@@ -54,8 +54,7 @@
 import { mapActions } from "vuex"
 import { createHelpers } from "vuex-map-fields"
 import UploadMixin from "../../mixins/UploadMixin"
-import { computed, onBeforeUnmount, ref } from "vue"
-
+import { computed, markRaw, onBeforeUnmount, ref, shallowRef } from "vue"
 import "@uppy/core/dist/style.css"
 import "@uppy/dashboard/dist/style.css"
 import "@uppy/image-editor/dist/style.css"
@@ -66,7 +65,6 @@ import { Dashboard } from "@uppy/vue"
 import XHRUpload from "@uppy/xhr-upload"
 import ImageEditor from "@uppy/image-editor"
 import { useRoute, useRouter } from "vue-router"
-import { ENTRYPOINT } from "../../config/entrypoint"
 import { useSecurityStore } from "../../store/securityStore"
 import { storeToRefs } from "pinia"
 import { useI18n } from "vue-i18n"
@@ -313,56 +311,59 @@ export default {
     parentResourceNodeId.value = resolveParentNodeId()
     persistCurrentPickerContext()
 
-    const uppy = ref()
-    uppy.value = new Uppy({
-      autoProceed: false,
-      onBeforeFileAdded(file) {
-        if (!matchesPickerType(file, pickerType.value)) {
-          const message = getInvalidTypeMessage(pickerType.value)
+    const uppy = shallowRef(null)
 
-          console.warn("[PERSONAL FILE UPLOAD] Invalid file type for picker", {
-            pickerType: pickerType.value,
-            fileName: file?.name,
-            mimeType: file?.type,
-          })
+    uppy.value = markRaw(
+      new Uppy({
+        autoProceed: false,
+        onBeforeFileAdded(file) {
+          if (!matchesPickerType(file, pickerType.value)) {
+            const message = getInvalidTypeMessage(pickerType.value)
 
-          try {
-            uppy.value?.info(message, "error", 4000)
-          } catch {
-            // Ignore Uppy info errors.
+            console.warn("[PERSONAL FILE UPLOAD] Invalid file type for picker", {
+              pickerType: pickerType.value,
+              fileName: file?.name,
+              mimeType: file?.type,
+            })
+
+            try {
+              uppy.value?.info(message, "error", 4000)
+            } catch {
+              // Ignore Uppy info errors.
+            }
+
+            return false
           }
 
-          return false
-        }
-
-        return true
-      },
-    })
-      .use(Webcam)
-      .use(ImageEditor, {
-        cropperOptions: {
-          viewMode: 1,
-          background: false,
-          autoCropArea: 1,
-          responsive: true,
-        },
-        actions: {
-          revert: true,
-          rotate: true,
-          granularRotate: true,
-          flip: true,
-          zoomIn: true,
-          zoomOut: true,
-          cropSquare: true,
-          cropWidescreen: true,
-          cropWidescreenVertical: true,
+          return true
         },
       })
-      .use(XHRUpload, {
-        endpoint: ENTRYPOINT + "personal_files",
-        formData: true,
-        fieldName: "uploadFile",
-      })
+        .use(Webcam)
+        .use(ImageEditor, {
+          cropperOptions: {
+            viewMode: 1,
+            background: false,
+            autoCropArea: 1,
+            responsive: true,
+          },
+          actions: {
+            revert: true,
+            rotate: true,
+            granularRotate: true,
+            flip: true,
+            zoomIn: true,
+            zoomOut: true,
+            cropSquare: true,
+            cropWidescreen: true,
+            cropWidescreenVertical: true,
+          },
+        })
+        .use(XHRUpload, {
+          endpoint: "/api/personal_files",
+          formData: true,
+          fieldName: "uploadFile",
+        }),
+    )
 
     uppy.value.setMeta({
       filetype: "file",

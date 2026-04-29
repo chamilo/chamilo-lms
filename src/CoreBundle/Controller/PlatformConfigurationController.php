@@ -15,7 +15,9 @@ use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
+use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -98,6 +100,11 @@ class PlatformConfigurationController extends AbstractController
         $configuration['settings']['profile.login_is_email'] = $settingsManager->getSetting('profile.login_is_email', true);
         $configuration['settings']['platform.timepicker_increment'] = (int) $settingsManager->getSetting('platform.timepicker_increment', true);
         $configuration['settings']['course.course_student_info'] = $this->decodeSetting($settingsManager->getSetting('course.course_student_info', true));
+        $configuration['settings']['platform.institution_address'] = $settingsManager->getSetting('platform.institution_address', true);
+        $configuration['settings']['platform.platform_logo_url'] = $settingsManager->getSetting('platform.platform_logo_url', true);
+        $configuration['settings']['platform.disable_copy_paste'] = $settingsManager->getSetting('platform.disable_copy_paste', true);
+        $configuration['settings']['platform.use_virtual_keyboard'] = $settingsManager->getSetting('platform.use_virtual_keyboard', true);
+        $configuration['settings']['platform.use_custom_pages'] = $settingsManager->getSetting('platform.use_custom_pages', true);
 
         $configuration['plugins']['buycourses'] = $this->getBuyCoursesFrontendConfig();
         $configuration['plugins']['tour'] = $this->getTourFrontendConfig();
@@ -116,6 +123,12 @@ class PlatformConfigurationController extends AbstractController
                 'admin.administrator_surname',
                 'editor.enabled_mathjax',
                 'editor.translate_html',
+                'editor.block_copy_paste_for_students',
+                'editor.youtube_for_students',
+                'editor.enabled_insertHtml',
+                'editor.enable_iframe_inclusion',
+                'editor.enable_uploadimage_editor',
+                'editor.video_context_menu_hidden',
                 'display.show_admin_toolbar',
                 'registration.allow_terms_conditions',
                 'agenda.allow_personal_agenda',
@@ -178,6 +191,10 @@ class PlatformConfigurationController extends AbstractController
                 'display.hide_logout_button',
                 'document.documents_hide_download_icon',
                 'platform.allow_my_files',
+                'document.users_copy_files',
+                'agenda.allow_careers_in_global_agenda',
+                'display.display_categories_on_homepage',
+                'security.hide_breadcrumb_if_not_allowed',
             ];
 
             foreach ($variables as $variable) {
@@ -216,6 +233,7 @@ class PlatformConfigurationController extends AbstractController
     public function courseSettingsList(
         SettingsCourseManager $courseSettingsManager,
         CourseRepository $courseRepository,
+        EntityManagerInterface $entityManager,
         Request $request
     ): JsonResponse {
         $courseId = $request->query->get('cid');
@@ -228,6 +246,7 @@ class PlatformConfigurationController extends AbstractController
             return new JsonResponse(['error' => 'Course not found'], Response::HTTP_NOT_FOUND);
         }
 
+        $courseId = (int) $course->getId();
         $courseSettingsManager->setCourse($course);
         $settings = [
             'show_course_in_user_language' => $courseSettingsManager->getCourseSettingValue('show_course_in_user_language'),
@@ -236,16 +255,97 @@ class PlatformConfigurationController extends AbstractController
             'enable_exercise_auto_launch' => $courseSettingsManager->getCourseSettingValue('enable_exercise_auto_launch'),
             'enable_lp_auto_launch' => $courseSettingsManager->getCourseSettingValue('enable_lp_auto_launch'),
             'enable_forum_auto_launch' => $courseSettingsManager->getCourseSettingValue('enable_forum_auto_launch'),
-            'learning_path_generator' => $courseSettingsManager->getCourseSettingValue('learning_path_generator'),
-            'image_generator' => $courseSettingsManager->getCourseSettingValue('image_generator'),
-            'video_generator' => $courseSettingsManager->getCourseSettingValue('video_generator'),
-            'glossary_terms_generator' => $courseSettingsManager->getCourseSettingValue('glossary_terms_generator'),
-            'task_grader' => $courseSettingsManager->getCourseSettingValue('task_grader'),
-            'content_analyzer' => $courseSettingsManager->getCourseSettingValue('content_analyzer'),
             'display_info_advance_inside_homecourse' => $courseSettingsManager->getCourseSettingValue('display_info_advance_inside_homecourse'),
+            'student_validate_own_attendance' => $courseSettingsManager->getCourseSettingValue('student_validate_own_attendance'),
         ];
 
-        return new JsonResponse(['settings' => $settings]);
+        $aiSettings = [
+            'learning_path_generator',
+            'exercise_generator',
+            'open_answers_grader',
+            'tutor_chatbot',
+            'task_grader',
+            'content_analyser',
+            'image_generator',
+            'glossary_terms_generator',
+            'video_generator',
+            'course_analyser',
+        ];
+
+        $settingsByCategory = [
+            'ai_helpers' => [],
+        ];
+
+        foreach ($aiSettings as $variable) {
+            $value = $this->getCourseSettingValueByCategory(
+                $entityManager,
+                $courseId,
+                $variable,
+                'ai_helpers'
+            );
+
+            $settingsByCategory['ai_helpers'][$variable] = $value;
+
+            // Backward compatibility for current frontend calls.
+            $settings[$variable] = $value;
+            $settings['ai_helpers.'.$variable] = $value;
+        }
+
+        // Backward compatibility with the previous frontend typo/name.
+        $settings['content_analyzer'] = $settingsByCategory['ai_helpers']['content_analyser'] ?? null;
+
+        return new JsonResponse([
+            'settings' => $settings,
+            'settings_by_category' => $settingsByCategory,
+        ]);
+    }
+
+    private function getCourseSettingValueByCategory(
+        EntityManagerInterface $entityManager,
+        int $courseId,
+        string $variable,
+        string $category
+    ): ?string {
+        $repository = $entityManager->getRepository(CCourseSetting::class);
+
+        /** @var CCourseSetting|null $categorized */
+        $categorized = $repository->findOneBy([
+            'cId' => $courseId,
+            'variable' => $variable,
+            'category' => $category,
+        ]);
+
+        if ($categorized instanceof CCourseSetting) {
+            return $categorized->getValue();
+        }
+
+        /**
+         * Temporary compatibility with legacy rows created without category.
+         * New writes should use the category.
+         */
+        /** @var CCourseSetting|null $legacyNullCategory */
+        $legacyNullCategory = $repository->findOneBy([
+            'cId' => $courseId,
+            'variable' => $variable,
+            'category' => null,
+        ]);
+
+        if ($legacyNullCategory instanceof CCourseSetting) {
+            return $legacyNullCategory->getValue();
+        }
+
+        /** @var CCourseSetting|null $legacyEmptyCategory */
+        $legacyEmptyCategory = $repository->findOneBy([
+            'cId' => $courseId,
+            'variable' => $variable,
+            'category' => '',
+        ]);
+
+        if ($legacyEmptyCategory instanceof CCourseSetting) {
+            return $legacyEmptyCategory->getValue();
+        }
+
+        return null;
     }
 
     /**

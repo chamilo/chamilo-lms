@@ -257,7 +257,6 @@
 import { computed, onMounted, provide, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import axios from "axios"
-import { ENTRYPOINT } from "../../config/entrypoint"
 import CourseTool from "../../components/course/CourseTool"
 import ShortCutList from "../../components/course/ShortCutList.vue"
 import Skeleton from "primevue/skeleton"
@@ -422,8 +421,7 @@ const setToolVisibility = (tool, visibility) => {
 function changeVisibility(tool) {
   axios
     .post(
-      ENTRYPOINT +
-        "../r/course_tool/links/" +
+      "/r/course_tool/links/" +
         tool.resourceNode.id +
         "/change_visibility?cid=" +
         course.value.id +
@@ -436,7 +434,7 @@ function changeVisibility(tool) {
 
 function onClickShowAll() {
   axios
-    .post(ENTRYPOINT + `../r/course_tool/links/change_visibility/show?cid=${course.value.id}&sid=${session.value?.id}`)
+    .post(`/r/course_tool/links/change_visibility/show?cid=${course.value.id}&sid=${session.value?.id}`)
     .then(() => {
       tools.value.forEach((tool) => setToolVisibility(tool, 2))
     })
@@ -445,7 +443,7 @@ function onClickShowAll() {
 
 function onClickHideAll() {
   axios
-    .post(ENTRYPOINT + `../r/course_tool/links/change_visibility/hide?cid=${course.value.id}&sid=${session.value?.id}`)
+    .post(`/r/course_tool/links/change_visibility/hide?cid=${course.value.id}&sid=${session.value?.id}`)
     .then(() => {
       tools.value.forEach((tool) => setToolVisibility(tool, 0))
     })
@@ -490,8 +488,7 @@ const showCourseSequence = computed(() => {
   return platformConfigStore.getSetting("course.resource_sequence_show_dependency_in_course_intro") === "true"
 })
 
-onMounted(async () => {
-  await courseSettingsStore.loadCourseSettings(course.value.id, session.value?.id)
+onMounted(() => {
   documentAutoLaunch.value = parseInt(courseSettingsStore.getSetting("enable_document_auto_launch"), 10) || 0
   exerciseAutoLaunch.value = parseInt(courseSettingsStore.getSetting("enable_exercise_auto_launch"), 10) || 0
   lpAutoLaunch.value = parseInt(courseSettingsStore.getSetting("enable_lp_auto_launch"), 10) || 0

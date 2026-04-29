@@ -325,7 +325,7 @@ if ($form->validate()) {
 
         if (empty($salesStatus)) {
             Display::addFlash(
-                Display::return_message(get_lang('NoResults'), 'warning', false)
+                Display::return_message(get_lang('No results'), 'warning', false)
             );
         }
     }

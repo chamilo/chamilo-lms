@@ -19,9 +19,9 @@
     <div class="text-right my-3">
       <Button
         v-if="pageId || v$.item.content.$model"
+        :label="t('Preview')"
         class="p-button-secondary"
         icon="mdi mdi-eye"
-        :label="t('Preview')"
         type="button"
         @click="openPreview"
       />
@@ -35,24 +35,24 @@
     />
 
     <BaseSelect
+      id="category"
       v-model="v$.item.category.$model"
       :error-text="v$.item.category.$errors.map((error) => error.$message).join('<br>')"
       :is-invalid="v$.item.category.$error"
       :label="t('Category')"
       :options="categories"
-      id="category"
       name="category"
       option-label="title"
       option-value="@id"
     />
 
     <BaseSelect
+      id="locale"
       v-model="v$.item.locale.$model"
       :error-text="v$.item.locale.$errors.map((error) => error.$message).join('<br>')"
       :is-invalid="v$.item.locale.$error"
       :label="t('Language')"
       :options="locales"
-      id="locale"
       name="locale"
       option-label="originalName"
       option-value="isocode"
@@ -81,23 +81,26 @@
       :modal="true"
       :style="{ width: '85vw', maxWidth: '1100px' }"
     >
-      <div v-if="pageId" class="mb-3 flex items-center gap-2">
+      <div
+        v-if="pageId"
+        class="mb-3 flex items-center gap-2"
+      >
         <InputText
-          :value="window.location.origin + previewUrl"
-          readonly
+          :value="previewFullUrl"
           class="w-full cursor-pointer"
+          readonly
           @focus="$event.target.select()"
         />
         <Button
+          :title="t('Copy link')"
           class="p-button-text p-button-sm"
           icon="mdi mdi-content-copy"
-          :title="t('Copy link')"
           @click="copyPreviewUrl"
         />
         <Button
+          :title="t('Open in a new tab')"
           class="p-button-text p-button-sm"
           icon="mdi mdi-open-in-new"
-          :title="t('Open in a new tab')"
           @click="openPreviewInNewTab"
         />
       </div>
@@ -109,15 +112,22 @@
           @load="onPreviewLoaded"
         ></iframe>
       </div>
-      <div v-else class="prose prose-lg max-w-none">
+      <div
+        v-else
+        class="prose prose-lg max-w-none"
+      >
         <h1 class="text-3xl font-bold mb-4">
-          {{ v$.item.title.$model || t('Untitled') }}
+          {{ v$.item.title.$model || t("Untitled") }}
         </h1>
         <article v-html="v$.item.content.$model"></article>
       </div>
 
       <template #footer>
-        <Button class="p-button-primary" :label="t('Close')" @click="previewVisible = false" />
+        <Button
+          :label="t('Close')"
+          class="p-button-primary"
+          @click="previewVisible = false"
+        />
       </template>
     </Dialog>
   </div>
@@ -147,36 +157,36 @@ const locales = ref(
   (window.languages || []).map((l) => ({
     originalName: l.originalName || l.original_name || l.english_name,
     isocode: l.isocode,
-  }))
+  })),
 )
 const categories = ref([])
 const findAllPageCategories = async () => (categories.value = await pageCategoryService.findAll())
 
 const pageId = computed(() => {
-  const raw = props.modelValue?.['@id'] || ''
+  const raw = props.modelValue?.["@id"] || ""
   const m = raw.match(/\/(\d+)(?:\?.*)?$/)
   return m ? m[1] : null
 })
 
 const previewVisible = ref(false)
 const cacheBust = ref(0)
-const previewUrl = computed(() => (pageId.value ? `/pages/${pageId.value}/preview` : ''))
-const previewUrlWithBust = computed(() => (previewUrl.value ? `${previewUrl.value}?_=${cacheBust.value}` : ''))
+const previewUrl = computed(() => (pageId.value ? `/pages/${pageId.value}/preview` : ""))
+const previewFullUrl = computed(() => (previewUrl.value ? `${window.location.origin}${previewUrl.value}` : ""))
+const previewUrlWithBust = computed(() => (previewUrl.value ? `${previewUrl.value}?_=${cacheBust.value}` : ""))
 
 function openPreview() {
   cacheBust.value = Date.now()
   previewVisible.value = true
 }
 function openPreviewInNewTab() {
-  if (previewUrl.value) window.open(previewUrl.value, '_blank')
+  if (previewUrl.value) window.open(previewUrl.value, "_blank")
 }
 async function copyPreviewUrl() {
-  if (!previewUrl.value) return
-  const full = window.location.origin + previewUrl.value
+  if (!previewFullUrl.value) return
   try {
-    await navigator.clipboard.writeText(full)
+    await navigator.clipboard.writeText(previewFullUrl.value)
   } catch {
-    window.prompt(t('Copy link'), full)
+    window.prompt(t("Copy link"), previewFullUrl.value)
   }
 }
 function onPreviewLoaded() {}
@@ -223,7 +233,7 @@ watch(
       emit("update:modelValue", { ...newValue, category: newValue.category["@id"] })
     }
   },
-  { immediate: true }
+  { immediate: true },
 )
 
 function btnSaveOnClick() {

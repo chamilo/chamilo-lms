@@ -1,6 +1,6 @@
 export default {
   path: "/resources/course_maintenance/:node(\\d+)",
-  meta: { requiresAuth: true, showBreadcrumb: true },
+  meta: { requiresAuth: true, showBreadcrumb: true, breadcrumb: "Course maintenance" },
   name: "course_maintenance",
   component: () => import("../components/coursemaintenance/CourseMaintenanceLayout.vue"),
   redirect: (to) => ({ name: "CMImportBackup", params: to.params, query: to.query }),

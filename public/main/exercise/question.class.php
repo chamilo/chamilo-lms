@@ -305,7 +305,7 @@ abstract class Question
         $showQuestionTitleHtml = ('true' === api_get_setting('editor.save_titles_as_html'));
         $title = '';
         if ('true' === api_get_setting('exercise.show_question_id')) {
-            $title .= '<h4>#'.$this->course['code'].'-'.$this->iid.'</h4>';
+            $title .= '<small class="text-muted">#'.$this->course['code'].'-'.$this->iid.'</small><br>';
         }
 
         $title .= $showQuestionTitleHtml ? '' : '<strong>';

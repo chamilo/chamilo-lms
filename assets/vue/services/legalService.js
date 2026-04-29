@@ -1,5 +1,4 @@
 import makeService from "./api"
-import { ENTRYPOINT } from "../config/entrypoint"
 
 const legalExtensions = {
   async findAllByLanguage(languageId) {
@@ -7,7 +6,7 @@ const legalExtensions = {
       languageId: languageId,
       "order[version]": "desc",
     })
-    return fetch(`${ENTRYPOINT}legals?${params.toString()}`)
+    return fetch(`/api/legals?${params.toString()}`)
   },
 
   async findLatestByLanguage(languageId) {
@@ -16,7 +15,7 @@ const legalExtensions = {
       "order[version]": "desc",
       itemsPerPage: "1",
     })
-    return fetch(`${ENTRYPOINT}legals?${params.toString()}`)
+    return fetch(`/api/legals?${params.toString()}`)
   },
 
   async findByLanguageAndVersion(languageId, version) {
@@ -26,7 +25,7 @@ const legalExtensions = {
       "order[type]": "asc",
       itemsPerPage: "50",
     })
-    return fetch(`${ENTRYPOINT}legals?${params.toString()}`)
+    return fetch(`/api/legals?${params.toString()}`)
   },
 
   async findAllType0() {
@@ -35,7 +34,7 @@ const legalExtensions = {
       "order[version]": "desc",
       itemsPerPage: "50",
     })
-    return fetch(`${ENTRYPOINT}legals?${params.toString()}`)
+    return fetch(`/api/legals?${params.toString()}`)
   },
 
   async saveOrUpdateLegal(payload) {

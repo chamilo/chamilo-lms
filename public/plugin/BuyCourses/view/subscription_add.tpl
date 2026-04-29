@@ -12,7 +12,7 @@
                         {{ page_title }}
                     </h1>
                     <p class="mt-2 max-w-3xl text-sm leading-6 text-gray-50">
-                        Create a subscription for this product, define the optional tax rate, and add one or more subscription periods with their prices.
+                        {{ 'SubscriptionAddIntro'|get_plugin_lang('BuyCoursesPlugin') }}
                     </p>
                 </div>
             </div>
@@ -70,11 +70,11 @@
                 </div>
                 <div class="mt-2 text-sm leading-6 text-gray-90">
                     {% if has_currency and has_frequencies %}
-                    Ready to configure subscription periods.
+                    {{ 'SubscriptionReadyToConfigure'|get_plugin_lang('BuyCoursesPlugin') }}
                     {% elseif not has_currency %}
-                    Currency must be configured before saving this subscription.
+                    {{ 'SubscriptionCurrencyMissing'|get_plugin_lang('BuyCoursesPlugin') }}
                     {% else %}
-                    Subscription periods must be configured before saving this subscription.
+                    {{ 'SubscriptionPeriodsMissing'|get_plugin_lang('BuyCoursesPlugin') }}
                     {% endif %}
                 </div>
             </div>

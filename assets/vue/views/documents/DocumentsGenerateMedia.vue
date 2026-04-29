@@ -1062,12 +1062,6 @@ onMounted(async () => {
 
   try {
     try {
-      await courseSettingsStore.loadCourseSettings(cid, sid)
-    } catch (e) {
-      console.error("[AI Media] loadCourseSettings failed:", e)
-    }
-
-    try {
       let allowed = await checkIsAllowedToEdit(true, true, true, false)
 
       if (!allowed && securityStore.isAdmin) {

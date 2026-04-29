@@ -71,18 +71,11 @@ if (isset($_GET['id'])) {
 
     if (!$VDB->w_api_is_anonymous()) {
         $user = $VDB->w_api_get_user_info();
-        if (isset($user['status'])) {
-            if (SESSIONADMIN == $user['status']
-              || COURSEMANAGER == $user['status']
-              || PLATFORM_ADMIN == $user['status']) {
-            } else {
-                if (false == $VDB->w_is_platform_admin()) {
-                    echo "<div style='color:red;' >Status !".$user['status'].'</div>';
-                    echo 'Context status '.$user['status'].' is not valid or has expired. User rejected ! v'.$version;
+        if (!$VDB->w_api_is_allowed_to_edit()) {
+            echo "<div style='color:red;' >Status !".$user['status'].'</div>';
+            echo 'Context status '.$user['status'].' is not valid or has expired. User rejected ! v'.$version;
 
-                    exit;
-                }
-            }
+            exit;
         }
     }
 } else {

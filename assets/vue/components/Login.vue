@@ -26,6 +26,7 @@
           type="text"
           variant="filled"
           @blur="updateCaptchaStatus"
+          @focus="setFocusedField('login')"
         />
       </div>
 
@@ -37,7 +38,14 @@
           input-id="password"
           toggle-mask
           variant="filled"
+          @focus="setFocusedField('password')"
         />
+      </div>
+      <div
+        v-if="useVirtualKeyboard && focusedField && !requires2FA"
+        class="field"
+      >
+        <VirtualKeyboard @key-press="handleVirtualKeyboardKey" />
       </div>
       <div
         v-if="captchaEnabled && !requires2FA"
@@ -110,7 +118,7 @@
         <a
           v-if="allowRegistration"
           class="btn btn--primary-outline"
-          href="/main/auth/registration.php"
+          href="/registration"
           tabindex="3"
           v-text="t('Sign up')"
         />
@@ -120,7 +128,7 @@
         <a
           id="forgot"
           class="field"
-          href="/main/auth/lostPassword.php"
+          href="/lost-password"
           tabindex="5"
           v-text="t('Forgot your password?')"
         />
@@ -147,7 +155,11 @@ import CategoryLinks from "./page/CategoryLinks.vue"
 import { useLogin } from "../composables/auth/login"
 import securityService from "../services/securityService"
 import { usePlatformConfig } from "../store/platformConfig"
+import VirtualKeyboard from "./login/VirtualKeyboard.vue"
 
+const useVirtualKeyboard = computed(() => {
+  return "true" === platformConfigStore.getSetting("platform.use_virtual_keyboard")
+})
 const isInIframe = window.self !== window.top
 const isHttps = window.location.protocol === "https:"
 
@@ -174,6 +186,7 @@ const { redirectNotAuthenticated, performLogin, isLoading, requires2FA } = useLo
 const ldapAuth = ref(false)
 const login = ref("")
 const password = ref("")
+const focusedField = ref(null)
 const totp = ref("")
 const remember = ref(false)
 
@@ -220,6 +233,38 @@ async function updateCaptchaStatus() {
   }
 
   await loadCaptchaStatus()
+}
+
+function setFocusedField(field) {
+  focusedField.value = field
+}
+
+function handleVirtualKeyboardKey(key) {
+  if (!focusedField.value) {
+    return
+  }
+
+  const target = "password" === focusedField.value ? password : login
+
+  if ("backspace" === key) {
+    target.value = target.value.slice(0, -1)
+
+    return
+  }
+
+  if ("space" === key) {
+    target.value += " "
+
+    return
+  }
+
+  if ("clear" === key) {
+    target.value = ""
+
+    return
+  }
+
+  target.value += key
 }
 
 async function onSubmitLoginForm() {

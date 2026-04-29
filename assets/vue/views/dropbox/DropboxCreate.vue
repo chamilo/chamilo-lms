@@ -117,7 +117,7 @@
               :placeholder="t('Choose recipients')"
               style="width: 100%"
               label=""
-              :class="{ 'ring-1 ring-red-500 rounded-md': submitted && !hasSelectedRecipient }"
+              :class="{ 'ring-1 ring-red-500 rounded-md': submitted && !hasValidRecipientSelection }"
             />
             <small class="text-gray-500 block mt-1">
               {{ t("Tip: choose “— Just upload —” to store without sending to anyone.") }}
@@ -129,6 +129,12 @@
               {{ t("Please select at least one recipient (“— Just upload —” or any user)") }}
             </div>
 
+            <div
+              v-else-if="submitted && hasMixedMailingRecipients"
+              class="text-sm text-red-600 mt-1"
+            >
+              {{ t("Mailing cannot be combined with other recipients.") }}
+            </div>
             <div class="flex justify-end gap-2 mt-2">
               <BaseAppLink :to="returnRoute">
                 <BaseButton
@@ -268,12 +274,17 @@ function toTokens(value) {
 
 const normalizedRecipientTokens = computed(() => toTokens(recipients.value))
 const hasSelectedRecipient = computed(() => normalizedRecipientTokens.value.length > 0)
-const canSubmit = computed(() => pickedFiles.value.length > 0 && hasSelectedRecipient.value)
+const hasMailingSelected = computed(() => normalizedRecipientTokens.value.includes("mailing"))
+const hasMixedMailingRecipients = computed(() => hasMailingSelected.value && normalizedRecipientTokens.value.length > 1)
+const hasValidRecipientSelection = computed(() => hasSelectedRecipient.value && !hasMixedMailingRecipients.value)
+const canSubmit = computed(() => pickedFiles.value.length > 0 && hasValidRecipientSelection.value)
 
 // submit
 async function submit() {
   submitted.value = true
-  if (!canSubmit.value || isUploading.value) return
+  if (!canSubmit.value || isUploading.value) {
+    return
+  }
 
   isUploading.value = true
   try {

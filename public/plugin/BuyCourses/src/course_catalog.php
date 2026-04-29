@@ -7,13 +7,13 @@ declare(strict_types=1);
 /**
  * Public catalog of courses on sale.
  */
+
 $cidReset = true;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
 $plugin = BuyCoursesPlugin::create();
 $includeSessions = 'true' === $plugin->get('include_sessions');
-$includeServices = 'true' === $plugin->get('include_services');
 
 /**
  * Normalize a price filter coming from the query string.
@@ -85,8 +85,6 @@ $pluginIndexUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/index.php';
 $backUrl = $pluginIndexUrl;
 
 if (api_is_platform_admin()) {
-    $backUrl = 'paymentsetup.php';
-
     $interbreadcrumb[] = [
         'name' => get_lang('Administration'),
         'url' => api_get_path(WEB_PATH).'admin',
@@ -96,12 +94,8 @@ if (api_is_platform_admin()) {
         'url' => api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Plugins',
     ];
     $interbreadcrumb[] = [
-        'url' => 'list.php',
-        'name' => $plugin->get_lang('AvailableCoursesConfiguration'),
-    ];
-    $interbreadcrumb[] = [
-        'url' => 'paymentsetup.php',
-        'name' => $plugin->get_lang('PaymentsConfiguration'),
+        'url' => $pluginIndexUrl,
+        'name' => $plugin->get_lang('plugin_title'),
     ];
 } else {
     $interbreadcrumb[] = [
@@ -111,6 +105,7 @@ if (api_is_platform_admin()) {
 }
 
 $templateName = $plugin->get_lang('CourseListOnSale');
+
 $tpl = new Template($templateName);
 
 $tpl->assign('page_title', $templateName);
@@ -122,14 +117,14 @@ $tpl->assign('showing_services', false);
 
 $tpl->assign('show_courses_tab', true);
 $tpl->assign('show_sessions_tab', $includeSessions);
-$tpl->assign('show_services_tab', $includeServices);
+$tpl->assign('show_services_tab', false);
 
 $tpl->assign('courses', $courseList);
 $tpl->assign('sessions', []);
 $tpl->assign('services', []);
 
 $tpl->assign('sessions_are_included', $includeSessions);
-$tpl->assign('services_are_included', $includeServices);
+$tpl->assign('services_are_included', false);
 
 $tpl->assign('name_filter_value', $nameFilter);
 $tpl->assign('min_filter_value', $minFilterValue);

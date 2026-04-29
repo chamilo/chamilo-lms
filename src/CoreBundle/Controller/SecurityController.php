@@ -419,22 +419,8 @@ class SecurityController extends AbstractController
         User $user,
         CourseRepository $courseRepo,
     ): ?string {
-        /* Possible values: index.php, user_portal.php, main/auth/courses.php */
-        $pageAfterLogin = $this->settingsManager->getSetting('registration.redirect_after_login');
-
-        $url = null;
-
-        if ($user->isStudent() && !empty($pageAfterLogin)) {
-            $url = match ($pageAfterLogin) {
-                'index.php' => null,
-                'user_portal.php' => $this->router->generate('courses', [], RouterInterface::ABSOLUTE_URL),
-                'main/auth/courses.php' => $this->router->generate('catalogue', ['slug' => 'courses'], RouterInterface::ABSOLUTE_URL),
-                default => null,
-            };
-        }
-
         if ('true' !== $this->settingsManager->getSetting('workflows.go_to_course_after_login')) {
-            return $url;
+            return null;
         }
 
         $personalCourseList = $courseRepo->getPersonalSessionCourses(

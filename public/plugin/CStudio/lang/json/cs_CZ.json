@@ -111,6 +111,10 @@
     "Section collapse": "Sbalit sekci",
     "Index Table": "Indexová tabulka",
     "fxTools": "fxNástroje",
+    "Tools": "Nástroje",
+    "Project theme": "Téma projektu",
+    "Page style": "Styl stránky",
+    "Quiz style": "Styl kvízu",
     "Content elements": "Prvky obsahu",
     "Button": "Tlačítko",
     "Insert": "Vložit",
@@ -124,5 +128,15 @@
     "Edition filltext": "Editační vyplnit text",
     "Edition findwords": "Editační najít slova",
     "Edition markwords": "Editační označit slova",
-    "Edition sorttheparagraphs": "Editační seřadit odstavce"
+    "Edition sorttheparagraphs": "Editační seřadit odstavce",
+    "tpl_demo_content_note": "Toto je ukázkový obsah pro Chamilo Studio. Pro vývoj byste neměli tento soubor upravovat, místo toho ho můžete upravit a přejmenovat.",
+    "tpl_start": "Spustit",
+    "tpl_put_your_title_here": "Zde zadejte název",
+    "tpl_title_a": "Název A",
+    "tpl_target_audience_and_prerequisites": "Cílová skupina a předpoklady",
+    "tpl_who_is_this_training_for": "Pro koho je toto školení?",
+    "tpl_objectives_of_the_course": "Cíle kurzu",
+    "tpl_objective_read_and_analyse": "Čtení a analýza účetních a finančních dokumentů",
+    "tpl_objective_conducting_project": "Provádění projektu k vykonání práce",
+    "tpl_objective_mastering_tools": "Zvládnutí nástrojů"
 }

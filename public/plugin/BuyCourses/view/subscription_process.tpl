@@ -1,5 +1,5 @@
 {% autoescape false %}
-<div class="buycourses-subscription-process mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
+<div class="buycourses-subscription-process mx-auto w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
     <style>
         .buycourses-subscription-process .buycourses-form-card form,
         .buycourses-subscription-process .buycourses-form-card .form-inline,
@@ -446,7 +446,7 @@
                             {{ 'SelecSubscription'|get_plugin_lang('BuyCoursesPlugin') }}
                         </h3>
                         <p class="mt-2 text-sm text-gray-50">
-                            Choose the frequency that best fits this subscription.
+                            {{ 'SubscriptionFrequencyHelp'|get_plugin_lang('BuyCoursesPlugin') }}
                         </p>
 
                         <div class="mt-5">
@@ -459,7 +459,7 @@
                             {{ 'DoYouHaveACoupon'|get_plugin_lang('BuyCoursesPlugin') }}
                         </h3>
                         <p class="mt-2 text-sm text-gray-50">
-                            Enter your coupon code to update the subscription total before paying.
+                            {{ 'SubscriptionCouponCodeHelp'|get_plugin_lang('BuyCoursesPlugin') }}
                         </p>
 
                         <div class="mt-5">

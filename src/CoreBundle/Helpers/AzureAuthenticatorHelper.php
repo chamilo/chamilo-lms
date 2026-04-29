@@ -12,7 +12,6 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
-use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
@@ -57,7 +56,7 @@ readonly class AzureAuthenticatorHelper
         private UserRepository $userRepository,
         private EntityManagerInterface $entityManager,
         private AccessUrlHelper $accessUrlHelper,
-        private LanguageRepository $languageRepository,
+        private LanguageHelper $languageHelper,
         AuthenticationConfigHelper $configHelper,
     ) {
         $this->providerParams = $configHelper->getOAuthProviderConfig('azure');
@@ -183,9 +182,6 @@ readonly class AzureAuthenticatorHelper
         );
     }
 
-    /**
-     * @throws NonUniqueResultException
-     */
     public function getUserByVerificationOrder(array $azureUserData): ?User
     {
         $selectedOrder = $this->getExistingUserVerificationOrder();
@@ -194,20 +190,25 @@ readonly class AzureAuthenticatorHelper
         $azureIdField = $this->getAzureIdField();
         $azureUidField = $this->getAzureUidField();
 
-        /** @var array<int, ExtraFieldValues> $positionsAndFields */
+        /** @var array<int, array<ExtraFieldValues>> $positionsAndFields */
         $positionsAndFields = [
-            1 => $this->extraFieldValuesRepo->findByVariableAndValue($organisationEmailField, $azureUserData['mail']),
-            2 => $this->extraFieldValuesRepo->findByVariableAndValue($azureIdField, $azureUserData['mailNickname']),
-            3 => $this->extraFieldValuesRepo->findByVariableAndValue($azureUidField, $azureUserData['id']),
+            1 => $this->extraFieldValuesRepo->findByVariableAndValue($organisationEmailField, $azureUserData['mail'], all: true),
+            2 => $this->extraFieldValuesRepo->findByVariableAndValue($azureIdField, $azureUserData['mailNickname'], all: true),
+            3 => $this->extraFieldValuesRepo->findByVariableAndValue($azureUidField, $azureUserData['id'], all: true),
         ];
 
         foreach ($selectedOrder as $position) {
             if (!empty($positionsAndFields[$position])) {
-                return $this->userRepository->find($positionsAndFields[$position]->getItemId());
+                $user = $this->findActiveUserFromExtraFieldValues($positionsAndFields[$position]);
+
+                if (null !== $user) {
+                    return $user;
+                }
             }
         }
 
-        return $this->userRepository->findOneBy(['email' => $azureUserData['mail']]);
+        return $this->userRepository->findByEmailCaseInsensitive($azureUserData['mail'])
+            ?? $this->userRepository->findByUsernameCaseInsensitive($azureUserData['userPrincipalName']);
     }
 
     public function getExistingUserVerificationOrder(): array
@@ -246,15 +247,11 @@ readonly class AzureAuthenticatorHelper
             $phone = $azureUserData['mobilePhone'];
         }
 
-        $preferredLanguage = $azureUserData['preferredLanguage']
-            ? str_replace('-', '_', $azureUserData['preferredLanguage'])
-            : null;
+        $preferredLanguage = $azureUserData['preferredLanguage'] ?? null;
 
         if (null !== $preferredLanguage) {
-            $lang = $this->languageRepository->findByIsoCode($preferredLanguage);
-            if (null === $lang || !$lang->getAvailable()) {
-                $preferredLanguage = $this->languageRepository->getPlatformDefaultIso();
-            }
+            $lang = $this->languageHelper->findBestAvailableMatch($preferredLanguage);
+            $preferredLanguage = $lang?->getIsocode() ?? $this->languageHelper->getPlatformDefaultIso();
         }
 
         // If the option is set to create users, create it
@@ -319,5 +316,21 @@ readonly class AzureAuthenticatorHelper
                 }
             },
         ];
+    }
+
+    /**
+     * @param array<ExtraFieldValues> $extraFieldValues
+     */
+    private function findActiveUserFromExtraFieldValues(array $extraFieldValues): ?User
+    {
+        foreach ($extraFieldValues as $extraFieldValue) {
+            $user = $this->userRepository->find($extraFieldValue->getItemId());
+
+            if (null !== $user && User::SOFT_DELETED !== $user->getActive()) {
+                return $user;
+            }
+        }
+
+        return null;
     }
 }

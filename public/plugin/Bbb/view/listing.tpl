@@ -24,7 +24,7 @@
                 {{ 'UrlMeetingToShare'|get_plugin_lang('BBBPlugin') }}
             </h3>
             <p class="mb-0 text-body-2 text-gray-50">
-                {{ 'Share the conference link with allowed participants.'|get_lang }}
+                {{ 'Share the conference link with allowed participants.'|get_plugin_lang('BBBPlugin') }}
             </p>
         </div>
 

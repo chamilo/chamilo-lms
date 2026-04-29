@@ -627,27 +627,27 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'drh_autosubscribe',
                     'title' => 'Human resources director autosubscribe',
-                    'comment' => 'Human resources director autosubscribe - not yet available',
+                    'comment' => 'Course codes separated by "|". When a human resources director logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role.',
+                ],
+                [
+                    'name' => 'sessionadmin_autosubscribe',
+                    'title' => 'Session admin autosubscribe',
+                    'comment' => 'Course codes separated by "|". When a session administrator logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role.',
+                ],
+                [
+                    'name' => 'student_autosubscribe',
+                    'title' => 'Learner autosubscribe',
+                    'comment' => 'Course codes separated by "|". When a learner logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002.',
+                ],
+                [
+                    'name' => 'teacher_autosubscribe',
+                    'title' => 'Teacher autosubscribe',
+                    'comment' => 'Course codes separated by "|". When a teacher logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not grant course teacher permissions.',
                 ],
                 [
                     'name' => 'platform_unsubscribe_allowed',
                     'title' => 'Allow unsubscription from platform',
                     'comment' => 'By enabling this option, you allow any user to definitively remove his own account and all data related to it from the platform. This is quite a radical action, but it is necessary for portals opened to the public where users can auto-register. An additional entry will appear in the user profile to unsubscribe after confirmation.',
-                ],
-                [
-                    'name' => 'sessionadmin_autosubscribe',
-                    'title' => 'Session admin autosubscribe',
-                    'comment' => 'Session administrator autosubscribe - not available yet',
-                ],
-                [
-                    'name' => 'student_autosubscribe',
-                    'title' => 'Learner autosubscribe',
-                    'comment' => 'Learner autosubscribe - not yet available',
-                ],
-                [
-                    'name' => 'teacher_autosubscribe',
-                    'title' => 'Teacher autosubscribe',
-                    'comment' => 'Teacher autosubscribe - not yet available',
                 ],
             ],
             'message' => [
@@ -718,11 +718,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'This option will display or hide courses categories on the portal home page',
                 ],
                 [
-                    'name' => 'show_administrator_data',
-                    'title' => 'Platform Administrator Information in footer',
-                    'comment' => 'Show the Information of the Platform Administrator in the footer?',
-                ],
-                [
                     'name' => 'show_back_link_on_top_of_tree',
                     'title' => 'Show back links from categories/courses',
                     'comment' => 'Show a link to go back in the courses hierarchy. A link is available at the bottom of the list anyway.',
@@ -746,16 +741,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'show_number_of_courses',
                     'title' => 'Show courses number',
                     'comment' => 'Show the number of courses in each category in the courses categories on the homepage',
-                ],
-                [
-                    'name' => 'show_teacher_data',
-                    'title' => 'Show teacher information in footer',
-                    'comment' => 'Show the teacher reference (name and e-mail if available) in the footer?',
-                ],
-                [
-                    'name' => 'show_tutor_data',
-                    'title' => "Session's tutor's data is shown in the footer.",
-                    'comment' => "Show the session's tutor reference (name and e-mail if available) in the footer?",
                 ],
                 [
                     'name' => 'showonline',
@@ -786,11 +771,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'show_hot_courses',
                     'title' => 'Show hot courses',
                     'comment' => 'The hot courses list will be added in the index page',
-                ],
-                [
-                    'name' => 'hide_home_top_when_connected',
-                    'title' => 'Hide top content on homepage when logged in',
-                    'comment' => 'On the platform homepage, this option allows you to hide the introduction block (to leave only the announcements, for example), for all users that are already logged in. The general introduction block will still appear to users not already logged in.',
                 ],
                 [
                     'name' => 'hide_logout_button',
@@ -1100,6 +1080,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'hosting_limit_users_per_course',
                     'title' => 'Global limit of users per course',
                     'comment' => 'Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals.',
+                ],
+                [
+                    'name' => 'max_courses_per_user',
+                    'title' => 'Maximum courses per user',
+                    'comment' => 'Maximum number of courses a teacher/trainer can create. Set to 0 to disable the limit. Can be overridden per user via a BuyCourses service purchase.',
                 ],
                 [
                     'name' => 'push_notification_settings',
@@ -1546,11 +1531,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => 'Hide option to send announcements to HR users',
                     'comment' => 'Remove the checkbox to enable sending announcements to users with HR roles (still requires to confirm in the announcements tool).',
                 ],
-                [
-                    'name' => 'hide_global_announcements_when_not_connected',
-                    'title' => 'Hide global announcements for anonymous',
-                    'comment' => 'Hide platform announcements from anonymous users, and only show them to authenticated users.',
-                ],
             ],
             'ticket' => [
                 [
@@ -1827,11 +1807,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'Enable to completely remove the possibility to export certificates to PDF (for all users). If enabled, this includes hiding it from students.',
                 ],
                 [
-                    'name' => 'add_gradebook_certificates_cron_task_enabled',
-                    'title' => 'Certificates auto-generation on WS call',
-                    'comment' => 'When enabled, and when using the WSCertificatesList webservice, this option will make sure that all certificates have been generated by users if they reached the sufficient score in all items defined in gradebooks for all courses and sessions (this might consume considerable processing resources on your server).',
-                ],
-                [
                     'name' => 'certificate_filter_by_official_code',
                     'title' => 'Certificates filter by official code',
                     'comment' => 'Add a filter on the students official code to the certificates list.',
@@ -2020,11 +1995,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'attendance_allow_comments',
                     'title' => 'Allow comments in attendance sheets',
                     'comment' => 'Teachers and students can comment on each individual attendance (to justify).',
-                ],
-                [
-                    'name' => 'attendance_calendar_set_duration',
-                    'title' => 'Duration of attendance events',
-                    'comment' => 'Option to define the duration for an event in attendance sheet.',
                 ],
                 [
                     'name' => 'enable_sign_attendance_sheet',

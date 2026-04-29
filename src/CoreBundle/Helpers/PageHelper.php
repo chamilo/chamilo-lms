@@ -16,11 +16,33 @@ use Chamilo\CoreBundle\Repository\SysAnnouncementRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Chamilo\CoreBundle\Settings\SettingsManager;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 use const PHP_URL_PATH;
 
 class PageHelper
 {
+    public const CUSTOM_PAGE_INDEX_LOGGED = 'index-logged';
+    public const CUSTOM_PAGE_INDEX_UNLOGGED = 'index-unlogged';
+    public const CUSTOM_PAGE_LOGGED_OUT = 'loggedout';
+    public const CUSTOM_PAGE_REGISTRATION = 'registration';
+    public const CUSTOM_PAGE_REGISTRATION_FEEDBACK = 'registration-feedback';
+    public const CUSTOM_PAGE_LOST_PASSWORD = 'lostpassword';
+
+    private const CUSTOM_PAGE_DIRECTORY = 'custompages';
+    private const CUSTOM_PAGE_EXTENSION = 'php';
+
+    private const CUSTOM_PAGES = [
+        self::CUSTOM_PAGE_INDEX_LOGGED,
+        self::CUSTOM_PAGE_INDEX_UNLOGGED,
+        self::CUSTOM_PAGE_LOGGED_OUT,
+        self::CUSTOM_PAGE_REGISTRATION,
+        self::CUSTOM_PAGE_REGISTRATION_FEEDBACK,
+        self::CUSTOM_PAGE_LOST_PASSWORD,
+    ];
     protected PageRepository $pageRepository;
     protected PageCategoryRepository $pageCategoryRepository;
 
@@ -40,6 +62,10 @@ class PageHelper
         SysAnnouncementRepository $sysAnnouncementRepository,
         AccessUrlHelper $accessUrlHelper,
         private TranslatorInterface $translator,
+        private SettingsManager $settingsManager,
+        private ThemeHelper $themeHelper,
+        #[Autowire(param: 'kernel.project_dir')]
+        private string $projectDir,
     ) {
         $this->pageRepository = $pageRepository;
         $this->pageCategoryRepository = $pageCategoryRepository;
@@ -151,6 +177,74 @@ class PageHelper
         $this->pageCategoryRepository->update($introductionCategory);
 
         return true;
+    }
+
+    public function isCustomPagesEnabled(): bool
+    {
+        return 'true' === $this->settingsManager->getSetting('platform.use_custom_pages', true);
+    }
+
+    public function getCustomAccessPageResponse(Request $request): ?Response
+    {
+        if (!$request->isMethod(Request::METHOD_GET)) {
+            return null;
+        }
+
+        if (!$this->isCustomPagesEnabled()) {
+            return null;
+        }
+
+        if ($request->query->has('normal')) {
+            return null;
+        }
+
+        $pathInfo = rtrim((string) $request->getPathInfo(), '/');
+
+        if ('' === $pathInfo) {
+            $pathInfo = '/';
+        }
+
+        if (!\in_array($pathInfo, ['/', '/login'], true)) {
+            return null;
+        }
+
+        if ($request->query->has('loggedout')) {
+            return $this->getCustomPageResponse(self::CUSTOM_PAGE_LOGGED_OUT, [
+                'request' => $request,
+            ]);
+        }
+
+        return $this->getCustomPageResponse(self::CUSTOM_PAGE_INDEX_UNLOGGED, [
+            'request' => $request,
+        ]);
+    }
+
+    public function getCustomPageResponse(string $page, array $content = []): ?Response
+    {
+        if (!$this->isCustomPagesEnabled()) {
+            return null;
+        }
+
+        if (!\in_array($page, self::CUSTOM_PAGES, true)) {
+            return null;
+        }
+
+        $file = $this->resolveCustomPageFile($page);
+
+        if (null === $file) {
+            return null;
+        }
+
+        $output = $this->renderCustomPhpPage($file, $page, $content);
+
+        return new Response(
+            $output,
+            Response::HTTP_OK,
+            [
+                'Content-Type' => 'text/html; charset=UTF-8',
+                'X-Content-Type-Options' => 'nosniff',
+            ]
+        );
     }
 
     /**
@@ -423,5 +517,67 @@ class PageHelper
         $value = trim($value, '-');
 
         return '' !== $value ? $value : 'generic';
+    }
+
+    private function resolveCustomPageFile(string $page): ?string
+    {
+        $relativePath = self::CUSTOM_PAGE_DIRECTORY.\DIRECTORY_SEPARATOR.$page.'.'.self::CUSTOM_PAGE_EXTENSION;
+        $themesBasePath = $this->projectDir.\DIRECTORY_SEPARATOR.'var'.\DIRECTORY_SEPARATOR.'themes';
+
+        $themeCandidates = [
+            $this->themeHelper->getVisualTheme(),
+            ThemeHelper::DEFAULT_THEME,
+        ];
+
+        foreach (array_unique($themeCandidates) as $theme) {
+            $theme = trim($theme);
+
+            if ('' === $theme) {
+                continue;
+            }
+
+            $customPagesDirectory = $themesBasePath.\DIRECTORY_SEPARATOR.$theme.\DIRECTORY_SEPARATOR.self::CUSTOM_PAGE_DIRECTORY;
+            $candidate = $customPagesDirectory.\DIRECTORY_SEPARATOR.$page.'.'.self::CUSTOM_PAGE_EXTENSION;
+
+            $realDirectory = realpath($customPagesDirectory);
+            $realFile = realpath($candidate);
+
+            if (false === $realDirectory || false === $realFile) {
+                continue;
+            }
+
+            if (!str_starts_with($realFile, $realDirectory.\DIRECTORY_SEPARATOR)) {
+                continue;
+            }
+
+            if (!is_file($realFile) || !is_readable($realFile)) {
+                continue;
+            }
+
+            return $realFile;
+        }
+
+        return null;
+    }
+
+    private function renderCustomPhpPage(string $file, string $page, array $content): string
+    {
+        $render = static function (string $customPageFile, string $customPageName, array $content): void {
+            $pageName = $customPageName;
+
+            include $customPageFile;
+        };
+
+        ob_start();
+
+        try {
+            $render($file, $page, $content);
+
+            return (string) ob_get_clean();
+        } catch (Throwable $throwable) {
+            ob_end_clean();
+
+            throw $throwable;
+        }
     }
 }

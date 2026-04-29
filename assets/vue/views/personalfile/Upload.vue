@@ -67,7 +67,6 @@ import { Dashboard } from "@uppy/vue"
 import XHRUpload from "@uppy/xhr-upload"
 import ImageEditor from "@uppy/image-editor"
 import { useRoute, useRouter } from "vue-router"
-import { ENTRYPOINT } from "../../config/entrypoint"
 import { useSecurityStore } from "../../store/securityStore"
 import { storeToRefs } from "pinia"
 import { useI18n } from "vue-i18n"
@@ -174,7 +173,7 @@ export default {
         },
       })
       .use(XHRUpload, {
-        endpoint: ENTRYPOINT + "personal_files",
+        endpoint: "/api/personal_files",
         formData: true,
         fieldName: "uploadFile",
       })

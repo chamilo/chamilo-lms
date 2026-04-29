@@ -25,7 +25,6 @@ import { Dashboard } from "@uppy/vue"
 import Uppy from "@uppy/core"
 import Dialog from "primevue/dialog"
 import { useNotification } from "../../composables/notification"
-import { ENTRYPOINT } from "../../config/entrypoint"
 import axios from "axios"
 import "@uppy/core/dist/style.css"
 import "@uppy/dashboard/dist/style.css"
@@ -83,7 +82,7 @@ function setupUppy() {
       formData.append("uploadFile", file.data)
 
       const uploadUrl =
-        `${ENTRYPOINT}c_student_publication_corrections/upload` +
+        `/api/c_student_publication_corrections/upload` +
         `?parentResourceNodeId=${props.parentResourceNodeId}` +
         `&submissionId=${props.submissionId}` +
         `&filetype=file`

@@ -1,7 +1,6 @@
 import makeService from "./api"
 import { useCidReq } from "../composables/cidReq"
 import axios from "axios"
-import { ENTRYPOINT } from "../config/entrypoint"
 
 function buildCidParams() {
   const { cid, sid, gid } = useCidReq()
@@ -21,7 +20,7 @@ function extractId(idOrIri) {
 
 async function updatePublication(idOrIri, payload) {
   const id = extractId(idOrIri)
-  return axios.put(`${ENTRYPOINT}c_student_publications/${id}`, payload, {
+  return axios.put(`/api/c_student_publications/${id}`, payload, {
     params: buildCidParams(),
   })
 }
@@ -40,7 +39,7 @@ async function getAssignmentMetadata(assignmentId, cid, sid = 0, gid = 0) {
     ...(gid && { gid }),
   }).toString()
 
-  const response = await axios.get(`${ENTRYPOINT}c_student_publications/${assignmentId}?${params}`)
+  const response = await axios.get(`/api/c_student_publications/${assignmentId}?${params}`)
   return response.data
 }
 
@@ -67,7 +66,7 @@ async function getAssignmentDetailForTeacher({ assignmentId, page = 1, itemsPerP
 }
 
 async function uploadStudentAssignment(formData, queryParams) {
-  const response = await axios.post(`${ENTRYPOINT}c_student_publications/upload?${queryParams}`, formData, {
+  const response = await axios.post(`/api/c_student_publications/upload?${queryParams}`, formData, {
     headers: { "Content-Type": "multipart/form-data" },
   })
   return response.data
@@ -102,7 +101,7 @@ async function uploadComment(submissionId, parentResourceNodeId, formData, sendM
     ...buildCidParams(),
   }
 
-  const response = await axios.post(`${ENTRYPOINT}c_student_publication_comments/upload`, formData, {
+  const response = await axios.post(`/api/c_student_publication_comments/upload`, formData, {
     params,
     headers: { "Content-Type": "multipart/form-data" },
   })
@@ -112,7 +111,7 @@ async function uploadComment(submissionId, parentResourceNodeId, formData, sendM
 
 async function loadComments(submissionId) {
   try {
-    const response = await axios.get(`${ENTRYPOINT}c_student_publication_comments`, {
+    const response = await axios.get(`/api/c_student_publication_comments`, {
       params: {
         "publication.iid": submissionId,
         ...buildCidParams(),
@@ -126,7 +125,7 @@ async function loadComments(submissionId) {
 }
 
 async function deleteComment(commentIid) {
-  await axios.delete(`${ENTRYPOINT}c_student_publication_comments/${commentIid}`, {
+  await axios.delete(`/api/c_student_publication_comments/${commentIid}`, {
     params: buildCidParams(),
   })
 }
@@ -188,7 +187,7 @@ async function uploadCorrectionsPackage(assignmentId, file) {
 }
 
 async function updateScore(iid, qualification) {
-  return axios.put(`${ENTRYPOINT}c_student_publications/${iid}`, { qualification }, { params: buildCidParams() })
+  return axios.put(`/api/c_student_publications/${iid}`, { qualification }, { params: buildCidParams() })
 }
 
 async function aiGradeSubmission(submissionId, payload = {}) {

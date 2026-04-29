@@ -1,0 +1,229 @@
+<script>
+  var mxBasePath = '{{ _p.web_lib }}mxgraph/src/';
+</script>
+
+<script src="{{ _p.web_lib }}mxgraph/src/js/mxClient.js"></script>
+
+<div class="career-diagram-page w-full">
+    <div class="mb-4 rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+        <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+            <div>
+                <h2 class="m-0 text-xl font-semibold text-gray-900">
+                    {{ 'Career diagram'|trans }}
+                </h2>
+                <p class="mt-1 text-sm text-gray-500">
+                    {{ 'Review the career structure and related learning path information.'|trans }}
+                </p>
+            </div>
+
+            {% if 0 == iframe %}
+                <div class="flex flex-wrap gap-2">
+                    <a
+                            class="inline-flex items-center rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 no-underline hover:bg-gray-50"
+                            href="{{ app.request.uri|replace({'iframe=0': 'iframe=1'}) }}{% if 'iframe=' not in app.request.queryString %}{% if app.request.queryString %}&{% else %}?{% endif %}iframe=1{% endif %}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                    >
+                        {{ 'Open compact view'|trans }}
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+        <div class="overflow-auto p-4">
+            {{ content|raw }}
+        </div>
+    </div>
+
+    <div
+            id="careerDiagramTooltip"
+            class="pointer-events-none fixed z-50 hidden max-w-sm rounded-lg border border-gray-200 bg-white p-3 text-sm text-gray-700 shadow-lg"
+            role="tooltip"
+    ></div>
+</div>
+
+<script>
+  (function () {
+    function getDataAttribute(element, name) {
+      return element.getAttribute('data-' + name) || '';
+    }
+
+    function appendTooltipLine(container, label, value) {
+      if (!value) {
+        return;
+      }
+
+      var line = document.createElement('div');
+      line.className = 'mb-1 last:mb-0';
+
+      if (label) {
+        var strong = document.createElement('strong');
+        strong.className = 'font-semibold text-gray-900';
+        strong.appendChild(document.createTextNode(label + ': '));
+
+        line.appendChild(strong);
+      }
+
+      line.appendChild(document.createTextNode(value));
+      container.appendChild(line);
+    }
+
+    function moveTooltip(tooltip, event) {
+      var offset = 14;
+
+      tooltip.style.left = event.clientX + offset + 'px';
+      tooltip.style.top = event.clientY + offset + 'px';
+    }
+
+    function setupCareerDiagramTooltips() {
+      var tooltip = document.getElementById('careerDiagramTooltip');
+
+      if (!tooltip) {
+        return;
+      }
+
+      var popupElements = document.querySelectorAll('.popup');
+
+      popupElements.forEach(function (element) {
+        element.addEventListener('mouseenter', function (event) {
+          var description = getDataAttribute(element, 'description');
+          var period = getDataAttribute(element, 'period');
+          var teacherText = getDataAttribute(element, 'teacher-text');
+          var teacher = getDataAttribute(element, 'teacher');
+          var score = getDataAttribute(element, 'score');
+          var scoreValue = getDataAttribute(element, 'score-value');
+          var info = getDataAttribute(element, 'info');
+
+          tooltip.innerHTML = '';
+
+          appendTooltipLine(tooltip, '', description);
+          appendTooltipLine(tooltip, '', period);
+          appendTooltipLine(tooltip, teacherText, teacher);
+          appendTooltipLine(tooltip, score, scoreValue);
+          appendTooltipLine(tooltip, '', info);
+
+          if ('' === tooltip.textContent.trim()) {
+            return;
+          }
+
+          tooltip.classList.remove('hidden');
+          moveTooltip(tooltip, event);
+        });
+
+        element.addEventListener('mousemove', function (event) {
+          moveTooltip(tooltip, event);
+        });
+
+        element.addEventListener('mouseleave', function () {
+          tooltip.classList.add('hidden');
+        });
+      });
+    }
+
+    function resizeCareerDiagramSvg(container) {
+      var svg = container.querySelector('svg');
+
+      if (!svg || 'function' !== typeof svg.getBBox) {
+        return;
+      }
+
+      try {
+        var box = svg.getBBox();
+        var width = Math.max(box.width + 100, container.clientWidth);
+        var height = Math.max(box.height + 100, container.clientHeight);
+
+        svg.setAttribute('viewBox', '0 0 ' + width + ' ' + height);
+        svg.style.minWidth = '100%';
+      } catch (error) {
+        console.warn('Unable to resize career diagram SVG.', error);
+      }
+    }
+
+    function initCareerDiagram(container) {
+      if (!mxClient.isBrowserSupported()) {
+        mxUtils.error('Browser is not supported.', 200, false);
+
+        return;
+      }
+
+      mxEvent.disableContextMenu(container);
+
+      var graph = new mxGraph(container);
+
+      graph.setConnectable(true);
+      graph.setHtmlLabels(true);
+      graph.setEnabled(false);
+
+      graph.connectionHandler.createEdgeState = function () {
+        var edge = graph.createEdge(null, null, null, null, null);
+
+        return new mxCellState(this.graph.view, edge, this.graph.getCellStyle(edge));
+      };
+
+      graph.getStylesheet().getDefaultEdgeStyle().edgeStyle = 'orthogonalEdgeStyle';
+
+      new mxRubberband(graph);
+
+      var parent = graph.getDefaultParent();
+
+      graph.getModel().beginUpdate();
+
+      try {
+          {% for vertex in group_list|default([]) %}
+          {{ vertex|raw }}
+          {% endfor %}
+
+          {% for vertex in subgroup_list|default([]) %}
+          {{ vertex|raw }}
+          {% endfor %}
+
+          {% for vertex in vertex_list|default([]) %}
+          {% set vertexScript = vertex %}
+
+          {% if 0 == iframe %}
+          {% set vertexScript = vertexScript|replace({'iframe=1': 'iframe=0'}) %}
+          {% endif %}
+
+          {{ vertexScript|raw }}
+          {% endfor %}
+
+          {% for vertex in connections|default([]) %}
+          {{ vertex|raw }}
+          {% endfor %}
+      } finally {
+        graph.getModel().endUpdate();
+      }
+
+      resizeCareerDiagramSvg(container);
+      setupCareerDiagramTooltips();
+    }
+
+    mxGraph.prototype.getAllConnectionConstraints = function (terminal) {
+      if (null !== terminal && null !== terminal.shape) {
+        if (null !== terminal.shape.stencil) {
+          return terminal.shape.stencil.constraints;
+        }
+
+        if (null !== terminal.shape.constraints) {
+          return terminal.shape.constraints;
+        }
+      }
+
+      return null;
+    };
+
+    mxPolyline.prototype.constraints = null;
+
+    document.addEventListener('DOMContentLoaded', function () {
+      var container = document.getElementById('graphContainer');
+
+      if (!container) {
+        return;
+      }
+
+      initCareerDiagram(container);
+    });
+  })();
+</script>

@@ -14,7 +14,6 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
-use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Repository\CShortcutRepository;
 use Chamilo\LtiBundle\Entity\ExternalTool;
 use Chamilo\LtiBundle\Form\ExternalToolType;
@@ -842,11 +841,11 @@ class CourseController extends ToolBaseController
                     return false;
                 }
 
-                if (in_array($tool->getId(), $addedToolIds, true)) {
+                if (\in_array($tool->getId(), $addedToolIds, true)) {
                     return false;
                 }
 
-                if (in_array($this->getExternalToolDedupKey($tool), $addedLaunchKeys, true)) {
+                if (\in_array($this->getExternalToolDedupKey($tool), $addedLaunchKeys, true)) {
                     return false;
                 }
 
@@ -865,6 +864,7 @@ class CourseController extends ToolBaseController
 
             if (!isset($globalToolsByKey[$key])) {
                 $globalToolsByKey[$key] = $tool;
+
                 continue;
             }
 
@@ -967,6 +967,7 @@ class CourseController extends ToolBaseController
 
             if (!isset($bestToolsByKey[$key])) {
                 $bestToolsByKey[$key] = $tool;
+
                 continue;
             }
 
@@ -1014,7 +1015,7 @@ class CourseController extends ToolBaseController
                 $this->shortcutRepository->getAssignedCourseIdsFromResource($tool)
             );
 
-            if (in_array($course->getId(), $assignedCourseIds, true)) {
+            if (\in_array($course->getId(), $assignedCourseIds, true)) {
                 $priority += 10;
             }
         }
@@ -1260,7 +1261,7 @@ class CourseController extends ToolBaseController
             $this->shortcutRepository->getAssignedCourseIdsFromResource($tool)
         );
 
-        return in_array($course->getId(), $assignedCourseIds, true);
+        return \in_array($course->getId(), $assignedCourseIds, true);
     }
 
     private function createCourseSpecificEditableTool(ExternalTool $tool, Course $course): ExternalTool
@@ -1377,9 +1378,7 @@ class CourseController extends ToolBaseController
         $em = $this->managerRegistry->getManager();
 
         /** @var Session|null $managedSession */
-        $managedSession = $em->find(Session::class, $session->getId());
-
-        return $managedSession;
+        return $em->find(Session::class, $session->getId());
     }
 
     /**

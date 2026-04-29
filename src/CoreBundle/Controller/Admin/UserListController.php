@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[IsGranted(new Expression('is_granted("ROLE_ADMIN") or is_granted("ROLE_SESSION_MANAGER")'))]
 #[Route('/admin/user-list-data')]
@@ -50,6 +51,7 @@ class UserListController extends AbstractController
         private readonly EntityManagerInterface $em,
         private readonly UserRepository $userRepository,
         private readonly CsrfTokenManagerInterface $csrfTokenManager,
+        private readonly TranslatorInterface $translator,
     ) {}
 
     #[Route('', name: 'admin_user_list_data', methods: ['GET'])]
@@ -233,7 +235,7 @@ class UserListController extends AbstractController
                 'isPlatformAdmin' => $isPlatformAdmin,
                 'isSessionAdmin' => $isSessionAdmin,
             ],
-            'roleLabels' => self::ROLE_LABELS,
+            'roleLabels' => array_map(fn (string $label): string => $this->translator->trans($label), self::ROLE_LABELS),
             'csrfToken' => $this->csrfTokenManager->getToken('user_list_action')->getValue(),
             'loginAsToken' => $this->csrfTokenManager->getToken('login_as')->getValue(),
         ]);

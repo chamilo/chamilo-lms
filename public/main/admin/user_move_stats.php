@@ -779,9 +779,9 @@ if (!empty($user_list)) {
             }
         }
 
-        foreach ($course_list_registered as &$course) {
+        foreach ($course_list_registered as $i => $course) {
             $courseInfo = api_get_course_info_by_id($course['real_id']);
-            $course['name'] = $courseInfo['name'];
+            $course_list_registered[$i]['name'] = $courseInfo['name'];
         }
 
         $course_list = $course_list_registered;

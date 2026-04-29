@@ -36,9 +36,13 @@
       class="p-4 border border-gray-300 rounded bg-white mb-6"
     >
       <AdvancedCourseFilters
+        :key="advancedFiltersKey"
         :allowTitle="courseCatalogueSettings.filters?.by_title ?? true"
         :fields="extraFields"
+        :initial-title="filterState.title"
+        :initial-categories="filterState.categories"
         @apply="onAdvancedApply"
+        @clear="onAdvancedClear"
       />
     </div>
 
@@ -90,7 +94,7 @@ import { useNotification } from "../../composables/notification"
 import { useSecurityStore } from "../../store/securityStore"
 import CatalogueCourseCard from "../../components/course/CatalogueCourseCard.vue"
 import * as userRelCourseVoteService from "../../services/userRelCourseVoteService"
-import { useRouter } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useI18n } from "vue-i18n"
 import courseService from "../../services/courseService"
@@ -100,15 +104,26 @@ const { t } = useI18n()
 const sortField = ref("title")
 
 const natural = new Intl.Collator(undefined, { numeric: true, sensitivity: "base" })
+const route = useRoute()
 const router = useRouter()
 const securityStore = useSecurityStore()
 const platformConfigStore = usePlatformConfig()
 const courseCatalogueSettings = computed(() => {
   let raw = platformConfigStore.getSetting("catalog.course_catalog_settings")
-  if (!raw || raw === false || raw === "false") return {}
+
+  if (!raw || raw === false || raw === "false") {
+    return {}
+  }
+
   try {
-    if (typeof raw === "string") raw = JSON.parse(raw)
-    if (typeof raw.courses === "object") return raw.courses
+    if (typeof raw === "string") {
+      raw = JSON.parse(raw)
+    }
+
+    if (typeof raw.courses === "object") {
+      return raw.courses
+    }
+
     return raw
   } catch (e) {
     console.error("Invalid catalogue settings format", e)
@@ -158,10 +173,21 @@ const currentUserId = securityStore.user?.id ?? null
 const status = ref(false)
 const totalCourses = ref(0)
 const courses = ref([])
-
 const loadingMore = ref(false)
-
 const extraFields = ref([])
+
+const filterState = ref({
+  title: "",
+  categories: [],
+})
+
+const advancedFiltersKey = computed(() =>
+  JSON.stringify({
+    title: filterState.value.title,
+    categories: filterState.value.categories,
+  }),
+)
+
 const { showErrorNotification } = useNotification()
 
 const loadExtraFields = async () => {
@@ -192,9 +218,85 @@ const loadCourseSubscriptionStatuses = async (courseIds) => {
   }
 }
 
-let loadParams = {
-  itemsPerPage: "12",
-  order: { [sortField.value]: "asc" },
+function buildBaseLoadParams() {
+  return {
+    itemsPerPage: "12",
+    order: { [sortField.value]: "asc" },
+  }
+}
+
+let loadParams = buildBaseLoadParams()
+
+function normalizeCategoriesQueryValue(value) {
+  const normalizeOne = (item) => {
+    const normalized = String(item).trim()
+
+    if ("" === normalized) {
+      return null
+    }
+
+    if (normalized.startsWith("/api/course_categories/")) {
+      return normalized
+    }
+
+    if (/^\d+$/.test(normalized)) {
+      return `/api/course_categories/${normalized}`
+    }
+
+    return normalized
+  }
+
+  if (!value) {
+    return []
+  }
+
+  if (Array.isArray(value)) {
+    return value.map(normalizeOne).filter((item) => null !== item)
+  }
+
+  return String(value)
+    .split(",")
+    .map(normalizeOne)
+    .filter((item) => null !== item)
+}
+
+function resetCatalogueState() {
+  courses.value = []
+  totalCourses.value = 0
+}
+
+function getRouteFilterPayload() {
+  return {
+    title: "",
+    categories: normalizeCategoriesQueryValue(route.query.categories),
+    extraFields: [],
+    extraFieldValues: [],
+  }
+}
+
+async function applyCatalogueFilters(payload) {
+  filterState.value = {
+    title: payload.title || "",
+    categories: Array.isArray(payload.categories) ? [...payload.categories] : [],
+  }
+
+  loadParams = buildBaseLoadParams()
+
+  if (payload.title) {
+    loadParams.title = payload.title
+  }
+
+  if (payload.categories.length > 0) {
+    loadParams.categories = payload.categories
+  }
+
+  if (payload.extraFields.length > 0 && payload.extraFieldValues) {
+    loadParams.extrafield = payload.extraFields
+    loadParams.extrafieldvalue = payload.extraFieldValues
+  }
+
+  resetCatalogueState()
+  await load()
 }
 
 const load = async () => {
@@ -303,29 +405,29 @@ const showCourseTitle = computed(() => courseCatalogueSettings.value.hide_course
 
 const showAdvancedSearch = ref(false)
 
-function onAdvancedApply(payload) {
-  loadParams = {
-    itemsPerPage: "12",
-    order: { [sortField.value]: "asc" },
+async function onAdvancedApply(payload) {
+  await applyCatalogueFilters(payload)
+}
+
+async function onAdvancedClear() {
+  filterState.value = {
+    title: "",
+    categories: [],
   }
 
-  if (payload.title) {
-    loadParams.title = payload.title
-  }
+  showAdvancedSearch.value = false
 
-  if (payload.categories.length > 0) {
-    loadParams.categories = payload.categories
-  }
+  await router.replace({
+    name: "CatalogueCourses",
+    query: {},
+  })
 
-  if (payload.extraFields.length > 0 && payload.extraFieldValues) {
-    loadParams.extrafield = payload.extraFields
-    loadParams.extrafieldvalue = payload.extraFieldValues
-  }
-
-  courses.value = []
-  totalCourses.value = 0
-
-  load()
+  await applyCatalogueFilters({
+    title: "",
+    categories: [],
+    extraFields: [],
+    extraFieldValues: [],
+  })
 }
 
 const visibleCoursesBase = computed(() => {
@@ -346,7 +448,7 @@ const visibleCoursesBase = computed(() => {
           const key = field.split("/")[1]
           valA = a.point_info?.[key] ?? 0
           valB = b.point_info?.[key] ?? 0
-        } else if (field === "count_users") {
+        } else if ("count_users" === field) {
           valA = a.users?.length ?? 0
           valB = b.users?.length ?? 0
         } else {
@@ -384,7 +486,15 @@ const sentinel = ref(null)
 
 onMounted(async () => {
   await loadExtraFields()
-  await load()
+
+  const routePayload = getRouteFilterPayload()
+
+  if (routePayload.categories.length > 0) {
+    showAdvancedSearch.value = true
+    await applyCatalogueFilters(routePayload)
+  } else {
+    await load()
+  }
 
   observer = new IntersectionObserver(
     async ([entry]) => {
@@ -400,8 +510,35 @@ onMounted(async () => {
     },
   )
 
-  observer.observe(sentinel.value)
+  if (sentinel.value) {
+    observer.observe(sentinel.value)
+  }
 })
+
+watch(
+  () => route.query.categories,
+  async (newValue, oldValue) => {
+    if (newValue === oldValue) {
+      return
+    }
+
+    const routePayload = getRouteFilterPayload()
+
+    if (routePayload.categories.length > 0) {
+      showAdvancedSearch.value = true
+      await applyCatalogueFilters(routePayload)
+
+      return
+    }
+
+    await applyCatalogueFilters({
+      title: "",
+      categories: [],
+      extraFields: [],
+      extraFieldValues: [],
+    })
+  },
+)
 
 onUnmounted(() => {
   observer?.disconnect()
@@ -452,7 +589,8 @@ function onRatingChange({ value, course }) {
 
 function onUserSubscribed({ courseId, newUser }) {
   const index = courses.value.findIndex((c) => c.id === courseId)
-  if (index !== -1) {
+
+  if (-1 !== index) {
     const oldCourse = courses.value[index]
     const nextCount = Number(oldCourse.subscriptionCount || 0) + 1
     const subscriptionLimit = Number(oldCourse.subscriptionLimit || 0)
@@ -470,13 +608,13 @@ function onUserSubscribed({ courseId, newUser }) {
 
     const filteredIndex = courses.value.findIndex((c) => c.id === courseId)
 
-    if (filteredIndex !== -1) {
+    if (-1 !== filteredIndex) {
       courses.value[filteredIndex] = updatedCourse
     }
 
     const redirectAfterSubscription = courseCatalogueSettings.value.redirect_after_subscription ?? "course_catalog"
 
-    if (redirectAfterSubscription === "course_home") {
+    if ("course_home" === redirectAfterSubscription) {
       router.push({ name: "CourseHome", params: { id: courseId } })
     }
   }

@@ -111,6 +111,10 @@
     "Section collapse": "Sektion indskrump",
     "Index Table": "Indholdsfortegnelse",
     "fxTools": "fxVærktøjer",
+    "Tools": "Værktøjer",
+    "Project theme": "Projekt-tema",
+    "Page style": "Side-stil",
+    "Quiz style": "Quiz-stil",
     "Content elements": "Indholdselementer",
     "Button": "Knapp",
     "Insert": "Indsæt",
@@ -124,5 +128,15 @@
     "Edition filltext": "Redigering udfyldtekst",
     "Edition findwords": "Redigering findord",
     "Edition markwords": "Redigering markérord",
-    "Edition sorttheparagraphs": "Redigering sorterafsnittene"
+    "Edition sorttheparagraphs": "Redigering sorterafsnittene",
+    "tpl_demo_content_note": "Dette er demo-indhold for Chamilo Studio. Til udvikling skal du ikke redigere denne fil, i stedet kan du modificere og omdøbe den.",
+    "tpl_start": "Start",
+    "tpl_put_your_title_here": "Skriv din titel her",
+    "tpl_title_a": "Titel A",
+    "tpl_target_audience_and_prerequisites": "Målgruppe og forudsætninger",
+    "tpl_who_is_this_training_for": "Hvem er denne uddannelse til?",
+    "tpl_objectives_of_the_course": "Kursets mål",
+    "tpl_objective_read_and_analyse": "Læs og analyser regnskabs- og finansielle dokumenter",
+    "tpl_objective_conducting_project": "Udføre et projekt for at udføre arbejde",
+    "tpl_objective_mastering_tools": "Beherske værktøjerne"
 }

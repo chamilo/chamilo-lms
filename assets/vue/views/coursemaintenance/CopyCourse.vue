@@ -3,39 +3,39 @@
     <!-- Stepper -->
     <div class="flex items-center gap-3">
       <Step
-        :index="1"
         :current="step"
+        :index="1"
         :label="t('Select source course')"
       />
       <Line />
       <Step
-        :index="2"
         :current="step"
+        :index="2"
         :label="t('Options')"
       />
       <Line />
       <Step
-        :index="3"
         :current="step"
+        :index="3"
         :label="t('Select items')"
       />
       <Line />
       <Step
-        :index="4"
         :current="step"
+        :index="4"
         :label="t('Copy course')"
       />
     </div>
 
     <CMAlert
       v-if="error"
-      type="error"
       :text="error"
+      type="error"
     />
     <CMAlert
       v-if="notice"
-      type="success"
       :text="notice"
+      type="success"
     />
 
     <!-- STEP 1: Source + options -->
@@ -52,13 +52,13 @@
         >
           <BaseSearchSelect
             v-model="sourceCourseId"
-            :options="courseOptions"
-            :label="t('Course to copy from')"
-            :placeholder="t('Search by code or title...')"
-            :emptyMessage="t('No courses match your search.')"
             :clearable="true"
-            :virtual="true"
+            :emptyMessage="t('No courses match your search.')"
             :filterFields="['label', 'sublabel']"
+            :label="t('Course to copy from')"
+            :options="courseOptions"
+            :placeholder="t('Search by code or title...')"
+            :virtual="true"
             input-id="copycourse-source"
           />
         </div>
@@ -80,9 +80,9 @@
             />
             <button
               v-if="courseQuery"
+              :aria-label="t('Clear search')"
               class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-50 hover:text-gray-90"
               @click="courseQuery = ''"
-              :aria-label="t('Clear search')"
             >
               <i class="mdi mdi-close"></i>
             </button>
@@ -117,17 +117,17 @@
         <div class="space-y-3">
           <label class="flex items-center gap-2">
             <input
+              v-model="copyOption"
               type="radio"
               value="full_copy"
-              v-model="copyOption"
             />
             <span class="text-sm text-gray-90">{{ t("Full copy") }}</span>
           </label>
           <label class="flex items-center gap-2">
             <input
+              v-model="copyOption"
               type="radio"
               value="select_items"
-              v-model="copyOption"
             />
             <span class="text-sm text-gray-90">{{ t("Let me select learning objects") }}</span>
           </label>
@@ -135,15 +135,15 @@
           <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
             <label class="flex items-center gap-2">
               <input
-                type="checkbox"
                 v-model="includeUsers"
+                type="checkbox"
               />
               <span class="text-sm text-gray-90">{{ t("Include users (enrollments)") }}</span>
             </label>
             <label class="flex items-center gap-2">
               <input
-                type="checkbox"
                 v-model="resetDates"
+                type="checkbox"
               />
               <span class="text-sm text-gray-90">{{ t("Reset dates") }}</span>
             </label>
@@ -156,17 +156,17 @@
             <div class="space-y-2">
               <label class="flex items-center gap-2">
                 <input
-                  type="radio"
-                  :value="1"
                   v-model.number="sameFileNameOption"
+                  :value="1"
+                  type="radio"
                 />
                 <span class="text-sm text-gray-90">{{ t("Skip same file name") }}</span>
               </label>
               <label class="flex items-center gap-2">
                 <input
-                  type="radio"
-                  :value="2"
                   v-model.number="sameFileNameOption"
+                  :value="2"
+                  type="radio"
                 />
                 <span class="text-sm text-gray-90">
                   {{ t("Rename file (eg file.pdf becomes file_1.pdf)") }}
@@ -174,9 +174,9 @@
               </label>
               <label class="flex items-center gap-2">
                 <input
-                  type="radio"
-                  :value="3"
                   v-model.number="sameFileNameOption"
+                  :value="3"
+                  type="radio"
                 />
                 <span class="text-sm text-gray-90">{{ t("Overwrite file") }}</span>
               </label>
@@ -187,16 +187,16 @@
 
       <div class="col-span-full flex justify-end gap-3">
         <button
+          :disabled="loading"
           class="btn-secondary"
           @click="resetAll"
-          :disabled="loading"
         >
           <i class="mdi mdi-refresh"></i> {{ t("Reset") }}
         </button>
         <button
+          :disabled="loading || !sourceCourseId"
           class="btn-primary"
           @click="nextFromStep1"
-          :disabled="loading || !sourceCourseId"
         >
           <i class="mdi mdi-arrow-right"></i> {{ t("Continue") }}
         </button>
@@ -219,16 +219,16 @@
       </CMInfo>
       <div class="flex justify-between">
         <button
+          :disabled="loading"
           class="btn-secondary"
           @click="step = 1"
-          :disabled="loading"
         >
           <i class="mdi mdi-arrow-left"></i> {{ t("Back") }}
         </button>
         <button
+          :disabled="loading"
           class="btn-primary"
           @click="doCopy"
-          :disabled="loading"
         >
           <i class="mdi mdi-content-copy"></i> {{ t("Start copying") }}
         </button>
@@ -243,29 +243,29 @@
       <CMAlert
         v-for="n in notices"
         :key="n"
-        type="warning"
         :text="n"
+        type="warning"
       />
 
       <ResourceSelector
-        :groups="tree"
         v-model="selections"
-        :title="t('Select resources to copy')"
         :emptyText="t('No resources available in this course.')"
+        :groups="tree"
+        :title="t('Select resources to copy')"
       />
 
       <div class="flex justify-between">
         <button
+          :disabled="loading"
           class="btn-secondary"
           @click="step = 1"
-          :disabled="loading"
         >
           <i class="mdi mdi-arrow-left"></i> {{ t("Back") }}
         </button>
         <button
+          :disabled="loading"
           class="btn-primary"
           @click="doCopy"
-          :disabled="loading"
         >
           <i class="mdi mdi-content-copy"></i> {{ t("Copy selected") }}
         </button>
@@ -282,7 +282,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, computed } from "vue"
+import { computed, onMounted, ref, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import svc from "../../services/courseMaintenance"
@@ -419,11 +419,18 @@ async function doCopy() {
     step.value = 4
 
     if (res.redirectUrl) {
-      const u = new URL(res.redirectUrl, window.location.origin)
-      const backendQuery = Object.fromEntries(u.searchParams.entries())
+      const [rawPath, rawQuery = ""] = res.redirectUrl.split("?")
+      const pathname = rawPath.replace(/^https?:\/\/[^/]+/, "") || "/"
+      const backendQuery = Object.fromEntries(new URLSearchParams(rawQuery).entries())
       const keep = {}
-      for (const k of ["gradebook", "origin"]) if (route.query[k] != null) keep[k] = route.query[k]
-      router.push({ path: u.pathname, query: { ...backendQuery, ...keep } })
+
+      for (const k of ["gradebook", "origin"]) {
+        if (route.query[k] != null) {
+          keep[k] = route.query[k]
+        }
+      }
+
+      router.push({ path: pathname, query: { ...backendQuery, ...keep } })
     }
   } catch (e) {
     error.value = e?.response?.data?.error || t("Copy failed")

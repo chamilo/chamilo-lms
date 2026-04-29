@@ -10,6 +10,7 @@
     "Title": "Isihloko",
     "Content": "Umxholo",
     "Invitees": "Abamenyiwe",
+    "Invitee": "Umntu umenyiweyo",
     "Are you sure you want to delete this item?": "Uqinisekile ukuba ufuna ukucima le nto?",
     "Search": "Gqiba",
     "User list": "Uluhlu lwabasebenzisi",
@@ -119,6 +120,7 @@
     "Edit profile": "Hlela iprofayili",
     "Clear filter results": "Cima iziphumo zesihluzi",
     "Teachers": "Ootitshala",
+    "Teacher": "Utitshala",
     "Category": "Udidi",
     "Language": "Ulwimi",
     "Go to the course": "Yiya kwikhosi",
@@ -248,6 +250,7 @@
     "Chamilo URL": "I-URL yeChamilo",
     "Path": "Indlela",
     "Administrator": "Mlawuli",
+    "Superior (n+1)": "Ephakamileyo (n+1)",
     "Administrator login": "Ungeno lomlawuli",
     "Administrator password": "Igama eliphathekayo lomlawuli",
     "You may want to change this": "Ungafuna ukuyiguqula le",
@@ -332,6 +335,7 @@
     "{0} updated": "{0} ilungisiwe",
     "Course sessions": "Iisesha zekhosi",
     "Learners": "Abafundi",
+    "Learner": "Umfundi",
     "Progress": "Inkqubela",
     "Diagnosis": "Uhlalutyo",
     "Add user": "Faka umsebenzisi",
@@ -1874,5 +1878,6 @@
     "Save and insert": "Gcina kwaye faka",
     "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser.": "Ukugcina kuxhaswa kuphela xa umnikezeli ebuyisela umxholo we-base64. Ukuba ufumene i-URL kuphela, ukugcina akuxhobanga ukuze kuthintelwe ukukhuphela kwisikhangeli.",
     "Video generated successfully, but saving is disabled because the provider returned a URL.": "Ividiyo yenziwe ngempumelelo, kodwa ukugcina akuxhobangi kuba umnikezeli ubuyisele i-URL.",
-    "The file was saved, but its URL could not be resolved.": "Ifayili ligciniwe, kodwa i-URL yayo ayiphumelelanga ukugqitywa."
+    "The file was saved, but its URL could not be resolved.": "Ifayili ligciniwe, kodwa i-URL yayo ayiphumelelanga ukugqitywa.",
+    "Items": "Items"
 }

@@ -67,6 +67,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                     ),
                 ],
             ),
+            paginationClientEnabled: true,
             name: 'get_lp_collection_with_progress',
             provider: LpCollectionStateProvider::class,
         ),

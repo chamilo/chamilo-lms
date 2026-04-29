@@ -60,27 +60,27 @@ const props = defineProps({
 const resolvedUrl = computed(() => {
   const base = props.shortcut.urlOverride || props.shortcut.url || "#"
   try {
-    const u = new URL(base, window.location.origin)
-
-    // If the link points outside the current origin, do not rewrite it.
-    const isExternal = u.origin !== window.location.origin
-
-    if (isExternal) {
-      return u.href
+    // Absolute http(s) URLs are external — return as-is.
+    if (/^https?:\/\//i.test(base)) {
+      return base
     }
 
-    // Same-origin URLs: ensure course/session context when missing.
-    if (!u.searchParams.has("cid") && course.value?.id) {
-      u.searchParams.set("cid", course.value.id)
+    // Relative/internal URL: append course/session context when missing.
+    const [withoutHash, hash = ""] = base.split("#")
+    const [path, rawQuery = ""] = withoutHash.split("?")
+    const sp = new URLSearchParams(rawQuery)
+
+    if (!sp.has("cid") && course.value?.id) {
+      sp.set("cid", course.value.id)
     }
 
-    if (!u.searchParams.has("sid")) {
-      u.searchParams.set("sid", session.value?.id || 0)
+    if (!sp.has("sid")) {
+      sp.set("sid", session.value?.id || 0)
     }
 
-    // Keep relative URL for internal navigation and preserve hash.
-    const qs = u.searchParams.toString()
-    return u.pathname + (qs ? `?${qs}` : "") + (u.hash || "")
+    const qs = sp.toString()
+
+    return path + (qs ? `?${qs}` : "") + (hash ? `#${hash}` : "")
   } catch {
     return base
   }

@@ -36,19 +36,20 @@ final class MailHelper
      */
     public function getPlatformFromAddress(): Address
     {
-        $fromEmail = $this->settingsManager->getSetting('mail.mailer_from_email');
-        $fromName = $this->settingsManager->getSetting('mail.mailer_from_name');
+        $fromEmail = $this->settingsManager->getSetting('mail.mailer_from_email', true);
+        $fromName = $this->settingsManager->getSetting('mail.mailer_from_name', true);
 
         if (empty($fromName)) {
             $fromName = $this->settingsManager->getSetting('platform.site_name') ?: 'Chamilo';
         }
 
         if (empty($fromEmail) || !filter_var($fromEmail, FILTER_VALIDATE_EMAIL)) {
-            $fromEmail = $this->settingsManager->getSetting('admin.administrator_email');
+            $fromEmail = $this->settingsManager->getSetting('admin.administrator_email', true);
+
             if (empty($fromName) || 'Chamilo' === $fromName) {
                 $fromName = api_get_person_name(
-                    $this->settingsManager->getSetting('admin.administrator_name'),
-                    $this->settingsManager->getSetting('admin.administrator_surname'),
+                    $this->settingsManager->getSetting('admin.administrator_name', true),
+                    $this->settingsManager->getSetting('admin.administrator_surname', true),
                     null,
                     PERSON_NAME_EMAIL_ADDRESS
                 );
@@ -74,9 +75,7 @@ final class MailHelper
         $senderName = !empty($sender['name']) ? $sender['name'] : $defaultSenderName;
         $senderEmail = !empty($sender['email']) ? $sender['email'] : $defaultSenderEmail;
 
-        // Send errors to the platform admin
-        $adminEmail = $this->settingsManager->getSetting('admin.administrator_email');
-
+        $adminEmail = $this->settingsManager->getSetting('admin.administrator_email', true);
         $adminEmailValidation = $this->validator->validate($adminEmail, $emailConstraint);
 
         if (!empty($adminEmail) && 0 === $adminEmailValidation->count()) {
@@ -155,7 +154,8 @@ final class MailHelper
                 $isSingleAttachment =
                     \is_array($data_file)
                     && (\array_key_exists('path', $data_file) || \array_key_exists('stream', $data_file))
-                    && !array_is_list($data_file);
+                    && !array_is_list($data_file)
+                ;
 
                 if ($isSingleAttachment) {
                     $data_file = [$data_file];
@@ -190,8 +190,12 @@ final class MailHelper
 
                                 $nameForThis = null;
 
-                                // If filename is also an array, try to match by index
-                                if (\is_array($filename) && isset($filename[$i]) && \is_string($filename[$i]) && '' !== $filename[$i]) {
+                                if (
+                                    \is_array($filename)
+                                    && isset($filename[$i])
+                                    && \is_string($filename[$i])
+                                    && '' !== $filename[$i]
+                                ) {
                                     $nameForThis = $filename[$i];
                                 } elseif (\is_string($filename) && '' !== $filename) {
                                     // Fallback: same filename for all (not ideal, but safe)
@@ -232,9 +236,8 @@ final class MailHelper
             }
 
             $automaticEmailText = '<br />'.get_lang('This is an automatic email message. Please do not reply to it.');
-
-            $charset = $this->settingsManager->getSetting('mail.mailer_mails_charset') ?: 'UTF-8';
-            $excludeJson = 'true' === $this->settingsManager->getSetting('mail.mailer_exclude_json');
+            $charset = $this->getMailerCharset();
+            $excludeJson = $this->shouldExcludeJsonLd();
 
             $params = [
                 'mail_header_style' => api_get_setting('mail.mail_header_style'),
@@ -260,13 +263,138 @@ final class MailHelper
             ;
 
             $this->bodyRenderer->render($templatedEmail);
+            $this->applyMailerCharset($templatedEmail, $charset);
+
+            $this->logMailerDebug('Mail message is being sent.', [
+                'subject' => $subject,
+                'to' => $recipientEmail,
+                'from' => $this->addressesToString($templatedEmail->getFrom()),
+                'reply_to' => $this->addressesToString($templatedEmail->getReplyTo()),
+                'has_attachments' => !empty($data_file) ? '1' : '0',
+            ]);
+
             $this->mailer->send($templatedEmail);
+
+            $this->logMailerDebug('Mail message sent successfully.', [
+                'subject' => $subject,
+                'to' => $recipientEmail,
+            ]);
 
             return true;
         } catch (Exception|TransportExceptionInterface $e) {
+            $this->logMailerDebug('Mail message sending failed.', [
+                'subject' => $subject,
+                'to' => $recipientEmail,
+                'error' => $e->getMessage(),
+            ]);
+
             error_log($e->getMessage());
 
             return false;
         }
+    }
+
+    private function getMailerCharset(): string
+    {
+        $charset = trim((string) $this->settingsManager->getSetting('mail.mailer_mails_charset', true));
+
+        if ('' === $charset) {
+            return 'UTF-8';
+        }
+
+        if (!preg_match('/^[A-Za-z0-9._-]+$/', $charset)) {
+            return 'UTF-8';
+        }
+
+        return $charset;
+    }
+
+    private function shouldExcludeJsonLd(): bool
+    {
+        $value = $this->settingsManager->getSetting('mail.mailer_exclude_json', true);
+
+        /*
+         * Legacy setting semantics:
+         * false disables the LD+JSON block.
+         */
+        return !$this->isSettingEnabled($value);
+    }
+
+    private function isMailerDebugEnabled(): bool
+    {
+        return $this->isSettingEnabled(
+            $this->settingsManager->getSetting('mail.mailer_debug_enable', true)
+        );
+    }
+
+    private function isSettingEnabled(mixed $value): bool
+    {
+        if (true === $value || 1 === $value) {
+            return true;
+        }
+
+        $normalized = strtolower(trim((string) $value));
+
+        return 'true' === $normalized || '1' === $normalized;
+    }
+
+    private function applyMailerCharset(TemplatedEmail $email, string $charset): void
+    {
+        if ('' === trim($charset)) {
+            return;
+        }
+
+        $htmlBody = $email->getHtmlBody();
+        $textBody = $email->getTextBody();
+
+        if (null !== $htmlBody) {
+            $email->html($htmlBody, $charset);
+        }
+
+        if (null !== $textBody) {
+            $email->text($textBody, $charset);
+        }
+    }
+
+    private function logMailerDebug(string $message, array $context = []): void
+    {
+        if (!$this->isMailerDebugEnabled()) {
+            return;
+        }
+
+        $safeContext = [];
+
+        foreach ($context as $key => $value) {
+            if (null === $value || '' === $value) {
+                continue;
+            }
+
+            $safeContext[$key] = is_scalar($value) ? (string) $value : get_debug_type($value);
+        }
+
+        error_log(
+            $message.' '.json_encode(
+                $safeContext,
+                JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
+            )
+        );
+    }
+
+    /**
+     * @param Address[] $addresses
+     */
+    private function addressesToString(array $addresses): string
+    {
+        if (empty($addresses)) {
+            return '';
+        }
+
+        return implode(
+            ', ',
+            array_map(
+                static fn (Address $address): string => $address->toString(),
+                $addresses
+            )
+        );
     }
 }

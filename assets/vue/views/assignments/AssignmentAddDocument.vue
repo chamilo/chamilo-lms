@@ -73,7 +73,6 @@ import axios from "axios"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import { useRoute, useRouter } from "vue-router"
 import { useNotification } from "../../composables/notification"
-import { ENTRYPOINT } from "../../config/entrypoint"
 import { useCidReq } from "../../composables/cidReq"
 
 const { t } = useI18n()
@@ -107,7 +106,7 @@ function extractIdFromIri(iri) {
 
 async function loadPublicationMetadata() {
   try {
-    const response = await axios.get(`${ENTRYPOINT}c_student_publications/${publicationId}`, {
+    const response = await axios.get(`/api/c_student_publications/${publicationId}`, {
       params: buildCidParams(),
     })
     const data = response.data
@@ -125,7 +124,7 @@ async function loadPublicationMetadata() {
 
 async function loadAddedDocuments() {
   try {
-    const response = await axios.get(`${ENTRYPOINT}c_student_publication_rel_documents`, {
+    const response = await axios.get(`/api/c_student_publication_rel_documents`, {
       params: {
         ...buildCidParams(),
         publication: `/api/c_student_publications/${publicationId}`,
@@ -139,7 +138,7 @@ async function loadAddedDocuments() {
 
 async function loadAvailableDocuments() {
   try {
-    const response = await axios.get(`${ENTRYPOINT}documents`, {
+    const response = await axios.get(`/api/documents`, {
       params: {
         "resourceNode.parent": parentResourceNodeId.value,
         "filetype[]": ["file"],
@@ -156,7 +155,7 @@ async function loadAvailableDocuments() {
 async function addDocument(documentId) {
   try {
     await axios.post(
-      `${ENTRYPOINT}c_student_publication_rel_documents`,
+      `/api/c_student_publication_rel_documents`,
       {
         publication: `/api/c_student_publications/${publicationId}`,
         document: `/api/documents/${documentId}`,
@@ -174,7 +173,7 @@ async function addDocument(documentId) {
 
 async function removeDocument(relId) {
   try {
-    await axios.delete(`${ENTRYPOINT}c_student_publication_rel_documents/${relId}`, {
+    await axios.delete(`/api/c_student_publication_rel_documents/${relId}`, {
       params: buildCidParams(),
     })
     await loadAddedDocuments()

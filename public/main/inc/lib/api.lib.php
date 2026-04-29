@@ -727,12 +727,12 @@ function api_get_path($path = '', $configuration = [])
     $root_sys = Container::getProjectDir();
     $root_web = '';
     if (isset(Container::$container)) {
-        $root_web = Container::$container->get('router')->generate(
-            'index',
-            [],
-            UrlGeneratorInterface::ABSOLUTE_URL
-        );
+        $router = Container::$container->get('router');
+        $relPath = $router->generate('index');
+        $request = Container::getRequest();
+        $root_web = $request ? $request->getSchemeAndHttpHost().$relPath : $relPath;
     }
+
 
     /*if (api_get_multiple_access_url()) {
         // To avoid that the api_get_access_url() function fails since global.inc.php also calls the main_api.lib.php

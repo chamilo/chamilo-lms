@@ -111,6 +111,10 @@
     "Section collapse": "Згортання секції",
     "Index Table": "Таблиця змісту",
     "fxTools": "fxІнструменти",
+    "Tools": "Інструменти",
+    "Project theme": "Тема проекту",
+    "Page style": "Стиль сторінки",
+    "Quiz style": "Стиль тесту",
     "Content elements": "Елементи вмісту",
     "Button": "Кнопка",
     "Insert": "Вставити",
@@ -124,5 +128,15 @@
     "Edition filltext": "Редагування заповнення тексту",
     "Edition findwords": "Редагування пошук слів",
     "Edition markwords": "Редагування позначення слів",
-    "Edition sorttheparagraphs": "Редагування сортування абзаців"
+    "Edition sorttheparagraphs": "Редагування сортування абзаців",
+    "tpl_demo_content_note": "Це демонстраційний контент для Chamilo Studio. Під час розробки не редагуйте цей файл, натомість ви можете його модифікувати та перейменувати.",
+    "tpl_start": "Почати",
+    "tpl_put_your_title_here": "Введіть тут назву",
+    "tpl_title_a": "Назва A",
+    "tpl_target_audience_and_prerequisites": "Цільова аудиторія та передумови",
+    "tpl_who_is_this_training_for": "Для кого цей тренінг?",
+    "tpl_objectives_of_the_course": "Цілі курсу",
+    "tpl_objective_read_and_analyse": "Читати та аналізувати бухгалтерські та фінансові документи",
+    "tpl_objective_conducting_project": "Виконання проекту для здійснення робіт",
+    "tpl_objective_mastering_tools": "Оволодіння інструментами"
 }

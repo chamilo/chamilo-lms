@@ -20,11 +20,9 @@ class CertificateSettingsSchema extends AbstractSettingsSchema
             'add_certificate_pdf_footer' => 'false',
             'session_admin_can_download_all_certificates' => 'false',
             'allow_public_certificates' => 'false',
-
             'certificate_pdf_orientation' => 'landscape',
             'allow_general_certificate' => 'false',
             'hide_certificate_export_link' => 'false',
-            'add_gradebook_certificates_cron_task_enabled' => 'false',
             'certificate_filter_by_official_code' => 'false',
             'hide_certificate_export_link_students' => 'false',
         ]);
@@ -55,7 +53,6 @@ class CertificateSettingsSchema extends AbstractSettingsSchema
             ])
             ->add('allow_general_certificate', YesNoType::class)
             ->add('hide_certificate_export_link', YesNoType::class)
-            ->add('add_gradebook_certificates_cron_task_enabled', YesNoType::class)
             ->add('certificate_filter_by_official_code', YesNoType::class)
             ->add('hide_certificate_export_link_students', YesNoType::class)
         ;

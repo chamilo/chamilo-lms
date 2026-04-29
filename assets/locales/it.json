@@ -10,6 +10,7 @@
     "Title": "Titolo",
     "Content": "Contenuto",
     "Invitees": "Invitati",
+    "Invitee": "Invitato",
     "Are you sure you want to delete this item?": "Sei sicuro di voler eliminare questo elemento?",
     "Search": "Cerca",
     "User list": "Lista Utenti",
@@ -119,6 +120,7 @@
     "Edit profile": "Modifica le informazioni",
     "Clear filter results": "Pulisci filtro risultati",
     "Teachers": "Docenti del corso",
+    "Teacher": "Docente",
     "Category": "Categoria",
     "Language": "Lingua",
     "Go to the course": "Vai al corso",
@@ -248,6 +250,7 @@
     "Chamilo URL": "URL Chamilo",
     "Path": "Percorso",
     "Administrator": "Amministratore",
+    "Superior (n+1)": "Supervisore (++1)",
     "Administrator login": "login dell'Amministratore",
     "Administrator password": "Password amministratore",
     "You may want to change this": "Potresti volerla cambiare",
@@ -332,6 +335,7 @@
     "{0} updated": "{0} aggiornato",
     "Course sessions": "Sessioni",
     "Learners": "Corsisti",
+    "Learner": "Studente",
     "Progress": "Avanzamento",
     "Diagnosis": "Diagnostica",
     "Add user": "Aggiungi utente",
@@ -1874,5 +1878,6 @@
     "Save and insert": "Salva e inserisci",
     "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser.": "Il salvataggio \u00e8 supportato solo quando il provider restituisce contenuto base64. Se hai ricevuto solo un URL, il salvataggio \u00e8 disabilitato per evitare il download nel browser.",
     "Video generated successfully, but saving is disabled because the provider returned a URL.": "Video generato con successo, ma il salvataggio \u00e8 disabilitato perch\u00e9 il provider ha restituito un URL.",
-    "The file was saved, but its URL could not be resolved.": "Il file \u00e8 stato salvato, ma il suo URL non poteva essere risolto."
+    "The file was saved, but its URL could not be resolved.": "Il file \u00e8 stato salvato, ma il suo URL non poteva essere risolto.",
+    "Items": "Items"
 }

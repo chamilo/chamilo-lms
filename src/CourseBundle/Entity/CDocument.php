@@ -164,7 +164,10 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
         new Post(
             uriTemplate: '/documents/download-selected',
-            outputFormats: ['zip' => DownloadSelectedDocumentsAction::CONTENT_TYPE],
+            outputFormats: [
+                'zip' => DownloadSelectedDocumentsAction::CONTENT_TYPE,
+                'bin' => 'application/octet-stream',
+            ],
             controller: DownloadSelectedDocumentsAction::class,
             parameters: [
                 'cid' => new QueryParameter(
@@ -177,20 +180,26 @@ use Symfony\Component\Validator\Constraints as Assert;
                 ),
                 'gid' => new QueryParameter(
                     schema: ['type' => 'integer'],
-                    description: 'Course grou identifier',
+                    description: 'Course group identifier',
                 ),
             ],
             openapi: new Operation(
-                summary: 'Download selected documents as a ZIP file.',
+                summary: 'Download selected documents as a ZIP file or a single original file.',
                 requestBody: new RequestBody(
                     content: new ArrayObject([
                         'application/json' => [
                             'schema' => [
                                 'type' => 'object',
+                                'required' => ['ids'],
                                 'properties' => [
                                     'ids' => [
                                         'type' => 'array',
                                         'items' => ['type' => 'integer'],
+                                    ],
+                                    'compressed' => [
+                                        'type' => 'boolean',
+                                        'default' => true,
+                                        'description' => 'When false, exactly one document ID is required and the original file is returned.',
                                     ],
                                 ],
                             ],

@@ -1,5 +1,5 @@
 {% autoescape false %}
-<div class="buycourses-process-confirm mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
+<div class="buycourses-process-confirm mx-auto w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
     <style>
         .buycourses-process-confirm .buycourses-confirm-actions form,
         .buycourses-process-confirm .buycourses-confirm-actions .form-inline,
@@ -116,7 +116,7 @@
                         {{ title }}
                     </h1>
                     <p class="mt-2 max-w-3xl text-sm leading-6 text-gray-50">
-                        Review the order details and confirm the operation to continue with the selected payment method.
+                        {{ 'SubscriptionProcessConfirmIntro'|get_plugin_lang('BuyCoursesPlugin') }}
                     </p>
                 </div>
             </div>
@@ -390,7 +390,7 @@
                     {{ 'ConfirmOrder'|get_plugin_lang('BuyCoursesPlugin') }}
                 </h3>
                 <p class="mt-2 text-sm leading-6 text-gray-50">
-                    Confirm the order to continue with the selected payment flow.
+                    {{ 'SubscriptionConfirmOrderHelp'|get_plugin_lang('BuyCoursesPlugin') }}
                 </p>
 
                 <div class="mt-5 rounded-2xl border border-primary/15 bg-support-2 px-4 py-4">

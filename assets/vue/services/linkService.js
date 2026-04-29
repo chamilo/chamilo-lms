@@ -1,4 +1,3 @@
-import { ENTRYPOINT } from "../config/entrypoint"
 import axios from "axios"
 import baseService from "./baseService"
 
@@ -8,8 +7,7 @@ export default {
    * @param {FormData} imageData
    */
   uploadImage: async (linkId, imageData) => {
-    const endpoint = `${ENTRYPOINT}links/${linkId}/upload-image`
-    const response = await axios.post(endpoint, imageData, {
+    const response = await axios.post(`/api/links/${linkId}/upload-image`, imageData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -21,7 +19,7 @@ export default {
    * @param {Object} params
    */
   getLinks: async (params) => {
-    const response = await axios.get(ENTRYPOINT + "links/", { params })
+    const response = await axios.get("/api/links/", { params })
 
     return response.data
   },
@@ -30,7 +28,7 @@ export default {
    * @param {Number|String} linkId
    */
   getLink: async (linkId) => {
-    const response = await axios.get(ENTRYPOINT + "links/" + linkId + "/details/")
+    const response = await axios.get("/api/links/" + linkId + "/details/")
 
     return response.data
   },
@@ -39,7 +37,7 @@ export default {
    * @param {Object} data
    */
   createLink: async (data) => {
-    const endpoint = `${ENTRYPOINT}links`
+    const endpoint = `/api/links`
 
     const response = await axios.post(endpoint, data)
 
@@ -51,10 +49,9 @@ export default {
    * @param {Object} data
    */
   updateLink: async (linkId, data) => {
-    const endpoint = `${ENTRYPOINT}links/${linkId}`
     data.id = linkId
 
-    const response = await axios.put(endpoint, data)
+    const response = await axios.put(`/api/links/${linkId}`, data)
 
     return response.data
   },
@@ -67,8 +64,7 @@ export default {
    * @returns {Promise<Object>}
    */
   toggleLinkVisibility: async (linkId, visible, cid, sid) => {
-    const endpoint = `${ENTRYPOINT}links/${linkId}/toggle_visibility?cid=${cid}&sid=${sid}`
-    const response = await axios.put(endpoint, { visible })
+    const response = await axios.put(`/api/links/${linkId}/toggle_visibility?cid=${cid}&sid=${sid}`, { visible })
     return response.data
   },
 
@@ -80,8 +76,6 @@ export default {
    * @param {{categoryId?: number|null, cid?: number|null, sid?: number|null}} opts
    */
   moveLink: async (linkId, position, opts = {}) => {
-    const endpoint = `${ENTRYPOINT}links/${linkId}/move`
-
     const params = {}
     if (opts.cid !== undefined && opts.cid !== null) params.cid = opts.cid
     if (opts.sid !== undefined && opts.sid !== null) params.sid = opts.sid
@@ -92,7 +86,7 @@ export default {
       payload.categoryId = opts.categoryId ?? 0
     }
 
-    const response = await axios.put(endpoint, payload, { params })
+    const response = await axios.put(`/api/links/${linkId}/move`, payload, { params })
     return response.data
   },
 
@@ -104,7 +98,7 @@ export default {
    * @param {{cid:number, sid?:number}} params
    */
   exportLinks: async (format, params) => {
-    const endpoint = `${ENTRYPOINT}links/export?format=${encodeURIComponent(format)}`
+    const endpoint = `/api/links/export?format=${encodeURIComponent(format)}`
 
     const formData = new FormData()
     formData.append("cid", String(params.cid))
@@ -121,14 +115,13 @@ export default {
    * @param {Number|String} linkId
    */
   deleteLink: async (linkId) => {
-    const endpoint = `${ENTRYPOINT}links/${linkId}`
-    const response = await axios.delete(endpoint)
+    const response = await axios.delete(`/api/links/${linkId}`)
 
     return response.data
   },
 
   getCategories: async (parentId) => {
-    const response = await axios.get(`${ENTRYPOINT}link_categories?resourceNode.parent=${parentId}`)
+    const response = await axios.get(`/api/link_categories?resourceNode.parent=${parentId}`)
 
     return response.data["hydra:member"]
   },
@@ -137,7 +130,7 @@ export default {
    * @param {Number|String} categoryId
    */
   getCategory: async (categoryId) => {
-    const response = await axios.get(ENTRYPOINT + "link_categories/" + categoryId)
+    const response = await axios.get("/api/link_categories/" + categoryId)
 
     return response.data
   },
@@ -146,8 +139,7 @@ export default {
    * @param {Object} data
    */
   createCategory: async (data) => {
-    const endpoint = `${ENTRYPOINT}link_categories`
-    const response = await axios.post(endpoint, data)
+    const response = await axios.post(`/api/link_categories`, data)
 
     return response.data
   },
@@ -157,8 +149,7 @@ export default {
    * @param {Object} data
    */
   updateCategory: async (categoryId, data) => {
-    const endpoint = `${ENTRYPOINT}link_categories/${categoryId}`
-    const response = await axios.put(endpoint, data)
+    const response = await axios.put(`/api/link_categories/${categoryId}`, data)
 
     return response.data
   },
@@ -167,8 +158,7 @@ export default {
    * @param {Number|String} categoryId
    */
   deleteCategory: async (categoryId) => {
-    const endpoint = `${ENTRYPOINT}link_categories/${categoryId}`
-    const response = await axios.delete(endpoint)
+    const response = await axios.delete(`/api/link_categories/${categoryId}`)
 
     return response.data
   },
@@ -180,7 +170,7 @@ export default {
    * @param {number} sid
    */
   toggleCategoryVisibility: async (categoryId, visible, cid, sid) => {
-    const endpoint = `${ENTRYPOINT}link_categories/${categoryId}/toggle_visibility?cid=${cid}&sid=${sid}`
+    const endpoint = `/api/link_categories/${categoryId}/toggle_visibility?cid=${cid}&sid=${sid}`
     const response = await axios.put(endpoint, { visible })
 
     return response.data
@@ -192,7 +182,7 @@ export default {
    * @param linkId
    */
   checkLink: async (url, linkId) => {
-    const endpoint = `${ENTRYPOINT}links/${linkId}/check`
+    const endpoint = `/api/links/${linkId}/check`
     const response = await axios.get(endpoint, { params: { url } })
 
     return response.data

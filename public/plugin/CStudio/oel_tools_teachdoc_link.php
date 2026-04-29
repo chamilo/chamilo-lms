@@ -25,19 +25,14 @@ $iso = api_get_language_isocode();
 if (!$VDB->w_api_is_anonymous()) {
     $user = $VDB->w_api_get_user_info();
 
-    if (isset($user['status'])) {
-        if (SESSIONADMIN == $user['status']
-        || COURSEMANAGER == $user['status']
-        || PLATFORM_ADMIN == $user['status']) {
-        } else {
-            Display::addFlash(
-                Display::return_message(get_lang('NotAllowed'), 'error')
-            );
+    if (!$VDB->w_api_is_allowed_to_edit()) {
+        Display::addFlash(
+            Display::return_message(get_lang(''), 'error')
+        );
 
-            (new RedirectResponse('../../index.php'))->send();
+        (new RedirectResponse('../../index.php'))->send();
 
-            exit;
-        }
+        exit;
     }
 } else {
     Display::addFlash(

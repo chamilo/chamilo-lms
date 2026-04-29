@@ -2,7 +2,7 @@
 
   &-header,
   &-footer {
-    @apply bg-gray-10 text-gray-90 border-solid border-gray-30 p-3 text-caption font-semibold;
+    @apply bg-gray-10 text-gray-90 border-solid border-gray-30 p-3;
   }
 
   &-header {
@@ -32,9 +32,9 @@
     &-next,
     &-last {
       @apply flex items-center justify-center w-8 h-8 rounded-md border-0 bg-transparent
-             text-gray-50 text-lg cursor-pointer transition-colors duration-150
-             hover:bg-gray-15 hover:text-primary
-             disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-gray-50;
+      text-gray-50 text-lg cursor-pointer transition-colors duration-150
+      hover:bg-gray-15 hover:text-primary
+      disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-gray-50;
 
       .mdi {
         @apply leading-none;
@@ -48,8 +48,8 @@
 
     &-page {
       @apply flex items-center justify-center min-w-[2rem] h-8 px-2 rounded-md border-0 bg-transparent
-             text-body-2 text-gray-90 cursor-pointer font-medium transition-colors duration-150
-             hover:bg-gray-15 hover:text-primary;
+      text-body-2 text-gray-90 cursor-pointer font-medium transition-colors duration-150
+      hover:bg-gray-15 hover:text-primary;
 
       // Current page — filled primary pill
       &[aria-current="page"],
@@ -109,7 +109,7 @@
 
   .p-sortable-column {
     @apply outline-none
-      hover:text-primary;
+    hover:text-primary;
 
     &-icon {
       @apply ml-2;

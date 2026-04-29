@@ -12,17 +12,26 @@ $cidReset = true;
 
 require_once '../config.php';
 
-api_protect_admin_script();
-
 $plugin = BuyCoursesPlugin::create();
+
+if (api_is_anonymous()) {
+    api_not_allowed(true);
+}
 
 $invoicingEnable = 'true' === $plugin->get('invoicing_enable');
 if (!$invoicingEnable) {
     api_not_allowed(true, $plugin->get_lang('NoInvoiceEnable'));
 }
 
-$saleId = isset($_GET['invoice']) ? (int) $_GET['invoice'] : 0;
+$saleId = isset($_GET['sale_id']) ? (int) $_GET['sale_id'] : 0;
+if ($saleId <= 0) {
+    $saleId = isset($_GET['invoice']) ? (int) $_GET['invoice'] : 0;
+}
 $isService = isset($_GET['is_service']) ? (int) $_GET['is_service'] : 0;
+
+if ($saleId <= 0 || !$plugin->canUserAccessInvoice($saleId, $isService)) {
+    api_not_allowed(true);
+}
 
 $globalParameters = $plugin->getGlobalParameters();
 $infoSale = $plugin->getDataSaleInvoice($saleId, $isService);

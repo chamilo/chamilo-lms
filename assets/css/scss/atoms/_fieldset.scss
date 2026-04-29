@@ -1,8 +1,8 @@
 .p-fieldset {
-  @apply border border-solid border-support-3 rounded-lg p-3.5;
+  @apply border border-solid border-support-3 rounded-lg pt-2 px-3.5 pb-3.5;
 
   &-legend {
-    @apply text-body-1 font-semibold px-2;
+    @apply text-body-1 font-semibold px-1 -ml-1;
   }
 
   &-content {

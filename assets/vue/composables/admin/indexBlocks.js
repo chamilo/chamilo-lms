@@ -25,15 +25,15 @@ export function useIndexBlocks() {
     if ("false" === platformConfigStore.getSetting("platform.registered")) {
       blockVersionStatusEl.value = null
     } else {
-      loadVersion()
+      loadVersion().then(() => {})
     }
 
     if ("true" === platformConfigStore.getSetting("admin.chamilo_support")) {
-      loadSupport()
+      loadSupport().then(() => {})
     }
 
     if ("true" === platformConfigStore.getSetting("admin.chamilo_latest_news")) {
-      loadNews()
+      loadNews().then(() => {})
     }
   })
 
@@ -42,7 +42,7 @@ export function useIndexBlocks() {
    */
   function checkVersion(doNotListCampus) {
     adminService.registerCampus(doNotListCampus).then(() => {
-      loadVersion()
+      loadVersion().then(() => {})
 
       toast.add({
         severity: "success",

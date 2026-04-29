@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Entity\User;
+use Display;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Expression;
@@ -16,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use UserManager;
 
 #[IsGranted(new Expression('is_granted("ROLE_ADMIN") or is_granted("ROLE_SESSION_MANAGER")'))]
 class UserListActionController extends AbstractController
@@ -131,8 +133,9 @@ class UserListActionController extends AbstractController
                 if (!$this->isGranted('ROLE_ADMIN')) {
                     break;
                 }
-                $user->setActive(User::SOFT_DELETED);
-                $this->em->flush();
+
+                UserManager::delete_user($userId);
+
                 $this->addFlash('success', 'User has been removed.');
 
                 break;
@@ -141,8 +144,9 @@ class UserListActionController extends AbstractController
                 if (!$this->isGranted('ROLE_ADMIN')) {
                     break;
                 }
-                $user->setActive(User::ACTIVE);
-                $this->em->flush();
+
+                UserManager::change_active_state($userId, User::ACTIVE);
+
                 $this->addFlash('success', 'The user has been restored.');
 
                 break;
@@ -151,8 +155,9 @@ class UserListActionController extends AbstractController
                 if (!$this->isGranted('ROLE_ADMIN')) {
                     break;
                 }
-                $this->em->remove($user);
-                $this->em->flush();
+
+                UserManager::delete_user($userId, true);
+
                 $this->addFlash('success', 'The user has been deleted permanently.');
                 $view = 'deleted';
 
@@ -162,16 +167,10 @@ class UserListActionController extends AbstractController
                 if (!$this->isGranted('ROLE_ADMIN')) {
                     break;
                 }
-                $user->setFirstname('Anonymous');
-                $user->setLastname('Anonymous');
-                $user->setEmail('anonymous_'.$userId.'@example.com');
-                $user->setUsername('anon_'.$userId);
-                $user->setPhone(null);
-                $user->setAddress(null);
-                $user->setBiography('');
-                $user->setDateOfBirth(null);
-                $this->em->flush();
-                $this->addFlash('success', 'User has been anonymized.');
+
+                $message = UserManager::anonymizeUserWithVerification($userId);
+
+                Display::addFlash($message);
 
                 break;
         }

@@ -25,6 +25,9 @@ $userId = api_get_user_id();
 switch ($action) {
     case 'add':
         if (api_is_platform_admin() || api_is_drh()) {
+            if (false === Security::check_token('get')) {
+                exit;
+            }
             // Close the session as we don't need it any further
             session_write_close();
             if (isset($_REQUEST['id']) && !empty($_REQUEST['id'])) {
@@ -334,6 +337,9 @@ switch ($action) {
     case 'delete_gradebook_from_skill':
     case 'remove_skill':
         if (api_is_platform_admin() || api_is_drh()) {
+            if (false === Security::check_token('get')) {
+                exit;
+            }
             if (!empty($_REQUEST['skill_id']) && !empty($_REQUEST['gradebook_id'])) {
                 $skill_item = $skillGradeBook->getSkillInfo(
                     $_REQUEST['skill_id'],
@@ -360,6 +366,9 @@ switch ($action) {
         break;
     case 'save_profile':
         if (api_is_platform_admin() || api_is_drh()) {
+            if (false === Security::check_token('get')) {
+                exit;
+            }
             // Close the session as we don't need it any further
             session_write_close();
             $skill_profile = new SkillProfileModel();
@@ -385,6 +394,9 @@ switch ($action) {
         break;
     case 'delete_profile':
         if (api_is_platform_admin() || api_is_drh()) {
+            if (false === Security::check_token('get')) {
+                exit;
+            }
             // Close the session as we don't need it any further
             session_write_close();
             $profileId = $_REQUEST['profile'];
@@ -461,6 +473,10 @@ switch ($action) {
             exit;
         }
 
+        if (false === Security::check_token('get')) {
+            exit;
+        }
+
         $creatorId = api_get_user_id();
         $typeId = isset($_REQUEST['type_id']) ? (int) $_REQUEST['type_id'] : 0;
         $itemId = isset($_REQUEST['item_id']) ? (int) $_REQUEST['item_id'] : 0;
@@ -524,6 +540,10 @@ switch ($action) {
         }
 
         if (!api_is_allowed_to_edit()) {
+            exit;
+        }
+
+        if (false === Security::check_token('get')) {
             exit;
         }
 

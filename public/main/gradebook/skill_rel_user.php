@@ -72,7 +72,8 @@ $interbreadcrumb[] = [
     'name' => get_lang('Student reports'),
 ];
 
-$url = api_get_path(WEB_AJAX_PATH).'skill.ajax.php?a=assign_user_to_skill';
+$token = Security::get_token();
+$url = api_get_path(WEB_AJAX_PATH).'skill.ajax.php?a=assign_user_to_skill&sec_token='.$token;
 
 $template = new Template(get_lang('Skills and users list'));
 $template->assign('conclusion_list', $uniqueSkillsConclusion);

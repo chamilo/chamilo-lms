@@ -111,6 +111,10 @@
     "Section collapse": "Faldi sekcion",
     "Index Table": "Indeksa Tabelo",
     "fxTools": "fxIloj",
+    "Tools": "Iloj",
+    "Project theme": "Temo de projekto",
+    "Page style": "Stilo de paĝo",
+    "Quiz style": "Stilo de kvizo",
     "Content elements": "Enhavaj elementoj",
     "Button": "Butono",
     "Insert": "Enmeti",
@@ -124,5 +128,15 @@
     "Edition filltext": "Redakto plenigi tekston",
     "Edition findwords": "Redakto trovi vortojn",
     "Edition markwords": "Redakto marki vortojn",
-    "Edition sorttheparagraphs": "Redakto ordigi paragrafon"
+    "Edition sorttheparagraphs": "Redakto ordigi paragrafon",
+    "tpl_demo_content_note": "Jen demo enhavo por Chamilo Studio. Por la disvolviĝo, vi ne devus redakti tiun dosieron, anstataŭe vi povas modifi kaj renomi ĝin.",
+    "tpl_start": "Komenci",
+    "tpl_put_your_title_here": "Metu vian titolon ĉi tie",
+    "tpl_title_a": "Titolo A",
+    "tpl_target_audience_and_prerequisites": "Celta publiko kaj antaŭkondiĉoj",
+    "tpl_who_is_this_training_for": "Por kiu estas tiu trejnado?",
+    "tpl_objectives_of_the_course": "Celoj de la kurso",
+    "tpl_objective_read_and_analyse": "Legi kaj analizi buhaldajn kaj financajn dokumentojn",
+    "tpl_objective_conducting_project": "Konduki projekton por plenumi laboron",
+    "tpl_objective_mastering_tools": "Mastri la ilojn"
 }

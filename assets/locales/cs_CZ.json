@@ -10,6 +10,7 @@
     "Title": "N\u00e1zev",
     "Content": "Obsah",
     "Invitees": "Pozvan\u00ed",
+    "Invitee": "Pozvan\u00fd",
     "Are you sure you want to delete this item?": "Jste si jisti, \u017ee chcete tuto polo\u017eku smazat?",
     "Search": "Hledat",
     "User list": "Seznam u\u017eivatel\u016f",
@@ -119,6 +120,7 @@
     "Edit profile": "Upravit profil",
     "Clear filter results": "Vy\u010distit v\u00fdsledky filtru",
     "Teachers": "Studenti",
+    "Teacher": "U\u010ditel",
     "Category": "Kategorie",
     "Language": "Jazyk",
     "Go to the course": "J\u00edt do kurzu",
@@ -248,6 +250,7 @@
     "Chamilo URL": "URL Chamilo",
     "Path": "Cesta",
     "Administrator": "Administr\u00e1tor",
+    "Superior (n+1)": "Nad\u0159\u00edzen\u00fd (n+1)",
     "Administrator login": "P\u0159ihl\u00e1\u0161en\u00ed administr\u00e1tora",
     "Administrator password": "Heslo administr\u00e1tora",
     "You may want to change this": "Toto m\u016f\u017eete zm\u011bnit",
@@ -332,6 +335,7 @@
     "{0} updated": "{0} aktualizov\u00e1no",
     "Course sessions": "V\u00fduky",
     "Learners": "Studenti",
+    "Learner": "Student",
     "Progress": "Postup",
     "Diagnosis": "Diagn\u00f3za",
     "Add user": "P\u0159idat u\u017eivatele",
@@ -1874,5 +1878,6 @@
     "Save and insert": "Ulo\u017eit a vlo\u017eit",
     "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser.": "Ukl\u00e1d\u00e1n\u00ed je podporov\u00e1no pouze pokud poskytovatel vr\u00e1t\u00ed obsah base64. Pokud jste obdr\u017eeli pouze URL, je ukl\u00e1d\u00e1n\u00ed zak\u00e1z\u00e1no, aby se zabr\u00e1nilo stahov\u00e1n\u00ed v prohl\u00ed\u017ee\u010di.",
     "Video generated successfully, but saving is disabled because the provider returned a URL.": "Video bylo \u00fasp\u011b\u0161n\u011b vygenerov\u00e1no, ale ukl\u00e1d\u00e1n\u00ed je zak\u00e1z\u00e1no, proto\u017ee poskytovatel vr\u00e1til URL.",
-    "The file was saved, but its URL could not be resolved.": "Soubor byl ulo\u017een, ale jeho URL se nepoda\u0159ilo vy\u0159e\u0161it."
+    "The file was saved, but its URL could not be resolved.": "Soubor byl ulo\u017een, ale jeho URL se nepoda\u0159ilo vy\u0159e\u0161it.",
+    "Items": "Items"
 }

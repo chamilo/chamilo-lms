@@ -101,7 +101,6 @@ import axios from "axios"
 import { useI18n } from "vue-i18n"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useCourseSettings } from "../../store/courseSettingStore"
-import { ENTRYPOINT } from "../../config/entrypoint"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
 import BaseTinyEditor from "../basecomponents/BaseTinyEditor.vue"
@@ -240,7 +239,6 @@ export default {
     }
 
     await this.loadCourseContext()
-    await this.loadCourseSettingsIfPossible()
 
     if (!this.searchEnabled) {
       return
@@ -338,20 +336,6 @@ export default {
         }
       } catch (error) {
         console.warn("[DocumentsForm] Failed to load course context.", error)
-      }
-    },
-    async loadCourseSettingsIfPossible() {
-      const cid = Number(this.$route?.query?.cid || 0)
-      const sid = Number(this.$route?.query?.sid || 0)
-
-      if (!cid) {
-        return
-      }
-
-      try {
-        await this.courseSettingsStore.loadCourseSettings(cid, sid)
-      } catch (error) {
-        console.warn("[DocumentsForm] Failed to load course settings.", error)
       }
     },
     getTinyEditor() {
@@ -452,7 +436,7 @@ export default {
     },
     async loadSearchEngineFields() {
       try {
-        const response = await fetch(ENTRYPOINT + "search_engine_fields", {
+        const response = await fetch("/api/search_engine_fields", {
           credentials: "same-origin",
         })
 
@@ -497,8 +481,8 @@ export default {
       const iri = `/api/resource_nodes/${resourceNodeId}`
 
       const tryUrls = [
-        `${ENTRYPOINT}search_engine_field_values?resourceNode=${encodeURIComponent(iri)}&pagination=false`,
-        `${ENTRYPOINT}search_engine_field_values?resourceNodeId=${encodeURIComponent(resourceNodeId)}&pagination=false`,
+        `/api/search_engine_field_values?resourceNode=${encodeURIComponent(iri)}&pagination=false`,
+        `/api/search_engine_field_values?resourceNodeId=${encodeURIComponent(resourceNodeId)}&pagination=false`,
       ]
 
       for (const url of tryUrls) {

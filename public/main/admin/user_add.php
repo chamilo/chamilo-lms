@@ -23,6 +23,9 @@ $authenticationConfigHelper = Container::$container->get(AuthenticationConfigHel
 $accessUrl = Container::getAccessUrlUtil()->getCurrent();
 
 $is_platform_admin = api_is_platform_admin() ? 1 : 0;
+$hideNeverExpireOption = 'true' === api_get_setting('registration.user_hide_never_expire_option')
+    && !api_is_platform_admin();
+$adminsCanSetUsersPass = 'true' === api_get_setting('security.admins_can_set_users_pass');
 
 $message = null;
 $advancedPanelOpen = !empty($_POST);
@@ -180,51 +183,42 @@ if (count($extAuthSource) > 0) {
     }
 }
 
-$group[] = $form->createElement(
-    'radio',
-    'password_auto',
-    get_lang('Password'),
-    get_lang('Automatically generate a new password').'<br />',
-    1
-);
-$group[] = $form->createElement(
-    'radio',
-    'password_auto',
-    'id="radio_user_password"',
-    get_lang('Enter password'),
-    0
-);
-$group[] = $form->createElement(
-    'password',
-    'password',
-    null,
-    [
-        'id' => 'password',
-        'autocomplete' => 'off',
-        'onkeydown' => 'javascript: password_switch_radio_button();',
-        'show_hide' => true,
-        //'required' => 'required'
-    ]
-);
+if ($adminsCanSetUsersPass) {
+    $group[] = $form->createElement(
+        'radio',
+        'password_auto',
+        'id="radio_user_password"',
+        get_lang('Enter password'),
+        0
+    );
+    $group[] = $form->createElement(
+        'password',
+        'password',
+        null,
+        [
+            'id' => 'password',
+            'autocomplete' => 'off',
+            'onkeydown' => 'javascript: password_switch_radio_button();',
+            'show_hide' => true,
+        ]
+    );
+}
 
 $form->addGroup($group, 'password', get_lang('Password'));
-$form->addPasswordRule('password', 'password');
-$form->addGroupRule('password', get_lang('Enter password'), 'required', null, 1);
+
+if ($adminsCanSetUsersPass) {
+    $form->addPasswordRule('password', 'password');
+    $form->addGroupRule('password', get_lang('Enter password'), 'required', null, 1);
+}
 
 // Status
-$status = [];
-$status[COURSEMANAGER] = get_lang('Trainer');
-$status[STUDENT] = get_lang('Learner');
-$status[DRH] = get_lang('Human Resources Manager');
-$status[SESSIONADMIN] = get_lang('Sessions administrator');
-$status[STUDENT_BOSS] = get_lang('Student\'s superior');
-$status[INVITEE] = get_lang('Invitee');
+$roleOptions = UserManager::getAllowedRoleOptionsForUserForm();
 
 $form->addElement(
     'select',
     'roles',
     get_lang('Roles'),
-    api_get_roles(),
+    $roleOptions,
     [
         'multiple' => 'multiple',
         'size' => 9,
@@ -245,19 +239,41 @@ $group = [];
 $group[] = $form->createElement('radio', 'send_mail', null, get_lang('Yes'), 1, ['id' => 'send_mail_yes']);
 $group[] = $form->createElement('radio', 'send_mail', null, get_lang('No'), 0, ['id' => 'send_mail_no']);
 $form->addGroup($group, 'mail', get_lang('Send mail to new user'));
+
+
 // Expiration Date
-$form->addElement('radio', 'radio_expiration_date', get_lang('Expiration date'), get_lang('Never expires'), 0);
-$group = [];
-$group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('Enabled'), 1);
-$group[] = $form->createElement(
-    'DateTimePicker',
-    'expiration_date',
-    null,
-    [
-        'onchange' => 'javascript: enable_expiration_date();',
-    ]
-);
-$form->addGroup($group, 'max_member_group', null, null, false);
+if ($hideNeverExpireOption) {
+    $form->addElement('hidden', 'radio_expiration_date', 1);
+
+    $group = [];
+    $group[] = $form->createElement(
+        'DateTimePicker',
+        'expiration_date',
+        null,
+        [
+            'onchange' => 'javascript: enable_expiration_date();',
+        ]
+    );
+
+    $form->addGroup($group, 'max_member_group', get_lang('Expiration date'), null, false);
+} else {
+    $form->addElement('radio', 'radio_expiration_date', get_lang('Expiration date'), get_lang('Never expires'), 0);
+
+    $group = [];
+    $group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('Enabled'), 1);
+    $group[] = $form->createElement(
+        'DateTimePicker',
+        'expiration_date',
+        null,
+        [
+            'onchange' => 'javascript: enable_expiration_date();',
+        ]
+    );
+
+    $form->addGroup($group, 'max_member_group', null, null, false);
+}
+
+
 // active account or inactive account
 $form->addElement('radio', 'active', get_lang('Account'), get_lang('active'), 1);
 $form->addElement('radio', 'active', '', get_lang('inactive'), 0);
@@ -314,7 +330,7 @@ $defaults['expiration_date'] = api_get_local_time('+'.$days.' day');
 $defaults['extra_mail_notify_invitation'] = 1;
 $defaults['extra_mail_notify_message'] = 1;
 $defaults['extra_mail_notify_group_message'] = 1;
-$defaults['radio_expiration_date'] = 0;
+$defaults['radio_expiration_date'] = $hideNeverExpireOption ? 1 : 0;
 $defaults['status'] = STUDENT;
 $defaults['locale'] = api_get_language_isocode();
 $form->setDefaults($defaults);
@@ -329,6 +345,14 @@ if ($form->validate()) {
     $check = Security::check_token('post');
     if (true) {
         $user = $form->getSubmitValues();
+        if ($hideNeverExpireOption) {
+            $user['radio_expiration_date'] = '1';
+
+            if (empty($user['expiration_date'])) {
+                $days = (int) api_get_setting('account_valid_duration');
+                $user['expiration_date'] = api_get_local_time('+'.$days.' day');
+            }
+        }
         $lastname = $user['lastname'];
         $firstname = $user['firstname'];
         $official_code = $user['official_code'];
@@ -344,14 +368,20 @@ if ($form->validate()) {
 
         $hr_dept_id = isset($user['hr_dept_id']) ? (int) $user['hr_dept_id'] : 0;
 
-        if (isset($extAuthSource) && count($extAuthSource) > 0 &&
-            '2' == $user['password']['password_auto']
+        $passwordData = $user['password'] ?? [];
+        $passwordAuto = (string) ($passwordData['password_auto'] ?? '1');
+        if (
+            isset($extAuthSource)
+            && count($extAuthSource) > 0
+            && '2' === $passwordAuto
         ) {
-            $auth_source = $user['password']['auth_source'];
+            $auth_source = $passwordData['auth_source'] ?? [];
             $password = 'PLACEHOLDER';
         } else {
             $auth_source = [UserAuthSource::PLATFORM];
-            $password = '1' === $user['password']['password_auto'] ? api_generate_password() : $user['password']['password'];
+            $password = '1' === $passwordAuto
+                ? api_generate_password()
+                : (string) ($passwordData['password'] ?? '');
         }
 
         $expiration_date = null;
@@ -376,6 +406,15 @@ if ($form->validate()) {
 
         $roles = $user['roles'] ?? [];
         $roles = array_values(array_unique(array_map('api_normalize_role_code', $roles)));
+        if (!UserManager::areRolesAllowedInUserForm($roles)) {
+            Display::addFlash(
+                Display::return_message(get_lang('Error'), 'error')
+            );
+
+            header('Location: user_add.php?sec_token='.Security::get_token());
+            exit;
+        }
+
         $status = api_status_from_roles($roles);
 
         $user_id = UserManager::create_user(

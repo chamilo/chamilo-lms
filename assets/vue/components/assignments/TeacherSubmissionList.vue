@@ -2,7 +2,8 @@
   <div>
     <BaseTable
       :is-loading="loading"
-      v-model:multi-sort-meta="sortFields"
+      :sort-field="sortField"
+      :sort-order="sortOrder"
       v-model:rows="loadParams.itemsPerPage"
       :total-items="totalRecords"
       :values="submissions"
@@ -14,6 +15,7 @@
       <Column
         field="user.fullName"
         :header="t('Full name')"
+        sortable
       >
         <template #body="{ data }">
           <span class="text-gray-900">
@@ -25,6 +27,7 @@
       <Column
         field="title"
         :header="t('Title')"
+        sortable
       />
 
       <Column :header="t('Feedback')">
@@ -100,6 +103,7 @@
       <Column
         field="sentDate"
         :header="t('Date')"
+        sortable
       >
         <template #body="{ data }">
           {{ abbreviatedDatetime(data.sentDate) }}
@@ -271,7 +275,8 @@ const notification = useNotification()
 const loading = ref(false)
 const submissions = ref([])
 const totalRecords = ref(0)
-const sortFields = ref([{ field: "sentDate", order: -1 }])
+const sortField = ref("sentDate")
+const sortOrder = ref(-1)
 const loadParams = reactive({
   page: 1,
   itemsPerPage: null,
@@ -292,29 +297,6 @@ const platform = usePlatformConfig()
 const courseSettingsStore = useCourseSettings()
 const securityStore = useSecurityStore()
 
-async function loadCourseSettingsIfPossible() {
-  const courseId = course.value?.id
-  const sessionId = session.value?.id
-
-  if (!courseId) return
-
-  try {
-    await courseSettingsStore.loadCourseSettings(courseId, sessionId)
-  } catch (err) {
-    console.error("[Assignments] loadCourseSettings FAILED:", err)
-  }
-}
-
-onMounted(async () => {
-  await loadCourseSettingsIfPossible()
-})
-
-watch(
-  () => [course.value?.id, session.value?.id],
-  async () => {
-    await loadCourseSettingsIfPossible()
-  },
-)
 
 const aiHelpersEnabled = computed(() => {
   const v = String(platform.getSetting("ai_helpers.enable_ai_helpers"))
@@ -343,17 +325,8 @@ watch(
 )
 
 function buildOrderFromSort() {
-  // PrimeVue multi sort meta => API expects { field: "asc|desc" }
-  const order = {}
-  const meta = Array.isArray(sortFields.value) ? sortFields.value : []
-  meta.forEach((s) => {
-    if (!s?.field) return
-    order[s.field] = s.order === 1 ? "asc" : "desc"
-  })
-  if (!Object.keys(order).length) {
-    order.sentDate = "desc"
-  }
-  return order
+  if (!sortField.value) return { sentDate: "desc" }
+  return { [sortField.value]: sortOrder.value === 1 ? "asc" : "desc" }
 }
 
 async function loadData() {
@@ -381,8 +354,11 @@ function onPage(event) {
 }
 
 function onSort(event) {
-  if (event?.multiSortMeta) {
-    sortFields.value = event.multiSortMeta
+  sortField.value = event.sortField ?? sortField.value
+  sortOrder.value = event.sortOrder ?? sortOrder.value
+  loadParams.page = 1
+  if (loadParams.itemsPerPage) {
+    loadData()
   }
 }
 

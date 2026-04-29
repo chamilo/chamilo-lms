@@ -389,7 +389,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue"
+import { computed, ref, watch } from "vue"
 import { useRoute } from "vue-router"
 import { useFileManager } from "../../composables/useFileManager"
 import { useI18n } from "vue-i18n"
@@ -403,6 +403,15 @@ const { relativeDatetime } = useFormatDate()
 const route = useRoute()
 
 const uploadDialogVisible = ref(false)
+
+function normalizeNodeId(raw) {
+  if (raw === null || raw === undefined || raw === "") {
+    return null
+  }
+
+  const value = Number(raw)
+  return Number.isFinite(value) && value > 0 ? value : null
+}
 
 const {
   files,
@@ -442,7 +451,32 @@ const {
   currentFolderTitle,
 } = useFileManager("personalfile", "/api/personal_files", "FileManagerUploadFile")
 
+async function syncParentNodeFromRoute() {
+  const routeNodeId = normalizeNodeId(route.params.node)
+
+  if (!routeNodeId) {
+    return
+  }
+
+  const currentParent = normalizeNodeId(filters.value["resourceNode.parent"])
+
+  if (currentParent === routeNodeId) {
+    return
+  }
+
+  filters.value["resourceNode.parent"] = routeNodeId
+  await onUpdateOptions()
+}
+
 onMountedCallback()
+void syncParentNodeFromRoute()
+
+watch(
+  () => route.params.node,
+  () => {
+    void syncParentNodeFromRoute()
+  },
+)
 
 const isTinyPicker = computed(() => String(route.query.picker || "") === "tinymce")
 

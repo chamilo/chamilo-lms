@@ -24,7 +24,6 @@ import AssignmentsForm from "../../components/assignments/AssignmentsForm.vue"
 import { useI18n } from "vue-i18n"
 import { ref } from "vue"
 import axios from "axios"
-import { ENTRYPOINT } from "../../config/entrypoint"
 import { useCidReq } from "../../composables/cidReq"
 import { useNotification } from "../../composables/notification"
 import { useRouter } from "vue-router"
@@ -42,7 +41,7 @@ function onSubmit(publicationStudent) {
   isFormLoading.value = true
 
   axios
-    .post(`${ENTRYPOINT}c_student_publications`, publicationStudent)
+    .post(`/api/c_student_publications`, publicationStudent)
     .then(({ data }) => {
       console.log("cstudentpublication", data)
 

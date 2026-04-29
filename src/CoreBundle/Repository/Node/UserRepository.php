@@ -475,6 +475,28 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         return $user;
     }
 
+    public function findByEmailCaseInsensitive(string $email): ?User
+    {
+        return $this->createQueryBuilder('u')
+            ->where('LOWER(u.email) = LOWER(:email)')
+            ->setParameter('email', $email)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+    public function findByUsernameCaseInsensitive(string $username): ?User
+    {
+        return $this->createQueryBuilder('u')
+            ->where('LOWER(u.username) = LOWER(:username)')
+            ->setParameter('username', $username)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
     public function findAllUsers(bool $useCache = false): array
     {
         $qb = $this->createQueryBuilder('u');

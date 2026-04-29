@@ -5,347 +5,10 @@ declare(strict_types=1);
 /* For license terms, see /license.txt */
 
 /**
- * Configuration script for the Buy Courses plugin.
+ * Clean coupon add page for BuyCourses.
+ * Uses a manual Tailwind form instead of legacy FormValidator HTML.
  */
 require_once '../config.php';
-
-/**
- * Add classes to a DOM element without removing existing classes.
- */
-function addTailwindClassesToElement(DOMElement $element, array $classes): void
-{
-    $existing = trim((string) $element->getAttribute('class'));
-    $currentClasses = '' === $existing ? [] : preg_split('/\s+/', $existing);
-    $currentClasses = is_array($currentClasses) ? $currentClasses : [];
-
-    foreach ($classes as $class) {
-        if (!in_array($class, $currentClasses, true)) {
-            $currentClasses[] = $class;
-        }
-    }
-
-    $element->setAttribute('class', trim(implode(' ', array_filter($currentClasses))));
-}
-
-/**
- * Return the inner HTML of a DOM element.
- */
-function getElementInnerHtml(DOMElement $element): string
-{
-    $html = '';
-
-    foreach ($element->childNodes as $childNode) {
-        $html .= $element->ownerDocument->saveHTML($childNode);
-    }
-
-    return $html;
-}
-
-/**
- * Style legacy FormValidator markup with Tailwind utility classes.
- */
-function styleBuyCoursesCouponFormHtml(string $html): string
-{
-    if (!class_exists(DOMDocument::class) || '' === trim($html)) {
-        return $html;
-    }
-
-    $previousUseInternalErrors = libxml_use_internal_errors(true);
-
-    $document = new DOMDocument('1.0', 'UTF-8');
-    $wrappedHtml = '<?xml encoding="utf-8" ?><div id="buycourses-form-root">'.$html.'</div>';
-
-    $loaded = $document->loadHTML($wrappedHtml, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-
-    if (!$loaded) {
-        libxml_clear_errors();
-        libxml_use_internal_errors($previousUseInternalErrors);
-
-        return $html;
-    }
-
-    $xpath = new DOMXPath($document);
-    $root = $document->getElementById('buycourses-form-root');
-
-    if (!$root) {
-        libxml_clear_errors();
-        libxml_use_internal_errors($previousUseInternalErrors);
-
-        return $html;
-    }
-
-    $forms = $xpath->query('.//form', $root);
-    if ($forms) {
-        foreach ($forms as $form) {
-            if ($form instanceof DOMElement) {
-                addTailwindClassesToElement($form, ['space-y-6']);
-            }
-        }
-    }
-
-    $formGroups = $xpath->query('.//*[contains(concat(" ", normalize-space(@class), " "), " form-group ")]', $root);
-    if ($formGroups) {
-        foreach ($formGroups as $group) {
-            if ($group instanceof DOMElement) {
-                addTailwindClassesToElement($group, [
-                    'rounded-2xl',
-                    'border',
-                    'border-gray-25',
-                    'bg-white',
-                    'p-5',
-                    'shadow-sm',
-                    'space-y-3',
-                ]);
-            }
-        }
-    }
-
-    $labels = $xpath->query('.//label', $root);
-    if ($labels) {
-        foreach ($labels as $label) {
-            if ($label instanceof DOMElement) {
-                addTailwindClassesToElement($label, [
-                    'mb-2',
-                    'block',
-                    'text-sm',
-                    'font-semibold',
-                    'text-gray-90',
-                ]);
-            }
-        }
-    }
-
-    $inputs = $xpath->query('.//input', $root);
-    if ($inputs) {
-        foreach ($inputs as $input) {
-            if (!$input instanceof DOMElement) {
-                continue;
-            }
-
-            $type = strtolower((string) $input->getAttribute('type'));
-
-            if ('hidden' === $type) {
-                continue;
-            }
-
-            if (in_array($type, ['checkbox', 'radio'], true)) {
-                addTailwindClassesToElement($input, [
-                    'h-4',
-                    'w-4',
-                    'rounded',
-                    'border-gray-25',
-                    'text-primary',
-                    'focus:ring-primary',
-                ]);
-
-                continue;
-            }
-
-            if (in_array($type, ['submit', 'button'], true)) {
-                addTailwindClassesToElement($input, [
-                    'inline-flex',
-                    'items-center',
-                    'justify-center',
-                    'gap-2',
-                    'rounded-xl',
-                    'bg-primary',
-                    'px-4',
-                    'py-2.5',
-                    'text-sm',
-                    'font-semibold',
-                    'text-white',
-                    'shadow-sm',
-                    'transition',
-                    'hover:opacity-90',
-                    'focus:outline-none',
-                    'focus:ring-2',
-                    'focus:ring-primary/30',
-                    'focus:ring-offset-2',
-                ]);
-
-                continue;
-            }
-
-            addTailwindClassesToElement($input, [
-                'block',
-                'w-full',
-                'rounded-xl',
-                'border-gray-25',
-                'bg-white',
-                'text-sm',
-                'text-gray-90',
-                'shadow-sm',
-                'placeholder:text-gray-50',
-                'focus:border-primary',
-                'focus:ring-primary',
-            ]);
-        }
-    }
-
-    $selects = $xpath->query('.//select', $root);
-    if ($selects) {
-        foreach ($selects as $select) {
-            if ($select instanceof DOMElement) {
-                addTailwindClassesToElement($select, [
-                    'block',
-                    'w-full',
-                    'rounded-xl',
-                    'border-gray-25',
-                    'bg-white',
-                    'text-sm',
-                    'text-gray-90',
-                    'shadow-sm',
-                    'focus:border-primary',
-                    'focus:ring-primary',
-                ]);
-            }
-        }
-    }
-
-    $buttons = $xpath->query('.//button', $root);
-    if ($buttons) {
-        foreach ($buttons as $button) {
-            if ($button instanceof DOMElement) {
-                addTailwindClassesToElement($button, [
-                    'inline-flex',
-                    'items-center',
-                    'justify-center',
-                    'gap-2',
-                    'rounded-xl',
-                    'bg-primary',
-                    'px-4',
-                    'py-2.5',
-                    'text-sm',
-                    'font-semibold',
-                    'text-white',
-                    'shadow-sm',
-                    'transition',
-                    'hover:opacity-90',
-                    'focus:outline-none',
-                    'focus:ring-2',
-                    'focus:ring-primary/30',
-                    'focus:ring-offset-2',
-                ]);
-            }
-        }
-    }
-
-    $helpBlocks = $xpath->query(
-        './/*[contains(concat(" ", normalize-space(@class), " "), " help-block ")
-            or contains(concat(" ", normalize-space(@class), " "), " form-control-feedback ")]',
-        $root
-    );
-    if ($helpBlocks) {
-        foreach ($helpBlocks as $helpBlock) {
-            if ($helpBlock instanceof DOMElement) {
-                addTailwindClassesToElement($helpBlock, [
-                    'mt-2',
-                    'block',
-                    'text-sm',
-                    'text-gray-50',
-                ]);
-            }
-        }
-    }
-
-    $advmultiselects = $xpath->query(
-        './/*[contains(concat(" ", normalize-space(@class), " "), " advmultiselect ")]',
-        $root
-    );
-    if ($advmultiselects) {
-        foreach ($advmultiselects as $multiselect) {
-            if (!$multiselect instanceof DOMElement) {
-                continue;
-            }
-
-            addTailwindClassesToElement($multiselect, [
-                'grid',
-                'gap-4',
-                'lg:grid-cols-[minmax(0,1fr)_72px_minmax(0,1fr)]',
-                'items-start',
-            ]);
-
-            $internalSelects = $xpath->query('.//select', $multiselect);
-            if ($internalSelects) {
-                foreach ($internalSelects as $internalSelect) {
-                    if ($internalSelect instanceof DOMElement) {
-                        addTailwindClassesToElement($internalSelect, [
-                            'min-h-[240px]',
-                            'w-full',
-                            'rounded-2xl',
-                            'border',
-                            'border-gray-25',
-                            'bg-white',
-                            'p-3',
-                            'text-sm',
-                            'text-gray-90',
-                            'shadow-sm',
-                        ]);
-                    }
-                }
-            }
-
-            $internalInputs = $xpath->query('.//input', $multiselect);
-            if ($internalInputs) {
-                foreach ($internalInputs as $internalInput) {
-                    if (!$internalInput instanceof DOMElement) {
-                        continue;
-                    }
-
-                    $type = strtolower((string) $internalInput->getAttribute('type'));
-
-                    if ('hidden' === $type) {
-                        continue;
-                    }
-
-                    addTailwindClassesToElement($internalInput, [
-                        'w-full',
-                        'rounded-xl',
-                        'border-gray-25',
-                        'bg-white',
-                        'text-sm',
-                        'text-gray-90',
-                        'shadow-sm',
-                        'placeholder:text-gray-50',
-                        'focus:border-primary',
-                        'focus:ring-primary',
-                    ]);
-                }
-            }
-
-            $internalButtons = $xpath->query('.//button|.//input[@type="button"]|.//input[@type="submit"]', $multiselect);
-            if ($internalButtons) {
-                foreach ($internalButtons as $internalButton) {
-                    if ($internalButton instanceof DOMElement) {
-                        addTailwindClassesToElement($internalButton, [
-                            'inline-flex',
-                            'h-10',
-                            'w-full',
-                            'items-center',
-                            'justify-center',
-                            'rounded-xl',
-                            'bg-primary',
-                            'px-3',
-                            'text-sm',
-                            'font-semibold',
-                            'text-white',
-                            'shadow-sm',
-                            'transition',
-                            'hover:opacity-90',
-                        ]);
-                    }
-                }
-            }
-        }
-    }
-
-    $result = getElementInnerHtml($root);
-
-    libxml_clear_errors();
-    libxml_use_internal_errors($previousUseInternalErrors);
-
-    return $result;
-}
 
 api_protect_admin_script();
 
@@ -355,18 +18,95 @@ $includeSession = 'true' === $plugin->get('include_sessions');
 $includeServices = 'true' === $plugin->get('include_services');
 
 $currency = $plugin->getSelectedCurrency();
+$currencyIso = $currency['iso_code'] ?? '';
 
-if (empty($currency)) {
-    Display::addFlash(
-        Display::return_message($plugin->get_lang('CurrencyIsNotConfigured'), 'error')
+/**
+ * Normalize datetime-local input to database format.
+ */
+function normalizeCouponDateTime(?string $value): ?string
+{
+    if (null === $value || '' === trim($value)) {
+        return null;
+    }
+
+    $value = trim($value);
+
+    $formats = [
+        'Y-m-d\TH:i',
+        'Y-m-d H:i:s',
+        'Y-m-d H:i',
+    ];
+
+    foreach ($formats as $format) {
+        $dateTime = DateTime::createFromFormat($format, $value);
+
+        if ($dateTime instanceof DateTime) {
+            return $dateTime->format('Y-m-d H:i:s');
+        }
+    }
+
+    try {
+        $dateTime = new DateTime($value);
+
+        return $dateTime->format('Y-m-d H:i:s');
+    } catch (Throwable $exception) {
+        return null;
+    }
+}
+
+/**
+ * Format date for datetime-local input.
+ */
+function formatCouponDateTimeInput(?string $value): string
+{
+    if (null === $value || '' === trim($value)) {
+        return '';
+    }
+
+    try {
+        return (new DateTime($value))->format('Y-m-d\TH:i');
+    } catch (Throwable $exception) {
+        return '';
+    }
+}
+
+/**
+ * Sanitize selected ids using available options.
+ *
+ * @param mixed $values
+ */
+function sanitizeCouponSelectedIds($values, array $available): array
+{
+    $values = is_array($values) ? $values : [];
+
+    return array_values(
+        array_unique(
+            array_filter(
+                array_map('intval', $values),
+                static fn (int $id): bool => $id > 0 && isset($available[$id])
+            )
+        )
     );
 }
 
-$currencyIso = $currency['iso_code'] ?? null;
+/**
+ * Build a lookup map for Twig.
+ */
+function buildCouponLookup(array $ids): array
+{
+    $lookup = [];
+
+    foreach ($ids as $id) {
+        $lookup[(int) $id] = true;
+    }
+
+    return $lookup;
+}
 
 $courses = [];
 $sessions = [];
 $services = [];
+$messages = [];
 
 $coursesList = CourseManager::get_courses_list(
     0,
@@ -437,111 +177,174 @@ foreach ($servicesList as $service) {
 
 $discountTypes = $plugin->getCouponDiscountTypes();
 
-// Build the form.
-$form = new FormValidator('add_coupon');
-$form->addText('code', $plugin->get_lang('CouponCode'), true);
-$form->addRadio('discount_type', $plugin->get_lang('CouponDiscountType'), $discountTypes);
-$form->addElement(
-    'number',
-    'discount_amount',
-    [$plugin->get_lang('CouponDiscount'), null, $currencyIso],
-    ['step' => 1, 'min' => 0]
-);
-$form->addDateRangePicker('date', get_lang('Date'), true);
-$form->addCheckBox('active', get_lang('Active'));
-$form->addElement(
-    'advmultiselect',
-    'courses',
-    get_lang('Courses'),
-    $courses,
-    []
-);
+$defaultStart = new DateTime('today 00:00:00');
+$defaultEnd = new DateTime('tomorrow 00:00:00');
 
-if ($includeSession) {
-    $form->addElement(
-        'advmultiselect',
-        'sessions',
-        get_lang('Sessions'),
-        $sessions,
-        []
-    );
-}
-
-if ($includeServices) {
-    $form->addElement(
-        'advmultiselect',
-        'services',
-        get_lang('Services'),
-        $services,
-        []
-    );
-}
-
-$button = $form->addButtonSave(get_lang('Save'));
-
-if (empty($currency)) {
-    $button->setAttribute('disabled');
-}
-
-if ($form->validate()) {
-    $formValues = $form->exportValues();
-
-    $coupon = [];
-    $coupon['code'] = isset($formValues['code']) ? trim((string) $formValues['code']) : '';
-    $coupon['discount_type'] = isset($formValues['discount_type']) ? (int) $formValues['discount_type'] : 0;
-    $coupon['discount_amount'] = isset($formValues['discount_amount']) ? (float) $formValues['discount_amount'] : 0;
-    $coupon['valid_start'] = isset($formValues['date_start']) ? (string) $formValues['date_start'] : '';
-    $coupon['valid_end'] = isset($formValues['date_end']) ? (string) $formValues['date_end'] : '';
-    $coupon['active'] = !empty($formValues['active']) ? 1 : 0;
-
-    if (
-        BuyCoursesPlugin::COUPON_DISCOUNT_TYPE_PERCENTAGE === $coupon['discount_type'] &&
-        $coupon['discount_amount'] > 100
-    ) {
-        Display::addFlash(
-            Display::return_message($plugin->get_lang('CouponDiscountExceed100'), 'error', false)
-        );
-
-        header('Location: '.api_get_self());
-        exit;
-    }
-
-    $coupon['courses'] = isset($formValues['courses']) && is_array($formValues['courses'])
-        ? array_values(array_filter(array_map('intval', $formValues['courses']), static fn (int $id): bool => $id > 0))
-        : [];
-
-    $coupon['sessions'] = isset($formValues['sessions']) && is_array($formValues['sessions'])
-        ? array_values(array_filter(array_map('intval', $formValues['sessions']), static fn (int $id): bool => $id > 0))
-        : [];
-
-    $coupon['services'] = isset($formValues['services']) && is_array($formValues['services'])
-        ? array_values(array_filter(array_map('intval', $formValues['services']), static fn (int $id): bool => $id > 0))
-        : [];
-
-    $result = $plugin->addNewCoupon($coupon);
-
-    if ($result) {
-        header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/coupons.php');
-    } else {
-        header('Location: '.api_get_self());
-    }
-
-    exit;
-}
-
-$formDefaults = [
+$formData = [
     'code' => '',
-    'discount_type' => null,
-    'discount_amount' => 0,
-    'active' => 0,
+    'discount_type' => '',
+    'discount_amount' => '0',
+    'date_start_input' => $defaultStart->format('Y-m-d\TH:i'),
+    'date_end_input' => $defaultEnd->format('Y-m-d\TH:i'),
+    'active' => false,
     'courses' => [],
+    'courses_lookup' => [],
     'sessions' => [],
+    'sessions_lookup' => [],
     'services' => [],
+    'services_lookup' => [],
 ];
 
-$form->setDefaults($formDefaults);
+$csrfSessionKey = 'buycourses_coupon_add_token';
+
+if (empty($_SESSION[$csrfSessionKey])) {
+    $_SESSION[$csrfSessionKey] = bin2hex(random_bytes(32));
+}
+
+$csrfToken = (string) $_SESSION[$csrfSessionKey];
+
+if (empty($currency)) {
+    $messages[] = Display::return_message(
+        $plugin->get_lang('CurrencyIsNotConfigured'),
+        'error',
+        false
+    );
+}
+
+if ('POST' === $_SERVER['REQUEST_METHOD']) {
+    $formData['code'] = trim((string) ($_POST['code'] ?? ''));
+    $formData['discount_type'] = trim((string) ($_POST['discount_type'] ?? ''));
+    $formData['discount_amount'] = trim((string) ($_POST['discount_amount'] ?? '0'));
+    $formData['date_start_input'] = trim((string) ($_POST['date_start'] ?? $formData['date_start_input']));
+    $formData['date_end_input'] = trim((string) ($_POST['date_end'] ?? $formData['date_end_input']));
+    $formData['active'] = isset($_POST['active']);
+
+    $formData['courses'] = sanitizeCouponSelectedIds($_POST['courses'] ?? [], $courses);
+    $formData['sessions'] = sanitizeCouponSelectedIds($_POST['sessions'] ?? [], $sessions);
+    $formData['services'] = sanitizeCouponSelectedIds($_POST['services'] ?? [], $services);
+
+    $formData['courses_lookup'] = buildCouponLookup($formData['courses']);
+    $formData['sessions_lookup'] = buildCouponLookup($formData['sessions']);
+    $formData['services_lookup'] = buildCouponLookup($formData['services']);
+
+    $hasError = false;
+
+    $submittedToken = (string) ($_POST['csrf_token'] ?? '');
+    if ('' === $submittedToken || !hash_equals($csrfToken, $submittedToken)) {
+        $messages[] = Display::return_message(
+            'Invalid form token. Please refresh the page and try again.',
+            'error',
+            false
+        );
+        $hasError = true;
+    }
+
+    if ('' === $formData['code']) {
+        $messages[] = Display::return_message(
+            'Coupon code is required.',
+            'error',
+            false
+        );
+        $hasError = true;
+    }
+
+    $discountType = (int) $formData['discount_type'];
+    if (!array_key_exists($discountType, $discountTypes)) {
+        $messages[] = Display::return_message(
+            'Discount type is required.',
+            'error',
+            false
+        );
+        $hasError = true;
+    }
+
+    $discountAmount = (float) str_replace(',', '.', $formData['discount_amount']);
+    if ($discountAmount < 0) {
+        $messages[] = Display::return_message(
+            'Discount must be zero or greater.',
+            'error',
+            false
+        );
+        $hasError = true;
+    }
+
+    $validStart = normalizeCouponDateTime($formData['date_start_input']);
+    $validEnd = normalizeCouponDateTime($formData['date_end_input']);
+
+    if (null === $validStart || null === $validEnd) {
+        $messages[] = Display::return_message(
+            'Both start and end dates are required.',
+            'error',
+            false
+        );
+        $hasError = true;
+    } elseif ($validStart > $validEnd) {
+        $messages[] = Display::return_message(
+            'The start date cannot be later than the end date.',
+            'error',
+            false
+        );
+        $hasError = true;
+    }
+
+    if (
+        BuyCoursesPlugin::COUPON_DISCOUNT_TYPE_PERCENTAGE === $discountType &&
+        $discountAmount > 100
+    ) {
+        $messages[] = Display::return_message(
+            $plugin->get_lang('CouponDiscountExceed100'),
+            'error',
+            false
+        );
+        $hasError = true;
+    }
+
+    if (empty($currency)) {
+        $hasError = true;
+    }
+
+    if (!$hasError) {
+        $coupon = [];
+        $coupon['code'] = $formData['code'];
+        $coupon['discount_type'] = $discountType;
+        $coupon['discount_amount'] = $discountAmount;
+        $coupon['valid_start'] = (string) $validStart;
+        $coupon['valid_end'] = (string) $validEnd;
+        $coupon['active'] = $formData['active'] ? 1 : 0;
+        $coupon['courses'] = $formData['courses'];
+        $coupon['sessions'] = $formData['sessions'];
+        $coupon['services'] = $formData['services'];
+
+        $result = $plugin->addNewCoupon($coupon);
+
+        if ($result) {
+            $_SESSION[$csrfSessionKey] = bin2hex(random_bytes(32));
+            header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/coupons.php');
+            exit;
+        }
+
+        $messages[] = Display::return_message(
+            'The coupon could not be saved.',
+            'error',
+            false
+        );
+    }
+}
+
+if (empty($formData['courses_lookup'])) {
+    $formData['courses_lookup'] = buildCouponLookup($formData['courses']);
+}
+
+if (empty($formData['sessions_lookup'])) {
+    $formData['sessions_lookup'] = buildCouponLookup($formData['sessions']);
+}
+
+if (empty($formData['services_lookup'])) {
+    $formData['services_lookup'] = buildCouponLookup($formData['services']);
+}
 
 $templateName = $plugin->get_lang('CouponAdd');
+
 $interbreadcrumb[] = [
     'url' => 'paymentsetup.php',
     'name' => get_lang('Configuration'),
@@ -556,7 +359,18 @@ $template->assign('header', $templateName);
 $template->assign('page_title', $templateName);
 $template->assign('plugin_title', $plugin->get_lang('plugin_title'));
 $template->assign('back_url', api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/coupons.php');
-$template->assign('form', styleBuyCoursesCouponFormHtml($form->returnForm()));
+$template->assign('messages', $messages);
+$template->assign('csrf_token', $csrfToken);
+$template->assign('currency_iso', $currencyIso);
+$template->assign('discount_types', $discountTypes);
+$template->assign('include_sessions', $includeSession);
+$template->assign('include_services', $includeServices);
+$template->assign('courses_options', $courses);
+$template->assign('sessions_options', $sessions);
+$template->assign('services_options', $services);
+$template->assign('form_data', $formData);
+$template->assign('submit_disabled', empty($currency));
+
 $content = $template->fetch('BuyCourses/view/coupon_add.tpl');
 $template->assign('content', $content);
 $template->display_one_col_template();

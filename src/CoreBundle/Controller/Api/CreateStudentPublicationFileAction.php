@@ -85,8 +85,8 @@ class CreateStudentPublicationFileAction extends BaseResourceFileAction
                         ->from(CStudentPublication::class, 'sp')
                         ->where('sp.publicationParent = :parent')
                         ->andWhere('sp.user = :user')
-                        ->setParameter('parent', $parentEntity)
-                        ->setParameter('user', $managedUser)
+                        ->setParameter('parent', $parentEntity->getIid())
+                        ->setParameter('user', $managedUser->getId())
                         ->getQuery()
                         ->getSingleScalarResult()
                     ;

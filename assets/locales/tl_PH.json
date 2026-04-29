@@ -10,6 +10,7 @@
     "Title": "Pamagat",
     "Content": "Nilalaman",
     "Invitees": "Mga inanyayahan",
+    "Invitee": "Imbitado",
     "Are you sure you want to delete this item?": "Sigurado ka bang gusto mong tanggalin ang item na ito?",
     "Search": "Maghanap",
     "User list": "Listahan ng Gumagamit",
@@ -119,6 +120,7 @@
     "Edit profile": "I-edit ang profile",
     "Clear filter results": "Linawin ang mga resulta ng filter",
     "Teachers": "Mga Guro",
+    "Teacher": "Guro",
     "Category": "Kategorya",
     "Language": "Wika",
     "Go to the course": "Pumunta sa kurso",
@@ -248,6 +250,7 @@
     "Chamilo URL": "Chamilo URL",
     "Path": "Path",
     "Administrator": "Tagapangasiwa",
+    "Superior (n+1)": "Pangunahing (n+1)",
     "Administrator login": "Login ng Administrator",
     "Administrator password": "Password ng administrator",
     "You may want to change this": "Maaari mong baguhin ito",
@@ -332,6 +335,7 @@
     "{0} updated": "{0} na na-update",
     "Course sessions": "Mga sesyon ng kurso",
     "Learners": "Mga Mag-aaral",
+    "Learner": "Mag-aaral",
     "Progress": "Pag-unlad",
     "Diagnosis": "Pagsusuri",
     "Add user": "Magdagdag ng gumagamit",
@@ -1871,5 +1875,6 @@
     "Save and insert": "I-save at ipasok",
     "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser.": "Ang pag-save ay suportado lamang kapag ang provider ay nagbalik ng base64 content. Kung URL lamang ang natanggap mo, ang pag-save ay hindi pinapayagan upang maiwasan ang pag-download sa browser.",
     "Video generated successfully, but saving is disabled because the provider returned a URL.": "Matagumpay na nabuo ang video, ngunit hindi pinapayagan ang pag-save dahil ang provider ay nagbalik ng URL.",
-    "The file was saved, but its URL could not be resolved.": "Na-save na ang file, ngunit hindi maresolba ang URL nito."
+    "The file was saved, but its URL could not be resolved.": "Na-save na ang file, ngunit hindi maresolba ang URL nito.",
+    "Items": "Items"
 }

@@ -6,8 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Controller;
 
-use Chamilo\CoreBundle\Entity\SettingsCurrent;
-use Chamilo\CoreBundle\Repository\SettingsCurrentRepository;
 use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
@@ -49,28 +47,17 @@ class IndexControllerTest extends WebTestCase
         $client = static::createClient();
         $client->request('GET', '/login');
         $this->assertResponseIsSuccessful();
-        $this->assertStringContainsString('lang="en"', $client->getResponse()->getContent());
+        $this->assertStringContainsString('lang="en-US"', $client->getResponse()->getContent());
     }
 
     public function testLoginChangeLanguage(): void
     {
         $client = static::createClient();
 
-        $repo = $this->getContainer()->get(SettingsCurrentRepository::class);
+        $client->request('GET', '/login', ['_locale' => 'fr_FR']);
 
-        /** @var SettingsCurrent $setting */
-        $setting = $repo->findOneBy(['variable' => 'platform_language']);
-        $this->assertNotNull($setting);
-
-        $setting->setSelectedValue('fr_FR');
-        $repo->update($setting);
-
-        $setting = $repo->findOneBy(['variable' => 'platform_language']);
-        $this->assertSame('fr_FR', $setting->getSelectedValue());
-
-        $client->request('GET', '/login');
         $this->assertResponseIsSuccessful();
-        $this->assertStringContainsString('lang="fr_FR"', $client->getResponse()->getContent());
+        $this->assertStringContainsString('lang="fr-FR"', $client->getResponse()->getContent());
     }
 
     public function testLogout(): void

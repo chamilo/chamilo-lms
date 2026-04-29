@@ -40,7 +40,6 @@
 <script setup>
 import { ref } from "vue"
 import axios from "axios"
-import { ENTRYPOINT } from "../../config/entrypoint"
 import { SOCIAL_TYPE_WALL_COMMENT } from "./constants"
 import { useI18n } from "vue-i18n"
 import BaseButton from "../basecomponents/BaseButton.vue"
@@ -70,7 +69,7 @@ function sendComment() {
   isLoading.value = true
 
   axios
-    .post(ENTRYPOINT + "social_posts", {
+    .post("/api/social_posts", {
       content: comment.value,
       type: SOCIAL_TYPE_WALL_COMMENT,
       sender: securityStore.user["@id"],

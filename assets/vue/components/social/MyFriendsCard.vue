@@ -120,7 +120,6 @@ import { useI18n } from "vue-i18n"
 import { computed, ref, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import axios from "axios"
-import { ENTRYPOINT } from "../../config/entrypoint"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useSecurityStore } from "../../store/securityStore"
 
@@ -191,7 +190,7 @@ async function loadTitleUser() {
   }
 
   try {
-    const { data } = await axios.get(`${ENTRYPOINT}users/${userId}`)
+    const { data } = await axios.get(`/api/users/${userId}`)
     titleUser.value = data
   } catch (error) {
     console.warn("Failed to load wall owner for friends card title.", error)
@@ -287,8 +286,8 @@ async function fetchFriends(forUserId) {
     const currentUserIri = buildUserIri(safeUserId)
 
     const [forward, backward] = await Promise.all([
-      axios.get(`${ENTRYPOINT}user_rel_users`, { params: { user: currentUserIri, relationType: 3 } }),
-      axios.get(`${ENTRYPOINT}user_rel_users`, { params: { friend: currentUserIri, relationType: 3 } }),
+      axios.get(`/api/user_rel_users`, { params: { user: currentUserIri, relationType: 3 } }),
+      axios.get(`/api/user_rel_users`, { params: { friend: currentUserIri, relationType: 3 } }),
     ])
 
     const raw = [...(forward.data?.["hydra:member"] || []), ...(backward.data?.["hydra:member"] || [])]

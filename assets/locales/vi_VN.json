@@ -10,6 +10,7 @@
     "Title": "Ti\u00eau \u0111\u1ec1",
     "Content": "N\u1ed9i dung",
     "Invitees": "Ng\u01b0\u1eddi \u0111\u01b0\u1ee3c m\u1eddi",
+    "Invitee": "Ng\u01b0\u1eddi \u0111\u01b0\u1ee3c m\u1eddi",
     "Are you sure you want to delete this item?": "B\u1ea1n c\u00f3 ch\u1eafc ch\u1eafn mu\u1ed1n x\u00f3a m\u1ee5c n\u00e0y kh\u00f4ng?",
     "Search": "T\u00ecm ki\u1ebfm",
     "User list": "Danh s\u00e1ch ng\u01b0\u1eddi d\u00f9ng",
@@ -119,6 +120,7 @@
     "Edit profile": "Ch\u1ec9nh s\u1eeda h\u1ed3 s\u01a1",
     "Clear filter results": "X\u00f3a k\u1ebft qu\u1ea3 b\u1ed9 l\u1ecdc",
     "Teachers": "Gi\u1ea3ng vi\u00ean",
+    "Teacher": "Gi\u1ea3ng vi\u00ean",
     "Category": "B\u1ed9 m\u00f4n",
     "Language": "Ng\u00f4n ng\u1eef",
     "Go to the course": "\u0110i \u0111\u1ebfn kh\u00f3a h\u1ecdc",
@@ -248,6 +250,7 @@
     "Chamilo URL": "URL Chamilo",
     "Path": "\u0110\u01b0\u1eddng d\u1eabn",
     "Administrator": "Qu\u1ea3n tr\u1ecb vi\u00ean",
+    "Superior (n+1)": "C\u1ea5p tr\u00ean (n+1)",
     "Administrator login": "\u0110\u0103ng nh\u1eadp Qu\u1ea3n tr\u1ecb vi\u00ean",
     "Administrator password": "M\u1eadt kh\u1ea9u qu\u1ea3n tr\u1ecb vi\u00ean",
     "You may want to change this": "B\u1ea1n c\u00f3 th\u1ec3 mu\u1ed1n thay \u0111\u1ed5i \u0111i\u1ec1u n\u00e0y",
@@ -332,6 +335,7 @@
     "{0} updated": "{0} \u0111\u00e3 c\u1eadp nh\u1eadt",
     "Course sessions": "C\u00e1c bu\u1ed5i h\u1ecdc c\u1ee7a kh\u00f3a h\u1ecdc",
     "Learners": "H\u1ecdc vi\u00ean",
+    "Learner": "H\u1ecdc vi\u00ean",
     "Progress": "Ti\u1ebfn \u0111\u1ed9",
     "Diagnosis": "Ch\u1ea9n \u0111o\u00e1n",
     "Add user": "Th\u00eam ng\u01b0\u1eddi d\u00f9ng",
@@ -1874,5 +1878,6 @@
     "Save and insert": "L\u01b0u v\u00e0 ch\u00e8n",
     "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser.": "Ch\u1ec9 h\u1ed7 tr\u1ee3 l\u01b0u khi nh\u00e0 cung c\u1ea5p tr\u1ea3 v\u1ec1 n\u1ed9i dung base64. N\u1ebfu ch\u1ec9 nh\u1eadn \u0111\u01b0\u1ee3c URL, l\u01b0u b\u1ecb v\u00f4 hi\u1ec7u h\u00f3a \u0111\u1ec3 tr\u00e1nh t\u1ea3i xu\u1ed1ng trong tr\u00ecnh duy\u1ec7t.",
     "Video generated successfully, but saving is disabled because the provider returned a URL.": "Video \u0111\u01b0\u1ee3c t\u1ea1o th\u00e0nh c\u00f4ng, nh\u01b0ng l\u01b0u b\u1ecb v\u00f4 hi\u1ec7u h\u00f3a v\u00ec nh\u00e0 cung c\u1ea5p tr\u1ea3 v\u1ec1 URL.",
-    "The file was saved, but its URL could not be resolved.": "T\u1ec7p \u0111\u00e3 \u0111\u01b0\u1ee3c l\u01b0u, nh\u01b0ng URL c\u1ee7a n\u00f3 kh\u00f4ng th\u1ec3 \u0111\u01b0\u1ee3c gi\u1ea3i quy\u1ebft."
+    "The file was saved, but its URL could not be resolved.": "T\u1ec7p \u0111\u00e3 \u0111\u01b0\u1ee3c l\u01b0u, nh\u01b0ng URL c\u1ee7a n\u00f3 kh\u00f4ng th\u1ec3 \u0111\u01b0\u1ee3c gi\u1ea3i quy\u1ebft.",
+    "Items": "Items"
 }

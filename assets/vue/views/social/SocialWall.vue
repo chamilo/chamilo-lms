@@ -50,7 +50,6 @@ import axios from "axios"
 import SocialWallPostForm from "../../components/social/SocialWallPostForm.vue"
 import SocialWallPostList from "../../components/social/SocialWallPostList.vue"
 import { useSecurityStore } from "../../store/securityStore"
-import { ENTRYPOINT } from "../../config/entrypoint"
 
 const { t } = useI18n()
 
@@ -114,7 +113,7 @@ async function loadWallUser() {
   }
 
   try {
-    const { data } = await axios.get(`${ENTRYPOINT}users/${targetId}`)
+    const { data } = await axios.get(`/api/users/${targetId}`)
     wallUser.value = data
   } catch (e) {
     console.warn("Failed to load wall user. Keeping stub.", e)
@@ -132,10 +131,10 @@ async function hasFriendship(meIri, wallIri) {
 
   try {
     const [a, b] = await Promise.all([
-      axios.get(`${ENTRYPOINT}user_rel_users`, {
+      axios.get(`/api/user_rel_users`, {
         params: { relationType: 3, user: meIri, friend: wallIri },
       }),
-      axios.get(`${ENTRYPOINT}user_rel_users`, {
+      axios.get(`/api/user_rel_users`, {
         params: { relationType: 3, user: wallIri, friend: meIri },
       }),
     ])

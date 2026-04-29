@@ -2172,7 +2172,7 @@ function detectBrowserLanguage(Request $request): string
 
     $preferredLanguages = $request->getPreferredLanguage();
 
-    $clientLanguage = strtolower(str_replace('_', '-', $preferredLanguages));
+    $clientLanguage = strtolower(str_replace('_', '-', $preferredLanguages ?? ''));
 
     foreach ($language_index as $code => $language) {
         if (str_starts_with($clientLanguage, $code)) {

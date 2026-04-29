@@ -6,6 +6,7 @@
   }
 
   &:has(.p-textarea) label {
+    @apply top-3 translate-y-0;
   }
 
   &:has(.p-inputicon:first-child) label {
@@ -32,12 +33,14 @@
   &:has(input.p-filled) label,
   &:has(textarea.p-filled) label,
   &:has(.p-inputwrapper-filled) label {
+    @apply text-primary;
   }
 
   &:has(input:focus) label,
   &:has(input:-webkit-autofill) label,
   &:has(textarea:focus) label,
   &:has(.p-inputwrapper-focus) label {
+    @apply text-primary;
   }
 
   &-in .p-inputtext,
@@ -47,6 +50,7 @@
   &-in .p-autocomplete-input-multiple,
   &-in .p-cascadeselect-label,
   &-in .p-treeselect-label {
+    @apply text-primary;
   }
 
   &-in:has(input:focus) label,
@@ -58,6 +62,7 @@
   &-in:has(.p-inputwrapper-filled) label,
   &-in:has(input[placeholder]) label,
   &-in:has(textarea[placeholder]) label {
+    @apply text-primary;
   }
 
   &-on:has(input:focus) label,

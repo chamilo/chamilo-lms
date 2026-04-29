@@ -4,7 +4,6 @@
     ref="menu"
     :model="model"
     :popup="true"
-    class="app-topbar__user-submenu"
   >
     <template #item="{ item, props }">
       <router-link
@@ -21,7 +20,6 @@
           <span
             v-if="item.icon"
             :class="item.icon"
-            class="mr-2"
           />
           <span>{{ item.label }}</span>
         </a>

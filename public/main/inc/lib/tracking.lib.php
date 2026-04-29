@@ -17,6 +17,7 @@ use ChamiloSession as Session;
 use CpChart\Cache as pCache;
 use CpChart\Data as pData;
 use CpChart\Image as pImage;
+use Doctrine\ORM\QueryBuilder;
 use ExtraField as ExtraFieldModel;
 
 /**
@@ -4594,7 +4595,8 @@ class Tracking
         $extra_params = '',
         $show_courses = true,
         $showAllSessions = true,
-        $returnArray = false
+        $returnArray = false,
+        $showGraph = true
     ) {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -4632,6 +4634,7 @@ class Tracking
             $courseSessionColumns = $trackingColumns['course_session'];
         }
 
+        $showDeletedExercises = 'true' === api_get_setting('exercise.tracking_my_progress_show_deleted_exercises');
         $user_id = (int) $user_id;
         $session_id = (int) $session_id;
         $urlId = -1;
@@ -4823,7 +4826,15 @@ class Tracking
                         true
                     );
 
-                    $qb = Container::getQuizRepository()->findAllByCourse($course, null, null, 1, false);
+                    $qb = Container::getQuizRepository()->findAllByCourse(
+                        $course,
+                        null,
+                        null,
+                        1,
+                        false,
+                        null,
+                        $showDeletedExercises
+                    );
                     /** @var CQuiz[] $exercises */
                     $exercises = $qb->getQuery()->getResult();
 
@@ -5035,11 +5046,13 @@ class Tracking
                     $final_all_exercise_graph_list[] = $all_exercise_graph_list[$key];
                 }
 
-                $main_session_graph = self::generate_session_exercise_graph(
-                    $final_all_exercise_graph_name_list,
-                    $my_results_final,
-                    $final_all_exercise_graph_list
-                );
+                if ($showGraph) {
+                    $main_session_graph = self::generate_session_exercise_graph(
+                        $final_all_exercise_graph_name_list,
+                        $my_results_final,
+                        $final_all_exercise_graph_list
+                    );
+                }
             }
 
             $sessionIcon = Display::getMdiIcon(
@@ -5095,7 +5108,15 @@ class Tracking
 
                     $sessionEntity = api_get_session_entity($my_session_id);
 
-                    $qb = Container::getQuizRepository()->findAllByCourse($course, $sessionEntity, null, 2);
+                    $qb = Container::getQuizRepository()->findAllByCourse(
+                        $course,
+                        $sessionEntity,
+                        null,
+                        2,
+                        true,
+                        null,
+                        $showDeletedExercises
+                    );
                     /** @var CQuiz[] $exercises */
                     $exercises = $qb->getQuery()->getResult();
                     $count_exercises = count($exercises);
@@ -5160,14 +5181,16 @@ class Tracking
             }
             $html .= '</tbody>';
             $html .= '</table></div><br />';
-            $html .= Display::div(
-                $main_session_graph,
-                [
-                    'id' => 'session_graph',
-                    'class' => 'chart-session',
-                    'style' => 'position:relative; text-align: center;',
-                ]
-            );
+            if ($showGraph) {
+                $html .= Display::div(
+                    $main_session_graph,
+                    [
+                        'id' => 'session_graph',
+                        'class' => 'chart-session',
+                        'style' => 'position:relative; text-align: center;',
+                    ]
+                );
+            }
 
             // -----------------------------------------------------------------
             // Checking selected session: course list inside a session
@@ -5456,6 +5479,57 @@ class Tracking
         return $html;
     }
 
+    private static function getQuizResultsForMyProgress(QueryBuilder $qb, bool $includeDeleted): array
+    {
+        if (false === $includeDeleted) {
+            return $qb->getQuery()->getResult();
+        }
+
+        $entityManager = Database::getManager();
+        $filters = $entityManager->getFilters();
+        $wasSoftDeleteableEnabled = $filters->isEnabled('softdeleteable');
+
+        if ($wasSoftDeleteableEnabled) {
+            $filters->disable('softdeleteable');
+        }
+
+        try {
+            return $qb->getQuery()->getResult();
+        } finally {
+            if ($wasSoftDeleteableEnabled) {
+                $filters->enable('softdeleteable');
+            }
+        }
+    }
+
+    private static function isDeletedQuizForMyProgress(CQuiz $exercise, int $courseId, int $sessionId): bool
+    {
+        $resourceNode = $exercise->getResourceNode();
+
+        if (null === $resourceNode) {
+            return false;
+        }
+
+        foreach ($resourceNode->getResourceLinks() as $resourceLink) {
+            $linkCourse = $resourceLink->getCourse();
+
+            if (null === $linkCourse || $courseId !== (int) $linkCourse->getId()) {
+                continue;
+            }
+
+            $linkSession = $resourceLink->getSession();
+            $linkSessionId = null === $linkSession ? 0 : (int) $linkSession->getId();
+
+            if ($sessionId !== $linkSessionId) {
+                continue;
+            }
+
+            return null !== $resourceLink->getDeletedAt()
+                || null !== $resourceLink->getEndVisibilityAt();
+        }
+
+        return false;
+    }
 
     /**
      * Shows the user detail progress (when clicking in the details link).
@@ -5483,6 +5557,7 @@ class Tracking
             return '';
         }
 
+        $showDeletedExercises = 'true' === api_get_setting('exercise.tracking_my_progress_show_deleted_exercises');
         $courseCode = $course->getCode();
 
         $html .= '<a name="course_session_data"></a>';
@@ -5540,9 +5615,18 @@ class Tracking
             );
         }
 
-        $qb = Container::getQuizRepository()->findAllByCourse($course, $session, null, 2, false);
+        $qb = Container::getQuizRepository()->findAllByCourse(
+            $course,
+            $session,
+            null,
+            2,
+            false,
+            null,
+            $showDeletedExercises
+        );
+
         /** @var CQuiz[] $exercises */
-        $exercises = $qb->getQuery()->getResult();
+        $exercises = self::getQuizResultsForMyProgress($qb, $showDeletedExercises);
 
         $to_graph_exercise_result = [];
         if (!empty($exercises)) {
@@ -5567,18 +5651,19 @@ class Tracking
 
                 $html .= '<tr class="row_even">';
                 $url = api_get_path(WEB_CODE_PATH).
-                    "exercise/overview.php?cid={$courseId}&sid=$sessionId&exerciseId={$exerciseId}";
+                    'exercise/overview.php?cid='.$courseId.'&sid='.$sessionId.'&exerciseId='.$exerciseId;
 
-                if (true == $visible_return['value']) {
+                $isDeletedExercise = self::isDeletedQuizForMyProgress($exercise, $courseId, $sessionId);
+
+                if ($showDeletedExercises && $isDeletedExercise) {
+                    $exerciseTitle = sprintf(get_lang('%s (deleted)'), $exercise->getTitle());
+                } elseif (true == $visible_return['value']) {
                     $exerciseTitle = Display::url(
                         $exercise->getTitle(),
                         $url,
                         ['target' => SESSION_LINK_TARGET]
                     );
-                } elseif (-1 == $exercise->getActive()) {
-                    $exerciseTitle = sprintf(get_lang('%s (deleted)'), $exercise->getTitle());
                 } else {
-                    // Fallback: not visible but not deleted
                     $exerciseTitle = $exercise->getTitle();
                 }
 
@@ -5831,7 +5916,7 @@ class Tracking
                 }
 
                 $url = api_get_path(WEB_CODE_PATH).
-                    "lp/lp_controller.php?cid={$courseId}&sid=$sessionId&lp_id=$lp_id&action=view";
+                    'exercise/overview.php?cid='.$courseId.'&sid='.$sessionId.'&exerciseId='.$exerciseId;
 
                 $html .= '<tr class="row_even">';
 

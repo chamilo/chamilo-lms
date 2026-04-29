@@ -125,7 +125,7 @@
                                     </span>
                                     {% if frequency.in_use %}
                                         <span class="inline-flex items-center rounded-full bg-warning/10 px-3 py-1 text-xs font-semibold text-warning">
-                                            In use ({{ frequency.usage_count }})
+                                            {{ 'FrequencyInUse'|get_plugin_lang('BuyCoursesPlugin')|format(frequency.usage_count) }}
                                         </span>
                                     {% endif %}
                                 </div>
@@ -161,7 +161,7 @@
                     {% else %}
                         <tr>
                             <td colspan="3" class="px-4 py-10 text-center text-sm text-gray-50">
-                                {{ 'NoResults'|get_lang }}
+                                {{ 'No Results'|get_lang }}
                             </td>
                         </tr>
                     {% endfor %}

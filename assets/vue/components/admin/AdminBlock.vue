@@ -48,17 +48,17 @@
           :key="index"
           :aria-label="t(item.label)"
           :class="item.class"
-          class="p-menuitem"
+          class="p-menu-item"
           role="menuitem"
         >
-          <div class="p-menuitem-content">
+          <div class="p-menu-item-content">
             <BaseAppLink
               :to="item.route"
               :url="item.url"
-              class="p-menuitem-link"
+              class="p-menu-item-link"
             >
               <span
-                class="p-menuitem-text"
+                class="p-menu-item-label"
                 v-text="item.label"
               />
             </BaseAppLink>
@@ -131,5 +131,5 @@ const visibleItems = computed(() =>
     .filter((item) => item.visible),
 )
 
-const bgImageUrl = computed(() => props.bgImage ? getThemeAssetUrl(props.bgImage) : null)
+const bgImageUrl = computed(() => (props.bgImage ? getThemeAssetUrl(props.bgImage) : null))
 </script>

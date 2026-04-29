@@ -42,6 +42,7 @@ class CourseChatUtils
 
     private bool $restrictToCoachSetting = false;
     private bool $savePrivateConversationsInDocuments = false;
+    private bool $hideUsernameInCourseChat = false;
 
     public function __construct($courseId, $userId, $sessionId, $groupId, ResourceNode $resourceNode, ResourceRepository $repository)
     {
@@ -54,6 +55,7 @@ class CourseChatUtils
 
         $this->restrictToCoachSetting = ('true' === api_get_setting('chat.course_chat_restrict_to_coach'));
         $this->savePrivateConversationsInDocuments = ('true' === api_get_setting('chat.save_private_conversations_in_documents'));
+        $this->hideUsernameInCourseChat = ('true' === api_get_setting('profile.hide_username_in_course_chat'));
 
         $this->dbg('construct', [
             'courseId'     => $courseId,
@@ -452,14 +454,15 @@ class CourseChatUtils
             $timeNow   = date('d/m/y H:i:s');
             $userPhoto = \UserManager::getUserPicture($this->userId);
             $htmlMsg   = self::prepareMessage($message);
+            $displayName = $user instanceof User ? $this->getUserChatDisplayName($user) : '';
 
             $bubble = $isMaster
                 ? '<div class="message-teacher"><div class="content-message"><div class="chat-message-block-name">'
-                .\UserManager::formatUserFullName($user).'</div><div class="chat-message-block-content">'
+                .$displayName.'</div><div class="chat-message-block-content">'
                 .$htmlMsg.'</div><div class="message-date">'.$timeNow
                 .'</div></div><div class="icon-message"></div><img class="chat-image" src="'.$userPhoto.'"></div>'
                 : '<div class="message-student"><img class="chat-image" src="'.$userPhoto.'"><div class="icon-message"></div>'
-                .'<div class="content-message"><div class="chat-message-block-name">'.\UserManager::formatUserFullName($user)
+                .'<div class="content-message"><div class="chat-message-block-name">'.$displayName
                 .'</div><div class="chat-message-block-content">'.$htmlMsg.'</div><div class="message-date">'
                 .$timeNow.'</div></div></div>';
 
@@ -810,9 +813,21 @@ class CourseChatUtils
         return $usersInfo;
     }
 
-    /** Normalize user card info */
+    /**
+     * Normalize user card info.
+     */
     private function formatUser(User $user, $status, array $connectedSet): array
     {
+        $completeName = $this->getUserChatDisplayName($user);
+
+        /*
+         * Keep the "username" key for frontend compatibility, but when the setting
+         * is enabled do not expose the real username in the course chat payload.
+         */
+        $username = $this->hideUsernameInCourseChat
+            ? $completeName
+            : (string) $user->getUsername();
+
         return [
             'id'            => $user->getId(),
             'firstname'     => $user->getFirstname(),
@@ -820,8 +835,8 @@ class CourseChatUtils
             'status'        => $status,
             'image_url'     => UserManager::getUserPicture($user->getId()),
             'profile_url'   => api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user->getId(),
-            'complete_name' => UserManager::formatUserFullName($user),
-            'username'      => $user->getUsername(),
+            'complete_name' => $completeName,
+            'username'      => $username,
             'email'         => $user->getEmail(),
             'isConnected'   => isset($connectedSet[$user->getId()]),
         ];
@@ -913,5 +928,22 @@ class CourseChatUtils
             ->getSingleScalarResult();
 
         return (int) $number;
+    }
+
+    private function getUserChatDisplayName(User $user): string
+    {
+        $displayName = trim((string) UserManager::formatUserFullName($user));
+
+        if ('' !== $displayName) {
+            return $displayName;
+        }
+
+        $displayName = trim((string) $user->getFirstname().' '.(string) $user->getLastname());
+
+        if ('' !== $displayName) {
+            return $displayName;
+        }
+
+        return (string) $user->getUsername();
     }
 }

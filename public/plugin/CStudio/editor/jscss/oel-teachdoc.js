@@ -9400,7 +9400,7 @@ function displayEditThemeParamsProject(){
 		bdDiv += '<div class="gjs-mdl-dialog-v2 gjs-one-bg gjs-two-color" ';
         bdDiv += ' style="max-width:850px;background-color:white;" >';
 		bdDiv += '<div class="gjs-mdl-header" style="background-color: #E6E6E6;" >';
-		bdDiv += '<div class="gjs-mdl-title">Project theme</div>';
+		bdDiv += '<div class="gjs-mdl-title trd">Project theme</div>';
 		
         bdDiv += '<a target="_blank" onClick="closeAllEditWindows();launchCustomCode();" class="params-right" ></a>';
 		
@@ -9415,8 +9415,8 @@ function displayEditThemeParamsProject(){
         bdDiv += '<div class="innerLeftBannerTeach" >';
         bdDiv += '</div>';
 
-		bdDiv += '<div class="innerEditTitleTeach" style="margin-left:5px;" >Page style</div>';
-		bdDiv += '<div class="innerEditTitleTeach" style="margin-left:10px;">Quiz style</div>';
+		bdDiv += '<div class="innerEditTitleTeach trd" style="margin-left:5px;" >Page style</div>';
+		bdDiv += '<div class="innerEditTitleTeach trd" style="margin-left:10px;">Quiz style</div>';
 
         bdDiv += '<div class="innerEditColorsTeach" >';
         bdDiv += getCollectionsColorsThemes();
@@ -9543,7 +9543,7 @@ function displayParamsTeachEdit() {
 		h += ' class="WinEditParamsTeach" >';
         
         h +=  '<div class="gjs-mdl-header" style="background:#808B96;color:white;padding:6px!important;" >';
-        h += '<div class="gjs-mdl-title">Tools</div>';
+        h += '<div class="gjs-mdl-title trd">Tools</div>';
         h += '<div class="gjs-mdl-btn-close gjs-mdl-btn-close-audio" ';
         h += ' data-close-modal=""></div>';
         h += '</div>';
@@ -15393,12 +15393,18 @@ function displaySelectLanguage(){
 
 }
 
+function setCstudioLangCookie(lg) {
+	document.cookie = 'cstudio_lang=' + encodeURIComponent(lg) + ';path=/;SameSite=Lax;max-age=31536000';
+}
+
 function selectLangUI(lg) {
 
 	if (langselectUI==lg) {
 		closeAllEditWindows();
 		return;
 	}
+
+	setCstudioLangCookie(lg);
 
 	if (langselectUI=='en_US') {
 		if(localStorage){
@@ -15479,6 +15485,7 @@ function detectTraductAll() {
         }
     }
     langselectUI = langselectUIStore;
+    setCstudioLangCookie(langselectUI);
 
 }
 

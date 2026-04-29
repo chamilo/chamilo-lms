@@ -43,6 +43,13 @@
         <CategoryLinks category="menu_links" />
         <PageList category-title="footer_private" />
 
+        <p
+          v-if="institutionAddress"
+          class="app-sidebar__institution-address"
+        >
+          {{ institutionAddress }}
+        </p>
+
         <p v-html="t('Created with Chamilo copyright year', [currentYear])" />
       </div>
       <a
@@ -109,6 +116,10 @@ const currentYear = new Date().getFullYear()
 
 const hideLogoutButton = computed(() => {
   return platformConfigStore.getSetting("display.hide_logout_button") === "true"
+})
+
+const institutionAddress = computed(() => {
+  return String(platformConfigStore.getSetting("platform.institution_address") || "").trim()
 })
 
 const isAnonymous = computed(() => {

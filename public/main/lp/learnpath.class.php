@@ -446,6 +446,14 @@ class learnpath
             $exercise->disable();
             $exercise->save();
             $title = $exercise->get_formated_title();
+
+            // Update the ResourceLink visibility to DRAFT so students cannot access the quiz directly
+            $quizRepo = Container::getQuizRepository();
+            $quizEntity = $quizRepo->find($id);
+            if (null !== $quizEntity) {
+                $courseEntity = api_get_course_entity($course_id);
+                $quizRepo->setVisibilityDraft($quizEntity, $courseEntity);
+            }
         }
 
         $lpItem = (new CLpItem())
@@ -1239,7 +1247,7 @@ class learnpath
 
             $this->last = $this->current;
             // current is
-            $this->current = isset($this->ordered_items[$index]) ? $this->ordered_items[$index] : null;
+            $this->current = $this->ordered_items[$index] ?? null;
             $this->index = $index;
             if ($this->debug > 2) {
                 error_log('$index '.$index);
@@ -2807,7 +2815,7 @@ class learnpath
      *
      * @return string $provided_toc Link to the lp_item resource
      */
-    public function get_link($type = 'http', $item_id = 0, $provided_toc = false)
+    public function get_link(string $type = 'http', $item_id = 0, $provided_toc = false)
     {
         $course_id = $this->get_course_int_id();
         $item_id = (int) $item_id;
@@ -2849,7 +2857,7 @@ class learnpath
             $lp_item_type = $row['litype'];
             $lp_item_path = $row['lipath'];
             $lp_item_params = $row['liparams'];
-            if (empty($lp_item_params) && false !== strpos($lp_item_path, '?')) {
+            if (empty($lp_item_params) && str_contains($lp_item_path, '?')) {
                 [$lp_item_path, $lp_item_params] = explode('?', $lp_item_path);
             }
             //$sys_course_path = api_get_path(SYS_COURSE_PATH).api_get_course_path();
@@ -3180,9 +3188,9 @@ class learnpath
                         }
 
                         // We want to use parameters if they were defined in the imsmanifest
-                        if (false === strpos($file, 'blank.php')) {
+                        if (!str_contains($file, 'blank.php')) {
                             $lp_item_params = ltrim($lp_item_params, '?');
-                            $file .= (false === strstr($file, '?') ? '?' : '').$lp_item_params;
+                            $file .= (!str_contains($file, '?') ? '?' : '').$lp_item_params;
                         }
                     } else {
                         $file = 'lp_content.php?type=dir';
@@ -4910,7 +4918,7 @@ class learnpath
                 href="javascript:void(0);"
                 onclick="return deleteItem(this);"
                 class="">';
-                $deleteIcon .= Display::getMdiIcon('delete', 'ch-tool-icon', '', 16, get_lang('Delete section'));
+                $deleteIcon .= Display::getMdiIcon('delete', 'ch-tool-icon', '', 16, get_lang('Delete'));
                 $deleteIcon .= '</a>';
                 $extra = '';
                 if ('dir' === $type && empty($node['__children'])) {
@@ -5120,9 +5128,32 @@ class learnpath
      */
     public static function generate_learning_path_folder($course, $creatorId = 0)
     {
-        // Creating learning_path folder
-        $dir = 'learning_path';
         $creatorId = empty($creatorId) ? api_get_user_id() : $creatorId;
+
+        $courseEntity = api_get_course_entity($course['real_id']);
+        $courseNode = $courseEntity ? $courseEntity->getResourceNode() : null;
+
+        if ($courseNode) {
+            $em = Database::getManager();
+            $qb = $em
+                ->createQueryBuilder()
+                ->select('doc')
+                ->from(Chamilo\CourseBundle\Entity\CDocument::class, 'doc')
+                ->innerJoin('doc.resourceNode', 'node')
+                ->where('doc.filetype = :filetype')
+                ->andWhere('doc.title = :title')
+                ->andWhere('node.parent = :parent')
+                ->setParameter('filetype', 'folder')
+                ->setParameter('title', 'learning_path')
+                ->setParameter('parent', $courseNode)
+                ->setMaxResults(1);
+
+            $document = $qb->getQuery()->getOneOrNullResult();
+
+            if ($document) {
+                return $document;
+            }
+        }
 
         return create_unexisting_directory(
             $course,
@@ -5131,8 +5162,8 @@ class learnpath
             null,
             0,
             '',
-            $dir,
-            get_lang('Learning paths'),
+            'learning_path',
+            'learning_path',
             0
         );
     }
@@ -6516,8 +6547,8 @@ document.addEventListener("DOMContentLoaded", function () {
             false,
             [],
             [],
-            ['file', 'folder'],
-            true
+            ['file', 'html', 'folder'],
+            false
         );
 
         $form = new FormValidator(
@@ -7630,7 +7661,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         if ('quiz' == $last_item_not_dir_type) {
                             // if previous is quiz, mark its max score as default score to be achieved
                             $sql = "UPDATE $tbl_lp_item SET mastery_score = '$last_item_not_dir_max'
-                                    WHERE c_id = $course_id AND lp_id = $lp_id AND iid = $last_item_not_dir";
+                                    WHERE lp_id = $lp_id AND iid = $last_item_not_dir";
                             Database::query($sql);
                         }
                         // now simply update the prerequisite to set it to the last non-chapter item
@@ -8123,24 +8154,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
     /**
      * Check if URL is not allowed to be show in a iframe.
-     *
-     * @param string $src
-     *
-     * @return string
      */
-    public function fixBlockedLinks($src)
+    public function fixBlockedLinks(string $src): string
     {
         $urlInfo = parse_url($src);
 
         $platformProtocol = 'https';
-        if (false === strpos(api_get_path(WEB_CODE_PATH), 'https')) {
+        if (!str_contains(api_get_path(WEB_CODE_PATH), 'https')) {
             $platformProtocol = 'http';
         }
 
         $protocolFixApplied = false;
         //Scheme validation to avoid "Notices" when the lesson doesn't contain a valid scheme
-        $scheme = isset($urlInfo['scheme']) ? $urlInfo['scheme'] : null;
-        $host = isset($urlInfo['host']) ? $urlInfo['host'] : null;
+        $scheme = $urlInfo['scheme'] ?? null;
+        $host = $urlInfo['host'] ?? null;
 
         if ($platformProtocol != $scheme) {
             Session::write('x_frame_source', $src);
@@ -8148,8 +8175,8 @@ document.addEventListener("DOMContentLoaded", function () {
             $protocolFixApplied = true;
         }
 
-        if (false == $protocolFixApplied) {
-            if (false === strpos(api_get_path(WEB_PATH), $host)) {
+        if (!$protocolFixApplied) {
+            if (!str_contains(api_get_path(WEB_PATH), $host)) {
                 // Check X-Frame-Options
                 $ch = curl_init();
                 $options = [

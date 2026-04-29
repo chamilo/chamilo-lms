@@ -100,7 +100,6 @@ import BaseFileUpload from "../basecomponents/BaseFileUpload.vue"
 import useVuelidate from "@vuelidate/core"
 import { required } from "@vuelidate/validators"
 import axios from "axios"
-import { ENTRYPOINT } from "../../config/entrypoint"
 
 const { t } = useI18n()
 const router = useRouter()
@@ -146,7 +145,7 @@ const submitGroupEdit = () => {
     }
 
     axios
-      .put(`${ENTRYPOINT}usergroups/${groupInfo.value.id}`, updatedGroupData, {
+      .put(`/api/usergroups/${groupInfo.value.id}`, updatedGroupData, {
         headers: {
           "Content-Type": "application/json",
         },

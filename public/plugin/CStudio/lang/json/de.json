@@ -111,6 +111,10 @@
     "Section collapse": "Abschnitt einklappen",
     "Index Table": "Inhaltsverzeichnis",
     "fxTools": "fxTools",
+    "Tools": "Werkzeuge",
+    "Project theme": "Projekt-Design",
+    "Page style": "Seitenstil",
+    "Quiz style": "Quiz-Stil",
     "Content elements": "Inhaltselemente",
     "Button": "Schaltfläche",
     "Insert": "Einfügen",
@@ -124,5 +128,15 @@
     "Edition filltext": "Bearbeitung Text ausfüllen",
     "Edition findwords": "Bearbeitung Wörter finden",
     "Edition markwords": "Bearbeitung Wörter markieren",
-    "Edition sorttheparagraphs": "Bearbeitung Absätze sortieren"
+    "Edition sorttheparagraphs": "Bearbeitung Absätze sortieren",
+    "tpl_demo_content_note": "Dies ist ein Demo-Inhalt für Chamilo Studio. Für die Entwicklung sollten Sie diese Datei nicht bearbeiten, stattdessen können Sie sie modifizieren und umbenennen.",
+    "tpl_start": "Start",
+    "tpl_put_your_title_here": "Geben Sie hier Ihren Titel ein",
+    "tpl_title_a": "Titel A",
+    "tpl_target_audience_and_prerequisites": "Zielgruppe und Voraussetzungen",
+    "tpl_who_is_this_training_for": "Für wen ist diese Schulung gedacht?",
+    "tpl_objectives_of_the_course": "Ziele des Kurses",
+    "tpl_objective_read_and_analyse": "Lesen und Analysieren von Buchhaltungs- und Finanzdokumenten",
+    "tpl_objective_conducting_project": "Durchführung eines Projekts zur Ausführung von Arbeiten",
+    "tpl_objective_mastering_tools": "Beherrschen der Werkzeuge"
 }

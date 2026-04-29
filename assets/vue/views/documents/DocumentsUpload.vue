@@ -115,7 +115,6 @@ import XHRUpload from "@uppy/xhr-upload"
 import ImageEditor from "@uppy/image-editor"
 import { useRoute, useRouter } from "vue-router"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
-import { ENTRYPOINT } from "../../config/entrypoint"
 import { useCidReq } from "../../composables/cidReq"
 import { useUpload } from "../../composables/upload"
 import { useI18n } from "vue-i18n"
@@ -343,7 +342,7 @@ const uppy = new Uppy({ autoProceed: false })
     },
   })
   .use(XHRUpload, {
-    endpoint: ENTRYPOINT + "documents",
+    endpoint: "/api/documents",
     formData: true,
     fieldName: "uploadFile",
     getResponseError: (responseText, xhr) => {
@@ -428,7 +427,7 @@ onMounted(async () => {
   if (!isSearchEnabled.value) return
 
   try {
-    const response = await fetch(ENTRYPOINT + "search_engine_fields", { credentials: "same-origin" })
+    const response = await fetch("/api/search_engine_fields", { credentials: "same-origin" })
     if (!response.ok) {
       console.error("[Search] Failed to load search engine fields:", response.status)
       return

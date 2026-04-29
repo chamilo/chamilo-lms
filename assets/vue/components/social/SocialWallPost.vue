@@ -144,7 +144,6 @@ import { computed, inject, onMounted, reactive, ref, watch } from "vue"
 import WallComment from "./SocialWallComment.vue"
 import WallActions from "./Actions"
 import axios from "axios"
-import { ENTRYPOINT } from "../../config/entrypoint"
 import BaseCard from "../basecomponents/BaseCard.vue"
 import { SOCIAL_TYPE_PROMOTED_MESSAGE } from "./constants"
 import { useFormatDate } from "../../composables/formatDate"
@@ -245,7 +244,7 @@ async function loadCommentsCount() {
     const postIri = props.post?.["@id"]
     if (!postIri) return
 
-    const { data } = await axios.get(ENTRYPOINT + "social_posts", {
+    const { data } = await axios.get("/api/social_posts", {
       params: {
         parent: postIri,
         itemsPerPage: 1,
@@ -269,7 +268,7 @@ async function loadComments() {
     const postIri = props.post?.["@id"]
     if (!postIri) return
 
-    const { data } = await axios.get(ENTRYPOINT + "social_posts", {
+    const { data } = await axios.get("/api/social_posts", {
       params: {
         parent: postIri,
         "order[sendDate]": "desc",

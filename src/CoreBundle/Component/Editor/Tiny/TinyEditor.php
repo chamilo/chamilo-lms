@@ -401,7 +401,12 @@ class TinyEditor extends Editor
     private function getPlatformTemplates(): array
     {
         $entityManager = Database::getManager();
-        $systemTemplates = $entityManager->getRepository(SystemTemplate::class)->findAll();
+        $systemTemplateRepository = $entityManager->getRepository(SystemTemplate::class);
+
+        $systemTemplates = 'true' === (string) api_get_setting('language.template_activate_language_filter')
+        && method_exists($systemTemplateRepository, 'findForLanguageFilter')
+            ? $systemTemplateRepository->findForLanguageFilter($this->getTemplateLanguageCandidates())
+            : $systemTemplateRepository->findAll();
         $cssTheme = api_get_path(WEB_CSS_PATH).'themes/'.api_get_visual_theme().'/';
         $search = ['{CSS_THEME}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}', '{CSS}'];
         $replace = [
@@ -473,5 +478,57 @@ class TinyEditor extends Editor
         }
 
         return $templateList;
+    }
+
+    private function getTemplateLanguageCandidates(): array
+    {
+        $candidates = [];
+
+        if (function_exists('api_get_language_isocode')) {
+            $this->addTemplateLanguageCandidates($candidates, api_get_language_isocode());
+        }
+
+        if (function_exists('api_get_interface_language')) {
+            $this->addTemplateLanguageCandidates($candidates, api_get_interface_language());
+        }
+
+        $user = api_get_user_entity();
+
+        if ($user && method_exists($user, 'getLocale')) {
+            $this->addTemplateLanguageCandidates($candidates, $user->getLocale());
+        }
+
+        return array_values(array_unique(array_filter($candidates)));
+    }
+
+    private function addTemplateLanguageCandidates(array &$candidates, ?string $locale): void
+    {
+        $locale = trim((string) $locale);
+
+        if ('' === $locale) {
+            return;
+        }
+
+        $candidates[] = $locale;
+        $candidates[] = str_replace('_', '-', $locale);
+        $candidates[] = str_replace('-', '_', $locale);
+
+        $shortLocale = substr($locale, 0, 2);
+
+        if (2 === strlen($shortLocale)) {
+            $candidates[] = $shortLocale;
+        }
+
+        if (function_exists('api_get_language_from_iso')) {
+            $languageInfo = api_get_language_from_iso($locale);
+
+            if (is_array($languageInfo)) {
+                foreach (['english_name', 'englishName', 'original_name', 'name', 'isocode', 'iso_code'] as $key) {
+                    if (!empty($languageInfo[$key])) {
+                        $candidates[] = (string) $languageInfo[$key];
+                    }
+                }
+            }
+        }
     }
 }

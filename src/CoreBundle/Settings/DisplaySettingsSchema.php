@@ -45,9 +45,6 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
         $builder->setDefaults(
             [
                 'enable_help_link' => 'true',
-                'show_administrator_data' => 'true',
-                'show_tutor_data' => 'true',
-                'show_teacher_data' => 'true',
                 'showonline' => 'world',
                 'time_limit_whosonline' => '30',
                 'show_email_addresses' => 'false',
@@ -59,7 +56,6 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
                 'accessibility_font_resize' => 'false',
                 'show_admin_toolbar' => 'do_not_show',
                 'show_hot_courses' => 'true',
-                'hide_home_top_when_connected' => 'false',
                 'hide_logout_button' => 'false',
                 'hide_social_media_links' => 'false',
                 'gravatar_enabled' => 'false',
@@ -87,9 +83,6 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->add('enable_help_link', YesNoType::class)
-            ->add('show_administrator_data', YesNoType::class)
-            ->add('show_tutor_data', YesNoType::class)
-            ->add('show_teacher_data', YesNoType::class)
             ->add(
                 'showonline',
                 ChoiceType::class,
@@ -122,7 +115,6 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
                 ]
             )
             ->add('show_hot_courses', YesNoType::class)
-            ->add('hide_home_top_when_connected', YesNoType::class)
             ->add('hide_logout_button', YesNoType::class)
             ->add('hide_social_media_links', YesNoType::class)
             ->add('gravatar_enabled', YesNoType::class)

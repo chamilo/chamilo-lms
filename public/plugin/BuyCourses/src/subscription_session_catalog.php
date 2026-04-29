@@ -108,11 +108,7 @@ if (api_is_platform_admin()) {
 
 $templateName = $plugin->get_lang('CourseListOnSale');
 $template = new Template($templateName);
-if (api_is_platform_admin()) {
-    $defaultBackUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/subscriptions_courses.php';
-} else {
-    $defaultBackUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/index.php';
-}
+$defaultBackUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/index.php';
 $backUrl = $defaultBackUrl;
 
 /*

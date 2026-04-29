@@ -65,6 +65,8 @@ if (isset($_GET['id'])) {
 
     include __DIR__.'/inc/getoptions.php';
 
+    require_once __DIR__.'/inc/template-lang.php';
+
     require_once __DIR__.'/../ajax/inc/teachdoc-render-prepare.php';
 
     $localFolder = get_local_folder($idPage);
@@ -83,20 +85,16 @@ if (isset($_GET['id'])) {
     if (!$VDB->w_api_is_anonymous()) {
         $user = $VDB->w_api_get_user_info();
 
-        if (isset($user['status'])) {
-            if (SESSIONADMIN == $user['status']
-              || COURSEMANAGER == $user['status']
-              || PLATFORM_ADMIN == $user['status']) {
-                echo "userStatusCS = '".(int) $user['status']."';";
-                if (isset($_SESSION['idsessionedition'])) {
-                    echo "listPagesCS = '".(string) $_SESSION['idsessionedition']."';";
-                }
-            } else {
-                echo 'Context token is not valid or has expired. User rejected !</br>';
-                echo "<a href='javascript:history.back();' >Return</a></br></head></html>";
-
-                exit;
+        if ($VDB->w_api_is_allowed_to_edit()) {
+            echo "userStatusCS = '".(int) $user['status']."';";
+            if (isset($_SESSION['idsessionedition'])) {
+                echo "listPagesCS = '".(string) $_SESSION['idsessionedition']."';";
             }
+        } else {
+            echo 'Context token is not valid or has expired. User rejected !</br>';
+            echo "<a href='javascript:history.back();' >Return</a></br></head></html>";
+
+            exit;
         }
     } else {
         echo "console.log('api_is_anonymous !');";
@@ -164,6 +162,12 @@ if (isset($_GET['id'])) {
             $base_css = '';
         }
 
+        // Cookie cstudio_lang is written by the JS language switcher (setCstudioLangCookie)
+        // on every page load, making it the most reliable source for the user's chosen UI language.
+        $cstudioInterfaceLocale = (!empty($_COOKIE['cstudio_lang']) ? $_COOKIE['cstudio_lang'] : null)
+            ?? Container::getSession()?->get('_locale')
+            ?? 'en_US';
+
         if ('' == $base_html) {
             if (isset($_GET['pty'])) {
                 $pathFile = 'templates/pages/'.$_GET['pty'].'.html';
@@ -188,11 +192,13 @@ if (isset($_GET['id'])) {
                 $base_html = file_get_contents('templates/pages/p0.html');
             }
             $base_html = str_replace('###TITLE###', $title, $base_html);
+            $base_html = apply_cstudio_template_lang($base_html, $cstudioInterfaceLocale);
         }
 
         if (isset($_GET['resetall'])) {
             $base_html = file_get_contents('templates/pages/p0.html');
             $base_html = str_replace('###TITLE###', $title, $base_html);
+            $base_html = apply_cstudio_template_lang($base_html, $cstudioInterfaceLocale);
         }
 
         oel_add_ctr_rights($idPage);
@@ -319,11 +325,11 @@ echo '<div id="filcustomcode" style="display:none;" >'.$filcustomcode.'&v='.$var
 
     <?php
 
-  if (file_exists(__DIR__.'/../vendor/elfinder/elfinder.php')) {
+  /*if (file_exists(__DIR__.'/../vendor/elfinder/elfinder.php')) {
       require_once __DIR__.'/../vendor/elfinder/elfinder.php';
   } else {
       echo "<script>console.log('Vendor elfinder not find !');</script>";
-  }
+  }*/
 
 echo "<script>
         var _p = {

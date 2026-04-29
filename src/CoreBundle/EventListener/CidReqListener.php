@@ -53,7 +53,7 @@ class CidReqListener
         private readonly AuthorizationCheckerInterface $authorizationChecker,
         private readonly TranslatorInterface $translator,
         private readonly EntityManagerInterface $entityManager,
-        private readonly TokenStorageInterface $tokenStorage
+        private readonly TokenStorageInterface $tokenStorage,
     ) {}
 
     /**
@@ -164,7 +164,6 @@ class CidReqListener
                 throw new NotAllowedException($this->translator->trans("You're not allowed in this course"));
             }
 
-            // Checking if sid is used.
             $sessionId = (int) $request->get('sid');
 
             if (empty($sessionId)) {

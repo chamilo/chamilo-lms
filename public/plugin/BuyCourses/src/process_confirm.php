@@ -46,13 +46,13 @@ switch ($sale['payment_type']) {
     case BuyCoursesPlugin::PAYMENT_TYPE_PAYPAL:
         $paypalParams = $plugin->getPaypalParams();
 
-        $pruebas = 1 == $paypalParams['sandbox'];
+        $test = 1 == $paypalParams['sandbox'];
         $paypalUsername = trim((string) ($paypalParams['username'] ?? ''));
         $paypalPassword = trim((string) ($paypalParams['password'] ?? ''));
         $paypalSignature = trim((string) ($paypalParams['signature'] ?? ''));
 
         error_log('[BuyCourses][PayPal] Starting Express Checkout for sale '.$sale['id']);
-        error_log('[BuyCourses][PayPal] Sandbox='.($pruebas ? 'true' : 'false'));
+        error_log('[BuyCourses][PayPal] Sandbox='.($test ? 'true' : 'false'));
         error_log('[BuyCourses][PayPal] API username configured='.($paypalUsername !== '' ? 'yes' : 'no'));
         error_log('[BuyCourses][PayPal] API password configured='.($paypalPassword !== '' ? 'yes' : 'no'));
         error_log('[BuyCourses][PayPal] API signature configured='.($paypalSignature !== '' ? 'yes' : 'no'));

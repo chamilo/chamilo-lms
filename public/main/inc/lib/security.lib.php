@@ -329,10 +329,15 @@ class Security
         static $purifier = [];
         if (!isset($purifier[$user_status])) {
             $cache_dir = api_get_path(SYS_ARCHIVE_PATH).'Serializer';
-            if (!file_exists($cache_dir)) {
+
+            if (!is_dir($cache_dir)) {
                 $mode = api_get_permissions_for_new_directories();
-                mkdir($cache_dir, $mode);
+
+                if (!@mkdir($cache_dir, $mode) && !is_dir($cache_dir)) {
+                    error_log('Cannot create HTMLPurifier cache directory: '.$cache_dir);
+                }
             }
+
             $config = HTMLPurifier_Config::createDefault();
             $config->set('Cache.SerializerPath', $cache_dir);
             $config->set('Core.Encoding', api_get_system_encoding());

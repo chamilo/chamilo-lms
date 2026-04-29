@@ -83,3 +83,4 @@ $strings['Pre-upload Documents'] = 'Documents à précharger';
 $strings['No documents found'] = 'Aucun document trouvé';
 $strings['Failed to load documents'] = 'Erreur de chargement des documents';
 $strings['No meetings or recordings are available yet.'] = 'Aucun meeting ni aucun enregistrement ne sont disponibles pour le moment.';
+$strings['Share the conference link with allowed participants.'] = 'Partager le lien de la conférence avec les participants autorisés.';

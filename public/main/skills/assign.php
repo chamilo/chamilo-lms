@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Level;
 use Chamilo\CoreBundle\Entity\Skill;
 
 /**
@@ -29,7 +30,7 @@ $entityManager = Database::getManager();
 $skillManager = new SkillModel();
 $skillRepo = $entityManager->getRepository(Skill::class);
 $skillRelSkill = $entityManager->getRepository(\Chamilo\CoreBundle\Entity\SkillRelSkill::class);
-$skillLevelRepo = $entityManager->getRepository(\Chamilo\CoreBundle\Entity\Level::class);
+$skillLevelRepo = $entityManager->getRepository(Level::class);
 $skillUserRepo = $entityManager->getRepository(\Chamilo\CoreBundle\Entity\SkillRelUser::class);
 
 $skillLevels = api_get_setting('skill.skill_levels_names', true);

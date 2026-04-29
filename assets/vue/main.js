@@ -54,7 +54,6 @@ import BaseAppLink from "./components/basecomponents/BaseAppLink.vue"
 // import 'primeflex/primeflex.css';
 
 import Alpine from "alpinejs"
-import { ENTRYPOINT } from "./config/entrypoint"
 
 // @todo move in a file:
 store.registerModule(
@@ -272,9 +271,9 @@ axios.interceptors.request.use((config) => {
 
   if (!pageCid && !pageSid && !pageGid) return config
 
-  // Only for API calls (ENTRYPOINT usually ends with /api)
+  // Only for API calls
   const url = config.url || ""
-  const isApiCall = url.includes("/api/") || url.startsWith("/api/") || url.startsWith(ENTRYPOINT)
+  const isApiCall = url.includes("/api/")
   if (!isApiCall) return config
 
   // Ensure params is an object

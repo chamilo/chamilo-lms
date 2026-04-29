@@ -10,6 +10,7 @@
     "Title": "ba\u015fl\u0131k",
     "Content": "\u0130\u00e7erik",
     "Invitees": "Davetliler",
+    "Invitee": "Davetli",
     "Are you sure you want to delete this item?": "Bu \u00f6\u011feyi silmek istedi\u011finizden emin misiniz?",
     "Search": "Arama",
     "User list": "Kullan\u0131c\u0131 listesi",
@@ -119,6 +120,7 @@
     "Edit profile": "Profili d\u00fczenle",
     "Clear filter results": "Filtre sonu\u00e7lar\u0131n\u0131 temizle",
     "Teachers": "Ders e\u011fitmenleri",
+    "Teacher": "\u00d6\u011fretmen",
     "Category": "Kategori",
     "Language": "Dil",
     "Go to the course": "Ders'e git",
@@ -248,6 +250,7 @@
     "Chamilo URL": "Chamilo URL'si",
     "Path": "Yol",
     "Administrator": "Y\u00f6netici",
+    "Superior (n+1)": "\u00dcst (n+1)",
     "Administrator login": "Y\u00f6netici kullan\u0131c\u0131 ad\u0131",
     "Administrator password": "Y\u00f6netici \u015fifresi",
     "You may want to change this": "Bunu de\u011fi\u015ftirmek isteyebilirsiniz",
@@ -332,6 +335,7 @@
     "{0} updated": "{0} g\u00fcncellendi",
     "Course sessions": "Ders oturumlar\u0131",
     "Learners": "\u00d6\u011frenciler",
+    "Learner": "\u00d6\u011frenci",
     "Progress": "\u0130lerleme",
     "Diagnosis": "Te\u015fhis",
     "Add user": "Kullan\u0131c\u0131 Ekle",
@@ -1874,5 +1878,6 @@
     "Save and insert": "Kaydet ve ekle",
     "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser.": "Kaydetme yaln\u0131zca sa\u011flay\u0131c\u0131 base64 i\u00e7eri\u011fi d\u00f6nd\u00fcrd\u00fc\u011f\u00fcnde desteklenir. Yaln\u0131zca bir URL ald\u0131ysan\u0131z, taray\u0131c\u0131da indirmeyi \u00f6nlemek i\u00e7in kaydetme devre d\u0131\u015f\u0131 b\u0131rak\u0131l\u0131r.",
     "Video generated successfully, but saving is disabled because the provider returned a URL.": "Video ba\u015far\u0131yla olu\u015fturuldu, ancak sa\u011flay\u0131c\u0131 bir URL d\u00f6nd\u00fcrd\u00fc\u011f\u00fc i\u00e7in kaydetme devre d\u0131\u015f\u0131.",
-    "The file was saved, but its URL could not be resolved.": "Dosya kaydedildi, ancak URL'si \u00e7\u00f6z\u00fcmlenemedi."
+    "The file was saved, but its URL could not be resolved.": "Dosya kaydedildi, ancak URL'si \u00e7\u00f6z\u00fcmlenemedi.",
+    "Items": "Items"
 }

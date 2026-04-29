@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Helpers\ResourceFileHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
+use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDropboxCategory;
 use Chamilo\CourseBundle\Entity\CDropboxFeedback;
 use Chamilo\CourseBundle\Repository\CDropboxCategoryRepository;
@@ -45,7 +48,8 @@ class DropboxController extends AbstractController
         private readonly CDropboxFileRepository $fileRepo,
         private readonly CDropboxFeedbackRepository $feedbackRepo,
         private readonly SluggerInterface $slugger,
-        private readonly ResourceNodeRepository $resourceNodeRepository
+        private readonly ResourceNodeRepository $resourceNodeRepository,
+        private readonly SettingsManager $settingsManager
     ) {}
 
     private function humanSize(int $bytes): string
@@ -96,9 +100,18 @@ class DropboxController extends AbstractController
                 $cid = (int) $m[1];
             }
         }
+
         if ($cid <= 0) {
             return $this->json(['message' => 'Missing course id (cid)'], 400);
         }
+
+        $course = $this->em->getRepository(Course::class)->find($cid);
+        if (!$course) {
+            return $this->json(['message' => 'Course not found'], 404);
+        }
+
+        $allowMailing = 'true' === $this->settingsManager->getSetting('dropbox.dropbox_allow_mailing', true)
+            && $this->isGranted(CourseVoter::EDIT, $course);
 
         $conn = $this->em->getConnection();
         $userRows = [];
@@ -124,6 +137,7 @@ class DropboxController extends AbstractController
             foreach ($userRows as $row) {
                 $seen[(int) $row['id']] = true;
             }
+
             foreach ($more as $row) {
                 $uid = (int) $row['id'];
                 if (!isset($seen[$uid])) {
@@ -139,11 +153,19 @@ class DropboxController extends AbstractController
             if ($uid === $me) {
                 continue;
             }
+
             $label = trim(($u['firstname'] ?? '').' '.($u['lastname'] ?? '')) ?: ('User #'.$uid);
             $options[] = ['value' => 'user_'.$uid, 'label' => $label];
         }
 
         array_unshift($options, ['value' => 'self', 'label' => '— Just upload —']);
+
+        if ($allowMailing) {
+            array_splice($options, 1, 0, [[
+                'value' => 'mailing',
+                'label' => '— Mailing to all learners —',
+            ]]);
+        }
 
         return $this->json($options);
     }

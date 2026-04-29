@@ -111,6 +111,10 @@
     "Section collapse": "Szakasz összecsukása",
     "Index Table": "Tartalomjegyzék",
     "fxTools": "fxEszközök",
+    "Tools": "Eszközök",
+    "Project theme": "Projekttéma",
+    "Page style": "Oldalstílus",
+    "Quiz style": "Kvízstílus",
     "Content elements": "Tartalmi elemek",
     "Button": "Gomb",
     "Insert": "Beszúrás",
@@ -124,5 +128,15 @@
     "Edition filltext": "Szerkesztés kitöltés",
     "Edition findwords": "Szerkesztés szavakkeresése",
     "Edition markwords": "Szerkesztés szavakmegjelölése",
-    "Edition sorttheparagraphs": "Szerkesztés bekezdéssorrend"
+    "Edition sorttheparagraphs": "Szerkesztés bekezdéssorrend",
+    "tpl_demo_content_note": "Ez egy demó tartalom a Chamilo Studio számára. Fejlesztés során ezt a fájlt ne szerkeszd, inkább módosítsd és nevezd át.",
+    "tpl_start": "Kezdés",
+    "tpl_put_your_title_here": "Írd be a címet ide",
+    "tpl_title_a": "Cím A",
+    "tpl_target_audience_and_prerequisites": "Célközönség és előfeltételek",
+    "tpl_who_is_this_training_for": "Kinek szól ez a képzés?",
+    "tpl_objectives_of_the_course": "A kurzus célkitűzései",
+    "tpl_objective_read_and_analyse": "Számviteli és pénzügyi dokumentumok olvasása és elemzése",
+    "tpl_objective_conducting_project": "Projekt vezetése munkavégzéshez",
+    "tpl_objective_mastering_tools": "Eszközök elsajátítása"
 }

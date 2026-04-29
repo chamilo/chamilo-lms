@@ -2,6 +2,9 @@
 
 declare(strict_types=1);
 
+use Chamilo\CoreBundle\Framework\Container;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
 /**
  * chamidoc plugin\CStudio\0_dal\dal.vdatabase.php
  * Virtual class for Software.
@@ -166,6 +169,9 @@ class VirtualDatabase
         $this->detect_engine();
 
         if ('chamil' == $this->engine) {
+            if (WEB_PATH === $term) {
+                return Container::getRouter()->generate('index', [], UrlGeneratorInterface::ABSOLUTE_URL);
+            }
             return api_get_path($term);
         }
     }
@@ -284,4 +290,12 @@ class VirtualDatabase
 
         return 'en_US';
     }
+    public function w_api_is_allowed_to_edit() {
+        $this->detect_engine();
+
+        if ('chamil' == $this->engine) {
+            return api_is_allowed_to_edit();
+        }
+    }
+
 }

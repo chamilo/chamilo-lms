@@ -111,6 +111,10 @@
     "Section collapse": "Secțiune pliere",
     "Index Table": "Tabel Indice",
     "fxTools": "fxTools",
+    "Tools": "Instrumente",
+    "Project theme": "Temă proiect",
+    "Page style": "Stil pagină",
+    "Quiz style": "Stil test",
     "Content elements": "Elemente de conținut",
     "Button": "Buton",
     "Insert": "Inserează",
@@ -124,5 +128,15 @@
     "Edition filltext": "Editare completaretxt",
     "Edition findwords": "Editare gasestecuvinte",
     "Edition markwords": "Editare marcheazacuvinte",
-    "Edition sorttheparagraphs": "Editare ordoneazaparagrafe"
+    "Edition sorttheparagraphs": "Editare ordoneazaparagrafe",
+    "tpl_demo_content_note": "Acesta este un conținut demo pentru Chamilo Studio. Pentru dezvoltare, nu ar trebui să editați acest fișier, în schimb îl puteți modifica și redenumi.",
+    "tpl_start": "Începeți",
+    "tpl_put_your_title_here": "Puneți titlul aici",
+    "tpl_title_a": "Titlu A",
+    "tpl_target_audience_and_prerequisites": "Public țintă și cerințe prealabile",
+    "tpl_who_is_this_training_for": "Pentru cine este acest training?",
+    "tpl_objectives_of_the_course": "Obiectivele cursului",
+    "tpl_objective_read_and_analyse": "Citiți și analizați documente contabile și financiare",
+    "tpl_objective_conducting_project": "Realizarea unui proiect pentru efectuarea lucrărilor",
+    "tpl_objective_mastering_tools": "Stăpânirea instrumentelor"
 }

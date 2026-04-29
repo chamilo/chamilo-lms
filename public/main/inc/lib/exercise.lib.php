@@ -3394,7 +3394,8 @@ EOT;
         $check_publication_dates = false,
         $search = '',
         $search_all_sessions = false,
-        $active = 2
+        $active = 2,
+        bool $includeDeleted = false
     ) {
         $course_id = api_get_course_int_id();
         if (!empty($course_info) && !empty($course_info['real_id'])) {
@@ -3413,9 +3414,19 @@ EOT;
 
         $repo = Container::getQuizRepository();
 
-        return $repo->findAllByCourse($course, $session, (string) $search, $active)
+        return $repo
+            ->findAllByCourse(
+                $course,
+                $session,
+                (string) $search,
+                $active,
+                true,
+                null,
+                $includeDeleted
+            )
             ->getQuery()
-            ->getResult();
+            ->getResult()
+            ;
     }
 
     /**

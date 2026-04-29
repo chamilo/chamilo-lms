@@ -111,6 +111,10 @@
     "Section collapse": "طي القسم",
     "Index Table": "جدول المؤشر",
     "fxTools": "fxTools",
+    "Tools": "أدوات",
+    "Project theme": "سمة المشروع",
+    "Page style": "نمط الصفحة",
+    "Quiz style": "نمط الاختبار",
     "Content elements": "عناصر المحتوى",
     "Button": "زر",
     "Insert": "أدرج",
@@ -124,5 +128,15 @@
     "Edition filltext": "تحرير ملء النص",
     "Edition findwords": "تحرير البحث عن الكلمات",
     "Edition markwords": "تحرير تحديد الكلمات",
-    "Edition sorttheparagraphs": "تحرير ترتيب الفقرات"
+    "Edition sorttheparagraphs": "تحرير ترتيب الفقرات",
+    "tpl_demo_content_note": "هذا محتوى تجريبي لـ Chamilo Studio. للتطوير، يجب ألا تقوم بتحرير هذا الملف، بل يمكنك تعديله وإعادة تسميته.",
+    "tpl_start": "ابدأ",
+    "tpl_put_your_title_here": "ضع عنوانك هنا",
+    "tpl_title_a": "العنوان أ",
+    "tpl_target_audience_and_prerequisites": "الجمهور المستهدف والمتطلبات الأساسية",
+    "tpl_who_is_this_training_for": "من أجل من هذه التدريب؟",
+    "tpl_objectives_of_the_course": "أهداف الدورة",
+    "tpl_objective_read_and_analyse": "قراءة وتحليل الوثائق المحاسبية والمالية",
+    "tpl_objective_conducting_project": "إجراء مشروع لتنفيذ العمل",
+    "tpl_objective_mastering_tools": "إتقان الأدوات"
 }

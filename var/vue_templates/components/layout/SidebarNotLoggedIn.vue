@@ -30,6 +30,7 @@ const platformConfigStore = usePlatformConfig()
 const allowRegistration = computed(() => "false" !== platformConfigStore.getSetting("registration.allow_registration")) 
 
 const categoryMenuLinks = ref([])
+const categoryPublicMenuLinks = ref([])
 
 function buildMenuLinkUrl(item) {
   if (item?.url) {
@@ -43,7 +44,7 @@ function buildMenuLinkUrl(item) {
   return null
 }
 
-function normalizeCategoryMenuLinks(items) {
+function normalizeCategoryLinks(items, keyPrefix) {
   if (!Array.isArray(items)) {
     return []
   }
@@ -51,45 +52,47 @@ function normalizeCategoryMenuLinks(items) {
   return items
     .filter((item) => item?.title && (item?.slug || item?.url))
     .map((item, index) => ({
-      key: `menu_link_${item.id || item.slug || index}`,
+      key: `${keyPrefix}_${item.id || item.slug || index}`,
       label: item.title,
       url: buildMenuLinkUrl(item),
     }))
     .filter((item) => item.url)
 }
 
-async function loadCategoryMenuLinks() {
+async function loadLinksForCategory(category) {
   try {
     const currentLocale = (locale.value || "").toString()
     const url =
-      `/pages/_category-links?category=${encodeURIComponent("menu_links")}` +
+      `/pages/_category-links?category=${encodeURIComponent(category)}` +
       `&locale=${encodeURIComponent(currentLocale)}`
 
-    const response = await fetch(url, {
-      headers: {
-        Accept: "application/json",
-      },
-    })
+    const response = await fetch(url, { headers: { Accept: "application/json" } })
 
     if (!response.ok) {
-      categoryMenuLinks.value = []
-      return
+      return []
     }
 
     const data = await response.json()
-    categoryMenuLinks.value = normalizeCategoryMenuLinks(data?.items)
+    return normalizeCategoryLinks(data?.items, category)
   } catch (error) {
-    console.error("Failed to load category menu links.", error)
-    categoryMenuLinks.value = []
+    console.error(`Failed to load category links for "${category}".`, error)
+    return []
   }
 }
 
-onMounted(loadCategoryMenuLinks)
+async function loadAllCategoryLinks() {
+  ;[categoryMenuLinks.value, categoryPublicMenuLinks.value] = await Promise.all([
+    loadLinksForCategory("menu_links"),
+    loadLinksForCategory("menu_public_links"),
+  ])
+}
+
+onMounted(loadAllCategoryLinks)
 
 watch(
   () => locale.value,
   () => {
-    loadCategoryMenuLinks()
+    loadAllCategoryLinks()
   },
 )
 
@@ -131,6 +134,10 @@ const menuItems = computed(() => {
 
   if (categoryMenuLinks.value.length > 0) {
     items.push(...categoryMenuLinks.value)
+  }
+
+  if (categoryPublicMenuLinks.value.length > 0) {
+    items.push(...categoryPublicMenuLinks.value)
   }
 
   return items

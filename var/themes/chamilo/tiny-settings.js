@@ -45,7 +45,7 @@
 //     both are merged here (base runs, then local).
 //
 ;(function () {
-  "use strict"
+  ;("use strict")
 
   // ── Basic TinyMCE path/suffix (self-hosted)
   var BASE_URL_TINYMCE = "/libs/editor"
@@ -57,21 +57,18 @@
     if (Array.isArray(p)) return p.flatMap((s) => String(s).split(/\s+/)).filter(Boolean)
     return String(p).split(/\s+/).filter(Boolean)
   }
-  function unionPlugins(a, b) {
-    var set = new Set()
-    normalizePlugins(a).forEach((x) => set.add(x))
-    normalizePlugins(b).forEach((x) => set.add(x))
-    return Array.from(set)
-  }
+
   function dedupeToolbar(a, b) {
     const tok = (t) =>
       (t || "")
         .split("|")
         .map((s) => s.trim())
         .filter(Boolean)
+
     const norm = (s) => s.replace(/\s+/g, " ")
     const seen = new Set()
     const out = []
+
     for (const block of [...tok(a), ...tok(b)]) {
       const k = norm(block)
       if (!seen.has(k)) {
@@ -79,7 +76,293 @@
         out.push(block)
       }
     }
+
     return out.join(" | ")
+  }
+
+  function toBool(value) {
+    if (typeof value === "boolean") {
+      return value
+    }
+
+    return ["1", "true", "yes", "on"].includes(
+      String(value ?? "")
+        .trim()
+        .toLowerCase(),
+    )
+  }
+
+  function removePlugins(plugins, namesToRemove) {
+    const removeSet = new Set((namesToRemove || []).map((item) => String(item).trim()).filter(Boolean))
+    return normalizePlugins(plugins)
+      .filter((plugin) => !removeSet.has(plugin))
+      .join(" ")
+  }
+
+  function removeToolbarCommands(toolbar, commandsToRemove) {
+    const removeSet = new Set((commandsToRemove || []).map((item) => String(item).trim()).filter(Boolean))
+
+    return String(toolbar || "")
+      .split("|")
+      .map((group) =>
+        group
+          .trim()
+          .split(/\s+/)
+          .filter((cmd) => cmd && !removeSet.has(cmd))
+          .join(" "),
+      )
+      .map((group) => group.trim())
+      .filter(Boolean)
+      .join(" | ")
+  }
+
+  function appendExtendedValidElements(raw, addition) {
+    const current = String(raw || "").trim()
+    const next = String(addition || "").trim()
+
+    if (!next) {
+      return current
+    }
+
+    if (!current) {
+      return next
+    }
+
+    if (current.includes(next)) {
+      return current
+    }
+
+    return `${current},${next}`
+  }
+
+  function appendValidChildren(raw, additions) {
+    const current = String(raw || "")
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean)
+
+    for (const item of additions || []) {
+      const normalized = String(item || "").trim()
+      if (!normalized) {
+        continue
+      }
+
+      if (!current.includes(normalized)) {
+        current.push(normalized)
+      }
+    }
+
+    return current.join(",")
+  }
+
+  function appendInvalidElements(raw, additions) {
+    const current = String(raw || "")
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean)
+
+    for (const item of additions || []) {
+      const normalized = String(item || "").trim()
+      if (!normalized) {
+        continue
+      }
+
+      if (!current.includes(normalized)) {
+        current.push(normalized)
+      }
+    }
+
+    return current.join(",")
+  }
+
+  function wrapSetup(existingSetup, extraSetup) {
+    return function (editor) {
+      if (typeof existingSetup === "function") {
+        try {
+          existingSetup(editor)
+        } catch (e) {
+          // Ignore
+        }
+      }
+
+      if (typeof extraSetup === "function") {
+        try {
+          extraSetup(editor)
+        } catch (e) {
+          // Ignore
+        }
+      }
+    }
+  }
+
+  function stripInlineSvg(html) {
+    return String(html || "").replace(/<svg[\s\S]*?<\/svg>/gi, "")
+  }
+
+  function stripSvgReferences(html) {
+    let out = stripInlineSvg(html)
+
+    out = out.replace(
+      /<img\b([^>]*?)\bsrc=(["'])([^"']*(?:\.svg(?:\?[^"']*)?|data:image\/svg\+xml[^"']*))\2([^>]*)>/gi,
+      "",
+    )
+
+    out = out.replace(
+      /<object\b([^>]*?)\bdata=(["'])([^"']*(?:\.svg(?:\?[^"']*)?|data:image\/svg\+xml[^"']*))\2([^>]*)>[\s\S]*?<\/object>/gi,
+      "",
+    )
+
+    out = out.replace(
+      /<embed\b([^>]*?)\bsrc=(["'])([^"']*(?:\.svg(?:\?[^"']*)?|data:image\/svg\+xml[^"']*))\2([^>]*)>/gi,
+      "",
+    )
+
+    return out
+  }
+
+  function applyChamiloEditorPolicies(config, features) {
+    const flags = features || {}
+
+    const isLearner = toBool(flags.isLearner)
+    const blockCopyPasteForStudents = toBool(flags.blockCopyPasteForStudents)
+    const youtubeForStudents = toBool(flags.youtubeForStudents)
+    const enabledInsertHtml = toBool(flags.enabledInsertHtml)
+    const enableIframeInclusion = toBool(flags.enableIframeInclusion)
+    const enabledSupportSvg = toBool(flags.enabledSupportSvg)
+
+    const allowIframeEmbeds = enabledInsertHtml && enableIframeInclusion
+
+    if (isLearner && !youtubeForStudents) {
+      config.plugins = removePlugins(config.plugins, ["media"])
+      config.toolbar = removeToolbarCommands(config.toolbar, ["media"])
+    }
+
+    if (allowIframeEmbeds) {
+      config.extended_valid_elements = appendExtendedValidElements(
+        config.extended_valid_elements,
+        "iframe[src|title|width|height|name|class|style|frameborder|allow|allowfullscreen|loading|referrerpolicy]",
+      )
+
+      config.valid_children = appendValidChildren(config.valid_children, [
+        "+body[iframe]",
+        "+div[iframe]",
+        "+p[iframe]",
+      ])
+    } else {
+      config.invalid_elements = appendInvalidElements(config.invalid_elements, ["iframe"])
+    }
+
+    const svgPolicySetup = function (editor) {
+      const sanitizeIfNeeded = function (event) {
+        if (!event) {
+          return
+        }
+
+        if (enabledSupportSvg) {
+          event.content = stripInlineSvg(event.content)
+          return
+        }
+
+        event.content = stripSvgReferences(event.content)
+      }
+
+      editor.on("BeforeSetContent", sanitizeIfNeeded)
+      editor.on("PastePreProcess", sanitizeIfNeeded)
+
+      editor.on("GetContent", function (event) {
+        if (!event?.content) {
+          return
+        }
+
+        if (enabledSupportSvg) {
+          event.content = stripInlineSvg(event.content)
+          return
+        }
+
+        event.content = stripSvgReferences(event.content)
+      })
+    }
+
+    config.setup = wrapSetup(config.setup, svgPolicySetup)
+
+    if (isLearner && blockCopyPasteForStudents) {
+      config.paste_block_drop = true
+
+      const policySetup = function (editor) {
+        const blockedMessage = "Copy and paste is disabled in this editor."
+
+        const notifyBlockedAction = function () {
+          try {
+            editor.notificationManager.open({
+              text: blockedMessage,
+              type: "warning",
+              timeout: 2000,
+            })
+          } catch (e) {
+            // Ignore
+          }
+        }
+
+        const preventEditorAction = function (event) {
+          try {
+            if (event && typeof event.preventDefault === "function") {
+              event.preventDefault()
+            }
+
+            if (event && typeof event.stopPropagation === "function") {
+              event.stopPropagation()
+            }
+          } catch (e) {
+            // Ignore
+          }
+
+          notifyBlockedAction()
+
+          return false
+        }
+
+        editor.on("BeforeExecCommand", function (event) {
+          const command = String(event?.command || "").toLowerCase()
+
+          if (["paste", "copy", "cut"].includes(command)) {
+            preventEditorAction(event)
+          }
+        })
+
+        editor.on("init", function () {
+          try {
+            const doc = editor.getDoc()
+
+            if (!doc) {
+              return
+            }
+
+            doc.addEventListener("paste", preventEditorAction, true)
+            doc.addEventListener("drop", preventEditorAction, true)
+            doc.addEventListener("copy", preventEditorAction, true)
+            doc.addEventListener("cut", preventEditorAction, true)
+
+            doc.addEventListener(
+              "beforeinput",
+              function (event) {
+                const inputType = String(event?.inputType || "")
+
+                if (["insertFromPaste", "insertFromDrop"].includes(inputType)) {
+                  preventEditorAction(event)
+                }
+              },
+              true,
+            )
+          } catch (e) {
+            // Ignore
+          }
+        })
+      }
+
+      config.setup = wrapSetup(config.setup, policySetup)
+    }
+
+    return config
   }
 
   // ── Merge policies (how base + local config are combined)
@@ -159,13 +442,17 @@
   // ── Autogenerate external_plugins map for self-hosted plugins
   ;(function ensureExternalPluginsMap(cfg) {
     var baseUrl = cfg.base_url || BASE_URL_TINYMCE
-    var list = ("" + cfg.plugins).split(/\s+/).filter(Boolean)
+    var list = String(cfg.plugins || "")
+      .split(/\s+/)
+      .filter(Boolean)
     var map = Object.assign({}, cfg.external_plugins || {})
+
     list.forEach(function (name) {
       if (!map[name]) {
         map[name] = baseUrl + "/plugins/" + name + "/plugin" + (cfg.suffix || SUFFIX) + ".js"
       }
     })
+
     cfg.external_plugins = map
   })(BASE)
 
@@ -175,47 +462,54 @@
   // ── Builder: merges local editor config with this base, per policy
   window.buildTinyMceConfig = function (local) {
     var base = window.CHAMILO_TINYMCE_BASE_CONFIG || {}
-    var merged = Object.assign({}, base, local || {})
+    var localConfig = Object.assign({}, local || {})
+    var features = Object.assign({}, localConfig.chamiloEditorFeatures || {})
 
-    // PLUGINS policy (union by default)
+    delete localConfig.chamiloEditorFeatures
+
+    var merged = Object.assign({}, base, localConfig)
+
     var basePlugins = base.plugins || ""
-    var localPlugins = (local && local.plugins) || ""
+    var localPlugins = localConfig.plugins || ""
+
     merged.plugins =
       PLUGINS_POLICY === "base"
         ? basePlugins
         : Array.from(new Set((basePlugins + " " + localPlugins).trim().split(/\s+/))).join(" ")
 
-    // external_plugins (local can override/add specific URLs)
-    merged.external_plugins = Object.assign({}, base.external_plugins || {}, (local && local.external_plugins) || {})
+    merged.external_plugins = Object.assign({}, base.external_plugins || {}, localConfig.external_plugins || {})
 
-    // TOOLBAR policy
     if (TOOLBAR_POLICY === "base" && base.toolbar) {
       merged.toolbar = base.toolbar
-    } else if (base.toolbar && local && local.toolbar) {
-      // If you ever switch to "concat", we dedupe blocks here:
-      merged.toolbar = dedupeToolbar(base.toolbar, local.toolbar)
+    } else if (base.toolbar && localConfig.toolbar) {
+      merged.toolbar = dedupeToolbar(base.toolbar, localConfig.toolbar)
     }
 
-    // content_style: keep base + also allow local additions
     var csBase = base.content_style || ""
-    var csLocal = (local && local.content_style) || ""
+    var csLocal = localConfig.content_style || ""
     merged.content_style = (csBase + " " + csLocal).trim()
 
-    // setup: run base first, then local
     var baseSetup = base.setup
-    var localSetup = local && local.setup
+    var localSetup = localConfig.setup
     merged.setup = function (ed) {
       if (typeof baseSetup === "function") {
         try {
           baseSetup(ed)
-        } catch (e) {}
+        } catch (e) {
+          // Ignore
+        }
       }
+
       if (typeof localSetup === "function") {
         try {
           localSetup(ed)
-        } catch (e) {}
+        } catch (e) {
+          // Ignore
+        }
       }
     }
+
+    merged = applyChamiloEditorPolicies(merged, features)
 
     return merged
   }

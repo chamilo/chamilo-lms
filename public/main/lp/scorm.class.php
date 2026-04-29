@@ -496,7 +496,7 @@ class scorm extends learnpath
         $lpToCheck = null,
         $allowHtaccess = false
     ) {
-        $this->debug = 100;
+        $this->debug = 0;
 
         $fileSystem = Container::getAssetRepository()->getFileSystem();
 

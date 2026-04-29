@@ -118,7 +118,6 @@ import BaseCard from "../basecomponents/BaseCard.vue"
 import { useI18n } from "vue-i18n"
 import { inject, ref, watch, computed } from "vue"
 import axios from "axios"
-import { ENTRYPOINT } from "../../config/entrypoint"
 import { useSecurityStore } from "../../store/securityStore"
 import { storeToRefs } from "pinia"
 
@@ -180,7 +179,7 @@ function onBadgeError(event) {
 
 async function fetchSkills(userId) {
   try {
-    const response = await axios.get(`${ENTRYPOINT}users/${userId}/skills`)
+    const response = await axios.get(`/api/users/${userId}/skills`)
     const data = Array.isArray(response.data) ? response.data : []
 
     skills.value = data.map((skill) => {

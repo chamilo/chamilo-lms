@@ -155,6 +155,11 @@ class ScormApi
             }
 
             $statusIsSet = false;
+            $currentScoStatus = (string) $myLPI->get_status(false);
+            $lmsCanUpdateScoStatus = 'true' === api_get_setting('lp.scorm_lms_update_sco_status_all_time')
+                || '' === $currentScoStatus
+                || 'not attempted' === $currentScoStatus;
+
             // Default behaviour.
             if (isset($status) && '' != $status && 'undefined' !== $status) {
                 if ($debug > 1) {
@@ -245,10 +250,13 @@ class ScormApi
                  *    the status to either passed or failed depending on the
                  *    student's score compared to the mastery score.
                  */
-                if ('credit' === $credit &&
-                    $masteryScore &&
-                    (isset($score) && -1 != $score) &&
-                    !$statusIsSet && !$statusSignalReceived
+                if (
+                    $lmsCanUpdateScoStatus
+                    && 'credit' === $credit
+                    && $masteryScore
+                    && (isset($score) && -1 != $score)
+                    && !$statusIsSet
+                    && !$statusSignalReceived
                 ) {
                     if ($score >= $masteryScore) {
                         $myLPI->set_status('passed');
@@ -269,7 +277,7 @@ class ScormApi
                  *    (adlcp:masteryscore), the LMS cannot override SCO
                  *    determined status.
                  */
-                if (!$statusIsSet && !$masteryScore && !$statusSignalReceived) {
+                if ($lmsCanUpdateScoStatus && !$statusIsSet && !$masteryScore && !$statusSignalReceived) {
                     if (!empty($status)) {
                         if ($debug) {
                             error_log("Set status: $status because: statusSignalReceived ");
@@ -286,7 +294,7 @@ class ScormApi
                  *    lesson_mode is "browse", the lesson_status may change to
                  *    "browsed" even if the cmi.core.credit is set to no-credit.
                  */
-                if (!$statusIsSet && 'no-credit' === $credit && !$statusSignalReceived) {
+                if ($lmsCanUpdateScoStatus && !$statusIsSet && 'no-credit' === $credit && !$statusSignalReceived) {
                     $mode = $myLPI->get_lesson_mode();
                     if ('browse' === $mode && 'browsed' === $status) {
                         if ($debug) {
@@ -304,7 +312,7 @@ class ScormApi
                  * cmi.core.lesson_status.  There is some additional requirements
                  * that must be adhered to successfully handle these cases:.
                  */
-                if (!$statusIsSet && empty($status) && !$statusSignalReceived) {
+                if ($lmsCanUpdateScoStatus && !$statusIsSet && empty($status) && !$statusSignalReceived) {
                     /**
                      * Upon initial launch the LMS should set the
                      * cmi.core.lesson_status to "not attempted".
@@ -356,7 +364,7 @@ class ScormApi
 
             // If no previous condition changed the SCO status, proceed with a
             // generic behaviour
-            if (!$statusIsSet && !$statusSignalReceived) {
+            if ($lmsCanUpdateScoStatus && !$statusIsSet && !$statusSignalReceived) {
                 // Default behaviour
                 if (isset($status) && '' != $status && 'undefined' !== $status) {
                     if ($debug > 1) {

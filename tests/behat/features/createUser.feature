@@ -8,8 +8,9 @@ Feature: Users management as admin
     Given I am a platform administrator
 
   Scenario: See the users list link on the admin page
-    Given I am on "/main/admin/index.php"
-    Then I should see "Users list"
+    Given I am on "/admin"
+    And I wait for the ".p-menuitem-text" element
+    Then I should see "User list"
     And I should see "Add a user"
 
   Scenario: Create a user with only basic info
@@ -55,17 +56,15 @@ Feature: Users management as admin
 
 
   Scenario: Search a user
-    Given I am on "/main/admin/user_list.php"
-    And wait the page to be loaded when ready
-    And I fill in "keyword" with "smarshall"
-    And I press "submit"
-    And wait for the page to be loaded
+    Given I am on "/admin/user-list?keyword=smarshall"
+    And I wait for the "tr[data-index]" element
     Then I should see "Sammy"
     And I should see "Marshall"
 
 
   Scenario: Delete a user
-    Given I am on "/main/admin/user_list.php?keyword=smarshall"
+    Given I am on "/admin/user-list?keyword=smarshall"
+    And I wait for the "tr[data-index]" element
     And I click the "i.mdi-delete" element
     And I confirm the popup
     And wait very long for the page to be loaded
@@ -95,8 +94,7 @@ Feature: Users management as admin
       | email     | teacher@example.com |
       | username  | teacher  |
       | password  | teacher00!   |
-#    And I fill in select bootstrap static input "#status_select" select "1"
-    And I select "Trainer" from "status_select"
+    And I select "Teacher" from "Roles"
     And I click the "input#send_mail_no" element
     And I press "submit"
     And wait very long for the page to be loaded
@@ -110,19 +108,18 @@ Feature: Users management as admin
       | email     | student@example.com |
       | username  | student   |
       | password  | student00!   |
-#    And I fill in select bootstrap static input "#status_select" select "5"
-    And I select "Learner" from "status_select"
+    And I select "Learner" from "Roles"
     And I click the "input#send_mail_no" element
     And I press "submit"
     And wait very long for the page to be loaded
     Then I should not see an error
 
   Scenario: HRM follows teacher
-    Given I am on "/main/admin/user_list.php?keyword=hrm&submit=&_qf__search_simple="
-    And wait the page to be loaded when ready
+    Given I am on "/admin/user-list?keyword=hrm"
+    And I wait for the "tr[data-index]" element
     And I should see "HRM lastname"
     And I should see "Human Resources Manager"
-    And I click the "i.mdi-account-child" element
+    And I click the ".mdi-account-child" element
     And wait the page to be loaded when ready
     And I select "teacher firstname teacher lastname" from "NoAssignedUsersList[]"
     And I press "add_user_button"
@@ -131,11 +128,11 @@ Feature: Users management as admin
     Then I should not see an error
 
   Scenario: HRM follows student
-    Given I am on "/main/admin/user_list.php?keyword=hrm&submit=&_qf__search_simple="
-    And wait the page to be loaded when ready
+    Given I am on "/admin/user-list?keyword=hrm"
+    And I wait for the "tr[data-index]" element
     And I should see "HRM lastname"
     And I should see "Human Resources Manager"
-    And I click the "i.mdi-account-child" element
+    And I click the ".mdi-account-child" element
     And wait the page to be loaded when ready
     And I select "student firstname student lastname" from "NoAssignedUsersList[]"
     And I press "add_user_button"

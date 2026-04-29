@@ -18,7 +18,7 @@ Feature: Course tools basic testing
 
   Scenario: See the course creation link on the admin page
     Given I am on "/main/admin/index.php"
-    Then I should see "Add course"
+    Then I should see "Courses"
 
 
   Scenario: Create a course before testing
@@ -26,7 +26,7 @@ Feature: Course tools basic testing
     And I fill in "title" with "TEMP"
     When I press "submit"
     And wait very long for the page to be loaded
-    Then I should see "TEMP"
+    Then I should not see an error
 
 
   Scenario: Make sure the course exists

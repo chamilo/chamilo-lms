@@ -5,7 +5,6 @@ Feature: Work tool
   Scenario: Create a work
     Given I am a platform administrator
     And I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I zoom out to maximum
     And I follow "Assignments"
     And wait very long for the page to be loaded
@@ -20,7 +19,6 @@ Feature: Work tool
   Scenario: Edit a work
     Given I am a platform administrator
     And I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I zoom out to maximum
     And I follow "Assignments"
     And wait very long for the page to be loaded
@@ -39,7 +37,6 @@ Feature: Work tool
   Scenario: Edit maximum score
     Given I am a platform administrator
     And I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I zoom out to maximum
     And I follow "Assignments"
     And wait very long for the page to be loaded
@@ -59,7 +56,6 @@ Feature: Work tool
     Given I am a platform administrator
     And I am not logged
     And I am a student
-    And I wait for the page to be loaded
     And I zoom out to maximum
     And I follow "Assignments"
     And wait very long for the page to be loaded
@@ -77,7 +73,6 @@ Feature: Work tool
     Given I am not logged
     Given I am a platform administrator
     And I am not logged
-    And I wait for the page to be loaded
     And I zoom out to maximum
     And I follow "Assignments"
     And wait very long for the page to be loaded
@@ -89,14 +84,12 @@ Feature: Work tool
   Scenario: Add a comment and a attachment to the work previously uploaded by student
     Given I am a platform administrator
     And I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I zoom out to maximum
     And I follow "Assignments"
     And wait very long for the page to be loaded
     And I click the "a.text-blue-600" element
     And wait very long for the page to be loaded
     Then I should see "Assignment name"
-    And wait very long for the page to be loaded
     Then I click the "span.mdi-reply-all" element
     And I wait for the page to be loaded
     When I fill in the following:
@@ -112,7 +105,6 @@ Feature: Work tool
   Scenario: Admin views submission list for Work 1
     Given I am a platform administrator
     And I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I zoom out to maximum
     And I follow "Assignments"
     And wait very long for the page to be loaded
@@ -140,7 +132,6 @@ Feature: Work tool
   Scenario: Admin views graded score for Work 1
     Given I am a platform administrator
     And I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I zoom out to maximum
     And I follow "Assignments"
     And wait very long for the page to be loaded
@@ -152,7 +143,6 @@ Feature: Work tool
   Scenario: Admin deletes Work 1 from assignments list
     Given I am a platform administrator
     And I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I zoom out to maximum
     And I follow "Assignments"
     And wait very long for the page to be loaded

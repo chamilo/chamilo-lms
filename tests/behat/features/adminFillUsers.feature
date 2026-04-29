@@ -3,7 +3,6 @@ Feature: Fill users
   Scenario: Create tests users successfully
     Given I am a platform administrator
     Then I am on "/main/admin/filler.php?fill=users"
-    And I wait one minute for the page to be loaded
     Then I should see "Inserted"
     And I should not see an error
 

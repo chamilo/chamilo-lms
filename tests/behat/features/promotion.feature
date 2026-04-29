@@ -6,7 +6,6 @@ Feature: Promotions
   Scenario: Create a promotion
     Given I am a platform administrator
     And I am on "/main/admin/promotions.php?action=add"
-    And wait for the page to be loaded
     When I fill in the following:
       | title       | Developer        |
     And I fill in editor field "description" with "Promotion Description"
@@ -19,7 +18,6 @@ Feature: Promotions
   Scenario: Edit a promotion
     Given I am a platform administrator
     And I am on "/main/admin/promotions.php"
-    And I wait very long for the page to be loaded
     Then I should not see an error
     And I should see "Developer"
     And I click the "i.mdi-pencil" element
@@ -32,7 +30,6 @@ Feature: Promotions
   Scenario: Copy a promotion
     Given I am a platform administrator
     And I am on "/main/admin/promotions.php"
-    And I wait for the page to be loaded
     Then I should not see an error
     And I should see "Developer"
     And I click the "i.mdi-text-box-plus" element
@@ -44,7 +41,6 @@ Feature: Promotions
   Scenario: Delete a promotion
     Given I am a platform administrator
     And I am on "/main/admin/promotions.php"
-    And I wait for the page to be loaded
     Then I should not see an error
     And I should see "Developer"
     And I click the "i.mdi-delete" element

@@ -5,7 +5,6 @@ Feature: Thematic tool
 
   Scenario: Create
     Given I am on "/main/course_progress/index.php?cid=1&action=thematic_add"
-    And I wait for the page to be loaded
     Then I fill in the following:
       | title | Thematic 1 |
     Then I fill in editor field "content" with "Description for thematic"
@@ -15,7 +14,6 @@ Feature: Thematic tool
 
   Scenario: Read and add Thematic plan
     Given I am on "/main/course_progress/index.php?cid=1"
-    And I wait for the page to be loaded
     Then I should see "Thematic 1"
     Then I follow "Edit thematic section"
     And I wait for the page to be loaded
@@ -29,7 +27,6 @@ Feature: Thematic tool
 
   Scenario: Update
     Given I am on "/main/course_progress/index.php?cid=1&action=thematic_edit&thematic_id=1"
-    And I wait for the page to be loaded
     Then I should see "Edit thematic section"
     Then I fill in the following:
       | title | Thematic 1 edited |
@@ -40,7 +37,6 @@ Feature: Thematic tool
 
   Scenario: Delete
     Given I am on "/main/course_progress/index.php?cid=1&"
-    And I wait for the page to be loaded
     Then I should see "Thematic 1 edited"
     Then I click the "i.mdi-delete" element
     Then I confirm the popup

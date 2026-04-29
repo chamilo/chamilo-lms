@@ -3,9 +3,7 @@ Feature: Assessments tool
 
   Scenario: Set certification minimum score to 50 in course TEMP
     Given I am a platform administrator
-    And I wait for the page to be loaded
     And I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I follow "Assessments"
     And wait very long for the page to be loaded
     Then I click the "i.mdi-pencil" element
@@ -18,9 +16,7 @@ Feature: Assessments tool
 
   Scenario: Create an evaluation "exam" in course TEMP
     Given I am a platform administrator
-    And I wait for the page to be loaded
     And I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I follow "Assessments"
     And wait very long for the page to be loaded
     Then I click the "i.mdi-table-plus" element
@@ -41,9 +37,7 @@ Feature: Assessments tool
 
   Scenario: Create a work
     Given I am a platform administrator
-    And I wait for the page to be loaded
     And I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I follow "Assignments"
     And wait very long for the page to be loaded
     Then I click the "span.mdi-folder-plus" element
@@ -54,9 +48,7 @@ Feature: Assessments tool
 
   Scenario: Edit maximum score
     Given I am a platform administrator
-    And I wait for the page to be loaded
     And I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I follow "Assignments"
     And wait very long for the page to be loaded
     And I click the "a.text-blue-600" element
@@ -71,9 +63,7 @@ Feature: Assessments tool
 
   Scenario: Send work as student (acostea)
     Given I am a student
-    And I wait for the page to be loaded
     And I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I follow "Assignments"
     And wait very long for the page to be loaded
     And I click the "a.text-blue-600" element
@@ -85,9 +75,7 @@ Feature: Assessments tool
 
   Scenario: Add a comment and a attachment to the work previously uploaded by student
     Given I am a platform administrator
-    And I wait for the page to be loaded
     And I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I follow "Assignments"
     And wait very long for the page to be loaded
     And I click the "a.text-blue-600" element
@@ -103,15 +91,12 @@ Feature: Assessments tool
 
   Scenario: Link an Assignment to the evaluation and edit its min score
     Given I am a platform administrator
-    And I wait for the page to be loaded
     And I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I follow "Assessments"
     And wait very long for the page to be loaded
     Then I click the "i.mdi-link-plus" element
     And I wait for the page to be loaded
     When I select "Assignments" from "create_link_select_link"
-    And wait very long for the page to be loaded
     When I fill in the following:
       | weight_mask | 50 |
       | minimum score | 3 |
@@ -127,9 +112,7 @@ Feature: Assessments tool
 
   Scenario: Edit a result and verify it in chart view
     Given I am a platform administrator
-    And I wait for the page to be loaded
     And I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I follow "Assessments"
     And wait very long for the page to be loaded
     And I follow "exam"
@@ -147,9 +130,7 @@ Feature: Assessments tool
 
   Scenario: Open certificate from list view in Assessments
     Given I am a platform administrator
-    And I wait for the page to be loaded
     And I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I follow "Assessments"
     And wait very long for the page to be loaded
     Then I click the "i.mdi-format-list-text" element
@@ -162,9 +143,7 @@ Feature: Assessments tool
 
   Scenario: Admin exports all to PDF
     Given I am a platform administrator
-    And I wait for the page to be loaded
     And I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I follow "Assessments"
     And wait very long for the page to be loaded
     Then I click the "i.mdi-account" element
@@ -174,9 +153,7 @@ Feature: Assessments tool
 
   Scenario: Deletes selected assessments
     Given I am a platform administrator
-    And I wait for the page to be loaded
     And I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I follow "Assessments"
     And wait very long for the page to be loaded
     Then I click the "a.btn--action" element
@@ -192,7 +169,6 @@ Feature: Assessments tool
   Scenario: Admin deletes Work 1 from assignments list
     Given I am a platform administrator
     And I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I follow "Assignments"
     And wait very long for the page to be loaded
     And I click the "input.p-checkbox-input" element

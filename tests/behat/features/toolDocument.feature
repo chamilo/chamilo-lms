@@ -5,7 +5,6 @@ Feature: Document tool
   Scenario: Create a folder
     Given I am a platform administrator
     And I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     Then I follow "Document"
     And wait for the page to be loaded
     Then I click the "span.mdi-folder-plus" element
@@ -19,7 +18,6 @@ Feature: Document tool
   Scenario: Create a folder that already exists
     Given I am a platform administrator
     And I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     Then I follow "Document"
     And wait for the page to be loaded
     Then I click the "span.mdi-folder-plus" element
@@ -32,7 +30,6 @@ Feature: Document tool
   Scenario: Create a text document
     Given I am a platform administrator
     And I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     Then I follow "Document"
     And wait for the page to be loaded
     Then I click the "span.mdi-file-plus" element
@@ -44,12 +41,10 @@ Feature: Document tool
     And wait for the page to be loaded
     Then I should see "created"
     And I should see "My first document"
-    And wait for the page to be loaded
 
   Scenario: Create a HTML document
     Given I am a platform administrator
     And I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     Then I follow "Document"
     And wait for the page to be loaded
     Then I click the "span.mdi-file-plus" element
@@ -65,7 +60,6 @@ Feature: Document tool
   Scenario: Upload a document
     Given I am a platform administrator
     And I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     Then I follow "Document"
     And wait for the page to be loaded
     Then I click the "span.mdi-file-upload" element
@@ -80,7 +74,6 @@ Feature: Document tool
   Scenario: Search for "My second document" and edit it
     Given I am a platform administrator
     And I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     Then I follow "Documents"
     And wait for the page to be loaded
     Then I should see "My second document"
@@ -95,7 +88,6 @@ Feature: Document tool
   Scenario: Search for "My first document" and delete it
     Given I am a platform administrator
     And I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     Then I follow "Document"
     And wait for the page to be loaded
     Then I should see "My first document"

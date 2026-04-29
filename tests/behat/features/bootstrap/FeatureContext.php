@@ -91,8 +91,8 @@ class FeatureContext extends MinkContext
     public function iAmOnCourseXHomepage($courseCode): void
     {
         $this->visit('/main/course_home/redirect.php?cidReq='.$courseCode);
-        $this->waitForThePageToBeLoaded();
-        //$this->visit('/courses/'.$courseCode.'/index.php');
+        // Course tools are loaded asynchronously via API after Vue mounts
+        $this->waitForSelector('#course-tools a', 10000);
         $this->assertElementNotOnPage('.alert-danger');
     }
 
@@ -103,7 +103,7 @@ class FeatureContext extends MinkContext
     public function iAmOnCourseXHomepageInSessionY($courseCode, $sessionName): void
     {
         $this->visit('/main/course_home/redirect.php?cidReq='.$courseCode.'&session_name='.$sessionName);
-        $this->waitForThePageToBeLoaded();
+        $this->waitForSelector('#course-tools a', 10000);
         $this->assertElementNotOnPage('.alert-danger');
     }
 
@@ -113,8 +113,7 @@ class FeatureContext extends MinkContext
     public function iAmOnTheHomepageOfCourseX($courseId): void
     {
         $this->visit('/course/'.$courseId.'/home');
-        $this->waitForThePageToBeLoaded();
-        //$this->visit('/courses/'.$courseCode.'/index.php');
+        $this->waitForSelector('#course-tools a', 10000);
         $this->assertElementNotOnPage('.alert-danger');
     }
 
@@ -124,7 +123,7 @@ class FeatureContext extends MinkContext
     public function iAmOnTheHomepageOfCourseXInSessionY($courseId, $sessionId): void
     {
         $this->visit('/course/'.$courseId.'&sid='.$sessionId);
-        $this->waitForThePageToBeLoaded();
+        $this->waitForSelector('#course-tools a', 10000);
         $this->assertElementNotOnPage('.alert-danger');
     }
 
@@ -142,14 +141,60 @@ class FeatureContext extends MinkContext
      */
     public function iAmLoggedAs($username)
     {
-        //$this->visit('/logout');
-        $this->visit('/login');
+        $passwords = [
+            'admin' => 'admin11+',
+        ];
+        $password = $passwords[$username] ?? $username;
+
+        if ($this->getSession()->isStarted()) {
+            parent::visit($this->getMinkParameter('base_url').'/logout');
+            $this->getSession()->reset();
+        }
+
+        // Visit login to establish a fresh PHP session (creates the session cookie)
+        parent::visit($this->getMinkParameter('base_url').'/login');
+        $this->getSession()->wait(4000, "document.readyState === 'complete'");
+
+        // Clear stale auth data from previous sessions so Vue starts fresh
+        $this->getSession()->executeScript(
+            'try { localStorage.clear(); sessionStorage.clear(); } catch(e) {}'
+        );
+
+        // Authenticate via synchronous XHR — bypasses the Vue form entirely,
+        // immune to race conditions, throttle counter resets after success.
+        $u = addslashes($username);
+        $p = addslashes($password);
+        // Retry up to 3 times — PHP session GC intermittently causes 500 when
+        // /var/lib/php/sessions is not accessible (Permission denied on gc cleanup).
+        $status = 0;
+        $body = '';
+        for ($attempt = 0; $attempt < 3; $attempt++) {
+            if ($attempt > 0) {
+                $this->getSession()->wait(1000);
+            }
+            $result = $this->getSession()->evaluateScript(
+                "(function(){
+                    var x = new XMLHttpRequest();
+                    x.open('POST', '/login_json', false);
+                    x.setRequestHeader('Content-Type', 'application/json');
+                    x.send(JSON.stringify({username:'$u', password:'$p'}));
+                    return {status: x.status, body: x.responseText.substring(0, 300)};
+                })()"
+            );
+            $status = (int) ($result['status'] ?? 0);
+            $body = (string) ($result['body'] ?? '');
+            if (200 === $status) {
+                break;
+            }
+        }
+
+        if (200 !== $status) {
+            throw new \Exception("Login failed for '$username' after 3 attempts — HTTP $status. Body: $body");
+        }
+
+        // Warm up the legacy PHP session bridge: LegacyListener sets _user in session
+        $this->visit('/admin');
         $this->waitForThePageToBeLoaded();
-        $this->fillField('login', $username);
-        $this->fillField('password', $username);
-        $this->pressButton('Sign in');
-        $this->waitForThePageToBeLoaded();
-        //$this->waitForThePageToBeLoaded();
     }
 
     /**
@@ -159,12 +204,28 @@ class FeatureContext extends MinkContext
      */
     public function iShouldNotSeeAnError()
     {
-        $this->assertSession()->pageTextNotContains('Internal server error');
-        $this->assertSession()->pageTextNotContains('error');
-        $el = $this->getSession()->getPage()->find(
-            'css',
-            '.alert-danger'
+        // Wait for page to have visible content before checking (avoids false empty-body reads)
+        $this->getSession()->wait(
+            5000,
+            "document.readyState === 'complete' && document.body && (document.body.innerText || '').trim().length > 0"
         );
+        // Use JS for text checks — atomic, avoids stale-element on Vue re-renders
+        $text = strtolower((string) $this->getSession()->evaluateScript(
+            'return document.body ? (document.body.innerText || document.body.textContent || "") : ""'
+        ));
+        if (str_contains($text, 'internal server error')) {
+            throw new \Behat\Mink\Exception\ExpectationException(
+                'Page contains "Internal server error"',
+                $this->getSession()
+            );
+        }
+        if (str_contains($text, 'error')) {
+            throw new \Behat\Mink\Exception\ExpectationException(
+                'Page contains "error"',
+                $this->getSession()
+            );
+        }
+        $el = $this->getSession()->getPage()->find('css', '.alert-danger');
         if (null !== $el) {
             $this->assertSession()->elementAttributeContains('css', '.alert-danger', 'style', 'display:none;');
         } else {
@@ -234,7 +295,9 @@ class FeatureContext extends MinkContext
      */
     public function iAmNotLogged()
     {
-        $this->visit('/logout');
+        if ($this->getSession()->isStarted()) {
+            $this->getSession()->reset();
+        }
     }
 
     /**
@@ -395,52 +458,50 @@ class FeatureContext extends MinkContext
      */
     public function confirmPopup()
     {
-       $session = $this->getSession();
-        // 1) accept_alert() (alert native)
+        $session = $this->getSession();
+
+        // 1) Native browser alert
         try {
-            $driver = $session->getDriver();
+            $session->getDriver()->getWebDriverSession()->accept_alert();
+            return;
+        } catch (\Exception $e) {}
 
-                try {
-                    $driver->getWebDriverSession()->accept_alert();
-                    return;
-                } catch (\Exception $e) {}
+        // 2) PrimeVue ConfirmDialog ("Yes" button with severity=secondary)
+        $session->wait(5000, "document.querySelector('.p-confirmdialog') !== null || document.querySelector('.swal2-container') !== null");
 
-        } catch (\Exception $e) {
-            // ignore
-        }
-
-        // wait for the HTML modal
-        $session->wait(5000, "document.querySelector('.swal2-container') !== null");
-
-        // JS: attempt to click a visible confirmation button inside the modal
         $js = <<<'JS'
         (function(){
-         function isVisible(el){
-         if(!el) return false;
-         var rect = el.getBoundingClientRect();
-         return !!(rect.width || rect.height) && window.getComputedStyle(el).visibility !== 'hidden' && window.getComputedStyle(el).display !== 'none';
-         }
-         function clickEl(el){
-         if(!el) return false;
-         try { el.style.pointerEvents = 'auto'; el.style.zIndex = 999999; } catch(e){}
-        try { if(el.focus) el.focus(); el.click(); return true; } catch(e){
-        }
-        }
-       // attempt to click a visible confirmation button inside the modal
-       var modal = document.querySelector('.swal2-container');
+            function click(el) {
+                if (!el) return false;
+                try { el.style.pointerEvents = 'auto'; el.style.zIndex = 999999; } catch(e){}
+                try { el.focus(); el.click(); return true; } catch(e){ return false; }
+            }
+            // PrimeVue ConfirmDialog: click the accept (Yes) button
+            var dlg = document.querySelector('.p-confirmdialog');
+            if (dlg) {
+                // acceptProps severity=secondary → .p-button-secondary; or just find first button that says "Yes"
+                var btns = dlg.querySelectorAll('button');
+                for (var i = 0; i < btns.length; i++) {
+                    var t = (btns[i].textContent || '').trim();
+                    if (t === 'Yes' || t === 'Oui' || btns[i].classList.contains('p-button-secondary')) {
+                        if (click(btns[i])) return true;
+                    }
+                }
+                // fallback: first button in dialog
+                if (btns.length > 0 && click(btns[0])) return true;
+            }
+            // SweetAlert2 fallback
+            var swal = document.querySelector('.swal2-container');
+            if (swal) {
+                var el = swal.querySelector('.swal2-confirm');
+                if (el && click(el)) return true;
+            }
+            return false;
+        })();
+        JS;
 
-       var el = modal.querySelector('.swal2-confirm');
-       if (el && isVisible(el)) {
-       if (clickEl(el)) return true;
-       }
-       return false;
-       })();
-       JS;
-        try {
-            $clicked = (bool) $session->executeScript($js);
-            if ($clicked)
-                return;
-        } catch (\Exception $e) {
+        $clicked = (bool) $session->executeScript($js);
+        if (!$clicked) {
             throw new \Exception('confirmPopup: no confirmation button found or clickable');
         }
     }
@@ -524,27 +585,58 @@ class FeatureContext extends MinkContext
 
     /**
      * @When /^(?:|I )wait for the page to be loaded$/
+     * @When /^wait the page to be loaded when ready$/
      */
-    public function waitForThePageToBeLoaded()
+    public function waitForThePageToBeLoaded(): void
     {
-        $this->getSession()->wait(8000);
+        // For Vue SPA pages, readyState alone is not enough: Vue renders after scripts run.
+        // We also wait until #app has at least one child (i.e. the app has mounted).
+        // Legacy PHP pages have no #app, so the second condition is vacuously true for them.
+        $this->getSession()->wait(
+            8000,
+            "document.readyState === 'complete' && " .
+            "(document.querySelector('#app') === null || document.querySelector('#app').children.length > 0)"
+        );
     }
 
     /**
      * @When /^(?:|I )wait very long for the page to be loaded$/
      */
-    public function waitVeryLongForThePageToBeLoaded()
+    public function waitVeryLongForThePageToBeLoaded(): void
     {
-        //$this->getSession()->wait(10000, "document.readyState === 'complete'");
-        $this->getSession()->wait(14000);
+        $this->getSession()->wait(
+            14000,
+            "document.readyState === 'complete' && " .
+            "(document.querySelector('#app') === null || document.querySelector('#app').children.length > 0)"
+        );
     }
 
     /**
      * @When /^(?:|I )wait for the page to be loaded when ready$/
      */
-    public function waitForThePageToBeLoadedWhenReady()
+    public function waitForThePageToBeLoadedWhenReady(): void
     {
         $this->getSession()->wait(9000, "document.readyState === 'complete'");
+    }
+
+    /**
+     * @When /^(?:|I )wait for the "([^"]*)" element$/
+     */
+    public function waitForSelector(string $css, int $timeoutMs = 8000): void
+    {
+        $escaped = addslashes($css);
+        $this->getSession()->wait($timeoutMs, "document.querySelector('$escaped') !== null");
+    }
+
+    /**
+     * @When /^I wait for jqGrid to load$/
+     */
+    public function waitForJqGridToLoad(): void
+    {
+        // Step 1: wait for jqGrid to initialize (fires in $(document).ready, same tick as readyState===complete)
+        $this->getSession()->wait(5000, "document.querySelector('.ui-jqgrid') !== null");
+        // Step 2: wait for jqGrid's AJAX data fetch to complete
+        $this->getSession()->wait(8000, "typeof jQuery !== 'undefined' && jQuery.active === 0");
     }
 
     /**
@@ -692,7 +784,7 @@ class FeatureContext extends MinkContext
         $this->pressButton('Next step');
         $this->assertPageContainsText('Update successful');
         $this->fillField('user_to_add', 'acostea');
-        $this->waitForThePageToBeLoaded();
+        $this->getSession()->wait(3000); // wait for autocomplete results, not page load
         $this->clickLink('Costea Andrea (acostea)');
         $this->pressButton('Finish session creation');
         $this->assertPageContainsText('Session overview');
@@ -773,6 +865,12 @@ class FeatureContext extends MinkContext
      */
     public function iClickTheElement($selector)
     {
+        $this->waitForSelector($selector, 8000);
+        $escaped = addslashes($selector);
+        // Scroll element into view so it is interactable even when off-screen
+        $this->getSession()->executeScript(
+            "var el = document.querySelector('$escaped'); if (el) { el.scrollIntoView({behavior:'instant',block:'center'}); }"
+        );
         $page = $this->getSession()->getPage();
         $element = $page->find('css', $selector);
 
@@ -852,7 +950,6 @@ JS;
     public function visit($page): void
     {
         parent::visit($page);
-
         $this->waitForThePageToBeLoaded();
     }
 }

@@ -3,7 +3,6 @@ Feature: Glossary tool
 
   Scenario: Create glossary term in course TEMP
     Given I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I follow "Glossary"
     And wait very long for the page to be loaded
     Then I click the "span.mdi-plus" element
@@ -17,7 +16,6 @@ Feature: Glossary tool
 
   Scenario: Add glossary link from Documents in course TEMP
     Given I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I follow "Documents"
     And wait very long for the page to be loaded
     Then I click the "span.mdi-file-plus" element
@@ -33,7 +31,6 @@ Feature: Glossary tool
   Scenario: Enable glossary display in extra tools from admin settings
     Given I am a platform administrator
     And I am on "/admin/settings/glossary"
-    And I wait for the page to be loaded
     When I select "Learning path" from "form_show_glossary_in_extra_tools"
     And I press "Save"
     And I wait for the page to be loaded
@@ -41,7 +38,6 @@ Feature: Glossary tool
 
   Scenario: Create Learning path named Glossary in course TEMP
     Given I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I follow "Learning paths"
     And wait very long for the page to be loaded
     Then I click the "i.mdi-dots-vertical" element
@@ -59,13 +55,11 @@ Feature: Glossary tool
 
   Scenario: Export glossary then check generated file in Documents
     Given I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I follow "Glossary"
     And wait very long for the page to be loaded
     Then I click the "span.mdi-export" element
     And I wait for the page to be loaded
     Then I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I follow "Documents"
     And wait very long for the page to be loaded
     Then I should see "glossary_"

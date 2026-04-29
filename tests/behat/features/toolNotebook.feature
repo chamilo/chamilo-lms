@@ -7,12 +7,10 @@ Feature: Notebook tool
 
   Background:
     Given I am a platform administrator
-    And I wait for the page to be loaded
 
 
   Scenario: Admin creates a note and sees it
     Given I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I zoom out to maximum
     And I follow "Notebook"
     And I wait for the page to be loaded

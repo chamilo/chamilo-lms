@@ -16,6 +16,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
+use Throwable;
 
 class LoginSuccessSubscriber implements EventSubscriberInterface
 {
@@ -78,7 +79,7 @@ class LoginSuccessSubscriber implements EventSubscriberInterface
                 if ($this->subscribeUserToCourseIfNeeded($user, $courseCode)) {
                     $mustFlush = true;
                 }
-            } catch (\Throwable $exception) {
+            } catch (Throwable $exception) {
                 $this->logger->warning('Registration autosubscribe failed for one course.', [
                     'user_id' => $user->getId(),
                     'course_code' => $courseCode,
@@ -94,7 +95,7 @@ class LoginSuccessSubscriber implements EventSubscriberInterface
 
         try {
             $this->entityManager->flush();
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $this->logger->warning('Registration autosubscribe flush failed.', [
                 'user_id' => $user->getId(),
                 'setting' => $settingName,
@@ -114,17 +115,17 @@ class LoginSuccessSubscriber implements EventSubscriberInterface
          * Legacy eventLogin priority:
          * session admin, teacher, DRH, otherwise student.
          */
-        if (in_array('ROLE_SESSION_MANAGER', $roles, true)) {
+        if (\in_array('ROLE_SESSION_MANAGER', $roles, true)) {
             return 'registration.sessionadmin_autosubscribe';
         }
 
-        if (in_array('ROLE_TEACHER', $roles, true)) {
+        if (\in_array('ROLE_TEACHER', $roles, true)) {
             return 'registration.teacher_autosubscribe';
         }
 
         if (
-            in_array('ROLE_DRH', $roles, true)
-            || in_array('ROLE_STUDENT_BOSS', $roles, true)
+            \in_array('ROLE_DRH', $roles, true)
+            || \in_array('ROLE_STUDENT_BOSS', $roles, true)
         ) {
             return 'registration.drh_autosubscribe';
         }

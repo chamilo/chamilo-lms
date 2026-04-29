@@ -53,9 +53,10 @@ class MessageApiTest extends AbstractApiTest
         $response = $this
             ->createClientWithCredentials($receiverToken)
             ->request(
-            'GET',
-            '/api/messages/'.$message->getId()
-        );
+                'GET',
+                '/api/messages/'.$message->getId()
+            )
+        ;
 
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
@@ -85,9 +86,10 @@ class MessageApiTest extends AbstractApiTest
         $response = $this
             ->createClientWithCredentials($receiverToken)
             ->request(
-            'GET',
-            '/api/messages/'.$message->getId()
-        );
+                'GET',
+                '/api/messages/'.$message->getId()
+            )
+        ;
 
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
@@ -117,10 +119,11 @@ class MessageApiTest extends AbstractApiTest
         $response = $this
             ->createClientWithCredentials($receiverToken)
             ->request(
-            'GET',
-            '/api/messages',
-            ['query' => ['msgType' => Message::MESSAGE_TYPE_INBOX]]
-        );
+                'GET',
+                '/api/messages',
+                ['query' => ['msgType' => Message::MESSAGE_TYPE_INBOX]]
+            )
+        ;
 
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 

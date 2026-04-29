@@ -13,14 +13,15 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\PageCategoryRepository;
 use Chamilo\CoreBundle\Repository\PageRepository;
 use Chamilo\CoreBundle\Repository\SysAnnouncementRepository;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 
+use const DIRECTORY_SEPARATOR;
 use const PHP_URL_PATH;
 
 class PageHelper
@@ -521,8 +522,8 @@ class PageHelper
 
     private function resolveCustomPageFile(string $page): ?string
     {
-        $relativePath = self::CUSTOM_PAGE_DIRECTORY.\DIRECTORY_SEPARATOR.$page.'.'.self::CUSTOM_PAGE_EXTENSION;
-        $themesBasePath = $this->projectDir.\DIRECTORY_SEPARATOR.'var'.\DIRECTORY_SEPARATOR.'themes';
+        $relativePath = self::CUSTOM_PAGE_DIRECTORY.DIRECTORY_SEPARATOR.$page.'.'.self::CUSTOM_PAGE_EXTENSION;
+        $themesBasePath = $this->projectDir.DIRECTORY_SEPARATOR.'var'.DIRECTORY_SEPARATOR.'themes';
 
         $themeCandidates = [
             $this->themeHelper->getVisualTheme(),
@@ -536,8 +537,8 @@ class PageHelper
                 continue;
             }
 
-            $customPagesDirectory = $themesBasePath.\DIRECTORY_SEPARATOR.$theme.\DIRECTORY_SEPARATOR.self::CUSTOM_PAGE_DIRECTORY;
-            $candidate = $customPagesDirectory.\DIRECTORY_SEPARATOR.$page.'.'.self::CUSTOM_PAGE_EXTENSION;
+            $customPagesDirectory = $themesBasePath.DIRECTORY_SEPARATOR.$theme.DIRECTORY_SEPARATOR.self::CUSTOM_PAGE_DIRECTORY;
+            $candidate = $customPagesDirectory.DIRECTORY_SEPARATOR.$page.'.'.self::CUSTOM_PAGE_EXTENSION;
 
             $realDirectory = realpath($customPagesDirectory);
             $realFile = realpath($candidate);
@@ -546,7 +547,7 @@ class PageHelper
                 continue;
             }
 
-            if (!str_starts_with($realFile, $realDirectory.\DIRECTORY_SEPARATOR)) {
+            if (!str_starts_with($realFile, $realDirectory.DIRECTORY_SEPARATOR)) {
                 continue;
             }
 

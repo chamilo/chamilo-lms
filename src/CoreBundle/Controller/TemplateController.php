@@ -256,7 +256,7 @@ class TemplateController extends AbstractController
         $candidates[] = $localeWithDash;
         $candidates[] = $localeWithUnderscore;
 
-        if (2 === strlen($shortLocale) && ctype_alpha($shortLocale)) {
+        if (2 === \strlen($shortLocale) && ctype_alpha($shortLocale)) {
             $candidates[] = $shortLocale;
 
             $isoToChamiloLanguage = [

@@ -354,8 +354,8 @@ final class CToolStateProvider implements ProviderInterface
         }
 
         return 'true' === $this->settingsManager->getSetting(
-                'lp.show_invisible_lp_in_course_home',
-                true
-            );
+            'lp.show_invisible_lp_in_course_home',
+            true
+        );
     }
 }

@@ -484,11 +484,11 @@ class TinyEditor extends Editor
     {
         $candidates = [];
 
-        if (function_exists('api_get_language_isocode')) {
+        if (\function_exists('api_get_language_isocode')) {
             $this->addTemplateLanguageCandidates($candidates, api_get_language_isocode());
         }
 
-        if (function_exists('api_get_interface_language')) {
+        if (\function_exists('api_get_interface_language')) {
             $this->addTemplateLanguageCandidates($candidates, api_get_interface_language());
         }
 
@@ -515,14 +515,14 @@ class TinyEditor extends Editor
 
         $shortLocale = substr($locale, 0, 2);
 
-        if (2 === strlen($shortLocale)) {
+        if (2 === \strlen($shortLocale)) {
             $candidates[] = $shortLocale;
         }
 
-        if (function_exists('api_get_language_from_iso')) {
+        if (\function_exists('api_get_language_from_iso')) {
             $languageInfo = api_get_language_from_iso($locale);
 
-            if (is_array($languageInfo)) {
+            if (\is_array($languageInfo)) {
                 foreach (['english_name', 'englishName', 'original_name', 'name', 'isocode', 'iso_code'] as $key) {
                     if (!empty($languageInfo[$key])) {
                         $candidates[] = (string) $languageInfo[$key];

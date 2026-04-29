@@ -122,8 +122,7 @@ final readonly class LpCollectionStateProvider implements ProviderInterface
                         return true;
                     }
 
-                    $keep = $showUnavailableWithDates && $lp->getDisplayNotAllowedLp();
-                    return $keep;
+                    return $showUnavailableWithDates && $lp->getDisplayNotAllowedLp();
                 }
             )
         );
@@ -142,6 +141,7 @@ final readonly class LpCollectionStateProvider implements ProviderInterface
 
         if (\function_exists('api_get_setting')) {
             $legacyValue = api_get_setting('lp.lp_start_and_end_date_visible_in_student_view');
+
             return $this->isSettingEnabled($legacyValue);
         }
 

@@ -194,27 +194,47 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
         $elementName = $this->getName();
         if (isset($_FILES[$elementName])) {
             return $_FILES[$elementName];
-        } elseif (false !== ($pos = strpos($elementName, '['))) {
-            $base  = str_replace(
-                        array('\\', '\''), array('\\\\', '\\\''),
-                        substr($elementName, 0, $pos)
-                    );
-            $idx   = "['" . str_replace(
-                        array('\\', '\'', ']', '['), array('\\\\', '\\\'', '', "']['"),
-                        substr($elementName, $pos + 1, -1)
-                     ) . "']";
-            $props = array('name', 'type', 'size', 'tmp_name', 'error');
-            $code  = "if (!isset(\$_FILES['{$base}']['name']{$idx})) {\n" .
-                     "    return null;\n" .
-                     "} else {\n" .
-                     "    \$value = array();\n";
-            foreach ($props as $prop) {
-                $code .= "    \$value['{$prop}'] = \$_FILES['{$base}']['{$prop}']{$idx};\n";
-            }
-            return eval($code . "    return \$value;\n}\n");
-        } else {
-            return null;
         }
+
+        if (false !== ($pos = strpos($elementName, '['))) {
+            $base = substr($elementName, 0, $pos);
+            if (!isset($_FILES[$base])) {
+                return null;
+            }
+
+            $innerStr = substr($elementName, $pos + 1, -1);
+            $idxKeys = '' !== $innerStr ? explode('][', $innerStr) : [];
+            $nameEntry = $_FILES[$base]['name'] ?? null;
+
+            foreach ($idxKeys as $key) {
+                if (!is_array($nameEntry) || !array_key_exists($key, $nameEntry)) {
+                    return null;
+                }
+
+                $nameEntry = $nameEntry[$key];
+            }
+
+            $props = array('name', 'type', 'size', 'tmp_name', 'error');
+            $value = [];
+
+            foreach ($props as $prop) {
+                $data = $_FILES[$base][$prop] ?? null;
+
+                foreach ($idxKeys as $key) {
+                    if (!is_array($data) || !array_key_exists($key, $data)) {
+                        $data = null;
+
+                        break;
+                    }
+                    $data = $data[$key];
+                }
+                $value[$prop] = $data;
+            }
+
+            return $value;
+        }
+
+        return null;
     }
 
     /**

@@ -197,6 +197,7 @@ class PlatformConfigurationController extends AbstractController
                 'security.hide_breadcrumb_if_not_allowed',
                 'lp.show_invisible_lp_in_course_home',
                 'lp.lp_start_and_end_date_visible_in_student_view',
+                'lp.lp_allow_export_to_students',
             ];
 
             foreach ($variables as $variable) {

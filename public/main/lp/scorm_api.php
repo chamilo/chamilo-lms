@@ -52,9 +52,31 @@ if (!is_object($oItem)) {
 }
 $user = api_get_user_info();
 $userId = api_get_user_id();
+
+$scormStudentId = (string) $userId;
+
+if ('true' === api_get_setting('lp.scorm_api_username_as_student_id')) {
+    $scormStudentId = (string) ($user['username'] ?? $userId);
+}
+
+$scormExtraFieldVariable = trim((string) api_get_setting('lp.scorm_api_extrafield_to_use_as_student_id'));
+if ('' !== $scormExtraFieldVariable) {
+    $userExtraFieldValue = new ExtraFieldValue('user');
+    $extraFieldData = $userExtraFieldValue->get_values_by_handler_and_field_variable(
+        $userId,
+        $scormExtraFieldVariable,
+        false,
+        false,
+        false
+    );
+
+    if (!empty($extraFieldData['value'])) {
+        $scormStudentId = trim((string) $extraFieldData['value']);
+    }
+}
+
 $itemId = $oItem->get_id();
 $lpId = $oLP->get_id();
-
 header('Content-type: text/javascript');
 ?>
 var scorm_logs=<?php echo (empty($oLP->scorm_debug) || (!api_is_course_admin() && !api_is_platform_admin())) ? '0' : '3'; ?>;
@@ -186,6 +208,7 @@ if (olms.lms_view_id == '') {
     olms.lms_view_id = 1;
 }
 olms.lms_user_id = '<?php echo $userId; ?>';
+olms.scorm_student_id = <?php echo json_encode($scormStudentId, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>;
 olms.lms_next_item = <?php echo (int) $oLP->get_next_item_id(); ?>;
 olms.lms_previous_item = <?php echo (int) $oLP->get_previous_item_id(); ?>;
 olms.lms_lp_type = '<?php echo $oLP->get_type(); ?>';
@@ -612,7 +635,7 @@ function LMSGetValue(param) {
         }
     } else if(param == 'cmi.core.student_id' || param == 'cmi.learner_id') { // cmi.learner_id widens support for SCORM 2004
         // ---- cmi.core.student_id
-        result='<?php echo learnpath::getUserIdentifierForExternalServices(); ?>';
+        result = olms.scorm_student_id;
     } else if(param == 'cmi.core.student_name' || param == 'cmi.learner_name') { // cmi.learner_name widens support for SCORM 2004
         // ---- cmi.core.student_name
         <?php

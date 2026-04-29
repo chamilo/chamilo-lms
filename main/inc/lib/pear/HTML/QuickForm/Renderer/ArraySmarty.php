@@ -256,11 +256,25 @@ class HTML_QuickForm_Renderer_ArraySmarty extends HTML_QuickForm_Renderer_Array
             unset($elAry['keys']);
             // where should we put this element...
             if (is_array($this->_currentGroup) && ('group' != $elAry['type'])) {
-                $toEval = '$this->_currentGroup' . $sKeys . ' = $elAry;';
+                $ref = &$this->_currentGroup;
             } else {
-                $toEval = '$this->_ary' . $sKeys . ' = $elAry;';
+                $ref = &$this->_ary;
             }
-            eval($toEval);
+            preg_match_all('/\[(?:\'((?:[^\'\\\\]|\\\\.)*)\')?\]/', $sKeys, $matches, PREG_SET_ORDER);
+            foreach ($matches as $match) {
+                if ('[]' === $match[0]) {
+                    $ref[] = [];
+                    end($ref);
+                    $ref = &$ref[key($ref)];
+                } else {
+                    $key = str_replace(['\\\\', "\\'"], ['\\', "'"], $match[1]);
+                    if (!isset($ref[$key]) || !is_array($ref[$key])) {
+                        $ref[$key] = [];
+                    }
+                    $ref = &$ref[$key];
+                }
+            }
+            $ref = $elAry;
         }
         return;
     }

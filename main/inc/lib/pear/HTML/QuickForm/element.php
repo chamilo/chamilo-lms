@@ -413,13 +413,16 @@ class HTML_QuickForm_element extends HTML_Common
                     return false;
                 }
             }
-            $replacedName = str_replace(
-                array('\\', '\'', ']', '['),
-                array('\\\\', '\\\'', '', "']['"),
-                $elementName
-            );
-            $myVar = "['$replacedName']";
-            return eval("return (isset(\$values$myVar)) ? \$values$myVar : null;");
+            $parts = explode('[', $elementName);
+            $ref = $values;
+            foreach ($parts as $i => $part) {
+                $key = 0 === $i ? $part : rtrim($part, ']');
+                if (!isset($ref[$key])) {
+                    return null;
+                }
+                $ref = $ref[$key];
+            }
+            return $ref;
         } else {
             return null;
         }
@@ -531,22 +534,33 @@ class HTML_QuickForm_element extends HTML_Common
     {
         if (null === $value) {
             return null;
-        } elseif (!$assoc) {
-            return $value;
-        } else {
-            $name = $this->getName();
-            if (!strpos($name, '[')) {
-                return array($name => $value);
-            } else {
-                $valueAry = array();
-                $myIndex  = "['" . str_replace(
-                                array('\\', '\'', ']', '['), array('\\\\', '\\\'', '', "']['"),
-                                $name
-                            ) . "']";
-                eval("\$valueAry$myIndex = \$value;");
-                return $valueAry;
-            }
         }
+
+        if (!$assoc) {
+            return $value;
+        }
+
+        $name = $this->getName();
+
+        if (!strpos($name, '[')) {
+            return array($name => $value);
+        }
+
+        $valueAry = [];
+        $parts = explode('[', $name);
+        $ref = &$valueAry;
+
+        foreach ($parts as $i => $part) {
+            $key = 0 === $i ? $part : rtrim($part, ']');
+            if (!isset($ref[$key]) || !is_array($ref[$key])) {
+                $ref[$key] = [];
+            }
+            $ref = &$ref[$key];
+        }
+
+        $ref = $value;
+
+        return $valueAry;
     }
 
     /**

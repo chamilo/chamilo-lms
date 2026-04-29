@@ -2410,17 +2410,47 @@ class learnpathItem
                                                 $returnstatus = false;
                                             }
                                         }
+
+                                        if (
+                                            false === $returnstatus &&
+                                            'true' === api_get_setting('lp.lp_prerequisite_on_quiz_unblock_if_max_attempt_reached') &&
+                                            $this->hasReachedPrerequisiteQuizMaxAttempts(
+                                                (int) $user_id,
+                                                (int) $items[$refs_list[$prereqs_string]]->path,
+                                                (int) $this->lp_id,
+                                                (int) $prereqs_string,
+                                                (int) $courseId
+                                            )
+                                        ) {
+                                            $returnstatus = true;
+                                            $this->prereq_alert = '';
+                                        }
                                     } else {
-                                        // 3. For multiple attempts we check that there are minimum 1 item completed
+                                        // 3. For multiple attempts we check that there are minimum 1 item completed.
                                         // Checking in the database.
+                                        $useLastAttemptOnly = 'true' === api_get_setting(
+                                                'lp.lp_prerequisite_use_last_attempt_only'
+                                            );
+
+                                        $unblockIfMaxAttemptReached = 'true' === api_get_setting(
+                                                'lp.lp_prerequisite_on_quiz_unblock_if_max_attempt_reached'
+                                            );
+
+                                        $prerequisiteLpItemId = (int) $prereqs_string;
+                                        $prerequisiteQuizId = (int) $items[$refs_list[$prereqs_string]]->path;
+
                                         $sql = 'SELECT score, max_score
-                                                    FROM '.Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES).'
-                                                    WHERE
-                                                        c_id = '.$courseId.' AND
-                                                        exe_exo_id = '.$items[$refs_list[$prereqs_string]]->path.' AND
-                                                        exe_user_id = '.$user_id.' AND
-                                                        orig_lp_id = '.$this->lp_id.' AND
-                                                        orig_lp_item_id = '.$prereqs_string;
+                                                FROM '.Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES).'
+                                                WHERE
+                                                    c_id = '.$courseId.' AND
+                                                    exe_exo_id = '.$prerequisiteQuizId.' AND
+                                                    exe_user_id = '.$user_id.' AND
+                                                    orig_lp_id = '.$this->lp_id.' AND
+                                                    orig_lp_item_id = '.$prerequisiteLpItemId;
+
+                                        if ($useLastAttemptOnly) {
+                                            $sql .= ' ORDER BY exe_date DESC LIMIT 1';
+                                        }
 
                                         $rs_quiz = Database::query($sql);
                                         if (Database::num_rows($rs_quiz) > 0) {
@@ -2431,7 +2461,7 @@ class learnpathItem
                                                 $maxScore = $myItemToCheck->getPrerequisiteMaxScore();
 
                                                 if (empty($minScore)) {
-                                                    // Try with mastery_score
+                                                    // Try with mastery_score.
                                                     $masteryScoreAsMin = $myItemToCheck->get_mastery_score();
 
                                                     if (!empty($masteryScoreAsMin)) {
@@ -2440,10 +2470,9 @@ class learnpathItem
                                                 }
 
                                                 if (isset($minScore, $minScore)) {
-                                                    // Taking min/max prerequisites values see BT#5776
+                                                    // Taking min/max prerequisites values see BT#5776.
                                                     if ($quiz['score'] >= $minScore && $quiz['score'] <= $maxScore) {
                                                         $returnstatus = true;
-
                                                         break;
                                                     }
 
@@ -2454,17 +2483,34 @@ class learnpathItem
                                                     $this->prereq_alert = $explanation;
                                                     $returnstatus = false;
                                                 } else {
-                                                    if ($quiz['score'] >=
-                                                        $items[$refs_list[$prereqs_string]]->get_mastery_score()
-                                                    ) {
+                                                    // Classic way.
+                                                    if ($quiz['score'] >= $items[$refs_list[$prereqs_string]]->get_mastery_score()) {
                                                         $returnstatus = true;
-
                                                         break;
                                                     }
 
-                                                    $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
+                                                    $explanation = sprintf(
+                                                        get_lang('Your result at %s blocks this step'),
+                                                        $itemToCheck->get_title()
+                                                    );
+                                                    $this->prereq_alert = $explanation;
                                                     $returnstatus = false;
                                                 }
+                                            }
+
+                                            if (
+                                                false === $returnstatus &&
+                                                $unblockIfMaxAttemptReached &&
+                                                $this->hasReachedPrerequisiteQuizMaxAttempts(
+                                                    (int) $user_id,
+                                                    $prerequisiteQuizId,
+                                                    (int) $this->lp_id,
+                                                    $prerequisiteLpItemId,
+                                                    (int) $courseId
+                                                )
+                                            ) {
+                                                $returnstatus = true;
+                                                $this->prereq_alert = '';
                                             }
                                         } else {
                                             $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
@@ -4347,5 +4393,52 @@ class learnpathItem
         } catch (Throwable) {
             return $title;
         }
+    }
+
+    private function hasReachedPrerequisiteQuizMaxAttempts(
+        int $userId,
+        int $exerciseId,
+        int $lpId,
+        int $lpItemId,
+        int $courseId
+    ): bool {
+        $tableQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
+
+        $sqlQuiz = "SELECT max_attempt
+                FROM $tableQuiz
+                WHERE iid = $exerciseId";
+
+        $resultQuiz = Database::query($sqlQuiz);
+        $rowQuiz = Database::fetch_assoc($resultQuiz);
+
+        $maxAttempts = (int) ($rowQuiz['max_attempt'] ?? 0);
+
+        if ($maxAttempts <= 0) {
+            return false;
+        }
+
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $sessionCondition = api_get_session_condition(api_get_session_id());
+
+        $sql = "SELECT COUNT(*) AS count
+            FROM $table
+            WHERE
+                exe_exo_id = $exerciseId AND
+                exe_user_id = $userId AND
+                status != 'incomplete' AND
+                orig_lp_id = $lpId AND
+                orig_lp_item_id = $lpItemId AND
+                c_id = $courseId
+                $sessionCondition";
+
+        $result = Database::query($sql);
+
+        if (Database::num_rows($result) <= 0) {
+            return false;
+        }
+
+        $row = Database::fetch_assoc($result);
+
+        return (int) ($row['count'] ?? 0) >= $maxAttempts;
     }
 }

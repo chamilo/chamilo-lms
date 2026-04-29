@@ -311,14 +311,28 @@ function getToolVisibility(tool) {
   return tool?.resourceNode?.resourceLinks?.[0]?.visibility
 }
 
+function isLearningPathTool(tool) {
+  return tool?.title === "learnpath" || tool?.tool?.title === "learnpath"
+}
+
+function shouldShowInvisibleLearningPathTool(tool) {
+  return isLearningPathTool(tool) && "true" === getSetting.value("lp.show_invisible_lp_in_course_home")
+}
+
 const toolsForDisplay = computed(() => {
   // Teachers/admins can see all tools (even hidden) to manage them.
   if (isAllowedToEdit.value) {
     return tools.value
   }
 
-  // Learners must not see hidden tools.
-  return tools.value.filter((tool) => getToolVisibility(tool) === TOOL_VISIBILITY_VISIBLE)
+  // Learners must not see hidden tools, except the learning path tool when enabled by platform setting.
+  return tools.value.filter((tool) => {
+    if (getToolVisibility(tool) === TOOL_VISIBILITY_VISIBLE) {
+      return true
+    }
+
+    return shouldShowInvisibleLearningPathTool(tool)
+  })
 })
 
 const reportingUrl = computed(() => {
@@ -349,7 +363,8 @@ async function loadCourseTools(showSkeleton = true) {
       }
 
       // Convenience flag for UI states (e.g. customize mode)
-      tool.isEnabled = tool.resourceNode?.resourceLinks?.[0]?.visibility === 2
+      tool.isEnabled =
+        tool.resourceNode?.resourceLinks?.[0]?.visibility === 2 || shouldShowInvisibleLearningPathTool(tool)
 
       return tool
     })

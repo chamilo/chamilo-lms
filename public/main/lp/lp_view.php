@@ -56,11 +56,63 @@ if (!$lp) {
 }
 /** @var learnpath $oLP */
 $oLP = Session::read('oLP');
-// Check if the learning path is visible for student - (LP requisites)
+// Check if the learning path is visible for student - (LP requisites).
 if (!api_is_allowed_to_create_course()) {
-    if (!api_is_allowed_to_edit(null, true, false, false) &&
-        !learnpath::is_lp_visible_for_student($lp, api_get_user_id(), $course)
-    ) {
+    $canEditLp = api_is_allowed_to_edit(null, true, false, false);
+
+    if (!$canEditLp && !learnpath::is_lp_visible_for_student($lp, api_get_user_id(), $course)) {
+        $showUnavailableLpWithDates = 'true' === api_get_setting(
+                'lp.lp_start_and_end_date_visible_in_student_view'
+            );
+
+        if ($showUnavailableLpWithDates && $lp->getDisplayNotAllowedLp()) {
+            $publishedOn = $lp->getPublishedOn();
+            $expiredOn = $lp->getExpiredOn();
+            $now = new DateTimeImmutable('now', new DateTimeZone('UTC'));
+
+            $isUnavailableByDate = false;
+            $availabilityDates = [];
+
+            if ($publishedOn instanceof DateTimeInterface) {
+                $availabilityDates[] = sprintf(
+                    get_lang('Available from %s'),
+                    api_get_local_time($publishedOn->format('Y-m-d H:i:s'))
+                );
+
+                if ($publishedOn > $now) {
+                    $isUnavailableByDate = true;
+                }
+            }
+
+            if ($expiredOn instanceof DateTimeInterface) {
+                $availabilityDates[] = sprintf(
+                    get_lang('Available until %s'),
+                    api_get_local_time($expiredOn->format('Y-m-d H:i:s'))
+                );
+
+                if ($expiredOn < $now) {
+                    $isUnavailableByDate = true;
+                }
+            }
+
+            if ($isUnavailableByDate) {
+                Display::addFlash(
+                    Display::return_message(
+                        implode('<br>', $availabilityDates),
+                        'warning'
+                    )
+                );
+
+                header(
+                    'Location: '.api_get_path(WEB_PATH)
+                    .'resources/lp/'
+                    .api_get_course_entity($course_id)->getResourceNode()->getId()
+                    .'?'.api_get_cidreq()
+                );
+                exit;
+            }
+        }
+
         api_not_allowed(true);
     }
 }

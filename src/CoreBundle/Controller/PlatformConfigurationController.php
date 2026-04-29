@@ -195,6 +195,8 @@ class PlatformConfigurationController extends AbstractController
                 'agenda.allow_careers_in_global_agenda',
                 'display.display_categories_on_homepage',
                 'security.hide_breadcrumb_if_not_allowed',
+                'lp.show_invisible_lp_in_course_home',
+                'lp.lp_start_and_end_date_visible_in_student_view',
             ];
 
             foreach ($variables as $variable) {

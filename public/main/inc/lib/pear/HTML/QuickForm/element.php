@@ -396,20 +396,8 @@ class HTML_QuickForm_element extends HTML_Common
                 }
             }
 
-            /*$replacedName = str_replace(
-                array('\\', '\'', ']', '['),
-                array('\\\\', '\\\'', '', "']['"),
-                $elementName
-            );
-            $myVar = "['$replacedName']";
-            $result =  eval("return (isset(\$values$myVar)) ? \$values$myVar : null;");
-            //var_dump($result);
-            return $result;*/
-
-            // $elementName = extra_statusocial[extra_statusocial] ;
             preg_match('/(.*)\[(.*)\]/', $elementName, $matches);
 
-            // Getting extra_statusocial
             $elementKey = $matches[1];
             $secondElementKey = '';
             if (isset($matches[2])) {
@@ -532,12 +520,20 @@ class HTML_QuickForm_element extends HTML_Common
             if (!strpos($name, '[')) {
                 return array($name => $value);
             } else {
-                $valueAry = array();
-                $myIndex  = "['" . str_replace(
-                                array('\\', '\'', ']', '['), array('\\\\', '\\\'', '', "']['"),
-                                $name
-                            ) . "']";
-                eval("\$valueAry$myIndex = \$value;");
+                $valueAry = [];
+                $parts = preg_split('/[\[\]]+/', $name, -1, PREG_SPLIT_NO_EMPTY);
+                $ref = &$valueAry;
+                $last = count($parts) - 1;
+                foreach ($parts as $i => $part) {
+                    if ($i === $last) {
+                        $ref[$part] = $value;
+                    } else {
+                        if (!isset($ref[$part]) || !is_array($ref[$part])) {
+                            $ref[$part] = [];
+                        }
+                        $ref = &$ref[$part];
+                    }
+                }
                 return $valueAry;
             }
         }

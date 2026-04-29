@@ -225,8 +225,37 @@ const items = ref([])
 const categories = ref([])
 const visibilityMap = ref({})
 
+function isTruthy(value) {
+  return value === true || value === 1 || value === "1" || String(value).toLowerCase() === "true"
+}
+
+function isLpCurrentlyAvailable(lp) {
+  const now = new Date()
+  const publishedOn = lp.publishedOn ? new Date(lp.publishedOn) : null
+  const expiredOn = lp.expiredOn ? new Date(lp.expiredOn) : null
+
+  if (publishedOn && publishedOn > now) {
+    return false
+  }
+
+  if (expiredOn && expiredOn < now) {
+    return false
+  }
+
+  return true
+}
+
+function shouldShowUnavailableLp(lp) {
+  const settingEnabled = isTruthy(platformConfig.getSetting("lp.lp_start_and_end_date_visible_in_student_view"))
+  const displayNotAllowed = isTruthy(lp.displayNotAllowedLp ?? lp.display_not_allowed_lp ?? false)
+
+  return settingEnabled && displayNotAllowed && !isLpCurrentlyAvailable(lp)
+}
+
 const filteredItems = computed(() =>
-  canEdit.value ? items.value : items.value.filter((lp) => !!visibilityMap.value[lp.iid]),
+  canEdit.value
+    ? items.value
+    : items.value.filter((lp) => !!visibilityMap.value[lp.iid] || shouldShowUnavailableLp(lp)),
 )
 
 const uncatList = ref([])

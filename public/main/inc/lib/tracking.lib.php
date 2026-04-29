@@ -2717,37 +2717,6 @@ class Tracking
         }
 
         $lpViewTable = Database::get_course_table(TABLE_LP_VIEW);
-        /*$lpConditions = [];
-        $lpConditions['c_id = ? '] = $courseInfo['real_id'];
-
-        if ($sessionId > 0) {
-            $lpConditions['AND (session_id = ? OR session_id = 0 OR session_id IS NULL)'] = $sessionId;
-        } else {
-            $lpConditions['AND session_id = ?'] = $sessionId;
-        }
-
-        if (is_array($lpIdList) && count($lpIdList) > 0) {
-            $placeHolders = [];
-            for ($i = 0; $i < count($lpIdList); $i++) {
-                $placeHolders[] = '?';
-            }
-            $lpConditions['AND iid IN('.implode(', ', $placeHolders).') '] = $lpIdList;
-        }
-
-        if ($onlySeriousGame) {
-            $lpConditions['AND seriousgame_mode = ? '] = true;
-        }
-
-        $resultLP = Database::select(
-            'iid',
-            $lPTable,
-            ['where' => $lpConditions]
-        );
-        $filteredLP = array_keys($resultLP);
-
-        if (empty($filteredLP)) {
-            return false;
-        }*/
 
         $conditions = [
             //" c_id = {$courseInfo['real_id']} ",
@@ -2764,20 +2733,31 @@ class Tracking
             $conditions[] = " lp_view.user_id = '$studentId' ";
 
             if (empty($lpIdList)) {
-                $lpList = new LearnpathList(
-                    $studentId,
-                    ['real_id' => $course->getId()],
-                    $sessionId,
-                    null,
-                    false,
-                    null,
-                    true
-                );
-                $lpList = $lpList->get_flat_list();
-                if (!empty($lpList)) {
-                    /** @var $lp */
-                    foreach ($lpList as $lpId => $lp) {
-                        $lpIdList[] = $lp['lp_old_id'];
+                $includeNotSubscribed =
+                    'true' === api_get_setting('lp.student_follow_page_include_not_subscribed_lp_students');
+
+                if ($includeNotSubscribed) {
+                    foreach ($filteredLP as $lpId) {
+                        $lpIdList[] = $lpId;
+                    }
+                } else {
+                    $lpList = new LearnpathList(
+                        $studentId,
+                        ['real_id' => $course->getId()],
+                        $sessionId,
+                        null,
+                        false,
+                        null,
+                        true
+                    );
+
+                    $lpList = $lpList->get_flat_list();
+
+                    if (!empty($lpList)) {
+                        /** @var $lp */
+                        foreach ($lpList as $lpId => $lp) {
+                            $lpIdList[] = $lp['lp_old_id'];
+                        }
                     }
                 }
             }

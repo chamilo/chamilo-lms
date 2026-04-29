@@ -41,6 +41,16 @@ $from_myspace = false;
 $from = $_GET['from'] ?? null;
 $origin = api_get_origin();
 $lpShowMaxProgress = 'true' === api_get_setting('lp.lp_show_max_progress_instead_of_average');
+$hideLpTestsAverageIcon = 'true' === api_get_setting('lp.student_follow_page_hide_lp_tests_average');
+$lpTestsAverageIcon = $hideLpTestsAverageIcon
+    ? ''
+    : Display::getMdiIcon(
+        'format-annotation-plus',
+        'ch-tool-icon',
+        null,
+        ICON_SIZE_TINY,
+        get_lang('Average of tests in Learning Paths')
+    );
 if ('true' === api_get_setting('lp.lp_show_max_progress_or_average_enable_course_level_redefinition')) {
     $lpShowProgressCourseSetting = api_get_course_setting('lp_show_max_or_average_progress');
     if (in_array($lpShowProgressCourseSetting, ['max', 'average'])) {
@@ -1164,14 +1174,14 @@ if ($nbStudents > 0) {
     $table->set_header(
         $headerCounter++,
         get_lang('Score').'&nbsp;'.
-        Display::getMdiIcon('format-annotation-plus', 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Average of tests in Learning Paths')),
+        $lpTestsAverageIcon,
         false
     );
     $headers['score'] = get_lang('Score');
     $table->set_header(
         $headerCounter++,
         $bestScoreLabel.'&nbsp;'.
-        Display::getMdiIcon('format-annotation-plus', 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Average of tests in Learning Paths')),
+        $lpTestsAverageIcon,
         false
     );
     $headers['score_best'] = $bestScoreLabel;

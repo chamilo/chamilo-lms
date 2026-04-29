@@ -252,7 +252,29 @@ if (isset($_POST['title'])) {
 }
 
 $redirectTo = '';
+$validateLpItemPrerequisiteDates = static function (): void {
+    if ('true' !== api_get_setting('lp.lp_item_prerequisite_dates')) {
+        return;
+    }
 
+    $extraStartDate = $_POST['extra_start_date'] ?? '';
+    $extraEndDate = $_POST['extra_end_date'] ?? '';
+
+    if (empty($extraStartDate) || empty($extraEndDate)) {
+        return;
+    }
+
+    if (strtotime((string) $extraEndDate) >= strtotime((string) $extraStartDate)) {
+        return;
+    }
+
+    Display::addFlash(
+        Display::return_message(get_lang('StartDateMustBeBeforeTheEndDate'), 'error')
+    );
+
+    header('Location: '.api_request_uri());
+    exit;
+};
 switch ($action) {
     case 'recalculate':
         if (!isset($oLP) || !$lp_found) {
@@ -354,6 +376,7 @@ switch ($action) {
         Session::write('refresh', 1);
 
         if (isset($_POST['submit_button']) && !empty($post_title)) {
+            $validateLpItemPrerequisiteDates();
             Session::write('post_time', $_POST['post_time']);
             $directoryParentId = $_POST['directory_parent_id'] ?? 0;
 
@@ -664,6 +687,7 @@ switch ($action) {
 
         Session::write('refresh', 1);
         if (isset($_POST['submit_button']) && !empty($post_title)) {
+            $validateLpItemPrerequisiteDates();
             // TODO: mp3 edit
             $audio = [];
             if (isset($_FILES['mp3'])) {
@@ -847,7 +871,9 @@ switch ($action) {
         $goList();
         break;
     case 'export':
-        if (!$is_allowed_to_edit) {
+        $allowExportToStudents = 'true' === api_get_setting('lp.lp_allow_export_to_students');
+
+        if (!$is_allowed_to_edit && !$allowExportToStudents) {
             api_not_allowed(true);
         }
         $hideScormExportLink = api_get_setting('lp.hide_scorm_export_link');

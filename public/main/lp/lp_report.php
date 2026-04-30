@@ -41,6 +41,7 @@ if (!empty($groupFilterParts) && isset($groupFilterParts[1])) {
 }
 $export = isset($_REQUEST['export']);
 $reset = isset($_REQUEST['reset']) ? $_REQUEST['reset'] : '';
+$showTeachers = isset($_GET['show_teachers']) ? (int) $_GET['show_teachers'] : 0;
 
 $repo = Container::getLpRepository();
 /** @var CLp $entity */
@@ -385,6 +386,75 @@ if (!empty($users)) {
     Display::addFlash(Display::return_message(get_lang('No user added'), 'warning'));
 }
 
+if ($showTeachers) {
+    $teacherUsers = empty($sessionId)
+        ? CourseManager::get_teacher_list_from_course_code($courseCode)
+        : CourseManager::get_coachs_from_course($sessionId, $courseId);
+
+    $addedTeachers = [];
+    foreach ($teacherUsers as $teacher) {
+        $userId = (int) ($teacher['user_id'] ?? 0);
+        if (in_array($userId, $addedTeachers)) {
+            continue;
+        }
+
+        $userInfo = api_get_user_info($userId);
+        $lpTime = Tracking::get_time_spent_in_lp($userId, $course, [$lpId], $sessionId);
+        $lpScore = Tracking::get_avg_student_score($userId, $course, [$lpId], $session);
+        $lpProgress = Tracking::get_avg_student_progress($userId, $course, [$lpId], $session);
+        $lpLastConnection = Tracking::get_last_connection_time_in_lp($userId, $courseCode, $lpId, $sessionId);
+        $lpLastConnection = empty($lpLastConnection) ? '-' : api_convert_and_format_date(
+            $lpLastConnection,
+            DATE_TIME_FORMAT_LONG
+        );
+
+        $trackingUrl = api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?details=true&'
+            .api_get_cidreq().'&course='.$courseCode.'&origin=tracking_course&student='.$userId;
+
+        $row = [];
+        $row[] = Display::url($userInfo['firstname'].' ('.get_lang('Teacher').')', $trackingUrl);
+        $row[] = Display::url($userInfo['lastname'], $trackingUrl);
+        if ('true' === $showEmail) {
+            $row[] = $userInfo['email'];
+        }
+        $row[] = '';
+        $row[] = api_time_to_hms($lpTime);
+        $row[] = "$lpProgress %";
+        $row[] = is_numeric($lpScore) ? "$lpScore%" : $lpScore;
+        $row[] = $lpLastConnection;
+
+        if (false === $export) {
+            $statsHref = api_get_path(WEB_CODE_PATH).'my_space/lp_tracking.php?'
+                .api_get_cidreq()
+                .'&action=stats&extend_all=0&origin=tracking_course&allow_extend=0&lp_id='.$lpId;
+            $teacherActions = Display::url(
+                Display::getMdiIcon('chart-box', 'ch-tool-icon', null, 32, get_lang('Reporting')),
+                $trackingUrl
+            );
+            $teacherActions .= '&nbsp;'.Display::url(
+                Display::getMdiIcon('fast-forward-outline', 'ch-tool-icon', null, 32, get_lang('Details')),
+                $statsHref,
+                ['data-id' => $userId, 'class' => 'details']
+            );
+            $teacherActions .= '&nbsp;'.Display::url(
+                Display::getMdiIcon('broom', 'ch-tool-icon', null, 32, get_lang('Reset')),
+                'javascript:void(0);',
+                ['data-id' => $userId, 'data-username' => $userInfo['username'], 'class' => 'delete_attempt']
+            );
+            $teacherActions .= Display::url(
+                Display::getMdiIcon('file-document-refresh', 'ch-tool-icon', null, 32, get_lang('Recalculate results')),
+                api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=recalculate&user_id='.$userId.'&lp_id='.$lpId,
+                ['title' => get_lang('Recalculate results')]
+            );
+            $row[] = $teacherActions;
+        }
+
+        $row['username'] = $userInfo['username'];
+        $userList[] = $row;
+        $addedTeachers[] = $userId;
+    }
+}
+
 $parameters = [
     'action' => 'report',
     'group_filter' => $groupFilter,
@@ -434,6 +504,14 @@ if (!empty($users)) {
     );
 }
 
+$teacherToggleUrl = $urlBase.'&group_filter='.$groupFilter.'&show_teachers='.($showTeachers ? 0 : 1);
+$teacherToggleLbl = $showTeachers ? get_lang('Hide teachers') : get_lang('Show teachers');
+$teacherToggleBtn = '<div class="mb-2" style="margin-top:8px;">'
+    .'<a class="btn btn--info" style="font-size:13px;padding:4px 10px;" href="'.Security::remove_XSS($teacherToggleUrl).'">'
+    .Security::remove_XSS($teacherToggleLbl)
+    .'</a>'
+    .'</div>';
+
 $template = new Template(get_lang('Learner score'));
 $template->assign('group_class_label', $label);
 $template->assign('user_list', $userList);
@@ -451,6 +529,7 @@ $template->assign('stats_url', $statsUrl);
 $template->assign('ajax_url',  $ajaxUrl);
 $template->assign('header', $entity->getTitle());
 $template->assign('actions', Display::toolbarAction('lp_actions', [$actions]));
+$template->assign('teacher_toggle_btn', $teacherToggleBtn);
 $result = $template->fetch('@ChamiloCore/LearnPath/report.html.twig');
 $template->assign('content', $result);
 

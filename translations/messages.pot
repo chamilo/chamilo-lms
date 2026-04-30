@@ -33830,3 +33830,6 @@ msgstr ""
 
 msgid "Hide teachers"
 msgstr ""
+
+msgid "Delete exercise attempts"
+msgstr ""

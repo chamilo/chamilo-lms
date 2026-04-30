@@ -35797,3 +35797,6 @@ msgstr "Afficher les enseignants"
 
 msgid "Hide teachers"
 msgstr "Masquer les enseignants"
+
+msgid "Delete exercise attempts"
+msgstr "Supprimer les tentatives d'exercice"

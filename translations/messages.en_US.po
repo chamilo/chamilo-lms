@@ -33913,3 +33913,6 @@ msgstr "Show teachers"
 
 msgid "Hide teachers"
 msgstr "Hide teachers"
+
+msgid "Delete exercise attempts"
+msgstr "Delete exercise attempts"

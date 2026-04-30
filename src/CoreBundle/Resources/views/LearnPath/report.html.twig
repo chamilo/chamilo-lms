@@ -3,99 +3,92 @@
 
     {{ table }}
 
-    <div id="dialog-form" style="display:none;">
-        <div class="dialog-form-content">
-            {{ 'AreYouSureToDeleteResults' | get_lang | e('html') }} <span id="user_title"></span>
-            <div class="form-group">
-                <div class="checkbox">
-                    <label>
-                        <input id="delete_exercise_attempts" type="checkbox"> {{ 'DeleteExerciseAttempts' | get_lang }}
-                    </label>
-                </div>
-            </div>
+    {{ teacher_toggle_btn }}
+
+    {# Custom confirmation modal (replaces jQuery UI dialog which lacks CSS on this page) #}
+    <div id="lp-confirm-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:19999;"></div>
+    <div id="lp-confirm-dialog" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:20000;background:#fff;border-radius:6px;box-shadow:0 4px 24px rgba(0,0,0,.3);width:380px;max-width:95vw;font-family:inherit;">
+        <div style="padding:16px 20px;border-bottom:1px solid #e5e7eb;font-weight:600;font-size:15px;">
+            {{ 'Confirmation' | get_lang }}
+        </div>
+        <div style="padding:20px;">
+            <p id="lp-confirm-message" style="margin:0 0 14px;"></p>
+            <label style="display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer;">
+                <input id="delete_exercise_attempts" type="checkbox">
+                {{ 'Delete exercise attempts' | get_lang }}
+            </label>
+        </div>
+        <div style="padding:12px 20px;border-top:1px solid #e5e7eb;display:flex;justify-content:flex-end;gap:8px;">
+            <button id="lp-confirm-cancel" class="btn btn--plain" type="button">{{ 'Cancel' | get_lang }}</button>
+            <button id="lp-confirm-ok"     class="btn btn--danger" type="button">{{ 'Delete' | get_lang }}</button>
         </div>
     </div>
 
     <script>
         $(function() {
-            $("#dialog-form").dialog({
-                autoOpen : false,
-                modal : false,
-                width : 300,
-                height : 250,
-                zIndex : 20000
+            var confirmCallback = null;
+
+            function openConfirm(message, onConfirm) {
+                $('#lp-confirm-message').html(message);
+                $('#delete_exercise_attempts').prop('checked', false);
+                confirmCallback = onConfirm;
+                $('#lp-confirm-overlay, #lp-confirm-dialog').show();
+            }
+
+            function closeConfirm() {
+                $('#lp-confirm-overlay, #lp-confirm-dialog').hide();
+                confirmCallback = null;
+            }
+
+            $('#lp-confirm-cancel, #lp-confirm-overlay').on('click', closeConfirm);
+
+            $('#lp-confirm-ok').on('click', function() {
+                if (typeof confirmCallback === 'function') {
+                    confirmCallback($('#delete_exercise_attempts').prop('checked'));
+                }
+                closeConfirm();
             });
 
             $('.delete_attempt').on('click', function() {
-                var userId = $(this).data('id');
+                var userId   = $(this).data('id');
                 var username = $(this).data('username');
-                $('#user_title').html(username);
-                $("#dialog-form").dialog({
-                    buttons: {
-                        '{{ "Delete" | get_lang }}' : function() {
-                            var deleteExercises = $('#delete_exercise_attempts').prop('checked');
-                            var urlDelete = '&delete_exercise_attempts=0';
-                            if (deleteExercises) {
-                                urlDelete = '&delete_exercise_attempts=1'
-                            }
-                            window.location.href = "{{ url }}"+urlDelete+"&reset=student&student_id=" + userId;
-                        }
-                    },
-                    close: function() {
-                        $('#user_title').html('');
-                        $('#delete_exercise_attempt').prop('checked', false);
-                    }
+                var baseUrl  = "{{ url }}";
+                openConfirm({{ 'Are you sure to delete results' | get_lang | json_encode | raw }} + ' <strong>' + username + '</strong>', function(deleteExercises) {
+                    window.location.href = baseUrl + '&delete_exercise_attempts=' + (deleteExercises ? 1 : 0) + '&reset=student&student_id=' + userId;
                 });
-                $("#dialog-form").dialog("open");
             });
 
             $('.delete_all').on('click', function() {
-                var users = $(this).data('users');
-                $('#user_title').html(users);
-                $("#dialog-form").dialog({
-                    buttons: {
-                        '{{ "Delete" | get_lang }}' : function() {
-                            var deleteExercises = $('#delete_exercise_attempts').prop('checked');
-                            var urlDelete = '&delete_exercise_attempts=0';
-                            if (deleteExercises) {
-                                urlDelete = '&delete_exercise_attempts=1'
-                            }
-                            window.location.href = "{{ url }}"+urlDelete+"&reset=all&student_id=0";
-                        }
-                    },
-                    close: function() {
-                        $('#user_title').html('');
-                        $('#delete_exercise_attempt').prop('checked', false);
-                    }
+                var users   = $(this).data('users');
+                var baseUrl = "{{ url }}";
+                openConfirm({{ 'Are you sure to delete results' | get_lang | json_encode | raw }} + ' <strong>' + users + '</strong>', function(deleteExercises) {
+                    window.location.href = baseUrl + '&delete_exercise_attempts=' + (deleteExercises ? 1 : 0) + '&reset=all&student_id=0';
                 });
-                $("#dialog-form").dialog("open");
             });
-
 
             $('#group_filter').on('change', function() {
-                var groupId  = $(this).val();
-                window.location.href = "{{ url_base }}&group_filter=" + groupId;
+                window.location.href = "{{ url_base }}&group_filter=" + $(this).val();
             });
 
-          $('tr td .details').on('click', function (e) {
-            e.preventDefault();
-            var self    = $(this);
-            var userId  = self.data('id') || 0;
-            var trHead  = self.parents('tr');
-            var trDetail= trHead.next();
-            if (self.is('.active')) {
-              self.removeClass('active');
-              trDetail.html('').addClass('hide');
-            } else {
-              self.addClass('active');
-              var newTD = $('<td>', { colspan: 7 });
-              var url   = self.attr('href') + '&student_id=' + encodeURIComponent(userId);
-              newTD.load(url + ' .table-responsive', function () {
-                newTD.insertAfter(trHead);
-              });
-              trDetail.removeClass('hide');
-            }
-          });
+            $('tr td .details').on('click', function (e) {
+                e.preventDefault();
+                var self     = $(this);
+                var userId   = self.data('id') || 0;
+                var trHead   = self.parents('tr');
+                var trDetail = trHead.next();
+                if (self.is('.active')) {
+                    self.removeClass('active');
+                    trDetail.html('').addClass('hide');
+                } else {
+                    self.addClass('active');
+                    var newTD = $('<td>', { colspan: 7 });
+                    var url   = self.attr('href') + '&student_id=' + encodeURIComponent(userId);
+                    newTD.load(url + ' .table-responsive', function () {
+                        newTD.insertAfter(trHead);
+                    });
+                    trDetail.removeClass('hide');
+                }
+            });
         });
     </script>
 

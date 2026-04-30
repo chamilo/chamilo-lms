@@ -284,6 +284,13 @@
             @keyframes lpSpin {
                 to { transform: rotate(360deg); }
             }
+
+            /* Currently active TOC item is non-clickable */
+            .scorm_highlight a.items-list,
+            .scorm_highlight a.item-action {
+                pointer-events: none;
+                cursor: default;
+            }
         </style>
         <div
                 id="learning_path_main"

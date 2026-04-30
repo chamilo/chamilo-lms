@@ -9738,8 +9738,8 @@ msgstr "Uxolo, awuvunyelwanga ukufikelela kweli phepha, okanye mhlawumbi uxhoro 
 msgid "Result"
 msgstr "Isiphumo"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Ukuzama ukungena njengo %s %s (id %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Ukuzama ukungena njengo %s (id %d)"
 
 msgid "Login successful. Go to %s"
 msgstr "Ukungena ngempumelelo. Iya ku %s"

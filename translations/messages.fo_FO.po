@@ -9738,8 +9738,8 @@ msgstr "Nai, tú hevur ikki loyvi til at náliga hesa síðu, ella kann vera at 
 msgid "Result"
 msgstr "Úrslit"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Provar at innrita sum %s %s (id %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Provar at innrita sum %s (id %d)"
 
 msgid "Login successful. Go to %s"
 msgstr "Innritan loynilig. Far til %s"

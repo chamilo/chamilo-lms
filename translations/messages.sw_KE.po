@@ -9738,8 +9738,8 @@ msgstr "Samahani, huruhusiwi kufikia ukurasa huu, au labda muunganisho wako umei
 msgid "Result"
 msgstr "Matokeo"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Kujaribu kuingia kama %s %s (kitambulisho %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Kujaribu kuingia kama %s (kitambulisho %d)"
 
 msgid "Login successful. Go to %s"
 msgstr "Kuingia kume fanikiwa. Nenda %s"

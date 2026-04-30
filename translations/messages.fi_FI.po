@@ -9743,8 +9743,8 @@ msgstr "Valitettavasti pääsy tälle sivulle on estetty."
 msgid "Result"
 msgstr "Tulos"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Yritetään kirjautua tunnuksella %s %s (id %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Yritetään kirjautua tunnuksella %s (id %d)"
 
 msgid "Login successful. Go to %s"
 msgstr "Kirjautuminen onnistui. Mene %s"

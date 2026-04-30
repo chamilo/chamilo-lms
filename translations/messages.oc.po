@@ -9738,8 +9738,8 @@ msgstr "Desolat, vos è pas autorizat a accedir a aquesta pagina, o eventualamen
 msgid "Result"
 msgstr "Resultat"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Tentativa de connexion en tant que %s %s (id %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Tentativa de connexion en tant que %s (id %d)"
 
 msgid "Login successful. Go to %s"
 msgstr "Connexion reüssida. Anar a %s"

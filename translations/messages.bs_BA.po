@@ -9738,8 +9738,8 @@ msgstr "Nažalost, nemate dozvolu da pristupite ovoj stranici, ili je možda ist
 msgid "Result"
 msgstr "Rezultat"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Pokušava se prijava kao %s %s (id %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Pokušava se prijava kao %s (id %d)"
 
 msgid "Login successful. Go to %s"
 msgstr "Prijava uspešna. Idi na %s"

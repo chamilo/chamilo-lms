@@ -9738,8 +9738,8 @@ msgstr "Paumanhin, ikaw ay hindi pinapayagan na ma-access ang pahinang ito, o an
 msgid "Result"
 msgstr "Resulta"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Sinusubukang mag-log in bilang %s %s (id %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Sinusubukang mag-log in bilang %s (id %d)"
 
 msgid "Login successful. Go to %s"
 msgstr "Matagumpay ang login. Pumunta sa %s"

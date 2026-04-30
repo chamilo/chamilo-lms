@@ -9743,8 +9743,8 @@ msgstr "Sorry, you are not allowed to access this page, or maybe your connection
 msgid "Result"
 msgstr "Result"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Attempting to login as %s %s (id %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Attempting to login as %s (id %d)"
 
 msgid "Login successful. Go to %s"
 msgstr "Login successful. Go to %s"

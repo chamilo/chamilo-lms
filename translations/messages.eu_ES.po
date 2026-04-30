@@ -9743,8 +9743,8 @@ msgstr "Sentitzen dugu, ez duzu orri honetan sartzeko baimenik edo zure konexioa
 msgid "Result"
 msgstr "Emaitza"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Saiatu konektatzen honela: %s %s (id %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Saiatu konektatzen honela: %s (id %d)"
 
 msgid "Login successful. Go to %s"
 msgstr "Konexioa ongi egin da. Joan honetara: %s"

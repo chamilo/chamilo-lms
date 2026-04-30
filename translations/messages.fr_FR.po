@@ -9975,8 +9975,8 @@ msgstr "Désolé, vous n'êtes pas autorisé à accéder à cette page, ou votre
 msgid "Result"
 msgstr "Résultat"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Tentative d'identification comme %s %s (id %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Tentative d'identification comme %s (id %d)"
 
 msgid "Login successful. Go to %s"
 msgstr "Identification réussie. Cliquez sur le lien suivant pour continuer : %s"

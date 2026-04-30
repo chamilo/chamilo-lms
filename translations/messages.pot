@@ -9739,7 +9739,7 @@ msgstr ""
 msgid "Result"
 msgstr ""
 
-msgid "Attempting to login as %s %s (id %s)"
+msgid "Attempting to login as %s (id %d)"
 msgstr ""
 
 msgid "Login successful. Go to %s"

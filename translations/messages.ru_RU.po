@@ -9744,8 +9744,8 @@ msgstr "Извините, у вас нет доступа к этой стран
 msgid "Result"
 msgstr "Результат"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Попытка входа как %s %s (id %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Попытка входа как %s (id %d)"
 
 msgid "Login successful. Go to %s"
 msgstr "Вход успешен. Перейти к %s"

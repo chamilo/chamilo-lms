@@ -9751,8 +9751,8 @@ msgstr "Sentímolo, non lle está permitido acceder a esta páxina. Para volver 
 msgid "Result"
 msgstr "Resultado"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr " \tIntentar identificarse como %s %s (id %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr " \tIntentar identificarse como %s (id %d)"
 
 msgid "Login successful. Go to %s"
 msgstr " \tIdentificación realizada. Vaia a %s"

@@ -9738,8 +9738,8 @@ msgstr "Omlouváme se, nemáte oprávnění k přístupu na tuto stránku nebo v
 msgid "Result"
 msgstr "Výsledek"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Pokus o přihlášení jako %s %s (id %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Pokus o přihlášení jako %s (id %d)"
 
 msgid "Login successful. Go to %s"
 msgstr "Přihlášení úspěšné. Jít na %s"

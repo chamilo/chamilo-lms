@@ -9743,8 +9743,8 @@ msgstr "Lo sentimos, no tienes permiso para acceder a esta página, o tal vez tu
 msgid "Result"
 msgstr "Resultado"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Intentando iniciar sesión como %s %s (id %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Intentando iniciar sesión como %s (id %d)"
 
 msgid "Login successful. Go to %s"
 msgstr "Inicio de sesión exitoso. Ir a %s"

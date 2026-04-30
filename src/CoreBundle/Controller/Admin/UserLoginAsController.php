@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Handles the "Login as" (user impersonation) action, replacing the legacy
@@ -24,6 +25,7 @@ class UserLoginAsController extends AbstractController
 {
     public function __construct(
         private readonly EntityManagerInterface $em,
+        private readonly TranslatorInterface $translator,
     ) {}
 
     #[Route('/admin/user-list-login-as', name: 'admin_user_login_as', methods: ['GET'])]
@@ -47,8 +49,8 @@ class UserLoginAsController extends AbstractController
         }
 
         $this->addFlash(
-            'success',
-            \sprintf('Attempting to login as %s (id %d)', $user->getFullname(), $userId)
+            'info',
+            \sprintf($this->translator->trans('Attempting to login as %s (id %d)'), $user->getFullname(), $userId)
         );
 
         return $this->redirect('/?_switch_user='.urlencode($user->getUsername()));

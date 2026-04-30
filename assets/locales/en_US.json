@@ -667,7 +667,7 @@
     "Download assignments package": "Download assignments package",
     "Full name": "Full name",
     "Upload correction": "Upload correction",
-    "Correct and rate": "Correct and rate",
+    "Correct and rate": "Correct and grade",
     "No resource link entity found": "No resource link entity found",
     "Number of days": "Number of days",
     "Every x days": "Every x days",
@@ -1883,13 +1883,15 @@
     "Items": "Items",
     "Newest first": "Newest first",
     "Oldest first": "Oldest first",
-    "Title A–Z": "Title A–Z",
-    "Title Z–A": "Title Z–A",
+    "Title A\u2013Z": "Title A\u2013Z",
+    "Title Z\u2013A": "Title Z\u2013A",
     "Projects": "Projects",
     "Continue": "Continue",
     "Import options": "Import options",
     "Change password": "Change password",
     "New message": "New message",
     "Mark as": "Mark as",
-    "No results found": "No results found"
+    "No results found": "No results found",
+    "Attempting to login as %s (id %d)": "Attempting to login as {0} (id {1})",
+    "Login successful. Go to %s": "Login successful. Go to {0}"
 }

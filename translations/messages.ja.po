@@ -9807,8 +9807,8 @@ msgstr "申し訳ありませんが、このページへのアクセスが許可
 msgid "Result"
 msgstr "結果"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "%s %s (ID %s) としてログインを試行中"
+msgid "Attempting to login as %s (id %d)"
+msgstr "%s (ID %d) としてログインを試行中"
 
 msgid "Login successful. Go to %s"
 msgstr "ログイン成功。%s に移動"

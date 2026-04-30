@@ -9743,8 +9743,8 @@ msgstr "Undskyld, du har ikke adgang til denne side, eller måske er din forbind
 msgid "Result"
 msgstr "Resultat"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Forsøger at logge ind som %s %s (id %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Forsøger at logge ind som %s (id %d)"
 
 msgid "Login successful. Go to %s"
 msgstr "Login vellykket. Gå til %s"

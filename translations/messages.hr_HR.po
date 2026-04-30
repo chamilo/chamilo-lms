@@ -9742,8 +9742,8 @@ msgstr "Nemate prava za pristup ovoj stranici. Molim odaberite \"nazad\" na vaš
 msgid "Result"
 msgstr "Rezultat"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Pokušaj prijave kao %s %s (id %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Pokušaj prijave kao %s (id %d)"
 
 msgid "Login successful. Go to %s"
 msgstr "Prijava uspješna. Idi na %s"

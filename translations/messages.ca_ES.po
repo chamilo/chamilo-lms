@@ -9751,8 +9751,8 @@ msgstr "Ho sentim, no li està permès accedir a aquesta pàgina. Per a tornar a
 msgid "Result"
 msgstr "Resultat"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Intentar identificar-se com %s %s (aneu %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Intentar identificar-se com %s (aneu %d)"
 
 msgid "Login successful. Go to %s"
 msgstr "Identificació realitzada. Vagi a %s"

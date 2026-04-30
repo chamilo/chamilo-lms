@@ -9742,8 +9742,8 @@ msgstr "மன்னிக்கவும், இந்தப் பக்கத
 msgid "Result"
 msgstr "முடிவு"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "%s %s (அ id %s) ஆக உள்நுழை முயற்சி"
+msgid "Attempting to login as %s (id %d)"
+msgstr "%s (அ id %d) ஆக உள்நுழை முயற்சி"
 
 msgid "Login successful. Go to %s"
 msgstr "உள்நுழைவு வெற்றி. %s க்கு செல்லுங்கள்"

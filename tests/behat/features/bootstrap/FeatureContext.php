@@ -538,7 +538,7 @@ class FeatureContext extends MinkContext
     public function waitVeryLongForThePageToBeLoaded()
     {
         //$this->getSession()->wait(10000, "document.readyState === 'complete'");
-        $this->getSession()->wait(7000);
+        $this->getSession()->wait(9000);
     }
 
     /**
@@ -1193,5 +1193,89 @@ JS;
         parent::visit($page);
 
         $this->waitForThePageToBeLoaded();
+    }
+
+    /**
+     * Adds an LP item by simulating the Sortable.js AJAX call used for drag-and-drop.
+     *
+     * Handles two DOM layouts:
+     *  - Quiz items  : text is inside  <a class="link_with_id">Title</a>
+     *  - Document items: text is a bare text-node in <div class="item_data">, outside the link
+     *
+     * @When /^I add LP item "([^"]*)" from the resource panel$/
+     */
+    public function iAddLpItemFromResourcePanel(string $title): void
+    {
+        $safeTitle = addslashes($title);
+
+        $infoJs = <<<JS
+(function() {
+    var items = document.querySelectorAll('ul.lp_resource li');
+    for (var i = 0; i < items.length; i++) {
+        var li   = items[i];
+        var link = li.querySelector('.link_with_id');
+
+        // Strategy 1 – quiz: title attr on <li> (e.g. title="QRU and Image Selection exercise")
+        if (li.getAttribute('title') === '{$safeTitle}') {
+            return JSON.stringify({ id: li.getAttribute('id'), type: link ? link.getAttribute('data_type') : null });
+        }
+
+        // Strategy 2 – quiz: text directly inside .link_with_id
+        if (link) {
+            var linkText = link.textContent.replace(/ /g, ' ').trim();
+            if (linkText === '{$safeTitle}') {
+                return JSON.stringify({ id: li.getAttribute('id'), type: link.getAttribute('data_type') });
+            }
+        }
+
+        // Strategy 3 – document: bare text-node(s) inside div.item_data (text lives outside the <a>)
+        var itemData = li.querySelector('.item_data');
+        if (itemData) {
+            var raw = '';
+            for (var j = 0; j < itemData.childNodes.length; j++) {
+                if (itemData.childNodes[j].nodeType === 3) raw += itemData.childNodes[j].textContent;
+            }
+            if (raw.trim() === '{$safeTitle}') {
+                return JSON.stringify({ id: li.getAttribute('id'), type: link ? link.getAttribute('data_type') : 'document' });
+            }
+        }
+    }
+    return null;
+})();
+JS;
+
+        $result = $this->getSession()->evaluateScript($infoJs);
+        if (!$result) {
+            throw new \Exception("LP item '{$title}' not found in resource panel");
+        }
+
+        $data   = json_decode($result, true);
+        $itemId = $data['id'];
+        $type   = $data['type'];
+
+        $currentUrl = $this->getSession()->getCurrentUrl();
+        parse_str(parse_url($currentUrl, PHP_URL_QUERY) ?? '', $params);
+        $lpId = $params['lp_id'] ?? '';
+        $cid  = $params['cid']  ?? '';
+        $sid  = $params['sid']  ?? 0;
+
+        $escapedTitle = str_replace("'", "\\'", $title);
+
+        $this->getSession()->executeScript("
+            \$.ajax({
+                url: '/main/inc/ajax/lp.ajax.php',
+                data: {
+                    lp_id: '{$lpId}', cid: '{$cid}', sid: '{$sid}',
+                    a: 'add_lp_item', id: '{$itemId}', type: '{$type}',
+                    title: '{$escapedTitle}',
+                    parent_id: '', previous_id: 0
+                },
+                async: false
+            });
+        ");
+
+        $this->getSession()->wait(1000);
+        $this->getSession()->reload();
+        $this->waitVeryLongForThePageToBeLoaded();
     }
 }

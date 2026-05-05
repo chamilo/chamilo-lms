@@ -89,7 +89,25 @@ try {
     $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader($inputFileType);
     $phpExcel = $reader->load($xlsxFile);
     $worksheet = $phpExcel->getActiveSheet();
-    $xlsxRows = $worksheet->toArray();
+    // toArray() passes all values through NumberFormat::toFormattedString(), which
+    // reinterprets string-typed cells (e.g. "000123") as numbers when the format code
+    // is General, silently stripping leading zeros. Read cells directly instead: string-
+    // typed cells return their raw value unchanged; numeric cells still go through
+    // formatting and honour any zero-padding format code (e.g. "0000000000").
+    $xlsxRows = [];
+    foreach ($worksheet->getRowIterator() as $row) {
+        $rowData = [];
+        $cellIterator = $row->getCellIterator();
+        $cellIterator->setIterateOnlyExistingCells(false);
+        foreach ($cellIterator as $cell) {
+            if ($cell->getDataType() === \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING) {
+                $rowData[] = (string) $cell->getValue();
+            } else {
+                $rowData[] = $cell->getFormattedValue();
+            }
+        }
+        $xlsxRows[] = $rowData;
+    }
 } catch (Exception $e) {
     exit("Error loading XLSX file: {$e->getMessage()}\n");
 }

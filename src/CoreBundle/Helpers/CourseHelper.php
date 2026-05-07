@@ -72,6 +72,10 @@ use Symfony\Component\Mime\Email;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 use UrlManager;
+use Chamilo\CoreBundle\Event\AbstractEvent;
+use Chamilo\CoreBundle\Event\CourseCreatedEvent;
+use Chamilo\CoreBundle\Event\Events;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 use const JSON_UNESCAPED_SLASHES;
 use const JSON_UNESCAPED_UNICODE;
@@ -99,6 +103,7 @@ class CourseHelper
         private readonly ResourceNodeRepository $resourceNodeRepository,
         private readonly CDocumentRepository $documentRepository,
         private readonly ExtraFieldValuesRepository $extraFieldValuesRepository,
+        private readonly EventDispatcherInterface $eventDispatcher,
     ) {}
 
     public function createCourse(array $params): ?Course
@@ -182,6 +187,17 @@ class CourseHelper
 
         $keys = $this->defineCourseKeys($params['wanted_code']);
         $params = array_merge($params, $keys);
+
+        $courseCreationEventData = [];
+        if (!empty($params['buycourses_service_sale_id'])) {
+            $courseCreationEventData['buycourses_service_sale_id'] = (int) $params['buycourses_service_sale_id'];
+        }
+
+        $this->eventDispatcher->dispatch(
+            new CourseCreatedEvent($courseCreationEventData, AbstractEvent::TYPE_PRE),
+            Events::COURSE_CREATED
+        );
+
         $course = $this->registerCourse($params);
 
         if (!$course) {
@@ -189,6 +205,13 @@ class CourseHelper
         }
 
         $this->handlePostCourseCreation($course, $params);
+
+        $courseCreationEventData['course'] = $course;
+
+        $this->eventDispatcher->dispatch(
+            new CourseCreatedEvent($courseCreationEventData, AbstractEvent::TYPE_POST),
+            Events::COURSE_CREATED
+        );
 
         return $course;
     }
@@ -1446,41 +1469,47 @@ class CourseHelper
             return [];
         }
 
-        $limitInfo = $this->getGlobalUsersPerCourseLimitDebugInfo();
-        $limit = (int) $limitInfo['limit'];
-        $rawSettingKey = $limitInfo['rawSettingKey'];
-        $rawSettingValue = $limitInfo['rawSettingValue'];
+        $globalLimitInfo = $this->getGlobalUsersPerCourseLimitDebugInfo();
+        $globalLimit = (int) $globalLimitInfo['limit'];
+        $globalRawSettingKey = $globalLimitInfo['rawSettingKey'];
+        $globalRawSettingValue = $globalLimitInfo['rawSettingValue'];
 
         $courseIds = array_map(
             static fn (Course $course): int => (int) $course->getId(),
             $courses
         );
 
-        if ($limit <= 0) {
-            $infoMap = [];
+        $buyCoursesLimits = $this->getBuyCoursesHostingLimitsByCourseIds($courseIds);
+        $counts = $this->getCourseSubscriptionCountsByCourseIds($courseIds);
+        $infoMap = [];
 
-            foreach ($courseIds as $courseId) {
+        foreach ($courses as $course) {
+            $courseId = (int) $course->getId();
+            $courseSpecificLimit = (int) ($buyCoursesLimits[$courseId] ?? 0);
+            $limit = $courseSpecificLimit > 0 ? $courseSpecificLimit : $globalLimit;
+            $rawSettingKey = $courseSpecificLimit > 0
+                ? 'buycourses.subscription_course.hosting_limit'
+                : $globalRawSettingKey;
+            $rawSettingValue = $courseSpecificLimit > 0
+                ? (string) $courseSpecificLimit
+                : $globalRawSettingValue;
+            $current = (int) ($counts[$courseId] ?? 0);
+
+            if ($limit <= 0) {
                 $infoMap[$courseId] = [
                     'subscriptionLimitEnabled' => false,
                     'subscriptionLimit' => 0,
-                    'subscriptionCount' => 0,
+                    'subscriptionCount' => $current,
                     'subscriptionLimitReached' => false,
                     'canSubscribe' => true,
                     'subscriptionLimitTooltip' => '',
                     'rawSettingKey' => $rawSettingKey,
                     'rawSettingValue' => $rawSettingValue,
                 ];
+
+                continue;
             }
 
-            return $infoMap;
-        }
-
-        $counts = $this->getCourseSubscriptionCountsByCourseIds($courseIds);
-        $infoMap = [];
-
-        foreach ($courses as $course) {
-            $courseId = (int) $course->getId();
-            $current = (int) ($counts[$courseId] ?? 0);
             $reached = $current >= $limit;
             $canSubscribe = ($current + $nbNewUsers) <= $limit;
 
@@ -1505,6 +1534,87 @@ class CourseHelper
         }
 
         return $infoMap;
+    }
+
+    /**
+     * Returns active BuyCourses hosting limits indexed by course id.
+     *
+     * The plugin table is optional, so missing tables or disabled plugin state must never break
+     * standard course subscription checks.
+     *
+     * @param int[] $courseIds
+     *
+     * @return array<int, int>
+     */
+    private function getBuyCoursesHostingLimitsByCourseIds(array $courseIds): array
+    {
+        $courseIds = array_values(array_filter(array_map('intval', $courseIds)));
+
+        if ([] === $courseIds) {
+            return [];
+        }
+
+        $connection = $this->entityManager->getConnection();
+
+        try {
+            $schemaManager = $connection->createSchemaManager();
+
+            if (!$schemaManager->tablesExist([
+                'plugin_buycourses_subscription_course',
+                'plugin_buycourses_service_sale',
+            ])) {
+                return [];
+            }
+
+            $placeholders = [];
+            $parameters = [
+                'activeStatus' => 'active',
+                'completedStatus' => 1,
+                'now' => api_get_utc_datetime(),
+            ];
+
+            foreach ($courseIds as $index => $courseId) {
+                $parameterName = 'courseId'.$index;
+                $placeholders[] = ':'.$parameterName;
+                $parameters[$parameterName] = $courseId;
+            }
+
+            $sql = 'SELECT
+                    sc.course_id AS course_id,
+                    JSON_UNQUOTE(JSON_EXTRACT(sc.context_json, "$.hosting_limit")) AS hosting_limit
+                FROM plugin_buycourses_subscription_course sc
+                INNER JOIN plugin_buycourses_service_sale ss
+                    ON ss.id = sc.service_sale_id
+                WHERE sc.course_id IN ('.implode(', ', $placeholders).')
+                  AND sc.status = :activeStatus
+                  AND ss.status = :completedStatus
+                  AND ss.date_end IS NOT NULL
+                  AND ss.date_end >= :now
+                ORDER BY ss.date_end DESC, sc.id DESC';
+
+            $rows = $connection->executeQuery($sql, $parameters)->fetchAllAssociative();
+        } catch (Throwable $exception) {
+            $this->debugLog('buycourses:hostingLimitLookupFailed', [
+                'error' => $exception->getMessage(),
+            ]);
+
+            return [];
+        }
+
+        $limits = [];
+
+        foreach ($rows as $row) {
+            $courseId = (int) ($row['course_id'] ?? 0);
+            $limit = (int) ($row['hosting_limit'] ?? 0);
+
+            if ($courseId <= 0 || $limit <= 0 || isset($limits[$courseId])) {
+                continue;
+            }
+
+            $limits[$courseId] = $limit;
+        }
+
+        return $limits;
     }
 
     public function deleteCourse(Course $course, bool $deleteExclusiveDocuments = false): void
@@ -1763,6 +1873,22 @@ class CourseHelper
             return;
         }
 
+        $buyCoursesServiceSaleId = isset($params['buycourses_service_sale_id']) ? (int) $params['buycourses_service_sale_id'] : 0;
+        if ($buyCoursesServiceSaleId > 0) {
+            $selectionStatus = $this->resolveBuyCoursesServiceSaleCourseCreationSelection(
+                $ownerUser,
+                $buyCoursesServiceSaleId
+            );
+
+            if (!empty($selectionStatus['valid'])) {
+                return;
+            }
+
+            throw new RuntimeException(
+                (string) ($selectionStatus['message'] ?? $this->translator->trans('The selected BuyCourses service cannot be used to create this course.'))
+            );
+        }
+
         $status = $this->resolveCourseCreationCapabilityForUser($ownerUser);
 
         if (true === (bool) $status['canCreate']) {
@@ -1823,6 +1949,52 @@ class CourseHelper
         ;
 
         return (int) $qb->getQuery()->getSingleScalarResult();
+    }
+
+    private function resolveBuyCoursesServiceSaleCourseCreationSelection(User $user, int $serviceSaleId): array
+    {
+        if ($serviceSaleId <= 0) {
+            return [
+                'valid' => false,
+                'message' => $this->translator->trans('The selected BuyCourses service is invalid.'),
+            ];
+        }
+
+        if (!$this->isBuyCoursesPluginEnabled()) {
+            return [
+                'valid' => false,
+                'message' => $this->translator->trans('BuyCourses is not available right now.'),
+            ];
+        }
+
+        try {
+            $plugin = \BuyCoursesPlugin::create();
+
+            if (!method_exists($plugin, 'getCourseCreationServiceSaleSelectionStatus')) {
+                return [
+                    'valid' => false,
+                    'message' => $this->translator->trans('BuyCourses cannot validate the selected service right now.'),
+                ];
+            }
+
+            $status = $plugin->getCourseCreationServiceSaleSelectionStatus((int) $user->getId(), $serviceSaleId);
+
+            return \is_array($status) ? $status : [
+                'valid' => false,
+                'message' => $this->translator->trans('The selected BuyCourses service cannot be used to create this course.'),
+            ];
+        } catch (Throwable $exception) {
+            $this->debugLog('createCourse:buyCoursesServiceSelectionFailed', [
+                'userId' => $user->getId(),
+                'serviceSaleId' => $serviceSaleId,
+                'message' => $exception->getMessage(),
+            ]);
+
+            return [
+                'valid' => false,
+                'message' => $this->translator->trans('Unable to validate the selected BuyCourses service right now.'),
+            ];
+        }
     }
 
     private function resolveBaseMaxCoursesPerUser(): int

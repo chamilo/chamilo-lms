@@ -48,6 +48,16 @@ $formDefaultValues = array_merge($plugin->buildBenefitFormDefaults(), [
     'price' => 0,
     'tax_perc' => $defaultGlobalTax,
     'duration_days' => 30,
+    'renewable' => false,
+    'total_charges' => 0,
+    'allow_trial' => false,
+    'trial_period' => 'Day',
+    'trial_frequency' => 0,
+    'trial_total_charges' => 0,
+    'max_subscribers' => 0,
+    'subscription_behavior_json' => '',
+    'stripe_price_id' => '',
+    'display_on_course_creation_page' => false,
     'applies_to' => BuyCoursesPlugin::SERVICE_TYPE_USER,
     'owner_id' => api_get_user_id(),
     'visibility' => true,
@@ -79,6 +89,61 @@ $form->addElement(
     [$plugin->get_lang('Duration'), null, get_lang('Days')],
     ['step' => 1]
 );
+
+$form->addHtml('<div class="buycourses-recurring-section">');
+$form->addHeader($plugin->get_lang('RecurringPayments'));
+$form->addCheckBox('renewable', $plugin->get_lang('RenewableService'));
+$form->addElement(
+    'number',
+    'total_charges',
+    [$plugin->get_lang('TotalCharges'), $plugin->get_lang('TotalChargesHelp')],
+    ['step' => 1, 'min' => 0]
+);
+$form->addCheckBox('allow_trial', $plugin->get_lang('AllowTrial'));
+$form->addSelect(
+    'trial_period',
+    $plugin->get_lang('TrialPeriod'),
+    [
+        'Day' => $plugin->get_lang('PeriodDay'),
+        'Week' => $plugin->get_lang('PeriodWeek'),
+        'Month' => $plugin->get_lang('PeriodMonth'),
+        'Year' => $plugin->get_lang('PeriodYear'),
+    ]
+);
+$form->addElement(
+    'number',
+    'trial_frequency',
+    [$plugin->get_lang('TrialFrequency'), $plugin->get_lang('TrialFrequencyHelp')],
+    ['step' => 1, 'min' => 0]
+);
+$form->addElement(
+    'number',
+    'trial_total_charges',
+    [$plugin->get_lang('TrialTotalCharges'), $plugin->get_lang('TrialTotalChargesHelp')],
+    ['step' => 1, 'min' => 0]
+);
+$form->addElement(
+    'number',
+    'max_subscribers',
+    [$plugin->get_lang('MaxSubscribers'), $plugin->get_lang('MaxSubscribersHelp')],
+    ['step' => 1, 'min' => 0]
+);
+$form->addTextarea(
+    'subscription_behavior_json',
+    [$plugin->get_lang('SubscriptionBehaviorJson'), $plugin->get_lang('SubscriptionBehaviorJsonHelp')],
+    ['rows' => 6]
+);
+$form->addText(
+    'stripe_price_id',
+    [$plugin->get_lang('StripePriceId'), $plugin->get_lang('StripePriceIdHelp')],
+    false
+);
+$form->addCheckBox(
+    'display_on_course_creation_page',
+    $plugin->get_lang('DisplayServiceOnCourseCreationPage'),
+    $plugin->get_lang('DisplayServiceOnCourseCreationPageHelp')
+);
+$form->addHtml('</div>');
 
 $form->addHidden('applies_to', (string) BuyCoursesPlugin::SERVICE_TYPE_USER);
 $form->addHtml(
@@ -306,6 +371,10 @@ function buycoursesValidateServicePayload(array $values, BuyCoursesPlugin $plugi
     $name = trim((string) ($values['name'] ?? ''));
     $appliesTo = isset($values['applies_to']) ? (int) $values['applies_to'] : BuyCoursesPlugin::SERVICE_TYPE_NONE;
     $durationDays = isset($values['duration_days']) ? (int) $values['duration_days'] : 0;
+    $renewable = !empty($values['renewable']);
+    $allowTrial = !empty($values['allow_trial']);
+    $trialFrequency = isset($values['trial_frequency']) ? (int) $values['trial_frequency'] : 0;
+    $subscriptionBehaviorJson = trim((string) ($values['subscription_behavior_json'] ?? ''));
 
     $benefitMaxCourses = isset($values['benefit_max_courses']) ? (int) $values['benefit_max_courses'] : 0;
     $benefitHostingLimit = isset($values['benefit_hosting_limit']) ? (int) $values['benefit_hosting_limit'] : 0;
@@ -323,6 +392,21 @@ function buycoursesValidateServicePayload(array $values, BuyCoursesPlugin $plugi
 
     if ($hasAnyBenefit && $durationDays <= 0) {
         $errors[] = $plugin->get_lang('DurationMustBePositiveForBenefits');
+    }
+
+    if ($allowTrial && $trialFrequency <= 0) {
+        $errors[] = $plugin->get_lang('TrialFrequencyMustBePositive');
+    }
+
+    if (!$renewable && $allowTrial) {
+        $errors[] = $plugin->get_lang('TrialRequiresRenewableService');
+    }
+
+    if ('' !== $subscriptionBehaviorJson) {
+        json_decode($subscriptionBehaviorJson, true);
+        if (JSON_ERROR_NONE !== json_last_error()) {
+            $errors[] = $plugin->get_lang('SubscriptionBehaviorJsonInvalid');
+        }
     }
 
     return $errors;

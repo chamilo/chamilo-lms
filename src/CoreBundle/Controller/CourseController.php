@@ -1137,7 +1137,13 @@ class CourseController extends ToolBaseController
 
         $capabilityStatus = $this->resolveCourseCreateCapabilityStatus($user, $translator, $courseHelper);
 
-        if (!$capabilityStatus['canCreate']) {
+        $buyCoursesServiceSaleId = null;
+        if (isset($courseData['buyCoursesServiceSaleId']) && \is_scalar($courseData['buyCoursesServiceSaleId'])) {
+            $candidateServiceSaleId = (int) $courseData['buyCoursesServiceSaleId'];
+            $buyCoursesServiceSaleId = $candidateServiceSaleId > 0 ? $candidateServiceSaleId : null;
+        }
+
+        if (!$capabilityStatus['canCreate'] && null === $buyCoursesServiceSaleId) {
             return new JsonResponse(
                 [
                     'success' => false,
@@ -1252,6 +1258,10 @@ class CourseController extends ToolBaseController
             'exemplary_content' => $exemplaryContent,
             'course_template' => $template,
         ];
+
+        if (null !== $buyCoursesServiceSaleId) {
+            $params['buycourses_service_sale_id'] = $buyCoursesServiceSaleId;
+        }
 
         if (!empty($categoryIds)) {
             $params['course_categories'] = $categoryIds;

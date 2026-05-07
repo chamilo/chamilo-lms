@@ -164,6 +164,99 @@ function ConfirmPayment($finalPaymentAmt)
 }
 
 /**
+ * Prepare a minimal Express Checkout request for a billing agreement.
+ */
+function MinimalExpressCheckout($extraParameters)
+{
+    $nvpstr = (string) $extraParameters;
+
+    $resArray = hash_call('SetExpressCheckout', $nvpstr);
+    $ack = strtoupper((string) ($resArray['ACK'] ?? ''));
+
+    if ('SUCCESS' === $ack || 'SUCCESSWITHWARNING' === $ack) {
+        $token = urldecode((string) ($resArray['TOKEN'] ?? ''));
+        $_SESSION['TOKEN'] = $token;
+    }
+
+    return $resArray;
+}
+
+/**
+ * Create a recurring payments profile using a PayPal billing agreement token.
+ */
+function CreateRecurringPaymentsProfile(
+    string $subscriberName,
+    string $billingStartDate,
+    string $profileReference,
+    string $profileDescription,
+    string $billingPeriod,
+    int $billingFrequency,
+    int $totalBillingCycles,
+    float $amount,
+    string $currencyCode,
+    string $subscriberEmail,
+    string $extra = '',
+    string $token = ''
+) {
+    $token = '' !== $token ? $token : (string) ($_SESSION['TOKEN'] ?? '');
+
+    if ('' === $token) {
+        return [
+            'ACK' => 'FAILURE',
+            'L_ERRORCODE0' => 'LOCAL1001',
+            'L_LONGMESSAGE0' => 'Missing token for CreateRecurringPaymentsProfile.',
+        ];
+    }
+
+    $formattedAmount = number_format($amount, 2, '.', '');
+    $billingFrequency = max(1, $billingFrequency);
+
+    $nvpstr = '&TOKEN='.urlencode($token);
+    $nvpstr .= '&SUBSCRIBERNAME='.urlencode($subscriberName);
+    $nvpstr .= '&PROFILESTARTDATE='.urlencode($billingStartDate);
+    $nvpstr .= '&PROFILEREFERENCE='.urlencode($profileReference);
+    $nvpstr .= '&DESC='.urlencode($profileDescription);
+    $nvpstr .= '&BILLINGPERIOD='.urlencode($billingPeriod);
+    $nvpstr .= '&BILLINGFREQUENCY='.urlencode((string) $billingFrequency);
+    $nvpstr .= '&AMT='.urlencode($formattedAmount);
+    $nvpstr .= '&CURRENCYCODE='.urlencode($currencyCode);
+    $nvpstr .= '&EMAIL='.urlencode($subscriberEmail);
+    $nvpstr .= '&AUTOBILLAMT=AddToNextBilling';
+    $nvpstr .= '&MAXFAILEDPAYMENTS=1';
+
+    if ($totalBillingCycles > 0) {
+        $nvpstr .= '&TOTALBILLINGCYCLES='.urlencode((string) $totalBillingCycles);
+    }
+
+    $nvpstr .= $extra;
+
+    return hash_call('CreateRecurringPaymentsProfile', $nvpstr);
+}
+
+/**
+ * Update the status of an existing PayPal recurring payments profile.
+ */
+function ManageRecurringPaymentsProfileStatus(string $profileId, string $action, string $note = '')
+{
+    if ('' === trim($profileId)) {
+        return [
+            'ACK' => 'FAILURE',
+            'L_ERRORCODE0' => 'LOCAL1002',
+            'L_LONGMESSAGE0' => 'Missing profile ID for ManageRecurringPaymentsProfileStatus.',
+        ];
+    }
+
+    $nvpstr = '&PROFILEID='.urlencode($profileId);
+    $nvpstr .= '&ACTION='.urlencode($action);
+
+    if ('' !== trim($note)) {
+        $nvpstr .= '&NOTE='.urlencode($note);
+    }
+
+    return hash_call('ManageRecurringPaymentsProfileStatus', $nvpstr);
+}
+
+/**
  * Make a DoDirectPayment API call.
  */
 function DirectPayment(

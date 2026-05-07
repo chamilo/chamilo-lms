@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Event\AbstractEvent;
 use Chamilo\CoreBundle\Event\CourseCreatedEvent;
+use Chamilo\CoreBundle\Event\CourseUserSubscriptionCheckEvent;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
@@ -861,6 +862,30 @@ class CourseManager
         $userCourseCategoryId = (int) $userCourseCategoryId;
         $sessionId = empty($sessionId) ? api_get_session_id() : (int) $sessionId;
         $status = STUDENT === $status || COURSEMANAGER === $status ? $status : STUDENT;
+
+        if (STUDENT === $status) {
+            $subscriptionCheckEvent = new CourseUserSubscriptionCheckEvent(
+                [
+                    'course_id' => $courseId,
+                    'user_ids' => [$userId],
+                    'status' => $status,
+                    'session_id' => $sessionId,
+                ],
+                AbstractEvent::TYPE_PRE
+            );
+
+            Container::getEventDispatcher()->dispatch(
+                $subscriptionCheckEvent,
+                Events::COURSE_USER_SUBSCRIPTION_CHECK
+            );
+
+            if (!$subscriptionCheckEvent->isAllowed()) {
+                return $finish(
+                    false,
+                    $subscriptionCheckEvent->getMessage() ?: get_lang('Subscription not allowed')
+                );
+            }
+        }
 
         if (!empty($sessionId)) {
             SessionManager::subscribe_users_to_session_course(

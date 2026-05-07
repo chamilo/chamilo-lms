@@ -84,6 +84,17 @@ if (!isset($formDefaultValues['visibility'])) {
     $formDefaultValues['visibility'] = !empty($service['visibility']);
 }
 
+$formDefaultValues['renewable'] = !empty($service['renewable']);
+$formDefaultValues['total_charges'] = isset($service['total_charges']) ? (int) $service['total_charges'] : 0;
+$formDefaultValues['allow_trial'] = !empty($service['allow_trial']);
+$formDefaultValues['trial_period'] = !empty($service['trial_period']) ? (string) $service['trial_period'] : 'Day';
+$formDefaultValues['trial_frequency'] = isset($service['trial_frequency']) ? (int) $service['trial_frequency'] : 0;
+$formDefaultValues['trial_total_charges'] = isset($service['trial_total_charges']) ? (int) $service['trial_total_charges'] : 0;
+$formDefaultValues['max_subscribers'] = isset($service['max_subscribers']) ? (int) $service['max_subscribers'] : 0;
+$formDefaultValues['subscription_behavior_json'] = (string) ($service['subscription_behavior_json'] ?? '');
+$formDefaultValues['stripe_price_id'] = (string) ($service['stripe_price_id'] ?? '');
+$formDefaultValues['display_on_course_creation_page'] = !empty($service['display_on_course_creation_page']);
+
 $form = new FormValidator(
     'Services',
     'post',
@@ -111,6 +122,61 @@ $form->addElement(
     [$plugin->get_lang('Duration'), null, get_lang('Days')],
     ['step' => 1]
 );
+
+$form->addHtml('<div class="buycourses-recurring-section">');
+$form->addHeader($plugin->get_lang('RecurringPayments'));
+$form->addCheckBox('renewable', $plugin->get_lang('RenewableService'));
+$form->addElement(
+    'number',
+    'total_charges',
+    [$plugin->get_lang('TotalCharges'), $plugin->get_lang('TotalChargesHelp')],
+    ['step' => 1, 'min' => 0]
+);
+$form->addCheckBox('allow_trial', $plugin->get_lang('AllowTrial'));
+$form->addSelect(
+    'trial_period',
+    $plugin->get_lang('TrialPeriod'),
+    [
+        'Day' => $plugin->get_lang('PeriodDay'),
+        'Week' => $plugin->get_lang('PeriodWeek'),
+        'Month' => $plugin->get_lang('PeriodMonth'),
+        'Year' => $plugin->get_lang('PeriodYear'),
+    ]
+);
+$form->addElement(
+    'number',
+    'trial_frequency',
+    [$plugin->get_lang('TrialFrequency'), $plugin->get_lang('TrialFrequencyHelp')],
+    ['step' => 1, 'min' => 0]
+);
+$form->addElement(
+    'number',
+    'trial_total_charges',
+    [$plugin->get_lang('TrialTotalCharges'), $plugin->get_lang('TrialTotalChargesHelp')],
+    ['step' => 1, 'min' => 0]
+);
+$form->addElement(
+    'number',
+    'max_subscribers',
+    [$plugin->get_lang('MaxSubscribers'), $plugin->get_lang('MaxSubscribersHelp')],
+    ['step' => 1, 'min' => 0]
+);
+$form->addTextarea(
+    'subscription_behavior_json',
+    [$plugin->get_lang('SubscriptionBehaviorJson'), $plugin->get_lang('SubscriptionBehaviorJsonHelp')],
+    ['rows' => 6]
+);
+$form->addText(
+    'stripe_price_id',
+    [$plugin->get_lang('StripePriceId'), $plugin->get_lang('StripePriceIdHelp')],
+    false
+);
+$form->addCheckBox(
+    'display_on_course_creation_page',
+    $plugin->get_lang('DisplayServiceOnCourseCreationPage'),
+    $plugin->get_lang('DisplayServiceOnCourseCreationPageHelp')
+);
+$form->addHtml('</div>');
 
 $form->addHidden('applies_to', (string) $currentAppliesTo);
 $form->addHtml(
@@ -703,6 +769,10 @@ function buycoursesValidateServicePayload(array $values, BuyCoursesPlugin $plugi
     $name = trim((string) ($values['name'] ?? ''));
     $appliesTo = isset($values['applies_to']) ? (int) ($values['applies_to'] ?? BuyCoursesPlugin::SERVICE_TYPE_NONE) : BuyCoursesPlugin::SERVICE_TYPE_NONE;
     $durationDays = isset($values['duration_days']) ? (int) ($values['duration_days'] ?? 0) : 0;
+    $renewable = !empty($values['renewable']);
+    $allowTrial = !empty($values['allow_trial']);
+    $trialFrequency = isset($values['trial_frequency']) ? (int) ($values['trial_frequency'] ?? 0) : 0;
+    $subscriptionBehaviorJson = trim((string) ($values['subscription_behavior_json'] ?? ''));
     $benefitMaxCourses = isset($values['benefit_max_courses']) ? (int) ($values['benefit_max_courses'] ?? 0) : 0;
     $benefitHostingLimit = isset($values['benefit_hosting_limit']) ? (int) ($values['benefit_hosting_limit'] ?? 0) : 0;
     $benefitDocumentQuota = isset($values['benefit_document_quota']) ? (int) ($values['benefit_document_quota'] ?? 0) : 0;
@@ -723,6 +793,21 @@ function buycoursesValidateServicePayload(array $values, BuyCoursesPlugin $plugi
         $errors[] = $plugin->get_lang('DurationMustBePositiveForBenefits');
     }
 
+    if ($allowTrial && $trialFrequency <= 0) {
+        $errors[] = $plugin->get_lang('TrialFrequencyMustBePositive');
+    }
+
+    if (!$renewable && $allowTrial) {
+        $errors[] = $plugin->get_lang('TrialRequiresRenewableService');
+    }
+
+    if ('' !== $subscriptionBehaviorJson) {
+        json_decode($subscriptionBehaviorJson, true);
+        if (JSON_ERROR_NONE !== json_last_error()) {
+            $errors[] = $plugin->get_lang('SubscriptionBehaviorJsonInvalid');
+        }
+    }
+
     return $errors;
 }
 
@@ -735,6 +820,16 @@ function buycoursesBuildPostedServicePayload(int $serviceId): array
         'price' => (string) ($_POST['price'] ?? ''),
         'tax_perc' => (string) ($_POST['tax_perc'] ?? ''),
         'duration_days' => (string) ($_POST['duration_days'] ?? ''),
+        'renewable' => isset($_POST['renewable']) ? 1 : 0,
+        'total_charges' => isset($_POST['total_charges']) ? (int) $_POST['total_charges'] : 0,
+        'allow_trial' => isset($_POST['allow_trial']) ? 1 : 0,
+        'trial_period' => (string) ($_POST['trial_period'] ?? 'Day'),
+        'trial_frequency' => isset($_POST['trial_frequency']) ? (int) $_POST['trial_frequency'] : 0,
+        'trial_total_charges' => isset($_POST['trial_total_charges']) ? (int) $_POST['trial_total_charges'] : 0,
+        'max_subscribers' => isset($_POST['max_subscribers']) ? (int) $_POST['max_subscribers'] : 0,
+        'subscription_behavior_json' => (string) ($_POST['subscription_behavior_json'] ?? ''),
+        'stripe_price_id' => trim((string) ($_POST['stripe_price_id'] ?? '')),
+        'display_on_course_creation_page' => isset($_POST['display_on_course_creation_page']) ? 1 : 0,
         'applies_to' => isset($_POST['applies_to']) ? (int) $_POST['applies_to'] : BuyCoursesPlugin::SERVICE_TYPE_NONE,
         'owner_id' => isset($_POST['owner_id']) ? (int) $_POST['owner_id'] : 0,
         'visibility' => isset($_POST['visibility']) ? 1 : 0,

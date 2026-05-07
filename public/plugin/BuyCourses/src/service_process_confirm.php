@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLp;
 use ChamiloSession as Session;
+use Stripe\Stripe;
 
 /**
  * Process purchase confirmation script for the Buy Courses plugin.
@@ -56,6 +57,44 @@ $interbreadcrumb[] = [
     'url' => 'service_catalog.php',
     'name' => $plugin->get_lang('ListOfServicesOnSale'),
 ];
+
+
+if (!function_exists('buycoursesGetStripeRecurringPriceDataInterval')) {
+    /**
+     * Map the service duration to a Stripe recurring interval.
+     * Stripe Checkout requires a fixed recurring interval when using dynamic price_data.
+     */
+    function buycoursesGetStripeRecurringPriceDataInterval(array $service): array
+    {
+        $durationDays = max(0, (int) ($service['duration_days'] ?? 0));
+
+        if ($durationDays >= 360) {
+            return [
+                'interval' => 'year',
+                'interval_count' => max(1, (int) round($durationDays / 365)),
+            ];
+        }
+
+        if ($durationDays >= 28) {
+            return [
+                'interval' => 'month',
+                'interval_count' => max(1, (int) round($durationDays / 30)),
+            ];
+        }
+
+        if ($durationDays >= 7) {
+            return [
+                'interval' => 'week',
+                'interval_count' => max(1, (int) round($durationDays / 7)),
+            ];
+        }
+
+        return [
+            'interval' => 'day',
+            'interval_count' => max(1, $durationDays ?: 1),
+        ];
+    }
+}
 
 switch ($serviceSale['payment_type']) {
     case BuyCoursesPlugin::PAYMENT_TYPE_PAYPAL:
@@ -331,6 +370,192 @@ switch ($serviceSale['payment_type']) {
         $template->assign('catalog_url', $catalogUrl);
         $template->assign('culqi_amount_cents', $amountInCents);
         $template->assign('culqi_currency_code', $currencyCode);
+
+        $content = $template->fetch('BuyCourses/view/process_confirm.tpl');
+        $template->assign('content', $content);
+        $template->display_one_col_template();
+        exit;
+
+    case BuyCoursesPlugin::PAYMENT_TYPE_STRIPE:
+        $stripeParams = $plugin->getStripeParams();
+        $stripeSecretKey = trim((string) ($stripeParams['secret_key'] ?? ''));
+
+        if ('' === $stripeSecretKey) {
+            Display::addFlash(
+                Display::return_message(
+                    $plugin->get_lang('StripeSecretKeyMissing'),
+                    'error',
+                    false
+                )
+            );
+
+            $plugin->cancelServiceSale((int) $serviceSale['id']);
+            header('Location: '.$catalogUrl);
+            exit;
+        }
+
+        if ('POST' === $_SERVER['REQUEST_METHOD']) {
+            $action = trim((string) ($_POST['action'] ?? ''));
+
+            if ('cancel' === $action) {
+                $plugin->cancelServiceSale((int) $serviceSale['id']);
+                unset($_SESSION['bc_service_sale_id'], $_SESSION['bc_coupon_id']);
+
+                Display::addFlash(
+                    Display::return_message(
+                        $plugin->get_lang('OrderCancelled'),
+                        'warning',
+                        false
+                    )
+                );
+
+                header('Location: '.$catalogUrl);
+                exit;
+            }
+
+            if ('confirm' === $action) {
+                $currencyCode = strtolower(trim((string) ($currency['iso_code'] ?? 'eur')));
+                $amountInCents = (int) round((float) ($serviceSale['price'] ?? 0) * 100);
+                $isRenewable = !empty($service['renewable']);
+                $serviceName = (string) ($service['name'] ?? $serviceSale['service']['name'] ?? 'Service');
+
+                if ($amountInCents <= 0) {
+                    Display::addFlash(
+                        Display::return_message(
+                            $plugin->get_lang('InvalidServiceSaleAmount'),
+                            'error',
+                            false
+                        )
+                    );
+
+                    header('Location: '.$catalogUrl);
+                    exit;
+                }
+
+                Stripe::setApiKey($stripeSecretKey);
+                Stripe::setAppInfo('ChamiloBuyCoursesPlugin');
+
+                $successUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_stripe_success.php?service_sale_id='.(int) $serviceSale['id'].'&session_id={CHECKOUT_SESSION_ID}';
+                $cancelUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_stripe_cancel.php?service_sale_id='.(int) $serviceSale['id'];
+
+                $checkoutPayload = [
+                    'payment_method_types' => ['card'],
+                    'customer_email' => $userInfo['email'] ?? '',
+                    'client_reference_id' => (string) $serviceSale['id'],
+                    'success_url' => $successUrl,
+                    'cancel_url' => $cancelUrl,
+                    'metadata' => [
+                        'source' => 'BuyCourses',
+                        'sale_type' => 'service',
+                        'service_sale_id' => (string) $serviceSale['id'],
+                        'service_id' => (string) $serviceSale['service_id'],
+                        'buyer_id' => (string) ($serviceSale['buyer']['id'] ?? $serviceSale['buyer_id'] ?? 0),
+                    ],
+                ];
+
+                $priceData = [
+                    'unit_amount' => $amountInCents,
+                    'currency' => $currencyCode,
+                    'product_data' => [
+                        'name' => $serviceName,
+                        'metadata' => [
+                            'source' => 'BuyCourses',
+                            'sale_type' => 'service',
+                            'service_id' => (string) $serviceSale['service_id'],
+                        ],
+                    ],
+                ];
+
+                if ($isRenewable) {
+                    $recurringInterval = buycoursesGetStripeRecurringPriceDataInterval($service);
+                    $priceData['recurring'] = [
+                        'interval' => $recurringInterval['interval'],
+                        'interval_count' => $recurringInterval['interval_count'],
+                    ];
+
+                    $checkoutPayload['mode'] = 'subscription';
+                    $checkoutPayload['line_items'] = [[
+                        'price_data' => $priceData,
+                        'quantity' => 1,
+                    ]];
+                    $checkoutPayload['subscription_data'] = [
+                        'metadata' => [
+                            'source' => 'BuyCourses',
+                            'sale_type' => 'service',
+                            'service_sale_id' => (string) $serviceSale['id'],
+                            'service_id' => (string) $serviceSale['service_id'],
+                            'buyer_id' => (string) ($serviceSale['buyer']['id'] ?? $serviceSale['buyer_id'] ?? 0),
+                            'vat_treatment' => (string) ($serviceSale['vat_treatment'] ?? ''),
+                            'vat_rate' => (string) ($serviceSale['vat_rate'] ?? ''),
+                            'tax_amount' => (string) ($serviceSale['tax_amount'] ?? ''),
+                            'price_without_tax' => (string) ($serviceSale['price_without_tax'] ?? ''),
+                        ],
+                    ];
+                } else {
+                    $checkoutPayload['mode'] = 'payment';
+                    $checkoutPayload['line_items'] = [[
+                        'price_data' => $priceData,
+                        'quantity' => 1,
+                    ]];
+                }
+
+                try {
+                    $checkoutSession = \Stripe\Checkout\Session::create($checkoutPayload);
+                } catch (Throwable $exception) {
+                    error_log('[BuyCourses][Stripe] Checkout Session creation failed for service sale '.(int) $serviceSale['id'].': '.$exception->getMessage());
+
+                    Display::addFlash(
+                        Display::return_message(
+                            $plugin->get_lang('StripeCheckoutCouldNotBeInitialized'),
+                            'error',
+                            false
+                        )
+                    );
+
+                    header('Location: '.$catalogUrl);
+                    exit;
+                }
+
+                if (empty($checkoutSession->id) || empty($checkoutSession->url)) {
+                    Display::addFlash(
+                        Display::return_message(
+                            $plugin->get_lang('StripeCheckoutCouldNotBeInitialized'),
+                            'error',
+                            false
+                        )
+                    );
+
+                    header('Location: '.$catalogUrl);
+                    exit;
+                }
+
+                $plugin->updateServiceSaleGatewayData((int) $serviceSale['id'], [
+                    'recurring_gateway' => $isRenewable ? 'stripe' : null,
+                    'gateway_checkout_session_id' => (string) $checkoutSession->id,
+                ]);
+
+                unset($_SESSION['bc_coupon_id']);
+
+                header('HTTP/1.1 303 See Other');
+                header('Location: '.$checkoutSession->url);
+                exit;
+            }
+        }
+
+        $template = new Template($templateName);
+        $template->assign('header', $templateName);
+        $template->assign('back_url', $catalogUrl);
+        $template->assign('confirm_url', api_get_self());
+        $template->assign('terms', $terms);
+        $template->assign('service_sale', $serviceSale);
+        $template->assign('service', $service);
+        $template->assign('service_item', $serviceItem);
+        $template->assign('currency', $currency);
+        $template->assign('user', $userInfo);
+        $template->assign('transfer_accounts', []);
+        $template->assign('is_bank_transfer', false);
+        $template->assign('is_culqi_payment', false);
+        $template->assign('is_cecabank_payment', false);
 
         $content = $template->fetch('BuyCourses/view/process_confirm.tpl');
         $template->assign('content', $content);

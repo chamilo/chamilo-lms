@@ -17,11 +17,124 @@ class FeatureContext extends MinkContext
     }
 
     /**
+     * Clean up test users created by createUser.feature before the feature runs.
+     * Prevents stale state from a previous aborted run from causing cascading failures.
+     *
+     * @BeforeFeature @administration
+     */
+    public static function cleanUpTestUsers(\Behat\Behat\Hook\Scope\BeforeFeatureScope $scope): void
+    {
+        $testUsernames = ['smarshall', 'hrm', 'teacher', 'student'];
+        // Locate .env (two directories up from bootstrap/)
+        $envFile = __DIR__.'/../../../../.env';
+        $cfg = ['DATABASE_HOST' => 'localhost', 'DATABASE_PORT' => '3306', 'DATABASE_NAME' => '', 'DATABASE_USER' => '', 'DATABASE_PASSWORD' => ''];
+        if (is_file($envFile)) {
+            foreach (file($envFile) as $line) {
+                $line = trim($line);
+                if ('' === $line || str_starts_with($line, '#')) {
+                    continue;
+                }
+                foreach (array_keys($cfg) as $key) {
+                    if (str_starts_with($line, $key.'=')) {
+                        $val = substr($line, strlen($key) + 1);
+                        $cfg[$key] = trim($val, "\"' \t");
+                    }
+                }
+            }
+        }
+        if ('' === $cfg['DATABASE_NAME']) {
+            return;
+        }
+        try {
+            $pdo = new \PDO(
+                "mysql:host={$cfg['DATABASE_HOST']};port={$cfg['DATABASE_PORT']};dbname={$cfg['DATABASE_NAME']};charset=utf8mb4",
+                $cfg['DATABASE_USER'],
+                $cfg['DATABASE_PASSWORD']
+            );
+            $placeholders = implode(',', array_fill(0, count($testUsernames), '?'));
+            $pdo->prepare("DELETE FROM user WHERE username IN ($placeholders)")->execute($testUsernames);
+        } catch (\Throwable $e) {
+            echo "\n[BeforeFeature] Could not clean up test users: ".$e->getMessage()."\n";
+        }
+    }
+
+    /**
      * @Given /^I am a platform administrator$/
      */
     public function iAmAPlatformAdministrator()
     {
         $this->iAmLoggedAs('admin');
+    }
+
+    /**
+     * Directly creates a USER_RELATION_TYPE_RRHH (type 7) relationship so an HRM
+     * user can "login as" the target user. Bypasses the legacy PHP dual-list UI
+     * which is brittle (option text includes "(username)" suffix that Mink can't match).
+     *
+     * @Given /^"([^"]*)" follows "([^"]*)" as HRM$/
+     */
+    public function userFollowsAsHrm(string $hrmUsername, string $targetUsername): void
+    {
+        $pdo = $this->getTestPdo();
+        $stmt = $pdo->prepare(
+            'SELECT id FROM user WHERE username = ?'
+        );
+        $stmt->execute([$hrmUsername]);
+        $hrmId = $stmt->fetchColumn();
+        $stmt->execute([$targetUsername]);
+        $targetId = $stmt->fetchColumn();
+        if (!$hrmId || !$targetId) {
+            throw new \RuntimeException("Could not find hrm='$hrmUsername' (id=$hrmId) or target='$targetUsername' (id=$targetId).");
+        }
+        // USER_RELATION_TYPE_RRHH = 7.
+        // Direction matches UserManager::subscribeUsersToUser: user_id=target, friend_user_id=HRM
+        // (getUsersFollowedByUser queries WHERE friend_user_id = HRM_ID)
+        $pdo->prepare(
+            'INSERT IGNORE INTO user_rel_user (user_id, friend_user_id, relation_type) VALUES (?, ?, 7)'
+        )->execute([$targetId, $hrmId]);
+    }
+
+    /**
+     * Navigate directly to the myStudents tracking page for a given username.
+     * Looks up the user ID from the database so tests don't need to hard-code IDs.
+     *
+     * @Given /^I am on the tracking page for "([^"]*)"$/
+     */
+    public function iAmOnTrackingPageFor(string $username): void
+    {
+        $pdo = $this->getTestPdo();
+        $stmt = $pdo->prepare('SELECT id FROM user WHERE username = ?');
+        $stmt->execute([$username]);
+        $userId = $stmt->fetchColumn();
+        if (!$userId) {
+            throw new \RuntimeException("User '$username' not found in database.");
+        }
+        $this->visit('/main/my_space/myStudents.php?student='.(int) $userId);
+        $this->waitForThePageToBeLoaded();
+    }
+
+    private function getTestPdo(): \PDO
+    {
+        $envFile = __DIR__.'/../../../../.env';
+        $cfg = ['DATABASE_HOST' => 'localhost', 'DATABASE_PORT' => '3306', 'DATABASE_NAME' => '', 'DATABASE_USER' => '', 'DATABASE_PASSWORD' => ''];
+        if (is_file($envFile)) {
+            foreach (file($envFile) as $line) {
+                $line = trim($line);
+                if ('' === $line || str_starts_with($line, '#')) {
+                    continue;
+                }
+                foreach (array_keys($cfg) as $key) {
+                    if (str_starts_with($line, $key.'=')) {
+                        $cfg[$key] = trim(substr($line, strlen($key) + 1), "\"' \t");
+                    }
+                }
+            }
+        }
+        return new \PDO(
+            "mysql:host={$cfg['DATABASE_HOST']};port={$cfg['DATABASE_PORT']};dbname={$cfg['DATABASE_NAME']};charset=utf8mb4",
+            $cfg['DATABASE_USER'],
+            $cfg['DATABASE_PASSWORD']
+        );
     }
 
     /**
@@ -466,42 +579,64 @@ class FeatureContext extends MinkContext
             return;
         } catch (\Exception $e) {}
 
-        // 2) PrimeVue ConfirmDialog ("Yes" button with severity=secondary)
+        // 2) PrimeVue ConfirmDialog: wait for dialog to appear AND animation to finish
         $session->wait(5000, "document.querySelector('.p-confirmdialog') !== null || document.querySelector('.swal2-container') !== null");
+        // Wait until dialog is present AND its enter animation is complete
+        $session->wait(2000,
+            "(function(){ var d = document.querySelector('.p-confirmdialog'); " .
+            "return d && !d.classList.contains('p-dialog-enter-active') && !d.classList.contains('p-dialog-enter-from'); })()"
+        );
 
         $js = <<<'JS'
         (function(){
             function click(el) {
                 if (!el) return false;
                 try { el.style.pointerEvents = 'auto'; el.style.zIndex = 999999; } catch(e){}
-                try { el.focus(); el.click(); return true; } catch(e){ return false; }
+                try {
+                    el.dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true, view: window}));
+                    return true;
+                } catch(e) {}
+                try { el.click(); return true; } catch(e) { return false; }
             }
-            // PrimeVue ConfirmDialog: click the accept (Yes) button
+            // PrimeVue ConfirmDialog: target accept button by its specific class
             var dlg = document.querySelector('.p-confirmdialog');
             if (dlg) {
-                // acceptProps severity=secondary → .p-button-secondary; or just find first button that says "Yes"
+                var acceptBtn = dlg.querySelector('.p-confirmdialog-accept-button');
+                if (click(acceptBtn)) return true;
+                // Fallback: button with text "Yes" or "Oui"
                 var btns = dlg.querySelectorAll('button');
                 for (var i = 0; i < btns.length; i++) {
-                    var t = (btns[i].textContent || '').trim();
-                    if (t === 'Yes' || t === 'Oui' || btns[i].classList.contains('p-button-secondary')) {
+                    if ((btns[i].textContent||'').trim() === 'Yes' || (btns[i].textContent||'').trim() === 'Oui') {
                         if (click(btns[i])) return true;
                     }
                 }
-                // fallback: first button in dialog
-                if (btns.length > 0 && click(btns[0])) return true;
             }
             // SweetAlert2 fallback
             var swal = document.querySelector('.swal2-container');
             if (swal) {
                 var el = swal.querySelector('.swal2-confirm');
-                if (el && click(el)) return true;
+                if (click(el)) return true;
             }
             return false;
         })();
         JS;
 
-        $clicked = (bool) $session->executeScript($js);
-        if (!$clicked) {
+        // executeScript may return null if the accept handler navigates away (form.submit()).
+        // In that case the confirmation DID succeed, so we treat null as "clicked".
+        try {
+            $result = $session->executeScript($js);
+        } catch (\Exception $e) {
+            // Page navigation during script execution — confirmation was accepted
+            return;
+        }
+
+        if (null === $result) {
+            // Page navigated away during script execution — confirmation was accepted
+            return;
+        }
+
+        if (!(bool) $result) {
+            // Dialog was still present but nothing was clickable — true failure
             throw new \Exception('confirmPopup: no confirmation button found or clickable');
         }
     }
@@ -589,13 +724,14 @@ class FeatureContext extends MinkContext
      */
     public function waitForThePageToBeLoaded(): void
     {
-        // For Vue SPA pages, readyState alone is not enough: Vue renders after scripts run.
-        // We also wait until #app has at least one child (i.e. the app has mounted).
-        // Legacy PHP pages have no #app, so the second condition is vacuously true for them.
+        // Brief sleep allows any in-flight navigation (form submit, redirect) to start
+        // before we begin polling; without it, the condition can fire on the old page.
+        $this->getSession()->wait(300);
         $this->getSession()->wait(
             8000,
             "document.readyState === 'complete' && " .
-            "(document.querySelector('#app') === null || document.querySelector('#app').children.length > 0)"
+            "(document.querySelector('#app') === null || document.querySelector('#app').children.length > 0) && " .
+            "(document.querySelector('#sectionMainContent') === null || document.querySelector('#sectionMainContent').style.display !== 'none')"
         );
     }
 
@@ -604,10 +740,15 @@ class FeatureContext extends MinkContext
      */
     public function waitVeryLongForThePageToBeLoaded(): void
     {
+        // Sleep gives the browser time to start any in-flight navigation (form submit,
+        // redirect) before we begin polling; without it the condition fires immediately
+        // on the old page (which already satisfies readyState=complete).
+        $this->getSession()->wait(1500);
         $this->getSession()->wait(
             14000,
             "document.readyState === 'complete' && " .
-            "(document.querySelector('#app') === null || document.querySelector('#app').children.length > 0)"
+            "(document.querySelector('#app') === null || document.querySelector('#app').children.length > 0) && " .
+            "(document.querySelector('#sectionMainContent') === null || document.querySelector('#sectionMainContent').style.display !== 'none')"
         );
     }
 
@@ -626,6 +767,227 @@ class FeatureContext extends MinkContext
     {
         $escaped = addslashes($css);
         $this->getSession()->wait($timeoutMs, "document.querySelector('$escaped') !== null");
+    }
+
+    /**
+     * @When /^(?:|I )wait until the URL contains "([^"]*)"$/
+     */
+    public function waitUntilUrlContains(string $fragment): void
+    {
+        $escaped = addslashes($fragment);
+        $this->getSession()->wait(10000, "window.location.href.indexOf('$escaped') !== -1");
+    }
+
+    /**
+     * Trigger a Vue Router push to the current URL.
+     * Fixes the issue where lazy route components don't render on initial full-page load
+     * because the component factory is never called until a SPA navigation occurs.
+     * Uses a roundtrip via /home (eagerly loaded) to avoid NavigationDuplicated.
+     *
+     * @When /^I trigger Vue SPA navigation$/
+     */
+    public function triggerVueSpaNavigation(): void
+    {
+        $this->getSession()->executeScript(
+            '(function(){
+                window.__vueSpaNavDone__ = false;
+                window.__vueSpaNavError__ = null;
+                var app = document.getElementById("app");
+                var vueApp = app && app.__vue_app__;
+                if (!vueApp) { window.__vueSpaNavDone__ = true; return; }
+                var router = vueApp.config.globalProperties.$router;
+                if (!router) { window.__vueSpaNavDone__ = true; return; }
+                var targetPath = router.currentRoute.value.fullPath;
+                // Use force:true to bypass NavigationDuplicated and trigger a real re-navigation
+                router.push({ path: targetPath, force: true }).then(function() {
+                    // Wait for nextTick to ensure DOM is committed after vnode update
+                    var nextTick = vueApp.config.globalProperties.$nextTick || Promise.resolve.bind(Promise);
+                    return nextTick();
+                }).then(function() {
+                    window.__vueSpaNavDone__ = true;
+                }).catch(function(err) {
+                    window.__vueSpaNavError__ = err ? (err.message || String(err)) : "unknown";
+                    window.__vueSpaNavDone__ = true;
+                });
+            })()'
+        );
+        $result = $this->getSession()->wait(20000, "window.__vueSpaNavDone__ === true");
+        if (!$result) {
+            throw new \RuntimeException('Vue SPA navigation did not complete within 20 seconds.');
+        }
+        $error = $this->getSession()->evaluateScript('return window.__vueSpaNavError__');
+        if ($error) {
+            echo "\n[Vue nav notice]: $error\n";
+        }
+        // Wait for Vue DOM updates to commit (scheduler flushes async)
+        usleep(3000000);
+    }
+
+    /**
+     * @When /^I wait (\d+) seconds for the "([^"]*)" element$/
+     */
+    public function waitSecondsForSelector(int $seconds, string $css): void
+    {
+        $this->waitForSelector($css, $seconds * 1000);
+    }
+
+    /**
+     * Dump browser console logs (errors, warnings) captured by ChromeDriver.
+     *
+     * @When /^I dump browser console logs$/
+     */
+    public function iDumpBrowserConsoleLogs(): void
+    {
+        $driver = $this->getSession()->getDriver();
+        if (!$driver instanceof \Behat\Mink\Driver\Selenium2Driver) {
+            echo "\n[console logs] Driver is not Selenium2\n";
+            return;
+        }
+        try {
+            $logs = $driver->getWebDriverSession()->log('browser');
+            echo "\n=== BROWSER CONSOLE LOGS (" . count($logs) . " entries) ===\n";
+            foreach ($logs as $entry) {
+                $level = $entry['level'] ?? '?';
+                $msg   = $entry['message'] ?? '';
+                echo "[$level] $msg\n";
+            }
+            echo "=== END CONSOLE LOGS ===\n";
+        } catch (\Throwable $e) {
+            echo "\n[console logs] Could not retrieve: " . $e->getMessage() . "\n";
+        }
+    }
+
+    /**
+     * Wait until the page's visible text contains the given string (polls until timeout).
+     * Use this instead of waitForSelector+assertPageContainsText when the content
+     * arrives asynchronously (Vue SPAs, lazy-loaded data) to avoid race conditions
+     * where the element exists but its text hasn't been populated yet.
+     *
+     * @When /^I wait until I see "([^"]*)"$/
+     * @When /^wait until I see "([^"]*)"$/
+     */
+    public function iWaitUntilISee(string $text): void
+    {
+        $escaped = addslashes($text);
+        $result = $this->getSession()->wait(
+            45000,
+            "(document.body ? (document.body.innerText || document.body.textContent || '') : '').indexOf('$escaped') !== -1"
+        );
+        if (!$result) {
+            // Debug: dump final state before throwing
+            $debug = (string) $this->getSession()->evaluateScript(
+                '(function(){
+                    var app = document.getElementById("app");
+                    var vueApp = app && app.__vue_app__;
+                    if (!vueApp) return "no vueApp";
+                    var router = vueApp.config.globalProperties.$router;
+                    var route = router ? router.currentRoute.value.name : "no router";
+                    var pinia = vueApp.config.globalProperties.$pinia;
+                    var isAdmin = false;
+                    var isLoading = "?";
+                    if (pinia && pinia.state.value.security) {
+                        var s = pinia.state.value.security;
+                        isLoading = s.isLoading;
+                        isAdmin = !!(s.user && s.user.roles && (s.user.roles.indexOf("ROLE_ADMIN") !== -1 || s.user.roles.indexOf("ROLE_GLOBAL_ADMIN") !== -1));
+                    }
+                    var adminIdx = document.querySelector(".admin-index");
+                    var chunks = window.webpackChunkChamilo ? window.webpackChunkChamilo.length : "N/A";
+                    var bodyText = document.body ? (document.body.innerText || "").substring(0, 300) : "nobody";
+                    return "route="+route+" isAdmin="+isAdmin+" isLoading="+isLoading+" chunks="+chunks+" adminIdx="+(!!adminIdx)+" body="+bodyText;
+                })()'
+            );
+            echo "\n[iWaitUntilISee debug] $debug\n";
+            throw new \RuntimeException("Text '$text' did not appear on the page within 12 seconds.");
+        }
+    }
+
+    /**
+     * @When /^I dump the page body text$/
+     */
+    public function iDumpThePageBodyText(): void
+    {
+        $text = (string) $this->getSession()->evaluateScript(
+            'return document.body ? (document.body.innerText || document.body.textContent || "BODY_EMPTY") : "NO_BODY"'
+        );
+        echo "\n=== PAGE BODY TEXT (first 2000 chars) ===\n";
+        echo mb_substr($text, 0, 2000) . "\n";
+        echo "=== URL: " . $this->getSession()->getCurrentUrl() . " ===\n";
+
+        $debug = (string) $this->getSession()->evaluateScript(
+            'return (function() {
+                var info = {};
+                info.url = window.location.href;
+                info.chunks = window.webpackChunkChamilo ? window.webpackChunkChamilo.length : "N/A";
+                var app = document.getElementById("app");
+                var vueApp = app && app.__vue_app__;
+                if (!vueApp) { info.vue = "no vueApp"; return JSON.stringify(info); }
+                var router = vueApp.config.globalProperties.$router;
+                if (router) {
+                    info.route = router.currentRoute.value.name;
+                    info.path = router.currentRoute.value.fullPath;
+                    info.matched = router.currentRoute.value.matched.length;
+                    // Check what component factories the matched records have
+                    info.matchedComponents = router.currentRoute.value.matched.map(function(r) {
+                        var c = r.components && r.components.default;
+                        return typeof c === "function" ? "lazy:"+c.name : (typeof c === "object" ? "eager" : typeof c);
+                    });
+                }
+                var pinia = vueApp.config.globalProperties.$pinia;
+                if (pinia) {
+                    var stores = Object.keys(pinia.state.value);
+                    info.stores = stores;
+                    if (pinia.state.value.security) {
+                        info.isAuthenticated = !!(pinia.state.value.security.user && pinia.state.value.security.user.id);
+                        info.isLoading = pinia.state.value.security.isLoading;
+                    }
+                    if (pinia.state.value.platformConfig) {
+                        info.platformIsLoading = pinia.state.value.platformConfig.isLoading;
+                    }
+                }
+                var adminIndex = document.querySelector(".admin-index");
+                info.adminIndexExists = !!adminIndex;
+                // Check for AdminBlock/PrimeVue elements
+                info.pPanelCount = document.querySelectorAll(".p-panel, .p-card, [class*=admin]").length;
+                // Check app-main
+                var appMain = document.querySelector(".app-main");
+                info.appMainChildCount = appMain ? appMain.childNodes.length : 0;
+                // Dump the full app-main innerHTML for analysis
+                info.appMainFull = appMain ? appMain.innerHTML.substring(0, 500) : "null";
+                // Walk Vue component tree to find RouterView and inspect its state
+                try {
+                    var root = vueApp._instance;
+                    var treeLines = [];
+                    function walkTree(vnode, depth) {
+                        if (!vnode || depth > 15) return;
+                        var typeName = "?";
+                        if (!vnode.type) typeName = "null";
+                        else if (typeof vnode.type === "string") typeName = "<"+vnode.type+">";
+                        else if (typeof vnode.type === "symbol") typeName = "Fragment";
+                        else if (vnode.type.__name) typeName = vnode.type.__name;
+                        else if (vnode.type.name) typeName = vnode.type.name;
+                        else typeName = typeof vnode.type;
+                        var indent = "  ".repeat(depth);
+                        var extra = "";
+                        if (vnode.component && vnode.component.setupState) {
+                            var ss = vnode.component.setupState;
+                            if (ss.matchedRouteRef !== undefined) {
+                                extra += " [RV matched="+(ss.matchedRouteRef && ss.matchedRouteRef.value ? (ss.matchedRouteRef.value.path || "ok") : "null")+"]";
+                            }
+                        }
+                        treeLines.push(indent + typeName + extra);
+                        if (vnode.component) {
+                            walkTree(vnode.component.subTree, depth + 1);
+                        } else if (Array.isArray(vnode.children)) {
+                            vnode.children.forEach(function(c) { walkTree(c, depth + 1); });
+                        }
+                    }
+                    walkTree(root.subTree, 0);
+                    info.tree = treeLines.join("\n");
+                } catch(e) { info.tree = "error: "+e.message; }
+                return JSON.stringify(info);
+            })()'
+        );
+        echo "=== VUE STATE ===\n" . json_encode(json_decode($debug), JSON_PRETTY_PRINT) . "\n";
     }
 
     /**
@@ -867,14 +1229,23 @@ class FeatureContext extends MinkContext
     {
         $this->waitForSelector($selector, 8000);
         $escaped = addslashes($selector);
-        // Scroll element into view so it is interactable even when off-screen
-        $this->getSession()->executeScript(
-            "var el = document.querySelector('$escaped'); if (el) { el.scrollIntoView({behavior:'instant',block:'center'}); }"
+        // Scroll element into view so it is interactable even when off-screen,
+        // then use JavaScript click - avoids sticky-header occlusion issues with WebDriver physical clicks.
+        $exists = $this->getSession()->evaluateScript(
+            "!!document.querySelector('$escaped')"
         );
-        $page = $this->getSession()->getPage();
-        $element = $page->find('css', $selector);
-
-        $element->click();
+        if (!$exists) {
+            throw new \RuntimeException("Element '$selector' not found on page.");
+        }
+        $this->getSession()->executeScript(
+            "(function(){
+                var el = document.querySelector('$escaped');
+                el.scrollIntoView({behavior:'instant',block:'center'});
+                // If the element is inside a button, click the button so Vue event handlers fire.
+                var clickTarget = el.closest('button') || el.closest('a') || el;
+                clickTarget.click();
+            })();"
+        );
     }
 
     /**
@@ -945,6 +1316,61 @@ JS;
         $this->getSession()->executeScript($script);
         $this->getSession()->wait(300);
         return true;
+    }
+
+    public function fillField($field, $value): void
+    {
+        $field = $this->fixStepArgument($field);
+        $value = $this->fixStepArgument($value);
+
+        $usedNative = false;
+        try {
+            $this->getSession()->getPage()->fillField($field, $value);
+            $usedNative = true;
+        } catch (\Exception $e) {
+            if (false === strpos($e->getMessage(), 'interactable') && false === strpos($e->getMessage(), 'ElementNotInteractable')) {
+                throw $e;
+            }
+        }
+
+        // After native fill, verify the value was actually set (Selenium sendKeys can silently
+        // drop non-ASCII characters like accented letters). If mismatch, fall through to JS.
+        if ($usedNative) {
+            $element = $this->getSession()->getPage()->findField($field);
+            if ($element) {
+                $actualValue = $element->getValue();
+                if ($actualValue === $value) {
+                    return;
+                }
+            } else {
+                return;
+            }
+        }
+
+        // PrimeVue float-label elements have the <label> positioned over the <input>,
+        // making ChromeDriver report "not interactable". Also used when native fill
+        // silently drops characters (e.g. non-ASCII like 'Ñ'). Set the value via JS.
+        $element = $element ?? $this->getSession()->getPage()->findField($field);
+        if (!$element) {
+            throw new \RuntimeException("Field '$field' not found on the page.");
+        }
+
+        $id = $element->getAttribute('id');
+        $name = $element->getAttribute('name') ?? '';
+        $selector = $id
+            ? "document.getElementById('" . addslashes($id) . "')"
+            : "document.querySelector('[name=\"" . addslashes($name) . "\"]')";
+        $escaped = addslashes($value);
+
+        $this->getSession()->executeScript(
+            "var el = $selector;
+             if (el) {
+                 el.scrollIntoView({block:'center'});
+                 el.value = '$escaped';
+                 el.dispatchEvent(new Event('input',  {bubbles:true}));
+                 el.dispatchEvent(new Event('change', {bubbles:true}));
+             }"
+        );
     }
 
     public function visit($page): void

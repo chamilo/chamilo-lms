@@ -135,19 +135,20 @@ readonly class LdapAuthenticatorHelper
         foreach ($ldapUsers as $ldapUser) {
             $user = [];
 
-            $user[] = $ldapUser->getAttribute($userIdentifier)[0];
-            $user[] = $ldapUser->getAttribute($userIdentifier)[0];
+            $uid = $this->getAttr($ldapUser, $userIdentifier);
+            $user[] = $uid;
+            $user[] = $uid;
 
             if ($isWesternNameOrder) {
-                $user[] = $ldapUser->getAttribute($dataCorrespondence['firstname'])[0];
-                $user[] = $ldapUser->getAttribute($dataCorrespondence['lastname'])[0];
+                $user[] = $this->getAttr($ldapUser, $dataCorrespondence['firstname'] ?? null);
+                $user[] = $this->getAttr($ldapUser, $dataCorrespondence['lastname'] ?? null);
             } else {
-                $user[] = $ldapUser->getAttribute($dataCorrespondence['lastname'])[0];
-                $user[] = $ldapUser->getAttribute($dataCorrespondence['firstname'])[0];
+                $user[] = $this->getAttr($ldapUser, $dataCorrespondence['lastname'] ?? null);
+                $user[] = $this->getAttr($ldapUser, $dataCorrespondence['firstname'] ?? null);
             }
 
-            $user[] = $ldapUser->getAttribute($dataCorrespondence['email'])[0];
-            $user[] = $ldapUser->getAttribute($userIdentifier)[0];
+            $user[] = $this->getAttr($ldapUser, $dataCorrespondence['email'] ?? null);
+            $user[] = $uid;
 
             $users[] = $user;
         }
@@ -204,14 +205,27 @@ readonly class LdapAuthenticatorHelper
 
         foreach ($ldapUsers as $ldapUser) {
             $users[] = [
-                'username' => $ldapUser->getAttribute($userIdentifier)[0],
-                'firstname' => $ldapUser->getAttribute($dataCorrespondence['firstname'])[0],
-                'lastname' => $ldapUser->getAttribute($dataCorrespondence['lastname'])[0],
-                'email' => $ldapUser->getAttribute($dataCorrespondence['email'])[0],
-                'password' => $ldapUser->getAttribute($passwordAttribute)[0],
+                'username' => $this->getAttr($ldapUser, $userIdentifier),
+                'firstname' => $this->getAttr($ldapUser, $dataCorrespondence['firstname'] ?? null),
+                'lastname' => $this->getAttr($ldapUser, $dataCorrespondence['lastname'] ?? null),
+                'email' => $this->getAttr($ldapUser, $dataCorrespondence['email'] ?? null),
+                'password' => $this->getAttr($ldapUser, $passwordAttribute),
             ];
         }
 
         return $users;
+    }
+
+    /**
+     * Safely reads the first value of an LDAP entry attribute.
+     * Returns an empty string when the attribute name is null/empty or the entry doesn't carry it.
+     */
+    private function getAttr(Entry $entry, ?string $attrName): string
+    {
+        if (null === $attrName || '' === $attrName) {
+            return '';
+        }
+
+        return ($entry->getAttribute($attrName) ?? [''])[0];
     }
 }

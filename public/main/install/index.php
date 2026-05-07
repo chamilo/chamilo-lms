@@ -739,6 +739,10 @@ if (isset($_POST['step2'])) {
             (new Dotenv())->load($envFile);
 
             error_log('Load kernel');
+            // Close the install wizard's session before booting the Symfony kernel.
+            // NativeFileSessionHandler calls ini_set() in its constructor, which PHP
+            // forbids once a session is active.
+            session_write_close();
             // Load Symfony Kernel
             $kernel = new Kernel('dev', true);
             $application = new Application($kernel);
@@ -759,11 +763,6 @@ if (isset($_POST['step2'])) {
                 // translated strings in the correct locale instead of the default en_US.
                 $kernel->getContainer()->get('translator')->setLocale($languageForm);
                 $result = $command->run($input, new ConsoleOutput());
-
-                error_log('Delete PHP Session');
-                session_unset();
-                $_SESSION = [];
-                session_destroy();
 
                 error_log('Boot kernel');
 

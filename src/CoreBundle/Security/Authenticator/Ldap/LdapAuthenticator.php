@@ -7,10 +7,13 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Security\Authenticator\Ldap;
 
 use Chamilo\CoreBundle\Controller\SecurityController;
+use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
+use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
+use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use stdClass;
@@ -55,6 +58,8 @@ class LdapAuthenticator extends AbstractAuthenticator implements InteractiveAuth
         private readonly SecurityController $securityController,
         private readonly TokenStorageInterface $tokenStorage,
         private readonly TranslatorInterface $translator,
+        private readonly ExtraFieldRepository $extraFieldRepo,
+        private readonly ExtraFieldValuesRepository $extraFieldValuesRepo,
         Ldap $ldap,
     ) {
         $ldapConfig = $this->authConfigHelper->getLdapConfig();
@@ -273,7 +278,28 @@ class LdapAuthenticator extends AbstractAuthenticator implements InteractiveAuth
 
         $this->entityManager->flush();
 
+        $this->syncExtraFields($user, $ldapEntry);
+
         return $user;
+    }
+
+    private function syncExtraFields(User $user, \Symfony\Component\Ldap\Entry $ldapEntry): void
+    {
+        foreach ($this->dataCorrespondence as $key => $ldapAttr) {
+            if (!str_starts_with($key, 'extra_') || '' === (string) $ldapAttr) {
+                continue;
+            }
+
+            $variable = substr($key, \strlen('extra_'));
+            $extraField = $this->extraFieldRepo->findByVariable(ExtraField::USER_FIELD_TYPE, $variable);
+
+            if (null === $extraField) {
+                continue;
+            }
+
+            $value = ($ldapEntry->getAttribute((string) $ldapAttr) ?? [])[0] ?? null;
+            $this->extraFieldValuesRepo->updateItemData($extraField, $user, $value);
+        }
     }
 
     public function isInteractive(): bool

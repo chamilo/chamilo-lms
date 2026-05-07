@@ -183,7 +183,9 @@ $serviceList = $plugin->getCatalogServiceList(
 );
 
 foreach ($serviceList as &$service) {
-    $service['has_blocking_sale'] = $plugin->hasBlockingUserServiceSaleForCurrentBuyer((int) $service['id']);
+    $serviceId = (int) $service['id'];
+    $service['has_blocking_sale'] = $plugin->hasBlockingUserServiceSaleForCurrentBuyer($serviceId);
+    $service['has_pending_sale'] = $plugin->hasPendingUserServiceSaleForCurrentBuyer($serviceId);
 }
 unset($service);
 

@@ -92,6 +92,10 @@ parameters:
                     phone: null
                     active: null
                     admin: null
+                    # Extra user fields: prefix the Chamilo field variable with "extra_".
+                    # The value is the LDAP attribute name to read from.
+                    # Example — sync the extra field "oauth2id" from the LDAP attribute "employeeID":
+                    #   extra_oauth2id: 'employeeID'
                 object_class: 'inetOrgPerson'
 
             scim:

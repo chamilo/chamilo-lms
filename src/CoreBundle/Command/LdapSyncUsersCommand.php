@@ -6,11 +6,14 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Command;
 
+use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\TrackEDefault;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
 use Chamilo\CoreBundle\Helpers\UserAnonymizationHelper;
+use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
+use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use DateTime;
@@ -39,6 +42,8 @@ class LdapSyncUsersCommand extends Command
         private readonly EntityManagerInterface $entityManager,
         private readonly AccessUrlRepository $accessUrlRepository,
         private readonly UserAnonymizationHelper $anonymizationHelper,
+        private readonly ExtraFieldRepository $extraFieldRepo,
+        private readonly ExtraFieldValuesRepository $extraFieldValuesRepo,
     ) {
         parent::__construct();
     }
@@ -177,6 +182,9 @@ class LdapSyncUsersCommand extends Command
 
             // ── 3. Create / update users found in this LDAP ──
 
+            /** @var array<array{User, Entry}> $pendingExtraFields */
+            $pendingExtraFields = [];
+
             foreach ($ldapEntries as $entry) {
                 $uidValues = $entry->getAttribute($uidKey);
 
@@ -218,6 +226,8 @@ class LdapSyncUsersCommand extends Command
                 $this->userRepository->updateUser($user, false);
                 $accessUrl->addUser($user);
 
+                $pendingExtraFields[] = [$user, $entry];
+
                 if ($isNew) {
                     $io->writeln(\sprintf('Created user: %s', $username));
                 } elseif ($output->isVerbose()) {
@@ -227,6 +237,10 @@ class LdapSyncUsersCommand extends Command
 
             if (!$testMode) {
                 $this->entityManager->flush();
+
+                foreach ($pendingExtraFields as [$user, $entry]) {
+                    $this->syncExtraFields($user, $entry, $dataCorrespondence);
+                }
             }
         }
 
@@ -288,6 +302,7 @@ class LdapSyncUsersCommand extends Command
 
     /**
      * Maps LDAP entry attributes onto a User entity using the data_correspondence config.
+     * Extra field mappings (extra_* keys) are handled separately by syncExtraFields().
      *
      * @param array<string, string> $dataCorrespondence
      */
@@ -318,6 +333,31 @@ class LdapSyncUsersCommand extends Command
             } else {
                 $user->{$setter}($value);
             }
+        }
+    }
+
+    /**
+     * Saves extra_* data_correspondence entries as user extra field values.
+     * Must be called after flush() so the user already has a valid ID.
+     *
+     * @param array<string, string> $dataCorrespondence
+     */
+    private function syncExtraFields(User $user, Entry $entry, array $dataCorrespondence): void
+    {
+        foreach ($dataCorrespondence as $key => $ldapAttr) {
+            if (!str_starts_with($key, 'extra_') || '' === (string) $ldapAttr) {
+                continue;
+            }
+
+            $variable = substr($key, \strlen('extra_'));
+            $extraField = $this->extraFieldRepo->findByVariable(ExtraField::USER_FIELD_TYPE, $variable);
+
+            if (null === $extraField) {
+                continue;
+            }
+
+            $value = ($entry->getAttribute((string) $ldapAttr) ?? [])[0] ?? null;
+            $this->extraFieldValuesRepo->updateItemData($extraField, $user, $value);
         }
     }
 

@@ -194,7 +194,8 @@ class SkillModel extends Model
         string $imageSize = 'mini',
         string $style = '',
         bool $showBadge = true,
-        bool $showTitle = true
+        bool $showTitle = true,
+        bool $showViewBadgeLink = true
     ): string {
         if (empty($skills)) {
             return '';
@@ -223,7 +224,7 @@ class SkillModel extends Model
             $targetUrl = $skill['url'] ?? null;
             $wrapperStyle = !empty($style) ? ' style="'.$style.'"' : '';
             $itemHtml = '<div class="skill-badge-wrapper"'.$wrapperStyle.'>';
-            // Badge (image)
+
             if ($showBadge) {
                 $skillEntity = $skillRepo->find($skill['id']);
                 if (null !== $skillEntity) {
@@ -267,7 +268,7 @@ class SkillModel extends Model
                 $itemHtml .= '<div class="caption">'.$titleInner.'</div>';
             }
 
-            if (!empty($targetUrl)) {
+            if ($showViewBadgeLink && !empty($targetUrl)) {
                 $viewLabel = get_lang('View badge');
                 $itemHtml .= '<div class="skill-badge-action">'
                     .Display::url($viewLabel, $targetUrl, ['target' => '_blank'])
@@ -803,12 +804,12 @@ class SkillModel extends Model
             if ($isHierarchicalTable) {
                 $subTable .= '<ul>';
             }
+
             foreach ($vertex->getVerticesEdgeTo() as $subVertex) {
                 $data = $subVertex->getAttribute('graphviz.data');
                 $passed = isset($skills[(int) $data['id']]);
                 $transparency = '';
                 if (false === $passed) {
-                    // @todo use a css class
                     $transparency = 'opacity: 0.4; filter: alpha(opacity=40);';
                 }
 
@@ -822,19 +823,30 @@ class SkillModel extends Model
                     if (2 == $level) {
                         $imageSize = 'small';
                     }
+
                     $showTitle = true;
                     if ($level > 2) {
                         $showTitle = false;
                     }
 
-                    $label = $this->processSkillListSimple([$data], $imageSize, $transparency, true, $showTitle);
-                    $subTable .= '<div class="thumbnail" style="float:left; margin-right:5px;">';
-                    $subTable .= '<div style="'.$transparency.'">';
-                    $subTable .= '<div style="text-align: center">';
+                    $label = $this->processSkillListSimple(
+                        [$data],
+                        $imageSize,
+                        $transparency,
+                        true,
+                        $showTitle,
+                        false
+                    );
+
+                    $children = $this->processVertex($subVertex, $skills, $level + 1);
+
+                    $subTable .= '<div class="skill-user-tracking-item" style="display:inline-block; vertical-align:top; text-align:center; margin:0 10px 8px 0;">';
                     $subTable .= $label;
-                    $subTable .= '</div>';
-                    $subTable .= '</div>';
-                    $subTable .= $this->processVertex($subVertex, $skills, $level + 1);
+
+                    if (!empty($children)) {
+                        $subTable .= '<div class="skill-user-tracking-children" style="margin-top:4px;">'.$children.'</div>';
+                    }
+
                     $subTable .= '</div>';
                 }
             }
@@ -941,7 +953,7 @@ class SkillModel extends Model
 
         if ($addTitle) {
             $tableResult .= Display::page_subheader(get_lang('Achieved skills'));
-            $wrapperClass = $isHierarchicalTable ? 'skills-badges skills-badges--tree' : 'skills-badges skills-badges--cards';
+            $wrapperClass = $isHierarchicalTable ? 'skills-badges skills-badges--tree' : 'skill-user-tracking';
             $tableResult .= '<div class="'.$wrapperClass.'">';
         }
 
@@ -1010,23 +1022,17 @@ class SkillModel extends Model
                     foreach ($root->getVerticesEdgeTo() as $vertex) {
                         $data = $vertex->getAttribute('graphviz.data');
 
-                        $passed = isset($skills[(int) $data['id']]);
-                        $transparency = '';
-                        if (false === $passed) {
-                            // @todo use a css class
-                            $transparency = 'opacity: 0.4; filter: alpha(opacity=40);';
-                        }
-
-                        $label = $this->processSkillListSimple([$data], 'mini', $transparency, false);
-
+                        $label = htmlspecialchars((string) ($data['title'] ?? ''), ENT_QUOTES, 'UTF-8');
                         $skillTable = $this->processVertex($vertex, $skills, 2);
-                        $table .= "<h3>$label</h3>";
+
+                        $table .= '<div class="skill-user-tracking-category" style="clear:both; margin-bottom:8px;">';
+                        $table .= '<h3 style="clear:both; margin:8px 0 4px;">'.$label.'</h3>';
 
                         if (!empty($skillTable)) {
-                            $table .= '<table class ="table table-bordered">';
-                            $table .= '<tr><td><div>'.$skillTable.'</div></td></tr>';
-                            $table .= '</table>';
+                            $table .= '<div class="skill-user-tracking-category-items">'.$skillTable.'</div>';
                         }
+
+                        $table .= '</div>';
                     }
                 }
 

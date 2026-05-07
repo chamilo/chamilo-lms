@@ -493,13 +493,17 @@ function get_number_of_users()
     // when there is a keyword then we are searching and we have to change the SQL statement
     if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
         $keyword = Database::escape_string(trim($_REQUEST['keyword']));
-        $sql .= " AND (
-            firstname LIKE '%".$keyword."%' OR
-            lastname LIKE '%".$keyword."%' OR
-            email LIKE '%".$keyword."%' OR
-            username LIKE '%".$keyword."%' OR
-            official_code LIKE '%".$keyword."%'
-        )";
+        $terms = array_values(array_filter(preg_split('/\s+/', trim($_REQUEST['keyword']))));
+        foreach ($terms as $term) {
+            $escapedTerm = Database::escape_string($term);
+            $sql .= " AND (
+                firstname LIKE '%".$escapedTerm."%' OR
+                lastname LIKE '%".$escapedTerm."%' OR
+                email LIKE '%".$escapedTerm."%' OR
+                username LIKE '%".$escapedTerm."%' OR
+                official_code LIKE '%".$escapedTerm."%'
+            )";
+        }
 
         // we also want to search for users who have something in their profile fields that matches the keyword
         if ('true' === api_get_setting('course.profiling_filter_adding_users')) {
@@ -779,14 +783,18 @@ function get_user_data($from, $number_of_items, $column, $direction)
     // adding additional WHERE statements to the SQL for the search functionality
     if (isset($_REQUEST['keyword'])) {
         $keyword = Database::escape_string(trim($_REQUEST['keyword']));
-        $sql .= " AND (
-                    firstname LIKE '%".$keyword."%' OR
-                    lastname LIKE '%".$keyword."%' OR
-                    email LIKE '%".$keyword."%' OR
-                    username LIKE '%".$keyword."%' OR
-                    official_code LIKE '%".$keyword."%'
-                    )
-                ";
+        $terms = array_values(array_filter(preg_split('/\s+/', trim($_REQUEST['keyword']))));
+        foreach ($terms as $term) {
+            $escapedTerm = Database::escape_string($term);
+            $sql .= " AND (
+                        firstname LIKE '%".$escapedTerm."%' OR
+                        lastname LIKE '%".$escapedTerm."%' OR
+                        email LIKE '%".$escapedTerm."%' OR
+                        username LIKE '%".$escapedTerm."%' OR
+                        official_code LIKE '%".$escapedTerm."%'
+                        )
+                    ";
+        }
 
         if ('true' === api_get_setting('course.profiling_filter_adding_users')) {
             // we also want to search for users who have something in

@@ -100,9 +100,13 @@ class UserListController extends AbstractController
         }
 
         if ('' !== $keyword) {
-            $qb->andWhere('(u.firstname LIKE :kw OR u.lastname LIKE :kw OR u.username LIKE :kw OR u.email LIKE :kw OR u.officialCode LIKE :kw)')
-                ->setParameter('kw', '%'.$keyword.'%')
-            ;
+            $terms = array_values(array_filter(array_map('trim', preg_split('/\s+/', $keyword))));
+            foreach ($terms as $i => $term) {
+                $param = 'kw'.$i;
+                $qb->andWhere("(u.firstname LIKE :{$param} OR u.lastname LIKE :{$param} OR u.username LIKE :{$param} OR u.email LIKE :{$param} OR u.officialCode LIKE :{$param})")
+                    ->setParameter($param, '%'.$term.'%')
+                ;
+            }
         } else {
             if ('' !== $keywordFirstname) {
                 $qb->andWhere('u.firstname LIKE :kwfn')->setParameter('kwfn', '%'.$keywordFirstname.'%');

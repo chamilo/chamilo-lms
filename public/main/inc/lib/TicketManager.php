@@ -896,7 +896,7 @@ class TicketManager
         }
 
         // Search simple
-        if (isset($_GET['submit_simple']) && '' != $_GET['keyword']) {
+        if (!empty($_GET['keyword'])) {
             $keyword = Database::escape_string(trim($_GET['keyword']));
             $sql .= " AND (
                       ticket.id LIKE '%$keyword%' OR
@@ -1102,18 +1102,16 @@ class TicketManager
         }
 
         // Search simple
-        if (isset($_GET['submit_simple'])) {
-            if ('' != $_GET['keyword']) {
-                $keyword = Database::escape_string(trim($_GET['keyword']));
-                $sql .= " AND (
-                          ticket.code LIKE '%$keyword%' OR
-                          ticket.subject LIKE '%$keyword%' OR
-                          ticket.message LIKE '%$keyword%' OR
-                          ticket.keyword LIKE '%$keyword%' OR
-                          ticket.personal_email LIKE '%$keyword%' OR
-                          ticket.source LIKE '%$keyword%'
-                )";
-            }
+        if (!empty($_GET['keyword'])) {
+            $keyword = Database::escape_string(trim($_GET['keyword']));
+            $sql .= " AND (
+                      ticket.code LIKE '%$keyword%' OR
+                      ticket.subject LIKE '%$keyword%' OR
+                      ticket.message LIKE '%$keyword%' OR
+                      ticket.keyword LIKE '%$keyword%' OR
+                      ticket.personal_email LIKE '%$keyword%' OR
+                      ticket.source LIKE '%$keyword%'
+            )";
         }
 
         $keywords = [
@@ -1128,7 +1126,9 @@ class TicketManager
         foreach ($keywords as $keyword => $sqlLabel) {
             if (isset($_GET[$keyword])) {
                 $data = Database::escape_string(trim($_GET[$keyword]));
-                $sql .= " AND $sqlLabel = '$data' ";
+                if (!empty($data)) {
+                    $sql .= " AND $sqlLabel = '$data' ";
+                }
             }
         }
 

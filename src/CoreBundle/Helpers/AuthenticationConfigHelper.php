@@ -119,6 +119,7 @@ readonly class AuthenticationConfigHelper
                 $ldapConfig['data_correspondence'] ?? []
             ),
             'object_class' => $ldapConfig['object_class'] ?? 'inetOrgPerson',
+            'tls_options' => $ldapConfig['tls_options'] ?? [],
         ];
     }
 
@@ -129,7 +130,7 @@ readonly class AuthenticationConfigHelper
      */
     private function getLdapDataCorrespondenceConfig(array $dataCorrespondence): array
     {
-        $known = [
+        return [
             'firstname' => $dataCorrespondence['firstname'] ?? null,
             'lastname' => $dataCorrespondence['lastname'] ?? 'sn',
             'email' => $dataCorrespondence['email'] ?? 'mail',
@@ -139,15 +140,6 @@ readonly class AuthenticationConfigHelper
             'active' => $dataCorrespondence['active'] ?? null,
             'admin' => $dataCorrespondence['admin'] ?? null,
         ];
-
-        // Pass through extra_* keys (e.g. extra_oauth2id: employeeID) for extra field sync.
-        $extras = array_filter(
-            $dataCorrespondence,
-            static fn (string $key) => str_starts_with($key, 'extra_'),
-            ARRAY_FILTER_USE_KEY
-        );
-
-        return array_merge($known, $extras);
     }
 
     /**

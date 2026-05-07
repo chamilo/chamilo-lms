@@ -9752,8 +9752,8 @@ msgstr "Oprostite, za dostop do te strani nimate dovoljenja. Uporabite gumb 'Naz
 msgid "Result"
 msgstr "Rezultat"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Poskus prijave kot %s %s (id %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Poskus prijave kot %s (id %d)"
 
 msgid "Login successful. Go to %s"
 msgstr "Prijava uspešna. Pojdite na %s"

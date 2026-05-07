@@ -2005,9 +2005,9 @@ class SettingsManager implements SettingsManagerInterface
                             $rowValue = $row->getValue();
 
                             if (
-                                $category !== $rowCategory &&
-                                null !== $rowValue &&
-                                '' !== (string) $rowValue
+                                $category !== $rowCategory
+                                && null !== $rowValue
+                                && '' !== (string) $rowValue
                             ) {
                                 $valueToKeep = (string) $rowValue;
 
@@ -2021,9 +2021,9 @@ class SettingsManager implements SettingsManagerInterface
                                 $rowValue = $row->getValue();
 
                                 if (
-                                    $category === $rowCategory &&
-                                    null !== $rowValue &&
-                                    '' !== (string) $rowValue
+                                    $category === $rowCategory
+                                    && null !== $rowValue
+                                    && '' !== (string) $rowValue
                                 ) {
                                     $valueToKeep = (string) $rowValue;
 

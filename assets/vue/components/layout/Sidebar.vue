@@ -178,7 +178,7 @@ const handlePanelHeaderClick = (event) => {
 }
 
 onMounted(async () => {
-  if (!isAnonymous.value) {
+  if (securityStore.isAuthenticated && !isAnonymous.value) {
     await initialize()
   }
 })

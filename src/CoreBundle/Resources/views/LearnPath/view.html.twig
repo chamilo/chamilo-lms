@@ -12,6 +12,7 @@
     <script>
       window.lpId = {{ lp_id_num }};
       window.lpCurrentItemId = {{ lp_current_item_id_num }};
+      window.isLtiEmbeddable = {{ is_lti_embeddable }};
     </script>
     {# Build iframe src including learning path context so the ResourceNodeVoter can detect LP access #}
     {% set iframe_src_with_lp = iframe_src %}
@@ -284,6 +285,13 @@
             @keyframes lpSpin {
                 to { transform: rotate(360deg); }
             }
+
+            /* Currently active TOC item is non-clickable */
+            .scorm_highlight a.items-list,
+            .scorm_highlight a.item-action {
+                pointer-events: none;
+                cursor: default;
+            }
         </style>
         <div
                 id="learning_path_main"
@@ -439,6 +447,13 @@
                         <div id="navTabBar" class="nav-tabs-bar">
                             <div class="text-left">
                                 <h2 class="text-h3">{{ lp_title_scorm }}</h2>
+
+                                {% if lp_flow_next_button is defined and lp_flow_next_button is not empty %}
+                                    <div class="my-4">
+                                        {{ lp_flow_next_button|raw }}
+                                    </div>
+                                {% endif %}
+
                                 <div id="item-parent-names">
                                     {% for parent_title in lp_item_parents %}
                                         <h3 class="text-h5">{{ parent_title }}</h3>
@@ -501,7 +516,7 @@
             }
 
             function cleanupLtiEmbedMenu() {
-              if ({{ is_lti_embeddable }} !== 1) {
+              if (window.isLtiEmbeddable !== 1) {
                 return;
               }
               $("#home-course").remove();

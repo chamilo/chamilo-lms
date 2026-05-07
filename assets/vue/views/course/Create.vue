@@ -18,23 +18,8 @@
       </div>
     </Message>
 
-    <Message
-      v-else-if="capabilityStatus === 'error'"
-      severity="error"
-    >
-      <div class="space-y-2">
-        <p class="font-medium">
-          {{ t("Unable to verify whether you can create a new course right now.") }}
-        </p>
-
-        <p>
-          {{ t("Please try again later or contact the administrator.") }}
-        </p>
-      </div>
-    </Message>
-
     <CourseForm
-      v-else-if="capabilityStatus === 'allowed'"
+      v-if="capabilityStatus !== 'blocked'"
       ref="createForm"
       :errors="violations"
       :values="item"
@@ -69,7 +54,7 @@ const item = ref({
 })
 
 const violations = ref(null)
-const capabilityStatus = ref("pending")
+const capabilityStatus = ref("allowed")
 const createCapabilityMessage = ref("")
 
 function sanitizeCoursePayload(data) {
@@ -94,34 +79,30 @@ function sanitizeCoursePayload(data) {
   return payload
 }
 
-function withTimeout(promise, timeout = 2500) {
-  return Promise.race([
-    promise,
-    new Promise((_, reject) => {
-      window.setTimeout(() => {
-        reject(new Error("create-capability-timeout"))
-      }, timeout)
-    }),
-  ])
+function normalizeCapabilityResponse(response) {
+  return response?.data || response || {}
 }
 
 async function loadCreateCapability() {
-  capabilityStatus.value = "pending"
   createCapabilityMessage.value = ""
 
   try {
-    const data = await withTimeout(courseService.getCreateCourseCapability(), 2500)
+    const response = await courseService.getCreateCourseCapability()
+    const capability = normalizeCapabilityResponse(response)
 
-    if (true === data.canCreate) {
-      capabilityStatus.value = "allowed"
+    if (false === capability.canCreate) {
+      capabilityStatus.value = "blocked"
+      createCapabilityMessage.value = capability.message || t("You cannot create more courses right now.")
       return
     }
 
-    capabilityStatus.value = "blocked"
-    createCapabilityMessage.value = data.message || t("You cannot create more courses right now.")
+    capabilityStatus.value = "allowed"
   } catch (error) {
     console.error("[course.create-capability] request failed", error)
-    capabilityStatus.value = "error"
+
+    // Do not block the form because this is only a pre-check.
+    // The backend validates the real limit when submitting the course.
+    capabilityStatus.value = "allowed"
   }
 }
 

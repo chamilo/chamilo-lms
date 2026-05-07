@@ -7497,6 +7497,25 @@ class BuyCoursesPlugin extends Plugin
 
         $canCreate = $effectiveLimit <= 0 || $currentCount < $effectiveLimit;
 
+        $message = '';
+        if (!$canCreate) {
+            if ($effectiveLimit <= 0) {
+                $message = 'You cannot create more courses at this time.';
+            } elseif ('service' === $source) {
+                $message = sprintf(
+                    'You already manage %d courses and your active service allows up to %d. To create another course, you need a higher service limit or reduce your current active courses.',
+                    $currentCount,
+                    $effectiveLimit
+                );
+            } else {
+                $message = sprintf(
+                    'You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now.',
+                    $currentCount,
+                    $effectiveLimit
+                );
+            }
+        }
+
         return [
             'canCreate' => $canCreate,
             'currentCount' => $currentCount,
@@ -7504,7 +7523,7 @@ class BuyCoursesPlugin extends Plugin
             'serviceLimit' => $serviceLimit,
             'globalLimit' => $globalLimit,
             'limitSource' => $source,
-            'message' => $canCreate ? '' : $this->getCourseCreationLimitMessage($userId),
+            'message' => $message,
         ];
     }
 
@@ -7513,29 +7532,7 @@ class BuyCoursesPlugin extends Plugin
      */
     public function getCourseCreationLimitMessage(int $userId): string
     {
-        $status = $this->getCourseCreationCapabilityStatus($userId);
-
-        $limit = (int) $status['effectiveLimit'];
-        $currentCount = (int) $status['currentCount'];
-        $source = (string) $status['limitSource'];
-
-        if ($limit <= 0) {
-            return 'You cannot create more courses at this time.';
-        }
-
-        if ('service' === $source) {
-            return sprintf(
-                'You already manage %d courses and your active service allows up to %d. To create another course, you need a higher service limit or reduce your current active courses.',
-                $currentCount,
-                $limit
-            );
-        }
-
-        return sprintf(
-            'You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now.',
-            $currentCount,
-            $limit
-        );
+        return (string) ($this->getCourseCreationCapabilityStatus($userId)['message'] ?? '');
     }
 
     /**

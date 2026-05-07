@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * Script showing information about a user (name, e-mail, courses and sessions).
@@ -72,6 +73,41 @@ if (api_can_login_as($userId)) {
             get_lang('Login as')
         ),
         api_get_path(WEB_PATH).'admin/user-list-login-as?user_id='.$userId.'&sec_token='.urlencode(Container::$container->get(\Symfony\Component\Security\Csrf\CsrfTokenManagerInterface::class)->getToken('login_as')->getValue())
+    );
+}
+
+if (
+    api_is_platform_admin(false, true) &&
+    'true' === api_get_setting('security.prevent_multiple_simultaneous_login')
+) {
+    $csrfTokenManager = Container::$container->get(CsrfTokenManagerInterface::class);
+    $clearSessionToken = $csrfTokenManager->getToken('clear_user_session_'.$userId)->getValue();
+
+    $formId = 'clear-user-session-'.$userId;
+
+    $actions[] = '
+        <form id="'.$formId.'"
+            action="'.api_get_path(WEB_PATH).'admin/users/'.$userId.'/clear-session"
+            method="post"
+            style="display:none"
+        >
+            <input type="hidden" name="_token" value="'.Security::remove_XSS($clearSessionToken).'">
+        </form>
+    ';
+
+    $actions[] = Display::url(
+        Display::getMdiIcon(
+            'logout',
+            'ch-tool-icon',
+            null,
+            ICON_SIZE_MEDIUM,
+            get_lang('Clear active session')
+        ),
+        '#',
+        [
+            'title' => get_lang('Clear active session'),
+            'onclick' => "if (confirm('".addslashes(get_lang('Are you sure you want to clear this user active session?'))."')) { document.getElementById('".$formId."').submit(); } return false;",
+        ]
     );
 }
 

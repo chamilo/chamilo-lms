@@ -154,7 +154,7 @@ final class MessageExtension implements QueryCollectionExtensionInterface
         ";
 
         $qb->andWhere(
-            sprintf(
+            \sprintf(
                 'NOT (%s) OR (%s)',
                 $hasSessionCoachStudentRelation,
                 $hasSessionCoachStudentRelationInsideDates

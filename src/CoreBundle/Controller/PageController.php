@@ -154,13 +154,13 @@ class PageController extends AbstractController
     {
         $platformLanguage = $this->settingsManager->getSetting('language.platform_language', true);
 
-        if (is_string($platformLanguage) && '' !== trim($platformLanguage)) {
+        if (\is_string($platformLanguage) && '' !== trim($platformLanguage)) {
             return trim($platformLanguage);
         }
 
         $defaultLocale = $this->getParameter('locale');
 
-        return is_string($defaultLocale) && '' !== trim($defaultLocale)
+        return \is_string($defaultLocale) && '' !== trim($defaultLocale)
             ? trim($defaultLocale)
             : 'en';
     }

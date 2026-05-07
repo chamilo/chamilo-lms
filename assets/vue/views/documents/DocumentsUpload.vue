@@ -29,6 +29,94 @@
         :uppy="uppy"
       />
     </div>
+    <div class="mb-4 rounded-lg border border-gray-25 bg-white p-4">
+      <div class="mb-3 flex items-center justify-between gap-4">
+        <div>
+          <h2 class="text-base font-semibold text-gray-90">
+            {{ t("Cloud link") }}
+          </h2>
+          <p class="text-sm text-gray-50">
+            {{ t("Add a link to a cloud document, such as Google Drive or Google Docs.") }}
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="inline-flex items-center gap-2 rounded-md border border-primary px-3 py-2 text-sm font-semibold text-primary hover:bg-primary hover:text-white"
+          @click="isCloudLinkFormVisible = !isCloudLinkFormVisible"
+        >
+          <span
+            class="mdi mdi-link-variant"
+            aria-hidden="true"
+          />
+          {{ isCloudLinkFormVisible ? t("Cancel") : t("Add cloud link") }}
+        </button>
+      </div>
+
+      <form
+        v-if="isCloudLinkFormVisible"
+        class="grid gap-4 md:grid-cols-[1fr_2fr_auto]"
+        @submit.prevent="saveCloudLink"
+      >
+        <div class="flex flex-col gap-1">
+          <label
+            for="cloud_link_title"
+            class="text-sm font-semibold text-gray-70"
+          >
+            {{ t("Title") }}
+          </label>
+          <input
+            id="cloud_link_title"
+            v-model.trim="cloudLinkTitle"
+            name="cloud_link_title"
+            type="text"
+            class="rounded-md border border-gray-25 px-3 py-2 text-sm"
+            :placeholder="t('Document title')"
+            required
+          />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label
+            for="cloud_link_url"
+            class="text-sm font-semibold text-gray-70"
+          >
+            {{ t("URL") }}
+          </label>
+          <input
+            id="cloud_link_url"
+            v-model.trim="cloudLinkUrl"
+            name="cloud_link_url"
+            type="url"
+            class="rounded-md border border-gray-25 px-3 py-2 text-sm"
+            placeholder="https://docs.google.com/..."
+            required
+          />
+        </div>
+
+        <div class="flex items-end">
+          <button
+            type="submit"
+            class="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
+            :disabled="isSavingCloudLink"
+          >
+            <span
+              class="mdi mdi-content-save"
+              aria-hidden="true"
+            />
+            {{ isSavingCloudLink ? t("Saving...") : t("Save") }}
+          </button>
+        </div>
+
+        <div
+          v-if="cloudLinkError"
+          class="md:col-span-3 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700"
+          role="alert"
+        >
+          {{ cloudLinkError }}
+        </div>
+      </form>
+    </div>
 
     <BaseAdvancedSettingsButton v-model="showAdvancedSettings">
       <div class="flex flex-row mb-2">
@@ -211,6 +299,11 @@ const searchFields = ref([])
 const searchFieldValues = ref({})
 
 const parentResourceNodeId = ref(Number(route.query.parentResourceNodeId || route.params.node))
+const isCloudLinkFormVisible = ref(false)
+const cloudLinkTitle = ref("")
+const cloudLinkUrl = ref("")
+const cloudLinkError = ref("")
+const isSavingCloudLink = ref(false)
 
 // Banner warning
 const quotaWarningMessage = ref("")
@@ -253,6 +346,77 @@ function buildResourceLinkList() {
       visibility: RESOURCE_LINK_PUBLISHED,
     },
   ])
+}
+
+function buildResourceLinkArray() {
+  return [
+    {
+      gid: toInt(gid, 0),
+      sid: toInt(sid, 0),
+      cid: toInt(cid, 0),
+      visibility: RESOURCE_LINK_PUBLISHED,
+    },
+  ]
+}
+
+async function saveCloudLink() {
+  cloudLinkError.value = ""
+
+  const title = String(cloudLinkTitle.value || "").trim()
+  const url = String(cloudLinkUrl.value || "").trim()
+  const parentNodeId = Number(parentResourceNodeId.value) || 0
+
+  if (!title) {
+    cloudLinkError.value = t("The title is required.")
+    return
+  }
+
+  if (!url) {
+    cloudLinkError.value = t("The URL is required.")
+    return
+  }
+
+  if (parentNodeId <= 0) {
+    cloudLinkError.value = t("The destination folder is missing.")
+    return
+  }
+
+  isSavingCloudLink.value = true
+
+  try {
+    const document = await documentsService.createCloudLink({
+      title,
+      comment: url,
+      parentResourceNodeId: parentNodeId,
+      resourceLinkList: buildResourceLinkArray(),
+    })
+
+    onCreated(document)
+
+    localStorage.setItem("isUploaded", "true")
+    localStorage.setItem("uploadParentNodeId", parentNodeId)
+
+    cloudLinkTitle.value = ""
+    cloudLinkUrl.value = ""
+    isCloudLinkFormVisible.value = false
+
+    if (route.query.returnTo) {
+      await router.push({
+        name: String(route.query.returnTo),
+        params: { node: parentNodeId },
+        query: buildReturnQuery({ parentResourceNodeId: parentNodeId }),
+      })
+
+      return
+    }
+
+    router.back()
+  } catch (error) {
+    console.error("[Documents] Failed to create cloud link.", error)
+    cloudLinkError.value = error?.message || t("Unable to create cloud link.")
+  } finally {
+    isSavingCloudLink.value = false
+  }
 }
 
 /**

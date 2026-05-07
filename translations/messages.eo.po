@@ -9743,8 +9743,8 @@ msgstr "Bedaŭrinde, vi ne rajtas aliri ĉi tiun paĝon, aŭ eble via konekto ek
 msgid "Result"
 msgstr "Rrezulto"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Provas ensaluti kiel %s %s (id %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Provas ensaluti kiel %s (id %d)"
 
 msgid "Login successful. Go to %s"
 msgstr "Ensaluto sukcesa. Iru al %s"

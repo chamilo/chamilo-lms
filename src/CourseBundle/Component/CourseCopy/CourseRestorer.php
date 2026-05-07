@@ -4483,6 +4483,10 @@ class CourseRestorer
      */
     public function restore_scorm_documents(): void
     {
+        if ('true' !== api_get_setting('lp.allow_import_scorm_package_in_course_builder')) {
+            return;
+        }
+
         $logp = 'RESTORE_SCORM_ZIP: ';
 
         $getBucket = function (string $type) {

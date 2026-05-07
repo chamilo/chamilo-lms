@@ -194,29 +194,47 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
         $elementName = $this->getName();
         if (isset($_FILES[$elementName])) {
             return $_FILES[$elementName];
-        } elseif (false !== ($pos = strpos($elementName, '['))) {
+        }
+
+        if (false !== ($pos = strpos($elementName, '['))) {
             $base = substr($elementName, 0, $pos);
-            $keys = preg_split('/[\[\]]+/', substr($elementName, $pos + 1, -1), -1, PREG_SPLIT_NO_EMPTY);
-            if (!isset($_FILES[$base]['name'])) {
+            if (!isset($_FILES[$base])) {
                 return null;
             }
-            $props = ['name', 'type', 'size', 'tmp_name', 'error'];
+
+            $innerStr = substr($elementName, $pos + 1, -1);
+            $idxKeys = '' !== $innerStr ? explode('][', $innerStr) : [];
+            $nameEntry = $_FILES[$base]['name'] ?? null;
+
+            foreach ($idxKeys as $key) {
+                if (!is_array($nameEntry) || !array_key_exists($key, $nameEntry)) {
+                    return null;
+                }
+
+                $nameEntry = $nameEntry[$key];
+            }
+
+            $props = array('name', 'type', 'size', 'tmp_name', 'error');
             $value = [];
+
             foreach ($props as $prop) {
-                $ref = $_FILES[$base][$prop] ?? null;
-                foreach ($keys as $key) {
-                    if (!is_array($ref) || !array_key_exists($key, $ref)) {
-                        $ref = null;
+                $data = $_FILES[$base][$prop] ?? null;
+
+                foreach ($idxKeys as $key) {
+                    if (!is_array($data) || !array_key_exists($key, $data)) {
+                        $data = null;
+
                         break;
                     }
-                    $ref = $ref[$key];
+                    $data = $data[$key];
                 }
-                $value[$prop] = $ref;
+                $value[$prop] = $data;
             }
-            return isset($value['name']) ? $value : null;
-        } else {
-            return null;
+
+            return $value;
         }
+
+        return null;
     }
 
     /**

@@ -58,7 +58,6 @@ $courseActions = [
     'get_work_user_list',
     'get_work_user_list_others',
     'get_work_user_list_all',
-    'get_work_pending_list',
     'get_course_announcements',
     'course_log_events',
     'get_learning_path_calendars',
@@ -129,10 +128,23 @@ if ($isDiagnosisLoadSearch) {
     if (!$canViewUsergroupFromCourse) {
         $usergroupAjax->protectScript($userGroupInfoAjax, true, true);
     }
+} elseif ('get_work_pending_list' === $action) {
+    api_block_anonymous_users();
+
+    if (!api_is_platform_admin(false, true) && false === api_is_teacher()) {
+        api_not_allowed(true);
+    }
 } elseif (in_array($action, $courseActions, true)) {
     api_protect_course_script();
 
-    if (!api_is_allowed_to_edit(null, true)) {
+    $studentAllowedActions = [
+        'get_course_announcements',
+    ];
+
+    if (
+        !in_array($action, $studentAllowedActions, true)
+        && !api_is_allowed_to_edit(null, true)
+    ) {
         api_not_allowed(true);
     }
 } elseif (in_array($action, $adminActions, true)) {
@@ -675,9 +687,10 @@ switch ($action) {
         $count = get_count_work($work_id);
         break;
     case 'get_work_pending_list':
-        $courseId = $_REQUEST['course'] ?? 0;
-        $status = $_REQUEST['status'] ?? 0;
-        $count = getAllWork(
+        $courseId = !empty($_REQUEST['course']) ? (int) $_REQUEST['course'] : null;
+        $status = !empty($_REQUEST['status']) ? (int) $_REQUEST['status'] : 0;
+
+        $count = getPendingWorkList(
             null,
             null,
             null,
@@ -1658,13 +1671,14 @@ switch ($action) {
         break;
     case 'get_work_pending_list':
         api_block_anonymous_users();
-        if (false === api_is_teacher()) {
+
+        if (!api_is_platform_admin(false, true) && false === api_is_teacher()) {
             exit;
         }
-        $plagiarismColumns = [];
-        if (('true' === api_get_setting('work.allow_compilatio_tool'))) {
-            $plagiarismColumns = ['compilatio'];
-        }
+
+        $courseId = !empty($_REQUEST['course']) ? (int) $_REQUEST['course'] : null;
+        $status = !empty($_REQUEST['status']) ? (int) $_REQUEST['status'] : 0;
+
         $columns = [
             'course',
             'work_name',
@@ -1674,11 +1688,12 @@ switch ($action) {
             'sent_date',
             'qualificator_id',
             'correction',
+            'actions',
         ];
-        $columns = array_merge($columns, $plagiarismColumns);
-        $columns[] = 'actions';
-        $sidx = in_array($sidx, $columns) ? $sidx : 'work_name';
-        $result = getAllWork(
+
+        $sidx = in_array($sidx, $columns, true) ? $sidx : 'sent_date';
+
+        $result = getPendingWorkList(
             $start,
             $limit,
             $sidx,

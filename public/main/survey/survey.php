@@ -82,12 +82,24 @@ if ($is_survey_type_1 && ('addgroup' === $action || 'deletegroup' === $action)) 
         }
         Security::clear_token();
         $_POST['name'] = trim($_POST['name']);
-        if (!empty($_POST['group_id'])) {
-            Database::query('UPDATE '.$table_survey_question_group.' SET description = \''.Database::escape_string($_POST['description']).'\'
-                             WHERE c_id = '.$course_id.' AND id = \''.Database::escape_string($_POST['group_id']).'\'');
+        $groupId = (int) ($_POST['group_id'] ?? 0);
+        if ($groupId > 0) {
+            Database::update(
+                $table_survey_question_group,
+                ['description' => $_POST['description']],
+                ['c_id = ? AND id = ?' => [$course_id, $groupId]]
+            );
             Display::addFlash(Display::return_message(get_lang('Update successful')));
         } elseif (!empty($_POST['name'])) {
-            Database::query('INSERT INTO '.$table_survey_question_group.' (c_id, title,description,survey_id) values ('.$course_id.', \''.Database::escape_string($_POST['name']).'\',\''.Database::escape_string($_POST['description']).'\',\''.$survey_id.'\') ');
+            Database::insert(
+                $table_survey_question_group,
+                [
+                    'c_id' => $course_id,
+                    'title' => $_POST['name'],
+                    'description' => $_POST['description'],
+                    'survey_id' => $survey_id,
+                ]
+            );
             Display::addFlash(Display::return_message(get_lang('Item added')));
         } else {
             Display::addFlash(Display::return_message(get_lang('Group need name'), 'warning'));

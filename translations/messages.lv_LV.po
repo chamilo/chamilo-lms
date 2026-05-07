@@ -9742,8 +9742,8 @@ msgstr "Atvainojiet. Jums nav piešķirtas tiesības piekļūt šai lapai. <br><
 msgid "Result"
 msgstr "Rezultāts"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Mēģinājums autorizēties kā %s %s (id %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Mēģinājums autorizēties kā %s (id %d)"
 
 msgid "Login successful. Go to %s"
 msgstr "Autorizēšanās veiksmīga. Dodieties uz %s"

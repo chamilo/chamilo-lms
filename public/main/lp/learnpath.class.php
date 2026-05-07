@@ -1328,6 +1328,69 @@ class learnpath
         }
     }
 
+    public static function getFlowNextLpOptions(int $lpId): array
+    {
+        $lpId = (int) $lpId;
+
+        if ($lpId <= 0) {
+            return [];
+        }
+
+        $lpTable = Database::get_course_table(TABLE_LP_MAIN);
+        $resourceNodeTable = 'resource_node';
+
+        $sql = "
+            SELECT DISTINCT candidate_lp.iid, candidate_lp.title
+            FROM $lpTable current_lp
+            INNER JOIN $resourceNodeTable current_rn
+                ON current_rn.id = current_lp.resource_node_id
+            INNER JOIN $resourceNodeTable candidate_rn
+                ON candidate_rn.parent_id = current_rn.parent_id
+            INNER JOIN $lpTable candidate_lp
+                ON candidate_lp.resource_node_id = candidate_rn.id
+            WHERE current_lp.iid = $lpId
+                AND candidate_lp.iid <> $lpId
+            ORDER BY candidate_lp.title ASC
+        ";
+
+        $result = Database::query($sql);
+        $options = [];
+
+        while ($row = Database::fetch_assoc($result)) {
+            $options[(int) $row['iid']] = $row['title'];
+        }
+
+        return $options;
+    }
+
+    public static function isValidFlowNextLp(int $currentLpId, int $nextLpId): bool
+    {
+        $currentLpId = (int) $currentLpId;
+        $nextLpId = (int) $nextLpId;
+
+        if ($currentLpId <= 0 || $nextLpId <= 0 || $currentLpId === $nextLpId) {
+            return false;
+        }
+
+        $options = self::getFlowNextLpOptions($currentLpId);
+
+        return isset($options[$nextLpId]);
+    }
+
+    public static function getFlowNextLpInfo(int $currentLpId, int $nextLpId): array
+    {
+        if (!self::isValidFlowNextLp($currentLpId, $nextLpId)) {
+            return [];
+        }
+
+        $options = self::getFlowNextLpOptions($currentLpId);
+
+        return [
+            'iid' => $nextLpId,
+            'title' => $options[$nextLpId],
+        ];
+    }
+
     /**
      * Gets the navigation bar for the learnpath display screen.
      *
@@ -5621,6 +5684,135 @@ class learnpath
         return $currentUrl;
     }
 
+    private static function isCloudLinkDocument(CDocument $document): bool
+    {
+        return 'link' === strtolower((string) $document->getFiletype());
+    }
+
+    private static function getCloudLinkOriginalUrlFromDocument(CDocument $document): string
+    {
+        if (!method_exists($document, 'getComment')) {
+            return '';
+        }
+
+        return self::normalizeCloudLinkUrl((string) $document->getComment());
+    }
+
+    private static function getCloudLinkEmbedUrlFromDocument(CDocument $document): string
+    {
+        $url = self::getCloudLinkOriginalUrlFromDocument($document);
+
+        if ('' === $url) {
+            return '';
+        }
+
+        return self::getCloudLinkEmbedUrlFromUrl($url);
+    }
+
+    private static function normalizeCloudLinkUrl(string $url): string
+    {
+        $url = trim($url);
+
+        if ('' === $url) {
+            return '';
+        }
+
+        $parts = parse_url($url);
+
+        if (!is_array($parts)) {
+            return '';
+        }
+
+        $scheme = strtolower((string) ($parts['scheme'] ?? ''));
+        if (!in_array($scheme, ['http', 'https'], true)) {
+            return '';
+        }
+
+        $host = strtolower((string) ($parts['host'] ?? ''));
+        if ('' === $host) {
+            return '';
+        }
+
+        return $url;
+    }
+
+    private static function getCloudLinkEmbedUrlFromUrl(string $url): string
+    {
+        $url = self::normalizeCloudLinkUrl($url);
+
+        if ('' === $url) {
+            return '';
+        }
+
+        $parts = parse_url($url);
+        if (!is_array($parts)) {
+            return '';
+        }
+
+        $scheme = strtolower((string) ($parts['scheme'] ?? 'https'));
+        $host = strtolower((string) ($parts['host'] ?? ''));
+        $path = (string) ($parts['path'] ?? '');
+
+        if ('drive.google.com' === $host && preg_match('#/file/d/([^/]+)#', $path, $matches)) {
+            return $scheme.'://drive.google.com/file/d/'.$matches[1].'/preview';
+        }
+
+        if ('docs.google.com' === $host && preg_match('#^/(document|spreadsheets|presentation)/d/([^/]+)#', $path, $matches)) {
+            return $scheme.'://docs.google.com/'.$matches[1].'/d/'.$matches[2].'/preview';
+        }
+
+        return $url;
+    }
+
+    private static function escapeCloudLinkAttribute(string $value): string
+    {
+        return htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    }
+
+    private static function renderCloudLinkDocument(CDocument $document): string
+    {
+        $originalUrl = self::getCloudLinkOriginalUrlFromDocument($document);
+        $embedUrl = self::getCloudLinkEmbedUrlFromDocument($document);
+
+        if ('' === $originalUrl) {
+            return Display::return_message(get_lang('Invalid URL.'), 'warning', false);
+        }
+
+        $title = self::escapeCloudLinkAttribute((string) $document->getTitle());
+        $safeOriginalUrl = self::escapeCloudLinkAttribute($originalUrl);
+        $safeEmbedUrl = self::escapeCloudLinkAttribute($embedUrl);
+
+        $html = '<div class="lp-cloud-link">';
+        $html .= '<div class="mb-3 d-flex justify-content-between align-items-center gap-2">';
+        $html .= '<div class="fw-semibold">';
+        $html .= Display::getMdiIcon('cloud-outline', 'ch-tool-icon', null, 22, get_lang('Cloud link'));
+        $html .= ' '.$title;
+        $html .= '</div>';
+        $html .= '<a class="btn btn--plain btn-sm" href="'.$safeOriginalUrl.'" target="_blank" rel="noopener noreferrer">';
+        $html .= get_lang('Open in a new tab');
+        $html .= '</a>';
+        $html .= '</div>';
+
+        if ('' !== $embedUrl) {
+            $html .= '<div class="ratio ratio-16x9 border rounded bg-white">';
+            $html .= '<iframe';
+            $html .= ' src="'.$safeEmbedUrl.'"';
+            $html .= ' title="'.$title.'"';
+            $html .= ' class="w-100 h-100 border-0"';
+            $html .= ' referrerpolicy="no-referrer-when-downgrade"';
+            $html .= ' allow="autoplay; fullscreen; encrypted-media"';
+            $html .= ' allowfullscreen';
+            $html .= '></iframe>';
+            $html .= '</div>';
+        } else {
+            $html .= Display::return_message(get_lang('This cloud document cannot be embedded.'), 'warning', false);
+        }
+
+        $html .= '</div>';
+
+        return $html;
+    }
+
     /**
      * Displays a document by id.
      *
@@ -5633,24 +5825,32 @@ class learnpath
      */
     public function display_document($document, $show_title = false, $iframe = true, $edit_link = false)
     {
-        $return = '';
         if (!$document) {
             return '';
         }
 
+        if ($document instanceof CDocument && self::isCloudLinkDocument($document)) {
+            return self::renderCloudLinkDocument($document);
+        }
+
+        $return = '';
         $repo = Container::getDocumentRepository();
 
-        // TODO: Add a path filter.
         if ($iframe) {
             $url = $repo->getResourceFileUrl($document);
+            $safeUrl = self::escapeCloudLinkAttribute((string) $url);
 
-            $return .= '<iframe
-                id="learnpath_preview_frame"
-                frameborder="0"
-                height="400"
-                width="100%"
-                scrolling="auto"
-                src="'.$url.'"></iframe>';
+            if ('' === $safeUrl) {
+                return Display::return_message(get_lang('Document not found'), 'warning', false);
+            }
+
+            $return .= '<iframe';
+            $return .= ' src="'.$safeUrl.'"';
+            $return .= ' class="w-100 border-0"';
+            $return .= ' style="min-height: 70vh;"';
+            $return .= ' referrerpolicy="no-referrer-when-downgrade"';
+            $return .= ' allowfullscreen';
+            $return .= '></iframe>';
         } else {
             $return = $repo->getResourceFileContent($document);
         }
@@ -6547,7 +6747,7 @@ document.addEventListener("DOMContentLoaded", function () {
             false,
             [],
             [],
-            ['file', 'html', 'folder'],
+            ['file', 'html', 'folder', 'link'],
             false
         );
 
@@ -8756,6 +8956,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 $repo = Container::getDocumentRepository();
                 $document = $repo->find($rowItem->getPath());
                 if ($document) {
+                    if ($document instanceof CDocument && self::isCloudLinkDocument($document)) {
+                        return self::getCloudLinkEmbedUrlFromDocument($document);
+                    }
+
                     $params = [
                         'cid' => $course_id,
                         'sid' => $session_id,

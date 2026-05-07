@@ -52,9 +52,31 @@ if (!is_object($oItem)) {
 }
 $user = api_get_user_info();
 $userId = api_get_user_id();
+
+$scormStudentId = (string) $userId;
+
+if ('true' === api_get_setting('lp.scorm_api_username_as_student_id')) {
+    $scormStudentId = (string) ($user['username'] ?? $userId);
+}
+
+$scormExtraFieldVariable = trim((string) api_get_setting('lp.scorm_api_extrafield_to_use_as_student_id'));
+if ('' !== $scormExtraFieldVariable) {
+    $userExtraFieldValue = new ExtraFieldValue('user');
+    $extraFieldData = $userExtraFieldValue->get_values_by_handler_and_field_variable(
+        $userId,
+        $scormExtraFieldVariable,
+        false,
+        false,
+        false
+    );
+
+    if (!empty($extraFieldData['value'])) {
+        $scormStudentId = trim((string) $extraFieldData['value']);
+    }
+}
+
 $itemId = $oItem->get_id();
 $lpId = $oLP->get_id();
-
 header('Content-type: text/javascript');
 ?>
 var scorm_logs=<?php echo (empty($oLP->scorm_debug) || (!api_is_course_admin() && !api_is_platform_admin())) ? '0' : '3'; ?>;
@@ -186,6 +208,7 @@ if (olms.lms_view_id == '') {
     olms.lms_view_id = 1;
 }
 olms.lms_user_id = '<?php echo $userId; ?>';
+olms.scorm_student_id = <?php echo json_encode($scormStudentId, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>;
 olms.lms_next_item = <?php echo (int) $oLP->get_next_item_id(); ?>;
 olms.lms_previous_item = <?php echo (int) $oLP->get_previous_item_id(); ?>;
 olms.lms_lp_type = '<?php echo $oLP->get_type(); ?>';
@@ -344,6 +367,20 @@ function LMSInitialize() {
             async: false,
             success:function(data) {
                 $('video:not(.skip), audio:not(.skip)').mediaelementplayer();
+                <?php if ('true' === api_get_setting('editor.video_context_menu_hidden')) { ?>
+                if (!window.chamiloVideoContextMenuHiddenInitialized) {
+                    window.chamiloVideoContextMenuHiddenInitialized = true;
+                    document.addEventListener('contextmenu', function(event) {
+                        var target = event.target;
+                        if (!target || !target.closest) {
+                            return;
+                        }
+                        if (target.closest('video:not(.skip), .mejs__container')) {
+                            event.preventDefault();
+                        }
+                    });
+                }
+                <?php } ?>
                 if (olms.lms_item_type === 'video') {
                     var cont_f = document.getElementById("content_id");
                     if (cont_f && (cont_f.contentDocument || cont_f.contentWindow.document).readyState === "complete") {
@@ -427,72 +464,120 @@ function LMSInitialize() {
 */
 function onIframeLoaded(iframe) {
     var contentDocument = iframe.contentDocument || iframe.contentWindow.document;
-    var $video = $("video:not(.skip)", contentDocument);
+    if (olms.lms_item_type === 'video') {
+        var style = contentDocument.getElementById('chamilo-lp-video-size-fix');
 
+        if (!style) {
+            style = contentDocument.createElement('style');
+            style.id = 'chamilo-lp-video-size-fix';
+            contentDocument.head.appendChild(style);
+        }
+
+        style.textContent = `
+        html,
+        body {
+            height: auto !important;
+            min-height: 480px !important;
+            overflow: visible !important;
+        }
+
+        video:not(.skip) {
+            display: block !important;
+            width: 100% !important;
+            height: 420px !important;
+            min-height: 420px !important;
+            object-fit: contain !important;
+            max-height: none !important;
+        }
+
+        .mejs__container,
+        .mejs__inner,
+        .mejs__mediaelement,
+        .mejs__overlay,
+        .mejs__poster {
+            width: 100% !important;
+            height: 420px !important;
+            min-height: 420px !important;
+            max-height: none !important;
+        }
+        `;
+    }
+
+    <?php if ('true' === api_get_setting('editor.video_context_menu_hidden')) { ?>
+        if (!contentDocument.chamiloVideoContextMenuHiddenInitialized) {
+            contentDocument.chamiloVideoContextMenuHiddenInitialized = true;
+            contentDocument.addEventListener('contextmenu', function(event) {
+                var target = event.target;
+                if (!target || !target.closest) {
+                    return;
+                }
+                if (target.closest('video:not(.skip), .mejs__container')) {
+                    event.preventDefault();
+                }
+            });
+        }
+    <?php } ?>
+
+    var $video = $("video:not(.skip)", contentDocument);
     if ($video.length <= 0) {
         return;
     }
-
     $video.each(function() {
         var videoElement = this;
-
-        // Create overlay DIV inside the iframe
         var overlayHtml = `
-        <div id="postroll-overlay" style="
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        width: 100%;
-                        height: 100%;
-                        background: rgba(0, 0, 0, 0.8);
-                        color: white;
-                        text-align: center;
-                        display: none;
-                        justify-content: center;
-                        align-items: center;
-                        flex-direction: column;
-                        z-index: 9999;
-                    ">
+            <div id="postroll-overlay" style="
+                                position: absolute;
+                                top: 0;
+                                left: 0;
+                                width: 100%;
+                                height: 100%;
+                                background: rgba(0, 0, 0, 0.8);
+                                color: white;
+                                text-align: center;
+                                display: none;
+                                justify-content: center;
+                                align-items: center;
+                                flex-direction: column;
+                                z-index: 9999;
+                            ">
             <p style="font-size: 24px; margin-bottom: 10px;"><?php echo get_lang('Video completed!') ?></p>
             `;
 
             if (olms.lms_auto_forward_video == 1) {
-            overlayHtml += `
-            <p style="font-size: 18px;">
-                <?php echo get_lang('Advancing in') ?>
-                <span id="postroll-counter">10</span>
-                <?php echo get_lang('seconds') ?>...
-            </p>
-            `;
+                overlayHtml += `
+                <p style="font-size: 18px;">
+                    <?php echo get_lang('Advancing in') ?>
+                    <span id="postroll-counter">10</span>
+                    <?php echo get_lang('seconds') ?>...
+                </p>
+                `;
             }
 
             overlayHtml += `
             <button id="postroll-next-btn" style="
-                            margin-top: 20px;
-                            padding: 10px 20px;
-                            font-size: 18px;
-                            background-color: #337ab7;
-                            border: none;
-                            color: white;
-                            cursor: pointer;
-                        "><?php echo get_lang('Next learning object') ?></button>
-        </div>
-        `;
+                                    margin-top: 20px;
+                                    padding: 10px 20px;
+                                    font-size: 18px;
+                                    background-color: #337ab7;
+                                    border: none;
+                                    color: white;
+                                    cursor: pointer;
+                                "><?php echo get_lang('Next learning object') ?></button>
+            </div>
+            `;
 
-        var $overlay = $(overlayHtml);
-        $(contentDocument.body).append($overlay);
-        videoElement.addEventListener("ended", function () {
-            $overlay.css("display", "flex");
-            if (olms.lms_auto_forward_video == 1) {
-                startPostrollCountdown(contentDocument);
-            } else {
-                console.log("Auto-forward is disabled; waiting for user click.");
-            }
-        });
-
-        // Next button click
-        $(contentDocument).off("click.postroll").on("click.postroll", "#postroll-next-btn", function () {
-            if (typeof switch_item === "function") {
+            var $overlay = $(overlayHtml);
+            $(contentDocument.body).append($overlay);
+            videoElement.addEventListener("ended", function () {
+                $overlay.css("display", "flex");
+                if (olms.lms_auto_forward_video == 1) {
+                    startPostrollCountdown(contentDocument);
+                } else {
+                    console.log("Auto-forward is disabled; waiting for user click.");
+                }
+            });
+            $(contentDocument).off("click.postroll").on("click.postroll", "#postroll-next-btn", function () {
+                if (typeof switch_item === "function") {
                 switch_item(olms.lms_item_id, olms.lms_next_item);
             }
         });
@@ -612,7 +697,7 @@ function LMSGetValue(param) {
         }
     } else if(param == 'cmi.core.student_id' || param == 'cmi.learner_id') { // cmi.learner_id widens support for SCORM 2004
         // ---- cmi.core.student_id
-        result='<?php echo learnpath::getUserIdentifierForExternalServices(); ?>';
+        result = olms.scorm_student_id;
     } else if(param == 'cmi.core.student_name' || param == 'cmi.learner_name') { // cmi.learner_name widens support for SCORM 2004
         // ---- cmi.core.student_name
         <?php

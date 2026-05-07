@@ -123,10 +123,14 @@ final class DocumentCollectionStateProvider implements ProviderInterface
         // Normalize & unique
         $requestedFiletypes = array_values(array_unique(array_filter(array_map('strval', $filetypes))));
 
-        // Compatibility: treat "html" as a subtype of "file"
+        // Compatibility: treat "html" and cloud links as subtypes of "file".
         $effectiveFiletypes = $requestedFiletypes;
-        if (\in_array('file', $effectiveFiletypes, true) && !\in_array('html', $effectiveFiletypes, true)) {
-            $effectiveFiletypes[] = 'html';
+        if (\in_array('file', $effectiveFiletypes, true)) {
+            foreach (['html', 'link'] as $fileSubtype) {
+                if (!\in_array($fileSubtype, $effectiveFiletypes, true)) {
+                    $effectiveFiletypes[] = $fileSubtype;
+                }
+            }
         }
 
         // System folder subtypes

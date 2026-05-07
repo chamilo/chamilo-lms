@@ -9743,8 +9743,8 @@ msgstr "抱歉，您無權存取此頁面，或您的連線已過期。請按瀏
 msgid "Result"
 msgstr "結果"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "嘗試以 %s %s (id %s) 登入"
+msgid "Attempting to login as %s (id %d)"
+msgstr "嘗試以 %s (id %d) 登入"
 
 msgid "Login successful. Go to %s"
 msgstr "登入成功。前往 %s"

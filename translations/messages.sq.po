@@ -9742,8 +9742,8 @@ msgstr "Na vjen keq, ju nuk jeni të lejuar të aksesoni këtë faqe, ose ndosht
 msgid "Result"
 msgstr "Rezultati"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Duke u përpjekur të hysh si %s %s (id %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Duke u përpjekur të hysh si %s (id %d)"
 
 msgid "Login successful. Go to %s"
 msgstr "Hyrja e suksesshme. Shko te %s"

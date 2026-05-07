@@ -9738,8 +9738,8 @@ msgstr "بخښنه غواړو، تاسو ته اجازه نشته دا پاڼه 
 msgid "Result"
 msgstr "پایله"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "د %s %s په توګه لاګین کول پیلوي (id %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "د %s په توګه لاګین کول پیلوي (id %d)"
 
 msgid "Login successful. Go to %s"
 msgstr "لاګین بریالی شو. %s ته لاړ شئ"

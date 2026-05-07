@@ -216,6 +216,14 @@ if ($isCli) {
         }
     }
 
+    if (function_exists('api_apply_samesite_none_session_cookie_to_response')) {
+        api_apply_samesite_none_session_cookie_to_response($response, $request);
+    }
+
+    if (function_exists('api_apply_samesite_none_session_cookie_setting')) {
+        api_apply_samesite_none_session_cookie_setting();
+    }
+
     $charset = 'UTF-8';
     ini_set('log_errors', '1');
     $this_section = SECTION_GLOBAL;

@@ -367,7 +367,7 @@ final class PageRepository extends ServiceEntityRepository
         $exactCandidates[] = $localeWithDash;
         $exactCandidates[] = $localeWithUnderscore;
 
-        if (2 === strlen($shortLocale) && ctype_alpha($shortLocale)) {
+        if (2 === \strlen($shortLocale) && ctype_alpha($shortLocale)) {
             $exactCandidates[] = $shortLocale;
             $prefixCandidates[] = $shortLocale;
 

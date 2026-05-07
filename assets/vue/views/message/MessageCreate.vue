@@ -45,7 +45,7 @@ const onSubmit = async (messageToSend) => {
 
   try {
     await messageService.create(messageToSend)
-    notification.showSuccessNotification("Message sent successfully.")
+    notification.showSuccessNotification(t("Message sent successfully."))
   } catch (error) {
     notification.showErrorNotification(error.message || "Error sending message.")
   } finally {

@@ -10,12 +10,17 @@ use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use DateInterval;
+use DateTimeImmutable;
+use DateTimeZone;
 use Doctrine\DBAL\Connection;
+use RuntimeException;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
 
 #[AsCommand(
     name: 'chamilo:disable-user-conditions',
@@ -31,7 +36,9 @@ final class DisableUserConditionsCommand extends Command
 
     private const MESSAGE_RECEIVER_TYPE_TO = 1;
 
-    /** @var array<string, string[]> */
+    /**
+     * @var array<string, string[]>
+     */
     private array $tableColumnsCache = [];
 
     public function __construct(
@@ -77,7 +84,7 @@ final class DisableUserConditionsCommand extends Command
             return Command::FAILURE;
         }
 
-        if (null !== $caseFilter && !in_array((string) $caseFilter, ['1', '2', '3'], true)) {
+        if (null !== $caseFilter && !\in_array((string) $caseFilter, ['1', '2', '3'], true)) {
             $output->writeln('<error>The --case option must be 1, 2 or 3.</error>');
 
             return Command::FAILURE;
@@ -113,12 +120,12 @@ final class DisableUserConditionsCommand extends Command
             return Command::FAILURE;
         }
 
-        $now = new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
-        $date3Months = $now->sub(new \DateInterval('P3M'));
-        $date6Months = $now->sub(new \DateInterval('P6M'));
+        $now = new DateTimeImmutable('now', new DateTimeZone('UTC'));
+        $date3Months = $now->sub(new DateInterval('P3M'));
+        $date6Months = $now->sub(new DateInterval('P6M'));
 
         $output->writeln($apply ? '<info>Apply mode enabled.</info>' : '<comment>Dry-run mode. No changes will be made.</comment>');
-        $output->writeln(sprintf(
+        $output->writeln(\sprintf(
             'Sender user: #%d %s (%s)',
             $senderId,
             $this->getCompleteName($senderInfo),
@@ -168,7 +175,7 @@ final class DisableUserConditionsCommand extends Command
         }
 
         $output->writeln('');
-        $output->writeln(sprintf('Processed users: %d', count($processedUsers)));
+        $output->writeln(\sprintf('Processed users: %d', \count($processedUsers)));
 
         return Command::SUCCESS;
     }
@@ -195,7 +202,7 @@ final class DisableUserConditionsCommand extends Command
         $conditions = ['variable = :variable'];
         $parameters = ['variable' => $variable];
 
-        if (in_array('item_type', $columns, true)) {
+        if (\in_array('item_type', $columns, true)) {
             $conditions[] = 'item_type = :itemType';
             $parameters['itemType'] = $this->getUserExtraFieldItemType();
         }
@@ -225,11 +232,11 @@ final class DisableUserConditionsCommand extends Command
 
         $columns = $this->getTableColumns('extra_field_values');
 
-        if (in_array('field_value', $columns, true)) {
+        if (\in_array('field_value', $columns, true)) {
             return 'field_value';
         }
 
-        if (in_array('value', $columns, true)) {
+        if (\in_array('value', $columns, true)) {
             return 'value';
         }
 
@@ -240,11 +247,11 @@ final class DisableUserConditionsCommand extends Command
     {
         $columns = $this->getTableColumns('extra_field_values');
 
-        if (!in_array('item_type', $columns, true)) {
+        if (!\in_array('item_type', $columns, true)) {
             return '';
         }
 
-        return sprintf(' AND %s.item_type = %d ', $alias, $this->getUserExtraFieldItemType());
+        return \sprintf(' AND %s.item_type = %d ', $alias, $this->getUserExtraFieldItemType());
     }
 
     /**
@@ -256,7 +263,7 @@ final class DisableUserConditionsCommand extends Command
     private function processCaseWithoutContractAndInactive(
         OutputInterface $output,
         int $fieldId,
-        \DateTimeImmutable $date3Months,
+        DateTimeImmutable $date3Months,
         int $senderId,
         bool $apply,
         ?int $userIdFilter,
@@ -339,7 +346,7 @@ final class DisableUserConditionsCommand extends Command
      */
     private function processCaseCertificateAndInactive(
         OutputInterface $output,
-        \DateTimeImmutable $date6Months,
+        DateTimeImmutable $date6Months,
         int $senderId,
         bool $apply,
         ?int $userIdFilter,
@@ -417,7 +424,7 @@ final class DisableUserConditionsCommand extends Command
     private function processCaseValidatedContractAndInactive(
         OutputInterface $output,
         int $fieldId,
-        \DateTimeImmutable $date6Months,
+        DateTimeImmutable $date6Months,
         int $senderId,
         bool $apply,
         ?int $userIdFilter,
@@ -496,7 +503,7 @@ final class DisableUserConditionsCommand extends Command
                     $bossSubject = $this->buildDisabledSubject($disabledUser);
                     $bossContent = $this->buildBossDisabledMessage($disabledUser);
 
-                    $output->writeln(sprintf(
+                    $output->writeln(\sprintf(
                         'Boss notification: #%d %s | Subject: %s',
                         $studentBossId,
                         $this->getCompleteName($bossInfo),
@@ -519,7 +526,7 @@ final class DisableUserConditionsCommand extends Command
                     $this->removeAllBossFromStudent($studentId);
 
                     $this->connection->commit();
-                } catch (\Throwable $exception) {
+                } catch (Throwable $exception) {
                     $this->connection->rollBack();
 
                     throw $exception;
@@ -543,14 +550,14 @@ final class DisableUserConditionsCommand extends Command
             $this->disableUser($studentId);
 
             $this->connection->commit();
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $this->connection->rollBack();
 
             throw $exception;
         }
     }
 
-    private function getLastConnectionDate(int $userId): ?\DateTimeImmutable
+    private function getLastConnectionDate(int $userId): ?DateTimeImmutable
     {
         if (!$this->tableExists('track_e_login')) {
             return null;
@@ -568,7 +575,7 @@ final class DisableUserConditionsCommand extends Command
         return $this->createDateFromDatabaseValue((string) $value);
     }
 
-    private function createDateFromDatabaseValue(string $value): ?\DateTimeImmutable
+    private function createDateFromDatabaseValue(string $value): ?DateTimeImmutable
     {
         $value = trim($value);
 
@@ -577,8 +584,8 @@ final class DisableUserConditionsCommand extends Command
         }
 
         try {
-            return new \DateTimeImmutable($value, new \DateTimeZone('UTC'));
-        } catch (\Throwable) {
+            return new DateTimeImmutable($value, new DateTimeZone('UTC'));
+        } catch (Throwable) {
             return null;
         }
     }
@@ -620,7 +627,7 @@ final class DisableUserConditionsCommand extends Command
      */
     private function buildDisabledSubject(array $user): string
     {
-        return sprintf('Account disabled: %s', $this->getCompleteName($user));
+        return \sprintf('Account disabled: %s', $this->getCompleteName($user));
     }
 
     /**
@@ -641,7 +648,7 @@ final class DisableUserConditionsCommand extends Command
      */
     private function buildBossDisabledMessage(array $disabledUser): string
     {
-        return sprintf(
+        return \sprintf(
             'The learner account "%s" has been disabled because it matched an automatic disabling condition.',
             $this->getCompleteName($disabledUser)
         );
@@ -699,10 +706,10 @@ final class DisableUserConditionsCommand extends Command
     private function sendMessage(int $recipientId, string $subject, string $content, int $senderId): void
     {
         if (!$this->tableExists('message') || !$this->tableExists('message_rel_user')) {
-            throw new \RuntimeException('Message tables were not found.');
+            throw new RuntimeException('Message tables were not found.');
         }
 
-        $now = (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))->format('Y-m-d H:i:s');
+        $now = (new DateTimeImmutable('now', new DateTimeZone('UTC')))->format('Y-m-d H:i:s');
         $messageColumns = $this->getTableColumns('message');
 
         $messageData = [
@@ -712,23 +719,23 @@ final class DisableUserConditionsCommand extends Command
             'send_date' => $now,
         ];
 
-        if (in_array('msg_type', $messageColumns, true)) {
+        if (\in_array('msg_type', $messageColumns, true)) {
             $messageData['msg_type'] = Message::MESSAGE_TYPE_INBOX;
         }
 
-        if (in_array('status', $messageColumns, true)) {
+        if (\in_array('status', $messageColumns, true)) {
             $messageData['status'] = 0;
         }
 
-        if (in_array('parent_id', $messageColumns, true)) {
+        if (\in_array('parent_id', $messageColumns, true)) {
             $messageData['parent_id'] = 0;
         }
 
-        if (in_array('group_id', $messageColumns, true)) {
+        if (\in_array('group_id', $messageColumns, true)) {
             $messageData['group_id'] = 0;
         }
 
-        if (in_array('update_date', $messageColumns, true)) {
+        if (\in_array('update_date', $messageColumns, true)) {
             $messageData['update_date'] = $now;
         }
 
@@ -737,7 +744,7 @@ final class DisableUserConditionsCommand extends Command
         $messageId = (int) $this->connection->lastInsertId();
 
         if ($messageId <= 0) {
-            throw new \RuntimeException('The internal message could not be created.');
+            throw new RuntimeException('The internal message could not be created.');
         }
 
         $this->connection->insert(
@@ -761,12 +768,12 @@ final class DisableUserConditionsCommand extends Command
         int $studentId,
         array $disabledUser,
         int $caseNumber,
-        \DateTimeImmutable $lastConnectionDate,
-        \DateTimeImmutable $thresholdDate,
+        DateTimeImmutable $lastConnectionDate,
+        DateTimeImmutable $thresholdDate,
         string $subject,
         string $content
     ): void {
-        $output->writeln(sprintf(
+        $output->writeln(\sprintf(
             'User #%d (%s) would be disabled. Case %d. Last connection: %s - threshold: %s',
             $studentId,
             $disabledUser['username'] ?? '',
@@ -774,8 +781,8 @@ final class DisableUserConditionsCommand extends Command
             $lastConnectionDate->format('Y-m-d H:i:s'),
             $thresholdDate->format('Y-m-d H:i:s')
         ));
-        $output->writeln(sprintf('Subject: %s', $subject));
-        $output->writeln(sprintf('Content: %s', $content));
+        $output->writeln(\sprintf('Subject: %s', $subject));
+        $output->writeln(\sprintf('Content: %s', $content));
         $output->writeln('');
     }
 

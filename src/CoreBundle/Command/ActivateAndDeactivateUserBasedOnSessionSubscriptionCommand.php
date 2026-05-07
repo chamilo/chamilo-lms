@@ -90,6 +90,7 @@ class ActivateAndDeactivateUserBasedOnSessionSubscriptionCommand extends Command
         ;
 
         $activatedCount = 0;
+
         /** @var User $user */
         foreach ($toActivate as $user) {
             $io->writeln(\sprintf('  [ACTIVATE]   #%d %s', $user->getId(), $user->getUsername()));
@@ -101,6 +102,7 @@ class ActivateAndDeactivateUserBasedOnSessionSubscriptionCommand extends Command
         }
 
         $deactivatedCount = 0;
+
         /** @var User $user */
         foreach ($toDeactivate as $user) {
             $io->writeln(\sprintf('  [DEACTIVATE] #%d %s', $user->getId(), $user->getUsername()));

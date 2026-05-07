@@ -910,6 +910,7 @@ $gridJs = Display::grid_js(
                 {height:280,reloadAfterSubmit:false}, // edit options
                 {height:280,reloadAfterSubmit:false}, // add options
                 {reloadAfterSubmit:true, url: '<?php echo $deleteUrl; ?>' }, // del options
+                {width:750}, // search options
             );
 
             var sgrid = $("#results")[0];

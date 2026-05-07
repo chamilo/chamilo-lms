@@ -39,10 +39,14 @@ class LoginFailureSubscriber implements EventSubscriberInterface
         $userIp = $request ? $request->getClientIp() : 'unknown';
 
         $passport = $event->getPassport();
+        $username = 'unknown';
 
-        /** @var UserBadge $userBadge */
-        $userBadge = $passport->getBadge(UserBadge::class);
-        $username = $userBadge->getUserIdentifier();
+        if (null !== $passport) {
+            $userBadge = $passport->getBadge(UserBadge::class);
+            if ($userBadge instanceof UserBadge) {
+                $username = $userBadge->getUserIdentifier();
+            }
+        }
 
         // Log of connection attempts
         $this->trackELoginRecordingRepository->addTrackLogin($username, $userIp, false);

@@ -421,7 +421,9 @@ class Plugin
             $this->settings = $configByUrl?->getConfiguration() ?? [];
         }
 
-        return $this->settings;
+        $overrides = Container::getPluginHelper()->getPluginOverrides($this->get_name());
+
+        return array_merge($this->settings, $overrides);
     }
 
     /**

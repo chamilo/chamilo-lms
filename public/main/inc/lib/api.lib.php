@@ -28,6 +28,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
+use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * This is a code library for Chamilo.
@@ -2922,15 +2925,12 @@ function api_get_plugin_setting($plugin, $variable)
         return $helper->isPluginEnabled((string) $plugin) ? 'true' : 'false';
     }
 
-    $value = $helper->getPluginConfigValue((string) $plugin, (string) $variable, null);
+    $value = $helper->getPluginSetting((string) $plugin, (string) $variable);
 
-    // BC: many legacy callers expect strings; normalize booleans to 'true'/'false'
     if (\is_bool($value)) {
         return $value ? 'true' : 'false';
     }
 
-    // If the value is serialized in old code paths, keep it as-is.
-    // For arrays/objects coming from JSON config, return them directly.
     return $value;
 }
 
@@ -7753,4 +7753,197 @@ function api_get_glossary_auto_snippet(?int $courseId, ?int $sessionId, ?int $re
     ';
 }
 
+function api_is_samesite_none_session_cookie_setting_enabled(): bool
+{
+    try {
+        $value = api_get_setting('security.security_session_cookie_samesite_none');
+    } catch (Throwable $exception) {
+        error_log('Unable to read SameSite=None session cookie setting: '.$exception->getMessage());
+
+        return false;
+    }
+
+    if (true === $value || 1 === $value) {
+        return true;
+    }
+
+    return in_array(strtolower(trim((string) $value)), ['true', '1', 'yes'], true);
+}
+
+function api_is_secure_request_for_samesite_none(?Request $request = null): bool
+{
+    if (null !== $request && $request->isSecure()) {
+        return true;
+    }
+
+    $https = strtolower((string) ($_SERVER['HTTPS'] ?? ''));
+    $forwardedProto = strtolower((string) ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? ''));
+
+    return 'on' === $https || '1' === $https || 'https' === $forwardedProto;
+}
+
+function api_should_apply_samesite_none_session_cookie(?Request $request = null): bool
+{
+    if ('cli' === PHP_SAPI) {
+        return false;
+    }
+
+    if (!api_is_secure_request_for_samesite_none($request)) {
+        return false;
+    }
+
+    return api_is_samesite_none_session_cookie_setting_enabled();
+}
+
+function api_apply_samesite_none_session_cookie_to_response(Response $response, ?Request $request = null): void
+{
+    if (!api_should_apply_samesite_none_session_cookie($request)) {
+        return;
+    }
+
+    $sessionName = '';
+
+    if (null !== $request && $request->hasSession()) {
+        $sessionName = $request->getSession()->getName();
+    }
+
+    if ('' === $sessionName) {
+        $sessionName = session_name();
+    }
+
+    if ('' === $sessionName) {
+        return;
+    }
+
+    foreach ($response->headers->getCookies() as $cookie) {
+        if ($cookie->getName() !== $sessionName) {
+            continue;
+        }
+
+        $response->headers->setCookie(
+            Cookie::create(
+                $cookie->getName(),
+                $cookie->getValue(),
+                $cookie->getExpiresTime(),
+                $cookie->getPath(),
+                $cookie->getDomain(),
+                true,
+                $cookie->isHttpOnly(),
+                $cookie->isRaw(),
+                Cookie::SAMESITE_NONE
+            )
+        );
+    }
+}
+
+function api_apply_samesite_none_session_cookie_setting(): void
+{
+    static $registered = false;
+
+    if ($registered || headers_sent()) {
+        return;
+    }
+
+    $request = null;
+
+    try {
+        $request = Container::getRequest();
+    } catch (Throwable) {
+        $request = null;
+    }
+
+    if (!api_should_apply_samesite_none_session_cookie($request)) {
+        return;
+    }
+
+    $registered = true;
+
+    header_register_callback(static function (): void {
+        $sessionName = session_name();
+
+        if ('' === $sessionName) {
+            return;
+        }
+
+        $headers = headers_list();
+        $rewrittenSessionCookies = [];
+
+        foreach ($headers as $header) {
+            if (0 !== stripos($header, 'Set-Cookie:')) {
+                continue;
+            }
+
+            $cookieValue = trim(substr($header, strlen('Set-Cookie:')));
+
+            if (0 !== strncmp($cookieValue, $sessionName.'=', strlen($sessionName) + 1)) {
+                continue;
+            }
+
+            $cookieValue = preg_replace('/;\s*SameSite=[^;]*/i', '', $cookieValue);
+
+            if (!preg_match('/;\s*Secure(?:;|$)/i', $cookieValue)) {
+                $cookieValue .= '; Secure';
+            }
+
+            $cookieValue .= '; SameSite=None';
+
+            $rewrittenSessionCookies[] = $cookieValue;
+        }
+
+        if (empty($rewrittenSessionCookies)) {
+            return;
+        }
+
+        header_remove('Set-Cookie');
+
+        foreach ($headers as $header) {
+            if (0 !== stripos($header, 'Set-Cookie:')) {
+                continue;
+            }
+
+            $cookieValue = trim(substr($header, strlen('Set-Cookie:')));
+
+            if (0 === strncmp($cookieValue, $sessionName.'=', strlen($sessionName) + 1)) {
+                continue;
+            }
+
+            header($header, false);
+        }
+
+        foreach ($rewrittenSessionCookies as $cookieValue) {
+            header('Set-Cookie: '.$cookieValue, false);
+        }
+    });
+}
+
+function api_get_video_context_menu_hidden_script(): string
+{
+    if ('true' !== api_get_setting('editor.video_context_menu_hidden')) {
+        return '';
+    }
+
+    return <<<HTML
+    <script>
+    (function () {
+        if (window.chamiloVideoContextMenuHiddenInitialized) {
+            return;
+        }
+
+        window.chamiloVideoContextMenuHiddenInitialized = true;
+
+        document.addEventListener('contextmenu', function (event) {
+            var target = event.target;
+
+            if (!target || !target.closest) {
+                return;
+            }
+
+            if (target.closest('video:not(.skip), .mejs__container')) {
+                event.preventDefault();
+            }
+        });
+    })();
+    </script>
+    HTML;
+}
 

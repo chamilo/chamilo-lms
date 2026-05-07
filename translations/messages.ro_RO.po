@@ -9752,8 +9752,8 @@ msgstr "Ne pare rau, nu aveti suficiente privilegii pentru a vizualiza aceasta p
 msgid "Result"
 msgstr "Rezultat"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Incearca sa te loghezi ca %s %s (id%s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Incearca sa te loghezi ca %s (id%d)"
 
 msgid "Login successful. Go to %s"
 msgstr "Logat cu succes. Mergi la %s"

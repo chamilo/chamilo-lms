@@ -9749,8 +9749,8 @@ msgstr "Lamentamos, mas não lhe é permitido aceder a esta página. Por favor, 
 msgid "Result"
 msgstr "Resultado"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Tentativa de login/acesso como %s %s (id %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Tentativa de login/acesso como %s (id %d)"
 
 msgid "Login successful. Go to %s"
 msgstr "Login/Acesso com sucesso. Ir para %s"

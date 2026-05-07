@@ -198,7 +198,9 @@ const showExportDialog = ref(false)
 const exportTarget = ref(null)
 
 const canExportScorm = computed(
-  () => canEdit.value && platformConfig.getSetting("lp.hide_scorm_export_link") !== "true",
+  () =>
+    platformConfig.getSetting("lp.hide_scorm_export_link") !== "true" &&
+    (canEdit.value || platformConfig.getSetting("lp.lp_allow_export_to_students") === "true"),
 )
 
 const canExportPdf = computed(() => platformConfig.getSetting("lp.hide_scorm_pdf_link") !== "true")

@@ -9738,8 +9738,8 @@ msgstr "क्षमा करें, आपको इस पृष्ठ तक
 msgid "Result"
 msgstr "परिणाम"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "%s %s (id %s) के रूप में लॉगिन करने का प्रयास"
+msgid "Attempting to login as %s (id %d)"
+msgstr "%s (id %d) के रूप में लॉगिन करने का प्रयास"
 
 msgid "Login successful. Go to %s"
 msgstr "लॉगिन सफल। %s पर जाएँ"

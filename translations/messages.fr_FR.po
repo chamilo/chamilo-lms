@@ -9963,6 +9963,9 @@ msgstr "Résultats de la recherche de :"
 msgid "Select a file"
 msgstr "Selectionnez un document"
 
+msgid "Select a file to insert into the editor."
+msgstr "Sélectionnez un fichier à insérer dans l'éditeur."
+
 msgid "Warning - The FAQ file, located in the /home/ directory of your portal, is not writable. Your text will not be saved until the file permissions are changed."
 msgstr "Attention - Le fichier de FAQ situé dans le répertoire /home/ de votre campus n'est pas inscriptible. Le texte que vous venez d'entrer ne pourra pas être sauvé tant que les permissions n'auront pas été modifiées."
 
@@ -9975,8 +9978,8 @@ msgstr "Désolé, vous n'êtes pas autorisé à accéder à cette page, ou votre
 msgid "Result"
 msgstr "Résultat"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Tentative d'identification comme %s %s (id %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Tentative d'identification comme %s (id %d)"
 
 msgid "Login successful. Go to %s"
 msgstr "Identification réussie. Cliquez sur le lien suivant pour continuer : %s"
@@ -34052,6 +34055,9 @@ msgstr "Devoir"
 msgid "Allowed file formats: %s"
 msgstr "Formats de fichiers autorisés : %s"
 
+msgid "File manager"
+msgstr "Gestionnaire de fichiers"
+
 msgid "File type not allowed. Allowed extensions: %s"
 msgstr "Type de fichier non autorisé. Extensions autorisées : %s"
 
@@ -35791,3 +35797,33 @@ msgstr "Titre (Z-A)"
 
 msgid "Send test email"
 msgstr "Envoyer"
+
+msgid "Show teachers"
+msgstr "Afficher les enseignants"
+
+msgid "Hide teachers"
+msgstr "Masquer les enseignants"
+
+msgid "Delete exercise attempts"
+msgstr "Supprimer les tentatives d'exercice"
+
+msgid "Message sent successfully."
+msgstr "Message envoyé avec succès."
+
+msgid "You cannot create a new course right now."
+msgstr "Vous ne pouvez pas créer de nouveau cours pour le moment."
+
+msgid "Unable to verify whether you can create a new course right now."
+msgstr "Impossible de vérifier si vous pouvez créer un nouveau cours pour le moment."
+
+msgid "Please try again later or contact the administrator."
+msgstr "Veuillez réessayer plus tard ou contacter l'administrateur."
+
+msgid "You cannot create more courses at this time."
+msgstr "Vous ne pouvez pas créer d'autres cours pour le moment."
+
+msgid "You already manage %d courses and your active service allows up to %d. To create another course, you need a higher service limit or reduce your current active courses."
+msgstr "Vous gérez déjà %d cours et votre service actif en autorise jusqu'à %d. Pour créer un autre cours, vous devez disposer d'une limite de service supérieure ou réduire le nombre de vos cours actifs."
+
+msgid "You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now."
+msgstr "Vous gérez déjà %d cours et la plateforme autorise actuellement jusqu'à %d pour votre compte. Vous ne pouvez pas créer d'autres cours pour le moment."

@@ -9802,8 +9802,8 @@ msgstr "Leider ist es Ihnen nicht gestattet, diese Seite aufzurufen. Klicken Sie
 msgid "Result"
 msgstr "Ergebnis"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Loginversuch als %s %s (id %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Loginversuch als %s (id %d)"
 
 msgid "Login successful. Go to %s"
 msgstr "Login war erfolgreich. Gehen Sie zu %s"
@@ -35477,3 +35477,12 @@ msgstr "Titel Z–A"
 
 msgid "Send test email"
 msgstr "Senden"
+
+msgid "Message sent successfully."
+msgstr "Nachricht erfolgreich gesendet."
+ 
+msgid "Select a file to insert into the editor."
+msgstr "Eine Datei auswählen, die in den Editor eingefügt werden soll."
+
+msgid "File manager"
+msgstr "Dateimanager"

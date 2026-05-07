@@ -136,27 +136,35 @@
       field="resourceNode.title"
     >
       <template #body="slotProps">
-        <div style="display: flex; align-items: center">
-          <DocumentEntry
-            v-if="slotProps.data"
-            :data="slotProps.data"
-          />
+        <div class="flex flex-col gap-1">
+          <div class="flex items-center">
+            <DocumentEntry
+              v-if="slotProps.data"
+              :data="slotProps.data"
+            />
 
-          <!-- AI badge at the end of the title -->
-          <span
-            v-if="slotProps.data?.ai_assisted"
-            aria-label="AI-assisted"
-            class="ml-2 inline-flex items-center gap-1 rounded-full border border-gray-300 bg-gray-10 px-2 py-[2px] text-xs text-gray-700"
-            title="AI-assisted"
-          >
-            <span aria-hidden="true">🤖</span>
-            <span class="font-semibold">AI</span>
-          </span>
+            <!-- AI badge at the end of the title -->
+            <span
+              v-if="slotProps.data?.ai_assisted"
+              aria-label="AI-assisted"
+              class="ml-2 inline-flex items-center gap-1 rounded-full border border-gray-300 bg-gray-10 px-2 py-[2px] text-xs text-gray-700"
+              title="AI-assisted"
+            >
+          <span aria-hidden="true">🤖</span>
+          <span class="font-semibold">AI</span>
+        </span>
 
-          <BaseIcon
-            v-if="isAllowedToEdit && isSessionDocument(slotProps.data)"
-            class="mr-8"
-            icon="session-star"
+            <BaseIcon
+              v-if="isAllowedToEdit && isSessionDocument(slotProps.data)"
+              class="mr-8"
+              icon="session-star"
+            />
+          </div>
+
+          <div
+            v-if="getDocumentComment(slotProps.data)"
+            class="max-w-3xl whitespace-pre-line text-sm text-gray-500"
+            v-text="getDocumentComment(slotProps.data)"
           />
         </div>
       </template>
@@ -169,9 +177,11 @@
     >
       <template #body="slotProps">
         {{
-          slotProps.data.resourceNode && slotProps.data.resourceNode.firstResourceFile
-            ? prettyBytes(slotProps.data.resourceNode.firstResourceFile.size)
-            : ""
+          slotProps.data.filetype === "link"
+            ? t("Cloud link")
+            : slotProps.data.resourceNode && slotProps.data.resourceNode.firstResourceFile
+              ? prettyBytes(slotProps.data.resourceNode.firstResourceFile.size)
+              : ""
         }}
       </template>
     </Column>
@@ -782,6 +792,10 @@ const selectedItems = ref([])
  * Visibility helpers (safe access)
  * -----------------------------------------
  */
+function getDocumentComment(document) {
+  return String(document?.comment || "").trim()
+}
+
 function getPrimaryResourceLink(doc) {
   const links = doc?.resourceLinkListFromEntity
   if (!Array.isArray(links) || links.length === 0) {
@@ -1258,6 +1272,12 @@ function getReplaceButtonTitle(item) {
 async function downloadSelectedItems() {
   if (!selectedItems.value.length) {
     notification.showErrorNotification(t("No items selected."))
+    return
+  }
+
+  if (selectedItems.value.some((item) => item?.filetype === "link")) {
+    notification.showErrorNotification(t("Cloud links cannot be downloaded."))
+
     return
   }
 

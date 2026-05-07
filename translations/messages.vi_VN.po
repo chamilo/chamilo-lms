@@ -9743,8 +9743,8 @@ msgstr "Xin lỗi, bạn không được phép truy cập trang này, hoặc có
 msgid "Result"
 msgstr "Kết quả"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Đang cố gắng đăng nhập với %s %s (id %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Đang cố gắng đăng nhập với %s (id %d)"
 
 msgid "Login successful. Go to %s"
 msgstr "Đăng nhập thành công. Chuyển đến %s"

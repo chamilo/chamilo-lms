@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Serializer;
 
+use ArrayObject;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\DBAL\Connection;
@@ -20,10 +21,14 @@ final class UserWebserviceFieldNormalizer implements NormalizerInterface, Normal
 
     private const ALREADY_CALLED = 'chamilo_user_webservice_field_normalizer_already_called';
 
-    /** @var array<string, int|null> */
+    /**
+     * @var array<string, int|null>
+     */
     private array $extraFieldIdCache = [];
 
-    /** @var array<int, array<string, string|null>> */
+    /**
+     * @var array<int, array<string, string|null>>
+     */
     private array $extraFieldValueCache = [];
 
     public function __construct(
@@ -32,13 +37,13 @@ final class UserWebserviceFieldNormalizer implements NormalizerInterface, Normal
         private readonly Connection $connection
     ) {}
 
-    public function normalize(mixed $object, ?string $format = null, array $context = []): array|\ArrayObject|bool|float|int|string|null
+    public function normalize(mixed $object, ?string $format = null, array $context = []): array|ArrayObject|bool|float|int|string|null
     {
         $context[self::ALREADY_CALLED] = true;
 
         $data = $this->normalizer->normalize($object, $format, $context);
 
-        if (!$object instanceof User || !is_array($data)) {
+        if (!$object instanceof User || !\is_array($data)) {
             return $data;
         }
 
@@ -101,7 +106,7 @@ final class UserWebserviceFieldNormalizer implements NormalizerInterface, Normal
             return null;
         }
 
-        if (array_key_exists($fieldName, $this->extraFieldValueCache[$userId] ?? [])) {
+        if (\array_key_exists($fieldName, $this->extraFieldValueCache[$userId] ?? [])) {
             return $this->extraFieldValueCache[$userId][$fieldName];
         }
 
@@ -128,16 +133,16 @@ final class UserWebserviceFieldNormalizer implements NormalizerInterface, Normal
 
         $valueColumn = null;
 
-        if (in_array('value', $columns, true)) {
+        if (\in_array('value', $columns, true)) {
             $valueColumn = 'value';
-        } elseif (in_array('field_value', $columns, true)) {
+        } elseif (\in_array('field_value', $columns, true)) {
             $valueColumn = 'field_value';
         }
 
         if (
             null === $valueColumn
-            || !in_array('field_id', $columns, true)
-            || !in_array('item_id', $columns, true)
+            || !\in_array('field_id', $columns, true)
+            || !\in_array('item_id', $columns, true)
         ) {
             $this->extraFieldValueCache[$userId][$fieldName] = null;
 
@@ -145,7 +150,7 @@ final class UserWebserviceFieldNormalizer implements NormalizerInterface, Normal
         }
 
         $value = $this->connection->fetchOne(
-            sprintf(
+            \sprintf(
                 'SELECT %s FROM extra_field_values WHERE field_id = :fieldId AND item_id = :userId',
                 $this->connection->quoteIdentifier($valueColumn)
             ),
@@ -162,7 +167,7 @@ final class UserWebserviceFieldNormalizer implements NormalizerInterface, Normal
 
     private function resolveExtraFieldId(string $fieldName): ?int
     {
-        if (array_key_exists($fieldName, $this->extraFieldIdCache)) {
+        if (\array_key_exists($fieldName, $this->extraFieldIdCache)) {
             return $this->extraFieldIdCache[$fieldName];
         }
 
@@ -179,7 +184,7 @@ final class UserWebserviceFieldNormalizer implements NormalizerInterface, Normal
             $schemaManager->listTableColumns('extra_field')
         );
 
-        if (!in_array('id', $columns, true) || !in_array('variable', $columns, true)) {
+        if (!\in_array('id', $columns, true) || !\in_array('variable', $columns, true)) {
             $this->extraFieldIdCache[$fieldName] = null;
 
             return null;

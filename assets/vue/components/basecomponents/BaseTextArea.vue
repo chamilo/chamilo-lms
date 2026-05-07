@@ -7,7 +7,6 @@
         :class="['w-full', { 'p-invalid': isInvalid }, $attrs.class]"
         v-bind="$attrs"
         :model-value="modelValue"
-        type="text"
         @update:model-value="$emit('update:modelValue', $event)"
       />
       <label :for="id">{{ t(label) }}</label>
@@ -28,9 +27,13 @@ import FloatLabel from "primevue/floatlabel"
 import Textarea from "primevue/textarea"
 import { useI18n } from "vue-i18n"
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 const { t } = useI18n()
 
-const props = defineProps({
+defineProps({
   id: {
     type: String,
     required: true,
@@ -43,7 +46,8 @@ const props = defineProps({
   },
   modelValue: {
     type: String,
-    required: true,
+    required: false,
+    default: "",
   },
   errorText: {
     type: String,

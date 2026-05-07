@@ -9738,8 +9738,8 @@ msgstr "Waan ka xumahay, ma ogola in aad gelayso boggan, ama laga yaabee in xiri
 msgid "Result"
 msgstr "Natiijada"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Isku dayaya in lagu galo %s %s (id %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Isku dayaya in lagu galo %s (id %d)"
 
 msgid "Login successful. Go to %s"
 msgstr "Galihii waa guulaystay. Tag %s"

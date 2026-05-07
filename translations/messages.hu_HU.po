@@ -9741,8 +9741,8 @@ msgstr "Sajnos nem jogosult az oldal megtekintésére. Kattintson a böngészőj
 msgid "Result"
 msgstr "Eredmény"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Belépés, mint %s %s  (azonosítója: %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Belépés, mint %s (azonosítója: %d)"
 
 msgid "Login successful. Go to %s"
 msgstr "A belépés sikeres. Lépjen ide: %s"

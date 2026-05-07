@@ -9751,8 +9751,8 @@ msgstr "Συγγνώμη, δεν επιτρέπεται η πρόσβαση σε
 msgid "Result"
 msgstr "Αποτέλεσμα"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Προσπάθεια σύνδεσης ως %s %s (id %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Προσπάθεια σύνδεσης ως %s (id %d)"
 
 msgid "Login successful. Go to %s"
 msgstr "Επιτυχές Login. Μετάβαση: %s"

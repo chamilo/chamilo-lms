@@ -119,7 +119,13 @@ class CourseDescriptionController
         $tpl->assign('actions', $actions);
         $tpl->assign('session_id', $session_id);
         $templateName = $tpl->get_template('course_description/index.tpl');
-        $content = $tpl->fetch($templateName);
+        $content = '';
+
+        if (!$history) {
+            $content .= Display::return_introduction_section(TOOL_COURSE_DESCRIPTION);
+        }
+
+        $content .= $tpl->fetch($templateName);
         $tpl->assign('content', $content);
         $tpl->display_one_col_template();
     }

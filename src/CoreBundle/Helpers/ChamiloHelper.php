@@ -30,10 +30,12 @@ use UserManager;
 
 use const ENT_HTML5;
 use const ENT_QUOTES;
+use const FILTER_VALIDATE_URL;
 use const PATHINFO_EXTENSION;
 use const PHP_ROUND_HALF_UP;
 use const PHP_SAPI;
 use const PHP_URL_PATH;
+use const PHP_URL_SCHEME;
 
 class ChamiloHelper
 {
@@ -1318,7 +1320,7 @@ class ChamiloHelper
             return false;
         }
 
-        return false !== \filter_var($url, FILTER_VALIDATE_URL)
+        return false !== filter_var($url, FILTER_VALIDATE_URL)
             && self::hasAllowedLogoExtension($url);
     }
 

@@ -9741,8 +9741,8 @@ msgstr "Извинете, немате дозвола да пристапите 
 msgid "Result"
 msgstr "Резултат"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Се обидува најавување како %s %s (id %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Се обидува најавување како %s (id %d)"
 
 msgid "Login successful. Go to %s"
 msgstr "Најавување успешно. Оди на %s"

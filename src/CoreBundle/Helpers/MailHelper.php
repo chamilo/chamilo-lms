@@ -19,6 +19,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 use const FILTER_VALIDATE_EMAIL;
+use const JSON_UNESCAPED_SLASHES;
+use const JSON_UNESCAPED_UNICODE;
 
 final class MailHelper
 {
@@ -154,8 +156,7 @@ final class MailHelper
                 $isSingleAttachment =
                     \is_array($data_file)
                     && (\array_key_exists('path', $data_file) || \array_key_exists('stream', $data_file))
-                    && !array_is_list($data_file)
-                ;
+                    && !array_is_list($data_file);
 
                 if ($isSingleAttachment) {
                     $data_file = [$data_file];
@@ -369,7 +370,7 @@ final class MailHelper
                 continue;
             }
 
-            $safeContext[$key] = is_scalar($value) ? (string) $value : get_debug_type($value);
+            $safeContext[$key] = \is_scalar($value) ? (string) $value : get_debug_type($value);
         }
 
         error_log(

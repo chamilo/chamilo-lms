@@ -111,7 +111,7 @@ async function onReplyMessageForm(messageToSend) {
   try {
     await store.dispatch("message/create", messageToSend)
 
-    notification.showSuccessNotification("Message sent")
+    notification.showSuccessNotification(t("Message sent successfully."))
 
     await router.push({
       name: "MessageList",

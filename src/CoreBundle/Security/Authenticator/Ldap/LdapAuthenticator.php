@@ -69,6 +69,8 @@ class LdapAuthenticator extends AbstractAuthenticator implements InteractiveAuth
         $searchDn = $ldapConfig['search_dn'] ?? '';
         $searchPassword = $ldapConfig['search_password'] ?? '';
         $queryString = $ldapConfig['query_string'] ?? null;
+        $objectClass = $ldapConfig['object_class'] ?? 'inetOrgPerson';
+        $uidKey = $ldapConfig['uid_key'] ?? 'uid';
 
         $this->dataCorrespondence = array_filter($ldapConfig['data_correspondence']) ?: [];
 
@@ -78,7 +80,24 @@ class LdapAuthenticator extends AbstractAuthenticator implements InteractiveAuth
             $dataCorrespondence = $this->dataCorrespondence;
         }
 
+        // Always use the queryString approach (search for actual DN, then bind) unless the admin
+        // has explicitly set query_string in config. Templating the bind DN via dn_string fails on
+        // AD because the real DN is CN=...,OU=... which cannot be guessed from a uid/sAMAccountName.
+        // CheckLdapCredentialsListener: binds as service account → searches with queryString →
+        // gets real DN from entry → binds as user. This requires search_dn + search_password.
+        if (null === $queryString) {
+            $queryString = '(&(objectClass='.$objectClass.')('.$uidKey.'={user_identifier}))';
+            $dnString = $ldapConfig['base_dn'];
+        }
+
         $this->ldapBadge = new LdapBadge(Ldap::class, $dnString, $searchDn, $searchPassword, $queryString);
+
+        // The login lookup only needs to find the user by uid — no extra filter restrictions.
+        // The config "filter" (e.g. bitwise userAccountControl OID, memberOf...) applies only
+        // to listing and sync (LdapAuthenticatorHelper / LdapSyncUsersCommand).
+        // Applying it here too causes ldap_search() to fail with AD's extensible-match OIDs,
+        // and is also unnecessary: a disabled AD account fails at the ldap_bind() step anyway.
+        $providerFilter = '(&(objectClass='.$objectClass.')({uid_key}={user_identifier}))';
 
         $this->userProvider = new LdapUserProvider(
             $ldap,
@@ -87,9 +106,9 @@ class LdapAuthenticator extends AbstractAuthenticator implements InteractiveAuth
             $searchPassword ?: null,
             ['ROLE_STUDENT'],
             $ldapConfig['uid_key'] ?? null,
-            $ldapConfig['filter'] ?? null,
+            $providerFilter,
             $ldapConfig['password_attribute'] ?? null,
-            $dataCorrespondence,
+            [],
         );
     }
 
@@ -214,7 +233,7 @@ class LdapAuthenticator extends AbstractAuthenticator implements InteractiveAuth
             ;
         }
 
-        $ldapFields = $ldapUser->getExtraFields();
+        $ldapEntry = $ldapUser->getEntry();
 
         $fieldsMap = [
             'firstname' => 'setFirstname',
@@ -228,7 +247,7 @@ class LdapAuthenticator extends AbstractAuthenticator implements InteractiveAuth
 
         foreach ($fieldsMap as $key => $setter) {
             if (isset($this->dataCorrespondence[$key]) && $fieldKey = $this->dataCorrespondence[$key]) {
-                $value = $ldapFields[$fieldKey][0] ?? '';
+                $value = ($ldapEntry->getAttribute((string) $fieldKey) ?? [])[0] ?? '';
                 if ('active' === $key) {
                     $user->{$setter}((int) $value);
                 } elseif ('role' === $key) {

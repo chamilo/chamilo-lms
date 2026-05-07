@@ -9743,8 +9743,8 @@ msgstr "Atsiprašome, jums nėra leidžiama pasiekti šį puslapį arba galbūt 
 msgid "Result"
 msgstr "Rezultatas"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Bandoma prisijungti kaip %s %s (id %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Bandoma prisijungti kaip %s (id %d)"
 
 msgid "Login successful. Go to %s"
 msgstr "Prisijungimas sėkmingas. Eiti į %s"

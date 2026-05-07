@@ -42,6 +42,9 @@ import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
 import FloatLabel from "primevue/floatlabel"
 import { useLocale } from "../../composables/locale"
+import { useI18n } from "vue-i18n"
+
+const { t } = useI18n()
 
 const modelValue = defineModel({ type: String, required: true })
 
@@ -719,7 +722,7 @@ async function filePickerCallback(callback, _value, meta) {
   try {
     window.tinymce?.activeEditor?.windowManager.openUrl({
       url,
-      title: "File Manager",
+      title: t("File manager"),
       onMessage: (api, message) => {
         const picked = message?.content?.url || message?.url || message?.data?.url
 

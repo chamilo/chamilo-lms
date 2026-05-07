@@ -469,7 +469,7 @@
       </Column>
     </BaseTable>
 
-    <!-- Bulk actions toolbar -->
+    <!-- Bulk actions toolbar — All users tab -->
     <div
       v-if="selectedItems.length > 0 && view !== 'deleted' && viewer.isPlatformAdmin"
       class="flex items-center gap-4"
@@ -495,6 +495,28 @@
         size="small"
         type="secondary"
         @click="confirmBulkAction('enable_users')"
+      />
+    </div>
+
+    <!-- Bulk actions toolbar — Deleted users tab -->
+    <div
+      v-if="selectedItems.length > 0 && view === 'deleted' && viewer.isPlatformAdmin"
+      class="flex items-center gap-4"
+    >
+      <span class="text-sm text-gray-600">{{ selectedItems.length }} {{ t("selected") }}</span>
+      <BaseButton
+        :label="t('Restore')"
+        icon="restore"
+        size="small"
+        type="secondary"
+        @click="confirmBulkAction('restore_users')"
+      />
+      <BaseButton
+        :label="t('Delete permanently')"
+        icon="delete-forever"
+        size="small"
+        type="danger"
+        @click="confirmBulkAction('destroy_users')"
       />
     </div>
   </div>
@@ -525,7 +547,7 @@ const page = ref(1)
 const pageSize = ref(20)
 const sortField = ref("lastname")
 const sortOrder = ref(1)
-const view = ref("all")
+const view = ref(urlParams.get("view") === "deleted" ? "deleted" : "all")
 
 const simpleKeyword = ref(urlParams.get("keyword") || String(route.query.keyword || ""))
 const showAdvanced = ref(false)
@@ -606,21 +628,24 @@ function canLoginAs(data) {
 function confirmAction(action, data, title) {
   requireConfirmation({
     title,
-    accept() {
-      const form = document.createElement("form")
-      form.method = "POST"
-      form.action = `/admin/user-list-action`
+    async accept() {
+      try {
+        const formData = new URLSearchParams()
+        formData.set("action", action)
+        formData.set("user_id", String(data.id))
+        formData.set("_token", csrfToken.value)
 
-      const fields = { action, user_id: data.id, view: view.value, _token: csrfToken.value }
-      for (const [k, v] of Object.entries(fields)) {
-        const input = document.createElement("input")
-        input.type = "hidden"
-        input.name = k
-        input.value = v
-        form.appendChild(input)
+        await fetch("/admin/user-list-action", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: formData.toString(),
+        })
+
+        selectedItems.value = []
+        await load()
+      } catch (e) {
+        console.error("Error performing action:", e)
       }
-      document.body.appendChild(form)
-      form.submit()
     },
   })
 }

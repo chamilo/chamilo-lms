@@ -1,6 +1,28 @@
 <template>
   <div class="field">
-    <FloatLabel variant="on">
+    <!-- Date/time types always show a browser-native placeholder, so a floating
+         label would overlap it. Use a static label above the input instead. -->
+    <template v-if="isDateType">
+      <label
+        :for="id"
+        class="block text-sm font-medium text-gray-700 mb-1"
+      >{{ label }}</label>
+      <InputText
+        :id="id"
+        :aria-label="label"
+        :disabled="disabled"
+        :invalid="isInvalid"
+        :model-value="modelValue"
+        :required="required"
+        type="text"
+        v-bind="$attrs"
+        @update:model-value="updateValue"
+      />
+    </template>
+    <FloatLabel
+      v-else
+      variant="on"
+    >
       <InputText
         :id="id"
         :aria-label="label"
@@ -32,6 +54,7 @@
 </template>
 
 <script setup>
+import { useAttrs, computed } from "vue"
 import FloatLabel from "primevue/floatlabel"
 import InputText from "primevue/inputtext"
 
@@ -78,6 +101,9 @@ defineProps({
     default: false,
   },
 })
+
+const attrs = useAttrs()
+const isDateType = computed(() => ["date", "datetime-local", "time", "month", "week"].includes(attrs.type))
 
 const emits = defineEmits(["update:modelValue"])
 const updateValue = (value) => {

@@ -98,7 +98,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                     'courses_default_creation_visibility' => '2',
                     'course_creation_use_template' => null,
                     'course_images_in_courses_list' => 'true',
-                    'show_toolshortcuts' => '',
+                    'show_toolshortcuts' => 'false',
                     'course_creation_splash_screen' => 'true',
                     'block_registered_users_access_to_open_course_contents' => 'false',
                     'view_grid_courses' => 'true',

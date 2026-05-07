@@ -9743,8 +9743,8 @@ msgstr "Disculpe, nun pue entrar nesta páxina. Pa tornar a la páxina anterior 
 msgid "Result"
 msgstr "Resultáu"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Intentar identificase como %s %s (id %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Intentar identificase como %s (id %d)"
 
 msgid "Login successful. Go to %s"
 msgstr "Identificación fecha. Vaya a %s"

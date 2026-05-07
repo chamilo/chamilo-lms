@@ -143,50 +143,69 @@ elseif ('POST' === $_SERVER['REQUEST_METHOD']
             return false;
     }
 } elseif ('POST' === $_SERVER['REQUEST_METHOD']) {
-    // Fallback: import from an existing file in /upload/ (no $_FILES)
-
+    // Fallback: import from an existing file in /archive/ (no $_FILES).
     if (!isset($_POST['file_name'])) {
         return false;
     }
 
-    // Escape path to ensure it only targets /archive/
-    $s = api_get_path(SYS_ARCHIVE_PATH).basename($_POST['file_name']);
+    if ('true' !== api_get_setting('lp.scorm_upload_from_cache')) {
+        Display::addFlash(
+            Display::return_message(get_lang('Not allowed'), 'error')
+        );
 
-    // Derive filename info
-    $info           = pathinfo($s);
-    $filename       = $info['basename'];
-    $extension      = $info['extension'] ?? '';
-    $file_base_name = str_replace('.'.$extension, '', $filename);
-    $new_dir        = api_replace_dangerous_char(trim($file_base_name));
+        return false;
+    }
+
+    if (!api_is_platform_admin() && !api_is_course_admin()) {
+        api_not_allowed(true);
+    }
+
+    $fileName = basename((string) $_POST['file_name']);
+    if ('' === $fileName) {
+        return false;
+    }
+
+    $s = api_get_path(SYS_ARCHIVE_PATH).$fileName;
+
+    if (!is_file($s) || !is_readable($s)) {
+        Display::addFlash(
+            Display::return_message(get_lang('File not found'), 'error')
+        );
+
+        return false;
+    }
 
     $result = learnpath::verify_document_size($s);
     if ($result) {
-        Display::addFlash(Display::return_message(get_lang('The file is too big to upload.')));
+        Display::addFlash(
+            Display::return_message(get_lang('The file is too big to upload.'))
+        );
+
+        return false;
     }
+
     $type = learnpath::getPackageType($s, basename($s));
 
     switch ($type) {
         case 'scorm':
             $oScorm = new scorm();
 
-            // Import from local path
             $manifest = $oScorm->import_local_package($s, $current_dir);
 
-            // Make a tmp copy of the ZIP (so we can register it in Documents after unlink)
             $uploadedZip = null;
             if (is_file($s)) {
                 $tmpCopy = tempnam(sys_get_temp_dir(), 'scorm_zip_');
-                @copy($s, $tmpCopy);
-                $uploadedZip = new UploadedFile(
-                    $tmpCopy,
-                    basename($s),
-                    'application/zip',
-                    null,
-                    true
-                );
+                if (false !== $tmpCopy && copy($s, $tmpCopy)) {
+                    $uploadedZip = new UploadedFile(
+                        $tmpCopy,
+                        basename($s),
+                        'application/zip',
+                        null,
+                        true
+                    );
+                }
             }
 
-            // Clean original file from /archive
             if (is_file($s)) {
                 unlink($s);
             }
@@ -194,10 +213,9 @@ elseif ('POST' === $_SERVER['REQUEST_METHOD']
             if (!empty($manifest)) {
                 $oScorm->parse_manifest();
 
-                // Create the LP entity (CLp)
                 $lp = $oScorm->import_manifest(
                     api_get_course_int_id(),
-                    (int) ($_REQUEST['use_max_score'] ?? 1)
+                    $_REQUEST['use_max_score'] ?? 1
                 );
 
                 if ($lp) {
@@ -207,21 +225,31 @@ elseif ('POST' === $_SERVER['REQUEST_METHOD']
                     /** @var Session|null $session */
                     $session = api_get_session_entity();
 
-                    // Save under Documents / Learning paths (course/session aware)
-                    $docRepo->registerScormZip(api_get_course_entity(), $session, $lp, $uploadedZip);
-                    Display::addFlash(Display::return_message(get_lang('File upload succeeded!')));
+                    $docRepo->registerScormZip(
+                        api_get_course_entity(),
+                        $session,
+                        $lp,
+                        $uploadedZip
+                    );
+
+                    Display::addFlash(
+                        Display::return_message(get_lang('File upload succeeded!'))
+                    );
                 }
             }
+
             break;
+
         case '':
         default:
-            // Unknown format: cleanup and warn
             if (is_file($s)) {
                 unlink($s);
             }
+
             Display::addFlash(
                 Display::return_message(get_lang('Unknown package format'), 'warning')
             );
+
             return false;
     }
 }

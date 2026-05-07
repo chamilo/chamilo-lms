@@ -1,17 +1,32 @@
 <template>
-  <div v-if="isFile">
+  <div v-if="isCloudLink">
     <a
-      v-if="isOnlyofficeSupported"
-      :href="onlyofficeUrl"
+      :href="cloudLinkUrl"
       class="flex align-center"
-      rel="noopener noreferrer"
       target="_blank"
+      rel="noopener noreferrer"
     >
       <ResourceIcon
         :resource-data="data"
         class="mr-2"
       />
-      {{ data.title }}
+      {{ documentTitle }}
+    </a>
+  </div>
+
+  <div v-else-if="isFile">
+    <a
+      v-if="isOnlyofficeSupported"
+      :href="onlyofficeUrl"
+      class="flex align-center"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <ResourceIcon
+        :resource-data="data"
+        class="mr-2"
+      />
+      {{ documentTitle }}
     </a>
     <BaseAppLink
       v-else-if="isPreviewable"
@@ -24,37 +39,28 @@
         :resource-data="data"
         class="mr-2"
       />
-      {{ data.title }}
+      {{ documentTitle }}
     </BaseAppLink>
-    <div
-      v-else-if="hideDownloadIcon"
-      class="flex align-center"
-    >
-      <ResourceIcon
-        :resource-data="data"
-        class="mr-2"
-      />
-      {{ data.title }}
-    </div>
+
     <BaseAppLink
       v-else
       :data-type="dataType"
       :url="data.contentUrl"
-      class="flex align-center"
       download
+      class="flex align-center"
     >
       <ResourceIcon
         :resource-data="data"
         class="mr-2"
       />
-      {{ data.title }}
+      {{ documentTitle }}
     </BaseAppLink>
   </div>
   <div v-else>
     <BaseAppLink
       :to="{
         name: 'DocumentsList',
-        params: { node: props.data.resourceNode.id },
+        params: { node: data.resourceNode.id },
         query: cidQuery,
       }"
       class="flex align-center"
@@ -63,13 +69,13 @@
         :resource-data="data"
         class="mr-2"
       />
-      <b>{{ data.resourceNode.title }}</b>
+      <b>{{ documentTitle }}</b>
     </BaseAppLink>
   </div>
 </template>
 <script setup>
-import ResourceIcon from "./ResourceIcon.vue"
 import { computed } from "vue"
+import ResourceIcon from "./ResourceIcon.vue"
 import { useCidReq } from "../../composables/cidReq"
 import { useFileUtils } from "../../composables/fileUtils"
 import { usePlatformConfig } from "../../store/platformConfig"
@@ -101,16 +107,40 @@ const onlyofficeSupportedExtensions = new Set([
   "pdf",
 ])
 
-const hideDownloadIcon = computed(() => {
-  return platformConfigStore.getSetting("document.documents_hide_download_icon") === "true"
+const documentTitle = computed(() => {
+  return String(props.data?.title || props.data?.resourceNode?.title || "")
 })
 
 const onlyofficePluginEnabled = computed(() => {
-  return platformConfigStore.plugins?.onlyoffice?.enabled === true
+  return true === platformConfigStore.plugins?.onlyoffice?.enabled
 })
 
 const onlyofficeEditorPath = computed(() => {
   return String(platformConfigStore.plugins?.onlyoffice?.editorPath || "/plugin/Onlyoffice/editor.php")
+})
+
+const isCloudLink = computed(() => {
+  return "link" === String(props.data?.filetype || "").toLowerCase()
+})
+
+const cloudLinkUrl = computed(() => {
+  const rawUrl = String(props.data?.comment || "").trim()
+
+  if (!rawUrl) {
+    return "#"
+  }
+
+  try {
+    const parsedUrl = new URL(rawUrl)
+
+    if (!["http:", "https:"].includes(parsedUrl.protocol)) {
+      return "#"
+    }
+
+    return parsedUrl.toString()
+  } catch (error) {
+    return "#"
+  }
 })
 
 const dataType = computed(() => {
@@ -132,7 +162,7 @@ const dataType = computed(() => {
 })
 
 const isFile = computed(() => {
-  return props.data && utilsIsFile(props.data)
+  return !!props.data && utilsIsFile(props.data)
 })
 
 const isPreviewable = computed(() => {
@@ -185,14 +215,14 @@ const isOnlyofficeSupported = computed(() => {
 })
 
 const onlyofficeUrl = computed(() => {
-  const sp = new URLSearchParams({
-    cid: String(cidQuery.cid || 0),
-    sid: String(cidQuery.sid || 0),
-    groupId: String(cidQuery.gid || 0),
-    docId: String(props.data.iid),
-    returnUrl: window.location.href,
-  })
+  const url = new URL(onlyofficeEditorPath.value, window.location.origin)
 
-  return `${onlyofficeEditorPath.value}?${sp.toString()}`
+  url.searchParams.set("cid", String(cidQuery.cid || 0))
+  url.searchParams.set("sid", String(cidQuery.sid || 0))
+  url.searchParams.set("groupId", String(cidQuery.gid || 0))
+  url.searchParams.set("docId", String(props.data.iid))
+  url.searchParams.set("returnUrl", window.location.href)
+
+  return url.toString()
 })
 </script>

@@ -570,7 +570,8 @@ switch ($action) {
         if ($isBoss || api_is_platform_admin()) {
             LegalManager::sendLegal($studentId, api_get_user_id());
         }
-        break;
+        header('Location: '.api_get_self().'?student='.$studentId.'&course='.$courseCode);
+        exit;
     case 'delete_legal':
         $isBoss = UserManager::userIsBossOfStudent(api_get_user_id(), $studentId);
         if ($isBoss || api_is_platform_admin()) {
@@ -1241,7 +1242,10 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
             $btn = Display::url(
                 get_lang('Send legal agreement'),
                 api_get_self().'?action=send_legal&student='.$studentId.'&course='.$courseCode,
-                ['class' => 'btn btn--primary']
+                [
+                    'class' => 'btn btn--primary',
+                    'onclick' => "this.classList.add('disabled'); this.style.pointerEvents='none';",
+                ]
             );
             $timeLegalAccept = get_lang('Not Registered');
         }

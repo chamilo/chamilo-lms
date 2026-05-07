@@ -513,30 +513,33 @@ class HTML_QuickForm_element extends HTML_Common
     {
         if (null === $value) {
             return null;
-        } elseif (!$assoc) {
-            return $value;
-        } else {
-            $name = $this->getName();
-            if (!strpos($name, '[')) {
-                return array($name => $value);
-            } else {
-                $valueAry = [];
-                $parts = preg_split('/[\[\]]+/', $name, -1, PREG_SPLIT_NO_EMPTY);
-                $ref = &$valueAry;
-                $last = count($parts) - 1;
-                foreach ($parts as $i => $part) {
-                    if ($i === $last) {
-                        $ref[$part] = $value;
-                    } else {
-                        if (!isset($ref[$part]) || !is_array($ref[$part])) {
-                            $ref[$part] = [];
-                        }
-                        $ref = &$ref[$part];
-                    }
-                }
-                return $valueAry;
-            }
         }
+
+        if (!$assoc) {
+            return $value;
+        }
+
+        $name = $this->getName();
+
+        if (!strpos($name, '[')) {
+            return array($name => $value);
+        }
+
+        $valueAry = [];
+        $parts = explode('[', $name);
+        $ref = &$valueAry;
+
+        foreach ($parts as $i => $part) {
+            $key = 0 === $i ? $part : rtrim($part, ']');
+            if (!isset($ref[$key]) || !is_array($ref[$key])) {
+                $ref[$key] = [];
+            }
+            $ref = &$ref[$key];
+        }
+
+        $ref = $value;
+
+        return $valueAry;
     }
 
     /**

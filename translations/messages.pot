@@ -9727,6 +9727,9 @@ msgstr ""
 msgid "Select a file"
 msgstr ""
 
+msgid "Select a file to insert into the editor."
+msgstr ""
+
 msgid "Warning - The FAQ file, located in the /home/ directory of your portal, is not writable. Your text will not be saved until the file permissions are changed."
 msgstr ""
 
@@ -9739,7 +9742,7 @@ msgstr ""
 msgid "Result"
 msgstr ""
 
-msgid "Attempting to login as %s %s (id %s)"
+msgid "Attempting to login as %s (id %d)"
 msgstr ""
 
 msgid "Login successful. Go to %s"
@@ -32112,6 +32115,9 @@ msgstr ""
 msgid "Allowed file formats: %s"
 msgstr ""
 
+msgid "File manager"
+msgstr ""
+
 msgid "File type not allowed. Allowed extensions: %s"
 msgstr ""
 
@@ -33823,4 +33829,34 @@ msgid "Title Z–A"
 msgstr ""
 
 msgid "Send test email"
+msgstr ""
+
+msgid "Show teachers"
+msgstr ""
+
+msgid "Hide teachers"
+msgstr ""
+
+msgid "Delete exercise attempts"
+msgstr ""
+
+msgid "Message sent successfully."
+msgstr ""
+
+msgid "You cannot create a new course right now."
+msgstr ""
+
+msgid "Unable to verify whether you can create a new course right now."
+msgstr ""
+
+msgid "Please try again later or contact the administrator."
+msgstr ""
+
+msgid "You cannot create more courses at this time."
+msgstr ""
+
+msgid "You already manage %d courses and your active service allows up to %d. To create another course, you need a higher service limit or reduce your current active courses."
+msgstr ""
+
+msgid "You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now."
 msgstr ""

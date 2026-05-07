@@ -25,9 +25,20 @@
         </div>
 
         <div
-          v-if="ui.categories.length > 0"
+          v-if="isCurrentUserCourseTeacher || ui.categories.length > 0"
           class="course-card__category-list"
         >
+          <span
+            v-if="isCurrentUserCourseTeacher"
+            class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary text-white shadow-sm"
+            :title="t('Teacher')"
+            :aria-label="t('Teacher')"
+          >
+            <span
+              class="mdi mdi-school-outline text-sm"
+              aria-hidden="true"
+            />
+          </span>
           <BaseTag
             v-for="cat in ui.categories"
             :key="cat"
@@ -384,6 +395,7 @@ import { computed, onBeforeUnmount, onMounted, ref, shallowReactive, watch } fro
 import { useRouter } from "vue-router"
 import { useFormatDate } from "../../composables/formatDate"
 import { usePlatformConfig } from "../../store/platformConfig"
+import { useSecurityStore } from "../../store/securityStore"
 import { useI18n } from "vue-i18n"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import CatalogueRequirementModal from "./CatalogueRequirementModal.vue"
@@ -536,6 +548,7 @@ const props = defineProps({
 
 const { t } = useI18n()
 const platformConfigStore = usePlatformConfig()
+const securityStore = useSecurityStore()
 const { isCoach } = useUserSessionSubscription(props.session, props.course)
 
 /**
@@ -673,7 +686,7 @@ function extractNumericId(value) {
   }
 
   if (value && typeof value === "object") {
-    const candidates = [value.id, value._id, value["@id"]]
+    const candidates = [value.id, value._id, value["@id"], value.value]
     for (const c of candidates) {
       const n = extractNumericId(c)
       if (n > 0) return n
@@ -681,6 +694,27 @@ function extractNumericId(value) {
   }
 
   return 0
+}
+
+const currentUserId = computed(() => extractNumericId(securityStore.user))
+
+function isCurrentUserReference(value) {
+  const userId = extractNumericId(value)
+
+  return userId > 0 && userId === currentUserId.value
+}
+
+function isTeacherSubscription(subscription) {
+  const status = subscription?.status ?? null
+  const role = String(subscription?.role ?? subscription?.roleKey ?? subscription?.roleLabel ?? "").toLowerCase()
+
+  return (
+    true === subscription?.isTutor ||
+    true === subscription?.tutor ||
+    1 === Number(status) ||
+    role.includes("teacher") ||
+    role.includes("coach")
+  )
 }
 
 const courseNumericId = computed(() => {
@@ -802,6 +836,50 @@ const teachers = computed(() => {
   }
 
   return []
+})
+
+const isCurrentUserCourseTeacher = computed(() => {
+  const currentCourse = props.course || {}
+
+  if (platformConfigStore.isStudentViewActive) {
+    return false
+  }
+
+  if (isCoach.value) {
+    return true
+  }
+
+  if (
+    true === currentCourse.currentUserIsTeacher ||
+    true === currentCourse.current_user_is_teacher ||
+    true === currentCourse.isCurrentUserTeacher ||
+    true === currentCourse.is_current_user_teacher
+  ) {
+    return true
+  }
+
+  const teachersLite = currentCourse.teachersLite ?? currentCourse.teachers_lite ?? []
+  if (Array.isArray(teachersLite) && teachersLite.some((teacher) => isCurrentUserReference(teacher))) {
+    return true
+  }
+
+  const courseIri = currentCourse["@id"]
+  if (props.session?.courseCoachesSubscriptions && courseIri) {
+    return props.session.courseCoachesSubscriptions.some((subscription) => {
+      return subscription?.course?.["@id"] === courseIri && isCurrentUserReference(subscription?.user)
+    })
+  }
+
+  const edges = currentCourse.users?.edges ?? []
+  if (Array.isArray(edges)) {
+    return edges.some((edge) => {
+      const subscription = edge?.node ?? {}
+
+      return isCurrentUserReference(subscription?.user ?? subscription) && isTeacherSubscription(subscription)
+    })
+  }
+
+  return false
 })
 
 const sessionDisplayDate = computed(() => {

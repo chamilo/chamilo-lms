@@ -431,6 +431,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'show_toolshortcuts',
                     'title' => 'Tools shortcuts',
                     'comment' => 'Show the tool shortcuts in the banner?',
+                    'selected_value' => 'false',
                 ],
                 [
                     'name' => 'student_view_enabled',

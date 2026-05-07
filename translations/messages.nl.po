@@ -9784,8 +9784,8 @@ msgstr "Sorry, u hebt onvoldoende rechten om deze pagina te bekijken. Gelieve op
 msgid "Result"
 msgstr "Resultaat"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Proberen in te loggen als %s %s (id %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Proberen in te loggen als %s (id %d)"
 
 msgid "Login successful. Go to %s"
 msgstr "Met succes ingelogd. Ga naar %s"

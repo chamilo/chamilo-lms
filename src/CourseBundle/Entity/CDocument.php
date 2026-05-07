@@ -126,7 +126,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                                     'title' => ['type' => 'string'],
                                     'filetype' => [
                                         'type' => 'string',
-                                        'enum' => ['folder', 'file'],
+                                        'enum' => ['folder', 'file', 'link'],
                                     ],
                                     'comment' => ['type' => 'string'],
                                     'contentFile' => ['type' => 'string'],
@@ -315,7 +315,7 @@ class CDocument extends AbstractResource implements ResourceInterface, ResourceS
     protected ?string $comment;
 
     #[Groups(['document:read', 'document:write'])]
-    #[Assert\Choice(['folder', 'file', 'certificate', 'video'], message: 'Choose a valid filetype.')]
+    #[Assert\Choice(['folder', 'file', 'certificate', 'video', 'link'], message: 'Choose a valid filetype.')]
     #[ORM\Column(name: 'filetype', type: 'string', length: 15, nullable: false)]
     protected string $filetype;
 

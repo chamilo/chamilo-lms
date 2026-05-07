@@ -9751,8 +9751,8 @@ msgstr "Prepáčte, nemáte povolenie prístupu na túto stránku. Vrátiť sa n
 msgid "Result"
 msgstr "Výsledok"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Pokus o prihlásenie ako %s %s (id %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Pokus o prihlásenie ako %s (id %d)"
 
 msgid "Login successful. Go to %s"
 msgstr "Prihlásenie úspešné. Choď na %s"

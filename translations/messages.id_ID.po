@@ -9741,8 +9741,8 @@ msgstr "Maaf, Anda tidak diizinkan mengakses halaman ini, atau mungkin koneksi A
 msgid "Result"
 msgstr "Hasil"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Mencoba login sebagai %s %s (id %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Mencoba login sebagai %s (id %d)"
 
 msgid "Login successful. Go to %s"
 msgstr "Login berhasil. Pergi ke %s"

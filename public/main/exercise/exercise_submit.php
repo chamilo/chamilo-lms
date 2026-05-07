@@ -2274,6 +2274,29 @@ if (ALL_ON_ONE_PAGE == $objExercise->type || $forceGrouped) {
     echo '</div>';
 }
 echo '</form>';
+
+$keepAliveInterval = (int) api_get_setting('exercise.quiz_keep_alive_ping_interval');
+if ($keepAliveInterval > 0) {
+    $keepAliveInterval = max(60, $keepAliveInterval);
+    $keepAliveIntervalMs = $keepAliveInterval * 1000;
+    ?>
+    <script>
+        (function () {
+            const interval = <?php echo (int) $keepAliveIntervalMs; ?>;
+
+            function sendExerciseKeepAlive() {
+                fetch("<?php echo api_get_path(WEB_AJAX_PATH); ?>keepalive.ajax.php", {
+                    method: "GET",
+                    credentials: "same-origin",
+                    cache: "no-store"
+                }).catch(function () {});
+            }
+
+            window.setInterval(sendExerciseKeepAlive, interval);
+        })();
+    </script>
+    <?php
+}
 if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
     echo '</div>'; // End glossary div
     Display::display_footer();

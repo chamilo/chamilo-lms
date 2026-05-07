@@ -4,12 +4,15 @@
 
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
+use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
+use Chamilo\CourseBundle\Entity\CTool;
+use Chamilo\CourseBundle\Entity\CToolIntro;
 use ChamiloSession as Session;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -161,33 +164,205 @@ class Display
         return self::display_footer();
     }
 
-    /**
-     * Displays the tool introduction of a tool.
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     *
-     * @param string $tool          these are the constants that are used for indicating the tools
-     * @param array  $editor_config Optional configuration settings for the online editor.
-     *                              return: $tool return a string array list with the "define" in main_api.lib
-     *
-     * @return string html code for adding an introduction
-     */
     public static function display_introduction_section(
         $tool,
         $editor_config = null
     ) {
-        // @todo replace introduction section with a vue page.
-        return;
+        echo self::return_introduction_section($tool, $editor_config);
     }
 
-    /**
-     * @param string $tool
-     * @param array  $editor_config
-     */
     public static function return_introduction_section(
         $tool,
         $editor_config = null
     ) {
+        if ('true' !== api_get_setting('course.enable_tool_introduction')) {
+            return '';
+        }
+
+        $tool = trim((string) $tool);
+        if ('' === $tool) {
+            return '';
+        }
+
+        $course = api_get_course_entity();
+        if (!$course) {
+            return '';
+        }
+
+        $session = api_get_session_entity();
+        $em = Database::getManager();
+
+        $courseToolRepo = $em->getRepository(CTool::class);
+        $toolRepo = $em->getRepository(Tool::class);
+        $toolIntroRepo = $em->getRepository(CToolIntro::class);
+
+        $courseTool = $courseToolRepo->findOneBy([
+            'title' => $tool,
+            'course' => $course,
+            'session' => $session,
+        ]);
+
+        if (!$courseTool && $session) {
+            $courseTool = $courseToolRepo->findOneBy([
+                'title' => $tool,
+                'course' => $course,
+                'session' => null,
+            ]);
+        }
+
+        if (!$courseTool && api_is_allowed_to_edit(false, true)) {
+            $baseTool = $toolRepo->findOneBy(['title' => $tool]);
+
+            if ($baseTool) {
+                $courseTool = (new CTool())
+                    ->setTool($baseTool)
+                    ->setTitle($tool)
+                    ->setCourse($course)
+                    ->setSession($session)
+                    ->setPosition(0)
+                    ->setParent($course)
+                    ->addCourseLink($course, $session)
+                ;
+
+                $em->persist($courseTool);
+                $em->flush();
+            }
+        }
+
+        if (!$courseTool) {
+            return '';
+        }
+
+        $toolIntro = $toolIntroRepo->findOneBy(
+            ['courseTool' => $courseTool],
+            ['iid' => 'DESC']
+        );
+
+        $canEdit = api_is_allowed_to_edit(false, true);
+        $content = $toolIntro ? trim((string) $toolIntro->getIntroText()) : '';
+
+        if (
+            $canEdit
+            && 'POST' === $_SERVER['REQUEST_METHOD']
+            && isset($_POST['tool_intro_action'], $_POST['tool_intro_tool'])
+            && 'save' === $_POST['tool_intro_action']
+            && $tool === $_POST['tool_intro_tool']
+        ) {
+            $introText = (string) ($_POST['tool_intro_text'] ?? '');
+
+            if (!$toolIntro) {
+                $toolIntro = (new CToolIntro())
+                    ->setCourseTool($courseTool)
+                    ->setIntroText($introText)
+                    ->setParent($course)
+                    ->addCourseLink($course, $session)
+                ;
+            } else {
+                $toolIntro->setIntroText($introText);
+            }
+
+            $em->persist($toolIntro);
+            $em->flush();
+
+            Display::addFlash(Display::return_message(get_lang('Updated'), 'success'));
+
+            header('Location: '.api_request_uri());
+            exit;
+        }
+
+        if (!$canEdit && '' === $content) {
+            return '';
+        }
+
+        $html = '<div class="tool-introduction mb-4">';
+
+        if ($canEdit) {
+            $modalId = 'tool-intro-modal-'.md5($tool);
+            $icon = '' === $content ? 'plus' : 'pencil';
+            $label = '' === $content ? get_lang('Add introduction') : get_lang('Edit introduction');
+
+            $html .= '
+                <div class="tool-introduction__actions mb-2" style="display:flex; justify-content:flex-end; align-items:center;">
+                    <button
+                        type="button"
+                        class="btn btn--success"
+                        style="width:40px; height:40px; padding:0; display:inline-flex; align-items:center; justify-content:center;"
+                        title="'.$label.'"
+                        aria-label="'.$label.'"
+                        onclick="document.getElementById(\''.$modalId.'\').showModal();"
+                    >
+                        '.Display::getMdiIcon($icon, 'ch-tool-icon text-white', null, ICON_SIZE_SMALL, $label).'
+                    </button>
+                </div>
+            ';
+        }
+
+        if ('' !== $content) {
+            $html .= '
+            <div class="tool-introduction__content mb-4">
+                '.Security::remove_XSS($content).'
+            </div>
+        ';
+        }
+
+        $html .= '</div>';
+
+        if ($canEdit) {
+            $modalId = 'tool-intro-modal-'.md5($tool);
+            $form = new FormValidator(
+                'tool_intro_form_'.$modalId,
+                'post',
+                api_request_uri()
+            );
+
+            $form->addHidden('tool_intro_action', 'save');
+            $form->addHidden('tool_intro_tool', $tool);
+            $form->addHtmlEditor(
+                'tool_intro_text',
+                null,
+                false,
+                false,
+                $editor_config ?? []
+            );
+            $form->setDefaults([
+                'tool_intro_text' => $content,
+            ]);
+            $form->addHtml('
+                <div style="display:flex; justify-content:flex-end; gap:12px; align-items:center; margin-top:16px;">
+                    <button type="button" name="cancel" class="btn btn--danger">
+                        '.Display::getMdiIcon('close', 'ch-tool-icon text-white', null, ICON_SIZE_SMALL).'
+                        '.get_lang('Cancel').'
+                    </button>
+                    <button type="submit" class="btn btn--success">
+                        '.Display::getMdiIcon('check', 'ch-tool-icon text-white', null, ICON_SIZE_SMALL).'
+                        '.get_lang('Save').'
+                    </button>
+                </div>
+            ');
+
+            $html .= '
+            <dialog id="'.$modalId.'" style="width: min(1000px, 95vw); border: 0; border-radius: 8px; padding: 0;">
+                <div style="padding: 16px; border-bottom: 1px solid #e5e7eb;">
+                    <strong>'.get_lang('Introduction').'</strong>
+                </div>
+
+                <div style="padding: 16px;">
+                    '.$form->returnForm().'
+                </div>
+
+                <script>
+                    document.addEventListener("click", function (event) {
+                        if (event.target && event.target.name === "cancel") {
+                            event.preventDefault();
+                            document.getElementById("'.$modalId.'").close();
+                        }
+                    });
+                </script>
+            </dialog>
+        ';
+        }
+
+        return $html;
     }
 
     /**
@@ -2664,6 +2839,7 @@ HTML;
                 $content = '<video style="width: 400px; height:100%;" src="'.$fileUrl.'"></video>';
                 // Allows video to play when loading during an ajax call
                 $content .= "<script>jQuery('video:not(.skip), audio:not(.skip)').mediaelementplayer();</script>";
+                $content .= api_get_video_context_menu_hidden_script();
                 break;
             case 'jpg':
             case 'jpeg':

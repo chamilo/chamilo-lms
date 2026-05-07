@@ -52,13 +52,11 @@
         :to="{ name: 'MessageList' }"
         class="item-button group"
       >
-        <span class="inline-flex h-[26px] w-[26px] shrink-0 items-center justify-center">
-          <BaseIcon
-            icon="inbox"
-            zoom-trigger="group"
-            class="item-button__icon"
-          />
-        </span>
+        <BaseIcon
+          icon="inbox"
+          zoom-trigger="group"
+          class="item-button__icon"
+        />
         <span
           v-if="btnInboxBadge"
           class="item-button__badge"

@@ -7,7 +7,10 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\EventSubscriber;
 
 use ApiPlatform\Metadata\Operation;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -16,7 +19,9 @@ use Symfony\Component\HttpKernel\KernelEvents;
 final class WebserviceAdminOnlyApiSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        private readonly SettingsManager $settingsManager
+        private readonly SettingsManager $settingsManager,
+        private readonly EntityManagerInterface $entityManager,
+        private readonly Security $security,
     ) {}
 
     public static function getSubscribedEvents(): array
@@ -33,6 +38,17 @@ final class WebserviceAdminOnlyApiSubscriber implements EventSubscriberInterface
         }
 
         $request = $event->getRequest();
+
+        if (!str_starts_with($request->getPathInfo(), '/api')) {
+            return;
+        }
+
+        $apiKey = trim((string) $request->headers->get('X-Chamilo-Api-Key', ''));
+
+        if ('' !== $apiKey) {
+            $this->verifyApiKeyForAuthenticatedUser($apiKey);
+            $request->attributes->set('_chamilo_webservice_api_key', true);
+        }
 
         /*
          * Only API-key webservice calls are affected.
@@ -57,6 +73,31 @@ final class WebserviceAdminOnlyApiSubscriber implements EventSubscriberInterface
         }
 
         throw new AccessDeniedHttpException('Admin-only API access by API key is disabled.');
+    }
+
+    private function verifyApiKeyForAuthenticatedUser(string $apiKey): void
+    {
+        $user = $this->security->getUser();
+
+        if (!$user instanceof User || null === $user->getId()) {
+            throw new AccessDeniedHttpException('A logged-in user token is required before API key verification.');
+        }
+
+        if (method_exists($user, 'isActive') && !$user->isActive()) {
+            throw new AccessDeniedHttpException('Inactive user.');
+        }
+
+        $matchedUser = $this->entityManager
+            ->getRepository(User::class)
+            ->findOneBy([
+                'id' => (int) $user->getId(),
+                'apiToken' => $apiKey,
+            ])
+        ;
+
+        if (!$matchedUser instanceof User) {
+            throw new AccessDeniedHttpException('Invalid API key for the authenticated user.');
+        }
     }
 
     private function isAdminOnlyOperation(Operation $operation): bool

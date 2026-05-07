@@ -14,9 +14,12 @@ use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRepository;
 use Chamilo\CoreBundle\Repository\TrackEOnlineRepository;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use RuntimeException;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
@@ -26,7 +29,9 @@ class LoginSuccessHandler
         private readonly AuthorizationCheckerInterface $checker,
         private readonly EntityManagerInterface $entityManager,
         private readonly LoginAttemptLoggerHelper $loginAttemptLogger,
-        private readonly UserHelper $userHelper
+        private readonly UserHelper $userHelper,
+        private readonly SettingsManager $settingsManager,
+        private readonly TokenStorageInterface $tokenStorage
     ) {}
 
     /**
@@ -38,6 +43,21 @@ class LoginSuccessHandler
         $requestSession = $request->getSession();
 
         $user = $this->userHelper->getCurrent();
+        $userId = (int) $user->getId();
+
+        /** @var TrackEOnlineRepository $trackEOnlineRepository */
+        $trackEOnlineRepository = $this->entityManager->getRepository(TrackEOnline::class);
+
+        if (
+            'true' === $this->settingsManager->getSetting('security.prevent_multiple_simultaneous_login', true) &&
+            !$requestSession->get('login_records_created') &&
+            $trackEOnlineRepository->hasOnlineSessionForUser($userId)
+        ) {
+            $this->tokenStorage->setToken(null);
+            $requestSession->invalidate();
+
+            throw new RuntimeException('This user already has an active session.');
+        }
 
         if ($this->checker->isGranted('ROLE_ADMIN')) {
             $requestSession->set('is_platformAdmin', true);
@@ -48,13 +68,10 @@ class LoginSuccessHandler
         }
 
         $requestSession->set('user_last_login_datetime', api_get_utc_datetime());
-        $requestSession->set('_uid', $user->getId());
+        $requestSession->set('_uid', $userId);
 
         if (!$requestSession->get('login_records_created')) {
-            $userIp = $request->getClientIp();
-
-            /** @var TrackEOnlineRepository $trackEOnlineRepository */
-            $trackEOnlineRepository = $this->entityManager->getRepository(TrackEOnline::class);
+            $userIp = (string) $request->getClientIp();
 
             /** @var TrackELoginRepository $trackELoginRepository */
             $trackELoginRepository = $this->entityManager->getRepository(TrackELogin::class);

@@ -9738,8 +9738,8 @@ msgstr "Dispiâs, no ti è permetût l'acès a cheste pàgine, o forse la to ses
 msgid "Result"
 msgstr "Risultât"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Tentant l'acès come %s %s (id %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Tentant l'acès come %s (id %d)"
 
 msgid "Login successful. Go to %s"
 msgstr "Acès rivû cu sucès. Va a %s"

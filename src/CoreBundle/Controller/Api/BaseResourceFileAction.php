@@ -533,20 +533,34 @@ class BaseResourceFileAction
         $parentResourceNodeId = 0;
         $title = null;
         $content = null;
+        $comment = null;
+        $hasComment = false;
 
         if (!empty($contentData)) {
             $contentData = json_decode($contentData, true);
 
-            if (isset($contentData['parentResourceNodeId'])) {
-                $parentResourceNodeId = (int) ($this->normalizeNodeId($contentData['parentResourceNodeId']) ?? 0);
-            }
+            if (\is_array($contentData)) {
+                if (isset($contentData['parentResourceNodeId'])) {
+                    $parentResourceNodeId = (int) ($this->normalizeNodeId($contentData['parentResourceNodeId']) ?? 0);
+                }
 
-            $title = $contentData['title'] ?? null;
-            $content = $contentData['contentFile'] ?? null;
-            $resourceLinkList = $contentData['resourceLinkListFromEntity'] ?? [];
+                $title = $contentData['title'] ?? null;
+                $content = $contentData['contentFile'] ?? null;
+                $resourceLinkList = $contentData['resourceLinkListFromEntity'] ?? [];
+
+                if (\array_key_exists('comment', $contentData)) {
+                    $comment = $contentData['comment'];
+                    $hasComment = true;
+                }
+            }
         } else {
             $title = $request->get('title');
             $content = $request->request->get('contentFile');
+
+            if ($request->request->has('comment')) {
+                $comment = $request->request->get('comment');
+                $hasComment = true;
+            }
 
             // Keep compatibility with form requests
             if ($request->query->has('parentResourceNodeId') || $request->request->has('parentResourceNodeId')) {
@@ -558,6 +572,10 @@ class BaseResourceFileAction
         // Only update the name when a title is explicitly provided.
         if (null !== $title) {
             $repo->setResourceName($resource, $title);
+        }
+
+        if ($hasComment && $resource instanceof CDocument) {
+            $resource->setComment(null === $comment ? null : (string) $comment);
         }
 
         $resourceNode = $resource->getResourceNode();

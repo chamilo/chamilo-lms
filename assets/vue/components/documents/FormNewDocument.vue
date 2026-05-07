@@ -6,7 +6,13 @@
       :label="$t('Title')"
       :vuelidate-property="v$.item.title"
     />
-
+    <BaseTextArea
+      id="item_comment"
+      v-model="item.comment"
+      label="Description"
+      rows="4"
+      auto-resize
+    />
     <BaseTinyEditor
       v-if="
         (item.resourceNode && item.resourceNode.firstResourceFile && item.resourceNode.firstResourceFile.text) ||
@@ -107,10 +113,12 @@ import BaseTinyEditor from "../basecomponents/BaseTinyEditor.vue"
 import BaseAdvancedSettingsButton from "../basecomponents/BaseAdvancedSettingsButton.vue"
 import BaseInputTextWithVuelidate from "../basecomponents/BaseInputTextWithVuelidate.vue"
 import DocumentAiMediaDialog from "./DocumentAiMediaDialog.vue"
+import BaseTextArea from "../basecomponents/BaseTextArea.vue"
 
 export default {
   name: "DocumentsForm",
   components: {
+    BaseTextArea,
     BaseButton,
     BaseCheckbox,
     BaseTinyEditor,
@@ -161,6 +169,7 @@ export default {
     return {
       item: {
         title: { required },
+        comment: {},
       },
     }
   },
@@ -230,6 +239,10 @@ export default {
     },
   },
   async created() {
+    if (undefined === this.item.comment || null === this.item.comment) {
+      this.item.comment = ""
+    }
+
     if (!this.item.searchFieldValues || typeof this.item.searchFieldValues !== "object") {
       this.item.searchFieldValues = {}
     }
@@ -582,7 +595,7 @@ export default {
       try {
         window.tinymce?.activeEditor?.windowManager.openUrl({
           url,
-          title: "File Manager",
+          title: t("File manager"),
           onClose: () => {
             window.removeEventListener("message", onMessage)
           },

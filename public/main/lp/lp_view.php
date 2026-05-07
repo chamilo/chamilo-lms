@@ -119,7 +119,20 @@ if (!api_is_allowed_to_create_course()) {
 
 // Checking visibility (eye icon)
 $visibility = $lp->isVisible($course, $session);
+$canEditLp = api_is_allowed_to_edit(false, true, false, false);
 
+if (!$canEditLp) {
+    $now = new DateTimeImmutable('now', new DateTimeZone('UTC'));
+    $publishedOn = $lp->getPublishedOn();
+    $expiredOn = $lp->getExpiredOn();
+
+    if (
+        ($publishedOn instanceof DateTimeInterface && $publishedOn > $now) ||
+        ($expiredOn instanceof DateTimeInterface && $expiredOn < $now)
+    ) {
+        api_not_allowed(true);
+    }
+}
 if (false === $visibility &&
     !api_is_allowed_to_edit(false, true, false, false)
 ) {
@@ -655,7 +668,6 @@ if (Tracking::minimumTimeAvailable(api_get_session_id(), api_get_course_int_id()
 
     $template->assign('time_progress_perc', $time_progress_perc);
     $template->assign('time_progress_value', $time_progress_value);
-    // Cronometro
     $hour = (intval($lpTime / 3600)) < 10 ? '0'.intval($lpTime / 3600) : intval($lpTime / 3600);
     $template->assign('hour', $hour);
     $template->assign('minute', date('i', $lpTime));
@@ -663,6 +675,69 @@ if (Tracking::minimumTimeAvailable(api_get_session_id(), api_get_course_int_id()
     $template->assign('hour_min', api_time_to_hms($timeLp * 60, '</div><div class="divider">:</div><div>'));
 }
 
+$lpFlowNextButton = '';
+$canEditLp = api_is_allowed_to_edit(false, true, false, false);
+$isLpAvailableForCurrentUser = static function (CLp $lpToCheck) use ($course, $session, $canEditLp): bool {
+    if ($canEditLp) {
+        return true;
+    }
+
+    if (!$lpToCheck->isVisible($course, $session)) {
+        return false;
+    }
+
+    if (!learnpath::is_lp_visible_for_student($lpToCheck, api_get_user_id(), $course)) {
+        return false;
+    }
+
+    $now = new DateTimeImmutable('now', new DateTimeZone('UTC'));
+    $publishedOn = $lpToCheck->getPublishedOn();
+    $expiredOn = $lpToCheck->getExpiredOn();
+
+    if ($publishedOn instanceof DateTimeInterface && $publishedOn > $now) {
+        return false;
+    }
+
+    if ($expiredOn instanceof DateTimeInterface && $expiredOn < $now) {
+        return false;
+    }
+
+    return true;
+};
+
+if ('true' === api_get_setting('lp.lp_enable_flow')) {
+    $nextLpId = (int) $lp->getNextLpId();
+    $nextLpInfo = learnpath::getFlowNextLpInfo((int) $lp->getIid(), $nextLpId);
+
+    if (!empty($nextLpInfo)) {
+        $nextLpEntity = $lpRepo->find((int) $nextLpInfo['iid']);
+
+        if ($nextLpEntity && $isLpAvailableForCurrentUser($nextLpEntity)) {
+            $params = [
+                'action' => 'view',
+                'cid' => api_get_course_int_id(),
+                'sid' => api_get_session_id(),
+                'gid' => api_get_group_id(),
+                'isStudentView' => $canEditLp ? 'false' : 'true',
+                'lp_id' => (int) $nextLpInfo['iid'],
+            ];
+
+            $nextLpUrl = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.http_build_query($params);
+
+            $lpFlowNextButton = Display::url(
+                get_lang('Next learning path'),
+                $nextLpUrl,
+                [
+                    'class' => 'btn btn--primary',
+                    'title' => Security::remove_XSS((string) $nextLpInfo['title']),
+                    'target' => '_top',
+                ]
+            );
+        }
+    }
+}
+
+$template->assign('lp_flow_next_button', $lpFlowNextButton);
 $template->assign('lp_accumulate_work_time', $lpMinTime);
 $template->assign('lp_mode', $lp->getDefaultViewMod());
 $template->assign('lp_title_scorm', stripslashes($lp->getTitle()));

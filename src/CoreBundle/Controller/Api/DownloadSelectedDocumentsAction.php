@@ -296,7 +296,7 @@ class DownloadSelectedDocumentsAction
         foreach ($ids as $id) {
             $documentId = (int) $id;
 
-            if (0 < $documentId) {
+            if ($documentId > 0) {
                 $documentIds[$documentId] = $documentId;
             }
         }

@@ -83,8 +83,6 @@ security:
                 check_path: /api/authentication_token
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
-            custom_authenticators:
-                - Chamilo\CoreBundle\Security\Authenticator\WebserviceApiKeyAuthenticator
 #            guard:
 #                authenticators:
 #                    - lexik_jwt_authentication.jwt_token_authenticator

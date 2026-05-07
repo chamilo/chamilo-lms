@@ -248,6 +248,36 @@ export default {
     })
   },
 
+  async createCloudLink(payload) {
+    const response = await window.fetch("/api/documents", {
+      method: "POST",
+      credentials: "same-origin",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ...payload,
+        filetype: "link",
+      }),
+    })
+
+    const data = await response.json().catch(() => ({}))
+
+    if (!response.ok) {
+      const message =
+        data?.message ||
+        data?.detail ||
+        data?.["hydra:description"] ||
+        (Array.isArray(data?.violations) && data.violations.length ? data.violations[0].message : null) ||
+        "Unable to create cloud link."
+
+      throw new Error(message)
+    }
+
+    return data
+  },
+
   /**
    * Retrieves all document templates for a given course.
    */

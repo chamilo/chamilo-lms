@@ -9743,8 +9743,8 @@ msgstr "Üzgünüz, bu sayfaya erişim izniniz yok veya bağlantınız süresi d
 msgid "Result"
 msgstr "Sonuç"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "%s %s (id %s) olarak giriş deneniyor"
+msgid "Attempting to login as %s (id %d)"
+msgstr "%s (id %d) olarak giriş deneniyor"
 
 msgid "Login successful. Go to %s"
 msgstr "Giriş başarılı. %s adresine git"

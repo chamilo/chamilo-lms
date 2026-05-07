@@ -9,10 +9,12 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users(true);
 
-$allow = Container::getPluginHelper()->isPluginEnabled('PauseTraining');
-$allowPauseFormation = 'true' === api_get_plugin_setting('PauseTraining', 'allow_users_to_edit_pause_formation');
+$plugin = PauseTraining::create();
 
-if (false === $allow || false === $allowPauseFormation) {
+$allow = $plugin->isEnabled(true);
+$allowPauseFormation = 'true' === $plugin->get('allow_users_to_edit_pause_formation');
+
+if (!$allow || false === $allowPauseFormation) {
     api_not_allowed(true);
 }
 
@@ -21,7 +23,6 @@ $userId = api_get_user_id();
 $userInfo = api_get_user_info($userId);
 
 $justification = '';
-$plugin = PauseTraining::create();
 
 $form = new FormValidator('pausetraining');
 $form->addHeader($plugin->get_lang('Pause training'));

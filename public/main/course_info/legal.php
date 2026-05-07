@@ -20,14 +20,13 @@ if (empty($course_code)) {
 $course_info = api_get_course_info($course_code);
 $course_legal = $course_info['legal'];
 
-$enabled = Container::getPluginHelper()->isPluginEnabled('CourseLegal');
 $pluginExtra = null;
 $pluginLegal = false;
+$plugin = CourseLegalPlugin::create();
 
-if ('true' === $enabled) {
+if ($plugin->isEnabled(true)) {
     $pluginLegal = true;
     require_once api_get_path(SYS_PLUGIN_PATH).'CourseLegal/config.php';
-    $plugin = CourseLegalPlugin::create();
     $data = $plugin->getData($course_info['real_id'], $session_id);
 
     if (!empty($data)) {

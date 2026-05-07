@@ -9,7 +9,6 @@ namespace Chamilo\CoreBundle\Controller;
 use Bbb;
 use BuyCoursesPlugin;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
-use Chamilo\CoreBundle\Helpers\PluginHelper;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CoreBundle\Helpers\TicketProjectHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
@@ -37,7 +36,6 @@ class PlatformConfigurationController extends AbstractController
         private readonly TicketProjectHelper $ticketProjectHelper,
         private readonly UserHelper $userHelper,
         private readonly ThemeHelper $themeHelper,
-        private readonly PluginHelper $pluginHelper,
     ) {}
 
     #[Route('/list', name: 'platform_config_list', methods: ['GET'])]
@@ -389,9 +387,8 @@ class PlatformConfigurationController extends AbstractController
 
     private function getOnlyofficeFrontendConfig(): array
     {
-        $enabled = $this->pluginHelper->isPluginEnabled('Onlyoffice');
-
         $onlyoffice = OnlyofficePlugin::create();
+        $enabled = $onlyoffice->isEnabled(true);
         $documentServerUrl = (string) ($onlyoffice->get('document_server_url') ?? '');
         $jwtSecret = (string) ($onlyoffice->get('jwt_secret') ?? '');
         $demoData = $onlyoffice->get('onlyoffice_connect_demo_data');
@@ -421,14 +418,14 @@ class PlatformConfigurationController extends AbstractController
 
     private function getTourFrontendConfig(): array
     {
-        $enabled = $this->pluginHelper->isPluginEnabled('Tour');
+        $tour = Tour::create();
+        $enabled = $tour->isEnabled(true);
 
         $config = [
             'enabled' => $enabled,
         ];
 
         if ($enabled) {
-            $tour = Tour::create();
 
             $theme = trim((string) ($tour->get('theme') ?? ''));
             $themeCssPath = null;
@@ -451,14 +448,14 @@ class PlatformConfigurationController extends AbstractController
 
     private function getBuyCoursesFrontendConfig(): array
     {
-        $enabled = $this->pluginHelper->isPluginEnabled('BuyCourses');
+        $buyCourses = BuyCoursesPlugin::create();
+        $enabled = $buyCourses->isEnabled(true);
 
         $config = [
             'enabled' => $enabled,
         ];
 
         if ($enabled) {
-            $buyCourses = BuyCoursesPlugin::create();
 
             $showMainMenuTab = $buyCourses->get('show_main_menu_tab');
             $publicMainMenuTab = $buyCourses->get('public_main_menu_tab');

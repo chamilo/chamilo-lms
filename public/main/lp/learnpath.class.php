@@ -3036,14 +3036,10 @@ class learnpath
                             if (class_exists('OnlyofficePlugin')) {
                                 $plugin = OnlyofficePlugin::create();
 
-                                if ($plugin) {
-                                    if (method_exists($plugin, 'isEnabled')) {
-                                        $isOnlyofficeEnabled = (bool) $plugin->isEnabled();
-                                    }
+                                $isOnlyofficeEnabled = $plugin->isEnabled();
 
-                                    if (!$isOnlyofficeEnabled && method_exists($plugin, 'get')) {
-                                        $isOnlyofficeEnabled = 'true' === (string) $plugin->get('enable_onlyoffice_plugin');
-                                    }
+                                if (!$isOnlyofficeEnabled) {
+                                    $isOnlyofficeEnabled = 'true' === (string) $plugin->get('enable_onlyoffice_plugin');
                                 }
                             }
 

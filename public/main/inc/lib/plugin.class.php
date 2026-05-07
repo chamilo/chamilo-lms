@@ -379,8 +379,7 @@ class Plugin
     public function get(string $name): mixed
     {
         if ('tool_enable' === $name) {
-            $isEnabled = Container::getPluginHelper()
-                ->isPluginEnabled($this->get_name());
+            $isEnabled = $this->isEnabled(true);
 
             return $isEnabled ? 'true' : 'false';
         }

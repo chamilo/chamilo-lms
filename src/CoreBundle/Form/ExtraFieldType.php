@@ -8,7 +8,6 @@ namespace Chamilo\CoreBundle\Form;
 
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Helpers\PluginHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\TagRepository;
@@ -57,7 +56,6 @@ class ExtraFieldType extends AbstractType
         private readonly ExtraFieldRepository $extraFieldRepository,
         private readonly TagRepository $tagRepository,
         private readonly Security $security,
-        private readonly PluginHelper $pluginHelper
     ) {}
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -107,8 +105,8 @@ class ExtraFieldType extends AbstractType
             }
         }
 
-        $pluginEnabled = $this->pluginHelper->isPluginEnabled('google_maps');
         $gMapsPlugin = GoogleMapsPlugin::create();
+        $pluginEnabled = $gMapsPlugin->isEnabled(true);
         $apiEnabled = 'true' === $gMapsPlugin->get('enable_api');
 
         $existingVariables = array_map(

@@ -181,7 +181,7 @@ class CourseHomeNotifyPlugin extends Plugin
      */
     private function setCourseSettings()
     {
-        if (!Container::getPluginHelper()->isPluginEnabled($this->get_name())) {
+        if (!$this->isEnabled(true)) {
             return;
         }
 

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use BuyCoursesPlugin;
-use Chamilo\CoreBundle\Helpers\PluginHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,7 +18,6 @@ class MyServicesController extends AbstractController
 {
     public function __construct(
         private readonly UserHelper $userHelper,
-        private readonly PluginHelper $pluginHelper,
         private readonly LoggerInterface $logger,
     ) {}
 
@@ -27,7 +25,7 @@ class MyServicesController extends AbstractController
     #[IsGranted('ROLE_USER')]
     public function data(): JsonResponse
     {
-        if (!$this->pluginHelper->isPluginEnabled('BuyCourses')) {
+        if (!BuyCoursesPlugin::create()->isEnabled(true)) {
             return new JsonResponse(['error' => 'Not found'], Response::HTTP_NOT_FOUND);
         }
 

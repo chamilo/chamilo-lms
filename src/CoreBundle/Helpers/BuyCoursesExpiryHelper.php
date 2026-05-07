@@ -31,7 +31,6 @@ final class BuyCoursesExpiryHelper
 
     public function __construct(
         private readonly Connection $connection,
-        private readonly PluginHelper $pluginHelper,
     ) {}
 
     public function processExpiredServiceBenefits(): int
@@ -89,7 +88,7 @@ final class BuyCoursesExpiryHelper
             return $this->buyCoursesAvailable;
         }
 
-        if (!$this->pluginHelper->isPluginEnabled('BuyCourses')) {
+        if (!BuyCoursesPlugin::create()->isEnabled(true)) {
             return $this->buyCoursesAvailable = false;
         }
 

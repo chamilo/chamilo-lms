@@ -7,17 +7,15 @@ use Chamilo\CoreBundle\Framework\Container;
 require_once __DIR__.'/config.php';
 
 // Course legal
-$enabled = Container::getPluginHelper()->isPluginEnabled('CourseLegal');
+$legal = CourseLegalPlugin::create();
 
-if ('true' != $enabled) {
+if (!$legal->isEnabled(true)) {
     api_not_allowed(true);
 }
 
 if (!api_is_allowed_to_edit()) {
     api_not_allowed(true);
 }
-
-$legal = CourseLegalPlugin::create();
 $url = api_get_self().'?'.api_get_cidreq();
 $courseId = api_get_course_int_id();
 $sessionId = api_get_session_id();

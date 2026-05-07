@@ -124,13 +124,13 @@ final class PluginHelper
 
     public function shouldBlockAccessByPositioning(?int $userId, int $courseId, ?int $sessionId): bool
     {
-        if (!$this->isPluginEnabled('Positioning') || !$userId) {
+        $plugin = Positioning::create();
+
+        if (!$plugin->isEnabled(true) || !$userId) {
             return false;
         }
 
-        $plugin = Positioning::create();
-
-        if (!$plugin || 'true' !== $plugin->get('block_course_if_initial_exercise_not_attempted')) {
+        if ('true' !== $plugin->get('block_course_if_initial_exercise_not_attempted')) {
             return false;
         }
 

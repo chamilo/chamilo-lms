@@ -4575,11 +4575,9 @@ class CourseManager
         $courseId = $courseInfo['real_id'];
 
         // Course legal
-        $enabled = Container::getPluginHelper()->isPluginEnabled('CourseLegal');
-
-        if ('true' == $enabled) {
+        $plugin = CourseLegalPlugin::create();
+        if ($plugin->isEnabled(true)) {
             require_once api_get_path(SYS_PLUGIN_PATH).'courselegal/config.php';
-            $plugin = CourseLegalPlugin::create();
 
             return $plugin->isUserAcceptedLegal($user_id, $course_code, $session_id);
         }
@@ -4630,10 +4628,9 @@ class CourseManager
         $course_code = $courseInfo['code'];
 
         // Course plugin legal
-        $enabled = Container::getPluginHelper()->isPluginEnabled('CourseLegal');
-        if ('true' == $enabled) {
+        $plugin = CourseLegalPlugin::create();
+        if ($plugin->isEnabled(true)) {
             require_once api_get_path(SYS_PLUGIN_PATH).'courselegal/config.php';
-            $plugin = CourseLegalPlugin::create();
 
             return $plugin->saveUserLegal($user_id, $course_code, $session_id);
         }

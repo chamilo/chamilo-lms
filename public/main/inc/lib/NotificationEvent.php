@@ -61,8 +61,7 @@ class NotificationEvent extends Model
         $eventType = $data['event_type'];
         switch ($eventType) {
             case self::JUSTIFICATION_EXPIRATION:
-                $plugin = Justification::create();
-                $list = $plugin->getList();
+                $list = Justification::create()->getList();
                 $list = array_column($list, 'name', 'id');
                 $form->addSelect('event_id', get_lang('Justification type'), $list);
                 $form->freeze('event_id');
@@ -109,8 +108,7 @@ class NotificationEvent extends Model
 
             switch ($eventType) {
                 case self::JUSTIFICATION_EXPIRATION:
-                    $plugin = Justification::create();
-                    $list = $plugin->getList();
+                    $list = Justification::create()->getList();
                     $list = array_column($list, 'name', 'id');
                     $form->addSelect('event_id', get_lang('Justification type'), $list);
                     break;
@@ -140,12 +138,12 @@ class NotificationEvent extends Model
         $userInfo = api_get_user_info($userId);
         $events = $this->get_all();
         $extraFieldData = $this->getUserExtraData(api_get_user_id());
-        $allowJustification = Container::getPluginHelper()->isPluginEnabled('Justification');
+        $justificationPlugin = Justification::create();
+        $allowJustification = $justificationPlugin->isEnabled(true);
 
         $userJustificationList = [];
         if ($allowJustification) {
-            $plugin = Justification::create();
-            $userJustificationList = $plugin->getUserJustificationList($userId);
+            $userJustificationList = $justificationPlugin->getUserJustificationList($userId);
         }
 
         $notifications = [];

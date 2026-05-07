@@ -15,7 +15,6 @@ use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\MailHelper;
 use Chamilo\CoreBundle\Helpers\PermissionHelper;
-use Chamilo\CoreBundle\Helpers\PluginHelper;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLp;
@@ -1014,12 +1013,10 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
         return false;
     }
 
-    $pluginHelper = Container::$container->get(PluginHelper::class);
+    $plugin = Positioning::create();
+    if ($plugin->isEnabled(true)) {
 
-    if ($pluginHelper->isPluginEnabled('Positioning')) {
-        $plugin = $pluginHelper->loadLegacyPlugin('Positioning');
-
-        if ($plugin && $plugin->get('block_course_if_initial_exercise_not_attempted') === 'true') {
+        if ($plugin->get('block_course_if_initial_exercise_not_attempted') === 'true') {
             $currentPath = $_SERVER['REQUEST_URI'];
 
             $allowedPatterns = [

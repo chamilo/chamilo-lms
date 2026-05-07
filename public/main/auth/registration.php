@@ -204,8 +204,7 @@ foreach ($forcedVisibleFields as $f) {
     }
 }
 
-$pluginTccDirectoryPath = api_get_path(SYS_PLUGIN_PATH) . 'logintcc';
-$isTccEnabled = (is_dir($pluginTccDirectoryPath) && Container::getPluginHelper()->isPluginEnabled('logintcc'));
+$isTccEnabled = false; //(is_dir(api_get_path(SYS_PLUGIN_PATH).'logintcc') && Container::getPluginHelper()->isPluginEnabled('logintcc'));
 $webserviceUrl = '';
 $hash = '';
 

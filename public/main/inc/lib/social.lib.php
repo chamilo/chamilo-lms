@@ -1913,19 +1913,21 @@ class SocialManager extends UserManager
                 'content' => get_lang('Profile'),
             ],
         ];
-        $allowJustification = Container::getPluginHelper()->isPluginEnabled('Justification');
+        $justificationPlugin = Justification::create();
+        $allowJustification = $justificationPlugin->isEnabled(true);
         if ($allowJustification) {
-            $plugin = Justification::create();
+            $plugin = $justificationPlugin;
             $headers[] = [
                 'url' => api_get_path(WEB_CODE_PATH).'auth/justification.php',
                 'content' => $plugin->get_lang('Justification'),
             ];
         }
 
-        $allowPauseTraining = Container::getPluginHelper()->isPluginEnabled('PauseTraining');
+        $pauseTrainingPlugin = PauseTraining::create();
+        $allowPauseTraining = $pauseTrainingPlugin->isEnabled(true);
         $allowEdit = 'true' === api_get_plugin_setting('PauseTraining', 'allow_users_to_edit_pause_formation');
         if ($allowPauseTraining && $allowEdit) {
-            $plugin = PauseTraining::create();
+            $plugin = $pauseTrainingPlugin;
             $headers[] = [
                 'url' => api_get_path(WEB_CODE_PATH).'auth/PauseTraining.php',
                 'content' => get_lang('Pause training'),

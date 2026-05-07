@@ -1079,7 +1079,7 @@ switch ($action) {
         // Close the session as we don't need it any further
         session_write_close();
 
-        if (!Container::getPluginHelper()->isPluginEnabled('ExerciseSignature')) {
+        if (!ExerciseSignaturePlugin::create()->isEnabled(true)) {
             exit;
         }
 

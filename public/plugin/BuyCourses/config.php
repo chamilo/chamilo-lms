@@ -14,11 +14,9 @@ if (!function_exists('buycourses_require_enabled_plugin')) {
     function buycourses_require_enabled_plugin(): BuyCoursesPlugin
     {
 
-       $isEnabled = Container::getPluginHelper()->isPluginEnabled('BuyCourses');
-
         $plugin = BuyCoursesPlugin::create();
 
-        if (!$isEnabled) {
+        if (!$plugin->isEnabled(true)) {
             api_not_allowed(true);
         }
 

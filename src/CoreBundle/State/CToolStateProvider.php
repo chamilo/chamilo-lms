@@ -26,6 +26,7 @@ use Chamilo\CourseBundle\Entity\CTool;
 use Doctrine\ORM\EntityManagerInterface;
 use Event;
 use Plugin;
+use Positioning;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Throwable;
@@ -317,13 +318,13 @@ final class CToolStateProvider implements ProviderInterface
             return [false, null];
         }
 
-        if (!$this->pluginHelper->isPluginEnabled('positioning')) {
+        $pluginInstance = Positioning::create();
+
+        if (!$pluginInstance->isEnabled(true)) {
             return [false, null];
         }
 
-        $pluginInstance = $this->pluginHelper->loadLegacyPlugin('Positioning');
-
-        if (!$pluginInstance || 'true' !== $pluginInstance->get('block_course_if_initial_exercise_not_attempted')) {
+        if ('true' !== $pluginInstance->get('block_course_if_initial_exercise_not_attempted')) {
             return [false, null];
         }
 

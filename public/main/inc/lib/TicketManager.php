@@ -896,7 +896,7 @@ class TicketManager
         }
 
         // Search simple
-        if (isset($_GET['submit_simple']) && '' != $_GET['keyword']) {
+        if (!empty($_GET['keyword'])) {
             $keyword = Database::escape_string(trim($_GET['keyword']));
             $sql .= " AND (
                       ticket.id LIKE '%$keyword%' OR

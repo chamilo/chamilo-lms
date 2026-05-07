@@ -32,6 +32,7 @@ class MyServicesController extends AbstractController
         }
 
         $user = $this->userHelper->getCurrent();
+
         if (null === $user) {
             return new JsonResponse(['error' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
         }
@@ -62,13 +63,45 @@ class MyServicesController extends AbstractController
     private function normalizeActiveServices(array $rows): array
     {
         return array_map(static function (array $row): array {
+            $serviceSaleId = (int) ($row['id'] ?? 0);
+            $serviceId = (int) ($row['service']['id'] ?? $row['service_id'] ?? 0);
+            $paymentType = (int) ($row['payment_type'] ?? 0);
+            $recurringPayment = (int) ($row['recurring_payment'] ?? BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_DISABLED);
+            $isRenewable = 1 === (int) ($row['service']['renewable'] ?? $row['renewable'] ?? 0);
+            $isPayPalPayment = BuyCoursesPlugin::PAYMENT_TYPE_PAYPAL === $paymentType;
+
+            $canEnableRecurringPayment = $isRenewable
+                && $isPayPalPayment
+                && BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_ENABLED !== $recurringPayment;
+
+            $canCancelRecurringPayment = $isRenewable
+                && $isPayPalPayment
+                && BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_ENABLED === $recurringPayment
+                && '' !== (string) ($row['recurring_profile_id'] ?? '');
+
             return [
-                'id' => (int) ($row['id'] ?? 0),
+                'id' => $serviceSaleId,
+                'serviceId' => $serviceId,
                 'name' => (string) ($row['service']['name'] ?? ''),
                 'description' => (string) ($row['service']['description'] ?? ''),
                 'dateStart' => (string) ($row['date_start'] ?? ''),
                 'dateEnd' => (string) ($row['date_end'] ?? ''),
                 'reference' => (string) ($row['reference'] ?? ''),
+                'paymentType' => $paymentType,
+                'isRenewable' => $isRenewable,
+                'recurringPayment' => $recurringPayment,
+                'recurringProfileId' => (string) ($row['recurring_profile_id'] ?? ''),
+                'nextChargeDate' => (string) ($row['next_charge_date'] ?? ''),
+                'cancelledAt' => (string) ($row['cancelled_at'] ?? ''),
+                'canEnableRecurringPayment' => $canEnableRecurringPayment,
+                'canCancelRecurringPayment' => $canCancelRecurringPayment,
+                'infoUrl' => \api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_information.php?service_id='.$serviceId.'&sale_id='.$serviceSaleId,
+                'recurringPaymentUrl' => $canEnableRecurringPayment
+                    ? \api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/recurring_payment_process.php?action=enable_recurring_payment&order='.$serviceSaleId
+                    : null,
+                'cancelRecurringPaymentUrl' => $canCancelRecurringPayment
+                    ? \api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/recurring_payment_process.php?action=cancel_recurring_payment&order='.$serviceSaleId
+                    : null,
                 'benefitSummaries' => array_map(static function (array $summary): array {
                     return [
                         'title' => (string) ($summary['title'] ?? ''),

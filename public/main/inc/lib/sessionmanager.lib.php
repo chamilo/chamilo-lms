@@ -15,6 +15,9 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\StateIcon;
+use Chamilo\CoreBundle\Event\AbstractEvent;
+use Chamilo\CoreBundle\Event\CourseUserSubscriptionCheckEvent;
+use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CSurvey;
@@ -2695,6 +2698,34 @@ class SessionManager
                     0,
                     true
                 );
+            }
+        }
+
+        if (!empty($user_list)) {
+            $subscriptionCheckEvent = new CourseUserSubscriptionCheckEvent(
+                [
+                    'course_id' => $courseId,
+                    'user_ids' => $user_list,
+                    'status' => STUDENT,
+                    'session_id' => $session_id,
+                ],
+                AbstractEvent::TYPE_PRE
+            );
+
+            Container::getEventDispatcher()->dispatch(
+                $subscriptionCheckEvent,
+                Events::COURSE_USER_SUBSCRIPTION_CHECK
+            );
+
+            if (!$subscriptionCheckEvent->isAllowed()) {
+                Display::addFlash(
+                    Display::return_message(
+                        $subscriptionCheckEvent->getMessage() ?: get_lang('Subscription not allowed'),
+                        'warning'
+                    )
+                );
+
+                return false;
             }
         }
 

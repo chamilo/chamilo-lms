@@ -462,21 +462,32 @@
                                                 <em class="fa fa-check-circle fa-fw"></em>
                                                 {{ 'Already purchased'|get_lang }}
                                             </span>
-                                        {% elseif can_buy_services|default(false) %}
-                                            <a
-                                                class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-success px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-success/30 focus:ring-offset-2"
-                                                href="service_process.php?i={{ service.id }}&t={{ service.applies_to|default(0) }}"
-                                            >
-                                                <em class="fa fa-shopping-cart fa-fw"></em>
-                                                {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
-                                            </a>
                                         {% else %}
+                                            {% if service.has_pending_sale|default(false) %}
+                                                <span
+                                                    class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-warning/15 px-4 py-2.5 text-sm font-semibold text-warning"
+                                                >
+                                                    <em class="fa fa-clock-o fa-fw"></em>
+                                                    {{ 'PayoutStatusPending'|get_plugin_lang('BuyCoursesPlugin') }}
+                                                </span>
+                                            {% endif %}
+
+                                            {% if can_buy_services|default(false) %}
+                                                <a
+                                                    class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-success px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-success/30 focus:ring-offset-2"
+                                                    href="service_process.php?i={{ service.id }}&t={{ service.applies_to|default(0) }}"
+                                                >
+                                                    <em class="fa fa-shopping-cart fa-fw"></em>
+                                                    {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
+                                                </a>
+                                            {% else %}
                                             <span
                                                 class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gray-20 px-4 py-2.5 text-sm font-semibold text-gray-50"
                                             >
                                                 <em class="fa fa-lock fa-fw"></em>
                                                 {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
                                             </span>
+                                            {% endif %}
                                         {% endif %}
                                     </div>
                                 </div>

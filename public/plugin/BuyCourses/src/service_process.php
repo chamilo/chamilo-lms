@@ -218,12 +218,52 @@ if ($typeUser) {
     $form->addSelect('info_select', get_lang('LearningPath'), $selectOptions);
 }
 
+$form->addHtml(
+    '<div class="mt-6 rounded-2xl border border-gray-20 bg-white p-4 shadow-sm">'.
+    '<h3 class="mb-2 text-body-1 font-semibold text-gray-90">'.$plugin->get_lang('VATBuyerInformation').'</h3>'.
+    '<p class="mb-4 text-body-2 text-gray-60">'.$plugin->get_lang('VATBuyerInformationHelp').'</p>'.
+    '</div>'
+);
+
+$form->addSelect(
+    'buyer_country',
+    $plugin->get_lang('BuyerCountry'),
+    $plugin->getVatCountryOptions()
+);
+$form->addText('buyer_postcode', $plugin->get_lang('BuyerPostcode'));
+$form->addSelect(
+    'buyer_type',
+    $plugin->get_lang('BuyerType'),
+    [
+        'individual' => $plugin->get_lang('BuyerTypeIndividual'),
+        'business' => $plugin->get_lang('BuyerTypeBusiness'),
+    ]
+);
+$form->addText('buyer_vat_number', $plugin->get_lang('BuyerVatNumber'));
+$form->addText('buyer_business_name', $plugin->get_lang('BuyerBusinessName'));
+$form->addTextarea('buyer_business_address', $plugin->get_lang('BuyerBusinessAddress'));
+
+$form->setDefaults([
+    'buyer_type' => 'individual',
+]);
+
 $form->addHidden('t', $type);
 $form->addHidden('i', $serviceId);
+$form->addHidden('buycourses_service_checkout_action', 'confirm_order');
+
+if (null !== $coupon) {
+    $form->addHidden('c', (int) $coupon['id']);
+}
+
 $form->addButton('submit', $plugin->get_lang('ConfirmOrder'), 'check', 'success');
 
-if ($form->validate()) {
-    $formValues = $form->getSubmitValues();
+$checkoutAction = (string) ($_POST['buycourses_service_checkout_action'] ?? '');
+
+if ('confirm_order' === $checkoutAction) {
+    // Read posted values directly for the checkout action.
+    // QuickForm validation can be affected by other forms on this page,
+    // so the required checkout fields are validated explicitly below.
+    $formValues = $_POST;
 
     if (!isset($formValues['payment_type'])) {
         Display::addFlash(
@@ -259,11 +299,29 @@ if ($form->validate()) {
         }
     }
 
+    $vatErrors = $plugin->validateVatBuyerData($formValues);
+
+    if (!empty($vatErrors)) {
+        foreach ($vatErrors as $vatError) {
+            Display::addFlash(
+                Display::return_message(
+                    $vatError,
+                    'error',
+                    false
+                )
+            );
+        }
+
+        header('Location: '.api_get_self().'?'.$queryString);
+        exit;
+    }
+
     $serviceSaleId = $plugin->registerServiceSale(
         $serviceId,
         (int) $formValues['payment_type'],
         (int) $infoSelected,
-        $formValues['c'] ?? null
+        $formValues['c'] ?? null,
+        $formValues
     );
 
     if (false !== $serviceSaleId) {
@@ -286,9 +344,14 @@ if ($form->validate()) {
 }
 
 $formCoupon = new FormValidator('confirm_coupon');
+$formCoupon->addText('coupon_code', $plugin->get_lang('CouponsCode'), true);
+$formCoupon->addHidden('t', $type);
+$formCoupon->addHidden('i', $serviceId);
+$formCoupon->addHidden('buycourses_service_checkout_action', 'coupon');
+$formCoupon->addButton('submit', $plugin->get_lang('RedeemCoupon'), 'check', 'success', 'btn-lg pull-right');
 
-if ($formCoupon->validate()) {
-    $formCouponValues = $formCoupon->getSubmitValues();
+if ('coupon' === $checkoutAction) {
+    $formCouponValues = $_POST;
     $couponCode = trim((string) ($formCouponValues['coupon_code'] ?? ''));
 
     if ('' === $couponCode) {
@@ -333,16 +396,6 @@ if ($formCoupon->validate()) {
     );
     exit;
 }
-
-$formCoupon->addText('coupon_code', $plugin->get_lang('CouponsCode'), true);
-$formCoupon->addHidden('t', $type);
-$formCoupon->addHidden('i', $serviceId);
-
-if (null !== $coupon) {
-    $form->addHidden('c', (int) $coupon['id']);
-}
-
-$formCoupon->addButton('submit', $plugin->get_lang('RedeemCoupon'), 'check', 'success', 'btn-lg pull-right');
 
 $templateName = $plugin->get_lang('PaymentMethods');
 

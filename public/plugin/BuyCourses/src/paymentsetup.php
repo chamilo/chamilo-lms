@@ -495,6 +495,15 @@ foreach ($currencies as $currency) {
     }
 }
 
+$escapedSelectedCurrencyLabel = htmlspecialchars($selectedCurrencyLabel, ENT_QUOTES, 'UTF-8');
+$globalSettingForm->addHtml(
+    '<div class="mb-4 rounded-2xl border border-info/20 bg-support-2 p-4 text-sm text-gray-90">'
+    .'<div class="font-semibold">'.$plugin->get_lang('ActiveCurrencyForPayments').'</div>'
+    .'<div class="mt-1">'.$escapedSelectedCurrencyLabel.'</div>'
+    .'<p class="mt-2 text-gray-50">'.$plugin->get_lang('ActiveCurrencyVatHelp').'</p>'
+    .'</div>'
+);
+
 $globalSettingForm->addHtmlEditor(
     'terms_and_conditions',
     [
@@ -542,31 +551,98 @@ if ($taxEnable) {
     );
 }
 
+
+$globalSettingForm->addHtml('<hr/>');
+$globalSettingForm->addHtml('<h4>'.$plugin->get_lang('SellerVatConfiguration').'</h4>');
+$globalSettingForm->addHtml('<p class="text-muted">'.$plugin->get_lang('SellerVatConfigurationHelp').'</p>');
+
+$globalSettingForm->addElement(
+    'text',
+    'seller_name',
+    $plugin->get_lang('SellerName')
+);
+
+$globalSettingForm->addElement(
+    'text',
+    'seller_address',
+    $plugin->get_lang('SellerAddress')
+);
+
+$globalSettingForm->addElement(
+    'text',
+    'seller_email',
+    $plugin->get_lang('SellerEmail')
+);
+
+$globalSettingForm->addElement(
+        'text',
+        'seller_country',
+        [$plugin->get_lang('SellerCountry'), $plugin->get_lang('SellerCountryHelp')],
+        ['maxlength' => 2, 'placeholder' => 'BE']
+    );
+
+    $globalSettingForm->addElement(
+        'text',
+        'seller_postcode',
+        $plugin->get_lang('SellerPostcode'),
+        ['maxlength' => 32]
+    );
+
+    $globalSettingForm->addElement(
+        'text',
+        'seller_vat_number',
+        [$plugin->get_lang('SellerVatNumber'), $plugin->get_lang('SellerVatNumberHelp')],
+        ['maxlength' => 64, 'placeholder' => 'BE0123456789']
+    );
+
+    $globalSettingForm->addCheckBox(
+        'seller_vat_registered',
+        null,
+        $plugin->get_lang('SellerVatRegistered')
+    );
+
+    $globalSettingForm->addElement(
+        'number',
+        'seller_annual_eu_tbe_turnover',
+        [$plugin->get_lang('SellerAnnualEuTbeTurnover'), $plugin->get_lang('SellerAnnualEuTbeTurnoverHelp')],
+        ['step' => '0.01', 'min' => '0']
+    );
+
+$globalSettingForm->addHtml('<hr/>');
+$globalSettingForm->addHtml('<h4>'.$plugin->get_lang('BuyerGeoIpVatEvidence').'</h4>');
+$globalSettingForm->addHtml('<p class="text-muted">'.$plugin->get_lang('BuyerGeoIpVatEvidenceHelp').'</p>');
+
+$geoIpProvider = $globalSettingForm->addSelect(
+    'vat_geoip_provider',
+    $plugin->get_lang('GeoIpProvider'),
+    [
+        'none' => $plugin->get_lang('GeoIpProviderNone'),
+        'maxmind_web_service' => $plugin->get_lang('GeoIpProviderMaxMindWebService'),
+    ]
+);
+
+$globalSettingForm->addElement(
+    'text',
+    'vat_maxmind_account_id',
+    [$plugin->get_lang('MaxMindAccountId'), $plugin->get_lang('MaxMindAccountIdHelp')],
+    ['maxlength' => 64]
+);
+
+$globalSettingForm->addElement(
+    'password',
+    'vat_maxmind_license_key',
+    [$plugin->get_lang('MaxMindLicenseKey'), $plugin->get_lang('MaxMindLicenseKeyHelp')],
+    ['maxlength' => 255, 'autocomplete' => 'new-password']
+);
+
+
 if ($invoicingEnable) {
     $globalSettingForm->addHtml('<hr/>');
 
     $globalSettingForm->addElement(
         'text',
-        'seller_name',
-        $plugin->get_lang('SellerName')
-    );
-
-    $globalSettingForm->addElement(
-        'text',
         'seller_id',
         $plugin->get_lang('SellerId')
-    );
-
-    $globalSettingForm->addElement(
-        'text',
-        'seller_address',
-        $plugin->get_lang('SellerAddress')
-    );
-
-    $globalSettingForm->addElement(
-        'text',
-        'seller_email',
-        $plugin->get_lang('SellerEmail')
     );
 
     $globalSettingForm->addElement(

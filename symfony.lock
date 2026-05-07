@@ -208,6 +208,15 @@
             "ref": "e805aba9eff5372e2d149a9ff56566769e22819d"
         }
     },
+    "stripe/stripe-php": {
+        "version": "20.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "19.0",
+            "ref": "d6829c693e3927a8972c7671d74a1a5c505712b0"
+        }
+    },
     "symfony/amazon-mailer": {
         "version": "6.4",
         "recipe": {

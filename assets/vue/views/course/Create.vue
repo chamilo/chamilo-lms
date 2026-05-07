@@ -4,7 +4,14 @@
     <hr class="mb-6" />
 
     <Message
-      v-if="capabilityStatus === 'blocked'"
+      v-if="isLoading"
+      severity="info"
+    >
+      {{ t("Checking course creation options...") }}
+    </Message>
+
+    <Message
+      v-else-if="showGlobalBlockedMessage"
       severity="warn"
     >
       <div class="space-y-2">
@@ -19,8 +26,9 @@
     </Message>
 
     <CourseForm
-      v-if="capabilityStatus !== 'blocked'"
+      v-if="showCourseForm"
       ref="createForm"
+      :buy-courses-options="buyCoursesOptions"
       :errors="violations"
       :values="item"
       @submit="submitCourse"
@@ -29,7 +37,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue"
+import { computed, onMounted, ref } from "vue"
 import { useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import Message from "primevue/message"
@@ -54,8 +62,30 @@ const item = ref({
 })
 
 const violations = ref(null)
+const isLoading = ref(true)
 const capabilityStatus = ref("allowed")
 const createCapabilityMessage = ref("")
+const buyCoursesOptions = ref(null)
+
+const hasBuyCoursesCourseTypeOptions = computed(() => {
+  return !!buyCoursesOptions.value?.enabled && !!buyCoursesOptions.value?.hasServiceOptions
+})
+
+const showGlobalBlockedMessage = computed(() => {
+  return capabilityStatus.value === "blocked" && !hasBuyCoursesCourseTypeOptions.value
+})
+
+const showCourseForm = computed(() => {
+  if (isLoading.value) {
+    return false
+  }
+
+  if (hasBuyCoursesCourseTypeOptions.value) {
+    return true
+  }
+
+  return capabilityStatus.value !== "blocked"
+})
 
 function sanitizeCoursePayload(data) {
   const payload = { ...data }
@@ -93,6 +123,7 @@ async function loadCreateCapability() {
     if (false === capability.canCreate) {
       capabilityStatus.value = "blocked"
       createCapabilityMessage.value = capability.message || t("You cannot create more courses right now.")
+
       return
     }
 
@@ -104,6 +135,31 @@ async function loadCreateCapability() {
     // The backend validates the real limit when submitting the course.
     capabilityStatus.value = "allowed"
   }
+}
+
+async function loadBuyCoursesOptions() {
+  buyCoursesOptions.value = null
+
+  try {
+    const response = await courseService.getBuyCoursesCourseCreationOptions()
+
+    if (response?.success && response?.enabled && response?.hasServiceOptions) {
+      buyCoursesOptions.value = response
+    }
+  } catch (error) {
+    console.error("[course.buycourses-options] request failed", error)
+
+    // BuyCourses options are optional. Standard course creation must keep working.
+    buyCoursesOptions.value = null
+  }
+}
+
+async function loadCreationContext() {
+  isLoading.value = true
+
+  await Promise.all([loadCreateCapability(), loadBuyCoursesOptions()])
+
+  isLoading.value = false
 }
 
 async function submitCourse(formData) {
@@ -136,6 +192,6 @@ async function submitCourse(formData) {
 }
 
 onMounted(() => {
-  loadCreateCapability()
+  loadCreationContext()
 })
 </script>

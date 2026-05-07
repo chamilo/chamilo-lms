@@ -19,7 +19,7 @@ require_once __DIR__.'/lp_initialize_item.inc.php';
 
 echo initialize_item(
     $_POST['lid'],
-    $_POST['uid'],
+    api_get_user_id(),
     $_POST['vid'],
     $_POST['iid']
 );

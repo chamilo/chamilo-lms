@@ -16,6 +16,8 @@ use ChamiloSession as Session;
 $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_course_script();
+
 /**
  * Get one item's details.
  *
@@ -286,7 +288,7 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
 
 echo switch_item_details(
     $_REQUEST['lid'],
-    $_REQUEST['uid'],
+    api_get_user_id(),
     $_REQUEST['vid'],
     $_REQUEST['iid'],
     $_REQUEST['next']

@@ -399,6 +399,7 @@ class BuyCoursesPlugin extends Plugin
             'max_subscribers' => 'INT NOT NULL DEFAULT 0',
             'subscription_behavior_json' => 'LONGTEXT DEFAULT NULL',
             'stripe_price_id' => 'VARCHAR(255) DEFAULT NULL',
+            'display_on_course_creation_page' => 'TINYINT(1) NOT NULL DEFAULT 0',
         ];
 
         foreach ($recurringServiceColumns as $field => $definition) {
@@ -3810,6 +3811,7 @@ class BuyCoursesPlugin extends Plugin
                 'max_subscribers' => $service['max_subscribers'],
                 'subscription_behavior_json' => $service['subscription_behavior_json'],
                 'stripe_price_id' => $service['stripe_price_id'],
+                'display_on_course_creation_page' => $service['display_on_course_creation_page'],
                 'applies_to' => $service['applies_to'],
                 'owner_id' => $service['owner_id'],
                 'visibility' => $service['visibility'],
@@ -3917,6 +3919,7 @@ class BuyCoursesPlugin extends Plugin
                 'max_subscribers' => $service['max_subscribers'],
                 'subscription_behavior_json' => $service['subscription_behavior_json'],
                 'stripe_price_id' => $service['stripe_price_id'],
+                'display_on_course_creation_page' => $service['display_on_course_creation_page'],
                 'applies_to' => $service['applies_to'],
                 'owner_id' => $service['owner_id'],
                 'visibility' => $service['visibility'],
@@ -3952,6 +3955,9 @@ class BuyCoursesPlugin extends Plugin
             'max_subscribers' => isset($service['max_subscribers']) ? max(0, (int) $service['max_subscribers']) : (int) ($existingService['max_subscribers'] ?? 0),
             'subscription_behavior_json' => trim((string) ($service['subscription_behavior_json'] ?? ($existingService['subscription_behavior_json'] ?? ''))),
             'stripe_price_id' => trim((string) ($service['stripe_price_id'] ?? ($existingService['stripe_price_id'] ?? ''))),
+            'display_on_course_creation_page' => array_key_exists('display_on_course_creation_page', $service)
+                ? (!empty($service['display_on_course_creation_page']) ? 1 : 0)
+                : (int) ($existingService['display_on_course_creation_page'] ?? 0),
             'applies_to' => $appliesTo,
             'owner_id' => isset($service['owner_id']) ? (int) $service['owner_id'] : api_get_user_id(),
             'visibility' => $visibility,

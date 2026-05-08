@@ -323,6 +323,7 @@ if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_S
     $servicesTable->addColumn('max_subscribers', Types::INTEGER, ['default' => 0]);
     $servicesTable->addColumn('subscription_behavior_json', Types::TEXT, ['notnull' => false]);
     $servicesTable->addColumn('stripe_price_id', Types::STRING, ['length' => 255, 'notnull' => false]);
+    $servicesTable->addColumn('display_on_course_creation_page', Types::BOOLEAN, ['default' => false]);
     $servicesTable->addColumn('applies_to', Types::INTEGER);
     $servicesTable->addColumn('owner_id', Types::INTEGER);
     $servicesTable->addColumn('visibility', Types::INTEGER);

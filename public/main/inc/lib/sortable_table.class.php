@@ -798,7 +798,7 @@ class SortableTable extends HTML_Table
             return '';
         }
 
-        $result[] = '<form method="GET" action="'.api_get_self().'" style="display:inline;">';
+        $result[] = '<form method="GET" action="'.api_get_self().'" style="display:inline;" data-no-autofocus="1">';
         $param[$this->param_prefix.'direction'] = $this->direction;
         $param[$this->param_prefix.'page_nr'] = $this->page_nr;
         $param[$this->param_prefix.'column'] = $this->column;

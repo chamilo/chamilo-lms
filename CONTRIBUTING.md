@@ -66,7 +66,8 @@ Replace 'chamilo2' by the database name and user you want, and '{password}' by a
 sudo apt update && apt -y upgrade
 sudo apt install apache2 libapache2-mod-php mariadb-client mariadb-server redis php-pear php-{apcu,bcmath,cli,curl,dev,gd,intl,ldap,mbstring,mysql,redis,soap,xml,zip} git unzip curl certbot
 sudo mysql
-mysql> GRANT ALL PRIVILEGES ON chamilo2.* TO chamilo2@localhost IDENTIFIED BY '{password}';
+mysql> CREATE USER chamilo2@localhost IDENTIFIED BY '{password}';
+mysql> GRANT ALL PRIVILEGES ON chamilo2.* TO chamilo2@localhost;
 mysql> exit
 cd ~
 curl -fsSL https://deb.nodesource.com/setup_20.x | sudo bash -
@@ -102,7 +103,8 @@ sudo apt update
 sudo apt -y upgrade
 sudo apt install apache2 libapache2-mod-php mariadb-client mariadb-server redis php-pear php-{apcu,bcmath,cli,curl,dev,gd,intl,ldap,mbstring,mysql,redis,soap,xml,zip} git unzip curl certbot
 sudo mysql
-mysql> GRANT ALL PRIVILEGES ON chamilo2.* TO chamilo2@localhost IDENTIFIED BY '{password}';
+mysql> CREATE USER chamilo2@localhost IDENTIFIED BY '{password}';
+mysql> GRANT ALL PRIVILEGES ON chamilo2.* TO chamilo2@localhost;
 mysql> exit
 ~~~~
 
@@ -116,7 +118,8 @@ sudo add-apt-repository ppa:ondrej/php
 sudo apt update
 sudo apt install apache2 libapache2-mod-php8.3 mariadb-client mariadb-server redis php-pear php8.3-{apcu,bcmath,cli,curl,dev,gd,intl,ldap,mbstring,mysql,redis,soap,xml,zip} git unzip curl
 sudo mysql
-mysql> GRANT ALL PRIVILEGES ON chamilo2.* TO chamilo2@localhost IDENTIFIED BY '{password}';
+mysql> CREATE USER chamilo2@localhost IDENTIFIED BY '{password}';
+mysql> GRANT ALL PRIVILEGES ON chamilo2.* TO chamilo2@localhost;
 mysql> exit
 ~~~~
 (replace 'chamilo2' by the database name and user you want, and '{password}' by a more secure password)

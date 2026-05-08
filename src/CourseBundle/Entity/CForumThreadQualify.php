@@ -36,7 +36,7 @@ class CForumThreadQualify
     #[ORM\JoinColumn(name: 'qualify_user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $qualifyUser;
 
-    #[ORM\Column(name: 'qualify', type: 'float', precision: 6, scale: 2, nullable: false)]
+    #[ORM\Column(name: '`qualify`', type: 'float', precision: 6, scale: 2, nullable: false)]
     protected float $qualify;
 
     #[ORM\Column(name: 'qualify_time', type: 'datetime', nullable: true)]

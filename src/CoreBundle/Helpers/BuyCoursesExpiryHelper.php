@@ -88,7 +88,7 @@ final class BuyCoursesExpiryHelper
             return $this->buyCoursesAvailable;
         }
 
-        if (!BuyCoursesPlugin::create()->isEnabled(true)) {
+        if (!BuyCoursesPlugin::create()->isEnabled()) {
             return $this->buyCoursesAvailable = false;
         }
 

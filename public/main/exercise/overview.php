@@ -34,7 +34,7 @@ if (!$result) {
 }
 
 $plugin = Positioning::create();
-if ($plugin->isEnabled(true)) {
+if ($plugin->isEnabled()) {
     if ($plugin->blockFinalExercise(api_get_user_id(), $exercise_id, $courseId, $sessionId)) {
         api_not_allowed(true);
     }

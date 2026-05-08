@@ -106,7 +106,7 @@ class ExtraFieldType extends AbstractType
         }
 
         $gMapsPlugin = GoogleMapsPlugin::create();
-        $pluginEnabled = $gMapsPlugin->isEnabled(true);
+        $pluginEnabled = $gMapsPlugin->isEnabled();
         $apiEnabled = 'true' === $gMapsPlugin->get('enable_api');
 
         $existingVariables = array_map(

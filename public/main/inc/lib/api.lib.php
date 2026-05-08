@@ -1014,7 +1014,7 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
     }
 
     $plugin = Positioning::create();
-    if ($plugin->isEnabled(true)) {
+    if ($plugin->isEnabled()) {
 
         if ($plugin->get('block_course_if_initial_exercise_not_attempted') === 'true') {
             $currentPath = $_SERVER['REQUEST_URI'];

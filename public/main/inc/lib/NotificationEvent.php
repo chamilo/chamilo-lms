@@ -139,7 +139,7 @@ class NotificationEvent extends Model
         $events = $this->get_all();
         $extraFieldData = $this->getUserExtraData(api_get_user_id());
         $justificationPlugin = Justification::create();
-        $allowJustification = $justificationPlugin->isEnabled(true);
+        $allowJustification = $justificationPlugin->isEnabled();
 
         $userJustificationList = [];
         if ($allowJustification) {

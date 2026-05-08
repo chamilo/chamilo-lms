@@ -25,7 +25,7 @@ class MyServicesController extends AbstractController
     #[IsGranted('ROLE_USER')]
     public function data(): JsonResponse
     {
-        if (!BuyCoursesPlugin::create()->isEnabled(true)) {
+        if (!BuyCoursesPlugin::create()->isEnabled()) {
             return new JsonResponse(['error' => 'Not found'], Response::HTTP_NOT_FOUND);
         }
 

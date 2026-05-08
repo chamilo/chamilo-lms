@@ -4601,7 +4601,7 @@ class CourseManager
 
         // Course legal
         $plugin = CourseLegalPlugin::create();
-        if ($plugin->isEnabled(true)) {
+        if ($plugin->isEnabled()) {
             require_once api_get_path(SYS_PLUGIN_PATH).'courselegal/config.php';
 
             return $plugin->isUserAcceptedLegal($user_id, $course_code, $session_id);
@@ -4654,7 +4654,7 @@ class CourseManager
 
         // Course plugin legal
         $plugin = CourseLegalPlugin::create();
-        if ($plugin->isEnabled(true)) {
+        if ($plugin->isEnabled()) {
             require_once api_get_path(SYS_PLUGIN_PATH).'courselegal/config.php';
 
             return $plugin->saveUserLegal($user_id, $course_code, $session_id);

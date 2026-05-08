@@ -259,7 +259,7 @@ if (!is_object($objExercise)) {
 }
 
 $plugin = Positioning::create();
-if ($plugin->isEnabled(true)) {
+if ($plugin->isEnabled()) {
     if ($plugin->blockFinalExercise(api_get_user_id(), $objExercise->iId, api_get_course_int_id(), $sessionId)) {
         api_not_allowed(true);
     }

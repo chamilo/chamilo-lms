@@ -10,20 +10,20 @@
   filter:alpha(opacity=50);-webkit-transition:all .3s ease-out;-moz-transition:all .3s ease-out;-ms-transition:all .3s ease-out;-o-transition:all .3s ease-out;transition:all .3s ease-out
 }
 .introjs-fixParent {
-    opacity: 1 !important;
-    transform: none !important;
-    background: transparent !important;
-    background-color: transparent !important;
-    box-shadow: none !important;
+    opacity: 1;
+    transform: none;
+    background: transparent;
+    background-color: transparent;
+    box-shadow: none;
 }
 .introjs-showElement,
 tr.introjs-showElement>td,
 tr.introjs-showElement>th {
     z-index: 9999999 !important;
-    background: transparent !important;
-    background-color: transparent !important;
-    box-shadow: none !important;
-    opacity: 1 !important;
+    background: transparent;
+    background-color: transparent;
+    box-shadow: none;
+    opacity: 1;
 }
 .introjs-relativePosition, tr.introjs-showElement>td, tr.introjs-showElement>th {
   position: relative;
@@ -293,75 +293,75 @@ fieldset[disabled] .tour-warning.active {
   background-color: #fff;
 }
 .introjs-overlay {
-    opacity: 0.34 !important;
-    background: rgba(15, 23, 42, 0.34) !important;
+    opacity: 0.34;
+    background: rgba(15, 23, 42, 0.34);
 }
 
 .introjs-helperLayer {
-    background: transparent !important;
-    background-color: transparent !important;
-    border: 3px solid #dc2626 !important;
-    border-radius: 14px !important;
+    background: transparent;
+    background-color: transparent;
+    border: 3px solid #dc2626;
+    border-radius: 14px;
     box-shadow:
             0 0 0 9999px rgba(15, 23, 42, 0.34),
-            0 0 0 4px rgba(220, 38, 38, 0.14) !important;
-    overflow: visible !important;
+            0 0 0 4px rgba(220, 38, 38, 0.14);
+    overflow: visible;
 }
 
 .introjs-helperNumberLayer {
-    position: absolute !important;
-    top: -18px !important;
-    left: -18px !important;
-    width: 40px !important;
-    min-width: 40px !important;
-    height: 40px !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    border-radius: 9999px !important;
-    background: #dc2626 !important;
-    color: #ffffff !important;
-    border: 2px solid #ffffff !important;
-    font-family: Arial, Verdana, Tahoma, sans-serif !important;
-    font-size: 15px !important;
-    font-weight: 700 !important;
-    line-height: 1 !important;
-    text-align: center !important;
-    text-indent: 0 !important;
-    text-shadow: none !important;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28) !important;
-    box-sizing: border-box !important;
-    z-index: 999999 !important;
+    position: absolute;
+    top: -18px;
+    left: -18px;
+    width: 40px;
+    min-width: 40px;
+    height: 40px;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    background: #dc2626;
+    color: #ffffff;
+    border: 2px solid #ffffff;
+    font-family: Arial, Verdana, Tahoma, sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    text-indent: 0;
+    text-shadow: none;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28);
+    box-sizing: border-box;
+    z-index: 999999;
 }
 
 .introjs-tooltip {
-    border-radius: 12px !important;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18) !important;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
 }
 
 .introjs-tooltipReferenceLayer {
-    background: transparent !important;
+    background: transparent;
 }
 
 .introjs-disableInteraction {
-    background-color: transparent !important;
+    background-color: transparent;
 }
 
 .introjs-showElement,
 tr.introjs-showElement > td,
 tr.introjs-showElement > th {
-    background: transparent !important;
-    background-color: transparent !important;
-    box-shadow: none !important;
-    opacity: 1 !important;
+    background: transparent;
+    background-color: transparent;
+    box-shadow: none;
+    opacity: 1;
 }
 
 .introjs-fixParent {
-    opacity: 1 !important;
-    transform: none !important;
-    background: transparent !important;
-    background-color: transparent !important;
-    box-shadow: none !important;
+    opacity: 1;
+    transform: none;
+    background: transparent;
+    background-color: transparent;
+    box-shadow: none;
 }

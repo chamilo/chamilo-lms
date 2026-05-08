@@ -126,7 +126,7 @@ final class PluginHelper
     {
         $plugin = Positioning::create();
 
-        if (!$plugin->isEnabled(true) || !$userId) {
+        if (!$plugin->isEnabled() || !$userId) {
             return false;
         }
 

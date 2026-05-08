@@ -33,7 +33,7 @@ class ExerciseSignaturePlugin extends Plugin
             return false;
         }
 
-        if (ExerciseSignaturePlugin::create()->isEnabled(true)) {
+        if (ExerciseSignaturePlugin::create()->isEnabled()) {
             $extraFieldValue = new ExtraFieldValue('exercise');
             $result = $extraFieldValue->get_values_by_handler_and_field_variable($exercise->iId, 'signature_activated');
             if ($result && isset($result['value']) && 1 === (int) $result['value']) {

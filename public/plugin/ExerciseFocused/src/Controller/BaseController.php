@@ -30,7 +30,7 @@ abstract class BaseController
      */
     public function __invoke(): Response
     {
-        if (!$this->plugin->isEnabled(true)) {
+        if (!$this->plugin->isEnabled()) {
             throw new AccessDeniedHttpException(
                 Response::$statusTexts[Response::HTTP_FORBIDDEN]
             );

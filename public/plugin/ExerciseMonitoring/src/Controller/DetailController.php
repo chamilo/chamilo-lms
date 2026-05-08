@@ -30,7 +30,7 @@ class DetailController
 
     public function __invoke(): HttpResponse
     {
-        if (!$this->plugin->isEnabled(true)) {
+        if (!$this->plugin->isEnabled()) {
             throw new AccessDeniedHttpException(
                 HttpResponse::$statusTexts[HttpResponse::HTTP_FORBIDDEN],
             );

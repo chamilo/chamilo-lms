@@ -36,7 +36,7 @@ class MigrationMoodleEventSubscriber implements EventSubscriberInterface
      */
     public function onLoginCredentialsChecked(LoginCredentialsCheckedEvent $event): void
     {
-        if (!$this->plugin->isEnabled(true)) {
+        if (!$this->plugin->isEnabled()) {
             return;
         }
 

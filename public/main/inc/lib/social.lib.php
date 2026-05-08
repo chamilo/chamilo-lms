@@ -1914,7 +1914,7 @@ class SocialManager extends UserManager
             ],
         ];
         $justificationPlugin = Justification::create();
-        $allowJustification = $justificationPlugin->isEnabled(true);
+        $allowJustification = $justificationPlugin->isEnabled();
         if ($allowJustification) {
             $plugin = $justificationPlugin;
             $headers[] = [
@@ -1924,7 +1924,7 @@ class SocialManager extends UserManager
         }
 
         $pauseTrainingPlugin = PauseTraining::create();
-        $allowPauseTraining = $pauseTrainingPlugin->isEnabled(true);
+        $allowPauseTraining = $pauseTrainingPlugin->isEnabled();
         $allowEdit = 'true' === api_get_plugin_setting('PauseTraining', 'allow_users_to_edit_pause_formation');
         if ($allowPauseTraining && $allowEdit) {
             $plugin = $pauseTrainingPlugin;

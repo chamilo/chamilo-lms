@@ -43,7 +43,7 @@ class ExternalNotificationConnectEventSubscriber implements EventSubscriberInter
 
     public function onPortfolioItemAdded(PortfolioItemAddedEvent $event): void
     {
-        if (!$this->plugin->isEnabled(true)
+        if (!$this->plugin->isEnabled()
             || 'true' !== $this->plugin->get(ExternalNotificationConnectPlugin::SETTING_NOTIFY_PORTFOLIO)
         ) {
             return;
@@ -85,7 +85,7 @@ class ExternalNotificationConnectEventSubscriber implements EventSubscriberInter
 
     public function onPortfolioItemEdited(PortfolioItemEditedEvent $event): void
     {
-        if (!$this->plugin->isEnabled(true)
+        if (!$this->plugin->isEnabled()
             || 'true' !== $this->plugin->get(ExternalNotificationConnectPlugin::SETTING_NOTIFY_PORTFOLIO)
         ) {
             return;
@@ -127,7 +127,7 @@ class ExternalNotificationConnectEventSubscriber implements EventSubscriberInter
 
     public function onPortfolioItemDeleted(PortfolioItemDeletedEvent $event): void
     {
-        if (!$this->plugin->isEnabled(true)
+        if (!$this->plugin->isEnabled()
             || 'true' !== $this->plugin->get(ExternalNotificationConnectPlugin::SETTING_NOTIFY_PORTFOLIO)
         ) {
             return;
@@ -160,7 +160,7 @@ class ExternalNotificationConnectEventSubscriber implements EventSubscriberInter
 
     public function onPortfolioItemVisibility(PortfolioItemVisibilityChangedEvent $event): void
     {
-        if (!$this->plugin->isEnabled(true)
+        if (!$this->plugin->isEnabled()
             || 'true' !== $this->plugin->get(ExternalNotificationConnectPlugin::SETTING_NOTIFY_PORTFOLIO)
         ) {
             return;
@@ -200,7 +200,7 @@ class ExternalNotificationConnectEventSubscriber implements EventSubscriberInter
 
     public function onLpCreated(LearningPathCreatedEvent $event): void
     {
-        if (!$this->plugin->isEnabled(true)
+        if (!$this->plugin->isEnabled()
             || 'true' !== $this->plugin->get(ExternalNotificationConnectPlugin::SETTING_NOTIFY_LEARNPATH)
         ) {
             return;

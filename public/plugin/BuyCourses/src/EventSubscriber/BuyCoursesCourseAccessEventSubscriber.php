@@ -26,7 +26,7 @@ class BuyCoursesCourseAccessEventSubscriber implements EventSubscriberInterface
 
     public function onCourseAccessCheck(CourseAccessCheckEvent $event): void
     {
-        if (!$this->plugin->isEnabled(true)) {
+        if (!$this->plugin->isEnabled()) {
             return;
         }
 

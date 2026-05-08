@@ -16,7 +16,7 @@ if (!function_exists('buycourses_require_enabled_plugin')) {
 
         $plugin = BuyCoursesPlugin::create();
 
-        if (!$plugin->isEnabled(true)) {
+        if (!$plugin->isEnabled()) {
             api_not_allowed(true);
         }
 

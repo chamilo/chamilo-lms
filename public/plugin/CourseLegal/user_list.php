@@ -11,7 +11,7 @@ require_once __DIR__.'/config.php';
 // Course legal
 $legal = CourseLegalPlugin::create();
 
-if (!$legal->isEnabled(true)) {
+if (!$legal->isEnabled()) {
     api_not_allowed(true);
 }
 

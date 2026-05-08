@@ -11,7 +11,7 @@ api_block_anonymous_users(true);
 
 $plugin = PauseTraining::create();
 
-$allow = $plugin->isEnabled(true);
+$allow = $plugin->isEnabled();
 $allowPauseFormation = 'true' === $plugin->get('allow_users_to_edit_pause_formation');
 
 if (!$allow || false === $allowPauseFormation) {

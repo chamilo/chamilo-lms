@@ -203,7 +203,7 @@ final class CToolStateProvider implements ProviderInterface
             }
 
             if (!$plugin instanceof Plugin
-                || !$plugin->isEnabled(true)
+                || !$plugin->isEnabled()
                 || !$plugin->isCoursePlugin
                 || !$plugin->addCourseTool
             ) {
@@ -271,7 +271,7 @@ final class CToolStateProvider implements ProviderInterface
 
         $pluginInstance = Positioning::create();
 
-        if (!$pluginInstance->isEnabled(true)) {
+        if (!$pluginInstance->isEnabled()) {
             return [false, null];
         }
 

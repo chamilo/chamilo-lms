@@ -174,7 +174,7 @@ class MessageManager
         // Disabling messages depending the pausetraining plugin (only relevant if email notifications are enabled).
         $allowPauseFormation =
             $sendEmail &&
-            PauseTraining::create()->isEnabled(true) &&
+            PauseTraining::create()->isEnabled() &&
             'true' === api_get_plugin_setting('PauseTraining', 'allow_users_to_edit_pause_formation');
 
         if ($allowPauseFormation) {

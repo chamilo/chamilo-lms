@@ -30,7 +30,7 @@ class ResubscriptionEventSubscriber implements EventSubscriberInterface
      */
     public function onResubscribe(SessionResubscriptionEvent $event): void
     {
-        if (!$this->plugin->isEnabled(true)) {
+        if (!$this->plugin->isEnabled()) {
             return;
         }
 

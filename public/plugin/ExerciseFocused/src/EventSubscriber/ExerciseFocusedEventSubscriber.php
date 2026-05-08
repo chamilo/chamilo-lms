@@ -29,7 +29,7 @@ class ExerciseFocusedEventSubscriber implements EventSubscriberInterface
 
     public function onExerciseReportAction(ExerciseReportActionEvent $event): void
     {
-        if (!$this->plugin->isEnabled(true)) {
+        if (!$this->plugin->isEnabled()) {
             return;
         }
 

@@ -56,9 +56,9 @@ class ProfileType extends AbstractType
         $usersTimezonesEnabled = 'true' === (string) $this->settingsManager->getSetting('profile.use_users_timezone', true);
 
         $addressGeolocalizationEnabled = 'true' === (string) $this->settingsManager->getSetting(
-                'profile.enable_profile_user_address_geolocalization',
-                true
-            );
+            'profile.enable_profile_user_address_geolocalization',
+            true
+        );
 
         $rawFine = $this->settingsManager->getSetting('profile.profile_fields_visibility', true) ?? [];
         if (\is_string($rawFine)) {
@@ -538,6 +538,6 @@ class ProfileType extends AbstractType
             }
         }
 
-        return PauseTraining::create()->isEnabled(true);
+        return PauseTraining::create()->isEnabled();
     }
 }

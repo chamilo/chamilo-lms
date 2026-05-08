@@ -24,7 +24,7 @@ $pluginExtra = null;
 $pluginLegal = false;
 $plugin = CourseLegalPlugin::create();
 
-if ($plugin->isEnabled(true)) {
+if ($plugin->isEnabled()) {
     $pluginLegal = true;
     require_once api_get_path(SYS_PLUGIN_PATH).'CourseLegal/config.php';
     $data = $plugin->getData($course_info['real_id'], $session_id);

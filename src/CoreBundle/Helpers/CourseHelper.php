@@ -10,6 +10,7 @@ use Agenda;
 use AnnouncementManager;
 use Answer;
 use AppPlugin;
+use BuyCoursesPlugin;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\ExtraField;
@@ -1895,12 +1896,7 @@ class CourseHelper
             return;
         }
 
-        throw new RuntimeException(
-            \sprintf(
-                $this->translator->trans('You have reached the maximum number of courses allowed (%d).'),
-                (int) $status['effectiveLimit']
-            )
-        );
+        throw new RuntimeException(\sprintf($this->translator->trans('You have reached the maximum number of courses allowed (%d).'), (int) $status['effectiveLimit']));
     }
 
     public function resolveCourseCreationCapabilityForUser(User $user): array
@@ -2027,18 +2023,8 @@ class CourseHelper
 
     private function isBuyCoursesPluginEnabled(): bool
     {
-        if (!class_exists('BuyCoursesPlugin')) {
-            return false;
-        }
-
         try {
-            $plugin = \BuyCoursesPlugin::create();
-
-            if (method_exists($plugin, 'isEnabled')) {
-                return $plugin->isEnabled(true);
-            }
-
-            return true;
+            return BuyCoursesPlugin::create()->isEnabled();
         } catch (Throwable $exception) {
             $this->debugLog('createCourse:buyCoursesPluginCheckFailed', [
                 'message' => $exception->getMessage(),

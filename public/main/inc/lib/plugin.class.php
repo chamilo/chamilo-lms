@@ -379,7 +379,7 @@ class Plugin
     public function get(string $name): mixed
     {
         if ('tool_enable' === $name) {
-            $isEnabled = $this->isEnabled(true);
+            $isEnabled = $this->isEnabled();
 
             return $isEnabled ? 'true' : 'false';
         }
@@ -890,30 +890,14 @@ class Plugin
     }
 
     /**
-     * Returns true if the plugin is installed, false otherwise.
+     * Returns true if the plugin is installed and active for the current access URL.
      *
-     * @param bool $checkEnabled Also check if enabled (instead of only installed)
-     *
-     * @return bool True if plugin is installed/enabled, false otherwise
+     * @return bool
      */
-    public function isEnabled(bool $checkEnabled = false)
+    public function isEnabled(): bool
     {
-        $settings = $this->get_settings();
-
-        if (empty($settings)) {
-            // plugin not installed or no configuration for current URL
-            if ($checkEnabled) {
-                return Container::getPluginHelper()->isPluginEnabled($this->get_name());
-            }
-            return false;
-        }
-
-        if ($checkEnabled) {
-            // Source of truth in C2 is access_url_rel_plugin.active
-            return Container::getPluginHelper()->isPluginEnabled($this->get_name());
-        }
-
-        return true;
+        // Source of truth in C2 is access_url_rel_plugin.active
+        return Container::getPluginHelper()->isPluginEnabled($this->get_name());
     }
 
     /**

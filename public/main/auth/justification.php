@@ -12,7 +12,7 @@ api_block_anonymous_users(true);
 
 $plugin = Justification::create();
 
-if (!$plugin->isEnabled(true)) {
+if (!$plugin->isEnabled()) {
     api_not_allowed(true);
 }
 $personalRepo = Container::getPersonalFileRepository();

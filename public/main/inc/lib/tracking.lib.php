@@ -4386,7 +4386,7 @@ class Tracking
 
         $rs = Database::query($sql);
 
-        $allow = PauseTraining::create()->isEnabled(true);
+        $allow = PauseTraining::create()->isEnabled();
         $allowPauseFormation = 'true' === api_get_plugin_setting('PauseTraining', 'allow_users_to_edit_pause_formation');
 
         $extraFieldValue = new ExtraFieldValue('user');

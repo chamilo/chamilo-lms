@@ -388,7 +388,7 @@ class PlatformConfigurationController extends AbstractController
     private function getOnlyofficeFrontendConfig(): array
     {
         $onlyoffice = OnlyofficePlugin::create();
-        $enabled = $onlyoffice->isEnabled(true);
+        $enabled = $onlyoffice->isEnabled();
         $documentServerUrl = (string) ($onlyoffice->get('document_server_url') ?? '');
         $jwtSecret = (string) ($onlyoffice->get('jwt_secret') ?? '');
         $demoData = $onlyoffice->get('onlyoffice_connect_demo_data');
@@ -419,14 +419,13 @@ class PlatformConfigurationController extends AbstractController
     private function getTourFrontendConfig(): array
     {
         $tour = Tour::create();
-        $enabled = $tour->isEnabled(true);
+        $enabled = $tour->isEnabled();
 
         $config = [
             'enabled' => $enabled,
         ];
 
         if ($enabled) {
-
             $theme = trim((string) ($tour->get('theme') ?? ''));
             $themeCssPath = null;
 
@@ -449,14 +448,13 @@ class PlatformConfigurationController extends AbstractController
     private function getBuyCoursesFrontendConfig(): array
     {
         $buyCourses = BuyCoursesPlugin::create();
-        $enabled = $buyCourses->isEnabled(true);
+        $enabled = $buyCourses->isEnabled();
 
         $config = [
             'enabled' => $enabled,
         ];
 
         if ($enabled) {
-
             $showMainMenuTab = $buyCourses->get('show_main_menu_tab');
             $publicMainMenuTab = $buyCourses->get('public_main_menu_tab');
             $allowAnonymousUsers = $buyCourses->get('unregistered_users_enable');

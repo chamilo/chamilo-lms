@@ -80,7 +80,7 @@ function ensureGeoExtraField(ExtraField $ef, ?string $var, string $label): ?arra
 $accessUrlHelper = Container::$container->get(AccessUrlHelper::class);
 $pluginRepo      = Container::$container->get(AccessUrlRelPluginRepository::class);
 $googleMapsPlugin = GoogleMapsPlugin::create();
-$googleMapsIsActive = $googleMapsPlugin->isEnabled(true);
+$googleMapsIsActive = $googleMapsPlugin->isEnabled();
 
 /* ---------------- validate plugin enabled --------------- */
 if (!$googleMapsIsActive) {

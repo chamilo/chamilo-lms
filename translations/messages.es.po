@@ -28523,7 +28523,7 @@ msgid "External tools (LTI)"
 msgstr "Herramientas externas (LTI)"
 
 msgid "Add course"
-msgstr "Añadir lección"
+msgstr "Añadir curso"
 
 msgid "Add a user to a course"
 msgstr "Añadir un usuario en un curso"

@@ -23,6 +23,8 @@ class SelectAjax extends HTML_QuickForm_select
     public function toHtml()
     {
         $iso = api_get_language_isocode();
+        // Select2 language files use the 2-letter code (e.g. "fr", not "fr_FR").
+        $s2Locale = strstr($iso, '_', true) ?: $iso;
         $formatResult = $this->getAttribute('formatResult');
         $formatCondition = '';
 
@@ -82,7 +84,7 @@ class SelectAjax extends HTML_QuickForm_select
             <script>
                 $(function(){
                     $('#{$this->getAttribute('id')}').select2({
-                        language: '$iso',
+                        language: '$s2Locale',
                         placeholder: '$plHolder',
                         allowClear: true,
                         width: '$width',
@@ -126,7 +128,14 @@ JS;
         $this->removeAttribute('url_function');
         $this->setAttribute('style', 'width: 100%;');
 
-        return parent::toHtml().$html;
+        // Load the Select2 language file so built-in messages (e.g. "inputTooShort") are translated.
+        $langHtml = '';
+        if ('en' !== $s2Locale) {
+            $langUrl = api_get_path(WEB_PUBLIC_PATH).'build/libs/select2/js/'.$s2Locale.'.js';
+            $langHtml = '<script src="'.htmlspecialchars($langUrl, ENT_QUOTES, 'UTF-8').'"></script>'.PHP_EOL;
+        }
+
+        return parent::toHtml().$langHtml.$html;
     }
 
     /**

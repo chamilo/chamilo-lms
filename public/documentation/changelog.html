@@ -24,6 +24,7 @@
     <div class="toc">
         <h2>Releases</h2>
         <ul>
+            <li><a href="#2.0.1">2.0.1 - [name TBD]</a></li>
             <li><a href="#2.0-stable">2.0 stable - Cadbury</a></li>
             <li><a href="#2.0-rc.3">2.0 RC 3 - Axium</a></li>
             <li><a href="#2.0-rc.2">2.0 RC 2 - Pensum</a></li>
@@ -33,6 +34,67 @@
             <li><a href="#2.0-beta.1">2.0 beta 1 - Aquarium</a></li>
         </ul>
     </div>
+
+    <a id="2.0.1"></a>
+    <h1>Chamilo 2.0.1 - [name TBD], 2026-05-08</h1>
+    <h3>Release notes - summary</h3>
+    <p>
+        First patch release of Chamilo 2.0, addressing multiple security vulnerabilities,
+        fixing installation issues, and refactoring internal components for improved
+        stability and performance.
+    </p>
+
+    <h3>Security fixes</h3>
+    <ul aria-live="off">
+        <li>[2026-05-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/0b545d596ec8">0b545d59</a>) Security: LP: Use current user ID instead of request user ID in learning path access check</li>
+        <li>[2026-04-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/a7fcc222bd7a">a7fcc222</a>) Security: Remove eval() usage in HTML_QuickForm library, replace with safe alternative</li>
+        <li>[2026-04-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/99d407a30e03">99d407a3</a>) Security: Fix eval() usage - refs GHSA-8rj2-88v5-mx6w</li>
+        <li>[2026-04-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/6c9586034284">6c958603</a>) Security: Add CSRF token validation for AJAX requests in skill management</li>
+        <li>[2026-04-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/4472f3089bbb">4472f308</a>) Security: Validate and enforce groupOp keyword in AJAX filters to prevent SQL injection</li>
+        <li>[2026-04-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/4bdba1b9a882">4bdba1b9</a>) Security: Plugin: CStudio: Sanitize file upload inputs to prevent malicious file uploads</li>
+        <li>[2026-04-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/4da33d8fd317">4da33d8f</a>) Security: Replace unserialize() with UnserializeApi::unserialize() to prevent deserialization attacks</li>
+        <li>[2026-04-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/0ba260a851ef">0ba260a8</a>) Security: Sanitize user profile fields to prevent XSS</li>
+        <li>[2026-04-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/b2c91c021fc5">b2c91c02</a>) Security: API: Add MessageNormalizer for sanitizing message content and ensuring secure rendering</li>
+    </ul>
+
+    <h3>Added</h3>
+    <ul aria-live="off">
+        <li>[2026-04-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/7c3856868bb3">7c385686</a>) Learnpath: Enable pagination for learning path list</li>
+    </ul>
+
+    <h3>Changed</h3>
+    <ul aria-live="off">
+        <li>[2026-04-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/d390bf9f7901">d390bf9f</a>) Internal: Refactor course and session initialization logic to use cidReqStore</li>
+        <li>[2026-04-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/59de18c5f1b1">59de18c5</a>) Internal: Refactor route handling and extract resolveCourseId function</li>
+        <li>[2026-04-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/fe69d4def47a">fe69d4de</a>) Internal: Remove redundant loadCourseSettings calls across components</li>
+        <li>[2026-04-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/b0a6ef45f997">b0a6ef45</a>) Auth: Refactor AzureAuthenticatorHelper to support Azure AD group-based user lookup</li>
+        <li>[2026-04-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/468b523ee969">468b523e</a>) Editor: Restore core editor settings support in TinyMCE</li>
+        <li>[2026-04-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/7c41ac714c95">7c41ac71</a>) Learnpath: Refactor LpList.vue to replace rebuildListsFromItems with computed properties</li>
+        <li>[2026-04-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/c20d357d6985">c20d357d</a>) Learnpath: Refactor Learning Path components to optimize computed properties</li>
+        <li>[2026-04-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/35e3ea0ac1dc">35e3ea0a</a>) Learnpath: Refactor Learning Path components for consistent URL handling</li>
+        <li>[2026-04-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/1088f9d01cc3">1088f9d0</a>) Display: Simplify LpCardItem.vue by removing redundant h3 wrapper</li>
+        <li>[2026-04-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/790425893d26">79042589</a>) Display: Replace anchor tag with BaseButton in CCalendarEventList footer slot</li>
+        <li>[2026-04-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/e08084cd33cb">e08084cd</a>) Plugin: CStudio: Add WEB_PATH URL generation logic using Symfony router</li>
+        <li>[2026-04-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/4430f12b6e00">4430f12b</a>) Internal: Simplify URL generation by removing ABSOLUTE_URL usage</li>
+        <li>[2026-04-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/568a3a73a03c">568a3a73</a>) Display: Replace PrimeVue components with BaseComponents and adjust styles</li>
+        <li>[2026-04-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/dfe13dce484a">dfe13dce</a>) Internal: Remove ENTRYPOINT constant and replace with direct API paths across Vue files</li>
+        <li>[2026-04-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/ce90670aebe2">ce90670a</a>) Internal: Reduce window.location.origin usage</li>
+        <li>[2026-04-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/b2b20f107601">b2b20f10</a>) Internal: Simplify api_get_path root URL generation</li>
+        <li>[2026-04-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/f334444d214d">f334444d</a>) Learnpath: Replace inline error handling with notification composable in LpList.vue</li>
+        <li>[2026-04-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/118972b5ca9b">118972b5</a>) Internal: Update WCAG language locale resolution with request-based logic</li>
+        <li>[2026-04-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/a41f6f0ed3b2">a41f6f0e</a>) Auth: Refactor language detection with better ISO matching logic</li>
+        <li>[2026-04-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/ea57181270ca">ea578127</a> - <a href="https://task.beeznest.com/issues/23134">BT#23134</a>) Plugin: CStudio: Include vendor directory</li>
+        <li>[2026-04-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/73d48d77057a">73d48d77</a> - <a href="https://task.beeznest.com/issues/23134">BT#23134</a>) Plugin: CStudio: Avoid loading elfinder-related files</li>
+    </ul>
+
+    <h3>Fixed</h3>
+    <ul aria-live="off">
+        <li>[2026-05-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/647fa63f1661">647fa63f</a>) Install: Remove unnecessary dbal server-version parameter that was breaking MySQL installations</li>
+        <li>[2026-04-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/c999ae3287ef">c999ae32</a>) Admin: Fix UserListActionController to properly delegate user management actions</li>
+        <li>[2026-04-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/d5cae3efc7ef">d5cae3ef</a>) Learnpath: Remove trailing slash from getLpCategories API URL for consistency</li>
+        <li>[2026-04-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/5e4ad62f2c89">5e4ad62f</a>) Learnpath: Remove redundant loadCourseSettings call in LpList.vue</li>
+        <li>[2026-04-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/7599defec7d6">7599defe</a>) Chat: Fix conditional return in chat event handler</li>
+    </ul>
 
     <a id="2.0-stable"></a>
     <h1>Chamilo 2.0 stable - Cadbury, 2026-04-13</h1>

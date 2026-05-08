@@ -156,49 +156,117 @@ $(function() {
 });
 </script>';
 
-// Picture preview HTML
-$image = '';
+// Course picture preview and upload
+$hasCustomCoursePicture = $illustrationRepo->hasIllustration($courseEntity);
 $illustrationUrl = $illustrationRepo->getIllustrationUrl($courseEntity, 'course_picture_medium');
+$allowed_picture_types = api_get_supported_image_extensions(false);
+$acceptedPictureTypes = implode(
+    ',',
+    array_map(
+        static fn (string $extension): string => '.'.$extension,
+        $allowed_picture_types
+    )
+);
 
-if (!empty($illustrationUrl)) {
-    $image = '
-        <div class="field course-picture-preview-row">
-            <div class="course-picture-preview">
-                <small class="help-block">'.get_lang('Current picture').'</small>
-                <img class="w-full" src="'.$illustrationUrl.'" alt="'.get_lang('Current picture').'" />
-            </div>
-        </div>'
-    ;
+$pictureStatusLabel = $hasCustomCoursePicture ? get_lang('Current picture') : get_lang('Default');
+$pictureStatusClasses = $hasCustomCoursePicture
+    ? 'bg-success text-white'
+    : 'bg-gray-20 text-gray-90';
+
+$deleteCoursePictureButton = '';
+if ($hasCustomCoursePicture) {
+    $deleteCoursePictureButton = '
+        <button
+            type="submit"
+            name="delete_picture"
+            value="1"
+            class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-danger bg-white text-danger transition hover:bg-support-6"
+            title="'.get_lang('Delete picture').'"
+            aria-label="'.get_lang('Delete picture').'"
+        >
+            '.Display::getMdiIcon(
+            ActionIcon::DELETE,
+            'ch-tool-icon text-danger',
+            null,
+            ICON_SIZE_SMALL,
+            get_lang('Delete picture')
+        ).'
+        </button>';
 }
 
-// Picture file input
+$form->addHtml('
+    <div id="course-picture-card" class="my-6 rounded-2xl border border-gray-25 bg-white p-4 shadow-sm">
+        <div class="grid grid-cols-1 gap-4 lg:grid-cols-4 lg:items-start">
+            <div class="rounded-2xl border border-gray-25 bg-support-2 p-4 lg:col-span-3">
+                <div class="mb-3 flex items-center gap-2">
+                    <span class="mdi mdi-image-outline ch-tool-icon"></span>
+                    <h4 class="m-0 text-body-1 font-semibold text-gray-90">'.get_lang('Course picture').'</h4>
+                </div>
+
+                <div
+                    id="course-picture-input-target"
+                    class="min-h-24 rounded-2xl border border-dashed border-support-3 bg-white p-4"
+                >
+                    <p class="m-0 mb-2 text-body-2 font-semibold text-gray-90">'.get_lang('Add image').'</p>
+                    <p class="m-0 mb-3 text-caption text-gray-50">
+                        '.get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(', ', $allowed_picture_types).')
+                    </p>
+');
+
+// Keep the file element registered directly in QuickForm.
+// The surrounding HTML keeps the input in the visual card without moving it with JavaScript.
 $form->addFile(
     'picture',
-    get_lang('Course picture'),
+    '',
     [
         'id' => 'picture',
-        'class' => 'picture-form',
+        'class' => 'picture-form block w-full cursor-pointer rounded-xl border border-gray-25 bg-white text-body-2 text-gray-90 file:mr-4 file:border-0 file:bg-primary file:px-4 file:py-2 file:text-body-2 file:font-semibold file:text-white hover:file:bg-primary-gradient',
         'crop_image' => true,
+        'accept' => $acceptedPictureTypes,
     ]
 );
 
-$allowed_picture_types = api_get_supported_image_extensions(false);
+$form->addHtml('
+                </div>
 
-// Preview below the file input
-$form->addHtml($image);
+                <p
+                    id="course-picture-selected-file"
+                    class="mt-3 hidden text-body-2 font-semibold text-primary"
+                ></p>
+            </div>
+
+            <div class="rounded-2xl border border-gray-25 bg-support-2 p-3 lg:col-span-1">
+                <div class="mb-3 flex items-center justify-between gap-2">
+                    <span class="text-body-2 font-semibold text-gray-90">'.get_lang('Preview').'</span>
+                    <span class="flex items-center gap-2">
+                        <span
+                            id="course-picture-status"
+                            class="inline-flex items-center rounded-full px-3 py-1 text-caption font-semibold '.$pictureStatusClasses.'"
+                        >
+                            '.$pictureStatusLabel.'
+                        </span>
+                        '.$deleteCoursePictureButton.'
+                    </span>
+                </div>
+
+                <div class="aspect-video overflow-hidden rounded-xl border border-gray-25 bg-white">
+                    <img
+                        id="course-picture-preview-image"
+                        class="block h-full w-full object-cover"
+                        src="'.htmlspecialchars($illustrationUrl, ENT_QUOTES | ENT_SUBSTITUTE).'"
+                        alt="'.get_lang('Course picture').'"
+                    />
+                </div>
+            </div>
+        </div>
+    </div>
+');
+
 $form->addRule(
     'picture',
     get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(',', $allowed_picture_types).')',
     'filetype',
     $allowed_picture_types
-);
-
-// Delete checkbox
-$form->addElement(
-    'checkbox',
-    'delete_picture',
-    null,
-    get_lang('Delete picture')
 );
 
 if ('true' === api_get_setting('pdf_export_watermark_by_course')) {
@@ -1314,20 +1382,291 @@ if ($enableAiHelpers) {
 $form->setDefaults($values);
 
 $htmlHeadXtra[] = '
-<style>
-    .course-picture-preview img {
-        max-width: 320px;
-        height: auto;
-        display: block;
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    var card = document.getElementById("course-picture-card");
+    var input = document.getElementById("picture");
+    var previewImage = document.getElementById("course-picture-preview-image");
+    var selectedFile = document.getElementById("course-picture-selected-file");
+    var status = document.getElementById("course-picture-status");
+    var currentPictureLabel = '.json_encode(get_lang('Current picture')).';
+    var objectUrl = null;
+    var originalImage = null;
+    var lastCropValue = "";
+    var syncTimer = null;
+
+    function markAsCurrentPicture() {
+        if (!status) {
+            return;
+        }
+
+        status.textContent = currentPictureLabel;
+        status.classList.remove(
+            "bg-gray-20",
+            "text-gray-90",
+            "bg-success"
+        );
+        status.classList.add(
+            "bg-primary",
+            "text-white"
+        );
     }
 
-    .course-picture-preview .help-block {
-        margin-bottom: 0.25rem;
+    function updateSelectedFileName(file) {
+        if (!selectedFile) {
+            return;
+        }
+
+        selectedFile.textContent = file.name;
+        selectedFile.classList.remove("hidden");
     }
-    .field-checkbox, .field-radiobutton {
-      margin-top: 10px;
+
+    function getCropInput() {
+        return document.querySelector(
+            "input[name=\"picture_crop_result\"], textarea[name=\"picture_crop_result\"], #picture_crop_result"
+        );
     }
-</style>
+
+    function parseCropValue(value) {
+        var crop = null;
+
+        if (!value) {
+            return null;
+        }
+
+        try {
+            crop = JSON.parse(value);
+        } catch (e) {
+            try {
+                crop = Object.fromEntries(new URLSearchParams(value));
+            } catch (ignored) {
+                crop = null;
+            }
+        }
+
+        if (!crop) {
+            return null;
+        }
+
+        var x = parseFloat(crop.x || crop.left || 0);
+        var y = parseFloat(crop.y || crop.top || 0);
+        var width = parseFloat(crop.width || crop.w || 0);
+        var height = parseFloat(crop.height || crop.h || 0);
+
+        if (!width || !height) {
+            return null;
+        }
+
+        return {
+            x: x,
+            y: y,
+            width: width,
+            height: height
+        };
+    }
+
+    function normaliseCrop(crop, image) {
+        var normalised = {
+            x: crop.x,
+            y: crop.y,
+            width: crop.width,
+            height: crop.height
+        };
+
+        if (normalised.width <= 1 && normalised.height <= 1) {
+            normalised.x *= image.naturalWidth;
+            normalised.y *= image.naturalHeight;
+            normalised.width *= image.naturalWidth;
+            normalised.height *= image.naturalHeight;
+        }
+
+        normalised.x = Math.max(0, Math.min(normalised.x, image.naturalWidth - 1));
+        normalised.y = Math.max(0, Math.min(normalised.y, image.naturalHeight - 1));
+        normalised.width = Math.max(1, Math.min(normalised.width, image.naturalWidth - normalised.x));
+        normalised.height = Math.max(1, Math.min(normalised.height, image.naturalHeight - normalised.y));
+
+        return normalised;
+    }
+
+    function applyCropPreviewFromHiddenInput() {
+        var cropInput = getCropInput();
+
+        if (!cropInput || !cropInput.value || !originalImage || !previewImage) {
+            return false;
+        }
+
+        if (cropInput.value === lastCropValue) {
+            return true;
+        }
+
+        var crop = parseCropValue(cropInput.value);
+
+        if (!crop) {
+            return false;
+        }
+
+        lastCropValue = cropInput.value;
+        crop = normaliseCrop(crop, originalImage);
+
+        var canvas = document.createElement("canvas");
+        var maxWidth = 640;
+        var outputWidth = Math.min(maxWidth, Math.round(crop.width));
+        var outputHeight = Math.max(1, Math.round(outputWidth * crop.height / crop.width));
+        var context = canvas.getContext("2d");
+
+        if (!context) {
+            return false;
+        }
+
+        canvas.width = outputWidth;
+        canvas.height = outputHeight;
+
+        context.drawImage(
+            originalImage,
+            crop.x,
+            crop.y,
+            crop.width,
+            crop.height,
+            0,
+            0,
+            outputWidth,
+            outputHeight
+        );
+
+        previewImage.src = canvas.toDataURL("image/jpeg", 0.92);
+        markAsCurrentPicture();
+
+        return true;
+    }
+
+    function isCropEditorElement(element) {
+        return Boolean(
+            element.closest(
+                ".modal, .modal-dialog, .ui-dialog, .cropper-container, .cropper-wrap-box, .cropper-canvas, .jcrop-holder, [role=\"dialog\"]"
+            )
+        );
+    }
+
+    function getExternalGeneratedPreviewImages() {
+        var form = input ? input.closest("form") : null;
+        var cropInput = getCropInput();
+
+        if (!form || !card || !cropInput || !cropInput.value) {
+            return [];
+        }
+
+        return Array.prototype.filter.call(form.querySelectorAll("img"), function (image) {
+            var src = image.getAttribute("src") || "";
+
+            if (card.contains(image) || isCropEditorElement(image)) {
+                return false;
+            }
+
+            if (image.classList.contains("hidden")) {
+                return false;
+            }
+
+            return src.indexOf("blob:") === 0 || src.indexOf("data:image/") === 0;
+        });
+    }
+
+    function hideGeneratedPreviewElement(image) {
+        var current = image;
+        var stop = input ? input.closest("form") : null;
+        var steps = 0;
+
+        if (isCropEditorElement(image)) {
+            return;
+        }
+
+        while (
+            current.parentElement &&
+            current.parentElement !== stop &&
+            steps < 4
+        ) {
+            var parent = current.parentElement;
+
+            if (
+                isCropEditorElement(parent) ||
+                parent.querySelector("input[type=\"file\"], select, textarea")
+            ) {
+                break;
+            }
+
+            if (parent.children.length <= 2) {
+                current = parent;
+                steps++;
+                continue;
+            }
+
+            break;
+        }
+
+        current.classList.add("hidden");
+        current.setAttribute("aria-hidden", "true");
+    }
+
+    function hideExternalGeneratedPreviews() {
+        getExternalGeneratedPreviewImages().forEach(hideGeneratedPreviewElement);
+    }
+
+    function syncPreviewAfterCrop() {
+        var updated = applyCropPreviewFromHiddenInput();
+
+        if (updated) {
+            hideExternalGeneratedPreviews();
+        }
+    }
+
+    function readImageFile(file) {
+        if (objectUrl) {
+            window.URL.revokeObjectURL(objectUrl);
+        }
+
+        objectUrl = window.URL.createObjectURL(file);
+
+        originalImage = new Image();
+        originalImage.onload = function () {
+            if (previewImage) {
+                previewImage.src = objectUrl;
+            }
+
+            syncPreviewAfterCrop();
+        };
+        originalImage.src = objectUrl;
+    }
+
+    if (!input || !card) {
+        return;
+    }
+
+    input.addEventListener("change", function () {
+        if (!input.files || !input.files[0]) {
+            return;
+        }
+
+        lastCropValue = "";
+        updateSelectedFileName(input.files[0]);
+        readImageFile(input.files[0]);
+        markAsCurrentPicture();
+
+        if (syncTimer) {
+            window.clearInterval(syncTimer);
+        }
+
+        syncTimer = window.setInterval(syncPreviewAfterCrop, 500);
+
+        window.setTimeout(function () {
+            if (syncTimer) {
+                window.clearInterval(syncTimer);
+                syncTimer = null;
+            }
+
+            syncPreviewAfterCrop();
+        }, 30000);
+    });
+});
+</script>
 ';
 
 // Handle form submission
@@ -1382,15 +1721,19 @@ if ($form->validate()) {
             : $courseEntity->getRegistrationCode();
 
     $visibility = $updateValues['visibility'] ?? $courseEntity->getVisibility();
-    $deletePicture = !empty($updateValues['delete_picture'] ?? null);
 
     $request = Container::getRequest();
     /** @var UploadedFile|null $uploadFile */
     $uploadFile = $request->files->get('picture');
+    $deletePicture = !empty($submittedValues['delete_picture'] ?? null);
 
-    // Handle course picture upload / update
-    if (null !== $uploadFile) {
-        // Replace existing illustration with the new one
+    // Handle course picture delete / upload.
+    // Delete has priority to avoid uploading and deleting a picture in the same submit.
+    if ($deletePicture) {
+        if ($illustrationRepo->hasIllustration($courseEntity)) {
+            $illustrationRepo->deleteIllustration($courseEntity);
+        }
+    } elseif (null !== $uploadFile) {
         if ($illustrationRepo->hasIllustration($courseEntity)) {
             $illustrationRepo->deleteIllustration($courseEntity);
         }
@@ -1402,7 +1745,6 @@ if ($form->validate()) {
         );
 
         if ($file) {
-            // Crop info is provided by the crop widget (hidden field)
             if (!empty($updateValues['picture_crop_result'])) {
                 $file->setCrop($updateValues['picture_crop_result']);
             }
@@ -1415,15 +1757,6 @@ if ($form->validate()) {
                 'course_picture',
                 $uploadFile->getFilename()
             );
-        }
-    }
-
-    $visibility = $updateValues['visibility'] ?? '';
-    $deletePicture = $updateValues['delete_picture'] ?? '';
-
-    if ($deletePicture) {
-        if ($illustrationRepo->hasIllustration($courseEntity)) {
-            $illustrationRepo->deleteIllustration($courseEntity);
         }
     }
 

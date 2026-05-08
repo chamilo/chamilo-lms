@@ -4138,7 +4138,7 @@ msgid "MySql Client"
 msgstr "MySql Klijent"
 
 msgid "MySql Server"
-msgstr "MySql Server"
+msgstr "MySQL Server"
 
 msgid "Owner"
 msgstr "Vlasnik"

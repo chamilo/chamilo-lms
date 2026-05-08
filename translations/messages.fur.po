@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Cori lis rispetts"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Esempi di formule: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Esempi formulis: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rangs variabii"
@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:dirit d'autor,, no:senza dirit d'autor"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Cartelle,, application/msword:MsWord,, application/octet-stream:Flui octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:esercizi,,      simulation:simulazion,,      questionnaire:cuestionari,,      diagram:diagrami,,      figure:figure,,      graph:graf,,      index:indis,,      slide:diapositivis,,      table:tabile,,      narrative text:test narativ,,      exam:sîs,,      experiment:esperiments,,      problem statement:enunzi de problem,,      self assessment:auto valutazion,,      lecture:lecion"
@@ -17863,7 +17863,7 @@ msgid "Thread moved"
 msgstr "Fî un migrait"
 
 msgid "Migrate forum"
-msgstr "Migrate forum"
+msgstr "Migrazion forum"
 
 msgid "You will be notified"
 msgstr "Ti a saran notificât"
@@ -22225,7 +22225,7 @@ msgid "Cloud file link"
 msgstr "Luncj a file Cloud"
 
 msgid "Reset %s"
-msgstr "Reset %s"
+msgstr "Azzerâ %s"
 
 msgid "My global certificate"
 msgstr "Il gno certificât globâl"

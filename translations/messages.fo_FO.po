@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Við kærleika"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formúluprøva: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formúlubygging: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variablumørk"
@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ja:upphavsrætt,, nei:ikki upphavsrætt"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mappar,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mappa,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":uppgáva:uppgáva,,      simuleran:simuleran,,      spurnarkanning:spurnarkanning,,      diagram:diagram,,      talva:talva,,      graf:graf,,      indeks:indeks,,      fólka:folka,,      talva:talva,,      frásagnartextur:frásagnartekstur,,      próv:próv,,      tilfar:tilfar,,      trupulleikafrágreiðing:trupulleikafrágreiðing,,      sjálvmatan:sjálvmatan,,      fyrilestrar:fyrilestrar"
@@ -4804,7 +4804,7 @@ msgid "AWStats allows you to consult the statistics of your platform : visitors,
 msgstr "AWStats loyvir tær at síggja tølfrøðina á tíni pallur: gestir, síðu sær, vísa..."
 
 msgid "Chamilo LIBRARY"
-msgstr "Chamilo LIBRARY"
+msgstr "Chamilo BÓKASAVN"
 
 msgid "Chamilo LIBRARY is a Search Engine offering multi-criteria indexing and research. It is part of the Chamilo Medical features."
 msgstr "Chamilo LIBRARY er ein søkjumøguleiki sum býður multi-kriteria indeks og rannsókn. Tað er partur av Chamilo Medical eiginleikum."
@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Skriva tegstin niðanfyri"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Dæmumynd fyri at fylla í eyðskema starvsemi: rokna Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Aldur</strong></td>            <td width=\"75%\" style=\"\">[25] ár gammal</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kyni</strong></td>            <td style=\"\" text-align:=\"\">[M] (M ella F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong:Vektur</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong:Hædd</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Vektur/Hædd<sup>2</sup> (Sí.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia grein</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Dømi um útfylling av eyðskema starv: rokna Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strongAldur</strong></td>            <td width=\"75%\" style=\"\">[25] ár</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strongKyni</strong></td>            <td style=\"\" text-align:=\"\">[M] (M ella F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strongVekt</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strongHædd</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strongBody Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Vekt/Hædd<sup>2</sup> (Sí <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia grein</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Rit upp adressuna"
@@ -33832,34 +33832,34 @@ msgid "The file was saved, but its URL could not be resolved."
 msgstr "Fílan var goymd, men hennara URL kundi ikki verða løst."
 
 msgid "Generate an Aiken quiz from a topic or from one course document."
-msgstr ""
+msgstr "Ger Aiken próv frá evni ella frá einum kursusdokument."
 
 msgid "Test from topic"
-msgstr ""
+msgstr "Prógva frá evni"
 
 msgid "Test from document"
-msgstr ""
+msgstr "Prógva frá dokumenti"
 
 msgid "Generate from topic"
-msgstr ""
+msgstr "Ger frá evni"
 
 msgid "Use a topic prompt to generate a new Aiken questionnaire."
-msgstr ""
+msgstr "Brúka evni prompt at gera eitt nýtt Aiken spurnareyðskema."
 
 msgid "Quiz title"
-msgstr ""
+msgstr "Prógva heiti"
 
 msgid "Generate from document"
-msgstr ""
+msgstr "Ger frá dokumenti"
 
 msgid "Select one course document and generate questions based only on its contents."
-msgstr ""
+msgstr "Vel eitt kursusdokument og ger spurningar bert á grundinum av inninhaldinum."
 
 msgid "Selected document"
-msgstr ""
+msgstr "Valið dokument"
 
 msgid "The document is selected from the course documents list."
-msgstr ""
+msgstr "Dokumentið er valt frá listanum yvir kursusdokument."
 
 msgid "Choose document"
 msgstr "Vel dokument"

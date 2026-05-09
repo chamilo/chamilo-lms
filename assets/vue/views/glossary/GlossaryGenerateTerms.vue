@@ -112,17 +112,17 @@
             </label>
 
             <select
-              v-model.number="selectedResourceFileId"
+              v-model="selectedResourceFileId"
               class="w-full rounded-xl border border-gray-25 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-25 disabled:opacity-50 disabled:cursor-not-allowed"
-              :disabled="isBusy || !canEditGlossary || documentSourcesLoading"
+              :disabled="isBusy || !canEditGlossary"
             >
-              <option :value="0">
+              <option value="0">
                 {{ t("Use the current course context") }}
               </option>
               <option
                 v-for="doc in documentSources"
                 :key="doc.resource_file_id"
-                :value="doc.resource_file_id"
+                :value="String(doc.resource_file_id)"
               >
                 {{ doc.title }} — {{ doc.filename }}
               </option>
@@ -158,7 +158,7 @@
             <div class="mt-1">
               {{
                 t(
-                  "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+                  "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization.",
                 )
               }}
             </div>
@@ -334,15 +334,15 @@ const aiProvider = ref("") // Provider key only
 
 const documentSources = ref([])
 const documentSourcesLoading = ref(false)
-const selectedResourceFileId = ref(0)
+const selectedResourceFileId = ref("0")
 
 const selectedDocument = computed(() => {
-  const id = Number(selectedResourceFileId.value || 0)
-  if (!id) {
+  const id = String(selectedResourceFileId.value || "0")
+  if ("0" === id) {
     return null
   }
 
-  return documentSources.value.find((doc) => Number(doc.resource_file_id) === id) || null
+  return documentSources.value.find((doc) => String(doc.resource_file_id) === id) || null
 })
 
 const selectedDocumentMode = computed(() => String(selectedDocument.value?.mode || ""))
@@ -419,16 +419,20 @@ function normalizeTermTitle(input) {
   // Remove leading list markers like "-", "*", "•", "1.", "1)"
   s = s.replace(/^\s*(?:[-*•]+|\d+[.)])\s+/, "")
 
+  // Remove trailing separators sometimes left by AI output.
+  s = s.replace(/\s*[:：-]\s*$/, "")
+
   // Remove surrounding quotes (straight + smart quotes)
   s = s.replace(/^[\s"'“”‘’]+/, "").replace(/[\s"'“”‘’]+$/, "")
 
   // Remove surrounding markdown wrappers (**term**, __term__, `term`)
   // Repeat a couple of times to handle nested wrappers.
-  for (let k = 0; k < 2; k++) {
+  for (let k = 0; k < 3; k++) {
     s = s.replace(/^\*\*(.+)\*\*$/, "$1").trim()
     s = s.replace(/^__(.+)__$/, "$1").trim()
     s = s.replace(/^`(.+)`$/, "$1").trim()
     s = s.replace(/^[\s"'“”‘’]+/, "").replace(/[\s"'“”‘’]+$/, "")
+    s = s.replace(/\s*[:：-]\s*$/, "")
   }
 
   // Collapse whitespace
@@ -447,15 +451,95 @@ function cleanupDefinitionText(input) {
   s = s.replace(/\*\*(.+?)\*\*/g, "$1")
   s = s.replace(/__(.+?)__/g, "$1")
   s = s.replace(/`(.+?)`/g, "$1")
+  s = s.replace(/\s+/g, " ")
 
   return s.trim()
 }
 
+function isLikelyAiPreamble(line) {
+  const value = String(line ?? "")
+    .trim()
+    .toLowerCase()
+
+  if (!value) {
+    return true
+  }
+
+  return (
+    value.startsWith("here are") ||
+    value.startsWith("below are") ||
+    value.startsWith("these are") ||
+    value.startsWith("generated glossary") ||
+    value.startsWith("new glossary terms") ||
+    value.startsWith("glossary terms generated") ||
+    value.startsWith("the following glossary") ||
+    value.startsWith("i generated") ||
+    value.startsWith("sure,")
+  )
+}
+
 /**
- * Parse:
+ * Accept common AI output variants:
+ * 1. **Term**: Definition
+ * 1. "Term": Definition
+ * - Term: Definition
+ * Term: Definition
+ */
+function parseInlineGlossaryTerm(line) {
+  let value = String(line ?? "").trim()
+
+  if (!value || isLikelyAiPreamble(value)) {
+    return null
+  }
+
+  value = value.replace(/^\s*(?:[-*•]+|\d+[.)])\s+/, "").trim()
+
+  const separatorMatch = value.match(/\s*[:：]\s*/)
+  const separatorIndex = separatorMatch?.index ?? -1
+  if (separatorIndex <= 0) {
+    return null
+  }
+
+  const rawTerm = value.slice(0, separatorIndex).trim()
+  const rawDefinition = value.slice(separatorIndex + separatorMatch[0].length).trim()
+
+  const term = normalizeTermTitle(rawTerm)
+  const definition = cleanupDefinitionText(rawDefinition)
+
+  if (!term || !definition) {
+    return null
+  }
+
+  return { term, definition }
+}
+
+function addParsedGlossaryTerm(items, seen, term, definitionRaw) {
+  const normalizedTerm = normalizeTermTitle(term)
+  const normalizedDefinition = cleanupDefinitionText(definitionRaw)
+
+  if (!normalizedTerm || !normalizedDefinition) {
+    return
+  }
+
+  const key = normalizedTerm.toLowerCase()
+  if (seen.has(key)) {
+    return
+  }
+
+  seen.add(key)
+
+  // Store definition as safe HTML, preserve line breaks
+  const safe = escapeHtml(normalizedDefinition).replace(/\n/g, "<br>")
+  items.push({ title: normalizedTerm, description: safe })
+}
+
+/**
+ * Parse both the requested strict format:
  * Term line
- * Definition lines...
- * blank line between items
+ * Definition line
+ *
+ * and common AI variants such as:
+ * 1. **Term**: Definition
  */
 function parseGlossaryTerms(text) {
   const lines = String(text ?? "").split(/\r?\n/)
@@ -467,29 +551,43 @@ function parseGlossaryTerms(text) {
     while (i < lines.length && lines[i].trim() === "") i++
     if (i >= lines.length) break
 
-    const rawTerm = lines[i].trim()
+    const currentLine = lines[i].trim()
+
+    if (isLikelyAiPreamble(currentLine)) {
+      i++
+      continue
+    }
+
+    const inlineItem = parseInlineGlossaryTerm(currentLine)
+    if (inlineItem) {
+      addParsedGlossaryTerm(items, seen, inlineItem.term, inlineItem.definition)
+      i++
+      continue
+    }
+
+    const rawTerm = currentLine
     i++
 
     const defLines = []
     while (i < lines.length && lines[i].trim() !== "") {
+      const possibleNextItem = parseInlineGlossaryTerm(lines[i].trim())
+
+      if (possibleNextItem && defLines.length > 0) {
+        break
+      }
+
       defLines.push(lines[i])
       i++
+
+      if (possibleNextItem) {
+        break
+      }
     }
 
     const term = normalizeTermTitle(rawTerm)
-    const definitionRaw = cleanupDefinitionText(defLines.join("\n").trim())
+    const definitionRaw = defLines.join("\n").trim()
 
-    if (term && definitionRaw) {
-      const key = term.toLowerCase()
-      if (seen.has(key)) {
-        continue
-      }
-      seen.add(key)
-
-      // Store definition as safe HTML, preserve line breaks
-      const safe = escapeHtml(definitionRaw).replace(/\n/g, "<br>")
-      items.push({ title: term, description: safe })
-    }
+    addParsedGlossaryTerm(items, seen, term, definitionRaw)
   }
 
   return items
@@ -577,7 +675,7 @@ async function applyDefaultPrompt(force = false) {
       sid: route.query.sid,
       n: n.value,
       language: locale.value || "en",
-      resource_file_id: selectedResourceFileId.value || undefined,
+      resource_file_id: selectedResourceFileId.value !== "0" ? Number(selectedResourceFileId.value) : undefined,
     })
 
     if ((force || !promptDirty.value) && res?.prompt) {
@@ -629,7 +727,7 @@ async function runGeneration() {
       sid: route.query.sid,
       ai_provider: aiProvider.value, // Send provider key only
       tool: "glossary",
-      resource_file_id: selectedResourceFileId.value || undefined,
+      resource_file_id: selectedResourceFileId.value !== "0" ? Number(selectedResourceFileId.value) : undefined,
       document_title: selectedDocument.value?.title || selectedDocument.value?.filename || undefined,
     })
 

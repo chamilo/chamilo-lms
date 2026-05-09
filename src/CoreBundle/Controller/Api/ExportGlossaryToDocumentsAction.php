@@ -14,8 +14,10 @@ use Chamilo\CourseBundle\Repository\CGlossaryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use PDF;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 use const ENT_QUOTES;
@@ -27,9 +29,8 @@ final class ExportGlossaryToDocumentsAction
         Request $request,
         CGlossaryRepository $repo,
         EntityManagerInterface $em,
-        KernelInterface $kernel,
-        TranslatorInterface $translator
-    ): string {
+        TranslatorInterface $translator,
+    ): Response {
         $data = json_decode((string) $request->getContent(), true) ?: [];
 
         $parentResourceNodeId = (int) ($data['parentResourceNodeId'] ?? 0);
@@ -56,57 +57,57 @@ final class ExportGlossaryToDocumentsAction
             $session = $em->getRepository(Session::class)->find($sid);
         }
 
-        // Important: export only glossary items for the current course/session context.
-        if ($course) {
-            $qb = $repo->getResourcesByCourse($course, $session, null, null, true, true);
-
-            // The alias used by getResourcesByCourse() is "resource" (as seen in GetGlossaryCollectionController).
-            $qb->orderBy('resource.title', 'ASC');
-
-            /** @var CGlossary[] $glossaryItems */
-            $glossaryItems = $qb->getQuery()->getResult();
-        } else {
-            // Fallback to keep behavior resilient if cid is missing.
-            /** @var CGlossary[] $glossaryItems */
-            $glossaryItems = $repo->findAll();
+        if (!$course instanceof Course) {
+            throw new BadRequestHttpException('Course not found.');
         }
 
-        $exportPath = $kernel->getCacheDir();
-        $pdfFilePath = $this->generatePdfFile($glossaryItems, $exportPath, $translator);
+        $qb = $repo->getResourcesByCourse($course, $session, null, null, true, true);
 
-        if (!empty($pdfFilePath) && file_exists($pdfFilePath)) {
-            $fileName = basename($pdfFilePath);
+        // The alias used by getResourcesByCourse() is "resource" (as seen in GetGlossaryCollectionController).
+        $qb->orderBy('resource.title', 'ASC');
 
-            // Important: mark as "test" because this file is generated on the server (not uploaded by HTTP).
-            $uploadFile = new UploadedFile(
-                $pdfFilePath,
-                $fileName,
-                'application/pdf',
-                null,
-                true
-            );
+        /** @var CGlossary[] $glossaryItems */
+        $glossaryItems = $qb->getQuery()->getResult();
 
-            $document = new CDocument();
-            $document->setTitle($fileName);
-            $document->setUploadFile($uploadFile);
-            $document->setFiletype('file');
+        $pdfFilePath = $this->generatePdfFile($glossaryItems, $course, $session, $translator);
 
-            if ($parentResourceNodeId > 0) {
-                $document->setParentResourceNode($parentResourceNodeId);
-            }
-
-            if (!empty($resourceLinkList)) {
-                $document->setResourceLinkArray($resourceLinkList);
-            }
-
-            // Save the CDocument entity to the database
-            $em->persist($document);
-            $em->flush();
-
-            @unlink($pdfFilePath);
+        if (empty($pdfFilePath) || !file_exists($pdfFilePath)) {
+            throw new BadRequestHttpException('The glossary PDF could not be generated.');
         }
 
-        return $pdfFilePath;
+        $fileName = basename($pdfFilePath);
+
+        // Important: mark as "test" because this file is generated on the server (not uploaded by HTTP).
+        $uploadFile = new UploadedFile(
+            $pdfFilePath,
+            $fileName,
+            'application/pdf',
+            null,
+            true
+        );
+
+        $document = new CDocument();
+        $document->setTitle($fileName);
+        $document->setUploadFile($uploadFile);
+        $document->setFiletype('file');
+
+        if ($parentResourceNodeId > 0) {
+            $document->setParentResourceNode($parentResourceNodeId);
+        }
+
+        if (!empty($resourceLinkList)) {
+            $document->setResourceLinkArray($resourceLinkList);
+        }
+
+        $em->persist($document);
+        $em->flush();
+
+        @unlink($pdfFilePath);
+
+        return new JsonResponse([
+            'created' => true,
+            'title' => $fileName,
+        ]);
     }
 
     /**
@@ -139,18 +140,38 @@ final class ExportGlossaryToDocumentsAction
     /**
      * @param CGlossary[] $glossaryItems
      */
-    private function generatePdfFile(array $glossaryItems, string $exportPath, TranslatorInterface $translator): string
-    {
+    private function generatePdfFile(
+        array $glossaryItems,
+        Course $course,
+        ?Session $session,
+        TranslatorInterface $translator,
+    ): string {
         $date = date('Y-m-d');
         $suffix = bin2hex(random_bytes(4));
-        $pdfFileName = 'glossary_'.$date.'_'.$suffix.'.pdf';
-        $pdfFilePath = rtrim($exportPath, '/').'/'.$pdfFileName;
+        $fileBase = 'glossary_'.$date.'_'.$suffix;
 
-        $mpdf = new PDF();
+        $html = '<style>
+            body { font-family: Arial, sans-serif; font-size: 12px; }
+            h1 { font-size: 18px; margin-bottom: 6px; }
+            table { width: 100%; border-collapse: collapse; margin-top: 6px; }
+            th, td { border: 1px solid #ddd; padding: 6px; vertical-align: top; }
+            th { background: #f4f4f4; }
+            .muted { color: #666; font-size: 11px; margin-bottom: 10px; }
+        </style>';
 
-        $html = '<h1>'.$translator->trans('Glossary').'</h1>';
-        $html .= '<table border="1" cellpadding="6" cellspacing="0" width="100%">';
-        $html .= '<tr><th>'.$translator->trans('Term').'</th><th>'.$translator->trans('Term definition').'</th></tr>';
+        $html .= '<h1>'.$translator->trans('Glossary').'</h1>';
+
+        $meta = $course->getCode();
+        if ($session instanceof Session) {
+            $meta .= ' / '.$translator->trans('Session').' #'.$session->getId();
+        }
+        $html .= '<div class="muted">'.htmlspecialchars($meta, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'</div>';
+
+        $html .= '<table>';
+        $html .= '<tr>';
+        $html .= '<th>'.$translator->trans('Term').'</th>';
+        $html .= '<th>'.$translator->trans('Term definition').'</th>';
+        $html .= '</tr>';
 
         foreach ($glossaryItems as $item) {
             $term = htmlspecialchars((string) $item->getTitle(), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
@@ -163,10 +184,18 @@ final class ExportGlossaryToDocumentsAction
         }
         $html .= '</table>';
 
-        $mpdf->pdf->WriteHTML($html);
-
-        $mpdf->pdf->Output($pdfFilePath, 'F');
-
-        return $pdfFilePath;
+        return (new PDF())
+            ->content_to_pdf(
+                $html,
+                null,
+                $fileBase,
+                $course->getCode(),
+                'F',
+                false,
+                null,
+                false,
+                true
+            )
+        ;
     }
 }

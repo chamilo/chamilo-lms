@@ -357,7 +357,7 @@ class UserManager
             $params = [
                 'complete_name' => stripslashes(api_get_person_name($firstName, $lastName)),
                 'login_name' => $loginName,
-                'original_password' => stripslashes((string) $original_password),
+                'original_password' => (string) $original_password,
                 'mailWebPath' => $url,
                 'new_user' => $user,
                 'search_link' => $url,
@@ -1240,7 +1240,7 @@ class UserManager
 
             $originalPassword = '';
             if ($reset_password > 0) {
-                $originalPassword = stripslashes($original_password);
+                $originalPassword = (string) $original_password;
             }
             $tplContent->assign('original_password', $originalPassword);
             $tplContent->assign('portal_url', $url);

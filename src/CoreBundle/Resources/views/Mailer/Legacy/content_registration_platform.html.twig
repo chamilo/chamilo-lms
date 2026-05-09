@@ -7,7 +7,7 @@
     <p>{{ 'You are registered to'|trans({}, 'messages', user_locale) }} {{ 'platform.site_name' | api_get_setting }} {{ 'with the following settings:'|trans({}, 'messages', user_locale) }}</p>
     <p>{{ 'Username'|trans({}, 'messages', user_locale) }} : {{ login_name }}<br>
         {% if show_password is not defined or show_password %}
-            {{ 'Pass'|trans({}, 'messages', user_locale) }} : {{ original_password }}
+            {{ 'Pass'|trans({}, 'messages', user_locale) }} : {{ original_password|e('html') }}
         {% endif %}
     </p>
     <p>{{ 'For more details visit %s'|trans({'%s': search_link}, 'messages', user_locale) }}</p>

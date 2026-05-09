@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\AiProvider\AiVideoJobProviderInterface;
 use Chamilo\CoreBundle\AiProvider\AiVideoProviderInterface;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceFile;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEDefault;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
@@ -20,6 +21,7 @@ use Chamilo\CoreBundle\Helpers\MessageHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Repository\TrackEAttemptRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
+use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGlossary;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Repository\CGlossaryRepository;
@@ -123,9 +125,19 @@ class AiController extends AbstractController
             return new JsonResponse(['documents' => []], 404);
         }
 
+        $documents = [];
+        $seen = [];
         $qb = $this->em->createQueryBuilder();
         $qb
-            ->select('DISTINCT rf')
+            ->select(
+                'DISTINCT rf.id AS resource_file_id',
+                'rn.id AS resource_node_id',
+                'rn.title AS title',
+                'rf.title AS file_title',
+                'rf.originalName AS original_name',
+                'rf.mimeType AS mime_type',
+                'rf.size AS size'
+            )
             ->from(ResourceFile::class, 'rf')
             ->join('rf.resourceNode', 'rn')
             ->join('rn.resourceLinks', 'rl')
@@ -136,7 +148,11 @@ class AiController extends AbstractController
                     'LOWER(rf.mimeType) = :pdfMime',
                     'LOWER(rf.mimeType) LIKE :textMime',
                     'LOWER(rf.originalName) LIKE :pdfExt',
-                    'LOWER(rf.originalName) LIKE :txtExt'
+                    'LOWER(rf.originalName) LIKE :txtExt',
+                    'LOWER(rf.title) LIKE :pdfExt',
+                    'LOWER(rf.title) LIKE :txtExt',
+                    'LOWER(rn.title) LIKE :pdfExt',
+                    'LOWER(rn.title) LIKE :txtExt'
                 )
             )
             ->orderBy('rn.title', 'ASC')
@@ -156,36 +172,77 @@ class AiController extends AbstractController
             ;
         }
 
-        /** @var list<ResourceFile> $resourceFiles */
-        $resourceFiles = $qb->getQuery()->getResult();
-        $documents = [];
+        /** @var list<array<string, mixed>> $rows */
+        $rows = $qb->getQuery()->getArrayResult();
 
-        foreach ($resourceFiles as $resourceFile) {
-            if (!$resourceFile instanceof ResourceFile) {
-                continue;
+        foreach ($rows as $row) {
+            $this->addGlossaryDocumentSourceFromRow($documents, $seen, $row);
+        }
+
+        /*
+         * Fallback for installations where the document resource link is
+         * resolved through CDocument. This keeps the selector robust without
+         * replacing the ResourceFile flow that already worked.
+         */
+        if (count($documents) < 200) {
+            $qb = $this->em->createQueryBuilder();
+            $qb
+                ->select(
+                    'DISTINCT d.iid AS document_id',
+                    'rn.title AS title',
+                    'rf.id AS resource_file_id',
+                    'rf.title AS file_title',
+                    'rf.originalName AS original_name',
+                    'rf.mimeType AS mime_type',
+                    'rf.size AS size'
+                )
+                ->from(CDocument::class, 'd')
+                ->join('d.resourceNode', 'rn')
+                ->join('rn.resourceLinks', 'rl')
+                ->join('rn.resourceFiles', 'rf')
+                ->where('IDENTITY(rl.course) = :cid')
+                ->andWhere('rl.deletedAt IS NULL')
+                ->andWhere('d.filetype = :filetype')
+                ->andWhere(
+                    $qb->expr()->orX(
+                        'LOWER(rf.mimeType) = :pdfMime',
+                        'LOWER(rf.mimeType) LIKE :textMime',
+                        'LOWER(rf.originalName) LIKE :pdfExt',
+                        'LOWER(rf.originalName) LIKE :txtExt',
+                        'LOWER(rf.title) LIKE :pdfExt',
+                        'LOWER(rf.title) LIKE :txtExt',
+                        'LOWER(rn.title) LIKE :pdfExt',
+                        'LOWER(rn.title) LIKE :txtExt'
+                    )
+                )
+                ->orderBy('rn.title', 'ASC')
+                ->addOrderBy('rf.id', 'ASC')
+                ->setMaxResults(200)
+                ->setParameter('cid', $cid, Types::INTEGER)
+                ->setParameter('filetype', 'file')
+                ->setParameter('pdfMime', 'application/pdf')
+                ->setParameter('textMime', 'text/plain%')
+                ->setParameter('pdfExt', '%.pdf')
+                ->setParameter('txtExt', '%.txt')
+            ;
+
+            if (0 < $sid) {
+                $qb
+                    ->andWhere('(IDENTITY(rl.session) = :sid OR rl.session IS NULL)')
+                    ->setParameter('sid', $sid, Types::INTEGER)
+                ;
             }
 
-            $node = $resourceFile->getResourceNode();
-            if (null === $node) {
-                continue;
+            /** @var list<array<string, mixed>> $rows */
+            $rows = $qb->getQuery()->getArrayResult();
+
+            foreach ($rows as $row) {
+                if (200 <= count($documents)) {
+                    break;
+                }
+
+                $this->addGlossaryDocumentSourceFromRow($documents, $seen, $row);
             }
-
-            $filename = (string) ($resourceFile->getOriginalName() ?: $resourceFile->getTitle() ?: $node->getTitle());
-            $mimeType = (string) ($resourceFile->getMimeType() ?: '');
-            $mode = $this->getSupportedDocumentMode($filename, $mimeType);
-
-            if ('' === $mode) {
-                continue;
-            }
-
-            $documents[] = [
-                'resource_file_id' => (int) $resourceFile->getId(),
-                'title' => (string) $node->getTitle(),
-                'filename' => $filename,
-                'mime_type' => $mimeType,
-                'mode' => $mode,
-                'size' => (int) ($resourceFile->getSize() ?? 0),
-            ];
         }
 
         return new JsonResponse(['documents' => $documents]);
@@ -222,6 +279,8 @@ class AiController extends AbstractController
             return new JsonResponse(['prompt' => ''], 404);
         }
 
+        $existingTerms = $this->getExistingGlossaryTermTitles($course, $sid);
+
         if (0 < $resourceFileId) {
             /** @var ResourceFile|null $resourceFile */
             $resourceFile = $this->em->getRepository(ResourceFile::class)->find($resourceFileId);
@@ -237,11 +296,14 @@ class AiController extends AbstractController
             $documentTitle = null !== $node ? (string) $node->getTitle() : (string) ($resourceFile->getOriginalName() ?: $resourceFile->getTitle());
 
             return new JsonResponse([
-                'prompt' => $this->buildGlossaryFromDocumentPrompt(
-                    (string) $course->getTitle(),
-                    $documentTitle,
-                    (string) $request->query->get('language', 'en'),
-                    $n
+                'prompt' => $this->appendExistingGlossaryTermsToPrompt(
+                    $this->buildGlossaryFromDocumentPrompt(
+                        (string) $course->getTitle(),
+                        $documentTitle,
+                        (string) $request->query->get('language', 'en'),
+                        $n
+                    ),
+                    $existingTerms
                 ),
             ]);
         }
@@ -261,6 +323,8 @@ class AiController extends AbstractController
             );
             $prompt .= ' '.\sprintf($descPrefix, $courseTitle).' '.$desc;
         }
+
+        $prompt = $this->appendExistingGlossaryTermsToPrompt($prompt, $existingTerms);
 
         return new JsonResponse(['prompt' => $prompt]);
     }
@@ -324,6 +388,8 @@ class AiController extends AbstractController
                 'text' => 'Course not found.',
             ], 404);
         }
+
+        $existingTerms = $this->getExistingGlossaryTermTitles($course, $sid);
 
         try {
             if (0 < $resourceFileId) {
@@ -408,7 +474,10 @@ class AiController extends AbstractController
                 }
 
                 $docLabel = '' !== $documentTitle ? $documentTitle : (string) ($node->getTitle() ?: $filename);
-                $documentPrompt = $this->buildGlossaryFromDocumentPrompt((string) $course->getTitle(), $docLabel, $language, $n);
+                $documentPrompt = $this->appendExistingGlossaryTermsToPrompt(
+                    $this->buildGlossaryFromDocumentPrompt((string) $course->getTitle(), $docLabel, $language, $n),
+                    $existingTerms
+                );
 
                 if ('txt' === $mode) {
                     $text = $this->normalizePlainText($binary);
@@ -517,6 +586,8 @@ class AiController extends AbstractController
                     'ai_assisted' => $this->aiDisclosureHelper->isDisclosureEnabled(),
                 ]);
             }
+
+            $prompt = $this->appendExistingGlossaryTermsToPrompt($prompt, $existingTerms);
 
             $provider = $this->aiProviderFactory->getProvider($providerName, 'text');
 
@@ -2303,6 +2374,127 @@ class AiController extends AbstractController
         return $base;
     }
 
+    /**
+     * @param list<array<string, mixed>> $documents
+     * @param array<int, bool> $seen
+     * @param array<string, mixed> $row
+     */
+    private function addGlossaryDocumentSourceFromRow(array &$documents, array &$seen, array $row): void
+    {
+        $resourceFileId = (int) ($row['resource_file_id'] ?? 0);
+        if (0 >= $resourceFileId || isset($seen[$resourceFileId])) {
+            return;
+        }
+
+        $title = trim((string) ($row['title'] ?? ''));
+        $fileTitle = trim((string) ($row['file_title'] ?? ''));
+        $originalName = trim((string) ($row['original_name'] ?? ''));
+        $filename = $originalName ?: $fileTitle ?: $title;
+        $mimeType = trim((string) ($row['mime_type'] ?? ''));
+        $mode = $this->getSupportedDocumentMode($filename, $mimeType);
+
+        if ('' === $mode) {
+            return;
+        }
+
+        $seen[$resourceFileId] = true;
+        $documents[] = [
+            'resource_file_id' => $resourceFileId,
+            'document_id' => (int) ($row['document_id'] ?? 0),
+            'title' => '' !== $title ? $title : $filename,
+            'filename' => $filename,
+            'mime_type' => $mimeType,
+            'mode' => $mode,
+            'size' => (int) ($row['size'] ?? 0),
+        ];
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function getExistingGlossaryTermTitles(Course $course, int $sid = 0, int $limit = 200): array
+    {
+        $session = null;
+        if (0 < $sid) {
+            /** @var Session|null $session */
+            $session = $this->em->getRepository(Session::class)->find($sid);
+        }
+
+        $repo = $this->em->getRepository(CGlossary::class);
+        if (!$repo instanceof CGlossaryRepository) {
+            return [];
+        }
+
+        try {
+            $qb = $repo->getResourcesByCourse($course, $session, null, null, true, true);
+            $qb
+                ->orderBy('resource.title', 'ASC')
+                ->setMaxResults($limit)
+            ;
+
+            /** @var list<CGlossary> $glossaryItems */
+            $glossaryItems = $qb->getQuery()->getResult();
+        } catch (Throwable) {
+            return [];
+        }
+
+        $terms = [];
+        $seen = [];
+
+        foreach ($glossaryItems as $item) {
+            if (!$item instanceof CGlossary) {
+                continue;
+            }
+
+            $title = $this->normalizeExistingGlossaryTermTitle($item->getTitle());
+            if ('' === $title) {
+                continue;
+            }
+
+            $key = mb_strtolower($title);
+            if (isset($seen[$key])) {
+                continue;
+            }
+
+            $seen[$key] = true;
+            $terms[] = $title;
+        }
+
+        return $terms;
+    }
+
+    private function normalizeExistingGlossaryTermTitle(string $title): string
+    {
+        $title = trim(strip_tags($title));
+        $title = preg_replace('/\s+/u', ' ', $title) ?? '';
+
+        return trim($title);
+    }
+
+    /**
+     * @param list<string> $existingTerms
+     */
+    private function appendExistingGlossaryTermsToPrompt(string $prompt, array $existingTerms): string
+    {
+        if (empty($existingTerms)) {
+            return $prompt;
+        }
+
+        if (str_contains($prompt, 'Existing glossary terms that must not be generated again:')) {
+            return $prompt;
+        }
+
+        $prompt .= "\n\nExisting glossary terms that must not be generated again:\n";
+
+        foreach ($existingTerms as $term) {
+            $prompt .= '- '.$term."\n";
+        }
+
+        $prompt .= "\nDo not generate duplicate entries for these terms, and do not generate minor spelling, plural, singular or capitalization variants of them.";
+
+        return $prompt;
+    }
+
     private function resourceFileBelongsToCourse(ResourceFile $resourceFile, int $courseId): bool
     {
         if (0 >= $courseId) {
@@ -2310,18 +2502,34 @@ class AiController extends AbstractController
         }
 
         $node = $resourceFile->getResourceNode();
-        if (null === $node) {
-            return false;
-        }
-
-        foreach ($node->getResourceLinks() as $link) {
-            $linkCourse = $link->getCourse();
-            if ($linkCourse && (int) $linkCourse->getId() === $courseId) {
-                return true;
+        if (null !== $node) {
+            foreach ($node->getResourceLinks() as $link) {
+                $linkCourse = $link->getCourse();
+                if ($linkCourse && (int) $linkCourse->getId() === $courseId) {
+                    return true;
+                }
             }
         }
 
-        return false;
+        $qb = $this->em->createQueryBuilder();
+        $count = (int) $qb
+            ->select('COUNT(d.iid)')
+            ->from(CDocument::class, 'd')
+            ->join('d.resourceNode', 'rn')
+            ->join('rn.resourceLinks', 'rl')
+            ->join('rn.resourceFiles', 'rf')
+            ->where('rf.id = :resourceFileId')
+            ->andWhere('IDENTITY(rl.course) = :courseId')
+            ->andWhere('rl.deletedAt IS NULL')
+            ->andWhere('d.filetype = :filetype')
+            ->setParameter('resourceFileId', (int) $resourceFile->getId(), Types::INTEGER)
+            ->setParameter('courseId', $courseId, Types::INTEGER)
+            ->setParameter('filetype', 'file')
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        return 0 < $count;
     }
 
     private function buildGlossaryFromDocumentPrompt(

@@ -71,6 +71,9 @@
                     {% set courseTitle = data.course_title|default('') %}
                     {% set courseCode = data.course_code|default('') %}
                     {% set courseImg = data.course_image_url|default('') %}
+                    {% set thumbnailUrl = data.thumbnail_url|default('') %}
+                    {% set thumbnailIcon = data.thumbnail_icon|default(data.file_icon|default('mdi-file-outline')) %}
+                    {% set thumbnailSource = data.thumbnail_source|default('icon') %}
                     {% set fileIcon = data.file_icon|default('mdi-file-outline') %}
                     {% set fileExt = data.file_ext|default('') %}
                     {% set filetype = data.filetype|default('unknown') %}
@@ -125,20 +128,23 @@
 
                     <div class="w-full rounded-xl border border-gray-20 bg-white shadow-sm hover:shadow-md transition p-4">
                         <div class="flex gap-4">
-                            {# Course image / placeholder #}
-                            <div class="w-16 h-16 rounded-lg overflow-hidden bg-gray-10 flex items-center justify-center shrink-0">
-                                {% if courseImg %}
+                            {# Result thumbnail: document image, course image, then file-type icon. #}
+                            <div
+                                    class="w-16 h-16 rounded-lg overflow-hidden bg-gray-10 flex items-center justify-center shrink-0"
+                                    title="{{ thumbnailSource == 'document' ? title : (thumbnailSource == 'course' ? courseTitle : fileExt|upper ?: filetype) }}"
+                            >
+                                {% if thumbnailUrl %}
                                     <img
-                                            src="{{ courseImg }}"
-                                            alt="{{ courseTitle ?: courseCode }}"
+                                            src="{{ thumbnailUrl }}"
+                                            alt="{{ thumbnailSource == 'document' ? title : (courseTitle ?: courseCode) }}"
                                             class="w-full h-full object-cover"
                                             loading="lazy"
                                     >
                                 {% else %}
-                                    {% set initials = courseCode ? courseCode|slice(0, 2) : 'C' %}
-                                    <div class="text-gray-700 font-semibold text-sm px-2" title="{{ courseCode }}">
-                                        {{ initials|upper }}
-                                    </div>
+                                    <span
+                                            class="mdi {{ thumbnailIcon }} text-4xl text-gray-600"
+                                            aria-hidden="true"
+                                    ></span>
                                 {% endif %}
                             </div>
 

@@ -192,7 +192,8 @@ final class AiTutorChatService
     private function buildProviderMessagesForChat(
         Course $course,
         AiTutorConversation $conversation,
-        string $newUserMessage
+        string $newUserMessage,
+        string $selectedTextContext = ''
     ): array {
         $system = $this->buildSystemPrompt($course);
 
@@ -211,9 +212,25 @@ final class AiTutorChatService
             }
         }
 
-        $providerMessages[] = ['role' => 'user', 'content' => $newUserMessage];
+        $providerMessages[] = [
+            'role' => 'user',
+            'content' => $this->buildUserMessageWithSelectedTextContext($newUserMessage, $selectedTextContext),
+        ];
 
         return $providerMessages;
+    }
+
+    private function buildUserMessageWithSelectedTextContext(string $message, string $selectedTextContext): string
+    {
+        $selectedTextContext = trim($selectedTextContext);
+        if ('' === $selectedTextContext) {
+            return $message;
+        }
+
+        return "Use the following text selected by the student as context for the question. "
+            ."Base the answer on this selection when it is relevant. Do not mention that it was provided as context unless useful.\n\n"
+            ."Selected text:\n\"\"\"\n".$selectedTextContext."\n\"\"\"\n\n"
+            ."Student question:\n".$message;
     }
 
     /**
@@ -227,7 +244,8 @@ final class AiTutorChatService
         Course $course,
         ?Session $session,
         string $provider,
-        string $message
+        string $message,
+        string $selectedTextContext = ''
     ): array {
         $provider = strtolower(trim($provider));
 
@@ -240,7 +258,7 @@ final class AiTutorChatService
 
         $conversation = $this->findConversationOrNew($userId, $course, $session, $provider);
 
-        $providerMessages = $this->buildProviderMessagesForChat($course, $conversation, $message);
+        $providerMessages = $this->buildProviderMessagesForChat($course, $conversation, $message, $selectedTextContext);
 
         $options = [
             'temperature' => 0.4,
@@ -284,7 +302,8 @@ final class AiTutorChatService
         Course $course,
         ?Session $session,
         string $preferredProvider,
-        string $message
+        string $message,
+        string $selectedTextContext = ''
     ): array {
         $courseId = (int) $course->getId();
         $preferredProvider = strtolower(trim($preferredProvider));
@@ -293,7 +312,7 @@ final class AiTutorChatService
         try {
             error_log('[AiTutorChat] Trying provider (fast path): '.$preferredProvider);
 
-            $meta = $this->tryChatProviderOnce($userId, $course, $session, $preferredProvider, $message);
+            $meta = $this->tryChatProviderOnce($userId, $course, $session, $preferredProvider, $message, $selectedTextContext);
 
             $this->setActiveProviderInSession($courseId, $meta['provider']);
 
@@ -331,7 +350,7 @@ final class AiTutorChatService
             try {
                 error_log('[AiTutorChat] Trying provider (failover): '.$provider);
 
-                $meta = $this->tryChatProviderOnce($userId, $course, $session, $provider, $message);
+                $meta = $this->tryChatProviderOnce($userId, $course, $session, $provider, $message, $selectedTextContext);
 
                 $this->setActiveProviderInSession($courseId, $provider);
 
@@ -461,10 +480,18 @@ final class AiTutorChatService
         Course $course,
         ?Session $session,
         string $provider,
-        string $message
+        string $message,
+        string $selectedTextContext = ''
     ): bool {
         try {
-            $this->handleUserMessageAndGetAssistantText($userId, $course, $session, $provider, $message);
+            $this->handleUserMessageAndGetAssistantText(
+                $userId,
+                $course,
+                $session,
+                $provider,
+                $message,
+                $selectedTextContext
+            );
 
             return true;
         } catch (Throwable $e) {
@@ -537,13 +564,17 @@ final class AiTutorChatService
         int $userId,
         string $providerKey,
         string $message,
-        string $uiLang
+        string $uiLang,
+        string $selectedTextContext = ''
     ): string {
         $systemPrompt = $this->resolveSystemPrompt($uiLang);
 
         $messages = [
             ['role' => 'system', 'content' => $systemPrompt],
-            ['role' => 'user', 'content' => $message],
+            [
+                'role' => 'user',
+                'content' => $this->buildUserMessageWithSelectedTextContext($message, $selectedTextContext),
+            ],
         ];
 
         return $this->client->chat($providerKey, $messages, [
@@ -641,7 +672,8 @@ final class AiTutorChatService
         Course $course,
         ?Session $session,
         string $provider,
-        string $message
+        string $message,
+        string $selectedTextContext = ''
     ): string {
         $provider = $this->resolveProviderForCourse($course, $provider);
         $message = trim($message);
@@ -651,7 +683,7 @@ final class AiTutorChatService
         }
 
         // Failover before persisting anything (prevents half-written messages)
-        $meta = $this->chatWithFailover($userId, $course, $session, $provider, $message);
+        $meta = $this->chatWithFailover($userId, $course, $session, $provider, $message, $selectedTextContext);
 
         $providerUsed = $meta['provider'];
         $conversation = $meta['conversation'];
@@ -730,7 +762,8 @@ final class AiTutorChatService
         ?Session $session,
         string $provider,
         string $message,
-        string $uiLang
+        string $uiLang,
+        string $selectedTextContext = ''
     ): array {
         $provider = $this->resolveProviderForCourse($course, $provider);
         $message = trim($message);
@@ -741,7 +774,7 @@ final class AiTutorChatService
 
         try {
             // Failover before persisting anything
-            $meta = $this->chatWithFailover($userId, $course, $session, $provider, $message);
+            $meta = $this->chatWithFailover($userId, $course, $session, $provider, $message, $selectedTextContext);
 
             $providerUsed = $meta['provider'];
             $conversation = $meta['conversation'];
@@ -1020,7 +1053,8 @@ final class AiTutorChatService
         Course $course,
         ?Session $session,
         string $provider,
-        string $message
+        string $message,
+        string $selectedTextContext = ''
     ): array {
         $provider = $this->resolveProviderForCourse($course, $provider);
         $message = trim($message);
@@ -1030,7 +1064,7 @@ final class AiTutorChatService
         }
 
         // Failover before persisting
-        $meta = $this->chatWithFailover($userId, $course, $session, $provider, $message);
+        $meta = $this->chatWithFailover($userId, $course, $session, $provider, $message, $selectedTextContext);
 
         $providerUsed = $meta['provider'];
         $conversation = $meta['conversation'];

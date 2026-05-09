@@ -26,6 +26,7 @@ use Chamilo\CoreBundle\Security\Authenticator\LoginTokenAuthenticator;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
 use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
@@ -190,6 +191,29 @@ class SecurityController extends AbstractController
             }
         }
 
+        if ($this->mustRenewPasswordAtFirstLogin($user)) {
+            return $this->json([
+                'force_password_change' => true,
+                'first_login' => true,
+                'message' => $translator->trans(
+                    'This is your first login. Please update your password to something you will remember.'
+                ),
+                'redirect' => $this->generateUrl('chamilo_core_account_change_password', [
+                    'first_login' => 1,
+                ]),
+            ]);
+        }
+
+        if ($this->mustRotatePassword($user)) {
+            return $this->json([
+                'force_password_change' => true,
+                'rotate_password' => true,
+                'redirect' => $this->generateUrl('chamilo_core_account_change_password', [
+                    'rotate' => 1,
+                ]),
+            ]);
+        }
+
         $redirectUrl = $this->calculateRedirectUrl(
             $user,
             $this->entityManager->getRepository(Course::class),
@@ -199,24 +223,6 @@ class SecurityController extends AbstractController
             return $this->json([
                 'redirect' => $redirectUrl,
             ]);
-        }
-
-        // Password rotation check
-        $days = (int) $this->settingsManager->getSetting('security.password_rotation_days', true);
-        if ($days > 0) {
-            $lastUpdate = $user->getPasswordUpdatedAt() ?? $user->getCreatedAt();
-            $diffDays = (new DateTimeImmutable())->diff($lastUpdate)->days;
-
-            if ($diffDays > $days) {
-                // Clean token and session before forcing password rotation.
-                $tokenStorage->setToken(null);
-                $request->getSession()->invalidate();
-
-                return $this->json([
-                    'rotate_password' => true,
-                    'redirect' => '/account/change-password?rotate=1&userId='.$user->getId(),
-                ]);
-            }
         }
 
         $data = null;
@@ -413,6 +419,30 @@ class SecurityController extends AbstractController
 
             return '';
         }
+    }
+
+    private function mustRenewPasswordAtFirstLogin(User $user): bool
+    {
+        return 'true' === $this->settingsManager->getSetting('security.force_renew_password_at_first_login', true)
+            && null !== $user->getPasswordRequestedAt()
+            && null === $user->getConfirmationToken();
+    }
+
+    private function mustRotatePassword(User $user): bool
+    {
+        $days = (int) $this->settingsManager->getSetting('security.password_rotation_days', true);
+        if (0 >= $days) {
+            return false;
+        }
+
+        $lastUpdate = $user->getPasswordUpdatedAt() ?? $user->getCreatedAt();
+        if (!$lastUpdate instanceof DateTimeInterface) {
+            return false;
+        }
+
+        $diffDays = (new DateTimeImmutable())->diff($lastUpdate)->days;
+
+        return $diffDays > $days;
     }
 
     private function calculateRedirectUrl(

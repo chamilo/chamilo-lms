@@ -202,6 +202,11 @@ class IndexBlocksController extends BaseController
                 'url' => $this->generateUrl('admin_security_simple_ids'),
                 'label' => $this->translator->trans('Simple IDS'),
             ],
+            [
+                'class' => 'item-security-password-strength',
+                'url' => $this->generateUrl('admin_security_password_strength'),
+                'label' => $this->translator->trans('Password strength checker'),
+            ],
         ];
     }
 

@@ -5,7 +5,10 @@
       {{ t("Export glossary") }}
     </template>
 
-    <GlossaryExportForm @back-pressed="goBack" />
+    <GlossaryExportForm
+      @back-pressed="goBack"
+      @exported="goBack"
+    />
   </LayoutFormGeneric>
 </template>
 

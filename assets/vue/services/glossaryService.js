@@ -26,7 +26,11 @@ export default {
 
   export: async (formData) => {
     const response = await axios.post("/api/glossaries/export", formData, { responseType: "blob" })
-    return response.data
+
+    return {
+      data: response.data,
+      headers: response.headers,
+    }
   },
 
   import: async (formData) => {

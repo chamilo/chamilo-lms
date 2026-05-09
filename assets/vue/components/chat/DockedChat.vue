@@ -201,6 +201,22 @@
                 @keydown.enter.prevent.exact="send"
                 @keydown.enter.shift.exact="newline"
               />
+              <div
+                v-if="isAiThread && selectionWordCount > 0"
+                aria-live="polite"
+                class="chd-selection-chip"
+              >
+                <i class="mdi mdi-text-box-search-outline" />
+                <span>{{ t("Selection") }} {{ selectionWordCount }}</span>
+                <button
+                  :aria-label="t('Remove selection context')"
+                  class="chd-selection-chip__close"
+                  type="button"
+                  @click="dismissSelectionContext"
+                >
+                  <i class="mdi mdi-close" />
+                </button>
+              </div>
               <div class="chd-composer__actions">
                 <span class="chd-hint">{{ t("Enter to send · Shift+Enter for newline") }}</span>
                 <div class="chd-spacer" />
@@ -1364,6 +1380,322 @@ const sendDisabled = computed(() => {
   return false
 })
 
+const selectionWordCount = ref(0)
+const selectedTextContext = ref("")
+const dismissedSelectedTextContext = ref("")
+let selectionRefreshTimer = null
+let selectionPollingTimer = null
+let selectionFrameObserver = null
+const observedSelectionDocuments = new Set()
+const observedSelectionFrames = new Set()
+
+function nodeToElement(node) {
+  if (!node) return null
+  if (node.nodeType === Node.ELEMENT_NODE) return node
+  return node.parentElement || null
+}
+
+function nodeMatches(node, selector) {
+  const el = nodeToElement(node)
+  return !!el?.closest?.(selector)
+}
+
+function isSelectionInsideChatDock(selection) {
+  return (
+    nodeMatches(selection?.anchorNode, ".chd") ||
+    nodeMatches(selection?.focusNode, ".chd") ||
+    nodeMatches(selection?.rangeCount ? selection.getRangeAt(0).commonAncestorContainer : null, ".chd")
+  )
+}
+
+function isSelectionInsideEditable(selection) {
+  const selector = "input, textarea, select, [contenteditable='true'], [contenteditable='']"
+  return (
+    nodeMatches(selection?.anchorNode, selector) ||
+    nodeMatches(selection?.focusNode, selector) ||
+    nodeMatches(selection?.rangeCount ? selection.getRangeAt(0).commonAncestorContainer : null, selector)
+  )
+}
+
+function isTextSelectionContextAllowed() {
+  const tool = String(route?.meta?.tool || "").toLowerCase()
+  if (["document", "forum", "wiki", "portfolio"].includes(tool)) return true
+
+  const routeName = String(route?.name || "").toLowerCase()
+  const routePath = String(route?.path || "").toLowerCase()
+  const fullPath = String(route?.fullPath || "").toLowerCase()
+  const currentPath = String(window.location.pathname || "").toLowerCase()
+  const currentSearch = String(window.location.search || "").toLowerCase()
+  const context = `${routeName} ${routePath} ${fullPath} ${currentPath} ${currentSearch}`
+
+  if (routeName.startsWith("lp") || context.includes("/resources/lp") || context.includes("learnpath")) return true
+  if (context.includes("lp_id=") || context.includes("origin=learnpath")) return true
+
+  return ["document", "forum", "wiki", "portfolio"].some((name) => {
+    return (
+      routeName.includes(name) ||
+      context.includes(`/resources/${name}`) ||
+      context.includes(`/${name}/`) ||
+      context.includes(`${name}.php`) ||
+      context.includes(`tool=${name}`)
+    )
+  })
+}
+
+function normalizeSelectedText(text) {
+  return String(text || "")
+    .replace(/\u00a0/g, " ")
+    .replace(/[\u200B-\u200D\uFEFF]/g, "")
+    .replace(/\s+/g, " ")
+    .trim()
+}
+
+function countWords(text) {
+  const normalized = normalizeSelectedText(text)
+  if (!normalized) return 0
+
+  if (typeof Intl !== "undefined" && typeof Intl.Segmenter === "function") {
+    try {
+      const segmenter = new Intl.Segmenter(undefined, { granularity: "word" })
+      let count = 0
+      for (const segment of segmenter.segment(normalized)) {
+        if (segment.isWordLike) count++
+      }
+
+      if (count > 0) return count
+    } catch {
+      // Fall back to the regex-based counter below.
+    }
+  }
+
+  try {
+    const matches = normalized.match(/[\p{L}\p{N}]+(?:[’'_\-][\p{L}\p{N}]+)*/gu)
+    return matches ? matches.length : 0
+  } catch {
+    const matches = normalized.match(/[^\s.,;:!?()[\]{}"“”‘’<>/\\|]+/g)
+    return matches ? matches.length : 0
+  }
+}
+
+function getSelectionText(selection) {
+  if (!selection || !selection.rangeCount) return ""
+
+  const rangeTexts = []
+  for (let i = 0; i < selection.rangeCount; i++) {
+    try {
+      const fragmentText = selection.getRangeAt(i).cloneContents().textContent || ""
+      if (fragmentText) rangeTexts.push(fragmentText)
+    } catch {
+      // Some browser selections cannot be cloned. Use selection.toString() below.
+    }
+  }
+
+  const rangeText = normalizeSelectedText(rangeTexts.join(" "))
+  if (rangeText) return rangeText
+
+  return normalizeSelectedText(selection.toString())
+}
+
+function getSameOriginSelectionDocuments(rootDocument = document, visited = new Set()) {
+  if (!rootDocument || visited.has(rootDocument)) return []
+
+  visited.add(rootDocument)
+
+  const docs = [rootDocument]
+
+  rootDocument.querySelectorAll("iframe").forEach((iframe) => {
+    try {
+      const frameDocument = iframe.contentDocument || iframe.contentWindow?.document
+      if (frameDocument && !visited.has(frameDocument)) {
+        docs.push(...getSameOriginSelectionDocuments(frameDocument, visited))
+      }
+    } catch {
+      // Ignore cross-origin frames. Their selection cannot be read safely.
+    }
+  })
+
+  return docs
+}
+
+function getSelectionFromDocument(doc) {
+  try {
+    return doc.getSelection?.() || doc.defaultView?.getSelection?.() || null
+  } catch {
+    return null
+  }
+}
+
+function getSelectedTextCandidateFromDocument(doc) {
+  const selection = getSelectionFromDocument(doc)
+  if (!selection || selection.isCollapsed || !selection.rangeCount) return null
+
+  if (isSelectionInsideChatDock(selection) || isSelectionInsideEditable(selection)) {
+    return null
+  }
+
+  const normalizedText = getSelectionText(selection)
+  const wordCount = countWords(normalizedText)
+
+  if (!normalizedText || wordCount <= 0) return null
+
+  return {
+    text: normalizedText,
+    wordCount,
+  }
+}
+
+function getBestSelectedTextCandidate() {
+  return getSameOriginSelectionDocuments()
+    .map((doc) => getSelectedTextCandidateFromDocument(doc))
+    .filter(Boolean)
+    .sort((a, b) => b.wordCount - a.wordCount || b.text.length - a.text.length)[0]
+}
+
+function registerSelectionFrameLoadListeners() {
+  getSameOriginSelectionDocuments().forEach((doc) => {
+    doc.querySelectorAll("iframe").forEach((iframe) => {
+      if (observedSelectionFrames.has(iframe)) return
+
+      iframe.addEventListener("load", scheduleSelectionRefresh, true)
+      observedSelectionFrames.add(iframe)
+    })
+  })
+}
+
+function registerSelectionDocumentListeners() {
+  getSameOriginSelectionDocuments().forEach((doc) => {
+    if (!observedSelectionDocuments.has(doc)) {
+      doc.addEventListener("selectionchange", scheduleSelectionRefresh, true)
+      doc.addEventListener("mouseup", scheduleSelectionRefresh, true)
+      doc.addEventListener("pointerup", scheduleSelectionRefresh, true)
+      doc.addEventListener("touchend", scheduleSelectionRefresh, true)
+      observedSelectionDocuments.add(doc)
+    }
+  })
+
+  registerSelectionFrameLoadListeners()
+}
+
+function unregisterSelectionDocumentListeners() {
+  observedSelectionDocuments.forEach((doc) => {
+    doc.removeEventListener("selectionchange", scheduleSelectionRefresh, true)
+    doc.removeEventListener("mouseup", scheduleSelectionRefresh, true)
+    doc.removeEventListener("pointerup", scheduleSelectionRefresh, true)
+    doc.removeEventListener("touchend", scheduleSelectionRefresh, true)
+  })
+  observedSelectionDocuments.clear()
+
+  observedSelectionFrames.forEach((iframe) => {
+    iframe.removeEventListener("load", scheduleSelectionRefresh, true)
+  })
+  observedSelectionFrames.clear()
+}
+
+function startSelectionFrameObserver() {
+  if (selectionFrameObserver) return
+
+  selectionFrameObserver = new MutationObserver(() => {
+    refreshSelectionDocumentListeners()
+    scheduleSelectionRefresh()
+  })
+
+  selectionFrameObserver.observe(document.body, {
+    childList: true,
+    subtree: true,
+  })
+}
+
+function stopSelectionFrameObserver() {
+  if (!selectionFrameObserver) return
+
+  selectionFrameObserver.disconnect()
+  selectionFrameObserver = null
+}
+
+function startSelectionPolling() {
+  if (selectionPollingTimer) return
+
+  selectionPollingTimer = window.setInterval(() => {
+    if (!open.value || !isAiThread.value || !isTextSelectionContextAllowed()) return
+
+    refreshSelectionDocumentListeners()
+    refreshSelectedTextWordCount()
+  }, 500)
+}
+
+function stopSelectionPolling() {
+  if (!selectionPollingTimer) return
+
+  window.clearInterval(selectionPollingTimer)
+  selectionPollingTimer = null
+}
+
+function refreshSelectionDocumentListeners() {
+  registerSelectionDocumentListeners()
+  window.setTimeout(registerSelectionDocumentListeners, 300)
+  window.setTimeout(registerSelectionDocumentListeners, 1000)
+  window.setTimeout(registerSelectionDocumentListeners, 2000)
+}
+
+function refreshSelectedTextWordCount() {
+  if (!open.value || !isAiThread.value || !isTextSelectionContextAllowed()) {
+    return
+  }
+
+  refreshSelectionDocumentListeners()
+
+  const candidate = getBestSelectedTextCandidate()
+  if (!candidate) {
+    dismissedSelectedTextContext.value = ""
+    return
+  }
+
+  if (dismissedSelectedTextContext.value && dismissedSelectedTextContext.value === candidate.text) {
+    selectedTextContext.value = ""
+    selectionWordCount.value = 0
+    return
+  }
+
+  dismissedSelectedTextContext.value = ""
+  selectedTextContext.value = candidate.text
+  selectionWordCount.value = candidate.wordCount
+}
+
+function scheduleSelectionRefresh() {
+  if (selectionRefreshTimer) clearTimeout(selectionRefreshTimer)
+  selectionRefreshTimer = setTimeout(refreshSelectedTextWordCount, 120)
+}
+
+function clearSelectionContext(rememberDismissed = false) {
+  if (rememberDismissed && selectedTextContext.value) {
+    dismissedSelectedTextContext.value = selectedTextContext.value
+  }
+  selectedTextContext.value = ""
+  selectionWordCount.value = 0
+}
+
+function clearSelectionWordCount() {
+  clearSelectionContext(false)
+}
+
+function dismissSelectionContext() {
+  clearSelectionContext(true)
+}
+
+watch([open, isAiThread, () => route.fullPath], () => {
+  refreshSelectionDocumentListeners()
+  scheduleSelectionRefresh()
+
+  if (open.value && isAiThread.value && isTextSelectionContextAllowed()) {
+    startSelectionFrameObserver()
+    startSelectionPolling()
+    return
+  }
+
+  stopSelectionPolling()
+  stopSelectionFrameObserver()
+})
+
 async function send() {
   if (!activePeer.value || !draft.value) return
 
@@ -1403,7 +1735,11 @@ async function send() {
   sending.value = true
 
   try {
-    const extra = pid === AI_PEER_ID ? { ai_provider: tutorCtx.provider } : {}
+    const selectionContext = pid === AI_PEER_ID && selectedTextContext.value ? selectedTextContext.value : ""
+    const extra =
+      pid === AI_PEER_ID
+        ? { ai_provider: tutorCtx.provider, selected_text: selectionContext }
+        : {}
     const res = await post(API.send, { to: pid, message: raw, chat_sec_token: me.secToken, ...extra })
 
     if (res?.assistant?.id) {
@@ -1693,6 +2029,13 @@ function newline() {}
 
 onMounted(async () => {
   registerLegacyChatGlobals()
+  window.addEventListener("focus", scheduleSelectionRefresh, true)
+  window.addEventListener("mouseup", scheduleSelectionRefresh, true)
+  window.addEventListener("pointerup", scheduleSelectionRefresh, true)
+  window.addEventListener("touchend", scheduleSelectionRefresh, true)
+  refreshSelectionDocumentListeners()
+  startSelectionFrameObserver()
+  startSelectionPolling()
 
   if (!canRenderDock.value) return
 
@@ -1715,6 +2058,15 @@ onBeforeUnmount(() => {
   stopHeartbeat()
   clearInterval(contactsTimer)
   contactsTimer = null
+  if (selectionRefreshTimer) clearTimeout(selectionRefreshTimer)
+  stopSelectionPolling()
+  stopSelectionFrameObserver()
+  window.removeEventListener("focus", scheduleSelectionRefresh, true)
+  window.removeEventListener("mouseup", scheduleSelectionRefresh, true)
+  window.removeEventListener("pointerup", scheduleSelectionRefresh, true)
+  window.removeEventListener("touchend", scheduleSelectionRefresh, true)
+  unregisterSelectionDocumentListeners()
+  clearSelectionWordCount()
   stopBlinkNow()
 })
 </script>
@@ -1791,5 +2143,42 @@ html[dir="rtl"] .chd .chd-contacts .chd-contact-dot {
 .chd-ai__hint {
   margin: 6px 2px 0;
   font-size: 12px;
+}
+.chd-selection-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  max-width: 100%;
+  margin-top: 8px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(255, 193, 7, 0.14);
+  color: #4a3b00;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.chd-selection-chip .mdi {
+  font-size: 14px;
+}
+.chd-selection-chip__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  margin-inline-start: 2px;
+  border: 0;
+  border-radius: 9999px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.75;
+}
+.chd-selection-chip__close:hover {
+  background: rgba(0, 0, 0, 0.08);
+  opacity: 1;
 }
 </style>

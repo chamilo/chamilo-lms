@@ -50,6 +50,7 @@ final class ChatController extends AbstractController
     private const AI_TUTOR_UNAVAILABLE_SESSION_KEY = 'ai_tutor_temporarily_unavailable_until';
     private const AI_TUTOR_UNAVAILABLE_COOLDOWN_SECONDS = 60;
     private const AI_TUTOR_UNAVAILABLE_MESSAGE = 'AI tutor is temporarily unavailable. Please try again later.';
+    private const AI_SELECTED_TEXT_CONTEXT_MAX_CHARS = 12000;
 
     public function __construct(
         private readonly CidReqHelper $cidReqHelper,
@@ -573,6 +574,10 @@ final class ChatController extends AbstractController
                 return new JsonResponse(['id' => 0]);
             }
 
+            $selectedTextContext = $this->normalizeAiSelectedTextContext(
+                (string) $req->request->get('selected_text', '')
+            );
+
             // AI tutor must be available only inside a course.
             $course = $this->resolveCourseFromRequest($req, $doctrine);
             if (null === $course) {
@@ -672,7 +677,8 @@ final class ChatController extends AbstractController
                         $course,
                         null,
                         $providerKey,
-                        $message
+                        $message,
+                        $selectedTextContext
                     );
                 } else {
                     // Global mode: keep current behavior (no ai_tutor_* persistence without course)
@@ -680,7 +686,8 @@ final class ChatController extends AbstractController
                         (int) $me,
                         $providerKey,
                         $message,
-                        $uiLang
+                        $uiLang,
+                        $selectedTextContext
                     );
                 }
             } catch (Throwable $e) {
@@ -816,6 +823,30 @@ final class ChatController extends AbstractController
         $aiTutorChatService->resetConversation((int) $me, $course, null, $providerKey);
 
         return new JsonResponse(['ok' => true]);
+    }
+
+    private function normalizeAiSelectedTextContext(string $text): string
+    {
+        $text = trim(strip_tags($text));
+        if ('' === $text) {
+            return '';
+        }
+
+        $normalized = preg_replace('/[\s\x{00A0}]+/u', ' ', $text);
+        if (null === $normalized) {
+            $normalized = preg_replace('/\s+/', ' ', $text) ?? $text;
+        }
+
+        $normalized = trim($normalized);
+        if ('' === $normalized) {
+            return '';
+        }
+
+        if (mb_strlen($normalized, 'UTF-8') > self::AI_SELECTED_TEXT_CONTEXT_MAX_CHARS) {
+            return mb_substr($normalized, 0, self::AI_SELECTED_TEXT_CONTEXT_MAX_CHARS, 'UTF-8');
+        }
+
+        return $normalized;
     }
 
     /**

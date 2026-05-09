@@ -97,8 +97,71 @@
               v-if="providers.length === 0"
               class="text-xs text-danger mt-1"
             >
-              No text AI providers available.
+              {{ noProviderMessage }}
             </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Document source -->
+      <div class="rounded-2xl border border-gray-25 bg-white p-4">
+        <div class="space-y-3">
+          <div>
+            <label class="block text-sm font-medium mb-1">
+              {{ t("Source document") }}
+            </label>
+
+            <select
+              v-model.number="selectedResourceFileId"
+              class="w-full rounded-xl border border-gray-25 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-25 disabled:opacity-50 disabled:cursor-not-allowed"
+              :disabled="isBusy || !canEditGlossary || documentSourcesLoading"
+            >
+              <option :value="0">
+                {{ t("Use the current course context") }}
+              </option>
+              <option
+                v-for="doc in documentSources"
+                :key="doc.resource_file_id"
+                :value="doc.resource_file_id"
+              >
+                {{ doc.title }} — {{ doc.filename }}
+              </option>
+            </select>
+
+            <p
+              v-if="documentSourcesLoading"
+              class="text-xs text-gray-60 mt-1"
+            >
+              {{ t("Loading documents...") }}
+            </p>
+            <p
+              v-else-if="documentSources.length === 0"
+              class="text-xs text-gray-60 mt-1"
+            >
+              {{ t("No compatible PDF or TXT document was found in this course.") }}
+            </p>
+            <p
+              v-else
+              class="text-xs text-gray-60 mt-1"
+            >
+              {{ t("Select a PDF or TXT document to generate terms only from that document.") }}
+            </p>
+          </div>
+
+          <div
+            v-if="selectedDocument"
+            class="rounded-xl border border-yellow-300 bg-yellow-50 p-3 text-sm text-yellow-800"
+          >
+            <div class="font-semibold">
+              {{ t("Confidentiality warning") }}
+            </div>
+            <div class="mt-1">
+              {{
+                t(
+                  "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+                )
+              }}
+            </div>
           </div>
         </div>
       </div>
@@ -112,7 +175,7 @@
             <button
               type="button"
               class="rounded-xl border border-gray-25 px-3 py-2 text-xs hover:bg-gray-15 disabled:opacity-50 disabled:cursor-not-allowed"
-              :disabled="isBusy || !canEditGlossary"
+              :disabled="isBusy || !canEditGlossary || !!selectedDocument"
               @click="applyDefaultPrompt(true)"
               title="Restore default prompt"
             >
@@ -125,10 +188,19 @@
           v-model="prompt"
           rows="6"
           class="w-full rounded-xl border border-gray-25 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-25 disabled:opacity-50 disabled:cursor-not-allowed"
-          :disabled="isBusy || !canEditGlossary"
+          :disabled="isBusy || !canEditGlossary || !!selectedDocument"
           @input="promptDirty = true"
         />
-        <p class="text-xs text-gray-60 mt-2">
+        <p
+          v-if="selectedDocument"
+          class="text-xs text-gray-60 mt-2"
+        >
+          {{ t("When a document is selected, the prompt is fixed so the generation uses only that document content.") }}
+        </p>
+        <p
+          v-else
+          class="text-xs text-gray-60 mt-2"
+        >
           Tip: keep the requested format (term line, definition next line, blank line between items) for best imports.
         </p>
 
@@ -256,8 +328,40 @@ const n = ref(15)
  * Providers are normalized to:
  * [{ key: "openai", label: "openai (gpt-4o)" }, ...]
  */
-const providers = ref([])
+const textProviders = ref([])
+const documentProcessProviders = ref([])
 const aiProvider = ref("") // Provider key only
+
+const documentSources = ref([])
+const documentSourcesLoading = ref(false)
+const selectedResourceFileId = ref(0)
+
+const selectedDocument = computed(() => {
+  const id = Number(selectedResourceFileId.value || 0)
+  if (!id) {
+    return null
+  }
+
+  return documentSources.value.find((doc) => Number(doc.resource_file_id) === id) || null
+})
+
+const selectedDocumentMode = computed(() => String(selectedDocument.value?.mode || ""))
+
+const providers = computed(() => {
+  if (selectedDocumentMode.value === "pdf") {
+    return documentProcessProviders.value
+  }
+
+  return textProviders.value
+})
+
+const noProviderMessage = computed(() => {
+  if (selectedDocumentMode.value === "pdf") {
+    return t("No document-processing AI providers available.")
+  }
+
+  return t("No text AI providers available.")
+})
 
 const prompt = ref("")
 const promptDirty = ref(false)
@@ -391,30 +495,78 @@ function parseGlossaryTerms(text) {
   return items
 }
 
+function normalizeProviders(raw) {
+  const values = Array.isArray(raw) ? raw : Object.entries(raw || {}).map(([key, label]) => ({ key, label }))
+
+  return values
+    .map((p) => {
+      if (typeof p === "string") {
+        const s = p.trim()
+        return s ? { key: s, label: s } : null
+      }
+
+      if (p && typeof p === "object") {
+        const key = String(p.key ?? p.name ?? "").trim()
+        if (!key) return null
+        const label = String(p.label ?? key).trim()
+        return { key, label }
+      }
+
+      return null
+    })
+    .filter(Boolean)
+}
+
+function selectFirstAvailableProvider() {
+  const options = providers.value || []
+  const current = String(aiProvider.value || "").trim()
+
+  if (current && options.some((p) => p.key === current)) {
+    return
+  }
+
+  aiProvider.value = options[0]?.key || ""
+}
+
 async function loadProviders() {
   try {
     const res = await glossaryService.getTextProviders()
-    const raw = res?.providers || []
-    providers.value = raw
-      .map((p) => {
-        if (typeof p === "string") {
-          const s = p.trim()
-          return s ? { key: s, label: s } : null
-        }
-        if (p && typeof p === "object") {
-          const key = String(p.key ?? p.name ?? "").trim()
-          if (!key) return null
-          const label = String(p.label ?? key).trim()
-          return { key, label }
-        }
-        return null
-      })
-      .filter(Boolean)
-    aiProvider.value = providers.value[0]?.key || ""
+    textProviders.value = normalizeProviders(res?.providers || [])
+
+    try {
+      const capabilities = await glossaryService.getAiCapabilities()
+      documentProcessProviders.value = normalizeProviders(
+        capabilities?.providers?.document_process || capabilities?.types?.document_process || [],
+      )
+    } catch (e) {
+      console.warn("[GlossaryGenerateTerms] Failed to load AI capabilities:", e)
+      documentProcessProviders.value = []
+    }
+
+    selectFirstAvailableProvider()
   } catch (e) {
     console.error("[GlossaryGenerateTerms] Failed to load AI providers:", e)
-    providers.value = []
+    textProviders.value = []
+    documentProcessProviders.value = []
     aiProvider.value = ""
+  }
+}
+
+async function loadDocumentSources() {
+  documentSourcesLoading.value = true
+
+  try {
+    const res = await glossaryService.getDocumentSources({
+      cid: route.query.cid,
+      sid: route.query.sid,
+    })
+
+    documentSources.value = Array.isArray(res?.documents) ? res.documents : []
+  } catch (e) {
+    console.error("[GlossaryGenerateTerms] Failed to load document sources:", e)
+    documentSources.value = []
+  } finally {
+    documentSourcesLoading.value = false
   }
 }
 
@@ -425,6 +577,7 @@ async function applyDefaultPrompt(force = false) {
       sid: route.query.sid,
       n: n.value,
       language: locale.value || "en",
+      resource_file_id: selectedResourceFileId.value || undefined,
     })
 
     if ((force || !promptDirty.value) && res?.prompt) {
@@ -438,7 +591,14 @@ async function applyDefaultPrompt(force = false) {
 
     if (force || !promptDirty.value) {
       const title = course.value?.title || course.value?.name || ""
-      prompt.value = `Generate ${n.value} glossary terms for a course on '${title}', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition.`
+      const selectedTitle = selectedDocument.value?.title || selectedDocument.value?.filename || ""
+
+      if (selectedTitle) {
+        prompt.value = `Generate ${n.value} glossary terms exclusively from the document '${selectedTitle}', each term on a single line, with its definition on the next line and one blank line between each term. Do not use outside knowledge.`
+      } else {
+        prompt.value = `Generate ${n.value} glossary terms for a course on '${title}', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition.`
+      }
+
       if (force) {
         promptDirty.value = false
       }
@@ -469,13 +629,20 @@ async function runGeneration() {
       sid: route.query.sid,
       ai_provider: aiProvider.value, // Send provider key only
       tool: "glossary",
+      resource_file_id: selectedResourceFileId.value || undefined,
+      document_title: selectedDocument.value?.title || selectedDocument.value?.filename || undefined,
     })
+
+    if (!res?.success) {
+      notification.showErrorNotification(res?.text || "AI glossary generation failed.")
+      return
+    }
 
     generatedText.value = res.text || ""
     notification.showSuccessNotification(t("Generate glossary terms"))
   } catch (e) {
     console.error("[GlossaryGenerateTerms] AI glossary generation failed:", e)
-    notification.showErrorNotification("AI glossary generation failed.")
+    notification.showErrorNotification(e?.response?.data?.text || "AI glossary generation failed.")
   } finally {
     isBusy.value = false
   }
@@ -540,8 +707,27 @@ watch(n, async () => {
   await applyDefaultPrompt(false)
 })
 
+watch(
+  () => selectedResourceFileId.value,
+  async () => {
+    generatedText.value = null
+    importReport.value = null
+    promptDirty.value = false
+    selectFirstAvailableProvider()
+    await applyDefaultPrompt(true)
+  },
+)
+
+watch(
+  () => providers.value,
+  () => {
+    selectFirstAvailableProvider()
+  },
+  { deep: true },
+)
+
 onMounted(async () => {
-  await loadProviders()
+  await Promise.all([loadProviders(), loadDocumentSources()])
   await applyDefaultPrompt(false)
 })
 </script>

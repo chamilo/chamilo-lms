@@ -24,6 +24,7 @@ use Chamilo\CourseBundle\Entity\CGlossary;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Repository\CGlossaryRepository;
 use DateTime;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Question;
@@ -100,23 +101,114 @@ class AiController extends AbstractController
         return new JsonResponse(['providers' => $providers]);
     }
 
+    #[Route('/glossary_document_sources', name: 'chamilo_core_ai_glossary_document_sources', methods: ['GET'])]
+    public function glossaryDocumentSources(Request $request): JsonResponse
+    {
+        try {
+            $this->denyIfNotTeacher();
+        } catch (AccessDeniedException) {
+            return new JsonResponse(['documents' => []], 403);
+        }
+
+        $cid = (int) $request->query->get('cid', 0);
+        $sid = (int) $request->query->get('sid', 0);
+
+        if (0 === $cid) {
+            return new JsonResponse(['documents' => []], 400);
+        }
+
+        /** @var Course|null $course */
+        $course = $this->em->getRepository(Course::class)->find($cid);
+        if (null === $course) {
+            return new JsonResponse(['documents' => []], 404);
+        }
+
+        $qb = $this->em->createQueryBuilder();
+        $qb
+            ->select('DISTINCT rf')
+            ->from(ResourceFile::class, 'rf')
+            ->join('rf.resourceNode', 'rn')
+            ->join('rn.resourceLinks', 'rl')
+            ->where('IDENTITY(rl.course) = :cid')
+            ->andWhere('rl.deletedAt IS NULL')
+            ->andWhere(
+                $qb->expr()->orX(
+                    'LOWER(rf.mimeType) = :pdfMime',
+                    'LOWER(rf.mimeType) LIKE :textMime',
+                    'LOWER(rf.originalName) LIKE :pdfExt',
+                    'LOWER(rf.originalName) LIKE :txtExt'
+                )
+            )
+            ->orderBy('rn.title', 'ASC')
+            ->addOrderBy('rf.id', 'ASC')
+            ->setMaxResults(200)
+            ->setParameter('cid', $cid, Types::INTEGER)
+            ->setParameter('pdfMime', 'application/pdf')
+            ->setParameter('textMime', 'text/plain%')
+            ->setParameter('pdfExt', '%.pdf')
+            ->setParameter('txtExt', '%.txt')
+        ;
+
+        if (0 < $sid) {
+            $qb
+                ->andWhere('(IDENTITY(rl.session) = :sid OR rl.session IS NULL)')
+                ->setParameter('sid', $sid, Types::INTEGER)
+            ;
+        }
+
+        /** @var list<ResourceFile> $resourceFiles */
+        $resourceFiles = $qb->getQuery()->getResult();
+        $documents = [];
+
+        foreach ($resourceFiles as $resourceFile) {
+            if (!$resourceFile instanceof ResourceFile) {
+                continue;
+            }
+
+            $node = $resourceFile->getResourceNode();
+            if (null === $node) {
+                continue;
+            }
+
+            $filename = (string) ($resourceFile->getOriginalName() ?: $resourceFile->getTitle() ?: $node->getTitle());
+            $mimeType = (string) ($resourceFile->getMimeType() ?: '');
+            $mode = $this->getSupportedDocumentMode($filename, $mimeType);
+
+            if ('' === $mode) {
+                continue;
+            }
+
+            $documents[] = [
+                'resource_file_id' => (int) $resourceFile->getId(),
+                'title' => (string) $node->getTitle(),
+                'filename' => $filename,
+                'mime_type' => $mimeType,
+                'mode' => $mode,
+                'size' => (int) ($resourceFile->getSize() ?? 0),
+            ];
+        }
+
+        return new JsonResponse(['documents' => $documents]);
+    }
+
     #[Route('/glossary_default_prompt', name: 'chamilo_core_ai_glossary_default_prompt', methods: ['GET'])]
     public function glossaryDefaultPrompt(Request $request): JsonResponse
     {
         try {
             $this->denyIfNotTeacher();
-        } catch (AccessDeniedException $e) {
+        } catch (AccessDeniedException) {
             return new JsonResponse(['prompt' => ''], 403);
         }
 
         $cid = (int) $request->query->get('cid', 0);
         $sid = (int) $request->query->get('sid', 0);
         $n = (int) $request->query->get('n', 15);
+        $resourceFileId = (int) $request->query->get('resource_file_id', 0);
 
-        if ($n < 1) {
+        if (1 > $n) {
             $n = 1;
         }
-        if ($n > 200) {
+        if (200 < $n) {
             $n = 200;
         }
 
@@ -128,6 +220,30 @@ class AiController extends AbstractController
         $course = $this->em->getRepository(Course::class)->find($cid);
         if (null === $course) {
             return new JsonResponse(['prompt' => ''], 404);
+        }
+
+        if (0 < $resourceFileId) {
+            /** @var ResourceFile|null $resourceFile */
+            $resourceFile = $this->em->getRepository(ResourceFile::class)->find($resourceFileId);
+            if (null === $resourceFile) {
+                return new JsonResponse(['prompt' => ''], 404);
+            }
+
+            if (!$this->resourceFileBelongsToCourse($resourceFile, $cid)) {
+                return new JsonResponse(['prompt' => ''], 403);
+            }
+
+            $node = $resourceFile->getResourceNode();
+            $documentTitle = null !== $node ? (string) $node->getTitle() : (string) ($resourceFile->getOriginalName() ?: $resourceFile->getTitle());
+
+            return new JsonResponse([
+                'prompt' => $this->buildGlossaryFromDocumentPrompt(
+                    (string) $course->getTitle(),
+                    $documentTitle,
+                    (string) $request->query->get('language', 'en'),
+                    $n
+                ),
+            ]);
         }
 
         $courseTitle = (string) $course->getTitle();
@@ -154,11 +270,18 @@ class AiController extends AbstractController
     {
         try {
             $this->denyIfNotTeacher();
-        } catch (AccessDeniedException $e) {
+        } catch (AccessDeniedException) {
             return new JsonResponse([
                 'success' => false,
                 'text' => 'Access denied.',
             ], 403);
+        }
+
+        $debug = false;
+        try {
+            $debug = (bool) $this->getParameter('kernel.debug');
+        } catch (Throwable) {
+            $debug = false;
         }
 
         $data = json_decode($request->getContent(), true);
@@ -172,33 +295,21 @@ class AiController extends AbstractController
         $n = (int) ($data['n'] ?? 15);
         $language = (string) ($data['language'] ?? 'en');
         $prompt = trim((string) ($data['prompt'] ?? ''));
-        $providerName = null;
-
-        $providerRaw = $data['ai_provider'] ?? null;
-        if (\is_array($providerRaw)) {
-            // Front-end may send {key,label}
-            $providerName = isset($providerRaw['key']) ? trim((string) $providerRaw['key']) : null;
-            if (null === $providerName || '' === $providerName) {
-                $providerName = isset($providerRaw['name']) ? trim((string) $providerRaw['name']) : null;
-            }
-        } elseif (\is_string($providerRaw)) {
-            $providerName = trim($providerRaw);
-        }
-
-        if ('' === (string) $providerName) {
-            $providerName = null; // Use factory default
-        }
+        $providerName = $this->normalizeProviderNameFromPayload($data['ai_provider'] ?? null);
         $cid = (int) ($data['cid'] ?? 0);
+        $sid = (int) ($data['sid'] ?? 0);
         $toolName = trim((string) ($data['tool'] ?? 'glossary'));
+        $resourceFileId = (int) ($data['resource_file_id'] ?? 0);
+        $documentTitle = trim((string) ($data['document_title'] ?? ''));
 
-        if ($n < 1) {
+        if (1 > $n) {
             $n = 1;
         }
-        if ($n > 200) {
+        if (200 < $n) {
             $n = 200;
         }
 
-        if (0 === $cid || '' === $prompt) {
+        if (0 === $cid || (0 === $resourceFileId && '' === $prompt)) {
             return new JsonResponse([
                 'success' => false,
                 'text' => 'Invalid request parameters.',
@@ -215,6 +326,198 @@ class AiController extends AbstractController
         }
 
         try {
+            if (0 < $resourceFileId) {
+                /** @var ResourceFile|null $resourceFile */
+                $resourceFile = $this->em->getRepository(ResourceFile::class)->find($resourceFileId);
+                if (null === $resourceFile) {
+                    return new JsonResponse([
+                        'success' => false,
+                        'text' => 'Resource file not found.',
+                    ], 404);
+                }
+
+                $node = $resourceFile->getResourceNode();
+                if (null === $node) {
+                    return new JsonResponse([
+                        'success' => false,
+                        'text' => 'Resource node not found.',
+                    ], 404);
+                }
+
+                if (!$this->resourceFileBelongsToCourse($resourceFile, $cid)) {
+                    return new JsonResponse([
+                        'success' => false,
+                        'text' => 'Resource does not belong to this course.',
+                    ], 403);
+                }
+
+                $fileUri = $this->resourceNodeRepository->getFilename($resourceFile);
+                if (!\is_string($fileUri) || '' === trim($fileUri)) {
+                    return new JsonResponse([
+                        'success' => false,
+                        'text' => 'Could not resolve resource file URI.',
+                    ], 500);
+                }
+
+                try {
+                    $binary = (string) $this->resourceNodeRepository->getFileSystem()->read($fileUri);
+                } catch (Throwable $e) {
+                    if ($debug) {
+                        error_log('[AI][glossary_document] Failed to read file: '.$e->getMessage());
+                    }
+
+                    return new JsonResponse([
+                        'success' => false,
+                        'text' => 'Failed to read file content.',
+                    ], 500);
+                }
+
+                if ('' === $binary) {
+                    return new JsonResponse([
+                        'success' => false,
+                        'text' => 'File is empty.',
+                    ], 400);
+                }
+
+                $filename = basename($fileUri);
+                $mimeType = (string) ($resourceFile->getMimeType() ?: 'application/octet-stream');
+                $mode = $this->getSupportedDocumentMode($filename, $mimeType);
+
+                if ('' === $mode) {
+                    return new JsonResponse([
+                        'success' => false,
+                        'text' => 'Unsupported file type. Supported: PDF, TXT.',
+                    ], 415);
+                }
+
+                $maxBytesPdf = 10 * 1024 * 1024;
+                $maxBytesTxt = 1 * 1024 * 1024;
+
+                if ('pdf' === $mode && \strlen($binary) > $maxBytesPdf) {
+                    return new JsonResponse([
+                        'success' => false,
+                        'text' => 'Document is too large to analyze.',
+                    ], 413);
+                }
+
+                if ('txt' === $mode && \strlen($binary) > $maxBytesTxt) {
+                    return new JsonResponse([
+                        'success' => false,
+                        'text' => 'Text file is too large to analyze.',
+                    ], 413);
+                }
+
+                $docLabel = '' !== $documentTitle ? $documentTitle : (string) ($node->getTitle() ?: $filename);
+                $documentPrompt = $this->buildGlossaryFromDocumentPrompt((string) $course->getTitle(), $docLabel, $language, $n);
+
+                if ('txt' === $mode) {
+                    $text = $this->normalizePlainText($binary);
+
+                    $maxChars = 20000;
+                    $truncated = false;
+                    if (mb_strlen($text) > $maxChars) {
+                        $text = mb_substr($text, 0, $maxChars);
+                        $truncated = true;
+                    }
+
+                    $fullPrompt = $documentPrompt
+                        ."\n\nUse only the following document content as source material:\n"
+                        .$text
+                        .($truncated ? "\n\n[Content truncated]" : '');
+
+                    $provider = $this->aiProviderFactory->getProvider($providerName, 'text');
+
+                    if (!\is_object($provider) || !method_exists($provider, 'generateText')) {
+                        return new JsonResponse([
+                            'success' => false,
+                            'text' => 'Selected AI provider does not support text generation.',
+                        ], 400);
+                    }
+
+                    try {
+                        $raw = (string) $provider->generateText($fullPrompt, [
+                            'language' => $language,
+                            'n' => $n,
+                            'tool' => 'glossary_terms_from_document_txt',
+                            'cid' => $cid,
+                            'sid' => $sid,
+                            'resource_file_id' => $resourceFileId,
+                        ]);
+                    } catch (TypeError $e) {
+                        $raw = (string) $provider->generateText($fullPrompt, $language);
+                    }
+
+                    $raw = trim($raw);
+                } else {
+                    $provider = $this->aiProviderFactory->getProvider($providerName, 'document_process');
+
+                    if (!$provider instanceof AiDocumentProcessProviderInterface) {
+                        return new JsonResponse([
+                            'success' => false,
+                            'text' => 'Selected AI provider does not support document processing.',
+                        ], 400);
+                    }
+
+                    $result = $provider->processDocument(
+                        $documentPrompt,
+                        'glossary_terms_from_document_pdf',
+                        $filename,
+                        'application/pdf',
+                        $binary,
+                        [
+                            'language' => $language,
+                            'n' => $n,
+                            'cid' => $cid,
+                            'sid' => $sid,
+                            'resource_file_id' => $resourceFileId,
+                        ]
+                    );
+
+                    $raw = \is_string($result) ? trim($result) : '';
+                }
+
+                if ('' === $raw) {
+                    return new JsonResponse([
+                        'success' => false,
+                        'text' => 'AI request returned an empty response.',
+                    ], 500);
+                }
+
+                if (str_starts_with($raw, 'Error:')) {
+                    $msg = trim((string) preg_replace('/^Error:\s*/', '', $raw));
+                    $status = $this->mapDocumentErrorToHttpStatus($msg);
+
+                    return new JsonResponse([
+                        'success' => false,
+                        'text' => '' !== $msg ? $msg : $raw,
+                    ], $status);
+                }
+
+                $this->aiDisclosureHelper->logAudit(
+                    targetKey: 'course:'.$cid.':glossary_terms_document:'.sha1($resourceFileId.'|'.$language.'|'.$n),
+                    userId: $this->getCurrentUserId(),
+                    meta: [
+                        'feature' => 'glossary_generator_document',
+                        'mode' => 'generated',
+                        'provider' => $providerName ?? 'default',
+                        'tool' => $toolName,
+                        'n' => $n,
+                        'language' => $language,
+                        'resource_file_id' => $resourceFileId,
+                        'document_title' => $docLabel,
+                        'document_mode' => $mode,
+                    ],
+                    courseId: $cid,
+                    sessionId: $sid > 0 ? $sid : api_get_session_id()
+                );
+
+                return new JsonResponse([
+                    'success' => true,
+                    'text' => $raw,
+                    'ai_assisted' => $this->aiDisclosureHelper->isDisclosureEnabled(),
+                ]);
+            }
+
             $provider = $this->aiProviderFactory->getProvider($providerName, 'text');
 
             if (!\is_object($provider) || !method_exists($provider, 'generateText')) {
@@ -475,7 +778,7 @@ class AiController extends AbstractController
                 ], 400);
             }
 
-            if ($nQ > 100) {
+            if (100 < $nQ) {
                 $nQ = 100;
             }
 
@@ -591,7 +894,7 @@ class AiController extends AbstractController
             ], 400);
         }
 
-        if ($nQ > 100) {
+        if (100 < $nQ) {
             $nQ = 100;
         }
 
@@ -1987,7 +2290,7 @@ class AiController extends AbstractController
         $base .= "Language: {$language}\n";
         $base .= "Course: {$courseTitle}\n";
         $base .= "Document: {$documentTitle}\n";
-        if ($sid > 0) {
+        if (0 < $sid) {
             $base .= "Session ID: {$sid}\n";
         }
         $base .= "\nTeacher request:\n{$teacherPrompt}\n";
@@ -1998,6 +2301,69 @@ class AiController extends AbstractController
         $base .= "- Use short headings and bullet points with '-'.\n";
 
         return $base;
+    }
+
+    private function resourceFileBelongsToCourse(ResourceFile $resourceFile, int $courseId): bool
+    {
+        if (0 >= $courseId) {
+            return false;
+        }
+
+        $node = $resourceFile->getResourceNode();
+        if (null === $node) {
+            return false;
+        }
+
+        foreach ($node->getResourceLinks() as $link) {
+            $linkCourse = $link->getCourse();
+            if ($linkCourse && (int) $linkCourse->getId() === $courseId) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function buildGlossaryFromDocumentPrompt(
+        string $courseTitle,
+        string $documentTitle,
+        string $language,
+        int $numberOfTerms
+    ): string {
+        $prompt = "You are an expert teacher creating glossary entries.\n";
+        $prompt .= "Language: {$language}\n";
+        $prompt .= "Course: {$courseTitle}\n";
+        $prompt .= "Document: {$documentTitle}\n";
+        $prompt .= "Requested term count: {$numberOfTerms}\n\n";
+        $prompt .= "Task:\n";
+        $prompt .= "- Use only the selected document content as source material.\n";
+        $prompt .= "- Do not use outside knowledge or general course context.\n";
+        $prompt .= "- Generate exactly {$numberOfTerms} glossary terms when possible.\n";
+        $prompt .= "- Select relevant concepts, names, acronyms, expressions or technical terms found in the document.\n\n";
+        $prompt .= "Output rules:\n";
+        $prompt .= "- Return plain text only.\n";
+        $prompt .= "- Each term must be on a single line.\n";
+        $prompt .= "- The definition must be on the next line.\n";
+        $prompt .= "- Add one blank line between terms.\n";
+        $prompt .= "- Do not return Markdown, HTML, bullets, code fences, headings or explanations.\n";
+
+        return $prompt;
+    }
+
+    private function getSupportedDocumentMode(string $filename, string $mimeType): string
+    {
+        $mimeType = strtolower(trim($mimeType));
+        $extension = strtolower((string) pathinfo($filename, PATHINFO_EXTENSION));
+
+        if ('pdf' === $extension || 'application/pdf' === $mimeType) {
+            return 'pdf';
+        }
+
+        if ('txt' === $extension || str_starts_with($mimeType, 'text/plain')) {
+            return 'txt';
+        }
+
+        return '';
     }
 
     private function buildAikenFromDocumentPrompt(
@@ -2017,7 +2383,7 @@ class AiController extends AbstractController
         $prompt .= "Course: {$courseTitle}\n";
         $prompt .= "Document: {$documentTitle}\n";
 
-        if ($sid > 0) {
+        if (0 < $sid) {
             $prompt .= "Session ID: {$sid}\n";
         }
 
@@ -2537,13 +2903,13 @@ class AiController extends AbstractController
     {
         // 1) JSON payload
         $sid = (int) ($data['sid'] ?? 0);
-        if ($sid > 0) {
+        if (0 < $sid) {
             return $sid;
         }
 
         // 2) Query string
         $sid = (int) $request->query->get('sid', 0);
-        if ($sid > 0) {
+        if (0 < $sid) {
             return $sid;
         }
 

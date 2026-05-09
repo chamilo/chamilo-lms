@@ -59,6 +59,16 @@ export default {
     return response.data
   },
 
+  getAiCapabilities: async () => {
+    const response = await axios.get("/ai/capabilities")
+    return response.data
+  },
+
+  getDocumentSources: async (params) => {
+    const response = await axios.get("/ai/glossary_document_sources", { params })
+    return response.data
+  },
+
   generateGlossaryTerms: async (data) => {
     const response = await axios.post("/ai/generate_glossary_terms", data)
     return response.data

@@ -46,13 +46,7 @@
             <h2 class="section-header__title">{{ user.fullName }}</h2>
         </div>
 
-        <div class="flex md:flex-row gap-4 mt-6">
-            <div class="w-16">
-                <img class="h-16 w-16 rounded-full mb-4"
-                     src="{{ user | illustration }}?w=120&h=120&fit=crop"
-                     alt=""
-                />
-            </div>
+        <div class="mt-6">
             <div class="flex-grow">
                 <div class="mb-4 flex justify-end">
                     <a href="{{ path('chamilo_core_account_change_password') }}" class="btn btn--secondary">
@@ -74,7 +68,7 @@
 
                 <div class="flex flex-col gap-4">
                     {% for child in form %}
-                        {% if child.vars.name not in ['extra_fields', '_token'] %}
+                        {% if child.vars.name not in ['extra_fields', '_token', 'illustration', 'illustration_crop', 'delete_illustration'] %}
                             {{ form_row(child) }}
                         {% endif %}
                     {% endfor %}
@@ -155,6 +149,157 @@
                     {% endif %}
                 </div>
 
+                {% if form.illustration is defined %}
+                    <div
+                        id="profile-picture-card"
+                        class="mb-6 rounded-2xl border border-gray-25 bg-white p-4 shadow-sm"
+                    >
+                        <div class="grid grid-cols-1 gap-4 lg:grid-cols-4 lg:items-start">
+                            <div class="rounded-2xl border border-gray-25 bg-support-2 p-4 lg:col-span-3">
+                                <div class="mb-3 flex items-center gap-2">
+                                    <span class="mdi mdi-account-circle-outline ch-tool-icon"></span>
+                                    <h3 class="m-0 text-base font-semibold text-gray-900">
+                                        {{ 'Profile picture'|trans }}
+                                    </h3>
+                                </div>
+
+                                <p class="m-0 mb-3 text-sm text-gray-600">
+                                    {{ 'Upload a new picture, adjust the crop, or remove the current one.'|trans }}
+                                </p>
+
+                                <div
+                                    id="profile-picture-drop-zone"
+                                    class="rounded-2xl border border-dashed border-support-3 bg-white p-4"
+                                >
+                                    {{ form_widget(form.illustration, {
+                                        'attr': {
+                                            'accept': 'image/*',
+                                            'class': 'sr-only js-profile-picture-input'
+                                        }
+                                    }) }}
+
+                                    {% if form.illustration_crop is defined %}
+                                        {{ form_widget(form.illustration_crop, {
+                                            'attr': {
+                                                'class': 'js-profile-picture-crop'
+                                            }
+                                        }) }}
+                                    {% endif %}
+
+                                    <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+                                        <label
+                                            for="{{ form.illustration.vars.id }}"
+                                            class="btn btn--primary inline-flex cursor-pointer items-center gap-2"
+                                        >
+                                            <span class="mdi mdi-image-plus"></span>
+                                            <span>{{ 'Choose picture'|trans }}</span>
+                                        </label>
+
+                                        <p
+                                            id="profile-picture-selected-file"
+                                            class="m-0 hidden text-sm font-semibold text-primary"
+                                        ></p>
+
+                                        {% if form.delete_illustration is defined %}
+                                            <label
+                                                for="{{ form.delete_illustration.vars.id }}"
+                                                id="profile-picture-delete-label"
+                                                class="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-red-100 bg-red-50 px-3 py-2 text-sm font-medium text-red-700 hover:bg-red-100"
+                                            >
+                                                {{ form_widget(form.delete_illustration, {
+                                                    'attr': {
+                                                        'class': 'h-4 w-4 rounded border-red-300 text-red-600 js-profile-picture-delete'
+                                                    }
+                                                }) }}
+                                                <span>{{ form.delete_illustration.vars.label|trans }}</span>
+                                            </label>
+                                            {{ form_errors(form.delete_illustration) }}
+                                        {% endif %}
+                                    </div>
+
+                                    {{ form_errors(form.illustration) }}
+
+                                    <div
+                                        id="profile-picture-crop-panel"
+                                        class="mt-4 hidden rounded-2xl border border-gray-25 bg-gray-10 p-4"
+                                    >
+                                        <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                                            <div>
+                                                <p class="m-0 mb-2 text-sm font-semibold text-gray-900">
+                                                    {{ 'Adjust crop'|trans }}
+                                                </p>
+                                                <div
+                                                    id="profile-picture-crop-viewport"
+                                                    class="relative h-64 w-64 max-w-full overflow-hidden rounded-full border border-gray-25 bg-white shadow-inner"
+                                                >
+                                                    <img
+                                                        id="profile-picture-crop-image"
+                                                        class="absolute left-0 top-0 select-none"
+                                                        src=""
+                                                        alt=""
+                                                        draggable="false"
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div class="flex flex-col justify-center">
+                                                <label
+                                                    for="profile-picture-zoom"
+                                                    class="mb-2 block text-sm font-medium text-gray-700"
+                                                >
+                                                    {{ 'Zoom'|trans }}
+                                                </label>
+                                                <input
+                                                    id="profile-picture-zoom"
+                                                    class="w-full"
+                                                    type="range"
+                                                    min="1"
+                                                    max="3"
+                                                    step="0.01"
+                                                    value="1"
+                                                />
+                                                <p class="m-0 mt-3 text-sm text-gray-600">
+                                                    {{ 'Drag the picture inside the circle to adjust the visible area.'|trans }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="rounded-2xl border border-gray-25 bg-support-2 p-3 lg:col-span-1">
+                                <div class="mb-3 flex items-center justify-between gap-2">
+                                    <span class="text-sm font-semibold text-gray-900">
+                                        {{ 'Preview'|trans }}
+                                    </span>
+                                    <span
+                                        id="profile-picture-status"
+                                        class="inline-flex items-center rounded-full bg-primary px-3 py-1 text-xs font-semibold text-white"
+                                    >
+                                        {{ 'Current picture'|trans }}
+                                    </span>
+                                </div>
+
+                                <div class="aspect-square overflow-hidden rounded-full border border-gray-25 bg-white">
+                                    <img
+                                        id="profile-picture-preview-image"
+                                        class="block h-full w-full object-cover"
+                                        src="{{ user | illustration }}?w=320&h=320&fit=crop"
+                                        alt="{{ 'Profile picture'|trans }}"
+                                    />
+                                </div>
+
+                                <p
+                                    id="profile-picture-delete-notice"
+                                    class="m-0 mt-3 hidden text-sm font-semibold text-red-700"
+                                >
+                                    {{ 'The current picture will be removed when you update your profile.'|trans }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
                 <div class="mt-2 mb-4 text-sm text-gray-600">
                     <span class="required-marker">*</span> {{ 'Required fields'|trans }}
                 </div>
@@ -220,6 +365,298 @@
               pauseCheckbox.addEventListener('change', togglePauseDateFields);
               togglePauseDateFields();
             }
+
+            const pictureInput = document.querySelector('.js-profile-picture-input');
+            const cropInput = document.querySelector('.js-profile-picture-crop');
+            const deleteCheckbox = document.querySelector('.js-profile-picture-delete');
+            const selectedFile = document.getElementById('profile-picture-selected-file');
+            const cropPanel = document.getElementById('profile-picture-crop-panel');
+            const viewport = document.getElementById('profile-picture-crop-viewport');
+            const cropImage = document.getElementById('profile-picture-crop-image');
+            const previewImage = document.getElementById('profile-picture-preview-image');
+            const zoomInput = document.getElementById('profile-picture-zoom');
+            const status = document.getElementById('profile-picture-status');
+            const deleteNotice = document.getElementById('profile-picture-delete-notice');
+            const originalPreviewSrc = previewImage ? previewImage.getAttribute('src') : '';
+
+            let objectUrl = null;
+            let naturalWidth = 0;
+            let naturalHeight = 0;
+            let baseScale = 1;
+            let currentZoom = 1;
+            let offsetX = 0;
+            let offsetY = 0;
+            let dragging = false;
+            let startX = 0;
+            let startY = 0;
+            let startOffsetX = 0;
+            let startOffsetY = 0;
+
+            function setStatus(text, classesToAdd, classesToRemove) {
+              if (!status) {
+                return;
+              }
+
+              status.textContent = text;
+
+              classesToRemove.forEach(function (className) {
+                status.classList.remove(className);
+              });
+
+              classesToAdd.forEach(function (className) {
+                status.classList.add(className);
+              });
+            }
+
+            function setPreviewAsRemoved(isRemoved) {
+              if (!previewImage || !deleteNotice) {
+                return;
+              }
+
+              previewImage.classList.toggle('opacity-40', isRemoved);
+              deleteNotice.classList.toggle('hidden', !isRemoved);
+
+              if (isRemoved) {
+                setStatus(
+                  '{{ 'Will be removed'|trans|e('js') }}',
+                  ['bg-red-100', 'text-red-700'],
+                  ['bg-primary', 'text-white', 'bg-success', 'text-gray-900']
+                );
+
+                return;
+              }
+
+              setStatus(
+                '{{ 'Current picture'|trans|e('js') }}',
+                ['bg-primary', 'text-white'],
+                ['bg-red-100', 'text-red-700', 'bg-success', 'text-gray-900']
+              );
+            }
+
+            function clampOffsets() {
+              if (!viewport || !naturalWidth || !naturalHeight) {
+                return;
+              }
+
+              const viewportWidth = viewport.clientWidth;
+              const viewportHeight = viewport.clientHeight;
+              const scale = baseScale * currentZoom;
+              const renderedWidth = naturalWidth * scale;
+              const renderedHeight = naturalHeight * scale;
+              const minOffsetX = Math.min(0, viewportWidth - renderedWidth);
+              const minOffsetY = Math.min(0, viewportHeight - renderedHeight);
+
+              offsetX = Math.min(0, Math.max(minOffsetX, offsetX));
+              offsetY = Math.min(0, Math.max(minOffsetY, offsetY));
+            }
+
+            function updateCropValueAndPreview() {
+              if (!viewport || !cropImage || !previewImage || !cropInput || !naturalWidth || !naturalHeight) {
+                return;
+              }
+
+              clampOffsets();
+
+              const viewportWidth = viewport.clientWidth;
+              const viewportHeight = viewport.clientHeight;
+              const scale = baseScale * currentZoom;
+              const renderedWidth = naturalWidth * scale;
+              const renderedHeight = naturalHeight * scale;
+
+              cropImage.style.width = renderedWidth + 'px';
+              cropImage.style.height = renderedHeight + 'px';
+              cropImage.style.transform = 'translate(' + offsetX + 'px, ' + offsetY + 'px)';
+
+              const cropX = Math.max(0, Math.round(-offsetX / scale));
+              const cropY = Math.max(0, Math.round(-offsetY / scale));
+              const cropWidth = Math.min(naturalWidth - cropX, Math.round(viewportWidth / scale));
+              const cropHeight = Math.min(naturalHeight - cropY, Math.round(viewportHeight / scale));
+
+              cropInput.value = cropWidth + ',' + cropHeight + ',' + cropX + ',' + cropY;
+
+              const canvas = document.createElement('canvas');
+              const size = 320;
+              const context = canvas.getContext('2d');
+
+              if (!context) {
+                return;
+              }
+
+              canvas.width = size;
+              canvas.height = size;
+
+              context.drawImage(
+                cropImage,
+                cropX,
+                cropY,
+                cropWidth,
+                cropHeight,
+                0,
+                0,
+                size,
+                size
+              );
+
+              previewImage.src = canvas.toDataURL('image/jpeg', 0.92);
+            }
+
+            function initialiseCropper() {
+              if (!viewport || !cropImage || !zoomInput || !naturalWidth || !naturalHeight) {
+                return;
+              }
+
+              const viewportWidth = viewport.clientWidth;
+              const viewportHeight = viewport.clientHeight;
+
+              baseScale = Math.max(viewportWidth / naturalWidth, viewportHeight / naturalHeight);
+              currentZoom = Number.parseFloat(zoomInput.value || '1');
+              offsetX = (viewportWidth - naturalWidth * baseScale * currentZoom) / 2;
+              offsetY = (viewportHeight - naturalHeight * baseScale * currentZoom) / 2;
+
+              updateCropValueAndPreview();
+            }
+
+            function loadSelectedPicture(file) {
+              if (!pictureInput || !cropImage || !cropPanel) {
+                return;
+              }
+
+              if (objectUrl) {
+                window.URL.revokeObjectURL(objectUrl);
+              }
+
+              objectUrl = window.URL.createObjectURL(file);
+              cropImage.onload = function () {
+                naturalWidth = cropImage.naturalWidth;
+                naturalHeight = cropImage.naturalHeight;
+
+                if (zoomInput) {
+                  zoomInput.value = '1';
+                }
+
+                cropPanel.classList.remove('hidden');
+                initialiseCropper();
+
+                setStatus(
+                  '{{ 'New picture'|trans|e('js') }}',
+                  ['bg-success', 'text-white'],
+                  ['bg-primary', 'text-gray-900', 'bg-red-100', 'text-red-700']
+                );
+              };
+              cropImage.src = objectUrl;
+            }
+
+            if (pictureInput) {
+              pictureInput.addEventListener('change', function () {
+                if (!pictureInput.files || !pictureInput.files[0]) {
+                  return;
+                }
+
+                if (deleteCheckbox) {
+                  deleteCheckbox.checked = false;
+                }
+
+                setPreviewAsRemoved(false);
+
+                if (selectedFile) {
+                  selectedFile.textContent = pictureInput.files[0].name;
+                  selectedFile.classList.remove('hidden');
+                }
+
+                loadSelectedPicture(pictureInput.files[0]);
+              });
+            }
+
+            if (deleteCheckbox) {
+              deleteCheckbox.addEventListener('change', function () {
+                if (deleteCheckbox.checked) {
+                  if (pictureInput) {
+                    pictureInput.value = '';
+                  }
+
+                  if (cropInput) {
+                    cropInput.value = '';
+                  }
+
+                  if (cropPanel) {
+                    cropPanel.classList.add('hidden');
+                  }
+
+                  if (selectedFile) {
+                    selectedFile.textContent = '';
+                    selectedFile.classList.add('hidden');
+                  }
+
+                  if (previewImage && originalPreviewSrc) {
+                    previewImage.src = originalPreviewSrc;
+                  }
+
+                  setPreviewAsRemoved(true);
+
+                  return;
+                }
+
+                setPreviewAsRemoved(false);
+              });
+            }
+
+            if (zoomInput) {
+              zoomInput.addEventListener('input', function () {
+                if (!naturalWidth || !naturalHeight) {
+                  return;
+                }
+
+                const previousZoom = currentZoom;
+                currentZoom = Number.parseFloat(zoomInput.value || '1');
+
+                if (viewport && previousZoom > 0) {
+                  const viewportCenterX = viewport.clientWidth / 2;
+                  const viewportCenterY = viewport.clientHeight / 2;
+                  const ratio = currentZoom / previousZoom;
+
+                  offsetX = viewportCenterX - (viewportCenterX - offsetX) * ratio;
+                  offsetY = viewportCenterY - (viewportCenterY - offsetY) * ratio;
+                }
+
+                updateCropValueAndPreview();
+              });
+            }
+
+            if (viewport) {
+              viewport.addEventListener('pointerdown', function (event) {
+                if (!naturalWidth || !naturalHeight) {
+                  return;
+                }
+
+                dragging = true;
+                startX = event.clientX;
+                startY = event.clientY;
+                startOffsetX = offsetX;
+                startOffsetY = offsetY;
+                viewport.setPointerCapture(event.pointerId);
+              });
+
+              viewport.addEventListener('pointermove', function (event) {
+                if (!dragging) {
+                  return;
+                }
+
+                offsetX = startOffsetX + event.clientX - startX;
+                offsetY = startOffsetY + event.clientY - startY;
+
+                updateCropValueAndPreview();
+              });
+
+              viewport.addEventListener('pointerup', function (event) {
+                dragging = false;
+                viewport.releasePointerCapture(event.pointerId);
+              });
+
+              viewport.addEventListener('pointercancel', function () {
+                dragging = false;
+              });
+            }
+
           });
         </script>
         <style>

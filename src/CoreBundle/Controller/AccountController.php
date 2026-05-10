@@ -66,16 +66,24 @@ class AccountController extends BaseController
         /** @var User $user */
         $form = $this->createForm(ProfileType::class, $user, [
             'include_password_field' => false,
+            'has_illustration' => $illustrationRepo->hasIllustration($user),
         ]);
         $form->setData($user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $deleteIllustration = $form->has('delete_illustration')
+                && true === (bool) $form->get('delete_illustration')->getData();
+
             if ($form->has('illustration')) {
                 $illustration = $form['illustration']->getData();
+                $crop = $form->has('illustration_crop') ? (string) $form->get('illustration_crop')->getData() : '';
+
                 if ($illustration) {
                     $illustrationRepo->deleteIllustration($user);
-                    $illustrationRepo->addIllustration($user, $user, $illustration);
+                    $illustrationRepo->addIllustration($user, $user, $illustration, $crop);
+                } elseif ($deleteIllustration) {
+                    $illustrationRepo->deleteIllustration($user);
                 }
             }
 

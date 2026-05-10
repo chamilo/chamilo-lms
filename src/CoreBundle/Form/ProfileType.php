@@ -13,9 +13,11 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTimeZone;
 use PauseTraining;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -371,6 +373,21 @@ class ProfileType extends AbstractType
             }
 
             $builder->add($fieldConfig['field'], $fieldConfig['type'], $opts);
+
+            if ('picture' === $key && $isEditable) {
+                $builder->add('illustration_crop', HiddenType::class, [
+                    'mapped' => false,
+                    'required' => false,
+                ]);
+
+                if ($options['has_illustration']) {
+                    $builder->add('delete_illustration', CheckboxType::class, [
+                        'label' => 'Delete photo',
+                        'mapped' => false,
+                        'required' => false,
+                    ]);
+                }
+            }
         }
 
         if ($isCoreVisible('timezone')) {
@@ -461,9 +478,11 @@ class ProfileType extends AbstractType
         $resolver->setDefaults([
             'data_class' => User::class,
             'include_password_field' => false,
+            'has_illustration' => false,
         ]);
 
         $resolver->setAllowedTypes('include_password_field', 'bool');
+        $resolver->setAllowedTypes('has_illustration', 'bool');
     }
 
     private function addConstraintIfMissing(array $constraints, string $constraintClass, object $constraint): array

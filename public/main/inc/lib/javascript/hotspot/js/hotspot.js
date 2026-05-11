@@ -1,4 +1,17 @@
-// chamiloCidReq.queryParams is defined in App.vue
+// window.getHotspotCidReqQueryParams(config) is defined in App.vue
+window.getHotspotCidReqQueryParams = function (config) {
+    var queryParams = '';
+
+    if (config && config.cidReqQueryParams) {
+        queryParams = config.cidReqQueryParams;
+    } else if ('undefined' !== typeof chamiloCidReq && window.getHotspotCidReqQueryParams(config)) {
+        queryParams = window.getHotspotCidReqQueryParams(config);
+    } else if (window.location.search) {
+        queryParams = window.location.search.substring(1);
+    }
+
+    return queryParams.replace(/^\?/, '');
+};
 window.HotspotQuestion = (function () {
     return function (settings) {
         var HotspotModel = function (attributes) {
@@ -1132,12 +1145,12 @@ window.HotspotQuestion = (function () {
 
         switch (config.for) {
             case 'admin':
-                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_actionscript_admin.as.php?' + chamiloCidReq.queryParams, {
+                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_actionscript_admin.as.php?' + window.getHotspotCidReqQueryParams(config), {
                     modifyAnswers: parseInt(config.questionId)
                 });
                 break;
             case 'user':
-                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_actionscript.as.php?' + chamiloCidReq.queryParams, {
+                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_actionscript.as.php?' + window.getHotspotCidReqQueryParams(config), {
                     modifyAnswers: parseInt(config.questionId),
                     exe_id: parseInt(config.exerciseId)
                 });
@@ -1145,7 +1158,7 @@ window.HotspotQuestion = (function () {
             case 'solution':
                 //no break
             case 'preview':
-                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_answers.as.php?' + chamiloCidReq.queryParams, {
+                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_answers.as.php?' + window.getHotspotCidReqQueryParams(config), {
                     modifyAnswers: parseInt(config.questionId),
                     exerciseId: parseInt(config.exerciseId),
                     exeId: parseInt(config.exeId)
@@ -1760,12 +1773,12 @@ window.DelineationQuestion = (function () {
         var xhrQuestion = null;
         switch (config.for) {
             case 'admin':
-                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_actionscript_admin.as.php?' + chamiloCidReq.queryParams, {
+                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_actionscript_admin.as.php?' + window.getHotspotCidReqQueryParams(config), {
                     modifyAnswers: parseInt(config.questionId)
                 });
                 break;
             case 'user':
-                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_actionscript.as.php?' + chamiloCidReq.queryParams, {
+                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_actionscript.as.php?' + window.getHotspotCidReqQueryParams(config), {
                     modifyAnswers: parseInt(config.questionId),
                     exe_id: parseInt(config.exerciseId)
                 });
@@ -1773,7 +1786,7 @@ window.DelineationQuestion = (function () {
             case 'solution':
                 // no break
             case 'preview':
-                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_answers.as.php?' + chamiloCidReq.queryParams, {
+                xhrQuestion = $.getJSON(config.relPath + 'exercise/hotspot_answers.as.php?' + window.getHotspotCidReqQueryParams(config), {
                     modifyAnswers: parseInt(config.questionId),
                     exerciseId: parseInt(config.exerciseId),
                     exeId: parseInt(config.exeId)

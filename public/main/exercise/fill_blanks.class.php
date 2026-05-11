@@ -46,6 +46,7 @@ class FillBlanks extends Question
             $defaults['case_insensitive'] = ('case:false' === $this->extra) ? 1 : 0;
             // Take the complete string except after the last '::'
             $defaults['answer'] = $listAnswersInfo['text'];
+            $defaults['comment'] = (string) ($objectAnswer->comment[1] ?? '');
             $defaults['select_separator'] = $listAnswersInfo['blank_separator_number'];
             $blankSeparatorNumber = $listAnswersInfo['blank_separator_number'];
         }
@@ -401,6 +402,18 @@ class FillBlanks extends Question
 
         $form->addHtml('<div id="blanks_weighting"></div>');
 
+        $form->addHtmlEditor(
+            'comment',
+            get_lang('Comment'),
+            false,
+            false,
+            [
+                'ToolbarSet' => 'TestQuestionDescription',
+                'Width' => '100%',
+                'Height' => '120',
+            ]
+        );
+
         global $text;
         // setting the save button here and not in the question class.php
         $form->addHtml('<div id="defineoneblank" style="color:#D04A66; margin-left:160px">'.get_lang('Please define at least one blank with the selected marker').'</div>');
@@ -541,7 +554,8 @@ class FillBlanks extends Question
 
         $this->save($exercise);
         $objAnswer = new Answer($this->id);
-        $objAnswer->createAnswer($answer, 0, '', 0, 1);
+        $comment = trim((string) $form->getSubmitValue('comment'));
+        $objAnswer->createAnswer($answer, 0, $comment, 0, 1);
         $objAnswer->save();
     }
 
@@ -553,8 +567,11 @@ class FillBlanks extends Question
         $header = parent::return_header($exercise, $counter, $score);
         $header .= '<table class="'.$this->questionTableClass.'">
             <tr>
-                <th>'.get_lang('Answer').'</th>
-            </tr>';
+                <th>'.get_lang('Answer').'</th>';
+        if (false === $exercise->hideComment && EXERCISE_FEEDBACK_TYPE_EXAM !== $exercise->getFeedbackType()) {
+            $header .= '<th>'.get_lang('Comment').'</th>';
+        }
+        $header .= '</tr>';
 
         return $header;
     }

@@ -5143,7 +5143,8 @@ class Exercise
                                 0,
                                 $results_disabled,
                                 $showTotalScoreAndUserChoicesInLastAttempt,
-                                ''
+                                '',
+                                $answerComment
                             );
                         } elseif (CALCULATED_ANSWER == $answerType) {
                             ExerciseShowFunctions::display_calculated_answer(
@@ -5156,7 +5157,8 @@ class Exercise
                                 $showTotalScoreAndUserChoicesInLastAttempt,
                                 $expectedAnswer,
                                 $calculatedChoice,
-                                $calculatedStatus
+                                $calculatedStatus,
+                                $answerComment
                             );
                         } elseif (FREE_ANSWER == $answerType) {
                             ExerciseShowFunctions::display_free_answer(
@@ -5382,6 +5384,12 @@ class Exercise
                                     ['style' => 'color: #008000; font-weight: bold;']
                                 )
                             );
+                            if (false === $this->hideComment && EXERCISE_FEEDBACK_TYPE_EXAM !== $feedback_type) {
+                                echo Display::tag(
+                                    'td',
+                                    Security::remove_XSS((string) $answerComment, COURSEMANAGERLOWSECURITY)
+                                );
+                            }
                             echo '</tr>';
                         } elseif (ANNOTATION == $answerType) {
                             ExerciseShowFunctions::displayAnnotationAnswer(
@@ -5547,7 +5555,8 @@ class Exercise
                                 $questionId,
                                 $results_disabled,
                                 $showTotalScoreAndUserChoicesInLastAttempt,
-                                $str
+                                $str,
+                                $answerComment
                             );
                             break;
                         case CALCULATED_ANSWER:
@@ -5559,7 +5568,10 @@ class Exercise
                                 $questionId,
                                 $results_disabled,
                                 '',
-                                $showTotalScoreAndUserChoicesInLastAttempt
+                                $showTotalScoreAndUserChoicesInLastAttempt,
+                                '',
+                                '',
+                                $answerComment
                             );
 
                             break;
@@ -5774,6 +5786,12 @@ class Exercise
                                     ['style' => 'color: #008000; font-weight: bold;']
                                 )
                             );
+                            if (false === $this->hideComment && EXERCISE_FEEDBACK_TYPE_EXAM !== $feedback_type) {
+                                echo Display::tag(
+                                    'td',
+                                    Security::remove_XSS((string) $answerComment, COURSEMANAGERLOWSECURITY)
+                                );
+                            }
                             echo '</tr>';
 
                             break;

@@ -70,6 +70,7 @@ class Matching extends Question
                             $defaults['weighting['.$nb_matches.']'] = float_format($answer->selectWeighting($i), 1);
                         }
                         $defaults['matches['.$nb_matches.']'] = $answer->correct[$i];
+                        $defaults['comment['.$nb_matches.']'] = (string) ($answer->comment[$i] ?? '');
                     } else {
                         $nb_options++;
                         $defaults['option['.$nb_options.']'] = $answer->selectAnswer($i);
@@ -112,6 +113,7 @@ class Matching extends Question
                 <th width="70%">'.get_lang('Answer').'</th>
                 <th width="15%">'.get_lang('Matches To').'</th>
                 '.$thWeighting.'
+                <th width="20%">'.get_lang('Comment').'</th>
             </tr>
         </thead>
         <tbody>';
@@ -149,6 +151,11 @@ class Matching extends Question
                 "weighting[$i]"
             );
 
+            $renderer->setElementTemplate(
+                '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->{element}</td>',
+                "comment[$i]"
+            );
+
             $form->addHtml('<tr>');
             $form->addHtml("<td>$i</td>");
             $form->addHtmlEditor(
@@ -174,6 +181,19 @@ class Matching extends Question
             } else {
                 $form->addHidden("weighting[$i]", "0");
             }
+
+            $form->addHtmlEditor(
+                "comment[$i]",
+                null,
+                false,
+                false,
+                [
+                    'ToolbarSet' => 'TestQuestionDescription',
+                    'Width' => '100%',
+                    'Height' => '100',
+                ]
+            );
+
             $form->addHtml('</tr>');
         }
 
@@ -272,6 +292,7 @@ class Matching extends Question
             $position++;
             $answer  = $form->getSubmitValue('answer['.$i.']');
             $matches = $form->getSubmitValue('matches['.$i.']');
+            $comment = trim((string) $form->getSubmitValue('comment['.$i.']'));
             $rowWeight = (MATCHING === $this->type)
                 ? (float) $form->getSubmitValue('weighting['.$i.']')
                 : 0.0;
@@ -283,7 +304,7 @@ class Matching extends Question
             $objAnswer->createAnswer(
                 $answer,
                 $matches,
-                '',
+                $comment,
                 $rowWeight,
                 $position
             );
@@ -315,6 +336,9 @@ class Matching extends Question
 
         if ($exercise->showExpectedChoice()) {
             $header .= '<th class="text-center">'.get_lang('Status').'</th>';
+        }
+        if (false === $exercise->hideComment && EXERCISE_FEEDBACK_TYPE_EXAM !== $exercise->getFeedbackType()) {
+            $header .= '<th>'.get_lang('Comment').'</th>';
         }
         $header .= '</tr>';
 

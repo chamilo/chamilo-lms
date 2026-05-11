@@ -162,14 +162,18 @@ class ScormApi
 
             // Default behaviour.
             if (isset($status) && '' != $status && 'undefined' !== $status) {
-                if ($debug > 1) {
-                    error_log('Calling set_status('.$status.')');
-                }
+                if (self::canApplyScoLessonStatus($myLPI, $status)) {
+                    if ($debug > 1) {
+                        error_log('Calling set_status('.$status.')');
+                    }
 
-                $myLPI->set_status($status);
-                $statusIsSet = true;
-                if ($debug > 1) {
-                    error_log('Done calling set_status: checking from memory: '.$myLPI->get_status(false));
+                    $myLPI->set_status($status);
+                    $statusIsSet = true;
+                    if ($debug > 1) {
+                        error_log('Done calling set_status: checking from memory: '.$myLPI->get_status(false));
+                    }
+                } elseif ($debug > 1) {
+                    error_log('Status not updated because prevent_reinit keeps the completed SCO status');
                 }
             } else {
                 if ($debug > 1) {
@@ -367,14 +371,18 @@ class ScormApi
             if ($lmsCanUpdateScoStatus && !$statusIsSet && !$statusSignalReceived) {
                 // Default behaviour
                 if (isset($status) && '' != $status && 'undefined' !== $status) {
-                    if ($debug > 1) {
-                        error_log('Calling set_status('.$status.')');
-                    }
+                    if (self::canApplyScoLessonStatus($myLPI, $status)) {
+                        if ($debug > 1) {
+                            error_log('Calling set_status('.$status.')');
+                        }
 
-                    $myLPI->set_status($status);
+                        $myLPI->set_status($status);
 
-                    if ($debug > 1) {
-                        error_log('Done calling set_status: checking from memory: '.$myLPI->get_status(false));
+                        if ($debug > 1) {
+                            error_log('Done calling set_status: checking from memory: '.$myLPI->get_status(false));
+                        }
+                    } elseif ($debug > 1) {
+                        error_log('Status not updated because prevent_reinit keeps the completed SCO status');
                     }
                 } else {
                     if ($debug > 1) {
@@ -591,6 +599,27 @@ class ScormApi
         }
 
         return $return;
+    }
+
+    /**
+     * Keeps prevent_reinit semantics while still accepting score and other SCO
+     * data updates after a completed status and before LMSFinish().
+     *
+     * @param learnpathItem $item
+     * @param string $newStatus
+     */
+    private static function canApplyScoLessonStatus($item, $newStatus): bool
+    {
+        if (!is_object($item) || 1 != $item->get_prevent_reinit()) {
+            return true;
+        }
+
+        $completedStatuses = ['completed', 'passed', 'browsed', 'failed'];
+        $storedStatus = (string) $item->get_status(true);
+        $newStatus = (string) $newStatus;
+
+        return !in_array($storedStatus, $completedStatuses, true)
+            || in_array($newStatus, $completedStatuses, true);
     }
 
     /**

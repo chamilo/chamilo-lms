@@ -476,6 +476,12 @@ async function onSearch() {
   await load()
 }
 
+function defaultSortForTab(tab) {
+  return tab === "custom"
+    ? { field: "displayStartDate", order: -1 }
+    : { field: "title", order: 1 }
+}
+
 async function switchTab(tab) {
   if (!isValidTab(tab) || listType.value === tab) {
     return
@@ -486,6 +492,10 @@ async function switchTab(tab) {
   keyword.value = ""
   categoryFilter.value = ""
   selectedItems.value = []
+
+  const defaults = defaultSortForTab(tab)
+  sortField.value = defaults.field
+  sortOrder.value = defaults.order
 
   await syncRouteState()
   await load()
@@ -650,6 +660,9 @@ onMounted(async () => {
 
   if (query.list_type && isValidTab(String(query.list_type))) {
     listType.value = String(query.list_type)
+    const defaults = defaultSortForTab(listType.value)
+    sortField.value = defaults.field
+    sortOrder.value = defaults.order
   }
   if (query.id_category) {
     categoryFilter.value = String(query.id_category)

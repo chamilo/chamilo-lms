@@ -78,8 +78,6 @@ class SessionListController extends AbstractController
     {
         $page = max(1, (int) $request->query->get('page', 1));
         $limit = max(1, min(200, (int) $request->query->get('limit', 20)));
-        $sortField = (string) $request->query->get('sortField', 'title');
-        $sortOrder = 'DESC' === strtoupper((string) $request->query->get('sortOrder', 'ASC')) ? 'DESC' : 'ASC';
         $keyword = trim((string) $request->query->get('keyword', ''));
         $categoryFilter = $request->query->get('category');
 
@@ -94,6 +92,11 @@ class SessionListController extends AbstractController
         if (!\in_array($listType, self::ALLOWED_LIST_TYPES, true)) {
             $listType = $defaultListType;
         }
+
+        $defaultSortField = 'custom' === $listType ? 'displayStartDate' : 'title';
+        $defaultSortOrder = 'custom' === $listType ? 'DESC' : 'ASC';
+        $sortField = (string) $request->query->get('sortField', $defaultSortField);
+        $sortOrder = 'DESC' === strtoupper((string) $request->query->get('sortOrder', $defaultSortOrder)) ? 'DESC' : 'ASC';
 
         $allowOrder = 'true' === $this->settingsManager->getSetting('session.session_list_order', true);
 

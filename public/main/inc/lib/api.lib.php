@@ -3019,14 +3019,14 @@ function api_is_platform_admin($allowSessionAdmins = false, $allowDrh = false)
  */
 function api_is_platform_admin_by_id($user_id = null, $url = null)
 {
-    $user_id = (int) $user_id;
-    if (empty($user_id)) {
-        $user_id = api_get_user_id();
+    $user = api_get_user_entity((int) $user_id);
+
+    if (null === $user) {
+        return false;
     }
-    $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
-    $sql = "SELECT * FROM $admin_table WHERE user_id = $user_id";
-    $res = Database::query($sql);
-    $is_admin = 1 === Database::num_rows($res);
+
+    $is_admin = $user->isAdmin();
+
     if (!$is_admin || !isset($url)) {
         return $is_admin;
     }
@@ -3034,7 +3034,7 @@ function api_is_platform_admin_by_id($user_id = null, $url = null)
     $url = (int) $url;
     $url_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     $sql = "SELECT * FROM $url_user_table
-            WHERE access_url_id = $url AND user_id = $user_id";
+            WHERE access_url_id = $url AND user_id = ".$user->getId();
     $res = Database::query($sql);
 
     return 1 === Database::num_rows($res);
@@ -5698,12 +5698,14 @@ function api_get_tool_information_by_name($name)
  */
 function api_is_global_platform_admin($user_id = null)
 {
-    $user_id = (int) $user_id;
-    if (empty($user_id)) {
-        $user_id = api_get_user_id();
+    $user = api_get_user_entity((int) $user_id);
+
+    if (null === $user) {
+        return false;
     }
-    if (api_is_platform_admin_by_id($user_id)) {
-        $urlList = api_get_access_url_from_user($user_id);
+
+    if ($user->isAdmin()) {
+        $urlList = api_get_access_url_from_user($user->getId());
         // The admin is registered in the first "main" site with access_url_id = 1
         if (in_array(1, $urlList)) {
             return true;

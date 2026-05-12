@@ -4468,7 +4468,6 @@ __metadata:
     prettier: "npm:3.8.2"
     prettier-plugin-tailwindcss: "npm:^0.7.2"
     pretty-bytes: "npm:^5.6.0"
-    primeflex: "npm:^4.0.0"
     primeicons: "npm:^7.0.0"
     primevue: "npm:^4.5.5"
     purgecss-webpack-plugin: "npm:^8.0.0"
@@ -9105,13 +9104,6 @@ __metadata:
     lodash: "npm:^4.17.20"
     renderkid: "npm:^3.0.0"
   checksum: 10c0/dc292c087e2857b2e7592784ab31e37a40f3fa918caa11eba51f9fb2853e1d4d6e820b219917e35f5721d833cfd20fdf4f26ae931a90fd1ad0cae2125c345138
-  languageName: node
-  linkType: hard
-
-"primeflex@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "primeflex@npm:4.0.0"
-  checksum: 10c0/36516c2fc657aca018115bdceef601326d83f25b24c342c0b9bdc4ec92115e58735f0f628494d431ae9b9a441899bfbbca2159160954d70fa3ed7f6e2a95c8bf
   languageName: node
   linkType: hard
 

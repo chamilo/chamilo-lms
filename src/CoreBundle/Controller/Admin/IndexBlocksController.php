@@ -603,6 +603,11 @@ class IndexBlocksController extends BaseController
             'label' => $this->translator->trans('Global statistics'),
         ];
         $items[] = [
+            'class' => 'item-reports-catalog',
+            'url' => '/main/admin/reports_catalog.php',
+            'label' => $this->translator->trans('Reports catalog'),
+        ];
+        $items[] = [
             'class' => 'item-my-space',
             'url' => '/main/my_space/index.php',
             'label' => $this->translator->trans('Learning analytics'),
@@ -626,11 +631,6 @@ class IndexBlocksController extends BaseController
             'class' => 'item-special-export',
             'url' => '/main/admin/special_exports.php',
             'label' => $this->translator->trans('Special exports'),
-        ];
-        $items[] = [
-            'class' => 'item-activity-audit',
-            'url' => '/main/admin/statistics/index.php?'.http_build_query(['report' => 'activities']),
-            'label' => $this->translator->trans('Administrative activity auditing'),
         ];
         $items[] = [
             'class' => 'item-ticket-system',

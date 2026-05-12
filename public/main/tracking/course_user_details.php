@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Enums\ActionIcon;
 
 require_once __DIR__.'/../inc/global.inc.php';
+require_once __DIR__.'/../inc/lib/reports.lib.php';
 
 $current_course_tool = TOOL_TRACKING;
 $this_section = SECTION_COURSES;
@@ -41,6 +42,11 @@ $interbreadcrumb[] = [
 ];
 
 Display::display_header($nameTools, 'Tracking');
+
+echo ReportRegistry::renderReportActionBar(
+    'course_learner_tracking_details',
+    api_get_path(WEB_CODE_PATH).'tracking/courseLog.php?'.api_get_cidreq()
+);
 
 $backUrl = api_get_path(WEB_CODE_PATH).'tracking/courseLog.php?'.api_get_cidreq();
 $legacyDetailsUrl = api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?details=true'

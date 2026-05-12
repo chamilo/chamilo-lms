@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Helpers\UserMergeHelper;
 $cidReset = true;
 
 require_once __DIR__.'/../../inc/global.inc.php';
+require_once __DIR__.'/../../inc/lib/reports.lib.php';
 api_protect_admin_script();
 
 $interbreadcrumb[] = ['url' => '../index.php', 'name' => get_lang('Administration')];
@@ -3053,6 +3054,11 @@ switch ($report) {
 
 Display::display_header($tool_name);
 echo Display::page_header($tool_name);
+
+echo ReportRegistry::renderReportActionBar(
+    'platform_global_statistics',
+    api_get_path(WEB_CODE_PATH).'admin/index.php'
+);
 
 echo Statistics::statistics_render_menu($tools);
 

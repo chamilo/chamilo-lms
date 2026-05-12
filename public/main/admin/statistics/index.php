@@ -20,6 +20,20 @@ $interbreadcrumb[] = ['url' => '../index.php', 'name' => get_lang('Administratio
 $report = isset($_REQUEST['report']) ? (string) $_REQUEST['report'] : '';
 $action = isset($_REQUEST['action']) ? (string) $_REQUEST['action'] : '';
 
+if ('activities' === $report) {
+    $query = $_GET;
+    unset($query['report']);
+
+    $target = api_get_path(WEB_CODE_PATH).'admin/activities_audit.php';
+    if (!empty($query)) {
+        $target .= '?'.http_build_query($query);
+    }
+
+    header('Location: '.$target);
+    exit;
+}
+
+
 // Duplicate users actions (disable/enable + unify)
 if ($report === 'duplicated_users' && in_array($action, [
         'disable_duplicate_user',
@@ -602,7 +616,6 @@ $tools = [
         'report=duplicated_users' => get_lang('Duplicate users'),
     ],
     get_lang('System') => [
-        'report=activities' => get_lang('Important activities'),
         'report=user_session' => get_lang('Portal user session stats'),
         'report=quarterly_report' => get_lang('Quarterly report'),
     ],

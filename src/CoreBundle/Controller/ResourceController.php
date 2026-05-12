@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CourseToolAccessTracker;
 use Chamilo\CoreBundle\Helpers\ResourceFileHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ResourceFileRepository;
@@ -71,7 +72,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
     public function __construct(
         private readonly UserHelper $userHelper,
         private readonly ResourceNodeRepository $resourceNodeRepository,
-        private readonly ResourceFileRepository $resourceFileRepository
+        private readonly ResourceFileRepository $resourceFileRepository,
+        private readonly CourseToolAccessTracker $courseToolAccessTracker
     ) {}
 
     #[Route(path: '/{tool}/{type}/{id}/disk_space', methods: ['GET', 'POST'], name: 'chamilo_core_resource_disk_space')]
@@ -181,6 +183,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $trackEDownloadsRepository->saveDownload($user, $firstResourceLink, $url);
         }
 
+        $this->courseToolAccessTracker->trackFromResourceRequest($request);
+
         $cid = (int) $request->query->get('cid');
         $sid = (int) $request->query->get('sid');
         $allUserInfo = null;
@@ -217,6 +221,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
         if (null === $resourceNode) {
             throw new FileNotFoundException('Resource not found');
         }
+
+        $this->courseToolAccessTracker->trackFromResourceRequest($request);
 
         if ('course_tool' === $tool && 'links' === $type) {
             $cLink = $cLinkRepository->findOneBy(['resourceNode' => $resourceNode]);
@@ -288,6 +294,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $resourceNode,
             $this->trans('Unauthorised access to resource')
         );
+
+        $this->courseToolAccessTracker->trackFromResourceRequest($request);
 
         $resourceFile = $resourceFileHelper->resolveResourceFileByAccessUrl($resourceNode);
 

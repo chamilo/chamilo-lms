@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ToolIcon;
 
 require_once __DIR__.'/../inc/global.inc.php';
+require_once __DIR__.'/../inc/lib/reports.lib.php';
 
 $current_course_tool = TOOL_TRACKING;
 $this_section = SECTION_COURSES;
@@ -73,6 +74,11 @@ $notRecentlyConnected = TrackingCourseLog::getCourseUsersNotConnectedSince($stud
 $resourceUsage = TrackingCourseLog::getCourseResourceUsageSummarySince($courseId, $sessionId, $resetDate);
 
 Display::display_header($nameTools, 'Tracking');
+
+echo ReportRegistry::renderReportActionBar(
+    'course_activity_statistics',
+    api_get_path(WEB_CODE_PATH).'tracking/courseLog.php?'.api_get_cidreq()
+);
 
 $actionsLeft = TrackingCourseLog::actionsLeft('activity', $sessionId, false);
 $actionsRight = Display::url(

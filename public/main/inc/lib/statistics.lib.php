@@ -1118,7 +1118,7 @@ class Statistics
         $form = new FormValidator(
             'search_simple',
             'get',
-            api_get_path(WEB_CODE_PATH).'admin/statistics/index.php',
+            api_get_self(),
             '',
             ['style' => 'display:inline-block']
         );

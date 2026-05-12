@@ -33025,7 +33025,7 @@ msgid "Manager"
 msgstr "Manager"
 
 msgid "Mark as"
-msgstr "Als markieren"
+msgstr "Markieren als"
 
 msgid "Reply to all"
 msgstr "Allen antworten"
@@ -35486,3 +35486,12 @@ msgstr "Eine Datei auswählen, die in den Editor eingefügt werden soll."
 
 msgid "File manager"
 msgstr "Dateimanager"
+
+msgid "Hide comments"
+msgstr "Kommentare ausblenden"
+
+msgid "Loading comments..."
+msgstr "Kommentare werden geladen..."
+
+msgid "No comments yet."
+msgstr "Noch keine Kommentare."

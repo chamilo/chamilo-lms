@@ -33943,3 +33943,12 @@ msgstr "You already manage %d courses and your active service allows up to %d. T
 
 msgid "You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now."
 msgstr "You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now."
+
+msgid "Hide comments"
+msgstr "Hide comments"
+
+msgid "Loading comments..."
+msgstr "Loading comments..."
+
+msgid "No comments yet."
+msgstr "No comments yet."

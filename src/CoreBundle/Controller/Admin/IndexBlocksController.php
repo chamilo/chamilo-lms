@@ -194,7 +194,7 @@ class IndexBlocksController extends BaseController
         return [
             [
                 'class' => 'item-security-activities-audit',
-                'url' => '/main/admin/activities_audit.php',
+                'url' => '/main/admin/report.php?id=security_activities_audit',
                 'label' => $this->translator->trans('Activities audit'),
             ],
             [
@@ -599,7 +599,7 @@ class IndexBlocksController extends BaseController
         $items = [];
         $items[] = [
             'class' => 'item-stats',
-            'url' => '/main/admin/statistics/index.php',
+            'url' => '/main/admin/report.php?id=platform_global_statistics',
             'label' => $this->translator->trans('Global statistics'),
         ];
         $items[] = [
@@ -609,27 +609,27 @@ class IndexBlocksController extends BaseController
         ];
         $items[] = [
             'class' => 'item-my-space',
-            'url' => '/main/my_space/index.php',
+            'url' => '/main/admin/report.php?id=learning_analytics_dashboard',
             'label' => $this->translator->trans('Learning analytics'),
         ];
         $items[] = [
             'class' => 'item-quarterly-report',
-            'url' => '/main/admin/statistics/index.php?'.http_build_query(['report' => 'quarterly_report']),
+            'url' => '/main/admin/report.php?id=platform_quarterly_report',
             'label' => $this->translator->trans('Quarterly report'),
         ];
         $items[] = [
             'class' => 'item-teacher-time-report',
-            'url' => '/main/admin/teacher_time_report.php',
+            'url' => '/main/admin/report.php?id=learning_teacher_time_report',
             'label' => $this->translator->trans('Teachers time report'),
         ];
         $items[] = [
             'class' => 'item-stats-report',
-            'url' => '/main/my_space/company_reports.php',
+            'url' => '/main/admin/report.php?id=learning_corporate_report',
             'label' => $this->translator->trans('Corporate report'),
         ];
         $items[] = [
             'class' => 'item-special-export',
-            'url' => '/main/admin/special_exports.php',
+            'url' => '/main/admin/report.php?id=export_special_exports',
             'label' => $this->translator->trans('Special exports'),
         ];
         $items[] = [

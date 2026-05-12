@@ -251,7 +251,11 @@ if ('add' === $action) {
     $surveys = $qb->getQuery()->getResult();
     $surveyOptions[0] = '';
     foreach ($surveys as $survey) {
-        $surveyOptions[$survey->getIid()] = implode(' > ', $repo->getPath($survey));
+        try {
+            $surveyOptions[$survey->getIid()] = implode(' > ', $repo->getPath($survey));
+        } catch (\InvalidArgumentException) {
+            $surveyOptions[$survey->getIid()] = (string) $survey;
+        }
     }
     $form->addSelect('parent_id', get_lang('Parent Survey'), $surveyOptions);
     $defaults['parent_id'] = 0;

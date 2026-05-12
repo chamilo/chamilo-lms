@@ -900,10 +900,31 @@ class TrackingCourseLog
                     : '0 / 0';
             }
 
-            $url        = $urlBase.'&student='.$user['user_id'];
-            $user['link'] = '<a href="'.$url.'">
-                    '.Display::return_icon('2rightarrow.png', get_lang('Details')).'
-                 </a>';
+            $url = $urlBase.'&student='.$user['user_id'];
+            $trackingDetailsUrl = api_get_path(WEB_CODE_PATH).'tracking/course_user_details.php?'
+                .api_get_cidreq()
+                .'&student='.(int) $user['user_id'];
+            $user['link'] = Display::url(
+                Display::getMdiIcon(
+                    'clipboard-text-search-outline',
+                    'ch-tool-icon',
+                    null,
+                    ICON_SIZE_TINY,
+                    get_lang('Course tracking details')
+                ),
+                $trackingDetailsUrl,
+                ['title' => get_lang('Course tracking details')]
+            ).' '.Display::url(
+                Display::getMdiIcon(
+                    'chart-box-outline',
+                    'ch-tool-icon',
+                    null,
+                    ICON_SIZE_TINY,
+                    get_lang('Learner details')
+                ),
+                $url,
+                ['title' => get_lang('Learner details')]
+            );
 
             // -------------------------------------------------------------
             // Build final row
@@ -1169,6 +1190,482 @@ class TrackingCourseLog
         return $users;
     }
 
+
+    /**
+     * Returns the latest document downloads for a learner in the current course context.
+     */
+    public static function getCourseUserDownloadedDocuments(
+        int $userId,
+        int $courseId,
+        int $sessionId = 0,
+        int $limit = 100
+    ): array {
+        $userId = (int) $userId;
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
+        $limit = max(1, min(500, (int) $limit));
+
+        $trackDownloadsTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
+        $resourceLinkTable = Database::get_main_table('resource_link');
+        $resourceNodeTable = Database::get_main_table('resource_node');
+        $documentTable = Database::get_course_table(TABLE_DOCUMENT);
+
+        $sessionCondition = self::getResourceLinkSessionCondition('rl', $sessionId);
+
+        $sql = "SELECT
+                    t.down_id,
+                    t.down_date,
+                    t.down_doc_path,
+                    rl.id AS resource_link_id,
+                    rn.id AS resource_node_id,
+                    rn.title AS resource_title,
+                    rn.path AS resource_path,
+                    d.iid AS document_id,
+                    d.title AS document_title,
+                    d.filetype AS document_filetype
+                FROM $trackDownloadsTable t
+                INNER JOIN $resourceLinkTable rl
+                    ON rl.id = t.resource_link_id
+                INNER JOIN $resourceNodeTable rn
+                    ON rn.id = rl.resource_node_id
+                LEFT JOIN $documentTable d
+                    ON d.resource_node_id = rn.id
+                WHERE t.down_user_id = $userId
+                    AND rl.c_id = $courseId
+                    $sessionCondition
+                ORDER BY t.down_date DESC
+                LIMIT $limit";
+
+        return self::fetchAllAssoc($sql);
+    }
+
+    /**
+     * Returns forum posts written by a learner in the current course context.
+     */
+    public static function getCourseUserForumPosts(
+        int $userId,
+        int $courseId,
+        int $sessionId = 0,
+        int $limit = 100
+    ): array {
+        $userId = (int) $userId;
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
+        $limit = max(1, min(500, (int) $limit));
+
+        $postTable = Database::get_course_table(TABLE_FORUM_POST);
+        $threadTable = Database::get_course_table(TABLE_FORUM_THREAD);
+        $forumTable = Database::get_course_table(TABLE_FORUM);
+        $resourceLinkTable = Database::get_main_table('resource_link');
+
+        $postSessionCondition = self::getResourceLinkSessionCondition('rl_post', $sessionId);
+        $threadSessionCondition = self::getResourceLinkSessionCondition('rl_thread', $sessionId);
+
+        $sql = "SELECT
+                    p.iid AS post_id,
+                    p.title AS post_title,
+                    p.post_date,
+                    p.visible,
+                    p.status,
+                    t.iid AS thread_id,
+                    t.title AS thread_title,
+                    f.iid AS forum_id,
+                    f.title AS forum_title
+                FROM $postTable p
+                LEFT JOIN $threadTable t
+                    ON t.iid = p.thread_id
+                LEFT JOIN $forumTable f
+                    ON f.iid = p.forum_id
+                LEFT JOIN $resourceLinkTable rl_post
+                    ON rl_post.resource_node_id = p.resource_node_id
+                    AND rl_post.c_id = $courseId
+                    $postSessionCondition
+                LEFT JOIN $resourceLinkTable rl_thread
+                    ON rl_thread.resource_node_id = t.resource_node_id
+                    AND rl_thread.c_id = $courseId
+                    $threadSessionCondition
+                WHERE p.poster_id = $userId
+                    AND (
+                        rl_post.id IS NOT NULL
+                        OR rl_thread.id IS NOT NULL
+                    )
+                ORDER BY p.post_date DESC
+                LIMIT $limit";
+
+        return self::fetchAllAssoc($sql);
+    }
+
+    /**
+     * Returns forum topics opened by a learner in the current course context.
+     */
+    public static function getCourseUserForumThreads(
+        int $userId,
+        int $courseId,
+        int $sessionId = 0,
+        int $limit = 100
+    ): array {
+        $userId = (int) $userId;
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
+        $limit = max(1, min(500, (int) $limit));
+
+        $threadTable = Database::get_course_table(TABLE_FORUM_THREAD);
+        $forumTable = Database::get_course_table(TABLE_FORUM);
+        $resourceLinkTable = Database::get_main_table('resource_link');
+
+        $sessionCondition = self::getResourceLinkSessionCondition('rl', $sessionId);
+
+        $sql = "SELECT
+                    t.iid AS thread_id,
+                    t.title AS thread_title,
+                    t.thread_date,
+                    t.thread_replies,
+                    t.thread_views,
+                    f.iid AS forum_id,
+                    f.title AS forum_title
+                FROM $threadTable t
+                LEFT JOIN $forumTable f
+                    ON f.iid = t.forum_id
+                INNER JOIN $resourceLinkTable rl
+                    ON rl.resource_node_id = t.resource_node_id
+                WHERE t.thread_poster_id = $userId
+                    AND rl.c_id = $courseId
+                    $sessionCondition
+                ORDER BY t.thread_date DESC
+                LIMIT $limit";
+
+        return self::fetchAllAssoc($sql);
+    }
+
+    /**
+     * Returns course access sessions for a learner.
+     */
+    public static function getCourseUserAccessList(
+        int $userId,
+        int $courseId,
+        int $sessionId = 0,
+        int $limit = 100
+    ): array {
+        $userId = (int) $userId;
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
+        $limit = max(1, min(500, (int) $limit));
+
+        $courseAccessTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+
+        $sql = "SELECT
+                    course_access_id,
+                    login_course_date,
+                    logout_course_date,
+                    counter,
+                    user_ip
+                FROM $courseAccessTable
+                WHERE user_id = $userId
+                    AND c_id = $courseId
+                    AND session_id = $sessionId
+                ORDER BY login_course_date DESC
+                LIMIT $limit";
+
+        return self::fetchAllAssoc($sql);
+    }
+
+    /**
+     * Returns tool/resource usage events for a learner in a course.
+     */
+    public static function getCourseUserResourceAccessList(
+        int $userId,
+        int $courseId,
+        int $sessionId = 0,
+        int $limit = 100
+    ): array {
+        $userId = (int) $userId;
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
+        $limit = max(1, min(500, (int) $limit));
+
+        $accessTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+
+        $sql = "SELECT
+                    access_id,
+                    access_date,
+                    access_tool,
+                    user_ip
+                FROM $accessTable
+                WHERE access_user_id = $userId
+                    AND c_id = $courseId
+                    AND session_id = $sessionId
+                ORDER BY access_date DESC
+                LIMIT $limit";
+
+        return self::fetchAllAssoc($sql);
+    }
+
+    private static function getResourceLinkSessionCondition(string $alias, int $sessionId): string
+    {
+        if ($sessionId > 0) {
+            return " AND $alias.session_id = $sessionId";
+        }
+
+        return " AND ($alias.session_id IS NULL OR $alias.session_id = 0)";
+    }
+
+    private static function fetchAllAssoc(string $sql): array
+    {
+        $result = Database::query($sql);
+        $rows = [];
+
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $rows[] = $row;
+        }
+
+        return $rows;
+    }
+
+    /**
+     * Returns learners connected to the course since a given date.
+     *
+     * @param int[] $userIds
+     */
+    public static function getCourseConnectedUsersSince(
+        int $courseId,
+        int $sessionId,
+        \DateTimeInterface $since,
+        array $userIds = [],
+        int $limit = 500
+    ): array {
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
+        $limit = max(1, min(1000, (int) $limit));
+        $sinceDate = Database::escape_string($since->format('Y-m-d H:i:s'));
+
+        $courseAccessTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+        $userCondition = self::buildUserIdCondition($userIds, 'ca.user_id');
+
+        $sql = "SELECT
+                    u.id AS user_id,
+                    u.firstname,
+                    u.lastname,
+                    u.username,
+                    COUNT(ca.course_access_id) AS connection_count,
+                    MIN(ca.login_course_date) AS first_access,
+                    MAX(ca.login_course_date) AS last_access,
+                    SUM(
+                        CASE
+                            WHEN UNIX_TIMESTAMP(ca.logout_course_date) > UNIX_TIMESTAMP(ca.login_course_date)
+                            THEN UNIX_TIMESTAMP(ca.logout_course_date) - UNIX_TIMESTAMP(ca.login_course_date)
+                            ELSE 0
+                        END
+                    ) AS total_seconds
+                FROM $courseAccessTable ca
+                INNER JOIN $userTable u
+                    ON u.id = ca.user_id
+                WHERE ca.c_id = $courseId
+                    AND ca.session_id = $sessionId
+                    AND ca.login_course_date >= '$sinceDate'
+                    $userCondition
+                GROUP BY u.id, u.firstname, u.lastname, u.username
+                ORDER BY last_access DESC
+                LIMIT $limit";
+
+        return self::fetchAllAssoc($sql);
+    }
+
+    /**
+     * Returns last course access information indexed by user id.
+     *
+     * @param int[] $userIds
+     */
+    public static function getCourseUsersLastAccessMap(
+        int $courseId,
+        int $sessionId,
+        array $userIds = []
+    ): array {
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
+
+        $courseAccessTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $userCondition = self::buildUserIdCondition($userIds, 'user_id');
+
+        $sql = "SELECT
+                    user_id,
+                    MAX(login_course_date) AS last_access,
+                    COUNT(course_access_id) AS connection_count
+                FROM $courseAccessTable
+                WHERE c_id = $courseId
+                    AND session_id = $sessionId
+                    $userCondition
+                GROUP BY user_id";
+
+        $rows = self::fetchAllAssoc($sql);
+        $map = [];
+
+        foreach ($rows as $row) {
+            $map[(int) $row['user_id']] = $row;
+        }
+
+        return $map;
+    }
+
+    /**
+     * Returns learners who have not connected to the course since a given date.
+     *
+     * @param array<int|string,array<string,mixed>> $students
+     */
+    public static function getCourseUsersNotConnectedSince(
+        array $students,
+        int $courseId,
+        int $sessionId,
+        \DateTimeInterface $since
+    ): array {
+        $studentRows = [];
+        $studentIds = [];
+
+        foreach ($students as $key => $student) {
+            if (!is_array($student)) {
+                continue;
+            }
+
+            $userId = (int) ($student['user_id'] ?? $student['id'] ?? $key);
+            if ($userId <= 0) {
+                continue;
+            }
+
+            $studentRows[$userId] = $student;
+            $studentIds[] = $userId;
+        }
+
+        if (empty($studentIds)) {
+            return [];
+        }
+
+        $lastAccessMap = self::getCourseUsersLastAccessMap($courseId, $sessionId, $studentIds);
+        $sinceTimestamp = $since->getTimestamp();
+        $inactiveUsers = [];
+
+        foreach ($studentRows as $userId => $student) {
+            $lastAccess = $lastAccessMap[$userId]['last_access'] ?? null;
+            $lastTimestamp = !empty($lastAccess) ? strtotime((string) $lastAccess) : false;
+
+            if (false !== $lastTimestamp && $lastTimestamp >= $sinceTimestamp) {
+                continue;
+            }
+
+            $inactiveUsers[] = [
+                'user_id' => $userId,
+                'firstname' => (string) ($student['firstname'] ?? $student['firstName'] ?? ''),
+                'lastname' => (string) ($student['lastname'] ?? $student['lastName'] ?? ''),
+                'username' => (string) ($student['username'] ?? ''),
+                'email' => (string) ($student['email'] ?? ''),
+                'last_access' => $lastAccess,
+                'connection_count' => (int) ($lastAccessMap[$userId]['connection_count'] ?? 0),
+            ];
+        }
+
+        usort(
+            $inactiveUsers,
+            static function (array $a, array $b): int {
+                if (empty($a['last_access']) && empty($b['last_access'])) {
+                    return strcmp($a['lastname'].$a['firstname'], $b['lastname'].$b['firstname']);
+                }
+
+                if (empty($a['last_access'])) {
+                    return -1;
+                }
+
+                if (empty($b['last_access'])) {
+                    return 1;
+                }
+
+                return strcmp((string) $a['last_access'], (string) $b['last_access']);
+            }
+        );
+
+        return $inactiveUsers;
+    }
+
+    /**
+     * Returns a summary of resource/tool usage since a given date.
+     */
+    public static function getCourseResourceUsageSummarySince(
+        int $courseId,
+        int $sessionId,
+        \DateTimeInterface $since,
+        int $limit = 100
+    ): array {
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
+        $limit = max(1, min(500, (int) $limit));
+        $sinceDate = Database::escape_string($since->format('Y-m-d H:i:s'));
+
+        $accessTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+
+        $sql = "SELECT
+                    access_tool,
+                    COUNT(access_id) AS event_count,
+                    COUNT(DISTINCT access_user_id) AS user_count,
+                    MAX(access_date) AS last_access
+                FROM $accessTable
+                WHERE c_id = $courseId
+                    AND session_id = $sessionId
+                    AND access_date >= '$sinceDate'
+                GROUP BY access_tool
+                ORDER BY event_count DESC, access_tool ASC
+                LIMIT $limit";
+
+        return self::fetchAllAssoc($sql);
+    }
+
+    /**
+     * Returns number of distinct connected users since a given date.
+     */
+    public static function countCourseConnectedUsersSince(
+        int $courseId,
+        int $sessionId,
+        \DateTimeInterface $since,
+        array $userIds = []
+    ): int {
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
+        $sinceDate = Database::escape_string($since->format('Y-m-d H:i:s'));
+        $userCondition = self::buildUserIdCondition($userIds, 'user_id');
+        $courseAccessTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+
+        $sql = "SELECT COUNT(DISTINCT user_id) AS total
+                FROM $courseAccessTable
+                WHERE c_id = $courseId
+                    AND session_id = $sessionId
+                    AND login_course_date >= '$sinceDate'
+                    $userCondition";
+
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result, 'ASSOC');
+
+        return (int) ($row['total'] ?? 0);
+    }
+
+    /**
+     * @param int[] $userIds
+     */
+    private static function buildUserIdCondition(array $userIds, string $field): string
+    {
+        $ids = array_values(
+            array_unique(
+                array_filter(
+                    array_map('intval', $userIds),
+                    static fn (int $id): bool => $id > 0
+                )
+            )
+        );
+
+        if (empty($ids)) {
+            return '';
+        }
+
+        return ' AND '.$field.' IN ('.implode(',', $ids).')';
+    }
+
+
     /**
      * Determines the remaining actions for a session and returns a string with the results.
      */
@@ -1187,6 +1684,11 @@ class TrackingCourseLog
                 'icon'  => ToolIcon::MEMBER,
                 'label' => get_lang('Report on learners'),
                 'url'   => 'courseLog.php'.$cidQuery,
+            ],
+            'activity' => [
+                'icon'  => ToolIcon::TRACKING,
+                'label' => get_lang('Course activity statistics'),
+                'url'   => $webCodePath.'tracking/course_activity_statistics.php'.$cidQuery,
             ],
             'groups' => [
                 'icon'  => ToolIcon::GROUP,
@@ -1237,7 +1739,7 @@ class TrackingCourseLog
         $isGlobalContext = $showExtended || !$hasCourse;
 
         if ($isGlobalContext) {
-            unset($items['users'], $items['lp']);
+            unset($items['users'], $items['activity'], $items['lp']);
         }
 
         $links = [];

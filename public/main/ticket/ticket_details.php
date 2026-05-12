@@ -501,6 +501,7 @@ function getForm($ticket)
         [
             'enctype' => 'multipart/form-data',
             'class' => 'form-horizontal',
+            'data-no-autofocus' => '1',
         ]
     );
 

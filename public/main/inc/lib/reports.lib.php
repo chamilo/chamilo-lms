@@ -27,6 +27,7 @@ class ReportRegistry
     {
         return [
             'ROLE_ADMIN' => get_lang('Administrator'),
+            'ROLE_GLOBAL_ADMIN' => get_lang('Global administrator'),
             'ROLE_SESSION_MANAGER' => get_lang('Session manager'),
             'ROLE_TEACHER' => get_lang('Teacher'),
             'ROLE_STUDENT' => get_lang('Student'),
@@ -58,42 +59,48 @@ class ReportRegistry
             'reports.platform' => [
                 'label' => get_lang('Platform reports'),
                 'description' => get_lang('Reports about platform-wide usage, users, courses and sessions.'),
-                'roles' => ['ROLE_ADMIN', 'ROLE_SESSION_MANAGER'],
+                'roles' => ['ROLE_ADMIN', 'ROLE_GLOBAL_ADMIN', 'ROLE_SESSION_MANAGER'],
+                'permission_slug' => 'report:viewplatform',
             ],
             'reports.security' => [
                 'label' => get_lang('Security reports'),
                 'description' => get_lang('Audit and security-sensitive reports.'),
-                'roles' => ['ROLE_ADMIN'],
+                'roles' => ['ROLE_ADMIN', 'ROLE_GLOBAL_ADMIN'],
+                'permission_slug' => 'report:viewsecurity',
             ],
             'reports.course' => [
                 'label' => get_lang('Course reports'),
                 'description' => get_lang('Reports scoped to courses managed by the user.'),
-                'roles' => ['ROLE_ADMIN', 'ROLE_SESSION_MANAGER', 'ROLE_TEACHER', 'ROLE_CURRENT_COURSE_TEACHER'],
+                'roles' => ['ROLE_ADMIN', 'ROLE_GLOBAL_ADMIN', 'ROLE_SESSION_MANAGER', 'ROLE_TEACHER', 'ROLE_CURRENT_COURSE_TEACHER'],
+                'permission_slug' => 'report:viewcourse',
             ],
             'reports.learning_analytics' => [
                 'label' => get_lang('Learning analytics'),
                 'description' => get_lang('Reports related to learner activity and follow-up.'),
-                'roles' => ['ROLE_ADMIN', 'ROLE_SESSION_MANAGER', 'ROLE_TEACHER', 'ROLE_HR', 'ROLE_STUDENT_BOSS'],
+                'roles' => ['ROLE_ADMIN', 'ROLE_GLOBAL_ADMIN', 'ROLE_SESSION_MANAGER', 'ROLE_TEACHER', 'ROLE_HR', 'ROLE_STUDENT_BOSS'],
+                'permission_slug' => 'report:viewlearninganalytics',
             ],
             'reports.gradebook' => [
                 'label' => get_lang('Gradebook reports'),
                 'description' => get_lang('Reports related to scores, certificates and gradebook data.'),
-                'roles' => ['ROLE_ADMIN', 'ROLE_SESSION_MANAGER', 'ROLE_TEACHER', 'ROLE_CURRENT_COURSE_TEACHER'],
+                'roles' => ['ROLE_ADMIN', 'ROLE_GLOBAL_ADMIN', 'ROLE_SESSION_MANAGER', 'ROLE_TEACHER', 'ROLE_CURRENT_COURSE_TEACHER'],
+                'permission_slug' => 'report:viewgradebook',
             ],
             'reports.export' => [
                 'label' => get_lang('Exports'),
                 'description' => get_lang('Reports and exports that generate downloadable files.'),
-                'roles' => ['ROLE_ADMIN', 'ROLE_SESSION_MANAGER'],
+                'roles' => ['ROLE_ADMIN', 'ROLE_GLOBAL_ADMIN', 'ROLE_SESSION_MANAGER'],
+                'permission_slug' => 'report:viewexports',
             ],
         ];
     }
 
     public static function getReports(): array
     {
-        $admin = ['ROLE_ADMIN'];
-        $adminSession = ['ROLE_ADMIN', 'ROLE_SESSION_MANAGER'];
-        $courseManagers = ['ROLE_ADMIN', 'ROLE_SESSION_MANAGER', 'ROLE_TEACHER', 'ROLE_CURRENT_COURSE_TEACHER'];
-        $learningFollowUp = ['ROLE_ADMIN', 'ROLE_SESSION_MANAGER', 'ROLE_TEACHER', 'ROLE_HR', 'ROLE_STUDENT_BOSS'];
+        $admin = ['ROLE_ADMIN', 'ROLE_GLOBAL_ADMIN'];
+        $adminSession = ['ROLE_ADMIN', 'ROLE_GLOBAL_ADMIN', 'ROLE_SESSION_MANAGER'];
+        $courseManagers = ['ROLE_ADMIN', 'ROLE_GLOBAL_ADMIN', 'ROLE_SESSION_MANAGER', 'ROLE_TEACHER', 'ROLE_CURRENT_COURSE_TEACHER'];
+        $learningFollowUp = ['ROLE_ADMIN', 'ROLE_GLOBAL_ADMIN', 'ROLE_SESSION_MANAGER', 'ROLE_TEACHER', 'ROLE_HR', 'ROLE_STUDENT_BOSS'];
 
         return [
             [
@@ -663,6 +670,133 @@ class ReportRegistry
                 'roles' => $admin,
                 'permission' => 'reports.export',
             ],
+
+            [
+                'id' => 'course_survey_reporting',
+                'title' => get_lang('Survey reporting'),
+                'description' => get_lang('Course survey results and reporting.'),
+                'category' => self::CATEGORY_COURSE,
+                'url' => '/main/survey/reporting.php',
+                'roles' => $courseManagers,
+                'permission' => 'reports.course',
+            ],
+            [
+                'id' => 'course_attendance_report',
+                'title' => get_lang('Attendance report'),
+                'description' => get_lang('Course attendance tracking and reports.'),
+                'category' => self::CATEGORY_COURSE,
+                'url' => '/main/attendance/index.php',
+                'roles' => $courseManagers,
+                'permission' => 'reports.course',
+            ],
+            [
+                'id' => 'course_exercise_global_report',
+                'title' => get_lang('Exercises global report'),
+                'description' => get_lang('Global exercise results report for the course.'),
+                'category' => self::CATEGORY_LEARNING_ANALYTICS,
+                'url' => '/main/exercise/exercise_global_report.php',
+                'roles' => $courseManagers,
+                'permission' => 'reports.learning_analytics',
+            ],
+            [
+                'id' => 'course_exercise_report',
+                'title' => get_lang('Exercise report'),
+                'description' => get_lang('Detailed exercise report.'),
+                'category' => self::CATEGORY_LEARNING_ANALYTICS,
+                'url' => '/main/exercise/exercise_report.php',
+                'roles' => $courseManagers,
+                'permission' => 'reports.learning_analytics',
+            ],
+            [
+                'id' => 'course_exercise_history',
+                'title' => get_lang('Exercise history'),
+                'description' => get_lang('Exercise attempt history.'),
+                'category' => self::CATEGORY_LEARNING_ANALYTICS,
+                'url' => '/main/exercise/exercise_history.php',
+                'roles' => $courseManagers,
+                'permission' => 'reports.learning_analytics',
+            ],
+            [
+                'id' => 'course_exercise_results',
+                'title' => get_lang('Exercise results'),
+                'description' => get_lang('Exercise results and corrections.'),
+                'category' => self::CATEGORY_LEARNING_ANALYTICS,
+                'url' => '/main/exercise/result.php',
+                'roles' => $courseManagers,
+                'permission' => 'reports.learning_analytics',
+            ],
+            [
+                'id' => 'course_exercise_question_stats',
+                'title' => get_lang('Question statistics'),
+                'description' => get_lang('Question-level exercise statistics.'),
+                'category' => self::CATEGORY_LEARNING_ANALYTICS,
+                'url' => '/main/exercise/question_stats.php',
+                'roles' => $courseManagers,
+                'permission' => 'reports.learning_analytics',
+            ],
+            [
+                'id' => 'course_exercise_stats',
+                'title' => get_lang('Exercise statistics'),
+                'description' => get_lang('Exercise statistics page.'),
+                'category' => self::CATEGORY_LEARNING_ANALYTICS,
+                'url' => '/main/exercise/stats.php',
+                'roles' => $courseManagers,
+                'permission' => 'reports.learning_analytics',
+            ],
+            [
+                'id' => 'course_exercise_live_stats',
+                'title' => get_lang('Live exercise statistics'),
+                'description' => get_lang('Live exercise statistics for teachers.'),
+                'category' => self::CATEGORY_LEARNING_ANALYTICS,
+                'url' => '/main/exercise/live_stats.php',
+                'roles' => $courseManagers,
+                'permission' => 'reports.learning_analytics',
+            ],
+            [
+                'id' => 'course_lp_stats',
+                'title' => get_lang('Learning path statistics'),
+                'description' => get_lang('Learning path item statistics.'),
+                'category' => self::CATEGORY_LEARNING_ANALYTICS,
+                'url' => '/main/lp/lp_stats.php',
+                'roles' => $courseManagers,
+                'permission' => 'reports.learning_analytics',
+            ],
+            [
+                'id' => 'course_lp_report_legacy',
+                'title' => get_lang('Learning path report'),
+                'description' => get_lang('Learning path report inside a course.'),
+                'category' => self::CATEGORY_LEARNING_ANALYTICS,
+                'url' => '/main/lp/lp_report.php',
+                'roles' => $courseManagers,
+                'permission' => 'reports.learning_analytics',
+            ],
+            [
+                'id' => 'social_skills_report',
+                'title' => get_lang('Skills report'),
+                'description' => get_lang('User skills report.'),
+                'category' => self::CATEGORY_SOCIAL,
+                'url' => '/main/social/my_skills_report.php',
+                'roles' => $learningFollowUp,
+                'permission' => 'reports.learning_analytics',
+            ],
+            [
+                'id' => 'export_periodic_export',
+                'title' => get_lang('Periodic export'),
+                'description' => get_lang('Scheduled or periodic export configuration.'),
+                'category' => self::CATEGORY_EXPORT,
+                'url' => '/main/admin/periodic_export.php',
+                'roles' => $admin,
+                'permission' => 'reports.export',
+            ],
+            [
+                'id' => 'export_user_export',
+                'title' => get_lang('User export'),
+                'description' => get_lang('Export users from the platform.'),
+                'category' => self::CATEGORY_EXPORT,
+                'url' => '/main/admin/user_export.php',
+                'roles' => $admin,
+                'permission' => 'reports.export',
+            ],
         ];
     }
 
@@ -733,6 +867,10 @@ class ReportRegistry
             $roles[] = 'ROLE_ADMIN';
         }
 
+        if (function_exists('api_is_global_platform_admin') && api_is_global_platform_admin()) {
+            $roles[] = 'ROLE_GLOBAL_ADMIN';
+        }
+
         if (function_exists('api_is_session_admin') && api_is_session_admin()) {
             $roles[] = 'ROLE_SESSION_MANAGER';
         }
@@ -762,6 +900,10 @@ class ReportRegistry
 
     public static function currentUserCanAccessReport(array $report): bool
     {
+        if (function_exists('api_is_global_platform_admin') && api_is_global_platform_admin()) {
+            return true;
+        }
+
         if (function_exists('api_is_platform_admin') && api_is_platform_admin()) {
             return true;
         }

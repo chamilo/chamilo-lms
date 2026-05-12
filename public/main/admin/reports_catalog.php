@@ -201,6 +201,11 @@ function renderReportsPermissionCategories(): void
     foreach ($permissions as $permissionKey => $permission) {
         echo '<article class="rounded-xl border border-gray-25 bg-gray-10 p-4">';
         echo '<div class="mb-2"><code>'.Security::remove_XSS($permissionKey).'</code></div>';
+        if (!empty($permission['permission_slug'])) {
+            echo '<div class="mb-2 text-xs text-gray-600">'.get_lang('Permission').': <code>'
+                .Security::remove_XSS($permission['permission_slug'])
+                .'</code></div>';
+        }
         echo '<h4 class="text-base font-semibold m-0 mb-2">'.Security::remove_XSS($permission['label']).'</h4>';
         echo '<p class="text-sm text-gray-600">'.Security::remove_XSS($permission['description']).'</p>';
         echo '<div class="mt-3">'.renderRoleBadges($permission['roles'] ?? []).'</div>';

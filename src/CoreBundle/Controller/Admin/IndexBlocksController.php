@@ -36,6 +36,7 @@ use Throwable;
 class IndexBlocksController extends BaseController
 {
     private bool $isAdmin = false;
+    private bool $isGlobalAdmin = false;
     private bool $isSessionAdmin = false;
     private bool $isLdapActive;
 
@@ -57,6 +58,7 @@ class IndexBlocksController extends BaseController
     public function __invoke(): JsonResponse
     {
         $this->isAdmin = $this->isGranted('ROLE_ADMIN');
+        $this->isGlobalAdmin = $this->isGranted('ROLE_GLOBAL_ADMIN');
         $this->isSessionAdmin = $this->isGranted('ROLE_SESSION_MANAGER');
 
         $json = [];
@@ -525,7 +527,7 @@ class IndexBlocksController extends BaseController
             'label' => $this->translator->trans('Extra fields'),
         ];
 
-        if (api_is_global_platform_admin()) {
+        if ($this->isGlobalAdmin) {
             $items[] = [
                 'class' => 'item-access-url',
                 'url' => '/main/admin/access_urls.php',

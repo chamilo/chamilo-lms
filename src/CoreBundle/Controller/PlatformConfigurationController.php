@@ -164,6 +164,7 @@ class PlatformConfigurationController extends AbstractController
                 'attendance.attendance_allow_comments',
                 'attendance.multilevel_grading',
                 'attendance.enable_sign_attendance_sheet',
+                'attendance.attendance_add_official_code',
                 'exercise.allow_exercise_auto_launch',
                 'document.access_url_specific_files',
                 'catalog.show_courses_descriptions_in_catalog',

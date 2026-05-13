@@ -189,6 +189,12 @@
                 <tr class="bg-gray-15 h-28">
                   <th class="p-3 border border-gray-25 text-left">#</th>
                   <th class="p-3 border border-gray-25 text-left">{{ t("Photo") }}</th>
+                  <th
+                    v-if="showOfficialCode"
+                    class="p-3 border border-gray-25 text-left"
+                  >
+                    {{ t("Official code") }}
+                  </th>
                   <th class="p-3 border border-gray-25 text-left">{{ t("Last name") }}</th>
                   <th class="p-3 border border-gray-25 text-left w-32">{{ t("First name") }}</th>
                   <th class="p-3 border border-gray-25 text-left">{{ t("Not attended") }}</th>
@@ -207,6 +213,13 @@
                       alt="User photo"
                       class="w-10 h-10 rounded-full"
                     />
+                  </td>
+                  <td
+                    v-if="showOfficialCode"
+                    class="p-3 border border-gray-25 truncate"
+                    :title="user.officialCode"
+                  >
+                    {{ user.officialCode }}
                   </td>
                   <td
                     class="p-3 border border-gray-25 truncate"
@@ -598,6 +611,9 @@ const allowComments = computed(() => platformConfigStore.getSetting("attendance.
 const allowMultilevelGrading = computed(
   () => platformConfigStore.getSetting("attendance.multilevel_grading") === "true",
 )
+const showOfficialCode = computed(
+  () => platformConfigStore.getSetting("attendance.attendance_add_official_code") === "true",
+)
 const canEdit = computed(() => {
   const readonly = route.query.readonly === "1"
   return !readonly && isTeacherUI.value
@@ -761,6 +777,7 @@ const fetchAttendanceSheetUsers = async (attendanceId) => {
       photo: user.photo || "/img/default-avatar.png",
       lastName: user.lastname,
       firstName: user.firstname,
+      officialCode: user.officialCode || "",
       notAttended: user.notAttended,
     }))
   } catch (error) {

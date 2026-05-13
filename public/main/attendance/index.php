@@ -33,6 +33,7 @@ $actions = [
     'attendance_set_visible_select',
     'attendance_restore',
     'attendance_sheet_export_to_pdf',
+    'attendance_sheet_export_to_xls',
     'attendance_sheet_list_no_edit',
     'calendar_logins',
     'calendar_list',
@@ -430,6 +431,14 @@ switch ($action) {
         break;
     case 'attendance_sheet_export_to_pdf':
         $attendance->attendance_sheet_export_to_pdf(
+            $attendanceId,
+            $student_id,
+            api_get_course_id()
+        );
+
+        break;
+    case 'attendance_sheet_export_to_xls':
+        $attendance->attendance_sheet_export_to_xls(
             $attendanceId,
             $student_id,
             api_get_course_id()

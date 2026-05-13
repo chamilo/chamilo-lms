@@ -379,12 +379,12 @@ async function load() {
     const params = new URLSearchParams({
       page: String(page.value),
       limit: String(pageSize.value),
-      sortField: sortField.value,
-      sortOrder: sortOrder.value === 1 ? "ASC" : "DESC",
     })
 
     if (listType.value) {
       params.set("listType", listType.value)
+      params.set("sortField", sortField.value)
+      params.set("sortOrder", sortOrder.value === 1 ? "ASC" : "DESC")
     }
 
     if (keyword.value) {
@@ -397,6 +397,11 @@ async function load() {
     const data = await baseService.get(`/admin/session-list-data?${params.toString()}`)
 
     if (data.currentListType && isValidTab(data.currentListType)) {
+      if (!listType.value) {
+        const defaults = defaultSortForTab(data.currentListType)
+        sortField.value = defaults.field
+        sortOrder.value = defaults.order
+      }
       listType.value = data.currentListType
     }
 

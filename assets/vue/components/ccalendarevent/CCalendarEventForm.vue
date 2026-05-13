@@ -8,14 +8,23 @@
       :label="t('Title')"
     />
 
-    <BaseCalendar
-      id="calendar-id"
-      v-model="dateRange"
-      :is-invalid="v$.item.startDate.$invalid || v$.item.endDate.$invalid"
-      :label="t('Date')"
-      show-time
-      type="range"
-    />
+    <div class="grid gap-4 md:grid-cols-2">
+      <BaseCalendar
+        id="calendar-start-date"
+        v-model="item.startDate"
+        :is-invalid="v$.item.startDate.$invalid"
+        :label="t('Start date')"
+        show-time
+      />
+
+      <BaseCalendar
+        id="calendar-end-date"
+        v-model="item.endDate"
+        :is-invalid="v$.item.endDate.$invalid"
+        :label="t('End date')"
+        show-time
+      />
+    </div>
 
     <BaseTinyEditor
       v-model="item.content"
@@ -86,7 +95,7 @@
 </template>
 
 <script setup>
-import { computed, ref, watch, onMounted, watchEffect } from "vue"
+import { computed, ref, watch, onMounted } from "vue"
 import { useRoute } from "vue-router"
 import { useVuelidate } from "@vuelidate/core"
 import { required } from "@vuelidate/validators"
@@ -189,13 +198,6 @@ const v$ = useVuelidate(rules, { item })
 
 defineExpose({
   v$,
-})
-
-const dateRange = ref([item.value?.startDate, item.value?.endDate])
-
-watchEffect(() => {
-  item.value.startDate = dateRange.value[0] ?? null
-  item.value.endDate = dateRange.value[1] ?? null
 })
 
 watch(

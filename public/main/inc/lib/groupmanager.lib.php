@@ -1057,7 +1057,7 @@ class GroupManager
         $selfRegistrationAllowed = 0,
         $selfUnRegistrationAllowed = 0,
         $maxStudent = 8,
-        $groupsPerUser = 0,
+        $groupsPerUser = 1,
         $documentAccess = 0
     ) {
         if (empty($title)) {
@@ -1523,12 +1523,16 @@ class GroupManager
 
         // Getting max numbers of user from group
         $maxNumberStudents = empty($group->getMaxStudent()) ? self::INFINITE : $group->getMaxStudent();
-        $groupsPerUser = self::INFINITE;
+        $groupsPerUser = 1;
         $categoryId = 0;
         if ($category) {
-            $groupsPerUser = empty($category['groups_per_user']) ? self::INFINITE : $category['groups_per_user'];
+            $groupsPerUser = (int) $category['groups_per_user'];
+            if (self::GROUP_PER_MEMBER_NO_LIMIT === $groupsPerUser) {
+                $groupsPerUser = self::INFINITE;
+            }
+
             $maxNumberStudentsCategory = empty($category['max_student']) ? self::INFINITE : $category['max_student'];
-            $categoryId = $category['iid'];
+            $categoryId = (int) $category['iid'];
             if ($maxNumberStudentsCategory < $maxNumberStudents) {
                 $maxNumberStudents = $maxNumberStudentsCategory;
             }

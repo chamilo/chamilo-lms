@@ -881,6 +881,11 @@ function display_license_agreement(): array
     ];
 }
 
+function installerHtmlAttributeValue(mixed $value): string
+{
+    return htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+}
+
 /**
  * Displays a parameter in a table row.
  * Used by the display_database_settings_form function.
@@ -901,36 +906,56 @@ function displayDatabaseParameter(
     $extra_notice,
     $displayWhenUpdate = true
 ) {
-    echo "<dt class='col-sm-4'>$parameterName</dt>";
+    $escapedParameterName = installerHtmlAttributeValue($parameterName);
+    $escapedFormFieldName = installerHtmlAttributeValue($formFieldName);
+    $escapedParameterValue = installerHtmlAttributeValue($parameterValue);
+
+    echo '<dt class="col-sm-4">'.$escapedParameterName.'</dt>';
     echo '<dd class="col-sm-8">';
+
     if (INSTALL_TYPE_UPDATE == $installType && $displayWhenUpdate) {
         echo '<input
                 type="hidden"
-                name="'.$formFieldName.'"
-                id="'.$formFieldName.'"
-                value="'.api_htmlentities($parameterValue).'" />'.$parameterValue;
-    } else {
-        $inputType = 'dbPassForm' === $formFieldName ? 'password' : 'text';
-        //Slightly limit the length of the database prefix to avoid having to cut down the databases names later on
-        $maxLength = 'dbPrefixForm' === $formFieldName ? '15' : MAX_FORM_FIELD_LENGTH;
-        if (INSTALL_TYPE_UPDATE == $installType) {
-            echo '<input
-                type="hidden" name="'.$formFieldName.'" id="'.$formFieldName.'"
-                value="'.api_htmlentities($parameterValue).'" />';
-            echo api_htmlentities($parameterValue);
-        } else {
-            echo '<input
-                        type="'.$inputType.'"
-                        class="form-control"
-                        size="'.DATABASE_FORM_FIELD_DISPLAY_LENGTH.'"
-                        maxlength="'.$maxLength.'"
-                        name="'.$formFieldName.'"
-                        id="'.$formFieldName.'"
-                        value="'.api_htmlentities($parameterValue).'" />
-                    '.$extra_notice.'
-                  ';
-        }
+                name="'.$escapedFormFieldName.'"
+                id="'.$escapedFormFieldName.'"
+                value="'.$escapedParameterValue.'" />'.$escapedParameterValue;
+        echo '</dd>';
+
+        return;
     }
+
+    $inputType = 'dbPassForm' === $formFieldName ? 'password' : 'text';
+
+    $maxLength = MAX_FORM_FIELD_LENGTH;
+    if ('dbPrefixForm' === $formFieldName) {
+        $maxLength = 15;
+    } elseif ('dbPassForm' === $formFieldName) {
+        $maxLength = 255;
+    }
+
+    if (INSTALL_TYPE_UPDATE == $installType) {
+        echo '<input
+                type="hidden"
+                name="'.$escapedFormFieldName.'"
+                id="'.$escapedFormFieldName.'"
+                value="'.$escapedParameterValue.'" />';
+        echo $escapedParameterValue;
+        echo '</dd>';
+
+        return;
+    }
+
+    echo '<input
+                type="'.$inputType.'"
+                class="form-control"
+                size="'.DATABASE_FORM_FIELD_DISPLAY_LENGTH.'"
+                maxlength="'.$maxLength.'"
+                name="'.$escapedFormFieldName.'"
+                id="'.$escapedFormFieldName.'"
+                value="'.$escapedParameterValue.'" />
+            '.$extra_notice.'
+          ';
+
     echo '</dd>';
 }
 
@@ -974,17 +999,14 @@ function display_database_settings_form(
             $connection->connect();
             $schemaManager = $connection->getSchemaManager();
 
-            // Test create/alter/drop table
             $table = 'zXxTESTxX_'.mt_rand(0, 1000);
             $sql = "CREATE TABLE $table (id INT AUTO_INCREMENT NOT NULL, name varchar(255), PRIMARY KEY(id))";
             $connection->executeQuery($sql);
-            $tableCreationWorks = false;
-            $tableDropWorks = false;
+
             if ($schemaManager->tablesExist($table)) {
                 $sql = "ALTER TABLE $table ADD COLUMN name2 varchar(140) ";
                 $connection->executeQuery($sql);
                 $schemaManager->dropTable($table);
-                $tableDropWorks = false === $schemaManager->tablesExist($table);
             }
         } else {
             connectToDatabase(
@@ -1372,6 +1394,21 @@ function migrate(EntityManager $manager)
  * @param string $envFile
  * @param array  $params
  */
+function escapeInstallerEnvValue(mixed $value): string
+{
+    $value = (string) $value;
+
+    if (str_contains($value, "\n") || str_contains($value, "\r")) {
+        throw new \InvalidArgumentException('Installer .env values cannot contain line breaks.');
+    }
+
+    return str_replace(
+        ['\\', "'"],
+        ['\\\\', "\\'"],
+        $value
+    );
+}
+
 function updateEnvFile($distFile, $envFile, $params)
 {
     $requirements = [
@@ -1400,8 +1437,13 @@ function updateEnvFile($distFile, $envFile, $params)
         }
     }
 
+    $escapedParams = [];
+    foreach ($params as $key => $value) {
+        $escapedParams[$key] = escapeInstallerEnvValue($value);
+    }
+
     $contents = file_get_contents($distFile);
-    $contents = str_replace(array_keys($params), array_values($params), $contents);
+    $contents = str_replace(array_keys($escapedParams), array_values($escapedParams), $contents);
     file_put_contents($envFile, $contents);
     error_log("File env saved here: $envFile");
 }

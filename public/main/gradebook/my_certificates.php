@@ -48,11 +48,7 @@ $template->assign('allow_export', $allowExport);
 $templateName = $template->get_template('gradebook/my_certificates.tpl');
 $content = $template->fetch($templateName);
 
-//Removed in Chamilo 2.0 because we do not have certificates search.
-//In Chamilo 2.1 there will be a new setting certificate.allow_certificates_search 
-//to be used to activate certificate search GH#7629
-/*
-if ('true' === api_get_setting('certificate.allow_public_certificates')) {
+if ('true' === api_get_setting('certificate.allow_certificates_search')) {
     $template->assign(
         'actions',
         Display::toolbarButton(
@@ -63,7 +59,6 @@ if ('true' === api_get_setting('certificate.allow_public_certificates')) {
         )
     );
 }
- */
 
 $template->assign('content', $content);
 $template->display_one_col_template();

@@ -286,7 +286,7 @@ if (api_is_platform_admin()) {
 
         $items = [];
         $items[] = [
-            'url' => api_get_path(WEB_CODE_PATH).'skills/skills_wheel.php',
+            'url' => '/skill/wheel',
             'label' => get_lang('Skills wheel'),
         ];
         $items[] = [

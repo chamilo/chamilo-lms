@@ -141,6 +141,7 @@ class PlatformConfigurationController extends AbstractController
                 'social.social_enable_messages_feedback',
                 'social.disable_dislike_option',
                 'skill.allow_skills_tool',
+                'skill.allow_hr_skills_management',
                 'gradebook.gradebook_enable_grade_model',
                 'gradebook.gradebook_dependency',
                 'course.course_validation',
@@ -207,6 +208,8 @@ class PlatformConfigurationController extends AbstractController
                 'course.show_toolshortcuts',
                 'work.my_courses_show_pending_work',
                 'exercise.my_courses_show_pending_exercise_attempts',
+                'certificate.allow_public_certificates',
+                'certificate.allow_certificates_search',
             ];
 
             foreach ($variables as $variable) {

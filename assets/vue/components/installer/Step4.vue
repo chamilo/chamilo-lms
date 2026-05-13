@@ -80,7 +80,7 @@
         <Password
           v-model="installerData.stepData.dbPassForm"
           :feedback="false"
-          :input-props="{ maxlength: 25, name: 'dbPassForm' }"
+          :input-props="{ maxlength: 255, name: 'dbPassForm' }"
           :readonly="'update' === installerData.installType"
           input-id="dbPassForm"
           toggle-mask

@@ -131,6 +131,7 @@ watch(created, (val) => {
     return
   }
 
+  createForm.value?.clearEditorDrafts?.()
   redirectToDocumentsList()
 })
 

@@ -103,6 +103,7 @@ const { isAllowedToEdit } = useIsAllowedToEdit({ tutor: true, coach: true, sessi
 const {
   item,
   isLoading,
+  updated,
   violations,
   retrieve,
   onSendFormData: dispatchSendFormData,
@@ -142,6 +143,14 @@ watch(
   },
   { immediate: true },
 )
+
+watch(updated, (val) => {
+  if (!val) {
+    return
+  }
+
+  updateForm.value?.clearEditorDrafts?.()
+})
 
 onMounted(() => {
   fetchTemplates()

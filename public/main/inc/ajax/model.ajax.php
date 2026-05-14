@@ -2789,7 +2789,7 @@ switch ($action) {
         $currentUserId = api_get_user_id();
         $isAllow = api_is_allowed_to_edit();
         if (!empty($result)) {
-            $urlUserGroup = api_get_path(WEB_CODE_PATH).'admin/usergroup_users.php?'.api_get_cidreq();
+            $urlUserGroup = '/admin/usergroup-users/';
             foreach ($result as $group) {
                 $countUsers = count($obj->get_users_by_usergroup($group['id']));
                 $group['users'] = $countUsers;

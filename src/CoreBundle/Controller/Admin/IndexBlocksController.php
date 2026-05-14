@@ -268,7 +268,7 @@ class IndexBlocksController extends BaseController
             ];
             $items[] = [
                 'class' => 'item-user-groups',
-                'url' => '/main/admin/usergroups.php',
+                'url' => '/admin/usergroups',
                 'label' => $this->translator->trans('Classes'),
             ];
 
@@ -287,7 +287,7 @@ class IndexBlocksController extends BaseController
             ];
             $items[] = [
                 'class' => 'item-user-groups',
-                'url' => '/main/admin/usergroups.php',
+                'url' => '/admin/usergroups',
                 'label' => $this->translator->trans('Classes'),
             ];
 

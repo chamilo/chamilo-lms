@@ -17171,6 +17171,18 @@ msgstr "Sessions in group"
 msgid "Courses in group"
 msgstr "Courses in group"
 
+msgid "Courses on the platform"
+msgstr "Courses on the platform"
+
+msgid "%s courses"
+msgstr "%s courses"
+
+msgid "%s sessions"
+msgstr "%s sessions"
+
+msgid "Search by title or code"
+msgstr "Search by title or code"
+
 msgid "Users in group"
 msgstr "Users in group"
 
@@ -33943,6 +33955,27 @@ msgstr "You already manage %d courses and your active service allows up to %d. T
 
 msgid "You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now."
 msgstr "You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now."
+
+msgid "Add a class"
+msgstr "Add a class"
+
+msgid "Search classes"
+msgstr "Search classes"
+
+msgid "No classes found"
+msgstr "No classes found"
+
+msgid "Import classes"
+msgstr "Import classes"
+
+msgid "Class users"
+msgstr "Class users"
+
+msgid "%s classes imported"
+msgstr "%s classes imported"
+
+msgid "%s user-class links imported"
+msgstr "%s user-class links imported"
 
 msgid "Hide comments"
 msgstr "Hide comments"

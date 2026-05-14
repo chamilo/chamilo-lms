@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from "vue"
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import axios from "axios"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
@@ -8,6 +8,7 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue"
 
 const { t } = useI18n()
 const route = useRoute()
+const router = useRouter()
 
 const groupId = computed(() => Number(route.params.id))
 
@@ -114,7 +115,7 @@ async function save() {
     formData.append("relationType", String(relationType.value))
     selectedIds.value.forEach((id) => formData.append("userIds[]", String(id)))
     await axios.post(`/admin/usergroups/${groupId.value}/add-users-data`, formData)
-    window.location.href = "/main/admin/usergroups.php"
+    await router.push({ name: "AdminUsergroupList" })
   } catch {
     errorMessage.value = t("An error occurred. Please try again.")
     isSaving.value = false
@@ -137,7 +138,7 @@ onMounted(() => {
         :label="t('Back')"
         icon="back"
         type="plain"
-        :to-url="'/main/admin/usergroups.php'"
+        :route="{ name: 'AdminUsergroupList' }"
       />
       <BaseButton
         :label="t('Export')"
@@ -314,7 +315,7 @@ onMounted(() => {
         :label="t('Cancel')"
         icon="back"
         type="plain"
-        :to-url="'/main/admin/usergroups.php'"
+        :route="{ name: 'AdminUsergroupList' }"
       />
     </div>
   </div>

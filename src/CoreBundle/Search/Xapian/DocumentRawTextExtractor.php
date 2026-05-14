@@ -22,6 +22,17 @@ final class DocumentRawTextExtractor
 {
     private const MAX_ARCHIVE_BYTES = 30_000_000; // 30MB safety limit for zip-based docs
 
+    private const GENERIC_EXTENSIONS = ['bin', 'tmp', 'dat'];
+
+    private const SUPPORTED_EXTENSIONS = [
+        'html', 'htm', 'txt', 'md', 'csv', 'log',
+        'pdf', 'ps', 'doc', 'ppt', 'rtf', 'xls',
+        'docx', 'docm', 'dotx', 'dotm',
+        'pptx', 'pptm', 'ppsx', 'ppsm', 'potx', 'potm',
+        'xlsx', 'xlsm', 'xltx', 'xltm',
+        'odt', 'ods', 'odp', 'ott', 'ots', 'otp',
+    ];
+
     public function __construct(
         private readonly ResourceNodeRepository $resourceNodeRepository,
     ) {}
@@ -123,12 +134,12 @@ final class DocumentRawTextExtractor
             'xls' => $this->runToStdout(['xls2csv', $tmpIn], 12),
 
             // ZIP/XML (no extra dependencies)
-            'docx' => $this->extractDocx($tmpIn),
-            'pptx' => $this->extractPptx($tmpIn),
-            'xlsx' => $this->extractXlsx($tmpIn),
+            'docx', 'docm', 'dotx', 'dotm' => $this->extractDocx($tmpIn),
+            'pptx', 'pptm', 'ppsx', 'ppsm', 'potx', 'potm' => $this->extractPptx($tmpIn),
+            'xlsx', 'xlsm', 'xltx', 'xltm' => $this->extractXlsx($tmpIn),
 
             // ODF (zip + content.xml)
-            'odt', 'ods', 'odp' => $this->extractOdf($tmpIn),
+            'odt', 'ods', 'odp', 'ott', 'ots', 'otp' => $this->extractOdf($tmpIn),
 
             default => $this->unsupported($ext),
         };
@@ -147,13 +158,14 @@ final class DocumentRawTextExtractor
                 '~^word/(footnotes|endnotes|comments)\.xml$~',
             ]);
 
-            $chunks = [];
+            $chunks = $this->extractOfficeMetadata($zip);
+
             foreach ($names as $name) {
                 $xml = $zip->getFromName($name);
                 if (!\is_string($xml) || '' === trim($xml)) {
                     continue;
                 }
-                $chunks[] = $this->extractTextByRegex($xml, '~<w:t[^>]*>(.*?)</w:t>~s');
+                $chunks[] = $this->extractTextByRegex($xml, '~<(?:[\w.-]+:)?t[^>]*>(.*?)</(?:[\w.-]+:)?t>~s');
             }
 
             return trim(implode(' ', array_filter($chunks)));
@@ -177,13 +189,14 @@ final class DocumentRawTextExtractor
                 return $this->extractFirstInt($a) <=> $this->extractFirstInt($b);
             });
 
-            $chunks = [];
+            $chunks = $this->extractOfficeMetadata($zip);
+
             foreach ($slideNames as $name) {
                 $xml = $zip->getFromName($name);
                 if (!\is_string($xml) || '' === trim($xml)) {
                     continue;
                 }
-                $chunks[] = $this->extractTextByRegex($xml, '~<a:t[^>]*>(.*?)</a:t>~s');
+                $chunks[] = $this->extractTextByRegex($xml, '~<(?:[\w.-]+:)?t[^>]*>(.*?)</(?:[\w.-]+:)?t>~s');
             }
 
             return trim(implode(' ', array_filter($chunks)));
@@ -197,15 +210,15 @@ final class DocumentRawTextExtractor
         }
 
         return $this->withZip($zipPath, function (ZipArchive $zip): string {
-            $chunks = [];
+            $chunks = $this->extractOfficeMetadata($zip);
 
-            // Shared strings (main source of text in XLSX)
+            // Shared strings are common in XLSX, but some generators store text
+            // directly in worksheet cells as <v> with t="str" or as inline strings.
             $shared = $zip->getFromName('xl/sharedStrings.xml');
             if (\is_string($shared) && '' !== trim($shared)) {
-                $chunks[] = $this->extractTextByRegex($shared, '~<t[^>]*>(.*?)</t>~s');
+                $chunks[] = $this->extractTextByRegex($shared, '~<(?:[\w.-]+:)?t[^>]*>(.*?)</(?:[\w.-]+:)?t>~s');
             }
 
-            // Inline strings in worksheets (cells with inlineStr)
             $sheetNames = $this->collectZipEntries($zip, [
                 '~^xl/worksheets/sheet\d+\.xml$~',
             ]);
@@ -219,12 +232,26 @@ final class DocumentRawTextExtractor
                 if (!\is_string($xml) || '' === trim($xml)) {
                     continue;
                 }
-                // Inline strings usually appear as <is>...<t>Text</t>...</is>
-                $chunks[] = $this->extractTextByRegex($xml, '~<t[^>]*>(.*?)</t>~s');
+
+                $chunks[] = $this->extractWorksheetText($xml);
             }
 
             return trim(implode(' ', array_filter($chunks)));
         });
+    }
+
+    private function extractWorksheetText(string $xml): string
+    {
+        $chunks = [];
+
+        // Inline strings usually appear as <is>...<t>Text</t>...</is>.
+        $chunks[] = $this->extractTextByRegex($xml, '~<(?:[\w.-]+:)?t[^>]*>(.*?)</(?:[\w.-]+:)?t>~s');
+
+        // Some generators, including minimal spreadsheet writers, store strings as:
+        // <c t="str"><v>Text</v></c>. Keep numeric values too; they can be searchable.
+        $chunks[] = $this->extractTextByRegex($xml, '~<(?:[\w.-]+:)?v[^>]*>(.*?)</(?:[\w.-]+:)?v>~s');
+
+        return trim(implode(' ', array_filter($chunks)));
     }
 
     private function extractOdf(string $zipPath): string
@@ -244,6 +271,30 @@ final class DocumentRawTextExtractor
             // ODF uses XML; stripping tags gives usable plain text for indexing
             return $this->toPlainText($xml);
         });
+    }
+
+    /**
+     * Extract basic document metadata from OOXML packages.
+     *
+     * @return array<int, string>
+     */
+    private function extractOfficeMetadata(ZipArchive $zip): array
+    {
+        $chunks = [];
+
+        foreach (['docProps/core.xml', 'docProps/app.xml', 'docProps/custom.xml'] as $name) {
+            $xml = $zip->getFromName($name);
+            if (!\is_string($xml) || '' === trim($xml)) {
+                continue;
+            }
+
+            $text = $this->toPlainText($xml);
+            if ('' !== $text) {
+                $chunks[] = $text;
+            }
+        }
+
+        return $chunks;
     }
 
     private function canOpenZip(string $zipPath): bool
@@ -498,18 +549,71 @@ final class DocumentRawTextExtractor
 
     private function detectExtension(string $fileKey, ResourceFile $resourceFile): string
     {
-        $ext = strtolower((string) pathinfo($fileKey, PATHINFO_EXTENSION));
-        if ('' !== $ext) {
-            return $ext;
+        $candidateExtensions = [];
+
+        $originalName = (string) $resourceFile->getOriginalName();
+        if ('' !== trim($originalName)) {
+            $candidateExtensions[] = strtolower((string) pathinfo($originalName, PATHINFO_EXTENSION));
         }
 
-        // Fallback to original name if available
-        if (method_exists($resourceFile, 'getOriginalName')) {
-            $orig = (string) $resourceFile->getOriginalName();
-            $ext = strtolower((string) pathinfo($orig, PATHINFO_EXTENSION));
+        $title = (string) $resourceFile->getTitle();
+        if ('' !== trim($title)) {
+            $candidateExtensions[] = strtolower((string) pathinfo($title, PATHINFO_EXTENSION));
         }
 
-        return $ext;
+        $candidateExtensions[] = strtolower((string) pathinfo($fileKey, PATHINFO_EXTENSION));
+
+        foreach ($candidateExtensions as $ext) {
+            if ('' === $ext || \in_array($ext, self::GENERIC_EXTENSIONS, true)) {
+                continue;
+            }
+
+            if (\in_array($ext, self::SUPPORTED_EXTENSIONS, true)) {
+                return $ext;
+            }
+        }
+
+        $mimeExt = $this->detectExtensionFromMimeType((string) $resourceFile->getMimeType());
+        if ('' !== $mimeExt) {
+            return $mimeExt;
+        }
+
+        foreach ($candidateExtensions as $ext) {
+            if ('' !== $ext) {
+                return $ext;
+            }
+        }
+
+        return '';
+    }
+
+    private function detectExtensionFromMimeType(string $mimeType): string
+    {
+        $mimeType = strtolower(trim($mimeType));
+
+        return match ($mimeType) {
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => 'docx',
+            'application/vnd.ms-word.document.macroenabled.12' => 'docm',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.template' => 'dotx',
+            'application/vnd.ms-word.template.macroenabled.12' => 'dotm',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' => 'xlsx',
+            'application/vnd.ms-excel.sheet.macroenabled.12' => 'xlsm',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.template' => 'xltx',
+            'application/vnd.ms-excel.template.macroenabled.12' => 'xltm',
+            'application/vnd.openxmlformats-officedocument.presentationml.presentation' => 'pptx',
+            'application/vnd.ms-powerpoint.presentation.macroenabled.12' => 'pptm',
+            'application/vnd.openxmlformats-officedocument.presentationml.slideshow' => 'ppsx',
+            'application/vnd.ms-powerpoint.slideshow.macroenabled.12' => 'ppsm',
+            'application/vnd.openxmlformats-officedocument.presentationml.template' => 'potx',
+            'application/vnd.ms-powerpoint.template.macroenabled.12' => 'potm',
+            'application/vnd.oasis.opendocument.text' => 'odt',
+            'application/vnd.oasis.opendocument.spreadsheet' => 'ods',
+            'application/vnd.oasis.opendocument.presentation' => 'odp',
+            'application/vnd.oasis.opendocument.text-template' => 'ott',
+            'application/vnd.oasis.opendocument.spreadsheet-template' => 'ots',
+            'application/vnd.oasis.opendocument.presentation-template' => 'otp',
+            default => '',
+        };
     }
 
     private function toPlainText(string $input): string

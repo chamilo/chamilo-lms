@@ -1781,6 +1781,12 @@ echo '<script>
             // Save attempt duration
             addExerciseEvent(window, \'unload\', updateDuration , false);
             addExerciseEvent(window, \'beforeunload\', updateDuration , false);
+
+            // Fix: restore visual checked state on page reload
+            $("input[type=\'radio\']:checked").each(function () {
+                $(this).closest(".p-radiobutton").addClass("p-radiobutton-checked");
+            });
+
         });
 
         function previous_question(question_num) {

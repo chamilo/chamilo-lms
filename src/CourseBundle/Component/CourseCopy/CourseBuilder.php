@@ -47,6 +47,7 @@ use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizQuestionOption;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
+use Chamilo\CourseBundle\Entity\CQuizRelQuestionCategory;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationAssignment;
 use Chamilo\CourseBundle\Entity\CSurvey;
@@ -2277,6 +2278,7 @@ class CourseBuilder
 
                 'question_ids' => [],
                 'question_orders' => [],
+                'question_category_counts' => [],
             ];
 
             // Collect referenced documents in quiz HTML fields.
@@ -2304,11 +2306,26 @@ class CourseBuilder
                 $neededQuestionIds[$qid] = true;
             }
 
+            foreach ($quiz->getQuestionsCategories() as $relCategory) {
+                if (!$relCategory instanceof CQuizRelQuestionCategory) {
+                    continue;
+                }
+
+                $category = $relCategory->getCategory();
+
+                $payload['question_category_counts'][] = [
+                    'category_id' => (int) $category->getIid(),
+                    'title' => (string) $category->getTitle(),
+                    'description' => (string) ($category->getDescription() ?? ''),
+                    'count_questions' => (int) $relCategory->getCountQuestions(),
+                ];
+            }
+
             $legacyCourse->resources[RESOURCE_QUIZ][$iid] = $this->mkLegacyItem(
                 RESOURCE_QUIZ,
                 $iid,
                 $payload,
-                ['question_ids', 'question_orders']
+                ['question_ids', 'question_orders', 'question_category_counts']
             );
         }
 
@@ -2413,6 +2430,7 @@ class CourseBuilder
                 'parent_media_id' => $q->getParentMediaId(),
                 'answers' => [],
                 'question_options' => [],
+                'categories' => [],
             ];
 
             // Collect referenced documents in question HTML fields.
@@ -2420,6 +2438,14 @@ class CourseBuilder
             $this->findAndSetDocumentsInText((string) ($payload['description'] ?? ''));
             $this->findAndSetDocumentsInText((string) ($payload['feedback'] ?? ''));
             $this->findAndSetDocumentsInText((string) ($payload['extra'] ?? ''));
+
+            foreach ($q->getCategories() as $category) {
+                $payload['categories'][] = [
+                    'id' => (int) $category->getIid(),
+                    'title' => (string) $category->getTitle(),
+                    'description' => (string) ($category->getDescription() ?? ''),
+                ];
+            }
 
             $ans = $this->em->createQueryBuilder()
                 ->select('a')
@@ -2472,7 +2498,7 @@ class CourseBuilder
                 RESOURCE_QUIZQUESTION,
                 $qid,
                 $payload,
-                ['answers', 'question_options']
+                ['answers', 'question_options', 'categories']
             );
 
             $this->trace('COURSE_BUILD: QQ exported qid='.$qid.' answers='.\count($payload['answers']));

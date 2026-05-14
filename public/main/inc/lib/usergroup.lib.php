@@ -164,7 +164,16 @@ class UserGroupModel extends Model
             while ($data = Database::fetch_array($result)) {
                 $userId = $data['user_id'];
                 $userInfo = api_get_user_info($userId);
-                $data['title'] = $userInfo['complete_name_with_username'];
+                $userTitle = $userInfo['complete_name_with_username'];
+                $officialCode = trim((string) ($userInfo['official_code'] ?? ''));
+                if ('' !== $officialCode) {
+                    if ('true' === api_get_setting('display.order_user_list_by_official_code')) {
+                        $userTitle = $officialCode.' - '.$userTitle;
+                    } else {
+                        $userTitle .= ' - '.$officialCode;
+                    }
+                }
+                $data['title'] = $userTitle;
 
                 if ($showCalendar) {
                     $calendar = $calendarPlugin->getUserCalendar($userId);

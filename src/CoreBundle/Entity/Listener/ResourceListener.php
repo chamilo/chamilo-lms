@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Controller\Api\BaseResourceFileAction;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\EntityAccessUrlInterface;
+use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\PersonalFile;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceFormat;
@@ -28,11 +29,13 @@ use Cocur\Slugify\SlugifyInterface;
 use Doctrine\ORM\Event\PrePersistEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
+use Doctrine\Persistence\ObjectManager;
 use Exception;
 use InvalidArgumentException;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 
 use const JSON_THROW_ON_ERROR;
@@ -316,6 +319,8 @@ class ResourceListener
 
         $resource->setResourceNode($resourceNode);
 
+        $this->applyResourceLanguageFromRequest($resource, $eventArgs);
+
         // All resources should have a parent, except AccessUrl.
         if (!($resource instanceof AccessUrl) && null === $resourceNode->getParent()) {
             $message = \sprintf(
@@ -349,6 +354,8 @@ class ResourceListener
         }
 
         $this->updateResourceName($resource);
+
+        $this->applyResourceLanguageFromRequest($resource, $eventArgs);
 
         // error_log('Resource listener preUpdate');
         // $this->setLinks($resource, $eventArgs->getEntityManager());
@@ -417,6 +424,103 @@ class ResourceListener
                 $em->persist($globalLink);
             }
         }
+    }
+
+
+    private function applyResourceLanguageFromRequest(AbstractResource $resource, LifecycleEventArgs $eventArgs): void
+    {
+        $currentRequest = $this->request->getCurrentRequest();
+        $hasLanguage = false;
+        $rawLanguage = null;
+
+        if (null !== $currentRequest) {
+            if ($currentRequest->request->has('language')) {
+                $hasLanguage = true;
+                $rawLanguage = $currentRequest->request->get('language');
+            } else {
+                $content = trim($currentRequest->getContent());
+                if ('' !== $content) {
+                    $payload = json_decode($content, true);
+                    if (\is_array($payload) && \array_key_exists('language', $payload)) {
+                        $hasLanguage = true;
+                        $rawLanguage = $payload['language'];
+                    }
+                }
+            }
+        }
+
+        if (!$hasLanguage && null !== $resource->language) {
+            $hasLanguage = true;
+            $rawLanguage = $resource->language;
+        }
+
+        if (!$hasLanguage) {
+            return;
+        }
+
+        $em = $eventArgs->getObjectManager();
+        $language = $this->findLanguage($rawLanguage, $em);
+        $resourceNode = $resource->getResourceNode();
+
+        if (null === $resourceNode) {
+            return;
+        }
+
+        $resourceNode->setLanguage($language);
+
+        foreach ($resourceNode->getResourceFiles() as $resourceFile) {
+            if ($resourceFile instanceof ResourceFile) {
+                $resourceFile->setLanguage($language);
+            }
+        }
+    }
+
+    private function findLanguage(mixed $rawLanguage, ObjectManager $em): ?Language
+    {
+        if (null === $rawLanguage) {
+            return null;
+        }
+
+        if (\is_array($rawLanguage)) {
+            if (isset($rawLanguage['@id'])) {
+                $rawLanguage = $rawLanguage['@id'];
+            } elseif (isset($rawLanguage['isocode'])) {
+                $rawLanguage = $rawLanguage['isocode'];
+            } elseif (isset($rawLanguage['id'])) {
+                $rawLanguage = $rawLanguage['id'];
+            }
+        }
+
+        $languageCode = trim((string) $rawLanguage);
+        if ('' === $languageCode) {
+            return null;
+        }
+
+        if (preg_match('#/api/languages/(\d+)$#', $languageCode, $matches) || ctype_digit($languageCode)) {
+            $languageId = isset($matches[1]) ? (int) $matches[1] : (int) $languageCode;
+            $language = $em->getRepository(Language::class)->find($languageId);
+
+            if ($language instanceof Language) {
+                return $language;
+            }
+
+            throw new BadRequestHttpException('Invalid resource language.');
+        }
+
+        if (!preg_match('/^[a-zA-Z0-9_-]{1,8}$/', $languageCode)) {
+            throw new BadRequestHttpException('Invalid resource language.');
+        }
+
+        $language = $em->getRepository(Language::class)->findOneBy([
+            'isocode' => $languageCode,
+            'available' => true,
+        ]);
+
+        if ($language instanceof Language) {
+            return $language;
+        }
+
+        throw new BadRequestHttpException('Invalid resource language.');
     }
 
     public function preRemove(AbstractResource $resource, LifecycleEventArgs $args): void

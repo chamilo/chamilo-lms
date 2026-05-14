@@ -129,6 +129,10 @@ use Symfony\Component\Validator\Constraints as Assert;
                                         'enum' => ['folder', 'file', 'link'],
                                     ],
                                     'comment' => ['type' => 'string'],
+                                    'language' => [
+                                        'type' => 'string',
+                                        'nullable' => true,
+                                    ],
                                     'contentFile' => ['type' => 'string'],
                                     'uploadFile' => [
                                         'type' => 'string',

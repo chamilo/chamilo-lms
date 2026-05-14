@@ -211,11 +211,16 @@ trait NestedTreeRepositoryTrait
         }
         $left = $wrapped->getPropertyValue($config['left']);
         $right = $wrapped->getPropertyValue($config['right']);
+        if (null === $left || null === $right) {
+            throw new InvalidArgumentException("Node has uninitialized tree left/right values");
+        }
         $qb = $this->getQueryBuilder();
         $qb->select('node')
             ->from($config['useObjectClass'], 'node')
-            ->where($qb->expr()->lte('node.'.$config['left'], $left))
-            ->andWhere($qb->expr()->gte('node.'.$config['right'], $right))
+            ->where($qb->expr()->lte('node.'.$config['left'], ':lft'))
+            ->andWhere($qb->expr()->gte('node.'.$config['right'], ':rgt'))
+            ->setParameter('lft', $left)
+            ->setParameter('rgt', $right)
             ->orderBy('node.'.$config['left'], 'ASC')
         ;
         if (isset($config['root'])) {

@@ -109,6 +109,11 @@
         />
       </div>
 
+      <!-- Language -->
+      <div class="space-y-1">
+        <ResourceLanguageSelector v-model="selectedLanguage" />
+      </div>
+
       <!-- Name -->
       <div class="space-y-1">
         <label class="font-semibold text-sm">{{ t("Filename") }}</label>
@@ -308,6 +313,7 @@ import { useCidReq } from "../../composables/cidReq"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import ResourceLanguageSelector from "../../components/resources/ResourceLanguageSelector.vue"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useCourseSettings } from "../../store/courseSettingStore"
 import { useSecurityStore } from "../../store/securityStore"
@@ -340,6 +346,7 @@ const selectedProvider = ref(null)
 
 const folders = ref([])
 const selectedFolderId = ref(null)
+const selectedLanguage = ref("")
 
 const fileName = ref("")
 const prompt = ref("")
@@ -650,6 +657,7 @@ async function saveToDocuments(file) {
   formData.append("parentResourceNodeId", String(selectedFolderId.value))
   formData.append("resourceLinkList", buildResourceLinkList())
   formData.append("fileExistsOption", "rename")
+  formData.append("language", selectedLanguage.value)
 
   // Mark as AI-assisted (same request, no extra calls)
   formData.append("ai_assisted", "1")

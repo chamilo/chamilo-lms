@@ -574,6 +574,10 @@ async function prepareCareerPromotionFieldsForDialog() {
   }
 }
 
+function extractResourceLanguage(resource) {
+  return String(resource?.resourceNode?.language?.isocode || resource?.language || "").trim()
+}
+
 async function hydrateEventForEdition() {
   const eventIri = item.value?.["@id"]
   if (!eventIri) {
@@ -592,6 +596,7 @@ async function hydrateEventForEdition() {
       room: normalizeRelationValueForSelect(fullEvent.room ?? item.value.room),
       career: normalizeRelationValueForSelect(fullEvent.career ?? item.value.career),
       promotion: normalizeRelationValueForSelect(fullEvent.promotion ?? item.value.promotion),
+      language: extractResourceLanguage(fullEvent),
       startDate: fullEvent.startDate ? new Date(fullEvent.startDate) : item.value.startDate,
       endDate: fullEvent.endDate ? new Date(fullEvent.endDate) : item.value.endDate,
     }
@@ -669,6 +674,7 @@ const calendarOptions = ref({
     item.value.startDate = event.start ? new Date(event.start) : null
     item.value.endDate = event.end ? new Date(event.end) : null
     item.value.parentResourceNodeId = event.extendedProps?.resourceNode?.creator?.id
+    item.value.language = extractResourceLanguage(event.extendedProps)
 
     const rawColor = event.extendedProps?.color ?? event.backgroundColor ?? event.borderColor ?? event.color ?? null
     item.value.color = normalizeHex(rawColor) || defaultColorByContext(currentContext.value)

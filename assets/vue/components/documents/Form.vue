@@ -27,6 +27,11 @@
       auto-resize
     />
 
+    <ResourceLanguageSelector
+      v-model="languageModel"
+      class="mb-4"
+    />
+
     <slot />
 
     <div class="text-right">
@@ -51,6 +56,7 @@ import InputText from "primevue/inputtext"
 import { computed } from "vue"
 import { useI18n } from "vue-i18n"
 import BaseTextArea from "../basecomponents/BaseTextArea.vue"
+import ResourceLanguageSelector from "../resources/ResourceLanguageSelector.vue"
 
 const { t } = useI18n()
 
@@ -70,6 +76,7 @@ const v$ = useVuelidate(
         required,
       },
       comment: {},
+      language: {},
       parentResourceNodeId: {},
     },
   },
@@ -84,6 +91,42 @@ const commentModel = computed({
   },
   set(value) {
     v$.value.item.comment.$model = value ?? ""
+  },
+})
+
+function extractResourceLanguageIso(language) {
+  if (!language) {
+    return ""
+  }
+
+  if ("string" === typeof language) {
+    const iriMatch = language.match(/\/api\/languages\/(\d+)/)
+    if (!iriMatch) {
+      return language
+    }
+
+    const languages = Array.isArray(window.languages) ? window.languages : []
+    const found = languages.find((item) => String(item?.id || "") === iriMatch[1])
+
+    return String(found?.isocode || "")
+  }
+
+  return String(language.isocode || language.isoCode || "")
+}
+
+const languageModel = computed({
+  get() {
+    return (
+      v$.value.item.language.$model ??
+      extractResourceLanguageIso(
+        props.modelValue?.resourceNode?.language ||
+          props.modelValue?.resourceNode?.firstResourceFile?.language ||
+          props.modelValue?.firstResourceFile?.language,
+      )
+    )
+  },
+  set(value) {
+    v$.value.item.language.$model = value ?? ""
   },
 })
 

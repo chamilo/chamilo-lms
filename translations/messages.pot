@@ -33893,3 +33893,12 @@ msgstr ""
 
 msgid "%s user-class links imported"
 msgstr ""
+
+msgid "Hide comments"
+msgstr ""
+
+msgid "Loading comments..."
+msgstr ""
+
+msgid "No comments yet."
+msgstr ""

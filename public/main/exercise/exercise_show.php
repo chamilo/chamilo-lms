@@ -1035,9 +1035,18 @@ if ('export' === $action) {
     if (ob_get_contents()) {
         ob_clean();
     }
+    $includeOfficialCode = '';
+    if ('true' === api_get_setting('exercise.quiz_result_pdf_export_include_official_code_in_file_name')) {
+        $officialCode = trim((string) ($user_info['official_code'] ?? ''));
+        if ('' !== $officialCode) {
+            $includeOfficialCode = $officialCode.' ';
+        }
+    }
+
     $params = [
         'filename' => api_replace_dangerous_char(
             $objExercise->name.' '.
+            $includeOfficialCode.
             $user_info['complete_name'].' '.
             api_get_local_time()
         ),
@@ -1060,7 +1069,7 @@ if ('export' === $action) {
         if (!is_dir($exportFolderPath)) {
             @mkdir($exportFolderPath);
         }
-        $pdfFileName = $user_info['firstname'].' '.$user_info['lastname'].'-attemptId'.$id.'.pdf';
+        $pdfFileName = $includeOfficialCode.$user_info['firstname'].' '.$user_info['lastname'].'-attemptId'.$id.'.pdf';
         $pdfFileName = api_replace_dangerous_char($pdfFileName);
         $fileNameToSave = $exportFolderPath.'/'.$pdfFileName;
         $pdf->html_to_pdf_with_template($content, true, false, true, [], 'F', $fileNameToSave);

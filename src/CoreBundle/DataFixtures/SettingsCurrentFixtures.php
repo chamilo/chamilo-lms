@@ -1792,6 +1792,12 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'User certificates can be view by unregistered users.',
                 ],
                 [
+                    'name' => 'allow_certificates_search',
+                    'title' => 'Allow certificates search',
+                    'comment' => 'Allow users and visitors to search generated certificates from the top bar menu.',
+                    'selected_value' => 'false',
+                ],
+                [
                     'name' => 'certificate_pdf_orientation',
                     'title' => 'PDF orientation for certificates',
                     'comment' => 'Set ‘portrait’ or ‘landscape’ (technical terms) for PDF certificates.',

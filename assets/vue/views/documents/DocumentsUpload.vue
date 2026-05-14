@@ -118,6 +118,10 @@
       </form>
     </div>
 
+    <div class="mb-4 max-w-xl">
+      <ResourceLanguageSelector v-model="selectedLanguage" />
+    </div>
+
     <BaseAdvancedSettingsButton v-model="showAdvancedSettings">
       <div class="flex flex-row mb-2">
         <label class="font-semibold w-28">{{ t("Options") }}:</label>
@@ -211,6 +215,7 @@ import BaseRadioButtons from "../../components/basecomponents/BaseRadioButtons.v
 import BaseAdvancedSettingsButton from "../../components/basecomponents/BaseAdvancedSettingsButton.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
+import ResourceLanguageSelector from "../../components/resources/ResourceLanguageSelector.vue"
 import { usePlatformConfig } from "../../store/platformConfig"
 import documentsService from "../../services/documents"
 
@@ -304,6 +309,7 @@ const cloudLinkTitle = ref("")
 const cloudLinkUrl = ref("")
 const cloudLinkError = ref("")
 const isSavingCloudLink = ref(false)
+const selectedLanguage = ref("")
 
 // Banner warning
 const quotaWarningMessage = ref("")
@@ -389,6 +395,7 @@ async function saveCloudLink() {
       comment: url,
       parentResourceNodeId: parentNodeId,
       resourceLinkList: buildResourceLinkArray(),
+      language: selectedLanguage.value,
     })
 
     onCreated(document)
@@ -577,6 +584,7 @@ uppy.setMeta({
   isUncompressZipEnabled: isUncompressZipEnabled.value,
   fileExistsOption: fileExistsOption.value,
   indexDocumentContent: indexDocumentContent.value,
+  language: selectedLanguage.value,
 })
 
 uppy.setOptions({
@@ -636,6 +644,10 @@ watch(fileExistsOption, (value) => {
 
 watch(indexDocumentContent, (value) => {
   uppy.setMeta({ indexDocumentContent: value })
+})
+
+watch(selectedLanguage, (value) => {
+  uppy.setMeta({ language: value })
 })
 
 watch(

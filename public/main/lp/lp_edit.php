@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Search\Xapian\LpXapianIndexer;
 use Chamilo\CourseBundle\Entity\CLp;
@@ -28,6 +29,21 @@ if (empty($lpId)) {
 
 /** @var CLp $lp */
 $lp = $lpRepo->find($lpId);
+
+$languageOptions = [
+    '' => get_lang('No specific language'),
+];
+$languages = Database::getManager()
+    ->getRepository(Language::class)
+    ->findBy(['available' => true], ['englishName' => 'ASC'])
+;
+foreach ($languages as $language) {
+    if (!$language instanceof Language) {
+        continue;
+    }
+
+    $languageOptions[$language->getIsocode()] = $language->getOriginalName() ?: $language->getEnglishName();
+}
 
 $nameTools = get_lang('Document');
 $this_section = SECTION_COURSES;
@@ -93,6 +109,14 @@ $form->addRule('lp_name', get_lang('Required field'), 'required');
 $form->addElement('hidden', 'lp_encoding');
 $items = learnpath::getCategoryFromCourseIntoSelect(api_get_course_int_id(), true);
 $form->addSelect('category_id', get_lang('Category'), $items);
+$form->addSelect(
+    'language',
+    get_lang('Language'),
+    $languageOptions,
+    [
+        'id' => 'resource_language',
+    ]
+);
 
 // Hide toc frame
 $form->addElement(
@@ -165,6 +189,8 @@ $defaults['lp_name'] = Security::remove_XSS($learnPath->get_name());
 $defaults['lp_author'] = Security::remove_XSS($lp->getAuthor());
 $defaults['hide_toc_frame'] = $hideTableOfContents;
 $defaults['category_id'] = $learnPath->getCategoryId();
+$language = $lp->getResourceNode()?->getLanguage();
+$defaults['language'] = $language instanceof Language ? $language->getIsocode() : '';
 $defaults['accumulate_scorm_time'] = $learnPath->getAccumulateScormTime();
 
 $expired_on = $learnPath->expired_on;

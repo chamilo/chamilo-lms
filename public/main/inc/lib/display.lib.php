@@ -1028,9 +1028,9 @@ class Display
     /**
      * Creates a span tag.
      */
-    public static function span(string $content, ?array $attributes = []): string
+    public static function span(?string $content, ?array $attributes = []): string
     {
-        return self::tag('span', $content, $attributes);
+        return self::tag('span', (string) ($content ?? ''), $attributes);
     }
 
     /**
@@ -1941,8 +1941,8 @@ HTML;
         }
 
         return self::span(
-            $text,
-            ['class' => 'boot-tooltip', 'title' => strip_tags($tip)]
+            (string) ($text ?? ''),
+            ['class' => 'boot-tooltip', 'title' => strip_tags((string) ($tip ?? ''))]
         );
     }
 

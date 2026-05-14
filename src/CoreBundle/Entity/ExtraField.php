@@ -41,7 +41,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\UniqueConstraint(name: 'uniq_extra_field_variable_itemtype', columns: ['variable', 'item_type'])]
 #[ORM\Entity]
 #[ORM\MappedSuperclass]
-#[ApiFilter(filterClass: SearchFilter::class, properties: ['variable'])]
+#[ApiFilter(filterClass: SearchFilter::class, properties: ['variable', 'itemType' => 'exact'])]
 class ExtraField
 {
     public const USER_FIELD_TYPE = 1;

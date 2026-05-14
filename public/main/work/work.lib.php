@@ -170,9 +170,6 @@ function get_work_count_by_student($user_id, $work_id)
 {
     $user_id = (int) $user_id;
     $work_id = (int) $work_id;
-    $course_id = api_get_course_int_id();
-    $session_id = api_get_session_id();
-    $sessionCondition = api_get_session_condition($session_id);
 
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $sql = "SELECT COUNT(*) as count
@@ -180,8 +177,7 @@ function get_work_count_by_student($user_id, $work_id)
             WHERE
                 parent_id = $work_id AND
                 user_id = $user_id AND
-                active IN (0, 1)
-                $sessionCondition";
+                active IN (0, 1)";
     $result = Database::query($sql);
     $return = 0;
     if (Database::num_rows($result)) {

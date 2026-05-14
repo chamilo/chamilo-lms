@@ -186,11 +186,11 @@ class IndexManager
                 'title' => get_lang('My certificates'),
             ];
         }
-        if ('true' == api_get_setting('certificate.allow_public_certificates')) {
+        if ('true' === api_get_setting('certificate.allow_certificates_search')) {
             $items[] = [
-                'icon' => Display::getMdiIcon(ActionIcon::SEARCH, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Search')),
+                'icon' => Display::getMdiIcon(ActionIcon::SEARCH, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Search certificates')),
                 'link' => api_get_path(WEB_CODE_PATH).'gradebook/search.php',
-                'title' => get_lang('Search'),
+                'title' => get_lang('Search certificates'),
             ];
         }
 
@@ -213,11 +213,11 @@ class IndexManager
                 'link' => api_get_path(WEB_CODE_PATH).'social/my_skills_report.php',
                 'title' => get_lang('My skills'),
             ];
-            $allowSkillsManagement = 'true' == api_get_setting('allow_hr_skills_management');
-            if (($allowSkillsManagement && api_is_drh()) || api_is_platform_admin()) {
+            $allowSkillsManagement = 'true' === api_get_setting('skill.allow_hr_skills_management');
+            if ($allowSkillsManagement && (api_is_drh() || api_is_platform_admin())) {
                 $items[] = [
-                    'icon' => Display::getMdiIcon(ActionIcon::EDIT_BADGE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('My skills')),
-                    'link' => Container::getRouter()->generate('skill_wheel'),
+                    'icon' => Display::getMdiIcon(ActionIcon::EDIT_BADGE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Manage skills')),
+                    'link' => api_get_path(WEB_CODE_PATH).'skills/skill_list.php',
                     'title' => get_lang('Manage skills'),
                 ];
             }

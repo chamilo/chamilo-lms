@@ -379,12 +379,12 @@ async function load() {
     const params = new URLSearchParams({
       page: String(page.value),
       limit: String(pageSize.value),
-      sortField: sortField.value,
-      sortOrder: sortOrder.value === 1 ? "ASC" : "DESC",
     })
 
     if (listType.value) {
       params.set("listType", listType.value)
+      params.set("sortField", sortField.value)
+      params.set("sortOrder", sortOrder.value === 1 ? "ASC" : "DESC")
     }
 
     if (keyword.value) {
@@ -397,6 +397,11 @@ async function load() {
     const data = await baseService.get(`/admin/session-list-data?${params.toString()}`)
 
     if (data.currentListType && isValidTab(data.currentListType)) {
+      if (!listType.value) {
+        const defaults = defaultSortForTab(data.currentListType)
+        sortField.value = defaults.field
+        sortOrder.value = defaults.order
+      }
       listType.value = data.currentListType
     }
 
@@ -476,6 +481,12 @@ async function onSearch() {
   await load()
 }
 
+function defaultSortForTab(tab) {
+  return tab === "custom"
+    ? { field: "displayStartDate", order: -1 }
+    : { field: "title", order: 1 }
+}
+
 async function switchTab(tab) {
   if (!isValidTab(tab) || listType.value === tab) {
     return
@@ -486,6 +497,10 @@ async function switchTab(tab) {
   keyword.value = ""
   categoryFilter.value = ""
   selectedItems.value = []
+
+  const defaults = defaultSortForTab(tab)
+  sortField.value = defaults.field
+  sortOrder.value = defaults.order
 
   await syncRouteState()
   await load()
@@ -650,6 +665,9 @@ onMounted(async () => {
 
   if (query.list_type && isValidTab(String(query.list_type))) {
     listType.value = String(query.list_type)
+    const defaults = defaultSortForTab(listType.value)
+    sortField.value = defaults.field
+    sortOrder.value = defaults.order
   }
   if (query.id_category) {
     categoryFilter.value = String(query.id_category)

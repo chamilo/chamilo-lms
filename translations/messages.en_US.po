@@ -33976,3 +33976,12 @@ msgstr "%s classes imported"
 
 msgid "%s user-class links imported"
 msgstr "%s user-class links imported"
+
+msgid "Hide comments"
+msgstr "Hide comments"
+
+msgid "Loading comments..."
+msgstr "Loading comments..."
+
+msgid "No comments yet."
+msgstr "No comments yet."

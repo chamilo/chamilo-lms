@@ -18,6 +18,11 @@
       editor-id="attendance_description"
     />
 
+    <ResourceLanguageSelector
+      id="attendance-language"
+      v-model="formData.language"
+    />
+
     <!-- Advanced Settings (create + edit) -->
     <BaseAdvancedSettingsButton v-model="showAdvancedSettings">
       <!-- Require unique presence -->
@@ -103,6 +108,7 @@ import LayoutFormButtons from "../../components/layout/LayoutFormButtons.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseAdvancedSettingsButton from "../../components/basecomponents/BaseAdvancedSettingsButton.vue"
 import BaseInputText from "../basecomponents/BaseInputText.vue"
+import ResourceLanguageSelector from "../resources/ResourceLanguageSelector.vue"
 import { useRoute, useRouter } from "vue-router"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import { useCidReq } from "../../composables/cidReq"
@@ -138,6 +144,7 @@ const formData = reactive({
   gradebookTitle: "",
   gradeWeight: 0.0,
   requireUnique: false,
+  language: "",
 })
 
 const gradebookOptions = ref([])
@@ -200,6 +207,7 @@ const submitForm = async () => {
     attendanceQualifyTitle: formData.gradebookTitle,
     attendanceWeight: formData.gradeWeight,
     requireUnique: !!formData.requireUnique,
+    language: formData.language || "",
   }
 
   // Only send these on create (safer)

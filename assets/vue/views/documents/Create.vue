@@ -39,7 +39,9 @@ export default {
   mixins: [CreateMixin],
   data() {
     return {
-      item: {},
+      item: {
+        language: "",
+      },
       type: "folder",
     }
   },

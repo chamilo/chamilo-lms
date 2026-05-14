@@ -4,6 +4,7 @@
 
 declare(strict_types=1);
 
+use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Framework\Container;
 
 /**
@@ -90,6 +91,22 @@ $interbreadcrumb[] = [
 ];
 
 $lpRepo = Container::getLpRepository();
+
+$languageOptions = [
+    '' => get_lang('No specific language'),
+];
+$languages = Database::getManager()
+    ->getRepository(Language::class)
+    ->findBy(['available' => true], ['englishName' => 'ASC'])
+;
+foreach ($languages as $language) {
+    if (!$language instanceof Language) {
+        continue;
+    }
+
+    $languageOptions[$language->getIsocode()] = $language->getOriginalName() ?: $language->getEnglishName();
+}
+
 $form = new FormValidator(
     'lp_add',
     'post',
@@ -130,6 +147,14 @@ $items = learnpath::getCategoryFromCourseIntoSelect(
     true
 );
 $form->addSelect('category_id', get_lang('Category'), $items);
+$form->addSelect(
+    'language',
+    get_lang('Language'),
+    $languageOptions,
+    [
+        'id' => 'resource_language',
+    ]
+);
 
 // accumulate_scorm_time
 $form->addCheckBox(
@@ -178,6 +203,7 @@ SkillModel::addSkillsToForm($form, ITEM_TYPE_LEARNPATH, 0);
 
 $form->addElement('html', '</div>');
 
+$defaults['language'] = '';
 $defaults['activate_start_date_check'] = 1;
 $defaults['accumulate_scorm_time'] = 0;
 if ('true' === api_get_setting('scorm_cumulative_session_time')) {

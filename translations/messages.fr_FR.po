@@ -35827,3 +35827,12 @@ msgstr "Vous gérez déjà %d cours et votre service actif en autorise jusqu'à 
 
 msgid "You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now."
 msgstr "Vous gérez déjà %d cours et la plateforme autorise actuellement jusqu'à %d pour votre compte. Vous ne pouvez pas créer d'autres cours pour le moment."
+
+msgid "Hide comments"
+msgstr "Masquer les commentaires"
+
+msgid "Loading comments..."
+msgstr "Chargement des commentaires..."
+
+msgid "No comments yet."
+msgstr "Aucun commentaire pour l'instant."

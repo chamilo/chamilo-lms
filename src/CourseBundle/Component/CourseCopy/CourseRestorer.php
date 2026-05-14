@@ -44,8 +44,10 @@ use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
+use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
 use Chamilo\CourseBundle\Entity\CQuizQuestionOption;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
+use Chamilo\CourseBundle\Entity\CQuizRelQuestionCategory;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationAssignment;
 use Chamilo\CourseBundle\Entity\CSurvey;
@@ -120,6 +122,11 @@ class CourseRestorer
 
     // Track if documents were already restored during this restore run.
     private bool $documentsRestored = false;
+
+    /**
+     * @var array<int, int>
+     */
+    private array $quizQuestionCategoryMap = [];
 
     /**
      * Restore order (keep existing order; docs first).
@@ -3823,7 +3830,197 @@ class CourseRestorer
             } else {
                 error_log('RESTORE_QUIZ: No questions bound to quiz src_id='.(int) $id.' (title="'.(string) ($quiz->title ?? '').'").');
             }
+
+            $this->restoreQuizQuestionCategoryCounts($entity, $quiz, $courseEntity, $linkSession);
         }
+    }
+
+    private function restoreQuestionCategoriesForQuestion(
+        CQuizQuestion $questionEntity,
+        object $question,
+        CourseEntity $courseEntity,
+        ?SessionEntity $sessionEntity
+    ): void {
+        $categories = $question->categories ?? [];
+        if (!is_iterable($categories)) {
+            return;
+        }
+
+        $em = Database::getManager();
+        $hasChanges = false;
+
+        foreach ($categories as $categoryData) {
+            $category = $this->restoreQuizQuestionCategoryFromBackup($categoryData, $courseEntity, $sessionEntity);
+            if (!$category instanceof CQuizQuestionCategory) {
+                continue;
+            }
+
+            $questionEntity->addCategory($category);
+            $hasChanges = true;
+        }
+
+        if (!$hasChanges) {
+            return;
+        }
+
+        $em->persist($questionEntity);
+        $em->flush();
+    }
+
+    private function restoreQuizQuestionCategoryCounts(
+        CQuiz $quizEntity,
+        object $quiz,
+        CourseEntity $courseEntity,
+        ?SessionEntity $sessionEntity
+    ): void {
+        $counts = $quiz->question_category_counts ?? [];
+        if (!is_iterable($counts)) {
+            return;
+        }
+
+        $em = Database::getManager();
+
+        foreach ($counts as $countData) {
+            $row = $this->backupDataToArray($countData);
+            $sourceCategoryId = (int) ($row['category_id'] ?? $row['id'] ?? $row['iid'] ?? 0);
+            $countQuestions = (int) ($row['count_questions'] ?? -1);
+
+            $category = null;
+            if ($sourceCategoryId > 0 && isset($this->quizQuestionCategoryMap[$sourceCategoryId])) {
+                $category = $em->getRepository(CQuizQuestionCategory::class)->find($this->quizQuestionCategoryMap[$sourceCategoryId]);
+            }
+
+            if (!$category instanceof CQuizQuestionCategory) {
+                $category = $this->restoreQuizQuestionCategoryFromBackup($row, $courseEntity, $sessionEntity);
+            }
+
+            if (!$category instanceof CQuizQuestionCategory) {
+                continue;
+            }
+
+            $existing = $em->getRepository(CQuizRelQuestionCategory::class)->findOneBy([
+                'quiz' => $quizEntity,
+                'category' => $category,
+            ]);
+
+            if ($existing instanceof CQuizRelQuestionCategory) {
+                $existing->setCountQuestions($countQuestions);
+                $em->persist($existing);
+                continue;
+            }
+
+            $relCategory = (new CQuizRelQuestionCategory())
+                ->setQuiz($quizEntity)
+                ->setCategory($category)
+                ->setCountQuestions($countQuestions)
+            ;
+
+            $em->persist($relCategory);
+        }
+
+        $em->flush();
+    }
+
+    private function restoreQuizQuestionCategoryFromBackup(
+        mixed $categoryData,
+        CourseEntity $courseEntity,
+        ?SessionEntity $sessionEntity
+    ): ?CQuizQuestionCategory {
+        $row = $this->backupDataToArray($categoryData);
+        $sourceCategoryId = (int) ($row['id'] ?? $row['category_id'] ?? $row['iid'] ?? 0);
+
+        if ($sourceCategoryId > 0 && isset($this->quizQuestionCategoryMap[$sourceCategoryId])) {
+            $existingMapped = Database::getManager()
+                ->getRepository(CQuizQuestionCategory::class)
+                ->find($this->quizQuestionCategoryMap[$sourceCategoryId])
+            ;
+
+            if ($existingMapped instanceof CQuizQuestionCategory) {
+                return $existingMapped;
+            }
+        }
+
+        $title = trim((string) ($row['title'] ?? $row['name'] ?? ''));
+        if ('' === $title) {
+            return null;
+        }
+
+        $description = (string) ($row['description'] ?? '');
+        $category = $this->findExistingQuizQuestionCategory($title, $courseEntity, $sessionEntity);
+
+        if (!$category instanceof CQuizQuestionCategory) {
+            $category = (new CQuizQuestionCategory())
+                ->setParent($courseEntity)
+                ->addCourseLink($courseEntity, $sessionEntity, null)
+                ->setTitle($title)
+                ->setDescription($description)
+            ;
+
+            $em = Database::getManager();
+            $em->persist($category);
+            $em->flush();
+        }
+
+        if ($sourceCategoryId > 0) {
+            $this->quizQuestionCategoryMap[$sourceCategoryId] = (int) $category->getIid();
+        }
+
+        return $category;
+    }
+
+    private function findExistingQuizQuestionCategory(
+        string $title,
+        CourseEntity $courseEntity,
+        ?SessionEntity $sessionEntity
+    ): ?CQuizQuestionCategory {
+        $qb = Database::getManager()->createQueryBuilder();
+
+        $qb
+            ->select('category')
+            ->from(CQuizQuestionCategory::class, 'category')
+            ->innerJoin('category.resourceNode', 'node')
+            ->innerJoin('node.resourceLinks', 'links')
+            ->andWhere('category.title = :title')
+            ->andWhere('links.course = :course')
+            ->andWhere('links.deletedAt IS NULL')
+            ->andWhere('links.endVisibilityAt IS NULL')
+            ->setParameter('title', $title)
+            ->setParameter('course', $courseEntity)
+            ->setMaxResults(1)
+        ;
+
+        if ($sessionEntity instanceof SessionEntity) {
+            $qb
+                ->andWhere('links.session = :session')
+                ->setParameter('session', $sessionEntity)
+            ;
+        } else {
+            $qb->andWhere('links.session IS NULL');
+        }
+
+        $result = $qb->getQuery()->getOneOrNullResult();
+
+        return $result instanceof CQuizQuestionCategory ? $result : null;
+    }
+
+    private function backupDataToArray(mixed $data): array
+    {
+        if (is_array($data)) {
+            return $data;
+        }
+
+        if (!is_object($data)) {
+            return [];
+        }
+
+        $row = get_object_vars($data);
+
+        if (isset($data->obj) && is_object($data->obj)) {
+            $row = array_merge(get_object_vars($data->obj), $row);
+            unset($row['obj']);
+        }
+
+        return $row;
     }
 
     /**
@@ -3916,6 +4113,8 @@ class CourseRestorer
 
         $em->persist($entity);
         $em->flush();
+
+        $this->restoreQuestionCategoriesForQuestion($entity, $question, $courseEntity, $sessionEntity);
 
         $newId = (int) $entity->getIid();
         if (!$newId) {

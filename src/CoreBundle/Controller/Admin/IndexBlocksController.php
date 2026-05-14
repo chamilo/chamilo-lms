@@ -36,6 +36,7 @@ use Throwable;
 class IndexBlocksController extends BaseController
 {
     private bool $isAdmin = false;
+    private bool $isGlobalAdmin = false;
     private bool $isSessionAdmin = false;
     private bool $isLdapActive;
 
@@ -57,6 +58,7 @@ class IndexBlocksController extends BaseController
     public function __invoke(): JsonResponse
     {
         $this->isAdmin = $this->isGranted('ROLE_ADMIN');
+        $this->isGlobalAdmin = $this->isGranted('ROLE_GLOBAL_ADMIN');
         $this->isSessionAdmin = $this->isGranted('ROLE_SESSION_MANAGER');
 
         $json = [];
@@ -192,6 +194,11 @@ class IndexBlocksController extends BaseController
     private function getItemsSecurity(): array
     {
         return [
+            [
+                'class' => 'item-security-activities-audit',
+                'url' => '/main/admin/report.php?id=security_activities_audit',
+                'label' => $this->translator->trans('Activities audit'),
+            ],
             [
                 'class' => 'item-security-login-attempts',
                 'url' => $this->generateUrl('admin_security_login_attempts'),
@@ -520,7 +527,7 @@ class IndexBlocksController extends BaseController
             'label' => $this->translator->trans('Extra fields'),
         ];
 
-        if (api_is_global_platform_admin()) {
+        if ($this->isGlobalAdmin) {
             $items[] = [
                 'class' => 'item-access-url',
                 'url' => '/main/admin/access_urls.php',
@@ -594,38 +601,38 @@ class IndexBlocksController extends BaseController
         $items = [];
         $items[] = [
             'class' => 'item-stats',
-            'url' => '/main/admin/statistics/index.php',
+            'url' => '/main/admin/report.php?id=platform_global_statistics',
             'label' => $this->translator->trans('Global statistics'),
         ];
         $items[] = [
+            'class' => 'item-reports-catalog',
+            'url' => '/main/admin/reports_catalog.php',
+            'label' => $this->translator->trans('Reports catalog'),
+        ];
+        $items[] = [
             'class' => 'item-my-space',
-            'url' => '/main/my_space/index.php',
+            'url' => '/main/admin/report.php?id=learning_analytics_dashboard',
             'label' => $this->translator->trans('Learning analytics'),
         ];
         $items[] = [
             'class' => 'item-quarterly-report',
-            'url' => '/main/admin/statistics/index.php?'.http_build_query(['report' => 'quarterly_report']),
+            'url' => '/main/admin/report.php?id=platform_quarterly_report',
             'label' => $this->translator->trans('Quarterly report'),
         ];
         $items[] = [
             'class' => 'item-teacher-time-report',
-            'url' => '/main/admin/teacher_time_report.php',
+            'url' => '/main/admin/report.php?id=learning_teacher_time_report',
             'label' => $this->translator->trans('Teachers time report'),
         ];
         $items[] = [
             'class' => 'item-stats-report',
-            'url' => '/main/my_space/company_reports.php',
+            'url' => '/main/admin/report.php?id=learning_corporate_report',
             'label' => $this->translator->trans('Corporate report'),
         ];
         $items[] = [
             'class' => 'item-special-export',
-            'url' => '/main/admin/special_exports.php',
+            'url' => '/main/admin/report.php?id=export_special_exports',
             'label' => $this->translator->trans('Special exports'),
-        ];
-        $items[] = [
-            'class' => 'item-activity-audit',
-            'url' => '/main/admin/statistics/index.php?'.http_build_query(['report' => 'activities']),
-            'label' => $this->translator->trans('Administrative activity auditing'),
         ];
         $items[] = [
             'class' => 'item-ticket-system',
@@ -904,18 +911,11 @@ class IndexBlocksController extends BaseController
         $allowCareer = $this->settingsManager->getSetting('session.allow_session_admin_read_careers');
 
         if ($this->isAdmin || ('true' === $allowCareer && $this->isSessionAdmin)) {
-            // Disabled until it is reemplemented to work with Chamilo 2
-            /*                $items[] = [
-                                'class' => 'item-session-user-move-stats',
-                                'url' => '/main/admin/user_move_stats.php',
-                                'label' => $this->translator->trans('Move users results from/to a session'),
-                            ];
             $items[] = [
                 'class' => 'item-session-user-move',
-                'url' => '/main/coursecopy/move_users_from_course_to_session.php',
+                'url' => '/main/session/move_users_from_course_to_session.php',
                 'label' => $this->translator->trans('Move users results from base course to a session'),
             ];
-             */
 
             $items[] = [
                 'class' => 'item-career-dashboard',

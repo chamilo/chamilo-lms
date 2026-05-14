@@ -3828,6 +3828,7 @@ class MoodleImport
                 'source_moduleid' => $sourceModuleId,
                 'question_ids' => [],
                 'question_orders' => [],
+                'question_category_counts' => (array) ($quizArr['question_category_counts'] ?? []),
             ];
 
             $localIds = [];
@@ -3862,7 +3863,7 @@ class MoodleImport
             $payload['question_orders'] = $localOrder;
 
             $resources[$quizKey][$qidLocal] =
-                $this->mkLegacyItem($quizKey, $qidLocal, $payload, ['question_ids', 'question_orders']);
+                $this->mkLegacyItem($quizKey, $qidLocal, $payload, ['question_ids', 'question_orders', 'question_category_counts']);
             $resources[$quizCompatKey][$qidLocal] = $resources[$quizKey][$qidLocal];
 
             $ansFlat = $this->readJsonFile($answersFile);
@@ -3890,6 +3891,7 @@ class MoodleImport
                     'duration' => $qArr['duration'] ?? null,
                     'parent_media_id' => $qArr['parent_media_id'] ?? null,
                     'answers' => [],
+                    'categories' => (array) ($qArr['categories'] ?? []),
                 ];
 
                 $ansList = [];
@@ -3930,7 +3932,7 @@ class MoodleImport
                 }
 
                 $resources[$qqKey][$qid] =
-                    $this->mkLegacyItem($qqKey, $qid, $qPayload, ['answers', 'question_options']);
+                    $this->mkLegacyItem($qqKey, $qid, $qPayload, ['answers', 'question_options', 'categories']);
                 $resources[$qqCompatKey][$qid] = $resources[$qqKey][$qid];
             }
 

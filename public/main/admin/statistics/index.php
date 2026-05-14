@@ -13,12 +13,27 @@ use Chamilo\CoreBundle\Helpers\UserMergeHelper;
 $cidReset = true;
 
 require_once __DIR__.'/../../inc/global.inc.php';
+require_once __DIR__.'/../../inc/lib/reports.lib.php';
 api_protect_admin_script();
 
 $interbreadcrumb[] = ['url' => '../index.php', 'name' => get_lang('Administration')];
 
 $report = isset($_REQUEST['report']) ? (string) $_REQUEST['report'] : '';
 $action = isset($_REQUEST['action']) ? (string) $_REQUEST['action'] : '';
+
+if ('activities' === $report) {
+    $query = $_GET;
+    unset($query['report']);
+
+    $target = api_get_path(WEB_CODE_PATH).'admin/activities_audit.php';
+    if (!empty($query)) {
+        $target .= '?'.http_build_query($query);
+    }
+
+    header('Location: '.$target);
+    exit;
+}
+
 
 // Duplicate users actions (disable/enable + unify)
 if ($report === 'duplicated_users' && in_array($action, [
@@ -602,7 +617,6 @@ $tools = [
         'report=duplicated_users' => get_lang('Duplicate users'),
     ],
     get_lang('System') => [
-        'report=activities' => get_lang('Important activities'),
         'report=user_session' => get_lang('Portal user session stats'),
         'report=quarterly_report' => get_lang('Quarterly report'),
     ],
@@ -3040,6 +3054,11 @@ switch ($report) {
 
 Display::display_header($tool_name);
 echo Display::page_header($tool_name);
+
+echo ReportRegistry::renderReportActionBar(
+    'platform_global_statistics',
+    api_get_path(WEB_CODE_PATH).'admin/index.php'
+);
 
 echo Statistics::statistics_render_menu($tools);
 

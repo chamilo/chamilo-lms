@@ -1937,5 +1937,8 @@
     "{0} sessions": "{0} sessions",
     "Search by title or code": "Search by title or code",
     "Search by title": "Search by title",
-    "Remove picture": "Remove picture"
+    "Remove picture": "Remove picture",
+    "Hide comments": "Hide comments",
+    "No comments yet.": "No comments yet.",
+    "Loading comments...": "Loading comments..."
 }

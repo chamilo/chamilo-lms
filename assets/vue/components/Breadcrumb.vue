@@ -234,6 +234,17 @@ function buildManualCrumbs() {
     ]
   }
 
+  // /admin/usergroup-import, /admin/usergroup-user-import, /admin/usergroup-users/:id
+  if (["usergroup-import", "usergroup-user-import", "usergroup-users"].includes(pathSegments[1])
+    || (pathSegments[1] === "usergroups" && pathSegments[3] !== undefined)) {
+    const pageLabel = route.meta?.breadcrumb || formatToolName(route.name)
+    return [
+      { label: t("Administration"), route: { name: overrides.admin, params: route.params, query: route.query } },
+      { label: t("Classes"), route: { path: "/admin/usergroups" } },
+      { label: t(pageLabel) },
+    ]
+  }
+
   const fullPath = "/" + pathSegments.join("/")
 
   if (router.getRoutes().some((r) => r.path === fullPath)) {
@@ -644,7 +655,7 @@ function handleBreadcrumbClick(item, event) {
 
   const itemSegment = resolved.path.split("/").filter(Boolean)[0] || ""
 
-  if (itemSegment === currentSegment && allowedSegments.includes(itemSegment)) {
+  if (itemSegment === currentSegment && allowedSegments.includes(itemSegment) && resolved.matched.length === 0) {
     event?.preventDefault?.()
     event?.stopImmediatePropagation?.()
     window.location.href = resolved.href

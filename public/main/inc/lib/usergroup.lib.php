@@ -371,11 +371,11 @@ class UserGroupModel extends Model
             '</a>';
         $actions .= Display::url(
             Display::getMdiIcon(ActionIcon::IMPORT_ARCHIVE, 'ch-tool-icon-success', null, ICON_SIZE_MEDIUM, get_lang('Import')),
-            'usergroup_import.php'
+            '/admin/usergroup-import'
         );
         $actions .= Display::url(
             Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export')),
-            'usergroup_export.php'
+            '/admin/usergroups-data/export'
         );
         $html .= Display::toolbarAction('toolbar', [$actions]);
         $html .= Display::grid_html('usergroups');
@@ -1617,7 +1617,7 @@ class UserGroupModel extends Model
                 }
                 $group['users'] = Display::url(
                     count($this->get_users_by_usergroup($group['id'], $roles)),
-                    api_get_path(WEB_CODE_PATH).'admin/usergroup_users.php?id='.$group['id']
+                    '/admin/usergroup-users/'.$group['id']
                 );
                 $new_result[] = $group;
             }

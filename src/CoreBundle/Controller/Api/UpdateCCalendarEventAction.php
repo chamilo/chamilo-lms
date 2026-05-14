@@ -60,6 +60,7 @@ class UpdateCCalendarEventAction extends BaseResourceFileAction
         }
 
         $this->applyCareerAndPromotionUpdate($calendarEvent, $result, $em, $settingsManager);
+        $this->applyResourceLanguageFromRequest($calendarEvent, $request, $em);
 
         $calendarEvent->getReminders()->clear();
 

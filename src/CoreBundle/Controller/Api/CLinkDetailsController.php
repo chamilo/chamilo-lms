@@ -44,6 +44,7 @@ class CLinkDetailsController extends AbstractController
             'parentResourceNodeId' => $parentResourceNodeId,
             'resourceLinkList' => $resourceLinkList,
             'category' => $link->getCategory()?->getIid(),
+            'language' => $link->getResourceNode()?->getLanguage()?->getIsocode() ?? '',
         ];
 
         if (null !== $link->getCustomImage()) {

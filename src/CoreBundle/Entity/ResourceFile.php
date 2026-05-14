@@ -53,6 +53,10 @@ use Vich\UploaderBundle\Mapping\Attribute as Vich;
                                         'type' => 'string',
                                         'format' => 'binary',
                                     ],
+                                    'language' => [
+                                        'type' => 'string',
+                                        'nullable' => true,
+                                    ],
                                 ],
                             ],
                         ],
@@ -85,6 +89,10 @@ use Vich\UploaderBundle\Mapping\Attribute as Vich;
                                     ],
                                     'accessUrlId' => [
                                         'type' => 'integer',
+                                    ],
+                                    'language' => [
+                                        'type' => 'string',
+                                        'nullable' => true,
                                     ],
                                 ],
                             ],

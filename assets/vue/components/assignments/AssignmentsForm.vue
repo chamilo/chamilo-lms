@@ -13,6 +13,11 @@
       editor-id=""
     />
 
+    <ResourceLanguageSelector
+      id="assignment-language"
+      v-model="assignment.language"
+    />
+
     <BaseAdvancedSettingsButton v-model="showAdvancedSettings">
       <BaseInputNumber
         id="qualification"
@@ -150,6 +155,7 @@ import BaseSelect from "../basecomponents/BaseSelect.vue"
 import BaseMultiSelect from "../basecomponents/BaseMultiSelect.vue"
 import BaseInputNumber from "../basecomponents/BaseInputNumber.vue"
 import BaseTinyEditor from "../basecomponents/BaseTinyEditor.vue"
+import ResourceLanguageSelector from "../resources/ResourceLanguageSelector.vue"
 import useVuelidate from "@vuelidate/core"
 import { computed, reactive, ref, watchEffect } from "vue"
 import { maxValue, minValue, required } from "@vuelidate/validators"
@@ -210,7 +216,12 @@ const assignment = reactive({
   allowTextAssignment: 2,
   allowedExtensions: [],
   customExtensions: "",
+  language: "",
 })
+
+function extractResourceLanguage(resource) {
+  return String(resource?.resourceNode?.language?.isocode || resource?.language || "").trim()
+}
 
 function extractGradebookCategoryId(def) {
   // Support multiple possible backend shapes.
@@ -254,6 +265,7 @@ watchEffect(() => {
   }
 
   assignment.allowTextAssignment = def.allowTextAssignment
+  assignment.language = extractResourceLanguage(def)
 
   if (def.extensions) {
     const extensionsArray = def.extensions
@@ -326,6 +338,7 @@ async function onSubmit() {
     qualification: assignment.qualification,
     addToCalendar: assignment.addToCalendar,
     allowTextAssignment: assignment.allowTextAssignment,
+    language: assignment.language || "",
   }
 
   if (chkAddToGradebook.value) {

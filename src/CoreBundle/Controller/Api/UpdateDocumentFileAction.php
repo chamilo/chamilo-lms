@@ -23,6 +23,7 @@ final class UpdateDocumentFileAction extends BaseResourceFileAction
     public function __invoke(CDocument $document, Request $request, CDocumentRepository $repo, EntityManager $em): CDocument
     {
         $this->handleUpdateRequest($document, $repo, $request, $em);
+        $this->applyResourceLanguageFromRequest($document, $request, $em);
 
         $raw = $request->request->get('ai_assisted_raw', null);
         if (null !== $raw) {

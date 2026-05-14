@@ -93,6 +93,20 @@ abstract class AbstractResource
     ])]
     public ?int $parentResourceNode = 0;
 
+    /**
+     * Optional resource language ISO code or Language IRI.
+     * This is a transient API field handled by ResourceListener.
+     */
+    #[Groups([
+        'resource_node:write',
+        'document:write',
+        'c_student_publication:write',
+        'calendar_event:write',
+        'attendance:write',
+        'link:write',
+    ])]
+    public ?string $language = null;
+
     #[ApiProperty(types: ['https://schema.org/image'])]
     public ?UploadedFile $uploadFile = null;
 

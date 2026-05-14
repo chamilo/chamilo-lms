@@ -17,6 +17,11 @@
       rows="6"
     />
 
+    <ResourceLanguageSelector
+      id="link-language"
+      v-model="formData.language"
+    />
+
     <BaseSelect
       v-model="formData.category"
       :label="t('Select a category')"
@@ -116,6 +121,7 @@ import BaseInputTextWithVuelidate from "../basecomponents/BaseInputTextWithVueli
 import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
 import BaseTextArea from "../basecomponents/BaseTextArea.vue"
 import BaseSelect from "../basecomponents/BaseSelect.vue"
+import ResourceLanguageSelector from "../resources/ResourceLanguageSelector.vue"
 import { useNotification } from "../../composables/notification"
 import LayoutFormButtons from "../layout/LayoutFormButtons.vue"
 import "@uppy/core/dist/style.css"
@@ -218,6 +224,7 @@ const formData = reactive({
   customImage: null,
   customImageUrl: null,
   removeImage: false,
+  language: "",
 })
 const rules = {
   url: { required, url },
@@ -268,6 +275,8 @@ const fetchLink = async () => {
       if (response.category) {
         formData.category = response.category
       }
+
+      formData.language = String(response.language || "").trim()
     } catch (error) {
       console.error("Error fetching link:", error)
     }
@@ -300,6 +309,7 @@ const submitForm = async () => {
     target: formData.target,
     parentResourceNodeId: parentResourceNodeId.value,
     resourceLinkList: resourceLinkList.value,
+    language: formData.language || "",
   }
   try {
     let linkId = props.linkId

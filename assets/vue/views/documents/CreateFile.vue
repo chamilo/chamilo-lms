@@ -121,6 +121,7 @@ const item = ref({
   searchFieldValues: {},
   ai_assisted: 0,
   ai_assisted_raw: 0,
+  language: "",
 })
 
 const { certificateTags, insertCertificateTag, copyAllCertificateTags } = useCertificateTags(item)

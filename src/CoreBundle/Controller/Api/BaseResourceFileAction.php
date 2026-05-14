@@ -409,12 +409,19 @@ class BaseResourceFileAction
                     }
                 }
 
-                // HTML contentFile => create an UploadedFile from content
+                // HTML/SVG contentFile => create an UploadedFile from content.
                 if (!$fileParsed && !empty($content)) {
+                    $contentFileInfo = $this->getContentFileUploadInfo($request, (string) $title);
+                    $content = $this->sanitizeContentFile((string) $content, $contentFileInfo['extension']);
+
                     $newBytes = (int) \strlen((string) $content);
                     $this->assertQuotaForRequest($courseHelper, $em, $parentResourceNodeId, $resourceLinkList, $newBytes, 0);
 
-                    $uploadedFile = CreateUploadedFileHelper::fromString($title.'.html', 'text/html', $content);
+                    $uploadedFile = CreateUploadedFileHelper::fromString(
+                        $contentFileInfo['fileName'],
+                        $contentFileInfo['mimeType'],
+                        $content
+                    );
                     $resource->setUploadFile($uploadedFile);
                     $fileParsed = true;
                 }
@@ -588,6 +595,8 @@ class BaseResourceFileAction
         $hasFile = $resourceNode->hasResourceFile();
 
         if ($hasFile && !empty($content)) {
+            $content = $this->sanitizeContentFileForUpdate((string) $content, $request, $resourceNode);
+
             $resourceNode->setContent($content);
             foreach ($resourceNode->getResourceFiles() as $resourceFile) {
                 $resourceFile->setSize(\strlen($content));
@@ -697,6 +706,156 @@ class BaseResourceFileAction
         $resourceNode->setUpdatedAt(new DateTime());
 
         return $resource;
+    }
+
+
+    private function getContentFileUploadInfo(Request $request, string $title): array
+    {
+        $extension = strtolower(trim((string) $request->request->get('contentFileExtension', 'html')));
+        $mimeType = strtolower(trim((string) $request->request->get('contentFileMimeType', 'text/html')));
+
+        $allowed = [
+            'html' => 'text/html',
+            'htm' => 'text/html',
+            'svg' => 'image/svg+xml',
+        ];
+
+        if (!isset($allowed[$extension])) {
+            $extension = 'html';
+        }
+
+        if ($mimeType !== $allowed[$extension]) {
+            $mimeType = $allowed[$extension];
+        }
+
+        $baseName = trim($title);
+        if ('' === $baseName) {
+            $baseName = 'document.'.$extension;
+        }
+
+        $baseName = preg_replace('/\.(html?|svg)$/i', '', $baseName);
+        if (!\is_string($baseName) || '' === trim($baseName)) {
+            $baseName = 'document';
+        }
+
+        return [
+            'extension' => $extension,
+            'mimeType' => $mimeType,
+            'fileName' => $baseName.'.'.$extension,
+        ];
+    }
+
+    private function sanitizeContentFileForUpdate(string $content, Request $request, ResourceNode $resourceNode): string
+    {
+        $extension = strtolower(trim((string) $request->request->get('contentFileExtension', '')));
+
+        if ('' === $extension) {
+            $firstFile = $resourceNode->getFirstResourceFile();
+            if ($firstFile instanceof ResourceFile) {
+                $extension = $this->guessExtensionFromResourceFile($firstFile);
+            }
+        }
+
+        return $this->sanitizeContentFile($content, $extension);
+    }
+
+    private function guessExtensionFromResourceFile(ResourceFile $resourceFile): string
+    {
+        $mimeType = strtolower(trim((string) $resourceFile->getMimeType()));
+        if ('image/svg+xml' === $mimeType) {
+            return 'svg';
+        }
+
+        $fileName = strtolower(trim((string) ($resourceFile->getOriginalName() ?: $resourceFile->getTitle())));
+        $extension = pathinfo($fileName, \PATHINFO_EXTENSION);
+
+        return strtolower((string) $extension);
+    }
+
+    private function sanitizeContentFile(string $content, string $extension): string
+    {
+        if ('svg' !== strtolower(trim($extension))) {
+            return $content;
+        }
+
+        return $this->sanitizeSvgContent($content);
+    }
+
+    private function sanitizeSvgContent(string $svg): string
+    {
+        $svg = trim($svg);
+        if ('' === $svg) {
+            throw new BadRequestHttpException('SVG content is empty.');
+        }
+
+        $previous = libxml_use_internal_errors(true);
+        $document = new \DOMDocument();
+
+        try {
+            $loaded = $document->loadXML($svg, \LIBXML_NONET | \LIBXML_NOERROR | \LIBXML_NOWARNING);
+        } finally {
+            libxml_clear_errors();
+            libxml_use_internal_errors($previous);
+        }
+
+        if (!$loaded || !$document->documentElement || 'svg' !== strtolower($document->documentElement->localName)) {
+            throw new BadRequestHttpException('Invalid SVG content.');
+        }
+
+        $dangerousTags = [
+            'script',
+            'foreignObject',
+            'iframe',
+            'object',
+            'embed',
+            'audio',
+            'video',
+        ];
+
+        foreach ($dangerousTags as $tagName) {
+            $nodes = [];
+            foreach ($document->getElementsByTagName($tagName) as $node) {
+                $nodes[] = $node;
+            }
+
+            foreach ($nodes as $node) {
+                if ($node->parentNode) {
+                    $node->parentNode->removeChild($node);
+                }
+            }
+        }
+
+        foreach ($document->getElementsByTagName('*') as $node) {
+            if (!$node instanceof \DOMElement || !$node->hasAttributes()) {
+                continue;
+            }
+
+            $attributesToRemove = [];
+            foreach ($node->attributes as $attribute) {
+                $name = strtolower($attribute->name);
+                $value = strtolower(trim($attribute->value));
+
+                if (str_starts_with($name, 'on')) {
+                    $attributesToRemove[] = $attribute->name;
+                    continue;
+                }
+
+                if (\in_array($name, ['href', 'xlink:href', 'src'], true) && str_starts_with($value, 'javascript:')) {
+                    $attributesToRemove[] = $attribute->name;
+                }
+            }
+
+            foreach ($attributesToRemove as $attributeName) {
+                $node->removeAttribute($attributeName);
+            }
+        }
+
+        $cleanSvg = $document->saveXML($document->documentElement);
+        if (!\is_string($cleanSvg) || '' === trim($cleanSvg)) {
+            throw new BadRequestHttpException('Invalid SVG content.');
+        }
+
+        return $cleanSvg;
     }
 
     protected function applyResourceLanguageFromRequest(AbstractResource $resource, Request $request, EntityManagerInterface $em): void

@@ -26,6 +26,54 @@
     />
 
     <div
+      v-if="editorDrafts.length > 0"
+      class="mt-3 rounded-lg border border-gray-25 bg-gray-10 p-4"
+    >
+      <div class="mb-3 flex items-center justify-between gap-3">
+        <div class="text-sm font-semibold text-gray-90">
+          {{ t("Draft") }}
+        </div>
+        <div class="text-xs text-gray-50">
+          {{ editorDrafts.length }}/{{ maxEditorDrafts }}
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <div
+          v-for="draft in editorDrafts"
+          :key="draft.id"
+          class="flex flex-col gap-2 rounded-md border border-gray-25 bg-white p-3 sm:flex-row sm:items-center sm:justify-between"
+        >
+          <div class="min-w-0">
+            <div class="truncate text-sm font-medium text-gray-90">
+              {{ draft.title || t("Untitled") }}
+            </div>
+            <div class="text-xs text-gray-50">
+              {{ t("Saved") }}: {{ formatEditorDraftDate(draft.savedAt) }}
+            </div>
+          </div>
+
+          <div class="flex shrink-0 gap-2">
+            <BaseButton
+              icon="restore"
+              size="small"
+              type="secondary"
+              :label="t('Restore')"
+              @click.prevent="restoreEditorDraft(draft)"
+            />
+            <BaseButton
+              icon="delete"
+              size="small"
+              type="danger"
+              :label="t('Remove')"
+              @click.prevent="removeEditorDraft(draft.id)"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
       v-if="aiEditorMessage"
       class="mt-3 rounded border border-yellow-200 bg-yellow-50 px-4 py-3 text-sm text-yellow-900"
     >
@@ -107,6 +155,7 @@ import axios from "axios"
 import { useI18n } from "vue-i18n"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useCourseSettings } from "../../store/courseSettingStore"
+import { useSecurityStore } from "../../store/securityStore"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
 import BaseTinyEditor from "../basecomponents/BaseTinyEditor.vue"
@@ -135,6 +184,7 @@ export default {
   setup() {
     const platformConfigStore = usePlatformConfig()
     const courseSettingsStore = useCourseSettings()
+    const securityStore = useSecurityStore()
     const extraPlugins = ref("")
     const { t, locale } = useI18n()
 
@@ -149,6 +199,7 @@ export default {
       locale,
       platformConfigStore,
       courseSettingsStore,
+      securityStore,
     }
   },
   data() {
@@ -163,6 +214,10 @@ export default {
       aiEditorMessage: "",
       courseContextTitle: "",
       courseContextLanguage: "",
+      editorDrafts: [],
+      editorDraftIntervalId: null,
+      lastEditorDraftContent: "",
+      maxEditorDrafts: 5,
     }
   },
   validations() {
@@ -260,7 +315,186 @@ export default {
     await this.loadSearchEngineFields()
     await this.loadSearchEngineFieldValuesForEdit()
   },
+  mounted() {
+    this.refreshEditorDrafts()
+    this.lastEditorDraftContent = this.normalizeEditorDraftContent(this.item.contentFile)
+    this.editorDraftIntervalId = window.setInterval(this.saveEditorDraft, 30000)
+    window.addEventListener("beforeunload", this.saveEditorDraftOnUnload)
+  },
+  beforeUnmount() {
+    if (this.editorDraftIntervalId) {
+      window.clearInterval(this.editorDraftIntervalId)
+      this.editorDraftIntervalId = null
+    }
+
+    window.removeEventListener("beforeunload", this.saveEditorDraftOnUnload)
+  },
   methods: {
+    getEditorDraftUserId() {
+      const user = this.securityStore?.user || {}
+
+      if (user.id) {
+        return String(user.id)
+      }
+
+      if (user["@id"]) {
+        return String(user["@id"]).replace(/[^a-zA-Z0-9_-]/g, "_")
+      }
+
+      return "anonymous"
+    },
+    getEditorDraftRouteKey() {
+      const route = this.$route || {}
+      const query = route.query || {}
+      const params = route.params || {}
+
+      const parts = [
+        route.name || "document",
+        params.node || params.id || "0",
+        query.id || query.node || "new",
+        query.cid || "0",
+        query.sid || "0",
+        query.gid || "0",
+        query.filetype || this.item.filetype || "file",
+      ]
+
+      return parts.map((part) => String(part ?? "").replace(/[^a-zA-Z0-9_-]/g, "_")).join(":")
+    },
+    getEditorDraftStorageKey() {
+      return `chamilo:document-editor-drafts:${this.getEditorDraftUserId()}:${this.getEditorDraftRouteKey()}`
+    },
+    normalizeEditorDraftContent(content) {
+      return String(content ?? "").trim()
+    },
+    getCurrentEditorContent() {
+      try {
+        const editor = window.tinymce?.get("item_content")
+
+        if (editor) {
+          return editor.getContent()
+        }
+      } catch {
+        // Ignore TinyMCE access errors.
+      }
+
+      return this.item.contentFile
+    },
+    setCurrentEditorContent(content) {
+      this.item.contentFile = content
+
+      try {
+        const editor = window.tinymce?.get("item_content")
+
+        if (editor) {
+          editor.setContent(content)
+        }
+      } catch {
+        // Ignore TinyMCE access errors.
+      }
+    },
+    readEditorDrafts() {
+      try {
+        const raw = window.localStorage.getItem(this.getEditorDraftStorageKey())
+        const drafts = raw ? JSON.parse(raw) : []
+
+        if (!Array.isArray(drafts)) {
+          return []
+        }
+
+        return drafts
+          .filter((draft) => draft && typeof draft === "object" && this.normalizeEditorDraftContent(draft.content))
+          .sort((a, b) => Number(b.savedAt || 0) - Number(a.savedAt || 0))
+          .slice(0, this.maxEditorDrafts)
+      } catch {
+        return []
+      }
+    },
+    writeEditorDrafts(drafts) {
+      const safeDrafts = Array.isArray(drafts) ? drafts.slice(0, this.maxEditorDrafts) : []
+
+      try {
+        window.localStorage.setItem(this.getEditorDraftStorageKey(), JSON.stringify(safeDrafts))
+      } catch {
+        try {
+          window.localStorage.setItem(
+            this.getEditorDraftStorageKey(),
+            JSON.stringify(safeDrafts.slice(0, Math.max(this.maxEditorDrafts - 1, 1))),
+          )
+        } catch {
+          // Ignore localStorage quota errors.
+        }
+      }
+    },
+    refreshEditorDrafts() {
+      this.editorDrafts = this.readEditorDrafts()
+    },
+    formatEditorDraftDate(savedAt) {
+      const timestamp = Number(savedAt || 0)
+
+      if (!timestamp) {
+        return ""
+      }
+
+      try {
+        return new Date(timestamp).toLocaleString()
+      } catch {
+        return ""
+      }
+    },
+    saveEditorDraftOnUnload() {
+      this.saveEditorDraft()
+    },
+    saveEditorDraft() {
+      const content = this.normalizeEditorDraftContent(this.getCurrentEditorContent())
+
+      if (!content || content === this.lastEditorDraftContent) {
+        return
+      }
+
+      const drafts = this.readEditorDrafts().filter(
+        (draft) => this.normalizeEditorDraftContent(draft.content) !== content,
+      )
+      const draft = {
+        id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+        title: String(this.item.title || "").trim(),
+        content,
+        savedAt: Date.now(),
+      }
+
+      drafts.unshift(draft)
+      this.writeEditorDrafts(drafts.slice(0, this.maxEditorDrafts))
+      this.lastEditorDraftContent = content
+      this.refreshEditorDrafts()
+    },
+    restoreEditorDraft(draft) {
+      const content = this.normalizeEditorDraftContent(draft?.content)
+
+      if (!content) {
+        return
+      }
+
+      this.setCurrentEditorContent(content)
+      this.lastEditorDraftContent = content
+
+      if (!this.item.title && draft.title) {
+        this.item.title = draft.title
+      }
+    },
+    removeEditorDraft(draftId) {
+      const drafts = this.readEditorDrafts().filter((draft) => draft.id !== draftId)
+      this.writeEditorDrafts(drafts)
+      this.refreshEditorDrafts()
+    },
+    clearEditorDrafts() {
+      try {
+        window.localStorage.removeItem(this.getEditorDraftStorageKey())
+      } catch {
+        // Ignore localStorage errors.
+      }
+
+      this.editorDrafts = []
+      this.lastEditorDraftContent = this.normalizeEditorDraftContent(this.getCurrentEditorContent())
+    },
     setAiEditorMessage(message) {
       this.aiEditorMessage = String(message || "").trim()
 

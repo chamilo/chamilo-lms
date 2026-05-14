@@ -6,9 +6,12 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Search\Xapian;
 
+use Chamilo\CoreBundle\AiProvider\AiProviderFactory;
+use Chamilo\CoreBundle\AiProvider\AiSearchMediaTextProviderInterface;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Symfony\Component\Process\Process;
 use Throwable;
@@ -22,6 +25,12 @@ final class DocumentRawTextExtractor
 {
     private const MAX_ARCHIVE_BYTES = 30_000_000; // 30MB safety limit for zip-based docs
 
+    private const MAX_AI_MEDIA_BYTES = 25_000_000; // 25MB safety limit before sending media to AI
+
+    private const AI_METADATA_KEY_TEXT = 'xapian_ai_extracted_text';
+
+    private const AI_METADATA_KEY_SIGNATURE = 'xapian_ai_extracted_signature';
+
     private const GENERIC_EXTENSIONS = ['bin', 'tmp', 'dat'];
 
     private const SUPPORTED_EXTENSIONS = [
@@ -31,10 +40,21 @@ final class DocumentRawTextExtractor
         'pptx', 'pptm', 'ppsx', 'ppsm', 'potx', 'potm',
         'xlsx', 'xlsm', 'xltx', 'xltm',
         'odt', 'ods', 'odp', 'ott', 'ots', 'otp',
+        'jpg', 'jpeg', 'png', 'webp', 'gif',
+        'mp3', 'm4a', 'wav', 'webm', 'mpga', 'mpeg', 'ogg', 'oga',
+        'mp4', 'm4v', 'mov',
     ];
+
+    private const IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+
+    private const AUDIO_EXTENSIONS = ['mp3', 'm4a', 'wav', 'webm', 'mpga', 'mpeg', 'ogg', 'oga'];
+
+    private const VIDEO_EXTENSIONS = ['mp4', 'm4v', 'mov', 'webm'];
 
     public function __construct(
         private readonly ResourceNodeRepository $resourceNodeRepository,
+        private readonly SettingsManager $settingsManager,
+        private readonly AiProviderFactory $aiProviderFactory,
     ) {}
 
     public function extract(CDocument $document): string
@@ -72,6 +92,11 @@ final class DocumentRawTextExtractor
             error_log('[Xapian] DocumentRawTextExtractor: could not detect extension, nodeId='.$resourceNode->getId());
 
             return '';
+        }
+
+        $mediaType = $this->detectAiMediaType($ext, (string) ($resourceFile->getMimeType() ?? ''));
+        if (null !== $mediaType) {
+            return $this->extractAiMediaText($resourceNode, $resourceFile, $ext, $mediaType);
         }
 
         // Quick path for text-like formats (read directly from flysystem)
@@ -117,6 +142,192 @@ final class DocumentRawTextExtractor
         } finally {
             @unlink($tmpIn);
         }
+    }
+
+    private function extractAiMediaText(
+        ResourceNode $resourceNode,
+        ResourceFile $resourceFile,
+        string $ext,
+        string $mediaType
+    ): string {
+        if (!$this->isAiMediaExtractionEnabled()) {
+            error_log('[Xapian] DocumentRawTextExtractor: AI media extraction disabled, ext='.$ext.', nodeId='.$resourceNode->getId());
+
+            return '';
+        }
+
+        $signature = $this->buildAiMediaSignature($resourceFile, $mediaType);
+        $cached = $this->getCachedAiMediaText($resourceFile, $signature);
+        if ('' !== $cached) {
+            return $cached;
+        }
+
+        $size = (int) ($resourceFile->getSize() ?? 0);
+        if ($size > self::MAX_AI_MEDIA_BYTES) {
+            error_log('[Xapian] DocumentRawTextExtractor: AI media extraction skipped, file too large. size='.$size.', nodeId='.$resourceNode->getId());
+
+            return '';
+        }
+
+        try {
+            $binaryContent = $this->resourceNodeRepository->getResourceNodeFileContent($resourceNode, $resourceFile);
+        } catch (Throwable $e) {
+            error_log('[Xapian] DocumentRawTextExtractor: AI media read failed, nodeId='.$resourceNode->getId().' error='.$e->getMessage());
+
+            return '';
+        }
+
+        if ('' === $binaryContent) {
+            error_log('[Xapian] DocumentRawTextExtractor: AI media content empty, nodeId='.$resourceNode->getId());
+
+            return '';
+        }
+
+        if (\strlen($binaryContent) > self::MAX_AI_MEDIA_BYTES) {
+            error_log('[Xapian] DocumentRawTextExtractor: AI media extraction skipped after read, file too large. size='.\strlen($binaryContent).', nodeId='.$resourceNode->getId());
+
+            return '';
+        }
+
+        $providers = $this->aiProviderFactory->getProvidersForType('document_process');
+        if (empty($providers)) {
+            error_log('[Xapian] DocumentRawTextExtractor: no AI document_process provider configured for media extraction');
+
+            return '';
+        }
+
+        $filename = $this->resolveOriginalFilename($resourceFile, $ext);
+        $mimeType = (string) ($resourceFile->getMimeType() ?? '');
+        if ('' === trim($mimeType)) {
+            $mimeType = $this->guessMimeTypeFromMediaType($mediaType, $ext);
+        }
+
+        foreach ($providers as $providerName) {
+            try {
+                $provider = $this->aiProviderFactory->getProvider($providerName, 'document_process');
+
+                $text = null;
+                if ($provider instanceof AiSearchMediaTextProviderInterface) {
+                    $text = $provider->extractSearchableMediaText(
+                        $filename,
+                        $mimeType,
+                        $binaryContent,
+                        $mediaType,
+                        [
+                            'prompt' => $this->buildAiMediaPrompt($mediaType),
+                        ]
+                    );
+                }
+
+                if (!\is_string($text) || '' === trim($text)) {
+                    continue;
+                }
+
+                $text = $this->normalizePlainText($text);
+                $this->cacheAiMediaText($resourceFile, $text, $signature);
+
+                return $text;
+            } catch (Throwable $e) {
+                error_log('[Xapian] DocumentRawTextExtractor: AI media provider failed, provider='.$providerName.', error='.$e->getMessage());
+            }
+        }
+
+        return '';
+    }
+
+    private function isAiMediaExtractionEnabled(): bool
+    {
+        return 'true' === $this->settingsManager->getSetting('ai_helpers.enable_ai_helpers', true)
+            && 'true' === $this->settingsManager->getSetting('ai_helpers.content_analyser', true)
+        ;
+    }
+
+    private function detectAiMediaType(string $ext, string $mimeType): ?string
+    {
+        $mimeType = strtolower(trim($mimeType));
+
+        if (str_starts_with($mimeType, 'image/') || \in_array($ext, self::IMAGE_EXTENSIONS, true)) {
+            return 'image';
+        }
+
+        if (str_starts_with($mimeType, 'audio/') || \in_array($ext, self::AUDIO_EXTENSIONS, true)) {
+            return 'audio';
+        }
+
+        if (str_starts_with($mimeType, 'video/') || \in_array($ext, self::VIDEO_EXTENSIONS, true)) {
+            return 'video';
+        }
+
+        return null;
+    }
+
+    private function buildAiMediaPrompt(string $mediaType): string
+    {
+        return match ($mediaType) {
+            'image' => 'Describe this image for full-text search indexing. Return only concise searchable plain text. Include visible text if any.',
+            'audio' => 'Transcribe this audio for full-text search indexing. Return only the transcript as plain text.',
+            'video' => 'Extract or transcribe the spoken content of this video for full-text search indexing. Return only the transcript as plain text.',
+            default => 'Extract searchable plain text from this media resource.',
+        };
+    }
+
+    private function buildAiMediaSignature(ResourceFile $resourceFile, string $mediaType): string
+    {
+        $parts = [
+            $mediaType,
+            (string) ($resourceFile->getId() ?? 0),
+            (string) ($resourceFile->getOriginalName() ?? ''),
+            (string) ($resourceFile->getMimeType() ?? ''),
+            (string) ($resourceFile->getSize() ?? 0),
+        ];
+
+        return hash('sha256', implode('|', $parts));
+    }
+
+    private function getCachedAiMediaText(ResourceFile $resourceFile, string $signature): string
+    {
+        $metadata = $resourceFile->getMetadata();
+
+        $cachedSignature = $metadata[self::AI_METADATA_KEY_SIGNATURE] ?? null;
+        $cachedText = $metadata[self::AI_METADATA_KEY_TEXT] ?? null;
+
+        if ($cachedSignature === $signature && \is_string($cachedText) && '' !== trim($cachedText)) {
+            return $this->normalizePlainText($cachedText);
+        }
+
+        return '';
+    }
+
+    private function cacheAiMediaText(ResourceFile $resourceFile, string $text, string $signature): void
+    {
+        $metadata = $resourceFile->getMetadata();
+        $metadata[self::AI_METADATA_KEY_TEXT] = $text;
+        $metadata[self::AI_METADATA_KEY_SIGNATURE] = $signature;
+        $metadata['xapian_ai_extracted_at'] = (new \DateTimeImmutable())->format('c');
+
+        $resourceFile->setMetadata($metadata);
+    }
+
+    private function resolveOriginalFilename(ResourceFile $resourceFile, string $ext): string
+    {
+        foreach ([$resourceFile->getOriginalName(), $resourceFile->getTitle()] as $name) {
+            $name = trim((string) $name);
+            if ('' !== $name) {
+                return $name;
+            }
+        }
+
+        return 'resource.'.$ext;
+    }
+
+    private function guessMimeTypeFromMediaType(string $mediaType, string $ext): string
+    {
+        return match ($mediaType) {
+            'image' => 'image/'.('jpg' === $ext ? 'jpeg' : $ext),
+            'audio' => 'audio/'.$ext,
+            'video' => 'video/'.$ext,
+            default => 'application/octet-stream',
+        };
     }
 
     private function extractFromBinaryByExtension(string $ext, string $tmpIn): string

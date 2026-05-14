@@ -23,6 +23,7 @@ use Chamilo\CoreBundle\Repository\TrackEAttemptRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGlossary;
+use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Repository\CGlossaryRepository;
 use DateTime;
@@ -58,6 +59,20 @@ class AiController extends AbstractController
 {
     private bool $debug = false;
     private const ACTIVE_MEDIA_PROVIDER_SESSION_PREFIX = 'ai_media_active_provider_';
+    private const LP_LEARNING_HELPER_MAX_SELECTED_TEXT_LENGTH = 5000;
+    private const LP_LEARNING_HELPER_METHODS = [
+        'mind_map',
+        'feynman',
+        'elaborative_interrogation',
+        'spaced_repetition',
+        'sq3r',
+        'analogies_metaphors',
+        'dual_coding',
+        'storytelling',
+        'thematic_connections',
+        'interleaved_learning',
+        'memory_palace',
+    ];
 
     public function __construct(
         private readonly AiProviderFactory $aiProviderFactory,
@@ -695,6 +710,167 @@ class AiController extends AbstractController
                 'document' => $this->aiProviderFactory->hasProvidersForType('document'),
                 'document_process' => $this->aiProviderFactory->hasProvidersForType('document_process'),
             ],
+        ]);
+    }
+
+    #[Route('/lp_learning_helper', name: 'chamilo_core_ai_lp_learning_helper', methods: ['POST'])]
+    public function lpLearningHelper(Request $request): JsonResponse
+    {
+        if ('true' !== api_get_setting('ai_helpers.enable_ai_helpers')) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'AI helpers are disabled.',
+            ], 403);
+        }
+
+        $data = json_decode($request->getContent(), true);
+        if (!\is_array($data)) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'Invalid JSON payload.',
+            ], 400);
+        }
+
+        $lpItemId = (int) ($data['lp_item_id'] ?? 0);
+        $cid = $this->resolveCourseIdFromRequest($request, $data);
+        $sid = $this->resolveSessionIdFromRequest($request, $data);
+        $method = trim((string) ($data['method'] ?? ''));
+        $selectedText = trim((string) ($data['selected_text'] ?? ''));
+        $language = trim((string) ($data['language'] ?? 'en'));
+        $aiProvider = $this->normalizeProviderNameFromPayload($data['ai_provider'] ?? null);
+
+        if ($lpItemId <= 0 || $cid <= 0 || '' === $method || '' === $selectedText) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'Invalid request parameters.',
+            ], 400);
+        }
+
+        if (!\in_array($method, self::LP_LEARNING_HELPER_METHODS, true)) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'Unsupported learning helper method.',
+            ], 400);
+        }
+
+        if (mb_strlen($selectedText) > self::LP_LEARNING_HELPER_MAX_SELECTED_TEXT_LENGTH) {
+            $selectedText = mb_substr($selectedText, 0, self::LP_LEARNING_HELPER_MAX_SELECTED_TEXT_LENGTH);
+        }
+
+        if ('' === $language) {
+            $language = 'en';
+        }
+
+        /** @var CLpItem|null $lpItem */
+        $lpItem = $this->em->getRepository(CLpItem::class)->find($lpItemId);
+        if (null === $lpItem) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'Learning path item not found.',
+            ], 404);
+        }
+
+        if ('document' !== $lpItem->getItemType()) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'AI learning helper is only available for document items.',
+            ], 400);
+        }
+
+        $lp = $lpItem->getLp();
+        $lpNode = $lp->getResourceNode();
+        if (null === $lpNode) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'Learning path resource was not found.',
+            ], 404);
+        }
+
+        if (!$this->learningPathBelongsToCourse($lpItem, $cid, $sid)) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'Learning path item does not belong to this course.',
+            ], 403);
+        }
+
+        if (!$this->isGranted('VIEW', $lpNode)) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'Access denied.',
+            ], 403);
+        }
+
+        $prompt = $this->buildLpLearningHelperPrompt(
+            $method,
+            $language,
+            trim($lpItem->getTitle()),
+            trim($lp->getTitle()),
+            $selectedText
+        );
+
+        try {
+            $provider = $this->aiProviderFactory->getProvider($aiProvider, 'text');
+        } catch (Throwable $e) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'No AI text provider is configured.',
+            ], 400);
+        }
+
+        if (!\is_object($provider) || !method_exists($provider, 'generateText')) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'Selected AI provider does not support text generation.',
+            ], 400);
+        }
+
+        try {
+            $raw = (string) $provider->generateText($prompt, [
+                'language' => $language,
+                'tool' => 'lp_learning_helper',
+                'method' => $method,
+                'cid' => $cid,
+                'sid' => $sid,
+                'lp_item_id' => $lpItemId,
+            ]);
+        } catch (TypeError) {
+            $raw = (string) $provider->generateText($prompt, $language);
+        } catch (Throwable $e) {
+            error_log('[AI][lp_learning_helper] Generation failed: '.$e->getMessage());
+
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'An error occurred while generating the learning helper response.',
+            ], 500);
+        }
+
+        $answer = trim($raw);
+        if ('' === $answer) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'AI request returned an empty response.',
+            ], 500);
+        }
+
+        $this->aiDisclosureHelper->logAudit(
+            targetKey: 'course:'.$cid.':lp_item:'.$lpItemId.':learning_helper:'.$method,
+            userId: $this->getCurrentUserId(),
+            meta: [
+                'feature' => 'lp_learning_helper',
+                'method' => $method,
+                'provider' => \is_string($aiProvider) && '' !== trim($aiProvider) ? $aiProvider : 'default',
+                'language' => $language,
+                'selected_text_length' => mb_strlen($selectedText),
+            ],
+            courseId: $cid,
+            sessionId: $sid
+        );
+
+        return new JsonResponse([
+            'success' => true,
+            'text' => $answer,
+            'method' => $method,
+            'ai_assisted' => $this->aiDisclosureHelper->isDisclosureEnabled(),
         ]);
     }
 
@@ -2915,6 +3091,73 @@ class AiController extends AbstractController
     /**
      * Accept ai_provider as string or as {key,label}/{name}.
      */
+    private function learningPathBelongsToCourse(CLpItem $lpItem, int $courseId, int $sessionId): bool
+    {
+        $lp = $lpItem->getLp();
+        $node = $lp->getResourceNode();
+
+        if (null === $node) {
+            return false;
+        }
+
+        foreach ($node->getResourceLinks() as $link) {
+            $linkCourse = $link->getCourse();
+            if (null === $linkCourse || (int) $linkCourse->getId() !== $courseId) {
+                continue;
+            }
+
+            if ($sessionId <= 0) {
+                return true;
+            }
+
+            $linkSession = $link->getSession();
+            if (null === $linkSession || (int) $linkSession->getId() === $sessionId) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function buildLpLearningHelperPrompt(
+        string $method,
+        string $language,
+        string $lpItemTitle,
+        string $lpTitle,
+        string $selectedText
+    ): string {
+        $topic = '' !== $lpItemTitle ? $lpItemTitle : $lpTitle;
+        if ('' === trim($topic)) {
+            $topic = 'the selected learning content';
+        }
+
+        $instructions = [
+            'mind_map' => 'Explain how to create a mind map to visually structure and organize the key concepts, facilitating better understanding and recall.',
+            'feynman' => 'Demonstrate how to apply the Feynman Technique by simplifying complex concepts and explaining them as if teaching someone else.',
+            'elaborative_interrogation' => 'Describe the process of elaborative interrogation and provide useful questions and examples to improve information retention.',
+            'spaced_repetition' => 'Explain how to incorporate spaced repetition into a study routine to enhance long-term memory retention and recall.',
+            'sq3r' => 'Introduce the SQ3R Method and demonstrate how to apply it to read and retain information from this content.',
+            'analogies_metaphors' => 'Share analogies and metaphors that simplify complex ideas and make them more memorable and easier to understand.',
+            'dual_coding' => 'Explain how to combine verbal and visual information using dual coding theory to enhance understanding and retention.',
+            'storytelling' => 'Explain how to transform the concepts into a relatable story, making them more memorable and easier to understand.',
+            'thematic_connections' => 'Describe how to build thematic connections between different aspects of the topic to form a coherent mental structure.',
+            'interleaved_learning' => 'Introduce interleaved learning and demonstrate how to mix related subjects or skills to enhance retention and transfer.',
+            'memory_palace' => 'Describe how to create a memory palace to retain and recall the main ideas by associating concepts with vivid mental images and locations.',
+        ];
+
+        $instruction = $instructions[$method] ?? $instructions['feynman'];
+
+        return "You are an educational assistant inside Chamilo LMS.\n"
+            ."Answer in the {$language} language.\n"
+            ."Use the selected learning path document content as the only source material.\n"
+            ."Do not invent facts that are not supported by the selected text.\n"
+            ."Keep the explanation practical and useful for a learner.\n\n"
+            ."Learning path: {$lpTitle}\n"
+            ."Topic: {$topic}\n"
+            ."Task: {$instruction}\n\n"
+            ."Selected content:\n{$selectedText}";
+    }
+
     private function normalizeProviderNameFromPayload(mixed $raw): ?string
     {
         $provider = null;

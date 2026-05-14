@@ -13,6 +13,14 @@
       window.lpId = {{ lp_id_num }};
       window.lpCurrentItemId = {{ lp_current_item_id_num }};
       window.isLtiEmbeddable = {{ is_lti_embeddable }};
+      window.lpAiLearningHelper = {
+        enabled: {{ ai_learning_helper_enabled|default(0) + 0 }},
+        endpoint: {{ ai_learning_helper_endpoint|default('')|json_encode|raw }},
+        language: {{ ai_learning_helper_language|default('en')|json_encode|raw }},
+        cid: {{ ai_learning_helper_course_id|default(0) + 0 }},
+        sid: {{ ai_learning_helper_session_id|default(0) + 0 }},
+        lpItemId: {{ lp_current_item_id_num }}
+      };
     </script>
     {# Build iframe src including learning path context so the ResourceNodeVoter can detect LP access #}
     {% set iframe_src_with_lp = iframe_src %}
@@ -27,6 +35,47 @@
     {% autoescape false %}
         <style>
             html, body { height: 100%; }
+            #lp-ai-learning-helper-menu {
+                position: fixed;
+                z-index: 1000000;
+                display: none;
+                max-width: 260px;
+            }
+            #lp-ai-learning-helper-modal {
+                position: fixed;
+                inset: 0;
+                z-index: 1000001;
+                display: none;
+                align-items: flex-start;
+                justify-content: center;
+                background: rgba(15, 23, 42, 0.45);
+                padding: 24px;
+                overflow-y: auto;
+                overscroll-behavior: contain;
+            }
+            #lp-ai-learning-helper-modal.lp-ai-open {
+                display: flex;
+            }
+            #lp-ai-learning-helper-modal .lp-ai-learning-helper-dialog {
+                display: flex;
+                flex-direction: column;
+                max-height: calc(100vh - 48px);
+                overflow: hidden;
+            }
+            #lp-ai-learning-helper-modal .lp-ai-learning-helper-body {
+                min-height: 0;
+                overflow-y: auto;
+                padding-right: 4px;
+            }
+            #lp-ai-learning-helper-answer-wrap {
+                min-height: 0;
+            }
+            #lp-ai-learning-helper-answer {
+                max-height: min(46vh, 520px);
+                overflow-y: auto;
+                padding-right: 4px;
+                white-space: pre-wrap;
+            }
             #learning_path_main {
                 display: flex !important;
                 flex-direction: row !important;
@@ -485,6 +534,84 @@
                                                 mozallowfullscreen="true"></iframe>
                                     {% endif %}
                                 </div>
+
+                                {% if ai_learning_helper_enabled|default(0) == 1 %}
+                                    <div id="lp-ai-learning-helper-menu" class="rounded-xl border border-gray-25 bg-white p-2 shadow-lg">
+                                        <button
+                                            type="button"
+                                            id="lp-ai-learning-helper-open"
+                                            class="inline-flex items-center gap-2 rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:opacity-90"
+                                        >
+                                            <i class="mdi mdi-robot-outline" aria-hidden="true"></i>
+                                            <span>AI study helper</span>
+                                        </button>
+                                    </div>
+
+                                    <div id="lp-ai-learning-helper-modal" aria-hidden="true">
+                                        <div class="lp-ai-learning-helper-dialog w-full max-w-3xl rounded-2xl bg-white p-6 shadow-xl">
+                                            <div class="mb-4 flex items-start justify-between gap-4">
+                                                <div>
+                                                    <h3 class="text-xl font-semibold text-gray-90">AI study helper</h3>
+                                                    <p class="mt-1 text-sm text-gray-50">
+                                                        Select a learning technique and generate a learner-friendly explanation from the selected text.
+                                                    </p>
+                                                </div>
+                                                <button
+                                                    type="button"
+                                                    id="lp-ai-learning-helper-close"
+                                                    class="rounded-lg p-2 text-gray-50 hover:bg-gray-15"
+                                                    aria-label="Close"
+                                                >
+                                                    <i class="mdi mdi-close text-xl" aria-hidden="true"></i>
+                                                </button>
+                                            </div>
+
+                                            <div class="lp-ai-learning-helper-body">
+                                                <div class="mb-4 rounded-xl border border-gray-25 bg-gray-15 p-3">
+                                                    <div class="mb-1 text-xs font-semibold uppercase tracking-wide text-gray-50">Selected text</div>
+                                                <div id="lp-ai-learning-helper-selection" class="max-h-32 overflow-auto text-sm text-gray-90"></div>
+                                            </div>
+
+                                            <label for="lp-ai-learning-helper-method" class="mb-1 block text-sm font-semibold text-gray-90">
+                                                Learning technique
+                                            </label>
+                                            <select
+                                                id="lp-ai-learning-helper-method"
+                                                class="mb-4 w-full rounded-lg border border-gray-25 bg-white px-3 py-2 text-sm"
+                                            >
+                                                <option value="mind_map">Mind mapping</option>
+                                                <option value="feynman">Feynman Technique</option>
+                                                <option value="elaborative_interrogation">Elaborative interrogation</option>
+                                                <option value="spaced_repetition">Spaced repetition</option>
+                                                <option value="sq3r">SQ3R Method</option>
+                                                <option value="analogies_metaphors">Analogies and metaphors</option>
+                                                <option value="dual_coding">Dual coding</option>
+                                                <option value="storytelling">Storytelling</option>
+                                                <option value="thematic_connections">Thematic connections</option>
+                                                <option value="interleaved_learning">Interleaved learning</option>
+                                                <option value="memory_palace">Memory palaces</option>
+                                            </select>
+
+                                            <div class="mb-4 flex items-center gap-2">
+                                                <button
+                                                    type="button"
+                                                    id="lp-ai-learning-helper-generate"
+                                                    class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:opacity-90"
+                                                >
+                                                    <i class="mdi mdi-auto-fix" aria-hidden="true"></i>
+                                                    <span>Generate</span>
+                                                </button>
+                                                <span id="lp-ai-learning-helper-status" class="text-sm text-gray-50"></span>
+                                            </div>
+
+                                                <div id="lp-ai-learning-helper-answer-wrap" class="hidden rounded-xl border border-gray-25 bg-white p-4">
+                                                    <div class="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-50">AI response</div>
+                                                    <div id="lp-ai-learning-helper-answer" class="text-sm leading-6 text-gray-90"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
                             </div>
                             <div role="tabpanel" class="tab-pane" id="lp-view-forum"></div>
                         </div>
@@ -496,6 +623,259 @@
         <script>
           $(function () {
             var $main = $("#learning_path_main");
+
+            function initLpAiLearningHelper() {
+              var cfg = window.lpAiLearningHelper || {};
+              if (Number(cfg.enabled) !== 1 || !cfg.endpoint || !cfg.lpItemId) {
+                return;
+              }
+
+              var $menu = $("#lp-ai-learning-helper-menu");
+              var $open = $("#lp-ai-learning-helper-open");
+              var $modal = $("#lp-ai-learning-helper-modal");
+              var $close = $("#lp-ai-learning-helper-close");
+              var $selection = $("#lp-ai-learning-helper-selection");
+              var $method = $("#lp-ai-learning-helper-method");
+              var $generate = $("#lp-ai-learning-helper-generate");
+              var $status = $("#lp-ai-learning-helper-status");
+              var $answerWrap = $("#lp-ai-learning-helper-answer-wrap");
+              var $answer = $("#lp-ai-learning-helper-answer");
+              var selectedText = "";
+
+              if (!$menu.length || !$modal.length) {
+                return;
+              }
+
+              function getFrameDocument() {
+                var iframe = document.getElementById("content_id") || document.getElementById("content_id_blank");
+                if (!iframe || !iframe.contentWindow || !iframe.contentDocument) {
+                  return null;
+                }
+
+                try {
+                  return iframe.contentDocument;
+                } catch (e) {
+                  return null;
+                }
+              }
+
+              function readSelectionFromDocument(doc) {
+                if (!doc) {
+                  return "";
+                }
+
+                try {
+                  var selection = doc.getSelection ? doc.getSelection() : null;
+                  return selection ? String(selection.toString() || "").trim() : "";
+                } catch (e) {
+                  return "";
+                }
+              }
+
+              function readCurrentSelection() {
+                var text = readSelectionFromDocument(getFrameDocument());
+                if (text) {
+                  return text;
+                }
+
+                try {
+                  return String(window.getSelection ? window.getSelection().toString() : "").trim();
+                } catch (e) {
+                  return "";
+                }
+              }
+
+              function hideMenu() {
+                $menu.hide();
+              }
+
+              function isCurrentLpDocumentItem() {
+                try {
+                  var currentId = Number(window.lpCurrentItemId || cfg.lpItemId || 0);
+                  var type = "";
+                  if (window.olms) {
+                    if (currentId > 0 && olms.lms_item_types && olms.lms_item_types["i" + currentId]) {
+                      type = String(olms.lms_item_types["i" + currentId]);
+                    } else if (typeof olms.lms_item_type !== "undefined") {
+                      type = String(olms.lms_item_type);
+                    }
+                  }
+
+                  return !type || type === "document";
+                } catch (e) {
+                  return true;
+                }
+              }
+
+              function showMenu(x, y) {
+                if (!isCurrentLpDocumentItem()) {
+                  hideMenu();
+                  return;
+                }
+
+                selectedText = readCurrentSelection();
+                if (!selectedText) {
+                  hideMenu();
+                  return;
+                }
+
+                var maxLen = 5000;
+                if (selectedText.length > maxLen) {
+                  selectedText = selectedText.substring(0, maxLen);
+                }
+
+                var left = Math.max(12, Math.min(x || 20, window.innerWidth - 280));
+                var top = Math.max(12, Math.min(y || 20, window.innerHeight - 80));
+                $menu.css({ left: left + "px", top: top + "px" }).show();
+              }
+
+              function bindSelectionEvents() {
+                var frameDoc = getFrameDocument();
+                if (frameDoc && !frameDoc.__lpAiLearningHelperBound) {
+                  frameDoc.__lpAiLearningHelperBound = true;
+
+                  frameDoc.addEventListener("mouseup", function (event) {
+                    setTimeout(function () {
+                      showMenu(event.clientX + 12, event.clientY + 12);
+                    }, 10);
+                  });
+
+                  frameDoc.addEventListener("keyup", function () {
+                    setTimeout(function () {
+                      var text = readCurrentSelection();
+                      if (text) {
+                        showMenu(24, 24);
+                      } else {
+                        hideMenu();
+                      }
+                    }, 10);
+                  });
+
+                  frameDoc.addEventListener("contextmenu", function (event) {
+                    var text = readCurrentSelection();
+                    if (!text) {
+                      return;
+                    }
+
+                    event.preventDefault();
+                    showMenu(event.clientX + 12, event.clientY + 12);
+                  });
+                }
+              }
+
+              var $iframe = $("#content_id, #content_id_blank").first();
+              if ($iframe.length) {
+                $iframe.off("load.lpAiLearningHelper").on("load.lpAiLearningHelper", function () {
+                  setTimeout(bindSelectionEvents, 100);
+                });
+              }
+              setTimeout(bindSelectionEvents, 300);
+
+              $(document).off("mouseup.lpAiLearningHelper").on("mouseup.lpAiLearningHelper", function (event) {
+                if ($(event.target).closest("#lp-ai-learning-helper-menu, #lp-ai-learning-helper-modal").length) {
+                  return;
+                }
+
+                setTimeout(function () {
+                  var text = readCurrentSelection();
+                  if (text) {
+                    showMenu(event.clientX + 12, event.clientY + 12);
+                  }
+                }, 10);
+              });
+
+              $open.off("click.lpAiLearningHelper").on("click.lpAiLearningHelper", function () {
+                if (!isCurrentLpDocumentItem()) {
+                  hideMenu();
+                  return;
+                }
+
+                selectedText = readCurrentSelection() || selectedText;
+                if (!selectedText) {
+                  return;
+                }
+
+                hideMenu();
+                $selection.text(selectedText);
+                $status.text("");
+                $answer.text("");
+                $answerWrap.addClass("hidden");
+                $modal.addClass("lp-ai-open").attr("aria-hidden", "false");
+              });
+
+              $close.off("click.lpAiLearningHelper").on("click.lpAiLearningHelper", function () {
+                $modal.removeClass("lp-ai-open").attr("aria-hidden", "true");
+              });
+
+              $modal.off("click.lpAiLearningHelperBackdrop").on("click.lpAiLearningHelperBackdrop", function (event) {
+                if (event.target === $modal.get(0)) {
+                  $modal.removeClass("lp-ai-open").attr("aria-hidden", "true");
+                }
+              });
+
+              $generate.off("click.lpAiLearningHelper").on("click.lpAiLearningHelper", function () {
+                if (!selectedText) {
+                  $status.text("Please select text first.");
+                  return;
+                }
+
+                $generate.prop("disabled", true);
+                $status.text("Generating...");
+                $answer.text("");
+                $answerWrap.addClass("hidden");
+
+                var currentLpId = Number(window.lpId || cfg.lpId || 0);
+                var currentLpItemId = Number(window.lpCurrentItemId || cfg.lpItemId || 0);
+                var currentCid = Number(cfg.cid || 0);
+                var currentSid = Number(cfg.sid || 0);
+                var requestUrl = cfg.endpoint
+                  + "?cid=" + encodeURIComponent(String(currentCid))
+                  + "&sid=" + encodeURIComponent(String(currentSid))
+                  + "&origin=learnpath"
+                  + "&lp_id=" + encodeURIComponent(String(currentLpId))
+                  + "&lp_item_id=" + encodeURIComponent(String(currentLpItemId));
+
+                fetch(requestUrl, {
+                  method: "POST",
+                  credentials: "same-origin",
+                  headers: {
+                    "Content-Type": "application/json",
+                    "X-Requested-With": "XMLHttpRequest"
+                  },
+                  body: JSON.stringify({
+                    cid: currentCid,
+                    sid: currentSid,
+                    lp_id: currentLpId,
+                    lp_item_id: currentLpItemId,
+                    selected_text: selectedText,
+                    method: String($method.val() || "feynman"),
+                    language: String(cfg.language || "en")
+                  })
+                })
+                  .then(function (response) {
+                    return response.json().then(function (json) {
+                      return { ok: response.ok, json: json };
+                    });
+                  })
+                  .then(function (result) {
+                    if (!result.ok || !result.json || !result.json.success) {
+                      throw new Error((result.json && result.json.text) ? result.json.text : "AI request failed.");
+                    }
+
+                    $answer.text(result.json.text || "");
+                    $answerWrap.removeClass("hidden");
+                    $status.text("");
+                  })
+                  .catch(function (error) {
+                    $status.text(error.message || "AI request failed.");
+                  })
+                  .finally(function () {
+                    $generate.prop("disabled", false);
+                  });
+              });
+            }
+
+            initLpAiLearningHelper();
             var tocHiddenSetting = $main.hasClass("lp-toc-hidden") ? 1 : 0;
 
             var $menu = $("#btn-menu-float");

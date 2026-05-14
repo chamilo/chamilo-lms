@@ -34,6 +34,12 @@ export default {
       component: () => import("../views/documents/DocumentsUpload.vue"),
     },
     {
+      name: "DocumentsSvgEditor",
+      path: "draw",
+      meta: { breadcrumb: "New drawing" },
+      component: () => import("../views/documents/SvgEditor.vue"),
+    },
+    {
       name: "DocumentsUpdate",
       path: "edit",
       meta: { breadcrumb: "Edit" },

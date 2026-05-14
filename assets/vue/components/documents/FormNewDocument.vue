@@ -13,6 +13,10 @@
       rows="4"
       auto-resize
     />
+    <ResourceLanguageSelector
+      v-model="item.language"
+      class="mt-3"
+    />
     <BaseTinyEditor
       v-if="
         (item.resourceNode && item.resourceNode.firstResourceFile && item.resourceNode.firstResourceFile.text) ||
@@ -163,6 +167,7 @@ import BaseAdvancedSettingsButton from "../basecomponents/BaseAdvancedSettingsBu
 import BaseInputTextWithVuelidate from "../basecomponents/BaseInputTextWithVuelidate.vue"
 import DocumentAiMediaDialog from "./DocumentAiMediaDialog.vue"
 import BaseTextArea from "../basecomponents/BaseTextArea.vue"
+import ResourceLanguageSelector from "../resources/ResourceLanguageSelector.vue"
 
 export default {
   name: "DocumentsForm",
@@ -174,6 +179,7 @@ export default {
     BaseAdvancedSettingsButton,
     BaseInputTextWithVuelidate,
     DocumentAiMediaDialog,
+    ResourceLanguageSelector,
   },
   props: {
     values: { type: Object, required: true },
@@ -306,6 +312,8 @@ export default {
       this.item.indexDocumentContent = true
     }
 
+    this.ensureResourceLanguage()
+
     await this.loadCourseContext()
 
     if (!this.searchEnabled) {
@@ -329,7 +337,45 @@ export default {
 
     window.removeEventListener("beforeunload", this.saveEditorDraftOnUnload)
   },
+  watch: {
+    item: {
+      immediate: true,
+      handler() {
+        this.ensureResourceLanguage()
+      },
+    },
+  },
   methods: {
+    extractResourceLanguageIso(language) {
+      if (!language) {
+        return ""
+      }
+
+      if ("string" === typeof language) {
+        const iriMatch = language.match(/\/api\/languages\/(\d+)/)
+        if (!iriMatch) {
+          return language
+        }
+
+        const languages = Array.isArray(window.languages) ? window.languages : []
+        const found = languages.find((item) => String(item?.id || "") === iriMatch[1])
+
+        return String(found?.isocode || "")
+      }
+
+      return String(language.isocode || language.isoCode || "")
+    },
+    ensureResourceLanguage() {
+      if (!this.item || undefined !== this.item.language) {
+        return
+      }
+
+      this.item.language = this.extractResourceLanguageIso(
+        this.item?.resourceNode?.language ||
+          this.item?.resourceNode?.firstResourceFile?.language ||
+          this.item?.firstResourceFile?.language,
+      )
+    },
     getEditorDraftUserId() {
       const user = this.securityStore?.user || {}
 

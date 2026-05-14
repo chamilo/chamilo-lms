@@ -32,6 +32,11 @@
       editor-id="calendar-event-content"
     />
 
+    <ResourceLanguageSelector
+      id="calendar-event-language"
+      v-model="item.language"
+    />
+
     <div class="m-4 flex flex-col gap-2">
       <label
         for="color-picker"
@@ -106,6 +111,7 @@ import BaseSelect from "../basecomponents/BaseSelect.vue"
 import BaseTinyEditor from "../basecomponents/BaseTinyEditor.vue"
 import CalendarInvitations from "./CalendarInvitations.vue"
 import CalendarRemindersEditor from "./CalendarRemindersEditor.vue"
+import ResourceLanguageSelector from "../resources/ResourceLanguageSelector.vue"
 import roomService from "../../services/roomService"
 import baseService from "../../services/baseService"
 

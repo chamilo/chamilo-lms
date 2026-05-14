@@ -111,7 +111,7 @@ class ResourceNode implements Stringable
      * Optional language for the node.
      * This is used for indexing and future-proof resource variations.
      */
-    #[Groups(['resource_node:read', 'document:read', 'personal_file:read'])]
+    #[Groups(['resource_node:read', 'resource_node:write', 'document:read', 'document:write', 'personal_file:read', 'student_publication:read', 'attendance:read', 'calendar_event:read', 'link:read'])]
     #[ORM\ManyToOne(targetEntity: Language::class)]
     #[ORM\JoinColumn(name: 'language_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     protected ?Language $language = null;

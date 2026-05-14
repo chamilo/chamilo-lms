@@ -48,28 +48,28 @@ class Language
 {
     public const ISO_MAX_LENGTH = 8;
 
-    #[Groups(['language:read'])]
+    #[Groups(['language:read', 'resource_node:read', 'resource_file:read', 'document:read', 'personal_file:read', 'student_publication:read', 'attendance:read', 'calendar_event:read', 'link:read'])]
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[Groups(['language:read', 'language:write'])]
+    #[Groups(['language:read', 'language:write', 'resource_node:read', 'resource_file:read', 'document:read', 'personal_file:read', 'student_publication:read', 'attendance:read', 'calendar_event:read', 'link:read'])]
     #[Assert\NotBlank]
     #[ORM\Column(name: 'original_name', type: 'string', length: 255, nullable: true)]
     protected ?string $originalName = null;
 
-    #[Groups(['language:read', 'language:write'])]
+    #[Groups(['language:read', 'language:write', 'resource_node:read', 'resource_file:read', 'document:read', 'personal_file:read', 'student_publication:read', 'attendance:read', 'calendar_event:read', 'link:read'])]
     #[Assert\NotBlank]
     #[ORM\Column(name: 'english_name', type: 'string', length: 255)]
     protected string $englishName;
 
-    #[Groups(['language:read', 'language:write'])]
+    #[Groups(['language:read', 'language:write', 'resource_node:read', 'resource_file:read', 'document:read', 'personal_file:read', 'student_publication:read', 'attendance:read', 'calendar_event:read', 'link:read'])]
     #[Assert\NotBlank]
     #[ORM\Column(name: 'isocode', type: 'string', length: self::ISO_MAX_LENGTH)]
     protected string $isocode;
 
-    #[Groups(['language:read', 'language:write'])]
+    #[Groups(['language:read', 'language:write', 'resource_node:read', 'resource_file:read', 'document:read', 'personal_file:read', 'student_publication:read', 'attendance:read', 'calendar_event:read', 'link:read'])]
     #[ORM\Column(name: 'available', type: 'boolean', nullable: false)]
     protected bool $available;
 
@@ -80,7 +80,7 @@ class Language
     /**
      * @var Collection<int, self>
      */
-    #[Groups(['language:read', 'language:write'])]
+    #[Groups(['language:read', 'language:write', 'resource_node:read', 'resource_file:read', 'document:read', 'personal_file:read', 'student_publication:read', 'attendance:read', 'calendar_event:read', 'link:read'])]
     #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class)]
     protected Collection $subLanguages;
 

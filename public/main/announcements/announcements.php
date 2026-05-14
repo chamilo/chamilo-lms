@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Framework\Container;
@@ -475,6 +476,21 @@ switch ($action) {
             ['enctype' => 'multipart/form-data']
         );
 
+        $languageOptions = [
+            '' => get_lang('No specific language'),
+        ];
+        $languages = Database::getManager()
+            ->getRepository(Language::class)
+            ->findBy(['available' => true], ['englishName' => 'ASC'])
+        ;
+        foreach ($languages as $language) {
+            if (!$language instanceof Language) {
+                continue;
+            }
+
+            $languageOptions[$language->getIsocode()] = $language->getOriginalName() ?: $language->getEnglishName();
+        }
+
         $form_name = get_lang('Edit announcement');
         if (empty($id)) {
             $form_name = get_lang('Add an announcement');
@@ -590,14 +606,18 @@ switch ($action) {
                 }
             }
 
+            $language = $announcementInfo->getResourceNode()?->getLanguage();
             $defaults = [
                 'title' => $announcementInfo->getTitle(),
                 'content' => $announcementInfo->getContent(),
                 'id' => $announcementInfo->getIid(),
                 'users' => $to,
+                'language' => $language instanceof Language ? $language->getIsocode() : '',
             ];
         } else {
-            $defaults = [];
+            $defaults = [
+                'language' => '',
+            ];
             if (!empty($to)) {
                 $defaults['users'] = $to;
             }
@@ -735,6 +755,14 @@ switch ($action) {
             true,
             false,
             ['ToolbarSet' => 'Announcements']
+        );
+        $form->addSelect(
+            'language',
+            get_lang('Language'),
+            $languageOptions,
+            [
+                'id' => 'resource_language',
+            ]
         );
 
     if (!$announcementAttachmentIsDisabled) {

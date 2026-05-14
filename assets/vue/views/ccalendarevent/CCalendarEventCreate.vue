@@ -60,6 +60,10 @@ const effectiveAllowCareerPromotionFields = computed(() => {
   return effectiveIsGlobal.value && "true" === platformConfigStore.getSetting("agenda.allow_careers_in_global_agenda")
 })
 
+function extractResourceLanguage(resource) {
+  return String(resource?.resourceNode?.language?.isocode || resource?.language || "").trim()
+}
+
 let id = route.params.id
 if (isEmpty(id)) {
   id = route.query.id
@@ -120,6 +124,8 @@ onMounted(async () => {
     if (undefined === item.value.promotion) {
       item.value.promotion = null
     }
+
+    item.value.language = extractResourceLanguage(item.value)
 
     await loadCareerAndPromotionOptions()
   } catch (e) {

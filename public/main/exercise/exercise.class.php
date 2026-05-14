@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\GradebookLink;
+use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation;
@@ -1868,11 +1869,66 @@ class Exercise
     }
 
     /**
+     * Returns optional language choices for resource language selectors.
+     *
+     * @return array<string, string>
+     */
+    private function getResourceLanguageOptions(): array
+    {
+        $options = [
+            '' => get_lang('No specific language'),
+        ];
+
+        $languages = Database::getManager()
+            ->getRepository(Language::class)
+            ->findBy(['available' => true], ['englishName' => 'ASC'])
+        ;
+
+        foreach ($languages as $language) {
+            if (!$language instanceof Language) {
+                continue;
+            }
+
+            $code = $language->getIsocode();
+            $label = $language->getOriginalName() ?: $language->getEnglishName();
+
+            $options[$code] = $label;
+        }
+
+        return $options;
+    }
+
+    private function getResourceLanguageIsoCode(): string
+    {
+        if (empty($this->iId)) {
+            return '';
+        }
+
+        $quiz = Database::getManager()
+            ->getRepository(CQuiz::class)
+            ->find((int) $this->iId)
+        ;
+
+        if (!$quiz instanceof CQuiz || null === $quiz->getResourceNode()) {
+            return '';
+        }
+
+        $language = $quiz->getResourceNode()->getLanguage();
+
+        if (!$language instanceof Language) {
+            return '';
+        }
+
+        return $language->getIsocode();
+    }
+
+    /**
      * Creates the form to create / edit an exercise.
      *
      * @param FormValidator $form
      * @param string|array        $type
      */
+
     public function createForm($form, $type = 'full')
     {
         if (empty($type)) {
@@ -2361,9 +2417,17 @@ class Exercise
             $form->addCheckBox('update_title_in_lps', null, get_lang('Update this title in learning paths'));
 
             $defaults = [];
+            $form->addSelect(
+                'language',
+                get_lang('Language'),
+                $this->getResourceLanguageOptions(),
+                [
+                    'id' => 'resource_language',
+                ]
+            );
+
             if ('true' === api_get_setting('search_enabled')) {
                 $form->addCheckBox('index_document', '', get_lang('Index document text?'));
-                $form->addSelectLanguage('language', get_lang('Document language for indexation'));
             }
 
             $skillList = SkillModel::addSkillsToForm($form, ITEM_TYPE_EXERCISE, $this->iId);
@@ -2486,6 +2550,8 @@ class Exercise
             $defaults['exerciseTitle'] = $this->selectTitle();
             $defaults['exerciseDescription'] = $this->selectDescription();
         }
+
+        $defaults['language'] = $this->getResourceLanguageIsoCode();
 
         if ('true' === api_get_setting('search_enabled')) {
             $defaults['index_document'] = 'checked="checked"';

@@ -94,6 +94,9 @@ final class CreateDocumentFileAction extends BaseResourceFileAction
         $em->persist($document);
         $em->flush();
 
+        $this->applyResourceLanguageFromRequest($document, $request, $em);
+        $em->flush();
+
         // Mark ExtraField: type=document, variable=ai_assisted, item_id=document iid.
         if ($isAiAssisted && $aiDisclosureHelper->isDisclosureEnabled()) {
             try {

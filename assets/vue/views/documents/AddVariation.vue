@@ -32,7 +32,7 @@
         @submit.prevent="uploadVariation"
         class="flex flex-col space-y-4"
       >
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <BaseFileUpload
             @file-selected="onFileSelected"
             :label="t('Choose file')"
@@ -40,6 +40,8 @@
             required
             class="w-full"
           />
+
+          <ResourceLanguageSelector v-model="selectedLanguage" />
 
           <Dropdown
             v-model="selectedAccessUrl"
@@ -148,6 +150,7 @@ import SectionHeader from "../../components/layout/SectionHeader.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseFileUpload from "../../components/basecomponents/BaseFileUpload.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
+import ResourceLanguageSelector from "../../components/resources/ResourceLanguageSelector.vue"
 import prettyBytes from "pretty-bytes"
 import { useCidReq } from "../../composables/cidReq"
 import { useSecurityStore } from "../../store/securityStore"
@@ -162,6 +165,7 @@ const variations = ref([])
 const originalFile = ref(null)
 const resourceFileId = route.params.resourceFileId
 const selectedAccessUrl = ref(null)
+const selectedLanguage = ref("")
 const accessUrls = ref([])
 const isAdmin = computed(() => securityStore.isAdmin)
 
@@ -229,6 +233,8 @@ async function uploadVariant(file, resourceNodeId, accessUrlId) {
     formData.append("accessUrlId", accessUrlId)
   }
 
+  formData.append("language", selectedLanguage.value)
+
   try {
     const response = await axios.post("/api/resource_files/add_variant", formData)
     console.log("Variant uploaded or updated successfully:", response.data)
@@ -236,6 +242,7 @@ async function uploadVariant(file, resourceNodeId, accessUrlId) {
     await fetchVariations()
     file.value = null
     selectedAccessUrl.value = null
+    selectedLanguage.value = ""
   } catch (error) {
     console.error("Error uploading variant:", error)
   }

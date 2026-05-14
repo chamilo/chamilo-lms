@@ -52,8 +52,8 @@ import { useI18n } from "vue-i18n"
 const { t } = useI18n()
 
 const modelValue = defineModel({
-  type: [Array, String],
-  require: true,
+  type: [Array, String, Object],
+  required: true,
 })
 
 const props = defineProps({

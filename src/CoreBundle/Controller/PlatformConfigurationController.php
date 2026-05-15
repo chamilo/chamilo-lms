@@ -99,6 +99,7 @@ class PlatformConfigurationController extends AbstractController
         $configuration['settings']['catalog.course_subscription_in_user_s_session'] = $settingsManager->getSetting('catalog.course_subscription_in_user_s_session', true);
         $configuration['settings']['catalog.course_catalog_settings'] = $this->decodeSetting($settingsManager->getSetting('catalog.course_catalog_settings', true));
         $configuration['settings']['catalog.session_catalog_settings'] = $this->decodeSetting($settingsManager->getSetting('catalog.session_catalog_settings', true));
+        $configuration['settings']['display.display_categories_on_homepage'] = $settingsManager->getSetting('display.display_categories_on_homepage', true);
         $configuration['settings']['admin.chamilo_latest_news'] = $settingsManager->getSetting('admin.chamilo_latest_news', true);
         $configuration['settings']['admin.chamilo_support'] = $settingsManager->getSetting('admin.chamilo_support', true);
         $configuration['settings']['platform.session_admin_access_to_all_users_on_all_urls'] = $settingsManager->getSetting('platform.session_admin_access_to_all_users_on_all_urls', true);

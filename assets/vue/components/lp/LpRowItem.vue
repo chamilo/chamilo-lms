@@ -79,6 +79,16 @@ const toggleAutoLaunchUrl = computed(() =>
 
 const deleteUrl = computed(() => lpService.buildLegacyActionUrl(props.lp.iid, "delete", { ...props.legacyContext }))
 
+const advancedAccessUrl = computed(() => {
+  const search = new URLSearchParams()
+
+  search.set("cid", props.legacyContext.cid || 0)
+  search.set("sid", props.legacyContext.sid || 0)
+  search.set("lp_id", props.lp.iid)
+
+  return `/resources/lp/${props.legacyContext.node}/advanced-access?${search.toString()}`
+})
+
 const onDelete = () => {
   const label = (props.lp.title || "").trim() || t("Learning path")
 
@@ -122,6 +132,12 @@ const buttonActions = computed(() =>
       label: t("Visibility"),
       icon: "visible",
       toUrl: toggleVisibleUrl.value,
+      visible: true,
+    },
+    {
+      label: t("Advanced access"),
+      icon: "calendar-plus",
+      toUrl: advancedAccessUrl.value,
       visible: true,
     },
     {
@@ -176,6 +192,7 @@ const mItemActionsMobile = ref()
 
 const itemActionsMobile = computed(() => [
   { label: t("Publish / Hide"), url: togglePublishUrl.value },
+  { label: t("Advanced access"), url: advancedAccessUrl.value },
   { label: t("Export as SCORM"), url: exportScormUrl.value, visible: props.canExportScorm },
   { label: t("Update SCORM"), visible: canUpdateScorm.value, url: updateScormUrl.value },
   { label: t("Settings"), url: lpService.buildLegacyActionUrl(props.lp.iid, "edit", props.legacyContext) },

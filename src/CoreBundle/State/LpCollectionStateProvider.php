@@ -11,6 +11,7 @@ use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session as CoreSession;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\LpAdvancedAccessHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Repository\CLpRepository;
@@ -29,7 +30,8 @@ final readonly class LpCollectionStateProvider implements ProviderInterface
         private EntityManagerInterface $em,
         private CLpRepository $lpRepo,
         private Security $security,
-        private SettingsManager $settingsManager
+        private SettingsManager $settingsManager,
+        private LpAdvancedAccessHelper $advancedAccessHelper,
     ) {}
 
     public function supports(Operation $op, array $uriVariables = [], array $ctx = []): bool
@@ -79,14 +81,14 @@ final readonly class LpCollectionStateProvider implements ProviderInterface
             return [];
         }
 
-        $lps = $this->filterLearningPathsByAvailability($lps);
+        $user = $this->security->getUser();
+
+        $lps = $this->filterLearningPathsByAvailability($lps, $course, $session, $user instanceof User ? $user : null);
         foreach ($lps as $lp) {
             if (!$lp instanceof CLp) {
                 continue;
             }
         }
-
-        $user = $this->security->getUser();
 
         if ($user instanceof User) {
             $progress = $this->lpRepo->lastProgressForUser($lps, $user, $session);
@@ -104,8 +106,12 @@ final readonly class LpCollectionStateProvider implements ProviderInterface
      *
      * @return array<int, CLp>
      */
-    private function filterLearningPathsByAvailability(array $lps): array
-    {
+    private function filterLearningPathsByAvailability(
+        array $lps,
+        Course $course,
+        ?CoreSession $session,
+        ?User $user,
+    ): array {
         if ($this->isAllowedToEditCourse()) {
             return $lps;
         }
@@ -115,7 +121,11 @@ final readonly class LpCollectionStateProvider implements ProviderInterface
         return array_values(
             array_filter(
                 $lps,
-                function (CLp $lp) use ($showUnavailableWithDates): bool {
+                function (CLp $lp) use ($course, $session, $user, $showUnavailableWithDates): bool {
+                    if ($user instanceof User && !$this->advancedAccessHelper->isAllowed($course, $lp, $session, $user)) {
+                        return false;
+                    }
+
                     $isAvailable = $this->isLearningPathCurrentlyAvailable($lp);
 
                     if ($isAvailable) {

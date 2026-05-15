@@ -319,12 +319,12 @@ onMounted(() => {
               :route="{ name: 'AdminUsergroupAddSessions', params: { id: data.id } }"
             />
             <BaseButton
-              :label="t('Overview students and courses subscribed to the class')"
+              :label="t('Preview class members and courses')"
               icon="list"
               only-icon
               size="small"
               type="primary"
-              :to-url="`/admin/usergroup/${data.id}/overview`"
+              :route="{ name: 'AdminUsergroupPreview', params: { id: data.id } }"
             />
             <BaseButton
               :label="t('Edit')"

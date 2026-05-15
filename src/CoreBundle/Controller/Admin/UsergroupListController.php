@@ -145,6 +145,85 @@ class UsergroupListController extends AbstractController
         ]);
     }
 
+
+    #[Route('/{id}/preview', name: 'admin_usergroup_preview_data', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function preview(int $id): JsonResponse
+    {
+        $usergroup = $this->em->find(Usergroup::class, $id);
+        if (null === $usergroup) {
+            return $this->json(['error' => 'Not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        if (!$this->belongsToCurrentUrl($usergroup)) {
+            return $this->json(['error' => 'Not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        /** @var list<array<string, mixed>> $userRows */
+        $userRows = $this->em->createQueryBuilder()
+            ->select(
+                'u.id',
+                'u.firstname',
+                'u.lastname',
+                'u.username',
+                'u.email',
+                'ru.relationType'
+            )
+            ->from(UsergroupRelUser::class, 'ru')
+            ->join('ru.user', 'u')
+            ->where('ru.usergroup = :usergroupId')
+            ->setParameter('usergroupId', $id, Types::INTEGER)
+            ->orderBy('u.lastname', 'ASC')
+            ->addOrderBy('u.firstname', 'ASC')
+            ->getQuery()
+            ->getArrayResult()
+        ;
+
+        /** @var list<array<string, mixed>> $courseRows */
+        $courseRows = $this->em->createQueryBuilder()
+            ->select('c.id', 'c.title', 'c.code', 'c.visualCode')
+            ->from(UsergroupRelCourse::class, 'rc')
+            ->join('rc.course', 'c')
+            ->where('rc.usergroup = :usergroupId')
+            ->setParameter('usergroupId', $id, Types::INTEGER)
+            ->orderBy('c.title', 'ASC')
+            ->getQuery()
+            ->getArrayResult()
+        ;
+
+        $users = array_map(
+            static fn (array $row): array => [
+                'id' => (int) $row['id'],
+                'firstname' => (string) ($row['firstname'] ?? ''),
+                'lastname' => (string) ($row['lastname'] ?? ''),
+                'username' => (string) ($row['username'] ?? ''),
+                'email' => (string) ($row['email'] ?? ''),
+                'relationType' => (int) ($row['relationType'] ?? 0),
+            ],
+            $userRows
+        );
+
+        $courses = array_map(
+            static fn (array $row): array => [
+                'id' => (int) $row['id'],
+                'title' => (string) ($row['title'] ?? ''),
+                'code' => (string) ($row['code'] ?? ''),
+                'visualCode' => (string) ($row['visualCode'] ?? ''),
+            ],
+            $courseRows
+        );
+
+        return $this->json([
+            'group' => [
+                'id' => (int) $usergroup->getId(),
+                'title' => $usergroup->getTitle(),
+                'description' => $usergroup->getDescription(),
+                'groupType' => $usergroup->getGroupType(),
+            ],
+            'users' => $users,
+            'courses' => $courses,
+        ]);
+    }
+
     #[Route('/export', name: 'admin_usergroups_export', methods: ['GET'])]
     public function export(): StreamedResponse
     {

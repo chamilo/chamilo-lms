@@ -180,6 +180,7 @@ class PlatformConfigurationController extends AbstractController
                 'message.allow_message_tool',
                 'lp.hide_scorm_export_link',
                 'ai_helpers.enable_ai_helpers',
+                'ai_helpers.course_analyser',
                 'lp.hide_scorm_pdf_link',
                 'display.table_default_row',
                 'display.table_row_list',

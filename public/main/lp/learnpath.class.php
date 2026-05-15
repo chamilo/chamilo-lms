@@ -9919,12 +9919,14 @@ document.addEventListener("DOMContentLoaded", function () {
         $fileName = $resourceFile->getTitle();
         $ext = pathinfo($fileName, PATHINFO_EXTENSION);
         $mimeType = $resourceFile->getMimeType() ?: 'video/mp4';
+        $safeVideoUrl = htmlspecialchars($videoUrl, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+        $safeMimeType = htmlspecialchars($mimeType, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
         $autoplayAttr = ($autostart === 'true') ? 'autoplay muted playsinline' : '';
 
         $html = '';
         $html .= '
         <video id="lp-video" width="100%" height="auto" controls '.$autoplayAttr.'>
-            <source src="'.$videoUrl.'" type="$mimeType">
+            <source src="'.$safeVideoUrl.'" type="'.$safeMimeType.'">
         </video>';
 
         return $html;

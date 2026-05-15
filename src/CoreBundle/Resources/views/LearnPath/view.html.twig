@@ -286,6 +286,88 @@
                 to { transform: rotate(360deg); }
             }
 
+            /* Video next-step overlay */
+            #lp-video-next-overlay {
+                position: absolute;
+                inset: 0;
+                z-index: 70;
+                display: none;
+                align-items: center;
+                justify-content: center;
+                padding: 24px;
+                background: rgba(15, 23, 42, 0.45);
+                pointer-events: none;
+            }
+            #lp-video-next-overlay.is-visible {
+                display: flex;
+                pointer-events: auto;
+            }
+            .lp-video-next-card {
+                width: min(420px, 100%);
+                border-radius: 18px;
+                border: 1px solid rgba(255,255,255,0.25);
+                background: rgba(255,255,255,0.96);
+                box-shadow: 0 20px 50px rgba(15,23,42,0.35);
+                padding: 24px;
+                text-align: center;
+            }
+            .lp-video-next-icon {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 56px;
+                height: 56px;
+                margin-bottom: 12px;
+                border-radius: 999px;
+                background: var(--color-primary, #2d75b8);
+                color: #fff;
+                font-size: 32px;
+            }
+            .lp-video-next-title {
+                color: #111827;
+                font-size: 20px;
+                font-weight: 700;
+                line-height: 1.25;
+            }
+            .lp-video-next-text {
+                margin-top: 8px;
+                color: #4b5563;
+                font-size: 14px;
+                line-height: 1.45;
+            }
+            .lp-video-next-actions {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 8px;
+                margin-top: 20px;
+            }
+            .lp-video-next-button {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 6px;
+                min-height: 40px;
+                border-radius: 999px;
+                border: 1px solid transparent;
+                padding: 8px 16px;
+                font-size: 14px;
+                font-weight: 600;
+                cursor: pointer;
+            }
+            .lp-video-next-button-primary {
+                background: var(--color-primary, #2d75b8);
+                color: #fff;
+            }
+            .lp-video-next-button-secondary {
+                background: #fff;
+                color: #374151;
+                border-color: #d1d5db;
+            }
+            .lp-video-next-button:hover {
+                filter: brightness(0.96);
+            }
+
             /* Currently active TOC item is non-clickable */
             .scorm_highlight a.items-list,
             .scorm_highlight a.item-action {
@@ -471,6 +553,24 @@
                                         <div class="lp-loader-box">
                                             <div class="lp-spinner" aria-hidden="true"></div>
                                             <div>Loading…</div>
+                                        </div>
+                                    </div>
+                                    <div id="lp-video-next-overlay" aria-hidden="true">
+                                        <div class="lp-video-next-card" role="dialog" aria-modal="true" aria-labelledby="lp-video-next-title">
+                                            <div class="lp-video-next-icon" aria-hidden="true">
+                                                <span class="mdi mdi-play-circle-outline"></span>
+                                            </div>
+                                            <div id="lp-video-next-title" class="lp-video-next-title">{{ "Finished"|trans }}</div>
+                                            <div class="lp-video-next-text">{{ "Continue"|trans }}</div>
+                                            <div class="lp-video-next-actions">
+                                                <button type="button" id="lp-video-next-button" class="lp-video-next-button lp-video-next-button-primary">
+                                                    <span class="mdi mdi-arrow-right-circle-outline" aria-hidden="true"></span>
+                                                    {{ "Next step"|trans }}
+                                                </button>
+                                                <button type="button" id="lp-video-next-close" class="lp-video-next-button lp-video-next-button-secondary">
+                                                    {{ "Close"|trans }}
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                     {% if lp_mode == 'fullscreen' %}
@@ -771,6 +871,249 @@
             var loaderVisibleSince = 0;
             var loaderMaxHideTimer = null;
 
+            var $videoNextOverlay = $("#lp-video-next-overlay");
+            var $videoNextButton = $("#lp-video-next-button");
+            var $videoNextClose = $("#lp-video-next-close");
+            var lpVideoNextCleanup = [];
+            var lpYoutubeApiLoading = false;
+            var lpYoutubeApiReadyCallbacks = [];
+
+            function hasNextLpItem() {
+              var currentItemId = getCurrentItemIdSafe();
+              var nextItemId = resolveDirectionToId("next", currentItemId);
+
+              if (nextItemId > 0 && nextItemId !== currentItemId) {
+                return true;
+              }
+
+              try {
+                if (window.olms && parseInt(olms.lms_next_item, 10) > 0) {
+                  return true;
+                }
+              } catch (e) {}
+
+              return false;
+            }
+
+            function showVideoNextOverlay() {
+              if (!$videoNextOverlay.length || !hasNextLpItem()) {
+                return;
+              }
+
+              $videoNextOverlay.addClass("is-visible").attr("aria-hidden", "false");
+            }
+
+            function hideVideoNextOverlay() {
+              if (!$videoNextOverlay.length) {
+                return;
+              }
+
+              $videoNextOverlay.removeClass("is-visible").attr("aria-hidden", "true");
+            }
+
+            function clearVideoNextWatchers() {
+              hideVideoNextOverlay();
+
+              while (lpVideoNextCleanup.length) {
+                var cleanup = lpVideoNextCleanup.pop();
+                try {
+                  cleanup();
+                } catch (e) {
+                  console.warn("LP video overlay: cleanup failed.", e);
+                }
+              }
+            }
+
+            function normalizeYoutubeIframeSrc(iframe) {
+              var src = iframe.getAttribute("src") || "";
+
+              if (!src || src.indexOf("youtube.com/embed/") === -1 && src.indexOf("youtube-nocookie.com/embed/") === -1) {
+                return false;
+              }
+
+              try {
+                var url = new URL(src, window.location.href);
+                if (url.searchParams.get("enablejsapi") !== "1") {
+                  url.searchParams.set("enablejsapi", "1");
+                }
+                if (!url.searchParams.get("origin")) {
+                  url.searchParams.set("origin", window.location.origin);
+                }
+                var normalized = url.toString();
+
+                if (normalized !== src) {
+                  iframe.setAttribute("src", normalized);
+                }
+
+                return true;
+              } catch (e) {
+                return false;
+              }
+            }
+
+            function loadYoutubeIframeApi(callback) {
+              if (window.YT && window.YT.Player) {
+                callback();
+                return;
+              }
+
+              lpYoutubeApiReadyCallbacks.push(callback);
+
+              if (lpYoutubeApiLoading) {
+                return;
+              }
+
+              lpYoutubeApiLoading = true;
+
+              var previousReady = window.onYouTubeIframeAPIReady;
+              window.onYouTubeIframeAPIReady = function () {
+                if (typeof previousReady === "function") {
+                  try {
+                    previousReady();
+                  } catch (e) {}
+                }
+
+                var callbacks = lpYoutubeApiReadyCallbacks.slice();
+                lpYoutubeApiReadyCallbacks = [];
+
+                callbacks.forEach(function (cb) {
+                  try {
+                    cb();
+                  } catch (e) {
+                    console.warn("LP video overlay: YouTube callback failed.", e);
+                  }
+                });
+              };
+
+              var script = document.createElement("script");
+              script.src = "https://www.youtube.com/iframe_api";
+              script.async = true;
+              document.head.appendChild(script);
+            }
+
+            function watchHtml5Videos(doc) {
+              var videos = [];
+
+              try {
+                videos = Array.prototype.slice.call(doc.querySelectorAll("video"));
+              } catch (e) {
+                videos = [];
+              }
+
+              videos.forEach(function (video) {
+                var endedHandler = function () {
+                  showVideoNextOverlay();
+                };
+                var playingHandler = function () {
+                  hideVideoNextOverlay();
+                };
+
+                video.addEventListener("ended", endedHandler);
+                video.addEventListener("play", playingHandler);
+                video.addEventListener("seeking", playingHandler);
+
+                lpVideoNextCleanup.push(function () {
+                  video.removeEventListener("ended", endedHandler);
+                  video.removeEventListener("play", playingHandler);
+                  video.removeEventListener("seeking", playingHandler);
+                });
+              });
+
+              return videos.length;
+            }
+
+            function watchYoutubeIframes(doc) {
+              var iframes = [];
+
+              try {
+                iframes = Array.prototype.slice.call(doc.querySelectorAll("iframe"));
+              } catch (e) {
+                iframes = [];
+              }
+
+              iframes = iframes.filter(function (iframe) {
+                return normalizeYoutubeIframeSrc(iframe);
+              });
+
+              if (!iframes.length) {
+                return 0;
+              }
+
+              loadYoutubeIframeApi(function () {
+                iframes.forEach(function (iframe) {
+                  try {
+                    var player = new YT.Player(iframe, {
+                      events: {
+                        onStateChange: function (event) {
+                          if (event.data === YT.PlayerState.ENDED) {
+                            showVideoNextOverlay();
+                          }
+                          if (event.data === YT.PlayerState.PLAYING) {
+                            hideVideoNextOverlay();
+                          }
+                        }
+                      }
+                    });
+
+                    lpVideoNextCleanup.push(function () {
+                      try {
+                        if (player && typeof player.destroy === "function") {
+                          player.destroy();
+                        }
+                      } catch (e) {}
+                    });
+                  } catch (e) {
+                    console.warn("LP video overlay: cannot attach YouTube player.", e);
+                  }
+                });
+              });
+
+              return iframes.length;
+            }
+
+            function setupVideoNextOverlay() {
+              clearVideoNextWatchers();
+
+              if (!hasNextLpItem()) {
+                return;
+              }
+
+              var $i = getLpIframe();
+              if (!$i.length) {
+                return;
+              }
+
+              try {
+                var iframe = $i.get(0);
+                var doc = iframe.contentDocument || iframe.contentWindow.document;
+
+                if (!doc) {
+                  return;
+                }
+
+                var detected = watchHtml5Videos(doc);
+                detected += watchYoutubeIframes(doc);
+
+                if (detected > 0) {
+                  console.info("LP video overlay: watching video players.", detected);
+                }
+              } catch (e) {
+                // Cross-origin content cannot be inspected. Keep the standard LP navigation untouched.
+                console.warn("LP video overlay: cannot inspect iframe content.", e);
+              }
+            }
+
+            $videoNextButton.off("click.lpVideoNext").on("click.lpVideoNext", function (e) {
+              e.preventDefault();
+              hideVideoNextOverlay();
+              lpNavigateToItem("next", "video ended overlay");
+            });
+
+            $videoNextClose.off("click.lpVideoNext").on("click.lpVideoNext", function (e) {
+              e.preventDefault();
+              hideVideoNextOverlay();
+            });
+
             function showLoaderNow(reason) {
               if (!$loader.length) return;
               if ($loader.hasClass("is-visible")) return;
@@ -826,7 +1169,9 @@
               $iframe.off("load.lpLoader").on("load.lpLoader", function () {
                 syncCurrentItemFromIframe();
                 hideLoader("iframe load");
+                setTimeout(setupVideoNextOverlay, 150);
               });
+              setTimeout(setupVideoNextOverlay, 500);
             } else {
               console.warn("LP: iframe not found (#content_id / #content_id_blank).");
             }
@@ -861,6 +1206,8 @@
                 if (!isKnownNavButton && !isTocClick && !isLpContentLink) {
                   return;
                 }
+
+                hideVideoNextOverlay();
 
                 // Delay loader so fast loads don't show anything.
                 scheduleShowLoader("nav click");

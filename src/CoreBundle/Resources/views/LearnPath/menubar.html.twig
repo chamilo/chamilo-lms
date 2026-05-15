@@ -15,10 +15,10 @@
             {# Expand/collapse only if TOC is actually visible #}
             {% if show_left_column == 1 and toc_hidden != 1 %}
                 {% set label = "Collapse"|trans %}
-                {% set icon_expand = "arrow-collapse-horizontal" %}
+                {% set icon_expand = "chevron-left" %}
                 {% if lp_mode == 'embedframe' %}
                     {% set label = "Expand"|trans %}
-                    {% set icon_expand = "arrow-expand-horizontal" %}
+                    {% set icon_expand = "chevron-right" %}
                 {% endif %}
                 <button
                         type="button"
@@ -29,6 +29,7 @@
                         data-lp-action="expand-toggle"
                 >
                     <i class="mdi-{{ icon_expand }} mdi" aria-hidden="true"></i>
+                    <span class="sr-only">{{ label }}</span>
                 </button>
             {% endif %}
             <a
@@ -41,8 +42,9 @@
                     onclick="javascript: if (window.parent && window.parent.API && window.parent.API.save_asset) { window.parent.API.save_asset(); }"
             >
                 <i class="mdi-home mdi" aria-hidden="true"></i>
+                <span class="sr-only">{{ button_home_text|default('Home') }}</span>
             </a>
-            <span data-lp-menu="nav" class="lp-menu-nav">
+            <span data-lp-menu="nav" class="lp-menu-nav lp-view-primary-nav">
                 {{ navigation_bar }}
             </span>
         </div>

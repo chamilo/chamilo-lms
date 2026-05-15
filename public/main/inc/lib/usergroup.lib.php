@@ -1454,13 +1454,8 @@ class UserGroupModel extends Model
             }
         }
 
-        // if in courses some groups are linked to this usergroup, update group users list
-        $groups = self::getGroupsByUsergroup($usergroup_id);
-        foreach ($groups as $groupDatas) {
-            // [groupId, cId]
-            GroupManager::subscribeUsers($new_items, api_get_group_entity($groupDatas['groupId']));
-            GroupManager::unsubscribeUsers($delete_items, api_get_group_entity($groupDatas['groupId']));
-        }
+        // Keep course groups linked to this class consistent with the final class membership.
+        GroupManager::synchronizeGroupsLinkedToUsergroup((int) $usergroup_id, $this->get_users_by_usergroup($usergroup_id));
 
     }
 
@@ -1497,8 +1492,6 @@ class UserGroupModel extends Model
         if (null !== $category_id) {
             $qb->andWhere('g.category = :catId')
                 ->setParameter('catId', $category_id, \Doctrine\DBAL\Types\Types::INTEGER);
-        } else {
-            $qb->andWhere('g.category IS NOT NULL');
         }
 
         $results = [];

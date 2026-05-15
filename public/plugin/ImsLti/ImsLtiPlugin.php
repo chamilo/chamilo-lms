@@ -39,6 +39,12 @@ class ImsLtiPlugin extends Plugin
             ) => 'html',
         ];
 
+        if (!self::isOpenSslAvailable()) {
+            $settings = [
+                self::getOpenSslRequirementMessageHtml() => 'html',
+            ] + $settings;
+        }
+
         parent::__construct($version, $author, $settings);
 
         $this->setCourseSettings();
@@ -72,6 +78,12 @@ class ImsLtiPlugin extends Plugin
         }
 
         if ($this->isEnabledForCurrentAccessUrl()) {
+            if (!self::isOpenSslAvailable()) {
+                error_log('[ImsLti] PHP OpenSSL extension is not available. Platform keys cannot be generated.');
+
+                return;
+            }
+
             if (!$platform) {
                 $this->ensurePlatformKeys();
             }
@@ -100,6 +112,7 @@ class ImsLtiPlugin extends Plugin
             $platformStateNote = 'Platform key storage is not available yet.';
         }
 
+        $isOpenSslAvailable = self::isOpenSslAvailable();
         $isEnabled = $this->isEnabledForCurrentAccessUrl();
         $kid = $platform ? (string) $platform->getKid() : 'Not generated';
         $hasPublicKey = $platform && !empty($platform->publicKey);
@@ -112,6 +125,10 @@ class ImsLtiPlugin extends Plugin
             '<li><strong>Private key configured:</strong> '.($hasPrivateKey ? 'Yes' : 'No').'</li>',
         ];
 
+        if (!$isOpenSslAvailable) {
+            $rows[] = '<li><strong>OpenSSL:</strong> Not available. Enable the PHP OpenSSL extension before enabling this plugin or generating platform keys.</li>';
+        }
+
         if ($platformStateNote) {
             $rows[] = '<li><strong>Note:</strong> '.htmlspecialchars($platformStateNote, ENT_QUOTES).'</li>';
         } elseif (!$isEnabled) {
@@ -123,7 +140,9 @@ class ImsLtiPlugin extends Plugin
             .'<ul class="list-disc pl-5 space-y-1">'.implode('', $rows).'</ul>'
             .'</div>';
 
-        return Display::return_message($message, $isEnabled ? 'info' : 'warning', false);
+        $messageType = $isOpenSslAvailable ? ($isEnabled ? 'info' : 'warning') : 'error';
+
+        return Display::return_message($message, $messageType, false);
     }
 
     /**
@@ -718,7 +737,11 @@ class ImsLtiPlugin extends Plugin
                 return $keyMaterial;
             }
 
-            if ($keyMaterial instanceof \OpenSSLAsymmetricKey) {
+            if (
+                class_exists(\OpenSSLAsymmetricKey::class)
+                && $keyMaterial instanceof \OpenSSLAsymmetricKey
+                && function_exists('openssl_pkey_get_details')
+            ) {
                 $details = openssl_pkey_get_details($keyMaterial);
                 if (!empty($details['key'])) {
                     return $details['key'];
@@ -848,8 +871,11 @@ class ImsLtiPlugin extends Plugin
      */
     private static function generatePlatformKeys()
     {
-        // Create the private and public key
-        $res = openssl_pkey_new(
+        if (!self::isOpenSslAvailable()) {
+            throw new RuntimeException(self::getOpenSslRequirementText());
+        }
+
+        $resource = openssl_pkey_new(
             [
                 'digest_alg' => 'sha256',
                 'private_key_bits' => 2048,
@@ -857,18 +883,50 @@ class ImsLtiPlugin extends Plugin
             ]
         );
 
-        // Extract the private key from $res to $privateKey
-        $privateKey = '';
-        openssl_pkey_export($res, $privateKey);
+        if (false === $resource) {
+            throw new RuntimeException('Unable to generate an OpenSSL private key for the IMS/LTI platform.');
+        }
 
-        // Extract the public key from $res to $publicKey
-        $publicKey = openssl_pkey_get_details($res);
+        $privateKey = '';
+        if (!openssl_pkey_export($resource, $privateKey) || '' === trim($privateKey)) {
+            throw new RuntimeException('Unable to export the generated IMS/LTI private key.');
+        }
+
+        $publicKey = openssl_pkey_get_details($resource);
+        if (!is_array($publicKey) || empty($publicKey['key'])) {
+            throw new RuntimeException('Unable to extract the generated IMS/LTI public key.');
+        }
+
+        $kidBytes = openssl_random_pseudo_bytes(10);
+        if (false === $kidBytes) {
+            throw new RuntimeException('Unable to generate a key identifier for the IMS/LTI platform.');
+        }
 
         return [
-            'kid' => bin2hex(openssl_random_pseudo_bytes(10)),
+            'kid' => bin2hex($kidBytes),
             'private' => $privateKey,
-            'public' => $publicKey["key"],
+            'public' => $publicKey['key'],
         ];
+    }
+
+    private static function isOpenSslAvailable(): bool
+    {
+        return extension_loaded('openssl')
+            && function_exists('openssl_pkey_new')
+            && function_exists('openssl_pkey_export')
+            && function_exists('openssl_pkey_get_details')
+            && function_exists('openssl_random_pseudo_bytes')
+            && defined('OPENSSL_KEYTYPE_RSA');
+    }
+
+    private static function getOpenSslRequirementText(): string
+    {
+        return 'The IMS/LTI client plugin requires the PHP OpenSSL extension to generate LTI 1.3 platform keys. Enable the OpenSSL extension in PHP and reload the web server before enabling this plugin.';
+    }
+
+    private static function getOpenSslRequirementMessageHtml(): string
+    {
+        return Display::return_message(self::getOpenSslRequirementText(), 'error', false);
     }
 
     private function getLtiMetadata(): array

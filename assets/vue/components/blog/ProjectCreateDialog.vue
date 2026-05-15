@@ -2,16 +2,30 @@
   <BaseDialog
     v-model:isVisible="visibleProxy"
     :title="t('New project')"
-    header-icon="plus"
     :width="'560px'"
+    header-icon="plus"
   >
     <div class="grid gap-4">
-      <BaseInputText id="p-title" :label="t('Title')" v-model="title"
-                     :form-submitted="submitted" :is-invalid="!title" />
-      <BaseInputText id="p-sub" :label="t('subtitle')" v-model="subtitle" />
+      <BaseInputText
+        id="p-title"
+        v-model="title"
+        :form-submitted="submitted"
+        :is-invalid="!title"
+        :label="t('Title')"
+      />
+      <BaseInputText
+        id="p-sub"
+        v-model="subtitle"
+        :label="t('subtitle')"
+      />
     </div>
     <template #footer>
-      <BaseButton type="primary" icon="check" :label="t('Create')" @click="submit" />
+      <BaseButton
+        :label="t('Create')"
+        icon="check"
+        type="primary"
+        @click="submit"
+      />
     </template>
   </BaseDialog>
 </template>
@@ -38,7 +52,11 @@ const submitted = ref(false)
 
 function submit() {
   submitted.value = true
-  if (!title.value.trim()) return
+
+  if (!title.value.trim()) {
+    return
+  }
+
   emit("submitted", { title: title.value.trim(), subtitle: subtitle.value.trim() })
 }
 </script>

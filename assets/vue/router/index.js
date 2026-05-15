@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router"
+import NProgress from "nprogress"
 import adminRoutes from "./admin"
 import sessionAdminRoutes from "./sessionAdmin"
 import courseRoutes from "./course"
@@ -403,12 +404,58 @@ const router = createRouter({
   ],
 })
 
+
+// ---------------------------------------------------------------------------
+// Route loading indicator
+// ---------------------------------------------------------------------------
+
+NProgress.configure({
+  showSpinner: false,
+  trickleSpeed: 120,
+})
+
+const loadingTitlePrefix = "⏳ "
+let previousDocumentTitle = null
+
+function startRouteLoading() {
+  NProgress.start()
+  document.body.classList.add("cursor-wait")
+
+  if (null === previousDocumentTitle) {
+    previousDocumentTitle = document.title
+
+    if (!document.title.startsWith(loadingTitlePrefix)) {
+      document.title = loadingTitlePrefix + (document.title || "Loading")
+    }
+  }
+}
+
+function stopRouteLoading() {
+  NProgress.done()
+  document.body.classList.remove("cursor-wait")
+
+  if (null !== previousDocumentTitle) {
+    const currentTitle = document.title
+    const expectedLoadingTitle = loadingTitlePrefix + previousDocumentTitle
+
+    if (currentTitle === expectedLoadingTitle || currentTitle.startsWith(loadingTitlePrefix)) {
+      document.title = previousDocumentTitle
+    }
+
+    previousDocumentTitle = null
+  }
+}
+
+router.onError(() => {
+  stopRouteLoading()
+})
+
 // ---------------------------------------------------------------------------
 // Guards — in lifecycle order: beforeEach → beforeResolve → afterEach
 // ---------------------------------------------------------------------------
 
 router.beforeEach(async (to, from, next) => {
-  document.body.classList.add("cursor-wait")
+  startRouteLoading()
 
   const securityStore = useSecurityStore()
   const preservedParams = ["origin", "isStudentView"]
@@ -545,8 +592,8 @@ router.beforeResolve(async (to) => {
 })
 
 router.afterEach((to) => {
-  // Always remove the loading cursor.
-  document.body.classList.remove("cursor-wait")
+  // Always remove the loading indicator.
+  stopRouteLoading()
 
   // Keep page marker classes in sync for SPA navigation.
   // This is required because Twig/PageHelper does not run on client-side route changes.

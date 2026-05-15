@@ -4460,6 +4460,7 @@ __metadata:
     mini-css-extract-plugin: "npm:^2.10.2"
     moment: "npm:^2.30.1"
     multiselect-two-sides: "npm:^2.5.7"
+    nprogress: "npm:^0.2.0"
     path: "npm:^0.12.7"
     pinia: "npm:^3.0.4"
     postcss: "npm:^8.5.9"
@@ -8105,6 +8106,13 @@ __metadata:
   version: 0.1.2
   resolution: "normalize-range@npm:0.1.2"
   checksum: 10c0/bf39b73a63e0a42ad1a48c2bd1bda5a07ede64a7e2567307a407674e595bcff0fa0d57e8e5f1e7fa5e91000797c7615e13613227aaaa4d6d6e87f5bd5cc95de6
+  languageName: node
+  linkType: hard
+
+"nprogress@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "nprogress@npm:0.2.0"
+  checksum: 10c0/eab9a923a1ad1eed71a455ecfbc358442dd9bcd71b9fa3fa1c67eddf5159360b182c218f76fca320c97541a1b45e19ced04e6dcb044a662244c5419f8ae9e821
   languageName: node
   linkType: hard
 

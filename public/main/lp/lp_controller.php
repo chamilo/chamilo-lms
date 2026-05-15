@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\LpAdvancedAccessHelper;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
@@ -210,10 +211,51 @@ $goList = static function () use ($listUrl) {
     exit;
 };
 
+$isAdvancedAccessAllowed = static function (
+    CLp $lp,
+    int $courseId,
+    int $sessionId,
+    int $userId
+): bool {
+    if ($courseId <= 0 || $userId <= 0) {
+        return true;
+    }
+
+    $entityManager = Database::getManager();
+    $courseEntity = api_get_course_entity($courseId);
+    $userEntity = api_get_user_entity($userId);
+
+    if (empty($courseEntity) || empty($userEntity)) {
+        return true;
+    }
+
+    $sessionEntity = null;
+    if ($sessionId > 0) {
+        $sessionEntity = $entityManager->getReference(Chamilo\CoreBundle\Entity\Session::class, $sessionId);
+    }
+
+    $advancedAccessHelper = new LpAdvancedAccessHelper($entityManager);
+
+    return $advancedAccessHelper->isAllowed($courseEntity, $lp, $sessionEntity, $userEntity);
+};
+
 if ($action === '' || $action === 'list') {
     $goList();
 }
 if (in_array($action, ['view','content'], true) && (empty($lpId) || !$lp_found || !is_object($oLP))) {
+    $goList();
+}
+if (!$is_allowed_to_edit
+    && in_array($action, ['view', 'content'], true)
+    && $lp instanceof CLp
+    && !$isAdvancedAccessAllowed($lp, $courseId, $sessionId, $userId)
+) {
+    Display::addFlash(
+        Display::return_message(
+            get_lang('This learning path is not available for your user at this time.'),
+            'warning'
+        )
+    );
     $goList();
 }
 $eventLpId = $lpId ?: (($lp_found && is_object($oLP)) ? $oLP->get_id() : 0);

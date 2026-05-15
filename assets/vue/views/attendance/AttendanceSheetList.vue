@@ -485,12 +485,6 @@
             type="success"
             @click="saveComment"
           />
-          <BaseButton
-            :label="t('Close')"
-            icon="close"
-            type="danger"
-            @click="closeCommentDialog"
-          />
         </template>
       </BaseDialog>
 
@@ -518,17 +512,12 @@
             type="success"
             @click="saveSignature"
           />
-          <BaseButton
-            :label="t('Close')"
-            icon="close"
-            type="danger"
-            @click="closeSignatureDialog"
-          />
         </template>
       </BaseDialog>
       <BaseDialog
         v-model:isVisible="showQrDialog"
         title="QR Code"
+        :close-label="t('Close')"
       >
         <div class="flex justify-center items-center p-4">
           <img
@@ -538,14 +527,6 @@
             class="w-64 h-64 object-contain"
           />
         </div>
-        <template #footer>
-          <BaseButton
-            :label="t('Close')"
-            icon="close"
-            type="danger"
-            @click="showQrDialog = false"
-          />
-        </template>
       </BaseDialog>
     </div>
   </div>

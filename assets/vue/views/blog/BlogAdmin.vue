@@ -135,12 +135,6 @@
       />
       <template #footer>
         <BaseButton
-          :label="t('Cancel')"
-          icon="close"
-          type="black"
-          @click="closeRename"
-        />
-        <BaseButton
           :label="t('Save')"
           icon="check"
           type="primary"
@@ -166,7 +160,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from "vue"
+import { computed, onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
@@ -263,10 +257,14 @@ function openRename(p) {
 }
 function closeRename() {
   showRename.value = false
-  renameSubmitted.value = false
-  renameTarget.value = null
-  renameTitle.value = ""
 }
+watch(showRename, (v) => {
+  if (!v) {
+    renameSubmitted.value = false
+    renameTarget.value = null
+    renameTitle.value = ""
+  }
+})
 async function saveRename() {
   renameSubmitted.value = true
   if (!renameTitle.value.trim() || !renameTarget.value) return

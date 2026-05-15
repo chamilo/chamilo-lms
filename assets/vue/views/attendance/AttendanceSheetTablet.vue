@@ -163,12 +163,6 @@
             type="success"
             @click="saveComment"
           />
-          <BaseButton
-            :label="t('Close')"
-            icon="close"
-            type="danger"
-            @click="showCommentDialog = false"
-          />
         </template>
       </BaseDialog>
 
@@ -197,12 +191,6 @@
             icon="save"
             type="success"
             @click="saveSignature"
-          />
-          <BaseButton
-            :label="t('Close')"
-            icon="close"
-            type="danger"
-            @click="showSignatureDialog = false"
           />
         </template>
       </BaseDialog>

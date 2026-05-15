@@ -11,7 +11,6 @@
       <BaseInputText id="p-sub" :label="t('subtitle')" v-model="subtitle" />
     </div>
     <template #footer>
-      <BaseButton type="black" icon="close" :label="t('Cancel')" @click="close" />
       <BaseButton type="primary" icon="check" :label="t('Create')" @click="submit" />
     </template>
   </BaseDialog>
@@ -37,7 +36,6 @@ const title = ref("")
 const subtitle = ref("")
 const submitted = ref(false)
 
-function close() { visibleProxy.value = false }
 function submit() {
   submitted.value = true
   if (!title.value.trim()) return

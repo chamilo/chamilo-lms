@@ -439,6 +439,7 @@
     v-model:is-visible="isFileUsageDialogVisible"
     :style="{ width: '28rem' }"
     :title="t('Space available')"
+    :close-label="t('Close')"
   >
     <div
       v-if="usageQuotaSummary"
@@ -472,6 +473,7 @@
     :style="{ width: '28rem' }"
     :title="t('Record audio')"
     header-icon="record-add"
+    :close-label="t('Close')"
   >
     <DocumentAudioRecorder
       :parent-resource-node-id="route.params.node"

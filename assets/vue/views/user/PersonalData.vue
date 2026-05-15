@@ -221,6 +221,7 @@
     v-model:is-visible="termsAndConditionsDialogVisible"
     :style="{ width: '52rem', maxWidth: '95vw' }"
     :title="t('Read the Terms and Conditions')"
+    :close-label="t('Close')"
   >
     <div class="overflow-y-auto max-h-[70vh] pr-2">
       <template

@@ -31,10 +31,10 @@
   />
 
   <BaseDialog
-    v-model:visible="isDialogVisible"
+    v-model:is-visible="isDialogVisible"
     :title="t('Student progress')"
     size="large"
-    is-visible
+    :close-label="t('Close')"
   >
     <div
       v-if="loadingProgress"

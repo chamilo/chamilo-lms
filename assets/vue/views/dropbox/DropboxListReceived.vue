@@ -269,12 +269,6 @@
       />
       <template #footer>
         <BaseButton
-          type="black"
-          :label="t('Cancel')"
-          icon="xmark"
-          @click="closeCatDialog"
-        />
-        <BaseButton
           type="primary"
           :label="t('Create folder')"
           icon="check"
@@ -286,7 +280,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue"
+import { ref, computed, onMounted, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import Column from "primevue/column"
 
@@ -397,9 +391,13 @@ function openCreateFolder() {
 }
 function closeCatDialog() {
   showCatDialog.value = false
-  catName.value = ""
-  submitted.value = false
 }
+watch(showCatDialog, (v) => {
+  if (!v) {
+    catName.value = ""
+    submitted.value = false
+  }
+})
 async function saveCategory() {
   submitted.value = true
   if (!catName.value.trim()) return

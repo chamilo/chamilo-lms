@@ -225,13 +225,1242 @@
 .description-upload {
   margin-bottom: 15px;
 }
+
 .lp-doc-template-panel {
   min-width: 260px;
 }
+
 #lp-doc-template-list {
   max-height: none;
   overflow-y: visible;
 }
+
 .dropdown-menu {
   z-index: 1000;
+}
+
+
+/* -------------------------------------------------------------------------
+ * Modern LP viewer (#7534)
+ *
+ * This block is intentionally scoped to the LP viewer IDs/classes used by
+ * src/CoreBundle/Resources/views/LearnPath/view.html.twig. Avoid adding
+ * generic selectors here because _lp.scss is loaded globally.
+ * ---------------------------------------------------------------------- */
+
+#learning_path_main {
+    display: flex !important;
+    flex-direction: row !important;
+    width: 100% !important;
+    height: 100vh !important;
+    min-height: 100vh !important;
+    overflow: hidden !important;
+}
+#learning_path_left_zone {
+    flex: 0 0 360px !important;
+    width: 360px !important;
+    height: 100% !important;
+    overflow: hidden !important;
+}
+#learning_path_left_zone .lp-view-zone-container {
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+}
+#toc_id.scorm-body {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow: auto !important;
+}
+#learning_path_right_zone {
+    flex: 1 1 auto !important;
+    height: 100% !important;
+    overflow: hidden !important;
+}
+#learning_path_right_zone .lp-view-zone-container {
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+}
+#learning_path_right_zone .lp-view-tabs {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+}
+#tab-iframe {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+}
+#lp-view-content, #wrapper-iframe {
+    height: 100% !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+}
+#content_id, #content_id_blank {
+    width: 100% !important;
+    height: 100% !important;
+}
+#learning_path_main.lp-toc-hidden #learning_path_left_zone {
+    flex: 0 0 0 !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+}
+#learning_path_main.lp-toc-hidden #learning_path_left_zone .lp-view-zone-container {
+    position: fixed !important;
+    left: -10000px !important;
+    top: 0 !important;
+    width: 360px !important;
+    height: 100vh !important;
+    overflow: auto !important;
+}
+#learning_path_right_zone.lp-content-full {
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+}
+
+/* ============================================================
+ * Floating menu (stable anchor + responsive layout)
+ *
+ * Requirements:
+ * - Hamburger must NEVER move when opening/closing the panel.
+ * - TOC expanded (normal): panel is horizontal, aligned with hamburger.
+ * - TOC collapsed by expand-toggle (.lp-view-collapsed): panel is vertical under hamburger.
+ * - TOC hidden by setting (.lp-toc-hidden): menu goes top-right + panel vertical under hamburger.
+ * ============================================================ */
+
+/* Reset inherited legacy styling */
+#btn-menu-float,
+#btn-menu-float > div,
+#btn-menu-float > ul {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+/* Base anchor: top-left */
+#btn-menu-float {
+    position: fixed !important;
+    top: 12px !important;
+    left: 12px !important;
+    right: auto !important;
+    width: 40px !important;
+    height: 40px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    z-index: 999999 !important;
+}
+
+/* Top-right mode (only when .lp-toc-hidden is active) */
+#btn-menu-float.lp-menu-top-right {
+    left: auto !important;
+    right: 12px !important;
+}
+
+/* Hamburger button: absolute so it never shifts */
+#btn-menu-float .menu-button {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+
+    width: 40px !important;
+    height: 40px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    border-radius: 10px !important;
+    border: 1px solid rgba(0,0,0,0.10) !important;
+    background: rgba(255,255,255,0.94) !important;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.14) !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+#btn-menu-float.lp-menu-top-right .menu-button {
+    left: auto !important;
+    right: 0 !important;
+}
+
+#btn-menu-float .menu-button.menu-button-selected {
+    background: rgba(255,255,255,0.98) !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.16) !important;
+}
+
+/* Panel container */
+#btn-menu-float .circle {
+    position: absolute !important;
+    top: 0 !important;
+    left: 48px !important;
+    right: auto !important;
+    display: none !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 4px !important;
+    padding: 0px !important;
+    white-space: nowrap !important;
+}
+#btn-menu-float .circle.open {
+    display: inline-flex !important;
+}
+
+/* Vertical panel: under the hamburger, aligned to it */
+#btn-menu-float.lp-menu-vertical .circle {
+    top: 48px !important;
+    left: 0 !important;
+    right: auto !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+    padding: 6px 0 !important;
+    white-space: normal !important;
+}
+
+/* Vertical + top-right: under the hamburger, right aligned */
+#btn-menu-float.lp-menu-top-right.lp-menu-vertical .circle {
+    left: auto !important;
+    right: 0 !important;
+    align-items: flex-end !important;
+}
+
+/* Toolbar items */
+#btn-menu-float .circle .icon-toolbar,
+#btn-menu-float .circle a.icon-toolbar,
+#btn-menu-float .circle button.icon-toolbar,
+#btn-menu-float .circle .lp-menu-nav a,
+#btn-menu-float .circle .lp-menu-nav button {
+    width: 40px !important;
+    height: 40px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 10px !important;
+    border: 1px solid rgba(0,0,0,0.08) !important;
+    background: rgba(255,255,255,0.98) !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+#btn-menu-float .circle .icon-toolbar:hover,
+#btn-menu-float .circle .lp-menu-nav a:hover,
+#btn-menu-float .circle .lp-menu-nav button:hover {
+    background: #fff !important;
+}
+
+/* Navigation bar wrapper - force layout (avoid "square" grouping) */
+#btn-menu-float .circle .lp-menu-nav {
+    display: flex !important;
+    flex-direction: row !important;      /* horizontal by default */
+    align-items: center !important;
+    gap: 8px !important;
+}
+#btn-menu-float.lp-menu-vertical .circle .lp-menu-nav {
+    flex-direction: column !important;   /* vertical when TOC is collapsed/hidden */
+    align-items: flex-start !important;
+    gap: 8px !important;
+}
+#btn-menu-float.lp-menu-top-right.lp-menu-vertical .circle .lp-menu-nav {
+    align-items: flex-end !important;
+}
+
+/* -----------------------------
+ * Runtime visibility states.
+ *
+ * Most visual styles below are now Tailwind classes in the markup.
+ * Keep only the state selectors that the legacy LP JavaScript toggles.
+ * ----------------------------- */
+#wrapper-iframe { position: relative !important; }
+
+#lp-iframe-loader,
+#lp-video-next-overlay {
+    display: none !important;
+}
+
+#lp-iframe-loader.is-visible,
+#lp-video-next-overlay.is-visible {
+    display: flex !important;
+}
+
+#lp-video-next-overlay {
+    pointer-events: none;
+}
+
+#lp-video-next-overlay.is-visible {
+    pointer-events: auto;
+}
+
+
+/* ============================================================
+ * Modern LP viewer style (#7534)
+ * Uses the Chamilo Tailwind color tokens exposed as CSS variables.
+ * This is intentionally scoped to #learning_path_main to avoid
+ * changing the legacy LP runtime behavior.
+ * ============================================================ */
+#learning_path_main.lp-modern-view {
+    background: #ffffff !important;
+    color: #333333 !important;
+}
+
+#learning_path_main.lp-modern-view #learning_path_left_zone {
+    flex: 0 0 300px !important;
+    width: 300px !important;
+    min-width: 300px !important;
+    background: #ffffff !important;
+    border-right: 1px solid #e4e9ed !important;
+    box-shadow: none !important;
+    z-index: 20;
+}
+
+#learning_path_main.lp-modern-view.lp-view-collapsed #learning_path_left_zone {
+    flex: 0 0 64px !important;
+    width: 64px !important;
+    min-width: 64px !important;
+    overflow: visible !important;
+    background: #ffffff !important;
+    border-right: 1px solid #e4e9ed !important;
+}
+
+#learning_path_main.lp-modern-view.lp-view-collapsed #learning_path_left_zone .lp-view-zone-container {
+    width: 64px !important;
+    overflow: visible !important;
+    background: #ffffff !important;
+}
+
+#learning_path_main.lp-modern-view.lp-view-collapsed #scorm-info,
+#learning_path_main.lp-modern-view.lp-view-collapsed #toc_id {
+    display: none !important;
+}
+
+#learning_path_main.lp-modern-view #learning_path_right_zone {
+    background: #ffffff !important;
+    padding: 20px 30px 20px 38px !important;
+    min-width: 0 !important;
+}
+
+#learning_path_main.lp-modern-view.lp-view-collapsed #learning_path_right_zone {
+    margin-left: 0 !important;
+    padding-left: 34px !important;
+    box-sizing: border-box !important;
+}
+
+/*
+ * Keep LP content constrained to the right of the collapsed rail.
+ * Some legacy LP pages set fixed/absolute iframe dimensions, so we
+ * normalize the frame position here instead of changing LP runtime.
+ */
+#learning_path_main.lp-modern-view #lp-view-content,
+#learning_path_main.lp-modern-view #wrapper-iframe,
+#learning_path_main.lp-modern-view #content_id,
+#learning_path_main.lp-modern-view #content_id_blank {
+    position: relative !important;
+    left: auto !important;
+    right: auto !important;
+    top: auto !important;
+    transform: none !important;
+    box-sizing: border-box !important;
+}
+
+#learning_path_main.lp-modern-view.lp-view-collapsed #wrapper-iframe {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+#learning_path_main.lp-modern-view.lp-view-collapsed #tab-iframe {
+    padding-left: 0 !important;
+    box-sizing: border-box !important;
+}
+
+#learning_path_main.lp-modern-view.lp-view-collapsed #content_id,
+#learning_path_main.lp-modern-view.lp-view-collapsed #content_id_blank {
+    margin-left: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+/* Keep the collapsed rail as a hard visual boundary.
+ * Some legacy LP contents can render wider than the iframe viewport;
+ * this prevents them from appearing below the left rail while keeping
+ * the current LP navigation/runtime untouched.
+ */
+#learning_path_main.lp-modern-view.lp-view-collapsed::before {
+    content: "" !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 64px !important;
+    height: 100vh !important;
+    background: #ffffff !important;
+    border-right: 1px solid #e4e9ed !important;
+    z-index: 999996 !important;
+    pointer-events: none !important;
+}
+
+#learning_path_main.lp-modern-view.lp-view-collapsed #learning_path_right_zone .lp-view-zone-container,
+#learning_path_main.lp-modern-view.lp-view-collapsed .lp-view-tabs,
+#learning_path_main.lp-modern-view.lp-view-collapsed #tab-iframe,
+#learning_path_main.lp-modern-view.lp-view-collapsed #lp-view-content,
+#learning_path_main.lp-modern-view.lp-view-collapsed #wrapper-iframe {
+    max-width: 100% !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+}
+
+#learning_path_main.lp-modern-view #learning_path_right_zone .lp-view-zone-container {
+    background: #ffffff !important;
+}
+
+#learning_path_main.lp-modern-view .lp-view-tabs {
+    position: relative;
+    background: #ffffff !important;
+    border-radius: 0 !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+}
+
+#learning_path_main.lp-modern-view #navTabBar {
+    display: none !important;
+}
+
+#learning_path_main.lp-modern-view #tab-iframe {
+    padding: 0 !important;
+    background: #ffffff !important;
+}
+
+#learning_path_main.lp-modern-view #wrapper-iframe {
+    border-radius: 10px !important;
+    background: #ffffff !important;
+    overflow: hidden !important;
+    max-width: 100% !important;
+}
+
+#learning_path_main.lp-modern-view #content_id,
+#learning_path_main.lp-modern-view #content_id_blank {
+    display: block !important;
+    border: 0 !important;
+    border-radius: 10px !important;
+    background: #ffffff !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+#learning_path_main.lp-modern-view #wrapper-iframe.lp-is-loading,
+#learning_path_main.lp-modern-view #wrapper-iframe.lp-is-loading #content_id,
+#learning_path_main.lp-modern-view #wrapper-iframe.lp-is-loading #content_id_blank {
+    background: #edf0f2 !important;
+}
+
+#learning_path_main.lp-modern-view #scorm-info {
+    flex: 0 0 auto;
+    border-bottom: 1px solid #e4e9ed;
+    background: #ffffff;
+}
+
+#learning_path_main.lp-modern-view #panel-scorm {
+    padding: 24px 22px 18px 22px !important;
+    text-align: center;
+}
+
+#learning_path_main.lp-modern-view #panel-scorm .image-avatar {
+    margin-bottom: 12px;
+}
+
+#learning_path_main.lp-modern-view #panel-scorm .image-avatar img {
+    width: 54px;
+    height: 54px;
+    object-fit: contain;
+    border-radius: 14px;
+    margin: 0 auto;
+}
+
+#learning_path_main.lp-modern-view #panel-scorm .media-author {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+#learning_path_main.lp-modern-view #panel-scorm .media-author-description {
+    color: #333333;
+    font-size: 13px;
+    line-height: 1.35;
+}
+
+#learning_path_main.lp-modern-view #actions_lp {
+    display: none !important;
+}
+
+#learning_path_main.lp-modern-view #progress_bar {
+    width: calc(100% - 28px) !important;
+    margin: 8px auto 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    color: transparent !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
+}
+
+#learning_path_main.lp-modern-view #progress_bar .progress,
+#learning_path_main.lp-modern-view #progress_bar .p-progressbar,
+#learning_path_main.lp-modern-view #progress_bar progress {
+    width: 100% !important;
+    height: 2px !important;
+    min-height: 2px !important;
+    max-height: 2px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 999px !important;
+    background: #dedede !important;
+    box-shadow: none !important;
+    overflow: hidden !important;
+    position: relative !important;
+    color: transparent !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
+}
+
+#learning_path_main.lp-modern-view #progress_bar .progress-bar,
+#learning_path_main.lp-modern-view #progress_bar .bar,
+#learning_path_main.lp-modern-view #progress_bar .ui-progressbar-value,
+#learning_path_main.lp-modern-view #progress_bar .p-progressbar-value {
+    height: 2px !important;
+    min-height: 2px !important;
+    max-height: 2px !important;
+    line-height: 2px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    color: transparent !important;
+    font-size: 0 !important;
+    text-indent: -9999px !important;
+    overflow: hidden !important;
+    background: rgb(var(--color-primary-base)) !important;
+    border-radius: 999px !important;
+    box-shadow: none !important;
+}
+
+#learning_path_main.lp-modern-view #progress_bar .progress *,
+#learning_path_main.lp-modern-view #progress_bar .p-progressbar *,
+#learning_path_main.lp-modern-view #progress_bar progress *,
+#learning_path_main.lp-modern-view #progress_bar .progress-bar *,
+#learning_path_main.lp-modern-view #progress_bar .bar *,
+#learning_path_main.lp-modern-view #progress_bar .ui-progressbar-value *,
+#learning_path_main.lp-modern-view #progress_bar .p-progressbar-value *,
+#learning_path_main.lp-modern-view #progress_bar .p-progressbar-label {
+    color: transparent !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
+    text-indent: -9999px !important;
+}
+
+#learning_path_main.lp-modern-view #progress_bar .lp-progress-label {
+    margin-top: 8px !important;
+    color: rgb(var(--color-primary-base)) !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    line-height: 1 !important;
+    text-align: right !important;
+    white-space: nowrap !important;
+    text-indent: 0 !important;
+}
+
+#learning_path_main.lp-modern-view #toc_id {
+    background: #ffffff !important;
+}
+
+#learning_path_main.lp-modern-view #learning_path_toc,
+#learning_path_main.lp-modern-view #learning_path_toc .scorm-body,
+#learning_path_main.lp-modern-view #inner_lp_toc {
+    width: 100%;
+    background: #ffffff !important;
+}
+
+#learning_path_main.lp-modern-view #inner_lp_toc {
+    padding: 0 0 18px 0 !important;
+}
+
+#learning_path_main.lp-modern-view .lp-toc-title {
+    padding: 16px 22px 12px 22px;
+    color: #333333;
+    font-size: 14px;
+    font-weight: 700;
+    border-bottom: 1px solid #edf0f2;
+}
+
+#learning_path_main.lp-modern-view .scorm_item_normal {
+    border: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+}
+
+#learning_path_main.lp-modern-view .scorm_item_normal .section,
+#learning_path_main.lp-modern-view .scorm_item_normal .item {
+    display: block;
+    min-height: 44px;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+}
+
+#learning_path_main.lp-modern-view .lp-item-row,
+#learning_path_main.lp-modern-view .lp-section-row {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 10px !important;
+    width: 100% !important;
+    min-height: 44px !important;
+    padding: 0 18px 0 20px !important;
+    color: #333333 !important;
+    text-decoration: none !important;
+    border-left: 4px solid transparent !important;
+    border-bottom: 1px solid #edf0f2 !important;
+    transition: background 0.16s ease, color 0.16s ease, border-color 0.16s ease;
+}
+
+#learning_path_main.lp-modern-view .lp-section-row {
+    font-weight: 700 !important;
+    background: #fafafa !important;
+}
+
+#learning_path_main.lp-modern-view .lp-item-row:hover,
+#learning_path_main.lp-modern-view .lp-section-row:hover {
+    background: rgb(var(--color-primary-base) / 0.08) !important;
+    color: rgb(var(--color-primary-base)) !important;
+}
+
+#learning_path_main.lp-modern-view .scorm_highlight > .item > .lp-item-row,
+#learning_path_main.lp-modern-view .scorm_highlight > .section > .lp-section-row {
+    background: rgb(var(--color-primary-base) / 0.10) !important;
+    border-left-color: rgb(var(--color-primary-base)) !important;
+    color: rgb(var(--color-primary-base)) !important;
+    font-weight: 700 !important;
+}
+
+#learning_path_main.lp-modern-view .parent_of_current_item > .status-heading .panel-heading > a,
+#learning_path_main.lp-modern-view .current_item > .status-heading .panel-heading > a {
+    background: rgb(var(--color-primary-base) / 0.10) !important;
+    border-left-color: rgb(var(--color-primary-base)) !important;
+    color: rgb(var(--color-primary-base)) !important;
+    font-weight: 700 !important;
+}
+
+#learning_path_main.lp-modern-view .lp-item-main {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    flex: 1 1 auto;
+}
+
+#learning_path_main.lp-modern-view .lp-item-type-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    min-width: 18px;
+    color: inherit;
+    opacity: 0.95;
+}
+
+#learning_path_main.lp-modern-view .lp-item-title {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+    line-height: 1.35;
+}
+
+#learning_path_main.lp-modern-view .lp-item-status-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    min-width: 18px;
+    color: #a2a6b0;
+    font-size: 18px;
+}
+
+#learning_path_main.lp-modern-view .scorm_completed .lp-item-status-icon {
+    color: rgb(var(--color-success-base)) !important;
+}
+
+#learning_path_main.lp-modern-view .scorm_failed .lp-item-status-icon {
+    color: rgb(var(--color-danger-base)) !important;
+}
+
+#learning_path_main.lp-modern-view .item-children {
+    border-left: 1px solid #e4e9ed;
+    margin-left: 22px;
+}
+
+#learning_path_main.lp-modern-view .level_1 .lp-item-row,
+#learning_path_main.lp-modern-view .level_1 .lp-section-row { padding-left: 30px !important; }
+#learning_path_main.lp-modern-view .level_2 .lp-item-row,
+#learning_path_main.lp-modern-view .level_2 .lp-section-row { padding-left: 42px !important; }
+#learning_path_main.lp-modern-view .level_3 .lp-item-row,
+#learning_path_main.lp-modern-view .level_3 .lp-section-row { padding-left: 54px !important; }
+#learning_path_main.lp-modern-view .level_4 .lp-item-row,
+#learning_path_main.lp-modern-view .level_4 .lp-section-row { padding-left: 66px !important; }
+
+#learning_path_main.lp-modern-view .lp-empty-state {
+    margin: 18px;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    border: 1px solid #e4e9ed;
+    border-radius: 12px;
+    background: #fafafa;
+    color: #333333;
+    text-align: center;
+    padding: 28px;
+}
+
+#learning_path_main.lp-modern-view .lp-empty-state-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 72px;
+    height: 72px;
+    border-radius: 999px;
+    background: rgb(var(--color-primary-base) / 0.10);
+    color: rgb(var(--color-primary-base));
+    font-size: 40px;
+}
+
+#learning_path_main.lp-modern-view .lp-empty-state-title {
+    font-weight: 700;
+    font-size: 15px;
+}
+
+#learning_path_main.lp-modern-view .lp-empty-state-text {
+    max-width: 220px;
+    color: #6b7280;
+    font-size: 13px;
+    line-height: 1.35;
+}
+
+#learning_path_main.lp-modern-view #btn-menu-float {
+    top: 16px !important;
+    left: 16px !important;
+    width: 42px !important;
+    height: 42px !important;
+}
+
+#learning_path_main.lp-modern-view #btn-menu-float .menu-button {
+    width: 42px !important;
+    height: 42px !important;
+    border: 0 !important;
+    border-radius: 12px !important;
+    background: #ffffff !important;
+    color: rgb(var(--color-primary-base)) !important;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.08) !important;
+}
+
+#learning_path_main.lp-modern-view #btn-menu-float .menu-button:hover,
+#learning_path_main.lp-modern-view #btn-menu-float .menu-button.menu-button-selected {
+    background: rgb(var(--color-primary-base)) !important;
+    color: #ffffff !important;
+}
+
+#learning_path_main.lp-modern-view #btn-menu-float .circle {
+    top: 50px !important;
+    left: 0 !important;
+    min-width: 190px !important;
+    padding: 8px !important;
+    border: 1px solid #e4e9ed !important;
+    border-radius: 12px !important;
+    background: #ffffff !important;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.16) !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 4px !important;
+    z-index: 1000001 !important;
+}
+
+#learning_path_main.lp-modern-view #btn-menu-float .circle .icon-toolbar {
+    width: 100% !important;
+    height: 38px !important;
+    justify-content: flex-start !important;
+    gap: 10px !important;
+    padding: 0 12px !important;
+    border: 0 !important;
+    border-radius: 8px !important;
+    color: #333333 !important;
+    background: #ffffff !important;
+    box-shadow: none !important;
+    text-decoration: none !important;
+}
+
+#learning_path_main.lp-modern-view #btn-menu-float .circle .icon-toolbar:hover {
+    color: rgb(var(--color-primary-base)) !important;
+    background: rgb(var(--color-primary-base) / 0.08) !important;
+}
+
+#learning_path_main.lp-modern-view #lp-view-expand-toggle.lp-side-toggle {
+    position: fixed !important;
+    top: 42px !important;
+    left: 282px !important;
+    z-index: 999998 !important;
+    width: 38px !important;
+    height: 38px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border: 1px solid #e4e9ed !important;
+    border-radius: 999px !important;
+    background: #ffffff !important;
+    color: rgb(var(--color-primary-base)) !important;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.08) !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+#learning_path_main.lp-modern-view #learning_path_left_zone::after {
+    content: "" !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 300px !important;
+    width: 1px !important;
+    height: 100vh !important;
+    background: #e4e9ed !important;
+    z-index: 999990 !important;
+    pointer-events: none !important;
+}
+
+#learning_path_main.lp-modern-view.lp-view-collapsed #learning_path_left_zone::after {
+    left: 64px !important;
+}
+
+#learning_path_main.lp-modern-view #lp-view-expand-toggle.lp-side-toggle:hover {
+    background: rgb(var(--color-primary-base)) !important;
+    color: #ffffff !important;
+}
+
+#learning_path_main.lp-modern-view #lp-view-expand-toggle.lp-side-toggle .mdi {
+    font-size: 22px !important;
+    color: inherit !important;
+}
+
+#learning_path_main.lp-modern-view.lp-view-collapsed #lp-view-expand-toggle.lp-side-toggle {
+    left: 46px !important;
+}
+
+#learning_path_main.lp-modern-view #btn-menu-float .circle .icon-toolbar .sr-only {
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    clip: auto !important;
+    white-space: nowrap !important;
+    color: inherit !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+}
+
+#learning_path_main.lp-modern-view #btn-menu-float .circle .lp-menu-text-action,
+#learning_path_main.lp-modern-view #btn-menu-float .circle .lp-menu-text-action *,
+#learning_path_main.lp-modern-view #btn-menu-float .circle .icon-toolbar:not(.lp-view-primary-nav .icon-toolbar) {
+    font-size: 14px !important;
+    line-height: 1.2 !important;
+    font-weight: 500 !important;
+}
+
+#learning_path_main.lp-modern-view #btn-menu-float .circle .lp-menu-text-action .mdi,
+#learning_path_main.lp-modern-view #btn-menu-float .circle .icon-toolbar .mdi {
+    font-size: 17px !important;
+    line-height: 1 !important;
+    width: 18px !important;
+    min-width: 18px !important;
+    text-align: center !important;
+}
+
+#learning_path_main.lp-modern-view .lp-view-primary-nav {
+    position: fixed !important;
+    top: 16px !important;
+    right: 22px !important;
+    z-index: 999998 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    overflow: hidden !important;
+    border-radius: 10px !important;
+    background: rgb(var(--color-primary-base)) !important;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.16) !important;
+}
+
+#learning_path_main.lp-modern-view .lp-view-primary-nav .buttons,
+#learning_path_main.lp-modern-view .lp-view-primary-nav #control-top,
+#learning_path_main.lp-modern-view .lp-view-primary-nav #control-bottom {
+    display: inline-flex !important;
+    align-items: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+}
+
+#learning_path_main.lp-modern-view .lp-view-primary-nav .icon-toolbar {
+    width: 44px !important;
+    height: 44px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border: 0 !important;
+    border-right: 1px solid rgba(255,255,255,0.20) !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    color: #ffffff !important;
+    box-shadow: none !important;
+    text-decoration: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+#learning_path_main.lp-modern-view .lp-view-primary-nav .icon-toolbar:last-child {
+    border-right: 0 !important;
+}
+
+#learning_path_main.lp-modern-view .lp-view-primary-nav .icon-toolbar:hover {
+    background: rgb(var(--color-primary-gradient)) !important;
+    color: #ffffff !important;
+}
+
+#learning_path_main.lp-modern-view .lp-view-primary-nav .mdi {
+    color: inherit !important;
+    font-size: 28px !important;
+}
+
+@media (max-width: 768px) {
+    #learning_path_main.lp-modern-view {
+        flex-direction: column !important;
+        overflow: auto !important;
+    }
+
+    #learning_path_main.lp-modern-view #learning_path_left_zone {
+        flex: 0 0 auto !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-height: 45vh !important;
+    }
+
+    #learning_path_main.lp-modern-view #learning_path_right_zone {
+        padding: 72px 12px 12px 12px !important;
+        min-height: 55vh !important;
+    }
+
+    #learning_path_main.lp-modern-view .lp-view-primary-nav {
+        top: 14px !important;
+        right: 14px !important;
+    }
+
+    #learning_path_main.lp-modern-view.lp-view-collapsed #learning_path_left_zone {
+        width: 0 !important;
+        min-width: 0 !important;
+        height: 0 !important;
+        border: 0 !important;
+    }
+}
+
+
+/* Currently active TOC item is non-clickable */
+#learning_path_main.lp-modern-view .scorm_highlight a.items-list,
+#learning_path_main.lp-modern-view .scorm_highlight a.item-action {
+    pointer-events: none;
+    cursor: default;
+}
+
+/*
+ * LP collapsed layout guard.
+ *
+ * In collapsed mode the rail remains visible at the left side.
+ * The content zone must start after that rail and must not slide
+ * below the arrow/border when legacy iframe content is reloaded.
+ */
+#learning_path_main.lp-modern-view {
+    --lp-collapsed-rail-width: 64px;
+    --lp-collapsed-content-gap: 34px;
+    --lp-collapsed-content-left: 98px;
+}
+
+#learning_path_main.lp-modern-view.lp-view-collapsed #learning_path_right_zone {
+    position: fixed !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: var(--lp-collapsed-content-left) !important;
+    width: auto !important;
+    max-width: calc(100vw - var(--lp-collapsed-content-left)) !important;
+    min-width: 0 !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
+    margin-left: 0 !important;
+    padding: 28px 30px !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    transform: none !important;
+}
+
+#learning_path_main.lp-modern-view.lp-view-collapsed #tab-iframe,
+#learning_path_main.lp-modern-view.lp-view-collapsed #lp-view-content,
+#learning_path_main.lp-modern-view.lp-view-collapsed #wrapper-iframe {
+    position: relative !important;
+    left: auto !important;
+    right: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    transform: none !important;
+}
+
+#learning_path_main.lp-modern-view.lp-view-collapsed #content_id,
+#learning_path_main.lp-modern-view.lp-view-collapsed #content_id_blank {
+    position: relative !important;
+    left: auto !important;
+    right: auto !important;
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+    box-sizing: border-box !important;
+    transform: none !important;
+}
+
+@media (max-width: 768px) {
+    #learning_path_main.lp-modern-view.lp-view-collapsed {
+        --lp-collapsed-content-left: 82px;
+    }
+
+    #learning_path_main.lp-modern-view.lp-view-collapsed #learning_path_right_zone {
+        padding: 20px 16px !important;
+    }
+}
+
+/* Timer shown when accumulated work time is enabled. */
+#learning_path_main.lp-modern-view #timer .container {
+  display: table;
+  background: #777;
+  color: #eee;
+  font-weight: bold;
+  width: 100%;
+  text-align: center;
+  text-shadow: 1px 1px 4px #999;
+}
+
+#learning_path_main.lp-modern-view #timer .container div {
+  display: table-cell;
+  font-size: 24px;
+  padding: 0;
+  width: 20px;
+}
+
+#learning_path_main.lp-modern-view #timer .container .divider {
+  width: 10px;
+  color: #ddd;
+}
+
+
+/* -------------------------------------------------------------------------
+ * Learning path design refinements (#8185)
+ *
+ * This block is intentionally scoped to the modern LP viewer or LP editor
+ * containers. _lp.scss is loaded by several LP pages, so avoid unscoped
+ * selectors here.
+ * ---------------------------------------------------------------------- */
+
+/* Viewer: top section above the table of contents. */
+#learning_path_main.lp-modern-view #panel-scorm {
+  padding: 12px 18px 18px !important;
+  text-align: center;
+}
+
+#learning_path_main.lp-modern-view #panel-scorm .image-avatar {
+  width: 100%;
+  margin: 0 auto 16px;
+}
+
+#learning_path_main.lp-modern-view #panel-scorm .media-author {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+#learning_path_main.lp-modern-view #panel-scorm .media-author-avatar {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+#learning_path_main.lp-modern-view #panel-scorm .image-avatar img,
+#learning_path_main.lp-modern-view #panel-scorm .media-author-avatar img {
+  display: block;
+  width: min(180px, 86%) !important;
+  max-width: 180px !important;
+  height: auto !important;
+  max-height: 150px !important;
+  object-fit: contain !important;
+  border-radius: 16px !important;
+  margin: 0 auto !important;
+}
+
+#learning_path_main.lp-modern-view #panel-scorm .media-author-description {
+  width: 100%;
+  max-width: 240px;
+  margin: 0 auto;
+  color: #374151;
+  font-size: 13px;
+  line-height: 1.45;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+#learning_path_main.lp-modern-view #panel-scorm #lp_media_file {
+  margin-top: 16px;
+}
+
+#learning_path_main.lp-modern-view #panel-scorm #progress_bar {
+  width: 100% !important;
+  max-width: 250px !important;
+  margin-top: 18px !important;
+}
+
+#learning_path_main.lp-modern-view #panel-scorm .row {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+#learning_path_main.lp-modern-view #panel-scorm .row > [class*="col-"] {
+  float: none;
+  width: 100%;
+  padding-right: 0;
+  padding-left: 0;
+  text-align: left;
+}
+
+#learning_path_main.lp-modern-view #panel-scorm .row > [class*="col-"] + [class*="col-"] {
+  margin-top: 8px;
+}
+
+#learning_path_main.lp-modern-view #panel-scorm .btn,
+#learning_path_main.lp-modern-view #panel-scorm a.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 4px;
+}
+
+/* Editor: better alignment for the LP edition tree and toolbar. */
+#lp_sidebar,
+#lp_item_list,
+#resource_tab {
+  box-sizing: border-box;
+}
+
+#lp_sidebar {
+  color: #374151;
+}
+
+#lp_sidebar .card,
+#lp_sidebar .panel,
+#lp_sidebar .list-group {
+  border-color: #e5e7eb;
+  border-radius: 12px;
+}
+
+#lp_item_list {
+  background: transparent;
+}
+
+#lp_item_list .list-group-item {
+  display: block;
+  margin-bottom: 8px;
+  border-color: #e5e7eb;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+#lp_item_list .item_data {
+  min-width: 0;
+}
+
+#lp_item_list .item_data .button_actions,
+#lp_item_list .btn-toolbar {
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+#lp_item_list .item_data:hover .button_actions {
+  display: flex;
+}
+
+#lp_item_list .button_actions a,
+#lp_item_list .button_actions button,
+#lp_item_list .btn-toolbar a,
+#lp_item_list .btn-toolbar button {
+  margin-right: 0;
+}
+
+#lp_item_list .ch-tool-icon,
+#lp_item_list .mdi-cursor-move {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+}
+
+#resource_tab .nav-tabs {
+  gap: 8px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #ffffff;
+}
+
+#resource_tab > .nav-tabs .nav-link {
+  min-height: 44px;
+  border-radius: 10px;
+}
+
+#resource_tab > .tab-panel {
+  margin-top: 12px;
+}
+
+/* Configuration form: constrain the old preview illustration if present.
+ * This keeps the page aligned without depending on the exact legacy image path.
+ */
+.lp-doc-template-panel,
+#lp-doc-template-list {
+  max-width: 100%;
+}
+
+#resource_tab img,
+#lp_sidebar img {
+  max-width: 100%;
+  height: auto;
 }

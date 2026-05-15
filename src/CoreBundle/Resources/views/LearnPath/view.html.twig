@@ -25,362 +25,12 @@
     {% endif %}
 
     {% autoescape false %}
-        <style>
-            html, body { height: 100%; }
-            #learning_path_main {
-                display: flex !important;
-                flex-direction: row !important;
-                width: 100% !important;
-                height: 100vh !important;
-                min-height: 100vh !important;
-                overflow: hidden !important;
-            }
-            #learning_path_left_zone {
-                flex: 0 0 360px !important;
-                width: 360px !important;
-                height: 100% !important;
-                overflow: hidden !important;
-            }
-            #learning_path_left_zone .lp-view-zone-container {
-                height: 100% !important;
-                display: flex !important;
-                flex-direction: column !important;
-                overflow: hidden !important;
-            }
-            #toc_id.scorm-body {
-                flex: 1 1 auto !important;
-                min-height: 0 !important;
-                overflow: auto !important;
-            }
-            #learning_path_right_zone {
-                flex: 1 1 auto !important;
-                height: 100% !important;
-                overflow: hidden !important;
-            }
-            #learning_path_right_zone .lp-view-zone-container {
-                height: 100% !important;
-                display: flex !important;
-                flex-direction: column !important;
-                overflow: hidden !important;
-            }
-            #learning_path_right_zone .lp-view-tabs {
-                flex: 1 1 auto !important;
-                min-height: 0 !important;
-                display: flex !important;
-                flex-direction: column !important;
-                overflow: hidden !important;
-            }
-            #tab-iframe {
-                flex: 1 1 auto !important;
-                min-height: 0 !important;
-                overflow: hidden !important;
-            }
-            #lp-view-content, #wrapper-iframe {
-                height: 100% !important;
-                min-height: 0 !important;
-                overflow: hidden !important;
-            }
-            #content_id, #content_id_blank {
-                width: 100% !important;
-                height: 100% !important;
-            }
-            #learning_path_main.lp-toc-hidden #learning_path_left_zone {
-                flex: 0 0 0 !important;
-                width: 0 !important;
-                min-width: 0 !important;
-                overflow: hidden !important;
-            }
-            #learning_path_main.lp-toc-hidden #learning_path_left_zone .lp-view-zone-container {
-                position: fixed !important;
-                left: -10000px !important;
-                top: 0 !important;
-                width: 360px !important;
-                height: 100vh !important;
-                overflow: auto !important;
-            }
-            #learning_path_right_zone.lp-content-full {
-                flex: 1 1 auto !important;
-                width: 100% !important;
-                margin-left: 0 !important;
-            }
-
-            /* ============================================================
-             * Floating menu (stable anchor + responsive layout)
-             *
-             * Requirements:
-             * - Hamburger must NEVER move when opening/closing the panel.
-             * - TOC expanded (normal): panel is horizontal, aligned with hamburger.
-             * - TOC collapsed by expand-toggle (.lp-view-collapsed): panel is vertical under hamburger.
-             * - TOC hidden by setting (.lp-toc-hidden): menu goes top-right + panel vertical under hamburger.
-             * ============================================================ */
-
-            /* Reset inherited legacy styling */
-            #btn-menu-float,
-            #btn-menu-float > div,
-            #btn-menu-float > ul {
-                background: transparent !important;
-                border: 0 !important;
-                box-shadow: none !important;
-            }
-
-            /* Base anchor: top-left */
-            #btn-menu-float {
-                position: fixed !important;
-                top: 12px !important;
-                left: 12px !important;
-                right: auto !important;
-                width: 40px !important;
-                height: 40px !important;
-                padding: 0 !important;
-                margin: 0 !important;
-                z-index: 999999 !important;
-            }
-
-            /* Top-right mode (only when .lp-toc-hidden is active) */
-            #btn-menu-float.lp-menu-top-right {
-                left: auto !important;
-                right: 12px !important;
-            }
-
-            /* Hamburger button: absolute so it never shifts */
-            #btn-menu-float .menu-button {
-                position: absolute !important;
-                top: 0 !important;
-                left: 0 !important;
-
-                width: 40px !important;
-                height: 40px !important;
-                display: inline-flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-
-                border-radius: 10px !important;
-                border: 1px solid rgba(0,0,0,0.10) !important;
-                background: rgba(255,255,255,0.94) !important;
-                box-shadow: 0 1px 6px rgba(0,0,0,0.14) !important;
-                padding: 0 !important;
-                margin: 0 !important;
-            }
-
-            #btn-menu-float.lp-menu-top-right .menu-button {
-                left: auto !important;
-                right: 0 !important;
-            }
-
-            #btn-menu-float .menu-button.menu-button-selected {
-                background: rgba(255,255,255,0.98) !important;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.16) !important;
-            }
-
-            /* Panel container */
-            #btn-menu-float .circle {
-                position: absolute !important;
-                top: 0 !important;
-                left: 48px !important;
-                right: auto !important;
-                display: none !important;
-                flex-direction: row !important;
-                align-items: center !important;
-                gap: 4px !important;
-                padding: 0px !important;
-                white-space: nowrap !important;
-            }
-            #btn-menu-float .circle.open {
-                display: inline-flex !important;
-            }
-
-            /* Vertical panel: under the hamburger, aligned to it */
-            #btn-menu-float.lp-menu-vertical .circle {
-                top: 48px !important;
-                left: 0 !important;
-                right: auto !important;
-                flex-direction: column !important;
-                align-items: flex-start !important;
-                gap: 8px !important;
-                padding: 6px 0 !important;
-                white-space: normal !important;
-            }
-
-            /* Vertical + top-right: under the hamburger, right aligned */
-            #btn-menu-float.lp-menu-top-right.lp-menu-vertical .circle {
-                left: auto !important;
-                right: 0 !important;
-                align-items: flex-end !important;
-            }
-
-            /* Toolbar items */
-            #btn-menu-float .circle .icon-toolbar,
-            #btn-menu-float .circle a.icon-toolbar,
-            #btn-menu-float .circle button.icon-toolbar,
-            #btn-menu-float .circle .lp-menu-nav a,
-            #btn-menu-float .circle .lp-menu-nav button {
-                width: 40px !important;
-                height: 40px !important;
-                display: inline-flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-                border-radius: 10px !important;
-                border: 1px solid rgba(0,0,0,0.08) !important;
-                background: rgba(255,255,255,0.98) !important;
-                box-shadow: none !important;
-                padding: 0 !important;
-                margin: 0 !important;
-            }
-            #btn-menu-float .circle .icon-toolbar:hover,
-            #btn-menu-float .circle .lp-menu-nav a:hover,
-            #btn-menu-float .circle .lp-menu-nav button:hover {
-                background: #fff !important;
-            }
-
-            /* Navigation bar wrapper - force layout (avoid "square" grouping) */
-            #btn-menu-float .circle .lp-menu-nav {
-                display: flex !important;
-                flex-direction: row !important;      /* horizontal by default */
-                align-items: center !important;
-                gap: 8px !important;
-            }
-            #btn-menu-float.lp-menu-vertical .circle .lp-menu-nav {
-                flex-direction: column !important;   /* vertical when TOC is collapsed/hidden */
-                align-items: flex-start !important;
-                gap: 8px !important;
-            }
-            #btn-menu-float.lp-menu-top-right.lp-menu-vertical .circle .lp-menu-nav {
-                align-items: flex-end !important;
-            }
-
-            /* -----------------------------
-             * Loader overlay
-             * ----------------------------- */
-            #wrapper-iframe { position: relative !important; }
-            #lp-iframe-loader {
-                position: absolute;
-                inset: 0;
-                display: none;
-                align-items: center;
-                justify-content: center;
-                background: rgba(255,255,255,0.75);
-                z-index: 50;
-            }
-            #lp-iframe-loader.is-visible {
-                display: flex;
-            }
-            .lp-loader-box {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                padding: 10px 14px;
-                border-radius: 10px;
-                background: rgba(0,0,0,0.65);
-                color: #fff;
-                font-size: 14px;
-            }
-            .lp-spinner {
-                width: 18px;
-                height: 18px;
-                border-radius: 50%;
-                border: 2px solid rgba(255,255,255,0.35);
-                border-top-color: rgba(255,255,255,0.95);
-                animation: lpSpin 0.8s linear infinite;
-            }
-            @keyframes lpSpin {
-                to { transform: rotate(360deg); }
-            }
-
-            /* Video next-step overlay */
-            #lp-video-next-overlay {
-                position: absolute;
-                inset: 0;
-                z-index: 70;
-                display: none;
-                align-items: center;
-                justify-content: center;
-                padding: 24px;
-                background: rgba(15, 23, 42, 0.45);
-                pointer-events: none;
-            }
-            #lp-video-next-overlay.is-visible {
-                display: flex;
-                pointer-events: auto;
-            }
-            .lp-video-next-card {
-                width: min(420px, 100%);
-                border-radius: 18px;
-                border: 1px solid rgba(255,255,255,0.25);
-                background: rgba(255,255,255,0.96);
-                box-shadow: 0 20px 50px rgba(15,23,42,0.35);
-                padding: 24px;
-                text-align: center;
-            }
-            .lp-video-next-icon {
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                width: 56px;
-                height: 56px;
-                margin-bottom: 12px;
-                border-radius: 999px;
-                background: var(--color-primary, #2d75b8);
-                color: #fff;
-                font-size: 32px;
-            }
-            .lp-video-next-title {
-                color: #111827;
-                font-size: 20px;
-                font-weight: 700;
-                line-height: 1.25;
-            }
-            .lp-video-next-text {
-                margin-top: 8px;
-                color: #4b5563;
-                font-size: 14px;
-                line-height: 1.45;
-            }
-            .lp-video-next-actions {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 8px;
-                margin-top: 20px;
-            }
-            .lp-video-next-button {
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                gap: 6px;
-                min-height: 40px;
-                border-radius: 999px;
-                border: 1px solid transparent;
-                padding: 8px 16px;
-                font-size: 14px;
-                font-weight: 600;
-                cursor: pointer;
-            }
-            .lp-video-next-button-primary {
-                background: var(--color-primary, #2d75b8);
-                color: #fff;
-            }
-            .lp-video-next-button-secondary {
-                background: #fff;
-                color: #374151;
-                border-color: #d1d5db;
-            }
-            .lp-video-next-button:hover {
-                filter: brightness(0.96);
-            }
-
-            /* Currently active TOC item is non-clickable */
-            .scorm_highlight a.items-list,
-            .scorm_highlight a.item-action {
-                pointer-events: none;
-                cursor: default;
-            }
-        </style>
         <div
                 id="learning_path_main"
-                class="{{ is_allowed_to_edit ? 'lp-view-include-breadcrumb' }} {{ lp_mode == 'embedframe' ? 'lp-view-collapsed' : '' }} {{ toc_hidden == 1 ? 'lp-toc-hidden' : '' }}"
+                class="lp-modern-view flex h-screen min-h-screen w-full overflow-hidden bg-gray-20 text-gray-90 {{ is_allowed_to_edit ? 'lp-view-include-breadcrumb' }} {{ lp_mode == 'embedframe' ? 'lp-view-collapsed' : '' }} {{ toc_hidden == 1 ? 'lp-toc-hidden' : '' }}"
         >
             {% if render_left_zone %}
-                <div id="learning_path_left_zone" class="sidebar-scorm" aria-hidden="{{ toc_hidden == 1 ? 'true' : 'false' }}">
+                <div id="learning_path_left_zone" class="sidebar-scorm h-full overflow-hidden border-r border-gray-25 bg-white" aria-hidden="{{ toc_hidden == 1 ? 'true' : 'false' }}">
                     <div class="lp-view-zone-container">
                         <div id="scorm-info">
                             <div id="panel-scorm">
@@ -406,28 +56,7 @@
 
                                 {% if lp_accumulate_work_time != '' %}
                                     {% set lp_progress %}
-                                    <style>
-                                        #timer .container {
-                                            display: table;
-                                            background: #777;
-                                            color: #eee;
-                                            font-weight: bold;
-                                            width: 100%;
-                                            text-align: center;
-                                            text-shadow: 1px 1px 4px #999;
-                                        }
-                                        #timer .container div {
-                                            display: table-cell;
-                                            font-size: 24px;
-                                            padding: 0px;
-                                            width: 20px;
-                                        }
-                                        #timer .container .divider {
-                                            width: 10px;
-                                            color: #ddd;
-                                        }
-                                    </style>
-                                    <script>
+<script>
                                       $(function () {
                                         var timerData = {
                                           hour: parseInt($("#hour").text(), 10),
@@ -522,10 +151,10 @@
             {% endif %}
             <div
                     id="learning_path_right_zone"
-                    class="content-scorm {{ (show_left_column != 1 or toc_hidden == 1) ? 'lp-content-full' : '' }}"
+                    class="content-scorm min-w-0 flex-1 overflow-hidden bg-gray-20 {{ (show_left_column != 1 or toc_hidden == 1) ? 'lp-content-full' : '' }}"
             >
-                <div class="lp-view-zone-container">
-                    <div class="lp-view-tabs">
+                <div class="lp-view-zone-container flex h-full flex-col overflow-hidden bg-white">
+                    <div class="lp-view-tabs relative flex min-h-0 flex-1 flex-col overflow-visible bg-white">
                         <div id="navTabBar" class="nav-tabs-bar">
                             <div class="text-left">
                                 <h2 class="text-h3">{{ lp_title_scorm }}</h2>
@@ -546,43 +175,84 @@
 
                         {% include '@ChamiloCore/LearnPath/menubar.html.twig' %}
 
-                        <div id="tab-iframe" class="auto tab-content">
-                            <div role="tabpanel" id="lp-view-content">
-                                <div id="wrapper-iframe">
-                                    <div id="lp-iframe-loader" aria-hidden="true">
-                                        <div class="lp-loader-box">
-                                            <div class="lp-spinner" aria-hidden="true"></div>
+                        <div id="tab-iframe" class="auto tab-content min-h-0 flex-1 overflow-hidden bg-white p-0">
+                            <div role="tabpanel" id="lp-view-content" class="h-full min-h-0 overflow-hidden">
+                                <div id="wrapper-iframe" class="relative h-full min-h-0 max-w-full overflow-hidden rounded-xl bg-white">
+                                    <div
+                                            id="lp-iframe-loader"
+                                            class="absolute inset-0 z-50 hidden items-center justify-center bg-white/75"
+                                            aria-hidden="true"
+                                    >
+                                        <div class="flex items-center gap-2.5 rounded-xl bg-gray-90/70 px-3.5 py-2.5 text-sm text-white">
+                                            <div
+                                                    class="h-[18px] w-[18px] animate-spin rounded-full border-2 border-white/40 border-t-white"
+                                                    aria-hidden="true"
+                                            ></div>
                                             <div>Loading…</div>
                                         </div>
                                     </div>
-                                    <div id="lp-video-next-overlay" aria-hidden="true">
-                                        <div class="lp-video-next-card" role="dialog" aria-modal="true" aria-labelledby="lp-video-next-title">
-                                            <div class="lp-video-next-icon" aria-hidden="true">
+                                    <div
+                                            id="lp-video-next-overlay"
+                                            class="absolute inset-0 z-[70] hidden items-center justify-center bg-gray-90/45 p-6"
+                                            aria-hidden="true"
+                                    >
+                                        <div
+                                                class="w-full max-w-[420px] rounded-[18px] border border-white/25 bg-white/95 p-6 text-center shadow-2xl"
+                                                role="dialog"
+                                                aria-modal="true"
+                                                aria-labelledby="lp-video-next-title"
+                                        >
+                                            <div
+                                                    class="mb-3 inline-flex h-14 w-14 items-center justify-center rounded-full bg-[rgb(var(--color-primary-base))] text-[32px] text-white"
+                                                    aria-hidden="true"
+                                            >
                                                 <span class="mdi mdi-play-circle-outline"></span>
                                             </div>
-                                            <div id="lp-video-next-title" class="lp-video-next-title">{{ "Finished"|trans }}</div>
-                                            <div class="lp-video-next-text">{{ "Continue"|trans }}</div>
-                                            <div class="lp-video-next-actions">
-                                                <button type="button" id="lp-video-next-button" class="lp-video-next-button lp-video-next-button-primary">
+                                            <div id="lp-video-next-title" class="text-xl font-bold leading-tight text-gray-90">{{ "Finished"|trans }}</div>
+                                            <div class="mt-2 text-sm leading-relaxed text-gray-60">{{ "Continue"|trans }}</div>
+                                            <div class="mt-5 flex flex-wrap justify-center gap-2">
+                                                <button
+                                                        type="button"
+                                                        id="lp-video-next-button"
+                                                        class="inline-flex min-h-10 cursor-pointer items-center justify-center gap-1.5 rounded-full border border-transparent bg-[rgb(var(--color-primary-base))] px-4 py-2 text-sm font-semibold text-white hover:brightness-95"
+                                                >
                                                     <span class="mdi mdi-arrow-right-circle-outline" aria-hidden="true"></span>
                                                     {{ "Next step"|trans }}
                                                 </button>
-                                                <button type="button" id="lp-video-next-close" class="lp-video-next-button lp-video-next-button-secondary">
+                                                <button
+                                                        type="button"
+                                                        id="lp-video-next-close"
+                                                        class="inline-flex min-h-10 cursor-pointer items-center justify-center rounded-full border border-gray-30 bg-white px-4 py-2 text-sm font-semibold text-gray-70 hover:brightness-95"
+                                                >
                                                     {{ "Close"|trans }}
                                                 </button>
                                             </div>
                                         </div>
                                     </div>
                                     {% if lp_mode == 'fullscreen' %}
-                                        <iframe id="content_id_blank" name="content_name_blank" src="blank.php"
-                                                style="width:100%; height:100%" border="0" frameborder="0"
-                                                allowfullscreen="true" webkitallowfullscreen="true"
-                                                mozallowfullscreen="true"></iframe>
+                                        <iframe
+                                                id="content_id_blank"
+                                                class="block h-full w-full max-w-full rounded-xl border-0 bg-white"
+                                                name="content_name_blank"
+                                                src="blank.php"
+                                                border="0"
+                                                frameborder="0"
+                                                allowfullscreen="true"
+                                                webkitallowfullscreen="true"
+                                                mozallowfullscreen="true"
+                                        ></iframe>
                                     {% else %}
-                                        <iframe id="content_id" name="content_name" src="{{ iframe_src_with_lp }}"
-                                                style="width:100%; height:100%" border="0" frameborder="0"
-                                                allowfullscreen="true" webkitallowfullscreen="true"
-                                                mozallowfullscreen="true"></iframe>
+                                        <iframe
+                                                id="content_id"
+                                                class="block h-full w-full max-w-full rounded-xl border-0 bg-white"
+                                                name="content_name"
+                                                src="{{ iframe_src_with_lp }}"
+                                                border="0"
+                                                frameborder="0"
+                                                allowfullscreen="true"
+                                                webkitallowfullscreen="true"
+                                                mozallowfullscreen="true"
+                                        ></iframe>
                                     {% endif %}
                                 </div>
                             </div>
@@ -597,6 +267,7 @@
           $(function () {
             var $main = $("#learning_path_main");
             var tocHiddenSetting = $main.hasClass("lp-toc-hidden") ? 1 : 0;
+            var lpCompletedText = {{ "Completed"|trans|json_encode|raw }};
 
             var $menu = $("#btn-menu-float");
             if (!$menu.length) {
@@ -639,6 +310,47 @@
 
             updateMenuLayout();
             cleanupLtiEmbedMenu();
+
+            // Move Previous/Next navigation outside the hamburger menu to match the C2 LP design.
+            // The navigation itself remains the legacy LP navigation generated by learnpath.class.php.
+            var $primaryNav = $menu.find("[data-lp-menu='nav']").first();
+            if ($primaryNav.length) {
+              var $statsLink = $primaryNav.find("#stats_link").detach();
+              if ($statsLink.length && $circle.length) {
+                $statsLink
+                  .removeClass("btn btn-sm btn--plain btn-default")
+                  .addClass("icon-toolbar lp-menu-text-action")
+                  .attr("title", "My progress");
+                if (!$statsLink.find(".sr-only").length && $.trim($statsLink.text()) === "") {
+                  $statsLink.append('<span class="sr-only">My progress</span>');
+                }
+                $statsLink.appendTo($circle);
+              }
+
+              if (!$primaryNav.hasClass("lp-view-primary-nav")) {
+                $primaryNav.addClass("lp-view-primary-nav");
+              }
+              $primaryNav.detach().appendTo($main);
+            }
+
+            var $teacherActions = $("#actions_lp");
+            if ($teacherActions.length && $circle.length) {
+              $teacherActions.find("a").each(function () {
+                var $link = $(this);
+                $link
+                  .removeClass("btn btn-sm btn--plain btn-default")
+                  .addClass("icon-toolbar lp-menu-text-action")
+                  .appendTo($circle);
+              });
+              $teacherActions.remove();
+            }
+
+            // Keep the sidebar expand/collapse control visible on the rail,
+            // instead of hiding it inside the hamburger dropdown.
+            var $expandToggle = $("#lp-view-expand-toggle");
+            if ($expandToggle.length && !$expandToggle.hasClass("lp-side-toggle")) {
+              $expandToggle.detach().appendTo($main).addClass("lp-side-toggle");
+            }
             // Observe class changes to keep menu layout consistent (covers expand/collapse toggles).
             try {
               var mo = new MutationObserver(function () {
@@ -679,20 +391,163 @@
             $("#lp-view-expand-toggle").off("click.lpExpand").on("click.lpExpand", function (e) {
               e.preventDefault();
               $main.toggleClass("lp-view-collapsed");
-              $("#lp-view-expand-toggle i.mdi").toggleClass("mdi-arrow-expand-horizontal");
-              $("#lp-view-expand-toggle i.mdi").toggleClass("mdi-arrow-collapse-horizontal");
+              $("#lp-view-expand-toggle i.mdi").toggleClass("mdi-chevron-left mdi-chevron-right");
               updateMenuLayout();
+              setTimeout(syncCollapsedIframeBoundary, 50);
+              setTimeout(syncCollapsedIframeBoundary, 200);
+              setTimeout(syncCollapsedIframeBoundary, 500);
             });
               {% else %}
             $("#lp-view-expand-toggle").off("click.lpExpand").on("click.lpExpand", function (e) {
               e.preventDefault();
               $main.toggleClass("lp-view-collapsed");
-              $("#lp-view-expand-toggle i.mdi").toggleClass("mdi-arrow-collapse-horizontal");
-              $("#lp-view-expand-toggle i.mdi").toggleClass("mdi-arrow-expand-horizontal");
+              $("#lp-view-expand-toggle i.mdi").toggleClass("mdi-chevron-left mdi-chevron-right");
               updateMenuLayout();
+              setTimeout(syncCollapsedIframeBoundary, 50);
+              setTimeout(syncCollapsedIframeBoundary, 200);
+              setTimeout(syncCollapsedIframeBoundary, 500);
             });
               {% endif %}
               {% endif %}
+
+            function extractProgressLabel($bar, $progressBar, $progressRoot) {
+              var rawValues = [];
+
+              // The legacy LP runtime updates the visual width first. Prefer it over
+              // the old internal label, otherwise the external label can remain stale.
+              var width = $progressBar.get(0) ? $progressBar.get(0).style.width : "";
+              if (width) {
+                rawValues.push(width);
+              }
+
+              rawValues = rawValues.concat([
+                $progressBar.attr("aria-valuenow") || "",
+                $progressRoot.attr("aria-valuenow") || "",
+                $bar.attr("aria-valuenow") || "",
+                $progressBar.attr("data-progress-value") || "",
+                $progressRoot.attr("data-progress-value") || "",
+                $.trim($progressBar.text())
+              ]);
+
+              for (var i = 0; i < rawValues.length; i++) {
+                var value = $.trim(String(rawValues[i] || ""));
+                if (!value) {
+                  continue;
+                }
+
+                var percentMatch = value.match(/(\d+(?:[\.,]\d+)?)\s*%/);
+                if (percentMatch && percentMatch[1]) {
+                  return percentMatch[1].replace(",", ".") + "%";
+                }
+
+                var numberMatch = value.match(/^(\d+(?:[\.,]\d+)?)$/);
+                if (numberMatch && numberMatch[1]) {
+                  return numberMatch[1].replace(",", ".") + "%";
+                }
+              }
+
+              return "0%";
+            }
+
+            function normalizeProgressBar() {
+              $("#progress_bar").each(function () {
+                var $bar = $(this);
+                var $progressBar = $bar.find(".progress-bar, .bar, .ui-progressbar-value, .p-progressbar-value").first();
+                var $progressRoot = $progressBar.closest(".progress, .p-progressbar, progress").first();
+
+                if (!$progressBar.length) {
+                  return;
+                }
+
+                if (!$progressRoot.length) {
+                  $progressRoot = $bar;
+                }
+
+                var label = extractProgressLabel($bar, $progressBar, $progressRoot);
+
+                $bar.contents().filter(function () {
+                  return this.nodeType === 3;
+                }).remove();
+
+                $bar.find(".progress, .p-progressbar, progress").contents().filter(function () {
+                  return this.nodeType === 3;
+                }).remove();
+
+                $bar.find(".progress-bar, .bar, .ui-progressbar-value, .p-progressbar-value").each(function () {
+                  var $inner = $(this);
+                  $inner.attr("aria-label", label + " " + lpCompletedText);
+                  $inner.find(".p-progressbar-label").remove();
+                  $inner.contents().filter(function () {
+                    return this.nodeType === 3;
+                  }).remove();
+                });
+
+                var $label = $bar.find(".lp-progress-label").first();
+                if (!$label.length) {
+                  $label = $('<div class="lp-progress-label"></div>').appendTo($bar);
+                }
+
+                $label.text(label + " " + lpCompletedText);
+              });
+            }
+
+            normalizeProgressBar();
+            setTimeout(normalizeProgressBar, 250);
+            setTimeout(normalizeProgressBar, 1000);
+            $(document).ajaxComplete(normalizeProgressBar);
+
+            function refreshLpStatusIcons() {
+              $("#learning_path_toc .scorm_item_normal").each(function () {
+                var $item = $(this);
+                var $icon = $item.find(".lp-item-status-icon").not(".lp-section-chevron").find("i.mdi").first();
+
+                if (!$icon.length) {
+                  return;
+                }
+
+                $icon.removeClass("mdi-circle-outline mdi-check-circle mdi-close-circle mdi-alert-circle mdi-clock-outline");
+
+                if (
+                  $item.hasClass("scorm_completed") ||
+                  $item.hasClass("scorm_passed") ||
+                  $item.hasClass("completed") ||
+                  $item.hasClass("passed")
+                ) {
+                  $icon.addClass("mdi-check-circle");
+                } else if (
+                  $item.hasClass("scorm_failed") ||
+                  $item.hasClass("failed")
+                ) {
+                  $icon.addClass("mdi-close-circle");
+                } else {
+                  $icon.addClass("mdi-circle-outline");
+                }
+              });
+            }
+
+            function refreshLpRuntimeDecorations() {
+              normalizeProgressBar();
+              refreshLpStatusIcons();
+            }
+
+            function scheduleLpRuntimeDecorations() {
+              setTimeout(refreshLpRuntimeDecorations, 150);
+              setTimeout(refreshLpRuntimeDecorations, 600);
+              setTimeout(refreshLpRuntimeDecorations, 1500);
+            }
+
+            refreshLpStatusIcons();
+            setTimeout(refreshLpStatusIcons, 250);
+            setTimeout(refreshLpStatusIcons, 1000);
+            $(document).ajaxComplete(function () {
+              setTimeout(refreshLpRuntimeDecorations, 50);
+              setTimeout(refreshLpRuntimeDecorations, 350);
+            });
+            // Do not observe the full TOC for class changes here: updating the
+            // replacement status icons also changes classes and can create a
+            // MutationObserver loop on large learning paths. Status refresh is
+            // triggered explicitly after navigation, AJAX and iframe load.
+
 
             // Debug: show what iframe is currently loading
             try {
@@ -762,6 +617,156 @@
               }
               return $i;
             }
+
+            function syncCollapsedIframeBoundary() {
+              var $rightZone = $("#learning_path_right_zone");
+              var $leftZone = $("#learning_path_left_zone");
+              var $toggle = $("#lp-view-expand-toggle");
+              var $iframe = getLpIframe();
+              var isCollapsed = $main.hasClass("lp-view-collapsed");
+
+              if ($rightZone.length) {
+                if (isCollapsed) {
+                  var railWidth = 64;
+                  var contentGap = 34;
+                  var contentLeft = railWidth + contentGap;
+
+                  try {
+                    if ($leftZone.length) {
+                      var leftRect = $leftZone.get(0).getBoundingClientRect();
+                      if (leftRect && leftRect.right) {
+                        contentLeft = Math.max(contentLeft, Math.ceil(leftRect.right + contentGap));
+                      }
+                    }
+
+                    if ($toggle.length) {
+                      var toggleRect = $toggle.get(0).getBoundingClientRect();
+                      if (toggleRect && toggleRect.right) {
+                        contentLeft = Math.max(contentLeft, Math.ceil(toggleRect.right + 16));
+                      }
+                    }
+                  } catch (e) {
+                    contentLeft = railWidth + contentGap;
+                  }
+
+                  // Keep the right content strictly after the collapsed rail/arrow.
+                  // The clamp avoids oversized offsets if a browser reports a transient
+                  // animation rectangle during the collapse transition.
+                  contentLeft = Math.max(82, Math.min(contentLeft, 180));
+
+                  $main.get(0).style.setProperty("--lp-collapsed-content-left", contentLeft + "px");
+
+                  $rightZone.get(0).style.setProperty("position", "fixed", "important");
+                  $rightZone.get(0).style.setProperty("top", "0", "important");
+                  $rightZone.get(0).style.setProperty("right", "0", "important");
+                  $rightZone.get(0).style.setProperty("bottom", "0", "important");
+                  $rightZone.get(0).style.setProperty("left", contentLeft + "px", "important");
+                  $rightZone.get(0).style.setProperty("width", "auto", "important");
+                  $rightZone.get(0).style.setProperty("max-width", "calc(100vw - " + contentLeft + "px)", "important");
+                  $rightZone.get(0).style.setProperty("margin-left", "0", "important");
+                  $rightZone.get(0).style.setProperty("padding-left", "30px", "important");
+                  $rightZone.get(0).style.setProperty("box-sizing", "border-box", "important");
+                  $rightZone.get(0).style.setProperty("overflow", "hidden", "important");
+                } else {
+                  $rightZone.get(0).style.removeProperty("position");
+                  $rightZone.get(0).style.removeProperty("top");
+                  $rightZone.get(0).style.removeProperty("right");
+                  $rightZone.get(0).style.removeProperty("bottom");
+                  $rightZone.get(0).style.removeProperty("left");
+                  $rightZone.get(0).style.removeProperty("width");
+                  $rightZone.get(0).style.removeProperty("max-width");
+                  $rightZone.get(0).style.removeProperty("margin-left");
+                  $rightZone.get(0).style.removeProperty("padding-left");
+                  $rightZone.get(0).style.removeProperty("box-sizing");
+                  $rightZone.get(0).style.removeProperty("overflow");
+                }
+              }
+
+              if (!$iframe.length) {
+                return;
+              }
+
+              // Keep the iframe itself inside the visible content area.
+              $iframe.css({
+                position: "relative",
+                left: "auto",
+                right: "auto",
+                top: "auto",
+                width: "100%",
+                maxWidth: "100%",
+                minWidth: "0",
+                height: "100%",
+                maxHeight: "100%",
+                marginLeft: "0",
+                paddingLeft: "0",
+                boxSizing: "border-box",
+                transform: "none"
+              });
+
+              // Same-origin LP documents can receive an internal safety padding.
+              // Some legacy LP item pages render their content from x=0 inside the iframe,
+              // so parent spacing alone is not enough when the TOC is collapsed.
+              try {
+                var iframe = $iframe.get(0);
+                var doc = iframe && (iframe.contentDocument || iframe.contentWindow.document);
+                if (!doc || !doc.head) {
+                  return;
+                }
+
+                var styleId = "lp-modern-collapsed-boundary-style";
+                var style = doc.getElementById(styleId);
+
+                if (isCollapsed) {
+                  if (!style) {
+                    style = doc.createElement("style");
+                    style.id = styleId;
+                    doc.head.appendChild(style);
+                  }
+                  style.textContent = [
+                    "html, body {",
+                    "  box-sizing: border-box !important;",
+                    "  overflow-x: hidden !important;",
+                    "}",
+                    "body {",
+                    "  margin-left: 0 !important;",
+                    "  padding-left: 0 !important;",
+                    "  padding-right: 18px !important;",
+                    "}",
+                    "#main_content, .container, .container-fluid, .lp_item_content, .document-view, .exercise-overview {",
+                    "  box-sizing: border-box !important;",
+                    "  max-width: 100% !important;",
+                    "}"
+                  ].join("\n");
+                } else if (style) {
+                  style.parentNode.removeChild(style);
+                }
+              } catch (e) {
+                // Cross-origin embeds such as external videos cannot be adjusted.
+              }
+            }
+
+            function bindIframeLoadingState() {
+              var $wrapper = $("#wrapper-iframe");
+              var $iframe = getLpIframe();
+              if (!$wrapper.length || !$iframe.length) {
+                return;
+              }
+
+              $wrapper.addClass("lp-is-loading");
+              $iframe.off("load.lpLoading").on("load.lpLoading", function () {
+                $wrapper.removeClass("lp-is-loading");
+                scheduleLpRuntimeDecorations();
+                setTimeout(syncCollapsedIframeBoundary, 0);
+                setTimeout(syncCollapsedIframeBoundary, 100);
+              });
+            }
+
+            bindIframeLoadingState();
+            setTimeout(syncCollapsedIframeBoundary, 100);
+            setTimeout(syncCollapsedIframeBoundary, 400);
+            $(window).off("resize.lpCollapsedBoundary").on("resize.lpCollapsedBoundary", function () {
+              setTimeout(syncCollapsedIframeBoundary, 80);
+            });
 
             function syncCurrentItemFromIframe() {
               try {
@@ -900,7 +905,7 @@
                 return;
               }
 
-              $videoNextOverlay.addClass("is-visible").attr("aria-hidden", "false");
+              $videoNextOverlay.removeClass("hidden").addClass("is-visible").attr("aria-hidden", "false");
             }
 
             function hideVideoNextOverlay() {
@@ -908,7 +913,7 @@
                 return;
               }
 
-              $videoNextOverlay.removeClass("is-visible").attr("aria-hidden", "true");
+              $videoNextOverlay.removeClass("is-visible").addClass("hidden").attr("aria-hidden", "true");
             }
 
             function clearVideoNextWatchers() {
@@ -1119,7 +1124,7 @@
               if ($loader.hasClass("is-visible")) return;
 
               loaderVisibleSince = Date.now();
-              $loader.addClass("is-visible").attr("aria-hidden", "false");
+              $loader.removeClass("hidden").addClass("is-visible").attr("aria-hidden", "false");
 
               clearTimeout(loaderMaxHideTimer);
               loaderMaxHideTimer = setTimeout(function () {
@@ -1159,7 +1164,7 @@
                 return;
               }
 
-              $loader.removeClass("is-visible").attr("aria-hidden", "true");
+              $loader.removeClass("is-visible").addClass("hidden").attr("aria-hidden", "true");
               clearTimeout(loaderMaxHideTimer);
             }
 
@@ -1211,6 +1216,7 @@
 
                 // Delay loader so fast loads don't show anything.
                 scheduleShowLoader("nav click");
+                scheduleLpRuntimeDecorations();
               }
             );
 
@@ -1252,6 +1258,7 @@
                   if (!isDirection || targetItemId > 0) {
                     window.lpCurrentItemId = targetItemId;
                   }
+                  scheduleLpRuntimeDecorations();
                   return true;
                 } catch (e) {
                   console.warn("LP NAV: switch_item() failed, falling back to iframe src update.", e);
@@ -1274,6 +1281,9 @@
                   console.info("LP NAV: updating iframe src (fallback).", src);
                   $i.attr("src", src);
                   window.lpCurrentItemId = targetItemId;
+                  scheduleLpRuntimeDecorations();
+                  setTimeout(syncCollapsedIframeBoundary, 100);
+                  setTimeout(syncCollapsedIframeBoundary, 400);
                   return true;
                 }
               }

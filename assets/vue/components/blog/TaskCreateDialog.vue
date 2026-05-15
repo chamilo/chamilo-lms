@@ -4,6 +4,7 @@
     :header-icon="headerIconComputed"
     :title="dialogTitleComputed"
     :width="'560px'"
+    @update:isVisible="(v) => !v && $emit('close')"
   >
     <div class="space-y-3">
       <BaseInputText
@@ -37,24 +38,17 @@
           <option :value="true">System</option>
         </select>
       </div>
-
-      <div class="flex justify-end gap-2">
-        <BaseButton
-          :label="t('Cancel')"
-          icon="close"
-          type="black"
-          @click="close"
-        />
-        <BaseButton
-          :disabled="!title"
-          :icon="isEdit ? 'check' : 'check'"
-          :isLoading="saving"
-          :label="isEdit ? t('Save') : t('Create')"
-          type="primary"
-          @click="submit"
-        />
-      </div>
     </div>
+    <template #footer>
+      <BaseButton
+        :disabled="!title"
+        :icon="isEdit ? 'check' : 'check'"
+        :isLoading="saving"
+        :label="isEdit ? t('Save') : t('Create')"
+        type="primary"
+        @click="submit"
+      />
+    </template>
   </BaseDialog>
 </template>
 

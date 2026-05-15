@@ -2,6 +2,11 @@
 
 Version 2.x
 
+## Requirements
+
+- PHP OpenSSL extension enabled. This plugin uses OpenSSL to generate and export the LTI 1.3 platform key pair when the plugin is enabled or when platform keys are created.
+
+
 This plugin adds **IMS/LTI client** capabilities to Chamilo 2.
 
 It allows Chamilo to register and launch **external LTI tools** from other platforms, providers, or services. In this setup, **Chamilo acts as the LTI platform/client**, while the remote service acts as the **LTI tool/provider**.

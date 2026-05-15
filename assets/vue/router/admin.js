@@ -77,6 +77,12 @@ export default {
       component: () => import("../views/admin/UsergroupList.vue"),
     },
     {
+      name: "AdminUsergroupPreview",
+      path: "usergroups/:id/preview",
+      meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Class overview" },
+      component: () => import("../views/admin/UsergroupPreview.vue"),
+    },
+    {
       name: "AdminUsergroupAddUsers",
       path: "usergroups/:id/add-users",
       meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Subscribe users to class" },

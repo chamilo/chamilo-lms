@@ -426,7 +426,6 @@ class ResourceListener
         }
     }
 
-
     private function applyResourceLanguageFromRequest(AbstractResource $resource, LifecycleEventArgs $eventArgs): void
     {
         $currentRequest = $this->request->getCurrentRequest();

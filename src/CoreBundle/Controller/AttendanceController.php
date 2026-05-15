@@ -838,5 +838,4 @@ class AttendanceController extends AbstractController
     {
         return 'true' === $this->settingsManager->getSetting('attendance.attendance_add_official_code', true);
     }
-
 }

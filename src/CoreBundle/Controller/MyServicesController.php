@@ -93,12 +93,12 @@ class MyServicesController extends AbstractController
                 'cancelledAt' => (string) ($row['cancelled_at'] ?? ''),
                 'canEnableRecurringPayment' => $canEnableRecurringPayment,
                 'canCancelRecurringPayment' => $canCancelRecurringPayment,
-                'infoUrl' => \api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_information.php?service_id='.$serviceId.'&sale_id='.$serviceSaleId,
+                'infoUrl' => api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_information.php?service_id='.$serviceId.'&sale_id='.$serviceSaleId,
                 'recurringPaymentUrl' => $canEnableRecurringPayment
-                    ? \api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/recurring_payment_process.php?action=enable_recurring_payment&order='.$serviceSaleId
+                    ? api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/recurring_payment_process.php?action=enable_recurring_payment&order='.$serviceSaleId
                     : null,
                 'cancelRecurringPaymentUrl' => $canCancelRecurringPayment
-                    ? \api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/recurring_payment_process.php?action=cancel_recurring_payment&order='.$serviceSaleId
+                    ? api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/recurring_payment_process.php?action=cancel_recurring_payment&order='.$serviceSaleId
                     : null,
                 'benefitSummaries' => array_map(static function (array $summary): array {
                     return [

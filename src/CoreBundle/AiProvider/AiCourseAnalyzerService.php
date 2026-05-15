@@ -20,6 +20,14 @@ use Symfony\Component\HttpFoundation\File\File;
 use Throwable;
 use ZipArchive;
 
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
+use const JSON_PRETTY_PRINT;
+use const JSON_THROW_ON_ERROR;
+use const JSON_UNESCAPED_SLASHES;
+use const JSON_UNESCAPED_UNICODE;
+use const PATHINFO_EXTENSION;
+
 final class AiCourseAnalyzerService
 {
     private const MAX_DOCUMENTS = 25;

@@ -80,12 +80,12 @@ class SocialWallFilter extends AbstractFilter
                 UserRelUser::USER_RELATION_TYPE_GOODFRIEND,
             ];
 
-            $friendsOfOwnerDql = sprintf(
+            $friendsOfOwnerDql = \sprintf(
                 'SELECT social_wall_friend.id FROM %s social_wall_relation JOIN social_wall_relation.friend social_wall_friend WHERE IDENTITY(social_wall_relation.user) = :socialWallOwner AND social_wall_relation.relationType IN (:socialWallFriendRelationTypes)',
                 UserRelUser::class
             );
 
-            $friendsWithOwnerDql = sprintf(
+            $friendsWithOwnerDql = \sprintf(
                 'SELECT social_wall_friend_owner.id FROM %s social_wall_inverse_relation JOIN social_wall_inverse_relation.user social_wall_friend_owner WHERE IDENTITY(social_wall_inverse_relation.friend) = :socialWallOwner AND social_wall_inverse_relation.relationType IN (:socialWallFriendRelationTypes)',
                 UserRelUser::class
             );

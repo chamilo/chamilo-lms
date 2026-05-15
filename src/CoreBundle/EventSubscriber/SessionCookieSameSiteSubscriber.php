@@ -11,6 +11,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Throwable;
 
 final class SessionCookieSameSiteSubscriber implements EventSubscriberInterface
 {
@@ -79,7 +80,7 @@ final class SessionCookieSameSiteSubscriber implements EventSubscriberInterface
                 'security.security_session_cookie_samesite_none',
                 true
             );
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return false;
         }
 

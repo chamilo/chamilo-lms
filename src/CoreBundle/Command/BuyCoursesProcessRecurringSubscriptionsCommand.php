@@ -14,6 +14,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Process\Process;
 
+use const PHP_BINARY;
+
 #[AsCommand(
     name: 'chamilo:buycourses:process-recurring-subscriptions',
     description: 'Processes expired and renewed BuyCourses recurring service subscriptions.'

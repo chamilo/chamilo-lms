@@ -23,8 +23,8 @@ use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use GradebookUtils;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 

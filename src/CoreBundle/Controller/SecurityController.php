@@ -431,7 +431,7 @@ class SecurityController extends AbstractController
     private function mustRotatePassword(User $user): bool
     {
         $days = (int) $this->settingsManager->getSetting('security.password_rotation_days', true);
-        if (0 >= $days) {
+        if ($days <= 0) {
             return false;
         }
 

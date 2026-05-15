@@ -28,6 +28,8 @@ use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use DateTime;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use DOMDocument;
+use DOMElement;
 use Exception;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -37,6 +39,11 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 use ZipArchive;
+
+use const LIBXML_NOERROR;
+use const LIBXML_NONET;
+use const LIBXML_NOWARNING;
+use const PATHINFO_EXTENSION;
 
 class BaseResourceFileAction
 {
@@ -708,7 +715,6 @@ class BaseResourceFileAction
         return $resource;
     }
 
-
     private function getContentFileUploadInfo(Request $request, string $title): array
     {
         $extension = strtolower(trim((string) $request->request->get('contentFileExtension', 'html')));
@@ -767,7 +773,7 @@ class BaseResourceFileAction
         }
 
         $fileName = strtolower(trim((string) ($resourceFile->getOriginalName() ?: $resourceFile->getTitle())));
-        $extension = pathinfo($fileName, \PATHINFO_EXTENSION);
+        $extension = pathinfo($fileName, PATHINFO_EXTENSION);
 
         return strtolower((string) $extension);
     }
@@ -789,10 +795,10 @@ class BaseResourceFileAction
         }
 
         $previous = libxml_use_internal_errors(true);
-        $document = new \DOMDocument();
+        $document = new DOMDocument();
 
         try {
-            $loaded = $document->loadXML($svg, \LIBXML_NONET | \LIBXML_NOERROR | \LIBXML_NOWARNING);
+            $loaded = $document->loadXML($svg, LIBXML_NONET | LIBXML_NOERROR | LIBXML_NOWARNING);
         } finally {
             libxml_clear_errors();
             libxml_use_internal_errors($previous);
@@ -826,7 +832,7 @@ class BaseResourceFileAction
         }
 
         foreach ($document->getElementsByTagName('*') as $node) {
-            if (!$node instanceof \DOMElement || !$node->hasAttributes()) {
+            if (!$node instanceof DOMElement || !$node->hasAttributes()) {
                 continue;
             }
 
@@ -837,6 +843,7 @@ class BaseResourceFileAction
 
                 if (str_starts_with($name, 'on')) {
                     $attributesToRemove[] = $attribute->name;
+
                     continue;
                 }
 

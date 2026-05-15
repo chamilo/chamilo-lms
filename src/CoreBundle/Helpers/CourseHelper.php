@@ -33,6 +33,9 @@ use Chamilo\CoreBundle\Entity\TrackEOnline;
 use Chamilo\CoreBundle\Entity\TrackEUploads;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UsergroupRelCourse;
+use Chamilo\CoreBundle\Event\AbstractEvent;
+use Chamilo\CoreBundle\Event\CourseCreatedEvent;
+use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
@@ -70,13 +73,10 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 use UrlManager;
-use Chamilo\CoreBundle\Event\AbstractEvent;
-use Chamilo\CoreBundle\Event\CourseCreatedEvent;
-use Chamilo\CoreBundle\Event\Events;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 use const JSON_UNESCAPED_SLASHES;
 use const JSON_UNESCAPED_UNICODE;
@@ -1885,9 +1885,7 @@ class CourseHelper
                 return;
             }
 
-            throw new RuntimeException(
-                (string) ($selectionStatus['message'] ?? $this->translator->trans('The selected BuyCourses service cannot be used to create this course.'))
-            );
+            throw new RuntimeException((string) ($selectionStatus['message'] ?? $this->translator->trans('The selected BuyCourses service cannot be used to create this course.')));
         }
 
         $status = $this->resolveCourseCreationCapabilityForUser($ownerUser);
@@ -1964,7 +1962,7 @@ class CourseHelper
         }
 
         try {
-            $plugin = \BuyCoursesPlugin::create();
+            $plugin = BuyCoursesPlugin::create();
 
             if (!method_exists($plugin, 'getCourseCreationServiceSaleSelectionStatus')) {
                 return [

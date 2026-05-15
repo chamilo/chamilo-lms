@@ -49,9 +49,9 @@ class LoginSuccessHandler
         $trackEOnlineRepository = $this->entityManager->getRepository(TrackEOnline::class);
 
         if (
-            'true' === $this->settingsManager->getSetting('security.prevent_multiple_simultaneous_login', true) &&
-            !$requestSession->get('login_records_created') &&
-            $trackEOnlineRepository->hasOnlineSessionForUser($userId)
+            'true' === $this->settingsManager->getSetting('security.prevent_multiple_simultaneous_login', true)
+            && !$requestSession->get('login_records_created')
+            && $trackEOnlineRepository->hasOnlineSessionForUser($userId)
         ) {
             $this->tokenStorage->setToken(null);
             $requestSession->invalidate();

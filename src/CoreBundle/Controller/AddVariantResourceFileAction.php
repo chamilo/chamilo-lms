@@ -114,5 +114,4 @@ class AddVariantResourceFileAction
 
         throw new BadRequestHttpException('Invalid resource language.');
     }
-
 }

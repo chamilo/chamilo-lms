@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Ldap\Entry;
 use Symfony\Component\Ldap\Ldap;
 use Symfony\Component\Ldap\Security\LdapBadge;
 use Symfony\Component\Ldap\Security\LdapUser;
@@ -283,7 +284,7 @@ class LdapAuthenticator extends AbstractAuthenticator implements InteractiveAuth
         return $user;
     }
 
-    private function syncExtraFields(User $user, \Symfony\Component\Ldap\Entry $ldapEntry): void
+    private function syncExtraFields(User $user, Entry $ldapEntry): void
     {
         foreach ($this->dataCorrespondence as $key => $ldapAttr) {
             if (!str_starts_with($key, 'extra_') || '' === (string) $ldapAttr) {

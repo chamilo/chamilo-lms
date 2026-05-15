@@ -20,7 +20,7 @@ final class CourseUserSubscriptionCheckEvent extends AbstractEvent
     {
         $userIds = $this->data['user_ids'] ?? [];
 
-        if (!is_array($userIds)) {
+        if (!\is_array($userIds)) {
             $userIds = [$userIds];
         }
 

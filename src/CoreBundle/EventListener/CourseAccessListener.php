@@ -11,7 +11,6 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\CourseToolAccessTracker;
 use Chamilo\CoreBundle\Helpers\UserHelper;
-use ChamiloSession as Session;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;

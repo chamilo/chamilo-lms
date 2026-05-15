@@ -145,7 +145,6 @@ class UsergroupListController extends AbstractController
         ]);
     }
 
-
     #[Route('/{id}/preview', name: 'admin_usergroup_preview_data', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function preview(int $id): JsonResponse
     {

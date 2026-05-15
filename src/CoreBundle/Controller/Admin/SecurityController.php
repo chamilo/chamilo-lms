@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Helpers\WeakPasswordCheckerHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
 use DateTimeImmutable;
+use Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -25,6 +26,9 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
+
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
 
 #[Route('/admin/security')]
 final class SecurityController extends BaseController
@@ -138,7 +142,7 @@ final class SecurityController extends BaseController
                 return new RedirectResponse($this->generateUrl('admin_security_password_strength'));
             }
 
-            if (!in_array($action, ['request_change', 'force_reset'], true)) {
+            if (!\in_array($action, ['request_change', 'force_reset'], true)) {
                 $this->addFlash('warning', $this->translator->trans('Invalid action.'));
 
                 return new RedirectResponse($this->generateUrl('admin_security_password_strength'));
@@ -161,6 +165,7 @@ final class SecurityController extends BaseController
             foreach ($weakUsers as $weakUser) {
                 if ('request_change' === $action && $this->sendPasswordChangeRequest($weakUser)) {
                     $processed++;
+
                     continue;
                 }
 
@@ -171,7 +176,7 @@ final class SecurityController extends BaseController
 
             $this->addFlash(
                 'success',
-                sprintf($this->translator->trans('%s user(s) processed.'), (string) $processed)
+                \sprintf($this->translator->trans('%s user(s) processed.'), (string) $processed)
             );
 
             return new RedirectResponse($this->generateUrl('admin_security_password_strength'));
@@ -187,7 +192,7 @@ final class SecurityController extends BaseController
             'has_scanned' => $hasFinishedScan,
             'scanned_count' => $hasFinishedScan ? $total : 0,
             'scan_total' => $hasFinishedScan ? $total : 0,
-            'weak_count' => $hasFinishedScan ? count($foundUserIds) : 0,
+            'weak_count' => $hasFinishedScan ? \count($foundUserIds) : 0,
             'csrf_token' => $csrfToken,
             'scan_endpoint' => $this->generateUrl('admin_security_password_strength_scan_batch'),
             'scan_filter_user_ids' => implode(',', $this->getPasswordStrengthScanFilterUserIds($request)),
@@ -250,7 +255,7 @@ final class SecurityController extends BaseController
                 'finished' => true,
                 'scanned_count' => $total,
                 'scan_total' => $total,
-                'weak_count' => count($foundUserIds),
+                'weak_count' => \count($foundUserIds),
                 'filter_user_ids' => $filterUserIds,
                 'scanned_users' => [],
                 'weak_users' => [],
@@ -277,7 +282,7 @@ final class SecurityController extends BaseController
         }
 
         $foundUserIds = array_values(array_unique(array_filter(array_map('intval', $foundUserIds))));
-        $nextOffset = min($total, $offset + count($scannedUsers));
+        $nextOffset = min($total, $offset + \count($scannedUsers));
 
         $session->set(self::PASSWORD_STRENGTH_SCAN_FOUND_KEY, $foundUserIds);
         $session->set(self::PASSWORD_STRENGTH_SCAN_OFFSET_KEY, $nextOffset);
@@ -286,7 +291,7 @@ final class SecurityController extends BaseController
             'finished' => $nextOffset >= $total,
             'scanned_count' => $nextOffset,
             'scan_total' => $total,
-            'weak_count' => count($foundUserIds),
+            'weak_count' => \count($foundUserIds),
             'filter_user_ids' => $filterUserIds,
             'scanned_users' => array_map([$this, 'formatPasswordStrengthUser'], $scannedUsers),
             'weak_users' => array_map([$this, 'formatPasswordStrengthUser'], $weakUsers),
@@ -320,12 +325,12 @@ final class SecurityController extends BaseController
             UrlGeneratorInterface::ABSOLUTE_URL
         );
 
-        $subject = sprintf(
+        $subject = \sprintf(
             $this->translator->trans('[%s] Please change your password'),
             $platformTitle
         );
 
-        $body = sprintf(
+        $body = \sprintf(
             $this->translator->trans("Dear %s,\n\nOur security enforcing process shows you use a password that is commonly used on the internet, which means your account could easily be stolen. It is probably a simple sequence or a very common word, we don't really know (we cannot see your password), but we ask you to please connect to the platform and request a password change. You can follow the link here: %s to do that now.\n\nPlease note we will never ask for your password in this process. You just enter your username or e-mail and we send you a link. If you are asked to introduce your existing password to do that, someone is probably trying to do Phishing on your account. Be safe, change your password now!\n\n%s\n%s"),
             $user->getFirstname(),
             $resetUrl,
@@ -358,12 +363,12 @@ final class SecurityController extends BaseController
         $platformTitle = $this->getPlatformTitle();
         $adminName = $this->getCurrentAdminName();
 
-        $subject = sprintf(
+        $subject = \sprintf(
             $this->translator->trans('[%s] Your password has been reset'),
             $platformTitle
         );
 
-        $body = sprintf(
+        $body = \sprintf(
             $this->translator->trans("Dear %s,\n\nOur security enforcing process flagged you as using a password that is commonly used on the internet, which means your account could easily be stolen. As a prevention measure, we have decided to initiate a password reset process. Your new, automatically generated password is now:\n\n%s\n\nPlease login to the platform soon (using this new password) to set your own, personal and secure, password.\n\nBe safe.\n\n%s\n%s"),
             $user->getFirstname(),
             $newPassword,
@@ -394,7 +399,7 @@ final class SecurityController extends BaseController
 
     private function generateSecurePassword(): string
     {
-        $requirements = \Security::getPasswordRequirements()['min'];
+        $requirements = Security::getPasswordRequirements()['min'];
 
         $lowercaseCharacters = 'abcdefghijkmnopqrstuvwxyz';
         $uppercaseCharacters = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
@@ -425,13 +430,13 @@ final class SecurityController extends BaseController
             max(1, (int) $requirements['specials'])
         );
 
-        $minimumLength = max(16, (int) $requirements['length'], count($characters));
+        $minimumLength = max(16, (int) $requirements['length'], \count($characters));
 
-        while (count($characters) < $minimumLength) {
+        while (\count($characters) < $minimumLength) {
             $characters[] = $this->pickRandomCharacter($allCharacters);
         }
 
-        for ($i = count($characters) - 1; $i > 0; $i--) {
+        for ($i = \count($characters) - 1; $i > 0; $i--) {
             $j = random_int(0, $i);
             [$characters[$i], $characters[$j]] = [$characters[$j], $characters[$i]];
         }
@@ -451,7 +456,7 @@ final class SecurityController extends BaseController
 
     private function pickRandomCharacter(string $characters): string
     {
-        return $characters[random_int(0, strlen($characters) - 1)];
+        return $characters[random_int(0, \strlen($characters) - 1)];
     }
 
     private function getCurrentAdminName(): string

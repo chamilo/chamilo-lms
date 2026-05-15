@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
+use DateTimeImmutable;
 use Symfony\Component\Process\Process;
 use Throwable;
 use ZipArchive;
@@ -238,8 +239,7 @@ final class DocumentRawTextExtractor
     private function isAiMediaExtractionEnabled(): bool
     {
         return 'true' === $this->settingsManager->getSetting('ai_helpers.enable_ai_helpers', true)
-            && 'true' === $this->settingsManager->getSetting('ai_helpers.content_analyser', true)
-        ;
+            && 'true' === $this->settingsManager->getSetting('ai_helpers.content_analyser', true);
     }
 
     private function detectAiMediaType(string $ext, string $mimeType): ?string
@@ -303,7 +303,7 @@ final class DocumentRawTextExtractor
         $metadata = $resourceFile->getMetadata();
         $metadata[self::AI_METADATA_KEY_TEXT] = $text;
         $metadata[self::AI_METADATA_KEY_SIGNATURE] = $signature;
-        $metadata['xapian_ai_extracted_at'] = (new \DateTimeImmutable())->format('c');
+        $metadata['xapian_ai_extracted_at'] = (new DateTimeImmutable())->format('c');
 
         $resourceFile->setMetadata($metadata);
     }

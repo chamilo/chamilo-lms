@@ -227,7 +227,7 @@ final class AiTutorChatService
             return $message;
         }
 
-        return "Use the following text selected by the student as context for the question. "
+        return 'Use the following text selected by the student as context for the question. '
             ."Base the answer on this selection when it is relevant. Do not mention that it was provided as context unless useful.\n\n"
             ."Selected text:\n\"\"\"\n".$selectedTextContext."\n\"\"\"\n\n"
             ."Student question:\n".$message;

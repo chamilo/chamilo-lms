@@ -62,7 +62,7 @@ final class WeakPasswordCheckerHelper
         return (int) $qb
             ->getQuery()
             ->getSingleScalarResult()
-            ;
+        ;
     }
 
     public function countScannableUsersByIds(array $userIds): int
@@ -86,7 +86,7 @@ final class WeakPasswordCheckerHelper
         return (int) $qb
             ->getQuery()
             ->getSingleScalarResult()
-            ;
+        ;
     }
 
     /**
@@ -204,9 +204,7 @@ final class WeakPasswordCheckerHelper
         $this->applyScannableUserFilters($qb);
 
         /** @var User[] $users */
-        $users = $qb->getQuery()->getResult();
-
-        return $users;
+        return $qb->getQuery()->getResult();
     }
 
     private function applyScannableUserFilters(QueryBuilder $qb): void
@@ -238,6 +236,7 @@ final class WeakPasswordCheckerHelper
             foreach (self::COMMON_PASSWORD_CANDIDATES as $passwordCandidate) {
                 if ($this->userRepository->isPasswordValid($user, $passwordCandidate)) {
                     $weakUsers[] = $user;
+
                     break;
                 }
             }

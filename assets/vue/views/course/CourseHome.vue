@@ -342,6 +342,26 @@ const reportingUrl = computed(() => {
   return `/main/tracking/courseLog.php?cid=${cid}&sid=${sid}&gid=0`
 })
 
+const aiCourseAnalyzerUrl = computed(() => {
+  const cid = course.value?.id
+  if (!cid) return null
+
+  const sid = session.value?.id || 0
+
+  return `/ai/course/${cid}/analyzer?sid=${sid}`
+})
+
+function isSettingEnabled(value) {
+  return value === true || value === "true" || value === 1 || value === "1"
+}
+
+const isAiCourseAnalyzerEnabled = computed(() => {
+  return (
+    isSettingEnabled(getSetting.value("ai_helpers.enable_ai_helpers")) &&
+    isSettingEnabled(getSetting.value("ai_helpers.course_analyser"))
+  )
+})
+
 /**
  * Load tools for the course, split admin tools into the cog menu
  * and keep the rest in the main tools grid.
@@ -384,6 +404,15 @@ async function loadCourseTools(showSkeleton = true) {
         regularTools.push(tool)
       }
     })
+
+    if (isAllowedToEdit.value && isAiCourseAnalyzerEnabled.value && aiCourseAnalyzerUrl.value) {
+      adminMenuItems.push({
+        label: t("AI analyzer"),
+        icon: "mdi mdi-robot-outline",
+        url: aiCourseAnalyzerUrl.value,
+        target: "_blank",
+      })
+    }
 
     tools.value = regularTools
     courseItems.value = adminMenuItems

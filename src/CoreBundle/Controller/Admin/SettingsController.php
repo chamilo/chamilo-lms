@@ -767,8 +767,6 @@ class SettingsController extends BaseController
      */
     private function getUnsupportedSettings(): array
     {
-        return [
-            'ai_helpers.course_analyser',
-        ];
+        return [];
     }
 }

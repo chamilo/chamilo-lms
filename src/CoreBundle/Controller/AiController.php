@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\AiProvider\AiImageProviderInterface;
 use Chamilo\CoreBundle\AiProvider\AiProviderFactory;
 use Chamilo\CoreBundle\AiProvider\AiVideoJobProviderInterface;
 use Chamilo\CoreBundle\AiProvider\AiVideoProviderInterface;
+use Chamilo\CoreBundle\AiProvider\AiCourseAnalyzerService;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\Session;
@@ -20,7 +21,9 @@ use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
 use Chamilo\CoreBundle\Helpers\MessageHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Repository\TrackEAttemptRepository;
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGlossary;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
@@ -34,6 +37,9 @@ use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Csrf\CsrfToken;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -657,6 +663,77 @@ class AiController extends AbstractController
                 'text' => 'An error occurred while generating glossary terms.',
             ], 500);
         }
+    }
+
+
+    #[Route('/course/{courseId}/analyzer', name: 'chamilo_core_ai_course_analyzer', methods: ['GET', 'POST'])]
+    public function courseAnalyzer(
+        Request $request,
+        int $courseId,
+        CourseRepository $courseRepository,
+        SettingsManager $settingsManager,
+        AiCourseAnalyzerService $courseAnalyzerService,
+        CsrfTokenManagerInterface $csrfTokenManager,
+    ): Response {
+        /** @var Course|null $course */
+        $course = $courseRepository->find($courseId);
+        if (!$course instanceof Course) {
+            throw $this->createNotFoundException('Course not found.');
+        }
+
+        $this->denyAccessUnlessGranted(CourseVoter::EDIT, $course);
+
+        $enabled = $this->isAiCourseAnalyzerSettingEnabled($settingsManager->getSetting('ai_helpers.enable_ai_helpers', true))
+            && $this->isAiCourseAnalyzerSettingEnabled($settingsManager->getSetting('ai_helpers.course_analyser', true));
+
+        $session = $this->getAiCourseAnalyzerSessionFromRequest($request);
+        $providers = $this->aiProviderFactory->getProvidersForType('text');
+        $defaultProvider = $providers[0] ?? '';
+        $csrfTokenId = 'ai_course_analyzer_'.$course->getId();
+
+        $result = null;
+        $error = null;
+        $prompt = trim((string) $request->request->get('prompt', ''));
+        $selectedProvider = trim((string) $request->request->get('provider', $defaultProvider));
+
+        if ('' === $selectedProvider) {
+            $selectedProvider = $defaultProvider;
+        }
+
+        if ($request->isMethod('POST')) {
+            if (!$enabled) {
+                $error = 'AI course analyzer is disabled.';
+            } elseif ('' === $prompt) {
+                $error = 'Please describe what kind of feedback you want.';
+            } elseif ('' === $selectedProvider || !\in_array($selectedProvider, $providers, true)) {
+                $error = 'No valid AI text provider is configured.';
+            } else {
+                $submittedToken = (string) $request->request->get('_token', '');
+                $token = new CsrfToken($csrfTokenId, $submittedToken);
+
+                if (!$csrfTokenManager->isTokenValid($token)) {
+                    $error = 'Invalid security token. Please reload the page and try again.';
+                } else {
+                    try {
+                        $result = $courseAnalyzerService->analyze($course, $session, $prompt, $selectedProvider);
+                    } catch (Throwable $exception) {
+                        $error = 'The AI analysis could not be completed: '.$exception->getMessage();
+                    }
+                }
+            }
+        }
+
+        return $this->render('@ChamiloCore/Course/ai_analyzer.html.twig', [
+            'course' => $course,
+            'session' => $session,
+            'enabled' => $enabled,
+            'providers' => $providers,
+            'selected_provider' => $selectedProvider,
+            'prompt' => $prompt,
+            'result' => $result,
+            'error' => $error,
+            'csrf_token_id' => $csrfTokenId,
+        ]);
     }
 
     #[Route('/capabilities', name: 'chamilo_core_ai_capabilities', methods: ['GET'])]
@@ -2942,6 +3019,32 @@ class AiController extends AbstractController
         }
 
         error_log($message);
+    }
+
+
+    private function getAiCourseAnalyzerSessionFromRequest(Request $request): ?Session
+    {
+        $sessionId = (int) $request->get('sid', 0);
+        if ($sessionId <= 0) {
+            return null;
+        }
+
+        $session = $this->em->getRepository(Session::class)->find($sessionId);
+
+        return $session instanceof Session ? $session : null;
+    }
+
+    private function isAiCourseAnalyzerSettingEnabled(mixed $value): bool
+    {
+        if (\is_bool($value)) {
+            return $value;
+        }
+
+        if (\is_int($value)) {
+            return 1 === $value;
+        }
+
+        return \in_array(strtolower(trim((string) $value)), ['1', 'true', 'yes', 'on'], true);
     }
 
     private function getCurrentUserId(): int

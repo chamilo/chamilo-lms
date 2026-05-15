@@ -1,0 +1,224 @@
+{% extends '@ChamiloCore/Layout/no_layout.html.twig' %}
+
+{% block content %}
+    <main class="min-h-screen bg-gray-15 px-8 py-8 text-gray-90">
+        <div class="mx-auto max-w-[1120px]">
+            <section class="mb-6 rounded-2xl border border-gray-25 bg-white p-6 shadow-xl shadow-gray-90/5">
+                <h1 class="m-0 text-3xl font-bold leading-tight text-gray-90">{{ 'AI analyzer'|trans }}</h1>
+                <p class="mt-2 text-base text-gray-60">
+                    {{ course.title }}
+                    {% if session %}
+                        · {{ 'Session'|trans }} #{{ session.id }}
+                    {% endif %}
+                </p>
+
+                <div class="mt-4 rounded-xl border-l-4 border-warning bg-warning/10 p-4 text-warning-dark">
+                    <strong>{{ 'Important'|trans }}</strong><br>
+                    {{ 'The contents of this course can be sent to an AI provider that might be external to your organization. Make sure you have authorization to share this content. This operation can also represent a considerable cost if used on large courses.'|trans }}
+                </div>
+            </section>
+
+            {% if error %}
+                <div class="mb-6 rounded-xl border-l-4 border-danger bg-danger/10 p-4 text-danger-dark">
+                    {{ error|trans }}
+                </div>
+            {% endif %}
+
+            <section class="mb-6 rounded-2xl border border-gray-25 bg-white p-6 shadow-xl shadow-gray-90/5">
+                {% if not enabled %}
+                    <p>{{ 'AI course analyzer is disabled by the platform administrator.'|trans }}</p>
+                {% elseif providers is empty %}
+                    <p>{{ 'No AI text provider is configured.'|trans }}</p>
+                {% else %}
+                    <form method="post" id="ai-course-analyzer-form">
+                        <input type="hidden" name="_token" value="{{ csrf_token(csrf_token_id) }}">
+                        {% if session %}
+                            <input type="hidden" name="sid" value="{{ session.id }}">
+                        {% endif %}
+
+                        <div>
+                            <label class="mb-2 block font-semibold text-gray-90" for="provider">{{ 'AI provider'|trans }}</label>
+                            <select
+                                    id="provider"
+                                    name="provider"
+                                    class="w-full rounded-xl border border-gray-30 bg-white p-3 text-sm text-gray-90"
+                            >
+                                {% for provider in providers %}
+                                    <option value="{{ provider }}" {{ provider == selected_provider ? 'selected' : '' }}>
+                                        {{ provider }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="mt-4">
+                            <label class="mb-2 block font-semibold text-gray-90" for="prompt">{{ 'What feedback do you want about this course?'|trans }}</label>
+                            <textarea
+                                    id="prompt"
+                                    name="prompt"
+                                    class="min-h-[140px] w-full resize-y rounded-xl border border-gray-30 bg-white p-3 text-sm text-gray-90"
+                                    required
+                                    placeholder="{{ 'Example: Analyze the pedagogical structure, clarity of documents, quiz quality and possible improvements.'|trans }}"
+                            >{{ prompt }}</textarea>
+                        </div>
+
+                        <div class="mt-4 flex items-center justify-end gap-3">
+                            <div
+                                    id="ai-course-analyzer-loading"
+                                    class="hidden items-center gap-2 text-sm font-semibold text-gray-60"
+                                    aria-live="polite"
+                                    aria-hidden="true"
+                            >
+                                <span class="h-[18px] w-[18px] animate-spin rounded-full border-2 border-gray-30 border-t-primary" aria-hidden="true"></span>
+                                <span>{{ 'Analyzing course, please wait…'|trans }}</span>
+                            </div>
+
+                            <button
+                                    type="submit"
+                                    id="ai-course-analyzer-submit"
+                                    class="inline-flex min-h-[42px] cursor-pointer items-center justify-center gap-1.5 rounded-xl border-0 bg-primary px-5 py-2.5 font-bold text-white hover:bg-primary-gradient disabled:cursor-not-allowed disabled:opacity-60"
+                                    data-loading-text="{{ 'Analyzing…'|trans }}"
+                            >
+                                <span class="mdi mdi-brain text-lg leading-none" aria-hidden="true"></span>
+                                <span class="ai-course-analyzer-button-label">{{ 'Analyze course'|trans }}</span>
+                            </button>
+                        </div>
+                    </form>
+                {% endif %}
+            </section>
+
+            {% if result %}
+                {% set structured = result.structuredResponse %}
+                {% set payload = result.payload %}
+
+                <section class="mb-6 rounded-2xl border border-gray-25 bg-white p-6 shadow-xl shadow-gray-90/5">
+                    <h2 class="mb-3 text-lg font-bold text-gray-90">{{ 'Analysis summary'|trans }}</h2>
+                    <p>
+                        {{ 'Documents included'|trans }}: {{ payload.documents|length }} ·
+                        {{ 'Exercises included'|trans }}: {{ payload.exercises|length }}
+                    </p>
+                </section>
+
+                {% if structured %}
+                    <section class="mb-6 rounded-2xl border border-gray-25 bg-white p-6 shadow-xl shadow-gray-90/5">
+                        <h2 class="mb-3 text-lg font-bold text-gray-90">{{ 'General feedback'|trans }}</h2>
+                        <p>{{ structured.generalFeedback|default('') }}</p>
+                    </section>
+
+                    <div class="mb-6 grid grid-cols-1 gap-4 md:grid-cols-3">
+                        <section class="rounded-2xl border border-gray-25 bg-white p-6 shadow-xl shadow-gray-90/5">
+                            <h2 class="mb-3 text-lg font-bold text-gray-90">{{ 'Strengths'|trans }}</h2>
+                            <ul class="m-0 list-disc pl-5">
+                                {% for item in structured.strengths|default([]) %}
+                                    <li>{{ item }}</li>
+                                {% else %}
+                                    <li>{{ 'No strengths returned.'|trans }}</li>
+                                {% endfor %}
+                            </ul>
+                        </section>
+
+                        <section class="rounded-2xl border border-gray-25 bg-white p-6 shadow-xl shadow-gray-90/5">
+                            <h2 class="mb-3 text-lg font-bold text-gray-90">{{ 'Risks'|trans }}</h2>
+                            <ul class="m-0 list-disc pl-5">
+                                {% for item in structured.risks|default([]) %}
+                                    <li>{{ item }}</li>
+                                {% else %}
+                                    <li>{{ 'No risks returned.'|trans }}</li>
+                                {% endfor %}
+                            </ul>
+                        </section>
+
+                        <section class="rounded-2xl border border-gray-25 bg-white p-6 shadow-xl shadow-gray-90/5">
+                            <h2 class="mb-3 text-lg font-bold text-gray-90">{{ 'Recommendations'|trans }}</h2>
+                            <ul class="m-0 list-disc pl-5">
+                                {% for item in structured.recommendations|default([]) %}
+                                    <li>{{ item }}</li>
+                                {% else %}
+                                    <li>{{ 'No recommendations returned.'|trans }}</li>
+                                {% endfor %}
+                            </ul>
+                        </section>
+                    </div>
+
+                    {% if structured.documents|default([]) is not empty %}
+                        <section class="mb-6 rounded-2xl border border-gray-25 bg-white p-6 shadow-xl shadow-gray-90/5">
+                            <h2 class="mb-4 text-lg font-bold text-gray-90">{{ 'Document feedback'|trans }}</h2>
+                            <div class="space-y-2">
+                                {% for document in structured.documents %}
+                                    <article class="rounded-xl border border-gray-25 bg-white p-4">
+                                        <strong>{{ document.title|default('Document') }}</strong>
+                                        <p>{{ document.feedback|default('') }}</p>
+                                        {% if document.recommendations|default([]) is not empty %}
+                                            <ul class="m-0 list-disc pl-5">
+                                                {% for recommendation in document.recommendations %}
+                                                    <li>{{ recommendation }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
+                                    </article>
+                                {% endfor %}
+                            </div>
+                        </section>
+                    {% endif %}
+
+                    {% if structured.exercises|default([]) is not empty %}
+                        <section class="mb-6 rounded-2xl border border-gray-25 bg-white p-6 shadow-xl shadow-gray-90/5">
+                            <h2 class="mb-4 text-lg font-bold text-gray-90">{{ 'Exercise feedback'|trans }}</h2>
+                            <div class="space-y-2">
+                                {% for exercise in structured.exercises %}
+                                    <article class="rounded-xl border border-gray-25 bg-white p-4">
+                                        <strong>{{ exercise.title|default('Exercise') }}</strong>
+                                        <p>{{ exercise.feedback|default('') }}</p>
+                                        {% if exercise.recommendations|default([]) is not empty %}
+                                            <ul class="m-0 list-disc pl-5">
+                                                {% for recommendation in exercise.recommendations %}
+                                                    <li>{{ recommendation }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
+                                    </article>
+                                {% endfor %}
+                            </div>
+                        </section>
+                    {% endif %}
+                {% else %}
+                    <section class="mb-6 rounded-2xl border border-gray-25 bg-white p-6 shadow-xl shadow-gray-90/5">
+                        <h2 class="mb-3 text-lg font-bold text-gray-90">{{ 'AI response'|trans }}</h2>
+                        <p>{{ 'The provider did not return valid JSON. Showing the raw response.'|trans }}</p>
+                        <pre class="max-h-[480px] overflow-auto whitespace-pre-wrap break-words rounded-xl bg-gray-90 p-4 text-gray-15">{{ result.rawResponse }}</pre>
+                    </section>
+                {% endif %}
+            {% endif %}
+        </div>
+    </main>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('ai-course-analyzer-form')
+        const submitButton = document.getElementById('ai-course-analyzer-submit')
+        const loadingIndicator = document.getElementById('ai-course-analyzer-loading')
+
+        if (!form || !submitButton) {
+          return
+        }
+
+        form.addEventListener('submit', function () {
+          const label = submitButton.querySelector('.ai-course-analyzer-button-label')
+          const loadingText = submitButton.dataset.loadingText || 'Analyzing…'
+
+          submitButton.disabled = true
+          submitButton.setAttribute('aria-busy', 'true')
+
+          if (label) {
+            label.textContent = loadingText
+          }
+
+          if (loadingIndicator) {
+            loadingIndicator.classList.remove('hidden')
+            loadingIndicator.classList.add('inline-flex')
+            loadingIndicator.setAttribute('aria-hidden', 'false')
+          }
+        })
+      })
+    </script>
+{% endblock %}

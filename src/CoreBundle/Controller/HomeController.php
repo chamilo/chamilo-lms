@@ -32,23 +32,54 @@ class HomeController extends AbstractController
     public function categories(): JsonResponse
     {
         $accessUrlId = $this->accessUrlHelper->getCurrent()?->getId() ?? 1;
-        $categories = $this->courseCategoryRepository->findAllInAccessUrl($accessUrlId);
 
-        $items = array_map(
-            fn (CourseCategory $category): array => [
-                'id' => $category->getId(),
-                'iri' => '/api/course_categories/'.$category->getId(),
+        return $this->json([
+            'items' => $this->buildCategoryTree($accessUrlId),
+        ]);
+    }
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    private function buildCategoryTree(int $accessUrlId, int $parentId = 0, array $visited = []): array
+    {
+        $categories = $this->courseCategoryRepository->findAllInAccessUrl($accessUrlId, false, $parentId);
+        $items = [];
+
+        foreach ($categories as $category) {
+            if (!$category instanceof CourseCategory) {
+                continue;
+            }
+
+            $categoryId = (int) $category->getId();
+
+            if (isset($visited[$categoryId])) {
+                continue;
+            }
+
+            $nextVisited = $visited;
+            $nextVisited[$categoryId] = true;
+            $children = $this->buildCategoryTree($accessUrlId, $categoryId, $nextVisited);
+            $visibleCourseCount = $this->getVisibleCourseCountByCategory($category, $accessUrlId);
+            $visibleCourseTotalCount = $visibleCourseCount;
+
+            foreach ($children as $child) {
+                $visibleCourseTotalCount += (int) ($child['visibleCourseTotalCount'] ?? $child['visibleCourseCount'] ?? 0);
+            }
+
+            $items[] = [
+                'id' => $categoryId,
+                'iri' => '/api/course_categories/'.$categoryId,
                 'title' => $category->getTitle(),
                 'code' => $category->getCode(),
                 'description' => $category->getDescription(),
-                'visibleCourseCount' => $this->getVisibleCourseCountByCategory($category, $accessUrlId),
-            ],
-            $categories,
-        );
+                'visibleCourseCount' => $visibleCourseCount,
+                'visibleCourseTotalCount' => $visibleCourseTotalCount,
+                'children' => $children,
+            ];
+        }
 
-        return $this->json([
-            'items' => $items,
-        ]);
+        return $items;
     }
 
     private function getVisibleCourseCountByCategory(CourseCategory $category, int $accessUrlId): int

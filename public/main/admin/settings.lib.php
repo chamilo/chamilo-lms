@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Plugin as PluginEntity;
 use Chamilo\CoreBundle\Entity\SystemTemplate;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
@@ -376,10 +377,194 @@ function plugin_get_admin_metadata(string $pluginName): array
         'title' => (string) ($plugin_info['title'] ?? $plugin_info['name'] ?? $pluginName),
         'version' => (string) ($plugin_info['version'] ?? '0.0.0'),
         'comment' => (string) ($plugin_info['comment'] ?? ''),
+        'source' => (string) ($plugin_info['source'] ?? ''),
+        'commercial_model' => (string) (
+            $plugin_info['commercial_model']
+            ?? $plugin_info['business_model']
+            ?? $plugin_info['pricing']
+            ?? $plugin_info['license_model']
+            ?? ''
+        ),
+        'is_commercial' => !empty($plugin_info['commercial']),
         'is_admin_plugin' => !empty($plugin_info['is_admin_plugin']),
         'is_course_plugin' => !empty($plugin_info['is_course_plugin']),
     ];
 }
+
+/**
+ * Return the origin stored for the plugin in the C2 plugin entity.
+ */
+function plugin_get_source_value(string $pluginName, ?PluginEntity $plugin): string
+{
+    $source = null !== $plugin ? $plugin->getSource() : '';
+
+    if ('' === trim((string) $source)) {
+        $source = AppPlugin::isOfficial($pluginName)
+            ? PluginEntity::SOURCE_OFFICIAL
+            : PluginEntity::SOURCE_THIRD_PARTY;
+    }
+
+    $source = strtolower(trim((string) $source));
+
+    if (PluginEntity::SOURCE_OFFICIAL === $source) {
+        return PluginEntity::SOURCE_OFFICIAL;
+    }
+
+    return PluginEntity::SOURCE_THIRD_PARTY;
+}
+
+/**
+ * Return the commercial model for a plugin.
+ *
+ * Plugins can define it explicitly in plugin.php using one of these optional keys:
+ * commercial_model, business_model, pricing or license_model.
+ * Values recognized: free, freemium, commercial_service, commercial.
+ */
+function plugin_get_commercial_model(string $pluginName, array $metadata): string
+{
+    $value = strtolower(trim((string) ($metadata['commercial_model'] ?? '')));
+    $value = str_replace(['-', ' '], '_', $value);
+
+    if (!empty($metadata['is_commercial']) && '' === $value) {
+        $value = 'commercial';
+    }
+
+    return match ($value) {
+        'freemium' => 'freemium',
+        'commercial_service', 'commercial_services', 'service', 'service_backed' => 'commercial_service',
+        'commercial', 'paid', 'premium' => 'commercial',
+        default => 'free',
+    };
+}
+
+/**
+ * Return a human-readable commercial model label.
+ */
+function plugin_get_commercial_model_label(string $model): string
+{
+    return match ($model) {
+        'freemium' => get_lang('Freemium'),
+        'commercial_service' => get_lang('Commercial service'),
+        'commercial' => get_lang('Commercial'),
+        default => get_lang('100% free'),
+    };
+}
+
+/**
+ * Return a badge for plugin source.
+ */
+function plugin_render_source_badge(string $source): string
+{
+    if (PluginEntity::SOURCE_OFFICIAL === $source) {
+        return '<span class="badge badge--success">'.get_lang('Official').'</span>';
+    }
+
+    return '<span class="badge badge--warning">'.get_lang('Third party').'</span>';
+}
+
+/**
+ * Return a badge for plugin commercial model.
+ */
+function plugin_render_commercial_badge(string $model): string
+{
+    $label = plugin_get_commercial_model_label($model);
+    $baseClasses = 'inline-flex w-fit items-center rounded-full px-3 py-1 text-xs font-semibold';
+
+    return match ($model) {
+        'freemium' => '<span class="'.$baseClasses.' bg-info/10 text-info">'.$label.'</span>',
+        'commercial_service' => '<span class="'.$baseClasses.' bg-warning/10 text-warning-dark">'.$label.'</span>',
+        'commercial' => '<span class="'.$baseClasses.' bg-danger/10 text-danger">'.$label.'</span>',
+        default => '<span class="'.$baseClasses.' bg-success/10 text-success">'.$label.'</span>',
+    };
+}
+
+/**
+ * Return the plugin tab requested by the administrator.
+ */
+function plugin_get_selected_tab(): string
+{
+    $tab = strtolower(trim((string) ($_GET['plugin_tab'] ?? 'included')));
+
+    return in_array($tab, ['included', 'commercial', 'all'], true) ? $tab : 'included';
+}
+
+/**
+ * Build a URL to the plugin admin page with a tab selected.
+ */
+function plugin_get_tab_url(string $tab): string
+{
+    return api_get_self().'?'.http_build_query([
+            'category' => 'Plugins',
+            'plugin_tab' => $tab,
+        ]);
+}
+
+/**
+ * Render one tab of the plugin list.
+ */
+function plugin_render_admin_tab(string $tab, string $label, int $count, string $selectedTab): string
+{
+    $isActive = $tab === $selectedTab;
+    $classes = $isActive
+        ? 'border-primary bg-primary text-white'
+        : 'border-gray-25 bg-white text-gray-90 hover:border-primary hover:text-primary';
+
+    return '<a href="'.htmlspecialchars(plugin_get_tab_url($tab), ENT_QUOTES).'" class="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition '.$classes.'">'
+        .htmlspecialchars($label, ENT_QUOTES)
+        .'<span class="rounded-full bg-white/20 px-2 py-0.5 text-xs">'.$count.'</span>'
+        .'</a>';
+}
+
+/**
+ * Decide whether a plugin belongs to the selected tab.
+ */
+function plugin_matches_admin_tab(array $pluginRow, string $selectedTab): bool
+{
+    if ('commercial' === $selectedTab) {
+        return 'free' !== $pluginRow['commercial_model'];
+    }
+
+    if ('all' === $selectedTab) {
+        return true;
+    }
+
+    return !empty($pluginRow['is_stable']) && 'free' === $pluginRow['commercial_model'];
+}
+
+/**
+ * Build plugin rows with metadata used by the admin UI.
+ */
+function plugin_get_admin_rows(array $allPlugins): array
+{
+    $pluginRepo = Container::getPluginRepository();
+    $rows = [];
+
+    foreach ($allPlugins as $pluginName) {
+        $pluginInfoFile = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/plugin.php';
+        if (!file_exists($pluginInfoFile)) {
+            continue;
+        }
+
+        $metadata = plugin_get_admin_metadata($pluginName);
+        $plugin = $pluginRepo->findOneByTitle($pluginName);
+        $source = plugin_get_source_value($pluginName, $plugin);
+        $commercialModel = plugin_get_commercial_model($pluginName, $metadata);
+
+        $rows[] = [
+            'name' => $pluginName,
+            'metadata' => $metadata,
+            'plugin' => $plugin,
+            'source' => $source,
+            'commercial_model' => $commercialModel,
+            'is_stable' => pluginShouldBeVisibleInStableList($pluginName),
+            'has_no_regions' => plugin_has_no_regions($pluginName),
+            'has_readme' => plugin_has_readme($pluginName),
+        ];
+    }
+
+    return $rows;
+}
+
 
 /**
  * Return current regions safely for a plugin in the current URL.
@@ -679,9 +864,26 @@ function plugin_get_open_url(string $pluginName): ?string
 function handlePlugins()
 {
     Session::erase('plugin_data');
-    $pluginRepo = Container::getPluginRepository();
 
     $allPlugins = (new AppPlugin())->read_plugins_from_path();
+    $pluginRows = plugin_get_admin_rows($allPlugins);
+    $selectedTab = plugin_get_selected_tab();
+
+    $tabCounts = [
+        'included' => 0,
+        'commercial' => 0,
+        'all' => count($pluginRows),
+    ];
+
+    foreach ($pluginRows as $pluginRow) {
+        if (!empty($pluginRow['is_stable']) && 'free' === $pluginRow['commercial_model']) {
+            $tabCounts['included']++;
+        }
+
+        if ('free' !== $pluginRow['commercial_model']) {
+            $tabCounts['commercial']++;
+        }
+    }
 
     echo '
         <div class="section-header section-header--h2">
@@ -697,46 +899,51 @@ function handlePlugins()
         <p class="text-body-1 text-gray-50">'.get_lang('Install, activate or deactivate plugins easily.').'</p>
     ';
 
-    echo '<div class="mb-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">';
+    echo '<div class="mb-4 rounded-2xl border border-gray-25 bg-white p-4 shadow-sm">';
+    echo '  <div class="mb-3 text-sm text-gray-60">';
+    echo        get_lang('Official and free plugins are listed separately from plugins that may depend on commercial services or paid offers.');
+    echo '  </div>';
     echo '  <div class="flex flex-wrap gap-2">';
-    /*if (!shouldShowAllPlugins()) {
-        echo '  <a href="'.htmlspecialchars(api_get_self().'?category=Plugins&show_all_plugins=1', ENT_QUOTES).'" class="btn btn--plain-outline btn--sm">';
-        echo '      <i class="mdi mdi-eye-outline"></i> Show all plugins';
-        echo '  </a>';
-    }*/
+    echo        plugin_render_admin_tab('included', get_lang('Included free plugins'), $tabCounts['included'], $selectedTab);
+    echo        plugin_render_admin_tab('commercial', get_lang('Commercial and freemium plugins'), $tabCounts['commercial'], $selectedTab);
+    echo        plugin_render_admin_tab('all', get_lang('All plugins'), $tabCounts['all'], $selectedTab);
     echo '  </div>';
     echo '</div>';
 
+    $visiblePluginRows = array_values(array_filter(
+        $pluginRows,
+        static fn (array $pluginRow): bool => plugin_matches_admin_tab($pluginRow, $selectedTab)
+    ));
+
+    if (empty($visiblePluginRows)) {
+        echo Display::return_message(get_lang('No plugins were found for this category.'), 'info', false);
+    }
+
     echo '<div class="overflow-x-auto rounded-xl border border-gray-25 bg-white shadow-sm">';
-    echo '<table class="w-full min-w-[980px] table-fixed">';
+    echo '<table class="w-full min-w-[1060px] table-fixed">';
     echo '<thead>';
     echo '<tr class="bg-gray-10 text-left">';
-    echo '<th class="w-[46%] p-3 border-b border-gray-25">'.get_lang('Plugin').'</th>';
+    echo '<th class="w-[42%] p-3 border-b border-gray-25">'.get_lang('Plugin').'</th>';
     echo '<th class="w-[10%] p-3 border-b border-gray-25">'.get_lang('Version').'</th>';
-    echo '<th class="w-[12%] p-3 border-b border-gray-25">'.get_lang('Status').'</th>';
-    echo '<th class="w-[32%] p-3 border-b border-gray-25 text-center">'.get_lang('Actions').'</th>';
+    echo '<th class="w-[18%] p-3 border-b border-gray-25">'.get_lang('Type').'</th>';
+    echo '<th class="w-[10%] p-3 border-b border-gray-25">'.get_lang('Status').'</th>';
+    echo '<th class="w-[20%] p-3 border-b border-gray-25 text-center">'.get_lang('Actions').'</th>';
     echo '</tr>';
     echo '</thead>';
     echo '<tbody>';
 
-    foreach ($allPlugins as $pluginName) {
-        if (!shouldShowAllPlugins() && !pluginShouldBeVisibleInStableList($pluginName)) {
-            continue;
-        }
+    foreach ($visiblePluginRows as $pluginRow) {
+        $pluginName = $pluginRow['name'];
+        $metadata = $pluginRow['metadata'];
+        $plugin = $pluginRow['plugin'];
+        $hasNoRegions = $pluginRow['has_no_regions'];
+        $hasReadme = $pluginRow['has_readme'];
+        $source = $pluginRow['source'];
+        $commercialModel = $pluginRow['commercial_model'];
 
-        $pluginInfoFile = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/plugin.php';
-        if (!file_exists($pluginInfoFile)) {
-            continue;
-        }
-
-        $metadata = plugin_get_admin_metadata($pluginName);
-        $hasNoRegions = plugin_has_no_regions($pluginName);
-
-        $plugin = $pluginRepo->findOneByTitle($pluginName);
         $pluginConfiguration = $plugin?->getConfigurationsByAccessUrl(Container::getAccessUrlUtil()->getCurrent());
         $isInstalled = $plugin && $plugin->isInstalled();
         $isEnabled = $plugin && $pluginConfiguration && $pluginConfiguration->isActive();
-        $hasReadme = plugin_has_readme($pluginName);
 
         $pluginDisplayTitle = htmlspecialchars($metadata['title'], ENT_QUOTES);
         $pluginDisplayComment = trim((string) $metadata['comment']);
@@ -757,12 +964,15 @@ function handlePlugins()
         echo '<tr class="border-t border-gray-25 align-top transition hover:bg-gray-15">';
 
         echo '<td class="p-3">';
-        echo '  <div class="min-w-0">';
-        echo '      <div class="font-bold text-gray-90">'.$pluginDisplayTitle.'</div>';
+        echo '  <div class="relative min-w-0 overflow-hidden rounded-xl border border-gray-25 bg-white p-3">';
+        echo '      <div class="flex flex-wrap items-center gap-2">';
+        echo '          <div class="font-bold text-gray-90">'.$pluginDisplayTitle.'</div>';
+        echo            plugin_render_source_badge($source);
+        echo '      </div>';
 
         if ('' !== $pluginDisplayComment) {
             $escapedComment = htmlspecialchars($pluginDisplayComment, ENT_QUOTES);
-            echo '  <p class="mt-1 text-caption text-gray-50" title="'.$escapedComment.'" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">'
+            echo '      <p class="mt-2 max-h-10 overflow-hidden text-caption text-gray-50" title="'.$escapedComment.'">'
                 .$escapedComment
                 .'</p>';
         }
@@ -771,6 +981,11 @@ function handlePlugins()
         echo '</td>';
 
         echo '<td class="p-3 text-sm text-gray-90">'.$pluginDisplayVersion.'</td>';
+        echo '<td class="p-3">';
+        echo '  <div class="flex items-center">';
+        echo        plugin_render_commercial_badge($commercialModel);
+        echo '  </div>';
+        echo '</td>';
         echo '<td class="p-3">'.$statusBadge.'</td>';
 
         echo '<td class="p-3">';
@@ -791,18 +1006,18 @@ function handlePlugins()
                     <i class="'.$toggleIcon.'"></i> '.$toggleText.'
                 </button>';
 
-            echo '  <a href="'.htmlspecialchars($configureUrl, ENT_QUOTES).'" class="btn btn--secondary btn--sm w-full justify-center">';
-            echo '      <i class="mdi mdi-cog-outline"></i> '.get_lang('Configure');
-            echo '  </a>';
+            echo '      <a href="'.htmlspecialchars($configureUrl, ENT_QUOTES).'" class="btn btn--secondary btn--sm w-full justify-center">';
+            echo '          <i class="mdi mdi-cog-outline"></i> '.get_lang('Configure');
+            echo '      </a>';
 
             if ($isEnabled && !empty($openUrl)) {
-                echo '  <a href="'.htmlspecialchars($openUrl, ENT_QUOTES).'" class="btn btn--plain-outline btn--sm w-full justify-center">';
-                echo '      <i class="mdi mdi-open-in-new"></i> '.get_lang('Open');
-                echo '  </a>';
+                echo '      <a href="'.htmlspecialchars($openUrl, ENT_QUOTES).'" class="btn btn--plain-outline btn--sm w-full justify-center">';
+                echo '          <i class="mdi mdi-open-in-new"></i> '.get_lang('Open');
+                echo '      </a>';
             } elseif (!empty($openUrl)) {
-                echo '  <span class="btn btn--plain-outline btn--sm w-full justify-center opacity-50 cursor-not-allowed">';
-                echo '      <i class="mdi mdi-open-in-new"></i> '.get_lang('Open');
-                echo '  </span>';
+                echo '      <span class="btn btn--plain-outline btn--sm w-full justify-center opacity-50 cursor-not-allowed">';
+                echo '          <i class="mdi mdi-open-in-new"></i> '.get_lang('Open');
+                echo '      </span>';
             }
 
             if (!$hasNoRegions) {
@@ -827,14 +1042,11 @@ function handlePlugins()
         }
 
         if ($hasReadme) {
-            echo Display::url(
-                Display::getMdiIcon('file-document-outline').' README',
-                api_get_path(WEB_AJAX_PATH).'plugin.ajax.php?'.http_build_query(['a' => 'md_to_html', 'plugin' => $pluginName]),
-                [
-                    'data-title' => $pluginDisplayTitle,
-                    'class' => 'ajax btn btn--plain-outline btn--sm col-span-2 w-full justify-center',
-                ]
-            );
+            echo '      <a href="'.htmlspecialchars(api_get_path(WEB_AJAX_PATH).'plugin.ajax.php?'.http_build_query(['a' => 'md_to_html', 'plugin' => $pluginName]), ENT_QUOTES).'"
+                    data-title="'.$pluginDisplayTitle.'"
+                    class="plugin-readme-link btn btn--plain-outline btn--sm col-span-2 w-full justify-center">';
+            echo '          <i class="mdi mdi-file-document-outline"></i> '.get_lang('README');
+            echo '      </a>';
         }
 
         echo '  </div>';
@@ -856,11 +1068,15 @@ function handlePlugins()
             </div>
           </div>';
 
-    echo '<div id="plugin-readme-modal" class="hidden fixed inset-0 z-50">
+    echo '<div id="plugin-readme-modal" class="hidden fixed inset-0 z-50" aria-hidden="true">
+            <div class="plugin-readme-close absolute inset-0 bg-black/40"></div>
             <div class="relative flex min-h-screen items-start justify-center p-4 md:p-6">
                 <div class="relative flex w-full max-w-4xl flex-col rounded-xl bg-white shadow-xl">
                     <div class="flex items-center justify-between gap-3 border-b border-gray-25 px-5 py-4">
-                        <h3 id="plugin-readme-modal-title" class="text-xl font-semibold text-gray-90 mb-0">README</h3>
+                        <h3 id="plugin-readme-modal-title" class="mb-0 text-xl font-semibold text-gray-90">README</h3>
+                        <button type="button" class="plugin-readme-close ch-tool-icon-button" aria-label="'.htmlspecialchars(get_lang('Close'), ENT_QUOTES).'">
+                            <i class="mdi mdi-close ch-tool-icon"></i>
+                        </button>
                     </div>
                     <div id="plugin-readme-modal-body" class="max-h-[75vh] overflow-y-auto px-5 py-4 text-sm leading-6 text-gray-90"></div>
                 </div>
@@ -877,7 +1093,6 @@ function handlePlugins()
     $uninstallingText = json_encode(get_lang('Uninstalling'));
     $enablingText = json_encode(get_lang('Enabling'));
     $disablingText = json_encode(get_lang('Disabling'));
-    $readmeMissingText = json_encode('README file not found for this plugin.');
     $readmeTitleSuffix = json_encode('README');
 
     echo <<<JS
@@ -893,7 +1108,6 @@ function handlePlugins()
   var uninstallingText = {$uninstallingText};
   var enablingText = {$enablingText};
   var disablingText = {$disablingText};
-  var readmeMissingText = {$readmeMissingText};
   var readmeTitleSuffix = {$readmeTitleSuffix};
 
   function showToast(message, type) {
@@ -917,12 +1131,12 @@ function handlePlugins()
 
   function openReadmeModal(title) {
     $("#plugin-readme-modal-title").text(title);
-    $("#plugin-readme-modal").removeClass("hidden");
+    $("#plugin-readme-modal").removeClass("hidden").attr("aria-hidden", "false");
     $("body").addClass("overflow-hidden");
   }
 
   function closeReadmeModal() {
-    $("#plugin-readme-modal").addClass("hidden");
+    $("#plugin-readme-modal").addClass("hidden").attr("aria-hidden", "true");
     $("#plugin-readme-modal-body").empty();
     $("body").removeClass("overflow-hidden");
   }
@@ -989,6 +1203,40 @@ function handlePlugins()
               .removeClass("opacity-60 cursor-not-allowed");
         }
       });
+    });
+
+    $(document).on("click", ".plugin-readme-link", function (event) {
+      event.preventDefault();
+
+      var \$link = $(this);
+      var title = (\$link.data("title") || "Plugin") + " - " + readmeTitleSuffix;
+
+      showReadmeLoading(title);
+
+      $.ajax({
+        type: "GET",
+        url: \$link.attr("href"),
+        dataType: "html",
+        timeout: 60000,
+        success: function(html) {
+          $("#plugin-readme-modal-body").html(html);
+        },
+        error: function() {
+          $("#plugin-readme-modal-body").html(
+            '<div class="rounded-xl border border-danger bg-danger/10 p-4 text-danger">' +
+            errorText + ": " + requestFailedText +
+            '</div>'
+          );
+        }
+      });
+    });
+
+    $(document).on("click", ".plugin-readme-close", closeReadmeModal);
+
+    $(document).on("keyup", function (event) {
+      if (event.key === "Escape") {
+        closeReadmeModal();
+      }
     });
   });
 })(jQuery);

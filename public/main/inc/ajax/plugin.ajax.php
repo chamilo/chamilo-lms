@@ -65,11 +65,14 @@ if ($action === 'md_to_html') {
 
         $content = file_get_contents($readmeFile);
         $html = MarkdownExtra::defaultTransform($content);
+        $html = preg_replace('#<script\b[^>]*>.*?</script>#is', '', (string) $html);
+        $html = preg_replace('/\son[a-z]+\s*=\s*(["\']).*?\1/ims', '', (string) $html);
+        $html = preg_replace('/\s(href|src)\s*=\s*(["\'])\s*javascript:[^"\']*\2/ims', ' $1="#"', (string) $html);
 
         if ('' === trim((string) $html)) {
             $html = Display::return_message('README file is empty.', 'warning', false);
         }
-        echo '<div class="prose">'.$html.'</div>';
+        echo '<div class="prose max-w-none">'.$html.'</div>';
     } catch (\Throwable $e) {
         error_log('[plugin.ajax md_to_html] '.$e->getMessage());
         http_response_code(500);

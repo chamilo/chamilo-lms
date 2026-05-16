@@ -544,6 +544,70 @@ class GroupManager
         return true;
     }
 
+    /**
+     * Remove the course groups linked to a class when the class is unsubscribed from a course.
+     *
+     * The class members are removed from the linked groups. If a linked group becomes empty, the
+     * group is deleted. If users not coming from the class remain in the group, the group is kept
+     * and only the class link is removed.
+     */
+    public static function cleanupGroupsLinkedToUsergroupForCourse(
+        int $usergroupId,
+        int $courseId,
+        int $sessionId = 0
+    ): void {
+        if ($usergroupId <= 0 || $courseId <= 0) {
+            return;
+        }
+
+        $obj = new UserGroupModel();
+        $classUserIds = $obj->get_users_by_usergroup($usergroupId);
+        $classUserIds = array_values(array_unique(array_filter(array_map('intval', $classUserIds))));
+
+        $em = Database::getManager();
+        $relRepository = $em->getRepository(CGroupRelUsergroup::class);
+
+        $qb = $relRepository->createQueryBuilder('rel')
+            ->where('IDENTITY(rel.usergroup) = :usergroupId')
+            ->andWhere('IDENTITY(rel.course) = :courseId')
+            ->setParameter('usergroupId', $usergroupId)
+            ->setParameter('courseId', $courseId)
+        ;
+
+        if ($sessionId > 0) {
+            $qb->andWhere('IDENTITY(rel.session) = :sessionId')
+                ->setParameter('sessionId', $sessionId)
+            ;
+        } else {
+            $qb->andWhere('rel.session IS NULL');
+        }
+
+        /** @var CGroupRelUsergroup[] $relations */
+        $relations = $qb->getQuery()->getResult();
+        if (empty($relations)) {
+            return;
+        }
+
+        $courseInfo = api_get_course_info_by_id($courseId);
+
+        foreach ($relations as $relation) {
+            $group = $relation->getGroup();
+
+            if (!empty($classUserIds)) {
+                self::unsubscribeUsers($classUserIds, $group, $courseId);
+            }
+
+            $remainingUserIds = self::getGroupUserIds($group, $courseId);
+
+            if (empty($remainingUserIds) && !empty($courseInfo)) {
+                self::deleteGroup($group, $courseInfo['code']);
+            } else {
+                $em->remove($relation);
+                $em->flush();
+            }
+        }
+    }
+
 
     /**
      * Synchronize every course group linked to a class with the current class members.

@@ -1252,8 +1252,22 @@ class UserGroupModel extends Model
                 continue;
             }
 
+            GroupManager::cleanupGroupsLinkedToUsergroupForCourse(
+                (int) $usergroup_id,
+                (int) $course_id,
+                $sessionId
+            );
+
             if (!$keepUsersInCourse && !empty($user_list)) {
                 foreach ($user_list as $user_id) {
+                    if ($this->userBelongsToAnotherUsergroupInCourse(
+                        (int) $user_id,
+                        (int) $course_id,
+                        (int) $usergroup_id
+                    )) {
+                        continue;
+                    }
+
                     CourseManager::unsubscribe_user(
                         $user_id,
                         $course_info['code'],
@@ -1300,6 +1314,29 @@ class UserGroupModel extends Model
                 );
             }
         }
+    }
+
+    /**
+     * Checks whether a user still belongs to another class subscribed to the same course.
+     */
+    private function userBelongsToAnotherUsergroupInCourse(int $userId, int $courseId, int $excludedUsergroupId): bool
+    {
+        if ($userId <= 0 || $courseId <= 0 || $excludedUsergroupId <= 0) {
+            return false;
+        }
+
+        $sql = "SELECT 1
+                FROM {$this->usergroup_rel_user_table} uru
+                INNER JOIN {$this->usergroup_rel_course_table} ugc
+                    ON ugc.usergroup_id = uru.usergroup_id
+                WHERE uru.user_id = ".(int) $userId."
+                    AND ugc.course_id = ".(int) $courseId."
+                    AND uru.usergroup_id <> ".(int) $excludedUsergroupId."
+                LIMIT 1";
+
+        $result = Database::query($sql);
+
+        return Database::num_rows($result) > 0;
     }
 
     /**

@@ -2,9 +2,10 @@
   <BaseCard plain>
     <div class="p-4 text-center">
       <img
-        :src="groupInfo.image"
-        alt="Group picture"
-        class="mb-4 w-24 h-24 mx-auto rounded-full"
+        :src="groupInfo.image || defaultGroupImage"
+        :alt="groupInfo.title"
+        class="mx-auto mb-4 h-24 w-24 rounded-full object-cover"
+        loading="lazy"
       />
       <hr />
       <BaseButton
@@ -107,6 +108,7 @@ const groupInfo = inject("group-info")
 
 const showEditGroupDialog = ref(false)
 const selectedFile = ref(null)
+const defaultGroupImage = "/img/icons/64/group_na.png"
 
 const permissionsOptions = [
   { label: "Open", value: 1 },

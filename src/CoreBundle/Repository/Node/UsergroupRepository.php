@@ -393,19 +393,25 @@ class UsergroupRepository extends ResourceRepository
         return $getCount ? $qb->getQuery()->getSingleScalarResult() : $qb->getQuery()->getResult();
     }
 
-    public function getUsergroupPicture($userGroupId): string
+    public function getUsergroupPicture(int $userGroupId, int $size = 128): string
     {
         $usergroup = $this->find($userGroupId);
-        if (!$usergroup) {
+        if (!$usergroup instanceof Usergroup) {
             return '/img/icons/64/group_na.png';
         }
 
-        $url = $this->illustrationRepository->getIllustrationUrl($usergroup);
-        $params['w'] = 64;
-        $params['rand'] = uniqid('u_', true);
-        $paramsToString = '?'.http_build_query($params);
+        if (!$this->illustrationRepository->hasIllustration($usergroup)) {
+            return $usergroup->getDefaultIllustration(64);
+        }
 
-        return $url.$paramsToString;
+        $url = $this->illustrationRepository->getIllustrationUrl($usergroup);
+        $params = [
+            'w' => max(64, $size),
+            'rand' => uniqid('ug_', true),
+        ];
+        $separator = str_contains($url, '?') ? '&' : '?';
+
+        return $url.$separator.http_build_query($params);
     }
 
     public function isGroupMember(int $groupId, User $user): bool

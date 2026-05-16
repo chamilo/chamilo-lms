@@ -869,7 +869,7 @@ class SocialController extends AbstractController
                     'id' => $item['id'],
                     'name' => $item['title'],
                     'description' => $item['description'] ?? '',
-                    'image' => $usergroupRepository->getUsergroupPicture($item['id']),
+                    'image' => $usergroupRepository->getUsergroupPicture((int) $item['id'], 128),
                     'url' => '/resources/usergroups/show/'.$item['id'],
                 ];
             }
@@ -905,7 +905,7 @@ class SocialController extends AbstractController
             'title' => $group->getTitle(),
             'description' => $group->getDescription(),
             'url' => $group->getUrl(),
-            'image' => $usergroupRepository->getUsergroupPicture($group->getId()),
+            'image' => $usergroupRepository->getUsergroupPicture((int) $group->getId(), 256),
             'visibility' => (int) $group->getVisibility(),
             'allowMembersToLeaveGroup' => $group->getAllowMembersToLeaveGroup(),
             'isMember' => $isMember,

@@ -15,7 +15,16 @@ require_once __DIR__.'/../config.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
-api_block_anonymous_users();
+if (api_is_anonymous()) {
+    http_response_code(401);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Authentication required.',
+    ]);
+    exit;
+}
+
+api_block_inactive_user();
 
 if ('POST' !== $_SERVER['REQUEST_METHOD']) {
     http_response_code(405);

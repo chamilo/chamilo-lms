@@ -11,7 +11,6 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackECourseAccess;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Security\Authorization\Voter\GroupVoter;
 use Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter;
@@ -19,7 +18,9 @@ use Chamilo\CourseBundle\Controller\CourseControllerInterface;
 use Chamilo\CourseBundle\Entity\CGroup;
 use ChamiloSession;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -28,6 +29,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Throwable;
 use Twig\Environment;
 
 /**
@@ -161,7 +163,9 @@ class CidReqListener
             }
 
             if (false === $checker->isGranted(CourseVoter::VIEW, $course)) {
-                throw new NotAllowedException($this->translator->trans("You're not allowed in this course"));
+                $this->denyRequest($event, $request, $this->translator->trans("You're not allowed in this course"));
+
+                return;
             }
 
             $sessionId = (int) $request->get('sid');
@@ -179,7 +183,9 @@ class CidReqListener
                     $session->setCurrentCourse($course);
 
                     if (false === $checker->isGranted(SessionVoter::VIEW, $session)) {
-                        throw new AccessDeniedHttpException($this->translator->trans("You're not allowed in this session"));
+                        $this->denyRequest($event, $request, $this->translator->trans("You're not allowed in this session"));
+
+                        return;
                     }
                     $sessionHandler->set('session_name', $session->getTitle());
                     $sessionHandler->set('sid', $session->getId());
@@ -208,7 +214,9 @@ class CidReqListener
                 $group->setParent($course);
 
                 if (false === $checker->isGranted(GroupVoter::VIEW, $group)) {
-                    throw new AccessDeniedHttpException($this->translator->trans("You're not allowed in this group"));
+                    $this->denyRequest($event, $request, $this->translator->trans("You're not allowed in this group"));
+
+                    return;
                 }
 
                 $sessionHandler->set('group', $group);
@@ -309,10 +317,14 @@ class CidReqListener
                 // The token user might be a string (e.g., "anon.") or another UserInterface implementation.
                 // We must only log access when it is the Doctrine-backed Chamilo User entity with a valid ID.
                 if ($tokenUser instanceof User && (int) $tokenUser->getId() > 0) {
-                    $this->entityManager
-                        ->getRepository(TrackECourseAccess::class)
-                        ->logoutAccess($tokenUser, $courseId, $sessionId, $ip)
-                    ;
+                    try {
+                        $this->entityManager
+                            ->getRepository(TrackECourseAccess::class)
+                            ->logoutAccess($tokenUser, $courseId, $sessionId, $ip)
+                        ;
+                    } catch (Throwable) {
+                        // Tracking must never break the current request.
+                    }
                 }
             }
         }
@@ -347,6 +359,21 @@ class CidReqListener
 
         // Remove context roles also when leaving the course/session/group
         $this->resetContextRolesOnTokenUser();
+    }
+
+
+    private function denyRequest(RequestEvent $event, Request $request, string $message): void
+    {
+        if ($request->isXmlHttpRequest() || str_contains((string) $request->headers->get('Accept'), 'application/json')) {
+            $event->setResponse(new JsonResponse([
+                'error' => 'access_denied',
+                'message' => $message,
+            ], Response::HTTP_FORBIDDEN));
+
+            return;
+        }
+
+        throw new AccessDeniedHttpException($message);
     }
 
     private function resetContextRolesOnTokenUser(): void

@@ -14,7 +14,34 @@ $cidReset = true;
 
 require_once __DIR__.'/../../inc/global.inc.php';
 require_once __DIR__.'/../../inc/lib/reports.lib.php';
-api_protect_admin_script();
+
+if (!api_is_platform_admin()) {
+    $acceptHeader = (string) ($_SERVER['HTTP_ACCEPT'] ?? '');
+    $isAjaxRequest = (
+        'xmlhttprequest' === strtolower((string) ($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '')) ||
+        str_contains($acceptHeader, 'application/json')
+    );
+
+    http_response_code(403);
+
+    if ($isAjaxRequest && str_contains($acceptHeader, 'application/json')) {
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode([
+            'error' => 'access_denied',
+            'message' => get_lang('You are not allowed to see this page.'),
+        ]);
+        exit;
+    }
+
+    echo Display::return_message(
+        get_lang('You are not allowed to see this page.'),
+        'error',
+        false
+    );
+    exit;
+}
+
+api_block_inactive_user();
 
 $interbreadcrumb[] = ['url' => '../index.php', 'name' => get_lang('Administration')];
 
@@ -2944,33 +2971,57 @@ switch ($report) {
             \$el.toggleClass("hidden");
           }
 
+          function renderLoadError(\$target, responseText) {
+            var message = responseText || LOAD_ERROR_TEXT;
+            \$target.html(
+              '<div class="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">' +
+              message +
+              '</div>'
+            );
+          }
+
           function loadQuarterlyReport(action, targetId, force) {
             var \$target = $("#" + targetId);
             if (!\$target.length) {
-              return;
+              return $.Deferred().resolve().promise();
             }
 
             var isLoaded = \$target.data("loaded") === 1;
             if (isLoaded && !force) {
               toggleTarget(\$target);
-              return;
+              return $.Deferred().resolve().promise();
+            }
+
+            var runningRequest = \$target.data("request");
+            if (runningRequest && runningRequest.readyState !== 4) {
+              return runningRequest;
             }
 
             showTarget(\$target);
             \$target.html(LOADING_HTML);
 
-            // Load HTML from Ajax endpoint.
-            \$target.load(AJAX_ENDPOINT + "?a=" + encodeURIComponent(action), function (response, status) {
-              if (status !== "success") {
-                \$target.html(
-                  '<div class="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">' +
-                  LOAD_ERROR_TEXT +
-                  '</div>'
-                );
-                return;
-              }
-              \$target.data("loaded", 1);
-            });
+            var request = $.ajax({
+              url: AJAX_ENDPOINT,
+              method: "GET",
+              data: { a: action },
+              dataType: "html",
+              cache: false,
+              timeout: 120000
+            })
+              .done(function (response) {
+                \$target.html(response);
+                \$target.data("loaded", 1);
+              })
+              .fail(function (xhr) {
+                renderLoadError(\$target, xhr.responseText);
+              })
+              .always(function () {
+                \$target.removeData("request");
+              });
+
+            \$target.data("request", request);
+
+            return request;
           }
 
           $(function () {
@@ -2988,10 +3039,30 @@ switch ($report) {
 
             $(document).on("click", "#js-quarterly-load-all", function (e) {
               e.preventDefault();
-              $(".js-quarterly-load").each(function () {
-                var \$btn = $(this);
-                loadQuarterlyReport(\$btn.data("action"), \$btn.data("target"), true);
-              });
+
+              var \$button = $(this);
+              var \$buttons = $(".js-quarterly-load");
+              var index = 0;
+
+              if (\$button.data("loading") === 1) {
+                return;
+              }
+
+              \$button.data("loading", 1).addClass("pointer-events-none opacity-60");
+
+              function loadNext() {
+                if (index >= \$buttons.length) {
+                  \$button.data("loading", 0).removeClass("pointer-events-none opacity-60");
+                  return;
+                }
+
+                var \$btn = \$buttons.eq(index);
+                index += 1;
+
+                loadQuarterlyReport(\$btn.data("action"), \$btn.data("target"), true).always(loadNext);
+              }
+
+              loadNext();
             });
           });
         })();

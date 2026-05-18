@@ -37,9 +37,15 @@ trait CourseLinkExtensionTrait
 
     protected function addVisibilityCondition(QueryBuilder $queryBuilder): void
     {
+        // Context roles (ROLE_CURRENT_COURSE_*) live in User::$temporaryRoles and appear in
+        // $user->getRoles(), but Symfony's AbstractToken::getRoleNames() only returns roles
+        // fixed at token-creation time. isGranted() therefore misses them.
+        $roles = $this->security->getUser()?->getRoles() ?? [];
+
         $allowDraft =
             $this->security->isGranted('ROLE_ADMIN')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER');
+            || \in_array('ROLE_CURRENT_COURSE_TEACHER', $roles, true)
+            || \in_array('ROLE_CURRENT_COURSE_SESSION_TEACHER', $roles, true);
 
         if (!$allowDraft) {
             $queryBuilder

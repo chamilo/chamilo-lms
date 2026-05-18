@@ -85,6 +85,14 @@ class ResourceNodeVoter extends Voter
         return $subject instanceof ResourceNode;
     }
 
+    // Context roles (ROLE_CURRENT_COURSE_*) live in User::$temporaryRoles and appear in
+    // $user->getRoles(), but Symfony's AbstractToken::getRoleNames() only returns roles
+    // fixed at token-creation time. isGranted() therefore misses them.
+    private function hasContextRole(string $role): bool
+    {
+        return \in_array($role, $this->security->getUser()?->getRoles() ?? [], true);
+    }
+
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
         /** @var ResourceNode $resourceNode */
@@ -191,10 +199,10 @@ class ResourceNodeVoter extends Voter
                 return true;
             }
 
-            if ($this->security->isGranted('ROLE_CURRENT_COURSE_STUDENT')
-                || $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-                || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_STUDENT')
-                || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER')
+            if ($this->hasContextRole('ROLE_CURRENT_COURSE_STUDENT')
+                || $this->hasContextRole('ROLE_CURRENT_COURSE_TEACHER')
+                || $this->hasContextRole('ROLE_CURRENT_COURSE_SESSION_STUDENT')
+                || $this->hasContextRole('ROLE_CURRENT_COURSE_SESSION_TEACHER')
             ) {
                 return true;
             }
@@ -370,7 +378,7 @@ class ResourceNodeVoter extends Voter
 
         if ($courseId && $link->hasCourse() && $link->getCourse()->getId() === $courseId) {
             // If teacher.
-            if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_TEACHER)) {
+            if ($this->hasContextRole(self::ROLE_CURRENT_COURSE_TEACHER)) {
                 $resourceRight = (new ResourceRight())
                     ->setMask($editorMask)
                     ->setRole(self::ROLE_CURRENT_COURSE_TEACHER)
@@ -382,7 +390,7 @@ class ResourceNodeVoter extends Voter
             // Normal case: resource must be published.
             // Exception: when the resource is being opened from a learning path item,
             // allow VIEW even if the underlying ResourceLink visibility is hidden in the tool.
-            if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_STUDENT)
+            if ($this->hasContextRole(self::ROLE_CURRENT_COURSE_STUDENT)
                 && (ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility() || $isFromLearningPath)
             ) {
                 $resourceRight = (new ResourceRight())
@@ -405,7 +413,7 @@ class ResourceNodeVoter extends Voter
         }
 
         if (!empty($groupId)) {
-            if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_GROUP_TEACHER)) {
+            if ($this->hasContextRole(self::ROLE_CURRENT_COURSE_GROUP_TEACHER)) {
                 $resourceRight = (new ResourceRight())
                     ->setMask($editorMask)
                     ->setRole(self::ROLE_CURRENT_COURSE_GROUP_TEACHER)
@@ -413,7 +421,7 @@ class ResourceNodeVoter extends Voter
                 $rights[] = $resourceRight;
             }
 
-            if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_GROUP_STUDENT)) {
+            if ($this->hasContextRole(self::ROLE_CURRENT_COURSE_GROUP_STUDENT)) {
                 $resourceRight = (new ResourceRight())
                     ->setMask($readerMask)
                     ->setRole(self::ROLE_CURRENT_COURSE_GROUP_STUDENT)
@@ -423,7 +431,7 @@ class ResourceNodeVoter extends Voter
         }
 
         if (!empty($sessionId)) {
-            if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_SESSION_TEACHER)) {
+            if ($this->hasContextRole(self::ROLE_CURRENT_COURSE_SESSION_TEACHER)) {
                 $resourceRight = (new ResourceRight())
                     ->setMask($editorMask)
                     ->setRole(self::ROLE_CURRENT_COURSE_SESSION_TEACHER)
@@ -431,7 +439,7 @@ class ResourceNodeVoter extends Voter
                 $rights[] = $resourceRight;
             }
 
-            if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_SESSION_STUDENT)) {
+            if ($this->hasContextRole(self::ROLE_CURRENT_COURSE_SESSION_STUDENT)) {
                 $resourceRight = (new ResourceRight())
                     ->setMask($readerMask)
                     ->setRole(self::ROLE_CURRENT_COURSE_SESSION_STUDENT)

@@ -6,6 +6,47 @@ use Chamilo\PluginBundle\Zoom\Meeting;
 
 require_once __DIR__.'/config.php';
 
+
+if (!function_exists('zoom_plugin_restore_course_context')) {
+    function zoom_plugin_restore_course_context(Meeting $meeting): string
+    {
+        $course = $meeting->getCourse();
+        if (null === $course) {
+            return '';
+        }
+
+        if (!isset($_REQUEST['cid']) || empty($_REQUEST['cid'])) {
+            $_GET['cid'] = $course->getId();
+            $_REQUEST['cid'] = $course->getId();
+        }
+
+        $session = $meeting->getSession();
+        if (!isset($_REQUEST['sid']) || '' === (string) $_REQUEST['sid']) {
+            $sessionId = null !== $session ? (int) $session->getId() : 0;
+            $_GET['sid'] = $sessionId;
+            $_REQUEST['sid'] = $sessionId;
+        }
+
+        $group = $meeting->getGroup();
+        if (!isset($_REQUEST['gid']) || '' === (string) $_REQUEST['gid']) {
+            $groupId = 0;
+            if (null !== $group) {
+                if (method_exists($group, 'getIid')) {
+                    $groupId = (int) $group->getIid();
+                } elseif (method_exists($group, 'getId')) {
+                    $groupId = (int) $group->getId();
+                }
+            }
+
+            $_GET['gid'] = $groupId;
+            $_REQUEST['gid'] = $groupId;
+        }
+
+        return api_get_cidreq();
+    }
+}
+
+
 $meetingId = isset($_REQUEST['meetingId']) ? (int) $_REQUEST['meetingId'] : 0;
 if (empty($meetingId)) {
     api_not_allowed(true);
@@ -23,19 +64,20 @@ $course_plugin = 'zoom'; // needed in order to load the plugin lang variables
 $returnURL = 'meetings.php';
 $urlExtra = '';
 if ($meeting->isCourseMeeting()) {
+    $urlExtra = zoom_plugin_restore_course_context($meeting);
     api_protect_course_script(true);
     $this_section = SECTION_COURSES;
-    $urlExtra = api_get_cidreq();
     $returnURL = 'start.php?'.$urlExtra;
 
-    if (api_is_in_group()) {
+    $group = $meeting->getGroup();
+    if (api_is_in_group() && null !== $group) {
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.$urlExtra,
             'name' => get_lang('Groups'),
         ];
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.$urlExtra,
-            'name' => get_lang('Group area').' '.$meeting->getGroup()->getTitle(),
+            'name' => get_lang('Group area').' '.$group->getTitle(),
         ];
     }
 }
@@ -51,6 +93,13 @@ $interbreadcrumb[] = [
 ];
 
 $tpl = new Template($meeting->getMeetingId());
+$tpl->assign('isConferenceManager', false);
+$tpl->assign('editMeetingForm', '');
+$tpl->assign('deleteMeetingForm', '');
+$tpl->assign('registerParticipantForm', '');
+$tpl->assign('fileForm', '');
+$tpl->assign('registrants', []);
+$tpl->assign('currentUserJoinURL', '');
 
 if ($plugin->userIsConferenceManager($meeting)) {
     // user can edit, start and delete meeting
@@ -90,5 +139,5 @@ if ($plugin->userIsConferenceManager($meeting)) {
 $tpl->assign('actions', $plugin->getToolbar());
 $tpl->assign('meeting', $meeting);
 $tpl->assign('url_extra', $urlExtra);
-$tpl->assign('content', $tpl->fetch('zoom/view/meeting.tpl'));
+$tpl->assign('content', $tpl->fetch('Zoom/view/meeting.tpl'));
 $tpl->display_one_col_template();

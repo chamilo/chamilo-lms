@@ -52,9 +52,18 @@ class CourseToolDataTranformer
         return $cTool;
     }
 
+    private function normalizeToolLink(string $link): string
+    {
+        if (str_starts_with($link, 'plugin/')) {
+            return '/'.$link;
+        }
+
+        return $link;
+    }
+
     private function generateToolUrl(AbstractTool $tool, Course $course): string
     {
-        $link = $tool->getLink();
+        $link = $this->normalizeToolLink($tool->getLink());
 
         if (str_contains($link, ':nodeId')) {
             $nodeId = (string) $course->getResourceNode()->getId();

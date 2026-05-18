@@ -47,8 +47,12 @@ $htmlHeadXtra[] = '<script>
 
 $tool_name = $plugin->get_lang('ZoomVideoConferences');
 $tpl = new Template($tool_name);
+$tpl->assign('instant_meeting_form', '');
+$tpl->assign('group_form', '');
+$tpl->assign('schedule_meeting_form', '');
+$tpl->assign('meetings', []);
 
-$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
+$action = isset($_REQUEST['action']) ? (string) $_REQUEST['action'] : '';
 
 $isManager = $plugin->userIsCourseConferenceManager();
 if ($isManager) {
@@ -73,7 +77,8 @@ if ($isManager) {
 
     switch ($action) {
         case 'delete':
-            $meeting = $plugin->getMeetingRepository()->findOneBy(['meetingId' => $_REQUEST['meetingId']]);
+            $meetingId = isset($_REQUEST['meetingId']) ? (int) $_REQUEST['meetingId'] : 0;
+            $meeting = $meetingId > 0 ? $plugin->getMeetingRepository()->findOneBy(['meetingId' => $meetingId]) : null;
             if ($meeting && $meeting->isCourseMeeting()) {
                 $plugin->deleteMeeting($meeting, api_get_self().'?'.api_get_cidreq());
             }
@@ -114,5 +119,5 @@ try {
 }
 
 $tpl->assign('is_manager', $isManager);
-$tpl->assign('content', $tpl->fetch('zoom/view/start.tpl'));
+$tpl->assign('content', $tpl->fetch('Zoom/view/start.tpl'));
 $tpl->display_one_col_template();

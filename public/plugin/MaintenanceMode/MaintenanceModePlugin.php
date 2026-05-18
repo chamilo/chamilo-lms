@@ -1,32 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
-/**
- * Class MaintenanceModePlugin.
- */
 class MaintenanceModePlugin extends Plugin
 {
-    /**
-     * MaintenanceModePlugin constructor.
-     */
-    public function __construct()
+    protected function __construct()
     {
         parent::__construct(
-            '0.1',
-            'Julio Montoya',
-            [
-            ]
+            '1.0',
+            'Chamilo',
+            []
         );
     }
 
-    /**
-     * @return $this
-     */
-    public static function create()
+    public static function create(): self
     {
-        static $result = null;
+        static $instance = null;
 
-        return $result ?: $result = new self();
+        return $instance ??= new self();
     }
 }

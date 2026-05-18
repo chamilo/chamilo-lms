@@ -807,6 +807,17 @@ class SortableTable extends HTML_Table
             $param = array_merge($param, $this->additional_parameters);
         }
 
+        // Preserve course/session context so the form submission doesn't lose access rights
+        $cidreq = api_get_cidreq();
+        if (!empty($cidreq)) {
+            parse_str($cidreq, $cidreqParams);
+            foreach ($cidreqParams as $key => $value) {
+                if (!isset($param[$key])) {
+                    $param[$key] = $value;
+                }
+            }
+        }
+
         foreach ($param as $key => $value) {
             $result[] = '<input type="hidden" name="'.$key.'" value="'.$value.'"/>';
         }

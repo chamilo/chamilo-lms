@@ -328,7 +328,7 @@ function save_data(array $users, bool $sendMail = false, ?string $targetFolder =
                 }
 
                 $email = $user['Email'] ?? $userInfo['email'];
-                $status = $user['Status'] ?? $userInfo['status'];
+                $status = api_status_key($user['Status']) ?? $userInfo['status'];
                 $officialCode = $user['OfficialCode'] ?? $userInfo['official_code'];
                 $phone = $user['PhoneNumber'] ?? $userInfo['phone'];
                 $pictureUrl = $user['PictureUri'] ?? $userInfo['picture_uri'];

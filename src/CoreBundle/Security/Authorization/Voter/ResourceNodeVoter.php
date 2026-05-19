@@ -118,10 +118,6 @@ class ResourceNodeVoter extends Voter
             return true;
         }
 
-        if (self::VIEW === $attribute && $this->isBlogResource($resourceNode)) {
-            return true;
-        }
-
         // Special case: allow file assets that are embedded inside a visible system announcement.
         if (self::VIEW === $attribute && $this->isAnnouncementFileVisibleForCurrentRequest($resourceNode, $token)) {
             return true;
@@ -685,27 +681,6 @@ class ResourceNodeVoter extends Voter
 
             $headerHost = $scheme.'://'.$host.(null !== $port ? ':'.$port : '');
             if ($headerHost !== $currentHost) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private function isBlogResource(ResourceNode $node): bool
-    {
-        $type = $node->getResourceType()?->getTitle();
-        if (\in_array($type, ['blog', 'blogs', 'c_blog', 'c_blogs'], true)) {
-            return true;
-        }
-
-        $firstLink = $node->getResourceLinks()->first();
-        if ($firstLink && method_exists($firstLink, 'getTool') && $firstLink->getTool()) {
-            $toolName = method_exists($firstLink->getTool(), 'getName')
-                ? $firstLink->getTool()->getName()
-                : $firstLink->getTool()->getTitle();
-
-            if (\in_array(strtolower((string) $toolName), ['blog', 'blogs'], true)) {
                 return true;
             }
         }

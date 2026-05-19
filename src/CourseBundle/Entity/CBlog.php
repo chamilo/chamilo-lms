@@ -70,8 +70,8 @@ use Symfony\Component\Validator\Constraints as Assert;
             deserialize: false
         ),
         new Get(security: "is_granted('VIEW', object.resourceNode)"),
-        new Patch(security: "is_granted('ROLE_USER')"),
-        new Delete(security: "is_granted('ROLE_USER')"),
+        new Patch(security: "is_granted('EDIT', object.resourceNode)"),
+        new Delete(security: "is_granted('DELETE', object.resourceNode)"),
         new Put(
             uriTemplate: '/c_blogs/{iid}/toggle_visibility',
             controller: UpdateVisibilityBlog::class,

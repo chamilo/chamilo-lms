@@ -434,11 +434,12 @@ async function handleCreateUser() {
     matches.value.unshift(newUser)
   } catch (e) {
     console.error(e)
-    const violations = e?.response?.data?.violations ?? []
-    const isDuplicate = violations.some(
-      (v) => v.propertyPath === "username" && v.message.toLowerCase().includes("already used"),
-    )
-    showErrorNotification(isDuplicate ? t("A user with this username already exists") : t("Could not create user"))
+    const errorKey = e?.response?.data?.error ?? e?.response?.data?.detail ?? ""
+    if (errorKey === "username_already_exists" || errorKey === "email_already_exists") {
+      showErrorNotification(t("A user with this username already exists"))
+    } else {
+      showErrorNotification(t("Could not create user"))
+    }
   } finally {
     createLoading.value = false
   }

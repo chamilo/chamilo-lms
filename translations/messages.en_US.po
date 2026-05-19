@@ -33985,3 +33985,6 @@ msgstr "Loading comments..."
 
 msgid "No comments yet."
 msgstr "No comments yet."
+
+msgid "A user with this username already exists"
+msgstr "A user with this username already exists"

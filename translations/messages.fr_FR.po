@@ -35836,3 +35836,6 @@ msgstr "Chargement des commentaires..."
 
 msgid "No comments yet."
 msgstr "Aucun commentaire pour l'instant."
+
+msgid "A user with this username already exists"
+msgstr "Un utilisateur avec ce nom d'utilisateur existe déjà"

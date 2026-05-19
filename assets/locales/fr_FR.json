@@ -966,6 +966,7 @@
     "Course sent to": "Cours envoy\u00e9 \u00e0",
     "User created": "Utilisateur cr\u00e9\u00e9",
     "Could not create user": "L'utilisateur n'a pas pu \u00eatre cr\u00e9\u00e9",
+    "A user with this username already exists": "Un utilisateur avec ce nom d'utilisateur existe d\u00e9j\u00e0",
     "Ended": "Termin\u00e9 le",
     "Extend one week": "Prolonger d'une semaine",
     "Could not load data": "Impossible de charger les donn\u00e9es",

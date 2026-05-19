@@ -33902,3 +33902,6 @@ msgstr ""
 
 msgid "No comments yet."
 msgstr ""
+
+msgid "A user with this username already exists"
+msgstr ""

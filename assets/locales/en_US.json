@@ -967,6 +967,7 @@
     "Course sent to": "Course sent to",
     "User created": "User created",
     "Could not create user": "Could not create user",
+    "A user with this username already exists": "A user with this username already exists",
     "Ended": "Ended",
     "Extend one week": "Extend one week",
     "Could not load data": "Could not load data",

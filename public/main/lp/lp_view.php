@@ -326,6 +326,30 @@ foreach ($get_toc_list as $toc) {
     }
 }
 
+$aiProviders = json_decode((string) api_get_setting('ai_helpers.ai_providers'), true);
+$aiProviders = \is_array($aiProviders) ? $aiProviders : [];
+$hasAiTextProvider = false;
+foreach ($aiProviders as $providerConfig) {
+    if (!\is_array($providerConfig)) {
+        continue;
+    }
+
+    if (isset($providerConfig['text']) && \is_array($providerConfig['text'])) {
+        $hasAiTextProvider = true;
+        break;
+    }
+
+    if (isset($providerConfig['model']) || isset($providerConfig['url'])) {
+        $hasAiTextProvider = true;
+        break;
+    }
+}
+$aiLearningHelperEnabled = (
+    'document' === $itemType
+    && 'true' === api_get_setting('ai_helpers.enable_ai_helpers')
+    && $hasAiTextProvider
+);
+
 if (!isset($src)) {
     $src = null;
     switch ($lpType) {
@@ -757,6 +781,12 @@ $template->assign('data_list', $oLP->getListArrayToc());
 
 $template->assign('lp_id', $lp->getIid());
 $template->assign('lp_current_item_id', $lpCurrentItemId);
+
+$template->assign('ai_learning_helper_enabled', (int) $aiLearningHelperEnabled);
+$template->assign('ai_learning_helper_endpoint', api_get_path(WEB_PATH).'ai/lp_learning_helper');
+$template->assign('ai_learning_helper_language', (string) ($courseInfo['language'] ?? 'en'));
+$template->assign('ai_learning_helper_course_id', (int) $course_id);
+$template->assign('ai_learning_helper_session_id', (int) $sessionId);
 
 $menuLocation = 'left';
 if ('false' !== api_get_setting('lp.lp_menu_location')) {

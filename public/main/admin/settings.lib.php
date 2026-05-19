@@ -317,6 +317,9 @@ function getStablePluginAllowList(): array
         'XApi',
         'ExerciseFocused',
         'ExerciseMonitoring',
+        'Zoom',
+        'MaintenanceMode',
+        'Redirection',
     ];
 }
 
@@ -340,6 +343,65 @@ function pluginShouldBeVisibleInStableList(string $pluginName): bool
     }
 
     return isset($allowedPlugins[$pluginName]);
+}
+
+/**
+ * Check whether a plugin is installed or enabled in the current access URL.
+ */
+function plugin_is_installed_or_enabled(array $pluginRow): bool
+{
+    $plugin = $pluginRow['plugin'] ?? null;
+
+    if (!$plugin instanceof PluginEntity) {
+        return false;
+    }
+
+    if ($plugin->isInstalled()) {
+        return true;
+    }
+
+    $configuration = $plugin->getConfigurationsByAccessUrl(Container::getAccessUrlUtil()->getCurrent());
+
+    return null !== $configuration && $configuration->isActive();
+}
+
+/**
+ * Hide pending plugins by default while keeping verified and already installed plugins visible.
+ */
+function plugin_should_be_visible_in_current_admin_view(array $pluginRow): bool
+{
+    if (shouldShowAllPlugins()) {
+        return true;
+    }
+
+    if (!empty($pluginRow['is_stable'])) {
+        return true;
+    }
+
+    return plugin_is_installed_or_enabled($pluginRow);
+}
+
+/**
+ * Build a URL that temporarily shows every plugin.
+ */
+function plugin_get_show_all_plugins_url(): string
+{
+    return api_get_self().'?'.http_build_query([
+            'category' => 'Plugins',
+            'plugin_tab' => plugin_get_selected_tab(),
+            'show_all_plugins' => 1,
+        ]);
+}
+
+/**
+ * Build a URL that returns to the verified plugins view.
+ */
+function plugin_get_verified_plugins_url(): string
+{
+    return api_get_self().'?'.http_build_query([
+            'category' => 'Plugins',
+            'plugin_tab' => plugin_get_selected_tab(),
+        ]);
 }
 
 /**
@@ -866,8 +928,22 @@ function handlePlugins()
     Session::erase('plugin_data');
 
     $allPlugins = (new AppPlugin())->read_plugins_from_path();
-    $pluginRows = plugin_get_admin_rows($allPlugins);
+    $allPluginRows = plugin_get_admin_rows($allPlugins);
     $selectedTab = plugin_get_selected_tab();
+
+    $hiddenPluginCount = 0;
+    $pluginRows = array_values(array_filter(
+        $allPluginRows,
+        static function (array $pluginRow) use (&$hiddenPluginCount): bool {
+            $isVisible = plugin_should_be_visible_in_current_admin_view($pluginRow);
+
+            if (!$isVisible) {
+                $hiddenPluginCount++;
+            }
+
+            return $isVisible;
+        }
+    ));
 
     $tabCounts = [
         'included' => 0,
@@ -898,6 +974,26 @@ function handlePlugins()
         </div>
         <p class="text-body-1 text-gray-50">'.get_lang('Install, activate or deactivate plugins easily.').'</p>
     ';
+
+    if (shouldShowAllPlugins()) {
+        echo '<div class="mb-4 rounded-2xl border border-info/20 bg-info/10 p-4 text-sm text-gray-90">';
+        echo '  <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">';
+        echo '      <div><strong>'.get_lang('Showing all plugins.').'</strong> '.get_lang('Some plugins are still pending functional verification.').'</div>';
+        echo '      <a class="btn btn--plain-outline btn--sm justify-center" href="'.htmlspecialchars(plugin_get_verified_plugins_url(), ENT_QUOTES).'">';
+        echo '          <i class="mdi mdi-filter-check-outline"></i> '.get_lang('Show verified plugins only');
+        echo '      </a>';
+        echo '  </div>';
+        echo '</div>';
+    } elseif (0 < $hiddenPluginCount) {
+        echo '<div class="mb-4 rounded-2xl border border-warning/20 bg-warning/10 p-4 text-sm text-gray-90">';
+        echo '  <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">';
+        echo '      <div><strong>'.get_lang('Showing verified plugins only.').'</strong> '.get_lang('Pending plugins are temporarily hidden until they are adapted and tested.').'</div>';
+        echo '      <a class="btn btn--plain-outline btn--sm justify-center" href="'.htmlspecialchars(plugin_get_show_all_plugins_url(), ENT_QUOTES).'">';
+        echo '          <i class="mdi mdi-eye-outline"></i> '.get_lang('Show all plugins');
+        echo '      </a>';
+        echo '  </div>';
+        echo '</div>';
+    }
 
     echo '<div class="mb-4 rounded-2xl border border-gray-25 bg-white p-4 shadow-sm">';
     echo '  <div class="mb-3 text-sm text-gray-60">';

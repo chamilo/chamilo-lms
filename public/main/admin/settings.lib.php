@@ -915,9 +915,96 @@ function handlePlugins()
         static fn (array $pluginRow): bool => plugin_matches_admin_tab($pluginRow, $selectedTab)
     ));
 
+    usort($visiblePluginRows, static function (array $left, array $right): int {
+        $leftPlugin = $left['plugin'];
+        $rightPlugin = $right['plugin'];
+
+        $leftConfiguration = $leftPlugin?->getConfigurationsByAccessUrl(Container::getAccessUrlUtil()->getCurrent());
+        $rightConfiguration = $rightPlugin?->getConfigurationsByAccessUrl(Container::getAccessUrlUtil()->getCurrent());
+
+        $leftPriority = $leftPlugin && $leftPlugin->isInstalled() ? 1 : 0;
+        $rightPriority = $rightPlugin && $rightPlugin->isInstalled() ? 1 : 0;
+
+        if ($leftConfiguration && $leftConfiguration->isActive()) {
+            $leftPriority = 2;
+        }
+
+        if ($rightConfiguration && $rightConfiguration->isActive()) {
+            $rightPriority = 2;
+        }
+
+        if ($leftPriority !== $rightPriority) {
+            return $rightPriority <=> $leftPriority;
+        }
+
+        return strcasecmp((string) ($left['metadata']['title'] ?? $left['name']), (string) ($right['metadata']['title'] ?? $right['name']));
+    });
+
     if (empty($visiblePluginRows)) {
         echo Display::return_message(get_lang('No plugins were found for this category.'), 'info', false);
     }
+
+    echo '<div class="mb-4 rounded-2xl border border-gray-25 bg-white p-4 shadow-sm">';
+    echo '  <div class="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">';
+    echo '      <div class="flex-1">';
+    echo '          <label for="plugin-admin-search" class="mb-1 block text-sm font-semibold text-gray-70">'.get_lang('Search plugins').'</label>';
+    echo '          <div class="relative">';
+    echo '              <i class="mdi mdi-magnify pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-50"></i>';
+    echo '              <input id="plugin-admin-search" type="search" class="w-full rounded-lg border border-gray-25 bg-white py-2 pl-10 pr-3 text-sm text-gray-90 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary" placeholder="'.htmlspecialchars(get_lang('Search by name or description'), ENT_QUOTES).'">';
+    echo '          </div>';
+    echo '      </div>';
+    echo '      <div class="flex flex-wrap items-center gap-2">';
+    echo '          <button id="plugin-admin-advanced-toggle" type="button" class="btn btn--plain-outline justify-center" aria-expanded="false" aria-controls="plugin-admin-advanced-filters">';
+    echo '              <i class="mdi mdi-tune-variant"></i> '.get_lang('Advanced filters');
+    echo '          </button>';
+    echo '          <button id="plugin-admin-clear-filters" type="button" class="btn btn--plain justify-center">';
+    echo '              <i class="mdi mdi-filter-remove-outline"></i> '.get_lang('Clear');
+    echo '          </button>';
+    echo '      </div>';
+    echo '  </div>';
+    echo '  <div id="plugin-admin-advanced-filters" class="mt-4 hidden rounded-xl border border-gray-25 bg-gray-5 p-4">';
+    echo '      <div class="grid gap-4 md:grid-cols-3">';
+    echo '          <div>';
+    echo '              <label for="plugin-admin-status-filter" class="mb-1 block text-sm font-semibold text-gray-70">'.get_lang('Status').'</label>';
+    echo '              <select id="plugin-admin-status-filter" class="w-full rounded-lg border border-gray-25 bg-white px-3 py-2 text-sm text-gray-90 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary">';
+    echo '                  <option value="">'.get_lang('All statuses').'</option>';
+    echo '                  <option value="enabled">'.get_lang('Enabled').'</option>';
+    echo '                  <option value="disabled">'.get_lang('Disabled').'</option>';
+    echo '                  <option value="installed">'.get_lang('Installed').'</option>';
+    echo '                  <option value="not-installed">'.get_lang('Not installed').'</option>';
+    echo '              </select>';
+    echo '          </div>';
+    echo '          <div>';
+    echo '              <label for="plugin-admin-source-filter" class="mb-1 block text-sm font-semibold text-gray-70">'.get_lang('Source').'</label>';
+    echo '              <select id="plugin-admin-source-filter" class="w-full rounded-lg border border-gray-25 bg-white px-3 py-2 text-sm text-gray-90 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary">';
+    echo '                  <option value="">'.get_lang('All sources').'</option>';
+    echo '                  <option value="official">'.get_lang('Official').'</option>';
+    echo '                  <option value="third_party">'.get_lang('Third party').'</option>';
+    echo '              </select>';
+    echo '          </div>';
+    echo '          <div>';
+    echo '              <label for="plugin-admin-type-filter" class="mb-1 block text-sm font-semibold text-gray-70">'.get_lang('Type').'</label>';
+    echo '              <select id="plugin-admin-type-filter" class="w-full rounded-lg border border-gray-25 bg-white px-3 py-2 text-sm text-gray-90 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary">';
+    echo '                  <option value="">'.get_lang('All types').'</option>';
+    echo '                  <option value="free">'.get_lang('100% free').'</option>';
+    echo '                  <option value="freemium">'.get_lang('Freemium').'</option>';
+    echo '                  <option value="commercial_service">'.get_lang('Commercial service').'</option>';
+    echo '                  <option value="commercial">'.get_lang('Commercial').'</option>';
+    echo '              </select>';
+    echo '          </div>';
+    echo '      </div>';
+    echo '  </div>';
+    echo '  <div class="mt-3 flex flex-wrap items-center justify-between gap-2 text-sm text-gray-50">';
+    echo '      <span id="plugin-admin-filter-summary" data-total="'.count($visiblePluginRows).'">'.count($visiblePluginRows).' / '.count($visiblePluginRows).'</span>';
+    echo '      <span class="inline-flex items-center gap-1 text-caption text-gray-50"><i class="mdi mdi-sort-ascending"></i> '.get_lang('Installed plugins are shown first').'</span>';
+    echo '  </div>';
+    echo '</div>';
+
+    echo '<div id="plugin-admin-empty-state" class="mb-4 hidden rounded-2xl border border-gray-25 bg-white p-6 text-center text-gray-50 shadow-sm">';
+    echo '  <i class="mdi mdi-puzzle-search-outline mb-2 block text-3xl text-primary"></i>';
+    echo '  <div class="font-semibold text-gray-90">'.get_lang('No plugins match the current filters.').'</div>';
+    echo '  <div class="mt-1 text-sm">'.get_lang('Try clearing the search or changing the filters.').'</div>';
+    echo '</div>';
 
     echo '<div class="overflow-x-auto rounded-xl border border-gray-25 bg-white shadow-sm">';
     echo '<table class="w-full min-w-[1060px] table-fixed">';
@@ -961,7 +1048,18 @@ function handlePlugins()
                 : '<span class="badge badge--warning">'.get_lang('Disabled').'</span>')
             : '<span class="badge badge--default">'.get_lang('Not installed').'</span>';
 
-        echo '<tr class="border-t border-gray-25 align-top transition hover:bg-gray-15">';
+        $pluginSearchText = strtolower(trim($pluginName.' '.($metadata['title'] ?? '').' '.$pluginDisplayComment.' '.($metadata['version'] ?? '')));
+        $pluginSearchText = htmlspecialchars($pluginSearchText, ENT_QUOTES);
+        $pluginStatus = $isInstalled ? ($isEnabled ? 'enabled' : 'disabled') : 'not-installed';
+        $pluginInstalled = $isInstalled ? '1' : '0';
+
+        echo '<tr class="plugin-admin-row border-t border-gray-25 align-top transition hover:bg-gray-15"
+            data-plugin-row="1"
+            data-plugin-search="'.$pluginSearchText.'"
+            data-plugin-status="'.$pluginStatus.'"
+            data-plugin-installed="'.$pluginInstalled.'"
+            data-plugin-source="'.htmlspecialchars($source, ENT_QUOTES).'"
+            data-plugin-type="'.htmlspecialchars($commercialModel, ENT_QUOTES).'">';
 
         echo '<td class="p-3">';
         echo '  <div class="relative min-w-0 overflow-hidden rounded-xl border border-gray-25 bg-white p-3">';
@@ -1110,6 +1208,44 @@ function handlePlugins()
   var disablingText = {$disablingText};
   var readmeTitleSuffix = {$readmeTitleSuffix};
 
+  function normalizePluginFilterValue(value) {
+    return (value || "").toString().trim().toLowerCase();
+  }
+
+  function applyPluginAdminFilters() {
+    var search = normalizePluginFilterValue($("#plugin-admin-search").val());
+    var status = normalizePluginFilterValue($("#plugin-admin-status-filter").val());
+    var source = normalizePluginFilterValue($("#plugin-admin-source-filter").val());
+    var type = normalizePluginFilterValue($("#plugin-admin-type-filter").val());
+    var visibleCount = 0;
+
+    $(".plugin-admin-row").each(function () {
+      var \$row = $(this);
+      var rowSearch = normalizePluginFilterValue(\$row.data("plugin-search"));
+      var rowStatus = normalizePluginFilterValue(\$row.data("plugin-status"));
+      var rowInstalled = normalizePluginFilterValue(\$row.data("plugin-installed"));
+      var rowSource = normalizePluginFilterValue(\$row.data("plugin-source"));
+      var rowType = normalizePluginFilterValue(\$row.data("plugin-type"));
+
+      var matchesSearch = !search || rowSearch.indexOf(search) !== -1;
+      var matchesStatus = !status ||
+        rowStatus === status ||
+        (status === "installed" && rowInstalled === "1");
+      var matchesSource = !source || rowSource === source;
+      var matchesType = !type || rowType === type;
+
+      if (matchesSearch && matchesStatus && matchesSource && matchesType) {
+        \$row.removeClass("hidden");
+        visibleCount++;
+      } else {
+        \$row.addClass("hidden");
+      }
+    });
+
+    $("#plugin-admin-empty-state").toggleClass("hidden", visibleCount > 0);
+    $("#plugin-admin-filter-summary").text(visibleCount + " / " + ($("#plugin-admin-filter-summary").data("total") || 0));
+  }
+
   function showToast(message, type) {
     var bg = type === "success" ? "bg-green-600" : (type === "warning" ? "bg-yellow-600" : "bg-red-600");
     var \$toast = $("<div/>", {
@@ -1152,6 +1288,27 @@ function handlePlugins()
   }
 
   $(document).ready(function () {
+    $(document).on("click", "#plugin-admin-advanced-toggle", function () {
+      var \$button = $(this);
+      var \$filters = $("#plugin-admin-advanced-filters");
+      var isExpanded = \$button.attr("aria-expanded") === "true";
+
+      \$button.attr("aria-expanded", isExpanded ? "false" : "true");
+      \$filters.toggleClass("hidden", isExpanded);
+    });
+
+    $(document).on("input change", "#plugin-admin-search, #plugin-admin-status-filter, #plugin-admin-source-filter, #plugin-admin-type-filter", applyPluginAdminFilters);
+
+    $(document).on("click", "#plugin-admin-clear-filters", function () {
+      $("#plugin-admin-search").val("");
+      $("#plugin-admin-status-filter").val("");
+      $("#plugin-admin-source-filter").val("");
+      $("#plugin-admin-type-filter").val("");
+      applyPluginAdminFilters();
+    });
+
+    applyPluginAdminFilters();
+
     $(document).on("click", ".plugin-action", function () {
       var \$btn = $(this);
       if (\$btn.data("busy")) {

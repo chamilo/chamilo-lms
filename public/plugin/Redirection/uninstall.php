@@ -1,11 +1,9 @@
 <?php
 
 /* For licensing terms, see /license.txt */
-/**
- * Uninstall the plugin.
- *
- * @author Enrique Alcaraz Lopez
- */
+
+require_once __DIR__.'/config.php';
+
 api_protect_admin_script();
 
 RedirectionPlugin::create()->uninstall();

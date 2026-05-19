@@ -3,62 +3,60 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Redirection plugin. Allows the configuration of redirection of specific users right after they login.
+ * Redirection plugin.
  *
- * @author Enrique Alcaraz Lopez
+ * Redirects specific users to an administrator-defined URL after login.
  */
 class RedirectionPlugin extends Plugin
 {
-    public $isAdminPlugin = true;
-
-    /**
-     * Class constructor.
-     */
     protected function __construct()
     {
-        $version = '1.0';
-        $author = 'Enrique Alcaraz, Julio Montoya';
-        parent::__construct($version, $author, ['enabled' => 'boolean']);
+        parent::__construct(
+            '1.4',
+            'Enrique Alcaraz, Julio Montoya',
+            []
+        );
+
         $this->isAdminPlugin = true;
     }
 
-    /**
-     * @return RedirectionPlugin
-     */
-    public static function create()
+    public static function create(): self
     {
-        static $result = null;
+        static $instance = null;
 
-        return $result ?: $result = new self();
+        return $instance ??= new self();
     }
 
     /**
-     * Inser a new redirection (and delete the previous one for this user, if any).
-     *
-     * @param int    $userId
-     * @param string $url
-     *
-     * @return false|string
+     * Inserts or replaces the redirection for one user.
      */
-    public static function insert($userId, $url)
+    public static function insert(int $userId, string $url)
     {
         $userId = (int) $userId;
+        $url = trim($url);
 
-        if (empty($userId)) {
+        if (empty($userId) || empty($url)) {
             return false;
         }
 
-        $sql = "DELETE FROM plugin_redirection WHERE user_id = $userId";
-        Database::query($sql);
+        if (!self::isAllowedRedirectUrl($url)) {
+            return false;
+        }
 
         $userInfo = api_get_user_info($userId);
-
         if (empty($userInfo)) {
             return false;
         }
 
+        $table = Database::get_main_table('plugin_redirection');
+
+        Database::delete(
+            $table,
+            ['user_id = ?' => [$userId]]
+        );
+
         return Database::insert(
-            'plugin_redirection',
+            $table,
             [
                 'user_id' => $userId,
                 'url' => $url,
@@ -67,113 +65,171 @@ class RedirectionPlugin extends Plugin
     }
 
     /**
-     * Get the current redirection for a given user (if any).
+     * Gets the current redirection for a given user.
      *
-     * @param int $userId
-     *
-     * @return array
+     * @return array|false
      */
-    public static function getUrlFromUser($userId)
+    public static function getUrlFromUser(int $userId)
     {
         $userId = (int) $userId;
+
+        if (empty($userId)) {
+            return false;
+        }
+
         $userInfo = api_get_user_info($userId);
         if (empty($userInfo)) {
             return false;
         }
-        $sql = "SELECT * FROM plugin_redirection WHERE user_id = $userId LIMIT 1";
-        $result = Database::query($sql);
 
-        return Database::fetch_assoc($result);
+        $table = Database::get_main_table('plugin_redirection');
+
+        $result = Database::select(
+            '*',
+            $table,
+            [
+                'where' => [
+                    'user_id = ?' => [$userId],
+                ],
+                'limit' => 1,
+            ]
+        );
+
+        if (empty($result)) {
+            return false;
+        }
+
+        return $result[0];
     }
 
-    /**
-     * Deletes redirection from user.
-     *
-     * @param int $userId
-     */
-    public static function deleteUserRedirection($userId)
+    public static function getRedirectUrlForUser(int $userId): ?string
+    {
+        $userId = (int) $userId;
+
+        if (empty($userId)) {
+            return null;
+        }
+
+        $table = Database::get_main_table('plugin_redirection');
+
+        $result = Database::select(
+            'url',
+            $table,
+            [
+                'where' => [
+                    'user_id = ?' => [$userId],
+                ],
+                'limit' => 1,
+            ]
+        );
+
+        if (empty($result) || empty($result[0]['url'])) {
+            return null;
+        }
+
+        $url = trim((string) $result[0]['url']);
+
+        if (!self::isAllowedRedirectUrl($url)) {
+            return null;
+        }
+
+        return $url;
+    }
+
+    public static function deleteUserRedirection(int $userId): void
     {
         $table = Database::get_main_table('plugin_redirection');
+
         Database::delete(
             $table,
-            ['user_id = ?' => [$userId]]
+            ['user_id = ?' => [(int) $userId]]
         );
     }
 
-    /**
-     * Deletes an existing redirection.
-     *
-     * @param int $id
-     */
-    public static function delete($id)
+    public static function delete(int $id): void
     {
         $table = Database::get_main_table('plugin_redirection');
+
         Database::delete(
             $table,
-            ['id = ?' => [$id]]
+            ['id = ?' => [(int) $id]]
         );
     }
 
-    /**
-     * Get all current redirection records.
-     *
-     * @return array
-     */
-    public static function getAll()
+    public static function getAll(): array
     {
         $table = Database::get_main_table('plugin_redirection');
 
-        return Database::select('*', $table);
+        return Database::select(
+            '*',
+            $table,
+            [
+                'order' => 'id DESC',
+            ]
+        );
     }
 
-    /**
-     * Install the required DB structure to store the plugin data.
-     */
-    public static function install()
+    public function install(): void
     {
         $table = Database::get_main_table('plugin_redirection');
 
         $sql = "CREATE TABLE IF NOT EXISTS $table (
             id INT unsigned NOT NULL auto_increment PRIMARY KEY,
             user_id INT unsigned NOT NULL DEFAULT 0,
-            url VARCHAR(255) NOT NULL DEFAULT ''
-        )";
+            url VARCHAR(2048) NOT NULL DEFAULT '',
+            UNIQUE KEY user_id (user_id)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
 
         Database::query($sql);
     }
 
-    /**
-     * Uninstall the plugin, cleaning up the database structure created on install.
-     */
-    public static function uninstall()
+    public function uninstall(): void
     {
         $table = Database::get_main_table('plugin_redirection');
-        $sql = "DROP TABLE IF EXISTS $table";
-        Database::query($sql);
+
+        Database::query("DROP TABLE IF EXISTS $table");
     }
 
-    /**
-     * Redirect user if plugin is installed.
-     *
-     * @param int $userId
-     */
-    public static function redirectUser($userId)
+    public static function isAllowedRedirectUrl(string $url): bool
     {
-        // Check redirection plugin
-        $plugin = new AppPlugin();
-        $pluginList = $plugin->getInstalledPlugins();
-        $redirectionInstalled = in_array('redirection', $pluginList);
-        if ($redirectionInstalled) {
-            $pluginInfo = $plugin->getPluginInfo('redirection');
-            if (!empty($pluginInfo) && isset($pluginInfo['obj'])) {
-                /** @var RedirectionPlugin $redirectionPlugin */
-                $redirectionPlugin = $pluginInfo['obj'];
-                $record = $redirectionPlugin->getUrlFromUser($userId);
-                if (!empty($record) && !empty($record['url'])) {
-                    header('Location: '.$record['url']);
-                    exit;
-                }
-            }
+        $url = trim($url);
+
+        if ('' === $url) {
+            return false;
         }
+
+        if (str_contains($url, "\r") || str_contains($url, "\n")) {
+            return false;
+        }
+
+        if (str_starts_with($url, '/')) {
+            return !str_starts_with($url, '//');
+        }
+
+        $scheme = parse_url($url, PHP_URL_SCHEME);
+
+        if (!in_array($scheme, ['http', 'https'], true)) {
+            return false;
+        }
+
+        return false !== filter_var($url, FILTER_VALIDATE_URL);
+    }
+
+    public static function redirectUser(int $userId): void
+    {
+        $record = self::getUrlFromUser($userId);
+
+        if (empty($record) || empty($record['url'])) {
+            return;
+        }
+
+        $url = (string) $record['url'];
+
+        if (!self::isAllowedRedirectUrl($url)) {
+            return;
+        }
+
+        header('Location: '.$url);
+        exit;
     }
 }

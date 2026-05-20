@@ -5,6 +5,8 @@
 declare(strict_types=1);
 
 use Chamilo\CoreBundle\Entity\Language;
+use Chamilo\CoreBundle\Event\Events;
+use Chamilo\CoreBundle\Event\LearningPathCreatedEvent;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLp;
 
@@ -294,6 +296,11 @@ if ($form->validate()) {
         $lp->setAccumulateScormTime((int) (null !== $request->request->get('accumulate_scorm_time')));
         lp_add_apply_resource_language($lp, $request->request->get('language', ''));
         $lpRepo->update($lp);
+
+        Container::getEventDispatcher()->dispatch(
+            new LearningPathCreatedEvent(['lp' => $lp]),
+            Events::LP_CREATED
+        );
 
         $url = api_get_self().'?action=add_item&type=step&lp_id='.$lpId.'&'.api_get_cidreq();
         header("Location: $url&isStudentView=false");

@@ -63,6 +63,9 @@ final class CreateCGlossaryAction extends BaseResourceFileAction
         $em->persist($glossary);
         $em->flush();
 
+        $this->applyResourceLanguageFromRequest($glossary, $request, $em);
+        $em->flush();
+
         if (\array_key_exists('ai_assisted_raw', $data)) {
             $enabled = $this->normalizeBoolean($data['ai_assisted_raw']);
             $iid = (int) ($glossary->getIid() ?? 0);

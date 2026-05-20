@@ -13,12 +13,11 @@
       editor-id=""
     />
 
-    <ResourceLanguageSelector
-      id="assignment-language"
-      v-model="assignment.language"
-    />
-
     <BaseAdvancedSettingsButton v-model="showAdvancedSettings">
+      <ResourceLanguageSelector
+        id="assignment-language"
+        v-model="assignment.language"
+      />
       <BaseInputNumber
         id="qualification"
         v-model="assignment.qualification"

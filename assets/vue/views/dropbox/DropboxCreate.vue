@@ -90,14 +90,23 @@
               :is-invalid="false"
             />
 
-            <label class="inline-flex items-center gap-3 mt-3">
-              <input
-                id="overwrite"
-                type="checkbox"
-                v-model="overwrite"
-              />
-              <span class="text-sm">{{ t("Overwrite previous versions of same document?") }}</span>
-            </label>
+            <BaseAdvancedSettingsButton v-model="showAdvancedSettings">
+              <div class="flex flex-col gap-4">
+                <ResourceLanguageSelector
+                  id="dropbox-language"
+                  v-model="selectedLanguage"
+                />
+
+                <label class="inline-flex items-center gap-3">
+                  <input
+                    id="overwrite"
+                    v-model="overwrite"
+                    type="checkbox"
+                  />
+                  <span class="text-sm">{{ t("Overwrite previous versions of same document?") }}</span>
+                </label>
+              </div>
+            </BaseAdvancedSettingsButton>
           </div>
         </div>
       </div>
@@ -178,6 +187,8 @@ import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
+import BaseAdvancedSettingsButton from "../../components/basecomponents/BaseAdvancedSettingsButton.vue"
+import ResourceLanguageSelector from "../../components/resources/ResourceLanguageSelector.vue"
 
 import service from "../../services/dropbox"
 
@@ -191,6 +202,8 @@ const uppy = shallowRef(null)
 const pickedFiles = ref([])
 const description = ref("")
 const overwrite = ref(false)
+const selectedLanguage = ref("")
+const showAdvancedSettings = ref(false)
 const submitted = ref(false)
 const isUploading = ref(false)
 
@@ -303,6 +316,7 @@ async function submit() {
         recipients: tokens,
         area: "sent",
         context,
+        language: selectedLanguage.value,
       })
     }
 
@@ -310,6 +324,7 @@ async function submit() {
     // Reset minimal state
     description.value = ""
     overwrite.value = false
+    selectedLanguage.value = ""
     recipients.value = []
     try {
       uppy.value?.reset?.()

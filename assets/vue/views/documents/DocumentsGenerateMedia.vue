@@ -109,10 +109,12 @@
         />
       </div>
 
-      <!-- Language -->
-      <div class="space-y-1">
+      <BaseAdvancedSettingsButton
+        v-if="showResourceLanguageAdvancedSettings"
+        v-model="showAdvancedSettings"
+      >
         <ResourceLanguageSelector v-model="selectedLanguage" />
-      </div>
+      </BaseAdvancedSettingsButton>
 
       <!-- Name -->
       <div class="space-y-1">
@@ -313,6 +315,7 @@ import { useCidReq } from "../../composables/cidReq"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import BaseAdvancedSettingsButton from "../../components/basecomponents/BaseAdvancedSettingsButton.vue"
 import ResourceLanguageSelector from "../../components/resources/ResourceLanguageSelector.vue"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useCourseSettings } from "../../store/courseSettingStore"
@@ -343,6 +346,33 @@ const selectedType = ref("image")
 // - ""   => Auto (recommended)
 // - "openai"/"grok"/... => explicit provider
 const selectedProvider = ref(null)
+const showAdvancedSettings = ref(false)
+
+function isResourceLanguageActive(language) {
+  if (!language || "object" !== typeof language) {
+    return false
+  }
+
+  if ("available" in language) {
+    return true === language.available || 1 === language.available || "1" === language.available
+  }
+
+  if ("isAvailable" in language) {
+    return true === language.isAvailable || 1 === language.isAvailable || "1" === language.isAvailable
+  }
+
+  if ("enabled" in language) {
+    return true === language.enabled || 1 === language.enabled || "1" === language.enabled
+  }
+
+  return true
+}
+
+const showResourceLanguageAdvancedSettings = computed(() => {
+  const languages = Array.isArray(window.languages) ? window.languages : []
+
+  return languages.filter(isResourceLanguageActive).length > 1
+})
 
 const folders = ref([])
 const selectedFolderId = ref(null)

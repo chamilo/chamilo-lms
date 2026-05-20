@@ -18,13 +18,12 @@
       editor-id="attendance_description"
     />
 
-    <ResourceLanguageSelector
-      id="attendance-language"
-      v-model="formData.language"
-    />
-
     <!-- Advanced Settings (create + edit) -->
     <BaseAdvancedSettingsButton v-model="showAdvancedSettings">
+      <ResourceLanguageSelector
+        id="attendance-language"
+        v-model="formData.language"
+      />
       <!-- Require unique presence -->
       <div class="flex flex-col gap-2 mb-4">
         <BaseCheckbox

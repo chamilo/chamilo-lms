@@ -1,34 +1,32 @@
 <template>
   <form @submit.prevent="$emit('submit')">
-    <BaseInputTextWithVuelidate
-      id="item_title"
-      v-model.trim="item.title"
-      :label="$t('Title')"
-      :vuelidate-property="v$.item.title"
-    />
-    <BaseTextArea
-      id="item_comment"
-      v-model="item.comment"
-      label="Description"
-      rows="4"
-      auto-resize
-    />
-    <ResourceLanguageSelector
-      v-model="item.language"
-      class="mt-3"
-    />
-    <BaseTinyEditor
-      v-if="
-        (item.resourceNode && item.resourceNode.firstResourceFile && item.resourceNode.firstResourceFile.text) ||
-        item.newDocument
-      "
-      v-model="item.contentFile"
-      :title="t('Content')"
-      editor-id="item_content"
-      :editor-config="tinyEditorConfig"
-      required
-    />
+    <div>
+      <BaseInputTextWithVuelidate
+        id="title"
+        v-model="v$.item.title.$model"
+        :label="t('Title')"
+        :vuelidate-property="v$.item.title"
+      />
 
+      <BaseTextArea
+        v-model="item.comment"
+        :label="t('Description')"
+        rows="4"
+        auto-resize
+      />
+
+      <BaseTinyEditor
+        v-if="
+          (item.resourceNode && item.resourceNode.firstResourceFile && item.resourceNode.firstResourceFile.text) ||
+          ['file', 'certificate'].includes(item.filetype)
+        "
+        id="item_content"
+        v-model="item.contentFile"
+        :full-page="isFullPage"
+        :title="t('Content')"
+        editor-id="item_content"
+      />
+    </div>
     <div
       v-if="editorDrafts.length > 0"
       class="mt-3 rounded-lg border border-gray-25 bg-gray-10 px-4 py-3"
@@ -109,10 +107,15 @@
     </div>
 
     <BaseAdvancedSettingsButton
-      v-if="searchEnabled"
+      v-if="searchEnabled || showResourceLanguageAdvancedSettings"
       v-model="showAdvancedSettings"
     >
-      <div class="mb-2 flex flex-row">
+      <ResourceLanguageSelector v-model="item.language" />
+
+      <div
+        v-if="searchEnabled"
+        class="mb-2 flex flex-row"
+      >
         <label class="w-40 font-semibold">{{ $t("Options") }}:</label>
 
         <BaseCheckbox
@@ -271,6 +274,31 @@ export default {
       const itemNode = this.normalizeNodeId(this.item?.parentResourceNodeId)
       const resourceNodeId = this.getResourceNodeId()
       return itemNode || routeNode || resourceNodeId || null
+    },
+    showResourceLanguageAdvancedSettings() {
+      const languages = Array.isArray(window.languages) ? window.languages : []
+
+      return (
+        languages.filter((language) => {
+          if (!language || "object" !== typeof language) {
+            return false
+          }
+
+          if ("available" in language) {
+            return true === language.available || 1 === language.available || "1" === language.available
+          }
+
+          if ("isAvailable" in language) {
+            return true === language.isAvailable || 1 === language.isAvailable || "1" === language.isAvailable
+          }
+
+          if ("enabled" in language) {
+            return true === language.enabled || 1 === language.enabled || "1" === language.enabled
+          }
+
+          return true
+        }).length > 1
+      )
     },
     showAiMediaButton() {
       const aiHelpersEnabled = String(this.platformConfigStore.getSetting("ai_helpers.enable_ai_helpers")) === "true"

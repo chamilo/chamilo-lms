@@ -104,6 +104,7 @@ abstract class AbstractResource
         'calendar_event:write',
         'attendance:write',
         'link:write',
+        'glossary:write',
     ])]
     public ?string $language = null;
 

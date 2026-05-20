@@ -27,10 +27,12 @@
       auto-resize
     />
 
-    <ResourceLanguageSelector
-      v-model="languageModel"
-      class="mb-4"
-    />
+    <BaseAdvancedSettingsButton
+      v-if="showResourceLanguageAdvancedSettings"
+      v-model="showAdvancedSettings"
+    >
+      <ResourceLanguageSelector v-model="languageModel" />
+    </BaseAdvancedSettingsButton>
 
     <slot />
 
@@ -53,12 +55,40 @@ import { required } from "@vuelidate/validators"
 import Button from "primevue/button"
 import FloatLabel from "primevue/floatlabel"
 import InputText from "primevue/inputtext"
-import { computed } from "vue"
+import { computed, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import BaseTextArea from "../basecomponents/BaseTextArea.vue"
+import BaseAdvancedSettingsButton from "../basecomponents/BaseAdvancedSettingsButton.vue"
 import ResourceLanguageSelector from "../resources/ResourceLanguageSelector.vue"
 
 const { t } = useI18n()
+const showAdvancedSettings = ref(false)
+
+function isResourceLanguageActive(language) {
+  if (!language || "object" !== typeof language) {
+    return false
+  }
+
+  if ("available" in language) {
+    return true === language.available || 1 === language.available || "1" === language.available
+  }
+
+  if ("isAvailable" in language) {
+    return true === language.isAvailable || 1 === language.isAvailable || "1" === language.isAvailable
+  }
+
+  if ("enabled" in language) {
+    return true === language.enabled || 1 === language.enabled || "1" === language.enabled
+  }
+
+  return true
+}
+
+const showResourceLanguageAdvancedSettings = computed(() => {
+  const languages = Array.isArray(window.languages) ? window.languages : []
+
+  return languages.filter(isResourceLanguageActive).length > 1
+})
 
 const props = defineProps({
   modelValue: {

@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
@@ -11,6 +12,78 @@ use Chamilo\CourseBundle\Entity\CThematicPlan;
 use ChamiloSession as Session;
 
 require_once __DIR__.'/../inc/global.inc.php';
+
+function course_progress_get_resource_language_options(): array
+{
+    $options = [
+        '' => get_lang('No specific language'),
+    ];
+
+    $languages = Database::getManager()
+        ->getRepository(Language::class)
+        ->findBy(['available' => true], ['englishName' => 'ASC'])
+    ;
+
+    foreach ($languages as $language) {
+        if (!$language instanceof Language) {
+            continue;
+        }
+
+        $options[$language->getIsocode()] = $language->getOriginalName() ?: $language->getEnglishName();
+    }
+
+    return $options;
+}
+
+function course_progress_get_resource_language_iso_code(?object $resource): string
+{
+    if (!$resource || !method_exists($resource, 'getResourceNode')) {
+        return '';
+    }
+
+    $resourceNode = $resource->getResourceNode();
+    if (null === $resourceNode || !method_exists($resourceNode, 'getLanguage')) {
+        return '';
+    }
+
+    $language = $resourceNode->getLanguage();
+
+    return $language instanceof Language ? $language->getIsocode() : '';
+}
+
+function course_progress_apply_resource_language(?object $resource, mixed $rawLanguage): void
+{
+    if (!$resource || !method_exists($resource, 'getResourceNode')) {
+        return;
+    }
+
+    $resourceNode = $resource->getResourceNode();
+    if (null === $resourceNode) {
+        return;
+    }
+
+    $languageCode = trim((string) $rawLanguage);
+    $entityManager = Database::getManager();
+    $language = null;
+
+    if ('' !== $languageCode) {
+        $language = $entityManager
+            ->getRepository(Language::class)
+            ->findOneBy([
+                'isocode' => $languageCode,
+                'available' => true,
+            ])
+        ;
+
+        if (!$language instanceof Language) {
+            return;
+        }
+    }
+
+    $resourceNode->setLanguage($language);
+    $entityManager->persist($resourceNode);
+    $entityManager->flush();
+}
 
 // current section
 $this_section = SECTION_COURSES;
@@ -233,7 +306,8 @@ switch ($action) {
         ) {
             $title = trim($_POST['title'] ?? '');
             $content = trim($_POST['content'] ?? '');
-            $thematicManager->thematicSave($thematicId, $title, $content, $course, $session);
+            $savedThematic = $thematicManager->thematicSave($thematicId, $title, $content, $course, $session);
+            course_progress_apply_resource_language($savedThematic instanceof CThematic ? $savedThematic : $thematicEntity, $_POST['language'] ?? '');
             Display::addFlash(Display::return_message(get_lang('Update successful')));
 
             header('Location: '.$currentUrl);
@@ -271,6 +345,22 @@ switch ($action) {
                 false,
                 ['ToolbarSet' => 'Basic', 'Height' => '150']
             );
+
+            $languageOptions = course_progress_get_resource_language_options();
+            if (\count($languageOptions) > 2) {
+                $form->addButtonAdvancedSettings('advanced_params', get_lang('Advanced settings'));
+                $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
+                $form->addSelect(
+                    'language',
+                    get_lang('Language'),
+                    $languageOptions,
+                    [
+                        'id' => 'resource_language',
+                    ]
+                );
+                $form->addElement('html', '</div>');
+            }
+
             $form->addButtonSave(get_lang('Save'));
 
             if (!empty($thematicEntity)) {
@@ -280,6 +370,7 @@ switch ($action) {
                 // set default values
                 $default['title'] = $thematicEntity->getTitle();
                 $default['content'] = $thematicEntity->getContent();
+                $default['language'] = course_progress_get_resource_language_iso_code($thematicEntity);
                 $form->setDefaults($default);
             }
             $content = $form->returnForm();

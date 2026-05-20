@@ -32,7 +32,7 @@
         @submit.prevent="uploadVariation"
         class="flex flex-col space-y-4"
       >
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <BaseFileUpload
             @file-selected="onFileSelected"
             :label="t('Choose file')"
@@ -40,8 +40,6 @@
             required
             class="w-full"
           />
-
-          <ResourceLanguageSelector v-model="selectedLanguage" />
 
           <Dropdown
             v-model="selectedAccessUrl"
@@ -52,6 +50,13 @@
             class="w-full"
           />
         </div>
+
+        <BaseAdvancedSettingsButton
+          v-if="showResourceLanguageAdvancedSettings"
+          v-model="showAdvancedSettings"
+        >
+          <ResourceLanguageSelector v-model="selectedLanguage" />
+        </BaseAdvancedSettingsButton>
 
         <div class="flex justify-end">
           <BaseButton
@@ -150,6 +155,7 @@ import SectionHeader from "../../components/layout/SectionHeader.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseFileUpload from "../../components/basecomponents/BaseFileUpload.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
+import BaseAdvancedSettingsButton from "../../components/basecomponents/BaseAdvancedSettingsButton.vue"
 import ResourceLanguageSelector from "../../components/resources/ResourceLanguageSelector.vue"
 import prettyBytes from "pretty-bytes"
 import { useCidReq } from "../../composables/cidReq"
@@ -165,6 +171,33 @@ const variations = ref([])
 const originalFile = ref(null)
 const resourceFileId = route.params.resourceFileId
 const selectedAccessUrl = ref(null)
+const showAdvancedSettings = ref(false)
+
+function isResourceLanguageActive(language) {
+  if (!language || "object" !== typeof language) {
+    return false
+  }
+
+  if ("available" in language) {
+    return true === language.available || 1 === language.available || "1" === language.available
+  }
+
+  if ("isAvailable" in language) {
+    return true === language.isAvailable || 1 === language.isAvailable || "1" === language.isAvailable
+  }
+
+  if ("enabled" in language) {
+    return true === language.enabled || 1 === language.enabled || "1" === language.enabled
+  }
+
+  return true
+}
+
+const showResourceLanguageAdvancedSettings = computed(() => {
+  const languages = Array.isArray(window.languages) ? window.languages : []
+
+  return languages.filter(isResourceLanguageActive).length > 1
+})
 const selectedLanguage = ref("")
 const accessUrls = ref([])
 const isAdmin = computed(() => securityStore.isAdmin)

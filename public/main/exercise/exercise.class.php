@@ -1649,6 +1649,8 @@ class Exercise
             }
         }
 
+        $this->applyResourceLanguage($exercise, $_POST['language'] ?? '');
+
         $this->saveCategoriesInExercise($this->categories);
 
         return $id;
@@ -1922,6 +1924,36 @@ class Exercise
         return $language->getIsocode();
     }
 
+
+    private function applyResourceLanguage(CQuiz $quiz, mixed $rawLanguage): void
+    {
+        $resourceNode = $quiz->getResourceNode();
+        if (null === $resourceNode) {
+            return;
+        }
+
+        $languageCode = trim((string) $rawLanguage);
+        $entityManager = Database::getManager();
+        $language = null;
+
+        if ('' !== $languageCode) {
+            $language = $entityManager
+                ->getRepository(Language::class)
+                ->findOneBy([
+                    'isocode' => $languageCode,
+                    'available' => true,
+                ])
+            ;
+
+            if (!$language instanceof Language) {
+                return;
+            }
+        }
+
+        $resourceNode->setLanguage($language);
+        $entityManager->persist($resourceNode);
+        $entityManager->flush();
+    }
     /**
      * Creates the form to create / edit an exercise.
      *
@@ -2417,14 +2449,17 @@ class Exercise
             $form->addCheckBox('update_title_in_lps', null, get_lang('Update this title in learning paths'));
 
             $defaults = [];
-            $form->addSelect(
-                'language',
-                get_lang('Language'),
-                $this->getResourceLanguageOptions(),
-                [
-                    'id' => 'resource_language',
-                ]
-            );
+            $languageOptions = $this->getResourceLanguageOptions();
+            if (\count($languageOptions) > 2) {
+                $form->addSelect(
+                    'language',
+                    get_lang('Language'),
+                    $languageOptions,
+                    [
+                        'id' => 'resource_language',
+                    ]
+                );
+            }
 
             if ('true' === api_get_setting('search_enabled')) {
                 $form->addCheckBox('index_document', '', get_lang('Index document text?'));

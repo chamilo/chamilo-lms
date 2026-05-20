@@ -6,6 +6,38 @@ declare(strict_types=1);
 
 use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CLp;
+
+
+function lp_add_apply_resource_language(CLp $lp, mixed $rawLanguage): void
+{
+    $resourceNode = $lp->getResourceNode();
+    if (null === $resourceNode) {
+        return;
+    }
+
+    $languageCode = trim((string) $rawLanguage);
+    $entityManager = Database::getManager();
+    $language = null;
+
+    if ('' !== $languageCode) {
+        $language = $entityManager
+            ->getRepository(Language::class)
+            ->findOneBy([
+                'isocode' => $languageCode,
+                'available' => true,
+            ])
+        ;
+
+        if (!$language instanceof Language) {
+            return;
+        }
+    }
+
+    $resourceNode->setLanguage($language);
+    $entityManager->persist($resourceNode);
+    $entityManager->flush();
+}
 
 /**
  * This is a learning path creation and player tool in Chamilo - previously learnpath_handler.php.
@@ -147,14 +179,16 @@ $items = learnpath::getCategoryFromCourseIntoSelect(
     true
 );
 $form->addSelect('category_id', get_lang('Category'), $items);
-$form->addSelect(
-    'language',
-    get_lang('Language'),
-    $languageOptions,
-    [
-        'id' => 'resource_language',
-    ]
-);
+if (\count($languageOptions) > 2) {
+    $form->addSelect(
+        'language',
+        get_lang('Language'),
+        $languageOptions,
+        [
+            'id' => 'resource_language',
+        ]
+    );
+}
 
 // accumulate_scorm_time
 $form->addCheckBox(
@@ -258,6 +292,7 @@ if ($form->validate()) {
 
         $lp->setSubscribeUsers((int) (null !== $request->request->get('subscribe_users')));
         $lp->setAccumulateScormTime((int) (null !== $request->request->get('accumulate_scorm_time')));
+        lp_add_apply_resource_language($lp, $request->request->get('language', ''));
         $lpRepo->update($lp);
 
         $url = api_get_self().'?action=add_item&type=step&lp_id='.$lpId.'&'.api_get_cidreq();

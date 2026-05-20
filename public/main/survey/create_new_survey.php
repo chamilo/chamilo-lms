@@ -2,7 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CSurvey;
 
 /**
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup,
@@ -15,6 +17,79 @@ use Chamilo\CoreBundle\Framework\Container;
  */
 
 require_once __DIR__.'/../inc/global.inc.php';
+
+function survey_get_resource_language_options(): array
+{
+    $options = [
+        '' => get_lang('No specific language'),
+    ];
+
+    $languages = Database::getManager()
+        ->getRepository(Language::class)
+        ->findBy(['available' => true], ['englishName' => 'ASC'])
+    ;
+
+    foreach ($languages as $language) {
+        if (!$language instanceof Language) {
+            continue;
+        }
+
+        $options[$language->getIsocode()] = $language->getOriginalName() ?: $language->getEnglishName();
+    }
+
+    return $options;
+}
+
+function survey_get_resource_language_iso_code(?int $surveyId): string
+{
+    if (empty($surveyId)) {
+        return '';
+    }
+
+    $survey = Database::getManager()->getRepository(CSurvey::class)->find($surveyId);
+    if (!$survey instanceof CSurvey || null === $survey->getResourceNode()) {
+        return '';
+    }
+
+    $language = $survey->getResourceNode()->getLanguage();
+
+    return $language instanceof Language ? $language->getIsocode() : '';
+}
+
+function survey_apply_resource_language(?int $surveyId, mixed $rawLanguage): void
+{
+    if (empty($surveyId)) {
+        return;
+    }
+
+    $entityManager = Database::getManager();
+    $survey = $entityManager->getRepository(CSurvey::class)->find($surveyId);
+    if (!$survey instanceof CSurvey || null === $survey->getResourceNode()) {
+        return;
+    }
+
+    $languageCode = trim((string) $rawLanguage);
+    $language = null;
+
+    if ('' !== $languageCode) {
+        $language = $entityManager
+            ->getRepository(Language::class)
+            ->findOneBy([
+                'isocode' => $languageCode,
+                'available' => true,
+            ])
+        ;
+
+        if (!$language instanceof Language) {
+            return;
+        }
+    }
+
+    $resourceNode = $survey->getResourceNode();
+    $resourceNode->setLanguage($language);
+    $entityManager->persist($resourceNode);
+    $entityManager->flush();
+}
 
 $repo = Container::getSurveyRepository();
 
@@ -69,6 +144,7 @@ if ('edit' === $action && isset($survey_id) && is_numeric($survey_id)) {
     $defaults = $survey_data;
     $defaults['survey_id'] = $survey_id;
     $defaults['anonymous'] = $survey_data['anonymous'];
+    $defaults['language'] = survey_get_resource_language_iso_code($survey_id);
     $defaults['avail_from'] = api_get_local_time($defaults['avail_from'], null, 'UTC');
     $defaults['avail_till'] = api_get_local_time($defaults['avail_till'], null, 'UTC');
     $defaults['start_date'] = $defaults['avail_from'];
@@ -99,6 +175,7 @@ if ('edit' === $action && isset($survey_id) && is_numeric($survey_id)) {
     $startdateandxdays = time() + 864000; // today + 10 days
     $defaults['end_date'] = date('Y-m-d 23:59:59', $startdateandxdays);
     $defaults['anonymous'] = 0;
+    $defaults['language'] = '';
 }
 
 // Initialize the object
@@ -210,6 +287,18 @@ if ($extraField->get_handler_field_info_by_field_variable('group_id')) {
 // Additional Parameters
 $form->addButtonAdvancedSettings('advanced_params');
 $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
+
+$languageOptions = survey_get_resource_language_options();
+if (\count($languageOptions) > 2) {
+    $form->addSelect(
+        'language',
+        get_lang('Language'),
+        $languageOptions,
+        [
+            'id' => 'resource_language',
+        ]
+    );
+}
 
 if (Gradebook::is_active()) {
     // An option: Qualify the fact that survey has been answered in the gradebook
@@ -346,6 +435,7 @@ if ($form->validate()) {
     $values = $form->getSubmitValues();
     // Storing the survey
     $return = SurveyManager::store_survey($values);
+    survey_apply_resource_language((int) ($return['id'] ?? 0), $values['language'] ?? '');
     SkillModel::saveSkills($form, ITEM_TYPE_SURVEY, $return['id']);
 
     $values['item_id'] = $return['id'];

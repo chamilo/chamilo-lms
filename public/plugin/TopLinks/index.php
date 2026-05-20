@@ -12,6 +12,7 @@ if ('/main/course_home/course_home.php' === $httpRequest->getScriptName()) {
 
     $em = Database::getManager();
     $linkToolRepo = $em->getRepository(TopLinkRelTool::class);
+    $plugin = TopLinksPlugin::create();
 
     $linkTools = $linkToolRepo->findInCourse($course);
 
@@ -19,10 +20,12 @@ if ('/main/course_home/course_home.php' === $httpRequest->getScriptName()) {
 
     /** @var TopLinkRelTool $linkTool */
     foreach ($linkTools as $linkTool) {
+        $icon = $linkTool->getLink()->getIcon();
+
         $toolIds[] = [
             'id' => $linkTool->getTool()->getIid(),
-            'img' => $linkTool->getLink()->getIcon()
-                ? api_get_path(WEB_UPLOAD_PATH).'plugins/TopLinks/'.$linkTool->getLink()->getIcon()
+            'img' => $icon
+                ? $plugin->getIconUrl($icon)
                 : null,
         ];
     } ?>

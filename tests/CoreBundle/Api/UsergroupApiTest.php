@@ -16,11 +16,11 @@ use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Regression test for the IDOR fix on /api/messages/by-group/list.
+ * Regression test for the IDOR fix on /api/usergroups/{usergroupId}/messages.
  *
  * Before the fix, any authenticated user could dump messages of any
- * Usergroup simply by iterating ?groupId=N. The endpoint must now reject
- * non-members with 403 while remaining usable by members and admins.
+ * Usergroup. The endpoint must reject non-members with 403, members and
+ * admins receive 200, and unknown groups resolve to 404.
  */
 class UsergroupApiTest extends AbstractApiTest
 {
@@ -32,8 +32,7 @@ class UsergroupApiTest extends AbstractApiTest
 
         static::createClient()->request(
             'GET',
-            '/api/messages/by-group/list',
-            ['query' => ['groupId' => $group->getId()]]
+            '/api/usergroups/'.$group->getId().'/messages'
         );
 
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
@@ -52,11 +51,7 @@ class UsergroupApiTest extends AbstractApiTest
 
         $this
             ->createClientWithCredentials($attackerToken)
-            ->request(
-                'GET',
-                '/api/messages/by-group/list',
-                ['query' => ['groupId' => $group->getId()]]
-            )
+            ->request('GET', '/api/usergroups/'.$group->getId().'/messages')
         ;
 
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
@@ -76,11 +71,7 @@ class UsergroupApiTest extends AbstractApiTest
 
         $response = $this
             ->createClientWithCredentials($readerToken)
-            ->request(
-                'GET',
-                '/api/messages/by-group/list',
-                ['query' => ['groupId' => $group->getId()]]
-            )
+            ->request('GET', '/api/usergroups/'.$group->getId().'/messages')
         ;
 
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
@@ -114,47 +105,24 @@ class UsergroupApiTest extends AbstractApiTest
 
         $response = $this
             ->createClientWithCredentials($adminToken)
-            ->request(
-                'GET',
-                '/api/messages/by-group/list',
-                ['query' => ['groupId' => $group->getId()]]
-            )
+            ->request('GET', '/api/usergroups/'.$group->getId().'/messages')
         ;
 
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $this->assertCount(1, $response->toArray()['hydra:member']);
     }
 
-    public function testMissingGroupIdReturnsEmptyCollection(): void
-    {
-        $user = $this->createUser('idor_no_param_user');
-        $token = $this->getUserTokenFromUser($user);
-
-        $response = $this
-            ->createClientWithCredentials($token)
-            ->request('GET', '/api/messages/by-group/list')
-        ;
-
-        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-        $this->assertSame([], $response->toArray()['hydra:member']);
-    }
-
-    public function testUnknownGroupIdReturnsEmptyCollection(): void
+    public function testUnknownGroupReturnsNotFound(): void
     {
         $user = $this->createUser('idor_unknown_group_user');
         $token = $this->getUserTokenFromUser($user);
 
-        $response = $this
+        $this
             ->createClientWithCredentials($token)
-            ->request(
-                'GET',
-                '/api/messages/by-group/list',
-                ['query' => ['groupId' => 999999999]]
-            )
+            ->request('GET', '/api/usergroups/999999999/messages')
         ;
 
-        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-        $this->assertSame([], $response->toArray()['hydra:member']);
+        $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
     }
 
     private function createOpenUsergroup(string $title): Usergroup

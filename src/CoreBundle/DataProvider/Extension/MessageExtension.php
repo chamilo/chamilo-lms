@@ -32,6 +32,10 @@ final class MessageExtension implements QueryCollectionExtensionInterface
         ?Operation $operation = null,
         array $context = []
     ): void {
+        if ('get_messages_by_social_group' === $operation?->getName()) {
+            return;
+        }
+
         $this->addWhere($queryBuilder, $resourceClass);
     }
 

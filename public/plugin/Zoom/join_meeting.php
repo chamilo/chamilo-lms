@@ -59,20 +59,35 @@ $plugin = ZoomPlugin::create();
 /** @var Meeting|null $meeting */
 $meeting = $plugin->getMeetingRepository()->findOneBy(['meetingId' => $meetingId]);
 if (null === $meeting) {
+    $meeting = $plugin->getMeetingRepository()->find($meetingId);
+}
+if (null === $meeting) {
     api_not_allowed(true, $plugin->get_lang('MeetingNotFound'));
 }
 
+$urlExtra = '';
 if ($meeting->isCourseMeeting()) {
+    $requestWasMissingCourseContext = empty($_GET['cid'])
+        || !\array_key_exists('sid', $_GET)
+        || !\array_key_exists('gid', $_GET)
+    ;
+
+    $urlExtra = zoom_plugin_restore_course_context($meeting);
+    if ($requestWasMissingCourseContext && '' !== $urlExtra && !headers_sent()) {
+        header('Location: '.api_get_path(WEB_PLUGIN_PATH).'Zoom/join_meeting.php?meetingId='.$meeting->getMeetingId().'&'.$urlExtra);
+        exit;
+    }
+
     api_protect_course_script(true);
 
     $group = $meeting->getGroup();
     if (api_is_in_group() && null !== $group) {
         $interbreadcrumb[] = [
-            'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
+            'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.$urlExtra,
             'name' => get_lang('Groups'),
         ];
         $interbreadcrumb[] = [
-            'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
+            'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.$urlExtra,
             'name' => get_lang('Group area').' '.$group->getTitle(),
         ];
     }
@@ -120,7 +135,7 @@ try {
         $content .= '<div class="mt-6 border-t border-gray-25 pt-4">';
         $content .= Display::url(
             get_lang('Details'),
-            api_get_path(WEB_PLUGIN_PATH).'Zoom/meeting.php?meetingId='.$meeting->getMeetingId().'&'.api_get_cidreq(),
+            api_get_path(WEB_PLUGIN_PATH).'Zoom/meeting.php?meetingId='.$meeting->getMeetingId().('' !== $urlExtra ? '&'.$urlExtra : ''),
             [
                 'class' => 'inline-flex items-center justify-center rounded-lg border border-gray-50 bg-white px-4 py-2 text-sm font-semibold text-gray-90 hover:bg-gray-15',
             ]

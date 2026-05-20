@@ -227,26 +227,72 @@ class ZoomPlugin extends Plugin
      */
     public function meetingsToWhichCurrentUserIsRegisteredComingSoon()
     {
-        $linkTemplate = $this->getPluginWebPath().'join_meeting.php?meetingId=%s';
-        $user         = api_get_user_entity(api_get_user_id());
-        $items        = [];
+        $user  = api_get_user_entity(api_get_user_id());
+        $items = [];
 
         if (null === $user) {
             return $items;
         }
 
-        $meetings     = self::getRegistrantRepository()->meetingsComingSoonRegistrationsForUser($user);
+        $meetings = self::getRegistrantRepository()->meetingsComingSoonRegistrationsForUser($user);
 
         foreach ($meetings as $registrant) {
             $meeting = $registrant->getMeeting();
+            if (!$meeting instanceof Meeting || null === $meeting->getMeetingId()) {
+                continue;
+            }
+
+            $meetingInfo = $meeting->getMeetingInfoGet();
+            if (null === $meetingInfo) {
+                continue;
+            }
+
             $items[sprintf(
                 $this->get_lang('DateMeetingTitle'),
                 $meeting->formattedStartTime,
-                $meeting->getMeetingInfoGet()->topic
-            )] = sprintf($linkTemplate, $meeting->getId());
+                $meetingInfo->topic
+            )] = $this->getJoinMeetingUrl($meeting);
         }
 
         return $items;
+    }
+
+    public function getJoinMeetingUrl(Meeting $meeting): string
+    {
+        $url = $this->getPluginWebPath().'join_meeting.php?meetingId='.$meeting->getMeetingId();
+        $contextQuery = $this->getMeetingContextQuery($meeting);
+
+        if ('' !== $contextQuery) {
+            $url .= '&'.$contextQuery;
+        }
+
+        return $url;
+    }
+
+    public function getMeetingContextQuery(Meeting $meeting): string
+    {
+        $course = $meeting->getCourse();
+        if (null === $course) {
+            return '';
+        }
+
+        $sessionId = 0;
+        $session = $meeting->getSession();
+        if (null !== $session) {
+            $sessionId = (int) $session->getId();
+        }
+
+        $groupId = 0;
+        $group = $meeting->getGroup();
+        if (null !== $group) {
+            $groupId = (int) $group->getIid();
+        }
+
+        return http_build_query([
+            'cid' => (int) $course->getId(),
+            'sid' => $sessionId,
+            'gid' => $groupId,
+        ]);
     }
 
     /**
@@ -951,75 +997,127 @@ class ZoomPlugin extends Plugin
      */
     public function getStartOrJoinMeetingURL($meeting)
     {
-        $status     = $meeting->getMeetingInfoGet()->status;
-        $userId     = api_get_user_id();
-        $currentUser= api_get_user_entity($userId);
-        $isGlobal   = 'true' === $this->get('enableGlobalConference') && $meeting->isGlobalMeeting();
+        $this->refreshMeetingInfo($meeting);
+
+        $meetingInfo = $meeting->getMeetingInfoGet();
+        if (null === $meetingInfo) {
+            return null;
+        }
+
+        $status = (string) ($meetingInfo->status ?? '');
+        $userId = api_get_user_id();
+        $currentUser = api_get_user_entity($userId);
+        if (!$currentUser instanceof User) {
+            throw new Exception($this->get_lang('YouAreNotRegisteredToThisMeeting'));
+        }
+
+        $isGlobal = 'true' === $this->get('enableGlobalConference') && $meeting->isGlobalMeeting();
 
         switch ($status) {
             case 'ended':
+            case 'finished':
                 if ($this->userIsConferenceManager($meeting)) {
-                    return $meeting->getMeetingInfoGet()->start_url;
+                    return $meetingInfo->start_url;
                 }
                 break;
 
             case 'waiting':
                 if ($this->userIsConferenceManager($meeting)) {
-                    return $meeting->getMeetingInfoGet()->start_url;
+                    return $meetingInfo->start_url;
+                }
+
+                if ($meeting->isCourseMeeting()) {
+                    return $this->getCourseMeetingParticipantJoinUrl($meeting, $currentUser, $userId);
                 }
                 break;
 
             case 'started':
                 if ($currentUser === $meeting->getUser()) {
-                    return $meeting->getMeetingInfoGet()->join_url;
+                    return $meetingInfo->join_url;
                 }
 
                 if ($isGlobal) {
-                    return $this->registerUser($meeting, $currentUser)->getCreatedRegistration()->join_url;
+                    if (!$meeting->requiresRegistration()) {
+                        return $meetingInfo->join_url;
+                    }
+
+                    return $this->getRegisteredOrRegisterUser($meeting, $currentUser)->getCreatedRegistration()->join_url;
                 }
 
                 if ($meeting->isCourseMeeting()) {
                     if ($this->userIsCourseConferenceManager()) {
-                        return $meeting->getMeetingInfoGet()->start_url;
+                        return $meetingInfo->start_url;
                     }
 
-                    $sessionId = api_get_session_id();
-                    $courseCode= api_get_course_id();
-
-                    if (empty($sessionId)) {
-                        $isSubscribed = CourseManager::is_user_subscribed_in_course($userId, $courseCode, false);
-                    } else {
-                        $isSubscribed = CourseManager::is_user_subscribed_in_course($userId, $courseCode, true, $sessionId);
-                    }
-
-                    if ($isSubscribed) {
-                        if ($meeting->isCourseGroupMeeting()) {
-                            $isInGroup = GroupManager::isUserInGroup($userId, $meeting->getGroup());
-                            if (false === $isInGroup) {
-                                throw new Exception($this->get_lang('YouAreNotRegisteredToThisMeeting'));
-                            }
-                        }
-
-                        if (\Chamilo\PluginBundle\Zoom\API\Meeting::TYPE_INSTANT == $meeting->getMeetingInfoGet()->type) {
-                            return $meeting->getMeetingInfoGet()->join_url;
-                        }
-
-                        return $this->registerUser($meeting, $currentUser)->getCreatedRegistration()->join_url;
-                    }
-
-                    throw new Exception($this->get_lang('YouAreNotRegisteredToThisMeeting'));
+                    return $this->getCourseMeetingParticipantJoinUrl($meeting, $currentUser, $userId);
                 }
 
-                // If registration is required for user meetings
                 $registrant = $meeting->getRegistrant($currentUser);
                 if (null == $registrant) {
                     throw new Exception($this->get_lang('YouAreNotRegisteredToThisMeeting'));
                 }
+
                 return $registrant->getCreatedRegistration()->join_url;
         }
 
         return null;
     }
+
+    private function refreshMeetingInfo(Meeting $meeting): void
+    {
+        $meetingId = $meeting->getMeetingId();
+        if (empty($meetingId)) {
+            return;
+        }
+
+        try {
+            $meeting->setMeetingInfoGet(MeetingInfoGet::fromId($meetingId));
+
+            $em = Database::getManager();
+            $em->persist($meeting);
+            $em->flush();
+        } catch (\Throwable $exception) {
+            // Keep using the local meeting information if Zoom does not answer.
+        }
+    }
+
+    private function getCourseMeetingParticipantJoinUrl(Meeting $meeting, User $currentUser, int $userId): string
+    {
+        $meetingInfo = $meeting->getMeetingInfoGet();
+        if (null === $meetingInfo) {
+            throw new Exception($this->get_lang('YouAreNotRegisteredToThisMeeting'));
+        }
+
+        $sessionId = api_get_session_id();
+        $courseCode = api_get_course_id();
+
+        if (empty($sessionId)) {
+            $isSubscribed = CourseManager::is_user_subscribed_in_course($userId, $courseCode, false);
+        } else {
+            $isSubscribed = CourseManager::is_user_subscribed_in_course($userId, $courseCode, true, $sessionId);
+        }
+
+        if (!$isSubscribed) {
+            throw new Exception($this->get_lang('YouAreNotRegisteredToThisMeeting'));
+        }
+
+        if ($meeting->isCourseGroupMeeting()) {
+            $isInGroup = GroupManager::isUserInGroup($userId, $meeting->getGroup());
+            if (false === $isInGroup) {
+                throw new Exception($this->get_lang('YouAreNotRegisteredToThisMeeting'));
+            }
+        }
+
+        if (
+            \Chamilo\PluginBundle\Zoom\API\Meeting::TYPE_INSTANT == $meetingInfo->type
+            || !$meeting->requiresRegistration()
+        ) {
+            return $meetingInfo->join_url;
+        }
+
+        return $this->getRegisteredOrRegisterUser($meeting, $currentUser)->getCreatedRegistration()->join_url;
+    }
+
 
     /**
      * @param Meeting $meeting
@@ -1229,6 +1327,20 @@ class ZoomPlugin extends Plugin
         Database::getManager()->flush();
 
         return $failedUsers;
+    }
+
+    /**
+     * @throws Exception
+     * @throws OptimisticLockException
+     */
+    private function getRegisteredOrRegisterUser(Meeting $meeting, User $user): Registrant
+    {
+        $registrant = $meeting->getRegistrant($user);
+        if ($registrant instanceof Registrant) {
+            return $registrant;
+        }
+
+        return $this->registerUser($meeting, $user);
     }
 
     /**

@@ -6,9 +6,13 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
 use Chamilo\CoreBundle\Helpers\MessageHelper;
+use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationComment;
 use Chamilo\CourseBundle\Repository\CStudentPublicationCommentRepository;
@@ -83,6 +87,22 @@ class CreateStudentPublicationCommentAction extends BaseResourceFileAction
         $qualification = $request->get('qualification', null);
         $hasQualification = null !== $qualification;
 
+        // Object-level authorization: the submission must be reachable by the current user
+        // through the resource ACL (creator, course/session role, admin). This blocks
+        // cross-course IDOR on submissionId.
+        $resourceNode = $submission->getResourceNode();
+
+        if (null === $resourceNode || !$security->isGranted(ResourceNodeVoter::VIEW, $resourceNode)) {
+            throw new AccessDeniedHttpException('You are not allowed to comment on this submission.');
+        }
+
+        // Grading must be restricted to teachers/coaches of the submission's course or session.
+        // The VIEW check above is not sufficient because the submission owner (a student) also
+        // passes it, and students must never overwrite their own qualification.
+        if ($hasQualification && !$this->isAllowedToGrade($submission, $securityUser, $security)) {
+            throw new AccessDeniedHttpException('You are not allowed to grade this submission.');
+        }
+
         if ($hasFile || $hasComment) {
             $commentEntity->setUser($managedUser);
             $commentEntity->setPublication($submission);
@@ -141,5 +161,50 @@ class CreateStudentPublicationCommentAction extends BaseResourceFileAction
         $v = strtolower(trim((string) $value));
 
         return \in_array($v, ['1', 'true', 'yes', 'on'], true);
+    }
+
+    /**
+     * Returns true when the user may overwrite qualification fields on the submission.
+     *
+     * Admins are always allowed. Otherwise, the user must be a teacher of the course
+     * where the submission lives, or a course/general coach of the related session.
+     */
+    private function isAllowedToGrade(
+        CStudentPublication $submission,
+        User $user,
+        Security $security
+    ): bool {
+        if ($security->isGranted('ROLE_ADMIN')) {
+            return true;
+        }
+
+        $resourceNode = $submission->getResourceNode();
+
+        if (null === $resourceNode) {
+            return false;
+        }
+
+        foreach ($resourceNode->getResourceLinks() as $link) {
+            if (!$link instanceof ResourceLink) {
+                continue;
+            }
+
+            $course = $link->getCourse();
+
+            if ($course instanceof Course && $course->hasUserAsTeacher($user)) {
+                return true;
+            }
+
+            $session = $link->getSession();
+
+            if ($session instanceof Session
+                && $course instanceof Course
+                && ($session->hasCourseCoachInCourse($user, $course) || $session->hasUserAsGeneralCoach($user))
+            ) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

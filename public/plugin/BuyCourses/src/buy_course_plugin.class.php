@@ -204,6 +204,42 @@ class BuyCoursesPlugin extends Plugin
         );
     }
 
+    private function hasPluginTable(string $table): bool
+    {
+        static $tableExists = [];
+
+        $tableName = Database::get_main_table($table);
+        if (isset($tableExists[$tableName])) {
+            return $tableExists[$tableName];
+        }
+
+        $tableLike = Database::escape_string(addcslashes($tableName, '\_%'));
+        $result = Database::query("SHOW TABLES LIKE '$tableLike'");
+
+        $tableExists[$tableName] = false !== $result && Database::num_rows($result) > 0;
+
+        return $tableExists[$tableName];
+    }
+
+    private function hasSubscriptionCourseInfrastructure(): bool
+    {
+        return $this->hasPluginTable(self::TABLE_SERVICES_SALE)
+            && $this->hasPluginTable(self::TABLE_SUBSCRIPTION_COURSE);
+    }
+
+    private function hasCourseCreationServiceInfrastructure(): bool
+    {
+        return $this->hasPluginTable(self::TABLE_SERVICES)
+            && $this->hasPluginTable(self::TABLE_SERVICES_SALE)
+            && $this->hasPluginTable(self::TABLE_SERVICE_REL_EXTRA_FIELD)
+            && $this->hasPluginTable(self::TABLE_SUBSCRIPTION_COURSE);
+    }
+
+    private function hasFrozenEnrollmentInfrastructure(): bool
+    {
+        return $this->hasPluginTable(self::TABLE_FROZEN_ENROLLMENT);
+    }
+
     /**
      * Check if plugin is enabled.
      */
@@ -8972,7 +9008,7 @@ class BuyCoursesPlugin extends Plugin
     public function getDisplayedServiceCourseCreationOptionsForUser(int $userId): array
     {
         $userId = (int) $userId;
-        if ($userId <= 0 || 'true' !== $this->get('include_services')) {
+        if ($userId <= 0 || 'true' !== $this->get('include_services') || !$this->hasCourseCreationServiceInfrastructure()) {
             return [];
         }
 
@@ -9085,6 +9121,15 @@ class BuyCoursesPlugin extends Plugin
             ];
         }
 
+        if (!$this->hasCourseCreationServiceInfrastructure()) {
+            return [
+                'valid' => false,
+                'message' => $this->get_lang('SelectedServiceUnavailableForCourseCreation'),
+                'reason' => 'service_infrastructure_unavailable',
+                'sale' => null,
+            ];
+        }
+
         $salesTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
         $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
         $now = Database::escape_string(api_get_utc_datetime());
@@ -9168,7 +9213,7 @@ class BuyCoursesPlugin extends Plugin
         $serviceId = (int) $serviceId;
         $maxCourses = max(0, (int) $maxCourses);
 
-        if ($userId <= 0 || $serviceId <= 0) {
+        if ($userId <= 0 || $serviceId <= 0 || !$this->hasCourseCreationServiceInfrastructure()) {
             return null;
         }
 
@@ -9205,7 +9250,7 @@ class BuyCoursesPlugin extends Plugin
     public function countCoursesLinkedToServiceSale(int $serviceSaleId): int
     {
         $serviceSaleId = (int) $serviceSaleId;
-        if ($serviceSaleId <= 0) {
+        if ($serviceSaleId <= 0 || !$this->hasSubscriptionCourseInfrastructure()) {
             return 0;
         }
 
@@ -9285,7 +9330,7 @@ class BuyCoursesPlugin extends Plugin
     {
         $courseId = (int) $courseId;
 
-        if ($courseId <= 0) {
+        if ($courseId <= 0 || !$this->hasSubscriptionCourseInfrastructure()) {
             return null;
         }
 
@@ -9487,7 +9532,7 @@ class BuyCoursesPlugin extends Plugin
         $courseId = (int) $courseId;
         $userId = (int) $userId;
 
-        if ($courseId <= 0 || $userId <= 0) {
+        if ($courseId <= 0 || $userId <= 0 || !$this->hasFrozenEnrollmentInfrastructure()) {
             return false;
         }
 
@@ -9510,7 +9555,7 @@ class BuyCoursesPlugin extends Plugin
     {
         $courseId = (int) $courseId;
 
-        if ($courseId <= 0) {
+        if ($courseId <= 0 || !$this->hasFrozenEnrollmentInfrastructure()) {
             return;
         }
 
@@ -9527,7 +9572,7 @@ class BuyCoursesPlugin extends Plugin
         $courseId = (int) $courseId;
         $limit = (int) $limit;
 
-        if ($courseId <= 0) {
+        if ($courseId <= 0 || !$this->hasFrozenEnrollmentInfrastructure()) {
             return;
         }
 
@@ -9578,6 +9623,10 @@ class BuyCoursesPlugin extends Plugin
      */
     public function processExpiredServiceBenefits(): int
     {
+        if (!$this->hasPluginTable(self::TABLE_SERVICES_SALE)) {
+            return 0;
+        }
+
         $table = Database::get_main_table(self::TABLE_SERVICES_SALE);
         $now = Database::escape_string(api_get_utc_datetime());
 

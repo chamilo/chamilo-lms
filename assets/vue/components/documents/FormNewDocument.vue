@@ -31,18 +31,42 @@
 
     <div
       v-if="editorDrafts.length > 0"
-      class="mt-3 rounded-lg border border-gray-25 bg-gray-10 p-4"
+      class="mt-3 rounded-lg border border-gray-25 bg-gray-10 px-4 py-3"
     >
-      <div class="mb-3 flex items-center justify-between gap-3">
-        <div class="text-sm font-semibold text-gray-90">
-          {{ t("Draft") }}
-        </div>
-        <div class="text-xs text-gray-50">
-          {{ editorDrafts.length }}/{{ maxEditorDrafts }}
-        </div>
-      </div>
+      <button
+        type="button"
+        class="flex w-full items-center justify-between gap-3 text-left"
+        @click="showEditorDrafts = !showEditorDrafts"
+      >
+        <span class="flex min-w-0 items-center gap-2 text-sm font-medium text-gray-90">
+          <span class="mdi mdi-content-save-clock-outline ch-tool-icon" />
+          <span class="truncate">
+            {{ t("Autosaved drafts available") }}
+          </span>
+          <span class="shrink-0 text-gray-50"> ({{ editorDrafts.length }}) </span>
+        </span>
 
-      <div class="flex flex-col gap-2">
+        <span class="flex shrink-0 items-center gap-1 text-sm text-primary">
+          {{ showEditorDrafts ? t("Hide drafts") : t("Show drafts") }}
+          <span
+            class="mdi ch-tool-icon"
+            :class="showEditorDrafts ? 'mdi-chevron-up' : 'mdi-chevron-down'"
+          />
+        </span>
+      </button>
+
+      <div
+        v-if="showEditorDrafts"
+        class="mt-3 flex flex-col gap-2 border-t border-gray-25 pt-3"
+      >
+        <div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+          <div class="text-xs text-gray-50">
+            {{ t("Drafts are stored only in this browser and are removed after saving the document.") }}
+          </div>
+
+          <div class="text-xs text-gray-50">{{ editorDrafts.length }}/{{ maxEditorDrafts }}</div>
+        </div>
+
         <div
           v-for="draft in editorDrafts"
           :key="draft.id"
@@ -52,9 +76,8 @@
             <div class="truncate text-sm font-medium text-gray-90">
               {{ draft.title || t("Untitled") }}
             </div>
-            <div class="text-xs text-gray-50">
-              {{ t("Saved") }}: {{ formatEditorDraftDate(draft.savedAt) }}
-            </div>
+
+            <div class="text-xs text-gray-50">{{ t("Last saved") }}: {{ formatEditorDraftDate(draft.savedAt) }}</div>
           </div>
 
           <div class="flex shrink-0 gap-2">
@@ -62,14 +85,15 @@
               icon="restore"
               size="small"
               type="secondary"
-              :label="t('Restore')"
+              :label="t('Restore draft')"
               @click.prevent="restoreEditorDraft(draft)"
             />
+
             <BaseButton
               icon="delete"
               size="small"
               type="danger"
-              :label="t('Remove')"
+              :label="t('Delete draft')"
               @click.prevent="removeEditorDraft(draft.id)"
             />
           </div>
@@ -224,6 +248,7 @@ export default {
       editorDraftIntervalId: null,
       lastEditorDraftContent: "",
       maxEditorDrafts: 5,
+      showEditorDrafts: false,
     }
   },
   validations() {

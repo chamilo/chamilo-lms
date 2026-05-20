@@ -268,16 +268,91 @@ class CourseController extends ToolBaseController
                 && $pluginConfiguration
                 && $pluginConfiguration->isActive();
 
+            $topLinksRelationClass = 'Chamilo\\PluginBundle\\TopLinks\\Entity\\TopLinkRelShortcut';
+            $topLinksEntityPath = \dirname(__DIR__, 3).'/public/plugin/TopLinks/src/Entity/TopLinkRelShortcut.php';
+            $topLinksRepositoryPath = \dirname(__DIR__, 3).'/public/plugin/TopLinks/src/Entity/Repository/TopLinkRelShortcutRepository.php';
+
+            if (is_file($topLinksRepositoryPath)) {
+                require_once $topLinksRepositoryPath;
+            }
+
+            if (is_file($topLinksEntityPath)) {
+                require_once $topLinksEntityPath;
+            }
+
+            $topLinksPluginEntity = Container::getPluginRepository()->findOneByTitle('TopLinks');
+            if (null === $topLinksPluginEntity) {
+                $topLinksPluginEntity = Container::getPluginRepository()->findOneByTitle('Top Links');
+            }
+
+            $topLinksConfiguration = $topLinksPluginEntity?->getConfigurationsByAccessUrl($currentAccessUrl);
+            $isTopLinksEnabled = $topLinksPluginEntity
+                && $topLinksPluginEntity->isInstalled()
+                && $topLinksConfiguration
+                && $topLinksConfiguration->isActive()
+                && class_exists($topLinksRelationClass)
+            ;
+
+            if ($isTopLinksEnabled) {
+                try {
+                    $isTopLinksEnabled = $em
+                        ->getConnection()
+                        ->createSchemaManager()
+                        ->tablesExist(['toplinks_link_rel_shortcut'])
+                    ;
+                } catch (Throwable) {
+                    $isTopLinksEnabled = false;
+                }
+            }
+
             $courseNodeId = $course->getResourceNode()->getId();
             $cid = $course->getId();
             $sid = $this->getSessionId() ?: null;
 
             $externalToolRepository = $em->getRepository(ExternalTool::class);
+            $topLinksRelationRepository = $isTopLinksEnabled ? $em->getRepository($topLinksRelationClass) : null;
             $visibleShortcuts = [];
 
             /** @var CShortcut $shortcut */
             foreach ($shortcuts as $shortcut) {
                 $resourceNode = $shortcut->getShortCutNode();
+
+                if (null !== $topLinksRelationRepository) {
+                    $topLinksRelation = $topLinksRelationRepository->findOneBy(['shortcut' => $shortcut]);
+
+                    if (null !== $topLinksRelation && method_exists($topLinksRelation, 'getLink')) {
+                        $topLink = $topLinksRelation->getLink();
+
+                        if (null !== $topLink && method_exists($topLink, 'getId')) {
+                            $queryParams = array_filter([
+                                'link' => $topLink->getId(),
+                                'cid' => $cid,
+                                'sid' => $sid ?: null,
+                                'gid' => 0,
+                            ], static fn ($value): bool => null !== $value);
+
+                            $shortcut->setUrlOverride('/plugin/TopLinks/start.php?'.http_build_query($queryParams));
+                            $shortcut->setIcon('mdi-link-variant');
+
+                            $iconName = method_exists($topLink, 'getIcon') ? $topLink->getIcon() : null;
+                            if (
+                                \is_string($iconName)
+                                && preg_match('/^[a-f0-9]{32}\.(?:png|jpe?g|gif|webp)$/i', $iconName)
+                            ) {
+                                $shortcut->setCustomImageUrl('/plugin/TopLinks/image.php?f='.rawurlencode($iconName));
+                            } else {
+                                $shortcut->setCustomImageUrl(null);
+                            }
+
+                            $target = method_exists($topLink, 'getTarget') ? (string) $topLink->getTarget() : '_blank';
+                            $shortcut->target = \in_array($target, ['_self', '_blank'], true) ? $target : '_blank';
+
+                            $visibleShortcuts[] = $shortcut;
+
+                            continue;
+                        }
+                    }
+                }
 
                 /** @var ExternalTool|null $externalTool */
                 $externalTool = $externalToolRepository->findOneBy(['resourceNode' => $resourceNode]);

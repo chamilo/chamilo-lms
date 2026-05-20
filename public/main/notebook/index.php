@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Language;
+use Chamilo\CourseBundle\Entity\CNotebook;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use ChamiloSession as Session;
 
@@ -10,6 +12,105 @@ use ChamiloSession as Session;
  * refactoring and tighter integration
  */
 require_once __DIR__.'/../inc/global.inc.php';
+
+function notebook_get_resource_language_options(): array
+{
+    $options = [
+        '' => get_lang('No specific language'),
+    ];
+
+    $languages = Database::getManager()
+        ->getRepository(Language::class)
+        ->findBy(['available' => true], ['englishName' => 'ASC'])
+    ;
+
+    foreach ($languages as $language) {
+        if (!$language instanceof Language) {
+            continue;
+        }
+
+        $options[$language->getIsocode()] = $language->getOriginalName() ?: $language->getEnglishName();
+    }
+
+    return $options;
+}
+
+function notebook_get_resource_language_iso_code(?int $noteId): string
+{
+    if (empty($noteId)) {
+        return '';
+    }
+
+    $note = Database::getManager()->getRepository(CNotebook::class)->find($noteId);
+    if (!$note instanceof CNotebook || null === $note->getResourceNode()) {
+        return '';
+    }
+
+    $language = $note->getResourceNode()->getLanguage();
+
+    return $language instanceof Language ? $language->getIsocode() : '';
+}
+
+function notebook_find_last_note_id(array $values): ?int
+{
+    $title = trim((string) ($values['note_title'] ?? ''));
+    if ('' === $title) {
+        return null;
+    }
+
+    $queryBuilder = Database::getManager()
+        ->getRepository(CNotebook::class)
+        ->createQueryBuilder('note')
+    ;
+
+    $note = $queryBuilder
+        ->andWhere('note.user = :user')
+        ->andWhere('note.title = :title')
+        ->setParameter('user', api_get_user_entity())
+        ->setParameter('title', $title)
+        ->orderBy('note.creationDate', 'DESC')
+        ->setMaxResults(1)
+        ->getQuery()
+        ->getOneOrNullResult()
+    ;
+
+    return $note instanceof CNotebook ? $note->getIid() : null;
+}
+
+function notebook_apply_resource_language(?int $noteId, mixed $rawLanguage): void
+{
+    if (empty($noteId)) {
+        return;
+    }
+
+    $entityManager = Database::getManager();
+    $note = $entityManager->getRepository(CNotebook::class)->find($noteId);
+    if (!$note instanceof CNotebook || null === $note->getResourceNode()) {
+        return;
+    }
+
+    $languageCode = trim((string) $rawLanguage);
+    $language = null;
+
+    if ('' !== $languageCode) {
+        $language = $entityManager
+            ->getRepository(Language::class)
+            ->findOneBy([
+                'isocode' => $languageCode,
+                'available' => true,
+            ])
+        ;
+
+        if (!$language instanceof Language) {
+            return;
+        }
+    }
+
+    $resourceNode = $note->getResourceNode();
+    $resourceNode->setLanguage($language);
+    $entityManager->persist($resourceNode);
+    $entityManager->flush();
+}
 
 $current_course_tool = TOOL_NOTEBOOK;
 
@@ -103,6 +204,22 @@ if ('addnote' === $action) {
             ? ['ToolbarSet' => 'Notebook', 'Width' => '100%', 'Height' => '300']
             : ['ToolbarSet' => 'NotebookStudent', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student']
     );
+
+    $languageOptions = notebook_get_resource_language_options();
+    if (\count($languageOptions) > 2) {
+        $form->addButtonAdvancedSettings('advanced_params', get_lang('Advanced settings'));
+        $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
+        $form->addSelect(
+            'language',
+            get_lang('Language'),
+            $languageOptions,
+            [
+                'id' => 'resource_language',
+            ]
+        );
+        $form->addElement('html', '</div>');
+    }
+
     $form->addButtonCreate(get_lang('Create note'), 'SubmitNote');
 
     // Setting the rules
@@ -115,6 +232,8 @@ if ('addnote' === $action) {
             $values = $form->exportValues();
             $res = NotebookManager::saveNote($values);
             if ($res) {
+                $noteId = is_numeric($res) ? (int) $res : notebook_find_last_note_id($values);
+                notebook_apply_resource_language($noteId, $values['language'] ?? '');
                 echo Display::return_message(get_lang('Note added'), 'confirmation');
             }
         }
@@ -174,8 +293,25 @@ if ('addnote' === $action) {
             ? ['ToolbarSet' => 'Notebook', 'Width' => '100%', 'Height' => '300']
             : ['ToolbarSet' => 'NotebookStudent', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student']
     );
+
+    $languageOptions = notebook_get_resource_language_options();
+    if (\count($languageOptions) > 2) {
+        $form->addButtonAdvancedSettings('advanced_params', get_lang('Advanced settings'));
+        $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
+        $form->addSelect(
+            'language',
+            get_lang('Language'),
+            $languageOptions,
+            [
+                'id' => 'resource_language',
+            ]
+        );
+        $form->addElement('html', '</div>');
+    }
+
     $form->addButtonUpdate(get_lang('Edit my personal note'), 'SubmitNote');
 
+    $defaults['language'] = notebook_get_resource_language_iso_code((int) $_GET['notebook_id']);
     $form->setDefaults($defaults);
 
     // Setting the rules
@@ -188,6 +324,7 @@ if ('addnote' === $action) {
             $values = $form->exportValues();
             $res = NotebookManager::updateNote($values);
             if ($res) {
+                notebook_apply_resource_language((int) ($values['notebook_id'] ?? 0), $values['language'] ?? '');
                 echo Display::return_message(get_lang('Note updated'), 'confirmation');
             }
         }

@@ -67,6 +67,36 @@ class CourseDescriptionController
         return $language->getIsocode();
     }
 
+
+    private function applyResourceLanguage(?CCourseDescription $courseDescription, mixed $rawLanguage): void
+    {
+        if (!$courseDescription instanceof CCourseDescription || null === $courseDescription->getResourceNode()) {
+            return;
+        }
+
+        $languageCode = trim((string) $rawLanguage);
+        $entityManager = Database::getManager();
+        $language = null;
+
+        if ('' !== $languageCode) {
+            $language = $entityManager
+                ->getRepository(Language::class)
+                ->findOneBy([
+                    'isocode' => $languageCode,
+                    'available' => true,
+                ])
+            ;
+
+            if (!$language instanceof Language) {
+                return;
+            }
+        }
+
+        $resourceNode = $courseDescription->getResourceNode();
+        $resourceNode->setLanguage($language);
+        $entityManager->persist($resourceNode);
+        $entityManager->flush();
+    }
     public function getToolbar()
     {
         $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
@@ -187,6 +217,7 @@ class CourseDescriptionController
         $course_description->set_session_id($session_id);
         $data = [];
         $courseDescriptionEntity = null;
+        $storedCourseDescription = null;
         $affected_rows = null;
         if ('POST' === strtoupper($_SERVER['REQUEST_METHOD'])) {
             if (!empty($_POST['title']) && !empty($_POST['contentDescription'])) {
@@ -225,6 +256,7 @@ class CourseDescriptionController
                     ;
 
                     $repo->update($courseDescription);
+                    $storedCourseDescription = $courseDescription;
                 } else {
                     $course_description->set_description_type($description_type);
                     $course_description->set_title($title);
@@ -233,7 +265,14 @@ class CourseDescriptionController
 
                     // Pass the flag down to insert (see next section).
                     $course_description->insert($enableSearch);
+
+                    $description = $course_description->get_data_by_description_type($description_type);
+                    if (!empty($description['iid'])) {
+                        $storedCourseDescription = $repo->find((int) $description['iid']);
+                    }
                 }
+
+                $this->applyResourceLanguage($storedCourseDescription, $_POST['language'] ?? '');
 
                 Display::addFlash(
                     Display::return_message(
@@ -343,14 +382,22 @@ class CourseDescriptionController
                     'Height' => '200',
                 ]
             );
-            $form->addSelect(
-                'language',
-                get_lang('Language'),
-                $this->getResourceLanguageOptions(),
-                [
-                    'id' => 'resource_language',
-                ]
-            );
+            $languageOptions = $this->getResourceLanguageOptions();
+            $showAdvancedSettings = \count($languageOptions) > 2 || 'true' === api_get_setting('search.search_enabled');
+            if ($showAdvancedSettings) {
+                $form->addButtonAdvancedSettings('advanced_params', get_lang('Advanced settings'));
+                $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
+            }
+            if (\count($languageOptions) > 2) {
+                $form->addSelect(
+                    'language',
+                    get_lang('Language'),
+                    $languageOptions,
+                    [
+                        'id' => 'resource_language',
+                    ]
+                );
+            }
 
             if ('true' === api_get_setting('search.search_enabled')) {
                 $form->addCheckBox(
@@ -361,6 +408,10 @@ class CourseDescriptionController
 
                 // Default: checked
                 $default['enable_search'] = 1;
+            }
+
+            if ($showAdvancedSettings) {
+                $form->addElement('html', '</div>');
             }
 
             $form->addButtonCreate(get_lang('Save'));
@@ -419,7 +470,14 @@ class CourseDescriptionController
 
                     // Pass flag
                     $course_description->insert($enableSearch);
+
+                    $description = $course_description->get_data_by_description_type($description_type);
+                    if (!empty($description['iid'])) {
+                        $storedCourseDescription = $repo->find((int) $description['iid']);
+                    }
                 }
+
+                $this->applyResourceLanguage($storedCourseDescription, $_POST['language'] ?? '');
 
                 Display::addFlash(
                     Display::return_message(
@@ -460,14 +518,22 @@ class CourseDescriptionController
                     'Height' => '200',
                 ]
             );
-            $form->addSelect(
-                'language',
-                get_lang('Language'),
-                $this->getResourceLanguageOptions(),
-                [
-                    'id' => 'resource_language',
-                ]
-            );
+            $languageOptions = $this->getResourceLanguageOptions();
+            $showAdvancedSettings = \count($languageOptions) > 2 || 'true' === api_get_setting('search.search_enabled');
+            if ($showAdvancedSettings) {
+                $form->addButtonAdvancedSettings('advanced_params', get_lang('Advanced settings'));
+                $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
+            }
+            if (\count($languageOptions) > 2) {
+                $form->addSelect(
+                    'language',
+                    get_lang('Language'),
+                    $languageOptions,
+                    [
+                        'id' => 'resource_language',
+                    ]
+                );
+            }
 
             $defaults = [
                 'language' => '',
@@ -481,6 +547,10 @@ class CourseDescriptionController
                 );
 
                 $defaults['enable_search'] = 1;
+            }
+
+            if ($showAdvancedSettings) {
+                $form->addElement('html', '</div>');
             }
 
             $form->setDefaults($defaults);

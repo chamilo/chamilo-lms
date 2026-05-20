@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CWiki;
@@ -16,6 +17,70 @@ use ChamiloSession as Session;
 
 final class WikiManager
 {
+
+    private static function getResourceLanguageOptions(): array
+    {
+        $options = [
+            '' => get_lang('No specific language'),
+        ];
+
+        $languages = \Database::getManager()
+            ->getRepository(Language::class)
+            ->findBy(['available' => true], ['englishName' => 'ASC'])
+        ;
+
+        foreach ($languages as $language) {
+            if (!$language instanceof Language) {
+                continue;
+            }
+
+            $options[$language->getIsocode()] = $language->getOriginalName() ?: $language->getEnglishName();
+        }
+
+        return $options;
+    }
+
+    private static function getResourceLanguageIsoCode(?CWiki $wiki): string
+    {
+        if (!$wiki instanceof CWiki || null === $wiki->getResourceNode()) {
+            return '';
+        }
+
+        $language = $wiki->getResourceNode()->getLanguage();
+
+        return $language instanceof Language ? $language->getIsocode() : '';
+    }
+
+    private static function applyResourceLanguage(CWiki $wiki, mixed $rawLanguage): void
+    {
+        $resourceNode = $wiki->getResourceNode();
+        if (null === $resourceNode) {
+            return;
+        }
+
+        $languageCode = trim((string) $rawLanguage);
+        $entityManager = \Database::getManager();
+        $language = null;
+
+        if ('' !== $languageCode) {
+            $language = $entityManager
+                ->getRepository(Language::class)
+                ->findOneBy([
+                    'isocode' => $languageCode,
+                    'available' => true,
+                ])
+            ;
+
+            if (!$language instanceof Language) {
+                return;
+            }
+        }
+
+        $resourceNode->setLanguage($language);
+        $entityManager->persist($resourceNode);
+        $entityManager->flush();
+    }
+
     /** Legacy compat: set from index.php */
     private readonly CWikiRepository $wikiRepo;
     public string $page = 'index';
@@ -511,6 +576,7 @@ final class WikiManager
             'progress'        => (string)($last?->getProgress() ?? ''),
             'comment'         => '',
             'assignment'      => (int)($last?->getAssignment() ?? 0),
+            'language'        => self::getResourceLanguageIsoCode($last),
         ];
 
         // Preselect categories
@@ -630,10 +696,22 @@ final class WikiManager
 
         // Advanced params (only for teachers/admin and not on index)
         if ((api_is_allowed_to_edit(false, true) || api_is_platform_admin())
-            && isset($row['reflink']) && $row['reflink'] !== 'index'
+            && (!isset($row['reflink']) || $row['reflink'] !== 'index')
         ) {
             $form->addElement('advanced_settings', 'advanced_params', get_lang('Advanced settings'));
             $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
+
+            $languageOptions = self::getResourceLanguageOptions();
+            if (\count($languageOptions) > 2) {
+                $form->addSelect(
+                    'language',
+                    get_lang('Language'),
+                    $languageOptions,
+                    [
+                        'id' => 'resource_language',
+                    ]
+                );
+            }
 
             // Task description
             $form->addHtmlEditor(
@@ -1148,6 +1226,8 @@ final class WikiManager
 
         $em->persist($w);
         $em->flush();
+
+        self::applyResourceLanguage($w, $values['language'] ?? '');
 
         if (method_exists(__CLASS__, 'dbg')) {
             self::dbg('[SAVE] after first flush iid='.(int)$w->getIid().' pageId='.(int)$w->getPageId().' reflink='.$reflink);

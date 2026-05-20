@@ -10,6 +10,62 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
 use Chamilo\CourseBundle\Entity\CGroup;
 
+function announcements_get_resource_language_options(): array
+{
+    $options = [
+        '' => get_lang('No specific language'),
+    ];
+
+    $languages = Database::getManager()
+        ->getRepository(Language::class)
+        ->findBy(['available' => true], ['englishName' => 'ASC'])
+    ;
+
+    foreach ($languages as $language) {
+        if (!$language instanceof Language) {
+            continue;
+        }
+
+        $options[$language->getIsocode()] = $language->getOriginalName() ?: $language->getEnglishName();
+    }
+
+    return $options;
+}
+
+function announcements_apply_resource_language(?CAnnouncement $announcement, mixed $rawLanguage): void
+{
+    if (!$announcement instanceof CAnnouncement) {
+        return;
+    }
+
+    $resourceNode = $announcement->getResourceNode();
+    if (null === $resourceNode) {
+        return;
+    }
+
+    $languageCode = trim((string) $rawLanguage);
+    $entityManager = Database::getManager();
+    $language = null;
+
+    if ('' !== $languageCode) {
+        $language = $entityManager
+            ->getRepository(Language::class)
+            ->findOneBy([
+                'isocode' => $languageCode,
+                'available' => true,
+            ])
+        ;
+
+        if (!$language instanceof Language) {
+            return;
+        }
+    }
+
+    $resourceNode->setLanguage($language);
+    $entityManager->persist($resourceNode);
+    $entityManager->flush();
+}
+
 /**
  * @author Frederik Vermeire <frederik.vermeire@pandora.be>, UGent Internship
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: code cleaning
@@ -475,21 +531,7 @@ switch ($action) {
             null,
             ['enctype' => 'multipart/form-data']
         );
-
-        $languageOptions = [
-            '' => get_lang('No specific language'),
-        ];
-        $languages = Database::getManager()
-            ->getRepository(Language::class)
-            ->findBy(['available' => true], ['englishName' => 'ASC'])
-        ;
-        foreach ($languages as $language) {
-            if (!$language instanceof Language) {
-                continue;
-            }
-
-            $languageOptions[$language->getIsocode()] = $language->getOriginalName() ?: $language->getEnglishName();
-        }
+        $languageOptions = announcements_get_resource_language_options();
 
         $form_name = get_lang('Edit announcement');
         if (empty($id)) {
@@ -756,14 +798,19 @@ switch ($action) {
             false,
             ['ToolbarSet' => 'Announcements']
         );
-        $form->addSelect(
-            'language',
-            get_lang('Language'),
-            $languageOptions,
-            [
-                'id' => 'resource_language',
-            ]
-        );
+        if (\count($languageOptions) > 2) {
+            $form->addButtonAdvancedSettings('resource_options', get_lang('Advanced settings'));
+            $form->addElement('html', '<div id="resource_options_options" style="display:none">');
+            $form->addSelect(
+                'language',
+                get_lang('Language'),
+                $languageOptions,
+                [
+                    'id' => 'resource_language',
+                ]
+            );
+            $form->addElement('html', '</div>');
+        }
 
     if (!$announcementAttachmentIsDisabled) {
         // Allow multiple files in one selection
@@ -1019,6 +1066,8 @@ switch ($action) {
                     $sendToUsersInSession
                 );
 
+                announcements_apply_resource_language($announcement, $data['language'] ?? '');
+
                 if ($announcementScheduledByDate && $announcement instanceof CAnnouncement) {
                     $extraFieldValues = new ExtraFieldValue('course_announcement');
                     $data['item_id'] = $announcement->getIid();
@@ -1101,6 +1150,8 @@ switch ($action) {
                 }
 
                 if ($announcement) {
+                    announcements_apply_resource_language($announcement instanceof CAnnouncement ? $announcement : null, $data['language'] ?? '');
+
                     if ($announcementScheduledByDate && $announcement instanceof CAnnouncement) {
                         $extraFieldValues = new ExtraFieldValue('course_announcement');
                         $data['item_id'] = $announcement->getIid();

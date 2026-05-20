@@ -17,6 +17,37 @@ use ChamiloSession as Session;
  */
 api_protect_course_script();
 
+
+function lp_edit_apply_resource_language(CLp $lp, mixed $rawLanguage): void
+{
+    $resourceNode = $lp->getResourceNode();
+    if (null === $resourceNode) {
+        return;
+    }
+
+    $languageCode = trim((string) $rawLanguage);
+    $entityManager = Database::getManager();
+    $language = null;
+
+    if ('' !== $languageCode) {
+        $language = $entityManager
+            ->getRepository(Language::class)
+            ->findOneBy([
+                'isocode' => $languageCode,
+                'available' => true,
+            ])
+        ;
+
+        if (!$language instanceof Language) {
+            return;
+        }
+    }
+
+    $resourceNode->setLanguage($language);
+    $entityManager->persist($resourceNode);
+    $entityManager->flush();
+}
+
 /** @var learnpath $learnPath */
 $learnPath = Session::read('oLP');
 $lpRepo = Container::getLpRepository();
@@ -109,14 +140,19 @@ $form->addRule('lp_name', get_lang('Required field'), 'required');
 $form->addElement('hidden', 'lp_encoding');
 $items = learnpath::getCategoryFromCourseIntoSelect(api_get_course_int_id(), true);
 $form->addSelect('category_id', get_lang('Category'), $items);
-$form->addSelect(
-    'language',
-    get_lang('Language'),
-    $languageOptions,
-    [
-        'id' => 'resource_language',
-    ]
-);
+if (\count($languageOptions) > 2) {
+    $form->addButtonAdvancedSettings('advanced_params', get_lang('Advanced settings'));
+    $form->addHtml('<div id="advanced_params_options" style="display:none">');
+    $form->addSelect(
+        'language',
+        get_lang('Language'),
+        $languageOptions,
+        [
+            'id' => 'resource_language',
+        ]
+    );
+    $form->addHtml('</div>');
+}
 
 // Hide toc frame
 $form->addElement(
@@ -485,6 +521,7 @@ if ($form->validate()) {
         }
     }
 
+    lp_edit_apply_resource_language($lp, $request->request->get('language', ''));
     $lpRepo->update($lp);
 
     // Optional: trigger Xapian index based on checkbox value

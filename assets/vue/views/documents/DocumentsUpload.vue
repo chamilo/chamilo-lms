@@ -118,11 +118,8 @@
       </form>
     </div>
 
-    <div class="mb-4 max-w-xl">
-      <ResourceLanguageSelector v-model="selectedLanguage" />
-    </div>
-
     <BaseAdvancedSettingsButton v-model="showAdvancedSettings">
+      <ResourceLanguageSelector v-model="selectedLanguage" />
       <div class="flex flex-row mb-2">
         <label class="font-semibold w-28">{{ t("Options") }}:</label>
         <BaseCheckbox

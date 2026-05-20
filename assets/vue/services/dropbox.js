@@ -125,7 +125,7 @@ async function updateFile({ id, file = null, categoryId = null, renameTitle = fa
 }
 
 /** ------- Upload / Download ------- */
-export async function uploadFile({ file, description, overwrite, recipients, area, context, parentResourceNodeId }) {
+export async function uploadFile({ file, description, overwrite, recipients, area, context, parentResourceNodeId, language }) {
   const sp = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : new URLSearchParams("")
   const cid = Number(context?.cid ?? (sp.get("cid") || 0))
   const sid = Number(context?.sid ?? (sp.get("sid") || 0))
@@ -139,6 +139,7 @@ export async function uploadFile({ file, description, overwrite, recipients, are
   fd.append("fileExistsOption", overwrite ? "overwrite" : "")
   ;(recipients || []).forEach((r) => fd.append("recipients[]", String(r)))
   if (parentResourceNodeId != null) fd.append("parentResourceNodeId", String(parentResourceNodeId))
+  if (language) fd.append("language", String(language))
 
   return axios.post(`/api/c_dropbox_files/upload?cid=${cid}&sid=${sid}&gid=${gid}`, fd)
 }

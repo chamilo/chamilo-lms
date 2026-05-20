@@ -22,6 +22,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\DBAL\Types\Types;
 use Symfony\Bundle\SecurityBundle\Security;
 
@@ -50,6 +51,7 @@ final class UserCollectionStateProvider implements ProviderInterface
         private readonly UserRepository $userRepository,
         private readonly UserHelper $userHelper,
         private readonly Security $security,
+        private readonly SettingsManager $settingsManager,
         FilterExtension $filterExtension,
         OrderExtension $orderExtension,
         PaginationExtension $paginationExtension,
@@ -89,54 +91,63 @@ final class UserCollectionStateProvider implements ProviderInterface
 
         $qb = $this->userRepository->createQueryBuilder('u');
 
-        $qb->andWhere(
-            $qb->expr()->orX(
-                // The user themselves.
-                'u = :currentUser',
-                // Relationships the current user initiated.
-                $qb->expr()->exists(
-                    'SELECT 1 FROM '.UserRelUser::class.' uru1
-                     WHERE uru1.user = :currentUser
-                       AND uru1.friend = u
-                       AND uru1.relationType NOT IN (:deletedRel)'
-                ),
-                // Relationships where the current user is the target.
-                $qb->expr()->exists(
-                    'SELECT 1 FROM '.UserRelUser::class.' uru2
-                     WHERE uru2.friend = :currentUser
-                       AND uru2.user = u
-                       AND uru2.relationType NOT IN (:deletedRel)'
-                ),
-                // Students of courses where the current user is a teacher.
-                $qb->expr()->exists(
-                    'SELECT 1 FROM '.CourseRelUser::class.' cru_t
-                     WHERE cru_t.user = :currentUser
-                       AND cru_t.status = :teacherStatus
-                       AND EXISTS (
-                           SELECT 1 FROM '.CourseRelUser::class.' cru_s
-                           WHERE cru_s.user = u
-                             AND cru_s.course = cru_t.course
-                       )'
-                ),
-                // Students of session-courses where the current user is a course coach.
-                $qb->expr()->exists(
-                    'SELECT 1 FROM '.SessionRelCourseRelUser::class.' srcru_c
-                     WHERE srcru_c.user = :currentUser
-                       AND srcru_c.status = :courseCoachStatus
-                       AND EXISTS (
-                           SELECT 1 FROM '.SessionRelCourseRelUser::class.' srcru_s
-                           WHERE srcru_s.user = u
-                             AND srcru_s.session = srcru_c.session
-                             AND srcru_s.course = srcru_c.course
-                       )'
-                ),
+        $allowSendToAll = 'true' === $this->settingsManager->getSetting('message.allow_send_message_to_all_platform_users');
+
+        if ($allowSendToAll) {
+            // When the platform allows messaging all users, expose all active non-anonymous users.
+            $qb->andWhere('u.active = 1 AND u.status != :anonStatus')
+                ->setParameter('anonStatus', User::ANONYMOUS)
+            ;
+        } else {
+            $qb->andWhere(
+                $qb->expr()->orX(
+                    // The user themselves.
+                    'u = :currentUser',
+                    // Relationships the current user initiated.
+                    $qb->expr()->exists(
+                        'SELECT 1 FROM '.UserRelUser::class.' uru1
+                         WHERE uru1.user = :currentUser
+                           AND uru1.friend = u
+                           AND uru1.relationType NOT IN (:deletedRel)'
+                    ),
+                    // Relationships where the current user is the target.
+                    $qb->expr()->exists(
+                        'SELECT 1 FROM '.UserRelUser::class.' uru2
+                         WHERE uru2.friend = :currentUser
+                           AND uru2.user = u
+                           AND uru2.relationType NOT IN (:deletedRel)'
+                    ),
+                    // Students of courses where the current user is a teacher.
+                    $qb->expr()->exists(
+                        'SELECT 1 FROM '.CourseRelUser::class.' cru_t
+                         WHERE cru_t.user = :currentUser
+                           AND cru_t.status = :teacherStatus
+                           AND EXISTS (
+                               SELECT 1 FROM '.CourseRelUser::class.' cru_s
+                               WHERE cru_s.user = u
+                                 AND cru_s.course = cru_t.course
+                           )'
+                    ),
+                    // Students of session-courses where the current user is a course coach.
+                    $qb->expr()->exists(
+                        'SELECT 1 FROM '.SessionRelCourseRelUser::class.' srcru_c
+                         WHERE srcru_c.user = :currentUser
+                           AND srcru_c.status = :courseCoachStatus
+                           AND EXISTS (
+                               SELECT 1 FROM '.SessionRelCourseRelUser::class.' srcru_s
+                               WHERE srcru_s.user = u
+                                 AND srcru_s.session = srcru_c.session
+                                 AND srcru_s.course = srcru_c.course
+                           )'
+                    ),
+                )
             )
-        )
-            ->setParameter('currentUser', $currentUser->getId())
-            ->setParameter('deletedRel', [UserRelUser::USER_RELATION_TYPE_DELETED])
-            ->setParameter('teacherStatus', CourseRelUser::TEACHER, Types::INTEGER)
-            ->setParameter('courseCoachStatus', Session::COURSE_COACH, Types::INTEGER)
-        ;
+                ->setParameter('currentUser', $currentUser->getId())
+                ->setParameter('deletedRel', [UserRelUser::USER_RELATION_TYPE_DELETED])
+                ->setParameter('teacherStatus', CourseRelUser::TEACHER, Types::INTEGER)
+                ->setParameter('courseCoachStatus', Session::COURSE_COACH, Types::INTEGER)
+            ;
+        }
 
         $queryNameGenerator = new QueryNameGenerator();
         $items = [];

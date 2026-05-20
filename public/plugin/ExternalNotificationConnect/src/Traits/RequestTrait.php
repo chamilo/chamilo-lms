@@ -19,175 +19,110 @@ trait RequestTrait
      * @throws GuzzleException
      * @throws Exception
      */
-    protected function doCreateRequest($json): ?array
+    protected function doCreateRequest(array $json): ?array
     {
-        try {
-            $token = $this->plugin->getAccessToken();
-        } catch (OptimisticLockException|ORMException|Exception $e) {
-            throw new Exception($e->getMessage());
-        }
-
-        $options = [
-            'headers' => [
-                'Authorization' => "Bearer $token",
-            ],
-            'json' => $json,
-        ];
-
-        $client = new Client();
-
-        try {
-            $response = $client->post(
-                $this->plugin->get(ExternalNotificationConnectPlugin::SETTING_NOTIFICATION_URL),
-                $options
-            );
-        } catch (ClientException|ServerException $e) {
-            if (!$e->hasResponse()) {
-                throw new Exception($e->getMessage());
-            }
-
-            $response = $e->getResponse();
-        }
-
-        $json = json_decode((string) $response->getBody(), true);
-
-        if (isset($json['status']) && 500 === $json['status']) {
-            throw new Exception($json['message']);
-        }
-
-        if (isset($json['validation_errors']) && $json['validation_errors']) {
-            $messageError = implode(
-                '<br>',
-                array_column($json['errors'], 'message')
-            );
-
-            throw new Exception($messageError);
-        }
-
-        return $json;
+        return $this->sendNotificationRequest(
+            'POST',
+            $this->plugin->get(ExternalNotificationConnectPlugin::SETTING_NOTIFICATION_URL),
+            $json
+        );
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     protected function doEditRequest(array $json): array
     {
-        try {
-            $token = $this->plugin->getAccessToken();
-        } catch (OptimisticLockException|ORMException|Exception $e) {
-            throw new Exception($e->getMessage());
-        }
-
-        $url = $this->plugin->get(ExternalNotificationConnectPlugin::SETTING_NOTIFICATION_URL)
+        $url = rtrim((string) $this->plugin->get(ExternalNotificationConnectPlugin::SETTING_NOTIFICATION_URL), '/')
             .'/'.$json['content_id'].'/'.$json['content_type'];
 
-        $options = [
-            'headers' => [
-                'Authorization' => "Bearer $token",
-            ],
-            'json' => $json,
-        ];
-
-        $client = new Client();
-
-        try {
-            $response = $client->post($url, $options);
-        } catch (ClientException|ServerException $e) {
-            if (!$e->hasResponse()) {
-                throw new Exception($e->getMessage());
-            }
-
-            $response = $e->getResponse();
-        }
-
-        $json = json_decode((string) $response->getBody(), true);
-
-        if (isset($json['status']) && 500 === $json['status']) {
-            throw new Exception($json['message']);
-        }
-
-        return $json;
+        return $this->sendNotificationRequest('POST', $url, $json);
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
-    protected function doVisibilityRequest(array $data)
+    protected function doVisibilityRequest(array $data): array
     {
-        try {
-            $token = $this->plugin->getAccessToken();
-        } catch (OptimisticLockException|ORMException|Exception $e) {
-            throw new Exception($e->getMessage());
-        }
+        $url = rtrim((string) $this->plugin->get(ExternalNotificationConnectPlugin::SETTING_NOTIFICATION_URL), '/')
+            .'/visibility';
 
-        $options = [
-            'headers' => [
-                'Authorization' => "Bearer $token",
-            ],
-            'json' => $data,
-        ];
-
-        $client = new Client();
-
-        try {
-            $response = $client->post(
-                $this->plugin->get(ExternalNotificationConnectPlugin::SETTING_NOTIFICATION_URL).'/visibility',
-                $options
-            );
-        } catch (ClientException|ServerException $e) {
-            if (!$e->hasResponse()) {
-                throw new Exception($e->getMessage());
-            }
-
-            $response = $e->getResponse();
-        }
-
-        $json = json_decode((string) $response->getBody(), true);
-
-        if (isset($json['status']) && 500 === $json['status']) {
-            throw new Exception($json['message']);
-        }
-
-        return $json;
+        return $this->sendNotificationRequest('POST', $url, $data);
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     protected function doDeleteRequest(int $contentId, string $contentType): array
     {
+        $url = rtrim((string) $this->plugin->get(ExternalNotificationConnectPlugin::SETTING_NOTIFICATION_URL), '/')
+            .'/'.$contentId.'/'.$contentType;
+
+        return $this->sendNotificationRequest('DELETE', $url);
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function sendNotificationRequest(string $method, string $url, array $json = []): array
+    {
+        if ('' === trim($url)) {
+            throw new Exception('Notification endpoint is not configured.');
+        }
+
         try {
             $token = $this->plugin->getAccessToken();
         } catch (OptimisticLockException|ORMException|Exception $e) {
             throw new Exception($e->getMessage());
         }
 
-        $url = $this->plugin->get(ExternalNotificationConnectPlugin::SETTING_NOTIFICATION_URL)."/$contentId/$contentType";
-
         $options = [
+            'connect_timeout' => ExternalNotificationConnectPlugin::HTTP_CONNECT_TIMEOUT,
             'headers' => [
-                'Authorization' => "Bearer $token",
+                'Authorization' => 'Bearer '.$token,
             ],
+            'http_errors' => false,
+            'timeout' => ExternalNotificationConnectPlugin::HTTP_TIMEOUT,
         ];
+
+        if ([] !== $json) {
+            $options['json'] = $json;
+        }
 
         $client = new Client();
 
         try {
-            $response = $client->delete($url, $options);
+            $response = $client->request($method, $url, $options);
         } catch (ClientException|ServerException $e) {
             if (!$e->hasResponse()) {
                 throw new Exception($e->getMessage());
             }
 
             $response = $e->getResponse();
+        } catch (GuzzleException $e) {
+            throw new Exception($e->getMessage());
         }
 
-        $json = json_decode((string) $response->getBody(), true);
+        $responseJson = json_decode((string) $response->getBody(), true);
 
-        if (isset($json['status']) && 500 === $json['status']) {
-            throw new Exception($json['message']);
+        if (!\is_array($responseJson)) {
+            throw new Exception('Notification endpoint returned an invalid JSON response.');
         }
 
-        return $json;
+        if (isset($responseJson['status']) && 500 === (int) $responseJson['status']) {
+            throw new Exception((string) ($responseJson['message'] ?? 'Notification endpoint returned an error.'));
+        }
+
+        if (!empty($responseJson['validation_errors'])) {
+            $errors = \is_array($responseJson['errors'] ?? null) ? $responseJson['errors'] : [];
+            $messages = array_filter(array_map(
+                static fn ($error): string => \is_array($error) ? (string) ($error['message'] ?? '') : '',
+                $errors
+            ));
+
+            throw new Exception([] === $messages ? 'Notification endpoint returned validation errors.' : implode('<br>', $messages));
+        }
+
+        return $responseJson;
     }
 }

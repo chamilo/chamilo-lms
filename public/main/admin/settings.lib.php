@@ -320,6 +320,8 @@ function getStablePluginAllowList(): array
         'Zoom',
         'MaintenanceMode',
         'Redirection',
+        'TopLinks',
+        'ExternalNotificationConnect',
     ];
 }
 

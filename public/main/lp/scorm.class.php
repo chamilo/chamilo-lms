@@ -3,6 +3,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Asset;
+use Chamilo\CoreBundle\Event\Events;
+use Chamilo\CoreBundle\Event\LearningPathCreatedEvent;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
@@ -445,6 +447,11 @@ class scorm extends learnpath
                  * }
                  * }*/
             }
+
+            Container::getEventDispatcher()->dispatch(
+                new LearningPathCreatedEvent(['lp' => $lp]),
+                Events::LP_CREATED
+            );
         }
 
         return $lp;

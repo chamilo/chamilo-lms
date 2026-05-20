@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Entity\MessageRelUser;
 use Chamilo\CoreBundle\Entity\SocialPost;
 use Chamilo\CoreBundle\Entity\SocialPostFeedback;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
@@ -40,12 +41,11 @@ class MessageManager
 
                 $deleteLink = '';
                 if (!empty($url) && $sender && $currentUserId === $sender->getId()) {
-                    $deleteLink = '<button title="'.addslashes(get_lang('Delete message')).'"
-                       onclick="event.stopPropagation(); if(confirm(\''.addslashes(api_htmlentities(get_lang('Are you sure you want to delete the selected message?'))).'\')) {
-                       window.location.href=\''.$url.'&action=delete_message&message_id='.$messageId.'\';
-                       } return false;"
-                       class="ml-2 inline-flex items-center">'.
-                        Display::returnPrimeIcon('trash', 'lg').'</button>';
+                    $deleteLink = '<a title="'.addslashes(get_lang('Delete message')).'"
+                       href="'.$url.'&action=delete_message&message_id='.$messageId.'"
+                       onclick="if(!confirm(\''.addslashes(api_htmlentities(get_lang('Are you sure you want to delete the selected message?'))).'\')) { return false; }"
+                       class="ml-2">'.
+                        Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete message')).'</a>';
                 }
 
                 $content = '<div class="custom-message">' . $message->getContent().'<br />'.$date.'<br />'.

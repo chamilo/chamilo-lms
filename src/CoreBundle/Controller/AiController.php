@@ -710,6 +710,8 @@ class AiController extends AbstractController
         $error = null;
         $prompt = trim((string) $request->request->get('prompt', ''));
         $selectedProvider = trim((string) $request->request->get('provider', $defaultProvider));
+        $includeStandaloneDocuments = '1' === (string) $request->request->get('include_standalone_documents', '0');
+        $includeStandaloneExercises = '1' === (string) $request->request->get('include_standalone_exercises', '0');
 
         if ('' === $selectedProvider) {
             $selectedProvider = $defaultProvider;
@@ -730,7 +732,14 @@ class AiController extends AbstractController
                     $error = 'Invalid security token. Please reload the page and try again.';
                 } else {
                     try {
-                        $result = $courseAnalyzerService->analyze($course, $session, $prompt, $selectedProvider);
+                        $result = $courseAnalyzerService->analyze(
+                            $course,
+                            $session,
+                            $prompt,
+                            $selectedProvider,
+                            $includeStandaloneDocuments,
+                            $includeStandaloneExercises,
+                        );
                     } catch (Throwable $exception) {
                         $error = 'The AI analysis could not be completed: '.$exception->getMessage();
                     }
@@ -747,6 +756,8 @@ class AiController extends AbstractController
             'prompt' => $prompt,
             'result' => $result,
             'error' => $error,
+            'include_standalone_documents' => $includeStandaloneDocuments,
+            'include_standalone_exercises' => $includeStandaloneExercises,
             'csrf_token_id' => $csrfTokenId,
         ]);
     }

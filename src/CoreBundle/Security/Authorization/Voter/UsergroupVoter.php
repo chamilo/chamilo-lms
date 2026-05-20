@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -60,16 +61,24 @@ class UsergroupVoter extends Voter
         /** @var Usergroup $usergroup */
         $usergroup = $subject;
 
-        switch ($attribute) {
-            case self::EDIT:
-                return $this->canEdit($usergroup, $currentUser);
-        }
-
-        return false;
+        return match ($attribute) {
+            self::EDIT => $this->canEdit($usergroup, $currentUser),
+            self::VIEW => $this->canView($usergroup, $currentUser),
+            default => false,
+        };
     }
 
     private function canEdit(Usergroup $usergroup, $currentUser): bool
     {
         return $this->usergroupRepository->isGroupModerator($usergroup->getId(), $currentUser->getId());
+    }
+
+    private function canView(Usergroup $usergroup, $currentUser): bool
+    {
+        if (!$currentUser instanceof User) {
+            return false;
+        }
+
+        return $this->usergroupRepository->isGroupMember($usergroup->getId(), $currentUser);
     }
 }

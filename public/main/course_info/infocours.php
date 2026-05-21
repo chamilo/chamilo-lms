@@ -55,6 +55,25 @@ $isImsLtiEnabled = $imsLtiPluginEntity
     && $imsLtiPluginConfiguration
     && $imsLtiPluginConfiguration->isActive();
 
+$courseHomeNotifyPluginEntity = Container::getPluginRepository()->findOneByTitle('CourseHomeNotify');
+$courseHomeNotifyPluginConfiguration = $courseHomeNotifyPluginEntity?->getConfigurationsByAccessUrl($currentAccessUrl);
+
+$isCourseHomeNotifyEnabled = $courseHomeNotifyPluginEntity
+    && $courseHomeNotifyPluginEntity->isInstalled()
+    && $courseHomeNotifyPluginConfiguration
+    && $courseHomeNotifyPluginConfiguration->isActive();
+
+$courseHomeNotifyPlugin = null;
+$courseHomeNotifyPluginPath = api_get_path(SYS_PLUGIN_PATH).'CourseHomeNotify/CourseHomeNotifyPlugin.php';
+
+if (is_file($courseHomeNotifyPluginPath)) {
+    require_once $courseHomeNotifyPluginPath;
+
+    if (class_exists('CourseHomeNotifyPlugin')) {
+        $courseHomeNotifyPlugin = CourseHomeNotifyPlugin::create();
+    }
+}
+
 $show_delete_watermark_text_message = false;
 if ('true' === api_get_setting('pdf_export_watermark_by_course')) {
     if (isset($_GET['delete_watermark'])) {
@@ -1184,6 +1203,43 @@ if ($isImsLtiEnabled) {
         'external_tools_lti',
         get_lang('External tools (LTI)'),
         [$ltiInfo],
+        ToolIcon::COURSE,
+        false
+    );
+}
+
+if ($isCourseHomeNotifyEnabled) {
+    $courseHomeNotifyTitle = $courseHomeNotifyPlugin
+        ? $courseHomeNotifyPlugin->get_title()
+        : 'Notify in course home';
+    $courseHomeNotifyDescription = $courseHomeNotifyPlugin
+        ? $courseHomeNotifyPlugin->get_comment()
+        : 'Show notifications when a user enters the course homepage.';
+    $courseHomeNotifyButtonLabel = $courseHomeNotifyPlugin
+        ? $courseHomeNotifyPlugin->get_lang('SetNotification')
+        : 'Set one notification on home page';
+
+    $button = Display::toolbarButton(
+        $courseHomeNotifyButtonLabel,
+        api_get_path(WEB_PLUGIN_PATH).'CourseHomeNotify/configure.php?'.api_get_cidreq(),
+        'cog',
+        'primary'
+    );
+
+    $courseHomeNotifyInfo = $form->createElement(
+        'html',
+        '<div class="mb-4">'
+        .'<p class="mb-3">'
+        .$courseHomeNotifyDescription
+        .'</p>'
+        .$button
+        .'</div>'
+    );
+
+    $form->addPanelOption(
+        'course_home_notify',
+        $courseHomeNotifyTitle,
+        [$courseHomeNotifyInfo],
         ToolIcon::COURSE,
         false
     );

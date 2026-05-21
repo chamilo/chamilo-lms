@@ -322,6 +322,7 @@ function getStablePluginAllowList(): array
         'Redirection',
         'TopLinks',
         'ExternalNotificationConnect',
+        'CourseHomeNotify',
     ];
 }
 

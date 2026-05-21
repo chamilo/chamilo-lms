@@ -51,6 +51,8 @@ class LdapAuthenticator extends AbstractAuthenticator implements InteractiveAuth
 
     private bool $isEnabled = false;
 
+    private bool $synchUserRoleOnUpdate = true;
+
     public function __construct(
         protected readonly AuthenticationConfigHelper $authConfigHelper,
         private readonly AccessUrlHelper $accessUrlHelper,
@@ -79,6 +81,7 @@ class LdapAuthenticator extends AbstractAuthenticator implements InteractiveAuth
         $uidKey = $ldapConfig['uid_key'] ?? 'uid';
 
         $this->dataCorrespondence = array_filter($ldapConfig['data_correspondence']) ?: [];
+        $this->synchUserRoleOnUpdate = (bool) ($ldapConfig['synch_user_role_on_update'] ?? true);
 
         if (null !== $ldapConfig['password_attribute']) {
             $dataCorrespondence = array_values($this->dataCorrespondence + [$ldapConfig['password_attribute']]);
@@ -231,6 +234,7 @@ class LdapAuthenticator extends AbstractAuthenticator implements InteractiveAuth
         $currentAccessUrl = $this->accessUrlHelper->getCurrent();
 
         $user = $this->userRepo->findOneBy(['username' => $ldapUser->getUserIdentifier()]);
+        $isNew = null === $user;
 
         if (!$user) {
             $user = (new User())
@@ -257,14 +261,18 @@ class LdapAuthenticator extends AbstractAuthenticator implements InteractiveAuth
                 if ('active' === $key) {
                     $user->{$setter}((int) $value);
                 } elseif ('role' === $key) {
-                    $user->{$setter}([$value]);
+                    if ($isNew || $this->synchUserRoleOnUpdate) {
+                        $user->{$setter}([$value]);
+                    }
                 } else {
                     $user->{$setter}($value);
                 }
             } elseif ('firstname' === $key || 'lastname' === $key || 'email' === $key) {
                 $user->{$setter}('');
             } elseif ('role' === $key) {
-                $user->setRoles($ldapUser->getRoles());
+                if ($isNew || $this->synchUserRoleOnUpdate) {
+                    $user->setRoles($ldapUser->getRoles());
+                }
             }
         }
 

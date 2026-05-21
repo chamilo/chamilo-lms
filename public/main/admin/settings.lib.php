@@ -324,6 +324,7 @@ function getStablePluginAllowList(): array
         'ExternalNotificationConnect',
         'CourseHomeNotify',
         'CourseLegal',
+        'Static',
     ];
 }
 

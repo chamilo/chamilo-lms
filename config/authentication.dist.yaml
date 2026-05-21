@@ -95,6 +95,9 @@ parameters:
                 filter: null
                 uid_key: 'uid'
                 password_attribute: 'userPassword'
+                # When true (default), the LDAP role is synced to Chamilo on every update (sync command, login, admin import).
+                # When false, the role is only applied when creating a new user; existing users keep their current Chamilo role.
+                synch_user_role_on_update: true
                 data_correspondence:
                     firstname: 'givenName'
                     lastname: 'sn'

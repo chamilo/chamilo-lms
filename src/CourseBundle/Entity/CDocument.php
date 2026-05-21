@@ -109,8 +109,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             openapi: new Operation(
                 summary: 'Get a list of learning paths where a document is used'
             ),
-            security: "is_granted('ROLE_USER')",
-            read: false,
+            security: "is_granted('VIEW', object.resourceNode)",
             name: 'api_documents_lp_usage'
         ),
         new Delete(security: "is_granted('DELETE', object.resourceNode)"),

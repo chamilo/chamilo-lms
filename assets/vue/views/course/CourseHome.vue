@@ -577,6 +577,23 @@ async function updateDisplayOrder(htmlItem, newIndex) {
 
 const { isAllowedToEdit } = useIsAllowedToEdit()
 
+
+async function enforceCourseLegalAgreement() {
+  if (!course.value?.id) {
+    return
+  }
+
+  try {
+    const response = await axios.get(`/plugin/CourseLegal/check.php?cid=${course.value.id}&sid=${session.value?.id || 0}&gid=0`)
+
+    if (response.data?.required && !response.data?.accepted && response.data?.url) {
+      window.location.href = response.data.url
+    }
+  } catch (error) {
+    console.error("[CourseLegal] Failed to check course legal agreement", error)
+  }
+}
+
 async function loadCourseHomeNotification() {
   if (!course.value?.id) {
     return
@@ -612,6 +629,7 @@ const showCourseSequence = computed(() => {
 })
 
 onMounted(() => {
+  enforceCourseLegalAgreement()
   loadCourseHomeNotification()
 
   documentAutoLaunch.value = parseInt(courseSettingsStore.getSetting("enable_document_auto_launch"), 10) || 0

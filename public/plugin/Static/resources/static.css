@@ -1,4 +1,16 @@
+.static-plugin {
+    overflow-wrap: anywhere;
+}
 
-.well.sidebar-nav.rss
-{
+.static-plugin__content > :first-child {
+    margin-top: 0;
+}
+
+.static-plugin__content > :last-child {
+    margin-bottom: 0;
+}
+
+.static-plugin__content img {
+    max-width: 100%;
+    height: auto;
 }

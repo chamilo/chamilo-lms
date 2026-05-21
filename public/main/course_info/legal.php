@@ -22,11 +22,16 @@ $course_legal = $course_info['legal'];
 
 $pluginExtra = null;
 $pluginLegal = false;
-$plugin = CourseLegalPlugin::create();
+$pluginConfigPath = api_get_path(SYS_PLUGIN_PATH).'CourseLegal/config.php';
 
-if ($plugin->isEnabled()) {
+if (is_file($pluginConfigPath)) {
+    require_once $pluginConfigPath;
+}
+
+$plugin = class_exists('CourseLegalPlugin') ? CourseLegalPlugin::create() : null;
+
+if ($plugin && $plugin->isEnabled()) {
     $pluginLegal = true;
-    require_once api_get_path(SYS_PLUGIN_PATH).'CourseLegal/config.php';
     $data = $plugin->getData($course_info['real_id'], $session_id);
 
     if (!empty($data)) {
@@ -53,16 +58,6 @@ if ($plugin->isEnabled()) {
 $form = new FormValidator('legal', 'GET', api_get_self().'?course_code='.$course_code.'&session_id='.$session_id);
 $pluginMessage = null;
 $hideForm = false;
-if ($pluginLegal && isset($userData) && !empty($userData)) {
-    if (1 == $userData['web_agreement']) {
-        if (empty($userData['mail_agreement'])) {
-            $pluginMessage = Display::return_message(
-                $plugin->get_lang('You need to confirm your agreement to our terms first. Please check your e-mail.')
-            );
-            $hideForm = true;
-        }
-    }
-}
 $form->addElement('header', get_lang('Legal agreement for this course'));
 $form->addElement('label', null, $course_legal);
 if ($pluginLegal && !empty($plugin)) {
@@ -88,6 +83,16 @@ if ($form->validate()) {
         }
 
         CourseManager::save_user_legal($user_id, $course_info, $session_id);
+
+        if ($pluginLegal && !empty($plugin)) {
+            $plugin->saveUserLegal(
+                $user_id,
+                $course_info['code'],
+                $session_id,
+                false
+            );
+        }
+
         if (api_check_user_access_to_legal($course_info)) {
             Session::write($variable, true);
         }

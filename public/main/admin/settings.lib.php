@@ -323,6 +323,8 @@ function getStablePluginAllowList(): array
         'TopLinks',
         'ExternalNotificationConnect',
         'CourseHomeNotify',
+        'CourseLegal',
+        'Static',
     ];
 }
 

@@ -4600,10 +4600,13 @@ class CourseManager
         $courseId = $courseInfo['real_id'];
 
         // Course legal
-        $plugin = CourseLegalPlugin::create();
-        if ($plugin->isEnabled()) {
-            require_once api_get_path(SYS_PLUGIN_PATH).'courselegal/config.php';
+        $courseLegalConfigPath = api_get_path(SYS_PLUGIN_PATH).'CourseLegal/config.php';
+        if (is_file($courseLegalConfigPath)) {
+            require_once $courseLegalConfigPath;
+        }
 
+        $plugin = class_exists('CourseLegalPlugin') ? CourseLegalPlugin::create() : null;
+        if ($plugin && $plugin->isEnabled()) {
             return $plugin->isUserAcceptedLegal($user_id, $course_code, $session_id);
         }
 
@@ -4653,10 +4656,13 @@ class CourseManager
         $course_code = $courseInfo['code'];
 
         // Course plugin legal
-        $plugin = CourseLegalPlugin::create();
-        if ($plugin->isEnabled()) {
-            require_once api_get_path(SYS_PLUGIN_PATH).'courselegal/config.php';
+        $courseLegalConfigPath = api_get_path(SYS_PLUGIN_PATH).'CourseLegal/config.php';
+        if (is_file($courseLegalConfigPath)) {
+            require_once $courseLegalConfigPath;
+        }
 
+        $plugin = class_exists('CourseLegalPlugin') ? CourseLegalPlugin::create() : null;
+        if ($plugin && $plugin->isEnabled()) {
             return $plugin->saveUserLegal($user_id, $course_code, $session_id);
         }
 

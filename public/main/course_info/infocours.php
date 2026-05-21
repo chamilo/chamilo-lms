@@ -74,6 +74,25 @@ if (is_file($courseHomeNotifyPluginPath)) {
     }
 }
 
+$courseLegalPluginEntity = Container::getPluginRepository()->findOneByTitle('CourseLegal');
+$courseLegalPluginConfiguration = $courseLegalPluginEntity?->getConfigurationsByAccessUrl($currentAccessUrl);
+
+$isCourseLegalEnabled = $courseLegalPluginEntity
+    && $courseLegalPluginEntity->isInstalled()
+    && $courseLegalPluginConfiguration
+    && $courseLegalPluginConfiguration->isActive();
+
+$courseLegalPlugin = null;
+$courseLegalPluginPath = api_get_path(SYS_PLUGIN_PATH).'CourseLegal/CourseLegalPlugin.php';
+
+if (is_file($courseLegalPluginPath)) {
+    require_once $courseLegalPluginPath;
+
+    if (class_exists('CourseLegalPlugin')) {
+        $courseLegalPlugin = CourseLegalPlugin::create();
+    }
+}
+
 $show_delete_watermark_text_message = false;
 if ('true' === api_get_setting('pdf_export_watermark_by_course')) {
     if (isset($_GET['delete_watermark'])) {
@@ -1240,6 +1259,50 @@ if ($isCourseHomeNotifyEnabled) {
         'course_home_notify',
         $courseHomeNotifyTitle,
         [$courseHomeNotifyInfo],
+        ToolIcon::COURSE,
+        false
+    );
+}
+
+if ($isCourseLegalEnabled) {
+    $courseLegalTitle = $courseLegalPlugin
+        ? $courseLegalPlugin->get_title()
+        : 'Course legal agreement';
+    $courseLegalDescription = $courseLegalPlugin
+        ? $courseLegalPlugin->get_comment()
+        : 'Configure a legal agreement that learners must accept before accessing the course.';
+
+    $configureButton = Display::toolbarButton(
+        $courseLegalPlugin ? $courseLegalPlugin->get_lang('CourseLegal') : 'Configure agreement',
+        api_get_path(WEB_PLUGIN_PATH).'CourseLegal/start.php?'.api_get_cidreq(),
+        'file-document-edit-outline',
+        'primary'
+    );
+
+    $userListButton = Display::toolbarButton(
+        get_lang('User list'),
+        api_get_path(WEB_PLUGIN_PATH).'CourseLegal/user_list.php?'.api_get_cidreq(),
+        'account-check-outline',
+        'secondary'
+    );
+
+    $courseLegalInfo = $form->createElement(
+        'html',
+        '<div class="mb-4">'
+        .'<p class="mb-3">'
+        .$courseLegalDescription
+        .'</p>'
+        .'<div class="flex flex-wrap gap-2">'
+        .$configureButton
+        .$userListButton
+        .'</div>'
+        .'</div>'
+    );
+
+    $form->addPanelOption(
+        'course_legal',
+        $courseLegalTitle,
+        [$courseLegalInfo],
         ToolIcon::COURSE,
         false
     );

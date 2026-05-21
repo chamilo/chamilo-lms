@@ -325,6 +325,7 @@ function getStablePluginAllowList(): array
         'CourseHomeNotify',
         'CourseLegal',
         'Static',
+        'ShowUserInfo',
     ];
 }
 

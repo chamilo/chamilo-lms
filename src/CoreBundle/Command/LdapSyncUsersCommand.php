@@ -215,7 +215,7 @@ class LdapSyncUsersCommand extends Command
                     $user = $dbUsers[$username];
                 }
 
-                $this->applyLdapFields($user, $entry, $dataCorrespondence);
+                $this->applyLdapFields($user, $entry, $dataCorrespondence, $isNew, (bool) $ldapConfig['synch_user_role_on_update']);
                 $user->setUsername($username);
 
                 if (!$user->isActive() && $reenableFound) {
@@ -306,7 +306,7 @@ class LdapSyncUsersCommand extends Command
      *
      * @param array<string, string> $dataCorrespondence
      */
-    private function applyLdapFields(User $user, Entry $entry, array $dataCorrespondence): void
+    private function applyLdapFields(User $user, Entry $entry, array $dataCorrespondence, bool $isNew = true, bool $synchUserRoleOnUpdate = true): void
     {
         $fieldsMap = [
             'firstname' => 'setFirstname',
@@ -329,7 +329,9 @@ class LdapSyncUsersCommand extends Command
             if ('active' === $key) {
                 $user->{$setter}((int) $value);
             } elseif ('role' === $key) {
-                $user->{$setter}([$value]);
+                if ($isNew || $synchUserRoleOnUpdate) {
+                    $user->{$setter}([$value]);
+                }
             } else {
                 $user->{$setter}($value);
             }

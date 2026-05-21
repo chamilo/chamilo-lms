@@ -215,6 +215,21 @@ final class DocumentCollectionStateProvider implements ProviderInterface
             // Contextual hierarchy based on ResourceLink.parent
             $qb->innerJoin('rn.resourceLinks', 'rl')->addSelect('rl');
 
+            // Hide DRAFT-visibility links from non-teachers. Mirrors the
+            // canonical rule in CourseLinkExtensionTrait::addVisibilityCondition
+            // — needed here because the custom provider bypasses CDocumentExtension.
+            $roles = $this->security->getUser()?->getRoles() ?? [];
+            $allowDraft = $this->security->isGranted('ROLE_ADMIN')
+                || \in_array('ROLE_CURRENT_COURSE_TEACHER', $roles, true)
+                || \in_array('ROLE_CURRENT_COURSE_SESSION_TEACHER', $roles, true);
+
+            if (!$allowDraft) {
+                $qb
+                    ->andWhere('rl.visibility != :visibilityDraft')
+                    ->setParameter('visibilityDraft', ResourceLink::VISIBILITY_DRAFT)
+                ;
+            }
+
             if ($cid > 0) {
                 $qb->andWhere('IDENTITY(rl.course) = :cid')->setParameter('cid', $cid);
             }

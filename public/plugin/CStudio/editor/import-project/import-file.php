@@ -43,12 +43,13 @@ $action = '';
 $oel_token = isset($_GET['cotk']) ? $_GET['cotk'] : '';
 $cotk = isset($_GET['cotk']) ? $_GET['cotk'] : '';
 
-if (false == $VDB->w_is_platform_admin()) {
-    if (false == validateCSRFToken($oel_token, $VDB->w_api_get_user_id())) {
-        echo 'CSRF token is not valid or has expired. Form submission rejected.'.$version;
+// CSRF gate: validate the per-user token for every caller, admins included.
+// The previous "platform admin skips CSRF" exemption let any admin session be
+// CSRF-attacked into authoring arbitrary asset uploads.
+if (false == validateCSRFToken($oel_token, $VDB->w_api_get_user_id())) {
+    echo 'CSRF token is not valid or has expired. Form submission rejected.'.$version;
 
-        exit;
-    }
+    exit;
 }
 
 if (!file_exists('files')) {
@@ -57,19 +58,18 @@ if (!file_exists('files')) {
 if (!file_exists('files/tmp')) {
     //mkdir('files/tmp', 0777, true);
 }
+// Authorization gate: deny anonymous and non-teacher outright. The previous
+// nested check let anonymous callers fall through to the upload form.
+if ($VDB->w_api_is_anonymous() || !$VDB->w_api_is_allowed_to_edit()) {
+    echo 'Context status is not valid or has expired. Form submission rejected ! '.$version;
+
+    exit;
+}
+
 if (isset($_GET['id'])) {
     $idPage = (int) $_GET['id'];
     $action = isset($_GET['action']) ? $VDB->remove_XSS($_GET['action']) : 'step1';
     $typefile = isset($_GET['typefile']) ? $VDB->remove_XSS($_GET['typefile']) : '';
-    if (!$VDB->w_api_is_anonymous()) {
-        $user = $VDB->w_api_get_user_info();
-        if (!$VDB->w_api_is_allowed_to_edit()) {
-            echo "<div style='color:red;' >Status !".$user['status'].'</div>';
-            echo 'Context status is not valid or has expired. Form submission rejected ! '.$version;
-
-            exit;
-        }
-    }
 } else {
     echo 'Error'.$version;
 
@@ -92,8 +92,8 @@ if (isset($_GET['id'])) {
         
         <h3>Direct import file</h3>
         <div id="run" style="text-align:center;" >
-          <form class="uploader" action="inc/bigUpload.php?action=post-unsupported" method="post" enctype="multipart/form-data" id="bigUploadForm">
-          
+          <form class="uploader" action="inc/big-upload.php?action=post-unsupported&uploadKind=asset&cotk=<?php echo htmlspecialchars($cotk, ENT_QUOTES, 'UTF-8'); ?>" method="post" enctype="multipart/form-data" id="bigUploadForm">
+
           <?php if ('13' == $typefile) { ?>
               <input type="file" id="bigUploadFile" onchange="readURL(this);" name="bigUploadFile" accept=".jpg,.png,.gif,.svg" />
           <?php } else { ?>
@@ -103,14 +103,20 @@ if (isset($_GET['id'])) {
               <div id="bigUploadProgressBarContainer" >
                 <div id="bigUploadProgressBarFilled"></div>
               </div>
-              
+
               <button class=" btn btn-primary " name="button" type="button" onclick="upload();<?php if ('13' == $typefile) { ?>showImgPrev();<?php } ?>" id="bigUploadSubmit" >
               <em class="fa fa-upload"></em>Upload</button>
-                
+
               <input type="button" class="bigUploadButton bigUploadAbort" style="display:none;" value="Annuler" onclick="abort();" />
               <input id="scormid" name="scormid" type="hidden" value="testsco" />
+              <input type="hidden" name="cotk" value="<?php echo htmlspecialchars($cotk, ENT_QUOTES, 'UTF-8'); ?>" />
+              <input type="hidden" name="uploadKind" value="asset" />
 
           </form>
+          <script>
+              window.cstudioCotk = <?php echo json_encode($cotk); ?>;
+              window.cstudioUploadKind = 'asset';
+          </script>
           
           <?php if ('13' == $typefile) { ?>
             <p style="text-align:center;" >

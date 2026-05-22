@@ -241,7 +241,7 @@ function bigUpload () {
 	this.sendFileData = function() {
 		var data = 'key=' + this.uploadData.key + '&name=' + this.uploadData.file.name  + '&scormid=' + this.scormid;
 		xhr = new XMLHttpRequest();
-		xhr.open("POST", parent.settings.scriptPath + '?action=finish', true);
+		xhr.open("POST", parent.settings.scriptPath + '?action=finish' + parent.settings.scriptPathParams, true);
 		xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
 		xhr.onreadystatechange = function() {
@@ -281,7 +281,7 @@ function bigUpload () {
 		this.uploadData.aborted = true;
 		var data = 'key=' + this.uploadData.key;
 		xhr = new XMLHttpRequest();
-		xhr.open("POST", this.settings.scriptPath + '?action=abort', true);
+		xhr.open("POST", this.settings.scriptPath + '?action=abort' + this.settings.scriptPathParams, true);
 		xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
 		xhr.onreadystatechange = function() {

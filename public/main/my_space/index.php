@@ -151,20 +151,27 @@ if (!empty($session_id) &&
 
     // 2) Extra actions: "View my progress", calendar plugin, certificates.
 
-    // Optional Learning Calendar plugin entry (teachers only).
-    $pluginCalendar = 'true' === api_get_plugin_setting('learning_calendar', 'enabled');
-    if ($pluginCalendar && api_is_teacher()) {
-        $lpCalendar = \LearningCalendarPlugin::create();
-        $actionsLeft .= Display::url(
-            Display::getMdiIcon(
-                'calendar-text',
-                'ch-tool-icon',
-                null,
-                32,
-                $lpCalendar->get_lang('Learning calendar')
-            ),
-            api_get_path(WEB_PLUGIN_PATH).'LearningCalendar/start.php'
-        );
+    // Optional Learning Calendar plugin entry for users allowed to access reporting.
+    $learningCalendarPluginPath = api_get_path(SYS_PLUGIN_PATH).'LearningCalendar/LearningCalendarPlugin.php';
+    if (file_exists($learningCalendarPluginPath)) {
+        require_once $learningCalendarPluginPath;
+    }
+
+    $canAccessLearningCalendar = $allowToTrack || $is_drh || $is_coach;
+    if (class_exists('LearningCalendarPlugin') && $canAccessLearningCalendar) {
+        $learningCalendarPlugin = LearningCalendarPlugin::create();
+        if ($learningCalendarPlugin->isEnabled()) {
+            $actionsLeft .= Display::url(
+                Display::getMdiIcon(
+                    'calendar-text',
+                    'ch-tool-icon',
+                    null,
+                    32,
+                    $learningCalendarPlugin->get_lang('LearningCalendar')
+                ),
+                api_get_path(WEB_PLUGIN_PATH).'LearningCalendar/start.php'
+            );
+        }
     }
 
     // Optional StudentFollowUp plugin entry for users allowed to access reporting.

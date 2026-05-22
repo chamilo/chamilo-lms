@@ -667,6 +667,25 @@ const calendarOptions = ref({
       return
     }
 
+    if (event.extendedProps["objectType"] && event.extendedProps["objectType"] === "learning_calendar") {
+      item.value = {
+        ...event.extendedProps,
+        id: event.id,
+        title: event.title,
+        startDate: event.start ? new Date(event.start) : null,
+        endDate: event.end ? new Date(event.end) : null,
+        type: "personal",
+        resourceLinkListFromEntity: [],
+      }
+
+      allowToEdit.value = false
+      allowToSubscribe.value = false
+      allowToUnsubscribe.value = false
+      dialogShow.value = true
+
+      return
+    }
+
     item.value = { ...event.extendedProps }
 
     item.value["@id"] = "/api/c_calendar_events/" + event.id.match(/\d+$/)[0]

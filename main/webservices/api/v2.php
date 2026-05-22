@@ -832,6 +832,13 @@ try {
             Event::addEvent(LOG_WS.$action, 'course_id', $courseId);
             $restResponse->setData(['status' => $result]);
             break;
+        case Rest::GET_SESSION_INFO:
+            $sessionInfo = $restApi->getSessionInfo();
+
+            Event::addEvent(LOG_WS.$action, 'course_id', $sessionInfo['id']);
+
+            $restResponse->setData($sessionInfo);
+            break;
         case Rest::GET_SESSION_FROM_EXTRA_FIELD:
             $fieldName = trim($httpRequest->request->get('field_name'));
             $fieldValue = trim($httpRequest->request->get('field_value'));

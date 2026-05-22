@@ -115,6 +115,7 @@ class Rest extends WebService
     public const UPDATE_COURSE = 'update_course';
     public const DELETE_COURSE = 'delete_course';
     public const GET_SESSION_FROM_EXTRA_FIELD = 'get_session_from_extra_field';
+    public const GET_SESSION_INFO = 'session_info';
     public const GET_SESSION_INFO_FROM_EXTRA_FIELD = 'get_session_info_from_extra_field';
     public const SAVE_SESSION = 'save_session';
     public const CREATE_SESSION_FROM_MODEL = 'create_session_from_model';
@@ -2711,6 +2712,33 @@ class Rest extends WebService
 
         // return sessionId
         return (int) $sessionIdList[0]['item_id'];
+    }
+
+    public function getSessionInfo(): array
+    {
+        self::protectAdminEndpoint();
+
+        $bundle = [
+            'id' => $this->session->getId(),
+            'name' => $this->session->getName(),
+            'access_start_date' => $this->session->getAccessStartDate()->format('Y-m-d H:i:s'),
+            'access_end_date' => $this->session->getAccessEndDate()
+                ? $this->session->getAccessEndDate()->format('Y-m-d H:i:s')
+                : null,
+        ];
+        $extraFieldValues = new ExtraFieldValue('session');
+        $extraFields = $extraFieldValues->getAllValuesByItem($this->session->getId());
+        // Only return these properties for each extra_field (the rest is not relevant to a webservice)
+        $filter = ['variable', 'value', 'display_text'];
+        $bundle['extra_fields'] = array_map(
+            function ($item) use ($filter) {
+                return array_intersect_key($item, array_flip($filter));
+            },
+            $extraFields
+        );
+
+        // return session details, including extra fields that have filter=1
+        return $bundle;
     }
 
     /**

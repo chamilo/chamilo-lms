@@ -153,6 +153,17 @@ class UserManager
             return false;
         }
 
+        // Defense in depth against privilege mass-assignment (CWE-915):
+        // when the effective requester is anonymous (self-registration path)
+        // never allow elevated platform roles to be assigned. Only STUDENT
+        // and COURSEMANAGER are acceptable for self-service flows.
+        if (api_is_anonymous()
+            && !in_array((int) $status, [STUDENT, COURSEMANAGER], true)
+        ) {
+            $status = STUDENT;
+            $isAdmin = false;
+        }
+
         $creatorInfo = api_get_user_info($creatorId);
         $creatorEmail = $creatorInfo['email'] ?? '';
 

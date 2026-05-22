@@ -15,7 +15,6 @@ class SurveyExportCsvPlugin extends Plugin
     protected function __construct()
     {
         $settings = [
-            'enabled' => 'boolean',
             'export_incomplete' => 'boolean',
         ];
 
@@ -53,9 +52,9 @@ class SurveyExportCsvPlugin extends Plugin
      */
     public static function filterModify($params)
     {
-        $enabled = api_get_plugin_setting('surveyexportcsv', 'enabled');
+        $plugin = self::create();
 
-        if ('true' !== $enabled) {
+        if (!$plugin->isEnabled()) {
             return '';
         }
 

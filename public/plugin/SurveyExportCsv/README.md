@@ -2,9 +2,8 @@
 
 Exports survey results to a CSV file with a very specific format.
 
-This plugin will add a new action button in the surveys list, allowing the 
-teacher to export the survey in a CSV format meant at exchanging with external
-analysis tools.
+This plugin adds a CSV export action to the survey list for teachers when the
+plugin is installed and enabled.
 
 The CSV format looks this way:
 
@@ -17,26 +16,27 @@ DATID;P01;P02;P03;P04;P05;P06;P07;P08;DATOBS
 ```
 
 Where:
-- DATID represents a sequential ID for the participants (not related to
-their internal user ID)
-- P01,P02,... represent the sequential ID of each question inside the survey
-- DATOBS represents the free answer of the user to an open remarks form at 
-the end of the survey
+- `DATID` is a sequential participant number, not the internal user ID.
+- `P01`, `P02`, ... represent the survey questions before the final open
+  remarks field.
+- `DATOBS` represents the final open/free answer.
 
-**Setup instructions**
+## Setup
 
-- Install plugin
-- Set enabled in configuration
-- Edit `configuration.php` file
-  ```php
-  $_configuration['survey_additional_teacher_modify_actions'] = [
-      // ...
-      'SurveyExportCSVPlugin' => ['SurveyExportCsvPlugin', 'filterModify'],
-  ];
-  ```
-If you have large surveys with large numbers of users answering them, you
-might want to ensure your c_survey_answer table is properly indexed. If not,
-use the following SQL statement to modify that:
-```sql
-alter table c_survey_answer add index idx_c_survey_answerucsq (user, c_id, survey_id, question_id);
-```
+- Install the plugin.
+- Enable it in the plugin configuration.
+- No manual `configuration.php` edit is required in Chamilo 2: the survey list
+  now auto-detects this official export plugin and adds the action only when the
+  plugin is enabled.
+
+If you have large surveys with many answers, ensure `c_survey_answer` is
+properly indexed.
+
+
+## Activation
+
+Plugin activation is controlled from the Chamilo plugins list. The configuration form only controls export-specific options.
+
+## Current behavior
+
+The export output is readable for teachers. Non-anonymous surveys include user identity columns. Anonymous surveys intentionally anonymize user identity.

@@ -15,6 +15,13 @@ function apply_cstudio_template_lang(string $html, string $locale): string
 {
     $langDir = __DIR__.'/../../lang/';
 
+    // Allowlist: only accept iso-style locales ("fr", "fr_FR"). Anything else
+    // (path traversal, absolute paths, leading dots) collapses to en_US so the
+    // value can never escape the lang/ directory when reaching require below.
+    if (!preg_match('/^[a-z]{2}(_[A-Z]{2})?$/', $locale)) {
+        $locale = 'en_US';
+    }
+
     // Step 1 — base layer: en_US guarantees every tpl_* key resolves to English text
     $strings = [];
     $enFile = $langDir.'en_US.php';
@@ -28,13 +35,25 @@ function apply_cstudio_template_lang(string $html, string $locale): string
         $strings = [];
         $localeFile = null;
 
-        if (file_exists($langDir.$locale.'.php')) {
-            $localeFile = $langDir.$locale.'.php';
+        // Defense in depth: basename() strips any traversal that slipped past
+        // the allowlist (should be impossible, but cheap to assert).
+        $localeSafe = basename($locale);
+        $bareSafe = basename(explode('_', $localeSafe)[0]);
+
+        $candidate = $langDir.$localeSafe.'.php';
+        if (realpath($candidate) !== false
+            && str_starts_with((string) realpath($candidate), (string) realpath($langDir))
+            && file_exists($candidate)
+        ) {
+            $localeFile = $candidate;
         } else {
             // Try bare language code: "fr_FR" → "fr"
-            $bare = explode('_', $locale)[0];
-            if (file_exists($langDir.$bare.'.php')) {
-                $localeFile = $langDir.$bare.'.php';
+            $candidateBare = $langDir.$bareSafe.'.php';
+            if (realpath($candidateBare) !== false
+                && str_starts_with((string) realpath($candidateBare), (string) realpath($langDir))
+                && file_exists($candidateBare)
+            ) {
+                $localeFile = $candidateBare;
             }
         }
 

@@ -328,6 +328,8 @@ function getStablePluginAllowList(): array
         'ShowUserInfo',
         'StudentFollowUp',
         'LearningCalendar',
+        'SurveyExportCsv',
+        'SurveyExportTxt',
     ];
 }
 

@@ -2,100 +2,89 @@
 
 /* For licensing terms, see /license.txt */
 
+declare(strict_types=1);
+
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
-use Symfony\Component\Filesystem\Filesystem;
+use Chamilo\PluginBundle\StudentFollowUp\Entity\CarePost;
 
 /**
  * Class StudentFollowUpPlugin.
  */
 class StudentFollowUpPlugin extends Plugin
 {
+    public const TABLE_POST = 'sfu_post';
+
     public $hasEntity = true;
 
-    /**
-     * StudentFollowUpPlugin constructor.
-     */
     protected function __construct()
     {
         parent::__construct(
             '0.1',
             'Julio Montoya',
-            [
-            ]
+            []
         );
     }
 
-    /**
-     * @return StudentFollowUpPlugin
-     */
-    public static function create()
+    public static function create(): self
     {
         static $result = null;
 
-        return $result ?: $result = new self();
+        return $result ??= new self();
     }
 
-    /**
-     * @throws \Doctrine\DBAL\Exception
-     */
-    public function install()
+    public function install(): void
     {
-        $pluginEntityPath = $this->getEntityPath();
-        if (!is_dir($pluginEntityPath)) {
-            if (!is_writable(dirname($pluginEntityPath))) {
-                $message = get_lang('Can\'t create the directory. Please contact your system administrator.').': '.$pluginEntityPath;
-                Display::addFlash(Display::return_message($message, 'error'));
-
-                return false;
-            }
-            mkdir($pluginEntityPath, api_get_permissions_for_new_directories());
-        }
-
-        $fs = new Filesystem();
-        $fs->mirror(__DIR__.'/Entity/', $pluginEntityPath, null, ['override']);
         $schema = Database::getManager()->getConnection()->createSchemaManager();
 
-        if (false === $schema->tablesExist('sfu_post')) {
-            $sql = "CREATE TABLE IF NOT EXISTS sfu_post (id INT AUTO_INCREMENT NOT NULL, insert_user_id INT NOT NULL, user_id INT NOT NULL, parent_id INT DEFAULT NULL, title VARCHAR(255) NOT NULL, content LONGTEXT DEFAULT NULL, external_care_id VARCHAR(255) DEFAULT NULL, created_at DATETIME DEFAULT NULL, updated_at DATETIME DEFAULT NULL, private TINYINT(1) NOT NULL, external_source TINYINT(1) NOT NULL, tags LONGTEXT NOT NULL COMMENT '(DC2Type:array)', attachment VARCHAR(255) NOT NULL, lft INT DEFAULT NULL, rgt INT DEFAULT NULL, lvl INT DEFAULT NULL, root INT DEFAULT NULL, INDEX IDX_35F9473C9C859CC3 (insert_user_id), INDEX IDX_35F9473CA76ED395 (user_id), INDEX IDX_35F9473C727ACA70 (parent_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;";
-            Database::query($sql);
-            $sql = 'ALTER TABLE sfu_post ADD CONSTRAINT FK_35F9473C9C859CC3 FOREIGN KEY (insert_user_id) REFERENCES user (id);';
-            Database::query($sql);
-            $sql = 'ALTER TABLE sfu_post ADD CONSTRAINT FK_35F9473CA76ED395 FOREIGN KEY (user_id) REFERENCES user (id);';
-            Database::query($sql);
-            $sql = 'ALTER TABLE sfu_post ADD CONSTRAINT FK_35F9473C727ACA70 FOREIGN KEY (parent_id) REFERENCES sfu_post (id) ON DELETE SET NULL;';
-            Database::query($sql);
+        if ($schema->tablesExist([self::TABLE_POST])) {
+            return;
         }
+
+        Database::query(
+            "CREATE TABLE IF NOT EXISTS sfu_post (
+                id INT AUTO_INCREMENT NOT NULL,
+                insert_user_id INT NOT NULL,
+                user_id INT NOT NULL,
+                parent_id INT DEFAULT NULL,
+                title VARCHAR(255) NOT NULL,
+                content LONGTEXT DEFAULT NULL,
+                external_care_id VARCHAR(255) DEFAULT NULL,
+                created_at DATETIME DEFAULT NULL,
+                updated_at DATETIME DEFAULT NULL,
+                private TINYINT(1) NOT NULL,
+                external_source TINYINT(1) NOT NULL,
+                tags LONGTEXT NOT NULL COMMENT '(DC2Type:array)',
+                attachment VARCHAR(255) NOT NULL,
+                lft INT DEFAULT NULL,
+                rgt INT DEFAULT NULL,
+                lvl INT DEFAULT NULL,
+                root INT DEFAULT NULL,
+                INDEX IDX_35F9473C9C859CC3 (insert_user_id),
+                INDEX IDX_35F9473CA76ED395 (user_id),
+                INDEX IDX_35F9473C727ACA70 (parent_id),
+                PRIMARY KEY(id)
+            ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;"
+        );
+
+        Database::query(
+            'ALTER TABLE sfu_post ADD CONSTRAINT FK_35F9473C9C859CC3 FOREIGN KEY (insert_user_id) REFERENCES user (id);'
+        );
+        Database::query(
+            'ALTER TABLE sfu_post ADD CONSTRAINT FK_35F9473CA76ED395 FOREIGN KEY (user_id) REFERENCES user (id);'
+        );
+        Database::query(
+            'ALTER TABLE sfu_post ADD CONSTRAINT FK_35F9473C727ACA70 FOREIGN KEY (parent_id) REFERENCES sfu_post (id) ON DELETE SET NULL;'
+        );
     }
 
-    public function uninstall()
+    public function uninstall(): void
     {
-        $pluginEntityPath = $this->getEntityPath();
-        $fs = new Filesystem();
-        if ($fs->exists($pluginEntityPath)) {
-            $fs->remove($pluginEntityPath);
-        }
-        $table = Database::get_main_table('sfu_post');
-        $sql = "DROP TABLE IF EXISTS $table";
-        Database::query($sql);
+        Database::query('DROP TABLE IF EXISTS '.self::TABLE_POST);
     }
 
-    /**
-     * @return string
-     */
-    public function getEntityPath()
+    public static function getPermissions(int $studentId, int $currentUserId): array
     {
-        return api_get_path(SYS_PATH).'src/Chamilo/PluginBundle/Entity/'.$this->get_name();
-    }
-
-    /**
-     * @param int $studentId
-     * @param int $currentUserId
-     *
-     * @return array
-     */
-    public static function getPermissions($studentId, $currentUserId)
-    {
-        $installed = AppPlugin::getInstance()->isInstalled('studentfollowup');
+        $installed = AppPlugin::getInstance()->isInstalled('StudentFollowUp') || AppPlugin::getInstance()->isInstalled('studentfollowup');
         if (false === $installed) {
             return [
                 'is_allow' => false,
@@ -104,64 +93,61 @@ class StudentFollowUpPlugin extends Plugin
         }
 
         if ($studentId === $currentUserId) {
-            $isAllow = true;
-            $showPrivate = true;
-        } else {
-            $isDrh = api_is_drh();
-            $isCareTaker = false;
-            $isDrhRelatedViaPost = false;
-            $isCourseCoach = false;
-            $isDrhRelatedToSession = false;
-
-            // Only admins and DRH that follow the user
-            $isAdmin = api_is_platform_admin();
-
-            // Check if user is care taker
-            if ($isDrh) {
-                $criteria = [
-                    'user' => $studentId,
-                    'insertUser' => $currentUserId,
-                ];
-                $repo = Database::getManager()->getRepository('ChamiloPluginBundle:StudentFollowUp\CarePost');
-                $post = $repo->findOneBy($criteria);
-                if ($post) {
-                    $isDrhRelatedViaPost = true;
-                }
-            }
-
-            // Check if course session coach
-            $sessions = SessionManager::get_sessions_by_user($studentId, false, true);
-            if (!empty($sessions)) {
-                foreach ($sessions as $session) {
-                    $sessionId = $session['session_id'];
-                    $sessionDrhInfo = SessionManager::getSessionFollowedByDrh(
-                        $currentUserId,
-                        $sessionId
-                    );
-                    if (!empty($sessionDrhInfo)) {
-                        $isDrhRelatedToSession = true;
-
-                        break;
-                    }
-                    foreach ($session['courses'] as $course) {
-                        $coachList = SessionManager::getCoachesByCourseSession(
-                            $sessionId,
-                            $course['real_id']
-                        );
-                        if (!empty($coachList) && in_array($currentUserId, $coachList)) {
-                            $isCourseCoach = true;
-
-                            break 2;
-                        }
-                    }
-                }
-            }
-
-            $isCareTaker = $isDrhRelatedViaPost && $isDrhRelatedToSession;
-
-            $isAllow = $isAdmin || $isCareTaker || $isDrhRelatedToSession || $isCourseCoach;
-            $showPrivate = $isAdmin || $isCareTaker;
+            return [
+                'is_allow' => true,
+                'show_private' => true,
+            ];
         }
+
+        $isDrh = api_is_drh();
+        $isDrhRelatedViaPost = false;
+        $isCourseCoach = false;
+        $isDrhRelatedToSession = false;
+        $isAdmin = api_is_platform_admin();
+
+        if ($isDrh) {
+            $criteria = [
+                'user' => $studentId,
+                'insertUser' => $currentUserId,
+            ];
+            $repo = Database::getManager()->getRepository(CarePost::class);
+            $post = $repo->findOneBy($criteria);
+            if ($post) {
+                $isDrhRelatedViaPost = true;
+            }
+        }
+
+        $sessions = SessionManager::get_sessions_by_user($studentId, false, true);
+        if (!empty($sessions)) {
+            foreach ($sessions as $session) {
+                $sessionId = (int) $session['session_id'];
+                $sessionDrhInfo = SessionManager::getSessionFollowedByDrh(
+                    $currentUserId,
+                    $sessionId
+                );
+                if (!empty($sessionDrhInfo)) {
+                    $isDrhRelatedToSession = true;
+
+                    break;
+                }
+
+                foreach ($session['courses'] as $course) {
+                    $coachList = SessionManager::getCoachesByCourseSession(
+                        $sessionId,
+                        (int) $course['real_id']
+                    );
+                    if (!empty($coachList) && in_array($currentUserId, $coachList, true)) {
+                        $isCourseCoach = true;
+
+                        break 2;
+                    }
+                }
+            }
+        }
+
+        $isCareTaker = $isDrhRelatedViaPost && $isDrhRelatedToSession;
+        $isAllow = $isAdmin || $isCareTaker || $isDrhRelatedToSession || $isCourseCoach;
+        $showPrivate = $isAdmin || $isCareTaker;
 
         return [
             'is_allow' => $isAllow,
@@ -169,16 +155,7 @@ class StudentFollowUpPlugin extends Plugin
         ];
     }
 
-    /**
-     * @param string $status
-     * @param int    $currentUserId
-     * @param int    $sessionId
-     * @param int    $start
-     * @param int    $limit
-     *
-     * @return array
-     */
-    public static function getUsers($status, $currentUserId, $sessionId, $start, $limit)
+    public static function getUsers(string $status, int $currentUserId, int $sessionId, int $start, int $limit): array
     {
         $sessions = [];
         $courses = [];
@@ -191,9 +168,8 @@ class StudentFollowUpPlugin extends Plugin
                 if (!empty($sessionId)) {
                     $sessions = [$sessionId];
                 }
-                // Get session courses where I'm coach
+
                 $courseList = SessionManager::getCoursesListByCourseCoach($currentUserId);
-                $courses = [];
                 /** @var SessionRelCourseRelUser $courseItem */
                 foreach ($courseList as $courseItem) {
                     $courses[] = $courseItem->getCourse()->getId();
@@ -207,11 +183,11 @@ class StudentFollowUpPlugin extends Plugin
                 if (!empty($sessionId)) {
                     $sessions = [$sessionId];
                 }
-                $courses = [];
-                foreach ($sessions as $sessionId) {
+
+                foreach ($sessions as $drhSessionId) {
                     $sessionDrhInfo = SessionManager::getSessionFollowedByDrh(
                         $currentUserId,
-                        $sessionId
+                        (int) $drhSessionId
                     );
                     if ($sessionDrhInfo && isset($sessionDrhInfo['course_list'])) {
                         $courses = array_merge($courses, array_column($sessionDrhInfo['course_list'], 'id'));
@@ -224,8 +200,9 @@ class StudentFollowUpPlugin extends Plugin
         $userList = SessionManager::getUsersByCourseAndSessionList(
             $sessions,
             $courses,
-            $start,
-            $limit
+            STUDENT,
+            null,
+            null
         );
 
         return [
@@ -234,22 +211,29 @@ class StudentFollowUpPlugin extends Plugin
         ];
     }
 
-    /**
-     * @return int
-     */
-    public static function getPageSize()
+
+    public static function normalizeLegacyTags(): void
+    {
+        Database::query(
+            "UPDATE sfu_post
+             SET tags = 'a:0:{}'
+             WHERE tags IS NULL
+                OR tags = ''
+                OR tags = '0'
+                OR tags = 'b:0;'"
+        );
+    }
+
+    public static function getPageSize(): int
     {
         return 20;
     }
 
-    /**
-     * @param int $userId
-     */
-    public function doWhenDeletingUser($userId)
+    public function doWhenDeletingUser($userId): void
     {
         $userId = (int) $userId;
 
-        Database::query("DELETE FROM sfu_post WHERE user_id = $userId");
-        Database::query("DELETE FROM sfu_post WHERE insert_user_id = $userId");
+        Database::query('DELETE FROM sfu_post WHERE user_id = '.$userId);
+        Database::query('DELETE FROM sfu_post WHERE insert_user_id = '.$userId);
     }
 }

@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-use Doctrine\Common\Collections\Criteria;
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
@@ -15,145 +15,117 @@ $currentUserId = api_get_user_id();
 $currentPage = isset($_REQUEST['page']) ? (int) $_REQUEST['page'] : 1;
 $keyword = isset($_REQUEST['keyword']) ? Security::remove_XSS($_REQUEST['keyword']) : '';
 $sessionId = isset($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : 0;
-$selectedTag = isset($_REQUEST['tag']) ? Security::remove_XSS($_REQUEST['tag']) : '';
-
-$totalItems = 0;
-$items = [];
-$tags = [];
-$showPrivate = false;
 
 $pageSize = StudentFollowUpPlugin::getPageSize();
 $firstResults = $pageSize * ($currentPage - 1);
+$totalItems = 0;
 $pagesCount = 0;
+$items = [];
 $isAdmin = api_is_platform_admin();
 
 $userList = [];
+$fullSessionList = [];
+
 if (!$isAdmin) {
     $status = COURSEMANAGER;
     if (api_is_drh()) {
         $status = DRH;
     }
+
     $data = StudentFollowUpPlugin::getUsers(
         $status,
         $currentUserId,
         $sessionId,
-        $firstResults,
-        $pageSize
+        0,
+        0
     );
-    $userList = $data['users'];
+    $userList = array_map('intval', $data['users']);
     $fullSessionList = $data['sessions'];
 } else {
     $fullSessionList = SessionManager::getSessionsCoachedByUser($currentUserId);
 }
 
 if (!empty($sessionId)) {
-    $userList = SessionManager::get_users_by_session($sessionId);
-    $userList = array_column($userList, 'user_id');
+    $sessionUserList = SessionManager::get_users_by_session($sessionId);
+    $userList = array_map('intval', array_column($sessionUserList, 'user_id'));
 }
-$tagList = [];
 
 if (!empty($userList) || $isAdmin) {
     $em = Database::getManager();
     $qb = $em->createQueryBuilder();
-    $criteria = Criteria::create();
-
-    if (!$isAdmin) {
-        $criteria->where(Criteria::expr()->in('user', $userList));
-    }
-
-    if (!empty($sessionId)) {
-        $criteria->where(Criteria::expr()->in('user', $userList));
-    }
-
-    if (false === $showPrivate) {
-        $criteria->andWhere(Criteria::expr()->eq('private', false));
-    }
 
     $qb
-        ->select('p')
-        ->distinct()
-        ->from('ChamiloPluginBundle:StudentFollowUp\CarePost', 'p')
-        ->join('p.user', 'u')
-        ->addCriteria($criteria)
+        ->select('u')
+        ->from(User::class, 'u')
+        ->andWhere('u.status = :studentStatus')
+        ->setParameter('studentStatus', STUDENT)
         ->setFirstResult($firstResults)
         ->setMaxResults($pageSize)
-        ->groupBy('p.user')
-        ->orderBy('p.createdAt', 'desc')
+        ->orderBy('u.lastname', 'ASC')
+        ->addOrderBy('u.firstname', 'ASC')
+        ->addOrderBy('u.username', 'ASC')
     ;
+
+    if (!$isAdmin) {
+        $qb
+            ->andWhere('u.id IN (:userList)')
+            ->setParameter('userList', $userList)
+        ;
+    }
 
     if (!empty($keyword)) {
         $keywordToArray = explode(' ', $keyword);
-        if (is_array($keywordToArray)) {
-            foreach ($keywordToArray as $key) {
-                $key = trim($key);
-                if (empty($key)) {
-                    continue;
-                }
-                $qb
-                    ->andWhere('u.firstname LIKE :keyword OR u.lastname LIKE :keyword OR u.username LIKE :keyword')
-                    ->setParameter('keyword', "%$key%")
-                ;
+        foreach ($keywordToArray as $index => $key) {
+            $key = trim($key);
+            if (empty($key)) {
+                continue;
             }
-        } else {
+
+            $parameterName = 'keyword'.$index;
             $qb
-                ->andWhere('u.firstname LIKE :keyword OR u.lastname LIKE :keyword OR u.username LIKE :keyword')
-                ->setParameter('keyword', "%$keyword%")
+                ->andWhere(
+                    'u.firstname LIKE :'.$parameterName.
+                    ' OR u.lastname LIKE :'.$parameterName.
+                    ' OR u.username LIKE :'.$parameterName.
+                    ' OR u.email LIKE :'.$parameterName
+                )
+                ->setParameter($parameterName, '%'.$key.'%')
             ;
         }
     }
 
-    $queryBuilderOriginal = clone $qb;
-
-    if (!empty($selectedTag)) {
-        $qb->andWhere('p.tags LIKE :tags ');
-        $qb->setParameter('tags', "%$selectedTag%");
-    }
-
-    $query = $qb->getQuery();
-
-    $items = new Paginator($query);
-
-    $queryBuilderOriginal->select('p.tags')
-        ->distinct(false)
-        ->setFirstResult(null)
-        ->setMaxResults(null)
-        ->groupBy('p.id')
-    ;
-
-    $tags = $queryBuilderOriginal->getQuery()->getResult();
-    //var_dump($queryBuilderOriginal->getQuery()->getSQL());
-    $tagList = [];
-    foreach ($tags as $tag) {
-        $itemTags = $tag['tags'];
-        foreach ($itemTags as $itemTag) {
-            if (in_array($itemTag, array_keys($tagList))) {
-                $tagList[$itemTag]++;
-            } else {
-                $tagList[$itemTag] = 1;
-            }
-        }
-    }
+    $items = new Paginator($qb->getQuery());
 
     $totalItems = $items->count();
-    $pagesCount = ceil($totalItems / $pageSize);
+    $pagesCount = (int) ceil($totalItems / $pageSize);
 }
 
 $pagination = '';
-$url = api_get_self().'?session_id='.$sessionId.'&tag='.$selectedTag.'&keyword='.$keyword.'&';
+$url = api_get_self().'?session_id='.$sessionId.'&keyword='.urlencode($keyword).'&';
 if ($totalItems > 1 && $pagesCount > 1) {
-    $pagination .= '<ul class="pagination">';
+    $pagination .= '<nav aria-label="'.htmlspecialchars(get_lang('Pagination'), ENT_QUOTES, 'UTF-8').'">';
+    $pagination .= '<ul class="flex flex-wrap items-center gap-2">';
+
     for ($i = 0; $i < $pagesCount; $i++) {
         $newPage = $i + 1;
-        if ($currentPage == $newPage) {
-            $pagination .= '<li class="active"><a href="'.$url.'page='.$newPage.'">'.$newPage.'</a></li>';
-        } else {
-            $pagination .= '<li><a href="'.$url.'page='.$newPage.'">'.$newPage.'</a></li>';
+        $pageUrl = htmlspecialchars($url.'page='.$newPage, ENT_QUOTES, 'UTF-8');
+
+        if ($currentPage === $newPage) {
+            $pagination .= '<li>';
+            $pagination .= '<a aria-current="page" class="inline-flex h-9 min-w-9 items-center justify-center rounded-lg bg-primary px-3 text-sm font-semibold text-white shadow-sm" href="'.$pageUrl.'">'.$newPage.'</a>';
+            $pagination .= '</li>';
+            continue;
         }
+
+        $pagination .= '<li>';
+        $pagination .= '<a class="inline-flex h-9 min-w-9 items-center justify-center rounded-lg border border-gray-25 bg-white px-3 text-sm font-semibold text-primary shadow-sm hover:bg-primary/10" href="'.$pageUrl.'">'.$newPage.'</a>';
+        $pagination .= '</li>';
     }
+
     $pagination .= '</ul>';
+    $pagination .= '</nav>';
 }
 
-// Create a search-box
 $form = new FormValidator('search_simple', 'get', null, null, null, FormValidator::LAYOUT_HORIZONTAL);
 $form->addText(
     'keyword',
@@ -171,21 +143,11 @@ if (!empty($fullSessionList)) {
     $form->addSelect('session_id', get_lang('Session'), $options);
 }
 
-if (!empty($tagList)) {
-    $tagOptions = [];
-    arsort($tagList);
-    foreach ($tagList as $tag => $counter) {
-        $tagOptions[$tag] = $tag.' ('.$counter.')';
-    }
-    $form->addSelect('tag', get_lang('Tags'), $tagOptions, ['placeholder' => get_lang('Please select an option')]);
-}
-
 $form->addButtonSearch(get_lang('Search'));
 
 $defaults = [
     'session_id' => $sessionId,
     'keyword' => $keyword,
-    'tag' => $selectedTag,
 ];
 
 $form->setDefaults($defaults);
@@ -193,12 +155,11 @@ $form->setDefaults($defaults);
 $tpl = new Template($plugin->get_lang('plugin_title'));
 $tpl->assign('users', $items);
 $tpl->assign('form', $form->returnForm());
-$url = api_get_path(WEB_PLUGIN_PATH).'StudentFollowUp/posts.php?';
-$tpl->assign('post_url', $url);
-$url = api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?';
-$tpl->assign('my_students_url', $url);
+$tpl->assign('post_url', api_get_path(WEB_PLUGIN_PATH).'StudentFollowUp/posts.php?');
+$tpl->assign('my_students_url', api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?');
+$tpl->assign('reporting_url', api_get_path(WEB_CODE_PATH).'my_space/index.php');
 $tpl->assign('pagination', $pagination);
-$tpl->assign('care_title', $plugin->get_lang('Student care detail view'));
+$tpl->assign('care_title', $plugin->get_lang('CareDetailView'));
 $content = $tpl->fetch('/'.$plugin->get_name().'/view/my_students.html.twig');
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

@@ -166,6 +166,28 @@ if (!empty($session_id) &&
             api_get_path(WEB_PLUGIN_PATH).'LearningCalendar/start.php'
         );
     }
+
+    // Optional StudentFollowUp plugin entry for users allowed to access reporting.
+    $studentFollowUpPluginPath = api_get_path(SYS_PLUGIN_PATH).'StudentFollowUp/StudentFollowUpPlugin.php';
+    if (file_exists($studentFollowUpPluginPath)) {
+        require_once $studentFollowUpPluginPath;
+    }
+
+    if (class_exists('StudentFollowUpPlugin')) {
+        $studentFollowUpPlugin = StudentFollowUpPlugin::create();
+        if ($studentFollowUpPlugin->isEnabled()) {
+            $actionsLeft .= Display::url(
+                Display::getMdiIcon(
+                    'account-search',
+                    'ch-tool-icon',
+                    null,
+                    32,
+                    $studentFollowUpPlugin->get_lang('plugin_title')
+                ),
+                api_get_path(WEB_PLUGIN_PATH).'StudentFollowUp/my_students.php'
+            );
+        }
+    }
 }
 
 // ---------------------------------------------------------------------

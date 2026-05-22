@@ -326,6 +326,7 @@ function getStablePluginAllowList(): array
         'CourseLegal',
         'Static',
         'ShowUserInfo',
+        'StudentFollowUp',
     ];
 }
 

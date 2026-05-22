@@ -1,26 +1,120 @@
-<h2>{{ 'Students' | get_lang}}</h2>
-{{ form }}
-{% if users %}
-    <table class="data_table">
-    <tr>
-        <th>{{'Student' | get_lang }}</th>
-        <th>{{'Action' | get_lang }}</th>
-    </tr>
-    {% for user in users %}
-        <tr>
-            <td>{{ user.user.completeNameWithUsername }}</td>
-            <td>
-                <a href="{{ my_students_url }}student={{ user.user.id }}">
-                    <img src="{{ '2rightarrow.png'|icon() }}">
-                </a>
-                <a href="{{ post_url }}student_id={{ user.user.id }}">
-                    <img src="{{ 'blog.png'|icon() }}">
-                </a>
-            </td>
-        </tr>
-    {% endfor %}
-    </table>
-    <div>
-    {{ pagination }}
+<section class="space-y-6">
+    <header class="rounded-2xl border border-gray-25 bg-white p-6 shadow-sm">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+                <p class="mb-1 text-xs font-semibold uppercase tracking-wide text-primary">
+                    {{ 'plugin_title'|get_plugin_lang('StudentFollowUpPlugin') }}
+                </p>
+                <h2 class="text-2xl font-semibold text-gray-90">
+                    {{ 'Students'|get_lang }}
+                </h2>
+                <p class="mt-1 text-sm text-gray-50">
+                    {{ 'StudentFollowUpIntro'|get_plugin_lang('StudentFollowUpPlugin') }}
+                </p>
+            </div>
+
+            <div class="flex items-center gap-2">
+                {% if reporting_url is defined and reporting_url %}
+                    <a class="btn btn--plain inline-flex items-center gap-2" href="{{ reporting_url }}">
+                        <span class="mdi mdi-arrow-left" aria-hidden="true"></span>
+                        {{ 'BackToReporting'|get_plugin_lang('StudentFollowUpPlugin') }}
+                    </a>
+                {% endif %}
+                <span class="mdi mdi-account-school ch-tool-icon-gradient text-4xl" aria-hidden="true"></span>
+            </div>
+        </div>
+    </header>
+
+    <div class="rounded-2xl border border-gray-25 bg-white p-4 shadow-sm">
+        <div class="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-90">
+            <span class="mdi mdi-magnify ch-tool-icon" aria-hidden="true"></span>
+            {{ 'SearchLearners'|get_plugin_lang('StudentFollowUpPlugin') }}
+        </div>
+        <div class="student-follow-up-search">
+            {{ form|raw }}
+        </div>
     </div>
-{% endif %}
+
+    {% if users|length %}
+        <div class="overflow-hidden rounded-2xl border border-gray-25 bg-white shadow-sm">
+            <div class="border-b border-gray-25 px-4 py-3">
+                <h3 class="text-lg font-semibold text-gray-90">
+                    {{ 'Learners'|get_lang }}
+                </h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full min-w-[640px]">
+                    <thead class="bg-gray-15">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-90">
+                                {{ 'Student'|get_lang }}
+                            </th>
+                            <th class="px-4 py-3 text-right text-sm font-semibold text-gray-90">
+                                {{ 'Action'|get_lang }}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in users %}
+                            {% set student = item.user is defined ? item.user : item %}
+                            {% set studentFullName = (student.firstname|default('') ~ ' ' ~ student.lastname|default(''))|trim %}
+                            {% set studentLabel = studentFullName ?: student.username|default('') %}
+                            <tr class="border-t border-gray-25 hover:bg-gray-15">
+                                <td class="px-4 py-3 text-sm text-gray-90">
+                                    <div class="flex items-center gap-3">
+                                        <span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-primary">
+                                            <span class="mdi mdi-account" aria-hidden="true"></span>
+                                        </span>
+                                        <div>
+                                            <div class="font-semibold">
+                                                {{ studentLabel }}
+                                            </div>
+                                            {% if student.username is defined and student.username %}
+                                                <div class="text-xs text-gray-50">
+                                                    {{ student.username }}
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3 text-right text-sm">
+                                    <a
+                                        class="btn btn--primary inline-flex items-center gap-2"
+                                        href="{{ post_url }}student_id={{ student.id }}"
+                                    >
+                                        <span class="mdi mdi-clipboard-text-search-outline" aria-hidden="true"></span>
+                                        {{ 'OpenFollowUp'|get_plugin_lang('StudentFollowUpPlugin') }}
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        {% if pagination %}
+            <div class="rounded-2xl border border-gray-25 bg-white p-4 shadow-sm">
+                {{ pagination|raw }}
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="rounded-2xl border border-gray-25 bg-white p-6 text-center shadow-sm">
+            <span class="mdi mdi-account-search-outline ch-tool-icon-gradient text-5xl" aria-hidden="true"></span>
+            <h3 class="mt-3 text-lg font-semibold text-gray-90">
+                {{ 'NoFollowUpStudents'|get_plugin_lang('StudentFollowUpPlugin') }}
+            </h3>
+            <p class="mt-1 text-sm text-gray-50">
+                {{ 'NoFollowUpStudentsHelp'|get_plugin_lang('StudentFollowUpPlugin') }}
+            </p>
+            {% if reporting_url is defined and reporting_url %}
+                <div class="mt-4">
+                    <a class="btn btn--plain inline-flex items-center gap-2" href="{{ reporting_url }}">
+                        <span class="mdi mdi-arrow-left" aria-hidden="true"></span>
+                        {{ 'BackToReporting'|get_plugin_lang('StudentFollowUpPlugin') }}
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+</section>

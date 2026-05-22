@@ -330,6 +330,7 @@ function getStablePluginAllowList(): array
         'LearningCalendar',
         'SurveyExportCsv',
         'SurveyExportTxt',
+        'UserRemoteService',
     ];
 }
 

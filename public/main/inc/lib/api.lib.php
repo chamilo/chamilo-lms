@@ -6821,6 +6821,9 @@ function api_drh_can_access_all_session_content()
 /**
  * Checks if user can login as another user.
  *
+ * Thin compatibility wrapper around LoginAsAuthorizationChecker, which is the single source
+ * of truth shared with the modern Symfony switch_user firewall (SwitchUserSubscriber).
+ *
  * @param int $loginAsUserId the user id to log in
  * @param int $userId        my user id
  *
@@ -6837,49 +6840,20 @@ function api_can_login_as($loginAsUserId, $userId = null)
         $userId = api_get_user_id();
     }
 
-    if ($loginAsUserId == $userId) {
+    $userId = (int) $userId;
+
+    if (empty($userId)) {
         return false;
     }
 
-    // If target is an admin, only global admins can login to admin accounts
-    if (api_is_platform_admin_by_id($loginAsUserId)) {
-        if (!api_global_admin_can_edit_admin($loginAsUserId)) {
-            return false;
-        }
-    }
-
-    $userInfo = api_get_user_info($loginAsUserId);
-
-    $isDrh = function () use ($loginAsUserId) {
-        if (api_is_drh()) {
-            if (api_drh_can_access_all_session_content()) {
-                $users   = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus('drh_all', api_get_user_id());
-                $userIds = [];
-                if (is_array($users)) {
-                    foreach ($users as $user) {
-                        $userIds[] = $user['id'];
-                    }
-                }
-                return in_array($loginAsUserId, $userIds);
-            }
-
-            if (UserManager::is_user_followed_by_drh($loginAsUserId, api_get_user_id())) {
-                return true;
-            }
-        }
-
+    $impersonator = api_get_user_entity($userId);
+    $target = api_get_user_entity($loginAsUserId);
+    if (null === $impersonator || null === $target) {
         return false;
-    };
-
-    $loginAsStatusForSessionAdmins = [STUDENT];
-
-    if ('true' === api_get_setting('session.allow_session_admin_login_as_teacher')) {
-        $loginAsStatusForSessionAdmins[] = COURSEMANAGER;
     }
 
-    return api_is_platform_admin() // local admins can login as (except into other admins unless allowed above)
-        || (api_is_session_admin() && in_array($userInfo['status'], $loginAsStatusForSessionAdmins))
-        || $isDrh();
+    return \Chamilo\CoreBundle\Framework\Container::getLoginAsAuthorizationChecker()
+        ->canLoginAs($impersonator, $target);
 }
 
 /**

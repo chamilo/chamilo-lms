@@ -327,6 +327,7 @@ function getStablePluginAllowList(): array
         'Static',
         'ShowUserInfo',
         'StudentFollowUp',
+        'LearningCalendar',
     ];
 }
 

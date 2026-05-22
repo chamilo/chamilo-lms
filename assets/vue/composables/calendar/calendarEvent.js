@@ -1,10 +1,10 @@
 import { DateTime } from "luxon"
 
 import cCalendarEventService from "../../services/ccalendarevent"
-const { getCurrentTimezone } = useFormatDate()
-
 import { subscriptionVisibility, type } from "../../constants/entity/ccalendarevent"
 import { useFormatDate } from "../formatDate"
+
+const { getCurrentTimezone } = useFormatDate()
 
 export function useCalendarEvent() {
   return {
@@ -80,6 +80,19 @@ function allowUnsubscribeToEvent(event, userId) {
   return !!findUserLink(event, userId)
 }
 
+function mapCalendarEvent(event) {
+  const timezone = getCurrentTimezone()
+  const start = DateTime.fromISO(event.startDate, { zone: "utc" }).setZone(timezone)
+  const end = DateTime.fromISO(event.endDate, { zone: "utc" }).setZone(timezone)
+
+  return {
+    ...event,
+    start: start.toString(),
+    end: end.toString(),
+    color: event.color || "#007BFF",
+  }
+}
+
 /**
  * @param {Object} params
  * @returns {Promise<Object[]>}
@@ -87,18 +100,56 @@ function allowUnsubscribeToEvent(event, userId) {
 async function requestCalendarEvents(params) {
   const calendarEvents = await cCalendarEventService.findAll({ params }).then((response) => response.json())
 
-  return calendarEvents["hydra:member"].map((event) => {
-    const timezone = getCurrentTimezone()
-    const start = DateTime.fromISO(event.startDate, { zone: "utc" }).setZone(timezone)
-    const end = DateTime.fromISO(event.endDate, { zone: "utc" }).setZone(timezone)
+  return calendarEvents["hydra:member"].map(mapCalendarEvent)
+}
 
-    return {
-      ...event,
-      start: start.toString(),
-      end: end.toString(),
-      color: event.color || "#007BFF",
-    }
+function shouldLoadLearningCalendarEvents(commonParams) {
+  if (!commonParams) {
+    return true
+  }
+
+  if (commonParams.cid || commonParams.sid || commonParams.gid || commonParams.type === "global") {
+    return false
+  }
+
+  return true
+}
+
+/**
+ * @param {Object} startDate
+ * @param {Object} endDate
+ * @param {Object} commonParams
+ * @returns {Promise<Object[]>}
+ */
+async function requestLearningCalendarEvents(startDate, endDate, commonParams) {
+  if (!shouldLoadLearningCalendarEvents(commonParams)) {
+    return []
+  }
+
+  const params = new URLSearchParams({
+    startDate: startDate.toISOString(),
+    endDate: endDate.toISOString(),
   })
+
+  try {
+    const response = await fetch(`/plugin/LearningCalendar/my_events.php?${params.toString()}`, {
+      credentials: "same-origin",
+      headers: {
+        Accept: "application/json",
+      },
+    })
+
+    if (!response.ok) {
+      return []
+    }
+
+    const payload = await response.json()
+    const events = Array.isArray(payload.events) ? payload.events : []
+
+    return events.map(mapCalendarEvent)
+  } catch (error) {
+    return []
+  }
 }
 
 /**
@@ -126,10 +177,13 @@ async function getCalendarEvents(startDate, endDate, commonParams) {
     "startDate[after]": startDate.toISOString(),
   })
 
-  const [endingEvents, currentEvents, startingEvents] = await Promise.all([
+  const learningCalendarEventsPromise = requestLearningCalendarEvents(startDate, endDate, commonParams)
+
+  const [endingEvents, currentEvents, startingEvents, learningCalendarEvents] = await Promise.all([
     endingEventsPromise,
     currentEventsPromise,
     startingEventsPromise,
+    learningCalendarEventsPromise,
   ])
 
   const uniqueEventsMap = new Map()
@@ -137,6 +191,7 @@ async function getCalendarEvents(startDate, endDate, commonParams) {
   endingEvents
     .concat(startingEvents)
     .concat(currentEvents)
+    .concat(learningCalendarEvents)
     .forEach((event) => uniqueEventsMap.set(event.id, event))
 
   return Array.from(uniqueEventsMap.values())

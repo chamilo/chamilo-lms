@@ -6,13 +6,10 @@ require_once __DIR__.'/config.php';
 api_protect_admin_script(true);
 
 $plugin = UserRemoteServicePlugin::create();
+$plugin->handleAdminPost();
 
 Display::display_header($plugin->get_title());
 
-echo $plugin->getCreationForm()->returnForm();
-
-echo $plugin->getDeletionForm()->returnForm();
-
-echo $plugin->getServiceHTMLTable();
+echo $plugin->getAdminPageHtml();
 
 Display::display_footer();

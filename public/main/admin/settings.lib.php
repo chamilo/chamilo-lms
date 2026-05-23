@@ -336,6 +336,7 @@ function getStablePluginAllowList(): array
         'SearchCourse',
         'Rss',
         'Dictionary',
+        'GoogleMaps',
     ];
 }
 

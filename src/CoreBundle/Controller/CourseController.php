@@ -305,6 +305,27 @@ class CourseController extends ToolBaseController
                 }
             }
 
+            $embedRegistryPluginEntity = Container::getPluginRepository()->findOneByTitle('EmbedRegistry');
+            $embedRegistryConfiguration = $embedRegistryPluginEntity?->getConfigurationsByAccessUrl($currentAccessUrl);
+            $isEmbedRegistryAvailable = false;
+
+            try {
+                $isEmbedRegistryAvailable = $em
+                    ->getConnection()
+                    ->createSchemaManager()
+                    ->tablesExist(['plugin_embed_registry_shortcut'])
+                ;
+            } catch (Throwable) {
+                $isEmbedRegistryAvailable = false;
+            }
+
+            $isEmbedRegistryEnabled = $embedRegistryPluginEntity
+                && $embedRegistryPluginEntity->isInstalled()
+                && $embedRegistryConfiguration
+                && $embedRegistryConfiguration->isActive()
+                && $isEmbedRegistryAvailable
+            ;
+
             $courseNodeId = $course->getResourceNode()->getId();
             $cid = $course->getId();
             $sid = $this->getSessionId() ?: null;
@@ -351,6 +372,38 @@ class CourseController extends ToolBaseController
 
                             continue;
                         }
+                    }
+                }
+
+                if ($isEmbedRegistryAvailable) {
+                    try {
+                        $embedRegistryShortcutId = (int) $em->getConnection()->fetchOne(
+                            'SELECT shortcut_id FROM plugin_embed_registry_shortcut WHERE shortcut_id = :shortcutId',
+                            ['shortcutId' => $shortcut->getId()]
+                        );
+                    } catch (Throwable) {
+                        $embedRegistryShortcutId = 0;
+                    }
+
+                    if ($embedRegistryShortcutId > 0) {
+                        if (!$isEmbedRegistryEnabled) {
+                            continue;
+                        }
+
+                        $queryParams = array_filter([
+                            'cid' => $cid,
+                            'sid' => $sid ?: null,
+                            'gid' => 0,
+                        ], static fn ($value): bool => null !== $value);
+
+                        $shortcut->setUrlOverride('/plugin/EmbedRegistry/start.php?'.http_build_query($queryParams));
+                        $shortcut->setIcon('mdi-application-brackets-outline');
+                        $shortcut->setCustomImageUrl(null);
+                        $shortcut->target = '_self';
+
+                        $visibleShortcuts[] = $shortcut;
+
+                        continue;
                     }
                 }
 

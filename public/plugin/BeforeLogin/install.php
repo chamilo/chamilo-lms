@@ -4,4 +4,6 @@
 
 require_once __DIR__.'/BeforeLoginPlugin.php';
 
-$plugin_info = BeforeLoginPlugin::create()->get_info();
+BeforeLoginPlugin::create();
+
+return true;

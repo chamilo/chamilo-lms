@@ -121,7 +121,7 @@ function handleRegions()
         $pluginVersion = htmlspecialchars($metadata['version'], ENT_QUOTES);
         $pluginComment = plugin_render_comment_preview((string) $metadata['comment']);
         $selectedRegions = plugin_get_assigned_regions_safe($pluginName);
-        $regionOptions = plugin_get_available_region_options($metadata);
+        $regionOptions = plugin_get_available_region_options($metadata, $pluginName);
         $pluginUrl = plugin_get_management_url($pluginName) ?? plugin_get_plugins_admin_url($pluginName);
 
         $isSelectedPlugin = $selectedPluginName === $pluginName;
@@ -337,6 +337,7 @@ function getStablePluginAllowList(): array
         'Rss',
         'Dictionary',
         'GoogleMaps',
+        'BeforeLogin',
     ];
 }
 
@@ -752,6 +753,8 @@ function plugin_get_region_labels(): array
         'course_tool_plugin' => 'Course tool',
         'content_top' => 'Above page content',
         'content_bottom' => 'Below page content',
+        'login_top' => 'Above login form',
+        'login_bottom' => 'Below login form',
         'main_top' => 'Top of main layout',
         'main_bottom' => 'Bottom of main layout',
         'pre_footer' => 'Before footer',
@@ -778,6 +781,8 @@ function plugin_get_region_descriptions(): array
         'course_tool_plugin' => get_lang('Recommended for plugins that must appear as course tools.'),
         'content_top' => get_lang('Displayed above the main page content.'),
         'content_bottom' => get_lang('Displayed below the main page content.'),
+        'login_top' => get_lang('Displayed above the public login form.'),
+        'login_bottom' => get_lang('Displayed below the public login form.'),
         'main_top' => get_lang('Displayed near the top of the main layout shell.'),
         'main_bottom' => get_lang('Displayed near the bottom of the main layout shell.'),
         'pre_footer' => get_lang('Recommended for global floating or persistent plugins shown before the footer.'),
@@ -879,9 +884,16 @@ function plugin_render_comment_preview(string $comment): string
 /**
  * Build the selectable region list according to plugin type.
  */
-function plugin_get_available_region_options(array $metadata): array
+function plugin_get_available_region_options(array $metadata, string $pluginName = ''): array
 {
     $labels = plugin_get_region_labels();
+
+    if ('BeforeLogin' === $pluginName) {
+        return [
+            'login_top' => $labels['login_top'].' (login_top)',
+            'login_bottom' => $labels['login_bottom'].' (login_bottom)',
+        ];
+    }
 
     if (!empty($metadata['is_admin_plugin'])) {
         return [

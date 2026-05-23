@@ -1,13 +1,25 @@
 <?php
 
 $strings['plugin_title'] = 'Google Maps';
-$strings['plugin_comment'] = 'Enable the functionality to show google maps';
-$strings['extra_field_name_help'] = "Ingrese aquí el nombre del campo o los campos extra de usuario separados por una coma (,) del cual quiere obtener las localizaciones, puede obtener hasta 5 campos de geolocalización (el resto serán ignorados) los cuales se marcarán con los siguientes iconos respectivamente:
-<br><br>
-<img src='//maps.google.com/mapfiles/ms/icons/red-dot.png'> <img src='//maps.google.com/mapfiles/ms/icons/blue-dot.png'> <img src='//maps.google.com/mapfiles/ms/icons/green-dot.png'> <img src='//maps.google.com/mapfiles/ms/icons/yellow-dot.png'> <img src='//maps.google.com/mapfiles/ms/icons/purple-dot.png'>
-<br><br>
-siga el siguiente link para ver el mapa : <a href='".api_get_path(WEB_PLUGIN_PATH)."GoogleMaps/src/map_coordinates.php'>".api_get_path(WEB_PLUGIN_PATH).'google_maps/src/map_coordinates.php</a>';
-$strings['enable_api'] = 'Activar API';
-$strings['api_key'] = 'Api Key';
+$strings['plugin_comment'] = 'Muestra un mapa de Google con ubicaciones de usuarios guardadas en campos extra.';
+$strings['enable_api'] = 'Cargar API de Google Maps';
+$strings['api_key'] = 'Clave API';
 $strings['extra_field_name'] = 'Nombre del campo extra';
-$strings['UsersCoordinatesMap'] = 'Mapa de localización de Usuarios';
+$strings['extra_field_name_help'] = 'Ingrese una o más variables de campos extra de usuario separadas por comas. El mapa puede mostrar hasta 5 campos. Ejemplo: address, office_address, city';
+$strings['UsersCoordinatesMap'] = 'Mapa de localización de usuarios';
+$strings['UsersCoordinatesMapHelp'] = 'Este mapa muestra ubicaciones de usuarios según los campos extra configurados.';
+$strings['GoogleMapsAdminIntro'] = 'Configure la clave API de Google Maps y los campos extra de usuario que contienen direcciones o ubicaciones.';
+$strings['GoogleMapsApi'] = 'API de Google Maps';
+$strings['ExtraFields'] = 'Campos extra';
+$strings['Access'] = 'Acceso';
+$strings['AdministratorsOnly'] = 'Solo administradores';
+$strings['OpenMap'] = 'Abrir mapa';
+$strings['ConfigurePlugin'] = 'Configurar plugin';
+$strings['Configured'] = 'Configurado';
+$strings['NotConfigured'] = 'No configurado';
+$strings['GoogleMapsApiDisabledWarning'] = 'La carga de la API de Google Maps está desactivada en la configuración del plugin.';
+$strings['GoogleMapsApiKeyMissingWarning'] = 'Falta la clave API de Google Maps.';
+$strings['ExtraFieldNameMissingWarning'] = 'No se configuró ningún campo extra de usuario.';
+$strings['ExtraFieldsNotFoundWarning'] = 'No se encontraron los siguientes campos extra de usuario: %s.';
+$strings['NoUserCoordinatesFound'] = 'No se encontraron ubicaciones de usuarios para los campos extra configurados.';
+$strings['ConfigureGoogleMapsFirst'] = 'Configure y active la API de Google Maps antes de abrir el mapa.';

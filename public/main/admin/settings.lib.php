@@ -331,6 +331,7 @@ function getStablePluginAllowList(): array
         'SurveyExportCsv',
         'SurveyExportTxt',
         'UserRemoteService',
+        'MigrationMoodle',
     ];
 }
 

@@ -334,6 +334,7 @@ function getStablePluginAllowList(): array
         'MigrationMoodle',
         'EmbedRegistry',
         'SearchCourse',
+        'Rss',
     ];
 }
 

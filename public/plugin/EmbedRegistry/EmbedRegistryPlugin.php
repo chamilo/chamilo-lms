@@ -4,7 +4,7 @@
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEAccess;
-use Chamilo\CourseBundle\Entity\CTool;
+use Chamilo\CourseBundle\Entity\CShortcut;
 use Chamilo\PluginBundle\EmbedRegistry\Entity\Embed;
 use Doctrine\ORM\Tools\SchemaTool;
 
@@ -13,10 +13,10 @@ use Doctrine\ORM\Tools\SchemaTool;
  */
 class EmbedRegistryPlugin extends Plugin
 {
-    public const SETTING_ENABLED = 'tool_enabled';
     public const SETTING_TITLE = 'tool_title';
     public const SETTING_EXTERNAL_URL = 'external_url';
     public const TBL_EMBED = 'plugin_embed_registry_embed';
+    public const TBL_SHORTCUT = 'plugin_embed_registry_shortcut';
 
     /**
      * EmbedRegistryPlugin constructor.
@@ -27,11 +27,13 @@ class EmbedRegistryPlugin extends Plugin
             'Angel Fernando Quiroz Campos',
         ];
 
+        $this->isCoursePlugin = true;
+        $this->addCourseTool = false;
+
         parent::__construct(
             '1.0',
             implode(', ', $authors),
             [
-                self::SETTING_ENABLED => 'boolean',
                 self::SETTING_TITLE => 'text',
                 self::SETTING_EXTERNAL_URL => 'text',
             ]
@@ -53,6 +55,30 @@ class EmbedRegistryPlugin extends Plugin
     }
 
     /**
+     * @return string
+     */
+    public function getExternalUrl()
+    {
+        $url = trim((string) $this->get(self::SETTING_EXTERNAL_URL));
+
+        if (empty($url)) {
+            return '';
+        }
+
+        if (!filter_var($url, FILTER_VALIDATE_URL)) {
+            return '';
+        }
+
+        $scheme = strtolower((string) parse_url($url, PHP_URL_SCHEME));
+
+        if (!in_array($scheme, ['http', 'https'], true)) {
+            return '';
+        }
+
+        return $url;
+    }
+
+    /**
      * @return EmbedRegistryPlugin|null
      */
     public static function create()
@@ -63,21 +89,18 @@ class EmbedRegistryPlugin extends Plugin
     }
 
     /**
-     * Create DB schema for this plugin if not present.
+     * Create DB schema and shortcuts for this plugin if not present.
      *
      * @throws \Doctrine\ORM\Tools\ToolsException
      * @throws \Doctrine\DBAL\Exception
      */
     public function install()
     {
-        $em = Database::getManager();
+        $this->ensureSchema();
 
-        if ($em->getConnection()->createSchemaManager()->tablesExist([self::TBL_EMBED])) {
-            return;
+        if ($this->isEnabled()) {
+            $this->addShortcutInAllCourses();
         }
-
-        $schemaTool = new SchemaTool($em);
-        $schemaTool->createSchema([$em->getClassMetadata(Embed::class)]);
     }
 
     /**
@@ -87,51 +110,88 @@ class EmbedRegistryPlugin extends Plugin
      */
     public function uninstall()
     {
-        $em = Database::getManager();
+        $this->deleteCourseShortcuts();
+        $this->deleteCourseToolLinks();
 
-        if (!$em->getConnection()->createSchemaManager()->tablesExist([self::TBL_EMBED])) {
+        $em = Database::getManager();
+        $connection = $em->getConnection();
+        $schemaManager = $connection->createSchemaManager();
+
+        if ($schemaManager->tablesExist([self::TBL_SHORTCUT])) {
+            $connection->executeStatement('DROP TABLE '.self::TBL_SHORTCUT);
+        }
+
+        if (!$schemaManager->tablesExist([self::TBL_EMBED])) {
             return;
         }
 
         $schemaTool = new SchemaTool($em);
-        $schemaTool->dropSchema([$em->getClassMetadata(Embed::class)]);
+        $schemaTool->dropSchema([
+            $em->getClassMetadata(Embed::class),
+        ]);
     }
 
     /**
-     * After (re)configuring the plugin, (re)create tool links if enabled.
+     * After (re)configuring the plugin, (re)create course home shortcuts if the plugin is active.
      *
      * @return EmbedRegistryPlugin
      */
     public function performActionsAfterConfigure()
     {
-        $em = Database::getManager();
-
+        $this->ensureSchema();
         $this->deleteCourseToolLinks();
 
-        if ('true' === $this->get(self::SETTING_ENABLED)) {
-            // Use FQCN instead of "ChamiloCoreBundle:Course".
-            $courses = $em->createQuery('SELECT c.id FROM '.Course::class.' c')->getResult();
-
-            foreach ($courses as $course) {
-                $this->createLinkToCourseTool($this->getToolTitle(), $course['id']);
-            }
+        if (!$this->isEnabled()) {
+            return $this;
         }
+
+        $this->addShortcutInAllCourses();
 
         return $this;
     }
 
+    public function ensureSchema(): void
+    {
+        $em = Database::getManager();
+        $connection = $em->getConnection();
+        $schemaManager = $connection->createSchemaManager();
+
+        if (!$schemaManager->tablesExist([self::TBL_EMBED])) {
+            $schemaTool = new SchemaTool($em);
+            $schemaTool->createSchema([
+                $em->getClassMetadata(Embed::class),
+            ]);
+        }
+
+        if ($schemaManager->tablesExist([self::TBL_SHORTCUT])) {
+            return;
+        }
+
+        $connection->executeStatement(
+            'CREATE TABLE '.self::TBL_SHORTCUT.' (
+                id INT AUTO_INCREMENT NOT NULL,
+                course_id INT NOT NULL,
+                shortcut_id INT NOT NULL,
+                UNIQUE INDEX UNIQ_EMBED_REGISTRY_SHORTCUT_COURSE (course_id),
+                UNIQUE INDEX UNIQ_EMBED_REGISTRY_SHORTCUT_SHORTCUT (shortcut_id),
+                INDEX IDX_EMBED_REGISTRY_SHORTCUT_COURSE (course_id),
+                INDEX IDX_EMBED_REGISTRY_SHORTCUT_SHORTCUT (shortcut_id),
+                PRIMARY KEY(id)
+            ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB'
+        );
+    }
+
     /**
      * Hook called when a course is deleted.
-     * We only have the course ID here, but e.course is a relation,
-     * so we must compare using IDENTITY(e.course) = :courseId.
      *
      * @param int $courseId
      */
     public function doWhenDeletingCourse($courseId)
     {
+        $this->deleteShortcutForCourse((int) $courseId);
+
         $em = Database::getManager();
 
-        // IMPORTANT: Use FQCN and IDENTITY() for relation-to-id comparison.
         $em->createQuery(
             'DELETE FROM '.Embed::class.' e WHERE IDENTITY(e.course) = :courseId'
         )
@@ -141,8 +201,6 @@ class EmbedRegistryPlugin extends Plugin
 
     /**
      * Hook called when a session is deleted.
-     * We only have the session ID here, but e.session is a relation,
-     * so we must compare using IDENTITY(e.session) = :sessionId.
      *
      * @param int $sessionId
      */
@@ -150,7 +208,6 @@ class EmbedRegistryPlugin extends Plugin
     {
         $em = Database::getManager();
 
-        // IMPORTANT: Use FQCN and IDENTITY() for relation-to-id comparison.
         $em->createQuery(
             'DELETE FROM '.Embed::class.' e WHERE IDENTITY(e.session) = :sessionId'
         )
@@ -159,8 +216,7 @@ class EmbedRegistryPlugin extends Plugin
     }
 
     /**
-     * Get the currently active embed (by date range) for a course and optional session.
-     * DO NOT compare an entity relation to a scalar id in DQL; bind the entity itself.
+     * Get the currently active embed for a course and optional session.
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
      *
@@ -221,12 +277,11 @@ class EmbedRegistryPlugin extends Plugin
      */
     public function getViewUrl(Embed $embed)
     {
-        return api_get_path(WEB_PLUGIN_PATH).'EmbedRegistry/view.php?id='.$embed->getId().'&'.api_get_cidreq();
+        return api_get_path(WEB_PLUGIN_PATH).'EmbedRegistry/view.php?id='.(int) $embed->getId().'&'.api_get_cidreq();
     }
 
     /**
      * Count distinct users who accessed this plugin within the embed date window.
-     * NOTE: TrackEAccess uses scalar fields (cId, accessSessionId), so pass integers.
      *
      * @throws \Doctrine\ORM\Query\QueryException
      *
@@ -244,7 +299,6 @@ class EmbedRegistryPlugin extends Plugin
             'tool' => 'plugin_'.$this->get_name(),
             'start_date' => $embed->getDisplayStartDate(),
             'end_date' => $embed->getDisplayEndDate(),
-            // IMPORTANT: cId is an integer field, not a relation.
             'courseId' => $embed->getCourse()->getId(),
         ];
 
@@ -260,33 +314,214 @@ class EmbedRegistryPlugin extends Plugin
     }
 
     /**
-     * Track a plugin access event (raw SQL-level insert is fine here).
+     * Track a plugin access event without breaking the embedded content view.
      */
     public function saveEventAccessTool()
     {
         $tableAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
-        $params = [
-            'access_user_id' => api_get_user_id(),
-            'c_id' => api_get_course_int_id(),
-            'access_tool' => 'plugin_'.$this->get_name(),
-            'access_date' => api_get_utc_datetime(),
-            'access_session_id' => api_get_session_id(),
-            'user_ip' => api_get_real_ip(),
-        ];
-        Database::insert($tableAccess, $params);
+
+        try {
+            $columns = [];
+            $result = Database::query('SHOW COLUMNS FROM '.$tableAccess);
+
+            while ($row = Database::fetch_assoc($result)) {
+                if (isset($row['Field'])) {
+                    $columns[(string) $row['Field']] = true;
+                }
+            }
+
+            $params = [
+                'access_user_id' => api_get_user_id(),
+                'c_id' => api_get_course_int_id(),
+                'access_tool' => 'plugin_'.$this->get_name(),
+                'access_date' => api_get_utc_datetime(),
+                'access_session_id' => api_get_session_id(),
+                'user_ip' => api_get_real_ip(),
+            ];
+
+            $params = array_intersect_key($params, $columns);
+
+            if (empty($params)) {
+                return;
+            }
+
+            Database::insert($tableAccess, $params);
+        } catch (Throwable $exception) {
+            error_log('[EmbedRegistry] Unable to save access event: '.$exception->getMessage());
+        }
+    }
+
+    public function addShortcutInAllCourses(): void
+    {
+        $em = Database::getManager();
+
+        /** @var Course $course */
+        foreach ($em->getRepository(Course::class)->findAll() as $course) {
+            $this->addShortcutInCourse($course);
+        }
+    }
+
+    public function addShortcutInCourse(Course $course): void
+    {
+        $this->ensureSchema();
+
+        $em = Database::getManager();
+        $connection = $em->getConnection();
+        $courseId = (int) $course->getId();
+
+        $shortcutId = (int) $connection->fetchOne(
+            'SELECT shortcut_id FROM '.self::TBL_SHORTCUT.' WHERE course_id = :courseId',
+            ['courseId' => $courseId]
+        );
+
+        if ($shortcutId > 0) {
+            $shortcut = $em->getRepository(CShortcut::class)->find($shortcutId);
+
+            if ($shortcut instanceof CShortcut) {
+                $shortcut->setTitle($this->getToolTitle());
+                $em->persist($shortcut);
+                $em->flush();
+
+                return;
+            }
+
+            $connection->executeStatement(
+                'DELETE FROM '.self::TBL_SHORTCUT.' WHERE course_id = :courseId',
+                ['courseId' => $courseId]
+            );
+        }
+
+        $creator = $course->getCreator();
+
+        if (null === $creator) {
+            $creator = api_get_user_entity();
+        }
+
+        if (null === $creator) {
+            return;
+        }
+
+        $shortcut = (new CShortcut())
+            ->setTitle($this->getToolTitle())
+            ->setParent($course)
+            ->setCreator($creator)
+            ->addCourseLink($course)
+        ;
+
+        $em->persist($shortcut);
+        $em->flush();
+
+        if (null === $shortcut->getResourceNode()) {
+            return;
+        }
+
+        $shortcut->setShortCutNode($shortcut->getResourceNode());
+        $em->persist($shortcut);
+        $em->flush();
+
+        $connection->executeStatement(
+            'INSERT INTO '.self::TBL_SHORTCUT.' (course_id, shortcut_id) VALUES (:courseId, :shortcutId)',
+            [
+                'courseId' => $courseId,
+                'shortcutId' => (int) $shortcut->getId(),
+            ]
+        );
+    }
+
+    public function deleteCourseShortcuts(): void
+    {
+        $em = Database::getManager();
+        $connection = $em->getConnection();
+        $schemaManager = $connection->createSchemaManager();
+
+        if (!$schemaManager->tablesExist([self::TBL_SHORTCUT])) {
+            return;
+        }
+
+        $rows = $connection->fetchAllAssociative('SELECT shortcut_id FROM '.self::TBL_SHORTCUT);
+
+        foreach ($rows as $row) {
+            $shortcutId = (int) ($row['shortcut_id'] ?? 0);
+
+            if (0 === $shortcutId) {
+                continue;
+            }
+
+            $shortcut = $em->getRepository(CShortcut::class)->find($shortcutId);
+
+            if ($shortcut instanceof CShortcut) {
+                $em->remove($shortcut);
+            }
+        }
+
+        $connection->executeStatement('DELETE FROM '.self::TBL_SHORTCUT);
+        $em->flush();
+    }
+
+    private function deleteShortcutForCourse(int $courseId): void
+    {
+        $em = Database::getManager();
+        $connection = $em->getConnection();
+        $schemaManager = $connection->createSchemaManager();
+
+        if (!$schemaManager->tablesExist([self::TBL_SHORTCUT])) {
+            return;
+        }
+
+        $shortcutId = (int) $connection->fetchOne(
+            'SELECT shortcut_id FROM '.self::TBL_SHORTCUT.' WHERE course_id = :courseId',
+            ['courseId' => $courseId]
+        );
+
+        $connection->executeStatement(
+            'DELETE FROM '.self::TBL_SHORTCUT.' WHERE course_id = :courseId',
+            ['courseId' => $courseId]
+        );
+
+        if (0 === $shortcutId) {
+            return;
+        }
+
+        $shortcut = $em->getRepository(CShortcut::class)->find($shortcutId);
+
+        if ($shortcut instanceof CShortcut) {
+            $em->remove($shortcut);
+            $em->flush();
+        }
     }
 
     /**
-     * Remove tool links created for this plugin in course tools.
-     * Use FQCN (CTool::class) instead of "ChamiloCourseBundle:CTool".
+     * Remove old CTool rows created by previous EmbedRegistry versions.
      */
-    private function deleteCourseToolLinks()
+    private function deleteCourseToolLinks(): void
     {
-        Database::getManager()
-            ->createQuery(
-                'DELETE FROM '.CTool::class.' t WHERE t.category = :category AND t.link LIKE :link'
-            )
-            ->setParameters(['category' => 'plugin', 'link' => 'EmbedRegistry/start.php%'])
-            ->execute();
+        $connection = Database::getManager()->getConnection();
+        $schemaManager = $connection->createSchemaManager();
+
+        if (!$schemaManager->tablesExist(['tool']) || !$schemaManager->tablesExist(['c_tool'])) {
+            return;
+        }
+
+        $toolRows = $connection->fetchAllAssociative(
+            'SELECT id FROM tool WHERE title IN (:pluginTitle, :configuredTitle, :legacyTitle)',
+            [
+                'pluginTitle' => $this->get_name(),
+                'configuredTitle' => $this->getToolTitle(),
+                'legacyTitle' => $this->get_title(),
+            ]
+        );
+
+        foreach ($toolRows as $toolRow) {
+            $toolId = (int) ($toolRow['id'] ?? 0);
+
+            if (0 === $toolId) {
+                continue;
+            }
+
+            $connection->executeStatement(
+                'DELETE FROM c_tool WHERE tool_id = :toolId',
+                ['toolId' => $toolId]
+            );
+        }
     }
 }

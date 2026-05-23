@@ -20,7 +20,7 @@ class SearchCoursePlugin extends Plugin
     public function get_info(): array
     {
         $info = parent::get_info();
-        $info['supports_regions'] = true;
+        $info['supports_regions'] = false;
 
         return $info;
     }
@@ -32,19 +32,7 @@ class SearchCoursePlugin extends Plugin
 
     public function renderRegion($region): string
     {
-        if (!$this->isEnabled()) {
-            return '';
-        }
-
-        if ($this->isCurrentSearchCoursePage()) {
-            return '';
-        }
-
-        if (!class_exists('SearchCourseWidget')) {
-            require_once __DIR__.'/search_course_widget.class.php';
-        }
-
-        return SearchCourseWidget::factory()->renderBlock();
+        return '';
     }
 
     public function isCurrentSearchCoursePage(): bool

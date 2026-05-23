@@ -33,7 +33,7 @@ class RssPlugin extends Plugin
     public function get_info(): array
     {
         $info = parent::get_info();
-        $info['supports_regions'] = true;
+        $info['supports_regions'] = false;
 
         return $info;
     }
@@ -55,22 +55,15 @@ class RssPlugin extends Plugin
 
     public function renderRegion($region): string
     {
-        if (!$this->isEnabled()) {
-            return '';
-        }
-
-        if (defined('RSS_FULL_PAGE_RENDERING') && RSS_FULL_PAGE_RENDERING) {
-            return '';
-        }
-
-        return $this->renderBlock();
+        return '';
     }
 
-    public function renderBlock(): string
+    public function renderBlock(bool $isRegionBlock = true): string
     {
         $url = $this->get_rss();
+        $regionAttribute = $isRegionBlock ? ' data-rss-region-block="1"' : '';
 
-        $content = '<section class="rounded-2xl border border-gray-20 bg-white p-4 shadow-sm" data-rss-region-block="1">';
+        $content = '<section class="rounded-2xl border border-gray-20 bg-white p-4 shadow-sm"'.$regionAttribute.'>';
         $content .= $this->renderHeader();
 
         if ('' === $url) {
@@ -118,18 +111,8 @@ class RssPlugin extends Plugin
 
     public function renderFullPage(): string
     {
-        $content = '
-            <style>
-                body.rss-full-page [data-rss-region-block="1"] {
-                    display: none !important;
-                }
-            </style>
-            <script>
-                document.body.classList.add("rss-full-page");
-            </script>';
-
-        $content .= '<div class="space-y-6">';
-        $content .= $this->renderBlock();
+        $content = '<div class="space-y-6">';
+        $content .= $this->renderBlock(false);
         $content .= '</div>';
 
         return $content;

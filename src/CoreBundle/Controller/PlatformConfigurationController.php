@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Bbb;
 use BuyCoursesPlugin;
+use DictionaryPlugin;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CoreBundle\Helpers\TicketProjectHelper;
@@ -19,6 +20,8 @@ use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
 use Doctrine\ORM\EntityManagerInterface;
 use OnlyofficePlugin;
+use RssPlugin;
+use SearchCoursePlugin;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -114,6 +117,9 @@ class PlatformConfigurationController extends AbstractController
 
         $configuration['plugins']['buycourses'] = $this->getBuyCoursesFrontendConfig();
         $configuration['plugins']['tour'] = $this->getTourFrontendConfig();
+        $configuration['plugins']['searchcourse'] = $this->getSearchCourseFrontendConfig();
+        $configuration['plugins']['rss'] = $this->getRssFrontendConfig();
+        $configuration['plugins']['dictionary'] = $this->getDictionaryFrontendConfig();
 
         if ($this->isGranted('ROLE_USER')) {
             $variables = [
@@ -389,6 +395,74 @@ class PlatformConfigurationController extends AbstractController
         }
 
         return [];
+    }
+
+
+    private function getSearchCourseFrontendConfig(): array
+    {
+        if (!$this->loadLegacyPluginClass('SearchCourse/lib/search_course_plugin.class.php')
+            || !class_exists('SearchCoursePlugin')
+        ) {
+            return ['enabled' => false];
+        }
+
+        $plugin = SearchCoursePlugin::create();
+        $enabled = $plugin->isEnabled();
+
+        return [
+            'enabled' => $enabled,
+            'title' => $enabled ? $plugin->get_title() : '',
+            'indexPath' => '/plugin/SearchCourse/index.php',
+        ];
+    }
+
+    private function getRssFrontendConfig(): array
+    {
+        if (!$this->loadLegacyPluginClass('Rss/lib/rss_plugin.class.php')
+            || !class_exists('RssPlugin')
+        ) {
+            return ['enabled' => false];
+        }
+
+        $plugin = RssPlugin::create();
+        $enabled = $plugin->isEnabled();
+
+        return [
+            'enabled' => $enabled,
+            'title' => $enabled ? $plugin->get_title() : '',
+            'indexPath' => '/plugin/Rss/index.php',
+        ];
+    }
+
+    private function getDictionaryFrontendConfig(): array
+    {
+        if (!$this->loadLegacyPluginClass('Dictionary/DictionaryPlugin.php')
+            || !class_exists('DictionaryPlugin')
+        ) {
+            return ['enabled' => false];
+        }
+
+        $plugin = DictionaryPlugin::create();
+        $enabled = $plugin->isEnabled();
+
+        return [
+            'enabled' => $enabled,
+            'title' => $enabled ? $plugin->get_title() : '',
+            'indexPath' => '/plugin/Dictionary/index.php',
+        ];
+    }
+
+    private function loadLegacyPluginClass(string $relativePath): bool
+    {
+        $filePath = dirname(__DIR__, 3).'/public/plugin/'.$relativePath;
+
+        if (!is_file($filePath)) {
+            return false;
+        }
+
+        require_once $filePath;
+
+        return true;
     }
 
     private function getOnlyofficeFrontendConfig(): array

@@ -37,6 +37,10 @@ class SearchCourseWidget
 
     public function renderBlock(): string
     {
+        if (api_is_anonymous()) {
+            return '';
+        }
+
         $content = '<div class="space-y-4" data-search-course-region-block="1">';
         $content .= $this->renderHeader();
         $content .= $this->renderSearchForm();
@@ -67,6 +71,9 @@ class SearchCourseWidget
 
     public function renderHeader(): string
     {
+        if (api_is_anonymous()) {
+            return '';
+        }
         return '
             <section class="rounded-2xl border border-gray-20 bg-white p-6 shadow-sm">
                 <p class="text-xs font-semibold uppercase tracking-wide text-blue-700">'

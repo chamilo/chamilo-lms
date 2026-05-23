@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 
 $plugin = MigrationMoodlePlugin::create();
 
@@ -17,33 +18,38 @@ try {
     echo Display::return_message($message, 'error');
 }
 
-/**
- * @throws \Doctrine\ORM\ORMException
- * @throws \Doctrine\ORM\OptimisticLockException
- */
-function removeExtraField()
+function removeExtraField(): void
 {
     $em = Database::getManager();
 
-    /** @var ExtraField $extraField */
+    /** @var ExtraField|null $extraField */
     $extraField = $em
         ->getRepository(ExtraField::class)
-        ->findOneBy(['variable' => 'moodle_password', 'extraFieldType' => ExtraField::USER_FIELD_TYPE]);
+        ->findOneBy([
+            'variable' => 'moodle_password',
+            'extraFieldType' => ExtraField::USER_FIELD_TYPE,
+        ]);
 
-    if ($extraField) {
-        $em
-            ->createQuery('DELETE FROM ChamiloCoreBundle:ExtraFieldValues efv WHERE efv.field = :field')
-            ->execute(['field' => $extraField]);
-
-        $em->remove($extraField);
-        $em->flush();
+    if (!$extraField) {
+        return;
     }
+
+    $values = $em
+        ->getRepository(ExtraFieldValues::class)
+        ->findBy(['field' => $extraField]);
+
+    foreach ($values as $value) {
+        $em->remove($value);
+    }
+
+    $em->remove($extraField);
+    $em->flush();
 }
 
 /**
  * Drop database table created by this plugin.
  */
-function removePluginTables()
+function removePluginTables(): void
 {
     $queries = [];
     $queries[] = "DROP TABLE IF EXISTS plugin_migrationmoodle_item";

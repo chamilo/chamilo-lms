@@ -7,9 +7,9 @@ if (!function_exists('api_is_platform_admin')) {
 }
 
 if (!api_is_platform_admin()) {
-    exit('You must have admin permissions to install plugins');
+    exit('You must have admin permissions to uninstall plugins');
 }
 
 require_once __DIR__.'/DictionaryPlugin.php';
 
-DictionaryPlugin::create()->install();
+DictionaryPlugin::create()->uninstall();

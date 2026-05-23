@@ -335,6 +335,7 @@ function getStablePluginAllowList(): array
         'EmbedRegistry',
         'SearchCourse',
         'Rss',
+        'Dictionary',
     ];
 }
 

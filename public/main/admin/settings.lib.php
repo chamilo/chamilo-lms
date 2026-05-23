@@ -333,6 +333,7 @@ function getStablePluginAllowList(): array
         'UserRemoteService',
         'MigrationMoodle',
         'EmbedRegistry',
+        'SearchCourse',
     ];
 }
 

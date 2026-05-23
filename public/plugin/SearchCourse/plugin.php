@@ -1,7 +1,6 @@
 <?php
-/**
- * @copyright (c) 2011 University of Geneva
- * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
- * @author Laurent Opprecht
- */
+/* For licensing terms, see /license.txt */
+
+require_once __DIR__.'/lib/search_course_plugin.class.php';
+
 $plugin_info = SearchCoursePlugin::create()->get_info();

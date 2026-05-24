@@ -2,8 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Config the plugin.
- *
- * @author Jose Angel Ruiz <desarrollo@nosolored.com>
+ * Config the CustomCertificate plugin.
  */
+
 require_once __DIR__.'/../../main/inc/global.inc.php';
+require_once __DIR__.'/src/CustomCertificatePlugin.php';

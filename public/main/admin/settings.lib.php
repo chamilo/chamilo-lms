@@ -339,6 +339,7 @@ function getStablePluginAllowList(): array
         'GoogleMaps',
         'BeforeLogin',
         'CourseBlock',
+        'CustomFooter',
     ];
 }
 
@@ -908,6 +909,12 @@ function plugin_get_available_region_options(array $metadata, string $pluginName
             'footer_left' => $labels['footer_left'].' (footer_left)',
             'footer_center' => $labels['footer_center'].' (footer_center)',
             'footer_right' => $labels['footer_right'].' (footer_right)',
+        ];
+    }
+
+    if ('CustomFooter' === $pluginName) {
+        return [
+            'pre_footer' => $labels['pre_footer'].' (pre_footer)',
         ];
     }
 

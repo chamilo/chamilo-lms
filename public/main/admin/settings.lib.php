@@ -338,6 +338,7 @@ function getStablePluginAllowList(): array
         'Dictionary',
         'GoogleMaps',
         'BeforeLogin',
+        'CourseBlock',
     ];
 }
 
@@ -758,6 +759,9 @@ function plugin_get_region_labels(): array
         'main_top' => 'Top of main layout',
         'main_bottom' => 'Bottom of main layout',
         'pre_footer' => 'Before footer',
+        'footer_left' => 'Footer left',
+        'footer_center' => 'Footer center',
+        'footer_right' => 'Footer right',
     ];
 }
 
@@ -785,7 +789,10 @@ function plugin_get_region_descriptions(): array
         'login_bottom' => get_lang('Displayed below the public login form.'),
         'main_top' => get_lang('Displayed near the top of the main layout shell.'),
         'main_bottom' => get_lang('Displayed near the bottom of the main layout shell.'),
-        'pre_footer' => get_lang('Recommended for global floating or persistent plugins shown before the footer.'),
+        'pre_footer' => get_lang('Displayed before the footer area.'),
+        'footer_left' => get_lang('Displayed in the left footer column.'),
+        'footer_center' => get_lang('Displayed in the center footer column.'),
+        'footer_right' => get_lang('Displayed in the right footer column.'),
     ];
 }
 
@@ -892,6 +899,15 @@ function plugin_get_available_region_options(array $metadata, string $pluginName
         return [
             'login_top' => $labels['login_top'].' (login_top)',
             'login_bottom' => $labels['login_bottom'].' (login_bottom)',
+        ];
+    }
+
+    if ('CourseBlock' === $pluginName) {
+        return [
+            'pre_footer' => $labels['pre_footer'].' (pre_footer)',
+            'footer_left' => $labels['footer_left'].' (footer_left)',
+            'footer_center' => $labels['footer_center'].' (footer_center)',
+            'footer_right' => $labels['footer_right'].' (footer_right)',
         ];
     }
 

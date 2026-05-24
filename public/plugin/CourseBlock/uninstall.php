@@ -5,7 +5,7 @@
 require_once __DIR__.'/config.php';
 
 if (!api_is_platform_admin()) {
-    exit('You must have admin permissions to install plugins');
+    exit('You must have admin permissions to uninstall plugins');
 }
 
-CourseBlockPlugin::create()->install();
+CourseBlockPlugin::create()->uninstall();

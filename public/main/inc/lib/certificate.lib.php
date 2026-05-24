@@ -246,6 +246,41 @@ class Certificate extends Model
         }
     }
 
+
+    /**
+     * Render a certificate using the CustomCertificate plugin when the plugin
+     * is active and the current course has enabled a custom/default template.
+     */
+    private function generateCustomCertificatePluginHtml($courseId, $courseCode, $sessionId, $categoryId)
+    {
+        $pluginFile = api_get_path(SYS_PLUGIN_PATH).'CustomCertificate/src/CustomCertificatePlugin.php';
+        if (!is_file($pluginFile)) {
+            return '';
+        }
+
+        require_once $pluginFile;
+
+        if (!class_exists('CustomCertificatePlugin')) {
+            return '';
+        }
+
+        try {
+            return CustomCertificatePlugin::generateHtmlCertificateForUser(
+                (int) $courseId,
+                (string) $courseCode,
+                (int) $sessionId,
+                (int) $this->user_id,
+                api_get_current_access_url_id(),
+                (int) $categoryId,
+                true
+            );
+        } catch (\Throwable $e) {
+            error_log('[CERT::generateCustomCertificatePluginHtml] '.$e->getMessage());
+
+            return '';
+        }
+    }
+
     /**
      * Generates (or updates) the user's certificate as a Resource.
      *
@@ -369,7 +404,19 @@ class Certificate extends Model
             $html   = '';
             $source = '';
 
-            if ($categoryHasDefaultTemplate) {
+            $customCertificateHtml = $this->generateCustomCertificatePluginHtml(
+                $courseId,
+                $courseInfo['code'] ?? '',
+                $sessionId,
+                $categoryId
+            );
+
+            if ('' !== $customCertificateHtml) {
+                $html = $customCertificateHtml;
+                $source = 'CUSTOMCERTIFICATE_PLUGIN';
+            }
+
+            if ('' === $html && $categoryHasDefaultTemplate) {
                 if (is_array($gb) && !empty($gb['content'])) {
                     $html   = (string)$gb['content'];
                     $source = 'DEFAULT_TEMPLATE';
@@ -377,20 +424,20 @@ class Certificate extends Model
                     $html   = $gb;
                     $source = 'DEFAULT_TEMPLATE';
                 }
-            } else {
+            } elseif ('' === $html) {
                 error_log(sprintf(
-                    '[CERT::generate] course DEFAULT template NOT found. cat=%d user=%d -> fallback to CUSTOM',
+                    '[CERT::generate] course DEFAULT template NOT found. cat=%d user=%d -> fallback to core CUSTOM',
                     (int)$categoryId,
                     (int)$this->user_id
                 ));
             }
 
-            if ($html === '') {
+            if ('' === $html) {
                 $html   = $this->generateCustomCertificate('');
                 $source = 'CUSTOM_TEMPLATE_FALLBACK';
             }
 
-            if ($html === '') {
+            if ('' === $html) {
                 error_log(sprintf(
                     '[CERT::generate] Empty HTML on category path. cat=%d user=%d',
                     (int)$categoryId,

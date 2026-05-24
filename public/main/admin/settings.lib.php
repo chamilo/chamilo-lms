@@ -340,6 +340,7 @@ function getStablePluginAllowList(): array
         'BeforeLogin',
         'CourseBlock',
         'CustomFooter',
+        'CustomCertificate',
     ];
 }
 

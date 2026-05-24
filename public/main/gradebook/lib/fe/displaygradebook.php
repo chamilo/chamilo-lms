@@ -498,8 +498,14 @@ class DisplayGradebook
                             ).'&cid='.$catobj->getCourseId().'&sid='.$catobj->get_session_id().'">'.
                             Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Edit')).'</a>';
 
-                        if ('true' == api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate') &&
-                            1 == api_get_course_setting('customcertificate_course_enable')
+                        $customCertificatePluginFile = api_get_path(SYS_PLUGIN_PATH).'CustomCertificate/src/CustomCertificatePlugin.php';
+                        if (is_file($customCertificatePluginFile)) {
+                            require_once $customCertificatePluginFile;
+                        }
+
+                        $courseInfo = api_get_course_info_by_id((int) $courseId);
+                        if (class_exists('CustomCertificatePlugin') &&
+                            CustomCertificatePlugin::isEnabledForCourse($courseInfo)
                         ) {
                             $actionsRight .= '<a href="'.api_get_path(
                                     WEB_PLUGIN_PATH

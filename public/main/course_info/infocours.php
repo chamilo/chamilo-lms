@@ -93,6 +93,38 @@ if (is_file($courseLegalPluginPath)) {
     }
 }
 
+$courseBlockSettings = [
+    'course_block_pre_footer',
+    'course_block_footer_left',
+    'course_block_footer_center',
+    'course_block_footer_right',
+];
+
+$courseBlockPluginEntity = Container::getPluginRepository()->findOneByTitle('CourseBlock');
+$courseBlockPluginConfiguration = $courseBlockPluginEntity?->getConfigurationsByAccessUrl($currentAccessUrl);
+
+$isCourseBlockEnabled = $courseBlockPluginEntity
+    && $courseBlockPluginEntity->isInstalled()
+    && $courseBlockPluginConfiguration
+    && $courseBlockPluginConfiguration->isActive();
+
+$courseBlockPlugin = null;
+$courseBlockPluginPath = api_get_path(SYS_PLUGIN_PATH).'CourseBlock/CourseBlockPlugin.php';
+
+if (is_file($courseBlockPluginPath)) {
+    require_once $courseBlockPluginPath;
+
+    if (class_exists('CourseBlockPlugin')) {
+        $courseBlockPlugin = CourseBlockPlugin::create();
+    }
+}
+
+$courseBlockAppPlugin = null;
+
+if ($isCourseBlockEnabled) {
+    $courseBlockAppPlugin = AppPlugin::getInstance();
+}
+
 $show_delete_watermark_text_message = false;
 if ('true' === api_get_setting('pdf_export_watermark_by_course')) {
     if (isset($_GET['delete_watermark'])) {
@@ -1227,6 +1259,66 @@ if ($isImsLtiEnabled) {
     );
 }
 
+if ($isCourseBlockEnabled) {
+    $courseBlockTitle = $courseBlockPlugin
+        ? $courseBlockPlugin->get_title()
+        : get_lang('Course block');
+
+    $courseBlockEditorConfig = [
+        'ToolbarSet' => 'Documents',
+        'Width' => '100%',
+        'Height' => '220',
+    ];
+
+    $form->addStartPanel(
+        'course_block',
+        $courseBlockTitle,
+        true,
+        ToolIcon::PLUGIN
+    );
+
+    $form->addHtml(
+        '<div class="mb-4">'
+        .'<p class="mb-3">'
+        .get_lang('Add custom content blocks to course footer regions.')
+        .'</p>'
+        .'</div>'
+    );
+
+    $form->addHtmlEditor(
+        'course_block_pre_footer',
+        $courseBlockPlugin ? $courseBlockPlugin->get_lang('course_block_pre_footer') : get_lang('Before footer'),
+        false,
+        false,
+        $courseBlockEditorConfig
+    );
+    $form->addHtmlEditor(
+        'course_block_footer_left',
+        $courseBlockPlugin ? $courseBlockPlugin->get_lang('course_block_footer_left') : get_lang('Footer left'),
+        false,
+        false,
+        $courseBlockEditorConfig
+    );
+    $form->addHtmlEditor(
+        'course_block_footer_center',
+        $courseBlockPlugin ? $courseBlockPlugin->get_lang('course_block_footer_center') : get_lang('Footer center'),
+        false,
+        false,
+        $courseBlockEditorConfig
+    );
+    $form->addHtmlEditor(
+        'course_block_footer_right',
+        $courseBlockPlugin ? $courseBlockPlugin->get_lang('course_block_footer_right') : get_lang('Footer right'),
+        false,
+        false,
+        $courseBlockEditorConfig
+    );
+
+    $form->addButtonSave(get_lang('Save settings'), 'submit_save');
+
+    $form->addEndPanel();
+}
+
 if ($isCourseHomeNotifyEnabled) {
     $courseHomeNotifyTitle = $courseHomeNotifyPlugin
         ? $courseHomeNotifyPlugin->get_title()
@@ -1419,6 +1511,10 @@ $values['activate_legal'] = $courseEntity->getActivateLegal();
 $values['show_score'] = $_course['show_score'] ?? 0;
 
 $courseSettings = CourseManager::getCourseSettingVariables();
+
+if ($isCourseBlockEnabled) {
+    $courseSettings = array_values(array_unique(array_merge($courseSettings, $courseBlockSettings)));
+}
 foreach ($courseSettings as $setting) {
     $result = api_get_course_setting($setting);
 
@@ -1991,6 +2087,12 @@ if ($form->validate()) {
     foreach ($courseSettings as $setting) {
         $value = $updateValues[$setting] ?? null;
 
+        if ($isCourseBlockEnabled && \in_array($setting, $courseBlockSettings, true)) {
+            // CourseBlock fields are added as panel elements and can be missing from exportValues()
+            // on some branches. Read the raw POST value to avoid saving null.
+            $value = $submittedValues[$setting] ?? '';
+        }
+
         if ('email_alert_manager_on_new_quiz' === $setting) {
             // Store checkbox values as a stable CSV string.
             $value = implode(',', $updateValues['email_alert_manager_on_new_quiz']);
@@ -2000,8 +2102,22 @@ if ($form->validate()) {
         CourseManager::saveCourseConfigurationSetting(
             $setting,
             $value,
-            api_get_course_int_id()
+            api_get_course_int_id(),
+            \in_array($setting, $courseBlockSettings, true) ? $courseBlockAppPlugin : null
         );
+    }
+
+    if ($isCourseBlockEnabled && null !== $courseBlockAppPlugin) {
+        foreach ($courseBlockSettings as $setting) {
+            $value = $submittedValues[$setting] ?? '';
+
+            CourseManager::saveCourseConfigurationSetting(
+                $setting,
+                $value,
+                api_get_course_int_id(),
+                $courseBlockAppPlugin
+            );
+        }
     }
 
     if (!$quizNotificationSettingSaved) {

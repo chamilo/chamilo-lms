@@ -295,6 +295,18 @@
           :shortcut="shortcut"
         />
       </div>
+
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <div class="min-w-0">
+          <PluginRegion region="footer_left" />
+        </div>
+        <div class="min-w-0">
+          <PluginRegion region="footer_center" />
+        </div>
+        <div class="min-w-0">
+          <PluginRegion region="footer_right" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -321,6 +333,7 @@ import { useSecurityStore } from "../../store/securityStore"
 import { useCourseSettings } from "../../store/courseSettingStore"
 import NextCourseSequence from "../../components/course/NextCourseSequence.vue"
 import CourseThematicProgress from "../../components/course/CourseThematicProgress.vue"
+import PluginRegion from "../../components/layout/PluginRegion.vue"
 
 const { t } = useI18n()
 const cidReqStore = useCidReqStore()

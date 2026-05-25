@@ -15,6 +15,9 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\QueryParameter;
+use ApiPlatform\OpenApi\Model\Operation;
+use ApiPlatform\OpenApi\Model\Parameter as OpenApiParameter;
 use Chamilo\CoreBundle\Controller\Api\CreateStudentPublicationFileAction;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
@@ -50,7 +53,27 @@ use Symfony\Component\Validator\Constraints as Assert;
             ],
             security: "is_granted('VIEW', object.resourceNode)",
         ),
-        new GetCollection(security: "is_granted('ROLE_USER')"),
+        new GetCollection(
+            openapi: new Operation(
+                parameters: [
+                    new OpenApiParameter(
+                        name: 'cid',
+                        in: 'query',
+                        description: 'Course identifier',
+                        required: true,
+                        schema: ['type' => 'integer'],
+                    ),
+                ],
+            ),
+            security: "is_granted('ROLE_USER')",
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+            ],
+        ),
         new Delete(
             security: "is_granted('DELETE', object.resourceNode)",
             processor: CStudentPublicationDeleteProcessor::class

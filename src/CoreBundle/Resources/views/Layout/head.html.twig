@@ -82,6 +82,10 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+{% if chamilo_plugin_is_enabled('NoSearchIndex') %}
+    <meta name="robots" content="noindex, nofollow, noarchive" data-plugin="NoSearchIndex">
+{% endif %}
+
     {# Meta description (SEO) #}
     {% if meta_description %}
         <meta name="description" content="{{ meta_description|e('html_attr') }}">

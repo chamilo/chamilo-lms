@@ -7,12 +7,10 @@ Feature: Users tool
 
   Background:
     Given I am a platform administrator
-    And I wait for the page to be loaded
 
 
   Scenario: Admin searches for 'amann' and unsubscribes the user
     Given I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I follow "Users"
     And I wait for the page to be loaded
     And I click the "i.mdi-account-plus" element
@@ -28,7 +26,6 @@ Feature: Users tool
 
   Scenario: Admin uses a specific tab then searches for 'ywarnier' and unsubscribes
     Given I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I follow "Users"
     And I wait for the page to be loaded
     And I click the "a#tabs_69662037e3281-1" element

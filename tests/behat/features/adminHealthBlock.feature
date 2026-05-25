@@ -5,11 +5,9 @@ Feature: Admin Health check block
 
   Background:
     Given I am a platform administrator
-    And I wait for the page to be loaded
 
   Scenario: Open Health check
     Given I am on "/admin"
-    And I wait for the page to be loaded
     And I zoom out to maximum
     And I follow "Health check"
     And I wait for the page to be loaded
@@ -17,7 +15,6 @@ Feature: Admin Health check block
 
   Scenario: See health warnings
     Given I am on "/admin"
-    And I wait for the page to be loaded
     And I zoom out to maximum
     And I follow "Health check"
     And I wait for the page to be loaded

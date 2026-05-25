@@ -8,7 +8,6 @@ Feature: Group tool
 
   Scenario: Delete default category
     Given I am on "/main/group/group.php?cid=1&sid=0"
-    And I wait for the page to be loaded
     Then I should see "Default groups"
     Then I click the "i.mdi-delete" element
     Then I confirm the popup
@@ -17,7 +16,6 @@ Feature: Group tool
 
   Scenario: Create a group directory
     Given I am on "/main/group/group_category.php?cid=1&sid=0&action=add_category"
-    And I wait for the page to be loaded
     When I fill in the following:
       | title | Group category 1 |
     And I press "Add"
@@ -27,7 +25,6 @@ Feature: Group tool
 
   Scenario: Create 4 groups
     Given I am on "/main/group/group_creation.php?cid=1&sid=0"
-    And I wait for the page to be loaded
     Then I fill in the following:
       | number_of_groups | 5 |
     And I press "submit"
@@ -40,15 +37,10 @@ Feature: Group tool
       | group_3_places | 1 |
       | group_4_places | 2 |
     And I select "Group category 1" from "category_0"
-    And I wait for the page to be loaded
     And I select "Group category 1" from "category_1"
-    And I wait for the page to be loaded
     And I select "Group category 1" from "category_2"
-    And I wait for the page to be loaded
     And I select "Group category 1" from "category_3"
-    And I wait for the page to be loaded
     And I select "Group category 1" from "category_4"
-    And I wait for the page to be loaded
     And I press "submit"
     And I wait for the page to be loaded
     Then I should not see an error
@@ -125,7 +117,6 @@ Feature: Group tool
     And I wait for the page to be loaded
     Then I should see "Are you sure to delete"
     Then I follow "delete_item"
-    And I wait for the page to be loaded
 
   Scenario: Delete directory
     Given I am on "/main/group/group.php?cid=1&sid=0"
@@ -139,11 +130,9 @@ Feature: Group tool
     And I wait for the page to be loaded
     Then I should see "Are you sure to delete"
     Then I follow "delete_item"
-    And I wait for the page to be loaded
 
   Scenario: Add fapple to the Group 0001
     Given I am on "/main/group/group.php?cid=1&sid=0"
-    And I wait for the page to be loaded
     And I follow "Group 0001"
     And I wait for the page to be loaded
     Then I should see "Group 0001"
@@ -153,7 +142,6 @@ Feature: Group tool
     Then I click the "i.mdi-account" element
     And I wait for the page to be loaded
     Then I select "Fiona Apple Maggart (fapple)" from "group_members"
-    And I wait for the page to be loaded
     Then I press "group_members_rightSelected"
     And I wait for the page to be loaded
     Then I press "Save settings"
@@ -165,7 +153,6 @@ Feature: Group tool
 
   Scenario: Add fapple to the Group 0003 not allowed because group category allows 1 user per group
     Given I am on "/main/group/group.php?cid=1&sid=0"
-    And I wait for the page to be loaded
     And I follow "Group 0003"
     And I wait for the page to be loaded
     Then I should see "Group 0003"
@@ -175,7 +162,6 @@ Feature: Group tool
     Then I click the "i.mdi-account" element
     And I wait for the page to be loaded
     Then I select "Fiona Apple Maggart (fapple)" from "group_members"
-    And I wait for the page to be loaded
     Then I press "group_members_rightSelected"
     And I wait for the page to be loaded
     Then I press "Save settings"
@@ -188,19 +174,16 @@ Feature: Group tool
  # Group category overwrites all other groups settings.
   Scenario: Change Group category to allow multiple inscription of the user
     Given I am on "/main/group/group.php?cid=1&sid=0"
-    And I wait for the page to be loaded
     And I follow "Edit this category"
     And I wait for the page to be loaded
     Then I should see "Edit group category: Group category 1"
     And I select "10" from "groups_per_user"
-    And I wait for the page to be loaded
     Then I press "Edit"
     And I wait for the page to be loaded
     Then I should see "Group settings have been modified"
 
   Scenario: Change Group 0003 settings to make announcements private
     Given I am on "/main/group/group.php?cid=1&sid=0"
-    And I wait for the page to be loaded
     And I follow "Group 0003"
     And I wait for the page to be loaded
     Then I should see "Group 0003"
@@ -214,7 +197,6 @@ Feature: Group tool
 
   Scenario: Change Group 0004 settings to make it private
     Given I am on "/main/group/group.php?cid=1&sid=0"
-    And I wait for the page to be loaded
     And I follow "Group 0004"
     And I wait for the page to be loaded
     Then I should see "Group 0004"
@@ -228,7 +210,6 @@ Feature: Group tool
 
   Scenario: Change Group 0005 settings to make announcements private between users
     Given I am on "/main/group/group.php?cid=1&sid=0"
-    And I wait for the page to be loaded
     And I follow "Group 0005"
     And I wait for the page to be loaded
     Then I should see "Group 0005"
@@ -242,7 +223,6 @@ Feature: Group tool
 
   Scenario: Add fapple and acostea to Group 0005
     Given I am on "/main/group/group.php?cid=1&sid=0"
-    And I wait for the page to be loaded
     And I follow "Group 0005"
     And I wait for the page to be loaded
     Then I should see "Group 0005"
@@ -252,9 +232,7 @@ Feature: Group tool
     Then I click the "i.mdi-account" element
     And I wait for the page to be loaded
     Then I additionally select "Fiona Apple Maggart (fapple)" from "group_members"
-    And I wait for the page to be loaded
     Then I additionally select "Andrea Costea (acostea)" from "group_members"
-    And I wait for the page to be loaded
     Then I press "group_members_rightSelected"
     And I wait for the page to be loaded
     Then I press "Save settings"
@@ -267,7 +245,6 @@ Feature: Group tool
 
   Scenario: Add fapple to the Group 0003
     Given I am on "/main/group/group.php?cid=1&sid=0"
-    And I wait for the page to be loaded
     And I follow "Group 0003"
     And I wait for the page to be loaded
     Then I should see "Group 0003"
@@ -277,7 +254,6 @@ Feature: Group tool
     Then I click the "i.mdi-account" element
     And I wait for the page to be loaded
     Then I select "Fiona Apple Maggart (fapple)" from "group_members"
-    And I wait for the page to be loaded
     Then I press "group_members_rightSelected"
     And I wait for the page to be loaded
     Then I press "Save settings"
@@ -289,7 +265,6 @@ Feature: Group tool
 
   Scenario: Add acostea to the Group 0002
     Given I am on "/main/group/group.php?cid=1&sid=0"
-    And I wait for the page to be loaded
     And I follow "Group 0002"
     And I wait for the page to be loaded
     Then I should see "Group 0002"
@@ -299,7 +274,6 @@ Feature: Group tool
     Then I click the "i.mdi-account" element
     And I wait for the page to be loaded
     Then I select "Andrea Costea (acostea)" from "group_members"
-    And I wait for the page to be loaded
     Then I press "group_members_rightSelected"
     And I wait for the page to be loaded
     Then I press "Save settings"
@@ -311,7 +285,6 @@ Feature: Group tool
 
   Scenario: Create an announcement for everybody inside Group 0001
     Given I am on "/main/group/group.php?cid=1&sid=0"
-    And I wait for the page to be loaded
     And I follow "Group 0001"
     And I wait for the page to be loaded
     Then I should see "Group 0001"
@@ -332,7 +305,6 @@ Feature: Group tool
 
   Scenario: Create an announcement for fapple inside Group 0001
     Given I am on "/main/group/group.php?cid=1&sid=0"
-    And I wait for the page to be loaded
     And I follow "Group 0001"
     And I wait for the page to be loaded
     Then I should see "Group 0001"
@@ -344,7 +316,6 @@ Feature: Group tool
     Then I press "choose_recipients"
     And I wait for the page to be loaded
     Then I select "Fiona Apple Maggart" from "users"
-    And I wait for the page to be loaded
     Then I press "users_rightSelected"
     And I wait for the page to be loaded
     Then I fill in the following:
@@ -359,7 +330,6 @@ Feature: Group tool
 
   Scenario: Create an announcement for everybody inside Group 0003 (private)
     Given I am on "/main/group/group.php?cid=1&sid=0"
-    And I wait for the page to be loaded
     And I follow "Group 0003"
     And I wait for the page to be loaded
     Then I should see "Group 0003"
@@ -380,7 +350,6 @@ Feature: Group tool
 
   Scenario: Create an announcement for fapple inside Group 0003
     Given I am on "/main/group/group.php?cid=1&sid=0"
-    And I wait for the page to be loaded
     And I follow "Group 0003"
     And I wait for the page to be loaded
     Then I should see "Group 0003"
@@ -392,7 +361,6 @@ Feature: Group tool
     Then I press "choose_recipients"
     And I wait for the page to be loaded
     Then I select "Fiona Apple" from "users"
-    And I wait for the page to be loaded
     Then I press "users_rightSelected"
     And I wait for the page to be loaded
     Then I fill in the following:
@@ -407,11 +375,8 @@ Feature: Group tool
 
   Scenario: Create an announcement as acostea and send only to fapple
     Given I am not logged
-    And I wait for the page to be loaded
     Then I am logged as "acostea"
-    And I wait for the page to be loaded
     Then I am on "/main/group/group.php?cid=1&sid=0"
-    And I wait for the page to be loaded
     And I follow "Group 0005"
     And I wait for the page to be loaded
     Then I should see "Group 0005"
@@ -423,7 +388,6 @@ Feature: Group tool
     Then I press "choose_recipients"
     And I wait for the page to be loaded
     Then I select "Fiona Apple Maggart" from "users"
-    And I wait for the page to be loaded
     Then I press "users_rightSelected"
     And I wait for the page to be loaded
     Then I fill in the following:
@@ -438,13 +402,9 @@ Feature: Group tool
 
   Scenario: Check fapple/acostea access of announcements
     Given I am not logged
-    And I wait for the page to be loaded
     Given I am logged as "fapple"
-    And I wait for the page to be loaded
     And I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I am on "/main/group/group.php?cid=1&sid=0"
-    And I wait for the page to be loaded
     And I follow "Group 0001"
     And I wait for the page to be loaded
     Then I should see "Group 0001"
@@ -464,7 +424,6 @@ Feature: Group tool
     Then I save current URL with name "announcement_for_all_users_group_0001_public"
     Then I should see "Announcement description in Group 0001"
     And I am on "/main/group/group.php?cid=1&sid=0"
-    And I wait for the page to be loaded
     And I follow "Group 0003"
     And I wait for the page to be loaded
     Then I should see "Group 0003"
@@ -484,7 +443,6 @@ Feature: Group tool
     Then I should see "Announcement description in Group 0003"
     Then I save current URL with name "announcement_for_all_users_group_0003_private"
     And I am on "/main/group/group.php?cid=1&sid=0"
-    And I wait for the page to be loaded
     And I follow "Group 0005"
     And I wait for the page to be loaded
     Then I should see "Group 0005"
@@ -497,13 +455,9 @@ Feature: Group tool
 
    ## Finish tests with fapple now check access with acostea ##
     Given I am not logged
-    And I wait for the page to be loaded
     Given I am logged as "acostea"
-    And I wait for the page to be loaded
     And I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     Given I am on "/main/group/group.php?cid=1&sid=0"
-    And I wait for the page to be loaded
     Then I should see "Group 0001"
     And I should see "Group 0002"
     And I should see "Group 0003"
@@ -520,13 +474,9 @@ Feature: Group tool
 
 
     Given I am not logged
-    And I wait for the page to be loaded
     Given I am logged as "acostea"
-    And I wait for the page to be loaded
     And I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     Given I am on "/main/group/group.php?cid=1&sid=0"
-    And I wait for the page to be loaded
     Then I should see "Group 0001"
     And I should see "Group 0002"
     And I should see "Group 0003"

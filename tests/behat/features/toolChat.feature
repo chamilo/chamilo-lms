@@ -6,7 +6,6 @@ Feature: Chat tool
   Scenario: Admin sends public and private messages, Andrea checks them
     Given I am a platform administrator
     And I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I zoom out to maximum
     Then I follow "Chat"
     And wait for the page to be loaded
@@ -23,13 +22,11 @@ Feature: Chat tool
     Then I fill in the following:
       | chat-writer | HelloAndrea |
     Then I click the "button#chat-send-message" element
-    And wait for the page to be loaded
 
 
   Scenario: Now switch to Andrea (student) and verify messages
     Given I am a student
     And I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I zoom out to maximum
     Then I follow "Chat"
     And wait for the page to be loaded

@@ -7,12 +7,10 @@ Feature: Course description tool
 
   Background:
     Given I am a platform administrator
-    And I wait for the page to be loaded
 
 
   Scenario: Admin edits the course description and sees the content
     Given I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I zoom out to maximum
     And I follow "Course description"
     And I wait for the page to be loaded
@@ -26,9 +24,7 @@ Feature: Course description tool
 
   Scenario: Student views the course description
     Given I am a student
-    And I wait for the page to be loaded
     Given I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I follow "Course description"
     And I wait for the page to be loaded
     Then I should see "surface web"

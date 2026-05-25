@@ -8,7 +8,6 @@ Feature: User registration
     Then I should see "Sign up"
     Then I follow "Sign up"
     Then I should see "Registration"
-    And I wait for the page to be loaded
     And I fill in the following:
       | firstname     | user registration first name  |
       | lastname      | user registration last name   |

@@ -8,7 +8,6 @@ Feature: Forum tool
 
   Scenario: Create a forum category
     Given I am on "/main/forum/index.php?action=add_category&cid=1"
-    And I wait for the page to be loaded
     When I fill in the following:
       | forum_category_title   | Forum Category Test |
     And I fill in editor field "forum_category_comment" with "This is the first forum category for test"
@@ -19,7 +18,6 @@ Feature: Forum tool
 
   Scenario: Create a forum
     Given I am on "/main/forum/index.php?action=add_forum&cid=1"
-    And I wait for the page to be loaded
     When I fill in the following:
       | forum_title   | Forum Test |
     And I fill in editor field "forum_comment" with "This is the first forum for test"
@@ -30,7 +28,6 @@ Feature: Forum tool
 
   Scenario: Create a forum thread
     Given I am on "/main/forum/index.php?cid=1"
-    And I wait for the page to be loaded
     And I follow "Forum Test"
     And I wait for the page to be loaded
     And I click the "i.mdi-format-quote-open" element
@@ -45,7 +42,6 @@ Feature: Forum tool
 
   Scenario: Reply to forum message
     Given I am on "/main/forum/index.php?cid=1"
-    And I wait for the page to be loaded
     And I follow "Forum Test"
     And I wait for the page to be loaded
     When I follow "Thread One"
@@ -62,7 +58,6 @@ Feature: Forum tool
 
   Scenario: Delete a forum thread
     Given I am on "/main/forum/index.php?cid=1"
-    And I wait for the page to be loaded
     And I follow "Forum Test"
     And I wait for the page to be loaded
     Then I follow "Thread One"
@@ -74,7 +69,6 @@ Feature: Forum tool
 
   Scenario: Quote a forum message
     Given I am on "/main/forum/viewthread.php?forum=1&thread=1&cid=1"
-    And I wait for the page to be loaded
     When I click the "i.mdi-comment-quote" element
     And I wait for the page to be loaded
     And I press "SubmitPost"

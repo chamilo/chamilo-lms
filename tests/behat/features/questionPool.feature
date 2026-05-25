@@ -4,11 +4,9 @@ Feature: Question pool management for QP scenarios
 
   Background:
     Given I am logged as "admin"
-    And wait very long for the page to be loaded
 
   Scenario: Create course QP1
     Given I am on "/courses"
-    And wait very long for the page to be loaded
     When I click the "span.mdi-plus" element
     And wait very long for the page to be loaded
     And I fill in the following:
@@ -19,7 +17,6 @@ Feature: Question pool management for QP scenarios
 
   Scenario: Create course QP2
     Given I am on "/courses"
-    And wait very long for the page to be loaded
     When I click the "span.mdi-plus" element
     And wait very long for the page to be loaded
     And I fill in the following:
@@ -30,7 +27,6 @@ Feature: Question pool management for QP scenarios
 
   Scenario: Create a test and add question QPQUESTION1 (then delete)
     Given I am on course "QP1" homepage
-    And wait very long for the page to be loaded
     When I follow "Tests"
     And wait very long for the page to be loaded
     And I click the "i.mdi-order-bool-ascending-variant" element
@@ -52,7 +48,6 @@ Feature: Question pool management for QP scenarios
 
   Scenario: Upload answer (QPQUESTION2) and check recycle behavior
     Given I am on course "QP1" homepage
-    And wait very long for the page to be loaded
     When I follow "Tests"
     And wait very long for the page to be loaded
     And I click the "i.mdi-pencil" element
@@ -81,7 +76,6 @@ Feature: Question pool management for QP scenarios
 
   Scenario: Admin reviews question pool and filters by course
     Given I am on "/admin"
-    And wait very long for the page to be loaded
     When I follow "Questions"
     And wait very long for the page to be loaded
     And I press "admin_question_submit"
@@ -102,7 +96,6 @@ Feature: Question pool management for QP scenarios
 
   Scenario: Admin deletes course QP2 from course maintenance
     Given I am on course "QP1" homepage
-    And wait very long for the page to be loaded
     And I click the "span.mdi-cog" element
     And wait very long for the page to be loaded
     And I follow "Course maintenance"
@@ -119,7 +112,6 @@ Feature: Question pool management for QP scenarios
 
   Scenario: Admin removes questions and database entries for QP1
     Given I am on course "QP1" homepage
-    And wait very long for the page to be loaded
     When I follow "Tests"
     And wait very long for the page to be loaded
     And I click the "i.mdi-pencil" element
@@ -139,11 +131,9 @@ Feature: Question pool management for QP scenarios
     And wait very long for the page to be loaded
     And I press "delete"
     And I confirm the popup
-    And wait very long for the page to be loaded
 
   Scenario: Admin deletes course QP1 via Course maintenance and checks QP2 absence
     Given I am on course "QP1" homepage
-    And wait very long for the page to be loaded
     When I click the "span.mdi-cog" element
     And wait very long for the page to be loaded
     And I follow "Course maintenance"

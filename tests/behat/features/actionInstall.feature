@@ -3,7 +3,6 @@ Feature: Install portal
 
   Scenario: Installation process
     Given I am on "/main/install/index.php"
-    And I wait for the page to be loaded when ready
     Then I should see "Step 1 - Installation Language"
     Then I press "Next"
     Then I should see "Step 2 - Requirements"
@@ -13,7 +12,6 @@ Feature: Install portal
     Then I check "accept_licence"
     Then I press "license-next"
     Then I should see "Step 4 - Database settings"
-    Then wait for the page to be loaded
     Then I fill in the following:
       | dbUsernameForm | root |
       | dbPassForm | root |
@@ -32,7 +30,6 @@ Feature: Install portal
     Then I press "step5"
     And I wait for the page to be loaded
     Then I should see "Step 6 - Last check before install"
-    When I wait for the page to be loaded
     And I press "button_step6"
     And I wait one minute for the page to be loaded
     Then I should see "Step 7"

@@ -5,7 +5,6 @@ Feature: Work tool
   Scenario: Create a work
     Given I am a platform administrator
     And I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I follow "Assignments"
     Then I click the "span.mdi-folder-plus" element
     And I wait for the page to be loaded
@@ -19,7 +18,6 @@ Feature: Work tool
   Scenario: Edit a work
     Given I am a platform administrator
     And I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I follow "Assignments"
     And wait very long for the page to be loaded
     And I follow "Work 1"
@@ -38,7 +36,6 @@ Feature: Work tool
     Given I am not logged
     Given I am a student
     And I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I follow "Assignments"
     And I wait for the page to be loaded
     Then I should see "Work 1"
@@ -57,7 +54,6 @@ Feature: Work tool
     Given I am not logged
     Given I am a platform administrator
     And I am on course "TEMP" homepage
-    And I wait for the page to be loaded
     And I follow "Assignments"
     And wait for the page to be loaded
     And I follow "Work 1"

@@ -1,11 +1,11 @@
 default:
   extensions:
     Behat\MinkExtension:
-      base_url: http://localhost
+      base_url: http://my.chamilo.net
       default_session: selenium2
       javascript_session: selenium2
       selenium2:
-        wd_host: "http://127.0.0.1:4444"
+        wd_host: "http://127.0.0.1:4444/wd/hub"
         browser: chrome
         capabilities:
           browserName: chrome
@@ -17,6 +17,8 @@ default:
                 - "--disable-dev-shm-usage"
                 - "--disable-gpu"
                 - "--window-size=1920,1080"
+            "goog:loggingPrefs":
+              browser: "ALL"
       files_path: "%paths.base%/../../"
   suites:
     default:

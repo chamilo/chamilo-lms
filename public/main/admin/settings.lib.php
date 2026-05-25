@@ -121,7 +121,7 @@ function handleRegions()
         $pluginVersion = htmlspecialchars($metadata['version'], ENT_QUOTES);
         $pluginComment = plugin_render_comment_preview((string) $metadata['comment']);
         $selectedRegions = plugin_get_assigned_regions_safe($pluginName);
-        $regionOptions = plugin_get_available_region_options($metadata);
+        $regionOptions = plugin_get_available_region_options($metadata, $pluginName);
         $pluginUrl = plugin_get_management_url($pluginName) ?? plugin_get_plugins_admin_url($pluginName);
 
         $isSelectedPlugin = $selectedPluginName === $pluginName;
@@ -331,6 +331,17 @@ function getStablePluginAllowList(): array
         'SurveyExportCsv',
         'SurveyExportTxt',
         'UserRemoteService',
+        'MigrationMoodle',
+        'EmbedRegistry',
+        'SearchCourse',
+        'Rss',
+        'Dictionary',
+        'GoogleMaps',
+        'BeforeLogin',
+        'CourseBlock',
+        'CustomFooter',
+        'CustomCertificate',
+        'NoSearchIndex',
     ];
 }
 
@@ -746,9 +757,14 @@ function plugin_get_region_labels(): array
         'course_tool_plugin' => 'Course tool',
         'content_top' => 'Above page content',
         'content_bottom' => 'Below page content',
+        'login_top' => 'Above login form',
+        'login_bottom' => 'Below login form',
         'main_top' => 'Top of main layout',
         'main_bottom' => 'Bottom of main layout',
         'pre_footer' => 'Before footer',
+        'footer_left' => 'Footer left',
+        'footer_center' => 'Footer center',
+        'footer_right' => 'Footer right',
     ];
 }
 
@@ -772,9 +788,14 @@ function plugin_get_region_descriptions(): array
         'course_tool_plugin' => get_lang('Recommended for plugins that must appear as course tools.'),
         'content_top' => get_lang('Displayed above the main page content.'),
         'content_bottom' => get_lang('Displayed below the main page content.'),
+        'login_top' => get_lang('Displayed above the public login form.'),
+        'login_bottom' => get_lang('Displayed below the public login form.'),
         'main_top' => get_lang('Displayed near the top of the main layout shell.'),
         'main_bottom' => get_lang('Displayed near the bottom of the main layout shell.'),
-        'pre_footer' => get_lang('Recommended for global floating or persistent plugins shown before the footer.'),
+        'pre_footer' => get_lang('Displayed before the footer area.'),
+        'footer_left' => get_lang('Displayed in the left footer column.'),
+        'footer_center' => get_lang('Displayed in the center footer column.'),
+        'footer_right' => get_lang('Displayed in the right footer column.'),
     ];
 }
 
@@ -873,9 +894,31 @@ function plugin_render_comment_preview(string $comment): string
 /**
  * Build the selectable region list according to plugin type.
  */
-function plugin_get_available_region_options(array $metadata): array
+function plugin_get_available_region_options(array $metadata, string $pluginName = ''): array
 {
     $labels = plugin_get_region_labels();
+
+    if ('BeforeLogin' === $pluginName) {
+        return [
+            'login_top' => $labels['login_top'].' (login_top)',
+            'login_bottom' => $labels['login_bottom'].' (login_bottom)',
+        ];
+    }
+
+    if ('CourseBlock' === $pluginName) {
+        return [
+            'pre_footer' => $labels['pre_footer'].' (pre_footer)',
+            'footer_left' => $labels['footer_left'].' (footer_left)',
+            'footer_center' => $labels['footer_center'].' (footer_center)',
+            'footer_right' => $labels['footer_right'].' (footer_right)',
+        ];
+    }
+
+    if ('CustomFooter' === $pluginName) {
+        return [
+            'pre_footer' => $labels['pre_footer'].' (pre_footer)',
+        ];
+    }
 
     if (!empty($metadata['is_admin_plugin'])) {
         return [

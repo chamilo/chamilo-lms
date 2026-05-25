@@ -93,6 +93,122 @@ if (is_file($courseLegalPluginPath)) {
     }
 }
 
+$courseBlockSettings = [
+    'course_block_pre_footer',
+    'course_block_footer_left',
+    'course_block_footer_center',
+    'course_block_footer_right',
+];
+
+$courseBlockPluginEntity = Container::getPluginRepository()->findOneByTitle('CourseBlock');
+$courseBlockPluginConfiguration = $courseBlockPluginEntity?->getConfigurationsByAccessUrl($currentAccessUrl);
+
+$isCourseBlockEnabled = $courseBlockPluginEntity
+    && $courseBlockPluginEntity->isInstalled()
+    && $courseBlockPluginConfiguration
+    && $courseBlockPluginConfiguration->isActive();
+
+$courseBlockPlugin = null;
+$courseBlockPluginPath = api_get_path(SYS_PLUGIN_PATH).'CourseBlock/CourseBlockPlugin.php';
+
+if (is_file($courseBlockPluginPath)) {
+    require_once $courseBlockPluginPath;
+
+    if (class_exists('CourseBlockPlugin')) {
+        $courseBlockPlugin = CourseBlockPlugin::create();
+    }
+}
+
+$courseBlockAppPlugin = null;
+
+if ($isCourseBlockEnabled) {
+    $courseBlockAppPlugin = AppPlugin::getInstance();
+}
+
+$customCertificateSettings = [
+    'customcertificate_course_enable',
+    'use_certificate_default',
+];
+
+$customCertificatePluginEntity = Container::getPluginRepository()->findOneByTitle('CustomCertificate');
+$customCertificatePluginConfiguration = $customCertificatePluginEntity?->getConfigurationsByAccessUrl($currentAccessUrl);
+
+$isCustomCertificateEnabled = $customCertificatePluginEntity
+    && $customCertificatePluginEntity->isInstalled()
+    && $customCertificatePluginConfiguration
+    && $customCertificatePluginConfiguration->isActive();
+
+$customCertificatePlugin = null;
+$customCertificatePluginPath = api_get_path(SYS_PLUGIN_PATH).'CustomCertificate/src/CustomCertificatePlugin.php';
+
+if ($isCustomCertificateEnabled && is_file($customCertificatePluginPath)) {
+    require_once $customCertificatePluginPath;
+
+    if (class_exists('CustomCertificatePlugin')) {
+        $customCertificatePlugin = CustomCertificatePlugin::create();
+    }
+}
+
+$customCertificateAppPlugin = null;
+
+if ($isCustomCertificateEnabled) {
+    $customCertificateAppPlugin = AppPlugin::getInstance();
+}
+
+if (!function_exists('customcertificate_save_course_setting')) {
+    function customcertificate_save_course_setting(string $variable, int $value, int $courseId): void
+    {
+        $courseId = (int) $courseId;
+
+        if ($courseId <= 0 || !\in_array($variable, ['customcertificate_course_enable', 'use_certificate_default'], true)) {
+            return;
+        }
+
+        $courseSettingTable = Database::get_course_table(TABLE_COURSE_SETTING);
+        $escapedVariable = Database::escape_string($variable);
+        $escapedValue = Database::escape_string((string) $value);
+        $escapedTitle = Database::escape_string($variable);
+
+        $sql = "SELECT variable
+                FROM $courseSettingTable
+                WHERE c_id = $courseId AND variable = '$escapedVariable'
+                LIMIT 1";
+        $result = Database::query($sql);
+
+        if (Database::num_rows($result) > 0) {
+            $sql = "UPDATE $courseSettingTable
+                    SET value = '$escapedValue'
+                    WHERE c_id = $courseId AND variable = '$escapedVariable'";
+            Database::query($sql);
+
+            return;
+        }
+
+        $sql = "INSERT INTO $courseSettingTable (c_id, variable, value, title)
+                VALUES ($courseId, '$escapedVariable', '$escapedValue', '$escapedTitle')";
+        Database::query($sql);
+    }
+}
+
+if (!function_exists('customcertificate_save_course_settings_mode')) {
+    function customcertificate_save_course_settings_mode(string $mode, int $courseId): void
+    {
+        $courseValue = 0;
+        $defaultValue = 0;
+
+        if ('course' === $mode) {
+            $courseValue = 1;
+        }
+
+        if ('default' === $mode) {
+            $defaultValue = 1;
+        }
+
+        customcertificate_save_course_setting('customcertificate_course_enable', $courseValue, $courseId);
+        customcertificate_save_course_setting('use_certificate_default', $defaultValue, $courseId);
+    }
+}
+
 $show_delete_watermark_text_message = false;
 if ('true' === api_get_setting('pdf_export_watermark_by_course')) {
     if (isset($_GET['delete_watermark'])) {
@@ -1014,6 +1130,86 @@ if ('true' === api_get_setting('certificate.allow_public_certificates')) {
     );
 }
 
+if ($isCustomCertificateEnabled && null !== $customCertificatePlugin) {
+    $customCertificateUrl = api_get_path(WEB_PLUGIN_PATH).'CustomCertificate/start.php?'.api_get_cidreq();
+    $customCertificateCourseIsEnabled = 1 == api_get_course_setting('customcertificate_course_enable');
+    $customCertificateDefaultIsEnabled = 1 == api_get_course_setting('use_certificate_default');
+    $customCertificateCanOpenEditor = $customCertificateCourseIsEnabled || $customCertificateDefaultIsEnabled;
+
+    $customCertificateMode = 'disabled';
+    if ($customCertificateCourseIsEnabled) {
+        $customCertificateMode = 'course';
+    }
+    if ($customCertificateDefaultIsEnabled) {
+        $customCertificateMode = 'default';
+    }
+
+    $values['customcertificate_mode'] = $customCertificateMode;
+
+    $customCertificateModeGroup = [
+        $form->createElement(
+            'radio',
+            'customcertificate_mode',
+            null,
+            $customCertificatePlugin->get_lang('Disabled'),
+            'disabled'
+        ),
+        $form->createElement(
+            'radio',
+            'customcertificate_mode',
+            null,
+            $customCertificatePlugin->get_lang('UseCourseCustomCertificate'),
+            'course'
+        ),
+        $form->createElement(
+            'radio',
+            'customcertificate_mode',
+            null,
+            $customCertificatePlugin->get_lang('UseDefaultCustomCertificate'),
+            'default'
+        ),
+    ];
+
+    if ($customCertificateCanOpenEditor) {
+        $customCertificateAction = '<a class="btn btn--primary text-white" style="color: #fff;" href="'.$customCertificateUrl.'">'
+            .'<span class="mdi mdi-certificate-outline text-white" style="color: #fff;" aria-hidden="true"></span> '
+            .'<span class="text-white" style="color: #fff;">'.$customCertificatePlugin->get_lang('CertificateSetting').'</span>'
+            .'</a>';
+    } else {
+        $customCertificateAction = '<span class="btn btn--plain disabled" aria-disabled="true">'
+            .'<span class="mdi mdi-certificate-outline" aria-hidden="true"></span> '
+            .$customCertificatePlugin->get_lang('CertificateSetting')
+            .'</span>'
+            .'<p class="text-muted mt-2">'
+            .$customCertificatePlugin->get_lang('SelectOneOptionBeforeOpeningEditor')
+            .'</p>';
+    }
+
+    $customCertificateInfo = $form->createElement(
+        'html',
+        '<div class="mb-4">'
+        .'<p class="mb-3">'
+        .$customCertificatePlugin->get_lang('ChooseCustomCertificateModeHelp')
+        .'</p>'
+        .$customCertificateAction
+        .'</div>'
+    );
+
+    $customCertificateSaveButton = $form->addButtonSave(get_lang('Save settings'), 'submit_save', true);
+
+    $form->addPanelOption(
+        'custom_certificate',
+        $customCertificatePlugin->get_title(),
+        [
+            $customCertificateInfo,
+            $customCertificatePlugin->get_lang('CertificateMode') => $customCertificateModeGroup,
+            '' => $customCertificateSaveButton,
+        ],
+        ObjectIcon::CERTIFICATE,
+        false
+    );
+}
+
 // Forum settings
 $myButton = $form->addButtonSave(get_lang('Save settings'), 'submit_save', true);
 
@@ -1227,6 +1423,66 @@ if ($isImsLtiEnabled) {
     );
 }
 
+if ($isCourseBlockEnabled) {
+    $courseBlockTitle = $courseBlockPlugin
+        ? $courseBlockPlugin->get_title()
+        : get_lang('Course block');
+
+    $courseBlockEditorConfig = [
+        'ToolbarSet' => 'Documents',
+        'Width' => '100%',
+        'Height' => '220',
+    ];
+
+    $form->addStartPanel(
+        'course_block',
+        $courseBlockTitle,
+        true,
+        ToolIcon::PLUGIN
+    );
+
+    $form->addHtml(
+        '<div class="mb-4">'
+        .'<p class="mb-3">'
+        .get_lang('Add custom content blocks to course footer regions.')
+        .'</p>'
+        .'</div>'
+    );
+
+    $form->addHtmlEditor(
+        'course_block_pre_footer',
+        $courseBlockPlugin ? $courseBlockPlugin->get_lang('course_block_pre_footer') : get_lang('Before footer'),
+        false,
+        false,
+        $courseBlockEditorConfig
+    );
+    $form->addHtmlEditor(
+        'course_block_footer_left',
+        $courseBlockPlugin ? $courseBlockPlugin->get_lang('course_block_footer_left') : get_lang('Footer left'),
+        false,
+        false,
+        $courseBlockEditorConfig
+    );
+    $form->addHtmlEditor(
+        'course_block_footer_center',
+        $courseBlockPlugin ? $courseBlockPlugin->get_lang('course_block_footer_center') : get_lang('Footer center'),
+        false,
+        false,
+        $courseBlockEditorConfig
+    );
+    $form->addHtmlEditor(
+        'course_block_footer_right',
+        $courseBlockPlugin ? $courseBlockPlugin->get_lang('course_block_footer_right') : get_lang('Footer right'),
+        false,
+        false,
+        $courseBlockEditorConfig
+    );
+
+    $form->addButtonSave(get_lang('Save settings'), 'submit_save');
+
+    $form->addEndPanel();
+}
+
 if ($isCourseHomeNotifyEnabled) {
     $courseHomeNotifyTitle = $courseHomeNotifyPlugin
         ? $courseHomeNotifyPlugin->get_title()
@@ -1386,6 +1642,10 @@ $defaultCourseSettings = [
     // Certificates
     'allow_public_certificates' => 0,
 
+    // CustomCertificate plugin
+    'customcertificate_course_enable' => 0,
+    'use_certificate_default' => 0,
+
     // Forum settings (Yes=1, No=2)
     'hide_forum_notifications' => 2,
     'subscribe_users_to_forum_notifications' => 2,
@@ -1419,6 +1679,15 @@ $values['activate_legal'] = $courseEntity->getActivateLegal();
 $values['show_score'] = $_course['show_score'] ?? 0;
 
 $courseSettings = CourseManager::getCourseSettingVariables();
+
+if ($isCourseBlockEnabled) {
+    $courseSettings = array_values(array_unique(array_merge($courseSettings, $courseBlockSettings)));
+}
+
+if ($isCustomCertificateEnabled) {
+    $courseSettings = array_values(array_unique(array_merge($courseSettings, $customCertificateSettings)));
+}
+
 foreach ($courseSettings as $setting) {
     $result = api_get_course_setting($setting);
 
@@ -1464,6 +1733,24 @@ if (!isset($values['student_validate_own_attendance'])) {
 
 if (!isset($values['email_alert_student_on_manual_subscription'])) {
     $values['email_alert_student_on_manual_subscription'] = 0;
+}
+
+if ($isCustomCertificateEnabled) {
+    foreach ($customCertificateSettings as $customCertificateSetting) {
+        if (!isset($values[$customCertificateSetting])) {
+            $values[$customCertificateSetting] = 0;
+        }
+    }
+
+    $values['customcertificate_mode'] = 'disabled';
+
+    if (1 == $values['customcertificate_course_enable']) {
+        $values['customcertificate_mode'] = 'course';
+    }
+
+    if (1 == $values['use_certificate_default']) {
+        $values['customcertificate_mode'] = 'default';
+    }
 }
 
 // Auto-launch: compute the selected UI option from stored flags
@@ -1953,6 +2240,16 @@ if ($form->validate()) {
             break;
     }
 
+    if ($isCustomCertificateEnabled) {
+        foreach ($customCertificateSettings as $customCertificateSetting) {
+            $updateValues[$customCertificateSetting] = !empty($submittedValues[$customCertificateSetting]) ? 1 : 0;
+        }
+
+        if (!empty($updateValues['use_certificate_default'])) {
+            $updateValues['customcertificate_course_enable'] = 0;
+        }
+    }
+
     // Persist main course entity
     $courseEntity
         ->setTitle($updateValues['title'])
@@ -1985,11 +2282,31 @@ if ($form->validate()) {
         }
     }
 
+    if ($isCustomCertificateEnabled) {
+        $customCertificateMode = $submittedValues['customcertificate_mode'] ?? 'disabled';
+
+        if (!\in_array($customCertificateMode, ['disabled', 'course', 'default'], true)) {
+            $customCertificateMode = 'disabled';
+        }
+
+        customcertificate_save_course_settings_mode($customCertificateMode, api_get_course_int_id());
+    }
+
     // Insert/Update course_settings table
     $quizNotificationSettingSaved = false;
 
     foreach ($courseSettings as $setting) {
         $value = $updateValues[$setting] ?? null;
+
+        if ($isCourseBlockEnabled && \in_array($setting, $courseBlockSettings, true)) {
+            // CourseBlock fields are added as panel elements and can be missing from exportValues()
+            // on some branches. Read the raw POST value to avoid saving null.
+            $value = $submittedValues[$setting] ?? '';
+        }
+
+        if ($isCustomCertificateEnabled && \in_array($setting, $customCertificateSettings, true)) {
+            continue;
+        }
 
         if ('email_alert_manager_on_new_quiz' === $setting) {
             // Store checkbox values as a stable CSV string.
@@ -1997,11 +2314,35 @@ if ($form->validate()) {
             $quizNotificationSettingSaved = true;
         }
 
+        $pluginContext = null;
+
+        if (\in_array($setting, $courseBlockSettings, true)) {
+            $pluginContext = $courseBlockAppPlugin;
+        }
+
+        if ($isCustomCertificateEnabled && \in_array($setting, $customCertificateSettings, true)) {
+            $pluginContext = $customCertificateAppPlugin;
+        }
+
         CourseManager::saveCourseConfigurationSetting(
             $setting,
             $value,
-            api_get_course_int_id()
+            api_get_course_int_id(),
+            $pluginContext
         );
+    }
+
+    if ($isCourseBlockEnabled && null !== $courseBlockAppPlugin) {
+        foreach ($courseBlockSettings as $setting) {
+            $value = $submittedValues[$setting] ?? '';
+
+            CourseManager::saveCourseConfigurationSetting(
+                $setting,
+                $value,
+                api_get_course_int_id(),
+                $courseBlockAppPlugin
+            );
+        }
     }
 
     if (!$quizNotificationSettingSaved) {

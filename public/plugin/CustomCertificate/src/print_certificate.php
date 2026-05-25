@@ -14,8 +14,7 @@ require_once __DIR__.'/../config.php';
 
 api_block_anonymous_users();
 $plugin = CustomCertificatePlugin::create();
-$enable = 'true' == $plugin->get('enable_plugin_customcertificate');
-$tblProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
+$enable = $plugin->isEnabled(true);
 $categoryId = isset($_GET['cat_id']) ? (int) $_GET['cat_id'] : 0;
 
 if (!$enable) {
@@ -52,6 +51,27 @@ if (empty($sessionId)) {
 
 $accessUrlId = api_get_current_access_url_id();
 
+if (1 !== $default) {
+    if (empty($courseInfo) || empty($courseId)) {
+        api_not_allowed(true);
+    }
+
+    $enableCourse = 1 == api_get_course_setting('customcertificate_course_enable', $courseInfo) ? true : false;
+    $useDefault = 1 == api_get_course_setting('use_certificate_default', $courseInfo) ? true : false;
+
+    if (!$enableCourse && !$useDefault) {
+        api_not_allowed(true, $plugin->get_lang('ToolDisabledCourse'));
+    }
+}
+
+if (!empty($_GET['student_id']) && (int) $_GET['student_id'] !== api_get_user_id() && !api_is_platform_admin() && !api_is_teacher()) {
+    api_not_allowed(true);
+}
+
+if ((!empty($_GET['export_all']) || !empty($_GET['export_all_in_one'])) && !api_is_platform_admin() && !api_is_teacher()) {
+    api_not_allowed(true);
+}
+
 $userList = [];
 $exportZip = false;
 $exportAllInOne = false;
@@ -82,7 +102,7 @@ if ($sessionId > 0) {
 
 $table = Database::get_main_table(CustomCertificatePlugin::TABLE_CUSTOMCERTIFICATE);
 $useDefault = false;
-$path = api_get_path(WEB_UPLOAD_PATH).'certificates/';
+$path = '';
 
 // Get info certificate
 $infoCertificate = CustomCertificatePlugin::getInfoCertificate($courseId, $sessionId, $accessUrlId);
@@ -129,7 +149,7 @@ foreach ($userList as $userInfo) {
     if (empty($infoCertificate['background'])) {
         $htmlText .= '<div class="caraA" style="page-break-before:always; margin:0px; padding:0px;">';
     } else {
-        $urlBackground = $path.$infoCertificate['background'];
+        $urlBackground = CustomCertificatePlugin::getCertificateImageSource($infoCertificate['background']);
         $htmlText .= ' <div
         class="caraA"
         style="background-image:url('.$urlBackground.') no-repeat;
@@ -140,7 +160,7 @@ foreach ($userList as $userInfo) {
         $logoLeft = '
             <img
                 style="max-height: 150px; max-width: '.(2 * $widthCell).'mm;"
-                src="'.$path.$infoCertificate['logo_left'].'" />';
+                src="'.CustomCertificatePlugin::getCertificateImageSource($infoCertificate['logo_left']).'" />';
     } else {
         $logoLeft = '';
     }
@@ -150,7 +170,7 @@ foreach ($userList as $userInfo) {
         $logoCenter = '
             <img
                 style="max-height: 150px; max-width: '.intval($workSpace - (2 * $widthCell)).'mm;"
-                src="'.$path.$infoCertificate['logo_center'].'" />';
+                src="'.CustomCertificatePlugin::getCertificateImageSource($infoCertificate['logo_center']).'" />';
     }
 
     $logoRight = '';
@@ -158,7 +178,7 @@ foreach ($userList as $userInfo) {
         $logoRight = '
             <img
                 style="max-height: 150px; max-width: '.(2 * $widthCell).'mm;"
-                src="'.$path.$infoCertificate['logo_right'].'" />';
+                src="'.CustomCertificatePlugin::getCertificateImageSource($infoCertificate['logo_right']).'" />';
     }
 
     $htmlText .= '<table
@@ -184,7 +204,7 @@ foreach ($userList as $userInfo) {
         false
     );
 
-    $myContentHtml = $infoCertificate['content_course'];
+    $myContentHtml = Security::remove_XSS((string) $infoCertificate['content_course']);
     $myContentHtml = str_replace(chr(13).chr(10).chr(13).chr(10), chr(13).chr(10), $myContentHtml);
     $infoToBeReplacedInContentHtml = $allUserInfo[0];
     $infoToReplaceInContentHtml = $allUserInfo[1];
@@ -225,7 +245,7 @@ foreach ($userList as $userInfo) {
 
     $dateExpediction = '';
     if (3 != $infoCertificate['type_date_expediction']) {
-        $dateExpediction .= $plugin->get_lang('ExpedictionIn').' '.$infoCertificate['place'];
+        $dateExpediction .= $plugin->get_lang('ExpedictionIn').' '.Security::remove_XSS((string) $infoCertificate['place']);
         if (1 == $infoCertificate['type_date_expediction']) {
             $dateExpediction .= $plugin->get_lang('to').api_format_date(time(), DATE_FORMAT_LONG);
         } elseif (2 == $infoCertificate['type_date_expediction']) {
@@ -289,16 +309,16 @@ foreach ($userList as $userInfo) {
 
     $htmlText .= '<tr>';
     $htmlText .= '<td colspan="2" class="seals" style="width:'.$widthCell.'mm">'.
-                ((!empty($infoCertificate['signature_text1'])) ? $infoCertificate['signature_text1'] : '').
+                ((!empty($infoCertificate['signature_text1'])) ? Security::remove_XSS((string) $infoCertificate['signature_text1']) : '').
                 '</td>
                 <td colspan="2" class="seals" style="width:'.$widthCell.'mm">'.
-                ((!empty($infoCertificate['signature_text2'])) ? $infoCertificate['signature_text2'] : '').
+                ((!empty($infoCertificate['signature_text2'])) ? Security::remove_XSS((string) $infoCertificate['signature_text2']) : '').
                 '</td>
                 <td colspan="2" class="seals" style="width:'.$widthCell.'mm">'.
-                ((!empty($infoCertificate['signature_text3'])) ? $infoCertificate['signature_text3'] : '').
+                ((!empty($infoCertificate['signature_text3'])) ? Security::remove_XSS((string) $infoCertificate['signature_text3']) : '').
                 '</td>
                 <td colspan="2" class="seals" style="width:'.$widthCell.'mm">'.
-                ((!empty($infoCertificate['signature_text4'])) ? $infoCertificate['signature_text4'] : '').
+                ((!empty($infoCertificate['signature_text4'])) ? Security::remove_XSS((string) $infoCertificate['signature_text4']) : '').
                 '</td>
                 <td colspan="4" class="seals" style="width:'.(2 * $widthCell).'mm">
                     '.((!empty($infoCertificate['seal'])) ? $plugin->get_lang('Seal') : '').
@@ -308,31 +328,31 @@ foreach ($userList as $userInfo) {
     $htmlText .= '<td colspan="2" class="logo-seals" style="width:'.$widthCell.'mm">'.
                 ((!empty($infoCertificate['signature1']))
                 ? '<img style="max-height: 100px; max-width: '.$widthCell.'mm;"
-                    src="'.$path.$infoCertificate['signature1'].'" />'
+                    src="'.CustomCertificatePlugin::getCertificateImageSource($infoCertificate['signature1']).'" />'
                 : '').
                 '</td>
                 <td colspan="2" class="logo-seals" style="width:'.$widthCell.'mm">'.
                 ((!empty($infoCertificate['signature2']))
                 ? '<img style="max-height: 100px; '.$widthCell.'mm;"
-                    src="'.$path.$infoCertificate['signature2'].'" />'
+                    src="'.CustomCertificatePlugin::getCertificateImageSource($infoCertificate['signature2']).'" />'
                 : '').
                 '</td>
                 <td colspan="2" class="logo-seals" style="width:'.$widthCell.'mm">'.
                 ((!empty($infoCertificate['signature3']))
                 ? '<img style="max-height: 100px; '.$widthCell.'mm;"
-                    src="'.$path.$infoCertificate['signature3'].'" />'
+                    src="'.CustomCertificatePlugin::getCertificateImageSource($infoCertificate['signature3']).'" />'
                 : '').
                 '</td>
                 <td colspan="2" class="logo-seals" style="width:'.$widthCell.'mm">'.
                 ((!empty($infoCertificate['signature4']))
                 ? '<img style="max-height: 100px; '.$widthCell.'mm;"
-                    src="'.$path.$infoCertificate['signature4'].'" />'
+                    src="'.CustomCertificatePlugin::getCertificateImageSource($infoCertificate['signature4']).'" />'
                 : '').
                 '</td>
                 <td colspan="4" class="logo-seals" style="width:'.(2 * $widthCell).'mm">'.
                 ((!empty($infoCertificate['seal']))
                 ? '<img style="max-height: 100px; '.(2 * $widthCell).'mm;"
-                    src="'.$path.$infoCertificate['seal'].'" />'
+                    src="'.CustomCertificatePlugin::getCertificateImageSource($infoCertificate['seal']).'" />'
                 : '').
                 '</td>';
     $htmlText .= '</tr>';
@@ -385,14 +405,7 @@ foreach ($userList as $userInfo) {
                     continue;
                 }
 
-                $sql = "SELECT 1
-                        FROM $tblProperty
-                        WHERE tool = 'learnpath_category'
-                        AND ref = $categoryId
-                        AND visibility = 0
-                        AND (session_id = $sessionId OR session_id IS NULL)";
-                $res = Database::query($sql);
-                if (Database::num_rows($res) > 0) {
+                if (CustomCertificatePlugin::isLegacyItemPropertyHidden('learnpath_category', $categoryId, $sessionId)) {
                     continue;
                 }
 
@@ -419,13 +432,7 @@ foreach ($userList as $userInfo) {
 
                 foreach ($flat_list as $learnpath) {
                     $lpId = $learnpath['lp_old_id'];
-                    $sql = "SELECT 1
-                            FROM $tblProperty
-                            WHERE tool = 'learnpath'
-                            AND ref = $lpId AND visibility = 0
-                            AND (session_id = $sessionId OR session_id IS NULL)";
-                    $res = Database::query($sql);
-                    if (Database::num_rows($res) > 0) {
+                    if (CustomCertificatePlugin::isLegacyItemPropertyHidden('learnpath', $lpId, $sessionId)) {
                         continue;
                     }
                     $lpName = $learnpath['lp_name'];

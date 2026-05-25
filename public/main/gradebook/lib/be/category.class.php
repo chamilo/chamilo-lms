@@ -2136,13 +2136,18 @@ class Category implements GradebookItem
         $my_certificate = GradebookUtils::get_certificate_by_user_id($categoryId, $user_id);
 
         if (!empty($my_certificate)) {
-            $pathToCertificate = $category
-                ->getDocument()
-                ->getResourceNode()
-                ->getResourceFiles()
-                ->first()
-                ->getFile()
-                ->getPathname();
+            $pathToCertificate = '';
+            try {
+                $document = $category->getDocument();
+                if ($document && $document->getResourceNode()) {
+                    $resourceFile = $document->getResourceNode()->getResourceFiles()->first();
+                    if ($resourceFile && method_exists($resourceFile, 'getFile') && $resourceFile->getFile()) {
+                        $pathToCertificate = $resourceFile->getFile()->getPathname();
+                    }
+                }
+            } catch (\Throwable $e) {
+                $pathToCertificate = '';
+            }
 
             $certificate_obj = new Certificate(
                 $my_certificate['id'],
@@ -2154,7 +2159,12 @@ class Category implements GradebookItem
 
             $fileWasGenerated = $certificate_obj->isHtmlFileGenerated();
 
-            if ('true' === api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate')) {
+            $customCertificatePluginFile = api_get_path(SYS_PLUGIN_PATH).'CustomCertificate/src/CustomCertificatePlugin.php';
+            if (is_file($customCertificatePluginFile)) {
+                require_once $customCertificatePluginFile;
+            }
+
+            if (class_exists('CustomCertificatePlugin')) {
                 $infoCertificate = CustomCertificatePlugin::getCertificateData($my_certificate['id'], $user_id);
                 if (!empty($infoCertificate)) {
                     $fileWasGenerated = true;

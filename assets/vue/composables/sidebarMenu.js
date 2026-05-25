@@ -226,6 +226,9 @@ export function useSidebarMenu() {
     securityStore.isAdmin || securityStore.isTeacher || securityStore.isHRM || securityStore.isSessionAdmin
 
   const buyCoursesConfig = computed(() => platformConfigStore.plugins?.buycourses || {})
+  const searchCourseConfig = computed(() => platformConfigStore.plugins?.searchcourse || {})
+  const rssConfig = computed(() => platformConfigStore.plugins?.rss || {})
+  const dictionaryConfig = computed(() => platformConfigStore.plugins?.dictionary || {})
 
   const showBuyCoursesMenuItem = computed(() => {
     if (!securityStore.isAuthenticated) {
@@ -237,6 +240,54 @@ export function useSidebarMenu() {
 
   const buyCoursesIndexPath = computed(() => {
     return buyCoursesConfig.value?.indexPath || "/plugin/BuyCourses/index.php"
+  })
+
+  const showSearchCourseMenuItem = computed(() => {
+    if (!securityStore.isAuthenticated) {
+      return false
+    }
+
+    return normalizeBooleanFlag(searchCourseConfig.value?.enabled)
+  })
+
+  const searchCourseIndexPath = computed(() => {
+    return searchCourseConfig.value?.indexPath || "/plugin/SearchCourse/index.php"
+  })
+
+  const searchCourseMenuTitle = computed(() => {
+    return searchCourseConfig.value?.title || t("Search courses")
+  })
+
+  const showRssMenuItem = computed(() => {
+    if (!securityStore.isAuthenticated) {
+      return false
+    }
+
+    return normalizeBooleanFlag(rssConfig.value?.enabled)
+  })
+
+  const rssIndexPath = computed(() => {
+    return rssConfig.value?.indexPath || "/plugin/Rss/index.php"
+  })
+
+  const rssMenuTitle = computed(() => {
+    return rssConfig.value?.title || t("RSS feed")
+  })
+
+  const showDictionaryMenuItem = computed(() => {
+    if (!securityStore.isAuthenticated) {
+      return false
+    }
+
+    return normalizeBooleanFlag(dictionaryConfig.value?.enabled)
+  })
+
+  const dictionaryIndexPath = computed(() => {
+    return dictionaryConfig.value?.indexPath || "/plugin/Dictionary/index.php"
+  })
+
+  const dictionaryMenuTitle = computed(() => {
+    return dictionaryConfig.value?.title || t("Dictionary")
   })
 
   const allowStudentCatalogue = computed(() => {
@@ -345,6 +396,30 @@ export function useSidebarMenu() {
         icon: "mdi mdi-cart-outline",
         label: t("Buy courses"),
         url: buyCoursesIndexPath.value,
+      })
+    }
+
+    if (showSearchCourseMenuItem.value) {
+      items.push({
+        icon: "mdi mdi-book-search-outline",
+        label: searchCourseMenuTitle.value,
+        url: searchCourseIndexPath.value,
+      })
+    }
+
+    if (showDictionaryMenuItem.value) {
+      items.push({
+        icon: "mdi mdi-book-open-page-variant-outline",
+        label: dictionaryMenuTitle.value,
+        url: dictionaryIndexPath.value,
+      })
+    }
+
+    if (showRssMenuItem.value) {
+      items.push({
+        icon: "mdi mdi-rss",
+        label: rssMenuTitle.value,
+        url: rssIndexPath.value,
       })
     }
 

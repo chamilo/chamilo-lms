@@ -75,3 +75,18 @@ $strings['QuestionDelete'] = "Do you want to delete the specific diploma and use
 $strings['SuccessDelete'] = "Successfully deleted";
 $strings['ProblemDelete'] = "Problem deleting the certificate";
 $strings['OnlyCustomCertificates'] = "Only courses with a personalized certificate are exported";
+$strings['CertificateMode'] = "Certificate mode";
+$strings['UseCourseCustomCertificate'] = "Use course-specific custom certificate";
+$strings['UseDefaultCustomCertificate'] = "Use platform default custom certificate";
+
+$strings['CreateCertificateWithTags'] = 'Create the certificate using these tags';
+
+$strings['DeleteCertificate'] = 'Delete certificate';
+
+$strings['SaveCertificate'] = 'Save certificate';
+
+$strings['SelectOneOptionBeforeOpeningEditor'] = 'Select one option and save settings before opening the certificate editor.';
+
+$strings['ChooseCustomCertificateModeHelp'] = 'Choose how this course should use custom certificates.';
+
+$strings['CouldNotSaveCertificate'] = 'Could not save certificate configuration.';

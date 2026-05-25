@@ -342,6 +342,7 @@ function getStablePluginAllowList(): array
         'CustomFooter',
         'CustomCertificate',
         'NoSearchIndex',
+        'NotebookTeacher',
     ];
 }
 

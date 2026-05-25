@@ -25,6 +25,7 @@ use Symfony\Component\HttpFoundation\{BinaryFileResponse,
     Response,
     ResponseHeaderBag,
     StreamedResponse};
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Mime\MimeTypes;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -78,10 +79,17 @@ class DropboxController extends AbstractController
 
     /**
      * Pull Chamilo context (cid/sid/gid) from query string.
+     *
+     * cid is mandatory: every dropbox endpoint operates on a course, and CidReqListener
+     * only authorizes (CourseVoter::VIEW) when ?cid is present and non-zero. Rejecting
+     * here keeps the listener as the single source of truth for course access control.
      */
     private function context(Request $r): array
     {
         $cid = (int) $r->query->get('cid', 0);
+        if ($cid <= 0) {
+            throw new BadRequestHttpException('Missing or invalid cid');
+        }
         $sid = $r->query->get('sid') ? (int) $r->query->get('sid') : null;
         $gid = $r->query->get('gid') ? (int) $r->query->get('gid') : null;
 
@@ -91,23 +99,14 @@ class DropboxController extends AbstractController
     #[Route('/recipients', name: 'dropbox_recipients', methods: ['GET'])]
     public function recipients(Request $r): JsonResponse
     {
-        [$cid, $sid, $gid] = $this->context($r);
+        // context() rejects requests without a valid cid; CidReqListener has already
+        // enforced CourseVoter::VIEW upstream so we can trust the resolved course.
+        [$cid, $sid] = $this->context($r);
         $me = (int) $this->getUser()?->getId();
 
-        if ($cid <= 0) {
-            $ref = (string) $r->headers->get('referer', '');
-            if ($ref && preg_match('#/resources/dropbox/(\d+)/#', $ref, $m)) {
-                $cid = (int) $m[1];
-            }
-        }
-
-        if ($cid <= 0) {
-            return $this->json(['message' => 'Missing course id (cid)'], 400);
-        }
-
         $course = $this->em->getRepository(Course::class)->find($cid);
-        if (!$course) {
-            return $this->json(['message' => 'Course not found'], 404);
+        if (!$course instanceof Course) {
+            throw $this->createNotFoundException('Course not found');
         }
 
         $allowMailing = 'true' === $this->settingsManager->getSetting('dropbox.dropbox_allow_mailing', true)
@@ -447,6 +446,9 @@ class DropboxController extends AbstractController
     #[Route('/files/{id<\d+>}/download', name: 'dropbox_file_download', methods: ['GET'])]
     public function download(int $id, Request $r, ResourceFileHelper $resourceFileHelper): Response
     {
+        // context() rejects requests without a valid cid; CidReqListener has already
+        // enforced CourseVoter::VIEW upstream. The consistency check below then rejects
+        // attempts to download a file that does not belong to the authorized course.
         [$cid] = $this->context($r);
 
         $file = $this->fileRepo->find($id);

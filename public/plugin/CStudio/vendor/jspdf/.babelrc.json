@@ -1,4 +1,0 @@
-{
-  "presets": [["@babel/env"]],
-  "exclude": ["node_modules/**"]
-}

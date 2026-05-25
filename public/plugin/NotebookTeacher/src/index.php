@@ -14,20 +14,19 @@ api_protect_course_script(true);
 $_setting['student_view_enabled'] = 'false';
 
 $plugin = NotebookTeacherPlugin::create();
-$enable = 'true' == $plugin->get('enable_plugin_notebookteacher');
 
-if (!$enable) {
+if (!$plugin->isEnabled(true)) {
     api_not_allowed(true, $plugin->get_lang('ToolDisabled'));
 }
 
-$allow = api_is_teacher() || api_is_drh();
+$allow = api_is_allowed_to_edit(false, true) || api_is_drh();
 if (!$allow) {
     api_not_allowed(true);
 }
 
 $current_course_tool = $plugin->get_lang('NotebookTeacher');
 $notebookId = isset($_GET['notebook_id']) ? (int) $_GET['notebook_id'] : 0;
-$studentId = isset($_GET['student_id']) ? $_GET['student_id'] : 0;
+$studentId = isset($_GET['student_id']) ? (int) $_GET['student_id'] : 0;
 $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
 $currentUrl = api_get_self().'?'.api_get_cidreq().'&student_id='.$studentId;
 
@@ -99,15 +98,27 @@ switch ($action) {
             // Tool introduction
             Display::display_introduction_section($noteBookTeacher);
 
-            echo '<div class="actions">';
-            echo '<a href="index.php">'.
-                Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to the notes list')).
+            echo '<section class="w-full px-6 py-4 space-y-4">';
+            echo '<div class="rounded-2xl border border-gray-25 bg-white p-5 shadow-sm">';
+            echo '<div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">';
+            echo '<div>';
+            echo '<h2 class="text-2xl font-semibold text-gray-90">'.get_lang('Add new note in my personal notebook').'</h2>';
+            echo '<p class="mt-1 text-sm text-gray-50">'.$plugin->get_lang('TeacherNotesHelp').'</p>';
+            echo '</div>';
+            $backLabel = Security::remove_XSS(get_lang('Back to the notes list'));
+            echo '<a href="index.php?'.api_get_cidreq().'&student_id='.$studentId.'" class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-gray-25 bg-white text-primary shadow-sm transition hover:bg-primary/10" title="'.$backLabel.'" aria-label="'.$backLabel.'">'.
+                '<span class="mdi mdi-arrow-left text-xl" aria-hidden="true"></span>'.
+                '<span class="sr-only">'.$backLabel.'</span>'.
                 '</a>';
             echo '</div>';
+            echo '</div>';
+            echo '<div class="rounded-2xl border border-gray-25 bg-white p-5 shadow-sm">';
             $token = Security::get_token();
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(['sec_token' => $token]);
             $form->display();
+            echo '</div>';
+            echo '</section>';
         }
 
         break;
@@ -159,31 +170,54 @@ switch ($action) {
 
             // Tool introduction
             Display::display_introduction_section($noteBookTeacher);
-            echo '<div class="actions">';
-            echo '<a href="index.php">'.
-                Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to the notes list')).'</a>';
+            echo '<section class="w-full px-6 py-4 space-y-4">';
+            echo '<div class="rounded-2xl border border-gray-25 bg-white p-5 shadow-sm">';
+            echo '<div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">';
+            echo '<div>';
+            echo '<h2 class="text-2xl font-semibold text-gray-90">'.get_lang('Edit my personal note').'</h2>';
+            echo '<p class="mt-1 text-sm text-gray-50">'.$plugin->get_lang('TeacherNotesHelp').'</p>';
             echo '</div>';
+            $backLabel = Security::remove_XSS(get_lang('Back to the notes list'));
+            echo '<a href="index.php?'.api_get_cidreq().'&student_id='.$studentId.'" class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-gray-25 bg-white text-primary shadow-sm transition hover:bg-primary/10" title="'.$backLabel.'" aria-label="'.$backLabel.'">'.
+                '<span class="mdi mdi-arrow-left text-xl" aria-hidden="true"></span>'.
+                '<span class="sr-only">'.$backLabel.'</span>'.
+                '</a>';
+            echo '</div>';
+            echo '</div>';
+            echo '<div class="rounded-2xl border border-gray-25 bg-white p-5 shadow-sm">';
             $token = Security::get_token();
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(['sec_token' => $token]);
             $form->display();
+            echo '</div>';
+            echo '</section>';
         }
 
         break;
     case 'deletenote':
+        if (!Security::check_token('get')) {
+            Display::addFlash(Display::return_message(get_lang('Invalid token'), 'error'));
+            header('Location: '.$currentUrl);
+            exit;
+        }
+
         $res = NotebookTeacher::deleteNote($notebookId);
         if ($res) {
             Display::addFlash(Display::return_message(get_lang('Note deleted'), 'confirmation'));
         }
+
         header('Location: '.$currentUrl);
         exit;
 
         break;
     case 'changeview':
-        if (in_array($_GET['view'], ['creation_date', 'update_date', 'title'])) {
-            switch ($_GET['view']) {
+        $view = isset($_GET['view']) ? Security::remove_XSS($_GET['view']) : '';
+        $direction = isset($_GET['direction']) ? strtoupper(Security::remove_XSS($_GET['direction'])) : 'ASC';
+
+        if (in_array($view, ['creation_date', 'update_date', 'title'])) {
+            switch ($view) {
                 case 'creation_date':
-                    if (!$_GET['direction'] || 'ASC' == $_GET['direction']) {
+                    if ('ASC' === $direction) {
                         Display::addFlash(
                             Display::return_message(get_lang('Notes sorted by creation date ascendant'), 'confirmation')
                         );
@@ -195,7 +229,7 @@ switch ($action) {
 
                     break;
                 case 'update_date':
-                    if (!$_GET['direction'] || 'ASC' == $_GET['direction']) {
+                    if ('ASC' === $direction) {
                         Display::addFlash(
                             Display::return_message(get_lang('Notes sorted by update date ascendant'), 'confirmation')
                         );
@@ -207,7 +241,7 @@ switch ($action) {
 
                     break;
                 case 'title':
-                    if (!$_GET['direction'] || 'ASC' == $_GET['direction']) {
+                    if ('ASC' === $direction) {
                         Display::addFlash(Display::return_message(get_lang('Notes sorted by title ascendant'), 'confirmation'));
                     } else {
                         Display::addFlash(Display::return_message(get_lang('Notes sorted by title downward'), 'confirmation'));
@@ -215,7 +249,7 @@ switch ($action) {
 
                     break;
             }
-            Session::write('notebook_view', Security::remove_XSS($_GET['view']));
+            Session::write('notebook_view', $view);
             header('Location: '.$currentUrl);
             exit;
         }

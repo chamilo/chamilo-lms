@@ -92,6 +92,14 @@ final class CToolStateProvider implements ProviderInterface
 
         /** @var CTool $cTool */
         foreach ($result as $cTool) {
+            if ($this->shouldSkipUnavailableTeacherOnlyLegacyCourseTool($cTool)) {
+                continue;
+            }
+
+            if ($this->shouldHideTeacherOnlyLegacyCourseTool($cTool, (bool) $isAllowToEdit, $studentView)) {
+                continue;
+            }
+
             $resolved = $this->resolveToolModelFromCTool($cTool);
             if (null === $resolved) {
                 continue;
@@ -100,6 +108,11 @@ final class CToolStateProvider implements ProviderInterface
             /** @var AbstractTool $toolModel */
             $toolModel = $resolved['model'];
             $resolvedName = $resolved['name'];
+            $legacyPlugin = $resolved['plugin'] ?? null;
+
+            if ($this->shouldHideLegacyPluginCourseTool($legacyPlugin, (bool) $isAllowToEdit, $studentView)) {
+                continue;
+            }
 
             if ($restrictToPositioning && $allowedToolName && $resolvedName !== $allowedToolName) {
                 continue;
@@ -156,7 +169,7 @@ final class CToolStateProvider implements ProviderInterface
     /**
      * Resolve a tool model from ToolChain first, then fallback to a legacy plugin course tool.
      *
-     * @return array{model: AbstractTool, name: string}|null
+     * @return array{model: AbstractTool, name: string, plugin?: Plugin}|null
      */
     private function resolveToolModelFromCTool(CTool $cTool): ?array
     {
@@ -179,16 +192,16 @@ final class CToolStateProvider implements ProviderInterface
 
         $legacyTool = $this->resolveLegacyPluginTool($rawTitle, $courseToolTitle);
         if (null !== $legacyTool) {
-            return [
-                'model' => $legacyTool,
-                'name' => $legacyTool->getTitle(),
-            ];
+            return $legacyTool;
         }
 
         return null;
     }
 
-    private function resolveLegacyPluginTool(string $rawTitle, string $courseToolTitle): ?AbstractTool
+    /**
+     * @return array{model: AbstractTool, name: string, plugin: Plugin}|null
+     */
+    private function resolveLegacyPluginTool(string $rawTitle, string $courseToolTitle): ?array
     {
         foreach ([$rawTitle, $courseToolTitle] as $candidate) {
             $candidate = trim($candidate);
@@ -196,24 +209,153 @@ final class CToolStateProvider implements ProviderInterface
                 continue;
             }
 
-            try {
-                $plugin = $this->pluginHelper->loadLegacyPlugin($candidate);
-            } catch (Throwable) {
-                continue;
-            }
-
+            $plugin = $this->loadLegacyPluginFromToolTitle($candidate);
             if (!$plugin instanceof Plugin
-                || !$plugin->isEnabled()
+                || !$plugin->isEnabled(true)
                 || !$plugin->isCoursePlugin
                 || !$plugin->addCourseTool
             ) {
                 continue;
             }
 
-            return LegacyPluginCourseTool::fromLegacyPlugin($plugin, $courseToolTitle);
+            $legacyTool = LegacyPluginCourseTool::fromLegacyPlugin($plugin, $courseToolTitle);
+
+            return [
+                'model' => $legacyTool,
+                'name' => $legacyTool->getTitle(),
+                'plugin' => $plugin,
+            ];
         }
 
         return null;
+    }
+
+    private function loadLegacyPluginFromToolTitle(string $candidate): ?Plugin
+    {
+        try {
+            $plugin = $this->pluginHelper->loadLegacyPlugin($candidate);
+            if ($plugin instanceof Plugin) {
+                return $plugin;
+            }
+        } catch (Throwable) {
+            // Try class-name fallbacks below.
+        }
+
+        foreach ($this->buildLegacyPluginClassCandidates($candidate) as $className) {
+            if (!class_exists($className) || !method_exists($className, 'create')) {
+                continue;
+            }
+
+            try {
+                $plugin = $className::create();
+            } catch (Throwable) {
+                continue;
+            }
+
+            if ($plugin instanceof Plugin) {
+                return $plugin;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Build possible legacy plugin class names from a stored tool title.
+     *
+     * @return string[]
+     */
+    private function buildLegacyPluginClassCandidates(string $rawTitle): array
+    {
+        $rawTitle = trim($rawTitle);
+        if ('' === $rawTitle) {
+            return [];
+        }
+
+        $studly = implode('', array_map('ucfirst', preg_split('/[^a-z0-9]+/i', $rawTitle) ?: []));
+        $compact = preg_replace('/[^a-z0-9]+/i', '', $rawTitle) ?: $rawTitle;
+
+        return array_values(array_unique(array_filter([
+            $rawTitle,
+            $rawTitle.'Plugin',
+            $studly,
+            $studly.'Plugin',
+            $compact,
+            $compact.'Plugin',
+        ], static fn ($value): bool => \is_string($value) && '' !== trim($value))));
+    }
+
+    private function shouldHideLegacyPluginCourseTool(?Plugin $plugin, bool $isAllowToEdit, ?string $studentView): bool
+    {
+        if (!$plugin instanceof Plugin) {
+            return false;
+        }
+
+        $visibility = $plugin->getToolIconVisibilityPerUserStatus();
+
+        if (Plugin::TAB_FILTER_NO_STUDENT === $visibility) {
+            return !$isAllowToEdit || 'studentview' === $studentView;
+        }
+
+        if (Plugin::TAB_FILTER_ONLY_STUDENT === $visibility) {
+            return $isAllowToEdit && 'studentview' !== $studentView;
+        }
+
+        return false;
+    }
+
+    private function shouldSkipUnavailableTeacherOnlyLegacyCourseTool(CTool $cTool): bool
+    {
+        if (!$this->isTeacherOnlyLegacyCourseTool($cTool)) {
+            return false;
+        }
+
+        foreach ($this->getLegacyPluginToolTitleCandidates($cTool) as $candidate) {
+            try {
+                if ($this->pluginHelper->isPluginEnabled($candidate)) {
+                    return false;
+                }
+            } catch (Throwable) {
+                // Try next candidate.
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getLegacyPluginToolTitleCandidates(CTool $cTool): array
+    {
+        $toolTitle = trim((string) $cTool->getTool()->getTitle());
+        $courseToolTitle = trim((string) $cTool->getTitle());
+
+        return array_values(array_unique(array_filter([
+            $toolTitle,
+            $courseToolTitle,
+            'NotebookTeacher',
+            'Teacher notes',
+            'teacher_notes',
+        ], static fn ($value): bool => \is_string($value) && '' !== trim($value))));
+    }
+
+    private function shouldHideTeacherOnlyLegacyCourseTool(CTool $cTool, bool $isAllowToEdit, ?string $studentView): bool
+    {
+        if (!$this->isTeacherOnlyLegacyCourseTool($cTool)) {
+            return false;
+        }
+
+        return !$isAllowToEdit || 'studentview' === $studentView;
+    }
+
+    private function isTeacherOnlyLegacyCourseTool(CTool $cTool): bool
+    {
+        $toolTitle = strtolower(trim((string) $cTool->getTool()->getTitle()));
+        $courseToolTitle = strtolower(trim((string) $cTool->getTitle()));
+
+        return \in_array($toolTitle, ['notebookteacher', 'teacher notes', 'teacher notebook'], true)
+            || \in_array($courseToolTitle, ['notebookteacher', 'teacher notes', 'teacher notebook'], true);
     }
 
     /**

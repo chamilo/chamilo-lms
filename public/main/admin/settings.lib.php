@@ -341,6 +341,7 @@ function getStablePluginAllowList(): array
         'CourseBlock',
         'CustomFooter',
         'CustomCertificate',
+        'NoSearchIndex',
     ];
 }
 

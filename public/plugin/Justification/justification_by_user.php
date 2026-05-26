@@ -3,17 +3,40 @@
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
-$allowSessionAdmins = api_get_plugin_setting('justification', 'access_for_session_admin') === 'true';
+$plugin = Justification::create();
+$allowSessionAdmins = $plugin->canSessionAdminsManageUsers();
+
 api_protect_admin_script($allowSessionAdmins);
 
 $tool = 'justification';
-$plugin = Justification::create();
+
+$action = isset($_REQUEST['a']) ? $_REQUEST['a'] : '';
+$id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
+$userId = isset($_REQUEST['user_id']) ? (int) $_REQUEST['user_id'] : 0;
+
+switch ($action) {
+    case 'delete':
+        if (!Security::check_token('get')) {
+            api_not_allowed(true);
+        }
+
+        Security::clear_token();
+
+        if ($plugin->deleteUserJustification($id)) {
+            Display::addFlash(Display::return_message(get_lang('Deleted')));
+        }
+
+        header('Location: '.api_get_self().'?user_id='.$userId);
+        exit;
+}
 
 $tpl = new Template($tool);
 $fields = [];
+$tpl->assign('list', []);
+$tpl->assign('user_info', null);
 
 $form = new FormValidator('search', 'get');
-$form->addHeader('Search');
+$form->addHeader(get_lang('Search'));
 $form->addSelectAjax(
     'user_id',
     get_lang('User'),
@@ -25,10 +48,8 @@ $form->addSelectAjax(
 $form->addButtonSearch(get_lang('Search'));
 $tpl->assign('form', $form->returnForm());
 
-$userId = isset($_REQUEST['user_id']) ? (int) $_REQUEST['user_id'] : 0;
-
 if ($form->validate()) {
-    $userId = $form->getSubmitValue('user_id');
+    $userId = (int) $form->getSubmitValue('user_id');
 }
 
 if ($userId) {
@@ -40,9 +61,14 @@ if ($userId) {
                 $item['date_validity'] = Display::label($item['date_validity'], 'warning');
             }
             $item['justification'] = $plugin->getJustification($item['justification_document_id']);
+            $fileLabel = basename((string) $item['file_path']);
+            if ('' === $fileLabel) {
+                $fileLabel = $plugin->get_lang('DownloadFile');
+            }
+
             $item['file_path'] = Display::url(
-                $item['file_path'],
-                api_get_uploaded_web_url('justification', $item['id'], $item['file_path']),
+                $fileLabel,
+                $plugin->getUserJustificationDownloadUrl((int) $item['id']),
                 ['target' => '_blank']
             );
         }
@@ -54,16 +80,16 @@ if ($userId) {
 }
 
 $tpl->assign('user_id', $userId);
+$tpl->assign('token', Security::get_token());
 $content = $tpl->fetch('Justification/view/justification_user_list.tpl');
-
-$actionLinks = '';
-
-$action = isset($_REQUEST['a']) ? $_REQUEST['a'] : '';
-$id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
 
 switch ($action) {
     case 'edit':
         $userJustification = $plugin->getUserJustification($id);
+        if (empty($userJustification)) {
+            api_not_allowed(true);
+        }
+
         $userInfo = api_get_user_info($userJustification['user_id']);
         $form = new FormValidator('edit', 'post', api_get_self().'?a=edit&id='.$id.'&user_id='.$userId);
         $form->addHeader($userInfo['complete_name']);
@@ -71,34 +97,39 @@ switch ($action) {
         $element->setValue($userJustification['date_validity']);
         $form->addButtonUpdate(get_lang('Update'));
         $form->setDefaults($userJustification);
-        $content = $form->returnForm();
+        $content = '
+<section class="w-full space-y-6">
+    <div class="rounded-2xl border border-gray-25 bg-white p-6 shadow-sm">
+        <div class="flex items-start gap-4">
+            <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                <span class="mdi mdi-calendar-edit text-2xl"></span>
+            </div>
+            <div>
+                <h2 class="text-2xl font-semibold text-gray-90">'.$plugin->get_lang('EditUserJustification').'</h2>
+                <p class="text-sm text-gray-50">'.$plugin->get_lang('EditUserJustificationHelp').'</p>
+            </div>
+        </div>
+    </div>
+    <div class="rounded-2xl border border-gray-25 bg-white p-6 shadow-sm">
+        '.$form->returnForm().'
+    </div>
+</section>';
 
         if ($form->validate()) {
             $values = $form->getSubmitValues();
             $date = Database::escape_string($values['date_validity']);
-            $sql = "UPDATE justification_document_rel_users SET date_validity = '$date' WHERE id = $id";
+            $sql = "UPDATE ".Justification::TABLE_DOCUMENT_REL_USER."
+                    SET date_validity = '$date'
+                    WHERE id = $id";
             Database::query($sql);
             Display::addFlash(Display::return_message(get_lang('Updated')));
             header('Location: '.api_get_self().'?user_id='.$userId);
             exit;
         }
         break;
-    case 'delete':
-        $userJustification = $plugin->getUserJustification($id);
-        if ($userJustification) {
-            api_remove_uploaded_file_by_id('justification', $id, $userJustification['file_path']);
-
-            $sql = "DELETE FROM justification_document_rel_users WHERE id = $id";
-            Database::query($sql);
-
-            Display::addFlash(Display::return_message(get_lang('Deleted')));
-        }
-        header('Location: '.api_get_self().'?user_id='.$userId);
-        exit;
-        break;
 }
 
-$actionLinks .= Display::toolbarButton(
+$actionLinks = Display::toolbarButton(
     $plugin->get_lang('Back'),
     api_get_path(WEB_PLUGIN_PATH).'Justification/list.php',
     'arrow-left',

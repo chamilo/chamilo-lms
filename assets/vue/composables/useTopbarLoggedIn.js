@@ -1,4 +1,4 @@
-import { computed, ref } from "vue"
+import { computed, onMounted, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { storeToRefs } from "pinia"
 import { useI18n } from "vue-i18n"
@@ -314,6 +314,45 @@ export function useTopbarLoggedIn(props) {
 
   const showMyServicesLink = computed(() => normalizeBooleanFlag(buyCoursesConfig.value?.enabled))
 
+  const justificationMenu = ref({
+    enabled: false,
+    label: "My justifications",
+    url: "/plugin/Justification/upload.php",
+  })
+
+  const showMyJustificationsLink = computed(() => !isAnonymous.value && justificationMenu.value.enabled === true)
+
+  async function fetchJustificationMenu() {
+    if (isAnonymous.value) {
+      justificationMenu.value.enabled = false
+
+      return
+    }
+
+    try {
+      const response = await fetch("/plugin/Justification/user_menu.php", {
+        method: "GET",
+        credentials: "same-origin",
+        headers: { Accept: "application/json" },
+      })
+
+      if (!response.ok) {
+        throw new Error("Request failed: " + response.status)
+      }
+
+      const data = await response.json()
+
+      justificationMenu.value = {
+        enabled: data?.enabled === true,
+        label: data?.label || "My justifications",
+        url: data?.url || "/plugin/Justification/upload.php",
+      }
+    } catch (e) {
+      console.warn("[Topbar] Failed to load Justification user menu", e)
+      justificationMenu.value.enabled = false
+    }
+  }
+
   const skillsToolAllowed = computed(() => isSettingEnabled(platformConfigStore, "skill.allow_skills_tool"))
 
   const certificatesSearchAllowed = computed(() =>
@@ -383,6 +422,14 @@ export function useTopbarLoggedIn(props) {
         ],
       },
     ]
+
+    if (showMyJustificationsLink.value) {
+      items[0].items.push({
+        label: justificationMenu.value.label || t("My justifications"),
+        url: justificationMenu.value.url || "/plugin/Justification/upload.php",
+        icon: "mdi mdi-file-document-check-outline",
+      })
+    }
 
     if (showPendingSurveys.value) {
       items[0].items.push({
@@ -471,6 +518,10 @@ export function useTopbarLoggedIn(props) {
     const unreadCount = messageRelUserStore.countUnread
 
     return unreadCount > 9 ? "9+" : unreadCount > 0 ? unreadCount.toString() : null
+  })
+
+  onMounted(() => {
+    fetchJustificationMenu()
   })
 
   if (messagingEnabled.value) {

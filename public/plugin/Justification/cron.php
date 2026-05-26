@@ -4,7 +4,7 @@
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
 $plugin = Justification::create();
-$courseId = api_get_setting('justification_default_course_id', 'justification');
+$courseId = $plugin->getDefaultCourseId();
 
 echo 'Justification CRON - '.api_get_local_time().PHP_EOL;
 

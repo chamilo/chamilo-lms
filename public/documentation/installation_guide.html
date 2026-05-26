@@ -219,6 +219,19 @@ After setting up this virtual host, don't forget to enable it (example here on D
   <pre>
 a2ensite [my.chamilo.local]
 systemctl restart apache2</pre>
+
+    <h4>Behind a reverse proxy</h4>
+    If you are installing Chamilo behind a reverse proxy that will handle the 
+    HTTPS communication, you will need to check for these two elements:
+    <ul>
+	    <li><em>.env</em> should define <em>TRUSTER_PROXIES</em> as the (internal) IP address of your reverse proxy (ot proxies) (i.e. <em>TRUSTED_PROXIES=192.168.118.2,::1</em>)</li>
+	    <li>your Apache VirtualHost should state *specifically* that you want HTTPS, through something like this: <em>SetEnvIf X-Forwarded-Proto "^https$" HTTPS=on</em></li>
+    </ul>
+    You should then reload Apache to take this new VHost configuration into account.<br />
+    Enabling mod_rpaf and defining TRUSTED_PROXIES in .env *without* adding the <em>SetEnvIF</em> above in your VHost config will result in some links (quiz answers, quarter stats, ...) being called in AJAX mode, using an HTTP version of the link.
+    
+
+
     <h3>3.4. Files permissions</h3>
     <a id="cli-install-permissions" class="anchor"></a>
     Make sure the following files and folders are writeable by the web server during the installation. Set permissions to 0770 or the owner to www-data, for example:
@@ -265,6 +278,7 @@ sudo chown -R www-data:www-data var/ config/ .env</pre>
       The files from Chamilo 1.11.* will be used as source but they will be copied and rearranged
       in the new Chamilo 2 installation, so you will have to indicate a source for the files to the (web or CLI) installer.<br>
       Note the extra pages created in 1.11.x and stored under app/home/ are *not* migrated. They will need to be created again in Chamilo 2 using the "pages" feature.
+      In the VirtualHost configuration, don't forget to point the DocumentRoot towards the public/ subdirectory of Chamilo.
 
     <h3>4.3. PHP settings</h3>
     <a id="cli-upgrade-php" class="anchor"></a>

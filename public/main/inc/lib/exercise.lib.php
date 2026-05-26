@@ -5086,13 +5086,15 @@ EOT;
                     true
                 );
             } else {
-                $pluginEvaluation = QuestionOptionsEvaluationPlugin::create();
-                if ('true' === $pluginEvaluation->get(QuestionOptionsEvaluationPlugin::SETTING_ENABLE)) {
-                    $formula = $pluginEvaluation->getFormulaForExercise($objExercise->getId());
+                if (class_exists(QuestionOptionsEvaluationPlugin::class)) {
+                    $pluginEvaluation = QuestionOptionsEvaluationPlugin::create();
+                    if ($pluginEvaluation->isEnabled()) {
+                        $formula = $pluginEvaluation->getFormulaForExercise($objExercise->getId());
 
-                    if (!empty($formula)) {
-                        $total_score = $pluginEvaluation->getResultWithFormula($exeId, $formula);
-                        $total_weight = $pluginEvaluation->getMaxScore();
+                        if (!empty($formula)) {
+                            $total_score = $pluginEvaluation->getResultWithFormula($exeId, $formula);
+                            $total_weight = $pluginEvaluation->getMaxScore();
+                        }
                     }
                 }
 
@@ -5872,20 +5874,62 @@ EOT;
      */
     public static function getAdditionalTeacherActions($exerciseId, $iconSize = ICON_SIZE_SMALL)
     {
-        $additionalActions = api_get_setting('exercise.exercise_additional_teacher_modify_actions', true) ?: [];
+        $additionalActions = self::normalizeAdditionalTeacherActions(
+            api_get_setting('exercise.exercise_additional_teacher_modify_actions', true)
+        );
         $actions = [];
 
-        if (is_array($additionalActions)) {
-            foreach ($additionalActions as $additionalAction) {
-                $actions[] = call_user_func(
-                    $additionalAction,
-                    $exerciseId,
-                    $iconSize
-                );
+        foreach ($additionalActions as $additionalAction) {
+            if (!is_callable($additionalAction)) {
+                continue;
+            }
+
+            $action = call_user_func(
+                $additionalAction,
+                $exerciseId,
+                $iconSize
+            );
+
+            if (!empty($action)) {
+                $actions[] = $action;
             }
         }
 
         return implode(PHP_EOL, $actions);
+    }
+
+    private static function normalizeAdditionalTeacherActions($additionalActions): array
+    {
+        if (empty($additionalActions)) {
+            return [];
+        }
+
+        if (is_array($additionalActions)) {
+            return array_values($additionalActions);
+        }
+
+        if (!is_string($additionalActions)) {
+            return [];
+        }
+
+        $decoded = json_decode($additionalActions, true);
+        if (JSON_ERROR_NONE === json_last_error() && is_array($decoded)) {
+            return array_values($decoded);
+        }
+
+        $unserialized = @unserialize($additionalActions, ['allowed_classes' => false]);
+        if (is_array($unserialized)) {
+            return array_values($unserialized);
+        }
+
+        return array_values(
+            array_filter(
+                array_map(
+                    'trim',
+                    preg_split('/\s*,\s*/', $additionalActions) ?: []
+                )
+            )
+        );
     }
 
     /**
@@ -6121,11 +6165,13 @@ EOT;
         $totalScore = 0;
         $totalWeight = 0;
 
-        $pluginEvaluation = QuestionOptionsEvaluationPlugin::create();
-
-        $formula = 'true' === $pluginEvaluation->get(QuestionOptionsEvaluationPlugin::SETTING_ENABLE)
-            ? $pluginEvaluation->getFormulaForExercise($exerciseId)
-            : 0;
+        $formula = 0;
+        if (class_exists(QuestionOptionsEvaluationPlugin::class)) {
+            $pluginEvaluation = QuestionOptionsEvaluationPlugin::create();
+            if ($pluginEvaluation->isEnabled()) {
+                $formula = $pluginEvaluation->getFormulaForExercise($exerciseId);
+            }
+        }
 
         if (empty($formula)) {
             foreach ($questionList as $questionId) {

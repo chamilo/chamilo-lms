@@ -344,6 +344,7 @@ function getStablePluginAllowList(): array
         'NoSearchIndex',
         'NotebookTeacher',
         'Justification',
+        'QuestionOptionsEvaluation',
     ];
 }
 

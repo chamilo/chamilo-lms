@@ -913,13 +913,11 @@ if (!empty($end_of_message) && ('learnpath' === $origin)) {
 
 $totalScoreText = '';
 
-if (MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY != $answerType) {
+if (MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY != $answerType && class_exists('QuestionOptionsEvaluationPlugin')) {
     $pluginEvaluation = QuestionOptionsEvaluationPlugin::create();
-
-    if ('true' === $pluginEvaluation->get(QuestionOptionsEvaluationPlugin::SETTING_ENABLE)) {
+    if ($pluginEvaluation->isEnabled()) {
         $formula = $pluginEvaluation->getFormulaForExercise($objExercise->getId());
-
-        if (!empty($formula)) {
+        if ($pluginEvaluation->shouldApplyFormula($formula)) {
             $totalScore = $pluginEvaluation->getResultWithFormula($id, $formula);
             $totalWeighting = $pluginEvaluation->getMaxScore();
         }

@@ -99,6 +99,9 @@ parameters:
                 # When false, the role is only applied when creating a new user; existing users keep their current Chamilo role.
                 synch_user_role_on_update: true
                 data_correspondence:
+                    # Each value is either:
+                    #   - an LDAP attribute name to read from the entry  (e.g. 'givenName')
+                    #   - a hardcoded value prefixed with "="            (e.g. '=ROLE_STUDENT')
                     firstname: 'givenName'
                     lastname: 'sn'
                     email: 'mail'
@@ -108,7 +111,7 @@ parameters:
                     active: null
                     admin: null
                     # Extra user fields: prefix the Chamilo field variable with "extra_".
-                    # The value is the LDAP attribute name to read from.
+                    # The value is the LDAP attribute name to read from (or a hardcoded "=VALUE").
                     # Example — sync the extra field "oauth2id" from the LDAP attribute "employeeID":
                     #   extra_oauth2id: 'employeeID'
                 object_class: 'inetOrgPerson'

@@ -323,8 +323,12 @@ class LdapSyncUsersCommand extends Command
                 continue;
             }
 
-            $attr = $entry->getAttribute($dataCorrespondence[$key]);
-            $value = $attr[0] ?? '';
+            $attrConfig = $dataCorrespondence[$key];
+            if (str_starts_with($attrConfig, '=')) {
+                $value = substr($attrConfig, 1);
+            } else {
+                $value = ($entry->getAttribute($attrConfig) ?? [])[0] ?? '';
+            }
 
             if ('active' === $key) {
                 $user->{$setter}((int) $value);
@@ -358,7 +362,10 @@ class LdapSyncUsersCommand extends Command
                 continue;
             }
 
-            $value = ($entry->getAttribute((string) $ldapAttr) ?? [])[0] ?? null;
+            $ldapAttrStr = (string) $ldapAttr;
+            $value = str_starts_with($ldapAttrStr, '=')
+                ? substr($ldapAttrStr, 1)
+                : ($entry->getAttribute($ldapAttrStr) ?? [])[0] ?? null;
             $this->extraFieldValuesRepo->updateItemData($extraField, $user, $value);
         }
     }

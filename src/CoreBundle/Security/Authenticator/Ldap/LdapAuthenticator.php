@@ -257,7 +257,10 @@ class LdapAuthenticator extends AbstractAuthenticator implements InteractiveAuth
 
         foreach ($fieldsMap as $key => $setter) {
             if (isset($this->dataCorrespondence[$key]) && $fieldKey = $this->dataCorrespondence[$key]) {
-                $value = ($ldapEntry->getAttribute((string) $fieldKey) ?? [])[0] ?? '';
+                $fieldKey = (string) $fieldKey;
+                $value = str_starts_with($fieldKey, '=')
+                    ? substr($fieldKey, 1)
+                    : ($ldapEntry->getAttribute($fieldKey) ?? [])[0] ?? '';
                 if ('active' === $key) {
                     $user->{$setter}((int) $value);
                 } elseif ('role' === $key) {
@@ -306,7 +309,10 @@ class LdapAuthenticator extends AbstractAuthenticator implements InteractiveAuth
                 continue;
             }
 
-            $value = ($ldapEntry->getAttribute((string) $ldapAttr) ?? [])[0] ?? null;
+            $ldapAttrStr = (string) $ldapAttr;
+            $value = str_starts_with($ldapAttrStr, '=')
+                ? substr($ldapAttrStr, 1)
+                : ($ldapEntry->getAttribute($ldapAttrStr) ?? [])[0] ?? null;
             $this->extraFieldValuesRepo->updateItemData($extraField, $user, $value);
         }
     }

@@ -464,10 +464,14 @@ function bbb_admin_render_records(array $meeting, BbbPlugin $plugin): string
         return '<span class="text-gray-50">'.bbb_admin_escape($plugin->get_lang('NoRecording')).'</span>';
     }
 
-    $links = (string) ($meeting['show_links'] ?? '');
+    $links = $meeting['show_links'] ?? '';
+    if (is_array($links)) {
+        $links = implode(PHP_EOL, array_filter($links, static fn ($link) => is_scalar($link)));
+    }
+    $links = (string) $links;
 
-    if ('' === trim($links)) {
-        return '<span class="text-gray-50">-</span>';
+    if ('' === trim($links) || trim($links) === $plugin->get_lang('NoRecording')) {
+        return '<span class="text-gray-50">'.bbb_admin_escape($plugin->get_lang('NoRecording')).'</span>';
     }
 
     return '<div class="flex flex-wrap">'.bbb_admin_style_action_links_html($links).'</div>';

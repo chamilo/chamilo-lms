@@ -1098,8 +1098,8 @@ class Bbb
             'remote_id' => $meeting->getRemoteId(),
             'moderator_pw' => $meeting->getModeratorPw(),
             'attendee_pw' => $meeting->getAttendeePw(),
-            'created_at' => $meeting->getCreatedAt()->format('Y-m-d H:i:s'),
-            'closed_at' => $meeting->getClosedAt()?->format('Y-m-d H:i:s'),
+            'created_at' => $this->formatMeetingDate($meeting->getCreatedAt()),
+            'closed_at' => $this->formatMeetingDate($meeting->getClosedAt()),
             'visibility' => $meeting->getVisibility(),
             'video_url' => $meeting->getVideoUrl(),
             'has_video_m4v' => $meeting->isHasVideoM4v(),
@@ -1141,8 +1141,8 @@ class Bbb
                 'remote_id' => $meeting->getRemoteId(),
                 'moderator_pw' => $meeting->getModeratorPw(),
                 'attendee_pw' => $meeting->getAttendeePw(),
-                'created_at' => $meeting->getCreatedAt()->format('Y-m-d H:i:s'),
-                'closed_at' => $meeting->getClosedAt()?->format('Y-m-d H:i:s'),
+                'created_at' => $this->formatMeetingDate($meeting->getCreatedAt()),
+                'closed_at' => $this->formatMeetingDate($meeting->getClosedAt()),
                 'visibility' => $meeting->getVisibility(),
                 'video_url' => $meeting->getVideoUrl(),
                 'has_video_m4v' => $meeting->isHasVideoM4v(),
@@ -1259,17 +1259,27 @@ class Bbb
                 if (!empty($recordings) && (!isset($recordings['messageKey']) || $recordings['messageKey'] !== 'noRecordings')) {
                     $record = end($recordings);
                     if (isset($record['playbackFormat'])) {
-                        $recordLink = array();
+                        $recordLinks = [];
                         foreach ($record['playbackFormat'] as $format) {
-                            $this->insertMeetingFormat(intval($meeting->getId()), $format->type->__toString(), $format->url->__toString());
-                            $recordLink['record'][] = 1;
-                            $recordLink[] = Display::url(
+                            $this->insertMeetingFormat(
+                                (int) $meeting->getId(),
+                                $format->type->__toString(),
+                                $format->url->__toString()
+                            );
+                            $recordLinks[] = Display::url(
                                 $this->plugin->get_lang($format->type->__toString()),
                                 $format->url->__toString(),
                                 ['target' => '_blank', 'class' => 'btn btn--plain']
                             );
                         }
-                        $this->updateMeetingVideoUrl($meeting->getId(), $record['playbackFormatUrl']);
+
+                        if (!empty($recordLinks)) {
+                            $recordLink = implode(PHP_EOL, $recordLinks);
+                        }
+
+                        if (!empty($record['playbackFormatUrl'])) {
+                            $this->updateMeetingVideoUrl($meeting->getId(), $record['playbackFormatUrl']);
+                        }
                     }
                 }
             }
@@ -1335,6 +1345,25 @@ class Bbb
         }
     }
 
+    private function formatMeetingDate(?\DateTimeInterface $date): string
+    {
+        if (!$date) {
+            return '';
+        }
+
+        $localDate = api_get_local_time(
+            $date->format('Y-m-d H:i:s'),
+            null,
+            'UTC',
+            true,
+            true,
+            false,
+            'Y-m-d H:i:s'
+        );
+
+        return is_string($localDate) ? $localDate : '';
+    }
+
     private function convertMeetingToArray(ConferenceMeeting $meeting): array
     {
         return [
@@ -1344,8 +1373,8 @@ class Bbb
             'meeting_name' => $meeting->getTitle(),
             'status' => $meeting->getStatus(),
             'visibility' => $meeting->getVisibility(),
-            'created_at' => $meeting->getCreatedAt() instanceof \DateTime ? $meeting->getCreatedAt()->format('Y-m-d H:i:s') : '',
-            'closed_at' => $meeting->getClosedAt() instanceof \DateTime ? $meeting->getClosedAt()->format('Y-m-d H:i:s') : '',
+            'created_at' => $this->formatMeetingDate($meeting->getCreatedAt()),
+            'closed_at' => $this->formatMeetingDate($meeting->getClosedAt()),
             'record' => $meeting->isRecord() ? 1 : 0,
             'c_id' => $meeting->getCourse()?->getId() ?? 0,
             'session_id' => $meeting->getSession()?->getId() ?? 0,
@@ -2334,7 +2363,7 @@ class Bbb
         /** @var ConferenceMeetingRepository $repo */
         $repo = $em->getRepository(ConferenceMeeting::class);
 
-        // Selecciona campos que necesitamos, incluyendo remoteId
+        // Select the required fields, including the remote meeting ID.
         $qb = $repo->createQueryBuilder('m')
             ->select('m.id AS id, m.title AS title, m.remoteId AS remote_id, m.createdAt AS created_at')
             ->where('m.title = :name')
@@ -2348,9 +2377,8 @@ class Bbb
             return null;
         }
 
-        // Normalización mínima de fechas a string (opcional)
         if (!empty($row[0]['created_at']) && $row[0]['created_at'] instanceof \DateTimeInterface) {
-            $row[0]['created_at'] = $row[0]['created_at']->format('Y-m-d H:i:s');
+            $row[0]['created_at'] = $this->formatMeetingDate($row[0]['created_at']);
         }
 
         return $row[0];

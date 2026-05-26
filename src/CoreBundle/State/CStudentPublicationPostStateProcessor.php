@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\State;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
@@ -22,6 +23,7 @@ use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use GradebookUtils;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
@@ -58,6 +60,20 @@ final class CStudentPublicationPostStateProcessor implements ProcessorInterface
             $currentUser = null;
         }
 
+        // Ensure we always assign a managed User reference BEFORE any persist/flush happens.
+        // This prevents Doctrine from treating the User as a new/unknown entity.
+        $targetUserId = null;
+        if ($isUpdate && $originalUser instanceof User && null !== $originalUser->getId()) {
+            $targetUserId = $originalUser->getId();
+        } elseif (!$isUpdate && $currentUser instanceof User && null !== $currentUser->getId()) {
+            $targetUserId = $currentUser->getId();
+        }
+
+        if (null !== $targetUserId) {
+            $publication->setUser($this->entityManager->getReference(User::class, $targetUserId));
+        }
+
+        // Persist/flush (ApiPlatform default processor)
         $result = $this->persistProcessor->process($publication, $operation, $uriVariables, $context);
 
         $assignment = $publication->getAssignment();
@@ -82,6 +98,8 @@ final class CStudentPublicationPostStateProcessor implements ProcessorInterface
                 $payload = [];
             }
         }
+
+        $this->applyResourceLanguage($publication, $payload);
 
         if (\array_key_exists('qualification', $payload)) {
             $publication->setQualification((float) $payload['qualification']);
@@ -116,16 +134,6 @@ final class CStudentPublicationPostStateProcessor implements ProcessorInterface
         }
 
         $publication->setViewProperties(true);
-        if (!$isUpdate) {
-            if ($currentUser instanceof User) {
-                $publication->setUser($currentUser);
-            }
-        } else {
-            if ($originalUser instanceof User) {
-                $publication->setUser($originalUser);
-            }
-        }
-
         $this->entityManager->flush();
 
         $this->saveGradebookConfig($publication, $course, $session);
@@ -135,6 +143,68 @@ final class CStudentPublicationPostStateProcessor implements ProcessorInterface
         }
 
         return $result;
+    }
+
+    private function applyResourceLanguage(CStudentPublication $publication, array $payload): void
+    {
+        if (!\array_key_exists('language', $payload)) {
+            return;
+        }
+
+        $resourceNode = $publication->getResourceNode();
+        if (null === $resourceNode) {
+            return;
+        }
+
+        $resourceNode->setLanguage($this->findLanguage($payload['language']));
+    }
+
+    private function findLanguage(mixed $rawLanguage): ?Language
+    {
+        if (null === $rawLanguage) {
+            return null;
+        }
+
+        if (\is_array($rawLanguage)) {
+            if (isset($rawLanguage['@id'])) {
+                $rawLanguage = $rawLanguage['@id'];
+            } elseif (isset($rawLanguage['isocode'])) {
+                $rawLanguage = $rawLanguage['isocode'];
+            } elseif (isset($rawLanguage['id'])) {
+                $rawLanguage = $rawLanguage['id'];
+            }
+        }
+
+        $languageCode = trim((string) $rawLanguage);
+        if ('' === $languageCode) {
+            return null;
+        }
+
+        if (preg_match('#/api/languages/(\d+)$#', $languageCode, $matches) || ctype_digit($languageCode)) {
+            $languageId = isset($matches[1]) ? (int) $matches[1] : (int) $languageCode;
+            $language = $this->entityManager->getRepository(Language::class)->find($languageId);
+
+            if ($language instanceof Language) {
+                return $language;
+            }
+
+            throw new BadRequestHttpException('Invalid resource language.');
+        }
+
+        if (!preg_match('/^[a-zA-Z0-9_-]{1,8}$/', $languageCode)) {
+            throw new BadRequestHttpException('Invalid resource language.');
+        }
+
+        $language = $this->entityManager->getRepository(Language::class)->findOneBy([
+            'isocode' => $languageCode,
+            'available' => true,
+        ]);
+
+        if ($language instanceof Language) {
+            return $language;
+        }
+
+        throw new BadRequestHttpException('Invalid resource language.');
     }
 
     private function saveCalendarEvent(
@@ -178,11 +248,16 @@ final class CStudentPublicationPostStateProcessor implements ProcessorInterface
             $color = $agendaColors['student_publication'];
         }
 
+        $creator = $publication->getCreator();
+        if ($creator instanceof User && null !== $creator->getId()) {
+            $creator = $this->entityManager->getReference(User::class, $creator->getId());
+        }
+
         $event = (new CCalendarEvent())
             ->setTitle($eventTitle)
             ->setContent($content)
             ->setParent($course)
-            ->setCreator($publication->getCreator())
+            ->setCreator($creator)
             ->addLink(clone $courseLink)
             ->setStartDate($startDate)
             ->setEndDate($endDate)

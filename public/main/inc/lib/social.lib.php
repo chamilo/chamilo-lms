@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
+use GuzzleHttp\Client;
 
 /**
  * Class SocialManager.
@@ -909,18 +910,62 @@ class SocialManager extends UserManager
     }
 
     /**
+     * Check if a URL is safe to fetch server-side (not targeting internal resources).
+     *
+     * Blocks private/reserved IP ranges, non-HTTP schemes, and unresolvable hosts
+     * to prevent SSRF attacks (CWE-918).
+     */
+    public static function isUrlSafe(string $url): bool
+    {
+        $parsed = parse_url($url);
+
+        // Allow only http and https schemes
+        if (!isset($parsed['scheme']) || !in_array($parsed['scheme'], ['http', 'https'], true)) {
+            return false;
+        }
+
+        $host = $parsed['host'] ?? '';
+        if (empty($host)) {
+            return false;
+        }
+
+        // Resolve hostname to IP
+        $ip = gethostbyname($host);
+        if ($ip === $host) {
+            // DNS resolution failed
+            return false;
+        }
+
+        // Block private and reserved IP ranges
+        if (false === filter_var(
+                $ip,
+                FILTER_VALIDATE_IP,
+                FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
+            )) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * verify if Url Exist - Using Curl.
      */
     public static function verifyUrl(string $uri): bool
     {
+        if (!self::isUrlSafe($uri)) {
+            return false;
+        }
+
         $client = new Client();
 
         try {
             $response = $client->request('GET', $uri, [
-                'timeout' => 15,
+                'timeout' => 10,
                 'verify' => false,
+                'allow_redirects' => ['max' => 3],
                 'headers' => [
-                    'User-Agent' => $_SERVER['HTTP_USER_AGENT'],
+                    'User-Agent' => $_SERVER['HTTP_USER_AGENT'] ?? 'Chamilo',
                 ],
             ]);
 
@@ -1868,19 +1913,21 @@ class SocialManager extends UserManager
                 'content' => get_lang('Profile'),
             ],
         ];
-        $allowJustification = Container::getPluginHelper()->isPluginEnabled('Justification');
+        $justificationPlugin = Justification::create();
+        $allowJustification = $justificationPlugin->isEnabled();
         if ($allowJustification) {
-            $plugin = Justification::create();
+            $plugin = $justificationPlugin;
             $headers[] = [
                 'url' => api_get_path(WEB_CODE_PATH).'auth/justification.php',
                 'content' => $plugin->get_lang('Justification'),
             ];
         }
 
-        $allowPauseTraining = Container::getPluginHelper()->isPluginEnabled('PauseTraining');
+        $pauseTrainingPlugin = PauseTraining::create();
+        $allowPauseTraining = $pauseTrainingPlugin->isEnabled();
         $allowEdit = 'true' === api_get_plugin_setting('PauseTraining', 'allow_users_to_edit_pause_formation');
         if ($allowPauseTraining && $allowEdit) {
-            $plugin = PauseTraining::create();
+            $plugin = $pauseTrainingPlugin;
             $headers[] = [
                 'url' => api_get_path(WEB_CODE_PATH).'auth/PauseTraining.php',
                 'content' => get_lang('Pause training'),

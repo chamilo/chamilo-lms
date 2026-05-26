@@ -21,9 +21,7 @@ class NotebookTeacherPlugin extends Plugin
         parent::__construct(
             '1.1',
             'Jose Angel Ruiz - NoSoloRed (original author), Julio Montoya',
-            [
-                'enable_plugin_notebookteacher' => 'boolean',
-            ]
+            []
         );
 
         $this->isAdminPlugin = true;
@@ -37,6 +35,17 @@ class NotebookTeacherPlugin extends Plugin
         static $result = null;
 
         return $result ?: $result = new self();
+    }
+
+
+    /**
+     * Keep the course tool visible only for teachers and course editors.
+     *
+     * @return string
+     */
+    public function getToolIconVisibilityPerUserStatus()
+    {
+        return self::TAB_FILTER_NO_STUDENT;
     }
 
     /**

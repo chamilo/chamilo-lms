@@ -1,0 +1,103 @@
+<?php
+/* License: see /license.txt */
+
+// Needed in order to show the plugin title
+$strings['plugin_title'] = 'Hội nghị video Zoom';
+$strings['plugin_comment'] = 'Tích hợp hội nghị video Zoom trong khóa học và buổi học';
+
+$strings['apiKey'] = 'Khóa API';
+$strings['apiSecret'] = 'Mã bí mật API';
+$strings['verificationToken'] = 'Mã xác thực';
+$strings['enableParticipantRegistration'] = 'Bật đăng ký người tham gia';
+$strings['enableCloudRecording'] = 'Loại ghi tự động';
+$strings['enableGlobalConference'] = 'Bật hội nghị toàn cục';
+$strings['enableGlobalConferencePerUser'] = 'Bật hội nghị toàn cục theo từng người dùng';
+$strings['globalConferenceAllowRoles'] = 'Liên kết hội nghị toàn cục chỉ hiển thị cho các vai trò người dùng này';
+$strings['globalConferencePerUserAllowRoles'] = 'Liên kết hội nghị toàn cục theo từng người dùng chỉ hiển thị cho các vai trò người dùng này';
+
+$strings['enableCloudRecording_help'] = 'Yêu cầu tài khoản Zoom trả phí.
+Sẽ không hoạt động với tài khoản <em>cơ bản</em>.';
+
+// please keep these lines alphabetically sorted
+$strings['AllCourseUsersWereRegistered'] = 'Tất cả học viên khóa học đã được đăng ký';
+$strings['Agenda'] = 'Chương trình nghị sự';
+$strings['CannotRegisterWithoutEmailAddress'] = 'Không thể đăng ký nếu không có địa chỉ email';
+$strings['CopyingJoinURL'] = 'Đang sao chép URL tham gia';
+$strings['CopyJoinAsURL'] = "Sao chép URL 'tham gia với tư cách'";
+$strings['CopyToCourse'] = 'Sao chép vào khóa học';
+$strings['CouldNotCopyJoinURL'] = 'Không thể sao chép URL tham gia';
+$strings['Course'] = 'Khóa học';
+$strings['CreatedAt'] = 'Được tạo vào';
+$strings['CreateLinkInCourse'] = 'Tạo liên kết trong khóa học';
+$strings['CreateUserVideoConference'] = 'Tạo hội nghị người dùng';
+$strings['DateMeetingTitle'] = '%s: %s';
+$strings['DeleteMeeting'] = 'Xóa cuộc họp';
+$strings['DeleteFile'] = 'Xóa tệp';
+$strings['Details'] = 'Chi tiết';
+$strings['DoIt'] = 'Thực hiện';
+$strings['Duration'] = 'Thời lượng';
+$strings['DurationFormat'] = '%hh%I';
+$strings['DurationInMinutes'] = 'Thời lượng (tính bằng phút)';
+$strings['EndDate'] = 'Ngày kết thúc';
+$strings['EnterMeeting'] = 'Tham gia cuộc họp';
+$strings['ViewMeeting'] = 'Xem cuộc họp';
+$strings['Files'] = 'Tệp';
+$strings['Finished'] = 'đã kết thúc';
+$strings['FileWasCopiedToCourse'] = 'Tệp đã được sao chép vào khóa học';
+$strings['FileWasDeleted'] = 'Tệp đã được xóa';
+$strings['GlobalMeeting'] = 'Hội nghị toàn cục';
+$strings['GlobalMeetingPerUser'] = 'Hội nghị toàn cục theo từng người dùng';
+$strings['GroupUsersWereRegistered'] = 'Các thành viên nhóm đã được đăng ký';
+$strings['InstantMeeting'] = 'Cuộc họp ngay lập tức';
+$strings['Join'] = 'Tham gia';
+$strings['JoinGlobalVideoConference'] = 'Tham gia hội nghị toàn cục';
+$strings['JoinURLCopied'] = 'URL tham gia đã được sao chép';
+$strings['JoinURLToSendToParticipants'] = 'URL tham gia gửi cho người tham gia';
+$strings['LiveMeetings'] = 'Cuộc họp trực tiếp';
+$strings['LinkToFileWasCreatedInCourse'] = 'Liên kết đến tệp đã được thêm vào khóa học';
+$strings['MeetingDeleted'] = 'Cuộc họp đã bị xóa';
+$strings['MeetingsFound'] = 'Tìm thấy cuộc họp';
+$strings['MeetingUpdated'] = 'Cuộc họp đã được cập nhật';
+$strings['NewMeetingCreated'] = 'Cuộc họp mới đã được tạo';
+$strings['Password'] = 'Mật khẩu';
+$strings['RecurringWithFixedTime'] = 'Lặp lại với thời gian cố định';
+$strings['RecurringWithNoFixedTime'] = 'Lặp lại không có thời gian cố định';
+$strings['RegisterAllCourseUsers'] = 'Đăng ký tất cả người dùng khóa học';
+$strings['RegisteredUserListWasUpdated'] = 'Danh sách người dùng đã đăng ký đã được cập nhật';
+$strings['RegisteredUsers'] = 'Người dùng đã đăng ký';
+$strings['RegisterNoUser'] = 'Không đăng ký người dùng nào';
+$strings['RegisterTheseGroupMembers'] = 'Đăng ký các thành viên nhóm này';
+$strings['ScheduleAMeeting'] = 'Lên lịch cuộc họp';
+$strings['ScheduledMeeting'] = 'Cuộc họp đã lên lịch';
+$strings['ScheduledMeetings'] = 'Các cuộc họp đã lên lịch';
+$strings['ScheduleAMeeting'] = 'Lên lịch cuộc họp';
+$strings['SearchMeeting'] = 'Tìm kiếm cuộc họp';
+$strings['Session'] = 'Phiên';
+$strings['StartDate'] = 'Ngày bắt đầu';
+$strings['Started'] = 'đã bắt đầu';
+$strings['StartInstantMeeting'] = 'Bắt đầu cuộc họp ngay lập tức';
+$strings['StartMeeting'] = 'Bắt đầu cuộc họp';
+$strings['StartTime'] = 'Thời gian bắt đầu';
+$strings['Topic'] = 'Chủ đề';
+$strings['TopicAndAgenda'] = 'Chủ đề và chương trình nghị sự';
+$strings['Type'] = 'Loại';
+$strings['UpcomingMeetings'] = 'Các cuộc họp sắp tới';
+$strings['UpdateMeeting'] = 'Cập nhật cuộc họp';
+$strings['UpdateRegisteredUserList'] = 'Cập nhật danh sách người dùng đã đăng ký';
+$strings['UserRegistration'] = 'Đăng ký người dùng';
+$strings['Y-m-d H:i'] = 'Y-m-d H:i';
+$strings['Waiting'] = 'đang chờ';
+$strings['XRecordingOfMeetingXFromXDurationXDotX'] = '%s bản ghi cuộc họp %s từ %s (%s).%s';
+$strings['YouAreNotRegisteredToThisMeeting'] = 'Bạn chưa đăng ký cuộc họp này';
+$strings['ZoomVideoConferences'] = 'Hội nghị video Zoom';
+$strings['Recordings'] = 'Bản ghi';
+$strings['CreateGlobalVideoConference'] = 'Tạo hội nghị video toàn cục';
+$strings['ConferenceNotStarted'] = 'Hội nghị chưa bắt đầu';
+$strings['MeetingNotFound'] = 'Không tìm thấy cuộc họp';
+$strings['JoinURLNotAvailable'] = 'URL không khả dụng';
+$strings['Meetings'] = 'Cuộc họp';
+$strings['ConferenceType'] = 'Loại hội nghị';
+$strings['ForEveryone'] = 'Mọi người';
+$strings['SomeUsers'] = 'Một số người dùng (Chọn sau)';
+$strings['Activity'] = 'Hoạt động';
+$strings['ConferenceNotAvailable'] = 'Hội nghị không khả dụng';

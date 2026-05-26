@@ -103,7 +103,7 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
         if (FormValidator::LAYOUT_HORIZONTAL === $layout) {
             return '
                 <div class="field">
-                    <div class="p-float-label">
+                    <div class="p-floatlabel p-floatlabel-on">
                         {element}
                         {icon}
                         <label {label-for}>

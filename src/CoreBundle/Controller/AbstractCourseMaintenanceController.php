@@ -7,19 +7,15 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use __PHP_Incomplete_Class;
-use Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Builder\Cc13Capabilities;
-use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
-use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 use Chamilo\CourseBundle\Component\CourseCopy\Course;
-use DateTimeInterface;
+use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
+use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Throwable;
 use ZipArchive;
 
-use const ARRAY_FILTER_USE_BOTH;
-use const DIRECTORY_SEPARATOR;
 use const JSON_PARTIAL_OUTPUT_ON_ERROR;
 
 /**
@@ -30,7 +26,7 @@ use const JSON_PARTIAL_OUTPUT_ON_ERROR;
 abstract class AbstractCourseMaintenanceController extends AbstractController
 {
     /**
-     * Debug flag (true by default). Toggle via ?debug=0|1 or X-Debug: 0|1
+     * Debug flag (true by default). Toggle via ?debug=0|1 or X-Debug: 0|1.
      */
     protected bool $debug = true;
 
@@ -61,7 +57,7 @@ abstract class AbstractCourseMaintenanceController extends AbstractController
         // Avoid dumping huge objects
         foreach ($ctx as $k => $v) {
             if (\is_object($v)) {
-                $ctx[$k] = ['_object' => get_class($v)];
+                $ctx[$k] = ['_object' => $v::class];
             }
             if (\is_array($v) && \count($v) > 2000) {
                 $ctx[$k] = ['_array_count' => \count($v)];
@@ -94,8 +90,8 @@ abstract class AbstractCourseMaintenanceController extends AbstractController
             };
         };
 
-        $u1 = $toBytes(ini_get('upload_max_filesize') ?: null);
-        $u2 = $toBytes(ini_get('post_max_size') ?: null);
+        $u1 = $toBytes(\ini_get('upload_max_filesize') ?: null);
+        $u2 = $toBytes(\ini_get('post_max_size') ?: null);
 
         if ($u1 <= 0 && $u2 <= 0) {
             return 0;

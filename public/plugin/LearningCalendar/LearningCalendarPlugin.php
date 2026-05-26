@@ -32,9 +32,21 @@ class LearningCalendarPlugin extends Plugin
     public function getEventTypeList()
     {
         return [
-            self::EVENT_TYPE_TAKEN => ['color' => 'red', 'name' => self::get_lang('EventTypeTaken')],
-            self::EVENT_TYPE_EXAM => ['color' => 'yellow', 'name' => self::get_lang('EventTypeExam')],
-            self::EVENT_TYPE_FREE => ['color' => 'green', 'name' => self::get_lang('EventTypeFree')],
+            self::EVENT_TYPE_TAKEN => [
+                'color' => 'red',
+                'name' => self::get_lang('EventTypeTaken'),
+                'title' => self::get_lang('EventTypeTaken'),
+            ],
+            self::EVENT_TYPE_EXAM => [
+                'color' => 'yellow',
+                'name' => self::get_lang('EventTypeExam'),
+                'title' => self::get_lang('EventTypeExam'),
+            ],
+            self::EVENT_TYPE_FREE => [
+                'color' => 'green',
+                'name' => self::get_lang('EventTypeFree'),
+                'title' => self::get_lang('EventTypeFree'),
+            ],
         ];
     }
 
@@ -116,28 +128,34 @@ class LearningCalendarPlugin extends Plugin
         Database::query($sql);
 
         $extraField = new ExtraField('lp_item');
-        $params = [
-            'display_text' => $this->get_lang('Learning calendar one day marker'),
-            'variable' => 'calendar',
-            'visible_to_self' => 1,
-            'changeable' => 1,
-            'visible_to_others' => 1,
-            'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
-        ];
+        $fieldInfo = $extraField->get_handler_field_info_by_field_variable('calendar');
+        if (empty($fieldInfo)) {
+            $params = [
+                'display_text' => $this->get_lang('Learning calendar one day marker'),
+                'variable' => 'calendar',
+                'visible_to_self' => 1,
+                'changeable' => 1,
+                'visible_to_others' => 1,
+                'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
+            ];
 
-        $extraField->save($params);
+            $extraField->save($params);
+        }
 
         $extraField = new ExtraField('course');
-        $params = [
-            'display_text' => $this->get_lang('Course duration (h)'),
-            'variable' => 'course_hours_duration',
-            'visible_to_self' => 1,
-            'changeable' => 1,
-            'visible_to_others' => 1,
-            'value_type' => ExtraField::FIELD_TYPE_TEXT,
-        ];
+        $fieldInfo = $extraField->get_handler_field_info_by_field_variable('course_hours_duration');
+        if (empty($fieldInfo)) {
+            $params = [
+                'display_text' => $this->get_lang('CourseHoursDuration'),
+                'variable' => 'course_hours_duration',
+                'visible_to_self' => 1,
+                'changeable' => 1,
+                'visible_to_others' => 1,
+                'value_type' => ExtraField::FIELD_TYPE_TEXT,
+            ];
 
-        $extraField->save($params);
+            $extraField->save($params);
+        }
 
         return true;
     }
@@ -151,6 +169,7 @@ class LearningCalendarPlugin extends Plugin
             'learning_calendar',
             'learning_calendar_events',
             'learning_calendar_user',
+            'learning_calendar_control_point',
         ];
 
         foreach ($tables as $table) {
@@ -344,6 +363,48 @@ class LearningCalendarPlugin extends Plugin
     }
 
     /**
+     * Returns calendars visible to the current user without jqGrid formatting.
+     *
+     * @return array
+     */
+    public function getCalendarList()
+    {
+        if (api_is_platform_admin()) {
+            $sql = 'SELECT * FROM learning_calendar ORDER BY title ASC';
+        } else {
+            $userId = api_get_user_id();
+            $sql = "SELECT * FROM learning_calendar WHERE author_id = $userId ORDER BY title ASC";
+        }
+
+        $result = Database::query($sql);
+        $list = [];
+        while ($row = Database::fetch_assoc($result)) {
+            $calendarId = (int) $row['id'];
+            $row['event_count'] = $this->getCalendarEventCount($calendarId);
+            $row['user_count'] = $this->getUsersPerCalendarCount($calendarId);
+            $list[] = $row;
+        }
+
+        return $list;
+    }
+
+    /**
+     * @param int $calendarId
+     *
+     * @return int
+     */
+    public function getCalendarEventCount($calendarId)
+    {
+        $calendarId = (int) $calendarId;
+        $sql = "SELECT count(id) as count FROM learning_calendar_events WHERE calendar_id = $calendarId";
+        $result = Database::query($sql);
+        $row = Database::fetch_assoc($result);
+
+        return (int) $row['count'];
+    }
+
+
+    /**
      * @param int $calendarId
      *
      * @return array
@@ -352,11 +413,20 @@ class LearningCalendarPlugin extends Plugin
     {
         $calendarId = (int) $calendarId;
         $sql = "SELECT * FROM learning_calendar_user
-                WHERE calendar_id = $calendarId";
+                WHERE calendar_id = $calendarId
+                ORDER BY id ASC";
         $result = Database::query($sql);
         $list = [];
         while ($row = Database::fetch_assoc($result)) {
-            $userInfo = api_get_user_info($row['user_id']);
+            $userId = (int) $row['user_id'];
+            $userInfo = api_get_user_info($userId);
+
+            if (empty($userInfo)) {
+                continue;
+            }
+
+            $userInfo['calendar_user_id'] = (int) $row['id'];
+            $userInfo['user_id'] = $userId;
             $userInfo['exam'] = 'exam';
             $list[] = $userInfo;
         }
@@ -435,10 +505,15 @@ class LearningCalendarPlugin extends Plugin
     public function getCalendar($calendarId)
     {
         $calendarId = (int) $calendarId;
+        if (empty($calendarId)) {
+            return [];
+        }
+
         $sql = "SELECT * FROM learning_calendar WHERE id = $calendarId";
         $result = Database::query($sql);
+        $row = Database::fetch_assoc($result);
 
-        return Database::fetch_assoc($result);
+        return $row ?: [];
     }
 
     /**
@@ -449,7 +524,11 @@ class LearningCalendarPlugin extends Plugin
     public function getUserCalendar($userId)
     {
         $userId = (int) $userId;
-        $sql = "SELECT * FROM learning_calendar_user WHERE user_id = $userId";
+        $sql = "SELECT *
+                FROM learning_calendar_user
+                WHERE user_id = $userId
+                ORDER BY id ASC
+                LIMIT 1";
         $result = Database::query($sql);
 
         return Database::fetch_assoc($result);
@@ -570,11 +649,94 @@ class LearningCalendarPlugin extends Plugin
         return true;
     }*/
 
+    /**
+     * @param string $identifier
+     *
+     * @return array
+     */
+    public function findUserForCalendarAssignment($identifier)
+    {
+        $identifier = trim((string) $identifier);
+
+        if ('' === $identifier) {
+            return [];
+        }
+
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+
+        if (ctype_digit($identifier)) {
+            $userId = (int) $identifier;
+            $sql = "SELECT id, username, firstname, lastname
+                    FROM $userTable
+                    WHERE id = $userId
+                    LIMIT 1";
+        } else {
+            $identifier = Database::escape_string($identifier);
+            $sql = "SELECT id, username, firstname, lastname
+                    FROM $userTable
+                    WHERE username = '$identifier'
+                    LIMIT 1";
+        }
+
+        $result = Database::query($sql);
+        $user = Database::fetch_assoc($result);
+
+        return $user ?: [];
+    }
+
+    /**
+     * Assigns a user to one learning calendar.
+     *
+     * @param int $calendarId
+     * @param int $userId
+     *
+     * @return string
+     */
+    public function assignUserToCalendar($calendarId, $userId)
+    {
+        $calendarId = (int) $calendarId;
+        $userId = (int) $userId;
+
+        if (empty($calendarId) || empty($userId)) {
+            return 'invalid';
+        }
+
+        $calendar = $this->getUserCalendar($userId);
+
+        if (empty($calendar)) {
+            $this->addUserToCalendar($calendarId, $userId);
+
+            return 'added';
+        }
+
+        if ((int) $calendar['calendar_id'] === $calendarId) {
+            return 'already';
+        }
+
+        $sql = "DELETE FROM learning_calendar_user WHERE user_id = $userId";
+        Database::query($sql);
+
+        Database::insert('learning_calendar_user', [
+            'calendar_id' => $calendarId,
+            'user_id' => $userId,
+        ]);
+
+        return 'moved';
+    }
+
     public function getForm(FormValidator &$form)
     {
         $form->addText('title', get_lang('Title'));
+        $form->addRule('title', get_lang('Required field'), 'required');
+
         $form->addText('total_hours', get_lang('Total hours'));
+        $form->addRule('total_hours', get_lang('Required field'), 'required');
+        $form->addRule('total_hours', get_lang('Only numbers'), 'numeric');
+
         $form->addText('minutes_per_day', get_lang('Minutes per day'));
+        $form->addRule('minutes_per_day', get_lang('Required field'), 'required');
+        $form->addRule('minutes_per_day', get_lang('Only numbers'), 'numeric');
+
         $form->addHtmlEditor('description', get_lang('Description'), false);
     }
 
@@ -629,6 +791,90 @@ class LearningCalendarPlugin extends Plugin
         }
 
         return $list;
+    }
+
+    public function getPersonalEventsForApi($userId, $startDate, $endDate)
+    {
+        $userId = (int) $userId;
+
+        if (empty($userId)) {
+            return [];
+        }
+
+        $calendarRelUser = $this->getUserCalendar($userId);
+
+        if (empty($calendarRelUser)) {
+            return [];
+        }
+
+        $calendarInfo = $this->getCalendar($calendarRelUser['calendar_id']);
+
+        if (empty($calendarInfo)) {
+            return [];
+        }
+
+        $startDate = $this->normalizeApiDate($startDate, date('Y-m-d'));
+        $endDate = $this->normalizeApiDate($endDate, date('Y-m-d', strtotime('+1 month')));
+
+        $calendarId = (int) $calendarInfo['id'];
+        $startDate = Database::escape_string($startDate);
+        $endDate = Database::escape_string($endDate);
+
+        $sql = "SELECT *
+                FROM learning_calendar_events
+                WHERE calendar_id = $calendarId
+                  AND start_date < '$endDate'
+                  AND (end_date >= '$startDate' OR end_date IS NULL)
+                ORDER BY start_date ASC, id ASC";
+        $result = Database::query($sql);
+
+        $list = [];
+        $eventTypeList = $this->getEventTypeList();
+
+        while ($row = Database::fetch_assoc($result)) {
+            $type = (int) $row['type'];
+            $typeInfo = $eventTypeList[$type] ?? $eventTypeList[self::EVENT_TYPE_FREE];
+            $start = $this->normalizeApiDate($row['start_date'], $startDate);
+            $end = $this->normalizeApiDate($row['end_date'] ?: $row['start_date'], $start);
+
+            $list[] = [
+                'id' => 'learning_calendar_'.$row['id'],
+                'title' => $calendarInfo['title'],
+                'content' => $typeInfo['title'],
+                'startDate' => $start.'T00:00:00+00:00',
+                'endDate' => $end.'T23:59:00+00:00',
+                'allDay' => true,
+                'url' => null,
+                'color' => $typeInfo['color'],
+                'type' => 'personal',
+                'objectType' => 'learning_calendar',
+                'eventType' => $typeInfo['title'],
+                'resourceLinkListFromEntity' => [],
+                'learningCalendar' => [
+                    'id' => (int) $calendarInfo['id'],
+                    'title' => $calendarInfo['title'],
+                ],
+            ];
+        }
+
+        return $list;
+    }
+
+    private function normalizeApiDate($value, $fallback)
+    {
+        $value = trim((string) $value);
+
+        if ('' === $value) {
+            return $fallback;
+        }
+
+        try {
+            $date = new DateTime($value);
+
+            return $date->format('Y-m-d');
+        } catch (Exception $exception) {
+            return $fallback;
+        }
     }
 
     /**
@@ -962,6 +1208,10 @@ class LearningCalendarPlugin extends Plugin
         $sql = "DELETE FROM learning_calendar_events WHERE calendar_id = $calendarId";
         Database::query($sql);
 
+        // Delete user assignments to avoid orphan rows in the plugin table.
+        $sql = "DELETE FROM learning_calendar_user WHERE calendar_id = $calendarId";
+        Database::query($sql);
+
         return true;
     }
 
@@ -974,43 +1224,41 @@ class LearningCalendarPlugin extends Plugin
         $startDate = Database::escape_string($startDate);
         $calendarId = (int) $calendarId;
 
-        $eventTypeList = $this->getEventTypeColorList();
-        // Remove the free type to loop correctly when toogle days.
-        unset($eventTypeList[self::EVENT_TYPE_FREE]);
-
         $sql = "SELECT * FROM learning_calendar_events
                 WHERE start_date = '$startDate' AND calendar_id = $calendarId ";
         $result = Database::query($sql);
 
         if (Database::num_rows($result)) {
             $row = Database::fetch_assoc($result);
-            $currentType = $row['type'];
-            $currentType++;
-            if ($currentType > count($eventTypeList)) {
+            $currentType = (int) $row['type'];
+
+            if ($currentType >= self::EVENT_TYPE_FREE) {
                 Database::delete(
                     'learning_calendar_events',
                     [' calendar_id = ? AND start_date = ?' => [$calendarId, $startDate]]
                 );
-            } else {
-                $params = [
-                    'type' => $currentType,
-                ];
-                Database::update(
-                    'learning_calendar_events',
-                    $params,
-                    [' calendar_id = ? AND start_date = ?' => [$calendarId, $startDate]]
-                );
+
+                return;
             }
-        } else {
-            $params = [
-                'title' => '',
-                'calendar_id' => $calendarId,
-                'start_date' => $startDate,
-                'end_date' => $startDate,
-                'type' => self::EVENT_TYPE_TAKEN,
-            ];
-            Database::insert('learning_calendar_events', $params);
+
+            Database::update(
+                'learning_calendar_events',
+                [
+                    'type' => $currentType + 1,
+                ],
+                [' calendar_id = ? AND start_date = ?' => [$calendarId, $startDate]]
+            );
+
+            return;
         }
+
+        Database::insert('learning_calendar_events', [
+            'title' => '',
+            'calendar_id' => $calendarId,
+            'start_date' => $startDate,
+            'end_date' => $startDate,
+            'type' => self::EVENT_TYPE_TAKEN,
+        ]);
     }
 
     /**
@@ -1021,7 +1269,7 @@ class LearningCalendarPlugin extends Plugin
     public function getEvents($calendarId)
     {
         $calendarId = (int) $calendarId;
-        $eventTypeList = $this->getEventTypeColorList();
+        $eventTypeList = $this->getEventTypeList();
 
         $sql = "SELECT * FROM learning_calendar_events
                 WHERE calendar_id = $calendarId ";
@@ -1029,17 +1277,23 @@ class LearningCalendarPlugin extends Plugin
 
         $list = [];
         while ($row = Database::fetch_assoc($result)) {
+            $type = (int) $row['type'];
+            $eventType = $eventTypeList[$type] ?? $eventTypeList[self::EVENT_TYPE_FREE];
+
             $list[] = [
+                'id' => (int) $row['id'],
+                'title' => $row['title'] ?: $eventType['title'],
                 'start_date' => $row['start_date'],
-                'end_date' => $row['start_date'],
-                'color' => $eventTypeList[$row['type']],
+                'end_date' => $row['end_date'] ?: $row['start_date'],
+                'type' => $type,
+                'color' => $eventType['color'],
             ];
         }
 
         return $list;
     }
 
-    public function protectCalendar(array $calendarInfo)
+    public function protectCalendar($calendarInfo)
     {
         $allow = api_is_platform_admin() || api_is_teacher();
 
@@ -1047,11 +1301,13 @@ class LearningCalendarPlugin extends Plugin
             api_not_allowed(true);
         }
 
-        if (!empty($calendarInfo)) {
-            if (!api_is_platform_admin() && api_is_teacher()) {
-                if ($calendarInfo['author_id'] != api_get_user_id()) {
-                    api_not_allowed(true);
-                }
+        if (empty($calendarInfo) || !is_array($calendarInfo)) {
+            api_not_allowed(true);
+        }
+
+        if (!api_is_platform_admin() && api_is_teacher()) {
+            if ((int) $calendarInfo['author_id'] !== api_get_user_id()) {
+                api_not_allowed(true);
             }
         }
     }

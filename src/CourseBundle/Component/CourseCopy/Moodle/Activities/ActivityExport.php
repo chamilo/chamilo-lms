@@ -6,27 +6,27 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities;
 
-use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Builder\FileIndex;
+use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Builder\MoodleExport;
+use DocumentManager;
 use Exception;
 
 use const PHP_EOL;
 
 /**
  * Base class for Moodle activity exporters.
- * Child classes must implement export() and may reuse helpers here.
- *
- * Expected $this->course shape (legacy array/object used by coursecopy):
- *   - info: ['real_id'=>int, 'code'=>string]
- *   - resources: mixed structure per tool
  */
 abstract class ActivityExport
 {
     /**
-     * @var mixed Legacy course snapshot used during export
+     * Synthetic module id used by the root "Documents" folder activity.
+     */
+    public const DOCS_MODULE_ID = 1000000;
+    public const INTRO_PAGE_MODULE_ID = 1000001;
+
+    /**
+     * @var object
      */
     protected $course;
-
-    public const DOCS_MODULE_ID = 1000000;
 
     public function __construct($course)
     {
@@ -34,24 +34,71 @@ abstract class ActivityExport
     }
 
     /**
-     * Export this activity to the provided directory.
+     * Export the activity.
      */
     abstract public function export(int $activityId, string $exportDir, int $moduleId, int $sectionId): void;
 
     /**
-     * Resolve the section id (learnpath/section) that contains a given activity.
-     * Falls back to 0 if not found.
+     * Resolve the section id (learnpath/source_id) that contains a given activity.
      */
     public function getSectionIdForActivity(int $activityId, string $itemType): int
     {
-        // Normalize legacy "student_publication" -> "work"
-        $needle = 'student_publication' === $itemType ? 'work' : $itemType;
+        $needle = $this->normalizeLpItemTypeForComparison($itemType);
 
-        foreach ($this->course->resources[RESOURCE_LEARNPATH] ?? [] as $learnpath) {
-            foreach ($learnpath->items ?? [] as $item) {
-                $type = ($item['item_type'] ?? '') === 'student_publication' ? 'work' : ($item['item_type'] ?? '');
-                if ($type === $needle && (int) ($item['path'] ?? -1) === $activityId) {
-                    return (int) $learnpath->source_id;
+        $learnpaths =
+            $this->course->resources[\defined('RESOURCE_LEARNPATH') ? RESOURCE_LEARNPATH : 'learnpath']
+            ?? $this->course->resources['learnpath']
+            ?? [];
+
+        if (!\is_array($learnpaths) || empty($learnpaths)) {
+            return 0;
+        }
+
+        foreach ($learnpaths as $learnpathWrap) {
+            $learnpath = (\is_object($learnpathWrap) && isset($learnpathWrap->obj) && \is_object($learnpathWrap->obj))
+                ? $learnpathWrap->obj
+                : $learnpathWrap;
+
+            if (!\is_object($learnpath) || empty($learnpath->items) || !\is_array($learnpath->items)) {
+                continue;
+            }
+
+            foreach ($learnpath->items as $item) {
+                if (!\is_array($item)) {
+                    continue;
+                }
+
+                $lpType = $this->normalizeLpItemTypeForComparison((string) ($item['item_type'] ?? ''));
+                if ($lpType !== $needle) {
+                    continue;
+                }
+
+                $lpPath = (string) ($item['path'] ?? '');
+
+                if ('' !== $lpPath && ctype_digit($lpPath) && (int) $lpPath === $activityId) {
+                    return (int) ($learnpath->source_id ?? 0);
+                }
+
+                if ('document' === $needle) {
+                    $courseCode = (string) ($this->course->code ?? $this->course->info['code'] ?? '');
+                    $doc = DocumentManager::get_document_data_by_id($activityId, $courseCode);
+
+                    if (!empty($doc['path'])) {
+                        $docPath = (string) $doc['path'];
+                        $candidates = [
+                            $docPath,
+                            ltrim($docPath, '/'),
+                            '/'.ltrim($docPath, '/'),
+                            'document/'.ltrim($docPath, '/'),
+                            '/document/'.ltrim($docPath, '/'),
+                        ];
+
+                        foreach (array_unique($candidates) as $candidate) {
+                            if ($lpPath === $candidate) {
+                                return (int) ($learnpath->source_id ?? 0);
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -60,224 +107,360 @@ abstract class ActivityExport
     }
 
     /**
-     * Ensure the activity directory exists and return its absolute path.
-     * Result: <exportDir>/activities/<activityType>_<moduleId>.
+     * Prepare the directory for the activity.
      */
     protected function prepareActivityDirectory(string $exportDir, string $activityType, int $moduleId): string
     {
         $activityDir = rtrim($exportDir, '/')."/activities/{$activityType}_{$moduleId}";
-        if (!is_dir($activityDir) && !@mkdir($activityDir, 0777, true) && !is_dir($activityDir)) {
-            throw new Exception("Can not create activity directory: {$activityDir}");
+
+        if (!is_dir($activityDir) && !@mkdir($activityDir, api_get_permissions_for_new_directories(), true) && !is_dir($activityDir)) {
+            throw new Exception("Unable to create activity directory: {$activityDir}");
         }
 
         return $activityDir;
     }
 
     /**
-     * Write a simple XML file into $directory with name $fileName.xml.
+     * Create a generic XML file.
      */
     protected function createXmlFile(string $fileName, string $xmlContent, string $directory): void
     {
         $filePath = rtrim($directory, '/').'/'.$fileName.'.xml';
+
         if (false === @file_put_contents($filePath, $xmlContent)) {
-            throw new Exception("Error creating {$fileName}.xml at {$filePath}");
+            throw new Exception("Error creating {$fileName}.xml");
         }
     }
 
     /**
-     * module.xml — generic module metadata used by Moodle backup.
+     * Create module.xml.
+     *
+     * @param array<string,mixed> $data
      */
     protected function createModuleXml(array $data, string $directory): void
     {
-        $xml = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
-        $xml .= '<module id="'.(int) $data['moduleid'].'" version="2021051700">'.PHP_EOL;
-        $xml .= '  <modulename>'.($data['modulename'] ?? '').'</modulename>'.PHP_EOL;
-        $xml .= '  <sectionid>'.(int) ($data['sectionid'] ?? 0).'</sectionid>'.PHP_EOL;
-        $xml .= '  <sectionnumber>'.(int) ($data['sectionnumber'] ?? 0).'</sectionnumber>'.PHP_EOL;
-        $xml .= '  <idnumber></idnumber>'.PHP_EOL;
-        $xml .= '  <added>'.time().'</added>'.PHP_EOL;
-        $xml .= '  <score>0</score>'.PHP_EOL;
-        $xml .= '  <indent>0</indent>'.PHP_EOL;
-        $xml .= '  <visible>1</visible>'.PHP_EOL;
-        $xml .= '  <visibleoncoursepage>1</visibleoncoursepage>'.PHP_EOL;
-        $xml .= '  <visibleold>1</visibleold>'.PHP_EOL;
-        $xml .= '  <groupmode>0</groupmode>'.PHP_EOL;
-        $xml .= '  <groupingid>0</groupingid>'.PHP_EOL;
-        $xml .= '  <completion>1</completion>'.PHP_EOL;
-        $xml .= '  <completiongradeitemnumber>$@NULL@$</completiongradeitemnumber>'.PHP_EOL;
-        $xml .= '  <completionview>0</completionview>'.PHP_EOL;
-        $xml .= '  <completionexpected>0</completionexpected>'.PHP_EOL;
-        $xml .= '  <availability>$@NULL@$</availability>'.PHP_EOL;
-        $xml .= '  <showdescription>0</showdescription>'.PHP_EOL;
-        $xml .= '  <tags></tags>'.PHP_EOL;
-        $xml .= '</module>'.PHP_EOL;
+        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
+        $xmlContent .= '<module id="'.(int) ($data['moduleid'] ?? 0).'" version="2021051700">'.PHP_EOL;
+        $xmlContent .= '  <modulename>'.htmlspecialchars((string) ($data['modulename'] ?? '')).'</modulename>'.PHP_EOL;
+        $xmlContent .= '  <sectionid>'.(int) ($data['sectionid'] ?? 0).'</sectionid>'.PHP_EOL;
+        $xmlContent .= '  <sectionnumber>'.(int) ($data['sectionnumber'] ?? 0).'</sectionnumber>'.PHP_EOL;
+        $xmlContent .= '  <idnumber></idnumber>'.PHP_EOL;
+        $xmlContent .= '  <added>'.time().'</added>'.PHP_EOL;
+        $xmlContent .= '  <score>0</score>'.PHP_EOL;
+        $xmlContent .= '  <indent>0</indent>'.PHP_EOL;
+        $xmlContent .= '  <visible>1</visible>'.PHP_EOL;
+        $xmlContent .= '  <visibleoncoursepage>1</visibleoncoursepage>'.PHP_EOL;
+        $xmlContent .= '  <visibleold>1</visibleold>'.PHP_EOL;
+        $xmlContent .= '  <groupmode>0</groupmode>'.PHP_EOL;
+        $xmlContent .= '  <groupingid>0</groupingid>'.PHP_EOL;
+        $xmlContent .= '  <completion>1</completion>'.PHP_EOL;
+        $xmlContent .= '  <completiongradeitemnumber>$@NULL@$</completiongradeitemnumber>'.PHP_EOL;
+        $xmlContent .= '  <completionview>0</completionview>'.PHP_EOL;
+        $xmlContent .= '  <completionexpected>0</completionexpected>'.PHP_EOL;
+        $xmlContent .= '  <availability>$@NULL@$</availability>'.PHP_EOL;
+        $xmlContent .= '  <showdescription>0</showdescription>'.PHP_EOL;
+        $xmlContent .= '  <tags></tags>'.PHP_EOL;
+        $xmlContent .= '</module>'.PHP_EOL;
 
-        $this->createXmlFile('module', $xml, $directory);
+        $this->createXmlFile('module', $xmlContent, $directory);
     }
 
     /**
-     * grades.xml — override in child to include real grade_item definitions.
+     * Create grades.xml.
+     *
+     * @param array<string,mixed> $data
      */
     protected function createGradesXml(array $data, string $directory): void
     {
-        $xml = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
-        $xml .= '<activity_gradebook>'.PHP_EOL;
-        $xml .= '  <grade_items></grade_items>'.PHP_EOL;
-        $xml .= '</activity_gradebook>'.PHP_EOL;
+        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
+        $xmlContent .= '<activity_gradebook>'.PHP_EOL;
+        $xmlContent .= '  <grade_items></grade_items>'.PHP_EOL;
+        $xmlContent .= '</activity_gradebook>'.PHP_EOL;
 
-        $this->createXmlFile('grades', $xml, $directory);
+        $this->createXmlFile('grades', $xmlContent, $directory);
     }
 
     /**
-     * inforef.xml — references to users/files used by this activity.
+     * Create inforef.xml.
+     *
+     * @param array<string,mixed> $references
      */
     protected function createInforefXml(array $references, string $directory): void
     {
-        @error_log('[ActivityExport::createInforefXml] Start. Dir='.$directory);
+        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
+        $xmlContent .= '<inforef>'.PHP_EOL;
 
-        $xml = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
-        $xml .= '<inforef>'.PHP_EOL;
-
-        $userCount = 0;
         if (!empty($references['users']) && \is_array($references['users'])) {
-            $xml .= ' <userref>'.PHP_EOL;
-            foreach ($references['users'] as $uid) {
-                $xml .= ' <user><id>'.htmlspecialchars((string) $uid).'</id></user>'.PHP_EOL;
-                $userCount++;
+            $xmlContent .= '  <userref>'.PHP_EOL;
+            foreach ($references['users'] as $userId) {
+                $xmlContent .= '    <user>'.PHP_EOL;
+                $xmlContent .= '      <id>'.htmlspecialchars((string) $userId).'</id>'.PHP_EOL;
+                $xmlContent .= '    </user>'.PHP_EOL;
             }
-            $xml .= ' </userref>'.PHP_EOL;
+            $xmlContent .= '  </userref>'.PHP_EOL;
         }
 
-        $fileCount = 0;
-        $resolvedByHash = 0;
-
         if (!empty($references['files']) && \is_array($references['files'])) {
-            $xml .= ' <fileref>'.PHP_EOL;
-
+            $xmlContent .= '  <fileref>'.PHP_EOL;
             foreach ($references['files'] as $file) {
-                $fid = null;
-                $hash = null;
-
-                if (\is_array($file)) {
-                    $fid  = $file['id'] ?? null;
-                    $hash = $file['contenthash'] ?? null;
-
-                    if ($hash) {
-                        $tmp = \Chamilo\CourseBundle\Component\CourseCopy\Moodle\Builder\FileIndex::resolveByContenthash((string) $hash);
-                        if (null !== $tmp) {
-                            $fid = $tmp;
-                            $resolvedByHash++;
-                        } else {
-                            @error_log('[ActivityExport::createInforefXml] WARNING: Could not resolve contenthash='.$hash.' to a file id.');
-                        }
-                    }
-                } else {
-                    $fid = $file;
-                }
-
-                if (null === $fid) {
-                    @error_log('[ActivityExport::createInforefXml] WARNING: Null file id entry skipped.');
+                $fileId = \is_array($file) ? (int) ($file['id'] ?? 0) : (int) $file;
+                if ($fileId <= 0) {
                     continue;
                 }
 
-                $xml .= ' <file><id>'.htmlspecialchars((string) $fid).'</id></file>'.PHP_EOL;
-                $fileCount++;
+                $xmlContent .= '    <file>'.PHP_EOL;
+                $xmlContent .= '      <id>'.$fileId.'</id>'.PHP_EOL;
+                $xmlContent .= '    </file>'.PHP_EOL;
             }
-
-            $xml .= ' </fileref>'.PHP_EOL;
+            $xmlContent .= '  </fileref>'.PHP_EOL;
         }
 
-        $xml .= '</inforef>'.PHP_EOL;
+        $xmlContent .= '</inforef>'.PHP_EOL;
 
-        $this->createXmlFile('inforef', $xml, $directory);
-
-        @error_log('[ActivityExport::createInforefXml] Done. users='.$userCount.' files='.$fileCount.' resolvedByHash='.$resolvedByHash.' Dir='.$directory);
+        $this->createXmlFile('inforef', $xmlContent, $directory);
     }
 
     /**
-     * roles.xml — left empty by default. Override if needed.
+     * Create roles.xml.
+     *
+     * @param array<string,mixed> $activityData
      */
     protected function createRolesXml(array $activityData, string $directory): void
     {
-        $xml = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL.'<roles></roles>'.PHP_EOL;
-        $this->createXmlFile('roles', $xml, $directory);
+        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
+        $xmlContent .= '<roles></roles>'.PHP_EOL;
+
+        $this->createXmlFile('roles', $xmlContent, $directory);
     }
 
     /**
-     * filters.xml — default empty.
+     * Create filters.xml.
+     *
+     * @param array<string,mixed> $activityData
      */
     protected function createFiltersXml(array $activityData, string $destinationDir): void
     {
-        $xml = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
-        $xml .= '<filters><filter_actives></filter_actives><filter_configs></filter_configs></filters>'.PHP_EOL;
-        $this->createXmlFile('filters', $xml, $destinationDir);
+        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
+        $xmlContent .= '<filters>'.PHP_EOL;
+        $xmlContent .= '  <filter_actives></filter_actives>'.PHP_EOL;
+        $xmlContent .= '  <filter_configs></filter_configs>'.PHP_EOL;
+        $xmlContent .= '</filters>'.PHP_EOL;
+
+        $this->createXmlFile('filters', $xmlContent, $destinationDir);
     }
 
     /**
-     * grade_history.xml — default empty.
+     * Create grade_history.xml.
+     *
+     * @param array<string,mixed> $activityData
      */
     protected function createGradeHistoryXml(array $activityData, string $destinationDir): void
     {
-        $xml = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
-        $xml .= '<grade_history><grade_grades></grade_grades></grade_history>'.PHP_EOL;
-        $this->createXmlFile('grade_history', $xml, $destinationDir);
+        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
+        $xmlContent .= '<grade_history>'.PHP_EOL;
+        $xmlContent .= '  <grade_grades></grade_grades>'.PHP_EOL;
+        $xmlContent .= '</grade_history>'.PHP_EOL;
+
+        $this->createXmlFile('grade_history', $xmlContent, $destinationDir);
     }
 
     /**
-     * completion.xml — default minimal placeholder.
+     * Create completion.xml.
+     *
+     * @param array<string,mixed> $activityData
      */
     protected function createCompletionXml(array $activityData, string $destinationDir): void
     {
-        $xml = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
-        $xml .= '<completion><completiondata><completion>'.PHP_EOL;
-        $xml .= '  <timecompleted>0</timecompleted><completionstate>1</completionstate>'.PHP_EOL;
-        $xml .= '</completion></completiondata></completion>'.PHP_EOL;
+        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
+        $xmlContent .= '<completion>'.PHP_EOL;
+        $xmlContent .= '  <completiondata>'.PHP_EOL;
+        $xmlContent .= '    <completion>'.PHP_EOL;
+        $xmlContent .= '      <timecompleted>0</timecompleted>'.PHP_EOL;
+        $xmlContent .= '      <completionstate>1</completionstate>'.PHP_EOL;
+        $xmlContent .= '    </completion>'.PHP_EOL;
+        $xmlContent .= '  </completiondata>'.PHP_EOL;
+        $xmlContent .= '</completion>'.PHP_EOL;
 
-        $this->createXmlFile('completion', $xml, $destinationDir);
+        $this->createXmlFile('completion', $xmlContent, $destinationDir);
     }
 
     /**
-     * comments.xml — default minimal placeholder.
+     * Create comments.xml.
+     *
+     * @param array<string,mixed> $activityData
      */
     protected function createCommentsXml(array $activityData, string $destinationDir): void
     {
-        $xml = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
-        $xml .= '<comments></comments>'.PHP_EOL;
+        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
+        $xmlContent .= '<comments></comments>'.PHP_EOL;
 
-        $this->createXmlFile('comments', $xml, $destinationDir);
+        $this->createXmlFile('comments', $xmlContent, $destinationDir);
     }
 
     /**
-     * competencies.xml — default minimal placeholder.
+     * Create competencies.xml.
+     *
+     * @param array<string,mixed> $activityData
      */
     protected function createCompetenciesXml(array $activityData, string $destinationDir): void
     {
-        $xml = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
-        $xml .= '<competencies></competencies>'.PHP_EOL;
+        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
+        $xmlContent .= '<competencies></competencies>'.PHP_EOL;
 
-        $this->createXmlFile('competencies', $xml, $destinationDir);
+        $this->createXmlFile('competencies', $xmlContent, $destinationDir);
     }
 
     /**
-     * calendar.xml — default with a single placeholder event.
+     * Create calendar.xml.
+     *
+     * @param array<string,mixed> $activityData
      */
     protected function createCalendarXml(array $activityData, string $destinationDir): void
     {
-        $xml = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
-        $xml .= '<calendar><event>'.PHP_EOL;
-        $xml .= '  <name>Due Date</name><timestart>'.time().'</timestart>'.PHP_EOL;
-        $xml .= '</event></calendar>'.PHP_EOL;
+        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
+        $xmlContent .= '<calendar>'.PHP_EOL;
+        $xmlContent .= '  <event>'.PHP_EOL;
+        $xmlContent .= '    <name>Due Date</name>'.PHP_EOL;
+        $xmlContent .= '    <timestart>'.time().'</timestart>'.PHP_EOL;
+        $xmlContent .= '  </event>'.PHP_EOL;
+        $xmlContent .= '</calendar>'.PHP_EOL;
 
-        $this->createXmlFile('calendar', $xml, $destinationDir);
+        $this->createXmlFile('calendar', $xmlContent, $destinationDir);
     }
 
     /**
-     * Tiny helper to retrieve an admin user when needed by exporters.
-     * Override if you have a service to resolve this properly.
+     * Create a Moodle-safe activity name.
+     */
+    protected function sanitizeMoodleActivityName(string $raw, int $maxLen = 255): string
+    {
+        $s = trim($raw);
+        if ('' === $s) {
+            return '';
+        }
+
+        $s = html_entity_decode($s, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $s = strip_tags($s);
+        $s = preg_replace('/\s+/u', ' ', $s);
+        $s = trim((string) $s);
+
+        if ('' === $s) {
+            return '';
+        }
+
+        if (\function_exists('mb_strlen') && \function_exists('mb_substr')) {
+            if (mb_strlen($s, 'UTF-8') > $maxLen) {
+                $s = mb_substr($s, 0, $maxLen, 'UTF-8');
+            }
+        } elseif (\strlen($s) > $maxLen) {
+            $s = substr($s, 0, $maxLen);
+        }
+
+        return $s;
+    }
+
+    /**
+     * Return the LP item title if present, otherwise the fallback title.
+     */
+    protected function lpItemTitle(int $sectionId, string $itemType, int $resourceId, ?string $fallback): string
+    {
+        $learnpaths =
+            $this->course->resources[\defined('RESOURCE_LEARNPATH') ? RESOURCE_LEARNPATH : 'learnpath']
+            ?? $this->course->resources['learnpath']
+            ?? [];
+
+        if (!\is_array($learnpaths) || empty($learnpaths)) {
+            return $fallback ?? '';
+        }
+
+        $needle = $this->normalizeLpItemTypeForComparison($itemType);
+        $courseCode = (string) ($this->course->code ?? $this->course->info['code'] ?? '');
+
+        foreach ($learnpaths as $learnpathWrap) {
+            $learnpath = (\is_object($learnpathWrap) && isset($learnpathWrap->obj) && \is_object($learnpathWrap->obj))
+                ? $learnpathWrap->obj
+                : $learnpathWrap;
+
+            if (!\is_object($learnpath) || (int) ($learnpath->source_id ?? 0) !== $sectionId || empty($learnpath->items)) {
+                continue;
+            }
+
+            foreach ((array) $learnpath->items as $item) {
+                if (!\is_array($item)) {
+                    continue;
+                }
+
+                $lpType = $this->normalizeLpItemTypeForComparison((string) ($item['item_type'] ?? ''));
+                if ($lpType !== $needle) {
+                    continue;
+                }
+
+                $lpPath = (string) ($item['path'] ?? '');
+
+                if (ctype_digit($lpPath) && (int) $lpPath === $resourceId) {
+                    return (string) ($item['title'] ?? ($fallback ?? ''));
+                }
+
+                if ('document' === $needle) {
+                    $doc = DocumentManager::get_document_data_by_id($resourceId, $courseCode);
+
+                    if (!empty($doc['path'])) {
+                        $docPath = (string) $doc['path'];
+                        $candidates = [
+                            $docPath,
+                            ltrim($docPath, '/'),
+                            '/'.ltrim($docPath, '/'),
+                            'document/'.ltrim($docPath, '/'),
+                            '/document/'.ltrim($docPath, '/'),
+                        ];
+
+                        foreach (array_unique($candidates) as $candidate) {
+                            if ($lpPath === $candidate) {
+                                return (string) ($item['title'] ?? ($fallback ?? ''));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return $fallback ?? '';
+    }
+
+    /**
+     * Get admin user data used by builders.
+     *
+     * @return array<string,mixed>
      */
     protected function getAdminUserData(): array
     {
-        // Default stub. Replace with real lookup if available.
-        return ['id' => 2];
+        return MoodleExport::getAdminUserData();
+    }
+
+    /**
+     * Normalize item types for LP comparison.
+     */
+    private function normalizeLpItemTypeForComparison(string $type): string
+    {
+        switch ($type) {
+            case 'student_publication':
+            case 'work':
+            case 'assign':
+                return 'work';
+
+            case 'link':
+            case 'url':
+                return 'link';
+
+            case 'survey':
+            case 'feedback':
+                return 'survey';
+
+            case 'page':
+            case 'resource':
+                return 'document';
+
+            default:
+                return $type;
+        }
     }
 }

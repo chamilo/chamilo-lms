@@ -13,10 +13,13 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use Chamilo\CoreBundle\ApiResource\SessionPlanItem;
+use Chamilo\CoreBundle\Controller\Api\CalendarMyStudentsScheduleAction;
 use Chamilo\CoreBundle\Controller\Api\CreateSessionWithUsersAndCoursesAction;
 use Chamilo\CoreBundle\Dto\CreateSessionWithUsersAndCoursesInput;
 use Chamilo\CoreBundle\Entity\Listener\SessionListener;
 use Chamilo\CoreBundle\Repository\SessionRepository;
+use Chamilo\CoreBundle\State\SessionPlanStateProvider;
 use Chamilo\CoreBundle\State\UserSessionSubscriptionsStateProvider;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -27,7 +30,7 @@ use Doctrine\ORM\Mapping as ORM;
 use LogicException;
 use Stringable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
@@ -101,6 +104,26 @@ use Symfony\Component\Validator\Constraints as Assert;
             name: 'user_session_subscriptions_upcoming',
             provider: UserSessionSubscriptionsStateProvider::class,
         ),
+        new GetCollection(
+            uriTemplate: '/calendar/sessions-plan.{_format}',
+            paginationEnabled: false,
+            normalizationContext: [
+                'groups' => ['session_plan:read'],
+            ],
+            security: "is_granted('ROLE_USER')",
+            output: SessionPlanItem::class,
+            name: 'calendar_sessions_plan',
+            provider: SessionPlanStateProvider::class,
+        ),
+        new GetCollection(
+            uriTemplate: '/calendar/my-students-schedule.{_format}',
+            controller: CalendarMyStudentsScheduleAction::class,
+            paginationEnabled: false,
+            security: "is_granted('ROLE_USER')",
+            output: false,
+            read: false,
+            name: 'calendar_my_students_schedule',
+        ),
         new Post(security: "is_granted('ROLE_ADMIN')"),
         new Post(
             uriTemplate: '/advanced/create-session-with-courses-and-users',
@@ -120,6 +143,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[ORM\Table(name: 'session')]
 #[ORM\UniqueConstraint(name: 'title', columns: ['title'])]
+#[ORM\Index(columns: ['access_end_date'], name: 'idx_session_access_end_date')]
+#[ORM\Index(columns: ['status'], name: 'idx_session_status')]
+#[ORM\Index(columns: ['parent_id'], name: 'idx_session_parent_id')]
+#[ORM\Index(columns: ['session_category_id'], name: 'idx_session_category_id')]
 #[ORM\EntityListeners([SessionListener::class])]
 #[ORM\Entity(repositoryClass: SessionRepository::class)]
 #[UniqueEntity('title')]
@@ -1511,11 +1538,12 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return (int) round(($endDateInSeconds - $currentTime) / 60 / 60 / 24);
     }
 
-    private function getAccessVisibilityByDuration(User $user): int
+    private function getAccessVisibilityByDuration(User $user, bool $coachAccessAfterDurationEnd = false): int
     {
         // Session duration per student.
         if ($this->getDuration() > 0) {
-            if ($this->hasCoach($user)) {
+            // If the setting is enabled, coaches always have access regardless of duration end.
+            if ($coachAccessAfterDurationEnd && $this->hasCoach($user)) {
                 return self::AVAILABLE;
             }
 
@@ -1572,13 +1600,13 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return self::AVAILABLE;
     }
 
-    public function setAccessVisibilityByUser(User $user, bool $ignoreVisibilityForAdmins = true): int
+    public function setAccessVisibilityByUser(User $user, bool $ignoreVisibilityForAdmins = true, bool $coachAccessAfterDurationEnd = false): int
     {
         if (($user->isAdmin() || $user->isSuperAdmin()) && $ignoreVisibilityForAdmins) {
             $this->accessVisibility = self::AVAILABLE;
         } elseif (!$this->getAccessStartDate() && !$this->getAccessEndDate()) {
             // I don't care the session visibility.
-            $this->accessVisibility = $this->getAccessVisibilityByDuration($user);
+            $this->accessVisibility = $this->getAccessVisibilityByDuration($user, $coachAccessAfterDurationEnd);
         } else {
             $this->accessVisibility = $this->getAcessVisibilityByDates($user);
         }

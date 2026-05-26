@@ -65,6 +65,10 @@ switch ($action) {
         // Close the session as we don't need it any further
         session_write_close();
 
+        if (!$isEdit) {
+            exit;
+        }
+
         $ifExists = $_POST['if_exists'] ?? api_get_setting('document.document_if_file_exists_option') ?? 'rename';
         $unzip    = !empty($_POST['unzip']);
 
@@ -94,22 +98,19 @@ switch ($action) {
             exit;
         }
 
-        if (!$isEdit) {
-            exit;
-        }
-
         $directoryParentId = isset($_POST['directory_parent_id'])
             ? (int) $_POST['directory_parent_id']
             : 0;
 
         $toProcess = [];
         if (!empty($_FILES['files'])) {
+            $finfo = new \finfo(FILEINFO_MIME_TYPE);
             foreach ($_FILES['files']['name'] as $i => $name) {
                 if ($_FILES['files']['error'][$i] === UPLOAD_ERR_OK) {
                     $toProcess[] = [
-                        'name'     => $name,
+                        'name'     => disable_dangerous_file(api_replace_dangerous_char($name)),
                         'tmp_name' => $_FILES['files']['tmp_name'][$i],
-                        'type'     => $_FILES['files']['type'][$i],
+                        'type'     => $finfo->file($_FILES['files']['tmp_name'][$i]),
                         'size'     => $_FILES['files']['size'][$i],
                     ];
                 }
@@ -228,6 +229,19 @@ switch ($action) {
                 if ($zip->open($fileInfo['tmp_name']) === true) {
                     $extractPath = sys_get_temp_dir() . '/extracted_' . uniqid();
                     mkdir($extractPath);
+                    // Guard against ZIP Slip: reject entries with path traversal
+                    $zipSlip = false;
+                    for ($zi = 0; $zi < $zip->numFiles; $zi++) {
+                        $entryName = str_replace('\\', '/', $zip->getNameIndex($zi));
+                        if (str_contains($entryName, '../') || str_starts_with($entryName, '/')) {
+                            $zipSlip = true;
+                            break;
+                        }
+                    }
+                    if ($zipSlip) {
+                        $zip->close();
+                        continue;
+                    }
                     $zip->extractTo($extractPath);
                     $zip->close();
 

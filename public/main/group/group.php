@@ -26,6 +26,10 @@ $this_section = SECTION_COURSES;
 $current_course_tool = TOOL_GROUP;
 $course_id = api_get_course_int_id();
 $sessionId = api_get_session_id();
+$keyword = isset($_GET['keyword']) ? trim(Security::remove_XSS($_GET['keyword'])) : null;
+if ('' === $keyword) {
+    $keyword = null;
+}
 
 // Notice for unauthorized people.
 api_protect_course_script(true, false, 'group');
@@ -58,7 +62,7 @@ if (!empty($my_group_id)) {
     $groupEntity = $groupRepo->find($my_group_id);
 }
 
-$currentUrl = api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq();
+$currentUrl = api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(true, false);
 $groupInfo = GroupManager::get_group_properties($my_group_id);
 
 if (isset($_GET['action']) && $is_allowed_in_course) {
@@ -231,18 +235,29 @@ if (api_is_allowed_to_edit(false, true)) {
     }
 }
 
-$actionsRight = GroupManager::getSearchForm();
+$actionsRight = '<div class="group-search-wrapper">'.GroupManager::getSearchForm().'</div>';
 $toolbar = Display::toolbarAction('toolbar-groups', [$actionsLeft, $actionsRight]);
 $categories = GroupManager::get_categories();
 
-echo $toolbar;
 echo UserManager::getUserSubscriptionTab(3);
+echo $toolbar;
 
 /*  List all categories */
 if ('true' === api_get_setting('allow_group_categories')) {
     if (empty($categories)) {
         $defaultCategoryId = GroupManager::create_category(
-            get_lang('Default groups')
+            get_lang('Default groups'),
+            '',
+            GroupManager::TOOL_NOT_AVAILABLE,
+            GroupManager::TOOL_NOT_AVAILABLE,
+            GroupManager::TOOL_NOT_AVAILABLE,
+            GroupManager::TOOL_NOT_AVAILABLE,
+            GroupManager::TOOL_NOT_AVAILABLE,
+            GroupManager::TOOL_NOT_AVAILABLE,
+            GroupManager::TOOL_NOT_AVAILABLE,
+            0,
+            0,
+            1
         );
         $defaultCategory = GroupManager::get_category($defaultCategoryId);
         $categories = [$defaultCategory];
@@ -256,7 +271,7 @@ if ('true' === api_get_setting('allow_group_categories')) {
             null,
             null,
             false,
-            null,
+            $keyword,
             true
         );
         $groupToShow = GroupManager::processGroups($groupList, $categoryId);
@@ -272,7 +287,10 @@ if ('true' === api_get_setting('allow_group_categories')) {
             $actions .= '<a
                 href="group_category.php?'.api_get_cidreq().'&id='.$categoryId.'" title="'.get_lang('Edit').'">'.
                 Display::getMdiIcon('pencil', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit this category')).'</a>';
-
+            // Add group
+            $actions .= ' <a
+                href="group_creation.php?'.api_get_cidreq().'&category_id='.$categoryId.'">'.
+                Display::getMdiIcon(ActionIcon::SUBSCRIBE_GROUP_USERS_TO_RESOURCE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Create new group(s)')).'</a>';
             // Delete
             $actions .= Display::url(
                 Display::getMdiIcon(ActionIcon::DELETE, count($categories) == 1 ? 'ch-tool-icon-disabled' : 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')),
@@ -315,7 +333,7 @@ if ('true' === api_get_setting('allow_group_categories')) {
             null,
             null,
             false,
-            null,
+            $keyword,
             true
         )
     );

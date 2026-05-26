@@ -80,27 +80,26 @@ if ($form->validate()) {
         $title = $values['email_title'];
         if (!empty($_user['mail'])) {
             api_mail_html(
-            '',
-            $email_administrator,
-            $title,
-            $text,
-            api_get_person_name($_user['firstname'], $_user['lastname']),
-                $_user['mail'],
-            [
-                'reply_to' => [
-                    'mail' => $_user['mail'],
-                    'name' => api_get_person_name($_user['firstname'], $_user['lastname']),
-                ],
-            ]
-        );
+                '',
+                $email_administrator,
+                $title,
+                $text,
+                '',
+                '',
+                [
+                    'reply_to' => [
+                        'mail' => $_user['mail'],
+                        'name' => api_get_person_name($_user['firstname'], $_user['lastname']),
+                    ],
+                ]
+            );
         } else {
             api_mail_html(
-            '',
-            $email_administrator,
-            $title,
-            $text,
-            get_lang('Anonymous')
-        );
+                '',
+                $email_administrator,
+                $title,
+                $text
+            );
         }
         Display::addFlash(Display::return_message(get_lang('Message Sent')));
         $orig = Session::read('origin_url');

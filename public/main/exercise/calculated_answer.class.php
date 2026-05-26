@@ -35,6 +35,7 @@ class CalculatedAnswer extends Question
             $defaults['answer'] = array_shift($preArray);
             $defaults['answer'] = preg_replace('/\[[^\]]*\]/', '[]', $defaults['answer']);
             $defaults['weighting'] = $this->weighting;
+            $defaults['comment'] = (string) ($objAnswer->comment[1] ?? '');
         }
 
         $defaultLow  = 1;
@@ -193,6 +194,18 @@ class CalculatedAnswer extends Question
         $form->addRule('answerVariations', get_lang('Question variations'), 'required');
         $form->setDefaults(['answerVariations' => '1']);
 
+        $form->addHtmlEditor(
+            'comment',
+            get_lang('Comment'),
+            false,
+            false,
+            [
+                'ToolbarSet' => 'TestQuestionDescription',
+                'Width' => '100%',
+                'Height' => '120',
+            ]
+        );
+
         global $text;
         $form->addButtonSave($text, 'submitQuestion');
 
@@ -212,6 +225,7 @@ class CalculatedAnswer extends Question
             $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
             $answer           = (string) $form->getSubmitValue('answer');
+            $comment          = trim((string) $form->getSubmitValue('comment'));
             $formula          = (string) $form->getSubmitValue('formula');
             $lowestValues     = (array) ($form->getSubmitValue('lowestValue')  ?? []);
             $highestValues    = (array) ($form->getSubmitValue('highestValue') ?? []);
@@ -275,7 +289,7 @@ class CalculatedAnswer extends Question
                 $ans->createAnswer(
                     $auxAnswer,
                     1,
-                    '',
+                    $comment,
                     (float) $this->weighting,
                     $j + 1
                 );
@@ -296,6 +310,9 @@ class CalculatedAnswer extends Question
                 $header .= '<th>'.get_lang('Expected choice').'</th>';
             }
             $header .= '<th class="text-center">'.get_lang('Status').'</th>';
+        }
+        if (false === $exercise->hideComment && EXERCISE_FEEDBACK_TYPE_EXAM !== $exercise->getFeedbackType()) {
+            $header .= '<th>'.get_lang('Comment').'</th>';
         }
         $header .= '</tr>';
 

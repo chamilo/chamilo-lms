@@ -15,14 +15,14 @@ use ApiPlatform\Metadata\Post;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\State\CBlogAssignAuthorProcessor;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Table(name: 'c_blog_task')]
 #[ORM\Entity]
 #[ApiResource(
     operations: [
-        new Get(),
-        new GetCollection(),
+        new Get(security: "is_granted('ROLE_USER')"),
+        new GetCollection(security: "is_granted('ROLE_USER')"),
         new Post(
             security: "is_granted('ROLE_USER')",
             processor: CBlogAssignAuthorProcessor::class

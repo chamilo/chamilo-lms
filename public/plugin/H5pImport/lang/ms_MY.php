@@ -1,0 +1,22 @@
+<?php
+$strings['plugin_title'] = 'Import H5P';
+$strings['plugin_comment'] = 'Import kandungan H5P dan gunakannya dalam learnpaths. Buka README.md untuk arahan pemasangan.';
+$strings['frame'] = 'Rangka';
+$strings['frame_help'] = 'Tunjukkan rangka dan butang di bawah H5P';
+$strings['embed'] = 'Benam';
+$strings['embed_help'] = 'Paparkan butang benam';
+$strings['copyright'] = 'Hak cipta';
+$strings['copyright_help'] = 'Paparkan butang hak cipta';
+$strings['icon'] = 'Ikon';
+$strings['icon_help'] = 'Paparkan ikon H5P';
+$strings['attempts'] = 'Bilangan percubaan';
+$strings['upload_h5p'] = 'Muat naik';
+$strings['import_h5p_package'] = 'Muat naik pakej H5P';
+$strings['h5p_package'] = 'Pakej H5P';
+$strings['h5p_error_loading'] = 'Ralat memuat pakej H5P';
+$strings['h5p_error_invalid_token'] = 'Token keselamatan tidak sah';
+$strings['h5p_error_missing_core_asset'] = 'Ralat memuat aset teras H5P';
+$strings['h5p_save_content_state'] = 'Simpan hasil pengguna';
+$strings['h5p_save_content_freq'] = 'Kekerapan simpan';
+$strings['h5p_save_freq_help'] = 'Seberapa kerap keadaan kandungan semasa perlu disimpan, dalam saat';
+$strings['start_attempt'] = 'Mula percubaan';

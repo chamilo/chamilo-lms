@@ -73,8 +73,20 @@ parameters:
                 title: 'LDAP'
                 force_as_login_method: false
                 connection_string: 'ldap://localhost:389'
+                # LDAPS (SSL port 636)  : 'ldaps://hostname:636'
+                # STARTTLS (port 389)   : 'ldap://hostname:389'  + tls_options: { x_tls_require_cert: … }
                 protocol_version: 3
                 referrals: false
+                # TLS options applied before ldap_connect() — required for ldaps:// with self-signed certs.
+                # x_tls_require_cert values: 0=never  1=hard  2=demand  3=allow(try, ignore failure)
+                # Examples:
+                #   Self-signed / internal CA, no cert check:
+                #     tls_options: { x_tls_require_cert: 0 }
+                #   Internal CA with cert file:
+                #     tls_options: { x_tls_require_cert: 2, x_tls_cacertfile: '/etc/ssl/certs/my-ca.crt' }
+                #   Public trusted CA (no extra options needed):
+                #     tls_options: {}
+                tls_options: {}
                 dn_string: '{user_identifier}'
                 query_string: null
                 base_dn: 'DC=chamilo,DC=org'
@@ -83,7 +95,13 @@ parameters:
                 filter: null
                 uid_key: 'uid'
                 password_attribute: 'userPassword'
+                # When true (default), the LDAP role is synced to Chamilo on every update (sync command, login, admin import).
+                # When false, the role is only applied when creating a new user; existing users keep their current Chamilo role.
+                synch_user_role_on_update: true
                 data_correspondence:
+                    # Each value is either:
+                    #   - an LDAP attribute name to read from the entry  (e.g. 'givenName')
+                    #   - a hardcoded value prefixed with "="            (e.g. '=ROLE_STUDENT')
                     firstname: 'givenName'
                     lastname: 'sn'
                     email: 'mail'
@@ -92,6 +110,11 @@ parameters:
                     phone: null
                     active: null
                     admin: null
+                    # Extra user fields: prefix the Chamilo field variable with "extra_".
+                    # The value is the LDAP attribute name to read from (or a hardcoded "=VALUE").
+                    # Example — sync the extra field "oauth2id" from the LDAP attribute "employeeID":
+                    #   extra_oauth2id: 'employeeID'
+                object_class: 'inetOrgPerson'
 
             scim:
                 enabled: false

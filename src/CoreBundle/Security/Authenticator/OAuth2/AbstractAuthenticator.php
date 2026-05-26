@@ -81,9 +81,13 @@ abstract class AbstractAuthenticator extends OAuth2Authenticator implements Auth
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
-        $message = strtr($exception->getMessage(), $exception->getMessageData());
+        $message = strtr($exception->getMessageKey(), $exception->getMessageData());
 
-        return new Response($message, Response::HTTP_FORBIDDEN);
+        if ($request->hasSession()) {
+            $request->getSession()->getFlashBag()->add('error', $message);
+        }
+
+        return new RedirectResponse($this->router->generate('index'));
     }
 
     /**

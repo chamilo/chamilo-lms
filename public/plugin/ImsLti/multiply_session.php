@@ -16,7 +16,7 @@ $webPluginPath = api_get_path(WEB_PLUGIN_PATH).'ImsLti/';
 $em = Database::getManager();
 
 try {
-    if ($plugin->get('enabled') !== 'true') {
+    if (!$plugin->isEnabledForCurrentAccessUrl()) {
         throw new Exception(get_lang('NotAllowed'));
     }
 
@@ -56,18 +56,18 @@ try {
 
     $form = new FormValidator('frm_multiply', 'post', api_get_self().'?id='.$tool->getId().'&session_id='.$sessionId);
     $form->addLabel(get_lang('SessionName'), $session);
-    $form->addLabel($plugin->get_lang('Tool'), $tool->getName());
+    $form->addLabel($plugin->get_lang('Tool'), $tool->getTitle());
     $form->addSelectAjax(
         'courses',
         get_lang('Courses'),
         $slctCourses,
         [
             'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?'.http_build_query(
-                [
-                    'a' => 'search_course_by_session_all',
-                    'session_id' => $sessionId,
-                ]
-            ),
+                    [
+                        'a' => 'search_course_by_session_all',
+                        'session_id' => $sessionId,
+                    ]
+                ),
             'multiple' => true,
         ]
     );

@@ -120,13 +120,13 @@ $hideSearch = ('true' === api_get_setting('session.hide_search_form_in_session_l
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
      return \'<a href="session_edit.php?page=resume_session.php&id=\'+options.rowId+\'">'.
     Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>'.
-    '&nbsp;<a href="add_users_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.
+    '&nbsp;<a href="add_users_to_session.php?page=/admin/session-list&id_session=\'+options.rowId+\'">'.
     Display::getMdiIcon(ObjectIcon::USER, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Subscribe users to this session')).'</a>'.
-    '&nbsp;<a href="add_courses_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.
+    '&nbsp;<a href="add_courses_to_session.php?page=/admin/session-list&id_session=\'+options.rowId+\'">'.
     Display::getMdiIcon(ObjectIcon::COURSE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Add courses to this session')).'</a>'.
-    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) return false;" href="session_list.php?list_type='.$listType.'&action=copy&idChecked=\'+options.rowId+\'">'.
+    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) return false;" href="/admin/session-list?list_type='.$listType.'&action=copy&idChecked=\'+options.rowId+\'">'.
     Display::getMdiIcon(ActionIcon::COPY_CONTENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Copy')).'</a>'.
-    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) return false;" href="session_list.php?list_type='.$listType.'&action=delete&idChecked=\'+options.rowId+\'">'.
+    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) return false;" href="/admin/session-list?list_type='.$listType.'&action=delete&idChecked=\'+options.rowId+\'">'.
     Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>'.
     '\';
 }';

@@ -1,11 +1,13 @@
 <template>
   <div class="space-y-6">
     <div class="flex items-center justify-between">
-      <BaseIcon
+      <BaseButton
+        :label="t('Back')"
         icon="back"
-        size="big"
+        only-icon
+        size="small"
+        type="black"
         @click="goBack"
-        :title="t('Back')"
       />
     </div>
     <hr />
@@ -38,6 +40,7 @@
       <BaseButton
         :label="t('Submit')"
         type="primary"
+        icon="send"
         @click="submitText"
       />
     </div>
@@ -100,6 +103,7 @@
       <BaseButton
         :label="t('Submit')"
         type="primary"
+        icon="send"
         @click="submitMixed"
       />
     </div>
@@ -118,8 +122,6 @@ import { Dashboard } from "@uppy/vue"
 import Uppy from "@uppy/core"
 import XHRUpload from "@uppy/xhr-upload"
 import axios from "axios"
-import { ENTRYPOINT } from "../../config/entrypoint"
-import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 
@@ -137,11 +139,17 @@ const text = ref("")
 const submissionTitle = ref("")
 const activeTab = ref(allowText ? "text" : "file")
 const allowedExtensions = ref([])
+const endsOn = ref(null)
+function isDeadlinePassed() {
+  if (!endsOn.value) return false
+  const s = String(endsOn.value)
+  return new Date() > new Date(s.includes("T") ? s : s.replace(" ", "T"))
+}
 
 onMounted(loadPublicationTitle)
 async function loadPublicationTitle() {
   try {
-    const { data } = await axios.get(`${ENTRYPOINT}c_student_publications/${publicationId}`, {
+    const { data } = await axios.get(`/api/c_student_publications/${publicationId}`, {
       params: { cid, ...(sid && { sid }), ...(gid && { gid }) },
     })
     publicationTitle.value = data.title
@@ -151,7 +159,19 @@ async function loadPublicationTitle() {
       allowedExtensions.value = data.extensions
         .split(' ')
         .map(ext => ext.trim().toLowerCase())
-        .filter(ext => ext.length > 0) }
+        .filter(ext => ext.length > 0)
+    }
+
+    endsOn.value = data.assignment?.endsOn ?? null
+
+    if (isDeadlinePassed()) {
+      showErrorNotification(t("The submission deadline has passed. You can no longer submit."))
+      router.push({
+        name: "AssignmentDetail",
+        params: { id: publicationId, node: parentResourceNodeId },
+        query: { cid, ...(sid && { sid }) },
+      })
+    }
   } catch (e) {
     console.error("Error loading publication metadata", e)
   }
@@ -176,6 +196,19 @@ const queryParams = new URLSearchParams({
 const uppy = new Uppy({
   restrictions: { maxNumberOfFiles: 1 },
   autoProceed: true,
+  onBeforeFileAdded: (currentFile) => {
+    if (isDeadlinePassed()) {
+      showErrorNotification(t("The submission deadline has passed. You can no longer submit."))
+      return false
+    }
+    if (!isFileExtensionAllowed(currentFile.name)) {
+      showErrorNotification(
+        t("File type not allowed. Allowed extensions: {0}", [allowedExtensions.value.map(ext => '.' + ext).join(', ')])
+      )
+      return false
+    }
+    return true
+  },
 })
 uppy.use(XHRUpload, {
   endpoint: `/api/c_student_publications/upload?${queryParams}`,
@@ -183,13 +216,6 @@ uppy.use(XHRUpload, {
   fieldName: "uploadFile",
 })
 uppy.on("file-added", (file) => {
-  if (!isFileExtensionAllowed(file.name)) {
-    uppy.removeFile(file.id)
-    showErrorNotification(
-      t("File type not allowed. Allowed extensions: {0}", [allowedExtensions.value.map(ext => '.' + ext).join(', ')])
-    )
-    return
-  }
   uppy.setMeta({
     title: file.name,
     filetype: "file",
@@ -200,13 +226,20 @@ uppy.on("file-added", (file) => {
 })
 uppy.on("upload-success", () => {
   showSuccessNotification(t("File uploaded successfully"))
-  router.back()
+  router.push({
+    name: "AssignmentDetail",
+    params: { id: publicationId, node: parentResourceNodeId },
+    query: { cid, ...(sid && { sid }) },
+  })
 })
 uppy.on("upload-error", () => {
   showErrorNotification(t("Failed to upload file"))
 })
 
 async function submitText() {
+  if (isDeadlinePassed()) {
+    return showErrorNotification(t("The submission deadline has passed. You can no longer submit."))
+  }
   if (!submissionTitle.value.trim() || !text.value.trim()) {
     return showErrorNotification(t("Please provide a title and some text"))
   }
@@ -226,7 +259,11 @@ async function submitText() {
       headers: { "Content-Type": "multipart/form-data" },
     })
     showSuccessNotification(t("Text submitted successfully"))
-    router.back()
+    router.push({
+      name: "AssignmentDetail",
+      params: { id: publicationId, node: parentResourceNodeId },
+      query: { cid, ...(sid && { sid }) },
+    })
   } catch (e) {
     showErrorNotification(e)
   }
@@ -241,8 +278,8 @@ function submitMixed() {
 function goBack() {
   router.push({
     name: "AssignmentDetail",
-    params: { id: publicationId },
-    query: route.query,
+    params: { id: publicationId, node: parentResourceNodeId },
+    query: { cid, ...(sid && { sid }) },
   })
 }
 

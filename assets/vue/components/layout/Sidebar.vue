@@ -40,12 +40,20 @@
         <BaseSidebarPanelMenu v-model="menuItemsAfterMyCourse" />
       </div>
       <div class="app-sidebar__bottom">
+        <CategoryLinks category="menu_links" />
         <PageList category-title="footer_private" />
+
+        <p
+          v-if="institutionAddress"
+          class="app-sidebar__institution-address"
+        >
+          {{ institutionAddress }}
+        </p>
 
         <p v-html="t('Created with Chamilo copyright year', [currentYear])" />
       </div>
       <a
-        v-if="securityStore.isAuthenticated && !isAnonymous"
+        v-if="securityStore.isAuthenticated && !isAnonymous && !hideLogoutButton"
         class="app-sidebar__logout-link"
         href="/logout"
       >
@@ -78,26 +86,41 @@ import ToggleButton from "primevue/togglebutton"
 import { useI18n } from "vue-i18n"
 import { useSecurityStore } from "../../store/securityStore"
 import { useSidebarMenu } from "../../composables/sidebarMenu"
+import { usePlatformConfig } from "../../store/platformConfig"
 import PageList from "../page/PageList.vue"
 import { useEnrolledStore } from "../../store/enrolledStore"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
 import BaseSidebarPanelMenu from "../basecomponents/BaseSidebarPanelMenu.vue"
+import CategoryLinks from "../page/CategoryLinks.vue"
 
 const { t } = useI18n()
 const securityStore = useSecurityStore()
 const enrolledStore = useEnrolledStore()
+const platformConfigStore = usePlatformConfig()
 
 const { menuItemsBeforeMyCourse, menuItemMyCourse, menuItemsAfterMyCourse, hasOnlyOneItem, initialize } =
   useSidebarMenu()
 
-const stored = window.localStorage.getItem("sidebarIsOpen")
-const sidebarIsOpen = ref(stored === null ? true : stored === "true")
-if (stored === null) {
+const isMobile = () => window.innerWidth < 640
+
+const storedSidebarState = window.localStorage.getItem("sidebarIsOpen")
+
+const sidebarIsOpen = ref(isMobile() ? false : storedSidebarState === null ? true : storedSidebarState === "true")
+
+if (!isMobile() && storedSidebarState === null) {
   window.localStorage.setItem("sidebarIsOpen", "true")
 }
 const expandingDueToPanelClick = ref(false)
 
 const currentYear = new Date().getFullYear()
+
+const hideLogoutButton = computed(() => {
+  return platformConfigStore.getSetting("display.hide_logout_button") === "true"
+})
+
+const institutionAddress = computed(() => {
+  return String(platformConfigStore.getSetting("platform.institution_address") || "").trim()
+})
 
 const isAnonymous = computed(() => {
   const u = securityStore.user || {}
@@ -112,7 +135,9 @@ watch(
   sidebarIsOpen,
   (newValue) => {
     const appEl = document.querySelector("#app")
-    window.localStorage.setItem("sidebarIsOpen", newValue.toString())
+    if (!isMobile()) {
+      window.localStorage.setItem("sidebarIsOpen", newValue.toString())
+    }
     appEl.classList.toggle("app--sidebar-inactive", !newValue)
 
     if (!newValue) {
@@ -120,7 +145,9 @@ watch(
         const expandedHeaders = document.querySelectorAll(".p-panelmenu-header.p-highlight")
         expandedHeaders.forEach((header) => header.click())
         sidebarIsOpen.value = false
-        window.localStorage.setItem("sidebarIsOpen", "false")
+        if (!isMobile()) {
+          window.localStorage.setItem("sidebarIsOpen", "false")
+        }
       }
     }
     expandingDueToPanelClick.value = false
@@ -130,20 +157,28 @@ watch(
 
 const handlePanelHeaderClick = (event) => {
   const header = event.target.closest(".p-panelmenu-header")
-  if (!header) return
 
-  const contentId = header.getAttribute("aria-controls")
-  const contentPanel = document.getElementById(contentId)
+  if (header) {
+    const contentId = header.getAttribute("aria-controls")
+    const contentPanel = document.getElementById(contentId)
 
-  if (contentPanel && !sidebarIsOpen.value) {
-    expandingDueToPanelClick.value = true
-    sidebarIsOpen.value = true
-    window.localStorage.setItem("sidebarIsOpen", "true")
+    if (contentPanel && !sidebarIsOpen.value) {
+      expandingDueToPanelClick.value = true
+      sidebarIsOpen.value = true
+
+      if (!isMobile()) {
+        window.localStorage.setItem("sidebarIsOpen", "true")
+      }
+    }
+  }
+
+  if (isMobile() && event.target.closest("a[href]")) {
+    sidebarIsOpen.value = false
   }
 }
 
 onMounted(async () => {
-  if (!isAnonymous.value) {
+  if (securityStore.isAuthenticated && !isAnonymous.value) {
     await initialize()
   }
 })

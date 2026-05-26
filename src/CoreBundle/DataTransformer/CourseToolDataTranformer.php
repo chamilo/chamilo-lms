@@ -25,19 +25,24 @@ class CourseToolDataTranformer
         protected readonly ToolChain $toolChain,
     ) {}
 
-    public function transform(CTool $object): CourseTool
+    public function transform(CTool $object, ?AbstractTool $resolvedTool = null): CourseTool
     {
-        $tool = $object->getTool();
+        $toolEntity = $object->getTool();
 
-        $toolModel = $this->toolChain->getToolFromName(
-            $tool->getTitle()
+        $toolModel = $resolvedTool ?? $this->toolChain->getToolFromName(
+            $toolEntity->getTitle()
         );
 
         $course = $this->getCourse();
 
+        $titleToShow = trim($toolModel->getTitleToShow());
+        if ('' === $titleToShow) {
+            $titleToShow = $object->getTitle();
+        }
+
         $cTool = new CourseTool();
         $cTool->iid = $object->getIid();
-        $cTool->title = $object->getTitle();
+        $cTool->title = $titleToShow;
         $cTool->visibility = $object->getVisibility();
         $cTool->resourceNode = $object->resourceNode;
         $cTool->illustrationUrl = $object->illustrationUrl;
@@ -47,20 +52,32 @@ class CourseToolDataTranformer
         return $cTool;
     }
 
+    private function normalizeToolLink(string $link): string
+    {
+        if (str_starts_with($link, 'plugin/')) {
+            return '/'.$link;
+        }
+
+        return $link;
+    }
+
     private function generateToolUrl(AbstractTool $tool, Course $course): string
     {
-        $link = $tool->getLink();
+        $link = $this->normalizeToolLink($tool->getLink());
 
-        if (strpos($link, 'nodeId')) {
+        if (str_contains($link, ':nodeId')) {
             $nodeId = (string) $course->getResourceNode()->getId();
             $link = str_replace(':nodeId', $nodeId, $link);
         }
 
-        return $link.'?'
-            .http_build_query([
-                'cid' => $this->getCourse()->getId(),
-                'sid' => $this->getSession()?->getId(),
-                'gid' => 0,
-            ]);
+        $query = http_build_query([
+            'cid' => $this->getCourse()->getId(),
+            'sid' => $this->getSession()?->getId(),
+            'gid' => 0,
+        ]);
+
+        $separator = str_contains($link, '?') ? '&' : '?';
+
+        return $link.$separator.$query;
     }
 }

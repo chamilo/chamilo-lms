@@ -1,7 +1,7 @@
 parameters:
   plugin_settings:
     default:
-      bbb:
+      Bbb:
         tool_enable: true
         host: 'https://www.example.com'
         salt: 'abc123'

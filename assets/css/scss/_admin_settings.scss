@@ -1,0 +1,13 @@
+.admin-settings {
+  &__list {
+    @apply flex flex-col mr-4 text-body-2;
+  }
+
+  &__item {
+    @apply flex flex-row justify-start gap-2 border-none rounded-sm px-2 py-2 items-center outline-none;
+
+    &--active {
+      @apply bg-support-1 border-l-4 border-primary border-solid text-primary font-semibold;
+    }
+  }
+}

@@ -1,0 +1,148 @@
+{
+  "semantics": [
+    {
+      "label": "Consigne",
+      "description": "La consigne indique ce que l'utilisateur doit faire.",
+      "default": "Déplacez les textes dans les emplacements qui leur correspondent."
+    },
+    {
+      "label": "Question",
+      "placeholder": "Paris est la capitale de la *France*",
+      "description": "",
+      "important": {
+        "description": "<ul><li>Les textes déplaçables s'ajoutent avec un astérisque (*) devant et derrière chaque texte.</li><li>Vous pouvez ajouter un indice en plaçant 2 points (:) avant cet indice.</li><li>Il ne peut y avoir qu'un seul texte correct pour chaque espace à remplir.</li><li>Vous pouvez ajouter un feedback qui apparaîtra une fois l'exercice terminé. Utilisez '\\+' pour créer le feedback en cas de réponse correcte et '\\-' pour le feedback en cas de mauvaise réponse.</li></ul>",
+        "example": "Les contenus H5P peuvent être édités en utilisant un *navigateur:Quel type de programme utilisez vous pour consulter des sites Internet ?*. </br> Un contenu H5P est *interactif\\+Correct ! \\-Incorrect, Recommencez !*"
+      }
+    },
+    {
+      "label": "Opacité des étiquettes",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Par défaut"
+            }
+          ],
+          "label": "Définissez le feedback pour chaque intervalle de scores",
+          "description": "Cliquez sur le bouton \"Ajouter Intervalle\" pour ajouter autant d'intervalles que vous le souhaitez. Exemple: 0-20% Mauvais score, 21-91% Score moyen, 91-100% Score excellent !",
+          "entity": "intervalle",
+          "field": {
+            "fields": [
+              {
+                "label": "Intervalle de score"
+              },
+              {},
+              {
+                "label": "Feedback pour un intervalle de score défini",
+                "placeholder": "Remplir le feedback"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Texte du bouton \"Vérifier\"",
+      "default": "Vérifier"
+    },
+    {
+      "label": "Texte du bouton \"Recommencer\"",
+      "default": "Recommencer"
+    },
+    {
+      "label": "Texte pour le bouton \"Voir la correction\"",
+      "default": "Voir la correction"
+    },
+    {
+      "label": "Etiquette de la zone de dépôt numérotée",
+      "default": "Zone de dépôt @index.",
+      "description": "Etiquette utilisée pour l'accessibilité quand la synthèse vocale annonce le numéro de la zone de dépôt. Variable disponible : @index"
+    },
+    {
+      "label": "Etiquette zone de dépôt vide",
+      "default": "La zone de dépôt @index est vide.",
+      "description": "Etiquette utilisée pour l'accessibilité quand la syntèse vocale annonce que la zone de dépôt est vide"
+    },
+    {
+      "label": "Etiquette pour la zone de dépôt contient",
+      "default": "La zone de dépôt @index contient un élément déplaçable @draggable.",
+      "description": "Etiquette utilisée pour l'accessibilité quand la syntèse vocale annonce que la zone de dépôt contient un élément déplaçable"
+    },
+    {
+      "label": "Etiquette pour les éléments à déplacer",
+      "default": "@index sur @count éléments déplaçables.",
+      "description": "Etiquette utilisée pour l'accessibilité quand la syntèse vocale annonce que c'est un élément déplaçable. Variables disponibles : @index, @count"
+    },
+    {
+      "label": "Etiquette pour le bouton d'indice",
+      "default": "Montrer l'indice",
+      "description": "Etiquette utilisée pour l'accessibilité quand la syntèse vocale annonce l'indice"
+    },
+    {
+      "label": "Texte exprimé par la synthèse vocale en cas de réponse correcte",
+      "default": "Correct !"
+    },
+    {
+      "label": "Texte exprimé par la synthèse vocale en cas de réponse incorrecte",
+      "default": "Incorrect !"
+    },
+    {
+      "label": "Intitulé de dialogue pour confirmer que l'utilisateur souhaite reparamétrer l'élément déplaçable",
+      "default": "Reparamétrer le déplacement"
+    },
+    {
+      "label": "Description du dialogue de confirmation pour reparamétrer un élément déplaçable",
+      "default": "Etes-vous certain de vouloir reparamétrer cet élément déplaçable ?"
+    },
+    {
+      "label": "Etiquette utilisée pour l'accessibilité quand la synthèse vocale annonce que le déplacement d'un élément est initié",
+      "default": "L'élément déplaçable est saisi."
+    },
+    {
+      "label": "Etiquette utilisée pour l'accessibilité quand la synthèse vocale annonce que le déplacement de l'élément est annulé",
+      "default": "Annuler le déplacement."
+    },
+    {
+      "label": "Etiquette utilisée pour l'accessibilité quand la bonne réponse est annoncée par la synthèse vocale",
+      "default": "Réponse correcte :"
+    },
+    {
+      "label": "Intitulé de l'espace contenant des feedbacks pour des réponses correctes/incorrectes",
+      "default": "Commentaire de retour"
+    },
+    {
+      "label": "Options générales.",
+      "description": "Ces options vous permettent de contrôler le déroulement de vos activités.",
+      "fields": [
+        {
+          "label": "Activer le bouton \"Recommencer\""
+        },
+        {
+          "label": "Activer le bouton \"Voir la solution\""
+        },
+        {
+          "label": "Activer le bouton \"Vérifier\""
+        },
+        {
+          "label": "Correction instantanée"
+        }
+      ]
+    },
+    {
+      "label": "Représentation textuelle du panneau du score pour les utilisateurs des outils de la vocalisation (comme ReadSpeaker)",
+      "default": "Vous avez obtenu :num sur un total de :points"
+    },
+    {
+      "label": "Assistive technology label for \"Check\" button",
+      "default": "Check the answers. The responses will be marked as correct, incorrect, or unanswered."
+    },
+    {
+      "label": "Assistive technology label for \"Show Solution\" button",
+      "default": "Show the solution. The task will be marked with its correct solution."
+    },
+    {
+      "label": "Assistive technology label for \"Retry\" button",
+      "default": "Retry the task. Reset all responses and start the task over again."
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+.qcmbarre{
+    text-align: left;
+    width:100%;
+}
+.quizzTextqcm{
+    text-align: left;
+}
+
+.loadcontentfram{
+    background-color: #EBF5FB!important;
+}
+
+.quizzcontentplug{
+    background-color: #EBF5FB;
+    border: 1px solid #ebf5fbd7;
+    border-radius: 8px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+}
+
+.qcmbarre {
+    position : relative;
+    background-color: #EBF5FB;
+    border: 1px solid #ebf5fbd7;
+    border-radius: 8px;
+    padding-bottom : 20px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+}
+
+.quizzblockdeco {
+    display: none;
+    position: absolute;
+    right : 0px;
+    bottom : 0px;
+    width: 50px;
+    height: 50px;
+}
+
+.qcmbarre tbody:after , .quizzcontentplug tbody:after {
+    content: "";
+    display: block;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 16px 0;
+    border-bottom-right-radius: 8px;
+    transition: inherit;
+    background-color: #5DADE2;
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjxzdmcKICAgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIgogICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIgogICB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiCiAgIHhtbG5zOnN2Zz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIKICAgeG1sbnM6c29kaXBvZGk9Imh0dHA6Ly9zb2RpcG9kaS5zb3VyY2Vmb3JnZS5uZXQvRFREL3NvZGlwb2RpLTAuZHRkIgogICB4bWxuczppbmtzY2FwZT0iaHR0cDovL3d3dy5pbmtzY2FwZS5vcmcvbmFtZXNwYWNlcy9pbmtzY2FwZSIKICAgdmlld0JveD0iMCAwIDM2IDM2IgogICB2ZXJzaW9uPSIxLjEiCiAgIGlkPSJzdmc0IgogICBzb2RpcG9kaTpkb2NuYW1lPSJxdWVzdGlvbi5zdmciCiAgIHdpZHRoPSIzNiIKICAgaGVpZ2h0PSIzNiIKICAgaW5rc2NhcGU6dmVyc2lvbj0iMS4wLjEgKDNiYzJlODEzZjUsIDIwMjAtMDktMDcpIj4KICA8bWV0YWRhdGEKICAgICBpZD0ibWV0YWRhdGExMCI+CiAgICA8cmRmOlJERj4KICAgICAgPGNjOldvcmsKICAgICAgICAgcmRmOmFib3V0PSIiPgogICAgICAgIDxkYzpmb3JtYXQ+aW1hZ2Uvc3ZnK3htbDwvZGM6Zm9ybWF0PgogICAgICAgIDxkYzp0eXBlCiAgICAgICAgICAgcmRmOnJlc291cmNlPSJodHRwOi8vcHVybC5vcmcvZGMvZGNtaXR5cGUvU3RpbGxJbWFnZSIgLz4KICAgICAgICA8ZGM6dGl0bGU+PC9kYzp0aXRsZT4KICAgICAgPC9jYzpXb3JrPgogICAgPC9yZGY6UkRGPgogIDwvbWV0YWRhdGE+CiAgPGRlZnMKICAgICBpZD0iZGVmczgiIC8+CiAgPHNvZGlwb2RpOm5hbWVkdmlldwogICAgIHBhZ2Vjb2xvcj0iI2ZmZmZmZiIKICAgICBib3JkZXJjb2xvcj0iIzY2NjY2NiIKICAgICBib3JkZXJvcGFjaXR5PSIxIgogICAgIG9iamVjdHRvbGVyYW5jZT0iMTAiCiAgICAgZ3JpZHRvbGVyYW5jZT0iMTAiCiAgICAgZ3VpZGV0b2xlcmFuY2U9IjEwIgogICAgIGlua3NjYXBlOnBhZ2VvcGFjaXR5PSIwIgogICAgIGlua3NjYXBlOnBhZ2VzaGFkb3c9IjIiCiAgICAgaW5rc2NhcGU6d2luZG93LXdpZHRoPSIxMTkxIgogICAgIGlua3NjYXBlOndpbmRvdy1oZWlnaHQ9Ijc2NyIKICAgICBpZD0ibmFtZWR2aWV3NiIKICAgICBzaG93Z3JpZD0iZmFsc2UiCiAgICAgaW5rc2NhcGU6em9vbT0iMTEuNjE2MzM2IgogICAgIGlua3NjYXBlOmN4PSIxOS44OTk1ODUiCiAgICAgaW5rc2NhcGU6Y3k9IjIxLjYyODAzMSIKICAgICBpbmtzY2FwZTp3aW5kb3cteD0iMCIKICAgICBpbmtzY2FwZTp3aW5kb3cteT0iMCIKICAgICBpbmtzY2FwZTp3aW5kb3ctbWF4aW1pemVkPSIwIgogICAgIGlua3NjYXBlOmN1cnJlbnQtbGF5ZXI9InN2ZzQiIC8+CiAgPHBhdGgKICAgICBkPSJNIDE4LjAxNDQ2OCwwLjQxMjE1ODMxIEEgMTcuNTE0MzkzLDE3LjYyNzQ4NCAwIDEgMCAzNS41Mjg4NTksMTguMDM5NjQyIDE3LjUzNDI1LDE3LjY0NzQ2OSAwIDAgMCAxOC4wMTQ0NjgsMC40MTIxNTgzMSBaIE0gMjAuMDM1NTI3LDI3LjUzMjAyNyBhIDIuMDIxMjI4MywyLjAzNDI3OTUgMCAxIDEgMCwtNy4wMWUtNCB6IG0gMi43NDIzODEsLTcuNDEwMTExIGEgNi42OTAwMDMsNi43MzMyMDAzIDAgMCAxIC0zLjQxNjE3NiwxLjg1MDg3MiB2IDAuMTM0NzM1IGEgMS4zNDcyNjExLDEuMzU1OTYwNSAwIDEgMSAtMi42OTQ1MjIsMCB2IC0xLjM1NTk2MSBhIDEuMzQ3MzI4MywxLjM1NjAyOCAwIDAgMSAxLjM0NzI2MSwtMS4zNTU5NiA0LjA0MTU4MjUsNC4wNjc2NzkzIDAgMSAwIC00LjA0MTc4MywtNC4wNjc4OCAxLjM0NzI2MTUsMS4zNTU5NjA5IDAgMCAxIC0yLjY5NDUyMywwIDYuNzM2MzA0OSw2Ljc3OTgwMTQgMCAxIDEgMTEuNDk5NzQzLDQuNzk0MTk0IHoiCiAgICAgaWQ9InBhdGgyIgogICAgIHN0eWxlPSJmaWxsOiNmOWY5Zjk7c3Ryb2tlLXdpZHRoOjAuMTY4OTUiIC8+Cjwvc3ZnPgo=);
+}
+
+.qcmbarre td{
+    padding : 1px;
+    margin : 0px;
+}
+.qcmbarre .quizzTextqcm{
+    padding : 20px;
+    padding-bottom : 20px;
+    padding-left:20px;
+}
+.qcmbarre .quizzTextqcm p{
+    padding : 0px;
+    margin : 0px;
+}
+.qcmbarre .quizzTextTd{
+    width: 54px;
+    padding : 0px;
+}
+.checkboxqcm{
+    padding : 0px;
+    margin : 0px;
+    width:30px;
+    height:30px;
+    margin-left:15px;
+}

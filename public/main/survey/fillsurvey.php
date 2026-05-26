@@ -193,9 +193,10 @@ if (1 == (int) $survey->getAnonymous()) {
 }
 
 
-// Block if already answered
+// Block if already answered (meeting polls, type 3, are always accessible within the date range)
 if (
     !isset($_POST['finish_survey'])
+    && 3 !== $survey->getSurveyType()
     && (
         ($isAnonymous && !empty($surveyUserFromSession) && SurveyUtil::isSurveyAnsweredFlagged($survey->getCode(), $survey_invitation['c_id']))
         || (1 == $survey_invitation['answered'] && !isset($_GET['user_id']))
@@ -698,7 +699,7 @@ if ((isset($_GET['show']) && '' != $_GET['show']) || isset($_POST['personality']
                           ON survey_question.iid = survey_question_option.question_id
                         WHERE survey_question NOT LIKE '%{{%'
                           AND survey_question.survey_id = '".$surveyId."'
-                          AND survey_question.iid IN (".implode(',', $paged_questions[$_GET['show']]).')
+                          AND survey_question.iid IN (".implode(',', $paged_questions[(int)$_GET['show']]).')
                         ORDER BY survey_question.sort, survey_question_option.sort ASC';
             }
 
@@ -1116,7 +1117,14 @@ if (isset($questions) && is_array($questions)) {
 
         $js .= survey_question::getQuestionJs($question);
 
-        $form->addHtml('<div class="survey_question '.$ch_type.' '.$parentClass.' mb-6 p-4 bg-gray-10 rounded-lg border border-gray-20">');
+        $questionDisplay = strtolower(trim((string) ($question['display'] ?? 'horizontal')));
+        if ('vertical' !== $questionDisplay) {
+            $questionDisplay = 'horizontal';
+        }
+
+        $form->addHtml(
+            '<div class="survey_question '.$ch_type.' survey-question-display-'.$questionDisplay.' '.$parentClass.' mb-6 p-4 bg-gray-10 rounded-lg border border-gray-20" data-display="'.$questionDisplay.'">'
+        );
         if ($showNumber && $survey->isDisplayQuestionNumber()) {
             $form->addHtml('<div class="font-semibold text-blue-700 mb-1"> '.$questionNumber.'. </div>');
         }
@@ -1146,6 +1154,12 @@ if (isset($questions) && is_array($questions)) {
                 case 'percentage':
                     [$choiceId, $choiceValue] = explode('*', current($userAnswer));
                     $finalAnswer = $choiceId;
+
+                    break;
+
+                case 'multiplechoiceother':
+                case 'dropdown':
+                    $finalAnswer = current($userAnswer);
 
                     break;
 

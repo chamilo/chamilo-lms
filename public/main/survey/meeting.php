@@ -183,8 +183,8 @@ foreach ($questions as $item) {
 
 $row = 1;
 $column = 0;
-$availableIcon = Display::getMdiIcon(StateIcon::ACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Available'));
-$notAvailableIcon = Display::getMdiIcon(StateIcon::INACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Not available'));
+$availableIcon = '<div class="text-center">'.Display::getMdiIcon(StateIcon::COMPLETE, 'ch-tool-icon text-success', null, ICON_SIZE_MEDIUM, get_lang('Available')).'</div>';
+$notAvailableIcon = '<div class="text-center">'.Display::getMdiIcon(StateIcon::INACTIVE, 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('Not available')).'</div>';
 
 foreach ($students as $studentId) {
     $userInfo = api_get_user_info($studentId);

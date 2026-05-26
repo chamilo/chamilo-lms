@@ -14,6 +14,9 @@ use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends ResourceRepository<AccessUrl>
+ */
 class AccessUrlRepository extends ResourceRepository
 {
     public function __construct(ManagerRegistry $registry)

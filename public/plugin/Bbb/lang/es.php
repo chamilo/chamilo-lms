@@ -1,0 +1,79 @@
+<?php
+/* License: see /license.txt */
+// Needed in order to show the plugin title
+$strings['plugin_title'] = 'Videoconferencia';
+$strings['plugin_comment'] = 'Añade una sala de videoconferencia en los cursos de Chamilo con BigBlueButton (BBB)';
+
+$strings['Videoconference'] = 'Videoconferencia';
+$strings['MeetingOpened'] = 'Sala abierta';
+$strings['MeetingClosed'] = 'Sala cerrada';
+$strings['MeetingClosedComment'] = 'Si ha pedido grabar la sesión de videoconferencia en los parámetros del curso, esta grabación aparecerá en la lista siguiente una vez generada.';
+$strings['CloseMeeting'] = 'Cerrar sala';
+
+$strings['VideoConferenceXCourseX'] = 'Videoconferencia #%s, curso %s';
+$strings['VideoConferenceAddedToTheCalendar'] = 'Videoconferencia añadida al calendario';
+$strings['VideoConferenceAddedToTheLinkTool'] = 'Videoconferencia añadida como enlace. Puede editar y publicar el enlace en la página principal del curso desde la herramienta de enlace.';
+
+$strings['GoToTheVideoConference'] = 'Ir a la videoconferencia';
+
+$strings['Records'] = 'Grabación';
+$strings['Meeting'] = 'Sala de conferencia';
+
+$strings['ViewRecord'] = 'Ver grabación';
+$strings['CopyToLinkTool'] = 'Añadir como enlace del curso';
+
+$strings['EnterConference'] = 'Entrar a la videoconferencia';
+$strings['RecordList'] = 'Lista de grabaciones';
+$strings['ServerIsNotRunning'] = 'El servidor de videoconferencia no está funcionando';
+$strings['ServerIsNotConfigured'] = 'El servidor de videoconferencia no está configurado correctamente';
+
+$strings['XUsersOnLine'] = '%s usuario(s) en la sala';
+
+$strings['host'] = 'Host de BigBlueButton';
+$strings['host_help'] = 'Este es el nombre del servidor donde su servidor BigBlueButton está corriendo. Puede ser localhost, una dirección IP (ej: http://192.168.13.54) o un nombre de dominio (ej: http://mi.video.com).';
+
+$strings['salt'] = 'Clave BigBlueButton';
+$strings['salt_help'] = 'Esta es la llave de seguridad de su servidor BigBlueButton (llamada "salt" en inglés), que permitirá a su servidor de autentifica la instalación de Chamilo (como autorizada). Refiérese a la documentación de BigBlueButton para ubicarla, o use el comando "bbb-conf --salt" si tiene acceso al servidor en línea de comando.';
+
+$strings['big_blue_button_welcome_message'] = 'Mensaje de bienvenida de BigBlueButton';
+$strings['enable_global_conference'] = 'Activar la conferencia global';
+$strings['enable_global_conference_per_user'] = 'Activar la conferencia global por usuario';
+$strings['enable_conference_in_course_groups'] = 'Activar las conferencias en grupos';
+$strings['enable_global_conference_link'] = 'Activar el enlace hacia la conferencia global desde la página principal';
+$strings['disable_download_conference_link'] = 'Desactivar descarga de conferencia';
+$strings['big_blue_button_record_and_store'] = 'Grabar las sesiones de videoconferencia.';
+$strings['bbb_enable_conference_in_groups'] = 'Activar la creación de videoconferencia en los grupos.';
+$strings['plugin_tool_bbb'] = 'Videoconferencia';
+$strings['ThereAreNotRecordingsForTheMeetings'] = 'No hay grabaciones de sesiones de videoconferencia';
+$strings['No recording'] = 'No hay grabación';
+$strings['ClickToContinue'] = 'Hacer click para continuar';
+$strings['NoGroup'] = 'No hay grupo';
+$strings['UrlMeetingToShare'] = 'URL a compartir';
+$strings['AdminView'] = 'Vista para administradores';
+$strings['max_users_limit'] = 'Cantidad máxima de usuarios';
+$strings['max_users_limit_help'] = 'Este valor indica la cantidad máxima de usuarios simultáneos en una conferencia en un curso o curso-sesión. Dejar vacío o en 0 para no poner límite.';
+$strings['MaxXUsersWarning'] = 'Esta sala de conferencia es limitada a un máximo de %s usuarios simultáneos.';
+$strings['MaxXUsersReached'] = 'El límite de %s usuarios simultáneos ha sido alcanzado en esta sala de conferencia. Por favor refresque la página en unos minutos para ver si un asiento se ha liberado, o espere la apertura de una nueva sala para poder participar.';
+$strings['MaxXUsersReachedManager'] = 'El límite de %s usuarios simultáneos ha sido alcanzado en esta sala de conferencia. Para aumentar el límite, contáctese con el administrador del portal.';
+$strings['MaxUsersInConferenceRoom'] = 'Número máximo de usuarios simultáneos en una sala de conferencia';
+$strings['global_conference_allow_roles'] = 'El enlace de videoconferencia global es disponible para estos perfiles';
+$strings['CreatedAt'] = 'Creado el';
+$strings['allow_regenerate_recording'] = 'Permitir regenerar grabación';
+$strings['bbb_force_record_generation'] = 'Forzar generación de grabación al final de la reunión';
+$strings['disable_course_settings'] = 'Desactivar configuración del curso';
+$strings['UpdateAllCourses'] = 'Actualizar todos los cursos';
+$strings['UpdateAllCourseSettings'] = 'Actualizar todas las configuraciones de cursos';
+$strings['ThisWillUpdateAllSettingsInAllCourses'] = 'Esto actualizará de una vez todas las configuraciones de sus cursos.';
+$strings['ThereIsNoVideoConferenceActive'] = 'No hay una videoconferencia actualmente activa';
+$strings['RoomClosed'] = 'Sala cerrada';
+$strings['RoomClosedComment'] = ' ';
+$strings['meeting_duration'] = 'Duración de la reunión (en minutos)';
+$strings['big_blue_button_students_start_conference_in_groups'] = 'Permitir a los estudiantes iniciar una videoconferencia en sus grupos.';
+$strings['hide_conference_link'] = 'Ocultar enlace de conferencia en herramienta del curso';
+$strings['hide_conference_link_comment'] = 'Mostrar u ocultar un bloque con un enlace a la videoconferencia junto al botón de unirse, para permitir a los usuarios copiarlo y pegarlo en otra ventana del navegador o invitar a otros. Aún será necesaria la autenticación para acceder a conferencias no públicas.';
+$strings['delete_recordings_on_course_delete'] = 'Eliminar las grabaciones al eliminar el curso';
+$strings['defaultVisibilityInCourseHomepage'] = 'Visibilidad predeterminada en la página de inicio del curso';
+$strings['ViewActivityDashboard'] = 'Ver el panel de actividades';
+$strings['Participants'] = 'Participantes';
+$strings['CountUsers'] = 'Contar usuarios';
+$strings['RoomExit'] = 'Ha salido de la sesión de Videoconferencia';

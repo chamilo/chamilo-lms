@@ -10,4 +10,4 @@ if (!ZoomPlugin::currentUserCanJoinGlobalMeeting()) {
     api_not_allowed(true);
 }
 
-api_location('join_meeting.php?meetingId='.ZoomPlugin::create()->getGlobalMeeting()->getMeetingId());
+api_location('join_meeting.php?'.api_get_cidreq().'&meetingId='.ZoomPlugin::create()->getGlobalMeeting()->getMeetingId());

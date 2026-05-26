@@ -51,6 +51,13 @@
           />
         </div>
 
+        <BaseAdvancedSettingsButton
+          v-if="showResourceLanguageAdvancedSettings"
+          v-model="showAdvancedSettings"
+        >
+          <ResourceLanguageSelector v-model="selectedLanguage" />
+        </BaseAdvancedSettingsButton>
+
         <div class="flex justify-end">
           <BaseButton
             :label="t('Upload')"
@@ -128,7 +135,7 @@
             <BaseButton
               :label="t('Delete')"
               icon="delete"
-              type="danger"
+              type="danger-text"
               @click="deleteVariant(slotProps.data.id)"
             />
           </template>
@@ -148,6 +155,8 @@ import SectionHeader from "../../components/layout/SectionHeader.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseFileUpload from "../../components/basecomponents/BaseFileUpload.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
+import BaseAdvancedSettingsButton from "../../components/basecomponents/BaseAdvancedSettingsButton.vue"
+import ResourceLanguageSelector from "../../components/resources/ResourceLanguageSelector.vue"
 import prettyBytes from "pretty-bytes"
 import { useCidReq } from "../../composables/cidReq"
 import { useSecurityStore } from "../../store/securityStore"
@@ -162,6 +171,34 @@ const variations = ref([])
 const originalFile = ref(null)
 const resourceFileId = route.params.resourceFileId
 const selectedAccessUrl = ref(null)
+const showAdvancedSettings = ref(false)
+
+function isResourceLanguageActive(language) {
+  if (!language || "object" !== typeof language) {
+    return false
+  }
+
+  if ("available" in language) {
+    return true === language.available || 1 === language.available || "1" === language.available
+  }
+
+  if ("isAvailable" in language) {
+    return true === language.isAvailable || 1 === language.isAvailable || "1" === language.isAvailable
+  }
+
+  if ("enabled" in language) {
+    return true === language.enabled || 1 === language.enabled || "1" === language.enabled
+  }
+
+  return true
+}
+
+const showResourceLanguageAdvancedSettings = computed(() => {
+  const languages = Array.isArray(window.languages) ? window.languages : []
+
+  return languages.filter(isResourceLanguageActive).length > 1
+})
+const selectedLanguage = ref("")
 const accessUrls = ref([])
 const isAdmin = computed(() => securityStore.isAdmin)
 
@@ -229,6 +266,8 @@ async function uploadVariant(file, resourceNodeId, accessUrlId) {
     formData.append("accessUrlId", accessUrlId)
   }
 
+  formData.append("language", selectedLanguage.value)
+
   try {
     const response = await axios.post("/api/resource_files/add_variant", formData)
     console.log("Variant uploaded or updated successfully:", response.data)
@@ -236,6 +275,7 @@ async function uploadVariant(file, resourceNodeId, accessUrlId) {
     await fetchVariations()
     file.value = null
     selectedAccessUrl.value = null
+    selectedLanguage.value = ""
   } catch (error) {
     console.error("Error uploading variant:", error)
   }

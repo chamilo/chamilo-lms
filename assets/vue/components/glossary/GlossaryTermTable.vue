@@ -8,7 +8,23 @@
     <Column
       :header="t('Term')"
       field="title"
-    />
+    >
+      <template #body="{ data }">
+        <div class="flex items-center gap-2">
+          <span>{{ data.title }}</span>
+
+          <span
+            v-if="data.ai_assisted"
+            class="inline-flex items-center gap-1 rounded-full border border-gray-300 bg-gray-10 px-2 py-[2px] text-xs text-gray-700"
+            title="AI-assisted"
+            aria-label="AI-assisted"
+          >
+            <span aria-hidden="true">🤖</span>
+            <span class="font-semibold">AI</span>
+          </span>
+        </div>
+      </template>
+    </Column>
 
     <Column :header="t('Definition')">
       <template #body="{ data }">
@@ -29,7 +45,7 @@
           class="mr-2"
           icon="edit"
           size="small"
-          type="black"
+          type="tertiary-text"
           @click="emit('edit', data)"
         />
         <BaseButton
@@ -37,7 +53,7 @@
           class="mr-2"
           icon="delete"
           size="small"
-          type="danger"
+          type="danger-text"
           @click="emit('delete', data)"
         />
       </template>

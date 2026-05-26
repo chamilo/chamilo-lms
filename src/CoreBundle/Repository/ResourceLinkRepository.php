@@ -59,6 +59,22 @@ class ResourceLinkRepository extends SortableRepository
         $em->flush();
     }
 
+    public function removeUserLinks(
+        AbstractResource $resource,
+        Course $course,
+        ?Session $session = null,
+    ): void {
+        $links = $resource->resourceNode->getResourceLinksByContext(
+            $course,
+            $session,
+        );
+
+        foreach ($links as $link) {
+            $this->remove($link); // soft delete
+            $this->remove($link); // hard delete
+        }
+    }
+
     public function removeByResourceInContext(
         AbstractResource $resource,
         Course $course,

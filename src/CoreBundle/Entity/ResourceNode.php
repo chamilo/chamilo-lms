@@ -31,8 +31,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use InvalidArgumentException;
 use Stringable;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
+use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Serializer\Attribute\MaxDepth;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -49,11 +49,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[Gedmo\Tree(type: 'materializedPath')]
 #[ApiResource(
     operations: [
-        new Get(),
-        new Put(),
-        new Patch(),
-        new Delete(),
-        new GetCollection(),
+        new Get(security: "is_granted('VIEW', object)"),
+        new Put(security: "is_granted('EDIT', object)"),
+        new Patch(security: "is_granted('EDIT', object)"),
+        new Delete(security: "is_granted('DELETE', object)"),
+        new GetCollection(security: "is_granted('ROLE_USER')"),
     ],
     normalizationContext: [
         'groups' => [
@@ -111,7 +111,7 @@ class ResourceNode implements Stringable
      * Optional language for the node.
      * This is used for indexing and future-proof resource variations.
      */
-    #[Groups(['resource_node:read', 'document:read', 'personal_file:read'])]
+    #[Groups(['resource_node:read', 'resource_node:write', 'document:read', 'document:write', 'personal_file:read', 'student_publication:read', 'attendance:read', 'calendar_event:read', 'link:read'])]
     #[ORM\ManyToOne(targetEntity: Language::class)]
     #[ORM\JoinColumn(name: 'language_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     protected ?Language $language = null;
@@ -185,8 +185,13 @@ class ResourceNode implements Stringable
 
     protected ?string $content = null;
 
-    #[ORM\OneToOne(mappedBy: 'shortCutNode', targetEntity: CShortcut::class, cascade: ['persist', 'remove'])]
-    protected ?CShortcut $shortCut = null;
+    /**
+     * Shortcuts that point to this resource node.
+     *
+     * @var Collection<int, CShortcut>
+     */
+    #[ORM\OneToMany(mappedBy: 'shortCutNode', targetEntity: CShortcut::class, cascade: ['persist', 'remove'])]
+    protected Collection $shortCuts;
 
     #[Groups(['resource_node:read', 'document:read'])]
     #[ORM\Column(type: 'uuid', unique: true)]
@@ -216,6 +221,7 @@ class ResourceNode implements Stringable
         $this->createdAt = new DateTime();
         $this->fileEditableText = false;
         $this->resourceFiles = new ArrayCollection();
+        $this->shortCuts = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -487,6 +493,40 @@ class ResourceNode implements Stringable
         return $first ?: null;
     }
 
+    /**
+     * @return Collection<int, ResourceLink>
+     */
+    public function getResourceLinksByContext(
+        ?Course $course = null,
+        ?Session $session = null,
+        ?User $user = null,
+    ): Collection {
+        $criteria = Criteria::create();
+        $criteria->where(
+            Criteria::expr()->eq('resourceTypeGroup', $this->resourceType->getId())
+        );
+
+        if ($course) {
+            $criteria->andWhere(
+                Criteria::expr()->eq('course', $course)
+            );
+        }
+
+        if ($session) {
+            $criteria->andWhere(
+                Criteria::expr()->eq('session', $session)
+            );
+        }
+
+        if ($user) {
+            $criteria->andWhere(
+                Criteria::expr()->eq('user', $user)
+            );
+        }
+
+        return $this->resourceLinks->matching($criteria);
+    }
+
     public function setResourceLinks(Collection $resourceLinks): self
     {
         $this->resourceLinks = $resourceLinks;
@@ -609,14 +649,51 @@ class ResourceNode implements Stringable
         return $this;
     }
 
-    public function getShortCut(): ?CShortcut
+    /**
+     * Returns all shortcuts that point to this resource node.
+     *
+     * @return Collection<int, CShortcut>
+     */
+    public function getShortCuts(): Collection
     {
-        return $this->shortCut;
+        return $this->shortCuts;
     }
 
+    /**
+     * Backward-compatible helper.
+     * Returns the first shortcut if any exists.
+     */
+    public function getShortCut(): ?CShortcut
+    {
+        return $this->shortCuts->first() ?: null;
+    }
+
+    /**
+     * Backward-compatible helper for legacy code paths.
+     * It no longer replaces a single relation, it just adds one shortcut.
+     */
     public function setShortCut(?CShortcut $shortCut): self
     {
-        $this->shortCut = $shortCut;
+        if (null === $shortCut) {
+            return $this;
+        }
+
+        return $this->addShortCut($shortCut);
+    }
+
+    public function addShortCut(CShortcut $shortCut): self
+    {
+        if (!$this->shortCuts->contains($shortCut)) {
+            $this->shortCuts->add($shortCut);
+            $shortCut->setShortCutNode($this);
+        }
+
+        return $this;
+    }
+
+    public function removeShortCut(CShortcut $shortCut): self
+    {
+        $this->shortCuts->removeElement($shortCut);
 
         return $this;
     }

@@ -71,15 +71,12 @@ foreach ($list as $mail) {
         );
         $emailsubject = '['.api_get_setting('site_name').'] '.sprintf(get_lang('Your registration on %s'), api_get_setting('site_name'));
         $emailbody = sprintf(get_lang('Dear %s,'), api_get_person_name($user['FirstName'], $user['LastName']))."\n\n".get_lang('You are registered to')." ".api_get_setting('site_name')." ".get_lang('with the following settings:')."\n\n".get_lang('Username')." : ".$user['UserName']."\n".get_lang('Password')." : ".$user['Password']."\n\n".get_lang('Address')." ".api_get_setting('site_name')." ".get_lang('is')." : ".api_get_path(WEB_PATH)." \n\n".get_lang('In case of trouble, contact us.')."\n\n".get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administrator_name'), api_get_setting('administrator_surname'))."\n".get_lang('Administrator')." ".api_get_setting('site_name')."\nT. ".api_get_setting('administrator_phone')."\n".get_lang('E-mail')." : ".api_get_setting('administrator_email');
-        $sender_name = api_get_person_name(api_get_setting('administrator_name'), api_get_setting('administrator_surname'), null, PERSON_NAME_EMAIL_ADDRESS);
-        $email_admin = api_get_setting('administrator_email');
+        // Pass empty sender so MailHelper uses platform defaults (mail.mailer_from_email > admin.administrator_email).
         @api_mail_html(
             $recipient_name,
             $user['Email'],
             $emailsubject,
-            $emailbody,
-            $sender_name,
-            $email_admin
+            $emailbody
         );
         echo "[OK] Sent to $mail with new password $pass (encrypted:$crypass)... w/ subject: $emailsubject\n";
     }

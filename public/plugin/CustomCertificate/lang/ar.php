@@ -1,0 +1,77 @@
+<?php
+$strings['plugin_title'] = 'شهادة مخصصة';
+$strings['plugin_comment'] = 'يسمح هذا الإضافة بإنشاء شهادات مخصصة لكل مساق.';
+$strings['enable_plugin_customcertificate'] = 'تفعيل الإضافة';
+$strings['customcertificate_course_enable'] = 'تفعيل الشهادة المخصصة في المساق';
+$strings['use_certificate_default'] = 'استخدام الشهادة المخصصة الافتراضية';
+$strings['ToolDisabled'] = 'الأداة معطلة من الإدارة';
+$strings['OnlyAdminPlatform'] = 'أداة للمديرين فقط';
+$strings['OnlyAdminPlatformOrTeacher'] = 'أداة للمديرين والمعلمين فقط';
+$strings['TrainingEntity'] = 'كيان التدريب';
+$strings['DescriptionFront'] = 'الوصف الأمامي';
+$strings['DescriptionRear'] = 'الوصف الخلفي';
+$strings['Certify'] = 'شهادة';
+$strings['CertificateType'] = 'نوع الشهادة';
+$strings['CertifyThat'] = 'نشهد بأن';
+$strings['StudentCourseInfo'] = 'بيانات الطالب والمساق';
+$strings['StudentData'] = 'بيانات الطالب';
+$strings['CourseData'] = 'بيانات المساق';
+$strings['Modality'] = 'النمط';
+$strings['Contents'] = 'المحتويات';
+$strings['ContentsToShow'] = 'المحتويات المعروضة';
+$strings['ContentsCourseDescription'] = 'استخدام قسم "وصف المساق" > "المحتويات"';
+$strings['ContentsIndexLearnpath'] = 'استخدام فهرس مسار التعلم';
+$strings['ContentsCustom'] = 'استخدام محتوى مخصص';
+$strings['ContentsHide'] = 'عدم عرض المحتويات';
+$strings['Dates'] = 'التواريخ';
+$strings['CourseDeliveryDates'] = 'تواريخ تقديم المساق';
+$strings['Custom'] = 'مخصص';
+$strings['UseDateSessionAccess'] = 'استخدام تواريخ الوصول إلى الجلسة';
+$strings['ExpectionPlace'] = 'مكان الإصدار';
+$strings['DateExpediction'] = 'تاريخ الإصدار';
+$strings['UseDateEndAccessSession'] = 'استخدام تاريخ انتهاء الوصول إلى الجلسة';
+$strings['UseDateDownloadCertificate'] = 'استخدام تاريخ تنزيل الشهادة';
+$strings['UseDateGenerationCertificate'] = 'استخدام تاريخ إنشاء الشهادة';
+$strings['UseCustomDate'] = 'استخدام تاريخ مخصص';
+$strings['LogosSeal'] = 'الشعارات / الأختام';
+$strings['LogoLeft'] = 'شعار يسار';
+$strings['LogoCenter'] = 'شعار وسط';
+$strings['LogoRight'] = 'شعار يمين';
+$strings['Seal'] = 'ختم';
+$strings['Signature1'] = 'توقيع 1';
+$strings['Signature2'] = 'توقيع 2';
+$strings['Signature3'] = 'توقيع 3';
+$strings['Signature4'] = 'توقيع 4';
+$strings['SignatureText1'] = 'نص التوقيع 1';
+$strings['SignatureText2'] = 'نص التوقيع 2';
+$strings['SignatureText3'] = 'نص التوقيع 3';
+$strings['SignatureText4'] = 'نص التوقيع 4';
+$strings['OtherOptions'] = 'خيارات أخرى';
+$strings['MarginRight'] = 'الهامش الأيمن';
+$strings['MarginLeft'] = 'الهامش الأيسر';
+$strings['SetDefaultTemplate'] = 'تعيين القالب كافتراضي';
+$strings['MessageDefaultTemplate'] = 'حفظ هذا التخصيص الافتراضي للمقررات والجلسات بدون
+     شهادات محددة';
+$strings['None'] = 'لا يوجد';
+$strings['ErrorTemplateCertificate'] = 'لا يوجد قالب محدد للشهادة.
+     لا يوجد قالب افتراضي.';
+$strings['DateStartEnd'] = 'بتاريخ البدء وتاريخ الانتهاء: ';
+$strings['ExpedictionIn'] = 'الإصدار في';
+$strings['Signatures'] = 'التوقيعات';
+$strings['BackgroundCertificate'] = 'صورة خلفية الشهادة';
+$strings['Background'] = 'الخلفية';
+$strings['CertificateSetting'] = 'إعدادات الشهادة';
+$strings['ToolDisabledCourse'] = 'الأداة معطلة في إعدادات المقرر';
+$strings['ToolUseDefaultSettingCourse'] = 'الأداة مُعدّلة لاستخدام الشهادة الافتراضية. <br>
+     يمكنك تعديلها من شاشة الإدارة -> الإضافات -> شهادة مخصصة. <br>
+     أو إذا أردت يمكنك تعطيل خيار استخدام الشهادة الافتراضية في إعدادات الإضافة في المقرر';
+$strings['CertificateSettingDefault'] = 'إعدادات الشهادة الافتراضية';
+$strings['InfoFromDefaultCertificate'] = 'محتوى الشهادة مبني على الشهادة الافتراضية.
+     التعديلات التي تجريها لن تؤثر على الشهادة الافتراضية.';
+$strings['to'] = ' إلى ';
+$strings['formatDownloadDate'] = ' إلى %s%s، %s';
+$strings['PrintCertificate'] = 'طباعة الشهادة';
+$strings['QuestionDelete'] = 'هل تريد حذف الدبلوم المخصص واستخدام الشهادة الافتراضية؟';
+$strings['SuccessDelete'] = 'تم الحذف بنجاح';
+$strings['ProblemDelete'] = 'مشكلة في حذف الشهادة';
+$strings['OnlyCustomCertificates'] = 'يتم تصدير المقررات التي لديها شهادة مخصصة فقط';

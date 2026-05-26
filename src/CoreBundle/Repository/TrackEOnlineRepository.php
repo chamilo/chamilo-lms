@@ -78,4 +78,25 @@ class TrackEOnlineRepository extends ServiceEntityRepository
 
         $this->_em->flush();
     }
+
+    public function hasOnlineSessionForUser(int $userId): bool
+    {
+        if ($userId <= 0) {
+            return false;
+        }
+
+        $accessUrl = $this->accessUrlHelper->getCurrent();
+
+        $count = $this->createQueryBuilder('t')
+            ->select('COUNT(t.loginId)')
+            ->where('t.loginUserId = :userId')
+            ->andWhere('t.accessUrlId = :accessUrlId')
+            ->setParameter('userId', $userId)
+            ->setParameter('accessUrlId', $accessUrl->getId())
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        return (int) $count > 0;
+    }
 }

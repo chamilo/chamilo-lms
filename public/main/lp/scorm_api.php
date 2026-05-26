@@ -52,9 +52,31 @@ if (!is_object($oItem)) {
 }
 $user = api_get_user_info();
 $userId = api_get_user_id();
+
+$scormStudentId = (string) $userId;
+
+if ('true' === api_get_setting('lp.scorm_api_username_as_student_id')) {
+    $scormStudentId = (string) ($user['username'] ?? $userId);
+}
+
+$scormExtraFieldVariable = trim((string) api_get_setting('lp.scorm_api_extrafield_to_use_as_student_id'));
+if ('' !== $scormExtraFieldVariable) {
+    $userExtraFieldValue = new ExtraFieldValue('user');
+    $extraFieldData = $userExtraFieldValue->get_values_by_handler_and_field_variable(
+        $userId,
+        $scormExtraFieldVariable,
+        false,
+        false,
+        false
+    );
+
+    if (!empty($extraFieldData['value'])) {
+        $scormStudentId = trim((string) $extraFieldData['value']);
+    }
+}
+
 $itemId = $oItem->get_id();
 $lpId = $oLP->get_id();
-
 header('Content-type: text/javascript');
 ?>
 var scorm_logs=<?php echo (empty($oLP->scorm_debug) || (!api_is_course_admin() && !api_is_platform_admin())) ? '0' : '3'; ?>;
@@ -186,8 +208,9 @@ if (olms.lms_view_id == '') {
     olms.lms_view_id = 1;
 }
 olms.lms_user_id = '<?php echo $userId; ?>';
-olms.lms_next_item = '<?php echo $oLP->get_next_item_id(); ?>';
-olms.lms_previous_item = '<?php echo $oLP->get_previous_item_id(); ?>';
+olms.scorm_student_id = <?php echo json_encode($scormStudentId, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>;
+olms.lms_next_item = <?php echo (int) $oLP->get_next_item_id(); ?>;
+olms.lms_previous_item = <?php echo (int) $oLP->get_previous_item_id(); ?>;
 olms.lms_lp_type = '<?php echo $oLP->get_type(); ?>';
 olms.lms_item_type = '<?php echo $oItem->get_type(); ?>';
 olms.lms_item_credit = '<?php echo $oItem->get_credit(); ?>';
@@ -217,7 +240,7 @@ olms.lms_lp_item_parents = '';
 olms.lms_auto_forward_video = <?php echo (int) $oLP->auto_forward_video; ?>;
 
 var courseUrl = '?cid='+olms.lms_course_id+'&sid='+olms.lms_session_id+'&lp_id='+olms.lms_lp_id;
-var statsUrl = 'lp_controller.php' + courseUrl + '&action=stats';
+var statsUrl = 'lp_controller.php' + courseUrl + '&action=stats&origin=learnpath';
 
 /**
  * Add the "addListeners" function to the "onload" event of the window and
@@ -241,16 +264,44 @@ $(function() {
     olms.info_lms_item[0] = '<?php echo $itemId; ?>';
     olms.info_lms_item[1] = '<?php echo $itemId; ?>';
 
-    $("#content_id").on('load', function() {
-        logit_lms('#content_id load event starts');
-        olms.info_lms_item[0] = olms.info_lms_item[1];
-
-        // Only trigger the LMSInitialize automatically if not SCO
-        if (olms.lms_item_types['i'+olms.info_lms_item[1]] != 'sco') {
-            LMSInitialize();
-        } else {
-            logit_lms('Content type is SCO and is responsible to launch LMSInitialize() on its own - Skipping',2);
+    function getContentFrame() {
+        var $f = $("#content_id");
+        if (!$f.length) {
+            $f = $("#content_id_blank");
         }
+        return $f;
+    }
+
+    function setContentFrameSrc(src) {
+        var $frame = getContentFrame();
+        if (!$frame.length) {
+        logit_lms("[LP] Content iframe not found (#content_id / #content_id_blank).", 0);
+            return false;
+        }
+        $frame.attr("src", src);
+        return true;
+    }
+
+    $(function() {
+        var $frame = getContentFrame();
+
+        if (!$frame.length) {
+            console.warn("[SCORM] Content iframe not found (#content_id / #content_id_blank).");
+            return;
+        }
+
+        $frame.off("load.scorm").on("load.scorm", function() {
+            logit_lms("Content iframe load event starts", 2);
+
+            olms.info_lms_item[0] = olms.info_lms_item[1];
+
+            // Only trigger LMSInitialize automatically if not SCO
+            if (olms.lms_item_types["i" + olms.info_lms_item[1]] != "sco") {
+                LMSInitialize();
+            } else {
+                logit_lms("Content type is SCO; skipping auto LMSInitialize()", 2);
+            }
+        });
     });
 });
 
@@ -316,6 +367,20 @@ function LMSInitialize() {
             async: false,
             success:function(data) {
                 $('video:not(.skip), audio:not(.skip)').mediaelementplayer();
+                <?php if ('true' === api_get_setting('editor.video_context_menu_hidden')) { ?>
+                if (!window.chamiloVideoContextMenuHiddenInitialized) {
+                    window.chamiloVideoContextMenuHiddenInitialized = true;
+                    document.addEventListener('contextmenu', function(event) {
+                        var target = event.target;
+                        if (!target || !target.closest) {
+                            return;
+                        }
+                        if (target.closest('video:not(.skip), .mejs__container')) {
+                            event.preventDefault();
+                        }
+                    });
+                }
+                <?php } ?>
                 if (olms.lms_item_type === 'video') {
                     var cont_f = document.getElementById("content_id");
                     if (cont_f && (cont_f.contentDocument || cont_f.contentWindow.document).readyState === "complete") {
@@ -392,74 +457,131 @@ function LMSInitialize() {
 /**
 * Handles post-processing once the SCORM content iframe has loaded.
 * Specifically, detects video elements and attaches logic to
-* automatically display a MediaElement postroll and switch to
-* the next learning path item 10 seconds after the video ends.
+* automatically display a postroll overlay and switch to
+* the next learning path item after a countdown.
 *
 * @param {HTMLIFrameElement} iframe - The iframe DOM element containing the SCORM content.
 */
 function onIframeLoaded(iframe) {
     var contentDocument = iframe.contentDocument || iframe.contentWindow.document;
-    var $video = $("video:not(.skip)", contentDocument);
-    if ($video.length > 0) {
-        $video.each(function() {
-            var videoElement = this;
+    if (olms.lms_item_type === 'video') {
+        var style = contentDocument.getElementById('chamilo-lp-video-size-fix');
 
-            // Create overlay DIV in iframe
-            var overlayHtml = `
-            <div id="postroll-overlay" style="
-                                    position: absolute;
-                                    top: 0;
-                                    left: 0;
-                                    width: 100%;
-                                    height: 100%;
-                                    background: rgba(0, 0, 0, 0.8);
-                                    color: white;
-                                    text-align: center;
-                                    display: none;
-                                    justify-content: center;
-                                    align-items: center;
-                                    flex-direction: column;
-                                    z-index: 9999;
-                                ">
-                <p style="font-size: 24px; margin-bottom: 10px;"><?php echo get_lang('Video completed!') ?></p>
-                `;
+        if (!style) {
+            style = contentDocument.createElement('style');
+            style.id = 'chamilo-lp-video-size-fix';
+            contentDocument.head.appendChild(style);
+        }
 
-                if (olms.lms_auto_forward_video == 1) {
-                    overlayHtml += `
-                    <p style="font-size: 18px;"><?php echo get_lang('Advancing in') ?> <span id="postroll-counter">10</span> <?php echo get_lang('seconds') ?>...</p>
-                    `;
+        style.textContent = `
+        html,
+        body {
+            height: auto !important;
+            min-height: 480px !important;
+            overflow: visible !important;
+        }
+
+        video:not(.skip) {
+            display: block !important;
+            width: 100% !important;
+            height: 420px !important;
+            min-height: 420px !important;
+            object-fit: contain !important;
+            max-height: none !important;
+        }
+
+        .mejs__container,
+        .mejs__inner,
+        .mejs__mediaelement,
+        .mejs__overlay,
+        .mejs__poster {
+            width: 100% !important;
+            height: 420px !important;
+            min-height: 420px !important;
+            max-height: none !important;
+        }
+        `;
+    }
+
+    <?php if ('true' === api_get_setting('editor.video_context_menu_hidden')) { ?>
+        if (!contentDocument.chamiloVideoContextMenuHiddenInitialized) {
+            contentDocument.chamiloVideoContextMenuHiddenInitialized = true;
+            contentDocument.addEventListener('contextmenu', function(event) {
+                var target = event.target;
+                if (!target || !target.closest) {
+                    return;
                 }
+                if (target.closest('video:not(.skip), .mejs__container')) {
+                    event.preventDefault();
+                }
+            });
+        }
+    <?php } ?>
 
+    var $video = $("video:not(.skip)", contentDocument);
+    if ($video.length <= 0) {
+        return;
+    }
+    $video.each(function() {
+        var videoElement = this;
+        var overlayHtml = `
+            <div id="postroll-overlay" style="
+                                position: absolute;
+                                top: 0;
+                                left: 0;
+                                width: 100%;
+                                height: 100%;
+                                background: rgba(0, 0, 0, 0.8);
+                                color: white;
+                                text-align: center;
+                                display: none;
+                                justify-content: center;
+                                align-items: center;
+                                flex-direction: column;
+                                z-index: 9999;
+                            ">
+            <p style="font-size: 24px; margin-bottom: 10px;"><?php echo get_lang('Video completed!') ?></p>
+            `;
+
+            if (olms.lms_auto_forward_video == 1) {
                 overlayHtml += `
-                    <button id="postroll-next-btn" style="
-                                            margin-top: 20px;
-                                            padding: 10px 20px;
-                                            font-size: 18px;
-                                            background-color: #337ab7;
-                                            border: none;
-                                            color: white;
-                                            cursor: pointer;
-                                        "><?php echo get_lang('Next learning object') ?></button>
-                    </div>
+                <p style="font-size: 18px;">
+                    <?php echo get_lang('Advancing in') ?>
+                    <span id="postroll-counter">10</span>
+                    <?php echo get_lang('seconds') ?>...
+                </p>
                 `;
+            }
+
+            overlayHtml += `
+            <button id="postroll-next-btn" style="
+                                    margin-top: 20px;
+                                    padding: 10px 20px;
+                                    font-size: 18px;
+                                    background-color: #337ab7;
+                                    border: none;
+                                    color: white;
+                                    cursor: pointer;
+                                "><?php echo get_lang('Next learning object') ?></button>
+            </div>
+            `;
 
             var $overlay = $(overlayHtml);
             $(contentDocument.body).append($overlay);
             videoElement.addEventListener("ended", function () {
-                $overlay.show();
+                $overlay.css("display", "flex");
                 if (olms.lms_auto_forward_video == 1) {
                     startPostrollCountdown(contentDocument);
                 } else {
-                    console.log("Auto-forward disabled, waiting for user click.");
+                    console.log("Auto-forward is disabled; waiting for user click.");
                 }
             });
-
-            // Click on next button
-            $(contentDocument).on("click", "#postroll-next-btn", function () {
+            $(contentDocument).off("click.postroll").on("click.postroll", "#postroll-next-btn", function () {
+                if (typeof switch_item === "function") {
                 switch_item(olms.lms_item_id, olms.lms_next_item);
-            });
+            }
         });
-    }
+    });
 }
 
 /**
@@ -474,7 +596,9 @@ function startPostrollCountdown(doc) {
         $(doc).find("#postroll-counter").text(seconds);
         if (seconds <= 0) {
             clearInterval(interval);
-            switch_item(olms.lms_item_id, olms.lms_next_item);
+            if (typeof switch_item === "function") {
+                switch_item(olms.lms_item_id, olms.lms_next_item);
+            }
         }
     }, 1000);
 }
@@ -573,7 +697,7 @@ function LMSGetValue(param) {
         }
     } else if(param == 'cmi.core.student_id' || param == 'cmi.learner_id') { // cmi.learner_id widens support for SCORM 2004
         // ---- cmi.core.student_id
-        result='<?php echo learnpath::getUserIdentifierForExternalServices(); ?>';
+        result = olms.scorm_student_id;
     } else if(param == 'cmi.core.student_name' || param == 'cmi.learner_name') { // cmi.learner_name widens support for SCORM 2004
         // ---- cmi.core.student_name
         <?php
@@ -1561,143 +1685,94 @@ function reinit_updatable_vars_list() {
 }
 
 /**
- * Function that handles the saving of an item and switching from an item to another.
- * Once called, this function should be able to do the whole process of
- * (1) saving the current item,
- * (2) refresh all the values inside the SCORM API object,
- * (3) open the new item into the content_id frame,
- * (4) refresh the table of contents
- * (5) refresh the progress bar (completion)
- * (6) refresh the message frame
- * @param	integer		Chamilo ID for the current item
- * @param	string		This parameter can be a string specifying the next
- *						item (like 'next', 'previous', 'first' or 'last') or the id to the next item
- */
-function switch_item(current_item, next_item)
-{
-    logit_lms('switch_item() called with params '+olms.lms_item_id+' and '+next_item+'',2);
+* Switch between items.
+* This function:
+*  1) saves current item,
+*  2) refreshes runtime variables for the next item (sync),
+*  3) refreshes TOC/progress (sync),
+*  4) loads next content inside the iframe,
+*  5) updates navigation buttons.
+*
+* @param {number|string} current_item
+* @param {number|string} next_item
+* @returns {boolean}
+*/
+function switch_item(current_item, next_item) {
+    logit_lms("switch_item() called with current=" + olms.lms_item_id + " next=" + next_item, 2);
 
-    if (olms.lms_initialized == 0) {
-        // Fix error when flash is not loaded and SCO is not started BT#14944
-        olms.G_LastError = G_NotInitialized;
-        olms.G_LastErrorMessage = G_NotInitializedMessage;
-        logit_scorm('Error '+ G_NotInitialized + G_NotInitializedMessage, 0);
-        //window.location.reload(false);
-
-        var url = window.location.href + '&item_id='  + parseInt(next_item);
-        window.location.replace(url);
-
+    // Prevent double-click storms (creates request queues and long locks)
+    olms._lpSwitching = olms._lpSwitching || 0;
+    if (olms._lpSwitching === 1) {
+        logit_lms("switch_item(): ignored (switch already in progress).", 2);
         return false;
     }
 
-    /**
-    * Because of SCORM 1.2's special rule about unsent commits and the fact
-    * that a SCO should be SET TO 'completed' IF NO STATUS WAS SENT (and
-    * then some checks have to be done on score), we have to force a
-    * special commit here to avoid getting to the next element with a
-    * missing prerequisite. The 'onunload' event is treated with
-    * savedata_onunload(), and doesn't need to be triggered at any
-    * particular time, but here we are in the case of switching to another
-    * item, so this is particularly important to complete the element in
-    * time.
-    * However, this cannot be initiated from the JavaScript, mainly
-    * because another onunload event can be triggered by the SCO itself,
-    * which can set, for example, the status to incomplete while the
-    * status has already been set to "completed" by the hand-made
-    * savedata() (and then the status cannot be "incompleted"
-    * anymore)
-    */
+    // Resolve target item id
+    var targetItemId = next_item;
+    if (next_item === "next") {
+        targetItemId = olms.lms_next_item;
+    } else if (next_item === "previous") {
+        targetItemId = olms.lms_previous_item;
+    }
+    targetItemId = parseInt(targetItemId, 10);
 
+    var currentItemId = parseInt(olms.lms_item_id, 10);
+    if (!Number.isFinite(targetItemId) || targetItemId <= 0) {
+        logit_lms("switch_item(): invalid target item id: " + targetItemId, 1);
+        return false;
+    }
+    if (!Number.isFinite(currentItemId) || currentItemId <= 0) {
+        logit_lms("switch_item(): invalid current item id: " + currentItemId, 1);
+        return false;
+    }
+    if (currentItemId === targetItemId) {
+        logit_lms("switch_item(): same item, ignoring.", 2);
+        return false;
+    }
+
+    // Identify types
+    var currentItemType = olms.lms_item_types["i" + currentItemId] || "";
+    var targetItemType = olms.lms_item_types["i" + targetItemId] || "";
+
+    // Helper: set iframe src safely
+    function setIframeSrc(src) {
+        var $f = $("#content_id");
+        if (!$f.length) {
+            $f = $("#content_id_blank");
+        }
+        if (!$f.length) {
+            logit_lms("[LP] Content iframe not found.", 0);
+            return false;
+        }
+
+        // Release lock after iframe load (best-effort)
+        $f.off("load.lpSwitchDone").one("load.lpSwitchDone", function () {
+            olms._lpSwitching = 0;
+        });
+
+        $f.attr("src", src);
+        return true;
+    }
+
+    // Force-unlock safety
+    olms._lpSwitching = 1;
+    setTimeout(function () {
+        olms._lpSwitching = 0;
+    }, 15000);
+
+    // Mark switching in progress (savedata() uses this)
+    olms.switch_finished = 0;
     olms.execute_stats = false;
-    // Considering info_lms_item[0] is initially the oldest and info_lms_item[1]
-    // is the newest item, and considering we are done switching the items now,
-    // we need to update these markers so that the new item is loaded when
-    // changing the document in the content frame
-    olms.execute_stats = false;
-    // Considering info_lms_item[0] is initially the oldest and info_lms_item[1]
-    // is the newest item, and considering we are done switching the items now,
-    // we need to update these markers so that the new item is loaded when
-    // changing the document in the content frame
-    if (olms.info_lms_item[1]==next_item && next_item!='next' && next_item!='previous') {
-        olms.info_lms_item[0]=next_item;
-        olms.info_lms_item[1]=next_item;
-    } else {
-        if (next_item!='next' && next_item!='previous') {
-            olms.info_lms_item[0]=olms.info_lms_item[1];
-            olms.info_lms_item[1]=next_item;
-        }
-    }
+    olms.info_lms_item[0] = currentItemId;
+    olms.info_lms_item[1] = targetItemId;
 
-    if (olms.info_lms_item[0]==next_item && next_item!='next' && next_item!='previous') {
-        olms.info_lms_item[0]=next_item;
-        olms.info_lms_item[1]=next_item;
-    } else {
-        if (next_item!='next' && next_item!='previous') {
-            olms.info_lms_item[0]=olms.info_lms_item[0];
-            olms.info_lms_item[1]=next_item;
-        }
-    }
-
-    // open the new item in the content_id frame
-    switch (next_item) {
-        case 'next':
-            next_item = olms.lms_next_item;
-            olms.info_lms_item[0] = olms.info_lms_item[1];
-            olms.info_lms_item[1] = olms.lms_next_item;
-            break;
-        case 'previous':
-            next_item = olms.lms_previous_item;
-            olms.info_lms_item[0] = olms.info_lms_item[1];
-            olms.info_lms_item[1] = olms.lms_previous_item;
-            break;
-        default:
-            break;
-    }
-
-    olms.switch_finished = 0; //only changed back once LMSInitialize() happens
-
-    // backup these params
-    var orig_current_item   = current_item;
-    var orig_next_item      = next_item;
-    var orig_lesson_status  = olms.lesson_status;
-    var orig_item_type      = olms.lms_item_types['i'+current_item];
-    var next_item_type      = olms.lms_item_types['i'+next_item];
-    if (olms.statusSignalReceived == 0 && olms.lesson_status != 'not attempted') {
-        // In this situation, the status can be considered set as it was clearly
-        // set in a previous stage
-        olms.statusSignalReceived = 1;
-    }
-
-    /*
-     There are four "cases" for switching items:
-     (1) asset switching to asset
-         We need to save, then switch
-     (2) asset switching to sco
-         We need to save, switching not necessary (LMSInitialize does the job)
-     (3) sco switching to asset
-         We need to switch the document in the content frame, but we cannot
-         switch the item details, otherwise the LMSFinish() call (that *must*
-         be triggered by the SCO when it unloads) will use bad values. However,
-         we need to load the new asset's context once the SCO has unloaded
-     (4) sco switching to sco
-         We don't need to switch nor commit, LMSFinish() on unload and
-         LMSInitialize on load will do the job
-     In any case, we need to change the current document frame.
-     These cases, although clear here, are however very difficult to implement
-    */
-
-    if (orig_item_type != 'sco') {
-        if (next_item_type != 'sco' ) {
-            logit_lms('Case 1 - current != sco and next != sco');
-        } else {
-            logit_lms('Case 2 - current != sco but next == sco');
-        }
-
-        var saveAjax = xajax_save_item(
+    // (1) Save current item (async for non-SCO to avoid blocking UI)
+    if (currentItemType !== "sco") {
+        xajax_save_item(
             olms.lms_lp_id,
             olms.lms_user_id,
             olms.lms_view_id,
-            olms.lms_item_id,
+            currentItemId,
             olms.score,
             olms.max,
             olms.min,
@@ -1707,142 +1782,101 @@ function switch_item(current_item, next_item)
             olms.lesson_location,
             olms.interactions,
             olms.lms_item_core_exit,
-            orig_item_type,
-            olms.session_id,
-            olms.course_id,
+            currentItemType,
+            olms.lms_session_id,
+            olms.lms_course_id,
             olms.finishSignalReceived,
             1,
             olms.statusSignalReceived,
-            next_item,
+            targetItemId,
             1
         );
-
-        // Keep TOC highlight and LMS context in sync when switching from non-SCO items
-        xajax_switch_item_toc(
-            olms.lms_lp_id,
-            olms.lms_user_id,
-            olms.lms_view_id,
-            olms.lms_item_id,
-            next_item
-        );
-
-        /*if (saveAjax) {
-            $.when(saveAjax).done(function(results) {
-                xajax_switch_item_details(
-                    olms.lms_lp_id,
-                    olms.lms_user_id,
-                    olms.lms_view_id,
-                    olms.lms_item_id,
-                    next_item
-                );
-            });
-        }*/
-
-
-
     } else {
-        if (next_item_type != 'sco') {
-            logit_lms('Case 3 - current == sco but next != sco');
-        } else {
-            logit_lms('Case 4 - current == sco and next == sco');
-        }
-        // Setting userNavigatesAway = 1
-        var saveAjax = xajax_save_item_scorm(
+        // SCO save stays async (already)
+        xajax_save_item_scorm(
             olms.lms_lp_id,
             olms.lms_user_id,
             olms.lms_view_id,
-            olms.lms_item_id,
+            currentItemId,
             olms.lms_session_id,
             olms.lms_course_id,
             olms.finishSignalReceived,
             1,
             olms.statusSignalReceived
         );
-
-        if (saveAjax) {
-            $.when(saveAjax).done(function(result) {
-            reinit_updatable_vars_list();
-            xajax_switch_item_toc(
-                olms.lms_lp_id,
-                olms.lms_user_id,
-                olms.lms_view_id,
-                olms.lms_item_id,
-                next_item
-            );
-
-            if (olms.item_objectives.length>0) {
-                    xajax_save_objectives(
-                        olms.lms_lp_id,
-                        olms.lms_user_id,
-                        olms.lms_view_id,
-                        olms.lms_item_id,
-                        olms.item_objectives
-                    );
-                }
-            });
-        }
+        reinit_updatable_vars_list();
     }
+
+    // (2) Fast path for NON-SCO: load iframe immediately, update TOC/progress in background
+    if (targetItemType !== "sco") {
+        // Optimistic UI update (instant feedback)
+        update_toc("unhighlight", currentItemId);
+        update_toc("highlight", targetItemId);
+
+        // Update local state immediately (navigation remains usable)
+        olms.lms_item_id = targetItemId;
+        olms.next_item = targetItemId;
+        olms.lms_initialized = 0;
+        olms.switch_finished = 1;
+
+        // Load content now (no waiting on XHR)
+        var mysrc = buildLpContentSrc(targetItemId);
+        setIframeSrc(mysrc);
+
+        // Background refresh of TOC/progress/runtime vars (JS returned will update olms + progress bar)
+        xajax_switch_item_toc(
+            olms.lms_lp_id,
+            olms.lms_user_id,
+            olms.lms_view_id,
+            currentItemId,
+            targetItemId
+        ).done(function() { updateItemParentNames(); });
+
+        // Update nav buttons (best-effort; does not block)
+        if (typeof checkCurrentItemPosition === "function") {
+            try { checkCurrentItemPosition(targetItemId); } catch (e) {}
+        }
+
+        return true;
+    }
+
+    // (3) Strict path for SCO: keep the old behavior (runtime must be ready before SCO runs)
+    xajax_switch_item_details_sync(
+        olms.lms_lp_id,
+        olms.lms_user_id,
+        olms.lms_view_id,
+        currentItemId,
+        targetItemId
+    );
+
+    // Keep TOC update (can remain sync for SCO if you want absolute safety)
+    // We keep it sync here because SCO runtime is sensitive.
+    $.ajax({
+        type: "POST",
+        data: { lid: olms.lms_lp_id, uid: olms.lms_user_id, vid: olms.lms_view_id, iid: currentItemId, next: targetItemId },
+        url: "lp_ajax_switch_item_toc.php" + courseUrl,
+        dataType: "script",
+        async: false,
+        cache: false
+    });
 
     updateItemParentNames();
-    var mysrc = '<?php echo api_get_path(WEB_CODE_PATH); ?>lp/lp_controller.php?action=content&lp_id=' + olms.lms_lp_id +
-                '&item_id=' + next_item + '&cid=' + olms.lms_course_id + '&sid=' + olms.lms_session_id;
-    var cont_f = $("#content_id");
-    <?php if ('fullscreen' === $oLP->mode) {
-        ?>
-        cont_f = window.open('' + mysrc, 'content_id', 'toolbar=0,location=0,status=0,scrollbars=1,resizable=1');
-        cont_f.onload=function(){
-            olms.info_lms_item[0]=olms.info_lms_item[1];
-        }
-        cont_f.onunload=function(){
-            olms.info_lms_item[0]=olms.info_lms_item[1];
-        }
-    <?php
-    } else {
-        ?>
-            log_in_log('loading '+mysrc+' in frame');
-            cont_f.attr("src",mysrc);
-    <?php
-    } ?>
 
-    let startTime = 0;
-    if (olms.lms_lp_type==1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document' || olms.lms_item_type == 'video') {
-        startTime = 1;
-        //xajax_start_timer();
+    var scoSrc = buildLpContentSrc(targetItemId);
+    setIframeSrc(scoSrc);
+
+    if (typeof checkCurrentItemPosition === "function") {
+        try { checkCurrentItemPosition(targetItemId); } catch (e) {}
     }
-
-    // (4) refresh the audio player if needed
-    /*$.ajax({
-        type: "POST",
-        url: "lp_nav.php"+courseUrl+ "&lp_id=" + olms.lms_lp_id,
-        data: {
-            lp_item: next_item,
-            start_time: startTime,
-        },
-        beforeSend: function() {
-            $.each($('audio'), function () {
-                if (this.player && this.player !== undefined) {
-                    this.player.pause();
-                }
-            });
-        },
-        success: function(result) {
-            if ($("#lp_media_file").length != 0) {
-                $("#lp_media_file").html(result);
-            }
-        }
-    });*/
-
-    // @todo add loadForumThread inside lp_nav.php to do only one request instead of 3!
-    //loadForumThread(olms.lms_lp_id, next_item);
-    checkCurrentItemPosition(next_item);
 
     return true;
 }
 
 /**
-* Decodes HTML entities in a string
-* @param {string} str - The string with HTML entities
-* @returns {string} - The decoded string
+* Decodes HTML entities in a string.
+*
+* @param {string} str
+* @returns {string}
 */
 function decodeHtmlEntities(str) {
     var txt = document.createElement("textarea");
@@ -1851,23 +1885,25 @@ function decodeHtmlEntities(str) {
 }
 
 /**
-* Updates the 'item-parent-names' div with the titles of the current item's parents.
+* Updates the 'item-parent-names' container with the titles of the current item's parents.
 */
 function updateItemParentNames() {
-    var parentNamesContainer = document.getElementById('item-parent-names');
-    if (parentNamesContainer) {
-        parentNamesContainer.innerHTML = '';
-
-        // Ensure olms.lms_lp_item_parents is an array
-        var parentNames = Array.isArray(olms.lms_lp_item_parents) ? olms.lms_lp_item_parents : [];
-
-        parentNames.forEach(function(parentTitle) {
-            var h3 = document.createElement('h3');
-            h3.className = 'text-h5';
-            h3.textContent = decodeHtmlEntities(parentTitle);
-            parentNamesContainer.appendChild(h3);
-        });
+    var parentNamesContainer = document.getElementById("item-parent-names");
+    if (!parentNamesContainer) {
+        return;
     }
+
+    parentNamesContainer.innerHTML = "";
+
+    // Ensure olms.lms_lp_item_parents is an array
+    var parentNames = Array.isArray(olms.lms_lp_item_parents) ? olms.lms_lp_item_parents : [];
+
+    parentNames.forEach(function(parentTitle) {
+        var h3 = document.createElement("h3");
+        h3.className = "text-h5";
+        h3.textContent = decodeHtmlEntities(parentTitle);
+        parentNamesContainer.appendChild(h3);
+    });
 }
 
 /**
@@ -1995,41 +2031,42 @@ function xajax_save_item(
     statusSignalReceived,
     switchNext = 0,
     loadNav = 0
-) {
+    ) {
     var params = '';
-    if (typeof(finishSignalReceived) == 'undefined') {
+    if (typeof(finishSignalReceived) === 'undefined') {
         finishSignalReceived = 0;
     }
-
-    if (typeof(userNavigatesAway) == 'undefined') {
+    if (typeof(userNavigatesAway) === 'undefined') {
         userNavigatesAway = 0;
     }
-
-    if (typeof(statusSignalReceived) == 'undefined') {
+    if (typeof(statusSignalReceived) === 'undefined') {
         statusSignalReceived = 0;
     }
 
-    params += 'lid='+lms_lp_id+'&uid='+lms_user_id+'&vid='+lms_view_id;
-    params += '&iid='+lms_item_id+'&s='+score+'&max='+max+'&min='+min;
-    params += '&status='+lesson_status+'&t='+session_time;
-    params += '&suspend='+suspend_data+'&loc='+lesson_location;
-    params += '&core_exit='+lms_item_core_exit;
-    params += '&session_id='+session_id;
-    params += '&course_id='+course_id;
-    params += '&finishSignalReceived='+finishSignalReceived;
-    params += '&userNavigatesAway='+userNavigatesAway;
-    params += '&statusSignalReceived='+statusSignalReceived;
-    params += '&switch_next='+switchNext;
-    params += '&load_nav='+loadNav;
+    params += 'lid=' + lms_lp_id + '&uid=' + lms_user_id + '&vid=' + lms_view_id;
+    params += '&iid=' + lms_item_id + '&s=' + score + '&max=' + max + '&min=' + min;
+    params += '&status=' + lesson_status + '&t=' + session_time;
+    params += '&suspend=' + suspend_data + '&loc=' + lesson_location;
+    params += '&core_exit=' + lms_item_core_exit;
+    params += '&session_id=' + session_id;
+    params += '&course_id=' + course_id;
+    params += '&finishSignalReceived=' + finishSignalReceived;
+    params += '&userNavigatesAway=' + userNavigatesAway;
+    params += '&statusSignalReceived=' + statusSignalReceived;
+    params += '&switch_next=' + switchNext;
+    params += '&load_nav=' + loadNav;
 
-    if (olms.lms_lp_type == 1 || item_type == 'document' || item_type == 'video' || item_type == 'asset') {
-        logit_lms('xajax_save_item with params:' + params, 3);
+    // IMPORTANT: Do not block the UI for Chamilo LP / assets.
+    if (olms.lms_lp_type === 1 || item_type === 'document' || item_type === 'video' || item_type === 'asset') {
+        logit_lms('xajax_save_item (async) with params:' + params, 3);
+
         return $.ajax({
-            type:"POST",
+            type: "POST",
             data: params,
             url: "lp_ajax_save_item.php" + courseUrl,
             dataType: "script",
-            async: false
+            async: true,
+            cache: false
         });
     }
 
@@ -2241,24 +2278,18 @@ function xajax_save_objectives(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,ite
 }
 
 /**
- * Switch between two items through an AJAX call.
- * @param   int     ID of the learning path
- * @param   int     ID of the user
- * @param   int     ID of the view
- * @param   int     ID of the item
- * @param   int     ID of the next item
- * @uses    lp_ajax_switch_item.php
- */
-function xajax_switch_item_details(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,next_item) {
+* Switch between two items through an AJAX call (async).
+*/
+function xajax_switch_item_details(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, next_item) {
     var params = {
-        'lid': lms_lp_id,
-        'uid': lms_user_id,
-        'vid': lms_view_id,
-        'iid': lms_item_id,
-        'next': next_item
+        lid: lms_lp_id,
+        uid: lms_user_id,
+        vid: lms_view_id,
+        iid: lms_item_id,
+        next: next_item
     };
 
-    logit_lms('xajax_switch_item_details with params:' + params, 3);
+    logit_lms("xajax_switch_item_details with params:" + JSON.stringify(params), 3);
 
     return $.ajax({
         type: "POST",
@@ -2281,20 +2312,23 @@ function xajax_switch_item_details(lms_lp_id,lms_user_id,lms_view_id,lms_item_id
  */
 function xajax_switch_item_toc(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, next_item) {
     var params = {
-        'lid': lms_lp_id,
-        'uid': lms_user_id,
-        'vid': lms_view_id,
-        'iid': lms_item_id,
-        'next': next_item
+        lid: lms_lp_id,
+        uid: lms_user_id,
+        vid: lms_view_id,
+        iid: lms_item_id,
+        next: next_item
     };
-    logit_lms('xajax_switch_item_toc');
 
-    $.ajax({
+    logit_lms('xajax_switch_item_toc (async)', 3);
+
+    // IMPORTANT: Do not block UI; let the iframe load immediately.
+    return $.ajax({
         type: "POST",
         data: params,
         url: "lp_ajax_switch_item_toc.php" + courseUrl,
         dataType: "script",
-        async: false
+        async: true,
+        cache: false
     });
 }
 
@@ -2732,4 +2766,49 @@ function save_suspend_data_in_local()
             }
         }
     }
+}
+
+/**
+* Builds the LP content URL for a given item id.
+* Includes "origin=learnpath" + "lp_item_id" for voter/context.
+*
+* @param {number} itemId
+* @returns {string}
+*/
+function buildLpContentSrc(itemId) {
+    itemId = parseInt(itemId, 10);
+        if (!Number.isFinite(itemId) || itemId <= 0) {
+        return "lp_controller.php" + courseUrl + "&action=view";
+    }
+
+    return "lp_controller.php"
+        + courseUrl
+        + "&action=content"
+        + "&origin=learnpath"
+        + "&lp_item_id=" + encodeURIComponent(String(itemId))
+        + "&item_id=" + encodeURIComponent(String(itemId));
+}
+
+/**
+* Switch between two items through an AJAX call (sync).
+* Needed to guarantee runtime vars are refreshed BEFORE loading next content.
+*/
+function xajax_switch_item_details_sync(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, next_item) {
+    var params = {
+        lid: lms_lp_id,
+        uid: lms_user_id,
+        vid: lms_view_id,
+        iid: lms_item_id,
+        next: next_item
+    };
+
+    logit_lms("xajax_switch_item_details_sync with params:" + JSON.stringify(params), 3);
+
+    return $.ajax({
+        type: "POST",
+        data: params,
+        url: "lp_ajax_switch_item.php" + courseUrl,
+        dataType: "script",
+        async: false
+    });
 }

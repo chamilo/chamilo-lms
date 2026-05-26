@@ -247,48 +247,101 @@ class Resource
      * Fix objects coming from 1.9.x to 1.10.x
      * Example class Event to CalendarEvent.
      *
-     * @param resource $resource
+     * @param mixed $resource
+     *
+     * @return mixed
      */
-    public static function setClassType($resource)
+    public static function setClassType(&$resource)
     {
-        $class = $resource::class;
+        // If legacy code passes arrays, try to unwrap to the actual resource.
+        if (is_array($resource)) {
+            if (isset($resource['resource'])) {
+                $resource = $resource['resource'];
+            } elseif (isset($resource[0])) {
+                $resource = $resource[0];
+            }
+        }
 
-        switch ($class) {
+        // Nothing to do if we still don't have an object.
+        if (!is_object($resource)) {
+            return $resource;
+        }
+
+        // Extract short class name (handles namespaced classes).
+        $class = get_class($resource);
+        $shortClass = $class;
+        if (false !== strpos($class, '\\')) {
+            $shortClass = substr($class, strrpos($class, '\\') + 1);
+        }
+
+        switch ($shortClass) {
             case 'Event':
-                /** @var CalendarEvent $resource */
-                $newResource = new CalendarEvent(
-                    $resource->source_id,
-                    $resource->title,
-                    $resource->content,
-                    $resource->start_date,
-                    $resource->end_date,
-                    $resource->attachment_path,
-                    $resource->attachment_filename,
-                    $resource->attachment_size,
-                    $resource->attachment_comment,
-                    $resource->all_day
-                );
-                $resource = $newResource;
+                // Avoid notices if properties are missing (legacy objects can vary).
+                $get = static function ($obj, string $prop, $default = null) {
+                    return (is_object($obj) && isset($obj->{$prop})) ? $obj->{$prop} : $default;
+                };
 
+                /** @var CalendarEvent $newResource */
+                $newResource = new CalendarEvent(
+                    $get($resource, 'source_id', 0),
+                    $get($resource, 'title', ''),
+                    $get($resource, 'content', ''),
+                    $get($resource, 'start_date', ''),
+                    $get($resource, 'end_date', ''),
+                    $get($resource, 'attachment_path', ''),
+                    $get($resource, 'attachment_filename', ''),
+                    $get($resource, 'attachment_size', 0),
+                    $get($resource, 'attachment_comment', ''),
+                    $get($resource, 'all_day', 0)
+                );
+
+                // Preserve common base fields if they exist.
+                if (isset($resource->destination_id)) {
+                    $newResource->destination_id = $resource->destination_id;
+                }
+                if (isset($resource->linked_resources)) {
+                    $newResource->linked_resources = $resource->linked_resources;
+                }
+                if (isset($resource->item_properties)) {
+                    $newResource->item_properties = $resource->item_properties;
+                }
+                if (isset($resource->obj)) {
+                    $newResource->obj = $resource->obj;
+                }
+
+                $resource = $newResource;
                 break;
 
             case 'CourseDescription':
                 if (!method_exists($resource, 'show')) {
-                    $resource = (array) $resource;
+                    $resourceArr = (array) $resource;
+
                     $newResource = new CourseDescription(
-                        isset($resource['id']) ? $resource['id'] : '',
-                        $resource['title'],
-                        $resource['content'],
-                        $resource['description_type']
+                        $resourceArr['id'] ?? '',
+                        $resourceArr['title'] ?? '',
+                        $resourceArr['content'] ?? '',
+                        $resourceArr['description_type'] ?? ''
                     );
-                    $newResource->source_id = $resource['source_id'];
-                    $newResource->destination_id = $resource['source_id'];
-                    $newResource->linked_resources = $resource['source_id'];
-                    $newResource->item_properties = $resource['source_id'];
-                    $newResource->obj = $resource['obj'];
+
+                    // Preserve base Resource fields (if present).
+                    if (isset($resourceArr['source_id'])) {
+                        $newResource->source_id = $resourceArr['source_id'];
+                    }
+                    if (isset($resourceArr['destination_id'])) {
+                        $newResource->destination_id = $resourceArr['destination_id'];
+                    }
+                    if (isset($resourceArr['linked_resources'])) {
+                        $newResource->linked_resources = $resourceArr['linked_resources'];
+                    }
+                    if (isset($resourceArr['item_properties'])) {
+                        $newResource->item_properties = $resourceArr['item_properties'];
+                    }
+                    if (isset($resourceArr['obj'])) {
+                        $newResource->obj = $resourceArr['obj'];
+                    }
+
                     $resource = $newResource;
                 }
-
                 break;
         }
 

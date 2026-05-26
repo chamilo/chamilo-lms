@@ -14,7 +14,8 @@ class AttendanceLink extends AbstractLink
 {
     private $attendance_table = null;
 
-    private $attendance_data = array();
+    /** @var array|null */
+    private ?array $attendance_data = null;
 
     public function __construct()
     {
@@ -101,12 +102,30 @@ class AttendanceLink extends AbstractLink
         // Load attendance settings (qualify max + require unique mode)
         $sql = 'SELECT attendance_qualify_max, require_unique
             FROM '.$this->get_attendance_table().'
-            WHERE iid = '.$attendanceId;
+            WHERE iid = '.(int) $attendanceId;
         $query = Database::query($sql);
         $attendance = Database::fetch_assoc($query);
 
         $qualifyMax = (float) ($attendance['attendance_qualify_max'] ?? 0);
         $requireUnique = !empty($attendance['require_unique']);
+
+        // Avoid gradebook showing 0/0 in require-unique mode when qualify max was never set.
+        if ($requireUnique && $qualifyMax <= 0.0) {
+            // Using 100 matches the UI expectation ("100% when present at least once").
+            $qualifyMax = 100.0;
+        }
+
+        if (!$requireUnique && $qualifyMax <= 0.0) {
+            $sqlTotal = 'SELECT COUNT(*) AS total
+                     FROM '.$tbl_calendar.'
+                     WHERE attendance_id = '.(int) $attendanceId;
+            $rowTotal = Database::fetch_assoc(Database::query($sqlTotal));
+            $totalDates = (int) ($rowTotal['total'] ?? 0);
+
+            if ($totalDates > 0) {
+                $qualifyMax = (float) $totalDates;
+            }
+        }
 
         // ------------------------------------------------------------
         // Require-unique mode: 100% score if present at least once
@@ -123,15 +142,17 @@ class AttendanceLink extends AbstractLink
                 $sqlHasPresence = 'SELECT 1
                 FROM '.$tbl_sheet.' s
                 INNER JOIN '.$tbl_calendar.' c ON c.iid = s.attendance_calendar_id
-                WHERE c.attendance_id = '.$attendanceId.'
-                  AND s.user_id = '.$studentId.'
+                WHERE c.attendance_id = '.(int) $attendanceId.'
+                  AND s.user_id = '.(int) $studentId.'
                   AND s.presence IN (1, 2, 3)
                 LIMIT 1';
 
                 $hasPresence = Database::num_rows(Database::query($sqlHasPresence)) > 0;
+                if ('default' === $type) {
+                    return [$hasPresence ? 1.0 : 0.0, 1];
+                }
 
-                // 100% if present at least once
-                return [$hasPresence ? $qualifyMax : 0, $qualifyMax];
+                return [$hasPresence ? $qualifyMax : 0.0, $qualifyMax];
             }
 
             // All students (average / best / ranking / default)
@@ -144,11 +165,11 @@ class AttendanceLink extends AbstractLink
 
             // Aggregate per user: has_presence = 1 if any presence in (1,2,3)
             $sqlAll = 'SELECT s.user_id,
-                          MAX(CASE WHEN s.presence IN (1, 2, 3) THEN 1 ELSE 0 END) AS has_presence
-                   FROM '.$tbl_sheet.' s
-                   INNER JOIN '.$tbl_calendar.' c ON c.iid = s.attendance_calendar_id
-                   WHERE c.attendance_id = '.$attendanceId.'
-                   GROUP BY s.user_id';
+                      MAX(CASE WHEN s.presence IN (1, 2, 3) THEN 1 ELSE 0 END) AS has_presence
+               FROM '.$tbl_sheet.' s
+               INNER JOIN '.$tbl_calendar.' c ON c.iid = s.attendance_calendar_id
+               WHERE c.attendance_id = '.(int) $attendanceId.'
+               GROUP BY s.user_id';
 
             $rs = Database::query($sqlAll);
 
@@ -164,7 +185,7 @@ class AttendanceLink extends AbstractLink
 
             // Compute stats (keep legacy behavior when qualifyMax is 0)
             foreach ($students as $uid => $finalScore) {
-                if (0 != $qualifyMax) {
+                if (0.0 != $qualifyMax) {
                     $resultCount++;
                     $sumRatio += $finalScore / $qualifyMax;
                     $sumScore += $finalScore;
@@ -197,7 +218,7 @@ class AttendanceLink extends AbstractLink
 
         $sql = 'SELECT user_id, score
             FROM '.$tbl_attendance_result.'
-            WHERE attendance_id = '.$attendanceId;
+            WHERE attendance_id = '.(int) $attendanceId;
 
         if (null !== $studentId) {
             $sql .= ' AND user_id = '.(int) $studentId;
@@ -208,13 +229,22 @@ class AttendanceLink extends AbstractLink
         // Single student
         if (null !== $studentId) {
             if ($row = Database::fetch_assoc($scores)) {
-                return [$row['score'], $qualifyMax];
+                $score = (float) ($row['score'] ?? 0);
+                if ('default' === $type) {
+                    return [$qualifyMax > 0.0 ? ($score / $qualifyMax) : 0.0, 1];
+                }
+
+                return [$score, $qualifyMax];
             }
 
-            return [0, $qualifyMax];
+            if ('default' === $type) {
+                return [0.0, 1];
+            }
+
+            return [0.0, $qualifyMax];
         }
 
-        // All students (average / best)
+        // All students (average / best / ranking / default)
         $students = [];      // user_id => final score for that user
         $sumRatio = 0.0;     // sum(score/max) across users
         $sumScore = 0.0;     // sum(score) across users
@@ -238,7 +268,7 @@ class AttendanceLink extends AbstractLink
 
         // Compute stats
         foreach ($students as $uid => $finalScore) {
-            if (0 != $qualifyMax) {
+            if (0.0 != $qualifyMax) {
                 $resultCount++;
                 $sumRatio += $finalScore / $qualifyMax;
                 $sumScore += $finalScore;
@@ -264,6 +294,7 @@ class AttendanceLink extends AbstractLink
                 return AbstractLink::getCurrentUserRanking($studentId, $students);
 
             default:
+                // Default expected format: [sum of ratios, number of users]
                 return [$sumRatio, $resultCount];
         }
     }

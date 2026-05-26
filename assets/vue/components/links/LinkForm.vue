@@ -1,5 +1,5 @@
 <template>
-  <form class="flex flex-col gap-2 mt-6">
+  <form class="mt-6 flex flex-col gap-2">
     <BaseInputTextWithVuelidate
       v-model="formData.url"
       :label="t('URL')"
@@ -13,77 +13,86 @@
     <BaseTextArea
       v-model="formData.description"
       :label="t('Description')"
-      class="w-full min-h-[120px]"
+      class="min-h-[120px] w-full"
       rows="6"
     />
 
-    <BaseSelect
-      v-model="formData.category"
-      :label="t('Select a category')"
-      :options="categories"
-      hast-empty-value
-      option-label="title"
-      option-value="iid"
-    />
-
-    <BaseSelect
-      v-model="formData.target"
-      :label="t('Link\'s target')"
-      :options="[
-        { label: 'Open self', value: '_self' },
-        { label: 'Open blank', value: '_blank' },
-        { label: 'Open parent', value: '_parent' },
-        { label: 'Open top', value: '_top' },
-      ]"
-    />
-
-    <BaseCheckbox
-      id="show-link-on-home-page"
-      v-model="formData.showOnHomepage"
-      :label="t('Show link on course homepage')"
-      name="show-link-on-home-page"
-    />
-
-    <div
-      v-if="formData.showOnHomepage"
-      class="mt-4 space-y-4"
-    >
-      <div v-if="currentPreviewImage">
-        <p class="text-gray-600 font-semibold">{{ t("Current icon") }}</p>
-        <img
-          :src="currentPreviewImage"
-          alt="Custom Image"
-          class="w-24 h-24 object-cover rounded-xl border shadow"
+    <BaseAdvancedSettingsButton v-model="showAdvancedSettings">
+      <div class="flex flex-col gap-4">
+        <ResourceLanguageSelector
+          id="link-language"
+          v-model="formData.language"
         />
-        <BaseButton
-          class="mt-2"
-          :label="t('Remove current icon')"
-          icon="trash"
-          type="danger"
-          size="small"
-          @click="removeCurrentImage"
+
+        <BaseSelect
+          v-model="formData.category"
+          :label="t('Select a category')"
+          :options="categories"
+          hast-empty-value
+          option-label="title"
+          option-value="iid"
         />
+
+        <BaseSelect
+          v-model="formData.target"
+          :label="t('Link\'s target')"
+          :options="[
+            { label: 'Open self', value: '_self' },
+            { label: 'Open blank', value: '_blank' },
+            { label: 'Open parent', value: '_parent' },
+            { label: 'Open top', value: '_top' },
+          ]"
+        />
+
+        <BaseCheckbox
+          id="show-link-on-home-page"
+          v-model="formData.showOnHomepage"
+          :label="t('Show link on course homepage')"
+          name="show-link-on-home-page"
+        />
+
+        <div
+          v-if="formData.showOnHomepage"
+          class="space-y-4"
+        >
+          <div v-if="currentPreviewImage">
+            <p class="font-semibold text-gray-600">{{ t("Current icon") }}</p>
+            <img
+              :src="currentPreviewImage"
+              alt="Custom Image"
+              class="h-24 w-24 rounded-xl border object-cover shadow"
+            />
+            <BaseButton
+              class="mt-2"
+              :label="t('Remove current icon')"
+              icon="trash"
+              type="danger"
+              size="small"
+              @click="removeCurrentImage"
+            />
+          </div>
+
+          <Dashboard
+            class="w-full max-w-3xl"
+            :uppy="uppy"
+            :props="{
+              proudlyDisplayPoweredByUppy: false,
+              height: 350,
+              hideUploadButton: true,
+              autoOpenFileEditor: true,
+              note: t('Click the image to crop it (1:1 ratio, 120x120 px recommended).'),
+            }"
+          />
+
+          <p class="text-sm text-gray-600">
+            {{ t("This icon will show for the link displayed as a tool on the course homepage.") }}
+          </p>
+          <p class="text-sm text-gray-600">
+            {{ t("Use the crop tool to select a 1:1 region. Recommended size: 120x120 pixels.") }}
+          </p>
+        </div>
       </div>
-
-      <Dashboard
-        class="w-full max-w-3xl"
-        :uppy="uppy"
-        :props="{
-          proudlyDisplayPoweredByUppy: false,
-          height: 350,
-          hideUploadButton: true,
-          autoOpenFileEditor: true,
-          note: t('Click the image to crop it (1:1 ratio, 120x120 px recommended).'),
-        }"
-      />
-
-      <p class="text-sm text-gray-600">
-        {{ t("This icon will show for the link displayed as a tool on the course homepage.") }}
-      </p>
-      <p class="text-sm text-gray-600">
-        {{ t("Use the crop tool to select a 1:1 region. Recommended size: 120x120 pixels.") }}
-      </p>
-    </div>
+    </BaseAdvancedSettingsButton>
 
     <LayoutFormButtons>
       <BaseButton
@@ -116,6 +125,8 @@ import BaseInputTextWithVuelidate from "../basecomponents/BaseInputTextWithVueli
 import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
 import BaseTextArea from "../basecomponents/BaseTextArea.vue"
 import BaseSelect from "../basecomponents/BaseSelect.vue"
+import BaseAdvancedSettingsButton from "../basecomponents/BaseAdvancedSettingsButton.vue"
+import ResourceLanguageSelector from "../resources/ResourceLanguageSelector.vue"
 import { useNotification } from "../../composables/notification"
 import LayoutFormButtons from "../layout/LayoutFormButtons.vue"
 import "@uppy/core/dist/style.css"
@@ -131,6 +142,8 @@ const { cid, sid } = useCidReq()
 const router = useRouter()
 const route = useRoute()
 const selectedFile = ref(null)
+const showAdvancedSettings = ref(false)
+
 const objectUrl = ref(null)
 
 const currentPreviewImage = computed(() => {
@@ -218,6 +231,7 @@ const formData = reactive({
   customImage: null,
   customImageUrl: null,
   removeImage: false,
+  language: "",
 })
 const rules = {
   url: { required, url },
@@ -268,6 +282,8 @@ const fetchLink = async () => {
       if (response.category) {
         formData.category = response.category
       }
+
+      formData.language = String(response.language || "").trim()
     } catch (error) {
       console.error("Error fetching link:", error)
     }
@@ -300,6 +316,7 @@ const submitForm = async () => {
     target: formData.target,
     parentResourceNodeId: parentResourceNodeId.value,
     resourceLinkList: resourceLinkList.value,
+    language: formData.language || "",
   }
   try {
     let linkId = props.linkId

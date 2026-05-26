@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
+use Chamilo\CoreBundle\Helpers\UserMergeHelper;
 use Doctrine\DBAL\ParameterType;
 
 /**
@@ -75,7 +76,7 @@ class Statistics
                     FROM $courseTable AS c
                     WHERE 1 = 1";
             if (isset($categoryCode)) {
-                $sql .= " WHERE c.category_code = '".Database::escape_string($categoryCode)."'";
+                $sql .= " AND c.category_code = '".Database::escape_string($categoryCode)."'";
             }
         }
 
@@ -263,7 +264,7 @@ class Statistics
                     ";
         } else {
             $sql = "SELECT DISTINCT(t.c_id) FROM $table t
-                   access_date BETWEEN '$startDate' AND '$endDate' ";
+             WHERE access_date BETWEEN '$startDate' AND '$endDate'";
         }
 
         $result = Database::query($sql);
@@ -468,11 +469,18 @@ class Statistics
                     $row[4] = '-';
                 }
 
-                // User id.
+                // User details (plain link - avoid legacy "send message" popups)
+                $userId = (int) ($row[6] ?? 0);
+                $userLabel = htmlspecialchars((string) ($row[5] ?? ''), ENT_QUOTES, 'UTF-8');
+
                 $row[5] = Display::url(
-                    $row[5],
-                    api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&user_id='.$row[6],
-                    ['class' => 'ajax']
+                    $userLabel,
+                    api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$userId,
+                    [
+                        'class' => 'js-user-details-link text-primary underline hover:text-primary/80',
+                        'target' => '_self',
+                        'rel' => 'noopener',
+                    ]
                 );
 
                 $row[6] = Tracking::get_ip_from_user_event(
@@ -507,13 +515,10 @@ class Statistics
         ?bool $isFileSize = false,
         ?bool $barRelativeToMax = false
     ): string {
-        $total = 0;
-        $max = 0;
+        static $cssAdded = false;
 
-        $content = '<table class="table table-hover table-striped data_table stats_table" cellspacing="0" cellpadding="3" width="90%">
-        <thead><tr><th colspan="'.($showTotal ? '4' : '3').'">'.$title.'</th></tr></thead><tbody>';
-
-        $i = 0;
+        $total = 0.0;
+        $max = 0.0;
 
         foreach ($stats as $subtitle => $number) {
             $number = (float) $number;
@@ -523,30 +528,92 @@ class Statistics
             }
         }
 
+        if (false === $showTotal) {
+            $barRelativeToMax = true;
+        }
+
+        $colspan = $showTotal ? 4 : 3;
+
+        $css = '';
+        if (!$cssAdded) {
+            $cssAdded = true;
+            $css = '<style>
+            .ch-stats-table{ width:100%; }
+            .ch-statbar-wrap{ display:flex; align-items:center; gap:10px; }
+            .ch-statbar{
+                flex: 1 1 auto;
+                height: 10px;
+                background: #e9eef5;
+                border-radius: 999px;
+                overflow: hidden;
+                min-width: 140px;
+            }
+            .ch-statbar__fill{
+                height: 100%;
+                width: 0%;
+                background: #3b82f6;
+                border-radius: 999px;
+            }
+            .ch-statbar__label{
+                font-size: 12px;
+                color: #5f6b7a;
+                white-space: nowrap;
+                min-width: 52px;
+                text-align: right;
+            }
+            .ch-stats-cols th{ vertical-align: middle; }
+        </style>';
+        }
+
+        $content = $css;
+        $content .= '<table class="table table-hover table-striped data_table stats_table ch-stats-table" cellspacing="0" cellpadding="3">
+        <thead>
+            <tr><th colspan="'.$colspan.'">'.$title.'</th></tr>
+            <tr class="ch-stats-cols">
+                <th>'.get_lang('Name').'</th>
+                <th>'.get_lang('Distribution').'</th>
+                <th class="text-end">'.get_lang('Count').'</th>';
+
+        if ($showTotal) {
+            $content .= '<th class="text-end">'.get_lang('Percentage').'</th>';
+        }
+
+        $content .= '</tr>
+        </thead>
+        <tbody>';
+
+        $i = 0;
         foreach ($stats as $subtitle => $number) {
             $number = (float) $number;
 
-            if (!$isFileSize) {
-                $numberLabel = number_format($number, 0, ',', '.');
-            } else {
-                $numberLabel = self::makeSizeString($number);
-            }
+            $numberLabel = !$isFileSize
+                ? number_format($number, 0, ',', '.')
+                : self::makeSizeString((int) $number);
 
             $percentageRaw = ($total > 0) ? (100 * $number / $total) : 0.0;
-            $percentageDisplay = ($total > 0) ? number_format($percentageRaw, 1, ',', '.') : '0';
+            $percentageDisplay = ($total > 0) ? number_format($percentageRaw, 1, ',', '.') : '0,0';
 
-            // Bar size: either relative to max (wanted for "1 vs 7") or relative to total (legacy behavior)
             $barPercent = $barRelativeToMax
                 ? (($max > 0) ? (100 * $number / $max) : 0.0)
                 : $percentageRaw;
 
+            $barPercent = max(0.0, min(100.0, (float) $barPercent));
+            $barHtml = '
+            <div class="ch-statbar-wrap" title="'.$percentageDisplay.'%">
+                <div class="ch-statbar">
+                    <div class="ch-statbar__fill" style="width: '.$barPercent.'%"></div>
+                </div>
+                <div class="ch-statbar__label">'.$percentageDisplay.'%</div>
+            </div>
+        ';
+
             $content .= '<tr class="row_'.(0 == $i % 2 ? 'odd' : 'even').'">
-            <td width="25%" style="vertical-align:top;">'.$subtitle.'</td>
-            <td width="60%">'.Display::bar_progress($barPercent, false).'</td>
-            <td width="5%" align="right" style="vertical-align:top;">'.$numberLabel.'</td>';
+            <td style="vertical-align:top;">'.$subtitle.'</td>
+            <td style="vertical-align:middle;">'.$barHtml.'</td>
+            <td class="text-end" style="vertical-align:top;">'.$numberLabel.'</td>';
 
             if ($showTotal) {
-                $content .= '<td width="5%" align="right"> '.$percentageDisplay.'%</td>';
+                $content .= '<td class="text-end" style="vertical-align:top;">'.$percentageDisplay.'%</td>';
             }
 
             $content .= '</tr>';
@@ -634,7 +701,7 @@ class Statistics
                 $stat_date = ('day' === $type) ? $periodCollection[$obj->stat_date] : $obj->stat_date;
                 $result_last_x[$stat_date] = $obj->number_of_logins;
             }
-            $content .= self::printStats(get_lang('Last logins').' ('.$period.')', $result_last_x, true);
+            $content .= self::printStats(get_lang('Last logins').' ('.$period.')', $result_last_x, false);
             flush(); //flush web request at this point to see something already while the full data set is loading
             $content .= '<br />';
         }
@@ -654,7 +721,7 @@ class Statistics
             }
             $result[$stat_date] = $obj->number_of_logins;
         }
-        $content .= self::printStats(get_lang('All logins').' ('.$period.')', $result, true);
+        $content .= self::printStats(get_lang('All logins').' ('.$period.')', $result, false);
 
         return $content;
     }
@@ -744,9 +811,9 @@ class Statistics
         }
 
         if ($distinct) {
-            $content = self::printStats(get_lang('Distinct users logins'), $totalLogin, false, false, true);
+            $content = self::printStats(get_lang('Distinct users logins'), $totalLogin, false, false, false);
         } else {
-            $content = self::printStats(get_lang('Logins'), $totalLogin, false, false, true);
+            $content = self::printStats(get_lang('Logins'), $totalLogin, false, false, false);
         }
 
         return $content;
@@ -834,6 +901,7 @@ class Statistics
             'student_publication',
             'user',
             'forum',
+            'glossary'
         ];
         $tool_names = [];
         foreach ($tools as $tool) {
@@ -844,25 +912,26 @@ class Statistics
         if ($accessUrlUtil->isMultiple()) {
             $accessUrl = $accessUrlUtil->getCurrent();
             $urlId = $accessUrl->getId();
-            $sql = "SELECT access_tool, count( access_id ) AS number_of_logins
-                    FROM $table t , $access_url_rel_course_table a
-                    WHERE
-                        access_tool IN ('".implode("','", $tools)."') AND
-                        t.c_id = a.c_id AND
-                        access_url_id = $urlId
-                        GROUP BY access_tool
-                    ";
+            $sql = "SELECT access_tool, count(access_id) AS number_of_logins
+                FROM $table t, $access_url_rel_course_table a
+                WHERE
+                    access_tool IN ('".implode("','", $tools)."') AND
+                    t.c_id = a.c_id AND
+                    access_url_id = $urlId
+                GROUP BY access_tool
+                ORDER BY number_of_logins DESC";
         } else {
-            $sql = "SELECT access_tool, count( access_id ) AS number_of_logins
-                    FROM $table
-                    WHERE access_tool IN ('".implode("','", $tools)."')
-                    GROUP BY access_tool ";
+            $sql = "SELECT access_tool, count(access_id) AS number_of_logins
+                FROM $table
+                WHERE access_tool IN ('".implode("','", $tools)."')
+                GROUP BY access_tool
+                ORDER BY number_of_logins DESC";
         }
 
         $res = Database::query($sql);
         $result = [];
         while ($obj = Database::fetch_object($res)) {
-            $result[$tool_names[$obj->access_tool]] = $obj->number_of_logins;
+            $result[$tool_names[$obj->access_tool]] = (int) $obj->number_of_logins;
         }
 
         return $result;
@@ -882,7 +951,7 @@ class Statistics
             $result = self::getToolsStats();
         }
 
-        return self::printStats(get_lang('Tools access'), $result, true);
+        return self::printStats(get_lang('Tools access'), $result, false);
     }
 
     /**
@@ -918,40 +987,80 @@ class Statistics
     }
 
     /**
-     * Shows the number of users having their picture uploaded in Dokeos.
+     * Shows the number of users having their picture uploaded.
+     * Compatible with different schemas (picture, picture_uri, picture_resource_node_id).
      * @throws Exception
      */
     public static function printUserPicturesStats(): string
     {
-        $user_table = Database::get_main_table(TABLE_MAIN_USER);
-        $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $url_condition = null;
-        $url_condition2 = null;
-        $table = null;
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+        $accessUrlRelUserTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+
         $accessUrlUtil = Container::getAccessUrlUtil();
+        $cols = [];
+        try {
+            $conn = Database::getManager()->getConnection();
+            $sm = $conn->createSchemaManager();
+            $cols = $sm->listTableColumns($userTable);
+        } catch (\Throwable $e) {
+            $cols = [];
+        }
+
+        $hasPicture = isset($cols['picture']);
+        $hasPictureUri = isset($cols['picture_uri']);
+        $hasPictureNodeId = isset($cols['picture_resource_node_id']);
+
+        $joins = '';
+        $where = 'WHERE u.active <> '.USER_SOFT_DELETED;
 
         if ($accessUrlUtil->isMultiple()) {
             $accessUrl = $accessUrlUtil->getCurrent();
-            $urlId = $accessUrl->getId();
-            $url_condition = ", $access_url_rel_user_table as url WHERE url.user_id=u.id AND access_url_id='".$urlId."'";
-            $url_condition2 = " AND url.user_id=u.id AND access_url_id = $urlId";
-            $table = ", $access_url_rel_user_table as url ";
+            $urlId = (int) $accessUrl->getId();
+            $joins .= " INNER JOIN $accessUrlRelUserTable url
+                    ON url.user_id = u.id AND url.access_url_id = $urlId ";
         }
-        $sql = "SELECT COUNT(*) AS n FROM $user_table as u ".$url_condition;
+
+        // Total users (within current URL if multi-url).
+        $sql = "SELECT COUNT(*) AS n FROM $userTable u $joins $where";
         $res = Database::query($sql);
-        $count1 = Database::fetch_object($res);
-        $sql = "SELECT COUNT(*) AS n FROM $user_table as u $table
-               WHERE LENGTH(picture_uri) > 0 $url_condition2";
+        $totalObj = Database::fetch_object($res);
+        $totalUsers = (int) ($totalObj->n ?? 0);
 
-        $sql .= !str_contains($sql, 'WHERE') ? ' WHERE u.active <> '.USER_SOFT_DELETED : ' AND u.active <> '.USER_SOFT_DELETED;
+        // Users with a picture (build conditions depending on available columns).
+        $pictureWhereParts = [];
 
-        $res = Database::query($sql);
-        $count2 = Database::fetch_object($res);
-        // #users without picture
-        $result[get_lang('No')] = $count1->n - $count2->n;
-        $result[get_lang('Yes')] = $count2->n; // #users with picture
+        if ($hasPictureUri) {
+            $pictureWhereParts[] = "(u.picture_uri IS NOT NULL AND u.picture_uri <> '')";
+        }
 
-        return self::printStats(get_lang('Number of users').' ('.get_lang('Picture').')', $result, true);
+        if ($hasPicture) {
+            // Exclude common "empty" values.
+            $pictureWhereParts[] = "(u.picture IS NOT NULL AND u.picture <> '' AND u.picture <> '0' AND u.picture <> 'unknown.jpg' AND u.picture <> 'unknown.png')";
+        }
+
+        if ($hasPictureNodeId) {
+            $pictureWhereParts[] = "(u.picture_resource_node_id IS NOT NULL AND u.picture_resource_node_id <> 0)";
+        }
+
+        $withPicture = 0;
+        if (!empty($pictureWhereParts)) {
+            $pictureWhere = implode(' OR ', $pictureWhereParts);
+
+            $sql = "SELECT COUNT(*) AS n
+                FROM $userTable u
+                $joins
+                $where
+                AND ($pictureWhere)";
+            $res = Database::query($sql);
+            $obj = Database::fetch_object($res);
+            $withPicture = (int) ($obj->n ?? 0);
+        }
+
+        $result = [];
+        $result[get_lang('No')] = max(0, $totalUsers - $withPicture);
+        $result[get_lang('Yes')] = max(0, $withPicture);
+
+        return self::printStats(get_lang('Number of users').' ('.get_lang('Picture').')', $result, false);
     }
 
     /**
@@ -1009,7 +1118,7 @@ class Statistics
         $form = new FormValidator(
             'search_simple',
             'get',
-            api_get_path(WEB_CODE_PATH).'admin/statistics/index.php',
+            api_get_self(),
             '',
             ['style' => 'display:inline-block']
         );
@@ -1201,10 +1310,11 @@ class Statistics
     {
         $access_url_rel_course_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $columns[0] = 'c_id';
-        $columns[1] = 'access_date';
+        $columns[1] = 'c_id';
+        $columns[2] = 'access_date';
         $sql_order[SORT_ASC] = 'ASC';
         $sql_order[SORT_DESC] = 'DESC';
-        $per_page = isset($_GET['per_page']) ? intval($_GET['per_page']) : 10;
+        $per_page = isset($_GET['per_page']) ? intval($_GET['per_page']) : 50;
         $page_nr = isset($_GET['page_nr']) ? intval($_GET['page_nr']) : 1;
         $column = isset($_GET['column']) ? intval($_GET['column']) : 0;
         $direction = isset($_GET['direction']) ? $_GET['direction'] : SORT_ASC;
@@ -1257,14 +1367,17 @@ class Statistics
             while ($obj = Database::fetch_object($res)) {
                 $courseInfo = api_get_course_info_by_id($obj->c_id);
                 $course = [];
-                $course[] = '<a href="'.api_get_path(WEB_COURSE_PATH).$courseInfo['code'].'">'.$courseInfo['code'].' <a>';
+                $course[] = $obj->c_id;
+                $courseTitle = htmlspecialchars($courseInfo['title'] ?? $courseInfo['code'] ?? '', ENT_QUOTES, 'UTF-8');
+                $course[] = '<a href="/course/'.(int) $obj->c_id.'/home">'.$courseTitle.'</a>';
                 // Allow sort by date hiding the numerical date
                 $course[] = '<span style="display:none;">'.$obj->access_date.'</span>'.api_convert_and_format_date($obj->access_date);
                 $courses[] = $course;
             }
             $parameters['date_diff'] = $date_diff;
             $parameters['report'] = 'courselastvisit';
-            $table_header[] = [get_lang("Course code"), true];
+            $table_header[] = [get_lang("Id"), true];
+            $table_header[] = [get_lang("Course title"), true];
             $table_header[] = [get_lang("Latest access"), true];
 
             ob_start();
@@ -1278,7 +1391,7 @@ class Statistics
             $content .= ob_get_contents();
             ob_end_clean();
         } else {
-            $content = get_lang('No search results');
+            $content .= get_lang('No search results');
         }
 
         return $content;
@@ -1466,23 +1579,22 @@ class Statistics
         if (strlen($endDate) > 10) {
             $endDate = substr($endDate, 0, 10);
         }
-        if (!preg_match('/\d\d\d\d-\d\d-\d\d/', $startDate)) {
+
+        if (!preg_match('/\d{4}-\d{2}-\d{2}/', $startDate)) {
             return false;
         }
-        if (!preg_match('/\d\d\d\d-\d\d-\d\d/', $startDate)) {
+        if (!preg_match('/\d{4}-\d{2}-\d{2}/', $endDate)) {
             return false;
         }
+
         $startTimestamp = strtotime($startDate);
         $endTimestamp = strtotime($endDate);
+
         $list = [];
         for ($time = $startTimestamp; $time < $endTimestamp; $time += 86400) {
             $datetime = api_get_utc_datetime($time);
-            if ($removeYear) {
-                $datetime = substr($datetime, 5, 5);
-            } else {
-                $dateTime = substr($datetime, 0, 10);
-            }
-            $list[$datetime] = 0;
+            $key = $removeYear ? substr($datetime, 5, 5) : substr($datetime, 0, 10);
+            $list[$key] = 0;
         }
 
         return $list;
@@ -1528,11 +1640,11 @@ class Statistics
         // - For circular charts, keep aspect ratio to avoid massive charts on tall wrappers.
         $options = trim($options);
         if ($isCircular) {
-            $baseOptions = 'responsive: true, maintainAspectRatio: true,';
+            $baseOptions = 'responsive: true, maintainAspectRatio: true, devicePixelRatio: Math.min(2, window.devicePixelRatio || 1),';
         } else {
             $baseOptions = $fullSize
-                ? 'responsive: true, maintainAspectRatio: false,'
-                : 'responsive: true,';
+                ? 'responsive: true, maintainAspectRatio: false, devicePixelRatio: Math.min(2, window.devicePixelRatio || 1),'
+                : 'responsive: true, devicePixelRatio: Math.min(2, window.devicePixelRatio || 1),';
         }
 
         $finalOptions = trim($baseOptions.' '.$options);
@@ -1629,6 +1741,9 @@ class Statistics
                         options: options
                     });
 
+                    setTimeout(function(){ if (chart) chart.resize(); }, 80);
+                    setTimeout(function(){ if (chart) chart.resize(); }, 280);
+
                     $afterInitBlock
                 });
             });
@@ -1667,7 +1782,7 @@ class Statistics
 
         $options = trim($options);
         if ($isCircular) {
-            $baseOptions = 'responsive: true, maintainAspectRatio: true,';
+            $baseOptions = 'responsive: true, maintainAspectRatio: false, devicePixelRatio: Math.min(2, window.devicePixelRatio || 1),';
         } else {
             $baseOptions = $fullSize
                 ? 'responsive: true, maintainAspectRatio: false,'
@@ -1747,6 +1862,9 @@ class Statistics
                         data: data,
                         options: options
                     });
+
+                    setTimeout(function(){ if (chart) chart.resize(); }, 80);
+                    setTimeout(function(){ if (chart) chart.resize(); }, 280);
 
                     $afterInitBlock
                 });
@@ -1990,6 +2108,8 @@ class Statistics
      */
     public static function getNewUserRegistrations(string $startDate, string $endDate): array
     {
+        $startDate = Database::escape_string($startDate);
+        $endDate = Database::escape_string($endDate);
         $sql = "SELECT DATE_FORMAT(created_at, '%Y-%m-%d') as reg_date, COUNT(*) as user_count
             FROM user
             WHERE created_at BETWEEN '$startDate' AND '$endDate'
@@ -2011,6 +2131,8 @@ class Statistics
      */
     public static function getUserRegistrationsByCreator(string $startDate, string $endDate): array
     {
+        $startDate = Database::escape_string($startDate);
+        $endDate = Database::escape_string($endDate);
         $sql = "SELECT u.creator_id, COUNT(u.id) as user_count, c.firstname, c.lastname
                 FROM user u
                 LEFT JOIN user c ON u.creator_id = c.id
@@ -2387,25 +2509,25 @@ class Statistics
             $cssPrinted = true;
 
             $out .= '<style>
-            .stats-menu-wrap{ overflow-x:auto; padding-bottom:2px; }
-            .stats-menu-grid{
-              --stats-cols: 5;
-              display:grid;
-              gap:1rem;
-              align-items:start;
-              grid-template-columns: repeat(1, minmax(0, 1fr));
-            }
-            .p-inputtext, .p-select { width: auto !important; }
-            @media (min-width:640px){
-              .stats-menu-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
-            }
-            @media (min-width:768px){
-              .stats-menu-grid{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
-            }
-            @media (min-width:1024px){
-              .stats-menu-grid{ grid-template-columns: repeat(var(--stats-cols), minmax(240px, 1fr)); }
-            }
-            </style>';
+        .stats-menu-wrap{ overflow-x:auto; padding-bottom:2px; }
+        .stats-menu-grid{
+          --stats-cols: 5;
+          display:grid;
+          gap:1rem;
+          align-items:start;
+          grid-template-columns: repeat(1, minmax(0, 1fr));
+        }
+        .p-inputtext, .p-select { width: auto !important; }
+        @media (min-width:640px){
+          .stats-menu-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+        @media (min-width:768px){
+          .stats-menu-grid{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        }
+        @media (min-width:1024px){
+          .stats-menu-grid{ grid-template-columns: repeat(var(--stats-cols), minmax(240px, 1fr)); }
+        }
+        </style>';
         }
 
         $out .= '<div class="stats-menu-wrap">';
@@ -2425,15 +2547,15 @@ class Statistics
 
             $sectionCardClass = $sectionHasActive
                 ? 'border-primary/30 ring-1 ring-primary/20'
-                : 'border-surface-200';
+                : 'border-gray-25';
 
-            $dotClass = $sectionHasActive ? 'bg-primary' : 'bg-surface-300';
+            $dotClass = $sectionHasActive ? 'bg-primary' : 'bg-gray-50';
 
-            $out .= '<section class="self-start h-fit min-w-0 rounded-2xl border ' . $sectionCardClass . ' bg-surface-50 p-4 shadow-sm">';
-            $out .= '  <h3 class="flex items-center gap-2 text-sm font-semibold text-surface-900">
-                <span class="h-2 w-2 rounded-full ' . $dotClass . '"></span>
-                ' . htmlspecialchars($section, ENT_QUOTES) . '
-            </h3>';
+            $out .= '<section class="self-start h-fit min-w-0 rounded-2xl border ' . $sectionCardClass . ' bg-white p-4 shadow-sm">';
+            $out .= '  <h3 class="flex items-center gap-2 text-sm font-semibold text-gray-90">
+            <span class="h-2 w-2 rounded-full ' . $dotClass . '"></span>
+            ' . htmlspecialchars($section, ENT_QUOTES) . '
+        </h3>';
 
             $out .= '  <ul class="mt-3 space-y-1">';
 
@@ -2445,22 +2567,21 @@ class Statistics
                 if ($active) {
                     $activeInfo = ['section' => $section, 'label' => (string) $label];
                 }
-
                 $aClass = $active
                     ? 'bg-primary/10 text-primary ring-1 ring-primary/25'
-                    : 'text-surface-700 hover:bg-surface-100 hover:text-surface-900';
+                    : 'text-gray-90 hover:bg-gray-15 hover:text-gray-90';
 
-                $itemDotClass = $active ? 'bg-primary' : 'bg-surface-300 group-hover:bg-primary/60';
+                $itemDotClass = $active ? 'bg-primary' : 'bg-gray-50 group-hover:bg-primary/60';
 
                 $out .= '<li>
-                <a href="' . htmlspecialchars($url, ENT_QUOTES) . '"
-                   ' . ($active ? 'aria-current="page"' : '') . '
-                   class="group flex items-start justify-between gap-3 rounded-xl px-3 py-2 text-sm font-medium transition
-                          focus:outline-none focus:ring-2 focus:ring-primary/30 ' . $aClass . '">
-                  <span class="flex items-start gap-2 min-w-0">
-                    <span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full ' . $itemDotClass . '"></span>
-                    <span class="leading-5 break-words">' . htmlspecialchars((string) $label, ENT_QUOTES) . '</span>
-                  </span>';
+            <a href="' . htmlspecialchars($url, ENT_QUOTES) . '"
+               ' . ($active ? 'aria-current="page"' : '') . '
+               class="group flex items-start justify-between gap-3 rounded-xl px-3 py-2 text-sm font-medium transition
+                      focus:outline-none focus:ring-2 focus:ring-primary/30 ' . $aClass . '">
+              <span class="flex items-start gap-2 min-w-0">
+                <span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full ' . $itemDotClass . '"></span>
+                <span class="leading-5 break-words">' . htmlspecialchars((string) $label, ENT_QUOTES) . '</span>
+              </span>';
 
                 if ($active) {
                     $out .= '<span class="inline-flex items-center rounded-full bg-primary/15 px-2 py-0.5 text-xs font-semibold text-primary">'
@@ -2478,17 +2599,1059 @@ class Statistics
         $out .= '</div></div>';
 
         if (!empty($activeInfo)) {
-            $out .= '<div class="mt-4 flex flex-wrap items-center gap-2 text-sm text-surface-700">
-            <span class="font-semibold">' . htmlspecialchars(get_lang('You are here'), ENT_QUOTES) . ':</span>
-            <span class="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">'
+            $out .= '<div class="mt-4 flex flex-wrap items-center gap-2 text-sm text-gray-90">
+        <span class="font-semibold">' . htmlspecialchars(get_lang('You are here'), ENT_QUOTES) . ':</span>
+        <span class="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">'
                 . htmlspecialchars($activeInfo['section'], ENT_QUOTES) . ' · ' . htmlspecialchars($activeInfo['label'], ENT_QUOTES) .
                 '</span>
-        </div>';
+    </div>';
         }
 
         $out .= '</nav>';
-        $out .= '<div class="my-6 h-px w-full bg-surface-200"></div>';
+        $out .= '<div class="my-6 h-px w-full bg-gray-25"></div>';
 
         return $out;
     }
+
+    /**
+     * Builds the duplicate users report table.
+     *
+     * @param string $mode name|email|extra
+     * @param array  $additionalExtraFieldsInfo Fields selected via TrackingCourseLog “additional profile fields”
+     * @param int    $extraFieldId Only used when $mode=extra
+     * @param string $csrfToken Security::get_token() from index.php
+     */
+    public static function returnDuplicatedUsersTable(
+        string $dupMode = 'name',
+        array $additionalExtraFieldsInfo = [],
+        int $extraFieldId = 0,
+        string $token = ''
+    ) {
+        $dupMode = in_array($dupMode, ['name', 'email', 'extra'], true) ? $dupMode : 'name';
+
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+        $extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
+        $extraFieldValuesTable = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        $courseRelUserTable = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $sessionRelUserTable = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+
+        $selectedExtraFieldInfo = null;
+        $selectedExtraFieldLabel = '';
+
+        if ('extra' === $dupMode && $extraFieldId > 0) {
+            $sql = "SELECT id, variable, display_text
+            FROM $extraFieldTable
+            WHERE id = ".(int) $extraFieldId."
+            LIMIT 1";
+
+            try {
+                $res = Database::getManager()->getConnection()->executeQuery($sql);
+            } catch (\Throwable $e) {
+                error_log('[DuplicatedUsers SQL ERROR] '.$e->getMessage());
+                error_log('[DuplicatedUsers SQL] '.$sql);
+                throw $e;
+            }
+
+            $selectedExtraFieldInfo = Database::fetch_assoc($res) ?: null;
+            if ($selectedExtraFieldInfo) {
+                $selectedExtraFieldLabel = (string) ($selectedExtraFieldInfo['display_text'] ?: $selectedExtraFieldInfo['variable']);
+            }
+        }
+
+        // Determine which extra fields will be shown as columns
+        $extraFieldIdsToLoad = [];
+        $extraFieldLabels = [];
+
+        if ('extra' === $dupMode && $extraFieldId > 0) {
+            $extraFieldIdsToLoad[$extraFieldId] = $extraFieldId;
+            $extraFieldLabels[$extraFieldId] = $selectedExtraFieldLabel ?: ('Extra field #'.$extraFieldId);
+        }
+
+        foreach ($additionalExtraFieldsInfo as $fieldInfo) {
+            $fieldId = (int) ($fieldInfo['id'] ?? 0);
+            if ($fieldId <= 0) {
+                continue;
+            }
+
+            $extraFieldIdsToLoad[$fieldId] = $fieldId;
+
+            $label = (string) ($fieldInfo['display_text'] ?? '');
+            if ('' === trim($label)) {
+                $label = (string) ($fieldInfo['variable'] ?? ('Extra field #'.$fieldId));
+            }
+
+            $extraFieldLabels[$fieldId] = $label;
+        }
+
+        $applyHeaders = static function (SortableTableFromArray $table) use ($extraFieldIdsToLoad, $extraFieldLabels): void {
+            $col = 0;
+            $table->set_header($col++, get_lang('Id'), false);
+            $table->set_header($col++, get_lang('Firstname'), false);
+            $table->set_header($col++, get_lang('Lastname'), false);
+            $table->set_header($col++, get_lang('Email'), false);
+            $table->set_header($col++, get_lang('Registration date'), false);
+            $table->set_header($col++, get_lang('First login in platform'), false);
+            $table->set_header($col++, get_lang('Last login in platform'), false);
+            $table->set_header($col++, get_lang('Role'), false);
+            $table->set_header($col++, get_lang('Courses'), false);
+            $table->set_header($col++, get_lang('Sessions'), false);
+
+            foreach ($extraFieldIdsToLoad as $fid) {
+                $table->set_header($col++, $extraFieldLabels[$fid] ?? ('Extra field #'.$fid), false);
+            }
+
+            $table->set_header($col++, get_lang('Active'), false);
+            $table->set_header($col++, get_lang('Actions'), false);
+        };
+
+        $buildEmptyTable = static function () use ($applyHeaders): SortableTableFromArray {
+            $table = new SortableTableFromArray([], 0, 20);
+            $applyHeaders($table);
+
+            $table->set_form_actions([
+                'export_csv' => get_lang('Export as CSV'),
+                'export_excel' => get_lang('Export as XLS'),
+            ]);
+
+            return $table;
+        };
+
+        // Build duplicate source query (only active != softDeleted, exclude empty duplicate keys)
+        $duplicateUsers = [];
+        $sql = '';
+
+        switch ($dupMode) {
+            case 'name':
+                $sql = "
+                SELECT
+                    u.id,
+                    u.username,
+                    u.firstname,
+                    u.lastname,
+                    u.email,
+                    u.status,
+                    u.active,
+                    u.created_at AS registration_date,
+                    NULL AS first_login,
+                    u.last_login,
+                    LOWER(TRIM(COALESCE(u.firstname, ''))) AS dup_firstname_norm,
+                    LOWER(TRIM(COALESCE(u.lastname, ''))) AS dup_lastname_norm,
+                    CONCAT(TRIM(COALESCE(u.firstname, '')), ' ', TRIM(COALESCE(u.lastname, ''))) AS duplicate_label
+                FROM $userTable u
+                INNER JOIN (
+                    SELECT
+                        LOWER(TRIM(COALESCE(firstname, ''))) AS d_firstname,
+                        LOWER(TRIM(COALESCE(lastname, ''))) AS d_lastname,
+                        COUNT(*) AS qty
+                    FROM $userTable
+                    WHERE active <> ".USER_SOFT_DELETED."
+                      AND (
+                            TRIM(COALESCE(firstname, '')) <> ''
+                         OR TRIM(COALESCE(lastname, '')) <> ''
+                      )
+                    GROUP BY
+                        LOWER(TRIM(COALESCE(firstname, ''))),
+                        LOWER(TRIM(COALESCE(lastname, '')))
+                    HAVING COUNT(*) > 1
+                ) d
+                    ON d.d_firstname = LOWER(TRIM(COALESCE(u.firstname, '')))
+                   AND d.d_lastname = LOWER(TRIM(COALESCE(u.lastname, '')))
+                WHERE u.active <> ".USER_SOFT_DELETED."
+                ORDER BY
+                    duplicate_label ASC,
+                    u.created_at ASC,
+                    u.id ASC
+            ";
+                break;
+
+            case 'email':
+                $sql = "
+                SELECT
+                    u.id,
+                    u.username,
+                    u.firstname,
+                    u.lastname,
+                    u.email,
+                    u.status,
+                    u.active,
+                    u.created_at AS registration_date,
+                    NULL AS first_login,
+                    u.last_login,
+                    LOWER(TRIM(COALESCE(u.email, ''))) AS dup_email_norm,
+                    TRIM(COALESCE(u.email, '')) AS duplicate_label
+                FROM $userTable u
+                INNER JOIN (
+                    SELECT
+                        LOWER(TRIM(COALESCE(email, ''))) AS d_email,
+                        COUNT(*) AS qty
+                    FROM $userTable
+                    WHERE active <> ".USER_SOFT_DELETED."
+                      AND TRIM(COALESCE(email, '')) <> ''
+                    GROUP BY LOWER(TRIM(COALESCE(email, '')))
+                    HAVING COUNT(*) > 1
+                ) d
+                    ON d.d_email = LOWER(TRIM(COALESCE(u.email, '')))
+                WHERE u.active <> ".USER_SOFT_DELETED."
+                ORDER BY
+                    duplicate_label ASC,
+                    u.created_at ASC,
+                    u.id ASC
+            ";
+                break;
+
+            case 'extra':
+                if ($extraFieldId <= 0 || empty($selectedExtraFieldInfo)) {
+                    $sql = '';
+                    break;
+                }
+
+                $sql = "
+                SELECT
+                    u.id,
+                    u.username,
+                    u.firstname,
+                    u.lastname,
+                    u.email,
+                    u.status,
+                    u.active,
+                    u.created_at AS registration_date,
+                    NULL AS first_login,
+                    u.last_login,
+                    LOWER(TRIM(COALESCE(efv.field_value, ''))) AS dup_extra_norm,
+                    TRIM(COALESCE(efv.field_value, '')) AS duplicate_label
+                FROM $userTable u
+                INNER JOIN $extraFieldValuesTable efv
+                    ON efv.item_id = u.id
+                   AND efv.field_id = ".(int) $extraFieldId."
+                INNER JOIN (
+                    SELECT
+                        LOWER(TRIM(COALESCE(efv2.field_value, ''))) AS d_value,
+                        COUNT(*) AS qty
+                    FROM $extraFieldValuesTable efv2
+                    INNER JOIN $userTable u2
+                        ON u2.id = efv2.item_id
+                    WHERE efv2.field_id = ".(int) $extraFieldId."
+                      AND u2.active <> ".USER_SOFT_DELETED."
+                      AND TRIM(COALESCE(efv2.field_value, '')) <> ''
+                    GROUP BY LOWER(TRIM(COALESCE(efv2.field_value, '')))
+                    HAVING COUNT(*) > 1
+                ) d
+                    ON d.d_value = LOWER(TRIM(COALESCE(efv.field_value, '')))
+                WHERE u.active <> ".USER_SOFT_DELETED."
+                ORDER BY
+                    duplicate_label ASC,
+                    u.created_at ASC,
+                    u.id ASC
+            ";
+                break;
+        }
+
+        if ('' !== trim($sql)) {
+            try {
+                $res = Database::getManager()->getConnection()->executeQuery($sql);
+            } catch (\Throwable $e) {
+                error_log('[DuplicatedUsers SQL ERROR] '.$e->getMessage());
+                error_log('[DuplicatedUsers SQL] '.$sql);
+                throw $e;
+            }
+
+            while ($row = Database::fetch_assoc($res)) {
+                $duplicateUsers[] = $row;
+            }
+        }
+
+        if (empty($duplicateUsers)) {
+            return $buildEmptyTable();
+        }
+
+        // Collect user IDs
+        $userIds = array_map(static fn (array $r): int => (int) $r['id'], $duplicateUsers);
+        $userIds = array_values(array_unique(array_filter($userIds, static fn (int $id): bool => $id > 0)));
+
+        if (empty($userIds)) {
+            return $buildEmptyTable();
+        }
+
+        $userIdsIn = implode(',', array_map('intval', $userIds));
+
+        // Load course counts (batch)
+        $courseCounts = [];
+        $sqlCourses = "
+            SELECT user_id, COUNT(*) AS qty
+            FROM $courseRelUserTable
+            WHERE user_id IN ($userIdsIn)
+            GROUP BY user_id
+        ";
+        $resCourses = Database::query($sqlCourses);
+        while ($row = Database::fetch_assoc($resCourses)) {
+            $courseCounts[(int) $row['user_id']] = (int) $row['qty'];
+        }
+
+        // Load session counts (batch)
+        $sessionCounts = [];
+        $sqlSessions = "
+            SELECT user_id, COUNT(*) AS qty
+            FROM $sessionRelUserTable
+            WHERE user_id IN ($userIdsIn)
+            GROUP BY user_id
+        ";
+        $resSessions = Database::query($sqlSessions);
+        while ($row = Database::fetch_assoc($resSessions)) {
+            $sessionCounts[(int) $row['user_id']] = (int) $row['qty'];
+        }
+
+        // Batch load extra field values for all selected fields
+        $extraValuesByUser = []; // [userId][fieldId] => value
+        if (!empty($extraFieldIdsToLoad)) {
+            $fieldIdsIn = implode(',', array_map('intval', array_values($extraFieldIdsToLoad)));
+            $sqlExtraValues = "
+                SELECT item_id, field_id, field_value AS value
+                FROM $extraFieldValuesTable
+                WHERE item_id IN ($userIdsIn)
+                  AND field_id IN ($fieldIdsIn)
+            ";
+            $resExtraValues = Database::query($sqlExtraValues);
+            while ($row = Database::fetch_assoc($resExtraValues)) {
+                $uid = (int) $row['item_id'];
+                $fid = (int) $row['field_id'];
+                $extraValuesByUser[$uid][$fid] = (string) ($row['value'] ?? '');
+            }
+        }
+
+        // Group rows (group by the normalized duplicate key, not by user id)
+        $groups = []; // [groupKey] => rows[]
+        foreach ($duplicateUsers as $row) {
+            $groupKey = self::buildDuplicateUsersGroupKey($row, $dupMode);
+            if (!isset($groups[$groupKey])) {
+                $groups[$groupKey] = [];
+            }
+            $groups[$groupKey][] = $row;
+        }
+
+        // Sort users inside each group (oldest registration date, then lowest ID)
+        foreach ($groups as $groupKey => $rows) {
+            usort($rows, static function (array $a, array $b): int {
+                $da = (string) ($a['registration_date'] ?? '');
+                $db = (string) ($b['registration_date'] ?? '');
+
+                if ($da === $db) {
+                    return ((int) $a['id']) <=> ((int) $b['id']);
+                }
+
+                if ('' === $da) {
+                    return 1;
+                }
+                if ('' === $db) {
+                    return -1;
+                }
+
+                return strcmp($da, $db);
+            });
+
+            $groups[$groupKey] = $rows;
+        }
+
+        // Flatten grouped ordering into one dataset (index.php will render grouped blocks).
+        $rowsForTable = [];
+        foreach ($groups as $groupKey => $rows) {
+            foreach ($rows as $row) {
+                $userId = (int) ($row['id'] ?? 0);
+                $activeValue = (int) ($row['active'] ?? 0);
+
+                $courseCount = $courseCounts[$userId] ?? 0;
+                $sessionCount = $sessionCounts[$userId] ?? 0;
+
+                $activeLabel = self::getDuplicateUserActiveLabel($activeValue);
+                $roleLabel = self::getDuplicateUserRoleLabel((int) ($row['status'] ?? 0));
+
+                $tableRow = [];
+
+                // First column must remain plain text because SortableTableFromArray
+                // uses it as the checkbox value when form actions are enabled.
+                $tableRow[] = (string) $userId;
+                $tableRow[] = Security::remove_XSS((string) ($row['firstname'] ?? ''));
+                $tableRow[] = Security::remove_XSS((string) ($row['lastname'] ?? ''));
+                $tableRow[] = Security::remove_XSS((string) ($row['email'] ?? ''));
+                $tableRow[] = self::formatDuplicateUserDate((string) ($row['registration_date'] ?? ''));
+                $tableRow[] = self::formatDuplicateUserDate((string) ($row['first_login'] ?? ''));
+                $tableRow[] = self::formatDuplicateUserDate((string) ($row['last_login'] ?? ''));
+                $tableRow[] = Security::remove_XSS((string) $roleLabel);
+                $tableRow[] = (string) $courseCount;
+                $tableRow[] = (string) $sessionCount;
+
+                foreach ($extraFieldIdsToLoad as $fid) {
+                    $val = $extraValuesByUser[$userId][$fid] ?? '';
+                    $tableRow[] = Security::remove_XSS($val);
+                }
+
+                $tableRow[] = Security::remove_XSS($activeLabel);
+
+                // Actions column (all buttons in one consistent block)
+                $tableRow[] = self::buildDuplicateUserActionsHtml(
+                    $userId,
+                    $activeValue,
+                    $dupMode,
+                    $extraFieldId,
+                    $token
+                );
+
+                $rowsForTable[] = $tableRow;
+            }
+        }
+
+        $table = new SortableTableFromArray($rowsForTable, 0, 20);
+        $applyHeaders($table);
+
+        $table->set_form_actions([
+            'export_csv' => get_lang('Export as CSV'),
+            'export_excel' => get_lang('Export as XLS'),
+        ]);
+
+        // IMPORTANT: Return the table object (index.php uses ->toArray() for export and grouping).
+        return $table;
+    }
+
+    private static function buildDuplicateUserActionsHtml(
+        int $userId,
+        int $activeValue,
+        string $dupMode,
+        int $extraFieldId,
+        string $token
+    ): string {
+        $dupMode = in_array($dupMode, ['name', 'email', 'extra'], true) ? $dupMode : 'name';
+
+        $baseParams = [
+            'report' => 'duplicated_users',
+            'dup_mode' => $dupMode,
+            'sec_token' => $token,
+        ];
+
+        if ('extra' === $dupMode && $extraFieldId > 0) {
+            $baseParams['extra_field_id'] = $extraFieldId;
+        }
+
+        // Preserve optional extra columns (can be array)
+        if (isset($_GET['additional_profile_field'])) {
+            $apf = $_GET['additional_profile_field'];
+            if (!is_array($apf)) {
+                $apf = [$apf];
+            }
+            $baseParams['additional_profile_field'] = array_values(array_filter(array_map('strval', $apf)));
+        }
+
+        $buildUrl = static function (array $params) use ($baseParams): string {
+            $self = (string) api_get_self();
+            $self = strtok($self, '?') ?: $self;
+
+            return $self.'?'.http_build_query(array_merge($baseParams, $params));
+        };
+
+        $escapeConfirm = static function (string $text): string {
+            return addslashes($text);
+        };
+
+        $html = '<div class="ch-dups-actions">';
+
+        // Details
+        $detailsUrl = api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$userId;
+        $detailsTitle = (string) get_lang('Details');
+        $html .= sprintf(
+            '<a href="%s" class="btn btn-default btn-xs" title="%s" aria-label="%s"><span class="ch-dups-btn-label">%s</span></a>',
+            htmlspecialchars($detailsUrl, ENT_QUOTES, 'UTF-8'),
+            htmlspecialchars($detailsTitle, ENT_QUOTES, 'UTF-8'),
+            htmlspecialchars($detailsTitle, ENT_QUOTES, 'UTF-8'),
+            htmlspecialchars($detailsTitle, ENT_QUOTES, 'UTF-8')
+        );
+
+        // Activate / Deactivate
+        if (1 === $activeValue) {
+            $url = $buildUrl([
+                'action' => 'disable_duplicate_user',
+                'user_id' => $userId,
+            ]);
+
+            $confirm = $escapeConfirm((string) get_lang('Deactivate this user?'));
+
+            $html .= '<a class="btn btn-danger btn-xs"'
+                .' href="'.htmlspecialchars($url, ENT_QUOTES, 'UTF-8').'"'
+                .' onclick="return confirm(\''.$confirm.'\');">'
+                .htmlspecialchars((string) get_lang('Deactivate'), ENT_QUOTES, 'UTF-8')
+                .'</a>';
+        } else {
+            $url = $buildUrl([
+                'action' => 'enable_duplicate_user',
+                'user_id' => $userId,
+            ]);
+
+            $confirm = $escapeConfirm((string) get_lang('Enable this user?'));
+
+            $html .= '<a class="btn btn-success btn-xs"'
+                .' href="'.htmlspecialchars($url, ENT_QUOTES, 'UTF-8').'"'
+                .' onclick="return confirm(\''.$confirm.'\');">'
+                .htmlspecialchars((string) get_lang('Enable'), ENT_QUOTES, 'UTF-8')
+                .'</a>';
+        }
+
+        // Unify group into THIS user (single action)
+        $unifyUrl = $buildUrl([
+            'action' => 'unify_duplicate_user',
+            'unify_user_id' => $userId,
+        ]);
+
+        $confirmParts = [
+            sprintf((string) get_lang('Unify this duplicate group into user #%s?'), (string) $userId),
+            (string) get_lang('This will merge all other accounts in the same group into this account.'),
+            (string) get_lang('Merged accounts will be permanently deleted and will disappear from this report.'),
+            (string) get_lang('This action cannot be undone.'),
+        ];
+        $confirm = $escapeConfirm(trim(implode(' ', $confirmParts)));
+
+        $html .= '<a class="btn btn-default btn-xs"'
+            .' href="'.htmlspecialchars($unifyUrl, ENT_QUOTES, 'UTF-8').'"'
+            .' onclick="return confirm(\''.$confirm.'\');">'
+            .htmlspecialchars((string) get_lang('Unify'), ENT_QUOTES, 'UTF-8')
+            .'</a>';
+
+        $html .= '</div>';
+
+        return $html;
+    }
+
+    /**
+     * Local replacement for api_get_status_lang() (not available in this context).
+     */
+    private static function getDuplicateUserRoleLabel(int $status): string
+    {
+        // Common Chamilo status mapping. Keep it simple and safe.
+        $labels = [
+            1 => get_lang('Teacher'),
+            3 => get_lang('SessionAdmin'),
+            4 => get_lang('Drh'),
+            5 => get_lang('Student'),
+            6 => get_lang('Anonymous'),
+            7 => get_lang('Invited'),
+        ];
+
+        return $labels[$status] ?? (string) $status;
+    }
+
+    /**
+     * Build a stable group key for duplicate grouping.
+     */
+    private static function buildDuplicateUsersGroupKey(array $row, string $dupMode): string
+    {
+        return match ($dupMode) {
+            'email' => 'email:'.mb_strtolower(trim((string) ($row['dup_email_norm'] ?? $row['email'] ?? '')), 'UTF-8'),
+            'extra' => 'extra:'.mb_strtolower(trim((string) ($row['dup_extra_norm'] ?? $row['selected_extra_value'] ?? '')), 'UTF-8'),
+            default => 'name:'
+                .mb_strtolower(trim((string) ($row['dup_firstname_norm'] ?? $row['firstname'] ?? '')), 'UTF-8')
+                .'|'
+                .mb_strtolower(trim((string) ($row['dup_lastname_norm'] ?? $row['lastname'] ?? '')), 'UTF-8'),
+        };
+    }
+
+    /**
+     * Return the active label used in the table.
+     */
+    private static function getDuplicateUserActiveLabel(int $active): string
+    {
+        return match ($active) {
+            1 => get_lang('Active'),
+            0 => get_lang('Inactive'),
+            -1 => 'Soft deleted',
+            default => (string) $active,
+        };
+    }
+
+    /**
+     * Format date values for display.
+     */
+    private static function formatDuplicateUserDate(string $date): string
+    {
+        $date = trim($date);
+        if ('' === $date || '0000-00-00 00:00:00' === $date) {
+            return '';
+        }
+
+        // Keep it simple and reliable. If you prefer localized format, replace with your local formatter.
+        return Security::remove_XSS($date);
+    }
+
+    /**
+     * Update the active status of a user (enable/disable).
+     *
+     * Allowed values:
+     * - 1: enabled
+     * - 0: disabled
+     *
+     * This method intentionally does not allow setting soft-deleted status (-1).
+     *
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     */
+    public static function updateUserActiveStatus(int $userId, int $active): bool
+    {
+        if ($userId <= 0) {
+            throw new \InvalidArgumentException('Invalid user ID.');
+        }
+
+        if (!in_array($active, [0, 1], true)) {
+            throw new \InvalidArgumentException('Invalid active value.');
+        }
+
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+        $userId = (int) $userId;
+        $active = (int) $active;
+
+        $sql = "SELECT id, active
+        FROM $userTable
+        WHERE id = $userId
+        LIMIT 1";
+        $result = Database::query($sql);
+
+        if (false === $result || 0 === Database::num_rows($result)) {
+            throw new \RuntimeException("User #{$userId} not found.");
+        }
+
+        $row = Database::fetch_assoc($result);
+        $currentActive = (int) ($row['active'] ?? 0);
+
+        if ($currentActive === (int) USER_SOFT_DELETED) {
+            throw new \RuntimeException("User #{$userId} is soft-deleted and cannot be updated.");
+        }
+
+        if ($currentActive === $active) {
+            return true;
+        }
+
+        $updateSql = "UPDATE $userTable SET active = $active WHERE id = $userId LIMIT 1";
+        $updateResult = Database::query($updateSql);
+
+        if (false === $updateResult) {
+            throw new \RuntimeException("Failed to update active status for user #{$userId}.");
+        }
+
+        return true;
+    }
+
+    /**
+     * Unify 2 users: keep $keepUserId, merge $mergeUserId into it.
+     */
+    public static function unifyUsers(int $keepUserId, int $mergeUserId): bool
+    {
+        $keepUserId = (int) $keepUserId;
+        $mergeUserId = (int) $mergeUserId;
+
+        if ($keepUserId <= 0 || $mergeUserId <= 0 || $keepUserId === $mergeUserId) {
+            return false;
+        }
+
+        $helper = Container::$container->get(UserMergeHelper::class);
+
+        return $helper->mergeUsers($keepUserId, $mergeUserId);
+    }
+
+    /**
+     * Returns the user IDs that belong to the same duplicate group as $targetUserId.
+     * The matching logic follows the report mode: name|email|extra.
+     *
+     * @return int[] User IDs (includes $targetUserId). Empty array if no group found.
+     */
+    public static function getDuplicateUserGroupUserIds(string $dupMode, int $targetUserId, int $extraFieldId = 0): array
+    {
+        $dupMode = in_array($dupMode, ['name', 'email', 'extra'], true) ? $dupMode : 'name';
+        $targetUserId = (int) $targetUserId;
+        $extraFieldId = (int) $extraFieldId;
+
+        if ($targetUserId <= 0) {
+            return [];
+        }
+
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+        $urlRelTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        [$joinUrl, $whereUrl] = self::getAccessUrlJoinAndWhere('u', 'url', $urlRelTable);
+
+        // Load target row (and make sure it belongs to current URL when multi-url).
+        $sqlTarget = "SELECT u.id, u.firstname, u.lastname, u.email
+        FROM $userTable u
+        $joinUrl
+        WHERE u.id = $targetUserId
+          AND u.active <> ".USER_SOFT_DELETED."
+          $whereUrl
+        LIMIT 1";
+
+        $res = Database::query($sqlTarget);
+        $target = $res ? Database::fetch_assoc($res) : null;
+        if (empty($target)) {
+            return [];
+        }
+
+        $ids = [];
+
+        if ('name' === $dupMode) {
+            $fn = mb_strtolower(trim((string) ($target['firstname'] ?? '')), 'UTF-8');
+            $ln = mb_strtolower(trim((string) ($target['lastname'] ?? '')), 'UTF-8');
+
+            if ($fn === '' && $ln === '') {
+                return [];
+            }
+
+            $fnEsc = Database::escape_string($fn);
+            $lnEsc = Database::escape_string($ln);
+
+            $sql = "SELECT u.id
+            FROM $userTable u
+            $joinUrl
+            WHERE u.active <> ".USER_SOFT_DELETED."
+              $whereUrl
+              AND LOWER(TRIM(COALESCE(u.firstname, ''))) = '$fnEsc'
+              AND LOWER(TRIM(COALESCE(u.lastname, ''))) = '$lnEsc'
+            ORDER BY u.id ASC";
+        } elseif ('email' === $dupMode) {
+            $em = mb_strtolower(trim((string) ($target['email'] ?? '')), 'UTF-8');
+            if ($em === '') {
+                return [];
+            }
+
+            $emEsc = Database::escape_string($em);
+
+            $sql = "SELECT u.id
+            FROM $userTable u
+            $joinUrl
+            WHERE u.active <> ".USER_SOFT_DELETED."
+              $whereUrl
+              AND TRIM(COALESCE(u.email, '')) <> ''
+              AND LOWER(TRIM(COALESCE(u.email, ''))) = '$emEsc'
+            ORDER BY u.id ASC";
+        } else {
+            // extra
+            if ($extraFieldId <= 0) {
+                return [];
+            }
+
+            $valuesTable = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+
+            $sqlVal = "SELECT TRIM(COALESCE(v.field_value, '')) AS v
+            FROM $valuesTable v
+            INNER JOIN $userTable u ON u.id = v.item_id
+            $joinUrl
+            WHERE u.id = $targetUserId
+              AND u.active <> ".USER_SOFT_DELETED."
+              $whereUrl
+              AND v.field_id = $extraFieldId
+            LIMIT 1";
+
+            $resVal = Database::query($sqlVal);
+            $rowVal = $resVal ? Database::fetch_assoc($resVal) : null;
+
+            $val = mb_strtolower(trim((string) ($rowVal['v'] ?? '')), 'UTF-8');
+            if ($val === '') {
+                return [];
+            }
+
+            $valEsc = Database::escape_string($val);
+
+            $sql = "SELECT u.id
+            FROM $userTable u
+            INNER JOIN $valuesTable v ON v.item_id = u.id AND v.field_id = $extraFieldId
+            $joinUrl
+            WHERE u.active <> ".USER_SOFT_DELETED."
+              $whereUrl
+              AND TRIM(COALESCE(v.field_value, '')) <> ''
+              AND LOWER(TRIM(COALESCE(v.field_value, ''))) = '$valEsc'
+            ORDER BY u.id ASC";
+        }
+
+        $r = Database::query($sql);
+        while ($r && ($row = Database::fetch_assoc($r))) {
+            $ids[] = (int) ($row['id'] ?? 0);
+        }
+
+        $ids = array_values(array_unique(array_filter($ids, static fn (int $id): bool => $id > 0)));
+
+        // Only consider it a "group" if there are at least 2 users.
+        if (count($ids) < 2) {
+            return [];
+        }
+
+        return $ids;
+    }
+
+    /**
+     * Duplicate users by firstname+lastname.
+     */
+    private static function getDuplicatedUsersByName(array $additionalExtraFieldsInfo, string $csrfToken): array
+    {
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+        $urlRelTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+
+        [$joinUrl, $whereUrl] = self::getAccessUrlJoinAndWhere('u', 'url', $urlRelTable);
+
+        $sql = "
+            SELECT u.firstname, u.lastname, COUNT(*) AS c
+            FROM $userTable u
+            $joinUrl
+            WHERE u.active <> ".USER_SOFT_DELETED."
+            $whereUrl
+            GROUP BY u.firstname, u.lastname
+            HAVING c > 1
+            ORDER BY u.lastname, u.firstname
+        ";
+
+        $res = Database::query($sql);
+        if (!$res || Database::num_rows($res) < 1) {
+            return [];
+        }
+
+        $out = [];
+        $extraValueObj = new ExtraFieldValue('user');
+
+        while ($dup = Database::fetch_assoc($res)) {
+            $firstname = Database::escape_string((string) $dup['firstname']);
+            $lastname  = Database::escape_string((string) $dup['lastname']);
+
+            $sub = "
+                SELECT u.id, u.firstname, u.lastname, u.email, u.created_at, u.status, u.active
+                FROM $userTable u
+                $joinUrl
+                WHERE u.active <> ".USER_SOFT_DELETED."
+                $whereUrl
+                AND u.firstname = '$firstname'
+                AND u.lastname = '$lastname'
+                ORDER BY u.created_at ASC, u.id ASC
+            ";
+            $r2 = Database::query($sub);
+            if (!$r2 || Database::num_rows($r2) < 2) {
+                continue;
+            }
+
+            $users = Database::store_result($r2, 'ASSOC');
+            $keepId = (int) ($users[0]['id'] ?? 0);
+
+            foreach ($users as $u) {
+                $out[] = self::formatDuplicateUserRow($u, 'name', $keepId, $additionalExtraFieldsInfo, $extraValueObj, $csrfToken);
+            }
+        }
+
+        return $out;
+    }
+
+    /**
+     * Format a row for the duplicate users table.
+     */
+    private static function formatDuplicateUserRow(
+        array $u,
+        string $mode,
+        int $keepId,
+        array $additionalExtraFieldsInfo,
+        ExtraFieldValue $extraValueObj,
+        string $csrfToken
+    ): array {
+        $userId = (int) ($u['id'] ?? 0);
+        $active = (int) ($u['active'] ?? 0);
+        $status = (int) ($u['status'] ?? 0);
+
+        $first = (string) ($u['firstname'] ?? '');
+        $last  = (string) ($u['lastname'] ?? '');
+        $email = (string) ($u['email'] ?? '');
+        $createdAt = (string) ($u['created_at'] ?? '');
+
+        $createdAtLocal = $createdAt ? (string) api_get_local_time($createdAt) : '';
+        $firstLogin = Tracking::get_first_connection_date($userId, DATE_TIME_FORMAT_LONG) ?: '';
+        $lastLogin  = Tracking::get_last_connection_date($userId, true, false, DATE_TIME_FORMAT_LONG) ?: '';
+
+        $roleLabel = '';
+        $map = api_get_status_langvars();
+        if (is_array($map) && isset($map[$status])) {
+            $roleLabel = (string) $map[$status];
+        }
+
+        $coursesCount = (int) Tracking::count_course_per_student($userId);
+        $sessionsCount = (int) Tracking::countSessionsPerStudent($userId);
+
+        $isKeep = ($userId === $keepId && $keepId > 0);
+        $keepBadge = $isKeep
+            ? '<span class="ch-dups-keep-badge" title="This is the keep account. Unify the other accounts into this one.">KEEP</span> '
+            : '';
+
+        $idHtml = $keepBadge.Display::url(
+                (string) $userId,
+                api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$userId,
+                [
+                    'class' => 'text-primary underline hover:text-primary/80',
+                    'target' => '_self',
+                    'rel' => 'noopener',
+                    'title' => 'Open user details',
+                ]
+            );
+
+        $row = [];
+        $row[] = $idHtml;
+
+        if ('email' === $mode) {
+            $row[] = $email;
+        }
+
+        if (api_is_western_name_order()) {
+            $row[] = $first;
+            $row[] = $last;
+        } else {
+            $row[] = $last;
+            $row[] = $first;
+        }
+
+        if ('name' === $mode || 'extra' === $mode) {
+            $row[] = $email;
+        }
+
+        $row[] = $createdAtLocal;
+        $row[] = $firstLogin;
+        $row[] = $lastLogin;
+        $row[] = $roleLabel;
+        $row[] = $coursesCount;
+        $row[] = $sessionsCount;
+
+        foreach ($additionalExtraFieldsInfo as $fieldInfo) {
+            $fid = (int) ($fieldInfo['id'] ?? 0);
+            if ($fid <= 0) {
+                $row[] = '';
+                continue;
+            }
+            $v = $extraValueObj->get_values_by_handler_and_field_id($userId, $fid, true);
+            $row[] = (string) ($v['field_value'] ?? ($v['value'] ?? ''));
+        }
+
+        $row[] = (1 === $active) ? get_lang('Active') : get_lang('Inactive');
+        $row[] = self::renderDuplicateUserActions($userId, $active, $keepId, $csrfToken);
+
+        return $row;
+    }
+
+    /**
+     * Render actions HTML for each row (Disable/Enable + Unify).
+     */
+    private static function renderDuplicateUserActions(int $userId, int $active, int $keepId, string $csrfToken): string
+    {
+        $base = api_get_self();
+        $paramsBase = $_GET;
+        $paramsBase['report'] = 'duplicated_users';
+
+        $sec = $csrfToken ?: Security::get_token();
+
+        $currentUserId = (int) api_get_user_id();
+        $isSelf = ($userId === $currentUserId);
+        $isKeep = ($userId === $keepId && $keepId > 0);
+
+        $btn = static function (
+            string $href,
+            string $label,
+            string $class,
+            string $confirm = '',
+            bool $disabled = false,
+            string $title = ''
+        ): string {
+            $h = htmlspecialchars($href, ENT_QUOTES, 'UTF-8');
+            $l = htmlspecialchars($label, ENT_QUOTES, 'UTF-8');
+
+            $confirmAttr = '';
+            if ($confirm !== '') {
+                $c = htmlspecialchars($confirm, ENT_QUOTES, 'UTF-8');
+                $confirmAttr = ' onclick="return confirm(\''.$c.'\');"';
+            }
+
+            $titleAttr = $title !== ''
+                ? ' title="'.htmlspecialchars($title, ENT_QUOTES, 'UTF-8').'"'
+                : '';
+
+            if ($disabled) {
+                return '<a class="btn '.$class.' btn-disabled" href="#" aria-disabled="true"'.$titleAttr.'>'.$l.'</a>';
+            }
+
+            return '<a class="btn '.$class.'" href="'.$h.'"'.$confirmAttr.$titleAttr.'>'.$l.'</a>';
+        };
+
+        // Toggle active
+        $toggleParams = $paramsBase;
+        $toggleParams['dup_action'] = 'toggle_active';
+        $toggleParams['user_id'] = $userId;
+        $toggleParams['active'] = (1 === $active) ? 0 : 1;
+        $toggleParams['sec_token'] = $sec;
+
+        $toggleHref = $base.'?'.http_build_query($toggleParams);
+        $toggleLabel = (1 === $active) ? get_lang('Disable') : get_lang('Enable');
+        $toggleClass = (1 === $active) ? 'btn--danger' : 'btn--success';
+
+        $toggleConfirm = (1 === $active)
+            ? "Disable user #{$userId}?\\n\\nThis will prevent login but will not delete the account."
+            : "Enable user #{$userId}?\\n\\nThis will allow login again.";
+
+        $toggleTitle = $isSelf
+            ? 'You cannot change your own status from this screen.'
+            : 'Toggle login availability (does not delete the user).';
+
+        $toggleHtml = $btn($toggleHref, $toggleLabel, $toggleClass, $toggleConfirm, $isSelf, $toggleTitle);
+
+        // Unify
+        $unifyHtml = '';
+        if ($keepId > 0 && !$isKeep) {
+            $unifyParams = $paramsBase;
+            $unifyParams['dup_action'] = 'unify';
+            $unifyParams['keep_id'] = $keepId;
+            $unifyParams['merge_id'] = $userId;
+            $unifyParams['sec_token'] = $sec;
+
+            $unifyHref = $base.'?'.http_build_query($unifyParams);
+
+            $confirm = "Unify accounts?\\n\\nKeep: #{$keepId}\\nMerge: #{$userId}\\n\\nThis will move subscriptions and related data into the keep account.\\nThe merged account will be set to soft-deleted (active=-1) and will disappear from this report.\\n\\nYou can permanently delete the merged account later from the Users list.";
+
+            $unifyHtml = $btn($unifyHref, get_lang('Unify'), 'btn--plain', $confirm, false, 'Merge this account into the keep account.');
+        } else {
+            $title = ($keepId > 0 && $isKeep)
+                ? 'This is the keep account. Use Unify on the other rows in the same group.'
+                : 'Unify is not available for this row.';
+            // Make it explicit: show "Keep" instead of a confusing disabled Unify.
+            $unifyHtml = $btn('#', 'Keep', 'btn--plain', '', true, $title);
+        }
+
+        return '<div class="ch-dups-actions">'.$toggleHtml.$unifyHtml.'</div>';
+    }
+
+    /**
+     * Returns join/where snippets for multi-url filtering (when enabled).
+     */
+    private static function getAccessUrlJoinAndWhere(string $userAlias, string $urlAlias, string $urlRelTable): array
+    {
+        $accessUrlUtil = Container::getAccessUrlUtil();
+
+        if ($accessUrlUtil->isMultiple()) {
+            $accessUrl = $accessUrlUtil->getCurrent();
+            $urlId = (int) $accessUrl->getId();
+
+            $join = " INNER JOIN $urlRelTable $urlAlias ON $urlAlias.user_id = $userAlias.id ";
+            $where = " AND $urlAlias.access_url_id = $urlId ";
+
+            return [$join, $where];
+        }
+
+        return ['', ''];
+    }
+
+
+    /**
+     * Read a row value by trying multiple aliases.
+     *
+     * @param array<string, mixed> $row
+     * @param string[] $aliases
+     */
+    function duplicateReportRowValue(array $row, array $aliases, mixed $default = ''): mixed
+    {
+        foreach ($aliases as $alias) {
+            if (array_key_exists($alias, $row)) {
+                return $row[$alias];
+            }
+        }
+
+        return $default;
+    }
+
 }

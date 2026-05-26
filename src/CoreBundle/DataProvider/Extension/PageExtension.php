@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\DataProvider\Extension;
 
 use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
+use ApiPlatform\Doctrine\Orm\Extension\QueryItemExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
 use Chamilo\CoreBundle\Entity\Page;
@@ -15,7 +16,7 @@ use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\SecurityBundle\Security;
 
-final class PageExtension implements QueryCollectionExtensionInterface // , QueryItemExtensionInterface
+final class PageExtension implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
 {
     public function __construct(
         private readonly Security $security,
@@ -29,6 +30,22 @@ final class PageExtension implements QueryCollectionExtensionInterface // , Quer
         ?Operation $operation = null,
         array $context = []
     ): void {
+        $this->addWhere($queryBuilder, $resourceClass);
+    }
+
+    public function applyToItem(
+        QueryBuilder $queryBuilder,
+        QueryNameGeneratorInterface $queryNameGenerator,
+        string $resourceClass,
+        array $identifiers,
+        ?Operation $operation = null,
+        array $context = []
+    ): void {
+        $this->addWhere($queryBuilder, $resourceClass);
+    }
+
+    private function addWhere(QueryBuilder $queryBuilder, string $resourceClass): void
+    {
         if (Page::class !== $resourceClass) {
             return;
         }

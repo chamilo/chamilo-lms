@@ -1,0 +1,61 @@
+.h5p-editor-range-list thead th.h5peditor-type-number {
+  white-space: nowrap;
+  width: 65px;
+}
+.h5p-editor-range-list thead th.h5peditor-dash {
+  width: 6px;
+}
+.h5p-editor-range-list tbody td.h5peditor-dash {
+  line-height: 37px;
+}
+.h5p-editor-range-list .h5peditor-input-text {
+  line-height: 38px;
+  height: 38px;
+  text-align: center;
+}
+.h5p-editor-range-list .number input {
+  text-align: center;
+  width: 65px;
+}
+.h5p-editor-range-list thead th.h5peditor-remove-header {
+  position: relative;
+}
+.h5peditor-range-distribute {
+  white-space: nowrap;
+  font-weight: normal;
+  font-size: 14px;
+  padding: 0 20px;
+  margin-left: 1em;
+  height: 42px;
+  line-height: 42px;
+
+  color: #2579c6;
+  font-weight: bold;
+  background: #fff;
+  border: 2px solid #2579c6;
+}
+.h5peditor-button-textual.h5peditor-range-distribute:hover {
+  color: #1f67a8;
+  border-color: #1f67a8;
+  background: #fff;
+}
+.h5peditor-range-distribute[aria-disabled="true"],
+.h5peditor-button-textual.h5peditor-range-distribute[aria-disabled="true"]:hover {
+  background: #f5f5f5;
+  color: #707171;
+  border-color: #eeeeee;
+  cursor: not-allowed;
+}
+.h5p-editor-table-list tbody .h5p-error-range-overlap td {
+  border-color: #da0001;
+}
+.h5p-editor-range-list-message-area {
+  display: none;
+  background: #f4ecec;
+  border-left: 2px solid #ad5b52;
+  padding: 1em;
+  margin-bottom: 0.5em;
+}
+.h5p-editor-range-list-message-area.problem-found {
+  display: block;
+}

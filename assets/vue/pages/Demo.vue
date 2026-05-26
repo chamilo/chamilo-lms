@@ -5,10 +5,7 @@
       v-if="pages.length"
       class="flex-1"
     >
-      <PageCardList
-        :pages="pages"
-        class="grid gap-4 grid-cols-1"
-      />
+      <PageCardList :pages="pages" />
     </div>
   </div>
 </template>

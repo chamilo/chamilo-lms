@@ -9,7 +9,7 @@ export const useUpload = () => {
   const notification = useNotification()
 
   const onCreated = (item) => {
-    notification.showSuccessNotification(t("{resource} created", { resource: item["resourceNode"].title }))
+    notification.showSuccessNotification(t("{0} created", [item.resourceNode.title]))
   }
 
   const onError = (message) => {

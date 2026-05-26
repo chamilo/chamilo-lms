@@ -2,48 +2,71 @@
 
 /* For license terms, see /license.txt */
 
-use ChamiloSession as Session;
-
-/**
- * This script answers to AJAX calls to store a new piece as revealed
- * in the plugin_card_game table.
- *
- * @author Damien Renou
- */
 require_once __DIR__.'/../../../main/inc/global.inc.php';
+require_once __DIR__.'/../CardGame.php';
 
-$cardGameSession = Session::read('cardgame');
+header('Content-Type: application/json');
 
-if (!empty($cardGameSession)) {
-    if ('havedeck' == $cardGameSession) {
-        $part = '1';
-        if (isset($_GET['part'])) {
-            $part = (int) $_GET['part'];
-            $userId = api_get_user_id();
-
-            if (isset($userId)) {
-                $sql = "UPDATE plugin_card_game 
-                        SET access_date = CURDATE(), parts = CONCAT(parts,'!!$part;!') 
-                        WHERE user_id = $userId";
-                Database::query($sql);
-                Session::write('cardgame', 'done');
-
-                $sql = "UPDATE plugin_card_game 
-                        SET pan = pan + 1, parts = '' 
-                        WHERE parts LIKE '%!1;%' AND parts LIKE '%!2;%' AND parts LIKE '%!3;%' AND parts LIKE '%!4;%' AND parts LIKE '%!5;%' AND parts LIKE '%!6;%' AND parts LIKE '%!7%' AND parts LIKE '%!8%' AND parts LIKE '%!9%' AND parts LIKE '%10%' AND parts LIKE '%11%' AND parts LIKE '%12%' AND parts LIKE '%13%' AND parts LIKE '%14%' AND parts LIKE '%15%' 
-                        AND user_id = $userId";
-                Database::query($sql);
-            }
-        } elseif (isset($_GET['loose'])) {
-            $userId = api_get_user_id();
-
-            if (isset($userId)) {
-                $sql = "UPDATE plugin_card_game 
-                        SET access_date = CURDATE() 
-                        WHERE user_id = $userId";
-                Database::query($sql);
-                Session::write('cardgame', 'done');
-            }
-        }
-    }
+if (api_is_anonymous()) {
+    http_response_code(403);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Authentication required.',
+    ]);
+    exit;
 }
+
+if ('POST' !== $_SERVER['REQUEST_METHOD']) {
+    http_response_code(405);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Method not allowed.',
+    ]);
+    exit;
+}
+
+$sessionToken = $_SESSION['cardgame_csrf_token'] ?? '';
+$requestToken = (string) ($_POST['csrf_token'] ?? '');
+
+if ('' === $sessionToken || '' === $requestToken || !hash_equals($sessionToken, $requestToken)) {
+    http_response_code(403);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Invalid security token.',
+    ]);
+    exit;
+}
+
+$cardGame = CardGame::create();
+$userId = (int) api_get_user_id();
+$action = (string) ($_POST['action'] ?? '');
+
+if ('' === $action && isset($_POST['part'])) {
+    $action = 'reveal';
+}
+
+if ('' === $action && isset($_POST['loose'])) {
+    $action = 'lose';
+}
+
+switch ($action) {
+    case 'reveal':
+        $part = (int) ($_POST['part'] ?? 0);
+        $response = $cardGame->revealPart($userId, $part);
+        break;
+    case 'lose':
+        $response = $cardGame->markLoss($userId);
+        break;
+    default:
+        http_response_code(400);
+        echo json_encode([
+            'success' => false,
+            'message' => 'Invalid action.',
+        ]);
+        exit;
+}
+
+$response['displayPan'] = $cardGame->getDisplayPan((int) ($response['pan'] ?? 1));
+$response['parts'] = array_values(array_map('intval', $response['parts'] ?? []));
+
+echo json_encode($response);

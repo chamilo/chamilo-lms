@@ -30,7 +30,7 @@ readonly class TopLinksEventSubscriber implements EventSubscriberInterface
 
     public function onCreateCourse(CourseCreatedEvent $event): void
     {
-        if (!$this->plugin->isEnabled(true)) {
+        if (!$this->plugin->isEnabled()) {
             return;
         }
 

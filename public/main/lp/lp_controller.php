@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\LpAdvancedAccessHelper;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
@@ -26,7 +27,7 @@ api_protect_course_script(true);
 $oLP = null;
 $debug = false;
 $current_course_tool = TOOL_LEARNPATH;
-$lpItemId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
+$lpItemId = (int) ($_REQUEST['id'] ?? $_REQUEST['lp_item_id'] ?? $_REQUEST['item_id'] ?? 0);
 $lpId = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : 0;
 $courseId = isset($_REQUEST['cid']) ? (int) $_REQUEST['cid'] : api_get_course_int_id();
 $sessionId = isset($_REQUEST['sid']) ? (int) $_REQUEST['sid'] : api_get_session_id();
@@ -149,12 +150,6 @@ if ($lpId) {
                     $lp_found = true;
                 }
                 break;
-            case CLp::AICC_TYPE:
-                $oLP = new aicc($lp, $courseInfo, $userId);
-                if (false !== $oLP) {
-                    $lp_found = true;
-                }
-                break;
             case CLp::LP_TYPE:
             default:
                 $oLP = new learnpath($lp, $courseInfo, $userId);
@@ -174,22 +169,93 @@ if (isset($oLP)) {
 }
 
 $action = !empty($_REQUEST['action']) ? $_REQUEST['action'] : '';
+$isBuildView = isset($_REQUEST['view']) && 'build' === $_REQUEST['view'];
+if ('POST' === $_SERVER['REQUEST_METHOD']
+    && 'edit' === $action
+    && $lpItemId > 0
+    && isset($_REQUEST['type'])
+    && 'dir' === $_REQUEST['type']
+    && isset($_POST['submit_button'], $_POST['title'])
+) {
+    $action = 'edit_item';
+    $isBuildView = true;
+}
 
 if ($debug) {
     error_log('Entered lp_controller.php -+- (action: '.$action.')');
 }
 
 $__returnTo = $_GET['returnTo'] ?? '';
-$__listUrlForSpa = $listUrl;
-$goList = static function () use ($__listUrlForSpa, $__returnTo) {
-    header('Location: '.$__listUrlForSpa);
+$redirectToReturnToOr = static function (string $fallback) use ($__returnTo): void {
+    $returnTo = (string) ($_REQUEST['returnTo'] ?? $__returnTo ?? '');
+    if ($returnTo !== '') {
+        $parts = parse_url($returnTo);
+
+        $isRelative = is_array($parts)
+            && !isset($parts['scheme'], $parts['host'])
+            && str_starts_with($returnTo, '/');
+
+        // Security: allow only same-site relative paths.
+        if ($isRelative) {
+            header('Location: '.$returnTo);
+            exit;
+        }
+    }
+
+    header('Location: '.$fallback);
     exit;
+};
+
+$goList = static function () use ($listUrl) {
+    header('Location: '.$listUrl);
+    exit;
+};
+
+$isAdvancedAccessAllowed = static function (
+    CLp $lp,
+    int $courseId,
+    int $sessionId,
+    int $userId
+): bool {
+    if ($courseId <= 0 || $userId <= 0) {
+        return true;
+    }
+
+    $entityManager = Database::getManager();
+    $courseEntity = api_get_course_entity($courseId);
+    $userEntity = api_get_user_entity($userId);
+
+    if (empty($courseEntity) || empty($userEntity)) {
+        return true;
+    }
+
+    $sessionEntity = null;
+    if ($sessionId > 0) {
+        $sessionEntity = $entityManager->getReference(Chamilo\CoreBundle\Entity\Session::class, $sessionId);
+    }
+
+    $advancedAccessHelper = new LpAdvancedAccessHelper($entityManager);
+
+    return $advancedAccessHelper->isAllowed($courseEntity, $lp, $sessionEntity, $userEntity);
 };
 
 if ($action === '' || $action === 'list') {
     $goList();
 }
 if (in_array($action, ['view','content'], true) && (empty($lpId) || !$lp_found || !is_object($oLP))) {
+    $goList();
+}
+if (!$is_allowed_to_edit
+    && in_array($action, ['view', 'content'], true)
+    && $lp instanceof CLp
+    && !$isAdvancedAccessAllowed($lp, $courseId, $sessionId, $userId)
+) {
+    Display::addFlash(
+        Display::return_message(
+            get_lang('This learning path is not available for your user at this time.'),
+            'warning'
+        )
+    );
     $goList();
 }
 $eventLpId = $lpId ?: (($lp_found && is_object($oLP)) ? $oLP->get_id() : 0);
@@ -228,7 +294,29 @@ if (isset($_POST['title'])) {
 }
 
 $redirectTo = '';
+$validateLpItemPrerequisiteDates = static function (): void {
+    if ('true' !== api_get_setting('lp.lp_item_prerequisite_dates')) {
+        return;
+    }
 
+    $extraStartDate = $_POST['extra_start_date'] ?? '';
+    $extraEndDate = $_POST['extra_end_date'] ?? '';
+
+    if (empty($extraStartDate) || empty($extraEndDate)) {
+        return;
+    }
+
+    if (strtotime((string) $extraEndDate) >= strtotime((string) $extraStartDate)) {
+        return;
+    }
+
+    Display::addFlash(
+        Display::return_message(get_lang('StartDateMustBeBeforeTheEndDate'), 'error')
+    );
+
+    header('Location: '.api_request_uri());
+    exit;
+};
 switch ($action) {
     case 'recalculate':
         if (!isset($oLP) || !$lp_found) {
@@ -330,6 +418,7 @@ switch ($action) {
         Session::write('refresh', 1);
 
         if (isset($_POST['submit_button']) && !empty($post_title)) {
+            $validateLpItemPrerequisiteDates();
             Session::write('post_time', $_POST['post_time']);
             $directoryParentId = $_POST['directory_parent_id'] ?? 0;
 
@@ -346,22 +435,26 @@ switch ($action) {
                 $parent = null;
             }
 
-            $previous = $_POST['previous'] ?? '';
-            $type = $_POST['type'] ?? '';
-            $path = $_POST['path'] ?? '';
-            $description = $_POST['description'] ?? '';
-            $prerequisites = $_POST['prerequisites'] ?? '';
+            $previous       = $_POST['previous'] ?? '';
+            $type           = $_POST['type'] ?? '';
+            $path           = $_POST['path'] ?? '';
+            $description    = $_POST['description'] ?? '';
+            $prerequisites  = $_POST['prerequisites'] ?? '';
             $maxTimeAllowed = $_POST['maxTimeAllowed'] ?? '';
-            $exportAllowed = (isset($_POST['export_allowed']) && $_POST['export_allowed'] === '1');
+            $exportAllowed  = (isset($_POST['export_allowed']) && $_POST['export_allowed'] === '1');
 
             $saveExportFlag = static function (int $itemId) use ($exportAllowed) {
-                if (empty($itemId)) return;
+                if (empty($itemId)) {
+                    return;
+                }
 
                 $em   = Database::getManager();
                 $repo = Container::getLpItemRepository();
                 /** @var CLpItem|null $it */
                 $it = $repo->find($itemId);
-                if (!$it) return;
+                if (!$it) {
+                    return;
+                }
 
                 $allowed = false;
                 if ($it->getItemType() === TOOL_DOCUMENT) {
@@ -384,23 +477,39 @@ switch ($action) {
                 $em->flush();
             };
 
-            if (in_array($_POST['type'], [TOOL_DOCUMENT, 'video'])) {
+            $saveLpItemExtraFields = static function (int $itemId): void {
+                if (empty($itemId)) {
+                    return;
+                }
+                $extraFieldValue = new ExtraFieldValue('lp_item');
+                $extraFieldValue->saveFieldValues($_POST, $itemId);
+            };
+
+            if (in_array($_POST['type'], [TOOL_DOCUMENT, 'video'], true)) {
+                $document_id = 0;
+                $contentLp = isset($_POST['content_lp']) ? (string) $_POST['content_lp'] : '';
+
                 if (isset($_POST['path']) && !empty($_GET['id'])) {
-                    $document_id = $_POST['path'];
+                    $document_id = (int) $_POST['path'];
                 } else {
-                    if ($_POST['content_lp']) {
-                        $document_id = $oLP->create_document(
-                            $courseInfo,
-                            $_POST['content_lp'],
-                            $_POST['title'],
-                            'html',
-                            $directoryParentId
-                        );
-                    }
+                    $document_id = (int) $oLP->create_document(
+                        $courseInfo,
+                        $contentLp,
+                        $_POST['title'],
+                        'html',
+                        $directoryParentId
+                    );
+                }
+
+                if (empty($document_id)) {
+                    Display::addFlash(Display::return_message(get_lang('Error while creating the document'), 'error'));
+                    $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($oLP->lp_id).'&'.api_get_cidreq();
+                    header('Location: '.$url);
+                    exit;
                 }
 
                 $documentRepo = Database::getManager()->getRepository(CDocument::class);
-                $document = $documentRepo->find((int)$document_id);
+                $document = $documentRepo->find($document_id);
                 if ($document && $document->getFiletype() === 'video') {
                     $type = 'video';
                 }
@@ -415,18 +524,27 @@ switch ($action) {
                     $prerequisites
                 );
                 $saveExportFlag($createdItemId);
+                $saveLpItemExtraFields($createdItemId);
             } elseif (TOOL_READOUT_TEXT == $_POST['type']) {
-                if (isset($_POST['path']) && 'true' != $_GET['edit']) {
-                    $document_id = $_POST['path'];
+                $document_id = 0;
+                $contentLp = isset($_POST['content_lp']) ? (string) $_POST['content_lp'] : '';
+
+                if (isset($_POST['path']) && 'true' != ($_GET['edit'] ?? '')) {
+                    $document_id = (int) $_POST['path'];
                 } else {
-                    if ($_POST['content_lp']) {
-                        $document_id = $oLP->createReadOutText(
-                            $courseInfo,
-                            $_POST['content_lp'],
-                            $_POST['title'],
-                            $directoryParentId
-                        );
-                    }
+                    $document_id = (int) $oLP->createReadOutText(
+                        $courseInfo,
+                        $contentLp,
+                        $_POST['title'],
+                        $directoryParentId
+                    );
+                }
+
+                if (empty($document_id)) {
+                    Display::addFlash(Display::return_message(get_lang('Error while creating the document'), 'error'));
+                    $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($oLP->lp_id).'&'.api_get_cidreq();
+                    header('Location: '.$url);
+                    exit;
                 }
 
                 $createdItemId = $oLP->add_item(
@@ -439,9 +557,9 @@ switch ($action) {
                     $prerequisites
                 );
                 $saveExportFlag($createdItemId);
+                $saveLpItemExtraFields($createdItemId);
+
             } else {
-                // For all other item types than documents,
-                // load the item using the item type and path rather than its ID.
                 $createdItemId = $oLP->add_item(
                     $parent,
                     $previous,
@@ -453,6 +571,7 @@ switch ($action) {
                     $maxTimeAllowed
                 );
                 $saveExportFlag($createdItemId);
+                $saveLpItemExtraFields($createdItemId);
             }
             $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($oLP->lp_id).'&'.api_get_cidreq();
             header('Location: '.$url);
@@ -610,6 +729,7 @@ switch ($action) {
 
         Session::write('refresh', 1);
         if (isset($_POST['submit_button']) && !empty($post_title)) {
+            $validateLpItemPrerequisiteDates();
             // TODO: mp3 edit
             $audio = [];
             if (isset($_FILES['mp3'])) {
@@ -653,9 +773,15 @@ switch ($action) {
             $extraFieldValues->saveFieldValues($_POST);
 
             Display::addFlash(Display::return_message(get_lang('Updated')));
-            $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($oLP->lp_id).'&'.api_get_cidreq();
-            header('Location: '.$url);
-            exit;
+            $fallback = $isBuildView
+                ? api_get_self()
+                .'?action=add_item&type=step&lp_id='.intval($oLP->lp_id)
+                .'&'.api_get_cidreq()
+                .'&isStudentView=false'
+                : api_get_self()
+                .'?action=add_item&type=step&lp_id='.intval($oLP->lp_id)
+                .'&'.api_get_cidreq();
+            $redirectToReturnToOr($fallback);
         }
         if (isset($_GET['view']) && 'build' === $_GET['view']) {
             require 'lp_edit_item.php';
@@ -787,7 +913,9 @@ switch ($action) {
         $goList();
         break;
     case 'export':
-        if (!$is_allowed_to_edit) {
+        $allowExportToStudents = 'true' === api_get_setting('lp.lp_allow_export_to_students');
+
+        if (!$is_allowed_to_edit && !$allowExportToStudents) {
             api_not_allowed(true);
         }
         $hideScormExportLink = api_get_setting('lp.hide_scorm_export_link');
@@ -879,7 +1007,7 @@ switch ($action) {
             api_not_allowed(true);
         }
 
-        learnpath::toggleCategoryPublish($_REQUEST['id'], $_REQUEST['new_status']);
+        learnpath::toggleCategoryPublish($_REQUEST['id']);
         Display::addFlash(Display::return_message(get_lang('Update successful')));
         $goList();
         exit;
@@ -891,7 +1019,7 @@ switch ($action) {
             api_not_allowed(true);
         }
         if ($lp_found) {
-            learnpath::togglePublish($_REQUEST['lp_id'], $_REQUEST['new_status']);
+            learnpath::togglePublish($_REQUEST['lp_id']);
             Display::addFlash(Display::return_message(get_lang('Update successful')));
         }
         $goList();
@@ -1120,8 +1248,40 @@ switch ($action) {
         }
         $goList();
         exit;
+    case 'update_scorm':
+        if (!$is_allowed_to_edit) {
+            api_not_allowed(true);
+        }
 
-        break;
+        if (empty($lpId)) {
+            Display::addFlash(Display::return_message(get_lang('No learning path found'), 'error'));
+            $goList();
+            exit;
+        }
+
+        /** @var CLp|null $lp */
+        $lp = $lpRepo->find($lpId);
+        if (!$lp) {
+            Display::addFlash(Display::return_message(get_lang('No learning path found'), 'error'));
+            $goList();
+            exit;
+        }
+
+        if ((int) $lp->getLpType() !== CLp::SCORM_TYPE) {
+            Display::addFlash(Display::return_message(get_lang('Not a SCORM learning path'), 'error'));
+            $goList();
+            exit;
+        }
+
+        $script = 'lp_update_scorm.php';
+        if (!is_file(__DIR__.'/lp_update_scorm.php') && is_file(__DIR__.'/lp_upload_scorm.php')) {
+            $script = 'lp_upload_scorm.php';
+        }
+
+        $target = api_get_path(WEB_CODE_PATH).'lp/'.$script.'?'.api_get_cidreq().'&lp_id='.$lpId;
+        $target .= '&returnTo='.urlencode($listUrl);
+        header('Location: '.$target);
+        exit;
     case 'return_to_course_homepage':
         if (!$lp_found) {
             $goList();

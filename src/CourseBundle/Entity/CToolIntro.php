@@ -14,6 +14,9 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\QueryParameter;
+use ApiPlatform\OpenApi\Model\Operation;
+use ApiPlatform\OpenApi\Model\Parameter as OpenApiParameter;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
@@ -22,7 +25,7 @@ use Chamilo\CoreBundle\Filter\SidFilter;
 use Chamilo\CourseBundle\Repository\CToolIntroRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -31,7 +34,27 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Get(security: "is_granted('VIEW', object)"),
         new Put(security: "is_granted('EDIT', object)"),
         new Delete(security: "is_granted('DELETE', object)"),
-        new GetCollection(security: "is_granted('ROLE_USER')"),
+        new GetCollection(
+            openapi: new Operation(
+                parameters: [
+                    new OpenApiParameter(
+                        name: 'cid',
+                        in: 'query',
+                        description: 'Course identifier',
+                        required: true,
+                        schema: ['type' => 'integer'],
+                    ),
+                ],
+            ),
+            security: "is_granted('ROLE_USER')",
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+            ],
+        ),
         new Post(securityPostDenormalize: "is_granted('CREATE', object)"),
     ],
     normalizationContext: [

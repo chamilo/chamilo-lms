@@ -22,6 +22,18 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script();
 $origin = api_get_origin();
+$ltiSession = Session::read('_ltiProvider');
+$currentLaunchId = $_REQUEST['lti_launch_id'] ?? '';
+$isLtiEmbeddable =
+    'embeddable' === $origin &&
+    !empty($ltiSession) &&
+    !empty($currentLaunchId) &&
+    !empty($ltiSession['lti_launch_id']) &&
+    hash_equals((string) $ltiSession['lti_launch_id'], (string) $currentLaunchId);
+
+if (!$isLtiEmbeddable && !empty(Session::read('_ltiProvider'))) {
+    Session::erase('_ltiProvider');
+}
 
 // To prevent the template class
 $lp_id = !empty($_GET['lp_id']) ? (int) $_GET['lp_id'] : 0;
@@ -44,18 +56,83 @@ if (!$lp) {
 }
 /** @var learnpath $oLP */
 $oLP = Session::read('oLP');
-// Check if the learning path is visible for student - (LP requisites)
+// Check if the learning path is visible for student - (LP requisites).
 if (!api_is_allowed_to_create_course()) {
-    if (!api_is_allowed_to_edit(null, true, false, false) &&
-        !learnpath::is_lp_visible_for_student($lp, api_get_user_id(), $course)
-    ) {
+    $canEditLp = api_is_allowed_to_edit(null, true, false, false);
+
+    if (!$canEditLp && !learnpath::is_lp_visible_for_student($lp, api_get_user_id(), $course)) {
+        $showUnavailableLpWithDates = 'true' === api_get_setting(
+                'lp.lp_start_and_end_date_visible_in_student_view'
+            );
+
+        if ($showUnavailableLpWithDates && $lp->getDisplayNotAllowedLp()) {
+            $publishedOn = $lp->getPublishedOn();
+            $expiredOn = $lp->getExpiredOn();
+            $now = new DateTimeImmutable('now', new DateTimeZone('UTC'));
+
+            $isUnavailableByDate = false;
+            $availabilityDates = [];
+
+            if ($publishedOn instanceof DateTimeInterface) {
+                $availabilityDates[] = sprintf(
+                    get_lang('Available from %s'),
+                    api_get_local_time($publishedOn->format('Y-m-d H:i:s'))
+                );
+
+                if ($publishedOn > $now) {
+                    $isUnavailableByDate = true;
+                }
+            }
+
+            if ($expiredOn instanceof DateTimeInterface) {
+                $availabilityDates[] = sprintf(
+                    get_lang('Available until %s'),
+                    api_get_local_time($expiredOn->format('Y-m-d H:i:s'))
+                );
+
+                if ($expiredOn < $now) {
+                    $isUnavailableByDate = true;
+                }
+            }
+
+            if ($isUnavailableByDate) {
+                Display::addFlash(
+                    Display::return_message(
+                        implode('<br>', $availabilityDates),
+                        'warning'
+                    )
+                );
+
+                header(
+                    'Location: '.api_get_path(WEB_PATH)
+                    .'resources/lp/'
+                    .api_get_course_entity($course_id)->getResourceNode()->getId()
+                    .'?'.api_get_cidreq()
+                );
+                exit;
+            }
+        }
+
         api_not_allowed(true);
     }
 }
 
 // Checking visibility (eye icon)
 $visibility = $lp->isVisible($course, $session);
+$canEditLp = api_is_allowed_to_edit(false, true, false, false);
 
+if (!$canEditLp) {
+    $now = new DateTimeImmutable('now', new DateTimeZone('UTC'));
+    $publishedOn = $lp->getPublishedOn();
+    $expiredOn = $lp->getExpiredOn();
+
+    if (
+        ($publishedOn instanceof DateTimeInterface && $publishedOn > $now) ||
+        ($expiredOn instanceof DateTimeInterface && $expiredOn < $now)
+    ) {
+        api_not_allowed(true);
+    }
+}
 if (false === $visibility &&
     !api_is_allowed_to_edit(false, true, false, false)
 ) {
@@ -132,36 +209,84 @@ $allowLpItemTip = ('false' === api_get_setting('lp.hide_accessibility_label_on_l
 if ($allowLpItemTip) {
     $htmlHeadXtra[] = api_get_asset('qtip2/dist/jquery.qtip.js');
     $htmlHeadXtra[] = '<script>
-    $(function() {
-         $(".scorm_item_normal").qtip({
-            content: {
-                text: function(event, api) {
-                    var item = $(this);
-                    var itemId = $(this).attr("id");
-                    itemId = itemId.replace("toc_", "");
-                    var textToShow = "";
-                    $.ajax({
-                        type: "GET",
-                        url: "'.$ajaxUrl.'&item_id="+ itemId,
-                        async: false
-                    })
-                    .then(function(content) {
-                        if (content == 1) {
-                            textToShow = "'.addslashes(get_lang('Item can be viewed - Prerequisites completed')).'";
-                            api.set("style.classes", "qtip-green qtip-shadow");
-                        } else {
-                            textToShow = content;
-                            api.set("style.classes", "qtip-red qtip-shadow");
-                        }
-                        api.set("content.text", textToShow);
-                        return textToShow;
-                    });
-                    return textToShow;
-                }
+        $(function() {
+            // Cache prerequisite checks per item to avoid repeated network calls on hover.
+            window.lpPrereqCache = window.lpPrereqCache || {};
+            window.lpPrereqInFlight = window.lpPrereqInFlight || {};
+
+            function getItemIdFromTocElement(el) {
+                var raw = $(el).attr("id") || "";
+                raw = raw.replace("toc_", "");
+                var n = parseInt(raw, 10);
+                return Number.isFinite(n) ? n : 0;
             }
+
+            function setTipStyle(api, ok) {
+                api.set("style.classes", ok ? "qtip-green qtip-shadow" : "qtip-red qtip-shadow");
+            }
+
+            function setTipText(api, text) {
+                api.set("content.text", text);
+                try { api.reposition(); } catch (e) {}
+            }
+
+            $(".scorm_item_normal").qtip({
+                content: {
+                    text: function(event, api) {
+                        var itemId = getItemIdFromTocElement(this);
+                        if (!itemId) {
+                            setTipStyle(api, false);
+                            return "Unable to check prerequisites.";
+                        }
+
+                        // Serve from cache if available.
+                        if (window.lpPrereqCache[itemId]) {
+                            setTipStyle(api, window.lpPrereqCache[itemId].ok);
+                            return window.lpPrereqCache[itemId].text;
+                        }
+
+                        // If a request is already in progress, just show a placeholder.
+                        if (window.lpPrereqInFlight[itemId]) {
+                            return "Loading…";
+                        }
+
+                        window.lpPrereqInFlight[itemId] = true;
+
+                        // Immediate placeholder (no UI freeze)
+                        setTipText(api, "Loading…");
+
+                        $.ajax({
+                            type: "GET",
+                            url: "'.$ajaxUrl.'&item_id=" + itemId,
+                            dataType: "text",
+                            async: true
+                        })
+                        .done(function(content) {
+                            var ok = (String(content) === "1");
+                            var text = ok
+                                ? "'.addslashes(get_lang('Item can be viewed - Prerequisites completed')).'"
+                                : (content || "'.addslashes(get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.')).'");
+
+                            window.lpPrereqCache[itemId] = { ok: ok, text: text };
+                            setTipStyle(api, ok);
+                            setTipText(api, text);
+                        })
+                        .fail(function() {
+                            var text = "Unable to check prerequisites.";
+                            window.lpPrereqCache[itemId] = { ok: false, text: text };
+                            setTipStyle(api, false);
+                            setTipText(api, text);
+                        })
+                        .always(function() {
+                            delete window.lpPrereqInFlight[itemId];
+                        });
+
+                        return "Loading…";
+                    }
+                }
+            });
         });
-    });
-    </script>';
+        </script>';
 }
 
 if ('impress' === $lp->getDefaultViewMod()) {
@@ -200,6 +325,30 @@ foreach ($get_toc_list as $toc) {
         $type_quiz = 'quiz' === $toc['type'];
     }
 }
+
+$aiProviders = json_decode((string) api_get_setting('ai_helpers.ai_providers'), true);
+$aiProviders = \is_array($aiProviders) ? $aiProviders : [];
+$hasAiTextProvider = false;
+foreach ($aiProviders as $providerConfig) {
+    if (!\is_array($providerConfig)) {
+        continue;
+    }
+
+    if (isset($providerConfig['text']) && \is_array($providerConfig['text'])) {
+        $hasAiTextProvider = true;
+        break;
+    }
+
+    if (isset($providerConfig['model']) || isset($providerConfig['url'])) {
+        $hasAiTextProvider = true;
+        break;
+    }
+}
+$aiLearningHelperEnabled = (
+    'document' === $itemType
+    && 'true' === api_get_setting('ai_helpers.enable_ai_helpers')
+    && $hasAiTextProvider
+);
 
 if (!isset($src)) {
     $src = null;
@@ -246,21 +395,6 @@ if (!isset($src)) {
                 $oLP->start_current_item(); // starts time counter manually if asset
             } else {
                 $src = 'blank.php?error=prerequisites';
-            }
-            break;
-        case CLp::AICC_TYPE:
-            $oLP->stop_previous_item(); // save status manually if asset
-            $htmlHeadXtra[] = '<script src="'.$oLP->get_js_lib().'"></script>';
-            $preReqCheck = $oLP->prerequisites_match($lp_item_id);
-            if (true === $preReqCheck) {
-                $src = $oLP->get_link(
-                    'http',
-                    $lp_item_id,
-                    $get_toc_list
-                );
-                $oLP->start_current_item(); // starts time counter manually if asset
-            } else {
-                $src = 'blank.php';
             }
             break;
         case 4:
@@ -339,8 +473,29 @@ $progress_bar = '';
 if (!api_is_invitee()) {
     $progress_bar = $oLP->getProgressBar();
 }
+
 $navigation_bar = $oLP->get_navigation_bar();
 $navigation_bar_bottom = $oLP->get_navigation_bar('control-bottom');
+
+if ($isLtiEmbeddable) {
+    $stripLpInfoButton = static function (?string $html): string {
+        if (empty($html)) {
+            return '';
+        }
+
+        $patterns = [
+            '#<li\b[^>]*>.*?<i\b[^>]*mdi-information(?:-outline|-variant-circle-outline)?\b[^>]*></i>.*?</li>#is',
+            '#<a\b[^>]*>.*?<i\b[^>]*mdi-information(?:-outline|-variant-circle-outline)?\b[^>]*></i>.*?</a>#is',
+            '#<button\b[^>]*>.*?<i\b[^>]*mdi-information(?:-outline|-variant-circle-outline)?\b[^>]*></i>.*?</button>#is',
+        ];
+
+        return trim((string) preg_replace($patterns, '', $html));
+    };
+
+    $navigation_bar = $stripLpInfoButton($navigation_bar);
+    $navigation_bar_bottom = $stripLpInfoButton($navigation_bar_bottom);
+}
+
 $mediaplayer = $oLP->get_mediaplayer($oLP->current, $autostart);
 
 $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
@@ -467,6 +622,7 @@ $template->assign('jquery_web_path', api_get_jquery_web_path());
 $template->assign('jquery_ui_js_web_path', api_get_jquery_ui_js_web_path());
 $template->assign('jquery_ui_css_web_path', api_get_jquery_ui_css_web_path());
 $template->assign('is_allowed_to_edit', $is_allowed_to_edit);
+$template->assign('is_lti_embeddable', $isLtiEmbeddable);
 $template->assign('button_home_url', $buttonHomeUrl);
 $template->assign('button_home_text', $buttonHomeText);
 $template->assign('navigation_bar', $navigation_bar);
@@ -476,8 +632,11 @@ $template->assign('media_player', $mediaplayer);
 $template->assign('toc_list', $get_toc_list);
 $template->assign('teacher_toc_buttons', $get_teacher_buttons);
 $template->assign('iframe_src', $src);
+$template->assign('is_lti_embeddable', (int) $isLtiEmbeddable);
 $template->assign('navigation_bar_bottom', $navigation_bar_bottom);
-$template->assign('show_left_column', !$lp->getHideTocFrame());
+$tocHidden = (bool) $lp->getHideTocFrame();
+$template->assign('toc_hidden', (int) $tocHidden);
+$template->assign('show_left_column', $tocHidden ? 0 : 1);
 
 $showMenu = 0;
 $settings = api_get_setting('lp.lp_view_settings', true);
@@ -533,7 +692,6 @@ if (Tracking::minimumTimeAvailable(api_get_session_id(), api_get_course_int_id()
 
     $template->assign('time_progress_perc', $time_progress_perc);
     $template->assign('time_progress_value', $time_progress_value);
-    // Cronometro
     $hour = (intval($lpTime / 3600)) < 10 ? '0'.intval($lpTime / 3600) : intval($lpTime / 3600);
     $template->assign('hour', $hour);
     $template->assign('minute', date('i', $lpTime));
@@ -541,6 +699,69 @@ if (Tracking::minimumTimeAvailable(api_get_session_id(), api_get_course_int_id()
     $template->assign('hour_min', api_time_to_hms($timeLp * 60, '</div><div class="divider">:</div><div>'));
 }
 
+$lpFlowNextButton = '';
+$canEditLp = api_is_allowed_to_edit(false, true, false, false);
+$isLpAvailableForCurrentUser = static function (CLp $lpToCheck) use ($course, $session, $canEditLp): bool {
+    if ($canEditLp) {
+        return true;
+    }
+
+    if (!$lpToCheck->isVisible($course, $session)) {
+        return false;
+    }
+
+    if (!learnpath::is_lp_visible_for_student($lpToCheck, api_get_user_id(), $course)) {
+        return false;
+    }
+
+    $now = new DateTimeImmutable('now', new DateTimeZone('UTC'));
+    $publishedOn = $lpToCheck->getPublishedOn();
+    $expiredOn = $lpToCheck->getExpiredOn();
+
+    if ($publishedOn instanceof DateTimeInterface && $publishedOn > $now) {
+        return false;
+    }
+
+    if ($expiredOn instanceof DateTimeInterface && $expiredOn < $now) {
+        return false;
+    }
+
+    return true;
+};
+
+if ('true' === api_get_setting('lp.lp_enable_flow')) {
+    $nextLpId = (int) $lp->getNextLpId();
+    $nextLpInfo = learnpath::getFlowNextLpInfo((int) $lp->getIid(), $nextLpId);
+
+    if (!empty($nextLpInfo)) {
+        $nextLpEntity = $lpRepo->find((int) $nextLpInfo['iid']);
+
+        if ($nextLpEntity && $isLpAvailableForCurrentUser($nextLpEntity)) {
+            $params = [
+                'action' => 'view',
+                'cid' => api_get_course_int_id(),
+                'sid' => api_get_session_id(),
+                'gid' => api_get_group_id(),
+                'isStudentView' => $canEditLp ? 'false' : 'true',
+                'lp_id' => (int) $nextLpInfo['iid'],
+            ];
+
+            $nextLpUrl = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.http_build_query($params);
+
+            $lpFlowNextButton = Display::url(
+                get_lang('Next learning path'),
+                $nextLpUrl,
+                [
+                    'class' => 'btn btn--primary',
+                    'title' => Security::remove_XSS((string) $nextLpInfo['title']),
+                    'target' => '_top',
+                ]
+            );
+        }
+    }
+}
+
+$template->assign('lp_flow_next_button', $lpFlowNextButton);
 $template->assign('lp_accumulate_work_time', $lpMinTime);
 $template->assign('lp_mode', $lp->getDefaultViewMod());
 $template->assign('lp_title_scorm', stripslashes($lp->getTitle()));
@@ -560,6 +781,12 @@ $template->assign('data_list', $oLP->getListArrayToc());
 
 $template->assign('lp_id', $lp->getIid());
 $template->assign('lp_current_item_id', $lpCurrentItemId);
+
+$template->assign('ai_learning_helper_enabled', (int) $aiLearningHelperEnabled);
+$template->assign('ai_learning_helper_endpoint', api_get_path(WEB_PATH).'ai/lp_learning_helper');
+$template->assign('ai_learning_helper_language', (string) ($courseInfo['language'] ?? 'en'));
+$template->assign('ai_learning_helper_course_id', (int) $course_id);
+$template->assign('ai_learning_helper_session_id', (int) $sessionId);
 
 $menuLocation = 'left';
 if ('false' !== api_get_setting('lp.lp_menu_location')) {

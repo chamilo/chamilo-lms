@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Moodle\Builder;
 
+use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\ActivityExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\AnnouncementsForumExport;
@@ -25,6 +26,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\ResourceExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\ThematicMetaExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\UrlExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\WikiExport;
+use DocumentManager;
 use Exception;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -34,8 +36,12 @@ use const PATHINFO_EXTENSION;
 use const PHP_EOL;
 
 /**
- * Class MoodleExport.
  * Handles the export of a Moodle course in .mbz format.
+ *
+ * Important design:
+ * - produce a valid Moodle backup structure
+ * - keep Chamilo sidecar metadata under chamilo/* for richer restore/import in C2
+ * - preserve selection-mode semantics
  */
 class MoodleExport
 {
@@ -47,46 +53,54 @@ class MoodleExport
     /**
      * @var array<string,mixed>
      */
-    private static $adminUserData = [];
+    private static array $adminUserData = [];
 
     /**
-     * @var bool selection flag (true when exporting only selected items)
+     * True when exporting only selected items.
      */
     private bool $selectionMode = false;
 
+    /**
+     * @var array<string,array<int,bool>>
+     */
     protected static array $activityUserinfo = [];
 
-    /** Synthetic module id for the News forum generated from announcements */
+    /**
+     * Synthetic module id for the News forum generated from announcements.
+     */
     private const ANNOUNCEMENTS_MODULE_ID = 48000001;
 
-    /** Synthetic module id for Gradebook (Chamilo-only metadata) */
+    /**
+     * Synthetic module id for Gradebook Chamilo-only metadata.
+     */
     private const GRADEBOOK_MODULE_ID = 48000002;
 
-    private bool $wikiAdded = false;
+    /**
+     * Synthetic module id for the single exported wiki activity.
+     */
     private const WIKI_MODULE_ID = 48000003;
+
+    private static int $backupCourseContextId = 0;
+    private static int $backupCourseId = 0;
 
     /**
      * Constructor to initialize the course object.
      *
-     * @param object $course        Filtered legacy course (may be full or selected-only)
-     * @param bool   $selectionMode When true, do NOT re-hydrate from complete snapshot
+     * @param object $course filtered legacy course (may be full or selected-only)
+     * @param bool   $selectionMode when true, do not re-hydrate from complete snapshot
      */
     public function __construct(object $course, bool $selectionMode = false)
     {
-        // Keep the provided (possibly filtered) course as-is.
         $this->course = $course;
         $this->selectionMode = $selectionMode;
 
-        // Only auto-fill missing dependencies when doing a full export.
-        // In selection mode we must not re-inject extra content ("full backup" effect).
+        // Only auto-fill dependencies on full export.
+        // In selection mode we must not re-inject extra content.
         if (!$this->selectionMode) {
-            $cb = new CourseBuilder('complete');
-            $complete = $cb->build(0, (string) ($course->code ?? ''));
+            $builder = new CourseBuilder('complete');
+            $complete = $builder->build(0, (string) ($course->code ?? ''));
 
-            // Fill missing resources from learnpath (full export only)
             $this->fillResourcesFromLearnpath($complete);
-
-            // Fill missing quiz questions (full export only)
             $this->fillQuestionsFromQuiz($complete);
         }
     }
@@ -94,12 +108,11 @@ class MoodleExport
     /**
      * Export the Moodle course in .mbz format.
      *
-     * @return string Path to the created .mbz file
+     * @return string path to the created .mbz file
      */
-    public function export(string $courseId, string $exportDir, int $version)
+    public function export(string $courseId, string $exportDir, int $version): string
     {
-        @error_log('[MoodleExport::export] Start. courseId='.$courseId.' exportDir='.$exportDir.' version='.$version);
-
+        FileIndex::reset();
         $tempDir = api_get_path(SYS_ARCHIVE_PATH).$exportDir;
 
         if (!is_dir($tempDir)) {
@@ -116,48 +129,85 @@ class MoodleExport
             throw new Exception(get_lang('Course not found'));
         }
 
-        // Create Moodle backup skeleton (backup.xml + dirs)
-        $this->createMoodleBackupXml($tempDir, $version);
-        @error_log('[MoodleExport::export] moodle_backup.xml generated');
+        $backupCourseId = (int) ($courseInfo['real_id'] ?? 0);
+        $backupCourseContextId = $this->buildBackupCourseContextId($backupCourseId);
+        self::setBackupCourseContext($backupCourseId, $backupCourseContextId);
 
-        //    This must happen BEFORE calling getActivities() so they are included.
-        if (method_exists($this, 'enqueueUrlActivities')) {
-            @error_log('[MoodleExport::export] Enqueuing URL activities …');
-            $this->enqueueUrlActivities();
-            @error_log('[MoodleExport::export] URL activities enqueued');
-        } else {
-            @error_log('[MoodleExport::export][WARN] enqueueUrlActivities() not found; skipping URL activities');
-        }
-
-        // Gather activities (now includes URLs)
+        $this->enqueueUrlActivities();
+        $this->debugExportResourceBuckets();
         $activities = $this->getActivities();
-        @error_log('[MoodleExport::export] Activities count='.count($activities));
+        $this->debugExportActivitiesSummary($activities);
+        $sections = $this->getSections($activities);
 
-        // Export course structure (sections + activities metadata)
+        // Create Moodle backup skeleton.
+        $this->createMoodleBackupXml($tempDir, $version, $activities, $sections);
+
+        // Export course structure.
         $courseExport = new CourseExport($this->course, $activities);
         $courseExport->exportCourse($tempDir);
-        @error_log('[MoodleExport::export] course/ exported');
 
-        // Page export (collect extra files from HTML pages)
+        // Collect extra files from intro/page HTML.
         $pageExport = new PageExport($this->course);
         $pageFiles = [];
         $pageData = $pageExport->getData(0, 1);
         if (!empty($pageData['files'])) {
             $pageFiles = $pageData['files'];
         }
-        @error_log('[MoodleExport::export] pageFiles from PageExport='.count($pageFiles));
 
-        // Files export (documents, attachments, + pages’ files)
+        // Collect files from resource activities.
+        $resourceFiles = [];
+        $resourceExport = new ResourceExport($this->course);
+        foreach ($activities as $activity) {
+            if (($activity['modulename'] ?? '') !== 'resource') {
+                continue;
+            }
+
+            $resourceData = $resourceExport->getData(
+                (int) ($activity['id'] ?? 0),
+                (int) ($activity['sectionid'] ?? 0),
+                (int) ($activity['moduleid'] ?? 0)
+            );
+
+            if (!empty($resourceData['files'])) {
+                $resourceFiles = array_merge($resourceFiles, $resourceData['files']);
+            }
+        }
+
+        // Collect embedded files from quiz questions/answers.
+        $quizFiles = [];
+        $quizExport = new QuizExport($this->course);
+        foreach ($activities as $activity) {
+            if (($activity['modulename'] ?? '') !== 'quiz') {
+                continue;
+            }
+
+            $quizData = $quizExport->getData(
+                (int) ($activity['id'] ?? 0),
+                (int) ($activity['sectionid'] ?? 0),
+                (int) ($activity['moduleid'] ?? 0)
+            );
+
+            if (!empty($quizData['files'])) {
+                $quizFiles = array_merge($quizFiles, $quizData['files']);
+            }
+        }
+
+        // Files export.
         $fileExport = new FileExport($this->course);
         $filesData = $fileExport->getFilesData();
-        @error_log('[MoodleExport::export] getFilesData='.count($filesData['files'] ?? []));
-        $filesData['files'] = array_merge($filesData['files'] ?? [], $pageFiles);
-        @error_log('[MoodleExport::export] merged files='.count($filesData['files'] ?? []));
+        $filesData['files'] = array_merge(
+            $filesData['files'] ?? [],
+            $pageFiles,
+            $resourceFiles,
+            $quizFiles
+        );
+
         $fileExport->exportFiles($filesData, $tempDir);
 
-        // Sections export (topics/weeks descriptors)
-        $this->exportSections($tempDir);
+        // Export sections.
+        $this->exportSections($tempDir, $activities, $sections);
 
+        // Export complementary artifacts.
         $this->exportCourseCalendar($tempDir);
         $this->exportAnnouncementsForum($activities, $tempDir);
         $this->exportLabelActivities($activities, $tempDir);
@@ -167,25 +217,24 @@ class MoodleExport
         $this->exportGradebookActivities($activities, $tempDir);
         $this->exportQuizMetaActivities($activities, $tempDir);
         $this->exportLearnpathMeta($tempDir);
+        $this->exportDocumentIndex($tempDir);
 
-        // Root XMLs (course/activities indexes)
-        $this->exportRootXmlFiles($tempDir);
-        @error_log('[MoodleExport::export] root XMLs exported');
+        // Root XMLs.
+        $this->exportRootXmlFiles($tempDir, $activities);
 
-        // Create .mbz archive
+        // Build .mbz.
         $exportedFile = $this->createMbzFile($tempDir);
-        @error_log('[MoodleExport::export] mbz created at '.$exportedFile);
 
-        // Cleanup temp dir
+        // Cleanup.
         $this->cleanupTempDir($tempDir);
-        @error_log('[MoodleExport::export] tempDir removed '.$tempDir);
 
-        @error_log('[MoodleExport::export] Done. file='.$exportedFile);
         return $exportedFile;
     }
 
     /**
      * Export questions data to XML file.
+     *
+     * @param array<int,array<string,mixed>> $questionsData
      */
     public function exportQuestionsXml(array $questionsData, string $exportDir): void
     {
@@ -193,30 +242,76 @@ class MoodleExport
         $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
         $xmlContent .= '<question_categories>'.PHP_EOL;
 
-        $categoryHashes = [];
+        $rootByContext = [];
+        $writtenCategories = [];
+
         foreach ($questionsData as $quiz) {
-            // Skip empty sets defensively
-            if (empty($quiz['questions']) || !\is_array($quiz['questions'])) {
+            $contextId = (int) ($quiz['contextid'] ?? 0);
+            $courseId = (int) ($quiz['courseid'] ?? 0);
+
+            if ($contextId <= 0 || $courseId <= 0) {
                 continue;
             }
 
-            $first = $quiz['questions'][0] ?? [];
-            $categoryId = $first['questioncategoryid'] ?? '1';
+            if (!isset($rootByContext[$contextId])) {
+                $rootId = $this->buildRootQuestionCategoryId($contextId);
+                $rootByContext[$contextId] = $rootId;
 
-            $hash = md5($categoryId.($quiz['name'] ?? ''));
-            if (isset($categoryHashes[$hash])) {
+                $xmlContent .= '  <question_category id="'.$rootId.'">'.PHP_EOL;
+                $xmlContent .= '    <name>Top</name>'.PHP_EOL;
+                $xmlContent .= '    <contextid>'.$contextId.'</contextid>'.PHP_EOL;
+                $xmlContent .= '    <contextlevel>50</contextlevel>'.PHP_EOL;
+                $xmlContent .= '    <contextinstanceid>'.$courseId.'</contextinstanceid>'.PHP_EOL;
+                $xmlContent .= '    <info>Top category</info>'.PHP_EOL;
+                $xmlContent .= '    <infoformat>0</infoformat>'.PHP_EOL;
+                $xmlContent .= '    <stamp>moodle+'.time().'+CATEGORYSTAMP</stamp>'.PHP_EOL;
+                $xmlContent .= '    <parent>0</parent>'.PHP_EOL;
+                $xmlContent .= '    <sortorder>999</sortorder>'.PHP_EOL;
+                $xmlContent .= '    <idnumber>$@NULL@$</idnumber>'.PHP_EOL;
+                $xmlContent .= '    <questions></questions>'.PHP_EOL;
+                $xmlContent .= '  </question_category>'.PHP_EOL;
+            }
+        }
+
+        foreach ($questionsData as $quiz) {
+            if (empty($quiz['questions']) || !is_array($quiz['questions'])) {
                 continue;
             }
-            $categoryHashes[$hash] = true;
+
+            $contextId = (int) ($quiz['contextid'] ?? 0);
+            $courseId = (int) ($quiz['courseid'] ?? 0);
+
+            if ($contextId <= 0 || $courseId <= 0) {
+                continue;
+            }
+
+            $rootId = (int) ($rootByContext[$contextId] ?? 0);
+            if ($rootId <= 0) {
+                $rootId = $this->buildRootQuestionCategoryId($contextId);
+                $rootByContext[$contextId] = $rootId;
+            }
+
+            $categoryId = (int) ($quiz['question_category_id'] ?? 0);
+            if ($categoryId <= 0) {
+                $moduleId = (int) ($quiz['moduleid'] ?? 0);
+                $categoryId = 1000000000 + max(1, $moduleId);
+            }
+
+            $categoryKey = $contextId.':'.$categoryId;
+            if (isset($writtenCategories[$categoryKey])) {
+                continue;
+            }
+            $writtenCategories[$categoryKey] = true;
+
             $xmlContent .= '  <question_category id="'.$categoryId.'">'.PHP_EOL;
-            $xmlContent .= '    <name>Default for '.htmlspecialchars((string) ($quiz['name'] ?? 'Unknown')).'</name>'.PHP_EOL;
-            $xmlContent .= '    <contextid>'.($quiz['contextid'] ?? '0').'</contextid>'.PHP_EOL;
-            $xmlContent .= '    <contextlevel>70</contextlevel>'.PHP_EOL;
-            $xmlContent .= '    <contextinstanceid>'.($quiz['moduleid'] ?? '0').'</contextinstanceid>'.PHP_EOL;
-            $xmlContent .= '    <info>The default category for questions shared in context "'.htmlspecialchars((string) ($quiz['name'] ?? 'Unknown')).'".</info>'.PHP_EOL;
+            $xmlContent .= '    <name>Default for '.htmlspecialchars((string) ($quiz['name'] ?? 'Quiz')).'</name>'.PHP_EOL;
+            $xmlContent .= '    <contextid>'.$contextId.'</contextid>'.PHP_EOL;
+            $xmlContent .= '    <contextlevel>50</contextlevel>'.PHP_EOL;
+            $xmlContent .= '    <contextinstanceid>'.$courseId.'</contextinstanceid>'.PHP_EOL;
+            $xmlContent .= '    <info>Default questions category</info>'.PHP_EOL;
             $xmlContent .= '    <infoformat>0</infoformat>'.PHP_EOL;
             $xmlContent .= '    <stamp>moodle+'.time().'+CATEGORYSTAMP</stamp>'.PHP_EOL;
-            $xmlContent .= '    <parent>0</parent>'.PHP_EOL;
+            $xmlContent .= '    <parent>'.$rootId.'</parent>'.PHP_EOL;
             $xmlContent .= '    <sortorder>999</sortorder>'.PHP_EOL;
             $xmlContent .= '    <idnumber>$@NULL@$</idnumber>'.PHP_EOL;
             $xmlContent .= '    <questions>'.PHP_EOL;
@@ -229,8 +324,17 @@ class MoodleExport
             $xmlContent .= '  </question_category>'.PHP_EOL;
         }
 
-        $xmlContent .= '</question_categories>';
+        $xmlContent .= '</question_categories>'.PHP_EOL;
+
         file_put_contents($exportDir.'/questions.xml', $xmlContent);
+    }
+
+    /**
+     * Build a stable root question category id per context id.
+     */
+    private function buildRootQuestionCategoryId(int $contextId): int
+    {
+        return 800000000 + max(1, $contextId);
     }
 
     /**
@@ -305,16 +409,49 @@ class MoodleExport
     }
 
     /**
-     * Robustly checks if a resource type matches a constant or any string aliases.
-     * This prevents "undefined constant" notices and supports mixed key styles.
+     * Store backup course mapping used by question bank and related files.
+     */
+    public static function setBackupCourseContext(int $courseId, int $contextId): void
+    {
+        self::$backupCourseId = $courseId;
+        self::$backupCourseContextId = $contextId;
+    }
+
+    /**
+     * Get the exported backup course id.
+     */
+    public static function getBackupCourseId(): int
+    {
+        return self::$backupCourseId;
+    }
+
+    /**
+     * Get the exported backup course context id.
+     */
+    public static function getBackupCourseContextId(): int
+    {
+        return self::$backupCourseContextId;
+    }
+
+    /**
+     * Build a stable backup course context id.
      *
-     * @param mixed         $resourceType Numeric constant or string like 'quiz', 'document', etc.
-     * @param string        $constName    Constant name, e.g. 'RESOURCE_QUIZ'
-     * @param array<string> $aliases      String aliases accepted for this type
+     * This is intentionally aligned with the quiz question-bank export logic.
+     */
+    private function buildBackupCourseContextId(int $courseId): int
+    {
+        return 600000000 + max(1, $courseId);
+    }
+
+    /**
+     * Robustly checks if a resource type matches a constant or any string aliases.
+     *
+     * @param mixed         $resourceType numeric constant or string like "quiz", "document", etc.
+     * @param string        $constName    constant name, e.g. "RESOURCE_QUIZ"
+     * @param array<string> $aliases      accepted string aliases
      */
     private function isType($resourceType, string $constName, array $aliases = []): bool
     {
-        // Match numeric constant exactly when defined
         if (\defined($constName)) {
             $constVal = \constant($constName);
             if ($resourceType === $constVal) {
@@ -322,11 +459,10 @@ class MoodleExport
             }
         }
 
-        // Match by string aliases (case-insensitive) if resourceType is a string
         if (\is_string($resourceType)) {
-            $rt = mb_strtolower($resourceType);
-            foreach ($aliases as $a) {
-                if ($rt === mb_strtolower($a)) {
+            $resourceType = mb_strtolower($resourceType);
+            foreach ($aliases as $alias) {
+                if ($resourceType === mb_strtolower($alias)) {
                     return true;
                 }
             }
@@ -335,26 +471,108 @@ class MoodleExport
         return false;
     }
 
+    private function debugExportResourceBuckets(): void
+    {
+        $resources = \is_array($this->course->resources ?? null) ? $this->course->resources : [];
+
+        $wanted = [
+            'announcement' => ['announcement', 'announcements'],
+            'work' => ['work', 'works', 'assign'],
+            'wiki' => ['wiki'],
+            'attendance' => ['attendance'],
+            'thematic' => ['thematic'],
+            'gradebook' => ['gradebook'],
+            'survey' => ['survey', 'surveys', 'feedback'],
+            'forum' => ['forum'],
+            'document' => ['document', 'documents'],
+            'learnpath' => ['learnpath'],
+        ];
+
+        $out = [];
+
+        foreach ($wanted as $label => $aliases) {
+            $count = 0;
+
+            foreach ($resources as $key => $bag) {
+                $matched = false;
+
+                foreach ($aliases as $alias) {
+                    if ($this->isType($key, 'RESOURCE_'.strtoupper($alias), [$alias])) {
+                        $matched = true;
+                        break;
+                    }
+
+                    if (\is_string($key) && mb_strtolower((string) $key) === mb_strtolower($alias)) {
+                        $matched = true;
+                        break;
+                    }
+                }
+
+                if (!$matched) {
+                    continue;
+                }
+
+                if (\is_array($bag)) {
+                    $count += \count($bag);
+                } elseif ($bag instanceof \Countable) {
+                    $count += \count($bag);
+                } elseif (null !== $bag) {
+                    $count++;
+                }
+            }
+
+            $out[$label] = $count;
+        }
+
+        @error_log('[MoodleExport::debugExportResourceBuckets] '.json_encode($out, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+    }
+
+    private function debugExportActivitiesSummary(array $activities): void
+    {
+        $summary = [];
+        $details = [];
+
+        foreach ($activities as $activity) {
+            $module = (string) ($activity['modulename'] ?? '');
+            if ('' === $module) {
+                $module = '(empty)';
+            }
+
+            if (!isset($summary[$module])) {
+                $summary[$module] = 0;
+                $details[$module] = [];
+            }
+
+            $summary[$module]++;
+
+            $details[$module][] = [
+                'id' => (int) ($activity['id'] ?? 0),
+                'moduleid' => (int) ($activity['moduleid'] ?? 0),
+                'sectionid' => (int) ($activity['sectionid'] ?? 0),
+                'title' => (string) ($activity['title'] ?? ''),
+                '__from' => (string) ($activity['__from'] ?? ''),
+            ];
+        }
+
+        @error_log('[MoodleExport::debugExportActivitiesSummary][counts] '.json_encode($summary, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        @error_log('[MoodleExport::debugExportActivitiesSummary][details] '.json_encode($details, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+    }
+
     /**
-     * Pulls dependent resources that LP items reference (only when LP bag exists).
-     * Defensive: if no learnpath bag is present (e.g., exporting only documents),
-     * this becomes a no-op. Keeps current behavior untouched when LP exist.
+     * Pull dependent resources referenced by LP items.
      */
     private function fillResourcesFromLearnpath(object $complete): void
     {
-        // Accept both constant and plain-string keys defensively.
         $lpBag =
             $this->course->resources[\defined('RESOURCE_LEARNPATH') ? RESOURCE_LEARNPATH : 'learnpath']
             ?? $this->course->resources['learnpath']
             ?? [];
 
         if (empty($lpBag) || !\is_array($lpBag)) {
-            // No learnpaths selected/present → nothing to hydrate.
             return;
         }
 
-        foreach ($lpBag as $learnpathId => $learnpath) {
-            // $learnpath may be wrapped in ->obj
+        foreach ($lpBag as $learnpath) {
             $lp = (\is_object($learnpath) && isset($learnpath->obj) && \is_object($learnpath->obj))
                 ? $learnpath->obj
                 : $learnpath;
@@ -364,29 +582,35 @@ class MoodleExport
             }
 
             foreach ($lp->items as $item) {
-                // Legacy LP items expose "item_type" and "path" (resource id)
                 $type = $item['item_type'] ?? null;
                 $resourceId = $item['path'] ?? null;
                 if (!$type || null === $resourceId) {
                     continue;
                 }
 
-                // Bring missing deps from the complete snapshot (keeps old behavior when LP exist)
-                if (isset($complete->resources[$type][$resourceId])
-                    && !isset($this->course->resources[$type][$resourceId])) {
+                if (isset($complete->resources[$type][$resourceId]) && !isset($this->course->resources[$type][$resourceId])) {
                     $this->course->resources[$type][$resourceId] = $complete->resources[$type][$resourceId];
                 }
             }
         }
     }
 
+    /**
+     * Fill missing quiz questions when exporting a complete course.
+     */
     private function fillQuestionsFromQuiz(object $complete): void
     {
-        if (!isset($this->course->resources['quiz'])) {
+        $quizResources =
+            $this->course->resources[\defined('RESOURCE_QUIZ') ? RESOURCE_QUIZ : 'quiz']
+            ?? $this->course->resources['quiz']
+            ?? [];
+
+        if (!\is_array($quizResources) || empty($quizResources)) {
             return;
         }
-        foreach ($this->course->resources['quiz'] as $quizId => $quiz) {
-            if (!isset($quiz->obj->question_ids)) {
+
+        foreach ($quizResources as $quiz) {
+            if (!isset($quiz->obj->question_ids) || !\is_array($quiz->obj->question_ids)) {
                 continue;
             }
             foreach ($quiz->obj->question_ids as $questionId) {
@@ -397,8 +621,14 @@ class MoodleExport
         }
     }
 
-    private function exportRootXmlFiles(string $exportDir): void
+    /**
+     * Export all root XML files.
+     *
+     * @param array<int,array<string,mixed>> $activities
+     */
+    private function exportRootXmlFiles(string $exportDir, array $activities): void
     {
+        $this->exportContextsXml($exportDir);
         $this->exportBadgesXml($exportDir);
         $this->exportCompletionXml($exportDir);
         $this->exportGradebookXml($exportDir);
@@ -406,14 +636,19 @@ class MoodleExport
         $this->exportGroupsXml($exportDir);
         $this->exportOutcomesXml($exportDir);
 
-        $activities = $this->getActivities();
         $questionsData = [];
         foreach ($activities as $activity) {
-            if ('quiz' === ($activity['modulename'] ?? '')) {
-                $quizExport = new QuizExport($this->course);
-                $quizData = $quizExport->getData($activity['id'], $activity['sectionid']);
-                $questionsData[] = $quizData;
+            if ('quiz' !== ($activity['modulename'] ?? '')) {
+                continue;
             }
+
+            $quizExport = new QuizExport($this->course);
+            $quizData = $quizExport->getData(
+                (int) ($activity['id'] ?? 0),
+                (int) ($activity['sectionid'] ?? 0),
+                (int) ($activity['moduleid'] ?? 0)
+            );
+            $questionsData[] = $quizData;
         }
         $this->exportQuestionsXml($questionsData, $exportDir);
 
@@ -422,21 +657,85 @@ class MoodleExport
         $this->exportUsersXml($exportDir);
     }
 
-    private function createMoodleBackupXml(string $destinationDir, int $version): void
+    /**
+     * Create the moodle_backup.xml file.
+     *
+     * @param array<int,array<string,mixed>> $activities
+     * @param array<int,array<string,mixed>> $sections
+     */
+    private function createMoodleBackupXml(string $destinationDir, int $version, array $activities, array $sections): void
     {
-        $courseInfo = api_get_course_info($this->course->code);
+        $courseInfo = api_get_course_info((string) ($this->course->code ?? ''));
         $backupId = md5(bin2hex(random_bytes(16)));
         $siteHash = md5(bin2hex(random_bytes(16)));
         $wwwRoot = api_get_path(WEB_PATH);
 
-        $courseStartDate = strtotime($courseInfo['creation_date']);
+        $courseStartDate = !empty($courseInfo['creation_date'])
+            ? strtotime((string) $courseInfo['creation_date'])
+            : time();
+
         $courseEndDate = $courseStartDate + (365 * 24 * 60 * 60);
+
+        $activitiesFlat = [];
+        $seenActivities = [];
+
+        foreach ($sections as $section) {
+            foreach ((array) ($section['activities'] ?? []) as $activity) {
+                $modname = (string) ($activity['modulename'] ?? '');
+                $moduleId = isset($activity['moduleid']) ? (int) $activity['moduleid'] : null;
+
+                if ('' === $modname || null === $moduleId || $moduleId < 0) {
+                    continue;
+                }
+
+                $key = $modname.':'.$moduleId;
+                if (isset($seenActivities[$key])) {
+                    continue;
+                }
+                $seenActivities[$key] = true;
+
+                $title = (string) ($activity['title'] ?? $activity['name'] ?? '');
+
+                $activitiesFlat[] = [
+                    'moduleid' => $moduleId,
+                    'sectionid' => (int) ($section['id'] ?? 0),
+                    'modulename' => $modname,
+                    'title' => $title,
+                ];
+            }
+        }
+
+        // Safety fallback for real Moodle activities that were not present in sections.
+        foreach ($activities as $activity) {
+            $modname = (string) ($activity['modulename'] ?? '');
+            if (!$this->isRealMoodleActivity($modname)) {
+                continue;
+            }
+
+            $moduleId = (int) ($activity['moduleid'] ?? 0);
+            if ($moduleId <= 0) {
+                continue;
+            }
+
+            $key = $modname.':'.$moduleId;
+            if (isset($seenActivities[$key])) {
+                continue;
+            }
+            $seenActivities[$key] = true;
+
+            $activitiesFlat[] = [
+                'moduleid' => $moduleId,
+                'sectionid' => (int) ($activity['sectionid'] ?? 0),
+                'modulename' => $modname,
+                'title' => (string) ($activity['title'] ?? ''),
+            ];
+        }
 
         $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
         $xmlContent .= '<moodle_backup>'.PHP_EOL;
         $xmlContent .= '  <information>'.PHP_EOL;
 
-        $xmlContent .= '    <name>backup-'.htmlspecialchars((string) $courseInfo['code']).'.mbz</name>'.PHP_EOL;
+        $xmlContent .= '    <name>backup-'.htmlspecialchars((string) ($courseInfo['code'] ?? 'course')).'.mbz</name>'.PHP_EOL;
         $xmlContent .= '    <moodle_version>'.(3 === $version ? '2021051718' : '2022041900').'</moodle_version>'.PHP_EOL;
         $xmlContent .= '    <moodle_release>'.(3 === $version ? '3.11.18 (Build: 20231211)' : '4.x version here').'</moodle_release>'.PHP_EOL;
         $xmlContent .= '    <backup_version>'.(3 === $version ? '2021051700' : '2022041900').'</backup_version>'.PHP_EOL;
@@ -447,14 +746,14 @@ class MoodleExport
         $xmlContent .= '    <include_file_references_to_external_content>0</include_file_references_to_external_content>'.PHP_EOL;
         $xmlContent .= '    <original_wwwroot>'.$wwwRoot.'</original_wwwroot>'.PHP_EOL;
         $xmlContent .= '    <original_site_identifier_hash>'.$siteHash.'</original_site_identifier_hash>'.PHP_EOL;
-        $xmlContent .= '    <original_course_id>'.htmlspecialchars((string) $courseInfo['real_id']).'</original_course_id>'.PHP_EOL;
+        $xmlContent .= '    <original_course_id>'.htmlspecialchars((string) ($courseInfo['real_id'] ?? 0)).'</original_course_id>'.PHP_EOL;
         $xmlContent .= '    <original_course_format>'.get_lang('Topics').'</original_course_format>'.PHP_EOL;
-        $xmlContent .= '    <original_course_fullname>'.htmlspecialchars((string) $courseInfo['title']).'</original_course_fullname>'.PHP_EOL;
-        $xmlContent .= '    <original_course_shortname>'.htmlspecialchars((string) $courseInfo['code']).'</original_course_shortname>'.PHP_EOL;
+        $xmlContent .= '    <original_course_fullname>'.htmlspecialchars((string) ($courseInfo['title'] ?? '')).'</original_course_fullname>'.PHP_EOL;
+        $xmlContent .= '    <original_course_shortname>'.htmlspecialchars((string) ($courseInfo['code'] ?? '')).'</original_course_shortname>'.PHP_EOL;
         $xmlContent .= '    <original_course_startdate>'.$courseStartDate.'</original_course_startdate>'.PHP_EOL;
         $xmlContent .= '    <original_course_enddate>'.$courseEndDate.'</original_course_enddate>'.PHP_EOL;
-        $xmlContent .= '    <original_course_contextid>'.$courseInfo['real_id'].'</original_course_contextid>'.PHP_EOL;
-        $xmlContent .= '    <original_system_contextid>'.api_get_current_access_url_id().'</original_system_contextid>'.PHP_EOL;
+        $xmlContent .= '    <original_course_contextid>'.self::getBackupCourseContextId().'</original_course_contextid>'.PHP_EOL;
+        $xmlContent .= '    <original_system_contextid>1</original_system_contextid>'.PHP_EOL;
 
         $xmlContent .= '    <details>'.PHP_EOL;
         $xmlContent .= '      <detail backup_id="'.$backupId.'">'.PHP_EOL;
@@ -469,87 +768,34 @@ class MoodleExport
 
         $xmlContent .= '    <contents>'.PHP_EOL;
 
-        $sections = $this->getSections();
         if (!empty($sections)) {
             $xmlContent .= '      <sections>'.PHP_EOL;
             foreach ($sections as $section) {
                 $xmlContent .= '        <section>'.PHP_EOL;
-                $xmlContent .= '          <sectionid>'.$section['id'].'</sectionid>'.PHP_EOL;
-                $xmlContent .= '          <title>'.htmlspecialchars((string) $section['name']).'</title>'.PHP_EOL;
-                $xmlContent .= '          <directory>sections/section_'.$section['id'].'</directory>'.PHP_EOL;
+                $xmlContent .= '          <sectionid>'.(int) ($section['id'] ?? 0).'</sectionid>'.PHP_EOL;
+                $xmlContent .= '          <title>'.htmlspecialchars((string) ($section['name'] ?? '')).'</title>'.PHP_EOL;
+                $xmlContent .= '          <directory>sections/section_'.(int) ($section['id'] ?? 0).'</directory>'.PHP_EOL;
                 $xmlContent .= '        </section>'.PHP_EOL;
             }
             $xmlContent .= '      </sections>'.PHP_EOL;
         }
 
-        $seenActs = [];
-        $activitiesFlat = [];
-        foreach ($sections as $section) {
-            foreach ($section['activities'] as $a) {
-                $modname = (string) ($a['modulename'] ?? '');
-                $moduleid = isset($a['moduleid']) ? (int) $a['moduleid'] : null;
-                if ('' === $modname || null === $moduleid || $moduleid < 0) {
-                    continue;
-                }
-                $key = $modname.':'.$moduleid;
-                if (isset($seenActs[$key])) {
-                    continue;
-                }
-                $seenActs[$key] = true;
-
-                $title = (string) ($a['title'] ?? $a['name'] ?? '');
-                $activitiesFlat[] = [
-                    'moduleid' => $moduleid,
-                    'sectionid' => (int) $section['id'],
-                    'modulename' => $modname,
-                    'title' => $title,
-                ];
-            }
-        }
-
-        // Append label/forum/wiki from getActivities() that are not already listed by sections
-        foreach ($this->getActivities() as $a) {
-            $modname  = (string) ($a['modulename'] ?? '');
-            if (!\in_array($modname, ['label','forum','wiki'], true)) {
-                continue;
-            }
-
-            $moduleid = (int) ($a['moduleid'] ?? 0);
-            if ($moduleid <= 0) {
-                continue;
-            }
-
-            $key = $modname.':'.$moduleid;
-            if (isset($seenActs[$key])) {
-                continue; // already present via sections, skip to avoid duplicates
-            }
-            $seenActs[$key] = true;
-
-            // Ensure we propagate title and section for the backup XML
-            $activitiesFlat[] = [
-                'moduleid'  => $moduleid,
-                'sectionid' => (int) ($a['sectionid'] ?? 0),
-                'modulename'=> $modname,
-                'title'     => (string) ($a['title'] ?? ''),
-            ];
-        }
-
         if (!empty($activitiesFlat)) {
             $xmlContent .= '      <activities>'.PHP_EOL;
             foreach ($activitiesFlat as $activity) {
-                $modname  = (string) $activity['modulename'];
-                $moduleid = (int)    $activity['moduleid'];
-                $sectionid= (int)    $activity['sectionid'];
-                $title    = (string) $activity['title'];
+                $modname = (string) $activity['modulename'];
+                $moduleId = (int) $activity['moduleid'];
+                $sectionId = (int) $activity['sectionid'];
+                $title = (string) $activity['title'];
 
-                $hasUserinfo = self::$activityUserinfo[$modname][$moduleid] ?? false;
+                $hasUserinfo = self::$activityUserinfo[$modname][$moduleId] ?? false;
 
                 $xmlContent .= '        <activity>'.PHP_EOL;
-                $xmlContent .= '          <moduleid>'.$moduleid.'</moduleid>'.PHP_EOL;
-                $xmlContent .= '          <sectionid>'.$sectionid.'</sectionid>'.PHP_EOL;
+                $xmlContent .= '          <moduleid>'.$moduleId.'</moduleid>'.PHP_EOL;
+                $xmlContent .= '          <sectionid>'.$sectionId.'</sectionid>'.PHP_EOL;
                 $xmlContent .= '          <modulename>'.htmlspecialchars($modname).'</modulename>'.PHP_EOL;
                 $xmlContent .= '          <title>'.htmlspecialchars($title).'</title>'.PHP_EOL;
-                $xmlContent .= '          <directory>activities/'.$modname.'_'.$moduleid.'</directory>'.PHP_EOL;
+                $xmlContent .= '          <directory>activities/'.$modname.'_'.$moduleId.'</directory>'.PHP_EOL;
                 $xmlContent .= '          <userinfo>'.($hasUserinfo ? '1' : '0').'</userinfo>'.PHP_EOL;
                 $xmlContent .= '        </activity>'.PHP_EOL;
             }
@@ -557,26 +803,25 @@ class MoodleExport
         }
 
         $xmlContent .= '      <course>'.PHP_EOL;
-        $xmlContent .= '        <courseid>'.$courseInfo['real_id'].'</courseid>'.PHP_EOL;
-        $xmlContent .= '        <title>'.htmlspecialchars((string) $courseInfo['title']).'</title>'.PHP_EOL;
+        $xmlContent .= '        <courseid>'.($courseInfo['real_id'] ?? 0).'</courseid>'.PHP_EOL;
+        $xmlContent .= '        <title>'.htmlspecialchars((string) ($courseInfo['title'] ?? '')).'</title>'.PHP_EOL;
         $xmlContent .= '        <directory>course</directory>'.PHP_EOL;
         $xmlContent .= '      </course>'.PHP_EOL;
 
         $xmlContent .= '    </contents>'.PHP_EOL;
 
         $xmlContent .= '    <settings>'.PHP_EOL;
-        $activities = $activitiesFlat;
-        $settings = $this->exportBackupSettings($sections, $activities);
+        $settings = $this->exportBackupSettings($sections, $activitiesFlat);
         foreach ($settings as $setting) {
             $xmlContent .= '      <setting>'.PHP_EOL;
-            $xmlContent .= '        <level>'.htmlspecialchars($setting['level']).'</level>'.PHP_EOL;
-            $xmlContent .= '        <name>'.htmlspecialchars($setting['name']).'</name>'.PHP_EOL;
-            $xmlContent .= '        <value>'.$setting['value'].'</value>'.PHP_EOL;
+            $xmlContent .= '        <level>'.htmlspecialchars((string) $setting['level']).'</level>'.PHP_EOL;
+            $xmlContent .= '        <name>'.htmlspecialchars((string) $setting['name']).'</name>'.PHP_EOL;
+            $xmlContent .= '        <value>'.htmlspecialchars((string) $setting['value']).'</value>'.PHP_EOL;
             if (isset($setting['section'])) {
-                $xmlContent .= '        <section>'.htmlspecialchars($setting['section']).'</section>'.PHP_EOL;
+                $xmlContent .= '        <section>'.htmlspecialchars((string) $setting['section']).'</section>'.PHP_EOL;
             }
             if (isset($setting['activity'])) {
-                $xmlContent .= '        <activity>'.htmlspecialchars($setting['activity']).'</activity>'.PHP_EOL;
+                $xmlContent .= '        <activity>'.htmlspecialchars((string) $setting['activity']).'</activity>'.PHP_EOL;
             }
             $xmlContent .= '      </setting>'.PHP_EOL;
         }
@@ -585,419 +830,630 @@ class MoodleExport
         $xmlContent .= '  </information>'.PHP_EOL;
         $xmlContent .= '</moodle_backup>';
 
-        $xmlFile = $destinationDir.'/moodle_backup.xml';
-        file_put_contents($xmlFile, $xmlContent);
+        file_put_contents($destinationDir.'/moodle_backup.xml', $xmlContent);
     }
 
     /**
-     * Builds the sections array for moodle_backup.xml and for sections/* export.
-     * Defensive: if no learnpaths are present/selected, only "General" (section 0) is emitted.
-     * When LP exist, behavior remains unchanged.
+     * Builds the sections array for moodle_backup.xml and sections/* export.
+     *
+     * @param array<int,array<string,mixed>>|null $activities
+     * @return array<int,array<string,mixed>>
      */
-    private function getSections(): array
+    private function getSections(?array $activities = null): array
     {
-        $sectionExport = new SectionExport($this->course);
-        $sections = [];
-
-        // Resolve LP bag defensively (constant or string key; or none)
-        $lpBag =
-            $this->course->resources[\defined('RESOURCE_LEARNPATH') ? RESOURCE_LEARNPATH : 'learnpath']
-            ?? $this->course->resources['learnpath']
-            ?? [];
-
-        if (!empty($lpBag) && \is_array($lpBag)) {
-            foreach ($lpBag as $learnpath) {
-                // Unwrap if needed
-                $lp = (\is_object($learnpath) && isset($learnpath->obj) && \is_object($learnpath->obj))
-                    ? $learnpath->obj
-                    : $learnpath;
-
-                // Some exports use string '1' or int 1 for LP type = learnpath
-                $lpType = \is_object($lp) && isset($lp->lp_type) ? (string) $lp->lp_type : '';
-                if ('1' === $lpType) {
-                    $sections[] = $sectionExport->getSectionData($learnpath);
-                }
-            }
+        if (null === $activities) {
+            $activities = $this->getActivities();
         }
 
-        // Always add "General" (section 0)
-        $sections[] = [
-            'id' => 0,
-            'number' => 0,
-            'name' => get_lang('General'),
-            'summary' => get_lang('General course resources'),
-            'sequence' => 0,
-            'visible' => 1,
-            'timemodified' => time(),
-            'activities' => $sectionExport->getActivitiesForGeneral(),
-        ];
+        $activitiesBySection = $this->groupActivitiesBySection($activities);
+        $sectionExport = new SectionExport($this->course, $activitiesBySection);
+        $sections = [];
+        $seenSectionIds = [];
+
+        $learnpaths = $this->getLearnpaths();
+        usort(
+            $learnpaths,
+            fn ($a, $b): int => $this->getLearnpathSortOrder($a) <=> $this->getLearnpathSortOrder($b)
+        );
+
+        foreach ($learnpaths as $learnpath) {
+            $lp = $this->unwrapLearnpath($learnpath);
+
+            if ((int) ($lp->lp_type ?? 0) !== 1) {
+                continue;
+            }
+
+            $sectionId = (int) ($lp->source_id ?? $lp->id ?? 0);
+            if ($sectionId <= 0 || isset($seenSectionIds[$sectionId])) {
+                continue;
+            }
+
+            $sectionData = $sectionExport->getSectionData($lp);
+            $resolvedSectionId = (int) ($sectionData['id'] ?? 0);
+
+            if ($resolvedSectionId <= 0 || isset($seenSectionIds[$resolvedSectionId])) {
+                continue;
+            }
+
+            $sections[] = $sectionData;
+            $seenSectionIds[$resolvedSectionId] = true;
+        }
+
+        if (!isset($seenSectionIds[0])) {
+            $sections[] = [
+                'id' => 0,
+                'number' => 0,
+                'name' => get_lang('General'),
+                'summary' => get_lang('GeneralResourcesCourse'),
+                'sequence' => 0,
+                'visible' => 1,
+                'timemodified' => time(),
+                'activities' => $sectionExport->getActivitiesForGeneral(),
+            ];
+        }
 
         return $sections;
     }
 
+    /**
+     * Get all activities from the course.
+     *
+     * This list includes:
+     * - real Moodle activities
+     * - Chamilo-only metadata pseudo-activities (attendance/thematic/gradebook)
+     *
+     * @return array<int,array<string,mixed>>
+     */
     private function getActivities(): array
     {
-        @error_log('[MoodleExport::getActivities] Start');
-
         $activities = [];
+        $orderBySection = [];
+
+        $documents = $this->getDocumentBucket();
+        if (!empty($documents)) {
+            $activities[] = [
+                'id' => ActivityExport::DOCS_MODULE_ID,
+                'sectionid' => 0,
+                'modulename' => 'folder',
+                'moduleid' => ActivityExport::DOCS_MODULE_ID,
+                'title' => 'Documents',
+                'order' => 0,
+            ];
+        }
+
+        // Build activities from LP items first to preserve LP order and unique LP-based module ids.
+        $learnpaths = $this->getLearnpaths();
+        usort(
+            $learnpaths,
+            fn ($a, $b): int => $this->getLearnpathSortOrder($a) <=> $this->getLearnpathSortOrder($b)
+        );
+
+        foreach ($learnpaths as $learnpath) {
+            $lp = $this->unwrapLearnpath($learnpath);
+
+            if ((int) ($lp->lp_type ?? 0) !== 1) {
+                continue;
+            }
+
+            $sectionId = (int) ($lp->source_id ?? $lp->id ?? 0);
+            if ($sectionId <= 0) {
+                continue;
+            }
+
+            $items = (array) ($lp->items ?? []);
+            foreach ($items as $item) {
+                if (!is_array($item)) {
+                    continue;
+                }
+
+                $lpItemId = isset($item['id']) ? (int) $item['id'] : 0;
+                $itemType = (string) ($item['item_type'] ?? '');
+                $path = $item['path'] ?? null;
+                $title = (string) ($item['title'] ?? '');
+                $order = isset($item['display_order']) ? (int) $item['display_order'] : 0;
+
+                $moduleName = null;
+                $instanceId = null;
+
+                if ('quiz' === $itemType) {
+                    $moduleName = 'quiz';
+                    $instanceId = is_numeric($path) ? (int) $path : null;
+                } elseif ('link' === $itemType) {
+                    $moduleName = 'url';
+                    $instanceId = is_numeric($path) ? (int) $path : null;
+                } elseif ('student_publication' === $itemType || 'work' === $itemType) {
+                    $moduleName = 'assign';
+                    $instanceId = is_numeric($path) ? (int) $path : null;
+                } elseif ('survey' === $itemType) {
+                    $moduleName = 'feedback';
+                    $instanceId = is_numeric($path) ? (int) $path : null;
+                } elseif ('forum' === $itemType) {
+                    $moduleName = 'forum';
+                    $instanceId = is_numeric($path) ? (int) $path : null;
+                } elseif ('glossary' === $itemType) {
+                    $moduleName = 'glossary';
+                    $instanceId = 1;
+                    if ('' === $title) {
+                        $title = get_lang('Glossary');
+                    }
+                    self::flagActivityUserinfo('glossary', 1, true);
+                } elseif ('document' === $itemType) {
+                    $documentId = is_numeric($path) ? (int) $path : 0;
+                    if ($documentId > 0) {
+                        $document = DocumentManager::get_document_data_by_id(
+                            $documentId,
+                            (string) ($this->course->code ?? '')
+                        );
+
+                        if (!empty($document)) {
+                            $documentPath = (string) ($document['path'] ?? '');
+                            $extension = strtolower((string) pathinfo($documentPath, PATHINFO_EXTENSION));
+
+                            if (in_array($extension, ['html', 'htm'], true)) {
+                                $moduleName = 'page';
+                                $instanceId = $documentId;
+                                if ('' === $title) {
+                                    $title = (string) ($document['title'] ?? '');
+                                }
+                            } elseif (($document['filetype'] ?? '') === 'file') {
+                                $moduleName = 'resource';
+                                $instanceId = $documentId;
+                                if ('' === $title) {
+                                    $title = (string) ($document['title'] ?? '');
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (empty($moduleName) || empty($instanceId)) {
+                    continue;
+                }
+
+                $moduleId = $this->resolveLpModuleId($moduleName, $lpItemId, (int) $instanceId);
+
+                $activities[] = [
+                    'id' => (int) $instanceId,
+                    'sectionid' => $sectionId,
+                    'modulename' => $moduleName,
+                    'moduleid' => $moduleId,
+                    'title' => '' !== $title ? $title : $moduleName,
+                    'order' => $order,
+                ];
+
+                if ('forum' === $moduleName) {
+                    self::flagActivityUserinfo('forum', $moduleId, true);
+                }
+            }
+        }
+
+        // General intro page.
+        $toolIntroBucket =
+            $this->course->resources[\defined('RESOURCE_TOOL_INTRO') ? RESOURCE_TOOL_INTRO : 'tool_intro']
+            ?? $this->course->resources['tool_intro']
+            ?? [];
+
+        if (is_array($toolIntroBucket) && isset($toolIntroBucket['course_homepage'])) {
+            $activities[] = [
+                'id' => 0,
+                'sectionid' => 0,
+                'modulename' => 'page',
+                'moduleid' => ActivityExport::INTRO_PAGE_MODULE_ID,
+                'title' => get_lang('Introduction'),
+                'order' => 0,
+            ];
+        }
+
+        // General standalone activities not linked to LP.
         $glossaryAdded = false;
         $wikiAdded = false;
-
-        // Build a "documents" bucket (root-level files/folders)
-        $docBucket = [];
-        if (\defined('RESOURCE_DOCUMENT') && isset($this->course->resources[RESOURCE_DOCUMENT]) && \is_array($this->course->resources[RESOURCE_DOCUMENT])) {
-            $docBucket = $this->course->resources[RESOURCE_DOCUMENT];
-        } elseif (isset($this->course->resources['document']) && \is_array($this->course->resources['document'])) {
-            $docBucket = $this->course->resources['document'];
-        }
-        @error_log('[MoodleExport::getActivities] docBucket='.count($docBucket));
-
-        // Add a visible "Documents" folder activity if we actually have documents
-        if (!empty($docBucket)) {
-            $activities[] = [
-                'id'        => ActivityExport::DOCS_MODULE_ID,
-                'sectionid' => 0,
-                'modulename'=> 'folder',
-                'moduleid'  => ActivityExport::DOCS_MODULE_ID,
-                'title'     => 'Documents',
-            ];
-            @error_log('[MoodleExport::getActivities] Added visible folder activity "Documents" (moduleid=' . ActivityExport::DOCS_MODULE_ID . ').');
-        }
-
-        $htmlPageIds = [];
 
         foreach ($this->course->resources as $resourceType => $resources) {
             if (!\is_array($resources) || empty($resources)) {
                 continue;
             }
 
-            foreach ($resources as $resource) {
-                $exportClass = null;
-                $moduleName = '';
-                $title = '';
-                $id = 0;
+            foreach ($resources as $resourceId => $resource) {
+                if (!\is_object($resource)) {
+                    continue;
+                }
 
-                // Quiz
                 if ($this->isType($resourceType, 'RESOURCE_QUIZ', ['quiz'])) {
-                    if (($resource->obj->iid ?? 0) > 0) {
-                        $exportClass = QuizExport::class;
-                        $moduleName = 'quiz';
-                        $id = (int) $resource->obj->iid;
-                        $title = (string) $resource->obj->title;
+                    $quizId = (int) ($resource->obj->iid ?? 0);
+                    if ($quizId > 0 && !$this->isActivityInLearnpath('quiz', $quizId)) {
+                        $activities[] = [
+                            'id' => $quizId,
+                            'sectionid' => 0,
+                            'modulename' => 'quiz',
+                            'moduleid' => $quizId,
+                            'title' => (string) ($resource->obj->title ?? 'Quiz'),
+                            'order' => 0,
+                        ];
                     }
+                    continue;
                 }
 
-                // URL
                 if ($this->isType($resourceType, 'RESOURCE_LINK', ['link'])) {
-                    if (($resource->source_id ?? 0) > 0) {
-                        $exportClass = UrlExport::class;
-                        $moduleName = 'url';
-                        $id = (int) $resource->source_id;
-                        $title = (string) ($resource->title ?? '');
+                    $linkId = (int) ($resource->source_id ?? 0);
+                    if ($linkId > 0 && !$this->isActivityInLearnpath('link', $linkId)) {
+                        $activities[] = [
+                            'id' => $linkId,
+                            'sectionid' => 0,
+                            'modulename' => 'url',
+                            'moduleid' => $linkId,
+                            'title' => (string) ($resource->title ?? ''),
+                            'order' => 0,
+                        ];
                     }
+                    continue;
                 }
-                // Glossary (only once)
-                elseif ($this->isType($resourceType, 'RESOURCE_GLOSSARY', ['glossary'])) {
-                    if (($resource->glossary_id ?? 0) > 0 && !$glossaryAdded) {
-                        $exportClass = GlossaryExport::class;
-                        $moduleName = 'glossary';
-                        $id = 1;
-                        $title = get_lang('Glossary');
+
+                if ($this->isType($resourceType, 'RESOURCE_WORK', ['work', 'assign'])) {
+                    $workId = (int) (
+                        $resource->source_id
+                        ?? $resource->params['iid']
+                        ?? 0
+                    );
+
+                    if ($workId > 0 && !$this->isActivityInLearnpath('work', $workId)) {
+                        $activities[] = [
+                            'id' => $workId,
+                            'sectionid' => 0,
+                            'modulename' => 'assign',
+                            'moduleid' => $workId,
+                            'title' => (string) ($resource->params['title'] ?? 'Assignment'),
+                            'order' => 0,
+                            '__from' => 'work',
+                        ];
+                    }
+                    continue;
+                }
+
+                if ($this->isType($resourceType, 'RESOURCE_SURVEY', ['survey', 'feedback'])) {
+                    $surveyId = (int) ($resource->source_id ?? 0);
+                    if ($surveyId > 0 && !$this->isActivityInLearnpath('survey', $surveyId)) {
+                        $activities[] = [
+                            'id' => $surveyId,
+                            'sectionid' => 0,
+                            'modulename' => 'feedback',
+                            'moduleid' => $surveyId,
+                            'title' => (string) ($resource->params['title'] ?? ''),
+                            'order' => 0,
+                        ];
+                    }
+                    continue;
+                }
+
+                if ($this->isType($resourceType, 'RESOURCE_FORUM', ['forum'])) {
+                    $forumId = (int) ($resource->obj->iid ?? $resource->source_id ?? 0);
+                    if ($forumId > 0 && !$this->isActivityInLearnpath('forum', $forumId)) {
+                        $activities[] = [
+                            'id' => $forumId,
+                            'sectionid' => 0,
+                            'modulename' => 'forum',
+                            'moduleid' => $forumId,
+                            'title' => (string) ($resource->obj->forum_title ?? 'Forum'),
+                            'order' => 0,
+                        ];
+                        self::flagActivityUserinfo('forum', $forumId, true);
+                    }
+                    continue;
+                }
+
+                if ($this->isType($resourceType, 'RESOURCE_GLOSSARY', ['glossary'])) {
+                    $glossaryId = (int) ($resource->glossary_id ?? 0);
+                    if ($glossaryId > 0 && !$glossaryAdded) {
+                        $activities[] = [
+                            'id' => 1,
+                            'sectionid' => 0,
+                            'modulename' => 'glossary',
+                            'moduleid' => 1,
+                            'title' => get_lang('Glossary'),
+                            'order' => 0,
+                        ];
+                        self::flagActivityUserinfo('glossary', 1, true);
                         $glossaryAdded = true;
-                        self::flagActivityUserinfo('glossary', $id, true);
                     }
+                    continue;
                 }
-                // Forum
-                elseif ($this->isType($resourceType, 'RESOURCE_FORUM', ['forum'])) {
-                    if (($resource->source_id ?? 0) > 0) {
-                        $exportClass = ForumExport::class;
-                        $moduleName = 'forum';
-                        $id = (int) ($resource->obj->iid ?? 0);
-                        $title = (string) ($resource->obj->forum_title ?? '');
-                        self::flagActivityUserinfo('forum', $id, true);
+
+                if ($this->isType($resourceType, 'RESOURCE_DOCUMENT', ['document'])) {
+                    $documentId = (int) ($resource->source_id ?? 0);
+                    if ($documentId <= 0) {
+                        continue;
                     }
+
+                    $documentPath = (string) ($resource->path ?? '');
+                    $extension = strtolower((string) pathinfo($documentPath, PATHINFO_EXTENSION));
+
+                    // Standalone HTML documents become general pages.
+                    if (
+                        !$this->isActivityInLearnpath('document', $documentId, $documentPath)
+                        && in_array($extension, ['html', 'htm'], true)
+                    ) {
+                        $activities[] = [
+                            'id' => $documentId,
+                            'sectionid' => 0,
+                            'modulename' => 'page',
+                            'moduleid' => $documentId,
+                            'title' => (string) ($resource->title ?? ''),
+                            'order' => 0,
+                        ];
+                    }
+                    continue;
                 }
-                // Documents (as Page or Resource)
-                elseif ($this->isType($resourceType, 'RESOURCE_DOCUMENT', ['document'])) {
-                    $resPath = (string) ($resource->path ?? '');
-                    $resTitle = (string) ($resource->title ?? '');
-                    $fileType = (string) ($resource->file_type ?? '');
 
-                    $isRoot = ('' !== $resPath && 1 === substr_count($resPath, '/'));
-                    $ext = '' !== $resPath ? pathinfo($resPath, PATHINFO_EXTENSION) : '';
+                if ($this->isType($resourceType, 'RESOURCE_COURSEDESCRIPTION', ['coursedescription', 'course_description'])) {
+                    $descriptionId = (int) ($resource->source_id ?? 0);
+                    if ($descriptionId > 0) {
+                        $activities[] = [
+                            'id' => $descriptionId,
+                            'sectionid' => 0,
+                            'modulename' => 'label',
+                            'moduleid' => $descriptionId,
+                            'title' => (string) ($resource->title ?? ''),
+                            'order' => 0,
+                        ];
+                    }
+                    continue;
+                }
 
-                    // Root HTML -> export as "page"
-                    if ('html' === $ext && $isRoot) {
-                        $exportClass = PageExport::class;
-                        $moduleName = 'page';
+                if ($this->isType($resourceType, 'RESOURCE_WIKI', ['wiki'])) {
+                    if (!$wikiAdded) {
+                        $activities[] = [
+                            'id' => self::WIKI_MODULE_ID,
+                            'sectionid' => 0,
+                            'modulename' => 'wiki',
+                            'moduleid' => self::WIKI_MODULE_ID,
+                            'title' => get_lang('Wiki') ?: 'Wiki',
+                            'order' => 0,
+                        ];
+                        self::flagActivityUserinfo('wiki', self::WIKI_MODULE_ID, true);
+                        $wikiAdded = true;
+                    }
+                    continue;
+                }
+
+                if ($this->isType($resourceType, 'RESOURCE_ATTENDANCE', ['attendance'])) {
+                    $attendanceObj = (isset($resource->obj) && \is_object($resource->obj)) ? $resource->obj : $resource;
+
+                    $params = [];
+                    if (isset($attendanceObj->params)) {
+                        if (\is_array($attendanceObj->params)) {
+                            $params = $attendanceObj->params;
+                        } elseif (\is_object($attendanceObj->params)) {
+                            $params = (array) $attendanceObj->params;
+                        }
+                    }
+
+                    $id = 0;
+                    if (isset($params['id']) && \is_numeric($params['id'])) {
+                        $id = (int) $params['id'];
+                    } elseif (isset($attendanceObj->iid) && \is_numeric($attendanceObj->iid)) {
+                        $id = (int) $attendanceObj->iid;
+                    } elseif (isset($attendanceObj->id) && \is_numeric($attendanceObj->id)) {
+                        $id = (int) $attendanceObj->id;
+                    } elseif (isset($resource->source_id) && \is_numeric($resource->source_id)) {
                         $id = (int) $resource->source_id;
-                        $title = $resTitle;
-                        $htmlPageIds[] = $id;
                     }
 
-                    // Regular file -> export as "resource" (avoid colliding with pages)
-                    if ('file' === $fileType && !\in_array($resource->source_id, $htmlPageIds, true)) {
-                        $resourceExport = new ResourceExport($this->course);
-                        if ($resourceExport->getSectionIdForActivity((int) $resource->source_id, $resourceType) > 0) {
-                            if ($isRoot) {
-                                $exportClass = ResourceExport::class;
-                                $moduleName = 'resource';
-                                $id = (int) $resource->source_id;
-                                $title = '' !== $resTitle ? $resTitle : (basename($resPath) ?: ('File '.$id));
+                    $title = '';
+                    foreach (['title', 'name'] as $key) {
+                        if (isset($params[$key]) && \is_string($params[$key])) {
+                            $value = trim((string) $params[$key]);
+                            if ('' !== $value) {
+                                $title = $value;
+                                break;
+                            }
+                        }
+
+                        if (isset($attendanceObj->{$key}) && \is_string($attendanceObj->{$key})) {
+                            $value = trim((string) $attendanceObj->{$key});
+                            if ('' !== $value) {
+                                $title = $value;
+                                break;
+                            }
+                        }
+
+                        if (isset($resource->{$key}) && \is_string($resource->{$key})) {
+                            $value = trim((string) $resource->{$key});
+                            if ('' !== $value) {
+                                $title = $value;
+                                break;
                             }
                         }
                     }
-                }
-                // Tool Intro -> treat "course_homepage" as a Page activity (id=0)
-                elseif ($this->isType($resourceType, 'RESOURCE_TOOL_INTRO', ['tool_intro'])) {
-                    // IMPORTANT: do not check source_id; the real key is obj->id
-                    $objId = (string) ($resource->obj->id ?? '');
-                    if ($objId === 'course_homepage') {
-                        $exportClass = PageExport::class;
-                        $moduleName = 'page';
-                        // Keep activity id = 0 → PageExport::getData(0, ...) reads the intro HTML
-                        $id = 0;
-                        $title = get_lang('Introduction');
-                    }
-                }
-                // Assignments
-                elseif ($this->isType($resourceType, 'RESOURCE_WORK', ['work', 'assign'])) {
-                    if (($resource->source_id ?? 0) > 0) {
-                        $exportClass = AssignExport::class;
-                        $moduleName = 'assign';
-                        $id = (int) $resource->source_id;
-                        $title = (string) ($resource->params['title'] ?? '');
-                    }
-                }
-                // Surveys -> Feedback
-                elseif ($this->isType($resourceType, 'RESOURCE_SURVEY', ['survey', 'feedback'])) {
-                    if (($resource->source_id ?? 0) > 0) {
-                        $exportClass = FeedbackExport::class;
-                        $moduleName = 'feedback';
-                        $id = (int) $resource->source_id;
-                        $title = (string) ($resource->params['title'] ?? '');
-                    }
-                }
-                // Course descriptions → Label
-                elseif ($this->isType($resourceType, 'RESOURCE_COURSEDESCRIPTION', ['coursedescription', 'course_description'])) {
-                    if (($resource->source_id ?? 0) > 0) {
-                        $exportClass = LabelExport::class;
-                        $moduleName  = 'label';
-                        $id          = (int) $resource->source_id;
-                        $title       = (string) ($resource->title ?? '');
-                    }
-                }
-                // Attendance (store as Chamilo-only metadata; NOT a Moodle activity)
-                elseif ($this->isType($resourceType, 'RESOURCE_ATTENDANCE', ['attendance'])) {
-                    // Resolve legacy id (iid) from possible fields
-                    $id = 0;
-                    if (isset($resource->obj->iid) && \is_numeric($resource->obj->iid)) {
-                        $id = (int) $resource->obj->iid;
-                    } elseif (isset($resource->source_id) && \is_numeric($resource->source_id)) {
-                        $id = (int) $resource->source_id;
-                    } elseif (isset($resource->obj->id) && \is_numeric($resource->obj->id)) {
-                        $id = (int) $resource->obj->id;
+
+                    if ('' === $title) {
+                        $title = 'Attendance';
                     }
 
-                    // Resolve title or fallback
-                    $title = '';
-                    foreach (['title','name'] as $k) {
-                        if (!empty($resource->obj->{$k}) && \is_string($resource->obj->{$k})) { $title = trim((string)$resource->obj->{$k}); break; }
-                        if (!empty($resource->{$k}) && \is_string($resource->{$k}))       { $title = trim((string)$resource->{$k}); break; }
-                    }
-                    if ($title === '') { $title = 'Attendance'; }
-
-                    // Section: best-effort (0 when unknown). We avoid calling any Attendance exporter here.
-                    $sectionId = 0;
-
-                    // IMPORTANT:
-                    // We register it with a pseudo module "attendance" for our own export step,
-                    // but we do NOT emit a Moodle activity nor include it in moodle_backup.xml.
                     $activities[] = [
-                        'id'         => $id,
-                        'sectionid'  => $sectionId,
+                        'id' => $id,
+                        'sectionid' => 0,
                         'modulename' => 'attendance',
-                        'moduleid'   => $id,
-                        'title'      => $title,
-                        '__from'     => 'attendance',
+                        'moduleid' => $id,
+                        'title' => $title,
+                        '__from' => 'attendance',
+                        'order' => 0,
                     ];
-
-                    @error_log('[MoodleExport::getActivities] ADD (Chamilo-only) attendance moduleid='.$id.' sectionid='.$sectionId.' title="'.str_replace(["\n","\r"],' ',$title).'"');
-                    // do NOT set $exportClass → keeps getActivities() side-effect free for Moodle
+                    continue;
                 }
-                // Thematic (Chamilo-only metadata)
-                elseif ($this->isType($resourceType, 'RESOURCE_THEMATIC', ['thematic'])) {
+
+                if ($this->isType($resourceType, 'RESOURCE_THEMATIC', ['thematic'])) {
                     $id = (int) ($resource->obj->iid ?? $resource->source_id ?? $resource->obj->id ?? 0);
                     if ($id > 0) {
                         $title = '';
-                        foreach (['title','name'] as $k) {
-                            if (!empty($resource->obj->{$k})) { $title = trim((string) $resource->obj->{$k}); break; }
-                            if (!empty($resource->{$k}))       { $title = trim((string) $resource->{$k}); break; }
+                        foreach (['title', 'name'] as $key) {
+                            if (!empty($resource->obj->{$key})) {
+                                $title = trim((string) $resource->obj->{$key});
+                                break;
+                            }
+                            if (!empty($resource->{$key})) {
+                                $title = trim((string) $resource->{$key});
+                                break;
+                            }
                         }
-                        if ($title === '') $title = 'Thematic';
+                        if ('' === $title) {
+                            $title = 'Thematic';
+                        }
 
                         $activities[] = [
-                            'id'         => $id,
-                            'sectionid'  => 0,            // or the real topic if you track it
-                            'modulename' => 'thematic',   // Chamilo-only meta
-                            'moduleid'   => $id,
-                            'title'      => $title,
-                            '__from'     => 'thematic',
+                            'id' => $id,
+                            'sectionid' => 0,
+                            'modulename' => 'thematic',
+                            'moduleid' => $id,
+                            'title' => $title,
+                            '__from' => 'thematic',
+                            'order' => 0,
                         ];
-                        @error_log('[MoodleExport::getActivities] ADD (Chamilo-only) thematic id='.$id);
                     }
+                    continue;
                 }
-                // Wiki (only once)
-                elseif ($this->isType($resourceType, 'RESOURCE_WIKI', ['wiki'])) {
-                    if (!$wikiAdded) {
-                        $exportClass = WikiExport::class;
-                        $moduleName  = 'wiki';
-                        $id          = self::WIKI_MODULE_ID;
-                        $title       = get_lang('Wiki') ?: 'Wiki';
-                        $wikiAdded = true;
 
-                        self::flagActivityUserinfo('wiki', $id, true);
-                    } else {
-                        continue;
-                    }
-                }
-                // Gradebook (Chamilo-only; exports chamilo/gradebook/*.json; NOT a Moodle activity)
-                elseif ($this->isType($resourceType, 'RESOURCE_GRADEBOOK', ['gradebook'])) {
-                    // One snapshot per course/session; treat as a single meta activity.
-                    $id = 1; // local activity id (opaque; not used by Moodle)
-                    $title = 'Gradebook';
-
+                if ($this->isType($resourceType, 'RESOURCE_GRADEBOOK', ['gradebook'])) {
                     $activities[] = [
-                        'id'         => $id,
-                        'sectionid'  => 0, // place in "General" topic (informational only)
+                        'id' => 1,
+                        'sectionid' => 0,
                         'modulename' => 'gradebook',
-                        'moduleid'   => self::GRADEBOOK_MODULE_ID,
-                        'title'      => $title,
-                        '__from'     => 'gradebook',
+                        'moduleid' => self::GRADEBOOK_MODULE_ID,
+                        'title' => 'Gradebook',
+                        '__from' => 'gradebook',
+                        'order' => 0,
                     ];
-                    @error_log('[MoodleExport::getActivities] ADD (Chamilo-only) gradebook moduleid=' . self::GRADEBOOK_MODULE_ID);
-                }
-
-                // Emit activity if resolved
-                if ($exportClass && $moduleName) {
-                    /** @var object $exportInstance */
-                    $exportInstance = new $exportClass($this->course);
-                    $sectionId = $exportInstance->getSectionIdForActivity($id, $resourceType);
-                    $activities[] = [
-                        'id' => $id,
-                        'sectionid' => $sectionId,
-                        'modulename' => $moduleName,
-                        'moduleid' => $id,
-                        'title' => $title,
-                    ];
-                    @error_log('[MoodleExport::getActivities] ADD modulename='.$moduleName.' moduleid='.$id.' sectionid='.$sectionId.' title="'.str_replace(["\n","\r"],' ',$title).'"');
+                    continue;
                 }
             }
         }
 
-        // ---- Append synthetic News forum from Chamilo announcements (if any) ----
+        // Synthetic announcements forum.
         try {
-            $res = \is_array($this->course->resources ?? null) ? $this->course->resources : [];
+            $resources = \is_array($this->course->resources ?? null) ? $this->course->resources : [];
             $annBag =
-                ($res[\defined('RESOURCE_ANNOUNCEMENT') ? RESOURCE_ANNOUNCEMENT : 'announcements'] ?? null)
-                ?? ($res['announcements'] ?? null)
-                ?? ($res['announcement'] ?? null)
+                ($resources[\defined('RESOURCE_ANNOUNCEMENT') ? RESOURCE_ANNOUNCEMENT : 'announcements'] ?? null)
+                ?? ($resources['announcements'] ?? null)
+                ?? ($resources['announcement'] ?? null)
                 ?? [];
 
             if (!empty($annBag) && !$this->hasAnnouncementsLikeForum($activities)) {
                 $activities[] = [
-                    'id'         => 1, // local activity id for our synthetic forum
-                    'sectionid'  => 0, // place in "General" topic
+                    'id' => 1,
+                    'sectionid' => 0,
                     'modulename' => 'forum',
-                    'moduleid'   => self::ANNOUNCEMENTS_MODULE_ID,
-                    'title'      => get_lang('Announcements'),
-                    '__from'     => 'announcements',
+                    'moduleid' => self::ANNOUNCEMENTS_MODULE_ID,
+                    'title' => get_lang('Announcements'),
+                    '__from' => 'announcements',
+                    'order' => 0,
                 ];
-                // Forum contains posts, mark userinfo = true
+
                 self::flagActivityUserinfo('forum', self::ANNOUNCEMENTS_MODULE_ID, true);
-                @error_log('[MoodleExport::getActivities] Added synthetic News forum (announcements) moduleid='.self::ANNOUNCEMENTS_MODULE_ID);
             }
         } catch (\Throwable $e) {
             @error_log('[MoodleExport::getActivities][WARN] announcements detection: '.$e->getMessage());
         }
 
-        @error_log('[MoodleExport::getActivities] Done. total='.count($activities));
-        return $activities;
+        // Stable ordering per section.
+        $grouped = [];
+        foreach ($activities as $activity) {
+            $sectionId = (int) ($activity['sectionid'] ?? 0);
+
+            if (!isset($grouped[$sectionId])) {
+                $grouped[$sectionId] = [];
+                $orderBySection[$sectionId] = 0;
+            }
+
+            $order = (int) ($activity['order'] ?? 0);
+            if ($order <= 0) {
+                $orderBySection[$sectionId]++;
+                $order = 1000 + $orderBySection[$sectionId];
+            }
+
+            $activity['_sort'] = $order;
+            $grouped[$sectionId][] = $activity;
+        }
+
+        $sorted = [];
+        foreach ($grouped as $sectionId => $list) {
+            usort(
+                $list,
+                static fn (array $a, array $b): int => (int) $a['_sort'] <=> (int) $b['_sort']
+            );
+
+            foreach ($list as $row) {
+                unset($row['_sort']);
+                $sorted[] = $row;
+            }
+        }
+
+        return $sorted;
     }
 
     /**
-     * Collect Moodle URL activities from legacy "link" bucket.
-     *
-     * It is defensive against different wrappers:
-     * - Accepts link objects as $wrap->obj or directly as $wrap.
-     * - Resolves title from title|name|url (last-resort).
-     * - Maps category_id to a section name (category title) if available.
+     * Collect Moodle URL activities from legacy link bucket.
      *
      * @return UrlExport[]
      */
     private function buildUrlActivities(): array
     {
-        $res = \is_array($this->course->resources ?? null) ? $this->course->resources : [];
+        $resources = \is_array($this->course->resources ?? null) ? $this->course->resources : [];
 
-        // Buckets (defensive: allow legacy casings)
-        $links = $res['link'] ?? $res['Link'] ?? [];
-        $cats  = $res['link_category'] ?? $res['Link_Category'] ?? [];
+        $links = $resources['link'] ?? $resources['Link'] ?? [];
+        $categories = $resources['link_category'] ?? $resources['Link_Category'] ?? [];
 
-        // Map category_id → label for section naming
-        $catLabel = [];
-        foreach ($cats as $cid => $cwrap) {
-            if (!\is_object($cwrap)) {
+        $categoryLabels = [];
+        foreach ($categories as $categoryId => $categoryWrap) {
+            if (!\is_object($categoryWrap)) {
                 continue;
             }
-            $c = (isset($cwrap->obj) && \is_object($cwrap->obj)) ? $cwrap->obj : $cwrap;
+
+            $category = (isset($categoryWrap->obj) && \is_object($categoryWrap->obj)) ? $categoryWrap->obj : $categoryWrap;
+
             $label = '';
-            foreach (['title', 'name'] as $k) {
-                if (!empty($c->{$k}) && \is_string($c->{$k})) {
-                    $label = trim((string) $c->{$k});
+            foreach (['title', 'name'] as $key) {
+                if (!empty($category->{$key}) && \is_string($category->{$key})) {
+                    $label = trim((string) $category->{$key});
                     break;
                 }
             }
-            $catLabel[(int) $cid] = $label !== '' ? $label : ('Category #'.(int) $cid);
+
+            $categoryLabels[(int) $categoryId] = '' !== $label ? $label : ('Category #'.(int) $categoryId);
         }
 
         $out = [];
-        foreach ($links as $id => $lwrap) {
-            if (!\is_object($lwrap)) {
-                continue;
-            }
-            $L = (isset($lwrap->obj) && \is_object($lwrap->obj)) ? $lwrap->obj : $lwrap;
-
-            $url = (string) ($L->url ?? '');
-            if ($url === '') {
-                // Skip invalid URL records
+        foreach ($links as $id => $linkWrap) {
+            if (!\is_object($linkWrap)) {
                 continue;
             }
 
-            // Resolve a robust title
+            $link = (isset($linkWrap->obj) && \is_object($linkWrap->obj)) ? $linkWrap->obj : $linkWrap;
+
+            $url = (string) ($link->url ?? '');
+            if ('' === $url) {
+                continue;
+            }
+
             $title = '';
-            foreach (['title', 'name'] as $k) {
-                if (!empty($L->{$k}) && \is_string($L->{$k})) {
-                    $title = trim((string) $L->{$k});
+            foreach (['title', 'name'] as $key) {
+                if (!empty($link->{$key}) && \is_string($link->{$key})) {
+                    $title = trim((string) $link->{$key});
                     break;
                 }
             }
-            if ($title === '') {
-                $title = $url; // last resort: use the URL itself
+            if ('' === $title) {
+                $title = $url;
             }
 
-            $target = (string) ($L->target ?? '');
-            $intro  = (string) ($L->description ?? '');
-            $cid    = (int) ($L->category_id ?? 0);
+            $target = (string) ($link->target ?? '');
+            $intro = (string) ($link->description ?? '');
+            $categoryId = (int) ($link->category_id ?? 0);
+            $sectionName = $categoryLabels[$categoryId] ?? null;
 
-            $sectionName = $catLabel[$cid] ?? null;
-
-            // UrlExport ctor: (string $title, string $url, ?string $section = null, ?string $introHtml = null, ?string $target = null)
-            $urlAct = new UrlExport($title, $url, $sectionName ?: null, $intro ?: null, $target ?: null);
-            if (method_exists($urlAct, 'setLegacyId')) {
-                $urlAct->setLegacyId((int) $id);
+            $urlActivity = new UrlExport($title, $url, $sectionName ?: null, $intro ?: null, $target ?: null);
+            if (method_exists($urlActivity, 'setLegacyId')) {
+                $urlActivity->setLegacyId((int) $id);
             }
 
-            $out[] = $urlAct;
+            $out[] = $urlActivity;
         }
 
         return $out;
@@ -1005,7 +1461,6 @@ class MoodleExport
 
     /**
      * Enqueue all URL activities into the export pipeline.
-     * Will try queueActivity(), then addActivity(), then $this->activities[].
      */
     private function enqueueUrlActivities(): void
     {
@@ -1017,16 +1472,16 @@ class MoodleExport
         }
 
         if (method_exists($this, 'queueActivity')) {
-            foreach ($urls as $act) {
-                $this->queueActivity($act);
+            foreach ($urls as $activity) {
+                $this->queueActivity($activity);
             }
             @error_log('[MoodleExport] URL activities enqueued via queueActivity(): '.count($urls));
             return;
         }
 
         if (method_exists($this, 'addActivity')) {
-            foreach ($urls as $act) {
-                $this->addActivity($act);
+            foreach ($urls as $activity) {
+                $this->addActivity($activity);
             }
             @error_log('[MoodleExport] URL activities appended via addActivity(): '.count($urls));
             return;
@@ -1041,15 +1496,494 @@ class MoodleExport
         @error_log('[MoodleExport][WARN] Could not enqueue URL activities (no compatible method found)');
     }
 
-    private function exportSections(string $exportDir): void
+    /**
+     * Export the course sections.
+     *
+     * @param array<int,array<string,mixed>> $activities
+     * @param array<int,array<string,mixed>> $sections
+     */
+    private function exportSections(string $exportDir, array $activities, array $sections): void
     {
-        $sections = $this->getSections();
+        $activitiesBySection = $this->groupActivitiesBySection($activities);
+        $sectionExport = new SectionExport($this->course, $activitiesBySection);
+
         foreach ($sections as $section) {
-            $sectionExport = new SectionExport($this->course);
-            $sectionExport->exportSection($section['id'], $exportDir);
+            $sectionExport->exportSection((int) ($section['id'] ?? 0), $exportDir);
         }
     }
 
+    /**
+     * Group only real Moodle activities by section.
+     *
+     * @param array<int,array<string,mixed>> $activities
+     * @return array<int,array<int,array<string,mixed>>>
+     */
+    private function groupActivitiesBySection(array $activities): array
+    {
+        $bySection = [];
+
+        foreach ($activities as $activity) {
+            $moduleName = (string) ($activity['modulename'] ?? '');
+            if (!$this->isRealMoodleActivity($moduleName)) {
+                continue;
+            }
+
+            $sectionId = (int) ($activity['sectionid'] ?? 0);
+
+            $bySection[$sectionId][] = [
+                'id' => (int) ($activity['id'] ?? 0),
+                'moduleid' => (int) ($activity['moduleid'] ?? 0),
+                'modulename' => $moduleName,
+                'name' => (string) ($activity['title'] ?? ''),
+                'title' => (string) ($activity['title'] ?? ''),
+                'sectionid' => $sectionId,
+            ];
+        }
+
+        return $bySection;
+    }
+
+    /**
+     * Returns true for real Moodle activities that must be part of sections and moodle_backup.xml.
+     */
+    private function isRealMoodleActivity(string $moduleName): bool
+    {
+        return in_array(
+            $moduleName,
+            ['folder', 'quiz', 'glossary', 'url', 'assign', 'forum', 'page', 'resource', 'feedback', 'label', 'wiki'],
+            true
+        );
+    }
+
+    /**
+     * Determine whether a legacy activity is already linked inside a learnpath.
+     */
+    private function isActivityInLearnpath(string $itemType, int $resourceId, ?string $documentPath = null): bool
+    {
+        $learnpaths = $this->getLearnpaths();
+        if (empty($learnpaths)) {
+            return false;
+        }
+
+        $needleType = $this->normalizeItemTypeForLpComparison($itemType);
+
+        foreach ($learnpaths as $learnpath) {
+            $lp = $this->unwrapLearnpath($learnpath);
+
+            if (empty($lp->items) || !is_array($lp->items)) {
+                continue;
+            }
+
+            foreach ($lp->items as $item) {
+                $lpType = $this->normalizeItemTypeForLpComparison((string) ($item['item_type'] ?? ''));
+                if ($lpType !== $needleType) {
+                    continue;
+                }
+
+                $lpPath = (string) ($item['path'] ?? '');
+                if ('' !== $lpPath && ctype_digit($lpPath) && (int) $lpPath === $resourceId) {
+                    return true;
+                }
+
+                if ('document' === $needleType && null !== $documentPath) {
+                    foreach ($this->buildDocumentLpCandidates($documentPath) as $candidate) {
+                        if ($lpPath === $candidate) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Normalize LP item types for comparisons.
+     */
+    private function normalizeItemTypeForLpComparison(string $type): string
+    {
+        return match ($type) {
+            'student_publication', 'work', 'assign' => 'work',
+            'link', 'url' => 'link',
+            'survey', 'feedback' => 'survey',
+            'page', 'resource' => 'document',
+            default => $type,
+        };
+    }
+
+    /**
+     * Resolve the exported module id for an LP occurrence.
+     */
+    private function resolveLpModuleId(string $moduleName, int $lpItemId, int $fallback): int
+    {
+        if ($lpItemId <= 0) {
+            return $fallback;
+        }
+
+        if (in_array($moduleName, ['folder', 'glossary'], true)) {
+            return $fallback;
+        }
+
+        return 900000000 + $lpItemId;
+    }
+
+    /**
+     * Get learnpaths defensively.
+     *
+     * @return array<int,mixed>
+     */
+    private function getLearnpaths(): array
+    {
+        $learnpaths =
+            $this->course->resources[\defined('RESOURCE_LEARNPATH') ? RESOURCE_LEARNPATH : 'learnpath']
+            ?? $this->course->resources['learnpath']
+            ?? [];
+
+        return is_array($learnpaths) ? $learnpaths : [];
+    }
+
+    /**
+     * Get the document bucket defensively.
+     *
+     * @return array<int,mixed>
+     */
+    private function getDocumentBucket(): array
+    {
+        $documents =
+            $this->course->resources[\defined('RESOURCE_DOCUMENT') ? RESOURCE_DOCUMENT : 'document']
+            ?? $this->course->resources['document']
+            ?? [];
+
+        return is_array($documents) ? $documents : [];
+    }
+
+
+    private function exportDocumentIndex(string $exportDir): void
+    {
+        $documents = $this->getDocumentBucket();
+        if (empty($documents)) {
+            return;
+        }
+
+        $hashById = $this->buildExportedDocumentHashMap($exportDir);
+
+        $indexDir = rtrim($exportDir, '/').'/chamilo/document';
+        if (!is_dir($indexDir) && !@mkdir($indexDir, api_get_permissions_for_new_directories(), true) && !is_dir($indexDir)) {
+            @error_log('[MoodleExport::exportDocumentIndex] ERROR cannot create '.$indexDir);
+
+            return;
+        }
+
+        $entries = [];
+        $seen = [];
+
+        foreach ($documents as $id => $wrap) {
+            if (!\is_object($wrap)) {
+                continue;
+            }
+
+            $doc = (isset($wrap->obj) && \is_object($wrap->obj)) ? $wrap->obj : $wrap;
+
+            $rawPath = (string) ($doc->path ?? $wrap->path ?? '');
+            if ('' === $rawPath) {
+                continue;
+            }
+
+            $fileType = strtolower((string) ($doc->file_type ?? $doc->filetype ?? $wrap->file_type ?? $wrap->filetype ?? ''));
+            $isFolder = 'folder' === $fileType || '/' === substr($rawPath, -1);
+
+            $relativePath = $this->normalizeDocumentIndexRelativePath($rawPath);
+            if ('' === $relativePath) {
+                continue;
+            }
+
+            $title = trim((string) ($doc->title ?? $wrap->title ?? ''));
+            $cleanPath = $this->buildCleanDocumentExportPath($relativePath, $title, $isFolder);
+            if ('' === $cleanPath) {
+                continue;
+            }
+
+            $key = ($isFolder ? 'folder:' : 'file:').$cleanPath;
+            if (isset($seen[$key])) {
+                continue;
+            }
+            $seen[$key] = true;
+
+            if ('' === $title) {
+                $title = basename($cleanPath);
+            }
+
+            $parentPath = trim((string) dirname($cleanPath), '.');
+            if ('.' === $parentPath) {
+                $parentPath = '';
+            }
+
+            $entry = [
+                'id' => (int) ($doc->iid ?? $wrap->source_id ?? $id),
+                'source_id' => (int) ($wrap->source_id ?? $doc->iid ?? $id),
+                'file_type' => $isFolder ? 'folder' : 'file',
+                'path' => $cleanPath,
+                'title' => $title,
+                'comment' => (string) ($doc->comment ?? $wrap->comment ?? ''),
+                'size' => (int) ($doc->size ?? $wrap->size ?? 0),
+                'parent_path' => $parentPath,
+            ];
+
+            if (!$isFolder) {
+                $lookupId = (int) ($wrap->source_id ?? $doc->iid ?? $id);
+                $contentHash = (string) ($hashById[$lookupId] ?? '');
+
+                // Only keep file entries that actually have a blob inside files/.
+                if ('' === $contentHash) {
+                    continue;
+                }
+
+                $entry['contenthash'] = $contentHash;
+            }
+
+            $entries[] = $entry;
+        }
+
+        usort(
+            $entries,
+            static function (array $a, array $b): int {
+                if (($a['file_type'] ?? '') !== ($b['file_type'] ?? '')) {
+                    return 'folder' === ($a['file_type'] ?? '') ? -1 : 1;
+                }
+
+                return strcmp((string) ($a['path'] ?? ''), (string) ($b['path'] ?? ''));
+            }
+        );
+
+        file_put_contents(
+            $indexDir.'/index.json',
+            json_encode(
+                [
+                    'generated_at' => date('c'),
+                    'course_code' => (string) ($this->course->code ?? ''),
+                    'documents' => $entries,
+                ],
+                JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+            )
+        );
+    }
+
+    private function buildExportedDocumentHashMap(string $exportDir): array
+    {
+        $filesXml = rtrim($exportDir, '/').'/files.xml';
+        if (!is_file($filesXml)) {
+            return [];
+        }
+
+        $xml = @simplexml_load_file($filesXml);
+        if (false === $xml) {
+            @error_log('[MoodleExport::buildExportedDocumentHashMap] ERROR cannot read files.xml');
+
+            return [];
+        }
+
+        $map = [];
+
+        foreach ($xml->file as $file) {
+            $id = (int) ($file['id'] ?? 0);
+            $hash = trim((string) ($file->contenthash ?? ''));
+
+            if ($id > 0 && '' !== $hash) {
+                $map[$id] = $hash;
+            }
+        }
+
+        return $map;
+    }
+
+    private function normalizeDocumentIndexRelativePath(string $rawPath): string
+    {
+        $path = trim(str_replace('\\', '/', $rawPath));
+        $path = preg_replace('#/+#', '/', $path);
+        $path = trim((string) $path, '/');
+
+        if ('' === $path || '.' === $path) {
+            return '';
+        }
+
+        $segments = array_values(array_filter(
+            explode('/', $path),
+            static fn ($part) => '' !== $part
+        ));
+
+        if (empty($segments)) {
+            return '';
+        }
+
+        while (!empty($segments) && 0 === strcasecmp((string) $segments[0], 'document')) {
+            array_shift($segments);
+        }
+
+        if (
+            !empty($segments) &&
+            preg_match('~^(localhost(?:-\d+)?|127(?:\.\d+){3}|[a-z0-9.-]+\.[a-z]{2,})$~i', (string) $segments[0])
+        ) {
+            array_shift($segments);
+        }
+
+        $courseCode = (string) ($this->course->code ?? '');
+        if ('' !== $courseCode && !empty($segments)) {
+            $first = (string) $segments[0];
+            if (
+                0 === strcasecmp($first, $courseCode) ||
+                str_starts_with(strtolower($first), strtolower($courseCode).'-')
+            ) {
+                array_shift($segments);
+            }
+        }
+
+        foreach ($segments as $index => $segment) {
+            $hasExtension = '' !== (string) pathinfo($segment, PATHINFO_EXTENSION);
+            if (!$hasExtension && preg_match('~^(.+)-\d{3,}$~', $segment, $matches)) {
+                $segments[$index] = (string) $matches[1];
+            }
+        }
+
+        $segments = array_values(array_filter(
+            $segments,
+            static fn ($part) => '' !== trim((string) $part)
+        ));
+
+        if (empty($segments)) {
+            return '';
+        }
+
+        return implode('/', $segments);
+    }
+
+    private function buildCleanDocumentExportPath(string $relativePath, string $title, bool $isFolder): string
+    {
+        $segments = array_values(array_filter(
+            explode('/', trim($relativePath, '/')),
+            static fn ($part) => '' !== trim((string) $part)
+        ));
+
+        if (empty($segments)) {
+            return '';
+        }
+
+        $lastIndex = \count($segments) - 1;
+
+        foreach ($segments as $index => $segment) {
+            $segment = trim(str_replace('\\', '/', (string) $segment), '/');
+            $segment = preg_replace('#\s+#', ' ', $segment) ?? $segment;
+            $segments[$index] = basename($segment);
+        }
+
+        $cleanTitle = basename(trim(str_replace('\\', '/', $title), '/'));
+
+        if ($isFolder) {
+            if ('' !== $cleanTitle) {
+                $segments[$lastIndex] = $cleanTitle;
+            }
+        } else {
+            $originalFileName = $segments[$lastIndex];
+            $titleExt = (string) pathinfo($cleanTitle, PATHINFO_EXTENSION);
+
+            // For files, prefer the document title when it already looks like a real filename.
+            // This removes technical suffixes such as "-23450" from exported paths.
+            if ('' !== $cleanTitle && '' !== $titleExt) {
+                $segments[$lastIndex] = $cleanTitle;
+            } else {
+                $segments[$lastIndex] = $originalFileName;
+            }
+        }
+
+        $segments = array_values(array_filter(
+            $segments,
+            static fn ($part) => '' !== trim((string) $part)
+        ));
+
+        if (empty($segments)) {
+            return '';
+        }
+
+        return trim(implode('/', $segments), '/');
+    }
+
+    private function resolveSourceDocumentAbsolutePath(object $doc): ?string
+    {
+        if (!method_exists($doc, 'getResourceNode')) {
+            return null;
+        }
+
+        $node = $doc->getResourceNode();
+        if (!$node || !method_exists($node, 'getResourceFiles')) {
+            return null;
+        }
+
+        $files = $node->getResourceFiles();
+        if (!$files || 0 === $files->count()) {
+            return null;
+        }
+
+        $first = $files->first();
+        if (!$first instanceof ResourceFile) {
+            return null;
+        }
+
+        $file = $first->getFile();
+        if (!$file) {
+            return null;
+        }
+
+        $pathname = $file->getPathname();
+        if ('' === $pathname || !is_file($pathname)) {
+            return null;
+        }
+
+        return $pathname;
+    }
+
+    /**
+     * Unwrap a learnpath wrapper into the effective learnpath object.
+     */
+    private function unwrapLearnpath($learnpath): object
+    {
+        if (\is_object($learnpath) && isset($learnpath->obj) && \is_object($learnpath->obj)) {
+            return $learnpath->obj;
+        }
+
+        return \is_object($learnpath) ? $learnpath : (object) [];
+    }
+
+    /**
+     * Resolve the display order of a learnpath, wrapper-safe.
+     */
+    private function getLearnpathSortOrder($learnpath): int
+    {
+        $lp = $this->unwrapLearnpath($learnpath);
+
+        return (int) ($lp->display_order ?? 0);
+    }
+
+    /**
+     * Build normalized document path candidates for LP comparisons.
+     *
+     * @return array<int,string>
+     */
+    private function buildDocumentLpCandidates(string $documentPath): array
+    {
+        $normalized = ltrim(str_replace('\\', '/', $documentPath), '/');
+        $normalized = (string) preg_replace('#^document/#', '', $normalized);
+
+        return array_values(array_unique([
+            $normalized,
+            '/'.$normalized,
+            'document/'.$normalized,
+            '/document/'.$normalized,
+        ]));
+    }
+
+    /**
+     * Create a .mbz file from the exported directory.
+     */
     private function createMbzFile(string $sourceDir): string
     {
         $zip = new ZipArchive();
@@ -1067,9 +2001,9 @@ class MoodleExport
         foreach ($files as $file) {
             if (!$file->isDir()) {
                 $filePath = $file->getRealPath();
-                $relativePath = substr($filePath, \strlen($sourceDir) + 1);
+                $relativePath = substr((string) $filePath, \strlen($sourceDir) + 1);
 
-                if (!$zip->addFile($filePath, $relativePath)) {
+                if (!$zip->addFile((string) $filePath, $relativePath)) {
                     throw new Exception(get_lang('Error adding file to zip').": $relativePath");
                 }
             }
@@ -1082,80 +2016,82 @@ class MoodleExport
         return $zipFile;
     }
 
+    /**
+     * Clean up the temporary export directory.
+     */
     private function cleanupTempDir(string $dir): void
     {
         $this->recursiveDelete($dir);
     }
 
+    /**
+     * Recursively delete a directory and its contents.
+     */
     private function recursiveDelete(string $dir): void
     {
         $files = array_diff(scandir($dir), ['.', '..']);
         foreach ($files as $file) {
-            $path = "$dir/$file";
+            $path = $dir.'/'.$file;
             is_dir($path) ? $this->recursiveDelete($path) : unlink($path);
         }
         rmdir($dir);
     }
 
     /**
-     * Export Gradebook metadata into chamilo/gradebook/*.json (no Moodle module).
-     * Keeps getActivities() side-effect free and avoids adding to moodle_backup.xml.
+     * Export Gradebook metadata into chamilo/gradebook/*.json.
      */
     private function exportGradebookActivities(array $activities, string $exportDir): void
     {
         $count = 0;
-        foreach ($activities as $a) {
-            if (($a['modulename'] ?? '') !== 'gradebook') {
+        foreach ($activities as $activity) {
+            if (($activity['modulename'] ?? '') !== 'gradebook') {
                 continue;
             }
-            $activityId = (int) ($a['id'] ?? 0); // local/opaque; not strictly needed
-            $moduleId   = (int) ($a['moduleid'] ?? self::GRADEBOOK_MODULE_ID);
-            $sectionId  = (int) ($a['sectionid'] ?? 0);
+            $activityId = (int) ($activity['id'] ?? 0);
+            $moduleId = (int) ($activity['moduleid'] ?? self::GRADEBOOK_MODULE_ID);
+            $sectionId = (int) ($activity['sectionid'] ?? 0);
 
             try {
                 $meta = new GradebookMetaExport($this->course);
                 $meta->export($activityId, $exportDir, $moduleId, $sectionId);
 
-                // No userinfo here (change if you later add per-user grades)
                 self::flagActivityUserinfo('gradebook', $moduleId, false);
                 $count++;
             } catch (\Throwable $e) {
                 @error_log('[MoodleExport::exportGradebookActivities][ERROR] '.$e->getMessage());
             }
         }
-
-        @error_log('[MoodleExport::exportGradebookActivities] exported=' . $count);
     }
 
     /**
-     * Export raw learnpath metadata (categories + each LP with items) as JSON sidecars.
-     * This does not affect Moodle XML; it complements the backup with Chamilo-native data.
+     * Export raw learnpath metadata as JSON sidecars.
      */
     private function exportLearnpathMeta(string $exportDir): void
     {
         try {
             $meta = new LearnpathMetaExport($this->course);
             $count = $meta->exportAll($exportDir);
-            @error_log('[MoodleExport::exportLearnpathMeta] exported learnpaths='.$count);
         } catch (\Throwable $e) {
             @error_log('[MoodleExport::exportLearnpathMeta][ERROR] '.$e->getMessage());
         }
     }
 
     /**
-     * Export quiz raw JSON sidecars (quiz.json, questions.json, answers.json)
-     * for every selected quiz activity. This does not affect Moodle XML export.
+     * Export quiz raw JSON sidecars.
      */
     private function exportQuizMetaActivities(array $activities, string $exportDir): void
     {
         $count = 0;
-        foreach ($activities as $a) {
-            if (($a['modulename'] ?? '') !== 'quiz') {
+
+        foreach ($activities as $activity) {
+            if (($activity['modulename'] ?? '') !== 'quiz') {
                 continue;
             }
-            $activityId = (int) ($a['id'] ?? 0);
-            $moduleId   = (int) ($a['moduleid'] ?? 0);
-            $sectionId  = (int) ($a['sectionid'] ?? 0);
+
+            $activityId = (int) ($activity['id'] ?? 0);
+            $moduleId = (int) ($activity['moduleid'] ?? 0);
+            $sectionId = (int) ($activity['sectionid'] ?? 0);
+
             if ($activityId <= 0 || $moduleId <= 0) {
                 continue;
             }
@@ -1168,23 +2104,24 @@ class MoodleExport
                 @error_log('[MoodleExport::exportQuizMetaActivities][ERROR] '.$e->getMessage());
             }
         }
-        @error_log('[MoodleExport::exportQuizMetaActivities] exported='.$count);
     }
 
     /**
-     * Export Attendance metadata into chamilo/attendance/*.json (no Moodle module).
-     * Keeps getActivities() side-effect free and avoids adding to moodle_backup.xml.
+     * Export Attendance metadata into chamilo/attendance/*.json.
      */
     private function exportAttendanceActivities(array $activities, string $exportDir): void
     {
         $count = 0;
-        foreach ($activities as $a) {
-            if (($a['modulename'] ?? '') !== 'attendance') {
+
+        foreach ($activities as $activity) {
+            if (($activity['modulename'] ?? '') !== 'attendance') {
                 continue;
             }
-            $activityId = (int) ($a['id'] ?? 0);
-            $moduleId   = (int) ($a['moduleid'] ?? 0);
-            $sectionId  = (int) ($a['sectionid'] ?? 0);
+
+            $activityId = (int) ($activity['id'] ?? 0);
+            $moduleId = (int) ($activity['moduleid'] ?? 0);
+            $sectionId = (int) ($activity['sectionid'] ?? 0);
+
             if ($activityId <= 0 || $moduleId <= 0) {
                 continue;
             }
@@ -1193,83 +2130,90 @@ class MoodleExport
                 $meta = new AttendanceMetaExport($this->course);
                 $meta->export($activityId, $exportDir, $moduleId, $sectionId);
 
-                // No userinfo here (change to true if you later include per-user marks)
                 self::flagActivityUserinfo('attendance', $moduleId, false);
                 $count++;
             } catch (\Throwable $e) {
                 @error_log('[MoodleExport::exportAttendanceActivities][ERROR] '.$e->getMessage());
             }
         }
-
-        @error_log('[MoodleExport::exportAttendanceActivities] exported='. $count);
     }
 
     /**
-     * Export Label activities into activities/label_{id}/label.xml
-     * Only for real "label" items (course descriptions).
+     * Export Label activities.
      */
     private function exportLabelActivities(array $activities, string $exportDir): void
     {
-        foreach ($activities as $a) {
-            if (($a['modulename'] ?? '') !== 'label') {
+        foreach ($activities as $activity) {
+            if (($activity['modulename'] ?? '') !== 'label') {
                 continue;
             }
-            $activityId = (int) ($a['id'] ?? 0);
-            $moduleId   = (int) ($a['moduleid'] ?? 0);
-            $sectionId  = (int) ($a['sectionid'] ?? 0);
+
+            $activityId = (int) ($activity['id'] ?? 0);
+            $moduleId = (int) ($activity['moduleid'] ?? 0);
+            $sectionId = (int) ($activity['sectionid'] ?? 0);
 
             try {
                 $label = new LabelExport($this->course);
                 $label->export($activityId, $exportDir, $moduleId, $sectionId);
-                @error_log('[MoodleExport::exportLabelActivities] exported label moduleid='.$moduleId.' sectionid='.$sectionId);
             } catch (\Throwable $e) {
                 @error_log('[MoodleExport::exportLabelActivities][ERROR] '.$e->getMessage());
             }
         }
     }
 
+    /**
+     * Export thematic metadata.
+     */
     private function exportThematicActivities(array $activities, string $exportDir): void
     {
         $count = 0;
-        foreach ($activities as $a) {
-            if (($a['modulename'] ?? '') !== 'thematic') continue;
 
-            $activityId = (int) ($a['id'] ?? 0);
-            $moduleId   = (int) ($a['moduleid'] ?? 0);
-            $sectionId  = (int) ($a['sectionid'] ?? 0);
-            if ($activityId <= 0 || $moduleId <= 0) continue;
+        foreach ($activities as $activity) {
+            if (($activity['modulename'] ?? '') !== 'thematic') {
+                continue;
+            }
+
+            $activityId = (int) ($activity['id'] ?? 0);
+            $moduleId = (int) ($activity['moduleid'] ?? 0);
+            $sectionId = (int) ($activity['sectionid'] ?? 0);
+
+            if ($activityId <= 0 || $moduleId <= 0) {
+                continue;
+            }
 
             try {
                 $meta = new ThematicMetaExport($this->course);
                 $meta->export($activityId, $exportDir, $moduleId, $sectionId);
 
-                // no userinfo for meta-only artifacts
                 self::flagActivityUserinfo('thematic', $moduleId, false);
-
                 $count++;
             } catch (\Throwable $e) {
                 @error_log('[MoodleExport::exportThematicActivities][ERROR] '.$e->getMessage());
             }
         }
-        @error_log('[MoodleExport::exportThematicActivities] exported='.$count);
     }
 
+    /**
+     * Export wiki activities.
+     */
     private function exportWikiActivities(array $activities, string $exportDir): void
     {
-        foreach ($activities as $a) {
-            if (($a['modulename'] ?? '') !== 'wiki') {
+        foreach ($activities as $activity) {
+            if (($activity['modulename'] ?? '') !== 'wiki') {
                 continue;
             }
-            $activityId = (int)($a['id'] ?? 0);
-            $moduleId   = (int)($a['moduleid'] ?? 0);
-            $sectionId  = (int)($a['sectionid'] ?? 0);
+
+            $activityId = (int) ($activity['id'] ?? 0);
+            $moduleId = (int) ($activity['moduleid'] ?? 0);
+            $sectionId = (int) ($activity['sectionid'] ?? 0);
+
             if ($activityId <= 0 || $moduleId <= 0) {
                 continue;
             }
+
             try {
-                $exp = new WikiExport($this->course);
-                $exp->export($activityId, $exportDir, $moduleId, $sectionId);
-                @error_log('[MoodleExport::exportWikiActivities] exported wiki moduleid='.$moduleId.' sectionid='.$sectionId);
+                $wiki = new WikiExport($this->course);
+                $wiki->export($activityId, $exportDir, $moduleId, $sectionId);
             } catch (\Throwable $e) {
                 @error_log('[MoodleExport::exportWikiActivities][ERROR] '.$e->getMessage());
             }
@@ -1277,26 +2221,25 @@ class MoodleExport
     }
 
     /**
-     * Export synthetic News forum built from Chamilo announcements.
+     * Export synthetic News forum built from announcements.
      */
     private function exportAnnouncementsForum(array $activities, string $exportDir): void
     {
-        foreach ($activities as $a) {
-            if (($a['modulename'] ?? '') !== 'forum') {
+        foreach ($activities as $activity) {
+            if (($activity['modulename'] ?? '') !== 'forum') {
                 continue;
             }
-            if (($a['__from'] ?? '') !== 'announcements') {
-                continue; // only our synthetic forum
+            if (($activity['__from'] ?? '') !== 'announcements') {
+                continue;
             }
 
-            $activityId = (int) ($a['id'] ?? 0);
-            $moduleId   = (int) ($a['moduleid'] ?? 0);
-            $sectionId  = (int) ($a['sectionid'] ?? 0);
+            $activityId = (int) ($activity['id'] ?? 0);
+            $moduleId = (int) ($activity['moduleid'] ?? 0);
+            $sectionId = (int) ($activity['sectionid'] ?? 0);
 
             try {
-                $exp = new AnnouncementsForumExport($this->course);
-                $exp->export($activityId, $exportDir, $moduleId, $sectionId);
-                @error_log('[MoodleExport::exportAnnouncementsForum] exported forum moduleid='.$moduleId.' sectionid='.$sectionId);
+                $forum = new AnnouncementsForumExport($this->course);
+                $forum->export($activityId, $exportDir, $moduleId, $sectionId);
             } catch (\Throwable $e) {
                 @error_log('[MoodleExport::exportAnnouncementsForum][ERROR] '.$e->getMessage());
             }
@@ -1304,20 +2247,74 @@ class MoodleExport
     }
 
     /**
-     * Export course-level calendar events to course/calendarevents.xml
-     * (This is NOT an activity; it belongs to the course folder.)
+     * Export course-level calendar events to course/calendarevents.xml.
      */
     private function exportCourseCalendar(string $exportDir): void
     {
         try {
-            $cal = new CourseCalendarExport($this->course);
-            $count = $cal->export($exportDir);
-
-            // Root backup settings already include "calendarevents" = 1 in createMoodleBackupXml().
-            @error_log('[MoodleExport::exportCourseCalendar] exported events='.$count);
+            $calendar = new CourseCalendarExport($this->course);
+            $count = $calendar->export($exportDir);
         } catch (\Throwable $e) {
             @error_log('[MoodleExport::exportCourseCalendar][ERROR] '.$e->getMessage());
         }
+    }
+
+    /**
+     * Export minimal contexts required by Moodle restore.
+     */
+    private function exportContextsXml(string $exportDir): void
+    {
+        $courseId = self::getBackupCourseId();
+        $courseContextId = self::getBackupCourseContextId();
+        $activities = $this->getActivities();
+
+        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
+        $xmlContent .= '<contexts>'.PHP_EOL;
+
+        // System context
+        $xmlContent .= '  <context id="1">'.PHP_EOL;
+        $xmlContent .= '    <contextlevel>10</contextlevel>'.PHP_EOL;
+        $xmlContent .= '    <instanceid>0</instanceid>'.PHP_EOL;
+        $xmlContent .= '    <path>/1</path>'.PHP_EOL;
+        $xmlContent .= '    <depth>1</depth>'.PHP_EOL;
+        $xmlContent .= '    <parentcontextid>0</parentcontextid>'.PHP_EOL;
+        $xmlContent .= '  </context>'.PHP_EOL;
+
+        // Course context
+        $xmlContent .= '  <context id="'.$courseContextId.'">'.PHP_EOL;
+        $xmlContent .= '    <contextlevel>50</contextlevel>'.PHP_EOL;
+        $xmlContent .= '    <instanceid>'.$courseId.'</instanceid>'.PHP_EOL;
+        $xmlContent .= '    <path>/1/'.$courseContextId.'</path>'.PHP_EOL;
+        $xmlContent .= '    <depth>2</depth>'.PHP_EOL;
+        $xmlContent .= '    <parentcontextid>1</parentcontextid>'.PHP_EOL;
+        $xmlContent .= '  </context>'.PHP_EOL;
+
+        // Module contexts
+        $seen = [];
+        foreach ($activities as $activity) {
+            $moduleId = (int) ($activity['moduleid'] ?? 0);
+            if ($moduleId <= 0) {
+                continue;
+            }
+            if (isset($seen[$moduleId])) {
+                continue;
+            }
+            $seen[$moduleId] = true;
+
+            $contextId = $moduleId;
+
+            $xmlContent .= '  <context id="'.$contextId.'">'.PHP_EOL;
+            $xmlContent .= '    <contextlevel>70</contextlevel>'.PHP_EOL;
+            $xmlContent .= '    <instanceid>'.$moduleId.'</instanceid>'.PHP_EOL;
+            $xmlContent .= '    <path>/1/'.$courseContextId.'/'.$contextId.'</path>'.PHP_EOL;
+            $xmlContent .= '    <depth>3</depth>'.PHP_EOL;
+            $xmlContent .= '    <parentcontextid>'.$courseContextId.'</parentcontextid>'.PHP_EOL;
+            $xmlContent .= '  </context>'.PHP_EOL;
+        }
+
+        $xmlContent .= '</contexts>'.PHP_EOL;
+
+        file_put_contents($exportDir.'/contexts.xml', $xmlContent);
     }
 
     private function exportBadgesXml(string $exportDir): void
@@ -1454,13 +2451,19 @@ class MoodleExport
         $xmlContent .= '      <role_overrides></role_overrides>'.PHP_EOL;
         $xmlContent .= '      <role_assignments></role_assignments>'.PHP_EOL;
         $xmlContent .= '    </roles>'.PHP_EOL;
-
         $xmlContent .= '  </user>'.PHP_EOL;
         $xmlContent .= '</users>';
 
         file_put_contents($exportDir.'/users.xml', $xmlContent);
     }
 
+    /**
+     * Export backup settings.
+     *
+     * @param array<int,array<string,mixed>> $sections
+     * @param array<int,array<string,mixed>> $activities
+     * @return array<int,array<string,string|int>>
+     */
     private function exportBackupSettings(array $sections, array $activities): array
     {
         $settings = [
@@ -1509,6 +2512,7 @@ class MoodleExport
                 'name' => $activity['modulename'].'_'.$activity['moduleid'].'_included',
                 'value' => '1',
             ];
+
             $value = (self::$activityUserinfo[$activity['modulename']][$activity['moduleid']] ?? false) ? '1' : '0';
             $settings[] = [
                 'level' => 'activity',
@@ -1521,20 +2525,26 @@ class MoodleExport
         return $settings;
     }
 
-    /** Returns true if an existing forum already looks like "Announcements/News". */
+    /**
+     * Returns true if an existing forum already looks like announcements/news.
+     *
+     * @param array<int,array<string,mixed>> $activities
+     */
     private function hasAnnouncementsLikeForum(array $activities): bool
     {
-        foreach ($activities as $a) {
-            if (($a['modulename'] ?? '') !== 'forum') {
+        foreach ($activities as $activity) {
+            if (($activity['modulename'] ?? '') !== 'forum') {
                 continue;
             }
-            $t = mb_strtolower((string) ($a['title'] ?? ''));
-            foreach (['announcements','news'] as $kw) {
-                if ($t === $kw || str_contains($t, $kw)) {
-                    return true; // looks like an announcements/news forum already
+
+            $title = mb_strtolower((string) ($activity['title'] ?? ''));
+            foreach (['announcements', 'news'] as $keyword) {
+                if ($title === $keyword || str_contains($title, $keyword)) {
+                    return true;
                 }
             }
         }
+
         return false;
     }
 }

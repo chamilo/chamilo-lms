@@ -2,7 +2,7 @@
   <div>
     <Button
       :label="$t('Back')"
-      icon="pi pi-chevron-left"
+      icon="mdi mdi-chevron-left"
       @click="goBack"
     />
     <Toolbar

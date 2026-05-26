@@ -1,0 +1,103 @@
+<?php
+/* License: see /license.txt */
+
+// Needed in order to show the plugin title
+$strings['plugin_title'] = 'Zoom 화상 회의';
+$strings['plugin_comment'] = '강의 및 세션에서의 Zoom 화상 회의 통합';
+
+$strings['apiKey'] = 'API 키';
+$strings['apiSecret'] = 'API 시크릿';
+$strings['verificationToken'] = '검증 토큰';
+$strings['enableParticipantRegistration'] = '참가자 등록 활성화';
+$strings['enableCloudRecording'] = '자동 녹화 유형';
+$strings['enableGlobalConference'] = '전체 회의 활성화';
+$strings['enableGlobalConferencePerUser'] = '사용자별 전체 회의 활성화';
+$strings['globalConferenceAllowRoles'] = '이 사용자 역할에만 전체 회의 링크 표시';
+$strings['globalConferencePerUserAllowRoles'] = '이 사용자 역할에만 사용자별 전체 회의 링크 표시';
+
+$strings['enableCloudRecording_help'] = '유료 Zoom 프로필이 필요합니다.
+<em>기본</em> 프로필에서는 작동하지 않습니다.';
+
+// please keep these lines alphabetically sorted
+$strings['AllCourseUsersWereRegistered'] = '모든 강의 학생이 등록되었습니다';
+$strings['Agenda'] = '일정';
+$strings['CannotRegisterWithoutEmailAddress'] = '이메일 주소 없이 등록할 수 없습니다';
+$strings['CopyingJoinURL'] = '참여 URL 복사 중';
+$strings['CopyJoinAsURL'] = "'참여로서' URL 복사";
+$strings['CopyToCourse'] = '강의로 복사';
+$strings['CouldNotCopyJoinURL'] = '참여 URL을 복사할 수 없습니다';
+$strings['Course'] = '강의';
+$strings['CreatedAt'] = '생성일';
+$strings['CreateLinkInCourse'] = '강의에서 링크 생성';
+$strings['CreateUserVideoConference'] = '사용자 회의 생성';
+$strings['DateMeetingTitle'] = '%s: %s';
+$strings['DeleteMeeting'] = '회의 삭제';
+$strings['DeleteFile'] = '파일 삭제';
+$strings['Details'] = '상세 정보';
+$strings['DoIt'] = '실행';
+$strings['Duration'] = '지속 시간';
+$strings['DurationFormat'] = '%hh%I';
+$strings['DurationInMinutes'] = '지속 시간 (분)';
+$strings['EndDate'] = '종료 날짜';
+$strings['EnterMeeting'] = '회의 참여';
+$strings['ViewMeeting'] = '회의 보기';
+$strings['Files'] = '파일';
+$strings['Finished'] = '종료됨';
+$strings['FileWasCopiedToCourse'] = '파일이 강의에 복사되었습니다';
+$strings['FileWasDeleted'] = '파일이 삭제되었습니다';
+$strings['GlobalMeeting'] = '전체 회의';
+$strings['GlobalMeetingPerUser'] = '사용자별 전체 회의';
+$strings['GroupUsersWereRegistered'] = '그룹 멤버가 등록되었습니다';
+$strings['InstantMeeting'] = '즉시 회의';
+$strings['Join'] = '참여';
+$strings['JoinGlobalVideoConference'] = '전체 회의 참여';
+$strings['JoinURLCopied'] = '참여 URL이 복사되었습니다';
+$strings['JoinURLToSendToParticipants'] = '참가자에게 보낼 참여 URL';
+$strings['LiveMeetings'] = '실시간 회의';
+$strings['LinkToFileWasCreatedInCourse'] = '파일 링크가 강의에 추가되었습니다';
+$strings['MeetingDeleted'] = '회의가 삭제되었습니다';
+$strings['MeetingsFound'] = '회의를 찾았습니다';
+$strings['MeetingUpdated'] = '미팅이 업데이트되었습니다';
+$strings['NewMeetingCreated'] = '새 미팅이 생성되었습니다';
+$strings['Password'] = '비밀번호';
+$strings['RecurringWithFixedTime'] = '고정 시간 반복';
+$strings['RecurringWithNoFixedTime'] = '고정 시간 없는 반복';
+$strings['RegisterAllCourseUsers'] = '모든 수강생 등록';
+$strings['RegisteredUserListWasUpdated'] = '등록 사용자 목록이 업데이트되었습니다';
+$strings['RegisteredUsers'] = '등록 사용자';
+$strings['RegisterNoUser'] = '사용자 등록 안 함';
+$strings['RegisterTheseGroupMembers'] = '이 그룹 구성원 등록';
+$strings['ScheduleAMeeting'] = '미팅 일정 설정';
+$strings['ScheduledMeeting'] = '예약된 미팅';
+$strings['ScheduledMeetings'] = '예약된 미팅';
+$strings['ScheduleAMeeting'] = '미팅 일정 설정';
+$strings['SearchMeeting'] = '미팅 검색';
+$strings['Session'] = '세션';
+$strings['StartDate'] = '시작 날짜';
+$strings['Started'] = '시작됨';
+$strings['StartInstantMeeting'] = '즉시 미팅 시작';
+$strings['StartMeeting'] = '미팅 시작';
+$strings['StartTime'] = '시작 시간';
+$strings['Topic'] = '주제';
+$strings['TopicAndAgenda'] = '주제 및 안건';
+$strings['Type'] = '유형';
+$strings['UpcomingMeetings'] = '예정된 미팅';
+$strings['UpdateMeeting'] = '미팅 업데이트';
+$strings['UpdateRegisteredUserList'] = '등록 사용자 목록 업데이트';
+$strings['UserRegistration'] = '사용자 등록';
+$strings['Y-m-d H:i'] = 'Y-m-d H:i';
+$strings['Waiting'] = '대기 중';
+$strings['XRecordingOfMeetingXFromXDurationXDotX'] = '%s 미팅 %s의 %s부터 녹화 (%s).%s';
+$strings['YouAreNotRegisteredToThisMeeting'] = '이 미팅에 등록되지 않았습니다';
+$strings['ZoomVideoConferences'] = 'Zoom 화상 회의';
+$strings['Recordings'] = '녹화본';
+$strings['CreateGlobalVideoConference'] = '전체 화상 회의 생성';
+$strings['ConferenceNotStarted'] = '회의가 시작되지 않았습니다';
+$strings['MeetingNotFound'] = '미팅을 찾을 수 없습니다';
+$strings['JoinURLNotAvailable'] = 'URL을 사용할 수 없습니다';
+$strings['Meetings'] = '미팅';
+$strings['ConferenceType'] = '회의 유형';
+$strings['ForEveryone'] = '모두';
+$strings['SomeUsers'] = '일부 사용자 (나중에 선택)';
+$strings['Activity'] = '활동';
+$strings['ConferenceNotAvailable'] = '회의를 사용할 수 없습니다';

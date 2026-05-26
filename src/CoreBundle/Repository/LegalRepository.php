@@ -10,8 +10,6 @@ use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\Legal;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 
@@ -127,19 +125,17 @@ class LegalRepository extends ServiceEntityRepository
 
     public function getLastVersionByLanguage(int $languageId): ?int
     {
-        try {
-            $result = $this->createQueryBuilder('l')
-                ->select('MAX(l.version)')
-                ->andWhere('l.languageId = :languageId')
-                ->setParameter('languageId', $languageId)
-                ->getQuery()
-                ->getSingleScalarResult()
-            ;
+        $result = $this->createQueryBuilder('l')
+            ->select('MAX(l.version) as maxVersion')
+            ->andWhere('l.languageId = :languageId')
+            ->setParameter('languageId', $languageId)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
 
-            return null !== $result ? (int) $result : null;
-        } catch (NonUniqueResultException|NoResultException) {
-            return null;
-        }
+        $version = (int) $result;
+
+        return $version > 0 ? $version : null;
     }
 
     /**

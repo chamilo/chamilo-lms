@@ -1,5 +1,5 @@
 .p-dialog {
-  @apply max-h-[90%] scale-100 drop-shadow-lg rounded-lg border-0 border-none;
+  @apply max-h-[90%] scale-100 shadow-xl rounded-lg border-0 border-none;
 
   &-mask {
     @apply bg-gray-30;
@@ -14,6 +14,14 @@
 
     .p-dialog-header-icon {
       @apply h-6 w-6 text-gray-50;
+    }
+  }
+
+  &-header-actions {
+    .p-button {
+      @apply border-0 border-none text-gray-50
+        hover:text-secondary;
+      padding: 0 calc(.25rem + 1px);
     }
   }
 

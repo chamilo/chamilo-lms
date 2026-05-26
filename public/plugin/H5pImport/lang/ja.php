@@ -1,0 +1,22 @@
+<?php
+$strings['plugin_title'] = 'H5P インポート';
+$strings['plugin_comment'] = 'H5P コンテンツをインポートし、ラーニングパスで使用します。インストール手順は README.md をご覧ください。';
+$strings['frame'] = 'フレーム';
+$strings['frame_help'] = 'H5Pの下にフレームとボタンを表示';
+$strings['embed'] = '埋め込み';
+$strings['embed_help'] = '埋め込みボタンを表示';
+$strings['copyright'] = '著作権';
+$strings['copyright_help'] = '著作権ボタンを表示';
+$strings['icon'] = 'アイコン';
+$strings['icon_help'] = 'H5P アイコンを表示';
+$strings['attempts'] = '試行回数';
+$strings['upload_h5p'] = 'アップロード';
+$strings['import_h5p_package'] = 'H5P パッケージをアップロード';
+$strings['h5p_package'] = 'H5P パッケージ';
+$strings['h5p_error_loading'] = 'H5P パッケージの読み込みエラー';
+$strings['h5p_error_invalid_token'] = '無効なセキュリティトークン';
+$strings['h5p_error_missing_core_asset'] = 'H5P コアアセットの読み込みエラー';
+$strings['h5p_save_content_state'] = 'ユーザーの結果を保存';
+$strings['h5p_save_content_freq'] = '保存頻度';
+$strings['h5p_save_freq_help'] = '現在のコンテンツ状態を秒単位で保存する頻度';
+$strings['start_attempt'] = '試行を開始';

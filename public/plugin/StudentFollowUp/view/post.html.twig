@@ -1,99 +1,167 @@
+{% macro user_label(user) %}
+    {% if user %}
+        {% set fullName = (user.firstname|default('') ~ ' ' ~ user.lastname|default(''))|trim %}
+        {{ fullName ?: user.username|default('') }}
+    {% endif %}
+{% endmacro %}
+
 {% macro post_template(type, post, information_icon, post_url, current_url, related_posts) %}
+{% import _self as helpers %}
 {% if post %}
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="row">
-                <div class="col-md-8">
-                    <h2>{{ post.title }}</h2>
-                    <p>{{ post.content }}</p>
+    <article class="rounded-2xl border border-gray-25 bg-white p-5 shadow-sm">
+        <div class="mb-4 flex flex-wrap items-center gap-2">
+            {% if post.private %}
+                <span class="inline-flex items-center gap-1 rounded-full bg-orange-100 px-2.5 py-1 text-xs font-semibold text-orange-700">
+                    <span class="mdi mdi-lock-outline" aria-hidden="true"></span>
+                    {{ 'Private'|get_plugin_lang('StudentFollowUpPlugin') }}
+                </span>
+            {% else %}
+                <span class="inline-flex items-center gap-1 rounded-full bg-green-100 px-2.5 py-1 text-xs font-semibold text-green-700">
+                    <span class="mdi mdi-eye-outline" aria-hidden="true"></span>
+                    {{ 'Public'|get_plugin_lang('StudentFollowUpPlugin') }}
+                </span>
+            {% endif %}
 
-                    {% if type == 'simple' %}
-                        {% set countElements = post.hasParent  + post.children.count %}
-                        {% if countElements %}
-                            <a href="{{ post_url }}&post_id={{ post.id }}">
-                            {% if countElements > 1 %}
-                                {{ information_icon }} + {{ countElements }}
-                            {% else %}
-                                {{ information_icon }} + 1
-                            {% endif %}
-                            </a>
-                        {% endif %}
-                    {% endif %}
+            {% if post.externalSource %}
+                <span class="inline-flex items-center gap-1 rounded-full bg-blue-100 px-2.5 py-1 text-xs font-semibold text-blue-700">
+                    <span class="mdi mdi-cloud-outline" aria-hidden="true"></span>
+                    {{ 'ExternalSource'|get_plugin_lang('StudentFollowUpPlugin') }}
+                </span>
+            {% endif %}
+        </div>
 
-                    {% if post.attachment %}
-                        <a href="{{ post_url }}&action=download&post_id={{ post.id }}" class="btn btn--plain">
-                            {{ 'Download' | get_lang }}
-                        </a>
-                    {% endif %}
+        <div class="mb-4 rounded-xl bg-gray-15 p-4">
+            <div class="grid gap-3 sm:grid-cols-2">
+                {% if post.createdAt %}
+                    <div>
+                        <div class="text-xs font-semibold uppercase tracking-wide text-gray-50">
+                            {{ 'CreatedOn'|get_plugin_lang('StudentFollowUpPlugin') }}
+                        </div>
+                        <div class="mt-1 text-sm font-medium text-gray-90">
+                            {{ post.createdAt|date('d/m/Y') }}
+                        </div>
+                    </div>
+                {% endif %}
 
-                    {#{% if type == 'all' %}#}
-                        {#{% if related_posts %}#}
-                            {#<h3>Related</h3>#}
-                             {#{% for post in related_posts %}#}
-                                {#<p>#}
-                                    {#<a href="{{ post_url }}&post_id={{ post.id }}">#}
-                                    {#{{ post.title }}#}
-                                    {#</a>#}
-                                {#</p>#}
-                            {#{% endfor %}#}
-                        {#{% endif %}#}
-                    {#{% endif %}#}
-                </div>
-                <div class="col-md-4">
-                    <p>{{ post.createdAt |date('d/m/Y') }}</p>
-                    <p>{{ post.insertUser.completeName }}</p>
-                    {% if post.tags %}
-                        {% for tag in post.tags %}
-                            {{ tag }}
-                            {% if not loop.last	 %}
-                                ,
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-
-                    {% if post.private %}
-                        <p>
-                            <span class="label label-warning">
-                                {{ 'Private'|get_plugin_lang('StudentFollowUpPlugin') }}
-                            </span>
-                        </p>
-                    {% else %}
-                        <p>
-                            <span class="label label-info">
-                                {{ 'Public'|get_plugin_lang('StudentFollowUpPlugin') }}
-                            </span>
-                        </p>
-                    {% endif %}
-                </div>
+                {% if post.insertUser %}
+                    <div>
+                        <div class="text-xs font-semibold uppercase tracking-wide text-gray-50">
+                            {{ 'CreatedBy'|get_plugin_lang('StudentFollowUpPlugin') }}
+                        </div>
+                        <div class="mt-1 text-sm font-medium text-gray-90">
+                            {{ helpers.user_label(post.insertUser) }}
+                        </div>
+                    </div>
+                {% endif %}
             </div>
         </div>
-    </div>
-    {#{% if type == 'all' %}#}
-        {#{% if post.children.count %}#}
-            {#{% for child in post.children %}#}
-                {#{% if child.id != post.id %}#}
-                    {#{{ _self.post_template('all', child) }}#}
-                {#{% endif %}#}
-            {#{% endfor %}#}
-        {#{% endif %}#}
-    {#{% endif %}#}
+
+        <h3 class="mb-3 text-xl font-semibold text-gray-90">
+            {{ post.title }}
+        </h3>
+
+        <div class="prose max-w-none break-words text-gray-90">
+            {{ post.content|raw }}
+        </div>
+
+        {% if post.tags %}
+            <div class="mt-4">
+                <div class="mb-2 text-sm font-semibold text-gray-90">
+                    {{ 'Tags'|get_lang }}
+                </div>
+                <div class="flex flex-wrap gap-1">
+                    {% for tag in post.tags %}
+                        <span class="rounded-full bg-gray-15 px-2 py-1 text-xs text-gray-90">
+                            {{ tag }}
+                        </span>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="mt-5 flex flex-wrap items-center gap-3">
+            {% if type == 'simple' %}
+                {% set countElements = post.hasParent + post.children.count %}
+                {% if countElements %}
+                    <a
+                        href="{{ post_url }}&post_id={{ post.id }}"
+                        class="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
+                    >
+                        {{ information_icon|raw }}
+                        {{ 'ViewRelatedNotes'|get_plugin_lang('StudentFollowUpPlugin') }}
+                        <span class="rounded-full bg-primary/10 px-2 py-0.5 text-xs text-primary">
+                            {{ countElements > 1 ? countElements : 1 }}
+                        </span>
+                    </a>
+                {% endif %}
+            {% endif %}
+
+            {% if post.attachment %}
+                <a href="{{ post_url }}&action=download&post_id={{ post.id }}" class="btn btn--primary inline-flex items-center gap-2">
+                    <span class="mdi mdi-download" aria-hidden="true"></span>
+                    {{ 'DownloadAttachment'|get_plugin_lang('StudentFollowUpPlugin') }}
+                </a>
+            {% endif %}
+        </div>
+    </article>
 {% endif %}
 {% endmacro %}
 
-{% import _self as template %}
+<section class="space-y-6">
+    <header class="rounded-2xl border border-gray-25 bg-white p-6 shadow-sm">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+                <p class="mb-1 text-xs font-semibold uppercase tracking-wide text-primary">
+                    {{ 'plugin_title'|get_plugin_lang('StudentFollowUpPlugin') }}
+                </p>
+                <h2 class="text-2xl font-semibold text-gray-90">
+                    {% if create_mode %}
+                        {{ 'CreateFollowUpNote'|get_plugin_lang('StudentFollowUpPlugin') }}
+                    {% else %}
+                        {{ 'CareDetailView'|get_plugin_lang('StudentFollowUpPlugin') }}
+                    {% endif %}
+                </h2>
+                <p class="mt-1 text-sm text-gray-50">
+                    {{ student_info.complete_name }}
+                </p>
+            </div>
+            <div>
+                {{ back_link|raw }}
+            </div>
+        </div>
+    </header>
 
-<div class="actions">
-    {{ back_link }}
-</div>
-<h2 class="text-center">
-    {{ care_title }} - {{ student_info.complete_name }} - {{ post.title }}
-    {% if post.parent %}
-        {{ post.parent.title }}
+    {% if create_mode %}
+        <div class="rounded-2xl border border-gray-25 bg-white p-6 shadow-sm">
+            <div class="mb-4">
+                <h3 class="text-lg font-semibold text-gray-90">
+                    {{ 'NewFollowUpNote'|get_plugin_lang('StudentFollowUpPlugin') }}
+                </h3>
+                <p class="mt-1 text-sm text-gray-50">
+                    {{ 'NewFollowUpNoteHelp'|get_plugin_lang('StudentFollowUpPlugin') }}
+                </p>
+            </div>
+            {{ create_form|raw }}
+        </div>
+    {% elseif post %}
+        {% if related_posts|length %}
+            <div class="space-y-4">
+                {% for related_post in related_posts %}
+                    {{ _self.post_template('full', related_post, information_icon, post_url, current_url, related_posts) }}
+                {% endfor %}
+            </div>
+        {% else %}
+            {{ _self.post_template('full', post, information_icon, post_url, current_url, related_posts) }}
+        {% endif %}
+    {% else %}
+        <div class="rounded-2xl border border-gray-25 bg-white p-6 text-center shadow-sm">
+            <span class="mdi mdi-alert-circle-outline ch-tool-icon-gradient text-5xl" aria-hidden="true"></span>
+            <h3 class="mt-3 text-lg font-semibold text-gray-90">
+                {{ 'NoFollowUpPosts'|get_plugin_lang('StudentFollowUpPlugin') }}
+            </h3>
+            <p class="mt-1 text-sm text-gray-50">
+                {{ 'NoFollowUpPostsHelp'|get_plugin_lang('StudentFollowUpPlugin') }}
+            </p>
+        </div>
     {% endif %}
-</h2>
-
-{% for post in related_posts %}
-    {{ template.post_template('all', post, information_icon, post_url, current_url) }}
-{% endfor %}
-
-{#{{ template.post_template('all', post, information_icon, post_url, current_url, related_posts) }}#}
+</section>

@@ -20,7 +20,6 @@
  * @usage php gitlog.php [-t|some-commit|-max20171001]
  * @see https://github.com/ywarnier/git
  */
-exit;
 if (PHP_SAPI != 'cli') {
     die('This script can only be launched from the command line');
 }

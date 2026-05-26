@@ -6,110 +6,149 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\State;
 
+use ApiPlatform\Doctrine\Orm\Extension\FilterExtension;
+use ApiPlatform\Doctrine\Orm\Extension\PaginationExtension;
+use ApiPlatform\Doctrine\Orm\Util\QueryNameGenerator;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
-use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\ExtraField;
-use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
-use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
+use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\CourseCatalogueHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Chamilo\CourseBundle\Entity\CCourseDescription;
+use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
+use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @implements ProviderInterface<Course>
  */
 readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
 {
+    public const DEFAULT_PAGE_SIZE = 12;
+
     public function __construct(
+        private FilterExtension $filterExtension,
+        private PaginationExtension $paginationExtension,
+        private UserHelper $userHelper,
         private CourseRepository $courseRepository,
         private SettingsManager $settingsManager,
-        private AccessUrlRepository $accessUrlRepository,
-        private RequestStack $requestStack,
-        private ExtraFieldValuesRepository $extraFieldValuesRepository,
-        private TokenStorageInterface $tokenStorage
+        private AccessUrlHelper $accessUrlHelper,
+        private TranslatorInterface $translator,
+        private CourseCatalogueHelper $courseCatalogueHelper,
+        private CCourseDescriptionRepository $courseDescriptionRepository,
     ) {}
 
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): array
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|object|null
     {
-        $user = $this->tokenStorage->getToken()?->getUser();
-        $isAuthenticated = \is_object($user);
+        $user = $this->userHelper->getCurrent();
+        $isAuthenticated = $user instanceof User;
 
-        if (!$isAuthenticated) {
-            $showCatalogue = 'false' !== $this->settingsManager->getSetting('catalog.course_catalog_published', true);
-            if (!$showCatalogue) {
-                return [];
-            }
+        $catalogIsPublic = 'true' === (string) $this->settingsManager->getSetting('catalog.course_catalog_published', true);
+
+        if (!$isAuthenticated && !$catalogIsPublic) {
+            throw new AccessDeniedHttpException($this->translator->trans('Not allowed'));
         }
 
-        $onlyShowMatching = 'true' === $this->settingsManager->getSetting('catalog.only_show_selected_courses', true);
-        $onlyShowCoursesWithCategory = $this->settingsManager->getSetting('catalog.only_show_course_from_selected_category', true);
+        $queryBuilder = $this->createQueryBuilder();
+        $queryNameGenerator = new QueryNameGenerator();
 
-        $request = $this->requestStack->getCurrentRequest();
-        if (!$request) {
-            return [];
-        }
+        $this->filterExtension->applyToCollection(
+            $queryBuilder,
+            $queryNameGenerator,
+            Course::class,
+            $operation,
+            $context
+        );
 
-        $host = $request->getSchemeAndHttpHost().'/';
-        $hidePrivateCourses = 'true' === $this->settingsManager->getSetting('catalog.course_catalog_hide_private', true);
-        $visibilities = $hidePrivateCourses
-            ? [Course::OPEN_WORLD, Course::OPEN_PLATFORM]
-            : [Course::OPEN_WORLD, Course::OPEN_PLATFORM, Course::REGISTERED];
+        $this->paginationExtension->applyToCollection(
+            $queryBuilder,
+            $queryNameGenerator,
+            Course::class,
+            $operation,
+            $context
+        );
 
-        /** @var AccessUrl $accessUrl */
-        $accessUrl = $this->accessUrlRepository->findOneBy(['url' => $host]) ?? $this->accessUrlRepository->find(1);
-        $courses = $this->courseRepository->createQueryBuilder('c')
-            ->innerJoin('c.urls', 'url_rel')
-            ->andWhere('url_rel.url = :accessUrl')
-            ->andWhere('c.visibility IN (:visibilities)')
-            ->setParameter('accessUrl', $accessUrl->getId())
-            ->setParameter('visibilities', $visibilities)
-            ->orderBy('c.title', 'ASC')
-            ->getQuery()
-            ->getResult()
-        ;
+        /** @var object $paginator */
+        $paginator = $this->paginationExtension->getResult(
+            $queryBuilder,
+            Course::class,
+            $operation,
+            $context
+        );
 
-        if (!$onlyShowMatching && !$onlyShowCoursesWithCategory) {
-            if ($isAuthenticated) {
-                foreach ($courses as $course) {
-                    if ($course instanceof Course) {
-                        $course->subscribed = $course->hasSubscriptionByUser($user);
-                    }
-                }
-            }
+        /** @var Course $course */
+        foreach ($paginator as $course) {
+            $course->subscribed = $isAuthenticated ? $course->hasSubscriptionByUser($user) : false;
+            $course->catalogueDescriptions = [];
 
-            return $courses;
-        }
+            $descriptions = $this->courseDescriptionRepository->findAllInCourseForCatalogue($course);
 
-        $filtered = [];
-        foreach ($courses as $course) {
-            $passesExtraField = true;
-            $passesCategory = true;
+            /** @var CCourseDescription $description */
+            foreach ($descriptions as $description) {
+                $title = trim((string) $description->getTitle());
+                $content = $this->normalizeHtmlContent((string) $description->getContent());
 
-            if ($onlyShowMatching) {
-                $value = $this->extraFieldValuesRepository->getValueByVariableAndItem(
-                    'show_in_catalogue',
-                    $course->getId(),
-                    ExtraField::COURSE_FIELD_TYPE
-                );
-                $passesExtraField = '1' === $value?->getFieldValue();
-            }
-
-            if ($onlyShowCoursesWithCategory) {
-                $passesCategory = $course->getCategories()->count() > 0;
-            }
-
-            if ($passesExtraField && $passesCategory) {
-                if ($isAuthenticated && $course instanceof Course) {
-                    $course->subscribed = $course->hasSubscriptionByUser($user);
+                if ('' === $title && '' === $content) {
+                    continue;
                 }
 
-                $filtered[] = $course;
+                $course->catalogueDescriptions[] = [
+                    'iid' => $description->getIid(),
+                    'title' => $title,
+                    'content' => $content,
+                    'descriptionType' => $description->getDescriptionType(),
+                    'progress' => $description->getProgress(),
+                ];
             }
         }
 
-        return $filtered;
+        return $paginator;
+    }
+
+    private function createQueryBuilder(): QueryBuilder
+    {
+        $qb = $this->courseRepository->createQueryBuilder('c');
+
+        if ($this->accessUrlHelper->isMultiple()) {
+            $qb
+                ->innerJoin(
+                    'c.urls',
+                    'aurc',
+                    Join::WITH,
+                    $qb->expr()->eq('aurc.url', ':accessUrl')
+                )
+                ->setParameter('accessUrl', $this->accessUrlHelper->getCurrent()->getId())
+            ;
+        }
+
+        $this->courseCatalogueHelper->addAvoidedCoursesCondition($qb);
+        $this->courseCatalogueHelper->addOnlySelectedCategoriesCondition($qb);
+        $this->courseCatalogueHelper->addShowInCatalogueCondition($qb);
+        $this->courseCatalogueHelper->addVisibilityCondition($qb, true);
+
+        return $qb;
+    }
+
+    private function normalizeHtmlContent(string $content): string
+    {
+        $content = trim($content);
+
+        if ('' === $content) {
+            return '';
+        }
+
+        $content = preg_replace('/<!doctype[^>]*>/i', '', $content) ?? $content;
+
+        if (preg_match('/<body[^>]*>(.*)<\/body>/is', $content, $matches)) {
+            $content = $matches[1];
+        }
+
+        return trim($content);
     }
 }

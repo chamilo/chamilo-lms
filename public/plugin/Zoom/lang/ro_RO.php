@@ -1,0 +1,103 @@
+<?php
+/* License: see /license.txt */
+
+// Needed in order to show the plugin title
+$strings['plugin_title'] = 'Videoconferință Zoom';
+$strings['plugin_comment'] = 'Integrare videoconferință Zoom în cursuri și sesiuni';
+
+$strings['apiKey'] = 'Cheie API';
+$strings['apiSecret'] = 'Secret API';
+$strings['verificationToken'] = 'Token de verificare';
+$strings['enableParticipantRegistration'] = 'Activează înregistrarea participanților';
+$strings['enableCloudRecording'] = 'Tip înregistrare automată';
+$strings['enableGlobalConference'] = 'Activează conferința globală';
+$strings['enableGlobalConferencePerUser'] = 'Activează conferința globală pe utilizator';
+$strings['globalConferenceAllowRoles'] = 'Link conferință globală vizibil doar pentru aceste roluri de utilizator';
+$strings['globalConferencePerUserAllowRoles'] = 'Link conferință globală pe utilizator vizibil doar pentru aceste roluri de utilizator';
+
+$strings['enableCloudRecording_help'] = 'Necesită un profil Zoom plătit.
+Nu va funcționa pentru un profil <em>basic</em>.';
+
+// please keep these lines alphabetically sorted
+$strings['AllCourseUsersWereRegistered'] = 'Toți studenții cursului au fost înregistrați';
+$strings['Agenda'] = 'Agendă';
+$strings['CannotRegisterWithoutEmailAddress'] = 'Nu se poate înregistra fără adresă de email';
+$strings['CopyingJoinURL'] = 'Se copiază URL-ul de conectare';
+$strings['CopyJoinAsURL'] = 'Copiază URL-ul „join as”';
+$strings['CopyToCourse'] = 'Copiază în curs';
+$strings['CouldNotCopyJoinURL'] = 'Nu s-a putut copia URL-ul de conectare';
+$strings['Course'] = 'Curs';
+$strings['CreatedAt'] = 'Creat la';
+$strings['CreateLinkInCourse'] = 'Creează link(-uri) în curs';
+$strings['CreateUserVideoConference'] = 'Creează conferință utilizator';
+$strings['DateMeetingTitle'] = '%s: %s';
+$strings['DeleteMeeting'] = 'Șterge întâlnirea';
+$strings['DeleteFile'] = 'Șterge fișier(e)';
+$strings['Details'] = 'Detalii';
+$strings['DoIt'] = 'Execută';
+$strings['Duration'] = 'Durată';
+$strings['DurationFormat'] = '%hh%I';
+$strings['DurationInMinutes'] = 'Durată (în minute)';
+$strings['EndDate'] = 'Data de sfârșit';
+$strings['EnterMeeting'] = 'Intră în întâlnire';
+$strings['ViewMeeting'] = 'Vezi întâlnirea';
+$strings['Files'] = 'Fișiere';
+$strings['Finished'] = 'finalizată';
+$strings['FileWasCopiedToCourse'] = 'Fișierul a fost copiat în curs';
+$strings['FileWasDeleted'] = 'Fișierul a fost șters';
+$strings['GlobalMeeting'] = 'Conferință globală';
+$strings['GlobalMeetingPerUser'] = 'Conferință globală pe utilizator';
+$strings['GroupUsersWereRegistered'] = 'Membrii grupului au fost înregistrați';
+$strings['InstantMeeting'] = 'Întâlnire instant';
+$strings['Join'] = 'Conectează-te';
+$strings['JoinGlobalVideoConference'] = 'Conectează-te la conferința globală';
+$strings['JoinURLCopied'] = 'URL de conectare copiat';
+$strings['JoinURLToSendToParticipants'] = 'URL de conectare de trimis participanților';
+$strings['LiveMeetings'] = 'Întâlniri live';
+$strings['LinkToFileWasCreatedInCourse'] = 'Un link către fișier a fost adăugat în curs';
+$strings['MeetingDeleted'] = 'Întâlnirea a fost ștearsă';
+$strings['MeetingsFound'] = 'Întâlniri găsite';
+$strings['MeetingUpdated'] = 'Întâlnire actualizată';
+$strings['NewMeetingCreated'] = 'Întâlnire nouă creată';
+$strings['Password'] = 'Parolă';
+$strings['RecurringWithFixedTime'] = 'Recurentă cu oră fixă';
+$strings['RecurringWithNoFixedTime'] = 'Recurentă fără oră fixă';
+$strings['RegisterAllCourseUsers'] = 'Înregistrează toți utilizatorii cursului';
+$strings['RegisteredUserListWasUpdated'] = 'Lista utilizatorilor înregistrați actualizată';
+$strings['RegisteredUsers'] = 'Utilizatori înregistrați';
+$strings['RegisterNoUser'] = 'Nu înregistra niciun utilizator';
+$strings['RegisterTheseGroupMembers'] = 'Înregistrează membrii acestui grup';
+$strings['ScheduleAMeeting'] = 'Programează o întâlnire';
+$strings['ScheduledMeeting'] = 'Întâlnire programată';
+$strings['ScheduledMeetings'] = 'Întâlniri programate';
+$strings['ScheduleAMeeting'] = 'Programează o întâlnire';
+$strings['SearchMeeting'] = 'Caută întâlnire';
+$strings['Session'] = 'Sesiune';
+$strings['StartDate'] = 'Data de început';
+$strings['Started'] = 'pornit';
+$strings['StartInstantMeeting'] = 'Începe întâlnire instantanee';
+$strings['StartMeeting'] = 'Începe întâlnirea';
+$strings['StartTime'] = 'Ora de început';
+$strings['Topic'] = 'Subiect';
+$strings['TopicAndAgenda'] = 'Subiect și agendă';
+$strings['Type'] = 'Tip';
+$strings['UpcomingMeetings'] = 'Întâlniri viitoare';
+$strings['UpdateMeeting'] = 'Actualizează întâlnirea';
+$strings['UpdateRegisteredUserList'] = 'Actualizează lista utilizatorilor înregistrați';
+$strings['UserRegistration'] = 'Înregistrare utilizator';
+$strings['Y-m-d H:i'] = 'Y-m-d H:i';
+$strings['Waiting'] = 'în așteptare';
+$strings['XRecordingOfMeetingXFromXDurationXDotX'] = '%s înregistrare a întâlnirii %s din %s (%s).%s';
+$strings['YouAreNotRegisteredToThisMeeting'] = 'Nu sunteți înregistrat la această întâlnire';
+$strings['ZoomVideoConferences'] = 'Conferințe video Zoom';
+$strings['Recordings'] = 'Înregistrări';
+$strings['CreateGlobalVideoConference'] = 'Creează conferință video globală';
+$strings['ConferenceNotStarted'] = 'Conferința nu a început';
+$strings['MeetingNotFound'] = 'Întâlnire negăsită';
+$strings['JoinURLNotAvailable'] = 'URL indisponibil';
+$strings['Meetings'] = 'Întâlniri';
+$strings['ConferenceType'] = 'Tip conferință';
+$strings['ForEveryone'] = 'Toată lumea';
+$strings['SomeUsers'] = 'Unii utilizatori (Selectați ulterior)';
+$strings['Activity'] = 'Activitate';
+$strings['ConferenceNotAvailable'] = 'Conferință indisponibilă';

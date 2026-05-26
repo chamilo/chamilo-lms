@@ -329,10 +329,15 @@ class Security
         static $purifier = [];
         if (!isset($purifier[$user_status])) {
             $cache_dir = api_get_path(SYS_ARCHIVE_PATH).'Serializer';
-            if (!file_exists($cache_dir)) {
+
+            if (!is_dir($cache_dir)) {
                 $mode = api_get_permissions_for_new_directories();
-                mkdir($cache_dir, $mode);
+
+                if (!@mkdir($cache_dir, $mode) && !is_dir($cache_dir)) {
+                    error_log('Cannot create HTMLPurifier cache directory: '.$cache_dir);
+                }
             }
+
             $config = HTMLPurifier_Config::createDefault();
             $config->set('Cache.SerializerPath', $cache_dir);
             $config->set('Core.Encoding', api_get_system_encoding());
@@ -539,8 +544,7 @@ class Security
      */
     public static function getPasswordRequirements(): array
     {
-        // Default
-        $requirements = [
+        $defaultRequirements = [
             'min' => [
                 'lowercase' => 0,
                 'uppercase' => 0,
@@ -551,11 +555,41 @@ class Security
         ];
 
         $passwordRequirements = api_get_setting('security.password_requirements', true);
-        if (is_array($passwordRequirements)) {
-            $requirements = $passwordRequirements;
+
+        // No custom configuration: keep Chamilo classic defaults.
+        if (
+            !is_array($passwordRequirements) ||
+            !isset($passwordRequirements['min']) ||
+            !is_array($passwordRequirements['min'])
+        ) {
+            return $defaultRequirements;
         }
 
-        return ['min' => $requirements['min']];
+        $configuredMin = $passwordRequirements['min'];
+
+        // Backward compatibility for singular key usage.
+        if (isset($configuredMin['special']) && !isset($configuredMin['specials'])) {
+            $configuredMin['specials'] = $configuredMin['special'];
+        }
+
+        // When a custom configuration exists, missing keys should mean "not required".
+        $normalizedMin = array_merge([
+            'lowercase' => 0,
+            'uppercase' => 0,
+            'numeric' => 0,
+            'length' => 0,
+            'specials' => 0,
+        ], $configuredMin);
+
+        return [
+            'min' => [
+                'lowercase' => (int) $normalizedMin['lowercase'],
+                'uppercase' => (int) $normalizedMin['uppercase'],
+                'numeric' => (int) $normalizedMin['numeric'],
+                'length' => (int) $normalizedMin['length'],
+                'specials' => (int) $normalizedMin['specials'],
+            ],
+        ];
     }
 
     /**

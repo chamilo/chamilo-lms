@@ -1,0 +1,128 @@
+{
+  "semantics": [
+    {
+      "label": "Ülesande kirjeldus",
+      "description": "Kirjelda, kuidas kasutaja peaks ülesande lahendama.",
+      "placeholder": "Kliki järgnevas tekstis kõigile tegusõnadele."
+    },
+    {
+      "label": "Tekstiväli",
+      "placeholder": "See on vastus: *vastus*.",
+      "description": "",
+      "important": {
+        "description": "<ul><li>Märgitud sõnad lisatakse tärni (*) kasutades.</li><li>Tärni lisamiseks kasuta topelt-tärni ** = *.</li></ul>",
+        "example": "Õiged sõnad märgitakse nii: *õigesõna*, tärn lisataksenii: *õigesõna***."
+      }
+    },
+    {
+      "label": "Üldine tagasiside",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Vaikimisi"
+            }
+          ],
+          "label": "Määratle kohandatud tagasiside igale punktisumma vahemikule",
+          "description": "Kliki \"Lisa vahemik\" nupule vajalike vahemike lisamiseks. Näiteks: 0-20% halb tulemus, 21-91% keskmine tulemus, 91-100% suurepärane tulemus!",
+          "entity": "vahemik",
+          "field": {
+            "fields": [
+              {
+                "label": "Punktisumma vahemik"
+              },
+              {},
+              {
+                "label": "Tagasiside määratletud punktisumma vahemikule",
+                "placeholder": "Sisesta tagasiside"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "\"Kontrolli\" nupu tekst",
+      "default": "Kontrolli"
+    },
+    {
+      "label": "\"Proovi uuesti\" nupu tekst",
+      "default": "Proovi uuesti"
+    },
+    {
+      "label": "\"Näita lahendust\" nupu tekst",
+      "default": "Näita lahendust"
+    },
+    {
+      "label": "Käitumisseaded.",
+      "description": "Nende valikutega saad määrata ülesande käitumise.",
+      "fields": [
+        {
+          "label": "Luba \"Proovi uuesti\" nupp"
+        },
+        {
+          "label": "Luba \"Näita lahendust\" nupp"
+        },
+        {
+          "label": "Luba \"Kontrolli\" nupp"
+        },
+        {
+          "label": "Näita punktisumma tulemus",
+          "description": "Iga vastusega teenitud punktid."
+        }
+      ]
+    },
+    {
+      "label": "Õige vastuse tekst",
+      "default": "Õige!",
+      "description": "Õigele vastusele osutav tekst"
+    },
+    {
+      "label": "Vale vastuse tekst",
+      "default": "Vale!",
+      "description": "Valele vastusele osutav tekst"
+    },
+    {
+      "label": "Täitmata vastuse tekst",
+      "default": "Puudu!",
+      "description": "Puuduvale vastusele osutav tekst"
+    },
+    {
+      "label": "Näita lahendust kirjeldus",
+      "default": "Ülesanne on uuendatud ja sisaldab nüüd lahendust.",
+      "description": "See tekst teatab kasutajale, et ülesandele on lisatud lahendus."
+    },
+    {
+      "label": "Punktisumma riba tekstiline esitus tekstilugeri kasutajaile",
+      "default": "Sa said :num punkti :total punktist"
+    },
+    {
+      "label": "Label for the full readable text for assistive technologies",
+      "default": "Full readable text"
+    },
+    {
+      "label": "Label for the text where words can be marked for assistive technologies",
+      "default": "Full text where words can be marked"
+    },
+    {
+      "label": "Solution mode header for assistive technologies",
+      "default": "Solution mode"
+    },
+    {
+      "label": "Checking mode header for assistive technologies",
+      "default": "Checking mode"
+    },
+    {
+      "label": "Assistive technology description for \"Check\" button",
+      "default": "Check the answers. The responses will be marked as correct, incorrect, or unanswered."
+    },
+    {
+      "label": "Assistive technology description for \"Show Solution\" button",
+      "default": "Show the solution. The task will be marked with its correct solution."
+    },
+    {
+      "label": "Assistive technology description for \"Retry\" button",
+      "default": "Retry the task. Reset all responses and start the task over again."
+    }
+  ]
+}

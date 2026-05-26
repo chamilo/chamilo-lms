@@ -52,6 +52,16 @@ class MoodleImport
             case 'application/x-gzip':
                 $backUpFile = new PharData($filePath);
 
+                // Guard against ZIP Slip: validate all entry paths before extraction
+                foreach (new RecursiveIteratorIterator($backUpFile) as $pharEntry) {
+                    $entryPath = str_replace('\\', '/', $pharEntry->getPathname());
+                    $pharPath = str_replace('\\', '/', $filePath);
+                    $relative = ltrim(substr($entryPath, strlen($pharPath)), '/');
+                    if (str_contains($relative, '../') || str_starts_with($relative, '/')) {
+                        throw new Exception(get_lang('Error importing file'));
+                    }
+                }
+
                 if (false === $backUpFile->extractTo($destinationDir)) {
                     throw new Exception(get_lang('Error importing file'));
                 }

@@ -10,15 +10,13 @@ use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
 use Chamilo\CoreBundle\Entity\MessageTag;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Bundle\SecurityBundle\Security;
 
-// use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
-
-final class MessageTagExtension implements QueryCollectionExtensionInterface // , QueryItemExtensionInterface
+final readonly class MessageTagExtension implements QueryCollectionExtensionInterface // , QueryItemExtensionInterface
 {
     public function __construct(
-        private readonly Security $security
+        private UserHelper $userHelper,
     ) {}
 
     public function applyToCollection(
@@ -31,24 +29,18 @@ final class MessageTagExtension implements QueryCollectionExtensionInterface // 
         $this->addWhere($queryBuilder, $resourceClass);
     }
 
-    /*public function applyToItem(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, array $identifiers, string $operationName = null, array $context = []): void
-    {
-        //error_log('applyToItem');
-        //$this->addWhere($queryBuilder, $resourceClass);
-    }*/
-
     private function addWhere(QueryBuilder $queryBuilder, string $resourceClass): void
     {
         if (MessageTag::class !== $resourceClass) {
             return;
         }
 
-        $user = $this->security->getUser();
+        $user = $this->userHelper->getCurrent();
         $alias = $queryBuilder->getRootAliases()[0];
 
-        $queryBuilder->andWhere(" $alias.user = :current ");
-        $queryBuilder->setParameters([
-            'current' => $user,
-        ]);
+        $queryBuilder
+            ->andWhere($queryBuilder->expr()->eq("$alias.user", ':current'))
+            ->setParameter('current', $user->getId())
+        ;
     }
 }

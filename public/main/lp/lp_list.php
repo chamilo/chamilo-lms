@@ -801,7 +801,7 @@ foreach ($categories as $category) {
                             api_get_self().'?'.$cidReq
                                 ."&lp_id=$id&action=toggle_seriousgame",
                             'trophy',
-                            'warning',
+                            'secondary',
                             [
                                 'class' => 'btn-xs active',
                                 'title' => htmlentities(get_lang('Disable gamification mode')),

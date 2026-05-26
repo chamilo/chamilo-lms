@@ -9,10 +9,12 @@ namespace Chamilo\CoreBundle\Controller;
 use SocialManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * @author Julio Montoya <gugli100@gmail.com>.
  */
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
 #[Route('/online')]
 class OnlineController extends BaseController
 {

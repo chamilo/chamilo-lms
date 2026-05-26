@@ -13,7 +13,7 @@ $request = Container::getRequest();
 
 $exerciseId = $request->query->getInt('exerciseId');
 
-$renderRegion = $plugin->isEnableForExercise($exerciseId);
+$renderRegion = $plugin->isEnableForExercise($exerciseId, $request);
 
 if ($renderRegion) {
     $_template['show_region'] = true;
@@ -43,9 +43,9 @@ if ($renderRegion) {
     }
 
     if ($trackingExercise) {
-        $exercise = new Exercise($trackingExercise->getCId());
+        $exercise = new Exercise($trackingExercise->getCourse()->getId());
 
-        if ($exercise->read($trackingExercise->getExeExoId())) {
+        if ($exercise->read($trackingExercise->getQuiz()->getIid())) {
             $_template['exercise_type'] = (int) $exercise->selectType();
         }
     }

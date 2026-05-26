@@ -1,0 +1,77 @@
+<?php
+$strings['plugin_title'] = 'Certificat personalizat';
+$strings['plugin_comment'] = 'Acest plugin vă permite să creați certificate personalizate pentru fiecare curs.';
+$strings['enable_plugin_customcertificate'] = 'Activează plugin';
+$strings['customcertificate_course_enable'] = 'Certificat personalizat activat în curs';
+$strings['use_certificate_default'] = 'Utilizează certificatul personalizat implicit';
+$strings['ToolDisabled'] = 'Instrumentul este dezactivat din administrare';
+$strings['OnlyAdminPlatform'] = 'Instrument doar pentru administratori';
+$strings['OnlyAdminPlatformOrTeacher'] = 'Instrument doar pentru administratori și profesori';
+$strings['TrainingEntity'] = 'Entitate de formare';
+$strings['DescriptionFront'] = 'Descriere față';
+$strings['DescriptionRear'] = 'Descriere spate';
+$strings['Certify'] = 'Certifică';
+$strings['CertificateType'] = 'Tip certificat';
+$strings['CertifyThat'] = 'CERTIFICĂ CĂ';
+$strings['StudentCourseInfo'] = 'Date student și curs';
+$strings['StudentData'] = 'Date student';
+$strings['CourseData'] = 'Date curs';
+$strings['Modality'] = 'Modalitate';
+$strings['Contents'] = 'Conținuturi';
+$strings['ContentsToShow'] = 'Conținuturi de afișat';
+$strings['ContentsCourseDescription'] = 'Utilizează secțiunea „Descriere curs” > „Conținuturi”';
+$strings['ContentsIndexLearnpath'] = 'Utilizează indexul parcursului de învățare';
+$strings['ContentsCustom'] = 'Utilizează conținut personalizat';
+$strings['ContentsHide'] = 'Nu afișa conținuturi';
+$strings['Dates'] = 'Date';
+$strings['CourseDeliveryDates'] = 'Date de livrare curs';
+$strings['Custom'] = 'Personalizat';
+$strings['UseDateSessionAccess'] = 'Utilizează datele de acces la sesiune';
+$strings['ExpectionPlace'] = 'Loc expediere';
+$strings['DateExpediction'] = 'Data expediere';
+$strings['UseDateEndAccessSession'] = 'Utilizează data de încheiere a accesului la sesiune';
+$strings['UseDateDownloadCertificate'] = 'Utilizează data descărcării certificatului';
+$strings['UseDateGenerationCertificate'] = 'Utilizează data generării certificatului';
+$strings['UseCustomDate'] = 'Utilizează dată personalizată';
+$strings['LogosSeal'] = 'Logo-uri / Sigilii';
+$strings['LogoLeft'] = 'Logo stânga';
+$strings['LogoCenter'] = 'Logo centru';
+$strings['LogoRight'] = 'Logo dreapta';
+$strings['Seal'] = 'Sigiliu';
+$strings['Signature1'] = 'Semnătură 1';
+$strings['Signature2'] = 'Semnătură 2';
+$strings['Signature3'] = 'Semnătură 3';
+$strings['Signature4'] = 'Semnătură 4';
+$strings['SignatureText1'] = 'Text semnătură 1';
+$strings['SignatureText2'] = 'Text semnătură 2';
+$strings['SignatureText3'] = 'Text semnătură 3';
+$strings['SignatureText4'] = 'Text semnătură 4';
+$strings['OtherOptions'] = 'Alte opțiuni';
+$strings['MarginRight'] = 'Margine dreapta';
+$strings['MarginLeft'] = 'Margine stânga';
+$strings['SetDefaultTemplate'] = 'Setați șablonul implicit';
+$strings['MessageDefaultTemplate'] = 'Salvați această personalizare implicită pentru cursuri și sesiuni fără
+     certificate definite';
+$strings['None'] = 'Niciunul';
+$strings['ErrorTemplateCertificate'] = 'Nu este definit niciun șablon pentru certificat.
+     Nu există șablon implicit.';
+$strings['DateStartEnd'] = 'Cu data de început și data de sfârșit: ';
+$strings['ExpedictionIn'] = 'Emis în';
+$strings['Signatures'] = 'Semnături';
+$strings['BackgroundCertificate'] = 'Imagine de fundal a certificatului';
+$strings['Background'] = 'Fundal';
+$strings['CertificateSetting'] = 'Setări certificat';
+$strings['ToolDisabledCourse'] = 'Instrument dezactivat în setările cursului';
+$strings['ToolUseDefaultSettingCourse'] = 'Instrument configurat să folosească certificatul implicit. <br>
+     Îl puteți edita din ecranul de Administrație -> Pluginuri -> Certificat personalizat. <br>
+     Sau, dacă doriți, puteți dezactiva opțiunea de a folosi certificatul implicit în configurația pluginului din curs';
+$strings['CertificateSettingDefault'] = 'Setări certificat implicit';
+$strings['InfoFromDefaultCertificate'] = 'Conținutul certificatului se bazează pe certificatul implicit.
+     Modificările efectuate nu vor afecta certificatul implicit.';
+$strings['to'] = ' la ';
+$strings['formatDownloadDate'] = ' la %sth %s, %s';
+$strings['PrintCertificate'] = 'Tipăriți certificatul';
+$strings['QuestionDelete'] = 'Doriți să ștergeți diploma specifică și să folosiți certificatul implicit?';
+$strings['SuccessDelete'] = 'Șters cu succes';
+$strings['ProblemDelete'] = 'Problemă la ștergerea certificatului';
+$strings['OnlyCustomCertificates'] = 'Sunt exportate doar cursurile cu certificat personalizat';

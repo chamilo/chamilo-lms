@@ -2,11 +2,11 @@
 {%- block content %}
 
     {%- autoescape false %}
-    <div class="flex flex-row">
-        <div class="w-2/5">
+    <div class="grid md:grid-cols-3 gap-4">
+        <div>
             {{ left }}
         </div>
-        <div class="w-3/5">
+        <div class="md:col-span-2">
             {{ right }}
         </div>
     </div>

@@ -94,6 +94,8 @@ if ($isCli) {
             throw $exception;
         }
 
+        error_log($exception->getTraceAsString());
+
         $event = new ExceptionEvent(
             $kernel,
             $request,
@@ -115,6 +117,13 @@ if ($isCli) {
         exit;
     }
 
+    // Start session for legacy code just in case not already started by Symfony.
+    if (!$request->hasSession()) {
+        $request->setSession(
+            Container::getLegacyHelper()->getSession()
+        );
+    }
+
     $container = $kernel->getContainer();
     $router = $container->get('router');
     $context = $router->getContext();
@@ -129,6 +138,8 @@ if ($isCli) {
         ) {
             throw $exception;
         }
+
+        error_log($exception->getTraceAsString());
 
         $event = new ExceptionEvent(
             $kernel,
@@ -181,7 +192,13 @@ if ($isCli) {
     $libraryPath = __DIR__.'/lib/';
     $container = $kernel->getContainer();
 
-    // Symfony uses request_stack now
+    // Symfony uses request_stack now.
+    // When http_cache is active, Kernel::handle() delegates to the HttpCache wrapper which
+    // passes a duplicate of $request to the inner kernel. LocaleSubscriber sets the locale
+    // on that duplicate, not on the original $request. Re-sync from the session so that
+    // getMainRequest()->getLocale() returns the correct locale in legacy code.
+    $resolvedLocale = $request->getSession()->get('_locale') ?: $request->getLocale();
+    $request->setLocale($resolvedLocale);
     $container->get('request_stack')->push($request);
     $container->get('translator')->setLocale($request->getLocale());
 
@@ -197,6 +214,14 @@ if ($isCli) {
                 Container::getSession()->getFlashBag()->add($typeMessage, $message);
             }
         }
+    }
+
+    if (function_exists('api_apply_samesite_none_session_cookie_to_response')) {
+        api_apply_samesite_none_session_cookie_to_response($response, $request);
+    }
+
+    if (function_exists('api_apply_samesite_none_session_cookie_setting')) {
+        api_apply_samesite_none_session_cookie_setting();
     }
 
     $charset = 'UTF-8';

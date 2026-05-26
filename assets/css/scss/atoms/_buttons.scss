@@ -1,597 +1,452 @@
+@use "../abstracts/mixins" as m;
+
 .btn {
-  @apply cursor-pointer font-semibold gap-2 inline-flex justify-center items-center px-6 py-2 rounded-md transition flex-none text-base;
+  @include m.base-button();
+  @apply text-base;
 
   .mdi {
     @apply text-base;
   }
 
-  &--primary {
-    @apply bg-primary text-white;
-
-    &:hover,
-    &:focus {
-      @apply bg-support-4;
-    }
+  &.disabled,
+  &:disabled {
+    @apply opacity-60 cursor-default pointer-events-none;
   }
 
-  &--primary-outline {
-    @apply bg-white border border-solid border-primary text-primary;
-
-    &:hover,
-    &:focus {
-      @apply bg-primary text-white;
-    }
+  // ---------------------------------------------------------------------------
+  // Severity — filled
+  // ---------------------------------------------------------------------------
+  &--primary {
+    @include m.button-filled-style('primary', 'primary-gradient');
   }
 
   &--secondary {
-    @apply bg-secondary text-white;
-
-    &:hover,
-    &:focus {
-      @apply bg-support-5;
-    }
-  }
-
-  &--secondary-outline {
-    @apply bg-white border border-solid border-secondary text-secondary;
-
-    &:hover,
-    &:focus {
-      @apply bg-secondary text-white;
-    }
+    @include m.button-filled-style('secondary', 'secondary-gradient');
   }
 
   &--plain {
-    @apply bg-gray-50 text-white mr-1.5;
-
-    &:hover,
-    &:focus {
-      @apply bg-gray-90;
-    }
-  }
-
-  &--plain-outline {
-    @apply bg-white border border-solid border-black text-black;
-
-    &:hover,
-    &:focus {
-      @apply bg-gray-90 border-gray-90 text-white;
-    }
+    @include m.button-filled-style('gray-90', 'black');
   }
 
   &--success {
-    @apply bg-success text-white;
-
-    &:hover,
-    &:focus {
-      @apply bg-success;
-    }
-  }
-
-  &--success-outline {
-    @apply bg-white border border-solid border-success text-success;
-
-    &:hover,
-    &:focus {
-      @apply bg-success text-white;
-    }
+    @include m.button-filled-style('success', 'success-gradient');
   }
 
   &--info {
-    @apply bg-info text-white;
-
-    &:hover,
-    &:focus {
-      @apply bg-info;
-    }
-  }
-
-  &--info-outline {
-    @apply bg-white border border-solid border-info text-info;
-
-    &:hover,
-    &:focus {
-      @apply bg-info text-white;
-    }
+    @include m.button-filled-style('info', 'info-gradient');
   }
 
   &--warning {
-    @apply bg-warning text-gray-90;
+    @include m.button-filled-style('warning', 'warning-gradient');
+  }
 
-    &:hover,
-    &:focus {
-      @apply bg-warning;
-    }
+  &--danger {
+    @include m.button-filled-style('danger', 'danger-gradient');
+  }
+
+  // ---------------------------------------------------------------------------
+  // Severity — outlined
+  // ---------------------------------------------------------------------------
+  &--primary-outline {
+    @include m.button-outlined-style('primary');
+  }
+
+  &--secondary-outline {
+    @include m.button-outlined-style('secondary');
+  }
+
+  &--plain-outline {
+    @include m.button-outlined-style('black');
+  }
+
+  &--success-outline {
+    @include m.button-outlined-style('success');
+  }
+
+  &--info-outline {
+    @include m.button-outlined-style('info');
   }
 
   &--warning-outline {
-    @apply bg-white border border-solid border-warning text-warning;
-
-    &:hover,
-    &:focus {
-      @apply bg-warning text-gray-90;
-    }
-  }
-
-  &--danger {
-    @apply bg-error text-white;
-
-    &:hover,
-    &:focus {
-      @apply bg-error;
-    }
+    @include m.button-outlined-style('warning');
   }
 
   &--danger-outline {
-    @apply bg-white border border-solid border-error text-error;
-
-    &:hover,
-    &:focus {
-      @apply bg-error text-white;
-    }
+    @include m.button-outlined-style('danger');
   }
 
-  &--primary,
-  &--secondary,
-  &--plain,
-  &--success,
-  &--info,
-  &--warning,
-  &--danger {
-    &:disabled {
-      @apply bg-gray-25 cursor-default select-none text-gray-50;
-    }
-  }
-
-  &--primary-outline,
-  &--secondary-outline,
-  &--plain-outline,
-  &--success-outline,
-  &--info-outline,
-  &--warning-outline,
-  &--danger-outline {
-    &:disabled,
-    &.disabled {
-      @apply bg-gray-10 border-gray-25 cursor-default select-none text-gray-50;
-    }
-  }
-
+  // ---------------------------------------------------------------------------
+  // Size variants
+  // ---------------------------------------------------------------------------
   &-sm,
-  &--sm{
-    @apply px-3 py-1;
+  &--sm {
+    padding: calc(0.25rem - 1px) calc(0.5rem - 1px);
     font-size: 13px;
   }
 }
 
-$color_7: #ffffff;
-$color_15: #A855F7;
-$background-color_4: transparent;
-$border-color_4: transparent;
-$border-color_12: #9333EA;
-
-@mixin filled-style($color, $hoverColor) {
-  $textColor: 'white';
-
-  @if('warning' == $color) {
-    $textColor: 'gray-90';
-  }
-
-  @apply bg-#{$color} text-#{$textColor};
-
-  &:enabled {
-    &:hover,
-    &:focus,
-    &:active {
-      @apply bg-#{$hoverColor};
-    }
-  }
-
-  &:disabled,
-  &.p-disabled {
-    @apply bg-gray-25 text-gray-50;
-  }
-}
-
-@mixin outlined-style($color) {
-  @apply bg-white border border-solid border-#{$color} text-#{$color};
-
-  &:enabled {
-    &:hover,
-    &:focus,
-    &:active {
-      @if ('warning' == $color) {
-        @apply bg-#{$color} border-#{$color} text-gray-90;
-      } @else if('black' == $color) {
-        @apply bg-gray-90 border-gray-90 text-white;
-      } @else {
-        @apply bg-#{$color} border-#{$color} text-white;
-      }
-    }
-  }
-
-  &:disabled,
-  &.p-disabled {
-    @apply bg-gray-10 border-gray-25 text-gray-50;
-  }
-}
-
-@mixin text-style($color) {
-  @apply bg-white text-#{$color};
-
-  &:enabled {
-    &:hover,
-    &:focus,
-    &:active {
-      @if('black' == $color) {
-        @apply bg-support-1 text-primary;
-      } @else {
-        @apply bg-gray-10;
-      }
-    }
-  }
-}
-
+// =============================================================================
+// PrimeVue Button — base
+// =============================================================================
 .p-button {
-  @include filled-style('primary', 'support-4');
-  @apply cursor-pointer font-semibold gap-2 inline-flex justify-center items-center px-4 py-2 rounded-md transition;
+  @include m.base-button();
+  @include m.button-filled-style('primary', 'primary-gradient');
+  position: relative;
+  overflow: hidden;
+  outline-color: transparent;
+  font-family: inherit;
+  font-feature-settings: inherit;
 
-  &:focus {
-    @apply outline-none;
+  &:disabled {
+    @apply cursor-default;
   }
 
+  // badge inside button
   .p-badge {
     @apply bg-white font-semibold h-4 leading-4 min-w-[1rem] text-primary text-[0.625rem];
   }
 
-  &.p-button-outlined {
-    @include outlined-style('primary');
+  // icon ordering
+  .p-button-icon-right {
+    @apply order-1;
   }
 
-  &.p-button-text {
-    @include text-style('primary');
-  }
-
-  &.p-button-raised {
-    @apply shadow-lg;
-  }
-
-  &.p-button-rounded {
-    @apply rounded-full;
-  }
-
-  &.p-button-sm {
-    @apply px-2 py-1;
-
-    .p-button-icon,
-    .p-button-label {
-      font-size: 13px;
-    }
-  }
-
-  &.p-button-lg {
-    @apply px-8 py-4;
-
-    .p-button-icon,
-    .p-button-label {
-      font-size: 18px;
-    }
+  .p-button-icon-bottom {
+    @apply order-2;
   }
 
   .p-button-icon {
     @apply text-base;
   }
 
+  // label
   .p-button-label {
     @apply align-middle font-semibold text-base;
   }
+}
+
+// =============================================================================
+// Layout variants
+// =============================================================================
+.p-button-vertical {
+  @apply flex-col;
+}
+
+.p-button-fluid {
+  @apply w-full;
 
   &.p-button-icon-only {
-    @apply px-3 gap-0;
+    @apply w-12;
+  }
+}
 
+// =============================================================================
+// Size variants
+// =============================================================================
+.p-button-sm {
+  padding: calc(0.25rem - 1px) calc(0.5rem - 1px);
+
+  &:not(.p-button-icon-only) .p-button-icon,
+  &:not(.p-button-icon-only) .p-button-label {
+    font-size: 13px;
+  }
+}
+
+.p-button-lg {
+  padding: calc(1rem - 1px) calc(2rem - 1px);
+
+  .p-button-icon,
+  .p-button-label {
+    font-size: 18px;
+  }
+}
+
+// =============================================================================
+// Icon-only
+// =============================================================================
+.p-button-icon-only {
+  @apply gap-0;
+
+  &:not(.p-button-sm) {
+    padding-left: calc(0.75rem - 1px);
+    padding-right: calc(0.75rem - 1px);
+  }
+
+  &.p-button-sm {
+    padding-left: calc(0.5rem - 1px);
+    padding-right: calc(0.5rem - 1px);
+  }
+
+  .p-button-label {
+    @apply flex-initial hidden w-0;
+  }
+
+  &::after {
+    @apply invisible w-0;
+    content: "\00A0";
+  }
+}
+
+// =============================================================================
+// Shape variants
+// =============================================================================
+.p-button-raised {
+  @apply shadow-lg;
+}
+
+.p-button-rounded {
+  @apply rounded-full;
+
+  &.p-button-icon-only {
+    @apply rounded-full;
+  }
+}
+
+// =============================================================================
+// Severity — filled
+// =============================================================================
+.p-button-secondary {
+  @include m.button-filled-style('secondary', 'secondary-gradient');
+}
+
+.p-button-success {
+  @include m.button-filled-style('success', 'success-gradient');
+}
+
+.p-button-info {
+  @include m.button-filled-style('info', 'info-gradient');
+}
+
+.p-button-warn {
+  @include m.button-filled-style('warning', 'warning-gradient');
+}
+
+.p-button-help {
+  @include m.button-filled-style('tertiary', 'tertiary-gradient');
+}
+
+.p-button-danger {
+  @include m.button-filled-style('danger', 'danger-gradient');
+}
+
+.p-button-contrast {
+  @include m.button-filled-style('gray-90', 'black');
+}
+
+// =============================================================================
+// Severity — outlined
+// =============================================================================
+.p-button-outlined {
+  @include m.button-outlined-style('primary');
+
+  &.p-button-secondary {
+    @include m.button-outlined-style('secondary');
+  }
+
+  &.p-button-success {
+    @include m.button-outlined-style('success');
+  }
+
+  &.p-button-info {
+    @include m.button-outlined-style('info');
+  }
+
+  &.p-button-warn {
+    @include m.button-outlined-style('warning');
+  }
+
+  &.p-button-help {
+    @include m.button-outlined-style('tertiary');
+  }
+
+  &.p-button-danger {
+    @include m.button-outlined-style('danger');
+  }
+
+  &.p-button-contrast {
+    @include m.button-outlined-style('black');
+  }
+
+  &.p-button-plain {
+    @apply bg-transparent border-black text-black
+      focus-visible:outline-black focus-visible:outline-1 focus-visible:outline-offset-1 focus-visible:shadow-none;
+
+    &:not(:disabled) {
+      @apply
+        hover:bg-gray-90 hover:border-gray-90 hover:text-white
+        active:bg-gray-90 active:border-gray-90 active:text-white active:brightness-[0.92];
+    }
+  }
+}
+
+// =============================================================================
+// Severity — text (no background, no border)
+// =============================================================================
+.p-button-text {
+  @include m.button-text-style('primary');
+
+  &.p-button-secondary {
+    @include m.button-text-style('secondary');
+  }
+
+  &.p-button-success {
+    @include m.button-text-style('success');
+  }
+
+  &.p-button-info {
+    @include m.button-text-style('info');
+  }
+
+  &.p-button-warn {
+    @include m.button-text-style('warning');
+  }
+
+  &.p-button-help {
+    @include m.button-text-style('tertiary');
+  }
+
+  &.p-button-danger {
+    @include m.button-text-style('danger');
+  }
+
+  &.p-button-contrast {
+    @include m.button-text-style('black');
+  }
+
+  &.p-button-plain {
+    @apply bg-transparent text-gray-50 border-transparent
+      focus-visible:outline-gray-50 focus-visible:outline-1 focus-visible:outline-offset-1 focus-visible:shadow-none;
+
+    &:not(:disabled) {
+      @apply
+        hover:bg-gray-10
+        active:bg-gray-25;
+    }
+  }
+}
+
+// =============================================================================
+// Link variant
+// =============================================================================
+.p-button-link {
+  @apply bg-transparent text-primary border-transparent
+    focus-visible:outline-primary focus-visible:outline-1 focus-visible:outline-offset-1 focus-visible:shadow-none;
+
+  &:not(:disabled) {
+    @apply
+      hover:bg-gray-10 hover:border-transparent
+      active:bg-gray-25 active:border-transparent;
+  }
+
+  &:not(:disabled):hover {
     .p-button-label {
-      @apply flex-initial hidden w-0;
+      @apply underline;
     }
   }
 
-  &.p-button-link {
-    @apply cursor-pointer bg-transparent text-primary;
-
-    &:enabled {
-      &:hover,
-      &:focus,
-      &:active {
-        @apply bg-gray-10;
-
-        .p-button-label {
-          @apply underline;
-        }
-      }
+  &:not(:disabled):active {
+    .p-button-label {
+      @apply underline;
     }
   }
 }
 
-// secondary button
-.p-button.p-button-secondary {
-  @include filled-style('secondary', 'secondary-hover');
-
-  &.p-button-outlined {
-    @include outlined-style('secondary');
-  }
-
-  &.p-button-text {
-    @include text-style('secondary');
-  }
-}
-
-.p-buttonset.p-button-secondary {
-  > .p-button {
-    @include filled-style('secondary', 'secondary-hover');
+// =============================================================================
+// ButtonSet (grouped buttons) — severity overrides
+// =============================================================================
+.p-buttonset {
+  &.p-button-secondary > .p-button {
+    @include m.button-filled-style('secondary', 'secondary-gradient');
 
     &.p-button-outlined {
-      @include outlined-style('secondary');
+      @include m.button-outlined-style('secondary');
     }
 
     &.p-button-text {
-      @include text-style('secondary');
+      @include m.button-text-style('secondary');
     }
   }
-}
 
-// plain button
-.p-button.p-button-plain {
-  @include filled-style('gray-90', 'black');
-
-  &.p-button-outlined {
-    @include outlined-style('black');
-  }
-
-  &.p-button-text {
-    @include text-style('black');
-  }
-}
-
-.p-buttonset.p-button-plain {
-  > .p-button {
-    @include filled-style('gray-90', 'black');
+  &.p-button-success > .p-button {
+    @include m.button-filled-style('success', 'success-gradient');
 
     &.p-button-outlined {
-      @include outlined-style('black');
+      @include m.button-outlined-style('success');
     }
 
     &.p-button-text {
-      @include text-style('black');
+      @include m.button-text-style('success');
     }
   }
-}
 
-// info button
-.p-button.p-button-info {
-  @include filled-style('info', 'info');
-
-  &.p-button-outlined {
-    @include outlined-style('info');
-  }
-
-  &.p-button-text {
-    @include text-style('info');
-  }
-}
-
-.p-buttonset.p-button-info {
-  > .p-button {
-    @include filled-style('info', 'info');
+  &.p-button-info > .p-button {
+    @include m.button-filled-style('info', 'info-gradient');
 
     &.p-button-outlined {
-      @include outlined-style('info');
+      @include m.button-outlined-style('info');
     }
 
     &.p-button-text {
-      @include text-style('info');
+      @include m.button-text-style('info');
     }
   }
-}
 
-// success button
-.p-button.p-button-success {
-  @include filled-style('success', 'success');
-
-  &.p-button-outlined {
-    @include outlined-style('success');
-  }
-
-  &.p-button-text {
-    @include text-style('success');
-  }
-}
-
-.p-buttonset.p-button-success {
-  > .p-button {
-    @include filled-style('success', 'success');
+  &.p-button-warn > .p-button {
+    @include m.button-filled-style('warning', 'warning-gradient');
 
     &.p-button-outlined {
-      @include outlined-style('success');
+      @include m.button-outlined-style('warning');
     }
 
     &.p-button-text {
-      @include text-style('success');
+      @include m.button-text-style('warning');
     }
   }
-}
 
-// warning button
-.p-button.p-button-warning {
-  @include filled-style('warning', 'warning');
-
-  &.p-button-outlined {
-    @include outlined-style('warning');
-  }
-
-  &.p-button-text {
-    @include text-style('warning');
-  }
-}
-
-.p-buttonset.p-button-warning {
-  > .p-button {
-    @include filled-style('warning', 'warning');
+  &.p-button-help > .p-button {
+    @include m.button-filled-style('tertiary', 'tertiary-gradient');
 
     &.p-button-outlined {
-      @include outlined-style('warning');
+      @include m.button-outlined-style('tertiary');
     }
 
     &.p-button-text {
-      @include text-style('warning');
-    }
-  }
-}
-
-// help button
-.p-button.p-button-help {
-  color: $color_7;
-  background: #A855F7;
-  border: 1px solid #A855F7;
-
-  &:enabled {
-    &:hover {
-      background: #9333EA;
-      color: $color_7;
-      border-color: $border-color_12;
-    }
-
-    &:active {
-      background: #9333EA;
-      color: $color_7;
-      border-color: $border-color_12;
-    }
-  }
-}
-
-.p-buttonset.p-button-help {
-  > .p-button {
-    color: $color_7;
-    background: #A855F7;
-    border: 1px solid #A855F7;
-
-    &:enabled {
-      &:hover {
-        background: #9333EA;
-        color: $color_7;
-        border-color: $border-color_12;
-      }
-
-      &:active {
-        background: #9333EA;
-        color: $color_7;
-        border-color: $border-color_12;
-      }
+      @include m.button-text-style('tertiary');
     }
   }
 
-  > .p-button.p-button-outlined {
-    background-color: $background-color_4;
-    color: $color_15;
-    border: 1px solid;
-
-    &:enabled {
-      &:hover {
-        background: rgba(168, 85, 247, 0.04);
-        color: $color_15;
-        border: 1px solid;
-      }
-
-      &:active {
-        background: rgba(168, 85, 247, 0.16);
-        color: $color_15;
-        border: 1px solid;
-      }
-    }
-  }
-
-  > .p-button.p-button-text {
-    background-color: $background-color_4;
-    color: $color_15;
-    border-color: $border-color_4;
-
-    &:enabled {
-      &:hover {
-        background: rgba(168, 85, 247, 0.04);
-        border-color: $border-color_4;
-        color: $color_15;
-      }
-
-      &:active {
-        background: rgba(168, 85, 247, 0.16);
-        border-color: $border-color_4;
-        color: $color_15;
-      }
-    }
-  }
-}
-
-.p-button.p-button-help.p-button-outlined {
-  background-color: $background-color_4;
-  color: $color_15;
-  border: 1px solid;
-
-  &:enabled {
-    &:hover {
-      background: rgba(168, 85, 247, 0.04);
-      color: $color_15;
-      border: 1px solid;
-    }
-
-    &:active {
-      background: rgba(168, 85, 247, 0.16);
-      color: $color_15;
-      border: 1px solid;
-    }
-  }
-}
-
-.p-button.p-button-help.p-button-text {
-  @apply bg-white text-gray-90;
-
-  &:enabled {
-    &:hover,
-    &:active {
-      @apply bg-gray-10;
-    }
-  }
-}
-
-// danger button
-.p-button.p-button-danger {
-  @include filled-style('error', 'error');
-
-  &.p-button-outlined {
-    @include outlined-style('error');
-  }
-
-  &.p-button-text {
-    @include text-style('error');
-  }
-}
-
-.p-buttonset.p-button-danger {
-  > .p-button {
-    @include filled-style('error', 'error');
+  &.p-button-danger > .p-button {
+    @include m.button-filled-style('danger', 'danger-gradient');
 
     &.p-button-outlined {
-      @include outlined-style('error');
+      @include m.button-outlined-style('danger');
     }
 
     &.p-button-text {
-      @include text-style('error');
+      @include m.button-text-style('danger');
+    }
+  }
+
+  &.p-button-contrast > .p-button {
+    @include m.button-filled-style('gray-90', 'black');
+
+    &.p-button-outlined {
+      @include m.button-outlined-style('black');
+    }
+
+    &.p-button-text {
+      @include m.button-text-style('black');
     }
   }
 }
 
-// toggle button
-.p-togglebutton{
+// =============================================================================
+// Toggle button
+// =============================================================================
+.p-togglebutton {
   &.p-button {
     &.p-highlight {
-
-      &.p-button-plain {
+      &.p-button-contrast {
         @apply bg-support-1 text-primary;
       }
     }

@@ -20,7 +20,7 @@ $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 $tool_name = get_lang('Edit session category');
 
 $interbreadcrumb[] = [
-    'url' => 'session_list.php',
+    'url' => '/admin/session-list',
     'name' => get_lang('Session list'),
 ];
 $interbreadcrumb[] = [
@@ -32,7 +32,7 @@ $sql = "SELECT * FROM $tbl_session_category WHERE id = '".$id."' ORDER BY title"
 $result = Database::query($sql);
 
 if (!$infos = Database::fetch_array($result)) {
-    header('Location: session_list.php');
+    header('Location: /admin/session-list');
     exit();
 }
 
@@ -109,7 +109,7 @@ if (!empty($return)) {
         );
         echo Display::url(
             Display::getMdiIcon('google-classroom', 'ch-tool-icon-gradient', null, 32, get_lang('Training sessions list')),
-            api_get_path(WEB_CODE_PATH).'session/session_list.php'
+            '/admin/session-list'
         );
         echo '</div>';
         ?>

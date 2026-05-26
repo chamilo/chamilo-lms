@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Event\ExerciseQuestionAnsweredEvent;
+use Chamilo\CourseBundle\Entity\CDocument;
 use ChamiloSession as Session;
 use Doctrine\Persistence\ObjectRepository;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -946,7 +947,7 @@ switch ($action) {
         $objQuestion = Question::read($questionId);
         $id = '';
         if ('true' === api_get_setting('exercise.show_question_id')) {
-            $id = '<h4>#'.$objQuestion->course['code'].'-'.$objQuestion->iid.'</h4>';
+            $id = '<small class="text-muted">#'.$objQuestion->course['code'].'-'.$objQuestion->iid.'</small><br>';
         }
         echo $id;
         echo '<p class="lead">'.$objQuestion->get_question_type_name().'</p>';
@@ -1075,29 +1076,64 @@ switch ($action) {
         break;
     case 'sign_attempt':
         api_block_anonymous_users();
-        // Close the session as we don't need it any further
+
+        if (!class_exists('ExerciseSignaturePlugin') || !ExerciseSignaturePlugin::create()->isEnabled()) {
+            echo 'Exercise signature is not available.';
+            exit;
+        }
+
+        $postedExeId = isset($_POST['exe_id']) ? (int) $_POST['exe_id'] : 0;
+        if (empty($postedExeId) && isset($_GET['exe_id'])) {
+            $postedExeId = (int) $_GET['exe_id'];
+        }
+        if (!empty($postedExeId)) {
+            $exeId = $postedExeId;
+        }
+
+        $file = '';
+        if (isset($_POST['file']) && is_string($_POST['file'])) {
+            $file = $_POST['file'];
+        } elseif (isset($_REQUEST['file']) && is_string($_REQUEST['file'])) {
+            $file = $_REQUEST['file'];
+        }
+
+        if (empty($exeId)) {
+            echo 'Missing exercise attempt id.';
+            exit;
+        }
+
+        if (empty($file)) {
+            echo 'Missing signature image.';
+            exit;
+        }
+
+        // Close the session before processing the signature.
         session_write_close();
 
-        if (!Container::getPluginHelper()->isPluginEnabled('ExerciseSignature')) {
+        $track = ExerciseLib::get_exercise_track_exercise_info((int) $exeId);
+        if (empty($track)) {
+            echo 'Exercise attempt was not found.';
             exit;
         }
 
-        $file = isset($_REQUEST['file']) ? $_REQUEST['file'] : '';
-        if (empty($exeId) || empty($file)) {
-            echo 0;
-            exit;
-        }
-
-        $file = str_replace(' ', '+', $file);
-        $track = ExerciseLib::get_exercise_track_exercise_info($exeId);
-        if ($track) {
-            $result = ExerciseSignaturePlugin::saveSignature($currentUserId, $track, $file);
-            if ($result) {
+        if (method_exists('ExerciseSignaturePlugin', 'saveSignatureWithReason')) {
+            $result = ExerciseSignaturePlugin::saveSignatureWithReason($currentUserId, $track, $file);
+            if (!empty($result['success'])) {
                 echo 1;
                 exit;
             }
+
+            echo !empty($result['message']) ? $result['message'] : 'The signature could not be saved.';
+            break;
         }
-        echo 0;
+
+        $result = ExerciseSignaturePlugin::saveSignature($currentUserId, $track, $file);
+        if ($result) {
+            echo 1;
+            exit;
+        }
+
+        echo 'The signature could not be saved.';
         break;
     case 'upload_answer':
         api_block_anonymous_users();
@@ -1236,6 +1272,90 @@ switch ($action) {
 
         echo $html;
         break;
+    case 'list_aiken_documents':
+        header('Content-Type: application/json');
+
+        if (!api_is_allowed_to_edit(null, true)) {
+            echo json_encode(['documents' => [], 'error' => 'Forbidden']);
+            exit;
+        }
+
+        // Close the session as we don't need it any further
+        session_write_close();
+
+        $courseId = api_get_course_int_id();
+        if (empty($courseId)) {
+            echo json_encode(['documents' => []]);
+            exit;
+        }
+
+        $em = Database::getManager();
+
+        $qb = $em->createQueryBuilder();
+        $qb
+            ->select('DISTINCT d')
+            ->from(CDocument::class, 'd')
+            ->innerJoin('d.resourceNode', 'rn')
+            ->innerJoin('rn.resourceFiles', 'rf')
+            ->innerJoin('rn.resourceLinks', 'rl')
+            ->where('d.filetype = :fileType')
+            ->andWhere('IDENTITY(rl.course) = :courseId')
+            ->setParameter('fileType', 'file')
+            ->setParameter('courseId', (int) $courseId)
+            ->orderBy('d.iid', 'DESC')
+        ;
+
+        $documents = [];
+        $results = $qb->getQuery()->getResult();
+
+        foreach ($results as $doc) {
+            if (!$doc instanceof CDocument) {
+                continue;
+            }
+
+            $node = $doc->getResourceNode();
+            if (null === $node) {
+                continue;
+            }
+
+            $files = $node->getResourceFiles();
+            if ($files->isEmpty()) {
+                continue;
+            }
+
+            /** @var ResourceFile|null $file */
+            $file = $files->first();
+            if (null === $file) {
+                continue;
+            }
+
+            $filename = (string) $file->getOriginalName();
+            $extension = strtolower((string) pathinfo($filename, PATHINFO_EXTENSION));
+
+            // Aiken from document currently supports PDF/TXT in the backend flow.
+            if (!in_array($extension, ['pdf', 'txt'], true)) {
+                continue;
+            }
+
+            $title = trim((string) $node->getTitle());
+            if ('' === $title) {
+                $title = $filename;
+            }
+
+            $documents[] = [
+                'document_id' => (int) $doc->getIid(),
+                'resource_file_id' => (int) $file->getId(),
+                'resource_node_id' => (int) $node->getId(),
+                'title' => $title,
+                'filename' => $filename,
+                'mime_type' => (string) $file->getMimeType(),
+                'extension' => $extension,
+                'size' => null,
+            ];
+        }
+
+        echo json_encode(['documents' => $documents]);
+        exit;
     default:
         echo '';
 }

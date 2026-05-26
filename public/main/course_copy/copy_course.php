@@ -113,7 +113,7 @@ if (Security::check_token('post') && (
         $group = [];
         $group[] = $form->createElement('radio', 'copy_option', null, get_lang('Full copy'), 'full_copy');
         $group[] = $form->createElement('radio', 'copy_option', null, get_lang('Let me select learning objects'), 'select_items');
-        $form->addGroup($group, '', get_lang('Please select a backup option'));
+        $form->addGroup($group, null, get_lang('Please select a backup option'));
 
         $group = [];
         $group[] = $form->createElement(
@@ -137,7 +137,7 @@ if (Security::check_token('post') && (
             get_lang('Overwrite file'),
             FILE_OVERWRITE
         );
-        $form->addGroup($group, '', get_lang('What should be done with imported files with the same file name as existing files?'));
+        $form->addGroup($group, null, get_lang('What should be done with imported files with the same file name as existing files?'));
         $form->addProgress();
         $form->addButtonSave(get_lang('Copy course'));
         $form->setDefaults(['copy_option' => 'select_items', 'same_file_name_option' => FILE_OVERWRITE]);

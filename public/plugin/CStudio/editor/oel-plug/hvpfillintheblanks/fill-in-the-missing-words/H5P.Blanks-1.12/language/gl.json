@@ -1,0 +1,211 @@
+{
+  "semantics": [
+    {
+      "label": "Medios",
+      "fields": [
+        {
+          "label": "Tipo",
+          "description": "Medios opcionais amosados enriba da pregunta."
+        },
+        {
+          "label": "Desactivar zoom das imaxes"
+        }
+      ]
+    },
+    {
+      "label": "Descrición da tarefa",
+      "default": "Completa as palabaras que faltan",
+      "description": "Unha guía que lle di ao ususario como contestar a tarefa."
+    },
+    {
+      "label": "Bloques de texto",
+      "entity": "bloque de texto",
+      "field": {
+        "label": "Liña de texto",
+        "placeholder": "Oslo é a capital de *Noruega*.",
+        "description": "",
+        "important": {
+          "description": "<ul><li>Os ocos engádense cun asterísco (*) diante e detrás da palabra/frase correcta.</li><li>As respostas alternativas sepáranse cunha barra (/).</li><li>Podes engadir un texto de axuda usando dous puntos (:) diante del.</li></ul>",
+          "example": "O contido H5P pódese editar usando un *navegador/navegador web:Algo que usas todos os días*."
+        }
+      }
+    },
+    {
+      "label": "Retroalimentación Xeral",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Por defecto"
+            }
+          ],
+          "label": "Definir retroalimentación personalizada para calquera rango de puntuación",
+          "description": "Preme o botón \"Engadir rango\" para engadir os rangos que precises. Exemplo: 0-20% Puntuación mala, 21-91% Puntuación media, 91-100% Puntuación xenial!",
+          "entity": "rango",
+          "field": {
+            "fields": [
+              {
+                "label": "Rango de Puntuación"
+              },
+              {},
+              {
+                "label": "Retroalimentación para o rango de puntuación definido",
+                "placeholder": "Escribe a retroalimentación"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Texto para o botón \"Amosar solucións\"",
+      "default": "Amosar solución"
+    },
+    {
+      "label": "Texto para o botón \"Reintentar\"",
+      "default": "Reintentar"
+    },
+    {
+      "label": "Texto para o botón \"Comprobar\"",
+      "default": "Comprobar"
+    },
+    {
+      "label": "Texto para a mensaxe \"Incompleto\"",
+      "default": "Por favor, completa todos os ocos para ver a solución"
+    },
+    {
+      "label": "Texto para a mensaxe \"':ans' é correcta\"",
+      "default": "':ans' é correcta"
+    },
+    {
+      "label": "Texto para a mensaxe \"':ans' é incorrecta\"",
+      "default": "':ans' é incorrecta"
+    },
+    {
+      "label": "Texto para a mensaxe \"Contestado correctamente\"",
+      "default": "Contestado correctamente"
+    },
+    {
+      "label": "Texto para a mensaxe \"Contestado incorrectamente\"",
+      "default": "Contestado incorretamente"
+    },
+    {
+      "label": "Etiqueta das tecnoloxías de asistencia para a solución",
+      "default": "Resposta correcta:"
+    },
+    {
+      "label": "Etiqueta das tecnoloxías de asistencia para o campo de entrada",
+      "description": "Usa @num e @total para substituir o número de oco actual e o número total de ocos",
+      "default": "Oco @num de @total"
+    },
+    {
+      "label": "Etiqueta das tecnoloxías de asistencia para indicar que unha entrada ten un texto de axuda asociado",
+      "default": "Axuda dispoñible"
+    },
+    {
+      "label": "Etiqueta da icona de axuda",
+      "default": "Axuda"
+    },
+    {
+      "label": "Configuración do comportamento.",
+      "description": "Estas opcións permitiranche controlar o comportamento da tarefa.",
+      "fields": [
+        {
+          "label": "Activar \"Reintentar\""
+        },
+        {
+          "label": "Activar botón \"Amosar solución\""
+        },
+        {
+          "label": "Activar botón \"Comprobar\""
+        },
+        {
+          "label": "Comprobar as respostas automaticamente despois da entrada de texto"
+        },
+        {
+          "label": "Distinguir entre maiúsculas e minúsculas",
+          "description": "Fai que a entrada de texto do usuario teña que ser exactamente igual que a resposta."
+        },
+        {
+          "label": "Requirir o completado de todos os campos antes de poder ver a solución"
+        },
+        {
+          "label": "Poñer campos de entrada de texto en liñas separadas"
+        },
+        {
+          "label": "Amosar diálogo de confirmación para \"Comprobar\"",
+          "description": "Esta opción non é compatible coa opción \"Comprobar as respostas automáticamente despois da entrada de texto\""
+        },
+        {
+          "label": "Amosar diálogo de confirmación para \"Reintentar\""
+        },
+        {
+          "label": "Aceptar erros ortográficos menores",
+          "description": "Se está activada, unha resposta contará como válida se contén erros ortográficos menores (3-9 caracteres: 1 erro ortogáfico, máis de 9 caracteres: 2 erros ortográficos)"
+        }
+      ]
+    },
+    {
+      "label": "Diáologo de confirmación para a comprobación",
+      "fields": [
+        {
+          "label": "Texto da cabeceira",
+          "default": "Rematar ?"
+        },
+        {
+          "label": "Texto do corpo",
+          "default": "Estás seguro de que queres rematar ?"
+        },
+        {
+          "label": "Etiqueta do botón Cancelar",
+          "default": "Cancelar"
+        },
+        {
+          "label": "Etiqueta do botón Confirmar",
+          "default": "Rematar"
+        }
+      ]
+    },
+    {
+      "label": "Diálogo de confirmación para o reintento",
+      "fields": [
+        {
+          "label": "Texto da cabeceira",
+          "default": "Reintentar ?"
+        },
+        {
+          "label": "Texto do corpo",
+          "default": "Estás seguro de que queres reintentar ?"
+        },
+        {
+          "label": "Etiqueta do botón Cancelar",
+          "default": "Cancelar"
+        },
+        {
+          "label": "Etiqueta do botón Confirmar",
+          "default": "Confirmar"
+        }
+      ]
+    },
+    {
+      "label": "Representación textual da barra de puntuación cando se usa un lector de pantalla",
+      "default": "Conseguiches :num puntos de :total"
+    },
+    {
+      "label": "Descrición para as tecnoloxías de asistencia do botón \"Comprobar\"",
+      "default": "Comprobar as respostas. As respostas marcaranse como correctas, incorrectas ou non contestadas."
+    },
+    {
+      "label": "Descrición para as tecnoloxías de asistencia do botón \"Amosar solución\"",
+      "default": "Amosar a solución. Marcarese a tarefa coa resposta correcta."
+    },
+    {
+      "label": "Descrición para as tecnoloxías de asistencia do botón \"Reintentar\"",
+      "default": "Reintentar a tarefa. Borrar todas as respostas e empezar a tarefa de novo."
+    },
+    {
+      "label": "Descrición para as tecnoloxías de asistencia para empezar a tarefa",
+      "default": "Modo de comprobación"
+    }
+  ]
+}

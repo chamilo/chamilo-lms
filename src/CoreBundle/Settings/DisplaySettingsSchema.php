@@ -35,19 +35,16 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
         'MenuSessionAdmin' => 'session_admin',
         'MenuSearch' => 'search',
         'MenuQuestionManager' => 'question_manager',
-        'TopbarCertificate' => 'topbar_certificate',
+        'TopbarMyCertificates' => 'topbar_my_certificates',
+        'TopbarMyCustomCertificate' => 'topbar_my_custom_certificate',
         'TopbarSkills' => 'topbar_skills',
     ];
-
 
     public function buildSettings(AbstractSettingsBuilder $builder): void
     {
         $builder->setDefaults(
             [
                 'enable_help_link' => 'true',
-                'show_administrator_data' => 'true',
-                'show_tutor_data' => 'true',
-                'show_teacher_data' => 'true',
                 'showonline' => 'world',
                 'time_limit_whosonline' => '30',
                 'show_email_addresses' => 'false',
@@ -59,7 +56,6 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
                 'accessibility_font_resize' => 'false',
                 'show_admin_toolbar' => 'do_not_show',
                 'show_hot_courses' => 'true',
-                'hide_home_top_when_connected' => 'false',
                 'hide_logout_button' => 'false',
                 'hide_social_media_links' => 'false',
                 'gravatar_enabled' => 'false',
@@ -87,9 +83,6 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->add('enable_help_link', YesNoType::class)
-            ->add('show_administrator_data', YesNoType::class)
-            ->add('show_tutor_data', YesNoType::class)
-            ->add('show_teacher_data', YesNoType::class)
             ->add(
                 'showonline',
                 ChoiceType::class,
@@ -122,7 +115,6 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
                 ]
             )
             ->add('show_hot_courses', YesNoType::class)
-            ->add('hide_home_top_when_connected', YesNoType::class)
             ->add('hide_logout_button', YesNoType::class)
             ->add('hide_social_media_links', YesNoType::class)
             ->add('gravatar_enabled', YesNoType::class)
@@ -156,7 +148,7 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
         $default = self::getDefaultShowTabsArray();
 
         $json = json_encode($default, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-        if (!is_string($json) || '' === $json) {
+        if (!\is_string($json) || '' === $json) {
             // Fallback (should never happen)
             return '{"menu":{},"topbar":{}}';
         }
@@ -170,16 +162,21 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
         $topbar = [];
 
         foreach (self::$tabs as $label => $key) {
-            $isTopbar = 0 === strpos($label, 'Topbar') || 0 === strpos($key, 'topbar_');
+            $isTopbar = str_starts_with($label, 'Topbar') || str_starts_with($key, 'topbar_');
 
             if ($isTopbar) {
+                // Default topbar entries are enabled, except the custom certificate toggle.
                 $topbar[$key] = true;
+
                 continue;
             }
 
             // Keep legacy default: videoconference + diagnostics disabled by default
-            $menu[$key] = !in_array($key, ['videoconference', 'diagnostics', 'question_manager'], true);
+            $menu[$key] = !\in_array($key, ['videoconference', 'diagnostics', 'question_manager'], true);
         }
+
+        // Keep proposed behavior: "My custom certificate" is a separate toggle and is disabled by default.
+        $topbar['topbar_my_custom_certificate'] = false;
 
         return [
             'menu' => $menu,

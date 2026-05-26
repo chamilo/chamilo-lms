@@ -9,13 +9,15 @@ namespace Chamilo\PluginBundle\XApi\ToolExperience\Statement;
 use Chamilo\PluginBundle\XApi\ToolExperience\Activity\PortfolioComment as PortfolioCommentActivity;
 use Chamilo\PluginBundle\XApi\ToolExperience\Actor\User;
 use Chamilo\PluginBundle\XApi\ToolExperience\Verb\Edited;
-use Xabbuh\XApi\Model\Statement;
 
+/**
+ * Class PortfolioCommentEdited.
+ */
 class PortfolioCommentEdited extends PortfolioComment
 {
     use PortfolioAttachmentsTrait;
 
-    public function generate(): Statement
+    public function generate(): array
     {
         $user = api_get_user_entity(api_get_user_id());
 
@@ -23,19 +25,21 @@ class PortfolioCommentEdited extends PortfolioComment
         $verb = new Edited();
         $object = new PortfolioCommentActivity($this->comment);
         $context = $this->generateContext();
-        $attachements = $this->generateAttachmentsForComment($this->comment);
+        $attachments = $this->generateAttachmentsForComment($this->comment);
 
-        return new Statement(
-            $this->generateStatementId('portfolio-comment'),
-            $actor->generate(),
-            $verb->generate(),
-            $object->generate(),
-            null,
-            null,
-            api_get_utc_datetime(null, false, true),
-            null,
-            $context,
-            $attachements
-        );
+        $statement = [
+            'id' => $this->generateStatementId('portfolio-comment'),
+            'actor' => $actor->generate(),
+            'verb' => $verb->generate(),
+            'object' => $object->generate(),
+            'timestamp' => api_get_utc_datetime(null, false, true)->format(DATE_ATOM),
+            'context' => $context,
+        ];
+
+        if (!empty($attachments)) {
+            $statement['attachments'] = $attachments;
+        }
+
+        return $statement;
     }
 }

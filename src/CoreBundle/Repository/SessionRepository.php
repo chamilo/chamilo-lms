@@ -77,11 +77,21 @@ class SessionRepository extends ServiceEntityRepository
                 'user' => $user,
                 'url' => $url,
             ])
-            ->orderBy('s.category', 'ASC') // by default sort by category, display date, title and position
-            ->addOrderBy('s.displayStartDate', 'ASC')
-            ->addOrderBy('s.title', 'ASC')
-            ->addOrderBy('s.position', 'ASC')
         ;
+
+        // When manual session ordering is enabled, position is the primary sort
+        if ('true' === $this->settingsManager->getSetting('session.session_list_order')) {
+            $qb->orderBy('s.position', 'ASC')
+                ->addOrderBy('s.category', 'ASC')
+                ->addOrderBy('s.title', 'ASC')
+            ;
+        } else {
+            $qb->orderBy('s.category', 'ASC')
+                ->addOrderBy('s.displayStartDate', 'ASC')
+                ->addOrderBy('s.title', 'ASC')
+                ->addOrderBy('s.position', 'ASC')
+            ;
+        }
 
         return $qb;
     }
@@ -221,7 +231,8 @@ class SessionRepository extends ServiceEntityRepository
             )
             ->setParameter('now', $now)
             ->setParameter('coachRelationType', 3)
-            // IMPORTANT: stable ordering for your scan pagination in the provider
+            // IMPORTANT: stable ordering for scan pagination in the provider
+            ->addOrderBy('s.position', 'ASC')
             ->addOrderBy('s.id', 'ASC')
         ;
     }
@@ -229,6 +240,7 @@ class SessionRepository extends ServiceEntityRepository
     public function getUpcomingSessionsOfUserInUrl(User $user, AccessUrl $url): QueryBuilder
     {
         $qb = $this->getSessionsByUser($user, $url)->distinct();
+        $qb->resetDQLPart('orderBy');
         $now = new DateTime();
 
         $nonDuration = $qb->expr()->orX(
@@ -247,10 +259,16 @@ class SessionRepository extends ServiceEntityRepository
             )
         );
 
-        return $qb
-            ->andWhere($nonDuration)
+        $qb->andWhere($nonDuration)
             ->andWhere($upcomingStart)
             ->setParameter('now', $now)
+        ;
+
+        if ('true' === $this->settingsManager->getSetting('session.session_list_order')) {
+            $qb->addOrderBy('s.position', 'ASC');
+        }
+
+        return $qb
             ->addOrderBy('sru.accessStartDate', 'ASC')
             ->addOrderBy('s.id', 'ASC')
         ;

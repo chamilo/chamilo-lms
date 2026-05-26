@@ -11,7 +11,10 @@ declare(strict_types=1);
  * Initialization.
  */
 require_once __DIR__.'/config.php';
+$plugin = BuyCoursesPlugin::create();
+
 if (!api_is_platform_admin()) {
-    exit('You must have admin permissions to install plugins');
+    exit($plugin->get_lang('AdminPermissionsRequired'));
 }
-BuyCoursesPlugin::create()->install();
+
+$plugin->install();

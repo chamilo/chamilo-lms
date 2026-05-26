@@ -1,30 +1,124 @@
 {% import '@ChamiloCore/Macros/box.html.twig' as display %}
 
 {% autoescape false %}
-<div class="details">
-    <div class="row">
-        <div class="col-md-4">
-            {{ display.panel('', display.reporting_user_box(user), '') }}
-        </div>
-        <div class="col-md-8">
-            <div class="list-card">
-                {{ display.card_widget('First login in platform'|get_lang, params.first_connection, 'calendar') }}
-                {{ display.card_widget('Latest login in platform'|get_lang, params.last_connection, 'calendar') }}
-                {% if params.legal is defined %}
-                    {{ display.card_widget('Legal accepted'|get_lang, params.legal.datetime, 'gavel', params.legal.icon) }}
-                {% endif %}
-            </div>
-            {% if social_tool %}
-                <div class="list-box-widget">
-{#                    {{ display.box_widget('Friends'|get_lang, params.social.friends, 'users') }}#}
-{#                    {{ display.box_widget('InvitationSent'|get_lang, params.social.invitation_sent, 'paper-plane') }}#}
-{#                    {{ display.box_widget('InvitationReceived'|get_lang, params.social.invitation_received, 'smile-o') }}#}
-{#                    {{ display.box_widget('WallMessagesPosted'|get_lang, params.social.messages_posted, 'comments') }}#}
-{#                    {{ display.box_widget('MessagesSent'|get_lang, params.social.messages_sent, 'envelope') }}#}
-{#                    {{ display.box_widget('MessagesReceived'|get_lang, params.social.messages_received, 'envelope-open-o') }}#}
+    <div class="w-full max-w-full overflow-x-hidden">
+        <div class="bg-white border border-gray-30 rounded-2xl shadow-sm overflow-hidden">
+            <div class="p-4 sm:p-6 lg:p-8">
+
+                {# Main layout: 30% left / 70% right from lg and up #}
+                <div class="flex flex-col gap-6 lg:flex-row lg:items-stretch lg:flex-nowrap">
+
+                    {# LEFT: Personal info  #}
+                    <div class="w-full min-w-0 lg:basis-[30%] lg:max-w-[30%]">
+                        {{ display.reporting_user_box_v2(user) }}
+                    </div>
+
+                    {# RIGHT: Reporting #}
+                    <div class="w-full min-w-0 lg:basis-[70%] lg:max-w-[70%]">
+                        <div class="rounded-2xl border border-gray-30 bg-white p-5 shadow-sm overflow-hidden max-w-full h-full">
+
+                            <div class="flex items-center gap-2 min-w-0">
+                                <span class="mdi mdi-chart-line text-xl text-gray-700"></span>
+                                <h3 class="text-base sm:text-lg font-semibold text-gray-900 truncate">
+                                    {{ 'Reporting'|get_lang }}
+                                </h3>
+                            </div>
+
+                            <div class="mt-5 flex flex-col gap-4">
+
+                                <div class="flex flex-col gap-4 lg:flex-row lg:flex-wrap">
+                                    <div class="w-full min-w-0 lg:flex-1 lg:min-w-[280px] rounded-2xl border border-gray-30 bg-white p-4 sm:p-5">
+                                        <div class="flex items-start gap-3">
+                                            <div class="shrink-0">
+                                                <div class="w-11 h-11 rounded-2xl bg-gray-15 border border-gray-30 flex items-center justify-center shadow-sm">
+                                                    <span class="mdi mdi-calendar-clock-outline text-xl text-gray-700"></span>
+                                                </div>
+                                            </div>
+                                            <div class="min-w-0">
+                                                <div class="text-xs font-semibold text-gray-600">
+                                                    {{ 'First login in platform'|get_lang }}
+                                                </div>
+                                                <div class="mt-1 text-sm font-semibold text-gray-900 break-words">
+                                                    {{ params.first_connection ? params.first_connection : '—' }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="w-full min-w-0 lg:flex-1 lg:min-w-[280px] rounded-2xl border border-gray-30 bg-white p-4 sm:p-5">
+                                        <div class="flex items-start gap-3">
+                                            <div class="shrink-0">
+                                                <div class="w-11 h-11 rounded-2xl bg-gray-15 border border-gray-30 flex items-center justify-center shadow-sm">
+                                                    <span class="mdi mdi-login text-xl text-gray-700"></span>
+                                                </div>
+                                            </div>
+                                            <div class="min-w-0">
+                                                <div class="text-xs font-semibold text-gray-600">
+                                                    {{ 'Latest login in platform'|get_lang }}
+                                                </div>
+                                                <div class="mt-1 text-sm font-semibold text-gray-900 break-words">
+                                                    {{ params.last_connection ? params.last_connection : '—' }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {% if params.legal is defined %}
+                                    <div class="rounded-2xl border border-gray-30 bg-white p-4 sm:p-5 overflow-hidden max-w-full">
+                                        <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                                            <div class="flex items-start gap-3 min-w-0">
+                                                <div class="shrink-0">
+                                                    <div class="w-11 h-11 rounded-2xl bg-gray-15 border border-gray-30 flex items-center justify-center shadow-sm">
+                                                        <span class="mdi mdi-shield-check-outline text-xl text-gray-700"></span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="min-w-0">
+                                                    <div class="text-xs font-semibold text-gray-600">
+                                                        {{ 'Legal accepted'|get_lang }}
+                                                    </div>
+                                                    <div class="mt-1 text-sm font-semibold text-gray-900 break-words">
+                                                        {{ params.legal.datetime ? params.legal.datetime : ('Not Registered'|get_lang) }}
+                                                    </div>
+
+                                                    {% if params.legal.url_send is defined %}
+                                                        <div class="mt-3">
+                                                            {{ params.legal.url_send }}
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+
+                                            <div class="shrink-0">
+                                                <div class="inline-flex items-center justify-center rounded-2xl border border-gray-30 bg-white px-3 py-2">
+                                                    {{ params.legal.icon is defined ? params.legal.icon : '' }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+                                {% if social_tool %}
+                                    <div class="mt-2 border-t border-gray-30 pt-5">
+                                        <div class="flex items-center gap-2">
+                                            <span class="mdi mdi-account-group-outline text-xl text-gray-700"></span>
+                                            <h4 class="text-sm font-semibold text-gray-900">
+                                                {{ 'Social'|get_lang }}
+                                            </h4>
+                                        </div>
+                                        <div class="mt-4 text-sm text-gray-600">
+                                            —
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
-            {% endif %}
+            </div>
         </div>
     </div>
-</div>
 {% endautoescape %}

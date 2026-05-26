@@ -41,7 +41,8 @@ class PortfolioCommentRepository extends ResourceRepository
     {
         $qbComments = $this->createQueryBuilder('comment');
         $qbComments
-            ->where('comment.author = :owner')
+            ->innerJoin('comment.resourceNode', 'node')
+            ->where('node.creator = :owner')
             ->setParameter('owner', $user)
         ;
 

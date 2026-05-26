@@ -1,44 +1,69 @@
 <template>
-  <div class="flex flex-col pb-4 xl:flex-row xl:justify-between">
-    <div class="pb-2">
-      <h6>
-        <a :href="link.url">
+  <div class="flex flex-col pb-4 xl:flex-row xl:items-start xl:justify-between">
+    <div class="flex items-start gap-3 pb-2 min-w-0">
+      <!-- Drag handle: only visible when the user can edit -->
+      <div
+        v-if="securityStore.isAuthenticated && canEdit(link)"
+        class="link-drag-handle select-none rounded border border-gray-20 bg-gray-10 px-2 py-1 text-gray-600 hover:text-black"
+        :title="t('Drag to reorder')"
+      >
+        ⠿
+      </div>
+
+      <div class="min-w-0">
+        <h6 class="min-w-0">
+          <a
+            :href="link.url"
+            :target="link.target || '_self'"
+            class="inline-flex items-center gap-2 min-w-0"
+          >
+            <BaseIcon
+              icon="link-external"
+              size="normal"
+            />
+            <span class="truncate">{{ link.title }}</span>
+          </a>
+
           <BaseIcon
-            icon="link-external"
-            size="small"
+            v-if="isAllowedToEdit && link.sessionId && Number(link.sessionId) === sidValue"
+            :title="t('Session Item')"
+            class="ml-2"
+            icon="session-star"
+            size="normal"
           />
-          {{ link.title }}
-        </a>
-        <BaseIcon
-          v-if="isAllowedToEdit && link.sessionId && link.sessionId === sid"
-          class="mr-8"
-          icon="session-star"
-          size="small"
-          title="Session Item"
-        />
-        <BaseIcon
-          v-if="isLinkValid.isValid"
-          :title="t('Link is valid')"
-          class="text-green-500"
-          icon="check"
-          size="small"
-        />
-        <BaseIcon
-          v-else-if="isLinkValid.isValid === false"
-          :title="t('Link is not valid')"
-          class="text-red-500"
-          icon="alert"
-          size="small"
-        />
-      </h6>
+
+          <BaseIcon
+            v-if="isLinkValid.isValid"
+            :title="t('Link is valid')"
+            class="ml-2 text-green-500"
+            icon="check"
+            size="normal"
+          />
+          <BaseIcon
+            v-else-if="isLinkValid.isValid === false"
+            :title="t('Link is not valid')"
+            class="ml-2 text-red-500"
+            icon="alert"
+            size="normal"
+          />
+        </h6>
+
+        <p
+          v-if="link.description && link.description.trim()"
+          class="mt-1 text-sm text-gray-500 whitespace-pre-wrap"
+        >{{ link.description.trim() }}</p>
+      </div>
     </div>
+
+    <!-- Icon-only actions (same style as categories) -->
     <div
       v-if="securityStore.isAuthenticated && canEdit(link)"
-      class="flex gap-2"
+      class="flex items-center gap-2 text-gray-700"
     >
       <BaseButton
         :label="t('Check link')"
         icon="check"
+        only-icon
         size="small"
         type="black"
         @click="emit('check', link)"
@@ -46,6 +71,7 @@
       <BaseButton
         :label="t('Edit')"
         icon="edit"
+        only-icon
         size="small"
         type="black"
         @click="emit('edit', link)"
@@ -53,27 +79,15 @@
       <BaseButton
         :icon="isVisible(link.linkVisible) ? 'eye-on' : 'eye-off'"
         :label="t('Toggle visibility')"
+        only-icon
         size="small"
         type="black"
         @click="emit('toggle', link)"
       />
       <BaseButton
-        :label="t('Move up')"
-        icon="up"
-        size="small"
-        type="black"
-        @click="emit('moveUp', link)"
-      />
-      <BaseButton
-        :label="t('Move down')"
-        icon="down"
-        size="small"
-        type="black"
-        @click="emit('moveDown', link)"
-      />
-      <BaseButton
         :label="t('Delete')"
         icon="delete"
+        only-icon
         size="small"
         type="danger"
         @click="emit('delete', link)"
@@ -83,13 +97,13 @@
 </template>
 
 <script setup>
-import BaseButton from "../basecomponents/BaseButton.vue"
 import { useI18n } from "vue-i18n"
+import BaseButton from "../basecomponents/BaseButton.vue"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
 import { isVisible } from "./linkVisibility"
 import { useSecurityStore } from "../../store/securityStore"
-import { computed, onMounted, ref } from "vue"
-import { checkIsAllowedToEdit } from "../../composables/userPermissions"
+import { computed } from "vue"
+import { useIsAllowedToEdit } from "../../composables/userPermissions"
 import { useRoute } from "vue-router"
 import { useCidReq } from "../../composables/cidReq"
 
@@ -97,7 +111,8 @@ const securityStore = useSecurityStore()
 const isCurrentTeacher = computed(() => securityStore.isCurrentTeacher)
 const route = useRoute()
 const { t } = useI18n()
-const { cid, sid, gid } = useCidReq()
+const { sid } = useCidReq()
+const sidValue = computed(() => Number(route.query.sid || (sid && typeof sid === "object" ? sid.value : sid) || 0))
 
 defineProps({
   link: {
@@ -112,17 +127,14 @@ defineProps({
 
 const emit = defineEmits(["check", "edit", "toggle", "moveUp", "moveDown", "delete"])
 
-const isAllowedToEdit = ref(false)
+const { isAllowedToEdit } = useIsAllowedToEdit({ tutor: true, coach: true, sessionCoach: true })
 
 const canEdit = (item) => {
-  const sessionId = item.sessionId
-  const isSessionDocument = sessionId && sessionId === sid
-  const isBaseCourse = !sessionId
+  const sessionId = item.sessionId ? Number(item.sessionId) : 0
+  const isSessionItem = sessionId > 0 && sessionId === sidValue.value
+  const isBaseCourseItem = !sessionId
 
-  return (isSessionDocument && isAllowedToEdit.value) || (isBaseCourse && !sid && isCurrentTeacher.value)
+  return (isSessionItem && isAllowedToEdit.value) || (isBaseCourseItem && !sidValue.value && isCurrentTeacher.value)
 }
 
-onMounted(async () => {
-  isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true)
-})
 </script>

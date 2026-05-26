@@ -115,9 +115,12 @@ readonly class AuthenticationConfigHelper
             'filter' => $ldapConfig['filter'] ?? null,
             'uid_key' => $ldapConfig['uid_key'] ?? 'uid',
             'password_attribute' => $ldapConfig['password_attribute'] ?? null,
+            'synch_user_role_on_update' => $ldapConfig['synch_user_role_on_update'] ?? true,
             'data_correspondence' => $this->getLdapDataCorrespondenceConfig(
                 $ldapConfig['data_correspondence'] ?? []
             ),
+            'object_class' => $ldapConfig['object_class'] ?? 'inetOrgPerson',
+            'tls_options' => $ldapConfig['tls_options'] ?? [],
         ];
     }
 

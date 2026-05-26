@@ -226,7 +226,11 @@ class EvalForm extends FormValidator
 		      <td align="left" >'.$user['official_code'].'</td>
 		      <td align="left" >'.$user['username'].'</td>
 		      '.$user_info.'
-		       <td align="left">{element} / '.$this->evaluation_object->get_max().'
+		       <td align="right">
+                   <div class="inline-flex w-full items-center justify-end gap-1 whitespace-nowrap">
+                       {element}
+                       <span class="text-sm text-gray-700">/ '.$this->evaluation_object->get_max().'</span>
+                   </div>
 		         <!-- BEGIN error --><br /><span style="color: #ff0000;font-size:10px">{error}</span><!-- END error -->
 		      </td>
 		   </tr>';
@@ -238,6 +242,9 @@ class EvalForm extends FormValidator
                     false,
                     [
                         'maxlength' => 5,
+                        'size' => 4,
+                        'style' => 'width: 6rem; max-width: 6rem;',
+                        'class' => 'text-right',
                     ],
                     false,
                     0,
@@ -352,7 +359,12 @@ class EvalForm extends FormValidator
         $firstUser = true;
         foreach ($users as $user) {
             $element_name = 'score['.$user[0].']';
-            $scoreColumnProperties = ['maxlength' => 5];
+            $scoreColumnProperties = [
+                'maxlength' => 5,
+                'size' => 4,
+                'style' => 'width: 6rem; max-width: 6rem;',
+                'class' => 'text-right',
+            ];
             if ($firstUser) {
                 $scoreColumnProperties['autofocus'] = '';
                 $firstUser = false;
@@ -379,12 +391,16 @@ class EvalForm extends FormValidator
             $nr_users++;
 
             $template = '<tr>
-		      <td align="left" >'.$user[4].'</td>
-		      <td align="left" >'.$user[1].'</td>
-		      '.$user_info.'
-		       <td align="left">{element} / '.$this->evaluation_object->get_max().'
-		         <!-- BEGIN error --><br /><span style="color: #ff0000;font-size:10px">{error}</span><!-- END error -->
-		      </td>
+                <td align="left" >'.$user[4].'</td>
+                <td align="left" >'.$user[1].'</td>
+                '.$user_info.'
+                <td align="right">
+                    <div class="inline-flex w-full items-center justify-end gap-1 whitespace-nowrap">
+                        {element}
+                        <span class="text-sm text-gray-700">/ '.$this->evaluation_object->get_max().'</span>
+                    </div>
+                    <!-- BEGIN error --><br /><span style="color: #ff0000;font-size:10px">{error}</span><!-- END error -->
+                </td>
             </tr>';
             $renderer->setElementTemplate($template, $element_name);
         }
@@ -393,12 +409,12 @@ class EvalForm extends FormValidator
         $this->addButtonSave(get_lang('Grade learners'), 'submit');
 
         $template_submit = '<tr>
-                <td colspan="4" ></td>
-                <td >
+            <td colspan="4" ></td>
+            <td >
                 {element}
-                    <!-- BEGIN error --><br /><span style="color: #ff0000;font-size:10px">{error}</span><!-- END error -->
-                </td>
-            </tr>';
+                <!-- BEGIN error --><br /><span style="color: #ff0000;font-size:10px">{error}</span><!-- END error -->
+            </td>
+        </tr>';
         $renderer->setElementTemplate($template_submit, 'submit');
     }
 
@@ -410,24 +426,34 @@ class EvalForm extends FormValidator
         $userInfo = api_get_user_info($this->result_object->get_user_id());
         $this->addHeader(get_lang('User').': '.$userInfo['complete_name']);
 
+        $renderer = &$this->defaultRenderer();
         $model = ExerciseLib::getCourseScoreModel();
 
         if (empty($model)) {
             $this->addFloat(
                 'score',
-                [
-                    get_lang('Score'),
-                    null,
-                    '/ '.$this->evaluation_object->get_max(),
-                ],
+                get_lang('Score'),
                 false,
                 [
                     'size' => '4',
                     'maxlength' => '5',
+                    'style' => 'width: 6rem; max-width: 6rem;',
+                    'class' => 'text-right',
                 ],
                 false,
                 0,
                 $this->evaluation_object->get_max()
+            );
+            $renderer->setElementTemplate(
+                '<div class="field">
+                    <label class="form-label">{label}</label>
+                    <div class="inline-flex items-center justify-start gap-1 whitespace-nowrap">
+                        {element}
+                        <span class="text-sm text-gray-700">/ '.$this->evaluation_object->get_max().'</span>
+                    </div>
+                    <!-- BEGIN error --><div class="mt-1 text-sm text-danger">{error}</div><!-- END error -->
+                </div>',
+                'score'
             );
             $this->setDefaults(
                 [
@@ -537,8 +563,6 @@ class EvalForm extends FormValidator
         if (!empty($_GET['editeval']) && 1 == $_GET['editeval']) {
             $form_title = get_lang('Edit evaluation');
         }
-
-        $this->addHeader($form_title);
         $this->addElement('hidden', 'hid_user_id');
         $this->addElement('hidden', 'hid_course_code');
 
@@ -693,7 +717,6 @@ class EvalForm extends FormValidator
 
         $this->addElement('textarea', 'description', get_lang('Description'));
         $this->addRule('hid_category_id', get_lang('Required field'), 'required');
-        $this->addElement('checkbox', 'visible', null, get_lang('Visible'));
         $this->addRule('max', get_lang('Only numbers'), 'numeric');
         $this->addRule(
             'max',
@@ -716,13 +739,6 @@ class EvalForm extends FormValidator
         );
         $this->addRule('min_score', get_lang('Only numbers'), 'numeric');
         $this->addRule('min_score', get_lang('Negative value'), 'compare', '>=', 'server', false, false, 0);
-        $tools = api_get_setting('course.active_tools_on_create', true);
-
-        $visibility_default = 1;
-        if (!in_array('gradebook', $tools, true)) {
-            $visibility_default = 0;
-        }
-        $this->setDefaults(['visible' => $visibility_default]);
     }
 
     /**

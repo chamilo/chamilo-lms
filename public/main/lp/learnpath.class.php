@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Event\LearningPathEndedEvent;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
 use Chamilo\CoreBundle\Repository\TrackEDefaultRepository;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
@@ -225,7 +226,7 @@ class learnpath
                 $this->last_item_seen = $row['last_item'];
                 $this->progress_db = $row['progress'];
                 $this->lp_view_session_id = $row['session_id'];
-            } elseif (!api_is_invitee()) {
+            } elseif (!api_is_invitee() && !empty($user_id)) {
                 $this->attempt = 1;
                 $params = [
                     'c_id' => $course_id,
@@ -259,16 +260,6 @@ class learnpath
                 $lp_item_id_list[] = $itemId;
 
                 switch ($this->type) {
-                    case CLp::AICC_TYPE:
-                        $oItem = new aiccItem('db', $itemId, $course_id);
-                        if (is_object($oItem)) {
-                            $oItem->set_lp_view($this->lp_view_id);
-                            $oItem->set_prevent_reinit($this->prevent_reinit);
-                            // Don't use reference here as the next loop will make the pointed object change.
-                            $this->items[$itemId] = $oItem;
-                            $this->refs_list[$oItem->ref] = $itemId;
-                        }
-                        break;
                     case CLp::SCORM_TYPE:
                         $oItem = new scormItem('db', $itemId);
                         if (is_object($oItem)) {
@@ -455,6 +446,14 @@ class learnpath
             $exercise->disable();
             $exercise->save();
             $title = $exercise->get_formated_title();
+
+            // Update the ResourceLink visibility to DRAFT so students cannot access the quiz directly
+            $quizRepo = Container::getQuizRepository();
+            $quizEntity = $quizRepo->find($id);
+            if (null !== $quizEntity) {
+                $courseEntity = api_get_course_entity($course_id);
+                $quizRepo->setVisibilityDraft($quizEntity, $courseEntity);
+            }
         }
 
         $lpItem = (new CLpItem())
@@ -589,7 +588,6 @@ class learnpath
         $type = 1;
         switch ($learnpath) {
             case 'guess':
-            case 'aicc':
                 break;
             case 'dokeos':
             case 'chamilo':
@@ -834,10 +832,8 @@ class learnpath
         }
 
         // Tracking event
-        $trackRepo    = Container::$container->get(TrackEDefaultRepository::class);
-        $resourceNode = $lp ? $lp->getResourceNode() : null;
-        if ($resourceNode) {
-            $trackRepo->registerResourceEvent(
+        if ($resourceNode = $lp?->getResourceNode()) {
+            Container::getResourceHelper()->createAndSaveResourceEvent(
                 $resourceNode,
                 'deletion',
                 api_get_user_id(),
@@ -1251,7 +1247,7 @@ class learnpath
 
             $this->last = $this->current;
             // current is
-            $this->current = isset($this->ordered_items[$index]) ? $this->ordered_items[$index] : null;
+            $this->current = $this->ordered_items[$index] ?? null;
             $this->index = $index;
             if ($this->debug > 2) {
                 error_log('$index '.$index);
@@ -1332,6 +1328,69 @@ class learnpath
         }
     }
 
+    public static function getFlowNextLpOptions(int $lpId): array
+    {
+        $lpId = (int) $lpId;
+
+        if ($lpId <= 0) {
+            return [];
+        }
+
+        $lpTable = Database::get_course_table(TABLE_LP_MAIN);
+        $resourceNodeTable = 'resource_node';
+
+        $sql = "
+            SELECT DISTINCT candidate_lp.iid, candidate_lp.title
+            FROM $lpTable current_lp
+            INNER JOIN $resourceNodeTable current_rn
+                ON current_rn.id = current_lp.resource_node_id
+            INNER JOIN $resourceNodeTable candidate_rn
+                ON candidate_rn.parent_id = current_rn.parent_id
+            INNER JOIN $lpTable candidate_lp
+                ON candidate_lp.resource_node_id = candidate_rn.id
+            WHERE current_lp.iid = $lpId
+                AND candidate_lp.iid <> $lpId
+            ORDER BY candidate_lp.title ASC
+        ";
+
+        $result = Database::query($sql);
+        $options = [];
+
+        while ($row = Database::fetch_assoc($result)) {
+            $options[(int) $row['iid']] = $row['title'];
+        }
+
+        return $options;
+    }
+
+    public static function isValidFlowNextLp(int $currentLpId, int $nextLpId): bool
+    {
+        $currentLpId = (int) $currentLpId;
+        $nextLpId = (int) $nextLpId;
+
+        if ($currentLpId <= 0 || $nextLpId <= 0 || $currentLpId === $nextLpId) {
+            return false;
+        }
+
+        $options = self::getFlowNextLpOptions($currentLpId);
+
+        return isset($options[$nextLpId]);
+    }
+
+    public static function getFlowNextLpInfo(int $currentLpId, int $nextLpId): array
+    {
+        if (!self::isValidFlowNextLp($currentLpId, $nextLpId)) {
+            return [];
+        }
+
+        $options = self::getFlowNextLpOptions($currentLpId);
+
+        return [
+            'iid' => $nextLpId,
+            'title' => $options[$nextLpId],
+        ];
+    }
+
     /**
      * Gets the navigation bar for the learnpath display screen.
      *
@@ -1344,6 +1403,8 @@ class learnpath
         if (empty($barId)) {
             $barId = 'control-top';
         }
+
+        $isLtiEmbeddable = 'embeddable' === api_get_origin() && !empty(Session::read('_ltiProvider'));
         $lpId = $this->lp_id;
         $mycurrentitemid = $this->get_current_item_id();
         $reportingText = get_lang('Reporting');
@@ -1355,14 +1416,17 @@ class learnpath
         $display = $settings['display'] ?? false;
         $icon = Display::getMdiIcon('information');
 
-        $reportingIcon = '
+        $reportingIcon = '';
+        if (!$isLtiEmbeddable) {
+            $reportingIcon = '
             <a class="icon-toolbar"
                 id="stats_link"
-                href="lp_controller.php?action=stats&'.api_get_cidreq(true).'&lp_id='.$lpId.'"
+                href="lp_controller.php?action=stats&origin=learnpath&'.api_get_cidreq(true).'&lp_id='.$lpId.'"
                 onclick="window.parent.API.save_asset(); return true;"
                 target="content_name" title="'.$reportingText.'">
                 '.$icon.'<span class="sr-only">'.$reportingText.'</span>
             </a>';
+        }
 
         if (!empty($display)) {
             $showReporting = isset($display['show_reporting_icon']) ? $display['show_reporting_icon'] : true;
@@ -1381,38 +1445,38 @@ class learnpath
         if (false === $hideArrows) {
             $icon = Display::getMdiIcon('chevron-left');
             $previousIcon = '
-                <button class="icon-toolbar" id="scorm-previous" type="button"
-                    onclick="switch_item('.$mycurrentitemid.',\'previous\');return false;" title="'.$previousText.'">
-                    '.$icon.'<span class="sr-only">'.$previousText.'</span>
-                </button>';
+            <button class="icon-toolbar" id="scorm-previous" type="button"
+                onclick="switch_item('.$mycurrentitemid.',\'previous\');return false;" title="'.$previousText.'">
+                '.$icon.'<span class="sr-only">'.$previousText.'</span>
+            </button>';
 
             $icon = Display::getMdiIcon('chevron-right');
             $nextIcon = '
-                <button class="icon-toolbar" id="scorm-next" type="button"
-                    onclick="switch_item('.$mycurrentitemid.',\'next\');return false;" title="'.$nextText.'">
-                    '.$icon.'<span class="sr-only">'.$nextText.'</span>
-                </button>';
+            <button class="icon-toolbar" id="scorm-next" type="button"
+                onclick="switch_item('.$mycurrentitemid.',\'next\');return false;" title="'.$nextText.'">
+                '.$icon.'<span class="sr-only">'.$nextText.'</span>
+            </button>';
         }
 
         if ('fullscreen' === $this->mode) {
             $icon = Display::getMdiIcon('view-column');
             $navbar = '
-                  <span id="'.$barId.'" class="buttons">
-                    '.$reportingIcon.'
-                    '.$previousIcon.'
-                    '.$nextIcon.'
-                    <a class="icon-toolbar" id="view-embedded"
-                        href="lp_controller.php?action=mode&mode=embedded" target="_top" title="'.$fullScreenText.'">
-                        '.$icon.'<span class="sr-only">'.$fullScreenText.'</span>
-                    </a>
-                  </span>';
+              <span id="'.$barId.'" class="buttons">
+                '.$reportingIcon.'
+                '.$previousIcon.'
+                '.$nextIcon.'
+                <a class="icon-toolbar" id="view-embedded"
+                    href="lp_controller.php?action=mode&mode=embedded" target="_top" title="'.$fullScreenText.'">
+                    '.$icon.'<span class="sr-only">'.$fullScreenText.'</span>
+                </a>
+              </span>';
         } else {
             $navbar = '
-                 <span id="'.$barId.'" class="buttons text-right">
-                    '.$reportingIcon.'
-                    '.$previousIcon.'
-                    '.$nextIcon.'
-                </span>';
+             <span id="'.$barId.'" class="buttons text-right">
+                '.$reportingIcon.'
+                '.$previousIcon.'
+                '.$nextIcon.'
+            </span>';
         }
 
         return $navbar;
@@ -2498,7 +2562,7 @@ class learnpath
             // TODO: Change this link generation and use new function instead.
             $toc[] = [
                 'id' => $item_id,
-                'title' => $this->items[$item_id]->get_title(),
+                'title' => $this->items[$item_id]->get_title_to_display(),
                 'status' => $this->items[$item_id]->get_status(false),
                 'status_class' => self::getStatusCSSClassName($this->items[$item_id]->get_status(false)),
                 'level' => $this->items[$item_id]->get_level(),
@@ -2676,7 +2740,79 @@ class learnpath
             'decorate' => false,
         ];
 
-        return $lpItemRepo->childrenHierarchy($itemRoot, false, $options);
+        $tree = $lpItemRepo->childrenHierarchy($itemRoot, false, $options);
+
+        // AI disclosure: decorate LP item titles in the TOC tree (single place, array mode).
+        try {
+
+            $aiDisclosure = Container::$container->get(AiDisclosureHelper::class);
+            if ($aiDisclosure instanceof AiDisclosureHelper
+                && $aiDisclosure->isDisclosureEnabled()
+                && is_array($tree)
+                && !empty($tree)
+            ) {
+                // Gedmo Tree can use a custom children index; default is "__children".
+                $childrenIndex = '__children';
+                try {
+                    $childrenIndex = (string) $lpItemRepo->getChildrenIndex();
+                } catch (\Throwable) {
+                    $childrenIndex = '__children';
+                }
+
+                $decorateTree = static function (array &$nodes) use (&$decorateTree, $aiDisclosure, $childrenIndex): void {
+                    foreach ($nodes as &$node) {
+                        if (!is_array($node)) {
+                            continue;
+                        }
+
+                        // Extract item id (Gedmo array output may vary by mapping)
+                        $itemId = 0;
+                        foreach (['iid', 'id', 'iId'] as $k) {
+                            if (isset($node[$k])) {
+                                $itemId = (int) $node[$k];
+                                break;
+                            }
+                        }
+
+                        // Extract title key
+                        $titleKey = null;
+                        foreach (['title', 'name'] as $k) {
+                            if (array_key_exists($k, $node)) {
+                                $titleKey = $k;
+                                break;
+                            }
+                        }
+
+                        if ($itemId > 0 && $titleKey) {
+                            $rawTitle = (string) $node[$titleKey];
+                            if ($rawTitle !== '') {
+                                // Keep the original title text safe; badge is appended as HTML.
+                                $safeTitle = \Security::remove_XSS(strip_tags($rawTitle));
+
+                                $node[$titleKey] = $aiDisclosure->decorateTitle(
+                                    $safeTitle,
+                                    'lp_item',
+                                    $itemId,
+                                    false
+                                );
+                            }
+                        }
+
+                        // Recurse into children
+                        if (isset($node[$childrenIndex]) && is_array($node[$childrenIndex]) && !empty($node[$childrenIndex])) {
+                            $decorateTree($node[$childrenIndex]);
+                        }
+                    }
+                    unset($node);
+                };
+
+                $decorateTree($tree);
+            }
+        } catch (\Throwable) {
+            // Never block LP rendering because of AI disclosure decoration.
+        }
+
+        return $tree;
     }
 
     /**
@@ -2742,7 +2878,7 @@ class learnpath
      *
      * @return string $provided_toc Link to the lp_item resource
      */
-    public function get_link($type = 'http', $item_id = 0, $provided_toc = false)
+    public function get_link(string $type = 'http', $item_id = 0, $provided_toc = false)
     {
         $course_id = $this->get_course_int_id();
         $item_id = (int) $item_id;
@@ -2784,7 +2920,7 @@ class learnpath
             $lp_item_type = $row['litype'];
             $lp_item_path = $row['lipath'];
             $lp_item_params = $row['liparams'];
-            if (empty($lp_item_params) && false !== strpos($lp_item_path, '?')) {
+            if (empty($lp_item_params) && str_contains($lp_item_path, '?')) {
                 [$lp_item_path, $lp_item_params] = explode('?', $lp_item_path);
             }
             //$sys_course_path = api_get_path(SYS_COURSE_PATH).api_get_course_path();
@@ -2817,31 +2953,155 @@ class learnpath
                     );
                     switch ($lp_item_type) {
                         case 'document':
-                            // Shows a button to download the file instead of just downloading the file directly.
-                            $documentPathInfo = pathinfo($file);
-                            if (isset($documentPathInfo['extension'])) {
-                                $parsed = parse_url($documentPathInfo['extension']);
-                                if (isset($parsed['path'])) {
-                                    $extension = $parsed['path'];
-                                    $extensionsToDownload = [
-                                        'zip',
-                                        'ppt',
-                                        'pptx',
-                                        'ods',
-                                        'xlsx',
-                                        'xls',
-                                        'csv',
-                                        'doc',
-                                        'docx',
-                                        'dot',
-                                    ];
+                            $lpItem = $this->getItem($item_id);
+                            $docId = $lpItem ? (int) $lpItem->get_path() : 0;
 
-                                    if (in_array($extension, $extensionsToDownload)) {
-                                        $file = api_get_path(WEB_CODE_PATH).
-                                            'lp/embed.php?type=download&source=file&lp_item_id='.$item_id.'&'.api_get_cidreq();
-                                    }
+                            $extensionsToDownload = [
+                                'zip',
+                                'ppt',
+                                'pptx',
+                                'ods',
+                                'xlsx',
+                                'xls',
+                                'csv',
+                                'doc',
+                                'docx',
+                                'dot',
+                            ];
+
+                            $onlyofficeAllowedExtensions = [
+                                'doc',
+                                'docx',
+                                'odt',
+                                'rtf',
+                                'txt',
+                                'xls',
+                                'xlsx',
+                                'ods',
+                                'csv',
+                                'ppt',
+                                'pptx',
+                                'odp',
+                                'pdf',
+                            ];
+
+                            $onlyofficeViewOnlyExtensions = [
+                                'pdf',
+                            ];
+
+                            $onlyofficeHandled = false;
+                            $extension = '';
+                            $docInfo = [];
+
+                            if ($docId > 0) {
+                                $docInfo = DocumentManager::get_document_data_by_id(
+                                    $docId,
+                                    api_get_course_id(),
+                                    false,
+                                    $this->get_lp_session_id()
+                                );
+                            }
+
+                            $fileNameCandidates = [];
+
+                            if (!empty($docInfo['title'])) {
+                                $fileNameCandidates[] = (string) $docInfo['title'];
+                            }
+
+                            if (!empty($docInfo['path'])) {
+                                $fileNameCandidates[] = (string) $docInfo['path'];
+                            }
+
+                            if (!empty($docInfo['absolute_path'])) {
+                                $fileNameCandidates[] = basename((string) $docInfo['absolute_path']);
+                            }
+
+                            if (!empty($file)) {
+                                $parsedFilePath = parse_url($file, PHP_URL_PATH);
+                                if (!empty($parsedFilePath)) {
+                                    $fileNameCandidates[] = basename((string) $parsedFilePath);
                                 }
                             }
+
+                            foreach ($fileNameCandidates as $candidate) {
+                                $candidateExtension = strtolower((string) pathinfo($candidate, PATHINFO_EXTENSION));
+                                if ('' !== $candidateExtension) {
+                                    $extension = $candidateExtension;
+                                    break;
+                                }
+                            }
+
+                            $isOnlyofficeEnabled = false;
+
+                            if (class_exists('OnlyofficePlugin')) {
+                                $plugin = OnlyofficePlugin::create();
+
+                                $isOnlyofficeEnabled = $plugin->isEnabled();
+
+                                if (!$isOnlyofficeEnabled) {
+                                    $isOnlyofficeEnabled = 'true' === (string) $plugin->get('enable_onlyoffice_plugin');
+                                }
+                            }
+
+                            if ($this->debug > 0) {
+                                error_log(
+                                    'LP ONLYOFFICE document check - itemId: '.$item_id.
+                                    ', docId: '.$docId.
+                                    ', extension: '.$extension.
+                                    ', pluginEnabled: '.($isOnlyofficeEnabled ? 'yes' : 'no')
+                                );
+                            }
+
+                            if (
+                                $isOnlyofficeEnabled &&
+                                $docId > 0 &&
+                                !empty($extension) &&
+                                in_array($extension, $onlyofficeAllowedExtensions, true)
+                            ) {
+                                $returnUrl = '';
+                                $currentRequestUri = isset($_SERVER['REQUEST_URI']) ? (string) $_SERVER['REQUEST_URI'] : '';
+                                $currentHost = isset($_SERVER['HTTP_HOST']) ? (string) $_SERVER['HTTP_HOST'] : '';
+
+                                if ('' !== $currentRequestUri && '' !== $currentHost) {
+                                    $scheme = api_is_https() ? 'https://' : 'http://';
+                                    $returnUrl = $scheme.$currentHost.$currentRequestUri;
+                                }
+
+                                $onlyofficeUrl = api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/editor.php'
+                                    .'?docId='.$docId
+                                    .'&cid='.$course_id
+                                    .'&sid='.(int) $this->get_lp_session_id()
+                                    .'&nh=1'
+                                    .'&origin=learnpath'
+                                    .'&embedded=1';
+
+                                $currentGroupId = (int) api_get_group_id();
+                                if ($currentGroupId > 0) {
+                                    $onlyofficeUrl .= '&groupId='.$currentGroupId;
+                                }
+
+                                if ('' !== $returnUrl) {
+                                    $onlyofficeUrl .= '&returnUrl='.rawurlencode($returnUrl);
+                                }
+
+                                $file = $onlyofficeUrl;
+                                $onlyofficeHandled = true;
+
+                                if ($this->debug > 0) {
+                                    error_log('LP ONLYOFFICE editor URL: '.$file);
+                                }
+                            }
+
+                            if (
+                                false === $onlyofficeHandled &&
+                                !empty($extension) &&
+                                in_array($extension, $extensionsToDownload, true)
+                            ) {
+                                $file = api_get_path(WEB_CODE_PATH)
+                                    .'lp/embed.php?type=download&source=file&lp_item_id='.$item_id.'&'
+                                    .api_get_cidreq();
+                            }
+
                             break;
                         case 'dir':
                             $file = 'lp_content.php?type=dir';
@@ -2987,60 +3247,9 @@ class learnpath
                         }
 
                         // We want to use parameters if they were defined in the imsmanifest
-                        if (false === strpos($file, 'blank.php')) {
+                        if (!str_contains($file, 'blank.php')) {
                             $lp_item_params = ltrim($lp_item_params, '?');
-                            $file .= (false === strstr($file, '?') ? '?' : '').$lp_item_params;
-                        }
-                    } else {
-                        $file = 'lp_content.php?type=dir';
-                    }
-                    break;
-                case CLp::AICC_TYPE:
-                    // Formatting AICC HACP append URL.
-                    $aicc_append = '?aicc_sid='.
-                        urlencode(session_id()).'&aicc_url='.urlencode(api_get_path(WEB_CODE_PATH).'lp/aicc_hacp.php').'&';
-                    if (!empty($lp_item_params)) {
-                        $aicc_append .= $lp_item_params.'&';
-                    }
-                    if ('dir' !== $lp_item_type) {
-                        // Quite complex here:
-                        // We want to make sure 'http://' (and similar) links can
-                        // be loaded as is (withouth the Chamilo path in front) but
-                        // some contents use this form: resource.htm?resource=http://blablabla
-                        // which means we have to find a protocol at the path's start, otherwise
-                        // it should not be considered as an external URL.
-                        if (0 != preg_match('#^[a-zA-Z]{2,5}://#', $lp_item_path)) {
-                            if ($this->debug > 2) {
-                                error_log('In learnpath::get_link() '.__LINE__.' - Found match for protocol in '.$lp_item_path, 0);
-                            }
-                            // Distant url, return as is.
-                            $file = $lp_item_path;
-                            // Enabled and modified by Ivan Tcholakov, 16-OCT-2008.
-                            /*
-                            if (stristr($file,'<servername>') !== false) {
-                                $file = str_replace('<servername>', $course_path.'/scorm/'.$lp_path.'/', $lp_item_path);
-                            }
-                            */
-                            if (false !== stripos($file, '<servername>')) {
-                                //$file = str_replace('<servername>',$course_path.'/scorm/'.$lp_path.'/',$lp_item_path);
-                                $web_course_path = str_replace('https://', '', str_replace('http://', '', $course_path));
-                                $file = str_replace('<servername>', $web_course_path.'/scorm/'.$lp_path, $lp_item_path);
-                            }
-
-                            $file .= $aicc_append;
-                        } else {
-                            if ($this->debug > 2) {
-                                error_log('In learnpath::get_link() '.__LINE__.' - No starting protocol in '.$lp_item_path, 0);
-                            }
-                            // Prevent getting untranslatable urls.
-                            $lp_item_path = preg_replace('/%2F/', '/', $lp_item_path);
-                            $lp_item_path = preg_replace('/%3A/', ':', $lp_item_path);
-                            // Prepare the path - lp_path might be unusable because it includes the "aicc" subdir name.
-                            $file = $course_path.'/scorm/'.$lp_path.'/'.$lp_item_path;
-                            // TODO: Fix this for urls with protocol header.
-                            $file = str_replace('//', '/', $file);
-                            $file = str_replace(':/', '://', $file);
-                            $file .= $aicc_append;
+                            $file .= (!str_contains($file, '?') ? '?' : '').$lp_item_params;
                         }
                     } else {
                         $file = 'lp_content.php?type=dir';
@@ -3106,7 +3315,7 @@ class learnpath
         if (Database::num_rows($res) > 0) {
             $row = Database::fetch_array($res);
             $this->lp_view_id = $row['iid'];
-        } elseif (!api_is_invitee()) {
+        } elseif (!api_is_invitee() && !empty($userId)) {
             $params = [
                 'c_id' => $course_id,
                 'lp_id' => $this->get_id(),
@@ -3385,7 +3594,6 @@ class learnpath
             $repo->setVisibilityPublished($resource, $course, $session);
         } else {
             $repo->setVisibilityDraft($resource, $course, $session);
-            self::toggleCategoryPublish($id, 0);
         }
 
         return false;
@@ -3396,16 +3604,11 @@ class learnpath
      * on the course homepage.
      *
      * @param int    $id            Learnpath id
-     * @param string $setVisibility New visibility (v/i - visible/invisible)
      *
      * @return bool
      */
-    public static function togglePublish($id, $setVisibility = 'v')
+    public static function togglePublish($id)
     {
-        $addShortcut = false;
-        if ('v' === $setVisibility) {
-            $addShortcut = true;
-        }
         $repo = Container::getLpRepository();
         /** @var CLp|null $lp */
         $lp = $repo->find($id);
@@ -3413,10 +3616,12 @@ class learnpath
             return false;
         }
         $repoShortcut = Container::getShortcutRepository();
-        if ($addShortcut) {
-            $repoShortcut->addShortCut($lp, api_get_user_entity(), api_get_course_entity(), api_get_session_entity());
-        } else {
+        $shortcut = $repoShortcut->getShortcutFromResource($lp);
+
+        if (null !== $shortcut) {
             $repoShortcut->removeShortCut($lp);
+        } else {
+            $repoShortcut->addShortCut($lp, api_get_user_entity(), api_get_course_entity(), api_get_session_entity());
         }
 
         return true;
@@ -3426,18 +3631,11 @@ class learnpath
      * Show or hide the learnpath category on the course homepage.
      *
      * @param int $id
-     * @param int $setVisibility
      *
      * @return bool
      */
-    public static function toggleCategoryPublish($id, $setVisibility = 1)
+    public static function toggleCategoryPublish($id)
     {
-        $setVisibility = (int) $setVisibility;
-        $addShortcut = false;
-        if (1 === $setVisibility) {
-            $addShortcut = true;
-        }
-
         $repo = Container::getLpCategoryRepository();
         /** @var CLpCategory|null $lp */
         $category = $repo->find($id);
@@ -3447,11 +3645,13 @@ class learnpath
         }
 
         $repoShortcut = Container::getShortcutRepository();
-        if ($addShortcut) {
+        $shortcut = $repoShortcut->getShortcutFromResource($category);
+
+        if (null !== $shortcut) {
+            $repoShortcut->removeShortCut($category);
+        } else {
             $courseEntity = api_get_course_entity(api_get_course_int_id());
             $repoShortcut->addShortCut($category, api_get_user_entity(), $courseEntity, api_get_session_entity());
-        } else {
-            $repoShortcut->removeShortCut($category);
         }
 
         return true;
@@ -3680,7 +3880,7 @@ class learnpath
     /**
      * Saves the last item seen's ID only in case.
      */
-    public function save_last()
+    public function save_last($score = null)
     {
         $course_id = api_get_course_int_id();
         $debug = $this->debug;
@@ -3723,7 +3923,7 @@ class learnpath
             [$progress] = $this->get_progress_bar_text('%');
             $scoreAsProgressSetting = ('true' === api_get_setting('lp.lp_score_as_progress_enable'));
             $scoreAsProgress = $this->getUseScoreAsProgress();
-            if ($scoreAsProgress && $scoreAsProgressSetting && (null === $score || empty($score) || -1 == $score)) {
+            if ($scoreAsProgress && $scoreAsProgressSetting && (null === $score || '' === $score || -1 == $score)) {
                 if ($debug) {
                     error_log("Return false: Dont save score: $score");
                     error_log("progress: $progress");
@@ -3964,7 +4164,6 @@ class learnpath
                 error_log('lp type: '.$type);
             }
             if ((2 == $type && 'sco' !== $item_type) ||
-                (3 == $type && 'au' !== $item_type) ||
                 (1 == $type && TOOL_QUIZ != $item_type && TOOL_HOTPOTATOES != $item_type)
             ) {
                 $this->items[$this->current]->open($allow_new_attempt);
@@ -3982,9 +4181,9 @@ class learnpath
         }
         if ($debug) {
             error_log('lp_view_session_id');
-            error_log($this->lp_view_session_id);
+            error_log(($this->lp_view_session_id ?? 'not set'));
             error_log('api session id');
-            error_log(api_get_session_id());
+            error_log((string) api_get_session_id());
             error_log('End of learnpath::start_current_item()');
         }
 
@@ -4010,18 +4209,6 @@ class learnpath
                 error_log('In learnpath::stop_previous_item() - '.$this->last.' is object');
             }
             switch ($this->get_type()) {
-                case '3':
-                    if ('au' != $this->items[$this->last]->get_type()) {
-                        if ($debug) {
-                            error_log('In learnpath::stop_previous_item() - '.$this->last.' in lp_type 3 is <> au');
-                        }
-                        $this->items[$this->last]->close();
-                    } else {
-                        if ($debug) {
-                            error_log('In learnpath::stop_previous_item() - Item is an AU, saving is managed by AICC signals');
-                        }
-                    }
-                    break;
                 case '2':
                     if ('sco' != $this->items[$this->last]->get_type()) {
                         if ($debug) {
@@ -4665,6 +4852,17 @@ class learnpath
         $downIcon = Display::getMdiIcon('arrow-down-bold', 'ch-tool-icon', '', 16, get_lang('Down'));
         $previewImage = Display::getMdiIcon('magnify-plus-outline', 'ch-tool-icon', '', 16, get_lang('Preview'));
 
+        // AI disclosure helper (best-effort, never block LP builder rendering).
+        $aiDisclosure = null;
+        $aiEnabled = false;
+        try {
+            $aiDisclosure = Container::$container->get(AiDisclosureHelper::class);
+            $aiEnabled = ($aiDisclosure instanceof AiDisclosureHelper) && $aiDisclosure->isDisclosureEnabled();
+        } catch (\Throwable) {
+            $aiDisclosure = null;
+            $aiEnabled = false;
+        }
+
         $lpItemRepo = Container::getLpItemRepository();
         $itemRoot = $lpItemRepo->getRootItem($this->get_id());
 
@@ -4683,8 +4881,7 @@ class learnpath
             'rootClose' => function($tree) use ($noWrapper, $dropElement)  {
                 if ($tree[0]['lvl'] === 1) {
                     if ($dropElement) {
-                        //return Display::return_message(get_lang('Drag and drop an element here'));
-                        //return $this->getDropElementHtml();
+                        // drop area
                     }
                     if ($noWrapper) {
                         return '';
@@ -4701,19 +4898,31 @@ class learnpath
                 $extraAttr  = $isFinal ? ' data-fixed="final"' : '';
 
                 return '<li
-                    id="'.$id.'"
-                    data-id="'.$id.'"
-                    data-type="'.$type.'"
-                    '.$extraAttr.'
-                    class="flex flex-col list-group-item nested-'.$child['lvl'].$extraClass.'">';
+                id="'.$id.'"
+                data-id="'.$id.'"
+                data-type="'.$type.'"
+                '.$extraAttr.'
+                class="flex flex-col list-group-item nested-'.$child['lvl'].$extraClass.'">';
             },
             'childClose' => '',
-            'nodeDecorator' => function ($node) use ($mainUrl, $previewImage, $upIcon, $downIcon) {
-                $fullTitle = $node['title'];
-                //$title = cut($fullTitle, self::MAX_LP_ITEM_TITLE_LENGTH);
-                $title = $fullTitle;
-                $itemId = $node['iid'];
-                $type = $node['itemType'];
+            'nodeDecorator' => function ($node) use ($mainUrl, $previewImage, $upIcon, $downIcon, $aiDisclosure, $aiEnabled) {
+                $itemId = (int) ($node['iid'] ?? 0);
+                $type = $node['itemType'] ?? '';
+
+                // Plain title for attributes (no HTML).
+                $titlePlain = Security::remove_XSS(strip_tags((string) ($node['title'] ?? '')));
+
+                // HTML title for UI (may include AI badge).
+                $titleHtml = $titlePlain;
+                if ($aiEnabled && $itemId > 0) {
+                    $titleHtml = $aiDisclosure->decorateTitle(
+                        $titlePlain,
+                        'lp_item',
+                        $itemId,
+                        false
+                    );
+                }
+
                 $lpId = $this->get_id();
 
                 $moveIcon = '';
@@ -4724,7 +4933,6 @@ class learnpath
                 }
 
                 $iconName = str_replace(' ', '', $type);
-                $icon = '';
                 switch ($iconName) {
                     case 'category':
                     case 'chapter':
@@ -4744,8 +4952,8 @@ class learnpath
                     [
                         'target' => '_blank',
                         'class' => 'btn btn--plain',
-                        'data-title' => $title,
-                        'title' => $title,
+                        'data-title' => $titlePlain,
+                        'title' => $titlePlain,
                     ]
                 );
                 $url = $mainUrl.'&view=build&id='.$itemId.'&lp_id='.$lpId;
@@ -4757,59 +4965,42 @@ class learnpath
                 );
 
                 $editIcon = '<a
-                    href="'.$mainUrl.'&action=edit_item&view=build&id='.$itemId.'&lp_id='.$lpId.'&path_item='.$node['path'].'"
-                    class=""
-                    >';
+                href="'.$mainUrl.'&action=edit_item&view=build&id='.$itemId.'&lp_id='.$lpId.'&path_item='.$node['path'].'"
+                class=""
+                >';
                 $editIcon .= Display::getMdiIcon('pencil', 'ch-tool-icon', '', 16, get_lang('Edit section description/name'));
                 $editIcon .= '</a>';
-                $orderIcons = '';
-                /*if ('final_item' !== $type) {
-                    $orderIcons = Display::url(
-                        $upIcon,
-                        'javascript:void(0)',
-                        ['class' => 'btn btn--plain order_items', 'data-dir' => 'up', 'data-id' => $itemId]
-                    );
-                    $orderIcons .= Display::url(
-                        $downIcon,
-                        'javascript:void(0)',
-                        ['class' => 'btn btn--plain order_items', 'data-dir' => 'down', 'data-id' => $itemId]
-                    );
-                }*/
 
                 $deleteIcon = ' <a
-                    data-id = '.$itemId.'
-                    data-title = \''.addslashes($title).'\'
-                    href="javascript:void(0);"
-                    onclick="return deleteItem(this);"
-                    class="">';
-                $deleteIcon .= Display::getMdiIcon('delete', 'ch-tool-icon', '', 16, get_lang('Delete section'));
+                data-id="'.$itemId.'"
+                data-title=\''.addslashes($titlePlain).'\'
+                href="javascript:void(0);"
+                onclick="return deleteItem(this);"
+                class="">';
+                $deleteIcon .= Display::getMdiIcon('delete', 'ch-tool-icon', '', 16, get_lang('Delete'));
                 $deleteIcon .= '</a>';
                 $extra = '';
-
                 if ('dir' === $type && empty($node['__children'])) {
-                    $level = $node['lvl'] + 1;
+                    $level = (int) ($node['lvl'] ?? 0) + 1;
                     $extra = '<ul class="list-group nested-sortable">
-                                <li class="list-group-item list-group-item-empty nested-'.$level.'"></li>
-                              </ul>';
+                            <li class="list-group-item list-group-item-empty nested-'.$level.'"></li>
+                          </ul>';
                 }
 
                 $buttons = Display::tag(
                     'div',
-                    "<div class=\"btn-group btn-group-sm\">
-                                $editIcon
-                                $preRequisitesIcon
-                                $orderIcons
-                                $deleteIcon
-                               </div>",
+                    '<div class="btn-group btn-group-sm">
+                    '.$editIcon.'
+                    '.$preRequisitesIcon.'
+                    '.$deleteIcon.'
+                 </div>',
                     ['class' => 'btn-toolbar button_actions']
                 );
 
                 return
-                    "<div class='flex flex-row'> $moveIcon  $icon <span class='mx-1'>$title </span></div>
-                    $extra
-                    $buttons
-                    "
-                    ;
+                    "<div class='flex flex-row'> $moveIcon $icon <span class='mx-1'>$titleHtml</span></div>
+                 $extra
+                 $buttons";
             },
         ];
 
@@ -4996,9 +5187,32 @@ class learnpath
      */
     public static function generate_learning_path_folder($course, $creatorId = 0)
     {
-        // Creating learning_path folder
-        $dir = 'learning_path';
         $creatorId = empty($creatorId) ? api_get_user_id() : $creatorId;
+
+        $courseEntity = api_get_course_entity($course['real_id']);
+        $courseNode = $courseEntity ? $courseEntity->getResourceNode() : null;
+
+        if ($courseNode) {
+            $em = Database::getManager();
+            $qb = $em
+                ->createQueryBuilder()
+                ->select('doc')
+                ->from(Chamilo\CourseBundle\Entity\CDocument::class, 'doc')
+                ->innerJoin('doc.resourceNode', 'node')
+                ->where('doc.filetype = :filetype')
+                ->andWhere('doc.title = :title')
+                ->andWhere('node.parent = :parent')
+                ->setParameter('filetype', 'folder')
+                ->setParameter('title', 'learning_path')
+                ->setParameter('parent', $courseNode)
+                ->setMaxResults(1);
+
+            $document = $qb->getQuery()->getOneOrNullResult();
+
+            if ($document) {
+                return $document;
+            }
+        }
 
         return create_unexisting_directory(
             $course,
@@ -5007,8 +5221,8 @@ class learnpath
             null,
             0,
             '',
-            $dir,
-            get_lang('Learning paths'),
+            'learning_path',
+            'learning_path',
             0
         );
     }
@@ -5137,7 +5351,11 @@ class learnpath
             $parentId
         );
 
-        if ($document && in_array($ext, ['html','htm'], true)) {
+        if (!$document) {
+            return 0;
+        }
+
+        if (in_array($ext, ['html', 'htm'], true)) {
             $em = Database::getManager();
             $docRepo = Container::getDocumentRepository();
             $docEntity = $docRepo->find($document->getIid());
@@ -5462,6 +5680,135 @@ class learnpath
         return $currentUrl;
     }
 
+    private static function isCloudLinkDocument(CDocument $document): bool
+    {
+        return 'link' === strtolower((string) $document->getFiletype());
+    }
+
+    private static function getCloudLinkOriginalUrlFromDocument(CDocument $document): string
+    {
+        if (!method_exists($document, 'getComment')) {
+            return '';
+        }
+
+        return self::normalizeCloudLinkUrl((string) $document->getComment());
+    }
+
+    private static function getCloudLinkEmbedUrlFromDocument(CDocument $document): string
+    {
+        $url = self::getCloudLinkOriginalUrlFromDocument($document);
+
+        if ('' === $url) {
+            return '';
+        }
+
+        return self::getCloudLinkEmbedUrlFromUrl($url);
+    }
+
+    private static function normalizeCloudLinkUrl(string $url): string
+    {
+        $url = trim($url);
+
+        if ('' === $url) {
+            return '';
+        }
+
+        $parts = parse_url($url);
+
+        if (!is_array($parts)) {
+            return '';
+        }
+
+        $scheme = strtolower((string) ($parts['scheme'] ?? ''));
+        if (!in_array($scheme, ['http', 'https'], true)) {
+            return '';
+        }
+
+        $host = strtolower((string) ($parts['host'] ?? ''));
+        if ('' === $host) {
+            return '';
+        }
+
+        return $url;
+    }
+
+    private static function getCloudLinkEmbedUrlFromUrl(string $url): string
+    {
+        $url = self::normalizeCloudLinkUrl($url);
+
+        if ('' === $url) {
+            return '';
+        }
+
+        $parts = parse_url($url);
+        if (!is_array($parts)) {
+            return '';
+        }
+
+        $scheme = strtolower((string) ($parts['scheme'] ?? 'https'));
+        $host = strtolower((string) ($parts['host'] ?? ''));
+        $path = (string) ($parts['path'] ?? '');
+
+        if ('drive.google.com' === $host && preg_match('#/file/d/([^/]+)#', $path, $matches)) {
+            return $scheme.'://drive.google.com/file/d/'.$matches[1].'/preview';
+        }
+
+        if ('docs.google.com' === $host && preg_match('#^/(document|spreadsheets|presentation)/d/([^/]+)#', $path, $matches)) {
+            return $scheme.'://docs.google.com/'.$matches[1].'/d/'.$matches[2].'/preview';
+        }
+
+        return $url;
+    }
+
+    private static function escapeCloudLinkAttribute(string $value): string
+    {
+        return htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    }
+
+    private static function renderCloudLinkDocument(CDocument $document): string
+    {
+        $originalUrl = self::getCloudLinkOriginalUrlFromDocument($document);
+        $embedUrl = self::getCloudLinkEmbedUrlFromDocument($document);
+
+        if ('' === $originalUrl) {
+            return Display::return_message(get_lang('Invalid URL.'), 'warning', false);
+        }
+
+        $title = self::escapeCloudLinkAttribute((string) $document->getTitle());
+        $safeOriginalUrl = self::escapeCloudLinkAttribute($originalUrl);
+        $safeEmbedUrl = self::escapeCloudLinkAttribute($embedUrl);
+
+        $html = '<div class="lp-cloud-link">';
+        $html .= '<div class="mb-3 d-flex justify-content-between align-items-center gap-2">';
+        $html .= '<div class="fw-semibold">';
+        $html .= Display::getMdiIcon('cloud-outline', 'ch-tool-icon', null, 22, get_lang('Cloud link'));
+        $html .= ' '.$title;
+        $html .= '</div>';
+        $html .= '<a class="btn btn--plain btn-sm" href="'.$safeOriginalUrl.'" target="_blank" rel="noopener noreferrer">';
+        $html .= get_lang('Open in a new tab');
+        $html .= '</a>';
+        $html .= '</div>';
+
+        if ('' !== $embedUrl) {
+            $html .= '<div class="ratio ratio-16x9 border rounded bg-white">';
+            $html .= '<iframe';
+            $html .= ' src="'.$safeEmbedUrl.'"';
+            $html .= ' title="'.$title.'"';
+            $html .= ' class="w-100 h-100 border-0"';
+            $html .= ' referrerpolicy="no-referrer-when-downgrade"';
+            $html .= ' allow="autoplay; fullscreen; encrypted-media"';
+            $html .= ' allowfullscreen';
+            $html .= '></iframe>';
+            $html .= '</div>';
+        } else {
+            $html .= Display::return_message(get_lang('This cloud document cannot be embedded.'), 'warning', false);
+        }
+
+        $html .= '</div>';
+
+        return $html;
+    }
+
     /**
      * Displays a document by id.
      *
@@ -5474,24 +5821,32 @@ class learnpath
      */
     public function display_document($document, $show_title = false, $iframe = true, $edit_link = false)
     {
-        $return = '';
         if (!$document) {
             return '';
         }
 
+        if ($document instanceof CDocument && self::isCloudLinkDocument($document)) {
+            return self::renderCloudLinkDocument($document);
+        }
+
+        $return = '';
         $repo = Container::getDocumentRepository();
 
-        // TODO: Add a path filter.
         if ($iframe) {
             $url = $repo->getResourceFileUrl($document);
+            $safeUrl = self::escapeCloudLinkAttribute((string) $url);
 
-            $return .= '<iframe
-                id="learnpath_preview_frame"
-                frameborder="0"
-                height="400"
-                width="100%"
-                scrolling="auto"
-                src="'.$url.'"></iframe>';
+            if ('' === $safeUrl) {
+                return Display::return_message(get_lang('Document not found'), 'warning', false);
+            }
+
+            $return .= '<iframe';
+            $return .= ' src="'.$safeUrl.'"';
+            $return .= ' class="w-100 border-0"';
+            $return .= ' style="min-height: 70vh;"';
+            $return .= ' referrerpolicy="no-referrer-when-downgrade"';
+            $return .= ' allowfullscreen';
+            $return .= '></iframe>';
         } else {
             $return = $repo->getResourceFileContent($document);
         }
@@ -6388,8 +6743,8 @@ document.addEventListener("DOMContentLoaded", function () {
             false,
             [],
             [],
-            ['file', 'folder'],
-            true
+            ['file', 'html', 'folder', 'link'],
+            false
         );
 
         $form = new FormValidator(
@@ -6481,11 +6836,11 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!empty($templatesPanel)) {
             // Two-column layout: templates on the left, form on the right.
             $new = '
-            <div class="lp-document-create flex flex-col lg:flex-row gap-4">
-                <div class="w-full lg:w-1/3">
+            <div class="lp-document-create flex flex-col xl:flex-row gap-4">
+                <div class="w-full xl:w-1/3">
                     '.$templatesPanel.'
                 </div>
-                <div class="w-full lg:w-2/3">
+                <div class="w-full xl:w-2/3">
                     '.$newForm.'
                 </div>
             </div>
@@ -6551,7 +6906,7 @@ document.addEventListener("DOMContentLoaded", function () {
             $headers,
             [$documentTree, $videosTree, $new, $uploadHtml],
             'subtab',
-            ['class' => 'mt-3 lp-subtabs']
+            ['class' => 'lp-subtabs']
         );
     }
 
@@ -6801,11 +7156,14 @@ document.addEventListener("DOMContentLoaded", function () {
     {
         $course_id = api_get_course_int_id();
         $session_id = api_get_session_id();
-        $setting = 'true' === api_get_setting('lp.show_invisible_exercise_in_lp_toc');
+        $showInvisibleExerciseInLpToc = 'true' === api_get_setting('lp.show_invisible_exercise_in_lp_toc');
+        $showInvisibleExerciseInLpList = 'true' === api_get_setting('lp.show_invisible_exercise_in_lp_list');
+
+        $setting = $showInvisibleExerciseInLpToc || $showInvisibleExerciseInLpList;
 
         $active = 2;
         if ($setting) {
-            $active = 1;
+            $active = null;
         }
         $keyword = $_REQUEST['keyword'] ?? null;
         $categoryId = $_REQUEST['category_id'] ?? null;
@@ -7502,7 +7860,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         if ('quiz' == $last_item_not_dir_type) {
                             // if previous is quiz, mark its max score as default score to be achieved
                             $sql = "UPDATE $tbl_lp_item SET mastery_score = '$last_item_not_dir_max'
-                                    WHERE c_id = $course_id AND lp_id = $lp_id AND iid = $last_item_not_dir";
+                                    WHERE lp_id = $lp_id AND iid = $last_item_not_dir";
                             Database::query($sql);
                         }
                         // now simply update the prerequisite to set it to the last non-chapter item
@@ -7995,24 +8353,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
     /**
      * Check if URL is not allowed to be show in a iframe.
-     *
-     * @param string $src
-     *
-     * @return string
      */
-    public function fixBlockedLinks($src)
+    public function fixBlockedLinks(string $src): string
     {
         $urlInfo = parse_url($src);
 
         $platformProtocol = 'https';
-        if (false === strpos(api_get_path(WEB_CODE_PATH), 'https')) {
+        if (!str_contains(api_get_path(WEB_CODE_PATH), 'https')) {
             $platformProtocol = 'http';
         }
 
         $protocolFixApplied = false;
         //Scheme validation to avoid "Notices" when the lesson doesn't contain a valid scheme
-        $scheme = isset($urlInfo['scheme']) ? $urlInfo['scheme'] : null;
-        $host = isset($urlInfo['host']) ? $urlInfo['host'] : null;
+        $scheme = $urlInfo['scheme'] ?? null;
+        $host = $urlInfo['host'] ?? null;
 
         if ($platformProtocol != $scheme) {
             Session::write('x_frame_source', $src);
@@ -8020,8 +8374,8 @@ document.addEventListener("DOMContentLoaded", function () {
             $protocolFixApplied = true;
         }
 
-        if (false == $protocolFixApplied) {
-            if (false === strpos(api_get_path(WEB_PATH), $host)) {
+        if (!$protocolFixApplied) {
+            if (!str_contains(api_get_path(WEB_PATH), $host)) {
                 // Check X-Frame-Options
                 $ch = curl_init();
                 $options = [
@@ -8598,6 +8952,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 $repo = Container::getDocumentRepository();
                 $document = $repo->find($rowItem->getPath());
                 if ($document) {
+                    if ($document instanceof CDocument && self::isCloudLinkDocument($document)) {
+                        return self::getCloudLinkEmbedUrlFromDocument($document);
+                    }
+
                     $params = [
                         'cid' => $course_id,
                         'sid' => $session_id,
@@ -9561,12 +9919,14 @@ document.addEventListener("DOMContentLoaded", function () {
         $fileName = $resourceFile->getTitle();
         $ext = pathinfo($fileName, PATHINFO_EXTENSION);
         $mimeType = $resourceFile->getMimeType() ?: 'video/mp4';
+        $safeVideoUrl = htmlspecialchars($videoUrl, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+        $safeMimeType = htmlspecialchars($mimeType, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
         $autoplayAttr = ($autostart === 'true') ? 'autoplay muted playsinline' : '';
 
         $html = '';
         $html .= '
         <video id="lp-video" width="100%" height="auto" controls '.$autoplayAttr.'>
-            <source src="'.$videoUrl.'" type="$mimeType">
+            <source src="'.$safeVideoUrl.'" type="'.$safeMimeType.'">
         </video>';
 
         return $html;

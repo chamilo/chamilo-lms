@@ -33,8 +33,8 @@ if (!$result) {
     api_not_allowed(true);
 }
 
-if (Container::getPluginHelper()->isPluginEnabled('Positioning')) {
-    $plugin = Positioning::create();
+$plugin = Positioning::create();
+if ($plugin->isEnabled()) {
     if ($plugin->blockFinalExercise(api_get_user_id(), $exercise_id, $courseId, $sessionId)) {
         api_not_allowed(true);
     }
@@ -226,6 +226,7 @@ $attempts = Event::getExerciseResultsByUser(
 $counter = count($attempts);
 $my_attempt_array = [];
 $table_content = '';
+$hideAttemptsTableOnStartPage = ('true' === api_get_setting('exercise.quiz_hide_attempts_table_on_start_page'));
 
 /* Make a special case for IE, which doesn't seem to be able to handle the
  * results popup -> send it to the full results page */
@@ -324,7 +325,9 @@ if (!empty($attempts)) {
         )
         ) {
             if ($blockShowAnswers &&
-                RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK != $objExercise->results_disabled
+                RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK != $objExercise->results_disabled &&
+                RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT != $objExercise->results_disabled &&
+                RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK != $objExercise->results_disabled
             ) {
                 $attempt_link = '';
             }
@@ -367,17 +370,13 @@ if (!empty($attempts)) {
             break;
         case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK:
         case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT:
-            if ($blockShowAnswers) {
-                $header_names = [get_lang('Attempt'), get_lang('Start Date'), get_lang('IP'), get_lang('Score')];
-            } else {
-                $header_names = [
-                    get_lang('Attempt'),
-                    get_lang('Start Date'),
-                    get_lang('IP'),
-                    get_lang('Score'),
-                    get_lang('Details'),
-                ];
-            }
+            $header_names = [
+                get_lang('Attempt'),
+                get_lang('Start Date'),
+                get_lang('IP'),
+                get_lang('Score'),
+                get_lang('Details'),
+            ];
 
             break;
         case RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS:
@@ -490,11 +489,13 @@ if ($isLimitReached) {
     );
 }
 
-$html .= Display::tag(
-    'div',
-    $table_content,
-    ['class' => 'table-responsive']
-);
+if (!$hideAttemptsTableOnStartPage && !empty($table_content)) {
+    $html .= Display::tag(
+        'div',
+        $table_content,
+        ['class' => 'table-responsive']
+    );
+}
 $html .= '</div>';
 
 if ($certificateBlock) {

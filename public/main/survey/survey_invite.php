@@ -61,8 +61,13 @@ Display::display_header($tool_name, 'Survey');
 
 echo '<script>
 $(function() {
-    $("#check_mail").change(function() {
-        $("#mail_text_wrapper").toggle();
+    var $mailWrapper = $("#mail_text_wrapper");
+    var $sendMail = $("input[name=\'send_mail\']");
+    if (!$sendMail.is(":checked")) {
+        $mailWrapper.hide();
+    }
+    $sendMail.change(function() {
+        $mailWrapper.toggle(this.checked);
     });
 });
 </script>';
@@ -107,9 +112,7 @@ $form->addTextarea(
     //['rows' => 5]
 );
 
-$form->addHtml('<div id="check_mail">');
 $form->addCheckBox('send_mail', '', get_lang('Send mail'));
-$form->addHtml('</div>');
 $form->addHtml('<div id="mail_text_wrapper">');
 
 // The title of the mail

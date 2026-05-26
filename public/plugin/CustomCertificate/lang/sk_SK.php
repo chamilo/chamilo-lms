@@ -1,0 +1,77 @@
+<?php
+$strings['plugin_title'] = 'Vlastný certifikát';
+$strings['plugin_comment'] = 'Tento zásuvný modul vám umožňuje vytvoriť vlastné certifikáty pre každý kurz.';
+$strings['enable_plugin_customcertificate'] = 'Povoliť zásuvný modul';
+$strings['customcertificate_course_enable'] = 'Povoliť vlastný certifikát v kurze';
+$strings['use_certificate_default'] = 'Použiť predvolený vlastný certifikát';
+$strings['ToolDisabled'] = 'Nástroj je vypnutý z administrácie';
+$strings['OnlyAdminPlatform'] = 'Nástroj iba pre administrátorov';
+$strings['OnlyAdminPlatformOrTeacher'] = 'Nástroj iba pre administrátorov a učiteľov';
+$strings['TrainingEntity'] = 'Školská entita';
+$strings['DescriptionFront'] = 'Popis predná';
+$strings['DescriptionRear'] = 'Popis zadná';
+$strings['Certify'] = 'Certifikovať';
+$strings['CertificateType'] = 'Typ certifikátu';
+$strings['CertifyThat'] = 'CERTIFIKUJEME, ŽE';
+$strings['StudentCourseInfo'] = 'Údaje študenta a kurzu';
+$strings['StudentData'] = 'Údaje študenta';
+$strings['CourseData'] = 'Údaje kurzu';
+$strings['Modality'] = 'Modalita';
+$strings['Contents'] = 'Obsahy';
+$strings['ContentsToShow'] = 'Obsahy na zobrazenie';
+$strings['ContentsCourseDescription'] = 'Použiť sekciu „Popis kurzu“ > „Obsahy“';
+$strings['ContentsIndexLearnpath'] = 'Použiť index učebnej cesty';
+$strings['ContentsCustom'] = 'Použiť vlastný obsah';
+$strings['ContentsHide'] = 'Nezobrazovať obsahy';
+$strings['Dates'] = 'Dátumy';
+$strings['CourseDeliveryDates'] = 'Dátumy realizácie kurzu';
+$strings['Custom'] = 'Vlastný';
+$strings['UseDateSessionAccess'] = 'Použiť dátumy prístupu k stretnutiu';
+$strings['ExpectionPlace'] = 'Miesto vydania';
+$strings['DateExpediction'] = 'Dátum vydania';
+$strings['UseDateEndAccessSession'] = 'Použiť dátum ukončenia prístupu k stretnutiu';
+$strings['UseDateDownloadCertificate'] = 'Použiť dátum stiahnutia certifikátu';
+$strings['UseDateGenerationCertificate'] = 'Použiť dátum generovania certifikátu';
+$strings['UseCustomDate'] = 'Použiť vlastný dátum';
+$strings['LogosSeal'] = 'Logá / Pečate';
+$strings['LogoLeft'] = 'Logo vľavo';
+$strings['LogoCenter'] = 'Logo uprostred';
+$strings['LogoRight'] = 'Logo vpravo';
+$strings['Seal'] = 'Pečať';
+$strings['Signature1'] = 'Podpis 1';
+$strings['Signature2'] = 'Podpis 2';
+$strings['Signature3'] = 'Podpis 3';
+$strings['Signature4'] = 'Podpis 4';
+$strings['SignatureText1'] = 'Text podpisu 1';
+$strings['SignatureText2'] = 'Text podpisu 2';
+$strings['SignatureText3'] = 'Text podpisu 3';
+$strings['SignatureText4'] = 'Text podpisu 4';
+$strings['OtherOptions'] = 'Ostatné možnosti';
+$strings['MarginRight'] = 'Okraj vpravo';
+$strings['MarginLeft'] = 'Okraj vľavo';
+$strings['SetDefaultTemplate'] = 'Nastaviť šablónu ako predvolenú';
+$strings['MessageDefaultTemplate'] = 'Uložiť túto predvolenú úpravu pre kurzy a stretnutia bez
+     definovaných certifikátov';
+$strings['None'] = 'Žiadny';
+$strings['ErrorTemplateCertificate'] = 'Pre certifikát nie je definovaná žiadna šablóna.
+     Nie je nastavená žiadna predvolená šablóna.';
+$strings['DateStartEnd'] = 'S dátumom začiatku a dátumom konca: ';
+$strings['ExpedictionIn'] = 'Vydaný';
+$strings['Signatures'] = 'Podpisy';
+$strings['BackgroundCertificate'] = 'Pozadie certifikátu';
+$strings['Background'] = 'Pozadie';
+$strings['CertificateSetting'] = 'Nastavenie certifikátu';
+$strings['ToolDisabledCourse'] = 'Nástroj je vypnutý v nastaveniach kurzu';
+$strings['ToolUseDefaultSettingCourse'] = 'Nástroj je nakonfigurovaný na použitie predvoleného certifikátu. <br>
+     Môžete ho upraviť z obrazovky Administrácia -> Zásuvné moduly -> Vlastný certifikát. <br>
+     Alebo ak chcete, môžete vypnúť možnosť použitia certifikátu ako predvoleného v konfigurácii zásuvného modulu v kurze';
+$strings['CertificateSettingDefault'] = 'Nastavenia predvoleného certifikátu';
+$strings['InfoFromDefaultCertificate'] = 'Obsah certifikátu je založený na predvolenom certifikáte.
+     Úpravy, ktoré vykonáte, neovplyvnia predvolený certifikát.';
+$strings['to'] = ' do ';
+$strings['formatDownloadDate'] = ' do %sth %s, %s';
+$strings['PrintCertificate'] = 'Tlačiť certifikát';
+$strings['QuestionDelete'] = 'Chcete zmazať špecifický diplom a použiť predvolený certifikát?';
+$strings['SuccessDelete'] = 'Úspešne zmazané';
+$strings['ProblemDelete'] = 'Problém pri mazaní certifikátu';
+$strings['OnlyCustomCertificates'] = 'Exportujú sa iba kurzy s personalizovaným certifikátom';

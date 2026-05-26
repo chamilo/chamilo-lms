@@ -55,25 +55,25 @@
       <template #body="{ data }">
         <div class="flex gap-2">
           <BaseButton
+            :label="t('View JSON')"
             icon="eye-on"
-            size="normal"
-            type="primary"
+            size="small"
+            type="primary-text"
             @click="showJsonDialog(data)"
-            :title="t('View JSON')"
           />
           <BaseButton
+            :label="t('Edit')"
             icon="edit"
-            size="normal"
-            type="secondary"
+            size="small"
+            type="secondary-text"
             @click="goToEdit(data)"
-            :title="t('Edit')"
           />
           <BaseButton
+            :label="t('Delete')"
             icon="delete"
-            size="normal"
-            type="danger"
+            size="small"
+            type="danger-text"
             @click="confirmDelete(data)"
-            :title="t('Delete')"
           />
         </div>
       </template>
@@ -88,8 +88,8 @@
     confirm-label="Copy JSON"
     @confirm-clicked="copyJsonToClipboard"
   >
-    <pre class="text-xs whitespace-pre-wrap break-words max-h-[400px] overflow-auto">
-{{ selectedJson }}
+    <pre class="text-xs whitespace-pre-wrap break-words max-h-[400px] overflow-auto"
+      >{{ selectedJson }}
     </pre>
   </BaseDialogConfirmCancel>
 
@@ -156,9 +156,7 @@ function confirmDelete(template) {
 
 async function deleteTemplate() {
   try {
-    await pageService.deletePageLayoutTemplate(
-      `/api/page_layout_templates/${templateToDelete.value.id}`
-    )
+    await pageService.deletePageLayoutTemplate(`/api/page_layout_templates/${templateToDelete.value.id}`)
     templates.value = templates.value.filter((t) => t.id !== templateToDelete.value.id)
     isDeleteDialogVisible.value = false
   } catch (e) {
@@ -184,10 +182,7 @@ function getColumnsCount(template) {
 function getBlocksCount(template) {
   try {
     const parsed = JSON.parse(template.layout)
-    return parsed?.page?.layout?.columns?.reduce(
-      (total, col) => total + (col.blocks?.length || 0),
-      0
-    ) || 0
+    return parsed?.page?.layout?.columns?.reduce((total, col) => total + (col.blocks?.length || 0), 0) || 0
   } catch (e) {
     return "-"
   }

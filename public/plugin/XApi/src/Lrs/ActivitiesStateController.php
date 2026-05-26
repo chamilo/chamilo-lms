@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\XApi\Lrs;
@@ -9,8 +10,6 @@ use Chamilo\CoreBundle\Entity\XApiActivityState;
 use Database;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Xabbuh\XApi\Model\Actor;
-use Xabbuh\XApi\Serializer\Symfony\Serializer;
 
 /**
  * Class ActivitiesStateController.
@@ -19,51 +18,59 @@ class ActivitiesStateController extends BaseController
 {
     public function get(): Response
     {
-        $serializer = Serializer::createSerializer();
+        $activityId = trim((string) $this->httpRequest->query->get('activityId'));
+        $stateId = trim((string) $this->httpRequest->query->get('stateId'));
+        $requestedAgentRaw = (string) $this->httpRequest->query->get('agent', '');
 
-        $requestedAgent = $this->httpRequest->query->get('agent');
-        $activityId = $this->httpRequest->query->get('activityId');
-        $stateId = $this->httpRequest->query->get('stateId');
+        if ('' === $activityId || '' === $stateId || '' === trim($requestedAgentRaw)) {
+            return new JsonResponse(
+                ['error' => 'Missing required parameters.'],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
 
-        $state = Database::select(
+        $requestedAgent = $this->decodeJsonObject($requestedAgentRaw);
+        if (null === $requestedAgent) {
+            return new JsonResponse(
+                ['error' => 'Invalid agent JSON.'],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        $rows = Database::select(
             '*',
             Database::get_main_table('xapi_activity_state'),
             [
                 'where' => [
-                    'state_id = ? AND activity_id = ? AND MD5(agent) = ?' => [
+                    'state_id = ? AND activity_id = ?' => [
                         Database::escape_string($stateId),
                         Database::escape_string($activityId),
-                        md5($requestedAgent),
                     ],
                 ],
-            ],
-            'first'
+            ]
         );
 
-        if (empty($state)) {
-            return JsonResponse::create([], Response::HTTP_NOT_FOUND);
+        if (empty($rows)) {
+            return new Response('', Response::HTTP_NOT_FOUND);
         }
 
-        $requestedAgent = $serializer->deserialize(
-            $this->httpRequest->query->get('agent'),
-            Actor::class,
-            'json'
-        );
+        foreach ($rows as $row) {
+            $storedAgent = $this->normalizeDecodedValue($row['agent'] ?? null);
 
-        /** @var Actor $stateAgent */
-        $stateAgent = $serializer->deserialize(
-            $state['agent'],
-            Actor::class,
-            'json'
-        );
+            if (!$this->agentsAreEqual($requestedAgent, $storedAgent)) {
+                continue;
+            }
 
-        if (!$stateAgent->equals($requestedAgent)) {
-            return JsonResponse::create([], Response::HTTP_NOT_FOUND);
+            $documentData = $this->normalizeDecodedValue($row['document_data'] ?? null);
+
+            if (null === $documentData) {
+                $documentData = [];
+            }
+
+            return new JsonResponse($documentData, Response::HTTP_OK);
         }
 
-        $documentData = json_decode($state['document_data'], true);
-
-        return JsonResponse::create($documentData);
+        return new Response('', Response::HTTP_NOT_FOUND);
     }
 
     public function head(): Response
@@ -78,44 +85,147 @@ class ActivitiesStateController extends BaseController
 
     public function put(): Response
     {
-        $activityId = $this->httpRequest->query->get('activityId');
-        $agent = $this->httpRequest->query->get('agent');
-        $stateId = $this->httpRequest->query->get('stateId');
-        $documentData = $this->httpRequest->getContent();
+        $activityId = trim((string) $this->httpRequest->query->get('activityId'));
+        $stateId = trim((string) $this->httpRequest->query->get('stateId'));
+        $agentRaw = (string) $this->httpRequest->query->get('agent', '');
+        $documentDataRaw = (string) $this->httpRequest->getContent();
 
-        $state = Database::select(
-            'id',
+        if ('' === $activityId || '' === $stateId || '' === trim($agentRaw)) {
+            return new JsonResponse(
+                ['error' => 'Missing required parameters.'],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        $decodedAgent = $this->decodeJsonObject($agentRaw);
+        if (null === $decodedAgent) {
+            return new JsonResponse(
+                ['error' => 'Invalid agent JSON.'],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        $decodedDocumentData = $this->decodeJsonObject($documentDataRaw);
+        if (null === $decodedDocumentData) {
+            return new JsonResponse(
+                ['error' => 'Invalid document JSON.'],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        $normalizedAgentJson = $this->encodeCanonicalJson($decodedAgent);
+
+        $stateRow = Database::select(
+            'id, agent',
             Database::get_main_table('xapi_activity_state'),
             [
                 'where' => [
-                    'state_id = ? AND activity_id = ? AND MD5(agent) = ?' => [
+                    'state_id = ? AND activity_id = ?' => [
                         Database::escape_string($stateId),
                         Database::escape_string($activityId),
-                        md5($agent),
                     ],
                 ],
-            ],
-            'first'
+            ]
         );
 
         $em = Database::getManager();
+        $stateEntity = null;
 
-        if (empty($state)) {
-            $state = new XApiActivityState();
-            $state
-                ->setActivityId($activityId)
-                ->setAgent(json_decode($agent, true))
-                ->setStateId($stateId)
-            ;
-        } else {
-            $state = $em->find(XApiActivityState::class, $state['id']);
+        foreach ($stateRow as $row) {
+            $storedAgent = $this->normalizeDecodedValue($row['agent'] ?? null);
+
+            if ($this->agentsAreEqual($decodedAgent, $storedAgent)) {
+                $stateEntity = $em->find(XApiActivityState::class, (int) $row['id']);
+                break;
+            }
         }
 
-        $state->setDocumentData(json_decode($documentData, true));
+        if (!$stateEntity instanceof XApiActivityState) {
+            $stateEntity = new XApiActivityState();
+            $stateEntity
+                ->setActivityId($activityId)
+                ->setStateId($stateId)
+                ->setAgent(json_decode($normalizedAgentJson, true))
+            ;
+        }
 
-        $em->persist($state);
+        $stateEntity->setDocumentData($decodedDocumentData);
+
+        $em->persist($stateEntity);
         $em->flush();
 
-        return Response::create('', Response::HTTP_NO_CONTENT);
+        return new Response('', Response::HTTP_NO_CONTENT);
+    }
+
+    private function decodeJsonObject(string $json): ?array
+    {
+        $json = trim($json);
+
+        if ('' === $json) {
+            return null;
+        }
+
+        $decoded = json_decode($json, true);
+
+        if (JSON_ERROR_NONE !== json_last_error() || !\is_array($decoded)) {
+            return null;
+        }
+
+        $this->sortArrayRecursively($decoded);
+
+        return $decoded;
+    }
+
+    private function normalizeDecodedValue(mixed $value): ?array
+    {
+        if (\is_array($value)) {
+            $this->sortArrayRecursively($value);
+
+            return $value;
+        }
+
+        if (\is_string($value) && '' !== trim($value)) {
+            return $this->decodeJsonObject($value);
+        }
+
+        return null;
+    }
+
+    private function agentsAreEqual(?array $left, ?array $right): bool
+    {
+        if (null === $left || null === $right) {
+            return false;
+        }
+
+        return $this->encodeCanonicalJson($left) === $this->encodeCanonicalJson($right);
+    }
+
+    private function encodeCanonicalJson(array $data): string
+    {
+        $copy = $data;
+        $this->sortArrayRecursively($copy);
+
+        $json = json_encode($copy, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
+        return false === $json ? '' : $json;
+    }
+
+    private function sortArrayRecursively(array &$data): void
+    {
+        foreach ($data as &$value) {
+            if (\is_array($value)) {
+                $this->sortArrayRecursively($value);
+            }
+        }
+        unset($value);
+
+        if ($this->isAssoc($data)) {
+            ksort($data);
+        }
+    }
+
+    private function isAssoc(array $array): bool
+    {
+        return array_keys($array) !== range(0, \count($array) - 1);
     }
 }

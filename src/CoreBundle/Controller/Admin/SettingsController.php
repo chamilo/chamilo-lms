@@ -217,14 +217,20 @@ class SettingsController extends BaseController
 
         $settingsRepo = $this->entityManager->getRepository(SettingsCurrent::class);
 
-        $currentUrlId = (int) $url->getId();
+        $multiUrlContext = $this->getMultiUrlSettingVisibilityContext($url);
+        $currentUrlId = $multiUrlContext['current_url_id'];
+        $changeableMap = $multiUrlContext['changeable_map'];
+        $lockedMap = $multiUrlContext['locked_map'];
+        $hideDisabledOnSubUrl = $multiUrlContext['hide_disabled_on_sub_url'];
+        $canToggleMultiUrlSetting = $multiUrlContext['can_toggle_multiurl_setting'];
+
         $mainUrl = $this->entityManager->getRepository(AccessUrl::class)->find(1);
 
         // Build template map: current URL overrides main URL when missing.
         if ($mainUrl instanceof AccessUrl && 1 !== $currentUrlId) {
             $mainRows = $settingsRepo->findBy(['url' => $mainUrl]);
             foreach ($mainRows as $s) {
-                if ($s->getValueTemplate()) {
+                if ($s instanceof SettingsCurrent && $s->getValueTemplate()) {
                     $templateMap[$s->getVariable()] = $s->getValueTemplate()->getId();
                 }
             }
@@ -232,34 +238,10 @@ class SettingsController extends BaseController
 
         $currentRows = $settingsRepo->findBy(['url' => $url]);
         foreach ($currentRows as $s) {
-            if ($s->getValueTemplate()) {
+            if ($s instanceof SettingsCurrent && $s->getValueTemplate()) {
                 $templateMap[$s->getVariable()] = $s->getValueTemplate()->getId();
             }
         }
-
-        // MultiURL flags: read from main URL (ID = 1) only
-        $changeableMap = [];
-        $lockedMap = [];
-
-        $mainUrlRows = $settingsRepo->createQueryBuilder('sc')
-            ->join('sc.url', 'u')
-            ->andWhere('u.id = :mainId')
-            ->setParameter('mainId', 1)
-            ->getQuery()
-            ->getResult()
-        ;
-
-        foreach ($mainUrlRows as $row) {
-            if ($row instanceof SettingsCurrent) {
-                $changeableMap[$row->getVariable()] = (int) $row->getAccessUrlChangeable();
-                $lockedMap[$row->getVariable()] = method_exists($row, 'getAccessUrlLocked')
-                    ? (int) $row->getAccessUrlLocked()
-                    : 0;
-            }
-        }
-
-        // Only platform admins on the main URL can toggle the MultiURL flag.
-        $canToggleMultiUrlSetting = $this->isGranted('ROLE_ADMIN') && 1 === $currentUrlId;
 
         if ('' === $keyword) {
             return $this->render('@ChamiloCore/Admin/Settings/search.html.twig', [
@@ -276,6 +258,7 @@ class SettingsController extends BaseController
                 'locked_map' => $lockedMap,
                 'current_url_id' => $currentUrlId,
                 'can_toggle_multiurl_setting' => $canToggleMultiUrlSetting,
+                'unsupported_settings' => $this->getUnsupportedSettings(),
             ]);
         }
 
@@ -286,12 +269,25 @@ class SettingsController extends BaseController
                     continue;
                 }
 
+                $schemaAlias = $manager->convertNameSpaceToService($category);
+
+                // Skip unknown/legacy categories.
+                if (!isset($schemas[$schemaAlias])) {
+                    continue;
+                }
+
                 $variablesInCategory = [];
+
                 foreach ($parameterList as $parameter) {
                     $var = $parameter->getVariable();
 
-                    // Hide locked settings from child URLs (do not show them at all).
-                    if (1 !== $currentUrlId && 1 === (int) ($lockedMap[$var] ?? 0)) {
+                    if ($this->isSettingHiddenInChildUrl(
+                        $var,
+                        $currentUrlId,
+                        $changeableMap,
+                        $lockedMap,
+                        $hideDisabledOnSubUrl
+                    )) {
                         continue;
                     }
 
@@ -302,27 +298,22 @@ class SettingsController extends BaseController
                     }
                 }
 
-                $schemaAlias = $manager->convertNameSpaceToService($category);
-
-                // Skip unknown/legacy categories (e.g., "tools")
-                if (!isset($schemas[$schemaAlias])) {
+                if (empty($variablesInCategory)) {
                     continue;
                 }
 
                 $settings = $manager->load($category);
                 $form = $this->getSettingsFormFactory()->create($schemaAlias);
 
-                // Keep only keyword-matching variables, and also remove locked ones for child URLs.
-                foreach (array_keys($settings->getParameters()) as $name) {
-                    $isLockedForChild = (1 !== $currentUrlId) && (1 === (int) ($lockedMap[$name] ?? 0));
-
-                    if ($isLockedForChild || !\in_array($name, $variablesInCategory, true)) {
-                        if ($form->has($name)) {
-                            $form->remove($name);
-                        }
-                        $settings->remove($name);
-                    }
-                }
+                $this->removeHiddenSettingsFromForm(
+                    $form,
+                    $settings,
+                    $currentUrlId,
+                    $changeableMap,
+                    $lockedMap,
+                    $hideDisabledOnSubUrl,
+                    $variablesInCategory
+                );
 
                 $form->setData($settings);
                 $formList[$category] = $form->createView();
@@ -343,6 +334,7 @@ class SettingsController extends BaseController
             'locked_map' => $lockedMap,
             'current_url_id' => $currentUrlId,
             'can_toggle_multiurl_setting' => $canToggleMultiUrlSetting,
+            'unsupported_settings' => $this->getUnsupportedSettings(),
         ]);
     }
 
@@ -374,29 +366,12 @@ class SettingsController extends BaseController
 
         $settingsRepo = $this->entityManager->getRepository(SettingsCurrent::class);
 
-        $currentUrlId = (int) $url->getId();
-        $mainUrl = $this->entityManager->getRepository(AccessUrl::class)->find(1);
-
-        // MultiURL flags: read from main URL (ID = 1) only
-        $changeableMap = [];
-        $lockedMap = [];
-
-        $mainUrlRows = $settingsRepo->createQueryBuilder('sc')
-            ->join('sc.url', 'u')
-            ->andWhere('u.id = :mainId')
-            ->setParameter('mainId', 1)
-            ->getQuery()
-            ->getResult()
-        ;
-
-        foreach ($mainUrlRows as $row) {
-            if ($row instanceof SettingsCurrent) {
-                $changeableMap[$row->getVariable()] = (int) $row->getAccessUrlChangeable();
-                $lockedMap[$row->getVariable()] = method_exists($row, 'getAccessUrlLocked')
-                    ? (int) $row->getAccessUrlLocked()
-                    : 0;
-            }
-        }
+        $multiUrlContext = $this->getMultiUrlSettingVisibilityContext($url);
+        $currentUrlId = $multiUrlContext['current_url_id'];
+        $changeableMap = $multiUrlContext['changeable_map'];
+        $lockedMap = $multiUrlContext['locked_map'];
+        $hideDisabledOnSubUrl = $multiUrlContext['hide_disabled_on_sub_url'];
+        $canToggleMultiUrlSetting = $multiUrlContext['can_toggle_multiurl_setting'];
 
         $settings = $manager->load($namespace);
 
@@ -406,21 +381,17 @@ class SettingsController extends BaseController
             ['allow_extra_fields' => true]
         );
 
-        // Hide locked settings from child URLs (do not show them at all).
-        if (1 !== $currentUrlId) {
-            foreach (array_keys($settings->getParameters()) as $name) {
-                if (1 === (int) ($lockedMap[$name] ?? 0)) {
-                    if ($form->has($name)) {
-                        $form->remove($name);
-                    }
-                    $settings->remove($name);
-                }
-            }
-        }
+        $this->removeHiddenSettingsFromForm(
+            $form,
+            $settings,
+            $currentUrlId,
+            $changeableMap,
+            $lockedMap,
+            $hideDisabledOnSubUrl
+        );
 
         $form->setData($settings);
 
-        // Build extra diagnostics for Xapian and converters when editing "search" settings
         if ('search' === $namespace) {
             $searchDiagnostics = $this->buildSearchDiagnostics($manager);
         }
@@ -464,12 +435,12 @@ class SettingsController extends BaseController
         [$ordered, $labelMap] = $this->computeOrderedNamespacesByTranslatedLabel($schemas, $request);
 
         $templateMap = [];
+        $mainUrl = $this->entityManager->getRepository(AccessUrl::class)->find(1);
 
-        // Build template map: fallback to main URL templates when sub-URL has no row for a locked setting.
         if ($mainUrl instanceof AccessUrl && 1 !== $currentUrlId) {
             $mainRows = $settingsRepo->findBy(['url' => $mainUrl]);
             foreach ($mainRows as $s) {
-                if ($s->getValueTemplate()) {
+                if ($s instanceof SettingsCurrent && $s->getValueTemplate()) {
                     $templateMap[$s->getVariable()] = $s->getValueTemplate()->getId();
                 }
             }
@@ -477,7 +448,7 @@ class SettingsController extends BaseController
 
         $settingsWithTemplate = $settingsRepo->findBy(['url' => $url]);
         foreach ($settingsWithTemplate as $s) {
-            if ($s->getValueTemplate()) {
+            if ($s instanceof SettingsCurrent && $s->getValueTemplate()) {
                 $templateMap[$s->getVariable()] = $s->getValueTemplate()->getId();
             }
         }
@@ -485,9 +456,6 @@ class SettingsController extends BaseController
         $platform = [
             'server_type' => (string) $manager->getSetting('platform.server_type', true),
         ];
-
-        // Only platform admins on the main URL can toggle the MultiURL flag.
-        $canToggleMultiUrlSetting = $this->isGranted('ROLE_ADMIN') && 1 === $currentUrlId;
 
         return $this->render('@ChamiloCore/Admin/Settings/default.html.twig', [
             'schemas' => $schemas,
@@ -504,6 +472,7 @@ class SettingsController extends BaseController
             'current_url_id' => $currentUrlId,
             'can_toggle_multiurl_setting' => $canToggleMultiUrlSetting,
             'search_diagnostics' => $searchDiagnostics,
+            'unsupported_settings' => $this->getUnsupportedSettings(),
         ]);
     }
 
@@ -540,6 +509,98 @@ class SettingsController extends BaseController
             'json_example' => $template->getJsonExample(),
             'description' => $template->getDescription(),
         ]);
+    }
+
+    private function getMultiUrlSettingVisibilityContext(AccessUrl $currentUrl): array
+    {
+        $settingsRepo = $this->entityManager->getRepository(SettingsCurrent::class);
+        $currentUrlId = (int) $currentUrl->getId();
+
+        $changeableMap = [];
+        $lockedMap = [];
+        $hideDisabledOnSubUrl = false;
+
+        $mainUrlRows = $settingsRepo
+            ->createQueryBuilder('sc')
+            ->join('sc.url', 'u')
+            ->andWhere('u.id = :mainId')
+            ->setParameter('mainId', 1)
+            ->getQuery()
+            ->getResult()
+        ;
+
+        foreach ($mainUrlRows as $row) {
+            if (!$row instanceof SettingsCurrent) {
+                continue;
+            }
+
+            $changeableMap[$row->getVariable()] = (int) $row->getAccessUrlChangeable();
+            $lockedMap[$row->getVariable()] = method_exists($row, 'getAccessUrlLocked')
+                ? (int) $row->getAccessUrlLocked()
+                : 0;
+
+            if (
+                1 !== $currentUrlId
+                && 'multiple_url_hide_disabled_settings' === $row->getVariable()
+            ) {
+                $hideDisabledOnSubUrl = 'true' === $row->getSelectedValue();
+            }
+        }
+
+        return [
+            'current_url_id' => $currentUrlId,
+            'changeable_map' => $changeableMap,
+            'locked_map' => $lockedMap,
+            'hide_disabled_on_sub_url' => $hideDisabledOnSubUrl,
+            'can_toggle_multiurl_setting' => $this->isGranted('ROLE_ADMIN') && 1 === $currentUrlId,
+        ];
+    }
+
+    private function isSettingHiddenInChildUrl(
+        string $variable,
+        int $currentUrlId,
+        array $changeableMap,
+        array $lockedMap,
+        bool $hideDisabledOnSubUrl
+    ): bool {
+        if (1 === $currentUrlId) {
+            return false;
+        }
+
+        $isLocked = 1 === (int) ($lockedMap[$variable] ?? 0);
+        $isNonChangeableHidden = $hideDisabledOnSubUrl && 0 === (int) ($changeableMap[$variable] ?? 1);
+
+        return $isLocked || $isNonChangeableHidden;
+    }
+
+    private function removeHiddenSettingsFromForm(
+        FormInterface $form,
+        mixed $settings,
+        int $currentUrlId,
+        array $changeableMap,
+        array $lockedMap,
+        bool $hideDisabledOnSubUrl,
+        ?array $allowedVariables = null
+    ): void {
+        foreach (array_keys($settings->getParameters()) as $name) {
+            $hiddenInChildUrl = $this->isSettingHiddenInChildUrl(
+                $name,
+                $currentUrlId,
+                $changeableMap,
+                $lockedMap,
+                $hideDisabledOnSubUrl
+            );
+
+            $notInSearchResult = null !== $allowedVariables && !\in_array($name, $allowedVariables, true);
+
+            if ($hiddenInChildUrl || $notInSearchResult) {
+                if ($form->has($name)) {
+                    $form->remove($name);
+                }
+
+                $settings->remove($name);
+            }
+        }
     }
 
     /**
@@ -695,5 +756,17 @@ class SettingsController extends BaseController
             'tools' => $tools,
             'tools_warning' => $toolsWarning,
         ];
+    }
+
+    /**
+     * Settings that exist in the database but are not yet implemented in Chamilo 2.x.
+     * Rendered as disabled with a "not yet supported" notice in the settings UI.
+     * Format: 'category.variable'.
+     *
+     * @return string[]
+     */
+    private function getUnsupportedSettings(): array
+    {
+        return [];
     }
 }

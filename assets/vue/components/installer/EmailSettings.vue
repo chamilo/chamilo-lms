@@ -2,7 +2,7 @@
   <div class="mt-8">
     <h3
       class="mb-4"
-      v-t="'Email Settings'"
+      v-text="t('Email Settings')"
     ></h3>
 
     <BaseInputText

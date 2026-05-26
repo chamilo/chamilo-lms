@@ -55,6 +55,112 @@ class DeepSeekProvider implements AiProviderInterface, AiDocumentProviderInterfa
         $this->maxTokens = (int) ($textCfg['max_tokens'] ?? 1000);
     }
 
+    /**
+     * Chat-style entrypoint (OpenAI-compatible).
+     *
+     * @param array<int, array{role:string,content:string}> $messages
+     * @param array<string,mixed>                           $options
+     */
+    public function chat(array $messages, array $options = []): string
+    {
+        $userId = $this->getUserId();
+        if (!$userId) {
+            error_log('[AI][DeepSeek][chat] User not authenticated.');
+
+            return 'Error: User is not authenticated.';
+        }
+
+        $normalized = $this->normalizeChatMessages($messages);
+        if (empty($normalized)) {
+            error_log('[AI][DeepSeek][chat] Empty messages payload.');
+
+            return 'Error: Empty chat messages.';
+        }
+
+        $resolved = $this->resolveTextOptions($options);
+
+        $payload = [
+            'model' => $resolved['model'],
+            'messages' => $normalized,
+            'temperature' => $resolved['temperature'],
+            'max_tokens' => $resolved['max_tokens'],
+        ];
+
+        // Optional safe overrides
+        if (isset($options['top_p'])) {
+            $payload['top_p'] = (float) $options['top_p'];
+        }
+        if (isset($options['presence_penalty'])) {
+            $payload['presence_penalty'] = (float) $options['presence_penalty'];
+        }
+        if (isset($options['frequency_penalty'])) {
+            $payload['frequency_penalty'] = (float) $options['frequency_penalty'];
+        }
+
+        try {
+            $response = $this->httpClient->request('POST', $resolved['url'], [
+                'headers' => [
+                    'Authorization' => 'Bearer '.$this->apiKey,
+                    'Content-Type' => 'application/json',
+                ],
+                'json' => $payload,
+            ]);
+
+            $data = $response->toArray(false);
+
+            if (\is_array($data) && isset($data['error'])) {
+                $msg = $data['error']['message'] ?? 'DeepSeek returned an error response.';
+                $msg = \is_string($msg) ? trim($msg) : 'DeepSeek returned an error response.';
+                error_log('[AI][DeepSeek][chat] Error response: '.$msg);
+
+                return 'Error: '.$msg;
+            }
+
+            $generated = $data['choices'][0]['message']['content'] ?? null;
+            if (!\is_string($generated) || '' === trim($generated)) {
+                error_log('[AI][DeepSeek][chat] Empty content returned.');
+
+                return 'Error: Empty response from DeepSeek.';
+            }
+
+            $this->saveAiRequest(
+                $userId,
+                'chat',
+                $this->messagesForLog($normalized, 900),
+                'deepseek',
+                (int) ($data['usage']['prompt_tokens'] ?? 0),
+                (int) ($data['usage']['completion_tokens'] ?? 0),
+                (int) ($data['usage']['total_tokens'] ?? 0)
+            );
+
+            return trim($generated);
+        } catch (Exception $e) {
+            error_log('[AI][DeepSeek][chat] Exception: '.$e->getMessage());
+
+            return 'Error: '.$e->getMessage();
+        }
+    }
+
+    /**
+     * Prompt-style entrypoint used by TaskGrader text mode and other features.
+     *
+     * @param array<string,mixed> $options
+     */
+    public function generateText(string $prompt, array $options = []): string
+    {
+        $prompt = trim($prompt);
+        if ('' === $prompt) {
+            return 'Error: Empty prompt.';
+        }
+
+        $messages = [
+            ['role' => 'system', 'content' => 'You are a helpful assistant.'],
+            ['role' => 'user', 'content' => $prompt],
+        ];
+
+        return $this->chat($messages, $options);
+    }
+
     public function generateQuestions(string $topic, int $numQuestions, string $questionType, string $language): ?string
     {
         $prompt = \sprintf(
@@ -202,6 +308,14 @@ class DeepSeekProvider implements AiProviderInterface, AiDocumentProviderInterfa
 
             $data = $response->toArray(false);
 
+            if (\is_array($data) && isset($data['error'])) {
+                $msg = $data['error']['message'] ?? 'DeepSeek returned an error response.';
+                $msg = \is_string($msg) ? trim($msg) : 'DeepSeek returned an error response.';
+                error_log('[AI][DeepSeek] Error response: '.$msg);
+
+                return null;
+            }
+
             $generatedContent = $data['choices'][0]['message']['content'] ?? null;
             if (!\is_string($generatedContent) || '' === trim($generatedContent)) {
                 error_log('[AI][DeepSeek] Empty content returned.');
@@ -229,7 +343,7 @@ class DeepSeekProvider implements AiProviderInterface, AiDocumentProviderInterfa
 
     private function filterValidAikenQuestions(string $quizContent): array
     {
-        $questions = preg_split('/\n{2,}/', trim($quizContent));
+        $questions = preg_split('/\n{2,}/', trim($quizContent)) ?: [];
 
         $validQuestions = [];
         foreach ($questions as $questionBlock) {
@@ -242,13 +356,100 @@ class DeepSeekProvider implements AiProviderInterface, AiDocumentProviderInterfa
             $options = \array_slice($lines, 1, 4);
             $validOptions = array_filter($options, static fn ($line) => (bool) preg_match('/^[A-D]\. .+/', $line));
 
-            $answerLine = end($lines);
-            if (4 === \count($validOptions) && \is_string($answerLine) && preg_match('/^ANSWER: [A-D]$/', $answerLine)) {
+            $answerLine = (string) end($lines);
+            if (4 === \count($validOptions) && preg_match('/^ANSWER: [A-D]$/', $answerLine)) {
                 $validQuestions[] = implode("\n", $lines);
             }
         }
 
         return $validQuestions;
+    }
+
+    /**
+     * @param array<int, array{role:string,content:string}> $messages
+     *
+     * @return array<int, array{role:string,content:string}>
+     */
+    private function normalizeChatMessages(array $messages): array
+    {
+        $out = [];
+
+        foreach ($messages as $m) {
+            if (!\is_array($m)) {
+                continue;
+            }
+
+            $role = isset($m['role']) ? trim((string) $m['role']) : '';
+            $content = isset($m['content']) ? trim((string) $m['content']) : '';
+
+            if ('' === $role || '' === $content) {
+                continue;
+            }
+
+            $role = strtolower($role);
+            if (!\in_array($role, ['system', 'user', 'assistant', 'tool'], true)) {
+                $role = 'user';
+            }
+
+            $out[] = [
+                'role' => $role,
+                'content' => $content,
+            ];
+        }
+
+        return $out;
+    }
+
+    /**
+     * @param array<int, array{role:string,content:string}> $messages
+     */
+    private function messagesForLog(array $messages, int $maxChars = 900): string
+    {
+        $parts = [];
+        foreach ($messages as $m) {
+            $role = $m['role'] ?? 'user';
+            $content = trim((string) ($m['content'] ?? ''));
+
+            if ('' === $content) {
+                continue;
+            }
+
+            $parts[] = strtoupper((string) $role).': '.mb_substr($content, 0, 300);
+        }
+
+        $s = implode(' | ', $parts);
+
+        return mb_substr($s, 0, $maxChars);
+    }
+
+    /**
+     * Resolve per-request overrides for text/chat.
+     *
+     * @param array<string,mixed> $options
+     *
+     * @return array{url:string,model:string,temperature:float,max_tokens:int}
+     */
+    private function resolveTextOptions(array $options): array
+    {
+        $url = (string) (($options['url'] ?? null) ?? $this->apiUrl);
+        $model = (string) (($options['model'] ?? null) ?? $this->model);
+
+        $temperature = (float) (($options['temperature'] ?? null) ?? $this->temperature);
+
+        // Accept either max_tokens or max_output_tokens (normalize to max_tokens).
+        $maxTokens = $options['max_tokens'] ?? ($options['max_output_tokens'] ?? null);
+        $maxTokens = (int) (($maxTokens ?? null) ?? $this->maxTokens);
+
+        if ($maxTokens <= 0) {
+            $maxTokens = $this->maxTokens > 0 ? $this->maxTokens : 1000;
+        }
+
+        return [
+            'url' => $url,
+            'model' => $model,
+            'temperature' => $temperature,
+            'max_tokens' => $maxTokens,
+        ];
     }
 
     private function saveAiRequest(

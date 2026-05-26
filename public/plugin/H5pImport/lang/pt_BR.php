@@ -1,0 +1,22 @@
+<?php
+$strings['plugin_title'] = 'Importação H5P';
+$strings['plugin_comment'] = 'Importe conteúdos H5P e use-os em percursos de aprendizagem. Abra o README.md para instruções de instalação.';
+$strings['frame'] = 'Quadro';
+$strings['frame_help'] = 'Mostrar quadro e botões abaixo do H5P';
+$strings['embed'] = 'Incorporar';
+$strings['embed_help'] = 'Exibir botão de incorporação';
+$strings['copyright'] = 'Direitos autorais';
+$strings['copyright_help'] = 'Exibir botão de direitos autorais';
+$strings['icon'] = 'Ícone';
+$strings['icon_help'] = 'Exibir ícone H5P';
+$strings['attempts'] = 'Número de tentativas';
+$strings['upload_h5p'] = 'Carregar';
+$strings['import_h5p_package'] = 'Carregar pacote H5P';
+$strings['h5p_package'] = 'Pacote H5P';
+$strings['h5p_error_loading'] = 'Erro ao carregar o pacote H5P';
+$strings['h5p_error_invalid_token'] = 'Token de segurança inválido';
+$strings['h5p_error_missing_core_asset'] = 'Erro ao carregar ativos principais do H5P';
+$strings['h5p_save_content_state'] = 'Salvar resultados do usuário';
+$strings['h5p_save_content_freq'] = 'Frequência de salvamento';
+$strings['h5p_save_freq_help'] = 'Com que frequência o estado atual do conteúdo deve ser salvo, em segundos';
+$strings['start_attempt'] = 'Iniciar tentativa';

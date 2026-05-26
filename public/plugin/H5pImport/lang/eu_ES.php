@@ -1,0 +1,22 @@
+<?php
+$strings['plugin_title'] = 'H5P inportazioa';
+$strings['plugin_comment'] = 'Inportatu H5P edukiak eta erabili ikastaroetan. Ireki README.md instalazio argibideak ikusteko.';
+$strings['frame'] = 'Marko';
+$strings['frame_help'] = 'Erakutsi markoa eta botoiak H5P azpian';
+$strings['embed'] = 'Txertatu';
+$strings['embed_help'] = 'Erakutsi txertatze botoia';
+$strings['copyright'] = 'Copyright';
+$strings['copyright_help'] = 'Erakutsi copyright botoia';
+$strings['icon'] = 'Ikurra';
+$strings['icon_help'] = 'Erakutsi H5P ikurra';
+$strings['attempts'] = 'Saiakeren kopurua';
+$strings['upload_h5p'] = 'Igorri';
+$strings['import_h5p_package'] = 'Igorri H5P paketea';
+$strings['h5p_package'] = 'H5P paketea';
+$strings['h5p_error_loading'] = 'Errorea H5P paketea kargatzerakoan';
+$strings['h5p_error_invalid_token'] = 'Segurtasun token baliogabea';
+$strings['h5p_error_missing_core_asset'] = 'Errorea H5P oinarrizko baliabideak kargatzerakoan';
+$strings['h5p_save_content_state'] = 'Gorde erabiltzailearen emaitzak';
+$strings['h5p_save_content_freq'] = 'Gorde maiztasuna';
+$strings['h5p_save_freq_help'] = 'Zenbat maiz gorde edukiaren egoera aktiboa, segundutan';
+$strings['start_attempt'] = 'Hasi saiakera';

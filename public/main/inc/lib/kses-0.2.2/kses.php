@@ -34,6 +34,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+global $kses_allowedentitynames;
 $kses_allowedentitynames = array(
     'nbsp',    'iexcl',  'cent',    'pound',  'curren', 'yen',
     'brvbar',  'sect',   'uml',     'copy',   'ordf',   'laquo',

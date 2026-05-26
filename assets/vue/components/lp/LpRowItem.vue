@@ -1,9 +1,16 @@
 <script setup>
-import { computed } from "vue"
+import { computed, ref } from "vue"
+import { useRoute } from "vue-router"
 import { useI18n } from "vue-i18n"
-import BaseDropdownMenu from "../basecomponents/BaseDropdownMenu.vue"
+import BaseButton from "../basecomponents/BaseButton.vue"
+import BaseMenu from "../basecomponents/BaseMenu.vue"
+import BaseAppLink from "../basecomponents/BaseAppLink.vue"
+import lpService from "../../services/lpService"
+import { useConfirmation } from "../../composables/useConfirmation"
 
 const { t } = useI18n()
+const { requireConfirmation } = useConfirmation()
+const route = useRoute()
 
 const props = defineProps({
   lp: { type: Object, required: true },
@@ -12,361 +19,455 @@ const props = defineProps({
   canExportPdf: { type: Boolean, default: false },
   canAutoLaunch: { type: Boolean, default: false },
   buildDates: { type: Function, required: true },
+  legacyContext: { type: Object, required: true },
   ringDash: { type: Function, required: true },
   ringValue: { type: Function, required: true },
 })
 
-const emit = defineEmits([
-  "open",
-  "edit",
-  "report",
-  "settings",
-  "build",
-  "toggle-visible",
-  "toggle-publish",
-  "delete",
-  "export-scorm",
-  "export-pdf",
-  "toggle-auto-launch",
-])
+const emit = defineEmits(["export-pdf"])
+
+// Only SCORM packages (type = 2 in Chamilo legacy)
+const canUpdateScorm = computed(() => {
+  if (!props.canEdit) {
+    return false
+  }
+
+  const v = props.lp?.lpType ?? props.lp?.lp_type ?? props.lp?.type ?? props.lp?.lpTypeId ?? props.lp?.lp_type_id ?? 0
+
+  return Number(v) === 2
+})
+
+const openUrl = computed(() =>
+  lpService.buildLegacyViewUrl(props.lp.iid, {
+    cid: props.legacyContext.cid || 0,
+    sid: props.legacyContext.sid || 0,
+    isStudentView: route.query?.isStudentView === "true" ? "true" : "false",
+  }),
+)
+
+const exportScormUrl = computed(() =>
+  lpService.buildLegacyActionUrl(props.lp.iid, "export", { ...props.legacyContext }),
+)
+
+const updateScormUrl = computed(() =>
+  lpService.buildLegacyActionUrl("update_scorm", {
+    ...props.legacyContext,
+    params: { lp_id: props.lp.iid },
+  }),
+)
+
+const togglePublishUrl = computed(() =>
+  lpService.buildLegacyActionUrl(props.lp.iid, "toggle_publish", {
+    ...props.legacyContext,
+    params: { new_status: props.lp.published === "v" ? "i" : "v" },
+  }),
+)
+
+const toggleVisibleUrl = computed(() =>
+  lpService.buildLegacyActionUrl(props.lp.iid, "toggle_visible", {
+    ...props.legacyContext,
+    params: { new_status: typeof props.lp.visible !== "undefined" ? (props.lp.visible ? 0 : 1) : 1 },
+  }),
+)
+
+const toggleAutoLaunchUrl = computed(() =>
+  lpService.buildLegacyActionUrl(props.lp.iid, "auto_launch", {
+    ...props.legacyContext,
+    params: { status: Number(props.lp.autolaunch) === 1 ? 0 : 1 },
+  }),
+)
+
+const deleteUrl = computed(() => lpService.buildLegacyActionUrl(props.lp.iid, "delete", { ...props.legacyContext }))
+
+const advancedAccessUrl = computed(() => {
+  const search = new URLSearchParams()
+
+  search.set("cid", props.legacyContext.cid || 0)
+  search.set("sid", props.legacyContext.sid || 0)
+  search.set("lp_id", props.lp.iid)
+
+  return `/resources/lp/${props.legacyContext.node}/advanced-access?${search.toString()}`
+})
+
+const onDelete = () => {
+  const label = (props.lp.title || "").trim() || t("Learning path")
+
+  requireConfirmation({
+    message: `${t("Are you sure to delete")} ${label}?`,
+    accept: () => {
+      window.location.href = deleteUrl.value
+    },
+  })
+}
 
 const dateText = computed(() => {
-  const v = props.buildDates ? props.buildDates(props.lp) : ""
+  const v = props.buildDates(props.lp)
+
   return typeof v === "string" ? v.trim() : ""
 })
 
-const progressBgClass = computed(() => {
-  return props.ringValue(props.lp.progress) === 100 ? "bg-success" : "bg-support-5"
-})
+const progressBgClass = computed(() => (props.ringValue(props.lp.progress) === 100 ? "bg-success" : "bg-support-5"))
+const progressTextClass = computed(() =>
+  props.ringValue(props.lp.progress) === 100 ? "text-success" : "text-support-5",
+)
 
-const progressTextClass = computed(() => {
-  return props.ringValue(props.lp.progress) === 100 ? "text-success" : "text-support-5"
-})
+const buttonActions = computed(() =>
+  [
+    {
+      label: t("Edit learnpath"),
+      icon: "edit",
+      toUrl: lpService.buildLegacyActionUrl(props.lp.iid, "add_item", {
+        ...props.legacyContext,
+        params: { type: "step", isStudentView: "false" },
+      }),
+      visible: true,
+    },
+    {
+      label: t("Reports"),
+      icon: "tracking",
+      toUrl: lpService.buildLegacyActionUrl(props.lp.iid, "report", { ...props.legacyContext }),
+      visible: true,
+    },
+    {
+      label: t("Visibility"),
+      icon: "visible",
+      toUrl: toggleVisibleUrl.value,
+      visible: true,
+    },
+    {
+      label: t("Advanced access"),
+      icon: "calendar-plus",
+      toUrl: advancedAccessUrl.value,
+      visible: true,
+    },
+    {
+      label: t("Settings"),
+      icon: "cog",
+      toUrl: lpService.buildLegacyActionUrl(props.lp.iid, "edit", { ...props.legacyContext }),
+      visible: true,
+    },
+    {
+      label: t("Export as SCORM"),
+      icon: "zip-pack",
+      toUrl: exportScormUrl.value,
+      visible: props.canExportScorm,
+      styleClass: "hidden md:flex",
+    },
+    {
+      label: t("Update SCORM"),
+      visible: canUpdateScorm.value,
+      icon: "upload",
+      toUrl: updateScormUrl.value,
+      styleClass: "hidden md:flex",
+    },
+    {
+      label: t("Export to PDF"),
+      icon: "file-pdf",
+      visible: props.canExportPdf,
+      command: () => emit("export-pdf", props.lp),
+      styleClass: "hidden md:flex",
+    },
+    {
+      label:
+        Number(props.lp.autolaunch) === 1
+          ? t("Disable learning path auto-launch")
+          : t("Enable learning path auto-launch"),
+      icon: Number(props.lp.autolaunch) === 1 ? "autolunch" : "autolunch-off",
+      visible: props.canAutoLaunch,
+      toUrl: toggleAutoLaunchUrl.value,
+      styleClass: "hidden md:flex",
+    },
+  ].filter((a) => a.visible),
+)
+
+const mItemActions = ref()
+
+const itemActions = computed(() => [
+  { label: t("Publish / Hide"), url: togglePublishUrl.value },
+  { label: t("Update SCORM"), visible: canUpdateScorm.value, url: updateScormUrl.value },
+  { label: t("Delete"), command: onDelete },
+])
+
+const mItemActionsMobile = ref()
+
+const itemActionsMobile = computed(() => [
+  { label: t("Publish / Hide"), url: togglePublishUrl.value },
+  { label: t("Advanced access"), url: advancedAccessUrl.value },
+  { label: t("Export as SCORM"), url: exportScormUrl.value, visible: props.canExportScorm },
+  { label: t("Update SCORM"), visible: canUpdateScorm.value, url: updateScormUrl.value },
+  { label: t("Settings"), url: lpService.buildLegacyActionUrl(props.lp.iid, "edit", props.legacyContext) },
+  { label: t("Delete"), command: onDelete },
+])
 </script>
 
 <template>
-  <article
-    class="relative md:flex items-center gap-4 pl-5 pr-4 py-3 rounded-2xl border border-gray-25 bg-support-6 shadow-[0_1px_8px_rgba(0,0,0,0.04)] w-full"
-  >
-    <span
-      aria-hidden="true"
-      class="absolute left-0 top-0 bottom-0 w-1.5 bg-support-5"
-    />
-    <button
-      v-if="canEdit"
-      :aria-label="t('Drag to reorder')"
-      :title="t('Drag to reorder')"
-      class="drag-handle absolute top-2.5 left-2.5 w-5 h-5 grid place-content-center text-gray-40 hover:text-gray-70 transition-colors cursor-move"
-    >
-      <svg
-        aria-hidden="true"
-        fill="currentColor"
-        height="14"
-        viewBox="0 0 14 14"
-        width="14"
+  <div class="lp-panel">
+    <article class="lp-panel__container">
+      <button
+        v-if="canEdit"
+        :aria-label="t('Drag to reorder')"
+        :title="t('Drag to reorder')"
+        class="lp-panel__drag-handler drag-handle"
       >
-        <circle
-          cx="4"
-          cy="3"
-          r="1.2"
-        />
-        <circle
-          cx="4"
-          cy="7"
-          r="1.2"
-        />
-        <circle
-          cx="4"
-          cy="11"
-          r="1.2"
-        />
-        <circle
-          cx="10"
-          cy="3"
-          r="1.2"
-        />
-        <circle
-          cx="10"
-          cy="7"
-          r="1.2"
-        />
-        <circle
-          cx="10"
-          cy="11"
-          r="1.2"
-        />
-      </svg>
-    </button>
-
-    <div class="flex gap-4 w-full">
-      <div class="ml-5 w-20 h-20 md:w-24 md:h-24 rounded-xl overflow-hidden ring-1 ring-gray-25 bg-gray-15 shrink-0">
-        <img
-          v-if="lp.coverUrl"
-          :src="lp.coverUrl"
-          alt=""
-          class="w-full h-full object-cover"
-        />
-        <div
-          v-else
-          class="w-full h-full grid place-content-center text-gray-40"
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          height="14"
+          viewBox="0 0 14 14"
+          width="14"
         >
-          <svg
-            class="opacity-70"
-            fill="none"
-            height="30"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            width="30"
+          <circle
+            cx="4"
+            cy="3"
+            r="1.2"
+          />
+          <circle
+            cx="4"
+            cy="7"
+            r="1.2"
+          />
+          <circle
+            cx="4"
+            cy="11"
+            r="1.2"
+          />
+          <circle
+            cx="10"
+            cy="3"
+            r="1.2"
+          />
+          <circle
+            cx="10"
+            cy="7"
+            r="1.2"
+          />
+          <circle
+            cx="10"
+            cy="11"
+            r="1.2"
+          />
+        </svg>
+      </button>
+
+      <div class="lp-panel__body">
+        <div class="lp-panel__cover">
+          <img
+            v-if="lp.coverUrl"
+            :src="lp.coverUrl"
+            alt=""
+            class="lp-panel__cover-image"
+          />
+          <div
+            v-else
+            class="lp-panel__cover-image"
           >
-            <rect
-              height="18"
-              rx="3"
-              stroke-width="1.5"
-              width="18"
-              x="3"
-              y="3"
-            />
-            <path
-              d="M3 16l4-4 3 3 5-5 6 6"
-              stroke-width="1.5"
-            />
-            <circle
-              cx="9"
-              cy="8"
-              r="1.3"
-              stroke-width="1.2"
-            />
-          </svg>
+            <svg
+              class="opacity-70"
+              fill="none"
+              height="30"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              width="30"
+            >
+              <rect
+                height="18"
+                rx="3"
+                stroke-width="1.5"
+                width="18"
+                x="3"
+                y="3"
+              />
+              <path
+                d="M3 16l4-4 3 3 5-5 6 6"
+                stroke-width="1.5"
+              />
+              <circle
+                cx="9"
+                cy="8"
+                r="1.3"
+                stroke-width="1.2"
+              />
+            </svg>
+          </div>
         </div>
-      </div>
-      <div class="flex-1 min-w-0 md:flex md:flex-col md:justify-center">
-        <h3 class="font-semibold text-gray-90 md:truncate text-lg md:text-2xl leading-none">
-          <button
+
+        <div class="lp-panel__info">
+          <BaseAppLink
             :title="t('Open')"
-            class="text-left hover:underline focus:underline underline-offset-2"
-            @click="emit('open', lp)"
+            :url="openUrl"
+            class="lp-panel__title"
           >
             {{ lp.title || t("Learning path title here") }}
-          </button>
-        </h3>
-        <p
-          v-if="dateText"
-          class="text-caption text-gray-50 mt-8 hidden md:block"
-        >
-          {{ dateText }}
-        </p>
-        <div
-          v-if="lp.prerequisiteName"
-          class="mt-1 text-caption hidden md:block"
-        >
-          <span class="text-support-5 font-medium">{{ t("Prerequisites") }}</span>
-          <span class="text-support-5">{{ lp.prerequisiteName }}</span>
-        </div>
-      </div>
-      <BaseDropdownMenu
-        :dropdown-id="`row-${lp.iid}`"
-        class="row-start-1 col-start-5 relative block md:hidden h-fit"
-      >
-        <template #button>
-          <span
-            :aria-label="t('More')"
-            :title="t('More')"
-            class="list-none w-8 h-8 rounded-lg border border-gray-25 grid place-content-center hover:bg-gray-15 cursor-pointer"
+          </BaseAppLink>
+          <p
+            v-if="dateText"
+            class="lp-panel__dates lp-panel__dates--desktop"
           >
-            <i
-              aria-hidden="true"
-              class="mdi mdi-dots-vertical text-lg"
-            ></i>
-          </span>
-        </template>
-        <template #menu>
-          <div class="absolute right-0 z-50 w-52 bg-white border border-gray-25 rounded-xl shadow-xl p-1">
-            <button
-              class="w-full text-left px-3 py-2 rounded hover:bg-gray-15"
-              @click="emit('open', lp)"
-            >
-              {{ t("Open") }}
-            </button>
-            <button
-              class="w-full text-left px-3 py-2 rounded hover:bg-gray-15"
-              @click="emit('toggle-publish', lp)"
-            >
-              {{ t("Publish / Hide") }}
-            </button>
-            <button
-              class="w-full text-left px-3 py-2 rounded hover:bg-gray-15"
-              @click="emit('build', lp)"
-            >
-              {{ t("Edit learnpath") }}
-            </button>
-            <button
-              class="w-full text-left px-3 py-2 rounded hover:bg-gray-15 text-danger"
-              @click="emit('delete', lp)"
-            >
-              {{ t("Delete") }}
-            </button>
-            <button
-              v-if="canExportScorm"
-              class="w-full text-left px-3 py-2 rounded hover:bg-gray-15 md:hidden"
-              @click="emit('export-scorm', lp)"
-            >
-              {{ t("Export as SCORM") }}
-            </button>
-            <button
-              class="w-full text-left px-3 py-2 rounded hover:bg-gray-15 md:hidden"
-              @click="emit('settings', lp)"
-            >
-              {{ t("Settings") }}
-            </button>
+            {{ dateText }}
+          </p>
+          <div
+            v-if="lp.prerequisiteName"
+            class="lp-panel__prerequisite lp-panel__prerequisite--desktop"
+          >
+            <span class="lp-panel__prerequisite-label">{{ t("Prerequisites") }}</span>
+            <span class="lp-panel__prerequisite-value">{{ lp.prerequisiteName }}</span>
           </div>
-        </template>
-      </BaseDropdownMenu>
-    </div>
-    <p
-      v-if="dateText"
-      class="text-caption text-gray-50 mt-4 block md:hidden ml-5"
-    >
-      {{ dateText }}
-    </p>
-    <div
-      v-if="lp.prerequisiteName"
-      class="mt-1 text-caption"
-    >
-      <span class="text-support-5 font-medium">{{ t("Prerequisites") }}</span>
-      <span class="text-support-5">{{ lp.prerequisiteName }}</span>
-    </div>
-
-    <template v-if="canEdit">
-      <div class="ml-5 md:ml-auto md:flex-col flex items-end justify-between md:justify-start">
-        <div class="flex gap-x-3 order-2 md:order1 mt-5 md:mt-0">
-          <button
-            :aria-label="t('Reports')"
-            :title="t('Reports')"
-            class="row-start-1 col-start-1 opacity-70 hover:opacity-100"
-            @click="emit('report', lp)"
-          >
-            <i class="mdi mdi-chart-box-outline text-xl" />
-          </button>
-          <button
-            :aria-label="t('Visibility')"
-            :title="t('Visibility')"
-            class="row-start-1 col-start-2 opacity-70 hover:opacity-100"
-            @click="emit('toggle-visible', lp)"
-          >
-            <i class="mdi mdi-eye-outline text-xl" />
-          </button>
-          <button
-            :aria-label="t('Settings')"
-            :title="t('Settings')"
-            class="row-start-1 col-start-3 opacity-70 hover:opacity-100"
-            @click="emit('settings', lp)"
-          >
-            <i class="mdi mdi-cog-outline text-xl" />
-          </button>
-          <button
-            v-if="canExportScorm"
-            :aria-label="t('Export as SCORM')"
-            :title="t('Export as SCORM')"
-            class="row-start-1 col-start-4 opacity-70 hover:opacity-100 hidden md:block"
-            @click="emit('export-scorm', lp)"
-          >
-            <i class="mdi mdi-archive-arrow-down text-xl" />
-          </button>
-          <button
-            v-if="canExportPdf"
-            :aria-label="t('Export to PDF')"
-            :title="t('Export to PDF')"
-            class="row-start-1 col-start-5 opacity-70 hover:opacity-100 hidden md:block"
-            @click="emit('export-pdf', lp)"
-          >
-            <i class="mdi mdi-file-pdf-box text-xl" />
-          </button>
-          <button
-            v-if="canAutoLaunch"
-            :title="
-              Number(lp.autolaunch) === 1
-                ? $t('Disable learning path auto-launch')
-                : $t('Enable learning path auto-launch')
-            "
-            class="w-9 h-9 rounded-xl border border-gray-25 grid place-content-center hover:bg-gray-15"
-            @click.stop="emit('toggle-auto-launch', lp)"
-          >
-            <i
-              :class="Number(lp.autolaunch) === 1 ? 'mdi-rocket-launch' : 'mdi-rocket-launch-outline'"
-              aria-hidden="true"
-              class="mdi"
-            ></i>
-          </button>
-          <BaseDropdownMenu
-            :dropdown-id="`row-${lp.iid}`"
-            class="row-start-1 col-start-5 relative hidden md:block"
-          >
-            <template #button>
-              <span
-                :aria-label="t('More')"
-                :title="t('More')"
-                class="list-none w-8 h-8 rounded-lg border border-gray-25 grid place-content-center hover:bg-gray-15 cursor-pointer"
-              >
-                <i
-                  aria-hidden="true"
-                  class="mdi mdi-dots-vertical text-lg"
-                ></i>
-              </span>
-            </template>
-            <template #menu>
-              <div class="absolute right-0 z-50 w-52 bg-white border border-gray-25 rounded-xl shadow-xl p-1">
-                <button
-                  class="w-full text-left px-3 py-2 rounded hover:bg-gray-15"
-                  @click="emit('open', lp)"
-                >
-                  {{ t("Open") }}
-                </button>
-                <button
-                  class="w-full text-left px-3 py-2 rounded hover:bg-gray-15"
-                  @click="emit('toggle-publish', lp)"
-                >
-                  {{ t("Publish / Hide") }}
-                </button>
-                <button
-                  class="w-full text-left px-3 py-2 rounded hover:bg-gray-15"
-                  @click="emit('build', lp)"
-                >
-                  {{ t("Edit learnpath") }}
-                </button>
-                <button
-                  class="w-full text-left px-3 py-2 rounded hover:bg-gray-15 text-danger"
-                  @click="emit('delete', lp)"
-                >
-                  {{ t("Delete") }}
-                </button>
-              </div>
-            </template>
-          </BaseDropdownMenu>
         </div>
 
-        <div class="row-start-2 col-start-1 col-end-5 flex items-center gap-2 justify-self-end mt-5 order-1 md:order-2">
-          <span class="text-caption text-gray-50 order-2 md:order-1">
+        <BaseButton
+          :label="t('More actions')"
+          class="lp-panel__mobile-dropdown"
+          icon="dots-vertical"
+          only-icon
+          popup-identifier="lp-menu-mobile"
+          size="small"
+          type="tertiary-alternative-text"
+          @click="mItemActionsMobile.toggle($event)"
+        />
+        <BaseMenu
+          id="lp-menu-mobile"
+          ref="mItemActionsMobile"
+          :model="itemActionsMobile"
+        />
+      </div>
+      <p
+        v-if="dateText"
+        class="lp-panel__dates lp-panel__dates--mobile"
+      >
+        {{ dateText }}
+      </p>
+      <div
+        v-if="lp.prerequisiteName"
+        class="lp-panel__prerequisite"
+      >
+        <span class="lp-panel__prerequisite-label">{{ t("Prerequisites") }}</span>
+        <span class="lp-panel__prerequisite-value">{{ lp.prerequisiteName }}</span>
+      </div>
+
+      <template v-if="canEdit">
+        <div class="lp-panel__actions">
+          <div class="lp-panel__action-buttons">
+            <BaseButton
+              v-for="(buttonAction, i) in buttonActions"
+              :key="i"
+              :class="buttonAction.styleClass"
+              :icon="buttonAction.icon"
+              :label="buttonAction.label"
+              :route="buttonAction.route"
+              :to-url="buttonAction.toUrl"
+              only-icon
+              size="small"
+              type="tertiary-alternative-text"
+              @click="buttonAction.command"
+            />
+
+            <BaseButton
+              :label="t('More actions')"
+              class="hidden md:flex"
+              icon="dots-vertical"
+              only-icon
+              popup-identifier="lp-menu"
+              size="small"
+              type="tertiary-alternative-text"
+              @click="mItemActions.toggle($event)"
+            />
+            <BaseMenu
+              id="lp-menu"
+              ref="mItemActions"
+              :model="itemActions"
+            />
+          </div>
+
+          <div class="lp-panel__progress">
+            <span class="lp-panel__progress-label">
+              {{ ringValue(lp.progress) === 100 ? t("Completed") : t("Progress") }}
+            </span>
+            <div class="lp-panel__progress-ring">
+              <svg
+                class="w-10 h-10"
+                viewBox="0 0 37 37"
+              >
+                <circle
+                  class="text-gray-25"
+                  cx="18.5"
+                  cy="19"
+                  fill="none"
+                  r="16"
+                  stroke="currentColor"
+                  stroke-width="3.5"
+                />
+                <circle
+                  :class="progressTextClass"
+                  :stroke-dasharray="ringDash(lp.progress)"
+                  cx="21"
+                  cy="18.5"
+                  fill="none"
+                  r="16"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-width="3.5"
+                  transform="rotate(-90 20 20)"
+                />
+              </svg>
+              <span
+                :class="progressBgClass"
+                aria-hidden="true"
+                class="lp-panel__progress-dot"
+              />
+              <div class="lp-panel__progress-value">{{ ringValue(lp.progress) }}%</div>
+            </div>
+          </div>
+        </div>
+      </template>
+
+      <template v-else>
+        <div class="lp-panel__student">
+          <div
+            aria-label="Student actions"
+            class="lp-panel__student-actions"
+            role="toolbar"
+          >
+            <button
+              v-if="canExportPdf"
+              :aria-label="t('Export to PDF')"
+              :title="t('Export to PDF')"
+              class="lp-panel__student-button"
+              @click="emit('export-pdf', lp)"
+            >
+              <i class="mdi mdi-file-pdf-box text-xl" />
+            </button>
+
+            <BaseAppLink
+              :title="t('Open')"
+              :url="openUrl"
+              class="lp-panel__student-button"
+            >
+              <i class="mdi mdi-open-in-new text-lg" />
+            </BaseAppLink>
+          </div>
+
+          <span class="lp-panel__progress-label">
             {{ ringValue(lp.progress) === 100 ? t("Completed") : t("Progress") }}
           </span>
-          <div class="relative w-10 h-10 order-1 md:order-2">
+          <div class="lp-panel__progress-ring">
             <svg
               class="w-10 h-10"
-              viewBox="0 0 37 37"
+              viewBox="0 0 40 40"
             >
               <circle
                 class="text-gray-25"
-                cx="18.5"
-                cy="19"
+                cx="20"
+                cy="20"
                 fill="none"
                 r="16"
                 stroke="currentColor"
                 stroke-width="3.5"
               />
               <circle
-                :class="progressTextClass"
                 :stroke-dasharray="ringDash(lp.progress)"
-                cx="21"
-                cy="18.5"
+                class="text-support-5"
+                cx="20"
+                cy="20"
                 fill="none"
                 r="16"
                 stroke="currentColor"
@@ -376,84 +477,13 @@ const progressTextClass = computed(() => {
               />
             </svg>
             <span
-              :class="progressBgClass"
               aria-hidden="true"
-              class="absolute -top-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full ring-2 ring-white"
+              class="lp-panel__progress-dot lp-panel__progress-dot--student"
             />
-            <div class="absolute inset-0 grid place-content-center text-tiny font-semibold text-gray-90">
-              {{ ringValue(lp.progress) }}%
-            </div>
+            <div class="lp-panel__progress-value">{{ ringValue(lp.progress) }}%</div>
           </div>
         </div>
-      </div>
-    </template>
-
-    <template v-else>
-      <div class="ml-auto flex items-center gap-3">
-        <div
-          aria-label="Student actions"
-          class="flex items-center gap-2"
-          role="toolbar"
-        >
-          <button
-            v-if="canExportPdf"
-            :aria-label="t('Export to PDF')"
-            :title="t('Export to PDF')"
-            class="opacity-80 hover:opacity-100 w-9 h-9 rounded-lg border border-gray-25 grid place-content-center"
-            @click="emit('export-pdf', lp)"
-          >
-            <i class="mdi mdi-file-pdf-box text-xl" />
-          </button>
-
-          <button
-            :aria-label="t('Open')"
-            :title="t('Open')"
-            class="opacity-80 hover:opacity-100 w-9 h-9 rounded-lg border border-gray-25 grid place-content-center"
-            @click="emit('open', lp)"
-          >
-            <i class="mdi mdi-open-in-new text-lg" />
-          </button>
-        </div>
-
-        <span class="text-caption text-gray-50">
-          {{ ringValue(lp.progress) === 100 ? t("Completed") : t("Progress") }}
-        </span>
-        <div class="relative w-10 h-10">
-          <svg
-            class="w-10 h-10"
-            viewBox="0 0 40 40"
-          >
-            <circle
-              class="text-gray-25"
-              cx="20"
-              cy="20"
-              fill="none"
-              r="16"
-              stroke="currentColor"
-              stroke-width="3.5"
-            />
-            <circle
-              :stroke-dasharray="ringDash(lp.progress)"
-              class="text-support-5"
-              cx="20"
-              cy="20"
-              fill="none"
-              r="16"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-width="3.5"
-              transform="rotate(-90 20 20)"
-            />
-          </svg>
-          <span
-            aria-hidden="true"
-            class="absolute -top-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-support-5 ring-2 ring-white"
-          />
-          <div class="absolute inset-0 grid place-content-center text-tiny font-semibold text-gray-90">
-            {{ ringValue(lp.progress) }}%
-          </div>
-        </div>
-      </div>
-    </template>
-  </article>
+      </template>
+    </article>
+  </div>
 </template>

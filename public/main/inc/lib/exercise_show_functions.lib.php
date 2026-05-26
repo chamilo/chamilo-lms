@@ -27,7 +27,8 @@ class ExerciseShowFunctions
         $questionId,
         $resultsDisabled,
         $showTotalScoreAndUserChoices,
-        $originalStudentAnswer = ''
+        $originalStudentAnswer = '',
+        $answerComment = ''
     ) {
         $answerHTML = FillBlanks::getHtmlDisplayForAnswer(
             $answer,
@@ -36,16 +37,27 @@ class ExerciseShowFunctions
             $showTotalScoreAndUserChoices
         );
 
+        $showCommentColumn = false === $exercise->hideComment && EXERCISE_FEEDBACK_TYPE_EXAM !== $feedbackType;
+
         if (empty($id)) {
             echo '<tr><td>';
             echo Security::remove_XSS($answerHTML, COURSEMANAGERLOWSECURITY);
-            echo '</td></tr>';
-        } else {
-            echo '<tr><td>';
-            echo Security::remove_XSS($answerHTML, COURSEMANAGERLOWSECURITY);
             echo '</td>';
+            if ($showCommentColumn) {
+                echo '<td>'.Security::remove_XSS((string) $answerComment, COURSEMANAGERLOWSECURITY).'</td>';
+            }
             echo '</tr>';
+
+            return;
         }
+
+        echo '<tr><td>';
+        echo Security::remove_XSS($answerHTML, COURSEMANAGERLOWSECURITY);
+        echo '</td>';
+        if ($showCommentColumn) {
+            echo '<td>'.Security::remove_XSS((string) $answerComment, COURSEMANAGERLOWSECURITY).'</td>';
+        }
+        echo '</tr>';
     }
 
     /**
@@ -66,8 +78,11 @@ class ExerciseShowFunctions
         $showTotalScoreAndUserChoices,
         $expectedChoice = '',
         $choice = '',
-        $status = ''
+        $status = '',
+        $answerComment = ''
     ) {
+        $showCommentColumn = false === $exercise->hideComment && EXERCISE_FEEDBACK_TYPE_EXAM !== $feedback_type;
+
         if ($exercise->showExpectedChoice()) {
             if (empty($id)) {
                 echo '<tr><td>'.Security::remove_XSS($answer).'</td>';
@@ -77,6 +92,9 @@ class ExerciseShowFunctions
                 }
 
                 echo '<td>'.Security::remove_XSS($status).'</td>';
+                if ($showCommentColumn) {
+                    echo '<td>'.Security::remove_XSS((string) $answerComment, COURSEMANAGERLOWSECURITY).'</td>';
+                }
                 echo '</tr>';
             } else {
                 echo '<tr><td>';
@@ -92,14 +110,25 @@ class ExerciseShowFunctions
                 echo '<td>';
                 echo Security::remove_XSS($status);
                 echo '</td>';
+                if ($showCommentColumn) {
+                    echo '<td>'.Security::remove_XSS((string) $answerComment, COURSEMANAGERLOWSECURITY).'</td>';
+                }
                 echo '</tr>';
             }
         } else {
             if (empty($id)) {
-                echo '<tr><td>'.Security::remove_XSS($answer).'</td></tr>';
+                echo '<tr><td>'.Security::remove_XSS($answer).'</td>';
+                if ($showCommentColumn) {
+                    echo '<td>'.Security::remove_XSS((string) $answerComment, COURSEMANAGERLOWSECURITY).'</td>';
+                }
+                echo '</tr>';
             } else {
                 echo '<tr><td>';
                 echo Security::remove_XSS($answer);
+                echo '</td>';
+                if ($showCommentColumn) {
+                    echo '<td>'.Security::remove_XSS((string) $answerComment, COURSEMANAGERLOWSECURITY).'</td>';
+                }
                 echo '</tr>';
             }
         }
@@ -754,7 +783,7 @@ class ExerciseShowFunctions
 
         // Your choice
         if (isset($newOptions[$studentChoice])) {
-            echo get_lang($newOptions[$studentChoice]['name']);
+            echo get_lang($newOptions[$studentChoice]['title']);
         } else {
             echo '-';
         }
@@ -765,7 +794,7 @@ class ExerciseShowFunctions
             echo '<td width="5%">';
             if (!$hideExpectedAnswer) {
                 if (isset($newOptions[$answerCorrect])) {
-                    echo get_lang($newOptions[$answerCorrect]['name']);
+                    echo get_lang($newOptions[$answerCorrect]['title']);
                 } else {
                     echo '-';
                 }
@@ -779,7 +808,7 @@ class ExerciseShowFunctions
         echo $answer;
         echo '</td><td width="5%" style="text-align:center;">';
         if (isset($newOptions[$studentChoiceDegree])) {
-            echo $newOptions[$studentChoiceDegree]['name'];
+            echo $newOptions[$studentChoiceDegree]['title'];
         }
         echo '</td>';
 

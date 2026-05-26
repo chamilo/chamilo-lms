@@ -25,15 +25,15 @@ export function useIndexBlocks() {
     if ("false" === platformConfigStore.getSetting("platform.registered")) {
       blockVersionStatusEl.value = null
     } else {
-      loadVersion()
+      loadVersion().then(() => {})
     }
 
     if ("true" === platformConfigStore.getSetting("admin.chamilo_support")) {
-      loadSupport()
+      loadSupport().then(() => {})
     }
 
     if ("true" === platformConfigStore.getSetting("admin.chamilo_latest_news")) {
-      loadNews()
+      loadNews().then(() => {})
     }
   })
 
@@ -42,7 +42,7 @@ export function useIndexBlocks() {
    */
   function checkVersion(doNotListCampus) {
     adminService.registerCampus(doNotListCampus).then(() => {
-      loadVersion()
+      loadVersion().then(() => {})
 
       toast.add({
         severity: "success",
@@ -79,8 +79,10 @@ export function useIndexBlocks() {
   const blockPlatform = ref(null)
   const blockChamilo = ref(null)
   const blockSecurity = ref(null)
+  const blockTracking = ref(null)
   const blockPlugins = ref(null)
   const blockHealthCheck = ref(null)
+  const blockRooms = ref(null)
 
   async function loadBlocks() {
     const blocks = await adminService.findBlocks()
@@ -91,12 +93,14 @@ export function useIndexBlocks() {
     blockGradebook.value = blocks.gradebook || null
     blockSkills.value = blocks.skills || null
     blockPrivacy.value = blocks.data_privacy || null
+    blockTracking.value = blocks.tracking || null
     blockSettings.value = blocks.settings || null
     blockPlatform.value = blocks.platform || null
     blockChamilo.value = blocks.chamilo || null
     blockSecurity.value = blocks.security || null
     blockPlugins.value = blocks.plugins || null
     blockHealthCheck.value = blocks.health_check || null
+    blockRooms.value = blocks.rooms || null
   }
 
   return {
@@ -111,6 +115,7 @@ export function useIndexBlocks() {
     blockSettings,
     blockPlatform,
     blockChamilo,
+    blockTracking,
     blockSecurity,
     loadBlocks,
     blockNewsStatusEl,
@@ -119,5 +124,6 @@ export function useIndexBlocks() {
     loadSupport,
     blockPlugins,
     blockHealthCheck,
+    blockRooms,
   }
 }

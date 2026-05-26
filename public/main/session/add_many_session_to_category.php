@@ -17,7 +17,7 @@ $xajax->registerFunction('search_courses');
 $this_section = SECTION_PLATFORM_ADMIN;
 
 // setting breadcrumbs
-$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('Session list')];
+$interbreadcrumb[] = ['url' => '/admin/session-list', 'name' => get_lang('Session list')];
 
 // Database Table Definitions
 $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);

@@ -34,7 +34,9 @@ class ExtraFieldValue extends Model
         'updated_at',
     ];
     /** @var ExtraField */
-    public $extraField;
+    public ExtraField $extraField;
+
+    private string $table_handler_field;
 
     /**
      * Formats the necessary elements for the given datatype.

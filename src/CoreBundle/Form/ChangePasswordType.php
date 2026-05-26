@@ -19,6 +19,8 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+use const OPENSSL_RAW_DATA;
+
 /**
  * @template T of object
  *
@@ -26,6 +28,12 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class ChangePasswordType extends AbstractType
 {
+    /**
+     * Prefix used to identify HKDF-based encryption format for MFA secrets.
+     * Legacy secrets have no prefix and remain readable for backward compatibility.
+     */
+    private const MFA_SECRET_V2_PREFIX = 'v2:';
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         // Add basic fields for password change
@@ -79,6 +87,7 @@ class ChangePasswordType extends AbstractType
                 ? $form->get('confirm2FACode')->getData()
                 : null;
             $passwordHasher = $form->getConfig()->getOption('password_hasher');
+            $checkPasswordRequirements = 'true' === api_get_setting('security.check_password', true);
 
             // Validate current password and confirmation if user wants to update password
             if (!empty($newPassword)) {
@@ -88,8 +97,10 @@ class ChangePasswordType extends AbstractType
                     $form->get('currentPassword')->addError(new FormError('The current password is incorrect.'));
                 }
 
-                foreach (self::validatePassword($newPassword) as $error) {
-                    $form->get('newPassword')->addError(new FormError($error));
+                if ($checkPasswordRequirements) {
+                    foreach (self::validatePassword($newPassword) as $error) {
+                        $form->get('newPassword')->addError(new FormError($error));
+                    }
                 }
 
                 if (!empty($confirmPassword) && $newPassword !== $confirmPassword) {
@@ -103,26 +114,22 @@ class ChangePasswordType extends AbstractType
                     if (empty($code)) {
                         $form->get('confirm2FACode')->addError(new FormError('The 2FA code is required.'));
                     } elseif ($user->getMfaSecret()) {
-                        $parts = explode('::', base64_decode($user->getMfaSecret()));
-                        if (2 === \count($parts)) {
-                            [$iv, $encryptedData] = $parts;
-                            $decryptedSecret = openssl_decrypt(
-                                $encryptedData,
-                                'aes-256-cbc',
-                                $_ENV['APP_SECRET'],
-                                0,
-                                $iv
-                            );
+                        // Decrypt the stored MFA secret (supports both v2 and legacy formats).
+                        $appSecret = (string) ($_ENV['APP_SECRET'] ?? '');
+                        $decryptedSecret = $this->decryptTOTPSecret((string) $user->getMfaSecret(), $appSecret);
 
-                            $totp = TOTP::create($decryptedSecret);
-                            $portal = $options['portal_name'] ?? 'Chamilo';
-                            $totp->setLabel($portal.' - '.$user->getEmail());
-
-                            if (!$totp->verify($code)) {
-                                $form->get('confirm2FACode')->addError(new FormError('The 2FA code is invalid or expired.'));
-                            }
-                        } else {
+                        if ('' === $decryptedSecret) {
                             $form->get('confirm2FACode')->addError(new FormError('Invalid 2FA configuration.'));
+
+                            return;
+                        }
+
+                        $totp = TOTP::create($decryptedSecret);
+                        $portal = $options['portal_name'] ?? 'Chamilo';
+                        $totp->setLabel($portal.' - '.$user->getEmail());
+
+                        if (!$totp->verify((string) $code)) {
+                            $form->get('confirm2FACode')->addError(new FormError('The 2FA code is invalid or expired.'));
                         }
                     }
                 }
@@ -142,6 +149,80 @@ class ChangePasswordType extends AbstractType
             'portal_name' => 'Chamilo',
             'password_hasher' => null,
         ]);
+    }
+
+    /**
+     * Derive a dedicated 32-byte encryption key for MFA secrets via HKDF.
+     * This avoids using APP_SECRET directly as an OpenSSL key for new secrets.
+     */
+    private function deriveMfaKey(string $baseKey): string
+    {
+        $baseKey = (string) $baseKey;
+        if ('' === $baseKey) {
+            return '';
+        }
+
+        // 32 bytes for AES-256 key length.
+        return hash_hkdf('sha256', $baseKey, 32, 'chamilo:mfa:totp-secret:v1');
+    }
+
+    /**
+     * Decrypts the stored TOTP secret.
+     *
+     * Supports:
+     * - v2 format (HKDF-derived key): v2:<base64(iv + ciphertext_raw)>
+     * - legacy format (APP_SECRET used directly): base64(iv.'::'.$encryptedSecret)
+     */
+    private function decryptTOTPSecret(string $encryptedSecret, string $encryptionKey): string
+    {
+        $cipherMethod = 'aes-256-cbc';
+
+        $encryptedSecret = (string) $encryptedSecret;
+        if ('' === $encryptedSecret) {
+            return '';
+        }
+
+        // v2 format (preferred): v2:<base64(iv + ciphertext_raw)>
+        if (str_starts_with($encryptedSecret, self::MFA_SECRET_V2_PREFIX)) {
+            $payload = base64_decode(substr($encryptedSecret, \strlen(self::MFA_SECRET_V2_PREFIX)), true);
+            if (false === $payload) {
+                return '';
+            }
+
+            $ivLen = openssl_cipher_iv_length($cipherMethod);
+            if (\strlen($payload) <= $ivLen) {
+                return '';
+            }
+
+            $iv = substr($payload, 0, $ivLen);
+            $ciphertextRaw = substr($payload, $ivLen);
+
+            $derivedKey = $this->deriveMfaKey($encryptionKey);
+            if ('' === $derivedKey) {
+                return '';
+            }
+
+            $pt = openssl_decrypt($ciphertextRaw, $cipherMethod, $derivedKey, OPENSSL_RAW_DATA, $iv);
+
+            return false === $pt ? '' : (string) $pt;
+        }
+
+        // Legacy format: base64(iv.'::'.$encryptedSecret)
+        $decoded = base64_decode($encryptedSecret, true);
+        if (false === $decoded) {
+            return '';
+        }
+
+        $parts = explode('::', $decoded, 2);
+        if (2 !== \count($parts)) {
+            return '';
+        }
+
+        [$iv, $encryptedData] = $parts;
+
+        $pt = openssl_decrypt((string) $encryptedData, $cipherMethod, (string) $encryptionKey, 0, (string) $iv);
+
+        return false === $pt ? '' : (string) $pt;
     }
 
     /**

@@ -41,37 +41,29 @@ function applyUserLocale(data) {
 }
 
 // Normalize and sanitize redirect URL so that:
-// - It stays on the same origin
-// - It preserves path + query + hash
-// - It returns a relative URL ("/path?query#hash") or null if invalid/unsafe
+// - It always returns a root-relative URL ("/path?query#hash") or null if invalid
+// - Strips any origin from absolute URLs (prevents open redirects)
+// - Handles protocol-relative paths ("//evil.com/path" → "/path")
 function normalizeRedirectUrl(rawRedirect) {
   if (!rawRedirect) {
     return null
   }
 
   try {
-    const currentOrigin = window.location.origin
-
-    // Root-relative path ("/resources/pages/edit?id=...")
+    // Root-relative path: parse with a dummy base to normalize "//" prefix attacks
     if (rawRedirect.startsWith("/")) {
-      const url = new URL(rawRedirect, currentOrigin)
+      const url = new URL(rawRedirect, "https://x")
+
       return url.pathname + url.search + url.hash
     }
 
-    // Absolute URL - validate protocol first
+    // Absolute URL: validate protocol, then strip origin (prevents open redirects)
     if (!isValidHttpUrl(rawRedirect)) {
       return null
     }
 
     const url = new URL(rawRedirect)
 
-    // Prevent open redirects: only allow same-origin URLs
-    if (url.origin !== currentOrigin) {
-      console.warn("[login] Blocked redirect to different origin:", url.origin)
-      return null
-    }
-
-    // Strip origin, keep path + query + hash
     return url.pathname + url.search + url.hash
   } catch (e) {
     console.warn("[login] Invalid redirect param:", rawRedirect, e)
@@ -80,15 +72,18 @@ function normalizeRedirectUrl(rawRedirect) {
 }
 
 function hardRedirect(target) {
-  const origin = window.location.origin
-  const url = new URL(target, origin)
+  const [withoutHash, hash = ""] = target.split("#")
+  const [path, rawQuery = ""] = withoutHash.split("?")
+  const sp = new URLSearchParams(rawQuery)
 
   // Cache buster only for legacy PHP pages
-  if (url.pathname.endsWith(".php")) {
-    url.searchParams.set("_", Date.now().toString())
+  if (path.endsWith(".php")) {
+    sp.set("_", Date.now().toString())
   }
 
-  window.location.replace(url.pathname + url.search + url.hash)
+  const qs = sp.toString()
+
+  window.location.replace(path + (qs ? `?${qs}` : "") + (hash ? `#${hash}` : ""))
 }
 
 export function useLogin() {
@@ -101,7 +96,14 @@ export function useLogin() {
   const isLoading = ref(false)
   const requires2FA = ref(false)
 
-  async function performLogin({ login, password, _remember_me, totp = null, isLoginLdap = false }) {
+  async function performLogin({
+    login,
+    password,
+    _remember_me,
+    totp = null,
+    captcha_code = null,
+    isLoginLdap = false,
+  }) {
     isLoading.value = true
     requires2FA.value = false
 
@@ -112,6 +114,7 @@ export function useLogin() {
         password,
         _remember_me,
         totp,
+        captcha_code,
       }
 
       // Add returnUrl if exists in query param, but sanitize it first
@@ -143,7 +146,14 @@ export function useLogin() {
       // Backend explicit error
       if (responseData.error) {
         showErrorNotification(responseData.error)
-        return { success: false, error: responseData.error }
+
+        return {
+          success: false,
+          error: responseData.error,
+          captchaRequired: !!responseData.captchaRequired,
+          captchaBlocked: !!responseData.captchaBlocked,
+          captchaBlockedSeconds: responseData.captchaBlockedSeconds || 0,
+        }
       }
 
       // Terms and conditions redirect (apply locale before navigating)
@@ -234,8 +244,8 @@ export function useLogin() {
             default:
               target = `/${String(value).replace(/^\/+/, "")}`
           }
-        } catch (e) {
-          console.warn("[redirect_after_login] Malformed JSON:", e)
+        } catch (error) {
+          console.warn("[redirect_after_login] Malformed JSON:", error)
         }
       }
 
@@ -251,7 +261,14 @@ export function useLogin() {
     } catch (error) {
       const errorMessage = error.response?.data?.error || "An error occurred during login."
       showErrorNotification(errorMessage)
-      return { success: false, error: errorMessage }
+
+      return {
+        success: false,
+        error: errorMessage,
+        captchaRequired: !!error.response?.data?.captchaRequired,
+        captchaBlocked: !!error.response?.data?.captchaBlocked,
+        captchaBlockedSeconds: error.response?.data?.captchaBlockedSeconds || 0,
+      }
     } finally {
       isLoading.value = false
     }

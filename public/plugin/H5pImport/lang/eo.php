@@ -1,0 +1,22 @@
+<?php
+$strings['plugin_title'] = 'H5P importi';
+$strings['plugin_comment'] = 'Importi H5P-enhavojn kaj uzi ilin en lernvojoj. Malfermu README.md por instalaj instrukcioj.';
+$strings['frame'] = 'Kadro';
+$strings['frame_help'] = 'Montri kadron kaj butonojn sub H5P';
+$strings['embed'] = 'Enmeti';
+$strings['embed_help'] = 'Montri enmeti-butonon';
+$strings['copyright'] = 'Aŭtorrajto';
+$strings['copyright_help'] = 'Montri aŭtorrajto-butonon';
+$strings['icon'] = 'Ikono';
+$strings['icon_help'] = 'Montri H5P-ikonon';
+$strings['attempts'] = 'Nombro da provoj';
+$strings['upload_h5p'] = 'Alŝuti';
+$strings['import_h5p_package'] = 'Alŝuti H5P-pakigon';
+$strings['h5p_package'] = 'H5P-pakigo';
+$strings['h5p_error_loading'] = 'Eraro dum ŝargado de la H5P-pakigo';
+$strings['h5p_error_invalid_token'] = 'Nevalida sekureca ĵetono';
+$strings['h5p_error_missing_core_asset'] = 'Eraro dum ŝargado de H5P-kernaj rimedoj';
+$strings['h5p_save_content_state'] = 'Konservi rezultojn de uzanto';
+$strings['h5p_save_content_freq'] = 'Konserva frekveneco';
+$strings['h5p_save_freq_help'] = 'Kiom ofte la nuna enhava stato devus esti konservita, en sekundoj';
+$strings['start_attempt'] = 'Komenci provon';

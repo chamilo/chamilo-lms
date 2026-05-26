@@ -1,0 +1,55 @@
+.qcmbarre{
+    text-align: left;
+    width:100%;
+}
+.quizzTextqcm{
+    text-align: left;
+}
+.loadcontentfram{
+    background-color: #ffffff!important;
+}
+.quizzcontentplug{
+    background-color : #FBFCFC;
+    border: 1px solid #dadce0;
+    border-radius: 8px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+}
+
+.quizzblockdeco {
+    display: none;
+}
+
+.qcmbarre{
+    background-color : #FBFCFC;
+    border: 1px solid #dadce0;
+    border-radius: 8px;
+    padding-bottom : 20px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+}
+
+.qcmbarre td{
+    padding : 1px;
+    margin : 0px;
+}
+.qcmbarre .quizzTextqcm{
+    padding : 20px;
+    padding-bottom : 20px;
+    padding-left:20px;
+}
+.qcmbarre .quizzTextqcm p{
+    padding : 0px;
+    margin : 0px;
+}
+.qcmbarre .quizzTextTd{
+    width: 54px;
+    padding : 0px;
+}
+.checkboxqcm{
+    padding : 0px;
+    margin : 0px;
+    width:30px;
+    height:30px;
+    margin-left:15px;
+}

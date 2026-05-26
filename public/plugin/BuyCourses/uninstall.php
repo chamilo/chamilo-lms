@@ -12,4 +12,11 @@ declare(strict_types=1);
  * Queries.
  */
 require_once __DIR__.'/config.php';
-BuyCoursesPlugin::create()->uninstall();
+
+$plugin = BuyCoursesPlugin::create();
+
+if (!api_is_platform_admin()) {
+    exit($plugin->get_lang('AdminPermissionsRequired'));
+}
+
+$plugin->uninstall();

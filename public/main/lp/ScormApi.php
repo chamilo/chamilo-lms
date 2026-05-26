@@ -155,16 +155,25 @@ class ScormApi
             }
 
             $statusIsSet = false;
+            $currentScoStatus = (string) $myLPI->get_status(false);
+            $lmsCanUpdateScoStatus = 'true' === api_get_setting('lp.scorm_lms_update_sco_status_all_time')
+                || '' === $currentScoStatus
+                || 'not attempted' === $currentScoStatus;
+
             // Default behaviour.
             if (isset($status) && '' != $status && 'undefined' !== $status) {
-                if ($debug > 1) {
-                    error_log('Calling set_status('.$status.')');
-                }
+                if (self::canApplyScoLessonStatus($myLPI, $status)) {
+                    if ($debug > 1) {
+                        error_log('Calling set_status('.$status.')');
+                    }
 
-                $myLPI->set_status($status);
-                $statusIsSet = true;
-                if ($debug > 1) {
-                    error_log('Done calling set_status: checking from memory: '.$myLPI->get_status(false));
+                    $myLPI->set_status($status);
+                    $statusIsSet = true;
+                    if ($debug > 1) {
+                        error_log('Done calling set_status: checking from memory: '.$myLPI->get_status(false));
+                    }
+                } elseif ($debug > 1) {
+                    error_log('Status not updated because prevent_reinit keeps the completed SCO status');
                 }
             } else {
                 if ($debug > 1) {
@@ -245,10 +254,13 @@ class ScormApi
                  *    the status to either passed or failed depending on the
                  *    student's score compared to the mastery score.
                  */
-                if ('credit' === $credit &&
-                    $masteryScore &&
-                    (isset($score) && -1 != $score) &&
-                    !$statusIsSet && !$statusSignalReceived
+                if (
+                    $lmsCanUpdateScoStatus
+                    && 'credit' === $credit
+                    && $masteryScore
+                    && (isset($score) && -1 != $score)
+                    && !$statusIsSet
+                    && !$statusSignalReceived
                 ) {
                     if ($score >= $masteryScore) {
                         $myLPI->set_status('passed');
@@ -269,7 +281,7 @@ class ScormApi
                  *    (adlcp:masteryscore), the LMS cannot override SCO
                  *    determined status.
                  */
-                if (!$statusIsSet && !$masteryScore && !$statusSignalReceived) {
+                if ($lmsCanUpdateScoStatus && !$statusIsSet && !$masteryScore && !$statusSignalReceived) {
                     if (!empty($status)) {
                         if ($debug) {
                             error_log("Set status: $status because: statusSignalReceived ");
@@ -286,7 +298,7 @@ class ScormApi
                  *    lesson_mode is "browse", the lesson_status may change to
                  *    "browsed" even if the cmi.core.credit is set to no-credit.
                  */
-                if (!$statusIsSet && 'no-credit' === $credit && !$statusSignalReceived) {
+                if ($lmsCanUpdateScoStatus && !$statusIsSet && 'no-credit' === $credit && !$statusSignalReceived) {
                     $mode = $myLPI->get_lesson_mode();
                     if ('browse' === $mode && 'browsed' === $status) {
                         if ($debug) {
@@ -304,7 +316,7 @@ class ScormApi
                  * cmi.core.lesson_status.  There is some additional requirements
                  * that must be adhered to successfully handle these cases:.
                  */
-                if (!$statusIsSet && empty($status) && !$statusSignalReceived) {
+                if ($lmsCanUpdateScoStatus && !$statusIsSet && empty($status) && !$statusSignalReceived) {
                     /**
                      * Upon initial launch the LMS should set the
                      * cmi.core.lesson_status to "not attempted".
@@ -356,17 +368,21 @@ class ScormApi
 
             // If no previous condition changed the SCO status, proceed with a
             // generic behaviour
-            if (!$statusIsSet && !$statusSignalReceived) {
+            if ($lmsCanUpdateScoStatus && !$statusIsSet && !$statusSignalReceived) {
                 // Default behaviour
                 if (isset($status) && '' != $status && 'undefined' !== $status) {
-                    if ($debug > 1) {
-                        error_log('Calling set_status('.$status.')');
-                    }
+                    if (self::canApplyScoLessonStatus($myLPI, $status)) {
+                        if ($debug > 1) {
+                            error_log('Calling set_status('.$status.')');
+                        }
 
-                    $myLPI->set_status($status);
+                        $myLPI->set_status($status);
 
-                    if ($debug > 1) {
-                        error_log('Done calling set_status: checking from memory: '.$myLPI->get_status(false));
+                        if ($debug > 1) {
+                            error_log('Done calling set_status: checking from memory: '.$myLPI->get_status(false));
+                        }
+                    } elseif ($debug > 1) {
+                        error_log('Status not updated because prevent_reinit keeps the completed SCO status');
                     }
                 } else {
                     if ($debug > 1) {
@@ -466,14 +482,14 @@ class ScormApi
             // If this object's JS status has not been updated by the SCORM API, update now.
             $return .= "olms.lesson_status='".$myStatus."';";
         }
-        $return .= "update_toc('".$myStatus."','".$item_id."');";
+        $return .= "if (typeof update_toc === 'function') { try { update_toc('".$myStatus."','".$item_id."'); } catch (e) {} }";
         $update_list = $myLP->get_update_queue();
 
         foreach ($update_list as $my_upd_id => $my_upd_status) {
             if ($my_upd_id != $item_id) {
                 /* Only update the status from other items (i.e. parents and brothers),
                 do not update current as we just did it already. */
-                $return .= "update_toc('".$my_upd_status."','".$my_upd_id."');";
+                $return .= "if (typeof update_toc === 'function') { try { update_toc('".$my_upd_status."','".$my_upd_id."'); } catch (e) {} }";
             }
         }
         $progressBarSpecial = false;
@@ -578,10 +594,32 @@ class ScormApi
                         $('video:not(.skip), audio:not(.skip)').mediaelementplayer();
                     });
                 </script>";
+                $return .= api_get_video_context_menu_hidden_script();
             }
         }
 
         return $return;
+    }
+
+    /**
+     * Keeps prevent_reinit semantics while still accepting score and other SCO
+     * data updates after a completed status and before LMSFinish().
+     *
+     * @param learnpathItem $item
+     * @param string $newStatus
+     */
+    private static function canApplyScoLessonStatus($item, $newStatus): bool
+    {
+        if (!is_object($item) || 1 != $item->get_prevent_reinit()) {
+            return true;
+        }
+
+        $completedStatuses = ['completed', 'passed', 'browsed', 'failed'];
+        $storedStatus = (string) $item->get_status(true);
+        $newStatus = (string) $newStatus;
+
+        return !in_array($storedStatus, $completedStatuses, true)
+            || in_array($newStatus, $completedStatuses, true);
     }
 
     /**
@@ -819,9 +857,13 @@ class ScormApi
         }
 
         $return .=
-            "update_toc('unhighlight','".$current_item."');
-            update_toc('highlight','".$new_item_id."');
-            update_toc('$mylesson_status','".$new_item_id."');
+            "if (typeof update_toc === 'function') {
+                try {
+                    update_toc('unhighlight','".$current_item."');
+                    update_toc('highlight','".$new_item_id."');
+                    update_toc('$mylesson_status','".$new_item_id."');
+                } catch (e) {}
+            }
             update_progress_bar('$mycomplete','$mytotal','$myprogress_mode');
             $updateMinTime"
         ;

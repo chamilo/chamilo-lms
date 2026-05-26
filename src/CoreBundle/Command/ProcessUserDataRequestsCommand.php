@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Command;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\MailHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Database;
 use DateInterval;
@@ -39,7 +40,8 @@ class ProcessUserDataRequestsCommand extends Command
         private readonly SettingsManager $settingsManager,
         private readonly MailerInterface $mailer,
         private readonly EntityManager $em,
-        private readonly TranslatorInterface $translator
+        private readonly TranslatorInterface $translator,
+        private readonly MailHelper $mailHelper,
     ) {
         parent::__construct();
     }
@@ -136,10 +138,7 @@ class ProcessUserDataRequestsCommand extends Command
         SymfonyStyle $io,
         bool $debug
     ): string {
-        $administrator = [
-            'completeName' => $this->settingsManager->getSetting('admin.administrator_name'),
-            'email' => $this->settingsManager->getSetting('admin.administrator_email'),
-        ];
+        $fromAddress = $this->mailHelper->getPlatformFromAddress();
 
         $rootweb = $this->settingsManager->getSetting('platform.institution_url');
         $link = $rootweb.'/main/admin/user_list_consent.php';
@@ -166,7 +165,7 @@ class ProcessUserDataRequestsCommand extends Command
 
             if ($email) {
                 $emailMessage = (new TemplatedEmail())
-                    ->from($administrator['email'])
+                    ->from($fromAddress)
                     ->to($email)
                     ->subject($subject)
                     ->html($content)

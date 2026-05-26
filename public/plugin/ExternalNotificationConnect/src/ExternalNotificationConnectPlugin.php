@@ -22,6 +22,10 @@ class ExternalNotificationConnectPlugin extends Plugin
     public const SETTING_NOTIFY_PORTFOLIO = 'notify_portfolio';
     public const SETTING_NOTIFY_LEARNPATH = 'notify_learnpath';
 
+    public const HTTP_TIMEOUT = 8.0;
+    public const HTTP_CONNECT_TIMEOUT = 4.0;
+    private const TOKEN_EXPIRATION_MARGIN_SECONDS = 60;
+
     protected function __construct()
     {
         $author = [
@@ -74,45 +78,49 @@ class ExternalNotificationConnectPlugin extends Plugin
         $this->uninstallDBTables();
     }
 
+    public function hasCompleteConfiguration(): bool
+    {
+        return '' !== trim((string) $this->get(self::SETTING_AUTH_URL))
+            && '' !== trim((string) $this->get(self::SETTING_AUTH_USERNAME))
+            && '' !== trim((string) $this->get(self::SETTING_AUTH_PASSWORD))
+            && '' !== trim((string) $this->get(self::SETTING_NOTIFICATION_URL));
+    }
+
+    public function isPortfolioNotificationEnabled(): bool
+    {
+        return $this->hasCompleteConfiguration()
+            && 'true' === $this->get(self::SETTING_NOTIFY_PORTFOLIO);
+    }
+
+    public function isLearningPathNotificationEnabled(): bool
+    {
+        return $this->hasCompleteConfiguration()
+            && 'true' === $this->get(self::SETTING_NOTIFY_LEARNPATH);
+    }
+
     /**
      * @throws OptimisticLockException
      * @throws ORMException
      * @throws Exception
      */
-    public function getAccessToken()
+    public function getAccessToken(): string
     {
         $em = Database::getManager();
         $tokenRepository = $em->getRepository(AccessToken::class);
 
+        /** @var AccessToken|null $accessToken */
         $accessToken = $tokenRepository->findOneBy(['isValid' => true]);
 
-        if (!$accessToken) {
-            $newToken = $this->requestAuthToken();
+        if (!$accessToken instanceof AccessToken) {
+            return $this->createAccessToken();
+        }
 
-            $accessToken = (new AccessToken())
-                ->setToken($newToken)
-                ->setIsValid(true);
-
+        if ($this->isTokenExpired($accessToken->getToken())) {
+            $accessToken->setIsValid(false);
             $em->persist($accessToken);
             $em->flush();
-        } else {
-            $tks = explode('.', $accessToken->getToken());
 
-            $payload = json_decode(JWT::urlsafeB64Decode($tks[1]), true);
-
-            if (time() >= $payload['exp']) {
-                $accessToken->setIsValid(false);
-
-                $newToken = $this->requestAuthToken();
-
-                $accessToken = (new AccessToken())
-                    ->setToken($newToken)
-                    ->setIsValid(true);
-
-                $em->persist($accessToken);
-
-                $em->flush();
-            }
+            return $this->createAccessToken();
         }
 
         return $accessToken->getToken();
@@ -143,21 +151,66 @@ class ExternalNotificationConnectPlugin extends Plugin
     }
 
     /**
+     * @throws OptimisticLockException
+     * @throws ORMException
+     * @throws Exception
+     */
+    private function createAccessToken(): string
+    {
+        $em = Database::getManager();
+
+        $newToken = $this->requestAuthToken();
+
+        $accessToken = (new AccessToken())
+            ->setToken($newToken)
+            ->setIsValid(true);
+
+        $em->persist($accessToken);
+        $em->flush();
+
+        return $accessToken->getToken();
+    }
+
+    private function isTokenExpired(string $token): bool
+    {
+        $parts = explode('.', $token);
+
+        if (!isset($parts[1])) {
+            return true;
+        }
+
+        $payload = json_decode(JWT::urlsafeB64Decode($parts[1]), true);
+
+        if (!\is_array($payload) || !isset($payload['exp']) || !is_numeric($payload['exp'])) {
+            return true;
+        }
+
+        return time() >= ((int) $payload['exp'] - self::TOKEN_EXPIRATION_MARGIN_SECONDS);
+    }
+
+    /**
      * @throws Exception
      */
     private function requestAuthToken(): string
     {
+        if (!$this->hasCompleteConfiguration()) {
+            throw new Exception('External notification plugin configuration is incomplete.');
+        }
+
         $client = new Client();
 
         try {
             $response = $client->request(
                 'POST',
-                $this->get(ExternalNotificationConnectPlugin::SETTING_AUTH_URL),
+                trim((string) $this->get(self::SETTING_AUTH_URL)),
                 [
+                    'connect_timeout' => self::HTTP_CONNECT_TIMEOUT,
+                    'http_errors' => false,
                     'json' => [
-                        'email' => $this->get(ExternalNotificationConnectPlugin::SETTING_AUTH_USERNAME),
-                        'password' => $this->get(ExternalNotificationConnectPlugin::SETTING_AUTH_PASSWORD),
+                        'email' => $this->get(self::SETTING_AUTH_USERNAME),
+                        'password' => $this->get(self::SETTING_AUTH_PASSWORD),
                     ],
+                    'timeout' => self::HTTP_TIMEOUT,
                 ]
             );
         } catch (ClientException|ServerException $e) {
@@ -172,10 +225,24 @@ class ExternalNotificationConnectPlugin extends Plugin
 
         $json = json_decode((string) $response->getBody(), true);
 
-        if (201 !== $json['status']) {
-            throw new Exception($json['message']);
+        if (!\is_array($json)) {
+            throw new Exception('Authentication endpoint returned an invalid JSON response.');
         }
 
-        return $json['data']['data']['token'];
+        $status = (int) ($json['status'] ?? $response->getStatusCode());
+
+        if (201 !== $status) {
+            $message = (string) ($json['message'] ?? 'Authentication endpoint rejected the request.');
+
+            throw new Exception($message);
+        }
+
+        $token = (string) ($json['data']['data']['token'] ?? '');
+
+        if ('' === trim($token)) {
+            throw new Exception('Authentication endpoint did not return an access token.');
+        }
+
+        return $token;
     }
 }

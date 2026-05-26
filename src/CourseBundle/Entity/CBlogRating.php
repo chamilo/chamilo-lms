@@ -13,12 +13,13 @@ use ApiPlatform\Metadata\ApiResource;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(
     normalizationContext: ['groups' => ['blog_rating:read']],
     denormalizationContext: ['groups' => ['blog_rating:write']],
-    paginationEnabled: true
+    paginationEnabled: true,
+    security: "is_granted('ROLE_USER')",
 )]
 #[ApiFilter(SearchFilter::class, properties: [
     'blog' => 'exact',

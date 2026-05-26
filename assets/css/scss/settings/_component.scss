@@ -1,0 +1,7 @@
+.p-disabled {
+  @apply opacity-60;
+}
+
+.p-component {
+  @apply disabled:opacity-60;
+}

@@ -1,12 +1,9 @@
 import makeService from "./api"
-import { ENTRYPOINT } from "../config/entrypoint"
 
 const legalExtensions = {
   async findAllAvailable() {
-    const url = new URL(`${ENTRYPOINT}languages`)
-    url.searchParams.append("available", "true")
     try {
-      const response = await fetch(url.toString())
+      const response = await fetch("/api/languages?available=true")
       if (!response.ok) {
         throw new Error("Network response was not ok")
       }

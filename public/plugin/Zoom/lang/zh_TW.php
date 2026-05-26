@@ -1,0 +1,103 @@
+<?php
+/* License: see /license.txt */
+
+// Needed in order to show the plugin title
+$strings['plugin_title'] = 'Zoom 視訊會議';
+$strings['plugin_comment'] = '課程與工作坊中的 Zoom 視訊會議整合';
+
+$strings['apiKey'] = 'API 金鑰';
+$strings['apiSecret'] = 'API 密鑰';
+$strings['verificationToken'] = '驗證權杖';
+$strings['enableParticipantRegistration'] = '啟用參與者註冊';
+$strings['enableCloudRecording'] = '自動錄製類型';
+$strings['enableGlobalConference'] = '啟用全域會議';
+$strings['enableGlobalConferencePerUser'] = '啟用每位使用者全域會議';
+$strings['globalConferenceAllowRoles'] = '全域會議連結僅對這些使用者角色顯示';
+$strings['globalConferencePerUserAllowRoles'] = '每位使用者全域會議連結僅對這些使用者角色顯示';
+
+$strings['enableCloudRecording_help'] = '需要付費 Zoom 帳戶。
+<em>基本</em>帳戶無法使用。';
+
+// please keep these lines alphabetically sorted
+$strings['AllCourseUsersWereRegistered'] = '所有課程學生已註冊';
+$strings['Agenda'] = '議程';
+$strings['CannotRegisterWithoutEmailAddress'] = '沒有電子郵件地址無法註冊';
+$strings['CopyingJoinURL'] = '正在複製加入網址';
+$strings['CopyJoinAsURL'] = '複製「以…身分加入」網址';
+$strings['CopyToCourse'] = '複製到課程';
+$strings['CouldNotCopyJoinURL'] = '無法複製加入網址';
+$strings['Course'] = '課程';
+$strings['CreatedAt'] = '建立時間';
+$strings['CreateLinkInCourse'] = '在課程中建立連結';
+$strings['CreateUserVideoConference'] = '建立使用者會議';
+$strings['DateMeetingTitle'] = '%s：%s';
+$strings['DeleteMeeting'] = '刪除會議';
+$strings['DeleteFile'] = '刪除檔案';
+$strings['Details'] = '詳細資料';
+$strings['DoIt'] = '執行';
+$strings['Duration'] = '持續時間';
+$strings['DurationFormat'] = '%hh%I';
+$strings['DurationInMinutes'] = '持續時間（分鐘）';
+$strings['EndDate'] = '結束日期';
+$strings['EnterMeeting'] = '進入會議';
+$strings['ViewMeeting'] = '檢視會議';
+$strings['Files'] = '檔案';
+$strings['Finished'] = '已結束';
+$strings['FileWasCopiedToCourse'] = '檔案已複製到課程';
+$strings['FileWasDeleted'] = '檔案已刪除';
+$strings['GlobalMeeting'] = '全域會議';
+$strings['GlobalMeetingPerUser'] = '每位使用者全域會議';
+$strings['GroupUsersWereRegistered'] = '小組成員已註冊';
+$strings['InstantMeeting'] = '即時會議';
+$strings['Join'] = '加入';
+$strings['JoinGlobalVideoConference'] = '加入全域會議';
+$strings['JoinURLCopied'] = '加入網址已複製';
+$strings['JoinURLToSendToParticipants'] = '發送給參與者的加入網址';
+$strings['LiveMeetings'] = '即時會議';
+$strings['LinkToFileWasCreatedInCourse'] = '已將檔案連結新增至課程';
+$strings['MeetingDeleted'] = '會議已刪除';
+$strings['MeetingsFound'] = '找到會議';
+$strings['MeetingUpdated'] = '會議已更新';
+$strings['NewMeetingCreated'] = '新會議已建立';
+$strings['Password'] = '密碼';
+$strings['RecurringWithFixedTime'] = '固定時間重複';
+$strings['RecurringWithNoFixedTime'] = '無固定時間重複';
+$strings['RegisterAllCourseUsers'] = '註冊所有課程使用者';
+$strings['RegisteredUserListWasUpdated'] = '已註冊使用者清單已更新';
+$strings['RegisteredUsers'] = '已註冊使用者';
+$strings['RegisterNoUser'] = '不註冊任何使用者';
+$strings['RegisterTheseGroupMembers'] = '註冊這些群組成員';
+$strings['ScheduleAMeeting'] = '排程會議';
+$strings['ScheduledMeeting'] = '已排程會議';
+$strings['ScheduledMeetings'] = '已排程會議';
+$strings['ScheduleAMeeting'] = '排程會議';
+$strings['SearchMeeting'] = '搜尋會議';
+$strings['Session'] = '工作坊';
+$strings['StartDate'] = '開始日期';
+$strings['Started'] = '已開始';
+$strings['StartInstantMeeting'] = '開始即時會議';
+$strings['StartMeeting'] = '開始會議';
+$strings['StartTime'] = '開始時間';
+$strings['Topic'] = '主題';
+$strings['TopicAndAgenda'] = '主題與議程';
+$strings['Type'] = '類型';
+$strings['UpcomingMeetings'] = '即將舉行的會議';
+$strings['UpdateMeeting'] = '更新會議';
+$strings['UpdateRegisteredUserList'] = '更新已註冊使用者清單';
+$strings['UserRegistration'] = '使用者註冊';
+$strings['Y-m-d H:i'] = 'Y-m-d H:i';
+$strings['Waiting'] = '等待中';
+$strings['XRecordingOfMeetingXFromXDurationXDotX'] = '%s會議 %s 於 %s 的錄影 (%s)。%s';
+$strings['YouAreNotRegisteredToThisMeeting'] = '您未註冊此會議';
+$strings['ZoomVideoConferences'] = 'Zoom 視訊會議';
+$strings['Recordings'] = '錄影';
+$strings['CreateGlobalVideoConference'] = '建立全域視訊會議';
+$strings['ConferenceNotStarted'] = '會議尚未開始';
+$strings['MeetingNotFound'] = '找不到會議';
+$strings['JoinURLNotAvailable'] = '網址不可用';
+$strings['Meetings'] = '會議';
+$strings['ConferenceType'] = '會議類型';
+$strings['ForEveryone'] = '所有人';
+$strings['SomeUsers'] = '部分使用者（稍後選擇）';
+$strings['Activity'] = '活動';
+$strings['ConferenceNotAvailable'] = '會議不可用';

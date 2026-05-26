@@ -18,6 +18,8 @@ require_once __DIR__.'/../../main/inc/global.inc.php';
 
 use ChamiloSession as Session;
 
+api_block_anonymous_users();
+
 $plugin = OnlyofficePlugin::create();
 $appSettings = new OnlyofficeAppsettings($plugin);
 $documentManager = new OnlyofficeDocumentManager($appSettings, []);
@@ -29,13 +31,17 @@ $mapFileFormat = [
     'formTemplate' => $plugin->get_lang('formTemplate'),
 ];
 
-$userId = !empty($_GET['userId']) ? $_GET['userId'] : 0;
-$sessionId = !empty($_GET['sessionId']) ? $_GET['sessionId'] : 0;
-$courseId = !empty($_GET['courseId']) ? $_GET['courseId'] : 0;
-$groupId = !empty($_GET['groupId']) ? $_GET['groupId'] : 0;
-$folderId = !empty($_GET['folderId']) ? $_GET['folderId'] : 0;
+$userId = (int) api_get_user_id();
+$sessionId = (int) api_get_session_id();
+$courseId = (int) api_get_course_int_id();
+$groupId = (int) api_get_group_id();
+$folderId = isset($_GET['folderId']) ? (int) $_GET['folderId'] : 0;
 
-$courseInfo = api_get_course_info_by_id($courseId);
+$courseInfo = api_get_course_info();
+if (empty($courseInfo)) {
+    api_not_allowed(true);
+}
+
 $courseCode = $courseInfo['code'];
 
 $isMyDir = false;
@@ -61,11 +67,7 @@ if (!($isAllowToEdit || $isMyDir || $groupRights)) {
 $form = new FormValidator(
     'doc_create',
     'post',
-    api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/create.php?userId='.Security::remove_XSS($userId)
-                                                        .'&groupId='.Security::remove_XSS($groupId)
-                                                        .'&courseId='.Security::remove_XSS($courseId)
-                                                        .'&sessionId='.Security::remove_XSS($sessionId)
-                                                        .'&folderId='.Security::remove_XSS($folderId)
+    api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/create.php?folderId='.(int) $folderId
 );
 
 $form->addText('fileName', $plugin->get_lang('title'), true);

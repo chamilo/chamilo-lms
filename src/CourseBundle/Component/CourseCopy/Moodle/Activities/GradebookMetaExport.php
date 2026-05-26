@@ -57,8 +57,6 @@ class GradebookMetaExport extends ActivityExport
             'title'     => 'Gradebook',
             'path'      => 'chamilo/gradebook/gradebook_' . $moduleId . '.json',
         ]);
-
-        @error_log('[GradebookMetaExport] Exported gradebook meta moduleId=' . $moduleId . ' sectionId=' . $sectionId);
     }
 
     /**

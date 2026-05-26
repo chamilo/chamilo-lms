@@ -1,7 +1,7 @@
 <template>
   <BaseButton
     icon="search"
-    label="Try and find some friends"
+    :label="t('Try and find some friends')"
     size="normal"
     type="success"
     @click="goToSearch"
@@ -28,11 +28,13 @@
 
 <script setup>
 import { inject, onMounted, ref } from "vue"
+import { useI18n } from "vue-i18n"
+import { useRouter } from "vue-router"
 import InvitationList from "../../components/userreluser/InvitationList.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
-import { useRouter } from "vue-router"
 import socialService from "../../services/socialService"
 
+const { t } = useI18n()
 const receivedInvitations = ref([])
 const sentInvitations = ref([])
 const pendingInvitations = ref([])

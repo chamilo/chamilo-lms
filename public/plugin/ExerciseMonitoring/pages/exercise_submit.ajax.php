@@ -11,10 +11,13 @@ api_protect_course_script();
 $plugin = ExerciseMonitoringPlugin::create();
 $em = Database::getManager();
 
+$pluginsFilesystem = Container::getPluginsFileSystem();
+
 $exerciseSubmitController = new ExerciseSubmitController(
     $plugin,
     Container::getRequest(),
-    $em
+    $em,
+    $pluginsFilesystem
 );
 
 $response = $exerciseSubmitController();

@@ -1,25 +1,23 @@
 .display-panel-collapse {
-  @apply rounded-lg border-gray-25 drop-shadow-lg bg-white;
+  @apply rounded-lg border-gray-25 shadow-xl bg-white;
 
   &__header {
     @apply relative
       before:content-[""] before:absolute before:rounded-l-lg before:bg-secondary before:w-1 before:h-full before:-left-1;
 
     a {
-      @apply cursor-pointer p-2 block bg-support-6 rounded-r-lg border-y border-y-gray-25 border-r border-r-gray-25;
+      @apply cursor-pointer p-3 block bg-support-6 rounded-r-lg border-y border-y-gray-25 border-r border-r-gray-25 space-x-1;
 
       &[aria-expanded=true] {
         @apply rounded-b-none;
       }
 
       &::before {
-        @apply mr-1;
-
-        float: left;
+        @apply mr-1 float-left;
       }
 
-      .ch-tool-icon.mdi {
-        @apply mr-1;
+      .mdi {
+        @apply text-secondary;
       }
     }
   }

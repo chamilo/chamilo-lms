@@ -47,6 +47,11 @@ final class ChatController extends AbstractController
     use CourseControllerTrait;
     use ResourceControllerTrait;
 
+    private const AI_TUTOR_UNAVAILABLE_SESSION_KEY = 'ai_tutor_temporarily_unavailable_until';
+    private const AI_TUTOR_UNAVAILABLE_COOLDOWN_SECONDS = 60;
+    private const AI_TUTOR_UNAVAILABLE_MESSAGE = 'AI tutor is temporarily unavailable. Please try again later.';
+    private const AI_SELECTED_TEXT_CONTEXT_MAX_CHARS = 12000;
+
     public function __construct(
         private readonly CidReqHelper $cidReqHelper,
         private readonly UserHelper $userHelper,
@@ -275,10 +280,6 @@ final class ChatController extends AbstractController
         return new JsonResponse($json);
     }
 
-    /**
-     * ===== GLOBAL CHAT (docked) =====
-     * This is the API used by DockedChat.vue.
-     */
     #[Route(path: '/account/chat', name: 'chamilo_core_global_chat_home', options: ['expose' => true])]
     public function globalHome(): Response
     {
@@ -287,7 +288,7 @@ final class ChatController extends AbstractController
             throw $this->createAccessDeniedException('User is not authenticated.');
         }
 
-        if ('true' !== $this->settingsManager->getSetting('chat.allow_global_chat')) {
+        if (!$this->isGlobalChatEnabled()) {
             return $this->redirectToRoute('homepage');
         }
 
@@ -296,8 +297,6 @@ final class ChatController extends AbstractController
             'restrict_to_coach' => false,
             'user' => api_get_user_info($me, true),
             'emoji_smile' => '<span>&#128522;</span>',
-
-            // Keep template vars safe even if not used.
             'ai_enabled' => false,
             'ai_default_provider' => 'openai',
         ]);
@@ -311,13 +310,18 @@ final class ChatController extends AbstractController
             return new JsonResponse(['error' => 'unauthorized'], 401);
         }
 
-        if ('true' !== $this->settingsManager->getSetting('chat.allow_global_chat')) {
-            return new JsonResponse(['error' => 'disabled'], 403);
+        if (!$this->isGlobalChatEnabled()) {
+            return $this->globalChatDisabledJson([
+                'me' => '',
+                'user_id' => (int) $me,
+                'user_status' => 0,
+                'sec_token' => '',
+                'items' => [],
+            ]);
         }
 
         $chat = new Chat();
 
-        // Some legacy methods echo JSON directly; capture that safely.
         ob_start();
         $ret = $chat->startSession();
         $echoed = ob_get_clean();
@@ -341,8 +345,8 @@ final class ChatController extends AbstractController
             return new Response('', 401);
         }
 
-        if ('true' !== $this->settingsManager->getSetting('chat.allow_global_chat')) {
-            return new Response('', 403);
+        if (!$this->isGlobalChatEnabled()) {
+            return $this->globalChatDisabledHtml();
         }
 
         $chat = new Chat();
@@ -359,31 +363,42 @@ final class ChatController extends AbstractController
             return new JsonResponse(['error' => 'unauthorized'], 401);
         }
 
-        if ('true' !== $this->settingsManager->getSetting('chat.allow_global_chat')) {
-            return new JsonResponse(['error' => 'disabled'], 403);
-        }
-
         $mode = (string) $req->query->get('mode', 'min');
         $sinceId = (int) $req->query->get('since_id', 0);
         $peerId = (int) $req->query->get('peer_id', 0);
-
-        // Allow client to ask for presence inside the same heartbeat.
         $presenceRaw = (string) $req->query->get('presence_ids', '');
         $presenceIds = $this->parseIdsFromRaw($presenceRaw);
-
-        // Optional contacts refresh flag.
         $includeContacts = (bool) $req->query->get('include_contacts', false);
+
+        if (!$this->isGlobalChatEnabled()) {
+            $payload = [
+                'error' => 'disabled',
+                'last_id' => $sinceId,
+                'has_new' => false,
+                'unread_by_peer' => [],
+            ];
+
+            if (!empty($presenceIds)) {
+                $payload['presence'] = [];
+            }
+            if ($includeContacts) {
+                $payload['contacts_html'] = '';
+            }
+
+            $resp = new JsonResponse($payload);
+            $resp->headers->set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+
+            return $resp;
+        }
 
         $chat = new Chat();
         $data = [];
 
-        // Tiny/min modes (recommended fast path).
         if ('tiny' === $mode && $peerId > 0) {
             $data = $chat->heartbeatTiny((int) $me, $peerId, $sinceId);
         } elseif ('min' === $mode) {
             $data = $chat->heartbeatMin((int) $me, $sinceId);
         } else {
-            // Fallback (legacy full heartbeat).
             ob_start();
             $ret = $chat->heartbeat();
             $echoed = ob_get_clean();
@@ -399,12 +414,10 @@ final class ChatController extends AbstractController
             $data = \is_array($ret) ? $ret : [];
         }
 
-        // Attach presence map when requested.
         if (!empty($presenceIds)) {
             $data['presence'] = $this->buildPresenceMap($presenceIds);
         }
 
-        // Attach contacts HTML only when explicitly requested.
         if ($includeContacts) {
             $html = $chat->getContacts();
             $data['contacts_html'] = \is_string($html) ? $html : '';
@@ -434,8 +447,8 @@ final class ChatController extends AbstractController
             return new JsonResponse(['error' => 'unauthorized'], 401);
         }
 
-        if ('true' !== $this->settingsManager->getSetting('chat.allow_global_chat')) {
-            return new JsonResponse(['error' => 'disabled'], 403);
+        if (!$this->isGlobalChatEnabled()) {
+            return new JsonResponse([]);
         }
 
         $peerId = (int) $req->query->get('user_id', 0);
@@ -533,8 +546,9 @@ final class ChatController extends AbstractController
             return new JsonResponse(['error' => 'unauthorized'], 401);
         }
 
-        if ('true' !== $this->settingsManager->getSetting('chat.allow_global_chat')) {
-            return new JsonResponse(['error' => 'disabled'], 403);
+        if (!$this->isGlobalChatEnabled()) {
+            // Return 200 to avoid frontend exceptions; message won't be delivered.
+            return $this->globalChatDisabledJson(['id' => 0]);
         }
 
         $to = (int) $req->request->get('to', 0);
@@ -560,6 +574,10 @@ final class ChatController extends AbstractController
                 return new JsonResponse(['id' => 0]);
             }
 
+            $selectedTextContext = $this->normalizeAiSelectedTextContext(
+                (string) $req->request->get('selected_text', '')
+            );
+
             // AI tutor must be available only inside a course.
             $course = $this->resolveCourseFromRequest($req, $doctrine);
             if (null === $course) {
@@ -581,8 +599,6 @@ final class ChatController extends AbstractController
             }
 
             $uiLang = $languageHelper->getInterfaceIso();
-
-            // Build course context
             $courseTitle = (string) $course->getTitle();
             $courseLang = $uiLang ?: 'en';
 
@@ -641,6 +657,18 @@ final class ChatController extends AbstractController
                 $now
             );
 
+            if ($this->isAiTutorTemporarilyUnavailable($req)) {
+                return $this->buildAiTutorUnavailableResponse(
+                    $chat,
+                    $chatRepository,
+                    (int) $me,
+                    (int) $userMsgId,
+                    $nowTs
+                );
+            }
+
+            $this->releaseSessionLock($req);
+
             try {
                 if (null !== $course) {
                     // Persist into ai_tutor_* when course context exists
@@ -649,7 +677,8 @@ final class ChatController extends AbstractController
                         $course,
                         null,
                         $providerKey,
-                        $message
+                        $message,
+                        $selectedTextContext
                     );
                 } else {
                     // Global mode: keep current behavior (no ai_tutor_* persistence without course)
@@ -657,34 +686,47 @@ final class ChatController extends AbstractController
                         (int) $me,
                         $providerKey,
                         $message,
-                        $uiLang
+                        $uiLang,
+                        $selectedTextContext
                     );
                 }
             } catch (Throwable $e) {
                 error_log('[AI][chat] Failed to generate assistant reply: '.$e->getMessage());
+                $this->markAiTutorTemporarilyUnavailable($req);
 
-                return new JsonResponse([
-                    'id' => (int) $userMsgId,
-                    'error' => 'ai_failed',
-                    'message' => $e->getMessage(),
-                ], 503);
+                return $this->buildAiTutorUnavailableResponse(
+                    $chat,
+                    $chatRepository,
+                    (int) $me,
+                    (int) $userMsgId,
+                    $nowTs
+                );
             }
 
             $assistantText = \is_string($assistantText) ? trim($assistantText) : '';
             if ('' === $assistantText) {
-                return new JsonResponse([
-                    'id' => (int) $userMsgId,
-                    'error' => 'ai_empty_reply',
-                    'message' => 'AI provider returned an empty reply.',
-                ], 503);
+                $this->markAiTutorTemporarilyUnavailable($req);
+
+                return $this->buildAiTutorUnavailableResponse(
+                    $chat,
+                    $chatRepository,
+                    (int) $me,
+                    (int) $userMsgId,
+                    $nowTs
+                );
             }
 
             if (str_starts_with($assistantText, 'Error:')) {
-                return new JsonResponse([
-                    'id' => (int) $userMsgId,
-                    'error' => 'ai_failed',
-                    'message' => $assistantText,
-                ], 503);
+                error_log('[AI][chat] Provider returned an error string: '.$assistantText);
+                $this->markAiTutorTemporarilyUnavailable($req);
+
+                return $this->buildAiTutorUnavailableResponse(
+                    $chat,
+                    $chatRepository,
+                    (int) $me,
+                    (int) $userMsgId,
+                    $nowTs
+                );
             }
 
             // Store assistant message (-1 -> me) as unread (recd=0)
@@ -735,25 +777,7 @@ final class ChatController extends AbstractController
             return JsonResponse::fromJsonString($echoed);
         }
 
-        if (\is_string($ret)) {
-            return JsonResponse::fromJsonString($ret);
-        }
-
         return new JsonResponse($ret ?? ['id' => 0]);
-    }
-
-    /**
-     * Course setting parser for tutor enablement.
-     * Empty value defaults to enabled (global setting already checked).
-     */
-    private function isCourseTutorEnabled(string $value): bool
-    {
-        $v = trim($value);
-        if ('' === $v) {
-            return true;
-        }
-
-        return 1 === preg_match('/^(1|true|on|yes)$/i', $v);
     }
 
     #[Route(
@@ -774,8 +798,8 @@ final class ChatController extends AbstractController
             return new JsonResponse(['error' => 'unauthorized'], 401);
         }
 
-        if ('true' !== $this->settingsManager->getSetting('chat.allow_global_chat')) {
-            return new JsonResponse(['error' => 'disabled'], 403);
+        if (!$this->isGlobalChatEnabled()) {
+            return $this->globalChatDisabledJson(['ok' => false]);
         }
 
         $course = $this->resolveCourseFromRequest($req, $doctrine);
@@ -801,9 +825,44 @@ final class ChatController extends AbstractController
         return new JsonResponse(['ok' => true]);
     }
 
+    private function normalizeAiSelectedTextContext(string $text): string
+    {
+        $text = trim(strip_tags($text));
+        if ('' === $text) {
+            return '';
+        }
+
+        $normalized = preg_replace('/[\s\x{00A0}]+/u', ' ', $text);
+        if (null === $normalized) {
+            $normalized = preg_replace('/\s+/', ' ', $text) ?? $text;
+        }
+
+        $normalized = trim($normalized);
+        if ('' === $normalized) {
+            return '';
+        }
+
+        if (mb_strlen($normalized, 'UTF-8') > self::AI_SELECTED_TEXT_CONTEXT_MAX_CHARS) {
+            return mb_substr($normalized, 0, self::AI_SELECTED_TEXT_CONTEXT_MAX_CHARS, 'UTF-8');
+        }
+
+        return $normalized;
+    }
+
     /**
-     * Try to resolve the course language from entity data; fallback to UI language.
+     * Course setting parser for tutor enablement.
+     * Empty value defaults to enabled (global setting already checked).
      */
+    private function isCourseTutorEnabled(string $value): bool
+    {
+        $v = trim($value);
+        if ('' === $v) {
+            return true;
+        }
+
+        return 1 === preg_match('/^(1|true|on|yes)$/i', $v);
+    }
+
     private function resolveCourseLanguage(Course $course): string
     {
         $tmpLang = '';
@@ -825,17 +884,18 @@ final class ChatController extends AbstractController
             return new JsonResponse(['error' => 'unauthorized'], 401);
         }
 
-        if ('true' !== $this->settingsManager->getSetting('chat.allow_global_chat')) {
-            return new JsonResponse(['error' => 'disabled'], 403);
-        }
-
         $status = (int) $req->request->get('status', 0);
+
+        if (!$this->isGlobalChatEnabled()) {
+            return $this->globalChatDisabledJson(['ok' => false, 'status' => $status]);
+        }
 
         $chat = new Chat();
         $chat->setUserStatus($status);
 
         return new JsonResponse(['ok' => true, 'status' => $status]);
     }
+
     #[Route(path: '/account/chat/api/history', name: 'chamilo_core_chat_api_history', options: ['expose' => true], methods: ['GET'])]
     public function globalHistory(
         Request $req,
@@ -849,8 +909,8 @@ final class ChatController extends AbstractController
             return new JsonResponse(['error' => 'unauthorized'], 401);
         }
 
-        if ('true' !== $this->settingsManager->getSetting('chat.allow_global_chat')) {
-            return new JsonResponse(['error' => 'disabled'], 403);
+        if (!$this->isGlobalChatEnabled()) {
+            return new JsonResponse([]);
         }
 
         $peerId = (int) $req->query->get('user_id', 0);
@@ -940,8 +1000,8 @@ final class ChatController extends AbstractController
             return new Response('', 401);
         }
 
-        if ('true' !== $this->settingsManager->getSetting('chat.allow_global_chat')) {
-            return new Response('', 403);
+        if (!$this->isGlobalChatEnabled()) {
+            return $this->globalChatDisabledHtml();
         }
 
         $html = CourseChatUtils::prepareMessage((string) $req->request->get('message', ''));
@@ -957,8 +1017,8 @@ final class ChatController extends AbstractController
             return new JsonResponse(['error' => 'unauthorized'], 401);
         }
 
-        if ('true' !== $this->settingsManager->getSetting('chat.allow_global_chat')) {
-            return new JsonResponse(['error' => 'disabled'], 403);
+        if (!$this->isGlobalChatEnabled()) {
+            return $this->globalChatDisabledJson(['presence' => []]);
         }
 
         $raw = (string) $req->request->get('ids', '');
@@ -980,8 +1040,9 @@ final class ChatController extends AbstractController
             return new JsonResponse(['error' => 'unauthorized'], 401);
         }
 
-        if ('true' !== $this->settingsManager->getSetting('chat.allow_global_chat')) {
-            return new JsonResponse(['error' => 'disabled'], 403);
+        if (!$this->isGlobalChatEnabled()) {
+            // Return 200 to avoid frontend exceptions; ack will be ignored.
+            return $this->globalChatDisabledJson(['ok' => false]);
         }
 
         $peerId = (int) $req->request->get('peer_id', 0);
@@ -1038,18 +1099,39 @@ final class ChatController extends AbstractController
             return new JsonResponse(['error' => 'unauthorized'], 401);
         }
 
-        if ('true' !== $this->settingsManager->getSetting('chat.allow_global_chat')) {
-            return new JsonResponse(['error' => 'disabled'], 403);
-        }
-
         $inTest = !empty($_SESSION['is_in_a_test']);
+
+        if (!$this->isGlobalChatEnabled()) {
+            // Return 200 with a normalized payload to avoid frontend exceptions.
+            return new JsonResponse([
+                'enabled' => false,
+                'in_test' => $inTest,
+                'course' => null,
+                'mode' => null,
+                'provider' => null,
+                'reason' => 'global_chat_disabled',
+            ]);
+        }
 
         $aiEnabledSetting = ('true' === $this->settingsManager->getSetting('ai_helpers.tutor_chatbot'));
         $providers = $aiProviderFactory->getProvidersForType('text');
         $hasTextProvider = !empty($providers);
-
-        // Course context is REQUIRED for the tutor.
         $course = $this->resolveCourseFromRequest($req, $doctrine);
+
+        if ($this->isAiTutorTemporarilyUnavailable($req)) {
+            return new JsonResponse([
+                'enabled' => false,
+                'in_test' => $inTest,
+                'course' => null !== $course ? [
+                    'id' => (int) $course->getId(),
+                    'title' => (string) $course->getTitle(),
+                    'language' => $this->resolveCourseLanguage($course) ?: 'en',
+                ] : null,
+                'mode' => null !== $course ? 'course' : null,
+                'provider' => null,
+                'reason' => 'temporarily_unavailable',
+            ]);
+        }
 
         if (!$aiEnabledSetting) {
             return new JsonResponse([
@@ -1315,7 +1397,6 @@ final class ChatController extends AbstractController
             ?? 0
         );
 
-        // Fallback: try Referer like /course/{id}/...
         if ($cid <= 0) {
             $ref = (string) $req->headers->get('referer', '');
             if ('' !== $ref && preg_match('~/course/(\d+)(/|$)~', $ref, $m)) {
@@ -1328,5 +1409,115 @@ final class ChatController extends AbstractController
         }
 
         return $doctrine->getRepository(Course::class)->find($cid);
+    }
+
+    /**
+     * Global chat enable switch.
+     */
+    private function isGlobalChatEnabled(): bool
+    {
+        return 'true' === (string) $this->settingsManager->getSetting('chat.allow_global_chat', true);
+    }
+
+    /**
+     * Return a normalized JSON response when global chat is disabled.
+     * This MUST be 200 to avoid frontend fetch wrappers throwing on non-2xx.
+     */
+    private function globalChatDisabledJson(array $payload = []): JsonResponse
+    {
+        return new JsonResponse(array_merge(['error' => 'disabled'], $payload));
+    }
+
+    /**
+     * Return an empty HTML response when global chat is disabled.
+     * This MUST be 200 to avoid frontend fetch wrappers throwing on non-2xx.
+     */
+    private function globalChatDisabledHtml(): Response
+    {
+        return new Response('', 200, ['Content-Type' => 'text/html; charset=UTF-8']);
+    }
+
+    private function isAiTutorTemporarilyUnavailable(Request $request): bool
+    {
+        try {
+            if (!$request->hasSession()) {
+                return false;
+            }
+
+            $until = (int) $request->getSession()->get(self::AI_TUTOR_UNAVAILABLE_SESSION_KEY, 0);
+
+            return $until > time();
+        } catch (Throwable) {
+            return false;
+        }
+    }
+
+    private function markAiTutorTemporarilyUnavailable(Request $request): void
+    {
+        try {
+            if (!$request->hasSession()) {
+                return;
+            }
+
+            $request->getSession()->set(
+                self::AI_TUTOR_UNAVAILABLE_SESSION_KEY,
+                time() + self::AI_TUTOR_UNAVAILABLE_COOLDOWN_SECONDS
+            );
+        } catch (Throwable) {
+            // Ignore session failures.
+        }
+    }
+
+    private function releaseSessionLock(Request $request): void
+    {
+        try {
+            if (!$request->hasSession()) {
+                return;
+            }
+
+            $request->getSession()->save();
+        } catch (Throwable) {
+            // Ignore session failures.
+        }
+    }
+
+    private function buildAiTutorUnavailableResponse(
+        Chat $chat,
+        ChatRepository $chatRepository,
+        int $userId,
+        int $userMessageId,
+        int $timestamp
+    ): JsonResponse {
+        $assistantSanitized = $chat->sanitize(self::AI_TUTOR_UNAVAILABLE_MESSAGE);
+        $assistantId = $chatRepository->insertChatRow(
+            AiTutorChatService::FRIEND_AI,
+            $userId,
+            $assistantSanitized,
+            1,
+            (new DateTimeImmutable('now', new DateTimeZone('UTC')))->format('Y-m-d H:i:s')
+        );
+
+        return new JsonResponse([
+            'id' => $userMessageId,
+            'assistant' => [
+                'id' => (int) $assistantId,
+                'message' => Security::remove_XSS($assistantSanitized),
+                'date' => $timestamp,
+                'recd' => 1,
+                'from_user_info' => [
+                    'id' => AiTutorChatService::FRIEND_AI,
+                    'user_id' => AiTutorChatService::FRIEND_AI,
+                    'complete_name' => 'AI Tutor',
+                    'user_is_online_in_chat' => 1,
+                    'user_is_online' => 1,
+                    'online' => 1,
+                    'avatar_small' => '',
+                ],
+                'to_user_info' => api_get_user_info($userId, true),
+            ],
+            'mode' => 'course',
+            'degraded' => true,
+            'temporarily_unavailable' => true,
+        ]);
     }
 }

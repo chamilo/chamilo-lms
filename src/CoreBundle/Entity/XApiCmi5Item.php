@@ -252,12 +252,12 @@ class XApiCmi5Item
         return $this;
     }
 
-    public function getñlvl(): ?int
+    public function getLvl(): ?int
     {
         return $this->lvl;
     }
 
-    public function setñlvl(int $lvl): static
+    public function setLvl(int $lvl): static
     {
         $this->lvl = $lvl;
 

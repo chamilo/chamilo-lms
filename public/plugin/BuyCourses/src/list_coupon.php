@@ -80,7 +80,6 @@ foreach ($coupons as &$coupon) {
 
 $interbreadcrumb[] = ['url' => '../index.php', 'name' => $plugin->get_lang('plugin_title')];
 
-$htmlHeadXtra[] = api_get_css(api_get_path(WEB_PLUGIN_PATH).'BuyCourses/resources/css/style.css');
 
 $templateName = $plugin->get_lang('CouponList');
 $template = new Template($templateName);

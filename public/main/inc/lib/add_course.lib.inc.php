@@ -976,8 +976,8 @@ class AddCourse
                         $recipient_email,
                         $subject,
                         $message,
-                        $siteName,
-                        $recipient_email,
+                        '',
+                        '',
                         [],
                         [],
                         false

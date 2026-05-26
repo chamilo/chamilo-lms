@@ -1,8 +1,0 @@
-/** CSS that will be included when loading an HTML in the Document tool */
-.hidden {
-    display: none;
-}
-
-.mce-translatehtml, span[lang] {
-    display: none;
-}

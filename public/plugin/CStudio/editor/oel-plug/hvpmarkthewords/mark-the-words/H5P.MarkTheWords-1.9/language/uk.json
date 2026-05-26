@@ -1,0 +1,128 @@
+{
+  "semantics": [
+    {
+      "label": "Опис завдання",
+      "description": "Опишіть, як користувач повинен вирішити завдання.",
+      "placeholder": "Клацніть всі дієслова у тексті, що випливає."
+    },
+    {
+      "label": "Текстове поле",
+      "placeholder": "Це відповідь: *answer*.",
+      "description": "",
+      "important": {
+        "description": "<ul><li>Позначені слова додаються з зірочкою (*).</li><li>Зірочка може вийти з іншої зірочки, в результаті чого ** = *.</li></ul>",
+        "example": "Правильні слова позначені так: *correctword*, зірочка написана так: *correctword***."
+      }
+    },
+    {
+      "label": "Зворотній зв'язок",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "По умовчанню"
+            }
+          ],
+          "label": "Визначте власні відгуки для будь-якого діапазону оцінок",
+          "description": "Натисніть кнопку \"Додати діапазон\" щоб додати стільки діапазонів, скільки вам потрібно. Наприклад: 0-20% Погана оцінка, 21-91% Середня оцінка, 91-100% Відмінна оцінка!",
+          "entity": "діапазон",
+          "field": {
+            "fields": [
+              {
+                "label": "Діапазон оцінок"
+              },
+              {},
+              {
+                "label": "Зворотній зв'язок на визначений діапазон оцінок",
+                "placeholder": "Заповніть відгук"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Тектс кнопки \"Перевірити\"",
+      "default": "Перевірити"
+    },
+    {
+      "label": "Текст кнопки \"Повторити\"",
+      "default": "Повторити"
+    },
+    {
+      "label": "Текст кнопки \"Показати відповіді\"",
+      "default": "Показати відповіді"
+    },
+    {
+      "label": "Налаштування поведінки.",
+      "description": "Ці параметри дозволять вам контролювати, як поводиться завдання.",
+      "fields": [
+        {
+          "label": "Включити кнопку \"Повторити\""
+        },
+        {
+          "label": "Включити кнопку \"Показати відповіді\""
+        },
+        {
+          "label": "Включити кнопку \"Перевірити\""
+        },
+        {
+          "label": "Показати бали",
+          "description": "Показати зароблені бали за кожну відповідь."
+        }
+      ]
+    },
+    {
+      "label": "Текст правильної відповіді",
+      "default": "Правильно!",
+      "description": "Текст використовується для вказівки правильності відповіді"
+    },
+    {
+      "label": "Текст неправильної відповіді",
+      "default": "Неправильно!",
+      "description": "Текст використовується для вказівки на те, що відповідь неправильна"
+    },
+    {
+      "label": "Текст відповіді пропущений",
+      "default": "Пропущено!",
+      "description": "Текст вказує на відсутність відповіді"
+    },
+    {
+      "label": "Опис для відображення відповідей",
+      "default": "Завдання оновлюється, щоб містити відповіді.",
+      "description": "Цей текст повідомляє користувачеві, що завдання було оновлено відповідями."
+    },
+    {
+      "label": "Текстове представлення шкали оцінок для тих, хто використовує озвучування",
+      "default": "Ти маєш :num з :total балів"
+    },
+    {
+      "label": "Label for the full readable text for assistive technologies",
+      "default": "Full readable text"
+    },
+    {
+      "label": "Label for the text where words can be marked for assistive technologies",
+      "default": "Full text where words can be marked"
+    },
+    {
+      "label": "Solution mode header for assistive technologies",
+      "default": "Solution mode"
+    },
+    {
+      "label": "Checking mode header for assistive technologies",
+      "default": "Checking mode"
+    },
+    {
+      "label": "Assistive technology description for \"Check\" button",
+      "default": "Check the answers. The responses will be marked as correct, incorrect, or unanswered."
+    },
+    {
+      "label": "Assistive technology description for \"Show Solution\" button",
+      "default": "Show the solution. The task will be marked with its correct solution."
+    },
+    {
+      "label": "Assistive technology description for \"Retry\" button",
+      "default": "Retry the task. Reset all responses and start the task over again."
+    }
+  ]
+}

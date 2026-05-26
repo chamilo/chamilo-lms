@@ -20,7 +20,6 @@ api_platform:
         yaml: ['application/x-yaml']
         csv: ['text/csv']
         html: ['text/html']
-        graphql: ['application/graphql']
 
     collection:
         pagination:
@@ -29,7 +28,7 @@ api_platform:
         invalidation:
             enabled: true
     enable_docs: true
-    enable_entrypoint: true
+    enable_entrypoint: '%env(bool:APP_ENABLE_API_ENTRYPOINT)%'
     show_webby: false
     messenger: true
     defaults:
@@ -56,6 +55,8 @@ api_platform:
     keep_legacy_inflector: false
 
     graphql:
+        graphiql:
+            enabled: false
         graphql_playground:
             enabled: false
 

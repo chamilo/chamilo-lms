@@ -94,8 +94,8 @@ if ($form->validate()) {
                 ".(('none' != api_get_configuration_value('password_encryption')) ? " " : "u.password AS Password, ")."
                 u.status		AS Status,
                 u.official_code	AS OfficialCode,
-                u.phone		AS Phone,
-                u.created_at AS CreatedAt";
+                u.phone		AS PhoneNumber,
+                u.created_at AS RegistrationDate";
     if (strlen($course_code) > 0) {
         $sql .= " FROM $user_table u, $course_user_table cu
                     WHERE
@@ -189,7 +189,20 @@ if ($form->validate()) {
                 $user[$key] = $value;
             }
         }
-        $data[] = $user;
+        // Reorder columns to match the canonical export header order
+        $canonicalOrder = ['UserId', 'LastName', 'FirstName', 'Email', 'UserName', 'Password', 'AuthSource', 'Status', 'OfficialCode', 'PhoneNumber', 'RegistrationDate'];
+        $ordered = [];
+        foreach ($canonicalOrder as $col) {
+            if (array_key_exists($col, $user)) {
+                $ordered[$col] = $user[$col];
+            }
+        }
+        foreach ($user as $key => $value) {
+            if (!array_key_exists($key, $ordered)) {
+                $ordered[$key] = $value;
+            }
+        }
+        $data[] = $ordered;
     }
 
     switch ($file_type) {

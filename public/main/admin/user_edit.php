@@ -21,7 +21,10 @@ api_protect_admin_script(true);
 $user_id = isset($_GET['user_id']) ? (int) $_GET['user_id'] : (int) $_POST['user_id'];
 api_protect_super_admin($user_id, null, true);
 $is_platform_admin = api_is_platform_admin() ? 1 : 0;
-$userInfo = api_get_user_info($user_id);
+$hideNeverExpireOption = 'true' === api_get_setting('registration.user_hide_never_expire_option')
+    && !api_is_platform_admin();
+$adminsCanSetUsersPass = 'true' === api_get_setting('security.admins_can_set_users_pass');
+$userInfo = api_get_user_info($user_id, null, true);
 $userObj = api_get_user_entity($user_id);
 $illustrationRepo = Container::getIllustrationRepository();
 
@@ -32,8 +35,6 @@ $accessUrl = Container::getAccessUrlUtil()->getCurrent();
 
 $htmlHeadXtra[] = '
 <script>
-var is_platform_id = "'.$is_platform_admin.'";
-
 function enable_expiration_date() {
     document.user_edit.radio_expiration_date[0].checked=false;
     document.user_edit.radio_expiration_date[1].checked=true;
@@ -45,22 +46,6 @@ function password_switch_radio_button(){
         if(input_elements.item(i).name == "reset_password" && input_elements.item(i).value == "2") {
             input_elements.item(i).checked = true;
         }
-    }
-}
-
-function display_drh_list(){
-    var $radios = $("input:radio[name=platform_admin]");
-    if (document.getElementById("status_select").value=='.COURSEMANAGER.') {
-        if (is_platform_id == 1)
-            document.getElementById("id_platform_admin").style.display="block";
-    } else if (document.getElementById("status_select").value=='.STUDENT.') {
-        if (is_platform_id == 1)
-            document.getElementById("id_platform_admin").style.display="none";
-        $radios.filter("[value=0]").attr("checked", true);
-    } else {
-        if (is_platform_id == 1)
-            document.getElementById("id_platform_admin").style.display="none";
-        $radios.filter("[value=0]").attr("checked", true);
     }
 }
 
@@ -83,22 +68,14 @@ $advancedPanelOpen = !empty($_POST);
 $tool_name = get_lang('Edit user information');
 
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
-$interbreadcrumb[] = ['url' => 'user_list.php', 'name' => get_lang('User list')];
+$interbreadcrumb[] = ['url' => '/admin/user-list', 'name' => get_lang('User list')];
 
-$table_user = Database::get_main_table(TABLE_MAIN_USER);
-$table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
-$sql = "SELECT u.*, a.user_id AS is_admin FROM $table_user u
-        LEFT JOIN $table_admin a ON a.user_id = u.id
-        WHERE u.id = '".$user_id."'";
-$res = Database::query($sql);
-if (1 != Database::num_rows($res)) {
-    header('Location: user_list.php');
+if (false === $userInfo) {
+    header('Location: /admin/user-list');
     exit;
 }
 
-$user_data = Database::fetch_assoc($res);
-
-$user_data['platform_admin'] = is_null($user_data['is_admin']) ? 0 : 1;
+$user_data = $userInfo;
 $user_data['send_mail'] = 0;
 $user_data['old_password'] = $user_data['password'];
 //Convert the registration date of the user
@@ -142,7 +119,7 @@ if (api_is_western_name_order()) {
 }
 
 // Official code
-$form->addElement('text', 'official_code', get_lang('Code'), ['size' => '40']);
+$form->addElement('text', 'official_code', get_lang('Official code'), ['size' => '40']);
 $form->applyFilter('official_code', 'html_filter');
 $form->applyFilter('official_code', 'trim');
 
@@ -162,9 +139,6 @@ if ('true' == api_get_setting('login_is_email')) {
     );
     $form->addRule('email', get_lang('This login is already in use'), 'username_available', $user_data['username']);
 }
-
-// Phone
-$form->addElement('text', 'phone', get_lang('Phone number'));
 
 // Picture
 $form->addFile(
@@ -208,8 +182,8 @@ $extAuthSource = $authenticationConfigHelper->getAuthSourceAuthentications($acce
 if (!empty($extAuthSource) && count($extAuthSource) > 0) {
     foreach ($userInfo['auth_sources'] as $userAuthSource) {
         $form->addLabel(
-            get_lang('External authentification'),
-            $userAuthSource
+            get_lang('Current authentication method'),
+            '<em>'.$userAuthSource.'</em>'
         );
     }
 }
@@ -232,36 +206,41 @@ if (!empty($extAuthSource) && count($extAuthSource) > 0) {
     if ($nb_ext_auth_source_added > 0) {
         // @todo check the radio button for external authentification and select the external authentication in the menu
         $group[] = $form->createElement('radio', 'reset_password', null, get_lang('External authentification').' ', 3);
-        $group[] = $form->createElement('select', 'auth_source', null, $auth_sources, ['multiple' => 'multiple']);
+        $group[] = $form->createElement('select', 'auth_source', null, $auth_sources, ['multiple' => 'multiple', 'size' => 2]);;
         $group[] = $form->createElement('static', '', '', '<br />', []);
         $form->addGroup($group, 'password', null, null, false);
     }
 }
 $form->addElement('radio', 'reset_password', null, get_lang('Automatically generate a new password'), 1);
-$group = [];
-$group[] = $form->createElement('radio', 'reset_password', null, get_lang('Enter password'), 2);
-$group[] = $form->createElement(
-    'password',
-    'password',
-    null,
-    [
-        'id' => 'password',
-        'onkeydown' => 'javascript: password_switch_radio_button();',
-        'show_hide' => true,
-    ]
-);
 
-$form->addGroup($group, 'password', null, null, false);
-$form->addPasswordRule('password', 'password');
+if ($adminsCanSetUsersPass) {
+    $group = [];
+    $group[] = $form->createElement('radio', 'reset_password', null, get_lang('Enter password'), 2);
+    $group[] = $form->createElement(
+        'password',
+        'password',
+        null,
+        [
+            'id' => 'password',
+            'onkeydown' => 'javascript: password_switch_radio_button();',
+            'show_hide' => true,
+        ]
+    );
+
+    $form->addGroup($group, 'password', null, null, false);
+    $form->addPasswordRule('password', 'password');
+}
+
+$roleOptions = UserManager::getAllowedRoleOptionsForUserForm();
 
 $form->addElement(
     'select',
     'roles',
     get_lang('Roles'),
-    api_get_roles(),
+    $roleOptions,
     [
         'multiple' => 'multiple',
-        'size' => 8,
+        'size' => 9,
     ]
 );
 $form->addRule('roles', get_lang('Required field'), 'required');
@@ -270,19 +249,6 @@ $display = 'none';
 if (isset($_POST['roles']) && is_array($_POST['roles'])) {
     $norm = array_map('api_normalize_role_code', $_POST['roles']);
     $display = (in_array('ROLE_TEACHER', $norm, true) || in_array('ROLE_SESSION_MANAGER', $norm, true)) ? 'block' : 'none';
-}
-
-// Platform admin
-if (api_is_platform_admin()) {
-    $group = [];
-    $group[] = $form->createElement('radio', 'platform_admin', null, get_lang('Yes'), 1);
-    $group[] = $form->createElement('radio', 'platform_admin', null, get_lang('No'), 0);
-
-    1 == $user_data['status'] ? $display = 'block' : $display = 'none';
-
-    $form->addElement('html', '<div id="id_platform_admin" style="display:'.$display.'">');
-    $form->addGroup($group, 'admin', get_lang('Administration'), null, false);
-    $form->addElement('html', '</div>');
 }
 
 //Language
@@ -310,16 +276,32 @@ $isUserEditingOwnAccount = ($user_data['id'] === api_get_user_id());
 $hideFields = $isUserEditingOwnAccount || USER_SOFT_DELETED == $user_data['active'];
 if (!$hideFields) {
     // Expiration Date
-    $form->addElement('radio', 'radio_expiration_date', get_lang('Expiration date'), get_lang('Never expires'), 0);
-    $group = [];
-    $group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('Enabled'), 1);
-    $group[] = $form->createElement(
-        'DateTimePicker',
-        'expiration_date',
-        null,
-        ['onchange' => 'javascript: enable_expiration_date();']
-    );
-    $form->addGroup($group, 'max_member_group', null, null, false);
+    if ($hideNeverExpireOption) {
+        $form->addElement('hidden', 'radio_expiration_date', 1);
+
+        $group = [];
+        $group[] = $form->createElement(
+            'DateTimePicker',
+            'expiration_date',
+            null,
+            ['onchange' => 'javascript: enable_expiration_date();']
+        );
+
+        $form->addGroup($group, 'max_member_group', get_lang('Expiration date'), null, false);
+    } else {
+        $form->addElement('radio', 'radio_expiration_date', get_lang('Expiration date'), get_lang('Never expires'), 0);
+
+        $group = [];
+        $group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('Enabled'), 1);
+        $group[] = $form->createElement(
+            'DateTimePicker',
+            'expiration_date',
+            null,
+            ['onchange' => 'javascript: enable_expiration_date();']
+        );
+
+        $form->addGroup($group, 'max_member_group', null, null, false);
+    }
 
     // active account or inactive account
     $form->addElement('radio', 'active', get_lang('Account'), get_lang('active'), 1);
@@ -328,6 +310,16 @@ if (!$hideFields) {
     $form->addElement('hidden', 'active', $user_data['active']);
     $form->addElement('hidden', 'expiration_date', $user_data['expiration_date']);
 }
+
+$form->addElement('html', Display::advancedPanelStart(
+    'advanced_params',
+    get_lang('Advanced settings'),
+    $advancedPanelOpen
+));
+
+// Phone
+$form->addElement('text', 'phone', get_lang('Phone number'));
+
 $studentBossList = UserManager::getStudentBossList($user_id);
 
 $conditions = ['status' => STUDENT_BOSS];
@@ -347,12 +339,6 @@ if (!empty($studentBossList)) {
 
 $user_data['student_boss'] = $studentBossList;
 $form->addMultiSelect('student_boss', get_lang('Superior (n+1)'), $studentBossToSelect);
-
-$form->addElement('html', Display::advancedPanelStart(
-    'advanced_params',
-    get_lang('Advanced settings'),
-    $advancedPanelOpen
-));
 
 // EXTRA FIELDS
 $extraField = new ExtraField('user');
@@ -380,7 +366,7 @@ $(function () {
 });
 </script>';
 
-// Freeze user conditions, admin cannot updated them
+// Freeze user conditions, admin cannot update them
 $extraConditions = api_get_setting('profile.show_conditions_to_user', true);
 if ($extraConditions && isset($extraConditions['conditions'])) {
     $extraConditions = $extraConditions['conditions'];
@@ -402,7 +388,17 @@ $user_data['auth_source'] = $userInfo['auth_sources'];
 
 if (!$hideFields) {
     $expiration_date = $user_data['expiration_date'];
-    if (empty($expiration_date)) {
+
+    if ($hideNeverExpireOption) {
+        $user_data['radio_expiration_date'] = 1;
+
+        if (empty($expiration_date)) {
+            $days = (int) api_get_setting('account_valid_duration');
+            $user_data['expiration_date'] = api_get_local_time('+'.$days.' day');
+        } else {
+            $user_data['expiration_date'] = api_get_local_time($expiration_date);
+        }
+    } elseif (empty($expiration_date)) {
         $user_data['radio_expiration_date'] = 0;
         $user_data['expiration_date'] = api_get_local_time();
     } else {
@@ -411,7 +407,7 @@ if (!$hideFields) {
     }
 }
 
-$roleOptions = api_get_roles();
+$roleOptions = UserManager::getAllowedRoleOptionsForUserForm();
 $optionKeyByCanon = [];
 foreach ($roleOptions as $optKey => $label) {
     $optionKeyByCanon[api_normalize_role_code((string) $optKey)] = $optKey;
@@ -431,8 +427,17 @@ $form->setDefaults($user_data);
 $error_drh = false;
 // Validate form
 if ($form->validate()) {
-    $user = $form->getSubmitValues(1);
-    $reset_password = (int) $user['reset_password'];
+    $user = $form->getSubmitValues(true);
+    if ($hideNeverExpireOption && !$hideFields) {
+        $user['radio_expiration_date'] = '1';
+
+        if (empty($user['expiration_date'])) {
+            $days = (int) api_get_setting('account_valid_duration');
+            $user['expiration_date'] = api_get_local_time('+'.$days.' day');
+        }
+    }
+    $reset_password = (int) ($user['reset_password'] ?? 0);
+    $password = (string) ($user['password'] ?? '');
     if (2 == $reset_password && empty($user['password'])) {
         Display::addFlash(Display::return_message(get_lang('The password is too short')));
         header('Location: '.api_get_self().'?user_id='.$user_id);
@@ -441,6 +446,15 @@ if ($form->validate()) {
 
     $roles = $user['roles'] ?? [];
     $roles = array_values(array_unique(array_map('api_normalize_role_code', $roles)));
+    if (!UserManager::areRolesAllowedInUserForm($roles)) {
+        Display::addFlash(
+            Display::return_message(get_lang('Error'), 'error')
+        );
+
+        header('Location: '.api_get_self().'?user_id='.$user_id);
+        exit;
+    }
+
     $newStatus = api_status_from_roles($roles);
     if ($newStatus === DRH && CourseManager::is_user_subscribed_in_course((int) $user_id)) {
         $error_drh = true;
@@ -464,17 +478,11 @@ if ($form->validate()) {
 
         $lastname = $user['lastname'];
         $firstname = $user['firstname'];
-        $password = $user['password'];
         $auth_source = $user['auth_source'] ?? ($userInfo['auth_source'] ?? []);
         $official_code = $user['official_code'];
         $email = $user['email'];
         $phone = $user['phone'];
         $username = $user['username'] ?? $userInfo['username'];
-        $platform_admin = 0;
-        // Only platform admin can change user status to admin.
-        if (api_is_platform_admin()) {
-            $platform_admin = (int) $user['platform_admin'];
-        }
         $send_mail = (int) $user['send_mail'];
         $reset_password = (int) $user['reset_password'];
         $hr_dept_id = isset($user['hr_dept_id']) ? intval($user['hr_dept_id']) : null;
@@ -491,9 +499,6 @@ if ($form->validate()) {
         }
 
         $template = $user['email_template_option'] ?? [];
-        if ((int) ($user['platform_admin'] ?? 0) === 1) {
-            $newStatus = COURSEMANAGER;
-        }
 
         $incompatible = false;
         $conflicts = [];
@@ -575,28 +580,12 @@ if ($form->validate()) {
             true
         );
 
-        $currentUserId = api_get_user_id();
-
-        if ($user_id != $currentUserId) {
-            if (1 == $platform_admin) {
-                UserManager::addUserAsAdmin($userObj);
-            } else {
-                UserManager::removeUserAdmin($userObj);
-            }
-        }
-
         $repo = Container::getUserRepository();
         /* @var User $userEntity */
         $userEntity = $repo->find($user_id);
         if ($userEntity) {
             $userEntity->setRoles($roles);
             $repo->updateUser($userEntity);
-        }
-
-        if (api_has_admin_role($roles)) {
-            UserManager::addUserAsAdmin($userEntity);
-        } else {
-            UserManager::removeUserAdmin($userEntity);
         }
 
         $extraFieldValue = new ExtraFieldValue('user');
@@ -610,7 +599,7 @@ if ($form->validate()) {
         Session::erase('system_timezone');
 
         Display::addFlash(Display::return_message($message, 'normal', false));
-        header('Location: user_list.php');
+        header('Location: /admin/user-list');
         exit();
     }
 }
@@ -631,8 +620,7 @@ $actions = [
     ),
     Display::url(
         Display::getMdiIcon(ActionIcon::LOGIN_AS, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Login as')),
-        api_get_path(WEB_CODE_PATH).
-        'admin/user_list.php?action=login_as&user_id='.$user_id.'&sec_token='.Security::getTokenFromSession()
+        api_get_path(WEB_PATH).'admin/user-list-login-as?user_id='.$user_id.'&sec_token='.urlencode(Container::$container->get(\Symfony\Component\Security\Csrf\CsrfTokenManagerInterface::class)->getToken('login_as')->getValue())
     ),
 ];
 

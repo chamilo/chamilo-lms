@@ -25,6 +25,9 @@ $userId = api_get_user_id();
 switch ($action) {
     case 'add':
         if (api_is_platform_admin() || api_is_drh()) {
+            if (false === Security::check_token('get')) {
+                exit;
+            }
             // Close the session as we don't need it any further
             session_write_close();
             if (isset($_REQUEST['id']) && !empty($_REQUEST['id'])) {
@@ -170,11 +173,18 @@ switch ($action) {
         break;
     case 'get_skills_tree_json':
         header('Content-Type: application/json');
-        $userId = isset($_REQUEST['load_user']) && 1 == $_REQUEST['load_user'] ? api_get_user_id() : 0;
+
+        // Accept both "load_user=1" and "load_user=<current_user_id>" to keep backward compatibility.
+        $loadUser = isset($_REQUEST['load_user']) ? (int) $_REQUEST['load_user'] : 0;
+        $currentUserId = (int) api_get_user_id();
+        $userId = ($loadUser === 1 || $loadUser === $currentUserId) ? $currentUserId : 0;
+
         // Close the session as we don't need it any further
         session_write_close();
-        $skill_id = isset($_REQUEST['skill_id']) ? intval($_REQUEST['skill_id']) : 0;
-        $depth = isset($_REQUEST['main_depth']) ? intval($_REQUEST['main_depth']) : 2;
+
+        $skill_id = isset($_REQUEST['skill_id']) ? (int) $_REQUEST['skill_id'] : 0;
+        $depth = isset($_REQUEST['main_depth']) ? (int) $_REQUEST['main_depth'] : 2;
+
         $all = $skill->getSkillsTreeToJson($userId, $skill_id, false, $depth);
         echo $all;
         break;
@@ -327,6 +337,9 @@ switch ($action) {
     case 'delete_gradebook_from_skill':
     case 'remove_skill':
         if (api_is_platform_admin() || api_is_drh()) {
+            if (false === Security::check_token('get')) {
+                exit;
+            }
             if (!empty($_REQUEST['skill_id']) && !empty($_REQUEST['gradebook_id'])) {
                 $skill_item = $skillGradeBook->getSkillInfo(
                     $_REQUEST['skill_id'],
@@ -353,6 +366,9 @@ switch ($action) {
         break;
     case 'save_profile':
         if (api_is_platform_admin() || api_is_drh()) {
+            if (false === Security::check_token('get')) {
+                exit;
+            }
             // Close the session as we don't need it any further
             session_write_close();
             $skill_profile = new SkillProfileModel();
@@ -378,6 +394,9 @@ switch ($action) {
         break;
     case 'delete_profile':
         if (api_is_platform_admin() || api_is_drh()) {
+            if (false === Security::check_token('get')) {
+                exit;
+            }
             // Close the session as we don't need it any further
             session_write_close();
             $profileId = $_REQUEST['profile'];
@@ -454,6 +473,10 @@ switch ($action) {
             exit;
         }
 
+        if (false === Security::check_token('get')) {
+            exit;
+        }
+
         $creatorId = api_get_user_id();
         $typeId = isset($_REQUEST['type_id']) ? (int) $_REQUEST['type_id'] : 0;
         $itemId = isset($_REQUEST['item_id']) ? (int) $_REQUEST['item_id'] : 0;
@@ -517,6 +540,10 @@ switch ($action) {
         }
 
         if (!api_is_allowed_to_edit()) {
+            exit;
+        }
+
+        if (false === Security::check_token('get')) {
             exit;
         }
 

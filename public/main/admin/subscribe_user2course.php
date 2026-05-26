@@ -120,18 +120,20 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
             // Global hosting limit: cancel whole operation if any selected
             // course would exceed platform.hosting_limit_users_per_course.
             // -----------------------------------------------------------------
+            $blockedCourseId = 0;
             $limitExceeded = false;
 
             if (!empty($subscribableUserIds)) {
                 foreach ($courses as $course_code) {
                     $courseInfo = api_get_course_info($course_code);
                     if (empty($courseInfo) || empty($courseInfo['real_id'])) {
-                        continue; // Skip invalid course records.
+                        continue;
                     }
 
                     $courseId = (int) $courseInfo['real_id'];
 
-                    if (CourseManager::wouldOperationExceedGlobalLimit($courseId, $subscribableUserIds)) {
+                    if (CourseManager::wouldOperationExceedUsersPerCourseLimit($courseId, $subscribableUserIds)) {
+                        $blockedCourseId = $courseId;
                         $limitExceeded = true;
                         break;
                     }
@@ -139,16 +141,11 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
             }
 
             if ($limitExceeded) {
-                // No subscription is executed if the global limit would be exceeded.
                 echo Display::return_message(
-                    CourseManager::getGlobalLimitCancelMessage(),
+                    CourseManager::getUsersPerCourseLimitCancelMessage($blockedCourseId),
                     'warning'
                 );
             } else {
-                // -----------------------------------------------------------------
-                // Original behaviour: subscribe all non-DRH users to all selected courses.
-                // DRH users are skipped and reported.
-                // -----------------------------------------------------------------
                 foreach ($courses as $course_code) {
                     $courseInfo = api_get_course_info($course_code);
 
@@ -403,7 +400,7 @@ if (is_array($extra_field_list)) {
     </select>
    </td>
    <td width="20%" valign="middle" align="center">
-    <button type="submit" class="btn btn--primary" value="<?php echo get_lang('Add to the course(s)'); ?> &gt;&gt;">
+    <button type="submit" class="btn btn--success" value="<?php echo get_lang('Add to the course(s)'); ?> &gt;&gt;">
         <em class="fa fa-plus"></em> <?php echo get_lang('Add to the course(s)'); ?>
     </button>
    </td>

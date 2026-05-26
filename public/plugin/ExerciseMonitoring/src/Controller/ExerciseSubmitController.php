@@ -7,23 +7,19 @@ use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\PluginBundle\ExerciseMonitoring\Entity\Log;
 use Doctrine\ORM\EntityManager;
-use Symfony\Component\Filesystem\Filesystem;
+use League\Flysystem\FilesystemOperator;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class ExerciseSubmitController
 {
-    private $plugin;
-    private $request;
-    private $em;
-
-    public function __construct(ExerciseMonitoringPlugin $plugin, HttpRequest $request, EntityManager $em)
-    {
-        $this->plugin = $plugin;
-        $this->request = $request;
-        $this->em = $em;
-    }
+    public function __construct(
+        private readonly ExerciseMonitoringPlugin $plugin,
+        private readonly HttpRequest $request,
+        private readonly EntityManager $em,
+        private readonly FilesystemOperator $pluginsFilesystem
+    ) {}
 
     /**
      * @throws \Doctrine\ORM\OptimisticLockException
@@ -32,7 +28,8 @@ class ExerciseSubmitController
      */
     public function __invoke(): HttpResponse
     {
-        $userDirName = $this->createDirectory();
+        $userId = api_get_user_id();
+        $dirPath = 'ExerciseMonitoring/'.$userId;
 
         $existingExeId = (int) ChamiloSession::read('exe_id');
 
@@ -46,14 +43,15 @@ class ExerciseSubmitController
 
         $trackingExercise = $this->em->find(TrackEExercise::class, $existingExeId);
 
-        $newFilename = '';
+        $filePath = '';
         $level = 0;
 
         /** @var UploadedFile $imgSubmit */
         if ($imgSubmit = $this->request->files->get('snapshot')) {
             $newFilename = uniqid().'_submit.jpg';
+            $filePath = $dirPath.'/'.$newFilename;
 
-            $imgSubmit->move($userDirName, $newFilename);
+            $this->pluginsFilesystem->write($filePath, $imgSubmit->getContent());
         }
 
         if (ONE_PER_PAGE == $objExercise->selectType()) {
@@ -66,7 +64,7 @@ class ExerciseSubmitController
             ->setExercise($exercise)
             ->setExe($trackingExercise)
             ->setLevel($level)
-            ->setImageFilename($newFilename)
+            ->setImageFilename($filePath)
         ;
 
         $this->em->persist($log);
@@ -75,26 +73,10 @@ class ExerciseSubmitController
 
         $this->em->flush();
 
-        return HttpResponse::create();
+        return new HttpResponse();
     }
 
-    private function createDirectory(): string
-    {
-        $user = api_get_user_entity(api_get_user_id());
-
-        $pluginDirName = api_get_path(SYS_UPLOAD_PATH).'plugins/ExerciseMonitoring';
-        $userDirName = $pluginDirName.'/'.$user->getId();
-
-        $fs = new Filesystem();
-        $fs->mkdir(
-            [$pluginDirName, $userDirName],
-            api_get_permissions_for_new_directories()
-        );
-
-        return $userDirName;
-    }
-
-    private function updateOrphanSnapshots(CQuiz $exercise, TrackEExercise $trackingExe)
+    private function updateOrphanSnapshots(CQuiz $exercise, TrackEExercise $trackingExe): void
     {
         $repo = $this->em->getRepository(Log::class);
 
@@ -104,8 +86,8 @@ class ExerciseSubmitController
             return;
         }
 
-        foreach ($fileNamesToUpdate as $filename) {
-            $log = $repo->findOneBy(['imageFilename' => $filename, 'exercise' => $exercise, 'exe' => null]);
+        foreach ($fileNamesToUpdate as $filePath) {
+            $log = $repo->findOneBy(['imageFilename' => $filePath, 'exercise' => $exercise, 'exe' => null]);
 
             if (!$log) {
                 continue;

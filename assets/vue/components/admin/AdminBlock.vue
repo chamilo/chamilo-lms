@@ -1,71 +1,78 @@
 <template>
-  <div
+  <BaseCard
     :class="id"
     class="admin-index__block-container"
   >
-    <div class="admin-index__block">
-      <div class="flex gap-2 justify-between">
-        <h4>
-          <BaseIcon :icon="icon" />
-          {{ props.title }}
-        </h4>
-      </div>
+    <template #title>
+      <BaseIcon :icon="icon" />
+      {{ title }}
+    </template>
 
-      <p
-        v-if="props.description"
-        class="text-body-4"
-        v-text="props.description"
-      />
+    <template
+      #subtitle
+      v-if="description"
+    >
+      {{ description }}
+    </template>
 
-      <form
-        v-if="props.searchUrl"
-        :action="props.searchUrl"
-        method="get"
-      >
-        <BaseInputGroup
-          :button-label="t('Search')"
-          :input-placeholder="t('Keyword')"
-          button-icon="search"
-          input-name="keyword"
-        />
-      </form>
-
-      <div class="p-menu p-component p-ripple-disabled">
-        <ul
-          class="p-menu-list p-reset"
-          role="menu"
-        >
-          <li
-            v-for="(item, index) in visibleItems"
-            :key="index"
-            :aria-label="t(item.label)"
-            :class="item.className"
-            class="p-menuitem"
-            role="menuitem"
-          >
-            <div class="p-menuitem-content">
-              <BaseAppLink
-                :to="item.route"
-                :url="item.url"
-                class="p-menuitem-link"
-              >
-                <span
-                  class="p-menuitem-text"
-                  v-text="item.label"
-                />
-              </BaseAppLink>
-            </div>
-          </li>
-        </ul>
-      </div>
-
+    <template #footer>
       <AdminBlockExtraContent
         :id="id"
         v-model="modelExtraContent"
         :editable="editable"
       />
+    </template>
+
+    <form
+      v-if="props.searchUrl"
+      :action="props.searchUrl"
+      method="get"
+    >
+      <BaseInputGroup
+        :id="inputId"
+        :button-id="buttonId"
+        :button-label="t('Search')"
+        :input-placeholder="t('Keyword')"
+        button-icon="search"
+        input-name="keyword"
+      />
+    </form>
+
+    <div class="p-menu p-component p-ripple-disabled">
+      <ul
+        class="p-menu-list p-reset"
+        role="menu"
+      >
+        <li
+          v-for="(item, index) in visibleItems"
+          :key="index"
+          :aria-label="t(item.label)"
+          :class="item.class"
+          class="p-menu-item"
+          role="menuitem"
+        >
+          <div class="p-menu-item-content">
+            <BaseAppLink
+              :to="item.route"
+              :url="item.url"
+              class="p-menu-item-link"
+            >
+              <span
+                class="p-menu-item-label"
+                v-text="item.label"
+              />
+            </BaseAppLink>
+          </div>
+        </li>
+      </ul>
     </div>
-  </div>
+    <div
+      v-if="bgImageUrl"
+      aria-hidden="true"
+      class="admin-block__bg-image"
+      :style="{ backgroundImage: `url('${bgImageUrl}')` }"
+    />
+  </BaseCard>
 </template>
 
 <script setup>
@@ -73,7 +80,10 @@ import { computed } from "vue"
 import { useI18n } from "vue-i18n"
 import BaseInputGroup from "../basecomponents/BaseInputGroup.vue"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
+import BaseCard from "../basecomponents/BaseCard.vue"
 import AdminBlockExtraContent from "./AdminBlockExtraContent.vue"
+import { useVisualTheme } from "../../composables/theme"
+const { getThemeAssetUrl } = useVisualTheme()
 
 const { t } = useI18n()
 
@@ -97,7 +107,17 @@ const props = defineProps({
   description: { type: String, required: false, default: () => null },
   searchUrl: { type: String, required: false, default: () => null },
   items: { type: Array, required: true, default: () => [] },
+  bgImage: { type: String, required: false, default: null },
 })
+
+// computed IDs for search input and button derived from the title
+const inputId = computed(() => {
+  const raw = (props.title || "").toString().trim()
+  const normalized = raw.replace(/\s+/g, "_").toLowerCase()
+  return (normalized || "search") + "_search"
+})
+
+const buttonId = computed(() => `${inputId.value}_button`)
 
 const visibleItems = computed(() =>
   props.items
@@ -110,4 +130,6 @@ const visibleItems = computed(() =>
     })
     .filter((item) => item.visible),
 )
+
+const bgImageUrl = computed(() => (props.bgImage ? getThemeAssetUrl(props.bgImage) : null))
 </script>

@@ -67,6 +67,15 @@ class HTML_QuickForm_element extends HTML_Common
     protected $columnsSize;
 
     /**
+     * Whether to change elements' names to $groupName[$elementName] or leave them as is.
+     *
+     * @var bool
+     *
+     * @since    3.0
+     */
+    protected $_appendName = true;
+
+    /**
      * @param string     Name of the element
      * @param string|array      Label(s) for the element
      * @param mixed      Associative array of tag attributes or HTML attributes name="value" pairs
@@ -364,6 +373,11 @@ class HTML_QuickForm_element extends HTML_Common
             return null;
         }
         $elementName = $this->getName();
+
+        if (empty($elementName)) {
+            return null;
+        }
+
         if (isset($values[$elementName])) {
             return $values[$elementName];
         } elseif (strpos($elementName, '[')) {
@@ -382,20 +396,8 @@ class HTML_QuickForm_element extends HTML_Common
                 }
             }
 
-            /*$replacedName = str_replace(
-                array('\\', '\'', ']', '['),
-                array('\\\\', '\\\'', '', "']['"),
-                $elementName
-            );
-            $myVar = "['$replacedName']";
-            $result =  eval("return (isset(\$values$myVar)) ? \$values$myVar : null;");
-            //var_dump($result);
-            return $result;*/
-
-            // $elementName = extra_statusocial[extra_statusocial] ;
             preg_match('/(.*)\[(.*)\]/', $elementName, $matches);
 
-            // Getting extra_statusocial
             $elementKey = $matches[1];
             $secondElementKey = '';
             if (isset($matches[2])) {
@@ -511,22 +513,33 @@ class HTML_QuickForm_element extends HTML_Common
     {
         if (null === $value) {
             return null;
-        } elseif (!$assoc) {
-            return $value;
-        } else {
-            $name = $this->getName();
-            if (!strpos($name, '[')) {
-                return array($name => $value);
-            } else {
-                $valueAry = array();
-                $myIndex  = "['" . str_replace(
-                                array('\\', '\'', ']', '['), array('\\\\', '\\\'', '', "']['"),
-                                $name
-                            ) . "']";
-                eval("\$valueAry$myIndex = \$value;");
-                return $valueAry;
-            }
         }
+
+        if (!$assoc) {
+            return $value;
+        }
+
+        $name = $this->getName();
+
+        if (!strpos($name, '[')) {
+            return array($name => $value);
+        }
+
+        $valueAry = [];
+        $parts = explode('[', $name);
+        $ref = &$valueAry;
+
+        foreach ($parts as $i => $part) {
+            $key = 0 === $i ? $part : rtrim($part, ']');
+            if (!isset($ref[$key]) || !is_array($ref[$key])) {
+                $ref[$key] = [];
+            }
+            $ref = &$ref[$key];
+        }
+
+        $ref = $value;
+
+        return $valueAry;
     }
 
     /**

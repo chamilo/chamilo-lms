@@ -132,6 +132,12 @@ class FlatViewDataGenerator
             $main_weight = 1;
         }
 
+        $mainWeightRaw = (float) $main_weight;
+        $mainWeightForItems = $this->normalizeMainWeightForItems($mainWeightRaw, $this->getAllEvalLinkWeights());
+        if (0.0 == $mainWeightForItems) {
+            $mainWeightForItems = 1.0;
+        }
+
         // @todo move these in a function
         $sum_categories_weight_array = [];
         $mainCategoryId = null;
@@ -168,7 +174,27 @@ class FlatViewDataGenerator
                     continue;
                 }
 
-                $sub_cat_weight = round(100 * $sub_cat->get_weight() / $main_weight, 1);
+                // Normalize main weight against subcategory weights too (same mismatch can happen here).
+                $subCatWeights = [];
+                foreach ($allcat as $tmpCat) {
+                    $isVisibleTmp = true;
+                    if (method_exists($tmpCat, 'is_visible')) {
+                        $isVisibleTmp = (bool) $tmpCat->is_visible();
+                    } elseif (method_exists($tmpCat, 'get_visible')) {
+                        $isVisibleTmp = (bool) $tmpCat->get_visible();
+                    }
+
+                    if ($isVisibleTmp && (float) $tmpCat->get_weight() > 0) {
+                        $subCatWeights[] = (float) $tmpCat->get_weight();
+                    }
+                }
+
+                $mainWeightForSubcats = $this->normalizeMainWeightForItems($mainWeightRaw, $subCatWeights);
+                if (0.0 == $mainWeightForSubcats) {
+                    $mainWeightForSubcats = 1.0;
+                }
+
+                $sub_cat_weight = round(100 * $sub_cat->get_weight() / $mainWeightForSubcats, 1);
                 $add_weight = ' ' . $sub_cat_weight . ' %';
 
                 $mainHeader = Display::url(
@@ -217,7 +243,7 @@ class FlatViewDataGenerator
                 ) {
                     /** @var AbstractLink $item */
                     $item = $this->evals_links[$count + $items_start];
-                    $weight = round(100 * $item->get_weight() / $main_weight, 1);
+                    $weight = round(100 * $item->get_weight() / $mainWeightForItems, 1);
                     $label = $item->get_name() . ' ' . $weight . ' % ';
                     // When a course score model is active, show only the item name.
                     if (!empty($model)) {
@@ -241,7 +267,7 @@ class FlatViewDataGenerator
                     $mainCategoryId == $item->get_category_id() &&
                     !in_array($item->get_id(), $evaluationsAdded)
                 ) {
-                    $weight = round(100 * $item->get_weight() / $main_weight, 1);
+                    $weight = round(100 * $item->get_weight() / $mainWeightForItems, 1);
                     $label = $item->get_name() . ' ' . $weight . ' % ';
                     if (!empty($model)) {
                         $label = $item->get_name();
@@ -407,6 +433,13 @@ class FlatViewDataGenerator
             $main_weight = 1;
         }
 
+        // Normalize main weight scale to avoid totals like 100/1 => 10000%.
+        $mainWeightRaw = (float) $main_weight;
+        $mainWeightForItems = $this->normalizeMainWeightForItems($mainWeightRaw, $this->getAllEvalLinkWeights());
+        if (0.0 == $mainWeightForItems) {
+            $mainWeightForItems = 1.0;
+        }
+
         $export_to_pdf = false;
         if (isset($this->params['export_pdf']) && $this->params['export_pdf']) {
             $export_to_pdf = true;
@@ -562,7 +595,7 @@ class FlatViewDataGenerator
                 );
                 $item_value_total += $result['item_value_total'];
                 $evaluationsAdded = $result['evaluations_added'];
-                $item_total = $main_weight;
+                $item_total = $mainWeightForItems;
             }
 
             // Additional evaluations (for main course category if defined).
@@ -1113,5 +1146,68 @@ class FlatViewDataGenerator
 
             $row[] = $extraFieldValueInfo ? $extraFieldValueInfo['value'] : null;
         }
+    }
+
+    /**
+     * Collect all weights from evals/links currently loaded in this flat view.
+     * Used to detect the scale (ratio 0..1 vs percent-like 0..100).
+     */
+    private function getAllEvalLinkWeights(): array
+    {
+        $weights = [];
+
+        foreach ($this->evals_links as $item) {
+            if ($item && method_exists($item, 'get_weight')) {
+                $weights[] = (float) $item->get_weight();
+            }
+        }
+
+        return $weights;
+    }
+
+    /**
+     * Normalize the category/main weight to match the scale used by item weights.
+     *
+     * Why:
+     * - Some installs store category weight as 1 (meaning 100%),
+     *   while item/link weights are stored as 100 (meaning 100%).
+     * - This causes 100 * 100 / 1 => 10000% in headers and totals.
+     *
+     * Heuristic:
+     * - If mainWeight <= 1 and items contain values > 1 => treat mainWeight as ratio and upscale to percent.
+     * - If mainWeight > 1 and items look fractional (0 < w < 1 or decimals) => treat items as ratio and downscale mainWeight.
+     */
+    private function normalizeMainWeightForItems(float $mainWeight, array $itemWeights): float
+    {
+        if ($mainWeight <= 0.0) {
+            return 1.0;
+        }
+
+        $max = 0.0;
+        $hasFractionalRatio = false;
+
+        foreach ($itemWeights as $w) {
+            $wf = (float) $w;
+            if ($wf > $max) {
+                $max = $wf;
+            }
+
+            // Detect ratio-style weights like 0.25, 0.5, 0.33...
+            if ($wf > 0.0 && ($wf < 1.0 || abs($wf - floor($wf)) > 0.00001)) {
+                $hasFractionalRatio = true;
+            }
+        }
+
+        // main weight stored as ratio (<=1) but items stored as percent-like (>1)
+        if ($mainWeight <= 1.0 && $max > 1.0) {
+            return $mainWeight * 100.0;
+        }
+
+        // main weight stored as percent-like (>1) but items stored as ratios (fractional <=1)
+        if ($mainWeight > 1.0 && $max <= 1.0 && $hasFractionalRatio) {
+            return $mainWeight / 100.0;
+        }
+
+        return $mainWeight;
     }
 }

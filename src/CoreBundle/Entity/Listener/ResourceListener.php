@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Controller\Api\BaseResourceFileAction;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\EntityAccessUrlInterface;
+use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\PersonalFile;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceFormat;
@@ -19,23 +20,22 @@ use Chamilo\CoreBundle\Entity\ResourceToRootInterface;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\ResourceWithAccessUrlInterface;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Repository\TrackEDefaultRepository;
+use Chamilo\CoreBundle\Helpers\ResourceHelper;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CoreBundle\Traits\AccessUrlListenerTrait;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Cocur\Slugify\SlugifyInterface;
-use Doctrine\ORM\Event\PostPersistEventArgs;
-use Doctrine\ORM\Event\PostRemoveEventArgs;
-use Doctrine\ORM\Event\PostUpdateEventArgs;
 use Doctrine\ORM\Event\PrePersistEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
+use Doctrine\Persistence\ObjectManager;
 use Exception;
 use InvalidArgumentException;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 
 use const JSON_THROW_ON_ERROR;
@@ -50,7 +50,7 @@ class ResourceListener
         protected ToolChain $toolChain,
         protected RequestStack $request,
         protected Security $security,
-        protected TrackEDefaultRepository $trackEDefaultRepository
+        protected ResourceHelper $trackEDefaultHelper
     ) {}
 
     /**
@@ -62,6 +62,17 @@ class ResourceListener
     {
         $em = $eventArgs->getObjectManager();
         $request = $this->request;
+
+        /**
+         * Current authenticated user (may be null in CLI/migrations).
+         * Always initialize to avoid "Undefined variable" warnings.
+         *
+         * @var User|null $currentUser
+         */
+        $currentUser = $this->security->getUser();
+        if (!$currentUser instanceof User) {
+            $currentUser = null;
+        }
 
         // 1. Set AccessUrl.
         if ($resource instanceof ResourceWithAccessUrlInterface) {
@@ -101,11 +112,8 @@ class ResourceListener
             }
         }
 
-        if (null === $creator) {
-            $currentUser = $this->security->getUser();
-            if ($currentUser instanceof User) {
-                $creator = $currentUser;
-            }
+        if (null === $creator && $currentUser instanceof User) {
+            $creator = $currentUser;
         }
 
         if (!$creator instanceof User) {
@@ -215,11 +223,42 @@ class ResourceListener
         }
 
         if ($resource instanceof PersonalFile) {
+            // In CLI/migrations there is no authenticated user, so fallback to the parent node creator.
             if (null === $currentUser) {
-                $currentUser = $parentNode->getCreator();
+                $currentUser = $parentNode?->getCreator();
             }
+
+            if (!$currentUser instanceof User) {
+                throw new UserNotFoundException('PersonalFile validation requires a user context (creator or parent node creator).');
+            }
+
+            // Ensure the user is managed by this EntityManager so lazy associations resolve.
+            if (!$em->contains($currentUser)) {
+                $managedUser = $em->find(User::class, $currentUser->getId());
+                if ($managedUser instanceof User) {
+                    $currentUser = $managedUser;
+                }
+            }
+
+            $currentUserNode = $currentUser->getResourceNode();
+
             $valid = $parentNode->getCreator()->getUsername() === $currentUser->getUsername()
-                     || $parentNode->getId() === $currentUser->getResourceNode()->getId();
+                || (null !== $currentUserNode && $parentNode->getId() === $currentUserNode->getId());
+
+            // Walk up the parent tree to check if the target belongs to the user's personal space.
+            if (!$valid && null !== $currentUserNode) {
+                $node = $parentNode->getParent();
+                while (null !== $node) {
+                    if ($node->getId() === $currentUserNode->getId()
+                        || $node->getCreator()->getUsername() === $currentUser->getUsername()
+                    ) {
+                        $valid = true;
+
+                        break;
+                    }
+                    $node = $node->getParent();
+                }
+            }
 
             if (!$valid) {
                 $msg = \sprintf('User %s cannot add a file to another user', $currentUser->getUsername());
@@ -280,6 +319,8 @@ class ResourceListener
 
         $resource->setResourceNode($resourceNode);
 
+        $this->applyResourceLanguageFromRequest($resource, $eventArgs);
+
         // All resources should have a parent, except AccessUrl.
         if (!($resource instanceof AccessUrl) && null === $resourceNode->getParent()) {
             $message = \sprintf(
@@ -295,56 +336,26 @@ class ResourceListener
         }
     }
 
-    public function postPersist(AbstractResource $resource, PostPersistEventArgs $event): void
-    {
-        $resourceNode = $resource->getResourceNode();
-
-        if ($resourceNode) {
-            $this->trackEDefaultRepository->registerResourceEvent(
-                $resourceNode,
-                'creation',
-                $this->security->getUser()?->getId()
-            );
-        }
-    }
-
-    public function postUpdate(AbstractResource $resource, PostUpdateEventArgs $event): void
-    {
-        $resourceNode = $resource->getResourceNode();
-
-        if ($resourceNode) {
-            $this->trackEDefaultRepository->registerResourceEvent(
-                $resourceNode,
-                'edition',
-                $this->security->getUser()?->getId()
-            );
-        }
-    }
-
-    public function postRemove(AbstractResource $resource, PostRemoveEventArgs $event): void
-    {
-        $resourceNode = $resource->getResourceNode();
-
-        if ($resourceNode) {
-            $this->trackEDefaultRepository->registerResourceEvent(
-                $resourceNode,
-                'deletion',
-                $this->security->getUser()?->getId()
-            );
-        }
-    }
-
     /**
      * When updating a Resource.
      */
     public function preUpdate(AbstractResource $resource, PreUpdateEventArgs $eventArgs): void
     {
         $resourceNode = $resource->getResourceNode();
+
+        if (null === $resourceNode) {
+            return;
+        }
+
         $parentResourceNode = $resource->getParent()?->resourceNode;
 
         if ($parentResourceNode) {
             $resourceNode->setParent($parentResourceNode);
         }
+
+        $this->updateResourceName($resource);
+
+        $this->applyResourceLanguageFromRequest($resource, $eventArgs);
 
         // error_log('Resource listener preUpdate');
         // $this->setLinks($resource, $eventArgs->getEntityManager());
@@ -358,11 +369,16 @@ class ResourceListener
             throw new InvalidArgumentException('Resource needs a name');
         }
 
+        $resourceNode = $resource->getResourceNode();
+        if (null === $resourceNode) {
+            return;
+        }
+
         $extension = $this->slugify->slugify(pathinfo($resourceName, PATHINFO_EXTENSION));
         if (empty($extension)) {
             // $slug = $this->slugify->slugify($resourceName);
         }
-        $resource->getResourceNode()->setTitle($resourceName);
+        $resourceNode->setTitle($resourceName);
     }
 
     private function addCCalendarEventGlobalLink(CCalendarEvent $event, PrePersistEventArgs $eventArgs): void
@@ -408,6 +424,102 @@ class ResourceListener
                 $em->persist($globalLink);
             }
         }
+    }
+
+    private function applyResourceLanguageFromRequest(AbstractResource $resource, LifecycleEventArgs $eventArgs): void
+    {
+        $currentRequest = $this->request->getCurrentRequest();
+        $hasLanguage = false;
+        $rawLanguage = null;
+
+        if (null !== $currentRequest) {
+            if ($currentRequest->request->has('language')) {
+                $hasLanguage = true;
+                $rawLanguage = $currentRequest->request->get('language');
+            } else {
+                $content = trim($currentRequest->getContent());
+                if ('' !== $content) {
+                    $payload = json_decode($content, true);
+                    if (\is_array($payload) && \array_key_exists('language', $payload)) {
+                        $hasLanguage = true;
+                        $rawLanguage = $payload['language'];
+                    }
+                }
+            }
+        }
+
+        if (!$hasLanguage && null !== $resource->language) {
+            $hasLanguage = true;
+            $rawLanguage = $resource->language;
+        }
+
+        if (!$hasLanguage) {
+            return;
+        }
+
+        $em = $eventArgs->getObjectManager();
+        $language = $this->findLanguage($rawLanguage, $em);
+        $resourceNode = $resource->getResourceNode();
+
+        if (null === $resourceNode) {
+            return;
+        }
+
+        $resourceNode->setLanguage($language);
+
+        foreach ($resourceNode->getResourceFiles() as $resourceFile) {
+            if ($resourceFile instanceof ResourceFile) {
+                $resourceFile->setLanguage($language);
+            }
+        }
+    }
+
+    private function findLanguage(mixed $rawLanguage, ObjectManager $em): ?Language
+    {
+        if (null === $rawLanguage) {
+            return null;
+        }
+
+        if (\is_array($rawLanguage)) {
+            if (isset($rawLanguage['@id'])) {
+                $rawLanguage = $rawLanguage['@id'];
+            } elseif (isset($rawLanguage['isocode'])) {
+                $rawLanguage = $rawLanguage['isocode'];
+            } elseif (isset($rawLanguage['id'])) {
+                $rawLanguage = $rawLanguage['id'];
+            }
+        }
+
+        $languageCode = trim((string) $rawLanguage);
+        if ('' === $languageCode) {
+            return null;
+        }
+
+        if (preg_match('#/api/languages/(\d+)$#', $languageCode, $matches) || ctype_digit($languageCode)) {
+            $languageId = isset($matches[1]) ? (int) $matches[1] : (int) $languageCode;
+            $language = $em->getRepository(Language::class)->find($languageId);
+
+            if ($language instanceof Language) {
+                return $language;
+            }
+
+            throw new BadRequestHttpException('Invalid resource language.');
+        }
+
+        if (!preg_match('/^[a-zA-Z0-9_-]{1,8}$/', $languageCode)) {
+            throw new BadRequestHttpException('Invalid resource language.');
+        }
+
+        $language = $em->getRepository(Language::class)->findOneBy([
+            'isocode' => $languageCode,
+            'available' => true,
+        ]);
+
+        if ($language instanceof Language) {
+            return $language;
+        }
+
+        throw new BadRequestHttpException('Invalid resource language.');
     }
 
     public function preRemove(AbstractResource $resource, LifecycleEventArgs $args): void

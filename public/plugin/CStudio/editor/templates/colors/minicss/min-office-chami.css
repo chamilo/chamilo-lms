@@ -1,0 +1,59 @@
+body{
+    background-color :#d1d1e0!important;
+    font-family: sans-serif;
+}
+h1 {
+    text-align: center;
+    font-weight: normal;
+    margin: 0px;
+    font-size: 33px;
+}
+h2 {
+    text-align : left;
+    font-weight : 100;
+    font-size : 20px;
+    margin : 0px;
+    margin-top : 10px;
+    margin-left : -40px;
+    margin-right : 25px;
+    padding-left : 25px;
+    padding-top : 6px;
+    padding-bottom : 6px;
+    background-color : #3498DB;
+    color : white;
+    font-size : 22px;
+    -webkit-box-shadow: 5px 5px 0px 0px #5DADE2, 5px 5px 15px 5px rgba(0,0,0,0); 
+    box-shadow: 5px 5px 0px 0px #5DADE2, 5px 5px 15px 5px rgba(0,0,0,0);
+}
+samp {
+    font-family: 'Hahmlet', serif;
+    font-size : 17px;
+    background-color : #aad8f6;
+    padding: 5px;
+    padding-left: 35px;
+    background-image : url(../img/classique/infos.png);
+    background-position: left center;
+    background-repeat: no-repeat;
+    border-radius: 4px;
+}
+address {
+    font-family: 'Hahmlet', serif;
+    font-size : 17px;
+    color: #9F6000;
+    background-color: #FEEFB3;
+    padding: 5px;
+    padding-left: 35px;
+    background-image : url(../img/classique/warning.png);
+    background-position: left center;
+    background-repeat: no-repeat;
+    border-radius: 4px;
+}
+blockquote {
+    border-left: 2px solid #ccc;
+    margin-left: 1.5rem;
+    padding-left: 1rem;
+}
+.oelAlignLeft{text-align:left;}
+.oelAligncenter{text-align:center;}
+.oelAlignright{text-align:right;}
+.oelAlignjustify{text-align:justify;}

@@ -13,6 +13,7 @@ use ApiPlatform\Metadata\GetCollection;
 use Chamilo\CoreBundle\ApiResource\CourseTool;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Listener\ResourceListener;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
@@ -25,7 +26,7 @@ use Chamilo\CourseBundle\Repository\CToolRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Stringable;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
@@ -40,8 +41,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'c_tool')]
 #[ORM\Index(columns: ['c_id'], name: 'course')]
 #[ORM\Index(columns: ['session_id'], name: 'session_id')]
-#[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: CToolRepository::class)]
+#[ORM\EntityListeners([ResourceListener::class])]
 #[ApiFilter(CidFilter::class)]
 #[ApiFilter(SidFilter::class)]
 #[ApiFilter(OrderFilter::class, properties: ['position' => 'ASC'])]

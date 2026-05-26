@@ -6,12 +6,13 @@
     @remove="$emit('remove', value)"
   >
     <template #removeicon="{ removeCallback, keydownCallback }">
-      <BaseIcon
+      <span
         class="p-icon p-chip-remove-icon"
-        icon="close"
         @click="removeCallback"
         @keydownk="keydownCallback"
-      />
+      >
+        <BaseIcon icon="close" />
+      </span>
     </template>
   </Chip>
 </template>

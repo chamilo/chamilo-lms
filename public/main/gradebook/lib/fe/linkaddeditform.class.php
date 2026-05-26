@@ -207,14 +207,6 @@ class LinkAddEditForm extends FormValidator
             }
         }
 
-        // ELEMENT: visible
-        $visible = (self::TYPE_EDIT == $form_type && $link->is_visible()) ? '1' : '0';
-        //$this->addCheckBox('visible', null, get_lang('Visible'), $visible);
-        $this->addCheckBox('visible', null, get_lang('Visible'));
-        if (self::TYPE_EDIT == $form_type) {
-            $defaults['visible'] = $link->is_visible();
-        }
-
         // ELEMENT: add results
         if (self::TYPE_ADD == $form_type && $link->needs_results()) {
             $this->addElement('checkbox', 'addresult', get_lang('Grade learners'));
@@ -224,16 +216,6 @@ class LinkAddEditForm extends FormValidator
             $this->addButtonCreate(get_lang('Add this learning activity to the assessment'));
         } else {
             $this->addButtonUpdate(get_lang('Edit link'));
-        }
-
-        if (self::TYPE_ADD == $form_type) {
-            $tools = api_get_setting('course.active_tools_on_create', true);
-
-            $visibility_default = 1;
-            if (!in_array('gradebook', $tools, true)) {
-                $visibility_default = 0;
-            }
-            $defaults['visible'] = $visibility_default;
         }
 
         // set default values

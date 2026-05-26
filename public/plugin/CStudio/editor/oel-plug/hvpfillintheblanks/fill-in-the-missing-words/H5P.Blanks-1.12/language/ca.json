@@ -1,0 +1,211 @@
+{
+  "semantics": [
+    {
+      "label": "Recurs",
+      "fields": [
+        {
+          "label": "Tipus",
+          "description": "Recursos opcionals per mostrar al damunt de la pregunta."
+        },
+        {
+          "label": "Desactiva el zoom de les imatges"
+        }
+      ]
+    },
+    {
+      "label": "Descripció de la tasca",
+      "default": "Introduïu les paraules que falten",
+      "description": "Una guia per explicar a l’usuari com funciona la tasca."
+    },
+    {
+      "label": "Blocs de text",
+      "entity": "bloc de text",
+      "field": {
+        "label": "Línia de text",
+        "placeholder": "Oslo és la capital de *Noruega*.",
+        "description": "",
+        "important": {
+          "description": "<ul><li>Els espais en blanc s’afegeixen amb un asterisc (*) al davant i un al darrere de la paraula o frase correcta.</li><li>Les respostes possibles se separen amb una barra inclinada (/).</li><li>Podeu afegir una pista textual introduint dos punts (:) davant de la pista.</li></ul>",
+          "example": "El contingut d’H5P es pot editar utilitzant un *navegador/navegador web:Una cosa que feu servir cada dia*."
+        }
+      }
+    },
+    {
+      "label": "Suggeriment general",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Opció predeterminada"
+            }
+          ],
+          "label": "Defineix una valoració per cada rang de puntuació",
+          "description": "Click the \"Add rang\" button to add as many rangs as you need. Example: 0-20% Bad score, 21-91% Average Score, 91-100% Great Score!",
+          "entity": "rang",
+          "field": {
+            "fields": [
+              {
+                "label": "Rang de puntuació"
+              },
+              {},
+              {
+                "label": "Feedback for defined score rang",
+                "placeholder": "Introduïu el suggeriment"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Text for \"Mostra la soluciós\" button",
+      "default": "Mostra la solució"
+    },
+    {
+      "label": "Text for \"Torna-ho a provar\" button",
+      "default": "Torna-ho a provar"
+    },
+    {
+      "label": "Text for \"Verifica\" button",
+      "default": "Verifica"
+    },
+    {
+      "label": "Text for \"Not filled out\" message",
+      "default": "Empleneu tots els espais en blanc per veure la solució"
+    },
+    {
+      "label": "Text for \"'La resposta ‘:ans’ és correcta\" message",
+      "default": "'La resposta ‘:ans’ és correcta"
+    },
+    {
+      "label": "Text for \"'La resposta ‘:ans’ és incorrecta\" message",
+      "default": "'La resposta ‘:ans’ és incorrecta"
+    },
+    {
+      "label": "Text for \"Respost correctament\" message",
+      "default": "Respost correctament"
+    },
+    {
+      "label": "Text for \"Respost incorrectament\" message",
+      "default": "Respost incorrectament"
+    },
+    {
+      "label": "Etiqueta de la tecnologia d’assistència per a la solució",
+      "default": "Resposta correcta:"
+    },
+    {
+      "label": "Descripció de la tecnologia d’assistència per al camp d’introducció de text",
+      "description": "Utilitzeu els paràmetres @num i @total per substituir el nombre d’espais per emplenar actual i el total",
+      "default": "Entrada en blanc @num de @total"
+    },
+    {
+      "label": "Etiqueta de la tecnologia d’assistència per indicar que el text introduït conté una pista",
+      "default": "Pista disponible"
+    },
+    {
+      "label": "Etiqueta de la icona per a la pista",
+      "default": "Pista"
+    },
+    {
+      "label": "Opcions de comportament",
+      "description": "Aquestes opcions us permetran controlar com es comporta la tasca.",
+      "fields": [
+        {
+          "label": "Enable \"Torna-ho a provar\""
+        },
+        {
+          "label": "Enable \"Mostra la solució\" button"
+        },
+        {
+          "label": "Enable \"Verifica\" button"
+        },
+        {
+          "label": "Revisa les respostes automàticament després de cada introducció"
+        },
+        {
+          "label": "Distingeix entre majúscules i minúscules",
+          "description": "Comprova que la introducció de text de l’usuari sigui exactament igual que la resposta."
+        },
+        {
+          "label": "Requereix que es responguin tots els camps per poder veure la solució"
+        },
+        {
+          "label": "Situa els camps d’entrada de text en línies diferents"
+        },
+        {
+          "label": "Show confirmation dialog on \"Verifica\"",
+          "description": "This options is not compatible with the \"Revisa les respostes automàticament després de cada introducció\" option"
+        },
+        {
+          "label": "Show confirmation dialog on \"Torna-ho a provar\""
+        },
+        {
+          "label": "Accepta errors ortogràfics menors",
+          "description": "Si s’activa aquesta opció, la resposta també s’admetrà com a correcta encara que contingui errors ortogràfics menors (3-9 caràcters: 1 error ortogràfic; més de 9 caràcters: 2 errors ortogràfics)."
+        }
+      ]
+    },
+    {
+      "label": "Quadre de diàleg per confirmar la revisió",
+      "fields": [
+        {
+          "label": "Títol",
+          "default": "Finalitza ?"
+        },
+        {
+          "label": "Text del cos",
+          "default": "Estàs segur que vols acabar?"
+        },
+        {
+          "label": "Cancel·la·la button label",
+          "default": "Cancel·la·la"
+        },
+        {
+          "label": "Confirma button label",
+          "default": "Finalitza"
+        }
+      ]
+    },
+    {
+      "label": "Quadre de diàleg de confirmació per a “Torna-ho a provar”",
+      "fields": [
+        {
+          "label": "Títol",
+          "default": "Torna-ho a provar ?"
+        },
+        {
+          "label": "Text del cos",
+          "default": "Confirmeu que voleu tornar-ho a provar?"
+        },
+        {
+          "label": "Cancel·la·la button label",
+          "default": "Cancel·la·la"
+        },
+        {
+          "label": "Confirma button label",
+          "default": "Confirma"
+        }
+      ]
+    },
+    {
+      "label": "Representació textual de la barra de puntuació pera als que utilitzen un altaveu de lectura",
+      "default": "Heu fet :num de :total punts"
+    },
+    {
+      "label": "Assistive technology description for \"Verifica\" button",
+      "default": "Comprova les respostes. Les respostes es marcaran com a correctes, incorrectes o sense resposta."
+    },
+    {
+      "label": "Assistive technology description for \"Show Solution\" button",
+      "default": "Mostra la solució. La tasca es marcarà amb la seva solució correcta."
+    },
+    {
+      "label": "Assistive technology description for \"Torna-ho a provar\" button",
+      "default": "Intenta de nou la tasca. Reajusta totes les respostes i comença la tasca de nou."
+    },
+    {
+      "label": "Descripció de la tecnologia d’assistència per a l’inici d’una tasca",
+      "default": "S’està comprovant el mode"
+    }
+  ]
+}

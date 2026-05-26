@@ -408,8 +408,7 @@ See https://support.chamilo.org/issues/6976
     margin-top: 4px;
     padding: 2px;
     border-radius: 20px;
-    background-color: #ffffff;
-    @apply border-2;
+    @apply bg-white border-2;
 }
 
 .c-menu-right .open.circle {

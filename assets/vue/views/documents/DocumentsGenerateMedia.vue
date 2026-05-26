@@ -10,6 +10,7 @@
 
   <div class="p-4 space-y-4">
     <h2 class="text-xl font-semibold">{{ t("Generate media") }}</h2>
+
     <div class="p-3 rounded border border-gray-200 bg-gray-10 text-sm text-gray-700 leading-relaxed">
       {{
         t(
@@ -17,12 +18,14 @@
         )
       }}
     </div>
+
     <div
       v-if="isBooting"
       class="text-sm text-gray-600"
     >
       {{ t("Loading...") }}
     </div>
+
     <div
       v-else-if="!canEdit"
       class="p-3 rounded border border-gray-200 text-sm"
@@ -106,6 +109,13 @@
         />
       </div>
 
+      <BaseAdvancedSettingsButton
+        v-if="showResourceLanguageAdvancedSettings"
+        v-model="showAdvancedSettings"
+      >
+        <ResourceLanguageSelector v-model="selectedLanguage" />
+      </BaseAdvancedSettingsButton>
+
       <!-- Name -->
       <div class="space-y-1">
         <label class="font-semibold text-sm">{{ t("Filename") }}</label>
@@ -130,7 +140,7 @@
         />
       </div>
 
-      <!-- Size (image only): width/height inputs + presets -->
+      <!-- Size (image only) -->
       <div
         v-if="selectedType === 'image'"
         class="space-y-1"
@@ -138,7 +148,6 @@
         <div class="flex items-center justify-between gap-2">
           <label class="font-semibold text-sm">{{ t("Size") }}</label>
 
-          <!-- Presets: small links -->
           <div class="flex flex-wrap items-center gap-2 text-xs">
             <button
               v-for="s in sizePresets"
@@ -167,9 +176,7 @@
           />
         </div>
 
-        <p class="text-xs text-gray-600">
-          {{ t("Tip: click a preset to quickly set the size.") }}
-        </p>
+        <p class="text-xs text-gray-600">{{ t("Tip: click a preset to quickly set the size.") }}</p>
       </div>
 
       <!-- Actions -->
@@ -194,9 +201,8 @@
         <span
           v-if="statusMessage"
           class="text-sm text-gray-700"
+          >{{ statusMessage }}</span
         >
-          {{ statusMessage }}
-        </span>
       </div>
 
       <!-- Video job status -->
@@ -250,12 +256,14 @@
             @click="applyRevisedPromptToPrompt"
           />
         </div>
+
         <textarea
           :value="revisedPrompt"
           class="w-full border border-gray-300 rounded px-3 py-2 min-h-[120px] bg-gray-10"
           readonly
         />
       </div>
+
       <div
         v-if="savedIri"
         class="p-3 rounded border border-green-200 bg-green-50 text-sm"
@@ -273,6 +281,7 @@
           />
         </div>
       </div>
+
       <div
         v-if="providerUsed"
         class="text-xs text-gray-600"
@@ -280,7 +289,6 @@
         {{ t("Provider used") }}: <strong>{{ providerLabel(providerUsed) }}</strong>
       </div>
 
-      <!-- Video note -->
       <div
         v-if="hasGeneratedResult && selectedType === 'video' && !canAccept && !isPollingVideoJob"
         class="p-3 rounded border border-yellow-200 bg-yellow-50 text-sm"
@@ -307,6 +315,8 @@ import { useCidReq } from "../../composables/cidReq"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import BaseAdvancedSettingsButton from "../../components/basecomponents/BaseAdvancedSettingsButton.vue"
+import ResourceLanguageSelector from "../../components/resources/ResourceLanguageSelector.vue"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useCourseSettings } from "../../store/courseSettingStore"
 import { useSecurityStore } from "../../store/securityStore"
@@ -323,7 +333,6 @@ const securityStore = useSecurityStore()
 
 const promptTextareaEl = ref(null)
 const isBooting = ref(true)
-
 const isLoadingCaps = ref(false)
 
 const hasImage = ref(false)
@@ -331,10 +340,43 @@ const hasVideo = ref(false)
 
 const providersByType = ref({ image: [], video: [] })
 const selectedType = ref("image")
+
+// Provider selection:
+// - null => not loaded yet
+// - ""   => Auto (recommended)
+// - "openai"/"grok"/... => explicit provider
 const selectedProvider = ref(null)
+const showAdvancedSettings = ref(false)
+
+function isResourceLanguageActive(language) {
+  if (!language || "object" !== typeof language) {
+    return false
+  }
+
+  if ("available" in language) {
+    return true === language.available || 1 === language.available || "1" === language.available
+  }
+
+  if ("isAvailable" in language) {
+    return true === language.isAvailable || 1 === language.isAvailable || "1" === language.isAvailable
+  }
+
+  if ("enabled" in language) {
+    return true === language.enabled || 1 === language.enabled || "1" === language.enabled
+  }
+
+  return true
+}
+
+const showResourceLanguageAdvancedSettings = computed(() => {
+  const languages = Array.isArray(window.languages) ? window.languages : []
+
+  return languages.filter(isResourceLanguageActive).length > 1
+})
 
 const folders = ref([])
 const selectedFolderId = ref(null)
+const selectedLanguage = ref("")
 
 const fileName = ref("")
 const prompt = ref("")
@@ -343,12 +385,9 @@ const previewUrl = ref("")
 const savedIri = ref("")
 const providerUsed = ref("")
 
-// Image size (requested improvement #7365):
-// Keep as strings for inputs, parse only when building payload.
 const widthInput = ref("1024")
 const heightInput = ref("768")
 
-// Common size presets (small links near width/height inputs).
 const sizePresets = [
   { label: "400x400", w: 400, h: 400 },
   { label: "800x600", w: 800, h: 600 },
@@ -370,15 +409,12 @@ function applyRevisedPromptToPrompt() {
   nextTick(() => {
     const el = promptTextareaEl.value
     if (!el) return
-
     try {
       el.scrollIntoView({ behavior: "smooth", block: "center" })
     } catch (e) {
       // Ignore: some browsers might not support scrollIntoView options.
     }
-
     el.focus()
-
     const len = (el.value || "").length
     if (typeof el.setSelectionRange === "function") {
       el.setSelectionRange(len, len)
@@ -386,80 +422,50 @@ function applyRevisedPromptToPrompt() {
   })
 }
 
-// Generated result kept in memory until teacher accepts it.
 const generatedResult = ref(null)
 
 const isGenerating = ref(false)
 const isSaving = ref(false)
 const statusMessage = ref("")
 
-// Tri-state permission flag to prevent UI flicker: null=unknown, true/false=known.
 const rawCanEdit = ref(null)
 const canEdit = computed(() => rawCanEdit.value === true)
 
-// Video polling state (OpenAI video is job-based).
 const isPollingVideoJob = ref(false)
 const videoJobId = ref("")
 const videoJobStatus = ref("")
 let videoPollTimeoutHandle = null
 let videoPollAttempts = 0
 
-// Polling config (best effort defaults).
 const VIDEO_POLL_INTERVAL_MS = 3000
 const VIDEO_POLL_MAX_ATTEMPTS = 80
 
-// Platform + course settings (same pattern as LP generator)
-const aiHelpersEnabled = computed(() => {
-  const v = String(platformConfig.getSetting("ai_helpers.enable_ai_helpers"))
-  return v === "true"
-})
-
-const imageGeneratorEnabled = computed(() => {
-  const v = String(courseSettingsStore?.getSetting?.("image_generator"))
-  return v === "true"
-})
-
-const videoGeneratorEnabled = computed(() => {
-  const v = String(courseSettingsStore?.getSetting?.("video_generator"))
-  return v === "true"
-})
+const aiHelpersEnabled = computed(() => String(platformConfig.getSetting("ai_helpers.enable_ai_helpers")) === "true")
+const imageGeneratorEnabled = computed(() => String(courseSettingsStore?.getSetting?.("image_generator")) === "true")
+const videoGeneratorEnabled = computed(() => String(courseSettingsStore?.getSetting?.("video_generator")) === "true")
 
 function providerLabel(code) {
   const c = String(code || "")
     .toLowerCase()
     .trim()
-
-  const map = {
-    openai: "OpenAI",
-    deepseek: "DeepSeek",
-    grok: "Grok",
-    mistral: "Mistral",
-    gemini: "Gemini",
-  }
-
+  const map = { openai: "OpenAI", deepseek: "DeepSeek", grok: "Grok", mistral: "Mistral", gemini: "Gemini" }
   return map[c] || c.toUpperCase()
 }
 
 function normalizeProviderList(input) {
-  // capabilities.types.image => string[]
   if (!Array.isArray(input)) return []
   return input
     .map((p) => String(p || "").trim())
     .filter(Boolean)
-    .map((code) => ({
-      code,
-      name: providerLabel(code),
-    }))
+    .map((code) => ({ code, name: providerLabel(code) }))
 }
 
-const canUseImage = computed(() => {
-  return canEdit.value && aiHelpersEnabled.value && imageGeneratorEnabled.value && hasImage.value
-})
-
-const canUseVideo = computed(() => {
-  return canEdit.value && aiHelpersEnabled.value && videoGeneratorEnabled.value && hasVideo.value
-})
-
+const canUseImage = computed(
+  () => canEdit.value && aiHelpersEnabled.value && imageGeneratorEnabled.value && hasImage.value,
+)
+const canUseVideo = computed(
+  () => canEdit.value && aiHelpersEnabled.value && videoGeneratorEnabled.value && hasVideo.value,
+)
 const canUseAnyType = computed(() => canUseImage.value || canUseVideo.value)
 
 const typeOptions = computed(() => {
@@ -469,15 +475,21 @@ const typeOptions = computed(() => {
   return opts
 })
 
+// Include Auto (recommended) at the top when we have at least one provider.
 const providerOptions = computed(() => {
   const list = providersByType.value?.[selectedType.value] || []
-  return list.map((p) => ({ label: p.name, value: p.code }))
+  const opts = list.map((p) => ({ label: p.name, value: p.code }))
+  if (opts.length <= 0) return []
+  return [{ label: t("Auto (recommended)"), value: "" }, ...opts]
 })
+
+// "Selected provider" is valid when it's not null/undefined.
+// Note: "" is Auto and must be accepted as a valid choice.
+const hasSelectedProvider = computed(() => selectedProvider.value !== null && selectedProvider.value !== undefined)
 
 watch(
   () => selectedType.value,
   () => {
-    // Reset generation state when switching type to avoid accidental saves.
     stopVideoPolling("Type changed by user.")
     generatedResult.value = null
     previewUrl.value = ""
@@ -486,15 +498,15 @@ watch(
     savedIri.value = ""
     statusMessage.value = ""
 
+    // Default to Auto on type switch (recommended UX).
     const list = providersByType.value?.[selectedType.value] || []
-    selectedProvider.value = list[0]?.code ?? null
+    selectedProvider.value = list.length > 0 ? "" : null
   },
 )
 
 watch(
   () => selectedProvider.value,
   () => {
-    // Provider changes should cancel any existing polling to avoid mixing providers/jobs.
     if (isPollingVideoJob.value) {
       stopVideoPolling("Provider changed by user.")
       statusMessage.value = t("Video polling was stopped because the provider changed.")
@@ -506,19 +518,17 @@ const parsedWidth = computed(() => {
   const n = Number(String(widthInput.value || "").trim())
   return Number.isFinite(n) && n > 0 ? Math.floor(n) : 0
 })
-
 const parsedHeight = computed(() => {
   const n = Number(String(heightInput.value || "").trim())
   return Number.isFinite(n) && n > 0 ? Math.floor(n) : 0
 })
 
 const canGenerate = computed(() => {
-  // Base requirements
   if (
     !(
       canUseAnyType.value &&
       !!selectedType.value &&
-      !!selectedProvider.value &&
+      hasSelectedProvider.value &&
       !!selectedFolderId.value &&
       !!fileName.value?.trim() &&
       !!prompt.value?.trim()
@@ -527,7 +537,6 @@ const canGenerate = computed(() => {
     return false
   }
 
-  // Image requires width/height
   if (selectedType.value === "image") {
     return parsedWidth.value > 0 && parsedHeight.value > 0
   }
@@ -538,8 +547,6 @@ const canGenerate = computed(() => {
 const hasGeneratedResult = computed(() => !!generatedResult.value)
 
 const canAccept = computed(() => {
-  // We only support saving when we have base64 content.
-  // This avoids frontend downloading URLs.
   if (!generatedResult.value) return false
   if (!generatedResult.value.is_base64) return false
   if (!generatedResult.value.content) return false
@@ -549,24 +556,20 @@ const canAccept = computed(() => {
 function normalizeResourceNodeId(value) {
   if (value == null) return null
   if (typeof value === "number") return value
-
   if (typeof value === "string") {
     const iriMatch = value.match(/\/api\/resource_nodes\/(\d+)/)
     if (iriMatch) return Number(iriMatch[1])
     if (/^\d+$/.test(value)) return Number(value)
   }
-
   return null
 }
 
 function sanitizeFilenameBase(name) {
-  // Keep it predictable for filesystem + UX.
   const raw = String(name || "").trim()
   if (!raw) return "generated_media"
-
   return (
     raw
-      .replace(/[\\/:"*?<>|]+/g, "_") // Windows forbidden chars + slashes
+      .replace(/[\\/:"*?<>|]+/g, "_")
       .replace(/\s+/g, "_")
       .replace(/_+/g, "_")
       .replace(/^_+|_+$/g, "")
@@ -576,7 +579,6 @@ function sanitizeFilenameBase(name) {
 
 function guessExtension(contentType, type) {
   const ct = String(contentType || "").toLowerCase()
-
   if (type === "image") {
     if (ct.includes("png")) return "png"
     if (ct.includes("jpeg") || ct.includes("jpg")) return "jpg"
@@ -584,7 +586,6 @@ function guessExtension(contentType, type) {
     if (ct.includes("gif")) return "gif"
     return "png"
   }
-
   if (ct.includes("webm")) return "webm"
   if (ct.includes("mp4")) return "mp4"
   return "mp4"
@@ -599,11 +600,9 @@ function ensureFilenameWithExtension(name, ext) {
 function base64ToFile(base64, filename, mime) {
   const binary = atob(base64)
   const bytes = new Uint8Array(binary.length)
-
   for (let i = 0; i < binary.length; i++) {
     bytes[i] = binary.charCodeAt(i)
   }
-
   const blob = new Blob([bytes], { type: mime })
   return new File([blob], filename, { type: mime })
 }
@@ -612,25 +611,14 @@ function buildResourceLinkList() {
   return JSON.stringify([{ gid, sid, cid, visibility: RESOURCE_LINK_PUBLISHED }])
 }
 
-/**
- * Local image resize (frontend) to match UI presets like 400x400.
- * Some providers only support fixed sizes; we keep the requested size by resizing here.
- */
 function canvasMimeFromContentType(contentType) {
   const ct = String(contentType || "").toLowerCase()
-
-  // Canvas reliably supports PNG and JPEG in all browsers.
   if (ct.includes("jpeg") || ct.includes("jpg")) return "image/jpeg"
   if (ct.includes("png")) return "image/png"
-
-  // WEBP might be supported depending on the browser; we try, and fallback to PNG if needed.
   if (ct.includes("webp")) return "image/webp"
-
   return "image/png"
 }
 
-// Resize/crop with "cover" strategy: scale to fill then center-crop.
-// Returns { base64, mime } without the "data:" prefix.
 function resizeImageBase64Cover(rawBase64, inContentType, targetW, targetH) {
   return new Promise((resolve, reject) => {
     const img = new Image()
@@ -644,7 +632,6 @@ function resizeImageBase64Cover(rawBase64, inContentType, targetW, targetH) {
         const ctx = canvas.getContext("2d")
         if (!ctx) return reject(new Error("Canvas context not available"))
 
-        // Cover strategy
         const scale = Math.max(targetW / img.width, targetH / img.height)
         const sw = targetW / scale
         const sh = targetH / scale
@@ -655,9 +642,6 @@ function resizeImageBase64Cover(rawBase64, inContentType, targetW, targetH) {
 
         const preferredMime = canvasMimeFromContentType(inContentType)
         let dataUrl = canvas.toDataURL(preferredMime)
-
-        // If the browser doesn't support the requested output mime, it may fallback silently.
-        // We accept whatever comes back and detect it via prefix.
         if (typeof dataUrl !== "string" || !dataUrl.startsWith("data:")) {
           dataUrl = canvas.toDataURL("image/png")
         }
@@ -679,21 +663,13 @@ function resizeImageBase64Cover(rawBase64, inContentType, targetW, targetH) {
 
 async function maybeResizeGeneratedImage(result, targetW, targetH) {
   if (!result?.is_base64 || !result?.content) return result
-
   const ct = String(result.content_type || "").toLowerCase()
   if (!ct.startsWith("image/")) return result
   if (!(targetW > 0 && targetH > 0)) return result
 
   try {
     const { base64, mime } = await resizeImageBase64Cover(result.content, result.content_type, targetW, targetH)
-
-    return {
-      ...result,
-      content: base64,
-      content_type: mime,
-      // Debug field (not used by UI, but useful when troubleshooting).
-      resized_to: `${targetW}x${targetH}`,
-    }
+    return { ...result, content: base64, content_type: mime, resized_to: `${targetW}x${targetH}` }
   } catch (e) {
     console.warn("[AI Media] Local resize failed, using provider output.", e)
     return result
@@ -702,11 +678,8 @@ async function maybeResizeGeneratedImage(result, targetW, targetH) {
 
 async function saveToDocuments(file) {
   const formData = new FormData()
-
-  // Must match CreateDocumentFileAction schema.
   formData.append("uploadFile", file)
 
-  // Title without extension usually looks better in Documents listings.
   const titleNoExt = String(file.name).replace(/\.[^/.]+$/i, "")
   formData.append("title", titleNoExt)
   formData.append("filetype", "file")
@@ -714,6 +687,10 @@ async function saveToDocuments(file) {
   formData.append("parentResourceNodeId", String(selectedFolderId.value))
   formData.append("resourceLinkList", buildResourceLinkList())
   formData.append("fileExistsOption", "rename")
+  formData.append("language", selectedLanguage.value)
+
+  // Mark as AI-assisted (same request, no extra calls)
+  formData.append("ai_assisted", "1")
 
   const response = await axios.post("/api/documents", formData, {
     headers: { "Content-Type": "multipart/form-data" },
@@ -721,14 +698,11 @@ async function saveToDocuments(file) {
 
   const data = response?.data || {}
   savedIri.value = String(data?.["@id"] || data?.id || "")
-
   return data
 }
 
 async function fetchFolders(nodeId = null) {
   const startId = normalizeResourceNodeId(nodeId ?? route.params.node ?? route.query.node)
-
-  // In this route (/resources/document/:node/) startId should exist, but keep a safe fallback.
   const safeStart = startId || null
   const foldersList = safeStart ? [{ label: t("Documents"), value: safeStart }] : []
 
@@ -745,7 +719,6 @@ async function fetchFolders(nodeId = null) {
     while (queue.length > 0 && depth < maxDepth) {
       const current = queue.shift()
       const currentNodeId = normalizeResourceNodeId(current?.id)
-
       if (!currentNodeId) {
         depth++
         continue
@@ -768,9 +741,7 @@ async function fetchFolders(nodeId = null) {
       for (const folder of members) {
         const folderNodeId =
           normalizeResourceNodeId(folder?.resourceNode?.id) ?? normalizeResourceNodeId(folder?.resourceNodeId)
-
         if (!folderNodeId) continue
-
         const fullPath = `${current.path}/${folder.title}`.replace(/^\/+/, "")
         foldersList.push({ label: fullPath, value: folderNodeId })
         queue.push({ id: folderNodeId, path: fullPath })
@@ -791,7 +762,6 @@ async function loadCapabilities() {
   try {
     const { data } = await axios.get("/ai/capabilities")
 
-    // Raw availability from backend (providers exist).
     hasImage.value = !!data?.has?.image
     hasVideo.value = !!data?.has?.video
 
@@ -800,7 +770,6 @@ async function loadCapabilities() {
       video: normalizeProviderList(data?.types?.video),
     }
 
-    // Pick a type that is actually usable under settings + capabilities.
     const usableImage = canUseImage.value && providersByType.value.image.length > 0
     const usableVideo = canUseVideo.value && providersByType.value.video.length > 0
 
@@ -810,8 +779,9 @@ async function loadCapabilities() {
       selectedType.value = "image"
     }
 
+    // Default to Auto when there is at least one provider.
     const list = providersByType.value?.[selectedType.value] || []
-    selectedProvider.value = list[0]?.code ?? null
+    selectedProvider.value = list.length > 0 ? "" : null
   } catch (e) {
     console.error("[AI Media] Failed to load capabilities:", e)
     hasImage.value = false
@@ -839,15 +809,30 @@ function stopVideoPolling(reason = "") {
 }
 
 async function pollVideoJobOnce(jobId, providerCode) {
-  // Server-side polling endpoint.
-  // Expected: { success: true, text?: string, result: { id, status, is_base64, content, url, content_type, error? } }.
   const response = await axios.get(`/ai/video_job/${encodeURIComponent(jobId)}`, {
-    params: {
-      ai_provider: providerCode || null,
-    },
+    params: { ai_provider: providerCode || null },
   })
-
   return response?.data
+}
+
+function isTerminalVideoStatus(status) {
+  const s = String(status || "")
+    .toLowerCase()
+    .trim()
+  return ["completed", "succeeded", "done", "failed", "canceled", "cancelled", "error"].includes(s)
+}
+
+function isSuccessVideoStatus(status) {
+  const s = String(status || "")
+    .toLowerCase()
+    .trim()
+  return ["completed", "succeeded", "done"].includes(s)
+}
+
+function scheduleNextVideoPoll(jobId, providerCode) {
+  videoPollTimeoutHandle = setTimeout(async () => {
+    await pollVideoJob(jobId, providerCode)
+  }, VIDEO_POLL_INTERVAL_MS)
 }
 
 async function pollVideoJob(jobId, providerCode) {
@@ -876,10 +861,8 @@ async function pollVideoJob(jobId, providerCode) {
     const status = String(result.status || "")
     videoJobStatus.value = status
 
-    // Prefer a provider/server error message when available.
     const serverError = String(result.error || data?.text || "").trim()
 
-    // Update stored result (job-based).
     generatedResult.value = {
       ...(generatedResult.value || {}),
       id: jobId,
@@ -926,26 +909,6 @@ async function pollVideoJob(jobId, providerCode) {
   }
 }
 
-function isTerminalVideoStatus(status) {
-  const s = String(status || "")
-    .toLowerCase()
-    .trim()
-  return ["completed", "succeeded", "done", "failed", "canceled", "cancelled", "error"].includes(s)
-}
-
-function isSuccessVideoStatus(status) {
-  const s = String(status || "")
-    .toLowerCase()
-    .trim()
-  return ["completed", "succeeded", "done"].includes(s)
-}
-
-function scheduleNextVideoPoll(jobId, providerCode) {
-  videoPollTimeoutHandle = setTimeout(async () => {
-    await pollVideoJob(jobId, providerCode)
-  }, VIDEO_POLL_INTERVAL_MS)
-}
-
 function startVideoPolling(jobId, providerCode) {
   stopVideoPolling("Restart polling with a new job.")
   isPollingVideoJob.value = true
@@ -973,7 +936,6 @@ async function generate() {
     return
   }
 
-  // Extra guard if user toggled type manually.
   if (selectedType.value === "image" && !canUseImage.value) {
     statusMessage.value = t("Image generation is not enabled for this course.")
     return
@@ -988,12 +950,18 @@ async function generate() {
   try {
     const endpoint = selectedType.value === "video" ? "/ai/generate_video" : "/ai/generate_image"
 
+    // Auto provider => send null, not empty string.
+    const providerParam = selectedProvider.value ? String(selectedProvider.value) : null
+
     const payload = {
       n: 1,
       language: "en",
       prompt: prompt.value,
       tool: "document",
-      ai_provider: selectedProvider.value,
+      ai_provider: providerParam,
+      cid,
+      sid,
+      gid,
     }
 
     if (selectedType.value === "image") {
@@ -1010,7 +978,7 @@ async function generate() {
       return
     }
 
-    providerUsed.value = String(data?.provider_used || selectedProvider.value || "")
+    providerUsed.value = String(data?.provider_used || providerParam || "")
     const result = data?.result || {}
 
     const content = String(result.content || "")
@@ -1030,21 +998,15 @@ async function generate() {
       content_type: contentType,
     }
 
-    // Preview logic:
-    // - Image: backend should return base64 (preferred).
-    // - Video: can be base64, url, or job-based id/status.
     if (isBase64 && content) {
-      // Enforce the requested UI size for images by resizing client-side.
       if (selectedType.value === "image") {
         const resized = await maybeResizeGeneratedImage(generatedResult.value, parsedWidth.value, parsedHeight.value)
         generatedResult.value = resized
-
         previewUrl.value = `data:${resized.content_type || contentType};base64,${resized.content}`
         statusMessage.value = t("Generated successfully. Review the preview and save when ready.")
         return
       }
 
-      // Default behavior (videos base64, or images when resize is not applicable).
       previewUrl.value = `data:${contentType};base64,${content}`
       statusMessage.value = t("Generated successfully. Review the preview and save when ready.")
       return
@@ -1056,10 +1018,9 @@ async function generate() {
       return
     }
 
-    // Job-based video: start polling until we get content or url.
     if (selectedType.value === "video" && id) {
       statusMessage.value = t("Video generation started. Waiting for the result...")
-      startVideoPolling(id, providerUsed.value || selectedProvider.value)
+      startVideoPolling(id, providerUsed.value || providerParam)
       return
     }
 
@@ -1082,7 +1043,6 @@ async function acceptAndSave() {
     return
   }
 
-  // We only save base64 results to avoid frontend downloading URLs.
   if (!generatedResult.value.is_base64 || !generatedResult.value.content) {
     statusMessage.value = t("This provider did not return base64 content. Please try another provider.")
     return
@@ -1099,18 +1059,13 @@ async function acceptAndSave() {
 
     const savedDoc = await saveToDocuments(file)
 
-    // Build a human-readable path for success message.
     const folderLabel =
       folders.value.find((f) => Number(f.value) === Number(selectedFolderId.value))?.label || t("Documents")
-
-    // Prefer backend title because it may have renamed due to conflicts.
     const savedTitle =
       String(savedDoc?.resourceNode?.title || savedDoc?.title || "").trim() ||
       String(file.name).replace(/\.[^/.]+$/i, "")
-
     const savedPath = `${folderLabel}/${savedTitle}`.replace(/^\/+/, "")
 
-    // Redirect to folder list and show toast there (via query params).
     router.push({
       name: "DocumentsList",
       params: { node: selectedFolderId.value },
@@ -1144,49 +1099,34 @@ onMounted(async () => {
   isBooting.value = true
 
   try {
-    // Load course settings first (needed by course flags like image_generator/video_generator).
-    try {
-      await courseSettingsStore.loadCourseSettings(cid, sid)
-    } catch (e) {
-      console.error("[AI Media] loadCourseSettings failed:", e)
-    }
-
-    // Permission check (teacher/admin).
     try {
       let allowed = await checkIsAllowedToEdit(true, true, true, false)
-      const roles = securityStore.user?.roles ?? []
 
-      if (!allowed && Array.isArray(roles) && (roles.includes("ROLE_ADMIN") || roles.includes("ROLE_GLOBAL_ADMIN"))) {
+      if (!allowed && securityStore.isAdmin) {
         allowed = true
       }
-
       rawCanEdit.value = !!allowed
     } catch (e) {
       console.error("[AI Media] Permission check failed:", e)
       rawCanEdit.value = false
     }
 
-    // Capabilities only if the feature is usable.
     if (canEdit.value && aiHelpersEnabled.value && (imageGeneratorEnabled.value || videoGeneratorEnabled.value)) {
       await loadCapabilities()
     }
 
-    // Folders list + default selection.
     folders.value = await fetchFolders()
     selectedFolderId.value = normalizeResourceNodeId(route.params.node) || folders.value[0]?.value || null
 
-    // Ensure selected type is valid when only one is available.
     if (typeOptions.value.length === 1) {
       selectedType.value = typeOptions.value[0].value
     }
   } finally {
-    // Always end boot mode (even if something failed).
     isBooting.value = false
   }
 })
 
 onBeforeUnmount(() => {
-  // Prevent orphan polling timers when leaving the page.
   stopVideoPolling("Component unmounted.")
 })
 </script>

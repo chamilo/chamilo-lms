@@ -1,6 +1,15 @@
 {% import '@ChamiloCore/Macros/box.html.twig' as display %}
 
 {% autoescape false %}
+    {% set exercise_signature_sign_label = 'Sign'|get_plugin_lang('ExerciseSignaturePlugin') %}
+    {% if exercise_signature_sign_label is empty %}
+        {% set exercise_signature_sign_label = 'Sign'|trans %}
+    {% endif %}
+    {% set exercise_signature_empty_message = 'ProvideASignatureFirst'|get_plugin_lang('ExerciseSignaturePlugin') %}
+    {% if exercise_signature_empty_message is empty %}
+        {% set exercise_signature_empty_message = 'Please provide a signature first' %}
+    {% endif %}
+
     <div class="question-result">
         <div class="bg-white border border-gray-25 rounded-lg shadow-sm overflow-hidden">
             <div class="p-6">
@@ -17,9 +26,11 @@
                         </div>
                         <div class="text-center md:text-left">
                             <p class="font-medium text-gray-90">{{ data.name_url|raw }}</p>
-                            {% if signature %}
-                                <img src="{{ signature }}" alt="{{ 'Signature'|trans }}" class="mt-2 w-32">
-                            {% endif %}
+                            <div id="exercise-signature-preview" class="mt-2">
+                                {% if signature %}
+                                    <img src="{{ signature }}" alt="{{ 'Signature'|trans }}" class="w-32 rounded border border-gray-25 bg-white p-1">
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                     <div class="w-full md:w-2/3 space-y-4">
@@ -46,7 +57,7 @@
                                 </div>
                             {% endif %}
 
-                            {% if data.ip %}
+                            {% if data.ip is defined and data.ip %}
                                 <div class="flex items-center space-x-2">
                                     {{ 'laptop'|mdi_icon }}
                                     <span class="font-semibold">{{ 'IP'|trans }}:</span>
@@ -57,15 +68,16 @@
                         <div class="flex flex-wrap gap-2 mt-4">
                             {% if allow_signature %}
                                 <button id="sign"
-                                        class="px-4 py-2 rounded-md bg-primary text-primary-button-text hover:opacity-90 transition">
-                                    <em class="fas fa-pencil-alt"></em>
-                                    {{ 'Sign'|get_plugin_lang('ExerciseSignaturePlugin') }}
+                                        type="button"
+                                        class="inline-flex min-w-[7rem] items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                                    <em class="fas fa-pencil-alt" aria-hidden="true"></em>
+                                    <span>{{ exercise_signature_sign_label }}</span>
                                 </button>
                             {% endif %}
 
                             {% if allow_export_pdf %}
                                 <a href="{{ export_url }}"
-                                   class="px-4 py-2 rounded-md border border-secondary hover:bg-secondary/10 transition flex items-center space-x-1">
+                                   class="inline-flex items-center gap-2 px-4 py-2 rounded-md border border-secondary text-secondary hover:bg-secondary hover:text-secondary-button-text transition">
                                     {{ 'ActionIcon::EXPORT_PDF'|mdi_icon_t(24, 'ch-tool-icon', 'Export response report') }}
                                     <span>{{ 'Export response report'|trans }}</span>
                                 </a>
@@ -103,7 +115,7 @@
                                     <div>
                                         <input type="hidden" name="tc_id" value="{{ data.track_confirmation.id }}">
                                         <button type="submit"
-                                                class="px-4 py-2 rounded-md bg-primary text-primary-button-text disabled:opacity-50"
+                                                class="rounded-lg bg-primary px-4 py-2 font-semibold text-white shadow-sm disabled:opacity-50"
                                                 disabled>
                                             <span class="fa fa-save fa-fw"></span>
                                             {{ 'Save'|trans }}
@@ -117,6 +129,247 @@
             </div>
         </div>
     </div>
+
+
+    {% if allow_signature %}
+        <div id="exercise-signature-modal"
+             class="fixed inset-0 z-50 hidden items-center justify-center bg-gray-90/60 p-4">
+            <div class="w-full max-w-2xl rounded-lg bg-white shadow-xl border border-gray-25">
+                <div class="flex items-center justify-between border-b border-gray-25 px-5 py-4">
+                    <h4 class="text-lg font-semibold text-gray-90">
+                        {{ exercise_signature_sign_label }}
+                    </h4>
+                    <button type="button"
+                            id="exercise-signature-cancel-x"
+                            class="flex h-8 w-8 items-center justify-center rounded-full text-gray-50 hover:bg-danger hover:text-danger-button-text"
+                            aria-label="{{ 'Close'|trans }}">
+                        ×
+                    </button>
+                </div>
+                <div class="space-y-4 p-5">
+                    <p class="text-body-2 text-gray-70">
+                        {{ exercise_signature_empty_message }}
+                    </p>
+                    <div class="rounded-md border border-gray-25 bg-gray-5 p-3">
+                        <canvas id="exercise-signature-canvas"
+                                class="h-56 w-full rounded bg-white border border-gray-25 touch-none"></canvas>
+                    </div>
+                    <div id="exercise-signature-message" class="hidden rounded-md px-3 py-2 text-body-2"></div>
+                    <div class="flex flex-wrap justify-end gap-2">
+                        <button type="button"
+                                id="exercise-signature-clear"
+                                class="px-4 py-2 rounded-md border border-gray-25 bg-white text-gray-90 hover:bg-gray-10">
+                            {{ 'Clear'|trans }}
+                        </button>
+                        <button type="button"
+                                id="exercise-signature-cancel"
+                                class="px-4 py-2 rounded-md border border-gray-25 bg-white text-gray-90 hover:bg-gray-10">
+                            {{ 'Cancel'|trans }}
+                        </button>
+                        <button type="button"
+                                id="exercise-signature-save"
+                                class="rounded-lg bg-primary px-4 py-2 font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                            {{ 'Save'|trans }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            $(function () {
+                var signButton = $('#sign');
+                var modal = $('#exercise-signature-modal');
+                var canvas = document.getElementById('exercise-signature-canvas');
+                var messageBox = $('#exercise-signature-message');
+                var saveButton = $('#exercise-signature-save');
+                var clearButton = $('#exercise-signature-clear');
+                var cancelButtons = $('#exercise-signature-cancel, #exercise-signature-cancel-x');
+                var signatureAjaxUrl = {{ (signature_ajax_url|default('/main/inc/ajax/exercise.ajax.php?a=sign_attempt'))|json_encode|raw }};
+                var exerciseAttemptId = {{ exe_id|default(data.exe_id|default(0)) }};
+                var missingAttemptMessage = {{ 'Exercise attempt was not found.'|trans|json_encode|raw }};
+                var emptyMessage = {{ exercise_signature_empty_message|json_encode|raw }};
+                var saveErrorMessage = {{ 'An error occurred'|trans|json_encode|raw }};
+                var savedMessage = {{ 'Saved.'|trans|json_encode|raw }};
+
+                if (!signButton.length || !canvas) {
+                    return;
+                }
+
+                var context = canvas.getContext('2d');
+                var isDrawing = false;
+                var hasSignature = false;
+                var lastPoint = null;
+
+                function resizeCanvas() {
+                    var ratio = Math.max(window.devicePixelRatio || 1, 1);
+                    var width = canvas.offsetWidth || 600;
+                    var height = canvas.offsetHeight || 220;
+
+                    canvas.width = width * ratio;
+                    canvas.height = height * ratio;
+                    context.setTransform(ratio, 0, 0, ratio, 0, 0);
+                    context.lineWidth = 2;
+                    context.lineCap = 'round';
+                    context.lineJoin = 'round';
+                    context.strokeStyle = '#111827';
+                    clearCanvas();
+                }
+
+                function clearCanvas() {
+                    var width = canvas.offsetWidth || 600;
+                    var height = canvas.offsetHeight || 220;
+
+                    context.clearRect(0, 0, width, height);
+                    context.fillStyle = '#ffffff';
+                    context.fillRect(0, 0, width, height);
+                    hasSignature = false;
+                    lastPoint = null;
+                }
+
+                function getPoint(event) {
+                    var originalEvent = event.originalEvent || event;
+                    var source = originalEvent.touches && originalEvent.touches.length
+                        ? originalEvent.touches[0]
+                        : originalEvent.changedTouches && originalEvent.changedTouches.length
+                            ? originalEvent.changedTouches[0]
+                            : originalEvent;
+                    var rect = canvas.getBoundingClientRect();
+
+                    return {
+                        x: source.clientX - rect.left,
+                        y: source.clientY - rect.top
+                    };
+                }
+
+                function startDrawing(event) {
+                    event.preventDefault();
+                    isDrawing = true;
+                    lastPoint = getPoint(event);
+                }
+
+                function draw(event) {
+                    if (!isDrawing) {
+                        return;
+                    }
+
+                    event.preventDefault();
+
+                    var point = getPoint(event);
+                    context.beginPath();
+                    context.moveTo(lastPoint.x, lastPoint.y);
+                    context.lineTo(point.x, point.y);
+                    context.stroke();
+                    lastPoint = point;
+                    hasSignature = true;
+                }
+
+                function stopDrawing(event) {
+                    if (event) {
+                        event.preventDefault();
+                    }
+
+                    isDrawing = false;
+                    lastPoint = null;
+                }
+
+                function showMessage(text, type) {
+                    var classes = type === 'success'
+                        ? 'bg-success text-success-button-text border border-success'
+                        : 'bg-danger text-danger-button-text border border-danger';
+
+                    messageBox
+                        .removeClass('hidden bg-success text-success-button-text border-success bg-danger text-danger-button-text border-danger')
+                        .addClass(classes)
+                        .text(text);
+                }
+
+                function hideMessage() {
+                    messageBox
+                        .addClass('hidden')
+                        .removeClass('bg-success text-success-button-text border-success bg-danger text-danger-button-text border-danger')
+                        .text('');
+                }
+
+                function closeModal() {
+                    modal.addClass('hidden').removeClass('flex');
+                    hideMessage();
+                }
+
+                canvas.addEventListener('mousedown', startDrawing);
+                canvas.addEventListener('mousemove', draw);
+                canvas.addEventListener('mouseup', stopDrawing);
+                canvas.addEventListener('mouseleave', stopDrawing);
+                canvas.addEventListener('touchstart', startDrawing, { passive: false });
+                canvas.addEventListener('touchmove', draw, { passive: false });
+                canvas.addEventListener('touchend', stopDrawing, { passive: false });
+                canvas.addEventListener('touchcancel', stopDrawing, { passive: false });
+
+                signButton.on('click', function (event) {
+                    event.preventDefault();
+                    modal.removeClass('hidden').addClass('flex');
+                    resizeCanvas();
+                });
+
+                clearButton.on('click', function () {
+                    clearCanvas();
+                    hideMessage();
+                });
+
+                cancelButtons.on('click', function () {
+                    closeModal();
+                });
+
+                saveButton.on('click', function () {
+                    if (!hasSignature) {
+                        showMessage(emptyMessage, 'error');
+
+                        return;
+                    }
+
+                    if (!exerciseAttemptId) {
+                        showMessage(missingAttemptMessage, 'error');
+
+                        return;
+                    }
+
+                    var signatureData = canvas.toDataURL('image/png');
+                    saveButton.prop('disabled', true).addClass('opacity-50');
+
+                    $.post(signatureAjaxUrl, {
+                        exe_id: exerciseAttemptId,
+                        file: signatureData
+                    }).done(function (response) {
+                        var cleanResponse = $.trim(response);
+
+                        if (cleanResponse !== '1') {
+                            showMessage(cleanResponse && cleanResponse !== '0' ? cleanResponse : saveErrorMessage, 'error');
+
+                            return;
+                        }
+
+                        $('#exercise-signature-preview').html(
+                            '<img src="' + signatureData + '" alt="Signature" class="w-32 rounded border border-gray-25 bg-white p-1">'
+                        );
+                        signButton.remove();
+                        showMessage(savedMessage, 'success');
+
+                        window.setTimeout(closeModal, 900);
+                    }).fail(function () {
+                        showMessage(saveErrorMessage, 'error');
+                    }).always(function () {
+                        saveButton.prop('disabled', false).removeClass('opacity-50');
+                    });
+                });
+
+                $(window).on('resize', function () {
+                    if (!modal.hasClass('hidden')) {
+                        resizeCanvas();
+                    }
+                });
+            });
+        </script>
+    {% endif %}
 
     {% if 'exercise.quiz_confirm_saved_answers'|api_get_setting == 'true' %}
         {% set enable_form = data.track_confirmation.updatedAt is empty and data.track_confirmation.userId == app.user.id %}
@@ -144,7 +397,7 @@
                         checkbox.prop('disabled', true);
 
                         $.post(
-                            '{{ url('web_ajax') }}exercise.ajax.php?a=quiz_confirm_saved_answers',
+                            '/main/inc/ajax/exercise.ajax.php?a=quiz_confirm_saved_answers',
                             xhrData
                         ).done(function () {
                             button.parents('.form-group').remove();

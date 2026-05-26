@@ -1,0 +1,103 @@
+<?php
+/* License: see /license.txt */
+
+// Needed in order to show the plugin title
+$strings['plugin_title'] = 'Zoom-videokokous';
+$strings['plugin_comment'] = 'Zoom-videokokouksen integrointi kursseihin ja sessioihin';
+
+$strings['apiKey'] = 'API-avain';
+$strings['apiSecret'] = 'API-salasana';
+$strings['verificationToken'] = 'Tunnisteen varmistus';
+$strings['enableParticipantRegistration'] = 'Ota käyttöön osallistujien rekisteröinti';
+$strings['enableCloudRecording'] = 'Automaattisen tallennuksen tyyppi';
+$strings['enableGlobalConference'] = 'Ota käyttöön globaali kokous';
+$strings['enableGlobalConferencePerUser'] = 'Ota käyttöön globaali kokous käyttäjäkohtaista';
+$strings['globalConferenceAllowRoles'] = 'Globaalin kokoussivun linkki näkyvissä vain näille käyttäjärooleille';
+$strings['globalConferencePerUserAllowRoles'] = 'Käyttäjäkohtaisen globaalin kokoussivun linkki näkyvissä vain näille käyttäjärooleille';
+
+$strings['enableCloudRecording_help'] = 'Vaatii maksullisen Zoom-profiilin.
+Ei toimi <em>perus</em>-profiililla.';
+
+// please keep these lines alphabetically sorted
+$strings['AllCourseUsersWereRegistered'] = 'Kaikki kurssin opiskelijat rekisteröitiin';
+$strings['Agenda'] = 'Asialista';
+$strings['CannotRegisterWithoutEmailAddress'] = 'Ei voi rekisteröityä ilman sähköpostiosoitetta';
+$strings['CopyingJoinURL'] = 'Kopioidaan liittymis-URL-osoitetta';
+$strings['CopyJoinAsURL'] = "Kopioi 'liity nimellä' -URL-osoite";
+$strings['CopyToCourse'] = 'Kopioi kurssille';
+$strings['CouldNotCopyJoinURL'] = 'Liittymis-URL-osoitetta ei voitu kopioida';
+$strings['Course'] = 'Kurssi';
+$strings['CreatedAt'] = 'Luotu';
+$strings['CreateLinkInCourse'] = 'Luo linkki(t) kurssille';
+$strings['CreateUserVideoConference'] = 'Luo käyttäjän kokous';
+$strings['DateMeetingTitle'] = '%s: %s';
+$strings['DeleteMeeting'] = 'Poista kokous';
+$strings['DeleteFile'] = 'Poista tiedosto(t)';
+$strings['Details'] = 'Tiedot';
+$strings['DoIt'] = 'Tee se';
+$strings['Duration'] = 'Kesto';
+$strings['DurationFormat'] = '%hh%I';
+$strings['DurationInMinutes'] = 'Kesto (minuuteissa)';
+$strings['EndDate'] = 'Päättymispäivä';
+$strings['EnterMeeting'] = 'Liity kokoukseen';
+$strings['ViewMeeting'] = 'Näytä kokous';
+$strings['Files'] = 'Tiedostot';
+$strings['Finished'] = 'valmis';
+$strings['FileWasCopiedToCourse'] = 'Tiedosto kopioitiin kurssille';
+$strings['FileWasDeleted'] = 'Tiedosto poistettiin';
+$strings['GlobalMeeting'] = 'Globaali kokous';
+$strings['GlobalMeetingPerUser'] = 'Globaali kokous käyttäjäkohtaisesti';
+$strings['GroupUsersWereRegistered'] = 'Ryhmän jäsenet rekisteröitiin';
+$strings['InstantMeeting'] = 'Välitön kokous';
+$strings['Join'] = 'Liity';
+$strings['JoinGlobalVideoConference'] = 'Liity globaaliin kokoukseen';
+$strings['JoinURLCopied'] = 'Liittymis-URL-osoite kopioitu';
+$strings['JoinURLToSendToParticipants'] = 'Liittymis-URL-osoite lähetettäväksi osallistujille';
+$strings['LiveMeetings'] = 'Suorat kokoukset';
+$strings['LinkToFileWasCreatedInCourse'] = 'Linkki tiedostoon lisättiin kurssille';
+$strings['MeetingDeleted'] = 'Kokous poistettiin';
+$strings['MeetingsFound'] = 'Löydetyt kokoukset';
+$strings['MeetingUpdated'] = 'Kokous päivitetty';
+$strings['NewMeetingCreated'] = 'Uusi kokous luotu';
+$strings['Password'] = 'Salasana';
+$strings['RecurringWithFixedTime'] = 'Toistuva kiinteällä ajalla';
+$strings['RecurringWithNoFixedTime'] = 'Toistuva ilman kiinteää aikaa';
+$strings['RegisterAllCourseUsers'] = 'Rekisteröi kaikki kurssin käyttäjät';
+$strings['RegisteredUserListWasUpdated'] = 'Rekisteröityjen käyttäjien luettelo päivitetty';
+$strings['RegisteredUsers'] = 'Rekisteröidyt käyttäjät';
+$strings['RegisterNoUser'] = 'Älä rekisteröi käyttäjiä';
+$strings['RegisterTheseGroupMembers'] = 'Rekisteröi tämän ryhmän jäsenet';
+$strings['ScheduleAMeeting'] = 'Varaa kokous';
+$strings['ScheduledMeeting'] = 'Varaus kokous';
+$strings['ScheduledMeetings'] = 'Varaukset kokoukset';
+$strings['ScheduleAMeeting'] = 'Varaa kokous';
+$strings['SearchMeeting'] = 'Hae kokous';
+$strings['Session'] = 'Istunto';
+$strings['StartDate'] = 'Alkamispäivä';
+$strings['Started'] = 'alkanut';
+$strings['StartInstantMeeting'] = 'Käynnistä välitön kokous';
+$strings['StartMeeting'] = 'Käynnistä kokous';
+$strings['StartTime'] = 'Aloitusaika';
+$strings['Topic'] = 'Aihe';
+$strings['TopicAndAgenda'] = 'Aihe ja asialista';
+$strings['Type'] = 'Tyyppi';
+$strings['UpcomingMeetings'] = 'Tulevat kokoukset';
+$strings['UpdateMeeting'] = 'Päivitä kokous';
+$strings['UpdateRegisteredUserList'] = 'Päivitä rekisteröityjen käyttäjien luettelo';
+$strings['UserRegistration'] = 'Käyttäjän rekisteröinti';
+$strings['Y-m-d H:i'] = 'Y-m-d H:i';
+$strings['Waiting'] = 'odottaa';
+$strings['XRecordingOfMeetingXFromXDurationXDotX'] = '%s tallenne kokouksesta %s ajalta %s (%s).%s';
+$strings['YouAreNotRegisteredToThisMeeting'] = 'Et ole rekisteröitynyt tähän kokoukseen';
+$strings['ZoomVideoConferences'] = 'Zoom-videoneuvottelut';
+$strings['Recordings'] = 'Taltenteet';
+$strings['CreateGlobalVideoConference'] = 'Luo globaali videoneuvottelu';
+$strings['ConferenceNotStarted'] = 'Neuvottelu ei ole alkanut';
+$strings['MeetingNotFound'] = 'Kokousta ei löytynyt';
+$strings['JoinURLNotAvailable'] = 'URL ei ole käytettävissä';
+$strings['Meetings'] = 'Kokoukset';
+$strings['ConferenceType'] = 'Neuvottelun tyyppi';
+$strings['ForEveryone'] = 'Kaikki';
+$strings['SomeUsers'] = 'Jotkut käyttäjät (Valitse myöhemmin)';
+$strings['Activity'] = 'Toiminta';
+$strings['ConferenceNotAvailable'] = 'Neuvottelu ei ole käytettävissä';

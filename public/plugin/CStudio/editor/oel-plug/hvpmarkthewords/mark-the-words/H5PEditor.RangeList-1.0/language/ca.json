@@ -1,0 +1,7 @@
+{
+  "libraryStrings": {
+    "distributeButtonLabel": "Distribueix de manera uniforme",
+    "distributeButtonWarning": "Els valors de tots els rangs canviaran. Voleu continuar?",
+    "rangeOutOfSequenceWarning": "Els rangs de puntuació són fora de la seqüència"
+  }
+}

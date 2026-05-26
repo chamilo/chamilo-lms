@@ -16,7 +16,7 @@ use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Exception;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 readonly class AzureAuthenticatorHelper
 {
@@ -34,6 +34,7 @@ readonly class AzureAuthenticatorHelper
         'accountEnabled',
         'mailNickname',
         'id',
+        'preferredLanguage',
     ];
     public const QUERY_GROUP_FIELDS = [
         'id',
@@ -55,6 +56,7 @@ readonly class AzureAuthenticatorHelper
         private UserRepository $userRepository,
         private EntityManagerInterface $entityManager,
         private AccessUrlHelper $accessUrlHelper,
+        private LanguageHelper $languageHelper,
         AuthenticationConfigHelper $configHelper,
     ) {
         $this->providerParams = $configHelper->getOAuthProviderConfig('azure');
@@ -67,7 +69,7 @@ readonly class AzureAuthenticatorHelper
     public function registerUser(array $azureUserInfo): User
     {
         if (empty($azureUserInfo)) {
-            throw new UnauthorizedHttpException('User info not found.');
+            throw new BadRequestHttpException('User info not found.');
         }
 
         [
@@ -79,11 +81,13 @@ readonly class AzureAuthenticatorHelper
             $authSource,
             $active,
             $extra,
+            $preferredLanguage,
         ] = $this->formatUserData($azureUserInfo);
 
-        $userId = $this->getUserIdByVerificationOrder($azureUserInfo);
+        $existingUser = $this->getUserByVerificationOrder($azureUserInfo);
 
-        if (empty($userId)) {
+        $existingLanguage = '';
+        if (null === $existingUser) {
             if (!$this->providerParams['provisioning']) {
                 throw new Exception(\sprintf('User not found when checking the extra fields from %s or %s or %s.', $azureUserInfo['mail'], $azureUserInfo['mailNickname'], $azureUserInfo['id']));
             }
@@ -92,12 +96,13 @@ readonly class AzureAuthenticatorHelper
                 ->setCreatorId($this->userRepository->getRootUser()->getId())
             ;
         } else {
-            /** @var User $user */
-            $user = $this->userRepository->find($userId);
+            $user = $existingUser;
 
             if (!$this->providerParams['update_users']) {
                 return $user;
             }
+            // Get existing language config to avoid blanking
+            $existingLanguage = $user->getLocale();
         }
 
         $user
@@ -115,6 +120,15 @@ readonly class AzureAuthenticatorHelper
             ->setActive($active)
             ->setRoleFromStatus(STUDENT)
         ;
+
+        if ($preferredLanguage) {
+            // If the language was set in the EntraID input, use it
+            $user->setLocale($preferredLanguage);
+        } elseif (!empty($existingLanguage)) {
+            // If no language was set by EntraID *and* we already had the user
+            // with a language set, use that one
+            $user->setLocale($existingLanguage);
+        }
 
         $this->userRepository->updateUser($user);
 
@@ -168,10 +182,7 @@ readonly class AzureAuthenticatorHelper
         );
     }
 
-    /**
-     * @throws NonUniqueResultException
-     */
-    public function getUserIdByVerificationOrder(array $azureUserData): ?int
+    public function getUserByVerificationOrder(array $azureUserData): ?User
     {
         $selectedOrder = $this->getExistingUserVerificationOrder();
 
@@ -179,20 +190,25 @@ readonly class AzureAuthenticatorHelper
         $azureIdField = $this->getAzureIdField();
         $azureUidField = $this->getAzureUidField();
 
-        /** @var array<int, ExtraFieldValues> $positionsAndFields */
+        /** @var array<int, array<ExtraFieldValues>> $positionsAndFields */
         $positionsAndFields = [
-            1 => $this->extraFieldValuesRepo->findByVariableAndValue($organisationEmailField, $azureUserData['mail']),
-            2 => $this->extraFieldValuesRepo->findByVariableAndValue($azureIdField, $azureUserData['mailNickname']),
-            3 => $this->extraFieldValuesRepo->findByVariableAndValue($azureUidField, $azureUserData['id']),
+            1 => $this->extraFieldValuesRepo->findByVariableAndValue($organisationEmailField, $azureUserData['mail'], all: true),
+            2 => $this->extraFieldValuesRepo->findByVariableAndValue($azureIdField, $azureUserData['mailNickname'], all: true),
+            3 => $this->extraFieldValuesRepo->findByVariableAndValue($azureUidField, $azureUserData['id'], all: true),
         ];
 
         foreach ($selectedOrder as $position) {
             if (!empty($positionsAndFields[$position])) {
-                return $positionsAndFields[$position]->getItemId();
+                $user = $this->findActiveUserFromExtraFieldValues($positionsAndFields[$position]);
+
+                if (null !== $user) {
+                    return $user;
+                }
             }
         }
 
-        return null;
+        return $this->userRepository->findByEmailCaseInsensitive($azureUserData['mail'])
+            ?? $this->userRepository->findByUsernameCaseInsensitive($azureUserData['userPrincipalName']);
     }
 
     public function getExistingUserVerificationOrder(): array
@@ -231,6 +247,13 @@ readonly class AzureAuthenticatorHelper
             $phone = $azureUserData['mobilePhone'];
         }
 
+        $preferredLanguage = $azureUserData['preferredLanguage'] ?? null;
+
+        if (null !== $preferredLanguage) {
+            $lang = $this->languageHelper->findBestAvailableMatch($preferredLanguage);
+            $preferredLanguage = $lang?->getIsocode() ?? $this->languageHelper->getPlatformDefaultIso();
+        }
+
         // If the option is set to create users, create it
         $firstName = $azureUserData['givenName'];
         $lastName = $azureUserData['surname'];
@@ -253,6 +276,7 @@ readonly class AzureAuthenticatorHelper
             $authSource,
             $active,
             $extra,
+            $preferredLanguage,
         ];
     }
 
@@ -292,5 +316,21 @@ readonly class AzureAuthenticatorHelper
                 }
             },
         ];
+    }
+
+    /**
+     * @param array<ExtraFieldValues> $extraFieldValues
+     */
+    private function findActiveUserFromExtraFieldValues(array $extraFieldValues): ?User
+    {
+        foreach ($extraFieldValues as $extraFieldValue) {
+            $user = $this->userRepository->find($extraFieldValue->getItemId());
+
+            if (null !== $user && User::SOFT_DELETED !== $user->getActive()) {
+                return $user;
+            }
+        }
+
+        return null;
     }
 }

@@ -71,9 +71,7 @@ export function useDatatableUpdate(servicePrefix) {
   function onUpdated(item) {
     toast.add({
       severity: "success",
-      detail: t("{resource} updated", {
-        resource: item["@id"],
-      }),
+      detail: t("{0} updated", [item["@id"]]),
       life: 3500,
     })
   }

@@ -4,21 +4,25 @@
 
     <p
       v-if="'update' === installerData.installType"
-      v-t="
-        'The upgrade script will recover and update the Chamilo database(s). In order to do this, this script will use the databases and settings defined below. Because our software runs on a wide range of systems and because all of them might not have been tested, we strongly recommend you do a full backup of your databases before you proceed with the upgrade!'
+      v-text="
+        t(
+          'The upgrade script will recover and update the Chamilo database(s). In order to do this, this script will use the databases and settings defined below. Because our software runs on a wide range of systems and because all of them might not have been tested, we strongly recommend you do a full backup of your databases before you proceed with the upgrade!',
+        )
       "
       class="RequirementContent mb-4"
     />
     <p
       v-else
-      v-t="
-        'The install script will create (or use) the Chamilo database using the database name given here. Please make sure the user you give has the right to create the database by the name given here. If a database with this name exists, it will be overwritten. Please do not use the root user as the Chamilo database user. This can lead to serious security issues.'
+      v-text="
+        t(
+          'The install script will create (or use) the Chamilo database using the database name given here. Please make sure the user you give has the right to create the database by the name given here. If a database with this name exists, it will be overwritten. Please do not use the root user as the Chamilo database user. This can lead to serious security issues.',
+        )
       "
       class="RequirementContent mb-4"
     />
 
     <div class="field">
-      <div class="p-float-label">
+      <FloatLabel variant="on">
         <InputText
           v-model="installerData.stepData.dbHostForm"
           :readonly="'update' === installerData.installType"
@@ -28,15 +32,15 @@
           type="text"
         />
         <label
-          v-t="'Database host'"
+          v-text="t('Database host')"
           for="dbHostForm"
         />
-      </div>
-      <small v-t="'ex. localhost'" />
+      </FloatLabel>
+      <small v-text="t('ex. localhost')" />
     </div>
 
     <div class="field">
-      <div class="p-float-label">
+      <FloatLabel variant="on">
         <InputText
           v-model="installerData.stepData.dbPortForm"
           :readonly="'update' === installerData.installType"
@@ -46,15 +50,15 @@
           type="number"
         />
         <label
-          v-t="'Port'"
+          v-text="t('Port')"
           for="dbPortForm"
         />
-      </div>
-      <small v-t="'ex. 3306'" />
+      </FloatLabel>
+      <small v-text="t('ex. 3306')" />
     </div>
 
     <div class="field">
-      <div class="p-float-label">
+      <FloatLabel variant="on">
         <InputText
           v-model="installerData.stepData.dbUsernameForm"
           :readonly="'update' === installerData.installType"
@@ -64,35 +68,33 @@
           type="text"
         />
         <label
-          v-t="'Database user'"
+          v-text="t('Database user')"
           for="dbUsernameForm"
         />
-      </div>
-      <small v-t="'ex. root'" />
+      </FloatLabel>
+      <small v-text="t('ex. root')" />
     </div>
 
     <div class="field">
-      <div class="p-float-label">
+      <FloatLabel variant="on">
         <Password
           v-model="installerData.stepData.dbPassForm"
           :feedback="false"
-          :input-props="{ maxlength: 25, name: 'dbPassForm' }"
+          :input-props="{ maxlength: 255, name: 'dbPassForm' }"
           :readonly="'update' === installerData.installType"
           input-id="dbPassForm"
           toggle-mask
         />
         <label
-          v-t="'Database Password'"
+          v-text="t('Database Password')"
           for="dbPassForm"
         />
-      </div>
-      <small
-        v-t="{ path: 'ex. {examplePassword}', args: { examplePassword: installerData.stepData.examplePassword } }"
-      />
+      </FloatLabel>
+      <small v-text="t('ex. {0}', [installerData.stepData.examplePassword])" />
     </div>
 
     <div class="field">
-      <div class="p-float-label">
+      <FloatLabel variant="on">
         <InputText
           v-model="installerData.stepData.dbNameForm"
           :readonly="'update' === installerData.installType"
@@ -102,10 +104,10 @@
           type="text"
         />
         <label
-          v-t="'Database name'"
+          v-text="t('Database name')"
           for="dbNameForm"
         />
-      </div>
+      </FloatLabel>
       <small v-if="'update' !== installerData.installType">
         {{
           t(
@@ -137,7 +139,13 @@
       severity="warn"
       style="margin-bottom: 8px"
     >
-      <span v-html="t('A database with the same name already exists. It will be deleted.')" />
+      <span
+        v-html="
+          t(
+            'A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused.',
+          )
+        "
+      />
     </Message>
 
     <Message
@@ -149,15 +157,15 @@
       <table>
         <tbody>
           <tr>
-            <td v-t="'Database host'" />
+            <td v-text="t('Database host')" />
             <td v-text="installerData.stepData.connParams.host" />
           </tr>
           <tr>
-            <td v-t="'Database port'" />
+            <td v-text="t('Database port')" />
             <td v-text="installerData.stepData.connParams.port" />
           </tr>
           <tr>
-            <td v-t="'Database driver'" />
+            <td v-text="t('Database driver')" />
             <td v-text="installerData.stepData.connParams.driver" />
           </tr>
         </tbody>
@@ -165,16 +173,16 @@
       <table v-if="'update' === installerData.installType">
         <tbody>
           <tr>
-            <td v-t="'CREATE TABLE works'" />
-            <td v-t="'OK'" />
+            <td v-text="t('CREATE TABLE works')" />
+            <td v-text="t('OK')" />
           </tr>
           <tr>
-            <td v-t="'ALTER TABLE works'" />
-            <td v-t="'OK'" />
+            <td v-text="t('ALTER TABLE works')" />
+            <td v-text="t('OK')" />
           </tr>
           <tr>
-            <td v-t="'DROP COLUMN works'" />
-            <td v-t="'OK'" />
+            <td v-text="t('DROP COLUMN works')" />
+            <td v-text="t('OK')" />
           </tr>
         </tbody>
       </table>
@@ -190,7 +198,7 @@
           "The database connection has failed. This is generally due to the wrong user, the wrong password or the wrong database prefix being set above. Please review these settings and try again.",
         )
       }}
-      <code v-t="installerData.stepData.dbConnError" />
+      <code v-text="t(installerData.stepData.dbConnError)" />
     </Message>
 
     <hr />
@@ -227,6 +235,7 @@
 import { inject } from "vue"
 import { useI18n } from "vue-i18n"
 
+import FloatLabel from "primevue/floatlabel"
 import InputText from "primevue/inputtext"
 import Password from "primevue/password"
 import Button from "primevue/button"

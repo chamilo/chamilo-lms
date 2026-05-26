@@ -9,6 +9,10 @@ api_protect_teacher_script();
 
 $plugin = SurveyExportCsvPlugin::create();
 
+if (!$plugin->isEnabled()) {
+    api_not_allowed(true);
+}
+
 $courseCode = api_get_course_id();
 
 // Create a sortable table with survey-data

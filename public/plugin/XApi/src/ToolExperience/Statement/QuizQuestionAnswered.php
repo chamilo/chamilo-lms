@@ -13,29 +13,15 @@ use Chamilo\PluginBundle\XApi\ToolExperience\Activity\Quiz as QuizActivity;
 use Chamilo\PluginBundle\XApi\ToolExperience\Activity\QuizQuestion as QuizQuestionActivity;
 use Chamilo\PluginBundle\XApi\ToolExperience\Actor\User as UserActor;
 use Chamilo\PluginBundle\XApi\ToolExperience\Verb\Answered as AnsweredVerb;
-use Xabbuh\XApi\Model\Result;
-use Xabbuh\XApi\Model\Score;
-use Xabbuh\XApi\Model\Statement;
 
 /**
  * Class QuizQuestionAnswered.
  */
 class QuizQuestionAnswered extends BaseStatement
 {
-    /**
-     * @var TrackEAttempt
-     */
-    private $attempt;
-
-    /**
-     * @var CQuizQuestion
-     */
-    private $question;
-
-    /**
-     * @var CQuiz
-     */
-    private $quiz;
+    private TrackEAttempt $attempt;
+    private CQuizQuestion $question;
+    private CQuiz $quiz;
 
     public function __construct(TrackEAttempt $attempt, CQuizQuestion $question, CQuiz $quiz)
     {
@@ -44,39 +30,60 @@ class QuizQuestionAnswered extends BaseStatement
         $this->quiz = $quiz;
     }
 
-    public function generate(): Statement
+    public function generate(): array
     {
-        $user = api_get_user_entity($this->attempt->getUserId());
+        $user = $this->attempt->getUser();
 
         $userActor = new UserActor($user);
         $answeredVerb = new AnsweredVerb();
         $questionActivity = new QuizQuestionActivity($this->question);
         $quizActivity = new QuizActivity($this->quiz);
 
-        $rawResult = $this->attempt->getMarks();
-        $maxResult = $this->question->getPonderation();
-        $scaledResult = $maxResult ? ($rawResult / $maxResult) : 0;
+        $rawResult = (float) $this->attempt->getMarks();
+        $maxResult = (float) $this->question->getPonderation();
+        $scaledResult = $maxResult > 0 ? ($rawResult / $maxResult) : 0.0;
 
-        $context = $this->generateContext();
-        $contextActivities = $context
-            ->getContextActivities()
-            ->withAddedGroupingActivity($quizActivity->generate())
-        ;
-
-        return new Statement(
-            $this->generateStatementId('exercise-question'),
-            $userActor->generate(),
-            $answeredVerb->generate(),
-            $questionActivity->generate(),
-            new Result(
-                new Score($scaledResult, $rawResult, null, $maxResult),
-                $rawResult > 0,
-                true
+        $result = $this->buildResult(
+            $this->buildScore(
+                $scaledResult,
+                $rawResult,
+                null,
+                $maxResult > 0 ? $maxResult : null
             ),
-            null,
-            $this->attempt->getTms(),
-            null,
-            $context->withContextActivities($contextActivities)
+            $rawResult > 0,
+            true
         );
+
+        $context = $this->mergeGroupingActivity(
+            $this->generateContext(),
+            $quizActivity->generate()
+        );
+
+        return [
+            'id' => $this->generateStatementId('exercise-question'),
+            'actor' => $userActor->generate(),
+            'verb' => $answeredVerb->generate(),
+            'object' => $questionActivity->generate(),
+            'result' => $result,
+            'timestamp' => $this->normalizeTimestamp($this->attempt->getTms()),
+            'context' => $context,
+        ];
+    }
+
+    private function normalizeTimestamp($value): string
+    {
+        if ($value instanceof \DateTimeInterface) {
+            return $value->format(DATE_ATOM);
+        }
+
+        $stringValue = trim((string) $value);
+
+        if ('' === $stringValue) {
+            return gmdate(DATE_ATOM);
+        }
+
+        $timestamp = strtotime($stringValue);
+
+        return false !== $timestamp ? gmdate(DATE_ATOM, $timestamp) : gmdate(DATE_ATOM);
     }
 }

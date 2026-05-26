@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\UserMergeHelper;
 
 /**
  * This tool show global Statistics on general platform events.
@@ -12,20 +13,233 @@ use Chamilo\CoreBundle\Framework\Container;
 $cidReset = true;
 
 require_once __DIR__.'/../../inc/global.inc.php';
-api_protect_admin_script();
+require_once __DIR__.'/../../inc/lib/reports.lib.php';
+
+if (!api_is_platform_admin()) {
+    $acceptHeader = (string) ($_SERVER['HTTP_ACCEPT'] ?? '');
+    $isAjaxRequest = (
+        'xmlhttprequest' === strtolower((string) ($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '')) ||
+        str_contains($acceptHeader, 'application/json')
+    );
+
+    http_response_code(403);
+
+    if ($isAjaxRequest && str_contains($acceptHeader, 'application/json')) {
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode([
+            'error' => 'access_denied',
+            'message' => get_lang('You are not allowed to see this page.'),
+        ]);
+        exit;
+    }
+
+    echo Display::return_message(
+        get_lang('You are not allowed to see this page.'),
+        'error',
+        false
+    );
+    exit;
+}
+
+api_block_inactive_user();
 
 $interbreadcrumb[] = ['url' => '../index.php', 'name' => get_lang('Administration')];
 
-$report = $_REQUEST['report'] ?? '';
+$report = isset($_REQUEST['report']) ? (string) $_REQUEST['report'] : '';
+$action = isset($_REQUEST['action']) ? (string) $_REQUEST['action'] : '';
+
+if ('activities' === $report) {
+    $query = $_GET;
+    unset($query['report']);
+
+    $target = api_get_path(WEB_CODE_PATH).'admin/activities_audit.php';
+    if (!empty($query)) {
+        $target .= '?'.http_build_query($query);
+    }
+
+    header('Location: '.$target);
+    exit;
+}
+
+
+// Duplicate users actions (disable/enable + unify)
+if ($report === 'duplicated_users' && in_array($action, [
+        'disable_duplicate_user',
+        'enable_duplicate_user',
+        'unify_duplicate_user',
+    ], true)) {
+    // CSRF check (GET links)
+    if (!Security::check_token('get')) {
+        Display::addFlash(Display::return_message(get_lang('Security breach avoid restart'), 'error'));
+    } else {
+        try {
+            switch ($action) {
+                case 'disable_duplicate_user':
+                    $userId = isset($_GET['user_id']) ? (int) $_GET['user_id'] : 0;
+
+                    if ($userId > 0) {
+                        Statistics::updateUserActiveStatus($userId, 0);
+                        Display::addFlash(Display::return_message(get_lang('User deactivated'), 'confirmation', false));
+                    } else {
+                        Display::addFlash(Display::return_message(get_lang('InvalidId'), 'error', false));
+                    }
+                    break;
+
+                case 'enable_duplicate_user':
+                    $userId = isset($_GET['user_id']) ? (int) $_GET['user_id'] : 0;
+
+                    if ($userId > 0) {
+                        Statistics::updateUserActiveStatus($userId, 1);
+                        Display::addFlash(Display::return_message(get_lang('User enabled'), 'confirmation', false));
+                    } else {
+                        Display::addFlash(Display::return_message(get_lang('InvalidId'), 'error', false));
+                    }
+                    break;
+
+                case 'unify_duplicate_user':
+                    $unifyUserId = isset($_GET['unify_user_id']) ? (int) $_GET['unify_user_id'] : 0;
+                    $dupModeParam = isset($_GET['dup_mode']) ? (string) $_GET['dup_mode'] : 'name';
+                    $extraFieldId = isset($_GET['extra_field_id']) ? (int) $_GET['extra_field_id'] : 0;
+
+                    /** @var UserMergeHelper $userMergeHelper */
+                    $userMergeHelper = Container::$container->get(UserMergeHelper::class);
+
+                    if ($unifyUserId > 0) {
+                        try {
+                            $groupIds = Statistics::getDuplicateUserGroupUserIds($dupModeParam, $unifyUserId, $extraFieldId);
+
+                            if (count($groupIds) < 2) {
+                                Display::addFlash(Display::return_message(
+                                    get_lang('No other duplicates found for this user.'),
+                                    'warning',
+                                    false
+                                ));
+                                break;
+                            }
+
+                            $mergeIds = array_values(array_filter(
+                                $groupIds,
+                                static fn (int $id): bool => $id !== $unifyUserId
+                            ));
+
+                            $mergedCount = $userMergeHelper->mergeUsersBatch($unifyUserId, $mergeIds, null, true);
+
+                            if ($mergedCount > 0) {
+                                $msg = sprintf(
+                                    get_lang('Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted.'),
+                                    (int) $mergedCount,
+                                    (int) $unifyUserId
+                                );
+                                Display::addFlash(Display::return_message($msg, 'confirmation', false));
+                            } else {
+                                Display::addFlash(Display::return_message(
+                                    get_lang('No accounts were merged.'),
+                                    'warning',
+                                    false
+                                ));
+                            }
+                        } catch (\Throwable $e) {
+                            error_log('[DuplicateUsers] Unify group failed: '.$e->getMessage());
+
+                            Display::addFlash(Display::return_message(
+                                get_lang('An error occurred while unifying users.'),
+                                'error',
+                                false
+                            ));
+                        }
+
+                        break;
+                    }
+
+                    $keepUserId = isset($_GET['keep_user_id']) ? (int) $_GET['keep_user_id'] : 0;
+                    $mergeUserId = isset($_GET['merge_user_id']) ? (int) $_GET['merge_user_id'] : 0;
+
+                    if ($keepUserId <= 0 || $mergeUserId <= 0 || $keepUserId === $mergeUserId) {
+                        Display::addFlash(Display::return_message(get_lang('InvalidId'), 'error', false));
+                        break;
+                    }
+
+                    try {
+                        $ok = $userMergeHelper->mergeUsers($keepUserId, $mergeUserId, null, true);
+
+                        if ($ok) {
+                            $msg = sprintf(
+                                get_lang('Users unified: merged user #%s into user #%s. Merged account was permanently deleted.'),
+                                (int) $mergeUserId,
+                                (int) $keepUserId
+                            );
+                            Display::addFlash(Display::return_message($msg, 'confirmation', false));
+                        } else {
+                            Display::addFlash(Display::return_message(
+                                get_lang('An error occurred while unifying users.'),
+                                'error',
+                                false
+                            ));
+                        }
+                    } catch (\Throwable $e) {
+                        error_log('[DuplicateUsers] Legacy unify failed: '.$e->getMessage());
+
+                        Display::addFlash(Display::return_message(
+                            get_lang('An error occurred while unifying users.'),
+                            'error',
+                            false
+                        ));
+                    }
+                    break;
+            }
+        } catch (\Throwable $e) {
+            Display::addFlash(Display::return_message($e->getMessage(), 'error', false));
+        }
+    }
+
+    // Prevent resubmission and keep filters
+    $redirectParams = [
+        'report' => 'duplicated_users',
+        'dup_mode' => isset($_GET['dup_mode']) ? (string) $_GET['dup_mode'] : 'name',
+    ];
+
+    if (isset($_GET['extra_field_id'])) {
+        $redirectParams['extra_field_id'] = (int) $_GET['extra_field_id'];
+    }
+
+    // Keep additional profile field columns (if any)
+    if (isset($_GET['additional_profile_field'])) {
+        $apf = $_GET['additional_profile_field'];
+        if (!is_array($apf)) {
+            $apf = [$apf];
+        }
+
+        // Keep the same parameter name so http_build_query generates additional_profile_field[0]=...
+        $redirectParams['additional_profile_field'] = array_values(array_filter(array_map('strval', $apf)));
+    }
+
+    Security::clear_token();
+
+    header('Location: '.api_get_self().'?'.http_build_query($redirectParams));
+    exit;
+}
+
 $sessionDuration = isset($_GET['session_duration']) ? (int) $_GET['session_duration'] : '';
 $validated = false;
 
+$statusId = 0;
 if (
-in_array(
-    $report,
-    ['recentlogins', 'tools', 'courses', 'coursebylanguage', 'users', 'users_active', 'session_by_date', 'new_user_registrations']
-)
+    in_array(
+        $report,
+        ['recentlogins', 'tools', 'courses', 'coursebylanguage', 'users', 'users_active', 'session_by_date', 'new_user_registrations']
+    )
 ) {
+    $htmlHeadXtra[] = '<style>
+      [id$="_chart_wrap"], #courses_chart_wrap, #tools_chart_wrap, #coursebylanguage_chart_wrap,
+      #recentlogins_chart_wrap, #subscriptions_chart_wrap {
+        position: relative;
+      }
+      [id$="_chart_wrap"] > canvas,
+      #courses_chart_wrap > canvas, #tools_chart_wrap > canvas, #coursebylanguage_chart_wrap > canvas,
+      #recentlogins_chart_wrap > canvas, #subscriptions_chart_wrap > canvas {display: block;width: 100%;height: 100%;}
+      #courses_chart_wrap{display:flex;align-items:center;justify-content:center;}
+      #courses_chart_wrap > canvas{max-height: 100%;width: auto;}
+    </style>';
     $htmlHeadXtra[] = api_get_build_js('libs/chartjs/chart.js');
     //$htmlHeadXtra[] = api_get_asset('chartjs-plugin-labels/build/chartjs-plugin-labels.min.js');
     // Prepare variables for the JS charts
@@ -50,17 +264,37 @@ in_array(
             $url = api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?a=tools_usage';
             $reportName = 'Tools access';
             $reportType = 'pie';
+            $htmlHeadXtra[] = '<style>
+                #tools_chart_wrap{
+                    max-width: 980px;
+                    margin: 0 auto 20px auto;
+                    height: 420px;
+                    position: relative;
+                }
+                #tools_chart_wrap canvas{
+                    width: 100% !important;
+                    height: 100% !important;
+                }
+                @media (max-width: 768px){
+                    #tools_chart_wrap{ height: 320px; }
+                }
+            </style>';
+
             $reportOptions = '
-                legend: {
-                    position: "left"
-                },
-                title: {
-                    text: "'.get_lang($reportName).'",
-                    display: true
-                },
+                legend: { position: "left" },
+                title: { text: "'.get_lang($reportName).'", display: true },
                 cutoutPercentage: 25
-                ';
-            $htmlHeadXtra[] = Statistics::getJSChartTemplate($url, $reportType, $reportOptions);
+            ';
+            $htmlHeadXtra[] = Statistics::getJSChartTemplate(
+                $url,
+                $reportType,
+                $reportOptions,
+                'canvas',
+                false,
+                '',
+                '',
+                ['circular_scale' => 0.55]
+            );
             break;
         case 'courses':
             $url = api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?a=courses';
@@ -76,7 +310,7 @@ in_array(
                 }
             </style>';
 
-                    $reportOptions = '
+            $reportOptions = '
                 legend: {
                     position: "left"
                 },
@@ -93,17 +327,38 @@ in_array(
             $url = api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?a=courses_by_language';
             $reportName = 'Courses count by language';
             $reportType = 'pie';
+            $htmlHeadXtra[] = '<style>
+                #coursebylanguage_chart_wrap{
+                    max-width: 1100px;
+                    margin: 0 auto 20px auto;
+                    height: 520px;
+                    position: relative;
+                }
+                #coursebylanguage_chart_wrap canvas{
+                    width: 100% !important;
+                    height: 100% !important;
+                }
+                @media (max-width: 992px){
+                    #coursebylanguage_chart_wrap{ height: 420px; }
+                }
+                @media (max-width: 768px){
+                    #coursebylanguage_chart_wrap{ height: 320px; }
+                }
+            </style>';
             $reportOptions = '
+                responsive: true,
+                maintainAspectRatio: false,
                 legend: {
-                    position: "left"
+                    position: "top"
                 },
                 title: {
                     text: "'.get_lang($reportName).'",
                     display: true
                 },
                 cutoutPercentage: 25
-                ';
-            $htmlHeadXtra[] = Statistics::getJSChartTemplate($url, $reportType, $reportOptions);
+            ';
+
+            $htmlHeadXtra[] = Statistics::getJSChartTemplate($url, $reportType, $reportOptions, 'canvas', true);
             break;
         case 'users':
             $invisible = isset($_GET['count_invisible_courses']) ? intval($_GET['count_invisible_courses']) : null;
@@ -212,6 +467,19 @@ in_array(
 
             break;
         case 'session_by_date':
+            $htmlHeadXtra[] = '<style>
+              .sbd-filters form{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px 14px}
+              .sbd-filters form :is(.form-group,.control-group,.form-row,.form-actions){margin:0!important}
+              .sbd-filters form .form-actions{padding:0!important;border:0!important;background:transparent!important}
+              .sbd-filters .form-group {visibility: hidden;}
+              .sbd-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:16px 0}
+              @media (max-width:1200px){.sbd-cards{grid-template-columns:repeat(2,1fr)}}
+              @media (max-width:768px){.sbd-filters form{display:block}.sbd-cards{grid-template-columns:1fr}}
+              .sbd-card{background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:12px;padding:12px}
+              .sbd-chart-wrap{position:relative;width:100%;max-width:360px;aspect-ratio:1/1;margin:0 auto}
+              .sbd-chart-wrap--wide{max-width:none;aspect-ratio:auto;height:420px}
+              .sbd-chart-wrap canvas{width:100%!important;height:100%!important;display:block}
+            </style>';
             $form = new FormValidator('session_by_date', 'get');
             $form->addDateRangePicker(
                 'range',
@@ -221,33 +489,50 @@ in_array(
             );
             $options = SessionManager::getStatusList();
             $form->addSelect('status_id', get_lang('Session status'), $options, ['placeholder' => get_lang('All')]);
-
             $form->addHidden('report', 'session_by_date');
             $form->addButtonSearch(get_lang('Search'));
 
-            $validated = $form->validate() || isset($_REQUEST['range']);
+            $validated = $form->validate()
+                || isset($_REQUEST['range'])
+                || isset($_REQUEST['range_start'])
+                || isset($_REQUEST['range_end']);
+
             if ($validated) {
                 $values = $form->getSubmitValues();
                 $urlBase = api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?';
-                $dateStart = null;
-                $dateEnd = null;
-
-                if (isset($values['range_start'])) {
-                    $dateStart = Security::remove_XSS($values['range_start']);
-                }
-                if (isset($values['range_end'])) {
-                    $dateEnd = Security::remove_XSS($values['range_end']);
+                $rangeRaw = (string) ($_REQUEST['range'] ?? ($values['range'] ?? ''));
+                if (!empty($rangeRaw)) {
+                    $form->setDefaults(['range' => Security::remove_XSS($rangeRaw)]);
                 }
 
-                if (isset($_REQUEST['range_start'])) {
-                    $dateStart = Security::remove_XSS($_REQUEST['range_start']);
+                $statusId = (int) ($_REQUEST['status_id'] ?? ($values['status_id'] ?? 0));
+                if (!empty($statusId)) {
+                    $form->setDefaults(['status_id' => $statusId]);
                 }
 
-                if (isset($_REQUEST['range_end'])) {
-                    $dateEnd = Security::remove_XSS($_REQUEST['range_end']);
+                $dateStart = (string) ($_REQUEST['range_start'] ?? ($values['range_start'] ?? ''));
+                $dateEnd = (string) ($_REQUEST['range_end'] ?? ($values['range_end'] ?? ''));
+
+                $dateStart = Security::remove_XSS($dateStart);
+                $dateEnd = Security::remove_XSS($dateEnd);
+                $isValidStart = false;
+                $isValidEnd = false;
+
+                if (!empty($dateStart)) {
+                    $dt = DateTime::createFromFormat('Y-m-d', $dateStart);
+                    $isValidStart = $dt && $dt->format('Y-m-d') === $dateStart;
+                }
+                if (!empty($dateEnd)) {
+                    $dt = DateTime::createFromFormat('Y-m-d', $dateEnd);
+                    $isValidEnd = $dt && $dt->format('Y-m-d') === $dateEnd;
                 }
 
-                $statusId = (int) $_REQUEST['status_id'];
+                if (!$isValidStart) {
+                    $dateStart = '';
+                }
+                if (!$isValidEnd) {
+                    $dateEnd = '';
+                }
 
                 $conditions = "&date_start=$dateStart&date_end=$dateEnd&status=$statusId";
 
@@ -263,14 +548,11 @@ in_array(
 
                 $reportType = 'pie';
                 $reportOptions = '
-                    legend: {
-                        position: "left"
-                    },
-                    title: {
-                        text: "%s",
-                        display: true
-                    },
-                    cutoutPercentage: 25
+                  legend: { position: "bottom" },
+                  title:{ text:"%s", display:true },
+                  responsive:true,
+                  maintainAspectRatio:false,
+                  cutoutPercentage:25
                 ';
                 $reportOptions1 = sprintf($reportOptions, $reportName1);
                 $reportOptions2 = sprintf($reportOptions, $reportName2);
@@ -314,7 +596,7 @@ in_array(
                         callbacks: {
                             label: function(tooltipItem, data) {
                                 var dataset = data.datasets[tooltipItem.datasetIndex];
-                                var total = dataset.data.reduce(function(previousValue, currentValue, currentIndex, array) {
+                                var total = dataset.data.reduce(function(previousValue, currentValue) {
                                     return previousValue + currentValue;
                                 });
 
@@ -326,13 +608,6 @@ in_array(
                         }
                     }
                 ';
-
-                $htmlHeadXtra[] = Statistics::getJSChartTemplate(
-                    $url4,
-                    $reportType,
-                    $reportOptions,
-                    'canvas4'
-                );
             }
             break;
     }
@@ -350,6 +625,7 @@ $tools = [
         'report=tool_usage' => get_lang('Tool-based resource count'),
         'report=courselastvisit' => get_lang('Latest access'),
         'report=coursebylanguage' => get_lang('Number of courses by language'),
+        'report=courses_usage' => get_lang('Courses usage'),
     ],
     get_lang('Users') => [
         'report=users' => get_lang('Number of users'),
@@ -365,9 +641,9 @@ $tools = [
         'report=users_online' => get_lang('Users online'),
         'report=new_user_registrations' => get_lang('New users registrations'),
         'report=subscription_by_day' => get_lang('Course/Session subscriptions by day'),
+        'report=duplicated_users' => get_lang('Duplicate users'),
     ],
     get_lang('System') => [
-        'report=activities' => get_lang('Important activities'),
         'report=user_session' => get_lang('Portal user session stats'),
         'report=quarterly_report' => get_lang('Quarterly report'),
     ],
@@ -384,6 +660,482 @@ $tools = [
 $content = '';
 
 switch ($report) {
+    case 'courses_usage':
+        $table = new SortableTableFromArray(
+            [],
+            0,
+            20,
+            'table_courses_usage',
+            null,
+            'table_courses_usage'
+        );
+
+        $perPage = (int) $table->per_page;
+        if ($perPage <= 0) {
+            $perPage = 20;
+        }
+
+        $first = max(0, ((int) $table->page_nr - 1) * $perPage);
+
+        $courses = CourseManager::get_course_list();
+        $coursesTotal = count($courses);
+        $endDate = (new DateTime())->format('Y-m-d');
+        $dateRanges = [
+            'day' => (new DateTime())->modify('-1 day')->format('Y-m-d'),
+            'week' => (new DateTime())->modify('-1 week')->format('Y-m-d'),
+            'month' => (new DateTime())->modify('-1 month')->format('Y-m-d'),
+            '6month' => (new DateTime())->modify('-6 month')->format('Y-m-d'),
+            'year' => (new DateTime())->modify('-1 year')->format('Y-m-d'),
+            '2year' => (new DateTime())->modify('-2 year')->format('Y-m-d'),
+            'total' => null,
+        ];
+
+        $data = [];
+        $index = 0;
+        foreach ($courses as $course) {
+            if ($index >= $first && $index < $first + $perPage) {
+                $courseId = (int) $course['id'];
+                $item = [];
+                $courseTotal = 0;
+                $sessions = 0;
+                foreach ($dateRanges as $key => $rangeStart) {
+                    $courseTotal = count(CourseManager::getAccessCourse($courseId, 0, 0, $rangeStart, $endDate));
+                    $sessions = count(CourseManager::getAccessCourse($courseId, 1, 0, $rangeStart, $endDate));
+                    $visit = count(CourseManager::getAccessCourse($courseId, 3, 0, $rangeStart, $endDate));
+                    $item[$key] = $sessions + $courseTotal;
+                }
+                $data[] = [
+                    Security::remove_XSS($course['title']),
+                    $item['day'],
+                    $item['week'],
+                    $item['month'],
+                    $item['6month'],
+                    $item['year'],
+                    $item['2year'],
+                    $courseTotal,
+                    $sessions,
+                    $item['total'],
+                ];
+            }
+            $index++;
+        }
+
+        $headers = [
+            get_lang('Course'),
+            get_lang('Today'),
+            get_lang('This week'),
+            get_lang('This month'),
+            '6 '.get_lang('months'),
+            '1 '.get_lang('Year'),
+            '2 '.get_lang('Years'),
+            get_lang('All time visits outside sessions'),
+            get_lang('All time visits in sessions'),
+            get_lang('All time visits total'),
+        ];
+
+        $table->total_number_of_items = $coursesTotal;
+        $table->table_data = $data;
+        $table->set_additional_parameters(['report' => 'courses_usage']);
+        $table->handlePagination = true;
+
+        $column = 0;
+        foreach ($headers as $header) {
+            $table->set_header($column, $header, false);
+            $column++;
+        }
+
+        $content = '<h4>'.get_lang('Student visits per period, per course').'</h4>';
+        $content .= $table->return_table();
+
+        break;
+    case 'duplicated_users':
+        $dupMode = (string) ($_REQUEST['dup_mode'] ?? 'name');
+        $allowedModes = ['name', 'email', 'extra'];
+        if (!in_array($dupMode, $allowedModes, true)) {
+            $dupMode = 'name';
+        }
+
+        $token = Security::get_token();
+
+        // Tabs
+        $baseTabParams = $_GET;
+        $baseTabParams['report'] = 'duplicated_users';
+        unset($baseTabParams['dup_mode']);
+
+        $tabClass = static function (string $mode, string $current): string {
+            return $mode === $current
+                ? 'bg-primary/10 text-primary ring-1 ring-primary/25'
+                : 'text-gray-90 hover:bg-gray-15';
+        };
+
+        $buildTabUrl = static function (array $params): string {
+            return api_get_self().'?'.http_build_query($params);
+        };
+
+        $tabs = [
+            'name'  => get_lang('By name'),
+            'email' => get_lang('By email'),
+            'extra' => get_lang('By extra field'),
+        ];
+
+        $content .= '
+    <style>
+      .ch-dups-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 14px}
+      .ch-dups-tabs a{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;font-size:13px;font-weight:600;text-decoration:none}
+      .ch-dups-box{background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:12px;padding:12px;margin:10px 0 14px}
+      .ch-dups-box .formw{margin:0}
+      .ch-dups-note{margin:0 0 10px}
+      .ch-dups-actions{display:inline-flex;flex-wrap:wrap;gap:6px;align-items:center}
+      .ch-dups-actions .btn{border-radius:4px;font-weight:700}
+      .ch-dups-actions .btn-xs{padding:2px 8px;font-size:12px;line-height:1.2}
+      .ch-dups-actions .btn.disabled{opacity:.45;pointer-events:none}
+      .ch-dups-actions .ch-dups-icon svg{width:14px; height:14px;}
+      .ch-dups-actions .ch-dups-emoji{font-size:14px; line-height:1;}
+      .ch-dups-actions .ch-dups-btn-label{margin-left:6px;}
+      .ch-dups-help{background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:12px;padding:12px;margin:10px 0 14px}
+      .ch-dups-help__title{font-weight:700;margin:0 0 8px;color:#2b3645}
+      .ch-dups-help__list{margin:0;padding-left:18px;color:#3b4757;font-size:13px}
+      .ch-dups-help__list li{margin:6px 0}
+      .ch-dups-help code{background:#f3f6fb;border:1px solid #e6edf5;border-radius:6px;padding:1px 6px}
+      .ch-dups-keep-badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:800;background:#e0f2fe;color:#075985;border:1px solid #bae6fd;}
+      .ch-dups-groups{display:flex;flex-direction:column;gap:14px;margin-top:8px}
+      .ch-dups-group{border:1px solid #b7dff1;background:#f7fcff;border-radius:4px;overflow:hidden}
+      .ch-dups-group__head{background:#dff2fb;border-bottom:1px solid #b7dff1;padding:8px 10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+      .ch-dups-group__key{font-weight:700;color:#2b3645}
+      .ch-dups-group__badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700;background:#4aa3c7;color:#fff}
+      .ch-dups-group__body{padding:10px}
+      .ch-dups-group__table-wrap{overflow-x:auto}
+      .ch-dups-group__table{width:100%;border-collapse:collapse;background:#fff}
+      .ch-dups-group__table th,
+      .ch-dups-group__table td{border:1px solid #e5edf3;padding:8px 10px;vertical-align:top}
+      .ch-dups-group__table th{background:#f6f8fb;font-weight:700;white-space:nowrap}
+    </style>
+    ';
+
+        $content .= '<div class="ch-dups-tabs">';
+        foreach ($tabs as $mode => $label) {
+            $p = $baseTabParams;
+            $p['dup_mode'] = $mode;
+            $content .= '<a class="'.$tabClass($mode, $dupMode).'" href="'.htmlspecialchars($buildTabUrl($p), ENT_QUOTES).'">'
+                .htmlspecialchars((string) $label, ENT_QUOTES).'</a>';
+        }
+        $content .= '</div>';
+
+        // Additional profile extra fields info for table columns (used by backend table builder)
+        $additionalExtraFieldsInfo = TrackingCourseLog::getAdditionalProfileExtraFields();
+
+        $apf = $_GET['additional_profile_field'] ?? [];
+        if (!is_array($apf)) {
+            $apf = [$apf];
+        }
+
+        // Extra field selector (only in extra mode)
+        $extraFieldId = isset($_REQUEST['extra_field_id']) ? (int) $_REQUEST['extra_field_id'] : 0;
+        $extraFieldFormHtml = '';
+        $selectedExtraFieldLabel = '';
+        $selectedExtraFieldVariable = '';
+
+        if ('extra' === $dupMode) {
+            $extraFieldObj = new ExtraField('user');
+            $allFields = $extraFieldObj->get_all();
+            $options = ['' => get_lang('Select an option')];
+
+            foreach ($allFields as $f) {
+                if (empty($f['id'])) {
+                    continue;
+                }
+                $label = $f['display_text'] ?? ($f['variable'] ?? ('Field #'.$f['id']));
+                $options[(int) $f['id']] = (string) $label;
+
+                if ((int) $f['id'] === $extraFieldId) {
+                    $selectedExtraFieldLabel = (string) $label;
+                    $selectedExtraFieldVariable = (string) ($f['variable'] ?? '');
+                }
+            }
+
+            $formExtra = new FormValidator('dup_extra_field', 'get', api_get_self());
+            $formExtra->addHidden('report', 'duplicated_users');
+            $formExtra->addHidden('dup_mode', 'extra');
+
+            foreach ($apf as $v) {
+                $formExtra->addHidden('additional_profile_field[]', (string) $v);
+            }
+
+            $formExtra->addSelect('extra_field_id', get_lang('Profile field'), $options, ['required' => true]);
+            $formExtra->addButtonSearch(get_lang('Search'));
+
+            if ($extraFieldId > 0) {
+                $formExtra->setDefaults(['extra_field_id' => $extraFieldId]);
+            }
+
+            $extraFieldFormHtml = $formExtra->returnForm();
+        }
+
+        if ('name' === $dupMode) {
+            $content .= Display::return_message(
+                get_lang('This report only lists users that have the same firstname and lastname.'),
+                'info'
+            );
+        } elseif ('email' === $dupMode) {
+            $content .= Display::return_message(
+                get_lang('This report only lists users that have the same e-mail address.'),
+                'info'
+            );
+        } else {
+            $content .= Display::return_message(
+                get_lang('This report only lists users that share the same value for the selected profile field.'),
+                'info'
+            );
+        }
+
+        $helpTitle = get_lang('How to use this report');
+        $helpHtml = '
+        <div class="ch-dups-help">
+          <div class="ch-dups-help__title">'.htmlspecialchars($helpTitle, ENT_QUOTES, 'UTF-8').'</div>
+          <ul class="ch-dups-help__list">
+            <li><strong>'.get_lang('Disable / Enable').'</strong>: '
+                .get_lang('Only blocks or restores login. It does not delete the user and does not remove subscriptions.')
+                .'</li>
+            <li><strong>'.get_lang('Unify').'</strong>: '
+                .'Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. '
+                .'Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone.'
+                .'</li>
+            <li><strong>Permanent deletion</strong>: '
+                .'Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually.'
+                .'</li>
+          </ul>
+        </div>
+        ';
+        $content .= $helpHtml;
+
+        // It creates the confusing textarea + extra button block that does not exist in C1.
+        if ('extra' === $dupMode) {
+            $content .= '<div class="ch-dups-box">'.$extraFieldFormHtml.'</div>';
+        }
+
+        // Build table (backend data source + actions)
+        $token = Security::get_token();
+
+        $table = Statistics::returnDuplicatedUsersTable(
+            $dupMode,
+            $additionalExtraFieldsInfo,
+            $extraFieldId,
+            $token
+        );
+
+        // Export actions
+        if (isset($_GET['action_table'])) {
+            $data = $table->toArray(true, true);
+
+            if ('export_excel' === $_GET['action_table']) {
+                Export::arrayToXls($data);
+            } elseif ('export_csv' === $_GET['action_table']) {
+                Export::arrayToCsv($data);
+            }
+            exit;
+        }
+
+        $tableArray = $table->toArray(true, true);
+        $extractText = static function ($value): string {
+            $value = html_entity_decode(strip_tags((string) $value), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            $value = preg_replace('/\s+/u', ' ', trim($value));
+
+            return (string) $value;
+        };
+
+        $renderGroupedTable = static function (array $tableArray, callable $getGroupValue) use ($extractText): string {
+            if (empty($tableArray) || !is_array($tableArray)) {
+                return '';
+            }
+
+            $rows = array_values($tableArray);
+            $headerRow = array_shift($rows);
+
+            if (!is_array($headerRow)) {
+                return '';
+            }
+
+            $headers = array_values($headerRow);
+            if (empty($headers)) {
+                return '';
+            }
+
+            $groups = [];
+            foreach ($rows as $row) {
+                if (!is_array($row)) {
+                    continue;
+                }
+
+                $cells = array_values($row);
+                $groupValue = (string) $getGroupValue($cells);
+                $groupValue = $extractText($groupValue);
+
+                if ('' === $groupValue) {
+                    $groupValue = get_lang('Not available');
+                }
+
+                $groups[$groupValue] ??= [];
+                $groups[$groupValue][] = $cells;
+            }
+
+            if (empty($groups)) {
+                return '';
+            }
+
+            $html = '<div class="ch-dups-groups">';
+
+            foreach ($groups as $groupValue => $groupRows) {
+                $count = count($groupRows);
+
+                $html .= '<div class="ch-dups-group">';
+                $html .= '  <div class="ch-dups-group__head">';
+                $html .= '    <span class="ch-dups-group__key">'
+                    .htmlspecialchars((string) $groupValue, ENT_QUOTES, 'UTF-8')
+                    .'</span>';
+                $html .= '    <span class="ch-dups-group__badge">'
+                    .(int) $count.' '.htmlspecialchars((string) get_lang('Users'), ENT_QUOTES, 'UTF-8')
+                    .'</span>';
+                $html .= '  </div>';
+
+                $html .= '  <div class="ch-dups-group__body">';
+                $html .= '    <div class="ch-dups-group__table-wrap">';
+                $html .= '      <table class="ch-dups-group__table">';
+                $html .= '        <thead><tr>';
+
+                foreach ($headers as $headerCell) {
+                    $label = trim(strip_tags((string) $headerCell));
+                    $html .= '<th>'.htmlspecialchars($label, ENT_QUOTES, 'UTF-8').'</th>';
+                }
+
+                $html .= '        </tr></thead><tbody>';
+
+                foreach ($groupRows as $cells) {
+                    $html .= '<tr>';
+                    foreach ($headers as $index => $_headerCell) {
+                        $cell = $cells[$index] ?? '';
+                        // Keep existing HTML for action buttons and badges.
+                        $html .= '<td>'.(string) $cell.'</td>';
+                    }
+                    $html .= '</tr>';
+                }
+
+                $html .= '        </tbody></table>';
+                $html .= '    </div>';
+                $html .= '  </div>';
+                $html .= '</div>';
+            }
+
+            $html .= '</div>';
+
+            return $html;
+        };
+
+        $groupedHtml = '';
+
+        // name: group by Firstname + Lastname (indexes are stable in your table)
+        if ('name' === $dupMode) {
+            $groupedHtml = $renderGroupedTable($tableArray, static function (array $cells) use ($extractText): string {
+                $first = $extractText($cells[1] ?? '');
+                $last  = $extractText($cells[2] ?? '');
+                return trim($first.' '.$last);
+            });
+        }
+
+        // email: group by Email (index 3)
+        if ('email' === $dupMode) {
+            $groupedHtml = $renderGroupedTable($tableArray, static function (array $cells) use ($extractText): string {
+                return $extractText($cells[3] ?? '');
+            });
+        }
+
+        // extra: group by the selected extra field value
+        // IMPORTANT: Do not match headers by "contains", because "tempoId" contains "Id" and would incorrectly match the Id column.
+        // The backend table builder places the selected extra field as the FIRST extra column right after "Sessions".
+        if ('extra' === $dupMode && $extraFieldId > 0) {
+            $normalizeHeader = static function (string $value): string {
+                $value = html_entity_decode(strip_tags($value), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                $value = mb_strtolower(trim($value), 'UTF-8');
+                $value = preg_replace('/\s+/u', ' ', $value);
+                return (string) $value;
+            };
+
+            $rowsTmp = array_values($tableArray);
+            $headerTmp = array_shift($rowsTmp);
+            $headersTmp = is_array($headerTmp) ? array_values($headerTmp) : [];
+
+            $targetIndex = null;
+
+            if (!empty($headersTmp)) {
+                // 1) Preferred: find the "Sessions" column and pick the next column (selected extra field).
+                $sessionsNorm = $normalizeHeader((string) get_lang('Sessions'));
+                $coursesNorm  = $normalizeHeader((string) get_lang('Courses'));
+
+                $sessionsIndex = null;
+                $coursesIndex = null;
+
+                foreach ($headersTmp as $i => $h) {
+                    $hn = $normalizeHeader((string) $h);
+                    if (null === $sessionsIndex && $hn === $sessionsNorm) {
+                        $sessionsIndex = (int) $i;
+                    }
+                    if (null === $coursesIndex && $hn === $coursesNorm) {
+                        $coursesIndex = (int) $i;
+                    }
+                }
+
+                if (null === $sessionsIndex && null !== $coursesIndex) {
+                    // Fallback: assume Sessions is right after Courses.
+                    $sessionsIndex = $coursesIndex + 1;
+                }
+
+                if (null !== $sessionsIndex) {
+                    $candidate = $sessionsIndex + 1;
+                    if (isset($headersTmp[$candidate])) {
+                        // Ensure we didn't land on "Active" or "Actions" (means no extra column exists).
+                        $candidateNorm = $normalizeHeader((string) $headersTmp[$candidate]);
+                        $activeNorm = $normalizeHeader((string) get_lang('Active'));
+                        $actionsNorm = $normalizeHeader((string) get_lang('Actions'));
+
+                        if ($candidateNorm !== $activeNorm && $candidateNorm !== $actionsNorm) {
+                            $targetIndex = $candidate;
+                        }
+                    }
+                }
+
+                // 2) Last resort: exact match by selected label/variable (no substring checks).
+                if (null === $targetIndex) {
+                    $selectedLabelNorm = $normalizeHeader((string) $selectedExtraFieldLabel);
+                    $selectedVarNorm   = $normalizeHeader((string) $selectedExtraFieldVariable);
+
+                    foreach ($headersTmp as $i => $h) {
+                        $hn = $normalizeHeader((string) $h);
+
+                        if ('' !== $selectedLabelNorm && $hn === $selectedLabelNorm) {
+                            $targetIndex = (int) $i;
+                            break;
+                        }
+                        if ('' !== $selectedVarNorm && $hn === $selectedVarNorm) {
+                            $targetIndex = (int) $i;
+                            break;
+                        }
+                    }
+                }
+
+                if (null !== $targetIndex) {
+                    $groupedHtml = $renderGroupedTable($tableArray, static function (array $cells) use ($targetIndex): string {
+                        return (string) ($cells[$targetIndex] ?? '');
+                    });
+                }
+            }
+        }
+
+        // Render grouped or fallback
+        if (!empty($groupedHtml)) {
+            $content .= $groupedHtml;
+        } else {
+            $content .= $table->return_table();
+        }
+        break;
     case 'subscription_by_day':
         $form = new FormValidator('subscription_by_day', 'get', api_get_self());
         $form->addDateRangePicker('daterange', get_lang('Date range'), true, [
@@ -436,15 +1188,57 @@ switch ($report) {
                 ]
             ];
 
+            $chartOptions = '
+                title: { text: "'.get_lang('Subscriptions vs unsubscriptions, by day').'", display: true },
+                legend: { position: "top" },
+                tooltips: { mode: "index", intersect: false },
+                hover: { mode: "index", intersect: false },
+                scales: {
+                    xAxes: [{
+                        ticks: { autoSkip: true, maxTicksLimit: 10, maxRotation: 45, minRotation: 0 },
+                        gridLines: { display: false }
+                    }],
+                    yAxes: [{
+                        ticks: { beginAtZero: true, precision: 0 }
+                    }],
+
+                    x: {
+                        ticks: { autoSkip: true, maxTicksLimit: 10, maxRotation: 45, minRotation: 0 },
+                        grid: { display: false }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: { precision: 0 }
+                    }
+                }
+            ';
+
             $htmlHeadXtra[] = Statistics::getJSChartTemplateWithData(
                 $chartData,
                 'bar',
-                'title: { text: "'.get_lang('Subscriptions vs unsubscriptions, by day').'", display: true }',
+                $chartOptions,
                 'subscriptions_chart',
                 true
             );
 
-            $content .= '<canvas id="subscriptions_chart"></canvas>';
+            $htmlHeadXtra[] = '<style>
+                #subscriptions_chart_wrap{
+                    width: 100%;
+                    height: 360px;
+                    max-height: 60vh;
+                    margin: 12px 0 20px;
+                    position: relative;
+                }
+                #subscriptions_chart_wrap canvas{
+                    width: 100% !important;
+                    height: 100% !important;
+                    display: block;
+                }
+                @media (max-width: 768px){
+                    #subscriptions_chart_wrap{ height: 280px; }
+                }
+            </style>';
+            $content .= '<div id="subscriptions_chart_wrap"><canvas id="subscriptions_chart"></canvas></div>';
             $table = new HTML_Table(['class' => 'table table-hover table-striped table-bordered data_table']);
 
             $table->setHeaderContents(0, 0, get_lang('Date'));
@@ -465,15 +1259,19 @@ switch ($report) {
         break;
     case 'session_by_date':
         $sessions = [];
+        $values = [];
         if ($validated) {
             $values = $form->getSubmitValues();
-            $dateStart = $values['range_start'];
-            $dateEnd = $values['range_end'];
+            $dateStart = (string) ($_REQUEST['range_start'] ?? ($values['range_start'] ?? ''));
+            $dateEnd = (string) ($_REQUEST['range_end'] ?? ($values['range_end'] ?? ''));
+            $statusId = (int) ($_REQUEST['status_id'] ?? ($values['status_id'] ?? 0));
+            $dateStart = Security::remove_XSS($dateStart);
+            $dateEnd = Security::remove_XSS($dateEnd);
             $first = DateTime::createFromFormat('Y-m-d', $dateStart);
             $second = DateTime::createFromFormat('Y-m-d', $dateEnd);
             $numberOfWeeks = 0;
-            if ($first) {
-                $numberOfWeeks = floor($first->diff($second)->days / 7);
+            if ($first && $second) {
+                $numberOfWeeks = (int) floor($first->diff($second)->days / 7);
             }
 
             $statusCondition = '';
@@ -484,7 +1282,6 @@ switch ($report) {
             $start = Database::escape_string($dateStart);
             $end = Database::escape_string($dateEnd);
 
-            // User count
             $tableSession = Database::get_main_table(TABLE_MAIN_SESSION);
             $tableSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
             $sql = "SELECT * FROM $tableSession
@@ -504,7 +1301,7 @@ switch ($report) {
             }
 
             $content .= Display::page_subheader2(get_lang('Global statistics'));
-            // Coach.
+
             $sql = "SELECT COUNT(DISTINCT(sru.user_id)) count
                     FROM $tableSession s
                     INNER JOIN $tableSessionRelUser sru
@@ -519,15 +1316,13 @@ switch ($report) {
             $row = Database::fetch_array($result);
             $uniqueCoaches = $row['count'];
 
-            // Categories
             $sql = "SELECT count(id) count, session_category_id FROM $tableSession
                     WHERE
                         (display_start_date BETWEEN '$start' AND '$end' OR
                         display_end_date BETWEEN '$start' AND '$end')
-                        $statusCondition;
+                        $statusCondition
                     GROUP BY session_category_id
                     ";
-
             $result = Database::query($sql);
             $sessionPerCategories = [];
             while ($row = Database::fetch_array($result)) {
@@ -560,7 +1355,7 @@ switch ($report) {
                 }
             }
 
-            $table = new HTML_Table(['class' => 'table table-responsive']);
+            $table = new HTML_Table(['class' => 'table table-hover table-striped table-bordered']);
             $row = 0;
             $table->setCellContents($row, 0, get_lang('Weeks'));
             $table->setCellContents($row, 1, $numberOfWeeks);
@@ -582,15 +1377,17 @@ switch ($report) {
             $table->setCellContents($row, 1, $averageCoach);
             $row++;
 
-            $content .= $table->toHtml();
+            $content .= '<div class="sbd-table-responsive">'.$table->toHtml().'</div>';
+            if ($sessionCount > 0) {
+                $content .= '<div class="sbd-cards">';
+                $content .= '  <div class="sbd-card sbd-mini-table"><h4 id="canvas1_title"></h4><div id="canvas1_table"></div></div>';
+                $content .= '  <div class="sbd-card sbd-mini-table"><h4 id="canvas2_title"></h4><div id="canvas2_table"></div></div>';
+                $content .= '  <div class="sbd-card sbd-mini-table"><h4 id="canvas3_title"></h4><div id="canvas3_table"></div></div>';
+                $content .= '</div>';
+            }
 
-            $content .= '<div class="grid grid-cols-3 gap-4">';
-            $content .= '<div><h4 class="text-center" id="canvas1_title"></h4><div id="canvas1_table"></div></div>';
-            $content .= '<div><h4 class="text-center" id="canvas2_title"></h4><div id="canvas2_table"></div></div>';
-            $content .= '<div><h4 class="text-center" id="canvas3_title"></h4><div id="canvas3_table"></div></div>';
-            $content .= '</div>';
-
-            $tableCourse = new HTML_Table(['class' => 'table table-responsive']);
+            // Courses table
+            $tableCourse = new HTML_Table(['class' => 'table table-hover table-striped table-bordered']);
             $headers = [
                 get_lang('Course'),
                 get_lang('Sessions count'),
@@ -608,26 +1405,24 @@ switch ($report) {
                 arsort($courseSessions);
                 foreach ($courseSessions as $courseId => $count) {
                     $courseInfo = api_get_course_info_by_id($courseId);
-                    $tableCourse->setCellContents($row, 0, $courseInfo['name']);
-                    $tableCourse->setCellContents($row, 1, $count);
+                    $courseName = htmlspecialchars((string) ($courseInfo['name'] ?? ''), ENT_QUOTES, 'UTF-8');
+                    $tableCourse->setCellContents($row, 0, $courseName);
+                    $tableCourse->setCellContents($row, 1, (int) $count);
                     $row++;
                 }
             }
 
-            $content .= $tableCourse->toHtml();
-
-            $content .= '<div class="grid grid-cols-3 gap-4">';
-            $content .= '<div><canvas id="canvas1" class="mb-5"></canvas></div>';
-            $content .= '<div><canvas id="canvas2" class="mb-5"></canvas></div>';
-            $content .= '<div><canvas id="canvas3" class="mb-5"></canvas></div>';
-            $content .= '</div>';
-
-            $content .= '<div class="grid grid-cols-1">';
-            $content .= '<div><canvas id="canvas4" class="mb-5"></canvas></div>';
-            $content .= '</div>';
+            $content .= '<div class="sbd-table-responsive">'.$tableCourse->toHtml().'</div>';
+            if ($sessionCount > 0) {
+                $content .= '<div class="sbd-cards">';
+                $content .= '  <div class="sbd-card"><div class="sbd-chart-wrap"><canvas id="canvas1"></canvas></div></div>';
+                $content .= '  <div class="sbd-card"><div class="sbd-chart-wrap"><canvas id="canvas2"></canvas></div></div>';
+                $content .= '  <div class="sbd-card"><div class="sbd-chart-wrap"><canvas id="canvas3"></canvas></div></div>';
+                $content .= '</div>';
+            }
         }
 
-        $table = new HTML_Table(['class' => 'table table-responsive']);
+        $table = new HTML_Table(['class' => 'table table-hover table-striped table-bordered data_table']);
         $headers = [
             get_lang('Name'),
             get_lang('Start date'),
@@ -645,28 +1440,26 @@ switch ($report) {
         $row++;
 
         foreach ($sessions as $session) {
-            $courseList = SessionManager::getCoursesInSession($session['id']);
-            $table->setCellContents($row, 0, $session['title']);
+            $table->setCellContents($row, 0, htmlspecialchars((string) ($session['title'] ?? ''), ENT_QUOTES, 'UTF-8'));
             $table->setCellContents($row, 1, api_get_local_time($session['display_start_date']));
             $table->setCellContents($row, 2, api_get_local_time($session['display_end_date']));
 
-            // Get first language.
             $language = '';
             $courses = SessionManager::getCoursesInSession($session['id']);
             if (!empty($courses)) {
                 $courseId = $courses[0];
                 $courseInfo = api_get_course_info_by_id($courseId);
-                $language = $courseInfo['language'];
-                $language = get_lang(ucfirst(str_replace(2, '', $language)));
+                $language = (string) ($courseInfo['language'] ?? '');
+                $language = get_lang(ucfirst(str_replace('2', '', $language)));
             }
-            $table->setCellContents($row, 3, $language);
+            $table->setCellContents($row, 3, htmlspecialchars((string) $language, ENT_QUOTES, 'UTF-8'));
             $table->setCellContents($row, 4, SessionManager::getStatusLabel($session['status']));
             $studentsCount = SessionManager::get_users_by_session($session['id'], 0, true);
-            $table->setCellContents($row, 5, $studentsCount);
+            $table->setCellContents($row, 5, (int) $studentsCount);
             $row++;
         }
 
-        $content .= $table->toHtml();
+        $content .= '<div class="sbd-table-responsive">'.$table->toHtml().'</div>';
 
         if (isset($_REQUEST['action']) && 'export' === $_REQUEST['action']) {
             $data = $table->toArray();
@@ -676,23 +1469,90 @@ switch ($report) {
 
         $link = '';
         if ($validated) {
-            $url = api_get_self().'?report=session_by_date&action=export';
-            if (!empty($values)) {
-                foreach ($values as $index => $value) {
-                    $url .= '&'.$index.'='.$value;
+            $exportParams = [
+                'report' => 'session_by_date',
+                'action' => 'export',
+                'range_start' => (string) ($_REQUEST['range_start'] ?? ($values['range_start'] ?? '')),
+                'range_end' => (string) ($_REQUEST['range_end'] ?? ($values['range_end'] ?? '')),
+                'status_id' => (string) ((int) ($_REQUEST['status_id'] ?? ($values['status_id'] ?? 0))),
+            ];
+            foreach ($exportParams as $k => $v) {
+                if ($v === '' || $v === '0') {
+                    unset($exportParams[$k]);
                 }
             }
-            $link = Display::url(
-                Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon').'&nbsp;'.get_lang('Export to XLS'),
-                $url,
-                ['class' => 'btn btn--plain']
-            );
+
+            $url = api_get_self().'?'.http_build_query($exportParams);
+            if ($sessionCount > 0) {
+                $link = Display::url(
+                    Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon').'&nbsp;'.get_lang('Export to XLS'),
+                    $url,
+                    ['class' => 'btn btn--plain']
+                );
+            }
         }
 
-        $content = $form->returnForm().$content.$link;
+        $content = '<div class="sbd-filters">'.$form->returnForm().'</div>'.$content.$link;
 
         break;
     case 'user_session':
+        $htmlHeadXtra[] = <<<HTML
+        <style>
+          #user_session input[name="range"]{
+            min-width: 320px;
+          }
+          @media (max-width: 768px){
+            #user_session input[name="range"]{
+              width: 100%;
+              min-width: 0;
+            }
+          }
+        </style>
+        HTML;
+
+        $labelLastWeek = addslashes(get_lang('Last week'));
+        $labelNextWeek = addslashes(get_lang('Next week'));
+
+        $htmlHeadXtra[] = <<<JS
+        <script>
+        (function () {
+          "use strict";
+          function patchUserSessionRanges() {
+            var \$input = $('input[name="range"]');
+            if (!\$input.length) return;
+
+            var drp = \$input.data('daterangepicker');
+            if (!drp) return;
+
+            var lastWeekLabel = "{$labelLastWeek}";
+            var nextWeekLabel = "{$labelNextWeek}";
+
+            drp.ranges = drp.ranges || {};
+
+            // Add "Last week"
+            drp.ranges[lastWeekLabel] = [
+              moment().subtract(1,'week').startOf('week'),
+              moment().subtract(1,'week').endOf('week')
+            ];
+
+            if (drp.ranges[nextWeekLabel]) {
+              delete drp.ranges[nextWeekLabel];
+            }
+
+            \$input.on('show.daterangepicker', function () {
+              var drp2 = \$input.data('daterangepicker');
+              if (!drp2) return;
+              drp2.ranges = drp.ranges;
+            });
+          }
+
+          $(function () {
+            patchUserSessionRanges();
+            setTimeout(patchUserSessionRanges, 150);
+          });
+        })();
+        </script>
+        JS;
         $form = new FormValidator('user_session', 'get');
         $form->addDateRangePicker('range', get_lang('Date range'), true);
         $form->addHidden('report', 'user_session');
@@ -733,7 +1593,7 @@ switch ($report) {
         $extraParams['autowidth'] = true;
         $extraParams['height'] = 'auto';
         $extraParams['shrinkToFit'] = true;
-        $extraParams['forceFit'] = true; // Stretch columns to fill the available width
+        $extraParams['forceFit'] = false;
         $extraParams['gridview'] = true;
 
         $actionLinks = '';
@@ -742,17 +1602,44 @@ switch ($report) {
         $wrapperId = $gridId.'_wrapper';
 
         $content .= '
-        <style>
-            /* Full-width wrapper so jqGrid can correctly compute available space */
-            #'.$wrapperId.' { width: 100%; max-width: none; overflow-x: auto; }
-
-            /* Guardrail: sometimes jqGrid keeps a fixed width on its outer box */
-            #'.$wrapperId.' #gbox_'.$gridId.' { width: 100% !important; }
-        </style>
-        <div id="'.$wrapperId.'">
-            '.Display::grid_html($gridId).'
-        </div>
-    ';
+            <style>
+              #'.$wrapperId.'{
+                width: 100%;
+                max-width: 100%;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                box-sizing: border-box;
+              }
+              #'.$wrapperId.' #gbox_'.$gridId.',
+              #'.$wrapperId.' #gview_'.$gridId.',
+              #'.$wrapperId.' .ui-jqgrid,
+              #'.$wrapperId.' .ui-jqgrid-view,
+              #'.$wrapperId.' .ui-jqgrid-hdiv,
+              #'.$wrapperId.' .ui-jqgrid-bdiv{
+                width: 100% !important;
+                max-width: 100% !important;
+                box-sizing: border-box;
+              }
+              #'.$wrapperId.' table.ui-jqgrid-btable,
+              #'.$wrapperId.' table.ui-jqgrid-htable{
+                width: 100% !important;
+                table-layout: fixed;
+              }
+              #'.$wrapperId.' .ui-jqgrid .jqgrow td{
+                white-space: normal !important;
+                overflow-wrap: anywhere;
+                word-break: break-word;
+                height: auto;
+              }
+              #'.$wrapperId.' .ui-jqgrid-htable th div{
+                white-space: normal !important;
+                height: auto;
+              }
+            </style>
+            <div id="'.$wrapperId.'">
+              '.Display::grid_html($gridId).'
+            </div>
+            ';
 
         $content .= '
         <script>
@@ -794,14 +1681,16 @@ switch ($report) {
                 }
 
                 function resizeGrid() {
-                    if (!$grid.length) {
-                        return;
-                    }
+                  if (!$grid.length) return;
 
-                    var w = getTargetWidth();
-                    if (w && w > 0) {
-                        $grid.jqGrid("setGridWidth", w, true);
-                    }
+                  var w = $wrap[0].clientWidth || $wrap.width();
+                  var vw = window.innerWidth || jQuery(window).width();
+
+                  w = Math.min(w, vw - 24);
+
+                  if (w > 0) {
+                    $grid.jqGrid("setGridWidth", w, true);
+                  }
                 }
 
                 // Initial + delayed resizes (layout can change after render)
@@ -854,10 +1743,10 @@ switch ($report) {
             $courses[$category->getTitle()] = $category->getCourses()->count();
         }
 
-        $content .= Statistics::printStats(get_lang('Courses'), $courses);
+        $content .= Statistics::printStats(get_lang('Courses'), $courses, false);
         break;
     case 'tools':
-        $content .= '<canvas class="col-md-12" id="canvas" height="300px" style="margin-bottom: 20px"></canvas>';
+        $content .= '<div id="tools_chart_wrap"><canvas id="canvas"></canvas></div>';
         $content .= Statistics::printToolStats();
         break;
     case 'tool_usage':
@@ -885,6 +1774,18 @@ switch ($report) {
             $values = $form->getSubmitValues();
             $toolIds = $values['tool_ids'];
             $reportData = Statistics::getToolUsageReportByTools($toolIds);
+            usort($reportData, static function (array $a, array $b): int {
+                $c1 = (int) ($a['resource_count'] ?? 0);
+                $c2 = (int) ($b['resource_count'] ?? 0);
+
+                if ($c1 === $c2) {
+                    $d1 = (string) ($a['last_updated'] ?? '');
+                    $d2 = (string) ($b['last_updated'] ?? '');
+                    return strcmp($d2, $d1);
+                }
+
+                return $c2 <=> $c1;
+            });
 
             $table = new HTML_Table(['class' => 'table table-hover table-striped data_table stats_table']);
             $headers = [
@@ -904,7 +1805,7 @@ switch ($report) {
             foreach ($reportData as $data) {
                 $linkHtml = $data['link'] !== '-'
                     ? sprintf(
-                        '<a href="%s" class="text-blue-500 underline hover:text-blue-700" target="_self">%s</a>',
+                        '<a href="%s" class="text-primary underline hover:text-primary/80" target="_self">%s</a>',
                         $data['link'],
                         htmlspecialchars($data['tool_name'])
                     )
@@ -921,9 +1822,9 @@ switch ($report) {
         }
         break;
     case 'coursebylanguage':
-        $content .= '<canvas class="col-md-12" id="canvas" height="300px" style="margin-bottom: 20px"></canvas>';
+        $content .= '<div id="coursebylanguage_chart_wrap"><canvas id="canvas"></canvas></div>';
         $result = Statistics::printCourseByLanguageStats();
-        $content .= Statistics::printStats(get_lang('Number of courses by language'), $result, true);
+        $content .= Statistics::printStats(get_lang('Number of courses by language'), $result, false);
         break;
     case 'courselastvisit':
         $content .= Statistics::printCourseLastVisit();
@@ -931,6 +1832,12 @@ switch ($report) {
     case 'users_active':
         $content = '';
         if ($validated) {
+            $htmlHeadXtra[] = '<style>
+                .users-active-wrap .stats_table,
+                .users-active-wrap .data_table,
+                .users-active-wrap table.table{ margin-bottom: 18px !important; }
+            </style>';
+
             $startDate = $values['daterange_start'];
             $endDate = $values['daterange_end'];
 
@@ -956,9 +1863,32 @@ switch ($report) {
 
             $conditions = [];
             $extraConditions = '';
-            if (!empty($startDate) && !empty($endDate)) {
-                // $extraConditions is already cleaned inside the function getUserListExtraConditions
-                $extraConditions .= " AND created_at BETWEEN '$startDate' AND '$endDate' ";
+            $userTable = Database::get_main_table(TABLE_MAIN_USER);
+            $dateColumn = '';
+            try {
+                $candidates = ['created_at', 'registration_date'];
+                foreach ($candidates as $candidate) {
+                    $q = Database::query("SHOW COLUMNS FROM $userTable LIKE '$candidate'");
+                    if ($q && Database::num_rows($q) > 0) {
+                        $dateColumn = $candidate;
+                        break;
+                    }
+                }
+            } catch (\Throwable $e) {
+                $dateColumn = '';
+            }
+
+            if (!empty($startDate) && !empty($endDate) && !empty($dateColumn)) {
+                $startDay = Security::remove_XSS((string) $startDate);
+                $endDay = Security::remove_XSS((string) $endDate);
+                $dtStart = DateTime::createFromFormat('Y-m-d', $startDay);
+                $dtEnd = DateTime::createFromFormat('Y-m-d', $endDay);
+
+                if ($dtStart && $dtEnd && $dtStart->format('Y-m-d') === $startDay && $dtEnd->format('Y-m-d') === $endDay) {
+                    $startUtc = api_get_utc_datetime($startDay.' 00:00:00');
+                    $endUtc = api_get_utc_datetime($endDay.' 23:59:59');
+                    $extraConditions .= " AND $dateColumn BETWEEN '$startUtc' AND '$endUtc' ";
+                }
             }
 
             $totalCount = UserManager::getUserListExtraConditions(
@@ -988,8 +1918,13 @@ switch ($report) {
                 ],
             ];
 
-            $first = ($table->page_nr - 1) * $pagination;
-            $limit = $table->page_nr * $pagination;
+            $perPage = (int) $table->per_page;
+            if ($perPage <= 0) {
+                $perPage = $pagination;
+            }
+
+            $first = max(0, ((int) $table->page_nr - 1) * $perPage);
+            $limit = $perPage;
 
             $data = [];
             $headers = [
@@ -1014,7 +1949,12 @@ switch ($report) {
             }
 
             if (isset($_REQUEST['table_users_active_per_page'])) {
-                $limit = (int) $_REQUEST['table_users_active_per_page'];
+                $requestedPerPage = (int) $_REQUEST['table_users_active_per_page'];
+                if ($requestedPerPage > 0) {
+                    $perPage = $requestedPerPage;
+                    $limit = $perPage;
+                    $first = max(0, ((int) $table->page_nr - 1) * $perPage);
+                }
             }
 
             $users = UserManager::getUserListExtraConditions(
@@ -1526,7 +2466,7 @@ switch ($report) {
             $content = $header.$extraTables.$graph.$content;
         }
 
-        $content = $form->returnForm().$content;
+        $content = '<div class="users-active-wrap">'.$form->returnForm().$content.'</div>';
 
         break;
     case 'users_online':
@@ -1558,19 +2498,30 @@ switch ($report) {
         }
 
         $now = api_get_local_time();
+        $tones = [
+            3 =>  ['border' => 'border-danger/20',  'bg' => 'bg-danger/10',  'iconBg' => 'bg-danger/20',  'text' => 'text-danger'],
+            5 =>  ['border' => 'border-warning/20', 'bg' => 'bg-warning/10', 'iconBg' => 'bg-warning/20', 'text' => 'text-warning'],
+            30 => ['border' => 'border-info/20',    'bg' => 'bg-info/10',    'iconBg' => 'bg-info/20',    'text' => 'text-info'],
+            120=> ['border' => 'border-success/20', 'bg' => 'bg-success/10', 'iconBg' => 'bg-success/20', 'text' => 'text-success'],
+        ];
 
-        $renderCard = static function (string $label, int $value, string $iconClass): string {
+        $renderCard = static function (string $label, int $value, string $iconClass, array $tone): string {
             $labelEsc = htmlspecialchars($label, ENT_QUOTES, 'UTF-8');
             $valueEsc = (int) $value;
 
+            $border = $tone['border'] ?? 'border-gray-25';
+            $bg     = $tone['bg'] ?? 'bg-white';
+            $iconBg = $tone['iconBg'] ?? 'bg-gray-20';
+            $text   = $tone['text'] ?? 'text-gray-90';
+
             return '
-            <div class="rounded-xl border border-gray-20 bg-white p-4 shadow-sm">
+            <div class="rounded-xl border '.$border.' '.$bg.' p-4 shadow-sm">
                 <div class="flex items-center gap-3">
-                    <div class="shrink-0 w-10 h-10 rounded-lg bg-gray-10 flex items-center justify-center">
+                    <div class="shrink-0 w-10 h-10 rounded-lg '.$iconBg.' flex items-center justify-center '.$text.'">
                         <i class="'.$iconClass.'" aria-hidden="true"></i>
                     </div>
                     <div class="min-w-0">
-                        <div class="text-sm text-gray-60">'.$labelEsc.'</div>
+                        <div class="text-sm text-gray-50">'.$labelEsc.'</div>
                         <div class="text-2xl font-semibold text-gray-90">'.$valueEsc.'</div>
                     </div>
                 </div>
@@ -1581,49 +2532,52 @@ switch ($report) {
         $cardsOnline = '';
         $cardsTest = '';
 
-        // Use distinct icons per interval (optional, but looks nicer).
         $icons = [
             3   => 'fa fa-bolt',
-            5   => 'fa fa-thermometer-4',
-            30  => 'fa fa-thermometer-2',
-            120 => 'fa fa-clock-o',
+            5   => 'fa fa-exclamation-triangle',
+            30  => 'fa fa-info-circle',
+            120 => 'fa fa-check-circle',
         ];
 
         foreach ($intervals as $minutes) {
             $minutes = (int) $minutes;
-            $suffix = ' ('.$minutes.'&prime;)';
+            $suffix = " ({$minutes}')";
+
+            $tone = $tones[$minutes] ?? [];
 
             $cardsOnline .= $renderCard(
                 get_lang('Users online').$suffix,
                 $onlineCounts[$minutes] ?? 0,
-                $icons[$minutes] ?? 'fa fa-user'
+                $icons[$minutes] ?? 'fa fa-user',
+                $tone
             );
 
             $cardsTest .= $renderCard(
                 get_lang('Users active in a test').$suffix,
                 $testCounts[$minutes] ?? 0,
-                $icons[$minutes] ?? 'fa fa-pencil'
+                $icons[$minutes] ?? 'fa fa-pencil',
+                $tone
             );
         }
 
         $content = '
-        <div class="max-w-6xl mx-auto">
-            <div class="flex items-center justify-between mb-4">
-                <h2 class="text-lg font-semibold text-gray-90">'.get_lang('Users online').'</h2>
-                <div class="text-sm text-gray-60">'.htmlspecialchars((string) $now, ENT_QUOTES, "UTF-8").'</div>
-            </div>
+            <div class="max-w-6xl mx-auto">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-lg font-semibold text-gray-90">'.get_lang('Users online').'</h2>
+                    <div class="text-sm text-gray-50">'.htmlspecialchars((string) $now, ENT_QUOTES, "UTF-8").'</div>
+                </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                '.$cardsOnline.'
-            </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                    '.$cardsOnline.'
+                </div>
 
-            <h3 class="text-lg font-semibold text-gray-90 mb-4">'.get_lang('Users active in a test').'</h3>
+                <h3 class="text-lg font-semibold text-gray-90 mb-4">'.get_lang('Users active in a test').'</h3>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                '.$cardsTest.'
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    '.$cardsTest.'
+                </div>
             </div>
-        </div>
-    ';
+        ';
         break;
     case 'new_user_registrations':
         $form = new FormValidator('new_user_registrations', 'get', api_get_self());
@@ -1639,6 +2593,26 @@ switch ($report) {
         $chartContent = '';
         $chartCreatorContent = '';
         $textChart = '';
+        $htmlHeadXtra[] = '
+            <style>
+                .js-chart-container {
+                    position: relative;
+                    height: 360px;
+                    max-height: 360px;
+                    overflow: hidden;
+                }
+                .js-chart-container--pie {
+                    height: 520px;
+                    max-height: 520px;
+                }
+                .js-chart-container canvas {
+                    width: 100% !important;
+                    height: 100% !important;
+                    display: block;
+                }
+            </style>
+        ';
+
         if ($validated) {
             $values = $form->getSubmitValues();
             $dateStart = Security::remove_XSS($values['daterange_start']);
@@ -1674,11 +2648,11 @@ switch ($report) {
                                 chart.data.datasets[0].data = dailyData.data;
                                 chart.data.datasets[0].label = "User Registrations for " + year + "-" + month;
                                 chart.update();
-
                                 $("#backButton").show();
                             }
                         });
-                    }';
+                    }
+                ';
                 } else {
                     $textChart = get_lang('User registrations by day');
                     foreach ($registrations as $registration) {
@@ -1691,42 +2665,54 @@ switch ($report) {
                     $onClickHandler = '';
                 }
 
+                $options = '
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: false,
+                    plugins: {
+                        title: { text: "'.$textChart.'", display: true }
+                    },
+                    scales: {
+                        x: { beginAtZero: true },
+                        y: { barPercentage: 0.4, categoryPercentage: 0.5, barThickness: 10, maxBarThickness: 15 }
+                    },
+                    layout: {
+                        padding: { left: 10, right: 10, top: 10, bottom: 10 }
+                    }
+                ';
                 $htmlHeadXtra[] = Statistics::getJSChartTemplateWithData(
                     $chartData['chart'],
                     'bar',
-                    'title: { text: "'.$textChart.'", display: true },
-                            scales: {
-                                x: { beginAtZero: true },
-                                y: { barPercentage: 0.4, categoryPercentage: 0.5, barThickness: 10, maxBarThickness: 15 }
-                            },
-                            layout: {
-                                padding: { left: 10, right: 10, top: 10, bottom: 10 }
-                            }',
+                    $options,
                     'user_registration_chart',
                     true,
                     $onClickHandler,
                     '
-                            $("#backButton").click(function() {
-                                $.ajax({
-                                    url: "/main/inc/ajax/statistics.ajax.php?a=get_user_registration_by_month",
-                                    type: "POST",
-                                    data: { date_start: "'.$dateStart.'", date_end: "'.$dateEnd.'" },
-                                    success: function(response) {
-                                        var monthlyData = JSON.parse(response);
-                                        chart.data.labels = monthlyData.labels;
-                                        chart.data.datasets[0].data = monthlyData.data;
-                                        chart.data.datasets[0].label = "'.get_lang('User registrations by month').'";
-                                        chart.update();
-                                        $("#backButton").hide();
-                                    }
-                                });
-                            });
-                        '
+                    $("#backButton").click(function() {
+                        $.ajax({
+                            url: "/main/inc/ajax/statistics.ajax.php?a=get_user_registration_by_month",
+                            type: "POST",
+                            data: { date_start: "'.$dateStart.'", date_end: "'.$dateEnd.'" },
+                            success: function(response) {
+                                var monthlyData = JSON.parse(response);
+                                chart.data.labels = monthlyData.labels;
+                                chart.data.datasets[0].data = monthlyData.data;
+                                chart.data.datasets[0].label = "'.get_lang('User registrations by month').'";
+                                chart.update();
+                                $("#backButton").hide();
+                            }
+                        });
+                    });
+                ',
+                    ['width' => 900, 'height' => 360]
                 );
 
+                $chartContent .= '<div class="js-chart-container">';
                 $chartContent .= '<canvas id="user_registration_chart"></canvas>';
+                $chartContent .= '</div>';
+                $chartContent .= '<div class="mt-2">';
                 $chartContent .= '<button id="backButton" style="display:none;" class="btn btn--info">'.get_lang('Back to months').'</button>';
-
+                $chartContent .= '</div>';
                 $creators = Statistics::getUserRegistrationsByCreator($dateStart, $dateEnd);
                 if (!empty($creators)) {
                     $chartCreatorContent = '<hr />';
@@ -1737,31 +2723,42 @@ switch ($report) {
                         $creatorData[] = $creator['count'];
                     }
 
+                    $creatorOptions = '
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        animation: false,
+                        plugins: {
+                            title: { text: "'.get_lang('User registrations by creator').'", display: true },
+                            legend: { position: "top" }
+                        },
+                        layout: {
+                            padding: { left: 10, right: 10, top: 10, bottom: 10 }
+                        }
+                    ';
+
                     $htmlHeadXtra[] = Statistics::getJSChartTemplateWithData(
                         ['labels' => $creatorLabels, 'datasets' => [['label' => get_lang('User registrations by creator'), 'data' => $creatorData]]],
                         'pie',
-                        'title: { text: "'.get_lang('User registrations by creator').'", display: true },
-                        legend: { position: "top" },
-                        layout: {
-                            padding: { left: 10, right: 10, top: 10, bottom: 10 }
-                        }',
+                        $creatorOptions,
                         'user_registration_by_creator_chart',
-                        false,
+                        true,
                         '',
                         '',
-                        ['width' => 700, 'height' => 700]
+                        ['width' => 700, 'height' => 520]
                     );
 
+                    $chartCreatorContent .= '<div class="js-chart-container js-chart-container--pie">';
                     $chartCreatorContent .= '<canvas id="user_registration_by_creator_chart"></canvas>';
+                    $chartCreatorContent .= '</div>';
+                }
             }
         }
-    }
 
-    $content .= $form->returnForm();
-    $content .= $chartContent;
-    $content .= $chartCreatorContent;
+        $content .= $form->returnForm();
+        $content .= $chartContent;
+        $content .= $chartCreatorContent;
 
-    break;
+        break;
     case 'users':
         $content .= '<div class="grid grid-cols-3 gap-4">';
         $content .= '<div><canvas id="canvas1" class="mb-5"></canvas></div>';
@@ -1777,7 +2774,8 @@ switch ($report) {
             [
                 get_lang('Trainers') => Statistics::countUsers(COURSEMANAGER, null, $countInvisible),
                 get_lang('Learners') => Statistics::countUsers(STUDENT, null, $countInvisible),
-            ]
+            ],
+            false
         );
         $courseCategoryRepo = Container::getCourseCategoryRepository();
         $categories = $courseCategoryRepo->findAll();
@@ -1790,9 +2788,9 @@ switch ($report) {
             $students[$name] = Statistics::countUsers(STUDENT, $code, $countInvisible);
         }
         // docents for each course category
-        $content .= Statistics::printStats(get_lang('Trainers'), $teachers);
+        $content .= Statistics::printStats(get_lang('Trainers'), $teachers, false);
         // students for each course category
-        $content .= Statistics::printStats(get_lang('Learners'), $students);
+        $content .= Statistics::printStats(get_lang('Learners'), $students, false);
         break;
     case 'recentlogins':
         $content .= '<h2 style="margin-bottom:18px;">'.sprintf(get_lang('Last %s days'), '15').'</h2>';
@@ -1830,29 +2828,62 @@ switch ($report) {
         $content .= Statistics::printUserPicturesStats();
         break;
     case 'no_login_users':
+        $totalUsers = Statistics::countUsers(null, null, true, false);
+        $content .= Display::page_subheader2(get_lang('Number of users').': '.(int) $totalUsers);
         $content .= Statistics::printUsersNotLoggedInStats();
         break;
     case 'zombies':
-        $content .= ZombieReport::create(['report' => 'zombies'])->display(true);
+        $htmlHeadXtra[] = <<<'HTML'
+        <style>
+        .ch-zombies-wrap { margin-top: 0.75rem; }
+        .ch-zombies-wrap .table-responsive { overflow-x: auto; }
+        .ch-zombies-wrap table { width: 100%; table-layout: fixed; }
+        .ch-zombies-wrap th, .ch-zombies-wrap td { overflow-wrap: anywhere; word-break: break-word; }
+        .ch-zombies-wrap .pagination { margin: 0; }
+        .ch-zombies-wrap .row, .ch-zombies-wrap .col, .ch-zombies-wrap .col-12 { max-width: 100%; }
+        </style>
+        HTML;
+        $content .= '<div class="ch-zombies-wrap">'.ZombieReport::create(['report' => 'zombies'])->display(true).'</div>';
         break;
     case 'activities':
+        $htmlHeadXtra[] = <<<JS
+        <script>
+        (function () {
+          "use strict";
+          $(document).on("click", "a.js-user-details-link", function (e) {
+            e.stopImmediatePropagation();
+          });
+        })();
+        </script>
+        JS;
         $content .= Statistics::printActivitiesStats();
         break;
     case 'messagesent':
         $messages_sent = Statistics::getMessages('sent');
-        $content .= Statistics::printStats(get_lang('Number of messages sent'), $messages_sent);
+        $content .= Statistics::printStats(get_lang('Number of messages sent'), $messages_sent, false);
         break;
     case 'messagereceived':
         $messages_received = Statistics::getMessages('received');
-        $content .= Statistics::printStats(get_lang('Number of messages received'), $messages_received);
+        $content .= Statistics::printStats(get_lang('Number of messages received'), $messages_received, false);
         break;
     case 'friends':
         // total amount of friends
         $friends = Statistics::getFriends();
-        $content .= Statistics::printStats(get_lang('Contacts count'), $friends);
+        $content .= Statistics::printStats(get_lang('Contacts count'), $friends, false);
         break;
     case 'logins_by_date':
-        $content .= Statistics::printLoginsByDate();
+        $htmlHeadXtra[] = '<script>
+        $(function () {
+            var $wrap = $("#ch-logins-by-date");
+            if (!$wrap.length) return;
+            var $form = $wrap.find("form").first();
+            var $table = $wrap.find("table").first();
+            if ($form.length && $table.length) {
+                $form.insertBefore($table);
+            }
+        });
+        </script>';
+        $content .= '<div id="ch-logins-by-date">'.Statistics::printLoginsByDate().'</div>';
         break;
     case 'quarterly_report':
         global $htmlHeadXtra;
@@ -1907,13 +2938,17 @@ switch ($report) {
         ];
 
         $ajaxEndpointJs = json_encode($ajaxEndpoint, JSON_UNESCAPED_SLASHES);
+        $loadingText = get_lang('Loading report...');
+        $loadErrorText = get_lang('Failed to load this report. Please try again.');
+
         $loadingHtml = '
-        <div class="flex items-center gap-2 text-sm text-gray-600 py-3">
-            '.$waitIcon.'
-            <span>Loading report…</span>
-        </div>
-    ';
+            <div class="flex items-center gap-2 text-sm text-gray-50 py-3">
+                '.$waitIcon.'
+                <span>'.htmlspecialchars($loadingText, ENT_QUOTES, 'UTF-8').'</span>
+            </div>
+        ';
         $loadingHtmlJs = json_encode($loadingHtml, JSON_UNESCAPED_SLASHES);
+        $loadErrorTextJs = json_encode($loadErrorText, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
         $htmlHeadXtra[] = <<<JS
         <script>
@@ -1922,6 +2957,7 @@ switch ($report) {
 
           var AJAX_ENDPOINT = {$ajaxEndpointJs};
           var LOADING_HTML = {$loadingHtmlJs};
+          var LOAD_ERROR_TEXT = {$loadErrorTextJs};
 
           function showTarget(\$el) {
             \$el.removeClass("hidden");
@@ -1935,33 +2971,57 @@ switch ($report) {
             \$el.toggleClass("hidden");
           }
 
+          function renderLoadError(\$target, responseText) {
+            var message = responseText || LOAD_ERROR_TEXT;
+            \$target.html(
+              '<div class="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">' +
+              message +
+              '</div>'
+            );
+          }
+
           function loadQuarterlyReport(action, targetId, force) {
             var \$target = $("#" + targetId);
             if (!\$target.length) {
-              return;
+              return $.Deferred().resolve().promise();
             }
 
             var isLoaded = \$target.data("loaded") === 1;
             if (isLoaded && !force) {
               toggleTarget(\$target);
-              return;
+              return $.Deferred().resolve().promise();
+            }
+
+            var runningRequest = \$target.data("request");
+            if (runningRequest && runningRequest.readyState !== 4) {
+              return runningRequest;
             }
 
             showTarget(\$target);
             \$target.html(LOADING_HTML);
 
-            // Load HTML from Ajax endpoint.
-            \$target.load(AJAX_ENDPOINT + "?a=" + encodeURIComponent(action), function (response, status) {
-              if (status !== "success") {
-                \$target.html(
-                  '<div class="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">' +
-                  'Failed to load this report. Please try again.' +
-                  '</div>'
-                );
-                return;
-              }
-              \$target.data("loaded", 1);
-            });
+            var request = $.ajax({
+              url: AJAX_ENDPOINT,
+              method: "GET",
+              data: { a: action },
+              dataType: "html",
+              cache: false,
+              timeout: 120000
+            })
+              .done(function (response) {
+                \$target.html(response);
+                \$target.data("loaded", 1);
+              })
+              .fail(function (xhr) {
+                renderLoadError(\$target, xhr.responseText);
+              })
+              .always(function () {
+                \$target.removeData("request");
+              });
+
+            \$target.data("request", request);
+
+            return request;
           }
 
           $(function () {
@@ -1979,10 +3039,30 @@ switch ($report) {
 
             $(document).on("click", "#js-quarterly-load-all", function (e) {
               e.preventDefault();
-              $(".js-quarterly-load").each(function () {
-                var \$btn = $(this);
-                loadQuarterlyReport(\$btn.data("action"), \$btn.data("target"), true);
-              });
+
+              var \$button = $(this);
+              var \$buttons = $(".js-quarterly-load");
+              var index = 0;
+
+              if (\$button.data("loading") === 1) {
+                return;
+              }
+
+              \$button.data("loading", 1).addClass("pointer-events-none opacity-60");
+
+              function loadNext() {
+                if (index >= \$buttons.length) {
+                  \$button.data("loading", 0).removeClass("pointer-events-none opacity-60");
+                  return;
+                }
+
+                var \$btn = \$buttons.eq(index);
+                index += 1;
+
+                loadQuarterlyReport(\$btn.data("action"), \$btn.data("target"), true).always(loadNext);
+              }
+
+              loadNext();
             });
           });
         })();
@@ -1990,20 +3070,18 @@ switch ($report) {
         JS;
         // Header
         $content .= '
-    <div class="w-full">
-      <div class="flex items-start justify-between gap-4 mb-4">
-        <div>
-          <h2 class="text-xl font-semibold text-gray-900">'.get_lang('Quarterly report').'</h2>
-          <p class="text-sm text-gray-600">'.get_lang('Show').': '.get_lang('All').'</p>
-        </div>
-        <div class="shrink-0">
-          <a href="#" id="js-quarterly-load-all"
-             class="inline-flex items-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-700">
-            '.get_lang('Show').': '.get_lang('All').'
-          </a>
-        </div>
-      </div>
-    ';
+          <div class="w-full">
+            <div class="flex items-start justify-between gap-4 mb-4">
+              <div>
+                <h2 class="text-xl font-semibold text-gray-90">'.get_lang('Quarterly report').'</h2>
+                <a href="#"
+                   id="js-quarterly-load-all"
+                   class="inline-flex items-center text-sm text-blue-700 hover:underline">
+                  '.get_lang('Show').': '.get_lang('All').'
+                </a>
+              </div>
+            </div>
+        ';
         $content .= '<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">';
 
         foreach ($cards as $card) {
@@ -2015,31 +3093,31 @@ switch ($report) {
             $action = $card['action'];
             $target = $card['target'];
             $content .= '
-        <div class="rounded-xl border border-gray-200 bg-white shadow-sm">
-          <div class="flex items-start justify-between gap-3 px-4 py-3 border-b border-gray-100">
-            <div class="min-w-0">
-              <h3 class="text-base font-semibold text-gray-900 leading-snug">'.$title.'</h3>
-            </div>
+            <div class="rounded-xl border border-gray-50 bg-white shadow-sm">
+              <div class="flex items-start justify-between gap-3 px-4 py-3 border-b border-gray-20">
+                <div class="min-w-0">
+                  <h3 class="text-base font-semibold text-gray-90 leading-snug">'.$title.'</h3>
+                </div>
 
-            <div class="flex items-center gap-2">
-              <a href="#"
-                 class="js-quarterly-load inline-flex items-center rounded-md border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
-                 data-action="'.$action.'" data-target="'.$target.'">
-                '.get_lang('Show').'
-              </a>
-              <a href="#"
-                 class="js-quarterly-reload inline-flex items-center rounded-md border border-blue-200 bg-blue-50 px-2.5 py-1.5 text-xs font-medium text-blue-700 hover:bg-blue-100"
-                 data-action="'.$action.'" data-target="'.$target.'">
-                '.get_lang('Refresh').'
-              </a>
-            </div>
-          </div>
+                <div class="flex items-center gap-2">
+                  <a href="#"
+                     class="js-quarterly-load inline-flex items-center rounded-md border border-gray-50 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
+                     data-action="'.$action.'" data-target="'.$target.'">
+                    '.get_lang('Show').'
+                  </a>
+                  <a href="#"
+                     class="js-quarterly-reload inline-flex items-center rounded-md border border-blue-200 bg-blue-50 px-2.5 py-1.5 text-xs font-medium text-blue-700 hover:bg-blue-100"
+                     data-action="'.$action.'" data-target="'.$target.'">
+                    '.get_lang('Refresh').'
+                  </a>
+                </div>
+              </div>
 
-          <div class="px-4 pb-4">
-            <div id="'.$target.'" class="hidden mt-3" data-loaded="0"></div>
-          </div>
-        </div>
-        ';
+              <div class="px-4 pb-4">
+                <div id="'.$target.'" class="hidden mt-3" data-loaded="0"></div>
+              </div>
+            </div>
+            ';
         }
         $content .= '</div></div>';
         break;
@@ -2047,6 +3125,11 @@ switch ($report) {
 
 Display::display_header($tool_name);
 echo Display::page_header($tool_name);
+
+echo ReportRegistry::renderReportActionBar(
+    'platform_global_statistics',
+    api_get_path(WEB_CODE_PATH).'admin/index.php'
+);
 
 echo Statistics::statistics_render_menu($tools);
 

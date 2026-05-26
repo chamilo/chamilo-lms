@@ -52,12 +52,15 @@ export function useFormatDate() {
       month: "long",
     })
 
-  const relativeDatetime = (datetime) =>
-    getDateTimeObject(datetime)?.toRelative()
+  const relativeDatetime = (datetime) => getDateTimeObject(datetime)?.toRelative()
+
+  const abbreviatedDate = (datetime) =>
+    getDateTimeObject(datetime)?.toLocaleString({ ...DateTime.DATE_MED, month: "long" })
 
   return {
     abbreviatedDatetime,
     relativeDatetime,
     getCurrentTimezone,
+    abbreviatedDate,
   }
 }

@@ -19,35 +19,27 @@ api_protect_admin_script(true);
 $id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
 $type = isset($_REQUEST['type']) ? (int) $_REQUEST['type'] : 0;
 
-if (!isset($id) || !isset($type)) {
+if ($id <= 0 || $type <= 0) {
     api_not_allowed();
 }
 
-$queryString = 'id='.(int) $_REQUEST['id'].'&type='.(int) $_REQUEST['type'];
+$queryString = 'id='.$id.'&type='.$type;
 
 $editingCourse = BuyCoursesPlugin::PRODUCT_TYPE_COURSE === $type;
 $editingSession = BuyCoursesPlugin::PRODUCT_TYPE_SESSION === $type;
 
 $plugin = BuyCoursesPlugin::create();
-
 $includeSession = 'true' === $plugin->get('include_sessions');
-
-if (isset($_GET['action'], $_GET['d'])) {
-    if ('delete_frequency' == $_GET['action']) {
-        $plugin->deleteSubscription($type, $id, $_GET['d']);
-
-        Display::addFlash(
-            Display::return_message(get_lang('ItemRemoved'), 'success')
-        );
-
-        header('Location: '.api_get_self().'?'.$queryString);
-
-        exit;
-    }
-}
-
 $entityManager = Database::getManager();
 $currency = $plugin->getSelectedCurrency();
+
+$subscriptionsListUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/subscriptions_courses.php';
+if ($editingSession) {
+    $subscriptionsListUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/subscriptions_sessions.php';
+}
+
+$backUrl = $subscriptionsListUrl;
+$deleteActionUrl = api_get_self().'?'.$queryString;
 
 if (empty($currency)) {
     Display::addFlash(
@@ -55,122 +47,111 @@ if (empty($currency)) {
     );
 }
 
-$subscriptions = $plugin->getSubscriptions($type, $id);
-
-$taxtPerc = 0;
-
-if (isset($subscriptions) && !empty($subscriptions)) {
-    $taxtPerc = $subscriptions[0]['tax_perc'];
-}
-
+$productLabelText = '';
+$productNameText = '';
 $currencyIso = null;
 
 if ($editingCourse) {
     $course = $entityManager->find(Course::class, $id);
+
     if (!$course) {
         api_not_allowed(true);
     }
 
     $courseItem = $plugin->getCourseForConfiguration($course, $currency);
-
     $currencyIso = $courseItem['currency'];
-    $formDefaults = [
-        'product_type' => get_lang('Course'),
-        'id' => $courseItem['course_id'],
-        'type' => BuyCoursesPlugin::PRODUCT_TYPE_COURSE,
-        'name' => $courseItem['course_title'],
-        'visible' => $courseItem['visible'],
-        'tax_perc' => $taxtPerc,
-    ];
+
+    $productLabelText = get_lang('Course');
+    $productNameText = (string) $courseItem['course_title'];
 } elseif ($editingSession) {
     if (!$includeSession) {
         api_not_allowed(true);
     }
 
     $session = $entityManager->find(Session::class, $id);
+
     if (!$session) {
         api_not_allowed(true);
     }
 
     $sessionItem = $plugin->getSessionForConfiguration($session, $currency);
-
     $currencyIso = $sessionItem['currency'];
-    $formDefaults = [
-        'product_type' => get_lang('Session'),
-        'id' => $session->getId(),
-        'type' => BuyCoursesPlugin::PRODUCT_TYPE_SESSION,
-        'name' => $sessionItem['session_name'],
-        'visible' => $sessionItem['visible'],
-        'tax_perc' => $taxtPerc,
-    ];
+
+    $productLabelText = get_lang('Session');
+    $productNameText = (string) $sessionItem['session_name'];
 } else {
     api_not_allowed(true);
 }
 
+$subscriptions = $plugin->getSubscriptions($type, $id);
+if (!is_array($subscriptions)) {
+    $subscriptions = [];
+}
+
+$taxPerc = 0;
+if (!empty($subscriptions) && isset($subscriptions[0]['tax_perc'])) {
+    $taxPerc = (int) $subscriptions[0]['tax_perc'];
+}
+
+$deleteAction = (string) ($_POST['action'] ?? '');
+$deleteDuration = isset($_POST['duration']) ? (int) $_POST['duration'] : 0;
+
+if ('delete_frequency' === $deleteAction) {
+    if ($deleteDuration > 0) {
+        $deleted = $plugin->deleteSubscription($type, $id, $deleteDuration);
+
+        if ($deleted) {
+            Display::addFlash(
+                Display::return_message(get_lang('ItemRemoved'), 'success')
+            );
+        } else {
+            Display::addFlash(
+                Display::return_message($plugin->get_lang('SubscriptionNotDeleted'), 'error')
+            );
+        }
+    } else {
+        Display::addFlash(
+            Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'error')
+        );
+    }
+
+    header('Location: '.api_get_self().'?'.$queryString);
+    exit;
+}
+
 $globalSettingsParams = $plugin->getGlobalParameters();
+$defaultGlobalTax = (int) ($globalSettingsParams['global_tax_perc'] ?? 0);
 
-$form = new FormValidator('add_subscription');
-
-$form->addText('product_type', $plugin->get_lang('ProductType'), false);
-$form->addText('name', get_lang('Name'), false);
-
-$form->freeze(['product_type', 'name']);
-
+$form = new FormValidator('subscription_settings');
 $form->addElement(
     'number',
     'tax_perc',
     [$plugin->get_lang('TaxPerc'), $plugin->get_lang('TaxPercDescription'), '%'],
-    ['step' => 1, 'placeholder' => $globalSettingsParams['global_tax_perc'].'% '.$plugin->get_lang('ByDefault')]
+    [
+        'step' => 1,
+        'placeholder' => $defaultGlobalTax.'% '.$plugin->get_lang('ByDefault'),
+    ]
 );
+$form->addHidden('type', (string) $type);
+$form->addHidden('id', (string) $id);
+$saveButton = $form->addButtonSave(get_lang('Save'));
 
-$frequenciesOptions = $plugin->getFrequencies();
-
-$frequencyForm = new FormValidator('frequency_config', 'post', api_get_self().'?'.$queryString);
-
-$frequencyFormDefaults = [
-    'id' => $id,
-    'type' => $type,
-    'tax_perc' => $taxtPerc,
-    'currency_id' => $currency['id'],
-];
-
-$frequencyForm->setDefaults($frequencyFormDefaults);
-
-if ($frequencyForm->validate()) {
-    $frequencyFormValues = $frequencyForm->getSubmitValues();
-
-    $subscription['product_id'] = $frequencyFormValues['id'];
-    $subscription['product_type'] = $frequencyFormValues['type'];
-    $subscription['tax_perc'] = '' != $frequencyFormValues['tax_perc'] ? (int) $frequencyFormValues['tax_perc'] : null;
-    $subscription['currency_id'] = $currency['id'];
-    $duration = $frequencyFormValues['duration'];
-    $price = $frequencyFormValues['price'];
-
-    for ($i = 0; $i <= count($subscriptions); $i++) {
-        if ($duration == $subscriptions[$i]['duration']) {
-            Display::addFlash(
-                Display::return_message($plugin->get_lang('SubscriptionAlreadyExists'), 'error')
-            );
-
-            header('Location:'.api_get_self().'?'.$queryString);
-
-            exit;
-        }
-    }
-
-    $subscription['frequencies'] = [['duration' => $duration, 'price' => $price]];
-
-    $result = $plugin->addNewSubscription($subscription);
-
-    Display::addFlash(
-        Display::return_message(get_lang('Saved'), 'success')
-    );
-
-    header('Location:'.api_get_self().'?'.$queryString);
-
-    exit;
+if (empty($currency)) {
+    $saveButton->setAttribute('disabled');
 }
 
+$form->setDefaults([
+    'type' => $type,
+    'id' => $id,
+    'tax_perc' => $taxPerc,
+]);
+
+$frequenciesOptions = $plugin->getFrequencies();
+if (!is_array($frequenciesOptions)) {
+    $frequenciesOptions = [];
+}
+
+$frequencyForm = new FormValidator('frequency_config', 'post', api_get_self().'?'.$queryString);
 $frequencyForm->addElement(
     'select',
     'duration',
@@ -178,73 +159,139 @@ $frequencyForm->addElement(
     $frequenciesOptions,
     ['cols-size' => [2, 8, 2]]
 );
-
 $frequencyForm->addElement(
     'number',
     'price',
     [$plugin->get_lang('Price'), null, $currencyIso],
-    false,
-    [
-        'step' => 1,
-        'cols-size' => [3, 8, 1],
-    ]
+    ['step' => 0.01, 'min' => 0],
+    ['cols-size' => [3, 8, 1]]
 );
+$frequencyForm->addHidden('type', (string) $type);
+$frequencyForm->addHidden('id', (string) $id);
+$frequencyForm->addHidden('tax_perc', (string) $taxPerc);
+$frequencyForm->addHidden('currency_id', (string) ($currency['id'] ?? 0));
+$frequencyForm->addButtonCreate(get_lang('Add'));
 
-$frequencyForm->addHidden('type', $type);
-$frequencyForm->addHidden('id', $id);
-$frequencyForm->addHidden('tax_perc', $taxtPerc);
-$frequencyForm->addHidden('currency_id', $currency['id']);
-$frequencyForm->addButtonCreate('Add');
+$frequencyForm->setDefaults([
+    'id' => $id,
+    'type' => $type,
+    'tax_perc' => $taxPerc,
+    'currency_id' => $currency['id'] ?? 0,
+]);
 
-for ($i = 0; $i < count($subscriptions); $i++) {
-    if ($subscriptions[$i]['duration'] > 0) {
-        $subscriptions[$i]['durationName'] = $frequenciesOptions[$subscriptions[$i]['duration']];
+if ($frequencyForm->validate()) {
+    $frequencyFormValues = $frequencyForm->getSubmitValues();
+
+    $subscription = [
+        'product_id' => (int) ($frequencyFormValues['id'] ?? 0),
+        'product_type' => (int) ($frequencyFormValues['type'] ?? 0),
+        'tax_perc' => '' !== (string) ($frequencyFormValues['tax_perc'] ?? '')
+            ? (int) $frequencyFormValues['tax_perc']
+            : null,
+        'currency_id' => (int) ($currency['id'] ?? 0),
+    ];
+
+    $duration = isset($frequencyFormValues['duration']) ? (int) $frequencyFormValues['duration'] : 0;
+    $price = isset($frequencyFormValues['price']) ? (float) $frequencyFormValues['price'] : 0.0;
+
+    if ($duration <= 0 || $price <= 0) {
+        Display::addFlash(
+            Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'error')
+        );
+
+        header('Location: '.api_get_self().'?'.$queryString);
+        exit;
     }
-}
 
-$form->addHidden('type', $type);
-$form->addHidden('id', $id);
-$button = $form->addButtonSave(get_lang('Save'));
+    foreach ($subscriptions as $existingSubscription) {
+        if ((int) ($existingSubscription['duration'] ?? 0) === $duration) {
+            Display::addFlash(
+                Display::return_message($plugin->get_lang('SubscriptionAlreadyExists'), 'error')
+            );
 
-if (empty($currency)) {
-    $button->setAttribute('disabled');
+            header('Location: '.api_get_self().'?'.$queryString);
+            exit;
+        }
+    }
+
+    $subscription['frequencies'] = [
+        [
+            'duration' => $duration,
+            'price' => $price,
+        ],
+    ];
+
+    $result = $plugin->addNewSubscription($subscription);
+
+    if ($result) {
+        Display::addFlash(
+            Display::return_message(get_lang('Saved'), 'success')
+        );
+    } else {
+        Display::addFlash(
+            Display::return_message($plugin->get_lang('SubscriptionErrorInsert'), 'error')
+        );
+    }
+
+    header('Location: '.api_get_self().'?'.$queryString);
+    exit;
 }
 
 if ($form->validate()) {
     $formValues = $form->getSubmitValues();
-    $id = $formValues['id'];
-    $type = $formValues['type'];
-    $taxPerc = '' != $formValues['tax_perc'] ? (int) $formValues['tax_perc'] : null;
 
-    $result = $plugin->updateSubscription($type, $id, $taxPerc);
+    $savedId = isset($formValues['id']) ? (int) $formValues['id'] : 0;
+    $savedType = isset($formValues['type']) ? (int) $formValues['type'] : 0;
+    $savedTaxPerc = '' !== (string) ($formValues['tax_perc'] ?? '')
+        ? (int) $formValues['tax_perc']
+        : null;
+
+    $result = $plugin->updateSubscription($savedType, $savedId, $savedTaxPerc);
 
     if ($result) {
-        header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/subscriptions_courses.php');
+        Display::addFlash(
+            Display::return_message(get_lang('Saved'), 'success')
+        );
+
+        header('Location: '.$subscriptionsListUrl);
     } else {
-        header('Location:'.api_get_self().'?'.$queryString);
+        Display::addFlash(
+            Display::return_message($plugin->get_lang('SubscriptionNotUpdated'), 'error')
+        );
+
+        header('Location: '.api_get_self().'?'.$queryString);
     }
 
     exit;
 }
 
-$form->setDefaults($formDefaults);
+foreach ($subscriptions as $index => $subscriptionRow) {
+    $durationValue = (int) ($subscriptionRow['duration'] ?? 0);
+    $subscriptions[$index]['durationName'] = $frequenciesOptions[$durationValue] ?? (string) $durationValue;
+}
 
 $templateName = $plugin->get_lang('SubscriptionAdd');
 $interbreadcrumb[] = [
-    'url' => 'subscriptions_courses.php',
+    'url' => $subscriptionsListUrl,
     'name' => get_lang('Configuration'),
 ];
 $interbreadcrumb[] = [
-    'url' => 'subscriptions_courses.php',
+    'url' => $subscriptionsListUrl,
     'name' => $plugin->get_lang('SubscriptionList'),
 ];
 
 $template = new Template($templateName);
 $template->assign('header', $templateName);
+$template->assign('page_title', $templateName);
+$template->assign('back_url', $backUrl);
+$template->assign('product_label', $productLabelText);
+$template->assign('product_name', $productNameText);
+$template->assign('currencyIso', $currencyIso);
 $template->assign('items_form', $form->returnForm());
 $template->assign('frequency_form', $frequencyForm->returnForm());
 $template->assign('subscriptions', $subscriptions);
-$template->assign('currencyIso', $currencyIso);
+$template->assign('subscriptions_count', count($subscriptions));
+$template->assign('delete_action_url', $deleteActionUrl);
 
 $content = $template->fetch('BuyCourses/view/configure_subscription.tpl');
 $template->assign('content', $content);

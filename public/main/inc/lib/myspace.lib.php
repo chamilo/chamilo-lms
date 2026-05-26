@@ -788,7 +788,7 @@ class MySpace
             $additionalExportFields = Session::read('additional_export_fields');
             if (!empty($additionalExportFields)) {
                 // get all the defined extra fields
-                $extrafields = UserManager::get_extra_fields(0, 50, 5, 'ASC');
+                $extrafields = UserManager::get_extra_fields(0, 50);
 
                 foreach ($additionalExportFields as $key => $extra_field_export) {
                     $message .= '<li>'.$extrafields[$extra_field_export][3].'</li>';
@@ -2425,7 +2425,7 @@ class MySpace
         $csv_row[] = get_lang('Code');
 
         // the additional user defined fields (only those that were selected to be exported)
-        $fields = UserManager::get_extra_fields(0, 50, 5, 'ASC');
+        $fields = UserManager::get_extra_fields(0, 50);
 
         $additionalExportFields = Session::read('additional_export_fields');
 
@@ -3544,212 +3544,265 @@ class MySpace
      */
     public static function grapher($sql_result, $start_date, $end_date, $type = '')
     {
-        if (empty($start_date)) {
-            $start_date = '';
+        if (empty($start_date) || empty($end_date) || empty($sql_result) || !is_array($sql_result)) {
+            return api_convert_encoding(
+                '<div class="warning-message">'.get_lang('Graphic not available').'</div>',
+                'UTF-8'
+            );
         }
-        if (empty($end_date)) {
-            $end_date = '';
-        }
-        if ('' == $type) {
+
+        if (!in_array($type, ['day', 'month', 'year'], true)) {
             $type = 'day';
         }
-        $main_year = $main_month_year = $main_day = [];
 
-        $period = new DatePeriod(
-        new DateTime($start_date),
-        new DateInterval('P1D'),
-        new DateTime($end_date)
-    );
-
-        foreach ($period as $date) {
-            $main_day[$date->format('d-m-Y')] = 0;
+        try {
+            $startDate = new DateTime($start_date);
+            $endDate = new DateTime($end_date);
+        } catch (Exception $e) {
+            return api_convert_encoding(
+                '<div class="warning-message">'.get_lang('Graphic not available').'</div>',
+                'UTF-8'
+            );
         }
 
-        $period = new DatePeriod(
-        new DateTime($start_date),
-        new DateInterval('P1M'),
-        new DateTime($end_date)
-    );
+        if ($startDate > $endDate) {
+            $tmp = $startDate;
+            $startDate = $endDate;
+            $endDate = $tmp;
+        }
 
-        foreach ($period as $date) {
-            $main_month_year[$date->format('m-Y')] = 0;
+        $mainDay = [];
+        $mainMonthYear = [];
+        $mainYear = [];
+
+        $cursorDay = clone $startDate;
+        while ($cursorDay <= $endDate) {
+            $mainDay[$cursorDay->format('d-m-Y')] = 0.0;
+            $cursorDay->modify('+1 day');
+        }
+
+        $cursorMonth = (clone $startDate)->modify('first day of this month');
+        $monthEnd = (clone $endDate)->modify('first day of next month');
+        while ($cursorMonth < $monthEnd) {
+            $mainMonthYear[$cursorMonth->format('m-Y')] = 0.0;
+            $cursorMonth->modify('+1 month');
+        }
+
+        $cursorYear = (clone $startDate)->modify('first day of january');
+        $yearEnd = (clone $endDate)->modify('first day of january next year');
+        while ($cursorYear < $yearEnd) {
+            $mainYear[$cursorYear->format('Y')] = 0.0;
+            $cursorYear->modify('+1 year');
         }
 
         $i = 0;
-        if (is_array($sql_result) && count($sql_result) > 0) {
-            foreach ($sql_result as $key => $data) {
-                $login = api_strtotime($data['login']);
-                $logout = api_strtotime($data['logout']);
-                //creating the main array
-                if (isset($main_month_year[date('m-Y', $login)])) {
-                    $main_month_year[date('m-Y', $login)] += (float) ($logout - $login) / 60;
-                }
-                if (isset($main_day[date('d-m-Y', $login)])) {
-                    $main_day[date('d-m-Y', $login)] += (float) ($logout - $login) / 60;
-                }
-                if ($i > 500) {
-                    break;
-                }
-                $i++;
+        foreach ($sql_result as $data) {
+            if (empty($data['login']) || empty($data['logout'])) {
+                continue;
             }
-            switch ($type) {
-            case 'day':
-                $main_date = $main_day;
+
+            $login = api_strtotime($data['login']);
+            $logout = api_strtotime($data['logout']);
+
+            if ($logout < $login) {
+                continue;
+            }
+
+            $minutes = (float) ($logout - $login) / 60;
+
+            $dayKey = date('d-m-Y', $login);
+            $monthKey = date('m-Y', $login);
+            $yearKey = date('Y', $login);
+
+            if (isset($mainDay[$dayKey])) {
+                $mainDay[$dayKey] += $minutes;
+            }
+
+            if (isset($mainMonthYear[$monthKey])) {
+                $mainMonthYear[$monthKey] += $minutes;
+            }
+
+            if (isset($mainYear[$yearKey])) {
+                $mainYear[$yearKey] += $minutes;
+            }
+
+            if ($i > 5000) {
                 break;
+            }
+
+            $i++;
+        }
+
+        switch ($type) {
             case 'month':
-                $main_date = $main_month_year;
+                $mainDate = $mainMonthYear;
                 break;
             case 'year':
-                $main_date = $main_year;
+                $mainDate = $mainYear;
+                break;
+            case 'day':
+            default:
+                $mainDate = $mainDay;
                 break;
         }
 
-            $labels = array_keys($main_date);
-            if (1 == count($main_date)) {
-                $labels = $labels[0];
-                $main_date = $main_date[$labels];
+        if (empty($mainDate)) {
+            return api_convert_encoding(
+                '<div class="warning-message">'.get_lang('Graphic not available').'</div>',
+                'UTF-8'
+            );
+        }
+
+        $labels = array_keys($mainDate);
+        $values = array_values($mainDate);
+
+        $displayLabels = $labels;
+        $labelCount = count($displayLabels);
+        $labelRotation = 50;
+
+        // Reduce label density for large ranges.
+        if ($labelCount > 24) {
+            $step = max(1, (int) ceil($labelCount / 12));
+            foreach ($displayLabels as $index => $label) {
+                if (0 !== $index % $step) {
+                    $displayLabels[$index] = '';
+                }
             }
+            $labelRotation = 0;
+        } elseif ($labelCount > 12) {
+            $labelRotation = 30;
+        }
 
-            /* Create and populate the pData object */
-            $myData = new pData();
-            $myData->addPoints($main_date, 'Serie1');
-            if (1 != count($main_date)) {
-                $myData->addPoints($labels, 'Labels');
-                $myData->setSerieDescription('Labels', 'Months');
-                $myData->setAbscissa('Labels');
-            }
-            $myData->setSerieWeight('Serie1', 1);
-            $myData->setSerieDescription('Serie1', get_lang('My results'));
-            $myData->setAxisName(0, get_lang('Minutes'));
-            $myData->loadPalette(api_get_path(SYS_CODE_PATH).'palettes/pchart/default.color', true);
+        $displayPointValues = $labelCount <= 12;
 
-            // Cache definition
-            $cachePath = api_get_path(SYS_ARCHIVE_PATH);
-            $myCache = new pCache(['CacheFolder' => substr($cachePath, 0, strlen($cachePath) - 1)]);
-            $chartHash = $myCache->getHash($myData);
+        $myData = new pData();
+        $myData->addPoints($values, 'Serie1');
+        $myData->addPoints($displayLabels, 'Labels');
+        $myData->setAbscissa('Labels');
+        $myData->setSerieWeight('Serie1', 1);
+        $myData->setSerieDescription('Serie1', get_lang('My results'));
+        $myData->setAxisName(0, get_lang('Minutes'));
+        $myData->loadPalette(api_get_path(SYS_CODE_PATH).'palettes/pchart/default.color', true);
 
-            if ($myCache->isInCache($chartHash)) {
-                //if we already created the img
-                $imgPath = api_get_path(SYS_ARCHIVE_PATH).$chartHash;
-                $myCache->saveFromCache($chartHash, $imgPath);
-                $imgPath = api_get_path(WEB_ARCHIVE_PATH).$chartHash;
-            } else {
-                /* Define width, height and angle */
-                $mainWidth = 760;
-                $mainHeight = 230;
-                $angle = 50;
+        $cachePath = rtrim(api_get_path(SYS_ARCHIVE_PATH), '/');
+        $myCache = new pCache([
+            'CacheFolder' => $cachePath,
+        ]);
 
-                /* Create the pChart object */
-                $myPicture = new pImage($mainWidth, $mainHeight, $myData);
+        $chartHash = $myCache->getHash($myData);
+        $imagePath = $cachePath.'/'.$chartHash.'.png';
 
-                /* Turn of Antialiasing */
-                $myPicture->Antialias = false;
-                /* Draw the background */
-                $settings = ["R" => 255, "G" => 255, "B" => 255];
-                $myPicture->drawFilledRectangle(0, 0, $mainWidth, $mainHeight, $settings);
+        if ($myCache->isInCache($chartHash)) {
+            $myCache->saveFromCache($chartHash, $imagePath);
+        } else {
+            $mainWidth = 980;
+            $mainHeight = 360;
 
-                /* Add a border to the picture */
-                $myPicture->drawRectangle(
+            $myPicture = new pImage($mainWidth, $mainHeight, $myData);
+            $myPicture->Antialias = false;
+
+            $myPicture->drawFilledRectangle(
+                0,
+                0,
+                $mainWidth,
+                $mainHeight,
+                ['R' => 255, 'G' => 255, 'B' => 255]
+            );
+
+            $myPicture->drawRectangle(
                 0,
                 0,
                 $mainWidth - 1,
                 $mainHeight - 1,
-                ["R" => 0, "G" => 0, "B" => 0]
+                ['R' => 0, 'G' => 0, 'B' => 0]
             );
 
-                /* Set the default font */
-                $myPicture->setFontProperties(
-                [
-                    "FontName" => api_get_path(SYS_FONTS_PATH).'opensans/OpenSans-Regular.ttf',
-                    "FontSize" => 10, ]
-            );
-                /* Write the chart title */
-                $myPicture->drawText(
-                $mainWidth / 2,
+            $fontPath = api_get_path(SYS_FONTS_PATH).'opensans/OpenSans-Regular.ttf';
+
+            $myPicture->setFontProperties([
+                'FontName' => $fontPath,
+                'FontSize' => 10,
+            ]);
+
+            $myPicture->drawText(
+                (int) ($mainWidth / 2),
                 30,
                 get_lang('Time spent in the course'),
                 [
-                    "FontSize" => 12,
-                    "Align" => TEXT_ALIGN_BOTTOMMIDDLE,
+                    'FontSize' => 12,
+                    'Align' => TEXT_ALIGN_BOTTOMMIDDLE,
                 ]
             );
 
-                /* Set the default font */
-                $myPicture->setFontProperties(
-                [
-                    "FontName" => api_get_path(SYS_FONTS_PATH).'opensans/OpenSans-Regular.ttf',
-                    "FontSize" => 8,
-                ]
-            );
+            $myPicture->setFontProperties([
+                'FontName' => $fontPath,
+                'FontSize' => 8,
+            ]);
 
-                /* Define the chart area */
-                $myPicture->setGraphArea(50, 40, $mainWidth - 40, $mainHeight - 80);
+            $myPicture->setGraphArea(60, 50, $mainWidth - 30, $mainHeight - 90);
 
-                /* Draw the scale */
-                $scaleSettings = [
+            $myPicture->drawScale([
                 'XMargin' => 10,
                 'YMargin' => 10,
                 'Floating' => true,
-                'GridR' => 200,
-                'GridG' => 200,
-                'GridB' => 200,
+                'GridR' => 220,
+                'GridG' => 220,
+                'GridB' => 220,
                 'DrawSubTicks' => true,
                 'CycleBackground' => true,
-                'LabelRotation' => $angle,
+                'LabelRotation' => $labelRotation,
                 'Mode' => SCALE_MODE_ADDALL_START0,
-            ];
-                $myPicture->drawScale($scaleSettings);
+            ]);
 
-                /* Turn on Antialiasing */
-                $myPicture->Antialias = true;
+            $myPicture->Antialias = true;
 
-                /* Enable shadow computing */
-                $myPicture->setShadow(
-                true,
-                [
-                    "X" => 1,
-                    "Y" => 1,
-                    "R" => 0,
-                    "G" => 0,
-                    "B" => 0,
-                    "Alpha" => 10,
-                ]
-            );
+            $myPicture->setShadow(true, [
+                'X' => 1,
+                'Y' => 1,
+                'R' => 0,
+                'G' => 0,
+                'B' => 0,
+                'Alpha' => 10,
+            ]);
 
-                /* Draw the line chart */
-                $myPicture->setFontProperties(
-                [
-                    "FontName" => api_get_path(SYS_FONTS_PATH).'opensans/OpenSans-Regular.ttf',
-                    "FontSize" => 10,
-                ]
-            );
-                $myPicture->drawSplineChart();
-                $myPicture->drawPlotChart(
-                [
-                    "DisplayValues" => true,
-                    "PlotBorder" => true,
-                    "BorderSize" => 1,
-                    "Surrounding" => -60,
-                    "BorderAlpha" => 80,
-                ]
-            );
+            $myPicture->setFontProperties([
+                'FontName' => $fontPath,
+                'FontSize' => 9,
+            ]);
 
-                /* Do NOT Write the chart legend */
+            $myPicture->drawLineChart();
+            $myPicture->drawPlotChart([
+                'DisplayValues' => $displayPointValues,
+                'PlotBorder' => true,
+                'BorderSize' => 1,
+                'Surrounding' => -60,
+                'BorderAlpha' => 80,
+                'PlotSize' => $labelCount > 40 ? 1 : 3,
+            ]);
 
-                /* Write and save into cache */
-                $myCache->writeToCache($chartHash, $myPicture);
-                $imgPath = api_get_path(SYS_ARCHIVE_PATH).$chartHash;
-                $myCache->saveFromCache($chartHash, $imgPath);
-                $imgPath = api_get_path(WEB_ARCHIVE_PATH).$chartHash;
-            }
-
-            return '<img src="'.$imgPath.'">';
-        } else {
-            return api_convert_encoding(
-                '<div id="messages" class="warning-message">'.get_lang('Graphic not available').'</div>',
-            'UTF-8'
-        );
+            $myCache->writeToCache($chartHash, $myPicture);
+            $myCache->saveFromCache($chartHash, $imagePath);
         }
+
+        if (!is_file($imagePath) || !is_readable($imagePath)) {
+            return api_convert_encoding(
+                '<div class="warning-message">'.get_lang('Graphic not available').'</div>',
+                'UTF-8'
+            );
+        }
+
+        $imageContents = file_get_contents($imagePath);
+        if (false === $imageContents) {
+            return api_convert_encoding(
+                '<div class="warning-message">'.get_lang('Graphic not available').'</div>',
+                'UTF-8'
+            );
+        }
+
+        $base64Image = base64_encode($imageContents);
+        $alt = Security::remove_XSS(get_lang('Time spent in the course'));
+
+        return '<img src="data:image/png;base64,'.$base64Image.'" alt="'.$alt.'" class="max-w-full h-auto mx-auto" />';
     }
 
     /**

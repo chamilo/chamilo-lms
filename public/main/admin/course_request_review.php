@@ -18,6 +18,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
+$sec_token = Security::get_existing_token();
 
 // The delete action should be deactivated in this page.
 // Better reject the target request, after that you can delete it.
@@ -40,6 +41,9 @@ if ($course_validation_feature) {
      * Course acceptance and creation.
      */
     if (!empty($accept_course_request)) {
+        if (!Security::check_token('get')) {
+            api_not_allowed(true);
+        }
         $course_request_code = CourseRequestManager::get_course_request_code($accept_course_request);
         $course_id = CourseRequestManager::accept_course_request($accept_course_request);
         if ($course_id) {
@@ -54,6 +58,9 @@ if ($course_validation_feature) {
         /**
          * Course rejection.
          */
+        if (!Security::check_token('get')) {
+            api_not_allowed(true);
+        }
         $course_request_code = CourseRequestManager::get_course_request_code($reject_course_request);
         $result = CourseRequestManager::reject_course_request($reject_course_request);
         if ($result) {
@@ -67,6 +74,9 @@ if ($course_validation_feature) {
         /**
          * Sending to the teacher a request for additional information about the proposed course.
          */
+        if (!Security::check_token('get')) {
+            api_not_allowed(true);
+        }
         $course_request_code = CourseRequestManager::get_course_request_code($request_info);
         $result = CourseRequestManager::ask_for_additional_info($request_info);
         if ($result) {
@@ -80,6 +90,9 @@ if ($course_validation_feature) {
         /**
          * Deletion of a course request.
          */
+        if (!Security::check_token('get')) {
+            api_not_allowed(true);
+        }
         $course_request_code = CourseRequestManager::get_course_request_code($delete_course_request);
         $result = CourseRequestManager::delete_course_request($delete_course_request);
         if ($result) {
@@ -93,6 +106,11 @@ if ($course_validation_feature) {
         /*
          * Form actions: delete.
          */
+        if (!Security::check_token('post')) {
+            api_not_allowed(true);
+        }
+        Security::clear_token();
+        $sec_token = Security::get_existing_token();
         switch ($_POST['action']) {
             // Delete selected courses
             case 'delete_course_requests':
@@ -100,7 +118,7 @@ if ($course_validation_feature) {
                 if (is_array($_POST['course_request']) && !empty($_POST['course_request'])) {
                     $success = true;
                     foreach ($_POST['course_request'] as $index => $course_request_id) {
-                        $success &= CourseRequestManager::delete_course_request($course_request_id);
+                        $success &= CourseRequestManager::delete_course_request((int) $course_request_id);
                     }
                     $message = $success ? get_lang('The selected course requests have been deleted.') : get_lang('Some of the selected course requests have not been deleted due to internal error.');
                     $is_error_message = !$success;
@@ -199,7 +217,9 @@ function email_filter($teacher)
  */
 function modify_filter($id)
 {
+    global $sec_token;
     $code = CourseRequestManager::get_course_request_code($id);
+    $token = htmlspecialchars($sec_token, ENT_QUOTES);
     $result = '<a href="course_request_edit.php?id='.$id.'&caller=0">'.
         Display::getMdiIcon(
             ActionIcon::EDIT,
@@ -208,7 +228,7 @@ function modify_filter($id)
             ICON_SIZE_SMALL,
             get_lang('Edit')
         ).'</a>'.
-        '&nbsp;<a href="?accept_course_request='.$id.'" script="onclick: if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('A new course %s is going to be created. Is it OK to proceed?'), $code), ENT_QUOTES)).'\')) return false;">'.
+        '&nbsp;<a href="?accept_course_request='.$id.'&sec_token='.$token.'" script="onclick: if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('A new course %s is going to be created. Is it OK to proceed?'), $code), ENT_QUOTES)).'\')) return false;">'.
         Display::getMdiIcon(
             StateIcon::COMPLETE,
             'ch-tool-icon',
@@ -216,7 +236,7 @@ function modify_filter($id)
             ICON_SIZE_TINY,
             get_lang('Accept this course')
         ).'</a>'.
-        '&nbsp;<a href="?reject_course_request='.$id.'" script="onclick:if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('The course request %s is going to be rejected. Is it OK to proceed?'), $code), ENT_QUOTES)).'\')) return false;">'.
+        '&nbsp;<a href="?reject_course_request='.$id.'&sec_token='.$token.'" script="onclick:if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('The course request %s is going to be rejected. Is it OK to proceed?'), $code), ENT_QUOTES)).'\')) return false;">'.
         Display::getMdiIcon(
             'trash-can-outline',
             'ch-tool-icon',
@@ -225,7 +245,7 @@ function modify_filter($id)
             get_lang('Reject this course request')
         ).'</a>';
     if (!CourseRequestManager::additional_info_asked($id)) {
-        $result .= '&nbsp;<a href="?request_info='.$id.'" script="onclick:if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('Additional information about %s course request is going to be asked through an e-mail message. Is it OK to proceed?'), $code), ENT_QUOTES)).'\')) return false;">'.
+        $result .= '&nbsp;<a href="?request_info='.$id.'&sec_token='.$token.'" script="onclick:if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('Additional information about %s course request is going to be asked through an e-mail message. Is it OK to proceed?'), $code), ENT_QUOTES)).'\')) return false;">'.
             Display::getMdiIcon(
                 ActionIcon::INFORMATION,
                 'ch-tool-icon',
@@ -236,7 +256,7 @@ function modify_filter($id)
     }
     if (DELETE_ACTION_ENABLED) {
         $message = addslashes(api_htmlentities(sprintf(get_lang('The course request %s is going to be deleted. Is it OK to proceed?'), $code), ENT_QUOTES));
-        $result .= '&nbsp;<a href="?delete_course_request='.$id.'" script="onclick:if (!confirm(\''.$message.'\')) return false;">';
+        $result .= '&nbsp;<a href="?delete_course_request='.$id.'&sec_token='.$token.'" script="onclick:if (!confirm(\''.$message.'\')) return false;">';
         $result .= Display::getMdiIcon(
             ActionIcon::DELETE,
             'ch-tool-icon',
@@ -251,7 +271,7 @@ function modify_filter($id)
 }
 
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
-$interbreadcrumb[] = ['url' => 'course_list.php', 'name' => get_lang('Course list')];
+$interbreadcrumb[] = ['url' => '/admin/course-list', 'name' => get_lang('Course list')];
 
 $tool_name = get_lang('Review incoming course requests');
 
@@ -329,6 +349,7 @@ $table->set_column_filter(3 + $offet, 'email_filter');
 $table->set_column_filter(5 + $offet, 'modify_filter');
 if (DELETE_ACTION_ENABLED) {
     $table->set_form_actions(['delete_course_requests' => get_lang('Delete selected course request(s)')], 'course_request');
+    $table->set_additional_parameters(['sec_token' => $sec_token]);
 }
 $table->display();
 

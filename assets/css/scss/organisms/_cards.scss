@@ -1,13 +1,20 @@
 .p-card {
-  @apply rounded-lg bg-white shadow-lg;
+  @apply rounded-lg bg-white border border-gray-25 transition isolate
+    hover:shadow-xl;
 
   .p-card-body {
-    @apply flex flex-col space-y-4 p-4;
+    @apply h-full flex flex-col gap-4 p-4 rounded-b-lg;
+  }
+
+  .p-card-caption {
+    @apply space-y-2;
   }
 
   .p-card-header {
+    @apply relative;
+
     img {
-      @apply rounded-t-lg;
+      @apply rounded-t-lg object-cover w-full h-auto;
     }
   }
 
@@ -20,12 +27,15 @@
   }
 
   .p-card-content {
+    @apply space-y-2;
+
     &:empty {
       @apply hidden;
     }
   }
 
   .p-card-footer {
+    @apply mt-auto rounded-b-lg space-y-2;
   }
 
   .p-menu {

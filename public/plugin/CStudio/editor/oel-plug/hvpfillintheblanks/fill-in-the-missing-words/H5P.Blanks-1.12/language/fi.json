@@ -1,0 +1,211 @@
+{
+  "semantics": [
+    {
+      "label": "Media",
+      "fields": [
+        {
+          "label": "Tyyppi",
+          "description": "Valinnainen kuva tai video, joka näkyy kysymyksen yläpuolella."
+        },
+        {
+          "label": "Estä kysymykseen liitetyn kuvan suurentaminen"
+        }
+      ]
+    },
+    {
+      "label": "Tehtävän kuvaus",
+      "default": "Täytä puuttuvat sanat",
+      "description": "Ohje käyttäjälle kuinka tehtävä suoritetaan."
+    },
+    {
+      "label": "Tekstikentät",
+      "entity": "tekstikenttä",
+      "field": {
+        "label": "Teksti",
+        "placeholder": "Oslo on *Norjan* pääkaupunki.",
+        "description": "",
+        "important": {
+          "description": "<ul><li>Tyhjät kohdat lisätään käyttämällä merkkiä (*) ennen ja jälkeen oikeaa sanaa tai lausetta.</li><li>Vaihtoehtoiset vastaukset erotetaan kauttaviivalla (/).</li><li>Voit lisätä sanallisen vihjeen käyttämällä kaksoispistettä (:) ennen vihjettä.</li></ul>",
+          "example": "H5P content may be edited using a *browser/web-browser:Something you use every day*."
+        }
+      }
+    },
+    {
+      "label": "Yleinen palaute",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Oletus"
+            }
+          ],
+          "label": "Määritä muokattu palaute pisterajojen mukaan.",
+          "description": "Klikkaa \"Lisää alue\" painiketta lisätäksesi niin monta pisterajaa kuin tarvit. Esimerkiksi: 0-20% Huono tulos, 21-91% Kelpo tulos, 91-100% Mahtava tulos!",
+          "entity": "alue",
+          "field": {
+            "fields": [
+              {
+                "label": "Pisteraja"
+              },
+              {},
+              {
+                "label": "Palaute määritellylle pisterajalle",
+                "placeholder": "Kirjoita palaute"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Painikkeen \"Näytä ratkaisu\" nimi",
+      "default": "Näytä ratkaisu"
+    },
+    {
+      "label": "Painikkeen \"Yritä uudelleen\" nimi",
+      "default": "Yritä uudelleen"
+    },
+    {
+      "label": "Painikkeen \"Tarkista\" nimi",
+      "default": "Tarkista"
+    },
+    {
+      "label": "Viestin \"Ei täytetty\" teksti",
+      "default": "Ole hyvä ja täytä kaikki tyhjät kohdat nähdäksesi ratkaisun"
+    },
+    {
+      "label": "Viestin \"':ans' on oikein\" teksti",
+      "default": "':ans' on oikein"
+    },
+    {
+      "label": "Viestin \"':ans' on väärin\" teksti",
+      "default": "':ans' on väärin"
+    },
+    {
+      "label": "Viestin \"Vastattu oikein\" teksti",
+      "default": "Vastattu oikein"
+    },
+    {
+      "label": "Viestin \"Vastattu väärin\" teksti",
+      "default": "Vastattu väärin"
+    },
+    {
+      "label": "Assistive technology label for solution",
+      "default": "Correct answer:"
+    },
+    {
+      "label": "Assistive technology label for input field",
+      "description": "Use @num and @total to replace current cloze number and total cloze number",
+      "default": "Blank input @num of @total"
+    },
+    {
+      "label": "Assistive technology label for saying an input has a tip tied to it",
+      "default": "Tip available"
+    },
+    {
+      "label": "Vihje ikonin nimi",
+      "default": "Vihje"
+    },
+    {
+      "label": "Yleisasetukset",
+      "description": "Näillä valinnoilla voit ohjailla tehtävän toimintoja.",
+      "fields": [
+        {
+          "label": "Salli \"Yritä uudelleen\""
+        },
+        {
+          "label": "Salli painike \"Katso vastaus\""
+        },
+        {
+          "label": "Enable \"Check\" button"
+        },
+        {
+          "label": "Tarkista vastaukset automaattisesti"
+        },
+        {
+          "label": "Vaadi oikea kirjainkoko",
+          "description": "Syötteen täytyy olla kirjoitettu täsmälleen samalla tavalla kuin annettu vastaus."
+        },
+        {
+          "label": "Vaadi kaikkiin kenttiin vastaamista ennen kuin ratkaisun voi katsoa"
+        },
+        {
+          "label": "Järjestä vastauskentät eri riveille"
+        },
+        {
+          "label": "Näytä varmistusdialogi, kun käyttäjä klikkaa \"Tarkista\"",
+          "description": "Tämä valinta ei toimi yhdessä \"Tarkista vastaukset automaattisesti\" valinnan kanssa"
+        },
+        {
+          "label": "Näytä varmistusdialogi, kun käyttäjä klikkaa \"Yritä uudelleen\""
+        },
+        {
+          "label": "Salli pienet kirjoitusvirheet",
+          "description": "Tämän valinta sallii pienet kirjoitusvirheet käyttäjän syötteessä (3-9 characters: 1 spelling error, more than 9 characters: 2 spelling errors)"
+        }
+      ]
+    },
+    {
+      "label": "Painikkeen \"Tarkista\" varmistusdialogi",
+      "fields": [
+        {
+          "label": "Otsikko",
+          "default": "Valmis?"
+        },
+        {
+          "label": "Leipäteksti",
+          "default": "Haluatko tarkistaa?"
+        },
+        {
+          "label": "Painikkeen Ei teksti",
+          "default": "En"
+        },
+        {
+          "label": "Painikkeen Kyllä teksti",
+          "default": "Kyllä"
+        }
+      ]
+    },
+    {
+      "label": "Painikkeen \"Yritä uudelleen\" varmistusdialogi",
+      "fields": [
+        {
+          "label": "Otsikkoteksti",
+          "default": "Yritätkö uudelleen?"
+        },
+        {
+          "label": "Leipäteksti",
+          "default": "Haluatko yrittää uudelleen?"
+        },
+        {
+          "label": "Painikkeen Ei teksti",
+          "default": "En"
+        },
+        {
+          "label": "Painikkeen Kyllä teksti",
+          "default": "Kyllä"
+        }
+      ]
+    },
+    {
+      "label": "Textual representation of the score bar for those using a readspeaker",
+      "default": "You got :num out of :total points"
+    },
+    {
+      "label": "Assistive technology description for \"Check\" button",
+      "default": "Check the answers. The responses will be marked as correct, incorrect, or unanswered."
+    },
+    {
+      "label": "Assistive technology description for \"Show Solution\" button",
+      "default": "Show the solution. The task will be marked with its correct solution."
+    },
+    {
+      "label": "Assistive technology description for \"Retry\" button",
+      "default": "Retry the task. Reset all responses and start the task over again."
+    },
+    {
+      "label": "Assistive technology description for starting task",
+      "default": "Checking mode"
+    }
+  ]
+}

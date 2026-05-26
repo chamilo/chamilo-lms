@@ -18,7 +18,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
@@ -41,7 +41,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\UniqueConstraint(name: 'uniq_extra_field_variable_itemtype', columns: ['variable', 'item_type'])]
 #[ORM\Entity]
 #[ORM\MappedSuperclass]
-#[ApiFilter(filterClass: SearchFilter::class, properties: ['variable'])]
+#[ApiFilter(filterClass: SearchFilter::class, properties: ['variable', 'itemType' => 'exact'])]
 class ExtraField
 {
     public const USER_FIELD_TYPE = 1;
@@ -67,8 +67,9 @@ class ExtraField
     public const COURSE_ANNOUNCEMENT = 21;
     public const MESSAGE_TYPE = 22;
     public const DOCUMENT_TYPE = 23;
+    public const GLOSSARY_TYPE = 29;
+    public const WORK_CORRECTIONS_COMMENT = 30;
     public const ATTENDANCE_CALENDAR_TYPE = 24;
-
     public const USER_FIELD_TYPE_RADIO = 3;
     public const USER_FIELD_TYPE_SELECT_MULTIPLE = 5;
     public const USER_FIELD_TYPE_TAG = 10;
@@ -359,12 +360,12 @@ class ExtraField
         };
     }
 
-    public function getHelperText(): string
+    public function getHelperText(): ?string
     {
         return $this->helperText;
     }
 
-    public function setHelperText(string $helperText): self
+    public function setHelperText(?string $helperText): self
     {
         $this->helperText = $helperText;
 

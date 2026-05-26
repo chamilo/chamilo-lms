@@ -58,6 +58,11 @@ class ExerciseResult
 
         $sessionCondition = api_get_session_condition($sessionId, true, false, 'te.session_id');
         $session_id_and   = $sessionCondition;
+
+        if (empty($sessionId) && 'true' === api_get_setting('exercise.show_exercise_session_attempts_in_base_course')) {
+            $session_id_and = '';
+        }
+
         $exercise_id      = (int) $exercise_id;
 
         if (!empty($exercise_id)) {

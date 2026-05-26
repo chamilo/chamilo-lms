@@ -21,6 +21,9 @@ use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Symfony\Component\Routing\RouterInterface;
 
+/**
+ * @extends ResourceRepository<CLp>
+ */
 final class CLpRepository extends ResourceRepository implements ResourceWithLinkInterface
 {
     public function __construct(ManagerRegistry $registry)

@@ -2,9 +2,10 @@
   <BaseCard plain>
     <div class="p-4 text-center">
       <img
-        :src="groupInfo.image"
-        alt="Group picture"
-        class="mb-4 w-24 h-24 mx-auto rounded-full"
+        :src="groupInfo.image || defaultGroupImage"
+        :alt="groupInfo.title"
+        class="mx-auto mb-4 h-24 w-24 rounded-full object-cover"
+        loading="lazy"
       />
       <hr />
       <BaseButton
@@ -22,45 +23,45 @@
     v-model:visible="showEditGroupDialog"
     :closable="true"
     :modal="true"
-    header="Edit Group"
+    :header="t('Edit group')"
   >
     <form @submit.prevent="submitGroupEdit">
       <div class="p-fluid">
         <BaseInputTextWithVuelidate
           v-model="editGroupForm.name"
           :vuelidate-property="v$.editGroupForm.name"
-          label="Name*"
+          :label="t('Name')"
         />
 
         <BaseInputTextWithVuelidate
           v-model="editGroupForm.description"
           :vuelidate-property="v$.editGroupForm.description"
           as="textarea"
-          label="Description"
+          :label="t('Description')"
           rows="3"
         />
 
         <BaseInputTextWithVuelidate
           v-model="editGroupForm.url"
           :vuelidate-property="v$.editGroupForm.url"
-          label="URL"
+          :label="t('URL')"
         />
 
         <BaseFileUpload
           :label="t('Add a picture')"
-          accept="image"
+          accept="image/*"
           size="small"
           @file-selected="selectedFile = $event"
         />
 
         <div class="p-field mt-2">
-          <label for="groupPermissions">Group Permissions</label>
+          <label for="groupPermissions">{{ t("Group permissions") }}</label>
           <Dropdown
             id="groupPermissions"
             v-model="editGroupForm.permissions"
             :options="permissionsOptions"
             option-label="label"
-            placeholder="Select Permission"
+            :placeholder="t('Select permission')"
           />
         </div>
 
@@ -75,13 +76,13 @@
       </div>
       <Button
         class="p-button-rounded p-button-text"
-        icon="pi pi-check"
-        label="Save"
+        icon="mdi mdi-check"
+        :label="t('Save')"
         @click="submitGroupEdit"
       />
       <Button
         class="p-button-text"
-        label="Close"
+        :label="t('Close')"
         @click="closeEditDialog"
       />
     </form>
@@ -100,7 +101,6 @@ import BaseFileUpload from "../basecomponents/BaseFileUpload.vue"
 import useVuelidate from "@vuelidate/core"
 import { required } from "@vuelidate/validators"
 import axios from "axios"
-import { ENTRYPOINT } from "../../config/entrypoint"
 
 const { t } = useI18n()
 const router = useRouter()
@@ -108,6 +108,7 @@ const groupInfo = inject("group-info")
 
 const showEditGroupDialog = ref(false)
 const selectedFile = ref(null)
+const defaultGroupImage = "/img/icons/64/group_na.png"
 
 const permissionsOptions = [
   { label: "Open", value: 1 },
@@ -146,7 +147,7 @@ const submitGroupEdit = () => {
     }
 
     axios
-      .put(`${ENTRYPOINT}usergroups/${groupInfo.value.id}`, updatedGroupData, {
+      .put(`/api/usergroups/${groupInfo.value.id}`, updatedGroupData, {
         headers: {
           "Content-Type": "application/json",
         },

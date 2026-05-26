@@ -336,7 +336,7 @@ function get_caller_name($caller_id)
 
 // The header.
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
-$interbreadcrumb[] = ['url' => 'course_list.php', 'name' => get_lang('Course list')];
+$interbreadcrumb[] = ['url' => '/admin/course-list', 'name' => get_lang('Course list')];
 
 Display :: display_header($tool_name);
 
@@ -348,7 +348,7 @@ if (!$course_validation_feature) {
 
 // The action bar.
 echo '<div class="actions">';
-echo '<a href="course_list.php">'.
+echo '<a href="/admin/course-list">'.
     Display::getMdiIcon(
         ToolIcon::COURSE,
         'ch-tool-icon',

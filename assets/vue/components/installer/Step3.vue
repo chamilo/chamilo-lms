@@ -3,12 +3,12 @@
     <SectionHeader :title="t('Step 3 - License')" />
 
     <p
-      v-t="'Chamilo is free software distributed under the GNU General Public licence (GPL).'"
+      v-text="t('Chamilo is free software distributed under the GNU General Public licence (GPL).')"
       class="RequirementHeading mb-4"
     />
 
     <a
-      v-t="'Printable version'"
+      v-text="t('Printable version')"
       class="mb-4"
       href="/main/documentation/license.html"
       target="_blank"
@@ -30,7 +30,7 @@
         value="1"
       />
       <label
-        v-t="'I accept'"
+        v-text="t('I accept')"
         for="accept_licence"
       />
     </div>
@@ -43,15 +43,19 @@
       class="mt-4"
     >
       <div class="space-y-3 mb-3">
-        <p v-t="'Dear user'" />
+        <p v-text="t('Dear user')" />
         <p
-          v-t="
-            'You are about to start using one of the best Open Source e-learning platforms on the market. Like many other Open Source projects, Chamilo is backed up by a large community of students, teachers, developers, content creators and businesses who would like to promote the project better.'
+          v-text="
+            t(
+              'You are about to start using one of the best Open Source e-learning platforms on the market. Like many other Open Source projects, Chamilo is backed up by a large community of students, teachers, developers, content creators and businesses who would like to promote the project better.',
+            )
           "
         />
         <p
-          v-t="
-            'By knowing a little bit more about you, a platform administrator, one of the most important user type for us, who will manage this e-learning system, we will be able to let people know, statistically, how our software is used while respecting your privacy. We will also be able to let you know when we organize events that might be relevant to you or offer additional services that might be of value to your organisation.'
+          v-text="
+            t(
+              'By knowing a little bit more about you, a platform administrator, one of the most important user type for us, who will manage this e-learning system, we will be able to let people know, statistically, how our software is used while respecting your privacy. We will also be able to let you know when we organize events that might be relevant to you or offer additional services that might be of value to your organisation.',
+            )
           "
         />
         <p
@@ -137,7 +141,7 @@
         option-value="0"
       />
 
-      <label v-t="'Do you have the power to take financial decisions on behalf of your company?'" />
+      <label v-text="t('Do you have the power to take financial decisions on behalf of your company?')" />
       <div class="formgroup-inline">
         <div class="field-checkbox">
           <RadioButton
@@ -147,7 +151,7 @@
             name="finalcial_decision"
           />
           <label
-            v-t="'Yes'"
+            v-text="t('Yes')"
             for="final_decision_yes"
           />
         </div>
@@ -159,7 +163,7 @@
             name="finalcial_decision"
           />
           <label
-            v-t="'No'"
+            v-text="t('No')"
             for="final_decision_no"
           />
         </div>

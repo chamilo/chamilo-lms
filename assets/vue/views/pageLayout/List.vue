@@ -55,23 +55,23 @@
       <template #body="{ data }">
         <div class="flex gap-2">
           <BaseButton
+            :label="t('View')"
             icon="eye-on"
-            size="normal"
-            type="primary"
+            size="small"
+            type="primary-text"
             @click="goToShow(data)"
-            :title="t('View')"
           />
           <BaseButton
+            :label="t('Edit')"
             icon="edit"
-            size="normal"
-            type="secondary"
+            size="small"
+            type="secondary-text"
             @click="goToEdit(data)"
-            :title="t('Edit')"
           />
           <BaseButton
             icon="delete"
-            size="normal"
-            type="danger"
+            size="small"
+            type="danger-text"
             @click="confirmDelete(data)"
             :title="t('Delete')"
           />

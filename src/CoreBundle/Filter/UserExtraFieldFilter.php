@@ -54,29 +54,33 @@ class UserExtraFieldFilter extends AbstractFilter
 
         switch ($property) {
             case 'userExtraFieldName':
+                $efvAlias = $queryNameGenerator->generateJoinAlias('efv');
+                $efAlias = $queryNameGenerator->generateJoinAlias('ef');
+                $itemTypeName = $queryNameGenerator->generateParameterName('itemType');
+                $variableName = $queryNameGenerator->generateParameterName('variable');
+
                 $queryBuilder
                     ->innerJoin(
                         ExtraFieldValues::class,
-                        'efv',
+                        $efvAlias,
                         Join::WITH,
-                        "$alias.user = efv.itemId"
+                        "$alias.user = $efvAlias.itemId"
                     )
-                    ->innerJoin(ExtraField::class, 'ef', Join::WITH, 'efv.field = ef.id')
-                    ->andWhere('ef.itemType = :itemType')
-                    ->andWhere('ef.variable = :variable')
+                    ->innerJoin("$efvAlias.field", $efAlias)
+                    ->andWhere("$efAlias.itemType = :$itemTypeName")
+                    ->andWhere("$efAlias.variable = :$variableName")
+                    ->andWhere("$efvAlias.fieldValue = :uef_value")
                 ;
 
                 $queryBuilder
-                    ->setParameter('itemType', ExtraField::USER_FIELD_TYPE)
-                    ->setParameter('variable', $value)
+                    ->setParameter($itemTypeName, ExtraField::USER_FIELD_TYPE)
+                    ->setParameter($variableName, $value)
                 ;
 
                 break;
 
             case 'userExtraFieldValue':
-                $queryBuilder->andWhere('efv.field_value = :value');
-
-                $queryBuilder->setParameter('value', $value);
+                $queryBuilder->setParameter('uef_value', $value);
 
                 break;
         }

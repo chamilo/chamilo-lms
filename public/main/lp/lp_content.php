@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CLp;
@@ -20,7 +22,8 @@ if (empty($lp_controller_touched)) {
     if ($debug > 0) {
         error_log('New lp - In lp_content.php - Redirecting to lp_controller');
     }
-    header('Location: lp_controller.php?action=content&lp_id='.intval($_REQUEST['lp_id']).'&item_id='.intval($_REQUEST['item_id']).'&'.api_get_cidreq());
+    header('Location: lp_controller.php?action=content&lp_id='.(int) $_REQUEST['lp_id'].'&item_id='.(int) $_REQUEST['item_id'].'&'.api_get_cidreq());
+
     exit;
 }
 
@@ -66,15 +69,19 @@ if ($dir) {
                 if (empty($src)) {
                     // Document is protected or not reachable -> send to blank with lp context.
                     $src = $blankBaseUrl.'&error=document_protected';
+
                     break;
                 }
                 $learnPath->start_current_item(); // starts time counter manually if asset
                 $src = $learnPath->fixBlockedLinks($src);
+
                 break;
             }
             // Prerequisites not met -> blank with lp context and message.
             $src = $blankBaseUrl.'&error=prerequisites&prerequisite_message='.Security::remove_XSS($learnPath->error);
+
             break;
+
         case CLp::SCORM_TYPE:
             $learnPath->stop_previous_item();
             $prerequisiteCheck = $learnPath->prerequisites_match($lpItemId);
@@ -86,18 +93,7 @@ if ($dir) {
                 // Prerequisites not met -> blank with lp context and message.
                 $src = $blankBaseUrl.'&error=prerequisites&prerequisite_message='.Security::remove_XSS($learnPath->error);
             }
-            break;
-        case CLp::AICC_TYPE:
-            // save old if asset
-            $learnPath->stop_previous_item(); // save status manually if asset
-            $prerequisiteCheck = $learnPath->prerequisites_match($lpItemId);
-            if (true === $prerequisiteCheck) {
-                $src = $learnPath->get_link('http', $lpItemId);
-                $learnPath->start_current_item(); // starts time counter manually if asset
-            } else {
-                // Fallback to blank with lp context (no specific error used here).
-                $src = $blankBaseUrl;
-            }
+
             break;
     }
 }
@@ -107,8 +103,8 @@ if ($dir) {
 // This will affect normal document URLs like /r/document/files/.../view?cid=...&sid=...
 // but will not duplicate the parameters for blank.php where they are already set.
 // -------------------------------------------------------------------------
-if (!empty($src) && false === strpos($src, 'lp_id=')) {
-    $separator = false === strpos($src, '?') ? '?' : '&';
+if (!empty($src) && !str_contains($src, 'lp_id=')) {
+    $separator = !str_contains($src, '?') ? '?' : '&';
     $src .= $separator.'lp_id='.$lpId.'&item_id='.$lpItemId;
 }
 
@@ -138,4 +134,5 @@ if ($debug > 0) {
 }
 Session::write('oLP', $learnPath);
 header('Location: '.urldecode($src));
+
 exit;

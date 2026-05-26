@@ -1,5 +1,6 @@
 <head>
     <meta charset="utf-8">
+    <meta name="generator" content="Chamilo 2">
     <link href="https://chamilo.org/chamilo-lms/" rel="help" />
     <link href="https://chamilo.org/the-association/" rel="author" />
     <link href="https://chamilo.org/the-association/" rel="copyright" />
@@ -41,6 +42,14 @@
     {% set profile_link = '' %}
     {% set message_link = '' %}
 
+    {# Global flag for the AI disclosure feature (used by legacy + Vue + Twig pages). #}
+    {% set ai_disclosure_raw = chamilo_settings_get('ai_helpers.disclose_ai_assistance')|default('')|trim|lower %}
+    {% set ai_disclosure_enabled = ai_disclosure_raw in ['true', '1', 'yes', 'on', 'enabled'] %}
+
+    <script>
+      window.CH_AI_DISCLOSURE_ENABLED = {{ ai_disclosure_enabled ? 'true' : 'false' }};
+    </script>
+
     {%- block stylesheets %}
         {{ encore_entry_link_tags('legacy_free-jqgrid') }}
         {{ encore_entry_link_tags('legacy_app') }}
@@ -59,10 +68,7 @@
     {% endblock %}
 
     {# --- TinyMCE shared base config (load before any TinyMCE usage) --- #}
-    <script
-            src="{{ theme_asset('tiny-settings.js') }}?v={{ random() }}"
-            onerror="this.onerror=null;this.src='/themes/chamilo/tiny-settings.js?v={{ random() }}';"
-    ></script>
+    {{ theme_asset_script_tag('tiny-settings.js') }}
 
     {{ encore_entry_script_tags('legacy_free-jqgrid') }}
     {{ encore_entry_script_tags('legacy_app') }}
@@ -75,6 +81,10 @@
     {# <script src="{{ url('index') ~ 'build/libs/js-cookie/src/js.cookie.js' }}"></script> #}
 
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+{% if chamilo_plugin_is_enabled('NoSearchIndex') %}
+    <meta name="robots" content="noindex, nofollow, noarchive" data-plugin="NoSearchIndex">
+{% endif %}
 
     {# Meta description (SEO) #}
     {% if meta_description %}

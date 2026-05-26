@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * Script showing information about a user (name, e-mail, courses and sessions).
@@ -61,6 +62,8 @@ $actions = [
 ];
 
 if (api_can_login_as($userId)) {
+    // Using get_token() is safe here because it generates the token if missing.
+    $secToken = Security::get_token();
     $actions[] = Display::url(
         Display::getMdiIcon(
             ActionIcon::LOGIN_AS,
@@ -69,8 +72,42 @@ if (api_can_login_as($userId)) {
             ICON_SIZE_MEDIUM,
             get_lang('Login as')
         ),
-        api_get_path(WEB_CODE_PATH).
-        'admin/user_list.php?action=login_as&user_id='.$userId.'&sec_token='.Security::getTokenFromSession()
+        api_get_path(WEB_PATH).'admin/user-list-login-as?user_id='.$userId.'&sec_token='.urlencode(Container::$container->get(\Symfony\Component\Security\Csrf\CsrfTokenManagerInterface::class)->getToken('login_as')->getValue())
+    );
+}
+
+if (
+    api_is_platform_admin(false, true) &&
+    'true' === api_get_setting('security.prevent_multiple_simultaneous_login')
+) {
+    $csrfTokenManager = Container::$container->get(CsrfTokenManagerInterface::class);
+    $clearSessionToken = $csrfTokenManager->getToken('clear_user_session_'.$userId)->getValue();
+
+    $formId = 'clear-user-session-'.$userId;
+
+    $actions[] = '
+        <form id="'.$formId.'"
+            action="'.api_get_path(WEB_PATH).'admin/users/'.$userId.'/clear-session"
+            method="post"
+            style="display:none"
+        >
+            <input type="hidden" name="_token" value="'.Security::remove_XSS($clearSessionToken).'">
+        </form>
+    ';
+
+    $actions[] = Display::url(
+        Display::getMdiIcon(
+            'logout',
+            'ch-tool-icon',
+            null,
+            ICON_SIZE_MEDIUM,
+            get_lang('Clear active session')
+        ),
+        '#',
+        [
+            'title' => get_lang('Clear active session'),
+            'onclick' => "if (confirm('".addslashes(get_lang('Are you sure you want to clear this user active session?'))."')) { document.getElementById('".$formId."').submit(); } return false;",
+        ]
     );
 }
 
@@ -650,7 +687,7 @@ if (DRH == $user->getStatus()) {
 
 $socialTool = api_get_setting('allow_social_tool');
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
-$interbreadcrumb[] = ['url' => 'user_list.php', 'name' => get_lang('User list')];
+$interbreadcrumb[] = ['url' => '/admin/user-list', 'name' => get_lang('User list')];
 $tpl = new Template(null, false, false, false, false, false, false);
 
 $tpl->assign('social_tool', $socialTool);
@@ -662,7 +699,7 @@ $content = $tpl->fetch($layoutTemplate);
 echo $content;
 
 // Sessions
-echo '<div class="bg-white border border-gray-100 rounded-2xl shadow-sm p-6">';
+echo '<div class="bg-white border border-gray-30 rounded-2xl shadow-sm p-6">';
 echo Display::page_subheader(get_lang('Session list'), null, 'h3', ['class' => 'section-title mb-4']);
 echo '<div class="overflow-x-auto">';
 echo $sessionInformation;
@@ -670,7 +707,7 @@ echo '</div>';
 echo '</div>';
 
 // Courses
-echo '<div class="bg-white border border-gray-100 rounded-2xl shadow-sm p-6">';
+echo '<div class="bg-white border border-gray-30 rounded-2xl shadow-sm p-6">';
 echo Display::page_subheader(get_lang('Course list'), null, 'h3', ['class' => 'section-title mb-4']);
 echo '<div class="overflow-x-auto">';
 echo $courseInformation;
@@ -681,7 +718,7 @@ echo '</div>';
 // Achieved skills (keep legacy output, enhance visually when possible)
 $legacySkillsHtml = Tracking::displayUserSkills($userId, 0, 0);
 
-echo '<div class="bg-white border border-gray-100 rounded-2xl shadow-sm p-6">';
+echo '<div class="bg-white border border-gray-30 rounded-2xl shadow-sm p-6">';
 echo '<div id="achieved-skills-section"'
     .' data-api-url="'.htmlspecialchars($apiUserSkillsUrl, ENT_QUOTES).'"'
     .' data-user-id="'.htmlspecialchars((string) $userId, ENT_QUOTES).'"'
@@ -704,7 +741,7 @@ echo '</div>';
 if ('true' === api_get_setting('session.allow_career_users')) {
     $careers = UserManager::getUserCareers($userId);
     if (!empty($careers)) {
-        echo '<div class="bg-white border border-gray-100 rounded-2xl shadow-sm p-6">';
+        echo '<div class="bg-white border border-gray-30 rounded-2xl shadow-sm p-6">';
         echo Display::page_subheader(get_lang('Careers'), null, 'h3', ['class' => 'section-title mb-4']);
         $table = new HTML_Table(['class' => 'data_table']);
         $table->setHeaderContents(0, 0, get_lang('Career'));
@@ -773,13 +810,13 @@ echo '<script>
       if (!image) image = defaultBadge;
 
       var a = document.createElement("a");
-      a.className = "group flex flex-col items-center text-center p-3 rounded-2xl border border-gray-100 bg-white hover:bg-gray-15 hover:border-gray-200 transition";
+      a.className = "group flex flex-col items-center text-center p-3 rounded-2xl border border-gray-30 bg-white hover:bg-gray-15 hover:border-gray-200 transition";
       a.title = name || "";
       a.href = "/main/skills/issued_all.php?skill=" + encodeURIComponent(id) +
         "&user=" + encodeURIComponent(userId) +
         "&origin=" + encodeURIComponent(origin);
 
-      var badgeWrap = createEl("div", "w-16 h-16 sm:w-18 sm:h-18 flex items-center justify-center rounded-2xl bg-gray-15 border border-gray-100 shadow-sm overflow-hidden");
+      var badgeWrap = createEl("div", "w-16 h-16 sm:w-18 sm:h-18 flex items-center justify-center rounded-2xl bg-gray-15 border border-gray-30 shadow-sm overflow-hidden");
 
       var img = document.createElement("img");
       img.className = "w-12 h-12 sm:w-14 sm:h-14 object-contain";

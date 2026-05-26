@@ -45,6 +45,7 @@ class ExtraField extends Model
         'variable',
         'description',
         'display_text',
+        'helper_text',
         'default_value',
         'field_order',
         'visible_to_self',
@@ -113,7 +114,7 @@ class ExtraField extends Model
 
         $this->pageUrl = 'extra_fields.php?type='.$this->type;
         // Example QuestionFields
-        $this->pageName = ucwords($this->type).'Fields';
+        $this->pageName = ucwords($this->type).' fields';
     }
 
     public static function getTypeList(): array
@@ -129,6 +130,7 @@ class ExtraField extends Model
             'lp_item' => EntityExtraField::LP_ITEM_FIELD_TYPE,
             'skill' => EntityExtraField::SKILL_FIELD_TYPE,
             'work' => EntityExtraField::WORK_FIELD_TYPE,
+            'work_corrections_comment' => EntityExtraField::WORK_CORRECTIONS_COMMENT,
             'career' => EntityExtraField::CAREER_FIELD_TYPE,
             'user_certificate' => EntityExtraField::USER_CERTIFICATE,
             'survey' => EntityExtraField::SURVEY_FIELD_TYPE,
@@ -143,6 +145,7 @@ class ExtraField extends Model
             'message' =>  EntityExtraField::MESSAGE_TYPE,
             'document' => EntityExtraField::DOCUMENT_TYPE,
             'attendance_calendar' => EntityExtraField::ATTENDANCE_CALENDAR_TYPE,
+            'glossary' => EntityExtraField::GLOSSARY_TYPE,
         ];
     }
 
@@ -186,6 +189,8 @@ class ExtraField extends Model
             'message',
             'document',
             'attendance_calendar',
+            'glossary',
+            'work_corrections_comment',
         ];
 
         if ('true' === api_get_setting('announcement.allow_scheduled_announcements')) {
@@ -1132,9 +1137,9 @@ class ExtraField extends Model
                 $extraField = $extraFieldRepo->find($field_details['id']);
                 $translatedDisplayText = $extraField->getDisplayText();
 
-                $translatedDisplayHelpText = '';
-                if ($help) {
-                    $translatedDisplayHelpText .= get_lang($field_details['display_text'].'Help');
+                $translatedDisplayHelpText = trim((string) $extraField->getHelperText());
+                if ($help && '' === $translatedDisplayHelpText) {
+                    $translatedDisplayHelpText = (string) get_lang($field_details['display_text'].'Help');
                 }
 
                 if (!empty($translatedDisplayText)) {
@@ -1143,7 +1148,6 @@ class ExtraField extends Model
                         // which is then treated by display_form()
                         $field_details['display_text'] = [$translatedDisplayText, $translatedDisplayHelpText];
                     } else {
-                        // We have an helper text, use it
                         $field_details['display_text'] = $translatedDisplayText;
                     }
                 }
@@ -1608,7 +1612,11 @@ class ExtraField extends Model
                                     cache: false,
                                     tags: true,
                                     tokenSeparators: [','],
-                                    placeholder: '".get_lang('Start to type, then click on this bar to validate tag')."'
+                                    placeholder: '".get_lang('Start to type, then click on this bar to validate tag')."',
+                                    language: {
+                                        searching: function() { return '".get_lang('Searching')."...'; },
+                                        noResults: function() { return '".get_lang('No results found')."'; }
+                                    }
                                 });
                             ";
                             }
@@ -2268,7 +2276,7 @@ class ExtraField extends Model
             $breadcrumb[] = ['url' => $this->pageUrl, 'name' => $this->pageName];
             $breadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
         } else {
-            $breadcrumb[] = ['url' => '#', 'name' => $this->pageName];
+            $breadcrumb[] = ['url' => '#', 'name' => ('user' === $this->type ? get_lang('Profiling') : get_lang($this->pageName))];
         }
     }
 
@@ -2281,7 +2289,7 @@ class ExtraField extends Model
         $actions .= Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Administration'));
         $actions .= '</a>';
         $actions .= '<a href="'.api_get_self().'?action=add&type='.$this->type.'">';
-        $actions .= Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add'));
+        $actions .= Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon-success', null, ICON_SIZE_MEDIUM, get_lang('Add'));
         $actions .= '</a>';
 
         echo Display::toolbarAction('toolbar', [$actions]);
@@ -2363,12 +2371,14 @@ class ExtraField extends Model
                 'name' => 'field_order',
                 'index' => 'field_order',
                 'align' => 'center',
+                'width' => 50,
                 'sortable' => 'true',
             ],
             [
                 'name' => 'actions',
                 'index' => 'actions',
                 'align' => 'center',
+                'width' => 70,
                 'formatter' => 'action_formatter',
                 'sortable' => 'false',
             ],
@@ -2430,6 +2440,13 @@ class ExtraField extends Model
 
         $form->addHtmlEditor('description', get_lang('Description'), false);
 
+        $form->addElement(
+            'textarea',
+            'helper_text',
+            get_lang('Helper text'),
+            ['rows' => 4, 'class' => 'span6']
+        );
+
         // Field type
         $types = self::get_field_types();
 
@@ -2489,22 +2506,22 @@ class ExtraField extends Model
         $group = [];
         $group[] = $form->createElement('radio', 'visible_to_self', null, get_lang('Yes'), 1, ['id' => 'visible_to_self_yes']);
         $group[] = $form->createElement('radio', 'visible_to_self', null, get_lang('No'), 0, ['id' => 'visible_to_self_no']);
-        $form->addGroup($group, '', get_lang('Visible to self'), null, false);
+        $form->addGroup($group, null, get_lang('Visible to self'), null, false);
 
         $group = [];
         $group[] = $form->createElement('radio', 'visible_to_others', null, get_lang('Yes'), 1, ['id' => 'visible_to_others_yes']);
         $group[] = $form->createElement('radio', 'visible_to_others', null, get_lang('No'), 0, ['id' => 'visible_to_others_no']);
-        $form->addGroup($group, '', get_lang('Visible to others'), null, false);
+        $form->addGroup($group, null, get_lang('Visible to others'), null, false);
 
         $group = [];
         $group[] = $form->createElement('radio', 'changeable', null, get_lang('Yes'), 1, ['id' => 'changeable_yes']);
         $group[] = $form->createElement('radio', 'changeable', null, get_lang('No'), 0, ['id' => 'changeable_no']);
-        $form->addGroup($group, '', get_lang('Can change'), null, false);
+        $form->addGroup($group, null, get_lang('Can change'), null, false);
 
         $group = [];
         $group[] = $form->createElement('radio', 'filter', null, get_lang('Yes'), 1, ['id' => 'filter_yes']);
         $group[] = $form->createElement('radio', 'filter', null, get_lang('No'), 0, ['id' => 'filter_no']);
-        $form->addGroup($group, '', get_lang('Filter'), null, false);
+        $form->addGroup($group, null, get_lang('Filter'), null, false);
 
         /* Enable this when field_loggeable is introduced as a table field (2.0)
         $group   = array();
@@ -2527,6 +2544,7 @@ class ExtraField extends Model
         if ('edit' == $action) {
             $option = new ExtraFieldOption($this->type);
             $defaults['field_options'] = $option->get_field_options_by_field_to_string($id);
+            $defaults['helper_text'] = $defaults['helper_text'] ?? '';
             $form->addButtonUpdate(get_lang('Edit'));
         } else {
             $defaults['visible_to_self'] = 0;
@@ -2534,6 +2552,7 @@ class ExtraField extends Model
             $defaults['changeable'] = 0;
             $defaults['filter'] = 0;
             $defaults['auto_remove'] = 0;
+            $defaults['helper_text'] = '';
             $form->addButtonCreate(get_lang('Add'));
         }
 
@@ -2572,28 +2591,18 @@ class ExtraField extends Model
     public function getJqgridActionLinks($token)
     {
         //With this function we can add actions to the jgrid (edit, delete, etc)
-        $editIcon = Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'));
-        $deleteIcon = Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete'));
-        $confirmMessage = addslashes(
-            api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES)
-        );
-
-        $editButton = <<<JAVASCRIPT
-            <a href="?action=edit&type={$this->type}&id=' + options.rowId + '" class="btn btn-link btn-xs">\
-                $editIcon\
-            </a>
-JAVASCRIPT;
-        $deleteButton = <<<JAVASCRIPT
-            <a \
-                    onclick="if (!confirm(\'$confirmMessage\')) {return false;}" \
-                href="?sec_token=$token&type={$this->type}&id=' + options.rowId + '&action=delete" \
-                class="btn btn-link btn-xs">\
-                $deleteIcon\
-            </a>
-JAVASCRIPT;
+        $editIcon = Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon-secondary', null, ICON_SIZE_SMALL, get_lang('Edit'));
+        $deleteIcon = Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon-danger', null, ICON_SIZE_SMALL, get_lang('Delete'));
+        $confirmMsg = json_encode(get_lang('Please confirm your choice'));
+        $editIconJs = json_encode($editIcon);
+        $deleteIconJs = json_encode($deleteIcon);
+        $type = $this->type;
 
         return "function action_formatter(cellvalue, options, rowObject) {
-            return '$editButton $deleteButton';
+            var r = options.rowId;
+            var e = '<a href=\"?action=edit&type={$type}&id=' + r + '\">' + {$editIconJs} + '</a>';
+            var d = '<a onclick=\'if (!confirm({$confirmMsg})) {return false;}\' href=\"?sec_token={$token}&type={$type}&id=' + r + '&action=delete\">' + {$deleteIconJs} + '</a>';
+            return e + ' ' + d;
         }";
     }
 
@@ -2940,7 +2949,7 @@ JAVASCRIPT;
             if (is_array($val)) {
                 $result = '"%'.implode(';', $val).'%"';
                 foreach ($val as $item) {
-                    $item = trim($item);
+                    $item = Database::escape_string(trim($item));
                     $result .= ' '.$conditionBetweenOptions.' '.$col.' LIKE "%'.$item.'%"';
                 }
                 $val = $result;

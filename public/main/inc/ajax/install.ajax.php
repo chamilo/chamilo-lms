@@ -7,6 +7,7 @@ declare(strict_types=1);
 use Chamilo\CoreBundle\Framework\Container;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\Transport;
 use Symfony\Component\Mime\Address;
@@ -17,12 +18,30 @@ use Symfony\Component\Mime\Email;
  */
 require_once __DIR__.'/../../../../vendor/autoload.php';
 
+// Block access on installed instances — this file is only for the installation wizard.
+$_envFile = __DIR__.'/../../../../.env';
+if (file_exists($_envFile)) {
+    try {
+        (new Dotenv())->loadEnv($_envFile);
+    } catch (\Throwable $e) {
+        // If the .env cannot be parsed, fail safe and block.
+        http_response_code(403);
+        exit;
+    }
+}
+$_appInstalled = (string) ($_SERVER['APP_INSTALLED'] ?? $_ENV['APP_INSTALLED'] ?? getenv('APP_INSTALLED') ?? '') === '1';
+if ($_appInstalled) {
+    http_response_code(403);
+    exit;
+}
+unset($_envFile, $_appInstalled);
+
 /**
  * Send a JSON response and stop execution.
  *
  * @param array<string,mixed> $payload
  */
-function json_response(array $payload, int $statusCode = 200): void
+function json_response(array $payload, int $statusCode = 200): never
 {
     // Always return JSON for AJAX consumers.
     header('Content-Type: application/json; charset=UTF-8');

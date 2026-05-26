@@ -10,9 +10,9 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users(true);
 
-$allowJustification = Container::getPluginHelper()->isPluginEnabled('Justification');
+$plugin = Justification::create();
 
-if (!$allowJustification) {
+if (!$plugin->isEnabled()) {
     api_not_allowed(true);
 }
 $personalRepo = Container::getPersonalFileRepository();
@@ -20,7 +20,6 @@ $userId = api_get_user_id();
 $user = api_get_user_entity();
 
 $justification = '';
-$plugin = Justification::create();
 $fields = $plugin->getList();
 $formValidator = new FormValidator('justification');
 $formValidator->addHeader($plugin->get_lang('Justification'));

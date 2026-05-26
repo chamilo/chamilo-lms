@@ -4,48 +4,88 @@
 declare(strict_types=1);
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
+use Chamilo\CourseBundle\Entity\CDocument;
 
 class LpAiHelper
 {
-    /**
-     * AiHelper constructor.
-     * Requires AI helpers to be enabled in the settings.
-     */
     public function __construct() {}
 
-    /**
-     * Get the form to generate Learning Path (LP) items using AI.
-     */
     public function aiHelperForm()
     {
         if ('true' !== api_get_setting('ai_helpers.enable_ai_helpers') ||
-            'true' !== api_get_course_setting('learning_path_generator')) {
+            'true' !== api_get_course_setting('learning_path_generator')
+        ) {
+            return false;
+        }
+
+        $aiProvidersJson = api_get_setting('ai_helpers.ai_providers');
+        $rawProviders = json_decode($aiProvidersJson, true);
+        $rawProviders = is_array($rawProviders) ? $rawProviders : [];
+
+        $availableApis = [];
+        foreach ($rawProviders as $key => $cfg) {
+            if (!is_array($cfg)) {
+                continue;
+            }
+
+            if (isset($cfg['text']) && is_array($cfg['text'])) {
+                $availableApis[$key] = $cfg;
+                continue;
+            }
+
+            // Backward compatibility: accept flat configs
+            if (isset($cfg['model']) || isset($cfg['url'])) {
+                $availableApis[$key] = $cfg;
+                continue;
+            }
+        }
+
+        if (empty($availableApis)) {
+            echo Display::return_message(get_lang('No AI text providers configured.'), 'warning');
 
             return false;
         }
 
-        // Get AI providers from settings
-        $aiProvidersJson = api_get_setting('ai_helpers.ai_providers');
-        $availableApis = json_decode($aiProvidersJson, true) ?? [];
-        $hasSingleApi = count($availableApis) === 1;
-        $configuredApi = $hasSingleApi ? array_key_first($availableApis) : null;
+        $providerOptions = [];
+        foreach ($availableApis as $key => $cfg) {
+            $model = '';
+            if (isset($cfg['text']['model'])) {
+                $model = (string) $cfg['text']['model'];
+            } elseif (isset($cfg['model'])) {
+                $model = (string) $cfg['model'];
+            }
+
+            $label = $key;
+            if ('' !== trim($model)) {
+                $label .= ' ('.$model.')';
+            }
+
+            $providerOptions[$key] = $label;
+        }
+
+        $hasSingleApi = count($providerOptions) === 1;
+        $configuredApi = $hasSingleApi ? array_key_first($providerOptions) : null;
 
         $form = new FormValidator(
             'lp_ai_generate',
             'post',
-            api_get_self()."?".api_get_cidreq(),
+            api_get_self().'?'.api_get_cidreq(),
             null
         );
         $form->addElement('header', get_lang('AI generator'));
 
-        // Show the AI provider being used
-        if ($hasSingleApi) {
-            $apiName = $availableApis[$configuredApi]['model'] ?? $configuredApi;
-            $form->addHtml('<div style="margin-bottom: 10px; font-size: 14px; color: #555;">'
-                .sprintf(get_lang('Using AI provider %s'), '<strong>'.htmlspecialchars($apiName).'</strong>').'</div>');
+        if ($hasSingleApi && null !== $configuredApi) {
+            $form->addHtml(
+                '<div style="margin-bottom: 10px; font-size: 14px; color: #555;">'
+                .sprintf(
+                    get_lang('Using AI provider %s'),
+                    '<strong>'.htmlspecialchars($providerOptions[$configuredApi]).'</strong>'
+                )
+                .'</div>'
+            );
         }
 
-        // Input fields for LP generation
         $form->addElement('text', 'lp_name', get_lang('Topic'));
         $form->addRule('lp_name', get_lang('Required field'), 'required');
         $form->addElement('number', 'nro_items', get_lang('Number of items'));
@@ -53,7 +93,6 @@ class LpAiHelper
         $form->addElement('number', 'words_count', get_lang('Words count per page'));
         $form->addRule('words_count', get_lang('Required field'), 'required');
 
-        // Checkbox for adding quizzes
         $form->addElement('checkbox', 'add_lp_quiz', null, get_lang('Add test after each page'), ['id' => 'add-lp-quiz']);
         $form->addHtml('<div id="lp-quiz-area">');
         $form->addElement('number', 'nro_questions', get_lang('Number of questions'));
@@ -61,24 +100,17 @@ class LpAiHelper
         $form->addHtml('</div>');
         $form->setDefaults(['nro_questions' => 2]);
 
-        // Allow provider selection if multiple are available
         if (!$hasSingleApi) {
-            $form->addSelect(
-                'ai_provider',
-                get_lang('AI provider'),
-                array_combine(array_keys($availableApis), array_keys($availableApis))
-            );
+            $form->addSelect('ai_provider', get_lang('AI provider'), $providerOptions);
         }
 
-        // API URLs
         $generateUrl = api_get_path(WEB_PATH).'ai/generate_learnpath';
         $courseInfo = api_get_course_info();
         $language = $courseInfo['language'];
         $courseCode = api_get_course_id();
-        $sessionId = api_get_session_id();
+
         $redirectSuccess = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=add_item&type=step&isStudentView=false&lp_id=';
 
-        // JavaScript to handle form submission
         $form->addHtml('<script>
         $(function () {
             $("#lp-quiz-area").hide();
@@ -95,9 +127,11 @@ class LpAiHelper
                 var nroItems = parseInt($("[name=\'nro_items\']").val());
                 var wordsCount = parseInt($("[name=\'words_count\']").val());
                 var addTests = $("#add-lp-quiz").is(":checked");
-                var nroQuestions = parseInt($("[name=\'nro_questions\']").val());
-                var provider = '.(!$hasSingleApi ? '$("[name=\'ai_provider\']").val()' : '"'.$configuredApi.'"').';
-
+                var nroQuestions = parseInt($("[name=\'nro_questions\']").val());'
+            .(!$hasSingleApi
+                ? 'var provider = $("[name=\'ai_provider\']").val();'
+                : 'var provider = "'.addslashes((string) $configuredApi).'";'
+            ).'
                 var isValid = true;
 
                 $(".error-message").remove();
@@ -132,15 +166,15 @@ class LpAiHelper
                     "lp_name": lpName,
                     "nro_items": nroItems,
                     "words_count": wordsCount,
-                    "language": "'.$language.'",
+                    "language": "'.addslashes((string) $language).'",
                     "add_tests": addTests,
                     "nro_questions": nroQuestions,
                     "ai_provider": provider,
-                    "course_code": "'.$courseCode.'",
+                    "course_code": "'.addslashes((string) $courseCode).'"
                 });
 
                 $.ajax({
-                    url: "'.$generateUrl.'",
+                    url: "'.addslashes((string) $generateUrl).'",
                     type: "POST",
                     contentType: "application/json",
                     data: requestData,
@@ -155,7 +189,9 @@ class LpAiHelper
                                 contentType: "application/json",
                                 data: JSON.stringify({
                                     "lp_data": data.data,
-                                    "course_code": "'.$courseCode.'"
+                                    "course_code": "'.addslashes((string) $courseCode).'",
+                                    "ai_assisted": (data.ai_assisted ? 1 : 0),
+                                    "ai_provider": provider
                                 }),
                                 success: function (result) {
                                     try {
@@ -193,20 +229,39 @@ class LpAiHelper
                         }
                     }
                 });
-
             });
         });
         </script>');
 
         $form->addButton('create_lp_button', get_lang('Generate'), 'check', 'primary', '', null, ['id' => 'create-lp-ai']);
         echo $form->returnForm();
+
+        return true;
     }
 
-    public function createLearningPathFromAI(array $lpData, string $courseCode): array
-    {
+    /**
+     * Create LP + items from AI payload.
+     *
+     * $aiAssisted is passed by lp.ajax.php from /ai/generate_learnpath response.
+     * We only mark extra fields when:
+     * - disclosure setting is enabled
+     * - and the generator response indicated ai_assisted=1
+     */
+    public function createLearningPathFromAI(
+        array $lpData,
+        string $courseCode,
+        bool $aiAssisted = false,
+        ?string $aiProvider = null
+    ): array {
         if (!isset($lpData['topic'])) {
             return ['success' => false, 'text' => 'Error: Topic not set in AI response.'];
         }
+        if (!isset($lpData['lp_items']) || !is_array($lpData['lp_items'])) {
+            return ['success' => false, 'text' => 'Error: Learning path items not set in AI response.'];
+        }
+
+        $ai = $this->getAiDisclosureHelper();
+        $aiEnabled = $aiAssisted && $ai instanceof AiDisclosureHelper && $ai->isDisclosureEnabled();
 
         $lp = learnpath::add_lp(
             $courseCode,
@@ -220,12 +275,17 @@ class LpAiHelper
             return ['success' => false, 'text' => 'Failed to create Learning Path.'];
         }
 
-        $lpId = $lp->getIid();
+        $lpId = (int) $lp->getIid();
+
+        // Mark LP itself (best effort)
+        if ($aiEnabled) {
+            $ai->markAiAssistedExtraField('lp', $lpId, true);
+        }
+
         $courseInfo = api_get_course_info($courseCode);
         $learningPath = new learnpath($lp, $courseInfo, api_get_user_id());
 
         $lpItemRepo = Container::getLpItemRepository();
-
         $parent = $lpItemRepo->getRootItem($lpId);
         $lpItemsIds = [];
         $order = 1;
@@ -234,41 +294,70 @@ class LpAiHelper
         require_once api_get_path(SYS_CODE_PATH).'exercise/export/aiken/aiken_classes.php';
 
         foreach ($lpData['lp_items'] as $index => $item) {
+            $title = isset($item['title']) ? (string) $item['title'] : '';
+            $content = isset($item['content']) ? (string) $item['content'] : '';
+
             $documentId = $learningPath->create_document(
                 $courseInfo,
-                $item['content'],
-                $item['title']
+                $content,
+                $title
             );
             if (!empty($documentId)) {
-                $previousId = $order > 1 ? (int) $lpItemsIds[$order - 1]['item_id'] : 0;
+                $previousId = $order > 1 ? (int) ($lpItemsIds[$order - 1]['item_id'] ?? 0) : 0;
+
                 $lpItemId = $learningPath->add_item(
                     $parent,
                     $previousId,
                     TOOL_DOCUMENT,
                     $documentId,
-                    $item['title']
+                    $title
                 );
-                $lpItemsIds[$order] = ['item_id' => $lpItemId, 'item_type' => TOOL_DOCUMENT];
-                $previousId = $lpItemId;
-                $order++;
+
+                if (!empty($lpItemId)) {
+                    $lpItemsIds[$order] = ['item_id' => $lpItemId, 'item_type' => TOOL_DOCUMENT];
+                    $previousId = (int) $lpItemId;
+                    $order++;
+
+                    // Mark lp_item as AI-assisted (best effort)
+                    if ($aiEnabled) {
+                        $ai->markAiAssistedExtraField('lp_item', (int) $lpItemId, true);
+                    }
+                }
+
+                // Mark the underlying document resource_node as AI-assisted (best effort)
+                if ($aiEnabled) {
+                    $this->markDocumentNodeAiAssisted((int) $documentId, $ai);
+                }
             }
 
-            if (!empty($lpData['quiz_items'][$index]) && !empty(trim($lpData['quiz_items'][$index]['content']))) {
+            // Optional quiz for this chapter
+            if (isset($lpData['quiz_items'][$index]) &&
+                is_array($lpData['quiz_items'][$index]) &&
+                !empty(trim((string) ($lpData['quiz_items'][$index]['content'] ?? '')))
+            ) {
                 $quiz = $lpData['quiz_items'][$index];
 
+                $quizTitle = isset($quiz['title']) ? (string) $quiz['title'] : '';
+                $quizContent = trim((string) $quiz['content']);
+
                 $request = [
-                    'quiz_name' => get_lang('Test') . ': ' . $quiz['title'],
-                    'nro_questions' => count(explode("\n", trim($quiz['content']))),
-                    'course_id' => api_get_course_int_id($courseCode),
-                    'aiken_format' => trim($quiz['content']),
+                    'quiz_name' => get_lang('Test').': '.$quizTitle,
+                    'nro_questions' => count(explode("\n", $quizContent)),
+                    'course_id' => api_get_course_int_id(),
+                    'aiken_format' => $quizContent,
                 ];
 
                 $exerciseId = aiken_import_exercise(null, $request);
 
                 if (!empty($exerciseId)) {
+                    // Mark generated quiz questions as AI-assisted
+                    if ($aiEnabled) {
+                        $this->markQuizQuestionsAiAssisted((int) $exerciseId, $ai);
+                    }
+
                     $lpQuizItemId = $learningPath->add_item(
                         $parent,
-                        $previousId,
+                        $previousId ?? 0,
                         TOOL_QUIZ,
                         $exerciseId,
                         $request['quiz_name']
@@ -281,13 +370,93 @@ class LpAiHelper
                             'min_score' => round($request['nro_questions'] / 2, 2),
                             'max_score' => (float) $request['nro_questions'],
                         ];
-                        $previousId = $lpQuizItemId;
+                        $previousId = (int) $lpQuizItemId;
                         $order++;
+
+                        // Mark lp_item (quiz item) as AI-assisted too
+                        if ($aiEnabled) {
+                            $ai->markAiAssistedExtraField('lp_item', (int) $lpQuizItemId, true);
+                        }
                     }
                 }
             }
         }
 
         return ['success' => true, 'lp_id' => $lpId];
+    }
+
+    private function getAiDisclosureHelper(): ?AiDisclosureHelper
+    {
+        try {
+            $container = Container::$container ?? null;
+            if (!$container) {
+                return null;
+            }
+
+            /** @var AiDisclosureHelper $svc */
+            $svc = $container->get(AiDisclosureHelper::class);
+
+            return $svc instanceof AiDisclosureHelper ? $svc : null;
+        } catch (\Throwable) {
+            return null;
+        }
+    }
+
+    private function markDocumentNodeAiAssisted(int $documentId, AiDisclosureHelper $ai): void
+    {
+        try {
+            $em = Database::getManager();
+            $repo = $em->getRepository(CDocument::class);
+
+            /** @var CDocument|null $doc */
+            $doc = $repo->find($documentId);
+            if (!$doc) {
+                return;
+            }
+
+            $node = $doc->getResourceNode();
+            if (!$node) {
+                return;
+            }
+
+            $nodeId = (int) $node->getId();
+            if ($nodeId <= 0) {
+                return;
+            }
+
+            $ai->markAiAssistedExtraField('document', $nodeId, true);
+        } catch (\Throwable) {
+            // Best effort: never block LP creation
+        }
+    }
+
+    private function markQuizQuestionsAiAssisted(int $exerciseId, AiDisclosureHelper $ai): void
+    {
+        try {
+            $relTable = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+
+            $rows = Database::select(
+                'question_id',
+                $relTable,
+                [
+                    'where' => [
+                        'quiz_id = ?' => [$exerciseId],
+                    ],
+                ]
+            );
+
+            if (!is_array($rows)) {
+                return;
+            }
+
+            foreach ($rows as $row) {
+                $qid = (int) ($row['question_id'] ?? 0);
+                if ($qid > 0) {
+                    $ai->markAiAssistedExtraField('question', $qid, true);
+                }
+            }
+        } catch (\Throwable) {
+            // Best effort
+        }
     }
 }

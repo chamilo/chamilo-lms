@@ -65,7 +65,7 @@ $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 $ltiTools = $ltiToolRepo->findBy(['course' => $course, 'gradebookEval' => null]);
 
 foreach ($ltiTools as $ltiTool) {
-    $slcLtiTools->addOption($ltiTool->getName(), $ltiTool->getId());
+    $slcLtiTools->addOption($ltiTool->getTitle(), $ltiTool->getId());
 }
 
 if ($form->validate()) {
@@ -79,7 +79,7 @@ if ($form->validate()) {
     }
 
     $eval = new Evaluation();
-    $eval->set_name($ltiTool->getName());
+    $eval->set_name($ltiTool->getTitle());
     $eval->set_description($values['description']);
     $eval->set_user_id($values['hid_user_id']);
 

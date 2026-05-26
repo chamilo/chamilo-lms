@@ -6,12 +6,18 @@ declare(strict_types=1);
 
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Actor;
 
-use Xabbuh\XApi\Model\Agent;
-
 /**
  * Class BaseActor.
  */
 abstract class BaseActor
 {
-    abstract public function generate(): Agent;
+    /**
+     * Build a plain xAPI actor payload.
+     */
+    abstract public function generate(): array;
+
+    protected function normalizeString(?string $value): string
+    {
+        return trim((string) $value);
+    }
 }

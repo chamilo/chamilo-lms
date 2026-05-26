@@ -1,0 +1,80 @@
+.h5p-question-explanation {
+  /* Needed this to make it display in IE 11 */
+  position: relative;
+}
+
+.h5p-question-explanation-container {
+  margin: 0;
+  padding: 1em;
+  background: #FAFAFA;
+}
+
+.h5p-question-explanation-title {
+  font-size: 1.125em;
+  margin-bottom: 0.5em;
+}
+
+.h5p-question-explanation-list {
+  background: #FFFFFF;
+  border: 1px solid #e0e0e0;
+  overflow: auto;
+  overflow-x: hidden;
+
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.h5p-question-explanation-item {
+  padding: 0.5em;
+  margin: 0;
+  line-height: 1.2;
+  display: flex;
+}
+
+.h5p-question-explanation-item:not(:last-child) {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.h5p-question-explanation-status {
+  display: flex;
+  flex-shrink: 0;
+  width: 8em;
+  flex-wrap: wrap;
+}
+
+.h5p-question-explanation-correct,
+.h5p-question-explanation-wrong {
+  display: inline-flex;
+  font-weight: bold;
+  margin-left: 0.5em;
+  font-size: 0.9em;
+
+  word-break: break-all;
+  /* Non standard for WebKit */
+  word-break: break-word;
+}
+
+.h5p-question-explanation-correct {
+  color: #265c42;
+}
+
+.h5p-question-explanation-wrong {
+  color: #b61c1e;
+  text-decoration: line-through;
+}
+
+.h5p-question-explanation-text {
+  display: inline-flex;
+  padding-left: 1em;
+  margin-left: 0.5em;
+  border-left: 1px solid #ddd;
+}
+
+.h5p-question-explanation-list::-webkit-scrollbar {
+  width: 0.4em;
+}
+
+.h5p-question-explanation-list::-webkit-scrollbar-thumb {
+  background-color: #e0e0e0;
+}

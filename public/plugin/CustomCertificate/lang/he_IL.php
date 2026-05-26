@@ -1,0 +1,77 @@
+<?php
+$strings['plugin_title'] = 'תעודה מותאמת אישית';
+$strings['plugin_comment'] = 'תוסף זה מאפשר לך ליצור תעודות מותאמות אישית לכל קורס.';
+$strings['enable_plugin_customcertificate'] = 'הפעל תוסף';
+$strings['customcertificate_course_enable'] = 'הפעל תעודה מותאמת אישית בקורס';
+$strings['use_certificate_default'] = 'השתמש בתעודה מותאמת אישית ברירת מחדל';
+$strings['ToolDisabled'] = 'הכלי מושבת מניהול המערכת';
+$strings['OnlyAdminPlatform'] = 'כלי למנהלים בלבד';
+$strings['OnlyAdminPlatformOrTeacher'] = 'כלי למנהלים ומורים בלבד';
+$strings['TrainingEntity'] = 'ישות קורס';
+$strings['DescriptionFront'] = 'תיאור חזית';
+$strings['DescriptionRear'] = 'תיאור גב';
+$strings['Certify'] = 'אשר';
+$strings['CertificateType'] = 'סוג תעודה';
+$strings['CertifyThat'] = 'מאשר';
+$strings['StudentCourseInfo'] = 'נתוני תלמיד וקורס';
+$strings['StudentData'] = 'נתוני תלמיד';
+$strings['CourseData'] = 'נתוני קורס';
+$strings['Modality'] = 'מסגרת';
+$strings['Contents'] = 'תכנים';
+$strings['ContentsToShow'] = 'תכנים להצגה';
+$strings['ContentsCourseDescription'] = 'השתמש בקטע "תיאור קורס" > "תכנים"';
+$strings['ContentsIndexLearnpath'] = 'השתמש במדד מסלול למידה';
+$strings['ContentsCustom'] = 'השתמש בתוכן מותאם אישית';
+$strings['ContentsHide'] = 'אל תציג תכנים';
+$strings['Dates'] = 'תאריכים';
+$strings['CourseDeliveryDates'] = 'תאריכי העברת קורס';
+$strings['Custom'] = 'מותאם אישית';
+$strings['UseDateSessionAccess'] = 'השתמש בתאריכי גישה למפגש';
+$strings['ExpectionPlace'] = 'מקום הנפקה';
+$strings['DateExpediction'] = 'תאריך הנפקה';
+$strings['UseDateEndAccessSession'] = 'השתמש בתאריך סיום גישה למפגש';
+$strings['UseDateDownloadCertificate'] = 'השתמש בתאריך הורדת תעודה';
+$strings['UseDateGenerationCertificate'] = 'השתמש בתאריך יצירת תעודה';
+$strings['UseCustomDate'] = 'השתמש בתאריך מותאם אישית';
+$strings['LogosSeal'] = 'לוגואים / חותמות';
+$strings['LogoLeft'] = 'לוגו שמאל';
+$strings['LogoCenter'] = 'לוגו מרכז';
+$strings['LogoRight'] = 'לוגו ימין';
+$strings['Seal'] = 'חותמת';
+$strings['Signature1'] = 'חתימה 1';
+$strings['Signature2'] = 'חתימה 2';
+$strings['Signature3'] = 'חתימה 3';
+$strings['Signature4'] = 'חתימה 4';
+$strings['SignatureText1'] = 'טקסט חתימה 1';
+$strings['SignatureText2'] = 'טקסט חתימה 2';
+$strings['SignatureText3'] = 'טקסט חתימה 3';
+$strings['SignatureText4'] = 'טקסט חתימה 4';
+$strings['OtherOptions'] = 'אפשרויות נוספות';
+$strings['MarginRight'] = 'שוליים ימין';
+$strings['MarginLeft'] = 'שוליים שמאל';
+$strings['SetDefaultTemplate'] = 'הגדר תבנית כברירת מחדל';
+$strings['MessageDefaultTemplate'] = 'שמור התאמה אישית זו כברירת מחדל עבור קורסים ומפגשים ללא
+     תעודות מוגדרות';
+$strings['None'] = 'אין';
+$strings['ErrorTemplateCertificate'] = 'אין תבנית מוגדרת עבור התעודה.
+     אין תבנית ברירת מחדל.';
+$strings['DateStartEnd'] = 'עם תאריך התחלה ותאריך סיום: ';
+$strings['ExpedictionIn'] = 'תפוגה בעוד';
+$strings['Signatures'] = 'חתימות';
+$strings['BackgroundCertificate'] = 'תמונת רקע של התעודה';
+$strings['Background'] = 'רקע';
+$strings['CertificateSetting'] = 'הגדרות תעודה';
+$strings['ToolDisabledCourse'] = 'כלי מושבת בהגדרות הקורס';
+$strings['ToolUseDefaultSettingCourse'] = 'הכלי מוגדר לשימוש בתעודת ברירת מחדל. <br>
+     ניתן לערוך אותה ממסך הניהול -> תוספים -> תעודה מותאמת אישית. <br>
+     או שאם תרצו תוכלו לבטל את האפשרות להשתמש בתעודה כברירת מחדל בהגדרות התוסף בקורס';
+$strings['CertificateSettingDefault'] = 'הגדרות תעודת ברירת מחדל';
+$strings['InfoFromDefaultCertificate'] = 'תוכן התעודה מבוסס על תעודת ברירת המחדל.
+     השינויים שביצעת לא ישפיעו על תעודת ברירת המחדל.';
+$strings['to'] = ' עד ';
+$strings['formatDownloadDate'] = ' עד %sth %s, %s';
+$strings['PrintCertificate'] = 'הדפס תעודה';
+$strings['QuestionDelete'] = 'האם אתה רוצה למחוק את התעודה הספציפית ולהשתמש בתעודת ברירת המחדל?';
+$strings['SuccessDelete'] = 'נמחק בהצלחה';
+$strings['ProblemDelete'] = 'בעיה במחיקת התעודה';
+$strings['OnlyCustomCertificates'] = 'מיוצאים רק קורסים עם תעודה מותאמת אישית';

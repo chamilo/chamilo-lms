@@ -1,3 +1,4 @@
+import qs from "qs"
 import api from "../config/api"
 
 export default {
@@ -27,9 +28,9 @@ export default {
     let nextPageParams = null
 
     if (data["hydra:view"] && data["hydra:view"]["hydra:next"]) {
-      const queryString = data["hydra:view"]["hydra:next"].split("?")[1]
+      const queryString = data["hydra:view"]["hydra:next"].split("?")[1] || ""
 
-      nextPageParams = Object.fromEntries(new URLSearchParams(queryString))
+      nextPageParams = qs.parse(queryString)
     }
 
     return {

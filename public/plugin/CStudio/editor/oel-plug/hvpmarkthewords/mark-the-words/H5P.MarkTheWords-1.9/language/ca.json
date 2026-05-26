@@ -1,0 +1,128 @@
+{
+  "semantics": [
+    {
+      "label": "Descripció de la tasca",
+      "description": "Descriu com l’usuari ha de resoldre la tasca.",
+      "placeholder": "Feu clic en tots els verbs del text que es mostra a continuació."
+    },
+    {
+      "label": "Camp de text",
+      "placeholder": "Aquesta és una resposta: *resposta*.",
+      "description": "",
+      "important": {
+        "description": "<ul><li>Les paraules que s’han de marcar s’afegeixen amb un asterisc (*).</li><li>Es poden afegir asteriscs a les paraules marcades afegint un altre asterisc, *paraulacorrecta*** =&gt; paraulacorrecta*.</li></ul>",
+        "example": "Les paraules correctes es marquen així: *paraulacorrecta*; l’asterisc s’introdueix així: *paraulacorrecta***."
+      }
+    },
+    {
+      "label": "Suggeriment general",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Opció predeterminada"
+            }
+          ],
+          "label": "Defineix una valoració per cada rang de puntuació",
+          "description": "Feu clic al botó \"Afegeix un rang\" per afegir tants rangs com necessiteu. Exemple: 0-20 % per a puntuació baixa, 21-91 % per a puntuació mitjana, 91-100 % per a puntuació excel·lent.",
+          "entity": "rang",
+          "field": {
+            "fields": [
+              {
+                "label": "Rang de puntuació"
+              },
+              {},
+              {
+                "label": "Retroacció per al rang de puntuació definit",
+                "placeholder": "Introduïu el suggeriment"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Text pel botó \"Verificar\"",
+      "default": "Verifica"
+    },
+    {
+      "label": "Text del botó \"Torna-ho a provar\"",
+      "default": "Torna-ho a provar"
+    },
+    {
+      "label": "Text pel botó \"Mostrar solució\"",
+      "default": "Mostra la solució"
+    },
+    {
+      "label": "Opcions de comportament",
+      "description": "Aquestes opcions et permetran controlar com es comporta la tasca.",
+      "fields": [
+        {
+          "label": "Activa \"Torna-ho a provar\""
+        },
+        {
+          "label": "Activa el botó \"Mostra la solució\""
+        },
+        {
+          "label": "Activa el botó \"Comprova\""
+        },
+        {
+          "label": "Mostra la puntuació",
+          "description": "Mostra els punts obtinguts per a cada resposta."
+        }
+      ]
+    },
+    {
+      "label": "Text de la resposta correcta",
+      "default": "Correcte!",
+      "description": "Text utilitzat per a indicar que una resposta és correcta"
+    },
+    {
+      "label": "Text de resposta incorrecta",
+      "default": "Incorrecte!",
+      "description": "Text utilitzat per a indicar que una resposta és correcta"
+    },
+    {
+      "label": "Text de resposta no proporcionada",
+      "default": "No s’ha trobat la resposta!",
+      "description": "Text que s’utilitza per indicar que falta una resposta"
+    },
+    {
+      "label": "Descripció per a Mostra la solució",
+      "default": "La tasca s’ha actualitzat per incloure la solució.",
+      "description": "Aquest text indica a l’usuari que les tasques s’han actualitzat amb la solució."
+    },
+    {
+      "label": "Representació textual de la barra de puntuació pera als que utilitzen un altaveu de lectura",
+      "default": "Heu fet :num de :total punts"
+    },
+    {
+      "label": "Etiqueta per al text complet que pot llegir per a les tecnologies d’assistència",
+      "default": "Text complet que es pot llegir"
+    },
+    {
+      "label": "Etiqueta per al text en què es poden marcar paraules per a tecnologies d’assistència",
+      "default": "Text complet en què es poden marcar les paraules"
+    },
+    {
+      "label": "Títol del mode de solució per a tecnologies d’assistència",
+      "default": "Mode de solució"
+    },
+    {
+      "label": "Títol del mode de comprovació per a les tecnologies d’assistència",
+      "default": "S’està comprovant el mode"
+    },
+    {
+      "label": "Descripció de la tecnologia d’assistència per al botó \"Comprova\"",
+      "default": "Comprova les respostes. Les respostes es marcaran com a correctes, incorrectes o sense resposta."
+    },
+    {
+      "label": "Descripció de la tecnologia d’assistència per al botó \"Mostra la solució\"",
+      "default": "Mostra la solució. La tasca es marcarà amb la seva solució correcta."
+    },
+    {
+      "label": "Descripció de la tecnologia d’assistència per al botó \"Torna-ho a provar\"",
+      "default": "Intenta de nou la tasca. Reajusta totes les respostes i comença la tasca de nou."
+    }
+  ]
+}

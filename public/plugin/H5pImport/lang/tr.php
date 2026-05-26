@@ -1,0 +1,22 @@
+<?php
+$strings['plugin_title'] = 'H5P içe aktarma';
+$strings['plugin_comment'] = 'H5P içeriklerini içe aktarın ve öğrenme yollarında kullanın. Kurulum talimatları için README.md dosyasını açın.';
+$strings['frame'] = 'Çerçeve';
+$strings['frame_help'] = 'H5P altında çerçeve ve düğmeleri göster';
+$strings['embed'] = 'Gömülü';
+$strings['embed_help'] = 'Gömülü düğmesini göster';
+$strings['copyright'] = 'Telif hakkı';
+$strings['copyright_help'] = 'Telif hakkı düğmesini göster';
+$strings['icon'] = 'Simge';
+$strings['icon_help'] = 'H5P simgesini göster';
+$strings['attempts'] = 'Deneme sayısı';
+$strings['upload_h5p'] = 'Yükle';
+$strings['import_h5p_package'] = 'H5P paketini yükle';
+$strings['h5p_package'] = 'H5P paketi';
+$strings['h5p_error_loading'] = 'H5P paketi yüklenirken hata';
+$strings['h5p_error_invalid_token'] = 'Geçersiz güvenlik jetonu';
+$strings['h5p_error_missing_core_asset'] = 'H5P çekirdek varlıkları yüklenirken hata';
+$strings['h5p_save_content_state'] = 'Kullanıcı sonuçlarını kaydet';
+$strings['h5p_save_content_freq'] = 'Kaydetme sıklığı';
+$strings['h5p_save_freq_help'] = 'Mevcut içerik durumunun saniye cinsinden ne sıklıkta kaydedileceği';
+$strings['start_attempt'] = 'Denemeyi başlat';

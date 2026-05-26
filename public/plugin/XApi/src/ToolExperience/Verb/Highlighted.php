@@ -6,6 +6,9 @@ declare(strict_types=1);
 
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Verb;
 
+/**
+ * Class Highlighted.
+ */
 class Highlighted extends BaseVerb
 {
     public function __construct()

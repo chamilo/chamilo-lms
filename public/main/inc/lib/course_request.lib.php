@@ -159,8 +159,6 @@ class CourseRequestManager
         $email_body_admin .= "\n".get_lang('This course request can be approved on the following page:', $email_language).' '.api_get_path(WEB_CODE_PATH).'admin/course_request_edit.php?id='.$last_insert_id."\n";
         $email_body_admin .= "\n".get_lang('The information about this course request is considered protected; it can be used only to open a new course within our e-learning portal; it should not be revealed to third parties.', $email_language)."\n";
 
-        $sender_name_teacher = api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
-        $sender_email_teacher = $user_info['mail'];
         $recipient_name_admin = api_get_person_name(
             api_get_setting('administratorName'),
             api_get_setting('administratorSurname'),
@@ -173,9 +171,7 @@ class CourseRequestManager
             $recipient_name_admin,
             $recipient_email_admin,
             $email_subject,
-            $email_body_admin,
-            $sender_name_teacher,
-            $sender_email_teacher
+            $email_body_admin
         );
 
         // Sending an e-mail to the request.
@@ -196,8 +192,6 @@ class CourseRequestManager
         $email_body_teacher .= "\n".get_lang('The information about this course request is considered protected; it can be used only to open a new course within our e-learning portal; it should not be revealed to third parties.', $email_language)."\n";
 
         // Swap the sender and the recipient.
-        $sender_name_admin = $recipient_name_admin;
-        $sender_email_admin = $recipient_email_admin;
         $recipient_name_teacher = $sender_name_teacher;
         $recipient_email_teacher = $sender_email_teacher;
 
@@ -206,8 +200,8 @@ class CourseRequestManager
             $recipient_email_teacher,
             $email_subject,
             $email_body_teacher,
-            $sender_name_admin,
-            $sender_email_admin,
+            '',
+            '',
             [],
             [],
             false
@@ -527,13 +521,6 @@ class CourseRequestManager
             $email_body .= get_lang('E-mail', $email_language).': '.api_get_setting('emailAdministrator', null, $email_language)."\n";
             $email_body .= "\n".get_lang('The information about this course request is considered protected; it can be used only to open a new course within our e-learning portal; it should not be revealed to third parties.', $email_language)."\n";
 
-            $sender_name = api_get_person_name(
-                api_get_setting('administratorName'),
-                api_get_setting('administratorSurname'),
-                null,
-                PERSON_NAME_EMAIL_ADDRESS
-            );
-            $sender_email = api_get_setting('emailAdministrator');
             $recipient_name = api_get_person_name(
                 $user_info['firstname'],
                 $user_info['lastname'],
@@ -546,9 +533,7 @@ class CourseRequestManager
                 $recipient_name,
                 $recipient_email,
                 $email_subject,
-                $email_body,
-                $sender_name,
-                $sender_email
+                $email_body
             );
 
             return $course->getCode();
@@ -609,13 +594,6 @@ class CourseRequestManager
         $email_body .= get_lang('E-mail', $email_language).': '.api_get_setting('emailAdministrator', null, $email_language)."\n";
         $email_body .= "\n".get_lang('The information about this course request is considered protected; it can be used only to open a new course within our e-learning portal; it should not be revealed to third parties.', $email_language)."\n";
 
-        $sender_name = api_get_person_name(
-            api_get_setting('administratorName'),
-            api_get_setting('administratorSurname'),
-            null,
-            PERSON_NAME_EMAIL_ADDRESS
-        );
-        $sender_email = api_get_setting('emailAdministrator');
         $recipient_name = api_get_person_name(
             $user_info['firstname'],
             $user_info['lastname'],
@@ -628,9 +606,7 @@ class CourseRequestManager
             $recipient_name,
             $recipient_email,
             $email_subject,
-            $email_body,
-            $sender_name,
-            $sender_email
+            $email_body
         );
 
         return true;
@@ -687,13 +663,6 @@ class CourseRequestManager
         $email_body .= get_lang('E-mail', $email_language).': '.api_get_setting('emailAdministrator')."\n";
         $email_body .= "\n".get_lang('The information about this course request is considered protected; it can be used only to open a new course within our e-learning portal; it should not be revealed to third parties.', $email_language)."\n";
 
-        $sender_name = api_get_person_name(
-            api_get_setting('administratorName'),
-            api_get_setting('administratorSurname'),
-            null,
-            PERSON_NAME_EMAIL_ADDRESS
-        );
-        $sender_email = api_get_setting('emailAdministrator');
         $recipient_name = api_get_person_name(
             $user_info['firstname'],
             $user_info['lastname'],
@@ -706,9 +675,7 @@ class CourseRequestManager
             $recipient_name,
             $recipient_email,
             $email_subject,
-            $email_body,
-            $sender_name,
-            $sender_email
+            $email_body
         );
 
         if (!$result) {

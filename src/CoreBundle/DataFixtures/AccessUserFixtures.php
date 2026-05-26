@@ -17,6 +17,7 @@ class AccessUserFixtures extends Fixture
 {
     public const ADMIN_USER_REFERENCE = 'admin';
     public const ANON_USER_REFERENCE = 'anon';
+    public const FALLBACK_USER_REFERENCE = 'fallback_user';
     public const ACCESS_URL_REFERENCE = 'accessUrl';
 
     public function __construct(
@@ -97,5 +98,6 @@ class AccessUserFixtures extends Fixture
 
         $this->addReference(self::ADMIN_USER_REFERENCE, $admin);
         $this->addReference(self::ANON_USER_REFERENCE, $anon);
+        $this->addReference(self::FALLBACK_USER_REFERENCE, $fallbackUser);
     }
 }

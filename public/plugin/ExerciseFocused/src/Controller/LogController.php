@@ -50,8 +50,8 @@ class LogController extends BaseController
             throw new NotFoundHttpException('no exercise attempt');
         }
 
-        $objExercise = new Exercise($trackingExercise->getCId());
-        $objExercise->read($trackingExercise->getExeExoId());
+        $objExercise = new Exercise($trackingExercise->getCourse()->getId());
+        $objExercise->read($trackingExercise->getQuiz()->getIid());
 
         $level = 0;
 
@@ -83,7 +83,7 @@ class LogController extends BaseController
         }
 
         $exercise = new Exercise(api_get_course_int_id());
-        $exercise->read($trackingExercise->getExeExoId());
+        $exercise->read($trackingExercise->getQuiz()->getIid());
 
         $json = [
             'sec_token' => Security::get_token('exercisefocused'),

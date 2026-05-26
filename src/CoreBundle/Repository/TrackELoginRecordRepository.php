@@ -181,4 +181,21 @@ final class TrackELoginRecordRepository extends ServiceEntityRepository
 
         return $stmt->executeQuery()->fetchAllAssociative();
     }
+
+    /**
+     * Count recent failed login attempts for a given username (last 24 hours).
+     */
+    public function countRecentFailedByUsername(string $username): int
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        return (int) $conn->executeQuery(
+            'SELECT COUNT(*)
+             FROM track_e_login_record
+             WHERE username = :username
+               AND success = 0
+               AND login_date >= (NOW() - INTERVAL 1 DAY)',
+            ['username' => $username]
+        )->fetchOne();
+    }
 }

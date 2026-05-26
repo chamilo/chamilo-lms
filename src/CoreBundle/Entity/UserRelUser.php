@@ -20,7 +20,7 @@ use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -28,10 +28,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ApiResource(
     operations: [
-        new Get(),
+        new Get(security: "is_granted('VIEW', object)"),
         new Put(security: "is_granted('EDIT', object)"),
         new Delete(security: "is_granted('DELETE', object)"),
-        new GetCollection(),
+        new GetCollection(security: "is_granted('ROLE_USER')"),
         new Post(securityPostDenormalize: "is_granted('CREATE', object)"),
     ],
     normalizationContext: [

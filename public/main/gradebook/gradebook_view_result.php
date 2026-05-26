@@ -44,13 +44,13 @@ if ($eval[0]->get_category_id() < 0) {
 //load the result with the evaluation id
 if (isset($_GET['delete_mark'])) {
     $result = Result::load($_GET['delete_mark']);
-    if (!empty($result[0])) {
+    if (!empty($result[0]) && $result[0]->get_evaluation_id() == $select_eval) {
         $result[0]->delete();
     }
 }
 
 if (isset($_GET['selecteval'])) {
-    $allresults = Result :: load(null, null, $select_eval, true);
+    $allresults = Result::load(null, null, $select_eval, true);
     $iscourse = !empty(api_get_course_id());
 }
 
@@ -60,7 +60,9 @@ if (isset($_GET['action'])) {
     switch ($_GET['action']) {
         case 'delete_attempt':
             $result = Result::load($_GET['editres']);
-            if ($allowMultipleAttempts && !empty($result) && isset($result[0]) && api_is_allowed_to_edit()) {
+            if ($allowMultipleAttempts && isset($result[0]) && api_is_allowed_to_edit()
+                && $result[0]->get_evaluation_id() == $select_eval
+            ) {
                 /** @var Result $result */
                 $result = $result[0];
                 $url = api_get_self().'?selecteval='.$select_eval.'&'.api_get_cidreq().'&editres='.$result->get_id();
@@ -78,7 +80,9 @@ if (isset($_GET['action'])) {
             break;
         case 'add_attempt':
             $result = Result::load($_GET['editres']);
-            if ($allowMultipleAttempts && !empty($result) && isset($result[0]) && api_is_allowed_to_edit()) {
+            if ($allowMultipleAttempts && isset($result[0]) && api_is_allowed_to_edit()
+                && $result[0]->get_evaluation_id() == $select_eval
+            ) {
                 /** @var Result $result */
                 $result = $result[0];
                 $backUrl = api_get_self().'?selecteval='.$select_eval.'&'.api_get_cidreq();
@@ -100,19 +104,29 @@ if (isset($_GET['action'])) {
 
                 $form->addFloat(
                     'score',
-                    [
-                        get_lang('Score'),
-                        null,
-                        '/ '.$evaluation->get_max(),
-                    ],
+                    get_lang('Score'),
                     true,
                     [
                         'size' => '4',
                         'maxlength' => '5',
+                        'style' => 'width: 6rem; max-width: 6rem;',
+                        'class' => 'text-right',
                     ],
                     false,
                     0,
                     $evaluation->get_max()
+                );
+                $renderer = &$form->defaultRenderer();
+                $renderer->setElementTemplate(
+                    '<div class="field">
+                        <label class="form-label">{label}</label>
+                        <div class="inline-flex items-center justify-start gap-1 whitespace-nowrap">
+                            {element}
+                            <span class="text-sm text-gray-700">/ '.$evaluation->get_max().'</span>
+                        </div>
+                        <!-- BEGIN error --><div class="mt-1 text-sm text-danger">{error}</div><!-- END error -->
+                    </div>',
+                    'score'
                 );
 
                 $form->addTextarea('comment', get_lang('Comment'));
@@ -227,7 +241,7 @@ if (isset($_GET['import'])) {
         ''
     );
     if (!$import_result_form->validate()) {
-        Display :: display_header(get_lang('Import'));
+        Display::display_header(get_lang('Import'));
     }
     $eval[0]->check_lock_permissions();
     if (isset($_POST['formSent']) && $_POST['formSent']) {
@@ -235,7 +249,7 @@ if (isset($_GET['import'])) {
             $values = $import_result_form->exportValues();
             $file_type = $_POST['file_type'];
             $file_name = $_FILES['import_file']['tmp_name'];
-            $results = Import :: csvToArray($file_name);
+            $results = Import::csvToArray($file_name);
             $nr_results_added = 0;
             foreach ($results as $index => $importedresult) {
                 //check username & score
@@ -420,7 +434,7 @@ if (isset($_GET['export'])) {
                 $head_table[] = [get_lang('Letters'), 15];
             }
             $head_display_score = '';
-            $scoredisplay = ScoreDisplay :: instance();
+            $scoredisplay = ScoreDisplay::instance();
             $customdisplays = $scoredisplay->get_custom_score_display_settings();
 
             if (!empty($customdisplays) && $scoredisplay->is_custom()) {
@@ -517,8 +531,10 @@ if (isset($_GET['export'])) {
 
 if (isset($_GET['resultdelete'])) {
     $result = Result::load($_GET['resultdelete']);
-    $result[0]->delete();
-    Display::addFlash(Display::return_message(get_lang('Result deleted.')));
+    if (!empty($result[0]) && $result[0]->get_evaluation_id() == $select_eval) {
+        $result[0]->delete();
+        Display::addFlash(Display::return_message(get_lang('Result deleted.')));
+    }
     header('Location: gradebook_view_result.php?selecteval='.$select_eval.'&'.api_get_cidreq());
     exit;
 }
@@ -538,9 +554,11 @@ if (isset($_POST['action'])) {
             case 'delete':
                 $number_of_deleted_results = 0;
                 foreach ($_POST['id'] as $indexstr) {
-                    $result = Result :: load($indexstr);
-                    $result[0]->delete();
-                    $number_of_deleted_results++;
+                    $result = Result::load($indexstr);
+                    if (!empty($result[0]) && $result[0]->get_evaluation_id() == $select_eval) {
+                        $result[0]->delete();
+                        $number_of_deleted_results++;
+                    }
                 }
                 Display::addFlash(Display::return_message(get_lang('Results deleted.'), 'confirmation', false));
                 header('Location: gradebook_view_result.php?massdelete=&selecteval='.$select_eval.'&'.api_get_cidreq());

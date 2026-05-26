@@ -41,6 +41,16 @@ $from_myspace = false;
 $from = $_GET['from'] ?? null;
 $origin = api_get_origin();
 $lpShowMaxProgress = 'true' === api_get_setting('lp.lp_show_max_progress_instead_of_average');
+$hideLpTestsAverageIcon = 'true' === api_get_setting('lp.student_follow_page_hide_lp_tests_average');
+$lpTestsAverageIcon = $hideLpTestsAverageIcon
+    ? ''
+    : Display::getMdiIcon(
+        'format-annotation-plus',
+        'ch-tool-icon',
+        null,
+        ICON_SIZE_TINY,
+        get_lang('Average of tests in Learning Paths')
+    );
 if ('true' === api_get_setting('lp.lp_show_max_progress_or_average_enable_course_level_redefinition')) {
     $lpShowProgressCourseSetting = api_get_course_setting('lp_show_max_or_average_progress');
     if (in_array($lpShowProgressCourseSetting, ['max', 'average'])) {
@@ -166,6 +176,34 @@ $htmlHeadXtra[] = $js;
 
 $htmlHeadXtra[] = <<<CSSJS
 <style>
+  /* Panel titles: ensure spacing between icon and text */
+  #course-log-main-panel .panel-title i.ch-tool-icon,
+  .panel .panel-title i.ch-tool-icon {
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+
+  /* Tables inside panels: avoid fixed width overflow (helps Audit report tables too) */
+  #course-log-main-panel .panel-body {
+    overflow-x: auto;
+  }
+  #course-log-main-panel .panel-body table {
+    width: 100% !important;
+    max-width: 100%;
+  }
+
+  .ch-icon-title {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .ch-icon-title i.ch-tool-icon {
+      margin-right: 0 !important;
+      line-height: 1;
+      vertical-align: middle;
+    }
+
   /* Toolbar spacing and compact controls */
   #course_log {
     margin-top: 8px;
@@ -292,7 +330,7 @@ $htmlHeadXtra[] = <<<CSSJS
   .table.table-bordered > thead > tr > th {
     border-color: #e5e7eb;
   }
-   .user-teacher,
+  .user-teacher,
   .user-coachs {
     list-style: none;
     padding-left: 0;
@@ -308,10 +346,10 @@ $htmlHeadXtra[] = <<<CSSJS
     padding: 2px 0;
   }
   .course-log-nav {
-     display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
   }
 
   .course-log-nav-link--active .course-log-nav-icon {
@@ -385,8 +423,7 @@ $htmlHeadXtra[] = <<<CSSJS
 CSSJS;
 $htmlHeadXtra[] = <<<CSSJS
 <style>
-
-  /* Extra fields form: grid layout and spacing */
+/* Extra fields form: grid layout and spacing */
 #advanced_search_options #extra_fields {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -440,264 +477,24 @@ $htmlHeadXtra[] = <<<CSSJS
 }
 
 .tracking-box-title {
- font-size: 18px;
- text-align: center;
+  font-size: 18px;
+  text-align: center;
 }
 
-  /* Main panel: give some breathing room inside */
-  #course-log-main-panel .panel-body {
-    padding: 18px 22px;
-  }
+/* Main panel: give some breathing room inside */
+#course-log-main-panel .panel-body {
+  padding: 18px 22px;
+}
 
-  #course-log-main-panel .card, .card {
-    padding: 8px;
-  }
+#course-log-main-panel .card, .card {
+  padding: 8px;
+}
 
-  .card .field-checkbox, .card .field-radiobutton {
-    justify-content: normal;
-  }
-
-  /* Toolbar spacing and compact controls */
-  #course_log {
-    margin-top: 8px;
-    margin-bottom: 12px;
-  }
-
-  #course_log .btn,
-  #course_log .form-control,
-  #course_log select {
-    font-size: 13px;
-  }
-
-  /* Advanced search container */
-  #advanced_search_options {
-    background: #f9fafb;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    padding: 16px 18px;
-    margin: 12px 0 16px;
-  }
-
-  #advanced_search_options .form-horizontal {
-    margin-bottom: 0;
-  }
-
-  #advanced_search_options .form-group {
-    display: grid;
-    grid-template-columns: 220px minmax(0, 1fr);
-    gap: 6px 12px;
-    align-items: flex-start;
-    margin-bottom: 10px;
-  }
-
-  #advanced_search_options .form-group:last-child {
-    margin-bottom: 0;
-  }
-
-  #advanced_search_options .control-label,
-  #advanced_search_options label.control-label {
-    font-weight: 600;
-    margin: 0;
-    font-size: 13px;
-    color: #374151;
-    padding-top: 4px;
-  }
-
-  #advanced_search_options .form-control,
-  #advanced_search_options select,
-  #advanced_search_options .select2-container {
-    width: 100% !important;
-    max-width: 100%;
-    font-size: 13px;
-    padding: 4px 6px;
-    height: auto;
-  }
-
-  #advanced_search_options .btn {
-    font-size: 13px;
-    padding: 4px 10px;
-  }
-
-  /* Large radio / checkbox lists: scroll and columns */
-  #advanced_search_options .has-long-list > div:last-child,
-  #advanced_search_options .has-long-list .col-sm-9 {
-    max-height: 260px;
-    overflow: auto;
-    border: 1px solid #e5e7eb;
-    border-radius: 6px;
-    padding: 6px 8px;
-    background: #ffffff;
-  }
-
-  #advanced_search_options .has-long-list .radio,
-  #advanced_search_options .has-long-list .checkbox {
-    margin: 0 0 4px 0;
-  }
-
-  @media (min-width: 992px) {
-    #advanced_search_options .has-long-list > div:last-child,
-    #advanced_search_options .has-long-list .col-sm-9 {
-      column-count: 2;
-      column-gap: 16px;
-    }
-
-    #advanced_search_options .has-long-list .radio,
-    #advanced_search_options .has-long-list .checkbox {
-      break-inside: avoid;
-    }
-  }
-
-  @media (max-width: 991px) {
-    #advanced_search_options .form-group {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  /* Show hidden columns buttons */
-  #unhideButtons {
-    margin: 12px 0 6px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-  }
-
-  /* Main reporting table */
-  #reporting_table {
-    margin-top: 8px;
-  }
-
-  #reporting_table .data_table {
-    border: 1px solid #e5e7eb;
-    border-radius: 6px;
-    overflow: hidden;
-  }
-
-  #reporting_table .data_table th,
-  #reporting_table .data_table td {
-    padding: 4px 6px;
-    font-size: 13px;
-    vertical-align: middle;
-  }
-
-  #reporting_table .data_table th {
-    background: #f9fafb;
-    border-bottom: 1px solid #e5e7eb;
-  }
-
-  #reporting_table .data_table tr:nth-child(even) td {
-    background: #fdfdfd;
-  }
-
-  /* Free users anchor and button */
-  #free-users {
-    scroll-margin-top: 80px;
-  }
-
-  #free-users .btn {
-    font-size: 13px;
-    padding: 4px 10px;
-  }
-
-  /* Generic grey borders for detailed tables */
-  .table.table-bordered > tbody > tr > td,
-  .table.table-bordered > thead > tr > th {
-    border-color: #e5e7eb;
-  }
-
-  /* Trainers / coaches lists inside cards */
-  .user-teacher,
-  .user-coachs {
-    list-style: none;
-    padding-left: 0;
-    margin: 4px 0 0;
-  }
-
-  .user-teacher li,
-  .user-coachs li {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 13px;
-    padding: 2px 0;
-  }
-
-  /* Top meta cards (Trainers / Session list) */
-  .course-log-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    margin: 16px 0 8px;
-  }
-
-  .course-log-meta__column {
-    flex: 1 1 280px;
-    min-width: 260px;
-  }
-
-  .course-log-card {
-    border: 1px solid #e5e7eb;
-    border-radius: 10px;
-    background: #ffffff;
-    padding: 12px 14px;
-    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
-  }
-
-  .course-log-card__header {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-bottom: 8px;
-  }
-
-  .course-log-card__icon {
-    font-size: 18px;
-  }
-
-  .course-log-card__title {
-    font-weight: 600;
-    font-size: 14px;
-    color: #111827;
-  }
-
-  .course-log-card__subsection-title {
-    font-weight: 600;
-    font-size: 13px;
-    margin-top: 8px;
-    margin-bottom: 2px;
-    color: #4b5563;
-  }
-
-  .course-log-card__body {
-    font-size: 13px;
-  }
-
-  .course-log-session-list {
-    list-style: none;
-    padding-left: 0;
-    margin: 0;
-  }
-
-  .course-log-session-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 3px 0;
-    font-size: 13px;
-  }
+.card .field-checkbox, .card .field-radiobutton {
+  justify-content: normal;
+}
 </style>
-<script>
-  $(function () {
-    // Mark long lists to render them in multiple columns.
-    $('#advanced_search_options .form-group').each(function () {
-      var inputs = $(this).find('input[type=checkbox], input[type=radio]');
-      if (inputs.length > 6) {
-        $(this).addClass('has-long-list');
-      }
-    });
-  });
-</script>
 CSSJS;
-
 
 // Database table definitions.
 // @todo remove these calls.
@@ -716,7 +513,7 @@ if ('resume_session' === $origin) {
         'name' => get_lang('Administration'),
     ];
     $interbreadcrumb[] = [
-        'url' => '../session/session_list.php',
+        'url' => '/admin/session-list',
         'name' => get_lang('Session list'),
     ];
     $interbreadcrumb[] = [
@@ -728,7 +525,7 @@ if ('resume_session' === $origin) {
 $view = isset($_REQUEST['view']) ? $_REQUEST['view'] : '';
 $nameTools = get_lang('Reporting');
 Event::event_access_tool(TOOL_TRACKING);
-$tpl = new Template($nameTools);
+$tpl = new Template('');
 
 // Getting all the students of the course.
 if (empty($sessionId)) {
@@ -807,6 +604,16 @@ if ($showNonRegistered) {
     $freeUsers = Statistics::getNonRegisteredActiveUsersInCourse($courseId, (int) $sessionId);
 }
 
+$showTeachers = isset($_GET['show_teachers']) ? (int) $_GET['show_teachers'] : 0;
+$teacherUsers = [];
+if ($showTeachers) {
+    if (empty($sessionId)) {
+        $teacherUsers = CourseManager::get_teacher_list_from_course_code($courseCode);
+    } else {
+        $teacherUsers = CourseManager::get_coachs_from_course($sessionId, $courseId);
+    }
+}
+
 $actionsRight .= '<a
     href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&'.$additionalParams.$users_tracking_per_page.'">
      '.Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('CSV export')).'</a>';
@@ -833,7 +640,8 @@ echo Display::toolbarAction(
     [$actionsLeft, $form_search->returnForm(), $actionsRight]
 );
 
-$course_name = get_lang('Course').' '.$course->getTitle();
+$courseTitle = (string) $course->getTitle();
+$courseDisplay = get_lang('Course').' '.$courseTitle;
 
 if ($sessionId) {
     $titleSession = Display::getMdiIcon(
@@ -842,7 +650,7 @@ if ($sessionId) {
             null,
             ICON_SIZE_SMALL,
             get_lang('Session')
-        ).' '.api_get_session_name($sessionId);
+        ).'&nbsp;'.api_get_session_name($sessionId);
 
     $titleCourse = Display::getMdiIcon(
             ObjectIcon::COURSE,
@@ -850,16 +658,16 @@ if ($sessionId) {
             null,
             ICON_SIZE_SMALL,
             get_lang('Course')
-        ).' '.$course_name;
+        ).'&nbsp;'.$courseDisplay;
 } else {
-    // When there is no session, show only course info
+    // When there is no session, show only course info.
     $titleSession = Display::getMdiIcon(
             ObjectIcon::COURSE,
             'ch-tool-icon',
             null,
             ICON_SIZE_SMALL,
             get_lang('Course')
-        ).' '.$course->getTitle();
+        ).'&nbsp;'.$courseDisplay;
     $titleCourse = '';
 }
 
@@ -873,9 +681,9 @@ $panelIcon = Display::getMdiIcon(
 
 // Panel title: tracking icon + course (if any) + session
 if ($sessionId) {
-    $panelTitle = $panelIcon.' '.$titleCourse.' &raquo; '.$titleSession;
+    $panelTitle = $panelIcon.'&nbsp;'.$titleCourse.' &raquo; '.$titleSession;
 } else {
-    $panelTitle = $panelIcon.' '.$titleSession;
+    $panelTitle = $panelIcon.'&nbsp;'.$titleSession;
 }
 
 $teacherList = CourseManager::getTeacherListFromCourseCodeToString(
@@ -1006,7 +814,6 @@ if (!empty($teacherList) || !empty($coaches) || !empty($sessionLinks)) {
     $html .= '</div>'; // .course-log-meta
 }
 
-
 $trackingColumn = $_GET['users_tracking_column'] ?? null;
 $trackingDirection = $_GET['users_tracking_direction'] ?? null;
 $hideReports = api_get_configuration_value('hide_course_report_graph');
@@ -1014,8 +821,6 @@ $conditions = [];
 
 $groupList = GroupManager::get_group_list(null, $course, 1, $sessionId);
 $class = new UserGroupModel();
-//$options['where'] = [' usergroup.course_id = ? ' => $courseId];
-//$classes = $class->getUserGroupInCourse($options);
 $classes = $class->get_all();
 
 $bestScoreLabel = get_lang('Score').' - '.get_lang('Best attempt');
@@ -1034,7 +839,6 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
     $select = $formClass->addSelect('class_id', get_lang('Class').'/'.get_lang('Group'), $groupIdList);
     $groupIdList = [];
     foreach ($classes as $class) {
-        //$groupIdList['class_'.$class['id']] = $class['title'];
         $groupIdList[] = ['text' => $class['title'], 'value' => 'class_'.$class['id']];
     }
     $select->addOptGroup($groupIdList, get_lang('Class'));
@@ -1066,7 +870,7 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
     $formExtraField->addButtonSearch(get_lang('Search'));
 
     $numberStudentsCompletedLP = 0;
-    $averageStudentsTestScore = 0;
+    $averageStudentsTestScore = 0.0;
     $scoresDistribution = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     $userScoreList = [];
     $listStudentIds = [];
@@ -1147,8 +951,8 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
             if ('100%' === $userTracking[5]) {
                 $numberStudentsCompletedLP++;
             }
-            $averageStudentTestScore = substr($userTracking[7], 0, -1);
-            $averageStudentsTestScore .= $averageStudentTestScore;
+            $averageStudentTestScore = (float) rtrim((string) $userTracking[7], " \t\n\r\0\x0B%");
+            $averageStudentsTestScore += $averageStudentTestScore;
 
             $reducedAverage = ('100' === $averageStudentTestScore) ? 9 : floor((float) $averageStudentTestScore / 10);
             if (isset($scoresDistribution[$reducedAverage])) {
@@ -1178,7 +982,7 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
         }
 
         uasort($userScoreList, 'sort_by_order');
-        $averageStudentsTestScore = round($averageStudentsTestScore / $nbStudents);
+        $averageStudentsTestScore = $nbStudents ? round($averageStudentsTestScore / $nbStudents) : 0;
 
         $colors = ChamiloHelper::getColorPalette(true, true, 10);
         $tpl->assign('chart_colors', json_encode($colors));
@@ -1196,13 +1000,16 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
 
 $html .= '<div style="margin-top: 16px;"></div>';
 $html .= Display::page_subheader2(
+    '<span class="ch-icon-title">'.
     Display::getMdiIcon(
         'account-multiple-outline',
         'ch-tool-icon',
         null,
         ICON_SIZE_TINY,
         get_lang('Learner list')
-    ).' '.get_lang('Learner list')
+    ).
+    '<span>'.get_lang('Learner list').'</span>'.
+    '</span>'
 );
 
 $bestScoreLabel = get_lang('Score').' - '.get_lang('Only best attempts');
@@ -1267,6 +1074,28 @@ if ($nbStudents > 0) {
         $csv_content = [];
         // Override the SortableTable "per page" limit if CSV.
         $_GET['users_tracking_per_page'] = 1000000;
+    }
+
+    if ($showTeachers && !empty($teacherUsers) && false === $hideReports) {
+        $teacherUserIds = array_column($teacherUsers, 'user_id');
+        if (!empty($teacherUserIds)) {
+            $teacherConditions = ['course_id' => $courseId, 'include_invited_users' => false];
+            $teacherTracking = TrackingCourseLog::getUserData(
+                0,
+                count($teacherUserIds),
+                $trackingColumn,
+                $trackingDirection,
+                $teacherConditions,
+                true,
+                false,
+                null,
+                (int) $sessionId,
+                $export_csv,
+                $teacherUserIds
+            );
+            $usersTracking = array_merge($usersTracking, $teacherTracking);
+            $nbStudents += count($teacherTracking);
+        }
     }
 
     if (false === $hideReports) {
@@ -1345,14 +1174,14 @@ if ($nbStudents > 0) {
     $table->set_header(
         $headerCounter++,
         get_lang('Score').'&nbsp;'.
-        Display::getMdiIcon('format-annotation-plus', 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Average of tests in Learning Paths')),
+        $lpTestsAverageIcon,
         false
     );
     $headers['score'] = get_lang('Score');
     $table->set_header(
         $headerCounter++,
         $bestScoreLabel.'&nbsp;'.
-        Display::getMdiIcon('format-annotation-plus', 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Average of tests in Learning Paths')),
+        $lpTestsAverageIcon,
         false
     );
     $headers['score_best'] = $bestScoreLabel;
@@ -1455,7 +1284,7 @@ if ($nbStudents > 0) {
     $html .= $table->return_table();
     $html .= '</div>';
 } else {
-    if (empty($freeUsers)) {
+    if (empty($freeUsers) && empty($teacherUsers)) {
         $html .= Display::return_message(get_lang('No users in course'), 'warning', true);
     }
 }
@@ -1468,13 +1297,25 @@ echo '</div>';
 
 
 $freeAnchor = 'free-users';
-$toggleUrl  = api_get_self().'?'.api_get_cidreq().'&show_non_registered='.($showNonRegistered ? 0 : 1).'#'.$freeAnchor;
+$toggleUrl  = api_get_self().'?'.api_get_cidreq()
+    .'&show_non_registered='.($showNonRegistered ? 0 : 1)
+    .($showTeachers ? '&show_teachers=1' : '')
+    .'#'.$freeAnchor;
 $toggleLbl  = $showNonRegistered
     ? get_lang('Hide free users (not enrolled)')
     : get_lang('Show free users (not enrolled)');
 
+$toggleTeachersUrl = api_get_self().'?'.api_get_cidreq()
+    .($showNonRegistered ? '&show_non_registered=1' : '')
+    .'&show_teachers='.($showTeachers ? 0 : 1)
+    .'#'.$freeAnchor;
+$toggleTeachersLbl = $showTeachers
+    ? get_lang('Hide teachers')
+    : get_lang('Show teachers');
+
 echo '<div id="'.$freeAnchor.'" class="mb-2" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">'
     .'<a class="btn btn--info" href="'.$toggleUrl.'">'.Security::remove_XSS($toggleLbl).'</a>'
+    .'<a class="btn btn--info" href="'.$toggleTeachersUrl.'">'.Security::remove_XSS($toggleTeachersLbl).'</a>'
     .'</div>';
 
 $groupTable = new HTML_Table(['class' => 'table table-hover table-striped table-bordered data_table']);
@@ -1763,7 +1604,7 @@ $groupPanelTitle = Display::getMdiIcon(
         null,
         ICON_SIZE_TINY,
         get_lang('Group reporting')
-    ).' '.get_lang('Group reporting');
+    ).'&nbsp;'.get_lang('Group reporting');
 
 echo Display::panel($groupTable->toHtml(), $groupPanelTitle);
 

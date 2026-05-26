@@ -19,13 +19,13 @@ final class MistralProvider implements AiProviderInterface, AiDocumentProviderIn
 {
     private string $apiKey;
 
-    // Text
+    // Text defaults
     private string $textApiUrl;
     private string $textModel;
     private float $textTemperature;
     private int $textMaxTokens;
 
-    // Document (fallbacks to text if missing)
+    // Document defaults (fallbacks to text if missing)
     private string $documentApiUrl;
     private string $documentModel;
     private float $documentTemperature;
@@ -66,6 +66,121 @@ final class MistralProvider implements AiProviderInterface, AiDocumentProviderIn
         $this->documentModel = \is_array($docCfg) ? (string) ($docCfg['model'] ?? $this->textModel) : $this->textModel;
         $this->documentTemperature = \is_array($docCfg) ? (float) ($docCfg['temperature'] ?? $this->textTemperature) : $this->textTemperature;
         $this->documentMaxTokens = \is_array($docCfg) ? (int) ($docCfg['max_tokens'] ?? $this->textMaxTokens) : $this->textMaxTokens;
+    }
+
+    /**
+     * Chat-style entrypoint (OpenAI-compatible).
+     *
+     * @param array<int, array{role:string,content:string}> $messages
+     * @param array<string,mixed>                           $options
+     */
+    public function chat(array $messages, array $options = []): string
+    {
+        $userId = $this->getUserId();
+        if (!$userId) {
+            error_log('[AI][Mistral][chat] User not authenticated.');
+
+            return 'Error: User is not authenticated.';
+        }
+
+        $normalized = $this->normalizeChatMessages($messages);
+        if (empty($normalized)) {
+            error_log('[AI][Mistral][chat] Empty messages payload.');
+
+            return 'Error: Empty chat messages.';
+        }
+
+        $resolved = $this->resolveTextOptions($options);
+
+        $payload = [
+            'model' => $resolved['model'],
+            'messages' => $normalized,
+            'temperature' => $resolved['temperature'],
+            'max_tokens' => $resolved['max_tokens'],
+        ];
+
+        // Optional safe overrides
+        if (isset($options['top_p'])) {
+            $payload['top_p'] = (float) $options['top_p'];
+        }
+
+        try {
+            $response = $this->httpClient->request('POST', $resolved['url'], [
+                'headers' => [
+                    'Authorization' => 'Bearer '.$this->apiKey,
+                    'Content-Type' => 'application/json',
+                ],
+                'json' => $payload,
+            ]);
+
+            $statusCode = $response->getStatusCode();
+            $data = $response->toArray(false);
+
+            if (200 !== $statusCode) {
+                error_log('[AI][Mistral][chat] Invalid response (status='.$statusCode.').');
+
+                return 'Error: Invalid response from Mistral.';
+            }
+
+            if (\is_array($data) && isset($data['error'])) {
+                $msg = $data['error']['message'] ?? 'Mistral returned an error response.';
+                $msg = \is_string($msg) ? trim($msg) : 'Mistral returned an error response.';
+                error_log('[AI][Mistral][chat] Error response: '.$msg);
+
+                return 'Error: '.$msg;
+            }
+
+            $generated = $data['choices'][0]['message']['content'] ?? null;
+            if (!\is_string($generated) || '' === trim($generated)) {
+                error_log('[AI][Mistral][chat] Empty content returned.');
+
+                return 'Error: Empty response from Mistral.';
+            }
+
+            $usage = $data['usage'] ?? [];
+            $promptTokens = (int) ($usage['prompt_tokens'] ?? 0);
+            $completionTokens = (int) ($usage['completion_tokens'] ?? 0);
+            $totalTokens = (int) ($usage['total_tokens'] ?? ($promptTokens + $completionTokens));
+
+            $aiRequest = new AiRequests();
+            $aiRequest
+                ->setUserId($userId)
+                ->setToolName('chat')
+                ->setRequestText($this->messagesForLog($normalized, 900))
+                ->setPromptTokens($promptTokens)
+                ->setCompletionTokens($completionTokens)
+                ->setTotalTokens($totalTokens)
+                ->setAiProvider('mistral')
+            ;
+
+            $this->aiRequestsRepository->save($aiRequest);
+
+            return trim($generated);
+        } catch (Exception $e) {
+            error_log('[AI][Mistral][chat] Exception: '.$e->getMessage());
+
+            return 'Error: '.$e->getMessage();
+        }
+    }
+
+    /**
+     * Prompt-style entrypoint used by TaskGrader text mode and other features.
+     *
+     * @param array<string,mixed> $options
+     */
+    public function generateText(string $prompt, array $options = []): string
+    {
+        $prompt = trim($prompt);
+        if ('' === $prompt) {
+            return 'Error: Empty prompt.';
+        }
+
+        $messages = [
+            ['role' => 'system', 'content' => 'You are a helpful assistant.'],
+            ['role' => 'user', 'content' => $prompt],
+        ];
+
+        return $this->chat($messages, $options);
     }
 
     public function generateQuestions(string $topic, int $numQuestions, string $questionType, string $language): ?string
@@ -285,6 +400,89 @@ Title: "%s". Assume the reader already knows the context.',
         }
 
         return $validQuestions;
+    }
+
+    /**
+     * @param array<int, array{role:string,content:string}> $messages
+     *
+     * @return array<int, array{role:string,content:string}>
+     */
+    private function normalizeChatMessages(array $messages): array
+    {
+        $out = [];
+
+        foreach ($messages as $m) {
+            if (!\is_array($m)) {
+                continue;
+            }
+
+            $role = isset($m['role']) ? trim((string) $m['role']) : '';
+            $content = isset($m['content']) ? trim((string) $m['content']) : '';
+
+            if ('' === $role || '' === $content) {
+                continue;
+            }
+
+            $role = strtolower($role);
+            if (!\in_array($role, ['system', 'user', 'assistant', 'tool'], true)) {
+                $role = 'user';
+            }
+
+            $out[] = [
+                'role' => $role,
+                'content' => $content,
+            ];
+        }
+
+        return $out;
+    }
+
+    /**
+     * @param array<int, array{role:string,content:string}> $messages
+     */
+    private function messagesForLog(array $messages, int $maxChars = 900): string
+    {
+        $parts = [];
+        foreach ($messages as $m) {
+            $role = $m['role'] ?? 'user';
+            $content = trim((string) ($m['content'] ?? ''));
+
+            if ('' === $content) {
+                continue;
+            }
+
+            $parts[] = strtoupper((string) $role).': '.mb_substr($content, 0, 300);
+        }
+
+        $s = implode(' | ', $parts);
+
+        return mb_substr($s, 0, $maxChars);
+    }
+
+    /**
+     * @param array<string,mixed> $options
+     *
+     * @return array{url:string,model:string,temperature:float,max_tokens:int}
+     */
+    private function resolveTextOptions(array $options): array
+    {
+        $url = (string) (($options['url'] ?? null) ?? $this->textApiUrl);
+        $model = (string) (($options['model'] ?? null) ?? $this->textModel);
+        $temperature = (float) (($options['temperature'] ?? null) ?? $this->textTemperature);
+
+        $maxTokens = $options['max_tokens'] ?? ($options['max_output_tokens'] ?? null);
+        $maxTokens = (int) (($maxTokens ?? null) ?? $this->textMaxTokens);
+
+        if ($maxTokens <= 0) {
+            $maxTokens = $this->textMaxTokens > 0 ? $this->textMaxTokens : 1000;
+        }
+
+        return [
+            'url' => $url,
+            'model' => $model,
+            'temperature' => $temperature,
+            'max_tokens' => $maxTokens,
+        ];
     }
 
     private function getUserId(): ?int

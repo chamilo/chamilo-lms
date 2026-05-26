@@ -1,0 +1,22 @@
+<?php
+$strings['plugin_title'] = 'Uvoz H5P';
+$strings['plugin_comment'] = 'Uvezite H5P sadržaj i koristite ga u stazama učenja. Otvorite README.md za uputstva za instalaciju.';
+$strings['frame'] = 'Okvir';
+$strings['frame_help'] = 'Prikaži okvir i dugmad ispod H5P';
+$strings['embed'] = 'Ugradi';
+$strings['embed_help'] = 'Prikaži dugme za ugrađivanje';
+$strings['copyright'] = 'Autorska prava';
+$strings['copyright_help'] = 'Prikaži dugme za autorska prava';
+$strings['icon'] = 'Ikona';
+$strings['icon_help'] = 'Prikaži H5P ikonu';
+$strings['attempts'] = 'Broj pokušaja';
+$strings['upload_h5p'] = 'Otpremi';
+$strings['import_h5p_package'] = 'Otpremi H5P paket';
+$strings['h5p_package'] = 'H5P paket';
+$strings['h5p_error_loading'] = 'Greška pri učitavanju H5P paketa';
+$strings['h5p_error_invalid_token'] = 'Nevažeći sigurnosni token';
+$strings['h5p_error_missing_core_asset'] = 'Greška pri učitavanju H5P osnovnih resursa';
+$strings['h5p_save_content_state'] = 'Sačuvaj rezultate korisnika';
+$strings['h5p_save_content_freq'] = 'Učestalost čuvanja';
+$strings['h5p_save_freq_help'] = 'Koliko često treba čuvati trenutno stanje sadržaja, u sekundama';
+$strings['start_attempt'] = 'Započni pokušaj';

@@ -1,7 +1,7 @@
 <template>
   <Button
     :label="$t('Back')"
-    icon="pi pi-chevron-left"
+    icon="mdi mdi-chevron-left"
     @click="goBack"
   />
   <BaseTable
@@ -67,7 +67,7 @@
         <div class="flex flex-row gap-2">
           <Button
             class="btn btn--primary"
-            icon="pi pi-info-circle"
+            icon="mdi mdi-information"
             @click="showHandler(slotProps.data)"
           />
         </div>

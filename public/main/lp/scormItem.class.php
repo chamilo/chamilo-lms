@@ -109,7 +109,7 @@ class scormItem extends learnpathItem
                                         }
                                         break;
                                     case 'metadata':
-                                        $this->metadata = new scormMetadata('manifest', $child);
+                                        $this->metadata = new scormMetadata($child, 'manifest');
                                         break;
                                 }
                                 break;

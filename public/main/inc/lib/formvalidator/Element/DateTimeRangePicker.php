@@ -33,10 +33,10 @@ class DateTimeRangePicker extends DateRangePicker
                     class="form-control" type="text" value="'.$value.'" data-input>
                 <div class="ml-1" id="button-addon3">
                     <button class="btn btn--secondary-outline"  type="button" data-toggle>
-                        <i class="pi pi-calendar pi-lg"></i>
+                        <i class="mdi mdi-calendar"></i>
                     </button>
                     <button class="btn btn--secondary-outline" type="button" data-clear>
-                        <i class="pi pi-times pi-lg"></i>
+                        <i class="mdi mdi-close"></i>
                     </button>
               </div>
             </div>
@@ -192,6 +192,11 @@ class DateTimeRangePicker extends DateRangePicker
                     'showDuration': true,
                     'timeFormat': 'H:i:s',
                     'scrollDefault': 'now',
+                    'lang': {
+                        'mins': '".get_lang('minutes')."',
+                        'hr': '".get_lang('hour')."',
+                        'hrs': '".get_lang('hours')."'
+                    }
                 });
 
                 $('#".$id."_time_range_start').timepicker('setTime', new Date('".$startTime."'));

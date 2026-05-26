@@ -70,6 +70,15 @@ class GenericAuthenticator extends AbstractAuthenticator
         /** @var GenericResourceOwner $resourceOwner */
         $resourceOwner = $this->client->fetchUserFromToken($accessToken);
         $resourceOwnerData = $resourceOwner->toArray();
+
+        // OIDC providers such as ADFS only return {sub} from the UserInfo endpoint.
+        // Decode the ID token JWT (included in the token response) to get the full
+        // set of claims, then merge: UserInfo data wins over ID token on conflicts.
+        $idTokenClaims = $this->decodeIdTokenClaims($accessToken);
+        if (!empty($idTokenClaims)) {
+            $resourceOwnerData = array_merge($idTokenClaims, $resourceOwnerData);
+        }
+
         $resourceOwnerId = $resourceOwner->getId();
 
         if (empty($resourceOwnerId)) {
@@ -283,5 +292,36 @@ class GenericAuthenticator extends AbstractAuthenticator
     protected function getCustomBadge(): ?BadgeInterface
     {
         return new OAuth2Badge(UserAuthSource::OAUTH2);
+    }
+
+    private function decodeIdTokenClaims(AccessToken $accessToken): array
+    {
+        $idToken = $accessToken->getValues()['id_token'] ?? null;
+
+        if (!\is_string($idToken)) {
+            return [];
+        }
+
+        $parts = explode('.', $idToken);
+
+        if (3 !== \count($parts)) {
+            return [];
+        }
+
+        $base64 = strtr($parts[1], '-_', '+/');
+        $mod4 = \strlen($base64) % 4;
+        if ($mod4) {
+            $base64 .= str_repeat('=', 4 - $mod4);
+        }
+
+        $decoded = base64_decode($base64, true);
+
+        if (false === $decoded) {
+            return [];
+        }
+
+        $claims = json_decode($decoded, true);
+
+        return \is_array($claims) ? $claims : [];
     }
 }

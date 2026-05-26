@@ -1,4 +1,50 @@
 {% autoescape false %}
+    {% macro itemIcon(type) %}
+        {% set normalizedType = type|default('document')|lower|replace({' ': '_'}) %}
+        {% set icon = 'file-document-outline' %}
+
+        {% if normalizedType in ['dir', 'chapter', 'section'] %}
+            {% set icon = 'bookmark' %}
+        {% elseif normalizedType in ['quiz', 'exercise', 'test'] %}
+            {% set icon = 'clipboard-text-outline' %}
+        {% elseif normalizedType in ['student_publication', 'assignment', 'work', 'homework'] %}
+            {% set icon = 'file-upload-outline' %}
+        {% elseif normalizedType in ['forum', 'thread'] %}
+            {% set icon = 'forum-outline' %}
+        {% elseif normalizedType in ['link'] %}
+            {% set icon = 'link-variant' %}
+        {% elseif normalizedType in ['video'] %}
+            {% set icon = 'video-outline' %}
+        {% elseif normalizedType in ['audio'] %}
+            {% set icon = 'volume-high' %}
+        {% elseif normalizedType in ['certificate'] %}
+            {% set icon = 'star-outline' %}
+        {% elseif normalizedType in ['sco', 'scorm', 'xapi'] %}
+            {% set icon = 'cube-outline' %}
+        {% elseif normalizedType in ['h5p'] %}
+            {% set icon = 'puzzle-outline' %}
+        {% elseif normalizedType in ['survey'] %}
+            {% set icon = 'poll' %}
+        {% endif %}
+
+        <span class="lp-item-type-icon" aria-hidden="true">
+            <i class="mdi mdi-{{ icon }}"></i>
+        </span>
+    {% endmacro %}
+
+    {% macro statusIcon(statusClass) %}
+        {% set icon = 'circle-outline' %}
+        {% if statusClass == 'scorm_completed' %}
+            {% set icon = 'check-circle' %}
+        {% elseif statusClass == 'scorm_failed' %}
+            {% set icon = 'close-circle' %}
+        {% endif %}
+
+        <span class="lp-item-status-icon" aria-hidden="true">
+            <i class="mdi mdi-{{ icon }}"></i>
+        </span>
+    {% endmacro %}
+
     {% macro processItem(item, lp_current_item_id, status_list) %}
         {% import _self as self %}
         {% set itemClass = ' ' %}
@@ -14,17 +60,29 @@
         {% set itemStatusClass = status_list[item.iid]|default('') %}
         {% set accordionClass = item.itemType == 'dir' and 'true' == chamilo_settings_get('lp.lp_view_accordion') ? 'accordion' : '' %}
         <div id="toc_{{ item.iid }}"
-             class=" scorm_item_normal {{ itemStatusClass }} {{ itemClass }} item-{{ item.itemType }} {{ accordionClass }}">
+             class="scorm_item_normal {{ itemStatusClass }} {{ itemClass }} item-{{ item.itemType }} {{ accordionClass }}">
             {% if item.itemType == 'dir' %}
                 <div class="section {{ itemLevel }}" title="{{ item.description | striptags | e('html') }}">
-                    {{ item.title | raw }}
+                    <div class="lp-section-row">
+                        <span class="lp-item-main">
+                            {{ self.itemIcon(item.itemType) }}
+                            <span class="lp-item-title">{{ item.title | raw }}</span>
+                        </span>
+                        <span class="lp-item-status-icon lp-section-chevron" aria-hidden="true">
+                            <i class="mdi mdi-chevron-up"></i>
+                        </span>
+                    </div>
                 </div>
             {% else %}
                 <div class="item {{ itemLevel }}" title="{{ item.description | striptags | e('html') }}">
                     <a name="atoc_{{ item.iid }}"></a>
-                    <a data-type="type-{{ item.itemType }}" class="items-list" href="#"
+                    <a data-type="type-{{ item.itemType }}" class="items-list lp-item-row" href="#"
                        onclick="switch_item('{{ lp_current_item_id }}','{{ item.iid }}'); return false;">
-                        {{ item.title | raw }}
+                        <span class="lp-item-main">
+                            {{ self.itemIcon(item.itemType) }}
+                            <span class="lp-item-title">{{ item.title | raw }}</span>
+                        </span>
+                        {{ self.statusIcon(itemStatusClass) }}
                     </a>
                 </div>
             {% endif %}
@@ -44,11 +102,25 @@
     {% if data_list is not empty %}
         <div id="learning_path_toc" class="scorm-list">
             <div class="scorm-body">
+                <div class="lp-toc-title">{{ lp_title_scorm|default("Lesson name"|trans)|striptags }}</div>
                 <div id="inner_lp_toc" class="inner_lp_toc scrollbar-light">
                     {% from _self import processItem %}
                     {% for item in data_list %}
                         {{ processItem(item, lp_current_item_id, status_list) }}
                     {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div id="learning_path_toc" class="scorm-list">
+            <div class="scorm-body">
+                <div class="lp-toc-title">{{ lp_title_scorm|default("Lesson name"|trans)|striptags }}</div>
+                <div class="lp-empty-state">
+                <span class="lp-empty-state-icon" aria-hidden="true">
+                    <i class="mdi mdi-book-open-page-variant-outline"></i>
+                </span>
+                <div class="lp-empty-state-title">{{ "No learning path content yet"|trans }}</div>
+                <div class="lp-empty-state-text">{{ "Add a course introduction or add documents to display them to learners."|trans }}</div>
                 </div>
             </div>
         </div>
@@ -63,11 +135,12 @@
             {% macro tree(item) %}
                 {% import _self as self %}
                 {% set isCurrentItem = item.id == lp_current_item_id %}
+                {% set itemStatusClass = item.status_css_class_name|default('') %}
                 <div id="toc_{{ item.id }}"
                      class="panel panel-default
                         {{ item.parent_id ? 'child_item':'root_item' }}
                         lp_item_type_{{ item.type|replace({' ': '_'}) }}
-                        {{ item.status_css_class_name }}
+                        {{ itemStatusClass }}
                         {{ item.is_current ? 'current_item scorm_highlight' : '' }}
                         {{ item.is_parent_of_current ? 'parent_of_current_item' : '' }}
                         {{ item.is_chapter ? 'chapter' : '' }}
@@ -76,18 +149,27 @@
                     <div class="status-heading">
                         <div id="heading_item_{{ item.id }}" class="panel-heading" role="tab">
                             {% if item.children|length %}
-                                <a class="item-header" role="button"
+                                <a class="item-header lp-section-row" role="button"
                                    data-toggle="collapse" data-parent="#tocchildren_{{ item.parent_id }}"
                                    href="#tocchildren_{{ item.id }}"
                                    aria-expanded="{{ isCurrentItem ? 'true' : 'false' }}"
                                    aria-controls="tocchildren_{{ item.id }}">
-                                    {{ item.title | raw }}
+                                    <span class="lp-item-main">
+                                        {{ self.itemIcon(item.type|default('dir')) }}
+                                        <span class="lp-item-title">{{ item.title | raw }}</span>
+                                    </span>
+                                    <span class="lp-item-status-icon" aria-hidden="true">
+                                        <i class="mdi mdi-chevron-down"></i>
+                                    </span>
                                 </a>
                             {% else %}
-                                <a data-type="type-{{ item.type }}" class="item-action" href="#"
+                                <a data-type="type-{{ item.type }}" class="item-action lp-item-row" href="#"
                                    onclick="switch_item('{{ item.current_id }}','{{ item.id }}'); return false;">
-                                    <i class="fa fa-chevron-circle-right" aria-hidden="true"></i>
-                                    {{ item.title | raw }}
+                                    <span class="lp-item-main">
+                                        {{ self.itemIcon(item.type) }}
+                                        <span class="lp-item-title">{{ item.title | raw }}</span>
+                                    </span>
+                                    {{ self.statusIcon(itemStatusClass) }}
                                 </a>
                             {% endif %}
                         </div>

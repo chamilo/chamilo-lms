@@ -84,6 +84,7 @@
 import { onMounted, reactive, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
+import { DateTime } from "luxon"
 import attendanceService from "../../services/attendanceService"
 import BaseCalendar from "../../components/basecomponents/BaseCalendar.vue"
 import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
@@ -92,6 +93,7 @@ import LayoutFormButtons from "../../components/layout/LayoutFormButtons.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseInputNumber from "../basecomponents/BaseInputNumber.vue"
 import { useLocale } from "../../composables/locale"
+import { useFormatDate } from "../../composables/formatDate"
 
 const { t } = useI18n()
 const emit = defineEmits(["back-pressed"])
@@ -100,6 +102,8 @@ const parentResourceNodeId = ref(Number(route.params.node))
 
 const { appLocale } = useLocale()
 const localePrefix = ref(getLocalePrefix(appLocale.value))
+
+const { getCurrentTimezone } = useFormatDate()
 
 function getLocalePrefix(locale) {
   const defaultLang = "en"
@@ -129,18 +133,27 @@ const groupOptions = ref([])
 const pad2 = (n) => String(n).padStart(2, "0")
 
 const buildIsoLocalDateTime = (d) => {
-  const year = d.getFullYear()
-  const month = pad2(d.getMonth() + 1)
-  const day = pad2(d.getDate())
-  const hours = pad2(d.getHours())
-  const minutes = pad2(d.getMinutes())
-  const seconds = pad2(d.getSeconds())
-  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`
+  // Interpret the local time components in the platform/user timezone (mirrors api_get_timezone()).
+  const tz = getCurrentTimezone()
+  const dt = DateTime.fromObject(
+    {
+      year: d.getFullYear(),
+      month: d.getMonth() + 1,
+      day: d.getDate(),
+      hour: d.getHours(),
+      minute: d.getMinutes(),
+      second: d.getSeconds(),
+    },
+    { zone: tz },
+  )
+  return dt.toISO({ suppressMilliseconds: true })
 }
 
 const parseIsoLocalToDate = (isoLocal) => {
   if (typeof isoLocal !== "string") return null
-  const m = isoLocal.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})$/)
+  // Strip trailing timezone offset (+HH:MM / -HH:MM / Z) before parsing as local parts
+  const stripped = isoLocal.replace(/[Z]$|[+-]\d{2}:\d{2}$/, "")
+  const m = stripped.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})$/)
   if (!m) return null
   const year = Number(m[1])
   const month = Number(m[2]) - 1
@@ -226,30 +239,33 @@ const parseLocaleDateTimeStringToDate = (raw, locale = "en") => {
 
 /**
  * Normalize a value coming from BaseCalendar into a local date-time string
- * without timezone information.
+ * with the browser timezone offset (e.g. "2026-03-30T15:30:00+02:00").
  *
  * Goal:
  * - Treat picked time as local time.
- * - Avoid sending UTC with Z or offsets to the backend.
- * - Always send an unambiguous ISO local format: "YYYY-MM-DDTHH:mm:ss".
+ * - Include the timezone offset so the backend can store the exact UTC equivalent.
+ * - Always send an unambiguous ISO format: "YYYY-MM-DDTHH:mm:ss±HH:MM".
  */
 const normalizeToLocalDateTime = (value) => {
   if (!value) {
     return null
   }
 
-  // Case 1: Date instance -> build local "YYYY-MM-DDTHH:mm:ss"
+  // Case 1: Date instance -> build local ISO with timezone offset
   if (value instanceof Date) {
     return buildIsoLocalDateTime(value)
   }
 
   // Case 2: string
   if (typeof value === "string") {
-    // Strip timezone/offset, keep local time if it already looks ISO-like.
+    // Parse the local date parts (strip any existing offset/Z), then rebuild with current offset.
     const isoMatch = value.match(/^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2})?)/)
     if (isoMatch) {
-      const base = isoMatch[1]
-      return base.length === 16 ? `${base}:00` : base
+      const base = isoMatch[1].length === 16 ? `${isoMatch[1]}:00` : isoMatch[1]
+      const parsed = parseIsoLocalToDate(base)
+      if (parsed instanceof Date && !Number.isNaN(parsed.getTime())) {
+        return buildIsoLocalDateTime(parsed)
+      }
     }
 
     // Try to parse locale-specific strings like "09/01/2025" or "01/09/2025"

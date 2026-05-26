@@ -22,6 +22,7 @@ use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\HttpFoundation\Request;
 
 /*
  * Chamilo LMS
@@ -437,7 +438,7 @@ function display_requirements(
     $dir_perm_verified = 0777;
 
     foreach ($perms_dir as $perm) {
-        $r = @mkdir($dir, $perm);
+        $r = @mkdir($dir, $perm, true);
         if (true === $r) {
             $dir_perm_verified = $perm;
             $course_test_was_created = true;
@@ -880,6 +881,11 @@ function display_license_agreement(): array
     ];
 }
 
+function installerHtmlAttributeValue(mixed $value): string
+{
+    return htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+}
+
 /**
  * Displays a parameter in a table row.
  * Used by the display_database_settings_form function.
@@ -900,36 +906,56 @@ function displayDatabaseParameter(
     $extra_notice,
     $displayWhenUpdate = true
 ) {
-    echo "<dt class='col-sm-4'>$parameterName</dt>";
+    $escapedParameterName = installerHtmlAttributeValue($parameterName);
+    $escapedFormFieldName = installerHtmlAttributeValue($formFieldName);
+    $escapedParameterValue = installerHtmlAttributeValue($parameterValue);
+
+    echo '<dt class="col-sm-4">'.$escapedParameterName.'</dt>';
     echo '<dd class="col-sm-8">';
+
     if (INSTALL_TYPE_UPDATE == $installType && $displayWhenUpdate) {
         echo '<input
                 type="hidden"
-                name="'.$formFieldName.'"
-                id="'.$formFieldName.'"
-                value="'.api_htmlentities($parameterValue).'" />'.$parameterValue;
-    } else {
-        $inputType = 'dbPassForm' === $formFieldName ? 'password' : 'text';
-        //Slightly limit the length of the database prefix to avoid having to cut down the databases names later on
-        $maxLength = 'dbPrefixForm' === $formFieldName ? '15' : MAX_FORM_FIELD_LENGTH;
-        if (INSTALL_TYPE_UPDATE == $installType) {
-            echo '<input
-                type="hidden" name="'.$formFieldName.'" id="'.$formFieldName.'"
-                value="'.api_htmlentities($parameterValue).'" />';
-            echo api_htmlentities($parameterValue);
-        } else {
-            echo '<input
-                        type="'.$inputType.'"
-                        class="form-control"
-                        size="'.DATABASE_FORM_FIELD_DISPLAY_LENGTH.'"
-                        maxlength="'.$maxLength.'"
-                        name="'.$formFieldName.'"
-                        id="'.$formFieldName.'"
-                        value="'.api_htmlentities($parameterValue).'" />
-                    '.$extra_notice.'
-                  ';
-        }
+                name="'.$escapedFormFieldName.'"
+                id="'.$escapedFormFieldName.'"
+                value="'.$escapedParameterValue.'" />'.$escapedParameterValue;
+        echo '</dd>';
+
+        return;
     }
+
+    $inputType = 'dbPassForm' === $formFieldName ? 'password' : 'text';
+
+    $maxLength = MAX_FORM_FIELD_LENGTH;
+    if ('dbPrefixForm' === $formFieldName) {
+        $maxLength = 15;
+    } elseif ('dbPassForm' === $formFieldName) {
+        $maxLength = 255;
+    }
+
+    if (INSTALL_TYPE_UPDATE == $installType) {
+        echo '<input
+                type="hidden"
+                name="'.$escapedFormFieldName.'"
+                id="'.$escapedFormFieldName.'"
+                value="'.$escapedParameterValue.'" />';
+        echo $escapedParameterValue;
+        echo '</dd>';
+
+        return;
+    }
+
+    echo '<input
+                type="'.$inputType.'"
+                class="form-control"
+                size="'.DATABASE_FORM_FIELD_DISPLAY_LENGTH.'"
+                maxlength="'.$maxLength.'"
+                name="'.$escapedFormFieldName.'"
+                id="'.$escapedFormFieldName.'"
+                value="'.$escapedParameterValue.'" />
+            '.$extra_notice.'
+          ';
+
     echo '</dd>';
 }
 
@@ -973,17 +999,14 @@ function display_database_settings_form(
             $connection->connect();
             $schemaManager = $connection->getSchemaManager();
 
-            // Test create/alter/drop table
             $table = 'zXxTESTxX_'.mt_rand(0, 1000);
             $sql = "CREATE TABLE $table (id INT AUTO_INCREMENT NOT NULL, name varchar(255), PRIMARY KEY(id))";
             $connection->executeQuery($sql);
-            $tableCreationWorks = false;
-            $tableDropWorks = false;
+
             if ($schemaManager->tablesExist($table)) {
                 $sql = "ALTER TABLE $table ADD COLUMN name2 varchar(140) ";
                 $connection->executeQuery($sql);
                 $schemaManager->dropTable($table);
-                $tableDropWorks = false === $schemaManager->tablesExist($table);
             }
         } else {
             connectToDatabase(
@@ -1371,6 +1394,21 @@ function migrate(EntityManager $manager)
  * @param string $envFile
  * @param array  $params
  */
+function escapeInstallerEnvValue(mixed $value): string
+{
+    $value = (string) $value;
+
+    if (str_contains($value, "\n") || str_contains($value, "\r")) {
+        throw new \InvalidArgumentException('Installer .env values cannot contain line breaks.');
+    }
+
+    return str_replace(
+        ['\\', "'"],
+        ['\\\\', "\\'"],
+        $value
+    );
+}
+
 function updateEnvFile($distFile, $envFile, $params)
 {
     $requirements = [
@@ -1399,8 +1437,13 @@ function updateEnvFile($distFile, $envFile, $params)
         }
     }
 
+    $escapedParams = [];
+    foreach ($params as $key => $value) {
+        $escapedParams[$key] = escapeInstallerEnvValue($value);
+    }
+
     $contents = file_get_contents($distFile);
-    $contents = str_replace(array_keys($params), array_values($params), $contents);
+    $contents = str_replace(array_keys($escapedParams), array_values($escapedParams), $contents);
     file_put_contents($envFile, $contents);
     error_log("File env saved here: $envFile");
 }
@@ -1555,12 +1598,6 @@ function finishInstallationWithContainer(
 
     $admin->setRoles($roles);
     $repo->updateUser($admin);
-
-    if (in_array('ROLE_ADMIN', $roles, true) || in_array('ROLE_GLOBAL_ADMIN', $roles, true)) {
-        UserManager::addUserAsAdmin($admin);
-    } else {
-        UserManager::removeUserAdmin($admin);
-    }
 
     /** @var User $anonUser */
     $anonUser = $repo->findOneBy(['username' => 'anon']);
@@ -1809,25 +1846,18 @@ function isUpdateAvailable(): bool
     try {
         $dotenv->loadEnv($envFile);
     } catch (\Throwable $e) {
-        // If .env cannot be parsed, play safe: no update banner
+        // Unable to load .env reliably -> do not assume update
+        error_log('Installer: Unable to load .env, update check disabled. Reason: ' . $e->getMessage());
         return false;
     }
 
     // Must be an installed platform
     if (($_ENV['APP_INSTALLED'] ?? '') !== '1') {
+        // Not marked as installed -> no update flow
         return false;
     }
 
-    // Compare DB version vs installer version
-    $versionInfo = require __DIR__.'/version.php';
-    $installerVersion = $versionInfo['new_version'] ?? null;
-
-    if (!$installerVersion) {
-        // If we cannot know installer version, do not show update banner
-        return false;
-    }
-
-    $dbVersion = null;
+    // DB connectivity and "looks installed" checks
     try {
         connectToDatabase(
             $_ENV['DATABASE_HOST'] ?? 'localhost',
@@ -1836,15 +1866,50 @@ function isUpdateAvailable(): bool
             $_ENV['DATABASE_NAME'] ?? '',
             (int) ($_ENV['DATABASE_PORT'] ?? 3306)
         );
-        $dbVersion = get_config_param_from_db('chamilo_database_version');
+
+        $conn = Database::getManager()->getConnection();
+        $schema = $conn->createSchemaManager();
+        $tables = $schema->listTableNames();
+
+        if (count($tables) === 0) {
+            // Empty database -> treat as not installed -> no update suggestion
+            return false;
+        }
+
+        // Must have at least one of the settings tables to consider it a Chamilo DB
+        $hasSettings = $schema->tablesExist(['settings']) || $schema->tablesExist(['settings_current']);
+        if (!$hasSettings) {
+            // Not a Chamilo database schema -> no update suggestion
+            return false;
+        }
     } catch (\Throwable $e) {
-        // If DB is unreachable but platform is marked installed, allow upgrade path
-        // so the UI can guide the admin.
-        return true;
+        // If DB does not exist or credentials are wrong, do NOT suggest update.
+        error_log('Installer: Database is not reachable, update is NOT available. Reason: ' . $e->getMessage());
+        return false;
     }
 
-    if (empty($dbVersion)) {
-        // No version recorded -> offer upgrade path to normalize state
+    // Compare versions (DB version vs installer version)
+    $versionInfo = require __DIR__ . '/version.php';
+    $installerVersion = $versionInfo['new_version'] ?? null;
+    if (!$installerVersion) {
+        // Cannot determine installer version -> do not assume update
+        error_log('Installer: Missing installer version info, update check disabled.');
+        return false;
+    }
+
+    $dbVersion = null;
+    try {
+        $dbVersion = get_config_param_from_db('chamilo_database_version');
+    } catch (\Throwable $e) {
+        // If we cannot read version, avoid false positives
+        error_log('Installer: Unable to read DB version, update check disabled. Reason: ' . $e->getMessage());
+        return false;
+    }
+
+    // If the DB looks like Chamilo (settings table exists) but version is missing,
+    // it is likely an old install (e.g., 1.11.x) -> update should be offered.
+    $dbVersion = is_string($dbVersion) ? trim($dbVersion) : '';
+    if ($dbVersion === '') {
         return true;
     }
 
@@ -2084,4 +2149,80 @@ function createExtraConfigFile(): void {
             file_put_contents($finalFilename, $contents);
         }
     }
+}
+
+function detectBrowserLanguage(Request $request): string
+{
+    static $language_index = [
+        'ar' => 'arabic',
+        'ast' => 'asturian',
+        'bg' => 'bulgarian',
+        'bs' => 'bosnian',
+        'ca' => 'catalan',
+        'zh' => 'simpl_chinese',
+        'zh-tw' => 'trad_chinese',
+        'cs' => 'czech',
+        'da' => 'danish',
+        'prs' => 'dari',
+        'de' => 'german',
+        'el' => 'greek',
+        'en' => 'english',
+        'es' => 'spanish',
+        'eo' => 'esperanto',
+        'eu' => 'basque',
+        'fa' => 'persian',
+        'fr' => 'french',
+        'fur' => 'friulian',
+        'gl' => 'galician',
+        'ka' => 'georgian',
+        'hr' => 'croatian',
+        'he' => 'hebrew',
+        'hi' => 'hindi',
+        'id' => 'indonesian',
+        'it' => 'italian',
+        'ko' => 'korean',
+        'lv' => 'latvian',
+        'lt' => 'lithuanian',
+        'mk' => 'macedonian',
+        'hu' => 'hungarian',
+        'ms' => 'malay',
+        'nl' => 'dutch',
+        'ja' => 'japanese',
+        'no' => 'norwegian',
+        'oc' => 'occitan',
+        'ps' => 'pashto',
+        'pl' => 'polish',
+        'pt' => 'portuguese',
+        'pt-br' => 'brazilian',
+        'ro' => 'romanian',
+        'qu' => 'quechua_cusco',
+        'ru' => 'russian',
+        'sk' => 'slovak',
+        'sl' => 'slovenian',
+        'sr' => 'serbian',
+        'fi' => 'finnish',
+        'sv' => 'swedish',
+        'th' => 'thai',
+        'tr' => 'turkish',
+        'uk' => 'ukrainian',
+        'vi' => 'vietnamese',
+        'sw' => 'swahili',
+        'yo' => 'yoruba',
+    ];
+
+    $systemAvailableLanguages = array_column(LanguageFixtures::getLanguages(), 'isocode', 'english_name');
+
+    $preferredLanguages = $request->getPreferredLanguage();
+
+    $clientLanguage = strtolower(str_replace('_', '-', $preferredLanguages ?? ''));
+
+    foreach ($language_index as $code => $language) {
+        if (str_starts_with($clientLanguage, $code)) {
+            if (!empty($systemAvailableLanguages[$language])) {
+                return $systemAvailableLanguages[$language];
+            }
+        }
+    }
+
+    return 'en_US';
 }

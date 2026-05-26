@@ -1,68 +1,65 @@
 <template>
-  <div v-if="isAdminOrTeacher" class="w-full blog-admin">
-    <!-- HEADER / TOOLBAR -->
-    <BaseToolbar class="sticky top-0 z-10 bg-[var(--surface-card,#fff)]">
-      <template #start>
-        <div class="flex items-center gap-2">
-          <i class="mdi mdi-view-grid-plus text-xl text-primary"></i>
-          <h3 class="text-lg font-semibold m-0">{{ t("Projects") }}</h3>
-        </div>
-      </template>
-
-      <template #end>
-        <div class="admin-actions">
-          <BaseInputText
-            id="search"
-            v-model="q"
-            :label="t('Search')"
-            label-position="invisible"
-            class="search-input"
-            :placeholder="t('Search for projects...')"
-          />
-          <BaseButton
-            type="primary"
-            icon="plus"
-            :label="t('New project')"
-            @click="openCreate()"
-          />
-        </div>
-      </template>
-    </BaseToolbar>
+  <div
+    v-if="isAdminOrTeacher"
+    class="blog-admin"
+  >
+    <SectionHeader :title="t('Projects')">
+      <BaseInputText
+        id="search"
+        v-model="q"
+        :label="t('Search')"
+        :placeholder="t('Search for projects...')"
+        class="search-input"
+        label-position="invisible"
+      />
+      <BaseButton
+        :label="t('New project')"
+        icon="plus"
+        type="success"
+        @click="openCreate()"
+      />
+    </SectionHeader>
 
     <!-- CONTROLS -->
-    <div class="controls">
-      <BaseSelect
-        v-model="sort"
-        :options="sortOptions"
-        optionLabel="label"
-        optionValue="value"
-        label=""
-        class="w-44"
-      />
-      <label class="inline-flex items-center text-sm gap-2">
-        <input type="checkbox" v-model="onlyVisible" />
-        <span>{{ t("Only visible") }}</span>
-      </label>
-    </div>
+    <BaseToolbar>
+      <template #start>
+        <BaseCheckbox
+          id="visible-filter"
+          v-model="onlyVisible"
+          :label="t('Only visible')"
+          name="visible-filter"
+        />
+      </template>
+      <template #end>
+        <BaseSelect
+          v-model="sort"
+          :label="t('Sort by')"
+          :options="sortOptions"
+          class="w-44"
+          optionLabel="label"
+          optionValue="value"
+        />
+      </template>
+    </BaseToolbar>
 
     <!-- GRID -->
     <div class="cards-grid">
       <div
         v-for="proj in filtered"
         :key="proj.id"
-        class="card"
         :class="{ 'card--hidden': !proj.visible }"
+        class="card"
       >
         <div class="card-head">
           <div>
             <div class="meta">{{ t("Created") }}: {{ formatDate(proj.createdAt) }}</div>
 
-            <RouterLink
-              class="title-link"
+            <BaseAppLink
               :to="{ name: 'BlogPosts', params: { ...$route.params, blogId: proj.id }, query: $route.query }"
+              class="title-link"
             >
               <h4 class="title">{{ proj.title }}</h4>
-            </RouterLink>
+            </BaseAppLink>
 
             <div class="subtitle">{{ proj.subtitle }}</div>
           </div>
@@ -74,47 +71,39 @@
         </div>
 
         <div class="actions icons">
-          <RouterLink
+          <BaseAppLink
             :to="{ name: 'BlogPosts', params: { ...$route.params, blogId: proj.id }, query: $route.query }"
             class="no-underline"
           >
             <BaseButton
-              type="primary"
-              :onlyIcon="true"
+              :label="t('Open')"
               icon="link-external"
-              :tooltip="t('Open')"
-              aria-label="open"
-              class="icon-btn icon-btn--primary"
+              only-icon
             />
-          </RouterLink>
+          </BaseAppLink>
 
           <BaseButton
-            type="black"
-            :onlyIcon="true"
-            icon="edit"
-            :tooltip="t('Rename')"
+            :label="t('Rename')"
             aria-label="rename"
-            class="icon-btn"
+            icon="edit"
+            only-icon
+            type="secondary"
             @click="openRename(proj)"
           />
 
           <BaseButton
-            type="black"
-            :onlyIcon="true"
             :icon="proj.visible ? 'eye-on' : 'eye-off'"
-            :tooltip="proj.visible ? t('Hide') : t('Show')"
-            aria-label="toggle-visibility"
-            class="icon-btn"
+            :label="proj.visible ? t('Hide') : t('Show')"
+            only-icon
+            type="black"
             @click="toggleVisibility(proj)"
           />
 
           <BaseButton
-            type="danger"
-            :onlyIcon="true"
+            :label="t('Delete')"
             icon="trash"
-            :tooltip="t('Delete')"
-            aria-label="delete"
-            class="icon-btn icon-btn--danger"
+            only-icon
+            type="danger"
             @click="remove(proj)"
           />
         </div>
@@ -134,27 +123,21 @@
     <BaseDialog
       v-model:isVisible="showRename"
       :title="t('Rename project')"
-      header-icon="pencil"
       :width="'520px'"
+      header-icon="pencil"
     >
       <BaseInputText
         id="rename"
-        :label="t('New title')"
         v-model="renameTitle"
         :form-submitted="renameSubmitted"
         :is-invalid="!renameTitle"
+        :label="t('New title')"
       />
       <template #footer>
         <BaseButton
-          type="black"
-          icon="close"
-          :label="t('Cancel')"
-          @click="closeRename"
-        />
-        <BaseButton
-          type="primary"
-          icon="check"
           :label="t('Save')"
+          icon="check"
+          type="primary"
           @click="saveRename"
         />
       </template>
@@ -162,7 +145,10 @@
   </div>
 
   <!-- FALLBACK FOR UNAUTHORIZED USERS -->
-  <div v-else class="p-8 text-center text-gray-600">
+  <div
+    v-else
+    class="p-8 text-center text-gray-600"
+  >
     <div class="inline-flex items-center gap-2 text-red-600 font-semibold mb-2">
       <i class="mdi mdi-lock-alert-outline text-2xl"></i>
       <span>{{ t("Access denied") }}</span>
@@ -174,7 +160,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from "vue"
+import { computed, onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
@@ -187,6 +173,8 @@ import service from "../../services/blogs"
 import { useSecurityStore } from "../../store/securityStore"
 import { RESOURCE_LINK_DRAFT } from "../../constants/entity/resourcelink"
 import { useCidReq } from "../../composables/cidReq"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
+import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
 
 const { cid, sid } = useCidReq()
 const { t } = useI18n()
@@ -213,23 +201,27 @@ const renameTitle = ref("")
 const renameSubmitted = ref(false)
 const createDialogKey = ref(0)
 
-const sortOptions = [
-  { label: "Newest first", value: "createdAt:desc" },
-  { label: "Oldest first", value: "createdAt:asc" },
-  { label: "Title (A–Z)", value: "title:asc" },
-  { label: "Title (Z–A)", value: "title:desc" },
-]
+const sortOptions = computed(() => [
+  { label: t("Newest first"), value: "createdAt:desc" },
+  { label: t("Oldest first"), value: "createdAt:asc" },
+  { label: t("Title A–Z"), value: "title:asc" },
+  { label: t("Title Z–A"), value: "title:desc" },
+])
 
 function formatDate(iso) {
-  try { return new Date(iso).toLocaleDateString() } catch { return iso }
+  try {
+    return new Date(iso).toLocaleDateString()
+  } catch {
+    return iso
+  }
 }
 
 const filtered = computed(() => {
   let out = [...rows.value]
-  if (q.value) out = out.filter(r => r.title.toLowerCase().includes(q.value.toLowerCase()))
-  if (onlyVisible.value) out = out.filter(r => r.visible)
+  if (q.value) out = out.filter((r) => r.title.toLowerCase().includes(q.value.toLowerCase()))
+  if (onlyVisible.value) out = out.filter((r) => r.visible)
   const [f, d] = (sort.value || "createdAt:desc").split(":")
-  out.sort((a,b) => (a[f] > b[f] ? 1 : -1) * (d === "desc" ? -1 : 1))
+  out.sort((a, b) => (a[f] > b[f] ? 1 : -1) * (d === "desc" ? -1 : 1))
   return out
 })
 
@@ -265,10 +257,14 @@ function openRename(p) {
 }
 function closeRename() {
   showRename.value = false
-  renameSubmitted.value = false
-  renameTarget.value = null
-  renameTitle.value = ""
 }
+watch(showRename, (v) => {
+  if (!v) {
+    renameSubmitted.value = false
+    renameTarget.value = null
+    renameTitle.value = ""
+  }
+})
 async function saveRename() {
   renameSubmitted.value = true
   if (!renameTitle.value.trim() || !renameTarget.value) return

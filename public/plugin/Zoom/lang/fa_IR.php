@@ -1,0 +1,103 @@
+<?php
+/* License: see /license.txt */
+
+// Needed in order to show the plugin title
+$strings['plugin_title'] = 'کنفرانس ویدیویی زوم';
+$strings['plugin_comment'] = 'یکپارچه‌سازی کنفرانس ویدیویی زوم در دوره‌ها و جلسات';
+
+$strings['apiKey'] = 'کلید API';
+$strings['apiSecret'] = 'راز API';
+$strings['verificationToken'] = 'توکن تأیید';
+$strings['enableParticipantRegistration'] = 'فعال‌سازی ثبت‌نام شرکت‌کنندگان';
+$strings['enableCloudRecording'] = 'نوع ضبط خودکار';
+$strings['enableGlobalConference'] = 'فعال‌سازی کنفرانس عمومی';
+$strings['enableGlobalConferencePerUser'] = 'فعال‌سازی کنفرانس عمومی برای هر کاربر';
+$strings['globalConferenceAllowRoles'] = 'لینک کنفرانس عمومی فقط برای این نقش‌های کاربری قابل مشاهده است';
+$strings['globalConferencePerUserAllowRoles'] = 'لینک کنفرانس عمومی برای هر کاربر فقط برای این نقش‌های کاربری قابل مشاهده است';
+
+$strings['enableCloudRecording_help'] = 'نیاز به پروفایل پرداخت‌شده زوم دارد.
+برای پروفایل <em>پایه</em> کار نمی‌کند.';
+
+// please keep these lines alphabetically sorted
+$strings['AllCourseUsersWereRegistered'] = 'تمام دانشجویان دوره ثبت‌نام شدند';
+$strings['Agenda'] = 'دستور کار';
+$strings['CannotRegisterWithoutEmailAddress'] = 'بدون آدرس ایمیل نمی‌توان ثبت‌نام کرد';
+$strings['CopyingJoinURL'] = 'در حال کپی URL پیوستن';
+$strings['CopyJoinAsURL'] = 'کپی URL «پیوستن به عنوان»';
+$strings['CopyToCourse'] = 'کپی به دوره';
+$strings['CouldNotCopyJoinURL'] = 'نتوانست URL پیوستن را کپی کند';
+$strings['Course'] = 'دوره';
+$strings['CreatedAt'] = 'ایجاد شده در';
+$strings['CreateLinkInCourse'] = 'ایجاد لینک(ها) در دوره';
+$strings['CreateUserVideoConference'] = 'ایجاد کنفرانس کاربر';
+$strings['DateMeetingTitle'] = '%s: %s';
+$strings['DeleteMeeting'] = 'حذف جلسه';
+$strings['DeleteFile'] = 'حذف فایل(ها)';
+$strings['Details'] = 'جزئیات';
+$strings['DoIt'] = 'انجام دهید';
+$strings['Duration'] = 'مدت زمان';
+$strings['DurationFormat'] = '%hh%I';
+$strings['DurationInMinutes'] = 'مدت زمان (به دقیقه)';
+$strings['EndDate'] = 'تاریخ پایان';
+$strings['EnterMeeting'] = 'ورود به جلسه';
+$strings['ViewMeeting'] = 'مشاهده جلسه';
+$strings['Files'] = 'فایل‌ها';
+$strings['Finished'] = 'تمام شده';
+$strings['FileWasCopiedToCourse'] = 'فایل به دوره کپی شد';
+$strings['FileWasDeleted'] = 'فایل حذف شد';
+$strings['GlobalMeeting'] = 'کنفرانس عمومی';
+$strings['GlobalMeetingPerUser'] = 'کنفرانس عمومی برای هر کاربر';
+$strings['GroupUsersWereRegistered'] = 'اعضای گروه ثبت‌نام شدند';
+$strings['InstantMeeting'] = 'جلسه فوری';
+$strings['Join'] = 'پیوستن';
+$strings['JoinGlobalVideoConference'] = 'پیوستن به کنفرانس عمومی';
+$strings['JoinURLCopied'] = 'URL پیوستن کپی شد';
+$strings['JoinURLToSendToParticipants'] = 'URL پیوستن برای ارسال به شرکت‌کنندگان';
+$strings['LiveMeetings'] = 'جلسات زنده';
+$strings['LinkToFileWasCreatedInCourse'] = 'لینک فایل به دوره اضافه شد';
+$strings['MeetingDeleted'] = 'جلسه حذف شد';
+$strings['MeetingsFound'] = 'جلسات یافت شده';
+$strings['MeetingUpdated'] = 'جلسه به‌روزرسانی شد';
+$strings['NewMeetingCreated'] = 'جلسه جدید ایجاد شد';
+$strings['Password'] = 'رمز عبور';
+$strings['RecurringWithFixedTime'] = 'تکرارشونده با زمان ثابت';
+$strings['RecurringWithNoFixedTime'] = 'تکرارشونده بدون زمان ثابت';
+$strings['RegisterAllCourseUsers'] = 'ثبت‌نام همه کاربران دوره';
+$strings['RegisteredUserListWasUpdated'] = 'فهرست کاربران ثبت‌نام شده به‌روزرسانی شد';
+$strings['RegisteredUsers'] = 'کاربران ثبت‌نام شده';
+$strings['RegisterNoUser'] = 'ثبت‌نام هیچ کاربری';
+$strings['RegisterTheseGroupMembers'] = 'ثبت‌نام اعضای این گروه';
+$strings['ScheduleAMeeting'] = 'زمان‌بندی جلسه';
+$strings['ScheduledMeeting'] = 'جلسه زمان‌بندی شده';
+$strings['ScheduledMeetings'] = 'جلسات زمان‌بندی شده';
+$strings['ScheduleAMeeting'] = 'زمان‌بندی جلسه';
+$strings['SearchMeeting'] = 'جستجوی جلسه';
+$strings['Session'] = 'جلسه';
+$strings['StartDate'] = 'تاریخ شروع';
+$strings['Started'] = 'شروع شده';
+$strings['StartInstantMeeting'] = 'شروع جلسه فوری';
+$strings['StartMeeting'] = 'شروع جلسه';
+$strings['StartTime'] = 'زمان شروع';
+$strings['Topic'] = 'موضوع';
+$strings['TopicAndAgenda'] = 'موضوع و دستور جلسه';
+$strings['Type'] = 'نوع';
+$strings['UpcomingMeetings'] = 'جلسات آینده';
+$strings['UpdateMeeting'] = 'به‌روزرسانی جلسه';
+$strings['UpdateRegisteredUserList'] = 'به‌روزرسانی فهرست کاربران ثبت‌نام شده';
+$strings['UserRegistration'] = 'ثبت‌نام کاربر';
+$strings['Y-m-d H:i'] = 'Y-m-d H:i';
+$strings['Waiting'] = 'در انتظار';
+$strings['XRecordingOfMeetingXFromXDurationXDotX'] = 'ضبط %s از جلسه %s از %s (%s).%s';
+$strings['YouAreNotRegisteredToThisMeeting'] = 'شما در این جلسه ثبت‌نام نشده‌اید';
+$strings['ZoomVideoConferences'] = 'کنفرانس‌های ویدیویی زوم';
+$strings['Recordings'] = 'ضبط‌ها';
+$strings['CreateGlobalVideoConference'] = 'ایجاد کنفرانس ویدیویی عمومی';
+$strings['ConferenceNotStarted'] = 'کنفرانس شروع نشده';
+$strings['MeetingNotFound'] = 'جلسه یافت نشد';
+$strings['JoinURLNotAvailable'] = 'URL در دسترس نیست';
+$strings['Meetings'] = 'جلسات';
+$strings['ConferenceType'] = 'نوع کنفرانس';
+$strings['ForEveryone'] = 'همه';
+$strings['SomeUsers'] = 'برخی کاربران (بعداً انتخاب کنید)';
+$strings['Activity'] = 'فعالیت';
+$strings['ConferenceNotAvailable'] = 'کنفرانس در دسترس نیست';

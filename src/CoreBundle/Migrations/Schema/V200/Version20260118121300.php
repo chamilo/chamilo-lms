@@ -7,7 +7,11 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
+use DateTimeImmutable;
 use Doctrine\DBAL\Schema\Schema;
+
+use const JSON_PRETTY_PRINT;
+use const JSON_UNESCAPED_SLASHES;
 
 final class Version20260118121300 extends AbstractMigrationChamilo
 {
@@ -60,7 +64,7 @@ final class Version20260118121300 extends AbstractMigrationChamilo
             ]
         );
 
-        $this->dbg(sprintf("[META] Updated show_tabs metadata (rows=%d).", $affectedMeta));
+        $this->dbg(\sprintf('[META] Updated show_tabs metadata (rows=%d).', $affectedMeta));
 
         // Ensure SettingsValueTemplate exists/updated for show_tabs.
         $templateId = $this->ensureSettingsValueTemplateForShowTabs();
@@ -74,7 +78,7 @@ final class Version20260118121300 extends AbstractMigrationChamilo
                 [(int) $templateId]
             );
 
-            $this->dbg(sprintf("[LINK] Linked show_tabs to template_id=%d (rows=%d).", (int) $templateId, $affectedLink));
+            $this->dbg(\sprintf('[LINK] Linked show_tabs to template_id=%d (rows=%d).', (int) $templateId, $affectedLink));
         }
 
         // Migrate selected_value from CSV to JSON for every access_url row.
@@ -94,6 +98,7 @@ final class Version20260118121300 extends AbstractMigrationChamilo
                 // If empty, apply a safe default JSON.
                 $json = $this->buildDefaultShowTabsJson();
                 $this->updateShowTabsRow($id, $accessUrl, $json, 'empty');
+
                 continue;
             }
 
@@ -103,8 +108,9 @@ final class Version20260118121300 extends AbstractMigrationChamilo
                 if (null !== $normalized && $normalized !== $rawTrim) {
                     $this->updateShowTabsRow($id, $accessUrl, $normalized, 'normalize');
                 } else {
-                    $this->dbg(sprintf("[SKIP] show_tabs id=%d access_url=%d already JSON (no changes).", $id, $accessUrl));
+                    $this->dbg(\sprintf('[SKIP] show_tabs id=%d access_url=%d already JSON (no changes).', $id, $accessUrl));
                 }
+
                 continue;
             }
 
@@ -127,12 +133,12 @@ final class Version20260118121300 extends AbstractMigrationChamilo
         ];
 
         $jsonExample = json_encode($example, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-        if (!is_string($jsonExample) || '' === $jsonExample) {
+        if (!\is_string($jsonExample) || '' === $jsonExample) {
             $this->dbg('[WARN] Failed to encode JSON example for show_tabs.');
             $jsonExample = '{"menu":{},"topbar":{}}';
         }
 
-        $now = (new \DateTimeImmutable())->format('Y-m-d H:i:s');
+        $now = (new DateTimeImmutable())->format('Y-m-d H:i:s');
 
         $existingId = $conn->fetchOne(
             "SELECT id FROM {$table} WHERE variable = ? LIMIT 1",
@@ -147,7 +153,7 @@ final class Version20260118121300 extends AbstractMigrationChamilo
                 [$jsonExample, $now, (int) $existingId]
             );
 
-            $this->dbg(sprintf("[TPL] Updated template for show_tabs (id=%d).", (int) $existingId));
+            $this->dbg(\sprintf('[TPL] Updated template for show_tabs (id=%d).', (int) $existingId));
 
             return (int) $existingId;
         }
@@ -164,11 +170,12 @@ final class Version20260118121300 extends AbstractMigrationChamilo
         );
 
         if (!$newId) {
-            $this->dbg("[WARN] Could not retrieve inserted template id for show_tabs.");
+            $this->dbg('[WARN] Could not retrieve inserted template id for show_tabs.');
+
             return null;
         }
 
-        $this->dbg(sprintf("[TPL] Inserted template for show_tabs (id=%d).", (int) $newId));
+        $this->dbg(\sprintf('[TPL] Inserted template for show_tabs (id=%d).', (int) $newId));
 
         return (int) $newId;
     }
@@ -182,12 +189,13 @@ final class Version20260118121300 extends AbstractMigrationChamilo
             [$json, $id]
         );
 
-        $this->dbg(sprintf("[MIG] mode=%s id=%d access_url=%d updated=%d", $mode, $id, $accessUrl, $affected));
+        $this->dbg(\sprintf('[MIG] mode=%s id=%d access_url=%d updated=%d', $mode, $id, $accessUrl, $affected));
     }
 
     private function looksLikeJson(string $value): bool
     {
         $v = ltrim($value);
+
         return '' !== $v && ('{' === $v[0] || '[' === $v[0]);
     }
 
@@ -195,19 +203,20 @@ final class Version20260118121300 extends AbstractMigrationChamilo
     {
         $decoded = json_decode($rawJson, true);
 
-        if (!is_array($decoded)) {
+        if (!\is_array($decoded)) {
             // If JSON is invalid, fallback to default JSON to avoid breaking the UI.
             $this->dbg('[WARN] show_tabs JSON is invalid. Falling back to default JSON.');
+
             return $this->buildDefaultShowTabsJson();
         }
 
-        $menu = (isset($decoded['menu']) && is_array($decoded['menu'])) ? $decoded['menu'] : [];
-        $topbar = (isset($decoded['topbar']) && is_array($decoded['topbar'])) ? $decoded['topbar'] : [];
+        $menu = (isset($decoded['menu']) && \is_array($decoded['menu'])) ? $decoded['menu'] : [];
+        $topbar = (isset($decoded['topbar']) && \is_array($decoded['topbar'])) ? $decoded['topbar'] : [];
 
         // Ensure all known keys exist (missing -> keep safe defaults).
         $defaultMenu = $this->buildDefaultMenuArray();
         foreach (self::MENU_KEYS as $k) {
-            if (!array_key_exists($k, $menu)) {
+            if (!\array_key_exists($k, $menu)) {
                 // Preserve behavior: default values apply when missing.
                 $menu[$k] = $defaultMenu[$k] ?? false;
             }
@@ -215,7 +224,7 @@ final class Version20260118121300 extends AbstractMigrationChamilo
 
         $defaultTopbar = $this->buildDefaultTopbarArray();
         foreach (self::TOPBAR_KEYS as $k) {
-            if (!array_key_exists($k, $topbar)) {
+            if (!\array_key_exists($k, $topbar)) {
                 $topbar[$k] = $defaultTopbar[$k] ?? true;
             }
         }
@@ -226,7 +235,7 @@ final class Version20260118121300 extends AbstractMigrationChamilo
         ];
 
         $json = json_encode($normalized, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-        if (!is_string($json) || '' === $json) {
+        if (!\is_string($json) || '' === $json) {
             return $this->buildDefaultShowTabsJson();
         }
 
@@ -244,8 +253,9 @@ final class Version20260118121300 extends AbstractMigrationChamilo
 
         $menu = [];
         foreach (self::MENU_KEYS as $k) {
-            if (in_array($k, $enabled, true)) {
+            if (\in_array($k, $enabled, true)) {
                 $menu[$k] = true;
+
                 continue;
             }
 
@@ -266,7 +276,7 @@ final class Version20260118121300 extends AbstractMigrationChamilo
         ];
 
         $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-        if (!is_string($json) || '' === $json) {
+        if (!\is_string($json) || '' === $json) {
             return $this->buildDefaultShowTabsJson();
         }
 
@@ -281,7 +291,7 @@ final class Version20260118121300 extends AbstractMigrationChamilo
         ];
 
         $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-        if (!is_string($json) || '' === $json) {
+        if (!\is_string($json) || '' === $json) {
             return '{"menu":{},"topbar":{}}';
         }
 
@@ -310,7 +320,7 @@ final class Version20260118121300 extends AbstractMigrationChamilo
 
         // Ensure all keys exist.
         foreach (self::MENU_KEYS as $k) {
-            if (!array_key_exists($k, $defaults)) {
+            if (!\array_key_exists($k, $defaults)) {
                 $defaults[$k] = false;
             }
         }
@@ -327,7 +337,7 @@ final class Version20260118121300 extends AbstractMigrationChamilo
         ];
 
         foreach (self::TOPBAR_KEYS as $k) {
-            if (!array_key_exists($k, $defaults)) {
+            if (!\array_key_exists($k, $defaults)) {
                 $defaults[$k] = true;
             }
         }
@@ -338,7 +348,7 @@ final class Version20260118121300 extends AbstractMigrationChamilo
     private function dbg(string $msg): void
     {
         if (self::DEBUG) {
-            error_log('[MIG][show_tabs_only] ' . $msg);
+            error_log('[MIG][show_tabs_only] '.$msg);
         }
     }
 }

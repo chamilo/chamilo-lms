@@ -24,5 +24,24 @@ export default {
       props: (route) => ({ type: route.query.type }),
       meta: { breadcrumb: "" },
     },
+    {
+      name: "CCalendarEventListView",
+      path: "list",
+      component: () => import("../views/ccalendarevent/CCalendarEventListView.vue"),
+      meta: { breadcrumb: "Events list" },
+    },
+
+    {
+      name: "CalendarSessionsPlan",
+      path: "sessions-plan",
+      component: () => import("../views/ccalendarevent/CalendarSessionsPlan.vue"),
+      meta: { breadcrumb: "Sessions plan calendar" },
+    },
+    {
+      name: "CalendarMyStudentsSchedule",
+      path: "my-students-schedule",
+      component: () => import("../views/ccalendarevent/CalendarMyStudentsSchedule.vue"),
+      meta: { breadcrumb: "My students schedule" },
+    },
   ],
 }

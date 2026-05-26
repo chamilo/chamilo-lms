@@ -3,11 +3,68 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
 use Chamilo\CourseBundle\Entity\CGroup;
+
+function announcements_get_resource_language_options(): array
+{
+    $options = [
+        '' => get_lang('No specific language'),
+    ];
+
+    $languages = Database::getManager()
+        ->getRepository(Language::class)
+        ->findBy(['available' => true], ['englishName' => 'ASC'])
+    ;
+
+    foreach ($languages as $language) {
+        if (!$language instanceof Language) {
+            continue;
+        }
+
+        $options[$language->getIsocode()] = $language->getOriginalName() ?: $language->getEnglishName();
+    }
+
+    return $options;
+}
+
+function announcements_apply_resource_language(?CAnnouncement $announcement, mixed $rawLanguage): void
+{
+    if (!$announcement instanceof CAnnouncement) {
+        return;
+    }
+
+    $resourceNode = $announcement->getResourceNode();
+    if (null === $resourceNode) {
+        return;
+    }
+
+    $languageCode = trim((string) $rawLanguage);
+    $entityManager = Database::getManager();
+    $language = null;
+
+    if ('' !== $languageCode) {
+        $language = $entityManager
+            ->getRepository(Language::class)
+            ->findOneBy([
+                'isocode' => $languageCode,
+                'available' => true,
+            ])
+        ;
+
+        if (!$language instanceof Language) {
+            return;
+        }
+    }
+
+    $resourceNode->setLanguage($language);
+    $entityManager->persist($resourceNode);
+    $entityManager->flush();
+}
 
 /**
  * @author Frederik Vermeire <frederik.vermeire@pandora.be>, UGent Internship
@@ -85,6 +142,56 @@ $homeUrl = api_get_self().'?action=list&'.api_get_cidreq();
 $content = '';
 $searchFormToString = '';
 
+/**
+ * Build a local URL for this announcements page.
+ * Keeps cidreq and preserves legacy navigation params (origin/page) when present.
+ */
+function announcements_build_url(string $action, ?int $id = null, array $extra = []): string
+{
+    $url = api_get_self().'?action='.$action;
+    if (null !== $id && $id > 0) {
+        $url .= '&id='.(int) $id;
+    }
+    $url .= '&'.api_get_cidreq();
+
+    // Preserve optional navigation context (legacy learnpath and similar flows).
+    if (!empty($_REQUEST['origin'])) {
+        $url .= '&origin='.rawurlencode((string) $_REQUEST['origin']);
+    }
+    if (!empty($_REQUEST['page'])) {
+        $url .= '&page='.rawurlencode((string) $_REQUEST['page']);
+    }
+
+    foreach ($extra as $key => $value) {
+        if (null === $value || '' === $value) {
+            continue;
+        }
+        $url .= '&'.rawurlencode((string) $key).'='.rawurlencode((string) $value);
+    }
+
+    return $url;
+}
+
+/**
+ * Resolve a safe return URL based only on explicit return_action/return_id params.
+ * If params are missing/invalid, fallback to the provided URL.
+ */
+function announcements_get_return_url(string $fallbackUrl): string
+{
+    $returnAction = (string) ($_REQUEST['return_action'] ?? '');
+    $returnId = (int) ($_REQUEST['return_id'] ?? 0);
+
+    if ('list' === $returnAction) {
+        return announcements_build_url('list');
+    }
+
+    if (in_array($returnAction, ['view', 'modify'], true) && $returnId > 0) {
+        return announcements_build_url($returnAction, $returnId);
+    }
+
+    return $fallbackUrl;
+}
+
 $logInfo = [
     'tool' => TOOL_ANNOUNCEMENT,
     'action' => $action,
@@ -94,7 +201,7 @@ Event::registerLog($logInfo);
 $announcementAttachmentIsDisabled = ('true' === api_get_setting('announcement.disable_announcement_attachment'));
 $thisAnnouncementId = null;
 $htmlHeadXtra[] = api_get_css_asset('select2/css/select2.min.css');
-$htmlHeadXtra[] = api_get_asset('select2/js/select2.min.j');
+$htmlHeadXtra[] = api_get_asset('select2/js/select2.min.js');
 
 switch ($action) {
     case 'move':
@@ -251,6 +358,35 @@ switch ($action) {
             ';
         }
 
+        // Safe responsive resize (ES5 only). This avoids blank pages caused by modern JS syntax.
+        $resizeJs = '
+            (function () {
+                function resizeAnnouncementsGrid() {
+                    var $grid = $("#announcements");
+                    if (!$grid.length) {
+                        return;
+                    }
+                    // jqGrid marks the grid on the DOM node when initialized
+                    if (!$grid[0].grid) {
+                        return;
+                    }
+                    var $wrap = $grid.closest(".ui-jqgrid").parent();
+                    if ($wrap.length && $wrap.width()) {
+                        $grid.jqGrid("setGridWidth", $wrap.width(), true);
+                    }
+                }
+
+                // Run after init + also after a short delay (layout may still be settling)
+                resizeAnnouncementsGrid();
+                setTimeout(resizeAnnouncementsGrid, 250);
+
+                // Keep it responsive on window resize
+                $(window).off("resize.announcementsGrid").on("resize.announcementsGrid", function () {
+                    resizeAnnouncementsGrid();
+                });
+            })();
+        ';
+
         $content = '<script>
         $(function() {'.
             Display::grid_js(
@@ -262,7 +398,7 @@ switch ($action) {
                 [],
                 '',
                 true
-            ).$editOptions.'
+            ).$editOptions.$resizeJs.'
         });
         </script>';
 
@@ -284,7 +420,8 @@ switch ($action) {
             }
             $content = $html;
         } else {
-            $content .= Display::grid_html('announcements');
+            // Use inline style (no Tailwind dependency) to allow horizontal scroll on small screens.
+            $content .= '<div style="width:100%; overflow-x:auto;">'.Display::grid_html('announcements').'</div>';
         }
 
         break;
@@ -309,8 +446,6 @@ switch ($action) {
         }
         header('Location: '.$homeUrl);
         exit;
-
-        break;
     case 'delete_all':
         if (api_is_allowed_to_edit()) {
             $allow = ('true' === api_get_setting('announcement.disable_delete_all_announcements'));
@@ -324,16 +459,15 @@ switch ($action) {
 
         break;
     case 'delete_attachment':
-        $id = (int) $_GET['id_attach'];
+        $id = (int) ($_GET['id_attach'] ?? 0);
 
-        if (api_is_allowed_to_edit()) {
+        if (api_is_allowed_to_edit() && $id > 0) {
             AnnouncementManager::delete_announcement_attachment_file($id);
         }
 
-        header('Location: '.$homeUrl);
+        $redirectUrl = announcements_get_return_url($homeUrl);
+        header('Location: '.$redirectUrl);
         exit;
-
-        break;
     case 'set_visibility':
         if (!empty($announcement_id)) {
             if (0 != $sessionId &&
@@ -357,7 +491,9 @@ switch ($action) {
                     $session
                 );
                 Display::addFlash(Display::return_message(get_lang('The visibility has been changed.')));
-                header('Location: '.$homeUrl);
+
+                $redirectUrl = announcements_get_return_url($homeUrl);
+                header('Location: '.$redirectUrl);
                 exit;
             }
         }
@@ -378,7 +514,15 @@ switch ($action) {
 
         // DISPLAY ADD ANNOUNCEMENT COMMAND
         $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-        $url = api_get_self().'?action='.$action.'&id='.$id.'&'.api_get_cidreq();
+
+        $url = announcements_build_url(
+            $action,
+            $id > 0 ? $id : null,
+            [
+                'return_action' => (string) ($_REQUEST['return_action'] ?? ''),
+                'return_id' => (int) ($_REQUEST['return_id'] ?? 0),
+            ]
+        );
 
         $form = new FormValidator(
             'announcement',
@@ -387,6 +531,7 @@ switch ($action) {
             null,
             ['enctype' => 'multipart/form-data']
         );
+        $languageOptions = announcements_get_resource_language_options();
 
         $form_name = get_lang('Edit announcement');
         if (empty($id)) {
@@ -434,8 +579,6 @@ switch ($action) {
                     api_get_setting('siteName')
                 );
             } elseif (isset($_GET['remindallinactives']) && 'true' === $_GET['remindallinactives']) {
-                // we want to remind inactive users. The $_GET['since'] parameter
-                // determines which users have to be warned (i.e the users who have been inactive for x days or more
                 $since = 6;
                 if (isset($_GET['since'])) {
                     if ('never' === $_GET['since']) {
@@ -445,32 +588,25 @@ switch ($action) {
                     }
                 }
 
-                // Getting the users who have to be reminded
                 $to = Tracking::getInactiveStudentsInCourse(
                     api_get_course_int_id(),
                     $since,
                     $sessionId
                 );
 
-                // setting the variables for the form elements: the users who need to receive the message
                 foreach ($to as &$user) {
                     $user = 'USER:'.$user;
                 }
-                // setting the variables for the form elements: the message has to be sent by email
                 $email_ann = '1';
-                // setting the variables for the form elements: the title of the email
                 $title_to_modify = sprintf(
                     get_lang('Inactivity on %s'),
                     api_get_setting('siteName')
                 );
-                // setting the variables for the form elements: the message of the email
                 $content_to_modify = sprintf(
                     get_lang('Dear user,<br /><br /> you are not active on %s since more than %s days.'),
                     api_get_setting('siteName'),
                     $since
                 );
-                // when we want to remind the users who have never been active
-                // then we have a different subject and content for the announcement
                 if ('never' === $_GET['since']) {
                     $title_to_modify = sprintf(
                         get_lang('Inactivity on %s'),
@@ -512,20 +648,24 @@ switch ($action) {
                 }
             }
 
+            $language = $announcementInfo->getResourceNode()?->getLanguage();
             $defaults = [
                 'title' => $announcementInfo->getTitle(),
                 'content' => $announcementInfo->getContent(),
                 'id' => $announcementInfo->getIid(),
                 'users' => $to,
+                'language' => $language instanceof Language ? $language->getIsocode() : '',
             ];
         } else {
-            $defaults = [];
+            $defaults = [
+                'language' => '',
+            ];
             if (!empty($to)) {
                 $defaults['users'] = $to;
             }
         }
 
-        $ajaxUrl = api_get_path(WEB_AJAX_PATH).'announcement.ajax.php?'.api_get_cidreq().'&a=preview';
+    $ajaxUrl = api_get_path(WEB_AJAX_PATH).'announcement.ajax.php?'.api_get_cidreq().'&a=preview';
         $ajaxUserGroupUrl = api_get_path(WEB_AJAX_PATH).'usergroup.ajax.php?'.api_get_cidreq();
         $form->addHtml("
         <script>
@@ -606,6 +746,10 @@ switch ($action) {
                         });
                     }
                 });
+
+                $('#announcement').on('submit', function () {
+                    $(this).find('[type=\"submit\"]').prop('disabled', true);
+                });
             });
         </script>
         ");
@@ -644,6 +788,7 @@ switch ($action) {
         }
         $form->addButtonAdvancedSettings('tags', get_lang('Tags'));
         $form->addElement('html', '<div id="tags_options" style="display:none">');
+        $form->addElement('html', '<p class="text-sm text-gray-600 mt-1 mb-2">'.get_lang('Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them.').'</p>');
         $form->addLabel('', Display::return_message($htmlTags, 'normal', false));
         $form->addElement('html', '</div>');
         $form->addHtmlEditor(
@@ -653,21 +798,137 @@ switch ($action) {
             false,
             ['ToolbarSet' => 'Announcements']
         );
-
-        if (!$announcementAttachmentIsDisabled) {
-            $form->addElement('file', 'user_upload', get_lang('Add attachment'));
-            $form->addElement('textarea', 'file_comment', get_lang('File comment'));
+        if (\count($languageOptions) > 2) {
+            $form->addButtonAdvancedSettings('resource_options', get_lang('Advanced settings'));
+            $form->addElement('html', '<div id="resource_options_options" style="display:none">');
+            $form->addSelect(
+                'language',
+                get_lang('Language'),
+                $languageOptions,
+                [
+                    'id' => 'resource_language',
+                ]
+            );
+            $form->addElement('html', '</div>');
         }
 
-        $form->addHidden('sec_token', $token);
+    if (!$announcementAttachmentIsDisabled) {
+        // Allow multiple files in one selection
+        $form->addElement('file', 'user_upload[]', get_lang('Add attachment'), ['multiple' => 'multiple']);
+        $form->addElement('textarea', 'file_comment', get_lang('File comment'));
 
-        if (empty($sessionId)) {
+        // Existing attachments (edit mode)
+        if (!empty($announcementInfo)) {
+            $attachRepo = Container::getAnnouncementAttachmentRepository();
+            $stok = Security::get_existing_token();
+
+            $baseUrl = api_get_self().'?'.api_get_cidreq();
+            $returnQs = '&return_action=modify&return_id='.(int) $id;
+
+            $attachments = $announcementInfo->getAttachments();
+            if (count($attachments) > 0) {
+                $html = '<div class="announcement-attachments" style="margin:20px 0;">';
+                $html .= '<strong>'.get_lang('Attachments').'</strong>';
+                $html .= '<ul style="margin:6px 0 0 18px;">';
+
+                foreach ($attachments as $attachment) {
+                    $downloadUrl = $attachRepo->getResourceFileDownloadUrl($attachment).'?'.api_get_cidreq();
+                    $deleteUrl = $baseUrl
+                        .'&action=delete_attachment'
+                        .'&id_attach='.(int) $attachment->getIid()
+                        .$returnQs
+                        .'&sec_token='.$stok;
+
+                    $html .= '<li style="margin:4px 0;">';
+                    $html .= Display::getMdiIcon(ObjectIcon::ATTACHMENT, 'ch-tool-icon', null, ICON_SIZE_TINY);
+                    $html .= ' <a href="'.$downloadUrl.'">'.api_htmlentities($attachment->getFilename()).'</a>';
+
+                    $comment = trim((string) $attachment->getComment());
+                    if ('' !== $comment) {
+                        $html .= ' - <span class="forum_attach_comment">'.api_htmlentities($comment).'</span>';
+                    }
+
+                    $html .= ' '.Display::url(
+                            Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Delete')),
+                            $deleteUrl
+                        );
+                    $html .= '</li>';
+                }
+
+                $html .= '</ul></div><br />';
+                $form->addElement('html', $html);
+            }
+        }
+    }
+
+
+    $form->addHidden('sec_token', $token);
+    $announcementScheduledByDate = 'true' === api_get_setting('announcement.course_announcement_scheduled_by_date');
+
+    $dateToSendNotificationDefault = '';
+    if ($announcementScheduledByDate) {
+        if (!empty($id)) {
+            $scheduledExtraFieldValue = new ExtraFieldValue('course_announcement');
+            $storedScheduledDate = $scheduledExtraFieldValue->get_values_by_handler_and_field_variable(
+                $id,
+                'date_to_send_notification'
+            );
+
+            $dateToSendNotificationDefault = (string) (
+                $storedScheduledDate['field_value'] ??
+                $storedScheduledDate['value'] ??
+                ''
+            );
+        }
+
+        if (empty($dateToSendNotificationDefault)) {
+            $dateToSendNotificationDefault = date('Y-m-d', strtotime('+1 day'));
+        }
+    }
+
+    if (empty($sessionId)) {
+        if ($announcementScheduledByDate) {
+            $extraField = new ExtraField('course_announcement');
+            $extraField->addElements(
+                $form,
+                $id ?: 0,
+                [],
+                false,
+                false,
+                [
+                    'send_to_users_in_session',
+                    'send_notification_at_a_specific_date',
+                ],
+                [],
+                [],
+                false,
+                true
+            );
+
+            $form->addHtml(
+                '<div class="form-group">'.
+                '<label class="control-label" for="scheduled_date_to_send_notification">'.
+                get_lang('Date to send notification').
+                '</label>'.
+                '<div>'.
+                '<input
+                type="date"
+                id="scheduled_date_to_send_notification"
+                name="scheduled_date_to_send_notification"
+                class="form-control"
+                value="'.api_htmlentities($dateToSendNotificationDefault).'"
+            >'.
+                '</div>'.
+                '</div>'
+            );
+        } else {
             $form->addCheckBox(
                 'send_to_users_in_session',
                 null,
                 get_lang('Send to users in all sessions of this course')
             );
         }
+    }
 
         $config = api_get_setting('announcement.announcements_hide_send_to_hrm_users');
 
@@ -752,15 +1013,47 @@ switch ($action) {
         if ($form->validate()) {
             $data = $form->getSubmitValues();
             $data['users'] = $data['users'] ?? [];
-            $sendToUsersInSession = isset($data['send_to_users_in_session']);
+
+            if ($announcementScheduledByDate) {
+                $sendToUsersInSessionValue = $data['extra_send_to_users_in_session'] ?? 0;
+                if (is_array($sendToUsersInSessionValue)) {
+                    $sendToUsersInSessionValue = $sendToUsersInSessionValue['extra_send_to_users_in_session'] ?? 0;
+                }
+
+                $sendToUsersInSession = 1 === (int) $sendToUsersInSessionValue;
+            } else {
+                $sendToUsersInSession = isset($data['send_to_users_in_session']);
+            }
+
             $sendMeCopy = isset($data['send_me_a_copy_by_email']);
+
+            $scheduleAnnouncementNotification = false;
+            $dateToSendNotification = null;
+
+            if ($announcementScheduledByDate) {
+                $scheduleAnnouncementValue = $data['extra_send_notification_at_a_specific_date'] ?? 0;
+                if (is_array($scheduleAnnouncementValue)) {
+                    $scheduleAnnouncementValue = $scheduleAnnouncementValue['extra_send_notification_at_a_specific_date'] ?? 0;
+                }
+
+                $scheduleAnnouncementNotification = 1 === (int) $scheduleAnnouncementValue;
+
+                $dateToSendNotification = isset($_POST['scheduled_date_to_send_notification'])
+                    ? trim((string) $_POST['scheduled_date_to_send_notification'])
+                    : null;
+
+                if (empty($dateToSendNotification) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $dateToSendNotification)) {
+                    $dateToSendNotification = null;
+                }
+
+                $data['extra_date_to_send_notification'] = $dateToSendNotification;
+            }
 
             $notificationCount = $data['notification_count'] ?? [];
             $notificationPeriod = $data['notification_period'] ?? [];
 
             $reminders = $notificationCount ? array_map(null, $notificationCount, $notificationPeriod) : [];
             if (!empty($id)) {
-                // there is an Id => the announcement already exists => update mode
                 $file_comment = $announcementAttachmentIsDisabled ? null : $_POST['file_comment'];
                 $file = $announcementAttachmentIsDisabled ? [] : $_FILES['user_upload'];
                 $announcement = AnnouncementManager::edit_announcement(
@@ -773,9 +1066,37 @@ switch ($action) {
                     $sendToUsersInSession
                 );
 
-                // Send mail
+                announcements_apply_resource_language($announcement, $data['language'] ?? '');
+
+                if ($announcementScheduledByDate && $announcement instanceof CAnnouncement) {
+                    $extraFieldValues = new ExtraFieldValue('course_announcement');
+                    $data['item_id'] = $announcement->getIid();
+
+                    $extraFieldValues->saveFieldValues(
+                        $data,
+                        false,
+                        false,
+                        [
+                            'send_notification_at_a_specific_date',
+                            'date_to_send_notification',
+                            'send_to_users_in_session',
+                        ]
+                    );
+
+                    if ($scheduleAnnouncementNotification) {
+                        $announcement->setEmailSent(false);
+                        $em = Database::getManager();
+                        $em->persist($announcement);
+                        $em->flush();
+                    }
+                }
+
                 $messageSentTo = [];
-                if (isset($_POST['email_ann']) && empty($_POST['onlyThoseMails'])) {
+                if (
+                    isset($_POST['email_ann']) &&
+                    empty($_POST['onlyThoseMails']) &&
+                    false === $scheduleAnnouncementNotification
+                ) {
                     $messageSentTo = AnnouncementManager::sendEmail(
                         api_get_course_info(),
                         api_get_session_id(),
@@ -797,10 +1118,10 @@ switch ($action) {
                     )
                 );
                 Security::clear_token();
-                header('Location: '.$homeUrl);
+                $redirectUrl = announcements_get_return_url($homeUrl);
+                header('Location: '.$redirectUrl);
                 exit;
             } else {
-                // Insert mode
                 $file = $_FILES['user_upload'];
                 $file_comment = $data['file_comment'];
 
@@ -829,6 +1150,31 @@ switch ($action) {
                 }
 
                 if ($announcement) {
+                    announcements_apply_resource_language($announcement instanceof CAnnouncement ? $announcement : null, $data['language'] ?? '');
+
+                    if ($announcementScheduledByDate && $announcement instanceof CAnnouncement) {
+                        $extraFieldValues = new ExtraFieldValue('course_announcement');
+                        $data['item_id'] = $announcement->getIid();
+
+                        $extraFieldValues->saveFieldValues(
+                            $data,
+                            false,
+                            false,
+                            [
+                                'send_notification_at_a_specific_date',
+                                'date_to_send_notification',
+                                'send_to_users_in_session',
+                            ]
+                        );
+
+                        if ($scheduleAnnouncementNotification) {
+                            $announcement->setEmailSent(false);
+                            $em = Database::getManager();
+                            $em->persist($announcement);
+                            $em->flush();
+                        }
+                    }
+
                     if (!empty($data['event_date_start']) && !empty($data['event_date_end'])) {
                         Container::getCalendarEventRepository()
                             ->createFromAnnouncement(
@@ -850,9 +1196,12 @@ switch ($action) {
                         )
                     );
 
-                    // Send mail
                     $messageSentTo = [];
-                    if (isset($data['email_ann']) && $data['email_ann']) {
+                    if (
+                        isset($data['email_ann']) &&
+                        $data['email_ann'] &&
+                        false === $scheduleAnnouncementNotification
+                    ) {
                         $messageSentTo = AnnouncementManager::sendEmail(
                             api_get_course_info(),
                             api_get_session_id(),
@@ -883,16 +1232,13 @@ if (!empty($_GET['remind_inactive'])) {
 }
 
 if (empty($_GET['origin']) || 'learnpath' !== $_GET['origin']) {
-    // We are not in the learning path
     Display::display_header($nameTools, get_lang('Announcements'));
 }
 
-// Tool introduction
 if (empty($_GET['origin']) || 'learnpath' !== $_GET['origin']) {
     Display::display_introduction_section(TOOL_ANNOUNCEMENT);
 }
 
-// Actions
 $show_actions = false;
 $actionsLeft = '';
 if (($allowToEdit || $allowStudentInGroupToSend) && (empty($_GET['origin']) || 'learnpath' !== $_GET['origin'])) {
@@ -913,19 +1259,6 @@ if (($allowToEdit || $allowStudentInGroupToSend) && (empty($_GET['origin']) || '
     }
 }
 
-/*
-if ($allowToEdit && 0 == api_get_group_id()) {
-    $allow = ('true' === api_get_setting('announcement.disable_delete_all_announcements'));
-    if (false === $allow && api_is_allowed_to_edit()) {
-        if (!isset($_GET['action']) ||
-            isset($_GET['action']) && 'list' == $_GET['action']
-        ) {
-            $actionsLeft .= '<a href="'.api_get_self().'?'.api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang('Please confirm your choice')."')) return false;\">".
-                Display::getMdiIcon('delete', 'ch-tool-icon', null, 32, get_lang('Clear list of announcements')).'</a>';
-        }
-    }
-}*/
-
 if ($show_actions) {
     echo Display::toolbarAction('toolbar', [$actionsLeft, $searchFormToString]);
 }
@@ -933,6 +1266,5 @@ if ($show_actions) {
 echo $content;
 
 if (empty($_GET['origin']) || 'learnpath' !== $_GET['origin']) {
-    //we are not in learnpath tool
     Display::display_footer();
 }

@@ -1,0 +1,193 @@
+
+h1.titleClassicH1Left {
+    text-align : left;
+}
+
+h1.titleFullH1 {
+    background-color : var(--main-color-1, #b3b3b3);
+    color : white;
+    padding-top : 10px;
+    padding-bottom : 10px;
+    margin-bottom : 20px;
+}
+
+
+h1.titleIconDocH1 {
+    background-color : var(--main-color-1, #b3b3b3);
+    color : white;
+    padding-top: 28px;
+    padding-bottom: 28px;
+    padding-left: 80px;
+    padding-right: 80px;
+    margin-bottom: 20px;
+    margin-top: -30px;
+    margin-left: -30px;
+    margin-right: -30px;
+    background-size : 100px 100px;
+    background-image : url(img/classique/titleicondoc.svg);
+    background-position : left center;
+    background-repeat : no-repeat;
+}
+h1.titleIconGradeH1 {
+    background-color : var(--main-color-1, #b3b3b3);
+    color : white;
+    padding-top: 28px;
+    padding-bottom: 28px;
+    padding-left: 80px;
+    padding-right: 80px;
+    margin-bottom: 20px;
+    margin-top: -30px;
+    margin-left: -30px;
+    margin-right: -30px;
+    background-size : 85px 85px;
+    background-image : url(img/classique/titleicongrade.svg);
+    background-position : left center;
+    background-repeat : no-repeat;
+}
+
+h1.titleiconknowledge {
+    background-color : var(--main-color-1, #b3b3b3);
+    color : black;
+    padding-top: 38px;
+    padding-bottom: 38px;
+    padding-left: 135px;
+    padding-right: 95px;
+    margin-bottom: 20px;
+    margin-top: 0px;
+    margin-left: -30px;
+    margin-right: -30px;
+    background-size : 960px 200px;
+    background-image : url(img/classique/titleiconknowledge.svg);
+    background-position : left center;
+    background-repeat : no-repeat;
+    border-color : var(--main-color-1, #b3b3b3);
+    border-style: solid;
+    border-width : 2px;
+    border-left : none;
+    border-right : none;
+}
+h1.titleReminderNote {
+    background-color : var(--main-color-1, #b3b3b3);
+    color : black;
+    padding-top: 38px;
+    padding-bottom: 38px;
+    padding-left: 135px;
+    padding-right: 95px;
+    margin-bottom: 20px;
+    margin-top: 0px;
+    margin-left: -30px;
+    margin-right: -30px;
+    background-size : 960px 200px;
+    background-image : url(img/classique/titleremindernote.svg);
+    background-position : left center;
+    background-repeat : no-repeat;
+    border-color : var(--main-color-1, #b3b3b3);
+    border-style: solid;
+    border-width : 2px;
+    border-left : none;
+    border-right : none;
+}
+h1.titletarget {
+    background-color : var(--main-color-1, #b3b3b3);
+    color : black;
+    padding-top: 38px;
+    padding-bottom: 38px;
+    padding-left: 135px;
+    padding-right: 95px;
+    margin-bottom: 20px;
+    margin-top: 0px;
+    margin-left: -30px;
+    margin-right: -30px;
+    background-size : 960px 200px;
+    background-image : url(img/classique/titletarget.svg);
+    background-position : left center;
+    background-repeat : no-repeat;
+    border-color : var(--main-color-1, #b3b3b3);
+    border-style: solid;
+    border-width : 2px;
+    border-left : none;
+    border-right : none;
+}
+
+h1.titleArrowH1 {
+    background-color : var(--main-color-1, #b3b3b3);
+    background-image: url(img/classique/arrowblank.png);
+    background-position: left center;
+    text-align: left;
+    padding-left : 50px;
+    padding-top : 14px;
+    padding-bottom : 14px;
+    margin-bottom : 20px;
+}
+
+h1.titleBlackH1 {
+    color : white;
+    background-color : #273746!important;
+    padding-top : 8px;
+    padding-bottom : 8px;
+    margin-bottom : 20px;
+}
+
+h1.titleOrangeH1 {
+    color : white;
+    background-color : #CA6F1E!important;
+    padding-top : 8px;
+    padding-bottom : 8px;
+    margin-bottom : 20px;
+}
+
+h1.titleGreenH1 {
+    color : white;
+    background-color : #138D75!important;
+    padding-top : 8px;
+    padding-bottom : 8px;
+    margin-bottom : 20px;
+}
+
+h1.titleBlueH1 {
+    color : white;
+    background-color : #21618C!important;
+    padding-top : 8px;
+    padding-bottom : 8px;
+    margin-bottom : 20px;
+}
+
+h1.titlePurpleH1 {
+    color : white;
+    background-color : #9B59B6!important;
+    padding-top : 8px;
+    padding-bottom : 8px;
+    margin-bottom : 20px;
+}
+
+h1.titleRedH1 {
+    color : white;
+    background-color : #CB4335!important;
+    padding-top : 8px;
+    padding-bottom : 8px;
+    margin-bottom : 20px;
+}
+
+h1.titleGoldH1 {
+    color : black;
+    background-color : #F9E79F!important;
+    padding-top : 8px;
+    padding-bottom : 8px;
+    margin-bottom : 20px;
+}
+
+h1.titleNavyH1 {
+    color : white;
+    background-color : #34495E!important;
+    padding-top : 8px;
+    padding-bottom : 8px;
+    margin-bottom : 20px;
+}
+
+h1.titleGrayH1 {
+    color : white;
+    background-color : #95A5A6!important;
+    padding-top : 8px;
+    padding-bottom : 8px;
+    margin-bottom : 20px;
+}

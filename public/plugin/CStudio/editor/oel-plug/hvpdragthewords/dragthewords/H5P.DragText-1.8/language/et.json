@@ -1,0 +1,148 @@
+{
+  "semantics": [
+    {
+      "label": "Ülesande kirjeldus",
+      "description": "Kirjelda, kuidas kasutaja peaks ülesande lahendama.",
+      "default": "Lohista sõnad õigetesse kastidesse"
+    },
+    {
+      "label": "Tekst",
+      "placeholder": "*Oslo* on Norra pealinn, *Stockholm* on Rootsi pealinn ja *Kopenhaagen* on Taani pealinn. Kõik need linnad asuvad *Skandinaavia:Euroopa põhjaosa* poolsaarel.",
+      "description": "",
+      "important": {
+        "description": "<ul><li>Lohistatavad sõnade või fraaside loomiseks märgitakse nende ette ja järele tärn (*).</li><li>Samuti saad lisada tekstivihje, kasutades koolonit (:) vihje ees.</li><li>Igale tühjale kohale sobib vaid üks õige sõna.</li><li>Saad lisada peale ülesande täitmist näidatava tagasiside. Kasuta '\\+' õige ja '\\-' vale vastuse tagasisideks.</li></ul>",
+        "example": "H5P sisu töötlemiseks sobib *brauser:Mis tüüpi programm on Chrome?*. </br> H5P sisu on *interaktiivne\\+Õige! \\-Vale, proovi uuesti!*"
+      }
+    },
+    {
+      "label": "Üldine tagasiside",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Vaikimisi"
+            }
+          ],
+          "label": "Määra kohandatud tagasiside punktisummade vahemikele",
+          "description": "Lisa nii palju vahemikke, kui vaja, klikkides \"Lisa vahemik\" nupule. Näiteks: 0-20% halb tulemus, 21-91% keskmine tulemus, 91-100% suurepärane tulemus!",
+          "entity": "vahemik",
+          "field": {
+            "fields": [
+              {
+                "label": "Punktisummade vahemik"
+              },
+              {},
+              {
+                "label": "Määratud punktisumma vahemiku tagasiside",
+                "placeholder": "Täida tagasiside"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "\"Kontrolli\" nupu tekst",
+      "default": "Kontrolli"
+    },
+    {
+      "label": "\"Proovi uuesti\" nupu tekst",
+      "default": "Proovi uuesti"
+    },
+    {
+      "label": "\"Õige vastus\" nupu tekst",
+      "default": "Õige vastus"
+    },
+    {
+      "label": "Nummerdatud sihtkoha silt",
+      "default": "Sihtkoht @index.",
+      "description": "Puudega kasutajale mõeldud silt, millelt tekstiluger loeb sihtkoha indeksi. Kasutatav muutuja: @index"
+    },
+    {
+      "label": "Tühja sihtkoha silt",
+      "default": "Sihtkoht @index on tühi.",
+      "description": "Puudega kasutajale mõeldud silt, millelt tekstiluger loeb, et sihtkoht on tühi"
+    },
+    {
+      "label": "Täidetud sihtkoha silt",
+      "default": "Sihtkoht @index sisaldab lohistatavat elementi @draggable.",
+      "description": "Puudega kasutajale mõeldud silt, millelt tekstiluger loeb, et sihtkohas on lohistatav element"
+    },
+    {
+      "label": "Lohistatava elemendi silt",
+      "default": "@index / @count elemendist.",
+      "description": "Puudega kasutajale mõeldud silt, millelt tekstiluger loeb, et see on lohistatav element. Kasutatav muutuja: @index, @count"
+    },
+    {
+      "label": "Näita vihjet nupu silt",
+      "default": "Vihje",
+      "description": "Puudega kasutajale mõeldud silt, mida tekstiluger loeb enne vihje ette lugemist"
+    },
+    {
+      "label": "tekstilugeri tekst õigele vastusele",
+      "default": "Õige!"
+    },
+    {
+      "label": "tekstilugeri tekst valele vastusele",
+      "default": "Vale!"
+    },
+    {
+      "label": "Kinnitusdialoogi tiitel juhuks, kui kasutaja tahab lohistatavat lähtestada",
+      "default": "Lohistuse lähtestamine"
+    },
+    {
+      "label": "Kinnitusdialoogi kirjeldus juhuks, kui kasutaja tahab lohistatavat lähtestada",
+      "default": "Kas oled kindel, et soovid selle sihtkoha lähtestada?"
+    },
+    {
+      "label": "Puudega kasutajale mõeldud silt, millelt tekstiluger osutab, et lohistamist alustati",
+      "default": "Lohistatav on haaratud."
+    },
+    {
+      "label": "Puudega kasutajale mõeldud silt, millelt tekstiluger osutab, et lohistamine on tühistatud",
+      "default": "Lohistamine tühistati."
+    },
+    {
+      "label": "Puudega kasutajale mõeldud silt, millelt tekstiluger osutab, et tekst on õige vastus",
+      "default": "Õige vastus:"
+    },
+    {
+      "label": "Õigete/valede vastuste tagasiside paneeli pealkiri",
+      "default": "Tagasiside"
+    },
+    {
+      "label": "Käitumisseaded.",
+      "description": "Nende valikutega saad määrata ülesande käitumise.",
+      "fields": [
+        {
+          "label": "Luba \"Proovi uuesti\""
+        },
+        {
+          "label": "Luba \"Näita lahendust\" nupp"
+        },
+        {
+          "label": "Luba \"Kontrolli\" nupp"
+        },
+        {
+          "label": "Kohene tagasiside"
+        }
+      ]
+    },
+    {
+      "label": "Tekstilugeri kasutajale määratud punktisumma rea tekstiline esitus",
+      "default": "Sa said :num punkti :total punktist"
+    },
+    {
+      "label": "Assistive technology label for \"Check\" button",
+      "default": "Check the answers. The responses will be marked as correct, incorrect, or unanswered."
+    },
+    {
+      "label": "Assistive technology label for \"Show Solution\" button",
+      "default": "Show the solution. The task will be marked with its correct solution."
+    },
+    {
+      "label": "Assistive technology label for \"Retry\" button",
+      "default": "Retry the task. Reset all responses and start the task over again."
+    }
+  ]
+}

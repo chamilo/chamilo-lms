@@ -1,8 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+declare(strict_types=1);
+
 use Chamilo\CoreBundle\Framework\Container;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 $cidReset = true;
@@ -10,50 +11,73 @@ $cidReset = true;
 require_once __DIR__.'/../../main/inc/global.inc.php';
 require_once __DIR__.'/LtiProviderPlugin.php';
 
-api_block_anonymous_users(false);
+api_protect_admin_script();
 
 $plugin = LtiProviderPlugin::create();
-$webPluginPath = api_get_path(WEB_PLUGIN_PATH).'LtiProvider/';
-
-$request = Container::getRequest();
 $response = new Response();
 
-$em = Database::getManager();
-
-$enabled = api_get_plugin_setting('lti_provider', 'enabled');
-$name = api_get_plugin_setting('lti_provider', 'name');
-$launchUrl = api_get_plugin_setting('lti_provider', 'launch_url');
-$loginUrl = api_get_plugin_setting('lti_provider', 'login_url');
-$redirectUrl = api_get_plugin_setting('lti_provider', 'redirect_url');
-$jwksUrl = api_get_plugin_setting('lti_provider', 'jwks_url');
-if (empty($jwksUrl)) {
-    $jwksUrl = api_get_path(WEB_PLUGIN_PATH).LtiProviderPlugin::JWKS_URL;
-}
-
 try {
-    if ($enabled !== 'true') {
+    $pluginEntity = Container::getPluginRepository()->findOneByTitle('LtiProvider');
+    $currentAccessUrl = Container::getAccessUrlUtil()->getCurrent();
+    $pluginConfiguration = $pluginEntity?->getConfigurationsByAccessUrl($currentAccessUrl);
+
+    $isPluginEnabled = $pluginEntity
+        && $pluginEntity->isInstalled()
+        && $pluginConfiguration
+        && $pluginConfiguration->isActive();
+
+    if (!$isPluginEnabled) {
         throw new Exception(get_lang('Not allowed'));
     }
 
-    $html = '<div class="row">'
-        .'<div class="col-xs-2 text-right"><strong>'.$plugin->get_lang('LaunchUrl').'</strong></div>'
-        .'<div class="col-xs-10">'.$launchUrl.'</div>'
-        .'</div>'
-        .'<div class="row">'
-        .'<div class="col-xs-2 text-right"><strong>'.$plugin->get_lang('LoginUrl').'</strong></div>'
-        .'<div class="col-xs-10">'.$loginUrl.'</div>'
-        .'</div>'
-        .'<div class="row">'
-        .'<div class="col-xs-2 text-right"><strong>'.$plugin->get_lang('RedirectUrl').'</strong></div>'
-        .'<div class="col-xs-10">'.$redirectUrl.'</div>'
-        .'</div>'
-        .'<div class="row">'
-        .'<div class="col-xs-2 text-right"><strong>'.$plugin->get_lang('KeySetUrlJwks').'</strong></div>'
-        .'<div class="col-xs-10">'.$jwksUrl.'</div>'
+    $toolBaseUrl = rtrim(api_get_path(WEB_PLUGIN_PATH).'LtiProvider/tool/', '/').'/';
+
+    $launchUrl = $toolBaseUrl.'start.php';
+    $loginUrl = $toolBaseUrl.'login.php';
+    $redirectUrl = $toolBaseUrl.'start.php';
+    $jwksUrl = $toolBaseUrl.'jwks.php';
+
+    $items = [
+        [
+            'label' => $plugin->get_lang('LaunchUrl'),
+            'value' => $launchUrl,
+        ],
+        [
+            'label' => $plugin->get_lang('LoginUrl'),
+            'value' => $loginUrl,
+        ],
+        [
+            'label' => $plugin->get_lang('RedirectUrl'),
+            'value' => $redirectUrl,
+        ],
+        [
+            'label' => $plugin->get_lang('KeySetUrlJwks'),
+            'value' => $jwksUrl,
+        ],
+    ];
+
+    $html = '<div class="space-y-4">';
+
+    $html .= ''
+        .'<div class="rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-90">'
+        .Security::remove_XSS($plugin->get_lang('ConnectionDetailsHelp'))
         .'</div>';
 
+    foreach ($items as $item) {
+        $label = Security::remove_XSS((string) $item['label']);
+        $value = Security::remove_XSS((string) $item['value']);
+
+        $html .= ''
+            .'<div class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">'
+            .'<div class="mb-2 text-sm font-semibold text-gray-700">'.$label.'</div>'
+            .'<div class="break-all rounded-md bg-gray-10 px-3 py-2 font-mono text-sm text-gray-900">'.$value.'</div>'
+            .'</div>';
+    }
+
+    $html .= '</div>';
+
     $response->setContent($html);
-} catch (Exception $exception) {
+} catch (Throwable $exception) {
     $response->setContent(
         Display::return_message($exception->getMessage(), 'error')
     );

@@ -1,29 +1,12 @@
 <?php
-/* PHP code to install the plugin
- * For example:
- *
-    // To query something to the database
 
-    $table = Database::get_main_table(TABLE_MAIN_USER); // TABLE_MAIN_USER is a constant check the main/inc/database.constants.inc.php
-    $sql = "SELECT firstname, lastname FROM $table_users ";
-    $users = Database::query($sql);
+/* For licensing terms, see /license.txt */
 
-    You can also use the Chamilo classes
-    $users = UserManager::get_user_list();
- */
-global $_configuration;
+if (!class_exists('Plugin', false)) {
+    require_once __DIR__.'/../../main/inc/global.inc.php';
+}
 
-api_add_setting(
-    @$_configuration['defaults']['customfooter_footer_left'],
-    'customfooter_footer_left',
-    'customfooter',
-    'setting',
-    'Plugins'
-);
-api_add_setting(
-    @$_configuration['defaults']['customfooter_footer_right'],
-    'customfooter_footer_right',
-    'customfooter',
-    'setting',
-    'Plugins'
-);
+require_once __DIR__.'/lib/customfooter_plugin.class.php';
+
+// No custom database structure is required. Settings are stored in the
+// plugin configuration for the current access URL by Chamilo.

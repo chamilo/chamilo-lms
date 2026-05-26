@@ -13,7 +13,8 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ApiResource(
     normalizationContext: ['groups' => ['third_party_user:read']],
     denormalizationContext: ['groups' => ['third_party_user:write']],
-    paginationEnabled: false
+    paginationEnabled: false,
+    security: "is_granted('ROLE_ADMIN')",
 )]
 #[ORM\Table(name: 'third_party_data_exchange_user')]
 #[ORM\Entity]

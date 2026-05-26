@@ -210,7 +210,7 @@ if (!empty($roleId)) {
         true
     );
 
-    $form->addGroup($group, '', null, ' ');
+    $form->addGroup($group, null, null, ' ');
     $form->setDefaults(['status' => $roleId]);
 } else {
     $form->addButtonUpdate(get_lang('Edit'));

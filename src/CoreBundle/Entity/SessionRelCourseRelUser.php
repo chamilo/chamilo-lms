@@ -13,8 +13,8 @@ use ApiPlatform\Metadata\ApiResource;
 use Chamilo\CoreBundle\Repository\SessionRelCourseRelUserRepository;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
+use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Serializer\Attribute\MaxDepth;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -29,6 +29,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         'enable_max_depth' => true,
     ],
     paginationClientEnabled: true,
+    security: "is_granted('ROLE_USER')",
 )]
 #[ORM\Table(name: 'session_rel_course_rel_user')]
 #[ORM\Index(columns: ['user_id'], name: 'idx_session_rel_course_rel_user_id_user')]

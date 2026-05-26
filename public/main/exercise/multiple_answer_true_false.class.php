@@ -24,7 +24,7 @@ class MultipleAnswerTrueFalse extends Question
         parent::__construct();
         $this->type = MULTIPLE_ANSWER_TRUE_FALSE;
         $this->isContent = $this->getIsContent();
-        $this->options = [1 => 'True', 2 => 'False', 3 => 'DoubtScore'];
+        $this->options = [1 => 'True', 2 => 'False', 3 => "Don't know"];
     }
 
     public function createAnswersForm($form)
@@ -80,12 +80,6 @@ class MultipleAnswerTrueFalse extends Question
         // Can be more options in the future
         $optionData = Question::readQuestionOption($this->id, $course_id);
 
-        // Safe input attrs (force visibility even if global CSS sets appearance:none)
-        $choiceInputAttrs = [
-            'class' => 'h-4 w-4 cursor-pointer',
-            'style' => 'appearance:auto;-webkit-appearance:auto;',
-        ];
-
         for ($i = 1; $i <= $nb_answers; $i++) {
             $form->addHtml('<tr>');
 
@@ -139,7 +133,7 @@ class MultipleAnswerTrueFalse extends Question
                     foreach ($optionData as $data) {
                         $value = (int) ($data['iid'] ?? 0);
                         if ($value > 0) {
-                            $form->addElement('radio', 'correct['.$i.']', null, null, $value, $choiceInputAttrs);
+                            $form->addElement('radio', 'correct['.$i.']', null, null, $value);
                             $count++;
                         }
                         if ($count >= 2) {
@@ -148,13 +142,13 @@ class MultipleAnswerTrueFalse extends Question
                     }
                 } else {
                     // Fallback
-                    $form->addElement('radio', 'correct['.$i.']', null, null, 1, $choiceInputAttrs);
-                    $form->addElement('radio', 'correct['.$i.']', null, null, 2, $choiceInputAttrs);
+                    $form->addElement('radio', 'correct['.$i.']', null, null, 1);
+                    $form->addElement('radio', 'correct['.$i.']', null, null, 2);
                 }
             } else {
                 // New question: positions 1/2 are mapped to the real option iids on save
-                $form->addElement('radio', 'correct['.$i.']', null, null, 1, $choiceInputAttrs);
-                $form->addElement('radio', 'correct['.$i.']', null, null, 2, $choiceInputAttrs);
+                $form->addElement('radio', 'correct['.$i.']', null, null, 1);
+                $form->addElement('radio', 'correct['.$i.']', null, null, 2);
 
                 $defaults['answer['.$i.']'] = '';
                 $defaults['comment['.$i.']'] = '';
@@ -218,7 +212,7 @@ class MultipleAnswerTrueFalse extends Question
 
         $renderer->setElementTemplate($scoreWrapperStart.$scoreInputTemplate(get_lang('Correct')), 'option[1]');
         $renderer->setElementTemplate($scoreInputTemplate(get_lang('Wrong')), 'option[2]');
-        $renderer->setElementTemplate($scoreInputTemplate(get_lang('Don\'t know')).$scoreWrapperEnd, 'option[3]');
+        $renderer->setElementTemplate($scoreInputTemplate(get_lang("Don't know")).$scoreWrapperEnd, 'option[3]');
 
         $scoreInputAttrs = [
             'class' => 'w-24 rounded-md border border-gray-300 px-2 py-1 text-sm',

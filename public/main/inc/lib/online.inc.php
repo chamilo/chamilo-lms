@@ -212,7 +212,7 @@ function online_logout($user_id = null, $logout_redirect = false)
     session_regenerate_id();
     Session::destroy();
 
-    $pluginKeycloak = Container::getPluginHelper()->isPluginEnabled('keycloak');
+    $pluginKeycloak = false; //Container::getPluginHelper()->isPluginEnabled('keycloak');
     if ($pluginKeycloak && in_array('keycloak', $uinfo['auth_sources'])) {
         $pluginUrl = api_get_path(WEB_PLUGIN_PATH).'keycloak/start.php?slo';
         header('Location: '.$pluginUrl);

@@ -25,6 +25,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Throwable;
 
 use const ENT_HTML5;
@@ -32,6 +33,8 @@ use const ENT_QUOTES;
 use const ENT_SUBSTITUTE;
 use const PATHINFO_EXTENSION;
 
+#[IsGranted('ROLE_USER')]
+#[Route('/search')]
 final class SearchController extends AbstractController
 {
     public function __construct(
@@ -43,7 +46,7 @@ final class SearchController extends AbstractController
     ) {}
 
     #[Route(
-        path: '/search/xapian',
+        path: '/xapian',
         name: 'chamilo_core.search_xapian',
         methods: ['GET']
     )]
@@ -87,7 +90,7 @@ final class SearchController extends AbstractController
     }
 
     #[Route(
-        path: '/search/ui',
+        path: '/ui',
         name: 'chamilo_core.search_ui',
         methods: ['GET']
     )]
@@ -145,7 +148,7 @@ final class SearchController extends AbstractController
     }
 
     #[Route(
-        path: '/search/xapian/demo-index',
+        path: '/xapian/demo-index',
         name: 'chamilo_core.search_xapian_demo_index',
         methods: ['POST']
     )]
@@ -415,13 +418,24 @@ final class SearchController extends AbstractController
             $tool = (string) ($data['tool'] ?? '');
             $isQuestion = ('question' === $kind) || ('quiz_question' === $tool);
 
-            $title = isset($data['title']) ? (string) $data['title'] : '';
+            $title = isset($data['title']) ? $this->normalizeDisplayText((string) $data['title']) : '';
+            $data['title'] = $title;
             $fullPath = isset($data['full_path']) ? (string) $data['full_path'] : '';
             $content = isset($data['content']) ? (string) $data['content'] : '';
 
+            if (isset($data['title']) && \is_string($data['title'])) {
+                $data['title'] = html_entity_decode($data['title'], ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            }
+
+            if (!empty($data['quiz_title']) && \is_string($data['quiz_title'])) {
+                $data['quiz_title'] = html_entity_decode($data['quiz_title'], ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            }
+            $title = isset($data['title']) ? (string) $data['title'] : $title;
+            $filetype = (string) ($data['filetype'] ?? '');
             $ext = $this->guessFileExtension($fullPath, $title);
             $data['file_ext'] = $ext;
-            $data['file_icon'] = $this->guessFileIconMdi($ext, (string) ($data['filetype'] ?? ''));
+            $data['file_icon'] = $this->guessFileIconMdi($ext, $filetype);
+            $data['thumbnail_icon'] = $this->guessFileThumbnailIconMdi($ext, $filetype);
 
             // Resolve session context first (used for access checks + link building).
             $resolvedSid = $this->resolveSessionIdForResult($data);
@@ -431,7 +445,7 @@ final class SearchController extends AbstractController
             if ($isQuestion) {
                 // Use quiz title as the main visible title if available.
                 if (!empty($data['quiz_title'])) {
-                    $data['title'] = (string) $data['quiz_title'];
+                    $data['title'] = $this->normalizeDisplayText((string) $data['quiz_title']);
                 }
 
                 // Show only a tiny context around the match, never the full question content.
@@ -442,6 +456,11 @@ final class SearchController extends AbstractController
 
             // Session-aware access flag.
             $data['is_accessible'] = $this->isResultAccessible($data, $resolvedSid);
+
+            $data['thumbnail_url'] = $this->resolveSearchResultThumbnailUrl($data, $ext, $filetype);
+            $data['thumbnail_source'] = '' !== (string) $data['thumbnail_url']
+                ? $this->resolveSearchResultThumbnailSource($data, $ext, $filetype)
+                : 'icon';
 
             $result['data'] = $data;
         }
@@ -474,7 +493,7 @@ final class SearchController extends AbstractController
         $matchedTerm = null;
 
         foreach ($terms as $t) {
-            $t = trim($t);
+            $t = trim((string) $t);
             if ('' === $t) {
                 continue;
             }
@@ -524,14 +543,14 @@ final class SearchController extends AbstractController
 
         $escaped = htmlspecialchars($snippet, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 
-        // Highlight terms (small snippet, safe).
+        // Highlight terms
         foreach ($terms as $t) {
-            $t = trim($t);
+            $t = trim((string) $t);
             if ('' === $t) {
                 continue;
             }
             $pattern = '/('.preg_quote(htmlspecialchars($t, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'), '/').')/iu';
-            $escaped = preg_replace($pattern, '<mark class="px-1 rounded bg-yellow-200">$1</mark>', $escaped) ?? $escaped;
+            $escaped = preg_replace($pattern, '<mark class="rounded bg-yellow-200">$1</mark>', $escaped) ?? $escaped;
         }
 
         if ($start > 0) {
@@ -542,6 +561,18 @@ final class SearchController extends AbstractController
         }
 
         return $escaped;
+    }
+
+    /**
+     * Normalize a UI text field coming from the index.
+     * It may contain HTML entities (e.g. &eacute;) depending on how it was indexed.
+     */
+    private function normalizeDisplayText(string $text): string
+    {
+        $text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $text = preg_replace('/\s+/u', ' ', $text) ?? $text;
+
+        return trim($text);
     }
 
     /**
@@ -821,10 +852,123 @@ final class SearchController extends AbstractController
             'ppt', 'pptx', 'odp' => 'mdi-file-powerpoint-box',
             'txt', 'md', 'log', 'csv' => 'mdi-file-document-outline',
             'html', 'htm' => 'mdi-language-html5',
-            'jpg', 'jpeg', 'png', 'gif', 'webp', 'svg' => 'mdi-file-image',
+            'jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp', 'tif', 'tiff' => 'mdi-file-image',
+            'mp4', 'webm', 'ogg', 'mov', 'avi', 'mkv' => 'mdi-file-video-outline',
+            'mp3', 'wav', 'm4a', 'flac' => 'mdi-file-music-outline',
             'zip', 'rar', '7z', 'tar', 'gz' => 'mdi-folder-zip-outline',
             default => 'mdi-file-outline',
         };
+    }
+
+    private function guessFileThumbnailIconMdi(string $ext, string $filetype): string
+    {
+        $ext = strtolower(trim($ext));
+        $filetype = strtolower(trim($filetype));
+
+        if ('folder' === $filetype) {
+            return 'mdi-folder';
+        }
+
+        if (\in_array($ext, ['pdf'], true)) {
+            return 'mdi-file-pdf-box';
+        }
+
+        if (\in_array($ext, ['html', 'htm'], true)) {
+            return 'mdi-language-html5';
+        }
+
+        if (\in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp', 'tif', 'tiff'], true)) {
+            return 'mdi-file-image';
+        }
+
+        if (\in_array($ext, ['mp4', 'webm', 'ogg', 'mov', 'avi', 'mkv'], true)) {
+            return 'mdi-file-video-outline';
+        }
+
+        if (\in_array($ext, ['doc', 'docx'], true)) {
+            return 'mdi-file-word-box';
+        }
+
+        if (\in_array($ext, ['xls', 'xlsx', 'ods'], true)) {
+            return 'mdi-file-excel-box';
+        }
+
+        if (\in_array($ext, ['ppt', 'pptx', 'odp'], true)) {
+            return 'mdi-file-powerpoint-box';
+        }
+
+        return 'mdi-file-outline';
+    }
+
+    private function resolveSearchResultThumbnailUrl(array $data, string $ext, string $filetype): string
+    {
+        if (($data['is_accessible'] ?? false) === true) {
+            $documentThumbnailUrl = $this->resolveDocumentThumbnailUrl($data, $ext, $filetype);
+            if ('' !== $documentThumbnailUrl) {
+                return $documentThumbnailUrl;
+            }
+        }
+
+        return (string) ($data['course_image_url'] ?? '');
+    }
+
+    private function resolveSearchResultThumbnailSource(array $data, string $ext, string $filetype): string
+    {
+        if (($data['is_accessible'] ?? false) === true && '' !== $this->resolveDocumentThumbnailUrl($data, $ext, $filetype)) {
+            return 'document';
+        }
+
+        if ('' !== (string) ($data['course_image_url'] ?? '')) {
+            return 'course';
+        }
+
+        return 'icon';
+    }
+
+    private function resolveDocumentThumbnailUrl(array $data, string $ext, string $filetype): string
+    {
+        if (!$this->isImageFileType($ext, $filetype)) {
+            return '';
+        }
+
+        $resourceNodeId = isset($data['resource_node_id']) && '' !== (string) $data['resource_node_id']
+            ? (int) $data['resource_node_id']
+            : 0;
+
+        if ($resourceNodeId <= 0) {
+            return '';
+        }
+
+        /** @var ResourceNode|null $resourceNode */
+        $resourceNode = $this->em->find(ResourceNode::class, $resourceNodeId);
+        if (!$resourceNode || !$resourceNode->hasResourceFile()) {
+            return '';
+        }
+
+        try {
+            return $this->generateUrl('chamilo_core_resource_view', [
+                'id' => $resourceNode->getUuid(),
+                'tool' => $resourceNode->getResourceType()->getTool(),
+                'type' => $resourceNode->getResourceType()->getTitle(),
+                'filter' => 'editor_thumbnail',
+            ]);
+        } catch (Throwable $e) {
+            error_log('[Search] resolveDocumentThumbnailUrl: failed: '.$e->getMessage());
+
+            return '';
+        }
+    }
+
+    private function isImageFileType(string $ext, string $filetype): bool
+    {
+        $ext = strtolower(trim($ext));
+        $filetype = strtolower(trim($filetype));
+
+        if ('image' === $filetype || str_contains($filetype, 'image')) {
+            return true;
+        }
+
+        return \in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp', 'tif', 'tiff'], true);
     }
 
     /**
@@ -842,13 +986,16 @@ final class SearchController extends AbstractController
         }
 
         $pos = null;
-        $matchedTerm = null;
 
         foreach ($terms as $t) {
+            $t = trim((string) $t);
+            if ('' === $t) {
+                continue;
+            }
+
             $p = mb_stripos($plain, $t, 0, 'UTF-8');
             if (false !== $p) {
                 $pos = (int) $p;
-                $matchedTerm = $t;
 
                 break;
             }
@@ -871,12 +1018,12 @@ final class SearchController extends AbstractController
 
         // Highlight all terms in escaped string.
         foreach ($terms as $t) {
-            $t = trim($t);
+            $t = trim((string) $t);
             if ('' === $t) {
                 continue;
             }
             $pattern = '/('.preg_quote(htmlspecialchars($t, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'), '/').')/iu';
-            $escaped = preg_replace($pattern, '<mark class="px-1 rounded bg-yellow-200">$1</mark>', $escaped) ?? $escaped;
+            $escaped = preg_replace($pattern, '<mark class="rounded bg-yellow-200">$1</mark>', $escaped) ?? $escaped;
         }
 
         if ($start > 0) {

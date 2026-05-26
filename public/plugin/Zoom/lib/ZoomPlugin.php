@@ -7,7 +7,9 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CourseBundle\Entity\CGroup;
+use Chamilo\PluginBundle\Zoom\API\Client;
 use Chamilo\PluginBundle\Zoom\API\JWTClient;
+use Chamilo\PluginBundle\Zoom\API\OAuthClient;
 use Chamilo\PluginBundle\Zoom\API\MeetingInfoGet;
 use Chamilo\PluginBundle\Zoom\API\MeetingRegistrant;
 use Chamilo\PluginBundle\Zoom\API\MeetingSettings;
@@ -26,24 +28,28 @@ use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\ToolsException;
 
+require_once __DIR__.'/API/Client.php';
+require_once __DIR__.'/API/OAuthClient.php';
+
 /**
  * Class ZoomPlugin. Integrates Zoom meetings in courses.
  */
 class ZoomPlugin extends Plugin
 {
+    private const PLUGIN_WEB_DIR = 'Zoom';
+
     const RECORDING_TYPE_CLOUD = 'cloud';
     const RECORDING_TYPE_LOCAL = 'local';
     const RECORDING_TYPE_NONE  = 'none';
 
     public $isCoursePlugin = true;
 
-    /** @var JWTClient|null Lazy-initialized JWT client */
-    private ?JWTClient $jwtClient = null;
+    private ?Client $apiClient = null;
 
-    /** @var string Cached API key (normalized) */
+    private string $accountId = '';
+    private string $clientId = '';
+    private string $clientSecret = '';
     private string $apiKey = '';
-
-    /** @var string Cached API secret (normalized) */
     private string $apiSecret = '';
 
     /**
@@ -56,6 +62,10 @@ class ZoomPlugin extends Plugin
             '0.3',
             'Sébastien Ducoulombier, Julio Montoya',
             [
+                'accountId'                    => 'text',
+                'clientId'                     => 'text',
+                'clientSecret'                 => 'text',
+                'webhookSecretToken'           => 'text',
                 'apiKey'                       => 'text',
                 'apiSecret'                    => 'text',
                 'verificationToken'            => 'text',
@@ -84,9 +94,7 @@ class ZoomPlugin extends Plugin
 
         $this->isAdminPlugin = true;
 
-        // Cache normalized credentials (empty string if missing). Do NOT instantiate JWT client here.
-        $this->apiKey    = trim((string) ($this->get('apiKey') ?? ''));
-        $this->apiSecret = trim((string) ($this->get('apiSecret') ?? ''));
+        $this->initializeApiClient(false);
     }
 
     /**
@@ -97,43 +105,75 @@ class ZoomPlugin extends Plugin
     public static function create()
     {
         static $instance = null;
+
         return $instance ? $instance : $instance = new self();
     }
 
-    /**
-     * Lazily build the JWT client only when config is present.
-     * Never throws here; return null if not configured.
-     */
-    private function getJwtClient(): ?JWTClient
+
+    public function get_info()
     {
-        if ($this->jwtClient instanceof JWTClient) {
-            return $this->jwtClient;
-        }
+        $info = parent::get_info();
+        $info['source'] = 'official';
+        $info['commercial_model'] = 'commercial_service';
 
-        // Ensure fresh copy of settings in case they were edited at runtime
-        $this->apiKey    = trim((string) ($this->get('apiKey') ?? ''));
-        $this->apiSecret = trim((string) ($this->get('apiSecret') ?? ''));
-
-        if ($this->apiKey === '' || $this->apiSecret === '') {
-            return null;
-        }
-
-        // Construct but do not sign here. JWT signing must happen on demand.
-        $this->jwtClient = new JWTClient($this->apiKey, $this->apiSecret);
-        return $this->jwtClient;
+        return $info;
     }
 
-    /**
-     * Build a short-lived JWT token on demand, with clear error if not configured.
-     */
-    private function getJwtToken(): string
+    public function getPluginWebPath(): string
     {
-        $client = $this->getJwtClient();
-        if (!$client) {
-            // English in code; Spanish message will be shown via Display::return_message if needed.
-            throw new \RuntimeException('Zoom plugin is not configured (missing API key/secret).');
+        return api_get_path(WEB_PLUGIN_PATH).self::PLUGIN_WEB_DIR.'/';
+    }
+
+    private function initializeApiClient(bool $throwOnMissing = true): ?Client
+    {
+        if ($this->apiClient instanceof Client) {
+            return $this->apiClient;
         }
-        return $client->makeToken(); // relies on the patched JWTClient with makeToken()
+
+        $this->accountId = trim((string) ($this->get('accountId') ?? ''));
+        $this->clientId = trim((string) ($this->get('clientId') ?? ''));
+        $this->clientSecret = trim((string) ($this->get('clientSecret') ?? ''));
+
+        if ('' !== $this->accountId && '' !== $this->clientId && '' !== $this->clientSecret) {
+            $this->apiClient = new OAuthClient($this->accountId, $this->clientId, $this->clientSecret);
+
+            return $this->apiClient;
+        }
+
+        $this->apiKey = trim((string) ($this->get('apiKey') ?? ''));
+        $this->apiSecret = trim((string) ($this->get('apiSecret') ?? ''));
+
+        if ('' !== $this->apiKey && '' !== $this->apiSecret) {
+            $this->apiClient = new JWTClient($this->apiKey, $this->apiSecret);
+
+            return $this->apiClient;
+        }
+
+        if ($throwOnMissing) {
+            throw new \RuntimeException('Zoom plugin is not configured. Configure Account ID, Client ID and Client Secret.');
+        }
+
+        return null;
+    }
+
+    private function getApiClient(): Client
+    {
+        return $this->initializeApiClient(true);
+    }
+
+    private function getZoomAccessToken(): string
+    {
+        $client = $this->getApiClient();
+
+        if ($client instanceof OAuthClient) {
+            return $client->getAccessToken();
+        }
+
+        if ($client instanceof JWTClient) {
+            return $client->makeToken();
+        }
+
+        throw new \RuntimeException('Zoom API client is not configured.');
     }
 
     /**
@@ -147,10 +187,10 @@ class ZoomPlugin extends Plugin
         }
 
         return
-            'true' === api_get_plugin_setting('zoom', 'enableGlobalConference')
+            'true' === api_get_plugin_setting(self::PLUGIN_WEB_DIR, 'enableGlobalConference')
             && in_array(
                 (api_is_platform_admin() ? PLATFORM_ADMIN : $user->getStatus()),
-                (array) api_get_plugin_setting('zoom', 'globalConferenceAllowRoles')
+                (array) api_get_plugin_setting(self::PLUGIN_WEB_DIR, 'globalConferenceAllowRoles')
             );
     }
 
@@ -166,7 +206,7 @@ class ZoomPlugin extends Plugin
         }
 
         if ($addMeetingLink) {
-            $elements[$this->get_lang('Meetings')] = api_get_path(WEB_PLUGIN_PATH) . 'zoom/meetings.php';
+            $elements[$this->get_lang('Meetings')] = $this->getPluginWebPath().'meetings.php';
         }
 
         $items = [];
@@ -187,21 +227,72 @@ class ZoomPlugin extends Plugin
      */
     public function meetingsToWhichCurrentUserIsRegisteredComingSoon()
     {
-        $linkTemplate = api_get_path(WEB_PLUGIN_PATH) . 'zoom/join_meeting.php?meetingId=%s';
-        $user         = api_get_user_entity(api_get_user_id());
-        $meetings     = self::getRegistrantRepository()->meetingsComingSoonRegistrationsForUser($user);
-        $items        = [];
+        $user  = api_get_user_entity(api_get_user_id());
+        $items = [];
+
+        if (null === $user) {
+            return $items;
+        }
+
+        $meetings = self::getRegistrantRepository()->meetingsComingSoonRegistrationsForUser($user);
 
         foreach ($meetings as $registrant) {
             $meeting = $registrant->getMeeting();
+            if (!$meeting instanceof Meeting || null === $meeting->getMeetingId()) {
+                continue;
+            }
+
+            $meetingInfo = $meeting->getMeetingInfoGet();
+            if (null === $meetingInfo) {
+                continue;
+            }
+
             $items[sprintf(
                 $this->get_lang('DateMeetingTitle'),
                 $meeting->formattedStartTime,
-                $meeting->getMeetingInfoGet()->topic
-            )] = sprintf($linkTemplate, $meeting->getId());
+                $meetingInfo->topic
+            )] = $this->getJoinMeetingUrl($meeting);
         }
 
         return $items;
+    }
+
+    public function getJoinMeetingUrl(Meeting $meeting): string
+    {
+        $url = $this->getPluginWebPath().'join_meeting.php?meetingId='.$meeting->getMeetingId();
+        $contextQuery = $this->getMeetingContextQuery($meeting);
+
+        if ('' !== $contextQuery) {
+            $url .= '&'.$contextQuery;
+        }
+
+        return $url;
+    }
+
+    public function getMeetingContextQuery(Meeting $meeting): string
+    {
+        $course = $meeting->getCourse();
+        if (null === $course) {
+            return '';
+        }
+
+        $sessionId = 0;
+        $session = $meeting->getSession();
+        if (null !== $session) {
+            $sessionId = (int) $session->getId();
+        }
+
+        $groupId = 0;
+        $group = $meeting->getGroup();
+        if (null !== $group) {
+            $groupId = (int) $group->getIid();
+        }
+
+        return http_build_query([
+            'cid' => (int) $course->getId(),
+            'sid' => $sessionId,
+            'gid' => $groupId,
+        ]);
     }
 
     /**
@@ -440,16 +531,24 @@ class ZoomPlugin extends Plugin
      */
     public function handleException($exception)
     {
-        if ($exception instanceof Exception) {
-            $error   = json_decode($exception->getMessage());
-            $message = $exception->getMessage();
-            if ($error->message) {
-                $message = $error->message;
-            }
-            Display::addFlash(
-                Display::return_message($message, 'error')
-            );
+        if (!$exception instanceof Exception) {
+            return;
         }
+
+        $message = trim((string) $exception->getMessage());
+        $error = json_decode($message);
+
+        if (is_object($error) && isset($error->message) && '' !== trim((string) $error->message)) {
+            $message = (string) $error->message;
+        }
+
+        if ('' === $message) {
+            $message = $this->get_lang('AnErrorOccurred');
+        }
+
+        Display::addFlash(
+            Display::return_message($message, 'error')
+        );
     }
 
     /**
@@ -672,7 +771,7 @@ class ZoomPlugin extends Plugin
         }
 
         // === NEW: get short-lived JWT on demand (no token in constructor) ===
-        $token = $this->getJwtToken();
+        $token = $this->getZoomAccessToken();
 
         $curl = curl_init($file->getFullDownloadURL($token));
         if (false === $curl) {
@@ -898,75 +997,127 @@ class ZoomPlugin extends Plugin
      */
     public function getStartOrJoinMeetingURL($meeting)
     {
-        $status     = $meeting->getMeetingInfoGet()->status;
-        $userId     = api_get_user_id();
-        $currentUser= api_get_user_entity($userId);
-        $isGlobal   = 'true' === $this->get('enableGlobalConference') && $meeting->isGlobalMeeting();
+        $this->refreshMeetingInfo($meeting);
+
+        $meetingInfo = $meeting->getMeetingInfoGet();
+        if (null === $meetingInfo) {
+            return null;
+        }
+
+        $status = (string) ($meetingInfo->status ?? '');
+        $userId = api_get_user_id();
+        $currentUser = api_get_user_entity($userId);
+        if (!$currentUser instanceof User) {
+            throw new Exception($this->get_lang('YouAreNotRegisteredToThisMeeting'));
+        }
+
+        $isGlobal = 'true' === $this->get('enableGlobalConference') && $meeting->isGlobalMeeting();
 
         switch ($status) {
             case 'ended':
+            case 'finished':
                 if ($this->userIsConferenceManager($meeting)) {
-                    return $meeting->getMeetingInfoGet()->start_url;
+                    return $meetingInfo->start_url;
                 }
                 break;
 
             case 'waiting':
                 if ($this->userIsConferenceManager($meeting)) {
-                    return $meeting->getMeetingInfoGet()->start_url;
+                    return $meetingInfo->start_url;
+                }
+
+                if ($meeting->isCourseMeeting()) {
+                    return $this->getCourseMeetingParticipantJoinUrl($meeting, $currentUser, $userId);
                 }
                 break;
 
             case 'started':
                 if ($currentUser === $meeting->getUser()) {
-                    return $meeting->getMeetingInfoGet()->join_url;
+                    return $meetingInfo->join_url;
                 }
 
                 if ($isGlobal) {
-                    return $this->registerUser($meeting, $currentUser)->getCreatedRegistration()->join_url;
+                    if (!$meeting->requiresRegistration()) {
+                        return $meetingInfo->join_url;
+                    }
+
+                    return $this->getRegisteredOrRegisterUser($meeting, $currentUser)->getCreatedRegistration()->join_url;
                 }
 
                 if ($meeting->isCourseMeeting()) {
                     if ($this->userIsCourseConferenceManager()) {
-                        return $meeting->getMeetingInfoGet()->start_url;
+                        return $meetingInfo->start_url;
                     }
 
-                    $sessionId = api_get_session_id();
-                    $courseCode= api_get_course_id();
-
-                    if (empty($sessionId)) {
-                        $isSubscribed = CourseManager::is_user_subscribed_in_course($userId, $courseCode, false);
-                    } else {
-                        $isSubscribed = CourseManager::is_user_subscribed_in_course($userId, $courseCode, true, $sessionId);
-                    }
-
-                    if ($isSubscribed) {
-                        if ($meeting->isCourseGroupMeeting()) {
-                            $isInGroup = GroupManager::isUserInGroup($userId, $meeting->getGroup());
-                            if (false === $isInGroup) {
-                                throw new Exception($this->get_lang('YouAreNotRegisteredToThisMeeting'));
-                            }
-                        }
-
-                        if (\Chamilo\PluginBundle\Zoom\API\Meeting::TYPE_INSTANT == $meeting->getMeetingInfoGet()->type) {
-                            return $meeting->getMeetingInfoGet()->join_url;
-                        }
-
-                        return $this->registerUser($meeting, $currentUser)->getCreatedRegistration()->join_url;
-                    }
-
-                    throw new Exception($this->get_lang('YouAreNotRegisteredToThisMeeting'));
+                    return $this->getCourseMeetingParticipantJoinUrl($meeting, $currentUser, $userId);
                 }
 
-                // If registration is required for user meetings
                 $registrant = $meeting->getRegistrant($currentUser);
                 if (null == $registrant) {
                     throw new Exception($this->get_lang('YouAreNotRegisteredToThisMeeting'));
                 }
+
                 return $registrant->getCreatedRegistration()->join_url;
         }
 
         return null;
     }
+
+    private function refreshMeetingInfo(Meeting $meeting): void
+    {
+        $meetingId = $meeting->getMeetingId();
+        if (empty($meetingId)) {
+            return;
+        }
+
+        try {
+            $meeting->setMeetingInfoGet(MeetingInfoGet::fromId($meetingId));
+
+            $em = Database::getManager();
+            $em->persist($meeting);
+            $em->flush();
+        } catch (\Throwable $exception) {
+            // Keep using the local meeting information if Zoom does not answer.
+        }
+    }
+
+    private function getCourseMeetingParticipantJoinUrl(Meeting $meeting, User $currentUser, int $userId): string
+    {
+        $meetingInfo = $meeting->getMeetingInfoGet();
+        if (null === $meetingInfo) {
+            throw new Exception($this->get_lang('YouAreNotRegisteredToThisMeeting'));
+        }
+
+        $sessionId = api_get_session_id();
+        $courseCode = api_get_course_id();
+
+        if (empty($sessionId)) {
+            $isSubscribed = CourseManager::is_user_subscribed_in_course($userId, $courseCode, false);
+        } else {
+            $isSubscribed = CourseManager::is_user_subscribed_in_course($userId, $courseCode, true, $sessionId);
+        }
+
+        if (!$isSubscribed) {
+            throw new Exception($this->get_lang('YouAreNotRegisteredToThisMeeting'));
+        }
+
+        if ($meeting->isCourseGroupMeeting()) {
+            $isInGroup = GroupManager::isUserInGroup($userId, $meeting->getGroup());
+            if (false === $isInGroup) {
+                throw new Exception($this->get_lang('YouAreNotRegisteredToThisMeeting'));
+            }
+        }
+
+        if (
+            \Chamilo\PluginBundle\Zoom\API\Meeting::TYPE_INSTANT == $meetingInfo->type
+            || !$meeting->requiresRegistration()
+        ) {
+            return $meetingInfo->join_url;
+        }
+
+        return $this->getRegisteredOrRegisterUser($meeting, $currentUser)->getCreatedRegistration()->join_url;
+    }
+
 
     /**
      * @param Meeting $meeting
@@ -1070,12 +1221,12 @@ class ZoomPlugin extends Plugin
         if (empty($courseId)) {
             $actionsLeft .= Display::url(
                 Display::getMdiIcon(ToolIcon::VIDEOCONFERENCE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, $this->get_lang('Meetings')),
-                api_get_path(WEB_PLUGIN_PATH) . 'zoom/meetings.php'
+                $this->getPluginWebPath().'meetings.php'
             );
         } else {
             $actionsLeft .= Display::url(
                 Display::getMdiIcon(ToolIcon::VIDEOCONFERENCE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, $this->get_lang('Meetings')),
-                api_get_path(WEB_PLUGIN_PATH) . 'zoom/start.php?' . api_get_cidreq()
+                $this->getPluginWebPath().'start.php?'.api_get_cidreq()
             );
         }
 
@@ -1182,6 +1333,20 @@ class ZoomPlugin extends Plugin
      * @throws Exception
      * @throws OptimisticLockException
      */
+    private function getRegisteredOrRegisterUser(Meeting $meeting, User $user): Registrant
+    {
+        $registrant = $meeting->getRegistrant($user);
+        if ($registrant instanceof Registrant) {
+            return $registrant;
+        }
+
+        return $this->registerUser($meeting, $user);
+    }
+
+    /**
+     * @throws Exception
+     * @throws OptimisticLockException
+     */
     private function registerUser(Meeting $meeting, User $user, $andFlush = true)
     {
         if (empty($user->getEmail())) {
@@ -1273,8 +1438,16 @@ class ZoomPlugin extends Plugin
         $meeting->getMeetingInfoGet()->settings->auto_recording                = $this->getRecordingSetting();
         $meeting->getMeetingInfoGet()->settings->registrants_email_notification= false;
 
+        // Register the Zoom API client before API objects use Client::getInstance().
+        $this->getApiClient();
+
         // Send create to Zoom.
-        $meeting->setMeetingInfoGet($meeting->getMeetingInfoGet()->create());
+        $createdMeetingInfo = $meeting->getMeetingInfoGet()->create();
+        if (empty($createdMeetingInfo->id)) {
+            throw new Exception('Zoom API did not return a meeting identifier.');
+        }
+
+        $meeting->setMeetingInfoGet($createdMeetingInfo);
 
         Database::getManager()->persist($meeting);
         Database::getManager()->flush();

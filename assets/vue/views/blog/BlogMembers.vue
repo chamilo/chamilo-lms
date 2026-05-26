@@ -5,7 +5,7 @@
       <template #end>
         <div class="flex items-center gap-2">
           <BaseInputText v-model="q" :placeholder="t('Search for members...')" id="m-q" label=""/>
-          <BaseButton type="primary" icon="plus" :label="t('Add')" @click="openPicker" />
+          <BaseButton type="success" icon="plus" :label="t('Add')" @click="openPicker" />
         </div>
       </template>
     </BaseToolbar>
@@ -109,7 +109,7 @@
                 </div>
 
                 <BaseButton
-                  type="primary"
+                  type="success"
                   icon="plus"
                   :label="t('Add')"
                   :disabled="addingUserId === u.id"

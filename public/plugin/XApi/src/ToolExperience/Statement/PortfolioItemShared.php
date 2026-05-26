@@ -6,42 +6,57 @@ declare(strict_types=1);
 
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Statement;
 
-use Chamilo\PluginBundle\XApi\ToolExperience\Activity\PortfolioItem;
+use Chamilo\PluginBundle\XApi\ToolExperience\Activity\PortfolioItem as PortfolioItemActivity;
 use Chamilo\PluginBundle\XApi\ToolExperience\Actor\User;
-use Chamilo\PluginBundle\XApi\ToolExperience\Statement\PortfolioItem as PortfolioItemStatement;
 use Chamilo\PluginBundle\XApi\ToolExperience\Verb\Shared;
-use Xabbuh\XApi\Model\Statement;
 
 /**
  * Class PortfolioItemShared.
  */
-class PortfolioItemShared extends PortfolioItemStatement
+class PortfolioItemShared extends PortfolioItem
 {
     use PortfolioAttachmentsTrait;
 
-    public function generate(): Statement
+    public function generate(): array
     {
         $itemAuthor = $this->item->getUser();
 
         $userActor = new User($itemAuthor);
         $sharedVerb = new Shared();
-        $itemActivity = new PortfolioItem($this->item);
-
+        $itemActivity = new PortfolioItemActivity($this->item);
         $context = $this->generateContext();
-
         $attachments = $this->generateAttachmentsForItem($this->item);
 
-        return new Statement(
-            $this->generateStatementId('portfolio-item'),
-            $userActor->generate(),
-            $sharedVerb->generate(),
-            $itemActivity->generate(),
-            null,
-            null,
-            $this->item->getCreationDate(),
-            null,
-            $context,
-            $attachments
-        );
+        $statement = [
+            'id' => $this->generateStatementId('portfolio-item'),
+            'actor' => $userActor->generate(),
+            'verb' => $sharedVerb->generate(),
+            'object' => $itemActivity->generate(),
+            'timestamp' => $this->normalizeTimestamp($this->item->getCreationDate()),
+            'context' => $context,
+        ];
+
+        if (!empty($attachments)) {
+            $statement['attachments'] = $attachments;
+        }
+
+        return $statement;
+    }
+
+    private function normalizeTimestamp($value): string
+    {
+        if ($value instanceof \DateTimeInterface) {
+            return $value->format(DATE_ATOM);
+        }
+
+        $stringValue = trim((string) $value);
+
+        if ('' === $stringValue) {
+            return gmdate(DATE_ATOM);
+        }
+
+        $timestamp = strtotime($stringValue);
+
+        return false !== $timestamp ? gmdate(DATE_ATOM, $timestamp) : gmdate(DATE_ATOM);
     }
 }

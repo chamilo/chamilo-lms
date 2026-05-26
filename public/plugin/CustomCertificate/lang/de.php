@@ -1,0 +1,77 @@
+<?php
+$strings['plugin_title'] = 'Benutzerdefiniertes Zertifikat';
+$strings['plugin_comment'] = 'Dieses Plugin ermöglicht die Erstellung benutzerdefinierter Zertifikate für jeden Kurs.';
+$strings['enable_plugin_customcertificate'] = 'Plugin aktivieren';
+$strings['customcertificate_course_enable'] = 'Benutzerdefiniertes Zertifikat im Kurs aktivieren';
+$strings['use_certificate_default'] = 'Standard-Benutzerzertifikat verwenden';
+$strings['ToolDisabled'] = 'Das Tool ist in der Administration deaktiviert';
+$strings['OnlyAdminPlatform'] = 'Tool nur für Administratoren';
+$strings['OnlyAdminPlatformOrTeacher'] = 'Tool nur für Administratoren und Dozenten';
+$strings['TrainingEntity'] = 'Ausbildungsstelle';
+$strings['DescriptionFront'] = 'Beschreibung Vorderseite';
+$strings['DescriptionRear'] = 'Beschreibung Rückseite';
+$strings['Certify'] = 'Bescheinigen';
+$strings['CertificateType'] = 'Zertifikatstyp';
+$strings['CertifyThat'] = 'BESCHEINIGT';
+$strings['StudentCourseInfo'] = 'Teilnehmer- und Kursdaten';
+$strings['StudentData'] = 'Teilnehmendaten';
+$strings['CourseData'] = 'Kursdaten';
+$strings['Modality'] = 'Modalität';
+$strings['Contents'] = 'Inhalte';
+$strings['ContentsToShow'] = 'Anzuzeigende Inhalte';
+$strings['ContentsCourseDescription'] = 'Abschnitt „Kursbeschreibung“ > „Inhalte“ verwenden';
+$strings['ContentsIndexLearnpath'] = 'Lernpfad-Index verwenden';
+$strings['ContentsCustom'] = 'Benutzerdefinierte Inhalte verwenden';
+$strings['ContentsHide'] = 'Keine Inhalte anzeigen';
+$strings['Dates'] = 'Daten';
+$strings['CourseDeliveryDates'] = 'Kursdurchführungsdaten';
+$strings['Custom'] = 'Benutzerdefiniert';
+$strings['UseDateSessionAccess'] = 'Zugriffsdaten der Sitzung verwenden';
+$strings['ExpectionPlace'] = 'Ausstellungsstelle';
+$strings['DateExpediction'] = 'Ausstellungsdatum';
+$strings['UseDateEndAccessSession'] = 'Enddatum des Sitzungszugriffs verwenden';
+$strings['UseDateDownloadCertificate'] = 'Zertifikatsdownload-Datum verwenden';
+$strings['UseDateGenerationCertificate'] = 'Zertifikatserstellungsdatum verwenden';
+$strings['UseCustomDate'] = 'Benutzerdefiniertes Datum verwenden';
+$strings['LogosSeal'] = 'Logos / Siegel';
+$strings['LogoLeft'] = 'Logo links';
+$strings['LogoCenter'] = 'Logo Mitte';
+$strings['LogoRight'] = 'Logo rechts';
+$strings['Seal'] = 'Siegel';
+$strings['Signature1'] = 'Unterschrift 1';
+$strings['Signature2'] = 'Unterschrift 2';
+$strings['Signature3'] = 'Unterschrift 3';
+$strings['Signature4'] = 'Unterschrift 4';
+$strings['SignatureText1'] = 'Unterschriftstext 1';
+$strings['SignatureText2'] = 'Unterschriftstext 2';
+$strings['SignatureText3'] = 'Unterschriftstext 3';
+$strings['SignatureText4'] = 'Unterschriftstext 4';
+$strings['OtherOptions'] = 'Weitere Optionen';
+$strings['MarginRight'] = 'Rechter Rand';
+$strings['MarginLeft'] = 'Linker Rand';
+$strings['SetDefaultTemplate'] = 'Vorlage standardmäßig setzen';
+$strings['MessageDefaultTemplate'] = 'Diese Standardanpassung für Kurse und Sitzungen ohne
+     definierte Zertifikate speichern';
+$strings['None'] = 'Keine';
+$strings['ErrorTemplateCertificate'] = 'Es ist keine Vorlage für das Zertifikat definiert.
+     Es gibt keine Standardvorlage.';
+$strings['DateStartEnd'] = 'Mit Startdatum und Enddatum: ';
+$strings['ExpedictionIn'] = 'Ausstellung in';
+$strings['Signatures'] = 'Unterschriften';
+$strings['BackgroundCertificate'] = 'Hintergrundbild des Zertifikats';
+$strings['Background'] = 'Hintergrund';
+$strings['CertificateSetting'] = 'Zertifikateinstellungen';
+$strings['ToolDisabledCourse'] = 'Tool in Kurs-Einstellungen deaktiviert';
+$strings['ToolUseDefaultSettingCourse'] = 'Tool ist so konfiguriert, dass das Standardzertifikat verwendet wird. <br>
+     Sie können es vom Administrationsbildschirm aus bearbeiten -> Plugins -> Custom Certificate. <br>
+     Oder Sie können die Option zur Verwendung des Zertifikats standardmäßig in der Plugin-Konfiguration im Kurs deaktivieren';
+$strings['CertificateSettingDefault'] = 'Standard-Zertifikateinstellungen';
+$strings['InfoFromDefaultCertificate'] = 'Der Inhalt des Zertifikats basiert auf dem Standardzertifikat.
+     Die von Ihnen vorgenommenen Änderungen wirken sich nicht auf das Standardzertifikat aus.';
+$strings['to'] = ' bis ';
+$strings['formatDownloadDate'] = ' bis %sth %s, %s';
+$strings['PrintCertificate'] = 'Zertifikat drucken';
+$strings['QuestionDelete'] = 'Möchten Sie das spezifische Diplom löschen und das Standardzertifikat verwenden?';
+$strings['SuccessDelete'] = 'Erfolgreich gelöscht';
+$strings['ProblemDelete'] = 'Problem beim Löschen des Zertifikats';
+$strings['OnlyCustomCertificates'] = 'Nur Kurse mit personalisiertem Zertifikat werden exportiert';

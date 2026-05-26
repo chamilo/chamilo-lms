@@ -1,91 +1,98 @@
 <?php
 /* For license terms, see /license.txt */
 
-use ChamiloSession as Session;
-use Packback\Lti1p3\Interfaces;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\PluginBundle\LtiProvider\Entity\Platform as ProviderPlatform;
+use Chamilo\PluginBundle\LtiProvider\Entity\PlatformKey;
+use Packback\Lti1p3\Interfaces\IDatabase;
+use Packback\Lti1p3\Interfaces\ILtiDeployment;
+use Packback\Lti1p3\Interfaces\ILtiRegistration;
 use Packback\Lti1p3\LtiDeployment;
 use Packback\Lti1p3\LtiRegistration;
 
-class Lti13Database implements Interfaces\Database
+class Lti13Database implements IDatabase
 {
-    public function findRegistrationByIssuer($iss, $clientId = null)
+    public function findRegistrationByIssuer(string $iss, ?string $clientId = null): ?ILtiRegistration
     {
-        if (!isset($clientId)) {
-            $clientId = $this->getClientIdByIssuer($iss);
+        $platform = $this->findPlatform($iss, $clientId);
+
+        if (!$platform) {
+            return null;
         }
 
-        $ltiCustomers = $this->getLtiConnection();
-        if (empty($ltiCustomers[$clientId])) {
-            return false;
+        $privateKey = $this->getPrivateKey();
+
+        if ('' === $privateKey) {
+            return null;
         }
 
-        return LtiRegistration::new()
-            ->setAuthLoginUrl($ltiCustomers[$clientId]['auth_login_url'])
-            ->setAuthTokenUrl($ltiCustomers[$clientId]['auth_token_url'])
-            ->setClientId($clientId)
-            ->setKeySetUrl($ltiCustomers[$clientId]['key_set_url'])
-            ->setKid($ltiCustomers[$clientId]['kid'])
-            ->setIssuer($iss)
-            ->setToolPrivateKey($this->getPrivateKey());
+        return LtiRegistration::new([
+            'issuer' => $platform->getIssuer(),
+            'clientId' => $platform->getClientId(),
+            'keySetUrl' => $platform->getKeySetUrl(),
+            'authTokenUrl' => $platform->getAuthTokenUrl(),
+            'authLoginUrl' => $platform->getAuthLoginUrl(),
+            'toolPrivateKey' => $privateKey,
+            'kid' => $platform->getKid(),
+        ]);
     }
 
-    public function findDeployment($iss, $deploymentId, $clientId = null)
+    public function findDeployment(string $iss, string $deploymentId, ?string $clientId = null): ?ILtiDeployment
     {
-        $issSession = Session::read('iss');
-        if (!in_array($deploymentId, $issSession[$clientId]['deployment'])) {
-            return false;
+        $platform = $this->findPlatform($iss, $clientId);
+
+        error_log(sprintf(
+            '[LTI Provider] findDeployment iss="%s" clientId="%s" incomingDeployment="%s"',
+            $iss,
+            (string) $clientId,
+            $deploymentId
+        ));
+
+        if (!$platform) {
+            error_log('[LTI Provider] findDeployment platform not found');
+
+            return null;
         }
 
-        return LtiDeployment::new()->setDeploymentId($deploymentId);
-    }
+        if ($platform->getDeploymentId() !== $deploymentId) {
+            error_log('[LTI Provider] findDeployment deployment mismatch');
 
-    private function getLtiConnection(): array
-    {
-        $em = Database::getManager();
-        $platforms = $em->getRepository('ChamiloPluginBundle:LtiProvider\Platform')->findAll();
-
-        $ltiCustomers = [];
-        foreach ($platforms as $platform) {
-            $clientId = $platform->getClientId();
-            $ltiCustomers[$clientId] = [
-                'client_id' => $clientId,
-                'issuer' => $platform->getIssuer(),
-                'auth_login_url' => $platform->getAuthLoginUrl(),
-                'auth_token_url' => $platform->getAuthTokenUrl(),
-                'key_set_url' => $platform->getKeySetUrl(),
-                'kid' => $platform->getKid(),
-                'deployment' => [$platform->getDeploymentId()],
-            ];
-        }
-        Session::write('iss', $ltiCustomers);
-
-        return $ltiCustomers;
-    }
-
-    private function getClientIdByIssuer($issuer)
-    {
-        $clientId = '';
-        $platform = Database::getManager()
-            ->getRepository('ChamiloPluginBundle:LtiProvider\Platform')
-            ->findOneBy(['issuer' => $issuer]);
-
-        if ($platform) {
-            $clientId = $platform->getClientId();
+            return null;
         }
 
-        return $clientId;
+        return LtiDeployment::new($deploymentId);
     }
 
-    private function getPrivateKey()
+    private function findPlatform(string $issuer, ?string $clientId = null): ?ProviderPlatform
     {
-        $privateKey = '';
-        $platformKey = Database::getManager()
-            ->getRepository('ChamiloPluginBundle:LtiProvider\PlatformKey')
+        $em = Container::getEntityManager();
+        $repo = $em->getRepository(ProviderPlatform::class);
+
+        if (null !== $clientId && '' !== $clientId) {
+            return $repo->findOneBy([
+                'issuer' => $issuer,
+                'clientId' => $clientId,
+            ]);
+        }
+
+        return $repo->findOneBy([
+            'issuer' => $issuer,
+        ]);
+    }
+
+    private function getPrivateKey(): string
+    {
+        $em = Container::getEntityManager();
+
+        /** @var PlatformKey|null $platformKey */
+        $platformKey = $em
+            ->getRepository(PlatformKey::class)
             ->findOneBy([]);
-        if ($platformKey) {
-            $privateKey = $platformKey->getPrivateKey();
+
+        if (!$platformKey) {
+            return '';
         }
 
-        return $privateKey;
+        return (string) $platformKey->getPrivateKey();
     }
 }

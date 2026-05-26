@@ -11,11 +11,14 @@ class ch_selectivedisplay extends ch_yesno
     public function render(FormValidator $form, $questionData = [], $answers = null)
     {
         if (is_array($questionData['options'])) {
-            $class = 'radio-inline';
-            $labelClass = 'radio-inline';
-            if ('vertical' === $questionData['display']) {
-                $class = 'radio-vertical';
+            $displayMode = strtolower(trim((string) ($questionData['display'] ?? 'horizontal')));
+            if ('vertical' !== $displayMode) {
+                $displayMode = 'horizontal';
             }
+
+            $isVertical = 'vertical' === $displayMode;
+            $class = $isVertical ? 'radio-vertical' : 'radio-inline';
+            $labelClass = $isVertical ? 'radio-vertical' : 'radio-inline';
 
             $name = 'question'.$questionData['question_id'];
             $radioAttributes = [
@@ -28,12 +31,14 @@ class ch_selectivedisplay extends ch_yesno
                 $radioAttributes['required'] = 'required';
             }
 
+            $form->addHtml('<div class="survey-answer-options survey-answer-options-'.$displayMode.'" data-display="'.$displayMode.'">');
             $form->addRadio(
                 $name,
                 null,
                 $questionData['options'],
                 $radioAttributes
             );
+            $form->addHtml('</div>');
 
             if (!empty($answers)) {
                 $form->setDefaults([$name => is_array($answers) ? current($answers) : $answers]);

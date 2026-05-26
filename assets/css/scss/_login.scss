@@ -53,11 +53,11 @@
   }
 
   &__buttons {
-    @apply grid grid-cols-2 gap-4;
+    @apply flex gap-4;
 
     a.btn,
     .p-button {
-      @apply p-3.5 text-body-1;
+      @apply w-1/2 mx-auto p-3.5 text-body-1;
     }
   }
 }

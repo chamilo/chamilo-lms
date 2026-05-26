@@ -86,7 +86,8 @@ $frmActivity->addRule(
 $frmActivity->applyFilter('title', 'trim');
 $frmActivity->applyFilter('description', 'trim');
 $frmActivity->applyFilter('lrs_url', 'trim');
-$frmActivity->applyFilter('lrs_auth', 'trim');
+$frmActivity->applyFilter('lrs_auth_username', 'trim');
+$frmActivity->applyFilter('lrs_auth_password', 'trim');
 
 if ($frmActivity->validate()) {
     $values = $frmActivity->exportValues();
@@ -130,14 +131,31 @@ if ($frmActivity->validate()) {
         && !empty($values['lrs_auth_password'])
     ) {
         $toolLaunch
-            ->setLrsUrl($values['lrs_url'])
+            ->setLrsUrl($plugin->normalizeLrsUrl($values['lrs_url']))
             ->setLrsAuthUsername($values['lrs_auth_username'])
             ->setLrsAuthPassword($values['lrs_auth_password'])
         ;
     }
 
     $em = Database::getManager();
+
     $em->persist($toolLaunch);
+
+    if (method_exists($toolLaunch, 'getItems')) {
+        $persistedItemIds = [];
+
+        foreach ($toolLaunch->getItems() as $item) {
+            $objectId = spl_object_id($item);
+
+            if (isset($persistedItemIds[$objectId])) {
+                continue;
+            }
+
+            $em->persist($item);
+            $persistedItemIds[$objectId] = true;
+        }
+    }
+
     $em->flush();
 
     Display::addFlash(

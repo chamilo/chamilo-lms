@@ -16,7 +16,6 @@ class AnnouncementSettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->setDefaults([
-                'hide_global_announcements_when_not_connected' => 'false',
                 'announcements_hide_send_to_hrm_users' => 'true',
                 'disable_announcement_attachment' => 'false',
                 'allow_scheduled_announcements' => 'false',
@@ -28,16 +27,13 @@ class AnnouncementSettingsSchema extends AbstractSettingsSchema
             ])
         ;
 
-        $allowedTypes = [
-            'hide_global_announcements_when_not_connected' => ['string'],
-        ];
+        $allowedTypes = [];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 
     public function buildForm(FormBuilderInterface $builder): void
     {
         $builder
-            ->add('hide_global_announcements_when_not_connected', YesNoType::class)
             ->add('announcements_hide_send_to_hrm_users', YesNoType::class)
             ->add('disable_announcement_attachment', YesNoType::class)
             ->add('allow_scheduled_announcements', YesNoType::class)

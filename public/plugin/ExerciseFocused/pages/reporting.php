@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\PluginBundle\ExerciseFocused\Controller\ReportingController;
 use Chamilo\PluginBundle\ExerciseFocused\Entity\Log;
+use Chamilo\PluginBundle\ExerciseFocused\Repository\LogRepository;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
@@ -15,6 +16,7 @@ if (!api_is_allowed_to_edit()) {
 }
 
 $em = Database::getManager();
+/** @var LogRepository $logRepository */
 $logRepository = $em->getRepository(Log::class);
 
 $startController = new ReportingController(

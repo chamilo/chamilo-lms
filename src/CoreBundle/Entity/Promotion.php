@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'promotion')]
@@ -21,11 +22,13 @@ class Promotion
     public const PROMOTION_STATUS_ACTIVE = 1;
     public const PROMOTION_STATUS_INACTIVE = 0;
 
+    #[Groups(['calendar_event:read'])]
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
+    #[Groups(['calendar_event:read'])]
     #[Assert\NotBlank]
     #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
     protected string $title;
@@ -33,6 +36,7 @@ class Promotion
     #[ORM\Column(name: 'description', type: 'text', nullable: false)]
     protected ?string $description = null;
 
+    #[Groups(['calendar_event:read'])]
     #[ORM\ManyToOne(targetEntity: Career::class, inversedBy: 'promotions')]
     #[ORM\JoinColumn(name: 'career_id', referencedColumnName: 'id')]
     protected Career $career;

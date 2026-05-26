@@ -7,58 +7,45 @@ declare(strict_types=1);
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Statement;
 
 use Chamilo\CourseBundle\Entity\CLp;
-use Chamilo\CourseBundle\Entity\CLp as CLpEntity;
 use Chamilo\CourseBundle\Entity\CLpView;
-use Chamilo\CourseBundle\Entity\CLpView as CLpViewEntity;
 use Chamilo\PluginBundle\XApi\ToolExperience\Activity\LearningPath as LearningPathActivity;
 use Chamilo\PluginBundle\XApi\ToolExperience\Actor\User as UserActor;
 use Chamilo\PluginBundle\XApi\ToolExperience\Verb\Completed;
-use Xabbuh\XApi\Model\Result;
-use Xabbuh\XApi\Model\Score;
-use Xabbuh\XApi\Model\Statement;
 
 /**
  * Class LearningPathCompleted.
  */
 class LearningPathCompleted extends BaseStatement
 {
-    /**
-     * @var CLpView
-     */
-    private $lpView;
+    private CLpView $lpView;
+    private CLp $lp;
 
-    /**
-     * @var CLp
-     */
-    private $lp;
-
-    public function __construct(CLpViewEntity $lpView, CLpEntity $lp)
+    public function __construct(CLpView $lpView, CLp $lp)
     {
         $this->lpView = $lpView;
         $this->lp = $lp;
     }
 
-    public function generate(): Statement
+    public function generate(): array
     {
-        $user = api_get_user_entity($this->lpView->getUserId());
+        $user = $this->lpView->getUser();
+
         $userActor = new UserActor($user);
         $completedVerb = new Completed();
         $lpActivity = new LearningPathActivity($this->lp);
 
-        return new Statement(
-            $this->generateStatementId('learning-path'),
-            $userActor->generate(),
-            $completedVerb->generate(),
-            $lpActivity->generate(),
-            new Result(
-                new Score(1, 100, 0, 100),
+        return [
+            'id' => $this->generateStatementId('learning-path'),
+            'actor' => $userActor->generate(),
+            'verb' => $completedVerb->generate(),
+            'object' => $lpActivity->generate(),
+            'result' => $this->buildResult(
+                $this->buildScore(1.0, 100.0, 0.0, 100.0),
                 null,
                 true
             ),
-            null,
-            api_get_utc_datetime(null, false, true),
-            null,
-            $this->generateContext()
-        );
+            'timestamp' => api_get_utc_datetime(null, false, true)->format(DATE_ATOM),
+            'context' => $this->generateContext(),
+        ];
     }
 }

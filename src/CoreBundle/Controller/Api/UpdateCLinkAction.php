@@ -45,6 +45,9 @@ class UpdateCLinkAction extends BaseResourceFileAction
         $em->persist($link);
         $em->flush();
 
+        $this->applyResourceLanguageFromRequest($link, $request, $em);
+        $em->flush();
+
         $this->handleShortcutCreationOrDeletion($resourceLinkList, $em, $security, $link, $shortcutRepository, $onHomepage);
 
         return $link;

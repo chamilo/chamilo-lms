@@ -30,6 +30,10 @@ function buildExpandedKeys(items) {
   }
   return keys
 }
+
+function isUrlActive(item) {
+  return item.url && window.location.pathname.startsWith(item.url)
+}
 </script>
 
 <template>
@@ -41,7 +45,7 @@ function buildExpandedKeys(items) {
     <template #item="{ item, root, active, props }">
       <BaseAppLink
         v-if="item.route || item.url"
-        :class="{ 'p-panelmenu-header-action': root, 'p-menuitem-link': !root }"
+        :class="{ 'p-panelmenu-header-action': root, 'p-menuitem-link': !root, 'router-link-url-active': isUrlActive(item) }"
         :to="item.route"
         :url="item.url"
       >

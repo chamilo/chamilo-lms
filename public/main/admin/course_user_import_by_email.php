@@ -192,7 +192,7 @@ if ($form->validate()) {
         Security::clear_token();
         $tok = Security::get_token();
         Display::addFlash(Display::return_message($warn));
-        header('Location: user_list.php?sec_token='.$tok);
+        header('Location: /admin/user-list');
         exit();
     }
 }

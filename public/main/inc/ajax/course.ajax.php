@@ -348,6 +348,10 @@ switch ($action) {
         }
         break;
     case 'display_sessions_courses':
+        if (!$isPlatformAdmin && !api_is_session_admin() && !api_is_teacher()) {
+            echo json_encode([]);
+            break;
+        }
         // Close the session as we don't need it any further
         session_write_close();
 
@@ -396,6 +400,38 @@ switch ($action) {
 
         $result = (int) Event::courseLogout($logoutInfo);
         echo $result;
+        break;
+    case 'search_room':
+        if (!$isPlatformAdmin && !api_is_session_admin() && !api_is_teacher()) {
+            echo json_encode([]);
+            break;
+        }
+        $em = Database::getManager();
+        $term = isset($_REQUEST['q']) ? trim($_REQUEST['q']) : '';
+        $qb = $em->createQueryBuilder()
+            ->select('r.id, r.title, b.title AS branchTitle')
+            ->from(\Chamilo\CoreBundle\Entity\Room::class, 'r')
+            ->leftJoin('r.branch', 'b')
+            ->orderBy('b.title', 'ASC')
+            ->addOrderBy('r.title', 'ASC');
+
+        if (!empty($term)) {
+            $qb->where('r.title LIKE :term OR b.title LIKE :term')
+                ->setParameter('term', '%'.$term.'%');
+        }
+
+        $rooms = $qb->getQuery()->getArrayResult();
+        $result = [];
+        foreach ($rooms as $room) {
+            $label = !empty($room['branchTitle'])
+                ? $room['branchTitle'].' - '.$room['title']
+                : $room['title'];
+            $result['items'][] = [
+                'id' => $room['id'],
+                'text' => $label,
+            ];
+        }
+        echo json_encode($result);
         break;
     default:
         echo '';

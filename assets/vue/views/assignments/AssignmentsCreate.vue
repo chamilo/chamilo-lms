@@ -1,12 +1,15 @@
 <template>
   <div class="field space-y-2">
-    <BaseIcon
+    <BaseButton
+      :label="t('Back')"
       icon="back"
-      size="big"
+      only-icon
+      size="small"
+      type="black"
       @click="goBack"
     />
     <div class="field">
-      <h3 v-t="'Create assignment'" />
+      <h3 v-text="t('Create assignment')" />
     </div>
 
     <AssignmentsForm
@@ -21,11 +24,10 @@ import AssignmentsForm from "../../components/assignments/AssignmentsForm.vue"
 import { useI18n } from "vue-i18n"
 import { ref } from "vue"
 import axios from "axios"
-import { ENTRYPOINT } from "../../config/entrypoint"
 import { useCidReq } from "../../composables/cidReq"
 import { useNotification } from "../../composables/notification"
 import { useRouter } from "vue-router"
-import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
+import BaseButton from "../../components/basecomponents/BaseButton.vue"
 
 const { t } = useI18n()
 const { cid, sid, gid } = useCidReq()
@@ -39,7 +41,7 @@ function onSubmit(publicationStudent) {
   isFormLoading.value = true
 
   axios
-    .post(`${ENTRYPOINT}c_student_publications`, publicationStudent)
+    .post(`/api/c_student_publications`, publicationStudent)
     .then(({ data }) => {
       console.log("cstudentpublication", data)
 

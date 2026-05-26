@@ -56,7 +56,17 @@ final class AssignExport extends ActivityExport
     public function getData(int $assignId, int $sectionId): ?array
     {
         $work = $this->course->resources[RESOURCE_WORK][$assignId] ?? null;
-        if (!$work || empty($work->params['id']) || empty($work->params['title'])) {
+        if (!$work || empty($work->params['title'])) {
+            return null;
+        }
+
+        $workIid = (int) (
+            $work->params['iid']
+            ?? $work->params['id']
+            ?? $assignId
+        );
+
+        if ($workIid <= 0) {
             return null;
         }
 
@@ -64,19 +74,23 @@ final class AssignExport extends ActivityExport
             ? (int) strtotime((string) $work->params['sent_date'])
             : time();
 
-        // Collect attached documents for this work
         $files = [];
-        $workFiles = getAllDocumentToWork($assignId, (int) $this->course->info['real_id']) ?? [];
+        $workFiles = getAllDocumentToWork($workIid, (int) $this->course->info['real_id']) ?? [];
+
         foreach ($workFiles as $file) {
             $docId = (int) ($file['document_id'] ?? 0);
             if ($docId <= 0) {
                 continue;
             }
-            $docData = DocumentManager::get_document_data_by_id($docId, (string) $this->course->info['code']);
+
+            $docData = DocumentManager::get_document_data_by_id(
+                $docId,
+                (string) $this->course->info['code']
+            );
+
             if (!empty($docData) && isset($docData['path'])) {
                 $files[] = [
                     'id' => $docId,
-                    // NOTE: Moodle uses filepool IDs. We keep a stable hash based on basename as a fallback.
                     'contenthash' => sha1((string) basename((string) $docData['path'])),
                     'filename' => (string) basename((string) $docData['path']),
                     'filepath' => '/Documents/',
@@ -84,20 +98,18 @@ final class AssignExport extends ActivityExport
             }
         }
 
-        // Prefer a base helper; if your base doesn't have it, replace with your static service
         $admin = method_exists($this, 'getAdminUserData')
             ? $this->getAdminUserData()
             : ['id' => 2];
 
         return [
-            'id' => (int) $work->params['id'],
-            'moduleid' => (int) $work->params['id'],
+            'id' => $workIid,
+            'moduleid' => $workIid,
             'modulename' => 'assign',
             'contextid' => (int) $this->course->info['real_id'],
             'sectionid' => $sectionId,
             'sectionnumber' => 0,
             'name' => (string) $work->params['title'],
-            // Keep raw HTML; assign.xml will wrap it in CDATA
             'intro' => (string) ($work->params['description'] ?? ''),
             'duedate' => $sentDate,
             'gradingduedate' => $sentDate + 7 * 86400,

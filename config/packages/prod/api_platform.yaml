@@ -1,3 +1,0 @@
-api_platform:
-    enable_docs: true
-    enable_entrypoint: '%env(bool:APP_ENABLE_API_ENTRYPOINT)%'

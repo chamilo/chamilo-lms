@@ -1,0 +1,103 @@
+<?php
+/* License: see /license.txt */
+
+// Needed in order to show the plugin title
+$strings['plugin_title'] = 'مؤتمر فيديو زووم';
+$strings['plugin_comment'] = 'تكامل مؤتمر فيديو زووم في الدورات والجلسات';
+
+$strings['apiKey'] = 'مفتاح API';
+$strings['apiSecret'] = 'سر API';
+$strings['verificationToken'] = 'رمز التحقق';
+$strings['enableParticipantRegistration'] = 'تفعيل تسجيل المشاركين';
+$strings['enableCloudRecording'] = 'نوع التسجيل التلقائي';
+$strings['enableGlobalConference'] = 'تفعيل المؤتمر العام';
+$strings['enableGlobalConferencePerUser'] = 'تفعيل المؤتمر العام لكل مستخدم';
+$strings['globalConferenceAllowRoles'] = 'رابط المؤتمر العام مرئي فقط لهذه أدوار المستخدمين';
+$strings['globalConferencePerUserAllowRoles'] = 'رابط المؤتمر العام لكل مستخدم مرئي فقط لهذه أدوار المستخدمين';
+
+$strings['enableCloudRecording_help'] = 'يتطلب حساب زووم مدفوع.
+لن يعمل مع حساب <em>أساسي</em>.';
+
+// please keep these lines alphabetically sorted
+$strings['AllCourseUsersWereRegistered'] = 'تم تسجيل جميع طلاب الدورة';
+$strings['Agenda'] = 'جدول الأعمال';
+$strings['CannotRegisterWithoutEmailAddress'] = 'لا يمكن التسجيل بدون عنوان بريد إلكتروني';
+$strings['CopyingJoinURL'] = 'نسخ رابط الانضمام';
+$strings['CopyJoinAsURL'] = "نسخ رابط 'الانضمام بصفتك'";
+$strings['CopyToCourse'] = 'نسخ إلى الدورة';
+$strings['CouldNotCopyJoinURL'] = 'تعذر نسخ رابط الانضمام';
+$strings['Course'] = 'الدورة';
+$strings['CreatedAt'] = 'تم الإنشاء في';
+$strings['CreateLinkInCourse'] = 'إنشاء رابط(روابط) في الدورة';
+$strings['CreateUserVideoConference'] = 'إنشاء مؤتمر مستخدم';
+$strings['DateMeetingTitle'] = '%s: %s';
+$strings['DeleteMeeting'] = 'حذف الاجتماع';
+$strings['DeleteFile'] = 'حذف الملف(الملفات)';
+$strings['Details'] = 'التفاصيل';
+$strings['DoIt'] = 'تنفيذ';
+$strings['Duration'] = 'المدة';
+$strings['DurationFormat'] = '%hh%I';
+$strings['DurationInMinutes'] = 'المدة (بالدقائق)';
+$strings['EndDate'] = 'تاريخ الانتهاء';
+$strings['EnterMeeting'] = 'دخول الاجتماع';
+$strings['ViewMeeting'] = 'عرض الاجتماع';
+$strings['Files'] = 'الملفات';
+$strings['Finished'] = 'منتهي';
+$strings['FileWasCopiedToCourse'] = 'تم نسخ الملف إلى الدورة';
+$strings['FileWasDeleted'] = 'تم حذف الملف';
+$strings['GlobalMeeting'] = 'المؤتمر العام';
+$strings['GlobalMeetingPerUser'] = 'المؤتمر العام لكل مستخدم';
+$strings['GroupUsersWereRegistered'] = 'تم تسجيل أعضاء المجموعة';
+$strings['InstantMeeting'] = 'اجتماع فوري';
+$strings['Join'] = 'انضمام';
+$strings['JoinGlobalVideoConference'] = 'انضمام إلى المؤتمر العام';
+$strings['JoinURLCopied'] = 'تم نسخ رابط الانضمام';
+$strings['JoinURLToSendToParticipants'] = 'رابط الانضمام لإرساله إلى المشاركين';
+$strings['LiveMeetings'] = 'الاجتماعات المباشرة';
+$strings['LinkToFileWasCreatedInCourse'] = 'تم إضافة رابط للملف إلى الدورة';
+$strings['MeetingDeleted'] = 'تم حذف الاجتماع';
+$strings['MeetingsFound'] = 'الاجتماعات الموجودة';
+$strings['MeetingUpdated'] = 'تم تحديث الاجتماع';
+$strings['NewMeetingCreated'] = 'تم إنشاء اجتماع جديد';
+$strings['Password'] = 'كلمة المرور';
+$strings['RecurringWithFixedTime'] = 'متكرر بوقت ثابت';
+$strings['RecurringWithNoFixedTime'] = 'متكرر بدون وقت ثابت';
+$strings['RegisterAllCourseUsers'] = 'تسجيل جميع مستخدمي المقرر';
+$strings['RegisteredUserListWasUpdated'] = 'تم تحديث قائمة المستخدمين المسجلين';
+$strings['RegisteredUsers'] = 'المستخدمون المسجلون';
+$strings['RegisterNoUser'] = 'عدم تسجيل أي مستخدم';
+$strings['RegisterTheseGroupMembers'] = 'تسجيل أعضاء هذه المجموعة';
+$strings['ScheduleAMeeting'] = 'جدولة اجتماع';
+$strings['ScheduledMeeting'] = 'اجتماع مجدول';
+$strings['ScheduledMeetings'] = 'الاجتماعات المجدولة';
+$strings['ScheduleAMeeting'] = 'جدولة اجتماع';
+$strings['SearchMeeting'] = 'البحث عن اجتماع';
+$strings['Session'] = 'جلسة';
+$strings['StartDate'] = 'تاريخ البدء';
+$strings['Started'] = 'بدأ';
+$strings['StartInstantMeeting'] = 'بدء اجتماع فوري';
+$strings['StartMeeting'] = 'بدء الاجتماع';
+$strings['StartTime'] = 'وقت البدء';
+$strings['Topic'] = 'الموضوع';
+$strings['TopicAndAgenda'] = 'الموضوع والأجندة';
+$strings['Type'] = 'النوع';
+$strings['UpcomingMeetings'] = 'الاجتماعات القادمة';
+$strings['UpdateMeeting'] = 'تحديث الاجتماع';
+$strings['UpdateRegisteredUserList'] = 'تحديث قائمة المستخدمين المسجلين';
+$strings['UserRegistration'] = 'تسجيل المستخدم';
+$strings['Y-m-d H:i'] = 'Y-m-d H:i';
+$strings['Waiting'] = 'في الانتظار';
+$strings['XRecordingOfMeetingXFromXDurationXDotX'] = 'تسجيل %s للاجتماع %s من %s (%s).%s';
+$strings['YouAreNotRegisteredToThisMeeting'] = 'أنت غير مسجل في هذا الاجتماع';
+$strings['ZoomVideoConferences'] = 'مؤتمرات فيديو زووم';
+$strings['Recordings'] = 'التسجيلات';
+$strings['CreateGlobalVideoConference'] = 'إنشاء مؤتمر فيديو عام';
+$strings['ConferenceNotStarted'] = 'المؤتمر لم يبدأ';
+$strings['MeetingNotFound'] = 'الاجتماع غير موجود';
+$strings['JoinURLNotAvailable'] = 'الرابط غير متاح';
+$strings['Meetings'] = 'الاجتماعات';
+$strings['ConferenceType'] = 'نوع المؤتمر';
+$strings['ForEveryone'] = 'الجميع';
+$strings['SomeUsers'] = 'بعض المستخدمين (اختر لاحقًا)';
+$strings['Activity'] = 'نشاط';
+$strings['ConferenceNotAvailable'] = 'المؤتمر غير متاح';

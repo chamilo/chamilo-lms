@@ -1139,8 +1139,8 @@
 			 */
 			private function decodeEntities($string)
 			{
-				$string = preg_replace('/&#([0-9]+);/e', 'chr("\\1")', $string);
-				$string = preg_replace('/&#[Xx]([0-9A-Fa-f]+);/e', 'chr(hexdec("\\1"))', $string);
+				$string = preg_replace_callback('/&#([0-9]+);/', static function ($m) { return chr((int) $m[1]); }, $string);
+				$string = preg_replace_callback('/&#[Xx]([0-9A-Fa-f]+);/', static function ($m) { return chr(hexdec($m[1])); }, $string);
 				return $string;
 			}
 

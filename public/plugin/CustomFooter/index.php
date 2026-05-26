@@ -1,14 +1,17 @@
 <?php
 
-if (isset($plugin_info['current_region'])) {
-    switch ($plugin_info['current_region']) {
-        case 'footer_left':
-            echo $plugin_info['settings']['customfooter_footer_left'];
+/* For licensing terms, see /license.txt */
 
-            break;
-        case 'footer_right':
-            echo $plugin_info['settings']['customfooter_footer_right'];
-
-            break;
-    }
+if (!class_exists('Plugin', false)) {
+    require_once __DIR__.'/../../main/inc/global.inc.php';
 }
+
+require_once __DIR__.'/lib/customfooter_plugin.class.php';
+
+$region = $plugin_info['current_region'] ?? '';
+
+if ('' === $region) {
+    return;
+}
+
+echo CustomFooterPlugin::create()->renderRegion((string) $region);

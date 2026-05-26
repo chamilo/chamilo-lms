@@ -12,29 +12,34 @@ use Database;
 use Exception;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Xabbuh\XApi\Common\Exception\AccessDeniedException;
-use Xabbuh\XApi\Common\Exception\XApiException;
 
 /**
  * Class LrsRequest.
  */
 class LrsRequest
 {
-    /**
-     * @var HttpRequest
-     */
-    private $request;
+    private HttpRequest $request;
 
-    public function __construct()
+    public function __construct(?HttpRequest $request = null)
     {
-        $this->request = Container::getRequest();
+        $this->request = $request ?? Container::getRequest();
     }
 
     public function send(): void
     {
+        $this->handle()->send();
+    }
+
+    public function handle(?HttpRequest $request = null): HttpResponse
+    {
+        if (null !== $request) {
+            $this->request = $request;
+        }
+
         try {
             $this->alternateRequestSyntax();
 
@@ -42,61 +47,118 @@ class LrsRequest
             $methodName = $this->getMethodName();
 
             $response = $this->generateResponse($controllerName, $methodName);
-        } catch (XApiException $xApiException) {
-            $response = HttpResponse::create('', HttpResponse::HTTP_BAD_REQUEST);
         } catch (HttpException $httpException) {
-            $response = HttpResponse::create(
+            $response = new HttpResponse(
                 $httpException->getMessage(),
                 $httpException->getStatusCode()
             );
+
+            if ($httpException instanceof AccessDeniedHttpException) {
+                $response->headers->set('WWW-Authenticate', 'Basic realm="xAPI LRS"');
+            }
         } catch (Exception $exception) {
-            $response = HttpResponse::create($exception->getMessage(), HttpResponse::HTTP_BAD_REQUEST);
+            $response = new HttpResponse(
+                $exception->getMessage(),
+                HttpResponse::HTTP_BAD_REQUEST
+            );
         }
 
         $response->headers->set('X-Experience-API-Version', '1.0.3');
 
-        $response->send();
+        return $response;
     }
 
-    /**
-     * @throws AccessDeniedException
-     */
     private function validateAuth(): bool
     {
         if (!$this->request->headers->has('Authorization')) {
-            throw new AccessDeniedException();
+            throw new AccessDeniedHttpException('Missing Authorization header.');
         }
 
-        $authHeader = $this->request->headers->get('Authorization');
+        $authHeader = trim((string) $this->request->headers->get('Authorization'));
 
-        $parts = explode('Basic ', $authHeader, 2);
-
-        if (empty($parts[1])) {
-            throw new AccessDeniedException();
+        if (!str_starts_with($authHeader, 'Basic ')) {
+            throw new AccessDeniedHttpException('Unsupported Authorization scheme.');
         }
 
-        $authDecoded = base64_decode($parts[1]);
+        $basicValue = trim(substr($authHeader, 6));
 
-        $parts = explode(':', $authDecoded, 2);
-
-        if (empty($parts) || 2 !== \count($parts)) {
-            throw new AccessDeniedException();
+        if ('' === $basicValue) {
+            throw new AccessDeniedHttpException('Empty Authorization header.');
         }
 
-        list($username, $password) = $parts;
+        if ($this->isValidLegacyBasicAuth($basicValue)) {
+            return true;
+        }
+
+        if ($this->isValidCmi5Token($basicValue)) {
+            return true;
+        }
+
+        throw new AccessDeniedHttpException('Invalid xAPI authorization.');
+    }
+
+    private function isValidLegacyBasicAuth(string $basicValue): bool
+    {
+        $decoded = base64_decode($basicValue, true);
+
+        if (false === $decoded) {
+            return false;
+        }
+
+        $parts = explode(':', $decoded, 2);
+
+        if (2 !== \count($parts)) {
+            return false;
+        }
+
+        [$username, $password] = $parts;
 
         $auth = Database::getManager()
             ->getRepository(XApiLrsAuth::class)
             ->findOneBy(
-                ['username' => $username, 'password' => $password, 'enabled' => true]
-            )
-        ;
+                [
+                    'username' => $username,
+                    'password' => $password,
+                    'enabled' => true,
+                ]
+            );
 
-        if (null == $auth) {
-            throw new AccessDeniedException();
+        return null !== $auth;
+    }
+
+    private function isValidCmi5Token(string $token): bool
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            @session_start();
         }
 
-        return true;
+        $storedTokens = $_SESSION['xapi_cmi5_tokens'] ?? [];
+        $now = time();
+
+        if (!\is_array($storedTokens)) {
+            return false;
+        }
+
+        foreach ($storedTokens as $launchSessionId => $tokenData) {
+            if (!\is_array($tokenData)) {
+                continue;
+            }
+
+            $expiresAt = (int) ($tokenData['expires_at'] ?? 0);
+
+            if ($expiresAt > 0 && $expiresAt < $now) {
+                unset($_SESSION['xapi_cmi5_tokens'][$launchSessionId]);
+                continue;
+            }
+
+            $storedToken = (string) ($tokenData['token'] ?? '');
+
+            if ('' !== $storedToken && hash_equals($storedToken, $token)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function validateVersion(): void
@@ -118,17 +180,24 @@ class LrsRequest
         throw new BadRequestHttpException("The xAPI version \"$version\" is not supported.");
     }
 
-    private function getControllerName(): ?string
+    private function getControllerName(): string
     {
-        $segments = explode('/', $this->request->getPathInfo());
-        $segments = array_filter($segments);
-        $segments = array_values($segments);
+        $segments = $this->getLrsSegments();
 
         if (empty($segments)) {
             throw new BadRequestHttpException('Bad request');
         }
 
-        $segments = array_map('ucfirst', $segments);
+        $segments = array_map(
+            static function (string $segment): string {
+                $segment = preg_replace('/[^a-z0-9]+/i', ' ', $segment) ?? $segment;
+                $segment = trim($segment);
+
+                return str_replace(' ', '', ucwords(strtolower($segment)));
+            },
+            $segments
+        );
+
         $controllerName = implode('', $segments).'Controller';
 
         return "Chamilo\\PluginBundle\\XApi\\Lrs\\$controllerName";
@@ -136,19 +205,12 @@ class LrsRequest
 
     private function getMethodName(): string
     {
-        $method = $this->request->getMethod();
-
-        return strtolower($method);
+        return strtolower($this->request->getMethod());
     }
 
-    /**
-     * @throws AccessDeniedException
-     */
     private function generateResponse(string $controllerName, string $methodName): HttpResponse
     {
-        if (!class_exists($controllerName)
-            || !method_exists($controllerName, $methodName)
-        ) {
+        if (!class_exists($controllerName) || !method_exists($controllerName, $methodName)) {
             throw new NotFoundHttpException();
         }
 
@@ -158,12 +220,14 @@ class LrsRequest
         }
 
         /** @var HttpResponse $response */
-        return \call_user_func(
+        $response = \call_user_func(
             [
                 new $controllerName($this->request),
                 $methodName,
             ]
         );
+
+        return $response;
     }
 
     private function alternateRequestSyntax(): void
@@ -172,18 +236,23 @@ class LrsRequest
             return;
         }
 
-        if (null === $method = $this->request->query->get('method')) {
+        $method = $this->request->query->get('method');
+
+        if (null === $method) {
             return;
         }
 
         if ($this->request->query->count() > 1) {
-            throw new BadRequestHttpException('Including other query parameters than "method" is not allowed. You have to send them as POST parameters inside the request body.');
+            throw new BadRequestHttpException(
+                'Including other query parameters than "method" is not allowed. You have to send them as POST parameters inside the request body.'
+            );
         }
 
         $this->request->setMethod($method);
         $this->request->query->remove('method');
 
-        if (null !== $content = $this->request->request->get('content')) {
+        $content = $this->request->request->get('content');
+        if (null !== $content) {
             $this->request->request->remove('content');
 
             $this->request->initialize(
@@ -206,14 +275,40 @@ class LrsRequest
             'If-None-Match',
         ];
 
-        foreach ($this->request->request as $key => $value) {
+        foreach ($this->request->request->all() as $key => $value) {
             if (\in_array($key, $headerNames, true)) {
-                $this->request->headers->set($key, $value);
+                $this->request->headers->set($key, (string) $value);
             } else {
                 $this->request->query->set($key, $value);
             }
 
             $this->request->request->remove($key);
         }
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getLrsSegments(): array
+    {
+        $segments = explode('/', $this->request->getPathInfo());
+        $segments = array_values(array_filter($segments, static fn ($value): bool => '' !== trim((string) $value)));
+
+        $markerIndex = array_search('lrs', $segments, true);
+
+        if (false === $markerIndex) {
+            $markerIndex = array_search('lrs.php', $segments, true);
+        }
+
+        if (false !== $markerIndex) {
+            $segments = array_slice($segments, $markerIndex + 1);
+        }
+
+        return array_values(
+            array_filter(
+                $segments,
+                static fn ($segment): bool => \is_string($segment) && '' !== trim($segment)
+            )
+        );
     }
 }

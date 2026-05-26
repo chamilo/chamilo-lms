@@ -19,14 +19,13 @@ use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model\Operation;
-use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\Controller\Api\CreateUserOnAccessUrlAction;
-use Chamilo\CoreBundle\Controller\Api\GetStatsAction;
 use Chamilo\CoreBundle\Controller\Api\UserSkillsController;
 use Chamilo\CoreBundle\Dto\CreateUserOnAccessUrlInput;
 use Chamilo\CoreBundle\Entity\Listener\UserListener;
 use Chamilo\CoreBundle\Filter\PartialSearchOrFilter;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\State\UserCollectionStateProvider;
 use Chamilo\CoreBundle\Traits\UserCreatorTrait;
 use Chamilo\CourseBundle\Entity\CGroupRelTutor;
 use Chamilo\CourseBundle\Entity\CGroupRelUser;
@@ -45,7 +44,7 @@ use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\LegacyPasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
@@ -60,51 +59,12 @@ use UserManager;
             ),
             security: "is_granted('VIEW', object)",
         ),
-        new Get(
-            uriTemplate: '/users/{id}/courses/{courseId}/stats/{metric}',
-            requirements: [
-                'id' => '\d+',
-                'courseId' => '\d+',
-                'metric' => 'avg-lp-progress|certificates|gradebook-global',
-            ],
-            controller: GetStatsAction::class,
-            openapi: new Operation(
-                summary: 'User-course statistics, switch by {metric}',
-                parameters: [
-                    new Parameter(
-                        name: 'courseId',
-                        in: 'path',
-                        description: 'Course ID',
-                        required: true,
-                        schema: ['type' => 'integer'],
-                    ),
-                    new Parameter(
-                        name: 'metric',
-                        in: 'path',
-                        description: 'Metric selector',
-                        required: true,
-                        schema: [
-                            'type' => 'string',
-                            'enum' => ['avg-lp-progress', 'certificates', 'gradebook-global'],
-                        ],
-                    ),
-                    new Parameter(
-                        name: 'sessionId',
-                        in: 'query',
-                        description: 'Optional Session ID',
-                        required: false,
-                        schema: ['type' => 'integer'],
-                    ),
-                ],
-            ),
-            security: "is_granted('ROLE_USER')",
-            output: false,
-            read: false,
-            name: 'stats_user_course_metric'
-        ),
         new Put(security: "is_granted('EDIT', object)"),
         new Delete(security: "is_granted('DELETE', object)"),
-        new GetCollection(security: "is_granted('ROLE_USER')"),
+        new GetCollection(
+            security: "is_granted('ROLE_USER')",
+            provider: UserCollectionStateProvider::class,
+        ),
         new Post(security: "is_granted('ROLE_ADMIN')"),
         new GetCollection(
             uriTemplate: '/users/{id}/skills',
@@ -207,6 +167,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     #[Groups([
         'user_export',
         'user:read',
+        'user:read:public',
         'resource_node:read',
         'document:read',
         'media_object_read',
@@ -217,17 +178,21 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         'user_rel_user:read',
         'social_post:read',
         'user_subscriptions:sessions',
+        'course_catalogue:read',
     ])]
     public ?string $illustrationUrl = null;
 
     #[Groups([
         'user:read',
+        'user:read:public',
         'course:read',
         'resource_node:read',
         'user_json:read',
         'message:read',
         'user_rel_user:read',
         'session:item:read',
+        'course_catalogue:read',
+        'student_publication_comment:read',
     ])]
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
@@ -238,6 +203,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     #[Groups([
         'user_export',
         'user:read',
+        'user:read:public',
         'user:write',
         'course:read',
         'course_rel_user:read',
@@ -250,6 +216,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         'track_e_exercise:read',
         'user_subscriptions:sessions',
         'student_publication_rel_user:read',
+        'course_catalogue:read',
     ])]
     #[ORM\Column(name: 'username', type: 'string', length: 100, unique: true)]
     protected string $username;
@@ -258,11 +225,33 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected ?string $apiToken = null;
 
     #[ApiProperty(iris: ['http://schema.org/name'])]
-    #[Groups(['user:read', 'user:write', 'resource_node:read', 'user_json:read', 'track_e_exercise:read', 'user_rel_user:read', 'user_subscriptions:sessions', 'student_publication_rel_user:read'])]
+    #[Groups([
+        'user:read',
+        'user:read:public',
+        'user:write',
+        'resource_node:read',
+        'user_json:read',
+        'track_e_exercise:read',
+        'user_rel_user:read',
+        'user_subscriptions:sessions',
+        'student_publication_rel_user:read',
+        'course_catalogue:read',
+    ])]
     #[ORM\Column(name: 'firstname', type: 'string', length: 64, nullable: true)]
     protected ?string $firstname = null;
 
-    #[Groups(['user:read', 'user:write', 'resource_node:read', 'user_json:read', 'track_e_exercise:read', 'user_rel_user:read', 'user_subscriptions:sessions', 'student_publication_rel_user:read'])]
+    #[Groups([
+        'user:read',
+        'user:read:public',
+        'user:write',
+        'resource_node:read',
+        'user_json:read',
+        'track_e_exercise:read',
+        'user_rel_user:read',
+        'user_subscriptions:sessions',
+        'student_publication_rel_user:read',
+        'course_catalogue:read',
+    ])]
     #[ORM\Column(name: 'lastname', type: 'string', length: 64, nullable: true)]
     protected ?string $lastname = null;
 
@@ -371,8 +360,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     /**
      * An array of roles. Example: ROLE_USER, ROLE_TEACHER, ROLE_ADMIN.
+     * Writable only by admins — see UserSerializerContextBuilder.
      */
-    #[Groups(['user:read', 'user:write', 'user_json:read'])]
+    #[Groups(['user:read', 'user:admin:write', 'user_json:read'])]
     #[ORM\Column(type: 'array')]
     protected array $roles = [];
 
@@ -768,6 +758,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         'user:read',
         'user_json:read',
         'social_post:read',
+        'user:read:public',
         'course:read',
         'course_rel_user:read',
         'message:read',
@@ -775,6 +766,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         'student_publication_rel_user:read',
         'student_publication:read',
         'student_publication_comment:read',
+        'course_catalogue:read',
     ])]
     protected string $fullName;
 
@@ -1275,7 +1267,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this->confirmationToken;
     }
 
-    public function setConfirmationToken(string $confirmationToken): self
+    public function setConfirmationToken(?string $confirmationToken): self
     {
         $this->confirmationToken = $confirmationToken;
 
@@ -2243,9 +2235,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     public function getDefaultIllustration(int $size): string
     {
-        $size = empty($size) ? 32 : $size;
-
-        return \sprintf('/img/icons/%s/unknown.png', $size);
+        return '/img/user_default.svg';
     }
 
     public function getAdmin(): ?Admin

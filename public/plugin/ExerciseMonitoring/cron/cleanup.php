@@ -3,9 +3,10 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\TrackEExercise;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\TrackEExerciseRepository;
 use Chamilo\PluginBundle\ExerciseMonitoring\Entity\Log;
-use Symfony\Component\Filesystem\Filesystem;
+use Chamilo\PluginBundle\ExerciseMonitoring\Repository\LogRepository;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
@@ -17,7 +18,7 @@ if ('cli' !== PHP_SAPI) {
 
 $plugin = ExerciseMonitoringPlugin::create();
 $em = Database::getManager();
-/** @var Log $repo */
+/** @var LogRepository $repo */
 $repo = $em->getRepository(Log::class);
 /** @var TrackEExerciseRepository $trackExeRepo */
 $trackExeRepo = $em->getRepository(TrackEExercise::class);
@@ -36,26 +37,20 @@ logging(
     sprintf("Deleting snapshots taken before than %s", $timeLimit->format('Y-m-d H:i:s'))
 );
 
-$fs = new Filesystem();
+$pluginsFilesystem = Container::getPluginsFileSystem();
 
 $logs = findLogsBeforeThan($timeLimit);
 
 foreach ($logs as $log) {
-    $sysPath = ExerciseMonitoringPlugin::generateSnapshotUrl(
-        $log['exe_user_id'],
-        $log['image_filename'],
-        SYS_UPLOAD_PATH
-    );
-
-    if (!file_exists($sysPath)) {
+    if (!$pluginsFilesystem->fileExists($log['image_filename'])) {
         logging(
-            sprintf("File %s not exists", $sysPath)
+            sprintf("File %s not exists", $log['image_filename'])
         );
 
         continue;
     }
 
-    $fs->remove($sysPath);
+    $pluginsFilesystem->delete($log['image_filename']);
 
     Database::update(
         'plugin_exercisemonitoring_log',
@@ -67,7 +62,7 @@ foreach ($logs as $log) {
         sprintf(
             "From exe_id %s; deleting filename %s created at %s",
             $log['exe_id'],
-            $sysPath,
+            $log['image_filename'],
             $log['created_at']
         )
     );

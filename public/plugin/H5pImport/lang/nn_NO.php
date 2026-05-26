@@ -1,0 +1,22 @@
+<?php
+$strings['plugin_title'] = 'H5P-import';
+$strings['plugin_comment'] = 'Importer H5P-innhald og bruk det i læringsstier. Opne README.md for installasjonsinstruksjonar.';
+$strings['frame'] = 'Ramme';
+$strings['frame_help'] = 'Vis ramme og knappar under H5P';
+$strings['embed'] = 'Innhaldsinnbygging';
+$strings['embed_help'] = 'Vis innbyggingsknapp';
+$strings['copyright'] = 'Opphavsrett';
+$strings['copyright_help'] = 'Vis opphavsrettsknapp';
+$strings['icon'] = 'Ikon';
+$strings['icon_help'] = 'Vis H5P-ikon';
+$strings['attempts'] = 'Antall forsøk';
+$strings['upload_h5p'] = 'Last opp';
+$strings['import_h5p_package'] = 'Last opp H5P-pakke';
+$strings['h5p_package'] = 'H5P-pakke';
+$strings['h5p_error_loading'] = 'Feil ved lasting av H5P-pakken';
+$strings['h5p_error_invalid_token'] = 'Ugyldig sikringstoken';
+$strings['h5p_error_missing_core_asset'] = 'Feil ved lasting av H5P-kjerne-ressursar';
+$strings['h5p_save_content_state'] = 'Lagre brukarresultat';
+$strings['h5p_save_content_freq'] = 'Lagringsfrekvens';
+$strings['h5p_save_freq_help'] = 'Kor ofte noverande innhaldstilstand skal lagrast, i sekund';
+$strings['start_attempt'] = 'Start forsøk';

@@ -221,8 +221,7 @@ foreach ($url_list as $u) {
                 'id' => $u->getId(),
                 'url' => $u->getUrl(),
                 'sec_token' => $parameters['sec_token'],
-            ],
-            UrlGeneratorInterface::ABSOLUTE_URL
+            ]
         );
 
         $rowActions .= '<a href="'.$vueHref.'">' .

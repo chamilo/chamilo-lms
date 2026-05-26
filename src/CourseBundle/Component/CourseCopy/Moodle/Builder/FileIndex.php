@@ -6,65 +6,68 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Moodle\Builder;
 
-final class FileIndex
+/**
+ * Lightweight runtime registry for exported files.
+ *
+ * This helper is intentionally simple:
+ * - it allows physical file copy deduplication by contenthash
+ * - it keeps optional logical lookup hooks available for future use
+ */
+class FileIndex
 {
-    /**
-     * @var array<string,int>
-     */
-    private static array $byHash = [];
-
     /**
      * @var array<string,string>
      */
-    private static array $subdirByHash = [];
+    private static array $subdirByContenthash = [];
 
     /**
-     * @param array{id:int, contenthash?:string} $file
+     * @var array<int,array<string,mixed>>
+     */
+    private static array $fileById = [];
+
+    /**
+     * Reset in-memory registry.
+     */
+    public static function reset(): void
+    {
+        self::$subdirByContenthash = [];
+        self::$fileById = [];
+    }
+
+    /**
+     * Register one logical file row.
+     *
+     * @param array<string,mixed> $file
      */
     public static function register(array $file): void
     {
-        $ch = (string) ($file['contenthash'] ?? '');
-        if ('' === $ch) {
-            return;
+        $contenthash = (string) ($file['contenthash'] ?? '');
+        $fileId = (int) ($file['id'] ?? 0);
+
+        if ('' !== $contenthash) {
+            self::$subdirByContenthash[$contenthash] = substr($contenthash, 0, 2);
         }
-        if (!isset(self::$byHash[$ch])) {
-            self::$byHash[$ch] = (int) $file['id'];
+
+        if ($fileId > 0) {
+            self::$fileById[$fileId] = $file;
         }
-        $subdir = substr($ch, 0, 2);
-        self::$subdirByHash[$ch] = $subdir;
     }
 
     /**
-     * @param array<int,array{id:int, contenthash?:string}> $files
+     * Resolve the export subdirectory for a contenthash.
      */
-    public static function registerMany(array $files): void
+    public static function resolveSubdirByContenthash(string $contenthash): string
     {
-        foreach ($files as $f) {
-            self::register($f);
-        }
+        return self::$subdirByContenthash[$contenthash] ?? substr($contenthash, 0, 2);
     }
 
-    public static function resolveByContenthash(?string $contenthash): ?int
+    /**
+     * Get a registered file by id.
+     *
+     * @return array<string,mixed>|null
+     */
+    public static function getById(int $fileId): ?array
     {
-        if (!$contenthash) {
-            return null;
-        }
-
-        return self::$byHash[$contenthash] ?? null;
-    }
-
-    public static function resolveSubdirByContenthash(?string $contenthash): ?string
-    {
-        if (!$contenthash) {
-            return null;
-        }
-
-        return self::$subdirByHash[$contenthash] ?? null;
-    }
-
-    public static function reset(): void
-    {
-        self::$byHash = [];
-        self::$subdirByHash = [];
+        return self::$fileById[$fileId] ?? null;
     }
 }

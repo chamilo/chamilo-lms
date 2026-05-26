@@ -1,0 +1,103 @@
+<?php
+/* License: see /license.txt */
+
+// Needed in order to show the plugin title
+$strings['plugin_title'] = 'Διαδικτυακή Σύσκεψη Zoom';
+$strings['plugin_comment'] = 'Ενσωμάτωση Διαδικτυακής Σύσκεψης Zoom σε μαθήματα και περιόδους';
+
+$strings['apiKey'] = 'Κλειδί API';
+$strings['apiSecret'] = 'Μυστικό API';
+$strings['verificationToken'] = 'Token Επαλήθευσης';
+$strings['enableParticipantRegistration'] = 'Ενεργοποίηση εγγραφής συμμετεχόντων';
+$strings['enableCloudRecording'] = 'Τύπος αυτόματης εγγραφής';
+$strings['enableGlobalConference'] = 'Ενεργοποίηση καθολικής σύσκεψης';
+$strings['enableGlobalConferencePerUser'] = 'Ενεργοποίηση καθολικής σύσκεψης ανά χρήστη';
+$strings['globalConferenceAllowRoles'] = 'Σύνδεσμος καθολικής σύσκεψης ορατός μόνο για αυτούς τους ρόλους χρηστών';
+$strings['globalConferencePerUserAllowRoles'] = 'Σύνδεσμος καθολικής σύσκεψης ανά χρήστη ορατός μόνο για αυτούς τους ρόλους χρηστών';
+
+$strings['enableCloudRecording_help'] = 'Απαιτείται επί πληρωμή προφίλ Zoom.
+Δεν θα λειτουργήσει για <em>βασικό</em> προφίλ.';
+
+// please keep these lines alphabetically sorted
+$strings['AllCourseUsersWereRegistered'] = 'Όλοι οι φοιτητές του μαθήματος εγγράφηκαν';
+$strings['Agenda'] = 'Ημερήσια Διάταξη';
+$strings['CannotRegisterWithoutEmailAddress'] = 'Δεν μπορεί να εγγραφεί χωρίς διεύθυνση email';
+$strings['CopyingJoinURL'] = 'Αντιγραφή URL συμμετοχής';
+$strings['CopyJoinAsURL'] = "Αντιγραφή URL 'συμμετοχή ως'";
+$strings['CopyToCourse'] = 'Αντιγραφή στο μάθημα';
+$strings['CouldNotCopyJoinURL'] = 'Δεν ήταν δυνατή η αντιγραφή του URL συμμετοχής';
+$strings['Course'] = 'Μάθημα';
+$strings['CreatedAt'] = 'Δημιουργήθηκε στις';
+$strings['CreateLinkInCourse'] = 'Δημιουργία συνδέσμου(-ων) στο μάθημα';
+$strings['CreateUserVideoConference'] = 'Δημιουργία σύσκεψης χρήστη';
+$strings['DateMeetingTitle'] = '%s: %s';
+$strings['DeleteMeeting'] = 'Διαγραφή σύσκεψης';
+$strings['DeleteFile'] = 'Διαγραφή αρχείου(-ων)';
+$strings['Details'] = 'Λεπτομέρειες';
+$strings['DoIt'] = 'Εκτέλεση';
+$strings['Duration'] = 'Διάρκεια';
+$strings['DurationFormat'] = '%hh%I';
+$strings['DurationInMinutes'] = 'Διάρκεια (σε λεπτά)';
+$strings['EndDate'] = 'Ημερομηνία Λήξης';
+$strings['EnterMeeting'] = 'Είσοδος στη σύσκεψη';
+$strings['ViewMeeting'] = 'Προβολή σύσκεψης';
+$strings['Files'] = 'Αρχεία';
+$strings['Finished'] = 'ολοκληρωμένη';
+$strings['FileWasCopiedToCourse'] = 'Το αρχείο αντιγράφηκε στο μάθημα';
+$strings['FileWasDeleted'] = 'Το αρχείο διαγράφηκε';
+$strings['GlobalMeeting'] = 'Καθολική σύσκεψη';
+$strings['GlobalMeetingPerUser'] = 'Καθολική σύσκεψη ανά χρήστη';
+$strings['GroupUsersWereRegistered'] = 'Τα μέλη της ομάδας εγγράφηκαν';
+$strings['InstantMeeting'] = 'Άμεση σύσκεψη';
+$strings['Join'] = 'Συμμετοχή';
+$strings['JoinGlobalVideoConference'] = 'Συμμετοχή στην καθολική σύσκεψη';
+$strings['JoinURLCopied'] = 'Το URL συμμετοχής αντιγράφηκε';
+$strings['JoinURLToSendToParticipants'] = 'URL συμμετοχής προς αποστολή στους συμμετέχοντες';
+$strings['LiveMeetings'] = 'Ζωντανές συσκέψεις';
+$strings['LinkToFileWasCreatedInCourse'] = 'Προστέθηκε σύνδεσμος του αρχείου στο μάθημα';
+$strings['MeetingDeleted'] = 'Η σύσκεψη διαγράφηκε';
+$strings['MeetingsFound'] = 'Βρέθηκαν συσκέψεις';
+$strings['MeetingUpdated'] = 'Συνάντηση ενημερώθηκε';
+$strings['NewMeetingCreated'] = 'Νέα συνάντηση δημιουργήθηκε';
+$strings['Password'] = 'Κωδικός πρόσβασης';
+$strings['RecurringWithFixedTime'] = 'Επαναλαμβανόμενη με σταθερή ώρα';
+$strings['RecurringWithNoFixedTime'] = 'Επαναλαμβανόμενη χωρίς σταθερή ώρα';
+$strings['RegisterAllCourseUsers'] = 'Εγγραφή όλων των χρηστών του μαθήματος';
+$strings['RegisteredUserListWasUpdated'] = 'Λίστα εγγεγραμμένων χρηστών ενημερώθηκε';
+$strings['RegisteredUsers'] = 'Εγγεγραμμένοι χρήστες';
+$strings['RegisterNoUser'] = 'Δεν εγγράφεται κανένας χρήστης';
+$strings['RegisterTheseGroupMembers'] = 'Εγγραφή μελών αυτής της ομάδας';
+$strings['ScheduleAMeeting'] = 'Προγραμματισμός συνάντησης';
+$strings['ScheduledMeeting'] = 'Προγραμματισμένη συνάντηση';
+$strings['ScheduledMeetings'] = 'Προγραμματισμένες συναντήσεις';
+$strings['ScheduleAMeeting'] = 'Προγραμματισμός συνάντησης';
+$strings['SearchMeeting'] = 'Αναζήτηση συνάντησης';
+$strings['Session'] = 'Συνεδρία';
+$strings['StartDate'] = 'Ημερομηνία έναρξης';
+$strings['Started'] = 'ξεκίνησε';
+$strings['StartInstantMeeting'] = 'Έναρξη άμεσης συνάντησης';
+$strings['StartMeeting'] = 'Έναρξη συνάντησης';
+$strings['StartTime'] = 'Ώρα έναρξης';
+$strings['Topic'] = 'Θέμα';
+$strings['TopicAndAgenda'] = 'Θέμα και ατζέντα';
+$strings['Type'] = 'Τύπος';
+$strings['UpcomingMeetings'] = 'Επερχόμενες συναντήσεις';
+$strings['UpdateMeeting'] = 'Ενημέρωση συνάντησης';
+$strings['UpdateRegisteredUserList'] = 'Ενημέρωση λίστας εγγεγραμμένων χρηστών';
+$strings['UserRegistration'] = 'Εγγραφή χρήστη';
+$strings['Y-m-d H:i'] = 'Y-m-d H:i';
+$strings['Waiting'] = 'σε αναμονή';
+$strings['XRecordingOfMeetingXFromXDurationXDotX'] = '%s εγγραφή της συνάντησης %s από %s (%s).%s';
+$strings['YouAreNotRegisteredToThisMeeting'] = 'Δεν είστε εγγεγραμμένος σε αυτή τη συνάντηση';
+$strings['ZoomVideoConferences'] = 'Συνέδρια Zoom Video';
+$strings['Recordings'] = 'Εγγραφές';
+$strings['CreateGlobalVideoConference'] = 'Δημιουργία γενικού βιντεοσυνεδρίου';
+$strings['ConferenceNotStarted'] = 'Το συνέδριο δεν έχει ξεκινήσει';
+$strings['MeetingNotFound'] = 'Συνάντηση δεν βρέθηκε';
+$strings['JoinURLNotAvailable'] = 'Δεν είναι διαθέσιμος ο σύνδεσμος URL';
+$strings['Meetings'] = 'Συναντήσεις';
+$strings['ConferenceType'] = 'Τύπος συνεδρίου';
+$strings['ForEveryone'] = 'Όλοι';
+$strings['SomeUsers'] = 'Ορισμένοι χρήστες (Επιλογή αργότερα)';
+$strings['Activity'] = 'Δραστηριότητα';
+$strings['ConferenceNotAvailable'] = 'Συνέδριο μη διαθέσιμο';

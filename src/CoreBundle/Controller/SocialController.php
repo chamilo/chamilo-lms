@@ -44,10 +44,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use UserManager;
 
+#[IsGranted('ROLE_USER')]
 #[Route('/social-network')]
 class SocialController extends AbstractController
 {
@@ -108,6 +110,10 @@ class SocialController extends AbstractController
         UserRepository $userRepo,
         LanguageRepository $languageRepo
     ): JsonResponse {
+        if (!$this->isTermsConditionsEnabled($settingsManager)) {
+            return $this->json($this->getEmptyTermsResponse('1' === (string) $request->query->get('accepted', '0')));
+        }
+
         $user = $userRepo->find($userId);
         if (!$user) {
             return $this->json(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
@@ -123,25 +129,30 @@ class SocialController extends AbstractController
             $extraFieldValue = new ExtraFieldValue('user');
             $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'legal_accept');
 
-            if (!empty($value['value'])) {
-                [$acceptedVersion, $acceptedLanguageId] = explode(':', $value['value']);
-                $languageId = (int) $acceptedLanguageId;
-                $version = (int) $acceptedVersion;
-            } else {
-                return $this->json(['error' => 'No accepted terms found'], Response::HTTP_NOT_FOUND);
+            if (empty($value['value'])) {
+                return $this->json($this->getEmptyTermsResponse(true));
+            }
+
+            $parts = explode(':', (string) $value['value']);
+            $languageId = (int) ($parts[1] ?? 0);
+            $version = (int) ($parts[0] ?? 0);
+
+            if ($languageId <= 0 || $version <= 0) {
+                return $this->json($this->getEmptyTermsResponse(true));
             }
         } else {
             $resolved = $this->resolveLatestTermsVersion($isoCode, $languageRepo, $legalTermsRepo, $settingsManager);
             if (!$resolved) {
-                return $this->json(['error' => 'Terms not found'], Response::HTTP_NOT_FOUND);
+                return $this->json($this->getEmptyTermsResponse(false));
             }
+
             $languageId = (int) $resolved['languageId'];
             $version = (int) $resolved['version'];
         }
 
         $rows = $legalTermsRepo->findByLanguageAndVersion($languageId, $version);
         if (empty($rows)) {
-            return $this->json(['error' => 'Terms not found'], Response::HTTP_NOT_FOUND);
+            return $this->json($this->getEmptyTermsResponse($showAccepted));
         }
 
         $terms = [];
@@ -149,8 +160,8 @@ class SocialController extends AbstractController
             $type = $row->getType();
             $section = self::TERMS_SECTIONS[$type] ?? self::TERMS_SECTIONS[0];
 
-            $content = $row->getContent() ?? '';
-            if ('' === trim($content)) {
+            $content = trim((string) ($row->getContent() ?? ''));
+            if ('' === $content) {
                 continue;
             }
 
@@ -163,6 +174,10 @@ class SocialController extends AbstractController
             ];
         }
 
+        if (empty($terms)) {
+            return $this->json($this->getEmptyTermsResponse($showAccepted));
+        }
+
         $pubDate = $this->dateTimeHelper->localTimeYmdHis($rows[0]->getDate(), null, 'UTC');
 
         return $this->json([
@@ -171,53 +186,65 @@ class SocialController extends AbstractController
             'version' => $version,
             'language_id' => $languageId,
             'showing_accepted' => $showAccepted,
+            'available' => true,
         ]);
     }
 
     #[Route('/legal-status/{userId}', name: 'chamilo_core_social_legal_status')]
     public function getLegalStatus(
         int $userId,
+        #[CurrentUser]
+        User $currentUser,
         SettingsManager $settingsManager,
         TranslatorInterface $translator,
         UserRepository $userRepo,
         LanguageRepository $languageRepo,
         LegalRepository $legalTermsRepo
     ): JsonResponse {
-        $allowTermsConditions = 'true' === $settingsManager->getSetting('registration.allow_terms_conditions');
-        if (!$allowTermsConditions) {
-            return $this->json([
-                'message' => $translator->trans('No terms and conditions available', [], 'messages'),
-            ]);
+        if ($userId !== $currentUser->getId()) {
+            throw $this->createAccessDeniedException();
         }
 
-        $user = $userRepo->find($userId);
-        if (!$user) {
-            return $this->json(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
+        if (!$this->isTermsConditionsEnabled($settingsManager)) {
+            return $this->json($this->getUnavailableLegalStatusResponse());
         }
 
-        $isoCode = $user->getLocale();
-        $latestLanguageId = $this->resolveLegalLanguageId($languageRepo, $isoCode, $settingsManager);
-        $latestVersion = 0 !== $latestLanguageId ? $legalTermsRepo->getLastVersionByLanguage($latestLanguageId) : null;
+        $isoCode = $currentUser->getLocale();
+
+        $resolved = $this->resolveLatestTermsVersion($isoCode, $languageRepo, $legalTermsRepo, $settingsManager);
+        if (!$resolved) {
+            return $this->json($this->getUnavailableLegalStatusResponse());
+        }
+
+        $latestLanguageId = (int) $resolved['languageId'];
+        $latestVersion = (int) $resolved['version'];
 
         $extraFieldValue = new ExtraFieldValue('user');
         $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'legal_accept');
 
         if (empty($value['value'])) {
             return $this->json([
+                'available' => true,
                 'isAccepted' => false,
+                'acceptDate' => null,
                 'message' => $translator->trans('Send legal agreement', [], 'messages'),
             ]);
         }
 
-        [$acceptedVersion, $acceptedLanguageId, $acceptedTime] = explode(':', $value['value']);
-        $dateTime = new DateTime('@'.(int) $acceptedTime);
+        $parts = explode(':', (string) $value['value']);
+        $acceptedVersion = (int) ($parts[0] ?? 0);
+        $acceptedLanguageId = (int) ($parts[1] ?? 0);
+        $acceptedTime = (int) ($parts[2] ?? 0);
 
-        $isLatestAccepted = null !== $latestVersion
-            && (int) $acceptedLanguageId === (int) $latestLanguageId
-            && (int) $acceptedVersion === (int) $latestVersion;
+        $dateTime = new DateTime('@'.$acceptedTime);
+
+        $isLatestAccepted =
+            $acceptedLanguageId === $latestLanguageId
+            && $acceptedVersion === $latestVersion;
 
         if (!$isLatestAccepted) {
             return $this->json([
+                'available' => true,
                 'isAccepted' => false,
                 'acceptDate' => $dateTime->format('Y-m-d H:i:s'),
                 'message' => $translator->trans('Please accept the latest version of the terms and conditions.', [], 'messages'),
@@ -225,46 +252,73 @@ class SocialController extends AbstractController
         }
 
         return $this->json([
+            'available' => true,
             'isAccepted' => true,
             'acceptDate' => $dateTime->format('Y-m-d H:i:s'),
             'message' => '',
         ]);
     }
-
-    #[Route('/send-legal-term', name: 'chamilo_core_social_send_legal_term')]
+    #[Route('/send-legal-term', name: 'chamilo_core_social_send_legal_term', methods: ['POST'])]
     public function sendLegalTerm(
         Request $request,
+        #[CurrentUser]
+        User $currentUser,
         SettingsManager $settingsManager,
         TranslatorInterface $translator,
         LegalRepository $legalTermsRepo,
         UserRepository $userRepo,
         LanguageRepository $languageRepo
     ): JsonResponse {
-        $data = json_decode($request->getContent(), true);
-        $userId = $data['userId'] ?? null;
+        if (!$this->isTermsConditionsEnabled($settingsManager)) {
+            return $this->json([
+                'success' => false,
+                'message' => $translator->trans('No terms and conditions available', [], 'messages'),
+            ], Response::HTTP_BAD_REQUEST);
+        }
 
-        $user = $userRepo->find($userId);
-        if (!$user) {
-            return $this->json(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
+        $data = json_decode($request->getContent(), true);
+        if (!\is_array($data)) {
+            return $this->json(['error' => 'Invalid JSON body'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $requestedUserId = isset($data['userId']) ? (int) $data['userId'] : 0;
+
+        // Non-admin users can only accept terms for themselves.
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $targetUserId = $currentUser->getId();
+            $user = $currentUser;
+        } else {
+            $targetUserId = $requestedUserId > 0 ? $requestedUserId : 0;
+            if (0 === $targetUserId) {
+                return $this->json(['error' => 'Missing or invalid userId'], Response::HTTP_BAD_REQUEST);
+            }
+
+            $user = $userRepo->find($targetUserId);
+            if (!$user) {
+                return $this->json(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
+            }
         }
 
         $isoCode = $user->getLocale();
-        $languageId = $this->resolveLegalLanguageId($languageRepo, $isoCode, $settingsManager);
-        if (0 === $languageId) {
-            return $this->json(['error' => 'Language not found'], Response::HTTP_BAD_REQUEST);
+        $resolved = $this->resolveLatestTermsVersion($isoCode, $languageRepo, $legalTermsRepo, $settingsManager);
+
+        if (!$resolved) {
+            return $this->json([
+                'success' => false,
+                'message' => $translator->trans('No terms and conditions available', [], 'messages'),
+            ], Response::HTTP_BAD_REQUEST);
         }
 
-        $version = $legalTermsRepo->getLastVersionByLanguage($languageId);
-        if (null === $version) {
-            return $this->json(['error' => 'Terms not found'], Response::HTTP_NOT_FOUND);
-        }
+        $languageId = (int) $resolved['languageId'];
+        $version = (int) $resolved['version'];
 
         $legalAcceptType = $version.':'.$languageId.':'.time();
-        UserManager::update_extra_field_value((int) $userId, 'legal_accept', $legalAcceptType);
+        UserManager::update_extra_field_value($targetUserId, 'legal_accept', $legalAcceptType);
 
-        $bossList = UserManager::getStudentBossList((int) $userId);
+        $bossList = UserManager::getStudentBossList($targetUserId);
         if (!empty($bossList)) {
             $bossList = array_column($bossList, 'boss_id');
+
             foreach ($bossList as $bossId) {
                 $subjectEmail = \sprintf(
                     $translator->trans('User %s signed the agreement.', [], 'messages'),
@@ -280,7 +334,7 @@ class SocialController extends AbstractController
                     (int) $bossId,
                     $subjectEmail,
                     $contentEmail,
-                    (int) $userId
+                    $targetUserId
                 );
             }
         }
@@ -291,83 +345,126 @@ class SocialController extends AbstractController
         ]);
     }
 
-    #[Route('/delete-legal', name: 'chamilo_core_social_delete_legal')]
-    public function deleteLegal(Request $request, TranslatorInterface $translator): JsonResponse
-    {
+    #[Route('/delete-legal', name: 'chamilo_core_social_delete_legal', methods: ['POST'])]
+    public function deleteLegal(
+        #[CurrentUser]
+        User $currentUser,
+        Request $request,
+        TranslatorInterface $translator
+    ): JsonResponse {
         $data = json_decode($request->getContent(), true);
-        $userId = $data['userId'] ?? null;
+        if (!\is_array($data)) {
+            return $this->json(['error' => 'Invalid JSON body'], Response::HTTP_BAD_REQUEST);
+        }
 
-        if (!$userId) {
-            return $this->json(['error' => $translator->trans('User ID not provided')], Response::HTTP_BAD_REQUEST);
+        // Backward compatible: if userId is not provided, default to current user.
+        $requestedUserId = isset($data['userId']) ? (int) $data['userId'] : 0;
+
+        // Non-admin users can only revoke their own consent (ignore provided userId if different).
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $targetUserId = $currentUser->getId();
+        } else {
+            // Admin must explicitly provide a valid userId.
+            $targetUserId = $requestedUserId > 0 ? $requestedUserId : 0;
+            if (0 === $targetUserId) {
+                return $this->json(['error' => 'Missing or invalid userId'], Response::HTTP_BAD_REQUEST);
+            }
         }
 
         $extraFieldValue = new ExtraFieldValue('user');
-        $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'legal_accept');
-        if ($value && isset($value['id'])) {
+
+        $value = $extraFieldValue->get_values_by_handler_and_field_variable($targetUserId, 'legal_accept');
+        if (!empty($value['id'])) {
             $extraFieldValue->delete($value['id']);
         }
 
-        $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'termactivated');
-        if ($value && isset($value['id'])) {
+        $value = $extraFieldValue->get_values_by_handler_and_field_variable($targetUserId, 'termactivated');
+        if (!empty($value['id'])) {
             $extraFieldValue->delete($value['id']);
         }
 
-        return $this->json(['success' => true, 'message' => $translator->trans('Legal consent revoked successfully.')]);
+        return $this->json([
+            'success' => true,
+            'message' => $translator->trans('Legal consent revoked successfully.'),
+        ]);
     }
 
-    #[Route('/handle-privacy-request', name: 'chamilo_core_social_handle_privacy_request')]
+    #[Route('/handle-privacy-request', name: 'chamilo_core_social_handle_privacy_request', methods: ['POST'])]
     public function handlePrivacyRequest(
         Request $request,
+        #[CurrentUser]
+        User $currentUser,
         SettingsManager $settingsManager,
         UserRepository $userRepo,
         TranslatorInterface $translator,
-        MailerInterface $mailer,
-        RequestStack $requestStack
+        MailerInterface $mailer
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
-        $userId = $data['userId'] ? (int) $data['userId'] : null;
-        $explanation = $data['explanation'] ?? '';
-        $requestType = $data['requestType'] ?? '';
-
-        /** @var User $user */
-        $user = $userRepo->find($userId);
-
-        if (!$user) {
-            return $this->json(['success' => false, 'message' => 'User not found']);
+        if (!\is_array($data)) {
+            return $this->json(['success' => false, 'message' => 'Invalid JSON body'], Response::HTTP_BAD_REQUEST);
         }
 
-        $request = $requestStack->getCurrentRequest();
+        $requestedUserId = isset($data['userId']) ? (int) $data['userId'] : 0;
+        $explanation = (string) ($data['explanation'] ?? '');
+        $requestType = (string) ($data['requestType'] ?? '');
+
+        // Non-admin users can only create requests for themselves
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $targetUserId = $currentUser->getId();
+            $user = $currentUser;
+        } else {
+            // Admin can create requests for another user if explicitly provided
+            $targetUserId = $requestedUserId > 0 ? $requestedUserId : 0;
+            if (0 === $targetUserId) {
+                return $this->json(['success' => false, 'message' => 'Missing or invalid userId'], Response::HTTP_BAD_REQUEST);
+            }
+            $user = $userRepo->find($targetUserId);
+            if (!$user) {
+                return $this->json(['success' => false, 'message' => 'User not found'], Response::HTTP_NOT_FOUND);
+            }
+        }
+
         $baseUrl = $request->getSchemeAndHttpHost().$request->getBasePath();
-        $specificPath = '/main/admin/user_list_consent.php';
-        $link = $baseUrl.$specificPath;
+        $link = $baseUrl.'/main/admin/user_list_consent.php';
 
         if ('delete_account' === $requestType) {
             $fieldToUpdate = 'request_for_delete_account';
             $justificationFieldToUpdate = 'request_for_delete_account_justification';
             $emailSubject = $translator->trans('Request for account removal');
-            $emailContent = \sprintf($translator->trans('User %s asked for the deletion of his/her account, explaining that "%s". You can process the request here: %s'), $user->getFullName(), $explanation, '<a href="'.$link.'">'.$link.'</a>');
+            $emailContent = \sprintf(
+                $translator->trans('User %s asked for the deletion of his/her account, explaining that "%s". You can process the request here: %s'),
+                $user->getFullName(),
+                $explanation,
+                '<a href="'.$link.'">'.$link.'</a>'
+            );
         } elseif ('delete_legal' === $requestType) {
             $fieldToUpdate = 'request_for_legal_agreement_consent_removal';
             $justificationFieldToUpdate = 'request_for_legal_agreement_consent_removal_justification';
             $emailSubject = $translator->trans('Request for consent withdrawal on legal terms');
-            $emailContent = \sprintf($translator->trans('User %s asked for the removal of his/her consent to our legal terms, explaining that "%s". You can process the request here: %s'), $user->getFullName(), $explanation, '<a href="'.$link.'">'.$link.'</a>');
+            $emailContent = \sprintf(
+                $translator->trans('User %s asked for the removal of his/her consent to our legal terms, explaining that "%s". You can process the request here: %s'),
+                $user->getFullName(),
+                $explanation,
+                '<a href="'.$link.'">'.$link.'</a>'
+            );
         } else {
-            return $this->json(['success' => false, 'message' => 'Invalid action type']);
+            return $this->json(['success' => false, 'message' => 'Invalid action type'], Response::HTTP_BAD_REQUEST);
         }
 
         UserManager::createDataPrivacyExtraFields();
-        UserManager::update_extra_field_value($userId, $fieldToUpdate, 1);
-        UserManager::update_extra_field_value($userId, $justificationFieldToUpdate, $explanation);
+        UserManager::update_extra_field_value($targetUserId, $fieldToUpdate, 1);
+        UserManager::update_extra_field_value($targetUserId, $justificationFieldToUpdate, $explanation);
 
-        $emailOfficer = $settingsManager->getSetting('profile.data_protection_officer_email');
-        if (!empty($emailOfficer)) {
-            $email = new Email();
-            $email
+        $emailOfficer = (string) $settingsManager->getSetting('profile.data_protection_officer_email');
+
+        if ('' !== trim($emailOfficer)) {
+            $email = (new Email())
                 ->from($user->getEmail())
                 ->to($emailOfficer)
                 ->subject($emailSubject)
                 ->html($emailContent)
             ;
+
             $mailer->send($email);
         } else {
             MessageManager::sendMessageToAllAdminUsers($user->getId(), $emailSubject, $emailContent);
@@ -516,7 +613,6 @@ class SocialController extends AbstractController
         return $this->json(['invitedUsers' => $invitedUsersList]);
     }
 
-    #[IsGranted('ROLE_USER')]
     #[Route('/user-profile/{userId}', name: 'chamilo_core_social_user_profile')]
     public function getUserProfile(
         int $userId,
@@ -760,7 +856,7 @@ class SocialController extends AbstractController
                     'avatar' => $userRepository->getUserPicture($item['id']),
                     'role' => 5 === $item['status'] ? 'student' : 'teacher',
                     'status' => $isUserOnline ? 'online' : 'offline',
-                    'url' => '/social?id='.$item['id'],
+                    'url' => '/social?uid='.$item['id'],
                     'relationType' => $relation['relationType'] ?? null,
                     'existingInvitations' => $existingInvitations,
                 ];
@@ -773,7 +869,7 @@ class SocialController extends AbstractController
                     'id' => $item['id'],
                     'name' => $item['title'],
                     'description' => $item['description'] ?? '',
-                    'image' => $usergroupRepository->getUsergroupPicture($item['id']),
+                    'image' => $usergroupRepository->getUsergroupPicture((int) $item['id'], 128),
                     'url' => '/resources/usergroups/show/'.$item['id'],
                 ];
             }
@@ -809,7 +905,7 @@ class SocialController extends AbstractController
             'title' => $group->getTitle(),
             'description' => $group->getDescription(),
             'url' => $group->getUrl(),
-            'image' => $usergroupRepository->getUsergroupPicture($group->getId()),
+            'image' => $usergroupRepository->getUsergroupPicture((int) $group->getId(), 256),
             'visibility' => (int) $group->getVisibility(),
             'allowMembersToLeaveGroup' => $group->getAllowMembersToLeaveGroup(),
             'isMember' => $isMember,
@@ -948,7 +1044,8 @@ class SocialController extends AbstractController
         Request $request,
         UserRepository $userRepository,
         MessageRepository $messageRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        TranslatorInterface $translator
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
 
@@ -972,6 +1069,37 @@ class SocialController extends AbstractController
 
         try {
             switch ($action) {
+                case 'send_friend_request_message':
+                    $receiverLocale = $friendUser->getLocale() ?: null;
+
+                    $subject = $translator->trans(
+                        'You have a new friend request',
+                        [],
+                        'messages',
+                        $receiverLocale
+                    );
+
+                    $content = $translator->trans(
+                        'You have received a new friend request. Visit the invitations page to accept or reject the request.',
+                        [],
+                        'messages',
+                        $receiverLocale
+                    ).' <a href="/resources/friends/invitations">'.
+                        $translator->trans(
+                            'here',
+                            [],
+                            'messages',
+                            $receiverLocale
+                        ).'</a>';
+
+                    $result = MessageManager::send_message(
+                        $friendUser->getId(),
+                        $subject,
+                        $content
+                    );
+
+                    break;
+
                 case 'send_invitation':
                     $result = $messageRepository->sendInvitationToFriend($currentUser, $friendUser, $subject, $content);
                     if (!$result) {
@@ -981,7 +1109,42 @@ class SocialController extends AbstractController
                     break;
 
                 case 'send_message':
-                    $result = MessageManager::send_message($friendUser->getId(), $subject, $content);
+                    $receiverLocale = $friendUser->getLocale() ?: null;
+
+                    $isFriendInvitationMessage =
+                        'You have a new friend request' === trim((string) $subject)
+                        && str_contains(
+                            (string) $content,
+                            'You have received a new friend request. Visit the invitations page to accept or reject the request.'
+                        );
+
+                    if ($isFriendInvitationMessage) {
+                        $subject = $translator->trans(
+                            'You have a new friend request',
+                            [],
+                            'messages',
+                            $receiverLocale
+                        );
+
+                        $content = $translator->trans(
+                            'You have received a new friend request. Visit the invitations page to accept or reject the request.',
+                            [],
+                            'messages',
+                            $receiverLocale
+                        ).' <a href="/resources/friends/invitations">'.
+                            $translator->trans(
+                                'here',
+                                [],
+                                'messages',
+                                $receiverLocale
+                            ).'</a>';
+                    }
+
+                    $result = MessageManager::send_message(
+                        $friendUser->getId(),
+                        $subject,
+                        $content
+                    );
 
                     break;
 
@@ -1286,16 +1449,15 @@ class SocialController extends AbstractController
         }
 
         $platformIso = (string) $settingsManager->getSetting('language.platform_language');
-        if ('' !== $platformIso) {
+        if ('' === $platformIso || 'false' === $platformIso) {
+            $platformIso = (string) $settingsManager->getSetting('platformLanguage');
+        }
+
+        if ('' !== $platformIso && 'false' !== $platformIso) {
             $platformLang = $languageRepo->findByIsoCode($platformIso);
             if ($platformLang) {
                 $candidates[] = (int) $platformLang->getId();
             }
-        }
-
-        $en = $languageRepo->findByIsoCode('en_US');
-        if ($en) {
-            $candidates[] = (int) $en->getId();
         }
 
         $candidates = array_values(array_unique(array_filter($candidates)));
@@ -1303,10 +1465,41 @@ class SocialController extends AbstractController
         foreach ($candidates as $languageId) {
             $version = $legalRepo->findLatestVersionByLanguage($languageId);
             if ($version > 0) {
-                return ['languageId' => $languageId, 'version' => $version];
+                return [
+                    'languageId' => $languageId,
+                    'version' => $version,
+                ];
             }
         }
 
         return null;
+    }
+
+    private function isTermsConditionsEnabled(SettingsManager $settingsManager): bool
+    {
+        return 'true' === (string) $settingsManager->getSetting('registration.allow_terms_conditions')
+            || 'true' === (string) $settingsManager->getSetting('allow_terms_conditions');
+    }
+
+    private function getEmptyTermsResponse(bool $showingAccepted = false): array
+    {
+        return [
+            'terms' => [],
+            'date_text' => '',
+            'version' => null,
+            'language_id' => null,
+            'showing_accepted' => $showingAccepted,
+            'available' => false,
+        ];
+    }
+
+    private function getUnavailableLegalStatusResponse(): array
+    {
+        return [
+            'available' => false,
+            'isAccepted' => false,
+            'acceptDate' => null,
+            'message' => '',
+        ];
     }
 }

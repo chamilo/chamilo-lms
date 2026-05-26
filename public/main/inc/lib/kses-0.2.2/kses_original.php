@@ -520,8 +520,8 @@ function kses_normalize_entities($string)
 
   $string = preg_replace('/&amp;([A-Za-z][A-Za-z0-9]{0,19});/',
                          '&\\1;', $string);
-  $string = preg_replace('/&amp;#0*([0-9]{1,5});/e',
-                         'kses_normalize_entities2("\\1")', $string);
+  $string = preg_replace_callback('/&amp;#0*([0-9]{1,5});/',
+                         function ($m) { return kses_normalize_entities2($m[1]); }, $string);
   $string = preg_replace('/&amp;#([Xx])0*(([0-9A-Fa-f]{2}){1,2});/',
                          '&#\\1\\2;', $string);
 
@@ -546,8 +546,8 @@ function kses_decode_entities($string)
 # URL protocol whitelisting system anyway.
 ###############################################################################
 {
-  $string = preg_replace('/&#([0-9]+);/e', 'chr("\\1")', $string);
-  $string = preg_replace('/&#[Xx]([0-9A-Fa-f]+);/e', 'chr(hexdec("\\1"))',
+  $string = preg_replace_callback('/&#([0-9]+);/', function ($m) { return chr((int) $m[1]); }, $string);
+  $string = preg_replace_callback('/&#[Xx]([0-9A-Fa-f]+);/', function ($m) { return chr(hexdec($m[1])); },
                          $string);
 
   return $string;

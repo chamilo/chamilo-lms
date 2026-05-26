@@ -7,6 +7,7 @@ namespace Chamilo\CoreBundle\Controller;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Form\ChangePasswordFormType;
 use Chamilo\CoreBundle\Form\ResetPasswordRequestFormType;
+use Chamilo\CoreBundle\Helpers\MailHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -32,7 +33,8 @@ class ResetPasswordController extends AbstractController
     public function __construct(
         ResetPasswordHelperInterface $resetPasswordHelper,
         private EntityManagerInterface $entityManager,
-        private UserRepository $userRepository
+        private UserRepository $userRepository,
+        private MailHelper $mailHelper,
     ) {
         $this->resetPasswordHelper = $resetPasswordHelper;
     }
@@ -160,7 +162,7 @@ class ResetPasswordController extends AbstractController
         }
 
         $email = (new TemplatedEmail())
-            ->from(new Address('admin@example.com', 'Admin'))
+            ->from($this->mailHelper->getPlatformFromAddress())
             ->to($user->getEmail())
             ->subject('Your password reset request')
             ->htmlTemplate('@ChamiloCore/reset_password/email.html.twig')

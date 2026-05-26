@@ -1,0 +1,103 @@
+<?php
+/* License: see /license.txt */
+
+// Needed in order to show the plugin title
+$strings['plugin_title'] = 'Videokonferensi Zoom';
+$strings['plugin_comment'] = 'Integrasi Videokonferensi Zoom di mata kuliah dan sesi';
+
+$strings['apiKey'] = 'Kunci API';
+$strings['apiSecret'] = 'Rahasia API';
+$strings['verificationToken'] = 'Token Verifikasi';
+$strings['enableParticipantRegistration'] = 'Aktifkan pendaftaran peserta';
+$strings['enableCloudRecording'] = 'Jenis perekaman otomatis';
+$strings['enableGlobalConference'] = 'Aktifkan konferensi global';
+$strings['enableGlobalConferencePerUser'] = 'Aktifkan konferensi global per pengguna';
+$strings['globalConferenceAllowRoles'] = 'Tautan konferensi global hanya terlihat untuk peran pengguna ini';
+$strings['globalConferencePerUserAllowRoles'] = 'Tautan konferensi global per pengguna hanya terlihat untuk peran pengguna ini';
+
+$strings['enableCloudRecording_help'] = 'Memerlukan profil Zoom berbayar.
+Tidak berfungsi untuk profil <em>dasar</em>.';
+
+// please keep these lines alphabetically sorted
+$strings['AllCourseUsersWereRegistered'] = 'Semua mahasiswa mata kuliah telah terdaftar';
+$strings['Agenda'] = 'Agenda';
+$strings['CannotRegisterWithoutEmailAddress'] = 'Tidak dapat mendaftar tanpa alamat email';
+$strings['CopyingJoinURL'] = 'Menyalin URL bergabung';
+$strings['CopyJoinAsURL'] = "Salin URL 'bergabung sebagai'";
+$strings['CopyToCourse'] = 'Salin ke mata kuliah';
+$strings['CouldNotCopyJoinURL'] = 'Tidak dapat menyalin URL bergabung';
+$strings['Course'] = 'Mata kuliah';
+$strings['CreatedAt'] = 'Dibuat pada';
+$strings['CreateLinkInCourse'] = 'Buat tautan di mata kuliah';
+$strings['CreateUserVideoConference'] = 'Buat konferensi pengguna';
+$strings['DateMeetingTitle'] = '%s: %s';
+$strings['DeleteMeeting'] = 'Hapus pertemuan';
+$strings['DeleteFile'] = 'Hapus file';
+$strings['Details'] = 'Detail';
+$strings['DoIt'] = 'Lakukan';
+$strings['Duration'] = 'Durasi';
+$strings['DurationFormat'] = '%hh%I';
+$strings['DurationInMinutes'] = 'Durasi (dalam menit)';
+$strings['EndDate'] = 'Tanggal Berakhir';
+$strings['EnterMeeting'] = 'Masuk pertemuan';
+$strings['ViewMeeting'] = 'Lihat pertemuan';
+$strings['Files'] = 'File';
+$strings['Finished'] = 'selesai';
+$strings['FileWasCopiedToCourse'] = 'File telah disalin ke mata kuliah';
+$strings['FileWasDeleted'] = 'File telah dihapus';
+$strings['GlobalMeeting'] = 'Konferensi global';
+$strings['GlobalMeetingPerUser'] = 'Konferensi global per pengguna';
+$strings['GroupUsersWereRegistered'] = 'Anggota kelompok telah terdaftar';
+$strings['InstantMeeting'] = 'Pertemuan instan';
+$strings['Join'] = 'Gabung';
+$strings['JoinGlobalVideoConference'] = 'Gabung konferensi global';
+$strings['JoinURLCopied'] = 'URL Gabung disalin';
+$strings['JoinURLToSendToParticipants'] = 'URL Gabung untuk dikirim ke peserta';
+$strings['LiveMeetings'] = 'Pertemuan langsung';
+$strings['LinkToFileWasCreatedInCourse'] = 'Tautan ke file telah ditambahkan ke mata kuliah';
+$strings['MeetingDeleted'] = 'Pertemuan dihapus';
+$strings['MeetingsFound'] = 'Pertemuan ditemukan';
+$strings['MeetingUpdated'] = 'Pertemuan diperbarui';
+$strings['NewMeetingCreated'] = 'Pertemuan baru dibuat';
+$strings['Password'] = 'Kata sandi';
+$strings['RecurringWithFixedTime'] = 'Berulang dengan waktu tetap';
+$strings['RecurringWithNoFixedTime'] = 'Berulang tanpa waktu tetap';
+$strings['RegisterAllCourseUsers'] = 'Daftarkan semua pengguna mata kuliah';
+$strings['RegisteredUserListWasUpdated'] = 'Daftar pengguna terdaftar diperbarui';
+$strings['RegisteredUsers'] = 'Pengguna terdaftar';
+$strings['RegisterNoUser'] = 'Tidak mendaftarkan pengguna';
+$strings['RegisterTheseGroupMembers'] = 'Daftarkan anggota grup ini';
+$strings['ScheduleAMeeting'] = 'Jadwalkan pertemuan';
+$strings['ScheduledMeeting'] = 'Pertemuan terjadwal';
+$strings['ScheduledMeetings'] = 'Pertemuan Terjadwal';
+$strings['ScheduleAMeeting'] = 'Jadwalkan pertemuan';
+$strings['SearchMeeting'] = 'Cari pertemuan';
+$strings['Session'] = 'Sesi';
+$strings['StartDate'] = 'Tanggal Mulai';
+$strings['Started'] = 'dimulai';
+$strings['StartInstantMeeting'] = 'Mulai pertemuan instan';
+$strings['StartMeeting'] = 'Mulai pertemuan';
+$strings['StartTime'] = 'Waktu mulai';
+$strings['Topic'] = 'Topik';
+$strings['TopicAndAgenda'] = 'Topik dan agenda';
+$strings['Type'] = 'Jenis';
+$strings['UpcomingMeetings'] = 'Pertemuan mendatang';
+$strings['UpdateMeeting'] = 'Perbarui pertemuan';
+$strings['UpdateRegisteredUserList'] = 'Perbarui daftar pengguna terdaftar';
+$strings['UserRegistration'] = 'Pendaftaran pengguna';
+$strings['Y-m-d H:i'] = 'Y-m-d H:i';
+$strings['Waiting'] = 'menunggu';
+$strings['XRecordingOfMeetingXFromXDurationXDotX'] = '%s rekaman pertemuan %s dari %s (%s).%s';
+$strings['YouAreNotRegisteredToThisMeeting'] = 'Anda tidak terdaftar untuk pertemuan ini';
+$strings['ZoomVideoConferences'] = 'Konferensi Video Zoom';
+$strings['Recordings'] = 'Rekaman';
+$strings['CreateGlobalVideoConference'] = 'Buat konferensi video global';
+$strings['ConferenceNotStarted'] = 'Konferensi belum dimulai';
+$strings['MeetingNotFound'] = 'Pertemuan tidak ditemukan';
+$strings['JoinURLNotAvailable'] = 'URL tidak tersedia';
+$strings['Meetings'] = 'Pertemuan';
+$strings['ConferenceType'] = 'Jenis konferensi';
+$strings['ForEveryone'] = 'Semua orang';
+$strings['SomeUsers'] = 'Beberapa pengguna (Pilih nanti)';
+$strings['Activity'] = 'Aktivitas';
+$strings['ConferenceNotAvailable'] = 'Konferensi tidak tersedia';

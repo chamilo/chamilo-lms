@@ -28,7 +28,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'social_post')]
@@ -62,7 +62,11 @@ use Symfony\Component\Validator\Constraints as Assert;
             controller: SocialPostAttachmentsController::class,
             normalizationContext: ['groups' => ['attachment:read']],
         ),
-        new GetCollection(security: "is_granted('ROLE_USER')"),
+        new GetCollection(
+            paginationItemsPerPage: 30,
+            paginationClientItemsPerPage: true,
+            security: "is_granted('ROLE_USER')"
+        ),
     ],
     normalizationContext: ['groups' => ['social_post:read']],
     denormalizationContext: ['groups' => ['social_post:write']],

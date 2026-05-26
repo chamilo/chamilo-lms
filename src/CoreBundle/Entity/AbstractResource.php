@@ -15,7 +15,7 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\MappedSuperclass]
@@ -57,6 +57,7 @@ abstract class AbstractResource
         'session_rel_user:read',
         'session_rel_course_rel_user:read',
         'user_subscriptions:sessions',
+        'course_catalogue:read',
     ])]
     public ?string $illustrationUrl = null;
 
@@ -91,6 +92,21 @@ abstract class AbstractResource
         'calendar_event:write',
     ])]
     public ?int $parentResourceNode = 0;
+
+    /**
+     * Optional resource language ISO code or Language IRI.
+     * This is a transient API field handled by ResourceListener.
+     */
+    #[Groups([
+        'resource_node:write',
+        'document:write',
+        'c_student_publication:write',
+        'calendar_event:write',
+        'attendance:write',
+        'link:write',
+        'glossary:write',
+    ])]
+    public ?string $language = null;
 
     #[ApiProperty(types: ['https://schema.org/image'])]
     public ?UploadedFile $uploadFile = null;

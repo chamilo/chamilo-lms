@@ -4,13 +4,38 @@
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
+use League\Flysystem\FilesystemOperator;
 
 /**
  * Responses to AJAX calls.
  */
 require_once __DIR__.'/../global.inc.php';
 
-api_protect_admin_script();
+if (!api_is_platform_admin()) {
+    $acceptHeader = (string) ($_SERVER['HTTP_ACCEPT'] ?? '');
+    $expectsJson = str_contains($acceptHeader, 'application/json');
+
+    http_response_code(403);
+
+    if ($expectsJson) {
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode([
+            'error' => 'access_denied',
+            'message' => get_lang('You are not allowed to see this page.'),
+        ]);
+        exit;
+    }
+
+    header('Content-Type: text/html; charset=utf-8');
+    echo Display::return_message(
+        get_lang('You are not allowed to see this page.'),
+        'error',
+        false
+    );
+    exit;
+}
+
+api_block_inactive_user();
 
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 $sessionDuration = isset($_GET['session_duration']) ? (int) $_GET['session_duration'] : 0;
@@ -23,15 +48,20 @@ switch ($action) {
     case 'get_user_registration_by_month':
         // Close the session as we don't need it any further
         session_write_close();
-        $dateStart = Security::remove_XSS($_POST['date_start']);
-        $dateEnd = Security::remove_XSS($_POST['date_end']);
+        $dateStart = isset($_POST['date_start']) ? $_POST['date_start'] : '';
+        $dateEnd = isset($_POST['date_end']) ? $_POST['date_end'] : '';
+
+        if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $dateStart) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $dateEnd)) {
+            echo json_encode(['labels' => [], 'data' => []]);
+            exit;
+        }
 
         $registrations = Statistics::getNewUserRegistrations($dateStart, $dateEnd);
         $all = Statistics::groupByMonth($registrations);
         $labels = [];
         $data = [];
         foreach ($all as $month => $count) {
-            $labels[] = $month;
+            $labels[] = Security::remove_XSS($month);
             $data[] = $count;
         }
 
@@ -49,7 +79,7 @@ switch ($action) {
         $labels = [];
         $data = [];
         foreach ($dailyData as $registration) {
-            $labels[] = $registration['date'];
+            $labels[] = Security::remove_XSS($registration['date']);
             $data[] = $registration['count'];
         }
 
@@ -294,14 +324,23 @@ switch ($action) {
         $palette = ChamiloHelper::getColorPalette(true, true);
 
         $statsName = 'Number of users';
-        $filter = $_REQUEST['filter'];
+        $filter = isset($_REQUEST['filter']) && in_array($_REQUEST['filter'], ['active', 'status', 'language', 'language_cible', 'age', 'career', 'contract', 'certificate'], true)
+            ? $_REQUEST['filter']
+            : 'active';
 
-        $startDate = $_REQUEST['date_start'];
-        $endDate = $_REQUEST['date_end'];
+        $startDate = isset($_REQUEST['date_start']) ? $_REQUEST['date_start'] : '';
+        $endDate = isset($_REQUEST['date_end']) ? $_REQUEST['date_end'] : '';
 
         $extraConditions = '';
         if (!empty($startDate) && !empty($endDate)) {
-            $extraConditions .= " AND created_at BETWEEN '$startDate' AND '$endDate' ";
+            if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $startDate) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $endDate)) {
+                $startDate = '';
+                $endDate = '';
+            } else {
+                $startDate = Database::escape_string($startDate);
+                $endDate = Database::escape_string($endDate);
+                $extraConditions .= " AND created_at BETWEEN '$startDate' AND '$endDate' ";
+            }
         }
 
         switch ($filter) {
@@ -641,10 +680,20 @@ switch ($action) {
         $palette = ChamiloHelper::getColorPalette(true, true);
 
         $statsName = 'Number of users';
-        $filter = $_REQUEST['filter'];
+        $filter = isset($_REQUEST['filter']) && in_array($_REQUEST['filter'], ['category', 'status', 'language', 'course_in_session'], true)
+            ? $_REQUEST['filter']
+            : 'category';
 
-        $startDate = Database::escape_string($_REQUEST['date_start']);
-        $endDate = Database::escape_string($_REQUEST['date_end']);
+        $startDate = isset($_REQUEST['date_start']) ? $_REQUEST['date_start'] : '';
+        $endDate = isset($_REQUEST['date_end']) ? $_REQUEST['date_end'] : '';
+
+        if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $startDate) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $endDate)) {
+            echo json_encode([]);
+            break;
+        }
+
+        $startDate = Database::escape_string($startDate);
+        $endDate = Database::escape_string($endDate);
         $statusId = (int) $_REQUEST['status'];
         $table = Database::get_main_table(TABLE_MAIN_SESSION);
 
@@ -928,10 +977,10 @@ switch ($action) {
         $rows[] = [
             get_lang('Number of users registered (new vs previous quarter)'),
             '-',
-            '+'.($countUsersPre1Quarter - $countUsersPre2Quarter),
-            '+'.($countUsersPre2Quarter - $countUsersPre3Quarter),
-            '+'.($countUsersPre3Quarter - $countUsersPre4Quarter),
             '+'.($countUsersPre4Quarter - $countUsersPre5Quarter),
+            '+'.($countUsersPre3Quarter - $countUsersPre4Quarter),
+            '+'.($countUsersPre2Quarter - $countUsersPre3Quarter),
+            '+'.($countUsersPre1Quarter - $countUsersPre2Quarter),
             '-',
             '+'.($countUsersTotal - $countUsersPre1Quarter),
         ];
@@ -1064,6 +1113,9 @@ switch ($action) {
     case 'report_quarterly_hours_of_training':
         // Close the session as we don't need it any further
         session_write_close();
+        // The maximum time spent, in number of hours, to be considered.
+        // Anything above that is considered a time registration error.
+        $maxTimeSpent = 6;
         $currentQuarterDates = getQuarterDates();
         $pre1QuarterDates = getQuarterDates(
             date_create($currentQuarterDates['quarter_start'])
@@ -1104,27 +1156,33 @@ switch ($action) {
         // Get data for the row
         $timeSpentCoursesCurrentQuarter = Tracking::getTotalTimeSpentInCourses(
             $currentQuarterDates['quarter_start'],
-            $currentQuarterDates['quarter_end']
+            $currentQuarterDates['quarter_end'],
+            $maxTimeSpent
         );
         $timeSpentCourses1PreQuarter = Tracking::getTotalTimeSpentInCourses(
             $pre1QuarterDates['quarter_start'],
-            $pre1QuarterDates['quarter_end']
+            $pre1QuarterDates['quarter_end'],
+            $maxTimeSpent
         );
         $timeSpentCourses2PreQuarter = Tracking::getTotalTimeSpentInCourses(
             $pre2QuarterDates['quarter_start'],
-            $pre2QuarterDates['quarter_end']
+            $pre2QuarterDates['quarter_end'],
+            $maxTimeSpent
         );
         $timeSpentCourses3PreQuarter = Tracking::getTotalTimeSpentInCourses(
             $pre3QuarterDates['quarter_start'],
-            $pre3QuarterDates['quarter_end']
+            $pre3QuarterDates['quarter_end'],
+            $maxTimeSpent
         );
         $timeSpentCourses4PreQuarter = Tracking::getTotalTimeSpentInCourses(
             $pre4QuarterDates['quarter_start'],
-            $pre4QuarterDates['quarter_end']
+            $pre4QuarterDates['quarter_end'],
+            $maxTimeSpent
         );
         $timeSpentCourses5PreQuarter = Tracking::getTotalTimeSpentInCourses(
             $pre5QuarterDates['quarter_start'],
-            $pre5QuarterDates['quarter_end']
+            $pre5QuarterDates['quarter_end'],
+            $maxTimeSpent
         );
         // Calculate percent for the row
         $percentIncrementTimeSpent = api_calculate_increment_percent(
@@ -1438,15 +1496,28 @@ switch ($action) {
         if (api_is_windows_os()) {
             $message = get_lang('The space used on disk cannot be measured properly on Windows-based systems.');
         } else {
-            $dir = api_get_path(SYS_PATH);
-            $du = exec('du -sh '.$dir, $err);
+            // @TODO Scanning the var folder should be done through oneup_flysystem
+            /** @var FilesystemOperator $assetFS */
+            //$assetFS = Container::$container->get('oneup_flysystem.asset_filesystem');
+            /** @var FilesystemOperator $resourceFS */
+            //$resourceFS = Container::$container->get('oneup_flysystem.resource_filesystem');
+            /** @var FilesystemOperator $themesFS */
+            //$themesFS = Container::$container->get('oneup_flysystem.themes_filesystem');
+            //$pluginsFS = Container::getPluginsFileSystem();
+
+            $dir = api_get_path(SYMFONY_SYS_PATH).'var/';
+            $du = exec('du -s '.$dir, $err);
             list($size, $none) = explode("\t", $du);
+            $size = round((int) $size / (1024*1024), 1);
             unset($none);
-            $limit = 0;
-            if (isset($_configuration[$accessUrlId]['hosting_limit_disk_space'])) {
-                $limit = $_configuration[$accessUrlId]['hosting_limit_disk_space'];
+            $limit = '';
+            $url = api_get_access_url($accessUrlId)['url'];
+            if (!empty($_configuration[$accessUrlId]['hosting_limit_disk_space'])) {
+                $limit = round($_configuration[$accessUrlId]['hosting_limit_disk_space'] / (1024), 1);
+                $message = sprintf(get_lang('Total space used by portal %s is %sGB (limit is set to %sGB)'), $url, $size, $limit);
+            } else {
+                $message = sprintf(get_lang('Total space used by %s is %sGB'), $url, $size);
             }
-            $message = sprintf(get_lang('Total space used by portal %s limit is %s MB'), $size, $limit);
         }
         echo Display::tag('H5', $message, ['style' => 'margin-bottom: 25px;']);
         break;

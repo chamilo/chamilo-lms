@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceType;
+use Chamilo\CoreBundle\Entity\TrackEOnline;
 use Chamilo\CoreBundle\Form\TestEmailType;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
@@ -774,6 +775,50 @@ class AdminController extends BaseController
                 'errors' => $errorsInfo,
             ]
         );
+    }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/users/{id}/clear-session', name: 'admin_user_clear_session', methods: ['POST'])]
+    public function clearUserSession(
+        int $id,
+        Request $request,
+        UserRepository $userRepository,
+        EntityManagerInterface $em,
+        SettingsManager $settingsManager
+    ): Response {
+        if ('true' !== $settingsManager->getSetting('security.prevent_multiple_simultaneous_login', true)) {
+            throw $this->createAccessDeniedException('This action is only available when prevent_multiple_simultaneous_login is enabled.');
+        }
+
+        $token = (string) $request->request->get('_token', '');
+
+        if (!$this->isCsrfTokenValid('clear_user_session_'.$id, $token)) {
+            throw $this->createAccessDeniedException('Invalid CSRF token.');
+        }
+
+        $user = $userRepository->find($id);
+
+        if (null === $user) {
+            $this->addFlash('error', 'User not found.');
+
+            return $this->redirect('/main/admin/user_list.php');
+        }
+
+        $deleted = $em
+            ->createQueryBuilder()
+            ->delete(TrackEOnline::class, 'online')
+            ->where('online.loginUserId = :userId')
+            ->setParameter('userId', $id)
+            ->getQuery()
+            ->execute()
+        ;
+
+        $this->addFlash(
+            'success',
+            \sprintf('User active session has been cleared. Removed records: %d.', (int) $deleted)
+        );
+
+        return $this->redirect('/main/admin/user_information.php?user_id='.$id);
     }
 
     /**

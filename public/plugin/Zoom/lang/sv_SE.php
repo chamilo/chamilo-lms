@@ -1,0 +1,103 @@
+<?php
+/* License: see /license.txt */
+
+// Needed in order to show the plugin title
+$strings['plugin_title'] = 'Zoom-videokonferens';
+$strings['plugin_comment'] = 'Zoom-videokonferensintegration i kurser och sessioner';
+
+$strings['apiKey'] = 'API-nyckel';
+$strings['apiSecret'] = 'API-hemlighet';
+$strings['verificationToken'] = 'Verifieringstoken';
+$strings['enableParticipantRegistration'] = 'Aktivera deltagarregistrering';
+$strings['enableCloudRecording'] = 'Automatisk inspelningstyp';
+$strings['enableGlobalConference'] = 'Aktivera global konferens';
+$strings['enableGlobalConferencePerUser'] = 'Aktivera global konferens per användare';
+$strings['globalConferenceAllowRoles'] = 'Global konferenslänk synlig endast för dessa användarroller';
+$strings['globalConferencePerUserAllowRoles'] = 'Global konferenslänk per användare synlig endast för dessa användarroller';
+
+$strings['enableCloudRecording_help'] = 'Kräver ett betalande Zoom-konto.
+Fungerar inte för ett <em>bas</em>-konto.';
+
+// please keep these lines alphabetically sorted
+$strings['AllCourseUsersWereRegistered'] = 'Alla kursstudenter registrerades';
+$strings['Agenda'] = 'Agenda';
+$strings['CannotRegisterWithoutEmailAddress'] = 'Kan inte registrera utan e-postadress';
+$strings['CopyingJoinURL'] = 'Kopierar deltagar-URL';
+$strings['CopyJoinAsURL'] = "Kopiera 'delta som'-URL";
+$strings['CopyToCourse'] = 'Kopiera till kurs';
+$strings['CouldNotCopyJoinURL'] = 'Kunde inte kopiera deltagar-URL';
+$strings['Course'] = 'Kurs';
+$strings['CreatedAt'] = 'Skapad';
+$strings['CreateLinkInCourse'] = 'Skapa länk(er) i kurs';
+$strings['CreateUserVideoConference'] = 'Skapa användarkonferens';
+$strings['DateMeetingTitle'] = '%s: %s';
+$strings['DeleteMeeting'] = 'Ta bort möte';
+$strings['DeleteFile'] = 'Ta bort fil(er)';
+$strings['Details'] = 'Detaljer';
+$strings['DoIt'] = 'Gör det';
+$strings['Duration'] = 'Varaktighet';
+$strings['DurationFormat'] = '%hh%I';
+$strings['DurationInMinutes'] = 'Varaktighet (i minuter)';
+$strings['EndDate'] = 'Slutdatum';
+$strings['EnterMeeting'] = 'Gå med i möte';
+$strings['ViewMeeting'] = 'Visa möte';
+$strings['Files'] = 'Filer';
+$strings['Finished'] = 'avslutad';
+$strings['FileWasCopiedToCourse'] = 'Filen kopierades till kursen';
+$strings['FileWasDeleted'] = 'Filen togs bort';
+$strings['GlobalMeeting'] = 'Global konferens';
+$strings['GlobalMeetingPerUser'] = 'Global konferens per användare';
+$strings['GroupUsersWereRegistered'] = 'Gruppmedlemmar registrerades';
+$strings['InstantMeeting'] = 'Omedelbart möte';
+$strings['Join'] = 'Delta';
+$strings['JoinGlobalVideoConference'] = 'Delta i global konferens';
+$strings['JoinURLCopied'] = 'Deltagar-URL kopierad';
+$strings['JoinURLToSendToParticipants'] = 'Deltagar-URL att skicka till deltagare';
+$strings['LiveMeetings'] = 'Live-möten';
+$strings['LinkToFileWasCreatedInCourse'] = 'En länk till filen lades till i kursen';
+$strings['MeetingDeleted'] = 'Möte togs bort';
+$strings['MeetingsFound'] = 'Möten hittades';
+$strings['MeetingUpdated'] = 'Möte uppdaterat';
+$strings['NewMeetingCreated'] = 'Nytt möte skapat';
+$strings['Password'] = 'Lösenord';
+$strings['RecurringWithFixedTime'] = 'Återkommande med fast tid';
+$strings['RecurringWithNoFixedTime'] = 'Återkommande utan fast tid';
+$strings['RegisterAllCourseUsers'] = 'Registrera alla kursanvändare';
+$strings['RegisteredUserListWasUpdated'] = 'Registrerad användarlista uppdaterad';
+$strings['RegisteredUsers'] = 'Registrerade användare';
+$strings['RegisterNoUser'] = 'Registrera ingen användare';
+$strings['RegisterTheseGroupMembers'] = 'Registrera dessa gruppmedlemmar';
+$strings['ScheduleAMeeting'] = 'Schemalägg ett möte';
+$strings['ScheduledMeeting'] = 'Schemalagt möte';
+$strings['ScheduledMeetings'] = 'Schemalagda möten';
+$strings['ScheduleAMeeting'] = 'Schemalägg ett möte';
+$strings['SearchMeeting'] = 'Sök möte';
+$strings['Session'] = 'Session';
+$strings['StartDate'] = 'Startdatum';
+$strings['Started'] = 'startad';
+$strings['StartInstantMeeting'] = 'Starta spontant möte';
+$strings['StartMeeting'] = 'Starta möte';
+$strings['StartTime'] = 'Starttid';
+$strings['Topic'] = 'Ämne';
+$strings['TopicAndAgenda'] = 'Ämne och agenda';
+$strings['Type'] = 'Typ';
+$strings['UpcomingMeetings'] = 'Kommande möten';
+$strings['UpdateMeeting'] = 'Uppdatera möte';
+$strings['UpdateRegisteredUserList'] = 'Uppdatera registrerad användarlista';
+$strings['UserRegistration'] = 'Användarregistrering';
+$strings['Y-m-d H:i'] = 'Y-m-d H:i';
+$strings['Waiting'] = 'väntar';
+$strings['XRecordingOfMeetingXFromXDurationXDotX'] = '%s inspelning av möte %s från %s (%s).%s';
+$strings['YouAreNotRegisteredToThisMeeting'] = 'Du är inte registrerad för detta möte';
+$strings['ZoomVideoConferences'] = 'Zoom-videokonferenser';
+$strings['Recordings'] = 'Inspelningar';
+$strings['CreateGlobalVideoConference'] = 'Skapa global videokonferens';
+$strings['ConferenceNotStarted'] = 'Konferens har inte startat';
+$strings['MeetingNotFound'] = 'Möte hittades inte';
+$strings['JoinURLNotAvailable'] = 'URL ej tillgänglig';
+$strings['Meetings'] = 'Möten';
+$strings['ConferenceType'] = 'Konferenstyp';
+$strings['ForEveryone'] = 'Alla';
+$strings['SomeUsers'] = 'Vissa användare (välj senare)';
+$strings['Activity'] = 'Aktivitet';
+$strings['ConferenceNotAvailable'] = 'Konferens ej tillgänglig';

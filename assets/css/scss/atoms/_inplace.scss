@@ -1,0 +1,17 @@
+.p-inplace {
+  &-display {
+    @apply block w-full cursor-pointer border border-solid border-transparent rounded-md p-2 outline-transparent;
+
+    &:not(.p-disabled):hover {
+      @apply text-gray-90;
+    }
+
+    &:focus-visible {
+      @apply ring-0 outline-none;
+    }
+  }
+
+  &-content {
+    @apply block;
+  }
+}

@@ -14,7 +14,7 @@
       <Column :header="t('Type')">
         <template #body="{}">
           <div class="flex justify-center">
-            <i class="pi pi-file" />
+            <i class="mdi mdi-file" />
           </div>
         </template>
       </Column>
@@ -26,41 +26,51 @@
 
       <Column :header="t('Feedback')">
         <template #body="{ data }">
-          <div class="flex justify-center items-center gap-2">
-            <span
-              v-if="data.correctionTitle"
-              class="text-green-600"
+          <div
+            v-if="hasVisibleFeedback(data)"
+            class="flex flex-col items-start gap-1 py-1"
+          >
+            <a
+              v-if="data.correctionTitle && data.correctionDownloadUrl"
+              :href="data.correctionDownloadUrl"
+              target="_blank"
+              download
+              class="inline-flex items-center gap-2 text-green-700 text-sm hover:underline max-w-[260px]"
+              :title="data.correctionTitle"
             >
-              <a
-                v-if="data.correctionDownloadUrl"
-                :href="data.correctionDownloadUrl"
-                target="_blank"
-                download
-                class="hover:underline"
-              >
-                <i class="pi pi-check-circle"></i>
-              </a>
-              <i
-                v-else
-                class="pi pi-check-circle"
-              ></i>
+              <i class="mdi mdi-check-circle shrink-0" />
+              <span class="truncate">
+                {{ data.correctionTitle }}
+              </span>
+            </a>
+
+            <span
+              v-else-if="data.correctionTitle"
+              class="inline-flex items-center gap-2 text-green-700 text-sm max-w-[260px]"
+              :title="data.correctionTitle"
+            >
+              <i class="mdi mdi-check-circle shrink-0" />
+              <span class="truncate">
+                {{ data.correctionTitle }}
+              </span>
             </span>
 
             <span
               v-if="data.comments && data.comments.length > 0"
-              class="flex items-center gap-1 text-gray-600 text-sm cursor-pointer hover:underline"
+              class="inline-flex items-center gap-1 text-gray-600 text-sm cursor-pointer hover:underline"
               @click="openCommentDialog(data)"
             >
-              <i class="pi pi-comment"></i> {{ data.comments.length }}
-            </span>
-
-            <span
-              v-else
-              class="text-gray-400"
-            >
-              —
+              <i class="mdi mdi-comment"></i>
+              <span>{{ data.comments.length }}</span>
             </span>
           </div>
+
+          <span
+            v-else
+            class="text-gray-400"
+          >
+            —
+          </span>
         </template>
       </Column>
 
@@ -101,31 +111,31 @@
               v-if="flags.allowFile"
               icon="download"
               only-icon
-              size="normal"
+              size="small"
               :class="actionBtnClass"
               :label="t('Download')"
               @click="downloadSubmission(data)"
-              type="primary"
+              type="primary-text"
             />
             <BaseButton
               v-if="flags.allowText"
               icon="reply-all"
               only-icon
-              size="normal"
+              size="small"
               :class="actionBtnClass"
               :label="t('Comment')"
               @click="correctAndRate(data)"
-              type="success"
+              type="success-text"
             />
             <BaseButton
               v-if="canDeleteSubmission(data)"
               icon="delete"
               only-icon
-              size="normal"
+              size="small"
               :class="actionBtnClass"
               :label="t('Delete')"
               @click="deleteSubmission(data)"
-              type="danger"
+              type="danger-text"
             />
             <span
               v-if="!flags.allowFile && !flags.allowText"
@@ -165,6 +175,8 @@ const props = defineProps({
     default: () => ({ allowText: true, allowFile: true }),
   },
 })
+
+const emit = defineEmits(["update:submissionCount"])
 
 const { t } = useI18n()
 const { abbreviatedDatetime } = useFormatDate()
@@ -230,6 +242,10 @@ function hasReceivedGrade(row) {
   return (row?.comments?.length ?? 0) > 0 || !!row?.correctionTitle
 }
 
+function hasVisibleFeedback(row) {
+  return !!row?.correctionTitle || (row?.comments?.length ?? 0) > 0
+}
+
 function canDeleteSubmission(row) {
   return !hasReceivedGrade(row)
 }
@@ -254,6 +270,7 @@ async function loadData() {
     })
     submissions.value = response["hydra:member"]
     totalRecords.value = response["hydra:totalItems"]
+    emit("update:submissionCount", totalRecords.value)
   } catch (error) {
     notification.showErrorNotification(error)
   } finally {

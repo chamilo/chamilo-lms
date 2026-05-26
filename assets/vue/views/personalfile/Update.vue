@@ -2,7 +2,7 @@
   <Button
     :label="$t('Back')"
     class="mb-4"
-    icon="pi pi-chevron-left"
+    icon="mdi mdi-chevron-left"
     @click="goBack"
   />
   <div v-if="!isLoading && item">

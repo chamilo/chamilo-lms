@@ -1,7 +1,7 @@
 <template>
   <Card class="course-card rounded-2xl overflow-hidden bg-white shadow-sm">
     <template #header>
-      <div class="relative aspect-[16/9] w-full overflow-hidden bg-gray-100">
+      <div class="relative aspect-video w-full overflow-hidden bg-gray-100">
         <img
           :alt="course.title || 'Course illustration'"
           :src="imageUrl"
@@ -15,7 +15,7 @@
           class="absolute top-2 right-2 grid place-content-center w-10 h-10 rounded-full bg-white/80 backdrop-blur text-yellow-400 hover:text-yellow-500 shadow"
           @click.stop="toggleFavorite"
         >
-          <i :class="isFavorite ? 'pi pi-star-fill' : 'pi pi-star'" />
+          <i :class="isFavorite ? 'mdi mdi-star' : 'mdi mdi-star-outline'" />
         </button>
       </div>
     </template>
@@ -33,12 +33,12 @@
 
     <template #footer>
       <div class="flex justify-end pt-2">
-        <RouterLink
+        <BaseAppLink
           :to="{ name: 'RegisterStudent', params: { courseId: course.id } }"
-          class="btn btn--primary"
+          class="btn btn--success"
         >
           {{ t("Register student") }}
-        </RouterLink>
+        </BaseAppLink>
       </div>
     </template>
   </Card>

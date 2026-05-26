@@ -107,6 +107,17 @@ export default {
     return await baseService.get(`/course/${courseId}/checkLegal.json`, { sid: sessionId })
   },
 
+
+  /**
+   * Loads BuyCourses course creation options for the current user.
+   * @returns {Promise<Object>}
+   */
+  getBuyCoursesCourseCreationOptions: async () => {
+    const { data } = await api.get(`/plugin/BuyCourses/src/course_creation_options.php`)
+
+    return data
+  },
+
   /**
    * Creates a new course with the provided data.
    * @param {Object} courseData - The data for the course to be created.
@@ -115,16 +126,6 @@ export default {
   createCourse: async (courseData) => {
     const response = await api.post(`/course/create`, courseData)
     console.log("response create ::", response)
-
-    return response.data
-  },
-
-  /**
-   * Fetches available categories for courses.
-   * @returns {Promise<Array>} A list of available categories.
-   */
-  getCategories: async () => {
-    const response = await api.get(`/course/categories`)
 
     return response.data
   },
@@ -198,29 +199,20 @@ export default {
   },
 
   /**
-   * Loads public catalogue courses filtered by access_url and usergroup rules.
-   * @returns {Promise<{items: Array}>}
+   *
+   * @param {Object} params
+   * @returns {Promise<{totalItems: number, items: (*&{userVote: null, extra_fields})[], nextPageParams: {page: number, itemsPerPage: number}|null}>}
    */
-  listCatalogueCourses: async () => {
-    const response = await api.get("/catalogue/courses-list")
-    return response.data
-  },
-  loadCourseCatalogue: async () => {
-    try {
-      const response = await fetch("/api/public_courses")
-      if (!response.ok) throw new Error("Failed to load catalogue courses")
+  loadCourseCatalogue: async (params = {}) => {
+    const { totalItems, items, nextPageParams } = await baseService.getCollection("/api/public_courses", params)
 
-      const data = await response.json()
-      const items = Array.isArray(data) ? data : (data["hydra:member"] ?? data.items ?? [])
-      return items.map((course) => ({
-        ...course,
-        userVote: null,
-        extra_fields: course.extra_fields || {},
-      }))
-    } catch (e) {
-      console.error("loadCourseCatalogue error:", e)
-      return []
-    }
+    const mappedItems = items.map((course) => ({
+      ...course,
+      userVote: null,
+      extra_fields: course.extra_fields || {},
+    }))
+
+    return { totalItems, items: mappedItems, nextPageParams }
   },
 
   fetchDashboardCourses: async () => {
@@ -318,4 +310,17 @@ export default {
     })
     return data
   },
+
+  getCreateCourseCapability: async (config = {}) => {
+    const { data } = await api.get("/course/create-capability", config)
+    return data
+  },
+}
+
+export async function getStickyCourses() {
+  const { items } = await baseService.getCollection("/api/sticky_courses", {
+    pagination: false,
+  })
+
+  return items
 }

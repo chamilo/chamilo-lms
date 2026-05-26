@@ -1,0 +1,128 @@
+{
+  "semantics": [
+    {
+      "label": "Descrição da tarefa",
+      "description": "Descreva como o utilizador deve resolver a tarefa.",
+      "placeholder": "Clique em todos os verbos no texto apresentado a seguir."
+    },
+    {
+      "label": "Campo de texto",
+      "placeholder": "Esta é uma resposta: *answer*.",
+      "description": "",
+      "important": {
+        "description": "<ul><li>As palavras a assinalar são adicionadas com um asterisco(*).</li><li>Os asteriscos podem ser adicionados às palavras a assinalar adicionando outro asterisco, *palavracorreta*** =&gt; palavracorreta*.</li></ul>",
+        "example": "As palavras corretas são marcadas desta maneira: *palavra correta* e um asterisco pode ser escrito da seguinte maneira: *palavracorreta***."
+      }
+    },
+    {
+      "label": "Feedback geral",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Predefinição"
+            }
+          ],
+          "label": "Defina feedback personalizado para qualquer intervalo de pontuação",
+          "description": "Clique no botão \"Adicionar intervalo\" para adicionar o número de intervalos de pontuação pretendidos. Exemplo: 0-20% - Mau, 21-91% - Média, 91-100% - Excelente!",
+          "entity": "intervalo",
+          "field": {
+            "fields": [
+              {
+                "label": "Intervalo de pontuação"
+              },
+              {},
+              {
+                "label": "Feedback para o intervalo de pontuação",
+                "placeholder": "Preencha o feedback"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Texto para o botão \"Verificar resposta\"",
+      "default": "Verificar resposta"
+    },
+    {
+      "label": "Texto para o botão \"Tentar novamente\"",
+      "default": "Tentar novamente"
+    },
+    {
+      "label": "Texto para o botão \"Mostrar solução\"",
+      "default": "Mostrar solução"
+    },
+    {
+      "label": "Configurações adicionais",
+      "description": "Estas opções permitem controlar o comportamento da tarefa.",
+      "fields": [
+        {
+          "label": "Ativar o botão \"Tentar novamente\""
+        },
+        {
+          "label": "Ativar o botão \"Mostrar solução\""
+        },
+        {
+          "label": "Ativar o botão \"Verificar resposta\""
+        },
+        {
+          "label": "Mostrar pontuação",
+          "description": "Mostra os pontos obtidos em cada pergunta."
+        }
+      ]
+    },
+    {
+      "label": "Texto para resposta correta",
+      "default": "Correto!",
+      "description": "Texto utilizado para indicar que a resposta está correta"
+    },
+    {
+      "label": "Texto para resposta incorreta",
+      "default": "Incorreto!",
+      "description": "Texto utilizado para indicar que a resposta está incorreta"
+    },
+    {
+      "label": "Texto para pergunta não respondida",
+      "default": "Pergunta não respondida!",
+      "description": "Texto utilizado para indicar que a pergunta não foi respondida"
+    },
+    {
+      "label": "Descrição para solução exibida",
+      "default": "A tarefa foi atualizada com a solução.",
+      "description": "Texto utilizado para indicar que a tarefa foi atualizada com a solução."
+    },
+    {
+      "label": "Representação textual da barra de pontuação para quem usa leitores de ecrã",
+      "default": "Total de :num em :total pontos"
+    },
+    {
+      "label": "Etiqueta para o texto legível completo para tecnologias de acessibilidade",
+      "default": "Texto totalmente legível"
+    },
+    {
+      "label": "Etiqueta para o texto onde algumas palavras assinaladas para tecnologias de acessibilidade",
+      "default": "Texto completo onde as palavras podem ser assinaladas"
+    },
+    {
+      "label": "Cabeçalho do modo de solução para tecnologias de acessibilidade",
+      "default": "Modo de solução"
+    },
+    {
+      "label": "Cabeçalho do modo de verificação para tecnologias de acessibilidade",
+      "default": "Modo de verificação"
+    },
+    {
+      "label": "Assistive technology description for \"Check\" button",
+      "default": "Check the answers. The responses will be marked as correct, incorrect, or unanswered."
+    },
+    {
+      "label": "Assistive technology description for \"Show Solution\" button",
+      "default": "Show the solution. The task will be marked with its correct solution."
+    },
+    {
+      "label": "Assistive technology description for \"Retry\" button",
+      "default": "Retry the task. Reset all responses and start the task over again."
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "libraryStrings": {
+    "distributeButtonLabel": "Gleichmäßig verteilen",
+    "distributeButtonWarning": "Die Werte in allen Bereichen werden geändert. Möchtest du fortfahren?",
+    "rangeOutOfSequenceWarning": "Die Punktebereiche sind nicht korrekt sortiert"
+  }
+}

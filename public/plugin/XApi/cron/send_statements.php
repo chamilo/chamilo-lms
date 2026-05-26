@@ -5,78 +5,92 @@ declare(strict_types=1);
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\XApiSharedStatement;
-use Xabbuh\XApi\Common\Exception\ConflictException;
-use Xabbuh\XApi\Common\Exception\XApiException;
-use Xabbuh\XApi\Model\StatementId;
-use Xabbuh\XApi\Model\Uuid;
-use Xabbuh\XApi\Serializer\Symfony\Serializer;
-use Xabbuh\XApi\Serializer\Symfony\StatementSerializer;
+use Symfony\Component\Uid\Uuid;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
-if (\PHP_SAPI !== 'cli') {
+if (PHP_SAPI !== 'cli') {
     exit;
 }
 
-echo 'XAPI: Cron to send statements.'.\PHP_EOL;
+echo 'XAPI: Cron to send statements.'.PHP_EOL;
 
 $em = Database::getManager();
-$serializer = Serializer::createSerializer();
-$statementSerializer = new StatementSerializer($serializer);
 
+/** @var XApiSharedStatement[] $notSentSharedStatements */
 $notSentSharedStatements = $em
     ->getRepository(XApiSharedStatement::class)
     ->findBy(
-        ['uuid' => null, 'sent' => false],
-        null,
+        ['sent' => false],
+        ['id' => 'ASC'],
         100
     )
 ;
+
 $countNotSent = count($notSentSharedStatements);
 
-if ($countNotSent > 0) {
-    echo '['.time().'] Trying to send '.$countNotSent.' statements to LRS'.\PHP_EOL;
+if (0 === $countNotSent) {
+    echo 'No statements to process.'.PHP_EOL;
 
-    $client = XApiPlugin::create()->getXapiStatementCronClient();
+    return;
+}
 
-    foreach ($notSentSharedStatements as $notSentSharedStatement) {
-        $notSentStatement = $statementSerializer->deserializeStatement(
-            json_encode($notSentSharedStatement->getStatement())
-        );
+echo '['.time().'] Trying to send '.$countNotSent.' statements to LRS'.PHP_EOL;
 
-        if (null == $notSentStatement->getId()) {
-            $notSentStatement = $notSentStatement->withId(
-                StatementId::fromUuid(Uuid::uuid4())
-            );
-        }
+$client = XApiPlugin::create()->getXapiStatementCronClient();
 
-        try {
-            echo '['.time()."] Sending shared statement ({$notSentSharedStatement->getId()})";
+foreach ($notSentSharedStatements as $notSentSharedStatement) {
+    $statement = $notSentSharedStatement->getStatement();
 
-            $sentStatement = $client->storeStatement($notSentStatement);
+    if (!is_array($statement) || empty($statement)) {
+        echo '['.time()."] Shared statement ({$notSentSharedStatement->getId()}) has an empty payload. Skipping.".PHP_EOL;
 
-            echo "\t\tStatement ID received: \"{$sentStatement->getId()->getValue()}\"";
-        } catch (ConflictException $e) {
-            echo $e->getMessage().\PHP_EOL;
+        continue;
+    }
 
-            continue;
-        } catch (XApiException $e) {
-            echo $e->getMessage().\PHP_EOL;
+    $statementId = null;
 
-            continue;
-        }
+    if (isset($statement['id']) && is_string($statement['id']) && '' !== trim($statement['id'])) {
+        $statementId = trim($statement['id']);
+    } elseif (null !== $notSentSharedStatement->getUuid()) {
+        $statementId = $notSentSharedStatement->getUuid()->toRfc4122();
+        $statement['id'] = $statementId;
+
+        $notSentSharedStatement->setStatement($statement);
+        $em->persist($notSentSharedStatement);
+    } else {
+        $statementId = Uuid::v4()->toRfc4122();
+        $statement['id'] = $statementId;
+
+        $notSentSharedStatement->setStatement($statement);
+        $em->persist($notSentSharedStatement);
+    }
+
+    try {
+        echo '['.time()."] Sending shared statement ({$notSentSharedStatement->getId()})".PHP_EOL;
+
+        $client->storeStatement($statement);
 
         $notSentSharedStatement
-            ->setUuid($sentStatement->getId()->getValue())
+            ->setUuid(Uuid::fromString($statementId))
             ->setSent(true)
         ;
 
         $em->persist($notSentSharedStatement);
+        $em->flush();
 
-        echo "\t\tShared statement updated".\PHP_EOL;
+        echo '['.time()."] Statement sent successfully. Statement ID: {$statementId}".PHP_EOL;
+    } catch (\Throwable $exception) {
+        echo '['.time()."] Failed to send shared statement ({$notSentSharedStatement->getId()}): {$exception->getMessage()}".PHP_EOL;
+
+        $em->clear();
+
+        $reloadedStatement = $em->find(XApiSharedStatement::class, $notSentSharedStatement->getId());
+
+        if (!$reloadedStatement) {
+            echo '['.time()."] Shared statement entity could not be reloaded after failure.".PHP_EOL;
+        }
+
+        continue;
     }
-
-    $em->flush();
-} else {
-    echo 'No statements to process.'.\PHP_EOL;
 }

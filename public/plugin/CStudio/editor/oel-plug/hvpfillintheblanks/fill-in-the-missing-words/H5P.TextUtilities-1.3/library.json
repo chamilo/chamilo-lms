@@ -1,0 +1,15 @@
+{
+  "title": "Text Utilities",
+  "machineName": "H5P.TextUtilities",
+  "majorVersion": 1,
+  "minorVersion": 3,
+  "patchVersion": 0,
+  "contentType": "Utility",
+  "runnable": 0,
+  "author": "Oliver Tacke",
+  "license": "pd",
+  "description": "General text related functions that can be used by other H5P libraries.",
+  "preloadedJs": [
+    {"path": "scripts/text-utilities.js"}
+  ]
+}

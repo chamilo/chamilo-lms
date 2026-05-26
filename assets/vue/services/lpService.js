@@ -1,17 +1,16 @@
-import { ENTRYPOINT } from "../config/entrypoint"
 import axios from "axios"
 import baseService from "./baseService"
 
 /** Lists learning paths filtered by course/session/title. */
 const getLearningPaths = async (params) => {
-  const response = await axios.get(`${ENTRYPOINT}learning_paths/`, { params })
+  const { items } = await baseService.getCollection(`/api/learning_paths`, params)
 
-  return response.data
+  return items
 }
 
 /** Fetches a learning path by ID (iid). */
 const getLearningPath = async (lpId) => {
-  const response = await axios.get(`${ENTRYPOINT}learning_paths/${lpId}/`)
+  const response = await axios.get(`/api/learning_paths/${lpId}/`)
 
   return response.data
 }
@@ -85,6 +84,22 @@ const buildLegacyActionUrl = (arg1, arg2, arg3 = {}) => {
   return `/main/lp/lp_controller.php?${search.toString()}`
 }
 
+/** Build URL for updating/uploading SCORM package for an existing LP. */
+const buildLegacyUploadUrl = (lpId, { cid, sid, node, gid = 0, gradebook = 0, origin = "" } = {}) => {
+  return buildLegacyActionUrl(lpId, "upload", {
+    cid,
+    sid,
+    node,
+    gid,
+    gradebook,
+    origin,
+    params: {
+      // force teacher mode context
+      isStudentView: "false",
+    },
+  })
+}
+
 /** Navigates immediately to a legacy controller action. */
 const goLegacyAction = (lpId, action, opts = {}) => {
   window.location.href =
@@ -96,14 +111,34 @@ const goLegacyAction = (lpId, action, opts = {}) => {
 }
 
 /**
+ * Persists the display order of learning paths.
+ *
+ * @param {Object} params
+ * @param {number} params.courseId
+ * @param {number} params.sessionId
+ * @param {number|null} params.categoryId
+ * @param {number[]} params.ids
+ * @returns {Promise<void>}
+ */
+const reorder = async ({ courseId, sessionId, categoryId = null, ids }) => {
+  await baseService.post("/api/learning_paths/reorder", {
+    courseId,
+    sessionId,
+    sid: sessionId,
+    categoryId,
+    ids,
+    order: ids,
+  })
+}
+
+/**
  * Lists LP categories for a course (empty included).
  *
  * @param {Object} searchParams
  * @returns {Promise<Object[]>}
  */
 const getLpCategories = async (searchParams) => {
-  // API Platform resource for CLpCategory (GET collection)
-  const { items } = await baseService.getCollection("/api/learning_path_categories/", searchParams)
+  const { items } = await baseService.getCollection("/api/learning_path_categories", searchParams)
 
   return items
 }
@@ -113,6 +148,8 @@ export default {
   getLearningPath,
   buildLegacyViewUrl,
   buildLegacyActionUrl,
+  buildLegacyUploadUrl,
   goLegacyAction,
   getLpCategories,
+  reorder,
 }

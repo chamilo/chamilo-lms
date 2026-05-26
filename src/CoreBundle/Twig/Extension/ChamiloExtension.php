@@ -76,6 +76,11 @@ class ChamiloExtension extends AbstractExtension
             new TwigFunction('password_checker_js', [$this, 'getPasswordCheckerJs'], ['is_safe' => ['html']]),
             new TwigFunction('theme_asset', $this->getThemeAssetUrl(...)),
             new TwigFunction('theme_asset_link_tag', $this->getThemeAssetLinkTag(...), ['is_safe' => ['html']]),
+            new TwigFunction(
+                'theme_asset_script_tag',
+                $this->themeHelper->getThemeAssetScriptTag(...),
+                ['is_safe' => ['html']]
+            ),
             new TwigFunction('theme_asset_base64', $this->getThemeAssetBase64Encoded(...)),
             new TwigFunction('theme_logo', $this->getThemeLogoUrl(...)),
             new TwigFunction('is_allowed_to_edit', $this->isAllowedToEditHelper->check(...)),
@@ -110,7 +115,7 @@ class ChamiloExtension extends AbstractExtension
     {
         $value = $this->helper->getSettingsParameter($name);
         // We only want to inject valid HTML snippets here.
-        if ($name === 'tracking.header_extra_content' || $name === 'tracking.footer_extra_content') {
+        if ('tracking.header_extra_content' === $name || 'tracking.footer_extra_content' === $name) {
             return $this->resolveTrackingExtraContentValue($name, $value);
         }
 
@@ -300,15 +305,15 @@ class ChamiloExtension extends AbstractExtension
     private function resolveTrackingExtraContentValue(string $settingName, mixed $value): string
     {
         if (!\in_array($settingName, ['tracking.header_extra_content', 'tracking.footer_extra_content'], true)) {
-            return is_string($value) ? $value : '';
+            return \is_string($value) ? $value : '';
         }
 
-        if (!is_string($value)) {
+        if (!\is_string($value)) {
             return '';
         }
 
         $value = trim($value);
-        if ($value === '') {
+        if ('' === $value) {
             return '';
         }
 

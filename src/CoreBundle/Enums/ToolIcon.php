@@ -23,7 +23,7 @@ enum ToolIcon: string
     // Course description
     case COURSE_DESCRIPTION = 'apple-safari';
     // Course homepage
-    case COURSE_HOME = 'upload';
+    case COURSE_HOME = 'home';
     // Course progress / Thematic advance
     case COURSE_PROGRESS = 'progress-star';
     // Course progress' lesson plan

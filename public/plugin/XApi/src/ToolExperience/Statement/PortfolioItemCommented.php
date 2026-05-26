@@ -6,73 +6,52 @@ declare(strict_types=1);
 
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Statement;
 
-use Chamilo\CoreBundle\Entity\PortfolioAttachment;
 use Chamilo\PluginBundle\XApi\ToolExperience\Activity\PortfolioComment as PortfolioCommentActivity;
 use Chamilo\PluginBundle\XApi\ToolExperience\Activity\PortfolioItem as PortfolioItemActivity;
 use Chamilo\PluginBundle\XApi\ToolExperience\Actor\User as UserActor;
 use Chamilo\PluginBundle\XApi\ToolExperience\Verb\Commented as CommentedVerb;
 use Chamilo\PluginBundle\XApi\ToolExperience\Verb\Replied as RepliedVerb;
-use Database;
-use Xabbuh\XApi\Model\Result;
-use Xabbuh\XApi\Model\Statement;
 
+/**
+ * Class PortfolioItemCommented.
+ */
 class PortfolioItemCommented extends PortfolioComment
 {
     use PortfolioAttachmentsTrait;
 
-    public function generate(): Statement
+    public function generate(): array
     {
         $statementId = $this->generateStatementId('portfolio-comment');
-
         $userActor = new UserActor($this->comment->getAuthor());
-        $statementResult = new Result(null, null, null, $this->comment->getContent());
-
         $context = $this->generateContext();
+        $attachments = $this->generateAttachmentsForComment($this->comment);
 
-        $em = Database::getManager();
-        $commentAttachments = $em->getRepository(PortfolioAttachment::class)->findFromComment($this->comment);
-
-        $attachments = $this->generateAttachments(
-            $commentAttachments,
-            $this->comment->getAuthor()
-        );
+        $statement = [
+            'id' => $statementId,
+            'actor' => $userActor->generate(),
+            'result' => $this->buildResult([], null, null, (string) $this->comment->getContent()),
+            'timestamp' => $this->normalizeTimestamp($this->comment->getDate()),
+            'context' => $context,
+        ];
 
         if ($this->parentComment) {
             $repliedVerb = new RepliedVerb();
-
-            $itemActivity = new PortfolioItemActivity($this->item);
             $parentCommentActivity = new PortfolioCommentActivity($this->parentComment);
 
-            $contextActivities = $context
-                ->getContextActivities()
-                ->withAddedGroupingActivity($itemActivity->generate())
-            ;
+            $statement['verb'] = $repliedVerb->generate();
+            $statement['object'] = $parentCommentActivity->generate();
+        } else {
+            $commentedVerb = new CommentedVerb();
+            $itemActivity = new PortfolioItemActivity($this->item);
 
-            return new Statement(
-                $statementId,
-                $userActor->generate(),
-                $repliedVerb->generate(),
-                $parentCommentActivity->generate(),
-                $statementResult,
-                null,
-                $this->comment->getDate(),
-                null,
-                $context->withContextActivities($contextActivities),
-                $attachments
-            );
+            $statement['verb'] = $commentedVerb->generate();
+            $statement['object'] = $itemActivity->generate();
         }
-        $itemShared = new PortfolioItemShared($this->item);
 
-        $commentedVerb = new CommentedVerb();
+        if (!empty($attachments)) {
+            $statement['attachments'] = $attachments;
+        }
 
-        return $itemShared->generate()
-            ->withId($statementId)
-            ->withActor($userActor->generate())
-            ->withVerb($commentedVerb->generate())
-            ->withStored($this->comment->getDate())
-            ->withResult($statementResult)
-            ->withContext($context)
-            ->withAttachments($attachments)
-        ;
+        return $statement;
     }
 }

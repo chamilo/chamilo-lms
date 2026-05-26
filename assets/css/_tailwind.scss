@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  hr {
+    @apply text-gray-30 my-6;
+  }
+}

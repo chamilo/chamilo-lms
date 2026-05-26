@@ -181,7 +181,7 @@ if (!$accessGranted) {
         // Skills: Category::generateUserCertificate() already assigns skills
         // to the user for this course/session/category when enabled.
         // Here we just render the user's skills panel.
-        $badgeBlock = generateBadgePanel($userId, $courseId, $sessionId);
+        $badgeBlock = generateBadgePanel($userId, $courseId, $sessionId, (int) $gbCat->getId());
     }
 
     // Replace ((certificate)) and ((skill)) tokens in the final-item document.
@@ -193,81 +193,20 @@ $tpl->assign('content', $finalHtml);
 $tpl->display_blank_template();
 
 /**
- * Generates/ensures the certificate via Doctrine repositories and returns minimal link data.
+ * Returns the user's skills panel HTML for the current final-item category only (empty if none).
  */
-function safeGenerateCertificateForCategory(GradebookCategory $category, int $userId): array
+function generateBadgePanel(int $userId, int $courseId, int $sessionId = 0, int $gradebookCategoryId = 0): string
 {
-    $course   = $category->getCourse();
-    $session  = $category->getSession();
-    $courseId = $course ? $course->getId() : 0;
-    $sessId   = $session ? $session->getId() : 0;
-    $catId    = (int) $category->getId();
-
-    // Build certificate content & score.
-    $gb    = GradebookUtils::get_user_certificate_content($userId, $courseId, $sessId);
-    $html  = (is_array($gb) && isset($gb['content'])) ? $gb['content'] : '';
-    $score = isset($gb['score']) ? (float) $gb['score'] : 100.0;
-
-    $certRepo = Container::getGradeBookCertificateRepository();
-
-    $htmlUrl = '';
-    $pdfUrl  = '';
-    $cert    = null;
-
-    try {
-        // Store/refresh as Resource (controlled access; not shown in "My personal files").
-        $cert = $certRepo->upsertCertificateResource($catId, $userId, $score, $html);
-
-        // (Optional) keep metadata (created_at/score). Filename is not required anymore.
-        $certRepo->registerUserInfoAboutCertificate($catId, $userId, $score);
-
-        // Build URLs from the Resource layer.
-        $htmlUrl = $certRepo->getResourceFileUrl($cert);
-    } catch (\Throwable $e) {
-        error_log('[LP_FINAL] register cert error: '.$e->getMessage());
-    }
-
-    return [
-        'path_certificate' => $cert ? (string) ($cert->getPathCertificate() ?? '') : '',
-        'html_url'         => $htmlUrl,
-        'pdf_url'          => $pdfUrl,
-    ];
-}
-
-/**
- * Builds the certificate download/view HTML block (if available).
- */
-function buildCertificateBlock(array $cert): string
-{
-    $htmlUrl = $cert['html_url'] ?? '';
-    $pdfUrl  = $cert['pdf_url']  ?? '';
-    if (!$htmlUrl && !$pdfUrl) {
+    $gradebookCategoryId = (int) $gradebookCategoryId;
+    if ($gradebookCategoryId <= 0) {
         return '';
     }
 
-    $downloadBtn = $pdfUrl
-        ? Display::toolbarButton(get_lang('Download certificate in PDF'), $pdfUrl, 'file-pdf-box')
-        : '';
+    $allowedSkillIds = getSkillIdsForGradebookCategory($gradebookCategoryId);
+    if (empty($allowedSkillIds)) {
+        return '';
+    }
 
-    $viewBtn = $htmlUrl
-        ? Display::url(get_lang('View certificate'), $htmlUrl, ['class' => 'btn btn-default'])
-        : '';
-
-    return "
-        <div class='panel panel-default'>
-            <div class='panel-body'>
-                <h3 class='text-center'>".get_lang('You can now download your certificate by clicking here')."</h3>
-                <div class='text-center'>{$downloadBtn} {$viewBtn}</div>
-            </div>
-        </div>
-    ";
-}
-
-/**
- * Returns the user's skills panel HTML (empty if none).
- */
-function generateBadgePanel(int $userId, int $courseId, int $sessionId = 0): string
-{
     $em           = Database::getManager();
     $skillRelUser = new SkillRelUserModel();
     $userSkills   = $skillRelUser->getUserSkills($userId, $courseId, $sessionId);
@@ -279,7 +218,16 @@ function generateBadgePanel(int $userId, int $courseId, int $sessionId = 0): str
     $items = '';
 
     foreach ($userSkills as $row) {
-        $skill = $em->find(Skill::class, (int) $row['skill_id']);
+        $rowSkillId = (int) ($row['skill_id'] ?? 0);
+        if ($rowSkillId <= 0) {
+            continue;
+        }
+
+        if (!in_array($rowSkillId, $allowedSkillIds, true)) {
+            continue;
+        }
+
+        $skill = $em->find(Skill::class, $rowSkillId);
         if (!$skill) {
             continue;
         }
@@ -381,6 +329,42 @@ function generateBadgePanel(int $userId, int $courseId, int $sessionId = 0): str
             </div>
         </section>
     ";
+}
+
+/**
+ * Returns the skill IDs linked to a gradebook category.
+ */
+function getSkillIdsForGradebookCategory(int $categoryId): array
+{
+    if ($categoryId <= 0) {
+        return [];
+    }
+
+    $ids = [];
+
+    try {
+        $gradebook = new Gradebook();
+        $rows = $gradebook->getSkillsByGradebook($categoryId);
+
+        if (is_array($rows)) {
+            foreach ($rows as $row) {
+                if (is_array($row) && isset($row['id'])) {
+                    $ids[] = (int) $row['id'];
+                } elseif (is_scalar($row)) {
+                    $ids[] = (int) $row;
+                }
+            }
+        } elseif (is_string($rows) && trim($rows) !== '') {
+            $parts = preg_split('/\s*,\s*/', trim($rows)) ?: [];
+            foreach ($parts as $p) {
+                $ids[] = (int) $p;
+            }
+        }
+    } catch (\Throwable $e) {
+        return [];
+    }
+
+    return array_values(array_unique(array_filter(array_map('intval', $ids), static fn (int $v) => $v > 0)));
 }
 
 /**

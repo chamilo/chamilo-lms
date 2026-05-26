@@ -2,9 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
-use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CQuiz;
 
@@ -16,7 +16,7 @@ $quizTable = Database::get_course_table(TABLE_QUIZ_TEST);
 $this_section = SECTION_TRACKING;
 
 $is_allowedToTrack =
-    api_is_course_admin() ||
+    api_is_allowed_to_edit() ||
     api_is_platform_admin(true) ||
     api_is_session_general_coach();
 
@@ -80,26 +80,33 @@ $form->addElement(
 if ($global) {
     $form->addElement('hidden', 'view', 'admin');
 } else {
-    // Course context – add optional test selector.
-    $courseId = api_get_course_int_id();
+    $courseId  = (int) api_get_course_int_id();
+    $sessionId = (int) api_get_session_id();
 
-    $sql = "SELECT quiz.title, iid
-            FROM $quizTable AS quiz
-            WHERE
-                c_id = $courseId AND
-                active = 1
-                $sessionCondition
-            ORDER BY quiz.title ASC";
-    $result = Database::query($sql);
+    $course  = api_get_course_entity($courseId);
+    $session = $sessionId ? api_get_session_entity($sessionId) : null;
 
-    if (Database::num_rows($result) > 0) {
-        $exerciseList = [get_lang('All')];
-        while ($row = Database::fetch_array($result)) {
-            $exerciseList[$row['iid']] = $row['title'];
-        }
+    $repo = Container::getQuizRepository();
+    $qb = $repo->getResourcesByCourse($course, $session);
 
-        $form->addSelect('exercise_id', get_lang('Test'), $exerciseList);
+    $qb->select('DISTINCT resource');
+
+    if ($session) {
+        $qb->andWhere('(links.session = :sess OR links.session IS NULL)')
+            ->setParameter('sess', $session);
+    } else {
+        $qb->andWhere('links.session IS NULL');
     }
+    $qb->orderBy('resource.title', 'ASC');
+    $quizzes = $qb->getQuery()->getResult();
+    $exerciseList = [0 => get_lang('All')];
+
+    foreach ($quizzes as $quiz) {
+        $id = method_exists($quiz, 'getIid') ? (int) $quiz->getIid() : (int) $quiz->getId();
+        $exerciseList[$id] = $quiz->getTitle();
+    }
+
+    $form->addSelect('exercise_id', get_lang('Test'), $exerciseList);
 }
 
 $form->addButton(
@@ -153,7 +160,7 @@ if (!empty($courseList)) {
 
     /** @var Course $course */
     foreach ($courseList as $course) {
-        $courseId = $course->getId();
+        $courseId = (int) $course->getId();
         $courseInfo = api_get_course_info_by_id($courseId);
 
         if (empty($courseInfo)) {
@@ -169,13 +176,48 @@ if (!empty($courseList)) {
             }
         }
 
-        // Check quiz tool visibility in this course.
-        $sql = "SELECT visibility FROM $toolTable
-                WHERE c_id = $courseId AND title = 'quiz'";
+        // Check quiz tool visibility for this course.
+        $toolVisible = 0;
+        $sessionIdInt = (int) $sessionId;
+        $whereSession = '';
+        $orderSession = '';
+
+        if ($global) {
+            $whereSession = ' AND (ct.session_id IS NULL OR ct.session_id = 0)';
+        } else {
+            if ($sessionIdInt > 0) {
+                $orderSession = "(ct.session_id = $sessionIdInt) DESC,";
+            }
+        }
+
+        $sql = "SELECT
+                    COALESCE(rl.visibility, ".ResourceLink::VISIBILITY_PUBLISHED.") AS visibility
+                FROM $toolTable ct
+                LEFT JOIN resource_link rl
+                    ON rl.resource_node_id = ct.resource_node_id
+                    AND rl.c_id = ct.c_id
+                    AND (
+                        ((rl.session_id IS NULL OR rl.session_id = 0) AND (ct.session_id IS NULL OR ct.session_id = 0))
+                        OR rl.session_id = ct.session_id
+                    )
+                    AND rl.user_id IS NULL
+                    AND rl.usergroup_id IS NULL
+                    AND rl.group_id IS NULL
+                    AND rl.deleted_at IS NULL
+                WHERE ct.c_id = $courseId
+                  AND ct.title = 'quiz'
+                  $whereSession
+                ORDER BY
+                  $orderSession
+                  ct.iid ASC
+                LIMIT 1";
+
         $result = Database::query($sql);
-        $toolVisible = (Database::num_rows($result) > 0)
-            ? (int) Database::result($result, 0, 'visibility')
-            : 0;
+
+        if (Database::num_rows($result) > 0) {
+            $linkVisibility = (int) Database::result($result, 0, 'visibility');
+            $toolVisible = ($linkVisibility === ResourceLink::VISIBILITY_PUBLISHED) ? 1 : 0;
+        }
 
         if (1 === $toolVisible) {
             // Fetch exams depending on context.

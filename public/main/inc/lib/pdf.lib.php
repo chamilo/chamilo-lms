@@ -905,7 +905,7 @@ class PDF
      *
      * @return string
      */
-    private static function fixImagesPaths($documentHtml, array $courseInfo = null, $dirName = '')
+    public static function fixImagesPaths($documentHtml, array $courseInfo = null, $dirName = '')
     {
         $html = new HTML5();
         $doc = $html->loadHTML($documentHtml);

@@ -8,20 +8,28 @@ namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\CourseHelper;
 use Chamilo\CoreBundle\Helpers\CreateUploadedFileHelper;
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
+use Chamilo\CoreBundle\Security\Upload\UploadFilenamePolicy;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroup;
+use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use DateTime;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use DOMDocument;
+use DOMElement;
 use Exception;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -29,7 +37,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Throwable;
 use ZipArchive;
+
+use const LIBXML_NOERROR;
+use const LIBXML_NONET;
+use const LIBXML_NOWARNING;
+use const PATHINFO_EXTENSION;
 
 class BaseResourceFileAction
 {
@@ -241,7 +255,9 @@ class BaseResourceFileAction
         Request $request,
         EntityManager $em,
         string $fileExistsOption = '',
-        ?TranslatorInterface $translator = null
+        ?TranslatorInterface $translator = null,
+        ?CourseRepository $courseRepository = null,
+        ?CourseHelper $courseHelper = null
     ): array {
         $contentData = $request->getContent();
 
@@ -261,7 +277,10 @@ class BaseResourceFileAction
             $fileType = $request->get('filetype');
             $resourceLinkList = $request->get('resourceLinkList', []);
             if (!empty($resourceLinkList)) {
-                $resourceLinkList = !str_contains($resourceLinkList, '[') ? json_decode('['.$resourceLinkList.']', true) : json_decode($resourceLinkList, true);
+                $resourceLinkList = !str_contains($resourceLinkList, '[')
+                    ? json_decode('['.$resourceLinkList.']', true)
+                    : json_decode($resourceLinkList, true);
+
                 if (empty($resourceLinkList)) {
                     $message = 'resourceLinkList is not a valid json. Use for example: [{"cid":1, "visibility":1}]';
 
@@ -280,15 +299,19 @@ class BaseResourceFileAction
 
         $resource->setParentResourceNode($parentResourceNodeId);
 
+        $uploadedFile = null;
+
         switch ($fileType) {
             case 'certificate':
             case 'file':
                 $content = '';
                 if ($request->request->has('contentFile')) {
-                    $content = $request->request->get('contentFile');
+                    $content = (string) $request->request->get('contentFile');
                 }
+
                 $fileParsed = false;
 
+                // Multipart upload
                 if ($request->files->count() > 0) {
                     if (!$request->files->has('uploadFile')) {
                         throw new BadRequestHttpException('"uploadFile" is required');
@@ -296,22 +319,32 @@ class BaseResourceFileAction
 
                     /** @var UploadedFile $uploadedFile */
                     $uploadedFile = $request->files->get('uploadFile');
-                    $title = $uploadedFile->getClientOriginalName();
 
+                    $title = (string) $uploadedFile->getClientOriginalName();
                     if (empty($title)) {
                         throw new InvalidArgumentException('title is required');
                     }
 
+                    // Handle overwrite/rename/nothing when same title already exists under parent
                     if (!empty($fileExistsOption)) {
                         $existingDocument = $resourceRepository->findByTitleAndParentResourceNode($title, $parentResourceNodeId);
                         if ($existingDocument) {
                             if ('overwrite' === $fileExistsOption) {
+                                // Quota check with delta: new - old
+                                $oldBytes = 0;
+                                $existingNode = $existingDocument->getResourceNode();
+                                $existingFile = $existingNode?->getFirstResourceFile();
+                                if ($existingFile instanceof ResourceFile) {
+                                    $oldBytes = (int) ($existingFile->getSize() ?? 0);
+                                }
+
+                                $newBytes = (int) ($uploadedFile->getSize() ?? 0);
+                                $this->assertQuotaForRequest($courseHelper, $em, $parentResourceNodeId, $resourceLinkList, $newBytes, $oldBytes);
                                 $existingDocument->setTitle($title);
                                 $existingDocument->setComment($comment);
                                 $existingDocument->setFiletype($fileType);
 
                                 $resourceNode = $existingDocument->getResourceNode();
-
                                 $resourceFile = $resourceNode->getFirstResourceFile();
                                 if ($resourceFile instanceof ResourceFile) {
                                     $resourceFile->setFile($uploadedFile);
@@ -322,6 +355,7 @@ class BaseResourceFileAction
 
                                 $resourceNode->setUpdatedAt(new DateTime());
                                 $existingDocument->setResourceNode($resourceNode);
+                                $this->applyResourceLanguageFromRequest($existingDocument, $request, $em);
 
                                 $em->persist($existingDocument);
                                 $em->flush();
@@ -333,7 +367,10 @@ class BaseResourceFileAction
                                 ];
                             }
 
-                            if ('rename' == $fileExistsOption) {
+                            if ('rename' === $fileExistsOption) {
+                                $newBytes = (int) ($uploadedFile->getSize() ?? 0);
+                                $this->assertQuotaForRequest($courseHelper, $em, $parentResourceNodeId, $resourceLinkList, $newBytes, 0);
+
                                 $newTitle = $this->generateUniqueTitle($title);
                                 $resource->setResourceName($newTitle);
                                 $resource->setUploadFile($uploadedFile);
@@ -350,26 +387,48 @@ class BaseResourceFileAction
                                 ];
                             }
 
-                            if ('nothing' == $fileExistsOption) {
+                            if ('nothing' === $fileExistsOption) {
                                 $resource->setResourceName($title);
-                                $flashBag = $request->getSession()->getFlashBag();
-                                $message = $translator ? $translator->trans('The operation is impossible, a file with this name already exists.') : 'Upload already exists';
-                                $flashBag->add('warning', $message);
+                                $message = $translator
+                                    ? $translator->trans('The operation is impossible, a file with this name already exists.')
+                                    : 'The operation is impossible, a file with this name already exists.';
 
                                 throw new BadRequestHttpException($message);
                             }
 
                             throw new InvalidArgumentException('Invalid fileExistsOption');
-                        } else {
-                            $resource->setResourceName($title);
-                            $resource->setUploadFile($uploadedFile);
-                            $fileParsed = true;
                         }
+
+                        // No existing doc with same name -> create new
+                        $newBytes = (int) ($uploadedFile->getSize() ?? 0);
+                        $this->assertQuotaForRequest($courseHelper, $em, $parentResourceNodeId, $resourceLinkList, $newBytes, 0);
+                        $resource->setResourceName($title);
+                        $resource->setUploadFile($uploadedFile);
+                        $fileParsed = true;
+                    } else {
+                        // No fileExistsOption specified -> still apply quota check for new creation
+                        $newBytes = (int) ($uploadedFile->getSize() ?? 0);
+                        $this->assertQuotaForRequest($courseHelper, $em, $parentResourceNodeId, $resourceLinkList, $newBytes, 0);
+
+                        $resource->setResourceName($title);
+                        $resource->setUploadFile($uploadedFile);
+                        $fileParsed = true;
                     }
                 }
 
-                if (!$fileParsed && $content) {
-                    $uploadedFile = CreateUploadedFileHelper::fromString($title.'.html', 'text/html', $content);
+                // HTML/SVG contentFile => create an UploadedFile from content.
+                if (!$fileParsed && !empty($content)) {
+                    $contentFileInfo = $this->getContentFileUploadInfo($request, (string) $title);
+                    $content = $this->sanitizeContentFile((string) $content, $contentFileInfo['extension']);
+
+                    $newBytes = (int) \strlen((string) $content);
+                    $this->assertQuotaForRequest($courseHelper, $em, $parentResourceNodeId, $resourceLinkList, $newBytes, 0);
+
+                    $uploadedFile = CreateUploadedFileHelper::fromString(
+                        $contentFileInfo['fileName'],
+                        $contentFileInfo['mimeType'],
+                        $content
+                    );
                     $resource->setUploadFile($uploadedFile);
                     $fileParsed = true;
                 }
@@ -381,6 +440,7 @@ class BaseResourceFileAction
                 break;
 
             case 'folder':
+                // No quota check for folders
                 break;
         }
 
@@ -390,18 +450,19 @@ class BaseResourceFileAction
 
         $filetypeResult = $fileType;
 
-        if (isset($uploadedFile) && $uploadedFile instanceof UploadedFile) {
-            $mimeType = $uploadedFile->getMimeType();
+        // Auto-detect video for better UI/filters
+        if ($uploadedFile instanceof UploadedFile) {
+            $mimeType = (string) $uploadedFile->getMimeType();
             if (str_starts_with($mimeType, 'video/')) {
                 $filetypeResult = 'video';
-                $comment = trim($comment.' [video]');
+                $comment = trim((string) $comment.' [video]');
             }
         }
 
         return [
-            'title' => $title,
-            'filetype' => $filetypeResult,
-            'comment' => $comment,
+            'title' => (string) $title,
+            'filetype' => (string) $filetypeResult,
+            'comment' => (string) $comment,
         ];
     }
 
@@ -409,16 +470,17 @@ class BaseResourceFileAction
         AbstractResource $resource,
         Request $request,
         EntityManager $em,
-        KernelInterface $kernel
+        KernelInterface $kernel,
+        ?CourseRepository $courseRepository = null,
+        ?CDocumentRepository $documentRepository = null,
+        ?CourseHelper $courseHelper = null
     ): array {
-        // Accept both numeric IDs and IRIs like /api/resource_nodes/{id}
         $rawParent = $request->get('parentResourceNodeId');
         $parentResourceNodeId = (int) ($this->normalizeNodeId($rawParent) ?? 0);
 
         $fileType = $request->get('filetype');
         $resourceLinkList = $request->get('resourceLinkList', []);
         if (!empty($resourceLinkList)) {
-            // Keep backward compatibility: allow string JSON or array
             if (\is_string($resourceLinkList)) {
                 $resourceLinkList = !str_contains($resourceLinkList, '[')
                     ? json_decode('['.$resourceLinkList.']', true)
@@ -427,6 +489,7 @@ class BaseResourceFileAction
 
             if (empty($resourceLinkList) || !\is_array($resourceLinkList)) {
                 $message = 'resourceLinkList is not a valid json. Use for example: [{"cid":1, "visibility":1}]';
+
                 throw new InvalidArgumentException($message);
             }
         }
@@ -444,13 +507,15 @@ class BaseResourceFileAction
                 throw new BadRequestHttpException('"uploadFile" is required');
             }
 
+            /** @var UploadedFile $uploadedFile */
             $uploadedFile = $request->files->get('uploadFile');
-            $resourceTitle = $uploadedFile->getClientOriginalName();
+            $resourceTitle = (string) $uploadedFile->getClientOriginalName();
             $resource->setResourceName($resourceTitle);
             $resource->setUploadFile($uploadedFile);
 
-            // If it is a ZIP, extract and create documents/folders preserving the same links.
             if ('zip' === strtolower((string) $uploadedFile->getClientOriginalExtension())) {
+                $zipBytes = $this->getZipTotalUncompressedSize($uploadedFile);
+                $this->assertQuotaForRequest($courseHelper, $em, $parentResourceNodeId, $resourceLinkList, $zipBytes, 0);
                 $extractedData = $this->extractZipFile($uploadedFile, $kernel);
                 $folderStructure = $extractedData['folderStructure'];
                 $extractPath = $extractedData['extractPath'];
@@ -471,7 +536,8 @@ class BaseResourceFileAction
         $resource->setParentResourceNode($parentResourceNodeId);
 
         return [
-            'filetype' => $fileType,
+            'title' => (string) $resource->getResourceName(),
+            'filetype' => (string) $fileType,
             'comment' => 'Uncompressed',
         ];
     }
@@ -483,20 +549,34 @@ class BaseResourceFileAction
         $parentResourceNodeId = 0;
         $title = null;
         $content = null;
+        $comment = null;
+        $hasComment = false;
 
         if (!empty($contentData)) {
             $contentData = json_decode($contentData, true);
 
-            if (isset($contentData['parentResourceNodeId'])) {
-                $parentResourceNodeId = (int) ($this->normalizeNodeId($contentData['parentResourceNodeId']) ?? 0);
-            }
+            if (\is_array($contentData)) {
+                if (isset($contentData['parentResourceNodeId'])) {
+                    $parentResourceNodeId = (int) ($this->normalizeNodeId($contentData['parentResourceNodeId']) ?? 0);
+                }
 
-            $title = $contentData['title'] ?? null;
-            $content = $contentData['contentFile'] ?? null;
-            $resourceLinkList = $contentData['resourceLinkListFromEntity'] ?? [];
+                $title = $contentData['title'] ?? null;
+                $content = $contentData['contentFile'] ?? null;
+                $resourceLinkList = $contentData['resourceLinkListFromEntity'] ?? [];
+
+                if (\array_key_exists('comment', $contentData)) {
+                    $comment = $contentData['comment'];
+                    $hasComment = true;
+                }
+            }
         } else {
             $title = $request->get('title');
             $content = $request->request->get('contentFile');
+
+            if ($request->request->has('comment')) {
+                $comment = $request->request->get('comment');
+                $hasComment = true;
+            }
 
             // Keep compatibility with form requests
             if ($request->query->has('parentResourceNodeId') || $request->request->has('parentResourceNodeId')) {
@@ -510,6 +590,10 @@ class BaseResourceFileAction
             $repo->setResourceName($resource, $title);
         }
 
+        if ($hasComment && $resource instanceof CDocument) {
+            $resource->setComment(null === $comment ? null : (string) $comment);
+        }
+
         $resourceNode = $resource->getResourceNode();
         if (null === $resourceNode) {
             return $resource;
@@ -518,6 +602,8 @@ class BaseResourceFileAction
         $hasFile = $resourceNode->hasResourceFile();
 
         if ($hasFile && !empty($content)) {
+            $content = $this->sanitizeContentFileForUpdate((string) $content, $request, $resourceNode);
+
             $resourceNode->setContent($content);
             foreach ($resourceNode->getResourceFiles() as $resourceFile) {
                 $resourceFile->setSize(\strlen($content));
@@ -629,6 +715,247 @@ class BaseResourceFileAction
         return $resource;
     }
 
+    private function getContentFileUploadInfo(Request $request, string $title): array
+    {
+        $extension = strtolower(trim((string) $request->request->get('contentFileExtension', 'html')));
+        $mimeType = strtolower(trim((string) $request->request->get('contentFileMimeType', 'text/html')));
+
+        $allowed = [
+            'html' => 'text/html',
+            'htm' => 'text/html',
+            'svg' => 'image/svg+xml',
+        ];
+
+        if (!isset($allowed[$extension])) {
+            $extension = 'html';
+        }
+
+        if ($mimeType !== $allowed[$extension]) {
+            $mimeType = $allowed[$extension];
+        }
+
+        $baseName = trim($title);
+        if ('' === $baseName) {
+            $baseName = 'document.'.$extension;
+        }
+
+        $baseName = preg_replace('/\.(html?|svg)$/i', '', $baseName);
+        if (!\is_string($baseName) || '' === trim($baseName)) {
+            $baseName = 'document';
+        }
+
+        return [
+            'extension' => $extension,
+            'mimeType' => $mimeType,
+            'fileName' => $baseName.'.'.$extension,
+        ];
+    }
+
+    private function sanitizeContentFileForUpdate(string $content, Request $request, ResourceNode $resourceNode): string
+    {
+        $extension = strtolower(trim((string) $request->request->get('contentFileExtension', '')));
+
+        if ('' === $extension) {
+            $firstFile = $resourceNode->getFirstResourceFile();
+            if ($firstFile instanceof ResourceFile) {
+                $extension = $this->guessExtensionFromResourceFile($firstFile);
+            }
+        }
+
+        return $this->sanitizeContentFile($content, $extension);
+    }
+
+    private function guessExtensionFromResourceFile(ResourceFile $resourceFile): string
+    {
+        $mimeType = strtolower(trim((string) $resourceFile->getMimeType()));
+        if ('image/svg+xml' === $mimeType) {
+            return 'svg';
+        }
+
+        $fileName = strtolower(trim((string) ($resourceFile->getOriginalName() ?: $resourceFile->getTitle())));
+        $extension = pathinfo($fileName, PATHINFO_EXTENSION);
+
+        return strtolower((string) $extension);
+    }
+
+    private function sanitizeContentFile(string $content, string $extension): string
+    {
+        if ('svg' !== strtolower(trim($extension))) {
+            return $content;
+        }
+
+        return $this->sanitizeSvgContent($content);
+    }
+
+    private function sanitizeSvgContent(string $svg): string
+    {
+        $svg = trim($svg);
+        if ('' === $svg) {
+            throw new BadRequestHttpException('SVG content is empty.');
+        }
+
+        $previous = libxml_use_internal_errors(true);
+        $document = new DOMDocument();
+
+        try {
+            $loaded = $document->loadXML($svg, LIBXML_NONET | LIBXML_NOERROR | LIBXML_NOWARNING);
+        } finally {
+            libxml_clear_errors();
+            libxml_use_internal_errors($previous);
+        }
+
+        if (!$loaded || !$document->documentElement || 'svg' !== strtolower($document->documentElement->localName)) {
+            throw new BadRequestHttpException('Invalid SVG content.');
+        }
+
+        $dangerousTags = [
+            'script',
+            'foreignObject',
+            'iframe',
+            'object',
+            'embed',
+            'audio',
+            'video',
+        ];
+
+        foreach ($dangerousTags as $tagName) {
+            $nodes = [];
+            foreach ($document->getElementsByTagName($tagName) as $node) {
+                $nodes[] = $node;
+            }
+
+            foreach ($nodes as $node) {
+                if ($node->parentNode) {
+                    $node->parentNode->removeChild($node);
+                }
+            }
+        }
+
+        foreach ($document->getElementsByTagName('*') as $node) {
+            if (!$node instanceof DOMElement || !$node->hasAttributes()) {
+                continue;
+            }
+
+            $attributesToRemove = [];
+            foreach ($node->attributes as $attribute) {
+                $name = strtolower($attribute->name);
+                $value = strtolower(trim($attribute->value));
+
+                if (str_starts_with($name, 'on')) {
+                    $attributesToRemove[] = $attribute->name;
+
+                    continue;
+                }
+
+                if (\in_array($name, ['href', 'xlink:href', 'src'], true) && str_starts_with($value, 'javascript:')) {
+                    $attributesToRemove[] = $attribute->name;
+                }
+            }
+
+            foreach ($attributesToRemove as $attributeName) {
+                $node->removeAttribute($attributeName);
+            }
+        }
+
+        $cleanSvg = $document->saveXML($document->documentElement);
+        if (!\is_string($cleanSvg) || '' === trim($cleanSvg)) {
+            throw new BadRequestHttpException('Invalid SVG content.');
+        }
+
+        return $cleanSvg;
+    }
+
+    protected function applyResourceLanguageFromRequest(AbstractResource $resource, Request $request, EntityManagerInterface $em): void
+    {
+        if (!$this->hasResourceLanguageInRequest($request)) {
+            return;
+        }
+
+        $language = $this->findResourceLanguageFromRequest($request, $em);
+        $this->applyResourceLanguage($resource, $language, $em);
+    }
+
+    protected function applyResourceLanguage(AbstractResource $resource, ?Language $language, EntityManagerInterface $em): void
+    {
+        $resourceNode = $resource->getResourceNode();
+        if (null === $resourceNode) {
+            return;
+        }
+
+        $resourceNode->setLanguage($language);
+        $em->persist($resourceNode);
+
+        foreach ($resourceNode->getResourceFiles() as $resourceFile) {
+            if ($resourceFile instanceof ResourceFile) {
+                $resourceFile->setLanguage($language);
+                $em->persist($resourceFile);
+            }
+        }
+    }
+
+    private function hasResourceLanguageInRequest(Request $request): bool
+    {
+        if ($request->request->has('language')) {
+            return true;
+        }
+
+        $content = $request->getContent();
+        if ('' === trim($content)) {
+            return false;
+        }
+
+        $data = json_decode($content, true);
+
+        return \is_array($data) && \array_key_exists('language', $data);
+    }
+
+    private function findResourceLanguageFromRequest(Request $request, EntityManagerInterface $em): ?Language
+    {
+        $rawLanguage = null;
+
+        if ($request->request->has('language')) {
+            $rawLanguage = $request->request->get('language');
+        } else {
+            $content = $request->getContent();
+            if ('' !== trim($content)) {
+                $data = json_decode($content, true);
+                if (\is_array($data) && \array_key_exists('language', $data)) {
+                    $rawLanguage = $data['language'];
+                }
+            }
+        }
+
+        $languageCode = trim((string) $rawLanguage);
+        if ('' === $languageCode) {
+            return null;
+        }
+
+        if (preg_match('#/api/languages/(\d+)#', $languageCode, $matches)) {
+            $language = $em->getRepository(Language::class)->find((int) $matches[1]);
+
+            if ($language instanceof Language) {
+                return $language;
+            }
+
+            throw new BadRequestHttpException('Invalid resource language.');
+        }
+
+        if (!preg_match('/^[a-zA-Z0-9_-]{1,8}$/', $languageCode)) {
+            throw new BadRequestHttpException('Invalid resource language.');
+        }
+
+        $language = $em->getRepository(Language::class)->findOneBy([
+            'isocode' => $languageCode,
+            'available' => true,
+        ]);
+
+        if ($language instanceof Language) {
+            return $language;
+        }
+
+        throw new BadRequestHttpException('Invalid resource language.');
+    }
+
     private function normalizeNodeId(mixed $value): ?int
     {
         if (\is_int($value)) {
@@ -713,9 +1040,14 @@ class BaseResourceFileAction
                 $filePath = $extractPath.'/'.$currentPath.$fileName;
 
                 if (file_exists($filePath)) {
+                    $mime = @mime_content_type($filePath) ?: null;
+
                     $uploadedFile = new UploadedFile(
                         $filePath,
-                        $fileName
+                        $fileName,
+                        $mime,
+                        null,
+                        true
                     );
 
                     $mimeType = $uploadedFile->getMimeType();
@@ -748,36 +1080,80 @@ class BaseResourceFileAction
 
     private function extractZipFile(UploadedFile $file, KernelInterface $kernel): array
     {
-        // Get the temporary path of the ZIP file
         $zipFilePath = $file->getRealPath();
+        if (!$zipFilePath) {
+            throw new BadRequestHttpException('ZIP file path is invalid.');
+        }
 
-        // Create an instance of the ZipArchive class
         $zip = new ZipArchive();
-        $zip->open($zipFilePath);
+        if (true !== $zip->open($zipFilePath)) {
+            throw new BadRequestHttpException('Could not open ZIP file.');
+        }
 
         $cacheDirectory = $kernel->getCacheDir();
         $extractPath = $cacheDirectory.'/'.uniqid('extracted_', true);
-        mkdir($extractPath);
 
-        // Extract the contents of the ZIP file
-        $zip->extractTo($extractPath);
+        if (!@mkdir($extractPath, 0770, true) && !is_dir($extractPath)) {
+            $zip->close();
 
-        // Array to store the sorted extracted paths
-        $extractedPaths = [];
-
-        // Iterate over each file or directory in the ZIP file
-        for ($i = 0; $i < $zip->numFiles; $i++) {
-            $filename = $zip->getNameIndex($i);
-            $extractedPaths[] = $extractPath.'/'.$filename;
+            throw new BadRequestHttpException('Could not create ZIP extraction directory.');
         }
 
-        // Close the ZIP file
+        $policy = $this->getUploadFilenamePolicy();
+
+        $extractedPaths = [];
+
+        for ($i = 0; $i < $zip->numFiles; $i++) {
+            $name = (string) $zip->getNameIndex($i);
+            if ('' === $name) {
+                continue;
+            }
+
+            if ($this->shouldSkipZipEntry($name)) {
+                continue;
+            }
+
+            $stat = $zip->statIndex($i);
+            if (\is_array($stat) && $this->isZipSymlink($stat)) {
+                // Skip symlinks to avoid writing outside extraction dir indirectly.
+                continue;
+            }
+
+            $isDir = str_ends_with($name, '/');
+
+            $safeRelative = $this->sanitizeZipRelativePath($name, $policy, $isDir);
+            if (null === $safeRelative) {
+                // Skip unsafe/blocked entries without failing the whole import.
+                continue;
+            }
+
+            $targetPath = $extractPath.'/'.$safeRelative;
+
+            if ($isDir) {
+                if (!@mkdir($targetPath, 0770, true) && !is_dir($targetPath)) {
+                    continue;
+                }
+                $extractedPaths[] = $targetPath;
+
+                continue;
+            }
+
+            $targetDir = \dirname($targetPath);
+            if (!@mkdir($targetDir, 0770, true) && !is_dir($targetDir)) {
+                continue;
+            }
+
+            if (!$this->writeZipEntryToPath($zip, $name, $targetPath)) {
+                continue;
+            }
+
+            $extractedPaths[] = $targetPath;
+        }
+
         $zip->close();
 
-        // Build the folder structure and file associations
         $folderStructure = $this->buildFolderStructure($extractedPaths, $extractPath);
 
-        // Return the array of folder structure and the extraction path
         return [
             'folderStructure' => $folderStructure,
             'extractPath' => $extractPath,
@@ -833,5 +1209,245 @@ class BaseResourceFileAction
         $extension = isset($info['extension']) ? '.'.$info['extension'] : '';
 
         return $filename.'_'.uniqid().$extension;
+    }
+
+    private function getZipTotalUncompressedSize(UploadedFile $zipFile): int
+    {
+        $path = $zipFile->getRealPath();
+        if (!$path) {
+            return 0;
+        }
+
+        $zip = new ZipArchive();
+        if (true !== $zip->open($path)) {
+            return 0;
+        }
+
+        $total = 0;
+        for ($i = 0; $i < $zip->numFiles; $i++) {
+            $stat = $zip->statIndex($i);
+            if (!\is_array($stat)) {
+                continue;
+            }
+
+            $name = (string) ($stat['name'] ?? '');
+            // Skip directories
+            if ('' !== $name && str_ends_with($name, '/')) {
+                continue;
+            }
+
+            $size = (int) ($stat['size'] ?? 0);
+            if ($size > 0) {
+                $total += $size;
+            }
+        }
+
+        $zip->close();
+
+        return $total;
+    }
+
+    private function assertQuotaForRequest(
+        ?CourseHelper $courseHelper,
+        EntityManagerInterface $em,
+        int $parentResourceNodeId,
+        array $resourceLinkList,
+        int $bytesToAdd,
+        int $bytesToSubtract = 0
+    ): void {
+        if (!$courseHelper instanceof CourseHelper) {
+            return;
+        }
+
+        if ($bytesToAdd <= 0) {
+            return;
+        }
+
+        $deltaBytes = $bytesToAdd - max(0, $bytesToSubtract);
+        if ($deltaBytes <= 0) {
+            return;
+        }
+
+        $courses = $this->resolveCoursesForQuotaCheck($em, $parentResourceNodeId, $resourceLinkList);
+        if (empty($courses)) {
+            return;
+        }
+
+        foreach ($courses as $course) {
+            try {
+                $courseHelper->assertCanStoreDocumentBytes($course, $deltaBytes);
+            } catch (Throwable $e) {
+                throw new BadRequestHttpException(\sprintf('Not enough space in course #%d.', (int) $course->getId()));
+            }
+        }
+    }
+
+    private function resolveCoursesForQuotaCheck(
+        EntityManagerInterface $em,
+        int $parentResourceNodeId,
+        array $resourceLinkList
+    ): array {
+        $courses = [];
+        $courseRepo = $em->getRepository(Course::class);
+
+        foreach ($resourceLinkList as $link) {
+            $cid = (int) ($link['cid'] ?? 0);
+            if ($cid > 0) {
+                $course = $courseRepo->find($cid);
+                if ($course instanceof Course) {
+                    $courses[(int) $course->getId()] = $course;
+                }
+            }
+        }
+
+        if (empty($courses) && $parentResourceNodeId > 0) {
+            $parentNode = $em->getRepository(ResourceNode::class)->find($parentResourceNodeId);
+            if ($parentNode instanceof ResourceNode) {
+                foreach ($parentNode->getResourceLinks() as $rl) {
+                    if ($rl instanceof ResourceLink && null !== $rl->getCourse()) {
+                        $course = $rl->getCourse();
+                        $courses[(int) $course->getId()] = $course;
+                    }
+                }
+            }
+        }
+
+        return array_values($courses);
+    }
+
+    private function getUploadFilenamePolicy(): ?UploadFilenamePolicy
+    {
+        try {
+            $svc = Container::$container->get(UploadFilenamePolicy::class);
+
+            return $svc instanceof UploadFilenamePolicy ? $svc : null;
+        } catch (Throwable) {
+            return null;
+        }
+    }
+
+    private function shouldSkipZipEntry(string $name): bool
+    {
+        $base = basename(str_replace('\\', '/', $name));
+
+        if ('' === $base) {
+            return false;
+        }
+
+        $skip = [
+            '__MACOSX',
+            '.DS_Store',
+            'Thumbs.db',
+            '.Thumbs.db',
+        ];
+
+        return \in_array($base, $skip, true);
+    }
+
+    private function isZipSymlink(array $stat): bool
+    {
+        // external_attributes contains unix permissions in upper 16 bits for many zips
+        $attrs = (int) ($stat['external_attributes'] ?? 0);
+        $mode = ($attrs >> 16) & 0xFFFF;
+
+        // 0xA000 is symlink in unix mode bits
+        return 0xA000 === ($mode & 0xF000);
+    }
+
+    private function sanitizeZipRelativePath(string $zipName, ?UploadFilenamePolicy $policy, bool $isDir): ?string
+    {
+        $name = str_replace('\\', '/', $zipName);
+        $name = ltrim($name, '/');
+
+        // Block null bytes and Windows drive paths
+        if (str_contains($name, "\0") || preg_match('/^[a-zA-Z]:\//', $name)) {
+            return null;
+        }
+
+        // Block path traversal
+        if (preg_match('#(^|/)\.\.(/|$)#', $name)) {
+            return null;
+        }
+
+        $parts = array_values(array_filter(explode('/', $name), static fn ($p) => '' !== $p && '.' !== $p));
+        if (empty($parts)) {
+            return null;
+        }
+
+        $sanitizedParts = [];
+
+        foreach ($parts as $idx => $part) {
+            if ('..' === $part) {
+                return null;
+            }
+
+            $isLast = ($idx === \count($parts) - 1);
+            $part = $this->sanitizeZipSegment($part);
+            $part = $this->disableDangerousZipName($part);
+
+            // Apply extension allow/deny only to files (last segment when not dir)
+            if ($isLast && !$isDir && $policy instanceof UploadFilenamePolicy) {
+                $decision = $policy->filter($part);
+
+                if (!($decision['allowed'] ?? false)) {
+                    return null; // skip file
+                }
+
+                $part = (string) ($decision['filename'] ?? $part);
+            }
+
+            $sanitizedParts[] = $part;
+        }
+
+        $safe = implode('/', $sanitizedParts);
+
+        // Avoid empty results
+        if ('' === $safe) {
+            return null;
+        }
+
+        return $safe;
+    }
+
+    private function sanitizeZipSegment(string $segment): string
+    {
+        $segment = trim($segment);
+        $segment = preg_replace('/[\x00-\x1F\x7F]/u', '', $segment) ?? $segment;
+        $segment = str_replace(['\\', '/', "\0"], '-', $segment);
+
+        if ('' === $segment) {
+            return 'item';
+        }
+
+        return $segment;
+    }
+
+    private function disableDangerousZipName(string $name): string
+    {
+        $name = (string) preg_replace('/\.(phar.?|php.?|phtml.?)(\.){0,1}.*$/i', '.phps', $name);
+
+        return str_ireplace('.htaccess', 'htaccess.txt', $name);
+    }
+
+    private function writeZipEntryToPath(ZipArchive $zip, string $zipName, string $targetPath): bool
+    {
+        $stream = $zip->getStream($zipName);
+        if (false === $stream) {
+            return false;
+        }
+
+        $out = @fopen($targetPath, 'wb');
+        if (false === $out) {
+            @fclose($stream);
+
+            return false;
+        }
+
+        stream_copy_to_stream($stream, $out);
+
+        @fclose($out);
+        @fclose($stream);
+
+        return is_file($targetPath);
     }
 }

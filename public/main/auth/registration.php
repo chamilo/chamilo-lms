@@ -110,9 +110,8 @@ $markRequired = static function (FormValidator $form, string $name): void {
 
 /**
  * Registration settings (backward-compatible).
- * Note: We ALWAYS show the role selector (UI requirement),
- * but we still enforce platform rules (security) by disabling teacher role
- * when the setting is disabled, and forcing STUDENT on submit.
+ * Note: Role selector must be shown only when teacher self-registration is allowed.
+ * Security is still enforced on submit by forcing STUDENT when teacher self-registration is disabled.
  */
 $allowTeacherRegistrationRaw = api_get_setting('registration.allow_registration_as_teacher');
 if (null === $allowTeacherRegistrationRaw || '' === (string) $allowTeacherRegistrationRaw) {
@@ -148,8 +147,9 @@ if ('false' !== $allowedFieldsConfiguration) {
     $allowedFields['extra_fields'] = $extraFromConfig;
 }
 
-// UI requirement: always show role selector even if config removes it.
-if (!in_array('status', $allowedFields, true)) {
+// Show role selector only when teacher self-registration is allowed.
+// If disabled, we must NOT force 'status' into the allowed fields.
+if ($allowTeacherRegistration && !in_array('status', $allowedFields, true)) {
     $allowedFields[] = 'status';
 }
 
@@ -204,8 +204,7 @@ foreach ($forcedVisibleFields as $f) {
     }
 }
 
-$pluginTccDirectoryPath = api_get_path(SYS_PLUGIN_PATH) . 'logintcc';
-$isTccEnabled = (is_dir($pluginTccDirectoryPath) && Container::getPluginHelper()->isPluginEnabled('logintcc'));
+$isTccEnabled = false; //(is_dir(api_get_path(SYS_PLUGIN_PATH).'logintcc') && Container::getPluginHelper()->isPluginEnabled('logintcc'));
 $webserviceUrl = '';
 $hash = '';
 
@@ -333,32 +332,14 @@ document.addEventListener('DOMContentLoaded', function () {
   // Form container
   form.classList.add('max-w-4xl','mx-auto','bg-white','rounded-2xl','border','border-gray-25','shadow-sm','p-6','md:p-8');
 
-  // Inputs / selects / textareas
-  const controls = form.querySelectorAll('input[type="text"], input[type="email"], input[type="password"], input[type="tel"], select, textarea');
-  controls.forEach(el => {
-    // Skip hidden fields
-    if (el.type === 'hidden') return;
-
-    el.classList.add(
-      'w-full','rounded-xl','border','border-gray-25','bg-white',
-      'px-4','py-3','text-gray-90',
-      'focus:outline-none','focus:ring-2','focus:ring-gray-60','focus:border-gray-60'
-    );
-  });
-
-  // Labels
-  form.querySelectorAll('label').forEach(l => {
-    l.classList.add('text-sm','font-medium','text-gray-90');
-  });
-
   // Required markers often appear as <span class="form_required">*</span>
   form.querySelectorAll('.form_required').forEach(s => {
-    s.classList.add('text-red-60','font-semibold');
+    s.classList.add('text-danger','font-semibold');
   });
 
   // Error messages
   form.querySelectorAll('.form_error, .error').forEach(err => {
-    err.classList.add('text-red-60','text-sm','mt-1');
+    err.classList.add('text-danger','text-sm','mt-1');
   });
 
   // Improve spacing between rows (best-effort)
@@ -435,22 +416,64 @@ if ('true' === api_get_setting('session.allow_redirect_to_session_after_inscript
     }
 }
 
-// Direct Link Subscription feature #5299
-$course_code_redirect = isset($_REQUEST['c']) && !empty($_REQUEST['c']) ? $_REQUEST['c'] : null;
-$exercise_redirect = isset($_REQUEST['e']) && !empty($_REQUEST['e']) ? $_REQUEST['e'] : null;
+/**
+ * Build the redirect URL for a "direct registration" link.
+ * - Default: course home.
+ * - If an exercise ID is provided: redirect to the exercise tool inside the course.
+ */
+$buildDirectLinkRedirectUrl = static function (int $courseId, int $exerciseId = 0): string {
+    // Course home
+    $courseHomeUrl = api_get_path(WEB_PATH) . 'course/' . $courseId . '/home?sid=0';
 
-if (!empty($course_code_redirect)) {
+    if ($exerciseId <= 0) {
+        return $courseHomeUrl;
+    }
+
+    $courseInfo = api_get_course_info_by_id($courseId);
+    $courseCode = $courseInfo['code'] ?? $courseInfo['course_code'] ?? $courseInfo['directory'] ?? '';
+
+    if (empty($courseCode)) {
+        return $courseHomeUrl;
+    }
+
+    // Go to the exercise entrypoint
+    $query = http_build_query([
+        'cid' => $courseId,
+        'sid' => 0,
+        'gid' => 0,
+        'exerciseId' => $exerciseId,
+    ]);
+
+    return api_get_path(WEB_CODE_PATH) . 'exercise/overview.php?' . $query;
+};
+
+$courseIdRedirect = isset($_REQUEST['c']) && !empty($_REQUEST['c']) ? (int) $_REQUEST['c'] : null;
+$exercise_redirect = isset($_REQUEST['e']) && !empty($_REQUEST['e']) ? (int) $_REQUEST['e'] : 0;
+
+if (!empty($courseIdRedirect)) {
+    $courseInfo = api_get_course_info_by_id($courseIdRedirect);
+    $visibility = (int) ($courseInfo['visibility'] ?? -1);
+
+    $isOpenCourse = in_array(
+        $visibility,
+        [COURSE_VISIBILITY_OPEN_PLATFORM, COURSE_VISIBILITY_OPEN_WORLD],
+        true
+    );
+
     if (!api_is_anonymous()) {
-        $course_info = api_get_course_info($course_code_redirect);
-        $subscribed = CourseManager::autoSubscribeToCourse($course_code_redirect);
-        if ($subscribed) {
-            header('Location: ' . api_get_path(WEB_PATH) . 'course/'.$course_info['real_id'].'/home?sid=0');
-        } else {
-            header('Location: ' . api_get_path(WEB_PATH) . 'course/'.$course_info['real_id'].'/about');
+        if ($isOpenCourse) {
+            if ($exercise_redirect > 0) {
+                CourseManager::autoSubscribeToCourse($courseIdRedirect);
+            }
+
+            header('Location: ' . $buildDirectLinkRedirectUrl($courseIdRedirect, $exercise_redirect));
+            exit;
         }
+
+        header('Location: ' . api_get_path(WEB_PATH) . 'course/' . $courseIdRedirect . '/about');
         exit;
     }
-    Session::write('course_redirect', $course_code_redirect);
+    Session::write('course_redirect', $courseIdRedirect);
     Session::write('exercise_redirect', $exercise_redirect);
 }
 
@@ -458,10 +481,10 @@ if (!empty($course_code_redirect)) {
 if (false === $userAlreadyRegisteredShowTerms && 'false' !== api_get_setting('allow_registration')) {
     /**
      * ROLE SELECTOR (Learner / Teacher)
-     * UI: always shown (forced in allowed fields).
-     * Security: teacher option disabled if platform forbids it, and backend forces STUDENT on submit.
+     * UI: must be shown only when teacher self-registration is allowed.
+     * Security: backend forces STUDENT on submit when teacher self-registration is disabled.
      */
-    if (in_array('status', $allowedFields, true)) {
+    if ($allowTeacherRegistration && in_array('status', $allowedFields, true)) {
         $iconSize = defined('ICON_SIZE_MEDIUM') ? ICON_SIZE_MEDIUM : 28;
 
         $renderIcon = static function (ObjectIcon|string $icon) use ($iconSize): string {
@@ -488,7 +511,7 @@ if (false === $userAlreadyRegisteredShowTerms && 'false' !== api_get_setting('al
         // Title (with required asterisk) above cards.
         $form->addHtml('
             <div class="mb-3">
-                <div class="text-lg font-semibold text-gray-90">'.$title.' <span class="text-red-60">*</span></div>
+                <div class="text-lg font-semibold text-gray-90">'.$title.' <span class="text-danger">*</span></div>
             </div>
         ');
 
@@ -928,10 +951,10 @@ EOD;
     $settingRequiredFields = api_get_setting('registration.required_extra_fields_in_inscription', true);
     $requiredExtraFieldVars = $normalizeSettingList($settingRequiredFields);
 
-// Load extra fields if:
-// - extra fields are enabled in allow_fields_inscription OR
-// - there are required extra fields configured OR
-// - conditions extra fields exist (profile.show_conditions_to_user)
+    // Load extra fields if:
+    // - extra fields are enabled in allow_fields_inscription OR
+    // - there are required extra fields configured OR
+    // - conditions extra fields exist (profile.show_conditions_to_user)
     $shouldLoadExtraFields = (
         array_key_exists('extra_fields', $allowedFields) ||
         in_array('extra_fields', $allowedFields, true) ||
@@ -1131,11 +1154,6 @@ if (!empty($_GET['openid_msg']) && 'idnotfound' == $_GET['openid_msg']) {
     $content .= Display::return_message(get_lang('This OpenID could not be found in our database. Please register for a new account. If you have already an account with us, please edit your profile inside your account to add this OpenID'));
 }
 
-if ($extraConditions) {
-    $form->addCheckBox('extra_platformuseconditions', null, get_lang('Platform use conditions'));
-    $form->addRule('extra_platformuseconditions', get_lang('Required field'), 'required');
-}
-
 $blockButton = false;
 $termActivated = false;
 $showTerms = false;
@@ -1157,7 +1175,16 @@ if ($blockButton) {
     );
 } else {
     $allow = ('true' === api_get_setting('registration.allow_double_validation_in_registration'));
-    ChamiloHelper::addLegalTermsFields($form, $userAlreadyRegisteredShowTerms);
+
+    if ('login' === api_get_setting('workflows.load_term_conditions_section')) {
+        ChamiloHelper::addLegalTermsFields($form, $userAlreadyRegisteredShowTerms);
+    }
+
+    /**
+     * Double validation must be controlled ONLY by:
+     * registration.allow_double_validation_in_registration
+     * It must not depend on Terms & Conditions activation.
+     */
     if ($allow && !$termActivated) {
         $htmlHeadXtra[] = '<script>
             $(document).ready(function() {
@@ -1182,7 +1209,7 @@ if ($blockButton) {
     $showTerms = true;
 }
 
-$course_code_redirect = Session::read('course_redirect');
+$courseIdRedirect = Session::read('course_redirect');
 $sessionToRedirect = Session::read('session_redirect');
 
 if ($extraConditions && $extraFieldsLoaded) {
@@ -1225,6 +1252,17 @@ if ($form->validate()) {
 
     // Security rule: if teacher registration is disabled, force learner status.
     if (!$allowTeacherRegistration) {
+        $values['status'] = STUDENT;
+    }
+
+    // Security rule: server-side allow-list on submitted status to prevent
+    // privilege mass-assignment (CWE-915). The UI only offers STUDENT/COURSEMANAGER;
+    // any other value (e.g. SESSIONADMIN, DRH, COURSEMANAGERLOWSECURITY) coming
+    // from a tampered POST must be downgraded to STUDENT.
+    $allowedSelfRegistrationStatus = $allowTeacherRegistration
+        ? [STUDENT, COURSEMANAGER]
+        : [STUDENT];
+    if (!in_array((int) ($values['status'] ?? STUDENT), $allowedSelfRegistrationStatus, true)) {
         $values['status'] = STUDENT;
     }
 
@@ -1360,8 +1398,8 @@ if ($form->validate()) {
         }
 
         // Saving user to course if it was set.
-        if (!empty($course_code_redirect)) {
-            $course_info = api_get_course_info($course_code_redirect);
+        if (!empty($courseIdRedirect)) {
+            $course_info = api_get_course_info_by_id($courseIdRedirect);
             if (!empty($course_info)) {
                 if (in_array(
                     $course_info['visibility'],
@@ -1373,13 +1411,13 @@ if ($form->validate()) {
                 ) {
                     CourseManager::subscribeUser(
                         $userId,
-                        $course_info['real_id']
+                        $courseIdRedirect
                     );
                 }
             }
         }
 
-        /* If the account has to be approved then we set the account to inactive,
+        /* If the account has to be approved, then we set the account to inactive,
         sent a mail to the platform admin and exit the page.*/
         if ('approval' === api_get_setting('allow_registration')) {
             // 1. Send mail to all platform admin
@@ -1422,7 +1460,6 @@ if ($form->validate()) {
         }
     }
 
-
     /* SESSION REGISTERING */
     /* @todo move this in a function */
     $user['firstName'] = stripslashes($values['firstname']);
@@ -1430,6 +1467,7 @@ if ($form->validate()) {
     $user['mail'] = $values['email'];
     $user['language'] = $values['language'];
     $user['user_id'] = $userId;
+    $user['id'] = $userId;
     Session::write('_user', $user);
 
     $is_allowedCreateCourse = isset($values['status']) && 1 == $values['status'];
@@ -1460,6 +1498,7 @@ if ($form->validate()) {
         'mail' => $values['email'],
         'language' => $values['language'],
         'user_id' => $userId,
+        'id' => $userId,
     ];
 
     $sessionHandler->set('_user', $userData);
@@ -1468,6 +1507,39 @@ if ($form->validate()) {
 
     // Stats
     Container::getTrackELoginRepository()->createLoginRecord($userEntity, new DateTime(), $request->getClientIp());
+
+    /**
+     * Direct link redirect (course + optional exercise).
+     */
+    $directCourseId = (int) Session::read('course_redirect');
+    $directExerciseId = (int) Session::read('exercise_redirect');
+
+    if ($directCourseId > 0) {
+        Session::erase('course_redirect');
+        Session::erase('exercise_redirect');
+
+        $courseInfo = api_get_course_info_by_id($directCourseId);
+        $visibility = (int) ($courseInfo['visibility'] ?? -1);
+
+        $isOpenCourse = in_array(
+            $visibility,
+            [COURSE_VISIBILITY_OPEN_PLATFORM, COURSE_VISIBILITY_OPEN_WORLD],
+            true
+        );
+
+        if ($isOpenCourse) {
+            // Only for exercises: helps tracking, but must not gate redirect.
+            if ($directExerciseId > 0) {
+                CourseManager::autoSubscribeToCourse($directCourseId);
+            }
+
+            header('Location: ' . $buildDirectLinkRedirectUrl($directCourseId, $directExerciseId));
+            exit;
+        }
+
+        header('Location: ' . api_get_path(WEB_PATH) . 'course/' . $directCourseId . '/about');
+        exit;
+    }
 
     // last user login date is now
     $user_last_login_datetime = 0; // used as a unix timestamp it will correspond to : 1 1 1970
@@ -1618,8 +1690,8 @@ if ($form->validate()) {
     } else {
         if (!api_is_anonymous()) {
             // Saving user to course if it was set.
-            if (!empty($course_code_redirect)) {
-                $course_info = api_get_course_info($course_code_redirect);
+            if (!empty($courseIdRedirect)) {
+                $course_info = api_get_course_info_by_id($courseIdRedirect);
                 if (!empty($course_info)) {
                     if (in_array(
                         $course_info['visibility'],
@@ -1631,7 +1703,7 @@ if ($form->validate()) {
                     ) {
                         CourseManager::subscribeUser(
                             api_get_user_id(),
-                            $course_info['real_id']
+                            $courseIdRedirect
                         );
                     }
                 }
@@ -1643,15 +1715,39 @@ if ($form->validate()) {
         if (false !== $termActivated) {
             $inscriptionHeader = Display::page_header($toolName);
         }
+
         $em = Container::getEntityManager();
         $categoryRepo = $em->getRepository(PageCategory::class);
         $pageRepo = $em->getRepository(Page::class);
         $accessUrl = api_get_url_entity();
-        $locale = api_get_language_isocode();
+
+        $autoDetectCustomPageLanguage = 'true' === (string) api_get_setting('language.auto_detect_language_custom_pages');
+
+        $defaultCustomPageLocale = api_get_setting('platformLanguage');
+
+        if (!is_string($defaultCustomPageLocale) || '' === trim($defaultCustomPageLocale)) {
+            $defaultCustomPageLocale = function_exists('api_get_language_isocode')
+                ? api_get_language_isocode()
+                : 'en';
+        }
+
+        $currentCustomPageLocale = $autoDetectCustomPageLanguage
+            ? (function_exists('api_get_language_isocode') ? api_get_language_isocode() : $defaultCustomPageLocale)
+            : $defaultCustomPageLocale;
 
         $category = $categoryRepo->findOneBy(['title' => 'introduction']);
         $introPage = null;
-        if ($category) {
+
+        if ($category && method_exists($pageRepo, 'findEnabledPageByCategoryWithLocaleFallback')) {
+            $introPage = $pageRepo->findEnabledPageByCategoryWithLocaleFallback(
+                $accessUrl,
+                'introduction',
+                $currentCustomPageLocale,
+                $defaultCustomPageLocale
+            );
+        }
+
+        if (!$introPage && $category) {
             $introPage = $pageRepo->findOneBy([
                 'category' => $category,
                 'url' => $accessUrl,

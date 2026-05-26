@@ -45,7 +45,7 @@
       >
         <p
           class="update-message-text"
-          v-t="'An update is available. Click the button below to proceed with the update.'"
+          v-text="t('An update is available. Click the button below to proceed with the update.')"
         />
         <p>{{ installerData.checkMigrationStatus.message }}</p>
         <p v-if="installerData.checkMigrationStatus.current_migration">

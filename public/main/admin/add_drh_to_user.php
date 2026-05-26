@@ -86,7 +86,7 @@ if ($form->validate()) {
 }
 
 $interbreadcrumb[] = ['name' => get_lang('Administration'), 'url' => 'index.php'];
-$interbreadcrumb[] = ['name' => get_lang('User list'), 'url' => 'user_list.php'];
+$interbreadcrumb[] = ['name' => get_lang('User list'), 'url' => '/admin/user-list'];
 $interbreadcrumb[] = [
     'name' => UserManager::formatUserFullName($user),
     'url' => 'user_information.php?user_id='.$user->getId(),

@@ -7,7 +7,17 @@
       @click="back"
     />
   </BaseToolbar>
+
   <div class="flex flex-col justify-start">
+    <!-- Quota warning banner (visible when threshold is reached) -->
+    <div
+      v-if="quotaWarningMessage"
+      class="mb-4 rounded border border-yellow-200 bg-yellow-50 px-4 py-3 text-sm text-yellow-900"
+      role="alert"
+    >
+      {{ quotaWarningMessage }}
+    </div>
+
     <div class="mb-4">
       <Dashboard
         :plugins="['Webcam', 'ImageEditor']"
@@ -19,8 +29,97 @@
         :uppy="uppy"
       />
     </div>
+    <div class="mb-4 rounded-lg border border-gray-25 bg-white p-4">
+      <div class="mb-3 flex items-center justify-between gap-4">
+        <div>
+          <h2 class="text-base font-semibold text-gray-90">
+            {{ t("Cloud link") }}
+          </h2>
+          <p class="text-sm text-gray-50">
+            {{ t("Add a link to a cloud document, such as Google Drive or Google Docs.") }}
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="inline-flex items-center gap-2 rounded-md border border-primary px-3 py-2 text-sm font-semibold text-primary hover:bg-primary hover:text-white"
+          @click="isCloudLinkFormVisible = !isCloudLinkFormVisible"
+        >
+          <span
+            class="mdi mdi-link-variant"
+            aria-hidden="true"
+          />
+          {{ isCloudLinkFormVisible ? t("Cancel") : t("Add cloud link") }}
+        </button>
+      </div>
+
+      <form
+        v-if="isCloudLinkFormVisible"
+        class="grid gap-4 md:grid-cols-[1fr_2fr_auto]"
+        @submit.prevent="saveCloudLink"
+      >
+        <div class="flex flex-col gap-1">
+          <label
+            for="cloud_link_title"
+            class="text-sm font-semibold text-gray-70"
+          >
+            {{ t("Title") }}
+          </label>
+          <input
+            id="cloud_link_title"
+            v-model.trim="cloudLinkTitle"
+            name="cloud_link_title"
+            type="text"
+            class="rounded-md border border-gray-25 px-3 py-2 text-sm"
+            :placeholder="t('Document title')"
+            required
+          />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label
+            for="cloud_link_url"
+            class="text-sm font-semibold text-gray-70"
+          >
+            {{ t("URL") }}
+          </label>
+          <input
+            id="cloud_link_url"
+            v-model.trim="cloudLinkUrl"
+            name="cloud_link_url"
+            type="url"
+            class="rounded-md border border-gray-25 px-3 py-2 text-sm"
+            placeholder="https://docs.google.com/..."
+            required
+          />
+        </div>
+
+        <div class="flex items-end">
+          <button
+            type="submit"
+            class="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
+            :disabled="isSavingCloudLink"
+          >
+            <span
+              class="mdi mdi-content-save"
+              aria-hidden="true"
+            />
+            {{ isSavingCloudLink ? t("Saving...") : t("Save") }}
+          </button>
+        </div>
+
+        <div
+          v-if="cloudLinkError"
+          class="md:col-span-3 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700"
+          role="alert"
+        >
+          {{ cloudLinkError }}
+        </div>
+      </form>
+    </div>
 
     <BaseAdvancedSettingsButton v-model="showAdvancedSettings">
+      <ResourceLanguageSelector v-model="selectedLanguage" />
       <div class="flex flex-row mb-2">
         <label class="font-semibold w-28">{{ t("Options") }}:</label>
         <BaseCheckbox
@@ -93,7 +192,7 @@
 </template>
 
 <script setup>
-import { computed, ref, watch, onBeforeUnmount, onMounted } from "vue"
+import { computed, ref, watch, onBeforeUnmount, onMounted, unref } from "vue"
 import "@uppy/core/dist/style.css"
 import "@uppy/dashboard/dist/style.css"
 import "@uppy/image-editor/dist/style.css"
@@ -105,7 +204,6 @@ import XHRUpload from "@uppy/xhr-upload"
 import ImageEditor from "@uppy/image-editor"
 import { useRoute, useRouter } from "vue-router"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
-import { ENTRYPOINT } from "../../config/entrypoint"
 import { useCidReq } from "../../composables/cidReq"
 import { useUpload } from "../../composables/upload"
 import { useI18n } from "vue-i18n"
@@ -114,7 +212,9 @@ import BaseRadioButtons from "../../components/basecomponents/BaseRadioButtons.v
 import BaseAdvancedSettingsButton from "../../components/basecomponents/BaseAdvancedSettingsButton.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
+import ResourceLanguageSelector from "../../components/resources/ResourceLanguageSelector.vue"
 import { usePlatformConfig } from "../../store/platformConfig"
+import documentsService from "../../services/documents"
 
 const route = useRoute()
 const router = useRouter()
@@ -123,9 +223,71 @@ const { onCreated } = useUpload()
 const { t } = useI18n()
 const platformConfigStore = usePlatformConfig()
 
-const allowedFiletypes = ["file", "video", "certificate"]
-const filetypeQuery = route.query.filetype
-const filetype = allowedFiletypes.includes(filetypeQuery) ? filetypeQuery : "file"
+const LOW_QUOTA_THRESHOLD_PERCENT = 2
+const QUOTA_STALE_MS = 30_000
+
+function normalizePickerType(raw) {
+  const value = String(raw || "")
+    .trim()
+    .toLowerCase()
+
+  if (value === "image" || value === "images") return "image"
+  if (value === "media" || value === "video" || value === "audio") return "media"
+  if (value === "certificate") return "certificate"
+
+  return "file"
+}
+
+function pickerTypeToRouteType(type) {
+  if (type === "image") return "images"
+  if (type === "media") return "media"
+  return "files"
+}
+
+function resolveUploadFiletype(raw, pickerType) {
+  const value = String(raw || "")
+    .trim()
+    .toLowerCase()
+
+  if (pickerType === "certificate") {
+    return "certificate"
+  }
+
+  // Keep legacy compatibility if a caller still explicitly uses "video".
+  if (value === "video") {
+    return "video"
+  }
+
+  return "file"
+}
+
+function getAllowedFileTypes(pickerType) {
+  if (pickerType === "image") {
+    return ["image/*"]
+  }
+
+  if (pickerType === "media") {
+    return ["video/*", "audio/*"]
+  }
+
+  if (pickerType === "certificate") {
+    return [".html"]
+  }
+
+  return null
+}
+
+function buildReturnQuery(overrides = {}) {
+  return {
+    ...route.query,
+    type: pickerTypeToRouteType(pickerType),
+    ...overrides,
+  }
+}
+
+const requestedType = String(route.query.type || route.query.filetype || "file")
+const pickerType = normalizePickerType(requestedType)
+const filetype = resolveUploadFiletype(requestedType, pickerType)
 
 const showAdvancedSettings = ref(false)
 const isUncompressZipEnabled = ref(false)
@@ -139,7 +301,27 @@ const searchFields = ref([])
 const searchFieldValues = ref({})
 
 const parentResourceNodeId = ref(Number(route.query.parentResourceNodeId || route.params.node))
-const resourceLinkList = ref(JSON.stringify([{ gid, sid, cid, visibility: RESOURCE_LINK_PUBLISHED }]))
+const isCloudLinkFormVisible = ref(false)
+const cloudLinkTitle = ref("")
+const cloudLinkUrl = ref("")
+const cloudLinkError = ref("")
+const isSavingCloudLink = ref(false)
+const selectedLanguage = ref("")
+
+// Banner warning
+const quotaWarningMessage = ref("")
+
+// Latest quota info (stored for client-side validation).
+const quotaInfo = ref({
+  availableBytes: null,
+  availablePercent: null,
+  fetchedAt: 0,
+})
+
+function toInt(value, fallback = 0) {
+  const n = Number(unref(value))
+  return Number.isFinite(n) ? n : fallback
+}
 
 function normalizeCode(code) {
   return String(code || "")
@@ -156,6 +338,154 @@ function buildSearchFieldMeta(values, fields) {
     meta[`searchFieldValues[${code}]`] = String(values?.[code] ?? "")
   }
   return meta
+}
+
+function buildResourceLinkList() {
+  return JSON.stringify([
+    {
+      gid: toInt(gid, 0),
+      sid: toInt(sid, 0),
+      cid: toInt(cid, 0),
+      visibility: RESOURCE_LINK_PUBLISHED,
+    },
+  ])
+}
+
+function buildResourceLinkArray() {
+  return [
+    {
+      gid: toInt(gid, 0),
+      sid: toInt(sid, 0),
+      cid: toInt(cid, 0),
+      visibility: RESOURCE_LINK_PUBLISHED,
+    },
+  ]
+}
+
+async function saveCloudLink() {
+  cloudLinkError.value = ""
+
+  const title = String(cloudLinkTitle.value || "").trim()
+  const url = String(cloudLinkUrl.value || "").trim()
+  const parentNodeId = Number(parentResourceNodeId.value) || 0
+
+  if (!title) {
+    cloudLinkError.value = t("The title is required.")
+    return
+  }
+
+  if (!url) {
+    cloudLinkError.value = t("The URL is required.")
+    return
+  }
+
+  if (parentNodeId <= 0) {
+    cloudLinkError.value = t("The destination folder is missing.")
+    return
+  }
+
+  isSavingCloudLink.value = true
+
+  try {
+    const document = await documentsService.createCloudLink({
+      title,
+      comment: url,
+      parentResourceNodeId: parentNodeId,
+      resourceLinkList: buildResourceLinkArray(),
+      language: selectedLanguage.value,
+    })
+
+    onCreated(document)
+
+    localStorage.setItem("isUploaded", "true")
+    localStorage.setItem("uploadParentNodeId", parentNodeId)
+
+    cloudLinkTitle.value = ""
+    cloudLinkUrl.value = ""
+    isCloudLinkFormVisible.value = false
+
+    if (route.query.returnTo) {
+      await router.push({
+        name: String(route.query.returnTo),
+        params: { node: parentNodeId },
+        query: buildReturnQuery({ parentResourceNodeId: parentNodeId }),
+      })
+
+      return
+    }
+
+    router.back()
+  } catch (error) {
+    console.error("[Documents] Failed to create cloud link.", error)
+    cloudLinkError.value = error?.message || t("Unable to create cloud link.")
+  } finally {
+    isSavingCloudLink.value = false
+  }
+}
+
+/**
+ * Refresh quota info using documentsService cache and update the banner.
+ */
+async function refreshQuota(force = false) {
+  const courseId = toInt(cid, 0)
+  if (!courseId) return null
+
+  const info = await documentsService.getQuotaUsage(courseId, {
+    sid: toInt(sid, 0),
+    gid: toInt(gid, 0),
+    force,
+    staleMs: QUOTA_STALE_MS,
+  })
+
+  quotaInfo.value = info || { availableBytes: null, availablePercent: null, fetchedAt: 0 }
+
+  const msg = documentsService.getQuotaWarningMessage(t, info, {
+    thresholdPercent: LOW_QUOTA_THRESHOLD_PERCENT,
+  })
+
+  quotaWarningMessage.value = msg
+
+  if (msg) {
+    uppy.info(msg, "warning", 9000)
+  }
+
+  return info
+}
+
+function getQueuedBytesExcluding(fileId) {
+  const files = uppy.getFiles?.() || []
+  let total = 0
+  for (const f of files) {
+    if (!f) continue
+    if (fileId && f.id === fileId) continue
+    total += Number(f.size || 0)
+  }
+  return total
+}
+
+async function enforceQuotaForFile(file) {
+  if (!file) return true
+
+  const info = await refreshQuota(false)
+  if (!info) return true
+
+  const availableBytes = Number(info.availableBytes)
+  if (!Number.isFinite(availableBytes)) return true
+
+  const alreadyQueued = getQueuedBytesExcluding(file.id)
+  const wouldUse = alreadyQueued + Number(file.size || 0)
+
+  if (availableBytes <= 0 || wouldUse > availableBytes) {
+    uppy.info(documentsService.getQuotaUploadErrorMessage(t), "error", 9000)
+    try {
+      uppy.removeFile(file.id)
+    } catch {
+      // Ignore Uppy remove errors.
+    }
+    return false
+  }
+
+  return true
 }
 
 const uppy = new Uppy({ autoProceed: false })
@@ -180,9 +510,49 @@ const uppy = new Uppy({ autoProceed: false })
     },
   })
   .use(XHRUpload, {
-    endpoint: ENTRYPOINT + "documents",
+    endpoint: "/api/documents",
     formData: true,
     fieldName: "uploadFile",
+    getResponseError: (responseText, xhr) => {
+      const status = xhr?.status
+
+      // If server returns common quota statuses, always map to the quota message.
+      if (status === 507 || status === 413) {
+        return new Error(documentsService.getQuotaUploadErrorMessage(t))
+      }
+
+      const msg = documentsService.extractApiErrorMessageFromText(responseText)
+
+      if (documentsService.isQuotaError(status, msg)) {
+        return new Error(documentsService.getQuotaUploadErrorMessage(t))
+      }
+
+      if (!msg) {
+        return new Error(`Upload failed (HTTP ${status ?? "unknown"}).`)
+      }
+
+      return new Error(msg)
+    },
+  })
+
+uppy.on("file-added", async (file) => {
+  // Validate quota before user starts uploading.
+  await enforceQuotaForFile(file)
+})
+
+uppy
+  .on("upload-error", async (file, error) => {
+    // If Uppy shows a generic network error but quota says it doesn't fit, show the real message.
+    const info = await refreshQuota(false)
+    const availableBytes = Number(info?.availableBytes)
+
+    if (file?.size && Number.isFinite(availableBytes) && file.size > availableBytes) {
+      uppy.info(documentsService.getQuotaUploadErrorMessage(t), "error", 9000)
+      return
+    }
+
+    const msg = error?.message || "Upload failed."
+    uppy.info(msg, "error", 9000)
   })
   .on("upload-success", (_item, response) => {
     onCreated(response.body)
@@ -194,9 +564,9 @@ const uppy = new Uppy({ autoProceed: false })
     setTimeout(() => {
       if (route.query.returnTo) {
         router.push({
-          name: route.query.returnTo,
+          name: String(route.query.returnTo),
           params: { node: parentNodeId },
-          query: { ...route.query, parentResourceNodeId: parentNodeId },
+          query: buildReturnQuery({ parentResourceNodeId: parentNodeId }),
         })
       } else {
         router.back()
@@ -204,29 +574,29 @@ const uppy = new Uppy({ autoProceed: false })
     }, 2000)
   })
 
-// Initial meta (do not send searchFieldValues as an object)
 uppy.setMeta({
   filetype,
   parentResourceNodeId: parentResourceNodeId.value,
-  resourceLinkList: resourceLinkList.value,
+  resourceLinkList: buildResourceLinkList(),
   isUncompressZipEnabled: isUncompressZipEnabled.value,
   fileExistsOption: fileExistsOption.value,
   indexDocumentContent: indexDocumentContent.value,
+  language: selectedLanguage.value,
 })
 
-if (filetype === "certificate") {
-  uppy.setOptions({ restrictions: { allowedFileTypes: [".html"] } })
-} else if (filetype === "video") {
-  uppy.setOptions({ restrictions: { allowedFileTypes: ["video/*"] } })
-} else {
-  uppy.setOptions({ restrictions: { allowedFileTypes: null } })
-}
+uppy.setOptions({
+  restrictions: {
+    allowedFileTypes: getAllowedFileTypes(pickerType),
+  },
+})
 
 onMounted(async () => {
+  await refreshQuota(true)
+
   if (!isSearchEnabled.value) return
 
   try {
-    const response = await fetch(ENTRYPOINT + "search_engine_fields", { credentials: "same-origin" })
+    const response = await fetch("/api/search_engine_fields", { credentials: "same-origin" })
     if (!response.ok) {
       console.error("[Search] Failed to load search engine fields:", response.status)
       return
@@ -273,6 +643,10 @@ watch(indexDocumentContent, (value) => {
   uppy.setMeta({ indexDocumentContent: value })
 })
 
+watch(selectedLanguage, (value) => {
+  uppy.setMeta({ language: value })
+})
+
 watch(
   searchFieldValues,
   () => {
@@ -282,7 +656,14 @@ watch(
 )
 
 function back() {
-  const queryParams = { cid, sid, gid, filetype, tab: route.query.tab }
+  const queryParams = {
+    ...buildReturnQuery(),
+    cid: toInt(cid, 0),
+    sid: toInt(sid, 0),
+    gid: toInt(gid, 0),
+    tab: route.query.tab,
+  }
+
   if (route.query.tab) {
     router.push({
       name: "FileManagerList",

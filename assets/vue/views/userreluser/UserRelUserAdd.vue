@@ -1,6 +1,6 @@
 <template>
   <h2
-    v-t="'Add friends'"
+    v-text="t('Add friends')"
     class="mr-auto"
   />
   <hr />
@@ -15,7 +15,7 @@
   <div class="flex flex-row pt-2">
     <div class="w-full">
       <div
-        v-t="'Search'"
+        v-text="t('Search')"
         class="text-h4 q-mb-md"
       />
 
@@ -103,13 +103,9 @@ const sendNotificationMessage = async (friend) => {
   const targetUserId = extractIdFromPath(friend["@id"])
 
   const messageData = {
-    userId: userId,
-    targetUserId: targetUserId,
-    action: "send_message",
-    subject: t("You have a new friend request"),
-    content:
-      t("You have received a new friend request. Visit the invitations page to accept or reject the request.") +
-      ` <a href="/resources/friends">${t("here")}</a>`,
+    userId,
+    targetUserId,
+    action: "send_friend_request_message",
   }
 
   try {

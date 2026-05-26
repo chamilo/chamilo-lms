@@ -15,3 +15,15 @@ services:
   Chamilo\LtiBundle\Controller\:
     resource: '../../Controller'
     tags: ['controller.service_arguments']
+
+  Chamilo\LtiBundle\Security\LtiProviderLaunchToken:
+    arguments:
+      $secret: '%kernel.secret%'
+
+  Chamilo\LtiBundle\EventSubscriber\LtiProviderRequestSubscriber:
+    tags:
+      - { name: kernel.event_subscriber }
+
+  Chamilo\LtiBundle\EventSubscriber\LtiProviderResponseSubscriber:
+    tags:
+      - { name: kernel.event_subscriber }

@@ -22,7 +22,7 @@ $csvCustomError = '';
 $topStaticErrorHtml = '';
 
 //$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('Administration'));
-$interbreadcrumb[] = ['url' => "session_list.php", "name" => get_lang('Session list')];
+$interbreadcrumb[] = ['url' => "/admin/session-list", "name" => get_lang('Session list')];
 $interbreadcrumb[] = [
     'url' => "resume_session.php?id_session=".$session_id,
     "name" => get_lang('Session overview'),

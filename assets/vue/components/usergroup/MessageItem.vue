@@ -37,25 +37,32 @@
         </div>
       </div>
       <div class="message-actions">
-        <BaseIcon
+        <BaseButton
+          :label="t('Reply to this message')"
           icon="reply"
-          size="normal"
+          only-icon
+          size="small"
+          type="black"
           @click="$emit('replyMessage', message)"
         />
-        <div>
-          <BaseIcon
-            v-if="isMessageCreator(message)"
-            icon="edit"
-            size="normal"
-            @click="$emit('editMessage', message)"
-          />
-          <BaseIcon
-            v-if="isMainMessage && isModerator"
-            icon="delete"
-            size="normal"
-            @click="$emit('deleteMessage', message)"
-          />
-        </div>
+        <BaseButton
+          v-if="isMessageCreator(message)"
+          :label="t('Edit')"
+          icon="edit"
+          only-icon
+          size="small"
+          type="black"
+          @click="$emit('editMessage', message)"
+        />
+        <BaseButton
+          v-if="isMainMessage && isModerator"
+          :label="t('Delete')"
+          icon="delete"
+          only-icon
+          size="small"
+          type="danger"
+          @click="$emit('deleteMessage', message)"
+        />
       </div>
       <div class="child-messages">
         <MessageItem
@@ -74,8 +81,11 @@
 </template>
 
 <script setup>
-import BaseIcon from "../basecomponents/BaseIcon.vue"
+import BaseButton from "../basecomponents/BaseButton.vue"
 import { useFormatDate } from "../../composables/formatDate"
+import { useI18n } from "vue-i18n"
+
+const { t } = useI18n()
 
 const { relativeDatetime } = useFormatDate()
 const { message, indentation, currentUser, isMainMessage, isModerator } = defineProps({

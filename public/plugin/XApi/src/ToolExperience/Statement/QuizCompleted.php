@@ -6,66 +6,72 @@ declare(strict_types=1);
 
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Statement;
 
-use Chamilo\CoreBundle\Entity\TrackEExercises;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\PluginBundle\XApi\ToolExperience\Activity\Quiz as QuizActivity;
 use Chamilo\PluginBundle\XApi\ToolExperience\Actor\User as UserActor;
 use Chamilo\PluginBundle\XApi\ToolExperience\Verb\Completed as CompletedVerb;
-use Xabbuh\XApi\Model\Result;
-use Xabbuh\XApi\Model\Score;
-use Xabbuh\XApi\Model\Statement;
 
 /**
  * Class QuizCompleted.
  */
 class QuizCompleted extends BaseStatement
 {
-    /**
-     * @var TrackEExercises
-     */
-    private $exe;
+    private TrackEExercise $exe;
+    private CQuiz $quiz;
 
-    /**
-     * @var CQuiz
-     */
-    private $quiz;
-
-    public function __construct(TrackEExercises $exe, CQuiz $quiz)
+    public function __construct(TrackEExercise $exe, CQuiz $quiz)
     {
         $this->exe = $exe;
         $this->quiz = $quiz;
     }
 
-    public function generate(): Statement
+    public function generate(): array
     {
-        $user = api_get_user_entity($this->exe->getExeUserId());
+        $user = $this->exe->getUser();
 
         $userActor = new UserActor($user);
         $completedVerb = new CompletedVerb();
         $quizActivity = new QuizActivity($this->quiz);
 
-        $rawResult = $this->exe->getExeResult();
-        $maxResult = $this->exe->getExeWeighting();
-        $scaledResult = $rawResult / $maxResult;
+        $rawResult = (float) $this->exe->getScore();
+        $maxResult = (float) $this->exe->getMaxScore();
+        $scaledResult = $maxResult > 0 ? ($rawResult / $maxResult) : 0.0;
 
         $duration = $this->exe->getExeDuration();
-
-        return new Statement(
-            $this->generateStatementId('exercise'),
-            $userActor->generate(),
-            $completedVerb->generate(),
-            $quizActivity->generate(),
-            new Result(
-                new Score($scaledResult, $rawResult, 0, $maxResult),
-                null,
-                true,
-                null,
-                $duration ? "PT{$duration}S" : null
-            ),
+        $result = $this->buildResult(
+            $this->buildScore($scaledResult, $rawResult, 0.0, $maxResult > 0 ? $maxResult : null),
             null,
-            $this->exe->getExeDate(),
+            true,
             null,
-            $this->generateContext()
+            $duration ? "PT{$duration}S" : null
         );
+
+        return [
+            'id' => $this->generateStatementId('exercise'),
+            'actor' => $userActor->generate(),
+            'verb' => $completedVerb->generate(),
+            'object' => $quizActivity->generate(),
+            'result' => $result,
+            'timestamp' => $this->normalizeTimestamp($this->exe->getExeDate()),
+            'context' => $this->generateContext(),
+        ];
+    }
+
+    private function normalizeTimestamp($value): string
+    {
+        if ($value instanceof \DateTimeInterface) {
+            return $value->format(DATE_ATOM);
+        }
+
+        $stringValue = trim((string) $value);
+
+        if ('' === $stringValue) {
+            return gmdate(DATE_ATOM);
+        }
+
+        $timestamp = strtotime($stringValue);
+
+        return false !== $timestamp ? gmdate(DATE_ATOM, $timestamp) : gmdate(DATE_ATOM);
     }
 }

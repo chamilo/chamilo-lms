@@ -20,11 +20,10 @@ class CertificateSettingsSchema extends AbstractSettingsSchema
             'add_certificate_pdf_footer' => 'false',
             'session_admin_can_download_all_certificates' => 'false',
             'allow_public_certificates' => 'false',
-
+            'allow_certificates_search' => 'false',
             'certificate_pdf_orientation' => 'landscape',
             'allow_general_certificate' => 'false',
             'hide_certificate_export_link' => 'false',
-            'add_gradebook_certificates_cron_task_enabled' => 'false',
             'certificate_filter_by_official_code' => 'false',
             'hide_certificate_export_link_students' => 'false',
         ]);
@@ -34,6 +33,7 @@ class CertificateSettingsSchema extends AbstractSettingsSchema
             'add_certificate_pdf_footer' => ['string'],
             'session_admin_can_download_all_certificates' => ['string'],
             'certificate_filter_by_official_code' => ['string'],
+            'allow_certificates_search' => ['string'],
         ];
 
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
@@ -47,6 +47,7 @@ class CertificateSettingsSchema extends AbstractSettingsSchema
             ->add('session_admin_can_download_all_certificates', YesNoType::class)
 
             ->add('allow_public_certificates', YesNoType::class)
+            ->add('allow_certificates_search', YesNoType::class)
             ->add('certificate_pdf_orientation', ChoiceType::class, [
                 'choices' => [
                     'Portrait' => 'portrait',
@@ -55,7 +56,6 @@ class CertificateSettingsSchema extends AbstractSettingsSchema
             ])
             ->add('allow_general_certificate', YesNoType::class)
             ->add('hide_certificate_export_link', YesNoType::class)
-            ->add('add_gradebook_certificates_cron_task_enabled', YesNoType::class)
             ->add('certificate_filter_by_official_code', YesNoType::class)
             ->add('hide_certificate_export_link_students', YesNoType::class)
         ;

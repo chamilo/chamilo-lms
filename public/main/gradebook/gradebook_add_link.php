@@ -106,7 +106,7 @@ if (isset($typeSelected) && '0' != $typeSelected) {
         if ($link->needs_name_and_description()) {
             $link->set_description($addvalues['description']);
         }
-        $link->set_visible(empty($addvalues['visible']) ? 0 : 1);
+        $link->set_visible(1);
 
         // Update view_properties
         if (isset($typeSelected) &&

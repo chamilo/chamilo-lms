@@ -371,7 +371,7 @@ class SortableTable extends HTML_Table
             return '';
         }
 
-        $params = $this->get_sortable_table_param_string().'&amp;'.$this->get_additional_url_paramstring();
+        $params = $this->get_sortable_table_param_string().'&amp;'.$this->get_additional_url_paramstring().'&'.api_get_cidreq();
         $table_id = 'form_'.$this->table_name.'_id';
         $html = '';
         $form = '';
@@ -398,7 +398,7 @@ class SortableTable extends HTML_Table
         }
 
         if (count($this->form_actions) > 0) {
-            $params = $this->get_sortable_table_param_string().'&amp;'.$this->get_additional_url_paramstring();
+            $params = $this->get_sortable_table_param_string().'&amp;'.$this->get_additional_url_paramstring().'&'.api_get_cidreq();
             $html .= '<form
                 id ="'.$table_id.'"
                 class="form-search"
@@ -412,9 +412,36 @@ class SortableTable extends HTML_Table
         $html .= $content.'</div>';
 
         if (!empty($this->additional_parameters)) {
-            foreach ($this->additional_parameters as $key => $value) {
-                $html .= '<input type="hidden" name="'.Security::remove_XSS($key).'" value ="'
+            $appendHiddenInput = function (string $name, mixed $value) use (&$html, &$appendHiddenInput): void {
+                if (is_array($value)) {
+                    foreach ($value as $childKey => $childValue) {
+                        $childName = is_int($childKey)
+                            ? $name.'[]'
+                            : $name.'['.$childKey.']';
+
+                        $appendHiddenInput($childName, $childValue);
+                    }
+
+                    return;
+                }
+
+                if (null === $value) {
+                    $value = '';
+                } elseif (is_bool($value)) {
+                    $value = $value ? '1' : '0';
+                } elseif (!is_scalar($value)) {
+                    // Skip unsupported values (objects/resources)
+                    return;
+                } else {
+                    $value = (string) $value;
+                }
+
+                $html .= '<input type="hidden" name="'.Security::remove_XSS($name).'" value="'
                     .Security::remove_XSS($value).'" />';
+            };
+
+            foreach ($this->additional_parameters as $key => $value) {
+                $appendHiddenInput((string) $key, $value);
             }
         }
         $html .= '<input type="hidden" name="action">';
@@ -422,7 +449,7 @@ class SortableTable extends HTML_Table
         $html .= '<div class="flex w-full items-center justify-between">';
 
         if (count($this->actionButtons) > 0) {
-            $html .= '<div class="btn-toolbar flex space-x-2">';
+            $html .= '<div class="btn-toolbar flex gap-4">';
             $html .= '<div class="btn-group">';
 
             foreach ($this->actionButtons as $action => $data) {
@@ -435,17 +462,17 @@ class SortableTable extends HTML_Table
         }
 
         if (count($this->form_actions) > 0) {
-            $html .= '<div class="flex space-x-2">';
-            $html .= '<a class="btn btn--action mr-2" href="?'.$params.'&amp;'.$this->param_prefix.'selectall=1" onclick="javascript: setCheckbox(true, \''.$table_id.'\'); return false;">'
+            $html .= '<div class="grow flex gap-4">';
+            $html .= '<a class="btn btn--plain-outline btn--sm" href="?'.$params.'&amp;'.$this->param_prefix.'selectall=1" onclick="setCheckbox(true, \''.$table_id.'\'); return false;">'
                 .get_lang('Select all').'</a>';
-            $html .= '<a class="btn btn--action mr-2" href="?'.$params.'" onclick="javascript: setCheckbox(false, \''.$table_id.'\'); return false;">'
+            $html .= '<a class="btn btn--plain-outline btn--sm" href="?'.$params.'" onclick="setCheckbox(false, \''.$table_id.'\'); return false;">'
                 .get_lang('Deselect all').'</a>';
 
             $items = [];
             foreach ($this->form_actions as $action => $label) {
                 $items[] = [
-                    'href' => 'javascript:void();',
-                    'onclick' => "javascript:action_click(this, '$table_id');",
+                    'type' => 'button',
+                    'onclick' => "action_click(this, '$table_id');",
                     'title' => $label,
                     'data-action' => $action,
                     'data-confirm' => addslashes(api_htmlentities(get_lang("Please confirm your choice"))),
@@ -771,7 +798,7 @@ class SortableTable extends HTML_Table
             return '';
         }
 
-        $result[] = '<form method="GET" action="'.api_get_self().'" style="display:inline;">';
+        $result[] = '<form method="GET" action="'.api_get_self().'" style="display:inline;" data-no-autofocus="1">';
         $param[$this->param_prefix.'direction'] = $this->direction;
         $param[$this->param_prefix.'page_nr'] = $this->page_nr;
         $param[$this->param_prefix.'column'] = $this->column;
@@ -780,11 +807,22 @@ class SortableTable extends HTML_Table
             $param = array_merge($param, $this->additional_parameters);
         }
 
+        // Preserve course/session context so the form submission doesn't lose access rights
+        $cidreq = api_get_cidreq();
+        if (!empty($cidreq)) {
+            parse_str($cidreq, $cidreqParams);
+            foreach ($cidreqParams as $key => $value) {
+                if (!isset($param[$key])) {
+                    $param[$key] = $value;
+                }
+            }
+        }
+
         foreach ($param as $key => $value) {
             $result[] = '<input type="hidden" name="'.$key.'" value="'.$value.'"/>';
         }
         $result[] = '<select style="width: auto;" class="form-control" name="'.$this->param_prefix
-            .'per_page" onchange="javascript: this.form.submit();">';
+            .'per_page" onchange="this.form.submit();">';
         $list = [10, 20, 50, 100, 500, 1000];
 
         $rowList = api_get_setting('display.table_row_list', true);
@@ -917,38 +955,31 @@ class SortableTable extends HTML_Table
      */
     public function get_additional_url_paramstring()
     {
-        $param_string_parts = [];
-        if (is_array($this->additional_parameters) && count($this->additional_parameters) > 0) {
-            foreach ($this->additional_parameters as $key => $value) {
-                $param_string_parts[] = urlencode($key).'='.urlencode($value);
-            }
+        $result = '';
+
+        if (is_array($this->additional_parameters) && !empty($this->additional_parameters)) {
+            $query = http_build_query($this->additional_parameters, '', '&', PHP_QUERY_RFC1738);
+            $result = str_replace('&', '&amp;', $query);
         }
-        $result = implode('&amp;', $param_string_parts);
+
         foreach ($this->other_tables as $index => &$tablename) {
             $param = [];
-            if (isset($_GET[$tablename.'_direction'])) {
-                $my_get_direction = $_GET[$tablename.'_direction'];
-                if (!in_array($my_get_direction, ['ASC', 'DESC'])) {
-                    $param[$tablename.'_direction'] = 'ASC';
-                } else {
-                    $param[$tablename.'_direction'] = $my_get_direction;
+            if (isset($_GET['page'])) {
+                $param[] = 'page_'.$tablename.'='.Security::remove_XSS($_GET['page']);
+            }
+            if (isset($_GET['column'])) {
+                $param[] = 'column_'.$tablename.'='.Security::remove_XSS($_GET['column']);
+            }
+            if (isset($_GET['direction'])) {
+                $param[] = 'direction_'.$tablename.'='.Security::remove_XSS($_GET['direction']);
+            }
+
+            $param = implode('&amp;', $param);
+            if (!empty($param)) {
+                if (!empty($result)) {
+                    $result .= '&amp;';
                 }
-            }
-            if (isset($_GET[$tablename.'_page_nr'])) {
-                $param[$tablename.'_page_nr'] = intval($_GET[$tablename.'_page_nr']);
-            }
-            if (isset($_GET[$tablename.'_per_page'])) {
-                $param[$tablename.'_per_page'] = intval($_GET[$tablename.'_per_page']);
-            }
-            if (isset($_GET[$tablename.'_column'])) {
-                $param[$tablename.'_column'] = intval($_GET[$tablename.'_column']);
-            }
-            $param_string_parts = [];
-            foreach ($param as $key => &$value) {
-                $param_string_parts[] = urlencode($key).'='.urlencode($value);
-            }
-            if (count($param_string_parts) > 0) {
-                $result .= '&amp;'.implode('&amp;', $param_string_parts);
+                $result .= $param;
             }
         }
 
@@ -1063,7 +1094,8 @@ class SortableTable extends HTML_Table
                 $checkboxParams['checked'] = 'checked';
             }
 
-            $row[0] = Display::input('checkbox', $this->checkbox_name.'[]', $row[0], $checkboxParams);
+            $value = $row[0]; // keep original id
+            $row[0] = Display::input('checkbox', $this->checkbox_name.'[]', $value, $checkboxParams);
         }
         if (is_array($row)) {
             $row = array_map(

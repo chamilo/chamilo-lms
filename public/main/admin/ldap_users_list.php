@@ -24,8 +24,8 @@ api_protect_admin_script();
 $ldapHelper = Container::$container->get(LdapAuthenticatorHelper::class);
 $userRepo = Container::getUserRepository();
 
-$action = @$_GET["action"] ?: null;
-$login_as_user_id = @$_GET["user_id"] ?: null;
+$action = $_GET["action"] ?? null;
+$login_as_user_id = $_GET["user_id"] ?? null;
 
 // Login as ...
 if ("login_as" == $action && !empty($login_as_user_id)) {
@@ -49,7 +49,7 @@ if (isset($_GET['action'])) {
     if ($check) {
         switch ($_GET['action']) {
             case 'show_message':
-                Display::addFlash(Display::return_message($_GET['message'], 'normal'));
+                Display::addFlash(Display::return_message(htmlspecialchars($_GET['message'], ENT_QUOTES), 'normal'));
                 Display::display_header($tool_name);
                 break;
             case 'delete_user':
@@ -74,17 +74,33 @@ if (isset($_GET['action'])) {
                 $id = $_GET['id'];
                 $UserList = [];
                 $userid_match_login = [];
+                $errors = [];
                 foreach ($id as $user_id) {
-                    /** @var LdapAuthenticator $userAuthenticator */
-                    $userAuthenticator = Container::$container->get(LdapAuthenticator::class);
-                    $ldapUser = $userAuthenticator->getUserProvider()->loadUserByIdentifier($user_id);
-                    $user = $userAuthenticator->createUser($ldapUser);
+                    try {
+                        /** @var LdapAuthenticator $userAuthenticator */
+                        $userAuthenticator = Container::$container->get(LdapAuthenticator::class);
+                        $ldapUser = $ldapHelper->findLdapUserByIdentifier($user_id);
+                        if (null === $ldapUser) {
+                            $errors[] = $user_id.': '.get_lang('User not found');
+                            continue;
+                        }
+                        $user = $userAuthenticator->createUser($ldapUser);
 
-                    $UserList[] = $user->getId();
-                    $userid_match_login[$user->getId()] = $user_id;
+                        $UserList[] = $user->getId();
+                        $userid_match_login[$user->getId()] = $user_id;
+                    } catch (Exception $e) {
+                        $errors[] = $user_id.': '.$e->getMessage();
+                    }
                 }
                 if (isset($_GET['id_session']) && ($_GET['id_session'] == strval(intval($_GET['id_session']))) && ($_GET['id_session'] > 0)) {
-                    ldap_add_user_to_session($UserList, $_GET['id_session']);
+                    if (!empty($UserList)) {
+                        ldap_add_user_to_session($UserList, $_GET['id_session']);
+                    }
+                    if (!empty($errors)) {
+                        foreach ($errors as $error) {
+                            Display::addFlash(Display::return_message($error, 'error'));
+                        }
+                    }
                     header('Location: resume_session.php?id_session='.intval($_GET['id_session']));
                 } else {
                     if (count($userid_match_login) > 0) {
@@ -92,10 +108,16 @@ if (isset($_GET['action'])) {
                         foreach ($userid_match_login as $user_id => $login) {
                             $message .= '- '.$login.'<br />';
                         }
-                    } else {
-                        $message = get_lang('No user added');
+                        Display::addFlash(Display::return_message($message, 'normal', false));
                     }
-                    Display::addFlash(Display::return_message($message, 'normal', false));
+                    if (!empty($errors)) {
+                        foreach ($errors as $error) {
+                            Display::addFlash(Display::return_message($error, 'error'));
+                        }
+                    }
+                    if (empty($userid_match_login) && empty($errors)) {
+                        Display::addFlash(Display::return_message(get_lang('No user added'), 'normal'));
+                    }
                     Display::display_header($tool_name);
                 }
                 break;
@@ -132,15 +154,20 @@ if (isset($_POST['action'])) {
                 break;
             case 'add_user':
                 $number_of_selected_users = count($_POST['id']);
-                $number_of_added_users = 0;
                 $UserList = [];
                 foreach ($_POST['id'] as $index => $user_id) {
-                    /** @var LdapAuthenticator $userAuthenticator */
-                    $userAuthenticator = Container::$container->get(LdapAuthenticator::class);
-                    $ldapUser = $userAuthenticator->getUserProvider()->loadUserByIdentifier($user_id);
-                    $user = $userAuthenticator->createUser($ldapUser);
-
-                    $UserList[] = $user->getId();
+                    try {
+                        /** @var LdapAuthenticator $userAuthenticator */
+                        $userAuthenticator = Container::$container->get(LdapAuthenticator::class);
+                        $ldapUser = $ldapHelper->findLdapUserByIdentifier($user_id);
+                        if (null === $ldapUser) {
+                            continue;
+                        }
+                        $user = $userAuthenticator->createUser($ldapUser);
+                        $UserList[] = $user->getId();
+                    } catch (Exception $e) {
+                        echo Display::return_message($user_id.': '.$e->getMessage(), 'error');
+                    }
                 }
                 if (isset($_GET['id_session']) && ("" != trim($_GET['id_session']))) {
                     addUserToSession($UserList, $_GET['id_session']);
@@ -178,15 +205,15 @@ $type["student"] = get_lang('Learner');
 
 $form->addSelect('keyword_type', get_lang('Status'), $type);
 // Structure a rajouer ??
-$form->addElement('submit', 'submit', get_lang('Validate'));
+$form->addButtonSearch(get_lang('Validate'));
 //$defaults['keyword_active'] = 1;
 //$defaults['keyword_inactive'] = 1;
 //$form->setDefaults($defaults);
 $form->display();
-$parameters['keyword_username'] = @$_GET['keyword_username'] ?: null;
-$parameters['keyword_firstname'] = @$_GET['keyword_firstname'] ?: null;
-$parameters['keyword_lastname'] = @$_GET['keyword_lastname'] ?: null;
-$parameters['keyword_email'] = @$_GET['keyword_email'] ?: null;
+$parameters['keyword_username'] = $_GET['keyword_username'] ?? null;
+$parameters['keyword_firstname'] = $_GET['keyword_firstname'] ?? null;
+$parameters['keyword_lastname'] = $_GET['keyword_lastname'] ?? null;
+$parameters['keyword_email'] = $_GET['keyword_email'] ?? null;
 if (isset($_GET['id_session'])) {
     $parameters['id_session'] = $_GET['id_session'];
 }
@@ -239,6 +266,11 @@ $table->set_column_filter(
     }
 );
 $table->set_form_actions(['add_user' => get_lang('Add LDAP users')]);
-$table->display();
+
+try {
+    $table->display();
+} catch (Exception $exception) {
+    echo Display::return_message($exception->getMessage());
+}
 
 Display::display_footer();

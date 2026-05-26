@@ -383,20 +383,28 @@ switch ($action) {
         /** @var learnpath $lp */
         $lp = Session::read('oLP');
         $itemId = isset($_GET['item_id']) ? (int) $_GET['item_id'] : 0;
+
         if (empty($lp) || empty($itemId)) {
             exit;
         }
+
+        // Release the session lock early so this request does not queue behind other LP requests.
+        if (function_exists('session_write_close')) {
+            @session_write_close();
+        }
+
         $result = $lp->prerequisites_match($itemId);
         if ($result) {
             echo '1';
-        } else {
-            if (!empty($lp->error)) {
-                echo $lp->error;
-            } else {
-                echo get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
-            }
+            exit;
         }
-        $lp->error = '';
+
+        if (!empty($lp->error)) {
+            echo $lp->error;
+            exit;
+        }
+
+        echo get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
         exit;
     case 'add_lp_ai':
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -412,10 +420,24 @@ switch ($action) {
             exit;
         }
 
+        $aiAssisted = isset($requestData['ai_assisted']) && (int) $requestData['ai_assisted'] === 1;
+        $aiProvider = null;
+        if (isset($requestData['ai_provider'])) {
+            $aiProvider = trim((string) $requestData['ai_provider']);
+            if ('' === $aiProvider) {
+                $aiProvider = null;
+            }
+        }
+
         require_once api_get_path(SYS_CODE_PATH).'lp/LpAiHelper.php';
 
         $aiHelper = new LpAiHelper();
-        $result = $aiHelper->createLearningPathFromAI($requestData['lp_data'], $requestData['course_code']);
+        $result = $aiHelper->createLearningPathFromAI(
+            $requestData['lp_data'],
+            (string) $requestData['course_code'],
+            $aiAssisted,
+            $aiProvider
+        );
 
         if (!isset($result['lp_id'])) {
             $result['success'] = false;
@@ -456,26 +478,62 @@ switch ($action) {
     case 'lp_visibility_map':
         header('Content-Type: application/json; charset=UTF-8');
 
-        $courseId  = isset($_GET['cid']) ? (int) $_GET['cid'] : api_get_course_int_id();
+        $courseId = isset($_GET['cid']) ? (int) $_GET['cid'] : api_get_course_int_id();
         $sessionId = isset($_GET['sid']) ? (int) $_GET['sid'] : api_get_session_id();
 
-        $course  = api_get_course_entity($courseId);
+        $course = api_get_course_entity($courseId);
         $session = $sessionId ? Container::getSessionRepository()->find($sessionId) : null;
 
         $rawIds = (string) ($_GET['lp_ids'] ?? '');
-        $ids = array_values(array_filter(array_map('intval', preg_split('/[,\s]+/', $rawIds)), static fn($x) => $x > 0));
+        $ids = array_values(
+            array_filter(
+                array_map('intval', preg_split('/[,\s]+/', $rawIds)),
+                static fn ($id) => $id > 0
+            )
+        );
 
         $repo = Container::getLpRepository();
         $userId = api_get_user_id();
 
+        $showUnavailableWithDates = 'true' === api_get_setting(
+                'lp.lp_start_and_end_date_visible_in_student_view'
+            );
+
+        $now = new DateTimeImmutable('now', new DateTimeZone('UTC'));
+
         $map = [];
+
         foreach ($ids as $id) {
+            /** @var CLp|null $lp */
             $lp = $repo->find($id);
+
             if (!$lp) {
                 $map[(string) $id] = false;
                 continue;
             }
-            $map[(string) $id] = (bool) learnpath::is_lp_visible_for_student($lp, $userId, $course, $session);
+
+            $isVisible = (bool) learnpath::is_lp_visible_for_student($lp, $userId, $course, $session);
+
+            if (!$isVisible && $showUnavailableWithDates && $lp->getDisplayNotAllowedLp()) {
+                $publishedOn = $lp->getPublishedOn();
+                $expiredOn = $lp->getExpiredOn();
+
+                $isUnavailableByDate = false;
+
+                if ($publishedOn instanceof DateTimeInterface && $publishedOn > $now) {
+                    $isUnavailableByDate = true;
+                }
+
+                if ($expiredOn instanceof DateTimeInterface && $expiredOn < $now) {
+                    $isUnavailableByDate = true;
+                }
+
+                if ($isUnavailableByDate) {
+                    $isVisible = true;
+                }
+            }
+
+            $map[(string) $id] = $isVisible;
         }
 
         echo json_encode(['map' => $map], JSON_UNESCAPED_UNICODE);

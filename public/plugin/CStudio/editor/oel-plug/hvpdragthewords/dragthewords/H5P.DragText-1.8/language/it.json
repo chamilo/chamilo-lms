@@ -1,0 +1,148 @@
+{
+  "semantics": [
+    {
+      "label": "Descrizione del compito",
+      "description": "Descrivi come l'apprendente deve risolvere il compito",
+      "default": "Trascina le parole negli spazi giusti"
+    },
+    {
+      "label": "Testo",
+      "placeholder": "*Oslo* è la capitale della Norvegia, *Stoccolma* è la capitale della Svezia e *Copenaghen* è la capitale della Danimarca. Tutte queste città si trovano nella penisola della *Scandinavia:Parte a nord dell'Europa*",
+      "description": "",
+      "important": {
+        "description": "<ul><li>Per rendere una parola - o una frase - rilasciabile le si deve aggiungere un asterisco (*) all'inizio e uno alla fine.</li><li>Puoi aggiungere un suggerimento usando i due punti (:) prima del suggerimento stesso.</li><li>Per ogni spazio vuoto c'è un'unica parola corretta.</li><li>Puoi anche aggiungere un feedback da mostrare quando l'attività è completata; usa '\\+' per giusto e '\\-' per sbagliato</li></ul>",
+        "example": "I contenuti H5P possono essere modificati usando un *browser:Che tipo di software è Chrome?*.</br>Il contenuto H5P è *interattivo\\+Giusto! \\-Sbagliato. Riprova!*"
+      }
+    },
+    {
+      "label": "Feedback generale",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Predefinito"
+            }
+          ],
+          "label": "Definisci un feedback personalizzato per ogni intervallo di punteggio",
+          "description": "Clicca sul pulsante \"Aggiungi intervallo\" per aggiungere gli intervalli che ti servono. Per esempio: 0-20%, Punteggio scarso; 21-90%, Punteggio medio; 91-100% Punteggio ottimo!",
+          "entity": "intervallo",
+          "field": {
+            "fields": [
+              {
+                "label": "Intervallo di punteggio"
+              },
+              {},
+              {
+                "label": "Feedback per un intervallo definito",
+                "placeholder": "Compila il feedback"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Testo per il pulsante \"Verifica\"",
+      "default": "Verifica"
+    },
+    {
+      "label": "Testo per il pulsante \"Riprova\"",
+      "default": "Riprova"
+    },
+    {
+      "label": "Testo per il pulsante \"Mostra Soluzione\"",
+      "default": "Mostra soluzione"
+    },
+    {
+      "label": "Etichetta per zona di rilascio numerata",
+      "default": "Zona di rilascio @index",
+      "description": "Etichetta usata per l'accessibilità, dove il lettore vocale legge l'indice di una zona di rilascio. Variabile disponibile: @index"
+    },
+    {
+      "label": "Etichetta per zona di rilascio vuota",
+      "default": "Zona di rilascio @index è vuota",
+      "description": "Etichetta usata per l'accessibilità, dove il lettore vocale legge che la zona di rilascio è vuota"
+    },
+    {
+      "label": "Contiene etichetta per zona di rilascio",
+      "default": "La zona di rilascio @index contiene @draggable trascinabile",
+      "description": "Etichetta usata per l'accessibilità, dove il lettore vocale legge che la zona di rilascio contiene un elemento trascinabile"
+    },
+    {
+      "label": "Etichetta per elementi trascinabili",
+      "default": "@index di @count trascinabili",
+      "description": "Etichetta usata per l'accessibilità, dove il lettore vocale legge che questo è un elemento trascinabile. Variabili disponibili: @index, @count"
+    },
+    {
+      "label": "Etichetta per il pulsante \"Mostra suggerimento\"",
+      "default": "Mostra suggerimento",
+      "description": "Etichetta usata per l'accessibilità, che il lettore vocale legge prima del suggerimento"
+    },
+    {
+      "label": "Testo del lettore vocale per risposta corretta",
+      "default": "Giusto!"
+    },
+    {
+      "label": "Testo del lettore vocale per risposta sbagliata",
+      "default": "Sbagliato!"
+    },
+    {
+      "label": "Titolo della finestra di dialogo per confermare all'utente il reset di un elemento trascinabile",
+      "default": "Resetta elemento trascinabile"
+    },
+    {
+      "label": "Descrizione della finestra di dialogo per confermare all'utente il reset di un elemento trascinabile",
+      "default": "Sei sicuro di voler resettare questo elemento trascinabile?"
+    },
+    {
+      "label": "Etichetta usata per l'accessibilità, dove il lettore vocale indica che il trascinamento è iniziato",
+      "default": "L'elemento trascinabile è stato afferrato"
+    },
+    {
+      "label": "Etichetta usata per l'accessibilità, dove il lettore vocale indica che il trascinamento è stato cancellato",
+      "default": "Trascinamento cancellato"
+    },
+    {
+      "label": "Etichetta usata per l'accessibilità, dove il lettore vocale indica che un testo è la risposta giusta",
+      "default": "Risposta giusta:"
+    },
+    {
+      "label": "Intestazione del pannello contenente i feedback per risposte corrette/errate",
+      "default": "Feedback"
+    },
+    {
+      "label": "Impostazioni di esecuzione",
+      "description": "Queste opzioni ti permettono di controllare il comportamento dell'attività",
+      "fields": [
+        {
+          "label": "Attiva \"Riprova\""
+        },
+        {
+          "label": "Attiva pulsante \"Mostra soluzione\""
+        },
+        {
+          "label": "Attiva pulsante \"Verifica\""
+        },
+        {
+          "label": "Feedback istantaneo"
+        }
+      ]
+    },
+    {
+      "label": "Rappresentazione testuale sulla barra del punteggio per chi usa un lettore vocale",
+      "default": "Il tuo punteggio è :num su :total"
+    },
+    {
+      "label": "Assistive technology label for \"Check\" button",
+      "default": "Check the answers. The responses will be marked as correct, incorrect, or unanswered."
+    },
+    {
+      "label": "Assistive technology label for \"Show Solution\" button",
+      "default": "Show the solution. The task will be marked with its correct solution."
+    },
+    {
+      "label": "Assistive technology label for \"Retry\" button",
+      "default": "Retry the task. Reset all responses and start the task over again."
+    }
+  ]
+}

@@ -5,6 +5,8 @@
 use Chamilo\CoreBundle\Entity\TrackEAttemptQualify;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Event\Events;
+use Chamilo\CoreBundle\Event\ExerciseReportActionEvent;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLp;
 
@@ -316,13 +318,11 @@ if (isset($_REQUEST['comments']) &&
     }
 
     $useEvaluationPlugin = false;
-    $pluginEvaluation = QuestionOptionsEvaluationPlugin::create();
-
-    if ('true' === $pluginEvaluation->get(QuestionOptionsEvaluationPlugin::SETTING_ENABLE)) {
-        $formula = $pluginEvaluation->getFormulaForExercise($exerciseId);
-
-        if (!empty($formula)) {
-            $useEvaluationPlugin = true;
+    if (class_exists('QuestionOptionsEvaluationPlugin')) {
+        $pluginEvaluation = QuestionOptionsEvaluationPlugin::create();
+        if ($pluginEvaluation->isEnabled()) {
+            $formula = $pluginEvaluation->getFormulaForExercise($exerciseId);
+            $useEvaluationPlugin = $pluginEvaluation->shouldApplyFormula($formula);
         }
     }
 
@@ -534,6 +534,16 @@ if ($is_allowedToEdit && 'learnpath' != $origin) {
         }
         $actions .= '<a class="btn btn--plain" href="question_stats.php?'.api_get_cidreq().'&id='.$exercise_id.'">'.
             get_lang('Question stats').'</a>';
+
+        $exerciseReportActionEvent = new ExerciseReportActionEvent();
+        $exerciseReportActionEvent->setQuizId($exercise_id);
+
+        Container::getEventDispatcher()->dispatch(
+            $exerciseReportActionEvent,
+            Events::EXERCISE_REPORT_ACTION
+        );
+
+        $actions .= implode(PHP_EOL, $exerciseReportActionEvent->getActions());
     }
 } else {
     $actions .= '<a href="exercise.php">'.
@@ -898,6 +908,7 @@ $gridJs = Display::grid_js(
                 {height:280,reloadAfterSubmit:false}, // edit options
                 {height:280,reloadAfterSubmit:false}, // add options
                 {reloadAfterSubmit:true, url: '<?php echo $deleteUrl; ?>' }, // del options
+                {width:750}, // search options
             );
 
             var sgrid = $("#results")[0];

@@ -1,0 +1,22 @@
+<?php
+$strings['plugin_title'] = 'Importazione H5P';
+$strings['plugin_comment'] = 'Importa contenuti H5P e usali nei percorsi di apprendimento. Apri README.md per le istruzioni di installazione.';
+$strings['frame'] = 'Frame';
+$strings['frame_help'] = 'Mostra frame e pulsanti sotto H5P';
+$strings['embed'] = 'Incorpora';
+$strings['embed_help'] = 'Mostra pulsante incorpora';
+$strings['copyright'] = 'Copyright';
+$strings['copyright_help'] = 'Mostra pulsante copyright';
+$strings['icon'] = 'Icona';
+$strings['icon_help'] = 'Mostra icona H5P';
+$strings['attempts'] = 'Numero di tentativi';
+$strings['upload_h5p'] = 'Carica';
+$strings['import_h5p_package'] = 'Carica pacchetto H5P';
+$strings['h5p_package'] = 'Pacchetto H5P';
+$strings['h5p_error_loading'] = 'Errore nel caricamento del pacchetto H5P';
+$strings['h5p_error_invalid_token'] = 'Token di sicurezza non valido';
+$strings['h5p_error_missing_core_asset'] = 'Errore nel caricamento delle risorse core H5P';
+$strings['h5p_save_content_state'] = 'Salva risultati utente';
+$strings['h5p_save_content_freq'] = 'Frequenza di salvataggio';
+$strings['h5p_save_freq_help'] = 'Con quale frequenza salvare lo stato corrente del contenuto, in secondi';
+$strings['start_attempt'] = 'Inizia tentativo';

@@ -31,7 +31,7 @@ class scormResource
      * @param    string    Type of construction needed ('db' or 'manifest', default = 'manifest')
      * @param    mixed    Depending on the type given, DB id for the lp_item or reference to the DOM element
      */
-    public function __construct($type = 'manifest', &$element)
+    public function __construct(&$element, $type = 'manifest')
     {
         if (isset($element)) {
             // Parsing using PHP5 DOMXML methods.
@@ -54,7 +54,7 @@ class scormResource
                                             break;
                                         case 'metadata':
                                             //echo "Child is a metadata tag<br />\n";
-                                            $this->metadata = new scormMetadata('manifest', $child);
+                                            $this->metadata = new scormMetadata($child, 'manifest');
                                             break;
                                         case 'dependency':
                                             // Need to get identifierref attribute inside dependency node.

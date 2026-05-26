@@ -106,22 +106,52 @@ class OralExpression extends Question
             return;
         }
 
-        $variable = 'oral_expression_asset_'.$attempt->getQuestionId();
-        $resourceNodeId = ChamiloSession::read($variable);
-        ChamiloSession::erase($variable);
+        $questionId = (int) $attempt->getQuestionId();
+        $assetKey = 'oral_expression_asset_'.$questionId;
+        $exeKey   = 'oral_expression_asset_exe_id_'.$questionId;
+        $resourceNodeId = ChamiloSession::read($assetKey);
+        $resourceNodeExeId = ChamiloSession::read($exeKey);
 
         if (empty($resourceNodeId)) {
             return;
+        }
+
+        // If we stored an exe_id with the recording, only attach it to attempts from the same exe_id.
+        // This prevents wrongly attaching an old recording to a new attempt when the user didn't record again.
+        if (!empty($resourceNodeExeId)) {
+            $trackExercise = $attempt->getTrackEExercise();
+            $attemptExeId = (int) $trackExercise->getExeId();
+
+            if ((int) $resourceNodeExeId !== $attemptExeId) {
+                // Clear stale keys to keep the session clean and avoid future wrong attachments.
+                ChamiloSession::erase($assetKey);
+                ChamiloSession::erase($exeKey);
+
+                return;
+            }
         }
 
         /** @var ResourceNodeRepository $resourceNodeRepo */
         $resourceNodeRepo = Container::getResourceNodeRepository();
 
         /** @var ResourceNode|null $node */
-        $node = $resourceNodeRepo->find($resourceNodeId);
+        $node = $resourceNodeRepo->find((int) $resourceNodeId);
 
         if (null === $node) {
             return;
+        }
+
+        // Do NOT erase the session key here.
+        // The exercise flow can save the same question multiple times (Save & continue, then End test),
+        // and the AJAX save handler can delete/recreate the TrackEAttempt row.
+        // Keeping the key allows re-attaching the same ResourceNode after a re-save.
+
+        // Avoid duplicates if the same attempt is saved multiple times without being deleted.
+        foreach ($attempt->getAttemptFiles() as $existingAttemptFile) {
+            $existingNode = $existingAttemptFile->getResourceNode();
+            if (null !== $existingNode && (int) $existingNode->getId() === (int) $resourceNodeId) {
+                return;
+            }
         }
 
         $attemptFile = new AttemptFile();

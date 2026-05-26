@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Event\AbstractEvent;
 use Chamilo\CoreBundle\Event\CourseCreatedEvent;
+use Chamilo\CoreBundle\Event\CourseUserSubscriptionCheckEvent;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
@@ -557,18 +558,18 @@ class CourseManager
     }
 
     /**
-     * @param string $courseCode
-     * @param int    $status
+     * @param int $courseId
+     * @param int $status
      *
      * @return bool
      */
-    public static function autoSubscribeToCourse($courseCode, $status = STUDENT)
+    public static function autoSubscribeToCourse(int $courseId, int $status = STUDENT): bool
     {
         if (api_is_anonymous()) {
             return false;
         }
 
-        $course = Container::getCourseRepository()->findOneBy(['code' => $courseCode]);
+        $course = Container::getCourseRepository()->findOneBy(['id' => $courseId]);
 
         if (null === $course) {
             return false;
@@ -791,10 +792,9 @@ class CourseManager
      * @param int  $sessionId
      * @param int  $userCourseCategoryId
      * @param bool $checkTeacherPermission
+     * @param array $options
      *
-     * @return bool True on success, false on failure
-     *
-     * @assert ('', '') === false
+     * @return bool|array True on success, false on failure, or a structured result array
      */
     public static function subscribeUser(
         $userId,
@@ -802,35 +802,90 @@ class CourseManager
         $status = STUDENT,
         $sessionId = 0,
         $userCourseCategoryId = 0,
-        $checkTeacherPermission = true
+        $checkTeacherPermission = true,
+        array $options = []
     ) {
         $userId = (int) $userId;
+        $courseId = (int) $courseId;
         $status = (int) $status;
 
+        $returnStructured = !empty($options['result']);
+        $showFlash = !array_key_exists('flash', $options) || (bool) $options['flash'];
+        $sendEmails = !array_key_exists('emails', $options) || (bool) $options['emails'];
+
+        $finish = static function (bool $ok, string $message = '') use ($returnStructured, $showFlash) {
+            if ($showFlash && '' !== $message) {
+                Display::addFlash(
+                    Display::return_message(
+                        $message,
+                        $ok ? 'normal' : 'warning'
+                    )
+                );
+            }
+
+            if ($returnStructured) {
+                return [
+                    'ok' => $ok,
+                    'message' => $message,
+                ];
+            }
+
+            return $ok;
+        };
+
         if (empty($userId) || empty($courseId)) {
-            return false;
+            return $finish(
+                false,
+                get_lang('Unexpected error while subscribing the user')
+            );
         }
 
         $course = api_get_course_entity($courseId);
 
         if (null === $course) {
-            Display::addFlash(Display::return_message(get_lang('This course doesn\'t exist'), 'warning'));
-
-            return false;
+            return $finish(
+                false,
+                get_lang('This course doesn\'t exist')
+            );
         }
 
         $user = api_get_user_entity($userId);
 
         if (null === $user) {
-            Display::addFlash(Display::return_message(get_lang('This user doesn\'t exist'), 'warning'));
-
-            return false;
+            return $finish(
+                false,
+                get_lang('This user doesn\'t exist')
+            );
         }
 
         $courseCode = $course->getCode();
         $userCourseCategoryId = (int) $userCourseCategoryId;
         $sessionId = empty($sessionId) ? api_get_session_id() : (int) $sessionId;
         $status = STUDENT === $status || COURSEMANAGER === $status ? $status : STUDENT;
+
+        if (STUDENT === $status) {
+            $subscriptionCheckEvent = new CourseUserSubscriptionCheckEvent(
+                [
+                    'course_id' => $courseId,
+                    'user_ids' => [$userId],
+                    'status' => $status,
+                    'session_id' => $sessionId,
+                ],
+                AbstractEvent::TYPE_PRE
+            );
+
+            Container::getEventDispatcher()->dispatch(
+                $subscriptionCheckEvent,
+                Events::COURSE_USER_SUBSCRIPTION_CHECK
+            );
+
+            if (!$subscriptionCheckEvent->isAllowed()) {
+                return $finish(
+                    false,
+                    $subscriptionCheckEvent->getMessage() ?: get_lang('Subscription not allowed')
+                );
+            }
+        }
 
         if (!empty($sessionId)) {
             SessionManager::subscribe_users_to_session_course(
@@ -839,131 +894,142 @@ class CourseManager
                 $courseCode
             );
 
-            return true;
-        } else {
-            // Check whether the user has not been already subscribed to the course.
-            $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
-                    WHERE
-                        user_id = $userId AND
-                        relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND
-                        c_id = $courseId
-                    ";
-            if (Database::num_rows(Database::query($sql)) > 0) {
-                Display::addFlash(Display::return_message(get_lang('Already registered in course'), 'warning'));
+            return $finish(
+                true,
+                sprintf(
+                    get_lang('User %s has been registered to course %s'),
+                    UserManager::formatUserFullName($user, true),
+                    $course->getTitle()
+                )
+            );
+        }
 
-                return false;
-            }
+        $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
+                WHERE
+                    user_id = $userId AND
+                    relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND
+                    c_id = $courseId";
+        if (Database::num_rows(Database::query($sql)) > 0) {
+            return $finish(
+                false,
+                get_lang('Already registered in course')
+            );
+        }
 
-            if ($checkTeacherPermission && !api_is_course_admin()) {
-                // Check in advance whether subscription is allowed or not for this course.
-                if (SUBSCRIBE_NOT_ALLOWED === (int) $course->getSubscribe()) {
-                    Display::addFlash(Display::return_message(get_lang('Subscription not allowed'), 'warning'));
-
-                    return false;
-                }
-            }
-
-            if (STUDENT === $status) {
-                // Check if max students per course extra field is set
-                $extraFieldValue = new ExtraFieldValue('course');
-                $value = $extraFieldValue->get_values_by_handler_and_field_variable(
-                    $courseId,
-                    'max_subscribed_students'
+        if ($checkTeacherPermission && !api_is_course_admin()) {
+            if (SUBSCRIBE_NOT_ALLOWED === (int) $course->getSubscribe()) {
+                return $finish(
+                    false,
+                    get_lang('Subscription not allowed')
                 );
-                if (!empty($value) && isset($value['value']) && '' !== $value['value']) {
-                    $maxStudents = (int) $value['value'];
-                    $count = self::get_user_list_from_course_code(
-                        $courseCode,
-                        0,
-                        null,
-                        null,
-                        STUDENT,
-                        true,
-                        false
-                    );
+            }
+        }
 
-                    if ($count >= $maxStudents) {
-                        Display::addFlash(
-                            Display::return_message(
-                                get_lang(
-                                    'The maximum number of student has already been reached, it is not possible to subscribe more student.'
-                                ),
-                                'warning'
-                            )
-                        );
-
-                        return false;
-                    }
-                }
+        if (STUDENT === $status) {
+            if (!api_is_platform_admin() && self::wouldOperationExceedUsersPerCourseLimit($courseId, [$userId])) {
+                return $finish(
+                    false,
+                    self::getUsersPerCourseLimitCancelMessage($courseId)
+                );
             }
 
-            $maxSort = api_max_sort_value(0, $userId) + 1;
-
-            $insertId = self::insertUserInCourse(
-                $user,
-                $course,
-                ['status' => $status, 'sort' => $maxSort, 'user_course_cat' => $userCourseCategoryId]
+            $extraFieldValue = new ExtraFieldValue('course');
+            $value = $extraFieldValue->get_values_by_handler_and_field_variable(
+                $courseId,
+                'max_subscribed_students'
             );
 
-            if ($insertId) {
-                Display::addFlash(
-                    Display::return_message(
-                        sprintf(
-                            get_lang('User %s has been registered to course %s'),
-                            UserManager::formatUserFullName($user, true),
-                            $course->getTitle()
-                        )
-                    )
+            if (!empty($value) && isset($value['value']) && '' !== $value['value']) {
+                $maxStudents = (int) $value['value'];
+                $count = self::get_user_list_from_course_code(
+                    $courseCode,
+                    0,
+                    null,
+                    null,
+                    STUDENT,
+                    true,
+                    false
                 );
 
-                $sendToStudent = (int) api_get_course_setting('email_alert_student_on_manual_subscription', $course);
-                if (1 === $sendToStudent) {
-                    $subject = get_lang('You have been enrolled in the course').' '.$course->getTitle();
-                    $message = sprintf(
-                        get_lang('Hello %s, you have been enrolled in the course %s.'),
-                        UserManager::formatUserFullName($user, true),
-                        $course->getTitle()
-                    );
-
-                    MessageManager::send_message_simple(
-                        $userId,
-                        $subject,
-                        $message,
-                        api_get_user_id(),
+                if ($count >= $maxStudents) {
+                    return $finish(
                         false,
-                        true
+                        get_lang(
+                            'The maximum number of student has already been reached, it is not possible to subscribe more student.'
+                        )
                     );
                 }
+            }
+        }
 
-                $send = (int) api_get_course_setting('email_alert_to_teacher_on_new_user_in_course', $course);
+        $maxSort = api_max_sort_value(0, $userId) + 1;
 
-                if (1 === $send) {
-                    self::email_to_tutor(
-                        $userId,
-                        $courseId,
-                        false
-                    );
-                } elseif (2 === $send) {
-                    self::email_to_tutor(
-                        $userId,
-                        $courseId,
-                        true
-                    );
-                }
+        $insertId = self::insertUserInCourse(
+            $user,
+            $course,
+            [
+                'status' => $status,
+                'sort' => $maxSort,
+                'user_course_cat' => $userCourseCategoryId,
+            ]
+        );
 
-                $subscribe = (int) api_get_course_setting('subscribe_users_to_forum_notifications', $course);
-                if (1 === $subscribe) {
-                    /*$forums = get_forums(0,  true, $sessionId);
-                    foreach ($forums as $forum) {
-                        set_notification('forum', $forum->getIid(), false, $userInfo, $courseInfo);
-                    }*/
-                }
+        if (!$insertId) {
+            return $finish(
+                false,
+                get_lang('Unexpected error while subscribing the user')
+            );
+        }
 
-                return true;
+        $message = sprintf(
+            get_lang('User %s has been registered to course %s'),
+            UserManager::formatUserFullName($user, true),
+            $course->getTitle()
+        );
+
+        if ($sendEmails) {
+            $sendToStudent = (int) api_get_course_setting('email_alert_student_on_manual_subscription', $course);
+            if (1 === $sendToStudent) {
+                $subject = get_lang('You have been enrolled in the course').' '.$course->getTitle();
+                $mailMessage = sprintf(
+                    get_lang('Hello %s, you have been enrolled in the course %s.'),
+                    UserManager::formatUserFullName($user, true),
+                    $course->getTitle()
+                );
+
+                MessageManager::send_message_simple(
+                    $userId,
+                    $subject,
+                    $mailMessage,
+                    api_get_user_id(),
+                    false,
+                    true
+                );
             }
 
-            return false;
+            $send = (int) api_get_course_setting('email_alert_to_teacher_on_new_user_in_course', $course);
+
+            if (1 === $send) {
+                self::email_to_tutor(
+                    $userId,
+                    $courseId,
+                    false
+                );
+            } elseif (2 === $send) {
+                self::email_to_tutor(
+                    $userId,
+                    $courseId,
+                    true
+                );
+            }
+
+            $subscribe = (int) api_get_course_setting('subscribe_users_to_forum_notifications', $course);
+            if (1 === $subscribe) {
+                // Keep current behavior unchanged.
+            }
         }
+
+        return $finish(true, $message);
     }
 
     /**
@@ -1650,7 +1716,7 @@ class CourseManager
             0,
             100,
             null,
-            null,
+            'ASC',
             true,
             true
         );
@@ -2918,21 +2984,11 @@ class CourseManager
                 null,
                 PERSON_NAME_EMAIL_ADDRESS
             );
-            $sender_name = api_get_person_name(
-                api_get_setting('administratorName'),
-                api_get_setting('administratorSurname'),
-                null,
-                PERSON_NAME_EMAIL_ADDRESS
-            );
-            $email_admin = api_get_setting('emailAdministrator');
-
             api_mail_html(
                 $recipient_name,
                 $emailto,
                 $emailsubject,
-                $emailbody,
-                $sender_name,
-                $email_admin
+                $emailbody
             );
         }
     }
@@ -4375,25 +4431,69 @@ class CourseManager
         bool $withBaseContent = true,
         bool $copySessionContent = false
     ) {
-        $course_info = api_get_course_info($source_course_code);
+        $courseInfo = api_get_course_info($source_course_code);
 
-        if (!empty($course_info)) {
-            $cb = new CourseBuilder('', $course_info);
-            $course = $cb->build($source_session_id, $source_course_code, $withBaseContent);
-            $restorer = new CourseRestorer($course);
-            $restorer->copySessionContent = $copySessionContent;
-            $restorer->skip_content = $params;
-            $restorer->restore(
-                $destination_course_code,
-                $destination_session_id,
-                true,
-                $withBaseContent
-            );
-
-            return true;
+        if (empty($courseInfo)) {
+            return false;
         }
 
-        return false;
+        $source_session_id = (int) $source_session_id;
+        $destination_session_id = (int) $destination_session_id;
+
+        if (!is_array($params)) {
+            $params = [];
+        }
+
+        // If there is no valid session on source or destination, session content copy does not make sense.
+        if ($source_session_id <= 0 || $destination_session_id <= 0) {
+            $copySessionContent = false;
+        }
+
+        try {
+            // Copy base content (course-wide) into destination course base (session 0).
+            if ($withBaseContent) {
+                $cb = new CourseBuilder('', $courseInfo);
+
+                // Build only base content snapshot (session 0).
+                $baseCourse = $cb->build(0, $source_course_code, true);
+
+                $baseRestorer = new CourseRestorer($baseCourse);
+                $baseRestorer->copySessionContent = false;
+                $baseRestorer->skip_content = $params;
+
+                // Restore into destination base (session 0).
+                $baseRestorer->restore(
+                    $destination_course_code,
+                    0,
+                    true,
+                    true
+                );
+            }
+
+            // Copy session-specific content into destination session.
+            if ($copySessionContent) {
+                $cb = new CourseBuilder('', $courseInfo);
+
+                // Build only session content snapshot (no base to avoid duplicates).
+                $sessionCourse = $cb->build($source_session_id, $source_course_code, false);
+
+                $sessionRestorer = new CourseRestorer($sessionCourse);
+                $sessionRestorer->copySessionContent = true;
+                $sessionRestorer->skip_content = $params;
+
+                // Restore into destination session (no base).
+                $sessionRestorer->restore(
+                    $destination_course_code,
+                    $destination_session_id,
+                    true,
+                    false
+                );
+            }
+
+            return true;
+        } catch (\Throwable $e) {
+            return false;
+        }
     }
 
     /**
@@ -4500,12 +4600,13 @@ class CourseManager
         $courseId = $courseInfo['real_id'];
 
         // Course legal
-        $enabled = Container::getPluginHelper()->isPluginEnabled('CourseLegal');
+        $courseLegalConfigPath = api_get_path(SYS_PLUGIN_PATH).'CourseLegal/config.php';
+        if (is_file($courseLegalConfigPath)) {
+            require_once $courseLegalConfigPath;
+        }
 
-        if ('true' == $enabled) {
-            require_once api_get_path(SYS_PLUGIN_PATH).'courselegal/config.php';
-            $plugin = CourseLegalPlugin::create();
-
+        $plugin = class_exists('CourseLegalPlugin') ? CourseLegalPlugin::create() : null;
+        if ($plugin && $plugin->isEnabled()) {
             return $plugin->isUserAcceptedLegal($user_id, $course_code, $session_id);
         }
 
@@ -4555,11 +4656,13 @@ class CourseManager
         $course_code = $courseInfo['code'];
 
         // Course plugin legal
-        $enabled = Container::getPluginHelper()->isPluginEnabled('CourseLegal');
-        if ('true' == $enabled) {
-            require_once api_get_path(SYS_PLUGIN_PATH).'courselegal/config.php';
-            $plugin = CourseLegalPlugin::create();
+        $courseLegalConfigPath = api_get_path(SYS_PLUGIN_PATH).'CourseLegal/config.php';
+        if (is_file($courseLegalConfigPath)) {
+            require_once $courseLegalConfigPath;
+        }
 
+        $plugin = class_exists('CourseLegalPlugin') ? CourseLegalPlugin::create() : null;
+        if ($plugin && $plugin->isEnabled()) {
             return $plugin->saveUserLegal($user_id, $course_code, $session_id);
         }
 
@@ -5435,6 +5538,7 @@ class CourseManager
             'show_course_in_user_language',
             'email_to_teachers_on_new_work_feedback',
             'student_delete_own_publication',
+            'student_validate_own_attendance',
             'hide_forum_notifications',
             'quiz_question_limit_per_day',
             'subscribe_users_to_forum_notifications',
@@ -6157,12 +6261,12 @@ class CourseManager
      */
     public static function redirectToCourse($form_data)
     {
-        $course_code_redirect = Session::read('course_redirect');
+        $courseIdRedirect = Session::read('course_redirect');
         $_user = api_get_user_info();
-        $userId = api_get_user_id();
+        $userId = (int) ($_user['id'] ?? ($_user['user_id'] ?? 0));
 
-        if (!empty($course_code_redirect)) {
-            $course_info = api_get_course_info($course_code_redirect);
+        if (!empty($courseIdRedirect)) {
+            $course_info = api_get_course_info_by_id($courseIdRedirect);
             if (!empty($course_info)) {
                 if (in_array(
                     $course_info['visibility'],
@@ -6174,7 +6278,7 @@ class CourseManager
                         $form_data['message'] = sprintf(get_lang('You have been registered to course %s'), $course_info['title']);
                         $form_data['button'] = Display::button(
                             'next',
-                            get_lang('Go to the course', null, $_user['language']),
+                            get_lang('Go to the course', $_user['language']),
                             ['class' => 'btn btn--primary btn-large']
                         );
 
@@ -6190,7 +6294,7 @@ class CourseManager
                             $form_data['message'] .= '<br />'.get_lang('Go to the test');
                             $form_data['button'] = Display::button(
                                 'next',
-                                get_lang('Go', null, $_user['language']),
+                                get_lang('Go', $_user['language']),
                                 ['class' => 'btn btn--primary btn-large']
                             );
                         }
@@ -6415,30 +6519,58 @@ class CourseManager
      */
     public static function useTemplateAsBasisIfRequired(string $courseCode, int $courseTemplate): void
     {
-        $template = api_get_setting('course_creation_use_template');
-        $template = is_numeric($template) ? intval($template) : null;
-        $teacherCanSelectCourseTemplate = 'true' === api_get_setting('workflows.teacher_can_select_course_template');
-        $courseTemplate = isset($courseTemplate) ? intval($courseTemplate) : 0;
-
-        $useTemplate = false;
-
-        if ($teacherCanSelectCourseTemplate && $courseTemplate) {
-            $useTemplate = true;
-            $originCourse = api_get_course_info_by_id($courseTemplate);
-        } elseif (!empty($template)) {
-            $useTemplate = true;
-            $originCourse = api_get_course_info_by_id($template);
+        $courseCode = trim($courseCode);
+        if ('' === $courseCode) {
+            return;
         }
 
-        if ($useTemplate && !empty($originCourse)) {
-            // Include the necessary libraries to generate a course copy
-            // Call the course copy object
+        $globalTemplateSetting = api_get_setting('course.course_creation_use_template');
+        $globalTemplateId = is_numeric($globalTemplateSetting) ? (int) $globalTemplateSetting : 0;
+
+        $teacherCanSelectCourseTemplate = 'true' === api_get_setting('workflows.teacher_can_select_course_template');
+        $selectedTemplateId = $courseTemplate > 0 ? (int) $courseTemplate : 0;
+
+        $originTemplateId = 0;
+
+        if ($teacherCanSelectCourseTemplate && $selectedTemplateId > 0) {
+            $originTemplateId = $selectedTemplateId;
+        } elseif ($globalTemplateId > 0) {
+            $originTemplateId = $globalTemplateId;
+        }
+
+        if ($originTemplateId <= 0) {
+            return;
+        }
+
+        $originCourse = api_get_course_info_by_id($originTemplateId);
+        if (empty($originCourse) || empty($originCourse['code'])) {
+            error_log('COURSE_TEMPLATE: origin course not found or missing code (template_id='.$originTemplateId.')');
+            return;
+        }
+
+        if ((string) $originCourse['code'] === $courseCode) {
+            error_log('COURSE_TEMPLATE: origin and destination course code are the same, skipping (code='.$courseCode.')');
+            return;
+        }
+
+        try {
             $originCourse['official_code'] = $originCourse['code'];
-            $cb = new CourseBuilder(null, $originCourse);
-            $course = $cb->build(null, $originCourse['code']);
+            $cb = new CourseBuilder('complete', $originCourse);
+
+            // Call build() WITHOUT passing $courseCode, so CourseBuilder can use its own course info
+            // and avoid calling api_get_course_info($originCourseCode) (which can pollute globals).
+            $course = $cb->build();
+
             $cr = new CourseRestorer($course);
             $cr->set_file_option();
             $cr->restore($courseCode);
+        } catch (\Throwable $e) {
+            // Never block course creation if template copy fails
+            error_log('COURSE_TEMPLATE: template copy failed for new_course='.$courseCode
+                .' from_template_course='.$originCourse['code']
+                .' error='.$e->getMessage()
+            );
+            return;
         }
     }
 
@@ -6654,11 +6786,11 @@ class CourseManager
         $tabs = [
             'simple' => [
                 'content' => get_lang('Standard List'),
-                'url' => api_get_path(WEB_CODE_PATH).'admin/course_list.php',
+                'url' => '/admin/course-list',
             ],
             'admin' => [
                 'content' => get_lang('Management List'),
-                'url' => api_get_path(WEB_CODE_PATH).'admin/course_list_admin.php',
+                'url' => '/admin/course-list',
             ],
         ];
 
@@ -6752,7 +6884,7 @@ class CourseManager
                 Course::HIDDEN
             );
         }
-        $form->addGroup($group, '', get_lang('Course access'));
+        $form->addGroup($group, null, get_lang('Course access'));
     }
 
     /**
@@ -6796,9 +6928,11 @@ class CourseManager
 
     /**
      * Fill course with all necessary items.
+     *
      * @param Course $course
      * @param array $params Parameters from the course creation form
-     * @param ?int   $authorId
+     * @param ?int  $authorId
+     *
      * @throws Exception
      */
     private static function fillCourse(Course $course, array $params, ?int $authorId = 0)
@@ -6818,19 +6952,22 @@ class CourseManager
             );
         }
 
-        // If parameter defined, copy the contents from a specific
-        // template course into this new course
-        if (isset($params['course_template'])) {
-            self::useTemplateAsBasisIfRequired(
-                $course->getCode(),
-                (int) $params['course_template']
-            );
-        }
+        /**
+         * Template copy:
+         * - Always evaluate template logic (selected template or global default).
+         * - This avoids relying on whether the form exported the "course_template" key.
+         */
+        $selectedTemplateId = isset($params['course_template']) ? (int) $params['course_template'] : 0;
+        self::useTemplateAsBasisIfRequired(
+            $course->getCode(),
+            $selectedTemplateId
+        );
+
         $params['course_code'] = $course->getCode();
         $params['item_id'] = $course->getId();
 
         $courseFieldValue = new ExtraFieldValue('course');
-        //$courseFieldValue->saveFieldValues($params);
+        // $courseFieldValue->saveFieldValues($params);
     }
 
     /**
@@ -6867,16 +7004,145 @@ class CourseManager
     }
 
     /**
-     * Check if subscribing the given users (no session) would exceed the global limit.
+     * Returns access to courses based on course id, user, and a start and end date range.
+     * If withSession is 0, only the courses will be taken.
+     * If withSession is 1, only the sessions will be taken.
+     * If withSession is different from 0 and 1, the whole set will be taken.
+     */
+    public static function getAccessCourse(
+        int $courseId = 0,
+        int $withSession = 0,
+        int $userId = 0,
+        ?string $startDate = null,
+        ?string $endDate = null
+    ): array {
+        $datePattern = '/^\d{4}-\d{2}-\d{2}$/';
+        if (!empty($startDate) && !preg_match($datePattern, $startDate)) {
+            return [];
+        }
+        if (!empty($endDate) && !preg_match($datePattern, $endDate)) {
+            return [];
+        }
+
+        $tblTrackECourse = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $conditions = [];
+
+        if (0 !== $courseId) {
+            $conditions[] = "course_access.c_id = $courseId";
+        }
+        if (0 !== $userId) {
+            $conditions[] = "course_access.user_id = $userId";
+        }
+        if (!empty($startDate)) {
+            $startDateObj = api_get_utc_datetime($startDate, false, true);
+            if ($startDateObj) {
+                $safeStart = Database::escape_string($startDateObj->format('Y-m-d'));
+                $conditions[] = "course_access.login_course_date >= '$safeStart'";
+            }
+        }
+        if (!empty($endDate)) {
+            $endDateObj = api_get_utc_datetime($endDate, false, true);
+            if ($endDateObj) {
+                $safeEnd = Database::escape_string($endDateObj->format('Y-m-d'));
+                $conditions[] = "course_access.login_course_date <= '$safeEnd'";
+            }
+        }
+        if (0 === $withSession) {
+            $conditions[] = 'course_access.session_id = 0';
+        } elseif (1 === $withSession) {
+            $conditions[] = 'course_access.session_id != 0';
+        }
+
+        $where = '';
+        if (!empty($conditions)) {
+            $where = ' WHERE '.implode(' AND ', $conditions);
+        }
+
+        $sql = "SELECT DISTINCT
+                    CAST(course_access.login_course_date AS DATE) AS login_course_date,
+                    user_id,
+                    c_id
+                FROM $tblTrackECourse AS course_access
+                $where
+                GROUP BY c_id, session_id, CAST(course_access.login_course_date AS DATE), user_id
+                ORDER BY c_id";
+
+        $res = Database::query($sql);
+        $data = Database::store_result($res);
+
+        return $data;
+    }
+
+    /**
+     * Return the BuyCourses plugin instance when available.
+     */
+    private static function getBuyCoursesPlugin()
+    {
+        if (!class_exists('BuyCoursesPlugin')) {
+            return null;
+        }
+
+        return BuyCoursesPlugin::create();
+    }
+
+    /**
+     * Count enrolled students for the users-per-course limit.
+     * Teachers are not counted.
+     */
+    public static function countStudentsForUsersPerCourseLimit(int $courseId): int
+    {
+        $courseId = (int) $courseId;
+
+        if ($courseId <= 0) {
+            return 0;
+        }
+
+        $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+
+        $sql = "SELECT COUNT(DISTINCT user_id) AS total
+                FROM $table
+                WHERE c_id = $courseId
+                  AND status = ".STUDENT."
+                  AND relation_type <> ".COURSE_RELATION_TYPE_RRHH;
+
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result, 'ASSOC') ?: [];
+
+        return (int) ($row['total'] ?? 0);
+    }
+
+    /**
+     * Return the effective users-per-course limit for a course.
+     * BuyCourses service limit wins over the global fallback.
+     * Zero means unlimited.
+     */
+    public static function getEffectiveUsersPerCourseLimit(int $courseId): int
+    {
+        $courseId = (int) $courseId;
+
+        if ($courseId <= 0) {
+            return max(0, (int) api_get_setting('platform.hosting_limit_users_per_course'));
+        }
+
+        $plugin = self::getBuyCoursesPlugin();
+
+        if (null !== $plugin && method_exists($plugin, 'getEffectiveUsersPerCourseLimitForCourse')) {
+            return max(0, (int) $plugin->getEffectiveUsersPerCourseLimitForCourse($courseId));
+        }
+
+        return max(0, (int) api_get_setting('platform.hosting_limit_users_per_course'));
+    }
+
+    /**
+     * Check if subscribing the given users would exceed the effective users-per-course limit.
      *
      * @param int   $courseId
      * @param int[] $userIds
      */
-    public static function wouldOperationExceedGlobalLimit(int $courseId, array $userIds): bool
+    public static function wouldOperationExceedUsersPerCourseLimit(int $courseId, array $userIds): bool
     {
-        $limit = self::getGlobalUsersPerCourseLimit();
+        $limit = self::getEffectiveUsersPerCourseLimit($courseId);
         if ($limit <= 0) {
-            // No global limit configured.
             return false;
         }
 
@@ -6885,7 +7151,6 @@ class CourseManager
             return false;
         }
 
-        // Keep unique, positive IDs only.
         $userIds = array_values(array_unique(array_map('intval', $userIds)));
         $userIds = array_filter(
             $userIds,
@@ -6898,55 +7163,62 @@ class CourseManager
             return false;
         }
 
-        $table  = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $idList = implode(',', $userIds);
 
-        // How many of these users are already in the course?
         $sql = "SELECT COUNT(DISTINCT user_id) AS already
                 FROM $table
                 WHERE c_id = $courseId
                   AND relation_type <> ".COURSE_RELATION_TYPE_RRHH."
                   AND user_id IN ($idList)";
 
-        $res = Database::query($sql);
-        $row = Database::fetch_array($res, 'ASSOC') ?: [];
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result, 'ASSOC') ?: [];
         $already = (int) ($row['already'] ?? 0);
 
         $newCount = count($userIds) - $already;
         if ($newCount <= 0) {
-            // Nothing new to subscribe, cannot exceed.
             return false;
         }
 
-        $current = self::countUsersForGlobalLimit($courseId);
+        $current = self::countStudentsForUsersPerCourseLimit($courseId);
 
         return ($current + $newCount) > $limit;
     }
 
     /**
-     * Build message when a *manual* subscription operation must be cancelled.
+     * Build the user-facing cancel message for users-per-course limit.
      */
-    public static function getGlobalLimitCancelMessage(): string
+    public static function getUsersPerCourseLimitCancelMessage(int $courseId = 0): string
     {
-        $limit = self::getGlobalUsersPerCourseLimit();
+        $courseId = (int) $courseId;
+        $plugin = self::getBuyCoursesPlugin();
 
-        return sprintf(
-            get_lang(
-                'This operation would exceed the limit of %d users per course set by the administrators. The whole subscription operation has been cancelled.'
-            ),
-            $limit
+        if ($courseId > 0 && null !== $plugin && method_exists($plugin, 'getUsersPerCourseLimitMessage')) {
+            return (string) $plugin->getUsersPerCourseLimitMessage($courseId);
+        }
+
+        $limit = self::getEffectiveUsersPerCourseLimit($courseId);
+
+        if ($limit > 0) {
+            return sprintf(
+                get_lang('This operation would exceed the limit of %d users allowed for this course.'),
+                $limit
+            );
+        }
+
+        return get_lang(
+            'This operation would exceed the allowed user limit for the selected course.'
         );
     }
 
     /**
-     * Build message for *batch imports* when some subscriptions hit the limit.
+     * Build message for batch imports when some subscriptions hit the effective users-per-course limit.
      *
-     * @param string[] $pairs List of "username / Course title" strings.
+     * @param string[] $pairs
      */
-    public static function getGlobalLimitPartialImportMessage(array $pairs): string
+    public static function getUsersPerCourseLimitPartialImportMessage(array $pairs): string
     {
-        $limit = self::getGlobalUsersPerCourseLimit();
-
         $safePairs = array_map(
             static function (string $pair): string {
                 return Security::remove_XSS($pair);
@@ -6958,10 +7230,38 @@ class CourseManager
 
         return sprintf(
             get_lang(
-                'Some or all the subscriptions could not be executed because they reached the limit of %d users per course set by the administrators. Please make sure that limit is raised and try executing this operation again. Users/Courses affected: %s'
+                'Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s'
             ),
-            $limit,
             $list
         );
+    }
+
+    /**
+     * Backward-compatible wrapper.
+     *
+     * @param int   $courseId
+     * @param int[] $userIds
+     */
+    public static function wouldOperationExceedGlobalLimit(int $courseId, array $userIds): bool
+    {
+        return self::wouldOperationExceedUsersPerCourseLimit($courseId, $userIds);
+    }
+
+    /**
+     * Backward-compatible wrapper.
+     */
+    public static function getGlobalLimitCancelMessage(): string
+    {
+        return self::getUsersPerCourseLimitCancelMessage((int) api_get_course_int_id());
+    }
+
+    /**
+     * Backward-compatible wrapper.
+     *
+     * @param string[] $pairs
+     */
+    public static function getGlobalLimitPartialImportMessage(array $pairs): string
+    {
+        return self::getUsersPerCourseLimitPartialImportMessage($pairs);
     }
 }

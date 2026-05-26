@@ -16,8 +16,8 @@ export function useDatatableCreate(servicePrefix) {
   function onCreated(item) {
     toast.add({
       severity: "success",
-      detail: t("{resource} created", {
-        resource: item["resourceNode"] ? item["resourceNode"].title : item.title,
+      detail: t("{0} created", {
+        resource: item.resourceNode ? item.resourceNode.title : item.title,
       }),
       life: 3500,
     })

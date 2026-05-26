@@ -256,6 +256,7 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
         if ($request->hasSession()) {
             $request->getSession()->set('_user', [
                 'user_id' => $user->getId(),
+                'id' => $user->getId(),
                 'username' => $user->getUsername(),
                 'firstname' => $user->getFirstname(),
                 'lastname' => $user->getLastname(),

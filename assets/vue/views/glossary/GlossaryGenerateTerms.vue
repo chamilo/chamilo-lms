@@ -86,10 +86,10 @@
             >
               <option
                 v-for="p in providers"
-                :key="p"
-                :value="p"
+                :key="p.key"
+                :value="p.key"
               >
-                {{ p }}
+                {{ p.label }}
               </option>
             </select>
 
@@ -97,8 +97,71 @@
               v-if="providers.length === 0"
               class="text-xs text-danger mt-1"
             >
-              No text AI providers available.
+              {{ noProviderMessage }}
             </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Document source -->
+      <div class="rounded-2xl border border-gray-25 bg-white p-4">
+        <div class="space-y-3">
+          <div>
+            <label class="block text-sm font-medium mb-1">
+              {{ t("Source document") }}
+            </label>
+
+            <select
+              v-model="selectedResourceFileId"
+              class="w-full rounded-xl border border-gray-25 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-25 disabled:opacity-50 disabled:cursor-not-allowed"
+              :disabled="isBusy || !canEditGlossary"
+            >
+              <option value="0">
+                {{ t("Use the current course context") }}
+              </option>
+              <option
+                v-for="doc in documentSources"
+                :key="doc.resource_file_id"
+                :value="String(doc.resource_file_id)"
+              >
+                {{ doc.title }} — {{ doc.filename }}
+              </option>
+            </select>
+
+            <p
+              v-if="documentSourcesLoading"
+              class="text-xs text-gray-60 mt-1"
+            >
+              {{ t("Loading documents...") }}
+            </p>
+            <p
+              v-else-if="documentSources.length === 0"
+              class="text-xs text-gray-60 mt-1"
+            >
+              {{ t("No compatible PDF or TXT document was found in this course.") }}
+            </p>
+            <p
+              v-else
+              class="text-xs text-gray-60 mt-1"
+            >
+              {{ t("Select a PDF or TXT document to generate terms only from that document.") }}
+            </p>
+          </div>
+
+          <div
+            v-if="selectedDocument"
+            class="rounded-xl border border-yellow-300 bg-yellow-50 p-3 text-sm text-yellow-800"
+          >
+            <div class="font-semibold">
+              {{ t("Confidentiality warning") }}
+            </div>
+            <div class="mt-1">
+              {{
+                t(
+                  "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization.",
+                )
+              }}
+            </div>
           </div>
         </div>
       </div>
@@ -112,7 +175,7 @@
             <button
               type="button"
               class="rounded-xl border border-gray-25 px-3 py-2 text-xs hover:bg-gray-15 disabled:opacity-50 disabled:cursor-not-allowed"
-              :disabled="isBusy || !canEditGlossary"
+              :disabled="isBusy || !canEditGlossary || !!selectedDocument"
               @click="applyDefaultPrompt(true)"
               title="Restore default prompt"
             >
@@ -125,10 +188,19 @@
           v-model="prompt"
           rows="6"
           class="w-full rounded-xl border border-gray-25 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-25 disabled:opacity-50 disabled:cursor-not-allowed"
-          :disabled="isBusy || !canEditGlossary"
+          :disabled="isBusy || !canEditGlossary || !!selectedDocument"
           @input="promptDirty = true"
         />
-        <p class="text-xs text-gray-60 mt-2">
+        <p
+          v-if="selectedDocument"
+          class="text-xs text-gray-60 mt-2"
+        >
+          {{ t("When a document is selected, the prompt is fixed so the generation uses only that document content.") }}
+        </p>
+        <p
+          v-else
+          class="text-xs text-gray-60 mt-2"
+        >
           Tip: keep the requested format (term line, definition next line, blank line between items) for best imports.
         </p>
 
@@ -225,7 +297,7 @@ import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import glossaryService from "../../services/glossaryService"
 import { useNotification } from "../../composables/notification"
 import { useSecurityStore } from "../../store/securityStore"
-import { checkIsAllowedToEdit } from "../../composables/userPermissions"
+import { useIsAllowedToEdit } from "../../composables/userPermissions"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useCidReqStore } from "../../store/cidReq"
 import { storeToRefs } from "pinia"
@@ -238,11 +310,11 @@ const securityStore = useSecurityStore()
 const platform = usePlatformConfig()
 
 const cidReqStore = useCidReqStore()
-const { course, session } = storeToRefs(cidReqStore)
+const { course } = storeToRefs(cidReqStore)
 
 const { cid, sid } = useCidReq()
 
-const isAllowedToEdit = ref(false)
+const { isAllowedToEdit } = useIsAllowedToEdit({ tutor: true, coach: true, sessionCoach: true })
 
 const canEditGlossary = computed(() => {
   const inSession = !!route.query.sid
@@ -251,8 +323,46 @@ const canEditGlossary = computed(() => {
 })
 
 const n = ref(15)
-const providers = ref([])
-const aiProvider = ref("")
+
+/**
+ * Providers are normalized to:
+ * [{ key: "openai", label: "openai (gpt-4o)" }, ...]
+ */
+const textProviders = ref([])
+const documentProcessProviders = ref([])
+const aiProvider = ref("") // Provider key only
+
+const documentSources = ref([])
+const documentSourcesLoading = ref(false)
+const selectedResourceFileId = ref("0")
+
+const selectedDocument = computed(() => {
+  const id = String(selectedResourceFileId.value || "0")
+  if ("0" === id) {
+    return null
+  }
+
+  return documentSources.value.find((doc) => String(doc.resource_file_id) === id) || null
+})
+
+const selectedDocumentMode = computed(() => String(selectedDocument.value?.mode || ""))
+
+const providers = computed(() => {
+  if (selectedDocumentMode.value === "pdf") {
+    return documentProcessProviders.value
+  }
+
+  return textProviders.value
+})
+
+const noProviderMessage = computed(() => {
+  if (selectedDocumentMode.value === "pdf") {
+    return t("No document-processing AI providers available.")
+  }
+
+  return t("No text AI providers available.")
+})
+
 const prompt = ref("")
 const promptDirty = ref(false)
 
@@ -309,16 +419,20 @@ function normalizeTermTitle(input) {
   // Remove leading list markers like "-", "*", "•", "1.", "1)"
   s = s.replace(/^\s*(?:[-*•]+|\d+[.)])\s+/, "")
 
+  // Remove trailing separators sometimes left by AI output.
+  s = s.replace(/\s*[:：-]\s*$/, "")
+
   // Remove surrounding quotes (straight + smart quotes)
   s = s.replace(/^[\s"'“”‘’]+/, "").replace(/[\s"'“”‘’]+$/, "")
 
   // Remove surrounding markdown wrappers (**term**, __term__, `term`)
   // Repeat a couple of times to handle nested wrappers.
-  for (let k = 0; k < 2; k++) {
+  for (let k = 0; k < 3; k++) {
     s = s.replace(/^\*\*(.+)\*\*$/, "$1").trim()
     s = s.replace(/^__(.+)__$/, "$1").trim()
     s = s.replace(/^`(.+)`$/, "$1").trim()
     s = s.replace(/^[\s"'“”‘’]+/, "").replace(/[\s"'“”‘’]+$/, "")
+    s = s.replace(/\s*[:：-]\s*$/, "")
   }
 
   // Collapse whitespace
@@ -337,15 +451,95 @@ function cleanupDefinitionText(input) {
   s = s.replace(/\*\*(.+?)\*\*/g, "$1")
   s = s.replace(/__(.+?)__/g, "$1")
   s = s.replace(/`(.+?)`/g, "$1")
+  s = s.replace(/\s+/g, " ")
 
   return s.trim()
 }
 
+function isLikelyAiPreamble(line) {
+  const value = String(line ?? "")
+    .trim()
+    .toLowerCase()
+
+  if (!value) {
+    return true
+  }
+
+  return (
+    value.startsWith("here are") ||
+    value.startsWith("below are") ||
+    value.startsWith("these are") ||
+    value.startsWith("generated glossary") ||
+    value.startsWith("new glossary terms") ||
+    value.startsWith("glossary terms generated") ||
+    value.startsWith("the following glossary") ||
+    value.startsWith("i generated") ||
+    value.startsWith("sure,")
+  )
+}
+
 /**
- * Parse:
+ * Accept common AI output variants:
+ * 1. **Term**: Definition
+ * 1. "Term": Definition
+ * - Term: Definition
+ * Term: Definition
+ */
+function parseInlineGlossaryTerm(line) {
+  let value = String(line ?? "").trim()
+
+  if (!value || isLikelyAiPreamble(value)) {
+    return null
+  }
+
+  value = value.replace(/^\s*(?:[-*•]+|\d+[.)])\s+/, "").trim()
+
+  const separatorMatch = value.match(/\s*[:：]\s*/)
+  const separatorIndex = separatorMatch?.index ?? -1
+  if (separatorIndex <= 0) {
+    return null
+  }
+
+  const rawTerm = value.slice(0, separatorIndex).trim()
+  const rawDefinition = value.slice(separatorIndex + separatorMatch[0].length).trim()
+
+  const term = normalizeTermTitle(rawTerm)
+  const definition = cleanupDefinitionText(rawDefinition)
+
+  if (!term || !definition) {
+    return null
+  }
+
+  return { term, definition }
+}
+
+function addParsedGlossaryTerm(items, seen, term, definitionRaw) {
+  const normalizedTerm = normalizeTermTitle(term)
+  const normalizedDefinition = cleanupDefinitionText(definitionRaw)
+
+  if (!normalizedTerm || !normalizedDefinition) {
+    return
+  }
+
+  const key = normalizedTerm.toLowerCase()
+  if (seen.has(key)) {
+    return
+  }
+
+  seen.add(key)
+
+  // Store definition as safe HTML, preserve line breaks
+  const safe = escapeHtml(normalizedDefinition).replace(/\n/g, "<br>")
+  items.push({ title: normalizedTerm, description: safe })
+}
+
+/**
+ * Parse both the requested strict format:
  * Term line
- * Definition lines...
- * blank line between items
+ * Definition line
+ *
+ * and common AI variants such as:
+ * 1. **Term**: Definition
  */
 function parseGlossaryTerms(text) {
   const lines = String(text ?? "").split(/\r?\n/)
@@ -357,42 +551,120 @@ function parseGlossaryTerms(text) {
     while (i < lines.length && lines[i].trim() === "") i++
     if (i >= lines.length) break
 
-    const rawTerm = lines[i].trim()
+    const currentLine = lines[i].trim()
+
+    if (isLikelyAiPreamble(currentLine)) {
+      i++
+      continue
+    }
+
+    const inlineItem = parseInlineGlossaryTerm(currentLine)
+    if (inlineItem) {
+      addParsedGlossaryTerm(items, seen, inlineItem.term, inlineItem.definition)
+      i++
+      continue
+    }
+
+    const rawTerm = currentLine
     i++
 
     const defLines = []
     while (i < lines.length && lines[i].trim() !== "") {
+      const possibleNextItem = parseInlineGlossaryTerm(lines[i].trim())
+
+      if (possibleNextItem && defLines.length > 0) {
+        break
+      }
+
       defLines.push(lines[i])
       i++
+
+      if (possibleNextItem) {
+        break
+      }
     }
 
     const term = normalizeTermTitle(rawTerm)
-    const definitionRaw = cleanupDefinitionText(defLines.join("\n").trim())
+    const definitionRaw = defLines.join("\n").trim()
 
-    if (term && definitionRaw) {
-      const key = term.toLowerCase()
-      if (seen.has(key)) {
-        continue
-      }
-      seen.add(key)
-
-      // Store definition as safe HTML, preserve line breaks
-      const safe = escapeHtml(definitionRaw).replace(/\n/g, "<br>")
-      items.push({ title: term, description: safe })
-    }
+    addParsedGlossaryTerm(items, seen, term, definitionRaw)
   }
 
   return items
 }
 
+function normalizeProviders(raw) {
+  const values = Array.isArray(raw) ? raw : Object.entries(raw || {}).map(([key, label]) => ({ key, label }))
+
+  return values
+    .map((p) => {
+      if (typeof p === "string") {
+        const s = p.trim()
+        return s ? { key: s, label: s } : null
+      }
+
+      if (p && typeof p === "object") {
+        const key = String(p.key ?? p.name ?? "").trim()
+        if (!key) return null
+        const label = String(p.label ?? key).trim()
+        return { key, label }
+      }
+
+      return null
+    })
+    .filter(Boolean)
+}
+
+function selectFirstAvailableProvider() {
+  const options = providers.value || []
+  const current = String(aiProvider.value || "").trim()
+
+  if (current && options.some((p) => p.key === current)) {
+    return
+  }
+
+  aiProvider.value = options[0]?.key || ""
+}
+
 async function loadProviders() {
   try {
     const res = await glossaryService.getTextProviders()
-    providers.value = res.providers || []
-    aiProvider.value = providers.value[0] || ""
+    textProviders.value = normalizeProviders(res?.providers || [])
+
+    try {
+      const capabilities = await glossaryService.getAiCapabilities()
+      documentProcessProviders.value = normalizeProviders(
+        capabilities?.providers?.document_process || capabilities?.types?.document_process || [],
+      )
+    } catch (e) {
+      console.warn("[GlossaryGenerateTerms] Failed to load AI capabilities:", e)
+      documentProcessProviders.value = []
+    }
+
+    selectFirstAvailableProvider()
   } catch (e) {
-    console.error("[GlossaryGenerateTerms] Error loading AI providers:", e)
-    providers.value = []
+    console.error("[GlossaryGenerateTerms] Failed to load AI providers:", e)
+    textProviders.value = []
+    documentProcessProviders.value = []
+    aiProvider.value = ""
+  }
+}
+
+async function loadDocumentSources() {
+  documentSourcesLoading.value = true
+
+  try {
+    const res = await glossaryService.getDocumentSources({
+      cid: route.query.cid,
+      sid: route.query.sid,
+    })
+
+    documentSources.value = Array.isArray(res?.documents) ? res.documents : []
+  } catch (e) {
+    console.error("[GlossaryGenerateTerms] Failed to load document sources:", e)
+    documentSources.value = []
+  } finally {
+    documentSourcesLoading.value = false
   }
 }
 
@@ -403,6 +675,7 @@ async function applyDefaultPrompt(force = false) {
       sid: route.query.sid,
       n: n.value,
       language: locale.value || "en",
+      resource_file_id: selectedResourceFileId.value !== "0" ? Number(selectedResourceFileId.value) : undefined,
     })
 
     if ((force || !promptDirty.value) && res?.prompt) {
@@ -412,11 +685,18 @@ async function applyDefaultPrompt(force = false) {
       }
     }
   } catch (e) {
-    console.error("[GlossaryGenerateTerms] Error loading default prompt:", e)
+    console.error("[GlossaryGenerateTerms] Failed to load default prompt:", e)
 
     if (force || !promptDirty.value) {
       const title = course.value?.title || course.value?.name || ""
-      prompt.value = `Generate ${n.value} glossary terms for a course on '${title}', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition.`
+      const selectedTitle = selectedDocument.value?.title || selectedDocument.value?.filename || ""
+
+      if (selectedTitle) {
+        prompt.value = `Generate ${n.value} glossary terms exclusively from the document '${selectedTitle}', each term on a single line, with its definition on the next line and one blank line between each term. Do not use outside knowledge.`
+      } else {
+        prompt.value = `Generate ${n.value} glossary terms for a course on '${title}', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition.`
+      }
+
       if (force) {
         promptDirty.value = false
       }
@@ -445,15 +725,22 @@ async function runGeneration() {
       prompt: prompt.value,
       cid: route.query.cid,
       sid: route.query.sid,
-      ai_provider: aiProvider.value,
+      ai_provider: aiProvider.value, // Send provider key only
       tool: "glossary",
+      resource_file_id: selectedResourceFileId.value !== "0" ? Number(selectedResourceFileId.value) : undefined,
+      document_title: selectedDocument.value?.title || selectedDocument.value?.filename || undefined,
     })
+
+    if (!res?.success) {
+      notification.showErrorNotification(res?.text || "AI glossary generation failed.")
+      return
+    }
 
     generatedText.value = res.text || ""
     notification.showSuccessNotification(t("Generate glossary terms"))
   } catch (e) {
-    console.error("[GlossaryGenerateTerms] Error generating glossary terms:", e)
-    notification.showErrorNotification("AI glossary generation failed.")
+    console.error("[GlossaryGenerateTerms] AI glossary generation failed:", e)
+    notification.showErrorNotification(e?.response?.data?.text || "AI glossary generation failed.")
   } finally {
     isBusy.value = false
   }
@@ -488,6 +775,7 @@ async function importTerms() {
       resourceLinkList: resourceLinkList.value,
       sid: route.query.sid,
       cid: route.query.cid,
+      ai_assisted_raw: 1,
     }
 
     try {
@@ -517,10 +805,27 @@ watch(n, async () => {
   await applyDefaultPrompt(false)
 })
 
-onMounted(async () => {
-  isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true)
+watch(
+  () => selectedResourceFileId.value,
+  async () => {
+    generatedText.value = null
+    importReport.value = null
+    promptDirty.value = false
+    selectFirstAvailableProvider()
+    await applyDefaultPrompt(true)
+  },
+)
 
-  await loadProviders()
+watch(
+  () => providers.value,
+  () => {
+    selectFirstAvailableProvider()
+  },
+  { deep: true },
+)
+
+onMounted(async () => {
+  await Promise.all([loadProviders(), loadDocumentSources()])
   await applyDefaultPrompt(false)
 })
 </script>

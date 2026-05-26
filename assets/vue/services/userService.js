@@ -29,14 +29,6 @@ async function findUsersForSessionAdmin(searchParams) {
 }
 
 /**
- * @param {string} username
- * @returns {Promise<{totalItems, items}>}
- */
-async function findByUsername(username) {
-  return await baseService.getCollection("/api/users", { username })
-}
-
-/**
  * @param {string} term
  * @returns {Promise<{totalItems, items}>}
  */
@@ -58,7 +50,6 @@ export default {
   findById,
   findAll,
   findUsersForSessionAdmin,
-  findByUsername,
   findBySearchTerm,
   createOnAccessUrl,
 }

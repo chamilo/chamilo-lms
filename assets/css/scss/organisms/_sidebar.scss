@@ -24,7 +24,7 @@
   &__logout-link {
     @apply block font-semibold whitespace-nowrap mt-5 mx-6 mb-3.5 px-4 py-2;
 
-    .mdi {
+    .base-icon {
       @apply leading-normal text-body-2;
     }
 
@@ -99,6 +99,12 @@
     }
 
     > .p-panelmenu-header-content a {
+
+      .p-submenu-icon,
+      .p-panelmenu-header-label {
+        @apply sm:opacity-100 sm:visible sm:pointer-events-auto sm:transition-[max-height,opacity] sm:duration-150 sm:delay-150 sm:max-h-[100px];
+      }
+
       .p-menuitem-text {
         @apply order-2 grow text-body-2 font-semibold;
       }
@@ -114,6 +120,7 @@
   .p-panelmenu-header-icon,
   .p-panelmenu-item-icon {
     // @apply text-gray-50;
+    @apply self-baseline;
   }
 
   .p-panelmenu-submenu-icon {
@@ -142,6 +149,7 @@
   }
 
   .p-panelmenu-content {
+    @apply sm:opacity-100 sm:visible sm:pointer-events-auto sm:transition-[max-height,opacity] sm:duration-150 sm:delay-150 sm:max-h-[1000px];
 
     .p-menuitem {
 
@@ -177,7 +185,8 @@
     }
   }
 
-  .router-link-active {
+  .router-link-exact-active,
+  .router-link-url-active {
     @apply text-primary;
   }
 }
@@ -187,23 +196,25 @@
 }
 
 #app {
-  .app-main {
-     @apply overflow-hidden;
-  }
-
   &.app--sidebar-inactive {
     .app-sidebar {
       @apply hidden
         sm:block sm:w-[88px];
 
+      &__panel {
+        @apply sm:overflow-x-hidden;
+      }
+
+      .p-panelmenu-content {
+        @apply sm:opacity-0 sm:invisible sm:pointer-events-none sm:transition-[opacity,height] sm:duration-150 sm:delay-0 sm:max-h-0;
+      }
+
       .p-panelmenu-header {
         > .p-panelmenu-header-content a {
-          .p-submenu-icon {
-            @apply sm:hidden;
-          }
 
+          .p-submenu-icon,
           .p-panelmenu-header-label {
-            @apply sm:hidden;
+            @apply sm:opacity-0 sm:invisible sm:pointer-events-none sm:transition-[opacity,height] sm:duration-150 sm:delay-0 sm:max-h-0;
           }
         }
       }
@@ -228,13 +239,13 @@
     .app-sidebar__topbar-button {
       .mdi.mdi-close {
         &::before {
-          content: "\F035C";
+          content: "󰍜";
         }
       }
     }
 
     .app-main {
-      @apply overflow-auto;
+      // @apply overflow-auto;
     }
   }
 }

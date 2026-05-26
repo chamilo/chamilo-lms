@@ -26,14 +26,22 @@ class TrackEExerciseRepository extends ServiceEntityRepository
     /**
      * Get exercises with pending corrections grouped by exercise ID.
      */
-    public function getPendingCorrectionsByExercise(int $courseId): array
+    public function getPendingCorrectionsByExercise(int $courseId, ?int $sessionId): array
     {
         $qb = $this->createQueryBuilder('te');
 
         $qb->select('IDENTITY(te.quiz) AS exerciseId, COUNT(te.exeId) AS pendingCount')
             ->where('te.status = :status')
             ->andWhere('te.course = :courseId')
-            ->setParameter('status', 'incomplete')
+        ;
+        if (!empty($sessionId)) {
+            $qb->andWhere('te.session = :sessionId')
+                ->setParameter('sessionId', $sessionId)
+            ;
+        } else {
+            $qb->andWhere('te.session IS NULL');
+        }
+        $qb->setParameter('status', 'incomplete')
             ->setParameter('courseId', $courseId)
             ->groupBy('te.quiz')
         ;

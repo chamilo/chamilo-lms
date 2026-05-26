@@ -44,13 +44,16 @@
                                 <div class="social-buttons">
                                     <span>{{ "Share with your friends"|trans }}</span>
                                     <a href="https://www.facebook.com/sharer/sharer.php?u={{ url }}" target="_blank" class="facebook">
-                                        <em class="fab fa-facebook-square"></em> Facebook
+                                        <em class="mdi mdi-facebook"></em> Facebook
                                     </a>
-                                    <a href="https://x.com/home?{{ {'status': course.title ~ ' ' ~ url }|url_encode }}" target="_blank" class="twitter">
-                                        <em class="fab fa-twitter"></em> Twitter
+                                    <a href="https://x.com/intent/post?{{ {'text': course.title ~ ' ' ~ url }|url_encode }}" target="_blank" class="twitter">
+                                        <img src="/img/icons/svg/x.svg" alt="X" style="width:1em;height:1em;vertical-align:middle;display:inline-block;" /> &nbsp;
                                     </a>
                                     <a href="https://www.linkedin.com/shareArticle?{{ {'mini': 'true', 'url': url , 'title': course.title }|url_encode }}" target="_blank" class="linkedin">
-                                        <em class="fab fa-linkedin-in"></em> LinkedIn
+                                        <em class="mdi mdi-linkedin"></em> LinkedIn
+                                    </a>
+                                    <a href="#" id="copy-link-btn" data-url="{{ url|e('html_attr') }}">
+                                        <em class="mdi mdi-paperclip"></em> <span>{{ "Copy link"|trans }}</span>
                                     </a>
                                 </div>
                             </div>
@@ -92,13 +95,13 @@
                                     {% if not is_granted('IS_AUTHENTICATED') %}
                                         {% if 'allow_registration'|api_get_setting != 'false' %}
                                             <a href="{{ base_url ~ '/main/auth/registration.php?c=' ~ course.code }}" class="btn btn--success w-full py-2 mt-2 text-white bg-green-600 rounded hover:bg-green-700">
-                                                <i class="fa fa-pencil" aria-hidden="true"></i> {{ 'Sign up'|trans }}
+                                                <i class="mdi mdi-pencil" aria-hidden="true"></i> {{ 'Sign up'|trans }}
                                             </a>
                                         {% endif %}
                                     {% elseif subscription %}
                                         <a href="{{ base_url }}/course/{{ course.id }}/home?sid=0" class="btn btn--success w-full py-2 mt-2 text-white bg-green-600 rounded hover:bg-green-700">{{ 'Course homepage'|trans }}</a>
                                     {% elseif allow_subscribe %}
-                                        <a href="{{ base_url }}/main/auth/registration.php?c={{ course.code }}" class="btn btn--success w-full py-2 mt-2 text-white bg-green-600 rounded hover:bg-green-700">{{ 'Subscribe'|trans }}</a>
+                                        <a href="{{ base_url }}/main/auth/courses.php?action=subscribe_course&course_code={{ course.code }}&sec_token={{ token }}" class="btn btn--success w-full py-2 mt-2 text-white bg-green-600 rounded hover:bg-green-700">{{ 'Subscribe'|trans }}</a>
                                     {% else %}
                                         <button class="btn btn--success w-full py-2 mt-2 text-white bg-gray-400 rounded" title="{{ 'Subscription is not allowed for this course'|trans }}" disabled>
                                             {{ 'Subscription not allowed'|trans }}
@@ -149,6 +152,30 @@
 
         <script>
           $(function() {
+            var copyBtn = document.getElementById('copy-link-btn');
+            if (copyBtn) {
+              copyBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                var url = this.getAttribute('data-url');
+                var span = this.querySelector('span');
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                  navigator.clipboard.writeText(url).then(function() {
+                    span.textContent = '{{ "Link copied!"|trans }}';
+                  });
+                } else {
+                  var ta = document.createElement('textarea');
+                  ta.value = url;
+                  ta.style.position = 'fixed';
+                  ta.style.opacity = '0';
+                  document.body.appendChild(ta);
+                  ta.select();
+                  document.execCommand('copy');
+                  document.body.removeChild(ta);
+                  span.textContent = '{{ "Link copied!"|trans }}';
+                }
+              });
+            }
+
             $('.course-information').readmore({
               speed: 100,
               lessLink: '<a class="hide-content" href="#">{{ 'Set invisible' | trans }}</a>',

@@ -61,8 +61,7 @@ class NotificationEvent extends Model
         $eventType = $data['event_type'];
         switch ($eventType) {
             case self::JUSTIFICATION_EXPIRATION:
-                $plugin = Justification::create();
-                $list = $plugin->getList();
+                $list = Justification::create()->getList();
                 $list = array_column($list, 'name', 'id');
                 $form->addSelect('event_id', get_lang('Justification type'), $list);
                 $form->freeze('event_id');
@@ -109,8 +108,7 @@ class NotificationEvent extends Model
 
             switch ($eventType) {
                 case self::JUSTIFICATION_EXPIRATION:
-                    $plugin = Justification::create();
-                    $list = $plugin->getList();
+                    $list = Justification::create()->getList();
                     $list = array_column($list, 'name', 'id');
                     $form->addSelect('event_id', get_lang('Justification type'), $list);
                     break;
@@ -140,12 +138,12 @@ class NotificationEvent extends Model
         $userInfo = api_get_user_info($userId);
         $events = $this->get_all();
         $extraFieldData = $this->getUserExtraData(api_get_user_id());
-        $allowJustification = Container::getPluginHelper()->isPluginEnabled('Justification');
+        $justificationPlugin = Justification::create();
+        $allowJustification = $justificationPlugin->isEnabled();
 
         $userJustificationList = [];
         if ($allowJustification) {
-            $plugin = Justification::create();
-            $userJustificationList = $plugin->getUserJustificationList($userId);
+            $userJustificationList = $justificationPlugin->getUserJustificationList($userId);
         }
 
         $notifications = [];
@@ -194,15 +192,15 @@ class NotificationEvent extends Model
 
                             $id = 'id_'.self::JUSTIFICATION_EXPIRATION.'_event_'.$event['id'].'_'.$userJustification['id'];
 
-                            $fieldData = $plugin->getJustification($userJustification['justification_document_id']);
+                            $fieldData = $justificationPlugin->getJustification($userJustification['justification_document_id']);
 
                             $read = false;
                             if ($checkIsRead) {
                                 $read = $this->isRead($id, $extraFieldData);
                             }
 
-                            $eventText = $plugin->get_lang('Justification').': '.$fieldData['name'].' <br />';
-                            $eventText .= $plugin->get_lang('Justification expiration').': '.$userJustification['date_validity'];
+                            $eventText = $justificationPlugin->get_lang('Justification').': '.$fieldData['name'].' <br />';
+                            $eventText .= $justificationPlugin->get_lang('Justification expiration').': '.$userJustification['date_validity'];
 
                             $url = $event['link'];
                             if (empty($url)) {

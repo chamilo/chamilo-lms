@@ -1,0 +1,9 @@
+# This route is intended only for testing purposes.
+# It enables access to legacy files through the Symfony kernel.
+legacy_main:
+    path: /main/{path}
+    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
+    defaults:
+        template: '@ChamiloCore/Index/vue.html.twig'
+    requirements:
+        path: .*

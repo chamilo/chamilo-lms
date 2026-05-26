@@ -53,8 +53,8 @@ class scormOrganization
                                         break;
                                     case 'metadata':
                                         $this->metadata = new scormMetadata(
-                                            'manifest',
-                                            $child
+                                            $child,
+                                            'manifest'
                                         );
                                         break;
                                     case 'title':

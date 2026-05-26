@@ -43,11 +43,11 @@ if (api_is_in_gradebook()) {
 }
 
 $interbreadcrumb[] = [
-    'url' => 'lp_controller.php?action=list',
+    'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
     'name' => get_lang('Learning paths'),
 ];
 $interbreadcrumb[] = [
-    'url' => api_get_self()."?action=add_item&lp_id=$learnpath_id",
+    'url' => api_get_self()."?action=add_item&lp_id=$learnpath_id&".api_get_cidreq(),
     'name' => $lp->getNameNoTags(),
 ];
 $interbreadcrumb[] = [

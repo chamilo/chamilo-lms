@@ -180,7 +180,7 @@ function openSessionRequirementModal() {
       v-if="!hasThumbnail"
       class="w-full h-40 bg-gray-30 flex items-center justify-center"
     >
-      <i class="pi pi-calendar text-5xl text-gray-400" />
+      <i class="mdi mdi-calendar text-5xl text-gray-400" />
     </div>
     <img
       v-else
@@ -193,7 +193,7 @@ function openSessionRequirementModal() {
       v-if="allowDescription"
       aria-label="Session info"
       class="absolute top-2 left-2 z-20"
-      icon="pi pi-info-circle"
+      icon="mdi mdi-information"
       size="small"
       text
       @click="showDescriptionDialog = true"
@@ -262,7 +262,7 @@ function openSessionRequirementModal() {
           :label="$t('Loading...')"
           class="w-full"
           disabled
-          icon="pi pi-spin pi-spinner"
+          icon="mdi mdi-loading mdi-spin"
         />
 
         <Button
@@ -270,7 +270,7 @@ function openSessionRequirementModal() {
           :label="$t('Not available')"
           class="w-full"
           disabled
-          icon="pi pi-lock"
+          icon="mdi mdi-lock"
         />
 
         <template v-else-if="session.buyButtonHtml">
@@ -291,7 +291,7 @@ function openSessionRequirementModal() {
         <Button
           v-else-if="allowAutoSubscription && !session.isSubscribed"
           :disabled="isLoading"
-          :icon="isLoading ? 'pi pi-spin pi-spinner' : 'pi pi-user-plus'"
+          :icon="isLoading ? 'mdi mdi-loading mdi-spin' : 'mdi mdi-account-plus'"
           :label="isLoading ? $t('Subscribing...') : $t('Subscribe')"
           class="w-full p-button-success"
           @click="subscribeToSession"
@@ -302,14 +302,14 @@ function openSessionRequirementModal() {
           :label="$t('Registered')"
           class="w-full p-button-outlined"
           disabled
-          icon="pi pi-check"
+          icon="mdi mdi-check"
         />
 
         <Button
           v-else-if="session.isSubscribed"
           :label="$t('Go to the session')"
           class="w-full"
-          icon="pi pi-external-link"
+          icon="mdi mdi-open-in-new"
           @click="showGoDialog = true"
         />
 
@@ -318,7 +318,7 @@ function openSessionRequirementModal() {
           :label="$t('Not available')"
           class="w-full"
           disabled
-          icon="pi pi-lock"
+          icon="mdi mdi-lock"
         />
       </div>
     </div>
@@ -364,7 +364,7 @@ function openSessionRequirementModal() {
               <Button
                 :label="$t('Go')"
                 class="p-button-sm p-button-text"
-                icon="pi pi-sign-in"
+                icon="mdi mdi-login"
                 size="small"
               />
             </a>

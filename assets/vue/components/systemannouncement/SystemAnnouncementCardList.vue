@@ -1,5 +1,8 @@
 <template>
-  <div v-if="announcements.length > 0">
+  <div
+    v-if="announcements.length > 0"
+    class="flex flex-col gap-4"
+  >
     <SystemAnnouncementCard
       v-for="announcement in announcements"
       :key="announcement.id"

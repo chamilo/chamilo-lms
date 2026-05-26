@@ -1,0 +1,103 @@
+<?php
+/* License: see /license.txt */
+
+// Needed in order to show the plugin title
+$strings['plugin_title'] = 'Zoom 视频会议';
+$strings['plugin_comment'] = '课程和会话中的 Zoom 视频会议集成';
+
+$strings['apiKey'] = 'API 密钥';
+$strings['apiSecret'] = 'API 密钥';
+$strings['verificationToken'] = '验证令牌';
+$strings['enableParticipantRegistration'] = '启用参与者注册';
+$strings['enableCloudRecording'] = '自动录制类型';
+$strings['enableGlobalConference'] = '启用全局会议';
+$strings['enableGlobalConferencePerUser'] = '启用每用户全局会议';
+$strings['globalConferenceAllowRoles'] = '仅这些用户角色可见全局会议链接';
+$strings['globalConferencePerUserAllowRoles'] = '仅这些用户角色可见每用户全局会议链接';
+
+$strings['enableCloudRecording_help'] = '需要付费 Zoom 账户。
+<em>基本</em>账户无法使用。';
+
+// please keep these lines alphabetically sorted
+$strings['AllCourseUsersWereRegistered'] = '所有课程学生已注册';
+$strings['Agenda'] = '议程';
+$strings['CannotRegisterWithoutEmailAddress'] = '没有电子邮件地址无法注册';
+$strings['CopyingJoinURL'] = '正在复制加入 URL';
+$strings['CopyJoinAsURL'] = '复制“以...身份加入”URL';
+$strings['CopyToCourse'] = '复制到课程';
+$strings['CouldNotCopyJoinURL'] = '无法复制加入 URL';
+$strings['Course'] = '课程';
+$strings['CreatedAt'] = '创建时间';
+$strings['CreateLinkInCourse'] = '在课程中创建链接';
+$strings['CreateUserVideoConference'] = '创建用户会议';
+$strings['DateMeetingTitle'] = '%s：%s';
+$strings['DeleteMeeting'] = '删除会议';
+$strings['DeleteFile'] = '删除文件';
+$strings['Details'] = '详情';
+$strings['DoIt'] = '执行';
+$strings['Duration'] = '持续时间';
+$strings['DurationFormat'] = '%hh%I';
+$strings['DurationInMinutes'] = '持续时间（分钟）';
+$strings['EndDate'] = '结束日期';
+$strings['EnterMeeting'] = '进入会议';
+$strings['ViewMeeting'] = '查看会议';
+$strings['Files'] = '文件';
+$strings['Finished'] = '已结束';
+$strings['FileWasCopiedToCourse'] = '文件已复制到课程';
+$strings['FileWasDeleted'] = '文件已删除';
+$strings['GlobalMeeting'] = '全局会议';
+$strings['GlobalMeetingPerUser'] = '每用户全局会议';
+$strings['GroupUsersWereRegistered'] = '小组成员已注册';
+$strings['InstantMeeting'] = '即时会议';
+$strings['Join'] = '加入';
+$strings['JoinGlobalVideoConference'] = '加入全局会议';
+$strings['JoinURLCopied'] = '加入 URL 已复制';
+$strings['JoinURLToSendToParticipants'] = '发送给参与者的加入 URL';
+$strings['LiveMeetings'] = '实时会议';
+$strings['LinkToFileWasCreatedInCourse'] = '文件链接已添加到课程';
+$strings['MeetingDeleted'] = '会议已删除';
+$strings['MeetingsFound'] = '找到会议';
+$strings['MeetingUpdated'] = '会议已更新';
+$strings['NewMeetingCreated'] = '新会议已创建';
+$strings['Password'] = '密码';
+$strings['RecurringWithFixedTime'] = '固定时间重复';
+$strings['RecurringWithNoFixedTime'] = '无固定时间重复';
+$strings['RegisterAllCourseUsers'] = '注册所有课程用户';
+$strings['RegisteredUserListWasUpdated'] = '已注册用户列表已更新';
+$strings['RegisteredUsers'] = '已注册用户';
+$strings['RegisterNoUser'] = '不注册任何用户';
+$strings['RegisterTheseGroupMembers'] = '注册这些组成员';
+$strings['ScheduleAMeeting'] = '安排会议';
+$strings['ScheduledMeeting'] = '已安排会议';
+$strings['ScheduledMeetings'] = '已安排会议';
+$strings['ScheduleAMeeting'] = '安排会议';
+$strings['SearchMeeting'] = '搜索会议';
+$strings['Session'] = '会话';
+$strings['StartDate'] = '开始日期';
+$strings['Started'] = '已开始';
+$strings['StartInstantMeeting'] = '开始即时会议';
+$strings['StartMeeting'] = '开始会议';
+$strings['StartTime'] = '开始时间';
+$strings['Topic'] = '主题';
+$strings['TopicAndAgenda'] = '主题和议程';
+$strings['Type'] = '类型';
+$strings['UpcomingMeetings'] = '即将举行的会议';
+$strings['UpdateMeeting'] = '更新会议';
+$strings['UpdateRegisteredUserList'] = '更新已注册用户列表';
+$strings['UserRegistration'] = '用户注册';
+$strings['Y-m-d H:i'] = 'Y-m-d H:i';
+$strings['Waiting'] = '等待中';
+$strings['XRecordingOfMeetingXFromXDurationXDotX'] = '%s %s 会议的 %s 至 %s 的录像。%s';
+$strings['YouAreNotRegisteredToThisMeeting'] = '您未注册此会议';
+$strings['ZoomVideoConferences'] = 'Zoom 视频会议';
+$strings['Recordings'] = '录像';
+$strings['CreateGlobalVideoConference'] = '创建全局视频会议';
+$strings['ConferenceNotStarted'] = '会议未开始';
+$strings['MeetingNotFound'] = '未找到会议';
+$strings['JoinURLNotAvailable'] = 'URL 不可用';
+$strings['Meetings'] = '会议';
+$strings['ConferenceType'] = '会议类型';
+$strings['ForEveryone'] = '所有人';
+$strings['SomeUsers'] = '部分用户（稍后选择）';
+$strings['Activity'] = '活动';
+$strings['ConferenceNotAvailable'] = '会议不可用';

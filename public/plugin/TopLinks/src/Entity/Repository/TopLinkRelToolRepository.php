@@ -2,75 +2,80 @@
 
 /* For license terms, see /license.txt */
 
+declare(strict_types=1);
+
 namespace Chamilo\PluginBundle\TopLinks\Entity\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\PluginBundle\TopLinks\Entity\TopLink;
-use Chamilo\PluginBundle\TopLinks\Entity\TopLinkRelTool;
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 
-/**
- * Class TopLinkRelToolRepository.
- */
 class TopLinkRelToolRepository extends EntityRepository
 {
-    public function findInCourse(Course $course)
+    public function findInCourse(Course $course): array
     {
         $qb = $this->createQueryBuilder('tlrt');
 
         return $qb
             ->innerJoin('tlrt.tool', 'tool', Join::WITH)
-            ->where($qb->expr()->eq('tool.cId', ':course'))
+            ->where($qb->expr()->eq('tool.course', ':course'))
             ->setParameter('course', $course)
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
     }
 
-    public function updateTools(TopLink $link)
+    public function updateTools(TopLink $link): void
     {
         $subQb = $this->createQueryBuilder('tlrt');
         $subQb
             ->select('tool.iid')
             ->innerJoin('tlrt.tool', 'tool', Join::WITH)
             ->where($subQb->expr()->eq('tlrt.link', ':link'))
-            ->setParameter('link', $link);
+            ->setParameter('link', $link)
+        ;
 
         $linkTools = $subQb->getQuery()->getArrayResult();
+        $toolIds = array_map('intval', array_column($linkTools, 'iid'));
+
+        if ([] === $toolIds) {
+            return;
+        }
 
         $qb = $this->_em->createQueryBuilder();
         $qb
             ->update(CTool::class, 'tool')
-            ->set('tool.name', ':link_name')
-            ->set('tool.target', ':link_target')
+            ->set('tool.title', ':linkTitle')
             ->where(
                 $qb->expr()->in('tool.iid', ':tools')
             )
-            ->setParameter('link_name', $link->getTitle())
-            ->setParameter('link_target', $link->getTarget())
-            ->setParameter('tools', array_column($linkTools, 'iid'))
+            ->setParameter('linkTitle', $link->getTitle(), Types::STRING)
+            ->setParameter('tools', $toolIds, ArrayParameterType::INTEGER)
             ->getQuery()
-            ->execute();
+            ->execute()
+        ;
     }
 
-    public function getMissingCoursesForTool(int $linkId)
+    public function getMissingCoursesForTool(int $linkId): array
     {
-        $qb = $this->_em->createQueryBuilder();
-
-        $subQb = $this->_em->createQueryBuilder();
-        $subQb
-            ->select('t.cId')
-            ->from(CTool::class, 't')
-            ->innerJoin(TopLinkRelTool::class, 'tlrt', Join::WITH, $subQb->expr()->eq('t.iid', 'tlrt.tool'))
-            ->where($subQb->expr()->eq('tlrt.link', ':link_id'));
-
-        return $qb
-            ->select('c')
-            ->from(Course::class, 'c')
-            ->where($qb->expr()->notIn('c.id', $subQb->getDQL()))
-            ->setParameter('link_id', $linkId)
-            ->getQuery()
-            ->getResult();
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT c
+                FROM Chamilo\CoreBundle\Entity\Course c
+                WHERE c.id NOT IN (
+                    SELECT IDENTITY(t.course)
+                    FROM Chamilo\CourseBundle\Entity\CTool t
+                    INNER JOIN Chamilo\PluginBundle\TopLinks\Entity\TopLinkRelTool tlrt WITH IDENTITY(tlrt.tool) = t.iid
+                    WHERE IDENTITY(tlrt.link) = :linkId
+                )
+                ORDER BY c.title ASC'
+            )
+            ->setParameter('linkId', $linkId, Types::INTEGER)
+            ->getResult()
+        ;
     }
 }

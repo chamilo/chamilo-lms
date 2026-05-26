@@ -1,0 +1,22 @@
+<?php
+$strings['plugin_title'] = 'H5P იმპორტი';
+$strings['plugin_comment'] = 'H5P შინაარსის იმპორტი და გამოყენება სწავლის გზებში. გახსენით README.md ინსტალაციის ინსტრუქციებისთვის.';
+$strings['frame'] = 'ჩარჩო';
+$strings['frame_help'] = 'ჩარჩოსა და ღილაკების ჩვენება H5P-ის ქვემოთ';
+$strings['embed'] = 'ჩასაშენებელი';
+$strings['embed_help'] = 'ჩასაშენებელი ღილაკის ჩვენება';
+$strings['copyright'] = 'ავტორის უფლებები';
+$strings['copyright_help'] = 'ავტორის უფლებების ღილაკის ჩვენება';
+$strings['icon'] = 'ხატულა';
+$strings['icon_help'] = 'H5P ხატულის ჩვენება';
+$strings['attempts'] = 'სცადების რაოდენობა';
+$strings['upload_h5p'] = 'ატვირთვა';
+$strings['import_h5p_package'] = 'H5P პაკეტის ატვირთვა';
+$strings['h5p_package'] = 'H5P პაკეტი';
+$strings['h5p_error_loading'] = 'შეცდომა H5P პაკეტის ჩატვირთვისას';
+$strings['h5p_error_invalid_token'] = 'არასწორი უსაფრთხოების ნიშანი';
+$strings['h5p_error_missing_core_asset'] = 'შეცდომა H5P ძირითადი ასეტების ჩატვირთვისას';
+$strings['h5p_save_content_state'] = 'მომხმარებლის შედეგების შენახვა';
+$strings['h5p_save_content_freq'] = 'შენახვის სიხშირე';
+$strings['h5p_save_freq_help'] = 'რამდენად ხშირად უნდა შენახულიყო მიმდინარე შინაარსის მდგომარეობა, წამებში';
+$strings['start_attempt'] = 'სცადების დაწყება';

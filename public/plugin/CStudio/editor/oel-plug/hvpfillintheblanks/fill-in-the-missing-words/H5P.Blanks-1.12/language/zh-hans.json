@@ -1,0 +1,211 @@
+{
+  "semantics": [
+    {
+      "label": "媒体",
+      "fields": [
+        {
+          "label": "类型",
+          "description": "用于显示该问题的可选媒体."
+        },
+        {
+          "label": "禁止图片缩放"
+        }
+      ]
+    },
+    {
+      "label": "任务描述",
+      "default": "填入缺少的词语",
+      "description": "用户如何回答此任务的参考."
+    },
+    {
+      "label": "文字块",
+      "entity": "文字块",
+      "field": {
+        "label": "一行文字",
+        "placeholder": "请在空格填入正确答案  2+3=*4* ",
+        "description": "",
+        "important": {
+          "description": "<ul><li>空格内需要填入正确答案 ，正确答案用星号*括起来 .</li><li>备选答案用/分隔.</li><li>你可以加一个文字提示，在提示前加冒号 : 即可.</li></ul>",
+          "example": "如果 |A| = 3 ， 那么 A= *3/-3:有两个答案啊！*. 也就是填3或者-3都算对"
+        }
+      }
+    },
+    {
+      "label": "所有评价",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "默认"
+            }
+          ],
+          "label": "为任何成绩自定义评价",
+          "description": "点击 \"添加成绩档次\" 增加档次. 例如: 0-20% 差, 21-91% 中等, 91-100% 优!",
+          "entity": "档次",
+          "field": {
+            "fields": [
+              {
+                "label": "成绩档次"
+              },
+              {},
+              {
+                "label": "指定成绩档次的评价",
+                "placeholder": "填写评价"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": " \"显示答案\" 按钮文字",
+      "default": "显示答案"
+    },
+    {
+      "label": "\"重试\" 按钮文字",
+      "default": "重试"
+    },
+    {
+      "label": " \"核对答案\" 按钮文字",
+      "default": "核对答案"
+    },
+    {
+      "label": "\"未填空\" 消息文字",
+      "default": "请完成所有填空后查看答案"
+    },
+    {
+      "label": "\"':ans' is correct\" 消息文字",
+      "default": "':ans' 是对的"
+    },
+    {
+      "label": "\"':ans' is wrong\" 消息文字",
+      "default": "':ans' 是错的"
+    },
+    {
+      "label": "\"回答正确\" 消息文字",
+      "default": "回答正确"
+    },
+    {
+      "label": "\"回答错误\" 消息文字",
+      "default": "回答错误"
+    },
+    {
+      "label": "辅助回答标签",
+      "default": "正确答案:"
+    },
+    {
+      "label": "辅助输入标签",
+      "description": "使用 @num 和 @total 来替代当前填空数和总填空数",
+      "default": "未填空@num 总数 @total"
+    },
+    {
+      "label": "输入框有标签辅助提示",
+      "default": "有提示"
+    },
+    {
+      "label": "提示图标标签",
+      "default": "提示"
+    },
+    {
+      "label": "行为设置",
+      "description": "任务动作参数",
+      "fields": [
+        {
+          "label": "启用 \"重试\""
+        },
+        {
+          "label": "启用 \"显示答案\" 按钮"
+        },
+        {
+          "label": "启用 \"核对答案\" 按钮"
+        },
+        {
+          "label": "输入完成后自动核对答案"
+        },
+        {
+          "label": "大小写敏感",
+          "description": "确保输入和答案完全匹配，注意大小写敏感."
+        },
+        {
+          "label": "您必须回答所有问题才能查看答案"
+        },
+        {
+          "label": "在不同行输入"
+        },
+        {
+          "label": "点击 \"核对答案\"时显示确认对话框",
+          "description": "此选项无法和 \"输入完成后自动核对答案\" 同时使用"
+        },
+        {
+          "label": " 点击\"重试\" 时显示确认对话框"
+        },
+        {
+          "label": "允许细微的拼写错误",
+          "description": "如本选项激活, 如果有细微的拼写错误也认为是正确答案 (3-9 字母: 1 个拼写错误, 超过9个字母: 2个拼写错误)，估计中文不行"
+        }
+      ]
+    },
+    {
+      "label": "核对答案对话框",
+      "fields": [
+        {
+          "label": "标题文字",
+          "default": "完成 ?"
+        },
+        {
+          "label": "内容文字",
+          "default": "你确定全部完成了?"
+        },
+        {
+          "label": "取消按钮文字",
+          "default": "取消"
+        },
+        {
+          "label": "确认按钮文字",
+          "default": "确认"
+        }
+      ]
+    },
+    {
+      "label": "重试对话框",
+      "fields": [
+        {
+          "label": "标题文字",
+          "default": "重试 ?"
+        },
+        {
+          "label": "内容文字",
+          "default": "你要重来一次吗?"
+        },
+        {
+          "label": "取消按钮文字",
+          "default": "取消"
+        },
+        {
+          "label": "确认按钮文字",
+          "default": "确认"
+        }
+      ]
+    },
+    {
+      "label": "使用讲读器的成绩栏文字",
+      "default": "你得到了 :num 分，总分为 :total 分"
+    },
+    {
+      "label": "Assistive technology description for \"Check\" button",
+      "default": "Check the answers. The responses will be marked as correct, incorrect, or unanswered."
+    },
+    {
+      "label": "Assistive technology description for \"Show Solution\" button",
+      "default": "Show the solution. The task will be marked with its correct solution."
+    },
+    {
+      "label": "Assistive technology description for \"Retry\" button",
+      "default": "Retry the task. Reset all responses and start the task over again."
+    },
+    {
+      "label": "Assistive technology description for starting task",
+      "default": "Checking mode"
+    }
+  ]
+}

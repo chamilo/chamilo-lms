@@ -2,6 +2,8 @@
 
 /* For license terms, see /license.txt */
 
+declare(strict_types=1);
+
 namespace Chamilo\PluginBundle\TopLinks\Entity;
 
 use Chamilo\CourseBundle\Entity\CTool;
@@ -15,25 +17,19 @@ class TopLinkRelTool
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    private ?int $id;
+    private ?int $id = null;
+
     #[ORM\ManyToOne(targetEntity: TopLink::class, inversedBy: 'tools')]
-    #[ORM\JoinColumn(name: 'link_id', referencedColumnName: 'id')]
-    private ?TopLink $link;
+    #[ORM\JoinColumn(name: 'link_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    private ?TopLink $link = null;
 
     #[ORM\OneToOne(targetEntity: CTool::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(name: 'tool_id', referencedColumnName: 'iid', nullable: true, onDelete: 'CASCADE')]
-    private ?CTool $tool;
+    private ?CTool $tool = null;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function setId(int $id): TopLinkRelTool
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
     public function getLink(): ?TopLink
@@ -48,7 +44,7 @@ class TopLinkRelTool
         return $this;
     }
 
-    public function getTool(): CTool
+    public function getTool(): ?CTool
     {
         return $this->tool;
     }

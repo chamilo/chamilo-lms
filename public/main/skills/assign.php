@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Level;
 use Chamilo\CoreBundle\Entity\Skill;
 
 /**
@@ -29,7 +30,7 @@ $entityManager = Database::getManager();
 $skillManager = new SkillModel();
 $skillRepo = $entityManager->getRepository(Skill::class);
 $skillRelSkill = $entityManager->getRepository(\Chamilo\CoreBundle\Entity\SkillRelSkill::class);
-$skillLevelRepo = $entityManager->getRepository(\Chamilo\CoreBundle\Entity\Level::class);
+$skillLevelRepo = $entityManager->getRepository(Level::class);
 $skillUserRepo = $entityManager->getRepository(\Chamilo\CoreBundle\Entity\SkillRelUser::class);
 
 $skillLevels = api_get_setting('skill.skill_levels_names', true);
@@ -387,8 +388,7 @@ if ($form->validate()) {
     if (isset($_POST['save_and_add_more'])) {
         header('Location: '.api_get_path(WEB_CODE_PATH)."skills/assign.php?user={$userId}");
     } else {
-        $secToken = Security::get_token();
-        header('Location: '.api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$userId.'&sec_token='.$secToken);
+        header('Location: '.api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?student='.$userId);
     }
     exit;
 }
@@ -422,7 +422,7 @@ if (api_is_drh()) {
         'name' => get_lang('Administration'),
     ];
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'admin/user_list.php',
+        'url' => '/admin/user-list',
         'name' => get_lang('User list'),
     ];
     $interbreadcrumb[] = [

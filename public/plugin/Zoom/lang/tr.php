@@ -1,0 +1,103 @@
+<?php
+/* License: see /license.txt */
+
+// Needed in order to show the plugin title
+$strings['plugin_title'] = 'Zoom Video Konferans';
+$strings['plugin_comment'] = 'Derslerde ve oturumlarda Zoom Video Konferans entegrasyonu';
+
+$strings['apiKey'] = 'API Anahtarı';
+$strings['apiSecret'] = 'API Gizli Anahtarı';
+$strings['verificationToken'] = 'Doğrulama Jetonu';
+$strings['enableParticipantRegistration'] = 'Katılımcı kaydını etkinleştir';
+$strings['enableCloudRecording'] = 'Otomatik kayıt türü';
+$strings['enableGlobalConference'] = 'Genel konferansı etkinleştir';
+$strings['enableGlobalConferencePerUser'] = 'Kullanıcı başına genel konferansı etkinleştir';
+$strings['globalConferenceAllowRoles'] = 'Genel konferans bağlantısı sadece bu kullanıcı rolleri için görünür';
+$strings['globalConferencePerUserAllowRoles'] = 'Kullanıcı başına genel konferans bağlantısı sadece bu kullanıcı rolleri için görünür';
+
+$strings['enableCloudRecording_help'] = 'Ücretli bir Zoom profiline gereklidir.
+<em>temel</em> profil için çalışmaz.';
+
+// please keep these lines alphabetically sorted
+$strings['AllCourseUsersWereRegistered'] = 'Tüm ders öğrencileri kaydedildi';
+$strings['Agenda'] = 'Gündem';
+$strings['CannotRegisterWithoutEmailAddress'] = 'E-posta adresi olmadan kayıt yapılamaz';
+$strings['CopyingJoinURL'] = "Katılma URL'si kopyalanıyor";
+$strings['CopyJoinAsURL'] = "'Katıl olarak' URL'sini kopyala";
+$strings['CopyToCourse'] = 'Derse kopyala';
+$strings['CouldNotCopyJoinURL'] = "Katılma URL'si kopyalanamadı";
+$strings['Course'] = 'Ders';
+$strings['CreatedAt'] = 'Oluşturulma tarihi';
+$strings['CreateLinkInCourse'] = 'Dersde bağlantı(lar) oluştur';
+$strings['CreateUserVideoConference'] = 'Kullanıcı konferansı oluştur';
+$strings['DateMeetingTitle'] = '%s: %s';
+$strings['DeleteMeeting'] = 'Toplantıyı sil';
+$strings['DeleteFile'] = 'Dosya(ları) sil';
+$strings['Details'] = 'Ayrıntılar';
+$strings['DoIt'] = 'Yap';
+$strings['Duration'] = 'Süre';
+$strings['DurationFormat'] = '%hh%I';
+$strings['DurationInMinutes'] = 'Süre (dakika cinsinden)';
+$strings['EndDate'] = 'Bitiş Tarihi';
+$strings['EnterMeeting'] = 'Toplantıya katıl';
+$strings['ViewMeeting'] = 'Toplantıyı görüntüle';
+$strings['Files'] = 'Dosyalar';
+$strings['Finished'] = 'tamamlandı';
+$strings['FileWasCopiedToCourse'] = 'Dosya derse kopyalandı';
+$strings['FileWasDeleted'] = 'Dosya silindi';
+$strings['GlobalMeeting'] = 'Genel konferans';
+$strings['GlobalMeetingPerUser'] = 'Kullanıcı başına genel konferans';
+$strings['GroupUsersWereRegistered'] = 'Grup üyeleri kaydedildi';
+$strings['InstantMeeting'] = 'Anlık toplantı';
+$strings['Join'] = 'Katıl';
+$strings['JoinGlobalVideoConference'] = 'Genel konferansa katıl';
+$strings['JoinURLCopied'] = "Katılma URL'si kopyalandı";
+$strings['JoinURLToSendToParticipants'] = "Katılımcılara gönderilecek katılma URL'si";
+$strings['LiveMeetings'] = 'Canlı toplantılar';
+$strings['LinkToFileWasCreatedInCourse'] = 'Dosyaya bağlantı derse eklendi';
+$strings['MeetingDeleted'] = 'Toplantı silindi';
+$strings['MeetingsFound'] = 'Bulunan toplantılar';
+$strings['MeetingUpdated'] = 'Toplantı güncellendi';
+$strings['NewMeetingCreated'] = 'Yeni toplantı oluşturuldu';
+$strings['Password'] = 'Şifre';
+$strings['RecurringWithFixedTime'] = 'Sabit saatle yinelenen';
+$strings['RecurringWithNoFixedTime'] = 'Sabit saat olmadan yinelenen';
+$strings['RegisterAllCourseUsers'] = 'Tüm kurs kullanıcılarını kaydet';
+$strings['RegisteredUserListWasUpdated'] = 'Kayıtlı kullanıcı listesi güncellendi';
+$strings['RegisteredUsers'] = 'Kayıtlı kullanıcılar';
+$strings['RegisterNoUser'] = 'Kullanıcı kaydetme';
+$strings['RegisterTheseGroupMembers'] = 'Bu grup üyelerini kaydet';
+$strings['ScheduleAMeeting'] = 'Toplantı planla';
+$strings['ScheduledMeeting'] = 'Planlanmış toplantı';
+$strings['ScheduledMeetings'] = 'Planlanmış Toplantılar';
+$strings['ScheduleAMeeting'] = 'Toplantı planla';
+$strings['SearchMeeting'] = 'Toplantı ara';
+$strings['Session'] = 'Oturum';
+$strings['StartDate'] = 'Başlangıç Tarihi';
+$strings['Started'] = 'başladı';
+$strings['StartInstantMeeting'] = 'Anlık toplantı başlat';
+$strings['StartMeeting'] = 'Toplantı başlat';
+$strings['StartTime'] = 'Başlangıç saati';
+$strings['Topic'] = 'Konu';
+$strings['TopicAndAgenda'] = 'Konu ve gündem';
+$strings['Type'] = 'Tür';
+$strings['UpcomingMeetings'] = 'Yaklaşan toplantılar';
+$strings['UpdateMeeting'] = 'Toplantıyı güncelle';
+$strings['UpdateRegisteredUserList'] = 'Kayıtlı kullanıcı listesini güncelle';
+$strings['UserRegistration'] = 'Kullanıcı kaydı';
+$strings['Y-m-d H:i'] = 'Y-m-d H:i';
+$strings['Waiting'] = 'bekliyor';
+$strings['XRecordingOfMeetingXFromXDurationXDotX'] = '%s tarihli %s toplantısının %s kaydı (%s).%s';
+$strings['YouAreNotRegisteredToThisMeeting'] = 'Bu toplantıya kayıtlı değilsiniz';
+$strings['ZoomVideoConferences'] = 'Zoom Video Konferansları';
+$strings['Recordings'] = 'Kayıtlar';
+$strings['CreateGlobalVideoConference'] = 'Genel video konferans oluştur';
+$strings['ConferenceNotStarted'] = 'Konferans başlamadı';
+$strings['MeetingNotFound'] = 'Toplantı bulunamadı';
+$strings['JoinURLNotAvailable'] = 'URL mevcut değil';
+$strings['Meetings'] = 'Toplantılar';
+$strings['ConferenceType'] = 'Konferans türü';
+$strings['ForEveryone'] = 'Herkes';
+$strings['SomeUsers'] = 'Bazı kullanıcılar (Sonra seçin)';
+$strings['Activity'] = 'Etkinlik';
+$strings['ConferenceNotAvailable'] = 'Konferans mevcut değil';

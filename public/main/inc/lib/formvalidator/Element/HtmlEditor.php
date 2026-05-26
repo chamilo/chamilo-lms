@@ -57,7 +57,7 @@ class HtmlEditor extends HTML_QuickForm_textarea
     {
         if ($this->editor) {
             if ($this->editor->getConfigAttribute('fullPage')) {
-                $value = $this->getValue();
+                $value = (string) $this->getValue();
                 if (0 == strlen(trim($value))) {
                     // TODO: To be considered whether here to add
                     // language and character set declarations.
@@ -110,7 +110,7 @@ class HtmlEditor extends HTML_QuickForm_textarea
         if (FormValidator::LAYOUT_HORIZONTAL === $layout) {
             return '
                 <div class="field">
-                    <div class="p-float-label">
+                    <div class="p-floatlabel p-floatlabel-on">
                         <div class="html-editor-container">
                             {element}
                             {icon}

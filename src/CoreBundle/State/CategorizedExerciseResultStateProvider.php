@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\CategorizedExerciseResult;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Security\Authorization\Voter\TrackEExerciseVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Event;
@@ -33,6 +34,7 @@ class CategorizedExerciseResultStateProvider implements ProviderInterface
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly AuthorizationCheckerInterface $security,
+        private readonly UserHelper $userHelper,
         private readonly RequestStack $requestStack
     ) {}
 
@@ -51,10 +53,12 @@ class CategorizedExerciseResultStateProvider implements ProviderInterface
             throw new Exception('Not allowed');
         }
 
-        $sessionHandler = $this->requestStack->getCurrentRequest()->getSession();
-        $sessionHandler->set('_course', api_get_course_info_by_id($trackExercise->getCourse()->getId()));
+        $course = $trackExercise->getCourse();
 
-        $objExercise = new Exercise();
+        $sessionHandler = $this->requestStack->getCurrentRequest()->getSession();
+        $sessionHandler->set('_course', api_get_course_info_by_id($course->getId()));
+
+        $objExercise = new Exercise($course->getId());
         $objExercise->read($trackExercise->getQuiz()->getIid());
 
         ob_start();
@@ -66,7 +70,7 @@ class CategorizedExerciseResultStateProvider implements ProviderInterface
 
         ob_end_clean();
 
-        $stats = self::getStatsTableByAttempt($objExercise, $categoryList);
+        $stats = self::getStatsTableByAttempt($objExercise, $trackExercise, $categoryList);
 
         return new CategorizedExerciseResult($trackExercise, $stats);
     }
@@ -78,8 +82,8 @@ class CategorizedExerciseResultStateProvider implements ProviderInterface
         Exercise $objExercise,
         TrackEExercise $exerciseTracking
     ): array {
-        $courseId = api_get_course_int_id();
-        $sessionId = api_get_session_id();
+        $courseId = $exerciseTracking->getCourse()->getId();
+        $sessionId = (int) $exerciseTracking->getSession()?->getId();
 
         $question_list = explode(',', $exerciseTracking->getDataTracking());
         $question_list = array_map('intval', $question_list);
@@ -106,8 +110,7 @@ class CategorizedExerciseResultStateProvider implements ProviderInterface
                 RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
                 RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS,
                 RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
-            ],
-            true
+            ]
         )) {
             $show_results = true;
         }
@@ -118,8 +121,7 @@ class CategorizedExerciseResultStateProvider implements ProviderInterface
                 RESULT_DISABLE_SHOW_SCORE_ONLY,
                 RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES,
                 RESULT_DISABLE_RANKING,
-            ],
-            true
+            ]
         )) {
             $show_only_score = true;
         }
@@ -141,8 +143,7 @@ class CategorizedExerciseResultStateProvider implements ProviderInterface
                 RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
                 RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK,
                 RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
-            ],
-            true
+            ]
         )) {
             $show_only_score = true;
             $show_results = true;
@@ -150,7 +151,7 @@ class CategorizedExerciseResultStateProvider implements ProviderInterface
 
             if ($objExercise->attempts > 0) {
                 $attempts = Event::getExerciseResultsByUser(
-                    api_get_user_id(),
+                    $this->userHelper->getCurrent()->getId(),
                     $objExercise->id,
                     $courseId,
                     $sessionId,
@@ -341,8 +342,11 @@ class CategorizedExerciseResultStateProvider implements ProviderInterface
         return $category_list;
     }
 
-    private static function getStatsTableByAttempt(Exercise $exercise, array $category_list = []): array
-    {
+    private static function getStatsTableByAttempt(
+        Exercise $exercise,
+        TrackEExercise $exerciseTracking,
+        array $category_list = []
+    ): array {
         if (empty($category_list)) {
             return [];
         }
@@ -353,7 +357,10 @@ class CategorizedExerciseResultStateProvider implements ProviderInterface
             return [];
         }
 
-        $categoryNameList = TestCategory::getListOfCategoriesNameForTest($exercise->iId);
+        $categoryNameList = TestCategory::getListOfCategoriesNameForTest(
+            $exercise->iId,
+            $exerciseTracking->getCourse()->getId()
+        );
 
         if (empty($categoryNameList)) {
             return [];

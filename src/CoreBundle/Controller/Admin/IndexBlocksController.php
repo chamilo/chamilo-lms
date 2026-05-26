@@ -36,6 +36,7 @@ use Throwable;
 class IndexBlocksController extends BaseController
 {
     private bool $isAdmin = false;
+    private bool $isGlobalAdmin = false;
     private bool $isSessionAdmin = false;
     private bool $isLdapActive;
 
@@ -57,6 +58,7 @@ class IndexBlocksController extends BaseController
     public function __invoke(): JsonResponse
     {
         $this->isAdmin = $this->isGranted('ROLE_ADMIN');
+        $this->isGlobalAdmin = $this->isGranted('ROLE_GLOBAL_ADMIN');
         $this->isSessionAdmin = $this->isGranted('ROLE_SESSION_MANAGER');
 
         $json = [];
@@ -69,7 +71,7 @@ class IndexBlocksController extends BaseController
 
         $json['users'] = [
             'id' => 'block-admin-users',
-            'searchUrl' => '/main/admin/user_list.php',
+            'searchUrl' => '/admin/user-list',
             'editable' => $this->isAdmin,
             'items' => $this->getItemsUsers(),
             'extraContent' => $this->getExtraContent('block-admin-users'),
@@ -78,10 +80,16 @@ class IndexBlocksController extends BaseController
         if ($this->isAdmin) {
             $json['courses'] = [
                 'id' => 'block-admin-courses',
-                'searchUrl' => '/main/admin/course_list.php',
+                'searchUrl' => '/admin/course-list',
                 'editable' => true,
                 'items' => $this->getItemsCourses(),
                 'extraContent' => $this->getExtraContent('block-admin-courses'),
+            ];
+
+            $json['rooms'] = [
+                'id' => 'block-admin-rooms',
+                'editable' => false,
+                'items' => $this->getItemsRooms(),
             ];
 
             $json['platform'] = [
@@ -90,6 +98,13 @@ class IndexBlocksController extends BaseController
                 'editable' => true,
                 'items' => $this->getItemsPlatform(),
                 'extraContent' => $this->getExtraContent('block-admin-platform'),
+            ];
+
+            $json['tracking'] = [
+                'id' => 'block-admin-tracking',
+                'editable' => false,
+                'items' => $this->getItemsTracking(),
+                'extraContent' => $this->getExtraContent('block-admin-tracking'),
             ];
 
             /* Settings */
@@ -161,7 +176,7 @@ class IndexBlocksController extends BaseController
         /* Sessions */
         $json['sessions'] = [
             'id' => 'block-admin-sessions',
-            'searchUrl' => '/main/session/session_list.php',
+            'searchUrl' => '/admin/session-list',
             'editable' => $this->isAdmin,
             'items' => $this->getItemsSessions(),
             'extraContent' => $this->getExtraContent('block-admin-sessions'),
@@ -180,9 +195,24 @@ class IndexBlocksController extends BaseController
     {
         return [
             [
+                'class' => 'item-security-activities-audit',
+                'url' => '/main/admin/report.php?id=security_activities_audit',
+                'label' => $this->translator->trans('Activities audit'),
+            ],
+            [
                 'class' => 'item-security-login-attempts',
                 'url' => $this->generateUrl('admin_security_login_attempts'),
                 'label' => $this->translator->trans('Login attempts'),
+            ],
+            [
+                'class' => 'item-security-simple-ids',
+                'url' => $this->generateUrl('admin_security_simple_ids'),
+                'label' => $this->translator->trans('Simple IDS'),
+            ],
+            [
+                'class' => 'item-security-password-strength',
+                'url' => $this->generateUrl('admin_security_password_strength'),
+                'label' => $this->translator->trans('Password strength checker'),
             ],
         ];
     }
@@ -192,7 +222,7 @@ class IndexBlocksController extends BaseController
         $items = [];
         $items[] = [
             'class' => 'item-user-list',
-            'url' => '/main/admin/user_list.php',
+            'route' => ['name' => 'AdminUserList'],
             'label' => $this->translator->trans('User list'),
         ];
         $items[] = [
@@ -238,7 +268,7 @@ class IndexBlocksController extends BaseController
             ];
             $items[] = [
                 'class' => 'item-user-groups',
-                'url' => '/main/admin/usergroups.php',
+                'url' => '/admin/usergroups',
                 'label' => $this->translator->trans('Classes'),
             ];
 
@@ -257,14 +287,14 @@ class IndexBlocksController extends BaseController
             ];
             $items[] = [
                 'class' => 'item-user-groups',
-                'url' => '/main/admin/usergroups.php',
+                'url' => '/admin/usergroups',
                 'label' => $this->translator->trans('Classes'),
             ];
 
             if ('true' === $this->settingsManager->getSetting('session.limit_session_admin_role')) {
                 $items = array_filter($items, function (array $item) {
                     $urls = [
-                        '/main/admin/user_list.php',
+                        '/admin/user-list',
                         '/main/admin/user_add.php',
                     ];
 
@@ -275,7 +305,7 @@ class IndexBlocksController extends BaseController
             if ('true' === $this->settingsManager->getSetting('session.limit_session_admin_list_users')) {
                 $items = array_filter($items, function (array $item): bool {
                     $urls = [
-                        '/main/admin/user_list.php',
+                        '/admin/user-list',
                     ];
 
                     return !\in_array($item['url'], $urls, true);
@@ -330,7 +360,7 @@ class IndexBlocksController extends BaseController
         $items = [];
         $items[] = [
             'class' => 'item-course-list',
-            'url' => '/main/admin/course_list.php',
+            'route' => ['name' => 'AdminCourseList'],
             'label' => $this->translator->trans('Course list'),
         ];
         $items[] = [
@@ -455,11 +485,14 @@ class IndexBlocksController extends BaseController
             'route' => ['name' => 'CCalendarEventList', 'query' => ['type' => 'global']],
             'label' => $this->translator->trans('Global agenda'),
         ];
+        // Disabled until it is reemplemented to work with Chamilo 2
+        /*
         $items[] = [
             'class' => 'item-agenda-reminders',
             'url' => '/main/admin/import_course_agenda_reminders.php',
             'label' => $this->translator->trans('Import course events'),
         ];
+        */
         $items[] = [
             'class' => 'item-pages-list',
             'route' => ['name' => 'PageList'],
@@ -478,22 +511,6 @@ class IndexBlocksController extends BaseController
             'url' => '/main/auth/registration.php?'.http_build_query(['create_intro_page' => 1]),
             'label' => $this->translator->trans('Setting the registration page'),
         ];
-        $items[] = [
-            'class' => 'item-stats',
-            'url' => '/main/admin/statistics/index.php',
-            'label' => $this->translator->trans('Statistics'),
-        ];
-        $items[] = [
-            'class' => 'item-stats-report',
-            'url' => '/main/my_space/company_reports.php',
-            'label' => $this->translator->trans('Reports'),
-        ];
-        $items[] = [
-            'class' => 'item-teacher-time-report',
-            'url' => '/main/admin/teacher_time_report.php',
-            'label' => $this->translator->trans('Teachers time report'),
-        ];
-
         if (api_get_configuration_value('chamilo_cms')) {
             $items[] = [
                 'class' => 'item-cms',
@@ -510,7 +527,7 @@ class IndexBlocksController extends BaseController
             'label' => $this->translator->trans('Extra fields'),
         ];
 
-        if (api_is_global_platform_admin()) {
+        if ($this->isGlobalAdmin) {
             $items[] = [
                 'class' => 'item-access-url',
                 'url' => '/main/admin/access_urls.php',
@@ -579,6 +596,53 @@ class IndexBlocksController extends BaseController
         return $items;
     }
 
+    private function getItemsTracking(): array
+    {
+        $items = [];
+        $items[] = [
+            'class' => 'item-stats',
+            'url' => '/main/admin/report.php?id=platform_global_statistics',
+            'label' => $this->translator->trans('Global statistics'),
+        ];
+        $items[] = [
+            'class' => 'item-reports-catalog',
+            'url' => '/main/admin/reports_catalog.php',
+            'label' => $this->translator->trans('Reports catalog'),
+        ];
+        $items[] = [
+            'class' => 'item-my-space',
+            'url' => '/main/admin/report.php?id=learning_analytics_dashboard',
+            'label' => $this->translator->trans('Learning analytics'),
+        ];
+        $items[] = [
+            'class' => 'item-quarterly-report',
+            'url' => '/main/admin/report.php?id=platform_quarterly_report',
+            'label' => $this->translator->trans('Quarterly report'),
+        ];
+        $items[] = [
+            'class' => 'item-teacher-time-report',
+            'url' => '/main/admin/report.php?id=learning_teacher_time_report',
+            'label' => $this->translator->trans('Teachers time report'),
+        ];
+        $items[] = [
+            'class' => 'item-stats-report',
+            'url' => '/main/admin/report.php?id=learning_corporate_report',
+            'label' => $this->translator->trans('Corporate report'),
+        ];
+        $items[] = [
+            'class' => 'item-special-export',
+            'url' => '/main/admin/report.php?id=export_special_exports',
+            'label' => $this->translator->trans('Special exports'),
+        ];
+        $items[] = [
+            'class' => 'item-ticket-system',
+            'url' => '/main/ticket/tickets.php',
+            'label' => $this->translator->trans('Tickets'),
+        ];
+
+        return $items;
+    }
+
     private function getItemsSettings(): array
     {
         $items = [];
@@ -588,11 +652,6 @@ class IndexBlocksController extends BaseController
             'label' => $this->translator->trans('Clean temporary files'),
         ];
 
-        $items[] = [
-            'class' => 'item-special-export',
-            'url' => '/main/admin/special_exports.php',
-            'label' => $this->translator->trans('Special exports'),
-        ];
         /*$items[] = [
             'url' => '/main/admin/periodic_export.php',
             'label' => $this->translator->$this->trans('Periodic export'),
@@ -618,17 +677,13 @@ class IndexBlocksController extends BaseController
             ];
         }
 
-        $items[] = [
-            'class' => 'item-ticket-system',
-            'url' => '/main/ticket/tickets.php',
-            'label' => $this->translator->trans('Tickets'),
-        ];
-
+        // Disabled until it is reemplemented to work with Chamilo 2
+        /*
         $items[] = [
             'url' => '/main/session/cron_status.php',
             'label' => $this->translator->trans('Update session status'),
         ];
-
+        */
         $items[] = [
             'class' => 'item-colors',
             'route' => ['name' => 'AdminConfigurationColors'],
@@ -645,6 +700,12 @@ class IndexBlocksController extends BaseController
             'class' => 'item-resources-info',
             'url' => '/admin/resources_info',
             'label' => $this->translator->trans('Resources by type'),
+        ];
+
+        $items[] = [
+            'class' => 'item-list-icons',
+            'route' => ['name' => 'AdminListIcons'],
+            'label' => $this->translator->trans('List icons'),
         ];
 
         return $items;
@@ -676,7 +737,7 @@ class IndexBlocksController extends BaseController
 
         $items[] = [
             'class' => 'item-skill-ranking',
-            'url' => '/main/social/skills_ranking.php?origin=admin',
+            'url' => '/skill/ranking',
             'label' => $this->translator->trans('Skills ranking'),
         ];
         $items[] = [
@@ -803,7 +864,7 @@ class IndexBlocksController extends BaseController
         $items = [];
         $items[] = [
             'class' => 'item-session-list',
-            'url' => '/main/session/session_list.php',
+            'url' => '/admin/session-list',
             'label' => $this->translator->trans('Training sessions list'),
         ];
         $items[] = [
@@ -843,23 +904,16 @@ class IndexBlocksController extends BaseController
 
         $items[] = [
             'class' => 'item-session-course-copy',
-            'url' => '/main/coursecopy/copy_course_session.php',
+            'url' => '/main/course_copy/copy_course_session.php',
             'label' => $this->translator->trans('Copy from course in session to another session'),
         ];
 
         $allowCareer = $this->settingsManager->getSetting('session.allow_session_admin_read_careers');
 
         if ($this->isAdmin || ('true' === $allowCareer && $this->isSessionAdmin)) {
-            // Disabled until it is reemplemented to work with Chamilo 2
-            /*                $items[] = [
-                                'class' => 'item-session-user-move-stats',
-                                'url' => '/main/admin/user_move_stats.php',
-                                'label' => $this->translator->trans('Move users results from/to a session'),
-                            ];
-             */
             $items[] = [
                 'class' => 'item-session-user-move',
-                'url' => '/main/coursecopy/move_users_from_course_to_session.php',
+                'url' => '/main/session/move_users_from_course_to_session.php',
                 'label' => $this->translator->trans('Move users results from base course to a session'),
             ];
 
@@ -900,21 +954,14 @@ class IndexBlocksController extends BaseController
             // getPluginInfo() might fail to build the plugin object; never assume 'obj' exists
             $pluginInfo = $appPlugin->getPluginInfo($plugin->getTitle());
 
-            // Normalize/fallbacks
-            if (!\is_array($pluginInfo)) {
-                // Defensive: unexpected structure → skip
-                error_log(\sprintf('[admin:index] Plugin "%s" has no pluginInfo array, skipping.', $plugin->getTitle()));
-
+            if (empty($pluginInfo)) {
                 continue;
             }
 
             /** @var Plugin|null $objPlugin */
             $objPlugin = $pluginInfo['obj'] ?? null;
 
-            if (!$objPlugin instanceof Plugin) {
-                // Defensive: plugin could not be instantiated (e.g. throws in constructor)
-                error_log(\sprintf('[admin:index] Plugin "%s" has no valid "obj" (instance of Plugin), skipping.', $plugin->getTitle()));
-
+            if (!$objPlugin) {
                 continue;
             }
 
@@ -922,12 +969,10 @@ class IndexBlocksController extends BaseController
             $pluginInUrl = $plugin->getOrCreatePluginConfiguration($accessUrl);
             $configuration = $pluginInUrl->getConfiguration() ?: [];
 
-            if (!$configuration || !isset($configuration['regions'])) {
-                continue;
-            }
-
             // Only show plugins that declare the admin menu region
-            if (!\in_array('menu_administrator', $configuration['regions'], true)) {
+            if (empty($configuration['regions'])
+                || !\in_array('menu_administrator', $configuration['regions'], true)
+            ) {
                 continue;
             }
 
@@ -990,6 +1035,85 @@ class IndexBlocksController extends BaseController
             ];
         }
 
+        // ---------------------------------------------------------------------
+        // File permissions checks
+        // ---------------------------------------------------------------------
+        $projectDir = (string) $this->getParameter('kernel.project_dir');
+
+        // Help links (optional but avoids null URLs)
+        $securityGuideUrl = '/documentation/security.html';
+        $optimizationGuideUrl = '/documentation/optimization.html';
+
+        // .env should NOT be writable by the web server user
+        $envPath = $projectDir.'/.env';
+        $envIsWritable = is_file($envPath) && is_writable($envPath);
+
+        $items[] = [
+            'className' => 'item-health-check-env-perms '.($envIsWritable ? 'text-error' : 'text-success'),
+            'url' => $securityGuideUrl,
+            'label' => \sprintf(
+                $this->translator->trans($envIsWritable ? '%s is writeable' : '%s is not writeable'),
+                '.env'
+            ),
+        ];
+
+        // config/ should NOT be writable by the web server user
+        $configPath = $projectDir.'/config';
+        $configIsWritable = is_dir($configPath) && is_writable($configPath);
+
+        $items[] = [
+            'className' => 'item-health-check-config-perms '.($configIsWritable ? 'text-error' : 'text-success'),
+            'url' => $securityGuideUrl,
+            'label' => \sprintf(
+                $this->translator->trans($configIsWritable ? '%s is writeable' : '%s is not writeable'),
+                'config/'
+            ),
+        ];
+
+        // var/cache MUST be writable (Symfony cache)
+        $cachePath = $projectDir.'/var/cache';
+        $cacheIsWritable = is_dir($cachePath) && is_writable($cachePath);
+
+        $items[] = [
+            'className' => 'item-health-check-cache-perms '.($cacheIsWritable ? 'text-success' : 'text-error'),
+            'url' => $optimizationGuideUrl,
+            'label' => \sprintf(
+                $this->translator->trans($cacheIsWritable ? '%s is writeable' : '%s is not writeable'),
+                'var/cache'
+            ),
+        ];
+
+        // public/main/install existence -> orange if present
+        $installPath = $projectDir.'/public/main/install';
+        $installExists = is_dir($installPath);
+
+        $items[] = [
+            'className' => 'item-health-check-install-folder '.($installExists ? 'text-warning' : 'text-success'),
+            'url' => $securityGuideUrl,
+            'label' => $this->translator->trans($installExists ? 'Install folder is still present' : 'Install folder is not present'),
+        ];
+
         return $items;
+    }
+
+    private function getItemsRooms(): array
+    {
+        return [
+            [
+                'class' => 'item-branch-list',
+                'route' => ['name' => 'BranchList'],
+                'label' => $this->translator->trans('Branches'),
+            ],
+            [
+                'class' => 'item-room-list',
+                'route' => ['name' => 'RoomList'],
+                'label' => $this->translator->trans('Rooms'),
+            ],
+            [
+                'class' => 'item-room-availability',
+                'route' => ['name' => 'RoomAvailability'],
+                'label' => $this->translator->trans('Room availability finder'),
+            ],
+        ];
     }
 }

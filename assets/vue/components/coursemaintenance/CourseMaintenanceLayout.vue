@@ -32,7 +32,7 @@
       <nav class="px-6 pb-3">
         <ul class="flex flex-wrap gap-3 text-body-2">
           <li>
-            <RouterLink
+            <BaseAppLink
               :to="tabTo('CMImportBackup')"
               class="cm-tab"
               active-class="cm-tab--active"
@@ -40,10 +40,10 @@
             >
               <i class="mdi mdi-tray-arrow-down cm-tab__icon"></i>
               <span>{{ t("Import backup") }}</span>
-            </RouterLink>
+            </BaseAppLink>
           </li>
           <li>
-            <RouterLink
+            <BaseAppLink
               :to="tabTo('CMCreateBackup')"
               class="cm-tab"
               active-class="cm-tab--active"
@@ -51,10 +51,10 @@
             >
               <i class="mdi mdi-content-save cm-tab__icon"></i>
               <span>{{ t("Create a backup") }}</span>
-            </RouterLink>
+            </BaseAppLink>
           </li>
           <li>
-            <RouterLink
+            <BaseAppLink
               :to="tabTo('CMCopyCourse')"
               class="cm-tab"
               active-class="cm-tab--active"
@@ -62,10 +62,10 @@
             >
               <i class="mdi mdi-content-copy cm-tab__icon"></i>
               <span>{{ t("Copy course") }}</span>
-            </RouterLink>
+            </BaseAppLink>
           </li>
           <li>
-            <RouterLink
+            <BaseAppLink
               :to="tabTo('CMCc13')"
               class="cm-tab"
               active-class="cm-tab--active"
@@ -73,10 +73,10 @@
             >
               <i class="mdi mdi-layers cm-tab__icon"></i>
               <span>IMS CC 1.3</span>
-            </RouterLink>
+            </BaseAppLink>
           </li>
           <li>
-            <RouterLink
+            <BaseAppLink
               :to="tabTo('CMRecycle')"
               class="cm-tab"
               active-class="cm-tab--active"
@@ -84,10 +84,10 @@
             >
               <i class="mdi mdi-recycle cm-tab__icon"></i>
               <span>{{ t("Recycle course") }}</span>
-            </RouterLink>
+            </BaseAppLink>
           </li>
           <li>
-            <RouterLink
+            <BaseAppLink
               :to="tabTo('CMDelete')"
               class="cm-tab cm-tab--danger"
               active-class="cm-tab--active"
@@ -95,7 +95,7 @@
             >
               <i class="mdi mdi-trash-can-outline cm-tab__icon"></i>
               <span>{{ t("Completely delete this course") }}</span>
-            </RouterLink>
+            </BaseAppLink>
           </li>
         </ul>
       </nav>

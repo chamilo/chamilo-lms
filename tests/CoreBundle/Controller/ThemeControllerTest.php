@@ -34,10 +34,10 @@ class ThemeControllerTest extends WebTestCase
         $client = static::createClient();
         $client->request('GET', '/themes/chamilo/../../../../../../etc/passwd');
 
-        $this->assertResponseStatusCodeSame(Response::HTTP_INTERNAL_SERVER_ERROR);
+        $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
 
         $client->request('GET', 'themes/chamilo/../../../.env');
 
-        $this->assertResponseStatusCodeSame(Response::HTTP_INTERNAL_SERVER_ERROR);
+        $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
     }
 }

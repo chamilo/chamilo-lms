@@ -8,13 +8,13 @@ namespace Chamilo\CoreBundle\Command;
 
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
-use Doctrine\ORM\NonUniqueResultException;
 use Exception;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 #[AsCommand(
     name: 'app:azure-sync-users',
@@ -34,9 +34,22 @@ class AzureSyncUsersCommand extends AzureSyncAbstractCommand
         try {
             foreach ($this->getAzureUsers() as $azureUserInfo) {
                 try {
+                    if (empty($azureUserInfo['mail'])) {
+                        throw new BadRequestHttpException('The mail field is empty in Azure AD and is needed to set the organisation email for this user.');
+                    }
+
+                    if (empty($azureUserInfo['mailNickname'])) {
+                        throw new BadRequestHttpException('The mailNickname field is empty in Azure AD and is needed to set the unique username for this user.');
+                    }
+
+                    if (empty($azureUserInfo['id'])) {
+                        throw new BadRequestHttpException('The id field is empty in Azure AD and is needed to set the unique Azure ID for this user.');
+                    }
+
                     $user = $this->azureHelper->registerUser($azureUserInfo);
-                } catch (NonUniqueResultException $e) {
+                } catch (Exception $e) {
                     $io->warning($e->getMessage());
+                    $io->note(serialize($azureUserInfo));
 
                     continue;
                 }

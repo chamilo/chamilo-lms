@@ -26,9 +26,16 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
 
 readonly class ExportCGlossaryAction
 {
+    private const MIME_TYPES = [
+        'csv' => 'text/csv; charset=UTF-8',
+        'xls' => 'application/vnd.ms-excel',
+        'pdf' => 'application/pdf',
+    ];
+
     public function __construct(
         private TranslatorInterface $translator,
         private SettingsManager $settingsManager,
@@ -41,23 +48,27 @@ readonly class ExportCGlossaryAction
         Request $request,
         CGlossaryRepository $repo,
         EntityManager $em,
-        TranslatorInterface $translator
     ): Response {
-        $format = $request->get('format');
-        $cid = $request->request->get('cid');
-        $sid = $request->request->get('sid');
+        $format = (string) $request->get('format', '');
+        $cid = $request->request->getInt('cid');
+        $sid = $request->request->getInt('sid');
 
         if (!\in_array($format, ['csv', 'xls', 'pdf'], true)) {
-            throw new BadRequestHttpException('Invalid export format');
+            throw new BadRequestHttpException('Invalid export format.');
         }
 
         $course = null;
         $session = null;
-        if (0 !== $cid) {
+
+        if ($cid > 0) {
             $course = $em->find(Course::class, $cid);
         }
-        if (0 !== $sid) {
+        if ($sid > 0) {
             $session = $em->find(Session::class, $sid);
+        }
+
+        if (!$course instanceof Course) {
+            throw new BadRequestHttpException('Course not found.');
         }
 
         $qb = $repo->getResourcesByCourse($course, $session);
@@ -69,13 +80,14 @@ readonly class ExportCGlossaryAction
             $course,
         );
 
-        $response = new BinaryFileResponse(
-            new File($exportFilePath)
-        );
+        $response = new BinaryFileResponse(new File($exportFilePath));
+        $response->headers->set('Content-Type', self::MIME_TYPES[$format]);
+        $response->headers->set('X-Content-Type-Options', 'nosniff');
         $response->setContentDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
             $response->getFile()->getFilename()
         );
+        $response->deleteFileAfterSend(true);
 
         return $response;
     }
@@ -86,7 +98,7 @@ readonly class ExportCGlossaryAction
     private function generateExportFile(
         array $glossaryItems,
         string $format,
-        ?Course $course,
+        Course $course,
     ): string {
         if ('pdf' === $format) {
             return $this->generatePdfFile($glossaryItems, $course);
@@ -98,7 +110,11 @@ readonly class ExportCGlossaryAction
         $allowStrip = 'true' === $this->settingsManager->getSetting('glossary.allow_remove_tags_in_glossary_export');
 
         foreach ($glossaryItems as $item) {
-            $definition = $item->getDescription();
+            if (!$item instanceof CGlossary) {
+                continue;
+            }
+
+            $definition = (string) ($item->getDescription() ?? '');
 
             if ($allowStrip) {
                 $definition = htmlspecialchars_decode(strip_tags($definition), ENT_QUOTES);
@@ -125,15 +141,29 @@ readonly class ExportCGlossaryAction
 
     private function generatePdfFile(array $glossaryItems, Course $course): string
     {
-        $html = '<h1>'.$this->translator->trans('Glossary').'</h1>';
-        $html .= '<table>';
-        $html .= '<tr><th>'.$this->translator->trans('Term').'</th><th>'.$this->translator->trans('Term definition').'</th></tr>';
+        $html = '<style>
+            body { font-family: Arial, sans-serif; font-size: 12px; }
+            h1 { font-size: 18px; margin-bottom: 6px; }
+            table { width: 100%; border-collapse: collapse; margin-top: 6px; }
+            th, td { border: 1px solid #ddd; padding: 6px; vertical-align: top; }
+            th { background: #f4f4f4; }
+        </style>';
 
-        /** @var CGlossary $item */
+        $html .= '<h1>'.$this->translator->trans('Glossary').'</h1>';
+        $html .= '<table>';
+        $html .= '<tr>';
+        $html .= '<th>'.$this->translator->trans('Term').'</th>';
+        $html .= '<th>'.$this->translator->trans('Term definition').'</th>';
+        $html .= '</tr>';
+
         foreach ($glossaryItems as $item) {
+            if (!$item instanceof CGlossary) {
+                continue;
+            }
+
             $html .= '<tr>';
-            $html .= '<td>'.$item->getTitle().'</td>';
-            $html .= '<td>'.$item->getDescription().'</td>';
+            $html .= '<td>'.htmlspecialchars($item->getTitle(), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'</td>';
+            $html .= '<td>'.htmlspecialchars((string) ($item->getDescription() ?? ''), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'</td>';
             $html .= '</tr>';
         }
         $html .= '</table>';

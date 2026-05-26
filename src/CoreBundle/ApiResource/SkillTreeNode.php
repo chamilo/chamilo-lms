@@ -9,7 +9,7 @@ namespace Chamilo\CoreBundle\ApiResource;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use Chamilo\CoreBundle\Entity\Skill;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(
     shortName: 'Skill',
@@ -44,4 +44,7 @@ class SkillTreeNode
 
     #[Groups(['skill:tree:read'])]
     public bool $isAchievedByUser = false;
+
+    #[Groups(['skill:tree:read'])]
+    public ?string $description = null;
 }

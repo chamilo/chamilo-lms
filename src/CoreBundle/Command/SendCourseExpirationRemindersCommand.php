@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Command;
 
+use Chamilo\CoreBundle\Helpers\MailHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateInterval;
 use DateTime;
@@ -30,7 +31,8 @@ class SendCourseExpirationRemindersCommand extends Command
     public function __construct(
         private readonly Connection $connection,
         private readonly MailerInterface $mailer,
-        private readonly SettingsManager $settingsManager
+        private readonly SettingsManager $settingsManager,
+        private readonly MailHelper $mailHelper,
     ) {
         parent::__construct();
     }
@@ -103,16 +105,13 @@ class SendCourseExpirationRemindersCommand extends Command
         $userInfo['complete_name'] = $userInfo['firstname'].' '.$userInfo['lastname'];
         $remainingDays = $this->calculateRemainingDays($session['access_end_date']);
 
-        $administrator = [
-            'completeName' => $this->settingsManager->getSetting('admin.administrator_name'),
-            'email' => $this->settingsManager->getSetting('admin.administrator_email'),
-        ];
+        $fromAddress = $this->mailHelper->getPlatformFromAddress();
 
         $institution = $this->settingsManager->getSetting('platform.institution');
         $rootWeb = $this->settingsManager->getSetting('platform.institution_url');
 
         $email = (new TemplatedEmail())
-            ->from($administrator['email'])
+            ->from($fromAddress)
             ->to($userInfo['email'])
             ->subject('Course Expiration Reminder')
             ->htmlTemplate('@ChamiloCore/Mailer/Legacy/cron_remind_course_expiration_body.html.twig')

@@ -1,4 +1,6 @@
 <?php
+
+use Chamilo\CoreBundle\Framework\Container;
 /**
  * (c) Copyright Ascensio System SIA 2025.
  *
@@ -31,8 +33,7 @@ class OnlyofficePlugin extends Plugin
             '1.5.0',
             'Asensio System SIA',
             [
-                'enable_onlyoffice_plugin' => 'boolean',
-                'document_server_url' => 'text',
+                                'document_server_url' => 'text',
                 'jwt_secret' => 'text',
                 'jwt_header' => 'text',
                 'document_server_internal' => 'text',
@@ -49,6 +50,25 @@ class OnlyofficePlugin extends Plugin
         static $result = null;
 
         return $result ?: $result = new self();
+    }
+
+
+    public function isEnabledForCurrentAccessUrl(): bool
+    {
+        $pluginName = $this->get_name();
+        $pluginRepository = Container::getPluginRepository();
+
+        $pluginEntity = $pluginRepository->findOneByTitle($pluginName)
+            ?: $pluginRepository->findOneByTitle(ucfirst(strtolower($pluginName)));
+
+        if (!$pluginEntity || !$pluginEntity->isInstalled()) {
+            return false;
+        }
+
+        $currentAccessUrl = Container::getAccessUrlUtil()->getCurrent();
+        $pluginConfiguration = $pluginEntity->getConfigurationsByAccessUrl($currentAccessUrl);
+
+        return $pluginConfiguration?->isActive() ?? false;
     }
 
     /**

@@ -10,11 +10,10 @@ export default {
       if (item["resourceNode"]) {
         message =
           this.$i18n && this.$i18n.t
-            ? this.$t("{resource} created", { resource: item["resourceNode"].title })
+            ? this.$t("{0} created", [item["resourceNode"].title])
             : `${item["resourceNode"].title} created`
       } else {
-        message =
-          this.$i18n && this.$i18n.t ? this.$t("{resource} created", { resource: item.title }) : `${item.title} created`
+        message = this.$i18n && this.$i18n.t ? this.$t("{0} created", [item.title]) : `${item.title} created`
       }
 
       this.showMessage(message)

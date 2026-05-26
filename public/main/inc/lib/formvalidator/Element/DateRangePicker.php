@@ -35,6 +35,7 @@ class DateRangePicker extends HTML_QuickForm_text
         $this->removeAttribute('format');
         $this->removeAttribute('timepicker');
         $this->removeAttribute('validate_format');
+        $this->removeAttribute('openOnFocus');
 
         return $js.parent::toHtml();
     }
@@ -183,6 +184,27 @@ class DateRangePicker extends HTML_QuickForm_text
             $timeIncrement = api_get_setting('platform.timepicker_increment');
         }
 
+        // When openOnFocus is set to false, block any automatic open on page load.
+        // Strategy: track user mousedown on the input; intercept every show.daterangepicker
+        // event and close the picker unless the open was triggered by a user click.
+        $openOnFocusValue = Security::remove_XSS($this->getAttribute('openOnFocus'));
+        $openOnFocusJs = '';
+        if ('false' === $openOnFocusValue) {
+            $openOnFocusJs = "
+                $('#$id').off('focus.daterangepicker');
+                var _p = $('#$id').data('daterangepicker');
+                if (_p) { _p.container.hide(); _p.isShowing = false; }
+                $('#$id').on('mousedown.drpUser', function() {
+                    $('#$id').data('drpAllow', true);
+                });
+                $('#$id').on('show.daterangepicker', function(ev, picker) {
+                    if (!$('#$id').data('drpAllow')) {
+                        picker.hide();
+                    }
+                    $('#$id').data('drpAllow', false);
+                });";
+        }
+
         // timeFormat: 'hh:mm'
         $js .= "<script>
             $(function() {
@@ -213,6 +235,7 @@ class DateRangePicker extends HTML_QuickForm_text
                         customRangeLabel: '".addslashes(get_lang('Custom range'))."',
                     }
                 });
+                $openOnFocusJs
 
                 $('#$id').on('change', function() {
                     var myPickedDates = $('#$id').val().split('/');

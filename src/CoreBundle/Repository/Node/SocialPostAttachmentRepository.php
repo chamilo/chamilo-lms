@@ -10,6 +10,9 @@ use Chamilo\CoreBundle\Entity\SocialPostAttachment;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends ResourceRepository<SocialPostAttachment>
+ */
 class SocialPostAttachmentRepository extends ResourceRepository
 {
     public function __construct(ManagerRegistry $registry)

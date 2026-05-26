@@ -9,6 +9,7 @@ namespace Chamilo\Tests\CoreBundle\Security\Authorization\Voter;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\Tests\ChamiloTestTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
@@ -38,7 +39,8 @@ class CourseVoterTest extends WebTestCase
             'query' => ['sid' => 1],
         ]);
         $security = $this->getContainer()->get(Security::class);
-        $voter = new CourseVoter($security, $translator, $request_stack, $entity_manager);
+        $settingsManager = $this->getContainer()->get(SettingsManager::class);
+        $voter = new CourseVoter($security, $translator, $settingsManager, $request_stack, $entity_manager);
         foreach ($tests as $message => $test) {
             [$expected, $user, $course] = $test;
             $client->loginUser($user);

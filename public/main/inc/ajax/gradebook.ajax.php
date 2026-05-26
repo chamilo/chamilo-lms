@@ -56,6 +56,10 @@ switch ($action) {
         }
         break;*/
     case 'export_all_certificates':
+        if (!api_is_allowed_to_edit(null, true) && !api_is_student_boss()) {
+            exit;
+        }
+
         $categoryId = (int) $_GET['cat_id'];
         $filterOfficialCodeGet = isset($_GET['filter']) ? Security::remove_XSS($_GET['filter']) : null;
 
@@ -76,9 +80,16 @@ switch ($action) {
 
         $commandScript = api_get_path(SYS_CODE_PATH).'gradebook/cli/export_all_certificates.php';
 
-        $userList = implode(',', $userList);
+        $userList = implode(',', array_map('intval', $userList));
 
-        shell_exec("php $commandScript $courseCode $sessionId $categoryId $userList > /dev/null &");
+        shell_exec(sprintf(
+            "php %s %s %s %s %s > /dev/null &",
+            escapeshellarg($commandScript),
+            escapeshellarg($courseCode),
+            escapeshellarg((string) $sessionId),
+            escapeshellarg((string) $categoryId),
+            escapeshellarg($userList)
+        ));
         break;
     case 'verify_export_all_certificates':
         $categoryId = (int) $_GET['cat_id'];

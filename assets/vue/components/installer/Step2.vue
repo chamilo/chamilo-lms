@@ -12,7 +12,7 @@
       tag="p"
     >
       <a
-        v-t="'Read the installation guide'"
+        v-text="t('Read the installation guide')"
         href="/main/documentation/installation_guide.html"
         target="_blank"
         rel="noopener noreferrer"
@@ -87,9 +87,9 @@
 
         <Tag
           :icon="{
-            'pi pi-check': 'success' === extension.status.severity,
-            'pi pi-exclamation-triangle': 'warning' === extension.status.severity,
-            'pi pi-times': 'danger' === extension.status.severity,
+            'mdi mdi-check': 'success' === extension.status.severity,
+            'mdi mdi-alert': 'warning' === extension.status.severity,
+            'mdi mdi-close': 'danger' === extension.status.severity,
           }"
           :severity="extension.status.severity"
           :value="extension.status.message"
@@ -158,8 +158,10 @@
       v-text="t('Directory and files permissions')"
     />
     <p
-      v-t="
-        'Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).'
+      v-text="
+        t(
+          'Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).',
+        )
       "
       class="mb-4"
     />
@@ -207,7 +209,7 @@
 
       <!-- form inputs for old version path -->
       <div class="field">
-        <div class="p-float-label">
+        <FloatLabel variant="on">
           <InputText
             id="updatePath"
             :value="installerData.badUpdatePath && installerData.updatePath ? updatePath : ''"
@@ -215,7 +217,7 @@
             size="50"
           />
           <label v-text="t('Old version\'s root path')" />
-        </div>
+        </FloatLabel>
       </div>
 
       <div class="formgroup-inline">
@@ -246,7 +248,7 @@
     <div v-else>
       <div v-if="installerData.stepData.notWritable.length > 0">
         <strong
-          v-t="'Warning!'"
+          v-text="t('Warning!')"
           class="text-error"
         />
         <p class="text-error">
@@ -350,6 +352,7 @@ import { inject } from "vue"
 
 import Message from "primevue/message"
 import Tag from "primevue/tag"
+import FloatLabel from "primevue/floatlabel"
 import InputText from "primevue/inputtext"
 import Button from "primevue/button"
 import SectionHeader from "../layout/SectionHeader.vue"

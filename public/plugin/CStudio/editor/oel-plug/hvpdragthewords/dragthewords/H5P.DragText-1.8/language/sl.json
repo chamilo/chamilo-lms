@@ -1,0 +1,148 @@
+{
+  "semantics": [
+    {
+      "label": "Navodilo udeležencem",
+      "description": "Opis reševanja zadane naloge.",
+      "default": "Povleci besede na pravilna mesta"
+    },
+    {
+      "label": "Besedilo naloge",
+      "placeholder": "Oslo je glavno mesto *Norveške*. Helsinki so glavno mesto *Finske*.",
+      "description": "",
+      "important": {
+        "description": "<ul><li>Besede za premikanje se označi z zvezdico (*) pred in za pravilno besedo/besedno zvezo.</li><li>Namig za udeležence se od odgovora loči z dvopičjem (:).</li><li>Za vsak prazen okvir je na razpolago le ena pravilna beseda.</li><li>Možno je dodati tudi povratno informacijo, ki se pokaže po zaključku naloge. Dodan zapis '\\+' pomeni pravilen, '\\-' pa nepravilen odgovor.</li></ul>",
+        "example": "Za brskanje po spletu lahko uporabimo *spletni brskalnik:Takšen program je na primer Chrome*. Vsebina H5P je *interaktivna\\+Pravilno!\\-Nepravilno. Poskusi ponovno.*"
+      }
+    },
+    {
+      "label": "Splošna povratna informacija",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Privzeto"
+            }
+          ],
+          "label": "Določi ločeno povratno informacijo za vsak razpon rezultatov",
+          "description": "Kliknite gumb \"Dodaj razpon\" za dodajanje dodatnih razponov. Primer: 0-20 % Slab rezultat, 21-91 % Povprečen rezultat, 91-100 % Odličen rezultat!",
+          "entity": "razpon",
+          "field": {
+            "fields": [
+              {
+                "label": "Razpon rezultatov"
+              },
+              {},
+              {
+                "label": "Povratna informacija za definiran razpon rezultatov",
+                "placeholder": "Vnesite povratno informacijo"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Besedilo za gumb \"Preveri\"",
+      "default": "Preveri"
+    },
+    {
+      "label": "Besedilo za gumb \"Poskusi ponovno\"",
+      "default": "Poskusi ponovno"
+    },
+    {
+      "label": "Besedilo za gumb \"Prikaži rešitev\"",
+      "default": "Prikaži rešitev"
+    },
+    {
+      "label": "Besedilo za oštevilčeno spustno polje",
+      "default": "Spustno polje @index.",
+      "description": "Besedilo, ki ga bralnik zaslona uporabi za razlikovanje spustnih polj. Spremenljivka: @index"
+    },
+    {
+      "label": "Besedilo praznega spustnega polja",
+      "default": "Spustno polje @index je prazno.",
+      "description": "Besedilo, ki ga bralnik zaslona uporabi za prazno spustno polje. Spremenljivka: @index"
+    },
+    {
+      "label": "Besedilo zapolnjenega spustnega polja",
+      "default": "Spustno polje @index vsebuje element @draggable.",
+      "description": "Besedilo, ki ga bralnik zaslona uporabi za povezavo spustnega polja z izbranim elementom."
+    },
+    {
+      "label": "Besedilo elementa za premik",
+      "default": "Element za premik: @index od @count.",
+      "description": "Besedilo, s katerim bralnik zaslona označi element za premikanje. Spremenljivki: @index, @count"
+    },
+    {
+      "label": "Besedilo gumba za prikaz namiga",
+      "default": "Pokaži namig",
+      "description": "Besedilo, ki ga bralnik zaslona uporabi za izražanje dosegljivosti namiga."
+    },
+    {
+      "label": "Besedilo za pravilni odgovor za bralnik zaslona",
+      "default": "Pravilno!"
+    },
+    {
+      "label": "Besedilo za nepravilni odgovor za bralnik zaslona",
+      "default": "Nepravilno!"
+    },
+    {
+      "label": "Naslov potrditvenega okna za ponastavitev spusta elementa",
+      "default": "Ponastavi spust elementa"
+    },
+    {
+      "label": "Besedilo potrditvenega okna za ponastavitev spusta elementa",
+      "default": "Ponastavim spustno polje?"
+    },
+    {
+      "label": "Besedilo, s katerim bralnik zaslona izrazi začetek premika elementa",
+      "default": "Element je na voljo za premik."
+    },
+    {
+      "label": "Besedilo, s katerim bralnik zaslona izrazi preklic premika elementa",
+      "default": "Premik elementa je preklican."
+    },
+    {
+      "label": "Besedilo, s katerim bralnik zaslona označi besedo kot pravilen odgovor",
+      "default": "Pravilen odgovor:"
+    },
+    {
+      "label": "Naslov sporočila povratne informacije o pravilnem/nepravilnem odgovoru",
+      "default": "Povratna informacija"
+    },
+    {
+      "label": "Nastavitve interakcije",
+      "description": "Nastavitve omogočajo nadzor nad interakcijo aktivnosti za udeležence.",
+      "fields": [
+        {
+          "label": "Omogoči gumb \"Poskusi ponovno\""
+        },
+        {
+          "label": "Omogoči gumb \"Prikaži rešitev\""
+        },
+        {
+          "label": "Omogoči gumb \"Preveri\""
+        },
+        {
+          "label": "Sprotno preverjaj odgovore"
+        }
+      ]
+    },
+    {
+      "label": "Besedilo, ki ga bralnik zaslona uporabi za izražanje napredka",
+      "default": "Napredek :num od :total"
+    },
+    {
+      "label": "Assistive technology label for \"Check\" button",
+      "default": "Check the answers. The responses will be marked as correct, incorrect, or unanswered."
+    },
+    {
+      "label": "Assistive technology label for \"Show Solution\" button",
+      "default": "Show the solution. The task will be marked with its correct solution."
+    },
+    {
+      "label": "Assistive technology label for \"Retry\" button",
+      "default": "Retry the task. Reset all responses and start the task over again."
+    }
+  ]
+}

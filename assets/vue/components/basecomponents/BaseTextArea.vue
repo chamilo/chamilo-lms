@@ -1,32 +1,39 @@
 <template>
   <div class="field">
-    <div class="p-float-label">
+    <FloatLabel variant="on">
       <Textarea
         :id="id"
         :aria-label="label"
         :class="['w-full', { 'p-invalid': isInvalid }, $attrs.class]"
         v-bind="$attrs"
         :model-value="modelValue"
-        type="text"
         @update:model-value="$emit('update:modelValue', $event)"
       />
       <label :for="id">{{ t(label) }}</label>
-    </div>
+    </FloatLabel>
     <slot name="errors">
-      <small v-if="isInvalid" class="p-error">
-        {{ t(errorText || 'Error message') }}
+      <small
+        v-if="isInvalid"
+        class="p-error"
+      >
+        {{ t(errorText || "Error message") }}
       </small>
     </slot>
   </div>
 </template>
 
 <script setup>
+import FloatLabel from "primevue/floatlabel"
 import Textarea from "primevue/textarea"
 import { useI18n } from "vue-i18n"
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 const { t } = useI18n()
 
-const props = defineProps({
+defineProps({
   id: {
     type: String,
     required: true,
@@ -39,7 +46,8 @@ const props = defineProps({
   },
   modelValue: {
     type: String,
-    required: true,
+    required: false,
+    default: "",
   },
   errorText: {
     type: String,

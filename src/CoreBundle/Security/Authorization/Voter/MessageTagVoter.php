@@ -58,15 +58,15 @@ class MessageTagVoter extends Voter
             return true;
         }
 
-        /** @var MessageTag $message */
-        $message = $subject;
+        /** @var MessageTag $messageTag */
+        $messageTag = $subject;
 
         switch ($attribute) {
             case self::CREATE:
             case self::VIEW:
             case self::EDIT:
             case self::DELETE:
-                if ($message->getUser() === $user) {
+                if ($messageTag->getUser() === $user) {
                     return true;
                 }
 

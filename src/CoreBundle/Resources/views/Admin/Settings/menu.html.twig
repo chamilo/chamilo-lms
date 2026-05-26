@@ -1,4 +1,4 @@
-<div class="list-group">
+<div class="admin-settings__list">
     {% set current_namespace = app.request.get('namespace') %}
     {% set array = {
         'admin': 'star',
@@ -55,7 +55,7 @@
             (namespace == 'lp' ? 'Learning path'|trans : (namespace|capitalize)|trans)
             ) %}
 
-        <a class="list-group-item border-0 {% if current_namespace == namespace %} bg-gray-25 rounded-lg {% endif %}"
+        <a class="admin-settings__item {% if current_namespace == namespace %} admin-settings__item--active {% endif %}"
            href="{{ path('chamilo_platform_settings', { 'namespace': namespace }) }}">
             <i class="mdi mdi-{{ array[namespace] | default('help-circle') }} ch-tool-icon-gradient"
                style="font-size:32px;width:32px;height:32px;line-height:32px"

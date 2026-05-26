@@ -1,285 +1,487 @@
 {% autoescape false %}
-<div class="row">
-    <div id="message-alert"></div>
-    <div class="col-md-5">
-        <div class="panel panel-default buycourse-panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">{{ 'PurchaseData'|get_plugin_lang('BuyCoursesPlugin') }}</h3>
+{% set appliesToLabel = '' %}
+{% if service.applies_to == 0 %}
+    {% set appliesToLabel = 'None'|get_lang %}
+{% elseif service.applies_to == 1 %}
+    {% set appliesToLabel = 'User'|get_lang %}
+{% elseif service.applies_to == 2 %}
+    {% set appliesToLabel = 'Course'|get_lang %}
+{% elseif service.applies_to == 3 %}
+    {% set appliesToLabel = 'Session'|get_lang %}
+{% elseif service.applies_to == 4 %}
+    {% set appliesToLabel = 'TemplateTitleCertificate'|get_lang %}
+{% endif %}
+
+{% set durationLabel = service.duration_days == 0 ? 'NoLimit'|get_lang : service.duration_days ~ ' ' ~ 'Days'|get_lang %}
+
+<div class="mx-auto w-full max-w-screen-2xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
+    <section class="rounded-3xl border border-gray-25 bg-white p-6 shadow-sm lg:p-8">
+        <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+            <div class="space-y-3">
+                <div class="inline-flex items-center rounded-full bg-support-1 px-3 py-1 text-xs font-semibold text-support-4">
+                    {{ 'PaymentMethods'|get_plugin_lang('BuyCoursesPlugin') }}
+                </div>
+
+                <div>
+                    <h1 class="text-2xl font-semibold tracking-tight text-gray-90 sm:text-3xl">
+                        {{ 'PurchaseData'|get_plugin_lang('BuyCoursesPlugin') }}
+                    </h1>
+                    <p class="mt-2 max-w-3xl text-sm leading-6 text-gray-50">
+                        {{ 'ProcessConfirmIntro'|get_plugin_lang('BuyCoursesPlugin') }}
+                    </p>
+                </div>
             </div>
-            <div class="panel-body">
-                {% if buying_course %}
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12 col-xs-12">
-                            <a class="ajax" data-title="{{ course.title }}"
-                               href="{{ _p.web_ajax ~ 'course_home.ajax.php?' ~ {'a': 'show_course_information', 'code': course.code}|url_encode() }}">
-                                <img alt="{{ course.title }}" class="img-responsive" style="width: 100%;"
-                                     src="{{ course.course_img ? course.course_img : 'session_default.png'|icon() }}">
-                            </a>
-                        </div>
-                        <div class="col-sm-12 col-md-12 col-xs-12">
-                            <h3>
-                                <a class="ajax" data-title="{{ course.title }}"
-                                   href="{{ _p.web_ajax ~ 'course_home.ajax.php?' ~ {'a': 'show_course_information', 'code': course.code}|url_encode() }}">{{ course.title }}</a>
-                            </h3>
-                            <ul class="list-unstyled">
-                                {% for teacher in course.teachers %}
-                                    <li><em class="fa fa-user"></em> {{ teacher.name }}</li>
-                                {% endfor %}
-                            </ul>
-                            <p id="n-price" class="lead text-right" style="color: white;">
-                                <span class="label label-primary">
-                                    {{ course.item.total_price_formatted }}
-                                </span>
-                            </p>
-                            <p id="s-price" class="lead text-right"></p>
-                        </div>
-                    </div>
-                {% elseif buying_session %}
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12 col-xs-12">
-                            <p>
-                                <img alt="{{ session.title }}" class="img-responsive" style="width: 100%;"
-                                     src="{{ session.image ? session.image : 'session_default.png'|icon() }}">
-                            </p>
-                        </div>
-                        <div class="col-sm-12 col-md-12 col-xs-12">
-                            <h3>{{ session.title }}</h3>
-                            <p><em class="fa fa-calendar fa-fw"></em> {{ session.dates.display }}</p>
-                            <ul class="list-unstyled">
-                                {% for course in session.courses %}
-                                    <li>
-                                        <em class="fa fa-book fa-fw"></em> {{ course.title }}
-                                        {% if course.coaches|length %}
-                                            <ul>
-                                                {% for coach in course.coaches %}
-                                                    <li><em class="fa fa-user fa-fw"></em>{{ coach }}</li>
-                                                {% endfor %}
-                                            </ul>
-                                        {% endif %}
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                            <p id="n-price" class="lead text-right" style="color: white;">
-                                <span class="label label-primary">
-                                    {{ session.item.total_price_formatted }}
-                                </span>
-                            </p>
-                            <p id="s-price" class="lead text-right"></p>
-                        </div>
-                    </div>
-                {% elseif buying_service %}
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12 col-xs-12">
-                            <a href='{{ url('index') ~ 'service/' ~ service.id }}'>
-                                <img alt="{{ service.name }}" class="img-responsive"
-                                     src="{{ service.image ? url('index') ~ 'plugin/BuyCourses/uploads/services/images/' ~ service.image : 'session_default.png'|icon }}">
-                            </a>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12 col-xs-12">
-                            <h3>
-                                <a href='{{ url('index') ~ 'service/' ~ service.id }}'>{{ service.name }}</a>
-                            </h3>
-                            <ul class="list-unstyled">
-                                {% if service.applies_to == 0 %}
-                                    <li>
-                                        <em class="fa fa-hand-o-right"></em> {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }} {{ 'None'|get_lang }}
-                                    </li>
-                                {% elseif service.applies_to == 1 %}
-                                    <li>
-                                        <em class="fa fa-hand-o-right"></em> {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }} {{ 'User'|get_lang }}
-                                    </li>
-                                {% elseif service.applies_to == 2 %}
-                                    <li>
-                                        <em class="fa fa-hand-o-right"></em> {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }} {{ 'Course'|get_lang }}
-                                    </li>
-                                {% elseif service.applies_to == 3 %}
-                                    <li>
-                                        <em class="fa fa-hand-o-right"></em> {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }} {{ 'Session'|get_lang }}
-                                    </li>
-                                {% elseif service.applies_to == 4 %}
-                                    <li>
-                                        <em class="fa fa-hand-o-right"></em> {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }} {{ 'TemplateTitleCertificate'|get_lang }}
-                                    </li>
-                                {% endif %}
-                                <li>
-                                    <em class="fa fa-money"></em>
-                                    {{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}
-                                    : {{ service_item.total_price_formatted }}
-                                    / {{ service.duration_days == 0 ? 'NoLimit'|get_lang  : service.duration_days ~ ' ' ~ 'Days'|get_lang }}
-                                </li>
-                                <li><em class="fa fa-user"></em> {{ service.owner.name }}</li>
-                                {% if service.description %}
-                                    <li><em class="fa fa-align-justify"></em> {{ service.description }}</li>
-                                {% endif %}
-                            </ul>
-                            <p id="n-price" class="lead text-right" style="color: white;">
-                                <span class="label label-primary">
-                                    {{ service_item.total_price_formatted }}
-                                </span>
-                            </p>
-                            <p id="s-price" class="lead text-right"></p>
-                        </div>
-                    </div>
-                {% endif %}
+
+            <div class="flex shrink-0">
+                <a
+                    href="{{ back_url }}"
+                    class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
+                >
+                    <em class="fa fa-arrow-left fa-fw"></em>
+                    {{ 'Back'|get_lang }}
+                </a>
             </div>
         </div>
-    </div>
-    {% if terms %}
-        <div class="col-md-7">
-            <div class="panel panel-default buycourse-panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">{{ 'TermsAndConditions'|get_plugin_lang('BuyCoursesPlugin') }}</h3>
-                </div>
-                <div class="panel-body">
-                    <form action="#">
-                        <div class="form-group">
-                            <textarea class="form-control" style="height: 345px;" readonly>{{ terms }}</textarea>
+    </section>
+
+    <div id="message-alert"></div>
+
+    <div class="grid gap-6 xl:grid-cols-3">
+        <section class="space-y-6 xl:col-span-2">
+            <article class="overflow-hidden rounded-3xl border border-gray-25 bg-white shadow-sm">
+                <div class="grid gap-0 lg:grid-cols-[320px_minmax(0,1fr)]">
+                    <div class="bg-support-2">
+                        <div class="aspect-[16/11] overflow-hidden">
+                            <img
+                                alt="{{ service.name }}"
+                                class="h-full w-full object-cover"
+                                src="{{ service.image ? service.image : 'session_default.png'|icon() }}"
+                            >
                         </div>
-                        <div class="checkbox">
-                            <label for="confirmTermsAndConditons">
-                                <input class="" type="checkbox" id="confirmTermsAndConditons" name="confirmTermsAndConditons">
-                                {{ 'IConfirmIReadAndAcceptTermsAndCondition'|get_plugin_lang('BuyCoursesPlugin') }}
+                    </div>
+
+                    <div class="p-6 lg:p-8">
+                        <div class="space-y-5">
+                            <div class="space-y-2">
+                                <h2 class="text-2xl font-semibold text-gray-90">
+                                    {{ service.name }}
+                                </h2>
+
+                                {% if service.description %}
+                                    <div class="text-sm leading-7 text-gray-50">
+                                        {{ service.description|raw }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                                <div class="rounded-2xl bg-support-2 p-4">
+                                    <div class="text-xs font-semibold uppercase tracking-wide text-gray-50">
+                                        {{ 'Total'|get_plugin_lang('BuyCoursesPlugin') }}
+                                    </div>
+                                    <div class="mt-2 text-xl font-semibold text-gray-90">
+                                        {{ service_item.total_price_formatted }}
+                                    </div>
+                                </div>
+
+                                <div class="rounded-2xl bg-support-2 p-4">
+                                    <div class="text-xs font-semibold uppercase tracking-wide text-gray-50">
+                                        {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }}
+                                    </div>
+                                    <div class="mt-2 text-base font-semibold text-gray-90">
+                                        {{ appliesToLabel }}
+                                    </div>
+                                </div>
+
+                                <div class="rounded-2xl bg-support-2 p-4">
+                                    <div class="text-xs font-semibold uppercase tracking-wide text-gray-50">
+                                        {{ 'Duration'|get_lang }}
+                                    </div>
+                                    <div class="mt-2 text-base font-semibold text-gray-90">
+                                        {{ durationLabel }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="grid gap-3 text-sm text-gray-50">
+                                <div class="flex items-start gap-3">
+                                    <span class="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-support-1 text-support-4">
+                                        <em class="fa fa-user"></em>
+                                    </span>
+                                    <div>
+                                        <div class="font-semibold text-gray-90">{{ 'Buyer'|get_lang }}</div>
+                                        <div>{{ service_sale.buyer.name }}</div>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start gap-3">
+                                    <span class="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-support-1 text-support-4">
+                                        <em class="fa fa-calendar"></em>
+                                    </span>
+                                    <div>
+                                        <div class="font-semibold text-gray-90">{{ 'PurchaseDate'|get_lang }}</div>
+                                        <div>{{ service_sale.buy_date }}</div>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start gap-3">
+                                    <span class="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-support-1 text-support-4">
+                                        <em class="fa fa-hashtag"></em>
+                                    </span>
+                                    <div>
+                                        <div class="font-semibold text-gray-90">{{ 'Reference'|get_lang }}</div>
+                                        <div>{{ service_sale.reference }}</div>
+                                    </div>
+                                </div>
+
+                                {% if service.owner.name is defined %}
+                                    <div class="flex items-start gap-3">
+                                        <span class="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-support-1 text-support-4">
+                                            <em class="fa fa-user-circle"></em>
+                                        </span>
+                                        <div>
+                                            <div class="font-semibold text-gray-90">{{ 'Owner'|get_lang }}</div>
+                                            <div>{{ service.owner.name }}</div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            {% if is_bank_transfer %}
+                <article class="rounded-3xl border border-gray-25 bg-white p-6 shadow-sm lg:p-8">
+                    <div class="space-y-5">
+                        <div class="space-y-2">
+                            <h2 class="text-xl font-semibold text-gray-90">
+                                {{ 'BankAccountInformation'|get_plugin_lang('BuyCoursesPlugin') }}
+                            </h2>
+                            <p class="text-sm leading-6 text-gray-50">
+                                {{ 'BankAccountReviewHelp'|get_plugin_lang('BuyCoursesPlugin') }}
+                            </p>
+                        </div>
+
+                        {% if transfer_accounts %}
+                            <div class="overflow-x-auto rounded-2xl border border-gray-25">
+                                <table class="min-w-full divide-y divide-gray-25 bg-white text-sm">
+                                    <thead class="bg-support-2">
+                                        <tr>
+                                            <th class="px-4 py-3 text-left font-semibold text-gray-90">{{ 'Name'|get_lang }}</th>
+                                            <th class="px-4 py-3 text-left font-semibold text-gray-90">{{ 'BankAccount'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+                                            <th class="px-4 py-3 text-left font-semibold text-gray-90">{{ 'SWIFT'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-25">
+                                        {% for account in transfer_accounts %}
+                                            <tr>
+                                                <td class="px-4 py-3 text-gray-90">{{ account.name }}</td>
+                                                <td class="px-4 py-3 text-gray-90">{{ account.account }}</td>
+                                                <td class="px-4 py-3 text-gray-90">{{ account.swift }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <div class="rounded-2xl border border-gray-25 bg-support-2 px-4 py-3 text-sm text-gray-90">
+                                {{ 'NoBankAccountsConfigured'|get_plugin_lang('BuyCoursesPlugin') }}
+                            </div>
+                        {% endif %}
+
+                        <div class="rounded-2xl border border-info/20 bg-support-2 px-4 py-3 text-sm text-gray-90">
+                            {{ 'OnceItIsConfirmedYouWillReceiveAnEmailWithTheBankInformationAndAnOrderReference'|get_plugin_lang('BuyCoursesPlugin') }}
+                        </div>
+                    </div>
+                </article>
+            {% endif %}
+
+            {% if terms %}
+                <article class="rounded-3xl border border-gray-25 bg-white p-6 shadow-sm lg:p-8">
+                    <div class="space-y-5">
+                        <div class="space-y-2">
+                            <h2 class="text-xl font-semibold text-gray-90">
+                                {{ 'TermsAndConditions'|get_plugin_lang('BuyCoursesPlugin') }}
+                            </h2>
+                            <p class="text-sm leading-6 text-gray-50">
+                                {{ 'TermsReviewHelp'|get_plugin_lang('BuyCoursesPlugin') }}
+                            </p>
+                        </div>
+
+                        <div class="max-h-80 overflow-y-auto rounded-2xl border border-gray-25 bg-support-2 p-4 text-sm leading-6 text-gray-90">
+                            {{ terms|raw }}
+                        </div>
+                    </div>
+                </article>
+            {% endif %}
+        </section>
+
+        <aside class="space-y-6 xl:col-span-1">
+            <div class="rounded-3xl border border-gray-25 bg-white p-6 shadow-sm">
+                <div class="space-y-5">
+                    <div class="space-y-2">
+                        <h2 class="text-lg font-semibold text-gray-90">Summary</h2>
+                        <p class="text-sm leading-6 text-gray-50">
+                            {{ 'ConfirmFinalDetails'|get_plugin_lang('BuyCoursesPlugin') }}
+                        </p>
+                    </div>
+
+                    <div class="space-y-3">
+                        {% if service_item.price_formatted is defined %}
+                            <div class="flex items-center justify-between gap-4 rounded-2xl bg-support-2 p-4">
+                                <span class="text-sm font-semibold text-gray-90">
+                                    {{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}
+                                </span>
+                                <span class="text-sm font-semibold text-gray-90">
+                                    {{ service_item.price_formatted }}
+                                </span>
+                            </div>
+                        {% endif %}
+
+                        {% if service_item.tax_enable is defined and service_item.tax_enable %}
+                            <div class="flex items-center justify-between gap-4 rounded-2xl bg-support-2 p-4">
+                                <span class="text-sm font-semibold text-gray-90">
+                                    {{ service_item.tax_name }} ({{ service_item.tax_perc_show }}%)
+                                </span>
+                                <span class="text-sm font-semibold text-gray-90">
+                                    {{ service_item.tax_amount_formatted }}
+                                </span>
+                            </div>
+                        {% endif %}
+
+                        {% if service_item.has_coupon is defined and service_item.has_coupon %}
+                            <div class="flex items-center justify-between gap-4 rounded-2xl bg-support-2 p-4">
+                                <span class="text-sm font-semibold text-gray-90">
+                                    {{ 'DiscountAmount'|get_plugin_lang('BuyCoursesPlugin') }}
+                                </span>
+                                <span class="text-sm font-semibold text-gray-90">
+                                    {{ service_item.discount_amount_formatted }}
+                                </span>
+                            </div>
+                        {% endif %}
+
+                        <div class="flex items-center justify-between gap-4 rounded-2xl bg-primary p-4">
+                            <span class="text-sm font-semibold text-white">
+                                {{ 'Total'|get_plugin_lang('BuyCoursesPlugin') }}
+                            </span>
+                            <span class="text-lg font-semibold text-white">
+                                {{ service_item.total_price_formatted }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="grid gap-3">
+                        <div class="rounded-2xl border border-gray-25 bg-white p-4">
+                            <div class="text-sm font-semibold text-gray-90">{{ 'Reference'|get_lang }}</div>
+                            <div class="mt-2 text-sm text-gray-50">{{ service_sale.reference }}</div>
+                        </div>
+
+                        <div class="rounded-2xl border border-gray-25 bg-white p-4">
+                            <div class="text-sm font-semibold text-gray-90">{{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }}</div>
+                            <div class="mt-2 text-sm text-gray-50">{{ appliesToLabel }}</div>
+                        </div>
+
+                        <div class="rounded-2xl border border-gray-25 bg-white p-4">
+                            <div class="text-sm font-semibold text-gray-90">{{ 'Duration'|get_lang }}</div>
+                            <div class="mt-2 text-sm text-gray-50">{{ durationLabel }}</div>
+                        </div>
+                    </div>
+
+                    <form method="post" action="{{ confirm_url }}" id="confirm-order-form" class="space-y-4">
+                        {% if terms %}
+                            <label class="flex items-start gap-3 rounded-2xl border border-gray-25 bg-white px-4 py-3">
+                                <input
+                                    type="checkbox"
+                                    id="confirmTermsAndConditions"
+                                    name="accept_terms"
+                                    value="1"
+                                    class="mt-1 h-4 w-4 border-gray-25 text-primary focus:ring-primary"
+                                >
+                                <span class="text-sm text-gray-90">
+                                    {{ 'IConfirmIReadAndAcceptTermsAndCondition'|get_plugin_lang('BuyCoursesPlugin') }}
+                                </span>
                             </label>
+                        {% endif %}
+
+                        {% if is_bank_transfer %}
+                            <div class="rounded-2xl border border-info/20 bg-support-2 px-4 py-3 text-sm text-gray-90">
+                                {{ 'BankTransferPendingNotice'|get_plugin_lang('BuyCoursesPlugin') }}
+                            </div>
+                        {% elseif is_culqi_payment %}
+                            <div class="rounded-2xl border border-info/20 bg-support-2 px-4 py-3 text-sm text-gray-90">
+                                {{ 'CardPaymentNextStepNotice'|get_plugin_lang('BuyCoursesPlugin') }}
+                            </div>
+                        {% elseif is_cecabank_payment %}
+                            <div class="rounded-2xl border border-info/20 bg-support-2 px-4 py-3 text-sm text-gray-90">
+                                {{ 'CecabankRedirectNotice'|get_plugin_lang('BuyCoursesPlugin') }}
+                            </div>
+                        {% endif %}
+
+                        {% if is_culqi_payment %}
+                            <div id="culqi-error-box" class="hidden rounded-2xl border border-danger bg-support-6 px-4 py-3 text-sm text-gray-90"></div>
+                        {% endif %}
+
+                        <div class="flex flex-col gap-3 sm:flex-row">
+                            {% if is_culqi_payment %}
+                                <button
+                                    type="button"
+                                    id="confirm"
+                                    class="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-success px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-success/30 focus:ring-offset-2"
+                                >
+                                    <em class="fa fa-check fa-fw"></em>
+                                    {{ 'ConfirmOrder'|get_plugin_lang('BuyCoursesPlugin') }}
+                                </button>
+                            {% else %}
+                                <button
+                                    type="submit"
+                                    name="action"
+                                    value="confirm"
+                                    id="confirm"
+                                    class="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-success px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-success/30 focus:ring-offset-2"
+                                >
+                                    <em class="fa fa-check fa-fw"></em>
+                                    {{ 'ConfirmOrder'|get_plugin_lang('BuyCoursesPlugin') }}
+                                </button>
+                            {% endif %}
+
+                            <button
+                                type="submit"
+                                name="action"
+                                value="cancel"
+                                id="cancel"
+                                class="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-danger px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-danger/30 focus:ring-offset-2"
+                            >
+                                <em class="fa fa-times fa-fw"></em>
+                                {{ 'CancelOrder'|get_plugin_lang('BuyCoursesPlugin') }}
+                            </button>
                         </div>
                     </form>
                 </div>
             </div>
-        </div>
-    {% endif %}
-</div>
-
-{% if is_bank_transfer %}
-    <div class="row">
-        <div class="col-xs-12">
-            <h3 class="page-header">{{ 'BankAccountInformation'|get_plugin_lang('BuyCoursesPlugin') }}</h3>
-            <div class="table-responsive">
-                <table class="table table-striped table-hover">
-                    <thead>
-                    <tr>
-                        <th>{{ 'Name'|get_lang }}</th>
-                        <th class="text-center">{{ 'BankAccount'|get_plugin_lang('BuyCoursesPlugin') }}</th>
-                        <th class="text-center">{{ 'SWIFT'|get_plugin_lang('BuyCoursesPlugin') }}</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for account in transfer_accounts %}
-                        <tr>
-                            <td>{{ account.name }}</td>
-                            <td class="text-center">{{ account.account }}</td>
-                            <td class="text-center">{{ account.swift }}</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            <p>{{ 'OnceItIsConfirmedYouWillReceiveAnEmailWithTheBankInformationAndAnOrderReference'|get_plugin_lang('BuyCoursesPlugin') }}</p>
-        </div>
-    </div>
-{% endif %}
-
-<div class="row">
-    <div class="col-xs-12">
-        {{ form }}
+        </aside>
     </div>
 </div>
+
 <script>
-    $(function () {
-        {% if terms %}
-            $("#confirm").prop("disabled", true);
+    (function () {
+        const confirmButton = document.getElementById('confirm');
+        const termsCheckbox = document.getElementById('confirmTermsAndConditions');
 
-            $("#confirmTermsAndConditons").click(function () {
-                if ($("#confirmTermsAndConditons").is(':checked')) {
-                    $("#confirm").prop("disabled", false);
-                } else {
-                    $("#confirm").prop("disabled", true);
+        if (confirmButton && termsCheckbox) {
+            confirmButton.disabled = true;
+            confirmButton.classList.add('opacity-50', 'cursor-not-allowed');
+
+            termsCheckbox.addEventListener('change', function () {
+                const enabled = termsCheckbox.checked;
+                confirmButton.disabled = !enabled;
+                confirmButton.classList.toggle('opacity-50', !enabled);
+                confirmButton.classList.toggle('cursor-not-allowed', !enabled);
+            });
+        }
+
+        {% if is_culqi_payment|default(false) %}
+        function showCulqiError(message) {
+            const errorBox = document.getElementById('culqi-error-box');
+
+            if (!errorBox) {
+                return;
+            }
+
+            errorBox.textContent = message || 'Culqi payment failed.';
+            errorBox.classList.remove('hidden');
+        }
+
+        async function sendCulqiToken(tokenId) {
+            const response = await fetch('{{ culqi_charge_url|e('js') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                },
+                body: new URLSearchParams({
+                    token_id: tokenId,
+                    service_sale_id: '{{ service_sale.id|e('js') }}',
+                }).toString(),
+            });
+
+            return response.json();
+        }
+
+        if (confirmButton) {
+            confirmButton.addEventListener('click', function (event) {
+                event.preventDefault();
+
+                {% if terms %}
+                if (termsCheckbox && !termsCheckbox.checked) {
+                    return;
                 }
+                {% endif %}
+
+                const errorBox = document.getElementById('culqi-error-box');
+                if (errorBox) {
+                    errorBox.classList.add('hidden');
+                    errorBox.textContent = '';
+                }
+
+                if (typeof Culqi === 'undefined') {
+                    showCulqiError('Culqi checkout is not available.');
+                    return;
+                }
+
+                Culqi.publicKey = '{{ culqi_public_key|e('js') }}';
+
+                Culqi.settings({
+                    title: '{{ service.name|e('js') }}',
+                    currency: '{{ culqi_currency_code|e('js') }}',
+                    amount: {{ culqi_amount_cents|default(0) }},
+                });
+
+                Culqi.options({
+                    lang: 'auto',
+                    installments: false,
+                    paymentMethods: {
+                        tarjeta: true,
+                        yape: false,
+                        bancaMovil: false,
+                        agente: false,
+                        billetera: false,
+                        cuotealo: false
+                    }
+                });
+
+                Culqi.open();
             });
-        {% endif %}
+        }
 
-        {% if is_culqi_payment|default(false)  %}
-            var price = {{ price }} * 100;
+        window.culqi = async function () {
+            if (Culqi.token && Culqi.token.id) {
+                try {
+                    const result = await sendCulqiToken(Culqi.token.id);
+                    Culqi.close();
 
-            Culqi.codigoComercio = '{{ culqi_params.commerce_code }}';
-            Culqi.configurar({
-                nombre: '{{ _s.institution }}',
-                orden: '{{ sale.reference ?  sale.reference : buying_service.reference }}',
-                moneda: '{{ currency.iso_code }}',
-                descripcion: '{{ title }}',
-                monto: price
-            });
-
-            $("#confirm").click(function (e) {
-                Culqi.abrir();
-                e.preventDefault();
-                $(".culqi_checkout").watch('style', function () {
-
-                    if (Culqi.error) {
-                        $("#message-alert").html('<div class="col-md-12 alert alert-danger">{{ 'ErrorOccurred'|get_plugin_lang('BuyCoursesPlugin')|format(Culqi.error.codigo, Culqi.error.mensaje) }}</div>')
-                    } else if (Culqi.token) {
-
-                        {% if buying_service %}
-
-                        var url = '{{ url('index') }}plugin/BuyCourses/src/buycourses.ajax.php?a=culqi_cargo_service&token_id=' + Culqi.token.id + '&service_sale_id=' + {{ buying_service.id }};
-
-                        {% else %}
-
-                        var url = '{{ url('index') }}plugin/BuyCourses/src/buycourses.ajax.php?a=culqi_cargo&token_id=' + Culqi.token.id + '&sale_id=' + {{ sale.id }};
-
-                        {% endif %}
-
-                        $.ajax({
-                            type: 'POST',
-                            url: url,
-                            beforeSend: function () {
-                                $("#confirm").html('<em class="fa fa-spinner fa-pulse fa-fw" ></em> {{ 'Loading'|get_lang }}');
-                                $("#confirm").prop("disabled", true);
-                                $("#cancel").prop("disabled", true);
-                            },
-                            success: function () {
-                                window.location = "{{ url('index') }}plugin/BuyCourses/index.php";
-                            }
-                        })
+                    if (result.success && result.redirect_url) {
+                        window.location.href = result.redirect_url;
+                        return;
                     }
 
-                    $(".culqi_checkout").unwatch('style');
-                });
+                    showCulqiError(result.message || 'Culqi payment failed.');
+                } catch (error) {
+                    Culqi.close();
+                    showCulqiError('Culqi charge request failed.');
+                }
 
-                return false;
-            });
+                return;
+            }
 
-            $.fn.watch = function (property, callback) {
-                return $(this).each(function () {
-
-                    var old_property_val = this[property];
-                    var timer;
-
-                    function watch() {
-                        var self = $(".culqi_checkout");
-                        self = self[0];
-
-                        if ($(self).data(property + '-watch-abort') == true) {
-                            timer = clearInterval(timer);
-                            $(self).data(property + '-watch-abort', null);
-                            return;
-                        }
-                        if (self[property] != old_property_val) {
-                            old_property_val = self[property];
-                            callback.call(self);
-                        }
-                    }
-
-                    timer = setInterval(watch, 700);
-                });
-            };
-
-            $.fn.unwatch = function (property) {
-                return $(this).each(function () {
-                    $(this).data(property + '-watch-abort', true);
-                });
-            };
+            if (Culqi.error) {
+                showCulqiError(
+                    Culqi.error.user_message
+                    || Culqi.error.merchant_message
+                    || 'Culqi checkout failed.'
+                );
+            }
+        };
         {% endif %}
-    })
+    })();
 </script>
 {% endautoescape %}

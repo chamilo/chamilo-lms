@@ -15,6 +15,10 @@ $isAllowedToEdit = api_is_allowed_to_edit();
 
 switch ($action) {
     case 'get_users_by_group_course':
+        if (!$isAllowedToEdit && !api_is_platform_admin() && !api_is_teacher()) {
+            echo json_encode([]);
+            break;
+        }
         $groupId = (int) $_POST['group_id'];
         $sessionId = (int) $_POST['session_id'];
         if ($groupId) {

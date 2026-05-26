@@ -10,6 +10,9 @@ use Chamilo\CoreBundle\Entity\TicketMessageAttachment;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends ResourceRepository<TicketMessageAttachment>
+ */
 class TicketMessageAttachmentRepository extends ResourceRepository
 {
     public function __construct(ManagerRegistry $registry)

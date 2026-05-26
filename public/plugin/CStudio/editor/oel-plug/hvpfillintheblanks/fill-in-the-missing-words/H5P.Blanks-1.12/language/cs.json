@@ -1,0 +1,211 @@
+{
+  "semantics": [
+    {
+      "label": "Média",
+      "fields": [
+        {
+          "label": "Typ",
+          "description": "Volitelná média k zobrazení nad otázkou."
+        },
+        {
+          "label": "Zakázat zvětšení obrázzu"
+        }
+      ]
+    },
+    {
+      "label": "Popis úlohy",
+      "default": "Doplňte chybějící slova",
+      "description": "Průvodce, který uživateli řekne, jak na tuto úlohu odpovědět."
+    },
+    {
+      "label": "Textové bloky",
+      "entity": "textové bloky",
+      "field": {
+        "label": "Řádek textu",
+        "placeholder": "Oslo je hlavním městem *Norska*.",
+        "description": "",
+        "important": {
+          "description": "<ul><li>Mezery jsou přidány s hvězdičkou (*) před a za správným slovem/frází.</li><li>Alternativní odpovědi jsou odděleny lomítkem (/).</li><li>Můžete přidat textovou nápovědu pomocí dvojtečky (:) před nápovědou.</li></ul>",
+          "example": "Obsah H5P lze upravovat pomocí *prohlížeče/webového prohlížeče: Něco, co používáte každý den*."
+        }
+      }
+    },
+    {
+      "label": "Celková zpětná vazba",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Výchozí"
+            }
+          ],
+          "label": "Definujte vlastní zpětnou vazbu pro jakýkoli rozsah skóre",
+          "description": "Klikněte na tlačítko \"Add range\" pro přidání tolika rozsahů, kolik potřebujete. Například: 0-20% špatný výsledek, 21-91% průměrný výsledek, 91-100% výborný výsledek!",
+          "entity": "rozsah",
+          "field": {
+            "fields": [
+              {
+                "label": "Rozsah skóre"
+              },
+              {},
+              {
+                "label": "Zpětná vazba pro definovaný rozsah skóre",
+                "placeholder": "Vyplňte ve zpětné vazbě"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Popis tlačítka \"Zobrazit řešení\" ",
+      "default": "Zobrazit řešení"
+    },
+    {
+      "label": "Popis tlačítka \"Opakovat\" ",
+      "default": "Opakovat"
+    },
+    {
+      "label": "Popis tlačítka \"Zkontrolovat\" ",
+      "default": "Zkontrolovat"
+    },
+    {
+      "label": "Text pro zprávu  \"Nevyplněno\" ",
+      "default": "Pro zobrazení řešení vyplňte prosím všechny mezery"
+    },
+    {
+      "label": "Text pro zprávu \"':ans' je správně\" ",
+      "default": "':ans' je správně"
+    },
+    {
+      "label": "Text pro zprávu \"':ans' je chybně\" ",
+      "default": "':ans' je chybně"
+    },
+    {
+      "label": "Text pro zprávu \"Odpověď je správně\" ",
+      "default": "Odpověď je správně"
+    },
+    {
+      "label": "Text pro zprávu \"Odpověď je chybně\" ",
+      "default": "Odpověď je chybně"
+    },
+    {
+      "label": "Popisek pomocné technologie pro řešení",
+      "default": "Správná odpověď:"
+    },
+    {
+      "label": "Popisek pomocné technologie pro vstupní pole",
+      "description": "Použijte @num a @total k nahrazení aktuálního počtu doplnění a celkového počtu doplnění v úloze",
+      "default": "Prázdný vstup @num ze @total"
+    },
+    {
+      "label": "Popisek pomocné technologie pro vyslovení vstupu, ke kterému je nápověda",
+      "default": "Nápověda k dispozici"
+    },
+    {
+      "label": "Popisek ikony nápovědy",
+      "default": "Nápověda"
+    },
+    {
+      "label": "Nastavení chování.",
+      "description": "Tyto možnosti vám umožní řídit, jak se bude úloha chovat.",
+      "fields": [
+        {
+          "label": "Povolit tlačítko \"Opakovat\""
+        },
+        {
+          "label": "Povolit tlačítko \"Zobrazit řešení\""
+        },
+        {
+          "label": "EPovolit tlačítko \"Zkontrolovat\" "
+        },
+        {
+          "label": "Po zadání automaticky zkontrolovat odpovědi "
+        },
+        {
+          "label": "Rozeznává velká a malá písmena",
+          "description": "Zajišťuje, že vstup uživatele musí být přesně stejný jako odpověď."
+        },
+        {
+          "label": "Před zobrazením řešení je třeba odpovědět na všechna pole"
+        },
+        {
+          "label": "Vložte vstupní pole na samostatné řádky"
+        },
+        {
+          "label": "Zobrazit potvrzovací dialog \"Zkontrolovat\"",
+          "description": "Tato volba není kompatibilní s volbou \"Po zadání automaticky zkontrolovat odpovědi\" "
+        },
+        {
+          "label": "Zobrazit potvrzovací dialog \"Opakovat\""
+        },
+        {
+          "label": "Přijmout malé pravopisné chyby",
+          "description": "Je-li aktivováno, odpověď se také počítá jako správná s drobnými pravopisnými chybami (3-9 znaků: 1 pravopisná chyba, více než 9 znaků: 2 pravopisné chyby)"
+        }
+      ]
+    },
+    {
+      "label": "Potvrzovací dialog kontroly",
+      "fields": [
+        {
+          "label": "Text záhlaví",
+          "default": "Ukončit ?"
+        },
+        {
+          "label": "Tělo textu",
+          "default": "Opravdu chcete ukončit ?"
+        },
+        {
+          "label": "Popis tlačítka zrušení",
+          "default": "Zrušit"
+        },
+        {
+          "label": "Popis potvrzovacího tlačítka",
+          "default": "Konec"
+        }
+      ]
+    },
+    {
+      "label": "Dialog pro potvrzení opakování",
+      "fields": [
+        {
+          "label": "Text záhlaví",
+          "default": "Opakovat ?"
+        },
+        {
+          "label": "Tělo textu",
+          "default": "Opravdu chcete akci opakovat ?"
+        },
+        {
+          "label": "Popis tlačítka zrušení",
+          "default": "Zrušit"
+        },
+        {
+          "label": "opis potvrzovacího tlačítka",
+          "default": "Potvrdit"
+        }
+      ]
+    },
+    {
+      "label": "Textové znázornění výsledkové lišty pro ty, kteří používají čtecí zařízení",
+      "default": "Získal jste :num z :total bodů"
+    },
+    {
+      "label": "Assistive technology description for \"Check\" button",
+      "default": "Check the answers. The responses will be marked as correct, incorrect, or unanswered."
+    },
+    {
+      "label": "Assistive technology description for \"Show Solution\" button",
+      "default": "Show the solution. The task will be marked with its correct solution."
+    },
+    {
+      "label": "Assistive technology description for \"Retry\" button",
+      "default": "Retry the task. Reset all responses and start the task over again."
+    },
+    {
+      "label": "Assistive technology description for starting task",
+      "default": "Checking mode"
+    }
+  ]
+}

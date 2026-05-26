@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
+use Chamilo\CoreBundle\Cache\DocumentListCacheInvalidator;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
@@ -24,6 +25,7 @@ class UpdateVisibilityDocument extends AbstractController
         private readonly CidReqHelper $cidReqHelper,
         private readonly EntityManagerInterface $em,
         private readonly RequestStack $requestStack,
+        private readonly DocumentListCacheInvalidator $cacheInvalidator,
     ) {}
 
     public function __invoke(CDocument $document, CDocumentRepository $repo): CDocument
@@ -47,6 +49,7 @@ class UpdateVisibilityDocument extends AbstractController
         }
 
         $repo->toggleVisibilityPublishedDraft($document, $course, $session);
+        $this->cacheInvalidator->invalidate();
 
         return $document;
     }

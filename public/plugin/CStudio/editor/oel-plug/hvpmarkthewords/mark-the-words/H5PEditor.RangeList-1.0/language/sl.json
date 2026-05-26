@@ -1,0 +1,7 @@
+{
+  "libraryStrings": {
+    "distributeButtonLabel": "Enakomerno porazdeli",
+    "distributeButtonWarning": "Resnično nadaljujem z enakomerno porazdelitvijo vrednosti? S tem bodo izgubljeni obstoječi vnosi.",
+    "rangeOutOfSequenceWarning": "Vrednost razpona je izven zaporedja"
+  }
+}

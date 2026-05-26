@@ -6,33 +6,51 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
-use Chamilo\CoreBundle\Repository\TrackEDefaultRepository;
+use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
+use Chamilo\CoreBundle\Helpers\ResourceHelper;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\ORM\EntityManager;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 
-class UpdateDocumentFileAction extends BaseResourceFileAction
+final class UpdateDocumentFileAction extends BaseResourceFileAction
 {
     public function __construct(
-        private TrackEDefaultRepository $trackRepo,
-        private Security $security
+        private readonly ResourceHelper $trackHelper,
+        private readonly AiDisclosureHelper $aiDisclosureHelper,
     ) {}
 
     public function __invoke(CDocument $document, Request $request, CDocumentRepository $repo, EntityManager $em): CDocument
     {
         $this->handleUpdateRequest($document, $repo, $request, $em);
+        $this->applyResourceLanguageFromRequest($document, $request, $em);
+
+        $raw = $request->request->get('ai_assisted_raw', null);
+        if (null !== $raw) {
+            $enabled = $this->normalizeBoolean($raw);
+
+            $docId = (int) ($document->getIid() ?? 0);
+            if ($docId > 0) {
+                $this->aiDisclosureHelper->markAiAssistedExtraField('document', $docId, $enabled);
+            }
+        }
 
         $node = $document->getResourceNode();
         if ($node) {
-            $this->trackRepo->registerResourceEvent(
-                $node,
-                'edition',
-                $this->security->getUser()?->getId()
-            );
+            $this->trackHelper->createAndSaveResourceEvent($node, 'edition');
         }
 
         return $document;
+    }
+
+    private function normalizeBoolean(mixed $value): bool
+    {
+        // Accept checkbox-like values: 1/0, true/false, on/off, yes/no
+        $v = strtolower(trim((string) $value));
+        if ('' === $v) {
+            return false;
+        }
+
+        return \in_array($v, ['1', 'true', 'yes', 'on'], true);
     }
 }

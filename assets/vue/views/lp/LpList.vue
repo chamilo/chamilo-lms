@@ -1,195 +1,111 @@
 <template>
-  <div class="space-y-6">
-    <div class="flex items-center justify-between">
-      <h1 class="text-2xl font-bold text-gray-90">{{ t("Learning path") }}</h1>
-      <div class="relative flex items-center gap-2">
-        <StudentViewButton
-          :key="route.query.isStudentView === 'true' ? 'sv-on' : 'sv-off'"
-          @change="onStudentViewChange"
-        />
-        <BaseDropdownMenu
-          v-if="canEdit"
-          :dropdown-id="'top-menu'"
-          class="relative flex items-center gap-2"
-        >
-          <template #button>
-            <button
-              :aria-label="t('More actions')"
-              class="w-9 h-9 rounded-xl border border-gray-25 grid place-content-center hover:bg-gray-15"
-            >
-              <i
-                aria-hidden="true"
-                class="mdi mdi-dots-vertical text-lg"
-              ></i>
-            </button>
-          </template>
-          <template #menu>
-            <div class="absolute right-0 z-50 w-56 bg-white border border-gray-25 rounded-xl shadow-md p-1">
-              <button
-                class="w-full text-left px-3 py-2 rounded hover:bg-gray-15"
-                @click="handleTopMenu('new', $event)"
-              >
-                {{ t("Create new learning path") }}
-              </button>
-              <button
-                v-if="canUseAi"
-                class="w-full text-left px-3 py-2 rounded hover:bg-gray-15"
-                @click="handleTopMenu('ai', $event)"
-              >
-                {{ t("AI learning path generator") }}
-              </button>
-              <button
-                class="w-full text-left px-3 py-2 rounded hover:bg-gray-15"
-                @click="handleTopMenu('import', $event)"
-              >
-                {{ t("Import") }}
-              </button>
-              <button
-                class="w-full text-left px-3 py-2 rounded hover:bg-gray-15"
-                @click="handleTopMenu('rapid', $event)"
-              >
-                {{ t("Chamilo RAPID") }}
-              </button>
-              <button
-                class="w-full text-left px-3 py-2 rounded hover:bg-gray-15"
-                @click="handleTopMenu('category', $event)"
-              >
-                {{ t("Add category") }}
-              </button>
-            </div>
-          </template>
-        </BaseDropdownMenu>
-      </div>
-    </div>
-
-    <div
-      v-if="loading"
-      class="space-y-4 animate-pulse"
-    >
-      <div class="mt-4">
-        <div class="h-36 bg-gray-15 rounded-2xl" />
-      </div>
-    </div>
-
-    <div
-      v-else-if="error"
-      class="text-body-2 text-danger"
-    >
-      {{ t("Error loading learning paths.") }}
-    </div>
-
-    <div
-      v-else-if="!hasAnyVisible"
-      class="flex flex-col items-center justify-center py-20 text-center"
-    >
-      <div class="w-24 h-24 rounded-full bg-support-1 flex items-center justify-center mb-4 text-support-3">
-        <svg
-          fill="none"
-          height="36"
-          viewBox="0 0 24 24"
-          width="36"
-        >
-          <path
-            d="M4 17l6-6 4 4 6-6"
-            stroke="currentColor"
-            stroke-width="2"
-          />
-        </svg>
-      </div>
-      <h3 class="text-base font-semibold">{{ t("You don't have any learning path.") }}</h3>
-      <p class="text-body-2 text-gray-50 max-w-sm">
-        {{ t("Create your first learning path to start organizing course content.") }}
-      </p>
-      <button
-        v-if="canEdit"
-        class="mt-4 px-4 py-2 border border-gray-25 rounded-xl text-gray-90 hover:bg-gray-15"
-        @click="handleTopMenu('new', $event)"
-      >
-        + {{ t("Create new learning path") }}
-      </button>
-    </div>
-
-    <template v-else>
-      <div v-if="uncatList.length">
-        <Draggable
-          v-model="uncatList"
-          :animation="180"
-          :disabled="!canEdit"
-          chosen-class="chosen"
-          class="space-y-3"
-          drag-class="dragging"
-          ghost-class="ghosting"
-          handle=".drag-handle"
-          item-key="iid"
-          tag="div"
-          @end="onEndUncat"
-          @start="draggingUncat = true"
-        >
-          <template #item="{ element }">
-            <LpRowItem
-              :buildDates="buildDates"
-              :canAutoLaunch="canAutoLaunch"
-              :canEdit="canEdit"
-              :canExportPdf="canExportPdf"
-              :canExportScorm="canExportScorm"
-              :lp="element"
-              :ringDash="ringDash"
-              :ringValue="ringValue"
-              @build="onBuild"
-              @delete="onDelete"
-              @edit="goEdit"
-              @open="openLegacy"
-              @report="onReport"
-              @settings="onSettings"
-              @toggle-auto-launch="onToggleAutoLaunch"
-              @toggle-visible="onToggleVisible"
-              @toggle-publish="onTogglePublish"
-              @export-scorm="onExportScorm"
-              @export-pdf="onExportPdf"
-            />
-          </template>
-        </Draggable>
-      </div>
-      <LpCategorySection
-        v-for="group in categorizedGroups"
-        :key="group?.[0]?.iid || group?.[0]?.title"
-        :category="group[0]"
-        :list="group[1]"
-        :isSessionCategory="group[2]"
-        :buildDates="buildDates"
-        :canAutoLaunch="canAutoLaunch"
-        :canEdit="canEdit"
-        :canExportPdf="canExportPdf"
-        :canExportScorm="canExportScorm"
-        :ringDash="ringDash"
-        :ringValue="ringValue"
-        :title="group[0]?.title"
-        @build="onBuild"
-        @delete="onDelete"
-        @edit="goEdit"
-        @open="openLegacy"
-        @reorder="(ids) => onReorderCategory(group[0], ids)"
-        @report="onReport"
-        @settings="onSettings"
-        @toggle-auto-launch="onToggleAutoLaunch"
-        @toggle-visible="onToggleVisible"
-        @toggle-publish="onTogglePublish"
-        @export-pdf="onExportPdf"
+  <div class="lp-list">
+    <SectionHeader :title="t('Learning paths')">
+      <BaseButton
+        :label="t('More actions')"
+        icon="dots-vertical"
+        only-icon
+        popup-identifier="lp-list-tmenu"
+        type="black"
+        @click="mLpList.toggle($event)"
       />
-    </template>
+      <BaseMenu
+        id="lp-list-tmenu"
+        ref="mLpList"
+        :model="mItems"
+      />
+    </SectionHeader>
+
+    <div class="flex flex-col gap-4 flex-1 min-h-0">
+      <div
+        v-if="loading"
+        class="space-y-4 animate-pulse"
+      >
+        <div class="mt-4">
+          <div class="h-36 bg-gray-15 rounded-2xl" />
+        </div>
+      </div>
+
+      <EmptyState
+        v-else-if="!hasAnyVisible"
+        :detail="t('Create your first learning path to start organizing course content.')"
+        :summary="t('You don\'t have any learning path.')"
+        icon="learning-paths"
+      >
+        <BaseButton
+          v-if="canEdit"
+          :label="t('Create new learning path')"
+          class="mt-4"
+          icon="plus"
+          @click="goCreateLp"
+        />
+      </EmptyState>
+
+      <template v-else>
+        <div v-if="uncatList.length">
+          <Draggable
+            v-model="uncatList"
+            :animation="180"
+            :disabled="!canEdit"
+            chosen-class="chosen"
+            class="space-y-6"
+            drag-class="dragging"
+            ghost-class="ghosting"
+            handle=".drag-handle"
+            item-key="iid"
+            tag="div"
+            @end="onEndUncat"
+            @start="draggingUncat = true"
+          >
+            <template #item="{ element }">
+              <LpRowItem
+                :buildDates="buildDates"
+                :canAutoLaunch="canAutoLaunch"
+                :canEdit="canEdit"
+                :canExportPdf="canExportPdf"
+                :canExportScorm="canExportScorm"
+                :legacyContext="legacyContext"
+                :lp="element"
+                :ringDash="ringDash"
+                :ringValue="ringValue"
+                @export-pdf="onExportPdf"
+              />
+            </template>
+          </Draggable>
+        </div>
+        <LpCategorySection
+          v-for="group in categorizedGroups"
+          :key="group?.[0]?.iid || group?.[0]?.title"
+          :buildDates="buildDates"
+          :canAutoLaunch="canAutoLaunch"
+          :canEdit="canEdit"
+          :canExportPdf="canExportPdf"
+          :canExportScorm="canExportScorm"
+          :category="group[0]"
+          :isSessionCategory="group[2]"
+          :list="group[1]"
+          :ringDash="ringDash"
+          :ringValue="ringValue"
+          :title="group[0]?.title"
+          @reorder="(ids) => onReorderCategory(group[0], ids)"
+          @export-pdf="onExportPdf"
+        />
+      </template>
+    </div>
+
+    <ExportPdfDialog
+      v-if="showExportDialog && exportTarget"
+      :cid="course?.id"
+      :lp-id="exportTarget.iid"
+      :show="showExportDialog"
+      :sid="session?.id"
+      @close="onCloseExportDialog"
+    />
   </div>
-  <ExportPdfDialog
-    v-if="showExportDialog && exportTarget"
-    :cid="course?.id"
-    :lp-id="exportTarget.iid"
-    :show="showExportDialog"
-    :sid="session?.id"
-    @close="onCloseExportDialog"
-  />
 </template>
 
 <script setup>
-import { computed, nextTick, onMounted, ref } from "vue"
+import { computed, nextTick, onMounted, ref, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useCidReqStore } from "../../store/cidReq"
 import { checkIsAllowedToEdit } from "../../composables/userPermissions"
@@ -199,12 +115,17 @@ import { usePlatformConfig } from "../../store/platformConfig"
 import Draggable from "vuedraggable"
 import LpRowItem from "../../components/lp/LpRowItem.vue"
 import LpCategorySection from "../../components/lp/LpCategorySection.vue"
-import StudentViewButton from "../../components/StudentViewButton.vue"
 import { useI18n } from "vue-i18n"
-import BaseDropdownMenu from "../../components/basecomponents/BaseDropdownMenu.vue"
 import { useCourseSettings } from "../../store/courseSettingStore"
 import ExportPdfDialog from "../../components/lp/ExportPdfDialog.vue"
 import { storeToRefs } from "pinia"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
+import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import BaseMenu from "../../components/basecomponents/BaseMenu.vue"
+import EmptyState from "../../components/EmptyState.vue"
+import { LP_LIST_LOADED } from "../../constants/events"
+import { useNotification } from "../../composables/notification"
+import api from "../../config/api"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -214,72 +135,163 @@ const platformConfig = usePlatformConfig()
 const courseSettingsStore = useCourseSettings()
 const securityStore = useSecurityStore()
 
+const { showErrorNotification } = useNotification()
+
 const loading = ref(true)
-const error = ref(null)
 const draggingUncat = ref(false)
 
 const rawCanEdit = ref(false)
 const isStudentView = computed(() => route.query?.isStudentView === "true")
 const canEdit = computed(() => rawCanEdit.value && !isStudentView.value)
 
+const mLpList = ref(null)
+const mItems = computed(() => {
+  const ctx = legacyContext.value
+
+  const uploadParams = new URLSearchParams({
+    cid: ctx.cid,
+    sid: ctx.sid,
+    tool: "learnpath",
+    curdirpath: "/",
+    node: ctx.node,
+    gid: ctx.gid,
+    gradebook: ctx.gradebook,
+    origin: ctx.origin,
+  }).toString()
+
+  return [
+    { label: t("Create new learning path"), url: lpService.buildLegacyActionUrl("add_lp", ctx) },
+    ...(canUseAi.value
+      ? [{ label: t("AI learning path generator"), url: lpService.buildLegacyActionUrl("ai_helper", ctx) }]
+      : []),
+    { label: t("Import"), url: `/main/upload/index.php?${uploadParams}` },
+    { label: t("Add category"), url: lpService.buildLegacyActionUrl("add_lp_category", ctx) },
+  ]
+})
+
 const { course, session } = storeToRefs(cidReqStore)
 
-const aiHelpersEnabled = computed(() => {
-  const v = String(platformConfig.getSetting("ai_helpers.enable_ai_helpers"))
+const legacyContext = computed(() => {
+  const node = Number(route.params?.node ?? 0) || undefined
+  const gid = Number(route.query?.gid ?? 0)
+  const gradebook = Number(route.query?.gradebook ?? 0)
+  const origin = String(route.query?.origin ?? "")
 
-  return v === "true"
+  return {
+    cid: course.value?.id,
+    sid: session.value?.id ?? 0,
+    node,
+    gid,
+    gradebook,
+    origin,
+  }
 })
-const lpGeneratorEnabled = computed(() => {
-  const v = String(courseSettingsStore?.getSetting?.("learning_path_generator"))
 
-  return v === "true"
-})
-const canUseAi = computed(() => {
-  return !!(canEdit.value && aiHelpersEnabled.value && lpGeneratorEnabled.value)
-})
+const canUseAi = computed(
+  () =>
+    canEdit.value &&
+    String(platformConfig.getSetting("ai_helpers.enable_ai_helpers")) === "true" &&
+    courseSettingsStore.isSettingEnabled("learning_path_generator", "ai_helpers"),
+)
 
 const showExportDialog = ref(false)
 const exportTarget = ref(null)
 
-const canExportScorm = computed(() => {
-  const isScormEnabled = platformConfig.getSetting("lp.hide_scorm_export_link") !== "true"
-  return canEdit.value && isScormEnabled
-})
+const canExportScorm = computed(
+  () =>
+    platformConfig.getSetting("lp.hide_scorm_export_link") !== "true" &&
+    (canEdit.value || platformConfig.getSetting("lp.lp_allow_export_to_students") === "true"),
+)
 
-const canExportPdf = computed(() => {
-  const hidden = platformConfig.getSetting("lp.hide_scorm_pdf_link") === "true"
-  return !hidden
-})
+const canExportPdf = computed(() => platformConfig.getSetting("lp.hide_scorm_pdf_link") !== "true")
 
-// --- Auto-launch enable (course setting) ---
-const enableLpAutoLaunch = computed(() => {
-  const val = courseSettingsStore?.getSetting?.("enable_lp_auto_launch")
-  return String(val) === "true" || Number(val) === 1
-})
-const canAutoLaunch = computed(() => canEdit.value && enableLpAutoLaunch.value)
-// Toggle Auto-launch (rocket)
-const onToggleAutoLaunch = (lp) => {
-  if (!canAutoLaunch.value || !lp?.iid) {
-    return
+// Uses a click handler instead of :to-url so the URL (including cid/sid) is
+// built at click time, when the course store is guaranteed to be populated.
+// A static :to-url binding can render before the store resolves, producing a
+// link without cid that the legacy controller rejects as "Not allowed".
+const goCreateLp = () => {
+  window.location.assign(lpService.buildLegacyActionUrl("add_lp", { ...legacyContext.value }))
+}
+
+const canAutoLaunch = computed(() => {
+  if (!canEdit.value) {
+    return false
   }
 
-  const next = Number(lp.autolaunch) === 1 ? 0 : 1
+  const val = courseSettingsStore?.getSetting?.("enable_lp_auto_launch")
 
-  window.location.href = lpService.buildLegacyActionUrl(lp.iid, "auto_launch", {
-    cid: course.value?.id,
-    sid: session.value?.id,
-    params: { status: next },
-  })
-}
+  return String(val) === "true" || Number(val) === 1
+})
 
 const items = ref([])
 const categories = ref([])
-const uncatList = ref([])
-const catLists = ref({})
 const visibilityMap = ref({})
 
+function isTruthy(value) {
+  return value === true || value === 1 || value === "1" || String(value).toLowerCase() === "true"
+}
+
+function isLpCurrentlyAvailable(lp) {
+  const now = new Date()
+  const publishedOn = lp.publishedOn ? new Date(lp.publishedOn) : null
+  const expiredOn = lp.expiredOn ? new Date(lp.expiredOn) : null
+
+  if (publishedOn && publishedOn > now) {
+    return false
+  }
+
+  if (expiredOn && expiredOn < now) {
+    return false
+  }
+
+  return true
+}
+
+function shouldShowUnavailableLp(lp) {
+  const settingEnabled = isTruthy(platformConfig.getSetting("lp.lp_start_and_end_date_visible_in_student_view"))
+  const displayNotAllowed = isTruthy(lp.displayNotAllowedLp ?? lp.display_not_allowed_lp ?? false)
+
+  return settingEnabled && displayNotAllowed && !isLpCurrentlyAvailable(lp)
+}
+
+const filteredItems = computed(() =>
+  canEdit.value
+    ? items.value
+    : items.value.filter((lp) => !!visibilityMap.value[lp.iid] || shouldShowUnavailableLp(lp)),
+)
+
+const uncatList = ref([])
+
+watch(
+  filteredItems,
+  (lps) => {
+    if (!draggingUncat.value) {
+      uncatList.value = lps.filter((lp) => !lp.category?.iid)
+    }
+  },
+  { immediate: true },
+)
+
+const catLists = computed(() => {
+  const byCat = {}
+
+  for (const lp of filteredItems.value) {
+    const catId = lp.category?.iid
+
+    if (catId) {
+      if (!byCat[catId]) {
+        byCat[catId] = []
+      }
+
+      byCat[catId].push(lp)
+    }
+  }
+
+  return byCat
+})
+
 onMounted(() => {
-  platformConfig.studentView = route.query?.isStudentView === "true"
+  platformConfig.setStudentViewEnabled(route.query?.isStudentView === "true")
 })
 
 const hasImageRF = (lp) => {
@@ -308,41 +320,26 @@ const onCloseExportDialog = () => {
 async function loadVisibilityFor(lpIds) {
   if (canEdit.value) {
     visibilityMap.value = {}
-
     return
   }
 
   if (!Array.isArray(lpIds) || lpIds.length === 0) {
     visibilityMap.value = {}
-
     return
   }
 
   const params = new URLSearchParams({
     a: "lp_visibility_map",
     lp_ids: lpIds.join(","),
-    cid: course.value?.id,
+    cid: legacyContext.value.cid,
   })
 
-  if (session.value) {
-    params.append("sid", session.value?.id)
+  if (legacyContext.value.sid) {
+    params.append("sid", legacyContext.value.sid)
   }
 
-  const res = await fetch(`/main/inc/ajax/lp.ajax.php?${params.toString()}`, {
-    headers: { "X-Requested-With": "XMLHttpRequest" },
-    credentials: "same-origin",
-  })
-
-  const data = await res.json().catch(() => ({}))
+  const { data } = await api.get(`/main/inc/ajax/lp.ajax.php?${params.toString()}`).catch(() => ({ data: {} }))
   visibilityMap.value = data.map || {}
-}
-
-function isVisibleForStudent(lp) {
-  if (canEdit.value) {
-    return true
-  }
-
-  return !!visibilityMap.value[lp.iid]
 }
 
 const withCidSid = (url) => {
@@ -350,78 +347,70 @@ const withCidSid = (url) => {
     return url
   }
 
-  try {
-    const isAbs = url.startsWith("http://") || url.startsWith("https://")
-    const abs = isAbs ? url : window.location.origin + url
-    const u = new URL(abs)
+  const [withoutHash, hash = ""] = url.split("#")
+  const [path, rawQuery = ""] = withoutHash.split("?")
+  const sp = new URLSearchParams(rawQuery)
 
-    if (course.value) {
-      u.searchParams.set("cid", course.value?.id)
-    }
-
-    if (session.value) {
-      u.searchParams.set("sid", session.value?.id)
-    }
-
-    return isAbs ? u.toString() : u.pathname + u.search
-  } catch {
-    return url
+  if (legacyContext.value.cid) {
+    sp.set("cid", legacyContext.value.cid)
   }
+
+  if (legacyContext.value.sid) {
+    sp.set("sid", legacyContext.value.sid)
+  }
+
+  const qs = sp.toString()
+
+  return path + (qs ? `?${qs}` : "") + (hash ? `#${hash}` : "")
 }
 
 const load = async () => {
   loading.value = true
-  error.value = null
 
   try {
-    const node = Number(route.params.node)
-
-    try {
-      await courseSettingsStore.loadCourseSettings(course.value?.id, session.value?.id)
-    } catch (err) {
-      console.error("[LPList] loadCourseSettings FAILED:", err)
-    }
-
     let allowed = await checkIsAllowedToEdit(true, true, true, false)
-    const roles = securityStore.user?.roles ?? []
 
-    if (!allowed && Array.isArray(roles) && (roles.includes("ROLE_ADMIN") || roles.includes("ROLE_GLOBAL_ADMIN"))) {
+    if (!allowed && securityStore.isAdmin) {
       allowed = true
     }
 
     rawCanEdit.value = !!allowed
+  } catch (e) {
+    showErrorNotification(e)
+  }
 
-    const catRes = await lpService.getLpCategories({
-      cid: course.value?.id,
-      sid: session.value?.id ?? 0,
+  try {
+    categories.value = await lpService.getLpCategories({
+      cid: legacyContext.value.cid,
+      sid: legacyContext.value.sid ?? 0,
     })
 
-    const cats = catRes?.["hydra:member"] ?? catRes ?? []
-    categories.value = Array.isArray(cats) ? cats : []
-
-    const res = await lpService.getLearningPaths({
-      "resourceNode.parent": node,
-      sid: session.value?.id ?? 0,
+    const raw = await lpService.getLearningPaths({
+      "resourceNode.parent": route.params?.node ?? 0,
+      sid: legacyContext.value.sid ?? 0,
       pagination: false,
     })
 
-    const raw = res["hydra:member"] ?? res ?? []
     items.value = raw.map((lp) => ({
       ...lp,
       coverUrl: hasImageRF(lp) && lp.contentUrl ? withCidSid(lp.contentUrl) : null,
     }))
 
     await loadVisibilityFor(items.value.map((lp) => lp.iid))
-
-    rebuildListsFromItems()
   } catch (e) {
-    console.error(e)
-    error.value = e
+    showErrorNotification(e)
   } finally {
     loading.value = false
   }
 }
-onMounted(load)
+
+onMounted(async () => {
+  await load()
+
+  await nextTick()
+
+  document.dispatchEvent(new CustomEvent(LP_LIST_LOADED))
+})
 
 /**
  * @param {Object} cat
@@ -444,9 +433,11 @@ const categorizedGroups = computed(() => {
   const rows = []
 
   for (const cat of cats) {
-    if (!cat) continue
+    if (!cat) {
+      continue
+    }
 
-    const list = catLists.value && cat.iid ? (catLists.value[cat.iid] ?? []) : []
+    const list = cat.iid ? (catLists.value[cat.iid] ?? []) : []
     const safeList = Array.isArray(list) ? list : []
     const isSessionCategory = hasSession(cat)
 
@@ -457,28 +448,6 @@ const categorizedGroups = computed(() => {
 
   return rows
 })
-
-function rebuildListsFromItems() {
-  const source = canEdit.value ? items.value : items.value.filter(isVisibleForStudent)
-  const uncat = []
-  const byCat = {}
-
-  for (const lp of source) {
-    const catId = lp.category?.iid
-
-    if (!catId) {
-      uncat.push(lp)
-    } else {
-      if (!byCat[catId]) {
-        byCat[catId] = []
-      }
-      byCat[catId].push(lp)
-    }
-  }
-
-  uncatList.value = uncat
-  catLists.value = byCat
-}
 
 const hasAnyVisible = computed(() => {
   if (canEdit.value) {
@@ -504,34 +473,15 @@ function applyOrderWithinContext(predicate, orderedIds) {
 
     return originalIndex.get(a.iid) - originalIndex.get(b.iid)
   })
-  rebuildListsFromItems()
 }
 
 async function sendReorder(orderedIds, { categoryId } = {}) {
-  const payload = {
-    courseId: course.value?.id,
-    sessionId: session.value?.id,
-    sid: session.value?.id,
+  await lpService.reorder({
+    courseId: legacyContext.value.cid,
+    sessionId: legacyContext.value.sid,
     categoryId: categoryId ?? null,
     ids: orderedIds,
-    order: orderedIds,
-  }
-
-  if (lpService?.reorder) {
-    await lpService.reorder(payload)
-    return
-  }
-
-  const resp = await fetch("/api/learning_paths/reorder", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
   })
-
-  if (!resp.ok) {
-    const txt = await resp.text().catch(() => "")
-    throw new Error(`Reorder failed: ${resp.status} ${txt}`)
-  }
 }
 
 async function onReorderCategory(cat, ids) {
@@ -542,7 +492,8 @@ async function onReorderCategory(cat, ids) {
   try {
     await sendReorder(ids, { categoryId: cat.iid })
   } catch (e) {
-    console.error(e)
+    showErrorNotification(e)
+
     await load()
     alert(t("Could not save the new category order."))
   }
@@ -568,139 +519,25 @@ const circumference = 2 * Math.PI * 16
 const ringDash = (val) => {
   const n = Math.min(100, Math.max(0, Number(val || 0)))
   const d = (n / 100) * circumference
-
   return `${d} ${circumference}`
 }
 const ringValue = (val) => Math.round(Math.min(100, Math.max(0, Number(val || 0))))
 
-const onStudentViewChange = async (val) => {
-  if (val) {
+watch(
+  () => platformConfig.isStudentViewActive,
+  async (val) => {
     await router.replace({
       name: route.name,
       params: route.params,
-      query: { ...route.query, isStudentView: "true" },
+      query: { ...route.query, isStudentView: val ? "true" : "false" },
     })
-  } else {
-    const q = new URLSearchParams(window.location.search)
-
-    q.delete("isStudentView")
-
-    const newUrl = window.location.pathname + (q.toString() ? "?" + q.toString() : "") + window.location.hash
-    window.location.replace(newUrl)
-  }
-}
-
-const openLegacy = (lp) => {
-  window.location.href = lpService.buildLegacyViewUrl(lp.iid, {
-    cid: course.value?.id || 0,
-    sid: session.value?.id || 0,
-    isStudentView: isStudentView.value ? "true" : "false",
-  })
-}
-const goEdit = (lp) => {
-  router.push({ name: "LpUpdate", params: { id: lp.iid }, query: route.query })
-}
-
-const handleTopMenu = (action, ev) => {
-  ev?.preventDefault?.()
-  ev?.stopPropagation?.()
-  ev?.stopImmediatePropagation?.()
-
-  if (!canEdit.value) {
-    return
-  }
-
-  const courseId = course.value?.id || undefined
-  const sidQ = session.value?.id || 0
-  const node = Number(route.params?.node ?? 0) || undefined
-  const gid = Number(route.query?.gid ?? 0)
-  const gradebook = Number(route.query?.gradebook ?? 0)
-  const origin = String(route.query?.origin ?? "")
-
-  const url =
-    action === "new"
-      ? lpService.buildLegacyActionUrl("add_lp", { cid: courseId, sid: sidQ, node, gid, gradebook, origin })
-      : action === "category"
-        ? lpService.buildLegacyActionUrl("add_lp_category", { cid: courseId, sid: sidQ, node, gid, gradebook, origin })
-        : action === "import"
-          ? `/main/upload/index.php?${new URLSearchParams({
-              cid: courseId,
-              sid: sidQ,
-              tool: "learnpath",
-              curdirpath: "/",
-              node,
-              gid,
-              gradebook,
-              origin,
-            }).toString()}`
-          : action === "rapid"
-            ? `/main/upload/upload_ppt.php?${new URLSearchParams({
-                cid: courseId,
-                sid: sidQ,
-                tool: "learnpath",
-                curdirpath: "/",
-                node,
-                gid,
-                gradebook,
-                origin,
-              }).toString()}`
-            : action === "ai"
-              ? lpService.buildLegacyActionUrl("ai_helper", { cid: courseId, sid: sidQ, node, gid, gradebook, origin })
-              : null
-
-  if (url) {
-    window.location.assign(url)
-  }
-}
-
-const onReport = (lp) =>
-  (window.location.href = lpService.buildLegacyActionUrl(lp.iid, "report", {
-    cid: course.value?.id,
-    sid: session.value,
-  }))
-const onSettings = (lp) =>
-  (window.location.href = lpService.buildLegacyActionUrl(lp.iid, "edit", { cid: course.value?.id, sid: session.value }))
-const onBuild = (lp) =>
-  (window.location.href = lpService.buildLegacyActionUrl(lp.iid, "add_item", {
-    cid: course.value?.id,
-    sid: session.value?.id,
-    params: { type: "step", isStudentView: "false" },
-  }))
-const onToggleVisible = (lp) => {
-  const newStatus = typeof lp.visible !== "undefined" ? (lp.visible ? 0 : 1) : 1
-
-  window.location.href = lpService.buildLegacyActionUrl(lp.iid, "toggle_visible", {
-    cid: course.value?.id,
-    sid: session.value?.id,
-    params: { new_status: newStatus },
-  })
-}
-const onTogglePublish = (lp) => {
-  const newStatus = lp.published === "v" ? "i" : "v"
-
-  window.location.href = lpService.buildLegacyActionUrl(lp.iid, "toggle_publish", {
-    cid: course.value?.id,
-    sid: session.value?.id,
-    params: { new_status: newStatus },
-  })
-}
-const onDelete = (lp) => {
-  const label = (lp.title || "").trim() || t("Learning path")
-  const msg = `${t("Are you sure to delete")} ${label}?`
-
-  if (confirm(msg)) {
-    window.location.href = lpService.buildLegacyActionUrl(lp.iid, "delete", {
-      cid: course.value?.id,
-      sid: session.value,
-    })
-  }
-}
+  },
+)
 
 async function onEndUncat() {
   await nextTick()
   if (!canEdit.value) {
     draggingUncat.value = false
-
     return
   }
 
@@ -710,25 +547,12 @@ async function onEndUncat() {
   try {
     await sendReorder(ids, { categoryId: null })
   } catch (e) {
-    console.error(e)
+    showErrorNotification(e)
+
     await load()
     alert(t("Could not save the new order."))
   } finally {
     draggingUncat.value = false
   }
-}
-
-const onExportScorm = (lp) => {
-  if (!canExportScorm.value) {
-    return
-  }
-
-  const params = new URLSearchParams({ action: "export", lp_id: lp.iid, cid: course.value?.id })
-
-  if (session.value) {
-    params.append("sid", session.value)
-  }
-
-  window.location.href = `/main/lp/lp_controller.php?${params.toString()}`
 }
 </script>

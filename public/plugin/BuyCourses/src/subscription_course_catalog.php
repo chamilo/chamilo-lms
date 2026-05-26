@@ -1,10 +1,11 @@
 <?php
 
 declare(strict_types=1);
+
 /* For license terms, see /license.txt */
 
 /**
- * List of subscriptions.
+ * Public catalog of subscriptions on sale for courses.
  */
 $cidReset = true;
 
@@ -12,39 +13,33 @@ require_once __DIR__.'/../../../main/inc/global.inc.php';
 
 $plugin = BuyCoursesPlugin::create();
 $includeSessions = 'true' === $plugin->get('include_sessions');
-$includeServices = 'true' === $plugin->get('include_services');
 
-$nameFilter = '';
-
-$form = new FormValidator(
-    'search_filter_form',
-    'get',
-    null,
-    null,
-    [],
-    FormValidator::LAYOUT_INLINE
-);
-
-if ($form->validate()) {
-    $formValues = $form->getSubmitValues();
-    $nameFilter = isset($formValues['name']) ? $formValues['name'] : null;
-}
-
-$form->addHeader($plugin->get_lang('SearchFilter'));
-$form->addText('name', get_lang('CourseName'), false);
-$form->addHtml('<hr>');
-$form->addButtonFilter(get_lang('Search'));
+$nameFilter = isset($_GET['name']) ? trim((string) $_GET['name']) : '';
 
 $pageSize = BuyCoursesPlugin::PAGINATION_PAGE_SIZE;
-$currentPage = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+$currentPage = isset($_GET['page']) ? max(1, (int) $_GET['page']) : 1;
 $first = $pageSize * ($currentPage - 1);
-$courseList = $plugin->getCatalogSubscriptionCourseList($first, $pageSize, $nameFilter);
-$totalItems = $plugin->getCatalogSubscriptionCourseList($first, $pageSize, $nameFilter, 'count');
-$pagesCount = (int) ceil($totalItems / $pageSize);
 
-$pagination = BuyCoursesPlugin::returnPagination(api_get_self(), $currentPage, $pagesCount, $totalItems);
+$courseList = $plugin->getCatalogSubscriptionCourseList(
+    $first,
+    $pageSize,
+    $nameFilter
+);
 
-// View
+$totalItems = $plugin->getCatalogSubscriptionCourseList(
+    0,
+    $pageSize,
+    $nameFilter,
+    'count'
+);
+
+$pagesCount = $totalItems > 0 ? (int) ceil($totalItems / $pageSize) : 1;
+
+// Keep a safe back target.
+$defaultBackUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/index.php';
+$backUrl = $defaultBackUrl;
+
+// View.
 if (api_is_platform_admin()) {
     $interbreadcrumb[] = [
         'url' => 'subscriptions_courses.php',
@@ -61,26 +56,36 @@ if (api_is_platform_admin()) {
     ];
 }
 
-$htmlHeadXtra[] = api_get_css(api_get_path(WEB_PLUGIN_PATH).'BuyCourses/resources/css/style.css');
-
 $templateName = $plugin->get_lang('SubscriptionListOnSale');
 $tpl = new Template($templateName);
-$tpl->assign('search_filter_form', $form->returnForm());
-$tpl->assign('showing_sessions', false);
+
+$tpl->assign('page_title', $templateName);
+$tpl->assign('back_url', $backUrl);
+
 $tpl->assign('showing_courses', true);
+$tpl->assign('showing_sessions', false);
+
 $tpl->assign('courses', $courseList);
+$tpl->assign('sessions', []);
+
 $tpl->assign('sessions_are_included', $includeSessions);
-$tpl->assign('pagination', $pagination);
 
-$sessionList = $plugin->getCatalogSubscriptionSessionList($first, $pageSize, $nameFilter, 'first', 0);
-$coursesExist = true;
-$sessionExist = true;
-if (count($sessionList) <= 0) {
-    $sessionExist = false;
-}
+$tpl->assign('coursesExist', true);
 
-$tpl->assign('coursesExist', $coursesExist);
-$tpl->assign('sessionExist', $sessionExist);
+/*
+ * Do not query subscription sessions here just to decide whether the tab
+ * should be visible. This page is the course subscription catalog and the
+ * extra query may fail depending on the active filter. The plugin setting
+ * is enough to decide whether the Sessions tab is available.
+ */
+$tpl->assign('sessionExist', $includeSessions);
+
+$tpl->assign('name_filter_value', $nameFilter);
+
+$tpl->assign('pagination_current_page', $currentPage);
+$tpl->assign('pagination_pages_count', $pagesCount);
+$tpl->assign('pagination_total_items', (int) $totalItems);
+$tpl->assign('pagination_base_path', 'subscription_course_catalog.php');
 
 $content = $tpl->fetch('BuyCourses/view/subscription_catalog.tpl');
 

@@ -420,7 +420,7 @@ class LanguageFixtures extends Fixture
                 'sort_by' => 'first_name',
             ],
             [
-                'original_name' => '中文（简体',
+                'original_name' => '中文（简体)',
                 'english_name' => 'simpl_chinese',
                 'isocode' => 'zh_CN',
                 'available' => 0,

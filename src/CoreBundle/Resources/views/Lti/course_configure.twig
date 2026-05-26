@@ -1,70 +1,390 @@
 {% extends '@ChamiloCore/Layout/layout_one_col.html.twig' %}
 
 {% block content %}
-    <section class="bg-white p-4">
-        <div class="row">
-            <div class="col-md-4">
-                {% if not added_tools is empty %}
-                    <div class="card bg-light mb-4">
-                        <h5 class="card-header">{{ 'Tools added'|trans }}</h5>
-                        <ul class="list-group list-group-flush">
-                            {% for tool in added_tools %}
-                                <li class="list-group-item">
-                                    <div class="float-right">
-                                        {% if tool.isActiveDeepLinking %}
-                                            <a href="{{ url('chamilo_lti_show', {"id": tool.id, 'cid': course.id}) }}"
-                                               class="btn btn-light btn-sm">
-                                                <span class="fa fa-rocket" aria-hidden="true"></span>
-                                                <span class="sr-only">{{ 'Configure'|trans }}</span>
-                                            </a>
-                                        {% endif %}
+    <section>
+        <div class="w-full px-4 py-8 lg:px-6 xl:px-8 2xl:px-10">
+            {% set hasSidebar = (added_tools is not empty) or (global_tools is not empty) %}
 
-                                        <a href="{{ url('chamilo_lti_edit', {"id": tool.id, 'cid': course.id}) }}"
-                                           class="btn btn-light btn-sm">
-                                            <span class="fa fa-edit" aria-hidden="true"></span>
-                                            <span class="sr-only">{{ 'Edit'|trans }}</span>
-                                        </a>
-                                    </div>
-                                    {{ tool.title }}
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                {% endif %}
+            <div class="mb-6">
+                <h1 class="text-2xl font-semibold text-gray-90">{{ title }}</h1>
+                <p class="mt-2 text-body-2 text-gray-50">
+                    {{ 'Configure and manage external tools available in this course.'|trans }}
+                </p>
+            </div>
 
-                {% if not global_tools is empty %}
-                    <div class="card bg-light">
-                        <h5 class="card-header">{{ 'Available tools'|trans }}</h5>
-                        <ul class="list-group list-group-flush">
-                            {% for tool in global_tools %}
-                                <li class="list-group-item">
-                                    <div class="float-right">
-                                        {% if tool.isActiveDeepLinking %}
-                                            <a href="{{ url('chamilo_lti_launch', {id: tool.id}) }}">
-                                                <span class="fa fa-rocket" aria-hidden="true"></span>
-                                                <span class="sr-only">{{ 'Configure'|trans }}</span>
-                                            </a>
-                                        {% else %}
-                                            <a href="{{ url('chamilo_lti_configure_global', {'cid': course.id, "id": tool.id}) }}"
-                                               class="btn btn-light btn-sm">
-                                                <span class="fa fa-plus" aria-hidden="true"></span>
-                                                <span class="sr-only">{{ 'Add'|trans }}</span>
-                                            </a>
-                                        {% endif %}
-                                    </div>
-                                    {{ tool.title }}
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
+            <div class="mb-6 flex flex-wrap items-center gap-3">
+                <a
+                        href="{{ path('chamilo_lti_configure', {'cid': course.id}) ~ '?' ~ legacy_context_query }}"
+                        class="inline-flex items-center gap-2 rounded-xl bg-success px-4 py-2 text-body-2 font-semibold text-success-button-text shadow-xl transition hover:opacity-90"
+                >
+                    <span class="mdi mdi-plus-circle-outline text-lg" aria-hidden="true"></span>
+                    <span>{{ 'New tool'|trans }}</span>
+                </a>
+
+                {% if first_gradebook_category_id is defined and first_gradebook_category_id %}
+                    <a
+                            href="{{ path('chamilo_lti_grade', {'cid': course.id, 'catId': first_gradebook_category_id}) ~ '?' ~ legacy_context_query }}"
+                            class="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-body-2 font-semibold text-white shadow-xl transition hover:opacity-90"
+                    >
+                        <span class="mdi mdi-book-open-variant text-lg" aria-hidden="true"></span>
+                        <span>{{ 'Add to gradebook'|trans }}</span>
+                    </a>
                 {% endif %}
             </div>
 
-            <div class="col-md-8">
-                <h3>{{ title }}</h3>
+            <div class="grid grid-cols-1 gap-6 lg:grid-cols-12">
+                {% if hasSidebar %}
+                    <aside class="space-y-6 lg:col-span-3">
+                        {% if not added_tools is empty %}
+                            <div class="overflow-hidden rounded-2xl border border-gray-25 bg-white shadow-xl">
+                                <div class="border-b border-gray-25 bg-support-2 px-5 py-4">
+                                    <h2 class="text-body-1 font-semibold text-gray-90">{{ 'Tools added'|trans }}</h2>
+                                </div>
 
-                {{ form(form) }}
+                                <ul class="divide-y divide-gray-20">
+                                    {% for tool in added_tools %}
+                                        <li class="flex items-center justify-between gap-3 px-5 py-4">
+                                            <div class="min-w-0">
+                                                <p class="truncate text-body-2 font-medium text-gray-90">
+                                                    {{ tool.title }}
+                                                </p>
+
+                                                {% if tool.gradebookEval is not null %}
+                                                    <p class="mt-1 text-caption text-success">
+                                                        {{ 'Linked to gradebook'|trans }}
+                                                    </p>
+                                                {% endif %}
+                                            </div>
+
+                                            <div class="flex items-center gap-2">
+                                                <a
+                                                        href="{{ path('chamilo_lti_edit', {'id': tool.id, 'cid': course.id}) ~ '?' ~ legacy_context_query }}"
+                                                        class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gray-90 text-white shadow-sm transition hover:opacity-90"
+                                                        title="{{ 'Edit'|trans }}"
+                                                >
+                                                    <span class="mdi mdi-pencil-outline text-lg" aria-hidden="true"></span>
+                                                    <span class="sr-only">{{ 'Edit'|trans }}</span>
+                                                </a>
+                                                <a
+                                                        href="{{ path('chamilo_lti_remove_from_course', {'id': tool.id, 'cid': course.id}) ~ '?' ~ legacy_context_query }}"
+                                                        class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-danger text-danger-button-text shadow-sm transition hover:opacity-90"
+                                                        title="{{ 'Remove from course'|trans }}"
+                                                        onclick="return confirm('{{ 'Removing an activity from a course can have an impact on the assessments of that course. Are you sure you want to remove it?'|trans|e('js') }}');"
+                                                >
+                                                    <span class="mdi mdi-trash-can-outline text-lg" aria-hidden="true"></span>
+                                                    <span class="sr-only">{{ 'Remove from course'|trans }}</span>
+                                                </a>
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+
+                        {% if not global_tools is empty %}
+                            <div class="overflow-hidden rounded-2xl border border-gray-25 bg-white shadow-xl">
+                                <div class="border-b border-gray-25 bg-support-2 px-5 py-4">
+                                    <h2 class="text-body-1 font-semibold text-gray-90">{{ 'Available tools'|trans }}</h2>
+                                </div>
+
+                                <ul class="divide-y divide-gray-20">
+                                    {% for tool in global_tools %}
+                                        <li class="flex items-center justify-between gap-3 px-5 py-4">
+                                            <div class="min-w-0">
+                                                <p class="truncate text-body-2 font-medium text-gray-90">
+                                                    {{ tool.title }}
+                                                </p>
+                                            </div>
+                                            <div class="flex items-center gap-2">
+                                                {% if tool.isActiveDeepLinking %}
+                                                    <a
+                                                            href="{{ path('chamilo_lti_show', {'id': tool.id, 'cid': course.id}) ~ '?' ~ legacy_context_query }}"
+                                                            class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-white shadow-sm transition hover:opacity-90"
+                                                            title="{{ 'Configure'|trans }}"
+                                                    >
+                                                        <span class="mdi mdi-cog-outline text-lg" aria-hidden="true"></span>
+                                                        <span class="sr-only">{{ 'Configure'|trans }}</span>
+                                                    </a>
+                                                {% else %}
+                                                    <a
+                                                            href="{{ path('chamilo_lti_configure_global', {'cid': course.id, 'id': tool.id}) ~ '?' ~ legacy_context_query }}"
+                                                            class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-success text-success-button-text shadow-sm transition hover:opacity-90"
+                                                            title="{{ 'Add'|trans }}"
+                                                    >
+                                                        <span class="mdi mdi-plus text-lg" aria-hidden="true"></span>
+                                                        <span class="sr-only">{{ 'Add'|trans }}</span>
+                                                    </a>
+                                                {% endif %}
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                    </aside>
+                {% endif %}
+
+                <div class="rounded-2xl border border-gray-25 bg-white p-6 shadow-xl {% if hasSidebar %}lg:col-span-9{% else %}lg:col-span-12{% endif %} lg:p-8">
+                    {{ form_start(form, {'action': form_action_url, 'attr': {'class': 'space-y-6', 'id': 'course-lti-form'}}) }}
+
+                    <div class="space-y-7">
+                        <div class="space-y-2">
+                            {{ form_label(form.title, null, {'label_attr': {'class': 'block text-body-2 font-semibold text-gray-90'}}) }}
+                            {{ form_widget(form.title) }}
+                            {{ form_help(form.title) }}
+                            {{ form_errors(form.title) }}
+                        </div>
+
+                        <div class="space-y-2">
+                            {{ form_label(form.description, null, {'label_attr': {'class': 'block text-body-2 font-semibold text-gray-90'}}) }}
+                            {{ form_widget(form.description) }}
+                            {{ form_help(form.description) }}
+                            {{ form_errors(form.description) }}
+                        </div>
+
+                        {% if form.launchUrl is defined %}
+                            <div class="space-y-2">
+                                {{ form_label(form.launchUrl, null, {'label_attr': {'class': 'block text-body-2 font-semibold text-gray-90'}}) }}
+                                {{ form_widget(form.launchUrl) }}
+                                {{ form_help(form.launchUrl) }}
+                                {{ form_errors(form.launchUrl) }}
+                            </div>
+                        {% endif %}
+
+                        {% if form.version is defined %}
+                            <div class="space-y-3">
+                                {{ form_label(form.version, null, {'label_attr': {'class': 'block text-body-2 font-semibold text-gray-90'}}) }}
+
+                                <div class="space-y-3 rounded-2xl border border-gray-25 bg-support-2 p-4">
+                                    {% for option in form.version %}
+                                        <label class="flex items-center gap-3 rounded-xl bg-white px-4 py-3">
+                                            {{ form_widget(option, {'attr': {'class': 'h-4 w-4 border-gray-25 text-primary focus:ring-primary'}}) }}
+                                            <span class="text-body-2 text-gray-90">{{ option.vars.label }}</span>
+                                        </label>
+                                    {% endfor %}
+                                </div>
+
+                                {{ form_errors(form.version) }}
+                            </div>
+                        {% endif %}
+
+                        {% if form.consumerKey is defined %}
+                            <div class="space-y-2" data-lti-version-section="lti1p1">
+                                {{ form_label(form.consumerKey, null, {'label_attr': {'class': 'block text-body-2 font-semibold text-gray-90'}}) }}
+                                {{ form_widget(form.consumerKey) }}
+                                {{ form_help(form.consumerKey) }}
+                                {{ form_errors(form.consumerKey) }}
+                            </div>
+                        {% endif %}
+
+                        {% if form.sharedSecret is defined %}
+                            <div class="space-y-2" data-lti-version-section="lti1p1">
+                                {{ form_label(form.sharedSecret, null, {'label_attr': {'class': 'block text-body-2 font-semibold text-gray-90'}}) }}
+                                {{ form_widget(form.sharedSecret) }}
+                                {{ form_help(form.sharedSecret) }}
+                                {{ form_errors(form.sharedSecret) }}
+                            </div>
+                        {% endif %}
+
+                        {% if form.publicKeyType is defined %}
+                            <div class="space-y-3" data-lti-version-section="lti1p3">
+                                {{ form_label(form.publicKeyType, null, {'label_attr': {'class': 'block text-body-2 font-semibold text-gray-90'}}) }}
+
+                                <div class="space-y-3 rounded-2xl border border-gray-25 bg-support-2 p-4">
+                                    {% for option in form.publicKeyType %}
+                                        <label class="flex items-center gap-3 rounded-xl bg-white px-4 py-3">
+                                            {{ form_widget(option, {'attr': {'class': 'h-4 w-4 border-gray-25 text-primary focus:ring-primary'}}) }}
+                                            <span class="text-body-2 text-gray-90">{{ option.vars.label }}</span>
+                                        </label>
+                                    {% endfor %}
+                                </div>
+
+                                {{ form_errors(form.publicKeyType) }}
+                            </div>
+                        {% endif %}
+
+                        {% if form.jwksUrl is defined %}
+                            <div class="space-y-2" data-lti-version-section="lti1p3" data-lti-key-type-section="jwk_keyset">
+                                {{ form_label(form.jwksUrl, null, {'label_attr': {'class': 'block text-body-2 font-semibold text-gray-90'}}) }}
+                                {{ form_widget(form.jwksUrl) }}
+                                {{ form_help(form.jwksUrl) }}
+                                {{ form_errors(form.jwksUrl) }}
+                            </div>
+                        {% endif %}
+
+                        {% if form.publicKey is defined %}
+                            <div class="space-y-2" data-lti-version-section="lti1p3" data-lti-key-type-section="rsa_key">
+                                {{ form_label(form.publicKey, null, {'label_attr': {'class': 'block text-body-2 font-semibold text-gray-90'}}) }}
+                                {{ form_widget(form.publicKey) }}
+                                {{ form_help(form.publicKey) }}
+                                {{ form_errors(form.publicKey) }}
+                            </div>
+                        {% endif %}
+
+                        {% if form.loginUrl is defined %}
+                            <div class="space-y-2" data-lti-version-section="lti1p3">
+                                {{ form_label(form.loginUrl, null, {'label_attr': {'class': 'block text-body-2 font-semibold text-gray-90'}}) }}
+                                {{ form_widget(form.loginUrl) }}
+                                {{ form_help(form.loginUrl) }}
+                                {{ form_errors(form.loginUrl) }}
+                            </div>
+                        {% endif %}
+
+                        {% if form.redirectUrl is defined %}
+                            <div class="space-y-2" data-lti-version-section="lti1p3">
+                                {{ form_label(form.redirectUrl, null, {'label_attr': {'class': 'block text-body-2 font-semibold text-gray-90'}}) }}
+                                {{ form_widget(form.redirectUrl) }}
+                                {{ form_help(form.redirectUrl) }}
+                                {{ form_errors(form.redirectUrl) }}
+                            </div>
+                        {% endif %}
+
+                        {% if form.ags is defined %}
+                            <div class="space-y-3" data-lti-version-section="lti1p3">
+                                {{ form_label(form.ags, null, {'label_attr': {'class': 'block text-body-2 font-semibold text-gray-90'}}) }}
+
+                                <div class="space-y-3 rounded-2xl border border-gray-25 bg-support-2 p-4">
+                                    {% for option in form.ags %}
+                                        <label class="flex items-center gap-3 rounded-xl bg-white px-4 py-3">
+                                            {{ form_widget(option, {'attr': {'class': 'h-4 w-4 border-gray-25 text-primary focus:ring-primary'}}) }}
+                                            <span class="text-body-2 text-gray-90">{{ option.vars.label }}</span>
+                                        </label>
+                                    {% endfor %}
+                                </div>
+
+                                {{ form_errors(form.ags) }}
+                            </div>
+                        {% endif %}
+
+                        {% if form.nrps is defined %}
+                            <div class="space-y-3" data-lti-version-section="lti1p3">
+                                {{ form_label(form.nrps, null, {'label_attr': {'class': 'block text-body-2 font-semibold text-gray-90'}}) }}
+
+                                <div class="space-y-3 rounded-2xl border border-gray-25 bg-support-2 p-4">
+                                    {% for option in form.nrps %}
+                                        <label class="flex items-center gap-3 rounded-xl bg-white px-4 py-3">
+                                            {{ form_widget(option, {'attr': {'class': 'h-4 w-4 border-gray-25 text-primary focus:ring-primary'}}) }}
+                                            <span class="text-body-2 text-gray-90">{{ option.vars.label }}</span>
+                                        </label>
+                                    {% endfor %}
+                                </div>
+
+                                {{ form_errors(form.nrps) }}
+                            </div>
+                        {% endif %}
+
+                        <div class="space-y-2">
+                            {{ form_label(form.customParams, null, {'label_attr': {'class': 'block text-body-2 font-semibold text-gray-90'}}) }}
+                            {{ form_widget(form.customParams) }}
+                            {{ form_help(form.customParams) }}
+                            {{ form_errors(form.customParams) }}
+                        </div>
+
+                        {% if form.documentTarget is defined %}
+                            <div class="space-y-2">
+                                {{ form_label(form.documentTarget, null, {'label_attr': {'class': 'block text-body-2 font-semibold text-gray-90'}}) }}
+                                {{ form_widget(form.documentTarget) }}
+                                {{ form_help(form.documentTarget) }}
+                                {{ form_errors(form.documentTarget) }}
+                            </div>
+                        {% endif %}
+
+                        <div class="space-y-4">
+                            {% if form.activeDeepLinking is defined %}
+                                <div class="rounded-2xl border border-gray-25 bg-support-2 p-4">
+                                    <label class="flex items-start gap-3">
+                                        {{ form_widget(form.activeDeepLinking, {'attr': {'class': 'mt-1 h-4 w-4 rounded border-gray-25 text-primary focus:ring-primary'}}) }}
+                                        <span>
+                                            <span class="block text-body-2 font-medium text-gray-90">{{ form.activeDeepLinking.vars.label }}</span>
+                                            {% if form.activeDeepLinking.vars.help %}
+                                                <span class="mt-1 block text-caption text-gray-50">{{ form.activeDeepLinking.vars.help|trans }}</span>
+                                            {% endif %}
+                                        </span>
+                                    </label>
+                                    {{ form_errors(form.activeDeepLinking) }}
+                                </div>
+                            {% endif %}
+
+                            <div class="rounded-2xl border border-gray-25 bg-support-2 p-4">
+                                <label class="flex items-start gap-3">
+                                    {{ form_widget(form.shareName, {'attr': {'class': 'mt-1 h-4 w-4 rounded border-gray-25 text-primary focus:ring-primary'}}) }}
+                                    <span class="block text-body-2 font-medium text-gray-90">{{ form.shareName.vars.label }}</span>
+                                </label>
+                                {{ form_errors(form.shareName) }}
+                            </div>
+
+                            <div class="rounded-2xl border border-gray-25 bg-support-2 p-4">
+                                <label class="flex items-start gap-3">
+                                    {{ form_widget(form.shareEmail, {'attr': {'class': 'mt-1 h-4 w-4 rounded border-gray-25 text-primary focus:ring-primary'}}) }}
+                                    <span class="block text-body-2 font-medium text-gray-90">{{ form.shareEmail.vars.label }}</span>
+                                </label>
+                                {{ form_errors(form.shareEmail) }}
+                            </div>
+
+                            <div class="rounded-2xl border border-gray-25 bg-support-2 p-4">
+                                <label class="flex items-start gap-3">
+                                    {{ form_widget(form.sharePicture, {'attr': {'class': 'mt-1 h-4 w-4 rounded border-gray-25 text-primary focus:ring-primary'}}) }}
+                                    <span class="block text-body-2 font-medium text-gray-90">{{ form.sharePicture.vars.label }}</span>
+                                </label>
+                                {{ form_errors(form.sharePicture) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 flex items-center justify-end">
+                        {{ form_widget(form.save) }}
+                    </div>
+
+                    {{ form_rest(form) }}
+                    {{ form_end(form, {'render_rest': false}) }}
+                </div>
             </div>
         </div>
     </section>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const root = document.getElementById('course-lti-form');
+
+        if (!root) {
+          return;
+        }
+
+        const getCheckedValue = (selector, fallbackValue) => {
+          const checkedInput = root.querySelector(selector);
+
+          return checkedInput ? checkedInput.value : fallbackValue;
+        };
+
+        const syncVersionSections = () => {
+          const currentVersion = getCheckedValue('input[name$="[version]"]:checked', 'lti1p3');
+
+          root.querySelectorAll('[data-lti-version-section]').forEach((element) => {
+            const supportedVersions = (element.dataset.ltiVersionSection || '')
+              .split(' ')
+              .filter(Boolean);
+
+            const isVisible = supportedVersions.includes(currentVersion);
+            element.classList.toggle('hidden', !isVisible);
+          });
+
+          const currentKeyType = getCheckedValue('input[name$="[publicKeyType]"]:checked', 'jwk_keyset');
+
+          root.querySelectorAll('[data-lti-key-type-section]').forEach((element) => {
+            const supportedKeyTypes = (element.dataset.ltiKeyTypeSection || '')
+              .split(' ')
+              .filter(Boolean);
+
+            const isVisible = supportedKeyTypes.includes(currentKeyType);
+            element.classList.toggle('hidden', !isVisible);
+          });
+        };
+
+        root.querySelectorAll('input[name$="[version]"], input[name$="[publicKeyType]"]').forEach((element) => {
+          element.addEventListener('change', syncVersionSections);
+        });
+
+        syncVersionSections();
+      });
+    </script>
 {% endblock %}

@@ -10,7 +10,7 @@ class Mobidico extends Plugin
     protected function __construct()
     {
         parent::__construct(
-            'O.1',
+            '0.1',
             'Julio Montoya',
             [
                 'api_key' => 'text',

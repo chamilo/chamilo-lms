@@ -1,0 +1,77 @@
+<?php
+$strings['plugin_title'] = 'Chứng chỉ tùy chỉnh';
+$strings['plugin_comment'] = 'Plugin này cho phép bạn tạo chứng chỉ tùy chỉnh cho mỗi khóa học.';
+$strings['enable_plugin_customcertificate'] = 'Bật plugin';
+$strings['customcertificate_course_enable'] = 'Bật chứng chỉ tùy chỉnh trong khóa học';
+$strings['use_certificate_default'] = 'Sử dụng chứng chỉ tùy chỉnh mặc định';
+$strings['ToolDisabled'] = 'Công cụ bị vô hiệu hóa từ quản trị';
+$strings['OnlyAdminPlatform'] = 'Công cụ chỉ dành cho quản trị viên';
+$strings['OnlyAdminPlatformOrTeacher'] = 'Công cụ chỉ dành cho quản trị viên và giảng viên';
+$strings['TrainingEntity'] = 'Đơn vị đào tạo';
+$strings['DescriptionFront'] = 'Mô tả mặt trước';
+$strings['DescriptionRear'] = 'Mô tả mặt sau';
+$strings['Certify'] = 'Chứng nhận';
+$strings['CertificateType'] = 'Loại chứng chỉ';
+$strings['CertifyThat'] = 'CHỨNG NHẬN RẰNG';
+$strings['StudentCourseInfo'] = 'Dữ liệu học viên và khóa học';
+$strings['StudentData'] = 'Dữ liệu học viên';
+$strings['CourseData'] = 'Dữ liệu khóa học';
+$strings['Modality'] = 'Hình thức';
+$strings['Contents'] = 'Nội dung';
+$strings['ContentsToShow'] = 'Nội dung hiển thị';
+$strings['ContentsCourseDescription'] = 'Sử dụng phần "Mô tả khóa học" > "Nội dung"';
+$strings['ContentsIndexLearnpath'] = 'Sử dụng chỉ mục lộ trình học tập';
+$strings['ContentsCustom'] = 'Sử dụng nội dung tùy chỉnh';
+$strings['ContentsHide'] = 'Không hiển thị nội dung';
+$strings['Dates'] = 'Ngày tháng';
+$strings['CourseDeliveryDates'] = 'Ngày triển khai khóa học';
+$strings['Custom'] = 'Tùy chỉnh';
+$strings['UseDateSessionAccess'] = 'Sử dụng ngày truy cập buổi học';
+$strings['ExpectionPlace'] = 'Nơi cấp';
+$strings['DateExpediction'] = 'Ngày cấp';
+$strings['UseDateEndAccessSession'] = 'Sử dụng ngày kết thúc truy cập buổi học';
+$strings['UseDateDownloadCertificate'] = 'Sử dụng ngày tải chứng chỉ';
+$strings['UseDateGenerationCertificate'] = 'Sử dụng ngày tạo chứng chỉ';
+$strings['UseCustomDate'] = 'Sử dụng ngày tùy chỉnh';
+$strings['LogosSeal'] = 'Logo / Đóng dấu';
+$strings['LogoLeft'] = 'Logo bên trái';
+$strings['LogoCenter'] = 'Logo giữa';
+$strings['LogoRight'] = 'Logo bên phải';
+$strings['Seal'] = 'Đóng dấu';
+$strings['Signature1'] = 'Chữ ký 1';
+$strings['Signature2'] = 'Chữ ký 2';
+$strings['Signature3'] = 'Chữ ký 3';
+$strings['Signature4'] = 'Chữ ký 4';
+$strings['SignatureText1'] = 'Văn bản chữ ký 1';
+$strings['SignatureText2'] = 'Văn bản chữ ký 2';
+$strings['SignatureText3'] = 'Văn bản chữ ký 3';
+$strings['SignatureText4'] = 'Văn bản chữ ký 4';
+$strings['OtherOptions'] = 'Các tùy chọn khác';
+$strings['MarginRight'] = 'Lề phải';
+$strings['MarginLeft'] = 'Lề trái';
+$strings['SetDefaultTemplate'] = 'Đặt mẫu mặc định';
+$strings['MessageDefaultTemplate'] = 'Lưu tùy chỉnh mặc định này cho các khóa học và buổi học không có
+     chứng chỉ được định nghĩa';
+$strings['None'] = 'Không có';
+$strings['ErrorTemplateCertificate'] = 'Không có mẫu nào được định nghĩa cho chứng chỉ.
+     Không có mẫu mặc định.';
+$strings['DateStartEnd'] = 'Có Ngày bắt đầu và Ngày kết thúc: ';
+$strings['ExpedictionIn'] = 'Hiệu lực trong';
+$strings['Signatures'] = 'Chữ ký';
+$strings['BackgroundCertificate'] = 'Hình nền của chứng chỉ';
+$strings['Background'] = 'Nền';
+$strings['CertificateSetting'] = 'Cài đặt chứng chỉ';
+$strings['ToolDisabledCourse'] = 'Công cụ bị vô hiệu hóa trong cài đặt khóa học';
+$strings['ToolUseDefaultSettingCourse'] = 'Công cụ được cấu hình để sử dụng chứng chỉ mặc định. <br>
+     Bạn có thể chỉnh sửa nó từ màn hình Quản trị -> Plugins -> Chứng chỉ tùy chỉnh. <br>
+     Hoặc nếu bạn muốn, bạn có thể vô hiệu hóa tùy chọn sử dụng chứng chỉ mặc định trong cấu hình plugin của khóa học';
+$strings['CertificateSettingDefault'] = 'Cài đặt chứng chỉ mặc định';
+$strings['InfoFromDefaultCertificate'] = 'Nội dung của chứng chỉ dựa trên chứng chỉ mặc định.
+     Các thay đổi bạn thực hiện sẽ không ảnh hưởng đến chứng chỉ mặc định.';
+$strings['to'] = ' đến ';
+$strings['formatDownloadDate'] = ' đến %sth %s, %s';
+$strings['PrintCertificate'] = 'In chứng chỉ';
+$strings['QuestionDelete'] = 'Bạn có muốn xóa bằng cấp cụ thể và sử dụng chứng chỉ mặc định không?';
+$strings['SuccessDelete'] = 'Xóa thành công';
+$strings['ProblemDelete'] = 'Có vấn đề khi xóa chứng chỉ';
+$strings['OnlyCustomCertificates'] = 'Chỉ các khóa học có chứng chỉ cá nhân hóa mới được xuất';

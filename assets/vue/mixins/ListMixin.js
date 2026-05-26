@@ -52,8 +52,8 @@ export default {
     deletedResource(item) {
       const message =
         this.$i18n && this.$i18n.t
-          ? this.$t("{resource} created", { resource: item["resourceNode"].title })
-          : `${item["resourceNode"].title} created`
+          ? this.$t("{0} created", [item.resourceNode.title])
+          : `${item.resourceNode.title} created`
       this.showMessage(message)
       this.onUpdateOptions(this.options)
     },

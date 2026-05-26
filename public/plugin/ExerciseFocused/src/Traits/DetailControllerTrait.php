@@ -18,11 +18,9 @@ trait DetailControllerTrait
 
         return Display::page_subheader2($objExercise->selectTitle())
             .Display::tag('p', $student->getFullNameWithUsername(), ['class' => 'lead'])
-            .Display::tag(
-                'p',
-                sprintf(get_lang('QuizRemindStartDate'), $startDate)
-                .sprintf(get_lang('QuizRemindEndDate'), $endDate)
-                .sprintf(get_lang('QuizRemindDuration'), api_format_time($trackExe->getExeDuration()))
-            );
+            .Display::tag('p', sprintf(get_lang('Test start date: %s'), $startDate))
+            .Display::tag('p', sprintf(get_lang('Test end date: %s'), $endDate))
+            .Display::tag('p', sprintf(get_lang('Test duration: %s'), api_format_time($trackExe->getExeDuration())))
+        ;
     }
 }

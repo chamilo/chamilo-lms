@@ -12,7 +12,7 @@
     </p>
     <input
       ref="inputFile"
-      :accept="acceptFileType"
+      :accept="accept"
       class="hidden"
       type="file"
     />
@@ -21,27 +21,17 @@
 
 <script setup>
 import BaseButton from "./BaseButton.vue"
-import { computed, onMounted, ref } from "vue"
+import { onMounted, ref } from "vue"
 import { sizeValidator } from "./validators"
 
-const props = defineProps({
-  modelValue: {
-    type: [File, null],
-    required: true,
-  },
+defineProps({
   label: {
     type: String,
     required: true,
   },
   accept: {
     type: String,
-    default: "",
-    validator: (value) => {
-      if (value === "") {
-        return true
-      }
-      return ["image"].includes(value)
-    },
+    default: undefined,
   },
   size: {
     type: String,
@@ -54,17 +44,6 @@ const emit = defineEmits(["fileSelected"])
 
 const inputFile = ref(null)
 const fileName = ref("")
-
-const acceptFileType = computed(() => {
-  switch (props.accept) {
-    case "":
-      return ""
-    case "image":
-      return "image/*"
-    default:
-      return ""
-  }
-})
 
 onMounted(() => {
   inputFile.value.addEventListener("change", fileSelected)

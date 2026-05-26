@@ -8,16 +8,19 @@ export default {
     {
       name: "MessageList",
       path: "",
+      meta: { breadcrumb: "Inbox" },
       component: () => import("../views/message/MessageList.vue"),
     },
     {
       name: "MessageCreate",
       path: "new",
+      meta: { breadcrumb: "Compose" },
       component: () => import("../views/message/MessageCreate.vue"),
     },
     {
       name: "MessageReply",
       path: "reply",
+      meta: { breadcrumb: "Reply" },
       component: () => import("../views/message/MessageReply.vue"),
     },
     /*{
@@ -29,6 +32,7 @@ export default {
       name: "MessageShow",
       //path: ':id',
       path: "show",
+      meta: { breadcrumb: "Show" },
       component: () => import("../views/message/MessageShow.vue"),
     },
   ],

@@ -1,43 +1,59 @@
 <template>
   <BaseDialog
     v-model:isVisible="visible"
-    :title="dialogTitleComputed"
     :header-icon="headerIconComputed"
+    :title="dialogTitleComputed"
     :width="'560px'"
+    @update:isVisible="(v) => !v && $emit('close')"
   >
     <div class="space-y-3">
-      <BaseInputText id="t-title" :label="t('Title')" v-model="title" :form-submitted="submitted" :is-invalid="!title" />
-      <BaseInputText id="t-desc" :label="t('Description')" v-model="description" />
+      <BaseInputText
+        id="t-title"
+        v-model="title"
+        :form-submitted="submitted"
+        :is-invalid="!title"
+        :label="t('Title')"
+      />
+      <BaseInputText
+        id="t-desc"
+        v-model="description"
+        :label="t('Description')"
+      />
       <div>
         <label class="text-sm block mb-1">{{ t("Color") }}</label>
-        <input type="color" v-model="color" class="h-9 w-16 border rounded" />
+        <input
+          v-model="color"
+          class="h-9 w-16 border rounded"
+          type="color"
+        />
       </div>
 
       <div v-if="isEdit && canEditStatusTemplate">
         <label class="text-sm block mb-1">{{ t("Template type") }}</label>
-        <select v-model="systemTask" class="border rounded h-9 px-2 w-full">
+        <select
+          v-model="systemTask"
+          class="border rounded h-9 px-2 w-full"
+        >
           <option :value="false">Standard</option>
           <option :value="true">System</option>
         </select>
       </div>
-
-      <div class="flex justify-end gap-2">
-        <BaseButton type="black" icon="close" :label="t('Cancel')" @click="close" />
-        <BaseButton
-          type="primary"
-          :icon="isEdit ? 'check' : 'check'"
-          :label="isEdit ? t('Save') : t('Create')"
-          :disabled="!title"
-          :isLoading="saving"
-          @click="submit"
-        />
-      </div>
     </div>
+    <template #footer>
+      <BaseButton
+        :disabled="!title"
+        :icon="isEdit ? 'check' : 'check'"
+        :isLoading="saving"
+        :label="isEdit ? t('Save') : t('Create')"
+        type="primary"
+        @click="submit"
+      />
+    </template>
   </BaseDialog>
 </template>
 
 <script setup>
-import { ref, computed, watch } from "vue"
+import { computed, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import BaseDialog from "../basecomponents/BaseDialog.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
@@ -45,7 +61,7 @@ import BaseInputText from "../basecomponents/BaseInputText.vue"
 import service from "../../services/blogs"
 
 const { t } = useI18n()
-const emit = defineEmits(["close","created","saved"])
+const emit = defineEmits(["close", "created", "saved"])
 
 const props = defineProps({
   mode: { type: String, default: "create" },
@@ -65,19 +81,26 @@ const description = ref(props.initial.description || "")
 const color = ref(props.initial.color || "#0ea5e9")
 const systemTask = ref(!!props.initial.system)
 
-watch(() => props.initial, (v) => {
-  title.value = v?.title || ""
-  description.value = v?.description || ""
-  color.value = v?.color || "#0ea5e9"
-  systemTask.value = !!v?.system
-}, { deep: true })
+watch(
+  () => props.initial,
+  (v) => {
+    title.value = v?.title || ""
+    description.value = v?.description || ""
+    color.value = v?.color || "#0ea5e9"
+    systemTask.value = !!v?.system
+  },
+  { deep: true },
+)
 
-const dialogTitleComputed = computed(() => isEdit.value ? t("Edit task") : t("New task"))
-const headerIconComputed = computed(() => isEdit.value ? "pencil" : "plus")
+const dialogTitleComputed = computed(() => (isEdit.value ? t("Edit task") : t("New task")))
+const headerIconComputed = computed(() => (isEdit.value ? "pencil" : "plus"))
 
-function close(){ visible.value=false; emit("close") }
+function close() {
+  visible.value = false
+  emit("close")
+}
 
-async function submit(){
+async function submit() {
   submitted.value = true
   if (!title.value.trim()) return
   saving.value = true
@@ -91,10 +114,17 @@ async function submit(){
       })
       emit("saved")
     } else {
-      await service.createTask({ title: title.value.trim(), description: description.value, color: color.value, systemTask: !!systemTask.value })
+      await service.createTask({
+        title: title.value.trim(),
+        description: description.value,
+        color: color.value,
+        systemTask: !!systemTask.value,
+      })
       emit("created")
     }
     close()
-  } finally { saving.value = false }
+  } finally {
+    saving.value = false
+  }
 }
 </script>

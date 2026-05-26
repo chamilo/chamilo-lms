@@ -12,7 +12,7 @@
         class="mt-4 invite-friends"
         plain
       >
-        <div class="flex flex-col items-center p-2 user-invite-card">
+        <div class="user-invite-card">
           <div class="w-full">
             <div class="bg-gray-200 border-b border-gray-300 rounded-t-lg text-center">
               <h2 class="text-xl font-semibold">{{ t("Pending group invitations") }}</h2>
@@ -28,32 +28,35 @@
                   class="flex items-center border rounded-lg shadow-sm bg-white"
                 >
                   <div class="ml-4 flex-grow text-center">
-                    <h4 class="text-lg font-semibold">
+                    <h4 class="m-0">
                       <a
                         :href="'profile.php?u=' + invitation.itemId"
                         class="text-blue-600 hover:underline"
                         >{{ invitation.itemName }}</a
                       >
                     </h4>
-                    <span class="text-sm text-gray-500">{{ invitation.date }}</span>
+                    <span class="block mt-1 text-sm text-gray-500">{{ invitation.date }}</span>
                   </div>
-                  <div class="flex space-x-2">
+                  <div class="flex gap-2">
                     <BaseButton
                       v-if="invitation.canAccept"
-                      icon="mdi-check"
+                      :label="t('Accept')"
+                      icon="confirm"
                       only-icon
                       size="small"
                       type="success"
                       @click="() => acceptGroupInvitation(invitation.itemId)"
                     />
 
-                    <button
+                    <BaseButton
                       v-if="invitation.canDeny"
-                      class="remove-btn"
+                      :label="t('Deny')"
+                      icon="close"
+                      only-icon
+                      size="small"
+                      type="danger"
                       @click="() => denyGroupInvitation(invitation.itemId)"
-                    >
-                      -
-                    </button>
+                    />
                   </div>
                 </div>
               </div>
@@ -81,13 +84,11 @@ import SocialGroupMenu from "../social/SocialGroupMenu.vue"
 import GroupInfoCard from "../social/GroupInfoCard.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import socialService from "../../services/socialService"
-import { useNotification } from "../../composables/notification"
 import { useI18n } from "vue-i18n"
 import BaseCard from "../../components/basecomponents/BaseCard.vue"
 
 const { t } = useI18n()
-const { user, isCurrentUser, groupInfo, isGroup, loadGroup, loadUser, isLoading } = useSocialInfo()
-const notification = useNotification()
+const { user, isCurrentUser, groupInfo, isGroup, loadUser, isLoading } = useSocialInfo()
 
 const pendingInvitations = ref([])
 

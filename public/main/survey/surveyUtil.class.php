@@ -1012,16 +1012,16 @@ class SurveyUtil
         if (!empty($lpItemId)) {
             $tableLp = Database::get_course_table(TABLE_LP_MAIN);
             $tableLpItem = Database::get_course_table(TABLE_LP_ITEM);
-            $sql = "SELECT l.name, li.title
+            $sql = "SELECT l.title as lptitle, li.title as lpititle
                 FROM $tableLpItem li
-                INNER JOIN $tableLp l ON l.iid = li.lp_id AND l.c_id = li.c_id
-                WHERE li.c_id = $course_id AND li.iid = $lpItemId";
+                INNER JOIN $tableLp l ON l.iid = li.lp_id
+                WHERE li.iid = $lpItemId";
             $rs = Database::query($sql);
             if (Database::num_rows($rs) > 0) {
                 $row = Database::fetch_assoc($rs);
                 $content .= '<div class="sr-container"><div class="sr-card"><div class="sr-card__header">'
                     .get_lang('Learning path')
-                    .'</div><div class="sr-card__body"><h3 style="margin:0">'.$row['name'].' : '.$row['title'].'</h3></div></div></div>';
+                    .'</div><div class="sr-card__body"><h3 style="margin:0">'.$row['lptitle'].' : '.$row['lpititle'].'</h3></div></div></div>';
             }
         }
 
@@ -3036,26 +3036,153 @@ class SurveyUtil
      */
     public static function getAdditionalTeacherActions($surveyId, $iconSize = ICON_SIZE_SMALL)
     {
+        $actions = [];
+        $registeredActions = [];
         $additionalActions = api_get_setting('survey.survey_additional_teacher_modify_actions', true) ?: [];
+        $additionalActions = self::normalizeAdditionalTeacherActions($additionalActions);
 
-        if (empty($additionalActions) || ('false' === $additionalActions)) {
-            return '';
+        foreach ($additionalActions as $additionalAction) {
+            self::appendAdditionalTeacherAction($actions, $registeredActions, $additionalAction, $surveyId, $iconSize);
         }
 
-        $action = '';
+        foreach (self::getInstalledSurveyExportPluginActions() as $additionalAction) {
+            self::appendAdditionalTeacherAction($actions, $registeredActions, $additionalAction, $surveyId, $iconSize);
+        }
+
+        return implode(PHP_EOL, array_filter($actions));
+    }
+
+    /**
+     * Normalize manually configured survey actions.
+     *
+     * The legacy configuration expected a PHP array. In Chamilo 2 the setting is
+     * exposed as text, so this also accepts one callback per line using
+     * ClassName::methodName.
+     */
+    private static function normalizeAdditionalTeacherActions($additionalActions): array
+    {
+        if (empty($additionalActions) || 'false' === $additionalActions) {
+            return [];
+        }
+
         if (is_array($additionalActions)) {
-            $actions = [];
-            foreach ($additionalActions as $additionalAction) {
-                $actions[] = call_user_func(
-                    $additionalAction,
-                    ['survey_id' => $surveyId, 'icon_size' => $iconSize]
-                );
-            }
-            $action = implode(PHP_EOL, $actions);
+            return $additionalActions;
         }
 
+        if (!is_string($additionalActions)) {
+            return [];
+        }
 
-        return $action;
+        $actions = [];
+        $lines = preg_split('/\R+/', trim($additionalActions));
+
+        foreach ($lines as $line) {
+            $line = trim($line);
+
+            if ('' === $line || false === strpos($line, '::')) {
+                continue;
+            }
+
+            [$class, $method] = explode('::', $line, 2);
+            $class = trim($class);
+            $method = trim($method);
+
+            if ('' === $class || '' === $method) {
+                continue;
+            }
+
+            $actions[] = [$class, $method];
+        }
+
+        return $actions;
+    }
+
+    private static function appendAdditionalTeacherAction(
+        array &$actions,
+        array &$registeredActions,
+        $additionalAction,
+        int $surveyId,
+        int $iconSize
+    ): void {
+        if (!is_callable($additionalAction)) {
+            return;
+        }
+
+        $actionKey = self::getAdditionalTeacherActionKey($additionalAction);
+
+        if (isset($registeredActions[$actionKey])) {
+            return;
+        }
+
+        $registeredActions[$actionKey] = true;
+
+        $action = call_user_func(
+            $additionalAction,
+            ['survey_id' => $surveyId, 'icon_size' => $iconSize]
+        );
+
+        if (empty($action)) {
+            return;
+        }
+
+        $actions[] = $action;
+    }
+
+    private static function getAdditionalTeacherActionKey($additionalAction): string
+    {
+        if (is_array($additionalAction)) {
+            return implode('::', $additionalAction);
+        }
+
+        if (is_string($additionalAction)) {
+            return $additionalAction;
+        }
+
+        if (is_object($additionalAction)) {
+            return spl_object_hash($additionalAction);
+        }
+
+        return md5((string) json_encode($additionalAction));
+    }
+
+    /**
+     * Add the official survey export plugin actions without requiring manual
+     * edits in configuration.php.
+     */
+    private static function getInstalledSurveyExportPluginActions(): array
+    {
+        $pluginActions = [
+            [
+                'directory' => 'SurveyExportCsv',
+                'class' => 'SurveyExportCsvPlugin',
+            ],
+            [
+                'directory' => 'SurveyExportTxt',
+                'class' => 'SurveyExportTxtPlugin',
+            ],
+        ];
+
+        $actions = [];
+
+        foreach ($pluginActions as $pluginAction) {
+            $class = $pluginAction['class'];
+
+            if (!class_exists($class, false)) {
+                $pluginPath = api_get_path(SYS_PLUGIN_PATH).$pluginAction['directory'].'/'.$class.'.php';
+
+                if (is_readable($pluginPath)) {
+                    require_once $pluginPath;
+                }
+            }
+
+            $callback = [$class, 'filterModify'];
+
+            if (is_callable($callback)) {
+                $actions[] = $callback;
+            }
+        }
+
+        return $actions;
     }
 
     /**
@@ -3442,21 +3569,8 @@ class SurveyUtil
         $sessionId = api_get_session_id();
         $mandatoryAllowed = ('true' === api_get_setting('survey.allow_mandatory_survey'));
 
-        // Database table definitions
         $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
         $table_survey = Database::get_course_table(TABLE_SURVEY);
-
-        echo '<table id="list-survey" class="table">';
-        echo '<thead>';
-        echo '<tr>';
-        echo '	<th>'.get_lang('Survey name').'</th>';
-        echo '	<th class="text-center">'.get_lang('Anonymous').'</th>';
-        if ($mandatoryAllowed) {
-            echo '<th class="text-center">'.get_lang('Mandatory?').'</th>';
-        }
-        echo '</tr>';
-        echo '</thead>';
-        echo '<tbody>';
 
         /** @var \DateTime $now */
         $now = api_get_utc_datetime(null, false, true);
@@ -3472,76 +3586,215 @@ class SurveyUtil
                     survey.iid,
                     survey.anonymous
                 FROM $table_survey survey
-                INNER JOIN
-                $table_survey_invitation survey_invitation
+                INNER JOIN $table_survey_invitation survey_invitation
                 ON (
                     survey.iid = survey_invitation.survey_id
                 )
-				WHERE
+                WHERE
                     survey_invitation.user_id = $user_id AND
                     survey.avail_from <= '$filterDate' AND
                     survey.avail_till >= '$filterDate' AND
                     survey_invitation.c_id = $course_id
                     $sessionCondition
-				";
+                ORDER BY survey.title ASC";
+
         $result = Database::query($sql);
         $efv = new ExtraFieldValue('survey');
         $surveyIds = [];
         $repo = Container::getSurveyRepository();
+        $items = [];
+
         while ($row = Database::fetch_assoc($result)) {
-            $surveyId = $row['iid'];
-            if (in_array($surveyId, $surveyIds)) {
+            $surveyId = (int) $row['iid'];
+
+            if (in_array($surveyId, $surveyIds, true)) {
                 continue;
             }
 
-            /** @var CSurvey $survey */
+            /** @var CSurvey|null $survey */
             $survey = $repo->find($surveyId);
 
-            echo '<tr>';
-            if (0 == $survey->getAnswered()) {
-                echo '<td>';
+            if (null === $survey) {
+                continue;
+            }
+
+            $title = Security::remove_XSS(strip_tags((string) $row['title']));
+            $isAnonymous = 1 == $row['anonymous'];
+            $isAnswered = 1 == (int) $row['answered'];
+            $isMeetingPoll = 3 === $survey->getSurveyType();
+            $url = '';
+            $statusLabel = get_lang('Click here to answer the survey');
+            $statusClass = 'bg-blue-100 text-blue-700';
+            $iconClass = 'ch-tool-icon';
+            $iconTitle = get_lang('Click here to answer the survey');
+            $icon = Display::getMdiIcon(
+                ToolIcon::SURVEY,
+                $iconClass,
+                null,
+                ICON_SIZE_TINY,
+                $iconTitle
+            );
+            $isLink = true;
+
+            if (!$isAnswered || $isMeetingPoll) {
                 $url = self::generateFillSurveyLink($survey, $row['invitation_code'], $course, $row['session_id']);
-                $icon = Display::getMdiIcon(ToolIcon::SURVEY, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Click here to answer the survey'));
-                echo '<a href="'.$url.'">
-                    '.$icon
-                    .$row['title']
-                    .'</a></td>';
+
+                if ($isMeetingPoll && $isAnswered) {
+                    $statusLabel = get_lang('Completed surveys');
+                    $statusClass = 'bg-green-100 text-green-700';
+                }
             } else {
                 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
                     $user_id,
                     $_course
                 );
-                $icon = Display::getMdiIcon(ObjectIcon::SURVEY, 'ch-tool-icon-disabled', null, ICON_SIZE_TINY, get_lang('Completed surveys'));
                 $showLink = (!api_is_allowed_to_edit(false, true) || $isDrhOfCourse)
                     && SURVEY_VISIBLE_TUTOR != $row['visible_results'];
 
-                echo '<td>';
-                echo $showLink
-                    ? Display::url(
-                        $icon.PHP_EOL.$row['title'],
-                        api_get_path(WEB_CODE_PATH).'survey/reporting.php?'.api_get_cidreq().'&'.http_build_query([
-                            'action' => 'questionreport',
-                            'survey_id' => $surveyId,
-                        ])
-                    )
-                    : $icon.PHP_EOL.$row['title'];
-                echo '</td>';
+                $icon = Display::getMdiIcon(
+                    ObjectIcon::SURVEY,
+                    'ch-tool-icon-disabled',
+                    null,
+                    ICON_SIZE_TINY,
+                    get_lang('Completed surveys')
+                );
+                $statusLabel = get_lang('Completed surveys');
+                $statusClass = 'bg-green-100 text-green-700';
+
+                if ($showLink) {
+                    $url = api_get_path(WEB_CODE_PATH).'survey/reporting.php?'.api_get_cidreq().'&'.http_build_query([
+                        'action' => 'questionreport',
+                        'survey_id' => $surveyId,
+                    ]);
+                } else {
+                    $isLink = false;
+                }
             }
-            echo '<td class="text-center">';
-            echo 1 == $row['anonymous'] ? get_lang('Yes') : get_lang('No');
-            echo '</td>';
+
+            $mandatoryLabel = '';
             if ($mandatoryAllowed) {
                 $efvMandatory = $efv->get_values_by_handler_and_field_variable(
-                    $row['survey_id'],
+                    $surveyId,
                     'is_mandatory'
                 );
-                echo '<td class="text-center">'.($efvMandatory['value'] ? get_lang('Yes') : get_lang('No')).'</td>';
+                $mandatoryLabel = !empty($efvMandatory['value']) ? get_lang('Yes') : get_lang('No');
             }
-            echo '</tr>';
+
+            $items[] = [
+                'title' => $title,
+                'url' => $url,
+                'is_link' => $isLink,
+                'icon' => $icon,
+                'status_label' => $statusLabel,
+                'status_class' => $statusClass,
+                'anonymous' => $isAnonymous ? get_lang('Yes') : get_lang('No'),
+                'mandatory' => $mandatoryLabel,
+            ];
             $surveyIds[] = $surveyId;
         }
-        echo '</tbody>';
-        echo '</table>';
+
+        echo '<section class="mt-6 w-full">';
+        echo '  <div class="rounded-2xl border border-gray-20 bg-white shadow-sm p-6 mb-6">';
+        echo '    <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">';
+        echo '      <div>';
+        echo '        <p class="text-sm font-semibold uppercase tracking-wide text-blue-700">'.get_lang('Surveys').'</p>';
+        echo '        <h2 class="mt-1 text-2xl font-bold text-gray-900">'.get_lang('Survey list').'</h2>';
+        echo '      </div>';
+        echo '      <div class="inline-flex items-center gap-2 rounded-full bg-gray-10 px-4 py-2 text-sm font-semibold text-gray-700">';
+        echo '        <span class="mdi mdi-clipboard-text-outline ch-tool-icon" aria-hidden="true"></span>';
+        echo '        <span>'.count($items).'</span>';
+        echo '      </div>';
+        echo '    </div>';
+        echo '  </div>';
+
+        if (empty($items)) {
+            echo '  <div class="rounded-2xl border border-dashed border-gray-30 bg-gray-10 p-8 text-center text-gray-500">';
+            echo        get_lang('No data available');
+            echo '  </div>';
+            echo '</section>';
+
+            return;
+        }
+
+        echo '  <div class="w-full overflow-hidden rounded-2xl border border-gray-20 bg-white shadow-sm">';
+        echo '    <div class="overflow-x-auto">';
+        echo '      <table class="min-w-full table-auto divide-y divide-gray-20">';
+        echo '        <thead class="bg-gray-10">';
+        echo '          <tr>';
+        echo '            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">'.get_lang('Survey name').'</th>';
+        echo '            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">'.get_lang('Status').'</th>';
+        echo '            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">'.get_lang('Anonymous').'</th>';
+
+        if ($mandatoryAllowed) {
+            echo '            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">'.get_lang('Mandatory?').'</th>';
+        }
+
+        echo '            <th scope="col" class="px-6 py-4 text-right text-xs font-semibold uppercase tracking-wide text-gray-500">'.get_lang('Actions').'</th>';
+        echo '          </tr>';
+        echo '        </thead>';
+        echo '        <tbody class="divide-y divide-gray-20 bg-white">';
+
+        foreach ($items as $item) {
+            $title = Security::remove_XSS($item['title']);
+            $url = api_htmlentities($item['url'], ENT_QUOTES);
+            $statusLabel = api_htmlentities($item['status_label'], ENT_QUOTES);
+            $anonymous = api_htmlentities($item['anonymous'], ENT_QUOTES);
+            $mandatory = api_htmlentities($item['mandatory'], ENT_QUOTES);
+
+            echo '          <tr class="hover:bg-gray-10">';
+            echo '            <td class="px-6 py-4 align-middle">';
+            echo '              <div class="flex items-center gap-3">';
+            echo '                <span class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-100">';
+            echo                    $item['icon'];
+            echo '                </span>';
+            echo '                <div class="min-w-0">';
+
+            if ($item['is_link']) {
+                echo '                  <a href="'.$url.'" class="font-semibold text-blue-700 hover:text-blue-900 hover:underline">';
+                echo                        $title;
+                echo '                  </a>';
+            } else {
+                echo '                  <span class="font-semibold text-gray-900">'.$title.'</span>';
+            }
+
+            echo '                </div>';
+            echo '              </div>';
+            echo '            </td>';
+            echo '            <td class="px-6 py-4 align-middle">';
+            echo '              <span class="inline-flex rounded-full px-3 py-1 text-xs font-semibold '.$item['status_class'].'">';
+            echo                    $statusLabel;
+            echo '              </span>';
+            echo '            </td>';
+            echo '            <td class="px-6 py-4 align-middle text-sm font-medium text-gray-900">'.$anonymous.'</td>';
+
+            if ($mandatoryAllowed) {
+                echo '            <td class="px-6 py-4 align-middle text-sm font-medium text-gray-900">'.$mandatory.'</td>';
+            }
+
+            echo '            <td class="px-6 py-4 align-middle text-right">';
+
+            if ($item['is_link']) {
+                echo '              <a href="'.$url.'" class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-gray-20 bg-white text-blue-700 shadow-sm hover:border-blue-300 hover:bg-blue-50" title="'.$statusLabel.'">';
+                echo '                <span class="mdi mdi-arrow-right-circle-outline ch-tool-icon" aria-hidden="true"></span>';
+                echo '                <span class="sr-only">'.$statusLabel.'</span>';
+                echo '              </a>';
+            } else {
+                echo '              <span class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-gray-20 bg-gray-10" title="'.$statusLabel.'">';
+                echo '                <span class="mdi mdi-check-circle-outline ch-tool-icon-disabled" aria-hidden="true"></span>';
+                echo '                <span class="sr-only">'.$statusLabel.'</span>';
+                echo '              </span>';
+            }
+
+            echo '            </td>';
+            echo '          </tr>';
+        }
+
+        echo '        </tbody>';
+        echo '      </table>';
+        echo '    </div>';
+        echo '  </div>';
+        echo '</section>';        echo '  </div>';
+        echo '</section>';
     }
 
     /**
@@ -3604,7 +3857,7 @@ class SurveyUtil
         }
 
         // EXTRA FIELDS
-        $extra = UserManager::get_extra_fields(0, 50, 5, 'ASC');
+        $extra = UserManager::get_extra_fields(0, 50);
 
         foreach ($extra as $id => $field_details) {
             if (0 == $field_details[6]) {

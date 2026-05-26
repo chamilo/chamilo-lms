@@ -4,7 +4,6 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
-use Chamilo\CoreBundle\Entity\TrackEAttemptQualify;
 use Chamilo\CoreBundle\Entity\TrackEDownloads;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Enums\ActionIcon;
@@ -17,6 +16,7 @@ use ChamiloSession as Session;
 use CpChart\Cache as pCache;
 use CpChart\Data as pData;
 use CpChart\Image as pImage;
+use Doctrine\ORM\QueryBuilder;
 use ExtraField as ExtraFieldModel;
 
 /**
@@ -2716,37 +2716,6 @@ class Tracking
         }
 
         $lpViewTable = Database::get_course_table(TABLE_LP_VIEW);
-        /*$lpConditions = [];
-        $lpConditions['c_id = ? '] = $courseInfo['real_id'];
-
-        if ($sessionId > 0) {
-            $lpConditions['AND (session_id = ? OR session_id = 0 OR session_id IS NULL)'] = $sessionId;
-        } else {
-            $lpConditions['AND session_id = ?'] = $sessionId;
-        }
-
-        if (is_array($lpIdList) && count($lpIdList) > 0) {
-            $placeHolders = [];
-            for ($i = 0; $i < count($lpIdList); $i++) {
-                $placeHolders[] = '?';
-            }
-            $lpConditions['AND iid IN('.implode(', ', $placeHolders).') '] = $lpIdList;
-        }
-
-        if ($onlySeriousGame) {
-            $lpConditions['AND seriousgame_mode = ? '] = true;
-        }
-
-        $resultLP = Database::select(
-            'iid',
-            $lPTable,
-            ['where' => $lpConditions]
-        );
-        $filteredLP = array_keys($resultLP);
-
-        if (empty($filteredLP)) {
-            return false;
-        }*/
 
         $conditions = [
             //" c_id = {$courseInfo['real_id']} ",
@@ -2763,20 +2732,31 @@ class Tracking
             $conditions[] = " lp_view.user_id = '$studentId' ";
 
             if (empty($lpIdList)) {
-                $lpList = new LearnpathList(
-                    $studentId,
-                    ['real_id' => $course->getId()],
-                    $sessionId,
-                    null,
-                    false,
-                    null,
-                    true
-                );
-                $lpList = $lpList->get_flat_list();
-                if (!empty($lpList)) {
-                    /** @var $lp */
-                    foreach ($lpList as $lpId => $lp) {
-                        $lpIdList[] = $lp['lp_old_id'];
+                $includeNotSubscribed =
+                    'true' === api_get_setting('lp.student_follow_page_include_not_subscribed_lp_students');
+
+                if ($includeNotSubscribed) {
+                    foreach ($filteredLP as $lpId) {
+                        $lpIdList[] = $lpId;
+                    }
+                } else {
+                    $lpList = new LearnpathList(
+                        $studentId,
+                        ['real_id' => $course->getId()],
+                        $sessionId,
+                        null,
+                        false,
+                        null,
+                        true
+                    );
+
+                    $lpList = $lpList->get_flat_list();
+
+                    if (!empty($lpList)) {
+                        /** @var $lp */
+                        foreach ($lpList as $lpId => $lp) {
+                            $lpIdList[] = $lp['lp_old_id'];
+                        }
                     }
                 }
             }
@@ -4405,7 +4385,7 @@ class Tracking
 
         $rs = Database::query($sql);
 
-        $allow = Container::getPluginHelper()->isPluginEnabled('PauseTraining');
+        $allow = PauseTraining::create()->isEnabled();
         $allowPauseFormation = 'true' === api_get_plugin_setting('PauseTraining', 'allow_users_to_edit_pause_formation');
 
         $extraFieldValue = new ExtraFieldValue('user');
@@ -4594,7 +4574,8 @@ class Tracking
         $extra_params = '',
         $show_courses = true,
         $showAllSessions = true,
-        $returnArray = false
+        $returnArray = false,
+        $showGraph = true
     ) {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -4632,6 +4613,7 @@ class Tracking
             $courseSessionColumns = $trackingColumns['course_session'];
         }
 
+        $showDeletedExercises = 'true' === api_get_setting('exercise.tracking_my_progress_show_deleted_exercises');
         $user_id = (int) $user_id;
         $session_id = (int) $session_id;
         $urlId = -1;
@@ -4823,7 +4805,15 @@ class Tracking
                         true
                     );
 
-                    $qb = Container::getQuizRepository()->findAllByCourse($course, null, null, 1, false);
+                    $qb = Container::getQuizRepository()->findAllByCourse(
+                        $course,
+                        null,
+                        null,
+                        1,
+                        false,
+                        null,
+                        $showDeletedExercises
+                    );
                     /** @var CQuiz[] $exercises */
                     $exercises = $qb->getQuery()->getResult();
 
@@ -5035,11 +5025,13 @@ class Tracking
                     $final_all_exercise_graph_list[] = $all_exercise_graph_list[$key];
                 }
 
-                $main_session_graph = self::generate_session_exercise_graph(
-                    $final_all_exercise_graph_name_list,
-                    $my_results_final,
-                    $final_all_exercise_graph_list
-                );
+                if ($showGraph) {
+                    $main_session_graph = self::generate_session_exercise_graph(
+                        $final_all_exercise_graph_name_list,
+                        $my_results_final,
+                        $final_all_exercise_graph_list
+                    );
+                }
             }
 
             $sessionIcon = Display::getMdiIcon(
@@ -5095,7 +5087,15 @@ class Tracking
 
                     $sessionEntity = api_get_session_entity($my_session_id);
 
-                    $qb = Container::getQuizRepository()->findAllByCourse($course, $sessionEntity, null, 2);
+                    $qb = Container::getQuizRepository()->findAllByCourse(
+                        $course,
+                        $sessionEntity,
+                        null,
+                        2,
+                        true,
+                        null,
+                        $showDeletedExercises
+                    );
                     /** @var CQuiz[] $exercises */
                     $exercises = $qb->getQuery()->getResult();
                     $count_exercises = count($exercises);
@@ -5160,14 +5160,16 @@ class Tracking
             }
             $html .= '</tbody>';
             $html .= '</table></div><br />';
-            $html .= Display::div(
-                $main_session_graph,
-                [
-                    'id' => 'session_graph',
-                    'class' => 'chart-session',
-                    'style' => 'position:relative; text-align: center;',
-                ]
-            );
+            if ($showGraph) {
+                $html .= Display::div(
+                    $main_session_graph,
+                    [
+                        'id' => 'session_graph',
+                        'class' => 'chart-session',
+                        'style' => 'position:relative; text-align: center;',
+                    ]
+                );
+            }
 
             // -----------------------------------------------------------------
             // Checking selected session: course list inside a session
@@ -5456,6 +5458,57 @@ class Tracking
         return $html;
     }
 
+    private static function getQuizResultsForMyProgress(QueryBuilder $qb, bool $includeDeleted): array
+    {
+        if (false === $includeDeleted) {
+            return $qb->getQuery()->getResult();
+        }
+
+        $entityManager = Database::getManager();
+        $filters = $entityManager->getFilters();
+        $wasSoftDeleteableEnabled = $filters->isEnabled('softdeleteable');
+
+        if ($wasSoftDeleteableEnabled) {
+            $filters->disable('softdeleteable');
+        }
+
+        try {
+            return $qb->getQuery()->getResult();
+        } finally {
+            if ($wasSoftDeleteableEnabled) {
+                $filters->enable('softdeleteable');
+            }
+        }
+    }
+
+    private static function isDeletedQuizForMyProgress(CQuiz $exercise, int $courseId, int $sessionId): bool
+    {
+        $resourceNode = $exercise->getResourceNode();
+
+        if (null === $resourceNode) {
+            return false;
+        }
+
+        foreach ($resourceNode->getResourceLinks() as $resourceLink) {
+            $linkCourse = $resourceLink->getCourse();
+
+            if (null === $linkCourse || $courseId !== (int) $linkCourse->getId()) {
+                continue;
+            }
+
+            $linkSession = $resourceLink->getSession();
+            $linkSessionId = null === $linkSession ? 0 : (int) $linkSession->getId();
+
+            if ($sessionId !== $linkSessionId) {
+                continue;
+            }
+
+            return null !== $resourceLink->getDeletedAt()
+                || null !== $resourceLink->getEndVisibilityAt();
+        }
+
+        return false;
+    }
 
     /**
      * Shows the user detail progress (when clicking in the details link).
@@ -5483,6 +5536,7 @@ class Tracking
             return '';
         }
 
+        $showDeletedExercises = 'true' === api_get_setting('exercise.tracking_my_progress_show_deleted_exercises');
         $courseCode = $course->getCode();
 
         $html .= '<a name="course_session_data"></a>';
@@ -5540,9 +5594,18 @@ class Tracking
             );
         }
 
-        $qb = Container::getQuizRepository()->findAllByCourse($course, $session, null, 2, false);
+        $qb = Container::getQuizRepository()->findAllByCourse(
+            $course,
+            $session,
+            null,
+            2,
+            false,
+            null,
+            $showDeletedExercises
+        );
+
         /** @var CQuiz[] $exercises */
-        $exercises = $qb->getQuery()->getResult();
+        $exercises = self::getQuizResultsForMyProgress($qb, $showDeletedExercises);
 
         $to_graph_exercise_result = [];
         if (!empty($exercises)) {
@@ -5567,18 +5630,19 @@ class Tracking
 
                 $html .= '<tr class="row_even">';
                 $url = api_get_path(WEB_CODE_PATH).
-                    "exercise/overview.php?cid={$courseId}&sid=$sessionId&exerciseId={$exerciseId}";
+                    'exercise/overview.php?cid='.$courseId.'&sid='.$sessionId.'&exerciseId='.$exerciseId;
 
-                if (true == $visible_return['value']) {
+                $isDeletedExercise = self::isDeletedQuizForMyProgress($exercise, $courseId, $sessionId);
+
+                if ($showDeletedExercises && $isDeletedExercise) {
+                    $exerciseTitle = sprintf(get_lang('%s (deleted)'), $exercise->getTitle());
+                } elseif (true == $visible_return['value']) {
                     $exerciseTitle = Display::url(
                         $exercise->getTitle(),
                         $url,
                         ['target' => SESSION_LINK_TARGET]
                     );
-                } elseif (-1 == $exercise->getActive()) {
-                    $exerciseTitle = sprintf(get_lang('%s (deleted)'), $exercise->getTitle());
                 } else {
-                    // Fallback: not visible but not deleted
                     $exerciseTitle = $exercise->getTitle();
                 }
 
@@ -5831,7 +5895,7 @@ class Tracking
                 }
 
                 $url = api_get_path(WEB_CODE_PATH).
-                    "lp/lp_controller.php?cid={$courseId}&sid=$sessionId&lp_id=$lp_id&action=view";
+                    'exercise/overview.php?cid='.$courseId.'&sid='.$sessionId.'&exerciseId='.$exerciseId;
 
                 $html .= '<tr class="row_even">';
 
@@ -7085,13 +7149,15 @@ class Tracking
 
         $TABLETRACK_EXERCICES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $TBL_TRACK_ATTEMPT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $TBL_TRACK_ATTEMPT_QUALIFY = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_QUALIFY);
         $TBL_TRACK_E_COURSE_ACCESS = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $TBL_TRACK_E_LAST_ACCESS = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
         $TBL_LP_VIEW = Database::get_course_table(TABLE_LP_VIEW);
         $TBL_NOTEBOOK = Database::get_course_table(TABLE_NOTEBOOK);
         $TBL_STUDENT_PUBLICATION = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
         $TBL_STUDENT_PUBLICATION_ASSIGNMENT = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
-        $TBL_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
+        $TBL_RESOURCE_LINK = Database::get_main_table('resource_link');
+        $TBL_RESOURCE_NODE = Database::get_main_table('resource_node');
 
         $TBL_DROPBOX_FILE = Database::get_course_table(TABLE_DROPBOX_FILE);
         $TBL_DROPBOX_POST = Database::get_course_table(TABLE_DROPBOX_POST);
@@ -7119,16 +7185,10 @@ class Tracking
                     //$sql = "UPDATE $TBL_TRACK_ATTEMPT SET session_id = '$new_session_id' WHERE exe_id = $exe_id";
                     //Database::query($sql);
 
-                    $repoTrackQualify = $em->getRepository(TrackEAttemptQualify::class);
-                    /** @var TrackEAttemptQualify $trackQualify */
-                    $trackQualify = $repoTrackQualify->findBy([
-                        'exeId' => $exe_id
-                    ]);
-                    if ($trackQualify) {
-                        $trackQualify->setSessionId($new_session_id);
-                        $em->persist($trackQualify);
-                        $em->flush();
-                    }
+                    $sql = "UPDATE $TBL_TRACK_ATTEMPT_QUALIFY
+                            SET session_id = $new_session_id
+                            WHERE exe_id = $exe_id";
+                    Database::query($sql);
 
                     if (!isset($result_message[$TABLETRACK_EXERCICES])) {
                         $result_message[$TABLETRACK_EXERCICES] = 0;
@@ -7332,248 +7392,106 @@ class Tracking
             }
         }
 
-        // 6. Agenda
-        // calendar_event_attachment no problems no session_id
-        $sql = "SELECT ref FROM $TBL_ITEM_PROPERTY
-                WHERE tool = 'calendar_event' AND insert_user_id = $user_id AND c_id = $course_id ";
-        $res = Database::query($sql);
-        while ($row = Database::fetch_assoc($res)) {
-            $id = $row['ref'];
+        // 6. Agenda.
+        // Chamilo 2 stores the course/session context in resource_link, not in item_property.
+        $originAgendaRows = self::getSessionResourceRows(
+            $TBL_AGENDA,
+            $TBL_RESOURCE_LINK,
+            $TBL_RESOURCE_NODE,
+            $course_id,
+            $user_id,
+            $origin_session_id,
+            'creator'
+        );
+
+        if (!empty($originAgendaRows)) {
             if ($update_database) {
-                $sql = "UPDATE $TBL_AGENDA SET session_id = $new_session_id WHERE c_id = $course_id AND iid = $id ";
-                if ($debug) {
-                    var_dump($sql);
+                $updatedRows = self::moveResourceLinksToSession(
+                    $originAgendaRows,
+                    $new_session_id,
+                    $debug
+                );
+
+                if ($updatedRows > 0) {
+                    $result_message['agenda'] = $updatedRows;
                 }
-                $res_update = Database::query($sql);
-                if ($debug) {
-                    var_dump($res_update);
-                }
-                if (!isset($result_message['agenda'])) {
-                    $result_message['agenda'] = 0;
-                }
-                $result_message['agenda']++;
+            } else {
+                $result_message['AGENDA'] = $originAgendaRows;
             }
         }
 
-        // 7. Forum ?? So much problems when trying to import data
-        // 8. Student publication - Works
-        $sql = "SELECT ref FROM $TBL_ITEM_PROPERTY
-                WHERE tool = 'work' AND insert_user_id = $user_id AND c_id = $course_id";
-        if ($debug) {
-            echo $sql;
+        if (!$update_database) {
+            $destinationAgendaRows = self::getSessionResourceRows(
+                $TBL_AGENDA,
+                $TBL_RESOURCE_LINK,
+                $TBL_RESOURCE_NODE,
+                $course_id,
+                $user_id,
+                $new_session_id,
+                'creator'
+            );
+
+            if (!empty($destinationAgendaRows)) {
+                $result_message_compare['AGENDA'] = $destinationAgendaRows;
+            }
         }
-        $res = Database::query($sql);
-        while ($row = Database::fetch_assoc($res)) {
-            $id = $row['ref'];
-            $sql = "SELECT * FROM $TBL_STUDENT_PUBLICATION
-                    WHERE iid = $id AND session_id = $origin_session_id AND c_id = $course_id";
-            $sub_res = Database::query($sql);
-            if (Database::num_rows($sub_res) > 0) {
-                $data = Database::fetch_assoc($sub_res);
-                if ($debug) {
-                    var_dump($data);
+
+        // 7. Forum. Not moved here.
+
+        // 8. Student publications.
+        // Chamilo 2 assignments use resource_link for course/session visibility.
+        $originPublicationRows = self::getSessionResourceRows(
+            $TBL_STUDENT_PUBLICATION,
+            $TBL_RESOURCE_LINK,
+            $TBL_RESOURCE_NODE,
+            $course_id,
+            $user_id,
+            $origin_session_id,
+            'user'
+        );
+
+        if (!empty($originPublicationRows)) {
+            if ($update_database) {
+                $updatedRows = self::moveResourceLinksToSession(
+                    $originPublicationRows,
+                    $new_session_id,
+                    $debug
+                );
+
+                if ($updatedRows > 0) {
+                    $result_message[$TBL_STUDENT_PUBLICATION] = $updatedRows;
                 }
-                $parent_id = $data['parent_id'];
-                if (isset($data['parent_id']) && !empty($data['parent_id'])) {
-                    $sql = "SELECT * FROM $TBL_STUDENT_PUBLICATION
-                            WHERE iid = $parent_id AND c_id = $course_id";
-                    $select_res = Database::query($sql);
-                    $parent_data = Database::fetch_assoc($select_res);
-                    if ($debug) {
-                        var_dump($parent_data);
-                    }
+            } else {
+                $result_message['STUDENT_PUBLICATION'] = $originPublicationRows;
+            }
+        }
 
-                    $sys_course_path = api_get_path(SYS_COURSE_PATH);
-                    $course_dir = $sys_course_path.$course_info['path'];
-                    $base_work_dir = $course_dir.'/work';
+        if (!$update_database) {
+            $destinationPublicationRows = self::getSessionResourceRows(
+                $TBL_STUDENT_PUBLICATION,
+                $TBL_RESOURCE_LINK,
+                $TBL_RESOURCE_NODE,
+                $course_id,
+                $user_id,
+                $new_session_id,
+                'user'
+            );
 
-                    // Creating the parent folder in the session if does not exists already
-                    //@todo ugly fix
-                    $search_this = "folder_moved_from_session_id_$origin_session_id";
-                    $search_this2 = $parent_data['url'];
-                    $sql = "SELECT * FROM $TBL_STUDENT_PUBLICATION
-                            WHERE description like '%$search_this%' AND
-                                  url LIKE '%$search_this2%' AND
-                                  session_id = $new_session_id AND
-                                  c_id = $course_id
-                            ORDER BY id desc  LIMIT 1";
-                    if ($debug) {
-                        echo $sql;
-                    }
-                    $sub_res = Database::query($sql);
-                    $num_rows = Database::num_rows($sub_res);
-
-                    $new_parent_id = 0;
-                    if ($num_rows > 0) {
-                        $new_result = Database::fetch_assoc($sub_res);
-                        $created_dir = $new_result['url'];
-                        $new_parent_id = $new_result['id'];
-                    } else {
-                        if ($update_database) {
-                            $dir_name = substr($parent_data['url'], 1);
-                            $created_dir = create_unexisting_work_directory($base_work_dir, $dir_name);
-                            $created_dir = '/'.$created_dir;
-                            $now = new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));
-                            // Creating directory
-                            $publication = (new CStudentPublication())
-                                ->setTitle($parent_data['title'])
-                                ->setDescription(
-                                    $parent_data['description']."folder_moved_from_session_id_$origin_session_id"
-                                )
-                                ->setActive(false)
-                                ->setAccepted(true)
-                                ->setPostGroupId(0)
-                                ->setHasProperties($parent_data['has_properties'])
-                                ->setWeight($parent_data['weight'])
-                                ->setContainsFile($parent_data['contains_file'])
-                                ->setFiletype('folder')
-                                ->setSentDate($now)
-                                ->setQualification($parent_data['qualification'])
-                                ->setParentId(0)
-                                ->setQualificatorId(0)
-                                ->setUserId($parent_data['user_id'])
-                                ->setAllowTextAssignment($parent_data['allow_text_assignment'])
-                                ->setSession($session);
-
-                            $publication->setDocumentId($parent_data['document_id']);
-
-                            Database::getManager()->persist($publication);
-                            Database::getManager()->flush();
-                            $id = $publication->getIid();
-                            //Folder created
-                            //api_item_property_update($course_info, 'work', $id, 'DirectoryCreated', api_get_user_id());
-                            $new_parent_id = $id;
-                            if (!isset($result_message[$TBL_STUDENT_PUBLICATION.' - new folder created called: '.$created_dir])) {
-                                $result_message[$TBL_STUDENT_PUBLICATION.' - new folder created called: '.$created_dir] = 0;
-                            }
-                            $result_message[$TBL_STUDENT_PUBLICATION.' - new folder created called: '.$created_dir]++;
-                        }
-                    }
-
-                    //Creating student_publication_assignment if exists
-                    $sql = "SELECT * FROM $TBL_STUDENT_PUBLICATION_ASSIGNMENT
-                            WHERE publication_id = $parent_id AND c_id = $course_id";
-                    if ($debug) {
-                        var_dump($sql);
-                    }
-                    $rest_select = Database::query($sql);
-                    if (Database::num_rows($rest_select) > 0) {
-                        if ($update_database && $new_parent_id) {
-                            $assignment_data = Database::fetch_assoc($rest_select);
-                            $sql_add_publication = "INSERT INTO ".$TBL_STUDENT_PUBLICATION_ASSIGNMENT." SET
-                                    	c_id = '$course_id',
-                                       expires_on          = '".$assignment_data['expires_on']."',
-                                       ends_on              = '".$assignment_data['ends_on']."',
-                                       add_to_calendar      = '".$assignment_data['add_to_calendar']."',
-                                       enable_qualification = '".$assignment_data['enable_qualification']."',
-                                       publication_id       = '".$new_parent_id."'";
-                            if ($debug) {
-                                echo $sql_add_publication;
-                            }
-                            Database::query($sql_add_publication);
-                            $id = (int) Database::insert_id();
-                            if ($id) {
-                                $sql_update = "UPDATE $TBL_STUDENT_PUBLICATION
-                                           SET  has_properties = '".$id."',
-                                                view_properties = '1'
-                                           WHERE iid = ".$new_parent_id;
-                                if ($debug) {
-                                    echo $sql_update;
-                                }
-                                Database::query($sql_update);
-                                if (!isset($result_message[$TBL_STUDENT_PUBLICATION_ASSIGNMENT])) {
-                                    $result_message[$TBL_STUDENT_PUBLICATION_ASSIGNMENT] = 0;
-                                }
-                                $result_message[$TBL_STUDENT_PUBLICATION_ASSIGNMENT]++;
-                            }
-                        }
-                    }
-
-                    $doc_url = $data['url'];
-                    $new_url = str_replace($parent_data['url'], $created_dir, $doc_url);
-
-                    if ($update_database) {
-                        // Creating a new work
-                        $data['sent_date'] = new DateTime($data['sent_date'], new DateTimeZone('UTC'));
-
-                        $data['post_group_id'] = (int) $data['post_group_id'];
-                        $publication = (new CStudentPublication())
-                            ->setTitle($data['title'])
-                            ->setDescription($data['description'].' file moved')
-                            ->setActive($data['active'])
-                            ->setAccepted($data['accepted'])
-                            ->setPostGroupId($data['post_group_id'])
-                            ->setSentDate($data['sent_date'])
-                            ->setParentId($new_parent_id)
-                            ->setWeight($data['weight'])
-                            ->setHasProperties(0)
-                            ->setWeight($data['weight'])
-                            ->setContainsFile($data['contains_file'])
-                            ->setSession($session)
-                            ->setUserId($data['user_id'])
-                            ->setFiletype('file')
-                            ->setDocumentId(0)
-                        ;
-
-                        $em->persist($publication);
-                        $em->flush();
-
-                        $id = $publication->getIid();
-                        /*api_item_property_update(
-                            $course_info,
-                            'work',
-                            $id,
-                            'DocumentAdded',
-                            $user_id,
-                            null,
-                            null,
-                            null,
-                            null,
-                            $new_session_id
-                        );*/
-                        if (!isset($result_message[$TBL_STUDENT_PUBLICATION])) {
-                            $result_message[$TBL_STUDENT_PUBLICATION] = 0;
-                        }
-                        $result_message[$TBL_STUDENT_PUBLICATION]++;
-                        $full_file_name = $course_dir.'/'.$doc_url;
-                        $new_file = $course_dir.'/'.$new_url;
-
-                        if (file_exists($full_file_name)) {
-                            // deleting old assignment
-                            $result = copy($full_file_name, $new_file);
-                            if ($result) {
-                                unlink($full_file_name);
-                                if (isset($data['id'])) {
-                                    $sql = "DELETE FROM $TBL_STUDENT_PUBLICATION WHERE id= ".$data['id'];
-                                    if ($debug) {
-                                        var_dump($sql);
-                                    }
-                                    Database::query($sql);
-                                }
-                                api_item_property_update(
-                                    $course_info,
-                                    'work',
-                                    $data['id'],
-                                    'DocumentDeleted',
-                                    api_get_user_id()
-                                );
-                            }
-                        }
-                    }
-                }
+            if (!empty($destinationPublicationRows)) {
+                $result_message_compare['STUDENT_PUBLICATION'] = $destinationPublicationRows;
             }
         }
 
         //9. Survey   Pending
         //10. Dropbox - not neccesary to move categories (no presence of session_id)
-        $sql = "SELECT id FROM $TBL_DROPBOX_FILE
+        $sql = "SELECT iid FROM $TBL_DROPBOX_FILE
                 WHERE uploader_id = $user_id AND session_id = $origin_session_id AND c_id = $course_id";
         if ($debug) {
             var_dump($sql);
         }
         $res = Database::query($sql);
         while ($row = Database::fetch_assoc($res)) {
-            $id = (int) $row['id'];
+            $id = (int) $row['iid'];
             if ($update_database) {
                 $sql = "UPDATE $TBL_DROPBOX_FILE SET session_id = $new_session_id WHERE c_id = $course_id AND iid = $id";
                 if ($debug) {
@@ -7658,6 +7576,91 @@ class Tracking
             echo '</tr>';
             echo '</table>';
         }
+    }
+
+
+    private static function getSessionResourceRows(
+        string $resourceTable,
+        string $resourceLinkTable,
+        string $resourceNodeTable,
+        int $courseId,
+        int $userId,
+        int $sessionId,
+        string $ownerField
+    ): array {
+        $courseId = (int) $courseId;
+        $userId = (int) $userId;
+        $sessionId = (int) $sessionId;
+        $ownerField = 'user' === $ownerField ? 'r.user_id' : 'rn.creator_id';
+        $sessionCondition = self::getResourceLinkSessionCondition($sessionId, 'rl');
+
+        $sql = "SELECT
+                    rl.id AS resource_link_id,
+                    r.iid AS item_id,
+                    rn.title AS title
+                FROM $resourceTable r
+                    INNER JOIN $resourceNodeTable rn
+                    ON rn.id = r.resource_node_id
+                    INNER JOIN $resourceLinkTable rl
+                    ON rl.resource_node_id = rn.id
+                WHERE
+                    rl.c_id = $courseId AND
+                    $sessionCondition AND
+                    $ownerField = $userId";
+
+        $result = Database::query($sql);
+        $rows = [];
+
+        while ($row = Database::fetch_assoc($result)) {
+            $rows[(int) $row['resource_link_id']] = [
+                'resource_link_id' => (int) $row['resource_link_id'],
+                'item_id' => (int) $row['item_id'],
+                'title' => $row['title'],
+            ];
+        }
+
+        return $rows;
+    }
+
+    private static function moveResourceLinksToSession(array $rows, int $newSessionId, bool $debug = false): int
+    {
+        if (empty($rows)) {
+            return 0;
+        }
+
+        $table = Database::get_main_table('resource_link');
+        $sessionValue = empty($newSessionId) ? 'NULL' : (string) (int) $newSessionId;
+        $updatedRows = 0;
+
+        foreach ($rows as $row) {
+            $resourceLinkId = (int) ($row['resource_link_id'] ?? 0);
+
+            if (empty($resourceLinkId)) {
+                continue;
+            }
+
+            $sql = "UPDATE $table
+                    SET session_id = $sessionValue
+                    WHERE id = $resourceLinkId";
+
+            if ($debug) {
+                var_dump($sql);
+            }
+
+            Database::query($sql);
+            $updatedRows++;
+        }
+
+        return $updatedRows;
+    }
+
+    private static function getResourceLinkSessionCondition(int $sessionId, string $alias = 'rl'): string
+    {
+        if (empty($sessionId)) {
+            return "($alias.session_id IS NULL OR $alias.session_id = 0)";
+        }
+
+        return "$alias.session_id = $sessionId";
     }
 
     public static function compareUserData($result_message)
@@ -8222,7 +8225,8 @@ class Tracking
      */
     public static function getTotalTimeSpentInCourses(
         string $dateFrom = '',
-        string $dateUntil = ''
+        string $dateUntil = '',
+        ?int $maxTimeSpent = 6
     ): int {
         $tableTrackLogin = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $tableUrlRelUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -8240,15 +8244,36 @@ class Tracking
             $dateUntil = Database::escape_string($dateUntil);
             $conditionTime = " (login_course_date >= '$dateFrom' AND logout_course_date <= '$dateUntil' ) ";
         }
-        $sql = "SELECT SUM(TIMESTAMPDIFF(HOUR, login_course_date, logout_course_date)) diff
+        $sql = "SELECT TIMESTAMPDIFF(HOUR, login_course_date, logout_course_date) diff
     	        FROM $tableTrackLogin u $tableUrl
                 WHERE $conditionTime $urlCondition";
         $rs = Database::query($sql);
-        $row = Database::fetch_array($rs, 'ASSOC');
-        $diff = $row['diff'];
+        $diff = 0;
+        if (!empty($rs)) {
+            while ($row = Database::fetch_array($rs)) {
+                // Anything above $maxTimeSpent is rounded down to $maxTimeSpent hours
+                if ($row['diff'] <= $maxTimeSpent) {
+                    $diff += $row['diff'];
+                } else {
+                    $diff += $maxTimeSpent;
+                }
+            }
+        }
         if ($diff >= 0 and !empty($diff)) {
             return $diff;
         }
         return 0;
+    }
+    public static function countSessionsPerStudent(int $userId): int
+    {
+        $tblSessionUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+
+        $sql = 'SELECT DISTINCT id
+            FROM '.$tblSessionUser.'
+            WHERE relation_type = '.SessionEntity::STUDENT.' AND user_id = '.$userId;
+
+        $rs = Database::query($sql);
+
+        return Database::num_rows($rs);
     }
 }

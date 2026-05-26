@@ -26,6 +26,29 @@ final class ThemeHelper
      */
     public const DEFAULT_THEME = 'chamilo';
 
+    /**
+     * Fallback palette (rgba) if no palette file is available in the theme FS.
+     * Colors are looped if more are needed.
+     */
+    private const FALLBACK_RGBA = [
+        'rgba(169,68,66,0.9)',
+        'rgba(230,126,34,0.9)',
+        'rgba(241,196,15,0.9)',
+        'rgba(175,122,197,0.9)',
+        'rgba(93,173,226,0.9)',
+        'rgba(133,193,233,0.9)',
+        'rgba(169,223,191,0.9)',
+        'rgba(46,134,193,0.9)',
+        'rgba(125,206,160,0.9)',
+        'rgba(40,116,166,0.9)',
+        'rgba(176,58,46,0.9)',
+        'rgba(88,214,141,0.9)',
+        'rgba(52,152,219,0.9)',
+        'rgba(155,89,182,0.9)',
+        'rgba(241,148,138,0.9)',
+        'rgba(127,140,141,0.9)',
+    ];
+
     public function __construct(
         private readonly AccessUrlHelper $accessUrlHelper,
         private readonly SettingsManager $settingsManager,
@@ -167,6 +190,17 @@ final class ThemeHelper
         return \sprintf('<link rel="stylesheet" href="%s">', $url);
     }
 
+    public function getThemeAssetScriptTag(string $path, bool $absoluteUrl = false): string
+    {
+        $url = $this->getThemeAssetUrl($path, $absoluteUrl);
+
+        if ('' === $url) {
+            return '';
+        }
+
+        return \sprintf('<script src="%s"></script>', $url);
+    }
+
     /**
      * Read raw contents from the themed filesystem.
      */
@@ -219,8 +253,9 @@ final class ThemeHelper
      */
     public function getPreferredLogoUrl(string $type = 'header', bool $absoluteUrl = false): string
     {
+        // For e-mails, prefer PNG only (Gmail often blocks SVG rendering in emails).
         $candidates = 'email' === $type
-            ? ['images/email-logo.svg', 'images/email-logo.png']
+            ? ['images/email-logo.png', 'images/header-logo.png']
             : ['images/header-logo.svg', 'images/header-logo.png'];
 
         foreach ($candidates as $relPath) {
@@ -231,5 +266,105 @@ final class ThemeHelper
         }
 
         return '';
+    }
+
+    /**
+     * Default palette file path (inside the theme FS):
+     * - palettes/pchart/default.color
+     *
+     * @return string[]
+     */
+    public function getColorPalette(
+        bool $decimalOpacity = false,
+        bool $wrapInRGBA = false,
+        int $fillUpTo = 0,
+        string $palettePath = 'palettes/pchart/default.color',
+    ): array {
+        $raw = $this->getAssetContents($palettePath);
+
+        if ('' === trim($raw)) {
+            // Theme does not provide the palette file; use fallback.
+            return $this->fillUpPalette(self::FALLBACK_RGBA, $fillUpTo);
+        }
+
+        $lines = preg_split("/\r\n|\n|\r/", $raw) ?: [];
+        $palette = [];
+
+        foreach ($lines as $line) {
+            $line = trim((string) $line);
+            if ('' === $line) {
+                continue;
+            }
+
+            $components = preg_split('/\s*,\s*/', $line);
+            if (!\is_array($components) || \count($components) < 3) {
+                continue;
+            }
+
+            $r = (int) ($components[0] ?? 0);
+            $g = (int) ($components[1] ?? 0);
+            $b = (int) ($components[2] ?? 0);
+
+            // Alpha is optional in some palettes; default to 1.0
+            $aRaw = $components[3] ?? '1';
+            $a = is_numeric($aRaw) ? (float) $aRaw : 1.0;
+
+            // optional conversion: 0..100 -> 0..1 (1 decimal)
+            if ($decimalOpacity && $a > 1.0) {
+                $a = round($a / 100.0, 1);
+            }
+
+            // When wrapping as rgba(), enforce CSS alpha normalization
+            if ($wrapInRGBA) {
+                if ($a > 1.0) {
+                    // C1 alpha is frequently 0..100
+                    $a = round($a / 100.0, 2);
+                }
+                $a = max(0.0, min(1.0, $a));
+
+                $palette[] = \sprintf(
+                    'rgba(%d,%d,%d,%s)',
+                    $r,
+                    $g,
+                    $b,
+                    rtrim(rtrim((string) $a, '0'), '.')
+                );
+            } else {
+                $palette[] = \sprintf('%d,%d,%d,%s', $r, $g, $b, (string) $a);
+            }
+        }
+
+        if (empty($palette)) {
+            return $this->fillUpPalette(self::FALLBACK_RGBA, $fillUpTo);
+        }
+
+        return $this->fillUpPalette($palette, $fillUpTo);
+    }
+
+    /**
+     * @param string[] $palette
+     *
+     * @return string[]
+     */
+    private function fillUpPalette(array $palette, int $fillUpTo): array
+    {
+        if ($fillUpTo <= 0) {
+            return $palette;
+        }
+
+        $count = \count($palette);
+        if ($count <= 0) {
+            return $palette;
+        }
+
+        if ($fillUpTo <= $count) {
+            return \array_slice($palette, 0, $fillUpTo);
+        }
+
+        for ($i = $count; $i < $fillUpTo; $i++) {
+            $palette[$i] = $palette[$i % $count];
+        }
+
+        return $palette;
     }
 }

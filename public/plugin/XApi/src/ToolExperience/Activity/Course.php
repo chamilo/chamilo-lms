@@ -6,35 +6,42 @@ declare(strict_types=1);
 
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Activity;
 
-use Xabbuh\XApi\Model\Activity;
-use Xabbuh\XApi\Model\Definition;
-use Xabbuh\XApi\Model\IRI;
-use Xabbuh\XApi\Model\LanguageMap;
-
 /**
  * Class Course.
  */
 class Course extends BaseActivity
 {
-    public function generate(): Activity
+    public function generate(): array
     {
         $course = api_get_course_entity();
         $session = api_get_session_entity();
 
-        $languageIso = api_get_language_isocode($course->getCourseLanguage());
+        if (!$course) {
+            return [];
+        }
+
+        $courseLanguage = method_exists($course, 'getCourseLanguage')
+            ? $course->getCourseLanguage()
+            : null;
+
+        $languageIso = !empty($courseLanguage)
+            ? api_get_language_isocode($courseLanguage)
+            : 'en';
 
         $courseUrl = api_get_course_url(
             $course->getCode(),
             $session ? $session->getId() : 0
         );
 
-        return new Activity(
-            IRI::fromString($courseUrl),
-            new Definition(
-                LanguageMap::create([$languageIso => $course->getTitle()]),
-                null,
-                IRI::fromString('http://id.tincanapi.com/activitytype/lms/course')
-            )
-        );
+        return [
+            'objectType' => 'Activity',
+            'id' => $courseUrl,
+            'definition' => [
+                'name' => [
+                    $languageIso => (string) $course->getTitle(),
+                ],
+                'type' => 'http://id.tincanapi.com/activitytype/lms/course',
+            ],
+        ];
     }
 }

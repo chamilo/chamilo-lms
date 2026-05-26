@@ -19,10 +19,12 @@ $nameTools = get_lang('Reporting');
 
 $currentUrl = api_get_self();
 $courseId = isset($_GET['course_id']) ? (int) $_GET['course_id'] : 0;
+$selectedExerciseId = isset($_GET['exercise_id']) ? (int) $_GET['exercise_id'] : 0;
 
 $defaults = [];
 $defaults['start_date'] = isset($_GET['start_date']) ? Security::remove_XSS($_GET['start_date']) : '';
 $defaults['course_id'] = $courseId;
+$defaults['exercise_id'] = $selectedExerciseId;
 
 // Ensure variable exists even if no course found
 $courseInfo = [];
@@ -30,7 +32,7 @@ $courseInfo = [];
 // JS: reload on course change to keep URL filters in sync
 $htmlHeadXtra[] = '<script>
 $(function() {
-    $("#exercise_course_id").on("change", function(e) {
+    $("#exercise_course_id").on("change", function() {
         var data = $(this).select2("data");
         if (!data || !data.length) {
             return;
@@ -38,10 +40,11 @@ $(function() {
 
         var option = data[0];
         var value = option.id;
-        var selectedDate = $("#start_date").datepicker({ dateFormat: "dd,MM,yyyy" }).val();
+        var selectedDate = $("#start_date").val() || "";
 
-        // Preserve filters in the URL for consistency with other admin reports
-        window.location.replace("'.$currentUrl.'?start_date=" + selectedDate + "&course_id=" + value);
+        window.location.replace(
+            "'.$currentUrl.'?start_date=" + encodeURIComponent(selectedDate) + "&course_id=" + encodeURIComponent(value)
+        );
     });
 });
 </script>';
@@ -79,9 +82,19 @@ if (empty($courseId)) {
         if (!empty($exerciseList)) {
             $options = [];
             foreach ($exerciseList as $exercise) {
-                $options[$exercise['id']] = $exercise['title'];
+                $exerciseOptionId = (int) ($exercise['iid'] ?? $exercise['id'] ?? 0);
+                if ($exerciseOptionId <= 0) {
+                    continue;
+                }
+
+                $options[$exerciseOptionId] = $exercise['title'];
             }
-            $form->addSelect('exercise_id', get_lang('Tests'), $options);
+
+            if (!empty($options)) {
+                $form->addSelect('exercise_id', get_lang('Tests'), $options);
+            } else {
+                $form->addLabel(get_lang('Tests'), Display::return_message(get_lang('No tests')));
+            }
         } else {
             $form->addLabel(get_lang('Tests'), Display::return_message(get_lang('No tests')));
         }
@@ -106,15 +119,30 @@ echo '<style>
         border-color: #0284c7 !important;
         background-color: #e0f2fe !important;
     }
-
     .reporting-admin-card {
         border-color: #e5e7eb !important;
         border-width: 1px !important;
     }
-
     .reporting-admin-card .panel,
     .reporting-admin-card fieldset {
         border-color: #e5e7eb !important;
+    }
+    .reporting-grid-wrapper {
+        width: 100%;
+        min-width: 100%;
+    }
+    .reporting-grid-wrapper .ui-jqgrid,
+    .reporting-grid-wrapper .ui-jqgrid-view,
+    .reporting-grid-wrapper .ui-jqgrid-hdiv,
+    .reporting-grid-wrapper .ui-jqgrid-bdiv,
+    .reporting-grid-wrapper .ui-jqgrid-pager {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box;
+    }
+    .reporting-grid-wrapper .ui-jqgrid-btable,
+    .reporting-grid-wrapper .ui-jqgrid-htable {
+        width: 100% !important;
     }
 </style>';
 
@@ -167,18 +195,20 @@ echo '  </section>';
 $extraFields = api_get_setting('exercise.exercise_category_report_user_extra_fields', true);
 
 // -----------------------------------------------------------------------------
-// Results grid (keeps original behavior)
+// Results grid
+// Render results whenever the required GET filters are present.
+// This avoids blank pages after reloads on GET reports.
 // -----------------------------------------------------------------------------
-if ($form->validate() && !empty($courseInfo)) {
-    $values = $form->getSubmitValues();
-    $exerciseId = isset($values['exercise_id']) ? $values['exercise_id'] : 0;
-    $startDate = Security::remove_XSS($values['start_date']);
+if (!empty($courseInfo) && !empty($selectedExerciseId)) {
+    $exerciseId = $selectedExerciseId;
+    $startDate = $defaults['start_date'];
 
     $exportFilename = 'exercise_results_report_'.$exerciseId.'_'.$courseInfo['code'];
 
     $url = api_get_path(WEB_AJAX_PATH).
         'model.ajax.php?a=get_exercise_results_report&exercise_id='.$exerciseId.
-        '&start_date='.$startDate.'&cidReq='.$courseInfo['code'].
+        '&start_date='.urlencode($startDate).
+        '&cidReq='.$courseInfo['code'].
         '&course_id='.$courseId.
         '&export_filename='.$exportFilename;
 
@@ -217,14 +247,14 @@ if ($form->validate() && !empty($courseInfo)) {
         [
             'name' => 'firstname',
             'index' => 'firstname',
-            'width' => '50',
+            'width' => '160',
             'align' => 'left',
             'search' => 'true',
         ],
         [
             'name' => 'lastname',
             'index' => 'lastname',
-            'width' => '50',
+            'width' => '160',
             'align' => 'left',
             'formatter' => 'action_formatter',
             'search' => 'true',
@@ -232,7 +262,7 @@ if ($form->validate() && !empty($courseInfo)) {
         [
             'name' => 'login',
             'index' => 'username',
-            'width' => '40',
+            'width' => '140',
             'align' => 'left',
             'search' => 'true',
             'hidden' => 'true',
@@ -245,7 +275,7 @@ if ($form->validate() && !empty($courseInfo)) {
             $columnModel[] = [
                 'name' => $variable,
                 'index' => $variable,
-                'width' => '40',
+                'width' => '140',
                 'align' => 'left',
                 'search' => 'false',
             ];
@@ -255,28 +285,28 @@ if ($form->validate() && !empty($courseInfo)) {
     $columnModel[] = [
         'name' => 'session',
         'index' => 'session',
-        'width' => '40',
+        'width' => '180',
         'align' => 'left',
         'search' => 'false',
     ];
     $columnModel[] = [
         'name' => 'session_access_start_date',
         'index' => 'session_access_start_date',
-        'width' => '50',
+        'width' => '170',
         'align' => 'center',
         'search' => 'true',
     ];
     $columnModel[] = [
         'name' => 'exe_date',
         'index' => 'exe_date',
-        'width' => '60',
+        'width' => '170',
         'align' => 'left',
         'search' => 'true',
     ];
     $columnModel[] = [
         'name' => 'score',
         'index' => 'score',
-        'width' => '50',
+        'width' => '140',
         'align' => 'center',
         'search' => 'true',
     ];
@@ -286,7 +316,7 @@ if ($form->validate() && !empty($courseInfo)) {
             $columnModel[] = [
                 'name' => 'category_'.$categoryInfo['id'],
                 'index' => 'category_'.$categoryInfo['id'],
-                'width' => '50',
+                'width' => '150',
                 'align' => 'center',
                 'search' => 'true',
             ];
@@ -296,7 +326,7 @@ if ($form->validate() && !empty($courseInfo)) {
     $columnModel[] = [
         'name' => 'actions',
         'index' => 'actions',
-        'width' => '60',
+        'width' => '120',
         'align' => 'left',
         'search' => 'false',
         'sortable' => 'false',
@@ -305,6 +335,7 @@ if ($form->validate() && !empty($courseInfo)) {
 
     $extra_params = [];
     $extra_params['autowidth'] = 'true';
+    $extra_params['shrinkToFit'] = 'true';
     $extra_params['height'] = 'auto';
 
     $actionLinks = '
@@ -318,6 +349,20 @@ if ($form->validate() && !empty($courseInfo)) {
 
     $tableId = 'results'; ?>
     <script>
+        function resizeExerciseCategoryGrid() {
+            var $grid = jQuery("#<?php echo $tableId; ?>");
+            var $wrapper = jQuery("#results-grid-wrapper");
+
+            if (!$grid.length || !$wrapper.length) {
+                return;
+            }
+
+            var width = $wrapper.innerWidth();
+            if (width && width > 0) {
+                $grid.jqGrid("setGridWidth", width, true);
+            }
+        }
+
         $(function() {
             <?php
             echo Display::grid_js(
@@ -330,13 +375,19 @@ if ($form->validate() && !empty($courseInfo)) {
                 $actionLinks,
                 true
             ); ?>
+
+            setTimeout(resizeExerciseCategoryGrid, 0);
+            setTimeout(resizeExerciseCategoryGrid, 200);
+            jQuery(window).off("resize.exerciseCategoryGrid").on("resize.exerciseCategoryGrid", function() {
+                resizeExerciseCategoryGrid();
+            });
         });
     </script>
     <?php
 
     // Results card
     echo '  <section class="reporting-admin-card bg-white rounded-xl shadow-sm border border-gray-200 w-full">';
-    echo '      <div class="p-4 md:p-5 overflow-x-auto">';
+    echo '      <div id="results-grid-wrapper" class="reporting-grid-wrapper p-4 md:p-5 overflow-x-auto">';
 
     echo '<script>
         $(function() {
@@ -368,6 +419,9 @@ if ($form->validate() && !empty($courseInfo)) {
                 );
                }
             });
+
+            setTimeout(resizeExerciseCategoryGrid, 0);
+            setTimeout(resizeExerciseCategoryGrid, 200);
         });
     </script>';
 
@@ -392,6 +446,6 @@ if ($form->validate() && !empty($courseInfo)) {
     echo '  </section>';
 }
 
-echo '</div>'; // main container
+echo '</div>';
 
 Display::display_footer();

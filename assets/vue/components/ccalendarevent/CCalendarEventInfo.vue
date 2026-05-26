@@ -21,6 +21,14 @@
       v-else-if="type.invitation === event.invitationType"
       :event="event"
     />
+    <div
+      v-else-if="event.objectType === 'learning_calendar' && event.eventType"
+      class="mt-2"
+    >
+      <strong>{{ t("Type") }}:</strong>
+      {{ event.eventType }}
+    </div>
+
     <ShowLinks
       v-else
       :clickable-course="true"
@@ -28,12 +36,24 @@
       :show-status="false"
     />
 
-    <CalendarRemindersInfo :event="event" />
+    <CalendarRemindersInfo
+      v-if="event.objectType !== 'learning_calendar'"
+      :event="event"
+    />
+
+    <div
+      v-if="event.room"
+      class="mt-2"
+    >
+      <strong>{{ t("Room") }}:</strong>
+      {{ event.room.branchTitle ? `${event.room.branchTitle} - ${event.room.title}` : event.room.title }}
+    </div>
   </div>
 </template>
 
 <script setup>
 import { useFormatDate } from "../../composables/formatDate"
+import { useI18n } from "vue-i18n"
 import ShowLinks from "../resource_links/ShowLinks"
 import { type } from "../../constants/entity/ccalendarevent"
 import CalendarEventSubscriptionsInfo from "./CalendarEventSubscriptionsInfo.vue"
@@ -41,6 +61,7 @@ import CalendarEventInvitationsInfo from "./CalendarEventInvitationsInfo.vue"
 import CalendarRemindersInfo from "./CalendarRemindersInfo.vue"
 
 const { abbreviatedDatetime } = useFormatDate()
+const { t } = useI18n()
 
 defineProps({
   event: {

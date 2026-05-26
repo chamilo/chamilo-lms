@@ -1,0 +1,14 @@
+{
+  "title": "H5P.FontIcons",
+  "majorVersion": 1,
+  "minorVersion": 0,
+  "patchVersion": 6,
+  "runnable": 0,
+  "machineName": "H5P.FontIcons",
+  "author": "Joubel",
+  "preloadedCss": [
+    {
+      "path": "styles/h5p-font-icons.css"
+    }
+  ]
+}

@@ -17,5 +17,14 @@ export default {
         breadcrumb: "",
       },
     },
+    {
+      name: "LpAdvancedAccess",
+      path: "advanced-access",
+      component: () => import("../views/lp/LpAdvancedAccess.vue"),
+      meta: {
+        breadcrumb: "Advanced access",
+      },
+    },
+
   ],
 }

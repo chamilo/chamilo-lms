@@ -1,0 +1,211 @@
+{
+  "semantics": [
+    {
+      "label": "Mediji",
+      "fields": [
+        {
+          "label": "Tip",
+          "description": "Neobvezna nastavitev dodatnega medija za prikaz nad vprašanjem."
+        },
+        {
+          "label": "Onemogoči povečavo slike"
+        }
+      ]
+    },
+    {
+      "label": "Navodilo udeležencem",
+      "default": "Vnesi manjkajoče besede",
+      "description": "Opis reševanja zadane naloge."
+    },
+    {
+      "label": "Odstavek z besedilom",
+      "entity": "odstavek",
+      "field": {
+        "label": "Besedilo naloge",
+        "placeholder": "Oslo je glavno mesto *Norveške*.",
+        "description": "",
+        "important": {
+          "description": "<ul><li>Prazno polje se označi z zvezdico (*) pred in za besedo/besedno zvezo.</li><li>Nadomestni odgovor se loči s poševnico (/).</li><li>Namig za udeležence se od odgovora loči z dvopičjem (:).</li></ul>",
+          "example": "Za brskanje po spletu lahko uporabimo *brskalnik/spletni brskalnik:Takšen program je na primer Chrome*."
+        }
+      }
+    },
+    {
+      "label": "Splošna povratna informacija",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Privzeto"
+            }
+          ],
+          "label": "Določi ločeno povratno informacijo za vsak razpon rezultatov",
+          "description": "Kliknite gumb \"Dodaj razpon\" za dodajanje dodatnih razponov. Primer: 0-20 % Slab rezultat, 21-91 % Povprečen rezultat, 91-100 % Odličen rezultat!",
+          "entity": "razpon",
+          "field": {
+            "fields": [
+              {
+                "label": "Razpon rezultatov"
+              },
+              {},
+              {
+                "label": "Povratna informacija za definiran razpon rezultatov",
+                "placeholder": "Vnesite povratno informacijo"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Besedilo za gumb \"Prikaži rešitev\"",
+      "default": "Prikaži rešitev"
+    },
+    {
+      "label": "Besedilo za gumb \"Poskusi ponovno\"",
+      "default": "Poskusi ponovno"
+    },
+    {
+      "label": "Besedilo za gumb \"Preveri\"",
+      "default": "Preveri"
+    },
+    {
+      "label": "Besedilo za manjkajoč odgovor",
+      "default": "Pred ogledom rešitve je potrebno izpolniti vsa prazna polja"
+    },
+    {
+      "label": "Besedilo za sporočilo \"... je pravilen\" (:ans je spremenljivka)",
+      "default": "':ans' je pravilen"
+    },
+    {
+      "label": "Besedilo za sporočilo \"... ni pravilen\" (:ans je spremenljivka)",
+      "default": "':ans' ni pravilen"
+    },
+    {
+      "label": "Besedilo za pravilni odgovor",
+      "default": "Pravilno!"
+    },
+    {
+      "label": "Besedilo za nepravilni odgovor",
+      "default": "Nepravilno!"
+    },
+    {
+      "label": "Besedilo, ki ga bralnik zaslona uporabi za izražanje rešitev naloge",
+      "default": "Pravilni odgovori:"
+    },
+    {
+      "label": "Besedilo, ki ga bralnik zaslona uporabi za vnosno polje",
+      "description": "Spremenljivki za oznako vnosnih polj sta @num in @total.",
+      "default": "Vnosno polje @num od @total"
+    },
+    {
+      "label": "Besedilo, ki ga bralnik zaslona uporabi za izražanje dosegljivosti namiga",
+      "default": "Namig je na voljo"
+    },
+    {
+      "label": "Besedilo za ikono namiga",
+      "default": "Namig"
+    },
+    {
+      "label": "Nastavitve interakcije",
+      "description": "Nastavitve omogočajo nadzor nad interakcijo aktivnosti za udeležence.",
+      "fields": [
+        {
+          "label": "Omogoči gumb \"Poskusi ponovno\""
+        },
+        {
+          "label": "Omogoči gumb \"Prikaži rešitev\""
+        },
+        {
+          "label": "Omogoči gumb \"Preveri\""
+        },
+        {
+          "label": "Sprotno preverjaj vnesene odgovore"
+        },
+        {
+          "label": "Loči velike/male črke",
+          "description": "Razlikuje med zapisom v velikih ali malih tiskanih črkah."
+        },
+        {
+          "label": "Pred ogledom rešitve zahtevaj vse odgovore"
+        },
+        {
+          "label": "Vnosna polja zapiši v ločenih vrsticah"
+        },
+        {
+          "label": "Pred zaključkom aktivnosti zahtevaj potrditev",
+          "description": "Možnost se izključuje z izbiro \"Sprotno preverjaj vnesene odgovore\"."
+        },
+        {
+          "label": "Pred ponovitvijo aktivnosti zahtevaj potrditev"
+        },
+        {
+          "label": "Toleriraj manjše napake",
+          "description": "Nastavitev tolerance in upoštevanje pravilnosti odgovora kljub manjšim napakam (npr. 1 napačen znak v besedah med 3 do 9 znaki, 2 napačna znaka v besedah dolgih nad 9 znakov)."
+        }
+      ]
+    },
+    {
+      "label": "Pogovorno okno pred oddajo odgovora",
+      "fields": [
+        {
+          "label": "Naslov",
+          "default": "Zaključi?"
+        },
+        {
+          "label": "Besedilo telesa pogovornega okna",
+          "default": "Ste prepričani, da želite zaključiti?"
+        },
+        {
+          "label": "Besedilo gumba Prekliči",
+          "default": "Prekliči"
+        },
+        {
+          "label": "Besedilo gumba Potrdi",
+          "default": "Potrdi"
+        }
+      ]
+    },
+    {
+      "label": "Pogovorno okno pred ponovitvijo aktivnosti",
+      "fields": [
+        {
+          "label": "Naslov",
+          "default": "Poskusi ponovno?"
+        },
+        {
+          "label": "Besedilo telesa pogovornega okna",
+          "default": "Ste prepričani, da želite poskusiti ponovno?"
+        },
+        {
+          "label": "Besedilo gumba Prekliči",
+          "default": "Prekliči"
+        },
+        {
+          "label": "Besedilo gumba Potrdi",
+          "default": "Potrdi"
+        }
+      ]
+    },
+    {
+      "label": "Besedilo, ki ga bralnik zaslona uporabi za izražanje napredka",
+      "default": "Napredek :num od :total"
+    },
+    {
+      "label": "Assistive technology description for \"Check\" button",
+      "default": "Check the answers. The responses will be marked as correct, incorrect, or unanswered."
+    },
+    {
+      "label": "Assistive technology description for \"Show Solution\" button",
+      "default": "Show the solution. The task will be marked with its correct solution."
+    },
+    {
+      "label": "Assistive technology description for \"Retry\" button",
+      "default": "Retry the task. Reset all responses and start the task over again."
+    },
+    {
+      "label": "Assistive technology description for starting task",
+      "default": "Checking mode"
+    }
+  ]
+}

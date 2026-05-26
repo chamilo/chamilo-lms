@@ -27,7 +27,7 @@ if (!$object->allowed()) {
 $sessionUrl = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$sessionId;
 
 $interbreadcrumb[] = [
-    'url' => 'session_list.php',
+    'url' => '/admin/session-list',
     'name' => get_lang('Session list'),
 ];
 $interbreadcrumb[] = [

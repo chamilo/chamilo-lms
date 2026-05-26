@@ -48,7 +48,7 @@ msgid "Create badge"
 msgstr "Badge erstellen"
 
 msgid "Badges"
-msgstr "Badges"
+msgstr "Abzeichen"
 
 msgid "Students who acquired skill %s"
 msgstr "Studierende die Fähigkeiten erworben haben %s"
@@ -303,7 +303,7 @@ msgid "Exponentiation:\t\t\t^"
 msgstr "Potenzierung:\t\t\t^"
 
 msgid "Division:\t\t\t/"
-msgstr "Division:\t\t\t/"
+msgstr "Abteilung:\t\t\t/"
 
 msgid "Multiplication:\t\t\t*"
 msgstr "Multiplikation:\t\t\t*"
@@ -552,7 +552,7 @@ msgid "Modification date"
 msgstr "Änderungsdatum"
 
 msgid "Weep"
-msgstr "Weep"
+msgstr "Weinen"
 
 msgid "Latest changes"
 msgstr "Letzte Änderungen"
@@ -1303,10 +1303,10 @@ msgid "-1 = All questions will be selected."
 msgstr "-1 = alle Fragen ausgewählt. 0 = keine Frage ausgewählt."
 
 msgid "You can customize the email sent to users when they finished the exercise. You can use tags like these:"
-msgstr "Emails zur Benachrichtigung bei Kursabschluss können individuell gestaltet werden. Beispielsweise mit: 1. {{ student.username }} 2. {{ student.firstname }} 3. {{ student.lastname }} 4. {{ student.official_code }} 5. {{ exercise.title }} 6. {{ exercise.start_time }} 7. {{ exercise.end_time }} 8. {{ course.title }} 9. {{ course.code }}"
+msgstr "E-mails zur Benachrichtigung bei Kursabschluss können individuell gestaltet werden. Beispielsweise mit: 1. {{ student.username }} 2. {{ student.firstname }} 3. {{ student.lastname }} 4. {{ student.official_code }} 5. {{ exercise.title }} 6. {{ exercise.start_time }} 7. {{ exercise.end_time }} 8. {{ course.title }} 9. {{ course.code }}"
 
 msgid "E-mail notification template"
-msgstr "Email-Vorlage"
+msgstr "E-mail-Vorlage"
 
 msgid "Logout"
 msgstr "Abmelden"
@@ -2039,16 +2039,16 @@ msgid "Deactivate open the chat in a new window"
 msgstr "Chat in neuem Fenster AUS"
 
 msgid "E-mail teacher when a new user auto-subscribes"
-msgstr "Über Email über neue Kursteilnehmer unterrichten"
+msgstr "Über E-mail über neue Kursteilnehmer unterrichten"
 
 msgid "E-mail the teacher when a new user auto-subscribes"
-msgstr "Email-Benachrichtigung  für Kursleiter AN"
+msgstr "E-mail-Benachrichtigung  für Kursleiter AN"
 
 msgid "E-mail teacher and tutors when new user auto-subscribes"
-msgstr "Email-Benachrichtigung für Kursleiter und Tutor AN"
+msgstr "E-mail-Benachrichtigung für Kursleiter und Tutor AN"
 
 msgid "Disable e-mail alert to teacher on auto-subscription"
-msgstr "Email-Benachrichtigung AUS"
+msgstr "E-mail-Benachrichtigung AUS"
 
 msgid "Press 'Store' again..."
 msgstr "Bitte nochmals 'speichern' klicken"
@@ -2360,7 +2360,7 @@ msgid "Undo"
 msgstr "Zurücknehmen"
 
 msgid "Redo"
-msgstr "Redo"
+msgstr "Wiederholen"
 
 msgid "Select an Object"
 msgstr "Objekt auswählen"
@@ -2438,13 +2438,13 @@ msgid "Teacher"
 msgstr "Kursleiter"
 
 msgid "Slides"
-msgstr "Slides"
+msgstr "Folien"
 
 msgid "Waiting for participants"
 msgstr "Auf Teilnehmer warten"
 
 msgid "Browse"
-msgstr "Browse"
+msgstr "Durchsuchen"
 
 msgid "Choose a file to import"
 msgstr "Datei zum Importieren auswählen"
@@ -2735,7 +2735,7 @@ msgid "Assign sessions to"
 msgstr "Kurs-Session zuordnen zu"
 
 msgid "Upload"
-msgstr "Upload"
+msgstr "Hochladen"
 
 msgid "New user on ((sitename))"
 msgstr "Neue Benutzer auf ((sitename))"
@@ -4172,7 +4172,7 @@ msgid "Manage Todo list"
 msgstr "Verwaltung der ToDo-Liste"
 
 msgid "Administration"
-msgstr "Administration"
+msgstr "Verwaltung"
 
 msgid "Info about the System"
 msgstr "Systeminformation"
@@ -4469,7 +4469,7 @@ msgid "Can one register as a teacher (with the ability to create courses)?"
 msgstr "Soll sich ein neuer Benutzer selbst als Kursleiter anmelden können?  (d.h. Der Benutzer kann dann Kurse erstellen)"
 
 msgid "Tuning"
-msgstr "Tuning"
+msgstr "Feinabstimmung"
 
 msgid "Split users' upload directory"
 msgstr "Benutzer Upload-Verzeichnis aufteilen"
@@ -4679,7 +4679,7 @@ msgid "Send mail to new user"
 msgstr "E-Mail an neuen Nutzer schicken"
 
 msgid "Portfolio"
-msgstr "Ausführliches Profil"
+msgstr "Portfolio"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
 msgstr "Wenn Ja gewählt, kann der Benutzer die Felder \"Meine Kompetenzen\", \"Meine Qualifikationen\", \"Was isch unterrichten kann\", \"Mein persönlicher Bereich\" vervoillständigen."
@@ -5285,10 +5285,10 @@ msgid "Whether you want to use the blacklist or whitelist filtering. See blackli
 msgstr "Auswahl der Blacklist oder Whitelist  als Filter. Weitere Details dazu in den Blacklist und Whitelist Beschreibungen unten"
 
 msgid "Blacklist"
-msgstr "Blacklist"
+msgstr "Schwarze Liste"
 
 msgid "Whitelist"
-msgstr "Whitelist"
+msgstr "Weiße Liste"
 
 msgid "Blacklist - setting"
 msgstr "Blacklist - Einstellungen"
@@ -6599,7 +6599,7 @@ msgid "Title is required"
 msgstr "Überschrift fehlt"
 
 msgid "Announcement sent by e-mail"
-msgstr "Ankündigung über Email versendet"
+msgstr "Ankündigung über E-mail versendet"
 
 msgid "Announcement sent to the selected users"
 msgstr "Ankündigung wurde an die ausgewählten Benutzer versendet"
@@ -7139,7 +7139,7 @@ msgid "Edit learnpath"
 msgstr "Lernpfad bearbeiten"
 
 msgid "Delete"
-msgstr "Lernpfad löschen"
+msgstr "Löschen"
 
 msgid "do not publish"
 msgstr "nicht veröffentlichen"
@@ -8516,7 +8516,7 @@ msgid "Folder created"
 msgstr "Verzeichnis erstellt"
 
 msgid "Download"
-msgstr "Download"
+msgstr "Herunterladen"
 
 msgid "Group"
 msgstr "Gruppen"
@@ -8636,7 +8636,7 @@ msgid "Open"
 msgstr "offen"
 
 msgid "Import"
-msgstr "Import"
+msgstr "Importieren"
 
 msgid "Add another"
 msgstr "weitere hinzufügen"
@@ -8663,10 +8663,10 @@ msgid "Numbered"
 msgstr "nummeriert"
 
 msgid "en"
-msgstr "en"
+msgstr "de"
 
 msgid "eng"
-msgstr "eng"
+msgstr "deu"
 
 msgid "iso-8859-1"
 msgstr "iso-8859-1"
@@ -8906,7 +8906,7 @@ msgid "English"
 msgstr "Name der Sprache auf Englisch"
 
 msgid "Home"
-msgstr "Home"
+msgstr "Startseite"
 
 msgid "Are you sure you want to delete"
 msgstr "Wollen Sie wirklich löschen"
@@ -8942,7 +8942,7 @@ msgid "swedisch"
 msgstr "Schwedisch"
 
 msgid "thai"
-msgstr "Thai"
+msgstr "thai"
 
 msgid "turkish"
 msgstr "türkisch"
@@ -8993,7 +8993,7 @@ msgid "User"
 msgstr "Benutzer"
 
 msgid "M"
-msgstr "M"
+msgstr "Mo"
 
 msgid "T"
 msgstr "D"
@@ -9002,10 +9002,10 @@ msgid "W"
 msgstr "M"
 
 msgid "F"
-msgstr "F"
+msgstr "Fr"
 
 msgid "S"
-msgstr "S"
+msgstr "Sa"
 
 msgid "Mon"
 msgstr "Mo"
@@ -9050,19 +9050,19 @@ msgid "Sunday"
 msgstr "Sonntag"
 
 msgid "J"
-msgstr "J"
+msgstr "So"
 
 msgid "A"
-msgstr "A"
+msgstr "Jan"
 
 msgid "O"
-msgstr "O"
+msgstr "Okt"
 
 msgid "N"
-msgstr "N"
+msgstr "Nov"
 
 msgid "D"
-msgstr "D"
+msgstr "Dez"
 
 msgid "Jan"
 msgstr "Jan"
@@ -9227,7 +9227,7 @@ msgid "Modules"
 msgstr "Werkzeuge"
 
 msgid "Everyone"
-msgstr "jeden"
+msgstr "Jeder"
 
 msgid "Select groups/users"
 msgstr "Nutzer/Gruppe auswählen"
@@ -9296,7 +9296,7 @@ msgid "Focus on right"
 msgstr "Alle Rollen und Bereiche für ein spezifisches Recht ansehen"
 
 msgid "Authoring"
-msgstr "Authoring"
+msgstr "Erstellung"
 
 msgid "The value has been modified."
 msgstr "Wert wurde geändert"
@@ -9464,7 +9464,7 @@ msgid "You can now return to the"
 msgstr "Sie können nun zurückgehen zu"
 
 msgid "Horizontal"
-msgstr "horizontal"
+msgstr "Horizontal"
 
 msgid "Vertical"
 msgstr "vertikal"
@@ -9802,8 +9802,8 @@ msgstr "Leider ist es Ihnen nicht gestattet, diese Seite aufzurufen. Klicken Sie
 msgid "Result"
 msgstr "Ergebnis"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Loginversuch als %s %s (id %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Loginversuch als %s (id %d)"
 
 msgid "Login successful. Go to %s"
 msgstr "Login war erfolgreich. Gehen Sie zu %s"
@@ -9941,7 +9941,7 @@ msgid "Course settings"
 msgstr "Kurs-Einstellungen"
 
 msgid "E-mail notifications"
-msgstr "Email-Benachrichtigungen"
+msgstr "E-mail-Benachrichtigungen"
 
 msgid "User rights"
 msgstr "Benutzer-Rechte"
@@ -10076,7 +10076,7 @@ msgid "Go to question"
 msgstr "Gehe zu Frage"
 
 msgid "Level"
-msgstr "Level"
+msgstr "Stufe"
 
 msgid "Duration"
 msgstr "Dauer"
@@ -10787,7 +10787,7 @@ msgid "total users online"
 msgstr "Benutzer gesamt online"
 
 msgid "Refresh"
-msgstr "aktualisieren"
+msgstr "Aktualisieren"
 
 msgid "Portal news"
 msgstr "Portal-Ankündigungen"
@@ -10907,7 +10907,7 @@ msgid "Upload the list"
 msgstr "Upload der Liste"
 
 msgid "Every line of file to send will necessarily and only include 5 fields: <b>First name   LastName   Login   Password   E-mail</b> tab-separated and in this order. Users will receive an e-mail confirmation with their login/password."
-msgstr "Jede Zeile der Datei darf nur genau fünf Felder enthalten:<br /> \n<b>Nachname |  Vorname |  Login |  Passwort | Email</b> getrennt durch Tabulatoren und in dieser Reihenfolge.<br />\nDie Teilnehmer erhalten eine Bestätigung durch E-Mail mit Login-Daten und Passwort."
+msgstr "Jede Zeile der Datei darf nur genau fünf Felder enthalten:<br /> \n<b>Nachname |  Vorname |  Login |  Passwort | E-mail</b> getrennt durch Tabulatoren und in dieser Reihenfolge.<br />\nDie Teilnehmer erhalten eine Bestätigung durch E-Mail mit Login-Daten und Passwort."
 
 msgid "Import a users list"
 msgstr "Teilnehmerliste durch Textdatei einfügen"
@@ -11171,7 +11171,7 @@ msgid "Forgot your password?"
 msgstr "Passwort vergessen?"
 
 msgid "Enter the username or the e-mail address with which you registered and we will send your password."
-msgstr "Bitte geben Sie den Benutzernamen und die Emailadresse ein mit denen Sie sich angemeldet haben und wir senden Ihnen Ihr Passwort zu."
+msgstr "Bitte geben Sie den Benutzernamen und die E-mailadresse ein mit denen Sie sich angemeldet haben und wir senden Ihnen Ihr Passwort zu."
 
 msgid "There is no account with this user and/or e-mail address"
 msgstr "Es gibt keinen Zugang mit diesem Benutzernamen und/oder dieser E-Mail-Adresse"
@@ -11567,10 +11567,10 @@ msgid "This Wiki is frozen so far. A trainer must start it."
 msgstr ". Der Kursleiter muss es neu starten."
 
 msgid "Notify by e-mail of new comments about this page is allowed"
-msgstr "Email-Benachrichtigung  bei neuen Kommentaren zu dieser Seite ist erlaubt"
+msgstr "E-mail-Benachrichtigung  bei neuen Kommentaren zu dieser Seite ist erlaubt"
 
 msgid "The email notification of new comments on this page is disabled"
-msgstr "Email-Benachrichtigung  bei neuen Kommentaren zu dieser Seite ist nicht erlaubt"
+msgstr "E-mail-Benachrichtigung  bei neuen Kommentaren zu dieser Seite ist nicht erlaubt"
 
 msgid "Notify Wiki changes"
 msgstr "Benachrichtigung bei Wiki Änderungen"
@@ -11588,10 +11588,10 @@ msgid "New comment in the discussion of the page"
 msgstr "Neuer Kommentar zu dieser Seite"
 
 msgid "Receive an e-mail notification every time there is a change in the Wiki"
-msgstr "Email-Benachrichtigung jedes Mal senden, wenn es eine Änderung am Wiki gibt"
+msgstr "E-mail-Benachrichtigung jedes Mal senden, wenn es eine Änderung am Wiki gibt"
 
 msgid "Stop receiving notifications by e-mail every time there is a change in the Wiki"
-msgstr "KEINE Email-Benachrichtigung jedes Mal senden, wenn es eine Änderung am Wiki gibt"
+msgstr "KEINE E-mail-Benachrichtigung jedes Mal senden, wenn es eine Änderung am Wiki gibt"
 
 msgid "This notification has been made in accordance with their desire to monitor changes in the Wiki. This option means you have activated the button"
 msgstr "Diese Benachrichtigung wurde in Abstimmung mit den Einstellungen bezüglich der Änderungen am Wiki erstellt. Diese Funktion bedeutet, dass Sie den Button aktiviert haben"
@@ -11810,7 +11810,7 @@ msgid "There is no result yet"
 msgstr "Es liegt noch kein Ergebnis vor"
 
 msgid "Hits"
-msgstr "Hits"
+msgstr "Zugriffe"
 
 msgid "h."
 msgstr "h"
@@ -11825,7 +11825,7 @@ msgid "This day"
 msgstr "heute"
 
 msgid "Logins"
-msgstr "Logins"
+msgstr "Anmeldungen"
 
 msgid "Here is the list of your latest logins with the tools you visited during these sessions."
 msgstr "Liste Ihrer letzten Logins und der Werkzeuge, die Sie dabei benutzt haben."
@@ -11951,7 +11951,7 @@ msgid "Browsers"
 msgstr "Browser"
 
 msgid "Referers"
-msgstr "Referers"
+msgstr "Referrer"
 
 msgid "(When an user open the index of the portal)"
 msgstr "(Wenn ein Teilnehmer den Index aufruft)"
@@ -13076,7 +13076,7 @@ msgid "Forums Help"
 msgstr "Hilfe für die Foren"
 
 msgid "<p> The forum is an discussion tool for asynchronous written work.  In contrast to e-mail, a forum is for public, or semi-public, group discussion. </p>To use the Chamilo forum, members can simply use their browser - they do not require any distinct client software. </p>To organize forums, click on the Forums tool. Discussions are organized hierarchically according to the following structure: </ p><b> Category> Forum> Topic> Post</ b> </ p> To ensure members can participate in the forum tidily and effectively, it is essential in the first instance to create categories and forums; it's then up to the participants to create topics and posts. By default, the forum contains a single (public) category, an example topic and an example post. You can add forums to the category,  change its title or create other categories within which you could then create new forums. (Don't confuse categories and forums, and remember that a category that contains no forum is useless and is not displayed.)</p>\n<p>The forum description might include a list of its members, a definition of its purpose, a target a task, a theme etc.</p><p>Group forums should not be created via the Forum tool but instead via the Groups tool, where you can determine whether your group forums should be private or public, at the same time providing a location for sharing groups of documents.</p><b> Teaching Tips</ b></ p> A learning forum is not quite the same as the forums you are used to seeing on the internet. For one thing, it is not possible for learners to alter their posts once they have been published as the course is logically archived to allow tracking of what has been said in the past. Furthermore, Chamilo forums allow for specific uses  relevant to teaching. For example, some teachers/trainers publish corrections directly within forums in the following way: <li> A learner is asked to post a report directly into the forum, </ li> The teacher corrects it by clicking Edit (yellow pencil) and marking it using the graphics editor (color, underlining, etc.) </ li> Finally, other learners benefit from viewing the corrections was made on the production of one of of them, </ li> Note that the same principle can be applied between learners, but will require his copying/pasting the message of his fellow student because students / trainees can not edit one another's posts. <. li> </ ul>"
-msgstr "Ein Forum ist ein schriftliches asynchrones Diskussionswerkzeug. Wo Email nur einen Eins-zu Eins Dialog ermöglicht, bieten Foren die Gelegenheit öffentliche bzw. halböffentliche Diskussionen zu führen.</p><p>Die Kurtsteilnehmer benötigen nur ihren Browser, um die Foren zu benutzen.</p><p>Um Foren einzurichten, klicken Sie auf 'admin'. Diskussionen sind wie folgt aufgeteilt:</p><p><b>Kategorie > Forum >Thema > Antworten</b></p>Um die Diskussionen zu strukturieren, müssen zuvor die Kategorien und Foren eingerichtet werden. Dabei können die Überschriften und Antworten frei gelassen werden.Per Voreinstellung enthält das Forum nun die Kategorie 'Public' und ein Beispielforum mit einem exemplarischen Thema.</p><p>Zuerst sollten Sie die Beispielüberschrift entfernen und den Forennamen ändern. Anschließend können Sie in der Kategorie 'public' weitere Foren anlegen, nach Gruppen oder Themen, entsprechend den Anforderungen Ihrer Einsatzsituation.</p><p>Mischen Sie keine Kategorien und Foren und vergessen Sie nicht, daß eine leere Kategorie (ohne Foren) nicht in der Teilnehmeransicht sichtbar ist.</p><p>Die Beschreibung eines Forums kann eine Liste der Mitglieder, eine Zieldefinition, ein Vorhaben, ein Thema... sein."
+msgstr "Ein Forum ist ein schriftliches asynchrones Diskussionswerkzeug. Wo E-mail nur einen Eins-zu Eins Dialog ermöglicht, bieten Foren die Gelegenheit öffentliche bzw. halböffentliche Diskussionen zu führen.</p><p>Die Kurtsteilnehmer benötigen nur ihren Browser, um die Foren zu benutzen.</p><p>Um Foren einzurichten, klicken Sie auf 'admin'. Diskussionen sind wie folgt aufgeteilt:</p><p><b>Kategorie > Forum >Thema > Antworten</b></p>Um die Diskussionen zu strukturieren, müssen zuvor die Kategorien und Foren eingerichtet werden. Dabei können die Überschriften und Antworten frei gelassen werden.Per Voreinstellung enthält das Forum nun die Kategorie 'Public' und ein Beispielforum mit einem exemplarischen Thema.</p><p>Zuerst sollten Sie die Beispielüberschrift entfernen und den Forennamen ändern. Anschließend können Sie in der Kategorie 'public' weitere Foren anlegen, nach Gruppen oder Themen, entsprechend den Anforderungen Ihrer Einsatzsituation.</p><p>Mischen Sie keine Kategorien und Foren und vergessen Sie nicht, daß eine leere Kategorie (ohne Foren) nicht in der Teilnehmeransicht sichtbar ist.</p><p>Die Beschreibung eines Forums kann eine Liste der Mitglieder, eine Zieldefinition, ein Vorhaben, ein Thema... sein."
 
 msgid "Dropbox Help"
 msgstr "Dateikiste"
@@ -14498,7 +14498,7 @@ msgid "Cool blue"
 msgstr "Cool Blau"
 
 msgid "Corporate"
-msgstr "Corporate"
+msgstr "Unternehmen"
 
 msgid "Cosmic campus"
 msgstr "Kosmische Campus"
@@ -14513,7 +14513,7 @@ msgid "Fruity orange"
 msgstr "Fruchtige Orange"
 
 msgid "Medical"
-msgstr "Medical"
+msgstr "Medizin"
 
 msgid "Royal purple"
 msgstr "Royal Purpur"
@@ -14543,7 +14543,7 @@ msgid "czech"
 msgstr "tschechisch"
 
 msgid "dari"
-msgstr "dari"
+msgstr "Dari"
 
 msgid "dutch corporate"
 msgstr "niederländisch förmlich"
@@ -14624,7 +14624,7 @@ msgid "Survey Help"
 msgstr "Umfrage Hilfe"
 
 msgid "<p>Getting proper feedback on your courses is extremely important. You will find the dedicated Survey tool invaluable for getting effective feedback from users. </p> <p><b>Creating a new survey</b></p> <p> Click on the link 'Create a new survey' and fill in the fields 'Survey code' and 'Survey title'. With the help of the calendar, you can control the duration of your survey. There's no need to keep it open for a whole year; allow access for a few days at the end of the course program. Filling in the text fields 'Survey introduction' and 'Survey thanks' is also good practice; this will add clarity and a certain friendliness to your survey.</p> <p><b>Adding questions to the survey</b></p> <p>Once the survey outline is created, it is up to you to create the questions. The 'Survey' tool has many question types: open/closed questions, percentage, QCM, multiple responses... You should certainly find everything you need for your (ever increasing) feedback requirements.</p>  <p><b>Previewing the survey</b></p><p>Once you have created questions, you may want to check what the survey will look like to learners. Click on the 'Preview' icon and the preview screen will show you exactly this.</p> <p><b>Publishing the survey</b></p> <p>Happy with the preview? Any modifications to be made? No? Then click on the icon 'Publish survey' to send the survey to the selected list of recipients. As with creating groups, use the list 'Users of this course' on the left and the one for 'receivers' on its right to arrange this. Next, fill in the e-mail subject 'Title of the e-mail' and the content, 'Text of the e-mail'. Potential surveyees will be alerted by e-mail of the availability of a survey. Think carefully about  the wording of the e-mail  because it will play a big part in motivating users to take the survey.</p>  <p><b>Survey reports</b></p> Analysing surveys is a tedious task. The survey Reporting tool will help with analysis as it sorts reports according to question, user, comparisons etc...  <p><b>Managing surveys</b></p> When managing surveys you will see some new icons, apart from the usual 'Edit' and 'Delete' options. You can preview, publish and keep track of your surveys and responses using these.</p>"
-msgstr "<p>Feedback zu Kursen und eLearning im Allgemeinen ist immer wichtig! Daher hat Chamilo ein Umfrage-Tool bereits integriert.</p> <p><b>Neue Umfrage erstellen</b></p> <p>Einfach auf \"eine neue Umfrage erstellen\" klicken, und alle benötigten Felder ausfüllen. Unter Zuhilfenahme des Kalenders läßt sich auch die Dauer der Umfrage beschränken. Üblicherweise ist eine Umfrage auf ein paar Tage beschränkt. Die Felder \"Einleitung zur Umfrage\" und \"Dankes-Floskel\" sind geeignet, um evtl. auf die Schwerpunkte der Umfrage einzugehen, oder abschließend noch gezielte Informationen zu platzieren.</p> <p><b>Fragen zur Umfrage hinzufügen</b></p> <p>Nachdem das Grundgerüst der Umfrage feststeht, ist es jetzt an der Zeit, die eigentliche Umfrage zu gestalten. Es gibt hierzu verschiedene Frage-Typen: Freitext-Fragen, Multiple Choice, Prozent-Angaben, ... Es sollte eigentlich alles da sein, was man .</p> <p><b>Vorschau der Umfrage</b></p> <p>Nach der Zusammenstellung der Umfrage ist es selbstverständlich auch möglich, eine Vorschau zu begutachten. Einfach auf das \"Vorschau\"-Icon klicken, und schon wird die Umfrage angezeigt.</p> <p><b>Umfrage veröffentlichen</b></p> <p>Vorschau zufriedenstellend? Keine Änderungen nötig? Dann einfach auf das Icon \"Umfrage veröffentlichen\" klicken, und die Umfrage wird an alle Empfänger versendet. Hierbei kann an User des Kurses, oder auch an Aussenstehende versendet werden. Einfach den Betreff/Titel der Email ausfüllen, eine kurze Information dazu, und schon erhalten alle Empfänger eine Email.</p> <p><b>Reporting der Umfrage</b></p>Die Analyse einer Umfrage ist sehr wichtig. Bei der Auswertung kann nach Frage, User und noch einigen anderen Kriterien gefiltert und sortiert werden... </p>"
+msgstr "<p>Feedback zu Kursen und eLearning im Allgemeinen ist immer wichtig! Daher hat Chamilo ein Umfrage-Tool bereits integriert.</p> <p><b>Neue Umfrage erstellen</b></p> <p>Einfach auf \"eine neue Umfrage erstellen\" klicken, und alle benötigten Felder ausfüllen. Unter Zuhilfenahme des Kalenders läßt sich auch die Dauer der Umfrage beschränken. Üblicherweise ist eine Umfrage auf ein paar Tage beschränkt. Die Felder \"Einleitung zur Umfrage\" und \"Dankes-Floskel\" sind geeignet, um evtl. auf die Schwerpunkte der Umfrage einzugehen, oder abschließend noch gezielte Informationen zu platzieren.</p> <p><b>Fragen zur Umfrage hinzufügen</b></p> <p>Nachdem das Grundgerüst der Umfrage feststeht, ist es jetzt an der Zeit, die eigentliche Umfrage zu gestalten. Es gibt hierzu verschiedene Frage-Typen: Freitext-Fragen, Multiple Choice, Prozent-Angaben, ... Es sollte eigentlich alles da sein, was man .</p> <p><b>Vorschau der Umfrage</b></p> <p>Nach der Zusammenstellung der Umfrage ist es selbstverständlich auch möglich, eine Vorschau zu begutachten. Einfach auf das \"Vorschau\"-Icon klicken, und schon wird die Umfrage angezeigt.</p> <p><b>Umfrage veröffentlichen</b></p> <p>Vorschau zufriedenstellend? Keine Änderungen nötig? Dann einfach auf das Icon \"Umfrage veröffentlichen\" klicken, und die Umfrage wird an alle Empfänger versendet. Hierbei kann an User des Kurses, oder auch an Aussenstehende versendet werden. Einfach den Betreff/Titel der E-mail ausfüllen, eine kurze Information dazu, und schon erhalten alle Empfänger eine E-mail.</p> <p><b>Reporting der Umfrage</b></p>Die Analyse einer Umfrage ist sehr wichtig. Bei der Auswertung kann nach Frage, User und noch einigen anderen Kriterien gefiltert und sortiert werden... </p>"
 
 msgid "Project help"
 msgstr "Projekt Hilfe"
@@ -14669,10 +14669,10 @@ msgid "User tag"
 msgstr "Benutzer Tag"
 
 msgid "E-mail alert on course creation"
-msgstr "Email-Versand: Kurs-Erstellung"
+msgstr "E-mail-Versand: Kurs-Erstellung"
 
 msgid "Send an email to the platform administrator each time a teacher creates a new course"
-msgstr "Immer einen Email an den Plattform-Administrator senden, wenn ein neuer Kurs erstellt wurde."
+msgstr "Immer einen E-mail an den Plattform-Administrator senden, wenn ein neuer Kurs erstellt wurde."
 
 msgid "Select session"
 msgstr "Kurs-Session auswählen"
@@ -14768,7 +14768,7 @@ msgid "Contacts count"
 msgstr "Anzahl Kontakte"
 
 msgid "In order to change your e-mail address, you are required to confirm your password"
-msgstr "Um Ihre Email-Adresse zu ändern, müssen Sie Ihr Passwort eingeben."
+msgstr "Um Ihre E-mail-Adresse zu ändern, müssen Sie Ihr Passwort eingeben."
 
 msgid "My groups"
 msgstr "Meine Gruppen"
@@ -14788,7 +14788,7 @@ msgstr "Benutzer, Gruppen"
 msgid "Sorry no results"
 msgstr "Sorry, keine Ergebnisse"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "Gruppenrechte"
 
 msgid "Closed"
@@ -15041,7 +15041,7 @@ msgid "ukrainian"
 msgstr "ukrainisch"
 
 msgid "yoruba"
-msgstr "yoruba"
+msgstr "Yoruba"
 
 msgid "New"
 msgstr "Neu"
@@ -15461,7 +15461,7 @@ msgid "There are empty lines in the header of selected file"
 msgstr "Es gibt leere Zeilen im Kopf der ausgewählten Datei"
 
 msgid "This feature is useful for the multi-URL scenario, where there is a difference between the global admin and the normal admins. In this case, selecting \"No\" will prevent normal admins to set other users' passwords, and will only allow them to ask for a password regeneration (thus sent by e-mail to the user). The global admin can still do it."
-msgstr "Diese Funktion erleichtert die Administration in MUlti-URL Umgebungen bei Unterschieden zwischen globalem und normalem Admin. In diesem Fall wird mit \"Nein\" den normalen Administratoren keine Möglichkeit zum Ändern gegeben, jedoch steht die Funktion per Email zur Verfügung. Der globale Admin kann jedoch weiterhin Kennwörter ändern."
+msgstr "Diese Funktion erleichtert die Administration in MUlti-URL Umgebungen bei Unterschieden zwischen globalem und normalem Admin. In diesem Fall wird mit \"Nein\" den normalen Administratoren keine Möglichkeit zum Ändern gegeben, jedoch steht die Funktion per E-mail zur Verfügung. Der globale Admin kann jedoch weiterhin Kennwörter ändern."
 
 msgid "Admins can change users' passwords"
 msgstr "Administratoren können Benutzer-Kennwörter ändern"
@@ -15970,6 +15970,9 @@ msgstr "Datum & Zeit"
 msgid "Item"
 msgstr "Inhalt"
 
+msgid "Items"
+msgstr "Inhalt"
+
 msgid "Configure Dashboard Plugin"
 msgstr "Plugins des Kontroll-Zentrum konfigurieren"
 
@@ -16131,6 +16134,15 @@ msgstr "Kürzel"
 
 msgid "Create child skill"
 msgstr "Erstelle Kind-Fähigkeit"
+
+msgid "This skill can be obtained through:"
+msgstr "Diese Kompetenz kann erworben werden durch:"
+
+msgid "No course currently allows you to obtain this skill."
+msgstr "Derzeit erlaubt kein Kurs den Erwerb dieser Kompetenz."
+
+msgid "Add skill to search profile"
+msgstr "Kompetenz zum Suchprofil hinzufügen"
 
 msgid "Search profile matches"
 msgstr "Profil-Suche nach"
@@ -16307,13 +16319,13 @@ msgid "Letters"
 msgstr "Buchstaben"
 
 msgid "E-mail students on assignment creation"
-msgstr "Email-Benachrichtung der Kursteilnehmer bei Ausarbeitungen"
+msgstr "E-mail-Benachrichtung der Kursteilnehmer bei Ausarbeitungen"
 
 msgid "E-mail students on assignments creation"
-msgstr "Email-Benachrichtung AN"
+msgstr "E-mail-Benachrichtung AN"
 
 msgid "Disable e-mail notification on assignment creation"
-msgstr "Email-Benachrichtung AUS"
+msgstr "E-mail-Benachrichtung AUS"
 
 msgid "Maximum number of members"
 msgstr "Max. Anzahl Mitglieder"
@@ -16688,7 +16700,7 @@ msgid "A new course %s is going to be created. Is it OK to proceed?"
 msgstr "Ein neuer Kurs %s soll erstellt werden. Fortfahren?"
 
 msgid "Additional information about %s course request is going to be asked through an e-mail message. Is it OK to proceed?"
-msgstr "Zusätzliche Informationen zur Kurserstellungsanfrage %s  sollen per Email abgefragt werden. Fortfahren?"
+msgstr "Zusätzliche Informationen zur Kurserstellungsanfrage %s  sollen per E-mail abgefragt werden. Fortfahren?"
 
 msgid "Ask for additional information"
 msgstr "Nachfrage für weitere Informationen"
@@ -16763,7 +16775,7 @@ msgid "Courses validation"
 msgstr "Kurs-Freigabe"
 
 msgid "When the 'Courses validation' feature is enabled, a teacher is not able to create a course alone. He/she fills a course request. The platform administrator reviews the request and approves it or rejects it.<br />This feature relies on automated e-mail messaging; set Chamilo to access an e-mail server and to use a dedicated an e-mail account."
-msgstr "Wenn die Funktion 'Kurs-Freigabe' aktiviert ist, kann ein Kurs-Leiter Kurse nicht allein erstellen. Er/Sie muss erst eine Kurs-Erstellungsanfrage stellen. Der Adminstrator überprüfft die Anfrage und genehmigt bzw. lehnt die Kurserstellungsanfrage ab.<br />Diese Funktion basiert auf der automatischen Email-Benachrichtigung: Die Plattform muss einen Zugang zu einem Emaol-Server haben und über ein eigenes Email-Konto verfügen."
+msgstr "Wenn die Funktion 'Kurs-Freigabe' aktiviert ist, kann ein Kurs-Leiter Kurse nicht allein erstellen. Er/Sie muss erst eine Kurs-Erstellungsanfrage stellen. Der Adminstrator überprüfft die Anfrage und genehmigt bzw. lehnt die Kurserstellungsanfrage ab.<br />Diese Funktion basiert auf der automatischen E-mail-Benachrichtigung: Die Plattform muss einen Zugang zu einem Emaol-Server haben und über ein eigenes E-mail-Konto verfügen."
 
 msgid "%s A request for additional information about the course request %s"
 msgstr "%s Eine Anfrage für weitere Informationen zur Kurserstellungsanfrage %s"
@@ -17684,7 +17696,7 @@ msgid "Assign a users list to the sessions administrator"
 msgstr "Eine Benutzer-Liste dem Session-Kursleiter zuordnen"
 
 msgid "Class updated."
-msgstr "aktualisiert"
+msgstr "Aktualisiert"
 
 msgid "Class deleted."
 msgstr "Klasse erfolgreich gelöscht"
@@ -18548,7 +18560,7 @@ msgid "%d questions, for a total score (all questions) of %s."
 msgstr "%d Fragen, für ein Gesamtergebnis  (alle Fragen ) von %s."
 
 msgid "This is an automatic email message. Please do not reply to it."
-msgstr "Dies ist eine automatisch generierte Email. Bitte nicht darauf antworten."
+msgstr "Dies ist eine automatisch generierte E-mail. Bitte nicht darauf antworten."
 
 msgid "Uploaded documents"
 msgstr "Hochgeladene Dokumente"
@@ -18782,10 +18794,10 @@ msgid "Add CAS user login details when registering a new user"
 msgstr "Zum Registrierungsprozeß CAS Benutzerdaten hinzufügen"
 
 msgid "Add CAS user e-mail"
-msgstr "CAS Benutzer-Email hinzufügen"
+msgstr "CAS Benutzer-E-mail hinzufügen"
 
 msgid "Add CAS user e-mail details when registering a new user"
-msgstr "CAS Email-Details bei Neuregisrierung hinzufügen"
+msgstr "CAS E-mail-Details bei Neuregisrierung hinzufügen"
 
 msgid "Add CAS user first name"
 msgstr "CAS Vorname des Benutzers hinzufügen"
@@ -19037,7 +19049,7 @@ msgid "Add in menu"
 msgstr "Im Menü hinzufügen"
 
 msgid "Allow users to change e-mail without password"
-msgstr "Benutzern das Ändern der Emailadresse ohne Kennwort ermöglichen"
+msgstr "Benutzern das Ändern der E-mailadresse ohne Kennwort ermöglichen"
 
 msgid "When changing the account information"
 msgstr "Bei Benutzerkonto-Änderungen"
@@ -19178,10 +19190,10 @@ msgid "You have entered the course <b>%s</b> in <b>%s</b>"
 msgstr "Kurs <strong>%s</strong> in <strong>%s</strong> beigetreten"
 
 msgid "Use the email as username"
-msgstr "Emailadresse als Benutzernamen verwenden"
+msgstr "E-mailadresse als Benutzernamen verwenden"
 
 msgid "Use the email in order to login to the system"
-msgstr "Die registrierte Emailadresse wird zum Login verwendet"
+msgstr "Die registrierte E-mailadresse wird zum Login verwendet"
 
 msgid "Congratulations you passed the test!"
 msgstr "Herzlichen Glückwunsch, Sie haben den Test bestanden!"
@@ -19445,7 +19457,7 @@ msgid "Auto"
 msgstr "Auto"
 
 msgid "Stop"
-msgstr "Stop"
+msgstr "Stopp"
 
 msgid "Enable Webcam Clip"
 msgstr "Webcam-Clip aktivieren"
@@ -19466,7 +19478,7 @@ msgid "Select an audio file from documents"
 msgstr "Bitte eine Audio-Datei auswählen"
 
 msgid "Enable e-mail alerts templates"
-msgstr "Aktiviere Email-Templates"
+msgstr "Aktiviere E-mail-Templates"
 
 msgid "Define home-made e-mail alerts to be fired on specific events (and to specific users)"
 msgstr "Mit dieser Option werden benutzerspezifische Vorlagen für spezielle Aktionen (und für spezielle Benutzer) möglich"
@@ -19480,11 +19492,8 @@ msgstr "Alte Datenbank entfernen"
 msgid "Remove old tables"
 msgstr "Alte Tabellen entfernen"
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr "Gesamtspeicherplatz des Plattformlimits von %s beträgt %s MB"
-
 msgid "Event message management"
-msgstr "Verwaltung Email-Templates"
+msgstr "Verwaltung E-mail-Templates"
 
 msgid "To be warned user list"
 msgstr "Liste der zu verwarnenden User"
@@ -19499,7 +19508,7 @@ msgid "Available event keys. Use them between (( ))."
 msgstr "Verfügbare Event Keys. Bitte zwischen (( )) benutzen."
 
 msgid "Events"
-msgstr "Events"
+msgstr "Ereignisse"
 
 msgid "Event type name"
 msgstr "Eventtyp Name"
@@ -19565,7 +19574,7 @@ msgid "Filter terms"
 msgstr "Filterbegriffe"
 
 msgid "Give a list of terms, one by line, to be filtered out of web pages and e-mails. These terms will be replaced by ***."
-msgstr "Eine Liste von Begriffen, einen pro Zeile, welche aus Webseiten und Emails ausgefiltert wird. Diese werden durch *** ersetzt."
+msgstr "Eine Liste von Begriffen, einen pro Zeile, welche aus Webseiten und E-mails ausgefiltert wird. Diese werden durch *** ersetzt."
 
 msgid "Use custom pages"
 msgstr "Benutzerdefinierte Seiten aktivieren"
@@ -19655,7 +19664,7 @@ msgid "Please wait. This could take a while..."
 msgstr "Bitte warten..."
 
 msgid "This platform was unable to send the email. Please contact %s for more information."
-msgstr "Diese Installation kann leider keine Email versenden. Bitte kontaktieren Sie %s für mehr Informationen."
+msgstr "Diese Installation kann leider keine E-mail versenden. Bitte kontaktieren Sie %s für mehr Informationen."
 
 msgid "This is your first login. Please update your password to something you will remember."
 msgstr "Dies ist Ihr erster Login. Bitte aktualisieren Sie Ihr Kennwort."
@@ -22231,19 +22240,11 @@ msgstr "Bericht über Übungen nach Kategorie für alle Sitzungen"
 msgid "Require e-mail confirmation"
 msgstr "E-Mail-Bestätigung erforderlich"
 
-msgid "Registration confirmation"
-msgstr "Bestätigung der Registrierung"
-
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr ""
 "Ihr Konto ist inaktiv, da Sie es noch nicht bestätigt haben. Überprüfen Sie "
 "Ihre E-Mails und folgen Sie den Anweisungen oder klicken Sie auf den "
 "folgenden Link, um die E-Mail erneut zu senden"
-
-msgid "To complete your platform registration you need to confirm your account by clicking the following link"
-msgstr ""
-"Um Ihre Plattformregistrierung abzuschließen, müssen Sie Ihr Konto "
-"bestätigen, indem Sie auf den folgenden Link klicken"
 
 msgid "Confirmation for new account"
 msgstr "Bestätigung für neues Konto"
@@ -30384,7 +30385,7 @@ msgid "Auto-launch for forums"
 msgstr "Automatischer Start für Foren"
 
 msgid "E-mail student when he is subscribed to the course"
-msgstr "E-Mail an Studenten senden, wenn sie am Kurs angemeldet sind"
+msgstr "E-Mail an Studenten senden, wenn sie im Kurs angemeldet sind"
 
 msgid "You're now subscribed."
 msgstr "Sie sind jetzt angemeldet."
@@ -32583,7 +32584,7 @@ msgid "Create your first note to get started."
 msgstr "Erstellen Sie Ihre erste Notiz, um zu beginnen."
 
 msgid "F d, Y"
-msgstr "d. M. Y"
+msgstr "d/m/Y"
 
 msgid "Could not load support info at this time."
 msgstr "Support-Informationen konnten derzeit nicht geladen werden."
@@ -33008,8 +33009,8 @@ msgstr "Im Datenbanknamen sind nur Buchstaben, Ziffern und Unterstriche (_) erla
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr "Welche allgemeinen Geschäftsbedingungen werden den Nutzern für die Nutzung dieser Plattform mitgeteilt?"
 
-msgid "ex. {examplePassword}"
-msgstr "z. B. {examplePassword}"
+msgid "ex. %s"
+msgstr "z. B. %s"
 
 msgid "Welcome to Chamilo!"
 msgstr "Willkommen bei Chamilo!"
@@ -33024,7 +33025,7 @@ msgid "Manager"
 msgstr "Manager"
 
 msgid "Mark as"
-msgstr "Als markieren"
+msgstr "Markieren als"
 
 msgid "Reply to all"
 msgstr "Allen antworten"
@@ -33909,7 +33910,7 @@ msgid "Quiz"
 msgstr "Test"
 
 msgid "Customcertificate"
-msgstr "Customcertificate"
+msgstr "Benutzerdefiniertes Zertifikat"
 
 msgid "Update profile"
 msgstr "Profil aktualisieren"
@@ -34142,3 +34143,1355 @@ msgstr "Geänderter Prompt"
 msgid "Saved in Documents"
 msgstr "In Dokumente gespeichert"
 
+msgid "Total space used by %s is %sGB"
+msgstr "Von %s genutzter Speicherplatz insgesamt: %s GB"
+
+msgid "Total space used by portal %s is %sGB (limit is set to %sGB)"
+msgstr "Von Portal %s genutzter Speicherplatz insgesamt: %s GB (Limit: %s GB)"
+
+msgid "[%s] Confirm your e-mail"
+msgstr "[%s] Bestätigen Sie Ihre E-Mail"
+
+msgid "To verify your e-mail and enable your account on %s, please click the link below."
+msgstr "Um Ihre E-Mail zu verifizieren und Ihr Konto auf %s zu aktivieren, klicken Sie bitte auf den untenstehenden Link."
+
+msgid "If you did not register this account, you can ignore this e-mail. No action will be taken."
+msgstr "Falls Sie dieses Konto nicht registriert haben, können Sie diese E-Mail ignorieren. Es wird keine Aktion durchgeführt."
+
+msgid "Current authentication method"
+msgstr "Aktuelle Authentifizierungsmethode"
+
+msgid "Branches"
+msgstr "Filialen"
+
+msgid "Rooms"
+msgstr "Räume"
+
+msgid "Room availability finder"
+msgstr "Raumsuchmaschine"
+
+msgid "New branch"
+msgstr "Neue Filiale"
+
+msgid "New room"
+msgstr "Neuer Raum"
+
+msgid "Branch"
+msgstr "Filiale"
+
+msgid "Default room"
+msgstr "Standardsaal"
+
+msgid "Room occupation: %s"
+msgstr "Raumnutzung: %s"
+
+msgid "Find available rooms"
+msgstr "Verfügbare Räume suchen"
+
+msgid "Available rooms"
+msgstr "Verfügbare Räume"
+
+msgid "Occupied rooms"
+msgstr "Belegte Räume"
+
+msgid "No available rooms found for this time range"
+msgstr "Keine verfügbaren Räume für diesen Zeitraum gefunden"
+
+msgid "No rooms have been created yet"
+msgstr "Es wurden noch keine Räume erstellt"
+
+msgid "Courses linked to %s"
+msgstr "Kurse verknüpft mit %s"
+
+msgid "No branches have been created yet"
+msgstr "Es wurden noch keine Filialen erstellt"
+
+msgid "Occupation"
+msgstr "Belegung"
+
+msgid "Cannot delete branch with rooms attached"
+msgstr "Filiale mit zugehörigen Räumen kann nicht gelöscht werden"
+
+msgid "Cannot delete room with courses attached"
+msgstr "Raum mit zugehörigen Kursen kann nicht gelöscht werden"
+
+msgid "Conflicts"
+msgstr "Konflikte"
+
+msgid "Geolocation"
+msgstr "Geolocation"
+
+msgid "Latitude, Longitude (e.g. 48.8566, 2.3522)"
+msgstr "Breitengrad, Längengrad (z. B. 48.8566, 2.3522)"
+
+msgid "IPv4 or IPv6"
+msgstr "IPv4 oder IPv6"
+
+msgid "IP mask"
+msgstr "IP-Maske"
+
+msgid "e.g. /24"
+msgstr "z. B. /24"
+
+msgid "Parent branch"
+msgstr "Übergeordnete Filiale"
+
+msgid "Unique identifier"
+msgstr "Eindeutiger Bezeichner"
+
+msgid "Latitude"
+msgstr "Breitengrad"
+
+msgid "e.g. 48.8566"
+msgstr "z. B. 48.8566"
+
+msgid "Longitude"
+msgstr "Längengrad"
+
+msgid "e.g. 2.3522"
+msgstr "z. B. 2.3522"
+
+msgid "Download speed (KB/s)"
+msgstr "Downloadgeschwindigkeit (KB/s)"
+
+msgid "Upload speed (KB/s)"
+msgstr "Uploadgeschwindigkeit (KB/s)"
+
+msgid "Delay (ms)"
+msgstr "Verzögerung (ms)"
+
+msgid "admin@example.com"
+msgstr "admin@example.com"
+
+msgid "Administrator name"
+msgstr "Administratorname"
+
+msgid "Administrator phone number"
+msgstr "Telefonnummer des Administrators"
+
+msgid "ID of last synch transaction"
+msgstr "ID der letzten Synchronisationstransaktion"
+
+msgid "Time of last synchronization"
+msgstr "Zeitpunkt der letzten Synchronisation"
+
+msgid "Last synchronization type"
+msgstr "Typ der letzten Synchronisation"
+
+msgid "SSL public key"
+msgstr "SSL-Öffentlicher Schlüssel"
+
+msgid "Branch type"
+msgstr "Filialtyp"
+
+msgid "Room"
+msgstr "Raum"
+
+msgid "Simple IDS"
+msgstr "Einfaches IDS"
+
+msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
+msgstr "IDS ist derzeit deaktiviert. Setzen Sie IDS_ENABLED=true in Ihrer .env-Datei, um das Scannen zu aktivieren."
+
+msgid "All event types"
+msgstr "Alle Ereignistypen"
+
+msgid "Events by day (last 7 days)"
+msgstr "Ereignisse pro Tag (letzte 7 Tage)"
+
+msgid "Events by type (last 30 days)"
+msgstr "Ereignisse nach Typ (letzte 30 Tage)"
+
+msgid "Top attacking IPs (last 30 days)"
+msgstr "Top angreifende IPs (letzte 30 Tage)"
+
+msgid "Flagged IDS events"
+msgstr "Markierte IDS-Ereignisse"
+
+msgid "No suspicious events detected."
+msgstr "Keine verdächtigen Ereignisse erkannt."
+
+msgid "Detection type"
+msgstr "Erkennungstyp"
+
+msgid "Parameter"
+msgstr "Parameter"
+
+msgid "URI"
+msgstr "URI"
+
+msgid "%s (current)"
+msgstr "%s (aktuell)"
+
+msgid "Upload an image or create one with Badge Studio."
+msgstr "Ein Bild hochladen oder mit Badge Studio erstellen."
+
+msgid "Current badge set"
+msgstr "Aktueller Badgesatz"
+
+msgid "In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user."
+msgstr "In diesem Abschnitt werden Sie beim Klicken auf 'Studenten anmelden' für einen Kurs auf der nächsten Seite aufgefordert, den Benutzer auszuwählen. Nach der Validierung wird eine neue Sitzung mit dem ausgewählten Kurs und Benutzer erstellt und eine Anmeldebenachrichtigung an den Benutzer gesendet."
+
+msgid "Read-only view"
+msgstr "Schreibgeschützte Ansicht"
+
+msgid "Events list"
+msgstr "Ereignisliste"
+
+msgid "Personal"
+msgstr "Persönlich"
+
+msgid "Weeks are displayed from 1 to 52"
+msgstr "Wochen werden von 1 bis 52 angezeigt"
+
+msgid "No tutored sessions found"
+msgstr "Keine betreuten Sitzungen gefunden"
+
+msgid "Content search"
+msgstr "Inhaltsuche"
+
+msgid "Search indexed content across all courses."
+msgstr "Durchsuchen Sie indizierten Inhalt in allen Kursen."
+
+msgid "Enter a keyword..."
+msgstr "Geben Sie ein Schlüsselwort ein..."
+
+msgid "Search error"
+msgstr "Suchfehler"
+
+msgid "Enter a keyword to search indexed documents."
+msgstr "Geben Sie ein Schlüsselwort ein, um indizierte Dokumente zu durchsuchen."
+
+msgid "Results you cannot access are hidden by configuration."
+msgstr "Ergebnisse, auf die Sie keinen Zugriff haben, sind durch Konfiguration ausgeblendet."
+
+msgid "Restricted"
+msgstr "Eingeschränkt"
+
+msgid "You do not have access to this resource."
+msgstr "Sie haben keinen Zugriff auf diese Ressource."
+
+msgid "Create group"
+msgstr "Gruppe erstellen"
+
+msgid "My custom certificate"
+msgstr "Mein benutzerdefiniertes Zertifikat"
+
+msgid "Select permission"
+msgstr "Berechtigung auswählen"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user"
+msgstr "Durch Annahme dieser Einladung werden Sie mit dem anfragenden Benutzer verknüpft, sodass einige oder alle Ihrer Profildaten für den anfragenden Benutzer lesbar sind"
+
+msgid "Showing %d of approximately %d result(s) for %s."
+msgstr "%d von ca. %d Ergebnis(se) für %s werden angezeigt."
+
+msgid "Showing %d accessible result(s) for %s."
+msgstr "%d zugängliche Ergebnisse für %s werden angezeigt."
+
+msgid "You will therefore be automatically redirected to this URL"
+msgstr "Sie werden daher automatisch zu dieser URL weitergeleitet"
+
+msgid "You have access to multiple URLs"
+msgstr "Sie haben Zugriff auf mehrere URLs"
+
+msgid "Please click on the link below corresponding to the URL you wish to access"
+msgstr "Klicken Sie bitte auf den unten stehenden Link zur URL, die Sie aufrufen möchten"
+
+msgid "You do not currently have access to any URL"
+msgstr "Sie haben derzeit keinen Zugriff auf eine URL"
+
+msgid "Maximum number of subscriptions allowed"
+msgstr "Maximale Anzahl an Abonnements erreicht"
+
+msgid "An error occurred"
+msgstr "Ein Fehler ist aufgetreten"
+
+msgid "You don't have any course content yet"
+msgstr "Sie haben noch keinen Kursinhalt"
+
+msgid "This course is locked"
+msgstr "Dieser Kurs ist gesperrt"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header"
+msgstr "Die E-Mail-Adresse, von der E-Mails gesendet werden, wenn die Plattform eine E-Mail sendet; wird auch als 'Reply-to'-Header verwendet"
+
+msgid "Cannot find your language in the list? Contact us at %s to contribute as a translator"
+msgstr "Ihre Sprache ist nicht in der Liste? Kontaktieren Sie uns unter %s, um als Übersetzer beizutragen"
+
+msgid "An update is available"
+msgstr "Ein Update ist verfügbar"
+
+msgid "to know what's new and what has been changed"
+msgstr "um zu erfahren, was neu ist und was geändert wurde"
+
+msgid "We have detected that your PHP installation does not define the date"
+msgstr "Wir haben festgestellt, dass Ihre PHP-Installation das Datum nicht definiert"
+
+msgid "Your PHP version does not match the requirements for this software"
+msgstr "Ihre PHP-Version erfüllt nicht die Anforderungen dieser Software"
+
+msgid "Some files or folders don't have writing permission"
+msgstr "Einige Dateien oder Ordner haben keine Schreibrechte"
+
+msgid "Warning! The installer has detected an existing Chamilo platform on your system"
+msgstr "Warnung! Der Installer hat eine bestehende Chamilo-Plattform auf Ihrem System erkannt"
+
+msgid "Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>"
+msgstr "Da die Verzeichnisse <code>newscorm</code> und <code>exercice</code> in <code>lp</code> und <code>exercise</code> umbenannt wurden, müssen diese in <code>newscorm_old</code> und <code>exercice_old</code> umbenannt oder gelöscht werden"
+
+msgid "The form contains incorrect or incomplete data"
+msgstr "Das Formular enthält falsche oder unvollständige Daten"
+
+msgid "Your contact information could not be sent"
+msgstr "Ihre Kontaktinformationen konnten nicht gesendet werden"
+
+msgid "Please contact support with the error details"
+msgstr "Bitte kontaktieren Sie den Support mit den Fehlerinformationen"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)"
+msgstr "Klicken Sie auf das Bild, um es zuzuschneiden (Verhältnis 1:1, 120x120 px empfohlen)"
+
+msgid "Use the crop tool to select a 1:1 region"
+msgstr "Verwenden Sie das Zuschneidewerkzeug, um einen 1:1-Bereich auszuwählen"
+
+msgid "Checking push subscription"
+msgstr "Push-Abonnement wird geprüft"
+
+msgid "You're subscribed to push notifications in this browser"
+msgstr "Sie sind für Push-Benachrichtigungen in diesem Browser abonniert"
+
+msgid "Push notifications are not enabled in this browser"
+msgstr "Push-Benachrichtigungen sind in diesem Browser nicht aktiviert"
+
+msgid "Data exchange successfully saved"
+msgstr "Datenaustausch erfolgreich gespeichert"
+
+msgid "Error saving data exchange"
+msgstr "Fehler beim Speichern des Datenaustauschs"
+
+msgid "No documents added yet"
+msgstr "Noch keine Dokumente hinzugefügt"
+
+msgid "No additional details available for this skill."
+msgstr "Keine zusätzlichen Details für diese Kompetenz verfügbar."
+
+msgid "No available documents"
+msgstr "Keine verfügbaren Dokumente"
+
+msgid "No users added yet"
+msgstr "Noch keine Benutzer hinzugefügt"
+
+msgid "No available users"
+msgstr "Keine verfügbaren Benutzer"
+
+msgid "You can no longer submit"
+msgstr "Sie können nicht mehr absenden"
+
+msgid "No missing submissions found for this assignment or data is not available"
+msgstr "Keine fehlenden Abgaben für diese Aufgabe gefunden oder Daten nicht verfügbar"
+
+msgid "Email sent to all unsubmitted users"
+msgstr "E-Mail an alle Benutzer ohne Abgabe gesendet"
+
+msgid "Failed to send email"
+msgstr "E-Mail-Versand fehlgeschlagen"
+
+msgid "Write your answer here"
+msgstr "Schreiben Sie Ihre Antwort hier"
+
+msgid "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)"
+msgstr "Der Präsenzkalender ermöglicht die Erfassung von Präsenzlisten (eine pro realer Sitzung, die die Studierenden besuchen müssen)"
+
+msgid "Loading attendance data"
+msgstr "Präsenzen werden geladen"
+
+msgid "No attendance assigned yet"
+msgstr "Noch keine Präsenz zugewiesen"
+
+msgid "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons"
+msgstr "Heute ist kein Unterricht geplant, wählen Sie einen anderen Tag oder fügen Sie den Präsenz-Eintrag selbst mit den Aktionssymbolen hinzu"
+
+msgid "No attendance data for today"
+msgstr "Keine Präsenzdaten für heute"
+
+msgid "Saving"
+msgstr "Speichern"
+
+msgid "No attendance data to save"
+msgstr "Keine Präsenzdaten zum Speichern"
+
+msgid "Failed to save attendance"
+msgstr "Präsenz konnte nicht gespeichert werden"
+
+msgid "Loading more courses"
+msgstr "Mehr Kurse werden geladen"
+
+msgid "Loading more sessions"
+msgstr "Mehr Sitzungen werden geladen"
+
+msgid "The document auto-launch feature configuration is enabled"
+msgstr "Die Dokumente-Auto-Start-Funktion ist aktiviert"
+
+msgid "The exercises auto-launch feature configuration is enabled"
+msgstr "Die Übungen-Auto-Start-Funktion ist aktiviert"
+
+msgid "The learning path auto-launch setting is ON"
+msgstr "Die Lernpfad-Auto-Start-Einstellung ist EINGESCHALTET"
+
+msgid "The forum's auto-launch setting is on"
+msgstr "Die Auto-Start-Einstellung des Forums ist aktiviert"
+
+msgid "Course ID is missing"
+msgstr "Kurs-ID fehlt"
+
+msgid "Course created successfully"
+msgstr "Kurs erfolgreich erstellt"
+
+msgid "Error deleting document(s)"
+msgstr "Fehler beim Löschen des/der Dokuments/e"
+
+msgid "Template successfully deleted"
+msgstr "Vorlage erfolgreich gelöscht"
+
+msgid "Error deleting the template"
+msgstr "Fehler beim Löschen der Vorlage"
+
+msgid "The title and thumbnail are required"
+msgstr "Titel und Vorschaubild sind erforderlich"
+
+msgid "Template created successfully"
+msgstr "Vorlage erfolgreich erstellt"
+
+msgid "Error creating the template"
+msgstr "Fehler beim Erstellen der Vorlage"
+
+msgid "Error submitting the form"
+msgstr "Fehler beim Absenden des Formulars"
+
+msgid "Loading templates"
+msgstr "Vorlagen werden geladen"
+
+msgid "Loading layout"
+msgstr "Layout wird geladen"
+
+msgid "Loading courses"
+msgstr "Kurse werden geladen"
+
+msgid "No courses available"
+msgstr "Keine Kurse verfügbar"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Diese Liste zeigt Benutzer aller Zugriffs-URLs an, da die Einstellung \"session_admin_access_to_all_users_on_all_urls\" aktiviert ist."
+
+msgid "User not found"
+msgstr "Benutzer nicht gefunden"
+
+msgid "An error occurred while sending the course"
+msgstr "Fehler beim Senden des Kurses"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR"
+msgstr "Bitte beachten Sie, dass Änderungen an den DSGVO-Bedingungen eine Mitteilung dieser Änderungen an Dritte erfordern, denen Sie personenbezogene Daten Ihrer Benutzer mitgeteilt haben, gemäß Artikel 19 DSGVO"
+
+msgid "You should create the \"Term and Conditions\" for all the available languages"
+msgstr "Sie sollten die \"AGB\" für alle verfügbaren Sprachen erstellen"
+
+msgid "You don't have any course yet"
+msgstr "Sie haben noch keinen Kurs"
+
+msgid "You have received a new friend request"
+msgstr "Sie haben eine neue Freundschaftsanfrage erhalten"
+
+msgid "Diagnosis Management"
+msgstr "Diagnoseverwaltung"
+
+msgid "Tracking"
+msgstr "Tracking"
+
+msgid "View reports, statistics and tracking data"
+msgstr "Berichte, Statistiken und Tracking-Daten anzeigen"
+
+msgid "System activity audit"
+msgstr "Systemaktivitätsprüfung"
+
+msgid "Learning analytics"
+msgstr "Lernanalytik"
+
+msgid "Administrative activity auditing"
+msgstr "Administrative Aktivitätsprüfung"
+
+msgid "List icons"
+msgstr "Listenikonen"
+
+msgid "Constant name"
+msgstr "Konstantenname"
+
+msgid "MDI icon name"
+msgstr "MDI-Symbolname"
+
+msgid "Assign authentication sources"
+msgstr "Authentifizierungsquellen zuweisen"
+
+msgid "Assignment details"
+msgstr "Aufgabendetails"
+
+msgid "Terms and conditions"
+msgstr "Nutzungsbedingungen"
+
+msgid "Icons"
+msgstr "Symbole"
+
+msgid "Create backup"
+msgstr "Sicherung erstellen"
+
+msgid "Create file"
+msgstr "Datei erstellen"
+
+msgid "Create link"
+msgstr "Link erstellen"
+
+msgid "Edit template"
+msgstr "Vorlage bearbeiten"
+
+msgid "Shared files"
+msgstr "Geteilte Dateien"
+
+msgid "Skill wheel"
+msgstr "Kompetenzrad"
+
+msgid "Favourite courses"
+msgstr "Favorisierte Kurse"
+
+msgid "Restart courses"
+msgstr "Kurse neu starten"
+
+msgid "Generate terms"
+msgstr "Bedingungen generieren"
+
+msgid "Add variation"
+msgstr "Variation hinzufügen"
+
+msgid "Editor demo"
+msgstr "Editor-Demo"
+
+msgid "Tool introduction"
+msgstr "Werkzeug  Einleitung"
+
+msgid "Data exchanges"
+msgstr "Datenaustausch"
+
+msgid "Third parties"
+msgstr "Drittanbieter"
+
+msgid "Layouts"
+msgstr "Layouts"
+
+msgid "Relation type"
+msgstr "Beziehungstyp"
+
+msgid "Add all"
+msgstr "Alle hinzufügen"
+
+msgid "Remove all"
+msgstr "Alle entfernen"
+
+msgid "An error occurred. Please try again."
+msgstr "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
+
+msgid "%s created"
+msgstr "%s erstellt"
+
+msgid "%s updated"
+msgstr "%s aktualisiert"
+
+msgid "If you plan to upgrade from an older version of Chamilo, you might want to"
+msgstr "Wenn Sie von einer älteren Version von Chamilo upgraden möchten, sollten Sie"
+
+msgid "have a look at the changelog"
+msgstr "das Changelog anschauen"
+
+msgid "to know what's new and what has been changed."
+msgstr "um zu erfahren, was neu ist und was geändert wurde."
+
+msgid "Session Item"
+msgstr "Sitzungselement"
+
+msgid "Points"
+msgstr "Punkte"
+
+msgid "See notifications"
+msgstr "Benachrichtigungen ansehen"
+
+msgid "New content available for this course."
+msgstr "Neuer Inhalt für diesen Kurs verfügbar."
+
+msgid "No new notifications."
+msgstr "Keine neuen Benachrichtigungen."
+
+msgid "No new content found."
+msgstr "Kein neuer Inhalt gefunden."
+
+msgid "No tool details available yet."
+msgstr "Noch keine Tool-Details verfügbar."
+
+msgid "Last access"
+msgstr "Letzter Zugriff"
+
+msgid "Open course"
+msgstr "Kurs öffnen"
+
+msgid "Course completed"
+msgstr "Kurs abgeschlossen"
+
+msgid "The subscription limit for this course has been reached."
+msgstr "Das Anmelde限 für diesen Kurs wurde erreicht."
+
+msgid "Subscription limit reached"
+msgstr "Anmelde限 erreicht"
+
+msgid "Tertiary alternative"
+msgstr "Tertiäre Alternative"
+
+msgid "Update SCORM"
+msgstr "SCORM aktualisieren"
+
+msgid "AI can draft feedback and a suggested score before you send it."
+msgstr "KI kann Feedback und einen vorgeschlagenen Score entwerfen, bevor Sie ihn senden."
+
+msgid "What will be sent to the AI"
+msgstr "Was an die KI gesendet wird"
+
+msgid "Assignment title + instructions"
+msgstr "Aufgabentitel + Anweisungen"
+
+msgid "Student submission (text)"
+msgstr "Studenteneinreichung (Text)"
+
+msgid "Student submission (text): none"
+msgstr "Studenteneinreichung (Text): keine"
+
+msgid "Student attachment"
+msgstr "Studentenanhang"
+
+msgid "supported"
+msgstr "unterstützt"
+
+msgid "not supported for document analysis"
+msgstr "nicht unterstützt für Dokumentenanalyse"
+
+msgid "Student attachment: none"
+msgstr "Studentenanhang: keiner"
+
+msgid "No text AI providers available."
+msgstr "Keine Text-KI-Anbieter verfügbar."
+
+msgid "AI-assisted"
+msgstr "KI-unterstützt"
+
+msgid "This decision is saved with the correction (ExtraField) and cannot be changed later."
+msgstr "Diese Entscheidung wird mit der Korrektur (ExtraField) gespeichert und kann später nicht geändert werden."
+
+msgid "Optional correction attachment (this is not the student's submission)."
+msgstr "Optionale Korrektur-Anlage (dies ist nicht die Einreichung des Studierenden)."
+
+msgid "AI"
+msgstr "KI"
+
+msgid "Received"
+msgstr "Erhalten"
+
+msgid "%s min"
+msgstr "%s Min."
+
+msgid "Unlock column"
+msgstr "Spalte freischalten"
+
+msgid "Lock column"
+msgstr "Spalte sperren"
+
+msgid "Set all Present"
+msgstr "Alle auf Präsenz setzen"
+
+msgid "Set all Absent"
+msgstr "Alle auf Abwesenheit setzen"
+
+msgid "Auto (recommended)"
+msgstr "Auto (empfohlen)"
+
+msgid "Error downloading all documents."
+msgstr "Fehler beim Herunterladen aller Dokumente."
+
+msgid "Open with ONLYOFFICE"
+msgstr "Mit ONLYOFFICE öffnen"
+
+msgid "Limiting quota"
+msgstr "Quota-Begrenzung"
+
+msgid "Remaining space"
+msgstr "Verbleibender Speicherplatz"
+
+msgid "Course catalogue"
+msgstr "Kurskatalog"
+
+msgid "Drag links to reorder"
+msgstr "Links ziehen, um neu zu ordnen"
+
+msgid "Drop links here to keep them without category"
+msgstr "Links hier ablegen, um sie ohne Kategorie zu behalten"
+
+msgid "Could not export"
+msgstr "Konnte nicht exportieren"
+
+msgid "Link moved"
+msgstr "Link verschoben"
+
+msgid "Could not move link"
+msgstr "Link konnte nicht verschoben werden"
+
+msgid "Category reordering is not enabled"
+msgstr "Kategorien-Umsortierung ist nicht aktiviert"
+
+msgid "Showing %s posts"
+msgstr "%s Beiträge anzeigen"
+
+msgid "Showing %s tasks"
+msgstr "%s Aufgaben anzeigen"
+
+msgid "Page %s of %s"
+msgstr "Seite %s von %s"
+
+msgid "Tutors"
+msgstr "Tutor:innen"
+
+msgid "selected"
+msgstr "ausgewählt"
+
+msgid "No data to export"
+msgstr "Keine Daten zum Exportieren"
+
+msgid "Header PNG must be \\u2264 %spx."
+msgstr "Header PNG muss ≤ %spx sein."
+
+msgid "Standard list"
+msgstr "Standardliste"
+
+msgid "Management list"
+msgstr "Verwaltungsliste"
+
+msgid "Open platform"
+msgstr "Offene Plattform"
+
+msgid "Teacher user ID"
+msgstr "Lehrer-Benutzer-ID"
+
+msgid "Are you sure you want to delete this course?"
+msgstr "Möchten Sie diesen Kurs wirklich löschen?"
+
+msgid "Are you sure you want to delete the selected courses?"
+msgstr "Möchten Sie die ausgewählten Kurse wirklich löschen?"
+
+msgid "Search by name, username, email"
+msgstr "Nach Name, Benutzername, E-Mail suchen"
+
+msgid "contains %s items"
+msgstr "enthält %s Elemente"
+
+msgid "Your legal agreement remains active until any withdrawal request has been reviewed and processed."
+msgstr "Ihre rechtliche Zustimmung bleibt aktiv, bis der Widerruf geprüft und bearbeitet wurde."
+
+msgid "Your legal consent withdrawal request is pending review."
+msgstr "Ihr Widerrufsantrag für die rechtliche Zustimmung wartet auf Prüfung."
+
+msgid "Your account deletion request is pending review."
+msgstr "Ihr Kontolöschungsantrag wartet auf Prüfung."
+
+msgid "Why do you want to request the withdrawal of your legal consent?"
+msgstr "Warum möchten Sie den Widerruf Ihrer rechtlichen Zustimmung beantragen?"
+
+msgid "Submitting your legal consent withdrawal request..."
+msgstr "Widerrufsantrag für rechtliche Zustimmung wird gesendet…"
+
+msgid "Submitting request..."
+msgstr "Antrag wird gesendet…"
+
+msgid "Request withdrawal of legal consent"
+msgstr "Widerruf der rechtlichen Zustimmung anfordern"
+
+msgid "Submitting your account deletion request..."
+msgstr "Kontolöschungsantrag wird gesendet…"
+
+msgid "Submitting your acceptance..."
+msgstr "Ihre Annahme wird gesendet…"
+
+msgid "Event details"
+msgstr "Veranstaltungsdetails"
+
+msgid "You cannot access the linked course from this view."
+msgstr "Sie können von dieser Ansicht nicht auf den verknüpften Kurs zugreifen."
+
+msgid "Failed to load sessions"
+msgstr "Fehler beim Laden der Sitzungen"
+
+msgid "Failed to load events"
+msgstr "Fehler beim Laden der Veranstaltungen"
+
+msgid "No events found"
+msgstr "Keine Ereignisse gefunden"
+
+msgid "Group image"
+msgstr "Gruppenbild"
+
+msgid "SearchTCC"
+msgstr "SearchTCC"
+
+msgid "Forbidden"
+msgstr "Verboten"
+
+msgid "Distribution"
+msgstr "Verteilung"
+
+msgid "Firstname"
+msgstr "Vorname"
+
+msgid "Lastname"
+msgstr "Nachname"
+
+msgid "Email"
+msgstr "E-Mail"
+
+msgid "Last login in platform"
+msgstr "Letzte Anmeldung in der Plattform"
+
+msgid "Export as CSV"
+msgstr "Als CSV exportieren"
+
+msgid "Export as XLS"
+msgstr "Als XLS exportieren"
+
+msgid "Deactivate this user?"
+msgstr "Diesen Benutzer deaktivieren?"
+
+msgid "Enable this user?"
+msgstr "Diesen Benutzer aktivieren?"
+
+msgid "Unify this duplicate group into user #%s?"
+msgstr "Diese doppelte Gruppe in Benutzer #%s zusammenführen?"
+
+msgid "This will merge all other accounts in the same group into this account."
+msgstr "Dies wird alle anderen Konten in derselben Gruppe in dieses Konto zusammenführen."
+
+msgid "Merged accounts will be permanently deleted and will disappear from this report."
+msgstr "Zusammengeführte Konten werden dauerhaft gelöscht und verschwinden aus diesem Bericht."
+
+msgid "This action cannot be undone."
+msgstr "Diese Aktion kann nicht rückgängig gemacht werden."
+
+msgid "Unify"
+msgstr "Zusammenführen"
+
+msgid "SessionAdmin"
+msgstr "SessionAdmin"
+
+msgid "Drh"
+msgstr "Drh"
+
+msgid "Student"
+msgstr "Lernender"
+
+msgid "Total space used by portal %s limit is %s MB"
+msgstr "Gesamter Speicherplatz der Portal %s Grenze beträgt %s MB"
+
+msgid "Helper text"
+msgstr "Hilfetext"
+
+msgid "NotAllowed"
+msgstr "NichtErlaubt"
+
+msgid "Use the filters above to load the learner access details."
+msgstr "Verwenden Sie die obigen Filter, um die Lernzugriffsdetails zu laden."
+
+msgid "Start date must be before end date"
+msgstr "Startdatum muss vor Enddatum liegen"
+
+msgid "Select a date range and grouping type to review the learner access details."
+msgstr "Wählen Sie einen Datumsbereich und eine Gruppierungsart aus, um die Lernzugriffsdetails zu überprüfen."
+
+msgid "This course will be created using the platform default course template."
+msgstr "Dieser Kurs wird mit der Standard-Kursvorlage der Plattform erstellt."
+
+msgid "Security breach avoid restart"
+msgstr "Sicherheitsverletzung, Neustart vermeiden"
+
+msgid "User deactivated"
+msgstr "Benutzer deaktiviert"
+
+msgid "InvalidId"
+msgstr "UngültigeId"
+
+msgid "User enabled"
+msgstr "Benutzer aktiviert"
+
+msgid "No other duplicates found for this user."
+msgstr "Keine weiteren Duplikate für diesen Benutzer gefunden."
+
+msgid "Users unified: merged %s account(s) into user #%s. Merged accounts were permanently deleted."
+msgstr "Benutzer zusammengeführt: %s Konto(s) in Benutzer #%s zusammengeführt. Zusammengeführte Konten wurden dauerhaft gelöscht."
+
+msgid "No accounts were merged."
+msgstr "Keine Konten wurden zusammengeführt."
+
+msgid "An error occurred while unifying users."
+msgstr "Ein Fehler ist beim Zusammenführen der Benutzer aufgetreten."
+
+msgid "Users unified: merged user #%s into user #%s. Merged account was permanently deleted."
+msgstr "Benutzer zusammengeführt: Benutzer #%s in Benutzer #%s zusammengeführt. Zusammengeführtes Konto wurde dauerhaft gelöscht."
+
+msgid "Duplicate users"
+msgstr "Doppelte Benutzer"
+
+msgid "Years"
+msgstr "Jahre"
+
+msgid "All time visits outside sessions"
+msgstr "Besuche aller Zeiten außerhalb von Sitzungen"
+
+msgid "All time visits in sessions"
+msgstr "Besuche aller Zeiten in Sitzungen"
+
+msgid "All time visits total"
+msgstr "Besuche aller Zeiten gesamt"
+
+msgid "Student visits per period, per course"
+msgstr "Lernbesuche pro Periode, pro Kurs"
+
+msgid "By email"
+msgstr "Nach E-Mail"
+
+msgid "By extra field"
+msgstr "Nach Extra-Feld"
+
+msgid "Select an option"
+msgstr "Option auswählen"
+
+msgid "Profile field"
+msgstr "Profilfeld"
+
+msgid "This report only lists users that have the same e-mail address."
+msgstr "Dieser Bericht listet nur Benutzer mit derselben E-Mail-Adresse auf."
+
+msgid "This report only lists users that share the same value for the selected profile field."
+msgstr "Dieser Bericht listet nur Benutzer mit demselben Wert für das ausgewählte Profilfeld auf."
+
+msgid "How to use this report"
+msgstr "Wie man diesen Bericht verwendet"
+
+msgid "Disable / Enable"
+msgstr "Deaktivieren / Aktivieren"
+
+msgid "Only blocks or restores login. It does not delete the user and does not remove subscriptions."
+msgstr "Nur Blockieren oder Freischalten der Anmeldung. Löscht den Benutzer nicht und entfernt keine Abonnements."
+
+msgid "Last week"
+msgstr "Letzte Woche"
+
+msgid "Next week"
+msgstr "Nächste Woche"
+
+msgid "Loading report..."
+msgstr "Bericht wird geladen…"
+
+msgid "Failed to load this report. Please try again."
+msgstr "Bericht konnte nicht geladen werden. Bitte versuchen Sie es erneut."
+
+msgid "Select one or more sessions to copy trainers from and choose the destination course"
+msgstr "Wählen Sie eine oder mehrere Sitzungen aus, um Trainer zu kopieren, und wählen Sie den Zielkurs"
+
+msgid "Hold Ctrl (or Cmd) to select multiple items"
+msgstr "Strg (oder Cmd) gedrückt halten, um mehrere Elemente auszuwählen"
+
+msgid "Choose the destination course"
+msgstr "Wählen Sie den Zielkurs"
+
+msgid "You can select multiple items"
+msgstr "Sie können mehrere Elemente auswählen"
+
+msgid "Use the search box to find courses quickly"
+msgstr "Verwenden Sie das Suchfeld, um Kurse schnell zu finden"
+
+msgid "Select one or more source sessions and one or more destination sessions to copy students"
+msgstr "Wählen Sie eine oder mehrere Quell-Sitzungen und eine oder mehrere Ziel-Sitzungen aus, um Studenten zu kopieren"
+
+msgid "Select destination sessions"
+msgstr "Ziel-Sitzungen auswählen"
+
+msgid "You can select multiple users"
+msgstr "Sie können mehrere Benutzer auswählen"
+
+msgid "Use the search box to find users quickly"
+msgstr "Verwenden Sie das Suchfeld, um Benutzer schnell zu finden"
+
+msgid "Error while creating the document"
+msgstr "Fehler beim Erstellen des Dokuments"
+
+msgid "Not a SCORM learning path"
+msgstr "Kein SCORM-Lernpfad"
+
+msgid "Final item"
+msgstr "Letztes Element"
+
+msgid "Edit item"
+msgstr "Element bearbeiten"
+
+msgid "No AI text providers configured."
+msgstr "Keine KI-Textanbieter konfiguriert."
+
+msgid "Upload failed. The file is likely larger than the server limit (post_max_size)."
+msgstr "Hochladen fehlgeschlagen. Die Datei ist wahrscheinlich größer als das Serverlimit (post_max_size)."
+
+msgid "Update failed. No file received by the server."
+msgstr "Aktualisieren fehlgeschlagen. Keine Datei vom Server empfangen."
+
+msgid "Update failed. %s"
+msgstr "Aktualisieren fehlgeschlagen. %s"
+
+msgid "Update failed. Invalid uploaded file payload."
+msgstr "Aktualisieren fehlgeschlagen. Ungültige hochgeladene Dateinutzlast."
+
+msgid "Update failed. The uploaded ZIP file name must match the original SCORM package name."
+msgstr "Aktualisieren fehlgeschlagen. Der Name der hochgeladenen ZIP-Datei muss mit dem ursprünglichen SCORM-Paketnamen übereinstimmen."
+
+msgid "Update failed"
+msgstr "Aktualisieren fehlgeschlagen"
+
+msgid "Question lower case"
+msgstr "Frage Kleinbuchstaben"
+
+msgid "Regenerate"
+msgstr "Neu generieren"
+
+msgid "Case insensitive"
+msgstr "Groß-/Kleinschreibung ignorieren"
+
+msgid "Select a session to load its courses."
+msgstr "Wählen Sie eine Sitzung aus, um deren Kurse zu laden."
+
+msgid "Select the source course."
+msgstr "Wählen Sie den Quellkurs aus."
+
+msgid "Select a destination session."
+msgstr "Wählen Sie eine Ziel-Sitzung aus."
+
+msgid "Select the destination course."
+msgstr "Wählen Sie den Zielkurs aus."
+
+msgid "Copy the full course content from the selected session course."
+msgstr "Kopieren Sie den vollständigen Kursinhalt aus dem ausgewählten Sitzungskurs."
+
+msgid "Select which tools/items to copy."
+msgstr "Wählen Sie aus, welche Tools/Elemente zu kopieren sind."
+
+msgid "Do not include the base (non-session) course content."
+msgstr "Nicht den Basis- (nicht-Sitzungs-) Kursinhalt einbeziehen."
+
+msgid "An error occurred while copying the course"
+msgstr "Fehler beim Kopieren des Kurses"
+
+msgid "Please select a different destination"
+msgstr "Bitte wählen Sie ein anderes Ziel aus"
+
+msgid "You must select a destination course"
+msgstr "Sie müssen einen Zielkurs auswählen"
+
+msgid "To export courses with quiz you have to select quiz"
+msgstr "Um Kurse mit Tests zu exportieren, müssen Sie Tests auswählen"
+
+msgid "If your LPs have audio files included you should select them from the documents"
+msgstr "Wenn Ihre LPs Audiodateien enthalten, sollten Sie diese aus den Dokumenten auswählen"
+
+msgid "If your quiz have hotspot questions included you should select the images from the documents"
+msgstr "Wenn Ihre Tests Hotspot-Fragen enthalten, sollten Sie die Bilder aus den Dokumenten auswählen"
+
+msgid "GeneralResourcesCourse"
+msgstr "GeneralResourcesCourse"
+
+msgid "Password must be at least %length% characters long."
+msgstr "Passwort muss mindestens %length% Zeichen lang sein."
+
+msgid "Password must contain at least %count% lowercase characters."
+msgstr "Passwort muss mindestens %count% Kleinbuchstaben enthalten."
+
+msgid "Password must contain at least %count% uppercase characters."
+msgstr "Passwort muss mindestens %count% Großbuchstaben enthalten."
+
+msgid "Password must contain at least %count% numerical (0-9) characters."
+msgstr "Passwort muss mindestens %count% Ziffern (0-9) enthalten."
+
+msgid "Password must contain at least %count% special characters."
+msgstr "Passwort muss mindestens %count% Sonderzeichen enthalten."
+
+msgid "Invalid login request."
+msgstr "Ungültige Anmeldeanfrage."
+
+msgid "Authentication failed."
+msgstr "Authentifizierung fehlgeschlagen."
+
+msgid "Login %status% for username %username%"
+msgstr "Anmeldung %status% für Benutzername %username%"
+
+msgid "Co-generated with AI"
+msgstr "Gemeinsam mit KI generiert"
+
+msgid "GDPRTitle"
+msgstr "GDPRTitle"
+
+msgid "EntraID ID"
+msgstr "EntraID-ID"
+
+msgid "EntraID UID"
+msgstr "EntraID-UID"
+
+msgid "Required fields"
+msgstr "Pflichtfelder"
+
+msgid "Tags can be copied and pasted inside the text area below and will be dynamically replaced with their value for each user individually when sending them."
+msgstr "Tags können in das Textfeld unten kopiert und eingefügt werden und werden dynamisch mit ihrem individuellen Wert für jeden Benutzer ersetzt, wenn sie gesendet werden."
+
+msgid "This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group."
+msgstr "Diese Gruppe ist mit der Klasse %s verknüpft.<br>Die Mitgliederliste der Gruppe hängt von den Klassenmitgliedern ab und kann nicht geändert werden.<br>Gehen Sie zu den Gruppeneinstellungen, um diese Verknüpfung zu trennen, falls Sie Mitglieder zu dieser Gruppe hinzufügen oder entfernen möchten."
+
+msgid "Link classes to created groups ?"
+msgstr "Klassen mit erstellten Gruppen verknüpfen?"
+
+msgid "If a class is linked to a group, users added to or removed from the class are automatically added to or removed from the group."
+msgstr "Wenn eine Klasse mit einer Gruppe verknüpft ist, werden Benutzer, die der Klasse hinzugefügt oder entfernt werden, automatisch der Gruppe hinzugefügt oder entfernt."
+
+msgid "New groups creation in category %s"
+msgstr "Neue Gruppen in Kategorie %s erstellen"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Warnmeldung, dass der Benutzer die Mitglieder der verknüpften Gruppe nicht ändern kann"
+
+msgid "Remove the group link with the class"
+msgstr "Gruppenverknüpfung mit der Klasse entfernen"
+
+msgid "Linked class"
+msgstr "Verknüpfte Klasse"
+
+msgid "The group is no longer linked to the class"
+msgstr "Die Gruppe ist nicht mehr mit der Klasse verknüpft"
+
+msgid "Overview students and courses subscribed to the class"
+msgstr "Übersicht über Schüler und Kurse, die zur Klasse angemeldet sind"
+
+msgid "Overview students subscribed to the class"
+msgstr "Übersicht über Schüler, die zur Klasse angemeldet sind"
+
+msgid "Overview class"
+msgstr "Klassenübersicht"
+
+msgid "Go back to the list of classes"
+msgstr "Zurück zur Klassenliste"
+
+msgid "Go back to course classes"
+msgstr "Zurück zu den Kurseklassen"
+
+msgid "Users subscribed to the course"
+msgstr "Benutzer, die zum Kurs angemeldet sind"
+
+msgid "Users not subscribed to the course"
+msgstr "Benutzer, die nicht zum Kurs angemeldet sind"
+
+msgid "Users subscribed to the class"
+msgstr "Benutzer, die zur Klasse angemeldet sind"
+
+msgid "Courses subscribed to the class"
+msgstr "Kurse, die zur Klasse angemeldet sind"
+
+msgid "No user is subscribed to this class"
+msgstr "Kein Benutzer ist zu dieser Klasse angemeldet"
+
+msgid "No user and no course are subscribed to this class"
+msgstr "Kein Benutzer und kein Kurs sind zu dieser Klasse angemeldet"
+
+msgid "No user are subscribed to this class"
+msgstr "Keine Benutzer sind zu dieser Klasse angemeldet"
+
+msgid "No course are subscribed to this class"
+msgstr "Keine Kurse sind zu dieser Klasse angemeldet"
+
+msgid "Are you sure you want to remove the class"
+msgstr "Sind Sie sicher, dass Sie die Klasse entfernen möchten?"
+
+msgid "Are you sure you want to remove the class?"
+msgstr "Sind Sie sicher, dass Sie die Klasse entfernen möchten?"
+
+msgid "Are you sure you want to remove the class without removing users?"
+msgstr "Sind Sie sicher, dass Sie die Klasse ohne Entfernen der Benutzer entfernen möchten?"
+
+msgid "Remove the class without removing students"
+msgstr "Klasse ohne Entfernen der Schüler entfernen"
+
+msgid "This setting is not yet implemented in this version."
+msgstr "Diese Einstellung ist in dieser Version noch nicht implementiert."
+
+msgid "Recommended for admin-only plugins shown in the administration area."
+msgstr "Empfohlen für Admin-only-Plugins, die im Administrationsbereich angezeigt werden."
+
+msgid "Recommended for plugins that must appear as course tools."
+msgstr "Empfohlen für Plugins, die als Kurswerkzeuge erscheinen müssen."
+
+msgid "Displayed above the main page content."
+msgstr "Über dem Hauptseiteninhalt angezeigt."
+
+msgid "Displayed below the main page content."
+msgstr "Unter dem Hauptseiteninhalt angezeigt."
+
+msgid "Displayed near the top of the main layout shell."
+msgstr "Nahe dem oberen Rand des Hauptlayouts angezeigt."
+
+msgid "Displayed near the bottom of the main layout shell."
+msgstr "Wird in der Nähe des unteren Rands der Hauptlayout-Schale angezeigt."
+
+msgid "Recommended for global floating or persistent plugins shown before the footer."
+msgstr "Empfohlen für globale schwimmende oder persistente Plugins, die vor dem Footer angezeigt werden."
+
+msgid "Displayed in the selected plugin region."
+msgstr "Wird in der ausgewählten Plugin-Region angezeigt."
+
+msgid "Admin menu"
+msgstr "Admin-Menü"
+
+msgid "Global regions"
+msgstr "Globale Regionen"
+
+msgid "No regions assigned"
+msgstr "Keine Regionen zugewiesen"
+
+msgid "Plugin regions"
+msgstr "Plugin-Regionen"
+
+msgid "Choose where each installed plugin should be rendered."
+msgstr "Wählen Sie aus, wo jedes installierte Plugin gerendert werden soll."
+
+msgid "Tip: use Ctrl/Cmd to select multiple regions."
+msgstr "Tipp: Verwenden Sie Ctrl/Cmd, um mehrere Regionen auszuwählen."
+
+msgid "No installed plugins were found."
+msgstr "Keine installierten Plugins gefunden."
+
+msgid "Select one or more regions for this plugin in the current access URL."
+msgstr "Wählen Sie eine oder mehrere Regionen für dieses Plugin in der aktuellen Zugriffs-URL aus."
+
+msgid "Available regions"
+msgstr "Verfügbare Regionen"
+
+msgid "Selected paragraph"
+msgstr "Ausgewählter Absatz"
+
+msgid "Destination folder"
+msgstr "Zielverzeichnis"
+
+msgid "Generate AI media"
+msgstr "KI-Medien generieren"
+
+msgid "Save and insert"
+msgstr "Speichern und einfügen"
+
+msgid "Saving is only supported when the provider returns base64 content. If you only received a URL, saving is disabled to avoid downloading in the browser."
+msgstr "Speichern wird nur unterstützt, wenn der Anbieter Base64-Inhalt zurückgibt. Wenn nur eine URL erhalten wurde, ist Speichern deaktiviert, um das Herunterladen im Browser zu vermeiden."
+
+msgid "Video generated successfully, but saving is disabled because the provider returned a URL."
+msgstr "Video erfolgreich generiert, aber Speichern deaktiviert, da der Anbieter eine URL zurückgegeben hat."
+
+msgid "The file was saved, but its URL could not be resolved."
+msgstr "Die Datei wurde gespeichert, aber ihre URL konnte nicht aufgelöst werden."
+
+msgid "Generate an Aiken quiz from a topic or from one course document."
+msgstr "Erstellen Sie einen Aiken-Test aus einem Thema oder einem Kursdokument."
+
+msgid "Test from topic"
+msgstr "Test aus Thema"
+
+msgid "Test from document"
+msgstr "Test aus Dokument"
+
+msgid "Generate from topic"
+msgstr "Aus Thema generieren"
+
+msgid "Use a topic prompt to generate a new Aiken questionnaire."
+msgstr "Verwenden Sie einen Themenprompt, um ein neues Aiken-Fragebogen zu generieren."
+
+msgid "Quiz title"
+msgstr "Testtitel"
+
+msgid "Generate from document"
+msgstr "Aus Dokument generieren"
+
+msgid "Select one course document and generate questions based only on its contents."
+msgstr "Wählen Sie ein Kursdokument aus und generieren Sie Fragen basierend nur auf dessen Inhalt."
+
+msgid "Selected document"
+msgstr "Ausgewähltes Dokument"
+
+msgid "The document is selected from the course documents list."
+msgstr "Das Dokument wird aus der Liste der Kursdokumente ausgewählt."
+
+msgid "Choose document"
+msgstr "Dokument wählen"
+
+msgid "Optional. Used only as an extra hint for the AI."
+msgstr "Optional. Wird nur als zusätzlicher Hinweis für die KI verwendet."
+
+msgid "Select a document"
+msgstr "Dokument auswählen"
+
+msgid "Welcome"
+msgstr "Willkommen"
+
+msgid "Welcome to Chamilo"
+msgstr "Willkommen bei Chamilo"
+
+msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
+msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Wenn Sie Chamilo zum ersten Mal verwenden, schauen Sie bitte im Seitenmenü nach, um sich durch die vielen Funktionen zu navigieren. Wenn Sie Hilfe benötigen, finden Sie in <a href=\"https://docs.chamilo.org\">unserer offiziellen Dokumentation</a> Standarddokumentation und in unserem <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">Online-Forum</a> Ideen und Antworten von anderen Chamilo-Nutzern."
+
+msgid "Change password"
+msgstr "Kennwort ändern"
+
+msgid "Goto current location"
+msgstr "Zum aktuellen Standort navigieren"
+
+msgid "Find address"
+msgstr "Adresse finden"
+
+msgid "Newest first"
+msgstr "Neueste zuerst"
+
+msgid "Oldest first"
+msgstr "Älteste zuerst"
+
+msgid "Title A–Z"
+msgstr "Titel A–Z"
+
+msgid "Title Z–A"
+msgstr "Titel Z–A"
+
+msgid "Send test email"
+msgstr "Senden"
+
+msgid "Message sent successfully."
+msgstr "Nachricht erfolgreich gesendet."
+ 
+msgid "Select a file to insert into the editor."
+msgstr "Eine Datei auswählen, die in den Editor eingefügt werden soll."
+
+msgid "File manager"
+msgstr "Dateimanager"
+
+msgid "Hide comments"
+msgstr "Kommentare ausblenden"
+
+msgid "Loading comments..."
+msgstr "Kommentare werden geladen..."
+
+msgid "No comments yet."
+msgstr "Noch keine Kommentare."

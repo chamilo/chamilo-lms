@@ -12,8 +12,6 @@ Feature: Special admin settings flows
     And I wait very long for the page to be loaded
 
     # Diagnostic search
-    And I am on "/admin"
-    And I wait very long for the page to be loaded
     When I fill in the following:
       | platform_management_search | Diagnostic |
     And I press "platform_management_search_button"
@@ -105,9 +103,6 @@ Feature: Special admin settings flows
     And I am not logged
     And I am logged as "admin"
     And I wait very long for the page to be loaded
-    And I am on "/admin"
-    And I wait very long for the page to be loaded
-
     And I am on "/admin"
     And I wait very long for the page to be loaded
     When I fill in the following:

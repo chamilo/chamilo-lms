@@ -1,0 +1,211 @@
+{
+  "semantics": [
+    {
+      "label": "Media",
+      "fields": [
+        {
+          "label": "Typ",
+          "description": "Valfri media att visa ovanför frågan."
+        },
+        {
+          "label": "Inaktivera zoomning i bild"
+        }
+      ]
+    },
+    {
+      "label": "Beskrivning av uppgift",
+      "default": "Fyll i saknade ord",
+      "description": "En guide som beskriver för användaren hur uppgiften ska lösas."
+    },
+    {
+      "label": "Textblock",
+      "entity": "textblock",
+      "field": {
+        "label": "Textrad",
+        "placeholder": "Oslo är huvudstaden i *Norge*.",
+        "description": "",
+        "important": {
+          "description": "<ul><li>Tomma fält läggs till med en  asterisk (*) före och bakom det korrekta ordet/frasen.</li><li>Alternativ anges med ett snedstreck (/).</li><li>Du kan lägga till ett tips genom att använda kolon (:) före tipset.</li></ul>",
+          "example": "H5P-innehåll kan redigeras direkt i din *webbläsare/browser:Något som du använder varje dag*."
+        }
+      }
+    },
+    {
+      "label": "Övergripande feedback",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Förvalt"
+            }
+          ],
+          "label": "Ange specifik feedback för valfritt poängintervall",
+          "description": "Klicka på knappen \"Lägg till intervall\" för att lägga till så många intervall du behöver. Exempel: 0-20 % Inte så bra, 21-91 % Medel, 91-100 % Jättebra!",
+          "entity": "intervall",
+          "field": {
+            "fields": [
+              {
+                "label": "Poängintervall"
+              },
+              {},
+              {
+                "label": "Feedback för specifikt poängintervall",
+                "placeholder": "Fyll i din feedback"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Text for \"Show solutions\" button",
+      "default": "Show solution"
+    },
+    {
+      "label": "Text for \"Retry\" button",
+      "default": "Retry"
+    },
+    {
+      "label": "Text for \"Check\" button",
+      "default": "Check"
+    },
+    {
+      "label": "Text for \"Not filled out\" message",
+      "default": "Please fill in all blanks to view solution"
+    },
+    {
+      "label": "Text for \"':ans' is correct\" message",
+      "default": "':ans' is correct"
+    },
+    {
+      "label": "Text for \"':ans' is wrong\" message",
+      "default": "':ans' is wrong"
+    },
+    {
+      "label": "Text for \"Answered correctly\" message",
+      "default": "Answered correctly"
+    },
+    {
+      "label": "Text for \"Answered incorrectly\" message",
+      "default": "Answered incorrectly"
+    },
+    {
+      "label": "Assistive technology label for solution",
+      "default": "Correct answer:"
+    },
+    {
+      "label": "Assistive technology label for input field",
+      "description": "Use @num and @total to replace current cloze number and total cloze number",
+      "default": "Blank input @num of @total"
+    },
+    {
+      "label": "Assistive technology label for saying an input has a tip tied to it",
+      "default": "Tip available"
+    },
+    {
+      "label": "Tip icon label",
+      "default": "Tip"
+    },
+    {
+      "label": "Behavioural settings.",
+      "description": "These options will let you control how the task behaves.",
+      "fields": [
+        {
+          "label": "Enable \"Retry\""
+        },
+        {
+          "label": "Enable \"Show solution\" button"
+        },
+        {
+          "label": "Enable \"Check\" button"
+        },
+        {
+          "label": "Automatically check answers after input"
+        },
+        {
+          "label": "Case sensitive",
+          "description": "Makes sure the user input has to be exactly the same as the answer."
+        },
+        {
+          "label": "Require all fields to be answered before the solution can be viewed"
+        },
+        {
+          "label": "Put input fields on separate lines"
+        },
+        {
+          "label": "Show confirmation dialog on \"Check\"",
+          "description": "This options is not compatible with the \"Automatically check answers after input\" option"
+        },
+        {
+          "label": "Show confirmation dialog on \"Retry\""
+        },
+        {
+          "label": "Accept minor spelling errors",
+          "description": "If activated, an answer will also count as correct with minor spelling errors (3-9 characters: 1 spelling error, more than 9 characters: 2 spelling errors)"
+        }
+      ]
+    },
+    {
+      "label": "Check confirmation dialog",
+      "fields": [
+        {
+          "label": "Header text",
+          "default": "Finish ?"
+        },
+        {
+          "label": "Body text",
+          "default": "Are you sure you wish to finish ?"
+        },
+        {
+          "label": "Cancel button label",
+          "default": "Cancel"
+        },
+        {
+          "label": "Confirm button label",
+          "default": "Finish"
+        }
+      ]
+    },
+    {
+      "label": "Retry confirmation dialog",
+      "fields": [
+        {
+          "label": "Header text",
+          "default": "Retry ?"
+        },
+        {
+          "label": "Body text",
+          "default": "Are you sure you wish to retry ?"
+        },
+        {
+          "label": "Cancel button label",
+          "default": "Cancel"
+        },
+        {
+          "label": "Confirm button label",
+          "default": "Confirm"
+        }
+      ]
+    },
+    {
+      "label": "Textual representation of the score bar for those using a readspeaker",
+      "default": "You got :num out of :total points"
+    },
+    {
+      "label": "Beskrivning av knappen \"Rätta\" för tillgänglighetshjälpmedel",
+      "default": "Rätta svaren. Svaren kommer att markeras som korrekta, felaktiga eller obesvarade."
+    },
+    {
+      "label": "Beskrivning av knappen \"Visa lösning\" för tillgänglighetshjälpmedel",
+      "default": "Visa lösningen. Uppgiften kommer att markeras med dess korrekta lösning."
+    },
+    {
+      "label": "Beskrivning av knappen \"Försök igen\" för tillgänglighetshjälpmedel",
+      "default": "Försök igen med uppgiften. Nollställer alla svar och startar om uppgiften."
+    },
+    {
+      "label": "Beskrivning av inledande uppgift för tillgänglighetshjälpmedel",
+      "default": "Rättningsläge"
+    }
+  ]
+}

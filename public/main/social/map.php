@@ -12,7 +12,6 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
-use Chamilo\CoreBundle\Helpers\PluginHelper;
 use Chamilo\CoreBundle\Repository\AccessUrlRelPluginRepository;
 use Symfony\Component\Cache\Adapter\ApcuAdapter;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
@@ -78,13 +77,13 @@ function ensureGeoExtraField(ExtraField $ef, ?string $var, string $label): ?arra
 }
 
 /* ----------------------- services ----------------------- */
-$pluginHelper    = Container::$container->get(PluginHelper::class);
 $accessUrlHelper = Container::$container->get(AccessUrlHelper::class);
 $pluginRepo      = Container::$container->get(AccessUrlRelPluginRepository::class);
+$googleMapsPlugin = GoogleMapsPlugin::create();
+$googleMapsIsActive = $googleMapsPlugin->isEnabled();
 
 /* ---------------- validate plugin enabled --------------- */
-$PLUGIN_NAME = 'google_maps';
-if (!$pluginHelper->isPluginEnabled($PLUGIN_NAME)) {
+if (!$googleMapsIsActive) {
     if (api_is_platform_admin()) {
         Display::display_header(get_lang('Social'));
         echo Display::return_message('Google Maps plugin is not enabled for this portal URL. Enable it in Administration → Plugins.', 'warning');
@@ -101,19 +100,13 @@ $currentUrl = $accessUrlHelper->getCurrent();
 if ($currentUrl === null) {
     api_not_allowed(true);
 }
-$rel = $pluginRepo->findOneByPluginName($PLUGIN_NAME, $currentUrl->getId());
-if (!$rel || !$rel->isActive()) {
+
+if (!$googleMapsIsActive) {
     api_not_allowed(true);
 }
-$config = $rel->getConfiguration();
-if (is_string($config)) {
-    $tmp = json_decode($config, true);
-    if (json_last_error() === JSON_ERROR_NONE) $config = $tmp;
-}
-if (!is_array($config)) $config = [];
 
-$enabledRaw = $config['enable_api'] ?? null;
-$apiKey     = trim((string)($config['api_key'] ?? ''));
+$enabledRaw = $googleMapsPlugin->get('enable_api');
+$apiKey     = trim((string)($googleMapsPlugin->get('api_key') ?? ''));
 
 /* truthy parsing for enable_api */
 $localization = ($enabledRaw === true) || ($enabledRaw === 1) || ($enabledRaw === '1') || ($enabledRaw === 'true') || ($enabledRaw === 'on') || ($enabledRaw === 'yes');
@@ -131,7 +124,7 @@ if (!$localization || $apiKey === '') {
 }
 
 /* ---------------- fields to use ------------------------ */
-$pluginFieldsCsv = (string)($config['extra_field_name'] ?? '');
+$pluginFieldsCsv = (string) ($googleMapsPlugin->get('extra_field_name') ?? '');
 $vars = array_values(array_filter(array_map('trim', explode(',', $pluginFieldsCsv))));
 if (empty($vars)) {
     $fieldsSetting = api_get_setting('profile.allow_social_map_fields', true);

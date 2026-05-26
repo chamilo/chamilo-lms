@@ -5,7 +5,7 @@ oneup_flysystem:
                 location: '%kernel.project_dir%/var/upload/assets'
         asset_cache_adapter:
             local:
-                location: '%kernel.project_dir%/var/cache/assets'
+                location: '%kernel.cache_dir%/upload/assets'
 
         asset_azure_adapter:
             azureblob:
@@ -50,7 +50,7 @@ oneup_flysystem:
                 location: '%kernel.project_dir%/var/upload/resource'
         resource_cache_adapter:
             local:
-                location: '%kernel.project_dir%/var/cache/resource'
+                location: '%kernel.cache_dir%/upload/resource'
 
         resource_azure_adapter:
             azureblob:

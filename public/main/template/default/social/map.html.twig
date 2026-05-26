@@ -28,7 +28,7 @@
 
             marker.addListener('click', function() {
               var infoWindow = new google.maps.InfoWindow({
-                content: '<a href="{{ url }}?u=' + city['id'] + '">' + city['complete_name'] + '</a>'
+                content: '<a href="{{ url }}?uid=' + city['id'] + '">' + city['complete_name'] + '</a>'
               });
               infoWindow.open(map, marker);
             });
@@ -46,7 +46,7 @@
 
             marker.addListener('click', function() {
               var infoWindow = new google.maps.InfoWindow({
-                content: '<a href="{{ url }}?id=' + city['id'] + '">' + city['complete_name'] + '</a>'
+                content: '<a href="{{ url }}?uid=' + city['id'] + '">' + city['complete_name'] + '</a>'
               });
               infoWindow.open(map, marker);
             });

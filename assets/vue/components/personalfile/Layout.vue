@@ -5,7 +5,7 @@
     </div>
     <div class="md:basis-2/3 lg:basis-3/4 2xl:basis-5/6">
       <h2
-        v-t="'My files'"
+        v-text="t('My files')"
         class="mr-auto"
       />
       <hr />
@@ -16,7 +16,10 @@
 <script setup>
 import UserProfileCard from "../social/UserProfileCard.vue"
 import { onMounted, provide } from "vue"
+import { useI18n } from "vue-i18n"
 import { useSocialInfo } from "../../composables/useSocialInfo"
+
+const { t } = useI18n()
 
 const { user, isCurrentUser, groupInfo, isGroup, loadUser } = useSocialInfo()
 

@@ -6,19 +6,73 @@ declare(strict_types=1);
 
 use Chamilo\CoreBundle\Entity\XApiToolLaunch;
 use Chamilo\CoreBundle\Framework\Container;
-use Symfony\Component\HttpFoundation\Request as HttpRequest;
-use Xabbuh\XApi\Common\Exception\NotFoundException;
-use Xabbuh\XApi\Model\Activity;
-use Xabbuh\XApi\Model\Agent;
-use Xabbuh\XApi\Model\InverseFunctionalIdentifier;
-use Xabbuh\XApi\Model\IRI;
-use Xabbuh\XApi\Model\State;
-use Xabbuh\XApi\Model\Uuid;
+use Symfony\Component\Uid\Uuid;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
 api_block_anonymous_users();
 api_protect_course_script(true);
+
+/**
+ * Render a small activity type badge.
+ */
+function xapi_render_tincan_type_badge(): string
+{
+    return Display::tag(
+        'span',
+        'TinCan',
+        [
+            'class' => 'inline-flex items-center rounded-full border px-2 py-1 text-xs font-semibold',
+            'style' => 'background:#ecfeff;color:#155e75;border-color:#a5f3fc;',
+        ]
+    );
+}
+
+/**
+ * Build a styled button class string.
+ */
+function xapi_tincan_button_style(string $variant = 'secondary'): string
+{
+    $baseStyle = 'display:inline-flex;align-items:center;justify-content:center;'
+        .'padding:10px 14px;border-radius:10px;border:1px solid transparent;'
+        .'font-size:14px;font-weight:600;white-space:nowrap;cursor:pointer;';
+
+    $variantStyle = match ($variant) {
+        'primary' => 'background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe;',
+        'success' => 'background:#ecfdf5;color:#047857;border-color:#a7f3d0;',
+        default => 'background:#f8fafc;color:#334155;border-color:#e2e8f0;',
+    };
+
+    return $baseStyle.$variantStyle;
+}
+
+/**
+ * Render a launch form that can target the preview iframe.
+ */
+function xapi_render_tincan_launch_form(
+    int $toolId,
+    string $attemptId,
+    string $cidReq,
+    string $label,
+    string $target,
+    string $variant = 'secondary'
+): string {
+    $action = 'launch.php?'.$cidReq;
+    $toolId = (int) $toolId;
+    $attemptId = htmlspecialchars($attemptId, ENT_QUOTES, 'UTF-8');
+    $target = htmlspecialchars($target, ENT_QUOTES, 'UTF-8');
+    $label = htmlspecialchars($label, ENT_QUOTES, 'UTF-8');
+
+    $button = '<button type="submit" style="'.xapi_tincan_button_style($variant).'">'
+        .$label
+        .'</button>';
+
+    return '<form method="post" action="'.$action.'" target="'.$target.'" style="margin:0;">'
+        .'<input type="hidden" name="attempt_id" value="'.$attemptId.'">'
+        .'<input type="hidden" name="id" value="'.$toolId.'">'
+        .$button
+        .'</form>';
+}
 
 $request = Container::getRequest();
 
@@ -40,113 +94,46 @@ if (null === $toolLaunch
 }
 
 $plugin = XApiPlugin::create();
-
-$activity = new Activity(
-    IRI::fromString($toolLaunch->getActivityId())
-);
-$actor = new Agent(
-    InverseFunctionalIdentifier::withMbox(
-        IRI::fromString('mailto:'.$user->getEmail())
-    ),
-    $user->getFullName()
-);
-$state = new State(
-    $activity,
-    $actor,
-    $plugin->generateIri('tool-'.$toolLaunch->getId(), 'state')->getValue()
-);
+$actor = $plugin->buildTinCanActorPayload($user);
+$stateId = $plugin->getTinCanStateId($toolLaunch->getId());
 
 $cidReq = api_get_cidreq();
+$previewFrameName = 'xapi_tincan_preview';
+$launchTarget = $originIsLearnpath ? '_self' : $previewFrameName;
 
 try {
-    $stateDocument = $plugin
-        ->getXApiStateClient(
-            $toolLaunch->getLrsUrl(),
-            $toolLaunch->getLrsAuthUsername(),
-            $toolLaunch->getLrsAuthPassword()
-        )
-        ->getDocument($state)
-    ;
-} catch (NotFoundException $notFoundException) {
-    $stateDocument = null;
+    $stateDocument = $plugin->fetchActivityStateDocument(
+        (string) $toolLaunch->getActivityId(),
+        $actor,
+        $stateId,
+        null,
+        $toolLaunch->getLrsUrl(),
+        $toolLaunch->getLrsAuthUsername(),
+        $toolLaunch->getLrsAuthPassword()
+    );
 } catch (Exception $exception) {
     Display::addFlash(
         Display::return_message($exception->getMessage(), 'error')
     );
 
     header('Location: '.api_get_course_url());
-
     exit;
 }
 
-$formTarget = $originIsLearnpath ? '_self' : '_blank';
+if (!empty($stateDocument) && is_array($stateDocument)) {
+    uasort(
+        $stateDocument,
+        static function ($attemptA, $attemptB): int {
+            $timeA = isset($attemptA[XApiPlugin::STATE_LAST_LAUNCH])
+                ? strtotime((string) $attemptA[XApiPlugin::STATE_LAST_LAUNCH])
+                : 0;
+            $timeB = isset($attemptB[XApiPlugin::STATE_LAST_LAUNCH])
+                ? strtotime((string) $attemptB[XApiPlugin::STATE_LAST_LAUNCH])
+                : 0;
 
-$frmNewRegistration = new FormValidator(
-    'launch_new',
-    'post',
-    "launch.php?$cidReq",
-    '',
-    ['target' => $formTarget],
-    FormValidator::LAYOUT_INLINE
-);
-$frmNewRegistration->addHidden('attempt_id', Uuid::uuid4());
-$frmNewRegistration->addHidden('id', $toolLaunch->getId());
-$frmNewRegistration->addButton(
-    'submit',
-    $plugin->get_lang('LaunchNewAttempt'),
-    'external-link fa-fw',
-    'success'
-);
-
-if ($stateDocument) {
-    $row = 0;
-
-    $table = new HTML_Table(['class' => 'table table-hover table-striped']);
-    $table->setHeaderContents($row, 0, $plugin->get_lang('ActivityFirstLaunch'));
-    $table->setHeaderContents($row, 1, $plugin->get_lang('ActivityLastLaunch'));
-    $table->setHeaderContents($row, 2, get_lang('Actions'));
-
-    $row++;
-
-    $langActivityLaunch = $plugin->get_lang('ActivityLaunch');
-
-    foreach ($stateDocument->getData()->getData() as $attemptId => $attempt) {
-        $firstLaunch = api_convert_and_format_date(
-            $attempt[XApiPlugin::STATE_FIRST_LAUNCH],
-            DATE_TIME_FORMAT_LONG
-        );
-        $lastLaunch = api_convert_and_format_date(
-            $attempt[XApiPlugin::STATE_LAST_LAUNCH],
-            DATE_TIME_FORMAT_LONG
-        );
-
-        $frmLaunch = new FormValidator(
-            "launch_$row",
-            'post',
-            "launch.php?$cidReq",
-            '',
-            ['target' => $formTarget],
-            FormValidator::LAYOUT_INLINE
-        );
-        $frmLaunch->addHidden('attempt_id', $attemptId);
-        $frmLaunch->addHidden('id', $toolLaunch->getId());
-        $frmLaunch->addButton(
-            'submit',
-            $langActivityLaunch,
-            'external-link fa-fw',
-            'default'
-        );
-
-        $table->setCellContents($row, 0, $firstLaunch);
-        $table->setCellContents($row, 1, $lastLaunch);
-        $table->setCellContents($row, 2, $frmLaunch->returnForm());
-
-        $row++;
-    }
-
-    $table->setColAttributes(0, ['class' => 'text-center']);
-    $table->setColAttributes(1, ['class' => 'text-center']);
-    $table->setColAttributes(2, ['class' => 'text-center']);
+            return $timeB <=> $timeA;
+        }
+    );
 }
 
 $interbreadcrumb[] = ['url' => '../start.php', 'name' => $plugin->get_lang('ToolTinCan')];
@@ -154,22 +141,120 @@ $interbreadcrumb[] = ['url' => '../start.php', 'name' => $plugin->get_lang('Tool
 $pageTitle = $toolLaunch->getTitle();
 $pageContent = '';
 
+$descriptionHtml = '';
 if ($toolLaunch->getDescription()) {
-    $pageContent .= \PHP_EOL;
-    $pageContent .= "<p class='lead'>{$toolLaunch->getDescription()}</p>";
-}
-
-if ($toolLaunch->isAllowMultipleAttempts()
-    || empty($stateDocument)
-) {
-    $pageContent .= Display::div(
-        $frmNewRegistration->returnForm(),
-        ['class' => 'exercise_overview_options']
+    $descriptionHtml = Display::tag(
+        'p',
+        $toolLaunch->getDescription(),
+        ['class' => 'text-muted', 'style' => 'margin:0;']
     );
 }
 
-if ($stateDocument) {
-    $pageContent .= $table->toHtml();
+$newAttemptForm = '';
+if ($toolLaunch->isAllowMultipleAttempts() || empty($stateDocument)) {
+    $newAttemptForm = xapi_render_tincan_launch_form(
+        $toolLaunch->getId(),
+        Uuid::v4()->toRfc4122(),
+        $cidReq,
+        $plugin->get_lang('LaunchNewAttempt'),
+        $launchTarget,
+        'success'
+    );
+}
+
+$attemptTableHtml = '';
+
+if (!empty($stateDocument) && is_array($stateDocument)) {
+    $table = new HTML_Table(['class' => 'table table-hover table-striped']);
+    $table->setHeaderContents(0, 0, $plugin->get_lang('ActivityFirstLaunch'));
+    $table->setHeaderContents(0, 1, $plugin->get_lang('ActivityLastLaunch'));
+    $table->setHeaderContents(0, 2, get_lang('Actions'));
+
+    $row = 1;
+
+    foreach ($stateDocument as $attemptId => $attempt) {
+        if (!is_array($attempt)) {
+            continue;
+        }
+
+        $firstLaunch = !empty($attempt[XApiPlugin::STATE_FIRST_LAUNCH])
+            ? api_convert_and_format_date(
+                $attempt[XApiPlugin::STATE_FIRST_LAUNCH],
+                DATE_TIME_FORMAT_LONG
+            )
+            : '-';
+
+        $lastLaunch = !empty($attempt[XApiPlugin::STATE_LAST_LAUNCH])
+            ? api_convert_and_format_date(
+                $attempt[XApiPlugin::STATE_LAST_LAUNCH],
+                DATE_TIME_FORMAT_LONG
+            )
+            : '-';
+
+        $launchForm = xapi_render_tincan_launch_form(
+            $toolLaunch->getId(),
+            (string) $attemptId,
+            $cidReq,
+            $plugin->get_lang('ActivityLaunch'),
+            $launchTarget
+        );
+
+        $table->setCellContents($row, 0, $firstLaunch);
+        $table->setCellContents($row, 1, $lastLaunch);
+        $table->setCellContents($row, 2, $launchForm);
+
+        $row++;
+    }
+
+    $table->setColAttributes(0, ['class' => 'text-center', 'style' => 'width:35%;']);
+    $table->setColAttributes(1, ['class' => 'text-center', 'style' => 'width:35%;']);
+    $table->setColAttributes(2, ['class' => 'text-center', 'style' => 'width:30%;']);
+
+    $attemptTableHtml = Display::tag(
+        'div',
+        $table->toHtml(),
+        ['style' => 'margin-top:20px;']
+    );
+}
+
+$topCard = '<div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm" '
+    .'style="border:1px solid #e5e7eb;border-radius:18px;background:#fff;padding:24px;">'
+    .'<div style="display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:16px;">'
+    .'<div style="display:flex;flex-direction:column;gap:10px;">'
+    .Display::tag(
+        'div',
+        xapi_render_tincan_type_badge(),
+        ['style' => 'display:flex;align-items:center;gap:8px;']
+    )
+    .$descriptionHtml
+    .'</div>'
+    .'<div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;">'
+    .$newAttemptForm
+    .'</div>'
+    .'</div>'
+    .$attemptTableHtml
+    .'</div>';
+
+$pageContent .= $topCard;
+
+if (!$originIsLearnpath) {
+    $pageContent .= '<div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm" '
+        .'style="border:1px solid #e5e7eb;border-radius:18px;background:#fff;padding:24px;margin-top:24px;">'
+        .Display::tag('h3', get_lang('Preview'), [
+            'style' => 'margin:0 0 6px 0;font-size:22px;font-weight:700;',
+        ])
+        .Display::tag(
+            'p',
+            get_lang('The selected activity will open here.'),
+            ['class' => 'text-muted', 'style' => 'margin:0 0 16px 0;']
+        )
+        .'<iframe '
+        .'name="'.$previewFrameName.'" '
+        .'title="TinCan preview" '
+        .'src="about:blank" '
+        .'style="width:100%;min-height:780px;border:1px solid #e5e7eb;border-radius:16px;background:#fff;"'
+        .'></iframe>'
+        .'</div>';
 }
 
 $actions = '';
@@ -193,5 +278,6 @@ if ($actions) {
         )
     );
 }
+
 $view->assign('content', $pageContent);
 $view->display_one_col_template();

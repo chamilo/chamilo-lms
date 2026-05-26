@@ -1,0 +1,22 @@
+<?php
+$strings['plugin_title'] = 'H5P 가져오기';
+$strings['plugin_comment'] = 'H5P 콘텐츠를 가져와 학습 경로에서 사용하세요. 설치 지침은 README.md를 참조하세요.';
+$strings['frame'] = '프레임';
+$strings['frame_help'] = 'H5P 아래에 프레임과 버튼 표시';
+$strings['embed'] = '임베드';
+$strings['embed_help'] = '임베드 버튼 표시';
+$strings['copyright'] = '저작권';
+$strings['copyright_help'] = '저작권 버튼 표시';
+$strings['icon'] = '아이콘';
+$strings['icon_help'] = 'H5P 아이콘 표시';
+$strings['attempts'] = '시도 횟수';
+$strings['upload_h5p'] = '업로드';
+$strings['import_h5p_package'] = 'H5P 패키지 업로드';
+$strings['h5p_package'] = 'H5P 패키지';
+$strings['h5p_error_loading'] = 'H5P 패키지 로드 오류';
+$strings['h5p_error_invalid_token'] = '잘못된 보안 토큰';
+$strings['h5p_error_missing_core_asset'] = 'H5P 코어 자산 로드 오류';
+$strings['h5p_save_content_state'] = '사용자 결과 저장';
+$strings['h5p_save_content_freq'] = '저장 빈도';
+$strings['h5p_save_freq_help'] = '현재 콘텐츠 상태를 초 단위로 저장할 빈도';
+$strings['start_attempt'] = '시도 시작';

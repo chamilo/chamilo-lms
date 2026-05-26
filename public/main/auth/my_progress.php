@@ -1,15 +1,18 @@
 <?php
+
+declare(strict_types=1);
 /* For licensing terms, see /license.txt */
 
-/**
+/*
  * Reporting page on the user's own progress.
  */
 
-use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
+use Chamilo\CoreBundle\Enums\ToolIcon;
+use Chamilo\CoreBundle\Framework\Container;
 
 $cidReset = true;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
@@ -77,8 +80,50 @@ if ($sessionId && !isset($_GET['session_id'])) {
 }
 
 // Main progress sections (courses + sessions).
-$content = Tracking::show_user_progress($user_id, $sessionId);
-$content .= Tracking::show_course_detail($user_id, $courseId, $sessionId);
+$showSessionGraph = 'true' !== api_get_setting('session.hide_session_graph_in_my_progress');
+
+$content = Tracking::show_user_progress(
+    $user_id,
+    $sessionId,
+    '',
+    true,
+    true,
+    false,
+    $showSessionGraph
+);
+
+$showAllSessionCourses = 'true' === api_get_setting('session.my_progress_session_show_all_courses');
+
+if ($showAllSessionCourses && !empty($sessionId) && empty($courseId)) {
+    $sessionCourseData = Tracking::show_user_progress(
+        $user_id,
+        $sessionId,
+        '',
+        true,
+        true,
+        true,
+        $showSessionGraph
+    );
+
+    if (
+        isset($sessionCourseData[$sessionId]['course_list'])
+        && is_array($sessionCourseData[$sessionId]['course_list'])
+    ) {
+        foreach ($sessionCourseData[$sessionId]['course_list'] as $courseData) {
+            if (empty($courseData['real_id'])) {
+                continue;
+            }
+
+            $content .= Tracking::show_course_detail(
+                $user_id,
+                (int) $courseData['real_id'],
+                $sessionId
+            );
+        }
+    }
+} else {
+    $content .= Tracking::show_course_detail($user_id, $courseId, $sessionId);
+}
 
 // Optional messages about the user.
 if ('true' === api_get_setting('message.private_messages_about_user_visible_to_user')) {
@@ -107,10 +152,31 @@ if ($show) {
         $table->setHeaderContents(0, 1, get_lang('Diagram'));
 
         $row = 1;
+        $careerModel = new Career();
+        $useExternalCareerId = 'true' === api_get_setting('platform.use_career_external_id_as_identifier_in_diagrams');
+
         foreach ($careers as $careerData) {
             $table->setCellContents($row, 0, $careerData['title']);
-            $url = api_get_path(WEB_CODE_PATH).'user/career_diagram.php?career_id='.$careerData['id'];
-            $diagram = Display::url(get_lang('Diagram'), $url);
+
+            $careerIdentifier = (string) $careerData['id'];
+
+            if ($useExternalCareerId) {
+                $externalCareerId = $careerModel->getCareerIdFromInternalToExternal((int) $careerData['id']);
+
+                if (!empty($externalCareerId)) {
+                    $careerIdentifier = $externalCareerId;
+                } else {
+                    $careerIdentifier = '';
+                }
+            }
+
+            if ('' !== $careerIdentifier) {
+                $url = api_get_path(WEB_CODE_PATH).'user/career_diagram.php?career_id='.urlencode($careerIdentifier);
+                $diagram = Display::url(get_lang('Diagram'), $url);
+            } else {
+                $diagram = get_lang('No data available');
+            }
+
             $table->setCellContents($row, 1, $diagram);
             $row++;
         }

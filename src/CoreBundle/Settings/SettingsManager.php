@@ -1005,13 +1005,9 @@ class SettingsManager implements SettingsManagerInterface
             'siteName' => 'Platform',
             'site_name' => 'Platform',
             'emailAdministrator' => 'admin',
-            // 'emailAdministrator' => 'Platform',
             'administratorSurname' => 'admin',
             'administratorTelephone' => 'admin',
             'administratorName' => 'admin',
-            'show_administrator_data' => 'Platform',
-            'show_tutor_data' => 'Session',
-            'show_teacher_data' => 'Platform',
             'show_toolshortcuts' => 'Course',
             'allow_group_categories' => 'Course',
             'server_type' => 'Platform',
@@ -1178,6 +1174,7 @@ class SettingsManager implements SettingsManagerInterface
             'allow_session_admins_to_manage_all_sessions' => 'Session',
             'allow_skills_tool' => 'Platform',
             'allow_public_certificates' => 'Course',
+            'allow_certificates_search' => 'Certificate',
             'platform_unsubscribe_allowed' => 'Platform',
             'enable_iframe_inclusion' => 'Editor',
             'show_hot_courses' => 'Platform',
@@ -1206,8 +1203,6 @@ class SettingsManager implements SettingsManagerInterface
             'ticket_allow_category_edition' => 'Ticket',
             'load_term_conditions_section' => 'Platform',
             'show_terms_if_profile_completed' => 'Profile',
-            'hide_home_top_when_connected' => 'Platform',
-            'hide_global_announcements_when_not_connected' => 'Platform',
             'course_creation_use_template' => 'Course',
             'allow_strength_pass_checker' => 'Security',
             'allow_captcha' => 'Security',
@@ -1234,9 +1229,8 @@ class SettingsManager implements SettingsManagerInterface
             'course_images_in_courses_list' => 'Course',
             'student_publication_to_take_in_gradebook' => 'Gradebook',
             'certificate_filter_by_official_code' => 'Gradebook',
-            'exercise_max_keditors_in_page' => 'Tools',
+            'exercise_max_editors_in_page' => 'Tools',
             'document_if_file_exists_option' => 'Tools',
-            'add_gradebook_certificates_cron_task_enabled' => 'Gradebook',
             'openbadges_backpack' => 'Gradebook',
             'cookie_warning' => 'Tools',
             'hide_course_group_if_no_tools_available' => 'Tools',
@@ -1326,8 +1320,9 @@ class SettingsManager implements SettingsManagerInterface
             'administrator_surname' => 'admin',
             'administrator_name' => 'admin',
             'administrator_phone' => 'admin',
-            'exercise_max_keditors_in_page' => 'exercise',
+            'exercise_max_editors_in_page' => 'exercise',
             'allow_hr_skills_management' => 'skill',
+            'allow_certificates_search' => 'certificate',
             'accessibility_font_resize' => 'display',
             'account_valid_duration' => 'profile',
             'allow_global_chat' => 'chat',
@@ -1357,7 +1352,6 @@ class SettingsManager implements SettingsManagerInterface
             'platform_unsubscribe_allowed' => 'registration',
             'send_email_to_admin_when_create_course' => 'course',
             'show_admin_toolbar' => 'display',
-            'show_administrator_data' => 'display',
             'show_back_link_on_top_of_tree' => 'display',
             'show_closed_courses' => 'display',
             'show_different_course_language' => 'display',
@@ -1367,7 +1361,6 @@ class SettingsManager implements SettingsManagerInterface
             'show_hot_courses' => 'display',
             'show_link_bug_notification' => 'display',
             'show_number_of_courses' => 'display',
-            'show_teacher_data' => 'display',
             'showonline' => 'display',
             'student_autosubscribe' => 'registration',
             'student_page_after_login' => 'registration',
@@ -1376,8 +1369,6 @@ class SettingsManager implements SettingsManagerInterface
             'teacher_page_after_login' => 'registration',
             'time_limit_whosonline' => 'display',
             'user_selected_theme' => 'profile',
-            'hide_global_announcements_when_not_connected' => 'announcement',
-            'hide_home_top_when_connected' => 'display',
             'hide_logout_button' => 'display',
             'institution_address' => 'platform',
             'redirect_admin_to_courses_list' => 'admin',
@@ -1397,7 +1388,6 @@ class SettingsManager implements SettingsManagerInterface
             'allow_coach_feedback_exercises' => 'exercise',
             'sessionadmin_autosubscribe' => 'registration',
             'sessionadmin_page_after_login' => 'registration',
-            'show_tutor_data' => 'display',
             'allow_social_tool' => 'social',
             'allow_message_tool' => 'message',
             'allow_email_editor' => 'editor',
@@ -1906,7 +1896,7 @@ class SettingsManager implements SettingsManagerInterface
     /**
      * Upsert course settings for all courses in batches.
      *
-     * @param array<string,string> $varToValue variable => value
+     * @param array<string, string> $varToValue variable => value
      */
     private function upsertCourseSettingsForAllCourses(string $category, array $varToValue, bool $force = false): void
     {
@@ -1919,12 +1909,12 @@ class SettingsManager implements SettingsManagerInterface
         ;
 
         $courseIds = array_map(
-            static fn (array $r): int => (int) ($r['id'] ?? 0),
+            static fn (array $row): int => (int) ($row['id'] ?? 0),
             $courseIdRows
         );
         $courseIds = array_values(array_filter($courseIds, static fn (int $id): bool => $id > 0));
 
-        if (empty($courseIds)) {
+        if (empty($courseIds) || empty($varToValue)) {
             return;
         }
 
@@ -1934,54 +1924,152 @@ class SettingsManager implements SettingsManagerInterface
         for ($offset = 0; $offset < \count($courseIds); $offset += $batchSize) {
             $chunk = \array_slice($courseIds, $offset, $batchSize);
 
-            // Load existing settings for this chunk
+            /*
+             * Include legacy rows with NULL/empty category.
+             * Some course settings were historically stored only by variable.
+             * Ignoring them creates semantic duplicates for the same course and variable.
+             */
             $existing = $this->manager->createQueryBuilder()
                 ->select('cs')
                 ->from(CCourseSetting::class, 'cs')
                 ->where('cs.cId IN (:cids)')
                 ->andWhere('cs.variable IN (:vars)')
-                ->andWhere('cs.category = :cat')
+                ->andWhere('(cs.category = :category OR cs.category IS NULL OR cs.category = :emptyCategory)')
                 ->setParameter('cids', $chunk)
                 ->setParameter('vars', $vars)
-                ->setParameter('cat', $category)
+                ->setParameter('category', $category)
+                ->setParameter('emptyCategory', '')
+                ->orderBy('cs.iid', 'ASC')
                 ->getQuery()
                 ->getResult()
             ;
 
-            /** @var array<int, array<string, CCourseSetting>> $byCourse */
-            $byCourse = [];
+            /** @var array<int, array<string, CCourseSetting[]>> $rowsByCourseAndVariable */
+            $rowsByCourseAndVariable = [];
+
             foreach ($existing as $row) {
                 if (!$row instanceof CCourseSetting) {
                     continue;
                 }
-                $cId = (int) $row->getCId();
-                $var = (string) $row->getVariable();
-                $byCourse[$cId][$var] = $row;
+
+                $courseId = (int) $row->getCId();
+                $variable = (string) $row->getVariable();
+
+                $rowsByCourseAndVariable[$courseId][$variable][] = $row;
             }
 
-            foreach ($chunk as $cId) {
-                foreach ($varToValue as $var => $value) {
-                    $row = $byCourse[$cId][$var] ?? null;
+            foreach ($chunk as $courseId) {
+                foreach ($varToValue as $variable => $value) {
+                    $rows = $rowsByCourseAndVariable[$courseId][$variable] ?? [];
 
-                    if ($row instanceof CCourseSetting) {
-                        if ($force && (string) $row->getValue() !== $value) {
-                            $row->setValue($value);
-                            $this->manager->persist($row);
-                        }
+                    if (empty($rows)) {
+                        $new = new CCourseSetting();
+                        $new
+                            ->setCId($courseId)
+                            ->setVariable($variable)
+                            ->setTitle($variable)
+                            ->setCategory($category)
+                            ->setValue($value)
+                        ;
+
+                        $this->manager->persist($new);
 
                         continue;
                     }
 
-                    $new = new CCourseSetting();
-                    $new
-                        ->setCId($cId)
-                        ->setVariable($var)
-                        ->setTitle($var)
-                        ->setCategory($category)
-                        ->setValue($value)
-                    ;
+                    $canonical = null;
 
-                    $this->manager->persist($new);
+                    /*
+                     * Prefer the row that already has the target category.
+                     * If it does not exist, reuse the oldest legacy row and normalize it.
+                     */
+                    foreach ($rows as $row) {
+                        if ($category === (string) $row->getCategory()) {
+                            $canonical = $row;
+
+                            break;
+                        }
+                    }
+
+                    if (!$canonical instanceof CCourseSetting) {
+                        $canonical = $rows[0];
+                    }
+
+                    /*
+                     * Preserve explicit course-level values when not forced.
+                     * Legacy NULL-category values are treated as existing course decisions.
+                     */
+                    $valueToKeep = null;
+
+                    if (!$force) {
+                        foreach ($rows as $row) {
+                            $rowCategory = (string) $row->getCategory();
+                            $rowValue = $row->getValue();
+
+                            if (
+                                $category !== $rowCategory
+                                && null !== $rowValue
+                                && '' !== (string) $rowValue
+                            ) {
+                                $valueToKeep = (string) $rowValue;
+
+                                break;
+                            }
+                        }
+
+                        if (null === $valueToKeep) {
+                            foreach ($rows as $row) {
+                                $rowCategory = (string) $row->getCategory();
+                                $rowValue = $row->getValue();
+
+                                if (
+                                    $category === $rowCategory
+                                    && null !== $rowValue
+                                    && '' !== (string) $rowValue
+                                ) {
+                                    $valueToKeep = (string) $rowValue;
+
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    if ($force || null === $valueToKeep) {
+                        $valueToKeep = (string) $value;
+                    }
+
+                    $needsPersist = false;
+
+                    if ($category !== (string) $canonical->getCategory()) {
+                        $canonical->setCategory($category);
+                        $needsPersist = true;
+                    }
+
+                    if ('' === trim((string) $canonical->getTitle())) {
+                        $canonical->setTitle($variable);
+                        $needsPersist = true;
+                    }
+
+                    if ((string) ($canonical->getValue() ?? '') !== $valueToKeep) {
+                        $canonical->setValue($valueToKeep);
+                        $needsPersist = true;
+                    }
+
+                    if ($needsPersist) {
+                        $this->manager->persist($canonical);
+                    }
+
+                    /*
+                     * Remove semantic duplicates after preserving the effective value.
+                     */
+                    foreach ($rows as $row) {
+                        if ($row === $canonical) {
+                            continue;
+                        }
+
+                        $this->manager->remove($row);
+                    }
                 }
             }
 

@@ -81,10 +81,6 @@ const mainUrl = homePublicUrl + "main/"
 const webAjax = homePublicUrl + "main/inc/ajax/"
 
 $(function () {
-  let courseId = $("body").attr("data-course-id")
-  let webCidReq = "&cid=" + courseId + "&sid=" + $("body").attr("data-session-id")
-  window.webCidReq = webCidReq
-
   $("#menu_courses").click(function () {
     return false
   })
@@ -95,22 +91,21 @@ $(function () {
     return false
   })
 
-  if (courseId > 0) {
-    let courseCode = $("body").data("course-code")
-    let logOutUrl = webAjax + "course.ajax.php?a=course_logout&cidReq=" + courseCode
-
-    function courseLogout() {
-      $.ajax({
-        async: false,
-        url: logOutUrl,
-        success: function () {
-          return 1
-        },
-      })
+  function courseLogout() {
+    if (!window.chamiloCidReq.course?.id) {
+      return
     }
 
-    addMainEvent(window, "unload", courseLogout, false)
+    $.ajax({
+      async: false,
+      url: "/main/inc/ajax/course.ajax.php?a=course_logout&" + window.chamiloCidReq.queryParams,
+      success: function () {
+        return 1
+      },
+    })
   }
+
+  addMainEvent(window, "unload", courseLogout, false)
 
   $("#open-view-list").click(function () {
     $("#student-list-work").fadeIn(300)
@@ -164,28 +159,26 @@ $(function () {
     e.preventDefault()
 
     var contentUrl = this.href,
-      loadModalContent = $.get(contentUrl),
       self = $(this)
 
-    $.when(loadModalContent).done(function (modalContent) {
-      var modalTitle = self.data("title") || " ",
-        globalModalTitle = $("#global-modal").find("#global-modal-title"),
-        globalModalBody = $("#global-modal").find("#global-modal-body")
+    var dialog = document.getElementById("global-modal")
+    $("#global-modal-title").text(self.data("title") || " ")
+    var $body = $("#global-modal-body")
+    $body.html('<div class="flex justify-center py-8"><i class="mdi mdi-loading mdi-spin text-3xl"></i></div>')
+    dialog.showModal()
 
-      globalModalTitle.text(modalTitle)
-      globalModalBody.html(modalContent)
-
-      globalModalBody.css({ "max-height": "500px", overflow: "auto" })
-      toggleModal("global-modal")
+    $.get(contentUrl).done(function (modalContent) {
+      $body.html(modalContent)
     })
   })
 
-  $("#global-modal").on("hidden.bs.modal", function () {
+  $("#global-modal").on("close", function () {
     $(".embed-responsive").find("iframe").remove()
+    $("#global-modal-body").empty()
   })
 
   $("#close-global-model").on("click", function () {
-    toggleModal("global-modal")
+    document.getElementById("global-modal").close()
   })
 
   // Expands an image modal
@@ -792,13 +785,6 @@ window.copyTextToClipBoard = function (elementId) {
     copyText.select()
     document.execCommand("copy")
   }
-}
-
-function toggleModal(modalID) {
-  document.getElementById(modalID).classList.toggle("hidden")
-  document.getElementById(modalID + "-backdrop").classList.toggle("hidden")
-  document.getElementById(modalID).classList.toggle("flex")
-  document.getElementById(modalID + "-backdrop").classList.toggle("flex")
 }
 
 // Expose functions to be use inside chamilo.

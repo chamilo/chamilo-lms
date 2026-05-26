@@ -45,12 +45,7 @@ class SessionControllerTest extends AbstractApiTest
         $em->persist($item);
         $em->flush();
 
-        $tokenFrom = $this->getUserToken(
-            [
-                'username' => 'admin',
-                'password' => 'admin',
-            ]
-        );
+        $tokenFrom = $this->getUserTokenFromUser($courseCoach);
 
         $response = $this->createClientWithCredentials($tokenFrom)->request(
             'POST',

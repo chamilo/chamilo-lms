@@ -33,6 +33,15 @@ class CreateSocialPostAttachmentAction extends BaseResourceFileAction
             throw new Exception('No file uploaded');
         }
 
+        // Security: allowlist of safe MIME types for social post attachments (A03 - XSS prevention).
+        // Only images and videos are accepted; everything else (HTML, JS, PDF, etc.) is rejected.
+        $actualMimeType = strtolower((string) $uploadedFile->getMimeType());
+        $isSafeCategory = str_starts_with($actualMimeType, 'image/') || str_starts_with($actualMimeType, 'video/');
+
+        if (!$isSafeCategory) {
+            throw new Exception('File type not allowed');
+        }
+
         $socialPost = $em->getRepository(SocialPost::class)->find($socialPostId);
         if (!$socialPost) {
             throw new Exception('No social post found');

@@ -1,0 +1,16 @@
+{
+  "title": "Font Awesome",
+  "contentType": "Font",
+  "majorVersion": 4,
+  "minorVersion": 5,
+  "patchVersion": 4,
+  "runnable": 0,
+  "machineName": "FontAwesome",
+  "license": "MIT",
+  "author": "Dave Gandy",
+  "preloadedCss": [
+    {
+      "path": "h5p-font-awesome.min.css"
+    }
+  ]
+}

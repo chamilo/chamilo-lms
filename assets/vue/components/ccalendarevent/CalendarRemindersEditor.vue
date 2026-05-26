@@ -30,7 +30,7 @@ function addEmptyReminder() {
       <BaseButton
         :label="t('Add reminder')"
         icon="add-event-reminder"
-        type="black"
+        type="success"
         @click="addEmptyReminder"
       />
 
@@ -53,7 +53,7 @@ function addEmptyReminder() {
             option-value="value"
           />
           <div
-            v-t="'Before'"
+            v-text="t('Before')"
             class="p-inputgroup-addon"
           />
         </div>

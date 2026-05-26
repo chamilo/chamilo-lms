@@ -9,13 +9,13 @@
         </div>
       </template>
       <template #end>
-        <RouterLink :to="{ name: 'DropboxListSent', params: $route.params, query: $route.query }">
+        <BaseAppLink :to="returnRoute">
           <BaseButton
             type="black"
             icon="arrow-left"
             :label="t('Back')"
           />
-        </RouterLink>
+        </BaseAppLink>
       </template>
     </BaseToolbar>
 
@@ -90,14 +90,23 @@
               :is-invalid="false"
             />
 
-            <label class="inline-flex items-center gap-3 mt-3">
-              <input
-                id="overwrite"
-                type="checkbox"
-                v-model="overwrite"
-              />
-              <span class="text-sm">{{ t("Overwrite previous versions of same document?") }}</span>
-            </label>
+            <BaseAdvancedSettingsButton v-model="showAdvancedSettings">
+              <div class="flex flex-col gap-4">
+                <ResourceLanguageSelector
+                  id="dropbox-language"
+                  v-model="selectedLanguage"
+                />
+
+                <label class="inline-flex items-center gap-3">
+                  <input
+                    id="overwrite"
+                    v-model="overwrite"
+                    type="checkbox"
+                  />
+                  <span class="text-sm">{{ t("Overwrite previous versions of same document?") }}</span>
+                </label>
+              </div>
+            </BaseAdvancedSettingsButton>
           </div>
         </div>
       </div>
@@ -117,7 +126,7 @@
               :placeholder="t('Choose recipients')"
               style="width: 100%"
               label=""
-              :class="{ 'ring-1 ring-red-500 rounded-md': submitted && !hasSelectedRecipient }"
+              :class="{ 'ring-1 ring-red-500 rounded-md': submitted && !hasValidRecipientSelection }"
             />
             <small class="text-gray-500 block mt-1">
               {{ t("Tip: choose “— Just upload —” to store without sending to anyone.") }}
@@ -129,14 +138,20 @@
               {{ t("Please select at least one recipient (“— Just upload —” or any user)") }}
             </div>
 
-            <div class="flex justify-end gap-2 mt-6">
-              <RouterLink :to="{ name: 'DropboxListSent', params: $route.params, query: $route.query }">
+            <div
+              v-else-if="submitted && hasMixedMailingRecipients"
+              class="text-sm text-red-600 mt-1"
+            >
+              {{ t("Mailing cannot be combined with other recipients.") }}
+            </div>
+            <div class="flex justify-end gap-2 mt-2">
+              <BaseAppLink :to="returnRoute">
                 <BaseButton
                   type="black"
                   icon="xmark"
                   :label="t('Cancel')"
                 />
-              </RouterLink>
+              </BaseAppLink>
               <BaseButton
                 type="primary"
                 icon="check"
@@ -172,17 +187,23 @@ import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
+import BaseAdvancedSettingsButton from "../../components/basecomponents/BaseAdvancedSettingsButton.vue"
+import ResourceLanguageSelector from "../../components/resources/ResourceLanguageSelector.vue"
 
 import service from "../../services/dropbox"
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
+const returnRouteName = computed(() => (route.query?.from === "received" ? "DropboxListReceived" : "DropboxListSent"))
+const returnRoute = computed(() => ({ name: returnRouteName.value, params: route.params, query: route.query }))
 const uppy = shallowRef(null)
 
 const pickedFiles = ref([])
 const description = ref("")
 const overwrite = ref(false)
+const selectedLanguage = ref("")
+const showAdvancedSettings = ref(false)
 const submitted = ref(false)
 const isUploading = ref(false)
 
@@ -266,12 +287,17 @@ function toTokens(value) {
 
 const normalizedRecipientTokens = computed(() => toTokens(recipients.value))
 const hasSelectedRecipient = computed(() => normalizedRecipientTokens.value.length > 0)
-const canSubmit = computed(() => pickedFiles.value.length > 0 && hasSelectedRecipient.value)
+const hasMailingSelected = computed(() => normalizedRecipientTokens.value.includes("mailing"))
+const hasMixedMailingRecipients = computed(() => hasMailingSelected.value && normalizedRecipientTokens.value.length > 1)
+const hasValidRecipientSelection = computed(() => hasSelectedRecipient.value && !hasMixedMailingRecipients.value)
+const canSubmit = computed(() => pickedFiles.value.length > 0 && hasValidRecipientSelection.value)
 
 // submit
 async function submit() {
   submitted.value = true
-  if (!canSubmit.value || isUploading.value) return
+  if (!canSubmit.value || isUploading.value) {
+    return
+  }
 
   isUploading.value = true
   try {
@@ -290,6 +316,7 @@ async function submit() {
         recipients: tokens,
         area: "sent",
         context,
+        language: selectedLanguage.value,
       })
     }
 
@@ -297,6 +324,7 @@ async function submit() {
     // Reset minimal state
     description.value = ""
     overwrite.value = false
+    selectedLanguage.value = ""
     recipients.value = []
     try {
       uppy.value?.reset?.()
@@ -304,7 +332,7 @@ async function submit() {
     pickedFiles.value = []
 
     // Navigate back to list (sent)
-    router.push({ name: "DropboxListSent", params: route.params, query: route.query })
+    router.push(returnRoute.value)
   } catch (e) {
     console.error(e)
     alert(t("Upload failed"))

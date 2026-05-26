@@ -1,12 +1,12 @@
 <?php
 /* For license terms, see /license.txt */
 
-$cidReset = true;
-
-require_once __DIR__.'/../../main/inc/global.inc.php';
 use Chamilo\PluginBundle\LtiProvider\Entity\Platform;
 use Chamilo\PluginBundle\LtiProvider\Form\FrmAdd;
 
+$cidReset = true;
+
+require_once __DIR__.'/../../main/inc/global.inc.php';
 require_once __DIR__.'/LtiProviderPlugin.php';
 
 api_protect_admin_script();
@@ -28,7 +28,7 @@ if ($form->validate()) {
     $platform->setKeySetUrl($formValues['key_set_url']);
     $platform->setDeploymentId($formValues['deployment_id']);
     $platform->setKid($formValues['kid']);
-    $toolProvider = (isset($formValues['tool_provider']) ? $formValues['tool_provider'] : $_POST['tool_provider']);
+    $toolProvider = $formValues['tool_provider'] ?? ($_POST['tool_provider'] ?? null);
     $platform->setToolProvider($toolProvider);
 
     $em->persist($platform);
@@ -44,13 +44,21 @@ if ($form->validate()) {
 
 $form->setDefaultValues();
 
-$interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('Administration')];
-$interbreadcrumb[] = ['url' => api_get_path(WEB_PLUGIN_PATH).'LtiProvider/admin.php', 'name' => $plugin->get_title()];
+$interbreadcrumb[] = [
+    'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
+    'name' => get_lang('Administration'),
+];
+$interbreadcrumb[] = [
+    'url' => api_get_path(WEB_PLUGIN_PATH).'LtiProvider/admin.php',
+    'name' => $plugin->get_title(),
+];
 
 $pageTitle = $plugin->get_lang('AddPlatform');
+$adminUrl = api_get_path(WEB_PLUGIN_PATH).'LtiProvider/admin.php';
 
 $template = new Template($pageTitle);
 $template->assign('form', $form->returnForm());
+$template->assign('back_url', $adminUrl);
 
 $content = $template->fetch('LtiProvider/view/add.tpl');
 

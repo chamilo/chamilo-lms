@@ -15,12 +15,12 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Entity\Listener\MessageListener;
 use Chamilo\CoreBundle\Filter\PartialSearchOrFilter;
 use Chamilo\CoreBundle\Repository\MessageRepository;
-use Chamilo\CoreBundle\State\MessageByGroupStateProvider;
 use Chamilo\CoreBundle\State\MessageProcessor;
 use Chamilo\CoreBundle\State\MessageStateProvider;
 use DateTime;
@@ -29,7 +29,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'message')]
@@ -49,12 +49,6 @@ use Symfony\Component\Validator\Constraints as Assert;
             name: 'get_all_messages',
             provider: MessageStateProvider::class
         ),
-        new GetCollection(
-            uriTemplate: '/messages/by-group/list',
-            security: "is_granted('ROLE_USER')",
-            name: 'get_messages_by_social_group',
-            provider: MessageByGroupStateProvider::class
-        ),
         new Post(securityPostDenormalize: "is_granted('CREATE', object)"),
     ],
     normalizationContext: [
@@ -65,6 +59,25 @@ use Symfony\Component\Validator\Constraints as Assert;
     ],
     security: "is_granted('ROLE_USER')",
     processor: MessageProcessor::class,
+)]
+#[ApiResource(
+    uriTemplate: '/usergroups/{usergroupId}/messages',
+    operations: [
+        new GetCollection(
+            name: 'get_messages_by_social_group',
+        ),
+    ],
+    uriVariables: [
+        'usergroupId' => new Link(
+            toProperty: 'group',
+            fromClass: Usergroup::class,
+            description: 'Usergroup identifier',
+        ),
+    ],
+    normalizationContext: [
+        'groups' => ['message:read'],
+    ],
+    security: "is_granted('ROLE_USER')",
 )]
 #[ApiFilter(filterClass: OrderFilter::class, properties: ['title', 'sendDate'])]
 #[ApiFilter(SearchFilter::class, properties: [

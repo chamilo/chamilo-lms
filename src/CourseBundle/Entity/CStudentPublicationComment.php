@@ -9,6 +9,7 @@ namespace Chamilo\CourseBundle\Entity;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use Chamilo\CoreBundle\Controller\Api\CreateStudentPublicationCommentAction;
@@ -20,7 +21,7 @@ use Cocur\Slugify\Slugify;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Uid\Uuid;
 
 #[ApiResource(
@@ -35,6 +36,10 @@ use Symfony\Component\Uid\Uuid;
             security: "is_granted('ROLE_USER')",
             deserialize: false,
         ),
+        new Delete(
+            uriTemplate: '/c_student_publication_comments/{iid}',
+            security: "is_granted('ROLE_USER') and object.getUser().getId() == user.getId()",
+        ),
     ],
     normalizationContext: ['groups' => ['student_publication_comment:read']]
 )]
@@ -45,6 +50,7 @@ use Symfony\Component\Uid\Uuid;
 #[ORM\Entity(repositoryClass: CStudentPublicationCommentRepository::class)]
 class CStudentPublicationComment extends AbstractResource implements ResourceInterface, Stringable
 {
+    #[Groups(['student_publication_comment:read'])]
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]

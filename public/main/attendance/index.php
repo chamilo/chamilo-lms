@@ -33,6 +33,7 @@ $actions = [
     'attendance_set_visible_select',
     'attendance_restore',
     'attendance_sheet_export_to_pdf',
+    'attendance_sheet_export_to_xls',
     'attendance_sheet_list_no_edit',
     'calendar_logins',
     'calendar_list',
@@ -347,11 +348,19 @@ switch ($action) {
         }
 
         if (isset($_POST['id']) && is_array($_POST['id'])) {
+            if (!Security::check_token('post')) {
+                api_not_allowed(true);
+            }
+            Security::clear_token();
             foreach ($_POST['id'] as $id) {
                 $attendanceEntity = $repo->find($id);
                 $attendance->changeVisibility($attendanceEntity, 1);
             }
         } else {
+            if (!Security::check_token('get')) {
+                api_not_allowed(true);
+            }
+            Security::clear_token();
             $attendance->changeVisibility($attendanceEntity, 1);
         }
 
@@ -362,11 +371,19 @@ switch ($action) {
     case 'attendance_set_invisible':
     case 'attendance_set_invisible_select':
         if (isset($_POST['id']) && is_array($_POST['id'])) {
+            if (!Security::check_token('post')) {
+                api_not_allowed(true);
+            }
+            Security::clear_token();
             foreach ($_POST['id'] as $id) {
                 $attendanceEntity = $repo->find($id);
                 $attendance->changeVisibility($attendanceEntity, 0);
             }
         } else {
+            if (!Security::check_token('get')) {
+                api_not_allowed(true);
+            }
+            Security::clear_token();
             $attendance->changeVisibility($attendanceEntity, 0);
         }
 
@@ -381,11 +398,19 @@ switch ($action) {
         }
 
         if (isset($_POST['id']) && is_array($_POST['id'])) {
+            if (!Security::check_token('post')) {
+                api_not_allowed(true);
+            }
+            Security::clear_token();
             foreach ($_POST['id'] as $id) {
                 $attendanceEntity = $repo->find($id);
                 $attendance->attendance_delete($attendanceEntity);
             }
         } else {
+            if (!Security::check_token('get')) {
+                api_not_allowed(true);
+            }
+            Security::clear_token();
             $attendance->attendance_delete($attendanceEntity);
         }
 
@@ -406,6 +431,14 @@ switch ($action) {
         break;
     case 'attendance_sheet_export_to_pdf':
         $attendance->attendance_sheet_export_to_pdf(
+            $attendanceId,
+            $student_id,
+            api_get_course_id()
+        );
+
+        break;
+    case 'attendance_sheet_export_to_xls':
+        $attendance->attendance_sheet_export_to_xls(
             $attendanceId,
             $student_id,
             api_get_course_id()
@@ -466,6 +499,10 @@ switch ($action) {
         }
 
         if ('POST' === strtoupper($_SERVER['REQUEST_METHOD'])) {
+            if (!Security::check_token('post')) {
+                api_not_allowed(true);
+            }
+            Security::clear_token();
             if (!isset($_POST['cancel'])) {
                 if (isset($_POST['repeat'])) {
                     //@todo  check this error_logs
@@ -566,6 +603,8 @@ switch ($action) {
 
             $form->addSelect('groups', get_lang('Group'), $groupIdList);
 
+            $form->addElement('hidden', 'sec_token');
+            $form->setConstants(['sec_token' => $token]);
             $form->addButtonCreate(get_lang('Save'));
             $form->setDefaults($defaults);
             $content = $form->returnForm();
@@ -577,6 +616,10 @@ switch ($action) {
         }
 
         if ('POST' === strtoupper($_SERVER['REQUEST_METHOD'])) {
+            if (!Security::check_token('post')) {
+                api_not_allowed(true);
+            }
+            Security::clear_token();
             if (!isset($_POST['cancel'])) {
                 $attendance->set_date_time(api_get_utc_datetime($_POST['date_time']));
                 $attendance->attendance_calendar_edit($calendarId, $attendanceEntity);
@@ -602,6 +645,8 @@ switch ($action) {
                 5
             );
             $defaults['date_time'] = $calendarEntity->getDateTime()->format('Y-m-d H:i:s');
+            $form->addElement('hidden', 'sec_token');
+            $form->setConstants(['sec_token' => $token]);
             $form->addButtonSave(get_lang('Save'));
             $form->addButtonCancel(get_lang('Cancel'), 'cancel');
             $form->setDefaults($defaults);

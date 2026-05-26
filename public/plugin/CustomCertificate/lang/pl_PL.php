@@ -1,0 +1,77 @@
+<?php
+$strings['plugin_title'] = 'Niestandardowy certyfikat';
+$strings['plugin_comment'] = 'Ta wtyczka pozwala tworzyć niestandardowe certyfikaty dla każdego kursu.';
+$strings['enable_plugin_customcertificate'] = 'Włącz wtyczkę';
+$strings['customcertificate_course_enable'] = 'Niestandardowy certyfikat włączony w kursie';
+$strings['use_certificate_default'] = 'Użyj domyślnego niestandardowego certyfikatu';
+$strings['ToolDisabled'] = 'Narzędzie jest wyłączone z administracji';
+$strings['OnlyAdminPlatform'] = 'Narzędzie tylko dla administratorów';
+$strings['OnlyAdminPlatformOrTeacher'] = 'Narzędzie tylko dla administratorów i nauczycieli';
+$strings['TrainingEntity'] = 'Jednostka szkoleniowa';
+$strings['DescriptionFront'] = 'Opis przedni';
+$strings['DescriptionRear'] = 'Opis tylny';
+$strings['Certify'] = 'Certyfikuj';
+$strings['CertificateType'] = 'Typ certyfikatu';
+$strings['CertifyThat'] = 'POŚWIADCZA SIĘ, ŻE';
+$strings['StudentCourseInfo'] = 'Dane studenta i kursu';
+$strings['StudentData'] = 'Dane studenta';
+$strings['CourseData'] = 'Dane kursu';
+$strings['Modality'] = 'Forma';
+$strings['Contents'] = 'Zawartości';
+$strings['ContentsToShow'] = 'Zawartości do pokazania';
+$strings['ContentsCourseDescription'] = 'Użyj sekcji „Opis kursu” > „Zawartości”';
+$strings['ContentsIndexLearnpath'] = 'Użyj indeksu ścieżki uczenia';
+$strings['ContentsCustom'] = 'Użyj niestandardowej zawartości';
+$strings['ContentsHide'] = 'Nie pokazuj zawartości';
+$strings['Dates'] = 'Daty';
+$strings['CourseDeliveryDates'] = 'Daty realizacji kursu';
+$strings['Custom'] = 'Niestandardowe';
+$strings['UseDateSessionAccess'] = 'Użyj dat dostępu do sesji';
+$strings['ExpectionPlace'] = 'Miejsce wystawienia';
+$strings['DateExpediction'] = 'Data wystawienia';
+$strings['UseDateEndAccessSession'] = 'Użyj daty zakończenia dostępu do sesji';
+$strings['UseDateDownloadCertificate'] = 'Użyj daty pobrania certyfikatu';
+$strings['UseDateGenerationCertificate'] = 'Użyj daty wygenerowania certyfikatu';
+$strings['UseCustomDate'] = 'Użyj niestandardowej daty';
+$strings['LogosSeal'] = 'Loga / Pieczęcie';
+$strings['LogoLeft'] = 'Logo lewe';
+$strings['LogoCenter'] = 'Logo środkowe';
+$strings['LogoRight'] = 'Logo prawe';
+$strings['Seal'] = 'Pieczęć';
+$strings['Signature1'] = 'Podpis 1';
+$strings['Signature2'] = 'Podpis 2';
+$strings['Signature3'] = 'Podpis 3';
+$strings['Signature4'] = 'Podpis 4';
+$strings['SignatureText1'] = 'Tekst podpisu 1';
+$strings['SignatureText2'] = 'Tekst podpisu 2';
+$strings['SignatureText3'] = 'Tekst podpisu 3';
+$strings['SignatureText4'] = 'Tekst podpisu 4';
+$strings['OtherOptions'] = 'Inne opcje';
+$strings['MarginRight'] = 'Margines prawy';
+$strings['MarginLeft'] = 'Margines lewy';
+$strings['SetDefaultTemplate'] = 'Ustaw szablon jako domyślny';
+$strings['MessageDefaultTemplate'] = 'Zapisz tę domyślną personalizację dla kursów i sesji bez
+     zdefiniowanych certyfikatów';
+$strings['None'] = 'Brak';
+$strings['ErrorTemplateCertificate'] = 'Nie zdefiniowano szablonu dla certyfikatu.
+     Nie ma domyślnego szablonu.';
+$strings['DateStartEnd'] = 'Z datą rozpoczęcia i datą zakończenia: ';
+$strings['ExpedictionIn'] = 'Wydanie za';
+$strings['Signatures'] = 'Podpisy';
+$strings['BackgroundCertificate'] = 'Tło graficzne certyfikatu';
+$strings['Background'] = 'Tło';
+$strings['CertificateSetting'] = 'Ustawienia certyfikatu';
+$strings['ToolDisabledCourse'] = 'Narzędzie wyłączone w ustawieniach kursu';
+$strings['ToolUseDefaultSettingCourse'] = 'Narzędzie skonfigurowane do używania domyślnego certyfikatu. <br>
+     Możesz go edytować z ekranu Administracja -> Wtyczki -> Custom Certificate. <br>
+     Lub jeśli chcesz, możesz wyłączyć opcję używania certyfikatu domyślnie w konfiguracji wtyczki w kursie';
+$strings['CertificateSettingDefault'] = 'Domyślne ustawienia certyfikatu';
+$strings['InfoFromDefaultCertificate'] = 'Zawartość certyfikatu opiera się na domyślnym certyfikacie.
+     Wprowadzone zmiany nie wpłyną na domyślny certyfikat.';
+$strings['to'] = ' do ';
+$strings['formatDownloadDate'] = ' do %s %s, %s';
+$strings['PrintCertificate'] = 'Drukuj certyfikat';
+$strings['QuestionDelete'] = 'Czy chcesz usunąć konkretny dyplom i użyć domyślnego certyfikatu?';
+$strings['SuccessDelete'] = 'Pomyślnie usunięto';
+$strings['ProblemDelete'] = 'Problem z usuwaniem certyfikatu';
+$strings['OnlyCustomCertificates'] = 'Eksportowane są tylko kursy z personalizowanym certyfikatem';

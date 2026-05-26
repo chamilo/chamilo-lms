@@ -3,6 +3,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
 use ChamiloSession as Session;
 
 /**
@@ -141,6 +143,12 @@ Question::displayTypeMenu($objExercise);
 
 echo '<div id="message"></div>';
 $token = Security::get_token();
+$aiDisclosureHelper = null;
+try {
+    $aiDisclosureHelper = Container::$container->get(AiDisclosureHelper::class);
+} catch (\Throwable) {
+    $aiDisclosureHelper = null;
+}
 //deletes a session when using don't know question type (ugly fix)
 Session::erase('less_answer');
 
@@ -180,7 +188,7 @@ if (isset($exerciseId) && $exerciseId > 0) {
             <div id="question_list">
         ';
 
-        $category_list = TestCategory::getListOfCategoriesNameForTest($objExercise->id, false);
+        $category_list = TestCategory::getListOfCategoriesNameForTest($objExercise->id);
 
         if (is_array($questionList)) {
             foreach ($questionList as $id) {
@@ -255,11 +263,15 @@ if (isset($exerciseId) && $exerciseId > 0) {
                     $move = Display::getMdiIcon('cursor-move', 'moved', null, ICON_SIZE_MEDIUM);
                 }
 
+                $aiBadge = ($aiDisclosureHelper && $aiDisclosureHelper->shouldShowAiBadge('question', (int) $id))
+                    ? AiDisclosureHelper::renderAiBadgeHtml('prefix')
+                    : '';
+
                 // Question name
                 $questionName =
-                    '<a href="#" title = "'.Security::remove_XSS($title).'">
-                        '.$move.' '.cut($title, 42).'
-                    </a>';
+                    '<a href="#" title="'.Security::remove_XSS($title).'">'
+                    .$move.' '.$aiBadge.cut($title, 42).
+                    '</a>';
 
                 $questionType = Display::return_icon(
                     $objQuestionTmp->getTypePicture(),
@@ -325,10 +337,23 @@ if (isset($exerciseId) && $exerciseId > 0) {
         // Pagination navigation
         if ($showPagination && $nbrQuestions > $length) {
             $totalPages = ceil($nbrQuestions / $length);
-            echo '<div class="pagination flex justify-center mt-4">';
+            echo '<div class="pagination flex justify-center mt-4 space-x-2">';
             for ($i = 1; $i <= $totalPages; $i++) {
-                $isActive = ($i == $page) ? 'bg-primary text-white' : 'border-gray-300 text-gray-700 hover:bg-gray-200';
-                echo '<a href="?' . http_build_query(array_merge($_GET, ['page' => $i])) . '" class="mx-1 px-4 py-2 border ' . $isActive . ' rounded">' . $i . '</a>';
+                $allowedParams = [
+                    'cid' => 0,
+                    'sid' => 0,
+                    'gid' => 0,
+                    'gradebook' => 0,
+                    'origin' => '',
+                    'exerciseId' => 0,
+                    'page' => 0,
+                ];
+                $filteredGet = array_intersect_key($_GET, $allowedParams);
+                echo Display::url(
+                    $i,
+                    '?'.http_build_query(array_merge($filteredGet, ['page' => $i])),
+                    ['class' => $i == $page ? 'btn btn--primary' : 'btn btn--plain']
+                );
             }
             echo '</div>';
         }

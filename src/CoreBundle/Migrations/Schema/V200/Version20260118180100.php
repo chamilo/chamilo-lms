@@ -10,6 +10,9 @@ use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
+use const DIRECTORY_SEPARATOR;
+use const PHP_URL_HOST;
+
 final class Version20260118180100 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
@@ -30,6 +33,7 @@ final class Version20260118180100 extends AbstractMigrationChamilo
 
         if (!$rows) {
             error_log('[MIGRATION] No tracking extra content settings found. Nothing to do.');
+
             return;
         }
 
@@ -45,19 +49,21 @@ final class Version20260118180100 extends AbstractMigrationChamilo
             $variable = (string) ($row['variable'] ?? '');
             $value = trim((string) ($row['selected_value'] ?? ''));
 
-            if ($id <= 0 || $variable === '' || $value === '') {
+            if ($id <= 0 || '' === $variable || '' === $value) {
                 continue;
             }
 
             // If it already looks like HTML, keep it.
             if (str_contains($value, '<')) {
                 error_log("[MIGRATION] settings#$id ($variable): already HTML, skipped.");
+
                 continue;
             }
 
             // Only fix legacy file paths (typically "app/home/*.txt").
             if (!$this->looksLikeLegacyTxtPath($value)) {
                 error_log("[MIGRATION] settings#$id ($variable): not a legacy .txt path, skipped.");
+
                 continue;
             }
 
@@ -71,18 +77,20 @@ final class Version20260118180100 extends AbstractMigrationChamilo
 
             $fileContent = $this->readLegacyExtraContentFile($updateRoot, $value, $host);
 
-            if ($fileContent === null) {
+            if (null === $fileContent) {
                 error_log("[MIGRATION] settings#$id ($variable): file not found for '$value'. Clearing setting.");
                 $this->updateSettingValue($id, '');
+
                 continue;
             }
 
             $fileContent = trim($fileContent);
 
             // Be conservative: header/footer snippets are injected as raw HTML in Twig.
-            if ($fileContent === '' || !str_contains($fileContent, '<')) {
+            if ('' === $fileContent || !str_contains($fileContent, '<')) {
                 error_log("[MIGRATION] settings#$id ($variable): file content is empty or not HTML. Clearing setting.");
                 $this->updateSettingValue($id, '');
+
                 continue;
             }
 
@@ -118,7 +126,7 @@ final class Version20260118180100 extends AbstractMigrationChamilo
         $storedValue = trim($storedValue);
 
         $basename = basename(str_replace('\\', '/', $storedValue));
-        $relative = ltrim($storedValue, "/\\");
+        $relative = ltrim($storedValue, '/\\');
         $relative = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, $relative);
 
         $candidates = [];
@@ -127,7 +135,7 @@ final class Version20260118180100 extends AbstractMigrationChamilo
         $candidates[] = $updateRoot.DIRECTORY_SEPARATOR.$relative;
 
         // 2) updateRoot/app/home/<host>/<basename> (some upgrades store files per URL)
-        if ($host !== '') {
+        if ('' !== $host) {
             $candidates[] = $updateRoot.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'home'.DIRECTORY_SEPARATOR.$host.DIRECTORY_SEPARATOR.$basename;
         }
 
@@ -138,7 +146,7 @@ final class Version20260118180100 extends AbstractMigrationChamilo
             if (is_file($path) && is_readable($path)) {
                 error_log('[MIGRATION] Reading extra content file: '.$path);
                 $content = @file_get_contents($path);
-                if ($content !== false) {
+                if (false !== $content) {
                     return (string) $content;
                 }
             }

@@ -223,7 +223,7 @@ foreach ($messages as $message) {
     $counter++;
 }
 
-$subject = get_lang('Re:').': '.Security::remove_XSS($ticket['ticket']['subject']);
+$subject = get_lang('Re:').Security::remove_XSS($ticket['ticket']['subject']);
 
 if ($allowEdition
     && TicketManager::STATUS_CLOSED
@@ -501,6 +501,7 @@ function getForm($ticket)
         [
             'enctype' => 'multipart/form-data',
             'class' => 'form-horizontal',
+            'data-no-autofocus' => '1',
         ]
     );
 

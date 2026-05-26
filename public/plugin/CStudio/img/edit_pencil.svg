@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:export-ydpi="128"
+   inkscape:export-xdpi="128"
+   inkscape:export-filename="D:\wamp\www\chamilo-1.11.10\plugin\oel_teachdoc\img\edit_pencil.png"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   sodipodi:docname="edit_pencil.svg"
+   id="svg24"
+   width="24"
+   version="1.1"
+   height="24">
+  <metadata
+     id="metadata30">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs28" />
+  <sodipodi:namedview
+     inkscape:current-layer="svg24"
+     inkscape:window-maximized="1"
+     inkscape:window-y="-8"
+     inkscape:window-x="-8"
+     inkscape:cy="13.485884"
+     inkscape:cx="9.7842839"
+     inkscape:zoom="25.013902"
+     showgrid="false"
+     id="namedview26"
+     inkscape:window-height="1017"
+     inkscape:window-width="1920"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     guidetolerance="10"
+     gridtolerance="10"
+     objecttolerance="10"
+     borderopacity="1"
+     bordercolor="#666666"
+     pagecolor="#ffffff" />
+  <g
+     id="g22"
+     transform="rotate(-1.1240111,-52440.764,489.25872)">
+    <g
+       id="g20"
+       transform="matrix(1.0607,1.0607,-1.0607,1.0607,1146.8,34.926)">
+      <path
+         sodipodi:nodetypes="cccccccccc"
+         id="path2"
+         fill="#ecf0f1"
+         d="m -63,1003.4 v 11.3 0.7 l 0.272465,1.0387 1.656725,2.8529 1.911976,-2.948 L -59,1015.4 v -0.7 -11.3 z" />
+      <path
+         sodipodi:nodetypes="ccccccc"
+         id="path4"
+         fill="#bdc3c7"
+         d="m -61,1003.4 -0.07081,15.8916 1.911976,-2.948 L -59,1015.4 v -0.7 -11.3 z" />
+      <rect
+         style="fill:#87cdde"
+         id="rect6"
+         y="1004.4"
+         x="-63"
+         width="4"
+         height="11"
+         fill="#e67e22" />
+      <path
+         sodipodi:nodetypes="ssccss"
+         id="path8"
+         fill="#7f8c8d"
+         d="M -60.959239,999.68109 C -62.064239,999.68109 -63,1001.3 -63,1002.4 v 1 h 4 v -1 c 0,-1.1 -0.854239,-2.71891 -1.959239,-2.71891 z" />
+      <g
+         id="g14"
+         transform="translate(-7,1)">
+        <path
+           sodipodi:nodetypes="ccccc"
+           id="path10"
+           fill="#34495e"
+           d="m -55.406,1016 1.335195,2.2916 L -52.594,1016 H -54 Z" />
+        <path
+           sodipodi:nodetypes="cccc"
+           id="path12"
+           fill="#2c3e50"
+           d="m -54,1016 -0.07081,2.2916 L -52.594,1016 Z" />
+      </g>
+      <path
+         sodipodi:nodetypes="csccc"
+         id="path16"
+         fill="#95a5a6"
+         d="M -60.959239,999.68109 C -62.064239,999.68109 -63,1001.3 -63,1002.4 v 1 h 2 z" />
+      <path
+         sodipodi:nodetypes="ccccc"
+         d="m -61,1004.4 h 2 l 0,11 -2.050026,0 z"
+         style="fill:#2c89a0"
+         id="rect18" />
+    </g>
+  </g>
+</svg>

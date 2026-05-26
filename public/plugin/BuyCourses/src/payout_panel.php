@@ -48,7 +48,6 @@ $toolbar = Display::toolbarButton(
 
 $templateName = get_lang('Dashboard');
 
-$htmlHeadXtra[] = api_get_css(api_get_path(WEB_PLUGIN_PATH).'BuyCourses/resources/css/style.css');
 
 $tpl = new Template($templateName);
 $tpl->assign('showing_courses', true);

@@ -11,12 +11,12 @@ use ApiPlatform\Metadata\Get;
 use Chamilo\CoreBundle\Repository\Node\MessageAttachmentRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(
     types: ['http://schema.org/MediaObject'],
     operations: [
-        new Get(),
+        new Get(security: "is_granted('ROLE_USER')"),
     ],
     normalizationContext: [
         'groups' => ['message:read'],

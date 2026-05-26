@@ -15,6 +15,9 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\StateIcon;
+use Chamilo\CoreBundle\Event\AbstractEvent;
+use Chamilo\CoreBundle\Event\CourseUserSubscriptionCheckEvent;
+use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CSurvey;
@@ -239,6 +242,13 @@ class SessionManager
                 if (!empty($duration)) {
                     $session->setDuration((int) $duration);
                 } else {
+                    [$coachStartDate, $coachEndDate] = self::applyDefaultCoachAccessDates(
+                        $startDate,
+                        $endDate,
+                        $coachStartDate,
+                        $coachEndDate
+                    );
+
                     $startDate = $startDate ? api_get_utc_datetime($startDate, true, true) : null;
                     $endDate = $endDate ? api_get_utc_datetime($endDate, true, true) : null;
                     $displayStartDate = $displayStartDate ? api_get_utc_datetime($displayStartDate, true, true) : null;
@@ -460,6 +470,11 @@ class SessionManager
         $injectExtraFields = $conditions['inject_extra_fields'];
         $order = empty($conditions['order']) ? ' ORDER BY s.title ASC' : $conditions['order'];
         $limit = $conditions['limit'];
+
+        // When session_list_order is enabled, sort by position by default
+        if ('true' === api_get_setting('session.session_list_order') && empty($conditions['order'])) {
+            $order = ' ORDER BY s.position ASC';
+        }
 
         $isMakingOrder = false;
         $showCountUsers = false;
@@ -2198,6 +2213,14 @@ class SessionManager
         }
 
         if ($session->getSendSubscriptionNotification() && is_array($userList)) {
+            $showUsername = 'true' === api_get_setting(
+                    'session.email_template_subscription_to_session_confirmation_username'
+                );
+            $showLostPasswordLink = 'true' === api_get_setting(
+                    'session.email_template_subscription_to_session_confirmation_lost_password'
+                );
+            $lostPasswordUrl = api_get_path(WEB_CODE_PATH).'auth/lostPassword.php';
+
             foreach ($userList as $user_id) {
                 $tplSubject = new Template(
                     null,
@@ -2211,7 +2234,10 @@ class SessionManager
                     'mail/subject_subscription_to_session_confirmation.tpl'
                 );
                 $subject = $tplSubject->fetch($layoutSubject);
+
                 $user_info = api_get_user_info($user_id);
+
+                $username = $user_info['username'] ?? $user_info['user_name'] ?? '';
 
                 $tplContent = new Template(
                     null,
@@ -2221,32 +2247,37 @@ class SessionManager
                     false,
                     false
                 );
-                // Variables for default template
+
+                // Variables for default template.
                 $tplContent->assign('complete_name', stripslashes($user_info['complete_name']));
                 $tplContent->assign('session_name', $session->getTitle());
                 $tplContent->assign(
                     'session_coaches',
                     $session->getGeneralCoaches()->map(fn(User $coach) => UserManager::formatUserFullName($coach))
                 );
+
+                // Optional variables controlled by session settings.
+                $tplContent->assign('show_username', $showUsername);
+                $tplContent->assign('username', $username);
+                $tplContent->assign('username_label', get_lang('Username'));
+                $tplContent->assign('show_lost_password_link', $showLostPasswordLink);
+                $tplContent->assign('lost_password_url', $lostPasswordUrl);
+                $tplContent->assign('lost_password_link_label', get_lang('Recover your password'));
+
                 $layoutContent = $tplContent->get_template(
                     'mail/content_subscription_to_session_confirmation.tpl'
                 );
                 $content = $tplContent->fetch($layoutContent);
 
-                // Send email
+                // Send email.
                 api_mail_html(
                     $user_info['complete_name'],
                     $user_info['mail'],
                     $subject,
-                    $content,
-                    api_get_person_name(
-                        api_get_setting('administratorName'),
-                        api_get_setting('administratorSurname')
-                    ),
-                    api_get_setting('emailAdministrator')
+                    $content
                 );
 
-                // Record message in system
+                // Record message in system.
                 MessageManager::send_message_simple(
                     $user_id,
                     $subject,
@@ -2421,9 +2452,7 @@ class SessionManager
             $boss->getFullName(),
             $boss->getEmail(),
             $subject,
-            $content,
-            api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname')),
-            api_get_setting('emailAdministrator')
+            $content
         );
 
         // Record message in system
@@ -2614,13 +2643,13 @@ class SessionManager
     }
 
     /**
-     * Subscribe a user to an specific course inside a session.
+     * Subscribe users to a specific course inside a session.
      *
-     * @param array  $user_list
-     * @param int    $session_id
-     * @param string $course_code
-     * @param int    $session_visibility
-     * @param bool   $removeUsersNotInList
+     * @param array|int $user_list
+     * @param int       $session_id
+     * @param string    $course_code
+     * @param int       $session_visibility
+     * @param bool      $removeUsersNotInList
      *
      * @return bool
      */
@@ -2639,12 +2668,18 @@ class SessionManager
         $session_visibility = (int) $session_visibility;
         $course_code = Database::escape_string($course_code);
         $courseInfo = api_get_course_info($course_code);
-        $courseId = $courseInfo['real_id'];
-        $subscribe = (int) api_get_course_setting('subscribe_users_to_forum_notifications', $courseInfo);
-        $forums = [];
-        if (1 === $subscribe) {
-            $forums = get_forums($courseId, $session_id);
+
+        if (empty($courseInfo) || empty($courseInfo['real_id'])) {
+            return false;
         }
+
+        $courseId = (int) $courseInfo['real_id'];
+
+        if (!is_array($user_list)) {
+            $user_list = [$user_list];
+        }
+
+        $user_list = array_values(array_unique(array_filter(array_map('intval', $user_list))));
 
         if ($removeUsersNotInList) {
             $currentUsers = self::getUsersByCourseSession($session_id, $courseInfo, 0);
@@ -2666,6 +2701,34 @@ class SessionManager
             }
         }
 
+        if (!empty($user_list)) {
+            $subscriptionCheckEvent = new CourseUserSubscriptionCheckEvent(
+                [
+                    'course_id' => $courseId,
+                    'user_ids' => $user_list,
+                    'status' => STUDENT,
+                    'session_id' => $session_id,
+                ],
+                AbstractEvent::TYPE_PRE
+            );
+
+            Container::getEventDispatcher()->dispatch(
+                $subscriptionCheckEvent,
+                Events::COURSE_USER_SUBSCRIPTION_CHECK
+            );
+
+            if (!$subscriptionCheckEvent->isAllowed()) {
+                Display::addFlash(
+                    Display::return_message(
+                        $subscriptionCheckEvent->getMessage() ?: get_lang('Subscription not allowed'),
+                        'warning'
+                    )
+                );
+
+                return false;
+            }
+        }
+
         self::insertUsersInCourse(
             $user_list,
             $courseId,
@@ -2674,6 +2737,122 @@ class SessionManager
             true,
             true
         );
+
+        return true;
+    }
+
+    private static function subscribeUsersToCourseForumNotifications(
+        array $studentIds,
+        int $courseId,
+        int $sessionId
+    ): void {
+        $studentIds = array_values(array_unique(array_filter(array_map('intval', $studentIds))));
+
+        if (empty($studentIds) || empty($courseId) || empty($sessionId)) {
+            return;
+        }
+
+        $courseInfo = api_get_course_info_by_id($courseId);
+
+        if (empty($courseInfo)) {
+            return;
+        }
+
+        $subscribe = (int) api_get_course_setting(
+            'subscribe_users_to_forum_notifications',
+            $courseInfo
+        );
+
+        if (1 !== $subscribe) {
+            return;
+        }
+
+        $forums = self::getForumsForNotificationSubscription($courseId, $sessionId);
+
+        if (empty($forums)) {
+            return;
+        }
+
+        self::loadForumNotificationFunctions();
+
+        foreach ($studentIds as $studentId) {
+            $userInfo = api_get_user_info($studentId);
+
+            if (empty($userInfo)) {
+                continue;
+            }
+
+            foreach ($forums as $forum) {
+                $forumId = self::getForumIdForNotificationSubscription($forum);
+
+                if (empty($forumId)) {
+                    continue;
+                }
+
+                set_notification('forum', $forumId, true, $userInfo, $courseInfo);
+            }
+        }
+    }
+
+    private static function getForumsForNotificationSubscription(int $courseId, int $sessionId): array
+    {
+        if (empty($courseId) || empty($sessionId)) {
+            return [];
+        }
+
+        self::loadForumNotificationFunctions();
+
+        $forumsById = [];
+
+        foreach (get_forums($courseId, $sessionId) as $forum) {
+            $forumId = self::getForumIdForNotificationSubscription($forum);
+
+            if (empty($forumId)) {
+                continue;
+            }
+
+            $forumsById[$forumId] = $forum;
+        }
+
+        $includeBaseCourseForums = 'true' === api_get_setting(
+                'forum.subscribe_users_to_forum_notifications_also_in_base_course'
+            );
+
+        if ($includeBaseCourseForums) {
+            foreach (get_forums($courseId, 0) as $forum) {
+                $forumId = self::getForumIdForNotificationSubscription($forum);
+
+                if (empty($forumId)) {
+                    continue;
+                }
+
+                $forumsById[$forumId] = $forum;
+            }
+        }
+
+        return array_values($forumsById);
+    }
+
+    private static function getForumIdForNotificationSubscription($forum): int
+    {
+        if (is_object($forum) && method_exists($forum, 'getIid')) {
+            return (int) $forum->getIid();
+        }
+
+        if (is_array($forum)) {
+            return (int) ($forum['iid'] ?? $forum['forum_id'] ?? 0);
+        }
+
+        return 0;
+    }
+
+    private static function loadForumNotificationFunctions(): void
+    {
+        if (function_exists('get_forums') && function_exists('set_notification')) {
+            return;
+        }
+
+        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
     }
 
     /**
@@ -6093,7 +6272,7 @@ class SessionManager
 
         $content = file_get_contents($file);
         $content = api_utf8_encode_xml($content);
-        $root = @simplexml_load_string($content);
+        $root = simplexml_load_string($content, SimpleXMLElement::class, LIBXML_NONET);
 
         if (!is_object($root)) {
             $errorMessage .= get_lang('XML document is not valid');
@@ -6560,7 +6739,7 @@ class SessionManager
 
         if (isset($active)) {
             $active = (int) $active;
-            $userConditions .= " AND active = $active";
+            $userConditions .= " AND u.active = $active";
         }
 
         $courseList = CourseManager::get_courses_followed_by_drh($userId, DRH);
@@ -6644,7 +6823,12 @@ class SessionManager
 
         if (!empty($lastConnectionDate)) {
             $lastConnectionDate = Database::escape_string($lastConnectionDate);
-            $userConditions .= " AND u.last_login <= '$lastConnectionDate' ";
+            $userConditions .= " AND (
+            u.last_login IS NULL OR
+            u.last_login = '0000-00-00 00:00:00' OR
+            u.last_login = '0000-00-00' OR
+            u.last_login <= '$lastConnectionDate'
+        ) ";
         }
 
         if (!empty($keyword)) {
@@ -10234,23 +10418,23 @@ class SessionManager
         $tabs = [
             [
                 'content' => get_lang('All sessions'),
-                'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=all',
+                'url' => '/admin/session-list?list_type=all',
             ],
             [
                 'content' => get_lang('Active sessions'),
-                'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=active',
+                'url' => '/admin/session-list?list_type=active',
             ],
             [
                 'content' => get_lang('Closed sessions'),
-                'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=close',
+                'url' => '/admin/session-list?list_type=close',
             ],
             [
                 'content' => get_lang('Custom list'),
-                'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=custom',
+                'url' => '/admin/session-list?list_type=custom',
             ],
             [
                 'content' => get_lang('Replication'),
-                'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=replication',
+                'url' => '/admin/session-list?list_type=replication',
             ],
         ];
         $default = null;
@@ -10354,39 +10538,81 @@ class SessionManager
         bool $updateSession = true,
         bool $sendNotification = false
     ) {
+        $studentIds = array_values(array_unique(array_filter(array_map('intval', $studentIds))));
+
+        if (empty($studentIds) || empty($courseId) || empty($sessionId)) {
+            return;
+        }
+
         $em = Database::getManager();
         $course = api_get_course_entity($courseId);
         $session = api_get_session_entity($sessionId);
 
-        $relationInfo = array_merge(['visibility' => 0, 'status' => Session::STUDENT], $relationInfo);
+        if (null === $course || null === $session) {
+            return;
+        }
+
+        $relationInfo = array_merge(
+            [
+                'visibility' => 0,
+                'status' => Session::STUDENT,
+            ],
+            $relationInfo
+        );
 
         $usersToInsert = [];
+
         foreach ($studentIds as $studentId) {
             $user = api_get_user_entity($studentId);
-            $session->addUserInCourse($relationInfo['status'], $user, $course)
-                ->setVisibility($relationInfo['visibility']);
+
+            if (null === $user) {
+                continue;
+            }
+
+            $session
+                ->addUserInCourse($relationInfo['status'], $user, $course)
+                ->setVisibility($relationInfo['visibility'])
+            ;
 
             Event::logUserSubscribedInCourseSession($user, $course, $session);
 
-            if ($updateSession) {
-                if (!$session->hasUserInSession($user, Session::STUDENT)) {
-                    $session->addUserInSession(Session::STUDENT, $user);
-                }
+            if ($updateSession && !$session->hasUserInSession($user, Session::STUDENT)) {
+                $session->addUserInSession(Session::STUDENT, $user);
             }
 
             $usersToInsert[] = $studentId;
         }
 
+        if (empty($usersToInsert)) {
+            return;
+        }
+
         $em->persist($session);
         $em->flush();
 
-        if ($sendNotification && !empty($usersToInsert)) {
+        self::subscribeUsersToCourseForumNotifications(
+            $usersToInsert,
+            $courseId,
+            $sessionId
+        );
+
+        if ($sendNotification) {
             foreach ($usersToInsert as $userId) {
                 $user = api_get_user_entity($userId);
+
+                if (null === $user) {
+                    continue;
+                }
+
                 $courseTitle = $course->getTitle();
                 $sessionTitle = $session->getTitle();
 
-                $subject = sprintf(get_lang('You have been enrolled in the course %s for the session %s'), $courseTitle, $sessionTitle);
+                $subject = sprintf(
+                    get_lang('You have been enrolled in the course %s for the session %s'),
+                    $courseTitle,
+                    $sessionTitle
+                );
+
                 $message = sprintf(
                     get_lang('Hello %s, you have been enrolled in the course %s for the session %s.'),
                     UserManager::formatUserFullName($user, true),
@@ -10746,56 +10972,81 @@ class SessionManager
     /**
      * Exports session data as a ZIP file with CSVs and sends it for download.
      */
-    public static function exportSessionsAsZip(array $sessionList): void
+    public static function exportSessionsAsZip(array $sessionList): string
     {
-        $tempZipFile = api_get_path(SYS_ARCHIVE_PATH) . api_get_unique_id() . '.zip';
-        $tempDir = dirname($tempZipFile);
+        $archivePath = api_get_path(SYS_ARCHIVE_PATH);
+        $tempZipFile = $archivePath.api_get_unique_id().'.zip';
 
-        if (!is_dir($tempDir) || !is_writable($tempDir)) {
-            exit("The directory for creating the ZIP file does not exist or lacks write permissions: $tempDir");
+        if (!is_dir($archivePath) || !is_writable($archivePath)) {
+            throw new \RuntimeException("Archive directory is not writable: $archivePath");
         }
 
         $zip = new \ZipArchive();
-        if ($zip->open($tempZipFile, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) {
-            exit("Unable to open the ZIP file for writing: $tempZipFile");
+        if (true !== $zip->open($tempZipFile, \ZipArchive::CREATE | \ZipArchive::OVERWRITE)) {
+            throw new \RuntimeException("Unable to open ZIP for writing: $tempZipFile");
         }
+
+        $tempCsvFiles = [];
 
         foreach ($sessionList as $sessionItemId) {
             $courses = SessionManager::get_course_list_by_session_id($sessionItemId);
 
-            if (!empty($courses)) {
-                foreach ($courses as $course) {
-                    $courseCode = $course['course_code'];
-                    $courseId = $course['id'];
-                    $studentList = CourseManager::get_student_list_from_course_code($courseCode, true, $sessionItemId);
-                    $userIds = array_keys($studentList);
+            if (empty($courses)) {
+                continue;
+            }
 
-                    [$csvHeaders, $csvContent] = self::generateSessionCourseReportData($sessionItemId, $courseId, $userIds);
-                    array_unshift($csvContent, $csvHeaders);
+            $sessionInfo = api_get_session_info($sessionItemId);
 
-                    $sessionInfo = api_get_session_info($sessionItemId);
-                    $courseInfo = api_get_course_info_by_id($courseId);
-                    $csvFileName = $sessionInfo['name'] . '_' . $courseInfo['name'] . '.csv';
+            foreach ($courses as $course) {
+                $courseCode = $course['course_code'];
+                $courseId = $course['id'];
+                $courseInfo = api_get_course_info_by_id($courseId);
 
-                    $csvFilePath = Export::arrayToCsvSimple($csvContent, $csvFileName, true);
+                $studentList = CourseManager::get_student_list_from_course_code($courseCode, true, $sessionItemId);
+                $userIds = array_keys($studentList);
 
-                    if ($csvFilePath && file_exists($csvFilePath)) {
-                        $zip->addFile($csvFilePath, $csvFileName);
-                    }
+                [$csvHeaders, $csvContent] = self::generateSessionCourseReportData($sessionItemId, $courseId, $userIds);
+                array_unshift($csvContent, $csvHeaders);
+
+                // Use a unique temp path to avoid collisions from special characters in names
+                $tempCsvPath = $archivePath.api_get_unique_id().'.csv';
+                $handle = fopen($tempCsvPath, 'w');
+                if (false === $handle) {
+                    continue;
+                }
+                foreach ($csvContent as $row) {
+                    fputcsv($handle, (array) $row, ',');
+                }
+                fclose($handle);
+
+                // Build a safe internal ZIP filename from the human-readable names
+                $safeName = preg_replace('/[\/\\\:\*\?"<>\|]/', '_', $sessionInfo['name'].'_'.$courseInfo['name']);
+                $internalName = $safeName.'.csv';
+
+                if ($zip->addFile($tempCsvPath, $internalName)) {
+                    $tempCsvFiles[] = $tempCsvPath;
+                } else {
+                    unlink($tempCsvPath);
                 }
             }
         }
 
         if (!$zip->close()) {
-            exit("Could not close the ZIP file correctly.");
+            foreach ($tempCsvFiles as $f) {
+                @unlink($f);
+            }
+            throw new \RuntimeException('Could not close the ZIP archive.');
         }
 
-        if (file_exists($tempZipFile)) {
-            DocumentManager::file_send_for_download($tempZipFile, true);
-            unlink($tempZipFile);
-        } else {
-            exit("The ZIP file was not created correctly.");
+        foreach ($tempCsvFiles as $f) {
+            @unlink($f);
         }
+
+        if (!file_exists($tempZipFile)) {
+            throw new \RuntimeException('ZIP file was not created. The selected sessions may have no courses.');
+        }
+
+        return $tempZipFile;
     }
 
     private static function generateSessionCourseReportData($sessionId, $courseId, $userIds): array
@@ -10851,7 +11102,7 @@ class SessionManager
         $rawCsvContent = ChamiloSession::read('csv_content');
 
         if (empty($rawCsvContent)) {
-            throw new \RuntimeException("No CSV content found in session for course $courseCode and session $sessionId.");
+            return [$csvHeaders, []];
         }
 
         $csvContent = [];
@@ -10882,5 +11133,131 @@ class SessionManager
         }
 
         return [$csvHeaders, $csvContent];
+    }
+
+    public static function isCourseUserSubscriptionLimitedToSessionUsers(): bool
+    {
+        return 'true' === api_get_setting('session.session_course_users_subscription_limited_to_session_users');
+    }
+
+    /**
+     * @return array<int, int>
+     */
+    public static function getSessionStudentUserIds(int $sessionId): array
+    {
+        if (0 >= $sessionId) {
+            return [];
+        }
+
+        $tableSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+
+        $sql = "SELECT user_id
+            FROM $tableSessionRelUser
+            WHERE session_id = $sessionId
+              AND relation_type = ".Session::STUDENT;
+
+        $result = Database::query($sql);
+        $userIds = [];
+
+        while ($row = Database::fetch_assoc($result)) {
+            $userId = (int) $row['user_id'];
+            $userIds[$userId] = $userId;
+        }
+
+        return $userIds;
+    }
+
+    /**
+     * @param array<int|string> $userIds
+     *
+     * @return array<int, int>
+     */
+    public static function filterUsersSubscribedToSession(int $sessionId, array $userIds): array
+    {
+        if (0 >= $sessionId || empty($userIds)) {
+            return [];
+        }
+
+        $userIds = array_values(
+            array_unique(
+                array_filter(
+                    array_map('intval', $userIds)
+                )
+            )
+        );
+
+        if (empty($userIds)) {
+            return [];
+        }
+
+        $sessionUserIds = self::getSessionStudentUserIds($sessionId);
+
+        return array_values(
+            array_intersect($userIds, $sessionUserIds)
+        );
+    }
+
+    /**
+     * Applies default coach access dates when no explicit coach dates were provided.
+     *
+     * @return array{0: ?string, 1: ?string}
+     */
+    private static function applyDefaultCoachAccessDates(
+        ?string $startDate,
+        ?string $endDate,
+        ?string $coachStartDate,
+        ?string $coachEndDate
+    ): array {
+        if (empty($coachStartDate) && !empty($startDate)) {
+            $daysBefore = self::getPositiveIntegerSetting('session.session_days_before_coach_access');
+
+            if (0 < $daysBefore) {
+                $coachStartDate = self::shiftSessionDate($startDate, -$daysBefore);
+            }
+        }
+
+        if (empty($coachEndDate) && !empty($endDate)) {
+            $daysAfter = self::getPositiveIntegerSetting('session.session_days_after_coach_access');
+
+            if (0 < $daysAfter) {
+                $coachEndDate = self::shiftSessionDate($endDate, $daysAfter);
+            }
+        }
+
+        return [$coachStartDate, $coachEndDate];
+    }
+
+    private static function getPositiveIntegerSetting(string $setting): int
+    {
+        $value = (int) api_get_setting($setting);
+
+        return max(0, $value);
+    }
+
+    private static function shiftSessionDate(string $date, int $days): ?string
+    {
+        $date = trim($date);
+
+        if ('' === $date) {
+            return null;
+        }
+
+        $format = str_contains($date, ':') && 19 === strlen($date)
+            ? 'Y-m-d H:i:s'
+            : 'Y-m-d H:i';
+
+        $dateTime = DateTimeImmutable::createFromFormat($format, $date);
+
+        if (!$dateTime instanceof DateTimeImmutable) {
+            return null;
+        }
+
+        if (0 < $days) {
+            $dateTime = $dateTime->modify('+'.$days.' days');
+        } elseif (0 > $days) {
+            $dateTime = $dateTime->modify($days.' days');
+        }
+
+        return $dateTime->format($format);
     }
 }

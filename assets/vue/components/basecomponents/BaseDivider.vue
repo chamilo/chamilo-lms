@@ -24,8 +24,6 @@ defineProps({
   <Divider
     :align="align"
     :layout="layout"
-    class="divider"
-    unstyled
   >
     {{ title }}
   </Divider>

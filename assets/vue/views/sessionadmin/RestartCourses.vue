@@ -20,7 +20,7 @@
 
       <Button
         class="p-button-sm p-button-outlined"
-        icon="pi pi-clock"
+        icon="mdi mdi-clock"
         :label="t('Extend one week')"
         :disabled="actionLoading"
         @click="extend(item)"
@@ -31,7 +31,7 @@
       <Button
         v-if="!loading && hasMore"
         class="p-button-text"
-        icon="pi pi-chevron-down"
+        icon="mdi mdi-chevron-down"
         :label="t('Load more')"
         @click="loadMore"
       />

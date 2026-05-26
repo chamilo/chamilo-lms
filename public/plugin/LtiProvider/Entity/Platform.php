@@ -10,33 +10,33 @@ use Doctrine\ORM\Mapping as ORM;
 class Platform
 {
     #[ORM\Column(name: 'issuer', type: 'text')]
-    public string $issuer;
+    private string $issuer = '';
 
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected ?int $id;
+    protected ?int $id = null;
 
     #[ORM\Column(name: 'kid', type: 'string')]
-    private string $kid;
+    private string $kid = '';
 
     #[ORM\Column(name: 'client_id', type: 'text')]
-    private string $clientId;
+    private string $clientId = '';
 
     #[ORM\Column(name: 'auth_login_url', type: 'text')]
-    private string $authLoginUrl;
+    private string $authLoginUrl = '';
 
     #[ORM\Column(name: 'auth_token_url', type: 'text')]
-    private string $authTokenUrl;
+    private string $authTokenUrl = '';
 
     #[ORM\Column(name: 'key_set_url', type: 'text')]
-    private string $keySetUrl;
+    private string $keySetUrl = '';
 
     #[ORM\Column(name: 'deployment_id', type: 'text')]
-    private string $deploymentId;
+    private string $deploymentId = '';
 
     #[ORM\Column(name: 'tool_provider', type: 'text')]
-    private string $toolProvider;
+    private string $toolProvider = '';
 
     public function getId(): ?int
     {
@@ -57,7 +57,7 @@ class Platform
 
     public function setToolProvider(?string $toolProvider): void
     {
-        $this->toolProvider = $toolProvider;
+        $this->toolProvider = $toolProvider ?? '';
     }
 
     public function getKid(): string
@@ -96,17 +96,11 @@ class Platform
         return $this;
     }
 
-    /**
-     * Get auth login URL.
-     */
-    public function getAuthLoginUrl()
+    public function getAuthLoginUrl(): string
     {
         return $this->authLoginUrl;
     }
 
-    /**
-     * Set auth login URL.
-     */
     public function setAuthLoginUrl(string $authLoginUrl): static
     {
         $this->authLoginUrl = $authLoginUrl;

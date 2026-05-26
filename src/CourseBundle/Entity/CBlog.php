@@ -30,14 +30,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CBlogRepository::class)]
 #[ORM\Table(name: 'c_blog')]
 #[ApiResource(
     operations: [
-        new GetCollection(),
+        new GetCollection(security: "is_granted('ROLE_USER')"),
         new Post(
             controller: CreateCBlogAction::class,
             openapi: new Operation(
@@ -70,8 +70,8 @@ use Symfony\Component\Validator\Constraints as Assert;
             deserialize: false
         ),
         new Get(security: "is_granted('VIEW', object.resourceNode)"),
-        new Patch(security: "is_granted('ROLE_USER')"),
-        new Delete(security: "is_granted('ROLE_USER')"),
+        new Patch(security: "is_granted('EDIT', object.resourceNode)"),
+        new Delete(security: "is_granted('DELETE', object.resourceNode)"),
         new Put(
             uriTemplate: '/c_blogs/{iid}/toggle_visibility',
             controller: UpdateVisibilityBlog::class,

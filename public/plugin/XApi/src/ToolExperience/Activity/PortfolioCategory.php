@@ -7,27 +7,20 @@ declare(strict_types=1);
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Activity;
 
 use Chamilo\CoreBundle\Entity\PortfolioCategory as PortfolioCategoryEntity;
-use Xabbuh\XApi\Model\Activity;
-use Xabbuh\XApi\Model\Definition;
-use Xabbuh\XApi\Model\IRI;
-use Xabbuh\XApi\Model\LanguageMap;
 
 /**
  * Class PortfolioCategory.
  */
 class PortfolioCategory extends BaseActivity
 {
-    /**
-     * @var PortfolioCategoryEntity
-     */
-    private $category;
+    private PortfolioCategoryEntity $category;
 
     public function __construct(PortfolioCategoryEntity $category)
     {
         $this->category = $category;
     }
 
-    public function generate(): Activity
+    public function generate(): array
     {
         $iri = $this->generateIri(
             WEB_PATH,
@@ -38,21 +31,11 @@ class PortfolioCategory extends BaseActivity
             ]
         );
 
-        $langIso = api_get_language_isocode();
-
-        $categoryDescription = $this->category->getDescription();
-
-        $definitionDescription = $categoryDescription
-            ? LanguageMap::create([$langIso => $categoryDescription])
-            : null;
-
-        return new Activity(
-            IRI::fromString($iri),
-            new Definition(
-                LanguageMap::create([$langIso => $this->category->getTitle()]),
-                $definitionDescription,
-                IRI::fromString('http://id.tincanapi.com/activitytype/category')
-            )
+        return $this->buildActivity(
+            $iri,
+            (string) $this->category->getTitle(),
+            $this->category->getDescription() ? (string) $this->category->getDescription() : null,
+            'http://id.tincanapi.com/activitytype/category'
         );
     }
 }

@@ -63,7 +63,7 @@ class UpdateSessionStatusCommand extends Command
             if ($debug) {
                 $startFormatted = $start ? $start->format('Y-m-d H:i:s') : 'N/A';
                 $endFormatted = $end ? $end->format('Y-m-d H:i:s') : 'N/A';
-                $io->note("Session #$id: Start date: {$startFormatted} - End date: {$endFormatted}");
+                $io->note("Session #$id: Start date: {$startFormatted} - End date: {$endFormatted} - status = $status");
             }
 
             $session->setStatus($status);
@@ -85,10 +85,6 @@ class UpdateSessionStatusCommand extends Command
      */
     private function determineSessionStatus(?DateTime $start, ?DateTime $end, int $userCount, DateTime $now): int
     {
-        if ($start > $now) {
-            return Session::STATUS_PLANNED;
-        }
-
         if ($userCount >= 2 && $start <= $now && $end > $now) {
             return Session::STATUS_PROGRESS;
         }
@@ -99,6 +95,10 @@ class UpdateSessionStatusCommand extends Command
 
         if ($now > $end && $userCount >= 2) {
             return Session::STATUS_FINISHED;
+        }
+
+        if ($start > $now) {
+            return Session::STATUS_PLANNED;
         }
 
         return Session::STATUS_UNKNOWN;

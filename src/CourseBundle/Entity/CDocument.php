@@ -25,6 +25,7 @@ use ArrayObject;
 use Chamilo\CoreBundle\Controller\Api\CreateDocumentFileAction;
 use Chamilo\CoreBundle\Controller\Api\DocumentLearningPathUsageAction;
 use Chamilo\CoreBundle\Controller\Api\DocumentUsageAction;
+use Chamilo\CoreBundle\Controller\Api\DownloadAllDocumentsAction;
 use Chamilo\CoreBundle\Controller\Api\DownloadSelectedDocumentsAction;
 use Chamilo\CoreBundle\Controller\Api\MoveDocumentAction;
 use Chamilo\CoreBundle\Controller\Api\ReplaceDocumentFileAction;
@@ -45,7 +46,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -108,8 +109,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             openapi: new Operation(
                 summary: 'Get a list of learning paths where a document is used'
             ),
-            security: "is_granted('ROLE_USER')",
-            read: false,
+            security: "is_granted('VIEW', object.resourceNode)",
             name: 'api_documents_lp_usage'
         ),
         new Delete(security: "is_granted('DELETE', object.resourceNode)"),
@@ -125,9 +125,13 @@ use Symfony\Component\Validator\Constraints as Assert;
                                     'title' => ['type' => 'string'],
                                     'filetype' => [
                                         'type' => 'string',
-                                        'enum' => ['folder', 'file'],
+                                        'enum' => ['folder', 'file', 'link'],
                                     ],
                                     'comment' => ['type' => 'string'],
+                                    'language' => [
+                                        'type' => 'string',
+                                        'nullable' => true,
+                                    ],
                                     'contentFile' => ['type' => 'string'],
                                     'uploadFile' => [
                                         'type' => 'string',
@@ -163,7 +167,10 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
         new Post(
             uriTemplate: '/documents/download-selected',
-            outputFormats: ['zip' => DownloadSelectedDocumentsAction::CONTENT_TYPE],
+            outputFormats: [
+                'zip' => DownloadSelectedDocumentsAction::CONTENT_TYPE,
+                'bin' => 'application/octet-stream',
+            ],
             controller: DownloadSelectedDocumentsAction::class,
             parameters: [
                 'cid' => new QueryParameter(
@@ -176,20 +183,26 @@ use Symfony\Component\Validator\Constraints as Assert;
                 ),
                 'gid' => new QueryParameter(
                     schema: ['type' => 'integer'],
-                    description: 'Course grou identifier',
+                    description: 'Course group identifier',
                 ),
             ],
             openapi: new Operation(
-                summary: 'Download selected documents as a ZIP file.',
+                summary: 'Download selected documents as a ZIP file or a single original file.',
                 requestBody: new RequestBody(
                     content: new ArrayObject([
                         'application/json' => [
                             'schema' => [
                                 'type' => 'object',
+                                'required' => ['ids'],
                                 'properties' => [
                                     'ids' => [
                                         'type' => 'array',
                                         'items' => ['type' => 'integer'],
+                                    ],
+                                    'compressed' => [
+                                        'type' => 'boolean',
+                                        'default' => true,
+                                        'description' => 'When false, exactly one document ID is required and the original file is returned.',
                                     ],
                                 ],
                             ],
@@ -199,9 +212,59 @@ use Symfony\Component\Validator\Constraints as Assert;
             ),
             security: "is_granted('ROLE_USER')",
         ),
+        new Post(
+            uriTemplate: '/documents/download-all',
+            outputFormats: ['zip' => DownloadAllDocumentsAction::CONTENT_TYPE],
+            controller: DownloadAllDocumentsAction::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course group identifier',
+                ),
+            ],
+            openapi: new Operation(
+                summary: 'Download all documents as a ZIP file.',
+                requestBody: new RequestBody(
+                    content: new ArrayObject([
+                        'application/json' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'rootNodeId' => ['type' => 'integer'],
+                                ],
+                            ],
+                        ],
+                    ]),
+                ),
+            ),
+            security: "is_granted('ROLE_USER')",
+            deserialize: false
+        ),
         new GetCollection(
+            parameters: [
+                'cid' => new QueryParameter(
+                    required: true,
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                ),
+            ],
             openapi: new Operation(
                 parameters: [
+                    new Parameter(
+                        name: 'cid',
+                        in: 'query',
+                        description: 'Course identifier',
+                        required: true,
+                        schema: ['type' => 'integer'],
+                    ),
                     new Parameter(
                         name: 'resourceNode.parent',
                         in: 'query',
@@ -211,7 +274,8 @@ use Symfony\Component\Validator\Constraints as Assert;
                     ),
                 ],
             ),
-            provider: DocumentCollectionStateProvider::class
+            security: "is_granted('ROLE_USER')",
+            provider: DocumentCollectionStateProvider::class,
         ),
         new Get(
             uriTemplate: '/documents/{cid}/usage',
@@ -269,7 +333,7 @@ class CDocument extends AbstractResource implements ResourceInterface, ResourceS
     protected ?string $comment;
 
     #[Groups(['document:read', 'document:write'])]
-    #[Assert\Choice(['folder', 'file', 'certificate', 'video'], message: 'Choose a valid filetype.')]
+    #[Assert\Choice(['folder', 'file', 'certificate', 'video', 'link'], message: 'Choose a valid filetype.')]
     #[ORM\Column(name: 'filetype', type: 'string', length: 15, nullable: false)]
     protected string $filetype;
 

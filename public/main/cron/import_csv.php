@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+// WARNING: This script has not been updated to work on 2.* yet.
+// It uses deprecated tables, functions and settings.
+
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
@@ -26,7 +29,10 @@ require_once __DIR__.'/../inc/global.inc.php';
 ini_set('memory_limit', -1);
 ini_set('max_execution_time', 0);
 ini_set('log_errors', '1');
-ini_set('display_errors', '1');
+// Only show errors when running from CLI to avoid leaking info over HTTP
+if ('cli' === PHP_SAPI) {
+    ini_set('display_errors', '1');
+}
 
 /**
  * Class ImportCsv.
@@ -2759,7 +2765,7 @@ class ImportCsv
                     continue;
                 }
 
-                $extraData = isset($userCareerData['extra_data']) && !empty($userCareerData['extra_data']) ? unserialize($userCareerData['extra_data']) : [];
+                $extraData = !empty($userCareerData['extra_data']) ? UnserializeApi::unserialize('not_allowed_classes', $userCareerData['extra_data']) : [];
 
                 //$teacherInfo = api_get_user_info_from_username($row['TeacherUsername']);
                 $sql = "SELECT firstname, lastname FROM $userTable
@@ -3286,15 +3292,3 @@ $import->run();
 $timeEnd = microtime(true);
 $executionTime = round(($timeEnd - $timeStart) / 60, 2);
 $logger->addInfo("Total execution Time $executionTime Min");
-
-if (isset($_configuration['import_csv_fix_permissions']) &&
-    true == $_configuration['import_csv_fix_permissions']
-) {
-    $command = "sudo find ".api_get_path(SYS_COURSE_PATH)." -type d -exec chmod 777 {} \; ";
-    echo "Executing: ".$command.PHP_EOL;
-    system($command);
-
-    $command = "sudo find ".api_get_path(SYS_CODE_PATH)."upload/users  -type d -exec chmod 777 {} \;";
-    echo "Executing: ".$command.PHP_EOL;
-    system($command);
-}

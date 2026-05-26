@@ -63,45 +63,93 @@ function get_lang(string $variable, ?string $locale = null): string
         return $variable;
     }
 
-    // Using symfony
-    $defaultDomain = 'messages';
+    $domain = 'messages';
+    $effectiveLocale = $locale;
 
-    // Check for locale fallbacks (in case no translation is available).
-    static $fallbacks = null;
-    $englishInQueue = (!empty($locale) && $locale === 'en_US');
-    if ($fallbacks === null) {
-        if (!empty($locale)) {
-            while (!empty($parent = SubLanguageManager::getParentLocale($locale))) {
-                $fallbacks[] = $parent;
-                if ($parent === 'en_US') {
-                    $englishInQueue = true;
-                }
-            }
-        }
-        // If there were no parent language, still consider en_US as global fallback
-        if (!$englishInQueue) {
-            $fallbacks[] = 'en_US';
+    // 1) Explicit locale passed by caller
+    if (empty($effectiveLocale)) {
+        // 2) Legacy/URL query locale (works in legacy pages)
+        if (!empty($_GET['_locale'])) {
+            $effectiveLocale = (string) $_GET['_locale'];
+        } elseif (!empty($_POST['_locale'])) {
+            $effectiveLocale = (string) $_POST['_locale'];
         }
     }
-    // Test a basic translation to the current language.
-    $translation = $translator->trans(
-        $variable,
-        [],
-        $defaultDomain,
-        $locale
-    );
-    // If no translation was found, $translation is empty.
-    // Check fallbacks for a valid translation.
-    $i = 0;
-    while (empty($translation) && !empty($fallbacks[$i])) {
-        $fallback = $fallbacks[$i];
-        $translation = $translator->trans(
-            $variable,
-            [],
-            $defaultDomain,
-            $fallback
-        );
-        $i++;
+
+    if (empty($effectiveLocale)) {
+        // 3) Symfony main request locale (if available)
+        $requestStack = Container::$container?->has('request_stack')
+            ? Container::$container->get('request_stack')
+            : null;
+
+        $request = $requestStack?->getMainRequest();
+        if ($request) {
+            // Query param should win in legacy pages
+            $effectiveLocale = (string) ($request->query->get('_locale') ?: $request->getLocale());
+        }
+    }
+
+    if (empty($effectiveLocale)) {
+        // 4) Translator current locale (set by Chamilo/bootstrap)
+        $effectiveLocale = $translator->getLocale();
+    }
+
+    if (empty($effectiveLocale)) {
+        $effectiveLocale = 'en_US';
+    }
+
+    $effectiveLocale = str_replace('-', '_', trim((string) $effectiveLocale));
+
+    // Build fallback chain per locale (sublanguage -> mother -> ... -> en_US)
+    static $fallbacksByLocale = [];
+    if (!isset($fallbacksByLocale[$effectiveLocale])) {
+        $fallbacks = [];
+        $visited = [];
+        $current = $effectiveLocale;
+
+        while (true) {
+            $parent = SubLanguageManager::getParentLocale($current);
+            if (empty($parent) || isset($visited[$parent])) {
+                break;
+            }
+
+            $visited[$parent] = true;
+            $fallbacks[] = $parent;
+            $current = $parent;
+        }
+
+        if ('en_US' !== $effectiveLocale && !in_array('en_US', $fallbacks, true)) {
+            $fallbacks[] = 'en_US';
+        }
+
+        $fallbacksByLocale[$effectiveLocale] = $fallbacks;
+    }
+
+    // If the key is explicitly defined in this locale's catalogue, use it directly —
+    // even when msgstr equals msgid (intentional identity translation like "Feedback" → "Feedback").
+    // Without this guard, the fallback chain would wrongly override it with the parent language.
+    if ($translator instanceof \Symfony\Component\Translation\TranslatorBagInterface
+        && $translator->getCatalogue($effectiveLocale)->defines($variable, $domain)
+    ) {
+        return $translator->trans($variable, [], $domain, $effectiveLocale);
+    }
+
+    $translation = $translator->trans($variable, [], $domain, $effectiveLocale);
+    if ($translation !== $variable) {
+        return $translation;
+    }
+
+    foreach ($fallbacksByLocale[$effectiveLocale] as $fb) {
+        if ($translator instanceof \Symfony\Component\Translation\TranslatorBagInterface
+            && $translator->getCatalogue($fb)->defines($variable, $domain)
+        ) {
+            return $translator->trans($variable, [], $domain, $fb);
+        }
+
+        $t = $translator->trans($variable, [], $domain, $fb);
+        if ($t !== $variable) {
+            return $t;
+        }
     }
 
     return $translation;

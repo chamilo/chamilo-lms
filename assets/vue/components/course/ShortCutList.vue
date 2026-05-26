@@ -29,7 +29,7 @@
       :target="props.shortcut.target || '_self'"
       :url="resolvedUrl"
       class="course-tool__title"
-      rel="noopener"
+      rel="noopener noreferrer"
     >
       {{ shortcut.title }}
     </BaseAppLink>
@@ -59,25 +59,29 @@ const props = defineProps({
  */
 const resolvedUrl = computed(() => {
   const base = props.shortcut.urlOverride || props.shortcut.url || "#"
-  // If it's absolute or relative, normalize with URL helper and keep it relative.
   try {
-    const u = new URL(base, window.location.origin)
-
-    // If URL already has cid (and possibly sid/gid), leave it as-is.
-    const hasCid = u.searchParams.has("cid")
-    const hasSid = u.searchParams.has("sid")
-
-    if (!hasCid && course.value?.id) {
-      u.searchParams.set("cid", course.value.id)
-    }
-    if (!hasSid) {
-      u.searchParams.set("sid", session.value?.id || 0)
+    // Absolute http(s) URLs are external — return as-is.
+    if (/^https?:\/\//i.test(base)) {
+      return base
     }
 
-    // Keep it relative (like backend responses)
-    return u.pathname + (u.search ? `?${u.searchParams.toString()}` : "")
+    // Relative/internal URL: append course/session context when missing.
+    const [withoutHash, hash = ""] = base.split("#")
+    const [path, rawQuery = ""] = withoutHash.split("?")
+    const sp = new URLSearchParams(rawQuery)
+
+    if (!sp.has("cid") && course.value?.id) {
+      sp.set("cid", course.value.id)
+    }
+
+    if (!sp.has("sid")) {
+      sp.set("sid", session.value?.id || 0)
+    }
+
+    const qs = sp.toString()
+
+    return path + (qs ? `?${qs}` : "") + (hash ? `#${hash}` : "")
   } catch {
-    // Fallback
     return base
   }
 })

@@ -1,20 +1,52 @@
 {% extends '@ChamiloCore/Layout/layout_one_col.html.twig' %}
 
 {% block content %}
-    <section class="bg-white">
-        {% if not tool.description is empty %}
-            {% if tool.toolParent.activeDeepLinking %}
-                {% autoescape false %}
-                    <div class="m-3 pt-3">{{ tool.description }}</div>
-                {% endautoescape %}
-            {% else %}
-                <p class="m-3 pt-3">{{ tool.description }}</p>
-            {% endif %}
-        {% endif %}
+    {% set parentTool = tool.toolParent %}
 
-        <div class="">
-            <iframe class="w-full h-screen plugin-ims-lti-iframe" allowfullscreen
-                    src="{{ url('chamilo_lti_launch', {'cid': course.id, 'id': tool.id}) }}"></iframe>
+    <section>
+        <div class="mx-auto w-full max-w-7xl px-4 py-8 lg:px-6">
+            {% set backUrl = app.request.basePath ~ '/courses/' ~ course.id ~ '/lti' %}
+
+            <a
+                    href="{{ backUrl }}"
+                    onclick="if (window.history.length > 1) { event.preventDefault(); window.history.back(); }"
+                    class="mb-6 inline-flex items-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2 text-body-2 font-semibold text-gray-90 shadow-sm transition hover:border-primary hover:text-primary"
+            >
+                <span class="fa fa-arrow-left" aria-hidden="true"></span>
+                <span>{{ 'Back'|trans }}</span>
+            </a>
+
+            <div class="mb-6">
+                <h1 class="text-2xl font-semibold text-gray-90">{{ tool.title }}</h1>
+
+                {% if not tool.description is empty %}
+                    {% if parentTool and parentTool.activeDeepLinking %}
+                        <div class="mt-4 rounded-2xl border border-gray-25 bg-white p-5 text-body-2 text-gray-90 shadow-xl">
+                            {% autoescape false %}
+                                {{ tool.description }}
+                            {% endautoescape %}
+                        </div>
+                    {% else %}
+                        <div class="mt-4 rounded-2xl border border-gray-25 bg-white p-5 text-body-2 text-gray-90 shadow-xl">
+                            <p>{{ tool.description }}</p>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+
+            <div class="overflow-hidden rounded-2xl border border-gray-25 bg-white shadow-xl">
+                <div class="border-b border-gray-25 bg-support-2 px-5 py-4">
+                    <h2 class="text-body-1 font-semibold text-gray-90">
+                        {{ 'External activity'|trans }}
+                    </h2>
+                </div>
+
+                <iframe
+                        class="plugin-ims-lti-iframe h-[calc(100vh-14rem)] w-full"
+                        allowfullscreen
+                        src="{{ url('chamilo_lti_launch', {'cid': course.id, 'id': tool.id}) }}"
+                ></iframe>
+            </div>
         </div>
     </section>
 {% endblock %}

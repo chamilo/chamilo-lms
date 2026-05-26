@@ -1,16 +1,18 @@
 <template>
   <div>
     <div class="flex items-center justify-between">
-      <BaseIcon
+      <BaseButton
+        :label="t('Back')"
         icon="back"
-        size="big"
+        only-icon
+        size="small"
+        type="black"
         @click="goBack"
-        :title="t('Back')"
       />
     </div>
 
     <hr />
-    <h1 class="text-2xl font-bold">{{ t("Add users") }} - {{ publicationTitle }}</h1>
+    <h1 class="text-2xl font-bold">{{ t("Assign users") }} - {{ publicationTitle }}</h1>
 
     <div class="m-4">
       <h2 class="text-xl font-semibold mb-2">{{ t("Users added") }}</h2>
@@ -44,7 +46,7 @@
       </p>
     </div>
 
-    <div>
+    <div class="m-4">
       <h2 class="text-xl font-semibold mb-2">{{ t("Users to add") }}</h2>
 
       <div class="mb-2 flex items-center gap-2">
@@ -84,12 +86,14 @@
             :disabled="currentPage === 1"
             @click="prevPage"
             :label="t('Previous')"
+            icon="arrow-left"
           />
           <span>{{ t("Page") }} {{ currentPage }}</span>
           <BaseButton
             :disabled="!hasNextPage"
             @click="nextPage"
             :label="t('Next')"
+            icon="arrow-right"
           />
         </div>
       </div>
@@ -109,10 +113,8 @@ import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { useNotification } from "../../composables/notification"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
-import { ENTRYPOINT } from "../../config/entrypoint"
 import { useCidReq } from "../../composables/cidReq"
 import debounce from "lodash/debounce"
-import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -153,7 +155,7 @@ function nextPage() {
 
 async function loadPublication() {
   try {
-    const response = await axios.get(`${ENTRYPOINT}c_student_publications/${publicationId}`, {
+    const response = await axios.get(`/api/c_student_publications/${publicationId}`, {
       params: { cid, ...(sid && { sid }) },
     })
     publicationTitle.value = response.data.title
@@ -165,7 +167,7 @@ async function loadPublication() {
 async function loadAddedUsers() {
   isLoadingAdded.value = true
   try {
-    const response = await axios.get(`${ENTRYPOINT}c_student_publication_rel_users`, {
+    const response = await axios.get(`/api/c_student_publication_rel_users`, {
       params: {
         publication: `/api/c_student_publications/${publicationId}`,
       },
@@ -191,7 +193,7 @@ async function loadAvailableUsers() {
     if (sid > 0) {
       params.session = sid
       params.course = cid
-      const response = await axios.get(`${ENTRYPOINT}session_rel_course_rel_users`, { params })
+      const response = await axios.get(`/api/session_rel_course_rel_users`, { params })
       const currentUserIds = new Set(addedUsers.value.map((u) => u.user["@id"]))
 
       const userMap = new Map()
@@ -206,7 +208,7 @@ async function loadAvailableUsers() {
       hasNextPage.value = !!response.data["hydra:view"]?.["hydra:next"]
     } else if (cid > 0) {
       params.course = cid
-      const response = await axios.get(`${ENTRYPOINT}course_rel_users`, { params })
+      const response = await axios.get(`/api/course_rel_users`, { params })
       const currentUserIds = new Set(addedUsers.value.map((u) => u.user["@id"]))
 
       const userMap = new Map()
@@ -237,7 +239,7 @@ const debouncedSearch = debounce(() => {
 
 async function addUser(userId) {
   try {
-    await axios.post(`${ENTRYPOINT}c_student_publication_rel_users`, {
+    await axios.post(`/api/c_student_publication_rel_users`, {
       publication: `/api/c_student_publications/${publicationId}`,
       user: `/api/users/${userId}`,
     })
@@ -251,7 +253,7 @@ async function addUser(userId) {
 
 async function removeUser(relId) {
   try {
-    await axios.delete(`${ENTRYPOINT}c_student_publication_rel_users/${relId}`)
+    await axios.delete(`/api/c_student_publication_rel_users/${relId}`)
     notification.showSuccessNotification(t("User removed"))
     await loadAddedUsers()
     await loadAvailableUsers()

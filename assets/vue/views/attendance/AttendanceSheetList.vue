@@ -1,12 +1,5 @@
 <template>
-  <SectionHeader :title="t('Attendance')">
-    <template #end>
-      <StudentViewButton
-        v-if="securityStore.isAuthenticated"
-        @change="onStudentViewChange"
-      />
-    </template>
-  </SectionHeader>
+  <SectionHeader :title="t('Attendance')" />
 
   <div class="attendance-page p-4">
     <!-- Toolbar -->
@@ -121,10 +114,11 @@
                 type="checkbox"
                 class="mr-2"
                 :checked="attendanceData[`${currentUserId}-${date.id}`] === 1"
-                disabled
+                :disabled="!studentCanValidateOwnAttendance"
+                @change="(e) => onStudentAttendanceChange(date.id, e.target.checked)"
               />
             </template>
-            <span>{{ date.label }}</span>
+            <span>{{ formatAttendanceDate(date.dateTime) }}</span>
           </div>
           <div class="flex gap-2">
             <BaseButton
@@ -144,6 +138,19 @@
               @click="openSignatureDialog(currentUserId, date.id)"
             />
           </div>
+        </div>
+
+        <div
+          v-if="studentCanValidateOwnAttendance && filteredDates.length > 0"
+          class="mt-4"
+        >
+          <BaseButton
+            :label="t('Save')"
+            icon="save"
+            type="success"
+            :disabled="isSavingStudentAttendance"
+            @click="saveStudentOwnAttendance"
+          />
         </div>
       </div>
 
@@ -182,6 +189,12 @@
                 <tr class="bg-gray-15 h-28">
                   <th class="p-3 border border-gray-25 text-left">#</th>
                   <th class="p-3 border border-gray-25 text-left">{{ t("Photo") }}</th>
+                  <th
+                    v-if="showOfficialCode"
+                    class="p-3 border border-gray-25 text-left"
+                  >
+                    {{ t("Official code") }}
+                  </th>
                   <th class="p-3 border border-gray-25 text-left">{{ t("Last name") }}</th>
                   <th class="p-3 border border-gray-25 text-left w-32">{{ t("First name") }}</th>
                   <th class="p-3 border border-gray-25 text-left">{{ t("Not attended") }}</th>
@@ -200,6 +213,13 @@
                       alt="User photo"
                       class="w-10 h-10 rounded-full"
                     />
+                  </td>
+                  <td
+                    v-if="showOfficialCode"
+                    class="p-3 border border-gray-25 truncate"
+                    :title="user.officialCode"
+                  >
+                    {{ user.officialCode }}
                   </td>
                   <td
                     class="p-3 border border-gray-25 truncate"
@@ -257,7 +277,7 @@
                     >
                       <div class="flex flex-col items-center">
                         <span class="font-bold">
-                          {{ date.label }}
+                          {{ formatAttendanceDate(date.dateTime) }}
                         </span>
                         <span
                           v-if="date.duration !== undefined && date.duration !== null"
@@ -270,32 +290,38 @@
                           class="flex gap-2 mt-1"
                           v-if="isTeacherUI"
                         >
-                          <BaseIcon
+                          <BaseButton
+                            :label="t('View for tablet')"
                             icon="view-table"
-                            size="normal"
+                            only-icon
+                            size="small"
+                            type="black"
                             @click="viewForTablet(date.id)"
-                            class="cursor-pointer text-primary"
-                            title="View for tablet"
                           />
-                          <BaseIcon
-                            v-if="isAdmin"
+                          <BaseButton
+                            v-if="canManageLocks"
                             :icon="isColumnLocked(date.id) ? 'lock' : 'unlock'"
-                            size="normal"
+                            :label="isColumnLocked(date.id) ? t('Unlock column') : t('Lock column')"
+                            only-icon
+                            size="small"
+                            type="warning"
                             @click="toggleLock(date.id)"
-                            :class="isColumnLocked(date.id) ? 'text-gray-500' : 'text-warning'"
-                            :title="isColumnLocked(date.id) ? 'Unlock column' : 'Lock column'"
                           />
-                          <BaseIcon
+                          <BaseButton
+                            :label="t('Set all Present')"
                             icon="account-check"
+                            only-icon
+                            size="small"
+                            type="success"
                             @click="setAllAttendance(date.id, 1)"
-                            class="text-success"
-                            title="Set all Present"
                           />
-                          <BaseIcon
+                          <BaseButton
+                            :label="t('Set all Absent')"
                             icon="account-cancel"
+                            only-icon
+                            size="small"
+                            type="danger"
                             @click="setAllAttendance(date.id, 0)"
-                            class="text-danger"
-                            title="Set all Absent"
                           />
                         </div>
                       </div>
@@ -396,19 +422,23 @@
                         v-if="canEdit"
                         class="absolute top-2 right-2 flex gap-3"
                       >
-                        <BaseIcon
+                        <BaseButton
                           v-if="allowComments && !isColumnLocked(date.id)"
+                          :label="t('Comment')"
                           icon="comment"
-                          size="normal"
+                          only-icon
+                          size="small"
+                          type="info"
                           @click="openCommentDialog(user.id, date.id)"
-                          class="cursor-pointer text-info"
                         />
-                        <BaseIcon
+                        <BaseButton
                           v-if="enableSignature && !isColumnLocked(date.id)"
+                          :label="t('Sign')"
                           icon="drawing"
-                          size="normal"
+                          only-icon
+                          size="small"
+                          type="success"
                           @click="openSignatureDialog(user.id, date.id)"
-                          class="cursor-pointer text-success"
                         />
                       </div>
                     </td>
@@ -420,7 +450,7 @@
         </div>
 
         <!-- Save Button -->
-        <div class="mt-4 flex justify-end">
+        <div class="mt-2 flex justify-end">
           <BaseButton
             v-if="canEdit && filteredDates.some((date) => !isColumnLocked(date.id))"
             :label="isSaving ? t('Saving...') : t('Save attendance')"
@@ -455,12 +485,6 @@
             type="success"
             @click="saveComment"
           />
-          <BaseButton
-            :label="t('Close')"
-            icon="close"
-            type="danger"
-            @click="closeCommentDialog"
-          />
         </template>
       </BaseDialog>
 
@@ -471,11 +495,10 @@
       >
         <div class="relative w-full h-48">
           <canvas
-            ref="signaturePad"
+            ref="signaturePadCanvas"
             class="border border-gray-300 rounded w-full h-full"
           ></canvas>
           <button
-            v-if="isTeacherUI && canEdit"
             @click="clearSignature"
             class="mt-2 text-primary"
           >
@@ -484,23 +507,17 @@
         </div>
         <template #footer>
           <BaseButton
-            v-if="isTeacherUI && canEdit"
             :label="t('Save')"
             icon="save"
             type="success"
             @click="saveSignature"
-          />
-          <BaseButton
-            :label="t('Close')"
-            icon="close"
-            type="danger"
-            @click="closeSignatureDialog"
           />
         </template>
       </BaseDialog>
       <BaseDialog
         v-model:isVisible="showQrDialog"
         title="QR Code"
+        :close-label="t('Close')"
       >
         <div class="flex justify-center items-center p-4">
           <img
@@ -510,14 +527,6 @@
             class="w-64 h-64 object-contain"
           />
         </div>
-        <template #footer>
-          <BaseButton
-            :label="t('Close')"
-            icon="close"
-            type="danger"
-            @click="showQrDialog = false"
-          />
-        </template>
       </BaseDialog>
     </div>
   </div>
@@ -532,22 +541,28 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseDialog from "../../components/basecomponents/BaseDialog.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
-import StudentViewButton from "../../components/StudentViewButton.vue"
 import attendanceService, { ATTENDANCE_STATES } from "../../services/attendanceService"
 import { useCidReq } from "../../composables/cidReq"
 import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
+import { useCourseSettings } from "../../store/courseSettingStore"
 import { storeToRefs } from "pinia"
 import { useCidReqStore } from "../../store/cidReq"
+import { useFormatDate } from "../../composables/formatDate"
+import { DateTime } from "luxon"
 
 const { t } = useI18n()
 const router = useRouter()
 const route = useRoute()
+const { abbreviatedDatetime, getCurrentTimezone } = useFormatDate()
+
+const formatAttendanceDate = (dateTimeStr) => abbreviatedDatetime(dateTimeStr) || dateTimeStr
 const { sid, cid, gid } = useCidReq()
 const isLoading = ref(true)
 const attendanceTitle = ref("")
 const securityStore = useSecurityStore()
 const platformConfigStore = usePlatformConfig()
+const courseSettingsStore = useCourseSettings()
 
 const isTeacherUser = computed(
   () => securityStore.isAdmin || securityStore.isTeacher || securityStore.isCourseAdmin || securityStore.isHRM,
@@ -563,7 +578,8 @@ function onStudentViewChange() {
   }
 }
 
-const isAdmin = computed(() => securityStore.isAdmin)
+watch(() => platformConfigStore.isStudentViewActive, onStudentViewChange)
+
 const currentUserId = computed(() => securityStore.user?.id)
 
 const cidReqStore = useCidReqStore()
@@ -576,18 +592,30 @@ const allowComments = computed(() => platformConfigStore.getSetting("attendance.
 const allowMultilevelGrading = computed(
   () => platformConfigStore.getSetting("attendance.multilevel_grading") === "true",
 )
+const showOfficialCode = computed(
+  () => platformConfigStore.getSetting("attendance.attendance_add_official_code") === "true",
+)
 const canEdit = computed(() => {
   const readonly = route.query.readonly === "1"
   return !readonly && isTeacherUI.value
 })
+
+const canManageLocks = computed(() => canEdit.value)
+
+const studentCanValidateOwnAttendance = computed(
+  () => isStudentUI.value && courseSettingsStore.getSetting("student_validate_own_attendance") === "1",
+)
 
 const signedCount = computed(
   () => filteredDates.value.filter((d) => attendanceData.value[`${currentUserId.value}-${d.id}`] === 1).length,
 )
 const totalCount = computed(() => filteredDates.value.length)
 
-const todayDate = new Date().toLocaleDateString("en-US", { year: "numeric", month: "short", day: "2-digit" })
-const isTodayScheduled = computed(() => attendanceDates.value.some((date) => date.label.includes(todayDate)))
+const isTodayScheduled = computed(() => attendanceDates.value.some((date) => {
+  if (!date.dateTime) return false
+  const dt = DateTime.fromISO(date.dateTime, { zone: "utc" }).setZone(getCurrentTimezone())
+  return dt.isValid && dt.toISODate() === DateTime.now().setZone(getCurrentTimezone()).toISODate()
+}))
 
 const attendanceDates = ref([])
 const attendanceSheetUsers = ref([])
@@ -623,6 +651,7 @@ const filteredAttendanceSheets = computed(() => {
 })
 
 const isSaving = ref(false)
+const isSavingStudentAttendance = ref(false)
 const attendanceData = ref({})
 
 /**
@@ -668,9 +697,9 @@ const saveAttendanceSheet = async () => {
   isSaving.value = true
   try {
     await attendanceService.saveAttendanceSheet({
-      courseId: parseInt(cid),
-      sessionId: sid ? parseInt(sid) : null,
-      groupId: gid ? parseInt(gid) : null,
+      courseId: parseInt(cid, 10),
+      sessionId: sid ? parseInt(sid, 10) : null,
+      groupId: gid ? parseInt(gid, 10) : null,
       attendanceData: preparedData,
     })
 
@@ -685,9 +714,37 @@ const saveAttendanceSheet = async () => {
   }
 }
 
+const onStudentAttendanceChange = (dateId, checked) => {
+  const key = `${currentUserId.value}-${dateId}`
+  attendanceData.value[key] = checked ? 1 : 0
+}
+
+const saveStudentOwnAttendance = async () => {
+  isSavingStudentAttendance.value = true
+  try {
+    const entries = filteredDates.value.map((date) => ({
+      calendarId: date.id,
+      presence: attendanceData.value[`${currentUserId.value}-${date.id}`] ?? 0,
+    }))
+
+    await attendanceService.saveStudentOwnAttendance({
+      courseId: parseInt(cid, 10),
+      entries,
+    })
+
+    alert(t("Attendance saved successfully"))
+  } catch (error) {
+    console.error("Error saving student attendance:", error)
+    alert(t("Failed to save attendance. Please try again."))
+  } finally {
+    isSavingStudentAttendance.value = false
+  }
+}
+
 const showCommentDialog = ref(false)
 const showSignatureDialog = ref(false)
 const currentComment = ref("")
+const signaturePadCanvas = ref(null)
 const signaturePad = ref(null)
 
 const fetchAttendanceSheetUsers = async (attendanceId) => {
@@ -701,6 +758,7 @@ const fetchAttendanceSheetUsers = async (attendanceId) => {
       photo: user.photo || "/img/default-avatar.png",
       lastName: user.lastname,
       firstName: user.firstname,
+      officialCode: user.officialCode || "",
       notAttended: user.notAttended,
     }))
   } catch (error) {
@@ -754,15 +812,11 @@ const fetchAttendanceTitle = async () => {
   }
 }
 
-const today = new Date().toISOString().split("T")[0]
-const isoFromDateLabel = (label) => {
-  try {
-    const dateOnly = label.split(" - ")[0]
-    const parsed = new Date(dateOnly)
-    return isNaN(parsed) ? null : parsed.toISOString().split("T")[0]
-  } catch {
-    return null
-  }
+const todayInTz = DateTime.now().setZone(getCurrentTimezone()).toISODate()
+const isoDateFromDateTime = (dateTimeStr) => {
+  if (!dateTimeStr) return null
+  const dt = DateTime.fromISO(dateTimeStr, { zone: "utc" }).setZone(getCurrentTimezone())
+  return dt.isValid ? dt.toISODate() : null
 }
 
 const filteredDates = ref([])
@@ -777,7 +831,7 @@ const updateAvailableFilters = () => {
   ]
 
   attendanceDates.value.forEach((date) => {
-    availableFilters.value.push({ label: date.label, value: date.id })
+    availableFilters.value.push({ label: formatAttendanceDate(date.dateTime), value: date.id })
   })
 }
 
@@ -786,9 +840,7 @@ const filterAttendanceSheets = () => {
     filteredDates.value = attendanceDates.value
   } else if (selectedFilter.value === "today") {
     const todayEntry = attendanceDates.value.find((date) => {
-      if (!date.label) return false
-      const formatted = isoFromDateLabel(date.label)
-      return formatted === today
+      return isoDateFromDateTime(date.dateTime) === todayInTz
     })
     filteredDates.value = todayEntry ? [todayEntry] : []
   } else if (selectedFilter.value === "done") {
@@ -818,10 +870,14 @@ const initializeColumnLocks = (dates) => {
 
 const isToggling = ref(false)
 const toggleLock = (dateId) => {
-  if (!isTeacherUI.value) return
+  if (!canManageLocks.value) return
   if (isToggling.value) return
   isToggling.value = true
-  columnLocks.value = { ...columnLocks.value, [dateId]: !columnLocks.value[dateId] }
+  columnLocks.value = {
+    ...columnLocks.value,
+    [dateId]: !columnLocks.value[dateId],
+  }
+
   setTimeout(() => {
     isToggling.value = false
   }, 100)
@@ -907,7 +963,8 @@ const toggleAttendanceState = (userId, dateId) => {
 }
 
 const setAllAttendance = (dateId, stateId) => {
-  if (!canEdit.value) return
+  if (!canEdit.value || isColumnLocked(dateId)) return
+
   filteredAttendanceSheets.value.forEach((user) => {
     attendanceData.value[`${user.id}-${dateId}`] = stateId
   })
@@ -951,7 +1008,7 @@ const openSignatureDialog = (userId, dateId) => {
   showSignatureDialog.value = true
 
   nextTick(() => {
-    const canvas = document.querySelector("canvas")
+    const canvas = signaturePadCanvas.value
     if (canvas) {
       canvas.width = canvas.offsetWidth
       canvas.height = canvas.offsetHeight
@@ -976,12 +1033,24 @@ const saveComment = () => {
   closeCommentDialog()
 }
 
-const saveSignature = () => {
-  if (!canEdit.value) return
-  if (signaturePad.value) {
-    const key = `${dialogUserId.value}-${dialogDateId.value}`
-    signatures.value[key] = signaturePad.value.toDataURL()
+const saveSignature = async () => {
+  if (!signaturePad.value) return
+  const key = `${dialogUserId.value}-${dialogDateId.value}`
+  signatures.value[key] = signaturePad.value.toDataURL()
+
+  if (isStudentUI.value) {
+    try {
+      await attendanceService.saveStudentSignature({
+        calendarId: dialogDateId.value,
+        signature: signatures.value[key],
+      })
+    } catch (error) {
+      console.error("Error saving student signature:", error)
+      alert(t("Failed to save signature. Please try again."))
+      return
+    }
   }
+
   closeSignatureDialog()
 }
 

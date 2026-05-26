@@ -14,9 +14,9 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\MessageHelper;
+use Chamilo\CoreBundle\Helpers\ResourceHelper;
 use Chamilo\CoreBundle\Repository\CourseRelUserRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
-use Chamilo\CoreBundle\Repository\TrackEDefaultRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationCorrection;
@@ -38,6 +38,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
@@ -48,6 +49,7 @@ use const ENT_QUOTES;
 use const PATHINFO_EXTENSION;
 use const PATHINFO_FILENAME;
 
+#[IsGranted('ROLE_USER')]
 #[Route('/assignments')]
 class StudentPublicationController extends AbstractController
 {
@@ -173,7 +175,7 @@ class StudentPublicationController extends AbstractController
         int $id,
         EntityManagerInterface $em,
         CStudentPublicationRepository $repo,
-        TrackEDefaultRepository $trackRepo
+        ResourceHelper $trackHelper
     ): JsonResponse {
         $submission = $repo->find($id);
 
@@ -185,7 +187,7 @@ class StudentPublicationController extends AbstractController
 
         $resourceNode = $submission->getResourceNode();
         if ($resourceNode) {
-            $trackRepo->registerResourceEvent($resourceNode, 'deletion');
+            $trackHelper->createAndSaveResourceEvent($resourceNode, 'deletion');
         }
 
         $em->remove($resourceNode);

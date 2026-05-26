@@ -19,9 +19,7 @@ import CreateMixin from "../../mixins/CreateMixin"
 import { ref } from "vue"
 import useVuelidate from "@vuelidate/core"
 import { useRoute, useRouter } from "vue-router"
-import isEmpty from "lodash/isEmpty"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink.js"
-import { useCidReq } from "../../composables/cidReq"
 import cToolIntroService from "../../services/cToolIntroService"
 import { useSecurityStore } from "../../store/securityStore"
 import { storeToRefs } from "pinia"
@@ -52,59 +50,68 @@ export default {
 
     const { isAuthenticated, user } = storeToRefs(securityStore)
 
-    let id = route.params.id
-    if (isEmpty(id)) {
-      id = route.query.id
-    }
+    const courseId = route.query.cid
+    const sessionId = route.query.sid
+    const tool = route.query.tool || "course_homepage"
+    const ctoolId = route.params.courseTool
 
-    const { cid } = useCidReq()
-
-    let courseId = route.query.cid
-    let sessionId = route.query.sid
-    let ctoolId = route.params.courseTool
-
-    async function getIntro() {
-      cToolIntroService
-        .findCourseHomeInro(courseId, {
-          cid: courseId,
-          sid: sessionId,
-        })
-        .then((intro) => {
-          if (intro.introText) {
-            item.value.introText = intro.introText
-          }
-        })
-    }
-
-    item.value["parentResourceNodeId"] = Number(route.query.parentResourceNodeId)
-    item.value["courseTool"] = "/api/c_tools/" + ctoolId
-
-    item.value["resourceLinkList"] = [
+    item.value.parentResourceNodeId = Number(route.query.parentResourceNodeId)
+    item.value.courseTool = `/api/c_tools/${ctoolId}`
+    item.value.resourceLinkList = [
       {
-        sid: route.query.sid,
-        cid: route.query.cid,
-        visibility: RESOURCE_LINK_PUBLISHED, // visible by default
+        sid: sessionId,
+        cid: courseId,
+        visibility: RESOURCE_LINK_PUBLISHED,
       },
     ]
 
+    async function getIntro() {
+      try {
+        const response = await cToolIntroService.getToolIntro(courseId, {
+          cid: courseId,
+          sid: sessionId,
+          tool,
+        })
+
+        const intro = response.data || response
+
+        if (intro?.introText) {
+          item.value.introText = intro.introText
+        }
+      } catch (error) {
+        console.error("Error loading tool introduction:", error)
+      }
+    }
+
     getIntro()
 
-    function onCreated(item) {
+    function onCreated(createdItem) {
       cToolIntroService
-        .addToolIntro(cid, {
-          iid: item.iid,
-          cid: route.query.cid,
-          sid: route.query.sid,
+        .addToolIntro(courseId, {
+          tool,
+          iid: createdItem.iid,
+          introText: item.value.introText || "",
+          cid: courseId,
+          sid: sessionId,
+          resourceLinkList: item.value.resourceLinkList,
         })
         .then(() => {
           router.go(-1)
         })
-        .catch(function (error) {
-          console.log(error)
+        .catch((error) => {
+          console.error("Error creating tool introduction:", error)
         })
     }
 
-    return { v$: useVuelidate(), users, isLoadingSelect, item, onCreated, currentUser: user, isAuthenticated }
+    return {
+      v$: useVuelidate(),
+      users,
+      isLoadingSelect,
+      item,
+      onCreated,
+      currentUser: user,
+      isAuthenticated,
+    }
   },
   computed: {
     ...mapFields(["error", "isLoading", "created", "violations"]),

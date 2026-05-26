@@ -213,7 +213,7 @@ if (isset($_POST['feedback'])) {
 
 // Error Message
 if (isset($_GET['error']) && !empty($_GET['error'])) {
-    echo Display::return_message(get_lang($_GET['error']), 'normal');
+    echo Display::return_message(htmlspecialchars(get_lang($_GET['error']), ENT_QUOTES), 'normal');
 }
 
 $dropbox_data_sent = [];

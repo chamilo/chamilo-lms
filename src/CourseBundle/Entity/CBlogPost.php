@@ -19,18 +19,18 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(
     operations: [
-        new Get(),
-        new GetCollection(),
+        new Get(security: "object.getBlog() != null and is_granted('VIEW', object.getBlog().resourceNode)"),
+        new GetCollection(security: "is_granted('ROLE_USER')"),
         new Post(
-            security: "is_granted('ROLE_USER')",
+            securityPostDenormalize: "object.getBlog() != null and is_granted('EDIT', object.getBlog().resourceNode)",
             processor: CBlogAssignAuthorProcessor::class
         ),
-        new Patch(security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_TEACHER') or (object.getAuthor() != null and object.getAuthor() === user)"),
-        new Delete(security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_TEACHER') or (object.getAuthor() != null and object.getAuthor() === user)"),
+        new Patch(security: "object.getBlog() != null and (is_granted('EDIT', object.getBlog().resourceNode) or (object.getAuthor() != null and object.getAuthor() === user and is_granted('VIEW', object.getBlog().resourceNode)))"),
+        new Delete(security: "object.getBlog() != null and (is_granted('DELETE', object.getBlog().resourceNode) or (object.getAuthor() != null and object.getAuthor() === user and is_granted('VIEW', object.getBlog().resourceNode)))"),
     ],
     normalizationContext: ['groups' => ['blog_post:read']],
     denormalizationContext: ['groups' => ['blog_post:write']],

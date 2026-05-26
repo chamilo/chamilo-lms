@@ -1,6 +1,10 @@
 export default {
   path: "/resources/document/:node/",
-  meta: { requiresAuth: true, showBreadcrumb: true },
+  meta: {
+    requiresAuth: true,
+    showBreadcrumb: true,
+    tool: "document",
+  },
   name: "documents",
   component: () => import("../components/layout/SimpleRouterViewLayout.vue"),
   redirect: { name: "DocumentsList" },
@@ -20,28 +24,37 @@ export default {
     {
       name: "DocumentsCreateFile",
       path: "create",
+      meta: { breadcrumb: "Create file" },
       component: () => import("../views/documents/CreateFile.vue"),
     },
     {
       name: "DocumentsUploadFile",
       path: "upload",
+      meta: { breadcrumb: "Upload file" },
       component: () => import("../views/documents/DocumentsUpload.vue"),
     },
     {
+      name: "DocumentsSvgEditor",
+      path: "draw",
+      meta: { breadcrumb: "New drawing" },
+      component: () => import("../views/documents/SvgEditor.vue"),
+    },
+    {
       name: "DocumentsUpdate",
-      //path: ':id/edit',
       path: "edit",
+      meta: { breadcrumb: "Edit" },
       component: () => import("../views/documents/Update.vue"),
     },
     {
       name: "DocumentsUpdateFile",
-      //path: ':id/edit',
       path: "edit_file",
+      meta: { breadcrumb: "Edit" },
       component: () => import("../views/documents/UpdateFile.vue"),
     },
     {
       name: "DocumentsShow",
       path: "show",
+      meta: { breadcrumb: "Show" },
       component: () => import("../views/documents/DocumentShow.vue"),
     },
     {
@@ -53,6 +66,7 @@ export default {
     {
       name: "DocumentsAddVariation",
       path: "add_variation/:resourceFileId",
+      meta: { breadcrumb: "Add variation" },
       component: () => import("../views/documents/AddVariation.vue"),
     },
     {

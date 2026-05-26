@@ -1,0 +1,7 @@
+{
+  "libraryStrings": {
+    "distributeButtonLabel": "균등하게 분배",
+    "distributeButtonWarning": "모든 범위에 대해 값이 변경됩니다. 계속하시겠습니까?",
+    "rangeOutOfSequenceWarning": "점수 범위가 시퀀스를 벗어남"
+  }
+}

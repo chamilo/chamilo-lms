@@ -3,7 +3,6 @@
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
-use Throwable;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';

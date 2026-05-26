@@ -16,7 +16,8 @@ module.exports = {
   important: true,
   content: [
     "./assets/**/*.{js,vue}",
-    "./public/main/**/*.{php,twig}",
+    "./public/main/**/*.{php,twig,tpl}",
+    "./public/plugin/**/*.{php,twig,tpl}",
     "./src/CoreBundle/Resources/views/**/*.html.twig",
   ],
   theme: {
@@ -100,6 +101,9 @@ module.exports = {
         "body-2": ["14px", "16px"],
         caption: ["13px", "16px"],
         tiny: ["11px", "16px"],
+      },
+      boxShadow: {
+        xl: "0 4px 12px 0 rgb(0, 0, 0, 0.2)",
       },
     },
   },

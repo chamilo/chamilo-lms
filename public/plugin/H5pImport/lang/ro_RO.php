@@ -1,0 +1,22 @@
+<?php
+$strings['plugin_title'] = 'Import H5P';
+$strings['plugin_comment'] = 'Importă conținuturi H5P și folosește-le în parcursuri de învățare. Deschide README.md pentru instrucțiuni de instalare.';
+$strings['frame'] = 'Cadru';
+$strings['frame_help'] = 'Afișează cadru și butoane sub H5P';
+$strings['embed'] = 'Încorporare';
+$strings['embed_help'] = 'Afișează butonul de încorporare';
+$strings['copyright'] = 'Drepturi de autor';
+$strings['copyright_help'] = 'Afișează butonul de drepturi de autor';
+$strings['icon'] = 'Pictogramă';
+$strings['icon_help'] = 'Afișează pictograma H5P';
+$strings['attempts'] = 'Număr de încercări';
+$strings['upload_h5p'] = 'Încărcare';
+$strings['import_h5p_package'] = 'Încarcă pachet H5P';
+$strings['h5p_package'] = 'Pachet H5P';
+$strings['h5p_error_loading'] = 'Eroare la încărcarea pachetului H5P';
+$strings['h5p_error_invalid_token'] = 'Jeton de securitate invalid';
+$strings['h5p_error_missing_core_asset'] = 'Eroare la încărcarea resurselor de bază H5P';
+$strings['h5p_save_content_state'] = 'Salvează rezultatele utilizatorului';
+$strings['h5p_save_content_freq'] = 'Frecvență de salvare';
+$strings['h5p_save_freq_help'] = 'Cât de des să se salveze starea curentă a conținutului, în secunde';
+$strings['start_attempt'] = 'Începe încercarea';

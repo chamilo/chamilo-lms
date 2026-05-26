@@ -7,9 +7,11 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\EventSubscriber;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Helpers\LanguageHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,14 +21,16 @@ use Symfony\Component\HttpKernel\KernelEvents;
 /**
  * Handles locale selection based on platform, user, and course settings.
  */
-class LocaleSubscriber implements EventSubscriberInterface
+readonly class LocaleSubscriber implements EventSubscriberInterface
 {
     public function __construct(
+        #[Autowire(param: 'locale')]
         private string $defaultLocale,
         private SettingsManager $settingsManager,
         private ParameterBagInterface $parameterBag,
         private SettingsCourseManager $courseSettingsManager,
         private EntityManagerInterface $em,
+        private LanguageHelper $languageHelper,
     ) {}
 
     public function onKernelRequest(RequestEvent $event): void
@@ -67,28 +71,8 @@ class LocaleSubscriber implements EventSubscriberInterface
             $localeList['user_profil_lang'] = $userLocale;
         }
 
-        // 3) Course language, or user language if course allows it
-        // First try: course already in session
-        $course = $session->get('course');
-
-        // Fallback: resolve course from request if not in session yet
-        if (!$course instanceof Course) {
-            // Accept both numeric id (?cid=123) and code (?cid=ABC) as well as legacy ?cidReq=CODE
-            $cid = $request->query->get('cid');
-            $cidReq = $request->query->get('cidReq');
-
-            if ($cid) {
-                if (ctype_digit((string) $cid)) {
-                    $course = $this->em->getRepository(Course::class)->find((int) $cid);
-                } else {
-                    $course = $this->em->getRepository(Course::class)->findOneBy(['code' => (string) $cid]);
-                }
-            }
-
-            if (!$course && $cidReq) {
-                $course = $this->em->getRepository(Course::class)->findOneBy(['code' => (string) $cidReq]);
-            }
-        }
+        // 3) Course language only when the current request is in course context
+        $course = $this->resolveCourseFromRequest($request);
 
         if ($course instanceof Course) {
             $userLocale = $localeList['user_profil_lang'] ?? null;
@@ -110,28 +94,107 @@ class LocaleSubscriber implements EventSubscriberInterface
             $localeList['user_selected_lang'] = $selected;
         }
 
-        // 5) Honor configured priorities language_priority_1..4
-        foreach ([
-            'language_priority_1',
-            'language_priority_2',
-            'language_priority_3',
-            'language_priority_4',
-        ] as $settingKey) {
+        // 5) Browser Accept-Language preference (overrides platform default, but not user/course/selected)
+        if (empty($localeList['user_profil_lang'])) {
+            $browserLocale = $this->detectBrowserLanguage($request);
+            if (null !== $browserLocale) {
+                $localeList['browser_lang'] = $browserLocale;
+            }
+        }
+
+        // 6) Honor configured priorities language_priority_1..4
+        $matchingPriorities = [];
+        foreach (['language_priority_1', 'language_priority_2', 'language_priority_3', 'language_priority_4'] as $settingKey) {
             $priority = $this->settingsManager->getSetting("language.$settingKey");
             if (!empty($priority) && !empty($localeList[$priority])) {
-                return $localeList[$priority];
+                $matchingPriorities[] = $priority;
             }
         }
 
-        // 6) Fallback order when priorities are absent
-        foreach (['platform_lang', 'user_profil_lang', 'course_lang', 'user_selected_lang'] as $key) {
+        foreach ($matchingPriorities as $index => $priority) {
+            if ('platform_lang' === $priority && !empty($localeList['browser_lang'])) {
+                // browser_lang replaces platform_lang only when no subsequent priority matches.
+                if (!isset($matchingPriorities[$index + 1])) {
+                    return $localeList['browser_lang'];
+                }
+
+                // A more-specific priority follows — skip platform_lang and let it win.
+                continue;
+            }
+
+            return $localeList[$priority];
+        }
+
+        // 7) Fallback order when priorities are absent — last non-empty wins
+        $result = $this->defaultLocale;
+        foreach (['platform_lang', 'browser_lang', 'user_profil_lang', 'course_lang', 'user_selected_lang'] as $key) {
             if (!empty($localeList[$key])) {
-                return $localeList[$key];
+                $result = $localeList[$key];
             }
         }
 
-        // 7) Final fallback to system default
-        return $this->defaultLocale;
+        return $result;
+    }
+
+    /**
+     * Resolve course context only from the current request.
+     * Do not reuse a course stored in session for global pages.
+     */
+    private function resolveCourseFromRequest(Request $request): ?Course
+    {
+        $cid = $request->attributes->get('cid');
+        if (!$cid) {
+            $cid = $request->query->get('cid');
+        }
+
+        $cidReq = $request->attributes->get('cidReq');
+        if (!$cidReq) {
+            $cidReq = $request->query->get('cidReq');
+        }
+
+        if ($cid) {
+            if (ctype_digit((string) $cid)) {
+                return $this->em->getRepository(Course::class)->find((int) $cid);
+            }
+
+            return $this->em->getRepository(Course::class)->findOneBy(['code' => (string) $cid]);
+        }
+
+        if ($cidReq) {
+            return $this->em->getRepository(Course::class)->findOneBy(['code' => (string) $cidReq]);
+        }
+
+        return null;
+    }
+
+    private function detectBrowserLanguage(Request $request): ?string
+    {
+        $acceptLanguage = $request->headers->get('Accept-Language', '');
+        if ('' === $acceptLanguage) {
+            return null;
+        }
+
+        $preferences = [];
+        foreach (explode(',', $acceptLanguage) as $part) {
+            $part = trim($part);
+            if (str_contains($part, ';q=')) {
+                [$tag, $q] = explode(';q=', $part, 2);
+                $preferences[trim($tag)] = (float) $q;
+            } else {
+                $preferences[$part] = 1.0;
+            }
+        }
+        arsort($preferences);
+
+        foreach (array_keys($preferences) as $browserTag) {
+            $match = $this->languageHelper->findBestAvailableMatch($browserTag);
+
+            if (null !== $match) {
+                return $match->getIsocode();
+            }
+        }
+
+        return null;
     }
 
     public static function getSubscribedEvents(): array

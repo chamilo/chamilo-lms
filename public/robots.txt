@@ -28,6 +28,7 @@ Disallow: /plugin/
 Disallow: /src/
 Disallow: /tests/
 Disallow: /vendor/
+Disallow: /_profiler/
 
 # Files
 Disallow: /license.txt

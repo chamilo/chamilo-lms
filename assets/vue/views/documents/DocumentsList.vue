@@ -8,7 +8,7 @@
       :label="t('Create certificate')"
       icon="file-add"
       only-icon
-      type="black"
+      type="success"
       @click="goToNewDocument"
     />
     <BaseButton
@@ -58,6 +58,7 @@
       icon="drawing"
       only-icon
       type="success"
+      @click="goToNewDrawing"
     />
     <BaseButton
       v-if="showRecordAudioButton"
@@ -92,11 +93,13 @@
       @click="showUsageDialog"
     />
     <BaseButton
-      v-if="showDownloadAllButton"
+      v-if="showDownloadAllButton && !hideDownloadIcon"
+      :disabled="isDownloadingAll"
       :label="t('Download all')"
       icon="download"
       only-icon
       type="primary"
+      @click="downloadAllItems"
     />
     <BaseButton
       v-if="showGenerateMediaButton"
@@ -109,11 +112,12 @@
   </SectionHeader>
 
   <BaseTable
+    :key="tableRenderKey"
     v-model:filters="filters"
+    v-model:rows="options.itemsPerPage"
     v-model:selected-items="selectedItems"
     :global-filter-fields="['resourceNode.title', 'resourceNode.updatedAt']"
-    :is-loading="isLoading"
-    v-model:rows="options.itemsPerPage"
+    :is-loading="tableIsLoading"
     :total-items="totalItems"
     :values="items"
     data-key="iid"
@@ -133,15 +137,35 @@
       field="resourceNode.title"
     >
       <template #body="slotProps">
-        <div style="display: flex; align-items: center">
-          <DocumentEntry
-            v-if="slotProps.data"
-            :data="slotProps.data"
-          />
-          <BaseIcon
-            v-if="isAllowedToEdit && isSessionDocument(slotProps.data)"
-            class="mr-8"
-            icon="session-star"
+        <div class="flex flex-col gap-1">
+          <div class="flex items-center">
+            <DocumentEntry
+              v-if="slotProps.data"
+              :data="slotProps.data"
+            />
+
+            <!-- AI badge at the end of the title -->
+            <span
+              v-if="slotProps.data?.ai_assisted"
+              aria-label="AI-assisted"
+              class="ml-2 inline-flex items-center gap-1 rounded-full border border-gray-300 bg-gray-10 px-2 py-[2px] text-xs text-gray-700"
+              title="AI-assisted"
+            >
+          <span aria-hidden="true">🤖</span>
+          <span class="font-semibold">AI</span>
+        </span>
+
+            <BaseIcon
+              v-if="isAllowedToEdit && isSessionDocument(slotProps.data)"
+              class="mr-8"
+              icon="session-star"
+            />
+          </div>
+
+          <div
+            v-if="getDocumentComment(slotProps.data)"
+            class="max-w-3xl whitespace-pre-line text-sm text-gray-500"
+            v-text="getDocumentComment(slotProps.data)"
           />
         </div>
       </template>
@@ -154,9 +178,11 @@
     >
       <template #body="slotProps">
         {{
-          slotProps.data.resourceNode && slotProps.data.resourceNode.firstResourceFile
-            ? prettyBytes(slotProps.data.resourceNode.firstResourceFile.size)
-            : ""
+          slotProps.data.filetype === "link"
+            ? t("Cloud link")
+            : slotProps.data.resourceNode && slotProps.data.resourceNode.firstResourceFile
+              ? prettyBytes(slotProps.data.resourceNode.firstResourceFile.size)
+              : ""
         }}
       </template>
     </Column>
@@ -175,11 +201,19 @@
       <template #body="slotProps">
         <div class="flex flex-row justify-end gap-2">
           <BaseButton
+            v-if="canShowCopyToMyFiles(slotProps.data)"
+            :title="t('Copy to My Files')"
+            icon="copy"
+            size="small"
+            type="secondary-text"
+            @click="copyToMyFiles(slotProps.data)"
+          />
+          <BaseButton
             v-if="canEdit(slotProps.data)"
             :title="t('Move')"
             icon="folder-move"
             size="small"
-            type="secondary"
+            type="secondary-text"
             @click="openMoveDialog(slotProps.data)"
           />
           <BaseButton
@@ -188,7 +222,7 @@
             :title="getReplaceButtonTitle(slotProps.data)"
             icon="file-swap"
             size="small"
-            type="secondary"
+            type="secondary-text"
             @click="
               (slotProps.data.filetype === 'file' || slotProps.data.filetype === 'video') &&
               openReplaceDialog(slotProps.data)
@@ -198,38 +232,41 @@
             :title="t('Information')"
             icon="information"
             size="small"
-            type="primary"
+            type="primary-text"
             @click="btnShowInformationOnClick(slotProps.data)"
           />
           <BaseButton
+            v-if="showOnlyofficeButton(slotProps.data)"
+            :title="getOnlyofficeButtonTitle(slotProps.data)"
+            icon="onlyoffice"
+            size="small"
+            type="secondary-text"
+            @click="openWithOnlyoffice(slotProps.data)"
+          />
+          <BaseButton
             v-if="showAiFeedbackButton(slotProps.data)"
-            :title="t('Get AI feedback')"
+            :disabled="aiFeedbackLoading"
+            :title="aiFeedbackLoading ? t('In progress') : t('Get AI feedback')"
             icon="robot"
             size="small"
-            type="secondary"
+            type="secondary-text"
             @click="openAiFeedback(slotProps.data)"
           />
           <BaseButton
             v-if="canEdit(slotProps.data)"
-            :icon="
-              RESOURCE_LINK_PUBLISHED === slotProps.data.resourceLinkListFromEntity[0].visibility
-                ? 'eye-on'
-                : RESOURCE_LINK_DRAFT === slotProps.data.resourceLinkListFromEntity[0].visibility
-                  ? 'eye-off'
-                  : ''
-            "
+            :icon="getVisibilityIcon(slotProps.data)"
             :title="t('Visibility')"
             size="small"
-            type="secondary"
+            type="secondary-text"
             @click="btnChangeVisibilityOnClick(slotProps.data)"
           />
 
           <BaseButton
             v-if="canEdit(slotProps.data) && allowAccessUrlFiles && isFile(slotProps.data) && securityStore.isAdmin"
+            :title="t('Add file variation')"
             icon="file-replace"
             size="small"
-            type="secondary"
-            :title="t('Add file variation')"
+            type="secondary-text"
             @click="goToAddVariation(slotProps.data)"
           />
 
@@ -238,7 +275,7 @@
             :title="t('Edit')"
             icon="edit"
             size="small"
-            type="secondary"
+            type="secondary-text"
             @click="btnEditOnClick(slotProps.data)"
           />
 
@@ -247,7 +284,7 @@
             :title="t('Delete')"
             icon="delete"
             size="small"
-            type="danger"
+            type="danger-text"
             @click="confirmDeleteItem(slotProps.data)"
           />
           <BaseButton
@@ -266,7 +303,7 @@
             :icon="getTemplateIcon(slotProps.data.iid)"
             :title="t('Template options')"
             size="small"
-            type="secondary"
+            type="secondary-text"
             @click="openTemplateForm(slotProps.data.iid)"
           />
         </div>
@@ -298,6 +335,7 @@
       @click="showDeleteMultipleDialog"
     />
     <BaseButton
+      v-if="!hideDownloadIcon"
       :disabled="isDownloading || !selectedItems || !selectedItems.length"
       :label="isDownloading ? t('In progress') : t('Download selected items as ZIP')"
       icon="download"
@@ -330,7 +368,7 @@
     @confirm-clicked="createNewFolder"
     @cancel-clicked="hideNewFolderDialog"
   >
-    <div class="p-float-label">
+    <FloatLabel variant="on">
       <InputText
         id="title"
         v-model.trim="item.title"
@@ -341,14 +379,14 @@
         required="true"
       />
       <label
-        v-t="'Name'"
         for="title"
+        v-text="t('Name')"
       />
-    </div>
+    </FloatLabel>
     <small
       v-if="submitted && !item.title"
-      v-t="'Title is required'"
       class="p-error"
+      v-text="t('Title is required')"
     />
   </BaseDialogConfirmCancel>
 
@@ -393,8 +431,6 @@
     <BaseFileUpload
       id="replace-file"
       :label="t('Select replacement file')"
-      accept="*/*"
-      model-value="selectedReplaceFile"
       @file-selected="selectedReplaceFile = $event"
     />
   </BaseDialogConfirmCancel>
@@ -403,7 +439,32 @@
     v-model:is-visible="isFileUsageDialogVisible"
     :style="{ width: '28rem' }"
     :title="t('Space available')"
+    :close-label="t('Close')"
   >
+    <div
+      v-if="usageQuotaSummary"
+      class="mb-3 rounded border border-gray-200 bg-gray-10 p-3"
+    >
+      <div class="text-sm font-semibold">
+        {{ usageQuotaSummary.limiterLabel }}
+      </div>
+
+      <div class="mt-1 text-xs opacity-80">
+        {{ usageQuotaSummary.remainingLabel }}
+      </div>
+
+      <div class="mt-3 grid grid-cols-2 gap-2 text-xs">
+        <div>
+          <span class="font-semibold">{{ t("Course") }}:</span>
+          {{ usageQuotaSummary.courseLine }}
+        </div>
+        <div>
+          <span class="font-semibold">{{ t("Documents") }}:</span>
+          {{ usageQuotaSummary.documentsLine }}
+        </div>
+      </div>
+    </div>
+
     <BaseChart :data="usageData" />
   </BaseDialog>
 
@@ -412,6 +473,7 @@
     :style="{ width: '28rem' }"
     :title="t('Record audio')"
     header-icon="record-add"
+    :close-label="t('Close')"
   >
     <DocumentAudioRecorder
       :parent-resource-node-id="route.params.node"
@@ -419,11 +481,13 @@
       @document-not-saved="recordedAudioNotSaved"
     />
   </BaseDialog>
+
+  <!-- AI feedback dialog -->
   <BaseDialogConfirmCancel
     v-model:is-visible="isAiFeedbackDialogVisible"
-    :title="t('Get AI feedback')"
-    :confirm-label="aiFeedbackLoading ? t('In progress') : t('Get AI feedback')"
     :cancel-label="t('Close')"
+    :confirm-label="aiFeedbackLoading ? t('In progress') : t('Get AI feedback')"
+    :title="t('Get AI feedback')"
     @confirm-clicked="runAiFeedback"
     @cancel-clicked="closeAiFeedbackDialog"
   >
@@ -438,18 +502,51 @@
       </div>
 
       <div class="space-y-1">
+        <div class="text-sm font-semibold">AI provider</div>
+
+        <select
+          v-model="aiFeedbackProvider"
+          :disabled="aiFeedbackLoading || aiFeedbackSaving || aiFeedbackProviderOptions.length === 0"
+          class="w-full rounded border border-gray-300 p-2 text-sm"
+        >
+          <option
+            v-for="p in aiFeedbackProviderOptions"
+            :key="p.key"
+            :value="p.key"
+          >
+            {{ p.label }}
+          </option>
+        </select>
+
+        <div
+          v-if="aiFeedbackProviderOptions.length === 0"
+          class="text-xs text-red-600"
+        >
+          No compatible AI providers available for this file type.
+        </div>
+
+        <div class="text-xs opacity-70">
+          <span v-if="aiFeedbackMode === 'pdf'">Mode: PDF (document processing)</span>
+          <span v-else-if="aiFeedbackMode === 'txt'">Mode: TXT (text processing)</span>
+          <span v-else>Mode: unsupported</span>
+        </div>
+      </div>
+
+      <div class="space-y-1">
         <div class="text-sm font-semibold">Prompt</div>
         <textarea
           v-model="aiFeedbackPrompt"
+          :disabled="aiFeedbackLoading || aiFeedbackSaving"
           class="w-full rounded border border-gray-300 p-2 text-sm"
-          rows="4"
           placeholder="Write your question for the AI..."
+          rows="4"
         />
       </div>
 
       <div class="flex flex-row gap-2">
         <BaseButton
           v-if="aiFeedbackAnswer"
+          :disabled="aiFeedbackLoading || aiFeedbackSaving"
           :label="t('Copy answer to clipboard')"
           icon="copy"
           type="secondary"
@@ -457,7 +554,7 @@
         />
         <BaseButton
           v-if="aiFeedbackAnswer"
-          :disabled="aiFeedbackSaving"
+          :disabled="aiFeedbackSaving || aiFeedbackLoading"
           :label="aiFeedbackSaving ? t('In progress') : t('Save answer to my inbox')"
           icon="save"
           type="primary"
@@ -492,7 +589,7 @@
     @cancel-clicked="showTemplateFormModal = false"
   >
     <form @submit.prevent="submitTemplateForm">
-      <div class="p-float-label">
+      <FloatLabel variant="on">
         <InputText
           id="templateTitle"
           v-model.trim="templateFormData.title"
@@ -500,20 +597,19 @@
           required
         />
         <label
-          v-t="'Name'"
           for="templateTitle"
+          v-text="t('Name')"
         />
-      </div>
+      </FloatLabel>
       <small
         v-if="submitted && !templateFormData.title"
-        v-t="'Title is required'"
         class="p-error"
+        v-text="t('Title is required')"
       />
       <BaseFileUpload
         id="post-file"
         :label="t('File upload')"
-        accept="image"
-        model-value=""
+        accept="image/*"
         size="small"
         @file-selected="selectedFile = $event"
       />
@@ -555,7 +651,7 @@ import { RESOURCE_LINK_DRAFT, RESOURCE_LINK_PUBLISHED } from "../../constants/en
 import { isEmpty } from "lodash"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
-import { computed, onMounted, ref, unref, watch } from "vue"
+import { computed, nextTick, onMounted, ref, unref, watch } from "vue"
 import { useCidReq } from "../../composables/cidReq"
 import { useDatatableList } from "../../composables/datatableList"
 import { useFormatDate } from "../../composables/formatDate"
@@ -576,12 +672,13 @@ import prettyBytes from "pretty-bytes"
 import BaseFileUpload from "../../components/basecomponents/BaseFileUpload.vue"
 import { useDocumentActionButtons } from "../../composables/document/documentActionButtons"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
-import { checkIsAllowedToEdit } from "../../composables/userPermissions"
+import { useIsAllowedToEdit } from "../../composables/userPermissions"
 import { usePlatformConfig } from "../../store/platformConfig"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import { useCourseSettings } from "../../store/courseSettingStore"
 import { storeToRefs } from "pinia"
 import { useCidReqStore } from "../../store/cidReq"
+import FloatLabel from "primevue/floatlabel"
 
 const store = useStore()
 const route = useRoute()
@@ -591,6 +688,40 @@ const courseSettingsStore = useCourseSettings()
 const platformConfigStore = usePlatformConfig()
 const { t, locale } = useI18n()
 const notification = useNotification()
+
+const isDownloadingAll = ref(false)
+
+async function downloadAllItems() {
+  isDownloadingAll.value = true
+
+  try {
+    const rootNodeId = getDocumentsRootNodeId()
+
+    const response = await axios.post(
+      "/api/documents/download-all",
+      { rootNodeId },
+      {
+        responseType: "blob",
+        params: { cid, sid, gid },
+      },
+    )
+
+    const url = window.URL.createObjectURL(new Blob([response.data]))
+    const link = document.createElement("a")
+    link.href = url
+    link.setAttribute("download", "all_documents.zip")
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+
+    notification.showSuccessNotification(t("Download started"))
+  } catch (error) {
+    console.error("[Documents] Error downloading all documents:", error)
+    notification.showErrorNotification(t("Error downloading all documents."))
+  } finally {
+    isDownloadingAll.value = false
+  }
+}
 
 const aiHelpersEnabled = computed(() => {
   return String(platformConfigStore.getSetting("ai_helpers.enable_ai_helpers")) === "true"
@@ -614,11 +745,15 @@ const allowAccessUrlFiles = computed(
   () => "false" !== platformConfigStore.getSetting("document.access_url_specific_files"),
 )
 
+const hideDownloadIcon = computed(() => {
+  return platformConfigStore.getSetting("document.documents_hide_download_icon") === "true"
+})
+
 const { filters, options, onUpdateOptions, deleteItem } = useDatatableList("Documents")
 const { cid, sid, gid } = useCidReq()
 const { isImage, isHtml, isFile } = useFileUtils()
 const { relativeDatetime } = useFormatDate()
-const isAllowedToEdit = ref(false)
+const { isAllowedToEdit } = useIsAllowedToEdit({ tutor: true, coach: true, sessionCoach: true })
 const folders = ref([])
 const selectedFolder = ref(null)
 const isDownloading = ref(false)
@@ -655,10 +790,73 @@ filters.value.loadNode = 1
 
 const selectedItems = ref([])
 
-const items = computed(() => store.getters["documents/getRecents"])
+/**
+ * -----------------------------------------
+ * Visibility helpers (safe access)
+ * -----------------------------------------
+ */
+function getDocumentComment(document) {
+  return String(document?.comment || "").trim()
+}
+
+function getPrimaryResourceLink(doc) {
+  const links = doc?.resourceLinkListFromEntity
+  if (!Array.isArray(links) || links.length === 0) {
+    return null
+  }
+  return links[0] || null
+}
+
+function getPrimaryVisibility(doc) {
+  const rl = getPrimaryResourceLink(doc)
+  if (!rl) return null
+  const v = Number(rl.visibility)
+  return Number.isFinite(v) ? v : null
+}
+
+function getVisibilityIcon(doc) {
+  const v = getPrimaryVisibility(doc)
+  if (v === RESOURCE_LINK_PUBLISHED) return "eye-on"
+  if (v === RESOURCE_LINK_DRAFT) return "eye-off"
+  return ""
+}
+
+const rawItems = computed(() => store.getters["documents/getRecents"] || [])
+
+/**
+ * Student view / learner visibility filter.
+ * Note: We keep all existing behaviors and only filter the UI list for learners/student-view.
+ */
+function isVisibleForLearner(doc) {
+  const links = doc?.resourceLinkListFromEntity
+  if (!Array.isArray(links) || links.length === 0) return true
+  return links.some((rl) => Number(rl?.visibility) === RESOURCE_LINK_PUBLISHED)
+}
+
+const items = computed(() => {
+  const list = rawItems.value
+
+  // In student view, behave like learner even if logged as teacher.
+  if (platformConfigStore.isStudentViewActive) {
+    return list.filter(isVisibleForLearner)
+  }
+
+  // For real learners, also keep only published.
+  if (!securityStore.isCurrentTeacher) {
+    return list.filter(isVisibleForLearner)
+  }
+
+  return list
+})
+
 const isLoading = computed(() => store.getters["documents/isLoading"])
 const totalItems = computed(() => store.getters["documents/getTotalItems"])
 const resourceNode = computed(() => store.getters["resourcenode/getResourceNode"])
+
+const tableRenderKey = computed(() => {
+  const rawNode = route.params.node || route.query.node || "root"
+  return `documents-table-${String(rawNode)}`
+})
 
 const hasImageInDocumentEntries = computed(() => {
   return items.value.find((i) => isImage(i)) !== undefined
@@ -672,25 +870,184 @@ const defaultCertificateId = ref(null)
 
 const isCurrentTeacher = computed(() => securityStore.isCurrentTeacher && !platformConfigStore.isStudentViewActive)
 
+const onlyofficePluginEnabled = computed(() => {
+  return platformConfigStore.plugins?.onlyoffice?.enabled === true
+})
+
+const onlyofficeEditorPath = computed(() => {
+  return String(platformConfigStore.plugins?.onlyoffice?.editorPath || "/plugin/Onlyoffice/editor.php")
+})
+
+const onlyofficeSupportedExtensions = new Set([
+  "doc",
+  "docx",
+  "odt",
+  "rtf",
+  "txt",
+  "xls",
+  "xlsx",
+  "ods",
+  "csv",
+  "ppt",
+  "pptx",
+  "odp",
+  "pdf",
+])
+
+const onlyofficeViewOnlyExtensions = new Set(["pdf"])
+
+function getOnlyofficeFileName(doc) {
+  return String(doc?.resourceNode?.firstResourceFile?.originalName || doc?.title || "").trim()
+}
+
+function getOnlyofficeExtension(doc) {
+  const fileName = getOnlyofficeFileName(doc).toLowerCase()
+  const parts = fileName.split(".")
+  if (parts.length < 2) {
+    return ""
+  }
+
+  return String(parts.pop() || "").trim()
+}
+
+function isOnlyofficeSupportedDocument(doc) {
+  if (!doc) {
+    return false
+  }
+
+  const filetype = String(doc?.filetype || "")
+    .trim()
+    .toLowerCase()
+
+  if (!["file", "certificate"].includes(filetype)) {
+    return false
+  }
+
+  const resourceFileId = doc?.resourceNode?.firstResourceFile?.id
+  if (!resourceFileId) {
+    return false
+  }
+
+  const ext = getOnlyofficeExtension(doc)
+  if (!ext) {
+    return false
+  }
+
+  return onlyofficeSupportedExtensions.has(ext)
+}
+
+function isOnlyofficeViewOnly(doc) {
+  const ext = getOnlyofficeExtension(doc)
+  return onlyofficeViewOnlyExtensions.has(ext)
+}
+
+function showOnlyofficeButton(doc) {
+  return securityStore.isAuthenticated && onlyofficePluginEnabled.value && isOnlyofficeSupportedDocument(doc)
+}
+
+function getOnlyofficeButtonTitle() {
+  return t("Open with ONLYOFFICE")
+}
+
+function buildOnlyofficeUrl(doc) {
+  const sp = new URLSearchParams({
+    cid: String(unref(cid) || 0),
+    sid: String(unref(sid) || 0),
+    docId: String(doc.iid),
+    returnUrl: window.location.href,
+  })
+
+  const currentGroupId = Number(unref(gid) || 0)
+
+  if (currentGroupId > 0) {
+    sp.set("groupId", String(currentGroupId))
+  }
+
+  if (isOnlyofficeViewOnly(doc) || !canEdit(doc)) {
+    sp.set("readOnly", "1")
+  }
+
+  return `${onlyofficeEditorPath.value}?${sp.toString()}`
+}
+
+function openWithOnlyoffice(doc) {
+  const url = buildOnlyofficeUrl(doc)
+  window.open(url, "_blank", "noopener,noreferrer")
+}
+
+/**
+ * Local loading flag to show the table spinner immediately.
+ * This prevents the "empty table" impression while the store is still preparing the request.
+ */
+const tableLoading = ref(true)
+const hasRequestedList = ref(false)
+
+const tableIsLoading = computed(() => {
+  return tableLoading.value || isLoading.value
+})
+
+function triggerTableLoad() {
+  // Make sure spinner appears immediately on any list refresh.
+  hasRequestedList.value = true
+  tableLoading.value = true
+  onUpdateOptions(options.value)
+}
+
+/**
+ * Reset pagination and selection when changing folders.
+ * This prevents carrying a stale page index into a different folder.
+ */
+function resetTableStateForFolderChange() {
+  options.value = {
+    ...options.value,
+    page: 1,
+  }
+
+  unselectAll()
+}
+
+// Keep local loading in sync with the store loading state.
+watch(isLoading, (val) => {
+  if (val) {
+    tableLoading.value = true
+    return
+  }
+
+  // If we already triggered at least one load and the store is not loading anymore, hide spinner.
+  if (hasRequestedList.value) {
+    tableLoading.value = false
+  }
+})
+
+// If store loading toggles late (or not at all), stop local loading when data changes.
+watch([items, totalItems], () => {
+  if (!hasRequestedList.value) return
+  if (!isLoading.value) {
+    tableLoading.value = false
+  }
+})
+
 function resolveDefaultRows(total = 0) {
   const raw = platformConfigStore.getSetting("display.table_default_row", 10)
   const def = Number(raw)
-  if (def === 0) return total || Number.MAX_SAFE_INTEGER // “All”
+  if (def === 0) return total || Number.MAX_SAFE_INTEGER
   return Number.isFinite(def) && def > 0 ? def : 10
 }
 
 const canEdit = (item) => {
-  const resourceLink = item?.resourceLinkListFromEntity?.[0]
+  const resourceLink = getPrimaryResourceLink(item)
   if (!resourceLink) {
     return false
   }
-  const isSessionDocument = resourceLink.session && resourceLink.session["@id"] === `/api/sessions/${sid}`
+
+  const isSessionDoc = resourceLink.session && resourceLink.session["@id"] === `/api/sessions/${sid}`
   const isBaseCourse = !resourceLink.session
-  return (isSessionDocument && isAllowedToEdit.value) || (isBaseCourse && !sid && isCurrentTeacher.value)
+
+  return (isSessionDoc && isAllowedToEdit.value) || (isBaseCourse && !sid && isCurrentTeacher.value)
 }
 
 const isSessionDocument = (item) => {
-  const resourceLink = item?.resourceLinkListFromEntity?.[0]
+  const resourceLink = getPrimaryResourceLink(item)
   return resourceLink?.session && resourceLink.session["@id"] === `/api/sessions/${sid}`
 }
 
@@ -700,32 +1057,35 @@ const isReplaceDialogVisible = ref(false)
 const selectedReplaceFile = ref(null)
 const documentToReplace = ref(null)
 
+const hasAiImage = ref(false)
+const hasAiVideo = ref(false)
+const hasAiDocumentProcess = ref(false)
+const hasAiTextForAnalyzer = ref(false)
+
+const aiTextProviders = ref([])
+const aiDocProcessProviders = ref([])
+
 onMounted(async () => {
-  isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true)
+  tableLoading.value = true
   filters.value.loadNode = 1
   filters.value.filetype = ["file", "folder", "video"]
 
-  // Set resource node.
   let nodeId = route.params.node
-
   if (isEmpty(nodeId)) {
     nodeId = route.query.node
   }
 
   await store.dispatch("resourcenode/findResourceNode", { id: `/api/resource_nodes/${nodeId}` })
 
-  await loadDefaultCertificate()
-  await loadAllFolders()
-  options.value.itemsPerPage = resolveDefaultRows(totalItems.value || 0)
-  onUpdateOptions(options.value)
+  options.value.itemsPerPage = resolveDefaultRows(0)
+  options.value.page = 1
+  triggerTableLoad()
+  void loadDefaultCertificate()
+  // loadAllFolders() is intentionally deferred: it recursively fetches all
+  // course folders and is only needed when the move dialog is opened.
+  // openMoveDialog() calls it on demand.
 
-  try {
-    await courseSettingsStore.loadCourseSettings(cid, sid)
-  } catch (e) {
-    console.error("[AI] loadCourseSettings failed:", e)
-  }
-
-  await loadAiCapabilities()
+  void loadAiCapabilities()
   consumeAiSavedToast()
 })
 
@@ -747,20 +1107,31 @@ watch(totalItems, (n) => {
   const def = Number(platformConfigStore.getSetting("display.table_default_row", 10))
   if (def === 0 && n) {
     options.value.itemsPerPage = n
+    options.value.page = 1
+    tableLoading.value = true
     onUpdateOptions(options.value)
   }
 })
 
 watch(
-  () => route.params,
-  () => {
-    const nodeId = route.params.node
-    const finderParams = { id: `/api/resource_nodes/${nodeId}`, cid, sid, gid }
+  () => [route.name, route.params.node, route.query.node, unref(cid), unref(sid), unref(gid)],
+  ([routeName]) => {
+    let nodeId = route.params.node
+    if (isEmpty(nodeId)) {
+      nodeId = route.query.node
+    }
 
+    if (isEmpty(nodeId)) {
+      return
+    }
+
+    resetTableStateForFolderChange()
+
+    const finderParams = { id: `/api/resource_nodes/${nodeId}`, cid, sid, gid }
     store.dispatch("resourcenode/findResourceNode", finderParams)
 
-    if ("DocumentsList" === route.name) {
-      onUpdateOptions(options.value)
+    if ("DocumentsList" === routeName) {
+      triggerTableLoad()
     }
   },
 )
@@ -769,6 +1140,7 @@ const showBackButtonIfNotRootFolder = computed(() => {
   if (!resourceNode.value) {
     return false
   }
+
   return resourceNode.value.resourceType.title !== "courses"
 })
 
@@ -792,9 +1164,12 @@ function back() {
   if (!resourceNode.value) {
     return
   }
-  let parent = resourceNode.value.parent
+
+  const parent = resourceNode.value.parent
   if (parent) {
-    let queryParams = { cid, sid, gid }
+    resetTableStateForFolderChange()
+
+    const queryParams = { cid, sid, gid }
     router.push({ name: "DocumentsList", params: { node: parent.id }, query: queryParams })
   }
 }
@@ -822,15 +1197,17 @@ function createNewFolder() {
           gid,
           sid,
           cid,
-          visibility: RESOURCE_LINK_PUBLISHED, // visible by default
+          visibility: RESOURCE_LINK_PUBLISHED,
         },
       ])
 
+      tableLoading.value = true
       store.dispatch("documents/createWithFormData", item.value).then(() => {
         notification.showSuccessNotification(t("Saved"))
-        onUpdateOptions(options.value)
+        triggerTableLoad()
       })
     }
+
     isNewFolderDialogVisible.value = false
     item.value = {}
   }
@@ -847,6 +1224,7 @@ function showDeleteMultipleDialog() {
 async function confirmDeleteItem(itemToDelete) {
   try {
     const response = await axios.get(`/api/documents/${itemToDelete.iid}/lp-usage`)
+
     if (response.data.usedInLp) {
       lpListWarning.value = response.data.lpList.map((lp) => ({
         ...lp,
@@ -868,13 +1246,14 @@ async function forceDeleteItem() {
   try {
     const docIdsToDelete = [...new Set(lpListWarning.value.map((lp) => lp.documentId))]
 
+    tableLoading.value = true
     await Promise.all(docIdsToDelete.map((iid) => axios.delete(`/api/documents/${iid}`)))
 
     notification.showSuccessNotification(t("Documents deleted"))
     isDeleteWarningLpDialogVisible.value = false
     item.value = {}
     unselectAll()
-    onUpdateOptions(options.value)
+    triggerTableLoad()
   } catch (error) {
     console.error("[Documents] Error deleting documents forcibly:", error)
     notification.showErrorNotification(t("Error deleting document(s)."))
@@ -885,15 +1264,23 @@ function getReplaceButtonTitle(item) {
   if (item.filetype === "file") {
     return t("Replace file")
   }
+
   if (item.filetype === "video") {
     return t("Replace video")
   }
+
   return t("Replace (files or videos only)")
 }
 
 async function downloadSelectedItems() {
   if (!selectedItems.value.length) {
     notification.showErrorNotification(t("No items selected."))
+    return
+  }
+
+  if (selectedItems.value.some((item) => item?.filetype === "link")) {
+    notification.showErrorNotification(t("Cloud links cannot be downloaded."))
+
     return
   }
 
@@ -927,6 +1314,7 @@ async function deleteMultipleItems() {
   const itemsWithoutLp = []
   const documentsWithLpMap = {}
 
+  tableLoading.value = true
   for (const item of selectedItems.value) {
     try {
       const response = await axios.get(`/api/documents/${item.iid}/lp-usage`)
@@ -974,7 +1362,7 @@ async function deleteMultipleItems() {
   }
 
   isDeleteMultipleDialogVisible.value = false
-  onUpdateOptions(options.value)
+  triggerTableLoad()
 }
 
 function unselectAll() {
@@ -982,9 +1370,11 @@ function unselectAll() {
 }
 
 function deleteSingleItem() {
+  tableLoading.value = true
   deleteItem(item)
   item.value = {}
   isDeleteItemDialogVisible.value = false
+  triggerTableLoad()
 }
 
 function onPage(event) {
@@ -995,14 +1385,14 @@ function onPage(event) {
     sortDesc: event.sortOrder === -1,
   }
 
-  onUpdateOptions(options.value)
+  triggerTableLoad()
 }
 
 function sortingChanged(event) {
   options.value.sortBy = event.sortField
   options.value.sortDesc = event.sortOrder === -1
 
-  onUpdateOptions(options.value)
+  triggerTableLoad()
 }
 
 function goToNewDocument() {
@@ -1017,6 +1407,27 @@ function goToUploadFile() {
     name: "DocumentsUploadFile",
     query: route.query,
   })
+}
+
+function goToNewDrawing() {
+  router.push({
+    name: "DocumentsSvgEditor",
+    params: { node: route.params.node },
+    query: route.query,
+  })
+}
+
+function getDocumentExtension(doc) {
+  const fileName = String(doc?.resourceNode?.firstResourceFile?.originalName || doc?.title || "").trim().toLowerCase()
+  const parts = fileName.split(".")
+
+  return parts.length > 1 ? String(parts.pop() || "").trim() : ""
+}
+
+function isSvgDocument(doc) {
+  const mime = String(doc?.resourceNode?.firstResourceFile?.mimeType || "").trim().toLowerCase()
+
+  return mime === "image/svg+xml" || getDocumentExtension(doc) === "svg"
 }
 
 function btnShowInformationOnClick(item) {
@@ -1037,9 +1448,9 @@ function btnChangeVisibilityOnClick(item) {
   const folderParams = route.query
   folderParams.id = item["@id"]
 
-  baseService
-    .put(item["@id"] + `/toggle_visibility?cid=${cid}&sid=${sid}`, {})
-    .then((data) => (item.resourceLinkListFromEntity = data.resourceLinkListFromEntity))
+  baseService.put(item["@id"] + `/toggle_visibility?cid=${cid}&sid=${sid}`, {}).then((data) => {
+    item.resourceLinkListFromEntity = data.resourceLinkListFromEntity
+  })
 }
 
 function btnEditOnClick(item) {
@@ -1055,15 +1466,28 @@ function btnEditOnClick(item) {
     return
   }
 
-  if ("file" === item.filetype || "certificate" === item.filetype) {
+  if ("file" === item.filetype && isSvgDocument(item)) {
+    router.push({
+      name: "DocumentsSvgEditor",
+      params: { node: route.params.node },
+      query: {
+        ...folderParams,
+        id: item["@id"],
+      },
+    })
+    return
+  }
+
+  if ("file" === item.filetype || "certificate" === item.filetype || "html" === item.filetype) {
     folderParams.getFile = true
     router.push({ name: "DocumentsUpdateFile", params: { id: item["@id"] }, query: folderParams })
   }
 }
 
 function showSlideShowWithFirstImage() {
-  let item = items.value.find((i) => isImage(i))
+  const item = items.value.find((i) => isImage(i))
   if (!item) return
+
   document.querySelector(`a[href='${item.contentUrl}']`)?.click()
   document.querySelector("button.fancybox-button--play")?.click()
 }
@@ -1094,7 +1518,7 @@ function showRecordAudioDialog() {
 function recordedAudioSaved() {
   notification.showSuccessNotification(t("Saved"))
   isRecordAudioDialogVisible.value = false
-  onUpdateOptions(options.value)
+  triggerTableLoad()
 }
 
 function recordedAudioNotSaved(error) {
@@ -1112,11 +1536,9 @@ function normalizeResourceNodeId(value) {
   if (typeof value === "number") return value
 
   if (typeof value === "string") {
-    // Accept IRI like "/api/resource_nodes/123"
     const iriMatch = value.match(/\/api\/resource_nodes\/(\d+)/)
     if (iriMatch) return Number(iriMatch[1])
 
-    // Accept "123"
     if (/^\d+$/.test(value)) return Number(value)
   }
 
@@ -1124,21 +1546,17 @@ function normalizeResourceNodeId(value) {
 }
 
 function getDocumentsRootNodeId() {
-  // We want the top node of this documents tree (usually the course root node).
   let node = resourceNode.value
-
   const fallback = normalizeResourceNodeId(route.params.node || route.query.node)
 
   if (!node) {
     return fallback
   }
 
-  // If current node is already the course root, use it.
   if (node?.resourceType?.title === "courses") {
     return normalizeResourceNodeId(node.id) || fallback
   }
 
-  // Walk up until we reach the course root node.
   let safety = 0
   while (node?.parent && node?.resourceType?.title !== "courses" && safety < 30) {
     node = node.parent
@@ -1154,12 +1572,12 @@ async function fetchFolders(nodeId = null, parentPath = "") {
   const foldersList = [
     {
       label: t("Documents"),
-      value: rootId, // REAL root node id
+      value: rootId,
     },
   ]
 
   try {
-    let nodesToFetch = [{ id: rootId, path: parentPath }]
+    const nodesToFetch = [{ id: rootId, path: parentPath }]
     let depth = 0
     const maxDepth = 10
 
@@ -1236,7 +1654,6 @@ async function moveDocument() {
       return
     }
 
-    // Optional: avoid no-op moves
     const currentParentId =
       normalizeResourceNodeId(item.value?.resourceNode?.parent?.id) ??
       normalizeResourceNodeId(item.value?.resourceNode?.parent)
@@ -1260,7 +1677,7 @@ async function moveDocument() {
 
     notification.showSuccessNotification(t("Document moved successfully"))
     isMoveDialogVisible.value = false
-    onUpdateOptions(options.value)
+    triggerTableLoad()
   } catch (error) {
     console.error("[Documents] Error moving document:", error.response || error)
     notification.showErrorNotification(t("Error moving the document"))
@@ -1294,15 +1711,17 @@ async function replaceDocument() {
 
   const formData = new FormData()
   formData.append("file", selectedReplaceFile.value)
+
   try {
     await axios.post(`/api/documents/${documentToReplace.value.iid}/replace`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     })
+
     notification.showSuccessNotification(t("File replaced"))
     isReplaceDialogVisible.value = false
-    onUpdateOptions(options.value)
+    triggerTableLoad()
   } catch (error) {
     notification.showErrorNotification(t("Error replacing file."))
     console.error(error)
@@ -1319,7 +1738,7 @@ async function selectAsDefaultCertificate(certificate) {
     const response = await axios.patch(`/gradebook/set_default_certificate/${cid}/${certificate.iid}`)
     if (response.status === 200) {
       loadDefaultCertificate()
-      onUpdateOptions(options.value)
+      triggerTableLoad()
       notification.showSuccessNotification(t("Certificate set as default successfully"))
     }
   } catch {
@@ -1368,7 +1787,7 @@ const isDocumentTemplate = async (documentId) => {
 const deleteDocumentTemplate = async (documentId) => {
   try {
     await axios.post(`/template/document-templates/${documentId}/delete`)
-    onUpdateOptions(options.value)
+    triggerTableLoad()
     notification.showSuccessNotification(t("Template successfully deleted."))
   } catch (error) {
     console.error("[Documents] Error deleting template:", error)
@@ -1386,7 +1805,7 @@ const openTemplateForm = async (documentId) => {
 
   if (isTemplate) {
     await deleteDocumentTemplate(documentId)
-    onUpdateOptions(options.value)
+    triggerTableLoad()
   } else {
     currentDocumentId.value = documentId
     showTemplateFormModal.value = true
@@ -1419,7 +1838,7 @@ const submitTemplateForm = async () => {
       templateFormData.value.title = ""
       selectedFile.value = null
       showTemplateFormModal.value = false
-      onUpdateOptions(options.value)
+      triggerTableLoad()
     } else {
       notification.showErrorNotification(t("Error creating the template."))
     }
@@ -1431,12 +1850,45 @@ const submitTemplateForm = async () => {
 
 /**
  * -----------------------------------------
- * AI: capabilities + content analyzer dialog
+ * AI: capabilities + provider lists (selector in modal)
  * -----------------------------------------
  */
-const hasAiImage = ref(false)
-const hasAiVideo = ref(false)
-const hasAiDocumentProcess = ref(false)
+function normalizeProviders(raw) {
+  if (!raw) return []
+
+  if (Array.isArray(raw)) {
+    return raw
+      .map((p) => {
+        if (typeof p === "string") {
+          const s = p.trim()
+          return s ? { key: s, label: s } : null
+        }
+        if (p && typeof p === "object") {
+          const key = String(p.key ?? p.name ?? "").trim()
+          if (!key) return null
+          const label = String(p.label ?? key).trim()
+          return { key, label: label || key }
+        }
+
+        return null
+      })
+      .filter(Boolean)
+  }
+
+  if (raw && typeof raw === "object") {
+    return Object.entries(raw)
+      .map(([k, v]) => {
+        const key = String(k || "").trim()
+        if (!key) return null
+
+        const label = String(v ?? key).trim()
+        return { key, label: label || key }
+      })
+      .filter(Boolean)
+  }
+
+  return []
+}
 
 const showGenerateMediaButton = computed(() => {
   if (!isCurrentTeacher.value) return false
@@ -1453,41 +1905,62 @@ async function loadAiCapabilities() {
     hasAiImage.value = false
     hasAiVideo.value = false
     hasAiDocumentProcess.value = false
+    hasAiTextForAnalyzer.value = false
+    aiTextProviders.value = []
+    aiDocProcessProviders.value = []
     return
   }
 
-  // If nothing is enabled on frontend, skip backend call.
   if (!imageGeneratorEnabled.value && !videoGeneratorEnabled.value && !contentAnalyzerEnabled.value) {
     hasAiImage.value = false
     hasAiVideo.value = false
     hasAiDocumentProcess.value = false
+    hasAiTextForAnalyzer.value = false
+    aiTextProviders.value = []
+    aiDocProcessProviders.value = []
     return
   }
 
   try {
     const { data } = await axios.get("/ai/capabilities", {
-      params: {
-        cid: unref(cid),
-        sid: unref(sid),
-        gid: unref(gid),
-      },
+      params: { cid: unref(cid), sid: unref(sid), gid: unref(gid) },
       headers: { Accept: "application/json" },
     })
 
     console.warn("[AI] capabilities:", data)
 
+    const backendHasText = !!(data?.has?.text ?? data?.text)
     const backendHasImage = !!(data?.has?.image ?? data?.image)
     const backendHasVideo = !!(data?.has?.video ?? data?.video)
     const backendHasDocProcess = !!(data?.has?.document_process ?? data?.document_process)
 
     hasAiImage.value = imageGeneratorEnabled.value && backendHasImage
     hasAiVideo.value = videoGeneratorEnabled.value && backendHasVideo
-    hasAiDocumentProcess.value = contentAnalyzerEnabled.value && backendHasDocProcess
+
+    aiDocProcessProviders.value = normalizeProviders(data?.types?.document_process)
+
+    aiTextProviders.value = []
+    if (isCurrentTeacher.value) {
+      try {
+        const res = await axios.get("/ai/text_providers", { headers: { Accept: "application/json" } })
+        aiTextProviders.value = normalizeProviders(res?.data?.providers)
+      } catch (e) {
+        console.warn("[AI][Documents] Failed to load /ai/text_providers, fallback to capabilities:", e?.response || e)
+        aiTextProviders.value = normalizeProviders(data?.types?.text)
+      }
+    }
+
+    hasAiDocumentProcess.value =
+      contentAnalyzerEnabled.value && backendHasDocProcess && aiDocProcessProviders.value.length > 0
+    hasAiTextForAnalyzer.value = contentAnalyzerEnabled.value && backendHasText && aiTextProviders.value.length > 0
   } catch (e) {
     console.error("[AI] Failed to load capabilities:", e?.response || e)
     hasAiImage.value = false
     hasAiVideo.value = false
     hasAiDocumentProcess.value = false
+    hasAiTextForAnalyzer.value = false
+    aiTextProviders.value = []
+    aiDocProcessProviders.value = []
   }
 }
 
@@ -1499,35 +1972,54 @@ function goToGenerateMedia() {
   })
 }
 
-function isSupportedForAnalyzer(doc) {
+/**
+ * Detect analyzer mode from file (PDF vs TXT).
+ * This must match backend logic in /ai/document_feedback.
+ */
+function getAnalyzerMode(doc) {
   const rf = doc?.resourceNode?.firstResourceFile
   const mime = String(rf?.mimeType || "").toLowerCase()
   const name = String(rf?.originalName || doc?.title || "").toLowerCase()
 
   const isPdf = mime === "application/pdf" || name.endsWith(".pdf")
-  const isTxt = mime.startsWith("text/plain") || name.endsWith(".txt")
+  if (isPdf) return "pdf"
 
-  return isPdf || isTxt
+  const isTxt = mime.startsWith("text/plain") || name.endsWith(".txt")
+  if (isTxt) return "txt"
+
+  return ""
 }
 
 function showAiFeedbackButton(doc) {
   if (!isCurrentTeacher.value) return false
   if (!aiHelpersEnabled.value) return false
   if (!contentAnalyzerEnabled.value) return false
-  if (!hasAiDocumentProcess.value) return false
 
-  // Only analyze items that have a real file attached.
   const rfId = doc?.resourceNode?.firstResourceFile?.id
   if (!rfId) return false
 
-  // Avoid folders.
   const ft = String(doc?.filetype || "")
   if (!["file", "video", "certificate"].includes(ft)) return false
 
-  if (!isSupportedForAnalyzer(doc)) return false
-  return true
+  const mode = getAnalyzerMode(doc)
+  if (!mode) return false
+
+  if (mode === "pdf") {
+    return hasAiDocumentProcess.value && aiDocProcessProviders.value.length > 0
+  }
+
+  if (mode === "txt") {
+    return hasAiTextForAnalyzer.value && aiTextProviders.value.length > 0
+  }
+
+  return false
 }
 
+/**
+ * -----------------------------------------
+ * AI feedback modal state + provider selector
+ * -----------------------------------------
+ */
 const isAiFeedbackDialogVisible = ref(false)
 const aiFeedbackLoading = ref(false)
 const aiFeedbackSaving = ref(false)
@@ -1536,30 +2028,65 @@ const aiFeedbackAnswer = ref("")
 const aiFeedbackPrompt = ref("")
 const aiFeedbackDoc = ref(null)
 
+const aiFeedbackProvider = ref(null)
+
 const cidReqStore = useCidReqStore()
 const { course } = storeToRefs(cidReqStore)
-
-// Optional provider name (keep null to use backend default).
-const aiFeedbackProvider = ref(null)
 
 const aiFeedbackDocTitle = computed(() => {
   return String(aiFeedbackDoc.value?.title || aiFeedbackDoc.value?.resourceNode?.title || "").trim()
 })
 
-const aiFeedbackCourseTitle = course.value.title
+const aiFeedbackCourseTitle = computed(() => {
+  return String(course.value?.title || "").trim()
+})
+
+const aiFeedbackMode = computed(() => getAnalyzerMode(aiFeedbackDoc.value))
+
+const aiFeedbackProviderOptions = computed(() => {
+  if (aiFeedbackMode.value === "pdf") return aiDocProcessProviders.value
+  if (aiFeedbackMode.value === "txt") return aiTextProviders.value
+  return []
+})
 
 function openAiFeedback(doc) {
   aiFeedbackDoc.value = doc
   aiFeedbackError.value = ""
   aiFeedbackAnswer.value = ""
-  aiFeedbackProvider.value = null
 
-  // Default prompt can be changed by the teacher (spec: teacher confirms and provides a question).
   aiFeedbackPrompt.value =
     "Please provide feedback on clarity, structure, and improvement suggestions. If needed, propose a revised version."
 
+  aiFeedbackProvider.value = null
   isAiFeedbackDialogVisible.value = true
+
+  void nextTick(() => {
+    const opts = aiFeedbackProviderOptions.value || []
+    aiFeedbackProvider.value = opts?.[0]?.key ?? null
+  })
 }
+
+watch(
+  () => [isAiFeedbackDialogVisible.value, aiFeedbackProviderOptions.value],
+  () => {
+    if (!isAiFeedbackDialogVisible.value) return
+
+    const opts = aiFeedbackProviderOptions.value || []
+    if (!opts.length) return
+
+    const current = String(aiFeedbackProvider.value || "").trim()
+    if (!current) {
+      aiFeedbackProvider.value = opts[0].key
+      return
+    }
+
+    const exists = opts.some((p) => p.key === current)
+    if (!exists) {
+      aiFeedbackProvider.value = opts[0].key
+    }
+  },
+  { deep: true },
+)
 
 function closeAiFeedbackDialog() {
   isAiFeedbackDialogVisible.value = false
@@ -1573,10 +2100,18 @@ function closeAiFeedbackDialog() {
 }
 
 async function runAiFeedback() {
+  if (aiFeedbackLoading.value) return
+
   aiFeedbackError.value = ""
 
   if (!aiFeedbackDoc.value) {
     aiFeedbackError.value = "Missing selected document."
+    return
+  }
+
+  const mode = getAnalyzerMode(aiFeedbackDoc.value)
+  if (!mode) {
+    aiFeedbackError.value = "Unsupported file type. Only PDF and TXT are supported."
     return
   }
 
@@ -1589,6 +2124,21 @@ async function runAiFeedback() {
   if (!resourceFileId) {
     aiFeedbackError.value = "Missing resource file information for this document."
     return
+  }
+
+  const opts = aiFeedbackProviderOptions.value || []
+  if (opts.length > 0) {
+    const selected = String(aiFeedbackProvider.value || "").trim()
+    if (!selected) {
+      aiFeedbackError.value = "AI provider is required."
+      return
+    }
+
+    const exists = opts.some((p) => p.key === selected)
+    if (!exists) {
+      aiFeedbackError.value = "Selected AI provider is not available for this file type."
+      return
+    }
   }
 
   aiFeedbackLoading.value = true
@@ -1672,8 +2222,49 @@ async function saveAiFeedbackToInbox() {
   }
 }
 
+const usageQuotaSummary = computed(() => {
+  const q = usageData.value?.quota
+  if (!q) return null
+
+  const limiter = String(q.limiter || "unlimited")
+
+  function fmtBytes(v) {
+    if (v === null || v === undefined) return t("Unlimited")
+    const n = Number(v)
+    if (!Number.isFinite(n)) return t("Unlimited")
+    return prettyBytes(Math.max(n, 0))
+  }
+
+  const courseQuota = fmtBytes(q.courseQuotaBytes)
+  const docsQuota = fmtBytes(q.documentsQuotaBytes)
+
+  const courseAvail = fmtBytes(q.availableCourseBytes)
+  const docsAvail = fmtBytes(q.availableDocumentsBytes)
+
+  const effectiveAvail = fmtBytes(q.availableBytes)
+  const effectivePct = Number(q.availablePercent)
+  const pctLabel = Number.isFinite(effectivePct) ? `${effectivePct}%` : ""
+
+  let limiterLabel = ""
+  if (limiter === "course") {
+    limiterLabel = `${t("Limiting quota")}: ${t("Course")}`
+  } else if (limiter === "documents") {
+    limiterLabel = `${t("Limiting quota")}: ${t("Documents")}`
+  } else {
+    limiterLabel = `${t("Limiting quota")}: ${t("Unlimited")}`
+  }
+
+  const remainingLabel = `${t("Remaining space")}: ${effectiveAvail}${pctLabel ? ` (${pctLabel})` : ""}`
+
+  return {
+    limiterLabel,
+    remainingLabel,
+    courseLine: `${courseAvail} / ${courseQuota}`,
+    documentsLine: `${docsAvail} / ${docsQuota}`,
+  }
+})
+
 function consumeAiSavedToast() {
-  // Show toast only once after redirect from AI generator.
   if (String(route.query.ai_saved || "") !== "1") {
     return
   }
@@ -1685,7 +2276,6 @@ function consumeAiSavedToast() {
     notification.showSuccessNotification(t("Saved"))
   }
 
-  // Remove params so it doesn't show again on refresh/back.
   const newQuery = { ...route.query }
   delete newQuery.ai_saved
   delete newQuery.ai_saved_path
@@ -1696,5 +2286,46 @@ function consumeAiSavedToast() {
     params: route.params,
     query: newQuery,
   })
+}
+
+async function copyToMyFiles(item) {
+  const documentId = item?.iid
+
+  if (!documentId) {
+    notification.showErrorNotification(t("Could not copy the file to My Files"))
+    return
+  }
+
+  try {
+    await baseService.post(`/api/documents/${documentId}/personal_files?cid=${cid}&sid=${sid}&gid=${gid}`)
+
+    notification.showSuccessNotification(t("File copied to My Files"))
+  } catch (error) {
+    console.error("[Documents] Error copying file to My Files:", error)
+    notification.showErrorNotification(t("Could not copy the file to My Files"))
+  }
+}
+
+const canCopyToMyFiles = computed(() => {
+  const allowMyFiles = platformConfigStore.getSetting("platform.allow_my_files")
+  const usersCopyFiles = platformConfigStore.getSetting("document.users_copy_files")
+
+  console.log("[Documents] copy-to-my-files config", {
+    isAuthenticated: securityStore.isAuthenticated,
+    allowMyFiles,
+    usersCopyFiles,
+  })
+
+  return securityStore.isAuthenticated && "true" === String(allowMyFiles) && "true" === String(usersCopyFiles)
+})
+
+function canShowCopyToMyFiles(item) {
+  console.log("[Documents] copy-to-my-files row", {
+    iid: item?.iid,
+    title: item?.title,
+    filetype: item?.filetype,
+  })
+
+  return canCopyToMyFiles.value && "file" === item?.filetype
 }
 </script>

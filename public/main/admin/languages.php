@@ -108,8 +108,8 @@ switch ($action) {
         $language_info = SubLanguageManager::get_all_information_of_language($id);
         if ($language_info && 1 == (int) $language_info['available']) {
             SubLanguageManager::make_unavailable_language($id);
-            $platform_language = api_get_setting('platformLanguage');
-            UserManager::update_all_user_languages($language_info['english_name'], $platform_language);
+            $platformIsocode = api_get_platform_default_isocode() ?? 'en';
+            UserManager::update_all_user_languages($language_info['isocode'], $platformIsocode);
             Display::addFlash(
                 Display::return_message(
                     get_lang('The language has been hidden. It will not be possible to use it until it becomes visible again.'),

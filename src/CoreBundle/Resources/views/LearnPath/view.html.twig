@@ -3,21 +3,43 @@
 {% set lp_view = true %}
 
 {% block content %}
+    {% set toc_hidden = (toc_hidden|default(0) + 0) %}
+    {% set show_left_column = (show_left_column|default(1) + 0) %}
+    {% set lp_id_num = (lp_id|default(0) + 0) %}
+    {% set lp_current_item_id_num = (lp_current_item_id|default(0) + 0) %}
+    {% set is_lti_embeddable = (is_lti_embeddable|default(0) + 0) %}
+    {% set render_left_zone = (show_left_column == 1) or (toc_hidden == 1) %}
+    <script>
+      window.lpId = {{ lp_id_num }};
+      window.lpCurrentItemId = {{ lp_current_item_id_num }};
+      window.isLtiEmbeddable = {{ is_lti_embeddable }};
+      window.lpAiLearningHelper = {
+        enabled: {{ ai_learning_helper_enabled|default(0) + 0 }},
+        endpoint: {{ ai_learning_helper_endpoint|default('')|json_encode|raw }},
+        language: {{ ai_learning_helper_language|default('en')|json_encode|raw }},
+        cid: {{ ai_learning_helper_course_id|default(0) + 0 }},
+        sid: {{ ai_learning_helper_session_id|default(0) + 0 }},
+        lpItemId: {{ lp_current_item_id_num }}
+      };
+    </script>
     {# Build iframe src including learning path context so the ResourceNodeVoter can detect LP access #}
     {% set iframe_src_with_lp = iframe_src %}
-    {% if lp_id is defined and lp_current_item_id is defined %}
+    {% if lp_id_num > 0 and lp_current_item_id_num > 0 %}
         {% if '?' in iframe_src_with_lp %}
-            {% set iframe_src_with_lp = iframe_src_with_lp ~ '&origin=learnpath&lp_id=' ~ lp_id ~ '&lp_item_id=' ~ lp_current_item_id %}
+            {% set iframe_src_with_lp = iframe_src_with_lp ~ '&origin=learnpath&lp_id=' ~ lp_id_num ~ '&lp_item_id=' ~ lp_current_item_id_num %}
         {% else %}
-            {% set iframe_src_with_lp = iframe_src_with_lp ~ '?origin=learnpath&lp_id=' ~ lp_id ~ '&lp_item_id=' ~ lp_current_item_id %}
+            {% set iframe_src_with_lp = iframe_src_with_lp ~ '?origin=learnpath&lp_id=' ~ lp_id_num ~ '&lp_item_id=' ~ lp_current_item_id_num %}
         {% endif %}
     {% endif %}
 
     {% autoescape false %}
-        <div id="learning_path_main"
-             class="{{ is_allowed_to_edit ? 'lp-view-include-breadcrumb' }} {{ lp_mode == 'embedframe' ? 'lp-view-collapsed' : '' }}">
-            {% if show_left_column == 1 %}
-                <div id="learning_path_left_zone" class="sidebar-scorm">
+
+        <div
+                id="learning_path_main"
+                class="lp-modern-view flex h-screen min-h-screen w-full overflow-hidden bg-gray-20 text-gray-90 {{ is_allowed_to_edit ? 'lp-view-include-breadcrumb' }} {{ lp_mode == 'embedframe' ? 'lp-view-collapsed' : '' }} {{ toc_hidden == 1 ? 'lp-toc-hidden' : '' }}"
+        >
+            {% if render_left_zone %}
+                <div id="learning_path_left_zone" class="sidebar-scorm h-full overflow-hidden border-r border-gray-25 bg-white" aria-hidden="{{ toc_hidden == 1 ? 'true' : 'false' }}">
                     <div class="lp-view-zone-container">
                         <div id="scorm-info">
                             <div id="panel-scorm">
@@ -43,47 +65,18 @@
 
                                 {% if lp_accumulate_work_time != '' %}
                                     {% set lp_progress %}
-                                    <style>
-                                        #timer .container {
-                                            display: table;
-                                            background: #777;
-                                            color: #eee;
-                                            font-weight: bold;
-                                            width: 100%;
-                                            text-align: center;
-                                            text-shadow: 1px 1px 4px #999;
-                                        }
-
-                                        #timer .container div {
-                                            display: table-cell;
-                                            font-size: 24px;
-                                            padding: 0px;
-                                            width: 20px;
-                                        }
-
-                                        #timer .container .divider {
-                                            width: 10px;
-                                            color: #ddd;
-                                        }
-                                    </style>
                                     <script>
                                       $(function () {
                                         var timerData = {
-                                          hour: parseInt($("#hour").text()),
-                                          minute: parseInt($("#minute").text()),
-                                          second: parseInt($("#second").text())
+                                          hour: parseInt($("#hour").text(), 10),
+                                          minute: parseInt($("#minute").text(), 10),
+                                          second: parseInt($("#second").text(), 10)
                                         }
                                         clearInterval(window.timerInterval)
                                         window.timerInterval = setInterval(function () {
                                           timerData.second++
-                                          if (timerData.second >= 60) {
-                                            timerData.second = 0
-                                            timerData.minute++
-                                          }
-                                          if (timerData.minute >= 60) {
-                                            timerData.minute = 0
-                                            timerData.hour++
-                                          }
+                                          if (timerData.second >= 60) { timerData.second = 0; timerData.minute++ }
+                                          if (timerData.minute >= 60) { timerData.minute = 0; timerData.hour++ }
                                           $("#hour").text(timerData.hour < 10 ? "0" + timerData.hour : timerData.hour)
                                           $("#minute").text(timerData.minute < 10 ? "0" + timerData.minute : timerData.minute)
                                           $("#second").text(timerData.second < 10 ? "0" + timerData.second : timerData.second)
@@ -95,9 +88,7 @@
                                             <b>{{ "Progress"|trans|format(lp_accumulate_work_time) }}</b>
                                         </div>
                                         <div class="col-xs-8">
-                                            <div id="progress_bar">
-                                                {{ progress_bar }}
-                                            </div>
+                                            <div id="progress_bar">{{ progress_bar }}</div>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -121,9 +112,7 @@
                                     {% endset %}
                                 {% else %}
                                     {% set lp_progress %}
-                                    <div id="progress_bar">
-                                        {{ progress_bar }}
-                                    </div>
+                                    <div id="progress_bar">{{ progress_bar }}</div>
                                     {% endset %}
                                 {% endif %}
 
@@ -156,7 +145,9 @@
                                     {{ lp_progress }}
                                 {% endif %}
 
-                                {{ teacher_toc_buttons }}
+                                {% if not is_lti_embeddable %}
+                                    {{ teacher_toc_buttons }}
+                                {% endif %}
                             </div>
                         </div>
 
@@ -167,14 +158,22 @@
                     </div>
                 </div>
             {% endif %}
-
-            <div id="learning_path_right_zone"
-                 class="{{ show_left_column == 1 ? 'content-scorm' : 'no-right-col' }}">
-                <div class="lp-view-zone-container">
-                    <div class="lp-view-tabs">
+            <div
+                    id="learning_path_right_zone"
+                    class="content-scorm min-w-0 flex-1 overflow-hidden bg-gray-20 {{ (show_left_column != 1 or toc_hidden == 1) ? 'lp-content-full' : '' }}"
+            >
+                <div class="lp-view-zone-container flex h-full flex-col overflow-hidden bg-white">
+                    <div class="lp-view-tabs relative flex min-h-0 flex-1 flex-col overflow-visible bg-white">
                         <div id="navTabBar" class="nav-tabs-bar">
                             <div class="text-left">
                                 <h2 class="text-h3">{{ lp_title_scorm }}</h2>
+
+                                {% if lp_flow_next_button is defined and lp_flow_next_button is not empty %}
+                                    <div class="my-4">
+                                        {{ lp_flow_next_button|raw }}
+                                    </div>
+                                {% endif %}
+
                                 <div id="item-parent-names">
                                     {% for parent_title in lp_item_parents %}
                                         <h3 class="text-h5">{{ parent_title }}</h3>
@@ -185,19 +184,166 @@
 
                         {% include '@ChamiloCore/LearnPath/menubar.html.twig' %}
 
-                        <div id="tab-iframe" class="auto tab-content">
-                            <div role="tabpanel" id="lp-view-content">
-                                <div id="wrapper-iframe">
+                        <div id="tab-iframe" class="auto tab-content min-h-0 flex-1 overflow-hidden bg-white p-0">
+                            <div role="tabpanel" id="lp-view-content" class="h-full min-h-0 overflow-hidden">
+                                <div id="wrapper-iframe" class="relative h-full min-h-0 max-w-full overflow-hidden rounded-xl bg-white">
+                                    <div
+                                            id="lp-iframe-loader"
+                                            class="absolute inset-0 z-50 hidden items-center justify-center bg-white/75"
+                                            aria-hidden="true"
+                                    >
+                                        <div class="flex items-center gap-2.5 rounded-xl bg-gray-90/70 px-3.5 py-2.5 text-sm text-white">
+                                            <div
+                                                    class="h-[18px] w-[18px] animate-spin rounded-full border-2 border-white/40 border-t-white"
+                                                    aria-hidden="true"
+                                            ></div>
+                                            <div>Loading…</div>
+                                        </div>
+                                    </div>
+                                    <div
+                                            id="lp-video-next-overlay"
+                                            class="absolute inset-0 z-[70] hidden items-center justify-center bg-gray-90/45 p-6"
+                                            aria-hidden="true"
+                                    >
+                                        <div
+                                                class="w-full max-w-[420px] rounded-[18px] border border-white/25 bg-white/95 p-6 text-center shadow-2xl"
+                                                role="dialog"
+                                                aria-modal="true"
+                                                aria-labelledby="lp-video-next-title"
+                                        >
+                                            <div
+                                                    class="mb-3 inline-flex h-14 w-14 items-center justify-center rounded-full bg-[rgb(var(--color-primary-base))] text-[32px] text-white"
+                                                    aria-hidden="true"
+                                            >
+                                                <span class="mdi mdi-play-circle-outline"></span>
+                                            </div>
+                                            <div id="lp-video-next-title" class="text-xl font-bold leading-tight text-gray-90">{{ "Finished"|trans }}</div>
+                                            <div class="mt-2 text-sm leading-relaxed text-gray-60">{{ "Continue"|trans }}</div>
+                                            <div class="mt-5 flex flex-wrap justify-center gap-2">
+                                                <button
+                                                        type="button"
+                                                        id="lp-video-next-button"
+                                                        class="inline-flex min-h-10 cursor-pointer items-center justify-center gap-1.5 rounded-full border border-transparent bg-[rgb(var(--color-primary-base))] px-4 py-2 text-sm font-semibold text-white hover:brightness-95"
+                                                >
+                                                    <span class="mdi mdi-arrow-right-circle-outline" aria-hidden="true"></span>
+                                                    {{ "Next step"|trans }}
+                                                </button>
+                                                <button
+                                                        type="button"
+                                                        id="lp-video-next-close"
+                                                        class="inline-flex min-h-10 cursor-pointer items-center justify-center rounded-full border border-gray-30 bg-white px-4 py-2 text-sm font-semibold text-gray-70 hover:brightness-95"
+                                                >
+                                                    {{ "Close"|trans }}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
                                     {% if lp_mode == 'fullscreen' %}
-                                        <iframe id="content_id_blank" name="content_name_blank" src="blank.php"
-                                                style="width:100%; height:100%" border="0" frameborder="0"
-                                                allowfullscreen="true" webkitallowfullscreen="true"
-                                                mozallowfullscreen="true"></iframe>
+                                        <iframe
+                                                id="content_id_blank"
+                                                class="block h-full w-full max-w-full rounded-xl border-0 bg-white"
+                                                name="content_name_blank"
+                                                src="blank.php"
+                                                border="0"
+                                                frameborder="0"
+                                                allowfullscreen="true"
+                                                webkitallowfullscreen="true"
+                                                mozallowfullscreen="true"
+                                        ></iframe>
                                     {% else %}
-                                        <iframe id="content_id" name="content_name" src="{{ iframe_src_with_lp }}"
-                                                style="width:100%; height:100%" border="0" frameborder="0"
-                                                allowfullscreen="true" webkitallowfullscreen="true"
-                                                mozallowfullscreen="true"></iframe>
+                                        <iframe
+                                                id="content_id"
+                                                class="block h-full w-full max-w-full rounded-xl border-0 bg-white"
+                                                name="content_name"
+                                                src="{{ iframe_src_with_lp }}"
+                                                border="0"
+                                                frameborder="0"
+                                                allowfullscreen="true"
+                                                webkitallowfullscreen="true"
+                                                mozallowfullscreen="true"
+                                        ></iframe>
+                                    {% endif %}
+
+                                    {% if ai_learning_helper_enabled|default(0) == 1 %}
+                                        <div id="lp-ai-learning-helper-menu" class="fixed z-[1000000] hidden max-w-[260px]">
+                                            <button
+                                                    type="button"
+                                                    id="lp-ai-learning-helper-open"
+                                                    class="group relative inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary text-white shadow-xl ring-4 ring-primary/15 transition hover:-translate-y-0.5 hover:shadow-2xl hover:brightness-95 focus:outline-none focus:ring-4 focus:ring-primary/25"
+                                                    aria-label="AI study helper"
+                                                    title="AI study helper"
+                                            >
+                                                <i class="mdi mdi-robot-happy-outline text-2xl" aria-hidden="true"></i>
+                                                <span class="mdi mdi-auto-fix absolute -right-1 -top-1 rounded-full bg-white px-1 py-0.5 text-xs leading-none text-primary shadow-sm" aria-hidden="true"></span>
+                                                <span class="pointer-events-none absolute left-1/2 top-full mt-2 hidden -translate-x-1/2 whitespace-nowrap rounded-lg bg-gray-90 px-2.5 py-1 text-xs font-medium text-white shadow-lg group-hover:block group-focus:block">
+                                                    AI study helper
+                                                </span>
+                                            </button>
+                                        </div>
+                                        <div
+                                                id="lp-ai-learning-helper-modal"
+                                                class="fixed inset-0 z-[1000001] hidden items-start justify-center overflow-y-auto overscroll-contain bg-gray-90/45 p-6"
+                                                aria-hidden="true"
+                                        >
+                                            <div class="lp-ai-learning-helper-dialog flex max-h-[calc(100vh-48px)] w-full max-w-3xl flex-col overflow-hidden rounded-2xl bg-white p-6 shadow-xl">
+                                                <div class="mb-4 flex items-start justify-between gap-4">
+                                                    <div>
+                                                        <h3 class="text-xl font-semibold text-gray-90">AI study helper</h3>
+                                                        <p class="mt-1 text-sm text-gray-50">
+                                                            Select a learning technique and generate a learner-friendly explanation from the selected text.
+                                                        </p>
+                                                    </div>
+                                                    <button
+                                                            type="button"
+                                                            id="lp-ai-learning-helper-close"
+                                                            class="rounded-lg p-2 text-gray-50 hover:bg-gray-15"
+                                                            aria-label="Close"
+                                                    >
+                                                        <i class="mdi mdi-close text-xl" aria-hidden="true"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="lp-ai-learning-helper-body min-h-0 overflow-y-auto pr-1">
+                                                    <div class="mb-4 rounded-xl border border-gray-25 bg-gray-15 p-3">
+                                                        <div class="mb-1 text-xs font-semibold uppercase tracking-wide text-gray-50">Selected text</div>
+                                                        <div id="lp-ai-learning-helper-selection" class="max-h-32 overflow-auto text-sm text-gray-90"></div>
+                                                    </div>
+                                                    <label for="lp-ai-learning-helper-method" class="mb-1 block text-sm font-semibold text-gray-90">
+                                                        Learning technique
+                                                    </label>
+                                                    <select
+                                                            id="lp-ai-learning-helper-method"
+                                                            class="mb-4 w-full rounded-lg border border-gray-25 bg-white px-3 py-2 text-sm"
+                                                    >
+                                                        <option value="mind_map">Mind mapping</option>
+                                                        <option value="feynman">Feynman Technique</option>
+                                                        <option value="elaborative_interrogation">Elaborative interrogation</option>
+                                                        <option value="spaced_repetition">Spaced repetition</option>
+                                                        <option value="sq3r">SQ3R Method</option>
+                                                        <option value="analogies_metaphors">Analogies and metaphors</option>
+                                                        <option value="dual_coding">Dual coding</option>
+                                                        <option value="storytelling">Storytelling</option>
+                                                        <option value="thematic_connections">Thematic connections</option>
+                                                        <option value="interleaved_learning">Interleaved learning</option>
+                                                        <option value="memory_palace">Memory palaces</option>
+                                                    </select>
+                                                    <div class="mb-4 flex items-center gap-2">
+                                                        <button
+                                                                type="button"
+                                                                id="lp-ai-learning-helper-generate"
+                                                                class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:opacity-90"
+                                                        >
+                                                            <i class="mdi mdi-auto-fix" aria-hidden="true"></i>
+                                                            <span>Generate</span>
+                                                        </button>
+                                                        <span id="lp-ai-learning-helper-status" class="text-sm text-gray-50"></span>
+                                                    </div>
+                                                    <div id="lp-ai-learning-helper-answer-wrap" class="hidden rounded-xl border border-gray-25 bg-white p-4">
+                                                        <div class="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-50">AI response</div>
+                                                        <div id="lp-ai-learning-helper-answer" class="max-h-[min(46vh,520px)] overflow-y-auto whitespace-pre-wrap pr-1 text-sm leading-6 text-gray-90"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     {% endif %}
                                 </div>
                             </div>
@@ -206,117 +352,1526 @@
                     </div>
                 </div>
             </div>
-            {# end right Zone #}
         </div>
 
         <script>
-          $(function() {
-            $(".menu-button").on("click", function() {
-              $(".circle").toggleClass("open")
-              $(".menu-button").toggleClass("menu-button-selected")
-            })
-            if (/iPhone|iPod|iPad|Safari/.test(navigator.userAgent)) {
-              if (!/Chrome/.test(navigator.userAgent)) {
-                // Fix an issue where you cannot scroll below first screen in
-                // learning paths on Apple devices
-                /*document.getElementById("wrapper-iframe").setAttribute(
-                  "style",
-                  "width:100%; overflow:auto; position:auto; -webkit-overflow-scrolling:touch !important;"
-                )*/
-                $("#wrapper-iframe").before('<a class="btn-open-pdf" target="_blank" href="{{ iframe_src_with_lp }}" >Open PDF on Safari</a>')
+          $(function () {
+            var $main = $("#learning_path_main");
 
-                // Fix another issue whereby buttons do not react to click below
-                // second screen in learning paths on Apple devices
-                document.getElementById("content_id").style.overflow = 'auto';
+            function initLpAiLearningHelper() {
+              var cfg = window.lpAiLearningHelper || {};
+              if (Number(cfg.enabled) !== 1 || !cfg.endpoint || !cfg.lpItemId) {
+                return;
+              }
+
+              var $menu = $("#lp-ai-learning-helper-menu");
+              var $open = $("#lp-ai-learning-helper-open");
+              var $modal = $("#lp-ai-learning-helper-modal");
+              var $close = $("#lp-ai-learning-helper-close");
+              var $selection = $("#lp-ai-learning-helper-selection");
+              var $method = $("#lp-ai-learning-helper-method");
+              var $generate = $("#lp-ai-learning-helper-generate");
+              var $status = $("#lp-ai-learning-helper-status");
+              var $answerWrap = $("#lp-ai-learning-helper-answer-wrap");
+              var $answer = $("#lp-ai-learning-helper-answer");
+              var selectedText = "";
+
+              if (!$menu.length || !$modal.length) {
+                return;
+              }
+
+              function getFrameElement() {
+                return document.getElementById("content_id") || document.getElementById("content_id_blank");
+              }
+
+              function getFrameDocument() {
+                var iframe = getFrameElement();
+                if (!iframe || !iframe.contentWindow || !iframe.contentDocument) {
+                  return null;
+                }
+
+                try {
+                  return iframe.contentDocument;
+                } catch (e) {
+                  return null;
+                }
+              }
+
+              function readSelectionFromDocument(doc) {
+                if (!doc) {
+                  return "";
+                }
+
+                try {
+                  var selection = doc.getSelection ? doc.getSelection() : null;
+                  return selection ? String(selection.toString() || "").trim() : "";
+                } catch (e) {
+                  return "";
+                }
+              }
+
+              function readCurrentSelection() {
+                var text = readSelectionFromDocument(getFrameDocument());
+                if (text) {
+                  return text;
+                }
+
+                try {
+                  return String(window.getSelection ? window.getSelection().toString() : "").trim();
+                } catch (e) {
+                  return "";
+                }
+              }
+
+              function hideMenu() {
+                $menu.addClass("hidden").removeClass("block");
+              }
+
+              function showModal() {
+                $modal.removeClass("hidden").addClass("flex").attr("aria-hidden", "false");
+              }
+
+              function hideModal() {
+                $modal.removeClass("flex").addClass("hidden").attr("aria-hidden", "true");
+              }
+
+              function isCurrentLpDocumentItem() {
+                try {
+                  var currentId = Number(window.lpCurrentItemId || cfg.lpItemId || 0);
+                  var type = "";
+
+                  if (window.olms) {
+                    if (currentId > 0 && olms.lms_item_types && olms.lms_item_types["i" + currentId]) {
+                      type = String(olms.lms_item_types["i" + currentId]);
+                    } else if (typeof olms.lms_item_type !== "undefined") {
+                      type = String(olms.lms_item_type);
+                    }
+                  }
+
+                  return !type || type === "document";
+                } catch (e) {
+                  return true;
+                }
+              }
+
+              function normalizeSelectionPosition(x, y, sourceDocument) {
+                var left = Number(x || 20);
+                var top = Number(y || 20);
+
+                try {
+                  var iframe = getFrameElement();
+                  if (sourceDocument && iframe && iframe.contentDocument === sourceDocument) {
+                    var rect = iframe.getBoundingClientRect();
+                    left += rect.left;
+                    top += rect.top;
+                  }
+                } catch (e) {
+                  // Ignore unavailable iframe coordinates.
+                }
+
+                return {
+                  left: Math.max(12, Math.min(left, window.innerWidth - 80)),
+                  top: Math.max(12, Math.min(top, window.innerHeight - 80))
+                };
+              }
+
+              function showMenu(x, y, sourceDocument) {
+                if (!isCurrentLpDocumentItem()) {
+                  hideMenu();
+                  return;
+                }
+
+                selectedText = readCurrentSelection();
+                if (!selectedText) {
+                  hideMenu();
+                  return;
+                }
+
+                var maxLen = 5000;
+                if (selectedText.length > maxLen) {
+                  selectedText = selectedText.substring(0, maxLen);
+                }
+
+                var pos = normalizeSelectionPosition(x, y, sourceDocument || getFrameDocument());
+
+                $menu
+                  .css({ left: pos.left + "px", top: pos.top + "px" })
+                  .removeClass("hidden")
+                  .addClass("block");
+              }
+
+              function bindSelectionEvents() {
+                var frameDoc = getFrameDocument();
+
+                if (frameDoc && !frameDoc.__lpAiLearningHelperBound) {
+                  frameDoc.__lpAiLearningHelperBound = true;
+
+                  frameDoc.addEventListener("mouseup", function (event) {
+                    setTimeout(function () {
+                      showMenu(event.clientX + 12, event.clientY + 12, frameDoc);
+                    }, 10);
+                  });
+
+                  frameDoc.addEventListener("keyup", function () {
+                    setTimeout(function () {
+                      var text = readCurrentSelection();
+                      if (text) {
+                        showMenu(24, 24, frameDoc);
+                      } else {
+                        hideMenu();
+                      }
+                    }, 10);
+                  });
+
+                  frameDoc.addEventListener("contextmenu", function (event) {
+                    var text = readCurrentSelection();
+                    if (!text) {
+                      return;
+                    }
+
+                    event.preventDefault();
+                    showMenu(event.clientX + 12, event.clientY + 12, frameDoc);
+                  });
+                }
+              }
+
+              var $iframe = $("#content_id, #content_id_blank").first();
+              if ($iframe.length) {
+                $iframe.off("load.lpAiLearningHelper").on("load.lpAiLearningHelper", function () {
+                  setTimeout(bindSelectionEvents, 100);
+                });
+              }
+
+              setTimeout(bindSelectionEvents, 300);
+              setTimeout(bindSelectionEvents, 800);
+
+              $(document).off("mouseup.lpAiLearningHelper").on("mouseup.lpAiLearningHelper", function (event) {
+                if ($(event.target).closest("#lp-ai-learning-helper-menu, #lp-ai-learning-helper-modal").length) {
+                  return;
+                }
+
+                setTimeout(function () {
+                  var text = readCurrentSelection();
+                  if (text) {
+                    showMenu(event.clientX + 12, event.clientY + 12, document);
+                  }
+                }, 10);
+              });
+
+              $open.off("click.lpAiLearningHelper").on("click.lpAiLearningHelper", function () {
+                if (!isCurrentLpDocumentItem()) {
+                  hideMenu();
+                  return;
+                }
+
+                selectedText = readCurrentSelection() || selectedText;
+                if (!selectedText) {
+                  return;
+                }
+
+                hideMenu();
+                $selection.text(selectedText);
+                $status.text("");
+                $answer.text("");
+                $answerWrap.addClass("hidden");
+                showModal();
+              });
+
+              $close.off("click.lpAiLearningHelper").on("click.lpAiLearningHelper", function () {
+                hideModal();
+              });
+
+              $modal.off("click.lpAiLearningHelperBackdrop").on("click.lpAiLearningHelperBackdrop", function (event) {
+                if (event.target === $modal.get(0)) {
+                  hideModal();
+                }
+              });
+
+              $(document).off("keydown.lpAiLearningHelper").on("keydown.lpAiLearningHelper", function (event) {
+                if (event.key === "Escape") {
+                  hideMenu();
+                  hideModal();
+                }
+              });
+
+              $generate.off("click.lpAiLearningHelper").on("click.lpAiLearningHelper", function () {
+                if (!selectedText) {
+                  $status.text("Please select text first.");
+                  return;
+                }
+
+                $generate.prop("disabled", true);
+                $status.text("Generating...");
+                $answer.text("");
+                $answerWrap.addClass("hidden");
+
+                var currentLpId = Number(window.lpId || cfg.lpId || 0);
+                var currentLpItemId = Number(window.lpCurrentItemId || cfg.lpItemId || 0);
+                var currentCid = Number(cfg.cid || 0);
+                var currentSid = Number(cfg.sid || 0);
+                var requestUrl = cfg.endpoint
+                  + "?cid=" + encodeURIComponent(String(currentCid))
+                  + "&sid=" + encodeURIComponent(String(currentSid))
+                  + "&origin=learnpath"
+                  + "&lp_id=" + encodeURIComponent(String(currentLpId))
+                  + "&lp_item_id=" + encodeURIComponent(String(currentLpItemId));
+
+                fetch(requestUrl, {
+                  method: "POST",
+                  credentials: "same-origin",
+                  headers: {
+                    "Content-Type": "application/json",
+                    "X-Requested-With": "XMLHttpRequest"
+                  },
+                  body: JSON.stringify({
+                    cid: currentCid,
+                    sid: currentSid,
+                    lp_id: currentLpId,
+                    lp_item_id: currentLpItemId,
+                    selected_text: selectedText,
+                    method: String($method.val() || "feynman"),
+                    language: String(cfg.language || "en")
+                  })
+                })
+                  .then(function (response) {
+                    return response.json().then(function (json) {
+                      return { ok: response.ok, json: json };
+                    });
+                  })
+                  .then(function (result) {
+                    if (!result.ok || !result.json || !result.json.success) {
+                      throw new Error((result.json && result.json.text) ? result.json.text : "AI request failed.");
+                    }
+
+                    $answer.text(result.json.text || "");
+                    $answerWrap.removeClass("hidden");
+                    $status.text("");
+                  })
+                  .catch(function (error) {
+                    $status.text(error.message || "AI request failed.");
+                  })
+                  .finally(function () {
+                    $generate.prop("disabled", false);
+                  });
+              });
+            }
+
+            initLpAiLearningHelper();
+            var tocHiddenSetting = $main.hasClass("lp-toc-hidden") ? 1 : 0;
+            var lpCompletedText = {{ "Completed"|trans|json_encode|raw }};
+
+            var $menu = $("#btn-menu-float");
+            if (!$menu.length) {
+              console.warn("LP: floating menu not found (#btn-menu-float).");
+              return;
+            }
+
+            // Prefer data attributes, fallback to legacy classes.
+            var $circle = $menu.find("[data-lp-menu='circle']").first();
+            if (!$circle.length) {
+              $circle = $menu.find(".circle").first();
+            }
+
+            var $toggle = $menu.find("[data-lp-menu='toggle']").first();
+            if (!$toggle.length) {
+              $toggle = $menu.find(".menu-button").first();
+            }
+
+            function cleanupLtiEmbedMenu() {
+              if (window.isLtiEmbeddable !== 1) {
+                return;
+              }
+              $("#home-course").remove();
+              $("#lp-view-info-toggle, #lp-view-item-info, #lp-view-item-info-btn").remove();
+              $("#btn-menu-float i.mdi-information, #btn-menu-float i.mdi-information-outline")
+                .closest("a, button, .icon-toolbar")
+                .remove();
+            }
+
+            function updateMenuLayout() {
+              // Layout rules:
+              // - Real TOC hidden setting -> top-right + vertical panel
+              // - Collapsed TOC (lp-view-collapsed) -> left + vertical panel
+              // - Normal mode -> left + horizontal panel
+              var isTocHidden = $main.hasClass("lp-toc-hidden");
+              var isCollapsed = $main.hasClass("lp-view-collapsed");
+              $menu.toggleClass("lp-menu-top-right", isTocHidden);
+              $menu.toggleClass("lp-menu-vertical", isTocHidden || isCollapsed);
+            }
+
+            updateMenuLayout();
+            cleanupLtiEmbedMenu();
+
+            // Move Previous/Next navigation outside the hamburger menu to match the C2 LP design.
+            // The navigation itself remains the legacy LP navigation generated by learnpath.class.php.
+            var $primaryNav = $menu.find("[data-lp-menu='nav']").first();
+            if ($primaryNav.length) {
+              var $statsLink = $primaryNav.find("#stats_link").detach();
+              if ($statsLink.length && $circle.length) {
+                $statsLink
+                  .removeClass("btn btn-sm btn--plain btn-default")
+                  .addClass("icon-toolbar lp-menu-text-action")
+                  .attr("title", "My progress");
+                if (!$statsLink.find(".sr-only").length && $.trim($statsLink.text()) === "") {
+                  $statsLink.append('<span class="sr-only">My progress</span>');
+                }
+                $statsLink.appendTo($circle);
+              }
+
+              if (!$primaryNav.hasClass("lp-view-primary-nav")) {
+                $primaryNav.addClass("lp-view-primary-nav");
+              }
+              $primaryNav.detach().appendTo($main);
+            }
+
+            var $teacherActions = $("#actions_lp");
+            if ($teacherActions.length && $circle.length) {
+              $teacherActions.find("a").each(function () {
+                var $link = $(this);
+                $link
+                  .removeClass("btn btn-sm btn--plain btn-default")
+                  .addClass("icon-toolbar lp-menu-text-action")
+                  .appendTo($circle);
+              });
+              $teacherActions.remove();
+            }
+
+            // Keep the sidebar expand/collapse control visible on the rail,
+            // instead of hiding it inside the hamburger dropdown.
+            var $expandToggle = $("#lp-view-expand-toggle");
+            if ($expandToggle.length && !$expandToggle.hasClass("lp-side-toggle")) {
+              $expandToggle.detach().appendTo($main).addClass("lp-side-toggle");
+            }
+            // Observe class changes to keep menu layout consistent (covers expand/collapse toggles).
+            try {
+              var mo = new MutationObserver(function () {
+                updateMenuLayout();
+              });
+              mo.observe($main.get(0), { attributes: true, attributeFilter: ["class"] });
+            } catch (e) {
+              console.warn("LP: MutationObserver not available, menu layout will update only on known actions.");
+            }
+
+            // Auto-open only once when TOC is hidden by setting (do not fight the user after that).
+            if (tocHiddenSetting === 1 && $circle.length && $toggle.length) {
+              if (!$menu.data("lpAutoOpened")) {
+                $circle.addClass("open");
+                $toggle.addClass("menu-button-selected");
+                $menu.data("lpAutoOpened", true);
               }
             }
+
+            // Toggle only this LP menu (avoid global selectors) - and NEVER navigate on toggle.
+            if ($toggle.length && $circle.length) {
+              $toggle.off("click.lpMenu").on("click.lpMenu", function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                $circle.toggleClass("open");
+                $toggle.toggleClass("menu-button-selected");
+
+                return false;
+              });
+            } else {
+              console.warn("LP: menu toggle/circle not found. Toggle binding skipped.");
+            }
+
+            // Expand/collapse only when TOC is visible (setting != 1)
+              {% if toc_hidden != 1 %}
               {% if lp_mode == 'embedframe' %}
-            $("#lp-view-expand-button, #lp-view-expand-toggle").on("click", function(e) {
-              e.preventDefault()
-              $("#learning_path_main").toggleClass("lp-view-collapsed")
-              $("#lp-view-expand-toggle i.mdi").toggleClass("mdi-arrow-expand-horizontal")
-              $("#lp-view-expand-toggle i.mdi").toggleClass("mdi-arrow-collapse-horizontal")
-              var className = $("#lp-view-expand-toggle i.mdi").attr("class")
-              if (className == "mdi-arrow-collapse-horizontal") {
-                $(this).attr("title", '{{ "Expand" | trans }}')
-              } else {
-                $(this).attr("title", '{{ "Collapse" | trans }}')
-              }
-
-              if ($("#navTabBar").is(":hidden")) {
-                $("#navTabBar").show()
-              } else {
-                $("#navTabBar").hide()
-              }
-            })
+            $("#lp-view-expand-toggle").off("click.lpExpand").on("click.lpExpand", function (e) {
+              e.preventDefault();
+              $main.toggleClass("lp-view-collapsed");
+              $("#lp-view-expand-toggle i.mdi").toggleClass("mdi-chevron-left mdi-chevron-right");
+              updateMenuLayout();
+              setTimeout(syncCollapsedIframeBoundary, 50);
+              setTimeout(syncCollapsedIframeBoundary, 200);
+              setTimeout(syncCollapsedIframeBoundary, 500);
+            });
               {% else %}
-            $("#lp-view-expand-button, #lp-view-expand-toggle").on("click", function(e) {
-              e.preventDefault()
-              $("#learning_path_main").toggleClass("lp-view-collapsed")
-              $("#lp-view-expand-toggle i.mdi").toggleClass("mdi-arrow-collapse-horizontal")
-              $("#lp-view-expand-toggle i.mdi").toggleClass("mdi-arrow-expand-horizontal")
-
-              var className = $("#lp-view-expand-toggle i.mdi").attr("class")
-              if (className == "mdi-arrow-expand-horizontal") {
-                $(this).attr("title", '{{ "Expand" | trans }}')
-              } else {
-                $(this).attr("title", '{{ "Collapse" | trans }}')
-              }
-            })
+            $("#lp-view-expand-toggle").off("click.lpExpand").on("click.lpExpand", function (e) {
+              e.preventDefault();
+              $main.toggleClass("lp-view-collapsed");
+              $("#lp-view-expand-toggle i.mdi").toggleClass("mdi-chevron-left mdi-chevron-right");
+              updateMenuLayout();
+              setTimeout(syncCollapsedIframeBoundary, 50);
+              setTimeout(syncCollapsedIframeBoundary, 200);
+              setTimeout(syncCollapsedIframeBoundary, 500);
+            });
+              {% endif %}
               {% endif %}
 
-            $(".lp-view-tabs").on("click", ".disabled", function(e) {
-              e.preventDefault()
-            })
+            function extractProgressLabel($bar, $progressBar, $progressRoot) {
+              var rawValues = [];
 
-            $("a#ui-option").on("click", function(e) {
-              e.preventDefault()
-              var icon = $(this).children(".mdi")
-              if (icon.is(".mdi-chevron-up")) {
-                icon.removeClass("mdi-chevron-up").addClass("mdi-chevron-down")
-
-                return
+              // The legacy LP runtime updates the visual width first. Prefer it over
+              // the old internal label, otherwise the external label can remain stale.
+              var width = $progressBar.get(0) ? $progressBar.get(0).style.width : "";
+              if (width) {
+                rawValues.push(width);
               }
-              icon.removeClass("mdi-chevron-down").addClass("mdi-chevron-up")
-            })
 
-            $(".scorm_item_normal a, #scorm-previous, #scorm-next").on("click", function() {
-              //$('.lp-view-tabs').animate({opacity: 0}, 500);
-            })
+              rawValues = rawValues.concat([
+                $progressBar.attr("aria-valuenow") || "",
+                $progressRoot.attr("aria-valuenow") || "",
+                $bar.attr("aria-valuenow") || "",
+                $progressBar.attr("data-progress-value") || "",
+                $progressRoot.attr("data-progress-value") || "",
+                $.trim($progressBar.text())
+              ]);
 
-            $("#learning_path_right_zone #lp-view-content iframe").on("load", function() {
-              //$('.lp-view-tabs a[href="#lp-view-content"]').tab('show');
-              //$('.lp-view-tabs').animate({opacity: 1}, 500);
-            })
-
-              {% if lp_mode == 'embedded' %}
-            /*$('.scorm_item_normal a, #scorm-previous, #scorm-next').on('click', function () {
-                $('.lp-view-tabs').animate({opacity: 0}, 500);
-                if ($('#flag-mobile').is(':visible') && !$('#learning_path_main').is('.lp-view-collapsed')) {
-                    $('#lp-view-expand-toggle').trigger('click');
+              for (var i = 0; i < rawValues.length; i++) {
+                var value = $.trim(String(rawValues[i] || ""));
+                if (!value) {
+                  continue;
                 }
-            });*/
-              {% endif %}
 
-            //loadForumThread({{ lp_id }}, {{ lp_current_item_id }});
-            checkCurrentItemPosition({{ lp_current_item_id }});
+                var percentMatch = value.match(/(\d+(?:[\.,]\d+)?)\s*%/);
+                if (percentMatch && percentMatch[1]) {
+                  return percentMatch[1].replace(",", ".") + "%";
+                }
 
-            // Glossary highlighting is now handled by api_get_glossary_auto_snippet()
-            // based on "show_glossary_in_extra_tools". Legacy per-document frameReady
-            // injection was removed from this template.
+                var numberMatch = value.match(/^(\d+(?:[\.,]\d+)?)$/);
+                if (numberMatch && numberMatch[1]) {
+                  return numberMatch[1].replace(",", ".") + "%";
+                }
+              }
+
+              return "0%";
+            }
+
+            function normalizeProgressBar() {
+              $("#progress_bar").each(function () {
+                var $bar = $(this);
+                var $progressBar = $bar.find(".progress-bar, .bar, .ui-progressbar-value, .p-progressbar-value").first();
+                var $progressRoot = $progressBar.closest(".progress, .p-progressbar, progress").first();
+
+                if (!$progressBar.length) {
+                  return;
+                }
+
+                if (!$progressRoot.length) {
+                  $progressRoot = $bar;
+                }
+
+                var label = extractProgressLabel($bar, $progressBar, $progressRoot);
+
+                $bar.contents().filter(function () {
+                  return this.nodeType === 3;
+                }).remove();
+
+                $bar.find(".progress, .p-progressbar, progress").contents().filter(function () {
+                  return this.nodeType === 3;
+                }).remove();
+
+                $bar.find(".progress-bar, .bar, .ui-progressbar-value, .p-progressbar-value").each(function () {
+                  var $inner = $(this);
+                  $inner.attr("aria-label", label + " " + lpCompletedText);
+                  $inner.find(".p-progressbar-label").remove();
+                  $inner.contents().filter(function () {
+                    return this.nodeType === 3;
+                  }).remove();
+                });
+
+                var $label = $bar.find(".lp-progress-label").first();
+                if (!$label.length) {
+                  $label = $('<div class="lp-progress-label"></div>').appendTo($bar);
+                }
+
+                $label.text(label + " " + lpCompletedText);
+              });
+            }
+
+            normalizeProgressBar();
+            setTimeout(normalizeProgressBar, 250);
+            setTimeout(normalizeProgressBar, 1000);
+            $(document).ajaxComplete(normalizeProgressBar);
+
+            function refreshLpStatusIcons() {
+              $("#learning_path_toc .scorm_item_normal").each(function () {
+                var $item = $(this);
+                var $icon = $item.find(".lp-item-status-icon").not(".lp-section-chevron").find("i.mdi").first();
+
+                if (!$icon.length) {
+                  return;
+                }
+
+                $icon.removeClass("mdi-circle-outline mdi-check-circle mdi-close-circle mdi-alert-circle mdi-clock-outline");
+
+                if (
+                  $item.hasClass("scorm_completed") ||
+                  $item.hasClass("scorm_passed") ||
+                  $item.hasClass("completed") ||
+                  $item.hasClass("passed")
+                ) {
+                  $icon.addClass("mdi-check-circle");
+                } else if (
+                  $item.hasClass("scorm_failed") ||
+                  $item.hasClass("failed")
+                ) {
+                  $icon.addClass("mdi-close-circle");
+                } else {
+                  $icon.addClass("mdi-circle-outline");
+                }
+              });
+            }
+
+            function refreshLpRuntimeDecorations() {
+              normalizeProgressBar();
+              refreshLpStatusIcons();
+            }
+
+            function scheduleLpRuntimeDecorations() {
+              setTimeout(refreshLpRuntimeDecorations, 150);
+              setTimeout(refreshLpRuntimeDecorations, 600);
+              setTimeout(refreshLpRuntimeDecorations, 1500);
+            }
+
+            refreshLpStatusIcons();
+            setTimeout(refreshLpStatusIcons, 250);
+            setTimeout(refreshLpStatusIcons, 1000);
+            $(document).ajaxComplete(function () {
+              setTimeout(refreshLpRuntimeDecorations, 50);
+              setTimeout(refreshLpRuntimeDecorations, 350);
+            });
+            // Do not observe the full TOC for class changes here: updating the
+            // replacement status icons also changes classes and can create a
+            // MutationObserver loop on large learning paths. Status refresh is
+            // triggered explicitly after navigation, AJAX and iframe load.
+
+
+            // Debug: show what iframe is currently loading
+            try {
+              var iframeSrc = $("#content_id").attr("src") || $("#content_id_blank").attr("src") || "";
+              console.info("LP: current iframe src =", iframeSrc);
+            } catch (e) {
+              console.warn("LP: cannot read iframe src:", e);
+            }
+
+            function isRealHref(href) {
+              return href && href !== "#" && href.indexOf("javascript:") !== 0;
+            }
+
+            function extractUrlFromOnclick(onclickValue) {
+              if (!onclickValue) return "";
+
+              // 1) frames.content_name.location='...'
+              var m1 = onclickValue.match(/content_name(?:_blank)?\.location(?:\.href)?\s*=\s*['"]([^'"]+)['"]/);
+              if (m1 && m1[1]) return m1[1];
+
+              // 2) Any direct lp_controller.php... in onclick
+              var m2 = onclickValue.match(/(lp_controller\.php[^'"]+)/);
+              if (m2 && m2[1]) return m2[1];
+
+              // 3) Fallback: any lp_view.php / lp_content.php inside onclick
+              var m3 = onclickValue.match(/(lp_(?:view|content)\.php[^'"]+)/);
+              if (m3 && m3[1]) return m3[1];
+
+              return "";
+            }
+
+            function resolveUrl(el) {
+              var $el = $(el);
+
+              // Prefer patched URL if present
+              var patched = $el.attr("data-lp-nav-url") || "";
+              if (patched) return patched;
+
+              var href = $el.attr("href") || "";
+              if (isRealHref(href)) return href;
+
+              var onclickValue = $el.attr("onclick") || "";
+              return extractUrlFromOnclick(onclickValue);
+            }
+
+            function getNumeric(v) {
+              var n = Number(v);
+              return Number.isFinite(n) ? n : 0;
+            }
+
+            function getSearchParam(name) {
+              try {
+                var sp = new URLSearchParams(window.location.search || "");
+                return sp.get(name) || "";
+              } catch (e) {
+                return "";
+              }
+            }
+
+            /* -----------------------------
+             * Iframe helpers
+             * ----------------------------- */
+            function getLpIframe() {
+              var $i = $("#content_id");
+              if (!$i.length) {
+                $i = $("#content_id_blank");
+              }
+              return $i;
+            }
+
+            function syncCollapsedIframeBoundary() {
+              var $rightZone = $("#learning_path_right_zone");
+              var $leftZone = $("#learning_path_left_zone");
+              var $toggle = $("#lp-view-expand-toggle");
+              var $iframe = getLpIframe();
+              var isCollapsed = $main.hasClass("lp-view-collapsed");
+
+              if ($rightZone.length) {
+                if (isCollapsed) {
+                  var railWidth = 64;
+                  var contentGap = 34;
+                  var contentLeft = railWidth + contentGap;
+
+                  try {
+                    if ($leftZone.length) {
+                      var leftRect = $leftZone.get(0).getBoundingClientRect();
+                      if (leftRect && leftRect.right) {
+                        contentLeft = Math.max(contentLeft, Math.ceil(leftRect.right + contentGap));
+                      }
+                    }
+
+                    if ($toggle.length) {
+                      var toggleRect = $toggle.get(0).getBoundingClientRect();
+                      if (toggleRect && toggleRect.right) {
+                        contentLeft = Math.max(contentLeft, Math.ceil(toggleRect.right + 16));
+                      }
+                    }
+                  } catch (e) {
+                    contentLeft = railWidth + contentGap;
+                  }
+
+                  // Keep the right content strictly after the collapsed rail/arrow.
+                  // The clamp avoids oversized offsets if a browser reports a transient
+                  // animation rectangle during the collapse transition.
+                  contentLeft = Math.max(82, Math.min(contentLeft, 180));
+
+                  $main.get(0).style.setProperty("--lp-collapsed-content-left", contentLeft + "px");
+
+                  $rightZone.get(0).style.setProperty("position", "fixed", "important");
+                  $rightZone.get(0).style.setProperty("top", "0", "important");
+                  $rightZone.get(0).style.setProperty("right", "0", "important");
+                  $rightZone.get(0).style.setProperty("bottom", "0", "important");
+                  $rightZone.get(0).style.setProperty("left", contentLeft + "px", "important");
+                  $rightZone.get(0).style.setProperty("width", "auto", "important");
+                  $rightZone.get(0).style.setProperty("max-width", "calc(100vw - " + contentLeft + "px)", "important");
+                  $rightZone.get(0).style.setProperty("margin-left", "0", "important");
+                  $rightZone.get(0).style.setProperty("padding-left", "30px", "important");
+                  $rightZone.get(0).style.setProperty("box-sizing", "border-box", "important");
+                  $rightZone.get(0).style.setProperty("overflow", "hidden", "important");
+                } else {
+                  $rightZone.get(0).style.removeProperty("position");
+                  $rightZone.get(0).style.removeProperty("top");
+                  $rightZone.get(0).style.removeProperty("right");
+                  $rightZone.get(0).style.removeProperty("bottom");
+                  $rightZone.get(0).style.removeProperty("left");
+                  $rightZone.get(0).style.removeProperty("width");
+                  $rightZone.get(0).style.removeProperty("max-width");
+                  $rightZone.get(0).style.removeProperty("margin-left");
+                  $rightZone.get(0).style.removeProperty("padding-left");
+                  $rightZone.get(0).style.removeProperty("box-sizing");
+                  $rightZone.get(0).style.removeProperty("overflow");
+                }
+              }
+
+              if (!$iframe.length) {
+                return;
+              }
+
+              // Keep the iframe itself inside the visible content area.
+              $iframe.css({
+                position: "relative",
+                left: "auto",
+                right: "auto",
+                top: "auto",
+                width: "100%",
+                maxWidth: "100%",
+                minWidth: "0",
+                height: "100%",
+                maxHeight: "100%",
+                marginLeft: "0",
+                paddingLeft: "0",
+                boxSizing: "border-box",
+                transform: "none"
+              });
+
+              // Same-origin LP documents can receive an internal safety padding.
+              // Some legacy LP item pages render their content from x=0 inside the iframe,
+              // so parent spacing alone is not enough when the TOC is collapsed.
+              try {
+                var iframe = $iframe.get(0);
+                var doc = iframe && (iframe.contentDocument || iframe.contentWindow.document);
+                if (!doc || !doc.head) {
+                  return;
+                }
+
+                var styleId = "lp-modern-collapsed-boundary-style";
+                var style = doc.getElementById(styleId);
+
+                if (isCollapsed) {
+                  if (!style) {
+                    style = doc.createElement("style");
+                    style.id = styleId;
+                    doc.head.appendChild(style);
+                  }
+                  style.textContent = [
+                    "html, body {",
+                    "  box-sizing: border-box !important;",
+                    "  overflow-x: hidden !important;",
+                    "}",
+                    "body {",
+                    "  margin-left: 0 !important;",
+                    "  padding-left: 0 !important;",
+                    "  padding-right: 18px !important;",
+                    "}",
+                    "#main_content, .container, .container-fluid, .lp_item_content, .document-view, .exercise-overview {",
+                    "  box-sizing: border-box !important;",
+                    "  max-width: 100% !important;",
+                    "}"
+                  ].join("\n");
+                } else if (style) {
+                  style.parentNode.removeChild(style);
+                }
+              } catch (e) {
+                // Cross-origin embeds such as external videos cannot be adjusted.
+              }
+            }
+
+            function bindIframeLoadingState() {
+              var $wrapper = $("#wrapper-iframe");
+              var $iframe = getLpIframe();
+              if (!$wrapper.length || !$iframe.length) {
+                return;
+              }
+
+              $wrapper.addClass("lp-is-loading");
+              $iframe.off("load.lpLoading").on("load.lpLoading", function () {
+                $wrapper.removeClass("lp-is-loading");
+                scheduleLpRuntimeDecorations();
+                setTimeout(syncCollapsedIframeBoundary, 0);
+                setTimeout(syncCollapsedIframeBoundary, 100);
+              });
+            }
+
+            bindIframeLoadingState();
+            setTimeout(syncCollapsedIframeBoundary, 100);
+            setTimeout(syncCollapsedIframeBoundary, 400);
+            $(window).off("resize.lpCollapsedBoundary").on("resize.lpCollapsedBoundary", function () {
+              setTimeout(syncCollapsedIframeBoundary, 80);
+            });
+
+            function syncCurrentItemFromIframe() {
+              try {
+                var $i = getLpIframe();
+                if (!$i.length) {
+                  return;
+                }
+                var src = $i.attr("src") || "";
+                var m = src.match(/[?&]item_id=(\d+)/);
+                if (m && m[1]) {
+                  window.lpCurrentItemId = parseInt(m[1], 10) || window.lpCurrentItemId;
+                }
+              } catch (e) {}
+            }
+
+            /* -----------------------------------------------------------
+             * TOC-based navigation helpers
+             * ----------------------------------------------------------- */
+            function collectTocItemIds() {
+              var ids = [];
+              var seen = {};
+
+              $("#toc_id [id^='toc_']").each(function () {
+                var raw = (this.id || "").replace("toc_", "");
+                var n = parseInt(raw, 10);
+                if (!Number.isFinite(n) || n <= 0) return;
+                if (seen[n]) return;
+                seen[n] = true;
+                ids.push(n);
+              });
+
+              if (!ids.length) {
+                $("#toc_id a[href*='item_id=']").each(function () {
+                  try {
+                    var href = $(this).attr("href") || "";
+                    var m = href.match(/[?&]item_id=(\d+)/);
+                    if (!m) return;
+                    var n = parseInt(m[1], 10);
+                    if (!Number.isFinite(n) || n <= 0) return;
+                    if (seen[n]) return;
+                    seen[n] = true;
+                    ids.push(n);
+                  } catch (e) {}
+                });
+              }
+
+              return ids;
+            }
+
+            function getCurrentItemIdSafe() {
+              // Prefer runtime value (most reliable when available)
+              try {
+                if (window.olms && typeof olms.lms_item_id !== "undefined") {
+                  var n = parseInt(olms.lms_item_id, 10);
+                  if (Number.isFinite(n) && n > 0) return n;
+                }
+              } catch (e) {}
+
+              var fromWindow = getNumeric(window.lpCurrentItemId);
+              if (fromWindow > 0) return fromWindow;
+
+              var fromUrl = parseInt(getSearchParam("item_id"), 10);
+              return Number.isFinite(fromUrl) ? fromUrl : 0;
+            }
+
+            function resolveDirectionToId(direction, currentId) {
+              var ids = collectTocItemIds();
+              if (!ids.length) {
+                return 0;
+              }
+
+              var idx = ids.indexOf(currentId);
+              if (idx === -1) {
+                return direction === "next" ? (ids[0] || 0) : 0;
+              }
+
+              if (direction === "next") {
+                return ids[idx + 1] || 0;
+              }
+              if (direction === "previous") {
+                return ids[idx - 1] || 0;
+              }
+              return 0;
+            }
+
+            function buildContentUrlForItem(itemId) {
+              var cid = getSearchParam("cid") || "";
+              var sid = getSearchParam("sid") || "0";
+              var lpId = String(getNumeric(window.lpId) || {{ lp_id_num }});
+              return "lp_controller.php?action=content"
+                + "&cid=" + encodeURIComponent(cid)
+                + "&sid=" + encodeURIComponent(sid)
+                + "&origin=learnpath"
+                + "&lp_id=" + encodeURIComponent(lpId)
+                + "&lp_item_id=" + encodeURIComponent(String(itemId))
+                + "&item_id=" + encodeURIComponent(String(itemId));
+            }
+
+            // Iframe loading overlay (UX-friendly: delayed + minimum visible time)
+            var $loader = $("#lp-iframe-loader");
+            var $iframe = getLpIframe();
+
+            var loaderShowDelayMs = 250;      // Do not show loader for very fast loads
+            var loaderMinVisibleMs = 250;     // Avoid flicker if it appears
+            var loaderShowTimer = null;
+            var loaderHideTimer = null;
+            var loaderVisibleSince = 0;
+            var loaderMaxHideTimer = null;
+
+            var $videoNextOverlay = $("#lp-video-next-overlay");
+            var $videoNextButton = $("#lp-video-next-button");
+            var $videoNextClose = $("#lp-video-next-close");
+            var lpVideoNextCleanup = [];
+            var lpYoutubeApiLoading = false;
+            var lpYoutubeApiReadyCallbacks = [];
+
+            function hasNextLpItem() {
+              var currentItemId = getCurrentItemIdSafe();
+              var nextItemId = resolveDirectionToId("next", currentItemId);
+
+              if (nextItemId > 0 && nextItemId !== currentItemId) {
+                return true;
+              }
+
+              try {
+                if (window.olms && parseInt(olms.lms_next_item, 10) > 0) {
+                  return true;
+                }
+              } catch (e) {}
+
+              return false;
+            }
+
+            function showVideoNextOverlay() {
+              if (!$videoNextOverlay.length || !hasNextLpItem()) {
+                return;
+              }
+
+              $videoNextOverlay.removeClass("hidden").addClass("is-visible").attr("aria-hidden", "false");
+            }
+
+            function hideVideoNextOverlay() {
+              if (!$videoNextOverlay.length) {
+                return;
+              }
+
+              $videoNextOverlay.removeClass("is-visible").addClass("hidden").attr("aria-hidden", "true");
+            }
+
+            function clearVideoNextWatchers() {
+              hideVideoNextOverlay();
+
+              while (lpVideoNextCleanup.length) {
+                var cleanup = lpVideoNextCleanup.pop();
+                try {
+                  cleanup();
+                } catch (e) {
+                  console.warn("LP video overlay: cleanup failed.", e);
+                }
+              }
+            }
+
+            function normalizeYoutubeIframeSrc(iframe) {
+              var src = iframe.getAttribute("src") || "";
+
+              if (!src || src.indexOf("youtube.com/embed/") === -1 && src.indexOf("youtube-nocookie.com/embed/") === -1) {
+                return false;
+              }
+
+              try {
+                var url = new URL(src, window.location.href);
+                if (url.searchParams.get("enablejsapi") !== "1") {
+                  url.searchParams.set("enablejsapi", "1");
+                }
+                if (!url.searchParams.get("origin")) {
+                  url.searchParams.set("origin", window.location.origin);
+                }
+                var normalized = url.toString();
+
+                if (normalized !== src) {
+                  iframe.setAttribute("src", normalized);
+                }
+
+                return true;
+              } catch (e) {
+                return false;
+              }
+            }
+
+            function loadYoutubeIframeApi(callback) {
+              if (window.YT && window.YT.Player) {
+                callback();
+                return;
+              }
+
+              lpYoutubeApiReadyCallbacks.push(callback);
+
+              if (lpYoutubeApiLoading) {
+                return;
+              }
+
+              lpYoutubeApiLoading = true;
+
+              var previousReady = window.onYouTubeIframeAPIReady;
+              window.onYouTubeIframeAPIReady = function () {
+                if (typeof previousReady === "function") {
+                  try {
+                    previousReady();
+                  } catch (e) {}
+                }
+
+                var callbacks = lpYoutubeApiReadyCallbacks.slice();
+                lpYoutubeApiReadyCallbacks = [];
+
+                callbacks.forEach(function (cb) {
+                  try {
+                    cb();
+                  } catch (e) {
+                    console.warn("LP video overlay: YouTube callback failed.", e);
+                  }
+                });
+              };
+
+              var script = document.createElement("script");
+              script.src = "https://www.youtube.com/iframe_api";
+              script.async = true;
+              document.head.appendChild(script);
+            }
+
+            function watchHtml5Videos(doc) {
+              var videos = [];
+
+              try {
+                videos = Array.prototype.slice.call(doc.querySelectorAll("video"));
+              } catch (e) {
+                videos = [];
+              }
+
+              videos.forEach(function (video) {
+                var endedHandler = function () {
+                  showVideoNextOverlay();
+                };
+                var playingHandler = function () {
+                  hideVideoNextOverlay();
+                };
+
+                video.addEventListener("ended", endedHandler);
+                video.addEventListener("play", playingHandler);
+                video.addEventListener("seeking", playingHandler);
+
+                lpVideoNextCleanup.push(function () {
+                  video.removeEventListener("ended", endedHandler);
+                  video.removeEventListener("play", playingHandler);
+                  video.removeEventListener("seeking", playingHandler);
+                });
+              });
+
+              return videos.length;
+            }
+
+            function watchYoutubeIframes(doc) {
+              var iframes = [];
+
+              try {
+                iframes = Array.prototype.slice.call(doc.querySelectorAll("iframe"));
+              } catch (e) {
+                iframes = [];
+              }
+
+              iframes = iframes.filter(function (iframe) {
+                return normalizeYoutubeIframeSrc(iframe);
+              });
+
+              if (!iframes.length) {
+                return 0;
+              }
+
+              loadYoutubeIframeApi(function () {
+                iframes.forEach(function (iframe) {
+                  try {
+                    var player = new YT.Player(iframe, {
+                      events: {
+                        onStateChange: function (event) {
+                          if (event.data === YT.PlayerState.ENDED) {
+                            showVideoNextOverlay();
+                          }
+                          if (event.data === YT.PlayerState.PLAYING) {
+                            hideVideoNextOverlay();
+                          }
+                        }
+                      }
+                    });
+
+                    lpVideoNextCleanup.push(function () {
+                      try {
+                        if (player && typeof player.destroy === "function") {
+                          player.destroy();
+                        }
+                      } catch (e) {}
+                    });
+                  } catch (e) {
+                    console.warn("LP video overlay: cannot attach YouTube player.", e);
+                  }
+                });
+              });
+
+              return iframes.length;
+            }
+
+            function setupVideoNextOverlay() {
+              clearVideoNextWatchers();
+
+              if (!hasNextLpItem()) {
+                return;
+              }
+
+              var $i = getLpIframe();
+              if (!$i.length) {
+                return;
+              }
+
+              try {
+                var iframe = $i.get(0);
+                var doc = iframe.contentDocument || iframe.contentWindow.document;
+
+                if (!doc) {
+                  return;
+                }
+
+                var detected = watchHtml5Videos(doc);
+                detected += watchYoutubeIframes(doc);
+
+                if (detected > 0) {
+                  console.info("LP video overlay: watching video players.", detected);
+                }
+              } catch (e) {
+                // Cross-origin content cannot be inspected. Keep the standard LP navigation untouched.
+                console.warn("LP video overlay: cannot inspect iframe content.", e);
+              }
+            }
+
+            $videoNextButton.off("click.lpVideoNext").on("click.lpVideoNext", function (e) {
+              e.preventDefault();
+              hideVideoNextOverlay();
+              lpNavigateToItem("next", "video ended overlay");
+            });
+
+            $videoNextClose.off("click.lpVideoNext").on("click.lpVideoNext", function (e) {
+              e.preventDefault();
+              hideVideoNextOverlay();
+            });
+
+            function showLoaderNow(reason) {
+              if (!$loader.length) return;
+              if ($loader.hasClass("is-visible")) return;
+
+              loaderVisibleSince = Date.now();
+              $loader.removeClass("hidden").addClass("is-visible").attr("aria-hidden", "false");
+
+              clearTimeout(loaderMaxHideTimer);
+              loaderMaxHideTimer = setTimeout(function () {
+                hideLoader("timeout");
+              }, 15000);
+            }
+
+            function scheduleShowLoader(reason) {
+              if (!$loader.length) return;
+
+              clearTimeout(loaderShowTimer);
+              loaderShowTimer = setTimeout(function () {
+                showLoaderNow(reason || "delayed");
+              }, loaderShowDelayMs);
+            }
+
+            function showLoader(reason) {
+              scheduleShowLoader(reason || "manual");
+            }
+
+            function hideLoader(reason) {
+              if (!$loader.length) return;
+
+              clearTimeout(loaderShowTimer);
+              clearTimeout(loaderHideTimer);
+
+              if (!$loader.hasClass("is-visible")) {
+                clearTimeout(loaderMaxHideTimer);
+                return;
+              }
+
+              var elapsed = Date.now() - (loaderVisibleSince || 0);
+              if (elapsed < loaderMinVisibleMs) {
+                loaderHideTimer = setTimeout(function () {
+                  hideLoader(reason || "min-visible");
+                }, loaderMinVisibleMs - elapsed);
+                return;
+              }
+
+              $loader.removeClass("is-visible").addClass("hidden").attr("aria-hidden", "true");
+              clearTimeout(loaderMaxHideTimer);
+            }
+
+// Initial iframe load: delay the loader (no blink)
+            if ($iframe.length) {
+              scheduleShowLoader("initial");
+              $iframe.off("load.lpLoader").on("load.lpLoader", function () {
+                syncCurrentItemFromIframe();
+                hideLoader("iframe load");
+                setTimeout(setupVideoNextOverlay, 150);
+              });
+              setTimeout(setupVideoNextOverlay, 500);
+            } else {
+              console.warn("LP: iframe not found (#content_id / #content_id_blank).");
+            }
+
+            $(document).off("click.lpLoaderNav").on(
+              "click.lpLoaderNav",
+              "#toc_id a, #btn-menu-float a, #btn-menu-float button",
+              function () {
+                var $t = $(this);
+
+                // Do NOT show loader for the menu toggle (open/close).
+                if ($toggle.length && ($t.is($toggle) || $t.closest($toggle).length)) {
+                  return;
+                }
+
+                // Only show loader when this looks like real navigation.
+                var href = ($t.attr("href") || "");
+                var onclickValue = ($t.attr("onclick") || "");
+
+                var isKnownNavButton = $t.is("#scorm-next, #scorm-previous, #home-course");
+                var isTocClick = $t.closest("#toc_id").length > 0;
+
+                var isLpContentLink =
+                  href.indexOf("lp_controller.php") !== -1 ||
+                  href.indexOf("lp_view.php") !== -1 ||
+                  href.indexOf("lp_content.php") !== -1 ||
+                  onclickValue.indexOf("lp_controller.php") !== -1 ||
+                  onclickValue.indexOf("lp_view.php") !== -1 ||
+                  onclickValue.indexOf("lp_content.php") !== -1 ||
+                  onclickValue.indexOf("content_name") !== -1;
+
+                if (!isKnownNavButton && !isTocClick && !isLpContentLink) {
+                  return;
+                }
+
+                hideVideoNextOverlay();
+
+                // Delay loader so fast loads don't show anything.
+                scheduleShowLoader("nav click");
+                scheduleLpRuntimeDecorations();
+              }
+            );
+
+            function lpNavigateToItem(target, label) {
+              var isDirection = (target === "next" || target === "previous" || target === "first" || target === "last");
+              var targetItemId = 0;
+
+              showLoader("navigate " + label);
+              var currentItemId = getCurrentItemIdSafe();
+
+              // If target is numeric, validate it.
+              if (!isDirection) {
+                targetItemId = parseInt(target, 10);
+                if (!Number.isFinite(targetItemId) || targetItemId <= 0) {
+                  console.warn("LP NAV: invalid target item id for " + label + ":", target);
+                  hideLoader("nav failed");
+                  return false;
+                }
+              }
+
+              // If direction, first resolve it from TOC order (best for Chamilo LP).
+              if (isDirection && (target === "next" || target === "previous")) {
+                var tocResolved = resolveDirectionToId(target, currentItemId);
+                if (tocResolved > 0 && tocResolved !== currentItemId) {
+                  targetItemId = tocResolved;
+                }
+              }
+
+              // Prefer switch_item if runtime is ready (keeps SCORM/LP state).
+              if (window.olms && typeof switch_item === "function" && Number(olms.lms_initialized) === 1) {
+                console.info("LP NAV: switching item via runtime", {
+                  currentItemId: currentItemId,
+                  target: isDirection ? (targetItemId > 0 ? targetItemId : target) : targetItemId
+                });
+
+                try {
+                  // If we resolved a numeric target, pass numeric. Otherwise pass direction.
+                  switch_item(currentItemId || 0, isDirection ? (targetItemId > 0 ? targetItemId : target) : targetItemId);
+                  if (!isDirection || targetItemId > 0) {
+                    window.lpCurrentItemId = targetItemId;
+                  }
+                  scheduleLpRuntimeDecorations();
+                  return true;
+                } catch (e) {
+                  console.warn("LP NAV: switch_item() failed, falling back to iframe src update.", e);
+                }
+              }
+
+              // Fallback: resolve direction from runtime vars only if TOC resolution failed.
+              if (isDirection && targetItemId <= 0 && window.olms) {
+                try {
+                  if (target === "next") targetItemId = parseInt(olms.lms_next_item, 10) || 0;
+                  if (target === "previous") targetItemId = parseInt(olms.lms_previous_item, 10) || 0;
+                } catch (e) {}
+              }
+
+              // Final fallback: update iframe src directly.
+              if (targetItemId > 0) {
+                var $i = getLpIframe();
+                if ($i.length) {
+                  var src = buildContentUrlForItem(targetItemId);
+                  console.info("LP NAV: updating iframe src (fallback).", src);
+                  $i.attr("src", src);
+                  window.lpCurrentItemId = targetItemId;
+                  scheduleLpRuntimeDecorations();
+                  setTimeout(syncCollapsedIframeBoundary, 100);
+                  setTimeout(syncCollapsedIframeBoundary, 400);
+                  return true;
+                }
+              }
+
+              hideLoader("nav failed");
+              return false;
+            }
+
+            /* -----------------------------------------------------------
+             * Deterministic bindings for Next/Previous (Chamilo LP safe)
+             * ----------------------------------------------------------- */
+            function bindPrimaryNavButtons() {
+              var $prev = $("#scorm-previous");
+              var $next = $("#scorm-next");
+
+              function bind($el, direction, label) {
+                if (!$el || !$el.length) return;
+
+                // Tag for easier debugging
+                $el.attr("data-lp-nav", direction);
+
+                // Remove legacy inline handlers to prevent NaN or dead navigation.
+                // We still keep behavior via lpNavigateToItem().
+                $el.removeAttr("onclick").removeAttr("target");
+
+                if ($el.is("a")) {
+                  $el.attr("href", "#");
+                }
+
+                $el.off("click.lpNavPrimary").on("click.lpNavPrimary", function (e) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  console.info("LP NAV: " + label + " clicked -> navigating", direction);
+                  lpNavigateToItem(direction, label);
+                  return false;
+                });
+              }
+
+              if (!$prev.length || !$next.length) {
+                console.warn("LP NAV: primary #scorm-previous/#scorm-next elements not found. Will rely on heuristic patching.");
+              }
+
+              bind($prev, "previous", "previous");
+              bind($next, "next", "next");
+            }
+
+            function looksLikePrev(el) {
+              var $el = $(el);
+              var t = ($el.attr("title") || "").toLowerCase();
+              var a = ($el.attr("aria-label") || "").toLowerCase();
+              var h = ($el.html() || "").toLowerCase();
+              var s = [t, a, h].join(" ");
+
+              return (
+                s.indexOf("previous") !== -1 ||
+                s.indexOf("prev") !== -1 ||
+                s.indexOf("anterior") !== -1 ||
+                s.indexOf("mdi-chevron-left") !== -1 ||
+                s.indexOf("mdi-arrow-left") !== -1
+              );
+            }
+
+            function looksLikeNext(el) {
+              var $el = $(el);
+              var t = ($el.attr("title") || "").toLowerCase();
+              var a = ($el.attr("aria-label") || "").toLowerCase();
+              var h = ($el.html() || "").toLowerCase();
+              var s = [t, a, h].join(" ");
+
+              return (
+                s.indexOf("next") !== -1 ||
+                s.indexOf("siguiente") !== -1 ||
+                s.indexOf("mdi-chevron-right") !== -1 ||
+                s.indexOf("mdi-arrow-right") !== -1
+              );
+            }
+
+            function patchNavArrowsWhenTocHidden() {
+              if (tocHiddenSetting !== 1) return;
+
+              // Prefer known IDs if present (most reliable)
+              var $prevEl = $("#scorm-previous");
+              var $nextEl = $("#scorm-next");
+
+              // If not found, fallback to heuristics inside the floating menu
+              if (!$prevEl.length || !$nextEl.length) {
+                var $candidates = $menu
+                  .find("a, button")
+                  .not("#home-course")
+                  .not("#lp-view-expand-toggle")
+                  .not("[data-lp-menu='toggle']");
+
+                $prevEl = $prevEl.length ? $prevEl : $();
+                $nextEl = $nextEl.length ? $nextEl : $();
+
+                $candidates.each(function () {
+                  if (!$prevEl.length && looksLikePrev(this)) $prevEl = $(this);
+                  if (!$nextEl.length && looksLikeNext(this)) $nextEl = $(this);
+                });
+              }
+
+              function applyPatchDirection($el, direction, label) {
+                if (!$el || !$el.length) {
+                  console.warn("LP NAV: cannot patch " + label + " (element not found).");
+                  return;
+                }
+
+                $el.removeAttr("onclick").removeAttr("target");
+                if ($el.is("a")) {
+                  $el.attr("href", "#");
+                }
+
+                $el.off("click.lpNav").on("click.lpNav", function (e) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  console.info("LP NAV: " + label + " clicked -> navigating direction", direction);
+                  lpNavigateToItem(direction, label);
+                  return false;
+                });
+              }
+
+              applyPatchDirection($prevEl, "previous", "previous");
+              applyPatchDirection($nextEl, "next", "next");
+            }
+
+            // When TOC is hidden, keep LP content navigation inside the iframe named "content_name".
+            if (tocHiddenSetting === 1) {
+              $menu.find("a").each(function () {
+                var url = resolveUrl(this);
+                if (!url) return;
+
+                // If it's LP content navigation, ensure it targets the content iframe.
+                var isLpContent =
+                  url.indexOf("lp_controller.php") !== -1 &&
+                  url.indexOf("action=content") !== -1;
+
+                if (!isLpContent) return;
+
+                var $a = $(this);
+                var target = ($a.attr("target") || "").toLowerCase();
+
+                if (!target || target === "_self" || target === "_top") {
+                  $a.attr("target", "content_name");
+                }
+              });
+            }
+
+            // Keep original hook (guarded)
+            try {
+              if (typeof checkCurrentItemPosition === "function") {
+                checkCurrentItemPosition({{ lp_current_item_id_num }});
+              } else {
+                console.warn("LP: checkCurrentItemPosition() is not available.");
+              }
+            } catch (err) {
+              console.warn("LP: checkCurrentItemPosition() failed:", err);
+            }
 
               {% if disable_js_in_lp_view == 0 %}
-            $(function() {
-              var arr = ["link", "sco"]
-              if ($.inArray(olms.lms_item_type, arr) === -1) {
-                  {{ frame_ready }}
+            try {
+              var allowedTypes = ["link", "sco"];
+              if (window.olms && typeof olms.lms_item_type !== "undefined") {
+                if ($.inArray(olms.lms_item_type, allowedTypes) === -1) {
+                    {{ frame_ready }}
+                }
+              } else {
+                console.warn("LP: olms is not ready; skipping frame_ready hook.");
               }
-            })
+            } catch (err) {
+              console.warn("LP: frame_ready hook failed:", err);
+            }
               {% endif %}
-          })
+
+            function patchNavArrowsWhenTocHiddenSafe() {
+              if (tocHiddenSetting !== 1) return;
+
+              try {
+                patchNavArrowsWhenTocHidden();
+              } catch (e) {
+                console.warn("LP NAV: patchNavArrowsWhenTocHidden() failed:", e);
+              }
+            }
+
+            // Bind primary next/prev always (safe for Chamilo LP + SCORM)
+            bindPrimaryNavButtons();
+            setTimeout(bindPrimaryNavButtons, 200);
+            setTimeout(bindPrimaryNavButtons, 600);
+            setTimeout(cleanupLtiEmbedMenu, 200);
+            setTimeout(cleanupLtiEmbedMenu, 600);
+            if (tocHiddenSetting === 1) {
+              // Run immediately + retries (menu markup sometimes arrives late)
+              patchNavArrowsWhenTocHiddenSafe();
+              setTimeout(patchNavArrowsWhenTocHiddenSafe, 200);
+              setTimeout(patchNavArrowsWhenTocHiddenSafe, 600);
+            }
+
+          });
         </script>
     {% endautoescape %}
-    <script>
-      window.lpCurrentItemId = {{ lp_current_item_id }};
-    </script>
 {% endblock %}

@@ -6,14 +6,6 @@ declare(strict_types=1);
 
 use Chamilo\CoreBundle\Entity\XApiToolLaunch;
 use Chamilo\CoreBundle\Framework\Container;
-use Symfony\Component\HttpFoundation\Request as HttpRequest;
-use Xabbuh\XApi\Common\Exception\NotFoundException;
-use Xabbuh\XApi\Common\Exception\XApiException;
-use Xabbuh\XApi\Model\Activity;
-use Xabbuh\XApi\Model\Agent;
-use Xabbuh\XApi\Model\InverseFunctionalIdentifier;
-use Xabbuh\XApi\Model\IRI;
-use Xabbuh\XApi\Model\State;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
@@ -22,12 +14,15 @@ $request = Container::getRequest();
 $course = api_get_course_entity();
 $session = api_get_session_entity();
 
-if (!$request->isXmlHttpRequest()
+if (
+    !$request->isXmlHttpRequest()
     || !api_is_allowed_to_edit()
     || !$course
 ) {
-    echo Display::return_message(get_lang('You are not allowed to see this page. Either your connection has expired or you are trying to access a page for which you do not have the sufficient privileges.'), 'error');
-
+    echo Display::return_message(
+        get_lang('You are not allowed to see this page. Either your connection has expired or you are trying to access a page for which you do not have the sufficient privileges.'),
+        'error'
+    );
     exit;
 }
 
@@ -42,8 +37,10 @@ $toolLaunch = $em->find(
 $student = api_get_user_entity($request->request->getInt('student'));
 
 if (!$toolLaunch || !$student) {
-    echo Display::return_message(get_lang('You are not allowed to see this page. Either your connection has expired or you are trying to access a page for which you do not have the sufficient privileges.'), 'error');
-
+    echo Display::return_message(
+        get_lang('You are not allowed to see this page. Either your connection has expired or you are trying to access a page for which you do not have the sufficient privileges.'),
+        'error'
+    );
     exit;
 }
 
@@ -55,85 +52,78 @@ $userIsSubscribedToCourse = CourseManager::is_user_subscribed_in_course(
 );
 
 if (!$userIsSubscribedToCourse) {
-    echo Display::return_message(get_lang('You are not allowed to see this page. Either your connection has expired or you are trying to access a page for which you do not have the sufficient privileges.'), 'error');
-
+    echo Display::return_message(
+        get_lang('You are not allowed to see this page. Either your connection has expired or you are trying to access a page for which you do not have the sufficient privileges.'),
+        'error'
+    );
     exit;
 }
 
-$cidReq = api_get_cidreq();
-
-$xApiStateClient = $plugin->getXApiStateClient(
-    $toolLaunch->getLrsUrl(),
-    $toolLaunch->getLrsAuthUsername(),
-    $toolLaunch->getLrsAuthPassword()
-);
-
-$activity = new Activity(
-    IRI::fromString($toolLaunch->getActivityId())
-);
-
-$actor = new Agent(
-    InverseFunctionalIdentifier::withMbox(
-        IRI::fromString('mailto:'.$student->getEmail())
-    ),
-    $student->getFullName()
-);
+$actor = $plugin->buildTinCanActorPayload($student);
+$stateId = $plugin->getTinCanStateId($toolLaunch->getId());
 
 try {
-    $stateDocument = $xApiStateClient->getDocument(
-        new State(
-            $activity,
-            $actor,
-            $plugin->generateIri('tool-'.$toolLaunch->getId(), 'state')->getValue()
-        )
+    $stateDocument = $plugin->fetchActivityStateDocument(
+        (string) $toolLaunch->getActivityId(),
+        $actor,
+        $stateId,
+        null,
+        $toolLaunch->getLrsUrl(),
+        $toolLaunch->getLrsAuthUsername(),
+        $toolLaunch->getLrsAuthPassword()
     );
-} catch (NotFoundException $notFoundException) {
-    echo Display::return_message(get_lang('No results found'), 'warning');
-
-    exit;
-} catch (XApiException $exception) {
+} catch (Exception $exception) {
     echo Display::return_message($exception->getMessage(), 'error');
+    exit;
+}
 
+if (empty($stateDocument) || !is_array($stateDocument)) {
+    echo Display::return_message(get_lang('No results found'), 'warning');
     exit;
 }
 
 $content = '';
 
-if ($stateDocument) {
-    $i = 1;
+foreach ($stateDocument as $attemptId => $attempt) {
+    if (!is_array($attempt)) {
+        continue;
+    }
 
-    foreach ($stateDocument->getData()->getData() as $attemptId => $attempt) {
-        $firstLaunch = api_convert_and_format_date(
+    $firstLaunch = !empty($attempt[XApiPlugin::STATE_FIRST_LAUNCH])
+        ? api_convert_and_format_date(
             $attempt[XApiPlugin::STATE_FIRST_LAUNCH],
             DATE_TIME_FORMAT_LONG
-        );
-        $lastLaunch = api_convert_and_format_date(
+        )
+        : '-';
+
+    $lastLaunch = !empty($attempt[XApiPlugin::STATE_LAST_LAUNCH])
+        ? api_convert_and_format_date(
             $attempt[XApiPlugin::STATE_LAST_LAUNCH],
             DATE_TIME_FORMAT_LONG
+        )
+        : '-';
+
+    $content .= '<dl class="dl-horizontal">'
+        .'<dt>'.$plugin->get_lang('ActivityFirstLaunch').'</dt>'
+        .'<dd>'.$firstLaunch.'</dd>'
+        .'<dt>'.$plugin->get_lang('ActivityLastLaunch').'</dt>'
+        .'<dd>'.$lastLaunch.'</dd>'
+        .'</dl>'
+        .Display::toolbarButton(
+            get_lang('ShowAllAttempts'),
+            '#',
+            'th-list',
+            'default',
+            [
+                'class' => 'btn_xapi_attempt_detail',
+                'data-attempt' => (string) $attemptId,
+                'data-tool' => $toolLaunch->getId(),
+                'style' => 'margin-bottom: 20px; margin-left: 180px;',
+                'role' => 'button',
+            ]
         );
-
-        $content .= '<dl class="dl-horizontal">'
-            .'<dt>'.$plugin->get_lang('ActivityFirstLaunch').'</dt>'
-            .'<dd>'.$firstLaunch.'</dd>'
-            .'<dt>'.$plugin->get_lang('ActivityLastLaunch').'</dt>'
-            .'<dd>'.$lastLaunch.'</dd>'
-            .'</dl>'
-            .Display::toolbarButton(
-                get_lang('ShowAllAttempts'),
-                '#',
-                'th-list',
-                'default',
-                [
-                    'class' => 'btn_xapi_attempt_detail',
-                    'data-attempt' => $attemptId,
-                    'data-tool' => $toolLaunch->getId(),
-                    'style' => 'margin-bottom: 20px; margin-left: 180px;',
-                    'role' => 'button',
-                ]
-            );
-
-        $i++;
-    }
 }
 
-echo $content;
+echo '' !== $content
+    ? $content
+    : Display::return_message(get_lang('No results found'), 'warning');

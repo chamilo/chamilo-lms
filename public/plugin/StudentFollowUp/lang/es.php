@@ -1,0 +1,36 @@
+<?php
+
+$strings['plugin_title'] = 'Seguimiento del estudiante';
+$strings['plugin_comment'] = 'Permite hacer seguimiento de estudiantes con notas, etiquetas e información privada.';
+$strings['CareDetailView'] = 'Detalle de seguimiento';
+$strings['Private'] = 'Privado';
+$strings['Public'] = 'Público';
+$strings['StudentFollowUpIntro'] = 'Revisa los estudiantes que tienen notas de seguimiento y abre su vista de detalle.';
+$strings['SearchLearners'] = 'Buscar estudiantes';
+$strings['OpenFollowUp'] = 'Abrir seguimiento';
+$strings['NoFollowUpStudents'] = 'No se encontraron estudiantes';
+$strings['NoFollowUpStudentsHelp'] = 'Ningún estudiante coincide con los filtros actuales.';
+$strings['FollowUpTimeline'] = 'Línea de tiempo de seguimiento';
+$strings['NoFollowUpPosts'] = 'No se encontraron notas de seguimiento';
+$strings['NoFollowUpPostsHelp'] = 'Todavía no hay notas de seguimiento visibles para este estudiante.';
+$strings['ExternalSource'] = 'Fuente externa';
+$strings['ViewRelatedNotes'] = 'Ver notas relacionadas';
+$strings['DownloadAttachment'] = 'Descargar adjunto';
+$strings['CreatedOn'] = 'Creado el';
+$strings['CreatedBy'] = 'Creado por';
+$strings['BackToReporting'] = 'Volver a reportes';
+$strings['BackToStudents'] = 'Volver a estudiantes';
+$strings['AddFollowUpNote'] = 'Agregar nota de seguimiento';
+$strings['CreateFollowUpNote'] = 'Crear nota de seguimiento';
+$strings['NewFollowUpNote'] = 'Nueva nota de seguimiento';
+$strings['NewFollowUpNoteHelp'] = 'Escribe una nota de acompañamiento para este estudiante. Las notas privadas solo son visibles para responsables autorizados.';
+$strings['FollowUpNoteTitle'] = 'Título';
+$strings['FollowUpNoteContent'] = 'Contenido';
+$strings['PrivateNote'] = 'Nota privada';
+$strings['Tags'] = 'Etiquetas';
+$strings['TagsHelp'] = 'Separa las etiquetas con comas.';
+$strings['TagsPlaceholder'] = 'riesgo, asistencia, tutoría';
+$strings['SaveFollowUpNote'] = 'Guardar nota de seguimiento';
+$strings['FollowUpNoteCreated'] = 'Nota de seguimiento creada.';
+$strings['TitleAndContentRequired'] = 'El título y el contenido son obligatorios.';
+$strings['BackToTimeline'] = 'Volver a la línea de tiempo';

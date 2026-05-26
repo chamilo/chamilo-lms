@@ -300,8 +300,8 @@ $actions = '';
 if ('learnpath' !== $origin) {
     if (!empty($groupId)) {
         $actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq().'">'
-            .Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Back to')
-            .' '.get_lang('Groups'), '', ICON_SIZE_MEDIUM).'</a>';
+            .Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Back to').' '.get_lang('Groups'), null, ICON_SIZE_MEDIUM)
+            .'</a>';
     } else {
         $actions .= '<span style="float:right;">'.search_link().'</span>';
         $actions .= '<a href="'.$forumUrl.'index.php?'.api_get_cidreq().'">'

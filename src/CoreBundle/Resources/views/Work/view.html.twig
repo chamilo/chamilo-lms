@@ -1,39 +1,164 @@
 {% autoescape false %}
-<div class="page-header">
-    <h2>
-        {{ work.title }}
-    </h2>
-</div>
+    <div class="work-view-page mx-auto w-full max-w-[1600px] px-4 py-6">
+        <div class="space-y-6">
+            <section class="rounded-xl border border-gray-25 bg-white p-6 shadow-sm">
+                <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                    <div class="min-w-0">
+                        <div class="mb-3 flex flex-wrap items-center gap-2 text-sm text-gray-50">
+                            {% if folder_data.title is defined and folder_data.title is not empty %}
+                                <span>{{ folder_data.title|e }}</span>
+                                <span aria-hidden="true">/</span>
+                            {% endif %}
 
-{% if work.description %}
-<h3>
-    {{ 'Description' | get_lang }}
-</h3>
-<p>
-    {{ work.description }}
-</p>
-{% endif %}
+                            {% if student_name is defined and student_name is not empty %}
+                                <span>{{ student_name|e }}</span>
+                            {% endif %}
+                        </div>
 
-{{ form }}
+                        <h1 class="break-words text-2xl font-semibold text-gray-90">
+                            {{ work.title|e }}
+                        </h1>
 
-{% if work.getResourceNode and work.getResourceNode.hasResourceFile %}
-<h3>
-    {{ 'Content' | get_lang }}
-</h3>
-<p>
-    <a class="btn btn--success"
-       href="{{ url('chamilo_core_resource_view', {
-           'id': work.resourceNode.id,
-           'tool' : 'student_publication',
-           'type' : 'student_publications',
-           'mode' : 'download'
-       })
-       }}">
-        {{ 'Download' | trans}}
-    </a>
-</p>
-{% endif %}
+                        <div class="mt-4 flex flex-wrap gap-2">
+                        <span class="inline-flex items-center gap-2 rounded-full bg-gray-15 px-3 py-1 text-sm font-medium text-gray-70">
+                            <span class="mdi mdi-star-outline text-base" aria-hidden="true"></span>
+                            <span>
+                                {{ 'Score'|get_lang }}:
+                                {{ score_label|e }}
+                                {% if maximum_score is defined and maximum_score is not empty %}
+                                    / {{ maximum_score|e }}
+                                {% endif %}
+                            </span>
+                        </span>
 
-{% include '@ChamiloCore/Work/comments.html.twig' %}
+                            <span class="inline-flex items-center gap-2 rounded-full px-3 py-1 text-sm font-medium {% if is_reviewed %}bg-green-100 text-green-700{% else %}bg-yellow-100 text-yellow-700{% endif %}">
+                            <span class="mdi {% if is_reviewed %}mdi-check-circle-outline{% else %}mdi-clock-outline{% endif %} text-base" aria-hidden="true"></span>
+                            <span>
+                                {% if is_reviewed %}
+                                    {{ 'Reviewed'|get_lang }}
+                                {% else %}
+                                    {{ 'Not reviewed'|get_lang }}
+                                {% endif %}
+                            </span>
+                        </span>
 
+                            {% if sent_date_label is defined and sent_date_label is not empty %}
+                                <span class="inline-flex items-center gap-2 rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-700">
+                                <span class="mdi mdi-calendar-clock text-base" aria-hidden="true"></span>
+                                <span>{{ sent_date_label|e }}</span>
+                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap gap-2">
+                        {% if back_url is defined and back_url is not empty %}
+                            <a
+                                    class="inline-flex items-center gap-2 rounded-lg border border-gray-30 bg-white px-4 py-2 text-sm font-semibold text-gray-70 shadow-sm transition hover:bg-gray-15"
+                                    href="{{ back_url|e('html_attr') }}"
+                            >
+                                <span class="mdi mdi-arrow-left text-lg" aria-hidden="true"></span>
+                                <span>{{ 'Back'|get_lang }}</span>
+                            </a>
+                        {% endif %}
+
+                        {% if download_url is defined and download_url is not empty %}
+                            <a
+                                    class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-primary/90"
+                                    href="{{ download_url|e('html_attr') }}"
+                            >
+                                <span class="mdi mdi-download text-lg" aria-hidden="true"></span>
+                                <span>{{ 'Download'|get_lang }}</span>
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% if work.description %}
+                    <div class="mt-6 rounded-lg border border-gray-25 bg-gray-10 p-4">
+                        <h2 class="mb-2 text-base font-semibold text-gray-90">
+                            {{ 'Description'|get_lang }}
+                        </h2>
+
+                        <div class="prose max-w-none text-sm text-gray-70">
+                            {{ work.description }}
+                        </div>
+                    </div>
+                {% endif %}
+            </section>
+
+            {% if form is defined and form is not empty %}
+                <section class="rounded-xl border border-gray-25 bg-white p-6 shadow-sm">
+                    <div class="mb-4 flex flex-col gap-1">
+                        <h2 class="text-lg font-semibold text-gray-90">
+                            {{ 'Correction'|get_lang }}
+                        </h2>
+
+                        <p class="text-sm text-gray-50">
+                            {{ 'Review the submitted assignment, add feedback, and save the correction.'|get_lang }}
+                        </p>
+                    </div>
+
+                    <div class="work-review-form">
+                        {{ form }}
+                    </div>
+                </section>
+            {% endif %}
+
+            <section class="rounded-xl border border-gray-25 bg-white p-6 shadow-sm">
+                <div class="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                    <div>
+                        <h2 class="text-lg font-semibold text-gray-90">
+                            {{ 'Content'|get_lang }}
+                        </h2>
+
+                        <p class="text-sm text-gray-50">
+                            {{ 'Submitted file and correction files.'|get_lang }}
+                        </p>
+                    </div>
+
+                    <div class="flex flex-wrap gap-2">
+                        {% if download_url is defined and download_url is not empty %}
+                            <a
+                                    class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-primary/90"
+                                    href="{{ download_url|e('html_attr') }}"
+                            >
+                                <span class="mdi mdi-download text-lg" aria-hidden="true"></span>
+                                <span>{{ 'Download submission'|get_lang }}</span>
+                            </a>
+                        {% endif %}
+
+                        {% if correction_url is defined and correction_url is not empty %}
+                            <a
+                                    class="inline-flex items-center gap-2 rounded-lg bg-success px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-success/90"
+                                    href="{{ correction_url|e('html_attr') }}"
+                            >
+                                <span class="mdi mdi-check-circle-outline text-lg" aria-hidden="true"></span>
+                                <span>{{ 'Download correction'|get_lang }}</span>
+                            </a>
+                        {% endif %}
+
+                        {% if delete_correction_url is defined and delete_correction_url is not empty %}
+                            <a
+                                    class="inline-flex items-center gap-2 rounded-lg bg-danger px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-danger/90"
+                                    href="{{ delete_correction_url|e('html_attr') }}"
+                                    onclick="return confirm('{{ 'Are you sure?'|get_lang|e('js') }}');"
+                            >
+                                <span class="mdi mdi-delete text-lg" aria-hidden="true"></span>
+                                <span>{{ 'Delete correction'|get_lang }}</span>
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% if download_url is empty and correction_url is empty %}
+                    <div class="rounded-lg border border-gray-25 bg-gray-10 p-4 text-sm text-gray-50">
+                        {{ 'No file available.'|get_lang }}
+                    </div>
+                {% endif %}
+            </section>
+
+            {% include '@ChamiloCore/Work/comments.html.twig' %}
+        </div>
+    </div>
 {% endautoescape %}

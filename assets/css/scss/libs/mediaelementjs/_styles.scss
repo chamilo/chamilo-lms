@@ -2,7 +2,7 @@
   &__container {
     @apply bg-transparent rounded-lg inline-block max-w-full
       md:max-w-none
-      focus:outline-none focus:drop-shadow-lg;
+      focus:outline-none focus:shadow-xl;
 
     video {
       @apply rounded-lg w-full h-full object-contain;

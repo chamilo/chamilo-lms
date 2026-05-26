@@ -1,0 +1,22 @@
+<?php
+$strings['plugin_title'] = 'H5P imports';
+$strings['plugin_comment'] = 'Importējiet H5P saturu un izmantojiet to mācību ceļos. Atveriet README.md uzstādīšanas instrukcijām.';
+$strings['frame'] = 'Rāmis';
+$strings['frame_help'] = 'Rādīt rāmi un pogas zem H5P';
+$strings['embed'] = 'Iegult';
+$strings['embed_help'] = 'Rādīt iegulšanas pogu';
+$strings['copyright'] = 'Autortiesības';
+$strings['copyright_help'] = 'Rādīt autortiesību pogu';
+$strings['icon'] = 'Ikona';
+$strings['icon_help'] = 'Rādīt H5P ikonu';
+$strings['attempts'] = 'Mēģinājumu skaits';
+$strings['upload_h5p'] = 'Augšupielādēt';
+$strings['import_h5p_package'] = 'Augšupielādēt H5P paketi';
+$strings['h5p_package'] = 'H5P pakete';
+$strings['h5p_error_loading'] = 'Kļūda ielādējot H5P paketi';
+$strings['h5p_error_invalid_token'] = 'Nederīgs drošības žetons';
+$strings['h5p_error_missing_core_asset'] = 'Kļūda ielādējot H5P kodola resursus';
+$strings['h5p_save_content_state'] = 'Saglabāt lietotāja rezultātus';
+$strings['h5p_save_content_freq'] = 'Saglabāšanas biežums';
+$strings['h5p_save_freq_help'] = 'Cik bieži saglabāt pašreizējo satura stāvokli sekundēs';
+$strings['start_attempt'] = 'Sākt mēģinājumu';

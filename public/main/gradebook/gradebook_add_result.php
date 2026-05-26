@@ -24,33 +24,68 @@ $add_result_form = new EvalForm(
     null,
     api_get_self().'?selectcat='.$category.'&selecteval='.$selectEval.'&'.api_get_cidreq()
 );
+
+$hasInvalidScores = false;
+$maxScore = (float) $evaluation[0]->get_max();
+
+if ('POST' === $_SERVER['REQUEST_METHOD']) {
+    $postedValues = $add_result_form->exportValues();
+
+    foreach (($postedValues['score'] ?? []) as $userId => $score) {
+        if ($score === '' || null === $score) {
+            continue;
+        }
+
+        if (!is_numeric($score) || (float) $score < 0 || (float) $score > $maxScore) {
+            $hasInvalidScores = true;
+
+            $add_result_form->setElementError(
+                'score['.$userId.']',
+                'Score must be between 0 and '.$maxScore.'.'
+            );
+        }
+    }
+
+    if ($hasInvalidScores) {
+        Display::addFlash(
+            Display::return_message(
+                'There is at least one invalid score. Please correct the highlighted fields.',
+                'warning',
+                false
+            )
+        );
+    }
+}
+
 $table = $add_result_form->toHtml();
-if ($add_result_form->validate()) {
+
+if ($add_result_form->validate() && !$hasInvalidScores) {
     $values = $add_result_form->exportValues();
     $nr_users = $values['nr_users'];
+
     if ('0' == $nr_users) {
         Display::addFlash(
-            Display::return_message(get_lang('There are no learners to add results for'), 'warning', false)
+            Display::return_message(
+                get_lang('There are no learners to add results for'),
+                'warning',
+                false
+            )
         );
         header('Location: gradebook_view_result.php?addresultnostudents=&selecteval='.$selectEval.'&'.api_get_cidreq());
         exit;
     }
 
     $scores = $values['score'];
-    $sumResult = 0;
-    $bestResult = 0;
-    $studentScoreList = [];
+
     foreach ($scores as $userId => $row) {
         $res = new Result();
         $res->set_evaluation_id($values['evaluation_id']);
         $res->set_user_id($userId);
-        //if no scores are given, don't set the score
+
         if (!empty($row) || '0' == $row) {
             $res->set_score($row);
         }
 
-        //To prevent error editing when going back in the browser,
-        //check if exist a record for this user and evaluation_id
         if ($res->exists()) {
             $res->addResultLog($userId, $values['evaluation_id']);
             $res->save();
@@ -62,7 +97,6 @@ if ($add_result_form->validate()) {
     }
 
     Evaluation::generateStats($values['evaluation_id']);
-
     Display::addFlash(Display::return_message(get_lang('Result added'), 'confirmation', false));
     header('Location: gradebook_view_result.php?addresult=&selecteval='.$selectEval.'&'.api_get_cidreq());
     exit;

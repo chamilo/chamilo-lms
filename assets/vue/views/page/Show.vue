@@ -15,34 +15,34 @@
       <div class="w-1/3">
         <dl class="grid grid-cols-2">
           <dt
-            v-t="'Author'"
+            v-text="t('Author')"
             class="font-semibold"
           />
           <dl v-text="item.creator.username" />
 
-          <dt v-t="'Language'" class="font-semibold" />
+          <dt v-text="t('Language')" class="font-semibold" />
           <dl>{{ languageLabel }}</dl>
 
           <dt
-            v-t="'Enabled'"
+            v-text="t('Enabled')"
             class="font-semibold"
           />
-          <dl v-t="item.enabled ? 'Yes' : 'No'" />
+          <dl v-text="t(item.enabled ? 'Yes' : 'No')" />
 
           <dt
-            v-t="'Category'"
+            v-text="t('Category')"
             class="font-semibold"
           />
           <dl v-text="item.category.title" />
 
           <dt
-            v-t="'Created at'"
+            v-text="t('Created at')"
             class="font-semibold"
           />
           <dl v-text="item.createdAt ? relativeDatetime(item.createdAt) : ''" />
 
           <dt
-            v-t="'Updated at'"
+            v-text="t('Updated at')"
             class="font-semibold"
           />
           <dl v-text="item.updatedAt ? relativeDatetime(item.updatedAt) : ''" />
@@ -56,8 +56,9 @@
 
 <script setup>
 import Loading from "../../components/Loading.vue"
+import { useI18n } from "vue-i18n"
 import { useFormatDate } from "../../composables/formatDate"
-import { useConfirm } from "primevue/useconfirm"
+import { useConfirmation } from "../../composables/useConfirmation"
 import { useRoute, useRouter } from "vue-router"
 import { inject, ref, watch } from "vue"
 import { useSecurityStore } from "../../store/securityStore"
@@ -66,6 +67,7 @@ import pageService from "../../services/page"
 import { useNotification } from "../../composables/notification"
 import { useLocale } from "../../composables/locale"
 
+const { t } = useI18n()
 const { relativeDatetime } = useFormatDate()
 
 const securityStore = useSecurityStore()
@@ -73,7 +75,7 @@ const { isAdmin } = storeToRefs(securityStore)
 const route = useRoute()
 const router = useRouter()
 
-const confirm = useConfirm()
+const { requireConfirmation } = useConfirmation()
 const notification = useNotification()
 
 const isLoading = ref(true)
@@ -110,8 +112,7 @@ watch(item, () => {
     {
       label: "Delete page",
       command() {
-        confirm.require({
-          header: "Confirmation",
+        requireConfirmation({
           message: "Are you sure you want to delete it?",
           async accept() {
             await pageService.del(item.value)

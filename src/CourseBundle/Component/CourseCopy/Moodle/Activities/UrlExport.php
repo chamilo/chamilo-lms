@@ -61,8 +61,6 @@ class UrlExport extends ActivityExport
             }
         }
 
-        error_log('URL_EXPORT activityId='.$activityId.' catId='.$catId.' catTitle='.$catTitle);
-
         if (null === $url) {
             return [
                 'id' => $activityId,

@@ -46,6 +46,168 @@ if (!$isAllowToEdit) {
 
 $router = Container::getRouter();
 $translator = Container::$container->get('translator');
+$imsLtiPluginEntity = Container::getPluginRepository()->findOneByTitle('ImsLti');
+$currentAccessUrl = Container::getAccessUrlUtil()->getCurrent();
+$imsLtiPluginConfiguration = $imsLtiPluginEntity?->getConfigurationsByAccessUrl($currentAccessUrl);
+
+$isImsLtiEnabled = $imsLtiPluginEntity
+    && $imsLtiPluginEntity->isInstalled()
+    && $imsLtiPluginConfiguration
+    && $imsLtiPluginConfiguration->isActive();
+
+$courseHomeNotifyPluginEntity = Container::getPluginRepository()->findOneByTitle('CourseHomeNotify');
+$courseHomeNotifyPluginConfiguration = $courseHomeNotifyPluginEntity?->getConfigurationsByAccessUrl($currentAccessUrl);
+
+$isCourseHomeNotifyEnabled = $courseHomeNotifyPluginEntity
+    && $courseHomeNotifyPluginEntity->isInstalled()
+    && $courseHomeNotifyPluginConfiguration
+    && $courseHomeNotifyPluginConfiguration->isActive();
+
+$courseHomeNotifyPlugin = null;
+$courseHomeNotifyPluginPath = api_get_path(SYS_PLUGIN_PATH).'CourseHomeNotify/CourseHomeNotifyPlugin.php';
+
+if (is_file($courseHomeNotifyPluginPath)) {
+    require_once $courseHomeNotifyPluginPath;
+
+    if (class_exists('CourseHomeNotifyPlugin')) {
+        $courseHomeNotifyPlugin = CourseHomeNotifyPlugin::create();
+    }
+}
+
+$courseLegalPluginEntity = Container::getPluginRepository()->findOneByTitle('CourseLegal');
+$courseLegalPluginConfiguration = $courseLegalPluginEntity?->getConfigurationsByAccessUrl($currentAccessUrl);
+
+$isCourseLegalEnabled = $courseLegalPluginEntity
+    && $courseLegalPluginEntity->isInstalled()
+    && $courseLegalPluginConfiguration
+    && $courseLegalPluginConfiguration->isActive();
+
+$courseLegalPlugin = null;
+$courseLegalPluginPath = api_get_path(SYS_PLUGIN_PATH).'CourseLegal/CourseLegalPlugin.php';
+
+if (is_file($courseLegalPluginPath)) {
+    require_once $courseLegalPluginPath;
+
+    if (class_exists('CourseLegalPlugin')) {
+        $courseLegalPlugin = CourseLegalPlugin::create();
+    }
+}
+
+$courseBlockSettings = [
+    'course_block_pre_footer',
+    'course_block_footer_left',
+    'course_block_footer_center',
+    'course_block_footer_right',
+];
+
+$courseBlockPluginEntity = Container::getPluginRepository()->findOneByTitle('CourseBlock');
+$courseBlockPluginConfiguration = $courseBlockPluginEntity?->getConfigurationsByAccessUrl($currentAccessUrl);
+
+$isCourseBlockEnabled = $courseBlockPluginEntity
+    && $courseBlockPluginEntity->isInstalled()
+    && $courseBlockPluginConfiguration
+    && $courseBlockPluginConfiguration->isActive();
+
+$courseBlockPlugin = null;
+$courseBlockPluginPath = api_get_path(SYS_PLUGIN_PATH).'CourseBlock/CourseBlockPlugin.php';
+
+if (is_file($courseBlockPluginPath)) {
+    require_once $courseBlockPluginPath;
+
+    if (class_exists('CourseBlockPlugin')) {
+        $courseBlockPlugin = CourseBlockPlugin::create();
+    }
+}
+
+$courseBlockAppPlugin = null;
+
+if ($isCourseBlockEnabled) {
+    $courseBlockAppPlugin = AppPlugin::getInstance();
+}
+
+$customCertificateSettings = [
+    'customcertificate_course_enable',
+    'use_certificate_default',
+];
+
+$customCertificatePluginEntity = Container::getPluginRepository()->findOneByTitle('CustomCertificate');
+$customCertificatePluginConfiguration = $customCertificatePluginEntity?->getConfigurationsByAccessUrl($currentAccessUrl);
+
+$isCustomCertificateEnabled = $customCertificatePluginEntity
+    && $customCertificatePluginEntity->isInstalled()
+    && $customCertificatePluginConfiguration
+    && $customCertificatePluginConfiguration->isActive();
+
+$customCertificatePlugin = null;
+$customCertificatePluginPath = api_get_path(SYS_PLUGIN_PATH).'CustomCertificate/src/CustomCertificatePlugin.php';
+
+if ($isCustomCertificateEnabled && is_file($customCertificatePluginPath)) {
+    require_once $customCertificatePluginPath;
+
+    if (class_exists('CustomCertificatePlugin')) {
+        $customCertificatePlugin = CustomCertificatePlugin::create();
+    }
+}
+
+$customCertificateAppPlugin = null;
+
+if ($isCustomCertificateEnabled) {
+    $customCertificateAppPlugin = AppPlugin::getInstance();
+}
+
+if (!function_exists('customcertificate_save_course_setting')) {
+    function customcertificate_save_course_setting(string $variable, int $value, int $courseId): void
+    {
+        $courseId = (int) $courseId;
+
+        if ($courseId <= 0 || !\in_array($variable, ['customcertificate_course_enable', 'use_certificate_default'], true)) {
+            return;
+        }
+
+        $courseSettingTable = Database::get_course_table(TABLE_COURSE_SETTING);
+        $escapedVariable = Database::escape_string($variable);
+        $escapedValue = Database::escape_string((string) $value);
+        $escapedTitle = Database::escape_string($variable);
+
+        $sql = "SELECT variable
+                FROM $courseSettingTable
+                WHERE c_id = $courseId AND variable = '$escapedVariable'
+                LIMIT 1";
+        $result = Database::query($sql);
+
+        if (Database::num_rows($result) > 0) {
+            $sql = "UPDATE $courseSettingTable
+                    SET value = '$escapedValue'
+                    WHERE c_id = $courseId AND variable = '$escapedVariable'";
+            Database::query($sql);
+
+            return;
+        }
+
+        $sql = "INSERT INTO $courseSettingTable (c_id, variable, value, title)
+                VALUES ($courseId, '$escapedVariable', '$escapedValue', '$escapedTitle')";
+        Database::query($sql);
+    }
+}
+
+if (!function_exists('customcertificate_save_course_settings_mode')) {
+    function customcertificate_save_course_settings_mode(string $mode, int $courseId): void
+    {
+        $courseValue = 0;
+        $defaultValue = 0;
+
+        if ('course' === $mode) {
+            $courseValue = 1;
+        }
+
+        if ('default' === $mode) {
+            $defaultValue = 1;
+        }
+
+        customcertificate_save_course_setting('customcertificate_course_enable', $courseValue, $courseId);
+        customcertificate_save_course_setting('use_certificate_default', $defaultValue, $courseId);
+    }
+}
 
 $show_delete_watermark_text_message = false;
 if ('true' === api_get_setting('pdf_export_watermark_by_course')) {
@@ -64,9 +226,10 @@ $enableAiHelpers = 'true' === api_get_setting('ai_helpers.enable_ai_helpers');
 $courseVisibilityAdminsOnlySetting = api_get_setting('workflows.course_visibility_change_only_admin');
 $courseVisibilityAdminsOnly = \in_array($courseVisibilityAdminsOnlySetting, ['true', '1'], true);
 
-// Teachers/course admins won't be able to change the visibility when this is enabled.
-// Platform admins can still change it (and also from admin courses list as mentioned in the issue).
+// Teachers/course admins won't be able to change the visibility or subscription when this is enabled.
+// Platform admins can still change both options.
 $canChangeCourseVisibility = !$courseVisibilityAdminsOnly || api_is_platform_admin();
+$canChangeCourseSubscription = $canChangeCourseVisibility;
 
 // Build the form
 $form = new FormValidator(
@@ -75,24 +238,16 @@ $form = new FormValidator(
     api_get_self().'?'.api_get_cidreq()
 );
 
-$image = '';
-$illustrationUrl = $illustrationRepo->getIllustrationUrl($courseEntity, 'course_picture_medium');
-if (!empty($illustrationUrl)) {
-    $image = '<div class="row">
-                <label class="col-md-2 control-label">'.get_lang('Image').'</label>
-                <div class="col-md-8">
-                    <img class="img-thumbnail" src="'.$illustrationUrl.'" />
-                </div>
-            </div>';
-}
-
-$form->addElement('html', '<div id="course-main-settings-legacy-start"></div>');
-
 // --- Main course settings fields (legacy block) ---
+$form->addStartPanel(
+    'course_main',
+    get_lang('Course settings'),
+    true,
+    ActionIcon::INFORMATION
+);
 $form->addText('title', get_lang('Title'), true);
 $form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
-
 $form->addSelectLanguage(
     'course_language',
     [get_lang('Language'), get_lang('This language will be valid for every visitor of your courses portal')]
@@ -102,8 +257,7 @@ $group = [
     $form->createElement('radio', 'show_course_in_user_language', null, get_lang('Yes'), 1),
     $form->createElement('radio', 'show_course_in_user_language', null, get_lang('No'), 2),
 ];
-
-$form->addGroup($group, '', [get_lang('Show course in user\'s language')]);
+$form->addGroup($group, null, [get_lang('Show course in user\'s language')]);
 
 $form->addText('department_name', get_lang('Department'), false);
 $form->applyFilter('department_name', 'html_filter');
@@ -111,6 +265,29 @@ $form->applyFilter('department_name', 'trim');
 
 $form->addText('department_url', get_lang('Department URL'), false);
 $form->applyFilter('department_url', 'html_filter');
+
+// Room.
+$em = Database::getManager();
+$roomCount = $em->getRepository(\Chamilo\CoreBundle\Entity\Room::class)->count([]);
+if ($roomCount > 0) {
+    $roomOptions = [];
+    $courseEntity = api_get_course_entity();
+    if ($courseEntity && $courseEntity->getRoom()) {
+        $currentRoom = $courseEntity->getRoom();
+        $branch = $currentRoom->getBranch();
+        $roomLabel = $branch ? $branch->getTitle().' - '.$currentRoom->getTitle() : $currentRoom->getTitle();
+        $roomOptions[$currentRoom->getId()] = $roomLabel;
+    }
+    $form->addSelectAjax(
+        'room_id',
+        get_lang('Default room'),
+        $roomOptions,
+        [
+            'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_room',
+            'placeholder' => get_lang('Select'),
+        ]
+    );
+}
 
 // Extra fields
 $extra_field = new ExtraField('course');
@@ -133,53 +310,118 @@ $(function() {
 });
 </script>';
 
-// Picture preview HTML
-$image = '';
+// Course picture preview and upload
+$hasCustomCoursePicture = $illustrationRepo->hasIllustration($courseEntity);
 $illustrationUrl = $illustrationRepo->getIllustrationUrl($courseEntity, 'course_picture_medium');
+$allowed_picture_types = api_get_supported_image_extensions(false);
+$acceptedPictureTypes = implode(
+    ',',
+    array_map(
+        static fn (string $extension): string => '.'.$extension,
+        $allowed_picture_types
+    )
+);
 
-if (!empty($illustrationUrl)) {
-    $image = '
-        <div class="row course-picture-preview-row">
-            <div class="col-md-2"></div>
-            <div class="col-md-8">
-                <div class="course-picture-preview ml-4">
-                    <span class="help-block small">'.get_lang('Current picture').'</span>
-                    <img class="img-thumbnail" src="'.$illustrationUrl.'" alt="'.get_lang('Current picture').'" />
-                </div>
-            </div>
-        </div>';
+$pictureStatusLabel = $hasCustomCoursePicture ? get_lang('Current picture') : get_lang('Default');
+$pictureStatusClasses = $hasCustomCoursePicture
+    ? 'bg-success text-white'
+    : 'bg-gray-20 text-gray-90';
+
+$deleteCoursePictureButton = '';
+if ($hasCustomCoursePicture) {
+    $deleteCoursePictureButton = '
+        <button
+            type="submit"
+            name="delete_picture"
+            value="1"
+            class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-danger bg-white text-danger transition hover:bg-support-6"
+            title="'.get_lang('Delete picture').'"
+            aria-label="'.get_lang('Delete picture').'"
+        >
+            '.Display::getMdiIcon(
+            ActionIcon::DELETE,
+            'ch-tool-icon text-danger',
+            null,
+            ICON_SIZE_SMALL,
+            get_lang('Delete picture')
+        ).'
+        </button>';
 }
 
-// Picture file input
+$form->addHtml('
+    <div id="course-picture-card" class="my-6 rounded-2xl border border-gray-25 bg-white p-4 shadow-sm">
+        <div class="grid grid-cols-1 gap-4 lg:grid-cols-4 lg:items-start">
+            <div class="rounded-2xl border border-gray-25 bg-support-2 p-4 lg:col-span-3">
+                <div class="mb-3 flex items-center gap-2">
+                    <span class="mdi mdi-image-outline ch-tool-icon"></span>
+                    <h4 class="m-0 text-body-1 font-semibold text-gray-90">'.get_lang('Course picture').'</h4>
+                </div>
+
+                <div
+                    id="course-picture-input-target"
+                    class="min-h-24 rounded-2xl border border-dashed border-support-3 bg-white p-4"
+                >
+                    <p class="m-0 mb-2 text-body-2 font-semibold text-gray-90">'.get_lang('Add image').'</p>
+                    <p class="m-0 mb-3 text-caption text-gray-50">
+                        '.get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(', ', $allowed_picture_types).')
+                    </p>
+');
+
+// Keep the file element registered directly in QuickForm.
+// The surrounding HTML keeps the input in the visual card without moving it with JavaScript.
 $form->addFile(
     'picture',
-    get_lang('Course picture'),
+    '',
     [
         'id' => 'picture',
-        'class' => 'picture-form',
+        'class' => 'picture-form block w-full cursor-pointer rounded-xl border border-gray-25 bg-white text-body-2 text-gray-90 file:mr-4 file:border-0 file:bg-primary file:px-4 file:py-2 file:text-body-2 file:font-semibold file:text-white hover:file:bg-primary-gradient',
         'crop_image' => true,
+        'accept' => $acceptedPictureTypes,
     ]
 );
 
-$allowed_picture_types = api_get_supported_image_extensions(false);
+$form->addHtml('
+                </div>
 
-// Preview below the file input
-$form->addHtml($image);
+                <p
+                    id="course-picture-selected-file"
+                    class="mt-3 hidden text-body-2 font-semibold text-primary"
+                ></p>
+            </div>
+
+            <div class="rounded-2xl border border-gray-25 bg-support-2 p-3 lg:col-span-1">
+                <div class="mb-3 flex items-center justify-between gap-2">
+                    <span class="text-body-2 font-semibold text-gray-90">'.get_lang('Preview').'</span>
+                    <span class="flex items-center gap-2">
+                        <span
+                            id="course-picture-status"
+                            class="inline-flex items-center rounded-full px-3 py-1 text-caption font-semibold '.$pictureStatusClasses.'"
+                        >
+                            '.$pictureStatusLabel.'
+                        </span>
+                        '.$deleteCoursePictureButton.'
+                    </span>
+                </div>
+
+                <div class="aspect-video overflow-hidden rounded-xl border border-gray-25 bg-white">
+                    <img
+                        id="course-picture-preview-image"
+                        class="block h-full w-full object-cover"
+                        src="'.htmlspecialchars($illustrationUrl, ENT_QUOTES | ENT_SUBSTITUTE).'"
+                        alt="'.get_lang('Course picture').'"
+                    />
+                </div>
+            </div>
+        </div>
+    </div>
+');
+
 $form->addRule(
     'picture',
     get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(',', $allowed_picture_types).')',
     'filetype',
     $allowed_picture_types
 );
-
-// Delete checkbox
-$form->addElement(
-    'checkbox',
-    'delete_picture',
-    null,
-    get_lang('Delete picture')
-);
-
 
 if ('true' === api_get_setting('pdf_export_watermark_by_course')) {
     $url = PDF::get_watermark($course_code);
@@ -216,10 +458,10 @@ if ('true' === api_get_setting('allow_course_theme')) {
         ['id' => 'course_theme_id'],
         []
     );
-    $form->addGroup($group, '', [get_lang('Style sheets')]);
+    $form->addGroup($group, null, [get_lang('Style sheets')]);
 }
 
-$form->addElement('label', get_lang('Space available'), format_file_size(DocumentManager::get_course_quota()));
+$form->addElement('label', get_lang('Space Available'), format_file_size(DocumentManager::get_course_quota()));
 
 $aiOptions = [
     'learning_path_generator' => 'Enable learning path generator',
@@ -237,39 +479,24 @@ $aiOptions = [
 // This global "Save settings" button belongs to the main course settings block
 $form->addButtonSave(get_lang('Save settings'), 'submit_save');
 
-// Marker: end of legacy main settings block
-$form->addElement('html', '<div id="course-main-settings-legacy-end"></div>');
-$mainPanelGroup = [
-    '' => [
-        $form->createElement(
-            'html',
-            '<!-- Main course settings will be moved into this panel via JavaScript -->'
-        ),
-    ],
-];
-
-$form->addPanelOption(
-    'course_main',
-    get_lang('Course settings'),
-    $mainPanelGroup,
-    ActionIcon::INFORMATION,
-    true
-);
-
+$form->addEndPanel();
 
 // --- End of legacy block, from here panels start as usual ---
 
-$url = api_get_path(WEB_CODE_PATH)."auth/inscription.php?c=$course_code&e=1";
-$url = Display::url($url, $url);
-$label = $form->addLabel(
-    get_lang('Direct link'),
-    sprintf(
-        get_lang(
-            'If your course is public or open, you can use the direct link below to send an invitation to new users, so after registration, they will be sent directly to the course. Also, you can add the e=1 parameter to the URL, replacing "1" by an exercise ID to send them directly to a specific exam. The exercise ID can be discovered in the URL when clicking on an exercise to open it.<br/>%s'
-        ),
-        $url
+$directUrl = api_get_path(WEB_CODE_PATH)."auth/registration.php?c=$courseId&e=1";
+$directUrlLink = Display::url($directUrl, $directUrl);
+
+$directLinkHtml = sprintf(
+    get_lang(
+        'If your course is public or open, you can use the direct link below to send an invitation to new users, so after registration, they will be sent directly to the course. Also, you can add the e=1 parameter to the URL, replacing "1" by an exercise ID to send them directly to a specific exam. The exercise ID can be discovered in the URL when clicking on an exercise to open it.<br/>%s'
     ),
-    true
+    $directUrlLink
+);
+$directLinkElement = $form->createElement(
+    'static',
+    'direct_link',
+    get_lang('Direct link'),
+    '<div class="course-settings-direct-link">'.$directLinkHtml.'</div>'
 );
 
 $groupAccess = [];
@@ -316,11 +543,9 @@ if (api_is_platform_admin()) {
 $courseVisibilityHelp = null;
 if (!$canChangeCourseVisibility) {
     foreach ($groupAccess as $radio) {
-        if (\is_object($radio) && method_exists($radio, 'updateAttributes')) {
-            $radio->updateAttributes([
-                'disabled' => 'disabled',
-            ]);
-        }
+        $radio->updateAttributes([
+            'disabled' => 'disabled',
+        ]);
     }
 
     $courseVisibilityHelp = $form->createElement(
@@ -340,6 +565,14 @@ $group2[] = $form->createElement(
     get_lang('This function is only available to trainers'),
     0
 );
+
+if (!$canChangeCourseSubscription) {
+    foreach ($group2 as $radio) {
+        $radio->updateAttributes([
+            'disabled' => 'disabled',
+        ]);
+    }
+}
 
 $myButton = $form->addButtonSave(get_lang('Save settings'), 'submit_save', true);
 
@@ -381,7 +614,7 @@ $courseAccessAnchor = $form->createElement('html', '<div id="course-access-panel
 $elements = [
     '' => array_values(array_filter([$courseAccessAnchor, $courseVisibilityHelp])),
     get_lang('Course access') => $groupAccess,
-    $label,
+    $directLinkElement,
     get_lang('Subscription') => $group2,
     get_lang('Unsubscribe') => $group3,
     $text,
@@ -544,16 +777,26 @@ $globalGroup[get_lang('E-mail users on dropbox file reception')] = $group;
 
 // Exercises notifications
 $emailAlerts = ExerciseLib::getNotificationSettings();
+$validQuizNotificationValues = array_map('strval', array_keys($emailAlerts));
+
+$buildQuizNotificationFieldName = static function (string $itemId): string {
+    return 'email_alert_manager_on_new_quiz_'.$itemId;
+};
+
 $group = [];
+
 foreach ($emailAlerts as $itemId => $label) {
+    $itemId = (string) $itemId;
+
     $group[] = $form->createElement(
         'checkbox',
-        'email_alert_manager_on_new_quiz[]',
+        $buildQuizNotificationFieldName($itemId),
         null,
         $label,
-        ['value' => $itemId]
+        ['value' => 1]
     );
 }
+
 $globalGroup[get_lang('Tests')] = $group;
 
 $group = [];
@@ -887,6 +1130,86 @@ if ('true' === api_get_setting('certificate.allow_public_certificates')) {
     );
 }
 
+if ($isCustomCertificateEnabled && null !== $customCertificatePlugin) {
+    $customCertificateUrl = api_get_path(WEB_PLUGIN_PATH).'CustomCertificate/start.php?'.api_get_cidreq();
+    $customCertificateCourseIsEnabled = 1 == api_get_course_setting('customcertificate_course_enable');
+    $customCertificateDefaultIsEnabled = 1 == api_get_course_setting('use_certificate_default');
+    $customCertificateCanOpenEditor = $customCertificateCourseIsEnabled || $customCertificateDefaultIsEnabled;
+
+    $customCertificateMode = 'disabled';
+    if ($customCertificateCourseIsEnabled) {
+        $customCertificateMode = 'course';
+    }
+    if ($customCertificateDefaultIsEnabled) {
+        $customCertificateMode = 'default';
+    }
+
+    $values['customcertificate_mode'] = $customCertificateMode;
+
+    $customCertificateModeGroup = [
+        $form->createElement(
+            'radio',
+            'customcertificate_mode',
+            null,
+            $customCertificatePlugin->get_lang('Disabled'),
+            'disabled'
+        ),
+        $form->createElement(
+            'radio',
+            'customcertificate_mode',
+            null,
+            $customCertificatePlugin->get_lang('UseCourseCustomCertificate'),
+            'course'
+        ),
+        $form->createElement(
+            'radio',
+            'customcertificate_mode',
+            null,
+            $customCertificatePlugin->get_lang('UseDefaultCustomCertificate'),
+            'default'
+        ),
+    ];
+
+    if ($customCertificateCanOpenEditor) {
+        $customCertificateAction = '<a class="btn btn--primary text-white" style="color: #fff;" href="'.$customCertificateUrl.'">'
+            .'<span class="mdi mdi-certificate-outline text-white" style="color: #fff;" aria-hidden="true"></span> '
+            .'<span class="text-white" style="color: #fff;">'.$customCertificatePlugin->get_lang('CertificateSetting').'</span>'
+            .'</a>';
+    } else {
+        $customCertificateAction = '<span class="btn btn--plain disabled" aria-disabled="true">'
+            .'<span class="mdi mdi-certificate-outline" aria-hidden="true"></span> '
+            .$customCertificatePlugin->get_lang('CertificateSetting')
+            .'</span>'
+            .'<p class="text-muted mt-2">'
+            .$customCertificatePlugin->get_lang('SelectOneOptionBeforeOpeningEditor')
+            .'</p>';
+    }
+
+    $customCertificateInfo = $form->createElement(
+        'html',
+        '<div class="mb-4">'
+        .'<p class="mb-3">'
+        .$customCertificatePlugin->get_lang('ChooseCustomCertificateModeHelp')
+        .'</p>'
+        .$customCertificateAction
+        .'</div>'
+    );
+
+    $customCertificateSaveButton = $form->addButtonSave(get_lang('Save settings'), 'submit_save', true);
+
+    $form->addPanelOption(
+        'custom_certificate',
+        $customCertificatePlugin->get_title(),
+        [
+            $customCertificateInfo,
+            $customCertificatePlugin->get_lang('CertificateMode') => $customCertificateModeGroup,
+            '' => $customCertificateSaveButton,
+        ],
+        ObjectIcon::CERTIFICATE,
+        false
+    );
+}
+
 // Forum settings
 $myButton = $form->addButtonSave(get_lang('Save settings'), 'submit_save', true);
 
@@ -944,6 +1267,27 @@ $form->addPanelOption(
     get_lang('Assignments'),
     $globalGroup,
     ToolIcon::ASSIGNMENT,
+    false
+);
+
+// Attendance
+$group = [
+    $form->createElement('radio', 'student_validate_own_attendance', null, get_lang('Yes'), 1),
+    $form->createElement('radio', 'student_validate_own_attendance', null, get_lang('No'), 0),
+];
+
+$myButton = $form->addButtonSave(get_lang('Save settings'), 'submit_save', true);
+
+$globalGroup = [
+    get_lang('Enable student to validate own attendance') => $group,
+    '' => $myButton,
+];
+
+$form->addPanelOption(
+    'attendance',
+    get_lang('Attendance'),
+    $globalGroup,
+    ToolIcon::ATTENDANCE,
     false
 );
 
@@ -1052,24 +1396,278 @@ if ($enableAiHelpers) {
     }
 }
 
-// External tools (LTI) info
-$button = Display::toolbarButton(
-    get_lang('External tools (LTI)'),
-    $router->generate('chamilo_lti_configure', ['cid' => $courseId]).'?'.api_get_cidreq(),
-    'cog',
-    'primary'
-);
-$html = [
-    $form->createElement(
+if ($isImsLtiEnabled) {
+    $button = Display::toolbarButton(
+        get_lang('External tools (LTI)'),
+        $router->generate('chamilo_lti_configure', ['cid' => $courseId]).'?'.api_get_cidreq(),
+        'cog',
+        'primary'
+    );
+
+    $ltiInfo = $form->createElement(
         'html',
-        '<p>'.get_lang('LTI tools allow your students to access external tools directly from your course. They can be enabled in your course if configured at the platform level.').'</p>'.$button
-    ),
+        '<div class="mb-4">'
+        .'<p class="mb-3">'
+        .get_lang('LTI tools allow your students to access external tools directly from your course. They can be enabled in your course if configured at the platform level.')
+        .'</p>'
+        .$button
+        .'</div>'
+    );
+
+    $form->addPanelOption(
+        'external_tools_lti',
+        get_lang('External tools (LTI)'),
+        [$ltiInfo],
+        ToolIcon::COURSE,
+        false
+    );
+}
+
+if ($isCourseBlockEnabled) {
+    $courseBlockTitle = $courseBlockPlugin
+        ? $courseBlockPlugin->get_title()
+        : get_lang('Course block');
+
+    $courseBlockEditorConfig = [
+        'ToolbarSet' => 'Documents',
+        'Width' => '100%',
+        'Height' => '220',
+    ];
+
+    $form->addStartPanel(
+        'course_block',
+        $courseBlockTitle,
+        true,
+        ToolIcon::PLUGIN
+    );
+
+    $form->addHtml(
+        '<div class="mb-4">'
+        .'<p class="mb-3">'
+        .get_lang('Add custom content blocks to course footer regions.')
+        .'</p>'
+        .'</div>'
+    );
+
+    $form->addHtmlEditor(
+        'course_block_pre_footer',
+        $courseBlockPlugin ? $courseBlockPlugin->get_lang('course_block_pre_footer') : get_lang('Before footer'),
+        false,
+        false,
+        $courseBlockEditorConfig
+    );
+    $form->addHtmlEditor(
+        'course_block_footer_left',
+        $courseBlockPlugin ? $courseBlockPlugin->get_lang('course_block_footer_left') : get_lang('Footer left'),
+        false,
+        false,
+        $courseBlockEditorConfig
+    );
+    $form->addHtmlEditor(
+        'course_block_footer_center',
+        $courseBlockPlugin ? $courseBlockPlugin->get_lang('course_block_footer_center') : get_lang('Footer center'),
+        false,
+        false,
+        $courseBlockEditorConfig
+    );
+    $form->addHtmlEditor(
+        'course_block_footer_right',
+        $courseBlockPlugin ? $courseBlockPlugin->get_lang('course_block_footer_right') : get_lang('Footer right'),
+        false,
+        false,
+        $courseBlockEditorConfig
+    );
+
+    $form->addButtonSave(get_lang('Save settings'), 'submit_save');
+
+    $form->addEndPanel();
+}
+
+if ($isCourseHomeNotifyEnabled) {
+    $courseHomeNotifyTitle = $courseHomeNotifyPlugin
+        ? $courseHomeNotifyPlugin->get_title()
+        : 'Notify in course home';
+    $courseHomeNotifyDescription = $courseHomeNotifyPlugin
+        ? $courseHomeNotifyPlugin->get_comment()
+        : 'Show notifications when a user enters the course homepage.';
+    $courseHomeNotifyButtonLabel = $courseHomeNotifyPlugin
+        ? $courseHomeNotifyPlugin->get_lang('SetNotification')
+        : 'Set one notification on home page';
+
+    $button = Display::toolbarButton(
+        $courseHomeNotifyButtonLabel,
+        api_get_path(WEB_PLUGIN_PATH).'CourseHomeNotify/configure.php?'.api_get_cidreq(),
+        'cog',
+        'primary'
+    );
+
+    $courseHomeNotifyInfo = $form->createElement(
+        'html',
+        '<div class="mb-4">'
+        .'<p class="mb-3">'
+        .$courseHomeNotifyDescription
+        .'</p>'
+        .$button
+        .'</div>'
+    );
+
+    $form->addPanelOption(
+        'course_home_notify',
+        $courseHomeNotifyTitle,
+        [$courseHomeNotifyInfo],
+        ToolIcon::COURSE,
+        false
+    );
+}
+
+if ($isCourseLegalEnabled) {
+    $courseLegalTitle = $courseLegalPlugin
+        ? $courseLegalPlugin->get_title()
+        : 'Course legal agreement';
+    $courseLegalDescription = $courseLegalPlugin
+        ? $courseLegalPlugin->get_comment()
+        : 'Configure a legal agreement that learners must accept before accessing the course.';
+
+    $configureButton = Display::toolbarButton(
+        $courseLegalPlugin ? $courseLegalPlugin->get_lang('CourseLegal') : 'Configure agreement',
+        api_get_path(WEB_PLUGIN_PATH).'CourseLegal/start.php?'.api_get_cidreq(),
+        'file-document-edit-outline',
+        'primary'
+    );
+
+    $userListButton = Display::toolbarButton(
+        get_lang('User list'),
+        api_get_path(WEB_PLUGIN_PATH).'CourseLegal/user_list.php?'.api_get_cidreq(),
+        'account-check-outline',
+        'secondary'
+    );
+
+    $courseLegalInfo = $form->createElement(
+        'html',
+        '<div class="mb-4">'
+        .'<p class="mb-3">'
+        .$courseLegalDescription
+        .'</p>'
+        .'<div class="flex flex-wrap gap-2">'
+        .$configureButton
+        .$userListButton
+        .'</div>'
+        .'</div>'
+    );
+
+    $form->addPanelOption(
+        'course_legal',
+        $courseLegalTitle,
+        [$courseLegalInfo],
+        ToolIcon::COURSE,
+        false
+    );
+}
+
+$normalizeQuizNotificationSetting = static function ($value) use ($validQuizNotificationValues): array {
+    if (\is_array($value)) {
+        $items = [];
+
+        foreach ($value as $item) {
+            $normalizedValue = trim((string) $item);
+
+            if ('' !== $normalizedValue && \in_array($normalizedValue, $validQuizNotificationValues, true)) {
+                $items[] = $normalizedValue;
+            }
+        }
+
+        return array_values(array_unique($items));
+    }
+
+    if (null === $value || '-1' === (string) $value) {
+        return [];
+    }
+
+    $rawValue = trim((string) $value);
+
+    if ('' === $rawValue) {
+        return [];
+    }
+
+    $items = array_map('trim', explode(',', $rawValue));
+
+    $items = array_values(
+        array_filter(
+            array_map('strval', $items),
+            static function (string $item) use ($validQuizNotificationValues): bool {
+                return '' !== $item && \in_array($item, $validQuizNotificationValues, true);
+            }
+        )
+    );
+
+    return array_values(array_unique($items));
+};
+
+// ---------------------------------------------------------------------
+// Default values
+// When a course setting is not stored yet, api_get_course_setting() returns -1.
+// We still want radios/selects to have a clear default selected in the UI.
+// This does NOT write anything to the database; it only affects form defaults.
+// ---------------------------------------------------------------------
+$defaultCourseSettings = [
+    // Documents (only used if the corresponding platform setting enables these fields)
+    'documents_default_visibility' => 'visible',
+    'show_system_folders' => 1,
+
+    // E-mail notifications (default to disabled)
+    'email_alert_to_teacher_on_new_user_in_course' => 0,
+    'email_alert_student_on_manual_subscription' => 0,
+    'email_alert_students_on_new_homework' => 0,
+    'email_alert_manager_on_new_doc' => 0,
+    'email_alert_on_new_doc_dropbox' => 0,
+    'email_to_teachers_on_new_work_feedback' => 2, // Yes=1, No=2
+
+    // User rights (default to disabled)
+    'allow_user_edit_agenda' => 0,
+    'allow_user_edit_announcement' => 0,
+    'allow_user_image_forum' => 0,
+    'allow_user_view_user_list' => 0,
+
+    // Chat settings
+    'allow_open_chat_window' => 0,
+
+    // Learning path settings
+    'allow_learning_path_theme' => 0,
+    'lp_return_link' => 0, // Redirect to Course home
+    'exercise_invisible_in_session' => 0,
+
+    // Thematic
+    'display_info_advance_inside_homecourse' => 0,
+
+    // Certificates
+    'allow_public_certificates' => 0,
+
+    // CustomCertificate plugin
+    'customcertificate_course_enable' => 0,
+    'use_certificate_default' => 0,
+
+    // Forum settings (Yes=1, No=2)
+    'hide_forum_notifications' => 2,
+    'subscribe_users_to_forum_notifications' => 2,
+
+    // Assignments / Student publications
+    'show_score' => 0,
+    'student_delete_own_publication' => 0,
+
+    // Attendance
+    'student_validate_own_attendance' => 0,
+
+    // Auto-launch (UI helper radio)
+    'auto_launch_option' => 'disable_auto_launch',
+    'show_course_in_user_language' => 2,
+    'email_alert_manager_on_new_quiz' => [],
 ];
 
 // Set default values
 $values = [];
 $values['title'] = $courseEntity->getTitle();
 $values['course_language'] = $courseEntity->getCourseLanguage();
+$values['room_id'] = $courseEntity->getRoom() ? $courseEntity->getRoom()->getId() : null;
 $values['department_name'] = $courseEntity->getDepartmentName();
 $values['department_url'] = $courseEntity->getDepartmentUrl();
 $values['visibility'] = $courseEntity->getVisibility();
@@ -1081,11 +1679,47 @@ $values['activate_legal'] = $courseEntity->getActivateLegal();
 $values['show_score'] = $_course['show_score'] ?? 0;
 
 $courseSettings = CourseManager::getCourseSettingVariables();
+
+if ($isCourseBlockEnabled) {
+    $courseSettings = array_values(array_unique(array_merge($courseSettings, $courseBlockSettings)));
+}
+
+if ($isCustomCertificateEnabled) {
+    $courseSettings = array_values(array_unique(array_merge($courseSettings, $customCertificateSettings)));
+}
+
 foreach ($courseSettings as $setting) {
     $result = api_get_course_setting($setting);
-    if ('-1' != $result) {
+
+    // Some settings can legitimately be arrays (e.g. multi-checkbox values).
+    // Casting arrays to string triggers "Array to string conversion".
+    if (\is_array($result)) {
         $values[$setting] = $result;
+        continue;
     }
+
+    // Stored setting: use it (api_get_course_setting returns -1 when not stored yet).
+    if ($result !== null && '-1' !== (string) $result) {
+        $values[$setting] = $result;
+        continue;
+    }
+
+    // Not stored yet: fallback to UI defaults when available.
+    if (!array_key_exists($setting, $values) && array_key_exists($setting, $defaultCourseSettings)) {
+        $values[$setting] = $defaultCourseSettings[$setting];
+    }
+}
+
+$selectedQuizNotifications = $normalizeQuizNotificationSetting(
+    api_get_course_setting('email_alert_manager_on_new_quiz')
+);
+
+foreach ($validQuizNotificationValues as $itemId) {
+    $values[$buildQuizNotificationFieldName($itemId)] = \in_array(
+        $itemId,
+        $selectedQuizNotifications,
+        true
+    ) ? 1 : 0;
 }
 
 // Make sure new settings have a clear default value
@@ -1093,10 +1727,33 @@ if (!isset($values['student_delete_own_publication'])) {
     $values['student_delete_own_publication'] = 0;
 }
 
+if (!isset($values['student_validate_own_attendance'])) {
+    $values['student_validate_own_attendance'] = 0;
+}
+
 if (!isset($values['email_alert_student_on_manual_subscription'])) {
     $values['email_alert_student_on_manual_subscription'] = 0;
 }
 
+if ($isCustomCertificateEnabled) {
+    foreach ($customCertificateSettings as $customCertificateSetting) {
+        if (!isset($values[$customCertificateSetting])) {
+            $values[$customCertificateSetting] = 0;
+        }
+    }
+
+    $values['customcertificate_mode'] = 'disabled';
+
+    if (1 == $values['customcertificate_course_enable']) {
+        $values['customcertificate_mode'] = 'course';
+    }
+
+    if (1 == $values['use_certificate_default']) {
+        $values['customcertificate_mode'] = 'default';
+    }
+}
+
+// Auto-launch: compute the selected UI option from stored flags
 $documentAutoLaunch = api_get_course_setting('enable_document_auto_launch');
 $lpAutoLaunch = api_get_course_setting('enable_lp_auto_launch');
 $exerciseAutoLaunch = api_get_course_setting('enable_exercise_auto_launch');
@@ -1119,76 +1776,325 @@ if ($documentAutoLaunch == 1) {
 
 $values['auto_launch_option'] = $defaultAutoLaunchOption;
 
+// AI helpers: api_get_course_setting() can also return -1 for new courses.
+// We want radios to default to "No" ("false") to avoid an empty state.
 if ($enableAiHelpers) {
     foreach ($aiOptions as $key => $label) {
-        $values[$key] = api_get_course_setting($key);
+        $v = api_get_course_setting($key);
+        $values[$key] = ('-1' === (string) $v || $v === null || $v === '') ? 'false' : (string) $v;
     }
 }
 
 $form->setDefaults($values);
 
-// JS helpers: move legacy main block into the "Course settings" panel
 $htmlHeadXtra[] = '
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-    var form = document.getElementById("update_course");
-    if (!form) {
+    var card = document.getElementById("course-picture-card");
+    var input = document.getElementById("picture");
+    var previewImage = document.getElementById("course-picture-preview-image");
+    var selectedFile = document.getElementById("course-picture-selected-file");
+    var status = document.getElementById("course-picture-status");
+    var currentPictureLabel = '.json_encode(get_lang('Current picture')).';
+    var objectUrl = null;
+    var originalImage = null;
+    var lastCropValue = "";
+    var syncTimer = null;
+
+    function markAsCurrentPicture() {
+        if (!status) {
+            return;
+        }
+
+        status.textContent = currentPictureLabel;
+        status.classList.remove(
+            "bg-gray-20",
+            "text-gray-90",
+            "bg-success"
+        );
+        status.classList.add(
+            "bg-primary",
+            "text-white"
+        );
+    }
+
+    function updateSelectedFileName(file) {
+        if (!selectedFile) {
+            return;
+        }
+
+        selectedFile.textContent = file.name;
+        selectedFile.classList.remove("hidden");
+    }
+
+    function getCropInput() {
+        return document.querySelector(
+            "input[name=\"picture_crop_result\"], textarea[name=\"picture_crop_result\"], #picture_crop_result"
+        );
+    }
+
+    function parseCropValue(value) {
+        var crop = null;
+
+        if (!value) {
+            return null;
+        }
+
+        try {
+            crop = JSON.parse(value);
+        } catch (e) {
+            try {
+                crop = Object.fromEntries(new URLSearchParams(value));
+            } catch (ignored) {
+                crop = null;
+            }
+        }
+
+        if (!crop) {
+            return null;
+        }
+
+        var x = parseFloat(crop.x || crop.left || 0);
+        var y = parseFloat(crop.y || crop.top || 0);
+        var width = parseFloat(crop.width || crop.w || 0);
+        var height = parseFloat(crop.height || crop.h || 0);
+
+        if (!width || !height) {
+            return null;
+        }
+
+        return {
+            x: x,
+            y: y,
+            width: width,
+            height: height
+        };
+    }
+
+    function normaliseCrop(crop, image) {
+        var normalised = {
+            x: crop.x,
+            y: crop.y,
+            width: crop.width,
+            height: crop.height
+        };
+
+        if (normalised.width <= 1 && normalised.height <= 1) {
+            normalised.x *= image.naturalWidth;
+            normalised.y *= image.naturalHeight;
+            normalised.width *= image.naturalWidth;
+            normalised.height *= image.naturalHeight;
+        }
+
+        normalised.x = Math.max(0, Math.min(normalised.x, image.naturalWidth - 1));
+        normalised.y = Math.max(0, Math.min(normalised.y, image.naturalHeight - 1));
+        normalised.width = Math.max(1, Math.min(normalised.width, image.naturalWidth - normalised.x));
+        normalised.height = Math.max(1, Math.min(normalised.height, image.naturalHeight - normalised.y));
+
+        return normalised;
+    }
+
+    function applyCropPreviewFromHiddenInput() {
+        var cropInput = getCropInput();
+
+        if (!cropInput || !cropInput.value || !originalImage || !previewImage) {
+            return false;
+        }
+
+        if (cropInput.value === lastCropValue) {
+            return true;
+        }
+
+        var crop = parseCropValue(cropInput.value);
+
+        if (!crop) {
+            return false;
+        }
+
+        lastCropValue = cropInput.value;
+        crop = normaliseCrop(crop, originalImage);
+
+        var canvas = document.createElement("canvas");
+        var maxWidth = 640;
+        var outputWidth = Math.min(maxWidth, Math.round(crop.width));
+        var outputHeight = Math.max(1, Math.round(outputWidth * crop.height / crop.width));
+        var context = canvas.getContext("2d");
+
+        if (!context) {
+            return false;
+        }
+
+        canvas.width = outputWidth;
+        canvas.height = outputHeight;
+
+        context.drawImage(
+            originalImage,
+            crop.x,
+            crop.y,
+            crop.width,
+            crop.height,
+            0,
+            0,
+            outputWidth,
+            outputHeight
+        );
+
+        previewImage.src = canvas.toDataURL("image/jpeg", 0.92);
+        markAsCurrentPicture();
+
+        return true;
+    }
+
+    function isCropEditorElement(element) {
+        return Boolean(
+            element.closest(
+                ".modal, .modal-dialog, .ui-dialog, .cropper-container, .cropper-wrap-box, .cropper-canvas, .jcrop-holder, [role=\"dialog\"]"
+            )
+        );
+    }
+
+    function getExternalGeneratedPreviewImages() {
+        var form = input ? input.closest("form") : null;
+        var cropInput = getCropInput();
+
+        if (!form || !card || !cropInput || !cropInput.value) {
+            return [];
+        }
+
+        return Array.prototype.filter.call(form.querySelectorAll("img"), function (image) {
+            var src = image.getAttribute("src") || "";
+
+            if (card.contains(image) || isCropEditorElement(image)) {
+                return false;
+            }
+
+            if (image.classList.contains("hidden")) {
+                return false;
+            }
+
+            return src.indexOf("blob:") === 0 || src.indexOf("data:image/") === 0;
+        });
+    }
+
+    function hideGeneratedPreviewElement(image) {
+        var current = image;
+        var stop = input ? input.closest("form") : null;
+        var steps = 0;
+
+        if (isCropEditorElement(image)) {
+            return;
+        }
+
+        while (
+            current.parentElement &&
+            current.parentElement !== stop &&
+            steps < 4
+        ) {
+            var parent = current.parentElement;
+
+            if (
+                isCropEditorElement(parent) ||
+                parent.querySelector("input[type=\"file\"], select, textarea")
+            ) {
+                break;
+            }
+
+            if (parent.children.length <= 2) {
+                current = parent;
+                steps++;
+                continue;
+            }
+
+            break;
+        }
+
+        current.classList.add("hidden");
+        current.setAttribute("aria-hidden", "true");
+    }
+
+    function hideExternalGeneratedPreviews() {
+        getExternalGeneratedPreviewImages().forEach(hideGeneratedPreviewElement);
+    }
+
+    function syncPreviewAfterCrop() {
+        var updated = applyCropPreviewFromHiddenInput();
+
+        if (updated) {
+            hideExternalGeneratedPreviews();
+        }
+    }
+
+    function readImageFile(file) {
+        if (objectUrl) {
+            window.URL.revokeObjectURL(objectUrl);
+        }
+
+        objectUrl = window.URL.createObjectURL(file);
+
+        originalImage = new Image();
+        originalImage.onload = function () {
+            if (previewImage) {
+                previewImage.src = objectUrl;
+            }
+
+            syncPreviewAfterCrop();
+        };
+        originalImage.src = objectUrl;
+    }
+
+    if (!input || !card) {
         return;
     }
 
-    // Move legacy main settings into the "Course settings" panel body
-    var start = document.getElementById("course-main-settings-legacy-start");
-    var end = document.getElementById("course-main-settings-legacy-end");
-    var panelBody = document.getElementById("collapse_course_main");
-
-    if (start && end && panelBody) {
-        var nodesToMove = [];
-        var node = start.nextSibling;
-
-        // Collect nodes between start and end (exclusive)
-        while (node && node !== end) {
-            var next = node.nextSibling;
-            nodesToMove.push(node);
-            node = next;
+    input.addEventListener("change", function () {
+        if (!input.files || !input.files[0]) {
+            return;
         }
 
-        // Move nodes into the panel body
-        nodesToMove.forEach(function (n) {
-            panelBody.appendChild(n);
-        });
+        lastCropValue = "";
+        updateSelectedFileName(input.files[0]);
+        readImageFile(input.files[0]);
+        markAsCurrentPicture();
 
-        // Remove markers to keep DOM clean
-        if (start.parentNode) {
-            start.parentNode.removeChild(start);
+        if (syncTimer) {
+            window.clearInterval(syncTimer);
         }
-        if (end.parentNode) {
-            end.parentNode.removeChild(end);
-        }
-    }
+
+        syncTimer = window.setInterval(syncPreviewAfterCrop, 500);
+
+        window.setTimeout(function () {
+            if (syncTimer) {
+                window.clearInterval(syncTimer);
+                syncTimer = null;
+            }
+
+            syncPreviewAfterCrop();
+        }, 30000);
+    });
 });
 </script>
-';
-$htmlHeadXtra[] = '
-<style>
-    .course-picture-preview-row {
-        margin-top: 0.5rem;
-    }
-
-    .course-picture-preview img {
-        max-width: 320px;
-        height: auto;
-        display: block;
-    }
-
-    .course-picture-preview .help-block {
-        margin-bottom: 0.25rem;
-    }
-</style>
 ';
 
 // Handle form submission
 if ($form->validate()) {
     $updateValues = $form->exportValues();
+
+    $request = Container::getRequest();
+    $submittedValues = $request->request->all();
+
+    $selectedQuizNotifications = [];
+
+    foreach ($validQuizNotificationValues as $itemId) {
+        $fieldName = $buildQuizNotificationFieldName($itemId);
+
+        if (!empty($submittedValues[$fieldName])) {
+            $selectedQuizNotifications[] = $itemId;
+        }
+
+        unset($updateValues[$fieldName]);
+    }
+
+    $updateValues['email_alert_manager_on_new_quiz'] = $selectedQuizNotifications;
 
     $updateValues['visibility'] = isset($updateValues['visibility'])
         ? (int) $updateValues['visibility']
@@ -1202,6 +2108,10 @@ if ($form->validate()) {
     $updateValues['subscribe'] = isset($updateValues['subscribe'])
         ? (int) $updateValues['subscribe']
         : $courseEntity->getSubscribe();
+
+    if ($courseVisibilityAdminsOnly && !api_is_platform_admin()) {
+        $updateValues['subscribe'] = (int) $courseEntity->getSubscribe();
+    }
 
     $updateValues['unsubscribe'] = isset($updateValues['unsubscribe'])
         ? (int) $updateValues['unsubscribe']
@@ -1217,15 +2127,19 @@ if ($form->validate()) {
             : $courseEntity->getRegistrationCode();
 
     $visibility = $updateValues['visibility'] ?? $courseEntity->getVisibility();
-    $deletePicture = !empty($updateValues['delete_picture'] ?? null);
 
     $request = Container::getRequest();
     /** @var UploadedFile|null $uploadFile */
     $uploadFile = $request->files->get('picture');
+    $deletePicture = !empty($submittedValues['delete_picture'] ?? null);
 
-    // Handle course picture upload / update
-    if (null !== $uploadFile) {
-        // Replace existing illustration with the new one
+    // Handle course picture delete / upload.
+    // Delete has priority to avoid uploading and deleting a picture in the same submit.
+    if ($deletePicture) {
+        if ($illustrationRepo->hasIllustration($courseEntity)) {
+            $illustrationRepo->deleteIllustration($courseEntity);
+        }
+    } elseif (null !== $uploadFile) {
         if ($illustrationRepo->hasIllustration($courseEntity)) {
             $illustrationRepo->deleteIllustration($courseEntity);
         }
@@ -1237,7 +2151,6 @@ if ($form->validate()) {
         );
 
         if ($file) {
-            // Crop info is provided by the crop widget (hidden field)
             if (!empty($updateValues['picture_crop_result'])) {
                 $file->setCrop($updateValues['picture_crop_result']);
             }
@@ -1250,15 +2163,6 @@ if ($form->validate()) {
                 'course_picture',
                 $uploadFile->getFilename()
             );
-        }
-    }
-
-    $visibility = $updateValues['visibility'] ?? '';
-    $deletePicture = $updateValues['delete_picture'] ?? '';
-
-    if ($deletePicture) {
-        if ($illustrationRepo->hasIllustration($courseEntity)) {
-            $illustrationRepo->deleteIllustration($courseEntity);
         }
     }
 
@@ -1336,6 +2240,16 @@ if ($form->validate()) {
             break;
     }
 
+    if ($isCustomCertificateEnabled) {
+        foreach ($customCertificateSettings as $customCertificateSetting) {
+            $updateValues[$customCertificateSetting] = !empty($submittedValues[$customCertificateSetting]) ? 1 : 0;
+        }
+
+        if (!empty($updateValues['use_certificate_default'])) {
+            $updateValues['customcertificate_course_enable'] = 0;
+        }
+    }
+
     // Persist main course entity
     $courseEntity
         ->setTitle($updateValues['title'])
@@ -1349,6 +2263,13 @@ if ($form->validate()) {
         ->setActivateLegal($activeLegal)
         ->setRegistrationCode($updateValues['course_registration_password']);
 
+    if (!empty($updateValues['room_id'])) {
+        $room = $em->find(\Chamilo\CoreBundle\Entity\Room::class, (int) $updateValues['room_id']);
+        $courseEntity->setRoom($room ?: null);
+    } else {
+        $courseEntity->setRoom(null);
+    }
+
     $em->persist($courseEntity);
     $em->flush();
 
@@ -1361,12 +2282,73 @@ if ($form->validate()) {
         }
     }
 
+    if ($isCustomCertificateEnabled) {
+        $customCertificateMode = $submittedValues['customcertificate_mode'] ?? 'disabled';
+
+        if (!\in_array($customCertificateMode, ['disabled', 'course', 'default'], true)) {
+            $customCertificateMode = 'disabled';
+        }
+
+        customcertificate_save_course_settings_mode($customCertificateMode, api_get_course_int_id());
+    }
+
     // Insert/Update course_settings table
+    $quizNotificationSettingSaved = false;
+
     foreach ($courseSettings as $setting) {
         $value = $updateValues[$setting] ?? null;
+
+        if ($isCourseBlockEnabled && \in_array($setting, $courseBlockSettings, true)) {
+            // CourseBlock fields are added as panel elements and can be missing from exportValues()
+            // on some branches. Read the raw POST value to avoid saving null.
+            $value = $submittedValues[$setting] ?? '';
+        }
+
+        if ($isCustomCertificateEnabled && \in_array($setting, $customCertificateSettings, true)) {
+            continue;
+        }
+
+        if ('email_alert_manager_on_new_quiz' === $setting) {
+            // Store checkbox values as a stable CSV string.
+            $value = implode(',', $updateValues['email_alert_manager_on_new_quiz']);
+            $quizNotificationSettingSaved = true;
+        }
+
+        $pluginContext = null;
+
+        if (\in_array($setting, $courseBlockSettings, true)) {
+            $pluginContext = $courseBlockAppPlugin;
+        }
+
+        if ($isCustomCertificateEnabled && \in_array($setting, $customCertificateSettings, true)) {
+            $pluginContext = $customCertificateAppPlugin;
+        }
+
         CourseManager::saveCourseConfigurationSetting(
             $setting,
             $value,
+            api_get_course_int_id(),
+            $pluginContext
+        );
+    }
+
+    if ($isCourseBlockEnabled && null !== $courseBlockAppPlugin) {
+        foreach ($courseBlockSettings as $setting) {
+            $value = $submittedValues[$setting] ?? '';
+
+            CourseManager::saveCourseConfigurationSetting(
+                $setting,
+                $value,
+                api_get_course_int_id(),
+                $courseBlockAppPlugin
+            );
+        }
+    }
+
+    if (!$quizNotificationSettingSaved) {
+        CourseManager::saveCourseConfigurationSetting(
+            'email_alert_manager_on_new_quiz',
+            implode(',', $updateValues['email_alert_manager_on_new_quiz']),
             api_get_course_int_id()
         );
     }

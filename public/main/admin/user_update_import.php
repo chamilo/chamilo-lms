@@ -278,7 +278,7 @@ $tool_name = get_lang('Update user list from XML/CSV');
 $interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('Administration')];
 
 set_time_limit(0);
-$extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', true);
+$extra_fields = UserManager::get_extra_fields();
 
 $form = new FormValidator('user_update_import', 'post', api_get_self());
 $form->addHeader($tool_name);
@@ -289,7 +289,7 @@ $group = [
     $form->createElement('radio', 'sendMail', '', get_lang('Yes'), 1),
     $form->createElement('radio', 'sendMail', null, get_lang('No'), 0),
 ];
-$form->addGroup($group, '', get_lang('Send mail to users'));
+$form->addGroup($group, null, get_lang('Send mail to users'));
 $defaults['sendMail'] = 0;
 
 if ($form->validate()) {

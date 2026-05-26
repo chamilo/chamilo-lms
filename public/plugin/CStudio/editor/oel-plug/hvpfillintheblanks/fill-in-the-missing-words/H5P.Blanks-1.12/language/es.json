@@ -1,0 +1,211 @@
+{
+  "semantics": [
+    {
+      "label": "Medio",
+      "fields": [
+        {
+          "label": "Tipo",
+          "description": "Medio opcional a mostrar arriba de la pregunta."
+        },
+        {
+          "label": "Desabilitar Zoom de imagen"
+        }
+      ]
+    },
+    {
+      "label": "Descripción de la tarea",
+      "default": "Rellenar las palabras que faltan",
+      "description": "Una guía que dice al usuario cómo responder a esta tarea."
+    },
+    {
+      "label": "Bloques de texto",
+      "entity": "bloque de texto",
+      "field": {
+        "label": "Línea de texto",
+        "placeholder": "Oslo es la capital de *Noruega*.",
+        "description": "",
+        "important": {
+          "description": "<ul><li>Se añaden espacios en blanco con un asterisco (*) delante y detrás de la palabra/frase correcta.</li> <li>Respuestas alternativas se separan con una barra diagonal (/).</li> <li>Puede agregar un texto de consejo, mediante dos puntos (:) delante del texto consejo.</li></ul>",
+          "example": "El contenido H5P puede ser editado usando un *browser/web-browser:Algo que Usted usa todos los días*."
+        }
+      }
+    },
+    {
+      "label": "Realimentación global",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Predeterminado"
+            }
+          ],
+          "label": "Definir realimentación personalizada para cualquier rango de puntaje",
+          "description": "Hacer cic en el botón de \"Añadir rango\" para añadir cuantos rangos necesite. Ejemplo: 0-20% Mal puntaje, 21-91% Puntaje promedio, 91-100% ¡Magnífico Puntaje!",
+          "entity": "rango",
+          "field": {
+            "fields": [
+              {
+                "label": "Rango de Puntaje"
+              },
+              {},
+              {
+                "label": "Realimentación para rango de puntaje definido",
+                "placeholder": "Complete la realimentación"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Texto para el botón de \"Mostrar soluciones\"",
+      "default": "Mostrar solución"
+    },
+    {
+      "label": "Texto para el botón de \"Reintentar\"",
+      "default": "Reintentar"
+    },
+    {
+      "label": "Texto para botón para \"Revisar\" ",
+      "default": "revisar"
+    },
+    {
+      "label": "Texto para mensaje de \"No contestado\" ",
+      "default": "Por favor llene todos los espacios para ver la solución"
+    },
+    {
+      "label": "Texto para mensaje de \"':ans' es correcto\" ",
+      "default": "':ans' es correcto"
+    },
+    {
+      "label": "Texto para mensaje de \"':ans' es incorrecto\" ",
+      "default": "':ans' es incorrecto"
+    },
+    {
+      "label": "Texto para mensaje de \"Contestado correctamente\" ",
+      "default": "Contestado correctamente"
+    },
+    {
+      "label": "Texto para mensaje de \"Contestado incorrectamente\" ",
+      "default": "Contestado incorrectamente"
+    },
+    {
+      "label": "Etiqueta para tecnología asistiva para Solución",
+      "default": "Respuesta correcta:"
+    },
+    {
+      "label": "Etiqueta para tecnología asistiva para campo de ingreso",
+      "description": "Use @num y @total para remplazar número cloze actual y número cloze total",
+      "default": "Vacío ingreso @num de @total"
+    },
+    {
+      "label": "Etiqueta para tecnología asistiva para decir que una entrada tiene una pista asociada a ella",
+      "default": "Pista disponible"
+    },
+    {
+      "label": "etiqueta de ícono de pista",
+      "default": "Pista"
+    },
+    {
+      "label": "Configuraciones de comportamiento.",
+      "description": "Estas opciones le permitirán controlar como se comporta el trabajo.",
+      "fields": [
+        {
+          "label": "Habilitar \"Reintentar\""
+        },
+        {
+          "label": "Habilitar botón para \"Mostrar solución\" "
+        },
+        {
+          "label": "Habilitar botón \"Revisar\" "
+        },
+        {
+          "label": "Automáticamente revisar respuestas después de ingresadas"
+        },
+        {
+          "label": "MAYÚSCULAS/minúsculas si importan",
+          "description": "Asegurar que la entrada del usuario tenga que ser exactamente la misma que la respuesta."
+        },
+        {
+          "label": "Requerir que todos los campos sean contestados antes que que pueda ser vista la solución"
+        },
+        {
+          "label": "Poner campos de entrada en líneas separadas"
+        },
+        {
+          "label": "Mostrar diálogo de confirmación en \"Revisar\"",
+          "description": "Esta opción no es compatible con la opción para \"Revisar respuestas automáticamente después de ingresadas\" "
+        },
+        {
+          "label": "Mostrar diálogo de confirmación en \"Reintentar\""
+        },
+        {
+          "label": "Aceptar errores tipográficos menores",
+          "description": "Si se activa, una respuesta también contará como correcta con errores tipográficos menores (3-9 caracteres: 1 error tipográfico, más de 9 caracteres: 2 errores tipográficos)"
+        }
+      ]
+    },
+    {
+      "label": "Diálogo de confirmación para Revisar",
+      "fields": [
+        {
+          "label": "Texto del encabezado",
+          "default": "¿ Terminar ?"
+        },
+        {
+          "label": "Texto del cuerpo",
+          "default": "¿Está seguro que desea terminar ?"
+        },
+        {
+          "label": "Etiqueta botón Cancelar",
+          "default": "Cancelar"
+        },
+        {
+          "label": "Etiqueta botón Confirmar",
+          "default": "Terminar"
+        }
+      ]
+    },
+    {
+      "label": "Diálogo de confirmación Reintentar",
+      "fields": [
+        {
+          "label": "Texto del encabezado",
+          "default": "¿ Reintentar ?"
+        },
+        {
+          "label": "Texto del cuerpo",
+          "default": "¿ Está seguro de querer Reintentar ?"
+        },
+        {
+          "label": "Etiqueta botón Cancelar",
+          "default": "Cancelar"
+        },
+        {
+          "label": "Etiqueta botón Confirmar",
+          "default": "Confirmar"
+        }
+      ]
+    },
+    {
+      "label": "Representación textual de la barra de puntaje para aquellos que usan un Lector de voz",
+      "default": "Usted obtuvo :num de un total de :total puntos"
+    },
+    {
+      "label": "Descripción de tecnología asistiva para botón \"Revisar\" ",
+      "default": "Revisar las respuestas. Las respuestas serán marcadas como correcta, incorrecta o sin contestar."
+    },
+    {
+      "label": "Descripción de tecnología asistiva para botón \"Mostrar solución\" ",
+      "default": "Mostrar la solución. El trabajo será marcado con su solución correcta."
+    },
+    {
+      "label": "Descripción de tecnología asistiva para botón \"Reintentar\" ",
+      "default": "Reintentar el trabajo. Reiniciar todas las respuestas e iniciar el trabajo de nuevo."
+    },
+    {
+      "label": "Descripción de tecnología asistiva para comenzando el trabajo",
+      "default": "Modo de revisión"
+    }
+  ]
+}

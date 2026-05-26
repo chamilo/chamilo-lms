@@ -363,7 +363,7 @@ if (!empty($session_id) && '-1' != $session_id && !empty($sessionList)) {
 
 $course_select_list = ['-1' => get_lang('Select')];
 foreach ($course_list as $item) {
-    $courseItemId = $item['real_id'];
+    $courseItemId = $item['id'];
     $courseInfo = api_get_course_info_by_id($courseItemId);
     $course_select_list[$courseItemId] = '';
     if ($courseItemId == api_get_course_int_id()) {

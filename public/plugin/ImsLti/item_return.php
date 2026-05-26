@@ -5,6 +5,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\LtiBundle\Entity\ExternalTool;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
+require_once __DIR__.'/OAuth1.php';
 
 api_protect_course_script(false);
 api_block_anonymous_users(false);
@@ -26,17 +27,22 @@ if (!$ltiTool) {
     api_not_allowed();
 }
 
-$consumer = new OAuthConsumer(
-    $_POST['oauth_consumer_key'],
-    $ltiTool->getSharedSecret()
+if (
+    empty($_POST['oauth_consumer_key']) ||
+    empty($_POST['oauth_signature']) ||
+    (string) $_POST['oauth_consumer_key'] !== (string) $ltiTool->getConsumerKey()
+) {
+    api_not_allowed();
+}
+
+$signatureIsValid = ImsLtiOAuth1::validateRequest(
+    'POST',
+    api_get_path(WEB_PLUGIN_PATH).'ImsLti/item_return.php',
+    $_POST,
+    (string) $ltiTool->getSharedSecret()
 );
-$hmacMethod = new OAuthSignatureMethod_HMAC_SHA1();
 
-$request = OAuthRequest::from_request('POST', api_get_path(WEB_PLUGIN_PATH).'ImsLti/item_return.php');
-$request->sign_request($hmacMethod, $consumer, '');
-$signature = $request->get_parameter('oauth_signature');
-
-if ($signature !== $_POST['oauth_signature']) {
+if (!$signatureIsValid) {
     api_not_allowed();
 }
 

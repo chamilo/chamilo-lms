@@ -1,0 +1,77 @@
+<?php
+$strings['plugin_title'] = 'Egyéni tanúsítvány';
+$strings['plugin_comment'] = 'Ez a bővítmény lehetővé teszi egyedi tanúsítványok létrehozását minden kurzushoz.';
+$strings['enable_plugin_customcertificate'] = 'Bővítmény engedélyezése';
+$strings['customcertificate_course_enable'] = 'Egyéni tanúsítvány engedélyezése kurzushoz';
+$strings['use_certificate_default'] = 'Alapértelmezett egyéni tanúsítvány használata';
+$strings['ToolDisabled'] = 'Az eszközt a rendszergazdai felületen letiltották';
+$strings['OnlyAdminPlatform'] = 'Eszköz csak rendszergazdáknak';
+$strings['OnlyAdminPlatformOrTeacher'] = 'Eszköz csak rendszergazdáknak és tanároknak';
+$strings['TrainingEntity'] = 'Képzési egység';
+$strings['DescriptionFront'] = 'Előlap leírás';
+$strings['DescriptionRear'] = 'Hátlap leírás';
+$strings['Certify'] = 'Igazolás';
+$strings['CertificateType'] = 'Tanúsítvány típusa';
+$strings['CertifyThat'] = 'IGAZOLJUK, HOGY';
+$strings['StudentCourseInfo'] = 'Hallgatói és kurzusu adatok';
+$strings['StudentData'] = 'Hallgatói adatok';
+$strings['CourseData'] = 'Kurzusadatok';
+$strings['Modality'] = 'Módszertan';
+$strings['Contents'] = 'Tartalmak';
+$strings['ContentsToShow'] = 'Megjelenítendő tartalmak';
+$strings['ContentsCourseDescription'] = '"Kurzusleírás" > "Tartalmak" szekció használata';
+$strings['ContentsIndexLearnpath'] = 'Tanösvény index használata';
+$strings['ContentsCustom'] = 'Egyéni tartalom használata';
+$strings['ContentsHide'] = 'Tartalmak ne legyenek láthatóak';
+$strings['Dates'] = 'Dátumok';
+$strings['CourseDeliveryDates'] = 'Kurzus átadásának dátumai';
+$strings['Custom'] = 'Egyéni';
+$strings['UseDateSessionAccess'] = 'Foglalkozás-hozzáférési dátumok használata';
+$strings['ExpectionPlace'] = 'Kibocsátási hely';
+$strings['DateExpediction'] = 'Kibocsátás dátuma';
+$strings['UseDateEndAccessSession'] = 'Foglalkozás-hozzáférés befejezési dátumának használata';
+$strings['UseDateDownloadCertificate'] = 'Tanúsítvány letöltési dátumának használata';
+$strings['UseDateGenerationCertificate'] = 'Tanúsítvány generálási dátumának használata';
+$strings['UseCustomDate'] = 'Egyéni dátum használata';
+$strings['LogosSeal'] = 'Logók / Pecsétek';
+$strings['LogoLeft'] = 'Bal logó';
+$strings['LogoCenter'] = 'Középső logó';
+$strings['LogoRight'] = 'Jobb logó';
+$strings['Seal'] = 'Pecsét';
+$strings['Signature1'] = 'Aláírás 1';
+$strings['Signature2'] = 'Aláírás 2';
+$strings['Signature3'] = 'Aláírás 3';
+$strings['Signature4'] = 'Aláírás 4';
+$strings['SignatureText1'] = 'Aláírás szöveg 1';
+$strings['SignatureText2'] = 'Aláírás szöveg 2';
+$strings['SignatureText3'] = 'Aláírás szöveg 3';
+$strings['SignatureText4'] = 'Aláírás szöveg 4';
+$strings['OtherOptions'] = 'Egyéb beállítások';
+$strings['MarginRight'] = 'Jobb margó';
+$strings['MarginLeft'] = 'Bal margó';
+$strings['SetDefaultTemplate'] = 'Alapértelmezett sablon beállítása';
+$strings['MessageDefaultTemplate'] = 'Mentse el ezt az alapértelmezett testreszabást a tanfolyamokhoz és foglalkozásokhoz, amelyeknél nincs
+     meghatározott tanúsítvány';
+$strings['None'] = 'Nincs';
+$strings['ErrorTemplateCertificate'] = 'Nincs sablon meghatározva a tanúsítványhoz.
+     Nincs alapértelmezett sablon.';
+$strings['DateStartEnd'] = 'Kezdő- és befejezési dátummal: ';
+$strings['ExpedictionIn'] = 'Kibocsátás';
+$strings['Signatures'] = 'Aláírások';
+$strings['BackgroundCertificate'] = 'A tanúsítvány hátkép';
+$strings['Background'] = 'Háttér';
+$strings['CertificateSetting'] = 'Tanúsítvány beállítás';
+$strings['ToolDisabledCourse'] = 'Eszköz letiltva a tanfolyam beállításokban';
+$strings['ToolUseDefaultSettingCourse'] = 'Az eszköz úgy van konfigurálva, hogy az alapértelmezett tanúsítványt használja. <br>
+     Szerkesztheti a Közigazgatás képernyőről -> Bővítmények -> Egyedi tanúsítvány. <br>
+     Vagy ha szeretné, letilthatja az alapértelmezés szerinti tanúsítvány használatának opcióját a tanfolyam bővítmény konfigurációjában';
+$strings['CertificateSettingDefault'] = 'Alapértelmezett tanúsítvány beállítások';
+$strings['InfoFromDefaultCertificate'] = 'A tanúsítvány tartalma az alapértelmezett tanúsítványon alapul.
+     A módosítások nem érintik az alapértelmezett tanúsítványt.';
+$strings['to'] = ' - ';
+$strings['formatDownloadDate'] = ' - %sth %s, %s';
+$strings['PrintCertificate'] = 'Tanúsítvány nyomtatása';
+$strings['QuestionDelete'] = 'Szeretné törölni a speciális diplomát és az alapértelmezett tanúsítványt használni?';
+$strings['SuccessDelete'] = 'Sikeresen törölve';
+$strings['ProblemDelete'] = 'Probléma a tanúsítvány törlésekor';
+$strings['OnlyCustomCertificates'] = 'Csak a személyre szabott tanúsítvánnyal rendelkező tanfolyamok exportálódnak';

@@ -7,26 +7,20 @@ declare(strict_types=1);
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Activity;
 
 use Chamilo\CoreBundle\Entity\PortfolioComment as PortfolioCommentEntity;
-use Xabbuh\XApi\Model\Activity;
-use Xabbuh\XApi\Model\Definition;
-use Xabbuh\XApi\Model\IRI;
 
 /**
  * Class PortfolioComment.
  */
 class PortfolioComment extends BaseActivity
 {
-    /**
-     * @var PortfolioCommentEntity
-     */
-    private $comment;
+    private PortfolioCommentEntity $comment;
 
     public function __construct(PortfolioCommentEntity $comment)
     {
         $this->comment = $comment;
     }
 
-    public function generate(): Activity
+    public function generate(): array
     {
         $iri = $this->generateIri(
             WEB_CODE_PATH,
@@ -38,13 +32,11 @@ class PortfolioComment extends BaseActivity
             ]
         );
 
-        return new Activity(
-            IRI::fromString($iri),
-            new Definition(
-                null,
-                null,
-                IRI::fromString('http://activitystrea.ms/schema/1.0/comment')
-            )
+        return $this->buildActivity(
+            $iri,
+            null,
+            null,
+            'http://activitystrea.ms/schema/1.0/comment'
         );
     }
 }

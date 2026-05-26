@@ -12,7 +12,52 @@ use Chamilo\CoreBundle\Framework\Container;
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
-$userId = api_get_user_id();
+$userId = (int) api_get_user_id();
+$action = (string) ($_GET['a'] ?? '');
+
+/**
+ * IMPORTANT:
+ * Handle lightweight actions BEFORE any access checks and role-based redirects.
+ * These actions are used by the Vue topbar and must never hit skills_wheel.php.
+ */
+if ('has_custom_certificate' === $action) {
+    header('Content-Type: application/json; charset=UTF-8');
+
+    // We don't need the session for this read-only check.
+    session_write_close();
+
+    try {
+        require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/GradebookUtils.php';
+
+        $myCertificate = GradebookUtils::get_certificate_by_user_id(0, $userId);
+
+        echo json_encode([
+            'hasCustomCertificate' => !empty($myCertificate),
+        ]);
+    } catch (Throwable $e) {
+        // Fail-closed: do not expose errors, and do not show the link in UI.
+        echo json_encode([
+            'hasCustomCertificate' => false,
+        ]);
+    }
+
+    exit;
+}
+
+/**
+ * Handle custom certificate generation BEFORE any role-based redirects.
+ * This prevents admins (or other roles) from being redirected to skills_wheel.php
+ * when they only want to generate the PDF.
+ */
+if ('generate_custom_skill' === $action) {
+    // PDF generation does not require an open session.
+    session_write_close();
+
+    $certificate = new Certificate(0, $userId, false, false);
+    $certificate->generatePdfFromCustomCertificate();
+    exit;
+}
+
 SkillModel::isAllowed($userId);
 
 $isStudent = api_is_student();
@@ -26,14 +71,9 @@ if (!$isStudent && !$isStudentBoss && !$isDRH) {
     exit;
 }
 
-$action = isset($_GET['a']) ? $_GET['a'] : '';
 switch ($action) {
-    case 'generate_custom_skill':
-        $certificate = new Certificate(0, api_get_user_id(), false, false);
-        $certificate->generatePdfFromCustomCertificate();
-        break;
     case 'generate':
-        $certificate = Certificate::generateUserSkills(api_get_user_id());
+        Certificate::generateUserSkills($userId);
         Display::addFlash(Display::return_message(get_lang('Update successful')));
         header('Location: '.api_get_self());
         exit;

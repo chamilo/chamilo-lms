@@ -1,0 +1,7 @@
+{
+  "libraryStrings": {
+    "distributeButtonLabel": "Distribute Evenly",
+    "distributeButtonWarning": "Values will be changed for all of the ranges. Do you wish to proceed?",
+    "rangeOutOfSequenceWarning": "The score ranges are out of sequence"
+  }
+}

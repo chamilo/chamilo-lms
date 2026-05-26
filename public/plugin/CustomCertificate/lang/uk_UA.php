@@ -1,0 +1,77 @@
+<?php
+$strings['plugin_title'] = 'Користувацький сертифікат';
+$strings['plugin_comment'] = 'Цей плагін дозволяє створювати користувацькі сертифікати для кожного курсу.';
+$strings['enable_plugin_customcertificate'] = 'Увімкнути плагін';
+$strings['customcertificate_course_enable'] = 'Користувацький сертифікат увімкнено в курсі';
+$strings['use_certificate_default'] = 'Використовувати стандартний користувацький сертифікат';
+$strings['ToolDisabled'] = 'Інструмент вимкнено з адміністрування';
+$strings['OnlyAdminPlatform'] = 'Інструмент тільки для адміністраторів';
+$strings['OnlyAdminPlatformOrTeacher'] = 'Інструмент тільки для адміністраторів і викладачів';
+$strings['TrainingEntity'] = 'Навчальний заклад';
+$strings['DescriptionFront'] = 'Опис лицьова сторона';
+$strings['DescriptionRear'] = 'Опис зворотна сторона';
+$strings['Certify'] = 'Сертифікувати';
+$strings['CertificateType'] = 'Тип сертифіката';
+$strings['CertifyThat'] = 'СЕРТИФІКУЄ, ЩО';
+$strings['StudentCourseInfo'] = 'Дані студента та курсу';
+$strings['StudentData'] = 'Дані студента';
+$strings['CourseData'] = 'Дані курсу';
+$strings['Modality'] = 'Форма навчання';
+$strings['Contents'] = 'Зміст';
+$strings['ContentsToShow'] = 'Зміст для показу';
+$strings['ContentsCourseDescription'] = 'Використовувати розділ «Опис курсу» > «Зміст»';
+$strings['ContentsIndexLearnpath'] = 'Використовувати індекс навчального шляху';
+$strings['ContentsCustom'] = 'Використовувати користувацький зміст';
+$strings['ContentsHide'] = 'Не показувати зміст';
+$strings['Dates'] = 'Дати';
+$strings['CourseDeliveryDates'] = 'Дати проведення курсу';
+$strings['Custom'] = 'Користувацькі';
+$strings['UseDateSessionAccess'] = 'Використовувати дати доступу до сесії';
+$strings['ExpectionPlace'] = 'Місце видачі';
+$strings['DateExpediction'] = 'Дата видачі';
+$strings['UseDateEndAccessSession'] = 'Використовувати дату завершення доступу до сесії';
+$strings['UseDateDownloadCertificate'] = 'Використовувати дату завантаження сертифіката';
+$strings['UseDateGenerationCertificate'] = 'Використовувати дату генерації сертифіката';
+$strings['UseCustomDate'] = 'Використовувати користувацьку дату';
+$strings['LogosSeal'] = 'Логотипи / Печатки';
+$strings['LogoLeft'] = 'Логотип ліворуч';
+$strings['LogoCenter'] = 'Логотип по центру';
+$strings['LogoRight'] = 'Логотип праворуч';
+$strings['Seal'] = 'Печатка';
+$strings['Signature1'] = 'Підпис 1';
+$strings['Signature2'] = 'Підпис 2';
+$strings['Signature3'] = 'Підпис 3';
+$strings['Signature4'] = 'Підпис 4';
+$strings['SignatureText1'] = 'Текст підпису 1';
+$strings['SignatureText2'] = 'Текст підпису 2';
+$strings['SignatureText3'] = 'Текст підпису 3';
+$strings['SignatureText4'] = 'Текст підпису 4';
+$strings['OtherOptions'] = 'Інші опції';
+$strings['MarginRight'] = 'Правий відступ';
+$strings['MarginLeft'] = 'Лівий відступ';
+$strings['SetDefaultTemplate'] = 'Встановити шаблон за замовчуванням';
+$strings['MessageDefaultTemplate'] = 'Зберегти це налаштування за замовчуванням для курсів і сесій без
+     визначених сертифікатів';
+$strings['None'] = 'Немає';
+$strings['ErrorTemplateCertificate'] = 'Шаблон для сертифіката не визначено.
+     Шаблону за замовчуванням немає.';
+$strings['DateStartEnd'] = 'З датою початку та завершення: ';
+$strings['ExpedictionIn'] = 'Дійсний до';
+$strings['Signatures'] = 'Підписи';
+$strings['BackgroundCertificate'] = 'Фонове зображення сертифіката';
+$strings['Background'] = 'Фон';
+$strings['CertificateSetting'] = 'Налаштування сертифіката';
+$strings['ToolDisabledCourse'] = 'Інструмент відключено в налаштуваннях курсу';
+$strings['ToolUseDefaultSettingCourse'] = 'Інструмент налаштовано на використання сертифіката за замовчуванням. <br>
+     Ви можете відредагувати його з екрану Адміністрування -> Плагіни -> Custom Certificate. <br>
+     Або якщо бажаєте, можете вимкнути опцію використання сертифіката за замовчуванням у конфігурації плагіна в курсі';
+$strings['CertificateSettingDefault'] = 'Налаштування сертифіката за замовчуванням';
+$strings['InfoFromDefaultCertificate'] = 'Зміст сертифіката базується на сертифікаті за замовчуванням.
+     Зміни, які ви внесете, не вплинуть на сертифікат за замовчуванням.';
+$strings['to'] = ' до ';
+$strings['formatDownloadDate'] = ' до %sth %s, %s';
+$strings['PrintCertificate'] = 'Друкувати сертифікат';
+$strings['QuestionDelete'] = 'Ви хочете видалити спеціальний диплом і використовувати сертифікат за замовчуванням?';
+$strings['SuccessDelete'] = 'Успішно видалено';
+$strings['ProblemDelete'] = 'Проблема з видаленням сертифіката';
+$strings['OnlyCustomCertificates'] = 'Експортуються лише курси з персоналізованим сертифікатом';

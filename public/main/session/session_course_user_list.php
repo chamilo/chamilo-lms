@@ -76,11 +76,41 @@ switch ($action) {
         exit();
         break;
     case 'add':
-        SessionManager::subscribe_users_to_session_course($idChecked, $id_session, $course_code);
-        header('Location: '.api_get_self()
-            .'?id_session='.$id_session.'&course_code='.urlencode($course_code).'&sort='.$sort);
+        $usersToAdd = is_array($idChecked) ? $idChecked : [$idChecked];
+
+        if (SessionManager::isCourseUserSubscriptionLimitedToSessionUsers()) {
+            $usersToAdd = SessionManager::filterUsersSubscribedToSession(
+                (int) $id_session,
+                $usersToAdd
+            );
+
+            if (empty($usersToAdd)) {
+                Display::addFlash(
+                    Display::return_message(
+                        get_lang('No users from the selected list are subscribed to this session.'),
+                        'warning'
+                    )
+                );
+
+                header(
+                    'Location: '.api_get_self()
+                    .'?id_session='.$id_session
+                    .'&course_code='.urlencode($course_code)
+                    .'&sort='.$sort
+                );
+                exit;
+            }
+        }
+
+        SessionManager::subscribe_users_to_session_course($usersToAdd, $id_session, $course_code);
+
+        header(
+            'Location: '.api_get_self()
+            .'?id_session='.$id_session
+            .'&course_code='.urlencode($course_code)
+            .'&sort='.$sort
+        );
         exit;
-        break;
 }
 
 $limit = 20;
@@ -118,7 +148,7 @@ $users = Database::store_result($result);
 $nbr_results = count($users);
 $tool_name = get_lang('Session').': '.$session_name.' - '.get_lang('Course').': '.$course_title;
 
-$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('Session list')];
+$interbreadcrumb[] = ['url' => '/admin/session-list', 'name' => get_lang('Session list')];
 $interbreadcrumb[] = [
     'url' => "resume_session.php?id_session=".$id_session,
     'name' => get_lang('Session overview'),

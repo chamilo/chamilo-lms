@@ -3,7 +3,7 @@ import * as d3 from "d3"
 import { getSkillTree } from "../../services/skillService"
 import { useNotification } from "../notification"
 
-export function useSkillWheel() {
+export function useSkillWheel({ onSkillDetail } = {}) {
   const isLoading = ref(true)
 
   const skillList = ref([])
@@ -20,6 +20,7 @@ export function useSkillWheel() {
   const width = 928
   const height = width
   const radius = width / 6
+  const centerRadius = radius * 0.25
 
   function transformSkillToWheelItem({
     id,
@@ -30,6 +31,7 @@ export function useSkillWheel() {
     hasGradebook,
     isSearched,
     isAchievedByUser,
+    description,
   }) {
     const item = {
       id,
@@ -40,6 +42,7 @@ export function useSkillWheel() {
       hasGradebook,
       isSearched,
       isAchievedByUser,
+      description,
     }
 
     if (children.length) {
@@ -70,14 +73,23 @@ export function useSkillWheel() {
     root.each((d) => (d.current = d))
 
     // Create the arc generator.
+    // Shrink only the center (depth 0–1) from radius to centerRadius.
+    // All outer rings keep their original width (radius per depth unit).
+    const centerShrink = radius - centerRadius
+
+    function depthToRadius(y) {
+      if (y <= 0) return 0
+      return y * radius - centerShrink
+    }
+
     const arc = d3
       .arc()
       .startAngle((d) => d.x0)
       .endAngle((d) => d.x1)
       .padAngle((d) => Math.min((d.x1 - d.x0) / 2, 0.005))
       .padRadius(radius * 1.5)
-      .innerRadius((d) => d.y0 * radius)
-      .outerRadius((d) => Math.max(d.y0 * radius, d.y1 * radius - 1))
+      .innerRadius((d) => depthToRadius(d.y0))
+      .outerRadius((d) => Math.max(depthToRadius(d.y0), depthToRadius(d.y1) - 1))
 
     // Create the SVG container.
     const svg = d3
@@ -103,6 +115,27 @@ export function useSkillWheel() {
       .style("cursor", "pointer")
       .on("click", clicked)
 
+    // Right-click shows skill details.
+    path.on("contextmenu", (event, d) => {
+      event.preventDefault()
+      if (onSkillDetail) {
+        const parentPath = d
+          .ancestors()
+          .filter((a) => a.depth > 0)
+          .map(setNodeText)
+          .reverse()
+          .slice(0, -1)
+          .join(" / ")
+        onSkillDetail({
+          id: d.data.id,
+          name: d.data.name,
+          shortCode: d.data.shortCode || "",
+          description: d.data.description || "",
+          parentPath,
+        })
+      }
+    })
+
     path.append("title").text(
       (d) =>
         `${d
@@ -124,12 +157,12 @@ export function useSkillWheel() {
       .attr("dy", "0.35em")
       .attr("fill-opacity", (d) => +labelVisible(d.current))
       .attr("transform", (d) => labelTransform(d.current))
-      .text(setNodeText)
+      .text(setNodeLabel)
 
     centralCircle = svg
       .append("circle")
       .datum(root)
-      .attr("r", radius)
+      .attr("r", centerRadius)
       .attr("fill", "none")
       .attr("pointer-events", "all")
       .on("click", clicked)
@@ -177,16 +210,16 @@ export function useSkillWheel() {
     }
 
     function arcVisible(d) {
-      return d.y1 <= 3 && d.y0 >= 1 && d.x1 > d.x0
+      return d.y1 <= 4 && d.y0 >= 1 && d.x1 > d.x0
     }
 
     function labelVisible(d) {
-      return d.y1 <= 3 && d.y0 >= 1 && (d.y1 - d.y0) * (d.x1 - d.x0) > 0.03
+      return d.y1 <= 4 && d.y0 >= 1 && (d.y1 - d.y0) * (d.x1 - d.x0) > 0.03
     }
 
     function labelTransform(d) {
       const x = (((d.x0 + d.x1) / 2) * 180) / Math.PI
-      const y = ((d.y0 + d.y1) / 2) * radius
+      const y = (depthToRadius(d.y0) + depthToRadius(d.y1)) / 2
 
       return `rotate(${x - 90}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`
     }
@@ -212,11 +245,25 @@ export function useSkillWheel() {
     }
 
     function setNodeText(d) {
+      return getFullNodeText(d)
+    }
+
+    function getFullNodeText(d) {
       if (d.data.shortCode) {
         return d.data.shortCode
       }
 
       return d.data.name
+    }
+
+    function setNodeLabel(d) {
+      const text = getFullNodeText(d)
+
+      if (text.length > 26) {
+        return text.substring(0, 26) + "…"
+      }
+
+      return text
     }
 
     return svg.node()

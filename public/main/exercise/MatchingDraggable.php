@@ -67,6 +67,7 @@ class MatchingDraggable extends Question
                         $defaults['answer['.$nb_matches.']'] = $answer->selectAnswer($i);
                         $defaults['weighting['.$nb_matches.']'] = float_format($answer->selectWeighting($i), 1);
                         $defaults['matches['.$nb_matches.']'] = $answer->correct[$i];
+                        $defaults['comment['.$nb_matches.']'] = (string) ($answer->comment[$i] ?? '');
                     } else {
                         $nb_options++;
                         $defaults['option['.$nb_options.']'] = $answer->selectAnswer($i);
@@ -109,6 +110,7 @@ class MatchingDraggable extends Question
                     <th width="85%">'.get_lang('Answer').'</th>
                     <th width="15%">'.get_lang('Matches To').'</th>
                     '.$thWeighting.'
+                    <th width="20%">'.get_lang('Comment').'</th>
                 </tr>
             </thead>
             <tbody>';
@@ -144,6 +146,11 @@ class MatchingDraggable extends Question
                 "weighting[$i]"
             );
 
+            $renderer->setElementTemplate(
+                '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->{element}</td>',
+                "comment[$i]"
+            );
+
             $form->addHtml('<tr>');
             $form->addHtml("<td>$i</td>");
 
@@ -162,6 +169,19 @@ class MatchingDraggable extends Question
             } else {
                 $form->addHidden("weighting[$i]", "0");
             }
+
+            $form->addHtmlEditor(
+                "comment[$i]",
+                null,
+                false,
+                false,
+                [
+                    'ToolbarSet' => 'TestQuestionDescription',
+                    'Width' => '100%',
+                    'Height' => '100',
+                ]
+            );
+
             $form->addHtml('</tr>');
         }
 
@@ -261,13 +281,14 @@ class MatchingDraggable extends Question
             $position++;
             $answer = $form->getSubmitValue("answer[$i]");
             $matches = $form->getSubmitValue("matches[$i]");
+            $comment = trim((string) $form->getSubmitValue("comment[$i]"));
             $weighting = $form->getSubmitValue("weighting[$i]");
             $this->weighting += $weighting;
 
             $objAnswer->createAnswer(
                 $answer,
                 $matches,
-                '',
+                $comment,
                 $weighting,
                 $position
             );
@@ -302,6 +323,9 @@ class MatchingDraggable extends Question
 
         if ($exercise->showExpectedChoice()) {
             $header .= '<th class="text-center">'.get_lang('Status').'</th>';
+        }
+        if (false === $exercise->hideComment && EXERCISE_FEEDBACK_TYPE_EXAM !== $exercise->getFeedbackType()) {
+            $header .= '<th>'.get_lang('Comment').'</th>';
         }
         $header .= '</tr>';
 

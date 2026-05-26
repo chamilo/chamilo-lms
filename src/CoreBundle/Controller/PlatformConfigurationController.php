@@ -1,12 +1,14 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
 use Bbb;
+use BuyCoursesPlugin;
+use DictionaryPlugin;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CoreBundle\Helpers\TicketProjectHelper;
@@ -14,14 +16,19 @@ use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
+use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
+use Doctrine\ORM\EntityManagerInterface;
+use OnlyofficePlugin;
+use RssPlugin;
+use SearchCoursePlugin;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Throwable;
+use Tour;
 
 #[Route('/platform-config')]
 class PlatformConfigurationController extends AbstractController
@@ -46,11 +53,20 @@ class PlatformConfigurationController extends AbstractController
         $forcedLoginMethod = $authenticationConfigHelper->getForcedLoginMethod();
 
         if ($forcedLoginMethod) {
-            if (\in_array($forcedLoginMethod, array_keys($enabledOAuthProviders))) {
+            if (\array_key_exists($forcedLoginMethod, $enabledOAuthProviders)) {
                 $enabledOAuthProviders = [$forcedLoginMethod => $enabledOAuthProviders[$forcedLoginMethod]];
             } else {
                 $enabledOAuthProviders = [];
             }
+        }
+
+        $oauth2Providers = [];
+        foreach ($enabledOAuthProviders as $providerName => $providerParams) {
+            $oauth2Providers[] = [
+                'name' => $providerName,
+                'title' => $providerParams['title'] ?? ucwords($providerName),
+                'url' => $urlGenerator->generate(\sprintf('chamilo.oauth2_%s_start', $providerName)),
+            ];
         }
 
         $configuration = [
@@ -58,18 +74,14 @@ class PlatformConfigurationController extends AbstractController
             'studentview' => $requestSession->get('studentview'),
             'plugins' => [],
             'visual_theme' => $this->themeHelper->getVisualTheme(),
-            'oauth2_providers' => array_map(
-                fn ($providerName, $providerParams) => [
-                    'name' => $providerName,
-                    'title' => $providerParams['title'] ?? ucwords($providerName),
-                    'url' => $urlGenerator->generate(\sprintf('chamilo.oauth2_%s_start', $providerName)),
-                ],
-                array_keys($enabledOAuthProviders),
-                $enabledOAuthProviders
-            ),
+            'oauth2_providers' => $oauth2Providers,
             'ldap_auth' => null,
             'forced_login_method' => $forcedLoginMethod,
         ];
+
+        if ($requestSession->isStarted()) {
+            $requestSession->save();
+        }
 
         $ldapConfig = $authenticationConfigHelper->getLdapConfig();
 
@@ -88,17 +100,26 @@ class PlatformConfigurationController extends AbstractController
         $configuration['settings']['catalog.allow_students_to_browse_courses'] = $settingsManager->getSetting('catalog.allow_students_to_browse_courses', true);
         $configuration['settings']['catalog.allow_session_auto_subscription'] = $settingsManager->getSetting('catalog.allow_session_auto_subscription', true);
         $configuration['settings']['catalog.course_subscription_in_user_s_session'] = $settingsManager->getSetting('catalog.course_subscription_in_user_s_session', true);
-        $rawCourseCatalogSetting = $settingsManager->getSetting('catalog.course_catalog_settings', true);
-        $configuration['settings']['catalog.course_catalog_settings'] = 'false' !== $rawCourseCatalogSetting ? $this->decodeSettingArray($rawCourseCatalogSetting) : 'false';
-        $rawSessionCatalogSetting = $settingsManager->getSetting('catalog.session_catalog_settings', true);
-        $configuration['settings']['catalog.session_catalog_settings'] = 'false' !== $rawSessionCatalogSetting ? $this->decodeSettingArray($rawSessionCatalogSetting) : 'false';
+        $configuration['settings']['catalog.course_catalog_settings'] = $this->decodeSetting($settingsManager->getSetting('catalog.course_catalog_settings', true));
+        $configuration['settings']['catalog.session_catalog_settings'] = $this->decodeSetting($settingsManager->getSetting('catalog.session_catalog_settings', true));
+        $configuration['settings']['display.display_categories_on_homepage'] = $settingsManager->getSetting('display.display_categories_on_homepage', true);
         $configuration['settings']['admin.chamilo_latest_news'] = $settingsManager->getSetting('admin.chamilo_latest_news', true);
         $configuration['settings']['admin.chamilo_support'] = $settingsManager->getSetting('admin.chamilo_support', true);
         $configuration['settings']['platform.session_admin_access_to_all_users_on_all_urls'] = $settingsManager->getSetting('platform.session_admin_access_to_all_users_on_all_urls', true);
         $configuration['settings']['profile.login_is_email'] = $settingsManager->getSetting('profile.login_is_email', true);
-        $configuration['settings']['platform.timepicker_increment'] = $settingsManager->getSetting('platform.timepicker_increment', true);
+        $configuration['settings']['platform.timepicker_increment'] = (int) $settingsManager->getSetting('platform.timepicker_increment', true);
+        $configuration['settings']['course.course_student_info'] = $this->decodeSetting($settingsManager->getSetting('course.course_student_info', true));
+        $configuration['settings']['platform.institution_address'] = $settingsManager->getSetting('platform.institution_address', true);
+        $configuration['settings']['platform.platform_logo_url'] = $settingsManager->getSetting('platform.platform_logo_url', true);
+        $configuration['settings']['platform.disable_copy_paste'] = $settingsManager->getSetting('platform.disable_copy_paste', true);
+        $configuration['settings']['platform.use_virtual_keyboard'] = $settingsManager->getSetting('platform.use_virtual_keyboard', true);
+        $configuration['settings']['platform.use_custom_pages'] = $settingsManager->getSetting('platform.use_custom_pages', true);
 
-        $variables = [];
+        $configuration['plugins']['buycourses'] = $this->getBuyCoursesFrontendConfig();
+        $configuration['plugins']['tour'] = $this->getTourFrontendConfig();
+        $configuration['plugins']['searchcourse'] = $this->getSearchCourseFrontendConfig();
+        $configuration['plugins']['rss'] = $this->getRssFrontendConfig();
+        $configuration['plugins']['dictionary'] = $this->getDictionaryFrontendConfig();
 
         if ($this->isGranted('ROLE_USER')) {
             $variables = [
@@ -114,6 +135,12 @@ class PlatformConfigurationController extends AbstractController
                 'admin.administrator_surname',
                 'editor.enabled_mathjax',
                 'editor.translate_html',
+                'editor.block_copy_paste_for_students',
+                'editor.youtube_for_students',
+                'editor.enabled_insertHtml',
+                'editor.enable_iframe_inclusion',
+                'editor.enable_uploadimage_editor',
+                'editor.video_context_menu_hidden',
                 'display.show_admin_toolbar',
                 'registration.allow_terms_conditions',
                 'agenda.allow_personal_agenda',
@@ -121,6 +148,7 @@ class PlatformConfigurationController extends AbstractController
                 'social.social_enable_messages_feedback',
                 'social.disable_dislike_option',
                 'skill.allow_skills_tool',
+                'skill.allow_hr_skills_management',
                 'gradebook.gradebook_enable_grade_model',
                 'gradebook.gradebook_dependency',
                 'course.course_validation',
@@ -143,6 +171,7 @@ class PlatformConfigurationController extends AbstractController
                 'attendance.attendance_allow_comments',
                 'attendance.multilevel_grading',
                 'attendance.enable_sign_attendance_sheet',
+                'attendance.attendance_add_official_code',
                 'exercise.allow_exercise_auto_launch',
                 'document.access_url_specific_files',
                 'catalog.show_courses_descriptions_in_catalog',
@@ -158,6 +187,7 @@ class PlatformConfigurationController extends AbstractController
                 'message.allow_message_tool',
                 'lp.hide_scorm_export_link',
                 'ai_helpers.enable_ai_helpers',
+                'ai_helpers.course_analyser',
                 'lp.hide_scorm_pdf_link',
                 'display.table_default_row',
                 'display.table_row_list',
@@ -167,7 +197,33 @@ class PlatformConfigurationController extends AbstractController
                 'search.search_enabled',
                 'search.search_prefilter_prefix',
                 'search.search_show_unlinked_results',
+                'certificate.allow_general_certificate',
+                'language.show_different_course_language',
+                'workflows.allow_users_to_create_courses',
+                'work.allow_only_one_student_publication_per_user',
+                'course.course_creation_form_hide_course_code',
+                'course.course_creation_form_set_course_category_mandatory',
+                'display.hide_logout_button',
+                'document.documents_hide_download_icon',
+                'platform.allow_my_files',
+                'document.users_copy_files',
+                'agenda.allow_careers_in_global_agenda',
+                'display.display_categories_on_homepage',
+                'security.hide_breadcrumb_if_not_allowed',
+                'lp.show_invisible_lp_in_course_home',
+                'lp.lp_start_and_end_date_visible_in_student_view',
+                'lp.lp_allow_export_to_students',
+                'course.enable_tool_introduction',
+                'course.show_toolshortcuts',
+                'work.my_courses_show_pending_work',
+                'exercise.my_courses_show_pending_exercise_attempts',
+                'certificate.allow_public_certificates',
+                'certificate.allow_certificates_search',
             ];
+
+            foreach ($variables as $variable) {
+                $configuration['settings'][$variable] = $settingsManager->getSetting($variable, true);
+            }
 
             $user = $this->userHelper->getCurrent();
 
@@ -190,12 +246,8 @@ class PlatformConfigurationController extends AbstractController
                 ]),
                 'listingURL' => (new Bbb('', '', true, $user->getId()))->getListingUrl(),
             ];
-        }
 
-        foreach ($variables as $variable) {
-            $value = $settingsManager->getSetting($variable, true);
-
-            $configuration['settings'][$variable] = $value;
+            $configuration['plugins']['onlyoffice'] = $this->getOnlyofficeFrontendConfig();
         }
 
         return new JsonResponse($configuration);
@@ -205,6 +257,7 @@ class PlatformConfigurationController extends AbstractController
     public function courseSettingsList(
         SettingsCourseManager $courseSettingsManager,
         CourseRepository $courseRepository,
+        EntityManagerInterface $entityManager,
         Request $request
     ): JsonResponse {
         $courseId = $request->query->get('cid');
@@ -217,6 +270,7 @@ class PlatformConfigurationController extends AbstractController
             return new JsonResponse(['error' => 'Course not found'], Response::HTTP_NOT_FOUND);
         }
 
+        $courseId = (int) $course->getId();
         $courseSettingsManager->setCourse($course);
         $settings = [
             'show_course_in_user_language' => $courseSettingsManager->getCourseSettingValue('show_course_in_user_language'),
@@ -225,53 +279,274 @@ class PlatformConfigurationController extends AbstractController
             'enable_exercise_auto_launch' => $courseSettingsManager->getCourseSettingValue('enable_exercise_auto_launch'),
             'enable_lp_auto_launch' => $courseSettingsManager->getCourseSettingValue('enable_lp_auto_launch'),
             'enable_forum_auto_launch' => $courseSettingsManager->getCourseSettingValue('enable_forum_auto_launch'),
-            'learning_path_generator' => $courseSettingsManager->getCourseSettingValue('learning_path_generator'),
-            'image_generator' => $courseSettingsManager->getCourseSettingValue('image_generator'),
-            'video_generator' => $courseSettingsManager->getCourseSettingValue('video_generator'),
-            'glossary_terms_generator' => $courseSettingsManager->getCourseSettingValue('glossary_terms_generator'),
-            'task_grader' => $courseSettingsManager->getCourseSettingValue('task_grader'),
-            'content_analyzer' => $courseSettingsManager->getCourseSettingValue('content_analyzer'),
             'display_info_advance_inside_homecourse' => $courseSettingsManager->getCourseSettingValue('display_info_advance_inside_homecourse'),
+            'student_validate_own_attendance' => $courseSettingsManager->getCourseSettingValue('student_validate_own_attendance'),
         ];
 
-        return new JsonResponse(['settings' => $settings]);
+        $aiSettings = [
+            'learning_path_generator',
+            'exercise_generator',
+            'open_answers_grader',
+            'tutor_chatbot',
+            'task_grader',
+            'content_analyser',
+            'image_generator',
+            'glossary_terms_generator',
+            'video_generator',
+            'course_analyser',
+        ];
+
+        $settingsByCategory = [
+            'ai_helpers' => [],
+        ];
+
+        foreach ($aiSettings as $variable) {
+            $value = $this->getCourseSettingValueByCategory(
+                $entityManager,
+                $courseId,
+                $variable,
+                'ai_helpers'
+            );
+
+            $settingsByCategory['ai_helpers'][$variable] = $value;
+
+            // Backward compatibility for current frontend calls.
+            $settings[$variable] = $value;
+            $settings['ai_helpers.'.$variable] = $value;
+        }
+
+        // Backward compatibility with the previous frontend typo/name.
+        $settings['content_analyzer'] = $settingsByCategory['ai_helpers']['content_analyser'] ?? null;
+
+        return new JsonResponse([
+            'settings' => $settings,
+            'settings_by_category' => $settingsByCategory,
+        ]);
+    }
+
+    private function getCourseSettingValueByCategory(
+        EntityManagerInterface $entityManager,
+        int $courseId,
+        string $variable,
+        string $category
+    ): ?string {
+        $repository = $entityManager->getRepository(CCourseSetting::class);
+
+        /** @var CCourseSetting|null $categorized */
+        $categorized = $repository->findOneBy([
+            'cId' => $courseId,
+            'variable' => $variable,
+            'category' => $category,
+        ]);
+
+        if ($categorized instanceof CCourseSetting) {
+            return $categorized->getValue();
+        }
+
+        /**
+         * Temporary compatibility with legacy rows created without category.
+         * New writes should use the category.
+         */
+        /** @var CCourseSetting|null $legacyNullCategory */
+        $legacyNullCategory = $repository->findOneBy([
+            'cId' => $courseId,
+            'variable' => $variable,
+            'category' => null,
+        ]);
+
+        if ($legacyNullCategory instanceof CCourseSetting) {
+            return $legacyNullCategory->getValue();
+        }
+
+        /** @var CCourseSetting|null $legacyEmptyCategory */
+        $legacyEmptyCategory = $repository->findOneBy([
+            'cId' => $courseId,
+            'variable' => $variable,
+            'category' => '',
+        ]);
+
+        if ($legacyEmptyCategory instanceof CCourseSetting) {
+            return $legacyEmptyCategory->getValue();
+        }
+
+        return null;
     }
 
     /**
-     * Attempts to decode a setting value that may be stored as:
-     * - native PHP array
-     * - JSON string
-     * - PHP array code string
+     * Decodes a setting stored as a JSON string or native array.
+     * Returns the string 'false' unchanged (used as a sentinel by the settings system).
      */
-    private function decodeSettingArray(mixed $setting): array
+    private function decodeSetting(mixed $setting): mixed
     {
-        // Already an array, return as is
+        if ('false' === $setting) {
+            return 'false';
+        }
+
         if (\is_array($setting)) {
             return $setting;
         }
 
-        // Try to decode JSON string
         if (\is_string($setting)) {
             $json = json_decode($setting, true);
+
             if (\is_array($json)) {
                 return $json;
             }
-
-            // Try to evaluate PHP-style array string
-            $trimmed = rtrim($setting, ';');
-
-            try {
-                $evaluated = eval("return $trimmed;");
-                if (\is_array($evaluated)) {
-                    return $evaluated;
-                }
-            } catch (Throwable $e) {
-                // Log error and continue
-                error_log('Failed to eval setting value: '.$e->getMessage());
-            }
         }
 
-        // Return empty array as fallback
         return [];
+    }
+
+
+    private function getSearchCourseFrontendConfig(): array
+    {
+        if (!$this->loadLegacyPluginClass('SearchCourse/lib/search_course_plugin.class.php')
+            || !class_exists('SearchCoursePlugin')
+        ) {
+            return ['enabled' => false];
+        }
+
+        $plugin = SearchCoursePlugin::create();
+        $enabled = $plugin->isEnabled();
+
+        return [
+            'enabled' => $enabled,
+            'title' => $enabled ? $plugin->get_title() : '',
+            'indexPath' => '/plugin/SearchCourse/index.php',
+        ];
+    }
+
+    private function getRssFrontendConfig(): array
+    {
+        if (!$this->loadLegacyPluginClass('Rss/lib/rss_plugin.class.php')
+            || !class_exists('RssPlugin')
+        ) {
+            return ['enabled' => false];
+        }
+
+        $plugin = RssPlugin::create();
+        $enabled = $plugin->isEnabled();
+
+        return [
+            'enabled' => $enabled,
+            'title' => $enabled ? $plugin->get_title() : '',
+            'indexPath' => '/plugin/Rss/index.php',
+        ];
+    }
+
+    private function getDictionaryFrontendConfig(): array
+    {
+        if (!$this->loadLegacyPluginClass('Dictionary/DictionaryPlugin.php')
+            || !class_exists('DictionaryPlugin')
+        ) {
+            return ['enabled' => false];
+        }
+
+        $plugin = DictionaryPlugin::create();
+        $enabled = $plugin->isEnabled();
+
+        return [
+            'enabled' => $enabled,
+            'title' => $enabled ? $plugin->get_title() : '',
+            'indexPath' => '/plugin/Dictionary/index.php',
+        ];
+    }
+
+    private function loadLegacyPluginClass(string $relativePath): bool
+    {
+        $filePath = dirname(__DIR__, 3).'/public/plugin/'.$relativePath;
+
+        if (!is_file($filePath)) {
+            return false;
+        }
+
+        require_once $filePath;
+
+        return true;
+    }
+
+    private function getOnlyofficeFrontendConfig(): array
+    {
+        $onlyoffice = OnlyofficePlugin::create();
+        $enabled = $onlyoffice->isEnabled();
+        $documentServerUrl = (string) ($onlyoffice->get('document_server_url') ?? '');
+        $jwtSecret = (string) ($onlyoffice->get('jwt_secret') ?? '');
+        $demoData = $onlyoffice->get('onlyoffice_connect_demo_data');
+
+        $demoEnabled = false;
+
+        if (\is_string($demoData) && '' !== trim($demoData)) {
+            $decodedDemo = json_decode($demoData, true);
+            if (\is_array($decodedDemo)) {
+                $demoEnabled = !empty($decodedDemo['enabled']);
+            }
+        } elseif (\is_array($demoData)) {
+            $demoEnabled = !empty($demoData['enabled']);
+        }
+
+        $configured = $demoEnabled || (
+            '' !== trim($documentServerUrl)
+                && '' !== trim($jwtSecret)
+        );
+
+        return [
+            'enabled' => $enabled,
+            'configured' => $configured,
+            'editorPath' => '/plugin/Onlyoffice/editor.php',
+        ];
+    }
+
+    private function getTourFrontendConfig(): array
+    {
+        $tour = Tour::create();
+        $enabled = $tour->isEnabled();
+
+        $config = [
+            'enabled' => $enabled,
+        ];
+
+        if ($enabled) {
+            $theme = trim((string) ($tour->get('theme') ?? ''));
+            $themeCssPath = null;
+
+            if ('' !== $theme) {
+                $themeCssPath = '/plugin/Tour/intro.js/introjs-'.$theme.'.css';
+            }
+
+            $config['showTour'] = $tour->get('show_tour');
+            $config['theme'] = $theme;
+            $config['introCss'] = '/plugin/Tour/intro.js/introjs.min.css';
+            $config['introThemeCss'] = $themeCssPath;
+            $config['introJs'] = '/plugin/Tour/intro.js/intro.min.js';
+            $config['stepsAjax'] = '/plugin/Tour/ajax/steps.ajax.php';
+            $config['saveAjax'] = '/plugin/Tour/ajax/save.ajax.php';
+        }
+
+        return $config;
+    }
+
+    private function getBuyCoursesFrontendConfig(): array
+    {
+        $buyCourses = BuyCoursesPlugin::create();
+        $enabled = $buyCourses->isEnabled();
+
+        $config = [
+            'enabled' => $enabled,
+        ];
+
+        if ($enabled) {
+            $showMainMenuTab = $buyCourses->get('show_main_menu_tab');
+            $publicMainMenuTab = $buyCourses->get('public_main_menu_tab');
+            $allowAnonymousUsers = $buyCourses->get('unregistered_users_enable');
+
+            $config['showMainMenuTab'] = $showMainMenuTab;
+            $config['publicMainMenuTab'] = $publicMainMenuTab;
+            $config['allowAnonymousUsers'] = $allowAnonymousUsers;
+            $config['visibleForAuthenticatedUsers'] = $showMainMenuTab;
+            $config['visibleForAnonymousUsers'] = $showMainMenuTab && $publicMainMenuTab;
+            $config['indexPath'] = '/plugin/BuyCourses/index.php';
+        }
+
+        return $config;
     }
 }

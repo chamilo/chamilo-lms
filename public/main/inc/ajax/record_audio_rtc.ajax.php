@@ -134,6 +134,13 @@ switch ($type) {
             (string) $node->getId()
         );
 
+        // Store the related exe_id to prevent attaching stale recordings to a different attempt.
+        // This also allows re-attaching after the attempt row is deleted/recreated by AJAX saves.
+        ChamiloSession::write(
+            'oral_expression_asset_exe_id_'.$questionId,
+            (string) $trackExerciseId
+        );
+
         break;
 
     case OralExpression::RECORDING_TYPE_FEEDBACK:

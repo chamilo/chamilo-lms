@@ -5,8 +5,11 @@
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Repository\TrackEAttemptRepository;
 use Chamilo\PluginBundle\ExerciseFocused\Entity\Log as FocusedLog;
+use Chamilo\PluginBundle\ExerciseFocused\Repository\LogRepository as FocusedLogRepository;
 use Chamilo\PluginBundle\ExerciseMonitoring\Entity\Log as MonitoringLog;
+use Chamilo\PluginBundle\ExerciseMonitoring\Repository\LogRepository as MonitoringLogRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
@@ -19,13 +22,14 @@ if (!api_is_allowed_to_edit()) {
 
 $plugin = ExerciseFocusedPlugin::create();
 $monitoringPlugin = ExerciseMonitoringPlugin::create();
-$monitoringPluginIsEnabled = $monitoringPlugin->isEnabled(true);
+$monitoringPluginIsEnabled = $monitoringPlugin->isEnabled();
 $em = Database::getManager();
-/** @var FocusedLog $focusedLogRepository */
+/** @var FocusedLogRepository $focusedLogRepository */
 $focusedLogRepository = $em->getRepository(FocusedLog::class);
+/** @var TrackEAttemptRepository $attempsRepository */
 $attempsRepository = $em->getRepository(TrackEAttempt::class);
 
-if (!$plugin->isEnabled(true)) {
+if (!$plugin->isEnabled()) {
     api_not_allowed(true);
 }
 
@@ -44,8 +48,8 @@ foreach ($results as $result) {
     $outfocusedLimitCount = $focusedLogRepository->countByActionInExe($trackExe, FocusedLog::TYPE_OUTFOCUSED_LIMIT);
     $timeLimitCount = $focusedLogRepository->countByActionInExe($trackExe, FocusedLog::TYPE_TIME_LIMIT);
 
-    $exercise = new Exercise($trackExe->getCId());
-    $exercise->read($trackExe->getExeExoId());
+    $exercise = new Exercise($trackExe->getCourse()->getId());
+    $exercise->read($trackExe->getQuiz()->getIid());
 
     $quizType = (int) $exercise->selectType();
 
@@ -270,14 +274,13 @@ function findResults(array $formValues, EntityManagerInterface $em, ExerciseFocu
 
 function getSnapshotListForLevel(int $level, TrackEExercise $trackExe): string
 {
-    $monitoringPluginIsEnabled = ExerciseMonitoringPlugin::create()->isEnabled(true);
+    $monitoringPluginIsEnabled = ExerciseMonitoringPlugin::create()->isEnabled();
 
     if (!$monitoringPluginIsEnabled) {
         return '';
     }
 
-    $user = $trackExe->getUser();
-    /** @var MonitoringLog $monitoringLogRepository */
+    /** @var MonitoringLogRepository $monitoringLogRepository */
     $monitoringLogRepository = Database::getManager()->getRepository(MonitoringLog::class);
 
     $monitoringLogsByQuestion = $monitoringLogRepository->findByLevelAndExe($level, $trackExe);
@@ -285,10 +288,8 @@ function getSnapshotListForLevel(int $level, TrackEExercise $trackExe): string
 
     /** @var MonitoringLog $logByQuestion */
     foreach ($monitoringLogsByQuestion as $logByQuestion) {
-        $snapshotUrl = ExerciseMonitoringPlugin::generateSnapshotUrl(
-            $user->getId(),
-            $logByQuestion->getImageFilename()
-        );
+        $snapshotUrl = '/plugin/ExerciseMonitoring/pages/snapshot.php?f='.urlencode($logByQuestion->getImageFilename());
+
         $snapshotList[] = api_get_local_time($logByQuestion->getCreatedAt()).' '.$snapshotUrl;
     }
 

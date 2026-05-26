@@ -26,6 +26,8 @@ use Doctrine\Persistence\ManagerRegistry;
  * Class CourseRepository.
  *
  * The functions inside this class should return an instance of QueryBuilder.
+ *
+ * @extends ResourceRepository<Course>
  */
 class CourseRepository extends ResourceRepository
 {

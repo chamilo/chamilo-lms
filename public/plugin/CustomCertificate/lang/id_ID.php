@@ -1,0 +1,77 @@
+<?php
+$strings['plugin_title'] = 'Sertifikat kustom';
+$strings['plugin_comment'] = 'Plugin ini memungkinkan Anda membuat sertifikat kustom untuk setiap kursus.';
+$strings['enable_plugin_customcertificate'] = 'Aktifkan plugin';
+$strings['customcertificate_course_enable'] = 'Aktifkan sertifikat kustom di kursus';
+$strings['use_certificate_default'] = 'Gunakan sertifikat kustom default';
+$strings['ToolDisabled'] = 'Alat dinonaktifkan dari administrasi';
+$strings['OnlyAdminPlatform'] = 'Alat hanya untuk administrator';
+$strings['OnlyAdminPlatformOrTeacher'] = 'Alat hanya untuk administrator dan pengajar';
+$strings['TrainingEntity'] = 'Entitas pelatihan';
+$strings['DescriptionFront'] = 'Deskripsi depan';
+$strings['DescriptionRear'] = 'Deskripsi belakang';
+$strings['Certify'] = 'Sertifikasi';
+$strings['CertificateType'] = 'Jenis sertifikat';
+$strings['CertifyThat'] = 'MENSERTIFIKASI BAHAWA';
+$strings['StudentCourseInfo'] = 'Data siswa dan kursus';
+$strings['StudentData'] = 'Data siswa';
+$strings['CourseData'] = 'Data kursus';
+$strings['Modality'] = 'Modalitas';
+$strings['Contents'] = 'Isi';
+$strings['ContentsToShow'] = 'Isi yang ditampilkan';
+$strings['ContentsCourseDescription'] = 'Gunakan bagian "Deskripsi kursus"> "Isi"';
+$strings['ContentsIndexLearnpath'] = 'Gunakan indeks jalur pembelajaran';
+$strings['ContentsCustom'] = 'Gunakan isi kustom';
+$strings['ContentsHide'] = 'Tidak tampilkan isi';
+$strings['Dates'] = 'Tanggal';
+$strings['CourseDeliveryDates'] = 'Tanggal penyampaian kursus';
+$strings['Custom'] = 'Kustom';
+$strings['UseDateSessionAccess'] = 'Gunakan tanggal akses sesi';
+$strings['ExpectionPlace'] = 'Tempat ekspedisi';
+$strings['DateExpediction'] = 'Tanggal ekspedisi';
+$strings['UseDateEndAccessSession'] = 'Gunakan tanggal akhir akses sesi';
+$strings['UseDateDownloadCertificate'] = 'Gunakan tanggal unduh sertifikat';
+$strings['UseDateGenerationCertificate'] = 'Gunakan tanggal pembuatan sertifikat';
+$strings['UseCustomDate'] = 'Gunakan tanggal kustom';
+$strings['LogosSeal'] = 'Logo / Segel';
+$strings['LogoLeft'] = 'Logo kiri';
+$strings['LogoCenter'] = 'Logo tengah';
+$strings['LogoRight'] = 'Logo kanan';
+$strings['Seal'] = 'Segel';
+$strings['Signature1'] = 'Tanda tangan 1';
+$strings['Signature2'] = 'Tanda tangan 2';
+$strings['Signature3'] = 'Tanda tangan 3';
+$strings['Signature4'] = 'Tanda tangan 4';
+$strings['SignatureText1'] = 'Teks tanda tangan 1';
+$strings['SignatureText2'] = 'Teks tanda tangan 2';
+$strings['SignatureText3'] = 'Teks tanda tangan 3';
+$strings['SignatureText4'] = 'Teks tanda tangan 4';
+$strings['OtherOptions'] = 'Opsi lainnya';
+$strings['MarginRight'] = 'Margin kanan';
+$strings['MarginLeft'] = 'Margin kiri';
+$strings['SetDefaultTemplate'] = 'Tetapkan template sebagai default';
+$strings['MessageDefaultTemplate'] = 'Simpan penyesuaian default ini untuk kursus dan sesi tanpa
+     sertifikat yang ditentukan';
+$strings['None'] = 'Tidak ada';
+$strings['ErrorTemplateCertificate'] = 'Tidak ada template yang ditentukan untuk sertifikat.
+     Tidak ada template default.';
+$strings['DateStartEnd'] = 'Dengan Tanggal Mulai dan Tanggal Selesai: ';
+$strings['ExpedictionIn'] = 'Eksipisi dalam';
+$strings['Signatures'] = 'Tanda tangan';
+$strings['BackgroundCertificate'] = 'Gambar latar belakang sertifikat';
+$strings['Background'] = 'Latar belakang';
+$strings['CertificateSetting'] = 'Pengaturan sertifikat';
+$strings['ToolDisabledCourse'] = 'Alat dinonaktifkan dalam pengaturan kursus';
+$strings['ToolUseDefaultSettingCourse'] = 'Alat dikonfigurasi untuk menggunakan sertifikat default. <br>
+     Anda dapat mengeditnya dari layar Administrasi -> Plugin -> Sertifikat Kustom. <br>
+     Atau jika Anda mau, Anda dapat menonaktifkan opsi untuk menggunakan sertifikat default dalam konfigurasi plugin di kursus';
+$strings['CertificateSettingDefault'] = 'Pengaturan sertifikat default';
+$strings['InfoFromDefaultCertificate'] = 'Konten sertifikat didasarkan pada sertifikat default.
+     Modifikasi yang Anda buat tidak akan memengaruhi sertifikat default.';
+$strings['to'] = ' hingga ';
+$strings['formatDownloadDate'] = ' hingga %sth %s, %s';
+$strings['PrintCertificate'] = 'Cetak sertifikat';
+$strings['QuestionDelete'] = 'Apakah Anda ingin menghapus diploma khusus dan menggunakan sertifikat default?';
+$strings['SuccessDelete'] = 'Berhasil dihapus';
+$strings['ProblemDelete'] = 'Masalah saat menghapus sertifikat';
+$strings['OnlyCustomCertificates'] = 'Hanya kursus dengan sertifikat yang dipersonalisasi yang diekspor';

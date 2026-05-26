@@ -22,7 +22,7 @@
       <BaseButton
         class="self-end"
         icon="search"
-        label="Search"
+        :label="$t('Search')"
         type="secondary"
         @click="handleFormSearch"
       />
@@ -42,22 +42,24 @@
       <div
         v-for="group in groups"
         :key="group.id"
-        class="group-card"
+        class="rounded-2xl border border-gray-25 bg-white p-4 text-center shadow-sm"
       >
-        <div class="group-image flex justify-center">
+        <div class="flex justify-center">
           <img
-            :src="group.image"
-            class="rounded w-16 h-16"
+            :src="group.image || defaultGroupImage"
+            :alt="group.name"
+            class="h-20 w-20 rounded-full object-cover"
+            loading="lazy"
           />
         </div>
-        <div class="group-info text-center">
-          <h3>{{ group.name }}</h3>
-          <p>{{ group.description }}</p>
+        <div class="mt-3 text-center">
+          <h3 class="font-semibold text-gray-90">{{ group.name }}</h3>
+          <p class="mt-1 text-sm text-gray-60">{{ group.description }}</p>
           <a :href="group.url">
             <BaseButton
-              class="mt-2"
+              class="mt-3"
               icon=""
-              label="See more"
+              :label="t('See more')"
               type="secondary"
             />
           </a>
@@ -74,13 +76,12 @@ import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import { useI18n } from "vue-i18n"
 import { useNotification } from "../../composables/notification"
-import { useSocialInfo } from "../../composables/useSocialInfo"
 
 const query = ref("")
 const { t } = useI18n()
 const notification = useNotification()
-const { user, loadGroup, groupInfo, isLoading } = useSocialInfo()
 const groups = ref([])
+const defaultGroupImage = "/img/icons/64/group_na.png"
 
 const headerTitle = computed(() => {
   return query.value ? `${t("Results for")} "${query.value}"` : t("Search groups")
@@ -88,11 +89,11 @@ const headerTitle = computed(() => {
 
 const handleFormSearch = async () => {
   if (!query.value.trim()) {
-    notification.showWarningNotification("Please enter a search term.")
+    notification.showWarningNotification(t("Please enter a search term."))
     return
   }
   try {
-    const response = await fetch(`/social-network/search?query=${query.value}&type=group`)
+    const response = await fetch(`/social-network/search?query=${encodeURIComponent(query.value)}&type=group`)
     const data = await response.json()
     if (!response.ok) {
       throw new Error(data.message || "Server response error")

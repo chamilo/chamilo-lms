@@ -41,21 +41,23 @@ final class ExceptionListener
 
         $exception = $event->getThrowable();
         $request = $event->getRequest();
-        $sessionHandler = $request->getSession();
+
+        if ($request->hasSession()) {
+            $request
+                ->getSession()
+                ->getFlashBag()
+                ->add(
+                    'error',
+                    $exception->getMessage() ?: 'You are not allowed to see this page. Either your connection has expired or you are trying to access a page for which you do not have the sufficient privileges.'
+                )
+            ;
+        }
 
         // Leave /api routes to the JSON listener
         $path = $request->getPathInfo() ?: $request->getRequestUri();
         if (str_starts_with($path, '/api/')) {
             return;
         }
-
-        $sessionHandler
-            ->getFlashBag()
-            ->add(
-                'error',
-                $exception->getMessage() ?: 'You are not allowed to see this page. Either your connection has expired or you are trying to access a page for which you do not have the sufficient privileges.'
-            )
-        ;
 
         // 403: legacy NotAllowed or Symfony AccessDenied
         if ($exception instanceof NotAllowedException

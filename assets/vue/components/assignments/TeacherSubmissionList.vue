@@ -2,7 +2,8 @@
   <div>
     <BaseTable
       :is-loading="loading"
-      v-model:multi-sort-meta="sortFields"
+      :sort-field="sortField"
+      :sort-order="sortOrder"
       v-model:rows="loadParams.itemsPerPage"
       :total-items="totalRecords"
       :values="submissions"
@@ -14,6 +15,7 @@
       <Column
         field="user.fullName"
         :header="t('Full name')"
+        sortable
       >
         <template #body="{ data }">
           <span class="text-gray-900">
@@ -25,6 +27,7 @@
       <Column
         field="title"
         :header="t('Title')"
+        sortable
       />
 
       <Column :header="t('Feedback')">
@@ -41,11 +44,11 @@
                 download
                 class="text-green-50 hover:underline"
               >
-                <i class="pi pi-check-circle"></i>
+                <i class="mdi mdi-check-circle"></i>
               </a>
               <i
                 v-else
-                class="pi pi-check-circle"
+                class="mdi mdi-check-circle"
               ></i>
             </span>
             <span
@@ -53,7 +56,7 @@
               class="flex items-center gap-1 text-gray-600 text-sm cursor-pointer hover:underline"
               @click="openCommentDialog(data)"
             >
-              <i class="pi pi-comment"></i> {{ data.comments.length }}
+              <i class="mdi mdi-comment"></i> {{ data.comments.length }}
             </span>
           </div>
         </template>
@@ -61,18 +64,34 @@
 
       <Column :header="t('Score')">
         <template #body="{ data }">
-          <template v-if="data.qualification !== null && data.publicationParent?.qualification">
-            <span
-              :class="{
-                'bg-success/10 text-success font-semibold text-sm px-2 py-1 rounded':
-                  data.qualification > data.publicationParent.qualification / 2,
-                'bg-danger/10 text-danger font-semibold text-sm px-2 py-1 rounded':
-                  data.qualification <= data.publicationParent.qualification / 2,
-              }"
+          <template v-if="data.qualification !== null && data.qualification !== undefined && data.qualification !== ''">
+            <template
+              v-if="
+                data.publicationParent?.qualification !== null &&
+                data.publicationParent?.qualification !== undefined &&
+                data.publicationParent?.qualification !== ''
+              "
             >
-              {{ data.qualification.toFixed(1) }} / {{ data.publicationParent.qualification.toFixed(1) }}
-            </span>
+              <span
+                :class="{
+                  'bg-success/10 text-success font-semibold text-sm px-2 py-1 rounded':
+                    Number(data.qualification) > Number(data.publicationParent.qualification) / 2,
+                  'bg-danger/10 text-danger font-semibold text-sm px-2 py-1 rounded':
+                    Number(data.qualification) <= Number(data.publicationParent.qualification) / 2,
+                }"
+              >
+                {{ Number(data.qualification).toFixed(1) }} /
+                {{ Number(data.publicationParent.qualification).toFixed(1) }}
+              </span>
+            </template>
+
+            <template v-else>
+              <span class="bg-success/10 text-success font-semibold text-sm px-2 py-1 rounded">
+                {{ Number(data.qualification).toFixed(1) }}
+              </span>
+            </template>
           </template>
+
           <template v-else>
             <span class="text-gray-50">
               {{ t("Not graded yet") }}
@@ -84,6 +103,7 @@
       <Column
         field="sentDate"
         :header="t('Date')"
+        sortable
       >
         <template #body="{ data }">
           {{ abbreviatedDatetime(data.sentDate) }}
@@ -95,10 +115,10 @@
           <div class="flex flex-col items-center gap-1">
             <BaseButton
               icon="file-upload"
-              size="normal"
+              size="small"
               only-icon
               :label="t('Upload correction')"
-              type="success"
+              type="success-text"
               :class="actionBtnClass"
               @click="openUploader(data)"
             />
@@ -118,35 +138,35 @@
           <div class="flex justify-center gap-2">
             <BaseButton
               icon="download"
-              size="normal"
+              size="small"
               only-icon
               :label="t('Download')"
               :class="actionBtnClass"
               @click="saveCorrection(data)"
-              type="primary"
+              type="primary-text"
             />
             <BaseButton
               v-if="canUseAiTaskGrader"
               icon="robot"
-              size="normal"
+              size="small"
               only-icon
               :label="t('AI grade')"
               :class="actionBtnClass"
               @click="openCorrectAndRate(data)"
-              type="black"
+              type="tertiary-text"
             />
             <BaseButton
               icon="reply-all"
-              size="normal"
+              size="small"
               only-icon
               :label="t('Correct and rate')"
               :class="actionBtnClass"
               @click="openCorrectAndRate(data)"
-              type="success"
+              type="success-text"
             />
             <BaseButton
               icon="edit"
-              size="normal"
+              size="small"
               only-icon
               :label="t('Edit')"
               :class="actionBtnClass"
@@ -155,12 +175,12 @@
             />
             <BaseButton
               icon="folder-move"
-              size="normal"
+              size="small"
               only-icon
               :label="t('Move')"
               :class="actionBtnClass"
               @click="moveSubmission(data)"
-              type="info"
+              type="secondary-text"
             />
             <BaseButton
               :icon="
@@ -172,19 +192,19 @@
               "
               :label="t('Visibility')"
               only-icon
-              size="normal"
-              type="black"
+              size="small"
+              type="tertiary-text"
               :class="actionBtnClass"
               @click="viewSubmission(data)"
             />
             <BaseButton
               icon="delete"
-              size="normal"
+              size="small"
               only-icon
               :label="t('Delete')"
               :class="actionBtnClass"
               @click="deleteSubmission(data)"
-              type="danger"
+              type="danger-text"
             />
           </div>
         </template>
@@ -255,7 +275,8 @@ const notification = useNotification()
 const loading = ref(false)
 const submissions = ref([])
 const totalRecords = ref(0)
-const sortFields = ref([{ field: "sentDate", order: -1 }])
+const sortField = ref("sentDate")
+const sortOrder = ref(-1)
 const loadParams = reactive({
   page: 1,
   itemsPerPage: null,
@@ -276,29 +297,6 @@ const platform = usePlatformConfig()
 const courseSettingsStore = useCourseSettings()
 const securityStore = useSecurityStore()
 
-async function loadCourseSettingsIfPossible() {
-  const courseId = course.value?.id
-  const sessionId = session.value?.id
-
-  if (!courseId) return
-
-  try {
-    await courseSettingsStore.loadCourseSettings(courseId, sessionId)
-  } catch (err) {
-    console.error("[Assignments] loadCourseSettings FAILED:", err)
-  }
-}
-
-onMounted(async () => {
-  await loadCourseSettingsIfPossible()
-})
-
-watch(
-  () => [course.value?.id, session.value?.id],
-  async () => {
-    await loadCourseSettingsIfPossible()
-  },
-)
 
 const aiHelpersEnabled = computed(() => {
   const v = String(platform.getSetting("ai_helpers.enable_ai_helpers"))
@@ -327,17 +325,8 @@ watch(
 )
 
 function buildOrderFromSort() {
-  // PrimeVue multi sort meta => API expects { field: "asc|desc" }
-  const order = {}
-  const meta = Array.isArray(sortFields.value) ? sortFields.value : []
-  meta.forEach((s) => {
-    if (!s?.field) return
-    order[s.field] = s.order === 1 ? "asc" : "desc"
-  })
-  if (!Object.keys(order).length) {
-    order.sentDate = "desc"
-  }
-  return order
+  if (!sortField.value) return { sentDate: "desc" }
+  return { [sortField.value]: sortOrder.value === 1 ? "asc" : "desc" }
 }
 
 async function loadData() {
@@ -365,8 +354,11 @@ function onPage(event) {
 }
 
 function onSort(event) {
-  if (event?.multiSortMeta) {
-    sortFields.value = event.multiSortMeta
+  sortField.value = event.sortField ?? sortField.value
+  sortOrder.value = event.sortOrder ?? sortOrder.value
+  loadParams.page = 1
+  if (loadParams.itemsPerPage) {
+    loadData()
   }
 }
 

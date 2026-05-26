@@ -63,14 +63,14 @@
           <div class="flex gap-2 flex-wrap">
             <BaseButton
               size="small"
-              type="secondary"
+              type="secondary-text"
               icon="edit"
               :label="t('Edit')"
               @click="openEdit(data)"
             />
             <BaseButton
               size="small"
-              type="danger"
+              type="danger-text"
               icon="delete"
               :label="t('Delete')"
               @click="openDelete(data)"

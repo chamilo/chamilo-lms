@@ -5,6 +5,52 @@
     class="course-home"
   >
     <div
+      v-if="courseHomeNotifyVisible"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
+      role="dialog"
+      aria-modal="true"
+      :aria-label="courseHomeNotify.title"
+    >
+      <div class="max-h-[85vh] w-full max-w-2xl overflow-hidden rounded-2xl bg-white shadow-xl">
+        <div class="flex items-center justify-between gap-4 border-b border-gray-25 px-6 py-4">
+          <h2 class="text-lg font-semibold text-gray-90">
+            {{ courseHomeNotify.title }}
+          </h2>
+
+          <button
+            type="button"
+            class="inline-flex h-8 w-8 items-center justify-center rounded-full text-gray-50 hover:bg-gray-10 hover:text-gray-90"
+            :aria-label="t('Close')"
+            @click="closeCourseHomeNotify"
+          >
+            <span class="mdi mdi-close" />
+          </button>
+        </div>
+
+        <div
+          class="max-h-[55vh] overflow-y-auto px-6 py-4 text-gray-90"
+          v-html="courseHomeNotify.content"
+        />
+
+        <div
+          v-if="courseHomeNotify.requiresLink && courseHomeNotify.contentUrl"
+          class="flex justify-end border-t border-gray-25 px-6 py-4"
+        >
+          <a
+            :href="courseHomeNotify.contentUrl"
+            class="btn btn--primary"
+            target="_blank"
+            rel="noopener noreferrer"
+            @click="closeCourseHomeNotify"
+          >
+            <span class="mdi mdi-open-in-new ch-tool-icon" />
+            {{ courseHomeNotify.linkLabel }}
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div
       v-if="isCourseLoading"
       class="flex flex-col gap-4"
     >
@@ -75,79 +121,33 @@
       v-else
       class="flex flex-col gap-4"
     >
-      <div class="section-header section-header--h2">
-        <h2 class="">
-          {{ course.title }}
-          <small v-if="session"> ({{ session.title }}) </small>
-        </h2>
-
-        <p
-          v-if="isAllowedToEdit && documentAutoLaunch === 1"
-          class="text-sm text-gray-600"
-        >
-          {{
-            t(
-              "The document auto-launch feature configuration is enabled. Learners will be automatically redirected to document tool.",
-            )
-          }}
-        </p>
-
-        <p
-          v-if="isAllowedToEdit && (exerciseAutoLaunch === 1 || exerciseAutoLaunch === 2)"
-          class="text-sm text-gray-600"
-        >
-          {{
-            t(
-              "The exercises auto-launch feature configuration is enabled. Learners will be automatically redirected to the selected exercise.",
-            )
-          }}
-        </p>
-
-        <p
-          v-if="isAllowedToEdit && (lpAutoLaunch === 1 || lpAutoLaunch === 2)"
-          class="text-sm text-gray-600"
-        >
-          {{
-            t(
-              "The learning path auto-launch setting is ON. When learners enter this course, they will be automatically redirected to the learning path marked as auto-launch.",
-            )
-          }}
-        </p>
-
-        <p
-          v-if="isAllowedToEdit && (forumAutoLaunch === 1 || forumAutoLaunch === 2)"
-          class="text-sm text-gray-600"
-        >
-          {{
-            t(
-              "The forum's auto-launch setting is on. Students will be redirected to the forum tool when entering this course.",
-            )
-          }}
-        </p>
-
-        <div class="grow-0">
-          <StudentViewButton
-            v-if="course"
-            @change="onStudentViewChanged"
-          />
-        </div>
-
+      <SectionHeader :title="course.title">
         <BaseButton
           v-if="isAllowedToEdit && courseIntroEl?.introduction?.iid"
           :label="t('Edit introduction')"
           class="grow-0"
           icon="edit"
+          type="secondary"
+          @click="courseIntroEl.goToCreateOrUpdate()"
+        />
+
+        <BaseButton
+          v-if="isAllowedToEdit"
+          :label="t('Reporting')"
+          :to-url="reportingUrl"
+          icon="tracking"
+          only-icon
           type="black"
           @click="courseIntroEl.goToCreateOrUpdate()"
         />
 
-        <div class="grow-0">
+        <template v-if="hasCourseTMenuItems">
           <BaseButton
-            v-if="isAllowedToEdit"
+            :label="t('More actions')"
             icon="cog"
             only-icon
             popup-identifier="course-tmenu"
-            type="black"
+            type="secondary"
             @click="toggleCourseTMenu"
           />
 
@@ -156,8 +156,52 @@
             ref="courseTMenu"
             :model="courseItems"
           />
-        </div>
-      </div>
+        </template>
+      </SectionHeader>
+
+      <p
+        v-if="isAllowedToEdit && documentAutoLaunch === 1"
+        class="text-sm text-gray-600"
+      >
+        {{
+          t(
+            "The document auto-launch feature configuration is enabled. Learners will be automatically redirected to document tool.",
+          )
+        }}
+      </p>
+
+      <p
+        v-if="isAllowedToEdit && (exerciseAutoLaunch === 1 || exerciseAutoLaunch === 2)"
+        class="text-sm text-gray-600"
+      >
+        {{
+          t(
+            "The exercises auto-launch feature configuration is enabled. Learners will be automatically redirected to the selected exercise.",
+          )
+        }}
+      </p>
+
+      <p
+        v-if="isAllowedToEdit && (lpAutoLaunch === 1 || lpAutoLaunch === 2)"
+        class="text-sm text-gray-600"
+      >
+        {{
+          t(
+            "The learning path auto-launch setting is ON. When learners enter this course, they will be automatically redirected to the learning path marked as auto-launch.",
+          )
+        }}
+      </p>
+
+      <p
+        v-if="isAllowedToEdit && (forumAutoLaunch === 1 || forumAutoLaunch === 2)"
+        class="text-sm text-gray-600"
+      >
+        {{
+          t(
+            "The forum's auto-launch setting is on. Students will be redirected to the forum tool when entering this course.",
+          )
+        }}
+      </p>
 
       <CourseThematicProgress />
 
@@ -180,7 +224,7 @@
         v-if="isAllowedToEdit"
         class="section-header section-header--h6"
       >
-        <h6 v-t="'Tools'" />
+        <h6 v-text="t('Tools')" />
 
         <div class="ml-auto">
           <BaseToggleButton
@@ -251,6 +295,18 @@
           :shortcut="shortcut"
         />
       </div>
+
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <div class="min-w-0">
+          <PluginRegion region="footer_left" />
+        </div>
+        <div class="min-w-0">
+          <PluginRegion region="footer_center" />
+        </div>
+        <div class="min-w-0">
+          <PluginRegion region="footer_right" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -259,17 +315,15 @@
 import { computed, onMounted, provide, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import axios from "axios"
-import { ENTRYPOINT } from "../../config/entrypoint"
 import CourseTool from "../../components/course/CourseTool"
 import ShortCutList from "../../components/course/ShortCutList.vue"
-import translateHtml from "../../../js/translatehtml.js"
 import Skeleton from "primevue/skeleton"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseMenu from "../../components/basecomponents/BaseMenu.vue"
 import BaseToggleButton from "../../components/basecomponents/BaseToggleButton.vue"
-import StudentViewButton from "../../components/StudentViewButton.vue"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
 import Sortable from "sortablejs"
-import { checkIsAllowedToEdit } from "../../composables/userPermissions"
+import { useIsAllowedToEdit } from "../../composables/userPermissions"
 import { useCidReqStore } from "../../store/cidReq"
 import { storeToRefs } from "pinia"
 import courseService from "../../services/courseService"
@@ -279,6 +333,7 @@ import { useSecurityStore } from "../../store/securityStore"
 import { useCourseSettings } from "../../store/courseSettingStore"
 import NextCourseSequence from "../../components/course/NextCourseSequence.vue"
 import CourseThematicProgress from "../../components/course/CourseThematicProgress.vue"
+import PluginRegion from "../../components/layout/PluginRegion.vue"
 
 const { t } = useI18n()
 const cidReqStore = useCidReqStore()
@@ -289,6 +344,8 @@ const { getSetting } = storeToRefs(platformConfigStore)
 
 const tools = ref([])
 const shortcuts = ref([])
+const courseHomeNotify = ref({})
+const courseHomeNotifyVisible = ref(false)
 
 const courseIntroEl = ref(null)
 
@@ -315,14 +372,55 @@ function getToolVisibility(tool) {
   return tool?.resourceNode?.resourceLinks?.[0]?.visibility
 }
 
+function isLearningPathTool(tool) {
+  return tool?.title === "learnpath" || tool?.tool?.title === "learnpath"
+}
+
+function shouldShowInvisibleLearningPathTool(tool) {
+  return isLearningPathTool(tool) && "true" === getSetting.value("lp.show_invisible_lp_in_course_home")
+}
+
 const toolsForDisplay = computed(() => {
   // Teachers/admins can see all tools (even hidden) to manage them.
   if (isAllowedToEdit.value) {
     return tools.value
   }
 
-  // Learners must not see hidden tools.
-  return tools.value.filter((tool) => getToolVisibility(tool) === TOOL_VISIBILITY_VISIBLE)
+  // Learners must not see hidden tools, except the learning path tool when enabled by platform setting.
+  return tools.value.filter((tool) => {
+    if (getToolVisibility(tool) === TOOL_VISIBILITY_VISIBLE) {
+      return true
+    }
+
+    return shouldShowInvisibleLearningPathTool(tool)
+  })
+})
+
+const reportingUrl = computed(() => {
+  const cid = course.value?.id
+  if (!cid) return null
+  const sid = session.value?.id || 0
+  return `/main/tracking/courseLog.php?cid=${cid}&sid=${sid}&gid=0`
+})
+
+const aiCourseAnalyzerUrl = computed(() => {
+  const cid = course.value?.id
+  if (!cid) return null
+
+  const sid = session.value?.id || 0
+
+  return `/ai/course/${cid}/analyzer?sid=${sid}`
+})
+
+function isSettingEnabled(value) {
+  return value === true || value === "true" || value === 1 || value === "1"
+}
+
+const isAiCourseAnalyzerEnabled = computed(() => {
+  return (
+    isSettingEnabled(getSetting.value("ai_helpers.enable_ai_helpers")) &&
+    isSettingEnabled(getSetting.value("ai_helpers.course_analyser"))
+  )
 })
 
 /**
@@ -346,7 +444,8 @@ async function loadCourseTools(showSkeleton = true) {
       }
 
       // Convenience flag for UI states (e.g. customize mode)
-      tool.isEnabled = tool.resourceNode?.resourceLinks?.[0]?.visibility === 2
+      tool.isEnabled =
+        tool.resourceNode?.resourceLinks?.[0]?.visibility === 2 || shouldShowInvisibleLearningPathTool(tool)
 
       return tool
     })
@@ -355,7 +454,9 @@ async function loadCourseTools(showSkeleton = true) {
     const regularTools = []
 
     normalizedTools.forEach((tool) => {
-      if (tool.tool?.category === "admin") {
+      if (tool.title === "tracking") {
+        // Tracking/Reporting is shown as a dedicated icon in the header, not in the tools grid.
+      } else if (tool.tool?.category === "admin") {
         adminMenuItems.push({
           label: t(tool.tool.titleToShow),
           url: tool.url,
@@ -364,6 +465,15 @@ async function loadCourseTools(showSkeleton = true) {
         regularTools.push(tool)
       }
     })
+
+    if (isAllowedToEdit.value && isAiCourseAnalyzerEnabled.value && aiCourseAnalyzerUrl.value) {
+      adminMenuItems.push({
+        label: t("AI analyzer"),
+        icon: "mdi mdi-robot-outline",
+        url: aiCourseAnalyzerUrl.value,
+        target: "_blank",
+      })
+    }
 
     tools.value = regularTools
     courseItems.value = adminMenuItems
@@ -394,7 +504,14 @@ courseService
 
 const courseTMenu = ref(null)
 
+const hasCourseTMenuItems = computed(() => {
+  return isAllowedToEdit.value && Array.isArray(courseItems.value) && courseItems.value.length > 0
+})
+
 const toggleCourseTMenu = (event) => {
+  if (!courseTMenu.value) {
+    return
+  }
   courseTMenu.value.toggle(event)
 }
 
@@ -409,8 +526,7 @@ const setToolVisibility = (tool, visibility) => {
 function changeVisibility(tool) {
   axios
     .post(
-      ENTRYPOINT +
-        "../r/course_tool/links/" +
+      "/r/course_tool/links/" +
         tool.resourceNode.id +
         "/change_visibility?cid=" +
         course.value.id +
@@ -423,7 +539,7 @@ function changeVisibility(tool) {
 
 function onClickShowAll() {
   axios
-    .post(ENTRYPOINT + `../r/course_tool/links/change_visibility/show?cid=${course.value.id}&sid=${session.value?.id}`)
+    .post(`/r/course_tool/links/change_visibility/show?cid=${course.value.id}&sid=${session.value?.id}`)
     .then(() => {
       tools.value.forEach((tool) => setToolVisibility(tool, 2))
     })
@@ -432,7 +548,7 @@ function onClickShowAll() {
 
 function onClickHideAll() {
   axios
-    .post(ENTRYPOINT + `../r/course_tool/links/change_visibility/hide?cid=${course.value.id}&sid=${session.value?.id}`)
+    .post(`/r/course_tool/links/change_visibility/hide?cid=${course.value.id}&sid=${session.value?.id}`)
     .then(() => {
       tools.value.forEach((tool) => setToolVisibility(tool, 0))
     })
@@ -472,31 +588,73 @@ async function updateDisplayOrder(htmlItem, newIndex) {
   await courseService.updateToolOrder(toolItem, newIndex, course.value.id, session.value?.id)
 }
 
-const isAllowedToEdit = ref(false)
+const { isAllowedToEdit } = useIsAllowedToEdit()
+
+
+async function enforceCourseLegalAgreement() {
+  if (!course.value?.id) {
+    return
+  }
+
+  try {
+    const response = await axios.get(`/plugin/CourseLegal/check.php?cid=${course.value.id}&sid=${session.value?.id || 0}&gid=0`)
+
+    if (response.data?.required && !response.data?.accepted && response.data?.url) {
+      window.location.href = response.data.url
+    }
+  } catch (error) {
+    console.error("[CourseLegal] Failed to check course legal agreement", error)
+  }
+}
+
+async function loadCourseHomeNotification() {
+  if (!course.value?.id) {
+    return
+  }
+
+  try {
+    const response = await axios.get(
+      `/plugin/CourseHomeNotify/ajax.php?cid=${course.value.id}&sid=${session.value?.id || 0}&gid=0`,
+    )
+
+    if (!response.data?.show) {
+      courseHomeNotify.value = {}
+      courseHomeNotifyVisible.value = false
+
+      return
+    }
+
+    courseHomeNotify.value = response.data
+    courseHomeNotifyVisible.value = true
+  } catch (error) {
+    console.error("[CourseHomeNotify] Failed to load course notification", error)
+    courseHomeNotify.value = {}
+    courseHomeNotifyVisible.value = false
+  }
+}
+
+function closeCourseHomeNotify() {
+  courseHomeNotifyVisible.value = false
+}
+
 const showCourseSequence = computed(() => {
   return platformConfigStore.getSetting("course.resource_sequence_show_dependency_in_course_intro") === "true"
 })
 
-onMounted(async () => {
-  isAllowedToEdit.value = await checkIsAllowedToEdit()
-  if ("true" === platformConfigStore.getSetting("editor.translate_html")) {
-    setTimeout(() => {
-      translateHtml()
-    }, 1000)
-  }
+onMounted(() => {
+  enforceCourseLegalAgreement()
+  loadCourseHomeNotification()
 
-  await courseSettingsStore.loadCourseSettings(course.value.id, session.value?.id)
   documentAutoLaunch.value = parseInt(courseSettingsStore.getSetting("enable_document_auto_launch"), 10) || 0
   exerciseAutoLaunch.value = parseInt(courseSettingsStore.getSetting("enable_exercise_auto_launch"), 10) || 0
   lpAutoLaunch.value = parseInt(courseSettingsStore.getSetting("enable_lp_auto_launch"), 10) || 0
   forumAutoLaunch.value = parseInt(courseSettingsStore.getSetting("enable_forum_auto_launch"), 10) || 0
 })
 
-const onStudentViewChanged = async () => {
-  isAllowedToEdit.value = await checkIsAllowedToEdit()
-
-  await loadCourseTools(false)
-}
+watch(
+  () => platformConfigStore.isStudentViewActive,
+  () => loadCourseTools(false),
+)
 
 const allowEditToolVisibilityInSession = computed(() => {
   const isInASession = session.value?.id

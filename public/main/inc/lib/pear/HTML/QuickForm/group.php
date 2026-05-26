@@ -55,15 +55,6 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
     public $_required = [];
 
     /**
-     * Whether to change elements' names to $groupName[$elementName] or leave them as is.
-     *
-     * @var bool
-     *
-     * @since    3.0
-     */
-    protected $_appendName = true;
-
-    /**
      * Class constructor.
      *
      * @param string $elementName  (optional)Group name

@@ -27,13 +27,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
+
+use const OPENSSL_RAW_DATA;
 
 /**
  * @author Julio Montoya <gugli100@gmail.com>
@@ -42,6 +41,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class AccountController extends BaseController
 {
     use ControllerTrait;
+
+    /**
+     * Prefix used to identify HKDF-based encryption format for MFA secrets.
+     * Legacy secrets have no prefix and remain readable for backward compatibility.
+     */
+    private const MFA_SECRET_V2_PREFIX = 'v2:';
 
     public function __construct(
         private readonly UserHelper $userHelper,
@@ -59,28 +64,30 @@ class AccountController extends BaseController
         $user = $this->userHelper->getCurrent();
 
         /** @var User $user */
-        $form = $this->createForm(ProfileType::class, $user);
+        $form = $this->createForm(ProfileType::class, $user, [
+            'include_password_field' => false,
+            'has_illustration' => $illustrationRepo->hasIllustration($user),
+        ]);
         $form->setData($user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $deleteIllustration = $form->has('delete_illustration')
+                && true === (bool) $form->get('delete_illustration')->getData();
+
             if ($form->has('illustration')) {
                 $illustration = $form['illustration']->getData();
+                $crop = $form->has('illustration_crop') ? (string) $form->get('illustration_crop')->getData() : '';
+
                 if ($illustration) {
                     $illustrationRepo->deleteIllustration($user);
-                    $illustrationRepo->addIllustration($user, $user, $illustration);
+                    $illustrationRepo->addIllustration($user, $user, $illustration, $crop);
+                } elseif ($deleteIllustration) {
+                    $illustrationRepo->deleteIllustration($user);
                 }
             }
 
-            if ($form->has('password')) {
-                $password = $form['password']->getData();
-                if ($password) {
-                    $user->setPlainPassword($password);
-                    $user->setPasswordUpdatedAt(new DateTimeImmutable());
-                }
-            }
-
-            $showTermsIfProfileCompleted = ('true' === $settingsManager->getSetting('profile.show_terms_if_profile_completed'));
+            $showTermsIfProfileCompleted = 'true' === $settingsManager->getSetting('profile.show_terms_if_profile_completed');
             $user->setProfileCompleted($showTermsIfProfileCompleted);
 
             $userRepository->updateUser($user);
@@ -92,12 +99,18 @@ class AccountController extends BaseController
             return new RedirectResponse($url);
         }
 
+        // Legacy Chamilo CSRF token (sec_token) used by old endpoints (extra fields/tags, etc).
+        // This prevents "CSRF error" warnings from legacy flows while the Symfony form still saves correctly.
+        $legacyToken = Security::get_token();
+
         return $this->render('@ChamiloCore/Account/edit.html.twig', [
             'form' => $form->createView(),
             'user' => $user,
+            'legacy_token' => $legacyToken,
         ]);
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/change-password', name: 'chamilo_core_account_change_password', methods: ['GET', 'POST'])]
     public function changePassword(
         Request $request,
@@ -105,39 +118,28 @@ class AccountController extends BaseController
         CsrfTokenManagerInterface $csrfTokenManager,
         SettingsManager $settingsManager,
         UserPasswordHasherInterface $passwordHasher,
-        TokenStorageInterface $tokenStorage,
     ): Response {
-        /** @var ?User $user */
         $user = $this->getUser();
 
-        if (!$user || !$user instanceof UserInterface) {
-            $userId = $request->query->get('userId');
-
-            if (!$userId || !ctype_digit($userId)) {
-                throw $this->createAccessDeniedException('This user does not have access to this section.');
-            }
-
-            $user = $userRepository->find((int) $userId);
-
-            if (!$user || !$user instanceof UserInterface) {
-                throw $this->createAccessDeniedException('User not found or invalid.');
-            }
+        // Always enforce "self" for this endpoint.
+        if (!$user instanceof User) {
+            throw $this->createAccessDeniedException('You must be logged in to access this page.');
         }
 
         // Global 2FA toggle: read either "security.2fa_enable" or fallback "2fa_enable"
         $twoFaEnabledGlobally = 'true' === $settingsManager->getSetting('security.2fa_enable', true);
 
-        // When rotating password (forced update), we also hide the 2FA widget
         $isRotation = $request->query->getBoolean('rotate', false);
+        $isFirstLogin = $this->isFirstLoginPasswordChange($user, $settingsManager);
+        $isForcedPasswordChange = $isRotation || $isFirstLogin;
 
-        // Build the form; expose 2FA fields only if globally enabled and not rotating the password
         $form = $this->createForm(ChangePasswordType::class, [
             'enable2FA' => $user->getMfaEnabled(),
         ], [
             'user' => $user,
             'portal_name' => $settingsManager->getSetting('platform.institution'),
             'password_hasher' => $passwordHasher,
-            'enable_2fa_field' => $twoFaEnabledGlobally && !$isRotation,
+            'enable_2fa_field' => $twoFaEnabledGlobally && !$isForcedPasswordChange,
             'global_2fa_enabled' => $twoFaEnabledGlobally,
         ]);
         $form->handleRequest($request);
@@ -146,7 +148,6 @@ class AccountController extends BaseController
         $qrCodeBase64 = null;
         $showQRCode = false;
 
-        // Pre-generate QR preview only when 2FA is globally enabled and user opted-in but hasn't saved yet
         if (
             $twoFaEnabledGlobally
             && $form->isSubmitted()
@@ -156,12 +157,10 @@ class AccountController extends BaseController
         ) {
             if (!$session->has('temporary_mfa_secret')) {
                 $totp = TOTP::create();
-                $secret = $totp->getSecret();
-                $session->set('temporary_mfa_secret', $secret);
-            } else {
-                $secret = $session->get('temporary_mfa_secret');
+                $session->set('temporary_mfa_secret', $totp->getSecret());
             }
 
+            $secret = (string) $session->get('temporary_mfa_secret');
             $totp = TOTP::create($secret);
             $portalName = $settingsManager->getSetting('platform.institution');
             $totp->setLabel($portalName.' - '.$user->getEmail());
@@ -182,76 +181,79 @@ class AccountController extends BaseController
 
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
-                $submittedToken = $request->request->get('_token');
+                $submittedToken = (string) $request->request->get('_token', '');
                 if (!$csrfTokenManager->isTokenValid(new CsrfToken('change_password', $submittedToken))) {
                     $form->addError(new FormError($this->translator->trans('CSRF token is invalid. Please try again.')));
                 } else {
-                    $currentPassword = $form->get('currentPassword')->getData();
-                    $newPassword = $form->get('newPassword')->getData();
-                    $confirmPassword = $form->get('confirmPassword')->getData();
+                    $currentPassword = (string) $form->get('currentPassword')->getData();
+                    $newPassword = (string) $form->get('newPassword')->getData();
+                    $confirmPassword = (string) $form->get('confirmPassword')->getData();
 
-                    // Only consider the user's 2FA intent if the global toggle is ON and not rotating
-                    $enable2FA = $twoFaEnabledGlobally && !$isRotation && $form->has('enable2FA')
+                    $enable2FA = $twoFaEnabledGlobally && !$isForcedPasswordChange && $form->has('enable2FA')
                         ? (bool) $form->get('enable2FA')->getData()
                         : false;
 
-                    // Handle 2FA activation (only when globally enabled)
-                    if ($twoFaEnabledGlobally && $enable2FA && !$user->getMfaSecret()) {
-                        $secret = $session->get('temporary_mfa_secret');
-                        if ($secret) {
-                            $encryptedSecret = $this->encryptTOTPSecret($secret, $_ENV['APP_SECRET']);
-                            $user->setMfaSecret($encryptedSecret);
-                            $user->setMfaEnabled(true);
-                            $user->setMfaService('TOTP');
-                            $userRepository->updateUser($user);
-                            $session->remove('temporary_mfa_secret');
+                    // Optional hardening: require current password to toggle 2FA as well.
+                    $twoFaToggleRequested = $twoFaEnabledGlobally && !$isForcedPasswordChange
+                        && (($enable2FA && !$user->getMfaEnabled()) || (!$enable2FA && $user->getMfaEnabled()));
 
-                            $this->addFlash('success', $this->translator->trans('2FA activated successfully.'));
+                    if ($twoFaToggleRequested && !$userRepository->isPasswordValid($user, $currentPassword)) {
+                        $form->get('currentPassword')->addError(new FormError(
+                            $this->translator->trans('The current password is incorrect')
+                        ));
+                    } else {
+                        // 2FA activation
+                        if ($twoFaEnabledGlobally && $enable2FA && !$user->getMfaSecret()) {
+                            $secret = (string) $session->get('temporary_mfa_secret', '');
+                            if ('' !== $secret) {
+                                $encryptedSecret = $this->encryptTOTPSecret($secret, $_ENV['APP_SECRET']);
+                                $user->setMfaSecret($encryptedSecret);
+                                $user->setMfaEnabled(true);
+                                $user->setMfaService('TOTP');
+                                $userRepository->updateUser($user);
+                                $session->remove('temporary_mfa_secret');
 
-                            return $this->redirectToRoute('chamilo_core_account_home');
-                        }
-                    }
+                                $this->addFlash('success', $this->translator->trans('2FA activated successfully.'));
 
-                    // Handle 2FA deactivation from the form (only visible if global is ON; safe to guard too)
-                    if ($twoFaEnabledGlobally && !$isRotation && !$enable2FA && $user->getMfaEnabled()) {
-                        $user->setMfaEnabled(false);
-                        $user->setMfaSecret(null);
-                        $userRepository->updateUser($user);
-                        $this->addFlash('success', $this->translator->trans('2FA disabled successfully.'));
-                    }
-
-                    // Password change flow (unchanged)
-                    if ($newPassword || $confirmPassword || $currentPassword) {
-                        if (!$userRepository->isPasswordValid($user, $currentPassword)) {
-                            $form->get('currentPassword')->addError(new FormError(
-                                $this->translator->trans('The current password is incorrect')
-                            ));
-                        } elseif ($newPassword !== $confirmPassword) {
-                            $form->get('confirmPassword')->addError(new FormError(
-                                $this->translator->trans('Passwords do not match')
-                            ));
-                        } else {
-                            $user->setPlainPassword($newPassword);
-                            $user->setPasswordUpdatedAt(new DateTimeImmutable());
-                            $userRepository->updateUser($user);
-                            $this->addFlash('success', $this->translator->trans('Password updated successfully'));
-
-                            // Re-login if the user was not logged in (edge case when rotating from link)
-                            if (!$this->getUser()) {
-                                $token = new UsernamePasswordToken($user, 'main', $user->getRoles());
-                                $tokenStorage->setToken($token);
-                                $request->getSession()->set('_security_main', serialize($token));
+                                return $this->redirectToRoute('chamilo_core_account_home');
                             }
+                        }
 
-                            return $this->redirectToRoute('chamilo_core_account_home');
+                        // 2FA deactivation
+                        if ($twoFaEnabledGlobally && !$isForcedPasswordChange && !$enable2FA && $user->getMfaEnabled()) {
+                            $user->setMfaEnabled(false);
+                            $user->setMfaSecret(null);
+                            $userRepository->updateUser($user);
+                            $this->addFlash('success', $this->translator->trans('2FA disabled successfully.'));
+                        }
+
+                        // Password change flow
+                        if ('' !== $newPassword || '' !== $confirmPassword || '' !== $currentPassword) {
+                            if (!$userRepository->isPasswordValid($user, $currentPassword)) {
+                                $form->get('currentPassword')->addError(new FormError(
+                                    $this->translator->trans('The current password is incorrect')
+                                ));
+                            } elseif ($newPassword !== $confirmPassword) {
+                                $form->get('confirmPassword')->addError(new FormError(
+                                    $this->translator->trans('Passwords do not match')
+                                ));
+                            } else {
+                                $user->setPlainPassword($newPassword);
+                                $user->setPasswordUpdatedAt(new DateTimeImmutable());
+
+                                if ($isFirstLogin) {
+                                    $user->setPasswordRequestedAt(null);
+                                }
+
+                                $userRepository->updateUser($user);
+                                $this->addFlash('success', $this->translator->trans('Password updated successfully'));
+
+                                return $this->redirectToRoute('chamilo_core_account_home');
+                            }
                         }
                     }
                 }
-            } else {
-                error_log('Form is NOT valid.');
             }
-        } else {
-            error_log('Form NOT submitted yet.');
         }
 
         return $this->render('@ChamiloCore/Account/change_password.html.twig', [
@@ -259,31 +261,122 @@ class AccountController extends BaseController
             'qrCode' => $qrCodeBase64,
             'user' => $user,
             'showQRCode' => $showQRCode,
+            'is_first_login' => $isFirstLogin,
+            'is_forced_password_change' => $isForcedPasswordChange,
+            'password_check_enabled' => 'true' === $settingsManager->getSetting('security.check_password', true),
             'password_requirements' => Security::getPasswordRequirements()['min'],
         ]);
     }
 
+    private function isFirstLoginPasswordChange(User $user, SettingsManager $settingsManager): bool
+    {
+        return 'true' === $settingsManager->getSetting('security.force_renew_password_at_first_login', true)
+            && null !== $user->getPasswordRequestedAt()
+            && null === $user->getConfirmationToken();
+    }
+
+    /**
+     * Derive a dedicated 32-byte encryption key for MFA secrets via HKDF.
+     * This avoids using APP_SECRET directly as an OpenSSL key.
+     */
+    private function deriveMfaKey(string $baseKey): string
+    {
+        $baseKey = (string) $baseKey;
+        if ('' === $baseKey) {
+            return '';
+        }
+
+        // 32 bytes for AES-256 key length.
+        return hash_hkdf('sha256', $baseKey, 32, 'chamilo:mfa:totp-secret:v1');
+    }
+
     /**
      * Encrypts the TOTP secret using AES-256-CBC encryption.
+     *
+     * New format:
+     * - v2:<base64(iv + ciphertext_raw)>
+     *
+     * Legacy format remains readable for backward compatibility:
+     * - base64(iv.'::'.ciphertext_base64)
      */
     private function encryptTOTPSecret(string $secret, string $encryptionKey): string
     {
         $cipherMethod = 'aes-256-cbc';
-        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length($cipherMethod));
-        $encryptedSecret = openssl_encrypt($secret, $cipherMethod, $encryptionKey, 0, $iv);
 
-        return base64_encode($iv.'::'.$encryptedSecret);
+        // Use HKDF-derived key (dedicated key separation).
+        $derivedKey = $this->deriveMfaKey($encryptionKey);
+        if ('' === $derivedKey) {
+            return '';
+        }
+
+        $ivLen = openssl_cipher_iv_length($cipherMethod);
+        $iv = openssl_random_pseudo_bytes($ivLen);
+
+        // Store raw ciphertext so we control encoding and versioning.
+        $ciphertextRaw = openssl_encrypt($secret, $cipherMethod, $derivedKey, OPENSSL_RAW_DATA, $iv);
+        if (false === $ciphertextRaw) {
+            return '';
+        }
+
+        return self::MFA_SECRET_V2_PREFIX.base64_encode($iv.$ciphertextRaw);
     }
 
     /**
      * Decrypts the TOTP secret using AES-256-CBC decryption.
+     *
+     * Supports:
+     * - v2 format (HKDF-derived key)
+     * - legacy format (APP_SECRET used directly), for existing users
      */
     private function decryptTOTPSecret(string $encryptedSecret, string $encryptionKey): string
     {
         $cipherMethod = 'aes-256-cbc';
-        list($iv, $encryptedData) = explode('::', base64_decode($encryptedSecret), 2);
+        $encryptedSecret = (string) $encryptedSecret;
 
-        return openssl_decrypt($encryptedData, $cipherMethod, $encryptionKey, 0, $iv);
+        if ('' === $encryptedSecret) {
+            return '';
+        }
+
+        // v2 format (preferred): v2:<base64(iv + ciphertext_raw)>
+        if (str_starts_with($encryptedSecret, self::MFA_SECRET_V2_PREFIX)) {
+            $payload = base64_decode(substr($encryptedSecret, \strlen(self::MFA_SECRET_V2_PREFIX)), true);
+            if (false === $payload) {
+                return '';
+            }
+
+            $ivLen = openssl_cipher_iv_length($cipherMethod);
+            if (\strlen($payload) <= $ivLen) {
+                return '';
+            }
+
+            $iv = substr($payload, 0, $ivLen);
+            $ciphertextRaw = substr($payload, $ivLen);
+
+            $derivedKey = $this->deriveMfaKey($encryptionKey);
+            if ('' === $derivedKey) {
+                return '';
+            }
+
+            $pt = openssl_decrypt($ciphertextRaw, $cipherMethod, $derivedKey, OPENSSL_RAW_DATA, $iv);
+
+            return false === $pt ? '' : (string) $pt;
+        }
+
+        // Legacy format: base64(iv.'::'.ciphertext_base64)
+        $decoded = base64_decode($encryptedSecret, true);
+        if (false === $decoded) {
+            return '';
+        }
+
+        // Keep legacy parsing unchanged.
+        [$iv, $encryptedData] = explode('::', $decoded, 2) + ['', ''];
+        if ('' === (string) $iv || '' === (string) $encryptedData) {
+            return '';
+        }
+
+        $pt = openssl_decrypt((string) $encryptedData, $cipherMethod, $encryptionKey, 0, (string) $iv);
+
+        return false === $pt ? '' : (string) $pt;
     }
 
     /**

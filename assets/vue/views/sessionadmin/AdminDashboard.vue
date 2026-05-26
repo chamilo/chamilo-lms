@@ -1,6 +1,9 @@
 <template>
   <div class="p-6">
-    <h1 class="text-2xl font-bold mb-6">{{ t("Available courses in this URL") }}</h1>
+    <h1 class="text-2xl font-bold mb-2">{{ t("Available courses in this URL") }}</h1>
+    <p class="text-gray-600 mb-6">
+      {{ t("In this section, when clicking on 'Register student' for a course, you will be asked to select the user on the next page. When validated, it will create a new session with the selected course and user, and send a subscription notification to the user.") }}
+    </p>
 
     <div v-if="loading" class="text-gray-500">
       {{ t("Loading courses...") }}

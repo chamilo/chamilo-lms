@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watch } from "vue"
+import { computed, onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRouter } from "vue-router"
 import PanelMenu from "primevue/panelmenu"
@@ -9,12 +9,15 @@ import PageList from "../../../../assets/vue/components/page/PageList.vue"
 import { useLocale } from "../../../../assets/vue/composables/locale"
 import { usePlatformConfig } from "../../../../assets/vue/store/platformConfig"
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const router = useRouter()
 
 const { languageList, currentLanguageFromList, reloadWithLocale } = useLocale()
 
-const selectedCity = ref({ label: currentLanguageFromList.originalName, isoCode: currentLanguageFromList.isocode })
+const selectedCity = ref({
+  label: currentLanguageFromList.originalName,
+  isoCode: currentLanguageFromList.isocode,
+})
 
 watch(selectedCity, ({ isoCode }) => reloadWithLocale(isoCode))
 
@@ -24,7 +27,74 @@ const languageItems = languageList.map((language) => ({
 }))
 
 const platformConfigStore = usePlatformConfig()
-const allowRegistration = computed(() => "false" !== platformConfigStore.getSetting("registration.allow_registration"))
+const allowRegistration = computed(() => "false" !== platformConfigStore.getSetting("registration.allow_registration")) 
+
+const categoryMenuLinks = ref([])
+const categoryPublicMenuLinks = ref([])
+
+function buildMenuLinkUrl(item) {
+  if (item?.url) {
+    return item.url
+  }
+
+  if (item?.slug) {
+    return `/pages/${item.slug}`
+  }
+
+  return null
+}
+
+function normalizeCategoryLinks(items, keyPrefix) {
+  if (!Array.isArray(items)) {
+    return []
+  }
+
+  return items
+    .filter((item) => item?.title && (item?.slug || item?.url))
+    .map((item, index) => ({
+      key: `${keyPrefix}_${item.id || item.slug || index}`,
+      label: item.title,
+      url: buildMenuLinkUrl(item),
+    }))
+    .filter((item) => item.url)
+}
+
+async function loadLinksForCategory(category) {
+  try {
+    const currentLocale = (locale.value || "").toString()
+    const url =
+      `/pages/_category-links?category=${encodeURIComponent(category)}` +
+      `&locale=${encodeURIComponent(currentLocale)}`
+
+    const response = await fetch(url, { headers: { Accept: "application/json" } })
+
+    if (!response.ok) {
+      return []
+    }
+
+    const data = await response.json()
+    return normalizeCategoryLinks(data?.items, category)
+  } catch (error) {
+    console.error(`Failed to load category links for "${category}".`, error)
+    return []
+  }
+}
+
+async function loadAllCategoryLinks() {
+  ;[categoryMenuLinks.value, categoryPublicMenuLinks.value] = await Promise.all([
+    loadLinksForCategory("menu_links"),
+    loadLinksForCategory("menu_public_links"),
+  ])
+}
+
+onMounted(loadAllCategoryLinks)
+
+watch(
+  () => locale.value,
+  () => {
+    loadAllCategoryLinks()
+  },
+)
 
 const menuItems = computed(() => {
   const items = [
@@ -62,17 +132,23 @@ const menuItems = computed(() => {
     })
   }
 
+  if (categoryMenuLinks.value.length > 0) {
+    items.push(...categoryMenuLinks.value)
+  }
+
+  if (categoryPublicMenuLinks.value.length > 0) {
+    items.push(...categoryPublicMenuLinks.value)
+  }
+
   return items
 })
 
-const sidebarIsOpen = ref(window.localStorage.getItem("sidebarIsOpen") === "true")
+const sidebarIsOpen = ref(true)
 
 watch(
   sidebarIsOpen,
   (newValue) => {
     const appEl = document.querySelector("#app")
-
-    window.localStorage.setItem("sidebarIsOpen", newValue.toString())
 
     appEl.classList.toggle("app--sidebar-inactive", !newValue)
   },
@@ -83,7 +159,7 @@ watch(
 </script>
 
 <template>
-  <aside class="app-sidebar">
+  <aside class="app-sidebar app-sidebar--custom-template">
     <div class="app-sidebar__container">
       <h3 class="app-sidebar__top">
         {{ t("Menu") }}
@@ -158,7 +234,7 @@ watch(
     </div>
   </aside>
 
-  <Teleport to=".app-topbar .p-menubar-end">
+  <Teleport to=".app-topbar__end">
     <a
       class="app-sidebar__topbar-button item-button"
       tabindex="0"
@@ -176,10 +252,16 @@ watch(
       @apply hidden
       sm:block sm:w-60;
 
+      &.app-sidebar--custom-template {
+        :deep(.p-panelmenu-content) {
+          @apply sm:opacity-100 sm:visible sm:pointer-events-auto sm:max-h-[1000px];
+        }
+      }
+
       .p-panelmenu-header {
         > .p-panelmenu-header-content a {
           .p-submenu-icon {
-            @apply block;
+            @apply block max-h-fit visible opacity-100;
           }
 
           .p-menuitem-text {

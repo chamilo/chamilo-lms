@@ -13,8 +13,8 @@
             <th>{{ 'Records'|get_plugin_lang('BBBPlugin') }}</th>
             <th>{{ 'Course'|get_lang }}</th>
             <th>{{ 'Session'|get_lang }}</th>
-            <th>{{ 'Participants'|get_lang }}</th>
-            <th>{{ 'CountUsers'|get_lang }}</th>
+            <th>{{ 'Participants'|get_plugin_lang('BBBPlugin') }}</th>
+            <th>{{ 'CountUsers'|get_plugin_lang('BBBPlugin') }}</th>
             <th>{{ 'Actions'|get_lang }}</th>
         </tr>
     </thead>

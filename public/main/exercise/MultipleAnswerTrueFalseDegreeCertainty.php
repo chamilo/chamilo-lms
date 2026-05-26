@@ -45,14 +45,13 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
     /**
      * Redefines Question::createAnswersForm: creates the HTML form to answer the question.
      *
-     * @uses \globals $text and $class, defined in the calling script
-     *
      * @param FormValidator $form
      */
     public function createAnswersForm($form)
     {
         global $text;
-        $nbAnswers = isset($_POST['nb_answers']) ? (int) $_POST['nb_answers'] : 4;
+
+        $nbAnswers = (int) ($_POST['nb_answers'] ?? 4);
         // The previous default value was 2. See task #1759.
         $nbAnswers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
 
@@ -62,25 +61,41 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $defaults = [];
 
         $form->addHeader(get_lang('Answers'));
-        $html = '<table class="table table-striped table-hover">
-            <tr>
-                <th width="10px">'.get_lang('number').'</th>
-                <th width="10px">'.get_lang('True').'</th>
-                <th width="10px">'.get_lang('False').'</th>
-                <th width="50%">'.get_lang('Answer').'</th>';
 
-        // show column comment when feedback is enable
+        // Determine if options exist already (edit) or not (first creation).
+        $hasOptions = false;
+        if (!empty($this->id)) {
+            try {
+                $opt = Question::readQuestionOption($this->id, $courseId);
+            } catch (\Throwable $e) {
+                $opt = Question::readQuestionOption($this->id);
+            }
+            $hasOptions = !empty($opt);
+        }
+
+        $tfIids = $this->getTrueFalseOptionIids($courseId);
+
+        $html = '<table class="table table-striped table-hover">';
+        $html .= '<thead><tr>';
+        $html .= '<th width="10px">'.get_lang('number').'</th>';
+        $html .= '<th width="10px">'.get_lang('True').'</th>';
+        $html .= '<th width="10px">'.get_lang('False').'</th>';
+        $html .= '<th width="50%">'.get_lang('Answer').'</th>';
+
+        // Show column comment when feedback is enabled
         if (EXERCISE_FEEDBACK_TYPE_EXAM != $objEx->getFeedbackType()) {
             $html .= '<th width="50%">'.get_lang('Comment').'</th>';
         }
-        $html .= '</tr>';
+
+        $html .= '</tr></thead><tbody>';
         $form->addHtml($html);
+
         $answer = null;
         if (!empty($this->id)) {
             $answer = new Answer($this->id);
             $answer->read();
             if ($answer->nbrAnswers > 0 && !$form->isSubmitted()) {
-                $nbAnswers = $answer->nbrAnswers;
+                $nbAnswers = (int) $answer->nbrAnswers;
             }
         }
 
@@ -90,22 +105,25 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             echo Display::return_message(get_lang('You have to create at least one answer'));
         }
 
-        // Can be more options
-        $optionData = Question::readQuestionOption($this->id);
-
         for ($i = 1; $i <= $nbAnswers; $i++) {
-            $renderer->setElementTemplate(
-                '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
-                'correct['.$i.']'
-            );
+            $form->addElement('html', '<tr>');
+
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
                 'counter['.$i.']'
             );
+
+            // Two radios will render as two <td> cells (True / False).
+            $renderer->setElementTemplate(
+                '<td style="text-align:center;"><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
+                'correct['.$i.']'
+            );
+
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
                 'answer['.$i.']'
             );
+
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
                 'comment['.$i.']'
@@ -119,43 +137,26 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             $defaults['correct['.$i.']'] = '';
 
             if (is_object($answer)) {
-                $defaults['answer['.$i.']'] = isset($answer->answer[$i]) ? $answer->answer[$i] : '';
-                if (isset($_POST['answer']) && isset($_POST['answer'][$i])) {
+                $defaults['answer['.$i.']'] = $answer->answer[$i] ?? '';
+                $defaults['comment['.$i.']'] = $answer->comment[$i] ?? '';
+                $defaults['correct['.$i.']'] = $answer->correct[$i] ?? '';
+
+                if (isset($_POST['answer'][$i])) {
                     $defaults['answer['.$i.']'] = Security::remove_XSS($_POST['answer'][$i]);
                 }
-
-                $defaults['comment['.$i.']'] = isset($answer->comment[$i]) ? $answer->comment[$i] : '';
-                if (isset($_POST['comment']) && isset($_POST['comment'][$i])) {
+                if (isset($_POST['comment'][$i])) {
                     $defaults['comment['.$i.']'] = Security::remove_XSS($_POST['comment'][$i]);
                 }
-
-                $defaults['weighting['.$i.']'] = isset($answer->weighting[$i]) ? float_format($answer->weighting[$i], 1) : '';
-                $correct = $answer->correct[$i] ?? '';
-                $defaults['correct['.$i.']'] = $correct;
-                if (isset($_POST['correct']) && isset($_POST['correct'][$i])) {
+                if (isset($_POST['correct'][$i])) {
                     $defaults['correct['.$i.']'] = Security::remove_XSS($_POST['correct'][$i]);
                 }
-
-                $j = 1;
-                if (!empty($optionData)) {
-                    foreach ($optionData as $id => $data) {
-                        $rdoCorrect = $form->addElement('radio', 'correct['.$i.']', null, null, $id);
-
-                        if (isset($_POST['correct']) && isset($_POST['correct'][$i]) && $j == $_POST['correct'][$i]) {
-                            $rdoCorrect->setValue(Security::remove_XSS($_POST['correct'][$i]));
-                        } else {
-                            $rdoCorrect->setValue($j);
-                        }
-                        $j++;
-                        if (3 == $j) {
-                            break;
-                        }
-                    }
-                }
-            } else {
-                $form->addElement('radio', 'correct['.$i.']', null, null, 1);
-                $form->addElement('radio', 'correct['.$i.']', null, null, 2);
             }
+
+            $trueValue = $hasOptions ? (int) $tfIids[1] : 1;
+            $falseValue = $hasOptions ? (int) $tfIids[2] : 2;
+
+            $form->addElement('radio', 'correct['.$i.']', null, null, $trueValue);
+            $form->addElement('radio', 'correct['.$i.']', null, null, $falseValue);
 
             $form->addHtmlEditor(
                 'answer['.$i.']',
@@ -163,15 +164,16 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 true,
                 false,
                 ['ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'],
-                ['style' => 'vertical-align:middle;'],
+                ['style' => 'vertical-align:middle;']
             );
             $form->addRule('answer['.$i.']', get_lang('Required field'), 'required');
             $form->applyFilter("answer[$i]", 'attr_on_filter');
 
-            if (isset($_POST['answer']) && isset($_POST['answer'][$i])) {
+            if (isset($_POST['answer'][$i])) {
                 $form->getElement("answer[$i]")->setValue(Security::remove_XSS($_POST['answer'][$i]));
             }
-            // show comment when feedback is enable
+
+            // Show comment when feedback is enabled
             if (EXERCISE_FEEDBACK_TYPE_EXAM != $objEx->getFeedbackType()) {
                 $form->addHtmlEditor(
                     'comment['.$i.']',
@@ -179,38 +181,39 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                     false,
                     false,
                     ['ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'],
-                    ['style' => 'vertical-align:middle;'],
+                    ['style' => 'vertical-align:middle;']
                 );
-                if (isset($_POST['comment']) && isset($_POST['comment'][$i])) {
+
+                if (isset($_POST['comment'][$i])) {
                     $form->getElement("comment[$i]")->setValue(Security::remove_XSS($_POST['comment'][$i]));
                 }
+
                 $form->applyFilter("comment[$i]", 'attr_on_filter');
             }
+
             $form->addElement('html', '</tr>');
         }
 
-        $form->addElement('html', '</table>');
+        $form->addElement('html', '</tbody></table>');
         $form->addElement('html', '<br />');
 
-        // 3 scores
+        // Scores (Correct/Wrong). Option[3] is fixed to 0 here.
         $txtOption1 = $form->addElement('text', 'option[1]', get_lang('Correct'), ['value' => '1']);
         $txtOption2 = $form->addElement('text', 'option[2]', get_lang('Wrong'), ['value' => '-0.5']);
-
         $form->addElement('hidden', 'option[3]', 0);
 
         $form->addRule('option[1]', get_lang('Required field'), 'required');
         $form->addRule('option[2]', get_lang('Required field'), 'required');
 
-        $form->addElement('html', '</tr><table>');
         $form->addElement('hidden', 'options_count', 3);
-        $form->addElement('html', '</table><br /><br />');
+        $form->addElement('html', '<br /><br />');
 
-        //Extra values True, false,  Dont known
+        // Load stored score values if present
         if (!empty($this->extra)) {
             $scores = explode(':', $this->extra);
             if (!empty($scores)) {
-                $txtOption1->setValue($scores[0]);
-                $txtOption2->setValue($scores[1]);
+                $txtOption1->setValue($scores[0] ?? '1');
+                $txtOption2->setValue($scores[1] ?? '-0.5');
             }
         }
 
@@ -219,16 +222,17 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         ) {
             $form->addElement('submit', 'lessAnswers', get_lang('Remove answer option'), 'class="btn btn--danger minus"');
             $form->addElement('submit', 'moreAnswers', get_lang('Add answer option'), 'class="btn btn--primary plus"');
-            $form->addElement('submit', 'submitQuestion', $text, 'class = "btn btn--primary"');
+            $form->addElement('submit', 'submitQuestion', $text, 'class="btn btn--primary"');
         }
+
         $renderer->setElementTemplate('{element}&nbsp;', 'lessAnswers');
         $renderer->setElementTemplate('{element}&nbsp;', 'submitQuestion');
         $renderer->setElementTemplate('{element}&nbsp;', 'moreAnswers');
-        $form->addElement('html', '</div></div>');
 
         if (!empty($this->id) && !$form->isSubmitted()) {
             $form->setDefaults($defaults);
         }
+
         $form->setConstants(['nb_answers' => $nbAnswers]);
     }
 
@@ -240,63 +244,62 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
      */
     public function processAnswersCreation($form, $exercise)
     {
-        $questionWeighting = 0;
+        $questionWeighting = 0.0;
         $objAnswer = new Answer($this->id);
-        $nbAnswers = $form->getSubmitValue('nb_answers');
+
+        $nbAnswers = (int) $form->getSubmitValue('nb_answers');
         $courseId = api_get_course_int_id();
 
         $repo = Container::getQuestionRepository();
         /** @var CQuizQuestion $question */
         $question = $repo->find($this->id);
-        $options = $question->getOptions();
 
-        if (!$options->isEmpty()) {
-            foreach ($options as $optionData) {
-                $optionData->setTitle($optionData->getTitle());
-            }
-        } else {
+        $optionsCollection = $question->getOptions();
+        $isFirstCreation = $optionsCollection->isEmpty();
+
+        // Ensure default options exist on first creation (True/False + certainty levels).
+        if ($isFirstCreation) {
             for ($i = 1; $i <= 8; $i++) {
                 Question::saveQuestionOption($question, $this->options[$i], $i);
             }
         }
 
-        /* Getting quiz_question_options (true, false, doubt) because
-          it's possible that there are more options in the future */
+        // Load options and index them by position for mapping (1/2 => iid).
         $newOptions = Question::readQuestionOption($this->id, $courseId);
         $sortedByPosition = [];
         foreach ($newOptions as $item) {
-            $sortedByPosition[$item['position']] = $item;
+            $sortedByPosition[(int) ($item['position'] ?? 0)] = $item;
         }
 
-        /* Saving quiz_question.extra values that has the correct scores of
-          the true, false, doubt options registered in this format
-          XX:YY:ZZZ where XX is a float score value. */
+        // Save extra score values in the format "Correct:Wrong:0".
         $extraValues = [];
         for ($i = 1; $i <= 3; $i++) {
-            $score = trim($form->getSubmitValue('option['.$i.']'));
+            $score = trim((string) $form->getSubmitValue('option['.$i.']'));
             $extraValues[] = $score;
         }
         $this->setExtra(implode(':', $extraValues));
 
         for ($i = 1; $i <= $nbAnswers; $i++) {
-            $answer = trim($form->getSubmitValue('answer['.$i.']'));
-            $comment = trim($form->getSubmitValue('comment['.$i.']'));
-            $goodAnswer = trim($form->getSubmitValue('correct['.$i.']'));
-            if (empty($options)) {
-                // If this is the first time that the question is created then change
-                // the default values from the form 1 and 2 by the correct "option id" registered
-                if (!empty($goodAnswer)) {
-                    $goodAnswer = $sortedByPosition[$goodAnswer]['iid'];
-                }
+            $answer = trim((string) $form->getSubmitValue('answer['.$i.']'));
+            $comment = trim((string) $form->getSubmitValue('comment['.$i.']'));
+            $goodAnswer = trim((string) $form->getSubmitValue('correct['.$i.']'));
+
+            if ($isFirstCreation) {
+                // First creation: map submitted position (1/2) to the real option iid.
+                $pos = (int) $goodAnswer;
+                $goodAnswer = isset($sortedByPosition[$pos]) ? (string) ($sortedByPosition[$pos]['iid'] ?? '') : '';
             }
-            $questionWeighting += $extraValues[0]; //By default 0 has the correct answers
+
+            // Total weighting = nbAnswers * "Correct" score (option[1]).
+            $questionWeighting += (float) ($extraValues[0] ?? 0);
+
             $objAnswer->createAnswer($answer, $goodAnswer, $comment, '', $i);
         }
 
-        // saves the answers into the data base
+        // Save answers to DB.
         $objAnswer->save();
 
-        // sets the total weighting of the question
+        // Save total weighting and question.
         $this->updateWeighting($questionWeighting);
         $this->save($exercise);
     }
@@ -1323,5 +1326,39 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $message = api_preg_replace("/\\\n/", '', $message);
 
         MessageManager::send_message_simple($userId, $subject, $message);
+    }
+
+    /**
+     * Return True/False option iids when they exist.
+     * Fallback to positions 1/2 when options are not available yet.
+     */
+    private function getTrueFalseOptionIids(int $courseId): array
+    {
+        // Fallback for first-creation cases (positions)
+        $map = [1 => 1, 2 => 2];
+
+        if (empty($this->id)) {
+            return $map;
+        }
+
+        // Try reading options with courseId if supported, fallback otherwise.
+        try {
+            $optionData = Question::readQuestionOption($this->id, $courseId);
+        } catch (\Throwable $e) {
+            $optionData = Question::readQuestionOption($this->id);
+        }
+
+        if (!empty($optionData)) {
+            foreach ($optionData as $row) {
+                $pos = (int) ($row['position'] ?? 0);
+                $iid = (int) ($row['iid'] ?? 0);
+
+                if (($pos === 1 || $pos === 2) && $iid > 0) {
+                    $map[$pos] = $iid;
+                }
+            }
+        }
+
+        return $map;
     }
 }

@@ -54,6 +54,7 @@ class GetLinksCollectionController extends BaseResourceFileAction
                     'linkVisible' => $link->getFirstResourceLink()->getVisibility(),
                     'position' => $resourceNode->getResourceLinkByContext($course, $session)?->getDisplayOrder(),
                     'sessionId' => $resourceNode->getResourceLinkByContext($course, $session)?->getSession()?->getId(),
+                    'target' => $link->getTarget(),
                 ];
             }
         }
@@ -64,7 +65,7 @@ class GetLinksCollectionController extends BaseResourceFileAction
             /** @var CLinkCategory $category */
             foreach ($categories as $category) {
                 $categoryId = $category->getIid();
-                $qbLink = $repo->getResourcesByCourse($course, $session);
+                $qbLink = $repo->getResourcesByCourse($course, $session, null, null, true, true);
                 $qbLink->andWhere('resource.category = '.$categoryId);
                 $links = $qbLink->getQuery()->getResult();
 
@@ -91,6 +92,7 @@ class GetLinksCollectionController extends BaseResourceFileAction
                             'linkVisible' => $link->getFirstResourceLink()->getVisibility(),
                             'position' => $resourceNode->getResourceLinkByContext($course, $session)?->getDisplayOrder(),
                             'sessionId' => $resourceNode->getResourceLinkByContext($course, $session)?->getSession()?->getId(),
+                            'target' => $link->getTarget(),
                         ];
 
                         $dataResponse['categories'][$categoryId]['links'] = $items;

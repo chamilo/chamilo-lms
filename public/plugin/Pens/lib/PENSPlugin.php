@@ -1,34 +1,27 @@
 <?php
 
-/* For licensing terms, see /license.txt */
+/* For licensing terms, see /license.txt. */
 
-
-/**
- * Class PENSPlugin
- * This class is used to add an advanced subscription allowing the admin to
- * create user queues requesting a subscribe to a session.
- */
 class PENSPlugin extends Plugin
 {
-    protected $strings;
-    private $errorMessages;
-    const TABLE_PENS = 'plugin_pens';
+    protected $strings = [];
+    private array $errorMessages = [];
 
-    /**
-     * Constructor.
-     */
+    public const TABLE_PENS = 'plugin_pens';
+
     public function __construct()
     {
         parent::__construct('1.1', 'Guillaume Viguier-Just, Yannick Warnier');
 
-        $this->errorMessages = [];
+        $this->loadPluginStrings();
+    }
+
+    public function get_name(): string
+    {
+        return 'Pens';
     }
 
     /**
-     * Instance the plugin.
-     *
-     * @staticvar null $result
-     *
      * @return PENSPlugin
      */
     public static function create()
@@ -38,110 +31,101 @@ class PENSPlugin extends Plugin
         return $result ?: $result = new self();
     }
 
-    /**
-     * Install the plugin.
-     */
     public function install()
     {
         $this->installDatabase();
     }
 
-    /**
-     * Uninstall the plugin.
-     */
     public function uninstall()
     {
-        $setting = api_get_setting('plugin_pens');
-        if (!empty($setting)) {
-            // Note: Keeping area field data is intended so it will not be removed
-            $this->uninstallDatabase();
-        }
+        $this->uninstallDatabase();
     }
 
-    /**
-     * Create the database tables for the plugin.
-     */
-    private function installDatabase()
+    private function installDatabase(): void
     {
         $pensTable = Database::get_main_table(self::TABLE_PENS);
 
-        $sql = "CREATE TABLE $pensTable (
-	        id int unsigned NOT NULL auto_increment,
-	        pens_version varchar(255) NOT NULL,
-	        package_type varchar(255) NOT NULL,
-	        package_type_version varchar(255) NOT NULL,
-        	package_format varchar(255) NOT NULL,
-	        package_id varchar (255) NOT NULL,
-	        client varchar(255) NOT NULL,
-	        vendor_data text,
-	        package_name varchar(255) NOT NULL,
-	        created_at datetime NOT NULL,
-	        updated_at datetime NULL,
-	        PRIMARY KEY (id),
-	        UNIQUE KEY package_id (package_id)
-	        ";
+        $sql = "CREATE TABLE IF NOT EXISTS $pensTable (
+                    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                    pens_version VARCHAR(255) NOT NULL,
+                    package_type VARCHAR(255) NOT NULL,
+                    package_type_version VARCHAR(255) NOT NULL,
+                    package_format VARCHAR(255) NOT NULL,
+                    package_id VARCHAR(255) NOT NULL,
+                    client VARCHAR(255) NOT NULL,
+                    vendor_data TEXT DEFAULT NULL,
+                    package_name VARCHAR(255) NOT NULL,
+                    created_at DATETIME NOT NULL,
+                    updated_at DATETIME DEFAULT NULL,
+                    PRIMARY KEY (id),
+                    UNIQUE KEY package_id (package_id)
+                )";
+
         Database::query($sql);
     }
 
-    /**
-     * Drop the database tables for the plugin.
-     */
-    private function uninstallDatabase()
+    private function uninstallDatabase(): void
     {
-        /* Drop plugin tables */
         $pensTable = Database::get_main_table(self::TABLE_PENS);
-
-        $sql = "DROP TABLE IF EXISTS $pensTable; ";
-        Database::query($sql);
-
-        /* Delete settings */
-        $settingsTable = Database::get_main_table(TABLE_MAIN_SETTINGS);
-        Database::query("DELETE FROM $settingsTable WHERE subkey = 'plugin_pens'");
+        Database::query("DROP TABLE IF EXISTS $pensTable");
     }
 
-    /**
-     * Get the error messages list.
-     *
-     * @return array The message list
-     */
-    public function getErrorMessages()
+    public function getErrorMessages(): array
     {
         return $this->errorMessages;
     }
 
-    /**
-     * Get author(s).
-     *
-     * @return string
-     */
-    public function get_author()
+    public function get_author(): string
     {
         return 'Guillaume Viguier-Just, Yannick Warnier';
     }
 
-    /**
-     * Returns the plugin version.
-     *
-     * @return string
-     */
-    public function get_version()
+    public function get_version(): string
     {
         return '1.1';
     }
 
-    /**
-     * Get generic plugin info.
-     *
-     * @return array
-     */
-    public function get_info()
+    public function get_info(): array
     {
         $result = parent::get_info();
-        $result['title'] = 'PENS';
-        $result['comment'] = 'Provides support for the PENS course exchange standard. Read the readme.txt file in the plugin/Pens/ folder for a complete installation.';
+        $result['title'] = $this->get_lang('plugin_title');
+        $result['comment'] = $this->get_lang('plugin_comment');
         $result['is_course_plugin'] = false;
         $result['is_mail_plugin'] = false;
 
         return $result;
+    }
+
+    private function loadPluginStrings(): void
+    {
+        $basePath = dirname(__DIR__).'/lang/';
+        $englishFile = $basePath.'english.php';
+
+        $this->strings = [];
+
+        if (is_readable($englishFile)) {
+            $strings = [];
+            require $englishFile;
+            if (isset($strings) && is_array($strings)) {
+                $this->strings = $strings;
+            }
+        }
+
+        $interfaceLanguage = api_get_language_isocode();
+        if (empty($interfaceLanguage) || 'english' === $interfaceLanguage) {
+            return;
+        }
+
+        $languageFile = $basePath.$interfaceLanguage.'.php';
+        if (!is_readable($languageFile)) {
+            return;
+        }
+
+        $strings = [];
+        require $languageFile;
+
+        if (isset($strings) && is_array($strings)) {
+            $this->strings = array_merge($this->strings, $strings);
+        }
     }
 }

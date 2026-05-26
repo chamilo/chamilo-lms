@@ -1,34 +1,65 @@
 <template>
   <Button
+    v-if="route || toUrl"
+    v-slot="slotProps"
+    :severity="primeSeverityProperty"
+    :variant="primerVariantProperty"
+    as-child
+  >
+    <BaseAppLink
+      :to="route ? route : null"
+      :url="toUrl ? toUrl : null"
+      :class="[
+        slotProps.class,
+        { 'p-button-sm': size === 'small', 'p-button-icon-only': onlyIcon, 'p-disabled': disabled },
+        attrs.class,
+      ]"
+      :title="onlyIcon ? label : undefined"
+    >
+      <span
+        v-if="icon"
+        class="p-button-icon"
+        :class="chamiloIconToClass[icon]"
+      />
+      <span
+        v-if="!onlyIcon"
+        class="p-button-label"
+        v-text="label"
+      />
+    </BaseAppLink>
+  </Button>
+  <Button
+    v-else
     :aria-label="onlyIcon ? label : undefined"
-    :class="buttonClass"
     :disabled="disabled"
     :icon="chamiloIconToClass[icon]"
     :label="onlyIcon ? undefined : label"
     :loading="isLoading"
-    :outlined="primeOutlinedProperty"
-    :plain="primePlainProperty"
+    :variant="primerVariantProperty"
     :severity="primeSeverityProperty"
     :size="size"
-    :text="onlyIcon"
-    :title="tooltip || (onlyIcon ? label : undefined)"
+    :title="onlyIcon ? label : undefined"
     :type="isSubmit ? 'submit' : 'button'"
     :name="name"
-    class="cursor-pointer"
+    :id="id"
     @click="$emit('click', $event)"
   />
 </template>
 
 <script setup>
 import Button from "primevue/button"
-import { computed } from "vue"
+import { computed, useAttrs } from "vue"
 import { chamiloIconToClass } from "./ChamiloIcons"
 import { buttonTypeValidator, iconValidator, sizeValidator } from "./validators"
+import BaseAppLink from "./BaseAppLink.vue"
+
+const attrs = useAttrs()
 
 const props = defineProps({
   label: {
     type: String,
     default: "",
+    required: true,
   },
   isSubmit: {
     type: Boolean,
@@ -42,12 +73,9 @@ const props = defineProps({
   },
   type: {
     type: String,
-    required: true,
+    required: false,
     validator: buttonTypeValidator,
-  },
-  tooltip: {
-    type: String,
-    default: "",
+    default: "primary",
   },
   onlyIcon: {
     type: Boolean,
@@ -76,75 +104,63 @@ const props = defineProps({
     required: false,
     default: undefined,
   },
+  id: {
+    type: String,
+    required: false,
+    default: undefined,
+  },
+  route: {
+    type: Object,
+    required: false,
+    default: null,
+  },
+  toUrl: {
+    type: String,
+    required: false,
+    default: null,
+  },
 })
 
 defineEmits(["click"])
 
 const primeSeverityProperty = computed(() => {
-  if (["primary", "secondary", "success", "danger"].includes(props.type)) {
-    return props.type
+  let type = props.type.replace("-text", "")
+
+  if (["primary", "secondary", "success", "danger", "info"].includes(type)) {
+    return type
+  }
+
+  if ("warning" === type) {
+    return "warn"
+  }
+
+  if ("black" === type) {
+    type = "tertiary-alternative"
+  }
+
+  if ("tertiary-alternative" === type) {
+    return "help"
+  }
+
+  if ("tertiary" === type) {
+    return "contrast"
   }
 
   return undefined
 })
 
-const primePlainProperty = computed(() => {
-  if ("black" === props.type) {
-    return true
+const primerVariantProperty = computed(() => {
+  if (props.type.endsWith("-text")) {
+    return "text"
   }
 
-  return undefined
-})
-
-const buttonClass = computed(() => {
-  if (props.onlyIcon) {
-    return "text-tertiary hover:bg-tertiary-gradient/30"
-  }
-  let result = ""
-
-  let commonDisabled =
-    "disabled:bg-primary-bgdisabled disabled:border disabled:border-primary-borderdisabled disabled:text-fontdisabled disabled:pointer-events-auto disabled:cursor-not-allowed"
   switch (props.type) {
-    case "primary":
-      result += `bg-white border-primary text-primary-button-text hover:bg-primary hover:text-white ${commonDisabled} `
-      break
     case "primary-alternative":
-      result += `bg-primary text-primary-button-alternative-text hover:bg-primary-gradient ${commonDisabled} `
-      break
-    case "secondary":
-      result += `bg-secondary text-secondary-button-text hover:bg-secondary-gradient disabled:bg-secondary-bgdisabled disabled:text-fontdisabled ${commonDisabled}`
-      break
-    case "success":
-      result += `bg-success text-success-button-text hover:bg-success-gradient ${commonDisabled} `
-      break
-    case "info":
-      result += `bg-info text-info-button-text hover:bg-info-gradient ${commonDisabled} `
-      break
-    case "warning":
-      result += `bg-warning text-warning-button-text hover:bg-warning-gradient ${commonDisabled} `
-      break
-    case "danger":
-      result += `bg-white border-error text-danger hover:bg-danger-gradient hover:text-white ${commonDisabled}`
-      break
+    case "tertiary-alternative":
     case "black":
-      result += `bg-white border-tertiary text-tertiary hover:bg-tertiary hover:text-white ${commonDisabled}`
-      break
-  }
-  return result
-})
-
-// https://primevue.org/button/#outlined
-const primeOutlinedProperty = computed(() => {
-  if (props.onlyIcon) {
-    return undefined
-  }
-  switch (props.type) {
-    case "primary":
-    case "danger":
-    case "black":
-      return true
+      return "outlined"
     default:
-      return false
+      return undefined
   }
 })
 </script>

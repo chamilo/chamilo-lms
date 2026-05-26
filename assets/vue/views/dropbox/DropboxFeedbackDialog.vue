@@ -78,29 +78,21 @@
           @keydown.ctrl.enter.prevent="trySend"
         />
 
-        <div class="mt-2 flex items-center justify-between">
-          <div class="text-xs text-gray-500">
-            {{ t('Press Ctrl+Enter to send') }}
-          </div>
-          <div class="flex gap-2">
-            <BaseButton
-              type="black"
-              icon="close"
-              :label="t('Close')"
-              @click="close"
-            />
-            <BaseButton
-              type="primary"
-              icon="send"
-              :label="t('Send')"
-              :disabled="!text.trim() || sending"
-              :isLoading="sending"
-              @click="trySend"
-            />
-          </div>
+        <div class="mt-2 text-xs text-gray-500">
+          {{ t('Press Ctrl+Enter to send') }}
         </div>
       </div>
     </div>
+    <template #footer>
+      <BaseButton
+        type="primary"
+        icon="send"
+        :label="t('Send')"
+        :disabled="!text.trim() || sending"
+        :isLoading="sending"
+        @click="trySend"
+      />
+    </template>
   </BaseDialog>
 </template>
 
@@ -181,10 +173,6 @@ async function trySend() {
   } finally {
     sending.value = false
   }
-}
-
-function close() {
-  visibleProxy.value = false
 }
 
 function formatWhen(iso) {

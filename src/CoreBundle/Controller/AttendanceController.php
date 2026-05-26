@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CAttendance;
 use Chamilo\CourseBundle\Entity\CAttendanceCalendar;
 use Chamilo\CourseBundle\Entity\CAttendanceResult;
@@ -35,15 +36,18 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+#[IsGranted('ROLE_USER')]
 #[Route('/attendance')]
 class AttendanceController extends AbstractController
 {
     public function __construct(
         private readonly CAttendanceCalendarRepository $attendanceCalendarRepository,
         private readonly EntityManagerInterface $em,
-        private readonly TranslatorInterface $translator
+        private readonly TranslatorInterface $translator,
+        private readonly SettingsManager $settingsManager,
     ) {}
 
     #[Route('/full-data', name: 'chamilo_core_attendance_get_full_data', methods: ['GET'])]
@@ -100,8 +104,9 @@ class AttendanceController extends AbstractController
         $totalCalendars = \count($calendars);
 
         $users = $userRepository->findUsersByContext($courseId, $sessionId, $groupId);
+        $showOfficialCode = $this->showOfficialCodeInAttendance();
 
-        $formattedUsers = array_map(function ($user) use ($userRepository, $sheetRepository, $calendars, $totalCalendars) {
+        $formattedUsers = array_map(function ($user) use ($userRepository, $sheetRepository, $calendars, $totalCalendars, $showOfficialCode) {
             $absences = 0;
 
             foreach ($calendars as $calendar) {
@@ -122,15 +127,21 @@ class AttendanceController extends AbstractController
 
             $percentage = $totalCalendars > 0 ? round(($absences * 100) / $totalCalendars) : 0;
 
-            return [
+            $formattedUser = [
                 'id' => $user->getId(),
                 'firstname' => $user->getFirstname(),
                 'lastname' => $user->getLastname(),
                 'email' => $user->getEmail(),
                 'username' => $user->getUsername(),
                 'photo' => $userRepository->getUserPicture($user->getId()),
-                'notAttended' => $absences.'/'.$totalCalendars." ({$percentage}%)",
+                'notAttended' => $absences.'/'.$totalCalendars.' ('.$percentage.'%)',
             ];
+
+            if ($showOfficialCode) {
+                $formattedUser['officialCode'] = $user->getOfficialCode() ?? '';
+            }
+
+            return $formattedUser;
         }, $users);
 
         return $this->json($formattedUsers, 200);
@@ -206,9 +217,15 @@ class AttendanceController extends AbstractController
                 : null;
         }
 
+        $showOfficialCode = $this->showOfficialCodeInAttendance();
+
         // Header
         $dataTable = [];
-        $header = ['#', 'Last Name', 'First Name', 'Not Attended'];
+        $header = ['#'];
+        if ($showOfficialCode) {
+            $header[] = 'Official code';
+        }
+        $header = array_merge($header, ['Last Name', 'First Name', 'Not Attended']);
         foreach ($calendars as $calendar) {
             $header[] = $calendar->getDateTime()->format('d/m H:i');
         }
@@ -221,10 +238,15 @@ class AttendanceController extends AbstractController
         foreach ($students as $student) {
             $row = [
                 $count++,
+            ];
+            if ($showOfficialCode) {
+                $row[] = $student->getOfficialCode() ?? '';
+            }
+            $row = array_merge($row, [
                 $student->getLastname(),
                 $student->getFirstname(),
                 '',
-            ];
+            ]);
 
             $absences = 0;
             foreach ($calendars as $calendar) {
@@ -248,7 +270,8 @@ class AttendanceController extends AbstractController
             }
 
             $percentage = $totalCalendars > 0 ? round(($absences * 100) / $totalCalendars) : 0;
-            $row[3] = "$absences/$totalCalendars ($percentage%)";
+            $notAttendedIndex = $showOfficialCode ? 4 : 3;
+            $row[$notAttendedIndex] = $absences.'/'.$totalCalendars.' ('.$percentage.'%)';
             $dataTable[] = $row;
         }
 
@@ -328,13 +351,18 @@ class AttendanceController extends AbstractController
         $sheetRepo = $this->em->getRepository(CAttendanceSheet::class);
 
         $stateLabels = CAttendanceSheet::getPresenceLabels();
+        $showOfficialCode = $this->showOfficialCodeInAttendance();
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setTitle('Attendance');
 
         // Header
-        $headers = ['#', 'Last Name', 'First Name', 'Not Attended'];
+        $headers = ['#'];
+        if ($showOfficialCode) {
+            $headers[] = 'Official code';
+        }
+        $headers = array_merge($headers, ['Last Name', 'First Name', 'Not Attended']);
         foreach ($calendars as $calendar) {
             $headers[] = $calendar->getDateTime()->format('d/m H:i');
         }
@@ -344,7 +372,11 @@ class AttendanceController extends AbstractController
         $rowNumber = 2;
         $count = 1;
         foreach ($students as $student) {
-            $row = [$count++, $student->getLastname(), $student->getFirstname()];
+            $row = [$count++];
+            if ($showOfficialCode) {
+                $row[] = $student->getOfficialCode() ?? '';
+            }
+            $row = array_merge($row, [$student->getLastname(), $student->getFirstname()]);
             $absences = 0;
 
             foreach ($calendars as $calendar) {
@@ -368,7 +400,8 @@ class AttendanceController extends AbstractController
             }
 
             $percentage = $totalCalendars > 0 ? round(($absences * 100) / $totalCalendars) : 0;
-            array_splice($row, 3, 0, "$absences/$totalCalendars ($percentage%)");
+            $notAttendedIndex = $showOfficialCode ? 4 : 3;
+            array_splice($row, $notAttendedIndex, 0, $absences.'/'.$totalCalendars.' ('.$percentage.'%)');
 
             $sheet->fromArray($row, null, 'A'.$rowNumber++);
         }
@@ -545,6 +578,104 @@ class AttendanceController extends AbstractController
         }
     }
 
+    #[Route('/sign-self', name: 'chamilo_core_attendance_sign_self', methods: ['POST'])]
+    public function signSelf(
+        Request $request,
+        CAttendanceSheetRepository $sheetRepository
+    ): JsonResponse {
+        $user = $this->getUser();
+        if (!$user instanceof User) {
+            return $this->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $data = json_decode($request->getContent(), true);
+        $calendarId = isset($data['calendarId']) ? (int) $data['calendarId'] : null;
+        $signature = $data['signature'] ?? null;
+
+        if (!$calendarId || !$signature) {
+            return $this->json(['error' => 'Missing required parameters'], 400);
+        }
+
+        $calendar = $this->attendanceCalendarRepository->find($calendarId);
+        if (!$calendar) {
+            return $this->json(['error' => 'Attendance calendar not found'], 404);
+        }
+
+        $sheet = $sheetRepository->findOneBy([
+            'user' => $user,
+            'attendanceCalendar' => $calendar,
+        ]);
+
+        if (!$sheet) {
+            return $this->json(['error' => 'No attendance sheet found for this user and date'], 404);
+        }
+
+        $sheet->setSignature($signature);
+        $this->em->flush();
+
+        return $this->json(['message' => $this->translator->trans('Signature saved successfully')]);
+    }
+
+    #[Route('/validate-self', name: 'chamilo_core_attendance_validate_self', methods: ['POST'])]
+    public function validateSelf(
+        Request $request,
+        CAttendanceSheetRepository $sheetRepository
+    ): JsonResponse {
+        $user = $this->getUser();
+        if (!$user instanceof User) {
+            return $this->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $data = json_decode($request->getContent(), true);
+        $courseId = isset($data['courseId']) ? (int) $data['courseId'] : null;
+        $entries = $data['entries'] ?? [];
+
+        if (!$courseId || empty($entries)) {
+            return $this->json(['error' => 'Missing required parameters'], 400);
+        }
+
+        $course = $this->em->getRepository(Course::class)->find($courseId);
+        if (!$course) {
+            return $this->json(['error' => 'Course not found'], 404);
+        }
+
+        $setting = api_get_course_setting('student_validate_own_attendance', $course);
+        if ('1' !== (string) $setting) {
+            return $this->json(['error' => 'This feature is not enabled for this course'], 403);
+        }
+
+        foreach ($entries as $entry) {
+            $calendarId = isset($entry['calendarId']) ? (int) $entry['calendarId'] : null;
+            $presence = isset($entry['presence']) ? (int) $entry['presence'] : null;
+
+            if (!$calendarId || null === $presence) {
+                continue;
+            }
+
+            $calendar = $this->attendanceCalendarRepository->find($calendarId);
+            if (!$calendar) {
+                continue;
+            }
+
+            $sheet = $sheetRepository->findOneBy([
+                'user' => $user,
+                'attendanceCalendar' => $calendar,
+            ]);
+
+            if (!$sheet) {
+                $sheet = new CAttendanceSheet();
+                $sheet->setUser($user)->setAttendanceCalendar($calendar);
+            }
+
+            $sheet->setPresence($presence);
+            $this->em->persist($sheet);
+        }
+
+        $this->em->flush();
+
+        return $this->json(['message' => $this->translator->trans('Attendance saved successfully')]);
+    }
+
     #[Route('/{id}/student-dates', name: 'attendance_student_dates', methods: ['GET'])]
     public function getStudentDates(int $id): JsonResponse
     {
@@ -565,7 +696,7 @@ class AttendanceController extends AbstractController
 
             return [
                 'id' => $calendar->getIid(),
-                'label' => $calendar->getDateTime()->format('M d, Y - h:i A'),
+                'dateTime' => $calendar->getDateTime()->format('Y-m-d\TH:i:s\Z'),
                 'done' => $calendar->getDoneAttendance(),
                 'presence' => $sheet ? $sheet->getPresence() : null,
                 'sheetId' => $sheet?->getIid(),
@@ -596,7 +727,7 @@ class AttendanceController extends AbstractController
             'attendanceDates' => array_map(
                 static fn ($d) => [
                     'id' => $d['id'],
-                    'label' => $d['label'],
+                    'dateTime' => $d['dateTime'],
                     'done' => $d['done'],
                     'duration' => $d['duration'],
                 ],
@@ -648,7 +779,7 @@ class AttendanceController extends AbstractController
         ], $users);
 
         return $this->json([
-            'dateLabel' => $calendar->getDateTime()->format('M d, Y - h:i A'),
+            'dateTime' => $calendar->getDateTime()->format('Y-m-d\TH:i:s\Z'),
             'isLocked' => true === (bool) $calendar->getDoneAttendance(),
             'users' => $formatted,
             'presence' => $presence,
@@ -702,5 +833,9 @@ class AttendanceController extends AbstractController
         ;
 
         $this->em->persist($log);
+    }
+    private function showOfficialCodeInAttendance(): bool
+    {
+        return 'true' === $this->settingsManager->getSetting('attendance.attendance_add_official_code', true);
     }
 }

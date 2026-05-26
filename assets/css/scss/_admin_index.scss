@@ -3,10 +3,10 @@
 
   &__block-container {
     @apply h-full;
-  }
-
-  &__block {
-    @apply flex flex-col h-full p-4 gap-4 rounded-lg shadow-md border border-solid border-gray-25 bg-white;
+    position: relative;
+    .p-card-body {
+      padding-bottom: 60px;
+    }
   }
 
   &__block-container--full {
@@ -15,6 +15,27 @@
 
   .p-menu {
     @apply border-none m-0 p-0 w-full;
+
+    &-item {
+      &-content {
+      }
+
+      &-link {
+        @apply px-3 py-2;
+      }
+
+      &-label {
+        @apply text-body-2;
+      }
+    }
+  }
+
+  .block-admin-version__form {
+    @apply space-y-3;
+
+    p {
+      @apply text-body-2;
+    }
   }
 }
 
@@ -34,4 +55,16 @@
   &__preview {
     @apply flex w-full md:w-2/5;
   }
+}
+.admin-block__bg-image {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  background-repeat: repeat-x;
+  background-position: center bottom;
+  background-size: auto 50px;
+  opacity: 0.20;
+  pointer-events: none;
 }

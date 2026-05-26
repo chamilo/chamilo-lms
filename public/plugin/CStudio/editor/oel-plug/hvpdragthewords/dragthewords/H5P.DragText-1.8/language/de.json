@@ -1,0 +1,148 @@
+{
+  "semantics": [
+    {
+      "label": "Aufgabenbeschreibung",
+      "description": "Beschreibung, wie die Lernenden die Aufgabe lösen sollten. Wird über dem Medium angezeigt.",
+      "default": "Ziehe die Wörter in die richtigen Felder!"
+    },
+    {
+      "label": "Text",
+      "placeholder": "*Oslo* ist die Hauptstadt von Norwegen, *Stockholm* ist die Hauptstadt von Schweden und *Kopenhagen* ist die Hauptstadt von Dänemark. Alle Städte befinden sich auf der *skandinavischen: nördlicher Teil von Europa* Halbinsel.",
+      "description": "",
+      "important": {
+        "description": "<ul><li>Ziehbare Wörter werden mit einem Sternchen (*) vor und hinter dem jeweiligen Wort bzw. Satzteil markiert.</li> <li>Du kannst einen Tipp mit einem Doppelpunkt (:) vor der dem Tipp hinzufügen.</li> <li>Pro Lücke gibt es nur genau eine richtige Antwort.</li> <li>Du kannst auch eine Rückmeldung hinzufügen, die angezeigt wird, wenn eine Aufgabe abgeschlossen wurde. Verwende \"\\+\" für positive und \" \\-\" für negative Rückmeldungen.</li></ul>",
+        "example": "H5P-Inhalt kann mit einem *Browser:Was für eine Art von Programm ist Chrome?* bearbeitet werden.<br/>H5P-Inhalt ist *interaktiv\\+Richtig!\\-Falsch. Probiere es nochmal!*."
+      }
+    },
+    {
+      "label": "Gesamtrückmeldung",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Eingabemaske"
+            }
+          ],
+          "label": "Lege Rückmeldungen für einzelne Punktebereiche fest",
+          "description": "Klicke auf den \"Bereich hinzufügen\"-Button, um so viele Bereiche hinzuzufügen, wie du brauchst. Beispiel: 0-20% Schlechte Punktzahl, 21-91% Durchschnittliche Punktzahl, 91-100% Großartige Punktzahl!",
+          "entity": "Bereich",
+          "field": {
+            "fields": [
+              {
+                "label": "Punktebereich"
+              },
+              {},
+              {
+                "label": "Rückmeldung für jeweiligen Punktebereich",
+                "placeholder": "Trage die Rückmeldung ein"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Beschriftung des \"Überprüfen\"-Buttons",
+      "default": "Überprüfen"
+    },
+    {
+      "label": "Beschriftung des \"Wiederholen\"-Buttons",
+      "default": "Wiederholen"
+    },
+    {
+      "label": "Beschriftung für den \"Lösung anzeigen\"-Button",
+      "default": "Lösung anzeigen"
+    },
+    {
+      "label": "Beschriftung: Nummer des Ablagefelds",
+      "default": "Ablagefeld @index.",
+      "description": "Die Beschriftung wird für Barrierefreiheit genutzt. Ein Readspeaker liest die Nummer des Ablagefeldes vor. Verfügbare Variable: @index"
+    },
+    {
+      "label": "Beschriftung: Leeres Ablagefeld",
+      "default": "Ablagefeld @index ist leer.",
+      "description": "Die Beschriftung wird für Barrierefreiheit genutzt. Ein Vorlesewerkzeug liest vor, dass das Ablagefeld leer ist."
+    },
+    {
+      "label": "Beschriftung: Ablagefeld enthält ziehbaren Text",
+      "default": "Ablagefeld @index enthält ziehbaren Text @draggable.",
+      "description": "Die Beschriftung wird für Barrierefreiheit genutzt. Ein Vorlesewerkzeug liest vor, dass das Ablagefeld ziehbaren Text enthält."
+    },
+    {
+      "label": "Beschriftung: Ziehbarer Text",
+      "default": "@index von @count ziehbaren Texten.",
+      "description": "Die Beschriftung wird für Barrierefreiheit genutzt. Ein Readspeaker liest vor, dass es sich um ziehbaren Text handelt. Verfügbare Variablen: @index, @count"
+    },
+    {
+      "label": "Beschriftung: Tipp anzeigen",
+      "default": "Tipp anzeigen",
+      "description": "Die Beschriftung wird für Barrierefreiheit genutzt. Ein Vorlesewerkzeug liest dies vor, bevor der Tip vorgelesen wird."
+    },
+    {
+      "label": "Readspeaker-Text für eine richtige Antwort",
+      "default": "Richtig!"
+    },
+    {
+      "label": "Readspeaker-Text für eine falsche Antwort",
+      "default": "Falsch!"
+    },
+    {
+      "label": "Titel des Bestätigungsdialogs, wenn die Lernenden ziehbaren Text zurücksetzen möchten",
+      "default": "Ablagefelder zurücksetzen"
+    },
+    {
+      "label": "Text des Bestätigungsdialogs, wenn die Lernenden ziehbaren Text zurücksetzen möchten",
+      "default": "Bist du sicher, dass du dieses Ablagefeld zurücksetzen möchtest?"
+    },
+    {
+      "label": "Die Beschriftung wird für Barrierefreiheit genutzt. Ziehen-Modus hat begonnen",
+      "default": "Ziehbarer Text wurde aufgenommen."
+    },
+    {
+      "label": "Die Beschriftung wird für Barrierefreiheit genutzt. Ziehen-Modus abgebrochen",
+      "default": "Ziehen abgebrochen."
+    },
+    {
+      "label": "Die Beschriftung wird für Barrierefreiheit genutzt. Ein Readspeaker liest vor, dass die Antwort richtig war",
+      "default": "Korrekte Antwort:"
+    },
+    {
+      "label": "Überschrift für den Abschnitt, der die Rückmeldungen für richtige/falsche Antworten enthält",
+      "default": "Rückmeldung"
+    },
+    {
+      "label": "Verhaltenseinstellungen",
+      "description": "Diese Optionen legen fest, wie die Aufgabe auf Eingaben reagiert.",
+      "fields": [
+        {
+          "label": "\"Wiederholen\" zulassen"
+        },
+        {
+          "label": "\"Lösung zeigen\"-Button anzeigen"
+        },
+        {
+          "label": "\"Überprüfen\"-Button anzeigen"
+        },
+        {
+          "label": "Sofortige Rückmeldung"
+        }
+      ]
+    },
+    {
+      "label": "Anzeigetext der Punkteleiste für Readspeaker (Barrierefreiheit)",
+      "default": "Du hast :num von :total Punkten erreicht."
+    },
+    {
+      "label": "Beschreibung des \"Überprüfen\"-Buttons (für Hilfsmittel zur Barrierefreiheit)",
+      "default": "Die Antworten überprüfen. Die Eingaben werden als richtig, falsch oder unbeantwortet markiert."
+    },
+    {
+      "label": "Beschreibung des \"Lösung anzeigen\"-Buttons (für Hilfsmittel zur Barrierefreiheit)",
+      "default": "Die Lösung anzeigen. Die richtigen Lösungen werden in der Aufgabe angezeigt."
+    },
+    {
+      "label": "Beschreibung des \"Wiederholen\"-Buttons (für Hilfsmittel zur Barrierefreiheit)",
+      "default": "Die Aufgabe wiederholen. Alle Eingaben werden zurückgesetzt und die Aufgabe wird erneut gestartet."
+    }
+  ]
+}

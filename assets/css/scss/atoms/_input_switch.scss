@@ -6,7 +6,7 @@
   }
 
   &-slider {
-     @apply cursor-pointer w-full h-full border-0 border-none bg-gray-30 transition rounded-full drop-shadow-none;
+     @apply cursor-pointer w-full h-full border-0 border-none bg-gray-30 transition rounded-full shadow-none;
 
     .p-toggleswitch.p-toggleswitch-checked & {
       @apply bg-secondary;

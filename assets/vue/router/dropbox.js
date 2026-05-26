@@ -7,7 +7,7 @@ export default {
   name: "dropbox",
   component: () => import("../components/dropbox/DropboxLayout.vue"),
   redirect: (to) => ({
-    name: "DropboxListSent",
+    name: "DropboxListReceived",
     params: to.params,
     query: to.query,
   }),
@@ -22,7 +22,7 @@ export default {
       name: "DropboxListReceived",
       path: "received",
       component: () => import("../views/dropbox/DropboxListReceived.vue"),
-      meta: { breadcrumb: "Received files" },
+      meta: { breadcrumb: "Received Files" },
     },
     {
       name: "DropboxCreate",

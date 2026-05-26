@@ -9738,7 +9738,7 @@ msgstr ""
 msgid "Result"
 msgstr ""
 
-msgid "Attempting to login as %s %s (id %s)"
+msgid "Attempting to login as %s (id %d)"
 msgstr ""
 
 msgid "Login successful. Go to %s"
@@ -14724,7 +14724,7 @@ msgstr "མི་མང་ སྡེ་ཚན་"
 msgid "Sorry no results"
 msgstr "སྙིང་རྗེ་ མཐོང་བ་མེད།"
 
-msgid "Group Permissions"
+msgid "Group permissions"
 msgstr "སྡེ་ཚན་གྱི་འབྲང་བརྩོན་"
 
 msgid "Closed"
@@ -19410,9 +19410,6 @@ msgstr ""
 msgid "Remove old tables"
 msgstr ""
 
-msgid "Total space used by portal %s limit is %s MB"
-msgstr ""
-
 msgid "Event message management"
 msgstr ""
 
@@ -22137,14 +22134,8 @@ msgstr ""
 msgid "Require e-mail confirmation"
 msgstr ""
 
-msgid "Registration confirmation"
-msgstr "ཐོ་རིམ་གསལ་བཀོད།"
-
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr "ཁྱེད་ཀྱི་རེམ་ཤོག་འདི་མ་གསལ་བཀོད་པས་མ་ལྕོག་སྒྲིབས། ཁྱེད་ཀྱི་གློག་འཕྲིན་ལ་སྐོར་བའི་གནས་ཚུལ་བལྟ་ནས་ལམ་སྀར་འབྲེལ་འབྱོར་ལྷབ་པར་གཏོང་རྒྱུ་ལྷུ་ནས་གློག་འཕྲིན་ཡང་སྤྲད་རྒྱུ་ལྷུ།"
-
-msgid "To complete your platform registration you need to confirm your account by clicking the following link"
-msgstr "ཁྱེད་ཀྱི་སྤྲོད་མཁན་གྱི་ཐོ་རིམ་གཏོང་ནས་ལམ་སྀར་འབྲེལ་འབྱོར་ལྷབ་པར་རེམ་ཤོག་གསལ་བཀོད་རྒྱུ་ཡོད།"
 
 msgid "Confirmation for new account"
 msgstr "རེམ་ཤོག་གསར་པའི་གསལ་བཀོད།"
@@ -31009,7 +31000,7 @@ msgid "Create your first note to get started."
 msgstr ""
 
 msgid "F d, Y"
-msgstr ""
+msgstr "F d، Y"
 
 msgid "Could not load support info at this time."
 msgstr ""
@@ -31434,7 +31425,7 @@ msgstr ""
 msgid "What general terms and conditions are given to users to use this platform?"
 msgstr ""
 
-msgid "ex. {examplePassword}"
+msgid "ex. %s"
 msgstr ""
 
 msgid "Welcome to Chamilo!"

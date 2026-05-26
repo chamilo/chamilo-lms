@@ -25,7 +25,7 @@ class OnlyofficeTools
 
         $appSettings = new OnlyofficeAppsettings($plugin);
         $documentManager = new OnlyofficeDocumentManager($appSettings, []);
-        $isEnable = 'true' === $plugin->get('enable_onlyoffice_plugin');
+        $isEnable = $plugin->isEnabledForCurrentAccessUrl();
         if (!$isEnable) {
             return '';
         }
@@ -74,7 +74,7 @@ class OnlyofficeTools
         $appSettings = new OnlyofficeAppsettings($plugin);
         $documentManager = new OnlyofficeDocumentManager($appSettings, []);
 
-        $isEnable = 'true' === $plugin->get('enable_onlyoffice_plugin');
+        $isEnable = $plugin->isEnabledForCurrentAccessUrl();
         if (!$isEnable) {
             return '';
         }
@@ -124,7 +124,7 @@ class OnlyofficeTools
     {
         $plugin = OnlyofficePlugin::create();
 
-        $isEnable = 'true' === $plugin->get('enable_onlyoffice_plugin');
+        $isEnable = $plugin->isEnabledForCurrentAccessUrl();
         if (!$isEnable) {
             return '';
         }
@@ -159,7 +159,7 @@ class OnlyofficeTools
         $appSettings = new OnlyofficeAppsettings($plugin);
         $documentManager = new OnlyofficeDocumentManager($appSettings, []);
 
-        $isEnable = 'true' === $plugin->get('enable_onlyoffice_plugin');
+        $isEnable = $plugin->isEnabledForCurrentAccessUrl();
         if (!$isEnable) {
             return '';
         }

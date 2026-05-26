@@ -1,0 +1,211 @@
+{
+  "semantics": [
+    {
+      "label": "Media",
+      "fields": [
+        {
+          "label": "Tipo",
+          "description": "Media facoltativo da mostrare sopra la domanda"
+        },
+        {
+          "label": "Disabilita lo zoom dell'immagine"
+        }
+      ]
+    },
+    {
+      "label": "Descrizione attività",
+      "default": "Riempi con le parole mancanti",
+      "description": "Una guida che dice all'utente come rispondere a questo compito."
+    },
+    {
+      "label": "Blocchi di testo",
+      "entity": "Blocco di testo",
+      "field": {
+        "label": "Linea di testo",
+        "placeholder": "Oslo è la capitale della *Norvegia*.",
+        "description": "",
+        "important": {
+          "description": "<ul><li>Gli spazi vuoti sono aggiunti con un asterisco (*) all'inizio e alla fine della frase corretta.</li> <li>Le risposte alternative sono separate da una barra (/).</li> <li>Si può aggiungere un testo di suggerimento facendolo precedere da due punti (:).</li></ul>",
+          "example": "I contenuti H5P possono essere editati usando un *browser/browser web:Qualcosa che usi ogni giorno*."
+        }
+      }
+    },
+    {
+      "label": "Feedback generale",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Predefinito"
+            }
+          ],
+          "label": "Definisci un feedback personalizzato per ogni intervallo di punteggio",
+          "description": "Clicca sul pulsante \"Aggiungi intervallo\" per aggiungere gli intervalli che ti servono. Per esempio: 0-20%, Punteggio scarso; 21-90%, Punteggio medio; 91-100% Punteggio ottimo!",
+          "entity": "Intervallo",
+          "field": {
+            "fields": [
+              {
+                "label": "Intervallo di punteggio"
+              },
+              {},
+              {
+                "label": "Feedback per un intervallo di punteggio definito",
+                "placeholder": "Compila il feedback"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Testo per il pulsante \"Mostra soluzioni\"",
+      "default": "Mostra soluzione"
+    },
+    {
+      "label": "Testo per il pulsante \"Riprova\"",
+      "default": "Riprova"
+    },
+    {
+      "label": "Testo per il pulsante \"Verifica\"",
+      "default": "Verifica"
+    },
+    {
+      "label": "Testo per il messaggio \"Non compilato\"",
+      "default": "Per favore, riempi tutti gli spazi vuoti per vedere la soluzione"
+    },
+    {
+      "label": "Il testo del messaggio \"': ans' è corretto\"",
+      "default": "': ans' è corretto"
+    },
+    {
+      "label": "Il testo del messaggio \"': ans' è sbagliato\"",
+      "default": "': ans' è sbagliato"
+    },
+    {
+      "label": "Testo del messaggio \"Hai risposto correttamente\"",
+      "default": "Hai risposto correttamente"
+    },
+    {
+      "label": "Testo del messaggio \"Hai risposto in modo non corretto\"",
+      "default": "Hai risposto in modo non corretto"
+    },
+    {
+      "label": "Etichetta di tecnologie assistive per la soluzione",
+      "default": "Risposta corretta:"
+    },
+    {
+      "label": "Etichetta di tecnologie assistive per il campo di immissione",
+      "description": "Utilizza @num e @total per sostituire il numero dello spazio vuoto corrente (cloze) e il numero totale di spazi da riempire (cloze)",
+      "default": "Immissioni mancanti: @num su @total"
+    },
+    {
+      "label": "Etichetta di tecnologie assistive per segnalare la presenza di un suggerimento sull'immissione",
+      "default": "Suggerimento disponibile"
+    },
+    {
+      "label": "Etichetta dell'icona di suggerimento",
+      "default": "Suggerimento"
+    },
+    {
+      "label": "Impostazioni di esecuzione",
+      "description": "Queste opzioni ti consentono di controllare l'andamento del compito",
+      "fields": [
+        {
+          "label": "Attiva \"Riprova\""
+        },
+        {
+          "label": "Attiva il pulsante \"Mostra soluzioni\""
+        },
+        {
+          "label": "Attiva il pulsante \"Verifica\""
+        },
+        {
+          "label": "Controlla automaticamente le risposte dopo l'immissione"
+        },
+        {
+          "label": "Riconosce maiuscole e minuscole",
+          "description": "Assicurati che i caratteri inseriti dall'utente siano esattamente gli stessi della risposta"
+        },
+        {
+          "label": "Richiedi che tutti i campi siano completati prima di mostrare la soluzione"
+        },
+        {
+          "label": "Inserire campi di input in righe separate"
+        },
+        {
+          "label": "Mostra la finestra di dialogo di conferma su \"Verifica\"",
+          "description": "Questa scelta non è compatibile con l'opzione \"Controlla automaticamente le risposte dopo l'immissione\""
+        },
+        {
+          "label": "Mostra la finestra di dialogo di conferma su \"Riprova\""
+        },
+        {
+          "label": "Accetta piccoli errori di ortografia",
+          "description": "Se attivo, una risposta sarà conteggiata come corretta nonostante piccoli errori di ortografia (da 3 a 9 caratteri: 1 errore; più di 9 caratteri: 2 errori)"
+        }
+      ]
+    },
+    {
+      "label": "Finestra di conferma per la verifica",
+      "fields": [
+        {
+          "label": "Testo dell'intestazione",
+          "default": "Terminato?"
+        },
+        {
+          "label": "Corpo del testo",
+          "default": "Sei sicuro di voler terminare?"
+        },
+        {
+          "label": "Etichetta del pulsante Annulla",
+          "default": "Annulla"
+        },
+        {
+          "label": "Etichetta del pulsante di conferma",
+          "default": "Terminato"
+        }
+      ]
+    },
+    {
+      "label": "Finestra di conferma per \"Riprova\"",
+      "fields": [
+        {
+          "label": "Testo dell'intestazione",
+          "default": "Vuoi riprovare?"
+        },
+        {
+          "label": "Corpo del testo",
+          "default": "Sei sicuro di voler riprovare?"
+        },
+        {
+          "label": "Etichetta del pulsante Annulla",
+          "default": "Annulla"
+        },
+        {
+          "label": "Etichetta del pulsante di conferma",
+          "default": "Conferma"
+        }
+      ]
+    },
+    {
+      "label": "Rappresentazione testuale sulla barra del punteggio per chi usa un lettore vocale",
+      "default": "Il tuo punteggio è :num di :total"
+    },
+    {
+      "label": "Descrizione delle tecnologie assistive per il pulsante \"Verifica\"",
+      "default": "Verifica"
+    },
+    {
+      "label": "Descrizione delle tecnologie assistive per il pulsante \"Mostra soluzione\"",
+      "default": "Mostra soluzione"
+    },
+    {
+      "label": "Descrizione delle tecnologie assistive per il pulsante \"Riprova\"",
+      "default": "Riprova"
+    },
+    {
+      "label": "Assistive technology description for starting task",
+      "default": "Checking mode"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 <template>
   <BaseCard plain>
-    <form>
+    <form data-no-autofocus="1">
       <BaseTinyEditor
         v-model="content"
         :editor-config="editorConfig"
@@ -30,7 +30,7 @@
         <BaseFileUpload
           id="post-file"
           :label="t('File upload')"
-          accept="image"
+          accept="image/*, video/*"
           size="small"
           @file-selected="selectedFile = $event"
         />

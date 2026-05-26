@@ -84,7 +84,10 @@
           {{ t("Search") }}
         </BaseAppLink>
       </li>
-      <li :class="['menu-item', { active: isActive('/resources/personal_files') }]">
+      <li
+        v-if="allowMyFiles"
+        :class="['menu-item', { active: isActive('/resources/personal_files') }]"
+      >
         <BaseAppLink :to="{ name: 'PersonalFileList', params: { node: currentNodeId } }">
           <i class="mdi mdi-briefcase"></i>
           {{ t("My files") }}
@@ -160,6 +163,7 @@ const groupLink = ref({ name: "UserGroupShow" })
 const platformConfigStore = usePlatformConfig()
 const globalForumsCourse = computed(() => platformConfigStore.getSetting("forum.global_forums_course_id"))
 const messagingEnabled = computed(() => platformConfigStore.getSetting("message.allow_message_tool") === "true")
+const allowMyFiles = computed(() => platformConfigStore.settings?.["platform.allow_my_files"] !== "false")
 const isValidGlobalForumsCourse = computed(() => {
   const courseId = globalForumsCourse.value
   return courseId !== null && courseId !== undefined && courseId > 0

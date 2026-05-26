@@ -164,9 +164,9 @@ class AnnouncementEmail
         $result .= '<hr />';
         $userInfo = api_get_user_info();
         if (!empty($userInfo)) {
-            $result .= '<a href="mailto:'.$userInfo['mail'].'">'.$userInfo['complete_name'].'</a><br/>';
+            $result .= $userInfo['complete_name'].'<br/>';
         }
-        $result .= '<a href="'.api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.$course_param.'">'.$course_name.'</a><br/>';
+        $result .= $course_name.'<br/>';
 
         return $result;
     }

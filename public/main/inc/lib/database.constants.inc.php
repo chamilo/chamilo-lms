@@ -163,6 +163,7 @@ define('TABLE_GROUP', 'group_info');
 define('TABLE_GROUP_USER', 'group_rel_user');
 define('TABLE_GROUP_TUTOR', 'group_rel_tutor');
 define('TABLE_GROUP_CATEGORY', 'group_category');
+define('TABLE_GROUP_CLASS',  'group_rel_usergroup');
 
 // Course dropbox tables
 define('TABLE_DROPBOX_CATEGORY', 'dropbox_category');

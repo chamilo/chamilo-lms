@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\ExtraFieldSavedSearch;
 use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 
 $cidReset = true;
@@ -21,20 +22,23 @@ $allowToSee = api_is_drh() || api_is_student_boss() || api_is_platform_admin();
 if (false === $allowToSee) {
     api_not_allowed(true);
 }
+
+$httpRequest = Container::getRequest();
+
 $userId = api_get_user_id();
 $userInfo = api_get_user_info();
 
-$userToLoad = isset($_GET['user_id']) ? (int) $_GET['user_id'] : 0;
+$userToLoad = $httpRequest->query->getInt('user_id');
 
 $userToLoadInfo = [];
 if ($userToLoad) {
     $userToLoadInfo = api_get_user_info($userToLoad);
 }
-$action = $_GET['action'] ?? '';
+$action = $httpRequest->query->get('action');
 
 switch ($action) {
     case 'subscribe_user':
-        $sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : '';
+        $sessionId = $httpRequest->query->getInt('session_id');
         SessionManager::subscribeUsersToSession(
             $sessionId,
             [$userToLoad],
@@ -45,7 +49,7 @@ switch ($action) {
         header("Location: ".api_get_self().'?user_id='.$userToLoad.'#session-table');
         break;
     case 'unsubscribe_user':
-        $sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : '';
+        $sessionId = $httpRequest->query->getInt('session_id');
         SessionManager::unsubscribe_user_from_session($sessionId, $userToLoad);
         Display::addFlash(Display::return_message(get_lang('User is now unsubscribed')));
         header("Location: ".api_get_self().'?user_id='.$userToLoad.'#session-table');
@@ -70,7 +74,9 @@ if (!empty($userInfo)) {
                 null,
                 null,
                 null,
-                1
+                1,
+                null,
+                true
             );
             break;
         case STUDENT_BOSS:
@@ -134,29 +140,25 @@ if (!empty($items)) {
     }
 }
 
-if (isset($defaults['extra_access_start_date']) && isset($defaults['extra_access_start_date'][0])) {
+if (isset($defaults['extra_access_start_date'][0])) {
     $defaults['extra_access_start_date'] = $defaults['extra_access_start_date'][0];
 }
 
-if (isset($defaults['extra_access_end_date']) && isset($defaults['extra_access_end_date'][0])) {
+if (isset($defaults['extra_access_end_date'][0])) {
     $defaults['extra_access_end_date'] = $defaults['extra_access_end_date'][0];
 }
 
 $extraField = new ExtraField('session');
-$extraFieldValue = new ExtraFieldValue('session');
 $extraFieldValueUser = new ExtraFieldValue('user');
 
 $wantStage = $extraFieldValueUser->get_values_by_handler_and_field_variable(api_get_user_id(), 'filiere_want_stage');
-$defaultValueStatus = '';
+
 $hide = true;
 if ($wantStage) {
     $hide = ('yes' === $wantStage['field_value'] || '' === $wantStage['field_value']);
 }
 
-$defaultValueStatus = 'extraFiliere.hide()';
-if (false === $hide) {
-    $defaultValueStatus = '';
-}
+$defaultValueStatus = false === $hide ? '' : 'extraFiliere.hide()';
 
 $theme = 'theme_fr';
 
@@ -299,10 +301,10 @@ $extra = $extraFieldUser->addElements(
 );
 $userForm->addEndPanel();
 
-if (isset($_POST) && !empty($_POST)) {
-    $searchChecked1 = isset($_POST['search_using_1']) ? 'checked' : '';
-    $searchChecked2 = isset($_POST['search_using_2']) ? 'checked' : '';
-    $searchChecked3 = isset($_POST['search_using_3']) ? 'checked' : '';
+if ($httpRequest->isMethod('POST')) {
+    $searchChecked1 = $httpRequest->request->has('search_using_1') ? 'checked' : '';
+    $searchChecked2 = $httpRequest->request->has('search_using_2') ? 'checked' : '';
+    $searchChecked3 = $httpRequest->request->has('search_using_3') ? 'checked' : '';
     Session::write('search_using_1', $searchChecked1);
     Session::write('search_using_2', $searchChecked2);
     Session::write('search_using_3', $searchChecked3);
@@ -563,7 +565,6 @@ $domainList = array_merge(
     is_object($domaine2) && !empty($domaine2->getValue()) ? $domaine2->getValue() : []
 );
 
-$themeList = [];
 $extraField = new ExtraField('session');
 $resultOptions = $extraField->searchOptionsFromTags('extra_domaine', 'extra_'.$theme, $domainList);
 
@@ -580,7 +581,6 @@ if ($resultOptions) {
     }
 }
 
-$filterToSend = '';
 if ($formSearch->validate()) {
     $formSearchParams = $formSearch->getSubmitValues();
 }
@@ -588,7 +588,7 @@ if ($formSearch->validate()) {
 // Search filter
 $filters = [];
 foreach ($defaults as $key => $value) {
-    if ('extra_' !== substr($key, 0, 6) && '_extra_' !== substr($key, 0, 7)) {
+    if (!str_starts_with($key, 'extra_') && !str_starts_with($key, '_extra_')) {
         continue;
     }
     if (!empty($value)) {
@@ -599,23 +599,21 @@ foreach ($defaults as $key => $value) {
 $filterToSend = [];
 if (!empty($filters)) {
     $filterToSend = ['groupOp' => 'AND'];
-    if ($filters) {
-        $count = 1;
-        $countExtraField = 1;
-        foreach ($result['column_model'] as $column) {
-            if ($count > 5) {
-                if (isset($filters[$column['name']])) {
-                    $defaultValues['jqg'.$countExtraField] = $filters[$column['name']];
-                    $filterToSend['rules'][] = [
-                        'field' => $column['name'],
-                        'op' => 'cn',
-                        'data' => $filters[$column['name']],
-                    ];
-                }
-                $countExtraField++;
+    $count = 1;
+    $countExtraField = 1;
+    foreach ($result['column_model'] as $column) {
+        if ($count > 5) {
+            if (isset($filters[$column['name']])) {
+                $defaultValues['jqg'.$countExtraField] = $filters[$column['name']];
+                $filterToSend['rules'][] = [
+                    'field' => $column['name'],
+                    'op' => 'cn',
+                    'data' => $filters[$column['name']],
+                ];
             }
-            $count++;
+            $countExtraField++;
         }
+        $count++;
     }
 }
 
@@ -660,28 +658,31 @@ if ($form->validate()) {
         $filterToSend = [];
         if (!empty($filters)) {
             $filterToSend = ['groupOp' => 'AND'];
-            if ($filters) {
-                $count = 1;
-                $countExtraField = 1;
-                foreach ($result['column_model'] as $column) {
-                    if ($count > 5) {
-                        if (isset($filters[$column['name']])) {
-                            $defaultValues['jqg'.$countExtraField] = $filters[$column['name']];
-                            $filterToSend['rules'][] = [
-                                'field' => $column['name'],
-                                'op' => 'cn',
-                                'data' => $filters[$column['name']],
-                            ];
-                        }
-                        $countExtraField++;
+            $count = 1;
+            $countExtraField = 1;
+            foreach ($result['column_model'] as $column) {
+                if ($count > 5) {
+                    if (isset($filters[$column['name']])) {
+                        $defaultValues['jqg'.$countExtraField] = $filters[$column['name']];
+                        $filterToSend['rules'][] = [
+                            'field' => $column['name'],
+                            'op' => 'cn',
+                            'data' => $filters[$column['name']],
+                        ];
                     }
-                    $count++;
+                    $countExtraField++;
                 }
+                $count++;
             }
         }
 
-        if (!empty($_REQUEST['filter_status'])) {
-            $filterToSend['filter_status'] = (int) $_REQUEST['filter_status'];
+        $filterStatus = $httpRequest->query->getInt(
+            'filter_status',
+            $httpRequest->request->getInt('filter_status')
+        );
+
+        if ($filterStatus) {
+            $filterToSend['filter_status'] = $filterStatus;
         }
     }
 
@@ -722,13 +723,6 @@ if ($form->validate()) {
             'extra_ecrire',
         ];
 
-        foreach ($userData as $key => $value) {
-            $found = strpos($key, '__persist__');
-            if (false === $found) {
-                continue;
-            }
-        }
-
         if (isset($userData['extra_filiere_want_stage']) &&
             isset($userData['extra_filiere_want_stage']['extra_filiere_want_stage'])
         ) {
@@ -744,7 +738,7 @@ if ($form->validate()) {
 
         // save in ExtraFieldSavedSearch.
         foreach ($userData as $key => $value) {
-            if ('extra_' !== substr($key, 0, 6) && '_extra_' !== substr($key, 0, 7)) {
+            if (!str_starts_with($key, 'extra_') && !str_starts_with($key, '_extra_')) {
                 continue;
             }
 
@@ -806,19 +800,9 @@ if ($form->validate()) {
 
 $view = $form->returnForm();
 
-$jsTag = '';
-if (!empty($tagsData)) {
-    foreach ($tagsData as $extraField => $tags) {
-        foreach ($tags as $tag) {
-            $tag = api_htmlentities($tag);
-        }
-    }
-}
-
 $htmlHeadXtra[] = '<script>
 $(function() {
     '.$jqueryExtra.'
-    '.$jsTag.'
 });
 </script>';
 
@@ -943,13 +927,15 @@ $(function() {
 </script>';
 
 if (!empty($filterToSend)) {
+    $customDates = [];
+
     if (isset($params['search_using_1'])) {
         // Get start and end date from ExtraFieldSavedSearch
-        $defaultExtraStartDate = isset($defaults['extra_access_start_date']) ? $defaults['extra_access_start_date'] : '';
-        $defaultExtraEndDate = isset($defaults['extra_access_end_date']) ? $defaults['extra_access_end_date'] : '';
+        $defaultExtraStartDate = $defaults['extra_access_start_date'] ?? '';
+        $defaultExtraEndDate = $defaults['extra_access_end_date'] ?? '';
 
-        $userStartDate = isset($params['extra_access_start_date']) ? $params['extra_access_start_date'] : $defaultExtraStartDate;
-        $userEndDate = isset($params['extra_access_end_date']) ? $params['extra_access_end_date'] : $defaultExtraEndDate;
+        $userStartDate = $params['extra_access_start_date'] ?? $defaultExtraStartDate;
+        $userEndDate = $params['extra_access_end_date'] ?? $defaultExtraEndDate;
 
         // Minus 3 days
         $date = new DateTime($userStartDate);
@@ -966,22 +952,13 @@ if (!empty($filterToSend)) {
         $userEndDatePlus = api_get_utc_datetime(substr($userEndDatePlus, 0, 11).'23:59:59');
 
         // Special OFAJ date logic
-        if ('' == $userEndDate) {
-            $sql = " AND (
-                (s.access_start_date >= '$userStartDateMinus') OR
-                ((s.access_start_date = '' OR s.access_start_date IS NULL) AND (s.access_end_date = '' OR s.access_end_date IS NULL))
-            )";
-        } else {
-            $sql = " AND (
-                (s.access_start_date >= '$userStartDateMinus' AND s.access_end_date < '$userEndDatePlus') OR
-                (s.access_start_date >= '$userStartDateMinus' AND (s.access_end_date = '' OR s.access_end_date IS NULL)) OR
-                ((s.access_start_date = '' OR s.access_start_date IS NULL) AND (s.access_end_date = '' OR s.access_end_date IS NULL))
-            )";
+        $customDates['start_date'] = $userStartDateMinus;
+        if ('' != $userEndDate) {
+            $customDates['end_date'] = $userEndDatePlus;
         }
     }
 
     $deleteFiliere = false;
-    $extraFieldOptions = new ExtraFieldOption('session');
     $extraFieldSession = new ExtraField('session');
 
     // Special filters
@@ -1105,18 +1082,18 @@ if (!empty($filterToSend)) {
     }
 
     // Language
-    $lang = isset($params['extra_langue_cible']) ? $params['extra_langue_cible'] : $defaultLangCible;
+    $lang = $params['extra_langue_cible'] ?? $defaultLangCible;
     $lang = strtolower($lang);
 
     if (isset($params['search_using_1'])) {
         if ($userStartDate && !empty($userStartDate)) {
-            $filterToSend['custom_dates'] = $sql;
+            $filterToSend['custom_dates'] = $customDates;
         }
     }
 
     $filterToSend = json_encode($filterToSend);
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_search=true&load_extra_field='.
-        $extraFieldListToString.'&_force_search=true&rows=20&page=1&origin=load_search&sidx=&sord=desc&filters2='.$filterToSend;
+        $extraFieldListToString.'&_force_search=true&rows=20&page=1&origin=load_search&sidx=&sord=desc&filters2='.urlencode($filterToSend);
     if (isset($params['search_using_2'])) {
         $url .= '&lang='.$lang;
     }
@@ -1126,10 +1103,10 @@ if (!empty($filterToSend)) {
 }
 
 // Autowidth
-$extra_params['autowidth'] = 'true';
+$extraParams['autowidth'] = 'true';
 
 // height auto
-$extra_params['height'] = 'auto';
+$extraParams['height'] = 'auto';
 $extraParams['postData'] = [
     'filters' => [
         'groupOp' => 'AND',
@@ -1202,12 +1179,10 @@ $tpl->assign('form', $view);
 $tpl->assign('form_search', $formSearch->returnForm().$userForm->returnForm());
 
 $table = new HTML_Table(['class' => 'data_table']);
-$column = 0;
 $row = 0;
 
 $total = 0;
 $sumHours = 0;
-$numHours = 0;
 
 $field = 'heures_disponibilite_par_semaine';
 $data = null;

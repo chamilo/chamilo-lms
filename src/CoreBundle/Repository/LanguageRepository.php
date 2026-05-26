@@ -35,7 +35,7 @@ class LanguageRepository extends ServiceEntityRepository
 
         $qb->where($qb->expr()->eq('l.available', ':avail'))
             ->setParameter('avail', true)
-            ->orderBy('l.englishName', 'ASC')
+            ->orderBy('l.originalName', 'ASC')
         ;
 
         if ($excludeDefaultLocale) {
@@ -143,6 +143,23 @@ class LanguageRepository extends ServiceEntityRepository
         try {
             return $qb->getQuery()->getSingleResult();
         } catch (NonUniqueResultException|NoResultException) {
+            return null;
+        }
+    }
+
+    public function findFirstAvailableByIsoPrefix(string $prefix): ?Language
+    {
+        try {
+            return $this->createQueryBuilder('l')
+                ->where('l.isocode LIKE :prefix')
+                ->andWhere('l.available = true')
+                ->orderBy('l.isocode', 'ASC')
+                ->setMaxResults(1)
+                ->setParameter('prefix', $prefix.'_%')
+                ->getQuery()
+                ->getOneOrNullResult()
+            ;
+        } catch (NonUniqueResultException) {
             return null;
         }
     }

@@ -111,17 +111,17 @@ $xajax->processRequests();
 Display::display_header($tool_name);
 
 if ('multiple' === $add_type) {
-    $link_add_type_unique = '<a href="'.api_get_self().'?id='.$id.'&add_type=unique">'.Display::getMdiIcon(ObjectIcon::SINGLE_ELEMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL).get_lang('Single registration').'</a>';
-    $link_add_type_multiple = Display::getMdiIcon(ObjectIcon::MULTI_ELEMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL).get_lang('Multiple registration');
+    $link_add_type_unique = '<a href="'.api_get_self().'?id='.$id.'&add_type=unique">'.Display::getMdiIcon(ObjectIcon::SINGLE_ELEMENT, '', null, ICON_SIZE_SMALL).get_lang('Single registration').'</a>';
+    $link_add_type_multiple = Display::getMdiIcon(ObjectIcon::MULTI_ELEMENT, '', null, ICON_SIZE_SMALL).get_lang('Multiple registration');
 } else {
-    $link_add_type_unique = Display::getMdiIcon(ObjectIcon::SINGLE_ELEMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL).get_lang('Single registration');
-    $link_add_type_multiple = '<a href="'.api_get_self().'?id='.$id.'&add_type=multiple">'.Display::getMdiIcon(ObjectIcon::MULTI_ELEMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL).get_lang('Multiple registration').'</a>';
+    $link_add_type_unique = Display::getMdiIcon(ObjectIcon::SINGLE_ELEMENT, '', null, ICON_SIZE_SMALL).get_lang('Single registration');
+    $link_add_type_multiple = '<a href="'.api_get_self().'?id='.$id.'&add_type=multiple">'.Display::getMdiIcon(ObjectIcon::MULTI_ELEMENT, '', null, ICON_SIZE_SMALL).get_lang('Multiple registration').'</a>';
 }
 
 echo Display::toolbarAction(
     'url',
     [
-        '<a href="promotions.php">'.Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')).'</a>',
+        '<a href="promotions.php">'.Display::getMdiIcon(ActionIcon::BACK, '', null, ICON_SIZE_MEDIUM, get_lang('Back')).'</a>',
     ]
 );
 ?>
@@ -184,17 +184,17 @@ echo Display::input('hidden', 'add_type', null);
   if ($ajax_search) {
       ?>
     <button class="btn btn--plain" type="button" onclick="remove_item(document.getElementById('session_in_promotion'))" >
-        <i class="mdi mdi-rewind-outline ch-tool-icon"></i>
+        <i class="mdi mdi-rewind-outline"></i>
     </button>
   <?php
   } else {
       ?>
     <button class="btn btn--plain" type="button" onclick="moveItem(document.getElementById('session_not_in_promotion'), document.getElementById('session_in_promotion'))" onclick="moveItem(document.getElementById('session_not_in_promotion'), document.getElementById('session_in_promotion'))">
-        <i class="mdi mdi-fast-forward-outline ch-tool-icon"></i>
+        <i class="mdi mdi-fast-forward-outline"></i>
     </button>
     <br /><br />
     <button class="btn btn--plain" type="button" onclick="moveItem(document.getElementById('session_in_promotion'), document.getElementById('session_not_in_promotion'))" onclick="moveItem(document.getElementById('session_in_promotion'), document.getElementById('session_not_in_promotion'))">
-        <i class="mdi mdi-rewind-outline ch-tool-icon"></i>
+        <i class="mdi mdi-rewind-outline"></i>
     </button>
     <?php
   }

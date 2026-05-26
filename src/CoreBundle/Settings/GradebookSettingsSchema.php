@@ -87,6 +87,7 @@ class GradebookSettingsSchema extends AbstractSettingsSchema
                 ],
             ])
             ->add('gradebook_detailed_admin_view', YesNoType::class)
+            ->add('gradebook_hide_graph', YesNoType::class)
             ->add('gradebook_hide_pdf_report_button', YesNoType::class)
             ->add('hide_gradebook_percentage_user_result', YesNoType::class)
             ->add('gradebook_use_exercise_score_settings_in_categories', YesNoType::class)

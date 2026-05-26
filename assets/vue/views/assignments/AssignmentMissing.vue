@@ -1,16 +1,20 @@
 <template>
   <div>
     <div class="flex items-center gap-2 mb-4">
-      <BaseIcon
+      <BaseButton
+        :label="t('Back')"
         icon="back"
-        size="big"
+        only-icon
+        size="small"
+        type="black"
         @click="goBack"
-        :title="t('Back')"
       />
-      <BaseIcon
+      <BaseButton
+        :label="t('Send email to all')"
         icon="email-unread"
-        size="big"
-        :title="t('Send email to all')"
+        only-icon
+        size="small"
+        type="black"
         @click="sendEmailToAll"
       />
     </div>
@@ -68,7 +72,7 @@ import { ref, onMounted } from "vue"
 import { useRouter, useRoute } from "vue-router"
 import { useI18n } from "vue-i18n"
 import cstudentpublication from "../../services/cstudentpublication"
-import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
+import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import Column from "primevue/column"
 import ProgressSpinner from "primevue/progressspinner"

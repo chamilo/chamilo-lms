@@ -24,6 +24,8 @@ import toolIntroService from "./services/ctoolintro"
 import pageService from "./services/page"
 import sessionService from "./services/session"
 import socialPostService from "./services/socialpost"
+import branchService from "./services/branchService"
+import roomService from "./services/roomService"
 
 import makeCrudModule from "./store/modules/crud"
 import installHttpErrors from "./plugins/httpErrors"
@@ -50,9 +52,8 @@ import ConfirmationService from "primevue/confirmationservice"
 import BaseAppLink from "./components/basecomponents/BaseAppLink.vue"
 
 // import 'primeflex/primeflex.css';
-import "primeicons/primeicons.css"
+
 import Alpine from "alpinejs"
-import { ENTRYPOINT } from "./config/entrypoint"
 
 // @todo move in a file:
 store.registerModule(
@@ -174,6 +175,20 @@ store.registerModule(
   }),
 )
 
+store.registerModule(
+  "branch",
+  makeCrudModule({
+    service: branchService,
+  }),
+)
+
+store.registerModule(
+  "room",
+  makeCrudModule({
+    service: roomService,
+  }),
+)
+
 store.registerModule("ux", uxModule)
 
 // Vue setup.
@@ -256,9 +271,9 @@ axios.interceptors.request.use((config) => {
 
   if (!pageCid && !pageSid && !pageGid) return config
 
-  // Only for API calls (ENTRYPOINT usually ends with /api)
+  // Only for API calls
   const url = config.url || ""
-  const isApiCall = url.includes("/api/") || url.startsWith("/api/") || url.startsWith(ENTRYPOINT)
+  const isApiCall = url.includes("/api/")
   if (!isApiCall) return config
 
   // Ensure params is an object

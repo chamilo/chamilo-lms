@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CWiki;
@@ -16,6 +17,70 @@ use ChamiloSession as Session;
 
 final class WikiManager
 {
+
+    private static function getResourceLanguageOptions(): array
+    {
+        $options = [
+            '' => get_lang('No specific language'),
+        ];
+
+        $languages = \Database::getManager()
+            ->getRepository(Language::class)
+            ->findBy(['available' => true], ['englishName' => 'ASC'])
+        ;
+
+        foreach ($languages as $language) {
+            if (!$language instanceof Language) {
+                continue;
+            }
+
+            $options[$language->getIsocode()] = $language->getOriginalName() ?: $language->getEnglishName();
+        }
+
+        return $options;
+    }
+
+    private static function getResourceLanguageIsoCode(?CWiki $wiki): string
+    {
+        if (!$wiki instanceof CWiki || null === $wiki->getResourceNode()) {
+            return '';
+        }
+
+        $language = $wiki->getResourceNode()->getLanguage();
+
+        return $language instanceof Language ? $language->getIsocode() : '';
+    }
+
+    private static function applyResourceLanguage(CWiki $wiki, mixed $rawLanguage): void
+    {
+        $resourceNode = $wiki->getResourceNode();
+        if (null === $resourceNode) {
+            return;
+        }
+
+        $languageCode = trim((string) $rawLanguage);
+        $entityManager = \Database::getManager();
+        $language = null;
+
+        if ('' !== $languageCode) {
+            $language = $entityManager
+                ->getRepository(Language::class)
+                ->findOneBy([
+                    'isocode' => $languageCode,
+                    'available' => true,
+                ])
+            ;
+
+            if (!$language instanceof Language) {
+                return;
+            }
+        }
+
+        $resourceNode->setLanguage($language);
+        $entityManager->persist($resourceNode);
+        $entityManager->flush();
+    }
+
     /** Legacy compat: set from index.php */
     private readonly CWikiRepository $wikiRepo;
     public string $page = 'index';
@@ -511,6 +576,7 @@ final class WikiManager
             'progress'        => (string)($last?->getProgress() ?? ''),
             'comment'         => '',
             'assignment'      => (int)($last?->getAssignment() ?? 0),
+            'language'        => self::getResourceLanguageIsoCode($last),
         ];
 
         // Preselect categories
@@ -630,10 +696,22 @@ final class WikiManager
 
         // Advanced params (only for teachers/admin and not on index)
         if ((api_is_allowed_to_edit(false, true) || api_is_platform_admin())
-            && isset($row['reflink']) && $row['reflink'] !== 'index'
+            && (!isset($row['reflink']) || $row['reflink'] !== 'index')
         ) {
             $form->addElement('advanced_settings', 'advanced_params', get_lang('Advanced settings'));
             $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
+
+            $languageOptions = self::getResourceLanguageOptions();
+            if (\count($languageOptions) > 2) {
+                $form->addSelect(
+                    'language',
+                    get_lang('Language'),
+                    $languageOptions,
+                    [
+                        'id' => 'resource_language',
+                    ]
+                );
+            }
 
             // Task description
             $form->addHtmlEditor(
@@ -1149,6 +1227,8 @@ final class WikiManager
         $em->persist($w);
         $em->flush();
 
+        self::applyResourceLanguage($w, $values['language'] ?? '');
+
         if (method_exists(__CLASS__, 'dbg')) {
             self::dbg('[SAVE] after first flush iid='.(int)$w->getIid().' pageId='.(int)$w->getPageId().' reflink='.$reflink);
         }
@@ -1430,8 +1510,6 @@ final class WikiManager
 
             $nameTo  = $uInfo['complete_name'];
             $emailTo = $uInfo['email'];
-            $from    = (string) api_get_setting('emailAdministrator');
-
             $subject = get_lang('Notify Wiki changes').' - '.$courseTitle;
 
             $body  = get_lang('Dear user').' '.api_get_person_name($uInfo['firstname'] ?? '', $uInfo['lastname'] ?? '').',<br /><br />';
@@ -1454,8 +1532,8 @@ final class WikiManager
                 $emailTo,
                 $subject,
                 $body,
-                $from,
-                $from,
+                '',
+                '',
                 [],
                 [],
                 false,
@@ -1565,29 +1643,54 @@ final class WikiManager
             }
         }
 
-        /** @var CWiki|null $first */
-        $first = $repo->createQueryBuilder('w')
+        // Resolve FIRST row in the right scope (session-aware)
+        $effectiveSid = (int) $ctx['sessionId'];
+
+        $firstQb = $repo->createQueryBuilder('w')
             ->andWhere('w.cId = :cid')->setParameter('cid', $ctx['courseId'])
             ->andWhere('w.reflink = :reflink')->setParameter('reflink', $pageKey)
-            ->andWhere('COALESCE(w.groupId,0) = :gid')->setParameter('gid', (int)$ctx['groupId'])
+            ->andWhere('COALESCE(w.groupId,0) = :gid')->setParameter('gid', (int) $ctx['groupId'])
             ->orderBy('w.version', 'ASC')
-            ->setMaxResults(1)
-            ->getQuery()->getOneOrNullResult();
+            ->setMaxResults(1);
+
+        if ($effectiveSid > 0) {
+            $firstQb->andWhere('COALESCE(w.sessionId,0) = :sid')->setParameter('sid', $effectiveSid);
+        } else {
+            $firstQb->andWhere('COALESCE(w.sessionId,0) = 0');
+        }
+
+        /** @var CWiki|null $first */
+        $first = $firstQb->getQuery()->getOneOrNullResult();
+
+        // if we are in session and no session page exists, show base course wiki
+        if (!$first && $effectiveSid > 0) {
+            $effectiveSid = 0;
+
+            $first = $repo->createQueryBuilder('w')
+                ->andWhere('w.cId = :cid')->setParameter('cid', $ctx['courseId'])
+                ->andWhere('w.reflink = :reflink')->setParameter('reflink', $pageKey)
+                ->andWhere('COALESCE(w.groupId,0) = :gid')->setParameter('gid', (int) $ctx['groupId'])
+                ->andWhere('COALESCE(w.sessionId,0) = 0')
+                ->orderBy('w.version', 'ASC')
+                ->setMaxResults(1)
+                ->getQuery()->getOneOrNullResult();
+        }
 
         $keyVisibility = $first?->getVisibility();
         $pageId = $first?->getPageId() ?? 0;
 
+        // When loading LAST version, use the same effective scope we used above
         $last = null;
         if ($pageId) {
             $qb = $repo->createQueryBuilder('w')
                 ->andWhere('w.cId = :cid')->setParameter('cid', $ctx['courseId'])
                 ->andWhere('w.pageId = :pid')->setParameter('pid', $pageId)
-                ->andWhere('COALESCE(w.groupId,0) = :gid')->setParameter('gid', (int)$ctx['groupId'])
+                ->andWhere('COALESCE(w.groupId,0) = :gid')->setParameter('gid', (int) $ctx['groupId'])
                 ->orderBy('w.version', 'DESC')
                 ->setMaxResults(1);
 
-            if ($ctx['sessionId'] > 0) {
-                $qb->andWhere('COALESCE(w.sessionId,0) = :sid')->setParameter('sid', (int)$ctx['sessionId']);
+            if ($effectiveSid > 0) {
+                $qb->andWhere('COALESCE(w.sessionId,0) = :sid')->setParameter('sid', $effectiveSid);
             } else {
                 $qb->andWhere('COALESCE(w.sessionId,0) = 0');
             }
@@ -2876,13 +2979,13 @@ final class WikiManager
 
             // Simple icon map
             $icons = [
-                'mactiveusers' => \Chamilo\CoreBundle\Enums\ActionIcon::STAR,
-                'mvisited'     => \Chamilo\CoreBundle\Enums\ActionIcon::HISTORY,
-                'mostchanged'  => \Chamilo\CoreBundle\Enums\ActionIcon::REFRESH,
-                'orphaned'     => \Chamilo\CoreBundle\Enums\ActionIcon::LINKS,
-                'wanted'       => \Chamilo\CoreBundle\Enums\ActionIcon::SEARCH,
-                'mostlinked'   => \Chamilo\CoreBundle\Enums\ActionIcon::LINKS,
-                'statistics'   => \Chamilo\CoreBundle\Enums\ActionIcon::INFORMATION,
+                'mactiveusers' => ActionIcon::STAR,
+                'mvisited'     => ActionIcon::HISTORY,
+                'mostchanged'  => ActionIcon::REFRESH,
+                'orphaned'     => ActionIcon::LINKS,
+                'wanted'       => ActionIcon::SEARCH,
+                'mostlinked'   => ActionIcon::LINKS,
+                'statistics'   => ActionIcon::INFORMATION,
             ];
 
             if (!$wikiHdrCssInjected) {
@@ -2895,7 +2998,7 @@ final class WikiManager
             foreach ($items as $key => $label) {
                 $isActive = ($key === $activeKey);
                 $href     = $url.'&action='.$key;
-                $icon     = Display::getMdiIcon($icons[$key] ?? \Chamilo\CoreBundle\Enums\ActionIcon::VIEW_DETAILS,
+                $icon     = Display::getMdiIcon($icons[$key] ?? ActionIcon::VIEW_DETAILS,
                     'mdi-inline', null, ICON_SIZE_SMALL, $label);
                 echo '<a class="pill'.($isActive ? ' active' : '').'" href="'.$href.'"'.
                     ($isActive ? ' aria-current="page"' : '').'>'.$icon.'<span>'.api_htmlentities($label).'</span></a>';
@@ -5007,18 +5110,18 @@ final class WikiManager
               <li class="breadcrumb-item">
                 <a href="'.
                     $this->url(['action'=>'showpage','title'=>'index']).'">'.
-                    Display::getMdiIcon(\Chamilo\CoreBundle\Enums\ActionIcon::HOME, 'mdi-inline', null, ICON_SIZE_SMALL, get_lang('Home')).
+                    Display::getMdiIcon(ActionIcon::HOME, 'mdi-inline', null, ICON_SIZE_SMALL, get_lang('Home')).
                     '<span>'.get_lang('Wiki').'</span>
                 </a>
               </li>
               <li class="breadcrumb-item active" aria-current="page">'.
-                    Display::getMdiIcon(\Chamilo\CoreBundle\Enums\ActionIcon::VIEW_MORE, 'mdi-inline', null, ICON_SIZE_SMALL, get_lang('More')).
+                    Display::getMdiIcon(ActionIcon::VIEW_MORE, 'mdi-inline', null, ICON_SIZE_SMALL, get_lang('More')).
                     '<span>'.get_lang('More').'</span>
               </li>
 
               <div class="breadcrumb-actions">
                 <a class="btn btn-default btn-xs" href="'.$this->url().'">'.
-                    Display::getMdiIcon(\Chamilo\CoreBundle\Enums\ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Back')).
+                    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Back')).
                     ' '.get_lang('Back').'
                 </a>
               </div>
@@ -6316,8 +6419,9 @@ mpdf-->'.$contentPdf;
         $t = html_entity_decode($t, ENT_QUOTES);
         $t = strip_tags(trim($t));
         $t = mb_strtolower($t);
-        $t = strtr($t, [' ' => '_', '-' => '_']);
+        $t = strtr($t, [' ' => '_']);
         $t = preg_replace('/_+/', '_', $t);
+
         return $t;
     }
 

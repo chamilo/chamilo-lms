@@ -170,9 +170,6 @@ function get_work_count_by_student($user_id, $work_id)
 {
     $user_id = (int) $user_id;
     $work_id = (int) $work_id;
-    $course_id = api_get_course_int_id();
-    $session_id = api_get_session_id();
-    $sessionCondition = api_get_session_condition($session_id);
 
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $sql = "SELECT COUNT(*) as count
@@ -180,8 +177,7 @@ function get_work_count_by_student($user_id, $work_id)
             WHERE
                 parent_id = $work_id AND
                 user_id = $user_id AND
-                active IN (0, 1)
-                $sessionCondition";
+                active IN (0, 1)";
     $result = Database::query($sql);
     $return = 0;
     if (Database::num_rows($result)) {
@@ -2958,6 +2954,300 @@ function getAllWork(
 
     return $works;
 }
+
+/**
+ * Returns pending assignment submissions for the global pending assignments page.
+ *
+ * This function is adapted to the Chamilo 2 resource model:
+ * - c_student_publication does not contain c_id/session_id anymore.
+ * - Course/session context comes from resource_link.
+ *
+ * @return int|array
+ */
+function getPendingWorkList(
+    ?int $start = null,
+    ?int $limit = null,
+    ?string $column = null,
+    ?string $direction = null,
+    string $whereCondition = '',
+    bool $getCount = false,
+    ?int $courseId = null,
+    int $status = 0
+): int|array {
+    api_block_anonymous_users();
+
+    $isPlatformAdmin = api_is_platform_admin(false, true);
+    $isTeacher = api_is_teacher();
+
+    if (!$isPlatformAdmin && !$isTeacher) {
+        return $getCount ? 0 : [];
+    }
+
+    $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    $userTable = Database::get_main_table(TABLE_MAIN_USER);
+    $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+    $resourceNodeTable = 'resource_node';
+    $resourceLinkTable = 'resource_link';
+
+    $userId = api_get_user_id();
+    $courseId = !empty($courseId) ? (int) $courseId : null;
+    $status = (int) $status;
+
+    $direction = strtolower((string) $direction);
+    if (!in_array($direction, ['asc', 'desc'], true)) {
+        $direction = 'desc';
+    }
+
+    $orderMap = [
+        'course' => 'course.title',
+        'work_name' => 'parent.title',
+        'fullname' => 'u.lastname',
+        'firstname' => 'u.firstname',
+        'lastname' => 'u.lastname',
+        'title' => 'work.title',
+        'qualification' => 'work.qualification',
+        'sent_date' => 'work.sent_date',
+        'qualificator_id' => 'work.qualificator_id',
+    ];
+
+    $orderBy = $orderMap[$column] ?? 'work.sent_date';
+
+    $conditions = [
+        'work.parent_id IS NOT NULL',
+        'work.parent_id <> 0',
+        'work.active IN (0, 1)',
+        'u.status != '.INVITEE,
+        'rl.c_id IS NOT NULL',
+        'rl.visibility = '.ResourceLink::VISIBILITY_PUBLISHED,
+    ];
+
+    /*
+     * Access control:
+     * - Platform admin can see all pending submissions.
+     * - Teachers only see submissions from their own course/session contexts.
+     */
+    if (!$isPlatformAdmin) {
+        $teacherCourses = CourseManager::get_courses_list_by_user_id($userId, false, false, false);
+        $contextConditions = [];
+        $showAllSessionAssignmentsFromBaseCourse = 'true' === api_get_setting(
+                'session.assignment_base_course_teacher_access_to_all_session'
+            );
+
+        foreach ($teacherCourses as $teacherCourse) {
+            $teacherCourseId = (int) ($teacherCourse['real_id'] ?? $teacherCourse['id'] ?? $teacherCourse['c_id'] ?? 0);
+            $teacherSessionId = (int) ($teacherCourse['session_id'] ?? 0);
+
+            if ($teacherCourseId <= 0) {
+                continue;
+            }
+
+            if (null !== $courseId && $teacherCourseId !== $courseId) {
+                continue;
+            }
+
+            if (0 === $teacherSessionId && $showAllSessionAssignmentsFromBaseCourse) {
+                $contextConditions[] = '(rl.c_id = '.$teacherCourseId.')';
+
+                continue;
+            }
+
+            if ($teacherSessionId > 0) {
+                $contextConditions[] = '(rl.c_id = '.$teacherCourseId.' AND rl.session_id = '.$teacherSessionId.')';
+            } else {
+                $contextConditions[] = '(rl.c_id = '.$teacherCourseId.' AND rl.session_id IS NULL)';
+            }
+        }
+
+        if (empty($contextConditions)) {
+            return $getCount ? 0 : [];
+        }
+
+        $conditions[] = '('.implode(' OR ', $contextConditions).')';
+    } elseif (null !== $courseId && $courseId > 0) {
+        $conditions[] = 'rl.c_id = '.$courseId;
+    }
+
+    if (2 === $status) {
+        $conditions[] = '(work.qualificator_id IS NULL OR work.qualificator_id = 0)';
+    } elseif (3 === $status) {
+        $conditions[] = '(work.qualificator_id IS NOT NULL AND work.qualificator_id <> 0)';
+    }
+
+    if (!empty($whereCondition) && '1 = 1' !== trim($whereCondition)) {
+        $conditions[] = '('.$whereCondition.')';
+    }
+
+    $where = implode(' AND ', $conditions);
+
+    if ($getCount) {
+        $sql = "
+            SELECT COUNT(DISTINCT work.iid) AS total
+            FROM $workTable work
+            INNER JOIN $userTable u
+                ON u.id = work.user_id
+            INNER JOIN $resourceNodeTable rn
+                ON rn.id = work.resource_node_id
+            INNER JOIN $resourceLinkTable rl
+                ON rl.resource_node_id = rn.id
+            INNER JOIN $courseTable course
+                ON course.id = rl.c_id
+            LEFT JOIN $workTable parent
+                ON parent.iid = work.parent_id
+            WHERE $where
+        ";
+
+        $result = Database::query($sql);
+        $row = Database::fetch_assoc($result);
+
+        return (int) ($row['total'] ?? 0);
+    }
+
+    $start = max(0, (int) $start);
+    $limit = max(0, (int) $limit);
+
+    $sql = "
+    SELECT DISTINCT
+        work.iid,
+        work.title,
+        work.sent_date,
+        work.qualification,
+        work.qualificator_id,
+        work.extensions,
+        work.contains_file,
+        LOWER(CONCAT(
+            SUBSTR(HEX(rn.uuid), 1, 8), '-',
+            SUBSTR(HEX(rn.uuid), 9, 4), '-',
+            SUBSTR(HEX(rn.uuid), 13, 4), '-',
+            SUBSTR(HEX(rn.uuid), 17, 4), '-',
+            SUBSTR(HEX(rn.uuid), 21)
+        )) AS resource_node_uuid,
+        parent.iid AS work_id,
+        parent.title AS work_name,
+        u.id AS user_id,
+        u.firstname,
+        u.lastname,
+        u.username,
+        course.id AS course_id,
+        course.code AS course_code,
+        course.title AS course_title,
+        rl.session_id
+    FROM $workTable work
+        INNER JOIN $userTable u
+            ON u.id = work.user_id
+        INNER JOIN $resourceNodeTable rn
+            ON rn.id = work.resource_node_id
+        INNER JOIN $resourceLinkTable rl
+            ON rl.resource_node_id = rn.id
+        INNER JOIN $courseTable course
+            ON course.id = rl.c_id
+        LEFT JOIN $workTable parent
+            ON parent.iid = work.parent_id
+        WHERE $where
+        ORDER BY $orderBy $direction
+    ";
+
+    if ($limit > 0) {
+        $sql .= " LIMIT $start, $limit";
+    }
+
+    $result = Database::query($sql);
+    $works = [];
+
+    while ($row = Database::fetch_assoc($result)) {
+        $itemId = (int) ($row['iid'] ?? 0);
+        $courseIdFromLink = (int) ($row['course_id'] ?? 0);
+        $sessionIdFromLink = (int) ($row['session_id'] ?? 0);
+        $resourceNodeUuid = trim((string) ($row['resource_node_uuid'] ?? ''));
+
+        $cidReq = api_get_cidreq_params($courseIdFromLink, $sessionIdFromLink);
+
+        $pendingReturnParams = [
+            'origin' => 'pending',
+        ];
+
+        if (null !== $courseId && $courseId > 0) {
+            $pendingReturnParams['pending_course'] = $courseId;
+        }
+
+        if ($status > 0) {
+            $pendingReturnParams['pending_status'] = $status;
+        }
+
+        $viewUrl = api_get_path(WEB_CODE_PATH)
+            .'work/view.php?id='.$itemId
+            .'&'.$cidReq
+            .'&'.http_build_query($pendingReturnParams);
+        $downloadUrl = '';
+
+        if ('' !== $resourceNodeUuid) {
+            $downloadUrl = api_get_path(WEB_PATH)
+                .'r/student_publication/student_publications/'
+                .rawurlencode($resourceNodeUuid)
+                .'/view?mode=download';
+        }
+
+        $viewIcon = Display::getMdiIcon(
+            ActionIcon::VIEW_DETAILS,
+            'ch-tool-icon',
+            null,
+            ICON_SIZE_SMALL,
+            get_lang('View')
+        );
+
+        $downloadIcon = Display::getMdiIcon(
+            ActionIcon::SAVE_FORM,
+            'ch-tool-icon',
+            null,
+            ICON_SIZE_SMALL,
+            get_lang('Download')
+        );
+
+        $actions = Display::url($viewIcon, $viewUrl);
+
+        if (!empty($row['contains_file']) && '' !== $downloadUrl) {
+            $actions .= Display::url($downloadIcon, $downloadUrl);
+        }
+
+        $qualificatorId = (int) ($row['qualificator_id'] ?? 0);
+
+        $statusLabel = 0 === $qualificatorId
+            ? Display::label(get_lang('Not reviewed'), 'warning')
+            : Display::label(get_lang('Reviewed'), 'success');
+
+        $correction = '';
+        if (!empty($row['extensions'])) {
+            $correction = Display::label(get_lang('Correction'), 'success');
+        }
+
+        $qualification = $row['qualification'] ?? null;
+        if (null === $qualification || '' === $qualification || 0.0 === (float) $qualification) {
+            $qualification = '-';
+        } else {
+            $qualification = Security::remove_XSS((string) $qualification);
+        }
+
+        $works[] = [
+            'id' => $itemId,
+            'course' => Security::remove_XSS((string) ($row['course_title'] ?? '')),
+            'work_name' => Security::remove_XSS((string) ($row['work_name'] ?? '')),
+            'fullname' => api_get_person_name(
+                (string) ($row['firstname'] ?? ''),
+                (string) ($row['lastname'] ?? '')
+            ),
+            'title' => Security::remove_XSS((string) ($row['title'] ?? '')),
+            'qualification' => $qualification,
+            'sent_date' => !empty($row['sent_date'])
+                ? api_convert_and_format_date($row['sent_date'])
+                : '',
+            'qualificator_id' => $statusLabel,
+            'correction' => $correction,
+            'actions' => '<div class="work-action">'.$actions.'</div>',
+        ];
+    }
+
+    return $works;
+}
+
 /**
  * Send reminder to users who have not given the task.
  *

@@ -24,24 +24,17 @@
           {{ t("Only non-root folders are shown to avoid leaving items in root.") }}
         </p>
       </div>
-
-      <div class="flex justify-end gap-2">
-        <BaseButton
-          type="black"
-          icon="close"
-          :label="t('Cancel')"
-          @click="close"
-        />
-        <BaseButton
-          type="primary"
-          icon="check"
-          :label="t('Move')"
-          :disabled="saving || targetCatId === null"
-          :isLoading="saving"
-          @click="submit"
-        />
-      </div>
     </div>
+    <template #footer>
+      <BaseButton
+        type="primary"
+        icon="check"
+        :label="t('Move')"
+        :disabled="saving || targetCatId === null"
+        :isLoading="saving"
+        @click="submit"
+      />
+    </template>
   </BaseDialog>
 </template>
 

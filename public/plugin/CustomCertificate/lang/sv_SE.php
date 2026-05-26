@@ -1,0 +1,77 @@
+<?php
+$strings['plugin_title'] = 'Anpassat certifikat';
+$strings['plugin_comment'] = 'Detta plugin låter dig skapa anpassade certifikat för varje kurs.';
+$strings['enable_plugin_customcertificate'] = 'Aktivera plugin';
+$strings['customcertificate_course_enable'] = 'Anpassat certifikat aktiverat i kurs';
+$strings['use_certificate_default'] = 'Använd standardanpassat certifikat';
+$strings['ToolDisabled'] = 'Verktyget är inaktiverat från administrationen';
+$strings['OnlyAdminPlatform'] = 'Verktyg endast för administratörer';
+$strings['OnlyAdminPlatformOrTeacher'] = 'Verktyg endast för administratörer och lärare';
+$strings['TrainingEntity'] = 'Utbildningsenhet';
+$strings['DescriptionFront'] = 'Framsidestext';
+$strings['DescriptionRear'] = 'Baksidestext';
+$strings['Certify'] = 'Intyga';
+$strings['CertificateType'] = 'Certifikattyp';
+$strings['CertifyThat'] = 'INTYGAR ATT';
+$strings['StudentCourseInfo'] = 'Student- och kursdata';
+$strings['StudentData'] = 'Studentdata';
+$strings['CourseData'] = 'Kursdata';
+$strings['Modality'] = 'Modalitet';
+$strings['Contents'] = 'Innehåll';
+$strings['ContentsToShow'] = 'Innehåll att visa';
+$strings['ContentsCourseDescription'] = 'Använd sektion "Kursbeskrivning"> "Innehåll"';
+$strings['ContentsIndexLearnpath'] = 'Använd lärtpindex';
+$strings['ContentsCustom'] = 'Använd anpassat innehåll';
+$strings['ContentsHide'] = 'Visa inte innehåll';
+$strings['Dates'] = 'Datum';
+$strings['CourseDeliveryDates'] = 'Kursens leveransdatum';
+$strings['Custom'] = 'Anpassat';
+$strings['UseDateSessionAccess'] = 'Använd åtkomst datum till sessionen';
+$strings['ExpectionPlace'] = 'Utfärdande plats';
+$strings['DateExpediction'] = 'Utfärdandedatum';
+$strings['UseDateEndAccessSession'] = 'Använd slutdatum för sessionstillgång';
+$strings['UseDateDownloadCertificate'] = 'Använd certifikatnedladdningsdatum';
+$strings['UseDateGenerationCertificate'] = 'Använd certifikatgenereringsdatum';
+$strings['UseCustomDate'] = 'Använd anpassat datum';
+$strings['LogosSeal'] = 'Logotyper / Sigiller';
+$strings['LogoLeft'] = 'Logotyp vänster';
+$strings['LogoCenter'] = 'Logotyp center';
+$strings['LogoRight'] = 'Logotyp höger';
+$strings['Seal'] = 'Sigill';
+$strings['Signature1'] = 'Signatur 1';
+$strings['Signature2'] = 'Signatur 2';
+$strings['Signature3'] = 'Signatur 3';
+$strings['Signature4'] = 'Signatur 4';
+$strings['SignatureText1'] = 'Signaturtext 1';
+$strings['SignatureText2'] = 'Signaturtext 2';
+$strings['SignatureText3'] = 'Signaturtext 3';
+$strings['SignatureText4'] = 'Signaturtext 4';
+$strings['OtherOptions'] = 'Övriga alternativ';
+$strings['MarginRight'] = 'Höger marginal';
+$strings['MarginLeft'] = 'Vänster marginal';
+$strings['SetDefaultTemplate'] = 'Sätt mall som standard';
+$strings['MessageDefaultTemplate'] = 'Spara denna standardanpassning för kurser och sessioner utan
+     definierade certifikat';
+$strings['None'] = 'Ingen';
+$strings['ErrorTemplateCertificate'] = 'Det finns ingen mall definierad för certifikatet.
+     Det finns ingen standardmall.';
+$strings['DateStartEnd'] = 'Med startdatum och slutdatum: ';
+$strings['ExpedictionIn'] = 'Utfärdat inom';
+$strings['Signatures'] = 'Signaturer';
+$strings['BackgroundCertificate'] = 'Bakgrundsbild för certifikatet';
+$strings['Background'] = 'Bakgrund';
+$strings['CertificateSetting'] = 'Certifikatinställningar';
+$strings['ToolDisabledCourse'] = 'Verktyg inaktiverat i kursinställningar';
+$strings['ToolUseDefaultSettingCourse'] = 'Verktyg konfigurerat för att använda standardcertifikatet. <br>
+     Du kan redigera det från Administrationsskärmen -> Plugins -> Anpassat certifikat. <br>
+     Eller om du vill kan du inaktivera alternativet att använda certifikat som standard i plugin-konfigurationen i kursen';
+$strings['CertificateSettingDefault'] = 'Standardinställningar för certifikat';
+$strings['InfoFromDefaultCertificate'] = 'Innehållet i certifikatet baseras på standardcertifikatet.
+     Ändringarna du gör påverkar inte standardcertifikatet.';
+$strings['to'] = ' till ';
+$strings['formatDownloadDate'] = ' till %sth %s, %s';
+$strings['PrintCertificate'] = 'Skriv ut certifikat';
+$strings['QuestionDelete'] = 'Vill du ta bort det specifika diplom och använda standardcertifikatet?';
+$strings['SuccessDelete'] = 'Borttagen framgångsrikt';
+$strings['ProblemDelete'] = 'Problem med att ta bort certifikatet';
+$strings['OnlyCustomCertificates'] = 'Endast kurser med personliga certifikat exporteras';

@@ -1,45 +1,45 @@
 <?php
 /* For license terms, see /license.txt */
 
-use Packback\Lti1p3\Interfaces\Cookie as Lti1p3Cookie;
+use Packback\Lti1p3\Interfaces\ICookie as Lti1p3Cookie;
 
 class Lti13Cookie implements Lti1p3Cookie
 {
-    public function getCookie($name)
+    public function getCookie(string $name): ?string
     {
-        if (isset($_REQUEST['state']) && $name === 'lti1p3_'.$_REQUEST['state']) {
-            return $_REQUEST['state'];
-        }
-
-        if (isset($_COOKIE[$name])) {
+        if (isset($_COOKIE[$name]) && is_string($_COOKIE[$name])) {
             return $_COOKIE[$name];
         }
-        // Look for backup cookie if same site is not supported by the user's browser.
-        if (isset($_COOKIE["LEGACY_".$name])) {
-            return $_COOKIE["LEGACY_".$name];
+
+        if (isset($_COOKIE['LEGACY_'.$name]) && is_string($_COOKIE['LEGACY_'.$name])) {
+            return $_COOKIE['LEGACY_'.$name];
         }
 
-        return false;
+        return null;
     }
 
-    public function setCookie($name, $value, $exp = 3600, $options = []): self
+    public function setCookie(string $name, string $value, int $exp = 3600, array $options = []): void
     {
-        $cookieOptions = [
+        $isHttps = 0 === strpos(api_get_path(WEB_PATH), 'https://');
+
+        $baseOptions = [
             'expires' => time() + $exp,
+            'path' => '/',
+            'secure' => $isHttps,
+            'httponly' => true,
+            'samesite' => 'None',
         ];
 
-        // SameSite none and secure will be required for tools to work inside iframes
-        $sameSiteOptions = [
-            'samesite' => 'None',
-            'secure' => false,
+        setcookie($name, $value, array_merge($baseOptions, $options));
+
+        // Fallback cookie for legacy browsers that ignore SameSite=None.
+        $legacyOptions = [
+            'expires' => time() + $exp,
+            'path' => '/',
+            'secure' => $isHttps,
             'httponly' => true,
         ];
 
-        setcookie($name, $value, array_merge($cookieOptions, $sameSiteOptions, $options));
-
-        // Set a second fallback cookie in the event that "SameSite" is not supported
-        setcookie("LEGACY_".$name, $value, array_merge($cookieOptions, $options));
-
-        return $this;
+        setcookie('LEGACY_'.$name, $value, array_merge($legacyOptions, $options));
     }
 }

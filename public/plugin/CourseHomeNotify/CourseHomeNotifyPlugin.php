@@ -22,6 +22,7 @@ class CourseHomeNotifyPlugin extends Plugin
 
         parent::__construct('0.1', 'Angel Fernando Quiroz Campos', $settings);
 
+        $this->isAdminPlugin = true;
         $this->isCoursePlugin = true;
         $this->addCourseTool = false;
         $this->setCourseSettings();
@@ -47,18 +48,17 @@ class CourseHomeNotifyPlugin extends Plugin
     public function install()
     {
         $em = Database::getManager();
+        $schemaManager = $em->getConnection()->createSchemaManager();
 
-        if ($em->getConnection()->createSchemaManager()->tablesExist(['course_home_notify_notification'])) {
-            return;
+        if (!$schemaManager->tablesExist(['course_home_notify_notification'])) {
+            $schemaTool = new SchemaTool($em);
+            $schemaTool->createSchema(
+                [
+                    $em->getClassMetadata(Notification::class),
+                    $em->getClassMetadata(NotificationRelUser::class),
+                ]
+            );
         }
-
-        $schemaTool = new SchemaTool($em);
-        $schemaTool->createSchema(
-            [
-                $em->getClassMetadata(Notification::class),
-                $em->getClassMetadata(NotificationRelUser::class),
-            ]
-        );
     }
 
     /**
@@ -98,6 +98,10 @@ class CourseHomeNotifyPlugin extends Plugin
             return '';
         }
 
+        if (!$this->isEnabled()) {
+            return '';
+        }
+
         $courseId = api_get_course_int_id();
         $userId = api_get_user_id();
 
@@ -111,7 +115,7 @@ class CourseHomeNotifyPlugin extends Plugin
         $em = Database::getManager();
         /** @var Notification $notification */
         $notification = $em
-            ->getRepository('ChamiloPluginBundle:CourseHomeNotify\Notification')
+            ->getRepository(Notification::class)
             ->findOneBy(['course' => $course]);
 
         if (!$notification) {
@@ -124,14 +128,20 @@ class CourseHomeNotifyPlugin extends Plugin
         if ($notification->getExpirationLink()) {
             /** @var NotificationRelUser $notificationUser */
             $notificationUser = $em
-                ->getRepository('ChamiloPluginBundle:CourseHomeNotify\NotificationRelUser')
+                ->getRepository(NotificationRelUser::class)
                 ->findOneBy(['notification' => $notification, 'user' => $user]);
 
             if ($notificationUser) {
                 return '';
             }
 
-            $contentUrl = api_get_path(WEB_PLUGIN_PATH).$this->get_name().'/content.php?hash='.$notification->getHash();
+            $contentUrl = api_get_path(WEB_PLUGIN_PATH)
+                .$this->get_name()
+                .'/content.php?hash='
+                .urlencode($notification->getHash())
+                .'&'
+                .api_get_cidreq();
+
             $link = Display::toolbarButton(
                 $this->get_lang('PleaseFollowThisLink'),
                 $contentUrl,
@@ -168,7 +178,7 @@ class CourseHomeNotifyPlugin extends Plugin
                 \$('#course-home-notify-modal').modal(".json_encode($modalConfig).");
 
                 \$('#course-home-notify-link').on('click', function () {
-                    $('#course-home-notify-modal').modal('hide');
+                    \$('#course-home-notify-modal').modal('hide');
                 });
             });
         </script>";
@@ -181,10 +191,6 @@ class CourseHomeNotifyPlugin extends Plugin
      */
     private function setCourseSettings()
     {
-        if (!Container::getPluginHelper()->isPluginEnabled($this->get_name())) {
-            return;
-        }
-
         $name = $this->get_name();
 
         $button = Display::toolbarButton(
@@ -196,8 +202,10 @@ class CourseHomeNotifyPlugin extends Plugin
 
         $this->course_settings = [
             [
-                'name' => '<p>'.$this->get_comment().'</p>'.$button.'<hr>',
+                'name' => 'notification_configuration',
+                'group' => 'course_home_notify',
                 'type' => 'html',
+                'init_value' => '<p>'.$this->get_comment().'</p>'.$button.'<hr>',
             ],
         ];
     }

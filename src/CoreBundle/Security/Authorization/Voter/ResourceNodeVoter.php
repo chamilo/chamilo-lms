@@ -18,10 +18,13 @@ use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
+use Chamilo\CourseBundle\Entity\CStudentPublication;
+use Chamilo\CourseBundle\Entity\CStudentPublicationComment;
 use Chamilo\CourseBundle\Entity\CStudentPublicationRelDocument;
 use ChamiloSession;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -82,6 +85,14 @@ class ResourceNodeVoter extends Voter
         return $subject instanceof ResourceNode;
     }
 
+    // Context roles (ROLE_CURRENT_COURSE_*) live in User::$temporaryRoles and appear in
+    // $user->getRoles(), but Symfony's AbstractToken::getRoleNames() only returns roles
+    // fixed at token-creation time. isGranted() therefore misses them.
+    private function hasContextRole(string $role): bool
+    {
+        return \in_array($role, $this->security->getUser()?->getRoles() ?? [], true);
+    }
+
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
         /** @var ResourceNode $resourceNode */
@@ -103,7 +114,7 @@ class ResourceNodeVoter extends Voter
             return true;
         }
 
-        if (self::VIEW === $attribute && $this->isBlogResource($resourceNode)) {
+        if (self::VIEW === $attribute && $this->canViewOwnStudentPublicationRelatedResource($resourceNode, $token)) {
             return true;
         }
 
@@ -112,7 +123,20 @@ class ResourceNodeVoter extends Voter
             return true;
         }
 
-        // @todo
+        // Special case: allow quiz attempt feedback audio files to be played by
+        // authorized users (student/teacher) when opened from exercise/LP views.
+        if (self::VIEW === $attribute && $this->isQuizAttemptFeedbackVisibleForCurrentRequest($resourceNode, $token)) {
+            return true;
+        }
+
+        if (self::VIEW === $attribute && $this->isPersonalDocumentFileVisibleForCurrentRequest($resourceNode, $token)) {
+            return true;
+        }
+
+        if (self::VIEW === $attribute && $this->isPersonalFileVisibleForAll($resourceNode, $token)) {
+            return true;
+        }
+
         switch ($attribute) {
             case self::VIEW:
                 if ($resourceNode->isPublic()) {
@@ -171,10 +195,10 @@ class ResourceNodeVoter extends Voter
                 return true;
             }
 
-            if ($this->security->isGranted('ROLE_CURRENT_COURSE_STUDENT')
-                || $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-                || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_STUDENT')
-                || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER')
+            if ($this->hasContextRole('ROLE_CURRENT_COURSE_STUDENT')
+                || $this->hasContextRole('ROLE_CURRENT_COURSE_TEACHER')
+                || $this->hasContextRole('ROLE_CURRENT_COURSE_SESSION_STUDENT')
+                || $this->hasContextRole('ROLE_CURRENT_COURSE_SESSION_TEACHER')
             ) {
                 return true;
             }
@@ -233,7 +257,7 @@ class ResourceNodeVoter extends Voter
         }
 
         $links = $resourceNode->getResourceLinks();
-        $firstLink = $resourceNode->getResourceLinks()->first();
+        $firstLink = $links->first();
         if ($resourceNode->hasResourceFile() && $firstLink) {
             if (0 === $courseId && $firstLink->getCourse() instanceof Course) {
                 $courseId = (int) $firstLink->getCourse()->getId();
@@ -243,11 +267,6 @@ class ResourceNodeVoter extends Voter
             }
             if (0 === $groupId && $firstLink->getGroup() instanceof CGroup) {
                 $groupId = (int) $firstLink->getGroup()->getIid();
-            }
-            if ($firstLink->getUser() instanceof UserInterface
-                && 'true' === $this->settingsManager->getSetting('security.access_to_personal_file_for_all')
-            ) {
-                return true;
             }
             if ($firstLink->getCourse() instanceof Course
                 && $firstLink->getCourse()->isPublic()
@@ -259,7 +278,6 @@ class ResourceNodeVoter extends Voter
         $linkFound = 0;
         $link = null;
 
-        // @todo implement view, edit, delete.
         foreach ($links as $link) {
             // Check if resource was sent to the current user.
             $linkUser = $link->getUser();
@@ -280,11 +298,7 @@ class ResourceNodeVoter extends Voter
 
             $linkSession = $link->getSession();
             $linkGroup = $link->getGroup();
-            // $linkUserGroup = $link->getUserGroup();
 
-            // @todo Check if resource was sent to a usergroup
-
-            // Check if resource was sent inside a group in a course session.
             if (null === $linkUser
                 && $linkGroup instanceof CGroup && !empty($groupId)
                 && $linkSession instanceof Session && !empty($sessionId)
@@ -329,8 +343,6 @@ class ResourceNodeVoter extends Voter
             if (null === $linkUser
                 && $linkCourse instanceof Course
                 && $linkCourse->getId() === $courseId
-                // Important: a link can belong to the course AND to a group/session.
-                // Without these guards, group/session resources may become visible in the global tool context (gid=0).
                 && null === $linkSession
                 && null === $linkGroup
             ) {
@@ -338,14 +350,8 @@ class ResourceNodeVoter extends Voter
 
                 break;
             }
-
-            /*if (ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()) {
-             * $linkFound = true;
-             * break;
-             * }*/
         }
 
-        // No link was found.
         if (0 === $linkFound) {
             return false;
         }
@@ -368,7 +374,7 @@ class ResourceNodeVoter extends Voter
 
         if ($courseId && $link->hasCourse() && $link->getCourse()->getId() === $courseId) {
             // If teacher.
-            if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_TEACHER)) {
+            if ($this->hasContextRole(self::ROLE_CURRENT_COURSE_TEACHER)) {
                 $resourceRight = (new ResourceRight())
                     ->setMask($editorMask)
                     ->setRole(self::ROLE_CURRENT_COURSE_TEACHER)
@@ -380,7 +386,7 @@ class ResourceNodeVoter extends Voter
             // Normal case: resource must be published.
             // Exception: when the resource is being opened from a learning path item,
             // allow VIEW even if the underlying ResourceLink visibility is hidden in the tool.
-            if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_STUDENT)
+            if ($this->hasContextRole(self::ROLE_CURRENT_COURSE_STUDENT)
                 && (ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility() || $isFromLearningPath)
             ) {
                 $resourceRight = (new ResourceRight())
@@ -403,7 +409,7 @@ class ResourceNodeVoter extends Voter
         }
 
         if (!empty($groupId)) {
-            if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_GROUP_TEACHER)) {
+            if ($this->hasContextRole(self::ROLE_CURRENT_COURSE_GROUP_TEACHER)) {
                 $resourceRight = (new ResourceRight())
                     ->setMask($editorMask)
                     ->setRole(self::ROLE_CURRENT_COURSE_GROUP_TEACHER)
@@ -411,7 +417,7 @@ class ResourceNodeVoter extends Voter
                 $rights[] = $resourceRight;
             }
 
-            if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_GROUP_STUDENT)) {
+            if ($this->hasContextRole(self::ROLE_CURRENT_COURSE_GROUP_STUDENT)) {
                 $resourceRight = (new ResourceRight())
                     ->setMask($readerMask)
                     ->setRole(self::ROLE_CURRENT_COURSE_GROUP_STUDENT)
@@ -421,7 +427,7 @@ class ResourceNodeVoter extends Voter
         }
 
         if (!empty($sessionId)) {
-            if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_SESSION_TEACHER)) {
+            if ($this->hasContextRole(self::ROLE_CURRENT_COURSE_SESSION_TEACHER)) {
                 $resourceRight = (new ResourceRight())
                     ->setMask($editorMask)
                     ->setRole(self::ROLE_CURRENT_COURSE_SESSION_TEACHER)
@@ -429,7 +435,7 @@ class ResourceNodeVoter extends Voter
                 $rights[] = $resourceRight;
             }
 
-            if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_SESSION_STUDENT)) {
+            if ($this->hasContextRole(self::ROLE_CURRENT_COURSE_SESSION_STUDENT)) {
                 $resourceRight = (new ResourceRight())
                     ->setMask($readerMask)
                     ->setRole(self::ROLE_CURRENT_COURSE_SESSION_STUDENT)
@@ -491,22 +497,248 @@ class ResourceNodeVoter extends Voter
         );
     }
 
-    private function isBlogResource(ResourceNode $node): bool
+    /**
+     * Allows access to quiz attempt feedback audio files for authenticated users.
+     *
+     * This is a narrow compatibility exception for:
+     * /r/quiz/attempt_feedback/{uuid}/view
+     *
+     * It avoids depending on cid/sid contextual roles, which are often missing
+     * on direct /r/... resource requests.
+     */
+    private function isQuizAttemptFeedbackVisibleForCurrentRequest(ResourceNode $resourceNode, TokenInterface $token): bool
     {
-        $type = $node->getResourceType()?->getTitle();
-        if (\in_array($type, ['blog', 'blogs', 'c_blog', 'c_blogs'], true)) {
-            return true;
+        $request = $this->requestStack->getCurrentRequest();
+        if (null === $request) {
+            return false;
         }
 
-        $firstLink = $node->getResourceLinks()->first();
-        if ($firstLink && method_exists($firstLink, 'getTool') && $firstLink->getTool()) {
-            $toolName = method_exists($firstLink->getTool(), 'getName')
-                ? $firstLink->getTool()->getName()
-                : $firstLink->getTool()->getTitle();
+        $pathInfo = (string) $request->getPathInfo();
+        if ('' === $pathInfo) {
+            return false;
+        }
 
-            if (\in_array(strtolower((string) $toolName), ['blog', 'blogs'], true)) {
+        // Match only:
+        // /r/quiz/attempt_feedback/{uuid}/view
+        // /r/quiz/attempt_file/{uuid}/view
+        if (!preg_match('#^/r/quiz/(attempt_feedback|attempt_file)/[0-9a-fA-F-]{36}/view$#', $pathInfo)) {
+            return false;
+        }
+
+        $user = $token->getUser();
+        if (!$user instanceof UserInterface) {
+            return false;
+        }
+
+        // Reject explicit cross-site requests when headers are present.
+        if ($this->hasCrossSiteHeaderMismatch($request)) {
+            return false;
+        }
+
+        // Keep the exception scoped to expected resource types.
+        $type = strtolower((string) ($resourceNode->getResourceType()?->getTitle() ?? ''));
+        if (!\in_array($type, ['files', 'quiz', 'attempt_feedback', 'attempt_file'], true)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Allows access to personal files for all authenticated users when the
+     * corresponding platform setting is enabled.
+     */
+    private function isPersonalFileVisibleForAll(ResourceNode $resourceNode, TokenInterface $token): bool
+    {
+        $user = $token->getUser();
+        if (!$user instanceof UserInterface) {
+            return false;
+        }
+
+        if (!$resourceNode->hasResourceFile()) {
+            return false;
+        }
+
+        if (!$this->isTruthySettingValue(
+            $this->settingsManager->getSetting('security.access_to_personal_file_for_all', true)
+        )) {
+            return false;
+        }
+
+        return $this->isPersonalFileResource($resourceNode);
+    }
+
+    /**
+     * Allows authenticated users to view direct document file resources that
+     * are backed by a personal file when the global setting is enabled.
+     *
+     * This targets URLs like:
+     * /r/document/files/{uuid}/view
+     */
+    private function isPersonalDocumentFileVisibleForCurrentRequest(ResourceNode $resourceNode, TokenInterface $token): bool
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        if (null === $request) {
+            return false;
+        }
+
+        $user = $token->getUser();
+        if (!$user instanceof UserInterface) {
+            return false;
+        }
+
+        $pathInfo = (string) $request->getPathInfo();
+        if ('' === $pathInfo) {
+            return false;
+        }
+
+        if (!preg_match('#^/r/document/files/[0-9a-fA-F-]{36}/view$#', $pathInfo)) {
+            return false;
+        }
+
+        if ($this->hasCrossSiteHeaderMismatch($request)) {
+            return false;
+        }
+
+        if (!$resourceNode->hasResourceFile()) {
+            return false;
+        }
+
+        if (!$this->isTruthySettingValue(
+            $this->settingsManager->getSetting('security.access_to_personal_file_for_all', true)
+        )) {
+            return false;
+        }
+
+        return $this->isPersonalFileResource($resourceNode);
+    }
+
+    /**
+     * Detects whether the resource node belongs to the personal files area.
+     *
+     * The primary source of truth is the personal_file table because some
+     * personal files do not have any resource_link row.
+     */
+    private function isPersonalFileResource(ResourceNode $resourceNode): bool
+    {
+        foreach ($resourceNode->getResourceLinks() as $resourceLink) {
+            if ($resourceLink->getUser() instanceof UserInterface) {
                 return true;
             }
+        }
+
+        $resourceNodeId = $resourceNode->getId();
+        if (null === $resourceNodeId) {
+            return false;
+        }
+
+        $sql = 'SELECT 1 FROM personal_file WHERE resource_node_id = :resourceNodeId LIMIT 1';
+        $exists = $this->entityManager
+            ->getConnection()
+            ->fetchOne($sql, ['resourceNodeId' => $resourceNodeId])
+        ;
+
+        return false !== $exists && null !== $exists;
+    }
+
+    private function isTruthySettingValue(mixed $value): bool
+    {
+        if (\is_bool($value)) {
+            return $value;
+        }
+
+        $normalized = strtolower(trim((string) $value));
+
+        return \in_array($normalized, ['1', 'true', 'yes', 'on'], true);
+    }
+
+    /**
+     * Returns true when Origin/Referer explicitly points to another host.
+     * Missing headers are allowed (common in some browsers/privacy settings).
+     */
+    private function hasCrossSiteHeaderMismatch(Request $request): bool
+    {
+        $currentHost = (string) $request->getSchemeAndHttpHost();
+
+        foreach (['origin', 'referer'] as $headerName) {
+            $headerValue = trim((string) $request->headers->get($headerName, ''));
+            if ('' === $headerValue) {
+                continue;
+            }
+
+            $parsed = parse_url($headerValue);
+            if (!\is_array($parsed)) {
+                continue;
+            }
+
+            $scheme = isset($parsed['scheme']) ? (string) $parsed['scheme'] : '';
+            $host = isset($parsed['host']) ? (string) $parsed['host'] : '';
+            $port = isset($parsed['port']) ? (int) $parsed['port'] : null;
+
+            if ('' === $scheme || '' === $host) {
+                continue;
+            }
+
+            $headerHost = $scheme.'://'.$host.(null !== $port ? ':'.$port : '');
+            if ($headerHost !== $currentHost) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function canViewOwnStudentPublicationRelatedResource(ResourceNode $resourceNode, TokenInterface $token): bool
+    {
+        $user = $token->getUser();
+        if (!$user instanceof UserInterface) {
+            return false;
+        }
+
+        $resourceTypeTitle = $resourceNode->getResourceType()->getTitle();
+
+        if ('student_publications' === $resourceTypeTitle) {
+            $publication = $this->entityManager
+                ->getRepository(CStudentPublication::class)
+                ->findOneBy(['resourceNode' => $resourceNode])
+            ;
+
+            if ($publication instanceof CStudentPublication) {
+                return $publication->getUser()->getUserIdentifier() === $user->getUserIdentifier();
+            }
+
+            return false;
+        }
+
+        if ('student_publications_comments' === $resourceTypeTitle) {
+            $comment = $this->entityManager
+                ->getRepository(CStudentPublicationComment::class)
+                ->findOneBy(['resourceNode' => $resourceNode])
+            ;
+
+            if ($comment instanceof CStudentPublicationComment) {
+                return $comment->getPublication()->getUser()->getUserIdentifier() === $user->getUserIdentifier();
+            }
+
+            return false;
+        }
+
+        if ('student_publications_corrections' === $resourceTypeTitle) {
+            $parentNode = $resourceNode->getParent();
+            if (!$parentNode instanceof ResourceNode) {
+                return false;
+            }
+
+            $publication = $this->entityManager
+                ->getRepository(CStudentPublication::class)
+                ->findOneBy(['resourceNode' => $parentNode])
+            ;
+
+            if ($publication instanceof CStudentPublication) {
+                return $publication->getUser()->getUserIdentifier() === $user->getUserIdentifier();
+            }
+
+            return false;
         }
 
         return false;

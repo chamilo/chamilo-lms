@@ -173,8 +173,13 @@ class GradebookCertificateRepository extends ResourceRepository
             $cert->setScoreCertificate($scoreCertificate);
         }
 
-        // Deterministic filename for legacy parity (used historically to build URLs)
-        $logicalFileName = ltrim(hash('sha256', $userId.($catId ?: 0)).'.html', '/');
+        // Reuse existing hash for existing certificates; generate unpredictable hash for new ones.
+        $existingPath = $cert->getPathCertificate();
+        if (!empty($existingPath) && str_ends_with($existingPath, '.html')) {
+            $logicalFileName = ltrim($existingPath, '/');
+        } else {
+            $logicalFileName = hash('sha256', $userId.($catId ?: 0).bin2hex(random_bytes(16))).'.html';
+        }
 
         // Ensure resource node exists with ResourceType 'files', under the user's node
         if (!$cert->hasResourceNode()) {

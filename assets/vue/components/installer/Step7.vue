@@ -17,8 +17,10 @@
 
     <div class="RequirementContent">
       <p
-        v-t="
-          'When you enter your portal for the first time, the best way to understand it is to create a course with the \'Create course\' link in the menu and play around a little.'
+        v-text="
+          t(
+            'When you enter your portal for the first time, the best way to understand it is to create a course with the \'Create course\' link in the menu and play around a little.',
+          )
         "
         class="mb-3"
       />
@@ -28,7 +30,7 @@
         severity="warn"
         style="margin-bottom: 8px;"
       >
-        <strong v-t="'Security advice'" />
+        <strong v-text="t('Security advice')" />
 
         <i18n-t
           keypath="To protect your site, make the whole {0} directory read-only (chmod -R 0555 on Linux) and delete the {1} directory."

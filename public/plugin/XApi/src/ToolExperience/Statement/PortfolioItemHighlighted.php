@@ -4,18 +4,20 @@ declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
+namespace Chamilo\PluginBundle\XApi\ToolExperience\Statement;
+
 use Chamilo\PluginBundle\XApi\ToolExperience\Activity\PortfolioItem as PortfolioItemActivity;
 use Chamilo\PluginBundle\XApi\ToolExperience\Actor\User;
-use Chamilo\PluginBundle\XApi\ToolExperience\Statement\PortfolioAttachmentsTrait;
-use Chamilo\PluginBundle\XApi\ToolExperience\Statement\PortfolioItem as PortfolioItemStatement;
 use Chamilo\PluginBundle\XApi\ToolExperience\Verb\Highlighted;
-use Xabbuh\XApi\Model\Statement;
 
-class PortfolioItemHighlighted extends PortfolioItemStatement
+/**
+ * Class PortfolioItemHighlighted.
+ */
+class PortfolioItemHighlighted extends PortfolioItem
 {
     use PortfolioAttachmentsTrait;
 
-    public function generate(): Statement
+    public function generate(): array
     {
         $user = api_get_user_entity(api_get_user_id());
 
@@ -25,17 +27,19 @@ class PortfolioItemHighlighted extends PortfolioItemStatement
         $context = $this->generateContext();
         $attachments = $this->generateAttachmentsForItem($this->item);
 
-        return new Statement(
-            $this->generateStatementId('portfolio-item'),
-            $actor->generate(),
-            $verb->generate(),
-            $object->generate(),
-            null,
-            null,
-            api_get_utc_datetime(null, false, true),
-            null,
-            $context,
-            $attachments
-        );
+        $statement = [
+            'id' => $this->generateStatementId('portfolio-item'),
+            'actor' => $actor->generate(),
+            'verb' => $verb->generate(),
+            'object' => $object->generate(),
+            'timestamp' => api_get_utc_datetime(null, false, true)->format(DATE_ATOM),
+            'context' => $context,
+        ];
+
+        if (!empty($attachments)) {
+            $statement['attachments'] = $attachments;
+        }
+
+        return $statement;
     }
 }

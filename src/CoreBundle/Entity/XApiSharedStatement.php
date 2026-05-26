@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: XApiSharedStatementRepository::class)]
+#[ORM\Table(name: 'xapi_shared_statement')]
 #[ORM\Index(columns: ['uuid'], name: 'idx_uuid')]
 class XApiSharedStatement
 {
@@ -31,7 +32,7 @@ class XApiSharedStatement
     public function __construct(array $statement, ?string $uuid = null, bool $sent = false)
     {
         $this->statement = $statement;
-        $this->uuid = Uuid::fromString($uuid);
+        $this->uuid = $this->normalizeUuid($uuid);
         $this->sent = $sent;
     }
 
@@ -74,5 +75,20 @@ class XApiSharedStatement
         $this->sent = $sent;
 
         return $this;
+    }
+
+    private function normalizeUuid(?string $uuid): ?Uuid
+    {
+        if (null === $uuid) {
+            return null;
+        }
+
+        $uuid = trim($uuid);
+
+        if ('' === $uuid) {
+            return null;
+        }
+
+        return Uuid::fromString($uuid);
     }
 }

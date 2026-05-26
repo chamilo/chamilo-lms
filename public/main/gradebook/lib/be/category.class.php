@@ -39,6 +39,8 @@ class Category implements GradebookItem
     private $documentId;
     /** @var int */
     private $gradeBooksToValidateInDependence;
+    private $locked;
+    private int $allowSkillsBySubcategory;
 
     /**
      * Consctructor.
@@ -61,6 +63,7 @@ class Category implements GradebookItem
         $this->courseDependency = [];
         $this->documentId = 0;
         $this->minimumToValidate = null;
+        $this->allowSkillsBySubcategory = 1;
     }
 
     /**
@@ -292,6 +295,33 @@ class Category implements GradebookItem
     public function getMinimumToValidate()
     {
         return $this->minimumToValidate;
+    }
+
+    public function setAllowSkillBySubCategory($value): self
+    {
+        $this->allowSkillsBySubcategory = (int) $value;
+
+        return $this;
+    }
+
+    public function getAllowSkillBySubCategory(?int $parentId = null): bool
+    {
+        $categoryId = $parentId ?? (int) $this->id;
+
+        if (empty($categoryId)) {
+            return true;
+        }
+
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $sql = "SELECT allow_skills_by_subcategory FROM $table WHERE id = ".(int) $categoryId;
+        $result = Database::query($sql);
+        $value = Database::result($result, 0, 0);
+
+        if (null === $value || '' === (string) $value) {
+            return true;
+        }
+
+        return 1 === (int) $value;
     }
 
     /**
@@ -534,6 +564,16 @@ class Category implements GradebookItem
             }
 
             $category->setIsRequirement($this->isRequirement);
+
+            if (
+                'true' === api_get_setting('gradebook.gradebook_enable_subcategory_skills_independant_assignement')
+                && 0 === (int) $this->get_parent_id()
+            ) {
+                $this->setAllowSkillBySubCategory(
+                    !empty($_POST['allow_skills_by_subcategory']) ? 1 : 0
+                );
+            }
+            $category->setAllowSkillsBySubcategory((int) $this->allowSkillsBySubcategory);
             $category->setLocked(0);
 
             $em->persist($category);
@@ -628,6 +668,16 @@ class Category implements GradebookItem
 
         $category->setIsRequirement($this->isRequirement);
 
+        if (
+            'true' === api_get_setting('gradebook.gradebook_enable_subcategory_skills_independant_assignement')
+            && 0 === (int) $this->get_parent_id()
+        ) {
+            $this->setAllowSkillBySubCategory(
+                !empty($_POST['allow_skills_by_subcategory']) ? 1 : 0
+            );
+        }
+
+        $category->setAllowSkillsBySubcategory((int) $this->allowSkillsBySubcategory);
         $em->persist($category);
         $em->flush();
 
@@ -2086,13 +2136,18 @@ class Category implements GradebookItem
         $my_certificate = GradebookUtils::get_certificate_by_user_id($categoryId, $user_id);
 
         if (!empty($my_certificate)) {
-            $pathToCertificate = $category
-                ->getDocument()
-                ->getResourceNode()
-                ->getResourceFiles()
-                ->first()
-                ->getFile()
-                ->getPathname();
+            $pathToCertificate = '';
+            try {
+                $document = $category->getDocument();
+                if ($document && $document->getResourceNode()) {
+                    $resourceFile = $document->getResourceNode()->getResourceFiles()->first();
+                    if ($resourceFile && method_exists($resourceFile, 'getFile') && $resourceFile->getFile()) {
+                        $pathToCertificate = $resourceFile->getFile()->getPathname();
+                    }
+                }
+            } catch (\Throwable $e) {
+                $pathToCertificate = '';
+            }
 
             $certificate_obj = new Certificate(
                 $my_certificate['id'],
@@ -2104,7 +2159,12 @@ class Category implements GradebookItem
 
             $fileWasGenerated = $certificate_obj->isHtmlFileGenerated();
 
-            if ('true' === api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate')) {
+            $customCertificatePluginFile = api_get_path(SYS_PLUGIN_PATH).'CustomCertificate/src/CustomCertificatePlugin.php';
+            if (is_file($customCertificatePluginFile)) {
+                require_once $customCertificatePluginFile;
+            }
+
+            if (class_exists('CustomCertificatePlugin')) {
                 $infoCertificate = CustomCertificatePlugin::getCertificateData($my_certificate['id'], $user_id);
                 if (!empty($infoCertificate)) {
                     $fileWasGenerated = true;
@@ -2691,7 +2751,7 @@ class Category implements GradebookItem
                 $cat->set_locked($data['locked']);
                 $cat->setGenerateCertificates($data['generate_certificates']);
                 $cat->setIsRequirement($data['is_requirement']);
-                //$cat->setCourseListDependency(isset($data['depends']) ? $data['depends'] : []);
+                $cat->setAllowSkillBySubCategory($data['allow_skills_by_subcategory'] ?? 1);
                 $cat->setMinimumToValidate(isset($data['minimum_to_validate']) ? $data['minimum_to_validate'] : null);
                 $cat->setGradeBooksToValidateInDependence(isset($data['gradebooks_to_validate_in_dependence']) ? $data['gradebooks_to_validate_in_dependence'] : null);
                 $cat->setDocumentId($data['document_id']);

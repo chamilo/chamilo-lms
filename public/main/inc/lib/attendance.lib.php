@@ -28,6 +28,12 @@ class Attendance
     private $attendance_qualify_title;
     private $attendance_weight;
 
+    private function shouldShowOfficialCode(): bool
+    {
+        return 'true' === api_get_setting('attendance.attendance_add_official_code')
+            || true === api_get_configuration_value('attendance_add_official_code');
+    }
+
     /**
      * Get attendance list only the id, title and attendance_qualify_max fields.
      *
@@ -213,20 +219,22 @@ class Attendance
             if (api_is_allowed_to_edit(null, true)) {
                 $actions = '';
                 $actions .= '<center>';
+                $secToken = Security::get_existing_token();
+                $tokenParam = '&sec_token='.htmlspecialchars($secToken, ENT_QUOTES);
                 if (api_is_platform_admin()) {
                     $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_edit&attendance_id='.$id.'">'.
                         Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>&nbsp;';
                     // Visible
                     if (1 == $active) {
-                        $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_set_invisible&attendance_id='.$id.'">'.
+                        $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_set_invisible&attendance_id='.$id.$tokenParam.'">'.
                             Display::getMdiIcon(StateIcon::ACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Hide')).'</a>';
                     } else {
-                        $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_set_visible&attendance_id='.$id.'">'.
+                        $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_set_visible&attendance_id='.$id.$tokenParam.'">'.
                             Display::getMdiIcon(StateIcon::INACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Show')).'</a>';
                         $row[2] = '<span class="muted">'.$attendance->getDescription().'</span>';
                     }
                     if ('true' === $allowDelete) {
-                        $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_delete&attendance_id='.$id.'">'.
+                        $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_delete&attendance_id='.$id.$tokenParam.'">'.
                             Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
                     }
                 } else {
@@ -239,15 +247,15 @@ class Attendance
                             Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>&nbsp;';
 
                         if (1 == $active) {
-                            $actions .= ' <a href="index.php?'.api_get_cidreq().'&action=attendance_set_invisible&attendance_id='.$id.'">'.
+                            $actions .= ' <a href="index.php?'.api_get_cidreq().'&action=attendance_set_invisible&attendance_id='.$id.$tokenParam.'">'.
                                 Display::getMdiIcon(StateIcon::ACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Hide')).'</a>';
                         } else {
-                            $actions .= ' <a href="index.php?'.api_get_cidreq().'&action=attendance_set_visible&attendance_id='.$id.'">'.
+                            $actions .= ' <a href="index.php?'.api_get_cidreq().'&action=attendance_set_visible&attendance_id='.$id.$tokenParam.'">'.
                                 Display::getMdiIcon(StateIcon::INACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Show')).'</a>';
                             $row[2] = '<span class="muted">'.$attendance->getDescription().'</span>';
                         }
                         if ('true' === $allowDelete) {
-                            $actions .= ' <a href="index.php?'.api_get_cidreq().'&action=attendance_delete&attendance_id='.$id.'">'.
+                            $actions .= ' <a href="index.php?'.api_get_cidreq().'&action=attendance_delete&attendance_id='.$id.$tokenParam.'">'.
                                 Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
                         }
                     }
@@ -675,6 +683,8 @@ class Attendance
 
         // get registered users inside current course
         $a_users = [];
+        $showOfficialCode = $this->shouldShowOfficialCode();
+
         foreach ($a_course_users as $key => $user_data) {
             $value = [];
             $uid = $user_data['user_id'];
@@ -730,6 +740,9 @@ class Attendance
             );
 
             $value['photo'] = $photo;
+            if ($showOfficialCode) {
+                $value['official_code'] = $user_data['official_code'] ?? '';
+            }
             $value['firstname'] = $user_data['firstname'];
             $value['lastname'] = $user_data['lastname'];
             $value['username'] = $user_data['username'];
@@ -2590,6 +2603,11 @@ class Attendance
                     href="index.php?'.api_get_cidreq().'&action=attendance_sheet_export_to_pdf&attendance_id='.$attendanceId.'&filter='.$default_filter.'&group_id='.$groupId.'">'.
                     Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export to PDF')).'</a>';
 
+                $actionsLeft .= '<a
+                    id="xls_export" style="float:left;"
+                    href="index.php?'.api_get_cidreq().'&action=attendance_sheet_export_to_xls&attendance_id='.$attendanceId.'&filter='.$default_filter.'&group_id='.$groupId.'">'.
+                    Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export to XLS')).'</a>';
+
                 $actionsRight = $form->returnForm();
                 $content .= Display::toolbarAction('toolbar-attendance', [$actionsLeft, $actionsRight]);
             }
@@ -2610,6 +2628,9 @@ class Attendance
             $param_filter = '&filter='.Security::remove_XSS($default_filter).'&group_id='.$groupId;
 
             if (count($users_in_course) > 0) {
+                $showOfficialCode = $this->shouldShowOfficialCode();
+                $officialCodeHeader = $showOfficialCode ? '<th width="100px">'.get_lang('Official code').'</th>' : '';
+
                 $form = '
                 <form method="post" action="index.php?action=attendance_sheet_add&'.api_get_cidreq().$param_filter.'&attendance_id='.$attendanceId.'">
                     <div
@@ -2624,6 +2645,7 @@ class Attendance
                                     style="position: absolute; top: 0px; left: 0px; visibility: hidden; margin:0px;padding:0px" >
                                     <th width="10px">#</th>
                                     <th width="10px">'.get_lang('Photo').'</th>
+                                    '.$officialCodeHeader.'
                                     <th width="100px">'.get_lang('Last name').'</th>
                                     <th width="100px">'.get_lang('First name').'</th>
                                     <th width="100px">'.get_lang('Not attended').'</th>
@@ -2631,6 +2653,7 @@ class Attendance
                                 <tr class="tableFloatingHeaderOriginal">
                                     <th width="10px">#</th>
                                     <th width="10px">'.get_lang('Photo').'</th>
+                                    '.$officialCodeHeader.'
                                     <th width="150px">'.get_lang('Last name').'</th>
                                     <th width="140px">'.get_lang('First name').'</th>
                                     <th width="100px">'.get_lang('Not attended').'</th>
@@ -2649,9 +2672,15 @@ class Attendance
                         ENT_QUOTES
                     );
 
+                    $officialCodeCell = '';
+                    if ($showOfficialCode) {
+                        $officialCodeCell = '<td>'.api_htmlentities($data['official_code'] ?? '', ENT_QUOTES).'</td>';
+                    }
+
                     $form .= '<tr class="'.$class.'">
                                 <td><center>'.$i.'</center></td>
                                 <td>'.$data['photo'].'</td>
+                                '.$officialCodeCell.'
                                 <td><span title="'.$username.'">'.$data['lastname'].'</span></td>
                                 <td>'.$data['firstname'].'</td>
                                 <td>
@@ -2959,7 +2988,13 @@ class Attendance
 
         // Get data table
         $data_table = [];
-        $head_table = ['#', get_lang('Name')];
+        $showOfficialCode = $this->shouldShowOfficialCode();
+        $head_table = ['#'];
+        if ($showOfficialCode) {
+            $head_table[] = get_lang('Official code');
+        }
+        $head_table[] = get_lang('Name');
+
         foreach ($data_array['attendant_calendar'] as $class_day) {
             $head_table[] =
                 api_format_date($class_day['date_time'], DATE_FORMAT_NUMBER_NO_YEAR).' '.
@@ -2975,6 +3010,9 @@ class Attendance
                 $cols = 1;
                 $result = [];
                 $result['count'] = $count;
+                if ($showOfficialCode) {
+                    $result['official_code'] = $user['official_code'] ?? '';
+                }
                 $result['full_name'] = api_get_person_name($user['firstname'], $user['lastname']);
                 foreach ($data_array['attendant_calendar'] as $class_day) {
                     if (1 == $class_day['done_attendance']) {
@@ -2992,22 +3030,19 @@ class Attendance
                 $data_table[] = $result;
             }
         }
-        $max_cols_per_page = 12; //10 dates + 2 name and number
-        $max_dates_per_page = $max_dates_per_page_original = $max_cols_per_page - 2; //10
+        $fixedColumns = $showOfficialCode ? 3 : 2;
+        $max_cols_per_page = 12;
+        $max_dates_per_page = $max_dates_per_page_original = $max_cols_per_page - $fixedColumns;
         $rows = count($data_table);
+        $cols = count($head_table);
 
         if ($cols > $max_cols_per_page) {
-            $number_tables = round(($cols - 2) / $max_dates_per_page);
-            $headers = $data_table[0];
-            $all = [];
             $tables = [];
-            $changed = 1;
 
             for ($i = 0; $i <= $rows; $i++) {
-                $row = isset($data_table[$i]) ? $data_table[$i] : null;
                 $key = 1;
-                $max_dates_per_page = 10;
-                $item = isset($data_table[$i]) ? $data_table[$i] : null;
+                $max_dates_per_page = $max_dates_per_page_original;
+                $item = $data_table[$i] ?? null;
                 $count_j = 0;
 
                 if (!empty($item)) {
@@ -3015,9 +3050,10 @@ class Attendance
                         if ($count_j >= $max_dates_per_page) {
                             $key++;
                             $max_dates_per_page = $max_dates_per_page_original * $key;
-                            //magic hack
-                            $tables[$key][$i][] = $tables[1][$i][0];
-                            $tables[$key][$i][] = $tables[1][$i][1];
+
+                            for ($fixedColumn = 0; $fixedColumn < $fixedColumns; $fixedColumn++) {
+                                $tables[$key][$i][] = $tables[1][$i][$fixedColumn];
+                            }
                         }
                         $tables[$key][$i][] = $value;
                         $count_j++;
@@ -3049,6 +3085,91 @@ class Attendance
             'orientation' => 'L',
         ];
         Export::export_html_to_pdf($content, $params);
+        exit;
+    }
+
+    public function attendance_sheet_export_to_xls(
+        $attendance_id,
+        $student_id = 0,
+        $course_id = ''
+    ) {
+        $courseInfo = api_get_course_info($course_id);
+        $this->set_course_id($courseInfo['code']);
+        $groupId = isset($_REQUEST['group_id']) ? $_REQUEST['group_id'] : null;
+        $data = [];
+        $showOfficialCode = $this->shouldShowOfficialCode();
+
+        $filter_type = 'today';
+        if (!empty($_REQUEST['filter'])) {
+            $filter_type = $_REQUEST['filter'];
+        }
+
+        $my_calendar_id = null;
+        if (is_numeric($filter_type)) {
+            $my_calendar_id = $filter_type;
+            $filter_type = 'calendar_id';
+        }
+
+        $calendar = $this->get_attendance_calendar(
+            $attendance_id,
+            $filter_type,
+            $my_calendar_id,
+            $groupId
+        );
+
+        if (api_is_allowed_to_edit(null, true) || api_is_drh()) {
+            $usersPresence = $this->get_users_attendance_sheet($attendance_id, 0, $groupId);
+        } else {
+            if (!empty($student_id)) {
+                $user_id = (int) $student_id;
+            } else {
+                $user_id = api_get_user_id();
+            }
+
+            $usersPresence = $this->get_users_attendance_sheet($attendance_id, $user_id, $groupId);
+        }
+
+        $usersInCourse = $this->get_users_rel_course($attendance_id, $groupId);
+
+        $headTable = ['#'];
+        if ($showOfficialCode) {
+            $headTable[] = get_lang('Official code');
+        }
+        $headTable[] = get_lang('Name');
+
+        foreach ($calendar as $classDay) {
+            $headTable[] = api_format_date($classDay['date_time'], DATE_FORMAT_NUMBER_NO_YEAR).' '.
+                api_format_date($classDay['date_time'], TIME_NO_SEC_FORMAT);
+        }
+
+        $data[] = $headTable;
+        $count = 1;
+
+        foreach ($usersInCourse as $user) {
+            $row = [$count++];
+
+            if ($showOfficialCode) {
+                $row[] = $user['official_code'] ?? '';
+            }
+
+            $row[] = api_get_person_name($user['firstname'], $user['lastname']);
+
+            foreach ($calendar as $classDay) {
+                if (1 == $classDay['done_attendance']) {
+                    if (1 == ($usersPresence[$user['user_id']][$classDay['iid']]['presence'] ?? 0)) {
+                        $row[] = get_lang('P');
+                    } else {
+                        $row[] = get_lang('NP');
+                    }
+                } else {
+                    $row[] = '';
+                }
+            }
+
+            $data[] = $row;
+        }
+
+        Export::arrayToXls($data, get_lang('Attendance').'-'.api_get_local_time());
         exit;
     }
 

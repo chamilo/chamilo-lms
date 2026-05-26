@@ -212,7 +212,7 @@ class HTML_QuickForm extends HTML_Common
         $this->token = null;
         parent::__construct($attributes);
 
-        $method = strtoupper($method) === 'GET' ? 'get' : 'post';
+        $method = strtoupper((string) $method) === 'GET' ? 'get' : 'post';
         $action = $action == '' ? api_get_self() : $action;
         $target = empty($target) ? [] : ['target' => $target];
         $form_id = $formName;
@@ -690,7 +690,7 @@ class HTML_QuickForm extends HTML_Common
      */
     public function &addGroup(
         $elements,
-        $name = null,
+        ?string $name = null,
         $groupLabel = '',
         $separator = null,
         $appendName = true,
@@ -698,7 +698,7 @@ class HTML_QuickForm extends HTML_Common
     ) {
         static $anonGroups = 1;
 
-        if (0 == strlen($name)) {
+        if (empty($name)) {
             $name = 'qf_group_'.$anonGroups++;
             $appendName = false;
         }

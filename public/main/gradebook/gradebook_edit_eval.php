@@ -12,9 +12,21 @@ api_block_anonymous_users();
 GradebookUtils::block_students();
 
 $evaledit = Evaluation::load($_GET['editeval']);
-if ($evaledit[0]->is_locked() && !api_is_platform_admin()) {
-    api_not_allowed();
+if (empty($evaledit[0])) {
+    api_not_allowed(true);
 }
+if (!api_is_platform_admin()) {
+    $currentCourseId = api_get_course_int_id();
+
+    if ($evaledit[0]->getCourseId() && $evaledit[0]->getCourseId() != $currentCourseId) {
+        api_not_allowed(true);
+    }
+
+    if ($evaledit[0]->is_locked()) {
+        api_not_allowed(true);
+    }
+}
+
 $form = new EvalForm(
     EvalForm::TYPE_EDIT,
     $evaledit[0],
@@ -28,12 +40,13 @@ if ($form->validate()) {
 
     $entityManager = Database::getManager();
 
-    $evaluationId = $values['hid_id'];
-    if ($evaluationId) {
-        $evaluation = $entityManager->getRepository(GradebookEvaluation::class)->find($evaluationId);
-    } else {
-        $evaluation = new GradebookEvaluation();
-        $entityManager->persist($evaluation);
+    $evaluationId = (int) $values['hid_id'];
+    if ($evaluationId !== (int) $evaledit[0]->get_id()) {
+        api_not_allowed(true);
+    }
+    $evaluation = $entityManager->getRepository(GradebookEvaluation::class)->find($evaluationId);
+    if (!$evaluation) {
+        api_not_allowed(true);
     }
 
     $evaluation->setTitle($values['name']);
@@ -47,7 +60,7 @@ if ($form->validate()) {
 
     $evaluation->setWeight($values['weight_mask']);
     $evaluation->setMax($values['max']);
-    $evaluation->setVisible(empty($values['visible']) ? 0 : 1);
+    $evaluation->setVisible(1);
 
     if (isset($values['min_score'])) {
         $evaluation->setMinScore($values['min_score']);

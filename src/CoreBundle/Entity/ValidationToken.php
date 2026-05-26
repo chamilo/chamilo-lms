@@ -45,9 +45,9 @@ class ValidationToken
         $this->type = $type;
         $this->resourceId = $resourceId;
 
-        // If a hash is provided (e.g. remember-me), use it. Otherwise generate one.
+        // If a hash is provided (e.g., remember-me), use it. Otherwise, generate one.
         $this->hash = $hash ?? hash('sha256', uniqid((string) random_int(0, PHP_INT_MAX), true));
-        $this->createdAt = $createdAt ?? new DateTime();
+        $this->createdAt = $this->createdAt ?? new DateTime();
     }
 
     public function getId(): ?int

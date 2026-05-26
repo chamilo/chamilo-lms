@@ -111,7 +111,7 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
      */
     public function toHtml()
     {
-        $extraClass = "p-radiobutton-input p-radiobutton-input--legacy";
+        $extraClass = "p-radiobutton-input";
 
         if (isset($this->_attributes['class'])) {
             $this->_attributes['class'] .= $extraClass;
@@ -119,9 +119,11 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
             $this->_attributes['class'] = $extraClass;
         }
 
-        if (0 == strlen($this->_text)) {
+        if (empty($this->_text)) {
             $label = '';
-        } elseif ($this->isFrozen()) {
+        }
+
+        if ($this->isFrozen()) {
             $label = $this->_text;
             if ($this->freezeSeeOnlySelected) {
                 $invisible = $this->getChecked() ? '' : ' style="display:none"';

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="16"
+   viewBox="0 0 16 16"
+   width="16"
+   version="1.1"
+   id="svg6"
+   sodipodi:docname="check-circle.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
+   class="fillcoloroel">
+  <defs
+     id="defs10" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     id="namedview8"
+     showgrid="false"
+     inkscape:zoom="18.491553"
+     inkscape:cx="17.479803"
+     inkscape:cy="15.845263"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg6"
+     inkscape:document-rotation="0" />
+  <path
+     d="m 7.9292955,1.9828379 c -3.8546437,0 -6.98304997,3.0888692 -6.98304997,6.8947976 0,3.8059285 3.12840627,6.8947985 6.98304997,6.8947985 3.8546425,0 6.9830485,-3.08887 6.9830485,-6.8947985 0,-3.8059284 -3.128406,-6.8947976 -6.9830485,-6.8947976 z M 6.5326856,12.325035 3.0411605,8.8776355 4.0257706,7.9054688 6.5326856,10.373807 11.832821,5.140655 12.81743,6.1197163 Z"
+     id="path4"
+     style="stroke-width:0.693878;fill:#808080" />
+</svg>

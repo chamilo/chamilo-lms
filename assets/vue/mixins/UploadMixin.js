@@ -6,7 +6,7 @@ export default {
   methods: {
     formatDateTime,
     onCreated(item) {
-      this.showMessage(this.$i18n.t("{resource} created", { resource: item["resourceNode"].title }))
+      this.showMessage(this.$i18n.t("{0} created", [item.resourceNode.title]))
     },
     onUploadForm() {
       console.log("onUploadForm")

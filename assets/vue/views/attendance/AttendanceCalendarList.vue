@@ -46,7 +46,7 @@
         class="calendar-item flex justify-between items-center border border-gray-25 rounded bg-gray-10 p-4"
       >
         <div class="flex items-center gap-2">
-          <i class="pi pi-calendar text-primary text-lg"></i>
+          <i class="mdi mdi-calendar text-primary text-lg"></i>
           <span class="text-gray-90">
             {{ formatDateTime(event.dateTime) }}
             <template v-if="event.duration !== null && event.duration !== undefined">

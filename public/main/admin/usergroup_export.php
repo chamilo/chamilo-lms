@@ -1,32 +1,4 @@
 <?php
-/* For licensing terms, see /license.txt */
-
-$cidReset = true;
-
-require_once __DIR__.'/../inc/global.inc.php';
-$this_section = SECTION_PLATFORM_ADMIN;
-
-$userGroup = new UserGroupModel();
-$userGroup->protectScript();
-
-$tool_name = get_lang('Export');
-$interbreadcrumb[] = ['url' => 'usergroups.php', 'name' => get_lang('Classes')];
-
-set_time_limit(0);
-
-$form = new FormValidator('export_users');
-$form->addElement('header', $tool_name);
-$form->addButtonExport(get_lang('Export'));
-
-if ($form->validate()) {
-    $header = [['id', 'name', 'description', 'users']];
-    $data = $userGroup->getDataToExport();
-    $data = array_merge($header, $data);
-    $filename = 'export_classes_'.api_get_local_time();
-    Export::arrayToCsv($data, $filename);
-    exit;
-}
-
-Display::display_header($tool_name);
-$form->display();
-Display::display_footer();
+// Deprecated file left here because contents removed after 2.0 RC2. Should be removed before the next major version.
+header('Location: /admin/usergroups-data/export');
+exit;

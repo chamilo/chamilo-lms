@@ -7,79 +7,110 @@ export function useSession(type) {
   const securityStore = useSecurityStore()
 
   const isLoading = ref(false)
+  const hasMore = ref(true)
+  const errorMessage = ref("")
+  const loadedCount = ref(0)
+  const totalItems = ref(null)
 
   const uncategorizedSessions = ref([])
   const categories = ref([])
   const categoriesWithSessions = ref(new Map())
 
+  // Avoid duplicates across pages
+  const seenSessionIds = new Set()
+  const seenCategoryIds = new Set()
+
+  // Start with a higher page size to reduce round-trips (faster perceived load)
+  // Keep it reasonable to avoid huge payloads.
   let paginationParams = {
     page: 1,
+    itemsPerPage: 20,
   }
 
-  function loadUncategorizedSessions(sessions) {
-    uncategorizedSessions.value.push(...sessions.filter((session) => isEmpty(session.category)))
-  }
-
-  /**
-   * @param {Object[]} sessions
-   */
-  function loadCategories(sessions) {
-    sessions.forEach((session) => {
-      if (session.category) {
-        const alreadyAdded = categories.value.findIndex((cat) => cat["@id"] === session.category["@id"]) >= 0
-
-        if (!alreadyAdded) {
-          categories.value.push(session.category)
-        }
+  function ingestSessions(items) {
+    for (const session of items || []) {
+      const sessionId = session["@id"] || session.id
+      if (sessionId && seenSessionIds.has(sessionId)) {
+        continue
       }
-    })
-  }
-
-  /**
-   * @param {Array<object>} sessions
-   */
-  function loadCategoriesWithSessions(sessions) {
-    sessions.forEach(function (session) {
-      if (isEmpty(session.category)) {
-        return
+      if (sessionId) {
+        seenSessionIds.add(sessionId)
       }
 
-      let sessionsInCategory = []
+      loadedCount.value += 1
 
-      if (categoriesWithSessions.value.has(session.category["@id"])) {
-        sessionsInCategory = categoriesWithSessions.value.get(session.category["@id"]).sessions
+      const cat = session.category
+      if (isEmpty(cat)) {
+        uncategorizedSessions.value.push(session)
+        continue
       }
 
-      sessionsInCategory.push(session)
+      const catId = cat["@id"] || cat.id
+      if (!catId) {
+        uncategorizedSessions.value.push(session)
+        continue
+      }
 
-      categoriesWithSessions.value.set(session.category["@id"], { sessions: sessionsInCategory })
-    })
+      if (!seenCategoryIds.has(catId)) {
+        seenCategoryIds.add(catId)
+        categories.value.push(cat)
+        categoriesWithSessions.value.set(catId, { sessions: [] })
+      }
+
+      const bucket = categoriesWithSessions.value.get(catId)
+      bucket.sessions.push(session)
+    }
   }
 
   async function getSessions() {
-    if (securityStore.isAuthenticated) {
-      isLoading.value = true
+    if (!securityStore.isAuthenticated) {
+      hasMore.value = false
+      return
+    }
 
-      try {
-        const { items, nextPageParams } = await sessionService.findUserSubscriptions(securityStore.user["@id"], type, {
-          ...paginationParams,
-        })
+    if (isLoading.value) {
+      return
+    }
 
-        paginationParams = nextPageParams ? { ...nextPageParams } : null
+    if (paginationParams === null) {
+      hasMore.value = false
+      return
+    }
 
-        loadUncategorizedSessions(items)
-        loadCategories(items)
-        loadCategoriesWithSessions(items)
-      } finally {
-        isLoading.value = false
+    isLoading.value = true
+    errorMessage.value = ""
+
+    try {
+      const {
+        items,
+        nextPageParams,
+        totalItems: apiTotal,
+      } = await sessionService.findUserSubscriptions(securityStore.user["@id"], type, {
+        ...paginationParams,
+      })
+
+      // totalItems is useful for "Showing X of Y"
+      if (typeof apiTotal === "number") {
+        totalItems.value = apiTotal
+      } else if (apiTotal != null) {
+        const parsed = parseInt(apiTotal, 10)
+        totalItems.value = Number.isFinite(parsed) ? parsed : totalItems.value
       }
+
+      paginationParams = nextPageParams ? { ...nextPageParams } : null
+      hasMore.value = paginationParams !== null
+
+      ingestSessions(items || [])
+    } catch (e) {
+      errorMessage.value = "Could not load sessions. Please try again."
+      // Do not kill pagination on error; allow retry
+    } finally {
+      isLoading.value = false
     }
   }
 
   async function reload() {
-    if (null !== paginationParams) {
-      await getSessions()
-    }
+    await getSessions()
   }
 
   getSessions().then(() => {})
@@ -90,5 +121,9 @@ export function useSession(type) {
     uncategorizedSessions,
     categories,
     categoriesWithSessions,
+    hasMore,
+    loadedCount,
+    totalItems,
+    errorMessage,
   }
 }

@@ -34,8 +34,14 @@ class AccessUrlValidationListener
         $request = $event->getRequest();
         $path = $request->getPathInfo();
 
+        // Do not run access URL validation during installation.
+        // This avoids crashes when APP_INSTALLED is incorrect or the DB schema is not ready.
+        if (\is_string($path) && str_starts_with($path, '/main/install/')) {
+            return;
+        }
+
         // Prevent infinite redirection loop to the same error page
-        if (str_starts_with($path, '/error/undefined-url')) {
+        if (\is_string($path) && str_starts_with($path, '/error/undefined-url')) {
             return;
         }
 
@@ -49,13 +55,21 @@ class AccessUrlValidationListener
         ];
 
         foreach ($excludedPrefixes as $prefix) {
-            if (str_starts_with($path, $prefix)) {
+            if (\is_string($path) && str_starts_with($path, $prefix)) {
                 return;
             }
         }
 
-        // Skip validation if multi-URL is not enabled
-        if (!$this->accessUrlHelper->isMultiple()) {
+        // If the database is not ready yet (fresh install), AccessUrlHelper may throw
+        // while trying to query access_url table. In that case, we must silently skip.
+        try {
+            // Skip validation if multi-URL is not enabled
+            if (!$this->accessUrlHelper->isMultiple()) {
+                return;
+            }
+        } catch (Throwable $e) {
+            error_log('AccessUrlValidationListener: DB not ready, skipping access URL validation. '.$e->getMessage());
+
             return;
         }
 
@@ -68,9 +82,10 @@ class AccessUrlValidationListener
                 throw new RuntimeException('AccessUrl not defined');
             }
         } catch (Throwable $e) {
-            // Log host and URI for debugging
+            // Log host and URI for debugging (avoid exposing details to the user)
             $host = $request->getHost();
             $uri = $request->getUri();
+            error_log(\sprintf('AccessUrlValidationListener: undefined access URL for host "%s", uri "%s". %s', $host, $uri, $e->getMessage()));
 
             // Redirect to custom error page
             $url = $this->router->generate('undefined_url_error');

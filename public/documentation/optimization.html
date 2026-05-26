@@ -6,6 +6,19 @@
     <link rel="stylesheet" href="documentation.css" />
 </head>
 <body>
+<nav>
+    <div class="nav-inner">
+        <a href="index.html" class="nav-logo"><img src="logo.svg" alt="Chamilo" /></a>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="license.html">License</a></li>
+            <li><a href="credits.html">Credits</a></li>
+            <li><a href="changelog.html">Changelog</a></li>
+        </ul>
+    </div>
+</nav>
+<div>
   <h1>Optimization guide for Chamilo 2</h1>
   <p>
 Although we strive to make Chamilo as lightweight and fast as possible
@@ -17,14 +30,73 @@ This page will contain optimization hints in the future. At this time,
   </p>
   <h2>Avoid dev mode</h2>
   The .env file contains an environment variable called APP_ENV, which is set to "prod" by default
-  on packaged Chamilo systems. This setting can be changed to "dev" to enable development mode.
+  on packaged Chamilo systems. This setting can be changed to "dev" to enable development mode.<br>
   Doing so can have disastrous performance implications, though. If observing performance issues, check the APP_ENV variable in .env as a first step.
+
+  <h2>Avoid debug mode</h2>
+  The .env file contains an environment variable called APP_DEBUG, which is set to "false" by default.<br>
+  Make sure it has not been changed to "true" in production.<br>
+  Debug mode will trigger a lot of extra checks and can slow down the system significantly.<br>
+
+  <h2>HTTP Caching</h2>
+  Thanks to Chamilo 2's integration with the Symfony controller, you can now use HTTP caching relatively easily to improve performance.<br>
+  This is still experimental, so please report any issues you encounter.<br>
+  To enable, edit the config/packages/framework.yaml file and add the following lines at the end of the file:<br>
+      <pre>
+          when@prod:
+            framework:
+              http_cache: true
+      </pre>
+
+  <h2>Enabling OpCache</h2>
+  OpCache is a PHP extension that can speed up the execution of PHP scripts by pre-interpreting parts of scripts that are relatively static.<br>
+  This is great for performance, but it is kind of tricky to set up correctly.<br>
+  When installing the php-opcache extension (which can also be packaged into your PHP installation from the start),
+  you will find a .ini file in the php configuration folder (on Ubuntu <em>/etc/php/8.3/apache2/conf.d/10-opcache.ini</em>) that looks like this:<br>
+  <pre>
+      zend_extension=opcache.so
+      opcache.jit=off
+  </pre>
+  This probably gives you the false impression that OpCache is enabled by default.<br>
+  This is not the case. You still have to add at least the "enable" option set to "1" for OpCache to be working.<br>
+  This is our recommendation for moderately-sized Chamilo systems:<br>
+  <pre>
+      zend_extension=opcache.so
+      opcache.jit=off
+      opcache.enable=1
+      opcache.memory_consumption=128
+      opcache.max_accelerated_files=10000
+  </pre>
+  Once you have done this, you will need to restart PHP for the changes to take effect.<br>
+
+  <h2>Enabling APCu</h2>
+
+  APCu is a userland caching extension for PHP.<br><br>
+  It works at a different level than OpCache and allows you to *share* values between PHP processes.<br>
+  So in fact it allows Chamilo to share pre-calculated values between users of the same PHP server.<br>
+  This is particularly useful when some data is not fixed but is particularly heavy to calculate.<br>
+  For example, showing the current number of users online at the same time normally requires a database query that becomes heavier as more users are online.<br>
+  With APCu, this value can be calculated once every 5 minutes instead of once per request, and shared between all users.<br>
+  It does require some specific coding at the Chamilo level, though, and Chamilo 2.0 doesn't do much with that yet,
+  so for now it's a very mild optimization, but as new versions come out, we plan to use it more heavily.<br>
+
+  APCu is normally enabled by default when you install it in your PHP setup, so there's nothing else to do.<br>
+  You can check if APCu is enabled by running <code>php -i | grep apcu</code><br>
+  <br>
+  Once APCu is enabled, you can benefit from it directly by editing the <em>config/packages/cache.yaml</em> file and following the instructions in the file.<br>
+
+  <h2>PHP-FPM and MPM_EVENT</h2>
+  This is more complex to setup and requires some knowledge of the PHP internals, but it is possible to use PHP-FPM with the MPM_EVENT mode to improve performance.<br>
+  PHP-FPM gives you more control and flexibility, together with a possibility to be moe efficient as it works as a separate process from Apache (unlike modPHP which is the default for PHP + Apache).<br>
+  MPM_EVENT is another process management mode that is more efficient than the default MM_PREFORK mode used when installed with modPHP.<br></br>
+  Using PHP-FPM can be done independently from using MPM_EVENT, but if you use PHP-FPM, there's nothing preventing you from using MPM_EVENT as well, and that's a good thing.<br>
+  We might publish more information on this in the future, but if you do this, don't forget to match the number of workers Apache provides to the pm.max_children setting in the pool configuration, otherwise your web server might hang without much explanation.</br>
 
   <h2>Sessions</h2>
   Chamilo 2 uses sessions to store user data between requests. Sessions are stored on disk by default.<br>
   In comparison with Chamilo 1, Chamilo 2 uses many micro-service-type calls to retrieve data from the system and repaint parts of the pages as the underlying data changes.<br>
-  This has the damaging effect of requiring much more accesses to the session files, which can slow down the system significantly or generate losses of session (the system acting as if you are not logged in).<br>
-  To remove this impact, make sure you use a system to store sessions that will have a very small footprint and be able to manage session accesses very quickly (Redis, Memcached, etc.). This is described in the installation guide.
+  This has the negative effect of requiring much more accesses to the session files, which can slow down the system significantly or generate losses of session (the system acting as if you are not logged in).<br>
+  To remove this impact, make sure you use a system to store sessions that will have a very small footprint and be able to manage session accesses very quickly (Redis is likely the best solution here). This is described in the installation guide.
 
   <h2>Database</h2>
   Chamilo 2 uses a database to store most of its data (except for files). This means the database is very commonly used and can be a bottleneck in some cases.<br>
@@ -32,5 +104,47 @@ This page will contain optimization hints in the future. At this time,
   If so, you would benefit from having someone knowledgeable look into the database and optimize it.<br>
   We will publish suggested optimizations in this guide as we discover them, but we strive to provide the best database structure by default for new systems.
 
+  <h3>Additional indexes for document list performance</h3>
+  <p>
+  On installations with large numbers of documents per course, the documents list page can become slow due to expensive filtering and sorting queries
+  against the <code>resource_link</code> and <code>resource_node</code> tables.
+  The following two indexes significantly reduce query cost and eliminate the filesort for the default title sort:
+  </p>
+  <pre>
+-- Composite index covering the most common document-list filter:
+-- WHERE c_id = ? AND session_id IS NULL AND group_id IS NULL AND parent_id IS NULL
+-- Avoids a full table scan on resource_link when listing documents in a course context.
+ALTER TABLE resource_link
+    ADD INDEX idx_rl_doc_list (c_id, session_id, group_id, parent_id);
+
+-- Composite index to avoid filesort when listing documents sorted by title
+-- within a specific folder (WHERE parent_id = ? ORDER BY title ASC).
+ALTER TABLE resource_node
+    ADD INDEX idx_rn_parent_title (parent_id, title);
+  </pre>
+  <p>
+  These indexes will be added automatically by the Doctrine migrations in the next major release.
+  On existing production systems they can be applied manually with no downtime on MySQL/MariaDB (the
+  <code>ALTER TABLE ... ADD INDEX</code> statement is an online operation in InnoDB).
+  </p>
+  <p>
+  For the Doctrine schema to reflect these indexes (e.g. so that <code>doctrine:schema:validate</code>
+  passes and future <code>doctrine:migrations:diff</code> does not re-create them), the corresponding
+  <code>#[ORM\Index]</code> attributes must also be added to the entity classes:
+  </p>
+  <pre>
+// src/CoreBundle/Entity/ResourceLink.php — add alongside the existing #[ORM\Index] attributes:
+#[ORM\Index(
+    columns: ['c_id', 'session_id', 'group_id', 'parent_id'],
+    name: 'idx_rl_doc_list'
+)]
+
+// src/CoreBundle/Entity/ResourceNode.php — add a new #[ORM\Index] attribute on the class:
+#[ORM\Index(
+    columns: ['parent_id', 'title'],
+    name: 'idx_rn_parent_title'
+)]
+  </pre>
+</div>
 </body>
 </html>

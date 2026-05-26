@@ -83,8 +83,8 @@ class AzureSyncUsergroupsCommand extends AzureSyncAbstractCommand
 
             try {
                 foreach ($this->getAzureGroupMembers($azureGroupUid) as $azureGroupMember) {
-                    if ($userId = $this->azureHelper->getUserIdByVerificationOrder($azureGroupMember)) {
-                        $newGroupMembers[] = $userId;
+                    if ($user = $this->azureHelper->getUserByVerificationOrder($azureGroupMember)) {
+                        $newGroupMembers[] = $user;
                     }
                 }
             } catch (Exception $e) {
@@ -93,9 +93,7 @@ class AzureSyncUsergroupsCommand extends AzureSyncAbstractCommand
                 continue;
             }
 
-            foreach ($newGroupMembers as $newGroupMemberId) {
-                $user = $this->userRepository->find($newGroupMemberId);
-
+            foreach ($newGroupMembers as $user) {
                 $group->addUser($user);
             }
 
@@ -103,7 +101,7 @@ class AzureSyncUsergroupsCommand extends AzureSyncAbstractCommand
                 \sprintf(
                     'User IDs subscribed in class (ID %d): %s',
                     $group->getId(),
-                    implode(', ', $newGroupMembers)
+                    implode(', ', array_map(fn ($u) => $u->getId(), $newGroupMembers))
                 )
             );
         }

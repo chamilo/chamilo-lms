@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\ValidationToken;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
+use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Helpers\ValidationTokenHelper;
@@ -25,6 +26,7 @@ use Chamilo\CoreBundle\Security\Authenticator\LoginTokenAuthenticator;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
 use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
@@ -43,8 +45,16 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+use const OPENSSL_RAW_DATA;
+
 class SecurityController extends AbstractController
 {
+    /**
+     * Prefix used to identify HKDF-based encryption format for MFA secrets.
+     * Legacy secrets have no prefix and remain readable for backward compatibility.
+     */
+    private const MFA_SECRET_V2_PREFIX = 'v2:';
+
     public function __construct(
         private SerializerInterface $serializer,
         private TrackELoginRecordRepository $trackELoginRecordRepository,
@@ -65,8 +75,12 @@ class SecurityController extends AbstractController
         TokenStorageInterface $tokenStorage,
         TranslatorInterface $translator,
     ): Response {
+        // This endpoint is expected to be reached only after successful authentication.
+        // If not authenticated, return a controlled JSON error instead of exposing exception details.
         if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
-            throw $this->createAccessDeniedException($translator->trans('Invalid login request: check that the Content-Type header is <em>application/json</em>.'));
+            return $this->json([
+                'error' => $translator->trans('Invalid login request.'),
+            ], Response::HTTP_UNAUTHORIZED);
         }
 
         $dataRequest = json_decode($request->getContent(), true);
@@ -78,6 +92,18 @@ class SecurityController extends AbstractController
 
         $user = $this->userHelper->getCurrent();
 
+        // Safety guard: avoid fatal errors if the security token is missing unexpectedly.
+        if (!$user instanceof User) {
+            $tokenStorage->setToken(null);
+            if ($request->hasSession()) {
+                $request->getSession()->invalidate();
+            }
+
+            return $this->json([
+                'error' => $translator->trans('Authentication failed.'),
+            ], Response::HTTP_UNAUTHORIZED);
+        }
+
         if (User::ACTIVE !== $user->getActive()) {
             if (User::INACTIVE === $user->getActive()) {
                 $message = $translator->trans('Your account has not been activated.');
@@ -88,7 +114,9 @@ class SecurityController extends AbstractController
             $tokenStorage->setToken(null);
             $request->getSession()->invalidate();
 
-            return $this->createAccessDeniedException($message);
+            return $this->json([
+                'error' => $message,
+            ], Response::HTTP_FORBIDDEN);
         }
 
         if ($user->getMfaEnabled()) {
@@ -98,14 +126,14 @@ class SecurityController extends AbstractController
                 $tokenStorage->setToken(null);
                 $request->getSession()->invalidate();
 
-                return $this->json(['requires2FA' => true], 200);
+                return $this->json(['requires2FA' => true], Response::HTTP_OK);
             }
 
-            if (!$this->isTOTPValid($user, $totpCode)) {
+            if (!$this->isTOTPValid($user, (string) $totpCode)) {
                 $tokenStorage->setToken(null);
                 $request->getSession()->invalidate();
 
-                return $this->json(['error' => 'Invalid 2FA code.'], 401);
+                return $this->json(['error' => 'Invalid 2FA code.'], Response::HTTP_UNAUTHORIZED);
             }
         }
 
@@ -115,7 +143,9 @@ class SecurityController extends AbstractController
             $tokenStorage->setToken(null);
             $request->getSession()->invalidate();
 
-            return $this->createAccessDeniedException($message);
+            return $this->json([
+                'error' => $message,
+            ], Response::HTTP_FORBIDDEN);
         }
 
         $extraFieldValuesRepository = $this->entityManager->getRepository(ExtraFieldValues::class);
@@ -125,32 +155,63 @@ class SecurityController extends AbstractController
             && 'true' === $this->settingsManager->getSetting('allow_terms_conditions', true)
             && 'login' === $this->settingsManager->getSetting('workflows.load_term_conditions_section', true)
         ) {
-            $termAndConditionStatus = false;
-            $extraValue = $extraFieldValuesRepository->findLegalAcceptByItemId($user->getId());
-            if (!empty($extraValue['value'])) {
-                $result = $extraValue['value'];
-                $userConditions = explode(':', $result);
-                $version = $userConditions[0];
-                $langId = (int) $userConditions[1];
-                $realVersion = $legalTermsRepo->getLastVersion($langId);
-                $termAndConditionStatus = ($version >= $realVersion);
+            // Do not block login if there is no usable legal content to display.
+            if (!ChamiloHelper::hasRenderableTermsConditionsContent()) {
+                $request->getSession()->remove('term_and_condition');
+            } else {
+                $termAndConditionStatus = false;
+                $extraValue = $extraFieldValuesRepository->findLegalAcceptByItemId($user->getId());
+
+                if (!empty($extraValue['value'])) {
+                    $result = $extraValue['value'];
+                    $userConditions = explode(':', $result);
+                    $version = $userConditions[0] ?? 0;
+                    $langId = (int) ($userConditions[1] ?? 0);
+                    $realVersion = $legalTermsRepo->getLastVersion($langId);
+                    $termAndConditionStatus = ($version >= $realVersion);
+                }
+
+                if (false === $termAndConditionStatus) {
+                    $tempTermAndCondition = ['user_id' => $user->getId()];
+
+                    $this->tokenStorage->setToken(null);
+                    $request->getSession()->invalidate();
+                    $request->getSession()->start();
+                    $request->getSession()->set('term_and_condition', $tempTermAndCondition);
+
+                    $afterLogin = $this->getRedirectAfterLoginPath($user);
+
+                    return $this->json([
+                        'load_terms' => true,
+                        'redirect' => '/main/auth/tc.php?return='.urlencode($afterLogin),
+                    ]);
+                }
+
+                $request->getSession()->remove('term_and_condition');
             }
+        }
 
-            if (false === $termAndConditionStatus) {
-                $tempTermAndCondition = ['user_id' => $user->getId()];
-                $this->tokenStorage->setToken(null);
-                $request->getSession()->invalidate();
-                $request->getSession()->start();
-                $request->getSession()->set('term_and_condition', $tempTermAndCondition);
+        if ($this->mustRenewPasswordAtFirstLogin($user)) {
+            return $this->json([
+                'force_password_change' => true,
+                'first_login' => true,
+                'message' => $translator->trans(
+                    'This is your first login. Please update your password to something you will remember.'
+                ),
+                'redirect' => $this->generateUrl('chamilo_core_account_change_password', [
+                    'first_login' => 1,
+                ]),
+            ]);
+        }
 
-                $afterLogin = $this->getRedirectAfterLoginPath($user);
-
-                return $this->json([
-                    'load_terms' => true,
-                    'redirect' => '/main/auth/tc.php?return='.urlencode($afterLogin),
-                ]);
-            }
-            $request->getSession()->remove('term_and_condition');
+        if ($this->mustRotatePassword($user)) {
+            return $this->json([
+                'force_password_change' => true,
+                'rotate_password' => true,
+                'redirect' => $this->generateUrl('chamilo_core_account_change_password', [
+                    'rotate' => 1,
+                ]),
+            ]);
         }
 
         $redirectUrl = $this->calculateRedirectUrl(
@@ -162,24 +223,6 @@ class SecurityController extends AbstractController
             return $this->json([
                 'redirect' => $redirectUrl,
             ]);
-        }
-
-        // Password rotation check
-        $days = (int) $this->settingsManager->getSetting('security.password_rotation_days', true);
-        if ($days > 0) {
-            $lastUpdate = $user->getPasswordUpdatedAt() ?? $user->getCreatedAt();
-            $diffDays = (new DateTimeImmutable())->diff($lastUpdate)->days;
-
-            if ($diffDays > $days) {
-                // Clean token & session
-                $tokenStorage->setToken(null);
-                $request->getSession()->invalidate();
-
-                return $this->json([
-                    'rotate_password' => true,
-                    'redirect' => '/account/change-password?rotate=1&userId='.$user->getId(),
-                ]);
-            }
         }
 
         $data = null;
@@ -294,22 +337,83 @@ class SecurityController extends AbstractController
     private function isTOTPValid($user, string $totpCode): bool
     {
         $decryptedSecret = $this->decryptTOTPSecret($user->getMfaSecret(), $_ENV['APP_SECRET']);
+
+        // Safety guard: if secret cannot be decrypted, never accept the code.
+        if ('' === $decryptedSecret) {
+            return false;
+        }
+
         $totp = TOTP::create($decryptedSecret);
 
         return $totp->verify($totpCode);
     }
 
     /**
+     * Derive a dedicated 32-byte encryption key for MFA secrets via HKDF.
+     * This avoids using APP_SECRET directly as an OpenSSL key for new secrets.
+     */
+    private function deriveMfaKey(string $baseKey): string
+    {
+        $baseKey = (string) $baseKey;
+        if ('' === $baseKey) {
+            return '';
+        }
+
+        // 32 bytes for AES-256 key length.
+        return hash_hkdf('sha256', $baseKey, 32, 'chamilo:mfa:totp-secret:v1');
+    }
+
+    /**
      * Decrypts the stored TOTP secret.
+     *
+     * Supports:
+     * - v2 format (HKDF-derived key): v2:<base64(iv + ciphertext_raw)>
+     * - legacy format (APP_SECRET used directly): base64(iv.'::'.$encryptedSecret)
      */
     private function decryptTOTPSecret(string $encryptedSecret, string $encryptionKey): string
     {
         $cipherMethod = 'aes-256-cbc';
 
         try {
-            list($iv, $encryptedData) = explode('::', base64_decode($encryptedSecret), 2);
+            $encryptedSecret = (string) $encryptedSecret;
+            if ('' === $encryptedSecret) {
+                return '';
+            }
 
-            return openssl_decrypt($encryptedData, $cipherMethod, $encryptionKey, 0, $iv);
+            // v2 format (preferred): v2:<base64(iv + ciphertext_raw)>
+            if (str_starts_with($encryptedSecret, self::MFA_SECRET_V2_PREFIX)) {
+                $payload = base64_decode(substr($encryptedSecret, \strlen(self::MFA_SECRET_V2_PREFIX)), true);
+                if (false === $payload) {
+                    return '';
+                }
+
+                $ivLen = openssl_cipher_iv_length($cipherMethod);
+                if (\strlen($payload) <= $ivLen) {
+                    return '';
+                }
+
+                $iv = substr($payload, 0, $ivLen);
+                $ciphertextRaw = substr($payload, $ivLen);
+
+                $derivedKey = $this->deriveMfaKey($encryptionKey);
+                if ('' === $derivedKey) {
+                    return '';
+                }
+
+                $pt = openssl_decrypt($ciphertextRaw, $cipherMethod, $derivedKey, OPENSSL_RAW_DATA, $iv);
+
+                return false === $pt ? '' : (string) $pt;
+            }
+
+            // Legacy format: base64(iv.'::'.$encryptedSecret)
+            $decoded = base64_decode($encryptedSecret, true);
+            if (false === $decoded) {
+                return '';
+            }
+
+            [$iv, $encryptedData] = explode('::', $decoded, 2) + ['', ''];
+
+            return (string) (openssl_decrypt((string) $encryptedData, $cipherMethod, $encryptionKey, 0, (string) $iv) ?: '');
         } catch (Exception $e) {
             error_log('Exception caught during decryption: '.$e->getMessage());
 
@@ -317,26 +421,36 @@ class SecurityController extends AbstractController
         }
     }
 
+    private function mustRenewPasswordAtFirstLogin(User $user): bool
+    {
+        return 'true' === $this->settingsManager->getSetting('security.force_renew_password_at_first_login', true)
+            && null !== $user->getPasswordRequestedAt()
+            && null === $user->getConfirmationToken();
+    }
+
+    private function mustRotatePassword(User $user): bool
+    {
+        $days = (int) $this->settingsManager->getSetting('security.password_rotation_days', true);
+        if ($days <= 0) {
+            return false;
+        }
+
+        $lastUpdate = $user->getPasswordUpdatedAt() ?? $user->getCreatedAt();
+        if (!$lastUpdate instanceof DateTimeInterface) {
+            return false;
+        }
+
+        $diffDays = (new DateTimeImmutable())->diff($lastUpdate)->days;
+
+        return $diffDays > $days;
+    }
+
     private function calculateRedirectUrl(
         User $user,
         CourseRepository $courseRepo,
     ): ?string {
-        /* Possible values: index.php, user_portal.php, main/auth/courses.php */
-        $pageAfterLogin = $this->settingsManager->getSetting('registration.redirect_after_login');
-
-        $url = null;
-
-        if ($user->isStudent() && !empty($pageAfterLogin)) {
-            $url = match ($pageAfterLogin) {
-                'index.php' => null,
-                'user_portal.php' => $this->router->generate('courses', [], RouterInterface::ABSOLUTE_URL),
-                'main/auth/courses.php' => $this->router->generate('catalogue', ['slug' => 'courses'], RouterInterface::ABSOLUTE_URL),
-                default => null,
-            };
-        }
-
         if ('true' !== $this->settingsManager->getSetting('workflows.go_to_course_after_login')) {
-            return $url;
+            return null;
         }
 
         $personalCourseList = $courseRepo->getPersonalSessionCourses(

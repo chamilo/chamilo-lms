@@ -5,7 +5,6 @@
 
         {% set sid = session_id|default(0) %}
         {% set hasSession = (sid is not empty) and (sid != 0) %}
-        {% set rootLabel = hasSession ? 'My sessions'|trans : 'My courses'|trans %}
         {% set rootUrl   = hasSession ? '/sessions' : '/courses' %}
         {% set courseLabel = course.title|default('Course') %}
         {% set courseUrl = '/course/' ~ course.id ~ '/home?sid=' ~ sid %}
@@ -15,7 +14,6 @@
 
         <script>
           window.breadcrumb = [
-            { name: "{{ rootLabel|e('js') }}", url: "{{ rootUrl|e('js') }}" },
             { name: "{{ courseLabel|e('js') }}", url: "{{ courseUrl|e('js') }}" },
             { name: "{{ 'Chat'|trans|e('js') }}" }
           ];

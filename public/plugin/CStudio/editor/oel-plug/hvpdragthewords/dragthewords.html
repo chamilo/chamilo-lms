@@ -1,0 +1,39 @@
+<html>
+
+<head>
+  <link type="text/css" rel="stylesheet" media="all" href="dragthewords/engine/styles/h5p.css" />
+  <meta charset="utf-8" />
+  <script type="text/javascript" src="abstract.js"></script>
+  <script type="text/javascript" src="dragthewords/engine/main.bundle.js"></script>
+</head>
+
+<body>
+
+  <div id="h5p-container"></div>
+  
+  <script type="text/javascript">
+   var HackThisSample= "Title@Blueberries are *blue* ";
+    var HackThisTxt = HackThisSample.split("@");
+    var hash = window.location.hash;
+    if(hash!=''){
+      hash = hash.replace('#','');
+      HackThisTxt = hash.split("@");
+      HackThisTxt[0] = decodeURI(HackThisTxt[0]);
+      HackThisTxt[1] = decodeURI(HackThisTxt[1]);
+      HackThisTxt[1] = HackThisTxt[1].replace(/!br!/g,"\n");
+
+      if(HackThisTxt[1]==''){
+        HackThisTxt[1] = "<p>Edit *this* object<\/p>";
+      }
+
+    }
+    const { H5P } = H5PStandalone;
+    new H5P(document.getElementById('h5p-container'),'dragthewords',{
+      frameJs : 'dragthewords/engine/frame.bundle.js',
+      frameCss : 'dragthewords/engine/styles/h5p.css'
+    });
+  </script>
+  
+</body>
+
+</html>

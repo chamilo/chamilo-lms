@@ -1,6 +1,5 @@
 <template>
   <div class="social-search p-2">
-    {{ query.value }}
     <BaseCard class="mb-2">
       <template #header>
         <div class="px-4 py-2 -mb-2 bg-gray-15">
@@ -9,15 +8,24 @@
       </template>
       <div class="flex flex-col items-end">
         <div class="w-full flex justify-between items-center mb-2">
-          <label class="mr-2" for="search-query">{{ t("Users, Groups") }}</label>
+          <label
+            class="mr-2"
+            for="search-query"
+            >{{ t("Users, Groups") }}</label
+          >
           <BaseInputText
             id="search-query"
             v-model="query"
             class="flex-grow"
-            label="" />
+            label=""
+          />
         </div>
         <div class="w-full flex justify-between items-center mb-4">
-          <label class="mr-2" for="search-type">{{ t("Type") }}</label>
+          <label
+            class="mr-2"
+            for="search-type"
+            >{{ t("Type") }}</label
+          >
           <BaseSelect
             id="search-type"
             v-model="searchType"
@@ -25,47 +33,68 @@
             class="flex-grow"
             label=""
             optionLabel="name"
-            optionValue="code" />
+            optionValue="code"
+          />
         </div>
         <BaseButton
           class="self-end"
           icon="search"
-          label="Search"
+          :label="t('Search')"
           type="secondary"
           @click="handleFormSearch"
         />
       </div>
     </BaseCard>
 
-
-    <BaseCard v-if="users.length" class="mb-2">
+    <BaseCard
+      v-if="users.length"
+      class="mb-2"
+    >
       <template #header>
         <div class="px-4 py-2 -mb-2 bg-gray-15">
           <h2 class="text-h5">{{ t("Users") }}</h2>
         </div>
       </template>
       <ul>
-        <li v-for="user in users" :key="user.id" class="flex items-center justify-between p-2 border-b-2">
+        <li
+          v-for="user in users"
+          :key="user.id"
+          class="flex items-center justify-between p-2 border-b-2"
+        >
           <div class="flex items-center">
-            <img :src="user.avatar" class="w-16 h-16 rounded-full mr-4">
+            <img
+              :src="user.avatar"
+              class="w-16 h-16 rounded-full mr-4"
+            />
             <span>{{ user.name }}</span>
-            <span v-if="user.status === 'online'" class="mdi mdi-circle circle-green mx-2" title="Online"></span>
-            <span v-else class="mdi mdi-circle circle-gray mx-2" title="Offline"></span>
-            <span :class="getRoleIcon(user.role)" class="mx-2"></span>
+            <span
+              v-if="user.status === 'online'"
+              class="mdi mdi-circle circle-green mx-2"
+              title="Online"
+            ></span>
+            <span
+              v-else
+              class="mdi mdi-circle circle-gray mx-2"
+              title="Offline"
+            ></span>
+            <span
+              :class="getRoleIcon(user.role)"
+              class="mx-2"
+            ></span>
           </div>
           <div>
             <BaseButton
               v-if="user.showInvitationButton"
               class="mr-2"
               icon="account"
-              label="Send invitation"
+              :label="t('Send invitation')"
               type="secondary"
               @click="openInvitationModal(user)"
             />
 
             <BaseButton
               icon="email"
-              label="Send message"
+              :label="t('Send message')"
               type="primary"
               @click="openMessageModal(user)"
             />
@@ -74,22 +103,39 @@
       </ul>
     </BaseCard>
 
-    <BaseCard v-if="groups.length" class="mb-2">
+    <BaseCard
+      v-if="groups.length"
+      class="mb-2"
+    >
       <template #header>
         <div class="px-4 py-2 -mb-2 bg-gray-15">
           <h2 class="text-h5">{{ t("Groups") }}</h2>
         </div>
       </template>
       <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4 p-4">
-        <div v-for="group in groups" :key="group.id" class="group-card">
-          <div class="group-image flex justify-center">
-            <img :src="group.image" class="rounded w-16 h-16"
+        <div
+          v-for="group in groups"
+          :key="group.id"
+          class="rounded-2xl border border-gray-25 bg-white p-4 text-center shadow-sm"
+        >
+          <div class="flex justify-center">
+            <img
+              :src="group.image || defaultGroupImage"
+              :alt="group.name"
+              class="h-20 w-20 rounded-full object-cover"
+              loading="lazy"
+            />
           </div>
-          <div class="group-info text-center">
-            <h3>{{ group.name }}</h3>
-            <p>{{ group.description }}</p>
+          <div class="mt-3 text-center">
+            <h3 class="font-semibold text-gray-90">{{ group.name }}</h3>
+            <p class="mt-1 text-sm text-gray-60">{{ group.description }}</p>
             <a :href="group.url">
-              <BaseButton class="mt-2" icon="" label="See more" type="secondary" />
+              <BaseButton
+                :label="t('See more')"
+                class="mt-3"
+                icon="link-external"
+                type="secondary"
+              />
             </a>
           </div>
         </div>
@@ -97,33 +143,77 @@
     </BaseCard>
 
     <!-- Invitation Modal -->
-    <div v-if="showInvitationModal" class="invitation-modal-overlay" @click.self="closeInvitationModal">
+    <div
+      v-if="showInvitationModal"
+      class="invitation-modal-overlay"
+      @click.self="closeInvitationModal"
+    >
       <div class="invitation-modal">
         <div class="invitation-modal-header">
           <h3>Send invitation</h3>
-          <button class="close-button" @click="closeInvitationModal">✕</button>
+          <button
+            class="close-button"
+            @click="closeInvitationModal"
+          >
+            ✕
+          </button>
         </div>
-        <textarea v-model="invitationMessage" class="invitation-modal-textarea"
-                  placeholder="Add a personal message"></textarea>
-        <button class="invitation-modal-send" @click="sendInvitation">Send message</button>
+        <textarea
+          v-model="invitationMessage"
+          class="invitation-modal-textarea"
+          placeholder="Add a personal message"
+        ></textarea>
+        <button
+          class="invitation-modal-send"
+          @click="sendInvitation"
+        >
+          Send message
+        </button>
       </div>
     </div>
 
     <!-- Message Modal -->
-    <div v-if="showMessageModal" class="message-modal-overlay" @click.self="closeMessageModal">
+    <div
+      v-if="showMessageModal"
+      class="message-modal-overlay"
+      @click.self="closeMessageModal"
+    >
       <div class="message-modal">
         <div class="message-modal-header">
           <h3>{{ t("Send message") }}</h3>
-          <button class="message-modal-close" @click="closeMessageModal">✕</button>
+          <button
+            class="message-modal-close"
+            @click="closeMessageModal"
+          >
+            ✕
+          </button>
         </div>
         <div class="message-modal-body">
           <div class="message-user-info">
-            <img :src="selectedUser.avatar" alt="User avatar" class="message-user-avatar">
+            <img
+              :src="selectedUser.avatar"
+              alt="User avatar"
+              class="message-user-avatar"
+            />
             <span class="message-user-name">{{ selectedUser.name }}</span>
           </div>
-          <input v-model="messageSubject" :placeholder="t('Subject')" class="message-modal-input" type="text">
-          <textarea v-model="messageContent" :placeholder="t('Message')" class="message-modal-textarea"></textarea>
-          <button class="message-modal-send" @click="sendMessage">{{ t("Send message") }}</button>
+          <input
+            v-model="messageSubject"
+            :placeholder="t('Subject')"
+            class="message-modal-input"
+            type="text"
+          />
+          <textarea
+            v-model="messageContent"
+            :placeholder="t('Message')"
+            class="message-modal-textarea"
+          ></textarea>
+          <button
+            class="message-modal-send"
+            @click="sendMessage"
+          >
+            {{ t("Send message") }}
+          </button>
         </div>
       </div>
     </div>
@@ -156,10 +246,11 @@ const invitationMessage = ref("")
 const { user, groupInfo, isGroup, loadGroup, isLoading } = useSocialInfo()
 const searchOptions = [
   { name: "User", code: "user" },
-  { name: "Group", code: "group" }
+  { name: "Group", code: "group" },
 ]
 const users = ref([])
 const groups = ref([])
+const defaultGroupImage = "/img/icons/64/group_na.png"
 const getRoleIcon = (role) => {
   switch (role) {
     case "student":
@@ -178,21 +269,23 @@ const headerTitle = computed(() => {
 const performSearch = async () => {
   try {
     if (query.value.trim() === "") {
-      notification.showWarningNotification("Please enter a search term.")
+      notification.showWarningNotification(t("Please enter a search term."))
       return
     }
     searchPerformed.value = true
     await nextTick()
-    const response = await fetch(`/social-network/search?query=${query.value}&type=${searchType.value}`)
+    const response = await fetch(
+      `/social-network/search?query=${encodeURIComponent(query.value)}&type=${searchType.value}`,
+    )
     const data = await response.json()
     if (!response.ok) {
       throw new Error(data.message || "Server response error")
     }
     if (searchType.value === "user") {
-
-      users.value = data.results.map(item => ({
+      users.value = data.results.map((item) => ({
         ...item,
-        showInvitationButton: (![3, 4, 10].includes(item.relationType) || item.id !== user.value.id) && !item.existingInvitations
+        showInvitationButton:
+          (![3, 4, 10].includes(item.relationType) || item.id !== user.value.id) && !item.existingInvitations,
       }))
       groups.value = []
     } else if (searchType.value === "group") {
@@ -231,15 +324,15 @@ const sendInvitation = async () => {
     targetUserId: selectedUser.value.id,
     action: "send_invitation",
     subject: "",
-    content: invitationMessage.value
+    content: invitationMessage.value,
   }
   try {
     const response = await fetch("/social-network/user-action", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(invitationData)
+      body: JSON.stringify(invitationData),
     })
     const result = await response.json()
     if (result.success) {
@@ -268,15 +361,15 @@ const sendMessage = async () => {
     targetUserId: selectedUser.value.id,
     action: "send_message",
     subject: messageSubject.value,
-    content: messageContent.value
+    content: messageContent.value,
   }
   try {
     const response = await fetch("/social-network/user-action", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(messageData)
+      body: JSON.stringify(messageData),
     })
     const result = await response.json()
     if (result.success) {
@@ -292,16 +385,20 @@ const sendMessage = async () => {
   closeMessageModal()
 }
 
-watch(route, (currentRoute) => {
-  query.value = currentRoute.query.query || ""
-  searchType.value = currentRoute.query.type || "user"
-  if (query.value) {
-    performSearch()
-  }
-}, { immediate: true })
+watch(
+  route,
+  (currentRoute) => {
+    query.value = currentRoute.query.query || ""
+    searchType.value = currentRoute.query.type || "user"
+    if (query.value) {
+      performSearch()
+    }
+  },
+  { immediate: true },
+)
 const handleFormSearch = async () => {
   if (!query.value.trim()) {
-    notification.showWarningNotification("Please enter a search term.")
+    notification.showWarningNotification(t("Please enter a search term."))
     return
   }
 

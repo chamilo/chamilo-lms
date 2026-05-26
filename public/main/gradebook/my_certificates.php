@@ -48,7 +48,7 @@ $template->assign('allow_export', $allowExport);
 $templateName = $template->get_template('gradebook/my_certificates.tpl');
 $content = $template->fetch($templateName);
 
-if ('true' === api_get_setting('certificate.allow_public_certificates')) {
+if ('true' === api_get_setting('certificate.allow_certificates_search')) {
     $template->assign(
         'actions',
         Display::toolbarButton(

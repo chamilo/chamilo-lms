@@ -1,6 +1,6 @@
 <template>
   <h2
-    v-t="'Search users for friends'"
+    v-text="t('Search users for friends')"
     class="mr-auto"
   />
   <hr />

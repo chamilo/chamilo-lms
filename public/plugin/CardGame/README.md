@@ -1,26 +1,39 @@
 Card reveal game Chamilo plugin
 ===============================
-This plugin adds a little game to the interface to encourage users to connect
-every day.
 
-# Installation
+This plugin adds a small daily card reveal widget to encourage users to return
+to the platform every day.
 
-To install, enable the plugin, then go to "Regions" in the administration panel
-and add the region "pre_footer" to the plugin. Save.
-The plugin should appear as a little icon in the lower-right side of your user
-picture in the left column of the "My courses" list.
+Installation
+------------
 
-## Migrating from a non-official version
-This plugin was initially designed by _Les Compagnons Bâtisseurs_. If you had
-used it before its review and integration into Chamilo, you will need to
-execute the following changes in your database to update its structure.
+1. Enable the plugin from the platform plugins administration.
+2. Install it so the `plugin_card_game` table is created or migrated.
+3. Go to **Administration > Configuration settings > Regions** and assign the
+   plugin to the **`pre_footer`** region.
+4. Open the authenticated user home/dashboard page and use the floating
+   launcher shown at the bottom-right corner.
 
-##### Database changes
-You need execute these SQL queries in your database if you are upgrading to 
-Chamilo 1.11.8 and the CardGame plugin was already installed in your previous version.
+Recommended C2 behavior
+-----------------------
 
-```sql
-ALTER TABLE plugin_card_game CHANGE COLUMN idUser user_id INT NOT NULL;
-ALTER TABLE plugin_card_game CHANGE COLUMN dateAcces access_date date default NULL;
+- Treat CardGame as a global user widget, not as a course tool.
+- In C2, the recommended integration is through the **`pre_footer`** plugin
+  region.
+- The launcher is intentionally layout-independent, so it does not rely on the
+  old Chamilo 1 sidebar or avatar DOM.
+- The preferred place to expose it is the authenticated user home/dashboard.
 
-```
+Current behavior
+----------------
+
+- The widget opens in a modal dialog.
+- Users can reveal one image piece per day.
+- Progress is stored per user.
+- Completed panels are tracked and shown in the archive area.
+
+Migration notes
+---------------
+
+This C2-oriented version adapts the original Chamilo 1 plugin behavior to a
+floating launcher + modal approach, which is more stable in modern C2 layouts.

@@ -4,7 +4,7 @@
       <BaseButton
         :label="t('Edit Terms and Conditions')"
         icon="edit"
-        type="primary"
+        type="secondary"
         @click="editTerms"
       />
     </BaseToolbar>
@@ -31,7 +31,7 @@
 
       <Column header="Content">
         <template #body="slotProps">
-          <div v-html="slotProps.data.content"></div>
+          <div v-html="sanitizeHtml(slotProps.data.content)"></div>
         </template>
       </Column>
 
@@ -66,6 +66,7 @@ import { useRouter } from "vue-router"
 import Message from "primevue/message"
 import languageService from "../../services/languageService"
 import legalService from "../../services/legalService"
+import { sanitizeHtml } from "../../utils/sanitizeHtml"
 
 const { t } = useI18n()
 const router = useRouter()

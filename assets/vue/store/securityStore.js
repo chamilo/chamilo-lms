@@ -77,6 +77,7 @@ export const useSecurityStore = defineStore("security", () => {
   async function checkSession() {
     // Only check user session when user info is stored
     if (!isAuthenticated.value) {
+      isLoading.value = false
       return
     }
 

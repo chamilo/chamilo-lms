@@ -1,0 +1,36 @@
+<?php
+
+$strings['plugin_title'] = 'Student Follow-up';
+$strings['plugin_comment'] = 'Follow learners with care notes, tags and private follow-up information.';
+$strings['CareDetailView'] = 'Follow-up detail';
+$strings['Private'] = 'Private';
+$strings['Public'] = 'Public';
+$strings['StudentFollowUpIntro'] = 'Review learners who have follow-up notes and open their care detail view.';
+$strings['SearchLearners'] = 'Search learners';
+$strings['OpenFollowUp'] = 'Open follow-up';
+$strings['NoFollowUpStudents'] = 'No learners found';
+$strings['NoFollowUpStudentsHelp'] = 'No learner matches the current filters.';
+$strings['FollowUpTimeline'] = 'Follow-up timeline';
+$strings['NoFollowUpPosts'] = 'No follow-up notes found';
+$strings['NoFollowUpPostsHelp'] = 'There are no visible follow-up notes for this learner yet.';
+$strings['ExternalSource'] = 'External source';
+$strings['ViewRelatedNotes'] = 'View related notes';
+$strings['DownloadAttachment'] = 'Download attachment';
+$strings['CreatedOn'] = 'Created on';
+$strings['CreatedBy'] = 'Created by';
+$strings['BackToReporting'] = 'Back to reporting';
+$strings['BackToStudents'] = 'Back to students';
+$strings['AddFollowUpNote'] = 'Add follow-up note';
+$strings['CreateFollowUpNote'] = 'Create follow-up note';
+$strings['NewFollowUpNote'] = 'New follow-up note';
+$strings['NewFollowUpNoteHelp'] = 'Write a care note for this learner. Private notes are only visible to authorized caretakers.';
+$strings['FollowUpNoteTitle'] = 'Title';
+$strings['FollowUpNoteContent'] = 'Content';
+$strings['PrivateNote'] = 'Private note';
+$strings['Tags'] = 'Tags';
+$strings['TagsHelp'] = 'Separate tags with commas.';
+$strings['TagsPlaceholder'] = 'risk, attendance, tutoring';
+$strings['SaveFollowUpNote'] = 'Save follow-up note';
+$strings['FollowUpNoteCreated'] = 'Follow-up note created.';
+$strings['TitleAndContentRequired'] = 'Title and content are required.';
+$strings['BackToTimeline'] = 'Back to timeline';

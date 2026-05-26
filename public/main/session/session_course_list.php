@@ -33,7 +33,7 @@ $sort = isset($_GET['sort']) && in_array($_GET['sort'], ['title', 'nbr_users']) 
 $result = Database::query("SELECT name FROM $tbl_session WHERE id='$id_session'");
 
 if (!list($session_name) = Database::fetch_row($result)) {
-    header('Location: session_list.php');
+    header('Location: /admin/session-list');
     exit;
 }
 
@@ -67,7 +67,7 @@ $result = Database::query($sql);
 $Courses = Database::store_result($result);
 $tool_name = api_htmlentities($session_name, ENT_QUOTES).' : '.get_lang('Courses in this session');
 
-$interbreadcrumb[] = ['url' => "session_list.php", "name" => get_lang('Session list')];
+$interbreadcrumb[] = ['url' => "/admin/session-list", "name" => get_lang('Session list')];
 $interbreadcrumb[] = ['url' => "resume_session.php?id_session=".Security::remove_XSS($_REQUEST['id_session']), "name" => get_lang('Session overview')];
 
 Display::display_header($tool_name);

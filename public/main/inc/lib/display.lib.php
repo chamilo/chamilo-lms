@@ -4,12 +4,15 @@
 
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
+use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
+use Chamilo\CourseBundle\Entity\CTool;
+use Chamilo\CourseBundle\Entity\CToolIntro;
 use ChamiloSession as Session;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -161,33 +164,205 @@ class Display
         return self::display_footer();
     }
 
-    /**
-     * Displays the tool introduction of a tool.
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     *
-     * @param string $tool          these are the constants that are used for indicating the tools
-     * @param array  $editor_config Optional configuration settings for the online editor.
-     *                              return: $tool return a string array list with the "define" in main_api.lib
-     *
-     * @return string html code for adding an introduction
-     */
     public static function display_introduction_section(
         $tool,
         $editor_config = null
     ) {
-        // @todo replace introduction section with a vue page.
-        return;
+        echo self::return_introduction_section($tool, $editor_config);
     }
 
-    /**
-     * @param string $tool
-     * @param array  $editor_config
-     */
     public static function return_introduction_section(
         $tool,
         $editor_config = null
     ) {
+        if ('true' !== api_get_setting('course.enable_tool_introduction')) {
+            return '';
+        }
+
+        $tool = trim((string) $tool);
+        if ('' === $tool) {
+            return '';
+        }
+
+        $course = api_get_course_entity();
+        if (!$course) {
+            return '';
+        }
+
+        $session = api_get_session_entity();
+        $em = Database::getManager();
+
+        $courseToolRepo = $em->getRepository(CTool::class);
+        $toolRepo = $em->getRepository(Tool::class);
+        $toolIntroRepo = $em->getRepository(CToolIntro::class);
+
+        $courseTool = $courseToolRepo->findOneBy([
+            'title' => $tool,
+            'course' => $course,
+            'session' => $session,
+        ]);
+
+        if (!$courseTool && $session) {
+            $courseTool = $courseToolRepo->findOneBy([
+                'title' => $tool,
+                'course' => $course,
+                'session' => null,
+            ]);
+        }
+
+        if (!$courseTool && api_is_allowed_to_edit(false, true)) {
+            $baseTool = $toolRepo->findOneBy(['title' => $tool]);
+
+            if ($baseTool) {
+                $courseTool = (new CTool())
+                    ->setTool($baseTool)
+                    ->setTitle($tool)
+                    ->setCourse($course)
+                    ->setSession($session)
+                    ->setPosition(0)
+                    ->setParent($course)
+                    ->addCourseLink($course, $session)
+                ;
+
+                $em->persist($courseTool);
+                $em->flush();
+            }
+        }
+
+        if (!$courseTool) {
+            return '';
+        }
+
+        $toolIntro = $toolIntroRepo->findOneBy(
+            ['courseTool' => $courseTool],
+            ['iid' => 'DESC']
+        );
+
+        $canEdit = api_is_allowed_to_edit(false, true);
+        $content = $toolIntro ? trim((string) $toolIntro->getIntroText()) : '';
+
+        if (
+            $canEdit
+            && 'POST' === $_SERVER['REQUEST_METHOD']
+            && isset($_POST['tool_intro_action'], $_POST['tool_intro_tool'])
+            && 'save' === $_POST['tool_intro_action']
+            && $tool === $_POST['tool_intro_tool']
+        ) {
+            $introText = (string) ($_POST['tool_intro_text'] ?? '');
+
+            if (!$toolIntro) {
+                $toolIntro = (new CToolIntro())
+                    ->setCourseTool($courseTool)
+                    ->setIntroText($introText)
+                    ->setParent($course)
+                    ->addCourseLink($course, $session)
+                ;
+            } else {
+                $toolIntro->setIntroText($introText);
+            }
+
+            $em->persist($toolIntro);
+            $em->flush();
+
+            Display::addFlash(Display::return_message(get_lang('Updated'), 'success'));
+
+            header('Location: '.api_request_uri());
+            exit;
+        }
+
+        if (!$canEdit && '' === $content) {
+            return '';
+        }
+
+        $html = '<div class="tool-introduction mb-4">';
+
+        if ($canEdit) {
+            $modalId = 'tool-intro-modal-'.md5($tool);
+            $icon = '' === $content ? 'plus' : 'pencil';
+            $label = '' === $content ? get_lang('Add introduction') : get_lang('Edit introduction');
+
+            $html .= '
+                <div class="tool-introduction__actions mb-2" style="display:flex; justify-content:flex-end; align-items:center;">
+                    <button
+                        type="button"
+                        class="btn btn--success"
+                        style="width:40px; height:40px; padding:0; display:inline-flex; align-items:center; justify-content:center;"
+                        title="'.$label.'"
+                        aria-label="'.$label.'"
+                        onclick="document.getElementById(\''.$modalId.'\').showModal();"
+                    >
+                        '.Display::getMdiIcon($icon, 'ch-tool-icon text-white', null, ICON_SIZE_SMALL, $label).'
+                    </button>
+                </div>
+            ';
+        }
+
+        if ('' !== $content) {
+            $html .= '
+            <div class="tool-introduction__content mb-4">
+                '.Security::remove_XSS($content).'
+            </div>
+        ';
+        }
+
+        $html .= '</div>';
+
+        if ($canEdit) {
+            $modalId = 'tool-intro-modal-'.md5($tool);
+            $form = new FormValidator(
+                'tool_intro_form_'.$modalId,
+                'post',
+                api_request_uri()
+            );
+
+            $form->addHidden('tool_intro_action', 'save');
+            $form->addHidden('tool_intro_tool', $tool);
+            $form->addHtmlEditor(
+                'tool_intro_text',
+                null,
+                false,
+                false,
+                $editor_config ?? []
+            );
+            $form->setDefaults([
+                'tool_intro_text' => $content,
+            ]);
+            $form->addHtml('
+                <div style="display:flex; justify-content:flex-end; gap:12px; align-items:center; margin-top:16px;">
+                    <button type="button" name="cancel" class="btn btn--danger">
+                        '.Display::getMdiIcon('close', 'ch-tool-icon text-white', null, ICON_SIZE_SMALL).'
+                        '.get_lang('Cancel').'
+                    </button>
+                    <button type="submit" class="btn btn--success">
+                        '.Display::getMdiIcon('check', 'ch-tool-icon text-white', null, ICON_SIZE_SMALL).'
+                        '.get_lang('Save').'
+                    </button>
+                </div>
+            ');
+
+            $html .= '
+            <dialog id="'.$modalId.'" style="width: min(1000px, 95vw); border: 0; border-radius: 8px; padding: 0;">
+                <div style="padding: 16px; border-bottom: 1px solid #e5e7eb;">
+                    <strong>'.get_lang('Introduction').'</strong>
+                </div>
+
+                <div style="padding: 16px;">
+                    '.$form->returnForm().'
+                </div>
+
+                <script>
+                    document.addEventListener("click", function (event) {
+                        if (event.target && event.target.name === "cancel") {
+                            event.preventDefault();
+                            document.getElementById("'.$modalId.'").close();
+                        }
+                    });
+                </script>
+            </dialog>
+        ';
+        }
+
+        return $html;
     }
 
     /**
@@ -853,9 +1028,9 @@ class Display
     /**
      * Creates a span tag.
      */
-    public static function span(string $content, ?array $attributes = []): string
+    public static function span(?string $content, ?array $attributes = []): string
     {
-        return self::tag('span', $content, $attributes);
+        return self::tag('span', (string) ($content ?? ''), $attributes);
     }
 
     /**
@@ -877,14 +1052,19 @@ class Display
             $attributes['class'] ??= 'p-checkbox-input';
         }
 
+        if ('radio' === $type) {
+            $attributes['class'] ??= 'p-radiobutton-input';
+            $attributes['onchange'] = "$('input[name=\'".(str_replace(['[', ']'], ['\\[', '\\]'], $attributes['name']))."\']').parent().removeClass('p-radiobutton-checked'); this.parentElement.classList.add('p-radiobutton-checked');";
+        }
+
         $inputBase = self::tag('input', '', $attributes);
 
         if ('checkbox' === $type) {
             $isChecked = isset($attributes['checked']) && 'checked' === $attributes['checked'];
-            $compontentCheckedClass = $isChecked ? 'p-checkbox-checked' : '';
+            $componentCheckedClass = $isChecked ? 'p-checkbox-checked' : '';
 
             return <<<HTML
-                <div class="p-checkbox p-component $compontentCheckedClass">
+                <div class="p-checkbox p-component $componentCheckedClass">
                     $inputBase
                     <div class="p-checkbox-box">
                         <svg class="p-icon p-checkbox-icon" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -893,6 +1073,21 @@ class Display
                     </div>
                 </div>
 HTML;
+        }
+
+        if ('radio' === $type) {
+            $isChecked = isset($attributes['checked']) && 'checked' === $attributes['checked'];
+            $componentCheckedClass = $isChecked ? 'p-radiobutton-checked' : '';
+
+            return <<<HTML
+                <div class="p-radiobutton p-component $componentCheckedClass">
+                    $inputBase
+                    <div class="p-radiobutton-box" >
+                        <div class="p-radiobutton-icon"></div>
+                    </div>
+                </div>
+HTML;
+
         }
 
         if ('text' === $type) {
@@ -1020,7 +1215,7 @@ HTML;
         $i = 1;
         foreach ($headers as $item) {
             $isActive = (empty($selected) && 1 === $i) || (!empty($selected) && (int) $selected === $i);
-            $activeClass = $isActive ? ' active' : '';
+            $activeClass = $isActive ? 'active' : '';
             $ariaSelected = $isActive ? 'true' : 'false';
 
             $item = self::tag(
@@ -1028,7 +1223,7 @@ HTML;
                 $item,
                 [
                     'href' => 'javascript:void(0)',
-                    'class' => 'nav-item nav-link text-primary'.$activeClass,
+                    'class' => 'nav-item nav-link '.$activeClass,
                     '@click' => "openTab = $i",
                     'id' => $id.$i.'-tab',
                     'data-toggle' => 'tab',
@@ -1047,7 +1242,7 @@ HTML;
             $lis,
             [
                 'id' => 'nav_'.$id,
-                'class' => 'nav nav-tabs bg-white px-3 pt-3 border-bottom-0',
+                'class' => 'nav nav-tabs bg-white',
                 'role' => 'tablist',
             ]
         );
@@ -1093,7 +1288,7 @@ HTML;
             $attributes['class'] = '';
         }
         // Shadow, rounded corners, small top margin
-        $attributes['class'] .= ' tab_wrapper shadow-sm rounded mt-3';
+        $attributes['class'] .= ' tab_wrapper shadow-sm rounded';
 
         $initialTab = !empty($selected) ? (int) $selected : 1;
         $attributes['x-data'] = '{ openTab: '.$initialTab.' }';
@@ -1609,9 +1804,12 @@ HTML;
             $second_title = Security::remove_XSS($second_title);
             $title .= "<small> $second_title<small>";
         }
-        $subTitle = self::tag($size, Security::remove_XSS($title), $attributes);
 
-        return $subTitle;
+        return '
+            <div class="section-header section-header--'.$size.'">
+              '.$subTitle = self::tag($size, Security::remove_XSS($title), $attributes).'
+            </div>
+        ';
     }
 
     public static function page_subheader2($title, $second_title = null)
@@ -1743,8 +1941,8 @@ HTML;
         }
 
         return self::span(
-            $text,
-            ['class' => 'boot-tooltip', 'title' => strip_tags($tip)]
+            (string) ($text ?? ''),
+            ['class' => 'boot-tooltip', 'title' => strip_tags((string) ($tip ?? ''))]
         );
     }
 
@@ -1776,48 +1974,62 @@ HTML;
     public static function groupButtonWithDropDown($title, $elements, $alignToRight = false)
     {
         $id = uniqid('dropdown', false);
+        $menuPositionClass = $alignToRight ? 'right-0' : 'left-0';
+
         $html = '
-        <div class="dropdown inline-block relative">
-            <button
-                id="'.$id.'"
-                type="button"
-                class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
-                aria-expanded="false"
-                aria-haspopup="true"
-                onclick="document.querySelector(\'#'.$id.'_menu\').classList.toggle(\'hidden\')"
-            >
-              '.$title.'
-              <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+    <div class="dropdown inline-block relative">
+        <button
+            id="'.$id.'"
+            type="button"
+            class="btn btn--plain-outline btn--sm whitespace-nowrap"
+            aria-expanded="false"
+            aria-haspopup="true"
+            onclick="document.querySelector(\'#'.$id.'_menu\').classList.toggle(\'hidden\')"
+        >
+            <span class="whitespace-nowrap">'.$title.'</span>
+            <svg class="h-5 w-5 inline-block align-middle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                 <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-              </svg>
-            </button>
-            <div
-                id="'.$id.'_menu"
-                class=" dropdown-menu hidden origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
-                role="menu"
-                aria-orientation="vertical"
-                aria-labelledby="menu-button"
-                tabindex="-1"
-            >
-            <div class="py-1" role="none">';
+            </svg>
+        </button>
+        <div
+            id="'.$id.'_menu"
+            class="dropdown-menu hidden absolute '.$menuPositionClass.' mt-1 py-2 bg-white border-0 shadow-xl rounded-lg z-50 flex flex-col items-stretch"
+            role="menu"
+            aria-orientation="vertical"
+            aria-labelledby="'.$id.'"
+            tabindex="-1"
+            style="min-width: 360px; max-width: 90vw;"
+        >';
+
         foreach ($elements as $item) {
-            $html .= self::url(
-                    $item['title'],
+            $attrs = [
+                'class' => 'block w-full rounded-none py-2 px-4 transition-none text-start text-body-2 hover:text-primary hover:bg-support-1 focus:text-primary focus:bg-support-1 whitespace-nowrap',
+                'role' => 'menuitem',
+                'onclick' => $item['onclick'] ?? '',
+                'data-action' => $item['data-action'] ?? '',
+                'data-confirm' => $item['data-confirm'] ?? '',
+            ];
+
+            if (empty($item['type'])) {
+                $html .= self::url(
+                    '<span class="whitespace-nowrap">'.Security::remove_XSS($item['title']).'</span>',
                     $item['href'],
-                    [
-                        'class' => 'text-gray-700 block px-4 py-2 text-sm',
-                        'role' => 'menuitem',
-                        'onclick' => $item['onclick'] ?? '',
-                        'data-action' => $item['data-action'] ?? '',
-                        'data-confirm' => $item['data-confirm'] ?? '',
-                    ]
+                    $attrs
                 );
+            } elseif ('button' === $item['type']) {
+                $attrs['type'] = 'button';
+                $html .= self::button(
+                    '',
+                    '<span class="whitespace-nowrap">'.Security::remove_XSS($item['title']).'</span>',
+                    $attrs
+                );
+            }
         }
+
         $html .= '
-            </div>
-            </div>
-            </div>
-        ';
+        </div>
+    </div>
+    ';
 
         return $html;
     }
@@ -2176,17 +2388,33 @@ HTML;
         array $attributes = [],
         $includeText = true
     ) {
-        $buttonClass = "btn btn--secondary-outline";
-        if (!empty($type)) {
-            $buttonClass = "btn btn--$type";
-        }
-        //$icon = self::tag('i', null, ['class' => "fa fa-$icon fa-fw", 'aria-hidden' => 'true']);
+        $baseClass = 'inline-flex items-center gap-2 rounded-xl px-4 py-2 text-body-2 font-semibold shadow-sm transition hover:opacity-90';
+
+        $colorClasses = [
+            'primary' => 'bg-primary text-white',
+            'secondary' => 'bg-secondary text-secondary-button-text',
+            'success' => 'bg-success text-success-button-text',
+            'danger' => 'bg-danger text-danger-button-text',
+            'warning' => 'bg-warning text-warning-button-text',
+            'info' => 'bg-info text-info-button-text',
+            'secondary-outline' => 'border border-gray-25 bg-white text-gray-90 hover:border-primary hover:text-primary',
+        ];
+
+        $resolvedType = $type ?: 'secondary-outline';
+        $buttonClass = $baseClass.' '.($colorClasses[$resolvedType] ?? $colorClasses['secondary-outline']);
+
         $icon = self::getMdiIcon($icon);
-        $attributes['class'] = isset($attributes['class']) ? "$buttonClass {$attributes['class']}" : $buttonClass;
+
+        $attributes['class'] = isset($attributes['class'])
+            ? $buttonClass.' '.$attributes['class']
+            : $buttonClass;
+
         $attributes['title'] = $attributes['title'] ?? $text;
 
         if (!$includeText) {
             $text = '<span class="sr-only">'.$text.'</span>';
+        } else {
+            $text = '<span>'.$text.'</span>';
         }
 
         return self::url("$icon $text", $url, $attributes);
@@ -2611,6 +2839,7 @@ HTML;
                 $content = '<video style="width: 400px; height:100%;" src="'.$fileUrl.'"></video>';
                 // Allows video to play when loading during an ajax call
                 $content .= "<script>jQuery('video:not(.skip), audio:not(.skip)').mediaelementplayer();</script>";
+                $content .= api_get_video_context_menu_hidden_script();
                 break;
             case 'jpg':
             case 'jpeg':
@@ -2680,7 +2909,7 @@ HTML;
         $content .= self::url(
             '<em class="fa fa-plus"></em> '.$buttonTitle,
             $url,
-            ['class' => 'btn btn--primary']
+            ['class' => 'btn btn--success']
         );
         $content .= '</div>';
         $content .= '</div>';
@@ -2944,5 +3173,123 @@ HTML;
           </div>
         </details>
         ';
+    }
+
+    /**
+     * Render a consistent "Subscribe users to this session" header + tabs layout
+     * reused across legacy admin pages (add users, usergroups, etc).
+     *
+     * $activeTab: users|classes|teachers|students
+     * $options:
+     *  - return_to: string (used to preserve the "Back" destination in the Classes tab)
+     *  - header_title: string (defaults to get_lang('Subscribe users to this session'))
+     *  - users_url/classes_url/teachers_url/students_url: override URLs if needed
+     *  - wrapper_class: string
+     *  - card_class: string
+     *  - tabs_bar_class: string
+     *  - content_class: string
+     */
+    public static function sessionSubscriptionPage(
+        int $sessionId,
+        string $sessionTitle,
+        string $backUrl,
+        string $activeTab,
+        string $contentHtml,
+        array $options = []
+    ): string {
+        $safeTitle = htmlspecialchars($sessionTitle, ENT_QUOTES, api_get_system_encoding());
+
+        $headerTitle = $options['header_title'] ?? get_lang('Subscribe users to this session');
+
+        $returnTo = (string) ($options['return_to'] ?? '');
+
+        $usersUrl = $options['users_url']
+            ?? api_get_path(WEB_CODE_PATH).'session/add_users_to_session.php?id_session='.$sessionId.'&add=true';
+
+        $classesUrl = $options['classes_url']
+            ?? api_get_path(WEB_CODE_PATH).'admin/usergroups.php?from_session='.$sessionId
+            .(!empty($returnTo) ? '&return_to='.rawurlencode($returnTo) : '');
+
+        $teachersUrl = $options['teachers_url']
+            ?? api_get_path(WEB_CODE_PATH).'session/add_teachers_to_session.php?id='.$sessionId;
+
+        $studentsUrl = $options['students_url']
+            ?? api_get_path(WEB_CODE_PATH).'session/add_students_to_session.php?id='.$sessionId;
+
+        $wrapperClass = $options['wrapper_class'] ?? 'mx-auto w-full p-4 space-y-4';
+        $cardClass = $options['card_class'] ?? 'rounded-lg border border-gray-30 bg-white shadow-sm';
+        $tabsBarClass = $options['tabs_bar_class'] ?? 'flex flex-wrap items-center gap-2 border-b border-gray-20 px-3 py-2';
+        $contentClass = $options['content_class'] ?? 'p-4';
+
+        $btnNeutral = 'inline-flex items-center gap-2 rounded-md border border-gray-30 bg-white px-3 py-1.5 text-sm font-medium text-gray-90 shadow-sm hover:bg-gray-10';
+
+        $tabBase = 'inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm';
+        $tabActive = 'font-semibold bg-gray-10 text-gray-90';
+        $tabIdle = 'font-medium text-gray-90 hover:bg-gray-10';
+
+        $tabs = [
+            'users' => [
+                'url' => $usersUrl,
+                'label' => get_lang('Users'),
+                'icon' => \Chamilo\CoreBundle\Enums\ObjectIcon::USER,
+            ],
+            'classes' => [
+                'url' => $classesUrl,
+                'label' => get_lang('Enrolment by classes'),
+                'icon' => \Chamilo\CoreBundle\Enums\ObjectIcon::MULTI_ELEMENT,
+            ],
+            'teachers' => [
+                'url' => $teachersUrl,
+                'label' => get_lang('Enroll trainers from existing sessions'),
+                'icon' => \Chamilo\CoreBundle\Enums\ObjectIcon::TEACHER,
+            ],
+            'students' => [
+                'url' => $studentsUrl,
+                'label' => get_lang('Enroll students from existing sessions'),
+                'icon' => \Chamilo\CoreBundle\Enums\ObjectIcon::USER,
+            ],
+        ];
+
+        if (!isset($tabs[$activeTab])) {
+            $activeTab = 'users';
+        }
+
+        $html = '';
+        $html .= '<div class="'.$wrapperClass.'">';
+
+        // Header card
+        $html .= '  <div class="'.$cardClass.' p-4">';
+        $html .= '    <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">';
+        $html .= '      <div class="min-w-0">';
+        $html .= '        <h1 class="text-lg font-semibold text-gray-90">'.htmlspecialchars($headerTitle, ENT_QUOTES, api_get_system_encoding()).'</h1>';
+        $html .= '        <p class="text-sm text-gray-50">'.$safeTitle.'</p>';
+        $html .= '      </div>';
+        $html .= '      <div class="flex items-center gap-2">';
+        $html .= '        <a href="'.htmlspecialchars($backUrl, ENT_QUOTES, api_get_system_encoding()).'" class="'.$btnNeutral.'">'.get_lang('Back').'</a>';
+        $html .= '      </div>';
+        $html .= '    </div>';
+        $html .= '  </div>';
+
+        // Tabs + content in the SAME card (so it looks like real tabs)
+        $html .= '  <div class="'.$cardClass.'">';
+        $html .= '    <div class="'.$tabsBarClass.'">';
+
+        foreach ($tabs as $key => $tab) {
+            $cls = $tabBase.' '.($key === $activeTab ? $tabActive : $tabIdle);
+            $ariaCurrent = $key === $activeTab ? ' aria-current="page"' : '';
+
+            $html .= '      <a href="'.htmlspecialchars($tab['url'], ENT_QUOTES, api_get_system_encoding()).'" class="'.$cls.'"'.$ariaCurrent.'>';
+            $html .=            self::getMdiIcon($tab['icon'], 'ch-tool-icon', null, ICON_SIZE_SMALL, $tab['label']);
+            $html .= '        <span>'.$tab['label'].'</span>';
+            $html .= '      </a>';
+        }
+
+        $html .= '    </div>';
+        $html .= '    <div class="'.$contentClass.'">'.$contentHtml.'</div>';
+        $html .= '  </div>';
+
+        $html .= '</div>';
+
+        return $html;
     }
 }

@@ -3,6 +3,10 @@
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
+
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CGroup;
+
 $this_section = SECTION_COURSES;
 $current_course_tool = TOOL_GROUP;
 
@@ -11,6 +15,7 @@ api_protect_course_script(true);
 
 $group_id = api_get_group_id();
 $current_group = GroupManager::get_group_properties($group_id);
+/** @var CGroup $groupEntity */
 $groupEntity = api_get_group_entity($group_id);
 
 $nameTools = get_lang('Edit this group');
@@ -156,16 +161,16 @@ if (!empty($group_member_list)) {
 }
 
 // UI wrapper: title + group title + tabs
-$form->addHtml('<div class="mx-auto wd-full px-4 sm:px-6 lg:px-8">');
+$form->addHtml('<div class="mx-auto w-full px-4 sm:px-6 lg:px-8">');
 $form->addHtml('<div class="mb-6">');
-$form->addHtml('<h1 class="text-2xl font-semibold text-gray-900">'.Security::remove_XSS($nameTools).'</h1>');
-$form->addHtml('<p class="mt-1 text-sm text-gray-600">'.Security::remove_XSS($groupEntity->getTitle()).'</p>');
+$form->addHtml('<h1 class="text-2xl font-semibold text-gray-90">'.Security::remove_XSS($nameTools).'</h1>');
+$form->addHtml('<p class="mt-1 text-sm text-gray-50">'.Security::remove_XSS($groupEntity->getTitle()).'</p>');
 $form->addHtml('</div>');
 $form->addHtml(GroupManager::renderGroupTabs('member'));
 
 // Card
-$form->addHtml('<div class="rounded-lg border border-gray-50 bg-white p-6 shadow-sm">');
-$form->addHtml('<h2 class="text-base font-semibold text-gray-900 mb-4">'.get_lang('Group members').'</h2>');
+$form->addHtml('<div class="rounded-lg border border-gray-20 bg-white p-6 shadow-sm">');
+$form->addHtml('<h2 class="mb-4 text-base font-semibold text-gray-90">'.get_lang('Group members').'</h2>');
 
 $form->addMultiSelect('group_members', get_lang('Group members'), $possible_users);
 
@@ -224,7 +229,7 @@ $searchAlertHtml = '';
 if (!empty($_GET['keyword']) && !empty($_GET['submit'])) {
     $keyword_name = Security::remove_XSS($_GET['keyword']);
     $searchAlertHtml = '<div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 mt-4">'.
-        '<div class="rounded-md border border-blue-200 bg-blue-50 p-4 text-sm text-blue-800">'.
+        '<div class="rounded-md border border-info bg-support-2 p-4 text-sm text-gray-90">'.
         get_lang('Search results for:').' <span class="font-medium italic">'.$keyword_name.'</span>'.
         '</div>'.
         '</div>';
@@ -237,6 +242,49 @@ if (!empty($searchAlertHtml)) {
 }
 
 $form->setDefaults($defaults);
-$form->display();
+
+// check if group has a CGroupRelUsergroup
+$courseInfo = api_get_course_info_by_id(api_get_course_int_id());
+
+if (GroupManager::isGroupLinkedToUsergroup($groupEntity)) {
+    echo '<div class="mx-auto w-full px-4 sm:px-6 lg:px-8">';
+    echo '<div class="mb-6">';
+    echo '<h1 class="text-2xl font-semibold text-gray-90">'.Security::remove_XSS($nameTools).'</h1>';
+    echo '<p class="mt-1 text-sm text-gray-50">'.Security::remove_XSS($groupEntity->getTitle()).'</p>';
+    echo '</div>';
+    echo GroupManager::renderGroupTabs('member');
+
+    echo '<div class="space-y-6">';
+    echo '<div class="rounded-lg border border-info bg-support-2 p-4 text-sm text-gray-90">';
+    echo sprintf(
+        get_lang('This group is linked to class %s.<br>Group member list depends on class members and cannot be modified.<br>Go to the group settings to break this link if you wish to add or remove members for this group.'),
+        $courseInfo['title']
+    );
+    echo '</div>';
+
+    echo '<div class="rounded-lg border border-gray-20 bg-white p-6 shadow-sm">';
+    echo '<h2 class="mb-4 text-base font-semibold text-gray-90">'.get_lang('Group members').'</h2>';
+
+    $memberInfos = GroupManager::get_subscribed_users($groupEntity);
+    if (!empty($memberInfos)) {
+        echo '<ul class="divide-y divide-gray-20">';
+        foreach ($memberInfos as $memberInfo) {
+            echo '<li class="py-3 text-sm text-gray-90">'.
+                ucfirst($memberInfo['firstname']).' '.
+                ucfirst($memberInfo['lastname']).' '.
+                '<span class="text-gray-50">('.$memberInfo['email'].')</span>'.
+                '</li>';
+        }
+        echo '</ul>';
+    } else {
+        echo '<p class="text-sm text-gray-50">'.get_lang('NoUsersInTheList').'</p>';
+    }
+
+    echo '</div>';
+    echo '</div>';
+    echo '</div>';
+} else {
+    $form->display();
+}
 
 Display::display_footer();

@@ -189,7 +189,7 @@ if ('add' === $action || 'edit' === $action) {
             'FALSE'
         ),
     ];
-    $form->addGroup($group, null, get_lang('Allow adding courses in this category?'));
+    $form->addGroup($group, '', get_lang('Allow adding courses in this category?'));
     if ('add' === $action && !empty($categoryId)) {
         $form->addHidden('parent_id', $categoryId);
         $form->addLabel(get_lang('Parent category'), $parentInfo['title'].' ('.$parentInfo['code'].')');
@@ -264,7 +264,7 @@ if ('add' === $action || 'edit' === $action) {
 
     if (empty($parentInfo) || 'TRUE' === $parentInfo['auth_cat_child']) {
         $newCategoryLink = Display::url(
-            Display::getMdiIcon(ActionIcon::CREATE_FOLDER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add category')),
+            Display::getMdiIcon(ActionIcon::CREATE_FOLDER, 'ch-tool-icon-success', null, ICON_SIZE_MEDIUM, get_lang('Add category')),
             api_get_path(WEB_CODE_PATH).'admin/course_category.php?action=add&id='.$categoryId
         );
 

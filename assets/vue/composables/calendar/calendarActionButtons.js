@@ -1,67 +1,51 @@
 import { ref, watchEffect } from "vue"
 import { storeToRefs } from "pinia"
-import { useCidReqStore } from "../../store/cidReq"
-import { usePlatformConfig } from "../../store/platformConfig"
 import { useSecurityStore } from "../../store/securityStore"
-import { checkIsAllowedToEdit } from "../userPermissions"
+import { useCidReqStore } from "../../store/cidReq"
+import { useIsAllowedToEdit } from "../userPermissions"
 
-/**
- * Extracted from Agenda::displayActions
- */
 export function useCalendarActionButtons() {
-  const cidReqStore = useCidReqStore()
-  const platformConfigStore = usePlatformConfig()
   const securityStore = useSecurityStore()
-
+  const cidReqStore = useCidReqStore()
   const { course } = storeToRefs(cidReqStore)
 
-  const isAllowedToEdit = ref(false)
-
-  checkIsAllowedToEdit(false, true).then((response) => (isAllowedToEdit.value = response))
-
-  const isAllowedToSessionEdit = false
-
-  const courseAllowUserEditAgenda = "0"
+  const { isAllowedToEdit } = useIsAllowedToEdit({ coach: true })
 
   const showAddButton = ref(false)
-  const showImportICalButton = ref(false)
-  const showImportCourseEventsButton = ref(false)
+  const showAgendaListButton = ref(false)
   const showSessionPlanningButton = ref(false)
   const showMyStudentsScheduleButton = ref(false)
 
-  const isPersonal = !course.value
-
   watchEffect(() => {
-    if (
-      isAllowedToEdit.value ||
-      (isPersonal &&
-        securityStore.isAuthenticated &&
-        "true" === platformConfigStore.getSetting("agenda.allow_personal_agenda")) ||
-      ("1" === courseAllowUserEditAgenda && securityStore.isAuthenticated && isAllowedToSessionEdit)
-    ) {
-      showAddButton.value = true
-      showImportICalButton.value = true
+    const isAuthenticated = Boolean(securityStore.isAuthenticated)
+    const isPersonal = !course.value
 
-      if (course.value) {
-        if (isAllowedToEdit.value) {
-          showImportCourseEventsButton.value = true
-        }
-      }
+    showAddButton.value = false
+    showAgendaListButton.value = false
+    showSessionPlanningButton.value = false
+    showMyStudentsScheduleButton.value = false
+
+    if (!isAuthenticated) {
+      return
     }
 
-    if (!course.value && securityStore.isAuthenticated) {
-      showSessionPlanningButton.value = true
+    // Calendar/List switch is useful for all authenticated users.
+    showAgendaListButton.value = true
 
-      if (securityStore.isStudentBoss || securityStore.isAdmin) {
-        showMyStudentsScheduleButton.value = true
-      }
+    // Basic "Add event": allow personal events for authenticated users.
+    if (isPersonal) {
+      showAddButton.value = true
+      showSessionPlanningButton.value = true
+      showMyStudentsScheduleButton.value = true
+    } else {
+      // Inside a course context: allow add only when user can edit.
+      showAddButton.value = Boolean(isAllowedToEdit.value)
     }
   })
 
   return {
     showAddButton,
-    showImportICalButton,
-    showImportCourseEventsButton,
+    showAgendaListButton,
     showSessionPlanningButton,
     showMyStudentsScheduleButton,
   }

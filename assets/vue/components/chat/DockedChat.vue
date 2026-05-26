@@ -6,10 +6,10 @@
     >
       <!-- FAB -->
       <button
-        class="chd-fab"
         :class="{ 'has-unread': fabHasUnread }"
         :title="t('Chat')"
         aria-label="Open chat"
+        class="chd-fab"
         @click="toggleDock(true)"
       >
         <i class="mdi mdi-message-text-outline" />
@@ -18,9 +18,9 @@
       <!-- Dock -->
       <div
         v-if="open"
+        aria-label="Chat dock"
         class="chd-dock"
         role="dialog"
-        aria-label="Chat dock"
       >
         <header class="chd-header">
           <div class="chd-title">
@@ -33,15 +33,15 @@
               @click="toggleStatus"
             >
               <span
-                class="chd-dot"
                 :class="userStatus === 1 ? 'chd-dot--on' : 'chd-dot--off'"
+                class="chd-dot"
               />
               {{ userStatus === 1 ? t("Online") : t("Offline") }}
             </button>
             <button
+              aria-label="Close"
               class="chd-btn chd-btn--ghost"
               @click="toggleDock(false)"
-              aria-label="Close"
             >
               <i class="mdi mdi-close" />
             </button>
@@ -54,9 +54,9 @@
             <div class="chd-sidebar__head">
               <strong>{{ t("Contacts") }}</strong>
               <button
+                :disabled="loadingContacts"
                 class="chd-btn chd-btn--ghost chd-btn--xs"
                 @click="loadContacts"
-                :disabled="loadingContacts"
               >
                 <i class="mdi mdi-refresh" />
               </button>
@@ -68,17 +68,17 @@
               class="chd-ai"
             >
               <button
-                class="chd-ai__btn"
                 :class="{ 'is-active': Number(activePeer?.id || 0) === AI_PEER_ID }"
-                @click="openConversation({ id: AI_PEER_ID, name: t('AI Tutor'), image: '' })"
                 :disabled="tutorCtx.inTest"
                 :title="tutorCtx.inTest ? t('AI tutor is disabled during tests') : t('AI Tutor')"
+                class="chd-ai__btn"
+                @click="openConversation({ id: AI_PEER_ID, name: t('AI Tutor'), image: '' })"
               >
                 <i class="mdi mdi-robot-outline" />
                 <span class="chd-truncate">{{ t("AI Tutor") }}</span>
                 <span
-                  class="chd-presence on"
                   aria-hidden="true"
+                  class="chd-presence on"
                 />
               </button>
 
@@ -118,19 +118,19 @@
                   <img
                     v-if="activePeerAvatar"
                     :src="activePeerAvatar"
-                    class="chd-avatar"
                     alt=""
+                    class="chd-avatar"
                   />
                   <i
                     v-else
-                    class="mdi mdi-account chd-avatar chd-avatar--fallback"
                     aria-hidden="true"
+                    class="mdi mdi-account chd-avatar chd-avatar--fallback"
                   />
                   <div class="chd-peer__meta">
                     <strong class="chd-truncate">{{ activePeer.name }}</strong>
                     <span
-                      class="chd-presence"
                       :class="activePeer.online ? 'on' : 'off'"
+                      class="chd-presence"
                     />
                   </div>
                 </template>
@@ -142,8 +142,8 @@
 
             <!-- Scrollable messages area -->
             <div
-              class="chd-chat__body"
               ref="scrollBox"
+              class="chd-chat__body"
               @scroll.passive="handleScroll"
             >
               <template v-if="activePeer">
@@ -153,8 +153,8 @@
                   :class="bubbleClass(msg)"
                 >
                   <div
-                    class="chd-bubble"
                     :class="{ 'is-pending': msg.pending }"
+                    class="chd-bubble"
                   >
                     <div
                       class="chd-bubble__content"
@@ -164,8 +164,8 @@
                       <span class="chd-bubble__date">{{ formatTs(msg.date) }}</span>
                       <span
                         v-if="isMine(msg)"
-                        class="chd-bubble__ack"
                         :title="ackTitle(msg)"
+                        class="chd-bubble__ack"
                       >
                         {{ ackGlyph(msg) }}
                       </span>
@@ -189,32 +189,48 @@
 
             <!-- Composer -->
             <div
-              class="chd-composer"
               v-if="activePeer"
+              class="chd-composer"
             >
               <textarea
                 v-model.trim="draft"
-                class="chd-input"
                 :placeholder="composerPlaceholder"
+                class="chd-input"
                 rows="2"
                 @keydown="onComposerKeydown"
                 @keydown.enter.prevent.exact="send"
                 @keydown.enter.shift.exact="newline"
               />
+              <div
+                v-if="isAiThread && selectionWordCount > 0"
+                aria-live="polite"
+                class="chd-selection-chip"
+              >
+                <i class="mdi mdi-text-box-search-outline" />
+                <span>{{ t("Selection") }} {{ selectionWordCount }}</span>
+                <button
+                  :aria-label="t('Remove selection context')"
+                  class="chd-selection-chip__close"
+                  type="button"
+                  @click="dismissSelectionContext"
+                >
+                  <i class="mdi mdi-close" />
+                </button>
+              </div>
               <div class="chd-composer__actions">
                 <span class="chd-hint">{{ t("Enter to send · Shift+Enter for newline") }}</span>
                 <div class="chd-spacer" />
                 <button
+                  :disabled="sending || clearing"
                   class="chd-btn chd-btn--danger-outline"
                   @click="clearConversation"
-                  :disabled="sending || clearing"
                 >
                   {{ t("Reset") }}
                 </button>
                 <button
+                  :disabled="sendDisabled"
                   class="chd-btn chd-btn--primary"
                   @click="send"
-                  :disabled="sendDisabled"
                 >
                   <i class="mdi mdi-send" /> {{ t("Send") }}
                 </button>
@@ -228,10 +244,11 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onBeforeUnmount, watch, onMounted } from "vue"
+import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
 import { useCidReq } from "../../composables/cidReq"
+import DOMPurify from "dompurify"
 
 const { t } = useI18n({ useScope: "global" })
 const route = useRoute()
@@ -327,7 +344,9 @@ watch(
     return `${r.cid}:${r.sid}:${r.gid}`
   },
   async (nv, ov) => {
-    if (nv === ov) return
+    if (nv === ov) {
+      return
+    }
   },
 )
 
@@ -473,10 +492,15 @@ function withCidReq(params) {
 
 function addCidReqToUrl(url) {
   try {
-    const u = new URL(url, window.location.origin)
+    const [path, existingQuery] = url.split("?")
+    const sp = new URLSearchParams(existingQuery || "")
     const p = runtimeCidReqParams()
-    Object.entries(p).forEach(([k, v]) => u.searchParams.set(k, String(v)))
-    return u.toString()
+
+    Object.entries(p).forEach(([k, v]) => sp.set(k, String(v)))
+
+    const qs = sp.toString()
+
+    return qs ? `${path}?${qs}` : path
   } catch {
     return url
   }
@@ -527,12 +551,6 @@ function normalizeContactsHtmlForAiTutor(html) {
   return wrap.innerHTML
 }
 
-function linkify(str) {
-  return (str || "").replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>')
-}
-function renderMessage(html) {
-  return linkify(html)
-}
 function formatTs(ts) {
   const d = Number(ts) * 1000
   if (!Number.isFinite(d)) return ""
@@ -556,6 +574,65 @@ function escapeForHtml(s) {
     (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" })[m],
   )
 }
+
+/**
+ * Convert plain text to safe HTML with clickable links.
+ * - Escapes all user content first (prevents HTML injection).
+ * - Then converts URLs to <a> tags with safe attributes.
+ * - Newlines are converted to <br> for readability.
+ */
+function linkify(raw) {
+  const s = String(raw ?? "")
+  const re = /(https?:\/\/[^\s<>"']+)/g
+
+  let out = ""
+  let last = 0
+  let m
+
+  while ((m = re.exec(s)) !== null) {
+    const url = m[0]
+    const start = m.index
+
+    out += escapeForHtml(s.slice(last, start)).replace(/\n/g, "<br>")
+
+    // Build a safe href. URL() will normalize/encode unsafe characters.
+    let href = ""
+    try {
+      const u = new URL(url)
+      if (/^https?:$/i.test(u.protocol)) href = u.toString()
+    } catch {
+      href = ""
+    }
+
+    if (href) {
+      // Extra hardening: prevent quote-based attribute breaking.
+      const safeHref = href.replace(/"/g, "%22").replace(/'/g, "%27")
+      const text = escapeForHtml(url)
+      out += `<a href="${safeHref}" target="_blank" rel="noopener noreferrer">${text}</a>`
+    } else {
+      out += escapeForHtml(url)
+    }
+
+    last = start + url.length
+  }
+
+  out += escapeForHtml(s.slice(last)).replace(/\n/g, "<br>")
+  return out
+}
+
+/**
+ * Render chat message safely for v-html.
+ * Allow only <a> and <br> tags (chat messages are treated as plain text).
+ */
+function renderMessage(rawMessage) {
+  const html = linkify(rawMessage)
+  return DOMPurify.sanitize(html, {
+    ALLOWED_TAGS: ["a", "br"],
+    ALLOWED_ATTR: ["href", "target", "rel"],
+    ADD_ATTR: ["target", "rel"],
+  })
+}
+
 function isMine(m) {
   return Number(m?.from_user_info?.id) === me.id || Number(m?.f) === me.id
 }
@@ -750,16 +827,13 @@ function extractPeerIdFromNode(node) {
   if (cand) return cand
   if (node.matches?.("a[href]")) {
     try {
-      const u = new URL(node.getAttribute("href"), window.location.origin)
-      const p = Number(
-        u.searchParams.get("user") ||
-          u.searchParams.get("id") ||
-          u.searchParams.get("uid") ||
-          u.searchParams.get("friend") ||
-          u.searchParams.get("contact") ||
-          0,
-      )
-      if (p) return p
+      const href = node.getAttribute("href") || ""
+      const sp = new URLSearchParams(href.includes("?") ? href.slice(href.indexOf("?") + 1) : "")
+      const p = Number(sp.get("user") || sp.get("id") || sp.get("uid") || sp.get("friend") || sp.get("contact") || 0)
+
+      if (p) {
+        return p
+      }
     } catch {
       // ignore
     }
@@ -959,10 +1033,13 @@ function onContactsClick(e) {
 
   if (a) {
     try {
-      const u = new URL(a.getAttribute("href"), window.location.origin)
-      const id = Number(u.searchParams.get("user") || u.searchParams.get("id") || 0)
+      const href = a.getAttribute("href") || ""
+      const sp = new URLSearchParams(href.includes("?") ? href.slice(href.indexOf("?") + 1) : "")
+      const id = Number(sp.get("user") || sp.get("id") || 0)
+
       if (id) {
         const name = a.getAttribute("data-name") || a.textContent?.trim() || "User"
+
         return openConversation({ id, name })
       }
     } catch {
@@ -1303,6 +1380,322 @@ const sendDisabled = computed(() => {
   return false
 })
 
+const selectionWordCount = ref(0)
+const selectedTextContext = ref("")
+const dismissedSelectedTextContext = ref("")
+let selectionRefreshTimer = null
+let selectionPollingTimer = null
+let selectionFrameObserver = null
+const observedSelectionDocuments = new Set()
+const observedSelectionFrames = new Set()
+
+function nodeToElement(node) {
+  if (!node) return null
+  if (node.nodeType === Node.ELEMENT_NODE) return node
+  return node.parentElement || null
+}
+
+function nodeMatches(node, selector) {
+  const el = nodeToElement(node)
+  return !!el?.closest?.(selector)
+}
+
+function isSelectionInsideChatDock(selection) {
+  return (
+    nodeMatches(selection?.anchorNode, ".chd") ||
+    nodeMatches(selection?.focusNode, ".chd") ||
+    nodeMatches(selection?.rangeCount ? selection.getRangeAt(0).commonAncestorContainer : null, ".chd")
+  )
+}
+
+function isSelectionInsideEditable(selection) {
+  const selector = "input, textarea, select, [contenteditable='true'], [contenteditable='']"
+  return (
+    nodeMatches(selection?.anchorNode, selector) ||
+    nodeMatches(selection?.focusNode, selector) ||
+    nodeMatches(selection?.rangeCount ? selection.getRangeAt(0).commonAncestorContainer : null, selector)
+  )
+}
+
+function isTextSelectionContextAllowed() {
+  const tool = String(route?.meta?.tool || "").toLowerCase()
+  if (["document", "forum", "wiki", "portfolio"].includes(tool)) return true
+
+  const routeName = String(route?.name || "").toLowerCase()
+  const routePath = String(route?.path || "").toLowerCase()
+  const fullPath = String(route?.fullPath || "").toLowerCase()
+  const currentPath = String(window.location.pathname || "").toLowerCase()
+  const currentSearch = String(window.location.search || "").toLowerCase()
+  const context = `${routeName} ${routePath} ${fullPath} ${currentPath} ${currentSearch}`
+
+  if (routeName.startsWith("lp") || context.includes("/resources/lp") || context.includes("learnpath")) return true
+  if (context.includes("lp_id=") || context.includes("origin=learnpath")) return true
+
+  return ["document", "forum", "wiki", "portfolio"].some((name) => {
+    return (
+      routeName.includes(name) ||
+      context.includes(`/resources/${name}`) ||
+      context.includes(`/${name}/`) ||
+      context.includes(`${name}.php`) ||
+      context.includes(`tool=${name}`)
+    )
+  })
+}
+
+function normalizeSelectedText(text) {
+  return String(text || "")
+    .replace(/\u00a0/g, " ")
+    .replace(/[\u200B-\u200D\uFEFF]/g, "")
+    .replace(/\s+/g, " ")
+    .trim()
+}
+
+function countWords(text) {
+  const normalized = normalizeSelectedText(text)
+  if (!normalized) return 0
+
+  if (typeof Intl !== "undefined" && typeof Intl.Segmenter === "function") {
+    try {
+      const segmenter = new Intl.Segmenter(undefined, { granularity: "word" })
+      let count = 0
+      for (const segment of segmenter.segment(normalized)) {
+        if (segment.isWordLike) count++
+      }
+
+      if (count > 0) return count
+    } catch {
+      // Fall back to the regex-based counter below.
+    }
+  }
+
+  try {
+    const matches = normalized.match(/[\p{L}\p{N}]+(?:[’'_\-][\p{L}\p{N}]+)*/gu)
+    return matches ? matches.length : 0
+  } catch {
+    const matches = normalized.match(/[^\s.,;:!?()[\]{}"“”‘’<>/\\|]+/g)
+    return matches ? matches.length : 0
+  }
+}
+
+function getSelectionText(selection) {
+  if (!selection || !selection.rangeCount) return ""
+
+  const rangeTexts = []
+  for (let i = 0; i < selection.rangeCount; i++) {
+    try {
+      const fragmentText = selection.getRangeAt(i).cloneContents().textContent || ""
+      if (fragmentText) rangeTexts.push(fragmentText)
+    } catch {
+      // Some browser selections cannot be cloned. Use selection.toString() below.
+    }
+  }
+
+  const rangeText = normalizeSelectedText(rangeTexts.join(" "))
+  if (rangeText) return rangeText
+
+  return normalizeSelectedText(selection.toString())
+}
+
+function getSameOriginSelectionDocuments(rootDocument = document, visited = new Set()) {
+  if (!rootDocument || visited.has(rootDocument)) return []
+
+  visited.add(rootDocument)
+
+  const docs = [rootDocument]
+
+  rootDocument.querySelectorAll("iframe").forEach((iframe) => {
+    try {
+      const frameDocument = iframe.contentDocument || iframe.contentWindow?.document
+      if (frameDocument && !visited.has(frameDocument)) {
+        docs.push(...getSameOriginSelectionDocuments(frameDocument, visited))
+      }
+    } catch {
+      // Ignore cross-origin frames. Their selection cannot be read safely.
+    }
+  })
+
+  return docs
+}
+
+function getSelectionFromDocument(doc) {
+  try {
+    return doc.getSelection?.() || doc.defaultView?.getSelection?.() || null
+  } catch {
+    return null
+  }
+}
+
+function getSelectedTextCandidateFromDocument(doc) {
+  const selection = getSelectionFromDocument(doc)
+  if (!selection || selection.isCollapsed || !selection.rangeCount) return null
+
+  if (isSelectionInsideChatDock(selection) || isSelectionInsideEditable(selection)) {
+    return null
+  }
+
+  const normalizedText = getSelectionText(selection)
+  const wordCount = countWords(normalizedText)
+
+  if (!normalizedText || wordCount <= 0) return null
+
+  return {
+    text: normalizedText,
+    wordCount,
+  }
+}
+
+function getBestSelectedTextCandidate() {
+  return getSameOriginSelectionDocuments()
+    .map((doc) => getSelectedTextCandidateFromDocument(doc))
+    .filter(Boolean)
+    .sort((a, b) => b.wordCount - a.wordCount || b.text.length - a.text.length)[0]
+}
+
+function registerSelectionFrameLoadListeners() {
+  getSameOriginSelectionDocuments().forEach((doc) => {
+    doc.querySelectorAll("iframe").forEach((iframe) => {
+      if (observedSelectionFrames.has(iframe)) return
+
+      iframe.addEventListener("load", scheduleSelectionRefresh, true)
+      observedSelectionFrames.add(iframe)
+    })
+  })
+}
+
+function registerSelectionDocumentListeners() {
+  getSameOriginSelectionDocuments().forEach((doc) => {
+    if (!observedSelectionDocuments.has(doc)) {
+      doc.addEventListener("selectionchange", scheduleSelectionRefresh, true)
+      doc.addEventListener("mouseup", scheduleSelectionRefresh, true)
+      doc.addEventListener("pointerup", scheduleSelectionRefresh, true)
+      doc.addEventListener("touchend", scheduleSelectionRefresh, true)
+      observedSelectionDocuments.add(doc)
+    }
+  })
+
+  registerSelectionFrameLoadListeners()
+}
+
+function unregisterSelectionDocumentListeners() {
+  observedSelectionDocuments.forEach((doc) => {
+    doc.removeEventListener("selectionchange", scheduleSelectionRefresh, true)
+    doc.removeEventListener("mouseup", scheduleSelectionRefresh, true)
+    doc.removeEventListener("pointerup", scheduleSelectionRefresh, true)
+    doc.removeEventListener("touchend", scheduleSelectionRefresh, true)
+  })
+  observedSelectionDocuments.clear()
+
+  observedSelectionFrames.forEach((iframe) => {
+    iframe.removeEventListener("load", scheduleSelectionRefresh, true)
+  })
+  observedSelectionFrames.clear()
+}
+
+function startSelectionFrameObserver() {
+  if (selectionFrameObserver) return
+
+  selectionFrameObserver = new MutationObserver(() => {
+    refreshSelectionDocumentListeners()
+    scheduleSelectionRefresh()
+  })
+
+  selectionFrameObserver.observe(document.body, {
+    childList: true,
+    subtree: true,
+  })
+}
+
+function stopSelectionFrameObserver() {
+  if (!selectionFrameObserver) return
+
+  selectionFrameObserver.disconnect()
+  selectionFrameObserver = null
+}
+
+function startSelectionPolling() {
+  if (selectionPollingTimer) return
+
+  selectionPollingTimer = window.setInterval(() => {
+    if (!open.value || !isAiThread.value || !isTextSelectionContextAllowed()) return
+
+    refreshSelectionDocumentListeners()
+    refreshSelectedTextWordCount()
+  }, 500)
+}
+
+function stopSelectionPolling() {
+  if (!selectionPollingTimer) return
+
+  window.clearInterval(selectionPollingTimer)
+  selectionPollingTimer = null
+}
+
+function refreshSelectionDocumentListeners() {
+  registerSelectionDocumentListeners()
+  window.setTimeout(registerSelectionDocumentListeners, 300)
+  window.setTimeout(registerSelectionDocumentListeners, 1000)
+  window.setTimeout(registerSelectionDocumentListeners, 2000)
+}
+
+function refreshSelectedTextWordCount() {
+  if (!open.value || !isAiThread.value || !isTextSelectionContextAllowed()) {
+    return
+  }
+
+  refreshSelectionDocumentListeners()
+
+  const candidate = getBestSelectedTextCandidate()
+  if (!candidate) {
+    dismissedSelectedTextContext.value = ""
+    return
+  }
+
+  if (dismissedSelectedTextContext.value && dismissedSelectedTextContext.value === candidate.text) {
+    selectedTextContext.value = ""
+    selectionWordCount.value = 0
+    return
+  }
+
+  dismissedSelectedTextContext.value = ""
+  selectedTextContext.value = candidate.text
+  selectionWordCount.value = candidate.wordCount
+}
+
+function scheduleSelectionRefresh() {
+  if (selectionRefreshTimer) clearTimeout(selectionRefreshTimer)
+  selectionRefreshTimer = setTimeout(refreshSelectedTextWordCount, 120)
+}
+
+function clearSelectionContext(rememberDismissed = false) {
+  if (rememberDismissed && selectedTextContext.value) {
+    dismissedSelectedTextContext.value = selectedTextContext.value
+  }
+  selectedTextContext.value = ""
+  selectionWordCount.value = 0
+}
+
+function clearSelectionWordCount() {
+  clearSelectionContext(false)
+}
+
+function dismissSelectionContext() {
+  clearSelectionContext(true)
+}
+
+watch([open, isAiThread, () => route.fullPath], () => {
+  refreshSelectionDocumentListeners()
+  scheduleSelectionRefresh()
+
+  if (open.value && isAiThread.value && isTextSelectionContextAllowed()) {
+    startSelectionFrameObserver()
+    startSelectionPolling()
+    return
+  }
+
+  stopSelectionPolling()
+  stopSelectionFrameObserver()
+})
+
 async function send() {
   if (!activePeer.value || !draft.value) return
 
@@ -1314,7 +1707,6 @@ async function send() {
     if (!tutorCtx.enabled || !inCourse.value) return
   }
 
-  const msgEscaped = escapeForHtml(raw)
   const nowSec = Math.floor(Date.now() / 1000)
 
   const tempId = -Date.now()
@@ -1323,7 +1715,8 @@ async function send() {
     username: me.name,
     date: nowSec,
     f: me.id,
-    message: msgEscaped,
+    // Store raw message; rendering will escape + sanitize to prevent XSS.
+    message: raw,
     id: tempId,
     recd: 0,
     pending: true,
@@ -1342,7 +1735,11 @@ async function send() {
   sending.value = true
 
   try {
-    const extra = pid === AI_PEER_ID ? { ai_provider: tutorCtx.provider } : {}
+    const selectionContext = pid === AI_PEER_ID && selectedTextContext.value ? selectedTextContext.value : ""
+    const extra =
+      pid === AI_PEER_ID
+        ? { ai_provider: tutorCtx.provider, selected_text: selectionContext }
+        : {}
     const res = await post(API.send, { to: pid, message: raw, chat_sec_token: me.secToken, ...extra })
 
     if (res?.assistant?.id) {
@@ -1360,7 +1757,6 @@ async function send() {
       if (res.sec_token) me.secToken = res.sec_token
       replaceTempId(pid, tempId, { id: Number(res.id), recd: 2, date: nowSec })
       removePending(pid, tempId)
-      return
     }
   } catch {
     // keep pending bubble
@@ -1633,6 +2029,13 @@ function newline() {}
 
 onMounted(async () => {
   registerLegacyChatGlobals()
+  window.addEventListener("focus", scheduleSelectionRefresh, true)
+  window.addEventListener("mouseup", scheduleSelectionRefresh, true)
+  window.addEventListener("pointerup", scheduleSelectionRefresh, true)
+  window.addEventListener("touchend", scheduleSelectionRefresh, true)
+  refreshSelectionDocumentListeners()
+  startSelectionFrameObserver()
+  startSelectionPolling()
 
   if (!canRenderDock.value) return
 
@@ -1655,6 +2058,15 @@ onBeforeUnmount(() => {
   stopHeartbeat()
   clearInterval(contactsTimer)
   contactsTimer = null
+  if (selectionRefreshTimer) clearTimeout(selectionRefreshTimer)
+  stopSelectionPolling()
+  stopSelectionFrameObserver()
+  window.removeEventListener("focus", scheduleSelectionRefresh, true)
+  window.removeEventListener("mouseup", scheduleSelectionRefresh, true)
+  window.removeEventListener("pointerup", scheduleSelectionRefresh, true)
+  window.removeEventListener("touchend", scheduleSelectionRefresh, true)
+  unregisterSelectionDocumentListeners()
+  clearSelectionWordCount()
   stopBlinkNow()
 })
 </script>
@@ -1731,5 +2143,42 @@ html[dir="rtl"] .chd .chd-contacts .chd-contact-dot {
 .chd-ai__hint {
   margin: 6px 2px 0;
   font-size: 12px;
+}
+.chd-selection-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  max-width: 100%;
+  margin-top: 8px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(255, 193, 7, 0.14);
+  color: #4a3b00;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.chd-selection-chip .mdi {
+  font-size: 14px;
+}
+.chd-selection-chip__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  margin-inline-start: 2px;
+  border: 0;
+  border-radius: 9999px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.75;
+}
+.chd-selection-chip__close:hover {
+  background: rgba(0, 0, 0, 0.08);
+  opacity: 1;
 }
 </style>

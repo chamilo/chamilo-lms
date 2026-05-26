@@ -1,0 +1,77 @@
+<?php
+$strings['plugin_title'] = 'მორგებული სერტიფიკატი';
+$strings['plugin_comment'] = 'ეს პლაგინი საშუალებას გაძლევთ შექმნათ მორგებული სერტიფიკატები თითოეული კურსისთვის.';
+$strings['enable_plugin_customcertificate'] = 'ჩართვა პლაგინის';
+$strings['customcertificate_course_enable'] = 'მორგებული სერტიფიკატის ჩართვა კურსში';
+$strings['use_certificate_default'] = 'სტანდარტული მორგებული სერტიფიკატის გამოყენება';
+$strings['ToolDisabled'] = 'ხელსაწყო გამორთულია ადმინისტრაციიდან';
+$strings['OnlyAdminPlatform'] = 'ხელსაწყო მხოლოდ ადმინისტრატორებისთვის';
+$strings['OnlyAdminPlatformOrTeacher'] = 'ხელსაწყო მხოლოდ ადმინისტრატორებისა და მასწავლებლებისთვის';
+$strings['TrainingEntity'] = 'სასწავლო ერთეული';
+$strings['DescriptionFront'] = 'აღწერა წინა';
+$strings['DescriptionRear'] = 'აღწერა უკანა';
+$strings['Certify'] = 'დამადასტურებელი';
+$strings['CertificateType'] = 'სერტიფიკატის ტიპი';
+$strings['CertifyThat'] = 'დამადასტურებელია';
+$strings['StudentCourseInfo'] = 'სტუდენტის და კურსის მონაცემები';
+$strings['StudentData'] = 'სტუდენტის მონაცემები';
+$strings['CourseData'] = 'კურსის მონაცემები';
+$strings['Modality'] = 'ფორმა';
+$strings['Contents'] = 'შინაარსი';
+$strings['ContentsToShow'] = 'შინაარსი ჩვენებისთვის';
+$strings['ContentsCourseDescription'] = 'გამოყენება სექცია "კურსის აღწერა"> "შინაარსი"';
+$strings['ContentsIndexLearnpath'] = 'სწავლების ბილიკის ინდექსის გამოყენება';
+$strings['ContentsCustom'] = 'მორგებული შინაარსის გამოყენება';
+$strings['ContentsHide'] = 'შინაარსის არ ჩვენება';
+$strings['Dates'] = 'თარიღები';
+$strings['CourseDeliveryDates'] = 'კურსის მიწოდების თარიღები';
+$strings['Custom'] = 'მორგებული';
+$strings['UseDateSessionAccess'] = 'სესიის წვდომის თარიღების გამოყენება';
+$strings['ExpectionPlace'] = 'გაცემის ადგილი';
+$strings['DateExpediction'] = 'გაცემის თარიღი';
+$strings['UseDateEndAccessSession'] = 'სესიის წვდომის დამთავრების თარიღის გამოყენება';
+$strings['UseDateDownloadCertificate'] = 'სერტიფიკატის ჩამოტვირთვის თარიღის გამოყენება';
+$strings['UseDateGenerationCertificate'] = 'სერტიფიკატის გენერაციის თარიღის გამოყენება';
+$strings['UseCustomDate'] = 'მორგებული თარიღის გამოყენება';
+$strings['LogosSeal'] = 'ლოგოები / ღია печатები';
+$strings['LogoLeft'] = 'ლოგო მარცხენა';
+$strings['LogoCenter'] = 'ლოგო ცენტრში';
+$strings['LogoRight'] = 'ლოგო მარჯვენა';
+$strings['Seal'] = 'ღია პეჭათი';
+$strings['Signature1'] = 'ხელმოწერა 1';
+$strings['Signature2'] = 'ხელმოწერა 2';
+$strings['Signature3'] = 'ხელმოწერა 3';
+$strings['Signature4'] = 'ხელმოწერა 4';
+$strings['SignatureText1'] = 'ხელმოწერის ტექსტი 1';
+$strings['SignatureText2'] = 'ხელმოწერის ტექსტი 2';
+$strings['SignatureText3'] = 'ხელმოწერის ტექსტი 3';
+$strings['SignatureText4'] = 'ხელმოწერის ტექსტი 4';
+$strings['OtherOptions'] = 'სხვა შეხსენებები';
+$strings['MarginRight'] = 'მარჯვენა ზღვარი';
+$strings['MarginLeft'] = 'მარცხენა ზღვარი';
+$strings['SetDefaultTemplate'] = 'შაბლონის ნაგულისხმევად დაყენება';
+$strings['MessageDefaultTemplate'] = 'ამ ნაგულისხმევი კონფიგურაციის შენახვა კურსებისა და სესიებისთვის სერტიფიკატის გარეშე
+     განსაზღვრული';
+$strings['None'] = 'არც ერთი';
+$strings['ErrorTemplateCertificate'] = 'სერტიფიკატისთვის შაბლონი არ არის განსაზღვრული.
+     ნაგულისხმევი შაბლონი არ არსებობს.';
+$strings['DateStartEnd'] = 'დაწყების თარიღით და დამთავრების თარიღით: ';
+$strings['ExpedictionIn'] = 'მოქმედების ვადა';
+$strings['Signatures'] = 'ხელმოწერები';
+$strings['BackgroundCertificate'] = 'სერტიფიკატის ფონური სურათი';
+$strings['Background'] = 'ფონი';
+$strings['CertificateSetting'] = 'სერტიფიკატის პარამეტრები';
+$strings['ToolDisabledCourse'] = 'ხელსაწყო გამორთულია კურსის პარამეტრებში';
+$strings['ToolUseDefaultSettingCourse'] = 'ხელსაწყო კონფიგურირებულია ნაგულისხმევი სერტიფიკატის გამოყენებისთვის. <br>
+     შეგიძლიათ შეცვალოთ იგი ადმინისტრაციის ეკრანიდან -> პლაგინები -> მორგებული სერტიფიკატი. <br>
+     ან თუ გსურთ, შეგიძლიათ გამორთოთ ნაგულისხმევი სერტიფიკატის გამოყენების ოფცია პლაგინის კონფიგურაციაში კურსში';
+$strings['CertificateSettingDefault'] = 'ნაგულისხმევი სერტიფიკატის პარამეტრები';
+$strings['InfoFromDefaultCertificate'] = 'სერტიფიკატის შინაარსი ეფუძნება ნაგულისხმევ სერტიფიკატს.
+     თქვენი ცვლილებები არ იმოქმედებს ნაგულისხმევ სერტიფიკატზე.';
+$strings['to'] = ' დან ';
+$strings['formatDownloadDate'] = ' დან %sth %s, %s';
+$strings['PrintCertificate'] = 'სერტიფიკატის დაბეჭდვა';
+$strings['QuestionDelete'] = 'გსურთ სპეციფიური დიპლომის წაშლა და ნაგულისხმევი სერტიფიკატის გამოყენება?';
+$strings['SuccessDelete'] = 'წარმატებით წაიშალა';
+$strings['ProblemDelete'] = 'პრობლემა სერტიფიკატის წაშლისას';
+$strings['OnlyCustomCertificates'] = 'ექსპორტდება მხოლოდ პერსონალიზებული სერტიფიკატი მქონე კურსები';

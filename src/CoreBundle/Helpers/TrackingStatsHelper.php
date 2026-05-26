@@ -6,9 +6,9 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Helpers;
 
+use Category;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
-use Chamilo\CoreBundle\Entity\GradebookResult;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
@@ -17,6 +17,7 @@ use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CourseBundle\Entity\CLpView;
 use Chamilo\CourseBundle\Repository\CLpRepository;
 use DateTime;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -58,7 +59,7 @@ class TrackingStatsHelper
         }
 
         // Get the latest progress per LP for this user.
-        //    Repository is expected to return a map for all LP ids (missing progress -> 0).
+        // Repository is expected to return a map for all LP ids (missing progress -> 0).
         $progressMap = $this->lpRepo->lastProgressForUser($lps, $user, $session);
         $count = \count($progressMap);
         if (0 === $count) {
@@ -86,7 +87,7 @@ class TrackingStatsHelper
         // Locate the Gradebook Category that ties this course/session.
         $category = $this->em->getRepository(GradebookCategory::class)->findOneBy([
             'course' => $course,
-            'session' => $session, // will match NULL if $session is null
+            'session' => $session,
         ]);
 
         // If there is no category, there cannot be a course/session certificate.
@@ -95,14 +96,15 @@ class TrackingStatsHelper
         }
 
         // Read gradebook_certificate rows (DBAL keeps it simple even if there's no Doctrine entity).
-        //    Expected columns: id, user_id, cat_id, created_at, path_certificate
+        // Expected columns: id, user_id, cat_id, created_at, path_certificate.
         $conn = $this->em->getConnection();
         $rows = $conn->fetchAllAssociative(
             'SELECT id, created_at, path_certificate
              FROM gradebook_certificate
              WHERE user_id = :uid AND cat_id = :cat
              ORDER BY created_at DESC',
-            ['uid' => $user->getId(), 'cat' => $category->getId()]
+            ['uid' => $user->getId(), 'cat' => $category->getId()],
+            ['uid' => ParameterType::INTEGER, 'cat' => ParameterType::INTEGER]
         );
 
         // Build a public-ish URL if possible (fallback to null if you serve via a controller).
@@ -137,55 +139,62 @@ class TrackingStatsHelper
         if (!$path) {
             return null;
         }
+
         $hash = pathinfo($path, PATHINFO_FILENAME);
         if (!$hash) {
             return null;
         }
 
-        // If you have a Symfony route, replace the line below with $router->generate(...)
+        // If you have a Symfony route, replace the line below with $router->generate(...).
         return '/certificates/'.$hash.'.html';
     }
 
     /**
      * Global gradebook score for a user within a course/session.
      *
-     * @return array{score: float, max: float, percentage: float}
+     * Uses the same dynamic calculation as the legacy gradebook flat view
+     * (Category::calc_score), which aggregates scores from exercises, quizzes,
+     * LPs and manual evaluations via gradebook_link — not just gradebook_result rows.
+     *
+     * @return array{score: float, max: float, percentage: float, min: float}
      */
     public function getUserGradebookGlobal(User $user, Course $course, ?Session $session): array
     {
-        $qb = $this->em->createQueryBuilder()
-            ->select('COALESCE(SUM(r.score), 0) AS score_sum', 'COALESCE(SUM(e.max), 0) AS max_sum')
-            ->from(GradebookResult::class, 'r')
-            ->innerJoin('r.evaluation', 'e')
-            ->innerJoin('e.category', 'c')
-            ->where('c.course = :course')
-            ->andWhere('e.visible = 1')
-            ->andWhere('c.visible = 1')
-            ->andWhere('r.user = :user')
-            ->setParameter('course', $course, ParameterType::INTEGER)
-            ->setParameter('user', $user, ParameterType::INTEGER)
-        ;
+        $empty = ['score' => 0.0, 'max' => 0.0, 'percentage' => 0.0, 'min' => 0.0];
 
-        if ($session) {
-            $qb->andWhere('c.session = :session')->setParameter('session', $session, ParameterType::INTEGER);
-        } else {
-            $qb->andWhere('c.session IS NULL');
+        $gradebookCategory = $this->em->getRepository(GradebookCategory::class)->findOneBy([
+            'course' => $course,
+            'session' => $session,
+        ]);
+
+        if (!$gradebookCategory) {
+            return $empty;
         }
 
-        $row = $qb->getQuery()->getSingleResult();
-        $score = (float) $row['score_sum'];
-        $max = (float) $row['max_sum'];
+        $min = (float) ($gradebookCategory->getCertifMinScore() ?? 0);
 
-        if ($max <= 0.0) {
-            return ['score' => 0.0, 'max' => 0.0, 'percentage' => 0.0];
+        $catArr = Category::load((int) $gradebookCategory->getId());
+        $catObj = $catArr[0] ?? null;
+
+        if (!$catObj instanceof Category) {
+            return array_merge($empty, ['min' => $min]);
         }
 
-        $pct = ($score / $max) * 100.0;
+        $score = $catObj->calc_score($user->getId());
+
+        if (!\is_array($score) || !isset($score[0], $score[1]) || (float) $score[1] <= 0.0) {
+            return array_merge($empty, ['min' => $min]);
+        }
+
+        $num = (float) $score[0];
+        $den = (float) $score[1];
+        $pct = ($num / $den) * 100.0;
 
         return [
-            'score' => round($score, 2, PHP_ROUND_HALF_UP),
-            'max' => round($max, 2, PHP_ROUND_HALF_UP),
+            'score' => round($num, 2, PHP_ROUND_HALF_UP),
+            'max' => round($den, 2, PHP_ROUND_HALF_UP),
             'percentage' => round($pct, 2, PHP_ROUND_HALF_UP),
+            'min' => $min,
         ];
     }
 
@@ -221,8 +230,8 @@ class TrackingStatsHelper
         $pct = Tracking::get_avg_student_score(
             $user->getId(),
             $course,
-            [],       // all LPs
-            $session  // session (or null)
+            [],
+            $session
         );
 
         return is_numeric($pct) ? (float) $pct : 0.0;
@@ -236,7 +245,7 @@ class TrackingStatsHelper
 
     /**
      * Fast average progress (0..100) for a course/session.
-     * Counts ALL LPs in the course (even if the user never opened them),
+     * Counts all LPs in the course (even if the user never opened them),
      * using the latest CLpView per (user, lp).
      *
      * @return array{avg: float, participants: int}
@@ -249,7 +258,7 @@ class TrackingStatsHelper
             return ['avg' => 0.0, 'participants' => 0];
         }
 
-        // Make LP query consistent with getUserAvgLpProgress (published filter = true)
+        // Make LP query consistent with getUserAvgLpProgress (published filter = true).
         $lps = $this->lpRepo->findAllByCourse($course, $session)
             ->getQuery()
             ->getResult()
@@ -259,27 +268,28 @@ class TrackingStatsHelper
             return ['avg' => 0.0, 'participants' => $n];
         }
 
-        $lpIds = array_map(static fn ($lp) => (int) $lp->getIid(), $lps);
+        $lpIds = array_map(static fn ($lp): int => (int) $lp->getIid(), $lps);
         $lpCount = \count($lpIds);
 
         $qb = $this->em->createQueryBuilder();
         $qb->select('IDENTITY(v.user) AS uid', 'SUM(COALESCE(v.progress, 0)) AS sum_p')
             ->from(CLpView::class, 'v')
             ->where('IDENTITY(v.lp) IN (:lpIds)')
-            ->andWhere($session ? 'v.session = :session' : 'v.session IS NULL')
+            ->andWhere($session ? 'IDENTITY(v.session) = :sessionId' : 'v.session IS NULL')
             ->andWhere(
                 'v.iid = (
-                SELECT MAX(v2.iid) FROM '.CLpView::class.' v2
-                WHERE v2.user = v.user AND v2.lp = v.lp '.
-                ($session ? 'AND v2.session = :session' : 'AND v2.session IS NULL').'
-            )'
+                    SELECT MAX(v2.iid) FROM '.CLpView::class.' v2
+                    WHERE v2.user = v.user
+                    AND v2.lp = v.lp
+                    '.($session ? 'AND IDENTITY(v2.session) = :sessionId' : 'AND v2.session IS NULL').'
+                )'
             )
             ->groupBy('v.user')
-            ->setParameter('lpIds', $lpIds)
+            ->setParameter('lpIds', $lpIds, ArrayParameterType::INTEGER)
         ;
 
         if ($session) {
-            $qb->setParameter('session', $session, ParameterType::INTEGER);
+            $qb->setParameter('sessionId', (int) $session->getId(), ParameterType::INTEGER);
         }
 
         $rows = $qb->getQuery()->getArrayResult();
@@ -312,11 +322,11 @@ class TrackingStatsHelper
                 ->select('DISTINCT u')
                 ->from(User::class, 'u')
                 ->innerJoin(SessionRelCourseRelUser::class, 'scru', 'WITH', 'scru.user = u')
-                ->where('scru.course = :course')
-                ->andWhere('scru.session = :session')
+                ->where('IDENTITY(scru.course) = :courseId')
+                ->andWhere('IDENTITY(scru.session) = :sessionId')
                 ->andWhere('u.active = :active')
-                ->setParameter('course', $course, ParameterType::INTEGER)
-                ->setParameter('session', $session, ParameterType::INTEGER)
+                ->setParameter('courseId', (int) $course->getId(), ParameterType::INTEGER)
+                ->setParameter('sessionId', (int) $session->getId(), ParameterType::INTEGER)
                 ->setParameter('active', User::ACTIVE, ParameterType::INTEGER)
                 ->getQuery()
                 ->getResult()
@@ -327,18 +337,20 @@ class TrackingStatsHelper
 
         $userIds = $conn->fetchFirstColumn(
             'SELECT DISTINCT user_id
-         FROM course_rel_user
-         WHERE c_id = :cid
-         /* AND status = 0 */',
-            ['cid' => (int) $course->getId()]
+             FROM course_rel_user
+             WHERE c_id = :cid
+             /* AND status = 0 */',
+            ['cid' => (int) $course->getId()],
+            ['cid' => ParameterType::INTEGER]
         );
 
         if (!$userIds) {
             $userIds = $conn->fetchFirstColumn(
                 'SELECT DISTINCT user_id
-             FROM session_rel_course_rel_user
-             WHERE c_id = :cid AND (session_id = 0 OR session_id IS NULL)',
-                ['cid' => (int) $course->getId()]
+                 FROM session_rel_course_rel_user
+                 WHERE c_id = :cid AND (session_id = 0 OR session_id IS NULL)',
+                ['cid' => (int) $course->getId()],
+                ['cid' => ParameterType::INTEGER]
             );
         }
 
@@ -351,8 +363,8 @@ class TrackingStatsHelper
             ->from(User::class, 'u')
             ->where('u.id IN (:ids)')
             ->andWhere('u.active = :active')
-            ->setParameter('ids', array_map('intval', $userIds))
-            ->setParameter('active', User::ACTIVE)
+            ->setParameter('ids', array_map('intval', $userIds), ArrayParameterType::INTEGER)
+            ->setParameter('active', User::ACTIVE, ParameterType::INTEGER)
             ->getQuery()
             ->getResult()
         ;

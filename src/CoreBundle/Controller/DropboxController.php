@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Helpers\ResourceFileHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
+use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDropboxCategory;
 use Chamilo\CourseBundle\Entity\CDropboxFeedback;
 use Chamilo\CourseBundle\Repository\CDropboxCategoryRepository;
@@ -22,8 +25,10 @@ use Symfony\Component\HttpFoundation\{BinaryFileResponse,
     Response,
     ResponseHeaderBag,
     StreamedResponse};
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Mime\MimeTypes;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Throwable;
 use ZipArchive;
@@ -32,6 +37,7 @@ use const DATE_ATOM;
 use const PATHINFO_EXTENSION;
 use const PATHINFO_FILENAME;
 
+#[IsGranted('ROLE_USER')]
 #[Route('/dropbox')]
 class DropboxController extends AbstractController
 {
@@ -43,7 +49,8 @@ class DropboxController extends AbstractController
         private readonly CDropboxFileRepository $fileRepo,
         private readonly CDropboxFeedbackRepository $feedbackRepo,
         private readonly SluggerInterface $slugger,
-        private readonly ResourceNodeRepository $resourceNodeRepository
+        private readonly ResourceNodeRepository $resourceNodeRepository,
+        private readonly SettingsManager $settingsManager
     ) {}
 
     private function humanSize(int $bytes): string
@@ -72,10 +79,17 @@ class DropboxController extends AbstractController
 
     /**
      * Pull Chamilo context (cid/sid/gid) from query string.
+     *
+     * cid is mandatory: every dropbox endpoint operates on a course, and CidReqListener
+     * only authorizes (CourseVoter::VIEW) when ?cid is present and non-zero. Rejecting
+     * here keeps the listener as the single source of truth for course access control.
      */
     private function context(Request $r): array
     {
         $cid = (int) $r->query->get('cid', 0);
+        if ($cid <= 0) {
+            throw new BadRequestHttpException('Missing or invalid cid');
+        }
         $sid = $r->query->get('sid') ? (int) $r->query->get('sid') : null;
         $gid = $r->query->get('gid') ? (int) $r->query->get('gid') : null;
 
@@ -85,18 +99,18 @@ class DropboxController extends AbstractController
     #[Route('/recipients', name: 'dropbox_recipients', methods: ['GET'])]
     public function recipients(Request $r): JsonResponse
     {
-        [$cid, $sid, $gid] = $this->context($r);
+        // context() rejects requests without a valid cid; CidReqListener has already
+        // enforced CourseVoter::VIEW upstream so we can trust the resolved course.
+        [$cid, $sid] = $this->context($r);
         $me = (int) $this->getUser()?->getId();
 
-        if ($cid <= 0) {
-            $ref = (string) $r->headers->get('referer', '');
-            if ($ref && preg_match('#/resources/dropbox/(\d+)/#', $ref, $m)) {
-                $cid = (int) $m[1];
-            }
+        $course = $this->em->getRepository(Course::class)->find($cid);
+        if (!$course instanceof Course) {
+            throw $this->createNotFoundException('Course not found');
         }
-        if ($cid <= 0) {
-            return $this->json(['message' => 'Missing course id (cid)'], 400);
-        }
+
+        $allowMailing = 'true' === $this->settingsManager->getSetting('dropbox.dropbox_allow_mailing', true)
+            && $this->isGranted(CourseVoter::EDIT, $course);
 
         $conn = $this->em->getConnection();
         $userRows = [];
@@ -122,6 +136,7 @@ class DropboxController extends AbstractController
             foreach ($userRows as $row) {
                 $seen[(int) $row['id']] = true;
             }
+
             foreach ($more as $row) {
                 $uid = (int) $row['id'];
                 if (!isset($seen[$uid])) {
@@ -137,11 +152,19 @@ class DropboxController extends AbstractController
             if ($uid === $me) {
                 continue;
             }
+
             $label = trim(($u['firstname'] ?? '').' '.($u['lastname'] ?? '')) ?: ('User #'.$uid);
             $options[] = ['value' => 'user_'.$uid, 'label' => $label];
         }
 
         array_unshift($options, ['value' => 'self', 'label' => '— Just upload —']);
+
+        if ($allowMailing) {
+            array_splice($options, 1, 0, [[
+                'value' => 'mailing',
+                'label' => '— Mailing to all learners —',
+            ]]);
+        }
 
         return $this->json($options);
     }
@@ -423,6 +446,9 @@ class DropboxController extends AbstractController
     #[Route('/files/{id<\d+>}/download', name: 'dropbox_file_download', methods: ['GET'])]
     public function download(int $id, Request $r, ResourceFileHelper $resourceFileHelper): Response
     {
+        // context() rejects requests without a valid cid; CidReqListener has already
+        // enforced CourseVoter::VIEW upstream. The consistency check below then rejects
+        // attempts to download a file that does not belong to the authorized course.
         [$cid] = $this->context($r);
 
         $file = $this->fileRepo->find($id);
@@ -766,7 +792,7 @@ class DropboxController extends AbstractController
         // Force strict ASCII-only fallback
         $baseAscii = preg_replace('/[^A-Za-z0-9._-]+/', '_', $baseAscii) ?? '';
         $baseAscii = preg_replace('/_+/', '_', $baseAscii) ?? '';
-        $baseAscii = trim($baseAscii, "._-");
+        $baseAscii = trim($baseAscii, '._-');
 
         if ('' === $baseAscii) {
             $baseAscii = 'download';

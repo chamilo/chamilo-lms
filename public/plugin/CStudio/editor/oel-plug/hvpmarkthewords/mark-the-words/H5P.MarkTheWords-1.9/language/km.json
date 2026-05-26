@@ -1,0 +1,128 @@
+{
+  "semantics": [
+    {
+      "label": "Task description",
+      "description": "Describe how the user should solve the task.",
+      "placeholder": "Click on all the verbs in the text that follows."
+    },
+    {
+      "label": "Textfield",
+      "placeholder": "This is an answer: *answer*.",
+      "description": "",
+      "important": {
+        "description": "<ul><li>Marked words are added with an asterisk (*).</li><li>Asterisks can be added within marked words by adding another asterisk, *correctword*** =&gt; correctword*.</li></ul>",
+        "example": "The correct words are marked like this: *correctword*, an asterisk is written like this: *correctword***."
+      }
+    },
+    {
+      "label": "Overall Feedback",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Default"
+            }
+          ],
+          "label": "Define custom feedback for any score range",
+          "description": "Click the \"Add range\" button to add as many ranges as you need. Example: 0-20% Bad score, 21-91% Average Score, 91-100% Great Score!",
+          "entity": "range",
+          "field": {
+            "fields": [
+              {
+                "label": "Score Range"
+              },
+              {},
+              {
+                "label": "Feedback for defined score range",
+                "placeholder": "Fill in the feedback"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Text for \"Check\" button",
+      "default": "ពិនិត្យចម្លើយ"
+    },
+    {
+      "label": "Text for \"Retry\" button",
+      "default": "សាកម្តងទៀត"
+    },
+    {
+      "label": "Text for \"Show solution\" button",
+      "default": "បង្ហាញចម្លើយត្រឹមត្រូវ"
+    },
+    {
+      "label": "Behavioural settings.",
+      "description": "These options will let you control how the task behaves.",
+      "fields": [
+        {
+          "label": "Enable \"Retry\""
+        },
+        {
+          "label": "Enable \"Show solution\" button"
+        },
+        {
+          "label": "Enable \"Check\" button"
+        },
+        {
+          "label": "Show score points",
+          "description": "Show points earned for each answer."
+        }
+      ]
+    },
+    {
+      "label": "Correct answer text",
+      "default": "ត្រឹមត្រូវ!",
+      "description": "Text used to indicate that an answer is correct"
+    },
+    {
+      "label": "Incorrect answer text",
+      "default": "មិនត្រឹមត្រូវ!",
+      "description": "Text used to indicate that an answer is incorrect"
+    },
+    {
+      "label": "Missed answer text",
+      "default": "មិនឃើញចម្លើយ!",
+      "description": "Text used to indicate that an answer is missing"
+    },
+    {
+      "label": "Description for Display Solution",
+      "default": "កិច្ចត្រូវបានធ្វើបច្ចុប្បន្នភាពដើម្បីឱ្យមានដំណោះស្រាយ។",
+      "description": "This text tells the user that the tasks has been updated with the solution."
+    },
+    {
+      "label": "Textual representation of the score bar for those using a readspeaker",
+      "default": "អ្នកទទួលបានពិន្ទុ :num លើ :total"
+    },
+    {
+      "label": "Label for the full readable text for assistive technologies",
+      "default": "អត្ថបទទាំងមូល"
+    },
+    {
+      "label": "Label for the text where words can be marked for assistive technologies",
+      "default": "អត្ថបទទាំងមូលដែលមានពាក្យអាចដាក់សម្គាល់បាន"
+    },
+    {
+      "label": "Solution mode header for assistive technologies",
+      "default": "ម៉ូត «ចម្លើយត្រឹមត្រូវ»"
+    },
+    {
+      "label": "Checking mode header for assistive technologies",
+      "default": "ម៉ូត «ពិនិត្យចម្លើយ»"
+    },
+    {
+      "label": "Assistive technology description for \"Check\" button",
+      "default": "Check the answers. The responses will be marked as correct, incorrect, or unanswered."
+    },
+    {
+      "label": "Assistive technology description for \"Show Solution\" button",
+      "default": "Show the solution. The task will be marked with its correct solution."
+    },
+    {
+      "label": "Assistive technology description for \"Retry\" button",
+      "default": "Retry the task. Reset all responses and start the task over again."
+    }
+  ]
+}

@@ -1,18 +1,22 @@
 <template>
-  <div class="field">
-    <FloatLabel
-      variant="on"
-      :class="{
-        'input-has-content': hasContent,
-        'input-has-focus': isFocused,
-      }"
-    >
-      <TinyEditor
-        :id="editorId"
-        v-model="modelValue"
-        :init="editorConfig"
-        :required="required"
-      />
+  <div
+    class="field"
+    data-chamilo-editor="BaseTinyEditor"
+  >
+    <FloatLabel variant="on">
+      <div
+        :class="[
+          'html-editor-container',
+          { 'html-editor-container--filled': hasContent, 'html-editor-container--focused': isFocused },
+        ]"
+      >
+        <TinyEditor
+          :id="editorId"
+          v-model="modelValue"
+          :init="editorConfig"
+          :required="required"
+        />
+      </div>
       <label
         v-if="title"
         :for="editorId"
@@ -28,14 +32,19 @@
 </template>
 
 <script setup>
-import { computed, ref, onBeforeUnmount } from "vue"
+import { computed, onBeforeUnmount, ref } from "vue"
 import TinyEditor from "../../components/Editor"
+import api from "../../config/api"
 import { useRoute, useRouter } from "vue-router"
 import { useCidReqStore } from "../../store/cidReq"
 import { storeToRefs } from "pinia"
 import { useSecurityStore } from "../../store/securityStore"
+import { usePlatformConfig } from "../../store/platformConfig"
 import FloatLabel from "primevue/floatlabel"
 import { useLocale } from "../../composables/locale"
+import { useI18n } from "vue-i18n"
+
+const { t } = useI18n()
 
 const modelValue = defineModel({ type: String, required: true })
 
@@ -64,21 +73,31 @@ const route = useRoute()
 const parentResourceNodeId = ref(0)
 
 const securityStore = useSecurityStore()
+const platformConfigStore = usePlatformConfig()
 const cidReqStore = useCidReqStore()
 const { course } = storeToRefs(cidReqStore)
 
-/**
- * Determine the best resource node to browse.
- * Prefer course node when available (Documents use case), fallback to user node.
- */
+function toBool(value) {
+  if (typeof value === "boolean") {
+    return value
+  }
+
+  return ["1", "true", "yes", "on"].includes(
+    String(value ?? "")
+      .trim()
+      .toLowerCase(),
+  )
+}
+
 function resolveParentNodeId() {
   const courseNodeId = Number(course.value?.resourceNode?.id || 0)
   const userNodeId = Number(securityStore.user?.resourceNode?.id || 0)
 
   // Route override (kept): if URL has a node param, respect it
   const routeNode = route?.params?.node ? Number(route.params.node) : 0
+  const routeId = route?.params?.id ? Number(route.params.id) : 0
 
-  return routeNode || courseNodeId || userNodeId || 0
+  return routeNode || routeId || courseNodeId || userNodeId || 0
 }
 parentResourceNodeId.value = resolveParentNodeId()
 
@@ -114,14 +133,283 @@ function getLanguageConfig(locale) {
       lang = defaultLang
     }
   }
+
   return { language: lang, language_url: `${url}${file}` }
 }
 const languageConfig = getLanguageConfig(appLocale.value)
 
-/* Pull base from global config file (tiny-settings.js) */
 const base = (typeof window !== "undefined" ? window.CHAMILO_TINYMCE_BASE_CONFIG : {}) || {}
 
-/* Compose default editor config: use base and add Chamilo-specific bits */
+const RESPONSIVE_IMAGE_CLASS = "ch-img-responsive"
+const HOOK_GUARD_KEY = "__chamiloBaseTinyEditorHooksAttached"
+const EDITOR_IMAGE_ALLOWED_EXTENSIONS = ["jpg", "jpeg", "png", "gif", "webp", "bmp"]
+
+function normalizeImageClassListItem(item) {
+  if (!item) return null
+
+  if (typeof item === "string") {
+    const v = item.trim()
+    if (!v) return null
+    return { title: v, value: v }
+  }
+
+  if (typeof item === "object") {
+    const title = String(item.title ?? "").trim()
+    const value = String(item.value ?? "").trim()
+
+    const fallbackTitle = String(item.text ?? item.name ?? "").trim()
+    const fallbackValue = String(item.class ?? "").trim()
+
+    const finalValue = value || fallbackValue
+    const finalTitle = title || fallbackTitle || finalValue
+
+    if (!finalValue && !finalTitle) return null
+
+    return {
+      title: finalTitle || finalValue,
+      value: finalValue,
+    }
+  }
+
+  return null
+}
+
+function buildImageClassList(baseList) {
+  const list = Array.isArray(baseList) ? baseList : []
+  const normalized = []
+
+  for (const item of list) {
+    const n = normalizeImageClassListItem(item)
+    if (!n) continue
+
+    const key = `${n.value}::${n.title}`
+    if (normalized.some((x) => `${x.value}::${x.title}` === key)) continue
+
+    normalized.push(n)
+  }
+
+  if (!normalized.some((i) => String(i.value) === "")) {
+    normalized.unshift({ title: "None", value: "" })
+  }
+
+  if (!normalized.some((i) => String(i.value) === RESPONSIVE_IMAGE_CLASS)) {
+    normalized.push({ title: "Responsive", value: RESPONSIVE_IMAGE_CLASS })
+  }
+
+  return normalized
+}
+
+function ensureTinyContentStyles(contentStyleRaw) {
+  const contentStyle = String(contentStyleRaw ?? "")
+
+  const baseWrapperRule = " .tiny-content { font-family: Arial, Helvetica, sans-serif; }"
+  const responsiveRule = ` .tiny-content img.${RESPONSIVE_IMAGE_CLASS} { max-width: 100%; height: auto; }`
+
+  let out = contentStyle
+
+  if (!out.includes(" .tiny-content {") && !out.includes(".tiny-content{")) {
+    out += baseWrapperRule
+  }
+  if (!out.includes(`img.${RESPONSIVE_IMAGE_CLASS}`)) {
+    out += responsiveRule
+  }
+
+  return out
+}
+
+function ensureExtendedValidElements(raw) {
+  const add = "img[class|style|src|alt|title|width|height]"
+  const s = String(raw ?? "").trim()
+  if (!s) return add
+  if (s.includes("img[")) return s
+  return `${s},${add}`
+}
+
+function applyResponsiveInlineStyles(htmlRaw) {
+  const html = String(htmlRaw ?? "")
+  if (!html.trim()) return html
+  if (!html.includes(RESPONSIVE_IMAGE_CLASS)) return html
+
+  try {
+    const doc = new DOMParser().parseFromString(`<div id="__root">${html}</div>`, "text/html")
+    const root = doc.getElementById("__root")
+    if (!root) return html
+
+    const imgs = root.querySelectorAll(`img.${RESPONSIVE_IMAGE_CLASS}`)
+    imgs.forEach((img) => {
+      const style = String(img.getAttribute("style") || "").trim()
+      const hasMaxWidth = /max-width\s*:/i.test(style)
+      const hasHeightAuto = /height\s*:\s*auto/i.test(style)
+
+      if (hasMaxWidth && hasHeightAuto) return
+
+      let next = style
+      if (next && !next.endsWith(";")) next += ";"
+
+      if (!hasMaxWidth) next += "max-width:100%;"
+      if (!hasHeightAuto) next += "height:auto;"
+
+      img.setAttribute("style", next)
+    })
+
+    return root.innerHTML
+  } catch {
+    return html
+  }
+}
+
+function getFileExtension(name) {
+  const value = String(name || "").toLowerCase()
+  const parts = value.split(".")
+  return parts.length > 1 ? parts.pop() : ""
+}
+
+function isAllowedEditorImage(blobInfo) {
+  const blob = blobInfo?.blob?.()
+  const mime = String(blob?.type || "").toLowerCase()
+  const ext = getFileExtension(blobInfo?.filename?.() || "")
+
+  if (mime.startsWith("image/") && mime !== "image/svg+xml" && mime !== "image/svg") {
+    return true
+  }
+
+  return EDITOR_IMAGE_ALLOWED_EXTENSIONS.includes(ext)
+}
+
+function buildAbsoluteUrl(url) {
+  const raw = String(url || "").trim()
+
+  if (!raw) {
+    return ""
+  }
+
+  try {
+    return new URL(raw, window.location.origin).href
+  } catch {
+    return raw
+  }
+}
+
+function resolveUploadedImageUrl(data) {
+  const candidates = [
+    data?.contentUrl,
+    data?.resourceNode?.contentUrl,
+    data?.resourceNode?.firstResourceFile?.contentUrl,
+    data?.url,
+  ]
+
+  const found = candidates.find((value) => String(value || "").trim() !== "")
+
+  return found ? buildAbsoluteUrl(found) : ""
+}
+
+function attachChamiloHooks(editor) {
+  try {
+    if (editor && editor[HOOK_GUARD_KEY]) return
+    if (editor) editor[HOOK_GUARD_KEY] = true
+  } catch {
+    // Ignore
+  }
+
+  editor.on("init", () => {
+    try {
+      window.__chamiloTinyEditorLoaded = true
+      window.__chamiloTinyEditorAppliedConfig = {
+        image_advtab: editor?.settings?.image_advtab,
+        image_class_list: editor?.settings?.image_class_list,
+        extended_valid_elements: editor?.settings?.extended_valid_elements,
+      }
+    } catch {
+      // Ignore
+    }
+  })
+
+  editor.on("focus", () => {
+    isFocused.value = true
+  })
+
+  editor.on("blur", () => {
+    isFocused.value = false
+  })
+
+  editor.on("GetContent", (e) => {
+    const html = String(e?.content ?? "")
+    if (!html.trim()) return
+
+    let out = html
+
+    const hasWrapper = /^\s*<div[^>]+class=["'][^"']*\btiny-content\b[^"']*["'][^>]*>/i.test(out)
+    if (!hasWrapper) {
+      out = `<div class="tiny-content">${out}</div>`
+    }
+
+    out = applyResponsiveInlineStyles(out)
+    e.content = out
+  })
+}
+
+const allowSvgInEditor = computed(() => {
+  return toBool(platformConfigStore.getSetting("editor.enabled_support_svg"))
+})
+
+const editorFeatureFlags = computed(() => ({
+  isLearner: securityStore.isStudent === true,
+  blockCopyPasteForStudents: toBool(platformConfigStore.getSetting("editor.block_copy_paste_for_students")),
+  youtubeForStudents: toBool(platformConfigStore.getSetting("editor.youtube_for_students")),
+  enabledInsertHtml: toBool(platformConfigStore.getSetting("editor.enabled_insertHtml")),
+  enableIframeInclusion: toBool(platformConfigStore.getSetting("editor.enable_iframe_inclusion")),
+  enabledSupportSvg: allowSvgInEditor.value,
+}))
+
+const enableUploadImageInEditor = computed(() => {
+  return (
+    securityStore.isAuthenticated === true &&
+    toBool(platformConfigStore.getSetting("editor.enable_uploadimage_editor")) &&
+    Number(parentResourceNodeId.value || 0) > 0
+  )
+})
+
+async function uploadEditorImage(blobInfo, progress) {
+  if (!enableUploadImageInEditor.value) {
+    throw new Error("Image upload is disabled in this editor.")
+  }
+
+  if (!isAllowedEditorImage(blobInfo)) {
+    throw new Error("Only JPG, PNG, GIF, WEBP and BMP images are allowed.")
+  }
+
+  const filename = blobInfo?.filename?.() || `editor-image-${Date.now()}.png`
+  const nodeId = Number(parentResourceNodeId.value || 0)
+
+  if (nodeId <= 0) {
+    throw new Error("A valid parent resource node is required.")
+  }
+
+  const formData = new FormData()
+  formData.append("uploadFile", blobInfo.blob(), filename)
+  formData.append("title", filename)
+  formData.append("filetype", "file")
+  formData.append("parentResourceNodeId", String(nodeId))
+  formData.append("parentResourceNode", `/api/resource_nodes/${nodeId}`)
+  formData.append("resourceNode.parent", String(nodeId))
+
+  const response = await api.post("/api/personal_files", formData, {
+    onUploadProgress: (event) => {
+      if (typeof progress === "function" && event?.total) {
+        progress(Math.round((event.loaded * 100) / event.total))
+      }
+    },
+  })
+
+  const uploadedUrl = resolveUploadedImageUrl(response?.data)
+
+  if (!uploadedUrl) {
+    throw new Error("Uploaded image URL is missing in the server response.")
+  }
+
+  return uploadedUrl
+}
+
 const defaultEditorConfig = {
   ...base,
   skin: false,
@@ -135,12 +423,13 @@ const defaultEditorConfig = {
     : ["/build/css/editor_content.css"],
   language: languageConfig.language,
   language_url: languageConfig.language_url,
-  // Keep a wrapper class inside content for consistent styling in Chamilo
-  content_style: (base.content_style ?? "") + " .tiny-content { font-family: Arial, Helvetica, sans-serif; }",
+  image_advtab: true,
+  image_class_list: buildImageClassList(base.image_class_list),
+  extended_valid_elements: ensureExtendedValidElements(base.extended_valid_elements),
+  content_style: ensureTinyContentStyles(base.content_style ?? ""),
   body_class: "tiny-content",
 }
 
-/* Add fullPage when requested (merge with base plugins/toolbar) */
 if (props.fullPage) {
   const basePlugins = String(base.plugins || "")
     .split(/\s+/)
@@ -150,62 +439,113 @@ if (props.fullPage) {
   defaultEditorConfig.toolbar = (base.toolbar ? base.toolbar + " | " : "") + "fullpage"
 }
 
-/**
- * Decide whether we should use the Chamilo file manager.
- * - If the caller explicitly sets useFileManager=true, always use it.
- * - If not set, we still try to use the file manager when a node id exists,
- *   because picking existing media is a common use case.
- * - If we cannot build a manager URL, we fallback to the native picker.
- */
 const effectiveUseFileManager = computed(() => {
   if (props.useFileManager === true) return true
   return Number(parentResourceNodeId.value || 0) > 0
 })
 
-/* Final config: merge base+local via builder to preserve both setup() handlers */
+function isSvgUrl(url) {
+  const value = String(url || "")
+    .trim()
+    .toLowerCase()
+
+  if (!value) {
+    return false
+  }
+
+  return value.includes("data:image/svg+xml") || /\.svg(?:\?|#|$)/i.test(value)
+}
+
+function notifySvgBlocked() {
+  try {
+    window.tinymce?.activeEditor?.notificationManager.open({
+      text: "SVG files are disabled in this editor.",
+      type: "warning",
+      timeout: 2500,
+    })
+  } catch {
+    // Ignore
+  }
+}
+
+function resolvePickedUrl(url) {
+  const pickedUrl = String(url || "").trim()
+
+  if (!pickedUrl) {
+    return ""
+  }
+
+  if (!allowSvgInEditor.value && isSvgUrl(pickedUrl)) {
+    notifySvgBlocked()
+
+    return ""
+  }
+
+  return pickedUrl
+}
+
 const editorConfig = computed(() => {
   const builder = typeof window !== "undefined" ? window.buildTinyMceConfig : null
 
-  // Respect a custom file_picker_callback if the caller provided one.
-  const callerHasPicker =
-    props.editorConfig?.file_picker_callback && typeof props.editorConfig.file_picker_callback === "function"
+  const callerConfig = props.editorConfig || {}
+  const callerHasPicker = callerConfig?.file_picker_callback && typeof callerConfig.file_picker_callback === "function"
+  const callerHasImagesUploadHandler =
+    callerConfig?.images_upload_handler && typeof callerConfig.images_upload_handler === "function"
+
+  const callerSetup = typeof callerConfig.setup === "function" ? callerConfig.setup : null
+  const appendToolbar = String(callerConfig.appendToolbar || "").trim()
+
+  const safeCallerConfig = { ...callerConfig }
+  delete safeCallerConfig.setup
+  delete safeCallerConfig.appendToolbar
 
   const local = {
     ...defaultEditorConfig,
-    ...props.editorConfig,
-
-    // Ensure TinyMCE will call the picker for these types.
-    file_picker_types: props.editorConfig?.file_picker_types || "file image media",
-
+    ...(enableUploadImageInEditor.value && !callerHasImagesUploadHandler
+      ? {
+          automatic_uploads: true,
+          paste_data_images: true,
+          block_unsupported_drop: true,
+          images_file_types: EDITOR_IMAGE_ALLOWED_EXTENSIONS.join(","),
+          images_upload_handler: uploadEditorImage,
+        }
+      : {}),
+    ...safeCallerConfig,
+    chamiloEditorFeatures: editorFeatureFlags.value,
+    file_picker_types: safeCallerConfig.file_picker_types || "file image media",
     ...(callerHasPicker
       ? {}
       : {
           file_picker_callback: filePickerCallback,
         }),
-
-    setup(editor) {
-      editor.on("focus", () => {
-        isFocused.value = true
-      })
-      editor.on("blur", () => {
-        isFocused.value = false
-      })
-      editor.on("GetContent", (e) => {
-        const html = String(e?.content ?? "")
-        if (!html.trim()) return
-
-        const hasWrapper = /^\s*<div[^>]+class=["'][^"']*\btiny-content\b[^"']*["'][^>]*>/i.test(html)
-        if (!hasWrapper) {
-          e.content = `<div class="tiny-content">${html}</div>`
-        }
-      })
-      // Preserve caller's setup if provided
-      if (props.editorConfig?.setup && typeof props.editorConfig.setup === "function") {
-        props.editorConfig.setup(editor)
-      }
-    },
   }
-  return builder ? builder(local) : local
+
+  const built = builder ? builder(local) : local
+
+  if (appendToolbar) {
+    const currentToolbar = String(built.toolbar || "").trim()
+    built.toolbar = currentToolbar ? `${currentToolbar} | ${appendToolbar}` : appendToolbar
+  }
+
+  built.image_advtab = built.image_advtab ?? true
+  built.image_class_list = buildImageClassList(built.image_class_list)
+  built.extended_valid_elements = ensureExtendedValidElements(built.extended_valid_elements)
+  built.content_style = ensureTinyContentStyles(built.content_style)
+
+  const prevSetup = built.setup
+  built.setup = (editor) => {
+    attachChamiloHooks(editor)
+
+    if (typeof prevSetup === "function") {
+      prevSetup(editor)
+    }
+
+    if (typeof callerSetup === "function") {
+      callerSetup(editor)
+    }
+  }
+
+  return built
 })
 
 /* ---------- Picker helpers ---------- */
@@ -219,17 +559,17 @@ function removeActiveMessageHandler() {
   }
 }
 
-/**
- * Native fallback picker.
- */
 function openNativePicker(callback, meta) {
   const input = document.createElement("input")
   input.type = "file"
 
-  // TinyMCE meta.filetype: "image" | "media" | "file"
-  if (meta?.filetype === "image") input.accept = "image/*"
-  else if (meta?.filetype === "media") input.accept = "video/*,audio/*"
-  else input.accept = "*/*"
+  if (meta?.filetype === "image") {
+    input.accept = ".jpg,.jpeg,.png,.gif,.webp,.bmp"
+  } else if (meta?.filetype === "media") {
+    input.accept = "video/*,audio/*"
+  } else {
+    input.accept = "*/*"
+  }
 
   input.onchange = () => {
     const file = input.files?.[0]
@@ -252,7 +592,6 @@ function createCbId() {
 }
 
 function registerTinyPickerCallback(cbId, cb) {
-  // Keep registry in English for easier debugging
   window.__chamiloTinyPickerCallbacks = window.__chamiloTinyPickerCallbacks || {}
   window.__chamiloTinyPickerCallbacks[cbId] = cb
 }
@@ -264,24 +603,21 @@ function unregisterTinyPickerCallback(cbId) {
 }
 
 function appendParams(rawUrl, params) {
-  const u = new URL(rawUrl, window.location.origin)
-  Object.entries(params).forEach(([k, v]) => u.searchParams.set(k, String(v)))
-  return u.toString()
+  const [path, existingQuery] = rawUrl.split("?")
+  const sp = new URLSearchParams(existingQuery || "")
+  Object.entries(params).forEach(([k, v]) => sp.set(k, String(v)))
+  const qs = sp.toString()
+
+  return qs ? `${path}?${qs}` : path
 }
 
-/**
- * Build a URL for the Chamilo manager.
- * Prefer Documents HTML editor picker route; fallback to FileManagerList.
- */
 function buildManagerUrl(meta) {
-  // TinyMCE meta.filetype: "image" | "media" | "file"
   const ft = String(meta?.filetype || "file").toLowerCase()
 
   let type = "files"
   if (ft === "image") type = "images"
   else if (ft === "media") type = "media"
 
-  // 1) Preferred: Documents HTML editor picker route (if exists)
   try {
     if (typeof router.hasRoute === "function" && router.hasRoute("DocumentForHtmlEditor")) {
       const nodeIdFromRoute =
@@ -300,7 +636,6 @@ function buildManagerUrl(meta) {
     // Not fatal, fallback below
   }
 
-  // 2) Fallback: FileManagerList
   try {
     const hasCourse = Boolean(course.value?.id)
     const resolved = router.resolve({
@@ -318,10 +653,6 @@ function buildManagerUrl(meta) {
   return ""
 }
 
-/**
- * File picker callback for TinyMCE.
- * Uses Chamilo manager when possible; otherwise falls back to native picker.
- */
 async function filePickerCallback(callback, _value, meta) {
   if (!effectiveUseFileManager.value) {
     openNativePicker(callback, meta)
@@ -334,14 +665,18 @@ async function filePickerCallback(callback, _value, meta) {
     return
   }
 
-  // Clean previous listeners (avoid duplicate callbacks).
   removeActiveMessageHandler()
 
-  // Register a direct callback (most reliable way to fill plugin inputs).
   const cbId = createCbId()
   registerTinyPickerCallback(cbId, (pickedUrl) => {
     try {
-      callback(pickedUrl)
+      const resolvedUrl = resolvePickedUrl(pickedUrl)
+
+      if (!resolvedUrl) {
+        return
+      }
+
+      callback(resolvedUrl)
     } finally {
       unregisterTinyPickerCallback(cbId)
     }
@@ -349,7 +684,6 @@ async function filePickerCallback(callback, _value, meta) {
 
   const url = appendParams(baseUrl, { cbId })
 
-  // Bridge for postMessage (fallback compatibility).
   const expectedOrigin = window.location.origin
   activeMessageHandler = (event) => {
     try {
@@ -357,14 +691,25 @@ async function filePickerCallback(callback, _value, meta) {
       const data = event.data
 
       if (data?.mceAction === "fileSelected" && data?.content?.url) {
-        callback(data.content.url)
+        const resolvedUrl = resolvePickedUrl(data.content.url)
+
+        if (resolvedUrl) {
+          callback(resolvedUrl)
+        }
+
         unregisterTinyPickerCallback(cbId)
         removeActiveMessageHandler()
+
         return
       }
 
       if (data?.url) {
-        callback(data.url)
+        const resolvedUrl = resolvePickedUrl(data.url)
+
+        if (resolvedUrl) {
+          callback(resolvedUrl)
+        }
+
         unregisterTinyPickerCallback(cbId)
         removeActiveMessageHandler()
       }
@@ -377,15 +722,20 @@ async function filePickerCallback(callback, _value, meta) {
   try {
     window.tinymce?.activeEditor?.windowManager.openUrl({
       url,
-      title: "File Manager",
+      title: t("File manager"),
       onMessage: (api, message) => {
         const picked = message?.content?.url || message?.url || message?.data?.url
 
         if (picked) {
-          callback(picked)
+          const resolvedUrl = resolvePickedUrl(picked)
+
+          if (resolvedUrl) {
+            callback(resolvedUrl)
+            api.close()
+          }
+
           unregisterTinyPickerCallback(cbId)
           removeActiveMessageHandler()
-          api.close()
         }
       },
       onClose: () => {
@@ -404,15 +754,3 @@ onBeforeUnmount(() => {
   removeActiveMessageHandler()
 })
 </script>
-<style scoped>
-.input-has-content label,
-.input-has-focus label {
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-1rem);
-  transition:
-    opacity 0.2s,
-    visibility 0.2s,
-    transform 0.2s;
-}
-</style>

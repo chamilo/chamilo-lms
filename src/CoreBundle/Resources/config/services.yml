@@ -1,6 +1,7 @@
 # Settings parameters that will be used in the 'services' section
 parameters:
   chamilo.search.xapian_index_dir: '%kernel.project_dir%/var/search'
+  chamilo.plugin.storage_dir: '%kernel.project_dir%/var/plugins'
 
 services:
     _defaults:
@@ -17,9 +18,9 @@ services:
             - {name: translation.loader, alias: po}
 
     Chamilo\CoreBundle\:
-        resource: '../../*'
-        exclude: '../../{Repository,Component,DependencyInjection,EventListener,Form/DataTransformer/ResourceToIdentifierTransformer.php,Framework,Migrations,Settings,ChamiloCoreBundle.php,Entity,ApiResource,Security/Badge}'
-        public: true
+      resource: '../../*'
+      exclude: '../../{Repository,Component,DependencyInjection,EventListener,Form/DataTransformer/ResourceToIdentifierTransformer.php,Framework,Migrations,Settings,ChamiloCoreBundle.php,Entity,ApiResource,Security/Badge,Tool/LegacyPluginCourseTool.php}'
+      public: true
 
     Doctrine\Migrations\Version\DbalMigrationFactory: ~
     Chamilo\CoreBundle\Migrations\MigrationFactory:
@@ -97,11 +98,6 @@ services:
 
     Chamilo\CoreBundle\Tool\ToolChain: ~
 
-    course.sticky_boolean_filter:
-        parent: 'api_platform.doctrine.orm.boolean_filter'
-        arguments: [{'sticky': ~}]
-        tags: [{name: 'api_platform.filter', id: 'course.sticky_boolean_filter'}]
-
     session.search_filter:
         parent: 'api_platform.doctrine.orm.search_filter'
         arguments:
@@ -148,11 +144,6 @@ services:
       factory: [ '@Chamilo\CoreBundle\AiProvider\AiProviderFactory', 'getProvider' ]
       arguments: [ 'deepseek' ]
 
-    api_platform.graphql.executor:
-      class: Chamilo\CoreBundle\GraphQL\LoggingExecutor
-      arguments:
-        $logger: '@logger'
-
     Chamilo\CourseBundle\Repository\CAttendanceCalendarRepository:
       arguments:
         $registry: '@doctrine'
@@ -182,3 +173,11 @@ services:
     Chamilo\CoreBundle\AiProvider\AiChatCompletionClientInterface:
       class: Chamilo\CoreBundle\AiProvider\DefaultAiChatCompletionClient
       public: true
+
+    Chamilo\CoreBundle\Security\LoginCaptchaManager:
+      arguments:
+        $cache: '@cache.app'
+
+    Chamilo\CoreBundle\EventSubscriber\LoginSuccessSubscriber:
+      tags:
+        - { name: kernel.event_subscriber, dispatcher: security.event_dispatcher.main }

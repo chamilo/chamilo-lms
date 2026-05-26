@@ -15,7 +15,6 @@ use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\MailHelper;
 use Chamilo\CoreBundle\Helpers\PermissionHelper;
-use Chamilo\CoreBundle\Helpers\PluginHelper;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLp;
@@ -28,6 +27,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
+use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * This is a code library for Chamilo.
@@ -727,12 +729,12 @@ function api_get_path($path = '', $configuration = [])
     $root_sys = Container::getProjectDir();
     $root_web = '';
     if (isset(Container::$container)) {
-        $root_web = Container::$container->get('router')->generate(
-            'index',
-            [],
-            UrlGeneratorInterface::ABSOLUTE_URL
-        );
+        $router = Container::$container->get('router');
+        $relPath = $router->generate('index');
+        $request = Container::getRequest();
+        $root_web = $request ? $request->getSchemeAndHttpHost().$relPath : $relPath;
     }
+
 
     /*if (api_get_multiple_access_url()) {
         // To avoid that the api_get_access_url() function fails since global.inc.php also calls the main_api.lib.php
@@ -1011,12 +1013,10 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
         return false;
     }
 
-    $pluginHelper = Container::$container->get(PluginHelper::class);
+    $plugin = Positioning::create();
+    if ($plugin->isEnabled()) {
 
-    if ($pluginHelper->isPluginEnabled('Positioning')) {
-        $plugin = $pluginHelper->loadLegacyPlugin('Positioning');
-
-        if ($plugin && $plugin->get('block_course_if_initial_exercise_not_attempted') === 'true') {
+        if ($plugin->get('block_course_if_initial_exercise_not_attempted') === 'true') {
             $currentPath = $_SERVER['REQUEST_URI'];
 
             $allowedPatterns = [
@@ -1257,8 +1257,8 @@ function api_get_navigator()
 function api_get_user_id()
 {
     $userInfo = Session::read('_user');
-    if ($userInfo && isset($userInfo['user_id'])) {
-        return (int) $userInfo['user_id'];
+    if ($userInfo && isset($userInfo['id'])) {
+        return (int) $userInfo['id'];
     }
 
     return 0;
@@ -2203,9 +2203,10 @@ function api_get_session_entity($id = 0): ?SessionEntity
 }
 
 /**
- * @param int $id
+ * @param ?int $id
+ * @return CGroup|null
  */
-function api_get_group_entity($id = 0): ?CGroup
+function api_get_group_entity(?int $id = null): ?CGroup
 {
     if (empty($id)) {
         $id = api_get_group_id();
@@ -2776,10 +2777,10 @@ function api_get_setting($variable, $isArray = false, $key = null)
                         return ($key !== null && array_key_exists($key, $parts)) ? $parts[$key] : $parts;
                     }
 
-                    // strings starting with "array(" (old PHP config style)
+                    // strings starting with "array(" (old PHP config style) — parse safely without eval()
                     $trim = ltrim($settingValue);
                     if (str_starts_with($trim, 'array(')) {
-                        $legacy = @eval('return ' . $trim . ';');
+                        $legacy = api_parse_legacy_php_array($trim);
                         if (is_array($legacy)) {
                             return ($key !== null && array_key_exists($key, $legacy)) ? $legacy[$key] : $legacy;
                         }
@@ -2796,6 +2797,102 @@ function api_get_setting($variable, $isArray = false, $key = null)
             return $settingValue;
         }
     }
+}
+
+/**
+ * Safely parses a legacy PHP array literal (e.g. "array('key' => 'val')") stored in the
+ * database without using eval(). Uses token_get_all() which tokenises without executing.
+ * Only supports scalar values (string, int, float, bool, null) as keys and values.
+ */
+function api_parse_legacy_php_array(string $code): ?array
+{
+    $tokens = token_get_all('<?php '.$code.';');
+    // Strip T_OPEN_TAG
+    array_shift($tokens);
+
+    $result = [];
+    $state = 'expect_array'; // states: expect_array, expect_open, expect_key_or_value, expect_arrow, expect_value, expect_comma
+    $pendingKey = null;
+    $depth = 0;
+
+    $readScalar = static function ($token): mixed {
+        if (!is_array($token)) {
+            return null;
+        }
+        return match ($token[0]) {
+            T_LNUMBER => (int) $token[1],
+            T_DNUMBER => (float) $token[1],
+            T_CONSTANT_ENCAPSED_STRING => substr($token[1], 1, -1), // strip quotes
+            T_STRING => match (strtolower($token[1])) {
+                'true' => true,
+                'false' => false,
+                'null' => null,
+                default => null,
+            },
+            default => null,
+        };
+    };
+
+    foreach ($tokens as $token) {
+        // Skip whitespace and comments
+        if (is_array($token) && in_array($token[0], [T_WHITESPACE, T_COMMENT, T_DOC_COMMENT], true)) {
+            continue;
+        }
+
+        $tok = is_array($token) ? $token[0] : $token;
+        $val = is_array($token) ? $token[1] : $token;
+
+        switch ($state) {
+            case 'expect_array':
+                if (T_ARRAY === $tok || (T_STRING === $tok && 'array' === strtolower((string) $val))) {
+                    $state = 'expect_open';
+                }
+                break;
+            case 'expect_open':
+                if ('(' === $val) {
+                    $depth++;
+                    $state = 'expect_key_or_value';
+                }
+                break;
+            case 'expect_key_or_value':
+                if (')' === $val) {
+                    return $result; // empty array or trailing comma
+                }
+                $scalar = $readScalar($token);
+                if (null !== $scalar || (is_array($token) && T_STRING === $token[0])) {
+                    $pendingKey = $scalar;
+                    $state = 'expect_arrow';
+                }
+                break;
+            case 'expect_arrow':
+                if (T_DOUBLE_ARROW === $tok) {
+                    $state = 'expect_value';
+                } elseif (',' === $val || ')' === $val) {
+                    // No arrow — positional value
+                    $result[] = $pendingKey;
+                    $pendingKey = null;
+                    $state = ')' === $val ? 'done' : 'expect_key_or_value';
+                }
+                break;
+            case 'expect_value':
+                $scalar = $readScalar($token);
+                $result[$pendingKey] = $scalar;
+                $pendingKey = null;
+                $state = 'expect_comma';
+                break;
+            case 'expect_comma':
+                if (',' === $val) {
+                    $state = 'expect_key_or_value';
+                } elseif (')' === $val) {
+                    return $result;
+                }
+                break;
+            case 'done':
+                return $result;
+        }
+    }
+
+    return empty($result) ? null : $result;
 }
 
 /**
@@ -2825,15 +2922,12 @@ function api_get_plugin_setting($plugin, $variable)
         return $helper->isPluginEnabled((string) $plugin) ? 'true' : 'false';
     }
 
-    $value = $helper->getPluginConfigValue((string) $plugin, (string) $variable, null);
+    $value = $helper->getPluginSetting((string) $plugin, (string) $variable);
 
-    // BC: many legacy callers expect strings; normalize booleans to 'true'/'false'
     if (\is_bool($value)) {
         return $value ? 'true' : 'false';
     }
 
-    // If the value is serialized in old code paths, keep it as-is.
-    // For arrays/objects coming from JSON config, return them directly.
     return $value;
 }
 
@@ -2925,14 +3019,14 @@ function api_is_platform_admin($allowSessionAdmins = false, $allowDrh = false)
  */
 function api_is_platform_admin_by_id($user_id = null, $url = null)
 {
-    $user_id = (int) $user_id;
-    if (empty($user_id)) {
-        $user_id = api_get_user_id();
+    $user = api_get_user_entity((int) $user_id);
+
+    if (null === $user) {
+        return false;
     }
-    $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
-    $sql = "SELECT * FROM $admin_table WHERE user_id = $user_id";
-    $res = Database::query($sql);
-    $is_admin = 1 === Database::num_rows($res);
+
+    $is_admin = $user->isAdmin();
+
     if (!$is_admin || !isset($url)) {
         return $is_admin;
     }
@@ -2940,7 +3034,7 @@ function api_is_platform_admin_by_id($user_id = null, $url = null)
     $url = (int) $url;
     $url_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     $sql = "SELECT * FROM $url_user_table
-            WHERE access_url_id = $url AND user_id = $user_id";
+            WHERE access_url_id = $url AND user_id = ".$user->getId();
     $res = Database::query($sql);
 
     return 1 === Database::num_rows($res);
@@ -3484,7 +3578,6 @@ function api_detect_feature_context(): string
     $script = basename($script);
 
     $map = [
-        'user_list.php' => 'user',
         'user_add.php' => 'user',
         'user_edit.php' => 'user',
         'session_list.php' => 'session',
@@ -3802,7 +3895,7 @@ function api_get_languages_with_platform_default(): array
     $sql = "SELECT isocode, original_name
             FROM $langTable
             WHERE available = '1'
-            ORDER BY english_name ASC";
+            ORDER BY original_name ASC";
     $res = Database::query($sql);
 
     $languages = [];
@@ -5605,12 +5698,14 @@ function api_get_tool_information_by_name($name)
  */
 function api_is_global_platform_admin($user_id = null)
 {
-    $user_id = (int) $user_id;
-    if (empty($user_id)) {
-        $user_id = api_get_user_id();
+    $user = api_get_user_entity((int) $user_id);
+
+    if (null === $user) {
+        return false;
     }
-    if (api_is_platform_admin_by_id($user_id)) {
-        $urlList = api_get_access_url_from_user($user_id);
+
+    if ($user->isAdmin()) {
+        $urlList = api_get_access_url_from_user($user->getId());
         // The admin is registered in the first "main" site with access_url_id = 1
         if (in_array(1, $urlList)) {
             return true;
@@ -5644,12 +5739,18 @@ function api_global_admin_can_edit_admin(
         return true;
     }
 
-    // If i'm a simple admin
+    // Primary check: legacy admin table (TABLE_MAIN_ADMIN)
     $is_platform_admin = api_is_platform_admin_by_id($userId);
+    if (!$is_platform_admin) {
+        $userEntity = api_get_user_entity($userId);
+        if ($userEntity !== null && ($userEntity->isAdmin() || $userEntity->isSuperAdmin())) {
+            $is_platform_admin = true;
+        }
+    }
 
     if ($allow_session_admin && !$is_platform_admin) {
         $user = api_get_user_entity($userId);
-        $is_platform_admin = $user->isSessionAdmin();
+        $is_platform_admin = $user !== null && $user->isSessionAdmin();
     }
 
     if ($is_platform_admin) {
@@ -5822,7 +5923,7 @@ function api_get_jquery_libraries_js($libraries)
 {
     $js = '';
 
-    //Document multiple upload funcionality
+    // Document multiple upload functionality
     if (in_array('jquery-upload', $libraries)) {
         $js .= api_get_asset('blueimp-load-image/js/load-image.all.min.js');
         $js .= api_get_asset('blueimp-canvas-to-blob/js/canvas-to-blob.min.js');
@@ -5834,8 +5935,19 @@ function api_get_jquery_libraries_js($libraries)
         $js .= api_get_asset('jquery-file-upload/js/jquery.fileupload-video.js');
         $js .= api_get_asset('jquery-file-upload/js/jquery.fileupload-validate.js');
 
-        $js .= api_get_css(api_get_path(WEB_PUBLIC_PATH).'assets/jquery-file-upload/css/jquery.fileupload.css');
-        $js .= api_get_css(api_get_path(WEB_PUBLIC_PATH).'assets/jquery-file-upload/css/jquery.fileupload-ui.css');
+        $cssBaseWeb = api_get_path(WEB_PUBLIC_PATH).'assets/jquery-file-upload/css/';
+        $cssBaseFs  = api_get_path(SYS_PUBLIC_PATH).'assets/jquery-file-upload/css/';
+
+        $cssFiles = [
+            'jquery.fileupload.css',
+            'jquery.fileupload-ui.css',
+        ];
+
+        foreach ($cssFiles as $file) {
+            if (is_file($cssBaseFs.$file)) {
+                $js .= api_get_css($cssBaseWeb.$file);
+            }
+        }
     }
 
     // jquery datepicker
@@ -6305,8 +6417,8 @@ function api_get_roles(): array
         'INVITEE'               => get_lang('Invitee'),
         'ROLE_QUESTION_MANAGER' => get_lang('Question manager'),
         'QUESTION_MANAGER'      => get_lang('Question manager'),
-        'ROLE_ADMIN'            => get_lang('Admin'),
-        'ADMIN'                 => get_lang('Admin'),
+        'ROLE_ADMIN'            => get_lang('Administrator'),
+        'ADMIN'                 => get_lang('Administrator'),
         'ROLE_PLATFORM_ADMIN'   => get_lang('Administrator'),
         'PLATFORM_ADMIN'        => get_lang('Administrator'),
         'ROLE_GLOBAL_ADMIN'     => get_lang('Global admin'),
@@ -6317,9 +6429,25 @@ function api_get_roles(): array
         'USER'                  => 'User',
     ];
 
+    // Set a fixed order for roles (ANONYMOUS is excluded by get_user_roles())
+    $sortedRoles = [
+        'STUDENT',
+        'TEACHER',
+        'SESSION_MANAGER',
+        'HR',
+        'ADMIN',
+        'INVITEE',
+        'STUDENT_BOSS',
+        'QUESTION_MANAGER',
+        'GLOBAL_ADMIN',
+    ];
+    // Make sure any custom role is added at the end
+    $diff = array_diff($codes, $sortedRoles);
+    $sortedRoles = array_merge($sortedRoles, $diff);
+
     $out = [];
-    foreach ((array) $codes as $code) {
-        $canon = strtoupper(trim((string) $code));
+    foreach ($sortedRoles as $code) {
+        $canon = strtoupper(trim($code));
         $label =
             ($labels[$canon] ?? null) ??
             ($labels['ROLE_'.$canon] ?? null) ??
@@ -6327,7 +6455,6 @@ function api_get_roles(): array
         $out[$code] = $label;
     }
 
-    ksort($out, SORT_STRING);
     return $cache = $out;
 }
 
@@ -6694,6 +6821,9 @@ function api_drh_can_access_all_session_content()
 /**
  * Checks if user can login as another user.
  *
+ * Thin compatibility wrapper around LoginAsAuthorizationChecker, which is the single source
+ * of truth shared with the modern Symfony switch_user firewall (SwitchUserSubscriber).
+ *
  * @param int $loginAsUserId the user id to log in
  * @param int $userId        my user id
  *
@@ -6710,49 +6840,20 @@ function api_can_login_as($loginAsUserId, $userId = null)
         $userId = api_get_user_id();
     }
 
-    if ($loginAsUserId == $userId) {
+    $userId = (int) $userId;
+
+    if (empty($userId)) {
         return false;
     }
 
-    // If target is an admin, only global admins can login to admin accounts
-    if (api_is_platform_admin_by_id($loginAsUserId)) {
-        if (!api_global_admin_can_edit_admin($loginAsUserId)) {
-            return false;
-        }
-    }
-
-    $userInfo = api_get_user_info($loginAsUserId);
-
-    $isDrh = function () use ($loginAsUserId) {
-        if (api_is_drh()) {
-            if (api_drh_can_access_all_session_content()) {
-                $users   = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus('drh_all', api_get_user_id());
-                $userIds = [];
-                if (is_array($users)) {
-                    foreach ($users as $user) {
-                        $userIds[] = $user['id'];
-                    }
-                }
-                return in_array($loginAsUserId, $userIds);
-            }
-
-            if (UserManager::is_user_followed_by_drh($loginAsUserId, api_get_user_id())) {
-                return true;
-            }
-        }
-
+    $impersonator = api_get_user_entity($userId);
+    $target = api_get_user_entity($loginAsUserId);
+    if (null === $impersonator || null === $target) {
         return false;
-    };
-
-    $loginAsStatusForSessionAdmins = [STUDENT];
-
-    if ('true' === api_get_setting('session.allow_session_admin_login_as_teacher')) {
-        $loginAsStatusForSessionAdmins[] = COURSEMANAGER;
     }
 
-    return api_is_platform_admin() // local admins can login as (except into other admins unless allowed above)
-        || (api_is_session_admin() && in_array($userInfo['status'], $loginAsStatusForSessionAdmins))
-        || $isDrh();
+    return \Chamilo\CoreBundle\Framework\Container::getLoginAsAuthorizationChecker()
+        ->canLoginAs($impersonator, $target);
 }
 
 /**
@@ -6870,23 +6971,23 @@ function api_get_configuration_value($variable)
 }
 
 /**
- * Gets a specific hosting limit.
+ * Gets a specific hosting limit, as defined in config/settings_overrides.yaml
  *
  * @param int $urlId The URL ID.
  * @param string $limitName The name of the limit.
- * @return mixed The value of the limit, or null if not found.
+ * @return ?int The value of the limit, or null if not found.
  */
-function get_hosting_limit(int $urlId, string $limitName): mixed
+function get_hosting_limit(int $urlId, string $limitName): ?int
 {
     if (!Container::$container->hasParameter('settings_overrides')) {
-        return [];
+        return null;
     }
 
     $settingsOverrides = Container::$container->getParameter('settings_overrides') ?? [];
 
     // Defensive: ensure array
     if (!is_array($settingsOverrides)) {
-        return [];
+        return null;
     }
 
     $urlOverrides = (isset($settingsOverrides[$urlId]) && is_array($settingsOverrides[$urlId]))
@@ -6897,16 +6998,18 @@ function get_hosting_limit(int $urlId, string $limitName): mixed
         ? $settingsOverrides['default']
         : [];
 
-    $limits = $urlOverrides['hosting_limit'] ?? ($defaultOverrides['hosting_limit'] ?? []);
+    $limits = $urlOverrides['hosting_limit'] ?? ($defaultOverrides['hosting_limit'] ?? null);
 
     // Defensive: ensure iterable array
     if (!is_array($limits)) {
-        $limits = [];
+        $limits = null;
     }
 
-    foreach ($limits as $limitArray) {
-        if (is_array($limitArray) && array_key_exists($limitName, $limitArray)) {
-            return $limitArray[$limitName];
+    if (is_array($limits)) {
+        foreach ($limits as $limitArray) {
+            if (is_array($limitArray) && array_key_exists($limitName, $limitArray)) {
+                return (int) $limitArray[$limitName];
+            }
         }
     }
 
@@ -7357,7 +7460,7 @@ function api_is_student_view_active(): bool
  */
 function api_float_val($number)
 {
-    return (float) str_replace(',', '.', trim($number));
+    return (float) str_replace(',', '.', trim((string) $number));
 }
 
 /**
@@ -7623,4 +7726,197 @@ function api_get_glossary_auto_snippet(?int $courseId, ?int $sessionId, ?int $re
     ';
 }
 
+function api_is_samesite_none_session_cookie_setting_enabled(): bool
+{
+    try {
+        $value = api_get_setting('security.security_session_cookie_samesite_none');
+    } catch (Throwable $exception) {
+        error_log('Unable to read SameSite=None session cookie setting: '.$exception->getMessage());
+
+        return false;
+    }
+
+    if (true === $value || 1 === $value) {
+        return true;
+    }
+
+    return in_array(strtolower(trim((string) $value)), ['true', '1', 'yes'], true);
+}
+
+function api_is_secure_request_for_samesite_none(?Request $request = null): bool
+{
+    if (null !== $request && $request->isSecure()) {
+        return true;
+    }
+
+    $https = strtolower((string) ($_SERVER['HTTPS'] ?? ''));
+    $forwardedProto = strtolower((string) ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? ''));
+
+    return 'on' === $https || '1' === $https || 'https' === $forwardedProto;
+}
+
+function api_should_apply_samesite_none_session_cookie(?Request $request = null): bool
+{
+    if ('cli' === PHP_SAPI) {
+        return false;
+    }
+
+    if (!api_is_secure_request_for_samesite_none($request)) {
+        return false;
+    }
+
+    return api_is_samesite_none_session_cookie_setting_enabled();
+}
+
+function api_apply_samesite_none_session_cookie_to_response(Response $response, ?Request $request = null): void
+{
+    if (!api_should_apply_samesite_none_session_cookie($request)) {
+        return;
+    }
+
+    $sessionName = '';
+
+    if (null !== $request && $request->hasSession()) {
+        $sessionName = $request->getSession()->getName();
+    }
+
+    if ('' === $sessionName) {
+        $sessionName = session_name();
+    }
+
+    if ('' === $sessionName) {
+        return;
+    }
+
+    foreach ($response->headers->getCookies() as $cookie) {
+        if ($cookie->getName() !== $sessionName) {
+            continue;
+        }
+
+        $response->headers->setCookie(
+            Cookie::create(
+                $cookie->getName(),
+                $cookie->getValue(),
+                $cookie->getExpiresTime(),
+                $cookie->getPath(),
+                $cookie->getDomain(),
+                true,
+                $cookie->isHttpOnly(),
+                $cookie->isRaw(),
+                Cookie::SAMESITE_NONE
+            )
+        );
+    }
+}
+
+function api_apply_samesite_none_session_cookie_setting(): void
+{
+    static $registered = false;
+
+    if ($registered || headers_sent()) {
+        return;
+    }
+
+    $request = null;
+
+    try {
+        $request = Container::getRequest();
+    } catch (Throwable) {
+        $request = null;
+    }
+
+    if (!api_should_apply_samesite_none_session_cookie($request)) {
+        return;
+    }
+
+    $registered = true;
+
+    header_register_callback(static function (): void {
+        $sessionName = session_name();
+
+        if ('' === $sessionName) {
+            return;
+        }
+
+        $headers = headers_list();
+        $rewrittenSessionCookies = [];
+
+        foreach ($headers as $header) {
+            if (0 !== stripos($header, 'Set-Cookie:')) {
+                continue;
+            }
+
+            $cookieValue = trim(substr($header, strlen('Set-Cookie:')));
+
+            if (0 !== strncmp($cookieValue, $sessionName.'=', strlen($sessionName) + 1)) {
+                continue;
+            }
+
+            $cookieValue = preg_replace('/;\s*SameSite=[^;]*/i', '', $cookieValue);
+
+            if (!preg_match('/;\s*Secure(?:;|$)/i', $cookieValue)) {
+                $cookieValue .= '; Secure';
+            }
+
+            $cookieValue .= '; SameSite=None';
+
+            $rewrittenSessionCookies[] = $cookieValue;
+        }
+
+        if (empty($rewrittenSessionCookies)) {
+            return;
+        }
+
+        header_remove('Set-Cookie');
+
+        foreach ($headers as $header) {
+            if (0 !== stripos($header, 'Set-Cookie:')) {
+                continue;
+            }
+
+            $cookieValue = trim(substr($header, strlen('Set-Cookie:')));
+
+            if (0 === strncmp($cookieValue, $sessionName.'=', strlen($sessionName) + 1)) {
+                continue;
+            }
+
+            header($header, false);
+        }
+
+        foreach ($rewrittenSessionCookies as $cookieValue) {
+            header('Set-Cookie: '.$cookieValue, false);
+        }
+    });
+}
+
+function api_get_video_context_menu_hidden_script(): string
+{
+    if ('true' !== api_get_setting('editor.video_context_menu_hidden')) {
+        return '';
+    }
+
+    return <<<HTML
+    <script>
+    (function () {
+        if (window.chamiloVideoContextMenuHiddenInitialized) {
+            return;
+        }
+
+        window.chamiloVideoContextMenuHiddenInitialized = true;
+
+        document.addEventListener('contextmenu', function (event) {
+            var target = event.target;
+
+            if (!target || !target.closest) {
+                return;
+            }
+
+            if (target.closest('video:not(.skip), .mejs__container')) {
+                event.preventDefault();
+            }
+        });
+    })();
+    </script>
+    HTML;
+}
 

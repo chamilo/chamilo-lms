@@ -367,10 +367,19 @@
                         <p class="text-xs text-gray-600">
                             {{ "Select an image (upload or Badge Studio) to enable saving."|trans }}
                         </p>
+                        <button
+                                id="btn-open-badge-studio"
+                                type="button"
+                                class="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white hover:opacity-90"
+                        >{{ "Design with Badge Studio"|trans }}</button>
+
+                        <p class="text-xs text-gray-600">
+                            {{ "Use the Badge Studio to create your own badge from within your platform"|trans }}
+                        </p>
                         <a
                                 id="btn-open-designer"
                                 href="https://badge.design"
-                                class="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white hover:opacity-90"
+                                class="w-full inline-flex items-center justify-center gap-2 rounded-lg border border-primary px-4 py-2.5 text-sm font-semibold text-primary hover:bg-primary/10"
                                 target="_blank"
                                 rel="noopener noreferrer"
                         >{{ "Design a new badge"|trans }}</a>
@@ -379,15 +388,6 @@
                             {{ "Design a new badge, download it from the design tool and upload it on the platform."|trans }}
                         </p>
 
-                        <button
-                                id="btn-open-badge-studio"
-                                type="button"
-                                class="w-full inline-flex items-center justify-center gap-2 rounded-lg border border-primary px-4 py-2.5 text-sm font-semibold text-primary hover:bg-primary/10"
-                        >{{ "Design with Badge Studio"|trans }}</button>
-
-                        <p class="text-xs text-gray-600">
-                            {{ "Use the Badge Studio to create your own badge from within your platform"|trans }}
-                        </p>
                     </div>
                 </div>
             </div>

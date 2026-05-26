@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 
@@ -24,6 +25,78 @@ class CourseDescriptionController
         $this->toolname = 'course_description';
     }
 
+    /**
+     * Returns optional language choices for resource language selectors.
+     *
+     * @return array<string, string>
+     */
+    private function getResourceLanguageOptions(): array
+    {
+        $options = [
+            '' => get_lang('No specific language'),
+        ];
+
+        $languages = Database::getManager()
+            ->getRepository(Language::class)
+            ->findBy(['available' => true], ['englishName' => 'ASC'])
+        ;
+
+        foreach ($languages as $language) {
+            if (!$language instanceof Language) {
+                continue;
+            }
+
+            $options[$language->getIsocode()] = $language->getOriginalName() ?: $language->getEnglishName();
+        }
+
+        return $options;
+    }
+
+    private function getResourceLanguageIsoCode(?CCourseDescription $courseDescription): string
+    {
+        if (!$courseDescription instanceof CCourseDescription || null === $courseDescription->getResourceNode()) {
+            return '';
+        }
+
+        $language = $courseDescription->getResourceNode()->getLanguage();
+
+        if (!$language instanceof Language) {
+            return '';
+        }
+
+        return $language->getIsocode();
+    }
+
+
+    private function applyResourceLanguage(?CCourseDescription $courseDescription, mixed $rawLanguage): void
+    {
+        if (!$courseDescription instanceof CCourseDescription || null === $courseDescription->getResourceNode()) {
+            return;
+        }
+
+        $languageCode = trim((string) $rawLanguage);
+        $entityManager = Database::getManager();
+        $language = null;
+
+        if ('' !== $languageCode) {
+            $language = $entityManager
+                ->getRepository(Language::class)
+                ->findOneBy([
+                    'isocode' => $languageCode,
+                    'available' => true,
+                ])
+            ;
+
+            if (!$language instanceof Language) {
+                return;
+            }
+        }
+
+        $resourceNode = $courseDescription->getResourceNode();
+        $resourceNode->setLanguage($language);
+        $entityManager->persist($resourceNode);
+        $entityManager->flush();
+    }
     public function getToolbar()
     {
         $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
@@ -119,7 +192,13 @@ class CourseDescriptionController
         $tpl->assign('actions', $actions);
         $tpl->assign('session_id', $session_id);
         $templateName = $tpl->get_template('course_description/index.tpl');
-        $content = $tpl->fetch($templateName);
+        $content = '';
+
+        if (!$history) {
+            $content .= Display::return_introduction_section(TOOL_COURSE_DESCRIPTION);
+        }
+
+        $content .= $tpl->fetch($templateName);
         $tpl->assign('content', $content);
         $tpl->display_one_col_template();
     }
@@ -137,6 +216,8 @@ class CourseDescriptionController
         $session_id = api_get_session_id();
         $course_description->set_session_id($session_id);
         $data = [];
+        $courseDescriptionEntity = null;
+        $storedCourseDescription = null;
         $affected_rows = null;
         if ('POST' === strtoupper($_SERVER['REQUEST_METHOD'])) {
             if (!empty($_POST['title']) && !empty($_POST['contentDescription'])) {
@@ -175,6 +256,7 @@ class CourseDescriptionController
                     ;
 
                     $repo->update($courseDescription);
+                    $storedCourseDescription = $courseDescription;
                 } else {
                     $course_description->set_description_type($description_type);
                     $course_description->set_title($title);
@@ -183,7 +265,14 @@ class CourseDescriptionController
 
                     // Pass the flag down to insert (see next section).
                     $course_description->insert($enableSearch);
+
+                    $description = $course_description->get_data_by_description_type($description_type);
+                    if (!empty($description['iid'])) {
+                        $storedCourseDescription = $repo->find((int) $description['iid']);
+                    }
                 }
+
+                $this->applyResourceLanguage($storedCourseDescription, $_POST['language'] ?? '');
 
                 Display::addFlash(
                     Display::return_message(
@@ -222,6 +311,7 @@ class CourseDescriptionController
                 $description_title = $course_description_data['description_title'];
                 $description_content = $course_description_data['description_content'];
                 $progress = $course_description_data['progress'];
+                $courseDescriptionEntity = Container::getCourseDescriptionRepository()->find($id);
                 $descriptions = $course_description->get_data_by_description_type(
                     $description_type,
                     null,
@@ -267,6 +357,7 @@ class CourseDescriptionController
             $form->addElement('hidden', 'id', $original_id);
             $form->addElement('hidden', 'description_type', $description_type);
             //$form->addElement('hidden', 'sec_token', $token);
+            $default = [];
 
             if ('true' === api_get_setting('editor.save_titles_as_html')) {
                 $form->addHtmlEditor(
@@ -291,6 +382,22 @@ class CourseDescriptionController
                     'Height' => '200',
                 ]
             );
+            $languageOptions = $this->getResourceLanguageOptions();
+            $showAdvancedSettings = \count($languageOptions) > 2 || 'true' === api_get_setting('search.search_enabled');
+            if ($showAdvancedSettings) {
+                $form->addButtonAdvancedSettings('advanced_params', get_lang('Advanced settings'));
+                $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
+            }
+            if (\count($languageOptions) > 2) {
+                $form->addSelect(
+                    'language',
+                    get_lang('Language'),
+                    $languageOptions,
+                    [
+                        'id' => 'resource_language',
+                    ]
+                );
+            }
 
             if ('true' === api_get_setting('search.search_enabled')) {
                 $form->addCheckBox(
@@ -301,6 +408,10 @@ class CourseDescriptionController
 
                 // Default: checked
                 $default['enable_search'] = 1;
+            }
+
+            if ($showAdvancedSettings) {
+                $form->addElement('html', '</div>');
             }
 
             $form->addButtonCreate(get_lang('Save'));
@@ -314,6 +425,7 @@ class CourseDescriptionController
                 $default['contentDescription'] = Security::remove_XSS($description_content, COURSEMANAGERLOWSECURITY);
             }
             $default['description_type'] = $description_type;
+            $default['language'] = $this->getResourceLanguageIsoCode($courseDescriptionEntity);
 
             $form->setDefaults($default);
 
@@ -358,7 +470,14 @@ class CourseDescriptionController
 
                     // Pass flag
                     $course_description->insert($enableSearch);
+
+                    $description = $course_description->get_data_by_description_type($description_type);
+                    if (!empty($description['iid'])) {
+                        $storedCourseDescription = $repo->find((int) $description['iid']);
+                    }
                 }
+
+                $this->applyResourceLanguage($storedCourseDescription, $_POST['language'] ?? '');
 
                 Display::addFlash(
                     Display::return_message(
@@ -399,6 +518,26 @@ class CourseDescriptionController
                     'Height' => '200',
                 ]
             );
+            $languageOptions = $this->getResourceLanguageOptions();
+            $showAdvancedSettings = \count($languageOptions) > 2 || 'true' === api_get_setting('search.search_enabled');
+            if ($showAdvancedSettings) {
+                $form->addButtonAdvancedSettings('advanced_params', get_lang('Advanced settings'));
+                $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
+            }
+            if (\count($languageOptions) > 2) {
+                $form->addSelect(
+                    'language',
+                    get_lang('Language'),
+                    $languageOptions,
+                    [
+                        'id' => 'resource_language',
+                    ]
+                );
+            }
+
+            $defaults = [
+                'language' => '',
+            ];
 
             if ('true' === api_get_setting('search.search_enabled')) {
                 $form->addCheckBox(
@@ -407,11 +546,14 @@ class CourseDescriptionController
                     get_lang('Index this description for the global search')
                 );
 
-                $form->setDefaults([
-                    'enable_search' => 1,
-                ]);
+                $defaults['enable_search'] = 1;
             }
 
+            if ($showAdvancedSettings) {
+                $form->addElement('html', '</div>');
+            }
+
+            $form->setDefaults($defaults);
             $form->addButtonCreate(get_lang('Save'));
 
             $tpl = new Template(get_lang('Description'));

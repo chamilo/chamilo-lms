@@ -841,23 +841,29 @@ class SubLanguageManager
      */
     public static function getParentLocale(string $childIsoCode): ?string
     {
-        $em = Database::getManager();
-        $languageRepository = $em->getRepository('Chamilo\CoreBundle\Entity\Language');
-
-        // Find the language by its ISO code
-        $language = $languageRepository->findOneBy(['isocode' => $childIsoCode]);
-
-        if (!$language) {
-            return null; // Language not found
+        // Installation-safe: database manager may not be initialized yet.
+        if (!class_exists('Database') || !Database::hasManager()) {
+            return null;
         }
 
-        // Get the parent language if it exists
-        $parentLanguage = $language->getParent();
-        if ($parentLanguage) {
-            return $parentLanguage->getIsocode();
-        }
+        try {
+            $em = Database::getManager();
+            $languageRepository = $em->getRepository(Language::class);
 
-        return null; // No parent language
+            $language = $languageRepository->findOneBy(['isocode' => $childIsoCode]);
+            if (null === $language) {
+                return null;
+            }
+
+            $parent = $language->getParent();
+            if (null === $parent) {
+                return null;
+            }
+
+            return $parent->getIsocode();
+        } catch (\Throwable $e) {
+            return null;
+        }
     }
 
     public static function generateSublanguageCode(string $parentCode, string $variant, int $maxLength = Language::ISO_MAX_LENGTH): string

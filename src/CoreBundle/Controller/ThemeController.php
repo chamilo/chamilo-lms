@@ -18,6 +18,8 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+use const PATHINFO_EXTENSION;
+
 #[Route('/themes')]
 class ThemeController extends AbstractController
 {
@@ -306,10 +308,20 @@ class ThemeController extends AbstractController
             fclose($in);
         });
 
-        $mimeType = $filesystem->mimeType($filePath) ?: 'application/octet-stream';
-        if (str_ends_with(strtolower($filePath), '.svg')) {
-            $mimeType = 'image/svg+xml';
-        }
+        $ext = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
+        $extMimeMap = [
+            'js' => 'application/javascript',
+            'css' => 'text/css',
+            'svg' => 'image/svg+xml',
+            'png' => 'image/png',
+            'jpg' => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'gif' => 'image/gif',
+            'webp' => 'image/webp',
+            'woff' => 'font/woff',
+            'woff2' => 'font/woff2',
+        ];
+        $mimeType = $extMimeMap[$ext] ?? ($filesystem->mimeType($filePath) ?: 'application/octet-stream');
 
         $disposition = $response->headers->makeDisposition(
             ResponseHeaderBag::DISPOSITION_INLINE,

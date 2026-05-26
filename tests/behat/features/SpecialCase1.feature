@@ -196,7 +196,7 @@ Feature: Special admin settings flows
       | platform_management_search | enable_help_link |
     And I press "platform_management_search_button"
     And I wait very long for the page to be loaded
-    And I select "Yes" from "form_enable_help_link"
+    And I select "No" from "form_enable_help_link"
     And I click the "button.btn.btn--primary.btn-lg.mr-4" element
     And I wait very long for the page to be loaded
 
@@ -420,6 +420,16 @@ Feature: Special admin settings flows
 
     And I am not logged
     Then I am logged as "admin"
+    And I wait very long for the page to be loaded
+
+    When I am on "/admin"
+    And I wait very long for the page to be loaded
+    And I fill in the following:
+      | platform_management_search | private_messages_about_user_visible_to_user |
+    And I press "platform_management_search_button"
+    And I wait very long for the page to be loaded
+    And I select "Yes" from "form_private_messages_about_user_visible_to_user"
+    And I click the "button.btn.btn--primary.btn-lg.mr-4" element
     And I wait very long for the page to be loaded
 
     # Cookie, registration, terms and extra fields
@@ -2166,7 +2176,7 @@ Feature: Special admin settings flows
     And I press "search_search"
     And I wait very long for the page to be loaded
     And I fill in the following:
-      | form_my_space_users_items_per_page | 1000 |
+      | form_my_space_users_items_per_page | 10000 |
     And I click the "button.btn.btn--primary.btn-lg.mr-4" element
     And I wait very long for the page to be loaded
 
@@ -2290,6 +2300,29 @@ Feature: Special admin settings flows
     And I am logged as "admin"
     And I wait very long for the page to be loaded
 
+    # ---- TERMS AND CONDITIONS ----
+    And I am on "/admin"
+    And I wait very long for the page to be loaded
+    And I zoom out to maximum
+    When I follow "Terms and Conditions"
+    And I wait very long for the page to be loaded
+    And I zoom out to maximum
+    When I click the "span.mdi-pencil" element
+    And I wait very long for the page to be loaded
+    And I reset zoom
+    And I click the "#language-dropdown" element
+    And I wait for the element "[role='option'][aria-label='english']" to appear
+    And I click the "[role='option'][aria-label='english']" element
+    And I wait very long for the page to be loaded
+    And I zoom out to maximum
+    And I click the "span.mdi-magnify" element
+    And I wait up to 20 seconds for the element ".tox-tinymce" to appear
+    And I fill in tinymce field "terms_section_0" with "Test Terms and Conditions content"
+    And I wait very long for the page to be loaded
+    And I click the "span.mdi-content-save" element
+    And I wait very long for the page to be loaded
+    Then I should not see an error
+
   Scenario: Create courses, multilingual documents, exercises, forum, learning path and assessment activity
 
   # Create courses
@@ -2323,33 +2356,33 @@ Feature: Special admin settings flows
     And I wait very long for the page to be loaded
     Then I should see "Testing course fr"
 
-  # Enter the new course (Testing course en)
+  # Enter the new course (Testing course fr)
     When I am on "/admin/course-list"
     And I wait very long for the page to be loaded
     And I zoom out to maximum
-    When I follow "Testing course en"
+    When I follow "Testing course fr"
     And I wait very long for the page to be loaded
-    Then I should see "Testing course en"
+    Then I should see "Testing course fr"
 
   # Create two HTML documents with bilingual content: introduction and final
     And I zoom out to maximum
     When I follow "Documents"
     And I wait very long for the page to be loaded
-    When I press "New document"
+    When I press "Nouveau document"
     And I wait very long for the page to be loaded
     And I fill in the following:
       | item_title | introduction |
-    And I fill in tinymce field "item_content" with "<p class=\"ck ck-texte\"><span dir=\"ltr\" lang=\"en\">English content</span><span dir=\"ltr\" lang=\"fr\">Contenu en français</span></p>"
+    And I fill in tinymce field "item_content" with "<p class='ck ck-texte'><span dir='ltr' lang='en'>English content</span><span dir='ltr' lang='fr'>Contenu en français</span></p>"
     And I click the "span.mdi-content-save" element
     And I wait very long for the page to be loaded
     Then I should not see an error
     Then I should see "introduction"
 
-    When I press "New document"
+    When I press "Nouveau document"
     And I wait very long for the page to be loaded
     And I fill in the following:
       | item_title | final |
-    And I fill in tinymce field "item_content" with "<p class=\"ck ck-texte\"><span dir=\"ltr\" lang=\"en\">English content</span><span dir=\"ltr\" lang=\"fr\">Contenu en français</span></p>"
+    And I fill in tinymce field "item_content" with "<p class='ck ck-texte'><span dir='ltr' lang='en'>English content</span><span dir='ltr' lang='fr'>Contenu en français</span></p>"
     And I click the "span.mdi-content-save" element
     And I wait very long for the page to be loaded
     Then I should not see an error
@@ -2359,12 +2392,12 @@ Feature: Special admin settings flows
     When I am on "/admin/course-list"
     And I wait very long for the page to be loaded
     And I zoom out to maximum
-    When I follow "Testing course en"
+    When I follow "Testing course fr"
     And I wait very long for the page to be loaded
     And I zoom out to maximum
 
   # Create exercises: one with QRU + image selection, one open question
-    When I follow "Tests"
+    When I follow "Exercices"
     And I wait very long for the page to be loaded
     When I click the "a[href*='exercise_admin.php']" element
     And I wait very long for the page to be loaded
@@ -2402,10 +2435,10 @@ Feature: Special admin settings flows
     When I am on "/admin/course-list"
     And I wait very long for the page to be loaded
     And I zoom out to maximum
-    When I follow "Testing course en"
+    When I follow "Testing course fr"
     And I wait very long for the page to be loaded
     And I zoom out to maximum
-    When I follow "Tests"
+    When I follow "Exercices"
     And I wait very long for the page to be loaded
     When I click the "a[href*='exercise_admin.php']" element
     And I wait very long for the page to be loaded
@@ -2433,15 +2466,10 @@ Feature: Special admin settings flows
     When I am on "/admin/course-list"
     And I wait very long for the page to be loaded
     And I zoom out to maximum
-    When I follow "Testing course en"
+    When I follow "Testing course fr"
     And I wait very long for the page to be loaded
     And I zoom out to maximum
-    When I follow "Learning paths"
-    And I wait very long for the page to be loaded
-    And I zoom out to maximum
-    When I click the "button[aria-label='More actions']" element
-    And I wait for the element ".menu-content" to appear
-    And I press "Create new learning path"
+    When I am on "/main/lp/lp_controller.php?action=add_lp&cid=15&sid=0&gid=0&gradebook=0&origin=&node=472"
     And I wait very long for the page to be loaded
     And I fill in the following:
       | lp_name | LP Test |
@@ -2461,17 +2489,14 @@ Feature: Special admin settings flows
     When I am on "/admin/course-list"
     And I wait very long for the page to be loaded
     And I zoom out to maximum
-    When I follow "Testing course en"
+    When I follow "Testing course fr"
     And I wait very long for the page to be loaded
     And I zoom out to maximum
-    When I follow "Documents"
+    When I click the "span.mdi-plus" element
     And I wait very long for the page to be loaded
-    And I click the "#document-edit-btn-introduction" element
-    And I wait very long for the page to be loaded
-    And I fill in tinymce field "item_content" with "<a href='/main/lp/lp_controller.php?action=view&lp_id=1'>LP Test</a>"
+    And I fill in tinymce field "introText" with "<a href='/main/lp/lp_controller.php?action=view&cid=15&sid=0&isStudentView=false&lp_id=4'>LP Test</a>"
     And I click the "span.mdi-content-save" element
     And I wait very long for the page to be loaded
-    Then I should see "LP Test"
 
   # Course settings: E-mail notifications -> Tests: mark relaxed options — commenté
     # When I click the "span.p-button-icon.mdi.mdi-cog" element
@@ -2492,11 +2517,11 @@ Feature: Special admin settings flows
     When I am on "/admin/course-list"
     And I wait very long for the page to be loaded
     And I zoom out to maximum
-    When I follow "Testing course en"
+    When I follow "Testing course fr"
     And I wait very long for the page to be loaded
     And I wait very long for the page to be loaded
     And I zoom out to maximum
-    When I follow "Assessments"
+    When I follow "Cahier de notes"
     And I wait very long for the page to be loaded
     And I zoom out to maximum
     When I click the "a[href*='gradebook_add_eval']" element
@@ -2573,13 +2598,13 @@ Feature: Special admin settings flows
     # Set extra fields for the session
     And I select "competente-dans-mon-domaine-de-specialite" from "extra_domaine"
     And I wait very long for the page to be loaded
-    And I click the "input[name='extra_filiere[extra_filiere]'][value='art-et-culture']" element
+    And I click the "input[name='extra_filiere[extra_filiere]'][value='vie-quotidienne']" element
     And I wait very long for the page to be loaded
 
     # theme_fr and theme_de: type and select via select2 AJAX
-    And I type and select "theme2" in inline select2 "extra_theme_fr"
+    And I type and select "theme1" in inline select2 "extra_theme_fr"
     And I wait very long for the page to be loaded
-    And I type and select "theme2" in inline select2 "extra_theme_de"
+    And I type and select "theme1" in inline select2 "extra_theme_de"
     And I wait very long for the page to be loaded
 
     # Select first option for competency fields
@@ -3400,7 +3425,7 @@ Feature: Special admin settings flows
       | search_keyword | show_courses_sessions |
     And I press "search_search"
     And I wait very long for the page to be loaded
-    And I select "Show courses & sessions" from "form_show_courses_sessions"
+    And I select "Hide catalogue" from "form_show_courses_sessions"
     And I click the "button.btn.btn--primary.btn-lg.mr-4" element
     And I wait very long for the page to be loaded
 

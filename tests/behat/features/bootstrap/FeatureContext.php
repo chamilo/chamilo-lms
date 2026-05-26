@@ -801,6 +801,62 @@ class FeatureContext extends MinkContext
     }
 
     /**
+     * @When /^I click element "([^"]*)" containing text "([^"]*)"$/
+     */
+    public function iClickElementContainingText(string $selector, string $text): void
+    {
+        $safeSelector = addslashes($selector);
+        $safeText = addslashes($text);
+        $result = $this->getSession()->evaluateScript(<<<JS
+(function() {
+    var els = document.querySelectorAll('$safeSelector');
+    for (var i = 0; i < els.length; i++) {
+        if (els[i].textContent.indexOf('$safeText') !== -1) {
+            els[i].click();
+            return true;
+        }
+    }
+    return false;
+})();
+JS);
+        if (!$result) {
+            throw new \Exception(sprintf('No "%s" element containing text "%s" found', $selector, $text));
+        }
+    }
+
+    /**
+     * @When /^I click the "([^"]*)" element bypassing overlay$/
+     */
+    public function iClickElementBypassingOverlay($selector): void
+    {
+        $safe = addslashes($selector);
+        // Disable pointer events on fixed overlays (sidebar, etc.) so WebDriver click reaches the target
+        $this->getSession()->executeScript("
+            document.querySelectorAll('.app-sidebar, .app-sidebar__panel, .app-sidebar__wrapper')
+                .forEach(function(el) {
+                    el.setAttribute('data-saved-pe', el.style.pointerEvents);
+                    el.style.pointerEvents = 'none';
+                });
+        ");
+        $this->getSession()->wait(200);
+
+        $element = $this->getSession()->getPage()->find('css', $selector);
+        if (!$element) {
+            throw new \Exception("Element not found: $selector");
+        }
+        $element->click();
+
+        $this->getSession()->executeScript("
+            document.querySelectorAll('.app-sidebar, .app-sidebar__panel, .app-sidebar__wrapper')
+                .forEach(function(el) {
+                    el.style.pointerEvents = el.getAttribute('data-saved-pe') || '';
+                    el.removeAttribute('data-saved-pe');
+                });
+        ");
+        $this->getSession()->wait(200);
+    }
+
+    /**
      * @Then I should see the :selector element
      */
     public function iShouldSeeTheElement($selector)
@@ -898,6 +954,18 @@ JS;
     }
 
     // php
+
+    /**
+     * @When /^I reset zoom$/
+     */
+    public function resetZoom(): void
+    {
+        $this->getSession()->executeScript("
+            document.body.style.zoom = '';
+            document.documentElement.style.transform = '';
+        ");
+        $this->getSession()->wait(300);
+    }
 
     /**
      * @When /^I zoom out to maximum$/
@@ -1277,5 +1345,40 @@ JS;
         $this->getSession()->wait(1000);
         $this->getSession()->reload();
         $this->waitVeryLongForThePageToBeLoaded();
+    }
+
+    /**
+     * @When /^I switch to the iframe "([^"]*)"$/
+     */
+    public function iSwitchToIframe(string $name): void
+    {
+        $this->getSession()->getDriver()->switchToIFrame($name);
+        $this->getSession()->wait(500);
+    }
+
+    /**
+     * @When /^I switch back to the main window$/
+     */
+    public function iSwitchBackToMainWindow(): void
+    {
+        $this->getSession()->getDriver()->switchToIFrame(null);
+        $this->getSession()->wait(500);
+    }
+
+    /**
+     * @When /^I fill in the first textarea with "([^"]*)"$/
+     */
+    public function iFillInFirstTextareaWith(string $value): void
+    {
+        $safe = addslashes($value);
+        $this->getSession()->executeScript("
+            var ta = document.querySelector('textarea');
+            if (ta) {
+                ta.value = '{$safe}';
+                ta.dispatchEvent(new Event('input', { bubbles: true }));
+                ta.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        ");
+        $this->getSession()->wait(300);
     }
 }

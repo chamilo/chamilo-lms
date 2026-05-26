@@ -259,6 +259,16 @@ $stats = ExerciseLib::displayQuestionListByAttempt(
 $pageContent .= ob_get_contents();
 ob_end_clean();
 
+if (is_array($stats)) {
+    if (isset($stats['total_score'])) {
+        $total_score = (float) $stats['total_score'];
+    }
+
+    if (isset($stats['total_weight'])) {
+        $maxScore = (float) $stats['total_weight'];
+    }
+}
+
 // Change settings for teacher access.
 $oldResultDisabled = $objExercise->results_disabled;
 $objExercise->results_disabled = RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS;

@@ -343,6 +343,7 @@ function getStablePluginAllowList(): array
         'CustomCertificate',
         'NoSearchIndex',
         'NotebookTeacher',
+        'Justification',
     ];
 }
 

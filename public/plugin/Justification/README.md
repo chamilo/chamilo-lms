@@ -37,3 +37,15 @@ ALTER TABLE notification_event_rel_user ADD CONSTRAINT FK_USER FOREIGN KEY (user
 // $_configuration['notification_event'] = false;
 ```
 
+
+
+Chamilo 2 maintenance notes
+---------------------------
+
+This plugin is still a legacy PHP plugin. It stores required document definitions in
+`justification_document` and user uploads in `justification_document_rel_users`.
+
+Administrators manage required documents from `plugin/Justification/list.php`.
+Users upload their documents from the profile justification page integrated in Chamilo.
+
+Delete actions are protected with Chamilo security tokens.

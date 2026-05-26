@@ -249,22 +249,8 @@ use Symfony\Component\Validator\Constraints as Assert;
             deserialize: false
         ),
         new GetCollection(
-            parameters: [
-                'cid' => new QueryParameter(
-                    required: true,
-                    schema: ['type' => 'integer'],
-                    description: 'Course identifier',
-                ),
-            ],
             openapi: new Operation(
                 parameters: [
-                    new Parameter(
-                        name: 'cid',
-                        in: 'query',
-                        description: 'Course identifier',
-                        required: true,
-                        schema: ['type' => 'integer'],
-                    ),
                     new Parameter(
                         name: 'resourceNode.parent',
                         in: 'query',

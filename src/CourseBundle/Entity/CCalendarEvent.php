@@ -24,8 +24,8 @@ use Chamilo\CoreBundle\Entity\Promotion;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceRestrictToGroupContextInterface;
 use Chamilo\CoreBundle\Entity\Room;
-use Chamilo\CoreBundle\Filter\CidFilter;
 use Chamilo\CoreBundle\Filter\GlobalEventFilter;
+use Chamilo\CoreBundle\Filter\OptionalCourseLinkFilter;
 use Chamilo\CoreBundle\Filter\SidFilter;
 use Chamilo\CoreBundle\State\CalendarEventStateProvider;
 use Chamilo\CoreBundle\State\CCalendarEventStateProcessor;
@@ -73,7 +73,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: CCalendarEventRepository::class)]
 #[ApiFilter(filterClass: SearchFilter::class, properties: ['allDay' => 'boolean'])]
 #[ApiFilter(filterClass: DateFilter::class, strategy: 'exclude_null')]
-#[ApiFilter(filterClass: CidFilter::class)]
+#[ApiFilter(filterClass: OptionalCourseLinkFilter::class)]
 #[ApiFilter(filterClass: SidFilter::class)]
 #[ApiFilter(GlobalEventFilter::class, properties: ['type'])]
 class CCalendarEvent extends AbstractResource implements ResourceInterface, ResourceRestrictToGroupContextInterface, Stringable

@@ -66,10 +66,29 @@ export default {
   /**
    * @param {string} iri
    * @param {Object} params
+   * @param {Object} [options={}]
    * @returns {Promise<Object>}
    */
-  async put(iri, params) {
-    const { data } = await api.put(iri, params)
+  async put(iri, params, options = {}) {
+    const { data } = await api.put(iri, params, options)
+
+    return data
+  },
+
+  /**
+   * Sends a PATCH request using the JSON merge-patch content type expected by API Platform.
+   * @param {string} iri
+   * @param {Object} params
+   * @param {Object} [options={}]
+   * @returns {Promise<Object>}
+   */
+  async patch(iri, params, options = {}) {
+    const { headers = {}, ...rest } = options
+
+    const { data } = await api.patch(iri, params, {
+      ...rest,
+      headers: { "Content-Type": "application/merge-patch+json", ...headers },
+    })
 
     return data
   },
@@ -87,9 +106,10 @@ export default {
 
   /**
    * @param {string} iri
+   * @param {Object} [options={}]
    * @returns {Promise<void>}
    */
-  async delete(iri) {
-    await api.delete(iri)
+  async delete(iri, options = {}) {
+    await api.delete(iri, options)
   },
 }

@@ -154,10 +154,17 @@ $logInfo = [
 ];
 Event::registerLog($logInfo);
 
-$allowSignature = ExerciseSignaturePlugin::exerciseHasSignatureActivated($objExercise);
-if ($allowSignature) {
-    $htmlHeadXtra[] = api_get_asset('signature_pad/signature_pad.umd.js');
+$allowSignature = false;
+if (
+    class_exists('ExerciseSignaturePlugin')
+    && !empty($exercise_stat_info['exe_user_id'])
+    && (int) $exercise_stat_info['exe_user_id'] === $currentUserId
+    && ExerciseSignaturePlugin::exerciseHasSignatureActivated($objExercise)
+) {
+    $signature = ExerciseSignaturePlugin::getSignature($currentUserId, $exercise_stat_info);
+    $allowSignature = false === $signature;
 }
+
 
 if ('learnpath' === $origin) {
     $pageTop .= '

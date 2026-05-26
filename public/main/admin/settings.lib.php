@@ -345,6 +345,7 @@ function getStablePluginAllowList(): array
         'NotebookTeacher',
         'Justification',
         'QuestionOptionsEvaluation',
+        'ExerciseSignature',
     ];
 }
 

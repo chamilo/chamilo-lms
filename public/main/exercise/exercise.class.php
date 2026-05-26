@@ -6839,7 +6839,8 @@ class Exercise
 
         $data['number_of_answers'] = $questionsCount;
         $data['number_of_answers_saved'] = $savedAnswersCount;
-        $exeId = $trackExerciseInfo['exe_id'];
+        $exeId = (int) $trackExerciseInfo['exe_id'];
+        $data['exe_id'] = $exeId;
 
         if ('true' === api_get_setting('exercise.quiz_confirm_saved_answers')) {
             $em = Database::getManager();
@@ -6875,13 +6876,21 @@ class Exercise
         }
 
         $signature = '';
-        if (ExerciseSignaturePlugin::exerciseHasSignatureActivated($this)) {
+        if (
+            class_exists('ExerciseSignaturePlugin')
+            && ExerciseSignaturePlugin::exerciseHasSignatureActivated($this)
+        ) {
             $signature = ExerciseSignaturePlugin::getSignature($trackExerciseInfo['exe_user_id'], $trackExerciseInfo);
         }
+
+        $signatureAjaxUrl = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=sign_attempt&exe_id='.$exeId;
+
         $tpl = new Template(null, false, false, false, false, false, false);
         $tpl->assign('data', $data);
         $tpl->assign('allow_signature', $allowSignature);
         $tpl->assign('signature', $signature);
+        $tpl->assign('signature_ajax_url', $signatureAjaxUrl);
+        $tpl->assign('exe_id', $exeId);
         $tpl->assign('allow_export_pdf', $allowExportPdf);
         $tpl->assign(
             'export_url',

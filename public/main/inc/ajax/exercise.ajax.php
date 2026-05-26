@@ -1076,29 +1076,64 @@ switch ($action) {
         break;
     case 'sign_attempt':
         api_block_anonymous_users();
-        // Close the session as we don't need it any further
+
+        if (!class_exists('ExerciseSignaturePlugin') || !ExerciseSignaturePlugin::create()->isEnabled()) {
+            echo 'Exercise signature is not available.';
+            exit;
+        }
+
+        $postedExeId = isset($_POST['exe_id']) ? (int) $_POST['exe_id'] : 0;
+        if (empty($postedExeId) && isset($_GET['exe_id'])) {
+            $postedExeId = (int) $_GET['exe_id'];
+        }
+        if (!empty($postedExeId)) {
+            $exeId = $postedExeId;
+        }
+
+        $file = '';
+        if (isset($_POST['file']) && is_string($_POST['file'])) {
+            $file = $_POST['file'];
+        } elseif (isset($_REQUEST['file']) && is_string($_REQUEST['file'])) {
+            $file = $_REQUEST['file'];
+        }
+
+        if (empty($exeId)) {
+            echo 'Missing exercise attempt id.';
+            exit;
+        }
+
+        if (empty($file)) {
+            echo 'Missing signature image.';
+            exit;
+        }
+
+        // Close the session before processing the signature.
         session_write_close();
 
-        if (!ExerciseSignaturePlugin::create()->isEnabled()) {
+        $track = ExerciseLib::get_exercise_track_exercise_info((int) $exeId);
+        if (empty($track)) {
+            echo 'Exercise attempt was not found.';
             exit;
         }
 
-        $file = isset($_REQUEST['file']) ? $_REQUEST['file'] : '';
-        if (empty($exeId) || empty($file)) {
-            echo 0;
-            exit;
-        }
-
-        $file = str_replace(' ', '+', $file);
-        $track = ExerciseLib::get_exercise_track_exercise_info($exeId);
-        if ($track) {
-            $result = ExerciseSignaturePlugin::saveSignature($currentUserId, $track, $file);
-            if ($result) {
+        if (method_exists('ExerciseSignaturePlugin', 'saveSignatureWithReason')) {
+            $result = ExerciseSignaturePlugin::saveSignatureWithReason($currentUserId, $track, $file);
+            if (!empty($result['success'])) {
                 echo 1;
                 exit;
             }
+
+            echo !empty($result['message']) ? $result['message'] : 'The signature could not be saved.';
+            break;
         }
-        echo 0;
+
+        $result = ExerciseSignaturePlugin::saveSignature($currentUserId, $track, $file);
+        if ($result) {
+            echo 1;
+            exit;
+        }
+
+        echo 'The signature could not be saved.';
         break;
     case 'upload_answer':
         api_block_anonymous_users();

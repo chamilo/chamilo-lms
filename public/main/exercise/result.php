@@ -86,7 +86,11 @@ if (!empty($objExercise->expired_time)) {
 }
 
 $allowSignature = false;
-if ($student_id === $current_user_id && ExerciseSignaturePlugin::exerciseHasSignatureActivated($objExercise)) {
+if (
+    class_exists('ExerciseSignaturePlugin')
+    && $student_id === $current_user_id
+    && ExerciseSignaturePlugin::exerciseHasSignatureActivated($objExercise)
+) {
     // Check if signature exists.
     $signature = ExerciseSignaturePlugin::getSignature($current_user_id, $track_exercise_info);
     if (false === $signature) {

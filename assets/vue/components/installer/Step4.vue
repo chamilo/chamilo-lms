@@ -25,7 +25,6 @@
       <FloatLabel variant="on">
         <InputText
           v-model="installerData.stepData.dbHostForm"
-          :readonly="'update' === installerData.installType"
           input-id="dbHostForm"
           maxlength="50"
           name="dbHostForm"
@@ -43,7 +42,6 @@
       <FloatLabel variant="on">
         <InputText
           v-model="installerData.stepData.dbPortForm"
-          :readonly="'update' === installerData.installType"
           input-id="dbPortForm"
           maxlength="25"
           name="dbPortForm"
@@ -61,7 +59,6 @@
       <FloatLabel variant="on">
         <InputText
           v-model="installerData.stepData.dbUsernameForm"
-          :readonly="'update' === installerData.installType"
           input-id="dbUsernameForm"
           maxlength="25"
           name="dbUsernameForm"
@@ -81,7 +78,6 @@
           v-model="installerData.stepData.dbPassForm"
           :feedback="false"
           :input-props="{ maxlength: 255, name: 'dbPassForm' }"
-          :readonly="'update' === installerData.installType"
           input-id="dbPassForm"
           toggle-mask
         />
@@ -97,7 +93,6 @@
       <FloatLabel variant="on">
         <InputText
           v-model="installerData.stepData.dbNameForm"
-          :readonly="'update' === installerData.installType"
           input-id="dbNameForm"
           maxlength="25"
           name="dbNameForm"

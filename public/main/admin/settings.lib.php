@@ -346,6 +346,7 @@ function getStablePluginAllowList(): array
         'Justification',
         'QuestionOptionsEvaluation',
         'ExerciseSignature',
+        'GradingElectronic',
     ];
 }
 

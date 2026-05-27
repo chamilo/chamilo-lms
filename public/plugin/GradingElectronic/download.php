@@ -8,5 +8,4 @@ api_block_anonymous_users();
 api_protect_course_script(true);
 
 $gradingElectronic = GradingElectronicPlugin::create();
-
-echo $gradingElectronic->generateFromRequest();
+$gradingElectronic->downloadFromRequest();

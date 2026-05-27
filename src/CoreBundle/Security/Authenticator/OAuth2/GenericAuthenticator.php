@@ -79,7 +79,13 @@ class GenericAuthenticator extends AbstractAuthenticator
             $resourceOwnerData = array_merge($idTokenClaims, $resourceOwnerData);
         }
 
-        $resourceOwnerId = $resourceOwner->getId();
+        // Read the owner ID from the merged data so that keys present only in the
+        // ID token (e.g. 'upn') are found. GenericResourceOwner::getId() reads the
+        // original UserInfo response and would trigger "Undefined array key" otherwise.
+        $idKey = $providerParams['responseResourceOwnerId'] ?? null;
+        $resourceOwnerId = $idKey
+            ? ($resourceOwnerData[$idKey] ?? null)
+            : $resourceOwner->getId();
 
         if (empty($resourceOwnerId)) {
             throw new UnexpectedValueException('Value for the resource owner identifier not found at the configured key');

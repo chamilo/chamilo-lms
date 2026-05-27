@@ -231,7 +231,7 @@
 </template>
 
 <script setup>
-import axios from "axios"
+import buyCoursesService from "../../services/buyCoursesService"
 import { computed, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRouter } from "vue-router"
@@ -268,7 +268,7 @@ async function loadMyServicesData() {
   isLoading.value = true
   loadError.value = ""
   try {
-    const { data } = await axios.get("/my-services-data")
+    const data = await buyCoursesService.getMyServices()
     activeServices.value = Array.isArray(data?.activeServices) ? data.activeServices : []
     purchaseHistory.value = Array.isArray(data?.purchaseHistory) ? data.purchaseHistory : []
     loadError.value = typeof data?.error === "string" ? data.error : ""

@@ -185,7 +185,6 @@ import { useCidReq } from "../../composables/cidReq"
 import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
 import cStudentPublicationService from "../../services/cstudentpublication"
-import axios from "axios"
 import { useNotification } from "../../composables/notification"
 
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
@@ -251,13 +250,11 @@ const allowFileFlag = computed(
 
 async function loadAddedDocuments() {
   try {
-    const resp = await axios.get(`/api/c_student_publication_rel_documents`, {
-      params: {
-        ...buildCidParams(),
-        publication: `/api/c_student_publications/${assignmentId}`,
-      },
+    const { items } = await cStudentPublicationService.getRelDocuments({
+      ...buildCidParams(),
+      publication: `/api/c_student_publications/${assignmentId}`,
     })
-    addedDocuments.value = resp.data["hydra:member"]
+    addedDocuments.value = items
   } catch (e) {
     console.warn("[AssignmentDetail] Failed to load added documents", e)
   }

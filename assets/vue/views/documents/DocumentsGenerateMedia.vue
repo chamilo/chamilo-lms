@@ -308,7 +308,8 @@
 
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref, watch, nextTick } from "vue"
-import axios from "axios"
+import documentService from "../../services/documents"
+import aiService from "../../services/aiService"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { useCidReq } from "../../composables/cidReq"
@@ -692,11 +693,7 @@ async function saveToDocuments(file) {
   // Mark as AI-assisted (same request, no extra calls)
   formData.append("ai_assisted", "1")
 
-  const response = await axios.post("/api/documents", formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  })
-
-  const data = response?.data || {}
+  const data = (await documentService.uploadDocumentFile(formData)) || {}
   savedIri.value = String(data?.["@id"] || data?.id || "")
   return data
 }
@@ -724,20 +721,18 @@ async function fetchFolders(nodeId = null) {
         continue
       }
 
-      const response = await axios.get("/api/documents", {
-        params: {
-          loadNode: 1,
-          filetype: ["folder"],
-          "resourceNode.parent": currentNodeId,
-          cid,
-          sid,
-          gid,
-          page: 1,
-          itemsPerPage: 200,
-        },
+      const { items } = await documentService.listDocuments({
+        loadNode: 1,
+        filetype: ["folder"],
+        "resourceNode.parent": currentNodeId,
+        cid,
+        sid,
+        gid,
+        page: 1,
+        itemsPerPage: 200,
       })
 
-      const members = response.data?.["hydra:member"] || []
+      const members = items || []
       for (const folder of members) {
         const folderNodeId =
           normalizeResourceNodeId(folder?.resourceNode?.id) ?? normalizeResourceNodeId(folder?.resourceNodeId)
@@ -760,7 +755,7 @@ async function loadCapabilities() {
   isLoadingCaps.value = true
 
   try {
-    const { data } = await axios.get("/ai/capabilities")
+    const data = await aiService.getCapabilities()
 
     hasImage.value = !!data?.has?.image
     hasVideo.value = !!data?.has?.video
@@ -809,10 +804,7 @@ function stopVideoPolling(reason = "") {
 }
 
 async function pollVideoJobOnce(jobId, providerCode) {
-  const response = await axios.get(`/ai/video_job/${encodeURIComponent(jobId)}`, {
-    params: { ai_provider: providerCode || null },
-  })
-  return response?.data
+  return aiService.getVideoJob(jobId, providerCode)
 }
 
 function isTerminalVideoStatus(status) {
@@ -969,7 +961,7 @@ async function generate() {
       payload.height = parsedHeight.value
     }
 
-    const { data } = await axios.post(endpoint, payload, { headers: { "Content-Type": "application/json" } })
+    const data = await aiService.generateMedia(endpoint, payload)
 
     if (!data?.success) {
       const msg = String(data?.text || "")

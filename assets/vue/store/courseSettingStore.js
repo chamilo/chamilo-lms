@@ -1,5 +1,5 @@
 import { defineStore } from "pinia"
-import axios from "axios"
+import platformConfigService from "../services/platformConfigService"
 import { ref } from "vue"
 
 export const useCourseSettings = defineStore("courseSettings", () => {
@@ -16,7 +16,7 @@ export const useCourseSettings = defineStore("courseSettings", () => {
         params.sid = sessionId
       }
 
-      const { data } = await axios.get("/platform-config/list/course_settings", { params })
+      const data = await platformConfigService.listCourseSettings(params)
 
       settings.value = data.settings || {}
       settingsByCategory.value = data.settings_by_category || {}

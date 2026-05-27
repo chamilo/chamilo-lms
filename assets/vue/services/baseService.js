@@ -107,9 +107,34 @@ export default {
   /**
    * @param {string} iri
    * @param {Object} [options={}]
-   * @returns {Promise<void>}
+   * @returns {Promise<any>}
    */
   async delete(iri, options = {}) {
-    await api.delete(iri, options)
+    const { data } = await api.delete(iri, options)
+
+    return data
+  },
+
+  /**
+   * Sends a GET request and returns the full response (data, headers, status).
+   * Use for binary downloads or when response headers are needed.
+   * @param {string} iri
+   * @param {Object} [options={}]
+   * @returns {Promise<import("axios").AxiosResponse>}
+   */
+  async getRaw(iri, options = {}) {
+    return await api.get(iri, options)
+  },
+
+  /**
+   * Sends a POST request and returns the full response (data, headers, status).
+   * Use for binary downloads or when response headers are needed.
+   * @param {string} endpoint
+   * @param {Object} [params={}]
+   * @param {Object} [options={}]
+   * @returns {Promise<import("axios").AxiosResponse>}
+   */
+  async postRaw(endpoint, params = {}, options = {}) {
+    return await api.post(endpoint, params, options)
   },
 }

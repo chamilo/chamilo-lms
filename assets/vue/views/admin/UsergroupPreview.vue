@@ -2,7 +2,7 @@
 import { computed, onMounted, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
-import axios from "axios"
+import usergroupAdminService from "../../services/usergroupAdminService"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 
@@ -84,7 +84,7 @@ async function loadData() {
   errorMessage.value = ""
 
   try {
-    const { data } = await axios.get(`/admin/usergroups-data/${usergroupId.value}/preview`)
+    const data = await usergroupAdminService.preview(usergroupId.value)
 
     group.value = data.group
     users.value = data.users || []

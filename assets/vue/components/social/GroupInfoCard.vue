@@ -100,7 +100,7 @@ import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
 import BaseFileUpload from "../basecomponents/BaseFileUpload.vue"
 import useVuelidate from "@vuelidate/core"
 import { required } from "@vuelidate/validators"
-import axios from "axios"
+import usergroupService from "../../services/usergroupService"
 
 const { t } = useI18n()
 const router = useRouter()
@@ -135,43 +135,33 @@ const v$ = useVuelidate(
   { editGroupForm },
 )
 
-const submitGroupEdit = () => {
+const submitGroupEdit = async () => {
   v$.value.$touch()
-  if (!v$.value.$invalid) {
-    const updatedGroupData = {
-      title: editGroupForm.value.name,
-      description: editGroupForm.value.description,
-      url: editGroupForm.value.url,
-      visibility: String(editGroupForm.value.permissions.value),
-      allowMembersToLeaveGroup: editGroupForm.value.allowLeave ? 1 : 0,
+  if (v$.value.$invalid) {
+    return
+  }
+
+  const updatedGroupData = {
+    title: editGroupForm.value.name,
+    description: editGroupForm.value.description,
+    url: editGroupForm.value.url,
+    visibility: String(editGroupForm.value.permissions.value),
+    allowMembersToLeaveGroup: editGroupForm.value.allowLeave ? 1 : 0,
+  }
+
+  try {
+    const response = await usergroupService.updateGroup(groupInfo.value.id, updatedGroupData)
+
+    if (selectedFile.value && response && response.id) {
+      await usergroupService.uploadPicture(response.id, { picture: selectedFile.value })
     }
 
-    axios
-      .put(`/api/usergroups/${groupInfo.value.id}`, updatedGroupData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((response) => {
-        if (selectedFile.value && response.data && response.data.id) {
-          const formData = new FormData()
-          formData.append("picture", selectedFile.value)
-          return axios.post(`/social-network/upload-group-picture/${response.data.id}`, formData, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          })
-        }
-      })
-      .then(() => {
-        showEditGroupDialog.value = false
-        router.push("/dummy").then(() => {
-          router.go(-1)
-        })
-      })
-      .catch((error) => {
-        console.error("Error updating group:", error)
-      })
+    showEditGroupDialog.value = false
+    router.push("/dummy").then(() => {
+      router.go(-1)
+    })
+  } catch (error) {
+    console.error("Error updating group:", error)
   }
 }
 

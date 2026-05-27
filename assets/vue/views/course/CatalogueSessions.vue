@@ -72,10 +72,11 @@ import { computed, onMounted, onUnmounted, ref, watch } from "vue"
 import InputText from "primevue/inputtext"
 import Button from "primevue/button"
 import { FilterMatchMode } from "@primevue/core/api"
-import axios from "axios"
 import CatalogueSessionCard from "../../components/session/CatalogueSessionCard.vue"
 import { useSecurityStore } from "../../store/securityStore"
 import * as userRelCourseVoteService from "../../services/userRelCourseVoteService"
+import sessionService from "../../services/sessionService"
+import sessionRelUserService from "../../services/sessionRelUserService"
 import { useRouter } from "vue-router"
 import { usePlatformConfig } from "../../store/platformConfig"
 
@@ -167,8 +168,8 @@ const onSessionSubscribed = (sessionId) => {
 const load = async () => {
   status.value = true
   try {
-    const response = await axios.get("/catalogue/sessions-list")
-    sessions.value = response.data.map((s) => ({
+    const data = await sessionService.getCatalogueList()
+    sessions.value = data.map((s) => ({
       ...s,
       userVote: null,
     }))
@@ -186,9 +187,9 @@ const load = async () => {
       }
     }
 
-    const sessionSubs = await axios.get(`/api/session_rel_users?user=${currentUserId}`)
+    const { items: sessionSubs } = await sessionRelUserService.findAll({ user: currentUserId })
 
-    for (const sub of sessionSubs.data["hydra:member"]) {
+    for (const sub of sessionSubs) {
       const sessionId = sub.session?.id ?? parseInt(sub.session?.split("/")?.pop())
       const session = sessions.value.find((s) => s.id === sessionId)
       if (session) {

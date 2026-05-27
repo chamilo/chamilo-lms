@@ -285,6 +285,142 @@ export default {
     return baseService.get(`/template/all-templates/${courseId}`)
   },
 
+  /**
+   * Creates a document (folder or file) from a FormData payload.
+   * Supports upload progress and abortion through the options bag.
+   */
+  async uploadDocumentFile(formData, { signal, onUploadProgress } = {}) {
+    return baseService.post("/api/documents", formData, false, {}, { signal, onUploadProgress })
+  },
+
+  /**
+   * Fetches the raw text content of a file URL (e.g. an SVG contentUrl).
+   * @param {string} url
+   * @returns {Promise<string>}
+   */
+  async fetchTextContent(url) {
+    const response = await baseService.getRaw(url, { responseType: "text" })
+
+    return response.data
+  },
+
+  /**
+   * Lists documents matching the given query params (collection endpoint).
+   */
+  async listDocuments(params = {}) {
+    return baseService.getCollection("/api/documents", params)
+  },
+
+  /**
+   * Fetches a single document by its IRI.
+   */
+  async getDocumentByIri(iri) {
+    return baseService.get(iri)
+  },
+
+  /**
+   * Downloads all documents under a root node as a ZIP blob.
+   * @param {number|string} rootNodeId
+   * @param {Object} [params={}]
+   * @returns {Promise<Blob>}
+   */
+  async downloadAll(rootNodeId, params = {}) {
+    const response = await baseService.postRaw(
+      "/api/documents/download-all",
+      { rootNodeId },
+      { responseType: "blob", params },
+    )
+
+    return response.data
+  },
+
+  /**
+   * Downloads the given document ids as a ZIP blob.
+   * @param {Array<number|string>} ids
+   * @returns {Promise<Blob>}
+   */
+  async downloadSelected(ids) {
+    const response = await baseService.postRaw("/api/documents/download-selected", { ids }, { responseType: "blob" })
+
+    return response.data
+  },
+
+  /**
+   * Checks whether a document is used in learning paths.
+   * @param {number|string} iid
+   * @returns {Promise<Object>}
+   */
+  async getLpUsage(iid) {
+    return baseService.get(`/api/documents/${iid}/lp-usage`)
+  },
+
+  /**
+   * Deletes a document.
+   * @param {number|string} iid
+   * @returns {Promise<any>}
+   */
+  async deleteDocument(iid) {
+    return baseService.delete(`/api/documents/${iid}`)
+  },
+
+  /**
+   * Fetches the storage quota usage for a course.
+   * @param {number|string} courseId
+   * @param {Object} [params={}]
+   * @returns {Promise<Object>}
+   */
+  async getUsage(courseId, params = {}) {
+    return baseService.get(`/api/documents/${courseId}/usage`, params)
+  },
+
+  /**
+   * Moves a document to another parent node.
+   * @param {number|string} iid
+   * @param {number|string} parentResourceNodeId
+   * @param {Object} [params={}]
+   * @returns {Promise<Object>}
+   */
+  async moveDocument(iid, parentResourceNodeId, params = {}) {
+    return baseService.put(`/api/documents/${iid}/move`, { parentResourceNodeId }, { params })
+  },
+
+  /**
+   * Replaces a document file.
+   * @param {number|string} iid
+   * @param {FormData} formData
+   * @returns {Promise<Object>}
+   */
+  async replaceDocument(iid, formData) {
+    return baseService.post(`/api/documents/${iid}/replace`, formData)
+  },
+
+  /**
+   * Checks whether a document is a template.
+   * @param {number|string} documentId
+   * @returns {Promise<Object>}
+   */
+  async isDocumentTemplate(documentId) {
+    return baseService.get(`/template/document-templates/${documentId}/is-template`)
+  },
+
+  /**
+   * Deletes a document template.
+   * @param {number|string} documentId
+   * @returns {Promise<any>}
+   */
+  async deleteDocumentTemplate(documentId) {
+    return baseService.post(`/template/document-templates/${documentId}/delete`)
+  },
+
+  /**
+   * Creates a document template from a FormData payload.
+   * @param {FormData} formData
+   * @returns {Promise<Object>}
+   */
+  async createDocumentTemplate(formData) {
+    return baseService.post("/template/document-templates/create", formData)
+  },
+
   // ----------------------------
   // Quota API (shared)
   // ----------------------------

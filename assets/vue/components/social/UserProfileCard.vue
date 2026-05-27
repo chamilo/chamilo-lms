@@ -296,7 +296,7 @@ import { computed, inject, ref, watch } from "vue"
 import BaseCard from "../basecomponents/BaseCard.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import { useI18n } from "vue-i18n"
-import axios from "axios"
+import socialService from "../../services/socialService"
 import { useSecurityStore } from "../../store/securityStore"
 import BaseUserAvatar from "../basecomponents/BaseUserAvatar.vue"
 import { usePushSubscription } from "../../composables/usePushSubscription"
@@ -356,7 +356,7 @@ function changePassword() {
 
 async function fetchUserProfile(userId) {
   try {
-    const { data } = await axios.get(`/social-network/user-profile/${userId}`)
+    const data = await socialService.getUserProfile(userId)
 
     languageInfo.value = data.language
     vCardUserLink.value = data.vCardUserLink

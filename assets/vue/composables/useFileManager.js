@@ -7,7 +7,7 @@ import { useSecurityStore } from "../store/securityStore"
 import { useCidReq } from "./cidReq"
 import { RESOURCE_LINK_PUBLISHED } from "../constants/entity/resourcelink"
 import { useCidReqStore } from "../store/cidReq"
-import axios from "axios"
+import documentsService from "../services/documents"
 
 export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocument = false) {
   const route = useRoute()
@@ -361,7 +361,7 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
     if (isCourseDocument) {
       if (itemToDelete.value && itemToDelete.value.iid) {
         try {
-          await axios.delete(`/api/documents/${itemToDelete.value.iid}`)
+          await documentsService.deleteDocument(itemToDelete.value.iid)
           deleteDialog.value = false
           itemToDelete.value = { resourceNode: {} }
           await onUpdateOptions()

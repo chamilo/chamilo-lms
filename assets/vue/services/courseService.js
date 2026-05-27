@@ -5,6 +5,34 @@ export default {
   find: baseService.get,
 
   /**
+   * Checks the current user's course enrollments.
+   * @returns {Promise<Object>}
+   */
+  checkEnrollments: async () => {
+    return await baseService.get("/course/check-enrollments")
+  },
+
+  /**
+   * Checks the CourseLegal plugin agreement status for a course.
+   * @param {number} cid
+   * @param {number} sid
+   * @returns {Promise<Object>}
+   */
+  checkCourseLegalPlugin: async (cid, sid = 0) => {
+    return await baseService.get("/plugin/CourseLegal/check.php", { cid, sid, gid: 0 })
+  },
+
+  /**
+   * Fetches the CourseHomeNotify plugin notification for a course.
+   * @param {number} cid
+   * @param {number} sid
+   * @returns {Promise<Object>}
+   */
+  getCourseHomeNotification: async (cid, sid = 0) => {
+    return await baseService.get("/plugin/CourseHomeNotify/ajax.php", { cid, sid, gid: 0 })
+  },
+
+  /**
    * @param {Object} searchParams
    * @param {boolean} disablePagination
    * @returns {Promise<{totalItems, items}>}
@@ -106,7 +134,6 @@ export default {
   checkLegal: async (courseId, sessionId = 0) => {
     return await baseService.get(`/course/${courseId}/checkLegal.json`, { sid: sessionId })
   },
-
 
   /**
    * Loads BuyCourses course creation options for the current user.

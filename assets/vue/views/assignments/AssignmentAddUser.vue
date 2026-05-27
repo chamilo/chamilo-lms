@@ -108,7 +108,9 @@
 </template>
 <script setup>
 import { ref, onMounted, watch } from "vue"
-import axios from "axios"
+import cStudentPublicationService from "../../services/cstudentpublication"
+import sessionRelCourseRelUserService from "../../services/sessionRelCourseRelUserService"
+import courseRelUserService from "../../services/courseRelUserService"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { useNotification } from "../../composables/notification"
@@ -155,10 +157,8 @@ function nextPage() {
 
 async function loadPublication() {
   try {
-    const response = await axios.get(`/api/c_student_publications/${publicationId}`, {
-      params: { cid, ...(sid && { sid }) },
-    })
-    publicationTitle.value = response.data.title
+    const data = await cStudentPublicationService.getPublication(publicationId, { cid, ...(sid && { sid }) })
+    publicationTitle.value = data.title
   } catch (e) {
     console.error("Error loading publication", e)
   }
@@ -167,12 +167,10 @@ async function loadPublication() {
 async function loadAddedUsers() {
   isLoadingAdded.value = true
   try {
-    const response = await axios.get(`/api/c_student_publication_rel_users`, {
-      params: {
-        publication: `/api/c_student_publications/${publicationId}`,
-      },
+    const { items } = await cStudentPublicationService.getRelUsers({
+      publication: `/api/c_student_publications/${publicationId}`,
     })
-    addedUsers.value = response.data["hydra:member"]
+    addedUsers.value = items
   } catch (e) {
     console.error("Error loading added users", e)
   } finally {
@@ -193,11 +191,11 @@ async function loadAvailableUsers() {
     if (sid > 0) {
       params.session = sid
       params.course = cid
-      const response = await axios.get(`/api/session_rel_course_rel_users`, { params })
+      const { items, nextPageParams } = await sessionRelCourseRelUserService.findAll(params)
       const currentUserIds = new Set(addedUsers.value.map((u) => u.user["@id"]))
 
       const userMap = new Map()
-      for (const u of response.data["hydra:member"]) {
+      for (const u of items) {
         const id = u.user["@id"]
         if (!currentUserIds.has(id) && !userMap.has(id)) {
           userMap.set(id, { user: u.user })
@@ -205,14 +203,14 @@ async function loadAvailableUsers() {
       }
 
       availableUsers.value = Array.from(userMap.values())
-      hasNextPage.value = !!response.data["hydra:view"]?.["hydra:next"]
+      hasNextPage.value = !!nextPageParams
     } else if (cid > 0) {
       params.course = cid
-      const response = await axios.get(`/api/course_rel_users`, { params })
+      const { items, nextPageParams } = await courseRelUserService.findAll(params)
       const currentUserIds = new Set(addedUsers.value.map((u) => u.user["@id"]))
 
       const userMap = new Map()
-      for (const u of response.data["hydra:member"]) {
+      for (const u of items) {
         const id = u.user["@id"]
         if (!currentUserIds.has(id) && !userMap.has(id)) {
           userMap.set(id, u)
@@ -220,7 +218,7 @@ async function loadAvailableUsers() {
       }
 
       availableUsers.value = Array.from(userMap.values())
-      hasNextPage.value = !!response.data["hydra:view"]?.["hydra:next"]
+      hasNextPage.value = !!nextPageParams
     } else {
       availableUsers.value = []
       hasNextPage.value = false
@@ -239,7 +237,7 @@ const debouncedSearch = debounce(() => {
 
 async function addUser(userId) {
   try {
-    await axios.post(`/api/c_student_publication_rel_users`, {
+    await cStudentPublicationService.addRelUser({
       publication: `/api/c_student_publications/${publicationId}`,
       user: `/api/users/${userId}`,
     })
@@ -253,7 +251,7 @@ async function addUser(userId) {
 
 async function removeUser(relId) {
   try {
-    await axios.delete(`/api/c_student_publication_rel_users/${relId}`)
+    await cStudentPublicationService.removeRelUser(relId)
     notification.showSuccessNotification(t("User removed"))
     await loadAddedUsers()
     await loadAvailableUsers()

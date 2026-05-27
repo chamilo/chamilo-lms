@@ -1,4 +1,3 @@
-import axios from "axios"
 import baseService from "./baseService"
 
 /** Lists learning paths filtered by course/session/title. */
@@ -10,9 +9,7 @@ const getLearningPaths = async (params) => {
 
 /** Fetches a learning path by ID (iid). */
 const getLearningPath = async (lpId) => {
-  const response = await axios.get(`/api/learning_paths/${lpId}/`)
-
-  return response.data
+  return await baseService.get(`/api/learning_paths/${lpId}/`)
 }
 
 /** Builds legacy VIEW URL (old student/teacher mode). */
@@ -143,6 +140,36 @@ const getLpCategories = async (searchParams) => {
   return items
 }
 
+/** Fetches advanced-access data (users/groups restrictions) for a learning path. */
+const getAdvancedAccessData = async (lpId, contextQuery) => {
+  return baseService.get(`/resources/lp/${lpId}/advanced-access-data?${contextQuery}`)
+}
+
+/** Adds/updates a user advanced-access restriction. */
+const saveUserAdvancedAccess = async (lpId, contextQuery, payload) => {
+  return baseService.post(`/resources/lp/${lpId}/advanced-access/user?${contextQuery}`, payload, true)
+}
+
+/** Adds/updates a group advanced-access restriction. */
+const saveGroupAdvancedAccess = async (lpId, contextQuery, payload) => {
+  return baseService.post(`/resources/lp/${lpId}/advanced-access/group?${contextQuery}`, payload, true)
+}
+
+/** Removes a user advanced-access restriction. */
+const removeUserAdvancedAccess = async (lpId, userId, contextQuery) => {
+  return baseService.delete(`/resources/lp/${lpId}/advanced-access/user/${userId}?${contextQuery}`)
+}
+
+/** Removes a group advanced-access restriction. */
+const removeGroupAdvancedAccess = async (lpId, groupId, contextQuery) => {
+  return baseService.delete(`/resources/lp/${lpId}/advanced-access/group/${groupId}?${contextQuery}`)
+}
+
+/** Clears all advanced-access date restrictions for a learning path. */
+const clearAdvancedAccessDates = async (lpId, contextQuery) => {
+  return baseService.post(`/resources/lp/${lpId}/advanced-access/clear-dates?${contextQuery}`, {})
+}
+
 export default {
   getLearningPaths,
   getLearningPath,
@@ -152,4 +179,10 @@ export default {
   goLegacyAction,
   getLpCategories,
   reorder,
+  getAdvancedAccessData,
+  saveUserAdvancedAccess,
+  saveGroupAdvancedAccess,
+  removeUserAdvancedAccess,
+  removeGroupAdvancedAccess,
+  clearAdvancedAccessDates,
 }

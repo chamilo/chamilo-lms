@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "title": "Help center",
+      "url": "https://chamilo.org",
+      "icon": "mdi-help-circle-outline",
+      "target": "_blank"
+    },
+    {
+      "title": "My courses",
+      "url": "/resources/catalog",
+      "icon": "mdi-book-open-page-variant",
+      "target": "_self"
+    }
+  ]
+}

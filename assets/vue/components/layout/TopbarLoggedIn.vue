@@ -4,6 +4,7 @@
       <PlatformLogo />
     </div>
     <div class="app-topbar__items">
+      <ExtraMenuFromWebserviceMenu />
       <BaseAppLink
         v-if="isTeacher && allowUsersToCreateCourses"
         :title="t('Create course')"
@@ -103,6 +104,7 @@ import PlatformLogo from "./PlatformLogo.vue"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
 import BaseAppLink from "../basecomponents/BaseAppLink.vue"
 import BaseMenu from "../basecomponents/BaseMenu.vue"
+import ExtraMenuFromWebserviceMenu from "../plugin/ExtraMenuFromWebserviceMenu.vue"
 import { useTopbarLoggedIn } from "../../composables/useTopbarLoggedIn"
 import { useTopbarTour } from "../../composables/useTopbarTour"
 import { useI18n } from "vue-i18n"

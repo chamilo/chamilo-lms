@@ -348,6 +348,7 @@ function getStablePluginAllowList(): array
         'ExerciseSignature',
         'GradingElectronic',
         'CheckExtraFieldAuthorCompany',
+        'CleanDeletedFiles',
     ];
 }
 

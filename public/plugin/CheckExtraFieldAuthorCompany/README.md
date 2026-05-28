@@ -28,3 +28,50 @@ This plugin adds the extra fields necessary to display the reports:
 
 When uninstalling this plugin, the extra fields created will not be removed,
 for data persistence reasons.
+
+### Optional manual cleanup
+
+The uninstall process preserves extra fields by default. This avoids deleting
+reporting metadata that may already be linked to users, learning paths, or LP
+items.
+
+If this plugin was only tested and the fields have no values, they can be
+removed manually. Check first:
+
+```sql
+SELECT ef.id, ef.item_type, ef.variable, COUNT(efv.id) AS values_count
+FROM extra_field ef
+LEFT JOIN extra_field_values efv ON efv.field_id = ef.id
+WHERE
+    (ef.item_type = 1 AND ef.variable IN ('company', 'authorlp'))
+    OR (ef.item_type = 6 AND ef.variable = 'authors')
+    OR (ef.item_type = 7 AND ef.variable IN ('authorlpitem', 'price'))
+GROUP BY ef.id, ef.item_type, ef.variable
+ORDER BY ef.item_type, ef.variable;
+```
+
+Only if all `values_count` results are `0`, remove them with:
+
+```sql
+DELETE efv
+FROM extra_field_values efv
+INNER JOIN extra_field ef ON ef.id = efv.field_id
+WHERE
+    (ef.item_type = 1 AND ef.variable IN ('company', 'authorlp'))
+    OR (ef.item_type = 6 AND ef.variable = 'authors')
+    OR (ef.item_type = 7 AND ef.variable IN ('authorlpitem', 'price'));
+
+DELETE efo
+FROM extra_field_options efo
+INNER JOIN extra_field ef ON ef.id = efo.field_id
+WHERE
+    (ef.item_type = 1 AND ef.variable IN ('company', 'authorlp'))
+    OR (ef.item_type = 6 AND ef.variable = 'authors')
+    OR (ef.item_type = 7 AND ef.variable IN ('authorlpitem', 'price'));
+
+DELETE FROM extra_field
+WHERE
+    (item_type = 1 AND variable IN ('company', 'authorlp'))
+    OR (item_type = 6 AND variable = 'authors')
+    OR (item_type = 7 AND variable IN ('authorlpitem', 'price'));
+```

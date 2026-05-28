@@ -351,6 +351,7 @@ function getStablePluginAllowList(): array
         'CleanDeletedFiles',
         'Dashboard',
         'ExtraMenuFromWebservice',
+        'Mobidico',
     ];
 }
 

@@ -350,6 +350,7 @@ function getStablePluginAllowList(): array
         'CheckExtraFieldAuthorCompany',
         'CleanDeletedFiles',
         'Dashboard',
+        'ExtraMenuFromWebservice',
     ];
 }
 

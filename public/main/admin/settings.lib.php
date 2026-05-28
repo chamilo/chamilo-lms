@@ -346,6 +346,11 @@ function getStablePluginAllowList(): array
         'Justification',
         'QuestionOptionsEvaluation',
         'ExerciseSignature',
+        'GradingElectronic',
+        'CheckExtraFieldAuthorCompany',
+        'CleanDeletedFiles',
+        'Dashboard',
+        'ExtraMenuFromWebservice',
     ];
 }
 

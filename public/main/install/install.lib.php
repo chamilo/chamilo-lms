@@ -1997,34 +1997,57 @@ function initializeEntityManager(): EntityManager
 function isVersionTableValid($connection): bool
 {
     $schema = $connection->createSchemaManager();
-    if ($schema->tablesExist('version')) {
-        $columns = $schema->listTableColumns('version');
 
-        $requiredColumns = ['version', 'executed_at', 'execution_time'];
-        foreach ($requiredColumns as $column) {
-            if (!isset($columns[$column])) {
-                return false;
-            }
-        }
+    if (!$schema->tablesExist(['version'])) {
+        return true;
+    }
 
-        $query = $connection->createQueryBuilder()
-            ->select('*')
-            ->from('version')
-            ->orderBy('executed_at', 'DESC')
-            ->setMaxResults(1);
-        $result = $query->execute()->fetchAll();
+    $columns = $schema->listTableColumns('version');
+    $requiredColumns = ['version', 'executed_at', 'execution_time'];
 
-        if (!empty($result)) {
-            $latestMigrationDate = new DateTime($result[0]['executed_at']);
-            $now = new DateTime();
-
-            if ($latestMigrationDate->diff($now)->days < 1) {
-                return true;
-            }
+    foreach ($requiredColumns as $column) {
+        if (!isset($columns[$column])) {
+            return false;
         }
     }
 
-    return false;
+    return true;
+}
+
+function getLegacyVersionBackupTableName(Connection $connection): string
+{
+    $schema = $connection->createSchemaManager();
+    $backupTable = 'version_1_11';
+
+    if (!$schema->tablesExist([$backupTable])) {
+        return $backupTable;
+    }
+
+    $baseBackupTable = $backupTable.'_'.date('YmdHis');
+    $backupTable = $baseBackupTable;
+    $suffix = 1;
+
+    while ($schema->tablesExist([$backupTable])) {
+        $backupTable = $baseBackupTable.'_'.$suffix;
+        $suffix++;
+    }
+
+    return $backupTable;
+}
+
+function moveLegacyVersionTable(Connection $connection): void
+{
+    $schema = $connection->createSchemaManager();
+
+    if (!$schema->tablesExist(['version']) || isVersionTableValid($connection)) {
+        return;
+    }
+
+    $backupTable = getLegacyVersionBackupTableName($connection);
+
+    $connection->executeStatement(
+        'RENAME TABLE '.$connection->quoteIdentifier('version').' TO '.$connection->quoteIdentifier($backupTable)
+    );
 }
 
 /**
@@ -2036,12 +2059,19 @@ function isVersionTableValid($connection): bool
  */
 function getLastExecutedMigration(Connection $connection): string
 {
+    $schema = $connection->createSchemaManager();
+
+    if (!$schema->tablesExist(['version'])) {
+        return '';
+    }
+
     $query = $connection->createQueryBuilder()
         ->select('version')
         ->from('version')
         ->orderBy('executed_at', 'DESC')
         ->setMaxResults(1);
     $result = $query->execute()->fetchAssociative();
+
     return $result['version'] ?? '';
 }
 
@@ -2068,10 +2098,7 @@ function executeMigration(): array
         $config = new PhpFile(api_get_path(SYS_CODE_PATH) . 'install/migrations.php');
         $dependency = DependencyFactory::fromConnection($config, new ExistingConnection($connection));
 
-        if (!isVersionTableValid($connection)) {
-            $schema = $connection->createSchemaManager();
-            $schema->dropTable('version');
-        }
+        moveLegacyVersionTable($connection);
 
         $dependency->getMetadataStorage()->ensureInitialized();
 

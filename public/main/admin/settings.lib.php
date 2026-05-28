@@ -349,6 +349,7 @@ function getStablePluginAllowList(): array
         'GradingElectronic',
         'CheckExtraFieldAuthorCompany',
         'CleanDeletedFiles',
+        'Dashboard',
     ];
 }
 

@@ -347,6 +347,7 @@ function getStablePluginAllowList(): array
         'QuestionOptionsEvaluation',
         'ExerciseSignature',
         'GradingElectronic',
+        'CheckExtraFieldAuthorCompany',
     ];
 }
 

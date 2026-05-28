@@ -924,6 +924,13 @@ try {
             $data = $restApi->getSessionsCampus($campusId, $getExtraFields);
             $restResponse->setData($data);
             break;
+        case Rest::GET_COURSE_SESSIONS:
+            Event::addEvent(LOG_WS.$action, 'course', $course);
+
+            $restResponse->setData(
+                $restApi->getSessionsByCourse()
+            );
+            break;
         case Rest::ADD_COURSES_SESSION:
             $data = $restApi->addCoursesSession($_POST);
             Event::addEvent(

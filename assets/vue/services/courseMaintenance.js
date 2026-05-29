@@ -115,10 +115,10 @@ async function getOptions(node = resolveNodeFromPath()) {
 async function uploadFile(node = resolveNodeFromPath(), file) {
   const fd = new FormData()
   fd.append("file", file, file.name || "backup.zip")
-  return baseService.post(base.upload(node), fd, false, {}, { params: withCourseParams() })
+  return baseService.post(base.upload(node), fd, {}, { params: withCourseParams() })
 }
 async function chooseServerFile(node = resolveNodeFromPath(), filename) {
-  return baseService.post(base.serverPick(node), { filename }, false, {}, { params: withCourseParams() })
+  return baseService.post(base.serverPick(node), { filename }, {}, { params: withCourseParams() })
 }
 async function fetchResources(node = resolveNodeFromPath(), backupId) {
   return baseService.get(base.resources(node, backupId), withCourseParams())
@@ -126,7 +126,7 @@ async function fetchResources(node = resolveNodeFromPath(), backupId) {
 async function restoreBackup(node = resolveNodeFromPath(), backupId, { importOption, sameFileNameOption, resources }) {
   const payload = { importOption, sameFileNameOption }
   if (importOption === "select_items") payload.resources = resources || {}
-  return baseService.post(base.restore(node, backupId), payload, false, {}, { params: withCourseParams() })
+  return baseService.post(base.restore(node, backupId), payload, {}, { params: withCourseParams() })
 }
 
 /* =========================
@@ -144,7 +144,7 @@ async function fetchCopyResources(node = resolveNodeFromPath(), sourceCourseId) 
 
 /** Execute course copy into current course */
 async function copyFromCourse(node = resolveNodeFromPath(), payload) {
-  return baseService.post(base.copyExecute(node), payload, false, {}, { params: withCourseParams() })
+  return baseService.post(base.copyExecute(node), payload, {}, { params: withCourseParams() })
 }
 
 /* =========================
@@ -157,28 +157,28 @@ async function fetchRecycleResources(node) {
   return baseService.get(base.recycleResources(node), withCourseParams())
 }
 async function recycleExecute(node, payload) {
-  return baseService.post(base.recycleExecute(node), payload, false, {}, { params: withCourseParams() })
+  return baseService.post(base.recycleExecute(node), payload, {}, { params: withCourseParams() })
 }
 
 /* =========================
    Other endpoints
    ========================= */
 async function createBackup(node = resolveNodeFromPath(), scope = "full") {
-  return baseService.post(base.createBackup(node), { scope }, false, {}, { params: withCourseParams() })
+  return baseService.post(base.createBackup(node), { scope }, {}, { params: withCourseParams() })
 }
 
 /** Compatibility: prior version that POSTed raw payload to /copy */
 async function copyCourse(node = resolveNodeFromPath(), payload) {
-  return baseService.post(`/course_maintenance/${node}/copy`, payload, false, {}, { params: withCourseParams() })
+  return baseService.post(`/course_maintenance/${node}/copy`, payload, {}, { params: withCourseParams() })
 }
 
 async function recycleCourse(node = resolveNodeFromPath(), payload) {
-  return baseService.post(base.recycleCourse(node), payload, false, {}, { params: withCourseParams() })
+  return baseService.post(base.recycleCourse(node), payload, {}, { params: withCourseParams() })
 }
 async function deleteCourse(node = resolveNodeFromPath(), payloadOrConfirm) {
   const payload = typeof payloadOrConfirm === "string" ? { confirm: payloadOrConfirm } : payloadOrConfirm || {}
 
-  return baseService.post(base.deleteCourse(node), payload, false, {}, { params: withCourseParams() })
+  return baseService.post(base.deleteCourse(node), payload, {}, { params: withCourseParams() })
 }
 
 // -------- Moodle export --------
@@ -236,7 +236,7 @@ async function importFromMoodle(node = resolveNodeFromPath(), file) {
   if (!file) throw new Error("Missing .mbz file")
   const fd = new FormData()
   fd.append("file", file, file.name || "backup.mbz")
-  return baseService.post(base.moodleImport(node), fd, false, {}, { params: withCourseParams() })
+  return baseService.post(base.moodleImport(node), fd, {}, { params: withCourseParams() })
 }
 
 // CC 1.3 export
@@ -251,7 +251,6 @@ async function cc13ExportExecute(node = resolveNodeFromPath(), payload) {
   return baseService.post(
     base.cc13ExportExecute(node),
     payload,
-    false,
     {},
     {
       params: withCourseParams(),
@@ -280,7 +279,7 @@ async function cc13Import(node = resolveNodeFromPath(), fileOrOptions) {
   }
 
   // Optional JSON mode (if later you add server switches)
-  return baseService.post(base.cc13Import(node), fileOrOptions || {}, false, {}, { params: withCourseParams() })
+  return baseService.post(base.cc13Import(node), fileOrOptions || {}, {}, { params: withCourseParams() })
 }
 
 /* =========================

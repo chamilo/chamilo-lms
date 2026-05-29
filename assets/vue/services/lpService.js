@@ -147,12 +147,12 @@ const getAdvancedAccessData = async (lpId, contextQuery) => {
 
 /** Adds/updates a user advanced-access restriction. */
 const saveUserAdvancedAccess = async (lpId, contextQuery, payload) => {
-  return baseService.post(`/resources/lp/${lpId}/advanced-access/user?${contextQuery}`, payload, true)
+  return baseService.post(`/resources/lp/${lpId}/advanced-access/user?${contextQuery}`, payload)
 }
 
 /** Adds/updates a group advanced-access restriction. */
 const saveGroupAdvancedAccess = async (lpId, contextQuery, payload) => {
-  return baseService.post(`/resources/lp/${lpId}/advanced-access/group?${contextQuery}`, payload, true)
+  return baseService.post(`/resources/lp/${lpId}/advanced-access/group?${contextQuery}`, payload)
 }
 
 /** Removes a user advanced-access restriction. */

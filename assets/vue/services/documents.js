@@ -242,7 +242,7 @@ export default {
 
   async createCloudLink(payload) {
     try {
-      return await baseService.post("/api/documents", { ...payload, filetype: "link" }, true)
+      return await baseService.post("/api/documents", { ...payload, filetype: "link" })
     } catch (error) {
       const data = error?.response?.data || {}
       const message =
@@ -268,7 +268,7 @@ export default {
    * Supports upload progress and abortion through the options bag.
    */
   async uploadDocumentFile(formData, { signal, onUploadProgress } = {}) {
-    return baseService.post("/api/documents", formData, false, {}, { signal, onUploadProgress })
+    return baseService.post("/api/documents", formData, {}, { signal, onUploadProgress })
   },
 
   /**

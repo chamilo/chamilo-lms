@@ -188,7 +188,7 @@ async function createProject({
   }
   if (showOnHomepage) payload.showOnHomepage = true
 
-  const data = await baseService.post(`/api/c_blogs`, payload, true, {}, { params: withCourseParams() })
+  const data = await baseService.post(`/api/c_blogs`, payload, {}, { params: withCourseParams() })
   return { id: extractId(data) }
 }
 
@@ -325,7 +325,7 @@ async function createPostApi({ blogId, title, fullText }) {
     fullText,
     blog: iri("c_blogs", blogId),
   }
-  const data = await baseService.post(`/api/c_blog_posts`, payload, true, {}, { params: withCourseParams() })
+  const data = await baseService.post(`/api/c_blog_posts`, payload, {}, { params: withCourseParams() })
   return { id: extractId(data) }
 }
 
@@ -378,7 +378,7 @@ async function ratePostApi(blogId, postId, score) {
     rating: Number(score),
     ratingType: "post",
   }
-  await baseService.post(`/api/c_blog_ratings`, payload, true, {}, { params: withCourseParams() })
+  await baseService.post(`/api/c_blog_ratings`, payload, {}, { params: withCourseParams() })
   return { ok: true }
 }
 
@@ -413,7 +413,7 @@ async function getManyPostRatingsApi(blogId, postIds = []) {
 async function uploadResourceFileApi(file) {
   const fd = new FormData()
   fd.append("file", file, file.name)
-  const data = (await baseService.post(`/api/resource_files`, fd, false, {}, { params: withCourseParams() })) || {}
+  const data = (await baseService.post(`/api/resource_files`, fd, {}, { params: withCourseParams() })) || {}
   return {
     path: data.path || data.filePath || data.url || "",
     filename: data.filename || file.name,
@@ -431,7 +431,7 @@ async function createAttachmentForPostApi({ blogId, postId, fileInfo, comment = 
     size: Number(fileInfo.size || 0),
     comment,
   }
-  await baseService.post(`/api/c_blog_attachments`, payload, true, {}, { params: withCourseParams() })
+  await baseService.post(`/api/c_blog_attachments`, payload, {}, { params: withCourseParams() })
   return { ok: true }
 }
 
@@ -441,13 +441,7 @@ async function uploadBlogAttachmentApi({ blogId, postId, file, comment = "" }) {
   fd.append("blog", iri("c_blogs", blogId))
   fd.append("post", iri("c_blog_posts", postId))
   if (comment) fd.append("comment", comment)
-  const data = await baseService.post(
-    `/api/c_blog_attachments/upload`,
-    fd,
-    false,
-    {},
-    { params: courseContextParams() },
-  )
+  const data = await baseService.post(`/api/c_blog_attachments/upload`, fd, {}, { params: courseContextParams() })
   return data ?? { ok: true }
 }
 
@@ -479,7 +473,7 @@ async function addBlogMember(blogId, userId) {
     blog: iri("c_blogs", blogId),
     user: iri("users", userId),
   }
-  await baseService.post(`/api/c_blog_rel_users`, payload, true, {}, { params: withCourseParams() })
+  await baseService.post(`/api/c_blog_rel_users`, payload, {}, { params: withCourseParams() })
   return { ok: true }
 }
 
@@ -604,7 +598,7 @@ async function createTask(
     systemTask: !!systemTask,
     blog: iri("c_blogs", blogId),
   }
-  const data = await baseService.post(`/api/c_blog_tasks`, payload, true, {}, { params: withCourseParams() })
+  const data = await baseService.post(`/api/c_blog_tasks`, payload, {}, { params: withCourseParams() })
   return { id: extractId(data) }
 }
 
@@ -627,7 +621,7 @@ async function assignTask({ taskId, userId, targetDate }, blogId = resolveBlogId
     blog: iri("c_blogs", blogId),
     targetDate, // ISO "YYYY-MM-DD"
   }
-  await baseService.post(`/api/c_blog_task_rel_users`, payload, true, {}, { params: withCourseParams() })
+  await baseService.post(`/api/c_blog_task_rel_users`, payload, {}, { params: withCourseParams() })
   return { ok: true }
 }
 
@@ -704,7 +698,7 @@ export default {
       comment: String(text ?? "").trim(),
     }
     if (blogId) payload.blog = iri("c_blogs", blogId)
-    await baseService.post(`/api/c_blog_comments`, payload, true, {}, { params: withCourseParams() })
+    await baseService.post(`/api/c_blog_comments`, payload, {}, { params: withCourseParams() })
     return { ok: true }
   },
 

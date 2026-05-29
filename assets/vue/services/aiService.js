@@ -43,7 +43,7 @@ export default {
    * @returns {Promise<Object>}
    */
   async generateMedia(endpoint, payload) {
-    return baseService.post(endpoint, payload, true)
+    return baseService.post(endpoint, payload)
   },
 
   /**

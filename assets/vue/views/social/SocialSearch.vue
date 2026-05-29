@@ -322,7 +322,7 @@ const sendInvitation = async () => {
     content: invitationMessage.value,
   }
   try {
-    const result = await baseService.post("/social-network/user-action", invitationData, true)
+    const result = await baseService.post("/social-network/user-action", invitationData)
     if (result.success) {
       notification.showSuccessNotification("Invitation sent successfully.")
       users.value = users.value.filter((user) => user.id !== selectedUser.value.id)
@@ -352,7 +352,7 @@ const sendMessage = async () => {
     content: messageContent.value,
   }
   try {
-    const result = await baseService.post("/social-network/user-action", messageData, true)
+    const result = await baseService.post("/social-network/user-action", messageData)
     if (result.success) {
       notification.showSuccessNotification("Message sent successfully.")
     } else {

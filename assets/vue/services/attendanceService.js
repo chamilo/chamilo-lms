@@ -128,7 +128,7 @@ export default {
    * @returns {Promise<Object>} - Data of the created calendar entry.
    */
   addAttendanceCalendar: async (attendanceId, data) => {
-    return await baseService.post(`/api/attendances/${attendanceId}/calendars`, data, true)
+    return await baseService.post(`/api/attendances/${attendanceId}/calendars`, data)
   },
 
   /**
@@ -212,16 +212,16 @@ export default {
   },
 
   saveStudentOwnAttendance: async ({ courseId, entries }) => {
-    return await baseService.post(`/attendance/validate-self`, { courseId, entries }, true)
+    return await baseService.post(`/attendance/validate-self`, { courseId, entries })
   },
 
   saveStudentSignature: async ({ calendarId, signature }) => {
-    return await baseService.post(`/attendance/sign-self`, { calendarId, signature }, true)
+    return await baseService.post(`/attendance/sign-self`, { calendarId, signature })
   },
 
   saveAttendanceSheet: async (data) => {
     try {
-      return await baseService.post(`/attendance/sheet/save`, data, true)
+      return await baseService.post(`/attendance/sheet/save`, data)
     } catch (error) {
       console.error("Error saving attendance sheet:", error)
       throw error

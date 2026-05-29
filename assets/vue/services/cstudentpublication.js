@@ -86,7 +86,7 @@ async function uploadComment(submissionId, parentResourceNodeId, formData, sendM
     ...buildCidParams(),
   }
 
-  return baseService.post(`/api/c_student_publication_comments/upload`, formData, false, {}, { params })
+  return baseService.post(`/api/c_student_publication_comments/upload`, formData, {}, { params })
 }
 
 async function loadComments(submissionId) {
@@ -127,7 +127,7 @@ async function getUnsubmittedUsers(assignmentId) {
 async function sendEmailToUnsubmitted(assignmentId, queryParams = {}) {
   const params = { ...buildCidParams(), ...queryParams }
 
-  return baseService.post(`/assignments/${assignmentId}/unsubmitted-users/email`, {}, false, {}, { params })
+  return baseService.post(`/assignments/${assignmentId}/unsubmitted-users/email`, {}, {}, { params })
 }
 
 async function deleteAllCorrections(assignmentId, cid, sid = 0) {
@@ -163,7 +163,6 @@ async function uploadCorrectionsPackage(assignmentId, file) {
   return baseService.post(
     `/assignments/${assignmentId}/upload-corrections-package`,
     formData,
-    false,
     {},
     {
       params: buildCidParams(),
@@ -179,7 +178,6 @@ async function aiGradeSubmission(submissionId, payload = {}) {
   return baseService.post(
     `/assignments/submissions/${submissionId}/ai-grade`,
     payload,
-    true,
     {},
     {
       params: buildCidParams(),
@@ -235,7 +233,7 @@ async function getRelDocuments(params) {
 
 /** Links a document to a publication. */
 async function addRelDocument(payload, params = {}) {
-  return baseService.post(`/api/c_student_publication_rel_documents`, payload, false, {}, { params })
+  return baseService.post(`/api/c_student_publication_rel_documents`, payload, {}, { params })
 }
 
 /** Removes a publication-document relation. */
@@ -248,7 +246,6 @@ async function uploadCorrection(formData, { parentResourceNodeId, submissionId }
   return baseService.post(
     `/api/c_student_publication_corrections/upload`,
     formData,
-    false,
     {},
     { params: { parentResourceNodeId, submissionId, filetype: "file" } },
   )

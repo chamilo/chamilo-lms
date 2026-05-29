@@ -484,7 +484,6 @@ function createStudentInfoBatcher() {
             const data = await baseService.post(
               "/course/student-info-batch.json",
               { sid: Number(sid) || 0, courseIds: ids },
-              true,
               {},
               { signal: abortCtrl.signal },
             )

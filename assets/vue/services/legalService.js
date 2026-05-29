@@ -38,7 +38,7 @@ const legalExtensions = {
   // it through the shared axios instance, which sets Accept: application/json
   // automatically for non-/api paths.
   async saveOrUpdateLegal(payload) {
-    return baseService.post("/legal/save", payload, true)
+    return baseService.post("/legal/save", payload)
   },
 }
 

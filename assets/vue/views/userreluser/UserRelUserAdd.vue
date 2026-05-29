@@ -110,7 +110,7 @@ const sendNotificationMessage = async (friend) => {
   }
 
   try {
-    const result = await baseService.post("/social-network/user-action", messageData, true)
+    const result = await baseService.post("/social-network/user-action", messageData)
     if (result.success) {
       showSuccessNotification(t("Notification message sent successfully"))
     } else {

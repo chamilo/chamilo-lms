@@ -41,22 +41,18 @@ export default {
   },
 
   /**
+   * Axios sets the Content-Type automatically from the payload type
+   * (application/json for plain objects, multipart for FormData,
+   * application/x-www-form-urlencoded for URLSearchParams), so it is not set here.
    * @param {string} endpoint
    * @param {Object} [params={}]
-   * @param {boolean} [addContentType=false]
    * @param {Object} [additionalHeaders={}]
    * @param {Object} [options={}]
    * @returns {Promise<Object>}
    */
-  async post(endpoint, params = {}, addContentType = false, additionalHeaders = {}, options = {}) {
-    const headers = {}
-
-    if (addContentType) {
-      headers["Content-Type"] = "application/json"
-    }
-
+  async post(endpoint, params = {}, additionalHeaders = {}, options = {}) {
     const { data } = await api.post(endpoint, params, {
-      headers: { ...headers, ...additionalHeaders },
+      headers: additionalHeaders,
       ...options,
     })
 

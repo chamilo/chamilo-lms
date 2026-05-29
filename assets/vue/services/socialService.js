@@ -11,7 +11,7 @@ async function createPost(params) {
  * @returns {Promise<Object>}
  */
 async function sendPostLike(postIri) {
-  return baseService.post(`${postIri}/like`, {}, true)
+  return baseService.post(`${postIri}/like`, {})
 }
 
 /**
@@ -19,7 +19,7 @@ async function sendPostLike(postIri) {
  * @returns {Promise<Object>}
  */
 async function sendPostDislike(postIri) {
-  return baseService.post(`${postIri}/dislike`, {}, true)
+  return baseService.post(`${postIri}/dislike`, {})
 }
 
 /**

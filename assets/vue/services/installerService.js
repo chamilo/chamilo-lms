@@ -18,7 +18,7 @@ export default {
    * @returns {Promise<any>}
    */
   sendContactInformation(formData) {
-    return baseService.post(`${INSTALL_AJAX}?a=send_contact_information`, formData, false, {
+    return baseService.post(`${INSTALL_AJAX}?a=send_contact_information`, formData, {
       "content-type": "application/x-www-form-urlencoded",
     })
   },

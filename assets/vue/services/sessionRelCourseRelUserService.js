@@ -14,7 +14,7 @@ async function findAll(searchParams) {
  * @returns {Promise<Object>}
  */
 async function create(payload) {
-  return await baseService.post("/api/session_rel_course_rel_users", payload, true)
+  return await baseService.post("/api/session_rel_course_rel_users", payload)
 }
 
 export default {

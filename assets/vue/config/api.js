@@ -6,11 +6,77 @@ import { getRawCourseContext } from "../utils/courseContext"
  */
 const instance = axios.create({
   headers: {
-    Accept: "application/ld+json",
+    // Accept is set per-request by the interceptor below, based on whether the
+    // path is served by API Platform (/api/*) or by a plain Symfony controller.
     // Soft hint so the backend may return HTML for XHR errors (kept from the
     // global axios defaults previously set in plugins/httpErrors.js).
     "X-Prefer-HTML-Errors": "1",
   },
+})
+
+// Accept values the interceptor is allowed to overwrite. Anything else (e.g.
+// "application/zip" for binary downloads) is treated as an explicit caller
+// choice and left untouched.
+const MANAGED_ACCEPT = new Set([
+  "application/json",
+  "application/ld+json",
+  // Default Accept axios injects when the caller sets none.
+  "application/json, text/plain, */*",
+])
+
+/**
+ * Extracts the pathname from a request URL, dropping origin, query and hash.
+ * @param {string} url
+ * @returns {string}
+ */
+function getPathname(url) {
+  if (!url) {
+    return ""
+  }
+
+  let path = url
+
+  const schemeIndex = path.indexOf("://")
+  if (-1 !== schemeIndex) {
+    const afterScheme = path.slice(schemeIndex + 3)
+    const slashIndex = afterScheme.indexOf("/")
+    path = -1 === slashIndex ? "/" : afterScheme.slice(slashIndex)
+  }
+
+  const cutIndex = path.search(/[?#]/)
+
+  return -1 === cutIndex ? path : path.slice(0, cutIndex)
+}
+
+/**
+ * Tells whether a path is served by API Platform (and therefore speaks JSON-LD).
+ * Everything else is a plain Symfony controller that speaks plain JSON.
+ * @param {string} path
+ * @returns {boolean}
+ */
+function isApiPlatformPath(path) {
+  return "/api" === path || path.startsWith("/api/")
+}
+
+// Negotiate the response format automatically: API Platform resources get
+// JSON-LD/Hydra (which the services rely on), plain controllers get JSON.
+// An Accept header explicitly chosen by the caller is preserved.
+instance.interceptors.request.use((config) => {
+  const path = getPathname(config.url)
+  const accept = isApiPlatformPath(path) ? "application/ld+json" : "application/json"
+
+  const headers = config.headers
+  const current = "function" === typeof headers?.get ? headers.get("Accept") : headers?.Accept
+
+  if (null === current || undefined === current || MANAGED_ACCEPT.has(String(current))) {
+    if ("function" === typeof headers?.set) {
+      headers.set("Accept", accept)
+    } else {
+      config.headers = { ...(config.headers || {}), Accept: accept }
+    }
+  }
+
+  return config
 })
 
 // Add cid/sid/gid automatically to every API call so requests keep the current

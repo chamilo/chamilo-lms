@@ -9,7 +9,6 @@ export default {
    */
   async getRegion(region, { params = {}, signal } = {}) {
     const response = await baseService.getRaw(`/plugin-regions/${region}`, {
-      headers: { Accept: "application/json" },
       params,
       signal,
     })

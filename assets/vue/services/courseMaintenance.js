@@ -252,7 +252,7 @@ async function cc13ExportExecute(node = resolveNodeFromPath(), payload) {
     base.cc13ExportExecute(node),
     payload,
     false,
-    { Accept: "application/json" },
+    {},
     {
       params: withCourseParams(),
     },

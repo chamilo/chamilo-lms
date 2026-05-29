@@ -24,6 +24,7 @@
         v-model="item.contentFile"
         :full-page="isFullPage"
         :title="t('Content')"
+        :editor-config="tinyEditorConfig"
         editor-id="item_content"
       />
     </div>
@@ -114,16 +115,28 @@
 
       <div
         v-if="searchEnabled"
-        class="mb-2 flex flex-row"
+        class="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center"
       >
-        <label class="w-40 font-semibold">{{ $t("Options") }}:</label>
+        <div class="flex w-40 shrink-0 items-center gap-1 font-semibold">
+          <span>{{ $t("Options") }}:</span>
+        </div>
 
-        <BaseCheckbox
-          id="indexDocumentContent"
-          v-model="item.indexDocumentContent"
-          :label="$t('Index document content?')"
-          name="indexDocumentContent"
-        />
+        <div class="flex items-center gap-2">
+          <BaseCheckbox
+            id="indexDocumentContent"
+            v-model="item.indexDocumentContent"
+            :label="$t('Index document content?')"
+            name="indexDocumentContent"
+          />
+
+          <span
+            class="mdi mdi-information-outline cursor-help text-primary"
+            role="img"
+            tabindex="0"
+            :aria-label="t('Information about indexing document content')"
+            :title="t('When enabled, the document text is indexed by the search engine so users can find it from platform search.')"
+          />
+        </div>
       </div>
 
       <div
@@ -251,6 +264,7 @@ export default {
       editorDraftIntervalId: null,
       lastEditorDraftContent: "",
       maxEditorDrafts: 5,
+      editorDraftIntervalMs: 60000,
       showEditorDrafts: false,
     }
   },
@@ -308,11 +322,16 @@ export default {
       return aiHelpersEnabled && (imageGeneratorEnabled || videoGeneratorEnabled)
     },
     tinyEditorConfig() {
+      const config = {
+        content_style: this.getDocumentEditorContentStyle(),
+      }
+
       if (!this.showAiMediaButton) {
-        return {}
+        return config
       }
 
       return {
+        ...config,
         appendToolbar: "chamiloAiMedia",
         setup: (editor) => {
           editor.ui.registry.addIcon(
@@ -365,9 +384,9 @@ export default {
       this.item.indexDocumentContent = true
     }
 
-    this.ensureResourceLanguage()
-
     await this.loadCourseContext()
+
+    this.ensureResourceLanguage()
 
     if (!this.searchEnabled) {
       return
@@ -379,7 +398,7 @@ export default {
   mounted() {
     this.refreshEditorDrafts()
     this.lastEditorDraftContent = this.normalizeEditorDraftContent(this.item.contentFile)
-    this.editorDraftIntervalId = window.setInterval(this.saveEditorDraft, 30000)
+    this.editorDraftIntervalId = window.setInterval(this.saveEditorDraft, this.editorDraftIntervalMs)
     window.addEventListener("beforeunload", this.saveEditorDraftOnUnload)
   },
   beforeUnmount() {
@@ -399,35 +418,88 @@ export default {
     },
   },
   methods: {
+    getDocumentEditorContentStyle() {
+      const baseStyle =
+        typeof window !== "undefined" ? String(window.CHAMILO_TINYMCE_BASE_CONFIG?.content_style || "") : ""
+
+      return `${baseStyle}
+        body {
+          box-sizing: border-box;
+          padding-left: 0.5rem;
+          padding-right: 0.5rem;
+        }
+      `
+    },
+    normalizeLanguageIso(value) {
+      const raw = String(value || "").trim()
+      if (!raw) {
+        return ""
+      }
+
+      const languages = Array.isArray(window.languages) ? window.languages : []
+      const iriMatch = raw.match(/\/api\/languages\/(\d+)/)
+      if (iriMatch) {
+        const byId = languages.find((language) => String(language?.id || "") === iriMatch[1])
+        return String(byId?.isocode || byId?.isoCode || "")
+      }
+
+      const normalizedRaw = raw.replace("-", "_").toLowerCase()
+      const exact = languages.find((language) => {
+        const code = String(language?.isocode || language?.isoCode || "")
+          .replace("-", "_")
+          .toLowerCase()
+
+        return code === normalizedRaw
+      })
+
+      if (exact) {
+        return String(exact.isocode || exact.isoCode || "")
+      }
+
+      const shortCode = normalizedRaw.split("_")[0]
+      const byShortCode = languages.find((language) => {
+        const code = String(language?.isocode || language?.isoCode || "")
+          .replace("-", "_")
+          .toLowerCase()
+
+        return code === shortCode || code.startsWith(`${shortCode}_`)
+      })
+
+      return String(byShortCode?.isocode || byShortCode?.isoCode || raw)
+    },
     extractResourceLanguageIso(language) {
       if (!language) {
         return ""
       }
 
       if ("string" === typeof language) {
-        const iriMatch = language.match(/\/api\/languages\/(\d+)/)
-        if (!iriMatch) {
-          return language
-        }
-
-        const languages = Array.isArray(window.languages) ? window.languages : []
-        const found = languages.find((item) => String(item?.id || "") === iriMatch[1])
-
-        return String(found?.isocode || "")
+        return this.normalizeLanguageIso(language)
       }
 
-      return String(language.isocode || language.isoCode || "")
+      return this.normalizeLanguageIso(language.isocode || language.isoCode || language["@id"] || "")
     },
     ensureResourceLanguage() {
-      if (!this.item || undefined !== this.item.language) {
+      if (!this.item) {
         return
       }
 
-      this.item.language = this.extractResourceLanguageIso(
+      const currentLanguage = this.extractResourceLanguageIso(this.item.language)
+      if (currentLanguage) {
+        if (currentLanguage !== this.item.language) {
+          this.item.language = currentLanguage
+        }
+
+        return
+      }
+
+      const fallbackLanguage = this.extractResourceLanguageIso(
         this.item?.resourceNode?.language ||
           this.item?.resourceNode?.firstResourceFile?.language ||
           this.item?.firstResourceFile?.language,
       )
+
+      const courseLanguage = this.extractResourceLanguageIso(this.courseContextLanguage)
+      this.item.language = fallbackLanguage || courseLanguage || ""
     },
     getEditorDraftUserId() {
       const user = this.securityStore?.user || {}
@@ -550,9 +622,15 @@ export default {
         return
       }
 
-      const drafts = this.readEditorDrafts().filter(
-        (draft) => this.normalizeEditorDraftContent(draft.content) !== content,
-      )
+      const storedDrafts = this.readEditorDrafts()
+      const latestStoredDraft = storedDrafts[0] || null
+
+      if (latestStoredDraft && this.normalizeEditorDraftContent(latestStoredDraft.content) === content) {
+        this.lastEditorDraftContent = content
+        return
+      }
+
+      const drafts = storedDrafts.filter((draft) => this.normalizeEditorDraftContent(draft.content) !== content)
       const draft = {
         id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
         title: String(this.item.title || "").trim(),
@@ -660,7 +738,7 @@ export default {
     async loadCourseContext() {
       const cid = Number(this.$route?.query?.cid || 0)
       this.courseContextTitle = String(this.$route?.query?.course_title || "").trim()
-      this.courseContextLanguage = String(this.$route?.query?.course_language || this.locale || "en").trim()
+      this.courseContextLanguage = String(this.$route?.query?.course_language || "").trim()
 
       if (!cid) {
         return
@@ -671,7 +749,7 @@ export default {
         const data = response?.data || {}
 
         const apiTitle = String(data?.title || data?.name || "").trim()
-        const apiLanguage = String(data?.language || "").trim()
+        const apiLanguage = String(data?.courseLanguage || data?.course_language || data?.language || "").trim()
 
         if (apiTitle) {
           this.courseContextTitle = apiTitle
@@ -679,6 +757,7 @@ export default {
 
         if (apiLanguage) {
           this.courseContextLanguage = apiLanguage
+          this.ensureResourceLanguage()
         }
       } catch (error) {
         console.warn("[DocumentsForm] Failed to load course context.", error)

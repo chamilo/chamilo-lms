@@ -120,14 +120,32 @@
 
     <BaseAdvancedSettingsButton v-model="showAdvancedSettings">
       <ResourceLanguageSelector v-model="selectedLanguage" />
-      <div class="flex flex-row mb-2">
-        <label class="font-semibold w-28">{{ t("Options") }}:</label>
-        <BaseCheckbox
-          id="uncompress"
-          v-model="isUncompressZipEnabled"
-          :label="t('Uncompress zip')"
-          name="uncompress"
-        />
+      <div class="mb-2 flex flex-col gap-2 sm:flex-row sm:items-center">
+        <div class="flex w-28 shrink-0 items-center gap-1 font-semibold">
+          <span>{{ t("Options") }}:</span>
+          <span
+            class="mdi mdi-information-outline cursor-help text-primary"
+            aria-hidden="true"
+            :title="t('Document options change how uploaded files are processed after saving.')"
+          />
+        </div>
+
+        <div class="flex items-center gap-2">
+          <BaseCheckbox
+            id="uncompress"
+            v-model="isUncompressZipEnabled"
+            :label="t('Uncompress zip')"
+            name="uncompress"
+          />
+
+          <span
+            class="mdi mdi-information-outline cursor-help text-primary"
+            role="img"
+            tabindex="0"
+            :aria-label="t('Information about uncompressing zip files')"
+            :title="t('When enabled, ZIP files are extracted into the current document folder after upload.')"
+          />
+        </div>
       </div>
 
       <div class="flex flex-row mb-2">
@@ -148,15 +166,26 @@
       <!-- Search / Xapian options -->
       <div
         v-if="isSearchEnabled"
-        class="flex flex-row mb-2"
+        class="mb-2 flex flex-col gap-2 sm:flex-row sm:items-center"
       >
-        <label class="font-semibold w-28">{{ t("Search") }}:</label>
-        <BaseCheckbox
-          id="indexDocumentContent"
-          v-model="indexDocumentContent"
-          :label="t('Index document content?')"
-          name="indexDocumentContent"
-        />
+        <label class="w-28 shrink-0 font-semibold">{{ t("Search") }}:</label>
+
+        <div class="flex items-center gap-2">
+          <BaseCheckbox
+            id="indexDocumentContent"
+            v-model="indexDocumentContent"
+            :label="t('Index document content?')"
+            name="indexDocumentContent"
+          />
+
+          <span
+            class="mdi mdi-information-outline cursor-help text-primary"
+            role="img"
+            tabindex="0"
+            :aria-label="t('Information about indexing document content')"
+            :title="t('When enabled, the document text is indexed by the search engine so users can find it from platform search.')"
+          />
+        </div>
       </div>
 
       <!-- Specific search fields -->
@@ -327,6 +356,81 @@ function normalizeCode(code) {
   return String(code || "")
     .trim()
     .toLowerCase()
+}
+
+function normalizeLanguageIso(value) {
+  const raw = String(value || "").trim()
+  if (!raw) {
+    return ""
+  }
+
+  const languages = Array.isArray(window.languages) ? window.languages : []
+  const iriMatch = raw.match(/\/api\/languages\/(\d+)/)
+  if (iriMatch) {
+    const byId = languages.find((language) => String(language?.id || "") === iriMatch[1])
+    return String(byId?.isocode || byId?.isoCode || "")
+  }
+
+  const normalizedRaw = raw.replace("-", "_").toLowerCase()
+  const exact = languages.find((language) => {
+    const code = String(language?.isocode || language?.isoCode || "")
+      .replace("-", "_")
+      .toLowerCase()
+
+    return code === normalizedRaw
+  })
+
+  if (exact) {
+    return String(exact.isocode || exact.isoCode || "")
+  }
+
+  const shortCode = normalizedRaw.split("_")[0]
+  const byShortCode = languages.find((language) => {
+    const code = String(language?.isocode || language?.isoCode || "")
+      .replace("-", "_")
+      .toLowerCase()
+
+    return code === shortCode || code.startsWith(`${shortCode}_`)
+  })
+
+  return String(byShortCode?.isocode || byShortCode?.isoCode || raw)
+}
+
+async function applyDefaultLanguageFromCourse() {
+  if (selectedLanguage.value) {
+    return
+  }
+
+  const queryLanguage = normalizeLanguageIso(route.query.course_language)
+  if (queryLanguage) {
+    selectedLanguage.value = queryLanguage
+    return
+  }
+
+  const courseId = toInt(cid, 0)
+  if (!courseId) {
+    return
+  }
+
+  try {
+    const response = await fetch(`/api/courses/${courseId}`, {
+      credentials: "same-origin",
+      headers: { Accept: "application/json" },
+    })
+
+    if (!response.ok) {
+      return
+    }
+
+    const data = await response.json()
+    const courseLanguage = normalizeLanguageIso(data?.courseLanguage || data?.course_language || data?.language)
+
+    if (courseLanguage && !selectedLanguage.value) {
+      selectedLanguage.value = courseLanguage
+    }
+  } catch (error) {
+    console.warn("[DocumentsUpload] Failed to load course language.", error)
+  }
 }
 
 // Build meta keys: { "searchFieldValues[t]": "...", "searchFieldValues[d]": "..." }
@@ -591,6 +695,7 @@ uppy.setOptions({
 })
 
 onMounted(async () => {
+  await applyDefaultLanguageFromCourse()
   await refreshQuota(true)
 
   if (!isSearchEnabled.value) return

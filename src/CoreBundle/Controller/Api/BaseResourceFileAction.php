@@ -927,7 +927,7 @@ class BaseResourceFileAction
 
         $languageCode = trim((string) $rawLanguage);
         if ('' === $languageCode) {
-            return null;
+            return $this->findDefaultCourseLanguageFromRequest($request, $em);
         }
 
         if (preg_match('#/api/languages/(\d+)#', $languageCode, $matches)) {
@@ -954,6 +954,90 @@ class BaseResourceFileAction
         }
 
         throw new BadRequestHttpException('Invalid resource language.');
+    }
+
+    private function findDefaultCourseLanguageFromRequest(Request $request, EntityManagerInterface $em): ?Language
+    {
+        $courseId = $this->resolveCourseIdFromRequest($request);
+        if ($courseId <= 0) {
+            return null;
+        }
+
+        $course = $em->getRepository(Course::class)->find($courseId);
+        if (!$course instanceof Course) {
+            return null;
+        }
+
+        $courseLanguage = trim((string) $course->getCourseLanguage());
+        if ('' === $courseLanguage) {
+            return null;
+        }
+
+        $language = $em->getRepository(Language::class)->findOneBy([
+            'isocode' => $courseLanguage,
+            'available' => true,
+        ]);
+
+        return $language instanceof Language ? $language : null;
+    }
+
+    private function resolveCourseIdFromRequest(Request $request): int
+    {
+        $courseId = $request->query->getInt('cid', 0);
+        if ($courseId > 0) {
+            return $courseId;
+        }
+
+        $courseId = $request->request->getInt('cid', 0);
+        if ($courseId > 0) {
+            return $courseId;
+        }
+
+        $resourceLinkList = $this->extractResourceLinkListFromRequest($request);
+        foreach ($resourceLinkList as $link) {
+            if (!\is_array($link)) {
+                continue;
+            }
+
+            $cid = (int) ($link['cid'] ?? 0);
+            if ($cid > 0) {
+                return $cid;
+            }
+        }
+
+        return 0;
+    }
+
+    private function extractResourceLinkListFromRequest(Request $request): array
+    {
+        $raw = $request->request->get('resourceLinkList', null);
+
+        if (null === $raw) {
+            $content = $request->getContent();
+            if ('' !== trim($content)) {
+                $data = json_decode($content, true);
+                if (\is_array($data)) {
+                    $raw = $data['resourceLinkList'] ?? [];
+                }
+            }
+        }
+
+        if (\is_array($raw)) {
+            return $raw;
+        }
+
+        if (!\is_string($raw) || '' === trim($raw)) {
+            return [];
+        }
+
+        $decoded = json_decode($raw, true);
+        if (\is_array($decoded)) {
+            return $decoded;
+        }
+
+        $decoded = json_decode('['.$raw.']', true);
+
+        return \is_array($decoded) ? $decoded : [];
     }
 
     private function normalizeNodeId(mixed $value): ?int

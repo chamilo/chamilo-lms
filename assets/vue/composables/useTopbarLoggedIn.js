@@ -223,6 +223,43 @@ function normalizeBooleanFlag(value) {
   return false
 }
 
+function normalizeExternalLogoutBehaviour(data) {
+  if (!data || data.active !== true) {
+    return null
+  }
+
+  const logoutUrl = typeof data.logoutUrl === "string" && data.logoutUrl.trim() ? data.logoutUrl.trim() : "/logout"
+
+  return {
+    logoutUrl,
+    tooltip: typeof data.tooltip === "string" ? data.tooltip : "",
+    showAlert: data.showAlert === true,
+    alertText: typeof data.alertText === "string" ? data.alertText : "",
+    disabled: data.disabled === true || logoutUrl === "#",
+  }
+}
+
+async function fetchExternalLogoutBehaviour() {
+  try {
+    const response = await fetch("/plugin/ExtAuthChamiloLogoutButtonBehaviour/logout-config.php", {
+      credentials: "same-origin",
+      headers: {
+        Accept: "application/json",
+      },
+    })
+
+    if (!response.ok) {
+      return null
+    }
+
+    return normalizeExternalLogoutBehaviour(await response.json())
+  } catch (e) {
+    console.warn("[ExtAuthChamiloLogoutButtonBehaviour] Unable to load logout behavior", e)
+
+    return null
+  }
+}
+
 export function useTopbarLoggedIn(props) {
   const { t } = useI18n()
   const router = useRouter()
@@ -237,6 +274,7 @@ export function useTopbarLoggedIn(props) {
 
   const loginUrl = "/login"
   const elUserSubmenu = ref(null)
+  const externalLogoutBehaviour = ref(null)
 
   const allowUsersToCreateCourses = computed(() =>
     isSettingEnabled(platformConfigStore, "workflows.allow_users_to_create_courses"),
@@ -410,6 +448,42 @@ export function useTopbarLoggedIn(props) {
     }
   }
 
+  function runExternalLogoutBehaviour() {
+    const behaviour = externalLogoutBehaviour.value
+
+    if (!behaviour) {
+      window.location.href = "/logout"
+
+      return
+    }
+
+    if (behaviour.showAlert && behaviour.alertText) {
+      window.alert(behaviour.alertText)
+    }
+
+    if (!behaviour.disabled) {
+      window.location.href = behaviour.logoutUrl || "/logout"
+    }
+  }
+
+  function buildLogoutMenuItem() {
+    const behaviour = externalLogoutBehaviour.value
+
+    if (!behaviour) {
+      return {
+        label: t("Sign out"),
+        url: "/logout",
+        icon: "mdi mdi-logout-variant",
+      }
+    }
+
+    return {
+      label: t("Sign out"),
+      icon: behaviour.disabled ? "mdi mdi-logout-variant opacity-60" : "mdi mdi-logout-variant",
+      command: runExternalLogoutBehaviour,
+    }
+  }
+
   const userSubmenuItems = computed(() => {
     const items = [
       {
@@ -483,14 +557,7 @@ export function useTopbarLoggedIn(props) {
     }
 
     if (!hideLogoutButton.value) {
-      items[0].items.push(
-        { separator: true },
-        {
-          label: t("Sign out"),
-          url: "/logout",
-          icon: "mdi mdi-logout-variant",
-        },
-      )
+      items[0].items.push({ separator: true }, buildLogoutMenuItem())
     }
 
     return items
@@ -520,8 +587,12 @@ export function useTopbarLoggedIn(props) {
     return unreadCount > 9 ? "9+" : unreadCount > 0 ? unreadCount.toString() : null
   })
 
-  onMounted(() => {
+  onMounted(async () => {
     fetchJustificationMenu()
+
+    if (!isAnonymous.value) {
+      externalLogoutBehaviour.value = await fetchExternalLogoutBehaviour()
+    }
   })
 
   if (messagingEnabled.value) {

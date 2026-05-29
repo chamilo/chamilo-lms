@@ -55,7 +55,10 @@
       <a
         v-if="securityStore.isAuthenticated && !isAnonymous && !hideLogoutButton"
         class="app-sidebar__logout-link"
-        href="/logout"
+        :class="{ 'opacity-60': externalLogoutBehaviour?.disabled }"
+        :href="sidebarLogoutUrl"
+        :title="sidebarLogoutTitle"
+        @click="handleLogoutClick"
       >
         <span class="mdi mdi-logout-variant" />
         <span class="logout-text">{{ t("Sign out") }}</span>
@@ -111,11 +114,20 @@ if (!isMobile() && storedSidebarState === null) {
   window.localStorage.setItem("sidebarIsOpen", "true")
 }
 const expandingDueToPanelClick = ref(false)
+const externalLogoutBehaviour = ref(null)
 
 const currentYear = new Date().getFullYear()
 
 const hideLogoutButton = computed(() => {
   return platformConfigStore.getSetting("display.hide_logout_button") === "true"
+})
+
+const sidebarLogoutUrl = computed(() => {
+  return externalLogoutBehaviour.value?.logoutUrl || "/logout"
+})
+
+const sidebarLogoutTitle = computed(() => {
+  return externalLogoutBehaviour.value?.tooltip || ""
 })
 
 const institutionAddress = computed(() => {
@@ -155,6 +167,61 @@ watch(
   { immediate: true },
 )
 
+function normalizeExternalLogoutBehaviour(data) {
+  if (!data || data.active !== true) {
+    return null
+  }
+
+  const logoutUrl = typeof data.logoutUrl === "string" && data.logoutUrl.trim() ? data.logoutUrl.trim() : "/logout"
+
+  return {
+    logoutUrl,
+    tooltip: typeof data.tooltip === "string" ? data.tooltip : "",
+    showAlert: data.showAlert === true,
+    alertText: typeof data.alertText === "string" ? data.alertText : "",
+    disabled: data.disabled === true || logoutUrl === "#",
+  }
+}
+
+async function fetchExternalLogoutBehaviour() {
+  try {
+    const response = await fetch("/plugin/ExtAuthChamiloLogoutButtonBehaviour/logout-config.php", {
+      credentials: "same-origin",
+      headers: {
+        Accept: "application/json",
+      },
+    })
+
+    if (!response.ok) {
+      return null
+    }
+
+    return normalizeExternalLogoutBehaviour(await response.json())
+  } catch (e) {
+    console.warn("[ExtAuthChamiloLogoutButtonBehaviour] Unable to load logout behavior", e)
+
+    return null
+  }
+}
+
+function handleLogoutClick(event) {
+  const behaviour = externalLogoutBehaviour.value
+
+  if (!behaviour) {
+    return
+  }
+
+  event.preventDefault()
+
+  if (behaviour.showAlert && behaviour.alertText) {
+    window.alert(behaviour.alertText)
+  }
+
+  if (!behaviour.disabled) {
+    window.location.href = behaviour.logoutUrl || "/logout"
+  }
+}
+
 const handlePanelHeaderClick = (event) => {
   const header = event.target.closest(".p-panelmenu-header")
 
@@ -180,6 +247,7 @@ const handlePanelHeaderClick = (event) => {
 onMounted(async () => {
   if (securityStore.isAuthenticated && !isAnonymous.value) {
     await initialize()
+    externalLogoutBehaviour.value = await fetchExternalLogoutBehaviour()
   }
 })
 </script>

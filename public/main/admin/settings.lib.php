@@ -354,6 +354,7 @@ function getStablePluginAllowList(): array
         'Mobidico',
         'ShowRegions',
         'HelloWorld',
+        'ExtAuthChamiloLogoutButtonBehaviour',
     ];
 }
 

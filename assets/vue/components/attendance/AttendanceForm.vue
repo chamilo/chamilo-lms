@@ -105,13 +105,13 @@ import BaseAdvancedSettingsButton from "../../components/basecomponents/BaseAdva
 import BaseInputText from "../basecomponents/BaseInputText.vue"
 import { useRoute, useRouter } from "vue-router"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import gradebookService from "../../services/gradebookService"
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
-const { sid, cid } = useCidReq()
+const { sid, cid } = getCourseContext()
 const emit = defineEmits(["backPressed"])
 const props = defineProps({
   initialData: {

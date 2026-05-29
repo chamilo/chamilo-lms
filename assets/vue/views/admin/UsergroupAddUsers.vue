@@ -2,7 +2,7 @@
 import { ref, computed, onMounted } from "vue"
 import { useRoute } from "vue-router"
 import { useI18n } from "vue-i18n"
-import axios from "axios"
+import usergroupAdminService from "../../services/usergroupAdminService"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 
@@ -57,16 +57,12 @@ async function loadData() {
   isLoading.value = true
   errorMessage.value = ""
   try {
-    const { data } = await axios.get(`/admin/usergroups/${groupId.value}/add-users-data`, {
-      params: { relation: relationType.value },
-    })
+    const data = await usergroupAdminService.getAddUsersData(groupId.value, relationType.value)
     groupTitle.value = data.groupTitle
     isSocialGroup.value = data.isSocialGroup
     csrfToken.value = data.csrfToken
     // Merge both sides into a single sorted list
-    const merged = [...data.usersInGroup, ...data.usersNotInGroup].sort((a, b) =>
-      a.label.localeCompare(b.label),
-    )
+    const merged = [...data.usersInGroup, ...data.usersNotInGroup].sort((a, b) => a.label.localeCompare(b.label))
     allUsers.value = merged
     selectedIds.value = new Set(data.usersInGroup.map((u) => u.id))
   } catch {
@@ -113,7 +109,7 @@ async function save() {
     formData.append("_token", csrfToken.value)
     formData.append("relationType", String(relationType.value))
     selectedIds.value.forEach((id) => formData.append("userIds[]", String(id)))
-    await axios.post(`/admin/usergroups/${groupId.value}/add-users-data`, formData)
+    await usergroupAdminService.saveUsers(groupId.value, formData)
     window.location.href = "/main/admin/usergroups.php"
   } catch {
     errorMessage.value = t("An error occurred. Please try again.")

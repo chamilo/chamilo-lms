@@ -27,13 +27,13 @@ import AssignmentsForm from "../../components/assignments/AssignmentsForm.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import cStudentPublicationService from "../../services/cstudentpublication"
 import { useNotification } from "../../composables/notification"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 
 const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
 const notification = useNotification()
-const { cid, sid, gid } = useCidReq()
+const { cid, sid, gid } = getCourseContext()
 
 const assignment = ref(null)
 const isFormLoading = ref(true)

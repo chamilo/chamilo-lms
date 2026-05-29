@@ -5,7 +5,7 @@ import toInteger from "lodash/toInteger"
 
 import { formatDateTime } from "../utils/dates"
 import NotificationMixin from "./NotificationMixin"
-import axios from "axios"
+import baseService from "../services/baseService"
 
 export default {
   mixins: [NotificationMixin],
@@ -237,8 +237,7 @@ export default {
     changeVisibilityHandler(item, slotProps) {
       let folderParams = this.$route.query
       folderParams["id"] = item["@id"]
-      axios.put(item["@id"] + "/toggle_visibility", {}).then((response) => {
-        let data = response.data
+      baseService.put(item["@id"] + "/toggle_visibility", {}).then((data) => {
         item["resourceLinkListFromEntity"] = data["resourceLinkListFromEntity"]
       })
     },

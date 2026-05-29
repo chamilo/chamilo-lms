@@ -31,7 +31,7 @@ const isLoading = ref(false)
 async function createItem(formData) {
   isLoading.value = true
   try {
-    await baseService.post("/api/rooms", formData, true)
+    await baseService.post("/api/rooms", formData)
     toast.add({ severity: "success", detail: t("{0} created", [formData.title]), life: 3500 })
     router.push({ name: "RoomList" })
   } catch (e) {

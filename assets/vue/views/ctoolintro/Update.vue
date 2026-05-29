@@ -20,6 +20,7 @@ import { ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import useVuelidate from "@vuelidate/core"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
+import { getCourseContext } from "../../utils/courseContext"
 import cToolIntroService from "../../services/cToolIntroService"
 
 const servicePrefix = "ctoolintro"
@@ -37,6 +38,7 @@ export default {
     const route = useRoute()
     const router = useRouter()
     const item = ref({})
+    const { cid, sid } = getCourseContext()
 
     let toolId = route.query.ctoolId
     let ctoolintroId = route.query.ctoolintroIid

@@ -21,10 +21,10 @@ import useVuelidate from "@vuelidate/core"
 import { useRoute, useRouter } from "vue-router"
 import isEmpty from "lodash/isEmpty"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink.js"
-import { useCidReq } from "../../composables/cidReq"
 import cToolIntroService from "../../services/cToolIntroService"
 import { useSecurityStore } from "../../store/securityStore"
 import { storeToRefs } from "pinia"
+import { getCourseContext } from "../../utils/courseContext"
 
 const servicePrefix = "ctoolintro"
 
@@ -57,7 +57,7 @@ export default {
       id = route.query.id
     }
 
-    const { cid } = useCidReq()
+    const { cid } = getCourseContext()
 
     let courseId = route.query.cid
     let sessionId = route.query.sid

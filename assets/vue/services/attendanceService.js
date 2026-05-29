@@ -1,4 +1,4 @@
-import axios from "axios"
+import baseService from "./baseService"
 
 export const ATTENDANCE_STATES = {
   ABSENT: { id: 0, label: "Absent", score: 0 },
@@ -15,8 +15,7 @@ export default {
    * @returns {Promise<Object>} - Data of the attendance lists.
    */
   getAttendances: async (params) => {
-    const response = await axios.get(`/api/attendances/`, { params })
-    return response.data
+    return await baseService.get(`/api/attendances/`, params)
   },
 
   /**
@@ -25,8 +24,7 @@ export default {
    * @returns {Promise<Object>} - Data of the specific attendance list.
    */
   getAttendance: async (attendanceId) => {
-    const response = await axios.get(`/api/attendances/${attendanceId}/`)
-    return response.data
+    return await baseService.get(`/api/attendances/${attendanceId}/`)
   },
 
   /**
@@ -36,10 +34,9 @@ export default {
    */
   fetchGroups: async (parentNodeId) => {
     try {
-      const response = await axios.get(`/api/groups`, {
-        params: { "resourceNode.parent": parentNodeId },
-      })
-      return response.data["hydra:member"].map((group) => ({
+      const { items } = await baseService.getCollection(`/api/groups`, { "resourceNode.parent": parentNodeId })
+
+      return items.map((group) => ({
         label: group.title,
         value: group.iid,
       }))
@@ -59,8 +56,7 @@ export default {
    * @returns {Promise<Object>} - Data of the created attendance list.
    */
   createAttendance: async (data) => {
-    const response = await axios.post(`/api/attendances`, data)
-    return response.data
+    return await baseService.post(`/api/attendances`, data)
   },
 
   /**
@@ -70,8 +66,7 @@ export default {
    * @returns {Promise<Object>} - Data of the updated attendance list.
    */
   updateAttendance: async (attendanceId, data) => {
-    const response = await axios.put(`/api/attendances/${attendanceId}`, data)
-    return response.data
+    return await baseService.put(`/api/attendances/${attendanceId}`, data)
   },
 
   /**
@@ -85,8 +80,7 @@ export default {
    * @returns {Promise<Object>} - Result of the deletion.
    */
   deleteAttendance: async (attendanceId) => {
-    const response = await axios.delete(`/api/attendances/${attendanceId}`)
-    return response.data
+    return await baseService.delete(`/api/attendances/${attendanceId}`)
   },
 
   /**
@@ -95,8 +89,7 @@ export default {
    * @returns {Promise<void>} - Result of the toggle action.
    */
   toggleVisibility: async (attendanceId) => {
-    const endpoint = `/api/attendances/${attendanceId}/toggle_visibility`
-    await axios.put(endpoint, {}, { headers: { "Content-Type": "application/json" } })
+    await baseService.put(`/api/attendances/${attendanceId}/toggle_visibility`, {})
   },
 
   /**
@@ -105,8 +98,7 @@ export default {
    * @returns {Promise<void>} - Result of the soft delete action.
    */
   softDelete: async (attendanceId) => {
-    const endpoint = `/api/attendances/${attendanceId}/soft_delete`
-    await axios.put(endpoint, {}, { headers: { "Content-Type": "application/json" } })
+    await baseService.put(`/api/attendances/${attendanceId}/soft_delete`, {})
   },
 
   /**
@@ -116,8 +108,7 @@ export default {
    * @returns {Promise<Object>} - Data of the created calendar event.
    */
   addCalendarEvent: async (attendanceId, data) => {
-    const response = await axios.post(`/api/attendances/${attendanceId}/calendars`, data)
-    return response.data
+    return await baseService.post(`/api/attendances/${attendanceId}/calendars`, data)
   },
 
   /**
@@ -127,8 +118,7 @@ export default {
    * @returns {Promise<Object>} - Data of the updated calendar event.
    */
   updateCalendarEvent: async (calendarId, data) => {
-    const response = await axios.put(`/api/c_attendance_calendars/${calendarId}`, data)
-    return response.data
+    return await baseService.put(`/api/c_attendance_calendars/${calendarId}`, data)
   },
 
   /**
@@ -137,8 +127,7 @@ export default {
    * @returns {Promise<Object>} - Result of the deletion.
    */
   deleteCalendarEvent: async (calendarId) => {
-    const response = await axios.delete(`/api/c_attendance_calendars/${calendarId}`)
-    return response.data
+    return await baseService.delete(`/api/c_attendance_calendars/${calendarId}`)
   },
 
   /**
@@ -148,11 +137,7 @@ export default {
    * @returns {Promise<Object>} - Data of the created calendar entry.
    */
   addAttendanceCalendar: async (attendanceId, data) => {
-    const endpoint = `/api/attendances/${attendanceId}/calendars`
-    const response = await axios.post(endpoint, data, {
-      headers: { "Content-Type": "application/json" },
-    })
-    return response.data
+    return await baseService.post(`/api/attendances/${attendanceId}/calendars`, data)
   },
 
   /**
@@ -162,10 +147,7 @@ export default {
    */
   getFullAttendanceData: async (attendanceId) => {
     try {
-      const response = await axios.get(`/attendance/full-data`, {
-        params: { attendanceId },
-      })
-      return response.data
+      return await baseService.get(`/attendance/full-data`, { attendanceId })
     } catch (error) {
       console.error("Error fetching full attendance data:", error)
       throw error
@@ -174,8 +156,7 @@ export default {
 
   getAttendanceSheetUsers: async (attendanceId, params) => {
     try {
-      const response = await axios.get(`/attendance/${attendanceId}/users/context`, { params })
-      return response.data
+      return await baseService.get(`/attendance/${attendanceId}/users/context`, params)
     } catch (error) {
       console.error("Error fetching attendance sheet users:", error)
       throw error
@@ -190,9 +171,7 @@ export default {
    * @returns {Promise<Object>} - Data of the updated calendar entry.
    */
   updateAttendanceCalendar: async (attendanceId, calendarId, data) => {
-    const endpoint = `/api/attendances/${attendanceId}/calendars/${calendarId}`
-    const response = await axios.put(endpoint, data)
-    return response.data
+    return await baseService.put(`/api/attendances/${attendanceId}/calendars/${calendarId}`, data)
   },
 
   /**
@@ -202,9 +181,7 @@ export default {
    * @returns {Promise<Object>} - Result of the deletion.
    */
   deleteAttendanceCalendar: async (attendanceId, calendarId) => {
-    const endpoint = `/api/attendances/${attendanceId}/calendars/${calendarId}`
-    const response = await axios.delete(endpoint)
-    return response.data
+    return await baseService.delete(`/api/attendances/${attendanceId}/calendars/${calendarId}`)
   },
 
   /**
@@ -213,50 +190,47 @@ export default {
    * @returns {Promise<Object>} - Result of the deletion.
    */
   deleteAllAttendanceCalendars: async (attendanceId) => {
-    const endpoint = `/api/attendances/${attendanceId}/calendars`
-    const response = await axios.delete(endpoint)
-    return response.data
+    return await baseService.delete(`/api/attendances/${attendanceId}/calendars`)
   },
 
   exportAttendanceToPdf: async (attendanceId, { cid, sid, gid }) => {
-    const response = await axios.get(
-      `/attendance/${attendanceId}/export/pdf`,
-      {
-        params: { cid, sid, gid },
-        responseType: "blob",
-      }
-    )
+    const response = await baseService.getRaw(`/attendance/${attendanceId}/export/pdf`, {
+      params: { cid, sid, gid },
+      responseType: "blob",
+    })
+
     return response.data
   },
 
   exportAttendanceToXls: async (attendanceId, { cid, sid, gid }) => {
-    const response = await axios.get(
-      `/attendance/${attendanceId}/export/xls`,
-      {
-        params: { cid, sid, gid },
-        responseType: "blob",
-      }
-    )
+    const response = await baseService.getRaw(`/attendance/${attendanceId}/export/xls`, {
+      params: { cid, sid, gid },
+      responseType: "blob",
+    })
+
     return response.data
   },
 
   generateQrCode: async (attendanceId, { cid, sid, gid }) => {
-    const response = await axios.get(
-      `/attendance/${attendanceId}/qrcode`,
-      {
-        params: { cid, sid, gid },
-        responseType: "blob",
-      }
-    )
+    const response = await baseService.getRaw(`/attendance/${attendanceId}/qrcode`, {
+      params: { cid, sid, gid },
+      responseType: "blob",
+    })
+
     return response.data
+  },
+
+  saveStudentOwnAttendance: async ({ courseId, entries }) => {
+    return await baseService.post(`/attendance/validate-self`, { courseId, entries })
+  },
+
+  saveStudentSignature: async ({ calendarId, signature }) => {
+    return await baseService.post(`/attendance/sign-self`, { calendarId, signature })
   },
 
   saveAttendanceSheet: async (data) => {
     try {
-      const response = await axios.post(`/attendance/sheet/save`, data, {
-        headers: { "Content-Type": "application/json" },
-      })
-      return response.data
+      return await baseService.post(`/attendance/sheet/save`, data)
     } catch (error) {
       console.error("Error saving attendance sheet:", error)
       throw error
@@ -264,14 +238,12 @@ export default {
   },
 
   getAttendancesWithDoneCount: async (params) => {
-    const response = await axios.get(`/attendance/list_with_done_count`, { params });
-    return response.data;
+    return await baseService.get(`/attendance/list_with_done_count`, params)
   },
 
   getStudentAttendanceData: async (attendanceId) => {
     try {
-      const response = await axios.get(`/attendance/${attendanceId}/student-dates`)
-      return response.data
+      return await baseService.get(`/attendance/${attendanceId}/student-dates`)
     } catch (error) {
       console.error("Error fetching student attendance data:", error)
       throw error
@@ -279,9 +251,6 @@ export default {
   },
 
   getDateSheet: async (attendanceId, calendarId, { cid, sid, gid }) => {
-    const res = await axios.get(`/attendance/${attendanceId}/date/${calendarId}/sheet`, {
-      params: { cid, sid, gid },
-    })
-    return res.data
+    return await baseService.get(`/attendance/${attendanceId}/date/${calendarId}/sheet`, { cid, sid, gid })
   },
 }

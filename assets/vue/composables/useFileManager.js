@@ -4,9 +4,11 @@ import { useStore } from "vuex"
 import { storeToRefs } from "pinia"
 import { useI18n } from "vue-i18n"
 import { useSecurityStore } from "../store/securityStore"
+import { getCourseContext } from "../utils/courseContext"
 import { RESOURCE_LINK_PUBLISHED } from "../constants/entity/resourcelink"
 import { useCidReqStore } from "../store/cidReq"
-import axios from "axios"
+import documentsService from "../services/documents"
+import baseService from "../services/baseService"
 
 export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocument = false) {
   const route = useRoute()
@@ -37,6 +39,7 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
   const contextMenuFile = ref(null)
   const previousFolders = ref([])
   const currentFolderTitle = ref("Root")
+  const { cid, sid, gid } = getCourseContext()
 
   // ---- Picker type filter (files/images/media) ----
   const filterType = computed(() => {
@@ -133,19 +136,12 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
     isLoading.value = true
 
     try {
-      const response = await fetch(`${apiEndpoint}?${new URLSearchParams(params).toString()}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-
-      const data = await response.json()
-      if (data["hydra:member"]) {
-        files.value = data["hydra:member"]
-        totalFiles.value = data["hydra:totalItems"]
+      const { items, totalItems } = await baseService.getCollection(apiEndpoint, params)
+      if (items) {
+        files.value = items
+        totalFiles.value = totalItems
       } else {
-        console.error("[FILEMANAGER] Unexpected API response format", data)
+        console.error("[FILEMANAGER] Unexpected API response format", items)
       }
     } catch (error) {
       console.error("[FILEMANAGER] Error fetching files:", error)
@@ -360,7 +356,7 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
     if (isCourseDocument) {
       if (itemToDelete.value && itemToDelete.value.iid) {
         try {
-          await axios.delete(`/api/documents/${itemToDelete.value.iid}`)
+          await documentsService.deleteDocument(itemToDelete.value.iid)
           deleteDialog.value = false
           itemToDelete.value = { resourceNode: {} }
           await onUpdateOptions()

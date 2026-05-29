@@ -178,9 +178,11 @@ import ProjectCreateDialog from "../../components/blog/ProjectCreateDialog.vue"
 import service from "../../services/blogs"
 import { useSecurityStore } from "../../store/securityStore"
 import { RESOURCE_LINK_DRAFT } from "../../constants/entity/resourcelink"
+import { getCourseContext } from "../../utils/courseContext"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
 
+const { cid, sid } = getCourseContext()
 const { t } = useI18n()
 const route = useRoute()
 

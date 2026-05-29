@@ -142,21 +142,22 @@
 import { ref, onMounted, computed } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
-import axios from "axios"
+import resourceFileService from "../../services/resourceFileService"
+import { findAll as findAllAccessUrls } from "../../services/accessurlService"
 import Column from "primevue/column"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseFileUpload from "../../components/basecomponents/BaseFileUpload.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import prettyBytes from "pretty-bytes"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import { useSecurityStore } from "../../store/securityStore"
 
 const securityStore = useSecurityStore()
 const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
-const { cid, sid, gid } = useCidReq()
+const { cid, sid, gid } = getCourseContext()
 const file = ref(null)
 const variations = ref([])
 const originalFile = ref(null)
@@ -184,8 +185,7 @@ async function fetchVariations() {
 
   try {
     const resourceNodeId = originalFile.value.resourceNode.id
-    const response = await axios.get(`/r/resource_files/${resourceNodeId}/variants`)
-    variations.value = response.data
+    variations.value = await resourceFileService.getVariants(resourceNodeId)
   } catch (error) {
     console.error("Error fetching variations:", error)
   }
@@ -193,11 +193,11 @@ async function fetchVariations() {
 
 async function fetchAccessUrls() {
   try {
-    const response = await axios.get("/api/access_urls")
-    if (Array.isArray(response.data["hydra:member"])) {
+    const items = await findAllAccessUrls()
+    if (Array.isArray(items)) {
       const currentAccessUrlId = window.access_url_id
 
-      accessUrls.value = response.data["hydra:member"].filter((url) => url.id !== currentAccessUrlId)
+      accessUrls.value = items.filter((url) => url.id !== currentAccessUrlId)
     } else {
       accessUrls.value = []
     }
@@ -209,8 +209,7 @@ async function fetchAccessUrls() {
 
 async function fetchOriginalFile() {
   try {
-    const response = await axios.get(`/api/resource_files/${resourceFileId}`)
-    originalFile.value = response.data
+    originalFile.value = await resourceFileService.findById(resourceFileId)
   } catch (error) {
     console.error("Error fetching original file:", error)
   }
@@ -230,8 +229,8 @@ async function uploadVariant(file, resourceNodeId, accessUrlId) {
   }
 
   try {
-    const response = await axios.post("/api/resource_files/add_variant", formData)
-    console.log("Variant uploaded or updated successfully:", response.data)
+    const data = await resourceFileService.addVariant(formData)
+    console.log("Variant uploaded or updated successfully:", data)
 
     await fetchVariations()
     file.value = null
@@ -243,7 +242,7 @@ async function uploadVariant(file, resourceNodeId, accessUrlId) {
 
 async function deleteVariant(variantId) {
   try {
-    await axios.delete(`/r/resource_files/${variantId}/delete_variant`)
+    await resourceFileService.deleteVariant(variantId)
     console.log("Variant deleted successfully.")
     await fetchVariations()
   } catch (error) {

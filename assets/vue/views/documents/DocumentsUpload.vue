@@ -115,7 +115,7 @@ import XHRUpload from "@uppy/xhr-upload"
 import ImageEditor from "@uppy/image-editor"
 import { useRoute, useRouter } from "vue-router"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import { useUpload } from "../../composables/upload"
 import { useI18n } from "vue-i18n"
 import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
@@ -125,10 +125,11 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import { usePlatformConfig } from "../../store/platformConfig"
 import documentsService from "../../services/documents"
+import searchEngineFieldService from "../../services/searchEngineFieldService"
 
 const route = useRoute()
 const router = useRouter()
-const { gid, sid, cid } = useCidReq()
+const { gid, sid, cid } = getCourseContext()
 const { onCreated } = useUpload()
 const { t } = useI18n()
 const platformConfigStore = usePlatformConfig()
@@ -420,16 +421,10 @@ onMounted(async () => {
   if (!isSearchEnabled.value) return
 
   try {
-    const response = await fetch("/api/search_engine_fields", { credentials: "same-origin" })
-    if (!response.ok) {
-      console.error("[Search] Failed to load search engine fields:", response.status)
-      return
-    }
-
-    const json = await response.json()
-    const fields = Array.isArray(json) ? json : json["hydra:member"] || []
+    const { items } = await searchEngineFieldService.listFields()
+    const fields = items || []
     if (!Array.isArray(fields)) {
-      console.error("[Search] Unexpected search engine fields payload:", json)
+      console.error("[Search] Unexpected search engine fields payload:", items)
       return
     }
 

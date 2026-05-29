@@ -221,13 +221,13 @@ import attendanceService, { ATTENDANCE_STATES } from "../../services/attendanceS
 import SignaturePad from "signature_pad"
 import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import { useFormatDate } from "../../composables/formatDate"
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
-const { cid, sid, gid } = useCidReq()
+const { cid, sid, gid } = getCourseContext()
 const { abbreviatedDatetime } = useFormatDate()
 
 // --------------------------- Permissions / flags -----------------------------

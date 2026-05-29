@@ -283,6 +283,7 @@ import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import ResourceFileLink from "../../components/documents/ResourceFileLink.vue"
 import DataFilter from "../../components/DataFilter"
 import DocumentsFilterForm from "../../components/documents/Filter"
+import resourceNodeService from "../../services/resourcenode"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import { useI18n } from "vue-i18n"
 import { useFormatDate } from "../../composables/formatDate"
@@ -652,17 +653,7 @@ export default {
       }
 
       try {
-        const resp = await fetch(`/api/resource_nodes/${id}`, {
-          headers: { Accept: "application/ld+json" },
-          credentials: "same-origin",
-        })
-
-        if (!resp.ok) {
-          console.warn("[DOC PICKER] Failed to fetch resource node info", { id, status: resp.status })
-          return null
-        }
-
-        const data = await resp.json()
+        const data = await resourceNodeService.findById(id)
         const title = String(data?.title || "").trim() || `#${id}`
         const parentRaw = data?.parent
         const parentId = this.normalizeNodeId(parentRaw)

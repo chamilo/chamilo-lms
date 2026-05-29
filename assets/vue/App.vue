@@ -86,7 +86,7 @@ import {
   watchEffect,
 } from "vue"
 import { useRoute, useRouter } from "vue-router"
-import axios from "axios"
+import api from "./config/api"
 import { capitalize, isEmpty } from "lodash"
 import ConfirmDialog from "primevue/confirmdialog"
 import { useSecurityStore } from "./store/securityStore"
@@ -243,7 +243,7 @@ onUpdated(() => {
   app.dataset.flashes = ""
 })
 
-axios.interceptors.response.use(
+api.interceptors.response.use(
   (r) => r,
   (error) => {
     const s = error?.response?.status

@@ -123,7 +123,7 @@ import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import GlossaryTermList from "../../components/glossary/GlossaryTermList.vue"
 import GlossaryTermTable from "../../components/glossary/GlossaryTermTable.vue"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import glossaryService from "../../services/glossaryService"
 import { useNotification } from "../../composables/notification"
 import BaseDialogDelete from "../../components/basecomponents/BaseDialogDelete.vue"
@@ -300,7 +300,7 @@ async function exportToDocuments() {
   }
 }
 
-const { cid, sid } = useCidReq()
+const { cid, sid } = getCourseContext()
 
 async function fetchGlossaries() {
   const params = {

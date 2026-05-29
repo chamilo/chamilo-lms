@@ -154,6 +154,7 @@ import useVuelidate from "@vuelidate/core"
 import { computed, reactive, ref, watchEffect } from "vue"
 import { maxValue, minValue, required } from "@vuelidate/validators"
 import { useI18n } from "vue-i18n"
+import { getCourseContext } from "../../utils/courseContext"
 import { useRoute } from "vue-router"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 
@@ -171,6 +172,7 @@ const props = defineProps({
 const emit = defineEmits(["submit"])
 
 const { t } = useI18n()
+const { cid, sid, gid } = getCourseContext()
 const route = useRoute()
 
 const showAdvancedSettings = ref(false)

@@ -279,19 +279,20 @@
 
 <script setup>
 import { computed, nextTick, onBeforeUnmount, ref, watch } from "vue"
-import axios from "axios"
 import Dialog from "primevue/dialog"
 import Dropdown from "primevue/dropdown"
 import InputText from "primevue/inputtext"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useCourseSettings } from "../../store/courseSettingStore"
 import { useSecurityStore } from "../../store/securityStore"
 import { checkIsAllowedToEdit } from "../../composables/userPermissions"
+import documentsService from "../../services/documents"
+import aiService from "../../services/aiService"
 
 const props = defineProps({
   visible: { type: Boolean, default: false },
@@ -306,7 +307,7 @@ const emit = defineEmits(["update:visible", "accepted"])
 
 const route = useRoute()
 const { t, locale } = useI18n()
-const { cid, sid, gid } = useCidReq()
+const { cid, sid, gid } = getCourseContext()
 
 const platformConfig = usePlatformConfig()
 const courseSettingsStore = useCourseSettings()
@@ -707,11 +708,9 @@ async function createFolder(title, parentNodeId) {
   formData.append("parentResourceNodeId", String(parentNodeId))
   formData.append("resourceLinkList", buildResourceLinkList())
 
-  const response = await axios.post("/api/documents", formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  })
+  const data = await documentsService.uploadDocumentFile(formData)
 
-  return response?.data || {}
+  return data || {}
 }
 
 async function fetchFolders(nodeId = null) {
@@ -737,20 +736,18 @@ async function fetchFolders(nodeId = null) {
         continue
       }
 
-      const response = await axios.get("/api/documents", {
-        params: {
-          loadNode: 1,
-          filetype: ["folder"],
-          "resourceNode.parent": currentNodeId,
-          cid,
-          sid,
-          gid,
-          page: 1,
-          itemsPerPage: 200,
-        },
+      const { items } = await documentsService.listDocuments({
+        loadNode: 1,
+        filetype: ["folder"],
+        "resourceNode.parent": currentNodeId,
+        cid,
+        sid,
+        gid,
+        page: 1,
+        itemsPerPage: 200,
       })
 
-      const members = response.data?.["hydra:member"] || []
+      const members = items || []
       for (const folder of members) {
         const folderNodeId =
           normalizeResourceNodeId(folder?.resourceNode?.id) ?? normalizeResourceNodeId(folder?.resourceNodeId)
@@ -833,11 +830,7 @@ async function saveToDocuments(file) {
   formData.append("fileExistsOption", "rename")
   formData.append("ai_assisted", "1")
 
-  const response = await axios.post("/api/documents", formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  })
-
-  const data = response?.data || {}
+  const data = (await documentsService.uploadDocumentFile(formData)) || {}
   savedIri.value = String(data?.["@id"] || data?.id || "")
   return data
 }
@@ -857,8 +850,7 @@ async function resolveSavedDocument(savedDoc) {
   }
 
   try {
-    const response = await axios.get(iri)
-    const fresh = response?.data || {}
+    const fresh = (await documentsService.getDocumentByIri(iri)) || {}
     const freshUrl = String(fresh?.contentUrl || fresh?.downloadUrl || fresh?.url || "").trim()
 
     return {
@@ -876,7 +868,7 @@ async function loadCapabilities() {
   isLoadingCaps.value = true
 
   try {
-    const { data } = await axios.get("/ai/capabilities")
+    const data = await aiService.getCapabilities()
 
     hasImage.value = !!data?.has?.image
     hasVideo.value = !!data?.has?.video
@@ -924,10 +916,7 @@ function stopVideoPolling(reason = "") {
 }
 
 async function pollVideoJobOnce(jobId, providerCode) {
-  const response = await axios.get(`/ai/video_job/${encodeURIComponent(jobId)}`, {
-    params: { ai_provider: providerCode || null },
-  })
-  return response?.data
+  return aiService.getVideoJob(jobId, providerCode)
 }
 
 function isTerminalVideoStatus(status) {
@@ -1090,9 +1079,7 @@ async function generate() {
       payload.height = parsedHeight.value
     }
 
-    const { data } = await axios.post(endpoint, payload, {
-      headers: { "Content-Type": "application/json" },
-    })
+    const data = await aiService.generateMedia(endpoint, payload)
 
     if (!data?.success) {
       const msg = String(data?.text || "")

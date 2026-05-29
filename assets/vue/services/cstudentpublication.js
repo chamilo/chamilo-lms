@@ -1,9 +1,9 @@
 import makeService from "./api"
-import { useCidReq } from "../composables/cidReq"
-import axios from "axios"
+import { getCourseContext } from "../utils/courseContext"
+import baseService from "./baseService"
 
 function buildCidParams() {
-  const { cid, sid, gid } = useCidReq()
+  const { cid, sid, gid } = getCourseContext()
 
   return {
     cid,
@@ -20,27 +20,20 @@ function extractId(idOrIri) {
 
 async function updatePublication(idOrIri, payload) {
   const id = extractId(idOrIri)
-  return axios.put(`/api/c_student_publications/${id}`, payload, {
-    params: buildCidParams(),
-  })
+
+  return baseService.put(`/api/c_student_publications/${id}`, payload, { params: buildCidParams() })
 }
 
 async function findStudentAssignments() {
-  const params = new URLSearchParams(buildCidParams()).toString()
-  const response = await fetch(`/assignments/student?${params}`)
-  if (!response.ok) throw new Error("Failed to load student assignments")
-  return response.json()
+  return baseService.get(`/assignments/student`, buildCidParams())
 }
 
 async function getAssignmentMetadata(assignmentId, cid, sid = 0, gid = 0) {
-  const params = new URLSearchParams({
+  return baseService.get(`/api/c_student_publications/${assignmentId}`, {
     cid,
     ...(sid && { sid }),
     ...(gid && { gid }),
-  }).toString()
-
-  const response = await axios.get(`/api/c_student_publications/${assignmentId}?${params}`)
-  return response.data
+  })
 }
 
 async function getAssignmentDetail({ assignmentId, page = 1, itemsPerPage = 10, order = {} }) {
@@ -50,8 +43,8 @@ async function getAssignmentDetail({ assignmentId, page = 1, itemsPerPage = 10, 
     itemsPerPage,
     ...Object.fromEntries(Object.entries(order).map(([key, val]) => [`order[${key}]`, val])),
   }
-  const response = await axios.get(`/assignments/${assignmentId}/submissions`, { params })
-  return response.data
+
+  return baseService.get(`/assignments/${assignmentId}/submissions`, params)
 }
 
 async function getAssignmentDetailForTeacher({ assignmentId, page = 1, itemsPerPage = 10, order = {} }) {
@@ -61,33 +54,25 @@ async function getAssignmentDetailForTeacher({ assignmentId, page = 1, itemsPerP
     itemsPerPage,
     ...Object.fromEntries(Object.entries(order).map(([key, val]) => [`order[${key}]`, val])),
   }
-  const response = await axios.get(`/assignments/${assignmentId}/submissions/teacher`, { params })
-  return response.data
+
+  return baseService.get(`/assignments/${assignmentId}/submissions/teacher`, params)
 }
 
 async function uploadStudentAssignment(formData, queryParams) {
-  const response = await axios.post(`/api/c_student_publications/upload?${queryParams}`, formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  })
-  return response.data
+  return baseService.post(`/api/c_student_publications/upload?${queryParams}`, formData)
 }
 
 async function getStudentProgress(queryParams = {}) {
-  const merged = { ...buildCidParams(), ...queryParams }
-  const params = new URLSearchParams(merged).toString()
-  const url = params ? `/assignments/progress?${params}` : `/assignments/progress`
-  const response = await axios.get(url)
-  return response.data
+  return baseService.get(`/assignments/progress`, { ...buildCidParams(), ...queryParams })
 }
 
 async function deleteAssignmentSubmission(submissionId) {
-  await axios.delete(`/assignments/submissions/${submissionId}`, {
-    params: buildCidParams(),
-  })
+  await baseService.delete(`/assignments/submissions/${submissionId}`, { params: buildCidParams() })
 }
 
 async function updateSubmission(id, data) {
-  await axios.patch(`/assignments/submissions/${id}/edit`, data, {
+  await baseService.patch(`/assignments/submissions/${id}/edit`, data, {
+    headers: { "Content-Type": "application/json" },
     params: buildCidParams(),
   })
 }
@@ -101,23 +86,17 @@ async function uploadComment(submissionId, parentResourceNodeId, formData, sendM
     ...buildCidParams(),
   }
 
-  const response = await axios.post(`/api/c_student_publication_comments/upload`, formData, {
-    params,
-    headers: { "Content-Type": "multipart/form-data" },
-  })
-
-  return response.data
+  return baseService.post(`/api/c_student_publication_comments/upload`, formData, {}, { params })
 }
 
 async function loadComments(submissionId) {
   try {
-    const response = await axios.get(`/api/c_student_publication_comments`, {
-      params: {
-        "publication.iid": submissionId,
-        ...buildCidParams(),
-      },
+    const { items } = await baseService.getCollection(`/api/c_student_publication_comments`, {
+      "publication.iid": submissionId,
+      ...buildCidParams(),
     })
-    return response.data["hydra:member"] || []
+
+    return items || []
   } catch (error) {
     console.error("[Assignments] Failed to load comments", error)
     return []
@@ -125,52 +104,55 @@ async function loadComments(submissionId) {
 }
 
 async function deleteComment(commentIid) {
-  await axios.delete(`/api/c_student_publication_comments/${commentIid}`, {
-    params: buildCidParams(),
-  })
+  await baseService.delete(`/api/c_student_publication_comments/${commentIid}`, { params: buildCidParams() })
 }
 
 async function moveSubmission(submissionId, newAssignmentId) {
-  const response = await axios.patch(
+  return baseService.patch(
     `/assignments/submissions/${submissionId}/move`,
     { newAssignmentId },
-    { params: buildCidParams() },
+    {
+      headers: { "Content-Type": "application/json" },
+      params: buildCidParams(),
+    },
   )
-  return response.data
 }
 
 async function getUnsubmittedUsers(assignmentId) {
-  const params = new URLSearchParams(buildCidParams()).toString()
-  const response = await axios.get(`/assignments/${assignmentId}/unsubmitted-users?${params}`)
-  return response.data["hydra:member"]
+  const { items } = await baseService.getCollection(`/assignments/${assignmentId}/unsubmitted-users`, buildCidParams())
+
+  return items
 }
 
 async function sendEmailToUnsubmitted(assignmentId, queryParams = {}) {
-  const merged = { ...buildCidParams(), ...queryParams }
-  const params = new URLSearchParams(merged).toString()
-  const response = await axios.post(`/assignments/${assignmentId}/unsubmitted-users/email?${params}`)
-  return response.data
+  const params = { ...buildCidParams(), ...queryParams }
+
+  return baseService.post(`/assignments/${assignmentId}/unsubmitted-users/email`, {}, {}, { params })
 }
 
 async function deleteAllCorrections(assignmentId, cid, sid = 0) {
   const params = { ...buildCidParams(), cid, ...(sid && { sid }) }
-  await axios.delete(`/assignments/${assignmentId}/corrections/delete`, { params })
+
+  await baseService.delete(`/assignments/${assignmentId}/corrections/delete`, { params })
 }
 
 async function exportAssignmentPdf(assignmentId, cid, sid = 0, gid = 0) {
   const params = { ...buildCidParams(), cid, ...(sid && { sid }), ...(gid && { gid }) }
-  const response = await axios.get(`/assignments/${assignmentId}/export/pdf`, {
+
+  const response = await baseService.getRaw(`/assignments/${assignmentId}/export/pdf`, {
     params,
     responseType: "blob",
   })
+
   return response.data
 }
 
 async function downloadAssignments(assignmentId) {
-  const response = await axios.get(`/assignments/${assignmentId}/download-package`, {
+  const response = await baseService.getRaw(`/assignments/${assignmentId}/download-package`, {
     params: buildCidParams(),
     responseType: "blob",
   })
+
   return response.data
 }
 
@@ -178,46 +160,95 @@ async function uploadCorrectionsPackage(assignmentId, file) {
   const formData = new FormData()
   formData.append("file", file)
 
-  const response = await axios.post(`/assignments/${assignmentId}/upload-corrections-package`, formData, {
-    params: buildCidParams(),
-    headers: { "Content-Type": "multipart/form-data" },
-  })
-
-  return response.data
+  return baseService.post(
+    `/assignments/${assignmentId}/upload-corrections-package`,
+    formData,
+    {},
+    {
+      params: buildCidParams(),
+    },
+  )
 }
 
 async function updateScore(iid, qualification) {
-  return axios.put(`/api/c_student_publications/${iid}`, { qualification }, { params: buildCidParams() })
+  return baseService.put(`/api/c_student_publications/${iid}`, { qualification }, { params: buildCidParams() })
 }
 
 async function aiGradeSubmission(submissionId, payload = {}) {
-  const response = await axios.post(`/assignments/submissions/${submissionId}/ai-grade`, payload, {
-    headers: { "Content-Type": "application/json" },
-    params: buildCidParams(),
-  })
-  return response.data
+  return baseService.post(
+    `/assignments/submissions/${submissionId}/ai-grade`,
+    payload,
+    {},
+    {
+      params: buildCidParams(),
+    },
+  )
 }
 
 async function getAiTextProviders() {
-  const { data } = await axios.get("/assignments/ai/text-providers")
-  return data
+  return baseService.get("/assignments/ai/text-providers")
 }
 
 async function getAiTaskGraderDefaultPrompt(submissionId, params = {}) {
-  const { data } = await axios.get(`/assignments/submissions/${submissionId}/ai-task-grader-default-prompt`, {
-    params,
-  })
-  return data
+  return baseService.get(`/assignments/submissions/${submissionId}/ai-task-grader-default-prompt`, params)
 }
 
 async function aiTaskGrade(submissionId, payload) {
-  const { data } = await axios.post(`/assignments/submissions/${submissionId}/ai-task-grade`, payload)
-  return data
+  return baseService.post(`/assignments/submissions/${submissionId}/ai-task-grade`, payload)
 }
 
 async function getAiTaskGradeCapabilities(submissionId) {
-  const { data } = await this.api.get(`/assignments/submissions/${submissionId}/ai-task-grade-capabilities`)
-  return data
+  return baseService.get(`/assignments/submissions/${submissionId}/ai-task-grade-capabilities`)
+}
+
+/** Fetches a single publication by id, with optional query params. */
+async function getPublication(publicationId, params = {}) {
+  return baseService.get(`/api/c_student_publications/${publicationId}`, params)
+}
+
+/** Creates a publication (assignment). */
+async function createPublication(payload) {
+  return baseService.post(`/api/c_student_publications`, payload)
+}
+
+/** Lists publication-user relations (collection endpoint). */
+async function getRelUsers(params) {
+  return baseService.getCollection(`/api/c_student_publication_rel_users`, params)
+}
+
+/** Links a user to a publication. */
+async function addRelUser(payload) {
+  return baseService.post(`/api/c_student_publication_rel_users`, payload)
+}
+
+/** Removes a publication-user relation. */
+async function removeRelUser(relId) {
+  return baseService.delete(`/api/c_student_publication_rel_users/${relId}`)
+}
+
+/** Lists publication-document relations (collection endpoint). */
+async function getRelDocuments(params) {
+  return baseService.getCollection(`/api/c_student_publication_rel_documents`, params)
+}
+
+/** Links a document to a publication. */
+async function addRelDocument(payload, params = {}) {
+  return baseService.post(`/api/c_student_publication_rel_documents`, payload, {}, { params })
+}
+
+/** Removes a publication-document relation. */
+async function removeRelDocument(relId, params = {}) {
+  return baseService.delete(`/api/c_student_publication_rel_documents/${relId}`, { params })
+}
+
+/** Uploads a teacher correction file for a submission. */
+async function uploadCorrection(formData, { parentResourceNodeId, submissionId } = {}) {
+  return baseService.post(
+    `/api/c_student_publication_corrections/upload`,
+    formData,
+    {},
+    { params: { parentResourceNodeId, submissionId, filetype: "file" } },
+  )
 }
 
 export default {
@@ -247,4 +278,13 @@ export default {
   getAiTaskGraderDefaultPrompt,
   aiTaskGrade,
   getAiTaskGradeCapabilities,
+  getPublication,
+  createPublication,
+  getRelUsers,
+  addRelUser,
+  removeRelUser,
+  getRelDocuments,
+  addRelDocument,
+  removeRelDocument,
+  uploadCorrection,
 }

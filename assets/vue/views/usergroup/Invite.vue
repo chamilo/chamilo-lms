@@ -93,7 +93,7 @@
 import { onMounted, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
-import axios from "axios"
+import socialService from "../../services/socialService"
 import { useSecurityStore } from "../../store/securityStore"
 
 const { t } = useI18n()
@@ -114,8 +114,8 @@ const loadAvailableFriends = async () => {
   const groupId = route.params.group_id
   const userId = securityStore.user.id
   try {
-    const response = await axios.get(`/social-network/invite-friends/${userId}/${groupId}`)
-    availableFriends.value = response.data.friends
+    const data = await socialService.getInviteFriends(userId, groupId)
+    availableFriends.value = data.friends
   } catch (error) {
     console.error("Error loading available friends:", error)
   }
@@ -128,9 +128,7 @@ const sendInvitations = async () => {
   const groupId = route.params.group_id
   const userIds = selectedFriends.value.map((friend) => friend.id)
   try {
-    await axios.post(`/social-network/add-users-to-group/${groupId}`, {
-      userIds,
-    })
+    await socialService.addUsersToGroup(groupId, userIds)
     console.log("Users added to group successfully!")
     selectedFriends.value = []
     loadInvitedFriends()
@@ -141,8 +139,8 @@ const sendInvitations = async () => {
 const loadInvitedFriends = async () => {
   const groupId = route.params.group_id
   try {
-    const response = await axios.get(`/social-network/group/${groupId}/invited-users`)
-    invitedFriends.value = response.data.invitedUsers
+    const data = await socialService.getInvitedUsers(groupId)
+    invitedFriends.value = data.invitedUsers
   } catch (error) {
     console.error("Error loading invited friends:", error)
   }

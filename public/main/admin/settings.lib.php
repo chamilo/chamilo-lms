@@ -355,6 +355,7 @@ function getStablePluginAllowList(): array
         'ShowRegions',
         'HelloWorld',
         'ExtAuthChamiloLogoutButtonBehaviour',
+        'Resubscription',
     ];
 }
 

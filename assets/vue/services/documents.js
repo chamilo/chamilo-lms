@@ -1,5 +1,4 @@
-import fetch from "../utils/fetch"
-import makeService from "./api"
+import makeService, { asResponse, toServiceError } from "./api"
 import baseService from "./baseService"
 import prettyBytes from "pretty-bytes"
 
@@ -215,7 +214,7 @@ export default {
    * PHP/Symfony does not parse multipart/form-data on PUT requests.
    * So for updates we send POST with a method override to PUT.
    */
-  updateWithFormData(payload) {
+  async updateWithFormData(payload) {
     const prepared = flattenSearchFieldValues(payload)
     const iri = prepared?.["@id"] || payload?.["@id"]
 
@@ -231,13 +230,16 @@ export default {
     const fd = buildFormData(bodyPayload)
     fd.append("_method", "PUT")
 
-    return fetch(iri, {
-      method: "POST",
-      body: fd,
-      headers: {
-        "X-HTTP-Method-Override": "PUT",
-      },
-    })
+    // PHP/Symfony does not parse multipart/form-data on PUT, so POST with a
+    // method override. baseService sends FormData as multipart automatically.
+    // Returns a Response-like shim because the CRUD store calls response.json().
+    try {
+      const response = await baseService.postRaw(iri, fd, { headers: { "X-HTTP-Method-Override": "PUT" } })
+
+      return asResponse(response)
+    } catch (error) {
+      throw toServiceError(error)
+    }
   },
 
   async createCloudLink(payload) {

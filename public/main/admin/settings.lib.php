@@ -352,6 +352,7 @@ function getStablePluginAllowList(): array
         'Dashboard',
         'ExtraMenuFromWebservice',
         'Mobidico',
+        'ShowRegions',
     ];
 }
 

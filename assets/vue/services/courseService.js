@@ -33,6 +33,20 @@ export default {
   },
 
   /**
+   * Lists the current user's courses (paginated). Returns the raw response body
+   * so the caller can normalize it; accepts extra axios options (e.g. a signal).
+   * @param {number} page
+   * @param {number} itemsPerPage
+   * @param {Object} [options={}] - Extra axios options (e.g. AbortController signal).
+   * @returns {Promise<Object>}
+   */
+  listMyCourses: async (page, itemsPerPage, options = {}) => {
+    const response = await baseService.getRaw("/api/me/courses", { params: { page, itemsPerPage }, ...options })
+
+    return response.data
+  },
+
+  /**
    * @param {Object} searchParams
    * @param {boolean} disablePagination
    * @returns {Promise<{totalItems, items}>}

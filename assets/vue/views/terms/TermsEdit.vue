@@ -400,9 +400,8 @@ const loadTermsByLanguage = async () => {
   mountedEditorIndexes.value = new Set([0])
 
   try {
-    const latestRes = await legalService.findLatestByLanguage(selectedLanguage.value)
-    const latestJson = latestRes.ok ? await latestRes.json() : null
-    const latestItem = latestJson?.["hydra:member"]?.length ? latestJson["hydra:member"][0] : null
+    const latest = await legalService.findLatestByLanguage(selectedLanguage.value)
+    const latestItem = latest.items?.length ? latest.items[0] : null
 
     if (!latestItem?.version) {
       termData.value = { changes: "", sections: buildEmptySections() }
@@ -412,16 +411,7 @@ const loadTermsByLanguage = async () => {
 
     loadedVersion.value = latestItem.version
 
-    const res = await legalService.findByLanguageAndVersion(selectedLanguage.value, latestItem.version)
-    if (!res.ok) {
-      console.error("Failed to load terms by language and version.")
-      termData.value = { changes: "", sections: buildEmptySections() }
-      loadedVersion.value = null
-      return
-    }
-
-    const data = await res.json()
-    const items = data?.["hydra:member"] ?? []
+    const { items } = await legalService.findByLanguageAndVersion(selectedLanguage.value, latestItem.version)
 
     const sections = buildEmptySections()
     let changes = ""

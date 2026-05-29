@@ -215,6 +215,7 @@ import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import ResourceLanguageSelector from "../../components/resources/ResourceLanguageSelector.vue"
 import { usePlatformConfig } from "../../store/platformConfig"
 import documentsService from "../../services/documents"
+import searchEngineFieldService from "../../services/searchEngineFieldService"
 
 const route = useRoute()
 const router = useRouter()
@@ -596,16 +597,10 @@ onMounted(async () => {
   if (!isSearchEnabled.value) return
 
   try {
-    const response = await fetch("/api/search_engine_fields", { credentials: "same-origin" })
-    if (!response.ok) {
-      console.error("[Search] Failed to load search engine fields:", response.status)
-      return
-    }
-
-    const json = await response.json()
-    const fields = Array.isArray(json) ? json : json["hydra:member"] || []
+    const { items } = await searchEngineFieldService.listFields()
+    const fields = items || []
     if (!Array.isArray(fields)) {
-      console.error("[Search] Unexpected search engine fields payload:", json)
+      console.error("[Search] Unexpected search engine fields payload:", items)
       return
     }
 

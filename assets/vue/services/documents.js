@@ -86,15 +86,7 @@ async function getQuotaUsage(courseId, { sid = 0, gid = 0, force = false, staleM
   }
 
   try {
-    const url = `/api/documents/${cid}/usage?sid=${s}&gid=${g}`
-    const response = await window.fetch(url, {
-      credentials: "same-origin",
-      headers: { Accept: "application/json" },
-    })
-
-    if (!response.ok) return null
-
-    const json = await response.json()
+    const json = await baseService.get(`/api/documents/${cid}/usage`, { sid: s, gid: g })
     const quota = json?.quota || {}
     const availableBytes = Number(quota.availableBytes)
     const availablePercent = Number(quota.availablePercent)
@@ -249,22 +241,10 @@ export default {
   },
 
   async createCloudLink(payload) {
-    const response = await window.fetch("/api/documents", {
-      method: "POST",
-      credentials: "same-origin",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        ...payload,
-        filetype: "link",
-      }),
-    })
-
-    const data = await response.json().catch(() => ({}))
-
-    if (!response.ok) {
+    try {
+      return await baseService.post("/api/documents", { ...payload, filetype: "link" }, true)
+    } catch (error) {
+      const data = error?.response?.data || {}
       const message =
         data?.message ||
         data?.detail ||
@@ -272,10 +252,8 @@ export default {
         (Array.isArray(data?.violations) && data.violations.length ? data.violations[0].message : null) ||
         "Unable to create cloud link."
 
-      throw new Error(message)
+      throw new Error(message, { cause: error })
     }
-
-    return data
   },
 
   /**

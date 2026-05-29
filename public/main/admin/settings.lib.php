@@ -353,6 +353,7 @@ function getStablePluginAllowList(): array
         'ExtraMenuFromWebservice',
         'Mobidico',
         'ShowRegions',
+        'HelloWorld',
     ];
 }
 

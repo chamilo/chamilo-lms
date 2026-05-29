@@ -141,7 +141,7 @@ import Column from "primevue/column"
 import { computed, reactive, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import cStudentPublicationService from "../../services/cstudentpublication"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import { useFormatDate } from "../../composables/formatDate"
 import BaseTag from "../basecomponents/BaseTag.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
@@ -163,7 +163,7 @@ const selected = ref([])
 const loading = ref(false)
 const totalRecords = ref(0)
 
-const { cid, sid, gid } = useCidReq()
+const { cid, sid, gid } = getCourseContext()
 
 const notification = useNotification()
 

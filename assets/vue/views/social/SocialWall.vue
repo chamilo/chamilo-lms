@@ -46,7 +46,8 @@
 import { computed, provide, ref, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
-import axios from "axios"
+import userService from "../../services/userService"
+import userRelUserService from "../../services/userRelUserService"
 import SocialWallPostForm from "../../components/social/SocialWallPostForm.vue"
 import SocialWallPostList from "../../components/social/SocialWallPostList.vue"
 import { useSecurityStore } from "../../store/securityStore"
@@ -113,8 +114,7 @@ async function loadWallUser() {
   }
 
   try {
-    const { data } = await axios.get(`/api/users/${targetId}`)
-    wallUser.value = data
+    wallUser.value = await userService.findById(targetId)
   } catch (e) {
     console.warn("Failed to load wall user. Keeping stub.", e)
   }
@@ -131,16 +131,12 @@ async function hasFriendship(meIri, wallIri) {
 
   try {
     const [a, b] = await Promise.all([
-      axios.get(`/api/user_rel_users`, {
-        params: { relationType: 3, user: meIri, friend: wallIri },
-      }),
-      axios.get(`/api/user_rel_users`, {
-        params: { relationType: 3, user: wallIri, friend: meIri },
-      }),
+      userRelUserService.findAll({ relationType: 3, user: meIri, friend: wallIri }),
+      userRelUserService.findAll({ relationType: 3, user: wallIri, friend: meIri }),
     ])
 
-    const aCount = Array.isArray(a.data?.["hydra:member"]) ? a.data["hydra:member"].length : 0
-    const bCount = Array.isArray(b.data?.["hydra:member"]) ? b.data["hydra:member"].length : 0
+    const aCount = Array.isArray(a.items) ? a.items.length : 0
+    const bCount = Array.isArray(b.items) ? b.items.length : 0
     return aCount + bCount > 0
   } catch (e) {
     console.warn("Friendship check failed; posting disabled.", e)

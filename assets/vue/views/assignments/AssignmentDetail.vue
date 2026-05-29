@@ -181,11 +181,10 @@
 import { ref, computed, onMounted } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
 import cStudentPublicationService from "../../services/cstudentpublication"
-import axios from "axios"
 import { useNotification } from "../../composables/notification"
 
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
@@ -194,7 +193,7 @@ import StudentSubmissionList from "../../components/assignments/StudentSubmissio
 import TeacherSubmissionList from "../../components/assignments/TeacherSubmissionList.vue"
 
 const { t } = useI18n()
-const { cid, sid, gid } = useCidReq()
+const { cid, sid, gid } = getCourseContext()
 const route = useRoute()
 const router = useRouter()
 const securityStore = useSecurityStore()
@@ -251,13 +250,11 @@ const allowFileFlag = computed(
 
 async function loadAddedDocuments() {
   try {
-    const resp = await axios.get(`/api/c_student_publication_rel_documents`, {
-      params: {
-        ...buildCidParams(),
-        publication: `/api/c_student_publications/${assignmentId}`,
-      },
+    const { items } = await cStudentPublicationService.getRelDocuments({
+      ...buildCidParams(),
+      publication: `/api/c_student_publications/${assignmentId}`,
     })
-    addedDocuments.value = resp.data["hydra:member"]
+    addedDocuments.value = items
   } catch (e) {
     console.warn("[AssignmentDetail] Failed to load added documents", e)
   }

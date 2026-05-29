@@ -76,7 +76,7 @@
 <script setup>
 import { computed } from "vue"
 import ResourceIcon from "./ResourceIcon.vue"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import { useFileUtils } from "../../composables/fileUtils"
 import { usePlatformConfig } from "../../store/platformConfig"
 
@@ -87,7 +87,7 @@ const props = defineProps({
   },
 })
 
-const cidQuery = useCidReq()
+const cidQuery = getCourseContext()
 const platformConfigStore = usePlatformConfig()
 const { isFile: utilsIsFile, isImage, isVideo, isAudio, isPreviewable: utilsIsPreviewable } = useFileUtils()
 

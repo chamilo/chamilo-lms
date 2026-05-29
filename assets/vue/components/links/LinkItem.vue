@@ -105,13 +105,13 @@ import { useSecurityStore } from "../../store/securityStore"
 import { computed } from "vue"
 import { useIsAllowedToEdit } from "../../composables/userPermissions"
 import { useRoute } from "vue-router"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 
 const securityStore = useSecurityStore()
 const isCurrentTeacher = computed(() => securityStore.isCurrentTeacher)
 const route = useRoute()
 const { t } = useI18n()
-const { sid } = useCidReq()
+const { sid } = getCourseContext()
 const sidValue = computed(() => Number(route.query.sid || (sid && typeof sid === "object" ? sid.value : sid) || 0))
 
 defineProps({

@@ -1,5 +1,4 @@
-import fetch from "../utils/fetch"
-import makeService from "./api"
+import makeService, { asResponse, toServiceError } from "./api"
 import baseService from "./baseService"
 import prettyBytes from "pretty-bytes"
 
@@ -86,15 +85,7 @@ async function getQuotaUsage(courseId, { sid = 0, gid = 0, force = false, staleM
   }
 
   try {
-    const url = `/api/documents/${cid}/usage?sid=${s}&gid=${g}`
-    const response = await window.fetch(url, {
-      credentials: "same-origin",
-      headers: { Accept: "application/json" },
-    })
-
-    if (!response.ok) return null
-
-    const json = await response.json()
+    const json = await baseService.get(`/api/documents/${cid}/usage`, { sid: s, gid: g })
     const quota = json?.quota || {}
     const availableBytes = Number(quota.availableBytes)
     const availablePercent = Number(quota.availablePercent)
@@ -223,7 +214,7 @@ export default {
    * PHP/Symfony does not parse multipart/form-data on PUT requests.
    * So for updates we send POST with a method override to PUT.
    */
-  updateWithFormData(payload) {
+  async updateWithFormData(payload) {
     const prepared = flattenSearchFieldValues(payload)
     const iri = prepared?.["@id"] || payload?.["@id"]
 
@@ -239,32 +230,23 @@ export default {
     const fd = buildFormData(bodyPayload)
     fd.append("_method", "PUT")
 
-    return fetch(iri, {
-      method: "POST",
-      body: fd,
-      headers: {
-        "X-HTTP-Method-Override": "PUT",
-      },
-    })
+    // PHP/Symfony does not parse multipart/form-data on PUT, so POST with a
+    // method override. baseService sends FormData as multipart automatically.
+    // Returns a Response-like shim because the CRUD store calls response.json().
+    try {
+      const response = await baseService.postRaw(iri, fd, { headers: { "X-HTTP-Method-Override": "PUT" } })
+
+      return asResponse(response)
+    } catch (error) {
+      throw toServiceError(error)
+    }
   },
 
   async createCloudLink(payload) {
-    const response = await window.fetch("/api/documents", {
-      method: "POST",
-      credentials: "same-origin",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        ...payload,
-        filetype: "link",
-      }),
-    })
-
-    const data = await response.json().catch(() => ({}))
-
-    if (!response.ok) {
+    try {
+      return await baseService.post("/api/documents", { ...payload, filetype: "link" })
+    } catch (error) {
+      const data = error?.response?.data || {}
       const message =
         data?.message ||
         data?.detail ||
@@ -272,10 +254,8 @@ export default {
         (Array.isArray(data?.violations) && data.violations.length ? data.violations[0].message : null) ||
         "Unable to create cloud link."
 
-      throw new Error(message)
+      throw new Error(message, { cause: error })
     }
-
-    return data
   },
 
   /**
@@ -283,6 +263,142 @@ export default {
    */
   getTemplates: async (courseId) => {
     return baseService.get(`/template/all-templates/${courseId}`)
+  },
+
+  /**
+   * Creates a document (folder or file) from a FormData payload.
+   * Supports upload progress and abortion through the options bag.
+   */
+  async uploadDocumentFile(formData, { signal, onUploadProgress } = {}) {
+    return baseService.post("/api/documents", formData, {}, { signal, onUploadProgress })
+  },
+
+  /**
+   * Fetches the raw text content of a file URL (e.g. an SVG contentUrl).
+   * @param {string} url
+   * @returns {Promise<string>}
+   */
+  async fetchTextContent(url) {
+    const response = await baseService.getRaw(url, { responseType: "text" })
+
+    return response.data
+  },
+
+  /**
+   * Lists documents matching the given query params (collection endpoint).
+   */
+  async listDocuments(params = {}) {
+    return baseService.getCollection("/api/documents", params)
+  },
+
+  /**
+   * Fetches a single document by its IRI.
+   */
+  async getDocumentByIri(iri) {
+    return baseService.get(iri)
+  },
+
+  /**
+   * Downloads all documents under a root node as a ZIP blob.
+   * @param {number|string} rootNodeId
+   * @param {Object} [params={}]
+   * @returns {Promise<Blob>}
+   */
+  async downloadAll(rootNodeId, params = {}) {
+    const response = await baseService.postRaw(
+      "/api/documents/download-all",
+      { rootNodeId },
+      { responseType: "blob", params },
+    )
+
+    return response.data
+  },
+
+  /**
+   * Downloads the given document ids as a ZIP blob.
+   * @param {Array<number|string>} ids
+   * @returns {Promise<Blob>}
+   */
+  async downloadSelected(ids) {
+    const response = await baseService.postRaw("/api/documents/download-selected", { ids }, { responseType: "blob" })
+
+    return response.data
+  },
+
+  /**
+   * Checks whether a document is used in learning paths.
+   * @param {number|string} iid
+   * @returns {Promise<Object>}
+   */
+  async getLpUsage(iid) {
+    return baseService.get(`/api/documents/${iid}/lp-usage`)
+  },
+
+  /**
+   * Deletes a document.
+   * @param {number|string} iid
+   * @returns {Promise<any>}
+   */
+  async deleteDocument(iid) {
+    return baseService.delete(`/api/documents/${iid}`)
+  },
+
+  /**
+   * Fetches the storage quota usage for a course.
+   * @param {number|string} courseId
+   * @param {Object} [params={}]
+   * @returns {Promise<Object>}
+   */
+  async getUsage(courseId, params = {}) {
+    return baseService.get(`/api/documents/${courseId}/usage`, params)
+  },
+
+  /**
+   * Moves a document to another parent node.
+   * @param {number|string} iid
+   * @param {number|string} parentResourceNodeId
+   * @param {Object} [params={}]
+   * @returns {Promise<Object>}
+   */
+  async moveDocument(iid, parentResourceNodeId, params = {}) {
+    return baseService.put(`/api/documents/${iid}/move`, { parentResourceNodeId }, { params })
+  },
+
+  /**
+   * Replaces a document file.
+   * @param {number|string} iid
+   * @param {FormData} formData
+   * @returns {Promise<Object>}
+   */
+  async replaceDocument(iid, formData) {
+    return baseService.post(`/api/documents/${iid}/replace`, formData)
+  },
+
+  /**
+   * Checks whether a document is a template.
+   * @param {number|string} documentId
+   * @returns {Promise<Object>}
+   */
+  async isDocumentTemplate(documentId) {
+    return baseService.get(`/template/document-templates/${documentId}/is-template`)
+  },
+
+  /**
+   * Deletes a document template.
+   * @param {number|string} documentId
+   * @returns {Promise<any>}
+   */
+  async deleteDocumentTemplate(documentId) {
+    return baseService.post(`/template/document-templates/${documentId}/delete`)
+  },
+
+  /**
+   * Creates a document template from a FormData payload.
+   * @param {FormData} formData
+   * @returns {Promise<Object>}
+   */
+  async createDocumentTemplate(formData) {
+    return baseService.post("/template/document-templates/create", formData)
   },
 
   // ----------------------------

@@ -278,7 +278,6 @@
 import { computed, onMounted, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
-import axios from "axios"
 import Toolbar from "../../components/Toolbar.vue"
 import Loading from "../../components/Loading.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
@@ -409,7 +408,7 @@ async function loadExistingSvg() {
   errorMessage.value = ""
 
   try {
-    const { data } = await axios.get(iri, { headers: { Accept: "application/json" } })
+    const data = await documentsService.getDocumentByIri(iri)
     documentItem.value = data
     title.value = String(data?.title || data?.resourceNode?.title || "drawing.svg")
     comment.value = String(data?.comment || "")
@@ -419,8 +418,7 @@ async function loadExistingSvg() {
     let svg = String(data?.resourceNode?.content || "")
 
     if (contentUrl) {
-      const response = await axios.get(contentUrl, { responseType: "text" })
-      svg = String(response?.data || svg)
+      svg = String((await documentsService.fetchTextContent(contentUrl)) || svg)
     }
 
     existingSvgMarkup.value = extractSvgInnerMarkup(sanitizeSvg(svg))
@@ -635,7 +633,6 @@ function finishDrawing(event) {
   currentShape.value = null
   isDrawing.value = false
 }
-
 
 function startShapeMove(shape, event) {
   if (tool.value !== "select") {
@@ -1014,7 +1011,9 @@ function importImageFile(event) {
     return
   }
 
-  const fileName = String(file.name || "").trim().toLowerCase()
+  const fileName = String(file.name || "")
+    .trim()
+    .toLowerCase()
   const mimeType = String(file.type || "").toLowerCase()
   const isAllowedMime = ["image/png", "image/jpeg", "image/webp", "image/gif"].includes(mimeType)
   const isAllowedExtension = /\.(png|jpe?g|webp|gif)$/.test(fileName)
@@ -1210,7 +1209,9 @@ function sanitizeSvg(rawSvg) {
     doc.querySelectorAll("*").forEach((node) => {
       ;[...node.attributes].forEach((attr) => {
         const name = attr.name.toLowerCase()
-        const value = String(attr.value || "").trim().toLowerCase()
+        const value = String(attr.value || "")
+          .trim()
+          .toLowerCase()
 
         if (name.startsWith("on")) {
           node.removeAttribute(attr.name)
@@ -1312,10 +1313,7 @@ async function saveSvg() {
   } catch (e) {
     console.error("[Documents] Failed to save SVG drawing:", e?.response || e)
     errorMessage.value =
-      e?.response?.data?.detail ||
-      e?.response?.data?.message ||
-      e?.message ||
-      t("Unable to save the drawing")
+      e?.response?.data?.detail || e?.response?.data?.message || e?.message || t("Unable to save the drawing")
   } finally {
     isSaving.value = false
   }

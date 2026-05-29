@@ -35,7 +35,7 @@
 import SocialWallPost from "./SocialWallPost.vue"
 import { inject, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from "vue"
 import Loading from "../Loading"
-import axios from "axios"
+import socialService from "../../services/socialService"
 import { useRoute } from "vue-router"
 import { SOCIAL_TYPE_PROMOTED_MESSAGE } from "./constants"
 import { ref as vueRef } from "vue"
@@ -148,13 +148,13 @@ async function loadPostsPage(page, replace = false) {
       params.type = SOCIAL_TYPE_PROMOTED_MESSAGE
     }
 
-    const { data } = await axios.get("/api/social_posts", { params })
+    const { items: fetchedItems, nextPageParams } = await socialService.getPosts(params)
 
     if (seq !== requestSeq) {
       return
     }
 
-    const items = data?.["hydra:member"] || []
+    const items = fetchedItems || []
 
     if (replace) {
       postList.splice(0, postList.length, ...items)
@@ -166,7 +166,7 @@ async function loadPostsPage(page, replace = false) {
     }
 
     currentPage.value = page
-    hasMore.value = Boolean(data?.["hydra:view"]?.["hydra:next"]) && items.length > 0
+    hasMore.value = Boolean(nextPageParams) && items.length > 0
   } catch (error) {
     console.error("Failed to load social wall posts.", error)
   } finally {

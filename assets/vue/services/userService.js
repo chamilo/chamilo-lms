@@ -10,10 +10,19 @@ async function find(userIri) {
 
 /**
  * @param {number} userId
+ * @param {Object} [params={}]
  * @returns {Promise<Object>}
  */
-async function findById(userId) {
-  return await baseService.get(`/api/users/${userId}`)
+async function findById(userId, params = {}) {
+  return await baseService.get(`/api/users/${userId}`, params)
+}
+
+/**
+ * @param {number} userId
+ * @returns {Promise<Object>}
+ */
+async function getSkills(userId) {
+  return await baseService.get(`/api/users/${userId}/skills`)
 }
 
 /**
@@ -48,6 +57,7 @@ async function createOnAccessUrl(accessUrlId, payload) {
 export default {
   find,
   findById,
+  getSkills,
   findAll,
   findUsersForSessionAdmin,
   findBySearchTerm,

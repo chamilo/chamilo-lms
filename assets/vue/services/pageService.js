@@ -155,8 +155,23 @@ async function getPageLayoutTemplate(id) {
   return data
 }
 
+/**
+ * Fetches the topbar visibility flags for non-logged-in users.
+ *
+ * @param {string} locale
+ * @returns {Promise<Object>}
+ */
+async function getTopbarVisibility(locale) {
+  const response = await baseService.getRaw("/pages/_topbar-visibility", {
+    params: { locale },
+    headers: { "Cache-Control": "no-cache" },
+  })
+
+  return response.data
+}
 
 export default {
+  getTopbarVisibility,
   // Pages
   getPublicPageBySlug,
   postPage,

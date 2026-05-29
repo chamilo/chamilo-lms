@@ -2,6 +2,7 @@ import { usePlatformConfig } from "../store/platformConfig"
 import { useSecurityStore } from "../store/securityStore"
 import { useCidReqStore } from "../store/cidReq"
 import { useCourseSettings } from "../store/courseSettingStore"
+import languageService from "../services/languageService"
 import { computed, ref, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 
@@ -133,11 +134,12 @@ export function useLocale() {
     const { db, bcp47, parent } = normalizeIso(iso)
 
     async function hit(q) {
-      const r = await fetch(`/api/languages?isocode=${encodeURIComponent(q)}`)
-      if (!r.ok) return null
-      const j = await r.json()
-      const arr = j["hydra:member"] || j
-      return Array.isArray(arr) && arr.length ? arr[0] : null
+      try {
+        const { items } = await languageService.searchByIsocode(q)
+        return Array.isArray(items) && items.length ? items[0] : null
+      } catch {
+        return null
+      }
     }
 
     let row = await hit(db)

@@ -98,6 +98,7 @@ import { useRoute, useRouter } from "vue-router"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useI18n } from "vue-i18n"
 import courseService from "../../services/courseService"
+import baseService from "../../services/baseService"
 import AdvancedCourseFilters from "../../components/course/AdvancedCourseFilters.vue"
 
 const { t } = useI18n()
@@ -324,7 +325,7 @@ const load = async () => {
 
     if (ids) {
       const [extraFieldsResponse, subscriptionStatuses] = await Promise.all([
-        fetch(`/catalogue/course-extra-field-values?ids=${ids}`).then((res) => res.json()),
+        baseService.get("/catalogue/course-extra-field-values", { ids }),
         loadCourseSubscriptionStatuses(courseIds),
       ])
 

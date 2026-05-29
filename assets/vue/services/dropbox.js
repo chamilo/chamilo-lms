@@ -1,23 +1,16 @@
-import axios from "axios"
-import { useCidReq } from "../composables/cidReq"
+import baseService from "./baseService"
+import { getRawCourseContext } from "../utils/courseContext"
 
 const BASE = "/dropbox"
 
+const JSON_HEADERS = { "Content-Type": "application/json" }
+
 function buildQuery(extra = {}, overrideCtx = {}) {
-  let qCid, qSid, qGid
-  if (typeof window !== "undefined") {
-    const sp = new URLSearchParams(window.location.search || "")
-    qCid = sp.get("cid")
-    qSid = sp.get("sid")
-    qGid = sp.get("gid")
-  }
-  let fromComp = {}
-  if (typeof useCidReq === "function") {
-    try { fromComp = useCidReq() || {} } catch {}
-  }
-  const cid = overrideCtx.cid ?? qCid ?? fromComp.cid
-  const sid = overrideCtx.sid ?? qSid ?? fromComp.sid ?? 0
-  const gid = overrideCtx.gid ?? qGid ?? fromComp.gid ?? 0
+  const { cid: qCid, sid: qSid, gid: qGid } = getRawCourseContext()
+
+  const cid = overrideCtx.cid ?? qCid
+  const sid = overrideCtx.sid ?? qSid ?? 0
+  const gid = overrideCtx.gid ?? qGid ?? 0
 
   const params = new URLSearchParams({
     cid: String(cid ?? ""),
@@ -31,66 +24,55 @@ function buildQuery(extra = {}, overrideCtx = {}) {
 /** ------- Categories ------- */
 async function listCategories({ area }) {
   const qs = buildQuery({ area })
-  const { data } = await axios.get(`${BASE}/categories?${qs}`)
-  return data
+  return baseService.get(`${BASE}/categories?${qs}`)
 }
 async function createCategory({ title, area }) {
   const qs = buildQuery()
-  const { data } = await axios.post(`${BASE}/categories?${qs}`, { title, area })
-  return data
+  return baseService.post(`${BASE}/categories?${qs}`, { title, area })
 }
 async function renameCategory({ id, title, area }) {
   const qs = buildQuery()
-  const { data } = await axios.patch(`${BASE}/categories/${id}?${qs}`, { title, area })
-  return data
+  return baseService.patch(`${BASE}/categories/${id}?${qs}`, { title, area }, { headers: JSON_HEADERS })
 }
 async function deleteCategory({ id, area }) {
   const qs = buildQuery({ area })
-  const { data } = await axios.delete(`${BASE}/categories/${id}?${qs}`)
-  return data
+  return baseService.delete(`${BASE}/categories/${id}?${qs}`)
 }
 
 /** ------- Files (list/move/delete) ------- */
 async function listFiles({ area, categoryId = 0 }) {
   const qs = buildQuery({ area, categoryId })
-  const { data } = await axios.get(`${BASE}/files?${qs}`)
-  return data
+  return baseService.get(`${BASE}/files?${qs}`)
 }
 async function moveFile({ id, targetCatId, area }) {
   const qs = buildQuery()
-  const { data } = await axios.patch(`${BASE}/files/${id}/move?${qs}`, { targetCatId, area })
-  return data
+  return baseService.patch(`${BASE}/files/${id}/move?${qs}`, { targetCatId, area }, { headers: JSON_HEADERS })
 }
 async function deleteFiles(ids, area) {
   const qs = buildQuery()
-  const { data } = await axios.delete(`${BASE}/files?${qs}`, { data: { ids, area } })
-  return data
+  return baseService.delete(`${BASE}/files?${qs}`, { data: { ids, area } })
 }
 
 /** ------- Feedback ------- */
 async function listFeedback(id) {
   const qs = buildQuery()
-  const { data } = await axios.get(`${BASE}/files/${id}/feedback?${qs}`)
-  return data
+  return baseService.get(`${BASE}/files/${id}/feedback?${qs}`)
 }
 async function createFeedback(id, text) {
   const qs = buildQuery()
-  const { data } = await axios.post(`${BASE}/files/${id}/feedback?${qs}`, { text })
-  return data
+  return baseService.post(`${BASE}/files/${id}/feedback?${qs}`, { text })
 }
 
 /** ------- Recipients ------- */
 async function listRecipients() {
   const qs = buildQuery()
-  const { data } = await axios.get(`${BASE}/recipients?${qs}`)
-  return data
+  return baseService.get(`${BASE}/recipients?${qs}`)
 }
 
 /** ------- Single file ------- */
 async function getFile(id) {
   const qs = buildQuery()
-  const { data } = await axios.get(`${BASE}/files/${id}?${qs}`)
-  return data
+  return baseService.get(`${BASE}/files/${id}?${qs}`)
 }
 
 /** ------- Update file ------- */
@@ -102,12 +84,7 @@ async function updateFile({ id, file = null, categoryId = null, renameTitle = fa
   const fd = new FormData()
 
   if (file) {
-    const blob =
-      file instanceof Blob
-        ? file
-        : file?.data instanceof Blob
-          ? file.data
-          : null
+    const blob = file instanceof Blob ? file : file?.data instanceof Blob ? file.data : null
     if (!blob) throw new Error("Invalid file object: expected Blob/File or Uppy file with .data")
     const name = file?.name || "upload.bin"
     fd.append("newFile", blob, name)
@@ -120,12 +97,19 @@ async function updateFile({ id, file = null, categoryId = null, renameTitle = fa
     fd.append("newTitle", newTitle)
   }
 
-  const { data } = await axios.post(`${BASE}/files/${id}/update?${qs}`, fd)
-  return data
+  return baseService.post(`${BASE}/files/${id}/update?${qs}`, fd)
 }
 
 /** ------- Upload / Download ------- */
-export async function uploadFile({ file, description, overwrite, recipients, area, context, parentResourceNodeId, language }) {
+export async function uploadFile({
+  file,
+  description,
+  overwrite,
+  recipients,
+  context,
+  parentResourceNodeId,
+  language,
+}) {
   const sp = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : new URLSearchParams("")
   const cid = Number(context?.cid ?? (sp.get("cid") || 0))
   const sid = Number(context?.sid ?? (sp.get("sid") || 0))
@@ -141,7 +125,7 @@ export async function uploadFile({ file, description, overwrite, recipients, are
   if (parentResourceNodeId != null) fd.append("parentResourceNodeId", String(parentResourceNodeId))
   if (language) fd.append("language", String(language))
 
-  return axios.post(`/api/c_dropbox_files/upload?cid=${cid}&sid=${sid}&gid=${gid}`, fd)
+  return baseService.post(`/api/c_dropbox_files/upload?cid=${cid}&sid=${sid}&gid=${gid}`, fd)
 }
 
 function downloadUrl(id) {

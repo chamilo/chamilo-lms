@@ -292,7 +292,7 @@ import { useI18n } from "vue-i18n"
 import LayoutFormGeneric from "../../components/layout/LayoutFormGeneric.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import glossaryService from "../../services/glossaryService"
 import { useNotification } from "../../composables/notification"
@@ -312,7 +312,7 @@ const platform = usePlatformConfig()
 const cidReqStore = useCidReqStore()
 const { course } = storeToRefs(cidReqStore)
 
-const { cid, sid } = useCidReq()
+const { cid, sid } = getCourseContext()
 
 const { isAllowedToEdit } = useIsAllowedToEdit({ tutor: true, coach: true, sessionCoach: true })
 

@@ -60,13 +60,13 @@ import BaseRadioButtons from "../basecomponents/BaseRadioButtons.vue"
 import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
 import glossaryService from "../../services/glossaryService"
 import BaseFileUpload from "../basecomponents/BaseFileUpload.vue"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 
 const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
 const notification = useNotification()
-const { sid, cid } = useCidReq()
+const { sid, cid } = getCourseContext()
 
 const emit = defineEmits(["backPressed"])
 

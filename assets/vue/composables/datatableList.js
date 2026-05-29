@@ -3,7 +3,7 @@ import { ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { isEmpty } from "lodash"
 
-import { useCidReq } from "./cidReq"
+import { getCourseContext } from "../utils/courseContext"
 import { useI18n } from "vue-i18n"
 import { useNotification } from "./notification"
 
@@ -15,7 +15,7 @@ export function useDatatableList(servicePrefix) {
   const route = useRoute()
   const { t } = useI18n()
 
-  const { cid, sid, gid } = useCidReq()
+  const { cid, sid, gid } = getCourseContext()
 
   const notification = useNotification()
 

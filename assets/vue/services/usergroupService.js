@@ -12,11 +12,36 @@ export default {
   },
 
   /**
+   * @param {number|string} groupId
+   * @returns {Promise<{totalItems, items}>}
+   */
+  getMembers: async (groupId) => {
+    return await baseService.getCollection(`/api/usergroups/${groupId}/members`)
+  },
+
+  /**
+   * @param {number|string} groupId
+   * @returns {Promise<{totalItems, items}>}
+   */
+  getMessages: async (groupId) => {
+    return await baseService.getCollection(`/api/usergroups/${groupId}/messages`)
+  },
+
+  /**
    * @param {Object} params
    * @returns {Promise<Object>}
    */
   async createGroup(params) {
     return await baseService.post("/api/usergroups", params)
+  },
+
+  /**
+   * @param {number} groupId
+   * @param {Object} params
+   * @returns {Promise<Object>}
+   */
+  async updateGroup(groupId, params) {
+    return await baseService.put(`/api/usergroups/${groupId}`, params)
   },
 
   /**

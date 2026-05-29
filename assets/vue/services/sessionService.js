@@ -47,6 +47,14 @@ export default {
   findUserSubscriptions,
 
   /**
+   * Fetches the public session catalogue list.
+   * @returns {Promise<Object[]>}
+   */
+  async getCatalogueList() {
+    return baseService.get("/catalogue/sessions-list")
+  },
+
+  /**
    * Get sequence requirements for a session
    *
    * @param {number} sessionId

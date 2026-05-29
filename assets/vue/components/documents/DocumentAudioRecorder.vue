@@ -55,11 +55,11 @@ import BaseInputText from "../basecomponents/BaseInputText.vue"
 import AudioRecorder from "../AudioRecorder.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import documentsService from "../../services/documents"
 
 const { t } = useI18n()
-const queryParams = useCidReq()
+const queryParams = getCourseContext()
 
 const props = defineProps({
   parentResourceNodeId: {

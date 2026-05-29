@@ -1,7 +1,7 @@
 <template>
   <div class="p-4 social-groups">
     <div class="flex justify-between items-center mb-4">
-      <h1 class="text-2xl font-semibold">{{ t('Social groups') }}</h1>
+      <h1 class="text-2xl font-semibold">{{ t("Social groups") }}</h1>
       <BaseButton
         class="self-end"
         type="success"
@@ -15,25 +15,25 @@
         :class="['tab', { 'tab-active': activeTab === 'Newest' }]"
         @click="activeTab = 'Newest'"
       >
-        {{ t('Newest') }}
+        {{ t("Newest") }}
       </button>
       <button
         :class="['tab', { 'tab-active': activeTab === 'Popular' }]"
         @click="activeTab = 'Popular'"
       >
-        {{ t('Popular') }}
+        {{ t("Popular") }}
       </button>
       <button
         :class="['tab', { 'tab-active': activeTab === 'My groups' }]"
         @click="activeTab = 'My groups'"
       >
-        {{ t('My groups') }}
+        {{ t("My groups") }}
       </button>
       <button
         :class="['tab', { 'tab-active': activeTab === 'Search Groups' }]"
         @click="activeTab = 'Search Groups'"
       >
-        {{ t('Search groups') }}
+        {{ t("Search groups") }}
       </button>
     </div>
     <div v-show="activeTab === 'Newest'">
@@ -60,7 +60,7 @@
               >{{ group.title }}</a
             >
             <div class="group-info text-gray-500">
-              <span class="group-member-count">{{ group.memberCount }} {{ t('Members') }}</span>
+              <span class="group-member-count">{{ group.memberCount }} {{ t("Members") }}</span>
               <span class="group-description">{{ group.description }}</span>
             </div>
           </div>
@@ -91,7 +91,7 @@
               >{{ group.title }}</a
             >
             <div class="group-info text-gray-500">
-              <span class="group-member-count">{{ group.memberCount }} {{ t('Members') }}</span>
+              <span class="group-member-count">{{ group.memberCount }} {{ t("Members") }}</span>
               <span class="group-description">{{ group.description }}</span>
             </div>
           </div>
@@ -122,7 +122,7 @@
               >{{ group.title }}</a
             >
             <div class="group-info text-gray-500">
-              <span class="group-member-count">{{ group.memberCount }} {{ t('Members') }}</span>
+              <span class="group-member-count">{{ group.memberCount }} {{ t("Members") }}</span>
               <span class="group-description">{{ group.description }}</span>
             </div>
           </div>
@@ -168,7 +168,7 @@
           @file-selected="selectedFile = $event"
         />
         <div class="p-field mt-2">
-          <label for="groupPermissions">{{ t('Group permissions') }}</label>
+          <label for="groupPermissions">{{ t("Group permissions") }}</label>
           <Dropdown
             id="groupPermissions"
             v-model="groupForm.permissions"

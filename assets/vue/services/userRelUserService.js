@@ -42,9 +42,30 @@ async function searchRelationshipByUsername(userIri, searchTerm) {
   })
 }
 
+/**
+ * Updates a user relation by its IRI.
+ * @param {string} iri
+ * @param {Object} payload
+ * @returns {Promise<Object>}
+ */
+async function update(iri, payload) {
+  return await baseService.put(iri, payload)
+}
+
+/**
+ * Removes a user relation by its IRI.
+ * @param {string} iri
+ * @returns {Promise<any>}
+ */
+async function remove(iri) {
+  return await baseService.delete(iri)
+}
+
 export default {
   findAll,
   getFriendList,
   sendFriendRequest,
   searchRelationshipByUsername,
+  update,
+  remove,
 }

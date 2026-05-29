@@ -48,7 +48,7 @@ import Button from "primevue/button"
 import Dialog from "primevue/dialog"
 import cStudentPublicationService from "../../services/cstudentpublication"
 import { useNotification } from "../../composables/notification"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 
 const props = defineProps({
   modelValue: Boolean,
@@ -57,7 +57,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(["update:modelValue", "moved"])
-const { cid, sid, gid } = useCidReq()
+const { cid, sid, gid } = getCourseContext()
 const { t } = useI18n()
 const notification = useNotification()
 

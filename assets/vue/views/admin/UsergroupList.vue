@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from "vue"
 import { useI18n } from "vue-i18n"
-import axios from "axios"
+import usergroupAdminService from "../../services/usergroupAdminService"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
@@ -42,12 +42,10 @@ async function loadData() {
   isLoading.value = true
   errorMessage.value = ""
   try {
-    const { data } = await axios.get("/admin/usergroups-data", {
-      params: {
-        page: currentPage.value,
-        limit: pageSize.value,
-        search: search.value,
-      },
+    const data = await usergroupAdminService.list({
+      page: currentPage.value,
+      limit: pageSize.value,
+      search: search.value,
     })
     items.value = data.items
     totalItems.value = data.totalItems
@@ -132,10 +130,10 @@ async function saveForm() {
     }
 
     if (isEditing.value && form.value.id) {
-      await axios.post(`/admin/usergroups-data/${form.value.id}`, payload)
+      await usergroupAdminService.update(form.value.id, payload)
       successMessage.value = t("Update successful")
     } else {
-      await axios.post("/admin/usergroups-data", payload)
+      await usergroupAdminService.create(payload)
       successMessage.value = t("Item added")
     }
 
@@ -164,9 +162,7 @@ function confirmDelete(item) {
 
 async function performDelete(item) {
   try {
-    await axios.delete(`/admin/usergroups-data/${item.id}`, {
-      headers: { "X-CSRF-Token": csrfToken.value },
-    })
+    await usergroupAdminService.remove(item.id, csrfToken.value)
     successMessage.value = t("Deleted")
     await loadData()
     setTimeout(() => {
@@ -284,9 +280,7 @@ onMounted(() => {
       />
       <Column :header="t('Type')">
         <template #body="{ data }">
-          <span
-            :class="['inline-block rounded px-2 py-0.5 text-xs font-medium', groupTypeBadgeClass(data.groupType)]"
-          >
+          <span :class="['inline-block rounded px-2 py-0.5 text-xs font-medium', groupTypeBadgeClass(data.groupType)]">
             {{ groupTypeLabel(data.groupType) }}
           </span>
         </template>
@@ -468,7 +462,11 @@ onMounted(() => {
               class="text-sm"
               type="file"
               accept="image/*"
-              @change="(e) => { form.pictureFile = e.target.files[0] ?? null }"
+              @change="
+                (e) => {
+                  form.pictureFile = e.target.files[0] ?? null
+                }
+              "
             />
           </div>
         </div>

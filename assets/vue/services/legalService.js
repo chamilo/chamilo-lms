@@ -1,48 +1,44 @@
 import makeService from "./api"
+import baseService from "./baseService"
 
 const legalExtensions = {
   async findAllByLanguage(languageId) {
-    const params = new URLSearchParams({
-      languageId: languageId,
+    return baseService.getCollection("/api/legals", {
+      languageId,
       "order[version]": "desc",
     })
-    return fetch(`/api/legals?${params.toString()}`)
   },
 
   async findLatestByLanguage(languageId) {
-    const params = new URLSearchParams({
-      languageId: languageId,
+    return baseService.getCollection("/api/legals", {
+      languageId,
       "order[version]": "desc",
-      itemsPerPage: "1",
+      itemsPerPage: 1,
     })
-    return fetch(`/api/legals?${params.toString()}`)
   },
 
   async findByLanguageAndVersion(languageId, version) {
-    const params = new URLSearchParams({
-      languageId: languageId,
-      version: version,
+    return baseService.getCollection("/api/legals", {
+      languageId,
+      version,
       "order[type]": "asc",
-      itemsPerPage: "50",
+      itemsPerPage: 50,
     })
-    return fetch(`/api/legals?${params.toString()}`)
   },
 
   async findAllType0() {
-    const params = new URLSearchParams({
-      type: "0",
+    return baseService.getCollection("/api/legals", {
+      type: 0,
       "order[version]": "desc",
-      itemsPerPage: "50",
+      itemsPerPage: 50,
     })
-    return fetch(`/api/legals?${params.toString()}`)
   },
 
+  // /legal/save is a controller endpoint (not API Platform); baseService routes
+  // it through the shared axios instance, which sets Accept: application/json
+  // automatically for non-/api paths.
   async saveOrUpdateLegal(payload) {
-    return fetch(`/legal/save`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    })
+    return baseService.post("/legal/save", payload)
   },
 }
 

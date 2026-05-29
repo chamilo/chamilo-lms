@@ -195,7 +195,6 @@
 import useVuelidate from "@vuelidate/core"
 import { required } from "@vuelidate/validators"
 import { ref } from "vue"
-import axios from "axios"
 import { useI18n } from "vue-i18n"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useCourseSettings } from "../../store/courseSettingStore"
@@ -208,6 +207,8 @@ import BaseInputTextWithVuelidate from "../basecomponents/BaseInputTextWithVueli
 import DocumentAiMediaDialog from "./DocumentAiMediaDialog.vue"
 import BaseTextArea from "../basecomponents/BaseTextArea.vue"
 import ResourceLanguageSelector from "../resources/ResourceLanguageSelector.vue"
+import courseService from "../../services/courseService"
+import searchEngineFieldService from "../../services/searchEngineFieldService"
 
 export default {
   name: "DocumentsForm",
@@ -745,8 +746,7 @@ export default {
       }
 
       try {
-        const response = await axios.get(`/api/courses/${cid}`)
-        const data = response?.data || {}
+        const data = (await courseService.find(`/api/courses/${cid}`)) || {}
 
         const apiTitle = String(data?.title || data?.name || "").trim()
         const apiLanguage = String(data?.courseLanguage || data?.course_language || data?.language || "").trim()
@@ -861,19 +861,10 @@ export default {
     },
     async loadSearchEngineFields() {
       try {
-        const response = await fetch("/api/search_engine_fields", {
-          credentials: "same-origin",
-        })
-
-        if (!response.ok) {
-          console.error("[Search] Failed to load search engine fields:", response.status)
-          return
-        }
-
-        const json = await response.json()
-        const rawFields = Array.isArray(json) ? json : json["hydra:member"] || []
+        const { items } = await searchEngineFieldService.listFields()
+        const rawFields = items || []
         if (!Array.isArray(rawFields)) {
-          console.error("[Search] Unexpected search engine fields payload:", json)
+          console.error("[Search] Unexpected search engine fields payload:", items)
           return
         }
 
@@ -903,35 +894,7 @@ export default {
       }
     },
     async fetchFieldValues(resourceNodeId) {
-      const iri = `/api/resource_nodes/${resourceNodeId}`
-
-      const tryUrls = [
-        `/api/search_engine_field_values?resourceNode=${encodeURIComponent(iri)}&pagination=false`,
-        `/api/search_engine_field_values?resourceNodeId=${encodeURIComponent(resourceNodeId)}&pagination=false`,
-      ]
-
-      for (const url of tryUrls) {
-        try {
-          const response = await fetch(url, { credentials: "same-origin" })
-          if (!response.ok) {
-            console.warn("[Search] Field values request failed:", response.status, url)
-            continue
-          }
-
-          const json = await response.json()
-          const items = Array.isArray(json) ? json : json["hydra:member"] || []
-          if (!Array.isArray(items)) {
-            console.warn("[Search] Unexpected field values payload:", json)
-            continue
-          }
-
-          return items
-        } catch (error) {
-          console.warn("[Search] Field values request error:", error)
-        }
-      }
-
-      return []
+      return searchEngineFieldService.listFieldValues(resourceNodeId)
     },
     async loadSearchEngineFieldValuesForEdit() {
       if (this.searchValuesLoaded) return

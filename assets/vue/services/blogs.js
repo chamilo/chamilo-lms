@@ -1,27 +1,28 @@
 import baseService from "./baseService"
+import { getCourseContext, getRawCourseContext } from "../utils/courseContext"
 
 function withCourseParams(params = {}) {
   const merged = { ...params }
+
+  // Course context (cid/sid/gid) comes from the shared helper so it stays
+  // consistent with the API interceptor, the composable and the cidReq store.
+  const ctx = getRawCourseContext()
+  for (const k of ["cid", "sid", "gid"]) {
+    if (ctx[k] !== null && merged[k] === undefined) merged[k] = ctx[k]
+  }
+
+  // gradebook/origin are not part of the course context; read them from the URL.
   const search = new URLSearchParams(window.location.search)
-  for (const k of ["cid", "sid", "gid", "gradebook", "origin"]) {
+  for (const k of ["gradebook", "origin"]) {
     if (search.has(k) && merged[k] === undefined) merged[k] = search.get(k)
   }
+
   return merged
 }
 
 /** Extract course context (cid/sid/gid) as backend expects */
 function courseContextParams() {
-  const qs = new URLSearchParams(window.location.search)
-  const pickNum = (...names) => {
-    for (const n of names) {
-      const v = qs.get(n)
-      if (v !== null && v !== undefined && !Number.isNaN(Number(v))) return Number(v)
-    }
-    return null
-  }
-  const cid = pickNum("cid", "cidReq") ?? Number(window?.chamilo?.course?.id) ?? null
-  const sid = pickNum("sid", "id_session") ?? Number(window?.chamilo?.session?.id) ?? null
-  const gid = pickNum("gid", "gidReq") ?? Number(window?.chamilo?.group?.id) ?? null
+  const { cid, sid, gid } = getCourseContext()
   const out = {}
   if (cid) out.cid = cid
   if (sid) out.sid = sid

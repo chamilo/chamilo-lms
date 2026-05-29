@@ -652,7 +652,7 @@ import { isEmpty } from "lodash"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { computed, nextTick, onMounted, ref, unref, watch } from "vue"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import { useDatatableList } from "../../composables/datatableList"
 import { useFormatDate } from "../../composables/formatDate"
 import baseService from "../../services/baseService"
@@ -745,7 +745,7 @@ const hideDownloadIcon = computed(() => {
 })
 
 const { filters, options, onUpdateOptions, deleteItem } = useDatatableList("Documents")
-const { cid, sid, gid } = useCidReq()
+const { cid, sid, gid } = getCourseContext()
 const { isImage, isHtml, isFile } = useFileUtils()
 const { relativeDatetime } = useFormatDate()
 const { isAllowedToEdit } = useIsAllowedToEdit({ tutor: true, coach: true, sessionCoach: true })

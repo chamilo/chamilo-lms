@@ -4,7 +4,7 @@ import { useStore } from "vuex"
 import { storeToRefs } from "pinia"
 import { useI18n } from "vue-i18n"
 import { useSecurityStore } from "../store/securityStore"
-import { useCidReq } from "./cidReq"
+import { getCourseContext } from "../utils/courseContext"
 import { RESOURCE_LINK_PUBLISHED } from "../constants/entity/resourcelink"
 import { useCidReqStore } from "../store/cidReq"
 import documentsService from "../services/documents"
@@ -38,7 +38,7 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
   const contextMenuFile = ref(null)
   const previousFolders = ref([])
   const currentFolderTitle = ref("Root")
-  const { cid, sid, gid } = useCidReq()
+  const { cid, sid, gid } = getCourseContext()
 
   // ---- Picker type filter (files/images/media) ----
   const filterType = computed(() => {

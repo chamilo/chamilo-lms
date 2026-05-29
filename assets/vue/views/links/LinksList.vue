@@ -358,7 +358,7 @@ import linkService from "../../services/linkService"
 import { useNotification } from "../../composables/notification"
 import { isVisible, toggleVisibilityProperty, visibilityFromBoolean } from "../../components/links/linkVisibility"
 import { useSecurityStore } from "../../store/securityStore"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import { useIsAllowedToEdit } from "../../composables/userPermissions"
 import { usePlatformConfig } from "../../store/platformConfig"
 
@@ -366,7 +366,7 @@ const route = useRoute()
 const router = useRouter()
 const securityStore = useSecurityStore()
 const platform = usePlatformConfig()
-const { cid, sid } = useCidReq()
+const { cid, sid } = getCourseContext()
 
 const { t } = useI18n()
 const notifications = useNotification()

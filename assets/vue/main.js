@@ -3,7 +3,6 @@ import App from "./App.vue"
 import i18n from "./i18n"
 import router from "./router"
 import store from "./store"
-import api from "./config/api"
 import { createPinia } from "pinia"
 
 // Services.
@@ -207,7 +206,6 @@ app.component("ColumnGroup", ColumnGroup)
 app.component("Toolbar", Toolbar)
 app.component("BaseAppLink", BaseAppLink)
 
-app.config.globalProperties.axios = api
 app.config.globalProperties.window = window
 
 window.Alpine = Alpine

@@ -74,13 +74,13 @@ import documentService from "../../services/documents"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import { useRoute, useRouter } from "vue-router"
 import { useNotification } from "../../composables/notification"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const notification = useNotification()
-const { cid, sid, gid } = useCidReq()
+const { cid, sid, gid } = getCourseContext()
 
 const publicationId = parseInt(route.params.id, 10)
 const publicationTitle = ref("")

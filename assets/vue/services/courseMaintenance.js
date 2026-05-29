@@ -1,34 +1,18 @@
 import baseService from "./baseService"
-import { useCidReqStore } from "../store/cidReq"
+import { getCourseContext } from "../utils/courseContext"
 
-/** Read current course/session/group context from Pinia store with graceful fallbacks */
+/**
+ * Read current course/session/group context (cid/sid/gid) from the shared helper.
+ * The helper mirrors the router's resolveCourseId that feeds the cidReq store, so
+ * these values stay consistent with the store, the composable and the interceptor.
+ */
 function courseContextParams() {
-  const store = useCidReqStore()
-
-  const fromStore = {
-    cid: Number(store?.course?.id) || null,
-    sid: Number(store?.session?.id) || null,
-    gid: Number(store?.group?.id) || null,
-  }
-
-  // Fallback to querystring (useful when reloading or opening deep links)
-  const qs = new URLSearchParams(window.location.search)
-  const pickNum = (...names) => {
-    for (const n of names) {
-      const v = qs.get(n)
-      if (v !== null && v !== undefined && !Number.isNaN(Number(v))) return Number(v)
-    }
-    return null
-  }
-
-  return {
-    ...(fromStore.cid ? { cid: fromStore.cid } : {}),
-    ...(fromStore.sid ? { sid: fromStore.sid } : {}),
-    ...(fromStore.gid ? { gid: fromStore.gid } : {}),
-    ...(fromStore.cid ? {} : pickNum("cid", "cidReq") ? { cid: pickNum("cid", "cidReq") } : {}),
-    ...(fromStore.sid ? {} : pickNum("sid", "id_session") ? { sid: pickNum("sid", "id_session") } : {}),
-    ...(fromStore.gid ? {} : pickNum("gid", "gidReq") ? { gid: pickNum("gid", "gidReq") } : {}),
-  }
+  const { cid, sid, gid } = getCourseContext()
+  const out = {}
+  if (cid) out.cid = cid
+  if (sid) out.sid = sid
+  if (gid) out.gid = gid
+  return out
 }
 
 /** Merge current context and extra params (also preserve gradebook/origin from URL if present) */

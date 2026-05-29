@@ -115,12 +115,12 @@ import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { useNotification } from "../../composables/notification"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import debounce from "lodash/debounce"
 
 const { t } = useI18n()
 const route = useRoute()
-const { cid, sid } = useCidReq()
+const { cid, sid } = getCourseContext()
 const notification = useNotification()
 const router = useRouter()
 

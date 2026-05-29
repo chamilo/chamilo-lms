@@ -247,7 +247,7 @@
 import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import DOMPurify from "dompurify"
 
 const { t } = useI18n({ useScope: "global" })
@@ -303,12 +303,12 @@ function readCidReqFromRouteAndLocation() {
 }
 
 /**
- * Keep compatibility: if useCidReq() works, bind to it.
+ * Keep compatibility: if getCourseContext() works, bind to it.
  * If it doesn't provide cid for path-based routes, route watcher will override via readCidReqFromRouteAndLocation().
  */
 function safeBindCidReq() {
   try {
-    const r = useCidReq()
+    const r = getCourseContext()
     if (r?.cid && typeof r.cid === "object" && "value" in r.cid) cid.value = toInt(r.cid.value) || 0
     if (r?.sid && typeof r.sid === "object" && "value" in r.sid) sid.value = toInt(r.sid.value) || 0
     if (r?.gid && typeof r.gid === "object" && "value" in r.gid) gid.value = toInt(r.gid.value) || 0

@@ -312,7 +312,7 @@ import documentService from "../../services/documents"
 import aiService from "../../services/aiService"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
@@ -326,7 +326,7 @@ import { checkIsAllowedToEdit } from "../../composables/userPermissions"
 const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
-const { cid, sid, gid } = useCidReq()
+const { cid, sid, gid } = getCourseContext()
 
 const platformConfig = usePlatformConfig()
 const courseSettingsStore = useCourseSettings()

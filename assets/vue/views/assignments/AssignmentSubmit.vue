@@ -115,7 +115,7 @@
 <script setup>
 import { ref, onMounted } from "vue"
 import { useRoute, useRouter } from "vue-router"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import { useI18n } from "vue-i18n"
 import { useNotification } from "../../composables/notification"
 import "@uppy/core/dist/style.css"
@@ -130,7 +130,7 @@ import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
-const { cid, sid, gid } = useCidReq()
+const { cid, sid, gid } = getCourseContext()
 const { showSuccessNotification, showErrorNotification } = useNotification()
 const allowText = route.query.allowText === "1"
 const allowFile = route.query.allowFile === "1"

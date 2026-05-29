@@ -1,9 +1,9 @@
 import makeService from "./api"
-import { useCidReq } from "../composables/cidReq"
+import { getCourseContext } from "../utils/courseContext"
 import baseService from "./baseService"
 
 function buildCidParams() {
-  const { cid, sid, gid } = useCidReq()
+  const { cid, sid, gid } = getCourseContext()
 
   return {
     cid,

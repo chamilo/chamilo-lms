@@ -1,4 +1,5 @@
 import axios from "axios"
+import { getRawCourseContext } from "../utils/courseContext"
 
 /**
  * @type {axios.AxiosInstance}
@@ -12,15 +13,11 @@ const instance = axios.create({
   },
 })
 
-// Add cid/sid/gid automatically to every API call, mirroring the global axios
-// interceptor configured in main.js. Instances created via axios.create() do not
-// inherit interceptors from the default axios instance, so it must be set here too
-// for baseService-based requests to keep the current course/session/group context.
+// Add cid/sid/gid automatically to every API call so requests keep the current
+// course/session/group context. The values come from getRawCourseContext(), the
+// same source the getCourseContext composable and the services use, so they cannot diverge.
 instance.interceptors.request.use((config) => {
-  const sp = new URLSearchParams(window.location.search)
-  const pageCid = sp.get("cid")
-  const pageSid = sp.get("sid")
-  const pageGid = sp.get("gid")
+  const { cid: pageCid, sid: pageSid, gid: pageGid } = getRawCourseContext()
 
   if (!pageCid && !pageSid && !pageGid) {
     return config

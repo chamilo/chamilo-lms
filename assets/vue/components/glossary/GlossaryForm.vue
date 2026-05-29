@@ -72,7 +72,7 @@ import BaseAdvancedSettingsButton from "../basecomponents/BaseAdvancedSettingsBu
 import ResourceLanguageSelector from "../resources/ResourceLanguageSelector.vue"
 import { useNotification } from "../../composables/notification"
 import glossaryService from "../../services/glossaryService"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import { useSecurityStore } from "../../store/securityStore"
 import { useIsAllowedToEdit } from "../../composables/userPermissions"
 
@@ -80,7 +80,7 @@ const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
 const notification = useNotification()
-const { sid, cid } = useCidReq()
+const { sid, cid } = getCourseContext()
 const securityStore = useSecurityStore()
 
 const props = defineProps({

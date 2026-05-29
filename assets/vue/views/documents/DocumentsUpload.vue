@@ -204,7 +204,7 @@ import XHRUpload from "@uppy/xhr-upload"
 import ImageEditor from "@uppy/image-editor"
 import { useRoute, useRouter } from "vue-router"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import { useUpload } from "../../composables/upload"
 import { useI18n } from "vue-i18n"
 import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
@@ -218,7 +218,7 @@ import documentsService from "../../services/documents"
 
 const route = useRoute()
 const router = useRouter()
-const { gid, sid, cid } = useCidReq()
+const { gid, sid, cid } = getCourseContext()
 const { onCreated } = useUpload()
 const { t } = useI18n()
 const platformConfigStore = usePlatformConfig()

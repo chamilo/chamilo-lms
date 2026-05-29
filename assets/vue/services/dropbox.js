@@ -1,29 +1,16 @@
 import baseService from "./baseService"
-import { useCidReq } from "../composables/cidReq"
+import { getRawCourseContext } from "../utils/courseContext"
 
 const BASE = "/dropbox"
 
 const JSON_HEADERS = { "Content-Type": "application/json" }
 
 function buildQuery(extra = {}, overrideCtx = {}) {
-  let qCid, qSid, qGid
-  if (typeof window !== "undefined") {
-    const sp = new URLSearchParams(window.location.search || "")
-    qCid = sp.get("cid")
-    qSid = sp.get("sid")
-    qGid = sp.get("gid")
-  }
-  let fromComp = {}
-  if (typeof useCidReq === "function") {
-    try {
-      fromComp = useCidReq() || {}
-    } catch {
-      // useCidReq may be unavailable outside a component setup context
-    }
-  }
-  const cid = overrideCtx.cid ?? qCid ?? fromComp.cid
-  const sid = overrideCtx.sid ?? qSid ?? fromComp.sid ?? 0
-  const gid = overrideCtx.gid ?? qGid ?? fromComp.gid ?? 0
+  const { cid: qCid, sid: qSid, gid: qGid } = getRawCourseContext()
+
+  const cid = overrideCtx.cid ?? qCid
+  const sid = overrideCtx.sid ?? qSid ?? 0
+  const gid = overrideCtx.gid ?? qGid ?? 0
 
   const params = new URLSearchParams({
     cid: String(cid ?? ""),

@@ -284,7 +284,7 @@ import Dropdown from "primevue/dropdown"
 import InputText from "primevue/inputtext"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import { usePlatformConfig } from "../../store/platformConfig"
@@ -307,7 +307,7 @@ const emit = defineEmits(["update:visible", "accepted"])
 
 const route = useRoute()
 const { t, locale } = useI18n()
-const { cid, sid, gid } = useCidReq()
+const { cid, sid, gid } = getCourseContext()
 
 const platformConfig = usePlatformConfig()
 const courseSettingsStore = useCourseSettings()

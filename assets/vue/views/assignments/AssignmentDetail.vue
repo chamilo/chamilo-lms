@@ -181,7 +181,7 @@
 import { ref, computed, onMounted } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
 import cStudentPublicationService from "../../services/cstudentpublication"
@@ -193,7 +193,7 @@ import StudentSubmissionList from "../../components/assignments/StudentSubmissio
 import TeacherSubmissionList from "../../components/assignments/TeacherSubmissionList.vue"
 
 const { t } = useI18n()
-const { cid, sid, gid } = useCidReq()
+const { cid, sid, gid } = getCourseContext()
 const route = useRoute()
 const router = useRouter()
 const securityStore = useSecurityStore()

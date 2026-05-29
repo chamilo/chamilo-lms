@@ -24,13 +24,13 @@ import AssignmentsForm from "../../components/assignments/AssignmentsForm.vue"
 import { useI18n } from "vue-i18n"
 import { ref } from "vue"
 import cStudentPublicationService from "../../services/cstudentpublication"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import { useNotification } from "../../composables/notification"
 import { useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 
 const { t } = useI18n()
-const { cid, sid, gid } = useCidReq()
+const { cid, sid, gid } = getCourseContext()
 const router = useRouter()
 
 const { showSuccessNotification, showErrorNotification } = useNotification()

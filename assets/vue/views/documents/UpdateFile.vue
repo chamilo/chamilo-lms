@@ -19,13 +19,25 @@
           :values="item"
           @submit="onSendFormData"
         >
-          <BaseCheckbox
+          <div
             v-if="isCurrentTeacher"
-            id="ai-assisted-flag"
-            v-model="aiAssistedFlag"
-            label="AI-assisted"
-            name="ai_assited"
-          />
+            class="mb-3 flex items-center gap-2"
+          >
+            <BaseCheckbox
+              id="ai-assisted-flag"
+              v-model="aiAssistedFlag"
+              :label="$t('AI-assisted')"
+              name="ai_assisted"
+            />
+
+            <span
+              class="mdi mdi-information-outline cursor-help text-primary"
+              role="img"
+              tabindex="0"
+              :aria-label="$t('Information about AI-assisted documents')"
+              :title="$t('Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools.')"
+            />
+          </div>
 
           <EditLinks
             v-model="item"

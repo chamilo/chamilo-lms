@@ -5,11 +5,13 @@ export default {
   /**
    * @param {string} iri
    * @param {Object} [params]
+   * @param {Object} [config] Extra axios config (e.g. { skipCourseContext: true }, signal, headers).
    * @returns {Promise<any>}
    */
-  async get(iri, params = {}) {
+  async get(iri, params = {}, config = {}) {
     const { data } = await api.get(iri, {
       params,
+      ...config,
     })
 
     return data
@@ -18,11 +20,13 @@ export default {
   /**
    * @param {string} endpoint
    * @param {Object} searchParams
+   * @param {Object} [config] Extra axios config (e.g. { skipCourseContext: true }, signal, headers).
    * @returns {Promise<{totalItems: number, items: Object[], nextPageParams: {page: number, itemsPerPage: number}|null}>}
    */
-  async getCollection(endpoint, searchParams = {}) {
+  async getCollection(endpoint, searchParams = {}, config = {}) {
     const { data } = await api.get(endpoint, {
       params: searchParams,
+      ...config,
     })
 
     let nextPageParams = null

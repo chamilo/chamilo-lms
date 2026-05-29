@@ -20,7 +20,8 @@ async function create(message) {
 async function countUnreadMessages(params) {
   params["exists[receivers.deletedAt]"] = false
   const queryParams = new URLSearchParams(params).toString()
-  return await baseService.get(`/api/messages?${queryParams}`)
+  // Global topbar widget: must not be scoped to the current course.
+  return await baseService.get(`/api/messages?${queryParams}`, {}, { skipCourseContext: true })
 }
 
 export const messageService = {

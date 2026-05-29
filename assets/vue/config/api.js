@@ -83,6 +83,12 @@ instance.interceptors.request.use((config) => {
 // course/session/group context. The values come from getRawCourseContext(), the
 // same source the getCourseContext composable and the services use, so they cannot diverge.
 instance.interceptors.request.use((config) => {
+  // Opt-out: global requests (topbar/sidebar widgets, etc.) can disable course
+  // context injection even while the user is inside a course.
+  if (config.skipCourseContext) {
+    return config
+  }
+
   const { cid: pageCid, sid: pageSid, gid: pageGid } = getRawCourseContext()
 
   if (!pageCid && !pageSid && !pageGid) {

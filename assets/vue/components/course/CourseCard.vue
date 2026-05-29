@@ -404,6 +404,7 @@ import BaseTag from "../basecomponents/BaseTag.vue"
 import { useUserSessionSubscription } from "../../composables/userPermissions"
 import { useLocale } from "../../composables/locale"
 import courseService from "../../services/courseService"
+import baseService from "../../services/baseService"
 
 function createStudentInfoBatcher() {
   const cache = shallowReactive(new Map()) // key -> studentInfo
@@ -479,41 +480,33 @@ function createStudentInfoBatcher() {
 
           if (ids.length === 0) return
 
-          const resp = await fetch("/course/student-info-batch.json", {
-            method: "POST",
-            credentials: "same-origin",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              sid: Number(sid) || 0,
-              courseIds: ids,
-            }),
-            signal: abortCtrl.signal,
-          })
+          try {
+            const data = await baseService.post(
+              "/course/student-info-batch.json",
+              { sid: Number(sid) || 0, courseIds: ids },
+              true,
+              {},
+              { signal: abortCtrl.signal },
+            )
 
-          if (!resp.ok) {
+            const items = data?.items || {}
+            const normalizedSid = Number(data?.sid ?? sid) || 0
+
+            Object.entries(items).forEach(([cidStr, info]) => {
+              const cId = Number(cidStr) || 0
+              if (cId <= 0) return
+              cache.set(buildKey(cId, normalizedSid), info)
+            })
+
+            ids.forEach((cid) => {
+              const k = buildKey(cid, normalizedSid)
+              if (!cache.has(k)) {
+                requestedKeys.delete(k)
+              }
+            })
+          } catch {
             ids.forEach((cid) => requestedKeys.delete(buildKey(cid, sid)))
-            return
           }
-
-          const data = await resp.json()
-          const items = data?.items || {}
-          const normalizedSid = Number(data?.sid ?? sid) || 0
-
-          Object.entries(items).forEach(([cidStr, info]) => {
-            const cId = Number(cidStr) || 0
-            if (cId <= 0) return
-            cache.set(buildKey(cId, normalizedSid), info)
-          })
-
-          ids.forEach((cid) => {
-            const k = buildKey(cid, normalizedSid)
-            if (!cache.has(k)) {
-              requestedKeys.delete(k)
-            }
-          })
         }),
       )
     } catch (e) {
@@ -591,19 +584,8 @@ async function loadNotifications() {
   try {
     const url = buildNotificationsEndpoint()
 
-    const resp = await fetch(url, {
-      method: "GET",
-      credentials: "same-origin",
-      headers: { Accept: "application/json" },
-      signal: notificationsAbort.signal,
-    })
-
-    if (!resp.ok) {
-      notificationsError.value = "[CourseCard] Failed to load notifications."
-      return
-    }
-
-    const data = await resp.json()
+    const resp = await baseService.getRaw(url, { signal: notificationsAbort.signal })
+    const data = resp.data
 
     notificationsItems.value = Array.isArray(data?.items) ? data.items : []
     notificationsMeta.value = {
@@ -612,7 +594,7 @@ async function loadNotifications() {
 
     notificationsLoadedOnce = true
   } catch (e) {
-    if (e?.name !== "AbortError") {
+    if (e?.code !== "ERR_CANCELED" && e?.name !== "AbortError") {
       console.warn("[CourseCard] Notifications request failed.", e)
       notificationsError.value = "[CourseCard] Failed to load notifications."
     }
@@ -1000,16 +982,9 @@ async function fetchStudentInfoSingle() {
   try {
     const url = `/course/${courseNumericId.value}/student-info.json?sid=${props.sessionId || 0}`
 
-    const resp = await fetch(url, {
-      method: "GET",
-      credentials: "same-origin",
-      headers: { Accept: "application/json" },
-      signal: studentInfoAbort.signal,
-    })
+    const resp = await baseService.getRaw(url, { signal: studentInfoAbort.signal })
+    const data = resp.data
 
-    if (!resp.ok) return
-
-    const data = await resp.json()
     if (data && typeof data === "object") {
       studentInfoLocal.value = data
     }

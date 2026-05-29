@@ -449,12 +449,8 @@ const saveTerms = async () => {
   }
 
   try {
-    const response = await legalService.saveOrUpdateLegal(payload)
-    if (response.ok) {
-      await router.push({ name: "TermsConditionsList" })
-    } else {
-      console.error("Failed to save legal terms.")
-    }
+    await legalService.saveOrUpdateLegal(payload)
+    await router.push({ name: "TermsConditionsList" })
   } catch (error) {
     console.error("Error while saving legal terms:", error)
   } finally {

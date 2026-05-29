@@ -7,6 +7,7 @@ import { useMessageRelUserStore } from "../store/messageRelUserStore"
 import { useCidReqStore } from "../store/cidReq"
 import { useSecurityStore } from "../store/securityStore"
 import { useNotification } from "./notification"
+import baseService from "../services/baseService"
 
 const ROLE_MAP = {
   ROLE_ADMIN: "ADMIN",
@@ -330,17 +331,7 @@ export function useTopbarLoggedIn(props) {
     }
 
     try {
-      const response = await fetch("/plugin/Justification/user_menu.php", {
-        method: "GET",
-        credentials: "same-origin",
-        headers: { Accept: "application/json" },
-      })
-
-      if (!response.ok) {
-        throw new Error("Request failed: " + response.status)
-      }
-
-      const data = await response.json()
+      const data = await baseService.get("/plugin/Justification/user_menu.php")
 
       justificationMenu.value = {
         enabled: data?.enabled === true,
@@ -386,17 +377,7 @@ export function useTopbarLoggedIn(props) {
     isFetchingCustomCertificate.value = true
 
     try {
-      const response = await fetch("/main/social/my_skills_report.php?a=has_custom_certificate", {
-        method: "GET",
-        credentials: "same-origin",
-        headers: { Accept: "application/json" },
-      })
-
-      if (!response.ok) {
-        throw new Error("Request failed: " + response.status)
-      }
-
-      const data = await response.json()
+      const data = await baseService.get("/main/social/my_skills_report.php", { a: "has_custom_certificate" })
 
       hasCustomCertificate.value = !!(
         data &&

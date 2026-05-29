@@ -34,14 +34,11 @@ const legalExtensions = {
     })
   },
 
-  // TODO: /legal/save is a controller endpoint (not API Platform); pending the
-  // non-API fetch migration decision, it still uses native fetch.
+  // /legal/save is a controller endpoint (not API Platform); baseService routes
+  // it through the shared axios instance, which sets Accept: application/json
+  // automatically for non-/api paths.
   async saveOrUpdateLegal(payload) {
-    return fetch(`/legal/save`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    })
+    return baseService.post("/legal/save", payload, true)
   },
 }
 

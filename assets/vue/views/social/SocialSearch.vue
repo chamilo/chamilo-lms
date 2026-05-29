@@ -230,6 +230,7 @@ import { useI18n } from "vue-i18n"
 import { useNotification } from "../../composables/notification"
 import { useSocialInfo } from "../../composables/useSocialInfo"
 import { useRoute } from "vue-router"
+import baseService from "../../services/baseService"
 
 const route = useRoute()
 const query = ref("")
@@ -274,13 +275,7 @@ const performSearch = async () => {
     }
     searchPerformed.value = true
     await nextTick()
-    const response = await fetch(
-      `/social-network/search?query=${encodeURIComponent(query.value)}&type=${searchType.value}`,
-    )
-    const data = await response.json()
-    if (!response.ok) {
-      throw new Error(data.message || "Server response error")
-    }
+    const data = await baseService.get("/social-network/search", { query: query.value, type: searchType.value })
     if (searchType.value === "user") {
       users.value = data.results.map((item) => ({
         ...item,
@@ -327,14 +322,7 @@ const sendInvitation = async () => {
     content: invitationMessage.value,
   }
   try {
-    const response = await fetch("/social-network/user-action", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(invitationData),
-    })
-    const result = await response.json()
+    const result = await baseService.post("/social-network/user-action", invitationData, true)
     if (result.success) {
       notification.showSuccessNotification("Invitation sent successfully.")
       users.value = users.value.filter((user) => user.id !== selectedUser.value.id)
@@ -364,14 +352,7 @@ const sendMessage = async () => {
     content: messageContent.value,
   }
   try {
-    const response = await fetch("/social-network/user-action", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(messageData),
-    })
-    const result = await response.json()
+    const result = await baseService.post("/social-network/user-action", messageData, true)
     if (result.success) {
       notification.showSuccessNotification("Message sent successfully.")
     } else {

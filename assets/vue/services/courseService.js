@@ -328,12 +328,7 @@ export default {
   },
 
   findCourseForSessionAdmin: async (cid) => {
-    const response = await fetch(`/admin/sessionadmin/courses/${cid}`)
-    if (!response.ok) {
-      throw new Error("Failed to fetch course")
-    }
-
-    const data = await response.json()
+    const data = await baseService.get(`/admin/sessionadmin/courses/${cid}`)
 
     if (!data || typeof data !== "object" || !data.id) {
       throw new Error("Failed to load course for session admin")

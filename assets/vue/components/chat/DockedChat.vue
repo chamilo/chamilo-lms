@@ -249,6 +249,7 @@ import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
 import { getCourseContext } from "../../utils/courseContext"
 import DOMPurify from "dompurify"
+import baseService from "../../services/baseService"
 
 const { t } = useI18n({ useScope: "global" })
 const route = useRoute()
@@ -652,21 +653,21 @@ function ackTitle(msg) {
 
 async function getJSON(url, params) {
   const full = params ? `${url}?${qs(withCidReq(params))}` : addCidReqToUrl(url)
-  const r = await fetch(full, { credentials: "same-origin" })
-  if (!r.ok) throw new Error("Network error")
-  return r.json()
+  return baseService.get(full)
 }
 
 async function post(url, params, expectJson = true) {
   const fullUrl = addCidReqToUrl(url)
-  const r = await fetch(fullUrl, {
-    method: "POST",
-    credentials: "same-origin",
-    headers: { "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8" },
-    body: new URLSearchParams(withCidReq(params || {})),
-  })
-  if (!r.ok) throw new Error("Network error")
-  return expectJson ? r.json() : r.text()
+  // URLSearchParams body makes axios send application/x-www-form-urlencoded.
+  const body = new URLSearchParams(withCidReq(params || {}))
+
+  if (expectJson) {
+    return baseService.post(fullUrl, body)
+  }
+
+  const r = await baseService.postRaw(fullUrl, body, { responseType: "text" })
+
+  return r.data
 }
 
 function byChronoId(a, b) {

@@ -85,6 +85,7 @@
 
 <script setup>
 import { onBeforeUnmount, onMounted, ref } from "vue"
+import baseService from "../../services/baseService"
 
 const endpoint = "/plugin/ExtraMenuFromWebservice/menu.php"
 
@@ -123,18 +124,7 @@ function normalizeItems(value) {
 
 async function loadMenu() {
   try {
-    const response = await fetch(endpoint, {
-      credentials: "same-origin",
-      headers: {
-        Accept: "application/json",
-      },
-    })
-
-    if (!response.ok) {
-      return
-    }
-
-    const data = await response.json()
+    const data = await baseService.get(endpoint)
 
     title.value = typeof data.title === "string" && data.title.trim() ? data.title : title.value
     items.value = data.enabled ? normalizeItems(data.items) : []

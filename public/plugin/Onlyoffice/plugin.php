@@ -28,6 +28,9 @@ $plugin = OnlyofficePlugin::create();
 $appSettings = new OnlyofficeAppsettings($plugin);
 $plugin_info = $plugin->get_info();
 
+$plugin_info['commercial_model'] = 'freemium';
+$plugin_info['commercial_model_reason'] = 'ONLYOFFICE Docs can be Community or paid Enterprise/Cloud, but requires an external document server/service.';
+
 $installed = Container::getPluginRepository()->isInstalledByName($plugin->get_name());
 
 if ($installed) {

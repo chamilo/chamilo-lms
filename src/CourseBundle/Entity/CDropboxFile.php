@@ -23,7 +23,7 @@ use Stringable;
     new Post(
         uriTemplate: '/c_dropbox_files/upload',
         controller: CreateDropboxFileAction::class,
-        security: "is_granted('IS_AUTHENTICATED_REMEMBERED')",
+        security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
         validationContext: ['groups' => ['Default']],
         output: false,
         deserialize: false

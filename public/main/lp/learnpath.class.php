@@ -3107,12 +3107,19 @@ class learnpath
                             $file = 'lp_content.php?type=dir';
                             break;
                         case 'link':
+                            $embedCidReq = api_get_cidreq();
                             if (Link::is_youtube_link($file)) {
                                 $src = Link::get_youtube_video_id($file);
                                 $file = api_get_path(WEB_CODE_PATH).'lp/embed.php?type=youtube&source='.$src;
+                                if ('' !== $embedCidReq) {
+                                    $file .= '&'.$embedCidReq;
+                                }
                             } elseif (Link::isVimeoLink($file)) {
                                 $src = Link::getVimeoLinkId($file);
                                 $file = api_get_path(WEB_CODE_PATH).'lp/embed.php?type=vimeo&source='.$src;
+                                if ('' !== $embedCidReq) {
+                                    $file .= '&'.$embedCidReq;
+                                }
                             } else {
                                 // If the current site is HTTPS and the link is
                                 // HTTP, browsers will refuse opening the link
@@ -3125,6 +3132,9 @@ class learnpath
                                         //this is the special intervention case
                                         $file = api_get_path(WEB_CODE_PATH).
                                             'lp/embed.php?type=nonhttps&source='.urlencode($file);
+                                        if ('' !== $embedCidReq) {
+                                            $file .= '&'.$embedCidReq;
+                                        }
                                     }
                                 }
                             }

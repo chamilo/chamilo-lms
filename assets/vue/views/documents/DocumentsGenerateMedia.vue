@@ -109,13 +109,6 @@
         />
       </div>
 
-      <BaseAdvancedSettingsButton
-        v-if="showResourceLanguageAdvancedSettings"
-        v-model="showAdvancedSettings"
-      >
-        <ResourceLanguageSelector v-model="selectedLanguage" />
-      </BaseAdvancedSettingsButton>
-
       <!-- Name -->
       <div class="space-y-1">
         <label class="font-semibold text-sm">{{ t("Filename") }}</label>

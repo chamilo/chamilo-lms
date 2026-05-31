@@ -6,16 +6,14 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
-use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
 use Chamilo\CoreBundle\Helpers\CourseHelper;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\ORM\EntityManager;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -51,13 +49,16 @@ final class CreateDocumentFileAction extends BaseResourceFileAction
         CourseRepository $courseRepository,
         CourseHelper $courseHelper,
         AiDisclosureHelper $aiDisclosureHelper,
-        Security $security,
     ): CDocument {
-        // Reject any resourceLinkList entry pointing to a course where the
-        // caller is not a teacher (admins bypass). The operation-level
-        // security expression only validates the role for the query `cid`,
-        // so the body could otherwise target a foreign course (IDOR).
-        $this->assertUserCanLinkToCourses($request, $security, $courseRepository);
+        // The link context (cid/sid/gid) is taken from the session-resolved
+        // course that gated this operation, not from the request body. This
+        // makes it impossible for the body to target a foreign course (IDOR):
+        // the body is only allowed to carry the link visibility.
+        $resourceLinkList = $this->buildResourceLinkListFromContext(
+            $request,
+            $this->extractResourceLinkListFromRequest($request),
+            ResourceLink::VISIBILITY_PUBLISHED
+        );
 
         $isUncompressZipEnabled = (string) $request->get('isUncompressZipEnabled', 'false');
         $fileExistsOption = (string) $request->get('fileExistsOption', 'rename');
@@ -74,7 +75,8 @@ final class CreateDocumentFileAction extends BaseResourceFileAction
                 $kernel,
                 $courseRepository,
                 $repo,
-                $courseHelper
+                $courseHelper,
+                $resourceLinkList
             );
         } else {
             $result = $this->handleCreateFileRequest(
@@ -85,7 +87,8 @@ final class CreateDocumentFileAction extends BaseResourceFileAction
                 $fileExistsOption,
                 $translator,
                 $courseRepository,
-                $courseHelper
+                $courseHelper,
+                $resourceLinkList
             );
         }
 
@@ -162,66 +165,5 @@ final class CreateDocumentFileAction extends BaseResourceFileAction
         }
 
         return false;
-    }
-
-    private function assertUserCanLinkToCourses(
-        Request $request,
-        Security $security,
-        CourseRepository $courseRepository,
-    ): void {
-        $user = $security->getUser();
-        if (!$user instanceof User) {
-            throw new AccessDeniedHttpException('Authentication required.');
-        }
-
-        if ($security->isGranted('ROLE_ADMIN')) {
-            return;
-        }
-
-        $resourceLinkList = $this->extractResourceLinkList($request);
-        foreach ($resourceLinkList as $entry) {
-            if (!\is_array($entry)) {
-                continue;
-            }
-
-            $cid = (int) ($entry['cid'] ?? 0);
-            if ($cid <= 0) {
-                continue;
-            }
-
-            $course = $courseRepository->find($cid);
-            if (null === $course || !$course->hasUserAsTeacher($user)) {
-                throw new AccessDeniedHttpException('You are not a teacher of one of the referenced courses.');
-            }
-        }
-    }
-
-    /**
-     * @return array<int, mixed>
-     */
-    private function extractResourceLinkList(Request $request): array
-    {
-        $raw = (string) $request->getContent();
-        if ('' !== $raw) {
-            $decoded = json_decode($raw, true);
-            if (\is_array($decoded) && isset($decoded['resourceLinkList']) && \is_array($decoded['resourceLinkList'])) {
-                return $decoded['resourceLinkList'];
-            }
-        }
-
-        $fromForm = $request->get('resourceLinkList', []);
-        if (\is_array($fromForm)) {
-            return $fromForm;
-        }
-
-        if (\is_string($fromForm) && '' !== $fromForm) {
-            $normalized = str_contains($fromForm, '[') ? $fromForm : '['.$fromForm.']';
-            $decoded = json_decode($normalized, true);
-            if (\is_array($decoded)) {
-                return $decoded;
-            }
-        }
-
-        return [];
     }
 }

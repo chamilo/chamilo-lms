@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CourseBundle\Entity\CBlog;
@@ -16,7 +17,6 @@ use Doctrine\ORM\EntityManagerInterface as EntityManager;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 #[AsController]
 class CreateCBlogAction extends BaseResourceFileAction
@@ -43,11 +43,15 @@ class CreateCBlogAction extends BaseResourceFileAction
             $resourceLinkList = \is_array($resourceLinkListRaw) ? $resourceLinkListRaw : [];
         }
 
-        // The `cid` (and optional `sid`/`gid`) query parameter establishes the
-        // course context that gated the security expression. Any
-        // resourceLinkList entry that points to a different context would
-        // bypass that gate, so we reject the request outright.
-        $this->assertResourceLinkListMatchesQueryContext($request, $resourceLinkList, $security);
+        // The link context (cid/sid/gid) is taken from the session-resolved
+        // course that gated this operation, not from the request body. This
+        // makes it impossible for the body to target a foreign course (IDOR):
+        // the body is only allowed to carry the link visibility.
+        $resourceLinkList = $this->buildResourceLinkListFromContext(
+            $request,
+            $resourceLinkList,
+            ResourceLink::VISIBILITY_DRAFT
+        );
 
         $blog = (new CBlog())
             ->setTitle($title)
@@ -94,49 +98,6 @@ class CreateCBlogAction extends BaseResourceFileAction
         $currentUser = $security->getUser();
         if ($currentUser) {
             $shortcutRepository->addShortCut($blog, $currentUser, $course, $session);
-        }
-    }
-
-    /**
-     * @param array<int, mixed> $resourceLinkList
-     */
-    private function assertResourceLinkListMatchesQueryContext(
-        Request $request,
-        array $resourceLinkList,
-        Security $security,
-    ): void {
-        if ($security->isGranted('ROLE_ADMIN')) {
-            return;
-        }
-
-        if ([] === $resourceLinkList) {
-            return;
-        }
-
-        $queryCid = (int) $request->query->get('cid');
-        $querySid = (int) $request->query->get('sid');
-        $queryGid = (int) $request->query->get('gid');
-
-        foreach ($resourceLinkList as $entry) {
-            if (!\is_array($entry)) {
-                continue;
-            }
-
-            $entryCid = (int) ($entry['cid'] ?? 0);
-            $entrySid = (int) ($entry['sid'] ?? 0);
-            $entryGid = (int) ($entry['gid'] ?? 0);
-
-            if ($entryCid > 0 && $entryCid !== $queryCid) {
-                throw new AccessDeniedHttpException('resourceLinkList course does not match the request context.');
-            }
-
-            if ($entrySid > 0 && $entrySid !== $querySid) {
-                throw new AccessDeniedHttpException('resourceLinkList session does not match the request context.');
-            }
-
-            if ($entryGid > 0 && $entryGid !== $queryGid) {
-                throw new AccessDeniedHttpException('resourceLinkList group does not match the request context.');
-            }
         }
     }
 }

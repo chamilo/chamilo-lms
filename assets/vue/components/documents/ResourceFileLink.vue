@@ -4,18 +4,21 @@
     :href="resource.contentUrl"
     data-fancybox="gallery"
   >
-    <ResourceIcon :resource-data="resource" />
+    <DocumentEntryThumbnail
+      :data="resource"
+      :title="resource.title"
+    />
     {{ resource.title }}
   </a>
 </template>
 
 <script>
-import ResourceIcon from "./ResourceIcon.vue"
+import DocumentEntryThumbnail from "./DocumentEntryThumbnail.vue"
 
 export default {
   name: "ResourceFileLink",
   components: {
-    ResourceIcon,
+    DocumentEntryThumbnail,
   },
   props: {
     resource: {

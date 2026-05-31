@@ -339,29 +339,8 @@ class Template
      */
     public static function isToolBarDisplayedForUser()
     {
-        //Toolbar
-        $show_admin_toolbar = api_get_setting('show_admin_toolbar');
-        $show_toolbar = false;
-
-        switch ($show_admin_toolbar) {
-            case 'do_not_show':
-                break;
-            case 'show_to_admin':
-                if (api_is_platform_admin()) {
-                    $show_toolbar = true;
-                }
-                break;
-            case 'show_to_admin_and_teachers':
-                if (api_is_platform_admin() || api_is_allowed_to_edit()) {
-                    $show_toolbar = true;
-                }
-                break;
-            case 'show_to_all':
-                $show_toolbar = true;
-                break;
-        }
-
-        return $show_toolbar;
+        // The legacy quick toolbar is obsolete in Chamilo 2 and is intentionally disabled.
+        return false;
     }
 
     /**

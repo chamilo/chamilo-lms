@@ -209,7 +209,7 @@ function resolveDisplayTabsConfig(platformConfigStore, securityStore) {
 }
 
 function isSettingEnabled(platformConfigStore, key) {
-  return platformConfigStore.getSetting(key) === "true"
+  return normalizeBooleanFlag(platformConfigStore.getSetting(key))
 }
 
 function normalizeBooleanFlag(value) {
@@ -280,6 +280,8 @@ export function useTopbarLoggedIn(props) {
   const allowUsersToCreateCourses = computed(() =>
     isSettingEnabled(platformConfigStore, "workflows.allow_users_to_create_courses"),
   )
+
+  const canCreateCourseFromTopbar = computed(() => isAdmin.value || (isTeacher.value && allowUsersToCreateCourses.value))
 
   const hideLogoutButton = computed(() => isSettingEnabled(platformConfigStore, "display.hide_logout_button"))
 
@@ -583,6 +585,7 @@ export function useTopbarLoggedIn(props) {
   return {
     loginUrl,
     elUserSubmenu,
+    canCreateCourseFromTopbar,
     isTeacher,
     allowUsersToCreateCourses,
     showTicketLink,

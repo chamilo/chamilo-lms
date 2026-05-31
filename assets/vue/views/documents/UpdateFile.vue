@@ -35,15 +35,22 @@
               role="img"
               tabindex="0"
               :aria-label="$t('Information about AI-assisted documents')"
-              :title="$t('Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools.')"
+              :title="
+                $t(
+                  'Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools.',
+                )
+              "
             />
           </div>
 
-          <EditLinks
-            v-model="item"
-            :show-share-with-user="false"
-            links-type="users"
-          />
+          <div class="mt-4">
+            <EditLinks
+              v-model="item"
+              :show-share-with-user="false"
+              :show-status="false"
+              links-type="users"
+            />
+          </div>
         </DocumentsForm>
 
         <Panel

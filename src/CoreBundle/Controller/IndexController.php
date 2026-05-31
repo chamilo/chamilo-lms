@@ -27,6 +27,8 @@ class IndexController extends BaseController
     #[Route('/courses', name: 'courses', options: ['expose' => true], methods: ['GET', 'POST'])]
     #[Route('/catalogue/{slug}', name: 'catalogue', options: ['expose' => true], methods: ['GET', 'POST'])]
     #[Route('/resources/ccalendarevent', name: 'resources_ccalendarevent', methods: ['GET'])]
+    #[Route('/resources/courses', name: 'resources_courses', methods: ['GET'])]
+    #[Route('/resources/courses/{vueRouting}', name: 'resources_courses_vue_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
     #[Route('/resources/document/{nodeId}/manager', name: 'resources_filemanager', methods: ['GET'])]
     #[Route('/resources/lp/{node}/advanced-access', name: 'resources_lp_advanced_access', methods: ['GET'])]
     #[Route('/resources/accessurl/{id}/delete', name: 'access_url_delete', methods: ['GET'])]
@@ -108,19 +110,38 @@ class IndexController extends BaseController
      * Toggle the student view action.
      */
     #[Route('/toggle_student_view', methods: ['GET'])]
-    #[IsGranted('ROLE_TEACHER')]
+    #[IsGranted('ROLE_USER')]
     public function toggleStudentView(Request $request, SettingsManager $settingsManager): Response
     {
         if ('true' !== $settingsManager->getSetting('course.student_view_enabled')) {
             throw $this->createAccessDeniedException();
         }
 
-        // Default to teacher view when not set, then flip to student view on the first click.
-        // This ensures the first click really enters Student View.
+        if (!$this->isGranted('ROLE_ADMIN') && !$this->isGranted('ROLE_TEACHER')) {
+            throw $this->createAccessDeniedException();
+        }
+
         $sessionHandler = $request->getSession();
         $current = $sessionHandler->get('studentview', 'teacherview');
 
-        $next = ('studentview' === $current) ? 'teacherview' : 'studentview';
+        $requestedStudentView = $request->query->get('isStudentView');
+        $next = null;
+
+        if (null !== $requestedStudentView) {
+            $requestedStudentView = strtolower((string) $requestedStudentView);
+
+            if (\in_array($requestedStudentView, ['1', 'true', 'yes', 'on'], true)) {
+                $next = 'studentview';
+            } elseif (\in_array($requestedStudentView, ['0', 'false', 'no', 'off'], true)) {
+                $next = 'teacherview';
+            }
+        }
+
+        if (null === $next) {
+            // Default to teacher view when not set, then flip to student view on the first click.
+            // This ensures the first click really enters Student View.
+            $next = ('studentview' === $current) ? 'teacherview' : 'studentview';
+        }
 
         $sessionHandler->set('studentview', $next);
 

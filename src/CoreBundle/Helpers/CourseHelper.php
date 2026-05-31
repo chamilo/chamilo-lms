@@ -1902,6 +1902,39 @@ class CourseHelper
         $globalLimit = $this->resolveBaseMaxCoursesPerUser();
         $serviceLimit = $this->resolveValidBuyCoursesMaxCoursesForUser($user);
 
+        if ($this->isCourseCreationAdmin($user)) {
+            return [
+                'canCreate' => true,
+                'currentCount' => 0,
+                'effectiveLimit' => 0,
+                'serviceLimit' => $serviceLimit,
+                'globalLimit' => $globalLimit,
+                'limitSource' => 'admin',
+            ];
+        }
+
+        if (!$this->isCourseCreationTeacher($user)) {
+            return [
+                'canCreate' => false,
+                'currentCount' => 0,
+                'effectiveLimit' => 0,
+                'serviceLimit' => $serviceLimit,
+                'globalLimit' => $globalLimit,
+                'limitSource' => 'role',
+            ];
+        }
+
+        if ('true' !== $this->settingsManager->getSetting('workflows.allow_users_to_create_courses', true)) {
+            return [
+                'canCreate' => false,
+                'currentCount' => 0,
+                'effectiveLimit' => 0,
+                'serviceLimit' => $serviceLimit,
+                'globalLimit' => $globalLimit,
+                'limitSource' => 'setting',
+            ];
+        }
+
         $effectiveLimit = $serviceLimit ?? $globalLimit;
         $currentCount = $this->countTeacherCoursesForUser($user);
 
@@ -1943,6 +1976,18 @@ class CourseHelper
         ;
 
         return (int) $qb->getQuery()->getSingleScalarResult();
+    }
+
+    private function isCourseCreationAdmin(User $user): bool
+    {
+        $roles = $user->getRoles();
+
+        return \in_array('ROLE_ADMIN', $roles, true) || \in_array('ROLE_GLOBAL_ADMIN', $roles, true);
+    }
+
+    private function isCourseCreationTeacher(User $user): bool
+    {
+        return \in_array('ROLE_TEACHER', $user->getRoles(), true);
     }
 
     private function resolveBuyCoursesServiceSaleCourseCreationSelection(User $user, int $serviceSaleId): array

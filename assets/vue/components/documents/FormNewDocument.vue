@@ -1,5 +1,8 @@
 <template>
-  <form @submit.prevent="$emit('submit')">
+  <form
+    ref="documentForm"
+    @submit.capture.prevent.stop="saveFromFormSubmit"
+  >
     <div>
       <BaseInputTextWithVuelidate
         id="title"
@@ -22,7 +25,7 @@
         "
         id="item_content"
         v-model="item.contentFile"
-        :full-page="isFullPage"
+        :full-page="fullPage"
         :title="t('Content')"
         :editor-config="tinyEditorConfig"
         editor-id="item_content"
@@ -108,10 +111,13 @@
     </div>
 
     <BaseAdvancedSettingsButton
-      v-if="searchEnabled || showResourceLanguageAdvancedSettings"
+      v-if="searchEnabled || showResourceLanguageAdvancedSettings || hasAdvancedSlot"
       v-model="showAdvancedSettings"
     >
-      <ResourceLanguageSelector v-model="item.language" />
+      <ResourceLanguageSelector
+        v-if="showResourceLanguageAdvancedSettings"
+        v-model="item.language"
+      />
 
       <div
         v-if="searchEnabled"
@@ -166,9 +172,14 @@
           />
         </div>
       </div>
-    </BaseAdvancedSettingsButton>
 
-    <slot></slot>
+      <div
+        v-if="hasAdvancedSlot"
+        class="mt-4 border-t border-gray-25 pt-4"
+      >
+        <slot></slot>
+      </div>
+    </BaseAdvancedSettingsButton>
 
     <div class="mt-4 flex justify-end">
       <BaseButton
@@ -227,6 +238,7 @@ export default {
     errors: { type: Object, default: () => ({}) },
     initialValues: { type: Object, default: () => ({}) },
     searchEnabled: { type: Boolean, default: false },
+    fullPage: { type: Boolean, default: false },
   },
   setup() {
     const platformConfigStore = usePlatformConfig()
@@ -267,6 +279,7 @@ export default {
       maxEditorDrafts: 5,
       editorDraftIntervalMs: 60000,
       showEditorDrafts: false,
+      isSavingFromEditor: false,
     }
   },
   validations() {
@@ -315,6 +328,9 @@ export default {
         }).length > 1
       )
     },
+    hasAdvancedSlot() {
+      return Boolean(this.$slots.default)
+    },
     showAiMediaButton() {
       const aiHelpersEnabled = String(this.platformConfigStore.getSetting("ai_helpers.enable_ai_helpers")) === "true"
       const imageGeneratorEnabled = String(this.courseSettingsStore?.getSetting?.("image_generator")) === "true"
@@ -325,49 +341,31 @@ export default {
     tinyEditorConfig() {
       const config = {
         content_style: this.getDocumentEditorContentStyle(),
+        removeToolbarButtons: "save preview print code fullscreen fullpage visualblocks visualchars ltr rtl",
+        visualblocks_default_state: false,
+        visualchars_default_state: false,
+        save_onsavecallback: (editor) => {
+          this.saveFromTinyEditor(editor)
+        },
       }
 
-      if (!this.showAiMediaButton) {
-        return config
+      const toolbarItems = ["preview", "print", "code", "fullscreen", "fullpage", "chamiloSave"]
+
+      if (this.showAiMediaButton) {
+        toolbarItems.push("chamiloAiMedia")
       }
 
       return {
         ...config,
-        appendToolbar: "chamiloAiMedia",
+        appendToolbar: toolbarItems.join(" "),
         setup: (editor) => {
-          editor.ui.registry.addIcon(
-            "chamiloRobot",
-            `
-            <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <rect x="7" y="8" width="10" height="8" rx="2.2" fill="#60A5FA" stroke="#1E3A8A" stroke-width="1.8"/>
-              <path d="M12 5V8" stroke="#1E3A8A" stroke-width="1.8" stroke-linecap="round"/>
-              <circle cx="12" cy="4" r="1.2" fill="#1E3A8A"/>
-              <circle cx="10" cy="11.6" r="1.35" fill="#FFFFFF"/>
-              <circle cx="14" cy="11.6" r="1.35" fill="#FFFFFF"/>
-              <circle cx="10" cy="11.6" r="0.45" fill="#1E3A8A"/>
-              <circle cx="14" cy="11.6" r="0.45" fill="#1E3A8A"/>
-              <path d="M10 14.4H14" stroke="#1E3A8A" stroke-width="1.8" stroke-linecap="round"/>
-              <path d="M5.6 10.2V13.8" stroke="#1E3A8A" stroke-width="1.8" stroke-linecap="round"/>
-              <path d="M18.4 10.2V13.8" stroke="#1E3A8A" stroke-width="1.8" stroke-linecap="round"/>
-              <path d="M9.2 16.2V18" stroke="#1E3A8A" stroke-width="1.8" stroke-linecap="round"/>
-              <path d="M14.8 16.2V18" stroke="#1E3A8A" stroke-width="1.8" stroke-linecap="round"/>
-            </svg>
-          `,
-          )
-          editor.ui.registry.addButton("chamiloAiMedia", {
-            icon: "chamiloRobot",
-            tooltip: this.$t("Generate AI media"),
-            onAction: () => {
-              this.openAiMediaFromEditor(editor)
-            },
-          })
-          editor.ui.registry.addMenuItem("chamiloAiMedia", {
-            text: this.$t("Generate AI media"),
-            icon: "chamiloRobot",
-            onAction: () => {
-              this.openAiMediaFromEditor(editor)
-            },
-          })
+          this.registerTinyEditorSaveButton(editor)
+          this.registerTinyEditorNativeSaveGuard(editor)
+          this.disableTinyEditorVisualHelpers(editor)
+
+          if (this.showAiMediaButton) {
+            this.registerTinyEditorAiMediaButton(editor)
+          }
         },
       }
     },
@@ -401,6 +399,7 @@ export default {
     this.lastEditorDraftContent = this.normalizeEditorDraftContent(this.item.contentFile)
     this.editorDraftIntervalId = window.setInterval(this.saveEditorDraft, this.editorDraftIntervalMs)
     window.addEventListener("beforeunload", this.saveEditorDraftOnUnload)
+    this.patchDocumentFormNativeSubmit()
   },
   beforeUnmount() {
     if (this.editorDraftIntervalId) {
@@ -409,6 +408,7 @@ export default {
     }
 
     window.removeEventListener("beforeunload", this.saveEditorDraftOnUnload)
+    this.restoreDocumentFormNativeSubmit()
   },
   watch: {
     item: {
@@ -430,6 +430,201 @@ export default {
           padding-right: 0.5rem;
         }
       `
+    },
+    disableTinyEditorVisualHelpers(editor) {
+      if (!editor) {
+        return
+      }
+
+      const disableCommandIfActive = (command) => {
+        try {
+          if (editor.queryCommandState(command)) {
+            editor.execCommand(command)
+          }
+        } catch (error) {
+          // Ignore optional TinyMCE commands that are not available in this editor.
+        }
+      }
+
+      editor.on("init", () => {
+        disableCommandIfActive("mceVisualBlocks")
+        disableCommandIfActive("mceVisualChars")
+      })
+    },
+    saveFromFormSubmit() {
+      const editor = this.getTinyEditor()
+
+      if (editor) {
+        this.item.contentFile = editor.getContent()
+      }
+
+      this.$emit("submit")
+    },
+    patchDocumentFormNativeSubmit() {
+      const form = this.$refs.documentForm
+
+      if (!form || form.__chamiloDocumentFormNativeSubmitGuard) {
+        return
+      }
+
+      const component = this
+      const guard = {
+        nativeSubmit: form.submit,
+        nativeRequestSubmit: form.requestSubmit,
+      }
+
+      try {
+        Object.defineProperty(form, "__chamiloDocumentFormNativeSubmitGuard", {
+          configurable: true,
+          value: guard,
+        })
+
+        Object.defineProperty(form, "submit", {
+          configurable: true,
+          value() {
+            component.saveFromTinyEditor(component.getTinyEditor())
+          },
+        })
+
+        if (typeof form.requestSubmit === "function") {
+          Object.defineProperty(form, "requestSubmit", {
+            configurable: true,
+            value() {
+              component.saveFromTinyEditor(component.getTinyEditor())
+            },
+          })
+        }
+      } catch {
+        // Ignore native form submit guard errors.
+      }
+    },
+    restoreDocumentFormNativeSubmit() {
+      const form = this.$refs.documentForm
+
+      if (!form || !form.__chamiloDocumentFormNativeSubmitGuard) {
+        return
+      }
+
+      try {
+        delete form.submit
+
+        if (form.__chamiloDocumentFormNativeSubmitGuard.nativeRequestSubmit) {
+          delete form.requestSubmit
+        }
+
+        delete form.__chamiloDocumentFormNativeSubmitGuard
+      } catch {
+        // Ignore native form submit guard cleanup errors.
+      }
+    },
+    registerTinyEditorSaveButton(editor) {
+      editor.addCommand("mceSave", () => {
+        this.saveFromTinyEditor(editor)
+      })
+
+      editor.ui.registry.addIcon(
+        "chamiloSave",
+        `
+        <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5 3H17L21 7V21H5C3.9 21 3 20.1 3 19V5C3 3.9 3.9 3 5 3Z" fill="#2563EB"/>
+          <path d="M7 5H15V10H7V5Z" fill="#FFFFFF"/>
+          <path d="M8 14H16C16.6 14 17 14.4 17 15V21H7V15C7 14.4 7.4 14 8 14Z" fill="#DBEAFE"/>
+          <path d="M15 5H17L19 7V10H15V5Z" fill="#93C5FD"/>
+        </svg>
+      `,
+      )
+      editor.ui.registry.addButton("chamiloSave", {
+        icon: "chamiloSave",
+        tooltip: this.$t("Save"),
+        onAction: () => {
+          this.saveFromTinyEditor(editor)
+        },
+      })
+      editor.ui.registry.addMenuItem("chamiloSave", {
+        text: this.$t("Save"),
+        icon: "chamiloSave",
+        onAction: () => {
+          this.saveFromTinyEditor(editor)
+        },
+      })
+
+      editor.addShortcut("meta+s", this.$t("Save"), () => {
+        this.saveFromTinyEditor(editor)
+      })
+      editor.addShortcut("ctrl+s", this.$t("Save"), () => {
+        this.saveFromTinyEditor(editor)
+      })
+    },
+    registerTinyEditorNativeSaveGuard(editor) {
+      editor.on("BeforeExecCommand", (event) => {
+        if ("mceSave" !== event.command) {
+          return
+        }
+
+        if (typeof event.preventDefault === "function") {
+          event.preventDefault()
+        }
+
+        if (typeof event.stopImmediatePropagation === "function") {
+          event.stopImmediatePropagation()
+        }
+
+        this.saveFromTinyEditor(editor)
+      })
+    },
+    registerTinyEditorAiMediaButton(editor) {
+      editor.ui.registry.addIcon(
+        "chamiloRobot",
+        `
+        <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <rect x="7" y="8" width="10" height="8" rx="2.2" fill="#60A5FA" stroke="#1E3A8A" stroke-width="1.8"/>
+          <path d="M12 5V8" stroke="#1E3A8A" stroke-width="1.8" stroke-linecap="round"/>
+          <circle cx="12" cy="4" r="1.2" fill="#1E3A8A"/>
+          <circle cx="10" cy="11.6" r="1.35" fill="#FFFFFF"/>
+          <circle cx="14" cy="11.6" r="1.35" fill="#FFFFFF"/>
+          <circle cx="10" cy="11.6" r="0.45" fill="#1E3A8A"/>
+          <circle cx="14" cy="11.6" r="0.45" fill="#1E3A8A"/>
+          <path d="M10 14.4H14" stroke="#1E3A8A" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M5.6 10.2V13.8" stroke="#1E3A8A" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M18.4 10.2V13.8" stroke="#1E3A8A" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M9.2 16.2V18" stroke="#1E3A8A" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M14.8 16.2V18" stroke="#1E3A8A" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      `,
+      )
+      editor.ui.registry.addButton("chamiloAiMedia", {
+        icon: "chamiloRobot",
+        tooltip: this.$t("Generate AI media"),
+        onAction: () => {
+          this.openAiMediaFromEditor(editor)
+        },
+      })
+      editor.ui.registry.addMenuItem("chamiloAiMedia", {
+        text: this.$t("Generate AI media"),
+        icon: "chamiloRobot",
+        onAction: () => {
+          this.openAiMediaFromEditor(editor)
+        },
+      })
+    },
+    saveFromTinyEditor(editor) {
+      if (this.isSavingFromEditor) {
+        return
+      }
+
+      this.isSavingFromEditor = true
+
+      if (editor) {
+        this.item.contentFile = editor.getContent()
+      }
+
+      this.$nextTick(() => {
+        this.$emit("submit")
+
+        window.setTimeout(() => {
+          this.isSavingFromEditor = false
+        }, 300)
+      })
     },
     normalizeLanguageIso(value) {
       const raw = String(value || "").trim()

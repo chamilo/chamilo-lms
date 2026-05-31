@@ -123,6 +123,15 @@
     >
       <SectionHeader :title="course.title">
         <BaseButton
+          v-if="showStudentViewSwitch"
+          :disabled="isSwitchingStudentView"
+          :label="studentViewSwitchLabel"
+          class="grow-0"
+          type="plain"
+          @click="toggleStudentView"
+        />
+
+        <BaseButton
           v-if="isAllowedToEdit && courseIntroEl?.introduction?.iid"
           :label="t('Edit introduction')"
           class="grow-0"
@@ -313,6 +322,7 @@
 
 <script setup>
 import { computed, onMounted, provide, ref, watch } from "vue"
+import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import CourseTool from "../../components/course/CourseTool"
 import ShortCutList from "../../components/course/ShortCutList.vue"
@@ -335,6 +345,8 @@ import CourseThematicProgress from "../../components/course/CourseThematicProgre
 import PluginRegion from "../../components/layout/PluginRegion.vue"
 
 const { t } = useI18n()
+const route = useRoute()
+const router = useRouter()
 const cidReqStore = useCidReqStore()
 const platformConfigStore = usePlatformConfig()
 const securityStore = useSecurityStore()
@@ -349,6 +361,7 @@ const courseHomeNotifyVisible = ref(false)
 const courseIntroEl = ref(null)
 
 const isCourseLoading = ref(true)
+const isSwitchingStudentView = ref(false)
 
 const isSorting = ref(false)
 const isCustomizing = ref(false)
@@ -421,6 +434,73 @@ const isAiCourseAnalyzerEnabled = computed(() => {
     isSettingEnabled(getSetting.value("ai_helpers.course_analyser"))
   )
 })
+
+const isStudentViewEnabled = computed(() => isSettingEnabled(getSetting.value("course.student_view_enabled")))
+
+const showStudentViewSwitch = computed(() => {
+  return isStudentViewEnabled.value && (isAllowedToEdit.value || platformConfigStore.isStudentViewActive)
+})
+
+const studentViewSwitchLabel = computed(() => {
+  return platformConfigStore.isStudentViewActive ? t("Switch to teacher view") : t("Switch to student view")
+})
+
+async function setStudentView(enabled, cleanRouteQuery = true) {
+  isSwitchingStudentView.value = true
+
+  try {
+    const response = await axios.get("/toggle_student_view", {
+      params: {
+        isStudentView: enabled ? "true" : "false",
+      },
+    })
+
+    const nextStudentViewEnabled = response?.data === "studentview"
+    platformConfigStore.setStudentViewEnabled(nextStudentViewEnabled)
+
+    await loadCourseTools(false)
+
+    if (cleanRouteQuery && Object.prototype.hasOwnProperty.call(route.query, "isStudentView")) {
+      const query = { ...route.query }
+      delete query.isStudentView
+
+      await router.replace({ query })
+    }
+  } catch (error) {
+    console.error("[CourseHome] Failed to switch student view", error)
+  } finally {
+    isSwitchingStudentView.value = false
+  }
+}
+
+async function toggleStudentView() {
+  await setStudentView(!platformConfigStore.isStudentViewActive)
+}
+
+async function applyStudentViewFromQuery() {
+  if (!Object.prototype.hasOwnProperty.call(route.query, "isStudentView")) {
+    return
+  }
+
+  const requestedValue = String(route.query.isStudentView).toLowerCase()
+
+  if (!["1", "true", "yes", "on", "0", "false", "no", "off"].includes(requestedValue)) {
+    return
+  }
+
+  const requestedStudentViewEnabled = ["1", "true", "yes", "on"].includes(requestedValue)
+
+  if (requestedStudentViewEnabled === platformConfigStore.isStudentViewActive) {
+    const query = { ...route.query }
+    delete query.isStudentView
+
+    await router.replace({ query })
+
+    return
+  }
+
+  await setStudentView(requestedStudentViewEnabled)
+}
 
 /**
  * Load tools for the course, split admin tools into the cog menu
@@ -638,7 +718,9 @@ const showCourseSequence = computed(() => {
   return platformConfigStore.getSetting("course.resource_sequence_show_dependency_in_course_intro") === "true"
 })
 
-onMounted(() => {
+onMounted(async () => {
+  await applyStudentViewFromQuery()
+
   enforceCourseLegalAgreement()
   loadCourseHomeNotification()
 

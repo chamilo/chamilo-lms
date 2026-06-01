@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Service\Update\Dto\UpdateManifest;
 use Chamilo\CoreBundle\Service\Update\UpdateManifestClient;
 use Chamilo\CoreBundle\Service\Update\UpdatePackageDownloader;
 use Chamilo\CoreBundle\Service\Update\UpdatePackageVerifier;
+use Chamilo\CoreBundle\Service\Update\UpdatePreflightChecker;
 use Composer\InstalledVersions;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -27,6 +28,7 @@ final class SystemUpdateController extends AbstractController
         private readonly UpdateManifestClient $manifestClient,
         private readonly UpdatePackageDownloader $packageDownloader,
         private readonly UpdatePackageVerifier $packageVerifier,
+        private readonly UpdatePreflightChecker $preflightChecker,
     ) {}
 
     #[Route('/status', name: 'status', methods: ['GET'])]
@@ -91,6 +93,29 @@ final class SystemUpdateController extends AbstractController
                 'manifest' => $this->manifestToArray($manifest),
                 'packagePath' => $packagePath,
                 'signaturePath' => $signaturePath,
+                'result' => $result->toArray(),
+            ]);
+        } catch (Throwable $exception) {
+            return $this->json([
+                'error' => $exception->getMessage(),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    #[Route('/preflight', name: 'preflight', methods: ['POST'])]
+    public function preflight(Request $request): JsonResponse
+    {
+        $payload = $this->readJsonPayload($request);
+
+        try {
+            $manifestSource = $this->normalizeLocalSource($this->readRequiredString($payload, 'manifestSource'));
+            $packagePath = $this->normalizeNullableLocalPath($this->readNullableString($payload, 'packagePath'));
+            $manifest = $this->manifestClient->load($manifestSource);
+            $result = $this->preflightChecker->check($manifest, $packagePath);
+
+            return $this->json([
+                'manifest' => $this->manifestToArray($manifest),
+                'packagePath' => $packagePath,
                 'result' => $result->toArray(),
             ]);
         } catch (Throwable $exception) {

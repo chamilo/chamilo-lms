@@ -19,6 +19,8 @@ export default {
 
   verifySystemUpdatePackage: (payload) => baseService.post("/admin/system-update/verify", payload),
 
+  runSystemUpdatePreflight: (payload) => baseService.post("/admin/system-update/preflight", payload),
+
 
   fetchThirdParties: async () => {
     const data = await baseService.get("/api/third_parties")

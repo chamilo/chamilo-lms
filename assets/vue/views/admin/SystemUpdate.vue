@@ -213,6 +213,109 @@
       </div>
     </div>
 
+
+    <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+      <h2 class="text-lg font-semibold text-gray-900">
+        {{ t("Preflight checks") }}
+      </h2>
+
+      <p class="mt-2 text-sm text-gray-600">
+        {{ t("Run environment checks before any future update application step. This does not modify files or the database.") }}
+      </p>
+
+      <div class="mt-4 flex flex-wrap gap-2">
+        <button
+          class="btn btn--primary"
+          :disabled="isRunningPreflight || !form.manifestSource"
+          type="button"
+          @click="runPreflight"
+        >
+          <span class="mdi mdi-clipboard-check-outline ch-tool-icon" />
+          {{ isRunningPreflight ? t("Checking...") : t("Run preflight checks") }}
+        </button>
+      </div>
+
+      <div
+        v-if="preflight"
+        class="mt-6 rounded-xl border p-4"
+        :class="preflight.result.valid ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'"
+      >
+        <div class="flex items-center gap-2 font-medium">
+          <span
+            class="mdi"
+            :class="preflight.result.valid ? 'mdi-check-circle text-green-700' : 'mdi-alert-circle text-red-700'"
+          />
+          <span :class="preflight.result.valid ? 'text-green-800' : 'text-red-800'">
+            {{ preflight.result.valid ? t("Preflight checks completed") : t("Preflight checks failed") }}
+          </span>
+        </div>
+
+        <div class="mt-4 overflow-hidden rounded-lg border border-gray-200 bg-white">
+          <table class="min-w-full divide-y divide-gray-200 text-sm">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-4 py-3 text-left font-medium text-gray-600">{{ t("Status") }}</th>
+                <th class="px-4 py-3 text-left font-medium text-gray-600">{{ t("Check") }}</th>
+                <th class="px-4 py-3 text-left font-medium text-gray-600">{{ t("Message") }}</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              <tr
+                v-for="check in preflight.result.checks"
+                :key="check.key"
+              >
+                <td class="px-4 py-3">
+                  <span
+                    class="inline-flex rounded-full px-2 py-1 text-xs font-medium"
+                    :class="getCheckStatusClass(check.status)"
+                  >
+                    {{ check.status }}
+                  </span>
+                </td>
+                <td class="px-4 py-3 font-mono text-xs text-gray-700">
+                  {{ check.key }}
+                </td>
+                <td class="px-4 py-3 text-gray-900">
+                  {{ check.message }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <ul
+          v-if="preflight.result.errors.length"
+          class="mt-3 list-disc pl-6 text-sm text-red-700"
+        >
+          <li
+            v-for="error in preflight.result.errors"
+            :key="error"
+          >
+            {{ error }}
+          </li>
+        </ul>
+
+        <ul
+          v-if="preflight.result.warnings.length"
+          class="mt-3 list-disc pl-6 text-sm text-yellow-700"
+        >
+          <li
+            v-for="warning in preflight.result.warnings"
+            :key="warning"
+          >
+            {{ warning }}
+          </li>
+        </ul>
+
+        <details class="mt-4">
+          <summary class="cursor-pointer text-sm font-medium text-gray-700">
+            {{ t("Preflight details") }}
+          </summary>
+          <pre class="mt-3 overflow-auto rounded-lg bg-white p-3 text-xs text-gray-800">{{ formattedPreflightDetails }}</pre>
+        </details>
+      </div>
+    </div>
+
     <div
       v-if="errorMessage"
       class="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700"
@@ -244,9 +347,11 @@ const form = reactive({
 
 const manifest = ref(null)
 const verification = ref(null)
+const preflight = ref(null)
 const errorMessage = ref("")
 const isChecking = ref(false)
 const isVerifying = ref(false)
+const isRunningPreflight = ref(false)
 
 const formattedVerificationDetails = computed(() => {
   if (!verification.value) {
@@ -254,6 +359,14 @@ const formattedVerificationDetails = computed(() => {
   }
 
   return JSON.stringify(verification.value.result.details || {}, null, 2)
+})
+
+const formattedPreflightDetails = computed(() => {
+  if (!preflight.value) {
+    return ""
+  }
+
+  return JSON.stringify(preflight.value.result.details || {}, null, 2)
 })
 
 onMounted(async () => {
@@ -269,6 +382,7 @@ onMounted(async () => {
 async function checkManifest() {
   errorMessage.value = ""
   verification.value = null
+  preflight.value = null
   isChecking.value = true
 
   try {
@@ -305,6 +419,43 @@ async function verifyPackage() {
   } finally {
     isVerifying.value = false
   }
+}
+
+
+async function runPreflight() {
+  errorMessage.value = ""
+  isRunningPreflight.value = true
+
+  try {
+    const data = await adminService.runSystemUpdatePreflight({
+      manifestSource: form.manifestSource,
+      packagePath: form.packagePath || null,
+    })
+
+    manifest.value = data.manifest
+    preflight.value = data
+  } catch (error) {
+    errorMessage.value = getErrorMessage(error)
+    preflight.value = null
+  } finally {
+    isRunningPreflight.value = false
+  }
+}
+
+function getCheckStatusClass(status) {
+  if ("passed" === status) {
+    return "bg-green-100 text-green-700"
+  }
+
+  if ("warning" === status) {
+    return "bg-yellow-100 text-yellow-700"
+  }
+
+  if ("failed" === status) {
+    return "bg-red-100 text-red-700"
+  }
+
+  return "bg-gray-100 text-gray-700"
 }
 
 function getErrorMessage(error) {

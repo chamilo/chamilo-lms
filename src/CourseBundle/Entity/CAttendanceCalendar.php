@@ -7,16 +7,29 @@ declare(strict_types=1);
 namespace Chamilo\CourseBundle\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(
+    operations: [
+        new Get(security: "object.getAttendance() != null and is_granted('VIEW', object.getAttendance().resourceNode)"),
+        new GetCollection(security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')"),
+        new Post(securityPostDenormalize: "object.getAttendance() != null and is_granted('EDIT', object.getAttendance().resourceNode)"),
+        new Put(security: "object.getAttendance() != null and is_granted('EDIT', object.getAttendance().resourceNode)"),
+        new Patch(security: "object.getAttendance() != null and is_granted('EDIT', object.getAttendance().resourceNode)"),
+        new Delete(security: "object.getAttendance() != null and is_granted('EDIT', object.getAttendance().resourceNode)"),
+    ],
     normalizationContext: ['groups' => ['attendance_calendar:read']],
     denormalizationContext: ['groups' => ['attendance_calendar:write']],
     paginationEnabled: false,
-    security: "is_granted('ROLE_TEACHER')"
 )]
 #[ORM\Table(name: 'c_attendance_calendar')]
 #[ORM\Index(columns: ['done_attendance'], name: 'done_attendance')]

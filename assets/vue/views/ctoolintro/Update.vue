@@ -20,7 +20,6 @@ import { ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import useVuelidate from "@vuelidate/core"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
-import { getCourseContext } from "../../utils/courseContext"
 import cToolIntroService from "../../services/cToolIntroService"
 
 const servicePrefix = "ctoolintro"
@@ -38,7 +37,6 @@ export default {
     const route = useRoute()
     const router = useRouter()
     const item = ref({})
-    const { cid, sid } = getCourseContext()
 
     let toolId = route.query.ctoolId
     let ctoolintroId = route.query.ctoolintroIid
@@ -55,13 +53,8 @@ export default {
       })
 
     item.value["courseTool"] = "/api/c_tools/" + toolId
-    item.value["resourceLinkList"] = [
-      {
-        sid,
-        cid,
-        visibility: RESOURCE_LINK_PUBLISHED, // visible by default
-      },
-    ]
+    // Course context derived server-side from the gated session course.
+    item.value["resourceLinkList"] = [{ visibility: RESOURCE_LINK_PUBLISHED }]
 
     function onUpdated() {
       router.go(-1)

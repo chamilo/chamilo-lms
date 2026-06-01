@@ -57,15 +57,8 @@ const props = defineProps({
 const emit = defineEmits(["backPressed"])
 
 const parentResourceNodeId = ref(Number(route.params.node))
-const resourceLinkList = ref(
-  JSON.stringify([
-    {
-      sid: route.query.sid,
-      cid: route.query.cid,
-      visibility: RESOURCE_LINK_PUBLISHED, // visible by default
-    },
-  ]),
-)
+// Course context derived server-side from the gated session course.
+const resourceLinkList = ref(JSON.stringify([{ visibility: RESOURCE_LINK_PUBLISHED }]))
 
 const formData = reactive({
   title: "",

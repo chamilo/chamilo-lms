@@ -55,11 +55,9 @@ import BaseInputText from "../basecomponents/BaseInputText.vue"
 import AudioRecorder from "../AudioRecorder.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
-import { getCourseContext } from "../../utils/courseContext"
 import documentsService from "../../services/documents"
 
 const { t } = useI18n()
-const queryParams = getCourseContext()
 
 const props = defineProps({
   parentResourceNodeId: {
@@ -101,12 +99,8 @@ const saveAudio = async () => {
     filetype: "file",
     uploadFile: uploadFile,
     parentResourceNodeId: props.parentResourceNodeId,
-    resourceLinkList: JSON.stringify([
-      {
-        ...queryParams,
-        visibility: RESOURCE_LINK_PUBLISHED,
-      },
-    ]),
+    // Course context derived server-side from the gated session course.
+    resourceLinkList: JSON.stringify([{ visibility: RESOURCE_LINK_PUBLISHED }]),
   }
 
   try {

@@ -24,7 +24,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ApiResource(
     operations: [
         new Get(security: "(object.getBlog() != null and is_granted('VIEW', object.getBlog().resourceNode)) or (object.getPost() != null and object.getPost().getBlog() != null and is_granted('VIEW', object.getPost().getBlog().resourceNode))"),
-        new GetCollection(security: "is_granted('ROLE_USER')"),
+        new GetCollection(security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')"),
         new Post(
             securityPostDenormalize: "(object.getPost() != null and object.getPost().getBlog() != null and is_granted('VIEW', object.getPost().getBlog().resourceNode)) or (object.getBlog() != null and is_granted('VIEW', object.getBlog().resourceNode))",
             processor: CBlogAssignAuthorProcessor::class

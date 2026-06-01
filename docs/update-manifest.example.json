@@ -1,0 +1,17 @@
+{
+  "channel": "stable",
+  "version": "2.1.0",
+  "released_at": "2026-01-20T00:00:00Z",
+  "package": {
+    "url": "https://download.chamilo.org/releases/chamilo-2.1.0.zip",
+    "sha256": "9b91c718d6e47045bc3113c293fbcc8ed70129ef9839e2028c183a0a1153e638"
+  },
+  "signature": {
+    "type": "minisign",
+    "url": "https://download.chamilo.org/releases/chamilo-2.1.0.zip.minisig"
+  },
+  "requirements": {
+    "php": ">=8.2",
+    "mariadb": ">=10.5"
+  }
+}

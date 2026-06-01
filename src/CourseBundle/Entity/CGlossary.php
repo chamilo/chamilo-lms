@@ -84,7 +84,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                     ]),
                 ),
             ),
-            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_TEACHER')",
+            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             validationContext: ['groups' => ['Default', 'media_object_create', 'glossary:write']],
             deserialize: false
         ),
@@ -127,7 +127,8 @@ use Symfony\Component\Validator\Constraints as Assert;
                         ],
                     ),
                 ],
-            )
+            ),
+            security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
         ),
         new Post(
             uriTemplate: '/glossaries/import',
@@ -155,21 +156,21 @@ use Symfony\Component\Validator\Constraints as Assert;
                     ),
                 ],
             ),
-            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_TEACHER')",
+            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             validationContext: ['groups' => ['Default', 'media_object_create', 'glossary:write']],
             deserialize: false
         ),
         new Post(
             uriTemplate: '/glossaries/export',
             controller: ExportCGlossaryAction::class,
-            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_TEACHER')",
+            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             validationContext: ['groups' => ['Default', 'media_object_create', 'glossary:write']],
             deserialize: false
         ),
         new Post(
             uriTemplate: '/glossaries/export_to_documents',
             controller: ExportGlossaryToDocumentsAction::class,
-            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_TEACHER')",
+            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             validationContext: ['groups' => ['Default', 'media_object_create', 'glossary:write']],
             deserialize: false
         ),

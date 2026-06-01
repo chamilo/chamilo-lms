@@ -65,7 +65,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                     ),
                 ],
             ),
-            security: "is_granted('ROLE_USER')",
+            security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
             parameters: [
                 'cid' => new QueryParameter(
                     schema: ['type' => 'integer'],
@@ -79,7 +79,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             processor: CStudentPublicationDeleteProcessor::class
         ),
         new Post(
-            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_TEACHER')",
+            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             processor: CStudentPublicationPostStateProcessor::class
         ),
         new Post(

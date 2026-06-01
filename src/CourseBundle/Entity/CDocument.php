@@ -98,7 +98,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                     ]),
                 ),
             ),
-            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_TEACHER')",
+            security: "is_granted('EDIT', object.resourceNode)",
             validationContext: ['groups' => ['Default', 'media_object_create', 'document:write']],
             deserialize: false
         ),
@@ -161,7 +161,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                     ]),
                 ),
             ),
-            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_TEACHER')",
+            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             validationContext: ['groups' => ['Default', 'media_object_create', 'document:write']],
             deserialize: false
         ),
@@ -210,7 +210,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                     ]),
                 ),
             ),
-            security: "is_granted('ROLE_USER')",
+            security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
         ),
         new Post(
             uriTemplate: '/documents/download-all',
@@ -245,26 +245,12 @@ use Symfony\Component\Validator\Constraints as Assert;
                     ]),
                 ),
             ),
-            security: "is_granted('ROLE_USER')",
+            security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
             deserialize: false
         ),
         new GetCollection(
-            parameters: [
-                'cid' => new QueryParameter(
-                    required: true,
-                    schema: ['type' => 'integer'],
-                    description: 'Course identifier',
-                ),
-            ],
             openapi: new Operation(
                 parameters: [
-                    new Parameter(
-                        name: 'cid',
-                        in: 'query',
-                        description: 'Course identifier',
-                        required: true,
-                        schema: ['type' => 'integer'],
-                    ),
                     new Parameter(
                         name: 'resourceNode.parent',
                         in: 'query',
@@ -274,7 +260,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                     ),
                 ],
             ),
-            security: "is_granted('ROLE_USER')",
+            security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
             provider: DocumentCollectionStateProvider::class,
         ),
         new Get(
@@ -283,7 +269,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             openapiContext: [
                 'summary' => 'Get usage/quota information for documents.',
             ],
-            security: "is_granted('ROLE_USER')",
+            security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
             read: false,
             name: 'api_documents_usage'
         ),

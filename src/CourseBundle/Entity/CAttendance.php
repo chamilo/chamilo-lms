@@ -18,6 +18,7 @@ use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Filter\CidFilter;
 use Chamilo\CoreBundle\Filter\SidFilter;
 use Chamilo\CoreBundle\State\CAttendanceStateProcessor;
 use Chamilo\CourseBundle\Repository\CAttendanceRepository;
@@ -50,13 +51,16 @@ use Symfony\Component\Validator\Constraints as Assert;
             name: 'soft_delete',
             processor: CAttendanceStateProcessor::class
         ),
-        new Delete(security: "is_granted('ROLE_TEACHER')"),
+        new Delete(
+            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
+        ),
         new Post(
             uriTemplate: '/attendances/{iid}/calendars',
             openapi: new Operation(
                 summary: 'Add a calendar to an attendance.'
             ),
             denormalizationContext: ['groups' => ['attendance:write']],
+            security: "is_granted('EDIT', object.resourceNode)",
             name: 'calendar_add',
             processor: CAttendanceStateProcessor::class
         ),
@@ -72,16 +76,17 @@ use Symfony\Component\Validator\Constraints as Assert;
                     ),
                 ],
             ),
+            security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
         ),
-        new Get(security: "is_granted('ROLE_USER')"),
+        new Get(security: "is_granted('VIEW', object.resourceNode)"),
         new Post(
             denormalizationContext: ['groups' => ['attendance:write']],
-            security: "is_granted('ROLE_TEACHER')",
+            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             validationContext: ['groups' => ['Default']]
         ),
         new Put(
             denormalizationContext: ['groups' => ['attendance:write']],
-            security: "is_granted('ROLE_TEACHER')"
+            security: "is_granted('EDIT', object.resourceNode)"
         ),
     ],
     normalizationContext: [
@@ -92,6 +97,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     paginationEnabled: true,
 )]
 #[ApiFilter(SearchFilter::class, properties: ['active' => 'exact', 'title' => 'partial', 'resourceNode.parent' => 'exact'])]
+#[ApiFilter(filterClass: CidFilter::class)]
 #[ApiFilter(filterClass: SidFilter::class)]
 #[ORM\Table(name: 'c_attendance')]
 #[ORM\Index(columns: ['active'], name: 'active')]

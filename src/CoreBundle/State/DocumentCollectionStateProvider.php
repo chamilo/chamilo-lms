@@ -17,6 +17,7 @@ use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
@@ -51,6 +52,7 @@ final class DocumentCollectionStateProvider implements ProviderInterface
         private readonly CacheInterface $documentListCache,
         #[Autowire('%kernel.secret%')]
         private readonly string $appSecret,
+        private readonly CidReqHelper $cidReqHelper,
     ) {}
 
     /**
@@ -80,9 +82,9 @@ final class DocumentCollectionStateProvider implements ProviderInterface
         ;
 
         $query = $request->query->all();
-        $cid = (int) ($query['cid'] ?? 0);
-        $sid = (int) ($query['sid'] ?? 0);
-        $gid = (int) ($query['gid'] ?? 0);
+        $course = $this->cidReqHelper->getCourseEntity();
+        $session = $this->cidReqHelper->getSessionEntity();
+        $group = $this->cidReqHelper->getGroupEntity();
 
         $page = max(1, (int) ($query['page'] ?? 1));
         $itemsPerPage = (int) ($query['itemsPerPage'] ?? 20);
@@ -93,11 +95,11 @@ final class DocumentCollectionStateProvider implements ProviderInterface
             $itemsPerPage = 5000;
         }
 
-        $hasContext = $cid > 0 || $sid > 0 || $gid > 0;
+        $hasContext = $course || $session || $group;
 
         // By default, documents must be visible in session context including base course content,
         // because CDocument implements ResourceShowCourseResourcesInSessionInterface.
-        $includeBaseContent = $sid > 0
+        $includeBaseContent = $session
             && is_a(CDocument::class, ResourceShowCourseResourcesInSessionInterface::class, true);
 
         // Allow API clients to override behavior (withBaseContent=0/1).
@@ -173,7 +175,7 @@ final class DocumentCollectionStateProvider implements ProviderInterface
             $hiddenSystemTypes[] = 'user_folder_ses';
         } else {
             // When enabled, never show session-scoped shared folders in base course context.
-            if ($sid <= 0) {
+            if (!$session) {
                 $hiddenSystemTypes[] = 'user_folder_ses';
             }
         }
@@ -230,11 +232,11 @@ final class DocumentCollectionStateProvider implements ProviderInterface
                 ;
             }
 
-            if ($cid > 0) {
-                $qb->andWhere('IDENTITY(rl.course) = :cid')->setParameter('cid', $cid);
+            if ($course) {
+                $qb->andWhere('IDENTITY(rl.course) = :cid')->setParameter('cid', $course->getId());
             }
 
-            if ($sid > 0) {
+            if ($session) {
                 if ($includeBaseContent) {
                     // Include both session content and base course content.
                     $qb
@@ -245,12 +247,12 @@ final class DocumentCollectionStateProvider implements ProviderInterface
                                 'IDENTITY(rl.session) = 0'
                             )
                         )
-                        ->setParameter('sid', $sid)
+                        ->setParameter('sid', $session->getId())
                     ;
                 } else {
                     $qb
                         ->andWhere('IDENTITY(rl.session) = :sid')
-                        ->setParameter('sid', $sid)
+                        ->setParameter('sid', $session->getId())
                     ;
                 }
             } else {
@@ -262,8 +264,8 @@ final class DocumentCollectionStateProvider implements ProviderInterface
                 );
             }
 
-            if ($gid > 0) {
-                $qb->andWhere('IDENTITY(rl.group) = :gid')->setParameter('gid', $gid);
+            if ($group) {
+                $qb->andWhere('IDENTITY(rl.group) = :gid')->setParameter('gid', $group->getIid());
             } else {
                 $qb->andWhere('rl.group IS NULL');
             }
@@ -279,10 +281,6 @@ final class DocumentCollectionStateProvider implements ProviderInterface
                     /** @var ResourceLinkRepository $linkRepo */
                     $linkRepo = $this->entityManager->getRepository(ResourceLink::class);
 
-                    $courseEntity = $cid > 0 ? $this->entityManager->getRepository(Course::class)->find($cid) : null;
-                    $sessionEntity = $sid > 0 ? $this->entityManager->getRepository(Session::class)->find($sid) : null;
-                    $groupEntity = $gid > 0 ? $this->entityManager->getRepository(CGroup::class)->find($gid) : null;
-
                     // Resolve possible folder links:
                     // - session link (sid=current session)
                     // - base link (sid=NULL), when base content is enabled in session view
@@ -290,9 +288,9 @@ final class DocumentCollectionStateProvider implements ProviderInterface
 
                     $sessionParentLink = $linkRepo->findParentLinkForContext(
                         $folderNode,
-                        $courseEntity,
-                        $sessionEntity,
-                        $groupEntity,
+                        $course,
+                        $session,
+                        $group,
                         null,
                         null
                     );
@@ -300,12 +298,12 @@ final class DocumentCollectionStateProvider implements ProviderInterface
                         $parentLinkIds[] = (int) $sessionParentLink->getId();
                     }
 
-                    if ($sid > 0 && $includeBaseContent && null !== $courseEntity) {
+                    if ($session && $includeBaseContent && $course) {
                         $baseParentLink = $linkRepo->findParentLinkForContext(
                             $folderNode,
-                            $courseEntity,
+                            $course,
                             null,
-                            $groupEntity,
+                            $group,
                             null,
                             null
                         );
@@ -413,7 +411,7 @@ final class DocumentCollectionStateProvider implements ProviderInterface
         //   - the access_url ID so that multi-portal setups within one installation
         //     are also isolated.
         $accessUrlId = $this->accessUrlHelper->getCurrent()?->getId() ?? 1;
-        $viewerProfileBucket = $this->getViewerProfileCacheBucket($cid, $sid);
+        $viewerProfileBucket = $this->getViewerProfileCacheBucket($course, $session);
         $sortedTypes = $effectiveFiletypes;
         sort($sortedTypes);
         $sortedHidden = $hiddenSystemTypes;
@@ -421,9 +419,9 @@ final class DocumentCollectionStateProvider implements ProviderInterface
         $cacheKey = 'doc_list_'.$this->getInstallationPrefix().'_'.hash('md5', serialize([
             $accessUrlId,
             $viewerProfileBucket,
-            $cid,
-            $sid,
-            $gid,
+            $course?->getId() ?? 0,
+            $session?->getId() ?? 0,
+            $group?->getIid() ?? 0,
             $parentNodeId,
             $loadNode,
             $sortedTypes,
@@ -581,7 +579,7 @@ final class DocumentCollectionStateProvider implements ProviderInterface
         return $this->installationPrefix;
     }
 
-    private function getViewerProfileCacheBucket(int $cid, int $sid): string
+    private function getViewerProfileCacheBucket(?Course $course, ?Session $session): string
     {
         $user = $this->security->getUser();
 
@@ -593,10 +591,7 @@ final class DocumentCollectionStateProvider implements ProviderInterface
             return 'admin';
         }
 
-        $course = $cid > 0 ? $this->entityManager->getRepository(Course::class)->find($cid) : null;
-        $session = $sid > 0 ? $this->entityManager->getRepository(Session::class)->find($sid) : null;
-
-        if ($session instanceof Session && $course instanceof Course) {
+        if ($session instanceof Session && $course) {
             $userIsGeneralCoach = $session->hasUserAsGeneralCoach($user);
             $userIsCourseCoach = $session->hasCourseCoachInCourse($user, $course);
             $userIsStudent = $session->hasUserInCourse($user, $course, Session::STUDENT);
@@ -610,7 +605,7 @@ final class DocumentCollectionStateProvider implements ProviderInterface
             }
         }
 
-        if ($course instanceof Course) {
+        if ($course) {
             if ($course->hasUserAsTeacher($user)) {
                 return 'teacher';
             }

@@ -151,13 +151,8 @@ async function createEmptyIntroIfNeeded() {
     tool: props.tool,
     introText: intro.value?.introText || "",
     sid: currentSessionId.value || 0,
-    resourceLinkList: [
-      {
-        sid: currentSessionId.value || 0,
-        cid: course.value.id,
-        visibility: "published",
-      },
-    ],
+    // Course context derived server-side from the gated session course.
+    resourceLinkList: [{ visibility: "published" }],
   })
 
   intro.value = normalizeIntroResponse(response)

@@ -21,14 +21,14 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ORM\Entity]
 #[ApiResource(
     operations: [
-        new Get(security: "is_granted('ROLE_USER')"),
-        new GetCollection(security: "is_granted('ROLE_USER')"),
+        new Get(security: "object.getBlog() != null and is_granted('VIEW', object.getBlog().resourceNode)"),
+        new GetCollection(security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')"),
         new Post(
-            security: "is_granted('ROLE_USER')",
+            securityPostDenormalize: "object.getBlog() != null and is_granted('EDIT', object.getBlog().resourceNode)",
             processor: CBlogAssignAuthorProcessor::class
         ),
-        new Patch(security: "object.getAuthor() === user or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')"),
-        new Delete(security: "object.getAuthor() === user or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')"),
+        new Patch(security: "object.getBlog() != null and (is_granted('EDIT', object.getBlog().resourceNode) or (object.getAuthor() === user and is_granted('VIEW', object.getBlog().resourceNode)))"),
+        new Delete(security: "object.getBlog() != null and (is_granted('DELETE', object.getBlog().resourceNode) or (object.getAuthor() === user and is_granted('VIEW', object.getBlog().resourceNode)))"),
     ],
     normalizationContext: ['groups' => ['blog_task:read']],
     denormalizationContext: ['groups' => ['blog_task:write']]

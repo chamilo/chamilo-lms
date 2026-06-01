@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -34,6 +36,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     normalizationContext: ['groups' => ['task_rel_user:read']],
     denormalizationContext: ['groups' => ['task_rel_user:write']]
 )]
+#[ApiFilter(SearchFilter::class, properties: ['blog' => 'exact'])]
 class CBlogTaskRelUser
 {
     use UserTrait;

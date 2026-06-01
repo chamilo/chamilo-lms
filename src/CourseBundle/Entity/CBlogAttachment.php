@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -32,6 +34,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     normalizationContext: ['groups' => ['blog_attachment:read']],
     denormalizationContext: ['groups' => ['blog_attachment:write']]
 )]
+#[ApiFilter(SearchFilter::class, properties: ['post' => 'exact'])]
 class CBlogAttachment
 {
     #[Groups(['blog_attachment:read', 'blog_post:read'])]

@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
@@ -33,6 +35,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     normalizationContext: ['groups' => ['blog_task:read']],
     denormalizationContext: ['groups' => ['blog_task:write']]
 )]
+#[ApiFilter(SearchFilter::class, properties: ['blog' => 'exact'])]
 class CBlogTask
 {
     #[ORM\Column(name: 'iid', type: 'integer')]

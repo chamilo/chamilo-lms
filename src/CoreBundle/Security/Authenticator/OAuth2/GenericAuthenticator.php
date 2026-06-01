@@ -82,7 +82,7 @@ class GenericAuthenticator extends AbstractAuthenticator
         // Read the owner ID from the merged data so that keys present only in the
         // ID token (e.g. 'upn') are found. GenericResourceOwner::getId() reads the
         // original UserInfo response and would trigger "Undefined array key" otherwise.
-        $idKey = $providerParams['responseResourceOwnerId'] ?? null;
+        $idKey = $providerParams['provider_options']['responseResourceOwnerId'] ?? null;
         $resourceOwnerId = $idKey
             ? ($resourceOwnerData[$idKey] ?? null)
             : $resourceOwner->getId();

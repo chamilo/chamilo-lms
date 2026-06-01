@@ -238,8 +238,9 @@ class SurveyManager
             }
 
             try {
-                $start = new \DateTime($values['start_date']);
-                $end   = new \DateTime($values['end_date']);
+                $platformTz = new \DateTimeZone(api_get_timezone());
+                $start = (new \DateTime($values['start_date'], $platformTz))->setTimezone(new \DateTimeZone('UTC'));
+                $end   = (new \DateTime($values['end_date'], $platformTz))->setTimezone(new \DateTimeZone('UTC'));
             } catch (\Exception $e) {
                 Display::addFlash(Display::return_message(get_lang('Invalid date'), 'error'));
                 return ['type' => 'error', 'id' => 0];
@@ -335,8 +336,13 @@ class SurveyManager
             $showFormProfile         = !empty($values['show_form_profile']) ? 1 : 0;
 
             try {
-                $start = !empty($values['start_date']) ? new \DateTime($values['start_date']) : $survey->getAvailFrom();
-                $end   = !empty($values['end_date'])   ? new \DateTime($values['end_date'])   : $survey->getAvailTill();
+                $platformTz = new \DateTimeZone(api_get_timezone());
+                $start = !empty($values['start_date'])
+                    ? (new \DateTime($values['start_date'], $platformTz))->setTimezone(new \DateTimeZone('UTC'))
+                    : $survey->getAvailFrom();
+                $end   = !empty($values['end_date'])
+                    ? (new \DateTime($values['end_date'], $platformTz))->setTimezone(new \DateTimeZone('UTC'))
+                    : $survey->getAvailTill();
             } catch (\Exception $e) {
                 Display::addFlash(Display::return_message(get_lang('Invalid date'), 'error'));
                 return ['type' => 'error', 'id' => $surveyId];

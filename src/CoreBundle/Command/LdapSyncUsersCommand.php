@@ -89,6 +89,13 @@ class LdapSyncUsersCommand extends Command
                 InputOption::VALUE_REQUIRED,
                 'Extra field variable name used to match LDAP entries to existing Chamilo users when the username does not match (e.g. --search_extra_field=matricule)'
             )
+            ->addOption(
+                'force_adding_extra_authsource',
+                null,
+                InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
+                'Add an extra auth source to every created or updated user (e.g. --force_adding_extra_authsource=oauth2). Can be repeated for multiple sources.',
+                []
+            )
             ->setHelp(<<<'HELP'
                 This command synchronizes user accounts between Chamilo and one or more LDAP directories.
 
@@ -116,6 +123,16 @@ class LdapSyncUsersCommand extends Command
 
                   <info>php bin/console app:ldap-sync-users --search_extra_field=matricule</info>
 
+                Use <info>--force_adding_extra_authsource</info> to add an extra authentication source to every user
+                created or updated by the sync (idempotent — already-assigned sources are not duplicated).
+                Useful to allow OAuth2 login alongside LDAP:
+
+                  <info>php bin/console app:ldap-sync-users --force_adding_extra_authsource=oauth2</info>
+
+                The option can be repeated to add several sources at once:
+
+                  <info>php bin/console app:ldap-sync-users --force_adding_extra_authsource=oauth2 --force_adding_extra_authsource=azure</info>
+
                 Run in dry-run mode first to preview all changes without writing to the database:
 
                   <info>php bin/console app:ldap-sync-users --dry-run -v</info>
@@ -137,6 +154,9 @@ class LdapSyncUsersCommand extends Command
 
         /** @var string|null $searchExtraField */
         $searchExtraField = $input->getOption('search_extra_field') ?: null;
+
+        /** @var string[] $extraAuthSources */
+        $extraAuthSources = $input->getOption('force_adding_extra_authsource');
 
         if ($testMode) {
             $io->note('Running in TEST mode — no changes will be written to the database.');
@@ -269,6 +289,10 @@ class LdapSyncUsersCommand extends Command
 
                 $this->applyLdapFields($user, $entry, $dataCorrespondence, $isNew, (bool) $ldapConfig['synch_user_role_on_update']);
                 $user->setUsername($username);
+
+                foreach ($extraAuthSources as $authSource) {
+                    $user->addAuthSourceByAuthentication($authSource, $accessUrl);
+                }
 
                 if (!$user->isActive() && $reenableFound) {
                     $user->setActive(1);

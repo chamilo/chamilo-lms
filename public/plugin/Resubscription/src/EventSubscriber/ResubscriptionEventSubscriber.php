@@ -4,12 +4,9 @@
 
 declare(strict_types=1);
 
-namespace Chamilo\PluginBundle\Resubscription\EventSubscriber;
-
 use Chamilo\CoreBundle\Event\AbstractEvent;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Event\SessionResubscriptionEvent;
-use Exception;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class ResubscriptionEventSubscriber implements EventSubscriberInterface

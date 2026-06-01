@@ -268,8 +268,19 @@ final readonly class UpdatePreflightChecker
         $installedVersion = $this->getInstalledVersion();
         $targetVersion = $manifest->getVersion();
 
+        if ('unknown' === $installedVersion) {
+            $message = 'Installed Chamilo version could not be detected automatically. Version direction cannot be checked.';
+            $warnings[] = $message;
+            $this->addCheck($checks, 'version_direction', 'warning', $message, [
+                'installed_version' => $installedVersion,
+                'target_version' => $targetVersion,
+            ]);
+
+            return;
+        }
+
         if (!$this->isComparableVersion($installedVersion) || !$this->isComparableVersion($targetVersion)) {
-            $message = 'Unable to compare installed and target versions automatically.';
+            $message = 'Installed or target version is not in a comparable semantic version format.';
             $warnings[] = $message;
             $this->addCheck($checks, 'version_direction', 'warning', $message, [
                 'installed_version' => $installedVersion,
@@ -335,6 +346,12 @@ final readonly class UpdatePreflightChecker
 
         if (0 !== $exitCode) {
             $message = 'Unable to check Git working tree status.';
+            $summary = $this->summarizeCommandOutput($output);
+
+            if ('' !== $summary) {
+                $message .= ' Git output: '.$summary;
+            }
+
             $warnings[] = $message;
             $this->addCheck($checks, 'git_working_tree', 'warning', $message, [
                 'exit_code' => $exitCode,
@@ -402,16 +419,115 @@ final readonly class UpdatePreflightChecker
 
     private function getInstalledVersion(): string
     {
+        foreach ([
+            $this->getInstalledVersionFromLegacyConfiguration(),
+            $this->getInstalledVersionFromComposerMetadata(),
+            $this->getInstalledVersionFromGitTag($this->getProjectDir()),
+        ] as $candidate) {
+            $version = $this->normalizeVersion((string) $candidate);
+
+            if (null !== $version) {
+                return $version;
+            }
+        }
+
+        return 'unknown';
+    }
+
+    private function getInstalledVersionFromLegacyConfiguration(): ?string
+    {
+        if (!\function_exists('api_get_version')) {
+            return null;
+        }
+
         try {
-            $version = InstalledVersions::getPrettyVersion('chamilo/chamilo-lms');
+            $version = \api_get_version();
 
             if (\is_string($version) && '' !== trim($version)) {
-                return ltrim(trim($version), 'v');
+                return $version;
             }
         } catch (Throwable) {
         }
 
-        return 'unknown';
+        return null;
+    }
+
+    private function getInstalledVersionFromComposerMetadata(): ?string
+    {
+        try {
+            $version = InstalledVersions::getPrettyVersion('chamilo/chamilo-lms');
+
+            if (\is_string($version) && '' !== trim($version)) {
+                return $version;
+            }
+        } catch (Throwable) {
+        }
+
+        $composerJsonPath = $this->getProjectDir().'/composer.json';
+
+        if (!is_file($composerJsonPath) || !is_readable($composerJsonPath)) {
+            return null;
+        }
+
+        $composerJson = file_get_contents($composerJsonPath);
+
+        if (false === $composerJson) {
+            return null;
+        }
+
+        $decoded = json_decode($composerJson, true);
+
+        if (!\is_array($decoded) || !isset($decoded['version']) || !\is_string($decoded['version'])) {
+            return null;
+        }
+
+        return $decoded['version'];
+    }
+
+    private function getInstalledVersionFromGitTag(string $projectDir): ?string
+    {
+        if (!is_dir($projectDir.'/.git') || !\function_exists('exec')) {
+            return null;
+        }
+
+        $output = [];
+        $exitCode = 0;
+        exec('git -C '.escapeshellarg($projectDir).' describe --tags --abbrev=0 2>&1', $output, $exitCode);
+
+        if (0 !== $exitCode || [] === $output) {
+            return null;
+        }
+
+        return trim((string) $output[0]);
+    }
+
+    private function normalizeVersion(string $version): ?string
+    {
+        $version = trim($version);
+
+        if ('' === $version) {
+            return null;
+        }
+
+        if (1 === preg_match('/v?(\d+(?:\.\d+){1,3}(?:[-+][A-Za-z0-9.-]+)?)/', $version, $matches)) {
+            return $matches[1];
+        }
+
+        return null;
+    }
+
+    /**
+     * @param string[] $output
+     */
+    private function summarizeCommandOutput(array $output): string
+    {
+        $summary = trim(implode(' ', array_slice($output, 0, 3)));
+
+        if (180 < \strlen($summary)) {
+            return substr($summary, 0, 177).'...';
+        }
+
+        return $summary;
     }
 
     private function isComparableVersion(string $version): bool

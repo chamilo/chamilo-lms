@@ -317,7 +317,7 @@ const status = reactive({
 })
 
 const form = reactive({
-  manifestSource: "docs/update-manifest.example.json",
+  manifestSource: "",
   packagePath: "",
   signaturePath: "",
   trustedPublicKey: "",

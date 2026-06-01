@@ -12,6 +12,14 @@ export default {
   findSupport: () => baseService.get("/main/inc/ajax/admin.ajax.php?a=get_support"),
   findBlocks: () => baseService.get("/admin/index"),
 
+
+  findSystemUpdateStatus: () => baseService.get("/admin/system-update/status"),
+
+  checkSystemUpdateManifest: (payload) => baseService.post("/admin/system-update/check", payload),
+
+  verifySystemUpdatePackage: (payload) => baseService.post("/admin/system-update/verify", payload),
+
+
   fetchThirdParties: async () => {
     const data = await baseService.get("/api/third_parties")
     return data["hydra:member"] || []

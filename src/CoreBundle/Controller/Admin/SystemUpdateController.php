@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Service\Update\UpdateManifestClient;
 use Chamilo\CoreBundle\Service\Update\UpdatePackageDownloader;
 use Chamilo\CoreBundle\Service\Update\UpdatePackageVerifier;
 use Chamilo\CoreBundle\Service\Update\UpdatePreflightChecker;
+use Chamilo\CoreBundle\Service\Update\UpdateStagingManager;
 use Composer\InstalledVersions;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -29,6 +30,7 @@ final class SystemUpdateController extends AbstractController
         private readonly UpdatePackageDownloader $packageDownloader,
         private readonly UpdatePackageVerifier $packageVerifier,
         private readonly UpdatePreflightChecker $preflightChecker,
+        private readonly UpdateStagingManager $stagingManager,
     ) {}
 
     #[Route('/status', name: 'status', methods: ['GET'])]
@@ -37,6 +39,7 @@ final class SystemUpdateController extends AbstractController
         return $this->json([
             'installedVersion' => $this->getInstalledVersion(),
             'updateDirectory' => $this->getProjectDir().'/var/update/downloads',
+            'stagingDirectory' => $this->getProjectDir().'/var/update/staging',
             'verificationOnly' => true,
         ]);
     }
@@ -117,6 +120,88 @@ final class SystemUpdateController extends AbstractController
                 'manifest' => $this->manifestToArray($manifest),
                 'packagePath' => $packagePath,
                 'result' => $result->toArray(),
+            ]);
+        } catch (Throwable $exception) {
+            return $this->json([
+                'error' => $exception->getMessage(),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+
+    #[Route('/stage', name: 'stage', methods: ['POST'])]
+    public function stage(Request $request): JsonResponse
+    {
+        $payload = $this->readJsonPayload($request);
+
+        try {
+            $manifestSource = $this->normalizeLocalSource($this->readRequiredString($payload, 'manifestSource'));
+            $packagePath = $this->normalizeNullableLocalPath($this->readNullableString($payload, 'packagePath'));
+            $signaturePath = $this->normalizeNullableLocalPath($this->readNullableString($payload, 'signaturePath'));
+            $trustedPublicKey = $this->readNullableString($payload, 'trustedPublicKey');
+            $skipSignature = true === ($payload['skipSignature'] ?? false);
+            $manifest = $this->manifestClient->load($manifestSource);
+
+            if (null === $packagePath) {
+                $packagePath = $this->packageDownloader->download($manifest->getPackageUrl());
+            }
+
+            if (!$skipSignature && null === $signaturePath && null !== $manifest->getSignatureUrl()) {
+                $signaturePath = $this->packageDownloader->download($manifest->getSignatureUrl());
+            }
+
+            $verificationResult = $this->packageVerifier->verify(
+                $packagePath,
+                $manifest,
+                $signaturePath,
+                $trustedPublicKey,
+                $skipSignature,
+            );
+
+            if (!$verificationResult->isValid()) {
+                return $this->json([
+                    'error' => 'Update package verification failed.',
+                    'manifest' => $this->manifestToArray($manifest),
+                    'packagePath' => $packagePath,
+                    'signaturePath' => $signaturePath,
+                    'verification' => $verificationResult->toArray(),
+                ], Response::HTTP_BAD_REQUEST);
+            }
+
+            $preflightResult = $this->preflightChecker->check($manifest, $packagePath);
+
+            if (!$preflightResult->isValid()) {
+                return $this->json([
+                    'error' => 'Update preflight checks failed.',
+                    'manifest' => $this->manifestToArray($manifest),
+                    'packagePath' => $packagePath,
+                    'signaturePath' => $signaturePath,
+                    'verification' => $verificationResult->toArray(),
+                    'preflight' => $preflightResult->toArray(),
+                ], Response::HTTP_BAD_REQUEST);
+            }
+
+            $stagingResult = $this->stagingManager->stage($manifest, $packagePath);
+
+            if (!$stagingResult->isValid()) {
+                return $this->json([
+                    'error' => 'Unable to stage update package.',
+                    'manifest' => $this->manifestToArray($manifest),
+                    'packagePath' => $packagePath,
+                    'signaturePath' => $signaturePath,
+                    'verification' => $verificationResult->toArray(),
+                    'preflight' => $preflightResult->toArray(),
+                    'staging' => $stagingResult->toArray(),
+                ], Response::HTTP_BAD_REQUEST);
+            }
+
+            return $this->json([
+                'manifest' => $this->manifestToArray($manifest),
+                'packagePath' => $packagePath,
+                'signaturePath' => $signaturePath,
+                'verification' => $verificationResult->toArray(),
+                'preflight' => $preflightResult->toArray(),
+                'staging' => $stagingResult->toArray(),
             ]);
         } catch (Throwable $exception) {
             return $this->json([

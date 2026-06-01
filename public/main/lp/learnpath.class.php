@@ -1693,19 +1693,26 @@ class learnpath
 
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $tbl_lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-        $itemViewId = (int) $item->db_item_view_id;
+        $itemViewId = (int) ($item->db_item_view_id ?? 0);
+        $row = [];
 
-        // Getting all the information about the item.
-        $sql = "SELECT lp_view.status
-                FROM $tbl_lp_item as lpi
-                INNER JOIN $tbl_lp_item_view as lp_view
-                ON (lpi.iid = lp_view.lp_item_id)
-                WHERE
-                    lp_view.iid = $itemViewId AND
-                    lpi.iid = $lpItemId
-                ";
-        $result = Database::query($sql);
-        $row = Database::fetch_assoc($result);
+        if ($itemViewId > 0) {
+            // Getting all the information about the item.
+            $sql = "SELECT lp_view.status
+                    FROM $tbl_lp_item as lpi
+                    INNER JOIN $tbl_lp_item_view as lp_view
+                    ON (lpi.iid = lp_view.lp_item_id)
+                    WHERE
+                        lp_view.iid = $itemViewId AND
+                        lpi.iid = $lpItemId
+                    ";
+            $result = Database::query($sql);
+            $row = Database::fetch_assoc($result);
+            if (!is_array($row)) {
+                $row = [];
+            }
+        }
+
         $output = '';
         $audio = $item->audio;
 
@@ -1723,7 +1730,7 @@ class learnpath
 
                     if ($type_quiz) {
                         if (1 == $_SESSION['oLP']->prevent_reinit) {
-                            $autostart_audio = 'completed' === $row['status'] ? 'false' : 'true';
+                            $autostart_audio = 'completed' === ($row['status'] ?? null) ? 'false' : 'true';
                         } else {
                             $autostart_audio = $autostart;
                         }

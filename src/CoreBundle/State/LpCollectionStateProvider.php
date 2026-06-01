@@ -11,6 +11,7 @@ use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session as CoreSession;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\LpAdvancedAccessHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CLp;
@@ -20,6 +21,7 @@ use DateTimeInterface;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * @template-implements ProviderInterface<CLp>
@@ -32,6 +34,7 @@ final readonly class LpCollectionStateProvider implements ProviderInterface
         private Security $security,
         private SettingsManager $settingsManager,
         private LpAdvancedAccessHelper $advancedAccessHelper,
+        private CidReqHelper $cidReqHelper,
     ) {}
 
     public function supports(Operation $op, array $uriVariables = [], array $ctx = []): bool
@@ -47,18 +50,19 @@ final readonly class LpCollectionStateProvider implements ProviderInterface
             return [];
         }
 
-        $course = $this->em->createQuery(
-            'SELECT c
-               FROM '.Course::class.' c
-               JOIN c.resourceNode rn
-              WHERE rn.id = :nid'
-        )
-            ->setParameter('nid', $parentNodeId)
-            ->getOneOrNullResult()
-        ;
-
-        if (!$course) {
+        // The operation's contextual-role security already authorized the current course,
+        // so the course is taken from the session context (not from client input). The
+        // client-supplied resourceNode.parent is then only accepted when it matches that
+        // course's resource node, so a member of one course cannot list another course's
+        // learning paths by pointing parent at a foreign course node (IDOR).
+        $course = $this->cidReqHelper->getDoctrineCourseEntity();
+        if (!$course instanceof Course) {
             return [];
+        }
+
+        $courseNode = $course->getResourceNode();
+        if (null === $courseNode || $parentNodeId !== (int) $courseNode->getId()) {
+            throw new AccessDeniedHttpException('resourceNode.parent does not match the current course.');
         }
 
         $sid = isset($f['sid']) ? (int) $f['sid'] : null;

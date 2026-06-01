@@ -61,6 +61,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             uriTemplate: '/social_posts/{id}/attachments',
             controller: SocialPostAttachmentsController::class,
             normalizationContext: ['groups' => ['attachment:read']],
+            security: "is_granted('VIEW', object)",
         ),
         new GetCollection(
             paginationItemsPerPage: 30,

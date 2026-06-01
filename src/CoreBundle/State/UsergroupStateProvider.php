@@ -62,12 +62,12 @@ final class UsergroupStateProvider implements ProviderInterface
 
         switch ($operationName) {
             case 'get_my_usergroups':
-                $userId = $context['request_attributes']['_api_filters']['userId'] ?? null;
-                if (!$userId) {
-                    /** @var User $user */
-                    $user = $this->security->getUser();
-                    $userId = $user?->getId();
-                }
+                // "my" groups are always the current user's. Ignore any client-supplied
+                // userId so an authenticated user cannot disclose another user's group
+                // memberships (IDOR).
+                /** @var User|null $user */
+                $user = $this->security->getUser();
+                $userId = $user?->getId();
                 if (!$userId) {
                     throw new Exception('User ID is required');
                 }

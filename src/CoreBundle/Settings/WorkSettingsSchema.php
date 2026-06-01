@@ -31,6 +31,7 @@ class WorkSettingsSchema extends AbstractSettingsSchema
                     'my_courses_show_pending_work' => 'false',
                     'allow_compilatio_tool' => 'false',
                     'compilatio_tool' => '',
+                    'add_fullname_in_file_download' => 'false',
                 ]
             )
         ;
@@ -52,6 +53,7 @@ class WorkSettingsSchema extends AbstractSettingsSchema
             ->add('my_courses_show_pending_work', YesNoType::class)
             ->add('allow_compilatio_tool', YesNoType::class)
             ->add('compilatio_tool', TextareaType::class)
+            ->add('add_fullname_in_file_download', YesNoType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

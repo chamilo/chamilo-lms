@@ -26,7 +26,7 @@ class learnpathItem
     public $current_stop_time;
     public $current_data = '';
     public $db_id;
-    public ?int $db_item_view_id;
+    public ?int $db_item_view_id = 0;
     public $description = '';
     public $file;
 
@@ -3050,6 +3050,7 @@ class learnpathItem
 
         if (empty($lp_view_id)) {
             $this->view_id = 0;
+            $this->db_item_view_id = 0;
 
             return false;
         }
@@ -3118,6 +3119,10 @@ class learnpathItem
             if (false !== $res) {
                 $this->objectives_count = Database::num_rows($res);
             }
+        }
+
+        if (empty($this->db_item_view_id)) {
+            $this->db_item_view_id = 0;
         }
 
         return true;

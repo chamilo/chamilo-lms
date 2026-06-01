@@ -2,6 +2,7 @@
   <div class="lp-list">
     <SectionHeader :title="t('Learning paths')">
       <BaseButton
+        v-if="canEdit"
         :label="t('More actions')"
         icon="dots-vertical"
         only-icon
@@ -10,6 +11,7 @@
         @click="mLpList.toggle($event)"
       />
       <BaseMenu
+        v-if="canEdit"
         id="lp-list-tmenu"
         ref="mLpList"
         :model="mItems"
@@ -141,7 +143,24 @@ const loading = ref(true)
 const draggingUncat = ref(false)
 
 const rawCanEdit = ref(false)
-const isStudentView = computed(() => route.query?.isStudentView === "true")
+const routeStudentViewFlag = computed(() => {
+  if (!Object.prototype.hasOwnProperty.call(route.query, "isStudentView")) {
+    return null
+  }
+
+  const value = String(route.query?.isStudentView ?? "").toLowerCase()
+
+  if (["1", "true", "yes", "on"].includes(value)) {
+    return true
+  }
+
+  if (["0", "false", "no", "off"].includes(value)) {
+    return false
+  }
+
+  return null
+})
+const isStudentView = computed(() => routeStudentViewFlag.value ?? platformConfig.isStudentViewActive)
 const canEdit = computed(() => rawCanEdit.value && !isStudentView.value)
 
 const mLpList = ref(null)
@@ -158,6 +177,10 @@ const mItems = computed(() => {
     gradebook: ctx.gradebook,
     origin: ctx.origin,
   }).toString()
+
+  if (!canEdit.value) {
+    return []
+  }
 
   return [
     { label: t("Create new learning path"), url: lpService.buildLegacyActionUrl("add_lp", ctx) },
@@ -254,10 +277,64 @@ function shouldShowUnavailableLp(lp) {
   return settingEnabled && displayNotAllowed && !isLpCurrentlyAvailable(lp)
 }
 
+function hasVisibilityMapValue(lpId) {
+  if (!visibilityMap.value || "object" !== typeof visibilityMap.value) {
+    return false
+  }
+
+  return Object.prototype.hasOwnProperty.call(visibilityMap.value, String(lpId))
+}
+
+function isPublishedForStudent(lp) {
+  const value = lp?.published ?? lp?.isPublished ?? lp?.publicationStatus
+
+  if (typeof value === "undefined" || value === null || value === "") {
+    return true
+  }
+
+  if (typeof value === "string") {
+    return ["1", "true", "v", "visible", "published"].includes(value.toLowerCase())
+  }
+
+  return Boolean(value)
+}
+
+function isVisibleForStudent(lp) {
+  const value = lp?.visible ?? lp?.visibility
+
+  if (typeof value === "undefined" || value === null || value === "") {
+    return true
+  }
+
+  if (typeof value === "string") {
+    return ["1", "true", "v", "visible", "published"].includes(value.toLowerCase())
+  }
+
+  return Boolean(value)
+}
+
+function isLocallyVisibleForStudent(lp) {
+  if (!isPublishedForStudent(lp) || !isVisibleForStudent(lp)) {
+    return false
+  }
+
+  if (!isLpCurrentlyAvailable(lp)) {
+    return shouldShowUnavailableLp(lp)
+  }
+
+  return true
+}
+
+function isVisibleInStudentView(lp) {
+  if (hasVisibilityMapValue(lp.iid)) {
+    return !!visibilityMap.value[String(lp.iid)] || shouldShowUnavailableLp(lp)
+  }
+
+  return isLocallyVisibleForStudent(lp)
+}
+
 const filteredItems = computed(() =>
-  canEdit.value
-    ? items.value
-    : items.value.filter((lp) => !!visibilityMap.value[lp.iid] || shouldShowUnavailableLp(lp)),
+  canEdit.value ? items.value : items.value.filter((lp) => isVisibleInStudentView(lp)),
 )
 
 const uncatList = ref([])
@@ -290,9 +367,32 @@ const catLists = computed(() => {
   return byCat
 })
 
+function syncStudentViewStateFromRoute() {
+  if (null !== routeStudentViewFlag.value) {
+    platformConfig.setStudentViewEnabled(routeStudentViewFlag.value)
+
+    return
+  }
+
+  if (platformConfig.isStudentViewActive) {
+    router.replace({
+      name: route.name,
+      params: route.params,
+      query: { ...route.query, isStudentView: "true" },
+    })
+  }
+}
+
 onMounted(() => {
-  platformConfig.setStudentViewEnabled(route.query?.isStudentView === "true")
+  syncStudentViewStateFromRoute()
 })
+
+watch(
+  () => route.query?.isStudentView,
+  () => {
+    syncStudentViewStateFromRoute()
+  },
+)
 
 const hasImageRF = (lp) => {
   const rfs = lp.resourceNode?.resourceFiles ?? lp.resourceFiles ?? []
@@ -339,7 +439,8 @@ async function loadVisibilityFor(lpIds) {
   }
 
   const { data } = await api.get(`/main/inc/ajax/lp.ajax.php?${params.toString()}`).catch(() => ({ data: {} }))
-  visibilityMap.value = data.map || {}
+  const map = data.map || {}
+  visibilityMap.value = Object.fromEntries(Object.entries(map).map(([key, value]) => [String(key), value]))
 }
 
 const withCidSid = (url) => {
@@ -526,10 +627,16 @@ const ringValue = (val) => Math.round(Math.min(100, Math.max(0, Number(val || 0)
 watch(
   () => platformConfig.isStudentViewActive,
   async (val) => {
+    const nextValue = val ? "true" : "false"
+
+    if (String(route.query?.isStudentView ?? "") === nextValue) {
+      return
+    }
+
     await router.replace({
       name: route.name,
       params: route.params,
-      query: { ...route.query, isStudentView: val ? "true" : "false" },
+      query: { ...route.query, isStudentView: nextValue },
     })
   },
 )

@@ -640,14 +640,6 @@ export default {
       return n || 1
     },
 
-    getContextIds() {
-      const q = this.$route?.query || {}
-      const cid = this.normalizeNodeId(q.cid) || 0
-      const sid = this.normalizeNodeId(q.sid) || 0
-      const gid = this.normalizeNodeId(q.gid) || 0
-      return { cid, sid, gid }
-    },
-
     getRootNodeId() {
       return this.trailRootId || this.folderTrail?.[0]?.id || null
     },
@@ -772,19 +764,11 @@ export default {
       this.submitted = true
       if (!this.item.title?.trim()) return
 
-      const { cid, sid, gid } = this.getContextIds()
-
       try {
         this.item.filetype = "folder"
         this.item.parentResourceNodeId = this.getCurrentNodeId()
-        this.item.resourceLinkList = JSON.stringify([
-          {
-            gid,
-            sid,
-            cid,
-            visibility: RESOURCE_LINK_PUBLISHED,
-          },
-        ])
+        // Course context derived server-side from the gated session course.
+        this.item.resourceLinkList = JSON.stringify([{ visibility: RESOURCE_LINK_PUBLISHED }])
 
         await this.create(this.item)
 
@@ -828,21 +812,13 @@ export default {
         return
       }
 
-      const { cid, sid, gid } = this.getContextIds()
-
       const payload = {
         title: file.name,
         filetype: "file",
         uploadFile: file,
         parentResourceNodeId: this.getCurrentNodeId(),
-        resourceLinkList: JSON.stringify([
-          {
-            gid,
-            sid,
-            cid,
-            visibility: RESOURCE_LINK_PUBLISHED,
-          },
-        ]),
+        // Course context derived server-side from the gated session course.
+        resourceLinkList: JSON.stringify([{ visibility: RESOURCE_LINK_PUBLISHED }]),
       }
 
       try {

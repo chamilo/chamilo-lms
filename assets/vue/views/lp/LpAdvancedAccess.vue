@@ -2,7 +2,7 @@
 import { computed, onMounted, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
-import axios from "axios"
+import lpService from "../../services/lpService"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 
@@ -160,7 +160,7 @@ async function loadData() {
   errorMessage.value = ""
 
   try {
-    const { data } = await axios.get(`/resources/lp/${lpId.value}/advanced-access-data?${contextQuery.value}`)
+    const data = await lpService.getAdvancedAccessData(lpId.value, contextQuery.value)
 
     lp.value = data.lp
     course.value = data.course
@@ -190,12 +190,12 @@ async function saveSelectedRestriction() {
 
   try {
     if (selectedUser.value) {
-      await axios.post(`/resources/lp/${lpId.value}/advanced-access/user?${contextQuery.value}`, {
+      await lpService.saveUserAdvancedAccess(lpId.value, contextQuery.value, {
         userId: selectedUser.value.id,
         ...form.value,
       })
     } else {
-      await axios.post(`/resources/lp/${lpId.value}/advanced-access/group?${contextQuery.value}`, {
+      await lpService.saveGroupAdvancedAccess(lpId.value, contextQuery.value, {
         groupId: selectedGroup.value.id,
         ...form.value,
       })
@@ -214,7 +214,7 @@ async function removeUserRestriction(user) {
   errorMessage.value = ""
 
   try {
-    await axios.delete(`/resources/lp/${lpId.value}/advanced-access/user/${user.id}?${contextQuery.value}`)
+    await lpService.removeUserAdvancedAccess(lpId.value, user.id, contextQuery.value)
     await loadData()
   } catch (error) {
     errorMessage.value = error?.response?.data?.error || t("An error occurred")
@@ -228,7 +228,7 @@ async function removeGroupRestriction(group) {
   errorMessage.value = ""
 
   try {
-    await axios.delete(`/resources/lp/${lpId.value}/advanced-access/group/${group.id}?${contextQuery.value}`)
+    await lpService.removeGroupAdvancedAccess(lpId.value, group.id, contextQuery.value)
     await loadData()
   } catch (error) {
     errorMessage.value = error?.response?.data?.error || t("An error occurred")
@@ -246,7 +246,7 @@ async function clearDates() {
   errorMessage.value = ""
 
   try {
-    await axios.post(`/resources/lp/${lpId.value}/advanced-access/clear-dates?${contextQuery.value}`)
+    await lpService.clearAdvancedAccessDates(lpId.value, contextQuery.value)
     await loadData()
   } catch (error) {
     errorMessage.value = error?.response?.data?.error || t("An error occurred")

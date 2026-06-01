@@ -1,39 +1,18 @@
-import axios from "axios"
-import { useCidReqStore } from "../store/cidReq"
+import baseService from "./baseService"
+import { getCourseContext } from "../utils/courseContext"
 
-// If the frontend is served from the same origin, this keeps requests relative.
-const http = axios.create({
-  baseURL: "/", // same-origin root
-})
-
-/** Read current course/session/group context from Pinia store with graceful fallbacks */
+/**
+ * Read current course/session/group context (cid/sid/gid) from the shared helper.
+ * The helper mirrors the router's resolveCourseId that feeds the cidReq store, so
+ * these values stay consistent with the store, the composable and the interceptor.
+ */
 function courseContextParams() {
-  const store = useCidReqStore()
-
-  const fromStore = {
-    cid: Number(store?.course?.id) || null,
-    sid: Number(store?.session?.id) || null,
-    gid: Number(store?.group?.id) || null,
-  }
-
-  // Fallback to querystring (useful when reloading or opening deep links)
-  const qs = new URLSearchParams(window.location.search)
-  const pickNum = (...names) => {
-    for (const n of names) {
-      const v = qs.get(n)
-      if (v !== null && v !== undefined && !Number.isNaN(Number(v))) return Number(v)
-    }
-    return null
-  }
-
-  return {
-    ...(fromStore.cid ? { cid: fromStore.cid } : {}),
-    ...(fromStore.sid ? { sid: fromStore.sid } : {}),
-    ...(fromStore.gid ? { gid: fromStore.gid } : {}),
-    ...(fromStore.cid ? {} : pickNum("cid", "cidReq") ? { cid: pickNum("cid", "cidReq") } : {}),
-    ...(fromStore.sid ? {} : pickNum("sid", "id_session") ? { sid: pickNum("sid", "id_session") } : {}),
-    ...(fromStore.gid ? {} : pickNum("gid", "gidReq") ? { gid: pickNum("gid", "gidReq") } : {}),
-  }
+  const { cid, sid, gid } = getCourseContext()
+  const out = {}
+  if (cid) out.cid = cid
+  if (sid) out.sid = sid
+  if (gid) out.gid = gid
+  return out
 }
 
 /** Merge current context and extra params (also preserve gradebook/origin from URL if present) */
@@ -131,31 +110,23 @@ const base = {
    Import
    ========================= */
 async function getOptions(node = resolveNodeFromPath()) {
-  const resp = await http.get(base.options(node), { params: withCourseParams() })
-  return resp.data
+  return baseService.get(base.options(node), withCourseParams())
 }
 async function uploadFile(node = resolveNodeFromPath(), file) {
   const fd = new FormData()
   fd.append("file", file, file.name || "backup.zip")
-  const resp = await http.post(base.upload(node), fd, {
-    headers: { "Content-Type": "multipart/form-data" },
-    params: withCourseParams(),
-  })
-  return resp.data
+  return baseService.post(base.upload(node), fd, {}, { params: withCourseParams() })
 }
 async function chooseServerFile(node = resolveNodeFromPath(), filename) {
-  const resp = await http.post(base.serverPick(node), { filename }, { params: withCourseParams() })
-  return resp.data
+  return baseService.post(base.serverPick(node), { filename }, {}, { params: withCourseParams() })
 }
 async function fetchResources(node = resolveNodeFromPath(), backupId) {
-  const resp = await http.get(base.resources(node, backupId), { params: withCourseParams() })
-  return resp.data
+  return baseService.get(base.resources(node, backupId), withCourseParams())
 }
 async function restoreBackup(node = resolveNodeFromPath(), backupId, { importOption, sameFileNameOption, resources }) {
   const payload = { importOption, sameFileNameOption }
   if (importOption === "select_items") payload.resources = resources || {}
-  const resp = await http.post(base.restore(node, backupId), payload, { params: withCourseParams() })
-  return resp.data
+  return baseService.post(base.restore(node, backupId), payload, {}, { params: withCourseParams() })
 }
 
 /* =========================
@@ -163,83 +134,64 @@ async function restoreBackup(node = resolveNodeFromPath(), backupId, { importOpt
    ========================= */
 /** Return courses list (excluding current) and defaults */
 async function getCopyOptions(node = resolveNodeFromPath()) {
-  const resp = await http.get(base.copyOptions(node), {
-    params: withCourseParams(),
-  })
-  return resp.data
+  return baseService.get(base.copyOptions(node), withCourseParams())
 }
 
 /** Return resource tree of the source course, same shape as import/resources */
 async function fetchCopyResources(node = resolveNodeFromPath(), sourceCourseId) {
-  const resp = await http.get(base.copyResources(node), {
-    params: withCourseParams({ sourceCourseId }),
-  })
-  return resp.data
+  return baseService.get(base.copyResources(node), withCourseParams({ sourceCourseId }))
 }
 
 /** Execute course copy into current course */
 async function copyFromCourse(node = resolveNodeFromPath(), payload) {
-  const resp = await http.post(base.copyExecute(node), payload, {
-    params: withCourseParams(),
-  })
-  return resp.data
+  return baseService.post(base.copyExecute(node), payload, {}, { params: withCourseParams() })
 }
 
 /* =========================
    Recycle course
    ========================= */
 async function getRecycleOptions(node) {
-  const r = await http.get(base.recycleOptions(node), { params: withCourseParams() })
-  return r.data
+  return baseService.get(base.recycleOptions(node), withCourseParams())
 }
 async function fetchRecycleResources(node) {
-  const r = await http.get(base.recycleResources(node), { params: withCourseParams() })
-  return r.data
+  return baseService.get(base.recycleResources(node), withCourseParams())
 }
 async function recycleExecute(node, payload) {
-  const r = await http.post(base.recycleExecute(node), payload, { params: withCourseParams() })
-  return r.data
+  return baseService.post(base.recycleExecute(node), payload, {}, { params: withCourseParams() })
 }
 
 /* =========================
    Other endpoints
    ========================= */
 async function createBackup(node = resolveNodeFromPath(), scope = "full") {
-  const resp = await http.post(base.createBackup(node), { scope }, { params: withCourseParams() })
-  return resp.data
+  return baseService.post(base.createBackup(node), { scope }, {}, { params: withCourseParams() })
 }
 
 /** Compatibility: prior version that POSTed raw payload to /copy */
 async function copyCourse(node = resolveNodeFromPath(), payload) {
-  const resp = await http.post(`/course_maintenance/${node}/copy`, payload, { params: withCourseParams() })
-  return resp.data
+  return baseService.post(`/course_maintenance/${node}/copy`, payload, {}, { params: withCourseParams() })
 }
 
 async function recycleCourse(node = resolveNodeFromPath(), payload) {
-  const resp = await http.post(base.recycleCourse(node), payload, { params: withCourseParams() })
-  return resp.data
+  return baseService.post(base.recycleCourse(node), payload, {}, { params: withCourseParams() })
 }
 async function deleteCourse(node = resolveNodeFromPath(), payloadOrConfirm) {
   const payload = typeof payloadOrConfirm === "string" ? { confirm: payloadOrConfirm } : payloadOrConfirm || {}
 
-  const resp = await http.post(base.deleteCourse(node), payload, { params: withCourseParams() })
-
-  return resp.data
+  return baseService.post(base.deleteCourse(node), payload, {}, { params: withCourseParams() })
 }
 
 // -------- Moodle export --------
 async function moodleExportOptions(node = resolveNodeFromPath()) {
-  const resp = await http.get(base.moodleExportOptions(node), { params: withCourseParams() })
-  return resp.data
+  return baseService.get(base.moodleExportOptions(node), withCourseParams())
 }
 
 async function moodleExportResources(node = resolveNodeFromPath()) {
-  const resp = await http.get(base.moodleExportResources(node), { params: withCourseParams() })
-  return resp.data
+  return baseService.get(base.moodleExportResources(node), withCourseParams())
 }
 
 async function moodleExportExecute(node = resolveNodeFromPath(), payload) {
-  const resp = await http.post(base.moodleExportExecute(node), payload, {
+  const resp = await baseService.postRaw(base.moodleExportExecute(node), payload, {
     params: withCourseParams(),
     responseType: "blob",
     validateStatus: () => true,
@@ -284,28 +236,26 @@ async function importFromMoodle(node = resolveNodeFromPath(), file) {
   if (!file) throw new Error("Missing .mbz file")
   const fd = new FormData()
   fd.append("file", file, file.name || "backup.mbz")
-  const resp = await http.post(base.moodleImport(node), fd, {
-    headers: { "Content-Type": "multipart/form-data" },
-    params: withCourseParams(),
-  })
-  return resp.data
+  return baseService.post(base.moodleImport(node), fd, {}, { params: withCourseParams() })
 }
 
 // CC 1.3 export
 async function cc13ExportOptions(node = resolveNodeFromPath()) {
-  const resp = await http.get(base.cc13ExportOptions(node), { params: withCourseParams() })
-  return resp.data
+  return baseService.get(base.cc13ExportOptions(node), withCourseParams())
 }
 async function cc13ExportResources(node = resolveNodeFromPath()) {
-  const resp = await http.get(base.cc13ExportResources(node), { params: withCourseParams() })
-  return resp.data
+  return baseService.get(base.cc13ExportResources(node), withCourseParams())
 }
 async function cc13ExportExecute(node = resolveNodeFromPath(), payload) {
-  const resp = await http.post(base.cc13ExportExecute(node), payload, {
-    params: withCourseParams(),
-    headers: { Accept: "application/json" },
-  })
-  return resp.data // { ok, file, downloadUrl, message }
+  // { ok, file, downloadUrl, message }
+  return baseService.post(
+    base.cc13ExportExecute(node),
+    payload,
+    {},
+    {
+      params: withCourseParams(),
+    },
+  )
 }
 
 // CC 1.3 import
@@ -314,8 +264,7 @@ async function cc13Import(node = resolveNodeFromPath(), fileOrOptions) {
   if (typeof File !== "undefined" && fileOrOptions instanceof File) {
     const fd = new FormData()
     fd.append("file", fileOrOptions, fileOrOptions.name || "package.imscc")
-    const resp = await http.post(base.cc13Import(node), fd, {
-      headers: { "Content-Type": "multipart/form-data" },
+    const resp = await baseService.postRaw(base.cc13Import(node), fd, {
       params: withCourseParams(),
       validateStatus: () => true,
       responseType: "json",
@@ -330,10 +279,7 @@ async function cc13Import(node = resolveNodeFromPath(), fileOrOptions) {
   }
 
   // Optional JSON mode (if later you add server switches)
-  const resp = await http.post(base.cc13Import(node), fileOrOptions || {}, {
-    params: withCourseParams(),
-  })
-  return resp.data
+  return baseService.post(base.cc13Import(node), fileOrOptions || {}, {}, { params: withCourseParams() })
 }
 
 /* =========================

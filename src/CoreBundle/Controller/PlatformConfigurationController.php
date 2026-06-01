@@ -141,7 +141,7 @@ class PlatformConfigurationController extends AbstractController
                 'editor.enable_iframe_inclusion',
                 'editor.enable_uploadimage_editor',
                 'editor.video_context_menu_hidden',
-                'display.show_admin_toolbar',
+                'display.accessibility_font_resize',
                 'registration.allow_terms_conditions',
                 'agenda.allow_personal_agenda',
                 'agenda.personal_calendar_show_sessions_occupation',

@@ -350,6 +350,12 @@ function getStablePluginAllowList(): array
         'CheckExtraFieldAuthorCompany',
         'CleanDeletedFiles',
         'Dashboard',
+        'ExtraMenuFromWebservice',
+        'Mobidico',
+        'ShowRegions',
+        'HelloWorld',
+        'ExtAuthChamiloLogoutButtonBehaviour',
+        'Resubscription',
     ];
 }
 

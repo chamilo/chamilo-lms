@@ -1,5 +1,5 @@
 import { defineStore } from "pinia"
-import axios from "axios"
+import platformConfigService from "../services/platformConfigService"
 import { computed, ref } from "vue"
 
 export const usePlatformConfig = defineStore("platformConfig", () => {
@@ -16,7 +16,7 @@ export const usePlatformConfig = defineStore("platformConfig", () => {
     isLoading.value = true
 
     try {
-      const { data } = await axios.get("/platform-config/list")
+      const data = await platformConfigService.list()
 
       visualTheme.value = data.visual_theme
 

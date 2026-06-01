@@ -1,5 +1,8 @@
 <template>
-  <form @submit.prevent="$emit('submit')">
+  <form
+    ref="documentForm"
+    @submit.capture.prevent.stop="saveFromFormSubmit"
+  >
     <div>
       <BaseInputTextWithVuelidate
         id="title"
@@ -22,8 +25,9 @@
         "
         id="item_content"
         v-model="item.contentFile"
-        :full-page="isFullPage"
+        :full-page="fullPage"
         :title="t('Content')"
+        :editor-config="tinyEditorConfig"
         editor-id="item_content"
       />
     </div>
@@ -107,23 +111,38 @@
     </div>
 
     <BaseAdvancedSettingsButton
-      v-if="searchEnabled || showResourceLanguageAdvancedSettings"
+      v-if="searchEnabled || showResourceLanguageAdvancedSettings || hasAdvancedSlot"
       v-model="showAdvancedSettings"
     >
-      <ResourceLanguageSelector v-model="item.language" />
+      <ResourceLanguageSelector
+        v-if="showResourceLanguageAdvancedSettings"
+        v-model="item.language"
+      />
 
       <div
         v-if="searchEnabled"
-        class="mb-2 flex flex-row"
+        class="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center"
       >
-        <label class="w-40 font-semibold">{{ $t("Options") }}:</label>
+        <div class="flex w-40 shrink-0 items-center gap-1 font-semibold">
+          <span>{{ $t("Options") }}:</span>
+        </div>
 
-        <BaseCheckbox
-          id="indexDocumentContent"
-          v-model="item.indexDocumentContent"
-          :label="$t('Index document content?')"
-          name="indexDocumentContent"
-        />
+        <div class="flex items-center gap-2">
+          <BaseCheckbox
+            id="indexDocumentContent"
+            v-model="item.indexDocumentContent"
+            :label="$t('Index document content?')"
+            name="indexDocumentContent"
+          />
+
+          <span
+            class="mdi mdi-information-outline cursor-help text-primary"
+            role="img"
+            tabindex="0"
+            :aria-label="t('Information about indexing document content')"
+            :title="t('When enabled, the document text is indexed by the search engine so users can find it from platform search.')"
+          />
+        </div>
       </div>
 
       <div
@@ -153,9 +172,14 @@
           />
         </div>
       </div>
-    </BaseAdvancedSettingsButton>
 
-    <slot></slot>
+      <div
+        v-if="hasAdvancedSlot"
+        class="mt-4 border-t border-gray-25 pt-4"
+      >
+        <slot></slot>
+      </div>
+    </BaseAdvancedSettingsButton>
 
     <div class="mt-4 flex justify-end">
       <BaseButton
@@ -182,7 +206,6 @@
 import useVuelidate from "@vuelidate/core"
 import { required } from "@vuelidate/validators"
 import { ref } from "vue"
-import axios from "axios"
 import { useI18n } from "vue-i18n"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useCourseSettings } from "../../store/courseSettingStore"
@@ -195,6 +218,8 @@ import BaseInputTextWithVuelidate from "../basecomponents/BaseInputTextWithVueli
 import DocumentAiMediaDialog from "./DocumentAiMediaDialog.vue"
 import BaseTextArea from "../basecomponents/BaseTextArea.vue"
 import ResourceLanguageSelector from "../resources/ResourceLanguageSelector.vue"
+import courseService from "../../services/courseService"
+import searchEngineFieldService from "../../services/searchEngineFieldService"
 
 export default {
   name: "DocumentsForm",
@@ -213,6 +238,7 @@ export default {
     errors: { type: Object, default: () => ({}) },
     initialValues: { type: Object, default: () => ({}) },
     searchEnabled: { type: Boolean, default: false },
+    fullPage: { type: Boolean, default: false },
   },
   setup() {
     const platformConfigStore = usePlatformConfig()
@@ -251,7 +277,9 @@ export default {
       editorDraftIntervalId: null,
       lastEditorDraftContent: "",
       maxEditorDrafts: 5,
+      editorDraftIntervalMs: 60000,
       showEditorDrafts: false,
+      isSavingFromEditor: false,
     }
   },
   validations() {
@@ -300,6 +328,9 @@ export default {
         }).length > 1
       )
     },
+    hasAdvancedSlot() {
+      return Boolean(this.$slots.default)
+    },
     showAiMediaButton() {
       const aiHelpersEnabled = String(this.platformConfigStore.getSetting("ai_helpers.enable_ai_helpers")) === "true"
       const imageGeneratorEnabled = String(this.courseSettingsStore?.getSetting?.("image_generator")) === "true"
@@ -308,46 +339,33 @@ export default {
       return aiHelpersEnabled && (imageGeneratorEnabled || videoGeneratorEnabled)
     },
     tinyEditorConfig() {
-      if (!this.showAiMediaButton) {
-        return {}
+      const config = {
+        content_style: this.getDocumentEditorContentStyle(),
+        removeToolbarButtons: "save preview print code fullscreen fullpage visualblocks visualchars ltr rtl",
+        visualblocks_default_state: false,
+        visualchars_default_state: false,
+        save_onsavecallback: (editor) => {
+          this.saveFromTinyEditor(editor)
+        },
+      }
+
+      const toolbarItems = ["preview", "print", "code", "fullscreen", "fullpage", "chamiloSave"]
+
+      if (this.showAiMediaButton) {
+        toolbarItems.push("chamiloAiMedia")
       }
 
       return {
-        appendToolbar: "chamiloAiMedia",
+        ...config,
+        appendToolbar: toolbarItems.join(" "),
         setup: (editor) => {
-          editor.ui.registry.addIcon(
-            "chamiloRobot",
-            `
-            <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <rect x="7" y="8" width="10" height="8" rx="2.2" fill="#60A5FA" stroke="#1E3A8A" stroke-width="1.8"/>
-              <path d="M12 5V8" stroke="#1E3A8A" stroke-width="1.8" stroke-linecap="round"/>
-              <circle cx="12" cy="4" r="1.2" fill="#1E3A8A"/>
-              <circle cx="10" cy="11.6" r="1.35" fill="#FFFFFF"/>
-              <circle cx="14" cy="11.6" r="1.35" fill="#FFFFFF"/>
-              <circle cx="10" cy="11.6" r="0.45" fill="#1E3A8A"/>
-              <circle cx="14" cy="11.6" r="0.45" fill="#1E3A8A"/>
-              <path d="M10 14.4H14" stroke="#1E3A8A" stroke-width="1.8" stroke-linecap="round"/>
-              <path d="M5.6 10.2V13.8" stroke="#1E3A8A" stroke-width="1.8" stroke-linecap="round"/>
-              <path d="M18.4 10.2V13.8" stroke="#1E3A8A" stroke-width="1.8" stroke-linecap="round"/>
-              <path d="M9.2 16.2V18" stroke="#1E3A8A" stroke-width="1.8" stroke-linecap="round"/>
-              <path d="M14.8 16.2V18" stroke="#1E3A8A" stroke-width="1.8" stroke-linecap="round"/>
-            </svg>
-          `,
-          )
-          editor.ui.registry.addButton("chamiloAiMedia", {
-            icon: "chamiloRobot",
-            tooltip: this.$t("Generate AI media"),
-            onAction: () => {
-              this.openAiMediaFromEditor(editor)
-            },
-          })
-          editor.ui.registry.addMenuItem("chamiloAiMedia", {
-            text: this.$t("Generate AI media"),
-            icon: "chamiloRobot",
-            onAction: () => {
-              this.openAiMediaFromEditor(editor)
-            },
-          })
+          this.registerTinyEditorSaveButton(editor)
+          this.registerTinyEditorNativeSaveGuard(editor)
+          this.disableTinyEditorVisualHelpers(editor)
+
+          if (this.showAiMediaButton) {
+            this.registerTinyEditorAiMediaButton(editor)
+          }
         },
       }
     },
@@ -365,9 +383,9 @@ export default {
       this.item.indexDocumentContent = true
     }
 
-    this.ensureResourceLanguage()
-
     await this.loadCourseContext()
+
+    this.ensureResourceLanguage()
 
     if (!this.searchEnabled) {
       return
@@ -379,8 +397,9 @@ export default {
   mounted() {
     this.refreshEditorDrafts()
     this.lastEditorDraftContent = this.normalizeEditorDraftContent(this.item.contentFile)
-    this.editorDraftIntervalId = window.setInterval(this.saveEditorDraft, 30000)
+    this.editorDraftIntervalId = window.setInterval(this.saveEditorDraft, this.editorDraftIntervalMs)
     window.addEventListener("beforeunload", this.saveEditorDraftOnUnload)
+    this.patchDocumentFormNativeSubmit()
   },
   beforeUnmount() {
     if (this.editorDraftIntervalId) {
@@ -389,6 +408,7 @@ export default {
     }
 
     window.removeEventListener("beforeunload", this.saveEditorDraftOnUnload)
+    this.restoreDocumentFormNativeSubmit()
   },
   watch: {
     item: {
@@ -399,35 +419,283 @@ export default {
     },
   },
   methods: {
+    getDocumentEditorContentStyle() {
+      const baseStyle =
+        typeof window !== "undefined" ? String(window.CHAMILO_TINYMCE_BASE_CONFIG?.content_style || "") : ""
+
+      return `${baseStyle}
+        body {
+          box-sizing: border-box;
+          padding-left: 0.5rem;
+          padding-right: 0.5rem;
+        }
+      `
+    },
+    disableTinyEditorVisualHelpers(editor) {
+      if (!editor) {
+        return
+      }
+
+      const disableCommandIfActive = (command) => {
+        try {
+          if (editor.queryCommandState(command)) {
+            editor.execCommand(command)
+          }
+        } catch (error) {
+          // Ignore optional TinyMCE commands that are not available in this editor.
+        }
+      }
+
+      editor.on("init", () => {
+        disableCommandIfActive("mceVisualBlocks")
+        disableCommandIfActive("mceVisualChars")
+      })
+    },
+    saveFromFormSubmit() {
+      const editor = this.getTinyEditor()
+
+      if (editor) {
+        this.item.contentFile = editor.getContent()
+      }
+
+      this.$emit("submit")
+    },
+    patchDocumentFormNativeSubmit() {
+      const form = this.$refs.documentForm
+
+      if (!form || form.__chamiloDocumentFormNativeSubmitGuard) {
+        return
+      }
+
+      const component = this
+      const guard = {
+        nativeSubmit: form.submit,
+        nativeRequestSubmit: form.requestSubmit,
+      }
+
+      try {
+        Object.defineProperty(form, "__chamiloDocumentFormNativeSubmitGuard", {
+          configurable: true,
+          value: guard,
+        })
+
+        Object.defineProperty(form, "submit", {
+          configurable: true,
+          value() {
+            component.saveFromTinyEditor(component.getTinyEditor())
+          },
+        })
+
+        if (typeof form.requestSubmit === "function") {
+          Object.defineProperty(form, "requestSubmit", {
+            configurable: true,
+            value() {
+              component.saveFromTinyEditor(component.getTinyEditor())
+            },
+          })
+        }
+      } catch {
+        // Ignore native form submit guard errors.
+      }
+    },
+    restoreDocumentFormNativeSubmit() {
+      const form = this.$refs.documentForm
+
+      if (!form || !form.__chamiloDocumentFormNativeSubmitGuard) {
+        return
+      }
+
+      try {
+        delete form.submit
+
+        if (form.__chamiloDocumentFormNativeSubmitGuard.nativeRequestSubmit) {
+          delete form.requestSubmit
+        }
+
+        delete form.__chamiloDocumentFormNativeSubmitGuard
+      } catch {
+        // Ignore native form submit guard cleanup errors.
+      }
+    },
+    registerTinyEditorSaveButton(editor) {
+      editor.addCommand("mceSave", () => {
+        this.saveFromTinyEditor(editor)
+      })
+
+      editor.ui.registry.addIcon(
+        "chamiloSave",
+        `
+        <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5 3H17L21 7V21H5C3.9 21 3 20.1 3 19V5C3 3.9 3.9 3 5 3Z" fill="#2563EB"/>
+          <path d="M7 5H15V10H7V5Z" fill="#FFFFFF"/>
+          <path d="M8 14H16C16.6 14 17 14.4 17 15V21H7V15C7 14.4 7.4 14 8 14Z" fill="#DBEAFE"/>
+          <path d="M15 5H17L19 7V10H15V5Z" fill="#93C5FD"/>
+        </svg>
+      `,
+      )
+      editor.ui.registry.addButton("chamiloSave", {
+        icon: "chamiloSave",
+        tooltip: this.$t("Save"),
+        onAction: () => {
+          this.saveFromTinyEditor(editor)
+        },
+      })
+      editor.ui.registry.addMenuItem("chamiloSave", {
+        text: this.$t("Save"),
+        icon: "chamiloSave",
+        onAction: () => {
+          this.saveFromTinyEditor(editor)
+        },
+      })
+
+      editor.addShortcut("meta+s", this.$t("Save"), () => {
+        this.saveFromTinyEditor(editor)
+      })
+      editor.addShortcut("ctrl+s", this.$t("Save"), () => {
+        this.saveFromTinyEditor(editor)
+      })
+    },
+    registerTinyEditorNativeSaveGuard(editor) {
+      editor.on("BeforeExecCommand", (event) => {
+        if ("mceSave" !== event.command) {
+          return
+        }
+
+        if (typeof event.preventDefault === "function") {
+          event.preventDefault()
+        }
+
+        if (typeof event.stopImmediatePropagation === "function") {
+          event.stopImmediatePropagation()
+        }
+
+        this.saveFromTinyEditor(editor)
+      })
+    },
+    registerTinyEditorAiMediaButton(editor) {
+      editor.ui.registry.addIcon(
+        "chamiloRobot",
+        `
+        <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <rect x="7" y="8" width="10" height="8" rx="2.2" fill="#60A5FA" stroke="#1E3A8A" stroke-width="1.8"/>
+          <path d="M12 5V8" stroke="#1E3A8A" stroke-width="1.8" stroke-linecap="round"/>
+          <circle cx="12" cy="4" r="1.2" fill="#1E3A8A"/>
+          <circle cx="10" cy="11.6" r="1.35" fill="#FFFFFF"/>
+          <circle cx="14" cy="11.6" r="1.35" fill="#FFFFFF"/>
+          <circle cx="10" cy="11.6" r="0.45" fill="#1E3A8A"/>
+          <circle cx="14" cy="11.6" r="0.45" fill="#1E3A8A"/>
+          <path d="M10 14.4H14" stroke="#1E3A8A" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M5.6 10.2V13.8" stroke="#1E3A8A" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M18.4 10.2V13.8" stroke="#1E3A8A" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M9.2 16.2V18" stroke="#1E3A8A" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M14.8 16.2V18" stroke="#1E3A8A" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      `,
+      )
+      editor.ui.registry.addButton("chamiloAiMedia", {
+        icon: "chamiloRobot",
+        tooltip: this.$t("Generate AI media"),
+        onAction: () => {
+          this.openAiMediaFromEditor(editor)
+        },
+      })
+      editor.ui.registry.addMenuItem("chamiloAiMedia", {
+        text: this.$t("Generate AI media"),
+        icon: "chamiloRobot",
+        onAction: () => {
+          this.openAiMediaFromEditor(editor)
+        },
+      })
+    },
+    saveFromTinyEditor(editor) {
+      if (this.isSavingFromEditor) {
+        return
+      }
+
+      this.isSavingFromEditor = true
+
+      if (editor) {
+        this.item.contentFile = editor.getContent()
+      }
+
+      this.$nextTick(() => {
+        this.$emit("submit")
+
+        window.setTimeout(() => {
+          this.isSavingFromEditor = false
+        }, 300)
+      })
+    },
+    normalizeLanguageIso(value) {
+      const raw = String(value || "").trim()
+      if (!raw) {
+        return ""
+      }
+
+      const languages = Array.isArray(window.languages) ? window.languages : []
+      const iriMatch = raw.match(/\/api\/languages\/(\d+)/)
+      if (iriMatch) {
+        const byId = languages.find((language) => String(language?.id || "") === iriMatch[1])
+        return String(byId?.isocode || byId?.isoCode || "")
+      }
+
+      const normalizedRaw = raw.replace("-", "_").toLowerCase()
+      const exact = languages.find((language) => {
+        const code = String(language?.isocode || language?.isoCode || "")
+          .replace("-", "_")
+          .toLowerCase()
+
+        return code === normalizedRaw
+      })
+
+      if (exact) {
+        return String(exact.isocode || exact.isoCode || "")
+      }
+
+      const shortCode = normalizedRaw.split("_")[0]
+      const byShortCode = languages.find((language) => {
+        const code = String(language?.isocode || language?.isoCode || "")
+          .replace("-", "_")
+          .toLowerCase()
+
+        return code === shortCode || code.startsWith(`${shortCode}_`)
+      })
+
+      return String(byShortCode?.isocode || byShortCode?.isoCode || raw)
+    },
     extractResourceLanguageIso(language) {
       if (!language) {
         return ""
       }
 
       if ("string" === typeof language) {
-        const iriMatch = language.match(/\/api\/languages\/(\d+)/)
-        if (!iriMatch) {
-          return language
-        }
-
-        const languages = Array.isArray(window.languages) ? window.languages : []
-        const found = languages.find((item) => String(item?.id || "") === iriMatch[1])
-
-        return String(found?.isocode || "")
+        return this.normalizeLanguageIso(language)
       }
 
-      return String(language.isocode || language.isoCode || "")
+      return this.normalizeLanguageIso(language.isocode || language.isoCode || language["@id"] || "")
     },
     ensureResourceLanguage() {
-      if (!this.item || undefined !== this.item.language) {
+      if (!this.item) {
         return
       }
 
-      this.item.language = this.extractResourceLanguageIso(
+      const currentLanguage = this.extractResourceLanguageIso(this.item.language)
+      if (currentLanguage) {
+        if (currentLanguage !== this.item.language) {
+          this.item.language = currentLanguage
+        }
+
+        return
+      }
+
+      const fallbackLanguage = this.extractResourceLanguageIso(
         this.item?.resourceNode?.language ||
           this.item?.resourceNode?.firstResourceFile?.language ||
           this.item?.firstResourceFile?.language,
       )
+
+      const courseLanguage = this.extractResourceLanguageIso(this.courseContextLanguage)
+      this.item.language = fallbackLanguage || courseLanguage || ""
     },
     getEditorDraftUserId() {
       const user = this.securityStore?.user || {}
@@ -550,9 +818,15 @@ export default {
         return
       }
 
-      const drafts = this.readEditorDrafts().filter(
-        (draft) => this.normalizeEditorDraftContent(draft.content) !== content,
-      )
+      const storedDrafts = this.readEditorDrafts()
+      const latestStoredDraft = storedDrafts[0] || null
+
+      if (latestStoredDraft && this.normalizeEditorDraftContent(latestStoredDraft.content) === content) {
+        this.lastEditorDraftContent = content
+        return
+      }
+
+      const drafts = storedDrafts.filter((draft) => this.normalizeEditorDraftContent(draft.content) !== content)
       const draft = {
         id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
         title: String(this.item.title || "").trim(),
@@ -660,18 +934,17 @@ export default {
     async loadCourseContext() {
       const cid = Number(this.$route?.query?.cid || 0)
       this.courseContextTitle = String(this.$route?.query?.course_title || "").trim()
-      this.courseContextLanguage = String(this.$route?.query?.course_language || this.locale || "en").trim()
+      this.courseContextLanguage = String(this.$route?.query?.course_language || "").trim()
 
       if (!cid) {
         return
       }
 
       try {
-        const response = await axios.get(`/api/courses/${cid}`)
-        const data = response?.data || {}
+        const data = (await courseService.find(`/api/courses/${cid}`)) || {}
 
         const apiTitle = String(data?.title || data?.name || "").trim()
-        const apiLanguage = String(data?.language || "").trim()
+        const apiLanguage = String(data?.courseLanguage || data?.course_language || data?.language || "").trim()
 
         if (apiTitle) {
           this.courseContextTitle = apiTitle
@@ -679,6 +952,7 @@ export default {
 
         if (apiLanguage) {
           this.courseContextLanguage = apiLanguage
+          this.ensureResourceLanguage()
         }
       } catch (error) {
         console.warn("[DocumentsForm] Failed to load course context.", error)
@@ -782,19 +1056,10 @@ export default {
     },
     async loadSearchEngineFields() {
       try {
-        const response = await fetch("/api/search_engine_fields", {
-          credentials: "same-origin",
-        })
-
-        if (!response.ok) {
-          console.error("[Search] Failed to load search engine fields:", response.status)
-          return
-        }
-
-        const json = await response.json()
-        const rawFields = Array.isArray(json) ? json : json["hydra:member"] || []
+        const { items } = await searchEngineFieldService.listFields()
+        const rawFields = items || []
         if (!Array.isArray(rawFields)) {
-          console.error("[Search] Unexpected search engine fields payload:", json)
+          console.error("[Search] Unexpected search engine fields payload:", items)
           return
         }
 
@@ -824,35 +1089,7 @@ export default {
       }
     },
     async fetchFieldValues(resourceNodeId) {
-      const iri = `/api/resource_nodes/${resourceNodeId}`
-
-      const tryUrls = [
-        `/api/search_engine_field_values?resourceNode=${encodeURIComponent(iri)}&pagination=false`,
-        `/api/search_engine_field_values?resourceNodeId=${encodeURIComponent(resourceNodeId)}&pagination=false`,
-      ]
-
-      for (const url of tryUrls) {
-        try {
-          const response = await fetch(url, { credentials: "same-origin" })
-          if (!response.ok) {
-            console.warn("[Search] Field values request failed:", response.status, url)
-            continue
-          }
-
-          const json = await response.json()
-          const items = Array.isArray(json) ? json : json["hydra:member"] || []
-          if (!Array.isArray(items)) {
-            console.warn("[Search] Unexpected field values payload:", json)
-            continue
-          }
-
-          return items
-        } catch (error) {
-          console.warn("[Search] Field values request error:", error)
-        }
-      }
-
-      return []
+      return searchEngineFieldService.listFieldValues(resourceNodeId)
     },
     async loadSearchEngineFieldValuesForEdit() {
       if (this.searchValuesLoaded) return

@@ -43,15 +43,11 @@ async function assignAuthSources() {
   isLoadingAssign.value = true
 
   try {
-    await baseService.post(
-      "/access-url/auth-sources/assign",
-      {
-        users: userFinder.value.selectedUsers.map((userInfo) => userInfo["@id"]),
-        auth_source: authSource.value,
-        access_url: accessUrl.value,
-      },
-      true,
-    )
+    await baseService.post("/access-url/auth-sources/assign", {
+      users: userFinder.value.selectedUsers.map((userInfo) => userInfo["@id"]),
+      auth_source: authSource.value,
+      access_url: accessUrl.value,
+    })
 
     showSuccessNotification(t("Authentication sources assigned successfully"))
 

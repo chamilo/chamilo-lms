@@ -6,9 +6,9 @@
       target="_blank"
       rel="noopener noreferrer"
     >
-      <ResourceIcon
-        :resource-data="data"
-        class="mr-2"
+      <DocumentEntryThumbnail
+        :data="data"
+        :title="documentTitle"
       />
       {{ documentTitle }}
     </a>
@@ -22,9 +22,9 @@
       target="_blank"
       rel="noopener noreferrer"
     >
-      <ResourceIcon
-        :resource-data="data"
-        class="mr-2"
+      <DocumentEntryThumbnail
+        :data="data"
+        :title="documentTitle"
       />
       {{ documentTitle }}
     </a>
@@ -35,9 +35,9 @@
       class="flex align-center"
       data-fancybox="gallery"
     >
-      <ResourceIcon
-        :resource-data="data"
-        class="mr-2"
+      <DocumentEntryThumbnail
+        :data="data"
+        :title="documentTitle"
       />
       {{ documentTitle }}
     </BaseAppLink>
@@ -49,9 +49,9 @@
       download
       class="flex align-center"
     >
-      <ResourceIcon
-        :resource-data="data"
-        class="mr-2"
+      <DocumentEntryThumbnail
+        :data="data"
+        :title="documentTitle"
       />
       {{ documentTitle }}
     </BaseAppLink>
@@ -65,9 +65,9 @@
       }"
       class="flex align-center"
     >
-      <ResourceIcon
-        :resource-data="data"
-        class="mr-2"
+      <DocumentEntryThumbnail
+        :data="data"
+        :title="documentTitle"
       />
       <b>{{ documentTitle }}</b>
     </BaseAppLink>
@@ -75,8 +75,8 @@
 </template>
 <script setup>
 import { computed } from "vue"
-import ResourceIcon from "./ResourceIcon.vue"
-import { useCidReq } from "../../composables/cidReq"
+import DocumentEntryThumbnail from "./DocumentEntryThumbnail.vue"
+import { getCourseContext } from "../../utils/courseContext"
 import { useFileUtils } from "../../composables/fileUtils"
 import { usePlatformConfig } from "../../store/platformConfig"
 
@@ -87,7 +87,7 @@ const props = defineProps({
   },
 })
 
-const cidQuery = useCidReq()
+const cidQuery = getCourseContext()
 const platformConfigStore = usePlatformConfig()
 const { isFile: utilsIsFile, isImage, isVideo, isAudio, isPreviewable: utilsIsPreviewable } = useFileUtils()
 

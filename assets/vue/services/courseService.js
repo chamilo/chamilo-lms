@@ -5,6 +5,48 @@ export default {
   find: baseService.get,
 
   /**
+   * Checks the current user's course enrollments.
+   * @returns {Promise<Object>}
+   */
+  checkEnrollments: async () => {
+    return await baseService.get("/course/check-enrollments")
+  },
+
+  /**
+   * Checks the CourseLegal plugin agreement status for a course.
+   * @param {number} cid
+   * @param {number} sid
+   * @returns {Promise<Object>}
+   */
+  checkCourseLegalPlugin: async (cid, sid = 0) => {
+    return await baseService.get("/plugin/CourseLegal/check.php", { cid, sid, gid: 0 })
+  },
+
+  /**
+   * Fetches the CourseHomeNotify plugin notification for a course.
+   * @param {number} cid
+   * @param {number} sid
+   * @returns {Promise<Object>}
+   */
+  getCourseHomeNotification: async (cid, sid = 0) => {
+    return await baseService.get("/plugin/CourseHomeNotify/ajax.php", { cid, sid, gid: 0 })
+  },
+
+  /**
+   * Lists the current user's courses (paginated). Returns the raw response body
+   * so the caller can normalize it; accepts extra axios options (e.g. a signal).
+   * @param {number} page
+   * @param {number} itemsPerPage
+   * @param {Object} [options={}] - Extra axios options (e.g. AbortController signal).
+   * @returns {Promise<Object>}
+   */
+  listMyCourses: async (page, itemsPerPage, options = {}) => {
+    const response = await baseService.getRaw("/api/me/courses", { params: { page, itemsPerPage }, ...options })
+
+    return response.data
+  },
+
+  /**
    * @param {Object} searchParams
    * @param {boolean} disablePagination
    * @returns {Promise<{totalItems, items}>}
@@ -106,7 +148,6 @@ export default {
   checkLegal: async (courseId, sessionId = 0) => {
     return await baseService.get(`/course/${courseId}/checkLegal.json`, { sid: sessionId })
   },
-
 
   /**
    * Loads BuyCourses course creation options for the current user.
@@ -287,12 +328,7 @@ export default {
   },
 
   findCourseForSessionAdmin: async (cid) => {
-    const response = await fetch(`/admin/sessionadmin/courses/${cid}`)
-    if (!response.ok) {
-      throw new Error("Failed to fetch course")
-    }
-
-    const data = await response.json()
+    const data = await baseService.get(`/admin/sessionadmin/courses/${cid}`)
 
     if (!data || typeof data !== "object" || !data.id) {
       throw new Error("Failed to load course for session admin")

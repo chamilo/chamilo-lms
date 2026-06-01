@@ -2,6 +2,7 @@
 import { computed, onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import lpService from "../../services/lpService"
+import baseService from "../../services/baseService"
 
 const { t } = useI18n()
 
@@ -45,18 +46,17 @@ async function fetchExportables() {
   selected.value = new Set()
 
   try {
-    const qs = new URLSearchParams({ a: "get_lp_export_items", lp_id: String(props.lpId) })
     const cidNum = Number(props.cid || 0)
     const sidNum = Number(props.sid || 0)
-    if (cidNum) qs.append("cid", String(cidNum))
-    if (sidNum) qs.append("sid", String(sidNum))
+    const params = { a: "get_lp_export_items", lp_id: String(props.lpId) }
+    if (cidNum) params.cid = String(cidNum)
+    if (sidNum) params.sid = String(sidNum)
 
-    const res = await fetch(`/main/inc/ajax/lp.ajax.php?${qs.toString()}`, {
+    const res = await baseService.getRaw("/main/inc/ajax/lp.ajax.php", {
+      params,
       headers: { "X-Requested-With": "XMLHttpRequest" },
-      credentials: "same-origin",
     })
-    if (!res.ok) throw new Error(`HTTP ${res.status}`)
-    const data = await res.json().catch(() => ({}))
+    const data = res.data ?? {}
 
     const arr = Array.isArray(data) ? data : Array.isArray(data.items) ? data.items : []
     const norm = arr

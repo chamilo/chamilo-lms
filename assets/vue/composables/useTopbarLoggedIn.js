@@ -7,6 +7,7 @@ import { useMessageRelUserStore } from "../store/messageRelUserStore"
 import { useCidReqStore } from "../store/cidReq"
 import { useSecurityStore } from "../store/securityStore"
 import { useNotification } from "./notification"
+import baseService from "../services/baseService"
 
 const ROLE_MAP = {
   ROLE_ADMIN: "ADMIN",
@@ -208,7 +209,7 @@ function resolveDisplayTabsConfig(platformConfigStore, securityStore) {
 }
 
 function isSettingEnabled(platformConfigStore, key) {
-  return platformConfigStore.getSetting(key) === "true"
+  return normalizeBooleanFlag(platformConfigStore.getSetting(key))
 }
 
 function normalizeBooleanFlag(value) {
@@ -221,6 +222,43 @@ function normalizeBooleanFlag(value) {
   }
 
   return false
+}
+
+function normalizeExternalLogoutBehaviour(data) {
+  if (!data || data.active !== true) {
+    return null
+  }
+
+  const logoutUrl = typeof data.logoutUrl === "string" && data.logoutUrl.trim() ? data.logoutUrl.trim() : "/logout"
+
+  return {
+    logoutUrl,
+    tooltip: typeof data.tooltip === "string" ? data.tooltip : "",
+    showAlert: data.showAlert === true,
+    alertText: typeof data.alertText === "string" ? data.alertText : "",
+    disabled: data.disabled === true || logoutUrl === "#",
+  }
+}
+
+async function fetchExternalLogoutBehaviour() {
+  try {
+    const response = await fetch("/plugin/ExtAuthChamiloLogoutButtonBehaviour/logout-config.php", {
+      credentials: "same-origin",
+      headers: {
+        Accept: "application/json",
+      },
+    })
+
+    if (!response.ok) {
+      return null
+    }
+
+    return normalizeExternalLogoutBehaviour(await response.json())
+  } catch (e) {
+    console.warn("[ExtAuthChamiloLogoutButtonBehaviour] Unable to load logout behavior", e)
+
+    return null
+  }
 }
 
 export function useTopbarLoggedIn(props) {
@@ -237,10 +275,13 @@ export function useTopbarLoggedIn(props) {
 
   const loginUrl = "/login"
   const elUserSubmenu = ref(null)
+  const externalLogoutBehaviour = ref(null)
 
   const allowUsersToCreateCourses = computed(() =>
     isSettingEnabled(platformConfigStore, "workflows.allow_users_to_create_courses"),
   )
+
+  const canCreateCourseFromTopbar = computed(() => isAdmin.value || (isTeacher.value && allowUsersToCreateCourses.value))
 
   const hideLogoutButton = computed(() => isSettingEnabled(platformConfigStore, "display.hide_logout_button"))
 
@@ -330,17 +371,7 @@ export function useTopbarLoggedIn(props) {
     }
 
     try {
-      const response = await fetch("/plugin/Justification/user_menu.php", {
-        method: "GET",
-        credentials: "same-origin",
-        headers: { Accept: "application/json" },
-      })
-
-      if (!response.ok) {
-        throw new Error("Request failed: " + response.status)
-      }
-
-      const data = await response.json()
+      const data = await baseService.get("/plugin/Justification/user_menu.php")
 
       justificationMenu.value = {
         enabled: data?.enabled === true,
@@ -386,17 +417,7 @@ export function useTopbarLoggedIn(props) {
     isFetchingCustomCertificate.value = true
 
     try {
-      const response = await fetch("/main/social/my_skills_report.php?a=has_custom_certificate", {
-        method: "GET",
-        credentials: "same-origin",
-        headers: { Accept: "application/json" },
-      })
-
-      if (!response.ok) {
-        throw new Error("Request failed: " + response.status)
-      }
-
-      const data = await response.json()
+      const data = await baseService.get("/main/social/my_skills_report.php", { a: "has_custom_certificate" })
 
       hasCustomCertificate.value = !!(
         data &&
@@ -407,6 +428,42 @@ export function useTopbarLoggedIn(props) {
       hasCustomCertificate.value = false
     } finally {
       isFetchingCustomCertificate.value = false
+    }
+  }
+
+  function runExternalLogoutBehaviour() {
+    const behaviour = externalLogoutBehaviour.value
+
+    if (!behaviour) {
+      window.location.href = "/logout"
+
+      return
+    }
+
+    if (behaviour.showAlert && behaviour.alertText) {
+      window.alert(behaviour.alertText)
+    }
+
+    if (!behaviour.disabled) {
+      window.location.href = behaviour.logoutUrl || "/logout"
+    }
+  }
+
+  function buildLogoutMenuItem() {
+    const behaviour = externalLogoutBehaviour.value
+
+    if (!behaviour) {
+      return {
+        label: t("Sign out"),
+        url: "/logout",
+        icon: "mdi mdi-logout-variant",
+      }
+    }
+
+    return {
+      label: t("Sign out"),
+      icon: behaviour.disabled ? "mdi mdi-logout-variant opacity-60" : "mdi mdi-logout-variant",
+      command: runExternalLogoutBehaviour,
     }
   }
 
@@ -483,14 +540,7 @@ export function useTopbarLoggedIn(props) {
     }
 
     if (!hideLogoutButton.value) {
-      items[0].items.push(
-        { separator: true },
-        {
-          label: t("Sign out"),
-          url: "/logout",
-          icon: "mdi mdi-logout-variant",
-        },
-      )
+      items[0].items.push({ separator: true }, buildLogoutMenuItem())
     }
 
     return items
@@ -520,8 +570,12 @@ export function useTopbarLoggedIn(props) {
     return unreadCount > 9 ? "9+" : unreadCount > 0 ? unreadCount.toString() : null
   })
 
-  onMounted(() => {
+  onMounted(async () => {
     fetchJustificationMenu()
+
+    if (!isAnonymous.value) {
+      externalLogoutBehaviour.value = await fetchExternalLogoutBehaviour()
+    }
   })
 
   if (messagingEnabled.value) {
@@ -531,6 +585,7 @@ export function useTopbarLoggedIn(props) {
   return {
     loginUrl,
     elUserSubmenu,
+    canCreateCourseFromTopbar,
     isTeacher,
     allowUsersToCreateCourses,
     showTicketLink,

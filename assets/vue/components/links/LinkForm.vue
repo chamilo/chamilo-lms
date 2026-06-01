@@ -117,7 +117,7 @@ import linkService from "../../services/linkService"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { computed, onMounted, reactive, ref, watch } from "vue"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import { required, url } from "@vuelidate/validators"
 import useVuelidate from "@vuelidate/core"
@@ -138,7 +138,7 @@ import { Dashboard } from "@uppy/vue"
 
 const notification = useNotification()
 const { t } = useI18n()
-const { cid, sid } = useCidReq()
+const { cid, sid } = getCourseContext()
 const router = useRouter()
 const route = useRoute()
 const selectedFile = ref(null)

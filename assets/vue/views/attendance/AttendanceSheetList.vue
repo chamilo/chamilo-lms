@@ -542,7 +542,7 @@ import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseDialog from "../../components/basecomponents/BaseDialog.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import attendanceService, { ATTENDANCE_STATES } from "../../services/attendanceService"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useCourseSettings } from "../../store/courseSettingStore"
@@ -557,7 +557,7 @@ const route = useRoute()
 const { abbreviatedDatetime, getCurrentTimezone } = useFormatDate()
 
 const formatAttendanceDate = (dateTimeStr) => abbreviatedDatetime(dateTimeStr) || dateTimeStr
-const { sid, cid, gid } = useCidReq()
+const { sid, cid, gid } = getCourseContext()
 const isLoading = ref(true)
 const attendanceTitle = ref("")
 const securityStore = useSecurityStore()

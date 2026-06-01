@@ -764,11 +764,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'The Help link is located in the top right part of the screen',
                 ],
                 [
-                    'name' => 'show_admin_toolbar',
-                    'title' => 'Show admin toolbar',
-                    'comment' => "Shows a global toolbar on top of the page to the designated user roles. This toolbar, very similar to Wordpress and Google's black toolbars, can really speed up complicated actions and improve the space you have available for the learning content, but it might be confusing for some users",
-                ],
-                [
                     'name' => 'show_hot_courses',
                     'title' => 'Show hot courses',
                     'comment' => 'The hot courses list will be added in the index page',

@@ -117,6 +117,7 @@ import timeGridPlugin from "@fullcalendar/timegrid"
 import interactionPlugin from "@fullcalendar/interaction"
 import Dialog from "primevue/dialog"
 import { DateTime } from "luxon"
+import calendarService from "../../services/calendarService"
 
 import CalendarSectionHeader from "../../components/ccalendarevent/CalendarSectionHeader.vue"
 
@@ -258,20 +259,7 @@ async function fetchSessions() {
     isLoadingSessions.value = true
     errorMessage.value = ""
 
-    const resp = await fetch("/api/calendar/my-students-schedule", {
-      method: "GET",
-      headers: { Accept: "application/json" },
-    })
-
-    if (!resp.ok) {
-      const text = await resp.text().catch(() => "")
-      console.error("[MyStudentsSchedule] Sessions request failed", resp.status, text)
-      errorMessage.value = t("Failed to load sessions")
-      sessions.value = []
-      return
-    }
-
-    const data = await resp.json()
+    const data = await calendarService.getMyStudentsSchedule()
     sessions.value = Array.isArray(data) ? data : []
   } catch (e) {
     console.error("[MyStudentsSchedule] Unexpected error", e)
@@ -378,26 +366,18 @@ async function fetchEvents(info, successCallback, failureCallback) {
     const start = DateTime.fromJSDate(info.start).toISO()
     const end = DateTime.fromJSDate(info.end).toISO()
 
-    const url = `/api/calendar/my-students-schedule?sid=${encodeURIComponent(sid)}&start=${encodeURIComponent(
-      start,
-    )}&end=${encodeURIComponent(end)}`
-
-    const resp = await fetch(url, { method: "GET", headers: { Accept: "application/json" } })
-
-    if (!resp.ok) {
-      const text = await resp.text().catch(() => "")
-      console.error("[MyStudentsSchedule] Events request failed", resp.status, text)
-      errorMessage.value = resp.status === 403 ? t("Not allowed") : t("Failed to load events")
-      successCallback([])
-      return
-    }
-
-    const data = await resp.json()
+    const data = await calendarService.getMyStudentsSchedule({ sid, start, end })
     successCallback(Array.isArray(data) ? data : [])
   } catch (e) {
-    console.error("[MyStudentsSchedule] Unexpected error", e)
-    errorMessage.value = t("Failed to load events")
-    failureCallback?.(e)
+    if (e?.response) {
+      console.error("[MyStudentsSchedule] Events request failed", e.response.status)
+      errorMessage.value = e.response.status === 403 ? t("Not allowed") : t("Failed to load events")
+      successCallback([])
+    } else {
+      console.error("[MyStudentsSchedule] Unexpected error", e)
+      errorMessage.value = t("Failed to load events")
+      failureCallback?.(e)
+    }
   }
 }
 

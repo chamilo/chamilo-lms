@@ -2,7 +2,7 @@
 import { ref, computed, onMounted } from "vue"
 import { useRoute } from "vue-router"
 import { useI18n } from "vue-i18n"
-import axios from "axios"
+import usergroupAdminService from "../../services/usergroupAdminService"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
@@ -25,7 +25,7 @@ async function loadData() {
   isLoading.value = true
   errorMessage.value = ""
   try {
-    const { data } = await axios.get(`/admin/usergroup-users-data/${groupId.value}`)
+    const data = await usergroupAdminService.listUsers(groupId.value)
     groupTitle.value = data.groupTitle
     users.value = data.users
     csrfToken.value = data.csrfToken
@@ -47,9 +47,7 @@ async function performRemove(user) {
   errorMessage.value = ""
   successMessage.value = ""
   try {
-    await axios.delete(`/admin/usergroup-users-data/${groupId.value}/user/${user.id}`, {
-      headers: { "X-CSRF-Token": csrfToken.value },
-    })
+    await usergroupAdminService.removeUser(groupId.value, user.id, csrfToken.value)
     successMessage.value = t("User removed")
     users.value = users.value.filter((u) => u.id !== user.id)
     setTimeout(() => {

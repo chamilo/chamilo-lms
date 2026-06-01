@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from "vue"
 import { useI18n } from "vue-i18n"
-import axios from "axios"
+import usergroupAdminService from "../../services/usergroupAdminService"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 
@@ -16,9 +16,7 @@ const importErrors = ref([])
 
 async function loadCsrf() {
   try {
-    const { data } = await axios.get("/admin/usergroups-data", {
-      params: { page: 1, limit: 1 },
-    })
+    const data = await usergroupAdminService.list({ page: 1, limit: 1 })
     csrfToken.value = data.importCsrfToken
   } catch {
     errorMessage.value = t("An error occurred. Please try again.")
@@ -42,7 +40,7 @@ async function handleSubmit() {
     formData.append("import_file", file)
     formData.append("_token", csrfToken.value)
 
-    const { data } = await axios.post("/admin/usergroup-import-data", formData)
+    const data = await usergroupAdminService.importClasses(formData)
     successMessage.value = t("{0} classes imported", [data.imported])
     if (fileInput.value) {
       fileInput.value.value = ""
@@ -146,9 +144,11 @@ onMounted(() => {
       <h3 class="text-sm font-semibold text-blue-800">
         {{ t("The CSV file must look like this") }}
       </h3>
-      <pre class="rounded bg-white border border-blue-100 px-4 py-3 text-xs text-gray-700 overflow-x-auto">title,description,users
+      <pre class="rounded bg-white border border-blue-100 px-4 py-3 text-xs text-gray-700 overflow-x-auto">
+title,description,users
 "My Class","Description here","user1,user2"
-"Another Class",,</pre>
+"Another Class",,</pre
+      >
       <p class="text-xs text-blue-700">
         <strong>{{ t("title") }}</strong>
         {{ t("is required.") }}

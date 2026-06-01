@@ -4,8 +4,10 @@
       <PlatformLogo />
     </div>
     <div class="app-topbar__items">
+      <FontResizeControls />
+      <ExtraMenuFromWebserviceMenu />
       <BaseAppLink
-        v-if="isTeacher && allowUsersToCreateCourses"
+        v-if="canCreateCourseFromTopbar"
         :title="t('Create course')"
         :to="{ name: 'CourseCreate' }"
         class="item-button group"
@@ -100,9 +102,11 @@
 <script setup>
 import Avatar from "primevue/avatar"
 import PlatformLogo from "./PlatformLogo.vue"
+import FontResizeControls from "./FontResizeControls.vue"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
 import BaseAppLink from "../basecomponents/BaseAppLink.vue"
 import BaseMenu from "../basecomponents/BaseMenu.vue"
+import ExtraMenuFromWebserviceMenu from "../plugin/ExtraMenuFromWebserviceMenu.vue"
 import { useTopbarLoggedIn } from "../../composables/useTopbarLoggedIn"
 import { useTopbarTour } from "../../composables/useTopbarTour"
 import { useI18n } from "vue-i18n"
@@ -119,8 +123,7 @@ const { t } = useI18n()
 const {
   loginUrl,
   elUserSubmenu,
-  isTeacher,
-  allowUsersToCreateCourses,
+  canCreateCourseFromTopbar,
   showTicketLink,
   isAnonymous,
   messagingEnabled,

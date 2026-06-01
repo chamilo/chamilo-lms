@@ -1,5 +1,5 @@
 import { defineStore } from "pinia"
-import axios from "axios"
+import courseService from "../services/courseService"
 import { ref } from "vue"
 
 export const useEnrolledStore = defineStore("enrolledStore", () => {
@@ -11,7 +11,7 @@ export const useEnrolledStore = defineStore("enrolledStore", () => {
   // Function to check enrollment status
   async function checkEnrollments() {
     try {
-      const { data } = await axios.get("/course/check-enrollments")
+      const data = await courseService.checkEnrollments()
       console.log("Check enrollments data:", data)
       isEnrolledInCourses.value = data.isEnrolledInCourses
       isEnrolledInSessions.value = data.isEnrolledInSessions

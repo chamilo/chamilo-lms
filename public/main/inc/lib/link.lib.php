@@ -1264,14 +1264,20 @@ Do you really want to delete this category and its links ?')."')) return false;\
         $categoryId = isset($linkInfo['category_id']) ? $linkInfo['category_id'] : '';
         $lpId = isset($_GET['lp_id']) ? Security::remove_XSS($_GET['lp_id']) : null;
 
-        $form = new FormValidator(
-            'link',
-            'post',
-            api_get_self().'?action='.$action.
+        $formAction = api_get_self().'?action='.$action.
             '&category_id='.$categoryId.
             '&'.api_get_cidreq().
             '&id='.$linkId.
-            '&sec_token='.$token
+            '&sec_token='.$token;
+
+        if (!empty($lpId)) {
+            $formAction .= '&lp_id='.(int) $lpId;
+        }
+
+        $form = new FormValidator(
+            'link',
+            'post',
+            $formAction
         );
 
         if ('addlink' === $action) {
@@ -1366,8 +1372,24 @@ Do you really want to delete this category and its links ?')."')) return false;\
                         $default_values = implode(', ', $arr_str_values);
                     }
                 }
-                $form->addText($specific_field['name'], $specific_field['code']);
-                $defaults[$specific_field['name']] = $default_values;
+                $specificFieldName = (string) ($specific_field['name'] ?? '');
+                if ('' === trim($specificFieldName)) {
+                    $specificFieldName = (string) ($specific_field['code'] ?? '');
+                }
+
+                if ('' === trim($specificFieldName)) {
+                    continue;
+                }
+
+                $specificFieldLabel = (string) (
+                    $specific_field['title'] ??
+                    $specific_field['name'] ??
+                    $specific_field['code'] ??
+                    $specificFieldName
+                );
+
+                $form->addText($specificFieldName, $specificFieldLabel);
+                $defaults[$specificFieldName] = $default_values;
             }
         }
 

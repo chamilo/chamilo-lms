@@ -2,7 +2,7 @@
 import { ref, computed, onMounted } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
-import axios from "axios"
+import usergroupAdminService from "../../services/usergroupAdminService"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 
@@ -36,12 +36,10 @@ async function loadData() {
   isLoading.value = true
   errorMessage.value = ""
   try {
-    const { data } = await axios.get(`/admin/usergroup-courses-data/${groupId.value}`)
+    const data = await usergroupAdminService.getCoursesData(groupId.value)
     groupTitle.value = data.groupTitle
     csrfToken.value = data.csrfToken
-    const merged = [...data.coursesInGroup, ...data.coursesNotInGroup].sort((a, b) =>
-      a.label.localeCompare(b.label),
-    )
+    const merged = [...data.coursesInGroup, ...data.coursesNotInGroup].sort((a, b) => a.label.localeCompare(b.label))
     allCourses.value = merged
     selectedIds.value = new Set(data.coursesInGroup.map((c) => c.id))
   } catch {
@@ -76,7 +74,7 @@ async function save() {
     const formData = new FormData()
     formData.append("_token", csrfToken.value)
     selectedIds.value.forEach((id) => formData.append("courseIds[]", String(id)))
-    await axios.post(`/admin/usergroup-courses-data/${groupId.value}`, formData)
+    await usergroupAdminService.saveCourses(groupId.value, formData)
     await router.push({ name: "AdminUsergroupList" })
   } catch {
     errorMessage.value = t("An error occurred. Please try again.")

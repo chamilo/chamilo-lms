@@ -1232,6 +1232,7 @@ class CourseController extends ToolBaseController
         return new JsonResponse($results);
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/create', name: 'chamilo_core_course_create')]
     public function createCourse(
         Request $request,
@@ -1439,6 +1440,7 @@ class CourseController extends ToolBaseController
         );
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/create-capability', name: 'chamilo_core_course_create_capability', methods: ['GET'])]
     public function createCourseCapability(
         TranslatorInterface $translator,
@@ -1505,6 +1507,10 @@ class CourseController extends ToolBaseController
                         $currentCount,
                         $effectiveLimit
                     );
+                } elseif ('role' === $limitSource) {
+                    $message = $translator->trans('Only trainers and administrators can create courses.');
+                } elseif ('setting' === $limitSource) {
+                    $message = $translator->trans('Course creation by trainers is disabled on this platform.');
                 } else {
                     $message = \sprintf(
                         $translator->trans(

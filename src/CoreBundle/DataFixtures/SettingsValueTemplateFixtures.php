@@ -289,6 +289,23 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                                 'url' => 'https://api.openai.com/v1/files',
                             ],
                         ],
+                        'claude' => [
+                            'api_key' => 'ANTHROPIC_KEY',
+                            'anthropic_version' => '2023-06-01',
+                            'monthly_token_limit' => 5000,
+                            'text' => [
+                                'url' => 'https://api.anthropic.com/v1/messages',
+                                'model' => 'claude-sonnet-4-6',
+                                'temperature' => 0.7,
+                                'max_tokens' => 1000,
+                            ],
+                            'document' => [
+                                'url' => 'https://api.anthropic.com/v1/messages',
+                                'model' => 'claude-sonnet-4-6',
+                                'temperature' => 0.7,
+                                'max_tokens' => 1200,
+                            ],
+                        ],
                         'deepseek' => [
                             'api_key' => 'DEEPSEEK_KEY',
                             'monthly_token_limit' => 5000,

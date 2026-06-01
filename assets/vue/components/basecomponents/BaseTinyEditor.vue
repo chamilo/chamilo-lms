@@ -484,6 +484,29 @@ function resolvePickedUrl(url) {
   return pickedUrl
 }
 
+function removeToolbarItems(toolbar, removedItems) {
+  const blocked = new Set(removedItems.map((item) => String(item || "").trim().toLowerCase()).filter(Boolean))
+
+  const cleanupToolbar = (toolbarValue) =>
+    String(toolbarValue || "")
+      .split("|")
+      .map((group) =>
+        group
+          .split(/\s+/)
+          .map((item) => item.trim())
+          .filter((item) => item && !blocked.has(item.toLowerCase()))
+          .join(" "),
+      )
+      .filter(Boolean)
+      .join(" | ")
+
+  if (Array.isArray(toolbar)) {
+    return toolbar.map((toolbarValue) => cleanupToolbar(toolbarValue)).filter(Boolean)
+  }
+
+  return cleanupToolbar(toolbar)
+}
+
 const editorConfig = computed(() => {
   const builder = typeof window !== "undefined" ? window.buildTinyMceConfig : null
 
@@ -494,10 +517,14 @@ const editorConfig = computed(() => {
 
   const callerSetup = typeof callerConfig.setup === "function" ? callerConfig.setup : null
   const appendToolbar = String(callerConfig.appendToolbar || "").trim()
+  const removeToolbarButtons = String(callerConfig.removeToolbarButtons || "")
+    .split(/\s+/)
+    .filter(Boolean)
 
   const safeCallerConfig = { ...callerConfig }
   delete safeCallerConfig.setup
   delete safeCallerConfig.appendToolbar
+  delete safeCallerConfig.removeToolbarButtons
 
   const local = {
     ...defaultEditorConfig,
@@ -521,6 +548,10 @@ const editorConfig = computed(() => {
   }
 
   const built = builder ? builder(local) : local
+
+  if (removeToolbarButtons.length > 0) {
+    built.toolbar = removeToolbarItems(built.toolbar, removeToolbarButtons)
+  }
 
   if (appendToolbar) {
     const currentToolbar = String(built.toolbar || "").trim()

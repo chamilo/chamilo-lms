@@ -5,11 +5,13 @@ export default {
   /**
    * @param {string} iri
    * @param {Object} [params]
+   * @param {Object} [config] Extra axios config (e.g. { skipCourseContext: true }, signal, headers).
    * @returns {Promise<any>}
    */
-  async get(iri, params = {}) {
+  async get(iri, params = {}, config = {}) {
     const { data } = await api.get(iri, {
       params,
+      ...config,
     })
 
     return data
@@ -18,11 +20,13 @@ export default {
   /**
    * @param {string} endpoint
    * @param {Object} searchParams
+   * @param {Object} [config] Extra axios config (e.g. { skipCourseContext: true }, signal, headers).
    * @returns {Promise<{totalItems: number, items: Object[], nextPageParams: {page: number, itemsPerPage: number}|null}>}
    */
-  async getCollection(endpoint, searchParams = {}) {
+  async getCollection(endpoint, searchParams = {}, config = {}) {
     const { data } = await api.get(endpoint, {
       params: searchParams,
+      ...config,
     })
 
     let nextPageParams = null
@@ -41,22 +45,18 @@ export default {
   },
 
   /**
+   * Axios sets the Content-Type automatically from the payload type
+   * (application/json for plain objects, multipart for FormData,
+   * application/x-www-form-urlencoded for URLSearchParams), so it is not set here.
    * @param {string} endpoint
    * @param {Object} [params={}]
-   * @param {boolean} [addContentType=false]
    * @param {Object} [additionalHeaders={}]
    * @param {Object} [options={}]
    * @returns {Promise<Object>}
    */
-  async post(endpoint, params = {}, addContentType = false, additionalHeaders = {}, options = {}) {
-    const headers = {}
-
-    if (addContentType) {
-      headers["Content-Type"] = "application/json"
-    }
-
+  async post(endpoint, params = {}, additionalHeaders = {}, options = {}) {
     const { data } = await api.post(endpoint, params, {
-      headers: { ...headers, ...additionalHeaders },
+      headers: additionalHeaders,
       ...options,
     })
 
@@ -66,10 +66,29 @@ export default {
   /**
    * @param {string} iri
    * @param {Object} params
+   * @param {Object} [options={}]
    * @returns {Promise<Object>}
    */
-  async put(iri, params) {
-    const { data } = await api.put(iri, params)
+  async put(iri, params, options = {}) {
+    const { data } = await api.put(iri, params, options)
+
+    return data
+  },
+
+  /**
+   * Sends a PATCH request using the JSON merge-patch content type expected by API Platform.
+   * @param {string} iri
+   * @param {Object} params
+   * @param {Object} [options={}]
+   * @returns {Promise<Object>}
+   */
+  async patch(iri, params, options = {}) {
+    const { headers = {}, ...rest } = options
+
+    const { data } = await api.patch(iri, params, {
+      ...rest,
+      headers: { "Content-Type": "application/merge-patch+json", ...headers },
+    })
 
     return data
   },
@@ -87,9 +106,35 @@ export default {
 
   /**
    * @param {string} iri
-   * @returns {Promise<void>}
+   * @param {Object} [options={}]
+   * @returns {Promise<any>}
    */
-  async delete(iri) {
-    await api.delete(iri)
+  async delete(iri, options = {}) {
+    const { data } = await api.delete(iri, options)
+
+    return data
+  },
+
+  /**
+   * Sends a GET request and returns the full response (data, headers, status).
+   * Use for binary downloads or when response headers are needed.
+   * @param {string} iri
+   * @param {Object} [options={}]
+   * @returns {Promise<import("axios").AxiosResponse>}
+   */
+  async getRaw(iri, options = {}) {
+    return await api.get(iri, options)
+  },
+
+  /**
+   * Sends a POST request and returns the full response (data, headers, status).
+   * Use for binary downloads or when response headers are needed.
+   * @param {string} endpoint
+   * @param {Object} [params={}]
+   * @param {Object} [options={}]
+   * @returns {Promise<import("axios").AxiosResponse>}
+   */
+  async postRaw(endpoint, params = {}, options = {}) {
+    return await api.post(endpoint, params, options)
   },
 }

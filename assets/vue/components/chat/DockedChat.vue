@@ -247,8 +247,9 @@
 import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import DOMPurify from "dompurify"
+import baseService from "../../services/baseService"
 
 const { t } = useI18n({ useScope: "global" })
 const route = useRoute()
@@ -303,12 +304,12 @@ function readCidReqFromRouteAndLocation() {
 }
 
 /**
- * Keep compatibility: if useCidReq() works, bind to it.
+ * Keep compatibility: if getCourseContext() works, bind to it.
  * If it doesn't provide cid for path-based routes, route watcher will override via readCidReqFromRouteAndLocation().
  */
 function safeBindCidReq() {
   try {
-    const r = useCidReq()
+    const r = getCourseContext()
     if (r?.cid && typeof r.cid === "object" && "value" in r.cid) cid.value = toInt(r.cid.value) || 0
     if (r?.sid && typeof r.sid === "object" && "value" in r.sid) sid.value = toInt(r.sid.value) || 0
     if (r?.gid && typeof r.gid === "object" && "value" in r.gid) gid.value = toInt(r.gid.value) || 0
@@ -652,21 +653,21 @@ function ackTitle(msg) {
 
 async function getJSON(url, params) {
   const full = params ? `${url}?${qs(withCidReq(params))}` : addCidReqToUrl(url)
-  const r = await fetch(full, { credentials: "same-origin" })
-  if (!r.ok) throw new Error("Network error")
-  return r.json()
+  return baseService.get(full)
 }
 
 async function post(url, params, expectJson = true) {
   const fullUrl = addCidReqToUrl(url)
-  const r = await fetch(fullUrl, {
-    method: "POST",
-    credentials: "same-origin",
-    headers: { "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8" },
-    body: new URLSearchParams(withCidReq(params || {})),
-  })
-  if (!r.ok) throw new Error("Network error")
-  return expectJson ? r.json() : r.text()
+  // URLSearchParams body makes axios send application/x-www-form-urlencoded.
+  const body = new URLSearchParams(withCidReq(params || {}))
+
+  if (expectJson) {
+    return baseService.post(fullUrl, body)
+  }
+
+  const r = await baseService.postRaw(fullUrl, body, { responseType: "text" })
+
+  return r.data
 }
 
 function byChronoId(a, b) {

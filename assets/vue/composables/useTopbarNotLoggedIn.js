@@ -1,7 +1,7 @@
 import { computed, onMounted, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
-import axios from "axios"
+import pageService from "../services/pageService"
 import { useLocale } from "./locale"
 import { usePlatformConfig } from "../store/platformConfig"
 
@@ -93,12 +93,7 @@ export function useTopbarNotLoggedIn() {
       return
     }
 
-    const { data } = await axios.get("/pages/_topbar-visibility", {
-      params: { locale: currentLocale.value },
-      headers: { "Cache-Control": "no-cache" },
-    })
-
-    flags.value = data
+    flags.value = await pageService.getTopbarVisibility(currentLocale.value)
   }
 
   onMounted(resolveVisibility)

@@ -362,3 +362,63 @@ This applies to all legacy PHP scripts and any Symfony controller that accesses 
 ### Migrating a legacy PHP page to Vue
 
 See `.claude/commands/legacy-to-vue.md` for the step-by-step checklist, invokable as `/legacy-to-vue` in Claude Code.
+
+### Contextual roles in `#[ApiResource]` security expressions
+
+Course/session/group membership is exposed to API Platform `security:` expressions as six contextual roles, all defined in `ResourceNodeVoter`:
+
+| Role                                  | Granted when the user is…                                              |
+|---------------------------------------|------------------------------------------------------------------------|
+| `ROLE_CURRENT_COURSE_STUDENT`         | subscribed to the current course (`course_rel_user`)                   |
+| `ROLE_CURRENT_COURSE_TEACHER`         | a teacher of the current course                                        |
+| `ROLE_CURRENT_COURSE_SESSION_STUDENT` | a student of the current course inside the current session             |
+| `ROLE_CURRENT_COURSE_SESSION_TEACHER` | a general coach of the session or a course coach in the current course |
+| `ROLE_CURRENT_COURSE_GROUP_STUDENT`   | a member of the current group                                          |
+| `ROLE_CURRENT_COURSE_GROUP_TEACHER`   | a tutor of the current group, or the teacher of its parent course      |
+
+These roles **only exist for the current request**. They are computed and published in two places by `CourseContextRoleListener` (`src/CoreBundle/EventListener/CourseContextRoleListener.php`, priority 5) **after** `CidReqListener` (priority 6) resolves `cid`/`sid`/`gid`:
+
+1. `User::$temporaryRoles` — visible to `Security::getUser()->getRoles()` and `ResourceNodeVoter::hasContextRole()`.
+2. The security token's `getRoleNames()` — visible to `is_granted()` and the `RoleHierarchyVoter`.
+
+The relationship logic lives in `CourseAccessResolver` (`src/CoreBundle/Security/CourseAccessResolver.php`), a pure service consumed by the listener. **Voters must never call `$user->addRole(ROLE_CURRENT_COURSE_*)`** — that pattern was removed in #8486 because Voter side-effects break Symfony's contract (non-deterministic order, short-circuit evaluation, etc.).
+
+#### Role hierarchy
+
+`config/packages/security.yaml` declares one-way implications **within each axis**:
+
+```
+COURSE_TEACHER ─implies─> COURSE_STUDENT
+SESSION_TEACHER ─implies─> SESSION_STUDENT
+GROUP_TEACHER ─implies─> GROUP_STUDENT
+```
+
+There is **no implication between axes**. A base-course teacher does NOT automatically get `SESSION_STUDENT`. Admins get all three `_TEACHER` variants via `ROLE_ADMIN`, which transitively grants all six.
+
+#### Canonical `security:` patterns
+
+Use the matrix below when writing or migrating an `#[ApiResource]` operation that receives `cid` (and optionally `sid`/`gid`) as **query parameters** (not body — `CidReqListener` does not parse bodies):
+
+```php
+// Get / Put / Patch / Delete on a single resource that extends AbstractResource:
+// prefer object-level checks — they are more granular than role-level.
+new Get(security: "is_granted('VIEW', object.resourceNode)"),
+new Put(security: "is_granted('EDIT', object.resourceNode)"),
+new Delete(security: "is_granted('DELETE', object.resourceNode)"),
+
+// GetCollection / download / search — any member of the course or session:
+security: "is_granted('ROLE_CURRENT_COURSE_STUDENT')
+       or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')"
+
+// Post / batch write — only teachers of the current course or session:
+security: "is_granted('ROLE_CURRENT_COURSE_TEACHER')
+       or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')"
+```
+
+`CDocument` (`src/CourseBundle/Entity/CDocument.php`) is the canonical reference — see lines 50-300 for examples of every pattern above.
+
+#### Caveats
+
+- **Body-only `cid` doesn't work.** `CidReqListener` reads `Request::get('cid')`, which sees query params and route attributes but not request bodies. Endpoints that pass `cid` only inside the JSON body need either an extra `cid` query param (preferred) or post-security validation in a `StateProcessor`.
+- **Output format negotiation runs before security.** Endpoints with binary `outputFormats` (`zip`, `bin`) reject the request with 406 if the `Accept` header is `application/ld+json`. Regression tests must send `Accept: application/zip` (or the matching MIME type) to reach the security gate.
+- **The skill `/migrate-contextual-roles <Entity>`** automates this migration for a single entity, including Vue-caller compatibility checks and lint/test runs.

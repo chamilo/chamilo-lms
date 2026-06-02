@@ -16,7 +16,7 @@
       <q-item-label lines="1">
         <p class="text-weight-medium">{{ comment.sender.fullName }}</p>
       </q-item-label>
-      <q-item-label v-html="comment.content" />
+      <q-item-label v-html="sanitizeHtml(comment.content)" />
       <q-item-label
         :title="abbreviatedDatetime(comment.sendDate)"
         caption
@@ -43,6 +43,7 @@ import { computed } from "vue"
 import WallActions from "./Actions"
 import { useFormatDate } from "../../composables/formatDate"
 import { useSecurityStore } from "../../store/securityStore"
+import { sanitizeHtml } from "../../utils/sanitizeHtml"
 
 const { abbreviatedDatetime, relativeDatetime } = useFormatDate()
 

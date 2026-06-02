@@ -475,6 +475,10 @@ class StudentPublicationController extends AbstractController
             throw $this->createNotFoundException('Assignment not found.');
         }
 
+        // Teacher-only: downloading every student's submission requires edit rights on
+        // the assignment's course resource.
+        $this->denyAccessUnlessGranted('EDIT', $assignment->getResourceNode());
+
         [$submissions] = $repo->findAllSubmissionsByAssignment($assignmentId, 1, 10000);
         $zipPath = api_get_path(SYS_ARCHIVE_PATH).uniqid('assignment_', true).'.zip';
         $zip = new ZipArchive();
@@ -516,6 +520,14 @@ class StudentPublicationController extends AbstractController
         EntityManagerInterface $em,
         TranslatorInterface $translator
     ): JsonResponse {
+        $assignment = $repo->find($assignmentId);
+        if (!$assignment) {
+            return new JsonResponse(['error' => 'Assignment not found.'], 404);
+        }
+        // Teacher-only: uploading corrections mutates grading state (qualification,
+        // accepted, dateOfQualification) for the whole class. Authorize before any work.
+        $this->denyAccessUnlessGranted('EDIT', $assignment->getResourceNode());
+
         $file = $request->files->get('file');
         if (!$file || 'zip' !== $file->getClientOriginalExtension()) {
             return new JsonResponse(['error' => 'Invalid file'], 400);

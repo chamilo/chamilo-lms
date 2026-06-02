@@ -1310,7 +1310,8 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
                 if (class_exists(UnserializeApi::class)) {
                     $c = UnserializeApi::unserialize('course', $payload);
                 } else {
-                    $c = @unserialize($payload, ['allowed_classes' => true]);
+                    // Defense-in-depth: never instantiate arbitrary classes from a backup.
+                    $c = @unserialize($payload, ['allowed_classes' => false]);
                 }
             } finally {
                 restore_error_handler();

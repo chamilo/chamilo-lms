@@ -259,17 +259,19 @@ When replacing a legacy PHP page, search these locations for old links:
 - `assets/vue/components/` — Vue components linking to legacy pages (e.g., `social/MySkillsCard.vue`)
 - `public/main/inc/ajax/model.ajax.php` — jqGrid AJAX allowlists; remove the action from both the allowlist arrays and the `case` blocks
 
-### Tables in Vue pages
+### Base components (forms, tables, buttons, dialogs)
 
-Use `BaseTable` (`assets/vue/components/basecomponents/BaseTable.vue`) which wraps PrimeVue `DataTable`. `Column` is globally registered in `main.js` — no import needed. Example:
-```vue
-<BaseTable :values="rows" :is-loading="isLoading">
-  <Column field="firstname" :header="t('First name')" sortable />
-</BaseTable>
-```
-### Buttons in Vue pages
+**Authoritative reference: the `use-base-components` skill** (`.claude/skills/use-base-components/SKILL.md`).
+It auto-invokes whenever you create or edit a Vue interface and documents every `Base*`
+component's API, the native-element → `Base*` mapping, the label-translation rule, and which
+components are globally registered (so you don't import them). When building UI, follow it.
 
-Always use `<BaseButton>` instead of a plain `<button>` element unless there is a clear reason to use a native button (e.g. inside a third-party component that requires one). Import it from `../../components/basecomponents/BaseButton.vue`. Key props: `type` (success / primary / secondary / danger / plain), `icon` (MDI icon name without `mdi-` prefix), `only-icon` + `size="small"` for icon-only table row actions.
+Quick essentials that apply everywhere:
+- Tables → `BaseTable` (wraps PrimeVue `DataTable`; `Column` is global, no import needed).
+- Buttons → `<BaseButton>` instead of plain `<button>`. Props: `type`, `icon` (MDI name without
+  `mdi-`), `only-icon` + `size="small"` for icon-only row actions.
+- Every non-global component used in the template **must** be imported in `<script setup>` —
+  a missing import does NOT fail the build, only warns at runtime.
 
 CRUD color convention (`type` prop):
 - Create/add/save/import → green → `type="success"`
@@ -336,7 +338,10 @@ Admin pages should always show: **Administration** (linked) / **Page title** (pl
 
 ### Forms
 
-Standard HTML `<input>`, `<select>` with Tailwind: `border border-gray-300 rounded px-3 py-1.5 text-sm`. Group elements with `flex gap-4 items-end`.
+Use `Base*` form components, not native `<input>`/`<select>`/`<textarea>` — see the
+`use-base-components` skill for the mapping and each component's API. Group fields with
+`flex gap-4 items-end`. Only fall back to a native element when a third-party slot requires one
+(e.g. multi-value checkbox arrays bound to a `v-model` array).
 
 ### SPA navigation — prefer router-links over plain links
 

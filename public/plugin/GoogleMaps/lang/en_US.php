@@ -23,3 +23,17 @@ $strings['ExtraFieldNameMissingWarning'] = 'No user extra field has been configu
 $strings['ExtraFieldsNotFoundWarning'] = 'The following user extra fields were not found: %s.';
 $strings['NoUserCoordinatesFound'] = 'No user locations were found for the configured extra fields.';
 $strings['ConfigureGoogleMapsFirst'] = 'Configure and enable the Google Maps API before opening the map.';
+
+$strings['map_provider'] = 'Map provider';
+$strings['map_provider_help'] = 'Select the map provider used by the plugin and by the Social map.';
+$strings['GoogleMapsProvider'] = 'Google Maps';
+$strings['OpenStreetMapProvider'] = 'OpenStreetMap';
+$strings['MapProvider'] = 'Map provider';
+$strings['MapProviderConfiguration'] = 'Provider configuration';
+$strings['default_latitude'] = 'Default latitude';
+$strings['default_latitude_help'] = 'Default map center latitude. Used when no marker is available.';
+$strings['default_longitude'] = 'Default longitude';
+$strings['default_longitude_help'] = 'Default map center longitude. Used when no marker is available.';
+$strings['default_zoom'] = 'Default zoom';
+$strings['default_zoom_help'] = 'Default map zoom between 1 and 20.';
+$strings['OpenStreetMapInfo'] = 'OpenStreetMap does not require an API key. Address-only markers are displayed as search links unless coordinates are available.';

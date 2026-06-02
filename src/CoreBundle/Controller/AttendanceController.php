@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CAttendance;
 use Chamilo\CourseBundle\Entity\CAttendanceCalendar;
@@ -59,6 +60,13 @@ class AttendanceController extends AbstractController
             return $this->json(['error' => 'Attendance ID is required'], 400);
         }
 
+        $attendance = $this->em->getRepository(CAttendance::class)->find($attendanceId);
+        if (!$attendance) {
+            return $this->json(['error' => 'Attendance not found'], 404);
+        }
+        // Only members of the attendance's course may read it.
+        $this->denyAccessUnlessGranted('VIEW', $attendance->getResourceNode());
+
         $data = $this->attendanceCalendarRepository->findAttendanceWithData($attendanceId);
 
         if (isset($data['attendanceDates']) && \is_array($data['attendanceDates'])) {
@@ -99,6 +107,8 @@ class AttendanceController extends AbstractController
         if (!$attendance) {
             return $this->json(['error' => 'Attendance not found'], 404);
         }
+        // Roster + PII: teacher of the attendance's course only.
+        $this->denyAccessUnlessGranted('EDIT', $attendance->getResourceNode());
 
         $calendars = $attendance->getCalendars();
         $totalCalendars = \count($calendars);
@@ -189,6 +199,8 @@ class AttendanceController extends AbstractController
         if (!$attendance) {
             throw $this->createNotFoundException('Attendance not found');
         }
+        // Teacher of the attendance's course only.
+        $this->denyAccessUnlessGranted('EDIT', $attendance->getResourceNode());
 
         $calendars = $attendance->getCalendars();
         $totalCalendars = \count($calendars);
@@ -344,6 +356,8 @@ class AttendanceController extends AbstractController
         if (!$attendance) {
             throw $this->createNotFoundException('Attendance not found');
         }
+        // Teacher of the attendance's course only.
+        $this->denyAccessUnlessGranted('EDIT', $attendance->getResourceNode());
 
         $calendars = $attendance->getCalendars();
         $totalCalendars = \count($calendars);
@@ -427,6 +441,8 @@ class AttendanceController extends AbstractController
         if (!$attendance) {
             throw $this->createNotFoundException('Attendance not found');
         }
+        // Teacher of the attendance's course only.
+        $this->denyAccessUnlessGranted('EDIT', $attendance->getResourceNode());
 
         $resourceNodeId = $attendance->getResourceNode()?->getParent()?->getId();
         if (!$resourceNodeId) {
@@ -477,12 +493,24 @@ class AttendanceController extends AbstractController
         $usersInCourse = $userRepository->findUsersByContext($courseId, $sessionId, $groupId);
         $userIdsInCourse = array_map(fn (User $user) => $user->getId(), $usersInCourse);
 
+        // Only a teacher of the target course/session may write attendance.
+        $course = $this->em->getRepository(Course::class)->find($courseId);
+        if (!$course instanceof Course) {
+            return $this->json(['error' => 'Course not found'], 404);
+        }
+        $this->denyAccessUnlessGranted(CourseVoter::EDIT, $course);
+
         $affectedRows = 0;
 
         try {
             foreach ($attendanceData as $entry) {
                 $userId = (int) $entry['userId'];
                 $calendarId = (int) $entry['calendarId'];
+
+                // Never write attendance for a user who is not in the target course.
+                if (!\in_array($userId, $userIdsInCourse, true)) {
+                    continue;
+                }
                 $presence = \array_key_exists('presence', $entry) ? $entry['presence'] : null;
                 $signature = $entry['signature'] ?? null;
                 $comment = $entry['comment'] ?? null;
@@ -688,6 +716,8 @@ class AttendanceController extends AbstractController
         if (!$attendance) {
             return $this->json(['error' => 'Attendance not found'], 404);
         }
+        // Self-view of the caller's own attendance; require course membership.
+        $this->denyAccessUnlessGranted('VIEW', $attendance->getResourceNode());
 
         $dates = $attendance->getCalendars()->map(function (CAttendanceCalendar $calendar) use ($user) {
             $sheet = $calendar->getSheets()->filter(
@@ -756,6 +786,8 @@ class AttendanceController extends AbstractController
         if (!$calendar || $calendar->getAttendance()?->getIid() !== $attendanceId) {
             return $this->json(['error' => 'Calendar not found'], 404);
         }
+        // Teacher-only: exposes every student's presence + signature for the date.
+        $this->denyAccessUnlessGranted('EDIT', $calendar->getAttendance()->getResourceNode());
 
         $users = $userRepository->findUsersByContext($cid, $sid, $gid);
         $presence = [];

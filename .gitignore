@@ -93,3 +93,6 @@ yarn-error.log
 /phpunit.xml
 .phpunit.result.cache
 ###< phpunit/phpunit ###
+
+### Ignore local Claude settings
+.claude/settings.local.json

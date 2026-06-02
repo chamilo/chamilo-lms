@@ -168,6 +168,23 @@ async function getGroupDiscussionMessages(groupId, discussionId) {
   return baseService.get(`${API_URL}/group/${groupId}/discussion/${discussionId}/messages`)
 }
 
+
+/**
+ * Fetches the Social map configuration exposed by the map plugin.
+ * @returns {Promise<Object>}
+ */
+async function getMapConfig() {
+  return baseService.get(`${API_URL}/map/config`)
+}
+
+/**
+ * Fetches Social map markers using the configured user extra fields.
+ * @returns {Promise<Object>}
+ */
+async function getMapMarkers() {
+  return baseService.get(`${API_URL}/map/markers`)
+}
+
 export default {
   async fetchPersonalData(userId) {
     try {
@@ -353,6 +370,8 @@ export default {
   addUsersToGroup,
   getInvitedUsers,
   getGroupDiscussionMessages,
+  getMapConfig,
+  getMapMarkers,
 
   delete: baseService.delete,
 }

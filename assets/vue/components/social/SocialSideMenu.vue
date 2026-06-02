@@ -92,6 +92,18 @@
         </BaseAppLink>
       </li>
       <li
+        v-if="socialMapEnabled"
+        :class="['menu-item', { active: isActive('/social/map') }]"
+      >
+        <BaseAppLink to="/social/map">
+          <i
+            aria-hidden="true"
+            class="mdi mdi-map-marker"
+          ></i>
+          {{ t("Map") }}
+        </BaseAppLink>
+      </li>
+      <li
         v-if="allowMyFiles"
         :class="['menu-item', { active: isActive('/resources/personal_files') }]"
       >
@@ -169,6 +181,7 @@ const currentNodeId = ref(0)
 const messageRelUserStore = useMessageRelUserStore()
 const unreadMessagesCount = computed(() => messageRelUserStore.countUnread)
 const invitationsCount = ref(0)
+const socialMapEnabled = ref(false)
 
 const user = inject("social-user")
 const isCurrentUser = inject("is-current-user")
@@ -204,6 +217,16 @@ const fetchInvitationsCount = async (userId) => {
     console.error("Error fetching invitations count:", error)
   }
 }
+
+const fetchSocialMapConfig = async () => {
+  try {
+    const data = await socialService.getMapConfig()
+    socialMapEnabled.value = Boolean(data?.enabled)
+  } catch (error) {
+    socialMapEnabled.value = false
+    console.error("Error fetching social map configuration:", error)
+  }
+}
 watchEffect(() => {
   try {
     if (user.value && user.value.resourceNode) {
@@ -226,23 +249,26 @@ watchEffect(() => {
 })
 
 const isActive = (path, filterType = null) => {
-  if (path === "/resources/friends/invitations" || path === "/social/search") {
+  if (path === "/resources/friends/invitations" || path === "/social/search" || path === "/social/map") {
     return route.path === path
+  }
+
+  if (path === "/social") {
+    const hasQueryParams = Object.keys(route.query).length > 0
+    const filterMatch = filterType ? route.query.filterType === filterType && hasQueryParams : !hasQueryParams
+
+    return route.path === "/social" && filterMatch
   }
 
   const pathMatch = route.path.startsWith(path)
   const hasQueryParams = Object.keys(route.query).length > 0
   const filterMatch = filterType ? route.query.filterType === filterType && hasQueryParams : !hasQueryParams
-  return (
-    pathMatch &&
-    filterMatch &&
-    !route.path.startsWith("/resources/friends/invitations") &&
-    !route.path.startsWith("/social/search")
-  )
+  return pathMatch && filterMatch
 }
 
 onMounted(async () => {
   await getGroupLink()
+  await fetchSocialMapConfig()
   if (user.value && user.value.id) {
     await fetchInvitationsCount(user.value.id)
   }

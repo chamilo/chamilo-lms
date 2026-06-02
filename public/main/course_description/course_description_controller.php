@@ -141,7 +141,7 @@ class CourseDescriptionController
         if ('POST' === strtoupper($_SERVER['REQUEST_METHOD'])) {
             if (!empty($_POST['title']) && !empty($_POST['contentDescription'])) {
                 $title            = $_POST['title'];
-                $content          = $_POST['contentDescription'];
+                $content          = Security::remove_XSS($_POST['contentDescription'], COURSEMANAGERLOWSECURITY);
                 $description_type = $_POST['description_type'];
                 $id               = $_POST['id'];
 
@@ -345,7 +345,7 @@ class CourseDescriptionController
         if ('POST' === strtoupper($_SERVER['REQUEST_METHOD'])) {
             if (!empty($_POST['title']) && !empty($_POST['contentDescription'])) {
                 $title            = $_POST['title'];
-                $content          = $_POST['contentDescription'];
+                $content          = Security::remove_XSS($_POST['contentDescription'], COURSEMANAGERLOWSECURITY);
                 $description_type = $_POST['description_type'];
 
                 $searchEnabled = api_get_setting('search.search_enabled');

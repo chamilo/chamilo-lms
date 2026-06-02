@@ -12,11 +12,11 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-use const PHP_INT_MAX;
-
 #[AsController]
 final class DocumentUsageAction extends AbstractController
 {
+    private const BYTES_PER_MB = 1048576;
+
     public function __construct(
         private readonly CourseRepository $courseRepository,
         private readonly CDocumentRepository $documentRepository,
@@ -33,71 +33,45 @@ final class DocumentUsageAction extends AbstractController
             return new JsonResponse(['error' => 'Course not found'], 404);
         }
 
-        $courseQuotaMb = (int) $this->courseHelper->resolveCourseStorageQuotaMbForCourse($course);
-        $docsQuotaMb = (int) $this->courseHelper->resolveDocumentsToolQuotaMbForCourse($course);
-
-        $courseQuotaBytes = $courseQuotaMb > 0 ? $courseQuotaMb * 1024 * 1024 : 0;
-        $docsQuotaBytes = $docsQuotaMb > 0 ? $docsQuotaMb * 1024 * 1024 : 0;
-
-        $courseStorageUsedBytes = (int) $this->documentRepository->getCourseStorageUsedBytes($course);
+        /*
+         * The course document quota is stored in course.disk_quota, in MB.
+         * document.default_document_quotum is only used as the initial value when a course is created.
+         */
+        $quotaMb = (int) $this->courseHelper->resolveCourseStorageQuotaMbForCourse($course);
+        $quotaBytes = $quotaMb > 0 ? $quotaMb * self::BYTES_PER_MB : 0;
 
         $usage = $this->documentRepository->getDocumentUsageBreakdownByCourse($course);
-        $bytesCourse = (int) ($usage['course'] ?? 0);
-        $bytesSessions = (int) ($usage['sessions'] ?? 0);
-        $bytesGroups = (int) ($usage['groups'] ?? 0);
+        $usedBytes = (int) ($usage['course'] ?? 0) + (int) ($usage['sessions'] ?? 0);
 
-        $docsUsedBytes = $bytesCourse + $bytesSessions;
-        $availableCourseBytes = $courseQuotaBytes > 0 ? max($courseQuotaBytes - $courseStorageUsedBytes, 0) : PHP_INT_MAX;
-        $availableDocsBytes = $docsQuotaBytes > 0 ? max($docsQuotaBytes - $docsUsedBytes, 0) : PHP_INT_MAX;
-        $availableBytes = min($availableCourseBytes, $availableDocsBytes);
-
-        $limiterQuotaBytes = 0;
-        $limiter = 'unlimited';
-
-        if (PHP_INT_MAX !== $availableBytes) {
-            if ($availableCourseBytes <= $availableDocsBytes) {
-                $limiter = 'course';
-                $limiterQuotaBytes = $courseQuotaBytes;
-            } else {
-                $limiter = 'documents';
-                $limiterQuotaBytes = $docsQuotaBytes;
-            }
-        }
-
+        $availableBytes = null;
         $availablePercent = 100.0;
-        if ($limiterQuotaBytes > 0) {
-            $availablePercent = round(($availableBytes / $limiterQuotaBytes) * 100, 4);
+
+        if ($quotaBytes > 0) {
+            $availableBytes = max($quotaBytes - $usedBytes, 0);
+            $availablePercent = round(($availableBytes / $quotaBytes) * 100, 4);
         }
-
-        $totalForChart = $limiterQuotaBytes > 0
-            ? $limiterQuotaBytes
-            : max($docsUsedBytes + max((int) $availableBytes, 0), 1);
-
-        $availableBytesForChart = PHP_INT_MAX === $availableBytes ? 0 : (int) $availableBytes;
 
         $labels = [];
         $data = [];
 
-        if ($bytesCourse > 0) {
-            $labels[] = $this->translator->trans('Course').' ('.$this->formatBytes($bytesCourse).')';
-            $data[] = $this->pct($bytesCourse, $totalForChart);
-        }
+        if ($quotaBytes > 0) {
+            $usedForChart = min($usedBytes, $quotaBytes);
+            $availableForChart = max($quotaBytes - $usedForChart, 0);
 
-        if ($bytesSessions > 0) {
-            $labels[] = $this->translator->trans('Session').' ('.$this->formatBytes($bytesSessions).')';
-            $data[] = $this->pct($bytesSessions, $totalForChart);
-        }
+            if ($usedForChart > 0) {
+                $labels[] = (string) $this->translator->trans('Documents used');
+                $data[] = $this->pct($usedForChart, $quotaBytes);
+            }
 
-        if ($bytesGroups > 0) {
-            $labels[] = $this->translator->trans('Group').' ('.$this->formatBytes($bytesGroups).')';
-            $data[] = $this->pct($bytesGroups, $totalForChart);
+            $labels[] = (string) $this->translator->trans('Available space');
+            $data[] = $this->pct($availableForChart, $quotaBytes);
+        } elseif ($usedBytes > 0) {
+            $labels[] = (string) $this->translator->trans('Documents used');
+            $data[] = 100.0;
+        } else {
+            $labels[] = (string) $this->translator->trans('No document usage');
+            $data[] = 100.0;
         }
-
-        $labels[] = \sprintf(
-            (string) $this->translator->trans('Available space (%s)'),
-            $this->formatBytes($availableBytesForChart)
-        );
-        $data[] = $this->pct($availableBytesForChart, $totalForChart);
 
         return new JsonResponse([
             'datasets' => [
@@ -105,14 +79,13 @@ final class DocumentUsageAction extends AbstractController
             ],
             'labels' => $labels,
             'quota' => [
-                'limiter' => $limiter,
-                'courseQuotaBytes' => $courseQuotaBytes > 0 ? $courseQuotaBytes : null,
-                'documentsQuotaBytes' => $docsQuotaBytes > 0 ? $docsQuotaBytes : null,
-                'courseStorageUsedBytes' => $courseStorageUsedBytes,
-                'documentsUsedBytes' => $docsUsedBytes,
-                'availableCourseBytes' => PHP_INT_MAX === $availableCourseBytes ? null : (int) $availableCourseBytes,
-                'availableDocumentsBytes' => PHP_INT_MAX === $availableDocsBytes ? null : (int) $availableDocsBytes,
-                'availableBytes' => PHP_INT_MAX === $availableBytes ? null : (int) $availableBytes,
+                'limiter' => $quotaBytes > 0 ? 'course' : 'unlimited',
+                'quotaBytes' => $quotaBytes > 0 ? $quotaBytes : null,
+                'quotaMb' => $quotaMb > 0 ? $quotaMb : null,
+                'usedBytes' => $usedBytes,
+                'usedMb' => $this->bytesToMegabytes($usedBytes),
+                'availableBytes' => null === $availableBytes ? null : (int) $availableBytes,
+                'availableMb' => null === $availableBytes ? null : $this->bytesToMegabytes((int) $availableBytes),
                 'availablePercent' => $availablePercent,
             ],
         ]);
@@ -127,18 +100,8 @@ final class DocumentUsageAction extends AbstractController
         return round(($part / $total) * 100, 2);
     }
 
-    private function formatBytes(int $bytes): string
+    private function bytesToMegabytes(int $bytes): float
     {
-        $units = ['B', 'KB', 'MB', 'GB', 'TB'];
-        $size = (float) max($bytes, 0);
-        $i = 0;
-        $max = \count($units) - 1;
-
-        while ($size >= 1024 && $i < $max) {
-            $size /= 1024;
-            $i++;
-        }
-
-        return round($size, 2).' '.$units[$i];
+        return round(max($bytes, 0) / self::BYTES_PER_MB, 2);
     }
 }

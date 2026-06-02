@@ -103,14 +103,32 @@ async function getQuotaUsage(courseId, { sid = 0, gid = 0, force = false, staleM
   }
 }
 
+function formatBytesAsMb(bytes) {
+  const n = Number(bytes || 0)
+
+  if (!Number.isFinite(n)) {
+    return "0 MB"
+  }
+
+  const mb = Math.max(n, 0) / 1048576
+  const rounded = Math.round(mb * 100) / 100
+
+  if (Number.isInteger(rounded)) {
+    return `${rounded} MB`
+  }
+
+  return `${String(rounded).replace(/\.0+$/, "").replace(/(\.\d*?)0+$/, "$1")} MB`
+}
+
 /**
- * Build "Available space (%s)" message using i18n + prettyBytes.
- * Vue i18n does not format "%s", so we replace it manually.
+ * Build "Available space (%s)" message using MB, because course document quotas
+ * are configured and stored in MB.
  */
 function formatAvailableSpaceMessage(t, availableBytes) {
   const template = String(t?.("Available space (%s)") ?? "Available space (%s)")
-  const bytesLabel = prettyBytes(Math.max(Number(availableBytes || 0), 0))
-  return template.includes("%s") ? template.replace("%s", bytesLabel) : `${template} (${bytesLabel})`
+  const bytesLabel = formatBytesAsMb(availableBytes)
+
+  return template.replace("%s", bytesLabel)
 }
 
 /**

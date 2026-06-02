@@ -80,7 +80,7 @@
           </video>
         </div>
 
-        <div v-html="post.content" />
+        <div v-html="sanitizeHtml(post.content)" />
 
         <LinkPreviewCard
           v-for="previewUrl in extractedUrls"
@@ -148,6 +148,8 @@ import BaseCard from "../basecomponents/BaseCard.vue"
 import { SOCIAL_TYPE_PROMOTED_MESSAGE } from "./constants"
 import { useFormatDate } from "../../composables/formatDate"
 import { useSecurityStore } from "../../store/securityStore"
+import { useI18n } from "vue-i18n"
+import { sanitizeHtml } from "../../utils/sanitizeHtml"
 
 const props = defineProps({
   post: {

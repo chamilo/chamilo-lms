@@ -319,6 +319,12 @@ $validateLpItemPrerequisiteDates = static function (): void {
 };
 switch ($action) {
     case 'recalculate':
+        // Recalculating another user's results is a teacher/grading action: a course
+        // member without edit rights must not be able to alter anyone's scores.
+        if (!$is_allowed_to_edit) {
+            api_not_allowed(true);
+        }
+
         if (!isset($oLP) || !$lp_found) {
             Display::addFlash(Display::return_message(get_lang('No learning path found'), 'error'));
             $goList();

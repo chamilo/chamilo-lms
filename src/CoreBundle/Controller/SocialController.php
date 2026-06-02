@@ -26,6 +26,7 @@ use Chamilo\CoreBundle\Repository\Node\MessageAttachmentRepository;
 use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\TrackEOnlineRepository;
+use Chamilo\CoreBundle\Security\Authorization\Voter\UsergroupVoter;
 use Chamilo\CoreBundle\Serializer\UserToJsonNormalizer;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Repository\CForumThreadRepository;
@@ -80,9 +81,15 @@ class SocialController extends AbstractController
     #[Route('/personal-data/{userId}', name: 'chamilo_core_social_personal_data')]
     public function getPersonalData(
         int $userId,
+        #[CurrentUser]
+        User $currentUser,
         SettingsManager $settingsManager,
         UserToJsonNormalizer $userToJsonNormalizer
     ): JsonResponse {
+        if ($userId !== $currentUser->getId() && !$this->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException();
+        }
+
         $propertiesToJson = $userToJsonNormalizer->serializeUserData($userId);
         $properties = $propertiesToJson ? json_decode($propertiesToJson, true) : [];
 
@@ -479,11 +486,17 @@ class SocialController extends AbstractController
     #[Route('/groups/{userId}', name: 'chamilo_core_social_groups')]
     public function getGroups(
         int $userId,
+        #[CurrentUser]
+        User $currentUser,
         UsergroupRepository $usergroupRepository,
         CForumThreadRepository $forumThreadRepository,
         SettingsManager $settingsManager,
         RequestStack $requestStack
     ): JsonResponse {
+        if ($userId !== $currentUser->getId() && !$this->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException();
+        }
+
         $baseUrl = $requestStack->getCurrentRequest()->getBaseUrl();
         $cid = (int) $settingsManager->getSetting('forum.global_forums_course_id');
         $items = [];
@@ -526,8 +539,16 @@ class SocialController extends AbstractController
         $discussionId,
         MessageRepository $messageRepository,
         UserRepository $userRepository,
-        MessageAttachmentRepository $attachmentRepository
+        MessageAttachmentRepository $attachmentRepository,
+        UsergroupRepository $usergroupRepository
     ): JsonResponse {
+        $group = $usergroupRepository->find((int) $groupId);
+        if (null === $group) {
+            return $this->json(['error' => 'Group not found'], Response::HTTP_NOT_FOUND);
+        }
+        // Only members of the group may read its discussion threads.
+        $this->denyAccessUnlessGranted(UsergroupVoter::VIEW, $group);
+
         $messages = $messageRepository->getMessagesByGroupAndMessage((int) $groupId, (int) $discussionId);
 
         $formattedMessages = $this->formatMessagesHierarchy($messages, $userRepository, $attachmentRepository);
@@ -555,10 +576,17 @@ class SocialController extends AbstractController
     public function inviteFriends(
         int $userId,
         int $groupId,
+        #[CurrentUser]
+        User $currentUser,
         UserRepository $userRepository,
         UsergroupRepository $usergroupRepository,
         IllustrationRepository $illustrationRepository
     ): JsonResponse {
+        // A user may only enumerate their own friend list.
+        if ($userId !== $currentUser->getId() && !$this->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException();
+        }
+
         $user = $userRepository->find($userId);
         if (!$user) {
             return $this->json(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
@@ -585,6 +613,13 @@ class SocialController extends AbstractController
     #[Route('/add-users-to-group/{groupId}', name: 'chamilo_core_social_add_users_to_group')]
     public function addUsersToGroup(Request $request, int $groupId, UsergroupRepository $usergroupRepository): JsonResponse
     {
+        $group = $usergroupRepository->find($groupId);
+        if (null === $group) {
+            return $this->json(['error' => 'Group not found'], Response::HTTP_NOT_FOUND);
+        }
+        // Only a moderator/admin of the group may add members.
+        $this->denyAccessUnlessGranted(UsergroupVoter::EDIT, $group);
+
         $data = json_decode($request->getContent(), true);
         $userIds = $data['userIds'] ?? [];
 
@@ -600,6 +635,13 @@ class SocialController extends AbstractController
     #[Route('/group/{groupId}/invited-users', name: 'chamilo_core_social_group_invited_users')]
     public function groupInvitedUsers(int $groupId, UsergroupRepository $usergroupRepository, IllustrationRepository $illustrationRepository): JsonResponse
     {
+        $group = $usergroupRepository->find($groupId);
+        if (null === $group) {
+            return $this->json(['error' => 'Group not found'], Response::HTTP_NOT_FOUND);
+        }
+        // Only a moderator/admin of the group may see its pending invitations.
+        $this->denyAccessUnlessGranted(UsergroupVoter::EDIT, $group);
+
         $invitedUsers = $usergroupRepository->getInvitedUsersByGroup($groupId);
 
         $invitedUsersList = array_map(function ($user) {
@@ -921,12 +963,13 @@ class SocialController extends AbstractController
     #[Route('/group-action', name: 'chamilo_core_social_group_action')]
     public function group(
         Request $request,
+        #[CurrentUser]
+        User $currentUser,
         UsergroupRepository $usergroupRepository,
         EntityManagerInterface $em,
         MessageRepository $messageRepository
     ): JsonResponse {
         if (str_starts_with($request->headers->get('Content-Type'), 'multipart/form-data')) {
-            $userId = $request->request->get('userId');
             $groupId = $request->request->get('groupId');
             $action = $request->request->get('action');
             $title = $request->request->get('title', '');
@@ -950,13 +993,28 @@ class SocialController extends AbstractController
             }
         } else {
             $data = json_decode($request->getContent(), true);
-            $userId = $data['userId'] ?? null;
             $groupId = $data['groupId'] ?? null;
             $action = $data['action'] ?? null;
         }
 
-        if (!$userId || !$groupId || !$action) {
+        // The actor/sender is always the authenticated user; a body-supplied userId is
+        // never trusted (prevents impersonation and forcing arbitrary users in/out).
+        $userId = $currentUser->getId();
+
+        if (!$groupId || !$action) {
             return $this->json(['error' => 'Missing parameters'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $group = $usergroupRepository->find((int) $groupId);
+        if (null === $group) {
+            return $this->json(['error' => 'Group not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        // Posting/editing requires group membership; deleting a thread requires moderation.
+        if (\in_array($action, ['reply_message_group', 'edit_message_group', 'add_message_group'], true)) {
+            $this->denyAccessUnlessGranted(UsergroupVoter::VIEW, $group);
+        } elseif ('delete_message_group' === $action) {
+            $this->denyAccessUnlessGranted(UsergroupVoter::EDIT, $group);
         }
 
         try {
@@ -1042,6 +1100,8 @@ class SocialController extends AbstractController
     #[Route('/user-action', name: 'chamilo_core_social_user_action')]
     public function user(
         Request $request,
+        #[CurrentUser]
+        User $authUser,
         UserRepository $userRepository,
         MessageRepository $messageRepository,
         EntityManagerInterface $em,
@@ -1049,21 +1109,22 @@ class SocialController extends AbstractController
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
 
-        $userId = $data['userId'] ?? null;
         $targetUserId = $data['targetUserId'] ?? null;
         $action = $data['action'] ?? null;
         $isMyFriend = $data['is_my_friend'] ?? false;
         $subject = $data['subject'] ?? '';
         $content = $data['content'] ?? '';
 
-        if (!$userId || !$targetUserId || !$action) {
+        if (!$targetUserId || !$action) {
             return $this->json(['error' => 'Missing parameters']);
         }
 
-        $currentUser = $userRepository->find($userId);
+        // The actor ("from") is always the authenticated user; a body-supplied userId is
+        // never trusted (prevents forging friendships/invitations on behalf of others).
+        $currentUser = $authUser;
         $friendUser = $userRepository->find($targetUserId);
 
-        if (null === $currentUser || null === $friendUser) {
+        if (null === $friendUser) {
             return $this->json(['error' => 'User not found']);
         }
 
@@ -1206,9 +1267,21 @@ class SocialController extends AbstractController
         UsergroupRepository $usergroupRepository,
         IllustrationRepository $illustrationRepository
     ): JsonResponse {
+        $userGroup = $usergroupRepository->find($groupId);
+        if (null === $userGroup) {
+            return $this->json(['error' => 'Group not found'], Response::HTTP_NOT_FOUND);
+        }
+        // Only a moderator/admin of the group may change its picture.
+        $this->denyAccessUnlessGranted(UsergroupVoter::EDIT, $userGroup);
+
         $file = $request->files->get('picture');
         if ($file instanceof UploadedFile) {
-            $userGroup = $usergroupRepository->find($groupId);
+            // Allowlist real image MIME types; never trust the client-provided extension.
+            $allowedMimeTypes = ['image/png', 'image/jpeg', 'image/gif', 'image/webp'];
+            if (!\in_array((string) $file->getMimeType(), $allowedMimeTypes, true)) {
+                return $this->json(['error' => 'Invalid image type'], Response::HTTP_UNSUPPORTED_MEDIA_TYPE);
+            }
+
             $illustrationRepository->addIllustration($userGroup, $this->userHelper->getCurrent(), $file);
         }
 

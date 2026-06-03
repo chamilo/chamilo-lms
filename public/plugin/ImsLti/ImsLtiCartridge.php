@@ -2,8 +2,7 @@
 
 /* For license terms, see /license.txt */
 
-use Symfony\Component\HttpClient\HttpClient;
-use Symfony\Component\HttpClient\NoPrivateNetworkHttpClient;
+use Chamilo\CoreBundle\Helpers\SafeHttpClientHelper;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 
 /**
@@ -36,10 +35,10 @@ class ImsLtiCartridge
             return null;
         }
 
-        $client = new NoPrivateNetworkHttpClient(HttpClient::create());
-
         try {
-            $content = $client->request('GET', (string) $cartridgeUrl, ['timeout' => 10])->getContent();
+            $content = SafeHttpClientHelper::create()
+                ->request('GET', (string) $cartridgeUrl, ['timeout' => 10])
+                ->getContent();
         } catch (ExceptionInterface $e) {
             return null;
         }

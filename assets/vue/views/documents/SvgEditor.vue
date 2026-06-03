@@ -1295,14 +1295,8 @@ async function saveSvg() {
         contentFileExtension: "svg",
         contentFileMimeType: "image/svg+xml",
         parentResourceNodeId: getParentResourceNodeId(),
-        resourceLinkList: JSON.stringify([
-          {
-            gid: route.query.gid,
-            sid: route.query.sid,
-            cid: route.query.cid,
-            visibility: RESOURCE_LINK_PUBLISHED,
-          },
-        ]),
+        // Course context derived server-side from the gated session course.
+        resourceLinkList: JSON.stringify([{ visibility: RESOURCE_LINK_PUBLISHED }]),
         indexDocumentContent: false,
         language: language.value || "",
       })

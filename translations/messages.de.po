@@ -32800,7 +32800,7 @@ msgid "Allow PDF export for this item"
 msgstr "PDF-Export für diesen Eintrag erlauben"
 
 msgid "Hide free users (not enrolled)"
-msgstr "Kostenlose Benutzer (nicht eingeschrieben) ausblenden"
+msgstr "Freie Nutzer (nicht eingeschrieben) ausblenden"
 
 msgid "Question statistics"
 msgstr "Fragenstatistik"

@@ -603,7 +603,7 @@ async function createTask(
 }
 
 /** GET /c_blog_task_rel_users */
-async function listAssignments(blogId = resolveBlogIdFromPath()) {
+async function listAssignments({ blogId = resolveBlogIdFromPath() } = {}) {
   const params = withCourseParams({
     blog: iri("c_blogs", blogId),
     itemsPerPage: 1000,

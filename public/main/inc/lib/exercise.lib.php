@@ -1670,6 +1670,14 @@ HTML;
             }
             if ($freeze) {
                 $relPath = api_get_path(WEB_CODE_PATH);
+                $hotspotCidReqQueryParams = json_encode(
+                    api_get_cidreq_params(
+                        api_get_course_int_id(),
+                        api_get_session_id(),
+                        api_get_group_id()
+                    ),
+                    JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT
+                );
                 echo "
         <div class=\"w-100\">
                 $answerList
@@ -1686,7 +1694,8 @@ HTML;
                 exeId: 0,
                 selector: '#hotspot-preview-$questionId',
                 for: 'preview',
-                relPath: '$relPath'
+                relPath: '$relPath',
+                cidReqQueryParams: $hotspotCidReqQueryParams
             });
         </script>
     ";
@@ -1714,6 +1723,14 @@ HOTSPOT;
             }
 
             $relPath = api_get_path(WEB_CODE_PATH);
+            $hotspotCidReqQueryParams = json_encode(
+                api_get_cidreq_params(
+                    api_get_course_int_id(),
+                    api_get_session_id(),
+                    api_get_group_id()
+                ),
+                JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT
+            );
             $s .= "<div>
            <div class=\"hotspot-image bg-gray-10 border border-gray-25 bg-center bg-no-repeat bg-contain\"></div>
             <script>
@@ -1724,7 +1741,8 @@ HOTSPOT;
                         exeId: 0,
                         selector: '#question_div_' + $questionId + ' .hotspot-image',
                         for: 'user',
-                        relPath: '$relPath'
+                        relPath: '$relPath',
+                        cidReqQueryParams: $hotspotCidReqQueryParams
                     });
                 });
             </script>

@@ -9,3 +9,34 @@
 .dashboard-plugin .table td {
     vertical-align: middle;
 }
+
+.dashboard-plugin [data-dashboard-widget] {
+    min-width: 0;
+}
+
+.dashboard-widget {
+    transition: box-shadow 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+}
+
+.dashboard-widget:hover .dashboard-widget__handle {
+    opacity: 1;
+}
+
+.dashboard-widget--dragging {
+    opacity: 0.55;
+    transform: scale(0.99);
+}
+
+.dashboard-widget__handle {
+    cursor: grab;
+    opacity: 0.55;
+    position: absolute;
+    right: 0.75rem;
+    top: 0.75rem;
+    z-index: 2;
+}
+
+.dashboard-widget__handle:active {
+    cursor: grabbing;
+}
+

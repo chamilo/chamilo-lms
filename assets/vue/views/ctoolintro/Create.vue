@@ -57,13 +57,8 @@ export default {
 
     item.value.parentResourceNodeId = Number(route.query.parentResourceNodeId)
     item.value.courseTool = `/api/c_tools/${ctoolId}`
-    item.value.resourceLinkList = [
-      {
-        sid: sessionId,
-        cid: courseId,
-        visibility: RESOURCE_LINK_PUBLISHED,
-      },
-    ]
+    // Course context derived server-side from the gated session course.
+    item.value.resourceLinkList = [{ visibility: RESOURCE_LINK_PUBLISHED }]
 
     async function getIntro() {
       try {

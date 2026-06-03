@@ -514,6 +514,14 @@ foreach ($questionList as $questionId) {
             $totalScore += $question_result['score'];
 
             if ($show_results || $showTotalScoreAndUserChoicesInLastAttempt) {
+                $hotspotCidReqQueryParams = json_encode(
+                    api_get_cidreq_params(
+                        api_get_course_int_id(),
+                        api_get_session_id(),
+                        api_get_group_id()
+                    ),
+                    JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT
+                );
                 echo '</table></td></tr>';
                 echo "
                         <tr>
@@ -527,7 +535,8 @@ foreach ($questionList as $questionId) {
                                             exeId: $id,
                                             selector: '#hotspot-solution-$questionId-$id',
                                             for: 'solution',
-                                            relPath: '$relPath'
+                                            relPath: '$relPath',
+                                            cidReqQueryParams: $hotspotCidReqQueryParams
                                         });
                                     });
                                 </script>

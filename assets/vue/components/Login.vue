@@ -291,13 +291,19 @@ async function onSubmitLoginForm() {
 
   if (result?.captchaRequired) {
     captchaCode.value = ""
-    await refreshCaptcha()
+    await loadCaptchaStatus()
+    if (captchaEnabled.value && !captchaImageUrl.value) {
+      await refreshCaptcha()
+    }
     return
   }
 
-  if (!result?.success && captchaEnabled.value && !requires2FA.value) {
+  if (!result?.success && !requires2FA.value) {
     captchaCode.value = ""
-    await refreshCaptcha()
+    await loadCaptchaStatus()
+    if (captchaEnabled.value && !captchaImageUrl.value) {
+      await refreshCaptcha()
+    }
   }
 }
 

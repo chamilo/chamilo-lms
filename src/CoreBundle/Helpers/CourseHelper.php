@@ -1162,9 +1162,11 @@ class CourseHelper
     }
 
     /**
-     * Enforces quotas for a DOCUMENT upload (deltaBytes > 0):
-     * 1) Global course storage quota (course.diskQuota fallback platform default)
-     * 2) Documents tool quota (platform default_document_quotum / document.default_document_quotum)
+     * Enforces the configured document quota for a document upload.
+     *
+     * The quota shown in the course configuration page is stored in course.disk_quota, in MB.
+     * document.default_document_quotum is only used as the initial value when the course is created.
+     * Do not apply a second live document quota here.
      */
     public function assertCanStoreDocumentBytes(Course $course, int $deltaBytes): void
     {
@@ -1172,76 +1174,45 @@ class CourseHelper
             return;
         }
 
-        // Global course storage quota
-        $courseQuotaMb = $this->resolveCourseStorageQuotaMbForCourse($course);
-        $courseUsedBytes = $this->getCourseStorageUsedBytes($course);
+        $quotaMb = $this->resolveCourseStorageQuotaMbForCourse($course);
+        $usedBytes = $this->getCourseDocumentUsedBytes($course);
 
-        if ($courseQuotaMb > 0) {
-            $courseQuotaBytes = $courseQuotaMb * 1024 * 1024;
-            $courseNextUsed = $courseUsedBytes + $deltaBytes;
-
-            $this->debugLog('quota:course:check', [
-                'courseId' => (int) $course->getId(),
-                'deltaBytes' => $deltaBytes,
-                'quotaMb' => $courseQuotaMb,
-                'quotaBytes' => $courseQuotaBytes,
-                'usedBytes' => $courseUsedBytes,
-                'nextUsedBytes' => $courseNextUsed,
-            ]);
-
-            if ($courseNextUsed > $courseQuotaBytes) {
-                throw new RuntimeException('Course storage quota exceeded.');
-            }
-        } else {
-            $this->debugLog('quota:course:unlimited', [
-                'courseId' => (int) $course->getId(),
-                'deltaBytes' => $deltaBytes,
-                'usedBytes' => $courseUsedBytes,
-            ]);
-        }
-
-        // Documents tool quota with BuyCourses benefit fallback
-        $docsQuotaMb = $this->resolveDocumentsToolQuotaMbForCourse($course);
-        $docUsedBytes = $this->getCourseDocumentUsedBytes($course);
-
-        if ($docsQuotaMb > 0) {
-            $docQuotaBytes = $docsQuotaMb * 1024 * 1024;
-            $docNextUsed = $docUsedBytes + $deltaBytes;
-
-            $this->debugLog('quota:documents:check', [
-                'courseId' => (int) $course->getId(),
-                'deltaBytes' => $deltaBytes,
-                'quotaMb' => $docsQuotaMb,
-                'quotaBytes' => $docQuotaBytes,
-                'usedBytes' => $docUsedBytes,
-                'nextUsedBytes' => $docNextUsed,
-            ]);
-
-            if ($docNextUsed > $docQuotaBytes) {
-                throw new RuntimeException('Course documents quota exceeded.');
-            }
-        } else {
+        if ($quotaMb <= 0) {
             $this->debugLog('quota:documents:unlimited', [
                 'courseId' => (int) $course->getId(),
                 'deltaBytes' => $deltaBytes,
-                'usedBytes' => $docUsedBytes,
+                'usedBytes' => $usedBytes,
             ]);
+
+            return;
+        }
+
+        $quotaBytes = $quotaMb * 1024 * 1024;
+        $nextUsedBytes = $usedBytes + $deltaBytes;
+
+        $this->debugLog('quota:documents:check', [
+            'courseId' => (int) $course->getId(),
+            'deltaBytes' => $deltaBytes,
+            'quotaMb' => $quotaMb,
+            'quotaBytes' => $quotaBytes,
+            'usedBytes' => $usedBytes,
+            'nextUsedBytes' => $nextUsedBytes,
+        ]);
+
+        if ($nextUsedBytes > $quotaBytes) {
+            throw new RuntimeException('Course documents quota exceeded.');
         }
     }
 
     /**
-     * Global course storage quota (MB):
-     * - If course.diskQuota is set (>0) use it.
-     * - Else fallback to platform default document quota.
+     * Course document quota in MB, as configured on the course.
+     *
+     * document.default_document_quotum is only used when a course is created
+     * and must not be applied as a second live quota here.
      */
     public function resolveCourseStorageQuotaMbForCourse(Course $course): int
     {
-        $quotaMb = (int) ($course->getDiskQuota() ?? 0);
-        if ($quotaMb > 0) {
-            return $quotaMb;
-        }
-
-        return $this->resolveDefaultDocumentQuotaMb();
+        return max((int) ($course->getDiskQuota() ?? 0), 0);
     }
 
     /**

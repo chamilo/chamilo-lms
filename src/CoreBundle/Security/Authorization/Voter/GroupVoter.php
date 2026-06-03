@@ -93,8 +93,6 @@ class GroupVoter extends Voter
         }
 
         if ($course->hasUserAsTeacher($user)) {
-            $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_GROUP_TEACHER);
-
             return true;
         }
 
@@ -105,8 +103,6 @@ class GroupVoter extends Voter
         switch ($attribute) {
             case self::VIEW:
                 if ($isTutor) {
-                    $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_GROUP_TEACHER);
-
                     return true;
                 }
 
@@ -115,10 +111,6 @@ class GroupVoter extends Voter
                 }
 
                 $userIsInGroup = $group->hasMember($user);
-
-                if ($userIsInGroup) {
-                    $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_GROUP_STUDENT);
-                }
 
                 $requestUri = '';
                 // Check if user has access in legacy tool.
@@ -177,8 +169,6 @@ class GroupVoter extends Voter
             case self::EDIT:
             case self::DELETE:
                 if ($isTutor) {
-                    $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_GROUP_TEACHER);
-
                     return true;
                 }
 

@@ -61,3 +61,20 @@ The `block_*` directories are kept for historical reference only. They are not l
 ## v4 UI update
 
 The admin page includes lightweight chart panels rendered with existing Chamilo/Tailwind utility classes. No external JavaScript charting dependency is added. The plugin remains read-only and uses database counts only.
+
+## v5 UI update
+
+The admin page now supports simple drag and drop reordering for dashboard widgets. The order is stored in the browser local storage, so no database change is required. A reset button restores the default layout.
+
+The plugin also provides `index.php`, which redirects administrators directly to `admin.php` when the plugin directory is opened.
+
+## v6 admin menu access
+
+The Vue sidebar administration menu now includes a `Dashboard` entry for platform administrators. It points directly to:
+
+```text
+/plugin/Dashboard/admin.php
+```
+
+Session administrators do not see this entry because the dashboard page is protected with `api_protect_admin_script(true)`.
+

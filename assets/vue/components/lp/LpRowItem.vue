@@ -250,16 +250,19 @@ const itemActionsMobile = computed(() => [
       </button>
 
       <div class="lp-panel__body">
-        <div class="lp-panel__cover">
+        <div
+          class="lp-panel__cover overflow-hidden rounded-xl"
+          :class="{ 'ml-4': !canEdit }"
+        >
           <img
             v-if="lp.coverUrl"
             :src="lp.coverUrl"
             alt=""
-            class="lp-panel__cover-image"
+            class="lp-panel__cover-image block h-full w-full max-w-full object-cover"
           />
           <div
             v-else
-            class="lp-panel__cover-image"
+            class="lp-panel__cover-image flex h-full w-full items-center justify-center"
           >
             <svg
               class="opacity-70"

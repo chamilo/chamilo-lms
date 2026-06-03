@@ -226,7 +226,7 @@ uppy.on("file-added", (file) => {
     filetype: "file",
     parentResourceNodeId,
     parentId: publicationId,
-    resourceLinkList: JSON.stringify([{ cid, sid, gid, visibility: 2 }]),
+    resourceLinkList: JSON.stringify([{ visibility: 2 }]),
   })
 })
 uppy.on("upload-success", () => {
@@ -257,7 +257,7 @@ async function submitText() {
   formData.append("filetype", "file") // ahora sí "file"
   formData.append("parentId", publicationId)
   formData.append("parentResourceNodeId", parentResourceNodeId)
-  formData.append("resourceLinkList", JSON.stringify([{ cid, sid, gid, visibility: 2 }]))
+  formData.append("resourceLinkList", JSON.stringify([{ visibility: 2 }]))
 
   try {
     await cStudentPublicationService.uploadStudentAssignment(formData, queryParams)

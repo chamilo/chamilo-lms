@@ -13,6 +13,8 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use ApiPlatform\OpenApi\Model\Operation;
+use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\ApiResource\SessionPlanItem;
 use Chamilo\CoreBundle\Controller\Api\CalendarMyStudentsScheduleAction;
 use Chamilo\CoreBundle\Controller\Api\CreateSessionWithUsersAndCoursesAction;
@@ -118,6 +120,31 @@ use Symfony\Component\Validator\Constraints as Assert;
         new GetCollection(
             uriTemplate: '/calendar/my-students-schedule.{_format}',
             controller: CalendarMyStudentsScheduleAction::class,
+            openapi: new Operation(
+                parameters: [
+                    new Parameter(
+                        name: 'sid',
+                        in: 'query',
+                        description: 'Session identifier. When omitted (or <= 0) the endpoint returns the sessions where the current user is a tutor/coach; when provided it returns the calendar events of that session.',
+                        required: false,
+                        schema: ['type' => 'integer'],
+                    ),
+                    new Parameter(
+                        name: 'start',
+                        in: 'query',
+                        description: 'Range start (ISO 8601 date-time). Required together with "end" to return events when "sid" is provided.',
+                        required: false,
+                        schema: ['type' => 'string', 'format' => 'date-time'],
+                    ),
+                    new Parameter(
+                        name: 'end',
+                        in: 'query',
+                        description: 'Range end (ISO 8601 date-time). Required together with "start" to return events when "sid" is provided.',
+                        required: false,
+                        schema: ['type' => 'string', 'format' => 'date-time'],
+                    ),
+                ],
+            ),
             paginationEnabled: false,
             security: "is_granted('ROLE_USER')",
             output: false,

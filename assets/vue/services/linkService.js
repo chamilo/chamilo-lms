@@ -100,8 +100,22 @@ export default {
     return await baseService.delete(`/api/links/${linkId}`)
   },
 
-  getCategories: async (parentId) => {
-    const { items } = await baseService.getCollection("/api/link_categories", { "resourceNode.parent": parentId })
+  /**
+   * @param {Number|String} parentId
+   * @param {{cid?: number|string|null, sid?: number|string|null, gid?: number|string|null}} params
+   */
+  getCategories: async (parentId, params = {}) => {
+    const query = {
+      "resourceNode.parent": parentId,
+    }
+
+    for (const [key, value] of Object.entries(params)) {
+      if (value !== undefined && value !== null && String(value) !== "" && Number(value) > 0) {
+        query[key] = value
+      }
+    }
+
+    const { items } = await baseService.getCollection("/api/link_categories", query)
 
     return items
   },

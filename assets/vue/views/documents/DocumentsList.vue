@@ -438,7 +438,7 @@
   <BaseDialog
     v-model:is-visible="isFileUsageDialogVisible"
     :style="{ width: '28rem' }"
-    :title="t('Space available')"
+    :title="t('Document quota')"
     :close-label="t('Close')"
   >
     <div
@@ -446,21 +446,25 @@
       class="mb-3 rounded border border-gray-200 bg-gray-10 p-3"
     >
       <div class="text-sm font-semibold">
-        {{ usageQuotaSummary.limiterLabel }}
+        {{ t("Document quota") }}
       </div>
 
-      <div class="mt-1 text-xs opacity-80">
-        {{ usageQuotaSummary.remainingLabel }}
-      </div>
-
-      <div class="mt-3 grid grid-cols-2 gap-2 text-xs">
+      <div class="mt-2 grid gap-2 text-xs">
         <div>
-          <span class="font-semibold">{{ t("Course") }}:</span>
-          {{ usageQuotaSummary.courseLine }}
+          <span class="font-semibold">{{ t("Limit") }}:</span>
+          {{ usageQuotaSummary.limitLabel }}
         </div>
         <div>
-          <span class="font-semibold">{{ t("Documents") }}:</span>
-          {{ usageQuotaSummary.documentsLine }}
+          <span class="font-semibold">{{ t("Used space") }}:</span>
+          {{ usageQuotaSummary.usedLabel }}
+        </div>
+        <div>
+          <span class="font-semibold">{{ t("Available space") }}:</span>
+          {{ usageQuotaSummary.availableLabel }}
+        </div>
+        <div>
+          <span class="font-semibold">{{ t("Available percentage") }}:</span>
+          {{ usageQuotaSummary.availablePercentLabel }}
         </div>
       </div>
     </div>
@@ -1187,14 +1191,8 @@ function createNewFolder() {
     if (!item.value.id) {
       item.value.filetype = "folder"
       item.value.parentResourceNodeId = route.params.node
-      item.value.resourceLinkList = JSON.stringify([
-        {
-          gid,
-          sid,
-          cid,
-          visibility: RESOURCE_LINK_PUBLISHED,
-        },
-      ])
+      // Course context derived server-side from the gated session course.
+      item.value.resourceLinkList = JSON.stringify([{ visibility: RESOURCE_LINK_PUBLISHED }])
 
       tableLoading.value = true
       store.dispatch("documents/createWithFormData", item.value).then(() => {
@@ -2187,43 +2185,64 @@ const usageQuotaSummary = computed(() => {
   const q = usageData.value?.quota
   if (!q) return null
 
-  const limiter = String(q.limiter || "unlimited")
+  function formatQuotaMb(value) {
+    const n = Number(value)
 
-  function fmtBytes(v) {
-    if (v === null || v === undefined) return t("Unlimited")
-    const n = Number(v)
-    if (!Number.isFinite(n)) return t("Unlimited")
-    return prettyBytes(Math.max(n, 0))
+    if (!Number.isFinite(n) || n <= 0) {
+      return t("Unlimited")
+    }
+
+    return `${Math.round(n)} MB`
   }
 
-  const courseQuota = fmtBytes(q.courseQuotaBytes)
-  const docsQuota = fmtBytes(q.documentsQuotaBytes)
+  function formatBytesAsMb(value) {
+    if (value === null || value === undefined) {
+      return t("Unlimited")
+    }
 
-  const courseAvail = fmtBytes(q.availableCourseBytes)
-  const docsAvail = fmtBytes(q.availableDocumentsBytes)
+    const n = Number(value)
 
-  const effectiveAvail = fmtBytes(q.availableBytes)
-  const effectivePct = Number(q.availablePercent)
-  const pctLabel = Number.isFinite(effectivePct) ? `${effectivePct}%` : ""
+    if (!Number.isFinite(n)) {
+      return t("Unlimited")
+    }
 
-  let limiterLabel = ""
-  if (limiter === "course") {
-    limiterLabel = `${t("Limiting quota")}: ${t("Course")}`
-  } else if (limiter === "documents") {
-    limiterLabel = `${t("Limiting quota")}: ${t("Documents")}`
-  } else {
-    limiterLabel = `${t("Limiting quota")}: ${t("Unlimited")}`
+    const mb = Math.max(n, 0) / 1048576
+    const rounded = Math.round(mb * 100) / 100
+
+    if (Number.isInteger(rounded)) {
+      return `${rounded} MB`
+    }
+
+    return `${String(rounded).replace(/\.0+$/, "").replace(/(\.\d*?)0+$/, "$1")} MB`
   }
 
-  const remainingLabel = `${t("Remaining space")}: ${effectiveAvail}${pctLabel ? ` (${pctLabel})` : ""}`
+  function formatPercent(value) {
+    const n = Number(value)
+
+    if (!Number.isFinite(n)) {
+      return "0%"
+    }
+
+    const rounded = Math.round(n * 100) / 100
+
+    if (Number.isInteger(rounded)) {
+      return `${rounded}%`
+    }
+
+    return `${String(rounded).replace(/\.0+$/, "").replace(/(\.\d*?)0+$/, "$1")}%`
+  }
+
+  const usedBytes = Number(q.usedBytes ?? 0)
+  const availableBytes = q.availableBytes
 
   return {
-    limiterLabel,
-    remainingLabel,
-    courseLine: `${courseAvail} / ${courseQuota}`,
-    documentsLine: `${docsAvail} / ${docsQuota}`,
+    limitLabel: formatQuotaMb(q.quotaMb),
+    usedLabel: formatBytesAsMb(usedBytes),
+    availableLabel: formatBytesAsMb(availableBytes),
+    availablePercentLabel: formatPercent(q.availablePercent),
   }
 })
+
 
 function consumeAiSavedToast() {
   if (String(route.query.ai_saved || "") !== "1") {

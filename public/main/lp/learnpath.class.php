@@ -1693,19 +1693,26 @@ class learnpath
 
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $tbl_lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-        $itemViewId = (int) $item->db_item_view_id;
+        $itemViewId = (int) ($item->db_item_view_id ?? 0);
+        $row = [];
 
-        // Getting all the information about the item.
-        $sql = "SELECT lp_view.status
-                FROM $tbl_lp_item as lpi
-                INNER JOIN $tbl_lp_item_view as lp_view
-                ON (lpi.iid = lp_view.lp_item_id)
-                WHERE
-                    lp_view.iid = $itemViewId AND
-                    lpi.iid = $lpItemId
-                ";
-        $result = Database::query($sql);
-        $row = Database::fetch_assoc($result);
+        if ($itemViewId > 0) {
+            // Getting all the information about the item.
+            $sql = "SELECT lp_view.status
+                    FROM $tbl_lp_item as lpi
+                    INNER JOIN $tbl_lp_item_view as lp_view
+                    ON (lpi.iid = lp_view.lp_item_id)
+                    WHERE
+                        lp_view.iid = $itemViewId AND
+                        lpi.iid = $lpItemId
+                    ";
+            $result = Database::query($sql);
+            $row = Database::fetch_assoc($result);
+            if (!is_array($row)) {
+                $row = [];
+            }
+        }
+
         $output = '';
         $audio = $item->audio;
 
@@ -1723,7 +1730,7 @@ class learnpath
 
                     if ($type_quiz) {
                         if (1 == $_SESSION['oLP']->prevent_reinit) {
-                            $autostart_audio = 'completed' === $row['status'] ? 'false' : 'true';
+                            $autostart_audio = 'completed' === ($row['status'] ?? null) ? 'false' : 'true';
                         } else {
                             $autostart_audio = $autostart;
                         }
@@ -7250,7 +7257,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         $selfUrl = api_get_self();
         $courseIdReq = api_get_cidreq();
-        $userInfo = api_get_user_info();
 
         $moveEverywhereIcon = Display::getMdiIcon('cursor-move', 'ch-tool-icon', '', 16, get_lang('Move'));
 
@@ -7268,21 +7274,86 @@ document.addEventListener("DOMContentLoaded", function () {
             $categorizedLinks[$categoryId][$link->getIid()] = $link;
         }
 
-        $linksHtmlCode =
-            '<script>
-            function toggle_tool(tool, id) {
-                if(document.getElementById(tool+"_"+id+"_content").style.display == "none"){
-                    document.getElementById(tool+"_"+id+"_content").style.display = "block";
-                    document.getElementById(tool+"_"+id+"_opener").src = "'.Display::returnIconPath('remove.gif').'";
-                } else {
-                    document.getElementById(tool+"_"+id+"_content").style.display = "none";
-                    document.getElementById(tool+"_"+id+"_opener").src = "'.Display::returnIconPath('add.png').'";
+        $linksHtmlCode = '
+        <script>
+            function toggle_lp_link_category(categoryId, button) {
+                var items = document.querySelectorAll("[data-lp-link-category=\\"" + categoryId + "\\"]");
+                var isCollapsed = button.getAttribute("aria-expanded") === "true";
+
+                items.forEach(function (item) {
+                    item.style.display = isCollapsed ? "none" : "";
+                });
+
+                button.setAttribute("aria-expanded", isCollapsed ? "false" : "true");
+
+                var indicator = button.querySelector(".lp-link-category-indicator");
+                if (indicator) {
+                    indicator.textContent = isCollapsed ? "▸" : "▾";
                 }
             }
         </script>
-
+        <style>
+            .lp-links-sticky-action {
+                position: sticky;
+                top: 0;
+                z-index: 2;
+                background: #fff;
+            }
+            .lp-link-category-header {
+                display: flex;
+                align-items: center;
+                gap: .5rem;
+                width: 100%;
+                border: 0;
+                background: transparent;
+                padding: 0;
+                text-align: left;
+                cursor: pointer;
+            }
+            .lp-link-category-title {
+                font-weight: 600;
+            }
+            .lp-link-category-count {
+                color: #6b7280;
+                font-size: .85rem;
+            }
+            .lp-link-row {
+                display: flex;
+                gap: .5rem;
+                align-items: flex-start;
+            }
+            .lp-link-row-main {
+                min-width: 0;
+                flex: 1;
+            }
+            .lp-link-title {
+                display: inline-block;
+                max-width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                vertical-align: bottom;
+                white-space: nowrap;
+            }
+            .lp-link-description {
+                margin-top: .25rem;
+                color: #6b7280;
+                font-size: .85rem;
+                line-height: 1.35;
+            }
+            .lp-link-description summary {
+                cursor: pointer;
+                color: #2f7fb2;
+                font-weight: 600;
+            }
+            .lp-link-description-summary {
+                display: -webkit-box;
+                overflow: hidden;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+            }
+        </style>
         <ul class="mt-2 bg-white list-group lp_resource">
-            <li class="list-group-item lp_resource_element border-gray-25 disable_drag ">
+            <li class="list-group-item lp_resource_element border-gray-25 disable_drag lp-links-sticky-action">
                 '.Display::getMdiIcon(ObjectIcon::LINK, 'ch-tool-icon', null, ICON_SIZE_SMALL).'
                 <a
                 href="'.api_get_path(WEB_CODE_PATH).'link/link.php?'.$courseIdReq.'&action=addlink&lp_id='.$this->lp_id.'"
@@ -7292,54 +7363,86 @@ document.addEventListener("DOMContentLoaded", function () {
             </li>';
         $linkIcon = Display::getMdiIcon('file-link', 'ch-tool-icon', null, 16, get_lang('Link'));
         foreach ($categorizedLinks as $categoryId => $links) {
-            $linkNodes = null;
+            $linkNodes = '';
+            $visibleLinkCount = 0;
             /** @var CLink $link */
             foreach ($links as $key => $link) {
+                if (!$link->isVisible($course, $session)) {
+                    continue;
+                }
+
+                $visibleLinkCount++;
                 $title = $link->getTitle();
                 $id = $link->getIid();
+                $description = trim((string) $link->getDescription());
                 $linkUrl = Display::url(
                     Display::getMdiIcon('magnify-plus-outline', 'ch-tool-icon', null, 22, get_lang('Preview')),
                     api_get_path(WEB_CODE_PATH).'link/link_goto.php?'.api_get_cidreq().'&link_id='.$key,
                     ['target' => '_blank']
                 );
 
-                if ($link->isVisible($course, $session)) {
-                    $sessionStar = '';
-                    $url = $selfUrl.'?'.$courseIdReq.'&action=add_item&type='.TOOL_LINK.'&file='.$key.'&lp_id='.$this->lp_id;
-                    $link = Display::url(
-                        Security::remove_XSS($title).$sessionStar.$linkUrl,
-                        $url,
-                        [
-                            'class' => 'moved link_with_id',
-                            'data-id' => $key,
-                            'data_type' => TOOL_LINK,
-                            'title' => $title,
-                        ]
-                    );
-                    $linkNodes .=
-                        "<li
-                            class='list-group-item border-gray-25 lp_resource_element'
-                            id= $id
-                            data-id= $id
-                            >
-                         <a class='moved' href='#'>
-                            $moveEverywhereIcon
-                        </a>
-                        $linkIcon $link
-                        </li>";
+                $url = $selfUrl.'?'.$courseIdReq.'&action=add_item&type='.TOOL_LINK.'&file='.$key.'&lp_id='.$this->lp_id;
+                $safeTitle = Security::remove_XSS($title);
+                $linkAnchor = Display::url(
+                    '<span class="lp-link-title">'.$safeTitle.'</span>'.$linkUrl,
+                    $url,
+                    [
+                        'class' => 'moved link_with_id',
+                        'data-id' => $key,
+                        'data_type' => TOOL_LINK,
+                        'title' => $title,
+                    ]
+                );
+
+                $descriptionHtml = '';
+                if ('' !== $description) {
+                    $plainDescription = trim(strip_tags($description));
+                    $safeFullDescription = nl2br(Security::remove_XSS($description));
+                    $safeSummaryDescription = Security::remove_XSS(cut($plainDescription, 180));
+                    $isLongDescription = strlen($plainDescription) > 180 || substr_count($description, "\n") > 1;
+
+                    if ($isLongDescription) {
+                        $descriptionHtml =
+                            '<div class="lp-link-description lp-link-description-summary">'.$safeSummaryDescription.'</div>'.
+                            '<details class="lp-link-description">'.
+                                '<summary>'.get_lang('Show full description').'</summary>'.
+                                '<div class="mt-1">'.$safeFullDescription.'</div>'.
+                            '</details>';
+                    } else {
+                        $descriptionHtml = '<div class="lp-link-description">'.$safeFullDescription.'</div>';
+                    }
                 }
+
+                $linkNodes .=
+                    "<li
+                        class='list-group-item border-gray-25 lp_resource_element'
+                        id='$id'
+                        data-id='$id'
+                        data-lp-link-category='$categoryId'
+                    >
+                        <div class='lp-link-row'>
+                            <a class='moved' href='#'>$moveEverywhereIcon</a>
+                            <span>$linkIcon</span>
+                            <div class='lp-link-row-main'>$linkAnchor$descriptionHtml</div>
+                        </div>
+                    </li>";
             }
+
             $linksHtmlCode .=
                 '<li class="list-group-item border-gray-25 disable_drag">
-                    <a style="cursor:hand" onclick="javascript: toggle_tool(\''.TOOL_LINK.'\','.$categoryId.')" >
-                        <img src="'.Display::returnIconPath('add.png').'" id="'.TOOL_LINK.'_'.$categoryId.'_opener"
-                        align="absbottom" />
-                    </a>
-                    <span style="vertical-align:middle">'.Security::remove_XSS($categories[$categoryId]).'</span>
-                </li>
-            '.
-                $linkNodes.
-            '';
+                    <button
+                        type="button"
+                        class="lp-link-category-header"
+                        onclick="toggle_lp_link_category('.(int) $categoryId.', this)"
+                        aria-expanded="true"
+                    >
+                        <span class="lp-link-category-indicator" aria-hidden="true">▾</span>
+                        '.Display::getMdiIcon('folder', 'ch-tool-icon', null, 16, get_lang('Category')).'
+                        <span class="lp-link-category-title">'.Security::remove_XSS($categories[$categoryId]).'</span>
+                        <span class="lp-link-category-count">('.$visibleLinkCount.')</span>
+                    </button>
+                </li>'.
+                $linkNodes;
         }
         $linksHtmlCode .= '</ul>';
 

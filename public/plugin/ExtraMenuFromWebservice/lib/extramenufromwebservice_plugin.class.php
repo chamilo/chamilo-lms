@@ -1,18 +1,21 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 
 /**
  * Extra menu integration for Chamilo 2.
  *
  * The plugin no longer injects arbitrary HTML/CSS/JS returned by a remote
- * service. It exposes a small JSON endpoint consumed by a Vue component in
- * the Chamilo topbar. The remote service is expected to return API Platform
- * style JSON or a plain array of menu items.
+ * service. It exposes a small JSON endpoint consumed by the Chamilo 2 Vue
+ * sidebar. The remote service is expected to return API Platform style JSON
+ * or a plain array of menu items.
  */
 class ExtraMenuFromWebservicePlugin extends Plugin
 {
+    public const SIDEBAR_MENU_KEY = 'extra_menu_from_webservice';
+    public const MAIN_MENU_ENTRIES_SETTING = 'display.show_tabs';
     public const SESSION_TOKEN = 'extramenufromwebservice_plugin_token';
     public const SESSION_TOKEN_START = 'extramenufromwebservice_plugin_token_start';
     public const SESSION_MENU_CACHE_PREFIX = 'extramenufromwebservice_plugin_menu_';
@@ -55,12 +58,22 @@ class ExtraMenuFromWebservicePlugin extends Plugin
 
     public function install()
     {
-        return true;
+        return $this->setSidebarMenuEntry(false);
     }
 
     public function uninstall()
     {
-        return true;
+        return $this->removeSidebarMenuEntry();
+    }
+
+    public function syncPlatformKeyWithPluginState(): bool
+    {
+        return $this->setSidebarMenuEntry($this->isEnabled());
+    }
+
+    public function syncPlatformKeyPairWithPluginState(): bool
+    {
+        return $this->syncPlatformKeyWithPluginState();
     }
 
     /**
@@ -88,6 +101,12 @@ class ExtraMenuFromWebservicePlugin extends Plugin
         if (!$this->isEnabled()) {
             return $response;
         }
+
+        if (!$this->isSidebarMenuEntryEnabled()) {
+            return $response;
+        }
+
+        $response['enabled'] = true;
 
         if (api_is_anonymous()) {
             return $response;
@@ -118,8 +137,6 @@ class ExtraMenuFromWebservicePlugin extends Plugin
 
         $cached = $this->readMenuCache($cacheKey);
         if (null !== $cached) {
-            $response['enabled'] = !empty($cached);
-
             $response['items'] = $cached;
 
             return $response;
@@ -128,7 +145,6 @@ class ExtraMenuFromWebservicePlugin extends Plugin
         $items = $this->getMenuItems($email, $userId, $isMobile);
 
         $this->writeMenuCache($cacheKey, $items);
-        $response['enabled'] = !empty($items);
         $response['items'] = $items;
 
         return $response;
@@ -606,6 +622,151 @@ class ExtraMenuFromWebservicePlugin extends Plugin
         ]);
     }
 
+
+    private function isSidebarMenuEntryEnabled(): bool
+    {
+        try {
+            $settingsManager = $this->getCurrentAccessUrlSettingsManager();
+            $entries = $this->decodeMainMenuEntries(
+                $settingsManager->getSetting(self::MAIN_MENU_ENTRIES_SETTING, true)
+            );
+
+            return isset($entries['menu'][self::SIDEBAR_MENU_KEY])
+                && true === (bool) $entries['menu'][self::SIDEBAR_MENU_KEY];
+        } catch (Throwable $exception) {
+            error_log('[ExtraMenuFromWebservice] Failed to read sidebar menu entry: '.$exception->getMessage());
+
+            return false;
+        }
+    }
+
+    private function setSidebarMenuEntry(bool $enabled): bool
+    {
+        try {
+            $settingsManager = $this->getCurrentAccessUrlSettingsManager();
+            $entries = $this->decodeMainMenuEntries(
+                $settingsManager->getSetting(self::MAIN_MENU_ENTRIES_SETTING, true)
+            );
+
+            if (!isset($entries['menu']) || !is_array($entries['menu'])) {
+                $entries['menu'] = [];
+            }
+
+            if (!isset($entries['topbar']) || !is_array($entries['topbar'])) {
+                $entries['topbar'] = [];
+            }
+
+            $entries['menu'][self::SIDEBAR_MENU_KEY] = $enabled;
+
+            $settingsManager->updateSetting(
+                self::MAIN_MENU_ENTRIES_SETTING,
+                $this->encodeMainMenuEntries($entries)
+            );
+
+            return true;
+        } catch (Throwable $exception) {
+            error_log('[ExtraMenuFromWebservice] Failed to update sidebar menu entry: '.$exception->getMessage());
+
+            return false;
+        }
+    }
+
+    private function removeSidebarMenuEntry(): bool
+    {
+        try {
+            $settingsManager = $this->getCurrentAccessUrlSettingsManager();
+            $entries = $this->decodeMainMenuEntries(
+                $settingsManager->getSetting(self::MAIN_MENU_ENTRIES_SETTING, true)
+            );
+
+            if (isset($entries['menu']) && is_array($entries['menu'])) {
+                unset($entries['menu'][self::SIDEBAR_MENU_KEY]);
+            }
+
+            $settingsManager->updateSetting(
+                self::MAIN_MENU_ENTRIES_SETTING,
+                $this->encodeMainMenuEntries($entries)
+            );
+
+            return true;
+        } catch (Throwable $exception) {
+            error_log('[ExtraMenuFromWebservice] Failed to remove sidebar menu entry: '.$exception->getMessage());
+
+            return false;
+        }
+    }
+
+    private function getCurrentAccessUrlSettingsManager()
+    {
+        $settingsManager = Container::getSettingsManager();
+
+        if (!method_exists($settingsManager, 'setUrl')) {
+            return $settingsManager;
+        }
+
+        try {
+            $accessUrlUtil = Container::getAccessUrlUtil();
+            $currentAccessUrl = $accessUrlUtil->getCurrent();
+
+            if (null !== $currentAccessUrl) {
+                $settingsManager->setUrl($currentAccessUrl);
+            }
+        } catch (Throwable $exception) {
+            error_log('[ExtraMenuFromWebservice] Failed to resolve current access URL: '.$exception->getMessage());
+        }
+
+        return $settingsManager;
+    }
+
+    private function decodeMainMenuEntries($value): array
+    {
+        $entries = [
+            'menu' => [],
+            'topbar' => [],
+        ];
+
+        if (is_array($value)) {
+            $entries = $value;
+        } elseif (is_string($value)) {
+            $value = trim($value);
+
+            if ('' !== $value) {
+                $decoded = json_decode($value, true);
+
+                if (JSON_ERROR_NONE === json_last_error() && is_array($decoded)) {
+                    $entries = $decoded;
+                }
+            }
+        }
+
+        if (!isset($entries['menu']) || !is_array($entries['menu'])) {
+            $entries['menu'] = [];
+        }
+
+        if (!isset($entries['topbar']) || !is_array($entries['topbar'])) {
+            $entries['topbar'] = [];
+        }
+
+        return $entries;
+    }
+
+    private function encodeMainMenuEntries(array $entries): string
+    {
+        if (!isset($entries['menu']) || !is_array($entries['menu'])) {
+            $entries['menu'] = [];
+        }
+
+        if (!isset($entries['topbar']) || !is_array($entries['topbar'])) {
+            $entries['topbar'] = [];
+        }
+
+        $encoded = json_encode(
+            $entries,
+            JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
+        );
+
+        return false === $encoded ? '{"menu":{},"topbar":{}}' : $encoded;
+    }
 
     private function isMobileRequest(): bool
     {

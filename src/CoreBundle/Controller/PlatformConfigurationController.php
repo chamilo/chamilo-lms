@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Bbb;
 use BuyCoursesPlugin;
+use DashboardPlugin;
 use DictionaryPlugin;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
@@ -116,6 +117,7 @@ class PlatformConfigurationController extends AbstractController
         $configuration['settings']['platform.use_custom_pages'] = $settingsManager->getSetting('platform.use_custom_pages', true);
 
         $configuration['plugins']['buycourses'] = $this->getBuyCoursesFrontendConfig();
+        $configuration['plugins']['dashboard'] = $this->getDashboardFrontendConfig();
         $configuration['plugins']['tour'] = $this->getTourFrontendConfig();
         $configuration['plugins']['searchcourse'] = $this->getSearchCourseFrontendConfig();
         $configuration['plugins']['rss'] = $this->getRssFrontendConfig();
@@ -397,6 +399,25 @@ class PlatformConfigurationController extends AbstractController
         return [];
     }
 
+
+
+    private function getDashboardFrontendConfig(): array
+    {
+        if (!$this->loadLegacyPluginClass('Dashboard/src/DashboardPlugin.php')
+            || !class_exists('DashboardPlugin')
+        ) {
+            return ['enabled' => false];
+        }
+
+        $plugin = DashboardPlugin::create();
+        $enabled = $plugin->isEnabled();
+
+        return [
+            'enabled' => $enabled,
+            'title' => $enabled ? $plugin->get_title() : '',
+            'adminPath' => '/plugin/Dashboard/admin.php',
+        ];
+    }
 
     private function getSearchCourseFrontendConfig(): array
     {

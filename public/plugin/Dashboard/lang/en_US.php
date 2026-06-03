@@ -39,3 +39,4 @@ $strings['Session'] = 'Session';
 $strings['NoRecentUsers'] = 'No recent users were found.';
 $strings['NoRecentCourses'] = 'No recent courses were found.';
 $strings['NoRecentSessions'] = 'No recent sessions were found.';
+$strings['ResetDashboardLayout'] = 'Reset layout';

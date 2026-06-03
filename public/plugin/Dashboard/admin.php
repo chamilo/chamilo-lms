@@ -15,6 +15,7 @@ if (!$plugin->isEnabled()) {
     Display::addFlash(
         Display::return_message($plugin->get_lang('PluginIsNotEnabled'), 'warning')
     );
+    api_not_allowed(true);
 }
 
 $connection = Database::getManager()->getConnection();
@@ -81,13 +82,38 @@ function dashboard_percentage(int $part, int $total): int
     return (int) round(($part / $total) * 100);
 }
 
-function dashboard_card(string $title, int $value, string $icon, string $description = ''): string
+function dashboard_widget_attributes(string $widgetId): string
+{
+    if ('' === $widgetId) {
+        return '';
+    }
+
+    $safeWidgetId = preg_replace('/[^a-zA-Z0-9_-]/', '', $widgetId) ?: '';
+
+    if ('' === $safeWidgetId) {
+        return '';
+    }
+
+    return ' draggable="true" data-dashboard-widget="'.Security::remove_XSS($safeWidgetId).'"';
+}
+
+function dashboard_widget_handle(string $widgetId): string
+{
+    if ('' === $widgetId) {
+        return '';
+    }
+
+    return '<span class="dashboard-widget__handle mdi mdi-drag-horizontal-variant" title="Move widget" aria-hidden="true"></span>';
+}
+
+function dashboard_card(string $title, int $value, string $icon, string $description = '', string $widgetId = ''): string
 {
     $safeTitle = Security::remove_XSS($title);
     $safeDescription = Security::remove_XSS($description);
 
     return '
-        <div class="group rounded-2xl border border-gray-25 bg-white p-5 shadow-sm transition-shadow hover:shadow-md">
+        <div class="dashboard-widget group relative rounded-2xl border border-gray-25 bg-white p-5 shadow-sm transition-shadow hover:shadow-md"'.dashboard_widget_attributes($widgetId).'>
+            '.dashboard_widget_handle($widgetId).'
             <div class="flex items-start justify-between gap-4">
                 <div>
                     <p class="m-0 text-body-2 font-semibold text-gray-50">'.$safeTitle.'</p>
@@ -122,7 +148,7 @@ function dashboard_bar_row(string $label, int $value, int $maxValue, string $des
     ';
 }
 
-function dashboard_chart_panel(string $title, string $subtitle, array $items): string
+function dashboard_chart_panel(string $title, string $subtitle, array $items, string $widgetId = ''): string
 {
     $maxValue = 0;
     foreach ($items as $item) {
@@ -130,7 +156,8 @@ function dashboard_chart_panel(string $title, string $subtitle, array $items): s
     }
 
     $html = '
-        <div class="rounded-2xl border border-gray-25 bg-white p-5 shadow-sm">
+        <div class="dashboard-widget relative rounded-2xl border border-gray-25 bg-white p-5 shadow-sm"'.dashboard_widget_attributes($widgetId).'>
+            '.dashboard_widget_handle($widgetId).'
             <div class="mb-5 flex items-start justify-between gap-4">
                 <div>
                     <h3 class="m-0 text-lg font-semibold text-gray-90">'.Security::remove_XSS($title).'</h3>
@@ -162,14 +189,15 @@ function dashboard_chart_panel(string $title, string $subtitle, array $items): s
     return $html;
 }
 
-function dashboard_status_panel(string $title, string $subtitle, int $activeUsers, int $inactiveUsers): string
+function dashboard_status_panel(string $title, string $subtitle, int $activeUsers, int $inactiveUsers, string $widgetId = ''): string
 {
     $total = $activeUsers + $inactiveUsers;
     $activePercent = dashboard_percentage($activeUsers, $total);
     $inactivePercent = dashboard_percentage($inactiveUsers, $total);
 
     return '
-        <div class="rounded-2xl border border-gray-25 bg-white p-5 shadow-sm">
+        <div class="dashboard-widget relative rounded-2xl border border-gray-25 bg-white p-5 shadow-sm"'.dashboard_widget_attributes($widgetId).'>
+            '.dashboard_widget_handle($widgetId).'
             <div class="mb-5 flex items-start justify-between gap-4">
                 <div>
                     <h3 class="m-0 text-lg font-semibold text-gray-90">'.Security::remove_XSS($title).'</h3>
@@ -196,10 +224,11 @@ function dashboard_status_panel(string $title, string $subtitle, int $activeUser
     ';
 }
 
-function dashboard_rows_table(string $title, array $headers, array $rows, callable $rowRenderer, string $emptyMessage): string
+function dashboard_rows_table(string $title, array $headers, array $rows, callable $rowRenderer, string $emptyMessage, string $widgetId = ''): string
 {
     $html = '
-        <div class="overflow-hidden rounded-2xl border border-gray-25 bg-white shadow-sm">
+        <div class="dashboard-widget relative overflow-hidden rounded-2xl border border-gray-25 bg-white shadow-sm"'.dashboard_widget_attributes($widgetId).'>
+            '.dashboard_widget_handle($widgetId).'
             <div class="border-b border-gray-25 bg-support-2 px-5 py-4">
                 <h3 class="m-0 text-lg font-semibold text-gray-90">'.Security::remove_XSS($title).'</h3>
             </div>
@@ -308,40 +337,48 @@ echo '
                 <h2 class="m-0 text-2xl font-semibold text-gray-90">'.$plugin->get_lang('plugin_title').'</h2>
                 <p class="m-0 mt-2 max-w-4xl text-body-2 text-gray-50">'.$plugin->get_lang('DashboardIntro').'</p>
             </div>
-            <a class="btn btn--plain" href="'.api_get_path(WEB_CODE_PATH).'admin/index.php">
-                <span class="mdi mdi-arrow-left" aria-hidden="true"></span>
-                '.$plugin->get_lang('BackToAdministration').'
-            </a>
+            <div class="flex flex-wrap gap-2">
+                <button id="dashboard-reset-layout" type="button" class="btn btn--plain">
+                    <span class="mdi mdi-restore" aria-hidden="true"></span>
+                    '.$plugin->get_lang('ResetDashboardLayout').'
+                </button>
+                <a class="btn btn--plain" href="'.api_get_path(WEB_CODE_PATH).'admin/index.php">
+                    <span class="mdi mdi-arrow-left" aria-hidden="true"></span>
+                    '.$plugin->get_lang('BackToAdministration').'
+                </a>
+            </div>
         </div>
     </div>
 ';
 
-echo '<div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">';
-echo dashboard_card($plugin->get_lang('Users'), $totalUsers, 'mdi-account-group-outline', $plugin->get_lang('ActiveUsers').': '.dashboard_format_number($activeUsers));
-echo dashboard_card($plugin->get_lang('Courses'), $totalCourses, 'mdi-book-open-page-variant-outline');
-echo dashboard_card($plugin->get_lang('Sessions'), $totalSessions, 'mdi-calendar-range-outline');
-echo dashboard_card($plugin->get_lang('LearningPaths'), $totalLearningPaths, 'mdi-routes');
-echo dashboard_card($plugin->get_lang('Exercises'), $totalExercises, 'mdi-format-list-checks');
-echo dashboard_card($plugin->get_lang('ResourceFiles'), $totalResourceFiles, 'mdi-file-document-outline');
-echo dashboard_card($plugin->get_lang('Assets'), $totalAssets, 'mdi-image-outline');
-echo dashboard_card($plugin->get_lang('InactiveUsers'), $inactiveUsers, 'mdi-account-off-outline');
+echo '<div id="dashboard-summary-widgets" class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4" data-dashboard-container="summary">';
+echo dashboard_card($plugin->get_lang('Users'), $totalUsers, 'mdi-account-group-outline', $plugin->get_lang('ActiveUsers').': '.dashboard_format_number($activeUsers), 'users');
+echo dashboard_card($plugin->get_lang('Courses'), $totalCourses, 'mdi-book-open-page-variant-outline', '', 'courses');
+echo dashboard_card($plugin->get_lang('Sessions'), $totalSessions, 'mdi-calendar-range-outline', '', 'sessions');
+echo dashboard_card($plugin->get_lang('LearningPaths'), $totalLearningPaths, 'mdi-routes', '', 'learning-paths');
+echo dashboard_card($plugin->get_lang('Exercises'), $totalExercises, 'mdi-format-list-checks', '', 'exercises');
+echo dashboard_card($plugin->get_lang('ResourceFiles'), $totalResourceFiles, 'mdi-file-document-outline', '', 'resource-files');
+echo dashboard_card($plugin->get_lang('Assets'), $totalAssets, 'mdi-image-outline', '', 'assets');
+echo dashboard_card($plugin->get_lang('InactiveUsers'), $inactiveUsers, 'mdi-account-off-outline', '', 'inactive-users');
 echo '</div>';
 
-echo '<div class="grid grid-cols-1 gap-6 xl:grid-cols-3">';
-echo dashboard_status_panel($plugin->get_lang('UserStatus'), $plugin->get_lang('UserStatusSubtitle'), $activeUsers, $inactiveUsers);
+echo '<div id="dashboard-overview-widgets" class="grid grid-cols-1 gap-6 xl:grid-cols-3" data-dashboard-container="overview">';
+echo dashboard_status_panel($plugin->get_lang('UserStatus'), $plugin->get_lang('UserStatusSubtitle'), $activeUsers, $inactiveUsers, 'user-status');
 echo dashboard_chart_panel(
     $plugin->get_lang('ContentOverview'),
     $plugin->get_lang('ContentOverviewSubtitle'),
-    $contentItems
+    $contentItems,
+    'content-overview'
 );
 echo dashboard_chart_panel(
     $plugin->get_lang('StorageOverview'),
     $plugin->get_lang('StorageOverviewSubtitle'),
-    $storageItems
+    $storageItems,
+    'storage-overview'
 );
 echo '</div>';
 
-echo '<div class="grid grid-cols-1 gap-6 xl:grid-cols-3">';
+echo '<div id="dashboard-table-widgets" class="grid grid-cols-1 gap-6 xl:grid-cols-3" data-dashboard-container="tables">';
 
 echo dashboard_rows_table(
     $plugin->get_lang('RecentUsers'),
@@ -358,7 +395,8 @@ echo dashboard_rows_table(
             .'<td><span class="badge '.($active ? 'badge--success' : 'badge--warning').'">'.($active ? get_lang('Active') : get_lang('Inactive')).'</span></td>'
             .'</tr>';
     },
-    $plugin->get_lang('NoRecentUsers')
+    $plugin->get_lang('NoRecentUsers'),
+    'recent-users'
 );
 
 echo dashboard_rows_table(
@@ -371,7 +409,8 @@ echo dashboard_rows_table(
             .'<td><code>'.Security::remove_XSS((string) ($row['code'] ?? '')).'</code></td>'
             .'</tr>';
     },
-    $plugin->get_lang('NoRecentCourses')
+    $plugin->get_lang('NoRecentCourses'),
+    'recent-courses'
 );
 
 echo dashboard_rows_table(
@@ -384,11 +423,157 @@ echo dashboard_rows_table(
             .'<td><span class="badge badge--info">'.Security::remove_XSS((string) ($row['status'] ?? '0')).'</span></td>'
             .'</tr>';
     },
-    $plugin->get_lang('NoRecentSessions')
+    $plugin->get_lang('NoRecentSessions'),
+    'recent-sessions'
 );
 
 echo '</div>';
 
 echo '</section>';
+
+
+echo '<script>
+(function () {
+    const storagePrefix = "chamilo-dashboard-plugin-order:";
+
+    function getWidgetId(widget) {
+        return widget ? widget.getAttribute("data-dashboard-widget") : "";
+    }
+
+    function saveContainer(container) {
+        const containerName = container.getAttribute("data-dashboard-container");
+
+        if (!containerName || !window.localStorage) {
+            return;
+        }
+
+        const order = Array.from(container.querySelectorAll("[data-dashboard-widget]"))
+            .map(getWidgetId)
+            .filter(Boolean);
+
+        window.localStorage.setItem(storagePrefix + containerName, JSON.stringify(order));
+    }
+
+    function restoreContainer(container) {
+        const containerName = container.getAttribute("data-dashboard-container");
+
+        if (!containerName || !window.localStorage) {
+            return;
+        }
+
+        let order = [];
+
+        try {
+            order = JSON.parse(window.localStorage.getItem(storagePrefix + containerName) || "[]");
+        } catch (e) {
+            order = [];
+        }
+
+        if (!Array.isArray(order) || 0 === order.length) {
+            return;
+        }
+
+        const widgets = new Map();
+
+        Array.from(container.querySelectorAll("[data-dashboard-widget]")).forEach(function (widget) {
+            widgets.set(getWidgetId(widget), widget);
+        });
+
+        order.forEach(function (widgetId) {
+            if (widgets.has(widgetId)) {
+                container.appendChild(widgets.get(widgetId));
+            }
+        });
+    }
+
+    function getDragAfterElement(container, y) {
+        const draggableElements = Array.from(
+            container.querySelectorAll("[data-dashboard-widget]:not(.dashboard-widget--dragging)")
+        );
+
+        return draggableElements.reduce(function (closest, child) {
+            const box = child.getBoundingClientRect();
+            const offset = y - box.top - (box.height / 2);
+
+            if (0 > offset && offset > closest.offset) {
+                return { offset: offset, element: child };
+            }
+
+            return closest;
+        }, { offset: Number.NEGATIVE_INFINITY, element: null }).element;
+    }
+
+    function initializeContainer(container) {
+        restoreContainer(container);
+
+        container.addEventListener("dragstart", function (event) {
+            const widget = event.target.closest("[data-dashboard-widget]");
+
+            if (!widget || !container.contains(widget)) {
+                return;
+            }
+
+            widget.classList.add("dashboard-widget--dragging");
+            event.dataTransfer.effectAllowed = "move";
+            event.dataTransfer.setData("text/plain", getWidgetId(widget));
+        });
+
+        container.addEventListener("dragover", function (event) {
+            event.preventDefault();
+
+            const dragging = container.querySelector(".dashboard-widget--dragging");
+
+            if (!dragging) {
+                return;
+            }
+
+            const afterElement = getDragAfterElement(container, event.clientY);
+
+            if (null === afterElement) {
+                container.appendChild(dragging);
+
+                return;
+            }
+
+            container.insertBefore(dragging, afterElement);
+        });
+
+        container.addEventListener("dragend", function (event) {
+            const widget = event.target.closest("[data-dashboard-widget]");
+
+            if (!widget) {
+                return;
+            }
+
+            widget.classList.remove("dashboard-widget--dragging");
+            saveContainer(container);
+        });
+
+        container.addEventListener("drop", function () {
+            saveContainer(container);
+        });
+    }
+
+    document.querySelectorAll("[data-dashboard-container]").forEach(initializeContainer);
+
+    const resetButton = document.getElementById("dashboard-reset-layout");
+
+    if (resetButton) {
+        resetButton.addEventListener("click", function () {
+            if (window.localStorage) {
+                document.querySelectorAll("[data-dashboard-container]").forEach(function (container) {
+                    const containerName = container.getAttribute("data-dashboard-container");
+
+                    if (containerName) {
+                        window.localStorage.removeItem(storagePrefix + containerName);
+                    }
+                });
+            }
+
+            window.location.reload();
+        });
+    }
+})();
+</script>';
 
 Display::display_footer();

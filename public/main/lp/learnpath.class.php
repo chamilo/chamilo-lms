@@ -12,6 +12,8 @@ use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Event\LearningPathEndedEvent;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\SafeHttpClientHelper;
+use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
 use Chamilo\CoreBundle\Repository\TrackEDefaultRepository;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
@@ -8148,40 +8150,35 @@ document.addEventListener("DOMContentLoaded", function () {
             $protocolFixApplied = true;
         }
 
-        if (false == $protocolFixApplied) {
-            if (false === strpos(api_get_path(WEB_PATH), $host)) {
-                // Check X-Frame-Options
-                $ch = curl_init();
-                $options = [
-                    CURLOPT_URL => $src,
-                    CURLOPT_RETURNTRANSFER => true,
-                    CURLOPT_HEADER => true,
-                    CURLOPT_FOLLOWLOCATION => true,
-                    CURLOPT_ENCODING => "",
-                    CURLOPT_AUTOREFERER => true,
-                    CURLOPT_CONNECTTIMEOUT => 120,
-                    CURLOPT_TIMEOUT => 120,
-                    CURLOPT_MAXREDIRS => 10,
-                ];
+        if (!$protocolFixApplied) {
+            if (!str_contains(api_get_path(WEB_PATH), $host)) {
+                // Check X-Frame-Options through an SSRF-safe client (blocks
+                // loopback/private/reserved/metadata targets, validates redirects,
+                // http(s) only); honours the platform proxy setting.
+                $options = SafeHttpClientHelper::withChamiloProxy([
+                    'timeout' => 120,
+                    'max_redirects' => 10,
+                ]);
 
-                $proxySettings = api_get_setting('security.proxy_settings', true);
-                if (!empty($proxySettings) &&
-                    isset($proxySettings['curl_setopt_array'])
-                ) {
-                    $options[CURLOPT_PROXY] = $proxySettings['curl_setopt_array']['CURLOPT_PROXY'];
-                    $options[CURLOPT_PROXYPORT] = $proxySettings['curl_setopt_array']['CURLOPT_PROXYPORT'];
+                $xFrameValues = [];
+                try {
+                    // false: do not throw on 3xx/4xx/5xx; we only inspect headers.
+                    $xFrameValues = SafeHttpClientHelper::create()
+                        ->request('GET', $src, $options)
+                        ->getHeaders(false)['x-frame-options'] ?? [];
+                } catch (ExceptionInterface $e) {
+                    // Unreachable or blocked target: leave $src untouched, as the
+                    // legacy curl path did when the request failed.
+                    $xFrameValues = [];
                 }
 
-                curl_setopt_array($ch, $options);
-                $response = curl_exec($ch);
-                $httpCode = curl_getinfo($ch);
-                $headers = substr($response, 0, $httpCode['header_size']);
-
                 $error = false;
-                if (stripos($headers, 'X-Frame-Options: DENY') > -1
-                    //|| stripos($headers, 'X-Frame-Options: SAMEORIGIN') > -1
-                ) {
-                    $error = true;
+                foreach ($xFrameValues as $xFrameValue) {
+                    if (false !== stripos($xFrameValue, 'DENY')) {
+                        $error = true;
+
+                        break;
+                    }
                 }
 
                 if ($error) {

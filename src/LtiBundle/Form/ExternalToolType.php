@@ -7,7 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\LtiBundle\Form;
 
 use Chamilo\LtiBundle\Entity\ExternalTool;
-use SimpleXMLElement;
+use ImsLtiCartridge;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -20,15 +20,6 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
-use const CURLOPT_CUSTOMREQUEST;
-use const CURLOPT_ENCODING;
-use const CURLOPT_FOLLOWLOCATION;
-use const CURLOPT_HEADER;
-use const CURLOPT_POST;
-use const CURLOPT_RETURNTRANSFER;
-use const CURLOPT_SSL_VERIFYPEER;
-use const LIBXML_NONET;
 
 class ExternalToolType extends AbstractType
 {
@@ -467,7 +458,7 @@ class ExternalToolType extends AbstractType
             '' === trim((string) $tool->getConsumerKey())
             && '' === trim((string) $tool->getSharedSecret())
         ) {
-            $cartridgeUrl = $this->getLaunchUrlFromCartridge((string) $tool->getLaunchUrl());
+            $cartridgeUrl = ImsLtiCartridge::resolveLaunchUrl((string) $tool->getLaunchUrl());
 
             if (!empty($cartridgeUrl)) {
                 $tool->setLaunchUrl($cartridgeUrl);
@@ -556,48 +547,6 @@ class ExternalToolType extends AbstractType
                 'class' => 'h-4 w-4 rounded border-gray-25 text-primary focus:ring-primary',
             ],
         ];
-    }
-
-    private function getLaunchUrlFromCartridge(string $launchUrl): ?string
-    {
-        if ('' === trim($launchUrl)) {
-            return null;
-        }
-
-        $options = [
-            CURLOPT_CUSTOMREQUEST => 'GET',
-            CURLOPT_POST => false,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER => false,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_SSL_VERIFYPEER => false,
-        ];
-
-        $ch = curl_init($launchUrl);
-        curl_setopt_array($ch, $options);
-        $content = curl_exec($ch);
-        $errno = curl_errno($ch);
-        curl_close($ch);
-
-        if (0 !== $errno || empty($content)) {
-            return null;
-        }
-
-        libxml_use_internal_errors(true);
-        $sxe = simplexml_load_string($content, SimpleXMLElement::class, LIBXML_NONET);
-
-        if (false === $sxe) {
-            return null;
-        }
-
-        $result = $sxe->xpath('blti:launch_url');
-
-        if (empty($result)) {
-            return null;
-        }
-
-        return (string) $result[0];
     }
 
     private function generateClientId(int $length = 20): string

@@ -543,42 +543,13 @@ class ImsLtiPlugin extends Plugin
      */
     public function getLaunchUrlFromCartridge($configUrl)
     {
-        $options = [
-            CURLOPT_CUSTOMREQUEST => 'GET',
-            CURLOPT_POST => false,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER => false,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_SSL_VERIFYPEER => false,
-        ];
+        $launchUrl = ImsLtiCartridge::resolveLaunchUrl($configUrl);
 
-        $ch = curl_init($configUrl);
-        curl_setopt_array($ch, $options);
-        $content = curl_exec($ch);
-        $errno = curl_errno($ch);
-        curl_close($ch);
-
-        if ($errno !== 0) {
-            throw new Exception($this->get_lang('NoAccessToUrl'));
-        }
-
-        libxml_use_internal_errors(true);
-        $xml = simplexml_load_string($content, SimpleXMLElement::class, LIBXML_NONET);
-
-        if ($xml === false) {
+        if (null === $launchUrl) {
             throw new Exception($this->get_lang('LaunchUrlNotFound'));
         }
 
-        $result = $xml->xpath('blti:launch_url');
-
-        if (empty($result)) {
-            throw new Exception($this->get_lang('LaunchUrlNotFound'));
-        }
-
-        $launchUrl = $result[0];
-
-        return (string) $launchUrl;
+        return $launchUrl;
     }
 
     public function trimParams(array &$params)

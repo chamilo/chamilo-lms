@@ -24,7 +24,7 @@
         </span>
       </div>
 
-      <dl class="mt-6 grid gap-4 md:grid-cols-3">
+      <dl class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <div class="rounded-2xl border border-gray-20 bg-support-2 p-4">
           <dt class="flex items-center gap-2 text-caption font-semibold uppercase tracking-wide text-gray-50">
             <i class="mdi mdi-tag-outline text-primary" />
@@ -54,6 +54,35 @@
             {{ status.stagingDirectory || "var/update/staging" }}
           </dd>
         </div>
+
+        <div class="rounded-2xl border border-gray-20 bg-support-2 p-4">
+          <dt class="flex items-center gap-2 text-caption font-semibold uppercase tracking-wide text-gray-50">
+            <i class="mdi mdi-key-variant text-primary" />
+            {{ t("Trusted signing key") }}
+          </dt>
+          <dd class="mt-2 text-body-2 font-semibold text-gray-90">
+            {{ status.trustedPublicKeyConfigured ? t("Configured") : t("Not configured") }}
+          </dd>
+          <dd
+            v-if="status.trustedPublicKeyFingerprint"
+            class="mt-1 break-all font-mono text-caption text-gray-50"
+          >
+            {{ status.trustedPublicKeyFingerprint }}
+          </dd>
+        </div>
+
+        <div class="rounded-2xl border border-gray-20 bg-support-2 p-4">
+          <dt class="flex items-center gap-2 text-caption font-semibold uppercase tracking-wide text-gray-50">
+            <i class="mdi mdi-test-tube text-primary" />
+            {{ t("Local test options") }}
+          </dt>
+          <dd class="mt-2 text-body-2 font-semibold text-gray-90">
+            {{ status.allowLocalPaths ? t("Enabled") : t("Disabled") }}
+          </dd>
+          <dd class="mt-1 text-caption text-gray-50">
+            {{ status.productionMode ? t("Production mode") : t("Development mode") }}
+          </dd>
+        </div>
       </dl>
     </div>
 
@@ -73,9 +102,12 @@
           <input
             v-model.trim="form.manifestSource"
             class="mt-2 w-full rounded-xl border border-gray-25 px-3 py-2 text-body-2 text-gray-90 shadow-sm focus:border-primary focus:ring-primary"
-            placeholder="https://download.example.org/chamilo/stable.json or /path/to/manifest.json"
+            :placeholder="manifestSourcePlaceholder"
             type="text"
           />
+          <span class="mt-2 block text-caption text-gray-50">
+            {{ manifestSourceHelp }}
+          </span>
         </label>
 
         <BaseButton
@@ -122,12 +154,15 @@
             {{ t("Package verification") }}
           </h2>
           <p class="mt-1 text-body-2 text-gray-50">
-            {{ t("Use local paths for development tests, or leave the package and signature paths empty to download them from the manifest URLs.") }}
+            {{ t("Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests.") }}
           </p>
         </div>
       </div>
 
-      <div class="mt-5 grid gap-4 md:grid-cols-2">
+      <div
+        v-if="status.allowLocalPaths"
+        class="mt-5 grid gap-4 md:grid-cols-2"
+      >
         <label class="block">
           <span class="text-body-2 font-semibold text-gray-90">{{ t("Package path") }}</span>
           <input
@@ -148,7 +183,10 @@
           />
         </label>
 
-        <label class="block md:col-span-2">
+        <label
+          v-if="showTrustedPublicKeyInput"
+          class="block md:col-span-2"
+        >
           <span class="text-body-2 font-semibold text-gray-90">{{ t("Trusted public key") }}</span>
           <input
             v-model.trim="form.trustedPublicKey"
@@ -156,10 +194,24 @@
             placeholder="RW..."
             type="text"
           />
+          <span class="mt-2 block text-caption text-gray-50">
+            {{ t("Use this only for local development tests. Production updates must use the server configured key.") }}
+          </span>
         </label>
       </div>
 
-      <label class="mt-4 flex items-center gap-2 text-body-2 text-gray-90">
+      <div
+        v-else
+        class="mt-5 rounded-2xl border border-gray-20 bg-support-2 p-4 text-body-2 text-gray-50"
+      >
+        <span class="mdi mdi-download-lock-outline mr-2 text-primary" />
+        {{ t("Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment.") }}
+      </div>
+
+      <label
+        v-if="status.allowSkipSignature"
+        class="mt-4 flex items-center gap-2 text-body-2 text-gray-90"
+      >
         <input
           v-model="form.skipSignature"
           class="rounded border-gray-25 text-primary focus:ring-primary"
@@ -167,6 +219,14 @@
         />
         <span>{{ t("Skip signature verification for local development tests") }}</span>
       </label>
+
+      <p
+        v-else
+        class="mt-4 rounded-2xl border border-gray-20 bg-support-2 p-3 text-caption text-gray-50"
+      >
+        <span class="mdi mdi-shield-lock-outline mr-1 text-primary" />
+        {{ t("Signature verification cannot be skipped in this environment.") }}
+      </p>
 
       <div class="mt-4">
         <BaseButton
@@ -314,6 +374,12 @@ const status = reactive({
   installedVersion: "",
   updateDirectory: "",
   stagingDirectory: "",
+  defaultManifestSource: "",
+  allowLocalPaths: false,
+  allowSkipSignature: false,
+  productionMode: false,
+  trustedPublicKeyConfigured: false,
+  trustedPublicKeyFingerprint: "",
 })
 
 const form = reactive({
@@ -321,7 +387,7 @@ const form = reactive({
   packagePath: "",
   signaturePath: "",
   trustedPublicKey: "",
-  skipSignature: true,
+  skipSignature: false,
 })
 
 const manifest = ref(null)
@@ -333,6 +399,34 @@ const isChecking = ref(false)
 const isVerifying = ref(false)
 const isRunningPreflight = ref(false)
 const isStaging = ref(false)
+
+const showTrustedPublicKeyInput = computed(() => {
+  return status.allowLocalPaths && !status.trustedPublicKeyConfigured
+})
+
+const manifestSourcePlaceholder = computed(() => {
+  if (status.defaultManifestSource) {
+    return status.defaultManifestSource
+  }
+
+  if (status.allowLocalPaths) {
+    return "https://download.example.org/chamilo/stable.json or /path/to/manifest.json"
+  }
+
+  return "https://download.example.org/chamilo/stable.json"
+})
+
+const manifestSourceHelp = computed(() => {
+  if (status.defaultManifestSource) {
+    return t("The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed.")
+  }
+
+  if (status.allowLocalPaths) {
+    return t("No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests.")
+  }
+
+  return t("Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL.")
+})
 
 const manifestRows = computed(() => {
   if (!manifest.value) {
@@ -512,6 +606,20 @@ onMounted(async () => {
     status.installedVersion = data.installedVersion || ""
     status.updateDirectory = data.updateDirectory || ""
     status.stagingDirectory = data.stagingDirectory || ""
+    status.defaultManifestSource = data.defaultManifestSource || ""
+    status.allowLocalPaths = Boolean(data.allowLocalPaths)
+    status.allowSkipSignature = Boolean(data.allowSkipSignature)
+    status.productionMode = Boolean(data.productionMode)
+    status.trustedPublicKeyConfigured = Boolean(data.trustedPublicKeyConfigured)
+    status.trustedPublicKeyFingerprint = data.trustedPublicKeyFingerprint || ""
+
+    if (!form.manifestSource && status.defaultManifestSource) {
+      form.manifestSource = status.defaultManifestSource
+    }
+
+    if (!status.allowSkipSignature) {
+      form.skipSignature = false
+    }
   } catch (error) {
     console.error("[SystemUpdate] Failed to load update status:", error)
   }
@@ -542,13 +650,7 @@ async function verifyPackage() {
   isVerifying.value = true
 
   try {
-    const data = await adminService.verifySystemUpdatePackage({
-      manifestSource: form.manifestSource,
-      packagePath: form.packagePath || null,
-      signaturePath: form.signaturePath || null,
-      trustedPublicKey: form.trustedPublicKey || null,
-      skipSignature: form.skipSignature,
-    })
+    const data = await adminService.verifySystemUpdatePackage(buildUpdatePayload())
 
     manifest.value = data.manifest
     verification.value = data
@@ -567,7 +669,7 @@ async function runPreflight() {
   try {
     const data = await adminService.runSystemUpdatePreflight({
       manifestSource: form.manifestSource,
-      packagePath: form.packagePath || null,
+      packagePath: status.allowLocalPaths ? form.packagePath || null : null,
     })
 
     manifest.value = data.manifest
@@ -585,13 +687,7 @@ async function stagePackage() {
   isStaging.value = true
 
   try {
-    const data = await adminService.stageSystemUpdatePackage({
-      manifestSource: form.manifestSource,
-      packagePath: form.packagePath || null,
-      signaturePath: form.signaturePath || null,
-      trustedPublicKey: form.trustedPublicKey || null,
-      skipSignature: form.skipSignature,
-    })
+    const data = await adminService.stageSystemUpdatePackage(buildUpdatePayload())
 
     manifest.value = data.manifest
     verification.value = {
@@ -640,6 +736,16 @@ async function stagePackage() {
     }
   } finally {
     isStaging.value = false
+  }
+}
+
+function buildUpdatePayload() {
+  return {
+    manifestSource: form.manifestSource,
+    packagePath: status.allowLocalPaths ? form.packagePath || null : null,
+    signaturePath: status.allowLocalPaths ? form.signaturePath || null : null,
+    trustedPublicKey: showTrustedPublicKeyInput.value ? form.trustedPublicKey || null : null,
+    skipSignature: status.allowSkipSignature && form.skipSignature,
   }
 }
 

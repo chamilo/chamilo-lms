@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Command;
 
+use Chamilo\CoreBundle\Service\Update\UpdateConfiguration;
 use Chamilo\CoreBundle\Service\Update\UpdateManifestClient;
 use Chamilo\CoreBundle\Service\Update\UpdatePackageDownloader;
 use Chamilo\CoreBundle\Service\Update\UpdatePackageVerifier;
@@ -20,6 +21,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
 
+use const JSON_PRETTY_PRINT;
+use const JSON_UNESCAPED_SLASHES;
+
 #[AsCommand(
     name: 'chamilo:update:stage',
     description: 'Verify and extract a Chamilo update package into a staging directory without applying it.',
@@ -32,6 +36,7 @@ final class UpdateStagePackageCommand extends Command
         private readonly UpdatePackageVerifier $packageVerifier,
         private readonly UpdatePreflightChecker $preflightChecker,
         private readonly UpdateStagingManager $stagingManager,
+        private readonly UpdateConfiguration $updateConfiguration,
     ) {
         parent::__construct();
     }
@@ -42,7 +47,7 @@ final class UpdateStagePackageCommand extends Command
             ->addArgument('manifest', InputArgument::REQUIRED, 'HTTPS URL or local path to the update manifest JSON.')
             ->addOption('package-path', null, InputOption::VALUE_REQUIRED, 'Local package path. If omitted, the package URL from the manifest is downloaded.')
             ->addOption('signature-path', null, InputOption::VALUE_REQUIRED, 'Local Minisign signature path. If omitted, the signature URL from the manifest is downloaded when needed.')
-            ->addOption('trusted-public-key', null, InputOption::VALUE_REQUIRED, 'Trusted Minisign public key used to verify the update package.')
+            ->addOption('trusted-public-key', null, InputOption::VALUE_REQUIRED, 'Trusted Minisign public key used to verify the update package. Defaults to CHAMILO_UPDATE_MINISIGN_PUBLIC_KEY when configured.')
             ->addOption('skip-signature', null, InputOption::VALUE_NONE, 'Skip signature verification. Only use this for local development tests.')
             ->setHelp(
                 <<<'HELP'
@@ -63,8 +68,14 @@ HELP
         $manifestSource = (string) $input->getArgument('manifest');
         $packagePath = $this->readNullableStringOption($input, 'package-path');
         $signaturePath = $this->readNullableStringOption($input, 'signature-path');
-        $trustedPublicKey = $this->readNullableStringOption($input, 'trusted-public-key');
+        $trustedPublicKey = $this->readNullableStringOption($input, 'trusted-public-key') ?? $this->updateConfiguration->getTrustedPublicKey();
         $skipSignature = (bool) $input->getOption('skip-signature');
+
+        if ($skipSignature && !$this->updateConfiguration->allowsSkipSignature()) {
+            $io->error('Skipping update signature verification is disabled in this environment.');
+
+            return Command::FAILURE;
+        }
 
         try {
             $manifest = $this->manifestClient->load($manifestSource);

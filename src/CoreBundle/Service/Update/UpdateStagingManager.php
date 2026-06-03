@@ -8,10 +8,16 @@ namespace Chamilo\CoreBundle\Service\Update;
 
 use Chamilo\CoreBundle\Service\Update\Dto\UpdateManifest;
 use Chamilo\CoreBundle\Service\Update\Dto\UpdateStagingResult;
+use FilesystemIterator;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Throwable;
 use ZipArchive;
+
+use const JSON_PRETTY_PRINT;
+use const JSON_UNESCAPED_SLASHES;
 
 final readonly class UpdateStagingManager
 {
@@ -48,7 +54,11 @@ final readonly class UpdateStagingManager
 
             $this->validateChamiloPackageStructure($applicationPath, $checks);
 
-            $this->writeStagingMetadata($stagingDirectory, $manifest, $packagePath, $applicationPath, $archiveDetails);
+            $dryRunReport = $this->buildDryRunReport($applicationPath);
+            $details['dry_run'] = $dryRunReport;
+            $this->addCheck($checks, 'dry_run_report', 'passed', 'Staged package dry-run report was generated.', $dryRunReport);
+
+            $this->writeStagingMetadata($stagingDirectory, $manifest, $packagePath, $applicationPath, $archiveDetails, $dryRunReport);
             $this->addCheck($checks, 'staging_metadata', 'passed', 'Staging metadata was written.', [
                 'metadata_file' => $stagingDirectory.'/STAGING-INFO.json',
             ]);
@@ -167,15 +177,90 @@ final readonly class UpdateStagingManager
         }
     }
 
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function buildDryRunReport(string $applicationPath): array
+    {
+        $filesTotal = 0;
+        $filesExisting = 0;
+        $filesNew = 0;
+        $directoriesTotal = 0;
+        $sampleExistingFiles = [];
+        $sampleNewFiles = [];
+
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($applicationPath, FilesystemIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::SELF_FIRST,
+        );
+
+        foreach ($iterator as $item) {
+            $relativePath = substr($item->getPathname(), \strlen($applicationPath) + 1);
+
+            if ($this->isSkippedDryRunPath($relativePath)) {
+                continue;
+            }
+
+            if ($item->isDir()) {
+                $directoriesTotal++;
+
+                continue;
+            }
+
+            if (!$item->isFile()) {
+                continue;
+            }
+
+            $filesTotal++;
+            $targetPath = $this->projectDir.'/'.$relativePath;
+
+            if (is_file($targetPath)) {
+                $filesExisting++;
+
+                if (\count($sampleExistingFiles) < 25) {
+                    $sampleExistingFiles[] = $relativePath;
+                }
+
+                continue;
+            }
+
+            $filesNew++;
+
+            if (\count($sampleNewFiles) < 25) {
+                $sampleNewFiles[] = $relativePath;
+            }
+        }
+
+        return [
+            'files_total' => $filesTotal,
+            'files_existing' => $filesExisting,
+            'files_new' => $filesNew,
+            'directories_total' => $directoriesTotal,
+            'sample_existing_files' => $sampleExistingFiles,
+            'sample_new_files' => $sampleNewFiles,
+            'skipped_top_level_entries' => ['.git', 'node_modules', 'vendor', 'var'],
+        ];
+    }
+
+    private function isSkippedDryRunPath(string $relativePath): bool
+    {
+        $firstSegment = explode('/', str_replace('\\', '/', $relativePath))[0] ?? '';
+
+        return \in_array($firstSegment, ['.git', 'node_modules', 'vendor', 'var'], true);
+    }
+
     /**
      * @param array<string, mixed> $archiveDetails
+     * @param array<string, mixed> $dryRunReport
      */
     private function writeStagingMetadata(
         string $stagingDirectory,
         UpdateManifest $manifest,
         string $packagePath,
         string $applicationPath,
-        array $archiveDetails
+        array $archiveDetails,
+        array $dryRunReport
     ): void {
         $metadata = [
             'created_at' => gmdate('c'),
@@ -192,6 +277,7 @@ final readonly class UpdateStagingManager
             'package_path' => $packagePath,
             'application_path' => $applicationPath,
             'archive' => $archiveDetails,
+            'dry_run' => $dryRunReport,
         ];
 
         $encoded = json_encode($metadata, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);

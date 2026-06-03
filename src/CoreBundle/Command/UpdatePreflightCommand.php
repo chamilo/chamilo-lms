@@ -17,6 +17,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
 
+use const JSON_PRETTY_PRINT;
+use const JSON_UNESCAPED_SLASHES;
+
 #[AsCommand(
     name: 'chamilo:update:preflight',
     description: 'Run environment checks before applying a Chamilo update package.',

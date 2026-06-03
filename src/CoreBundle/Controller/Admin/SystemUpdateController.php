@@ -7,12 +7,14 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Service\Update\Dto\UpdateManifest;
+use Chamilo\CoreBundle\Service\Update\UpdateConfiguration;
 use Chamilo\CoreBundle\Service\Update\UpdateManifestClient;
 use Chamilo\CoreBundle\Service\Update\UpdatePackageDownloader;
 use Chamilo\CoreBundle\Service\Update\UpdatePackageVerifier;
 use Chamilo\CoreBundle\Service\Update\UpdatePreflightChecker;
 use Chamilo\CoreBundle\Service\Update\UpdateStagingManager;
 use Composer\InstalledVersions;
+use InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,6 +33,7 @@ final class SystemUpdateController extends AbstractController
         private readonly UpdatePackageVerifier $packageVerifier,
         private readonly UpdatePreflightChecker $preflightChecker,
         private readonly UpdateStagingManager $stagingManager,
+        private readonly UpdateConfiguration $updateConfiguration,
     ) {}
 
     #[Route('/status', name: 'status', methods: ['GET'])]
@@ -41,6 +44,12 @@ final class SystemUpdateController extends AbstractController
             'updateDirectory' => $this->getProjectDir().'/var/update/downloads',
             'stagingDirectory' => $this->getProjectDir().'/var/update/staging',
             'verificationOnly' => true,
+            'defaultManifestSource' => $this->updateConfiguration->getDefaultManifestSource(),
+            'allowLocalPaths' => $this->updateConfiguration->allowsLocalPaths(),
+            'allowSkipSignature' => $this->updateConfiguration->allowsSkipSignature(),
+            'productionMode' => $this->updateConfiguration->isProduction(),
+            'trustedPublicKeyConfigured' => $this->updateConfiguration->hasTrustedPublicKey(),
+            'trustedPublicKeyFingerprint' => $this->updateConfiguration->getTrustedPublicKeyFingerprint(),
         ]);
     }
 
@@ -50,10 +59,11 @@ final class SystemUpdateController extends AbstractController
         $payload = $this->readJsonPayload($request);
 
         try {
-            $manifestSource = $this->normalizeLocalSource($this->readRequiredString($payload, 'manifestSource'));
+            $manifestSource = $this->readManifestSource($payload);
             $manifest = $this->manifestClient->load($manifestSource);
 
             return $this->json([
+                'manifestSource' => $manifestSource,
                 'manifest' => $this->manifestToArray($manifest),
             ]);
         } catch (Throwable $exception) {
@@ -69,11 +79,11 @@ final class SystemUpdateController extends AbstractController
         $payload = $this->readJsonPayload($request);
 
         try {
-            $manifestSource = $this->normalizeLocalSource($this->readRequiredString($payload, 'manifestSource'));
-            $packagePath = $this->normalizeNullableLocalPath($this->readNullableString($payload, 'packagePath'));
-            $signaturePath = $this->normalizeNullableLocalPath($this->readNullableString($payload, 'signaturePath'));
-            $trustedPublicKey = $this->readNullableString($payload, 'trustedPublicKey');
-            $skipSignature = true === ($payload['skipSignature'] ?? false);
+            $manifestSource = $this->readManifestSource($payload);
+            $packagePath = $this->normalizeNullableLocalPath($this->readNullableString($payload, 'packagePath'), 'package');
+            $signaturePath = $this->normalizeNullableLocalPath($this->readNullableString($payload, 'signaturePath'), 'signature');
+            $trustedPublicKey = $this->resolveTrustedPublicKey($payload);
+            $skipSignature = $this->readSkipSignature($payload);
             $manifest = $this->manifestClient->load($manifestSource);
 
             if (null === $packagePath) {
@@ -93,9 +103,12 @@ final class SystemUpdateController extends AbstractController
             );
 
             return $this->json([
+                'manifestSource' => $manifestSource,
                 'manifest' => $this->manifestToArray($manifest),
                 'packagePath' => $packagePath,
                 'signaturePath' => $signaturePath,
+                'trustedPublicKeyConfigured' => $this->updateConfiguration->hasTrustedPublicKey(),
+                'skipSignature' => $skipSignature,
                 'result' => $result->toArray(),
             ]);
         } catch (Throwable $exception) {
@@ -111,12 +124,13 @@ final class SystemUpdateController extends AbstractController
         $payload = $this->readJsonPayload($request);
 
         try {
-            $manifestSource = $this->normalizeLocalSource($this->readRequiredString($payload, 'manifestSource'));
-            $packagePath = $this->normalizeNullableLocalPath($this->readNullableString($payload, 'packagePath'));
+            $manifestSource = $this->readManifestSource($payload);
+            $packagePath = $this->normalizeNullableLocalPath($this->readNullableString($payload, 'packagePath'), 'package');
             $manifest = $this->manifestClient->load($manifestSource);
             $result = $this->preflightChecker->check($manifest, $packagePath);
 
             return $this->json([
+                'manifestSource' => $manifestSource,
                 'manifest' => $this->manifestToArray($manifest),
                 'packagePath' => $packagePath,
                 'result' => $result->toArray(),
@@ -128,18 +142,17 @@ final class SystemUpdateController extends AbstractController
         }
     }
 
-
     #[Route('/stage', name: 'stage', methods: ['POST'])]
     public function stage(Request $request): JsonResponse
     {
         $payload = $this->readJsonPayload($request);
 
         try {
-            $manifestSource = $this->normalizeLocalSource($this->readRequiredString($payload, 'manifestSource'));
-            $packagePath = $this->normalizeNullableLocalPath($this->readNullableString($payload, 'packagePath'));
-            $signaturePath = $this->normalizeNullableLocalPath($this->readNullableString($payload, 'signaturePath'));
-            $trustedPublicKey = $this->readNullableString($payload, 'trustedPublicKey');
-            $skipSignature = true === ($payload['skipSignature'] ?? false);
+            $manifestSource = $this->readManifestSource($payload);
+            $packagePath = $this->normalizeNullableLocalPath($this->readNullableString($payload, 'packagePath'), 'package');
+            $signaturePath = $this->normalizeNullableLocalPath($this->readNullableString($payload, 'signaturePath'), 'signature');
+            $trustedPublicKey = $this->resolveTrustedPublicKey($payload);
+            $skipSignature = $this->readSkipSignature($payload);
             $manifest = $this->manifestClient->load($manifestSource);
 
             if (null === $packagePath) {
@@ -161,6 +174,7 @@ final class SystemUpdateController extends AbstractController
             if (!$verificationResult->isValid()) {
                 return $this->json([
                     'error' => 'Update package verification failed.',
+                    'manifestSource' => $manifestSource,
                     'manifest' => $this->manifestToArray($manifest),
                     'packagePath' => $packagePath,
                     'signaturePath' => $signaturePath,
@@ -173,6 +187,7 @@ final class SystemUpdateController extends AbstractController
             if (!$preflightResult->isValid()) {
                 return $this->json([
                     'error' => 'Update preflight checks failed.',
+                    'manifestSource' => $manifestSource,
                     'manifest' => $this->manifestToArray($manifest),
                     'packagePath' => $packagePath,
                     'signaturePath' => $signaturePath,
@@ -186,6 +201,7 @@ final class SystemUpdateController extends AbstractController
             if (!$stagingResult->isValid()) {
                 return $this->json([
                     'error' => 'Unable to stage update package.',
+                    'manifestSource' => $manifestSource,
                     'manifest' => $this->manifestToArray($manifest),
                     'packagePath' => $packagePath,
                     'signaturePath' => $signaturePath,
@@ -196,9 +212,12 @@ final class SystemUpdateController extends AbstractController
             }
 
             return $this->json([
+                'manifestSource' => $manifestSource,
                 'manifest' => $this->manifestToArray($manifest),
                 'packagePath' => $packagePath,
                 'signaturePath' => $signaturePath,
+                'trustedPublicKeyConfigured' => $this->updateConfiguration->hasTrustedPublicKey(),
+                'skipSignature' => $skipSignature,
                 'verification' => $verificationResult->toArray(),
                 'preflight' => $preflightResult->toArray(),
                 'staging' => $stagingResult->toArray(),
@@ -227,15 +246,15 @@ final class SystemUpdateController extends AbstractController
     /**
      * @param array<string, mixed> $payload
      */
-    private function readRequiredString(array $payload, string $key): string
+    private function readManifestSource(array $payload): string
     {
-        $value = $this->readNullableString($payload, $key);
+        $source = $this->readNullableString($payload, 'manifestSource') ?? $this->updateConfiguration->getDefaultManifestSource();
 
-        if (null === $value) {
-            throw new \InvalidArgumentException('Missing required field: '.$key);
+        if (null === $source) {
+            throw new InvalidArgumentException('No update manifest source was provided and no default update manifest URL is configured.');
         }
 
-        return $value;
+        return $this->normalizeLocalSource($source);
     }
 
     /**
@@ -256,20 +275,78 @@ final class SystemUpdateController extends AbstractController
 
     private function normalizeLocalSource(string $source): string
     {
-        if ($this->isHttpUrl($source) || $this->isAbsolutePath($source)) {
+        if ($this->isHttpUrl($source)) {
+            return $source;
+        }
+
+        if (!$this->updateConfiguration->allowsLocalPaths()) {
+            throw new InvalidArgumentException('Local update manifest paths are disabled in this environment. Configure CHAMILO_UPDATE_MANIFEST_URL or provide an HTTPS manifest URL.');
+        }
+
+        if ($this->isAbsolutePath($source)) {
             return $source;
         }
 
         return $this->getProjectDir().'/'.ltrim($source, '/');
     }
 
-    private function normalizeNullableLocalPath(?string $path): ?string
+    private function normalizeNullableLocalPath(?string $path, string $label): ?string
     {
-        if (null === $path || $this->isHttpUrl($path) || $this->isAbsolutePath($path)) {
+        if (null === $path) {
+            return null;
+        }
+
+        if ($this->isHttpUrl($path)) {
+            throw new InvalidArgumentException('Do not provide an HTTP '.$label.' path. Leave this field empty to download it from the update manifest.');
+        }
+
+        if (!$this->updateConfiguration->allowsLocalPaths()) {
+            throw new InvalidArgumentException('Local update '.$label.' paths are disabled in this environment.');
+        }
+
+        if ($this->isAbsolutePath($path)) {
             return $path;
         }
 
         return $this->getProjectDir().'/'.ltrim($path, '/');
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     */
+    private function resolveTrustedPublicKey(array $payload): ?string
+    {
+        $configuredPublicKey = $this->updateConfiguration->getTrustedPublicKey();
+
+        if (null !== $configuredPublicKey) {
+            return $configuredPublicKey;
+        }
+
+        $payloadPublicKey = $this->readNullableString($payload, 'trustedPublicKey');
+
+        if (null === $payloadPublicKey) {
+            return null;
+        }
+
+        if (!$this->updateConfiguration->allowsLocalPaths()) {
+            throw new InvalidArgumentException('Trusted update public keys must be configured on the server in this environment.');
+        }
+
+        return $payloadPublicKey;
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     */
+    private function readSkipSignature(array $payload): bool
+    {
+        $skipSignature = true === ($payload['skipSignature'] ?? false);
+
+        if ($skipSignature && !$this->updateConfiguration->allowsSkipSignature()) {
+            throw new InvalidArgumentException('Skipping update signature verification is disabled in this environment.');
+        }
+
+        return $skipSignature;
     }
 
     private function isHttpUrl(string $source): bool
@@ -295,7 +372,7 @@ final class SystemUpdateController extends AbstractController
         $projectDir = $this->getParameter('kernel.project_dir');
 
         if (!\is_string($projectDir)) {
-            throw new \InvalidArgumentException('Unable to resolve project directory.');
+            throw new InvalidArgumentException('Unable to resolve project directory.');
         }
 
         return rtrim($projectDir, '/');

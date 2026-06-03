@@ -12,7 +12,6 @@ export default {
   findSupport: () => baseService.get("/main/inc/ajax/admin.ajax.php?a=get_support"),
   findBlocks: () => baseService.get("/admin/index"),
 
-
   findSystemUpdateStatus: () => baseService.get("/admin/system-update/status"),
 
   checkSystemUpdateManifest: (payload) => baseService.post("/admin/system-update/check", payload),
@@ -22,7 +21,6 @@ export default {
   runSystemUpdatePreflight: (payload) => baseService.post("/admin/system-update/preflight", payload),
 
   stageSystemUpdatePackage: (payload) => baseService.post("/admin/system-update/stage", payload),
-
 
   fetchThirdParties: async () => {
     const data = await baseService.get("/api/third_parties")

@@ -6176,6 +6176,14 @@ class Exercise
             if (in_array($answerType, [HOT_SPOT, HOT_SPOT_ORDER, HOT_SPOT_COMBINATION], true)) {
                 // We made an extra table for the answers
                 if ($show_result) {
+                    $hotspotCidReqQueryParams = json_encode(
+                        api_get_cidreq_params(
+                            api_get_course_int_id(),
+                            api_get_session_id(),
+                            api_get_group_id()
+                        ),
+                        JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT
+                    );
                     echo '</table></td></tr>';
                     echo '
                         <tr>
@@ -6190,7 +6198,8 @@ class Exercise
                                             exeId: $exeId,
                                             selector: '#hotspot-solution-$questionId',
                                             for: 'solution',
-                                            relPath: '$relPath'
+                                            relPath: '$relPath',
+                                            cidReqQueryParams: $hotspotCidReqQueryParams
                                         });
                                     });
                                 </script>
@@ -10148,6 +10157,14 @@ class Exercise
             $questionScore = Database::result($resfree, 0, 'marks');
             $totalScore += $questionScore;*/
             $relPath = api_get_path(REL_CODE_PATH);
+            $hotspotCidReqQueryParams = json_encode(
+                api_get_cidreq_params(
+                    api_get_course_int_id(),
+                    api_get_session_id(),
+                    api_get_group_id()
+                ),
+                JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT
+            );
             echo '</table></td></tr>';
             echo "
                         <tr>
@@ -10161,7 +10178,8 @@ class Exercise
                                             exeId: $id,
                                             selector: '#hotspot-solution',
                                             for: 'solution',
-                                            relPath: '$relPath'
+                                            relPath: '$relPath',
+                                            cidReqQueryParams: $hotspotCidReqQueryParams
                                         });
                                     });
                                 </script>

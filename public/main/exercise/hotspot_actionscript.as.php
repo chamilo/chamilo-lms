@@ -39,7 +39,15 @@ if (!$objQuestion->getResourceNode()->hasResourceFile()) {
 $resourceFile = $objQuestion->getResourceNode()->getResourceFiles()->first();
 $pictureWidth = $resourceFile->getWidth();
 $pictureHeight = $resourceFile->getHeight();
-$imagePath = $questionRepo->getHotSpotImageUrl($objQuestion).'?'.api_get_cidreq();
+$imagePath = $questionRepo->getHotSpotImageUrl($objQuestion);
+$cidReq = api_get_cidreq_params(
+    api_get_course_int_id(),
+    api_get_session_id(),
+    api_get_group_id()
+);
+if (!empty($cidReq)) {
+    $imagePath .= (str_contains($imagePath, '?') ? '&' : '?').$cidReq;
+}
 $course_id = api_get_course_int_id();
 $answers = $objQuestion->getAnswers();
 
@@ -130,14 +138,10 @@ $attemptInfo = Database::select(
     'first'
 );
 
-if (empty($attemptInfo)) {
-    exit(0);
-}
+if (!empty($attemptInfo)) {
+    $attemptList = Event::getAllExerciseEventByExeId($attemptInfo['exe_id']);
 
-$attemptList = Event::getAllExerciseEventByExeId($attemptInfo['exe_id']);
-
-if (!empty($attemptList)) {
-    if (isset($attemptList[$questionId])) {
+    if (!empty($attemptList) && isset($attemptList[$questionId])) {
         $questionAttempt = $attemptList[$questionId][0];
         if (!empty($questionAttempt['answer'])) {
             $coordinates = explode('|', $questionAttempt['answer']);

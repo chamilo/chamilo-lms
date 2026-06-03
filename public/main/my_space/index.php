@@ -252,6 +252,7 @@ $form = new FormValidator(
 $form = Tracking::setUserSearchForm($form);
 
 $totalTimeSpent = null;
+$averageTimeSpentOnThePlatform = null;
 $averageScore = null;
 $posts = null;
 
@@ -259,18 +260,21 @@ if (false === $skipData) {
     if (!empty($students)) {
         // Students.
         $studentIds = array_values($students);
-        $progress = 0; // @todo: fix stats (Tracking::get_avg_student_progress($studentIds)).
-        $countAssignments = 0; // @todo: restore assignments count when stats are fixed.
+        $avgTotalProgress = Tracking::getAverageLearningPathProgressForStudentList($studentIds);
+        $countAssignments = Tracking::countAssignmentsForStudentList($studentIds);
+        $posts = Tracking::countForumPostsForStudentList($studentIds);
 
         // Average progress.
         if ($numberStudents > 0) {
-            $avgTotalProgress = $progress / $numberStudents;
             $numberAssignments = $countAssignments / $numberStudents;
             $avg_courses_per_student = $countCourses / $numberStudents;
         }
 
-        $totalTimeSpent = Tracking::get_time_spent_on_the_platform($studentIds);
-        $posts = 0; // @todo: restore forum posts stats.
+        $totalTimeSpent = Tracking::get_time_spent_on_the_platform($studentIds, 'all');
+        if ($numberStudents > 0 && is_numeric($totalTimeSpent)) {
+            $averageTimeSpentOnThePlatform = $totalTimeSpent / $numberStudents;
+        }
+
         $averageScore = Tracking::getAverageStudentScore($studentIds);
     }
 
@@ -278,7 +282,12 @@ if (false === $skipData) {
         // CSV export.
         $csv_content[] = [get_lang('Learners')];
         $csv_content[] = [get_lang('Inactive learners'), $nb_inactive_students];
-        $csv_content[] = [get_lang('Time spent on portal'), $totalTimeSpent];
+        $csv_content[] = [
+            get_lang('Time spent on portal'),
+            is_null($averageTimeSpentOnThePlatform)
+                ? null
+                : api_time_to_hms($averageTimeSpentOnThePlatform),
+        ];
         $csv_content[] = [
             get_lang('Average number of courses to which my learners are subscribed'),
             round($avg_courses_per_student, 3),
@@ -299,7 +308,7 @@ if (false === $skipData) {
         $csv_content[] = [get_lang('Average assignments per learner'), $numberAssignments];
         $csv_content[] = [];
     } else {
-        $lastConnectionDate = api_get_utc_datetime(strtotime('15 days ago'));
+        $lastConnectionDate = api_get_utc_datetime(strtotime($daysAgo.' days ago'));
         $countActiveUsers = SessionManager::getCountUserTracking(
             null,
             1,
@@ -322,14 +331,15 @@ if (false === $skipData) {
             $sessionIdList,
             $studentIds
         );
+        $nb_inactive_students = (int) $countSleepingStudents;
 
         $report['AverageCoursePerStudent'] = is_null($avg_courses_per_student)
             ? ''
             : round($avg_courses_per_student, 3);
         $report['InactivesStudents'] = $nb_inactive_students;
-        $report['AverageTimeSpentOnThePlatform'] = is_null($totalTimeSpent)
+        $report['AverageTimeSpentOnThePlatform'] = is_null($averageTimeSpentOnThePlatform)
             ? '00:00:00'
-            : api_time_to_hms($totalTimeSpent);
+            : api_time_to_hms($averageTimeSpentOnThePlatform);
         $report['AverageProgressInLearnpath'] = is_null($avgTotalProgress)
             ? ''
             : round($avgTotalProgress, 2).'%';

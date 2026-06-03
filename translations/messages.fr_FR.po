@@ -33117,7 +33117,7 @@ msgid "Allow PDF export for this item"
 msgstr "Autoriser l'export PDF pour cet élément"
 
 msgid "Hide free users (not enrolled)"
-msgstr "Masquer les utilisateurs gratuits (non inscrits)"
+msgstr "Masquer les utilisateurs libres (non inscrits)"
 
 msgid "Question statistics"
 msgstr "Statistiques des questions"

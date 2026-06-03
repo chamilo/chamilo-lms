@@ -22,6 +22,13 @@ export default {
 
   stageSystemUpdatePackage: (payload) => baseService.post("/admin/system-update/stage", payload),
 
+  buildSystemUpdateApplyPlan: (payload) => baseService.post("/admin/system-update/apply-plan", payload),
+
+  applySystemUpdateFiles: (payload) => baseService.post("/admin/system-update/apply-files", payload),
+
+  findSystemUpdateProgress: (operationId) =>
+    baseService.get(`/admin/system-update/progress/${encodeURIComponent(operationId)}`),
+
   fetchThirdParties: async () => {
     const data = await baseService.get("/api/third_parties")
     return data["hydra:member"] || []

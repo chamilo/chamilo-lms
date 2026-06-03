@@ -7,8 +7,11 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Service\Update\Dto\UpdateManifest;
+use Chamilo\CoreBundle\Service\Update\UpdateApplyPlanner;
 use Chamilo\CoreBundle\Service\Update\UpdateConfiguration;
+use Chamilo\CoreBundle\Service\Update\UpdateFileApplier;
 use Chamilo\CoreBundle\Service\Update\UpdateManifestClient;
+use Chamilo\CoreBundle\Service\Update\UpdateOperationLogger;
 use Chamilo\CoreBundle\Service\Update\UpdatePackageDownloader;
 use Chamilo\CoreBundle\Service\Update\UpdatePackageVerifier;
 use Chamilo\CoreBundle\Service\Update\UpdatePreflightChecker;
@@ -34,6 +37,9 @@ final class SystemUpdateController extends AbstractController
         private readonly UpdatePreflightChecker $preflightChecker,
         private readonly UpdateStagingManager $stagingManager,
         private readonly UpdateConfiguration $updateConfiguration,
+        private readonly UpdateApplyPlanner $applyPlanner,
+        private readonly UpdateFileApplier $fileApplier,
+        private readonly UpdateOperationLogger $operationLogger,
     ) {}
 
     #[Route('/status', name: 'status', methods: ['GET'])]
@@ -43,7 +49,10 @@ final class SystemUpdateController extends AbstractController
             'installedVersion' => $this->getInstalledVersion(),
             'updateDirectory' => $this->getProjectDir().'/var/update/downloads',
             'stagingDirectory' => $this->getProjectDir().'/var/update/staging',
-            'verificationOnly' => true,
+            'backupDirectory' => $this->getProjectDir().'/var/update/backups',
+            'lockPath' => $this->getProjectDir().'/var/update/update.lock',
+            'verificationOnly' => false,
+            'fileApplyAvailable' => true,
             'defaultManifestSource' => $this->updateConfiguration->getDefaultManifestSource(),
             'allowLocalPaths' => $this->updateConfiguration->allowsLocalPaths(),
             'allowSkipSignature' => $this->updateConfiguration->allowsSkipSignature(),
@@ -229,6 +238,64 @@ final class SystemUpdateController extends AbstractController
         }
     }
 
+
+    #[Route('/apply-plan', name: 'apply_plan', methods: ['POST'])]
+    public function applyPlan(Request $request): JsonResponse
+    {
+        $payload = $this->readJsonPayload($request);
+
+        try {
+            $stagingPath = $this->readRequiredString($payload, 'stagingPath');
+            $result = $this->applyPlanner->buildPlan($stagingPath);
+
+            return $this->json([
+                'applyPlan' => $result->toArray(),
+            ], $result->isValid() ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
+        } catch (Throwable $exception) {
+            return $this->json([
+                'error' => $exception->getMessage(),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+
+    #[Route('/progress/{operationId}', name: 'progress', methods: ['GET'])]
+    public function progress(string $operationId): JsonResponse
+    {
+        try {
+            return $this->json([
+                'progress' => $this->operationLogger->read($operationId),
+            ]);
+        } catch (Throwable $exception) {
+            return $this->json([
+                'error' => $exception->getMessage(),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+
+    #[Route('/apply-files', name: 'apply_files', methods: ['POST'])]
+    public function applyFiles(Request $request): JsonResponse
+    {
+        $payload = $this->readJsonPayload($request);
+
+        try {
+            $stagingPath = $this->readRequiredString($payload, 'stagingPath');
+            $confirmed = $this->readApplyFilesConfirmation($payload);
+            $operationId = $this->readNullableString($payload, 'operationId');
+            $result = $this->fileApplier->apply($stagingPath, $confirmed, $operationId);
+
+            return $this->json([
+                'operationId' => $operationId,
+                'applyFiles' => $result->toArray(),
+            ], $result->isValid() ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
+        } catch (Throwable $exception) {
+            return $this->json([
+                'error' => $exception->getMessage(),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
     /**
      * @return array<string, mixed>
      */
@@ -241,6 +308,21 @@ final class SystemUpdateController extends AbstractController
         }
 
         return \is_array($payload) ? $payload : [];
+    }
+
+
+    /**
+     * @param array<string, mixed> $payload
+     */
+    private function readRequiredString(array $payload, string $key): string
+    {
+        $value = $this->readNullableString($payload, $key);
+
+        if (null === $value) {
+            throw new InvalidArgumentException('Missing required field: '.$key);
+        }
+
+        return $value;
     }
 
     /**
@@ -347,6 +429,22 @@ final class SystemUpdateController extends AbstractController
         }
 
         return $skipSignature;
+    }
+
+
+    /**
+     * @param array<string, mixed> $payload
+     */
+    private function readApplyFilesConfirmation(array $payload): bool
+    {
+        $confirmed = true === ($payload['confirmApply'] ?? false);
+        $confirmationText = $this->readNullableString($payload, 'confirmationText');
+
+        if (!$confirmed || 'APPLY UPDATE FILES' !== $confirmationText) {
+            throw new InvalidArgumentException('Applying staged update files requires the confirmation text "APPLY UPDATE FILES".');
+        }
+
+        return true;
     }
 
     private function isHttpUrl(string $source): bool

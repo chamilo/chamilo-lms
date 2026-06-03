@@ -14,6 +14,7 @@ final readonly class UpdateConfiguration
     private const ENV_ALLOW_SKIP_SIGNATURE = 'CHAMILO_UPDATE_ALLOW_SKIP_SIGNATURE';
     private const ENV_MANIFEST_URL = 'CHAMILO_UPDATE_MANIFEST_URL';
     private const ENV_MINISIGN_PUBLIC_KEY = 'CHAMILO_UPDATE_MINISIGN_PUBLIC_KEY';
+    private const ENV_DEBUG_SLOW_COPY_MS = 'CHAMILO_UPDATE_DEBUG_SLOW_COPY_MS';
 
     public function __construct(
         #[Autowire(param: 'kernel.environment')]
@@ -61,6 +62,15 @@ final readonly class UpdateConfiguration
         return 'prod' === $this->environment;
     }
 
+    public function getDebugSlowCopyMilliseconds(): int
+    {
+        if ($this->isProduction()) {
+            return 0;
+        }
+
+        return min($this->readIntegerEnv(self::ENV_DEBUG_SLOW_COPY_MS, 0), 5000);
+    }
+
     private function readStringEnv(string $name): ?string
     {
         foreach ([$_ENV[$name] ?? null, $_SERVER[$name] ?? null, getenv($name)] as $value) {
@@ -87,5 +97,16 @@ final readonly class UpdateConfiguration
         }
 
         return \in_array(strtolower($value), ['1', 'true', 'yes', 'on'], true);
+    }
+
+    private function readIntegerEnv(string $name, int $default): int
+    {
+        $value = $this->readStringEnv($name);
+
+        if (null === $value || !ctype_digit($value)) {
+            return $default;
+        }
+
+        return max((int) $value, 0);
     }
 }

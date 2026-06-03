@@ -1,16 +1,42 @@
 {
   "items": [
     {
-      "title": "Help center",
+      "label": "Chamilo website",
       "url": "https://chamilo.org",
-      "icon": "mdi-help-circle-outline",
+      "icon": "mdi-web",
       "target": "_blank"
     },
     {
-      "title": "My courses",
-      "url": "/resources/catalog",
-      "icon": "mdi-book-open-page-variant",
-      "target": "_self"
+      "label": "My courses",
+      "url": "/main/auth/courses.php",
+      "icon": "mdi-book-open-page-variant"
+    },
+    {
+      "label": "External resources",
+      "url": "#",
+      "icon": "mdi-link-variant",
+      "children": [
+        {
+          "label": "Documentation",
+          "url": "https://docs.chamilo.org",
+          "icon": "mdi-file-document-outline",
+          "target": "_blank"
+        },
+        {
+          "label": "Support",
+          "url": "https://chamilo.org",
+          "icon": "mdi-help-circle-outline",
+          "target": "_blank"
+        }
+      ]
+    },
+    {
+      "label": "Administration shortcut",
+      "url": "/main/admin/index.php",
+      "icon": "mdi-cog-outline",
+      "roles": [
+        "ROLE_ADMIN"
+      ]
     }
   ]
 }

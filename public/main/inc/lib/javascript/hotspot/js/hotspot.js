@@ -1,16 +1,23 @@
-// window.getHotspotCidReqQueryParams(config) is defined in App.vue
 window.getHotspotCidReqQueryParams = function (config) {
     var queryParams = '';
 
     if (config && config.cidReqQueryParams) {
         queryParams = config.cidReqQueryParams;
-    } else if ('undefined' !== typeof chamiloCidReq && window.getHotspotCidReqQueryParams(config)) {
-        queryParams = window.getHotspotCidReqQueryParams(config);
+    } else if ('undefined' !== typeof window.chamiloCidReq && window.chamiloCidReq.queryParams) {
+        queryParams = window.chamiloCidReq.queryParams;
     } else if (window.location.search) {
         queryParams = window.location.search.substring(1);
     }
 
-    return queryParams.replace(/^\?/, '');
+    queryParams = String(queryParams).replace(/^\?/, '');
+
+    if (queryParams && 'undefined' !== typeof URLSearchParams) {
+        var params = new URLSearchParams(queryParams);
+        params.delete('origin');
+        queryParams = params.toString();
+    }
+
+    return queryParams;
 };
 window.HotspotQuestion = (function () {
     return function (settings) {

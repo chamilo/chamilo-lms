@@ -520,6 +520,21 @@ function plugin_get_source_value(string $pluginName, ?PluginEntity $plugin): str
  */
 function plugin_get_commercial_model(string $pluginName, array $metadata): string
 {
+    $normalizedPluginName = strtolower((string) preg_replace('/[^a-z0-9]/i', '', $pluginName));
+
+    $forcedModels = [
+        'bbb' => 'freemium',
+        'bigbluebutton' => 'freemium',
+        'buycourse' => 'free',
+        'buycourses' => 'free',
+        'sellcourse' => 'free',
+        'sellcourses' => 'free',
+    ];
+
+    if (isset($forcedModels[$normalizedPluginName])) {
+        return $forcedModels[$normalizedPluginName];
+    }
+
     $value = strtolower(trim((string) ($metadata['commercial_model'] ?? '')));
     $value = str_replace(['-', ' '], '_', $value);
 

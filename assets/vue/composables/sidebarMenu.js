@@ -601,6 +601,7 @@ export function useSidebarMenu() {
       if (securityStore.isAdmin || securityStore.isSessionAdmin) {
         const adminItems = [
           { label: t("Administration"), route: { name: "AdminIndex" } },
+          ...(securityStore.isAdmin ? [{ label: t("Dashboard"), url: "/plugin/Dashboard/admin.php" }] : []),
           ...(securityStore.isSessionAdmin &&
           "true" === platformConfigStore.getSetting("session.limit_session_admin_list_users")
             ? [{ label: t("Add user"), url: "/main/admin/user_add.php" }]

@@ -8723,7 +8723,7 @@ msgid "Help"
 msgstr "Hilfe"
 
 msgid "Add"
-msgstr "hinzufügen"
+msgstr "Hinzufügen"
 
 msgid "Add an introduction text"
 msgstr "Einführungstext hinzufügen"

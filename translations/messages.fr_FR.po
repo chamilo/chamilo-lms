@@ -35857,3 +35857,6 @@ msgstr "Participants"
 
 msgid "CountUsers"
 msgstr "Nombre d'utilisateurs"
+
+msgid "No data found"
+msgstr "Aucune donnée trouvée"

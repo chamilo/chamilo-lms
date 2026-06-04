@@ -33923,3 +33923,6 @@ msgstr ""
 
 msgid "CountUsers"
 msgstr ""
+
+msgid "No data found"
+msgstr ""

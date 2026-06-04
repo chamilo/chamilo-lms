@@ -85,7 +85,7 @@ final readonly class UpdatePostApplyChecker
                 'application_path' => $applicationPath,
             ]);
 
-            $packageSignals = $this->detectPackageSignals($applicationPath);
+            $packageSignals = $this->detectPackageSignals($applicationPath, $applyPlan);
             $details['package_signals'] = $packageSignals;
 
             $actions = $this->buildRecommendedActions($packageSignals);
@@ -193,6 +193,8 @@ final readonly class UpdatePostApplyChecker
     }
 
     /**
+     * @param array<string, mixed> $applyPlan
+     *
      * @return array{
      *     composer_files_detected: bool,
      *     frontend_files_detected: bool,
@@ -201,7 +203,7 @@ final readonly class UpdatePostApplyChecker
      *     detected_paths: array<string, string[]>
      * }
      */
-    private function detectPackageSignals(string $applicationPath): array
+    private function detectPackageSignals(string $applicationPath, array $applyPlan): array
     {
         $detectedPaths = [
             'composer' => [],
@@ -232,10 +234,10 @@ final readonly class UpdatePostApplyChecker
             if ($this->isFrontendPath($relativePath)) {
                 $this->appendDetectedPath($detectedPaths['frontend'], $relativePath);
             }
+        }
 
-            if ($this->isMigrationPath($relativePath)) {
-                $this->appendDetectedPath($detectedPaths['migrations'], $relativePath);
-            }
+        foreach ($this->extractPlannedV210MigrationPaths($applyPlan) as $migrationPath) {
+            $this->appendDetectedPath($detectedPaths['migrations'], $migrationPath);
         }
 
         return [
@@ -245,6 +247,38 @@ final readonly class UpdatePostApplyChecker
             'cache_clear_recommended' => true,
             'detected_paths' => $detectedPaths,
         ];
+    }
+
+    /**
+     * @param array<string, mixed> $applyPlan
+     *
+     * @return string[]
+     */
+    private function extractPlannedV210MigrationPaths(array $applyPlan): array
+    {
+        $filePlan = $applyPlan['file_plan'] ?? [];
+        if (!\is_array($filePlan)) {
+            return [];
+        }
+
+        $migrationFiles = $filePlan['migration_files_new'] ?? [];
+        if (!\is_array($migrationFiles)) {
+            return [];
+        }
+
+        $paths = [];
+        foreach ($migrationFiles as $path) {
+            if (!\is_string($path)) {
+                continue;
+            }
+
+            $path = $this->normalizeRelativePath($path);
+            if ($this->isMigrationPath($path)) {
+                $paths[] = $path;
+            }
+        }
+
+        return array_values(array_unique($paths));
     }
 
     /**
@@ -295,7 +329,7 @@ final readonly class UpdatePostApplyChecker
                 'title' => 'Database migrations',
                 'description' => 'Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations.',
                 'commands' => [
-                    'php bin/console doctrine:migrations:migrate --no-interaction',
+                    'php bin/console doctrine:migrations:execute <staged-migration-class> --up --no-interaction',
                 ],
                 'required' => true,
                 'severity' => 'danger',
@@ -349,9 +383,7 @@ final readonly class UpdatePostApplyChecker
 
     private function isMigrationPath(string $relativePath): bool
     {
-        return str_starts_with($relativePath, 'src/CoreBundle/Migrations/')
-            || str_starts_with($relativePath, 'src/CourseBundle/Migrations/')
-            || str_starts_with($relativePath, 'src/LtiBundle/Migrations/');
+        return 1 === preg_match('/^src\/CoreBundle\/Migrations\/Schema\/V210\/Version[0-9]+\.php$/', $relativePath);
     }
 
     private function shouldSkipPath(string $relativePath): bool

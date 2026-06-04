@@ -19,6 +19,7 @@ use const JSON_UNESCAPED_SLASHES;
 
 final readonly class UpdatePostApplyCommandRunner
 {
+    private const SUPPORTED_MIGRATION_CLASS_PREFIX = 'Chamilo\\CoreBundle\\Migrations\\Schema\\V210\\';
     private const METADATA_FILE_NAME = 'POST-APPLY-RUN-RESULT.json';
 
     private const ADVANCED_ACTION_KEYS = [
@@ -108,7 +109,7 @@ final readonly class UpdatePostApplyCommandRunner
             }
 
             if (isset($selectedActions['doctrine_migrations'])) {
-                $migrationTarget = $this->validateDatabaseMigrationReview(
+                $migrationClasses = $this->validateDatabaseMigrationReview(
                     $stagingPath,
                     $confirmedDatabaseBackup,
                     $confirmedDatabaseMigrations,
@@ -118,16 +119,25 @@ final readonly class UpdatePostApplyCommandRunner
                     $operationId
                 );
 
-                $selectedActions['doctrine_migrations']['command'] = [
-                    'php',
-                    'bin/console',
-                    'doctrine:migrations:migrate',
-                    $migrationTarget,
-                    '--no-interaction',
-                ];
-                $selectedActions['doctrine_migrations']['display_command'] = 'php bin/console doctrine:migrations:migrate '
-                    .escapeshellarg($migrationTarget)
-                    .' --no-interaction';
+                $migrationCommands = [];
+                $displayCommands = [];
+                foreach ($migrationClasses as $migrationClass) {
+                    $migrationCommands[] = [
+                        'php',
+                        'bin/console',
+                        'doctrine:migrations:execute',
+                        $migrationClass,
+                        '--up',
+                        '--no-interaction',
+                    ];
+                    $displayCommands[] = 'php bin/console doctrine:migrations:execute '
+                        .escapeshellarg($migrationClass)
+                        .' --up --no-interaction';
+                }
+
+                $selectedActions['doctrine_migrations']['commands'] = $migrationCommands;
+                $selectedActions['doctrine_migrations']['command'] = $migrationCommands[0] ?? [];
+                $selectedActions['doctrine_migrations']['display_command'] = implode("\n", $displayCommands);
             }
 
             $this->validateExecutableActions($selectedActions, $checks, $warnings, $details, $operationId);
@@ -188,18 +198,28 @@ final readonly class UpdatePostApplyCommandRunner
     {
         $displayCommand = (string) $definition['display_command'];
         $title = (string) $definition['title'];
+        $commands = $definition['commands'] ?? null;
         $command = $definition['command'] ?? [];
 
-        if (!\is_array($command) || [] === $command) {
+        if (\is_array($commands)) {
+            $commandList = $commands;
+        } else {
+            $commandList = [$command];
+        }
+
+        if ([] === $commandList) {
             throw new RuntimeException('Invalid update post-apply command definition: '.$key);
+        }
+
+        foreach ($commandList as $commandItem) {
+            if (!\is_array($commandItem) || [] === $commandItem) {
+                throw new RuntimeException('Invalid update post-apply command definition: '.$key);
+            }
         }
 
         $this->logOperation($operationId, 'info', $key, 'Running post-apply action: '.$title, [
             'command' => $displayCommand,
         ]);
-
-        $process = new Process($command, $this->projectDir);
-        $process->setTimeout($this->updateConfiguration->getCommandTimeoutSeconds());
 
         $environment = $definition['environment'] ?? null;
         if ('composer_install' === $key) {
@@ -209,20 +229,34 @@ final readonly class UpdatePostApplyCommandRunner
             );
         }
 
-        if (\is_array($environment) && [] !== $environment) {
-            $process->setEnv($environment);
-        }
-
         $startedAt = microtime(true);
         $outputBuffer = '';
+        $exitCode = 0;
 
-        $exitCode = $process->run(function (string $type, string $buffer) use ($operationId, $key, &$outputBuffer): void {
-            $outputBuffer .= $buffer;
+        foreach ($commandList as $index => $commandItem) {
+            $process = new Process($commandItem, $this->projectDir);
+            $process->setTimeout($this->updateConfiguration->getCommandTimeoutSeconds());
 
-            foreach ($this->splitProcessOutput($buffer) as $line) {
-                $this->logOperation($operationId, Process::ERR === $type ? 'warning' : 'info', $key.'_output', $line);
+            if (\is_array($environment) && [] !== $environment) {
+                $process->setEnv($environment);
             }
-        });
+
+            if (\count($commandList) > 1) {
+                $this->logOperation($operationId, 'info', $key, sprintf('Running command %d of %d for %s.', $index + 1, \count($commandList), $title));
+            }
+
+            $exitCode = $process->run(function (string $type, string $buffer) use ($operationId, $key, &$outputBuffer): void {
+                $outputBuffer .= $buffer;
+
+                foreach ($this->splitProcessOutput($buffer) as $line) {
+                    $this->logOperation($operationId, Process::ERR === $type ? 'warning' : 'info', $key.'_output', $line);
+                }
+            });
+
+            if (0 !== $exitCode) {
+                break;
+            }
+        }
 
         $duration = round(microtime(true) - $startedAt, 3);
 
@@ -446,8 +480,8 @@ final readonly class UpdatePostApplyCommandRunner
             ],
             'doctrine_migrations' => [
                 'title' => 'Database migrations',
-                'command' => ['php', 'bin/console', 'doctrine:migrations:migrate', '--no-interaction'],
-                'display_command' => 'php bin/console doctrine:migrations:migrate --no-interaction',
+                'command' => ['php', 'bin/console', 'doctrine:migrations:execute', '--help'],
+                'display_command' => 'php bin/console doctrine:migrations:execute <staged-migration-class> --up --no-interaction',
                 'source_action' => 'database_migrations',
                 'advanced' => true,
             ],
@@ -484,6 +518,8 @@ final readonly class UpdatePostApplyCommandRunner
      * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}> $checks
      * @param string[] $warnings
      * @param array<string, mixed> $details
+     *
+     * @return string[]
      */
     private function validateDatabaseMigrationReview(
         string $stagingPath,
@@ -493,7 +529,7 @@ final readonly class UpdatePostApplyCommandRunner
         array &$warnings,
         array &$details,
         string $operationId
-    ): string {
+    ): array {
         $migrationSafetyPath = $stagingPath.'/MIGRATION-SAFETY-CHECKS.json';
 
         if (!is_file($migrationSafetyPath) || !is_readable($migrationSafetyPath)) {
@@ -506,14 +542,35 @@ final readonly class UpdatePostApplyCommandRunner
             throw new RuntimeException('Database migrations cannot run because the migration safety review did not pass.');
         }
 
-        $migrationTarget = $migrationSafety['migration_target'] ?? $migrationSafety['details']['migration_target'] ?? null;
-        if (!\is_string($migrationTarget) || '' === trim($migrationTarget)) {
-            throw new RuntimeException('Database migrations cannot run because the migration safety review did not define a migration target.');
+        $migrations = $migrationSafety['migrations'] ?? [];
+        if (!\is_array($migrations) || [] === $migrations) {
+            throw new RuntimeException('Database migrations cannot run because the migration safety review did not list staged migrations.');
+        }
+
+        $migrationClasses = [];
+        foreach ($migrations as $migration) {
+            if (!\is_array($migration) || !\is_string($migration['class'] ?? null) || '' === trim($migration['class'])) {
+                throw new RuntimeException('Database migrations cannot run because the migration safety review contains an invalid migration entry.');
+            }
+
+            $migrationClass = trim($migration['class']);
+            if (!str_starts_with($migrationClass, self::SUPPORTED_MIGRATION_CLASS_PREFIX)) {
+                throw new RuntimeException('Only staged V210 migrations can be executed by the update runner.');
+            }
+
+            $migrationClasses[] = $migrationClass;
         }
 
         $baseline = $migrationSafety['baseline'] ?? $migrationSafety['details']['baseline'] ?? null;
-        if (!\is_array($baseline) || true !== ($baseline['clean'] ?? false)) {
-            throw new RuntimeException('Database migrations cannot run because the migration baseline is not clean.');
+        if (\is_array($baseline)) {
+            $blockingErrors = $baseline['blocking_errors'] ?? [];
+            if (\is_array($blockingErrors) && [] !== $blockingErrors) {
+                throw new RuntimeException('Database migrations cannot run because the staged migration safety review reported blocking errors.');
+            }
+
+            if (true !== ($baseline['clean'] ?? false)) {
+                $warnings[] = 'Doctrine reports migration baseline warnings. Only staged V210 migration classes will be executed explicitly.';
+            }
         }
 
         if (!$confirmedDatabaseBackup) {
@@ -524,29 +581,31 @@ final readonly class UpdatePostApplyCommandRunner
             throw new RuntimeException('Database migrations require the confirmation text "RUN DATABASE MIGRATIONS".');
         }
 
-        $migrationCount = \is_array($migrationSafety['migrations'] ?? null) ? \count($migrationSafety['migrations']) : 0;
         $details['migration_safety'] = [
             'metadata_file' => $migrationSafetyPath,
-            'migration_count' => $migrationCount,
-            'migration_target' => $migrationTarget,
+            'migration_count' => \count($migrationClasses),
+            'migration_classes' => $migrationClasses,
+            'execution_mode' => $migrationSafety['details']['migration_execution_mode'] ?? 'explicit_execute',
             'dry_run_exit_code' => $migrationSafety['dry_run_exit_code'] ?? null,
         ];
 
         $this->addCheck($checks, 'database_migration_safety', 'passed', 'Database migration safety review was completed before execution.', [
             'metadata_file' => $migrationSafetyPath,
-            'migration_count' => $migrationCount,
-            'migration_target' => $migrationTarget,
+            'migration_count' => \count($migrationClasses),
+            'migration_classes' => $migrationClasses,
+            'execution_mode' => 'explicit_execute',
         ]);
         $this->addCheck($checks, 'database_backup_confirmation', 'passed', 'Database backup existence was explicitly confirmed.');
         $this->logOperation($operationId, 'warning', 'database_migration_safety', 'Database migration safety review and backup confirmation were provided.', [
             'metadata_file' => $migrationSafetyPath,
-            'migration_count' => $migrationCount,
-            'migration_target' => $migrationTarget,
+            'migration_count' => \count($migrationClasses),
+            'migration_classes' => $migrationClasses,
+            'execution_mode' => 'explicit_execute',
         ]);
 
         $warnings[] = 'Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup.';
 
-        return $migrationTarget;
+        return $migrationClasses;
     }
 
     /**

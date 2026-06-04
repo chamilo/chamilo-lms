@@ -26,10 +26,8 @@ final readonly class UpdateMigrationSafetyChecker
     private const DRY_RUN_OUTPUT_LIMIT = 20000;
     private const BASELINE_OUTPUT_LIMIT = 30000;
 
-    private const MIGRATION_PREFIXES = [
-        'src/CoreBundle/Migrations/Schema/V200/',
-        'src/CoreBundle/Migrations/Schema/V210/',
-    ];
+    private const SUPPORTED_MIGRATION_PREFIX = 'src/CoreBundle/Migrations/Schema/V210/';
+    private const SUPPORTED_MIGRATION_CLASS_PREFIX = 'Chamilo\\CoreBundle\\Migrations\\Schema\\V210\\';
 
     public function __construct(
         private UpdateConfiguration $updateConfiguration,
@@ -71,7 +69,7 @@ final readonly class UpdateMigrationSafetyChecker
                 'application_path' => $applicationPath,
             ]);
 
-            $migrations = $this->collectStagedMigrations($applicationPath);
+            $migrations = $this->collectStagedMigrations($applicationPath, $applyPlan);
             $migrationClasses = array_map(static fn (array $migration): string => $migration['class'], $migrations);
             $details['migration_count'] = \count($migrations);
             $details['migration_classes'] = $migrationClasses;
@@ -106,12 +104,16 @@ final readonly class UpdateMigrationSafetyChecker
             $baseline = $this->analyzeMigrationBaseline($migrationTarget, $migrationClasses);
             $details['baseline'] = $baseline;
 
-            if (true !== ($baseline['clean'] ?? false)) {
-                $this->addCheck($checks, 'migration_baseline', 'failed', 'Doctrine migration baseline is not clean. Do not run database migrations until the listed issues are fixed.', [
+            $baselineBlockingErrors = $baseline['blocking_errors'] ?? [];
+            if (!\is_array($baselineBlockingErrors)) {
+                $baselineBlockingErrors = ['Invalid migration baseline metadata.'];
+            }
+
+            if ([] !== $baselineBlockingErrors) {
+                $this->addCheck($checks, 'migration_baseline', 'failed', 'Doctrine migration baseline has blocking issues for staged migrations.', [
                     'migration_target' => $migrationTarget,
-                    'executed_unavailable_count' => $baseline['executed_unavailable_count'] ?? null,
-                    'pending_before_target_count' => \is_array($baseline['pending_before_target'] ?? null) ? \count($baseline['pending_before_target']) : null,
-                    'target_registered' => $baseline['target_registered'] ?? false,
+                    'blocking_errors' => $baselineBlockingErrors,
+                    'staged_migrations_already_executed' => $baseline['staged_migrations_already_executed'] ?? [],
                 ]);
 
                 $metadataPath = $this->writeMetadata($stagingPath, false, $checks, $warnings, $details, $migrations, null, null, '');
@@ -129,21 +131,36 @@ final readonly class UpdateMigrationSafetyChecker
                 );
             }
 
-            $this->addCheck($checks, 'migration_baseline', 'passed', 'Doctrine migration baseline is clean for the staged migration target.', [
-                'migration_target' => $migrationTarget,
-                'current' => $baseline['current'] ?? null,
-                'next' => $baseline['next'] ?? null,
-                'latest' => $baseline['latest'] ?? null,
-            ]);
+            $historicalIssueCount = (int) ($baseline['historical_issue_count'] ?? 0);
+            $targetRegistered = true === ($baseline['target_registered'] ?? false);
+            if ($historicalIssueCount > 0 || !$targetRegistered) {
+                $this->addCheck($checks, 'migration_baseline', 'warning', 'Doctrine reports historical migration baseline warnings, but only staged V210 migrations will be reviewed and executed explicitly.', [
+                    'migration_target' => $migrationTarget,
+                    'executed_unavailable_count' => $baseline['executed_unavailable_count'] ?? null,
+                    'pending_before_target_count' => \is_array($baseline['pending_before_target'] ?? null) ? \count($baseline['pending_before_target']) : null,
+                    'target_registered' => $targetRegistered,
+                ]);
+                $warnings[] = 'Doctrine reports historical migration baseline warnings. The updater will execute only staged V210 migration classes after explicit confirmation.';
+            } else {
+                $this->addCheck($checks, 'migration_baseline', 'passed', 'Doctrine baseline has no blocking issue for the staged V210 migrations.', [
+                    'migration_target' => $migrationTarget,
+                    'current' => $baseline['current'] ?? null,
+                    'next' => $baseline['next'] ?? null,
+                    'latest' => $baseline['latest'] ?? null,
+                ]);
+            }
 
-            $dryRunCommand = $this->formatDoctrineMigrationCommand($migrationTarget, true);
-            [$dryRunExitCode, $dryRunOutput] = $this->runDoctrineDryRun($migrationTarget);
+            [$dryRunExitCode, $dryRunOutput, $dryRunCommands, $dryRunResults] = $this->runStagedMigrationDryRuns($migrations);
+            $dryRunCommand = implode("\n", $dryRunCommands);
             $details['dry_run_exit_code'] = $dryRunExitCode;
+            $details['staged_migration_dry_runs'] = $dryRunResults;
+            $details['migration_execution_mode'] = 'explicit_execute';
 
             if (0 !== $dryRunExitCode) {
-                $this->addCheck($checks, 'migration_dry_run', 'failed', 'Doctrine migration dry-run failed. Do not run database migrations until this is fixed.', [
+                $this->addCheck($checks, 'migration_dry_run', 'failed', 'Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed.', [
                     'exit_code' => $dryRunExitCode,
                     'migration_target' => $migrationTarget,
+                    'execution_mode' => 'explicit_execute',
                 ]);
 
                 $metadataPath = $this->writeMetadata($stagingPath, false, $checks, $warnings, $details, $migrations, $dryRunCommand, $dryRunExitCode, $dryRunOutput);
@@ -161,10 +178,12 @@ final readonly class UpdateMigrationSafetyChecker
                 );
             }
 
-            $this->addCheck($checks, 'migration_dry_run', 'passed', 'Doctrine migration dry-run completed successfully for the staged migration target.', [
+            $this->addCheck($checks, 'migration_dry_run', 'passed', 'Doctrine dry-run completed successfully for each staged migration class.', [
                 'command' => $dryRunCommand,
                 'exit_code' => $dryRunExitCode,
                 'migration_target' => $migrationTarget,
+                'execution_mode' => 'explicit_execute',
+                'migration_count' => \count($migrations),
             ]);
 
             $this->addCheck($checks, 'database_backup_notice', 'warning', 'A database backup must be created outside this updater before running migrations.');
@@ -298,40 +317,94 @@ final readonly class UpdateMigrationSafetyChecker
     }
 
     /**
+     * @param array<string, mixed> $applyPlan
+     *
      * @return array<int, array{class: string, path: string, description: string, namespace?: string}>
      */
-    private function collectStagedMigrations(string $applicationPath): array
+    private function collectStagedMigrations(string $applicationPath, array $applyPlan): array
     {
+        $plannedMigrationPaths = $this->extractPlannedV210MigrationPaths($applyPlan);
         $migrations = [];
 
-        foreach (self::MIGRATION_PREFIXES as $prefix) {
-            $directory = $applicationPath.'/'.rtrim($prefix, '/');
-            if (!is_dir($directory)) {
+        if ([] !== $plannedMigrationPaths) {
+            foreach ($plannedMigrationPaths as $relativePath) {
+                $absolutePath = $applicationPath.'/'.$relativePath;
+                if (!is_file($absolutePath)) {
+                    throw new RuntimeException('Planned staged migration file was not found: '.$relativePath);
+                }
+
+                $migrations[] = $this->parseMigrationFile($absolutePath, $relativePath);
+            }
+
+            usort($migrations, static fn (array $left, array $right): int => strcmp($left['class'], $right['class']));
+
+            return $migrations;
+        }
+
+        $directory = $applicationPath.'/'.rtrim(self::SUPPORTED_MIGRATION_PREFIX, '/');
+        if (!is_dir($directory)) {
+            return [];
+        }
+
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::SELF_FIRST
+        );
+
+        foreach ($iterator as $item) {
+            if (!$item->isFile() || 'php' !== strtolower($item->getExtension())) {
                 continue;
             }
 
-            $iterator = new RecursiveIteratorIterator(
-                new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS),
-                RecursiveIteratorIterator::SELF_FIRST
-            );
-
-            foreach ($iterator as $item) {
-                if (!$item->isFile() || 'php' !== strtolower($item->getExtension())) {
-                    continue;
-                }
-
-                $relativePath = $this->normalizeRelativePath(substr($item->getPathname(), \strlen($applicationPath) + 1));
-                if (!preg_match('/(^|\/)Version[0-9]+\.php$/', $relativePath)) {
-                    continue;
-                }
-
-                $migrations[] = $this->parseMigrationFile($item->getPathname(), $relativePath);
+            $relativePath = $this->normalizeRelativePath(substr($item->getPathname(), \strlen($applicationPath) + 1));
+            if (!$this->isSupportedMigrationPath($relativePath)) {
+                continue;
             }
+
+            $migrations[] = $this->parseMigrationFile($item->getPathname(), $relativePath);
         }
 
         usort($migrations, static fn (array $left, array $right): int => strcmp($left['class'], $right['class']));
 
         return $migrations;
+    }
+
+    /**
+     * @param array<string, mixed> $applyPlan
+     *
+     * @return string[]
+     */
+    private function extractPlannedV210MigrationPaths(array $applyPlan): array
+    {
+        $filePlan = $applyPlan['file_plan'] ?? [];
+        if (!\is_array($filePlan)) {
+            return [];
+        }
+
+        $plannedPaths = $filePlan['migration_files_new'] ?? [];
+        if (!\is_array($plannedPaths)) {
+            return [];
+        }
+
+        $paths = [];
+        foreach ($plannedPaths as $path) {
+            if (!\is_string($path)) {
+                continue;
+            }
+
+            $path = $this->normalizeRelativePath($path);
+            if ($this->isSupportedMigrationPath($path)) {
+                $paths[] = $path;
+            }
+        }
+
+        return array_values(array_unique($paths));
+    }
+
+    private function isSupportedMigrationPath(string $relativePath): bool
+    {
+        return str_starts_with($relativePath, self::SUPPORTED_MIGRATION_PREFIX)
+            && 1 === preg_match('/^src\/CoreBundle\/Migrations\/Schema\/V210\/Version[0-9]+\.php$/', $relativePath);
     }
 
     /**
@@ -365,6 +438,10 @@ final readonly class UpdateMigrationSafetyChecker
             }
         }
 
+        if (!str_starts_with($fullyQualifiedClass, self::SUPPORTED_MIGRATION_CLASS_PREFIX)) {
+            throw new RuntimeException('Only V210 staged migrations are supported by the update runner: '.$relativePath);
+        }
+
         return [
             'class' => $fullyQualifiedClass,
             'namespace' => $namespace ?? '',
@@ -391,9 +468,25 @@ final readonly class UpdateMigrationSafetyChecker
         $next = $this->readStringStatusValue($statusRows, 'Next');
         $latest = $this->readStringStatusValue($statusRows, 'Latest');
         $newCount = $this->readIntegerStatusValue($statusRows, 'New');
-        $targetRegistered = \in_array($migrationTarget, array_map(static fn (array $row): string => $row['class'], $listRows), true);
+        $migrationStatusByClass = [];
+        foreach ($listRows as $row) {
+            $migrationStatusByClass[$row['class']] = $row['status'];
+        }
+
+        $targetRegistered = \in_array($migrationTarget, array_keys($migrationStatusByClass), true);
         $pendingBeforeTarget = $this->findPendingMigrationsBeforeTarget($listRows, $migrationTarget, $stagedMigrationClasses);
         $executedUnavailableMigrations = $this->extractExecutedUnavailableMigrations($statusOutput);
+        $stagedMigrationStatuses = [];
+        $stagedMigrationsAlreadyExecuted = [];
+
+        foreach ($stagedMigrationClasses as $stagedMigrationClass) {
+            $status = $migrationStatusByClass[$stagedMigrationClass] ?? 'not registered';
+            $stagedMigrationStatuses[$stagedMigrationClass] = $status;
+
+            if ('migrated' === $status) {
+                $stagedMigrationsAlreadyExecuted[] = $stagedMigrationClass;
+            }
+        }
 
         $errors = [];
 
@@ -405,20 +498,25 @@ final readonly class UpdateMigrationSafetyChecker
             $errors[] = 'Unable to read Doctrine migration list.';
         }
 
+        if ([] !== $stagedMigrationsAlreadyExecuted) {
+            $errors[] = 'At least one staged V210 migration has already been executed.';
+        }
+
+        $historicalIssueCount = \count($pendingBeforeTarget) + \count($executedUnavailableMigrations);
+        $baselineWarnings = [];
+
         if (!$targetRegistered) {
-            $errors[] = 'The staged migration target is not registered by Doctrine after applying files.';
+            $baselineWarnings[] = 'The staged V210 migration target is not listed by Doctrine, but explicit execute dry-run remains the source of truth.';
         }
 
-        if (null !== $executedUnavailableCount && $executedUnavailableCount > 0) {
-            $errors[] = 'The database contains executed migrations that are not registered in the current code.';
-        }
-
-        if ([] !== $pendingBeforeTarget) {
-            $errors[] = 'There are pending migrations before the staged update target.';
+        if ($historicalIssueCount > 0) {
+            $baselineWarnings[] = 'Doctrine reports historical migration baseline issues outside the staged V210 update migrations.';
         }
 
         return [
-            'clean' => [] === $errors,
+            'clean' => [] === $errors && [] === $baselineWarnings,
+            'blocking_errors' => $errors,
+            'warnings' => $baselineWarnings,
             'errors' => $errors,
             'migration_target' => $migrationTarget,
             'target_registered' => $targetRegistered,
@@ -429,6 +527,9 @@ final readonly class UpdateMigrationSafetyChecker
             'executed_unavailable_count' => $executedUnavailableCount,
             'executed_unavailable_migrations' => $executedUnavailableMigrations,
             'pending_before_target' => $pendingBeforeTarget,
+            'historical_issue_count' => $historicalIssueCount,
+            'staged_migration_statuses' => $stagedMigrationStatuses,
+            'staged_migrations_already_executed' => $stagedMigrationsAlreadyExecuted,
             'status_exit_code' => $statusExitCode,
             'list_exit_code' => $listExitCode,
             'status_output' => $this->limitOutput($statusOutput, self::BASELINE_OUTPUT_LIMIT),
@@ -466,11 +567,51 @@ final readonly class UpdateMigrationSafetyChecker
     }
 
     /**
-     * @return array{0: int, 1: string}
+     * @param array<int, array{class: string, path: string, description: string, namespace?: string}> $migrations
+     *
+     * @return array{0: int, 1: string, 2: string[], 3: array<int, array{class: string, command: string, exit_code: int, output: string}>}
      */
-    private function runDoctrineDryRun(string $migrationTarget): array
+    private function runStagedMigrationDryRuns(array $migrations): array
     {
-        return $this->runConsoleCommand(['php', 'bin/console', 'doctrine:migrations:migrate', $migrationTarget, '--dry-run', '--no-interaction']);
+        $overallExitCode = 0;
+        $combinedOutput = [];
+        $commands = [];
+        $results = [];
+
+        foreach ($migrations as $migration) {
+            $migrationClass = (string) $migration['class'];
+            $command = ['php', 'bin/console', 'doctrine:migrations:execute', $migrationClass, '--up', '--dry-run', '--no-interaction'];
+            $displayCommand = $this->formatDoctrineMigrationCommand($migrationClass, true);
+            $commands[] = $displayCommand;
+
+            [$exitCode, $output] = $this->runConsoleCommand($command);
+
+            if (0 !== $exitCode && 0 === $overallExitCode) {
+                $overallExitCode = $exitCode;
+            }
+
+            $results[] = [
+                'class' => $migrationClass,
+                'command' => $displayCommand,
+                'exit_code' => $exitCode,
+                'output' => $output,
+            ];
+
+            $combinedOutput[] = sprintf(
+                "## %s\nCommand: %s\nExit code: %d\n%s",
+                $migrationClass,
+                $displayCommand,
+                $exitCode,
+                '' !== $output ? $output : '[no output]'
+            );
+        }
+
+        return [
+            $overallExitCode,
+            $this->limitOutput(implode("\n\n", $combinedOutput), self::DRY_RUN_OUTPUT_LIMIT),
+            $commands,
+            $results,
+        ];
     }
 
     /**
@@ -494,9 +635,9 @@ final readonly class UpdateMigrationSafetyChecker
         return [$exitCode, $this->limitOutput($output, self::DRY_RUN_OUTPUT_LIMIT)];
     }
 
-    private function formatDoctrineMigrationCommand(string $migrationTarget, bool $dryRun): string
+    private function formatDoctrineMigrationCommand(string $migrationClass, bool $dryRun): string
     {
-        $command = 'php bin/console doctrine:migrations:migrate '.escapeshellarg($migrationTarget);
+        $command = 'php bin/console doctrine:migrations:execute '.escapeshellarg($migrationClass).' --up';
 
         if ($dryRun) {
             $command .= ' --dry-run';
@@ -649,7 +790,7 @@ final readonly class UpdateMigrationSafetyChecker
             'dry_run_command' => $dryRunCommand,
             'dry_run_exit_code' => $dryRunExitCode,
             'dry_run_output' => $dryRunOutput,
-            'note' => 'This file reviews staged Doctrine migrations and stores a baseline/dry-run result. It does not create a database backup and does not execute migrations.',
+            'note' => 'This file reviews staged Doctrine migrations and stores explicit per-migration dry-run results. It does not create a database backup and does not execute migrations.',
         ];
 
         $encoded = json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);

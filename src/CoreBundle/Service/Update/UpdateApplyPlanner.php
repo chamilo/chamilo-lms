@@ -315,6 +315,9 @@ final readonly class UpdateApplyPlanner
         $directorySamples = [];
         $unwritableTargets = [];
         $symlinkTargets = [];
+        $migrationFilesNew = [];
+        $migrationFilesToReplace = [];
+        $unsupportedMigrationFilesNew = [];
         $truncatedLists = false;
 
         $iterator = new RecursiveIteratorIterator(
@@ -336,6 +339,8 @@ final readonly class UpdateApplyPlanner
             }
 
             $targetPath = $this->projectDir.'/'.$relativePath;
+            $isSupportedMigrationPath = $this->isSupportedMigrationPath($relativePath);
+            $isUnsupportedMigrationPath = $this->isUnsupportedMigrationPath($relativePath);
 
             if ($item->isDir()) {
                 $directoriesTotal++;
@@ -370,6 +375,10 @@ final readonly class UpdateApplyPlanner
                 $filesToReplace++;
                 $this->appendLimited($replaceSamples, $relativePath, $truncatedLists);
 
+                if ($isSupportedMigrationPath || $isUnsupportedMigrationPath) {
+                    $this->appendLimited($migrationFilesToReplace, $relativePath, $truncatedLists);
+                }
+
                 if (!is_writable($targetPath)) {
                     $this->appendLimited($unwritableTargets, $relativePath, $truncatedLists);
                 }
@@ -379,6 +388,14 @@ final readonly class UpdateApplyPlanner
 
             $filesNew++;
             $this->appendLimited($newSamples, $relativePath, $truncatedLists);
+
+            if ($isSupportedMigrationPath) {
+                $this->appendLimited($migrationFilesNew, $relativePath, $truncatedLists);
+            }
+
+            if ($isUnsupportedMigrationPath) {
+                $this->appendLimited($unsupportedMigrationFilesNew, $relativePath, $truncatedLists);
+            }
 
             if (!$this->canCreatePath($targetPath)) {
                 $this->appendLimited($unwritableTargets, $relativePath, $truncatedLists);
@@ -397,6 +414,9 @@ final readonly class UpdateApplyPlanner
             'directories_new_sample' => $directorySamples,
             'unwritable_targets_sample' => array_values(array_unique($unwritableTargets)),
             'symlink_targets_sample' => array_values(array_unique($symlinkTargets)),
+            'migration_files_new' => array_values(array_unique($migrationFilesNew)),
+            'migration_files_to_replace_sample' => array_values(array_unique($migrationFilesToReplace)),
+            'unsupported_migration_files_new' => array_values(array_unique($unsupportedMigrationFilesNew)),
             'lists_truncated' => $truncatedLists,
             'skipped_top_level_entries' => self::SKIPPED_PREFIXES,
             'skipped_exact_paths' => self::SKIPPED_EXACT_PATHS,
@@ -435,6 +455,18 @@ final readonly class UpdateApplyPlanner
             $this->addCheck($checks, 'symlink_targets', 'passed', 'The planned update does not overwrite existing symbolic links.');
         }
 
+        $unsupportedMigrationFiles = $filePlan['unsupported_migration_files_new'] ?? [];
+        if (\is_array($unsupportedMigrationFiles) && [] !== $unsupportedMigrationFiles) {
+            $this->addCheck($checks, 'unsupported_migration_paths', 'failed', 'New update migration files must be placed under src/CoreBundle/Migrations/Schema/V210.', [
+                'unsupported_migration_files_new' => $unsupportedMigrationFiles,
+            ]);
+        }
+
+        $migrationFilesNew = $filePlan['migration_files_new'] ?? [];
+        if (\is_array($migrationFilesNew) && [] !== $migrationFilesNew) {
+            $warnings[] = 'New V210 Doctrine migration files were detected. They will require a database migration safety review after applying files.';
+        }
+
         if (true === ($filePlan['lists_truncated'] ?? false)) {
             $warnings[] = 'Some update apply plan file lists were truncated in the JSON response.';
         }
@@ -453,6 +485,17 @@ final readonly class UpdateApplyPlanner
         }
 
         return false;
+    }
+
+    private function isSupportedMigrationPath(string $relativePath): bool
+    {
+        return 1 === preg_match('/^src\/CoreBundle\/Migrations\/Schema\/V210\/Version[0-9]+\.php$/', $relativePath);
+    }
+
+    private function isUnsupportedMigrationPath(string $relativePath): bool
+    {
+        return 1 === preg_match('/^src\/CoreBundle\/Migrations\/Schema\/V[0-9]+\/Version[0-9]+\.php$/', $relativePath)
+            && !$this->isSupportedMigrationPath($relativePath);
     }
 
     private function normalizeRelativePath(string $relativePath): string

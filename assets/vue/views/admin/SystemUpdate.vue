@@ -785,7 +785,7 @@
               {{ t("Migration target") }}
             </h4>
             <p class="mt-1 text-caption text-gray-90">
-              {{ t("Doctrine will migrate only up to this target after the safety review passes.") }}
+              {{ t("Doctrine will execute only the staged V210 migrations explicitly after the safety review passes.") }}
             </p>
             <code class="mt-2 block break-all rounded-xl border border-gray-20 bg-support-2 px-3 py-2 font-mono text-caption text-gray-90">
               {{ migrationSafetyTarget }}
@@ -805,15 +805,15 @@
                   {{
                     migrationSafetyBaseline.clean
                       ? t("The database migration baseline is clean.")
-                      : t("The database migration baseline is not clean. Fix the listed migrations before running database migrations.")
+                      : t("Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation.")
                   }}
                 </p>
               </div>
               <span
                 class="inline-flex w-fit rounded-full border px-2.5 py-1 text-caption font-semibold uppercase"
-                :class="migrationSafetyBaseline.clean ? 'border-success text-success' : 'border-danger text-danger'"
+                :class="migrationSafetyBaseline.clean ? 'border-success text-success' : 'border-warning text-warning'"
               >
-                {{ migrationSafetyBaseline.clean ? t("Baseline clean") : t("Baseline failed") }}
+                {{ migrationSafetyBaseline.clean ? t("Baseline clean") : t("Baseline warnings") }}
               </span>
             </div>
 
@@ -2074,7 +2074,7 @@ function buildExecutablePostApplyActions(actions) {
         key: "doctrine_migrations",
         title: t("Database migrations"),
         description: action.description,
-        command: "php bin/console doctrine:migrations:migrate --no-interaction",
+        command: "php bin/console doctrine:migrations:execute <staged-migration-class> --up --no-interaction",
         severity: action.severity,
         advanced: true,
         category: "advanced",

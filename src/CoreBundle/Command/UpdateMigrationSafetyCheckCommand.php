@@ -38,9 +38,9 @@ Reviews Doctrine migrations detected in a staged update.
 This command does not execute migrations and does not create a database backup.
 It reads POST-APPLY-CHECKS.json, lists staged migration classes, runs:
 
-  php bin/console doctrine:migrations:migrate <staged-migration-target> --dry-run --no-interaction
+  php bin/console doctrine:migrations:execute <staged-migration-class> --up --dry-run --no-interaction
 
-checks the existing Doctrine migration baseline, runs a targeted dry-run and writes MIGRATION-SAFETY-CHECKS.json in the staging directory.
+for each staged migration class and writes MIGRATION-SAFETY-CHECKS.json in the staging directory.
 
 Example:
   php bin/console chamilo:update:migration-safety var/update/staging/2.1.0-20260603163014-bc4b52a8

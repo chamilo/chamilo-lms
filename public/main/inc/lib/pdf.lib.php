@@ -2,6 +2,7 @@
 
 /* See license terms in /license.txt */
 
+use Chamilo\CoreBundle\Component\Mpdf\SafeMpdfHttpClient;
 use Chamilo\CoreBundle\Framework\Container;
 use Masterminds\HTML5;
 use Mpdf\HTMLParserMode;
@@ -85,7 +86,9 @@ class PDF
         if ($value) {
             $params['img_dpi'] = $value;
         }
-        $this->pdf = new Mpdf($params);
+        // SSRF protection: route mPDF's remote asset fetches through an
+        // IP-filtered HTTP client (blocks loopback/private/reserved/metadata).
+        $this->pdf = new Mpdf($params, SafeMpdfHttpClient::container());
     }
 
     /**

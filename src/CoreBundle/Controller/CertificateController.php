@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Component\Mpdf\SafeMpdfHttpClient;
 use Chamilo\CoreBundle\Entity\GradebookCertificate;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
@@ -69,7 +70,7 @@ class CertificateController extends AbstractController
             $mpdf = new Mpdf([
                 'format' => 'A4',
                 'tempDir' => api_get_path(SYS_ARCHIVE_PATH).'mpdf/',
-            ]);
+            ], SafeMpdfHttpClient::container());
             $mpdf->WriteHTML($html);
             $pdfBinary = $mpdf->Output('', Destination::STRING_RETURN);
 

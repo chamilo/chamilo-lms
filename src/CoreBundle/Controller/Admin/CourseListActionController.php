@@ -56,10 +56,13 @@ class CourseListActionController extends AbstractController
         $course = $this->em->getRepository(Course::class)->find($courseId);
 
         if ($course) {
-            CourseManager::delete_course($course->getCode());
-            $this->addFlash('success', 'The course has been deleted.');
-        } else {
-            $this->addFlash('error', 'Course not found.');
+            $isDeleted = CourseManager::delete_course($course->getCode());
+
+            if ($isDeleted) {
+                $this->addFlash('success', 'The course has been deleted.');
+            } else {
+                $this->addFlash('error', 'Course not found.');
+            }
         }
 
         return $this->redirect('/admin/course-list');
@@ -79,8 +82,11 @@ class CourseListActionController extends AbstractController
         foreach ($courseIds as $courseId) {
             $course = $this->em->getRepository(Course::class)->find((int) $courseId);
             if ($course) {
-                CourseManager::delete_course($course->getCode());
-                $deleted++;
+                $isDeleted = CourseManager::delete_course($course->getCode());
+
+                if ($isDeleted) {
+                    $deleted++;
+                }
             }
         }
 

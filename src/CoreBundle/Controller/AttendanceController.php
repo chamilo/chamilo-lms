@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Component\Mpdf\SafeMpdfHttpClient;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\Session;
@@ -329,7 +330,7 @@ class AttendanceController extends AbstractController
             $mpdf = new Mpdf([
                 'orientation' => 'L',
                 'tempDir' => api_get_path(SYS_ARCHIVE_PATH).'mpdf/',
-            ]);
+            ], SafeMpdfHttpClient::container());
             $mpdf->WriteHTML($html);
 
             return new Response(

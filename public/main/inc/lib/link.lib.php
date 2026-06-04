@@ -8,8 +8,10 @@ use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\SafeHttpClientHelper;
 use Chamilo\CourseBundle\Entity\CLink;
 use Chamilo\CourseBundle\Entity\CLinkCategory;
+use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 
 /**
  * Function library for the links tool.
@@ -1495,42 +1497,19 @@ Do you really want to delete this category and its links ?')."')) return false;\
      */
     public static function checkUrl($url)
     {
-        // Check if curl is available.
-        if (!in_array('curl', get_loaded_extensions())) {
+        // SSRF-safe fetch (blocks loopback/private/reserved/metadata targets,
+        // validates redirects, http(s) only); honours the platform proxy setting.
+        $options = SafeHttpClientHelper::withChamiloProxy(['timeout' => 4]);
+
+        try {
+            // getStatusCode() forces the transport to complete; a blocked or
+            // unreachable target throws and the link is reported as invalid.
+            SafeHttpClientHelper::create()->request('GET', (string) $url, $options)->getStatusCode();
+        } catch (ExceptionInterface $e) {
             return false;
         }
 
-        // set URL and other appropriate options
-        $defaults = [
-            CURLOPT_URL => $url,
-            CURLOPT_FOLLOWLOCATION => true, // follow redirects accept youtube.com
-            CURLOPT_HEADER => 0,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => 4,
-        ];
-
-        $proxySettings = api_get_setting('security.proxy_settings', true);
-
-        if (!empty($proxySettings) &&
-            isset($proxySettings['curl_setopt_array'])
-        ) {
-            $defaults[CURLOPT_PROXY] = $proxySettings['curl_setopt_array']['CURLOPT_PROXY'];
-            $defaults[CURLOPT_PROXYPORT] = $proxySettings['curl_setopt_array']['CURLOPT_PROXYPORT'];
-        }
-
-        // Create a new cURL resource
-        $ch = curl_init();
-        curl_setopt_array($ch, $defaults);
-
-        // grab URL and pass it to the browser
-        ob_start();
-        $result = curl_exec($ch);
-        ob_get_clean();
-
-        // close cURL resource, and free up system resources
-        curl_close($ch);
-
-        return $result;
+        return true;
     }
 
     /**

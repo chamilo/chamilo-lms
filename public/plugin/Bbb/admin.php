@@ -745,7 +745,7 @@ $content = '
     <section class="rounded-2xl border border-gray-25 bg-white p-6 shadow-sm">
         <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div>
-                <div class="inline-flex items-center gap-2 rounded-full bg-support-2 px-3 py-1 text-caption font-semibold text-white">
+                <div class="inline-flex items-center gap-2 rounded-full bg-support-2 px-3 py-1 text-caption font-semibold">
                     <em class="mdi mdi-video-outline text-base"></em>
                     '.bbb_admin_escape($plugin->get_lang('RecordList')).'
                 </div>

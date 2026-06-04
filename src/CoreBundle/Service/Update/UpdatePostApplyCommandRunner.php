@@ -108,7 +108,26 @@ final readonly class UpdatePostApplyCommandRunner
             }
 
             if (isset($selectedActions['doctrine_migrations'])) {
-                $this->validateDatabaseMigrationReview($stagingPath, $confirmedDatabaseBackup, $confirmedDatabaseMigrations, $checks, $warnings, $details, $operationId);
+                $migrationTarget = $this->validateDatabaseMigrationReview(
+                    $stagingPath,
+                    $confirmedDatabaseBackup,
+                    $confirmedDatabaseMigrations,
+                    $checks,
+                    $warnings,
+                    $details,
+                    $operationId
+                );
+
+                $selectedActions['doctrine_migrations']['command'] = [
+                    'php',
+                    'bin/console',
+                    'doctrine:migrations:migrate',
+                    $migrationTarget,
+                    '--no-interaction',
+                ];
+                $selectedActions['doctrine_migrations']['display_command'] = 'php bin/console doctrine:migrations:migrate '
+                    .escapeshellarg($migrationTarget)
+                    .' --no-interaction';
             }
 
             $this->validateExecutableActions($selectedActions, $checks, $warnings, $details, $operationId);
@@ -474,7 +493,7 @@ final readonly class UpdatePostApplyCommandRunner
         array &$warnings,
         array &$details,
         string $operationId
-    ): void {
+    ): string {
         $migrationSafetyPath = $stagingPath.'/MIGRATION-SAFETY-CHECKS.json';
 
         if (!is_file($migrationSafetyPath) || !is_readable($migrationSafetyPath)) {
@@ -485,6 +504,16 @@ final readonly class UpdatePostApplyCommandRunner
 
         if (true !== ($migrationSafety['success'] ?? false)) {
             throw new RuntimeException('Database migrations cannot run because the migration safety review did not pass.');
+        }
+
+        $migrationTarget = $migrationSafety['migration_target'] ?? $migrationSafety['details']['migration_target'] ?? null;
+        if (!\is_string($migrationTarget) || '' === trim($migrationTarget)) {
+            throw new RuntimeException('Database migrations cannot run because the migration safety review did not define a migration target.');
+        }
+
+        $baseline = $migrationSafety['baseline'] ?? $migrationSafety['details']['baseline'] ?? null;
+        if (!\is_array($baseline) || true !== ($baseline['clean'] ?? false)) {
+            throw new RuntimeException('Database migrations cannot run because the migration baseline is not clean.');
         }
 
         if (!$confirmedDatabaseBackup) {
@@ -499,20 +528,25 @@ final readonly class UpdatePostApplyCommandRunner
         $details['migration_safety'] = [
             'metadata_file' => $migrationSafetyPath,
             'migration_count' => $migrationCount,
+            'migration_target' => $migrationTarget,
             'dry_run_exit_code' => $migrationSafety['dry_run_exit_code'] ?? null,
         ];
 
         $this->addCheck($checks, 'database_migration_safety', 'passed', 'Database migration safety review was completed before execution.', [
             'metadata_file' => $migrationSafetyPath,
             'migration_count' => $migrationCount,
+            'migration_target' => $migrationTarget,
         ]);
         $this->addCheck($checks, 'database_backup_confirmation', 'passed', 'Database backup existence was explicitly confirmed.');
         $this->logOperation($operationId, 'warning', 'database_migration_safety', 'Database migration safety review and backup confirmation were provided.', [
             'metadata_file' => $migrationSafetyPath,
             'migration_count' => $migrationCount,
+            'migration_target' => $migrationTarget,
         ]);
 
         $warnings[] = 'Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup.';
+
+        return $migrationTarget;
     }
 
     /**

@@ -776,6 +776,131 @@
             </div>
           </div>
 
+
+          <div
+            v-if="migrationSafetyTarget"
+            class="mb-4 rounded-2xl border border-info bg-white p-4"
+          >
+            <h4 class="text-body-2 font-semibold text-gray-90">
+              {{ t("Migration target") }}
+            </h4>
+            <p class="mt-1 text-caption text-gray-90">
+              {{ t("Doctrine will migrate only up to this target after the safety review passes.") }}
+            </p>
+            <code class="mt-2 block break-all rounded-xl border border-gray-20 bg-support-2 px-3 py-2 font-mono text-caption text-gray-90">
+              {{ migrationSafetyTarget }}
+            </code>
+          </div>
+
+          <div
+            v-if="migrationSafetyBaseline"
+            class="mb-4 rounded-2xl border border-gray-20 bg-white p-4"
+          >
+            <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+              <div>
+                <h4 class="text-body-2 font-semibold text-gray-90">
+                  {{ t("Database baseline") }}
+                </h4>
+                <p class="mt-1 text-caption text-gray-90">
+                  {{
+                    migrationSafetyBaseline.clean
+                      ? t("The database migration baseline is clean.")
+                      : t("The database migration baseline is not clean. Fix the listed migrations before running database migrations.")
+                  }}
+                </p>
+              </div>
+              <span
+                class="inline-flex w-fit rounded-full border px-2.5 py-1 text-caption font-semibold uppercase"
+                :class="migrationSafetyBaseline.clean ? 'border-success text-success' : 'border-danger text-danger'"
+              >
+                {{ migrationSafetyBaseline.clean ? t("Baseline clean") : t("Baseline failed") }}
+              </span>
+            </div>
+
+            <div class="mt-4 grid gap-3 md:grid-cols-2 lg:grid-cols-4">
+              <div class="rounded-xl border border-gray-20 bg-support-2 p-3">
+                <p class="text-caption font-semibold uppercase text-gray-50">
+                  {{ t("Current migration") }}
+                </p>
+                <p class="mt-1 break-all font-mono text-caption text-gray-90">
+                  {{ migrationSafetyBaseline.current || t("Not detected") }}
+                </p>
+              </div>
+              <div class="rounded-xl border border-gray-20 bg-support-2 p-3">
+                <p class="text-caption font-semibold uppercase text-gray-50">
+                  {{ t("Next migration") }}
+                </p>
+                <p class="mt-1 break-all font-mono text-caption text-gray-90">
+                  {{ migrationSafetyBaseline.next || t("Not detected") }}
+                </p>
+              </div>
+              <div class="rounded-xl border border-gray-20 bg-support-2 p-3">
+                <p class="text-caption font-semibold uppercase text-gray-50">
+                  {{ t("Latest migration") }}
+                </p>
+                <p class="mt-1 break-all font-mono text-caption text-gray-90">
+                  {{ migrationSafetyBaseline.latest || t("Not detected") }}
+                </p>
+              </div>
+              <div class="rounded-xl border border-gray-20 bg-support-2 p-3">
+                <p class="text-caption font-semibold uppercase text-gray-50">
+                  {{ t("New migrations reported by Doctrine") }}
+                </p>
+                <p class="mt-1 font-mono text-caption text-gray-90">
+                  {{ migrationSafetyBaseline.new_count ?? t("Unknown") }}
+                </p>
+              </div>
+            </div>
+
+            <div
+              v-if="migrationSafetyExecutedUnavailable.length"
+              class="mt-4 rounded-xl border border-danger bg-support-2 p-3"
+            >
+              <p class="text-body-2 font-semibold text-danger">
+                {{ t("Executed unavailable migrations") }}
+              </p>
+              <ul class="mt-2 list-disc space-y-1 pl-5 font-mono text-caption text-gray-90">
+                <li
+                  v-for="migration in migrationSafetyExecutedUnavailable"
+                  :key="migration"
+                  class="break-all"
+                >
+                  {{ migration }}
+                </li>
+              </ul>
+            </div>
+            <div
+              v-else
+              class="mt-4 rounded-xl border border-success bg-support-2 p-3 text-caption font-semibold text-gray-90"
+            >
+              {{ t("No executed unavailable migration was reported.") }}
+            </div>
+
+            <div
+              v-if="migrationSafetyPendingBeforeTarget.length"
+              class="mt-4 rounded-xl border border-danger bg-support-2 p-3"
+            >
+              <p class="text-body-2 font-semibold text-danger">
+                {{ t("Pending migrations before this update") }}
+              </p>
+              <ul class="mt-2 list-disc space-y-1 pl-5 font-mono text-caption text-gray-90">
+                <li
+                  v-for="migration in migrationSafetyPendingBeforeTarget"
+                  :key="migration.class"
+                  class="break-all"
+                >
+                  {{ migration.class }} — {{ migration.status }}
+                </li>
+              </ul>
+            </div>
+            <div
+              v-else
+              class="mt-4 rounded-xl border border-success bg-support-2 p-3 text-caption font-semibold text-gray-90"
+            >
+              {{ t("No pending migration was detected before the staged update target.") }}
+            </div>
+          </div>
+
           <div
             v-if="migrationSafety.migrationSafety.dryRunCommand"
             class="mb-4 rounded-2xl border border-gray-20 bg-white p-4"
@@ -1270,6 +1395,26 @@ const formattedMigrationSafetyDetails = computed(() => {
   }
 
   return JSON.stringify(migrationSafety.value.migrationSafety.details || {}, null, 2)
+})
+
+const migrationSafetyDetails = computed(() => {
+  return migrationSafety.value?.migrationSafety?.details || {}
+})
+
+const migrationSafetyTarget = computed(() => {
+  return migrationSafety.value?.migrationSafety?.migrationTarget || migrationSafetyDetails.value.migration_target || ""
+})
+
+const migrationSafetyBaseline = computed(() => {
+  return migrationSafety.value?.migrationSafety?.baseline || migrationSafetyDetails.value.baseline || null
+})
+
+const migrationSafetyPendingBeforeTarget = computed(() => {
+  return migrationSafetyBaseline.value?.pending_before_target || []
+})
+
+const migrationSafetyExecutedUnavailable = computed(() => {
+  return migrationSafetyBaseline.value?.executed_unavailable_migrations || []
 })
 
 const formattedPostApplyRunDetails = computed(() => {

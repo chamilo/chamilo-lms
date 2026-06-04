@@ -77,3 +77,6 @@ $strings['defaultVisibilityInCourseHomepage'] = 'Noklusētā redzamība kursa s�
 $strings['ViewActivityDashboard'] = 'Skatīt aktivitātes paneli';
 $strings['Participants'] = 'Dalībnieki';
 $strings['CountUsers'] = 'Skaitīt lietotājus';
+$strings['NoRecording'] = 'Nav ieraksta';
+$strings['presentation'] = 'Prezentacija';
+$strings['video'] = 'Video';

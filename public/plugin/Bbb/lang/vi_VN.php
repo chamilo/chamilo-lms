@@ -77,3 +77,6 @@ $strings['defaultVisibilityInCourseHomepage'] = 'Hiển thị mặc định trê
 $strings['ViewActivityDashboard'] = 'Xem bảng điều khiển hoạt động';
 $strings['Participants'] = 'Người tham gia';
 $strings['CountUsers'] = 'Đếm người dùng';
+$strings['NoRecording'] = 'Khong co ban ghi';
+$strings['presentation'] = 'Bai thuyet trinh';
+$strings['video'] = 'Video';

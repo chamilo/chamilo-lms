@@ -77,3 +77,6 @@ $strings['defaultVisibilityInCourseHomepage'] = 'Standaard zichtbaarheid op curs
 $strings['ViewActivityDashboard'] = 'Activiteiten-dashboard bekijken';
 $strings['Participants'] = 'Deelnemers';
 $strings['CountUsers'] = 'Tel gebruikers';
+$strings['NoRecording'] = 'Geen opname';
+$strings['presentation'] = 'Presentatie';
+$strings['video'] = 'Video';

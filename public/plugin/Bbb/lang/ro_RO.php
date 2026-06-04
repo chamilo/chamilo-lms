@@ -77,3 +77,6 @@ $strings['defaultVisibilityInCourseHomepage'] = 'Vizibilitate implicită pe pagi
 $strings['ViewActivityDashboard'] = 'Vizualizează tabloul de bord al activității';
 $strings['Participants'] = 'Participanți';
 $strings['CountUsers'] = 'Numără utilizatori';
+$strings['NoRecording'] = 'Fara inregistrare';
+$strings['presentation'] = 'Prezentare';
+$strings['video'] = 'Video';

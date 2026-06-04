@@ -77,3 +77,6 @@ $strings['defaultVisibilityInCourseHomepage'] = 'Oletusnäkyvyys kurssin etusivu
 $strings['ViewActivityDashboard'] = 'Näytä toiminnan koontinäyttö';
 $strings['Participants'] = 'Osallistujat';
 $strings['CountUsers'] = 'Laske käyttäjät';
+$strings['NoRecording'] = 'Ei tallenteita';
+$strings['presentation'] = 'Esitys';
+$strings['video'] = 'Video';

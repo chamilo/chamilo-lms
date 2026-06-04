@@ -77,3 +77,6 @@ $strings['defaultVisibilityInCourseHomepage'] = 'Ders ana sayfasında varsayıla
 $strings['ViewActivityDashboard'] = 'Etkinlik panosunu görüntüle';
 $strings['Participants'] = 'Katılımcılar';
 $strings['CountUsers'] = 'Kullanıcıları say';
+$strings['NoRecording'] = 'Kayit yok';
+$strings['presentation'] = 'Sunum';
+$strings['video'] = 'Video';

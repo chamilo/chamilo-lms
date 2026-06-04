@@ -26,6 +26,10 @@ export default {
 
   applySystemUpdateFiles: (payload) => baseService.post("/admin/system-update/apply-files", payload),
 
+  runSystemUpdatePostApplyChecks: (payload) => baseService.post("/admin/system-update/post-apply", payload),
+
+  runSystemUpdatePostApplyActions: (payload) => baseService.post("/admin/system-update/run-post-apply", payload),
+
   findSystemUpdateProgress: (operationId) =>
     baseService.get(`/admin/system-update/progress/${encodeURIComponent(operationId)}`),
 

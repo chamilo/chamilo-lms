@@ -14,6 +14,8 @@ use Chamilo\CoreBundle\Service\Update\UpdateManifestClient;
 use Chamilo\CoreBundle\Service\Update\UpdateOperationLogger;
 use Chamilo\CoreBundle\Service\Update\UpdatePackageDownloader;
 use Chamilo\CoreBundle\Service\Update\UpdatePackageVerifier;
+use Chamilo\CoreBundle\Service\Update\UpdatePostApplyChecker;
+use Chamilo\CoreBundle\Service\Update\UpdatePostApplyCommandRunner;
 use Chamilo\CoreBundle\Service\Update\UpdatePreflightChecker;
 use Chamilo\CoreBundle\Service\Update\UpdateStagingManager;
 use Composer\InstalledVersions;
@@ -39,6 +41,8 @@ final class SystemUpdateController extends AbstractController
         private readonly UpdateConfiguration $updateConfiguration,
         private readonly UpdateApplyPlanner $applyPlanner,
         private readonly UpdateFileApplier $fileApplier,
+        private readonly UpdatePostApplyChecker $postApplyChecker,
+        private readonly UpdatePostApplyCommandRunner $postApplyCommandRunner,
         private readonly UpdateOperationLogger $operationLogger,
     ) {}
 
@@ -59,6 +63,8 @@ final class SystemUpdateController extends AbstractController
             'productionMode' => $this->updateConfiguration->isProduction(),
             'trustedPublicKeyConfigured' => $this->updateConfiguration->hasTrustedPublicKey(),
             'trustedPublicKeyFingerprint' => $this->updateConfiguration->getTrustedPublicKeyFingerprint(),
+            'allowUiPostApplyCommands' => $this->updateConfiguration->allowsUiPostApplyCommands(),
+            'commandTimeout' => $this->updateConfiguration->getCommandTimeoutSeconds(),
         ]);
     }
 
@@ -238,7 +244,6 @@ final class SystemUpdateController extends AbstractController
         }
     }
 
-
     #[Route('/apply-plan', name: 'apply_plan', methods: ['POST'])]
     public function applyPlan(Request $request): JsonResponse
     {
@@ -273,7 +278,6 @@ final class SystemUpdateController extends AbstractController
         }
     }
 
-
     #[Route('/apply-files', name: 'apply_files', methods: ['POST'])]
     public function applyFiles(Request $request): JsonResponse
     {
@@ -296,6 +300,55 @@ final class SystemUpdateController extends AbstractController
         }
     }
 
+    #[Route('/post-apply', name: 'post_apply', methods: ['POST'])]
+    public function postApply(Request $request): JsonResponse
+    {
+        $payload = $this->readJsonPayload($request);
+
+        try {
+            $stagingPath = $this->readRequiredString($payload, 'stagingPath');
+            $result = $this->postApplyChecker->check($stagingPath);
+
+            return $this->json([
+                'postApply' => $result->toArray(),
+            ], $result->isValid() ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
+        } catch (Throwable $exception) {
+            return $this->json([
+                'error' => $exception->getMessage(),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+
+    #[Route('/run-post-apply', name: 'run_post_apply', methods: ['POST'])]
+    public function runPostApply(Request $request): JsonResponse
+    {
+        $payload = $this->readJsonPayload($request);
+
+        try {
+            if (!$this->updateConfiguration->allowsUiPostApplyCommands()) {
+                throw new InvalidArgumentException('Running post-apply commands from the UI is disabled on this server.');
+            }
+
+            $stagingPath = $this->readRequiredString($payload, 'stagingPath');
+            $actions = $this->readStringList($payload, 'actions');
+            $confirmed = $this->readPostApplyRunConfirmation($payload);
+            $confirmedAdvanced = $this->readAdvancedPostApplyRunConfirmation($payload);
+            $operationId = $this->readNullableString($payload, 'operationId');
+
+            $result = $this->postApplyCommandRunner->run($stagingPath, $actions, $confirmed, $operationId, $confirmedAdvanced);
+
+            return $this->json([
+                'operationId' => $result->getOperationId() ?? $operationId,
+                'postApplyRun' => $result->toArray(),
+            ], $result->isValid() ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
+        } catch (Throwable $exception) {
+            return $this->json([
+                'error' => $exception->getMessage(),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
     /**
      * @return array<string, mixed>
      */
@@ -309,7 +362,6 @@ final class SystemUpdateController extends AbstractController
 
         return \is_array($payload) ? $payload : [];
     }
-
 
     /**
      * @param array<string, mixed> $payload
@@ -431,6 +483,48 @@ final class SystemUpdateController extends AbstractController
         return $skipSignature;
     }
 
+
+    /**
+     * @param array<string, mixed> $payload
+     *
+     * @return string[]
+     */
+    private function readStringList(array $payload, string $key): array
+    {
+        $values = $payload[$key] ?? [];
+
+        if (!\is_array($values)) {
+            return [];
+        }
+
+        return array_values(array_unique(array_filter(array_map(
+            static fn (mixed $value): string => \is_string($value) ? trim($value) : '',
+            $values,
+        ))));
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     */
+    private function readPostApplyRunConfirmation(array $payload): bool
+    {
+        $confirmed = true === ($payload['confirmPostApplyRun'] ?? false);
+        $confirmationText = $this->readNullableString($payload, 'postApplyRunConfirmationText');
+
+        if (!$confirmed || 'RUN POST UPDATE ACTIONS' !== $confirmationText) {
+            throw new InvalidArgumentException('Running post-apply update actions requires the confirmation text "RUN POST UPDATE ACTIONS".');
+        }
+
+        return true;
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     */
+    private function readAdvancedPostApplyRunConfirmation(array $payload): bool
+    {
+        return true === ($payload['confirmAdvancedPostApplyRun'] ?? false);
+    }
 
     /**
      * @param array<string, mixed> $payload

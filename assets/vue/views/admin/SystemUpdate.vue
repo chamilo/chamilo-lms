@@ -572,6 +572,305 @@
       </ResultPanel>
     </div>
 
+    <div class="rounded-3xl border border-gray-20 bg-white p-6 shadow-sm">
+      <div class="flex items-center gap-3">
+        <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-support-1 text-primary">
+          <i class="mdi mdi-clipboard-check-outline text-xl" />
+        </span>
+        <div>
+          <h2 class="text-xl font-semibold text-gray-90">
+            {{ t("Post-apply checks") }}
+          </h2>
+          <p class="mt-1 text-body-2 text-gray-50">
+            {{ t("Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands.") }}
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-4 rounded-2xl border border-info bg-support-2 p-3 text-caption text-info">
+        <span class="mdi mdi-information-outline mr-1" />
+        {{ t("Run these commands manually from the server after confirming the file update result and backups.") }}
+      </div>
+
+      <div class="mt-4">
+        <BaseButton
+          :disabled="isCheckingPostApply || !form.stagingPath || !applyFilesResult?.applyFiles?.valid"
+          :is-loading="isCheckingPostApply"
+          :label="isCheckingPostApply ? t('Checking post-apply actions...') : t('Review post-apply actions')"
+          icon="clipboard-check-outline"
+          type="primary"
+          @click="runPostApplyChecks"
+        />
+      </div>
+
+      <ResultPanel
+        v-if="postApplyChecks"
+        :details-label="t('Post-apply details')"
+        :details-text="formattedPostApplyDetails"
+        :errors="postApplyChecks.postApply.errors"
+        :title="postApplyChecks.postApply.valid ? t('Post-apply actions ready') : t('Post-apply checks failed')"
+        :valid="postApplyChecks.postApply.valid"
+        :warnings="postApplyChecks.postApply.warnings"
+      >
+        <div
+          v-if="postApplyActions.length"
+          class="mb-4 space-y-3"
+        >
+          <div
+            v-for="action in postApplyActions"
+            :key="action.key"
+            class="rounded-2xl border border-gray-20 bg-white p-4"
+          >
+            <div class="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
+              <div>
+                <h3 class="text-body-2 font-semibold text-gray-90">
+                  {{ action.title }}
+                </h3>
+                <p class="mt-1 text-caption text-gray-50">
+                  {{ action.description }}
+                </p>
+              </div>
+              <span
+                class="inline-flex w-fit rounded-full border px-2.5 py-1 text-caption font-semibold uppercase"
+                :class="getActionSeverityClass(action.severity)"
+              >
+                {{ action.severity }}
+              </span>
+            </div>
+
+            <div class="mt-3 space-y-2">
+              <code
+                v-for="command in action.commands"
+                :key="command"
+                class="block break-all rounded-xl border border-gray-20 bg-support-2 px-3 py-2 font-mono text-caption text-gray-90"
+              >
+                {{ command }}
+              </code>
+            </div>
+          </div>
+        </div>
+
+        <CheckTable
+          v-if="postApplyChecks.postApply.checks.length"
+          :checks="postApplyChecks.postApply.checks"
+          :status-class="getCheckStatusClass"
+          :status-icon-class="getCheckStatusIconClass"
+        />
+      </ResultPanel>
+
+      <div
+        v-if="postApplyChecks?.postApply?.valid"
+        class="mt-6 rounded-2xl border border-gray-20 bg-support-2 p-4"
+      >
+        <div class="flex items-start gap-3">
+          <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-white text-primary">
+            <i class="mdi mdi-play-circle-outline text-xl" />
+          </span>
+          <div>
+            <h3 class="text-body-1 font-semibold text-gray-90">
+              {{ t("Run post-apply actions") }}
+            </h3>
+            <p class="mt-1 text-body-2 text-gray-50">
+              {{ t("Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted.") }}
+            </p>
+          </div>
+        </div>
+
+        <div
+          v-if="!status.allowUiPostApplyCommands"
+          class="mt-4 rounded-2xl border border-warning bg-support-2 p-3 text-caption font-semibold text-gray-90"
+        >
+          <span class="mdi mdi-alert-outline mr-1" />
+          {{ t("Running post-apply actions from the UI is disabled in production mode.") }}
+        </div>
+
+        <div
+          v-else
+          class="mt-4 space-y-4"
+        >
+          <div class="rounded-2xl border border-danger bg-white p-3 text-caption text-danger">
+            <span class="mdi mdi-alert-outline mr-1" />
+            {{ t("These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing.") }}
+          </div>
+
+          <div class="space-y-4">
+            <div>
+              <p class="text-body-2 font-semibold text-gray-90">
+                {{ t("Safe actions") }}
+              </p>
+              <p class="mt-1 text-caption text-gray-50">
+                {{ t("These actions are safe to run from the UI after reviewing the update result.") }}
+              </p>
+
+              <div class="mt-2 space-y-2">
+                <label
+                  v-for="action in postApplySafeExecutableActions"
+                  :key="action.key"
+                  class="flex items-start gap-3 rounded-2xl border border-success bg-white p-3 text-body-2 text-gray-90"
+                >
+                  <input
+                    v-model="form.selectedPostApplyActionKeys"
+                    :value="action.key"
+                    class="mt-1 rounded border-gray-25 text-primary focus:ring-primary"
+                    type="checkbox"
+                  />
+                  <span class="min-w-0">
+                    <span class="block font-semibold">{{ action.title }}</span>
+                    <span class="mt-1 block text-caption text-gray-50">{{ action.description }}</span>
+                    <code class="mt-2 block break-all rounded-xl border border-gray-20 bg-support-2 px-3 py-2 font-mono text-caption text-gray-90">
+                      {{ action.command }}
+                    </code>
+                  </span>
+                </label>
+              </div>
+            </div>
+
+            <div
+              v-if="postApplyAdvancedExecutableActions.length"
+              class="rounded-2xl border border-warning bg-white p-3"
+            >
+              <p class="text-body-2 font-semibold text-gray-90">
+                {{ t("Advanced actions") }}
+              </p>
+              <p class="mt-1 text-caption font-semibold text-gray-90">
+                {{ t("Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions.") }}
+              </p>
+
+              <div class="mt-3 space-y-2">
+                <label
+                  v-for="action in postApplyAdvancedExecutableActions"
+                  :key="action.key"
+                  class="flex items-start gap-3 rounded-2xl border border-warning bg-support-2 p-3 text-body-2 text-gray-90"
+                >
+                  <input
+                    v-model="form.selectedPostApplyActionKeys"
+                    :value="action.key"
+                    class="mt-1 rounded border-gray-25 text-warning focus:ring-warning"
+                    type="checkbox"
+                  />
+                  <span class="min-w-0">
+                    <span class="block font-semibold">{{ action.title }}</span>
+                    <span class="mt-1 block text-caption text-gray-90">{{ action.description }}</span>
+                    <code class="mt-2 block break-all rounded-xl border border-gray-20 bg-white px-3 py-2 font-mono text-caption text-gray-90">
+                      {{ action.command }}
+                    </code>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <label
+            v-if="hasSelectedAdvancedPostApplyActions"
+            class="flex items-start gap-3 rounded-2xl border border-warning bg-white p-3 text-body-2 text-gray-90"
+          >
+            <input
+              v-model="form.confirmAdvancedPostApplyRun"
+              class="mt-1 rounded border-gray-25 text-warning focus:ring-warning"
+              type="checkbox"
+            />
+            <span>
+              <span class="block font-semibold">
+                {{ t("I understand that advanced actions can modify dependencies, generated assets or the database.") }}
+              </span>
+              <span class="mt-1 block text-caption text-gray-90">
+                {{ t("Do not enable this unless the update backup and server permissions were reviewed.") }}
+              </span>
+            </span>
+          </label>
+
+          <label class="flex items-start gap-3 text-body-2 text-gray-90">
+            <input
+              v-model="form.confirmPostApplyRun"
+              class="mt-1 rounded border-gray-25 text-danger focus:ring-danger"
+              type="checkbox"
+            />
+            <span>
+              {{ t("I understand this will run update commands on the server.") }}
+            </span>
+          </label>
+
+          <label class="block">
+            <span class="text-body-2 font-semibold text-gray-90">
+              {{ t("Type RUN POST UPDATE ACTIONS to confirm") }}
+            </span>
+            <input
+              v-model.trim="form.postApplyRunConfirmationText"
+              class="mt-2 w-full rounded-xl border border-gray-25 px-3 py-2 font-mono text-body-2 text-gray-90 shadow-sm focus:border-danger focus:ring-danger"
+              placeholder="RUN POST UPDATE ACTIONS"
+              type="text"
+            />
+          </label>
+
+          <BaseButton
+            :disabled="isRunningPostApplyActions || !canRunPostApplyActions"
+            :is-loading="isRunningPostApplyActions"
+            :label="isRunningPostApplyActions ? t('Running post-apply actions...') : t('Run selected post-apply actions')"
+            icon="play-circle-outline"
+            type="primary"
+            @click="runPostApplyActions"
+          />
+        </div>
+
+        <div
+          v-if="postApplyRunOperationId || postApplyRunProgressEvents.length"
+          class="mt-6 overflow-hidden rounded-2xl border border-gray-20 bg-gray-90 shadow-sm"
+        >
+          <div class="flex items-center justify-between border-b border-gray-50 px-4 py-3">
+            <div class="flex items-center gap-2 text-body-2 font-semibold text-white">
+              <span class="mdi mdi-console-line text-lg text-info" />
+              {{ t("Live command log") }}
+            </div>
+            <span class="font-mono text-caption text-gray-25">
+              {{ postApplyRunOperationId }}
+            </span>
+          </div>
+
+          <div class="max-h-80 overflow-auto p-4 font-mono text-caption">
+            <div
+              v-if="!postApplyRunProgressEvents.length"
+              class="text-gray-25"
+            >
+              {{ t("Waiting for command progress events...") }}
+            </div>
+
+            <div
+              v-for="(event, index) in postApplyRunProgressEvents"
+              :key="`${event.time}-${event.step}-${index}`"
+              class="grid gap-2 py-1 md:grid-cols-[5.5rem_5rem_12rem_1fr]"
+            >
+              <span class="text-gray-25">{{ formatOperationTime(event.time) }}</span>
+              <span
+                class="font-semibold uppercase"
+                :class="getOperationLevelClass(event.level)"
+              >
+                {{ event.level }}
+              </span>
+              <span class="text-gray-25">{{ event.step }}</span>
+              <span class="text-white">{{ event.message }}</span>
+            </div>
+          </div>
+        </div>
+
+        <ResultPanel
+          v-if="postApplyRunResult"
+          :details-label="t('Post-apply run details')"
+          :details-text="formattedPostApplyRunDetails"
+          :errors="postApplyRunResult.postApplyRun.errors"
+          :title="postApplyRunResult.postApplyRun.valid ? t('Post-apply actions completed') : t('Post-apply actions failed')"
+          :valid="postApplyRunResult.postApplyRun.valid"
+          :warnings="postApplyRunResult.postApplyRun.warnings"
+        >
+          <CheckTable
+            v-if="postApplyRunResult.postApplyRun.checks.length"
+            :checks="postApplyRunResult.postApplyRun.checks"
+            :status-class="getCheckStatusClass"
+            :status-icon-class="getCheckStatusIconClass"
+          />
+        </ResultPanel>
+      </div>
+    </div>
+
     <div
       v-if="errorMessage"
       class="rounded-2xl border border-danger bg-white p-4 text-body-2 text-danger"
@@ -602,6 +901,8 @@ const status = reactive({
   productionMode: false,
   trustedPublicKeyConfigured: false,
   trustedPublicKeyFingerprint: "",
+  allowUiPostApplyCommands: false,
+  commandTimeout: 900,
 })
 
 const form = reactive({
@@ -613,6 +914,10 @@ const form = reactive({
   stagingPath: "",
   confirmApply: false,
   confirmationText: "",
+  selectedPostApplyActionKeys: [],
+  confirmPostApplyRun: false,
+  confirmAdvancedPostApplyRun: false,
+  postApplyRunConfirmationText: "",
 })
 
 const manifest = ref(null)
@@ -621,6 +926,8 @@ const preflight = ref(null)
 const staging = ref(null)
 const applyPlan = ref(null)
 const applyFilesResult = ref(null)
+const postApplyChecks = ref(null)
+const postApplyRunResult = ref(null)
 const errorMessage = ref("")
 const isChecking = ref(false)
 const isVerifying = ref(false)
@@ -628,11 +935,17 @@ const isRunningPreflight = ref(false)
 const isStaging = ref(false)
 const isPlanningApply = ref(false)
 const isApplyingFiles = ref(false)
+const isCheckingPostApply = ref(false)
+const isRunningPostApplyActions = ref(false)
 const applyOperationId = ref("")
 const applyProgress = ref(null)
 const applyProgressTimer = ref(null)
+const postApplyRunOperationId = ref("")
+const postApplyRunProgress = ref(null)
+const postApplyRunProgressTimer = ref(null)
 
 const applyProgressEvents = computed(() => applyProgress.value?.events || [])
+const postApplyRunProgressEvents = computed(() => postApplyRunProgress.value?.events || [])
 
 const showTrustedPublicKeyInput = computed(() => {
   return status.allowLocalPaths && !status.trustedPublicKeyConfigured
@@ -717,6 +1030,55 @@ const formattedApplyFilesDetails = computed(() => {
   return JSON.stringify(applyFilesResult.value.applyFiles.details || {}, null, 2)
 })
 
+const formattedPostApplyDetails = computed(() => {
+  if (!postApplyChecks.value) {
+    return ""
+  }
+
+  return JSON.stringify(postApplyChecks.value.postApply.details || {}, null, 2)
+})
+
+const formattedPostApplyRunDetails = computed(() => {
+  if (!postApplyRunResult.value) {
+    return ""
+  }
+
+  return JSON.stringify(postApplyRunResult.value.postApplyRun.details || {}, null, 2)
+})
+
+const postApplyActions = computed(() => {
+  return postApplyChecks.value?.postApply?.actions || []
+})
+
+const postApplyExecutableActions = computed(() => {
+  return buildExecutablePostApplyActions(postApplyActions.value)
+})
+
+const postApplySafeExecutableActions = computed(() => {
+  return postApplyExecutableActions.value.filter((action) => !action.advanced)
+})
+
+const postApplyAdvancedExecutableActions = computed(() => {
+  return postApplyExecutableActions.value.filter((action) => action.advanced)
+})
+
+const hasSelectedAdvancedPostApplyActions = computed(() => {
+  return postApplyExecutableActions.value.some(
+    (action) => action.advanced && form.selectedPostApplyActionKeys.includes(action.key),
+  )
+})
+
+const canRunPostApplyActions = computed(() => {
+  return Boolean(
+    status.allowUiPostApplyCommands &&
+      postApplyChecks.value?.postApply?.valid &&
+      form.selectedPostApplyActionKeys.length > 0 &&
+      form.confirmPostApplyRun &&
+      (!hasSelectedAdvancedPostApplyActions.value || form.confirmAdvancedPostApplyRun) &&
+      "RUN POST UPDATE ACTIONS" === form.postApplyRunConfirmationText,
+  )
+})
+
 const applyPlanFilePlan = computed(() => {
   return applyPlan.value?.applyPlan?.details?.file_plan || {}
 })
@@ -788,7 +1150,7 @@ const ResultPanel = defineComponent({
           props.warnings.length
             ? h(
                 "ul",
-                { class: "mt-3 list-disc pl-6 text-body-2 text-warning" },
+                { class: "mt-3 list-disc pl-6 text-body-2 text-gray-90" },
                 props.warnings.map((warning) => h("li", { key: warning }, warning)),
               )
             : null,
@@ -876,6 +1238,8 @@ onMounted(async () => {
     status.productionMode = Boolean(data.productionMode)
     status.trustedPublicKeyConfigured = Boolean(data.trustedPublicKeyConfigured)
     status.trustedPublicKeyFingerprint = data.trustedPublicKeyFingerprint || ""
+    status.allowUiPostApplyCommands = Boolean(data.allowUiPostApplyCommands)
+    status.commandTimeout = Number(data.commandTimeout || 900)
 
     if (!form.manifestSource && status.defaultManifestSource) {
       form.manifestSource = status.defaultManifestSource
@@ -891,6 +1255,7 @@ onMounted(async () => {
 
 onBeforeUnmount(() => {
   stopApplyProgressPolling()
+  stopPostApplyRunProgressPolling()
 })
 
 async function checkManifest() {
@@ -900,6 +1265,7 @@ async function checkManifest() {
   staging.value = null
   applyPlan.value = null
   applyFilesResult.value = null
+  postApplyChecks.value = null
   resetApplyProgress()
   isChecking.value = true
 
@@ -920,6 +1286,7 @@ async function verifyPackage() {
   errorMessage.value = ""
   applyPlan.value = null
   applyFilesResult.value = null
+  postApplyChecks.value = null
   resetApplyProgress()
   isVerifying.value = true
 
@@ -940,6 +1307,7 @@ async function runPreflight() {
   errorMessage.value = ""
   applyPlan.value = null
   applyFilesResult.value = null
+  postApplyChecks.value = null
   resetApplyProgress()
   isRunningPreflight.value = true
 
@@ -962,6 +1330,9 @@ async function runPreflight() {
 async function stagePackage() {
   errorMessage.value = ""
   applyFilesResult.value = null
+  postApplyChecks.value = null
+  postApplyRunResult.value = null
+  resetPostApplyRunProgress()
   isStaging.value = true
 
   try {
@@ -1034,6 +1405,9 @@ async function buildApplyPlan() {
 
     applyPlan.value = data
     applyFilesResult.value = null
+    postApplyChecks.value = null
+    postApplyRunResult.value = null
+    resetPostApplyRunProgress()
     form.confirmApply = false
     form.confirmationText = ""
     resetApplyProgress()
@@ -1056,6 +1430,9 @@ async function applyUpdateFiles() {
   errorMessage.value = ""
   isApplyingFiles.value = true
   applyFilesResult.value = null
+  postApplyChecks.value = null
+  postApplyRunResult.value = null
+  resetPostApplyRunProgress()
   applyOperationId.value = createOperationId()
   applyProgress.value = {
     operationId: applyOperationId.value,
@@ -1094,6 +1471,151 @@ async function applyUpdateFiles() {
   }
 }
 
+
+async function runPostApplyChecks() {
+  errorMessage.value = ""
+  isCheckingPostApply.value = true
+
+  try {
+    const data = await adminService.runSystemUpdatePostApplyChecks({
+      stagingPath: form.stagingPath,
+    })
+
+    postApplyChecks.value = data
+    postApplyRunResult.value = null
+    resetPostApplyRunProgress()
+    form.selectedPostApplyActionKeys = buildExecutablePostApplyActions(data.postApply?.actions || [])
+      .filter((action) => !action.advanced)
+      .map((action) => action.key)
+    form.confirmPostApplyRun = false
+    form.confirmAdvancedPostApplyRun = false
+    form.postApplyRunConfirmationText = ""
+  } catch (error) {
+    const responseData = error?.response?.data || null
+
+    errorMessage.value = getErrorMessage(error)
+    postApplyChecks.value = responseData?.postApply
+      ? {
+          postApply: responseData.postApply,
+        }
+      : null
+  } finally {
+    isCheckingPostApply.value = false
+  }
+}
+
+
+async function runPostApplyActions() {
+  errorMessage.value = ""
+  isRunningPostApplyActions.value = true
+  postApplyRunResult.value = null
+  postApplyRunOperationId.value = createOperationId()
+  postApplyRunProgress.value = {
+    operationId: postApplyRunOperationId.value,
+    exists: false,
+    events: [],
+    completed: false,
+  }
+  startPostApplyRunProgressPolling()
+
+  try {
+    const data = await adminService.runSystemUpdatePostApplyActions({
+      stagingPath: form.stagingPath,
+      actions: form.selectedPostApplyActionKeys,
+      confirmPostApplyRun: form.confirmPostApplyRun,
+      confirmAdvancedPostApplyRun: form.confirmAdvancedPostApplyRun,
+      postApplyRunConfirmationText: form.postApplyRunConfirmationText,
+      operationId: postApplyRunOperationId.value,
+    })
+
+    postApplyRunResult.value = data
+    if (data.operationId) {
+      postApplyRunOperationId.value = data.operationId
+    }
+    await refreshPostApplyRunProgress()
+  } catch (error) {
+    const responseData = error?.response?.data || null
+
+    errorMessage.value = getErrorMessage(error)
+    postApplyRunResult.value = responseData?.postApplyRun
+      ? {
+          postApplyRun: responseData.postApplyRun,
+        }
+      : null
+    await refreshPostApplyRunProgress()
+  } finally {
+    stopPostApplyRunProgressPolling()
+    isRunningPostApplyActions.value = false
+  }
+}
+
+function buildExecutablePostApplyActions(actions) {
+  const executableActions = []
+
+  for (const action of actions || []) {
+    if ("composer_install" === action.key) {
+      executableActions.push({
+        key: "composer_install",
+        title: t("Composer install"),
+        description: action.description,
+        command: status.productionMode
+          ? "composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader"
+          : "composer install --no-interaction --prefer-dist",
+        severity: action.severity,
+        advanced: true,
+        category: "advanced",
+      })
+    }
+
+    if ("frontend_build" === action.key) {
+      executableActions.push({
+        key: "yarn_install",
+        title: t("Yarn install"),
+        description: t("Install frontend dependencies before rebuilding assets."),
+        command: "yarn install --frozen-lockfile",
+        severity: action.severity,
+        advanced: true,
+        category: "advanced",
+      })
+      executableActions.push({
+        key: "yarn_build",
+        title: t("Yarn build"),
+        description: t("Build production frontend assets."),
+        command: 'NODE_OPTIONS="--max-old-space-size=8192" yarn build',
+        severity: action.severity,
+        advanced: true,
+        category: "advanced",
+      })
+    }
+
+    if ("database_migrations" === action.key) {
+      executableActions.push({
+        key: "doctrine_migrations",
+        title: t("Database migrations"),
+        description: action.description,
+        command: "php bin/console doctrine:migrations:migrate --no-interaction",
+        severity: action.severity,
+        advanced: true,
+        category: "advanced",
+      })
+    }
+
+    if ("cache_clear" === action.key) {
+      executableActions.push({
+        key: "cache_clear",
+        title: t("Symfony cache clear"),
+        description: action.description,
+        command: "php bin/console cache:clear",
+        severity: action.severity,
+        advanced: false,
+        category: "safe",
+      })
+    }
+  }
+
+  return executableActions
+}
+
 function createOperationId() {
   if (window.crypto?.randomUUID) {
     return window.crypto.randomUUID()
@@ -1130,6 +1652,37 @@ async function refreshApplyProgress() {
     applyProgress.value = data.progress
   } catch (error) {
     console.error("[SystemUpdate] Failed to refresh update progress:", error)
+  }
+}
+
+function resetPostApplyRunProgress() {
+  stopPostApplyRunProgressPolling()
+  postApplyRunOperationId.value = ""
+  postApplyRunProgress.value = null
+}
+
+function startPostApplyRunProgressPolling() {
+  stopPostApplyRunProgressPolling()
+  postApplyRunProgressTimer.value = window.setInterval(refreshPostApplyRunProgress, 1000)
+}
+
+function stopPostApplyRunProgressPolling() {
+  if (postApplyRunProgressTimer.value) {
+    window.clearInterval(postApplyRunProgressTimer.value)
+    postApplyRunProgressTimer.value = null
+  }
+}
+
+async function refreshPostApplyRunProgress() {
+  if (!postApplyRunOperationId.value) {
+    return
+  }
+
+  try {
+    const data = await adminService.findSystemUpdateProgress(postApplyRunOperationId.value)
+    postApplyRunProgress.value = data.progress
+  } catch (error) {
+    console.error("[SystemUpdate] Failed to refresh post-apply progress:", error)
   }
 }
 
@@ -1172,13 +1725,30 @@ function buildUpdatePayload() {
   }
 }
 
+
+function getActionSeverityClass(severity) {
+  if ("danger" === severity) {
+    return "border-danger text-danger bg-white"
+  }
+
+  if ("warning" === severity) {
+    return "border-warning text-gray-90 bg-support-2"
+  }
+
+  if ("success" === severity) {
+    return "border-success text-success bg-white"
+  }
+
+  return "border-info text-info bg-white"
+}
+
 function getCheckStatusClass(status) {
   if ("passed" === status) {
     return "border-success text-success bg-white"
   }
 
   if ("warning" === status) {
-    return "border-warning text-warning bg-white"
+    return "border-warning text-gray-90 bg-support-2"
   }
 
   if ("failed" === status) {

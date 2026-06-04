@@ -15,6 +15,7 @@ final readonly class UpdateConfiguration
     private const ENV_MANIFEST_URL = 'CHAMILO_UPDATE_MANIFEST_URL';
     private const ENV_MINISIGN_PUBLIC_KEY = 'CHAMILO_UPDATE_MINISIGN_PUBLIC_KEY';
     private const ENV_DEBUG_SLOW_COPY_MS = 'CHAMILO_UPDATE_DEBUG_SLOW_COPY_MS';
+    private const ENV_COMMAND_TIMEOUT = 'CHAMILO_UPDATE_COMMAND_TIMEOUT';
 
     public function __construct(
         #[Autowire(param: 'kernel.environment')]
@@ -69,6 +70,22 @@ final readonly class UpdateConfiguration
         }
 
         return min($this->readIntegerEnv(self::ENV_DEBUG_SLOW_COPY_MS, 0), 5000);
+    }
+
+    public function allowsUiPostApplyCommands(): bool
+    {
+        return !$this->isProduction();
+    }
+
+    public function getCommandTimeoutSeconds(): int
+    {
+        $timeout = $this->readIntegerEnv(self::ENV_COMMAND_TIMEOUT, 900);
+
+        if ($timeout < 60) {
+            return 60;
+        }
+
+        return min($timeout, 7200);
     }
 
     private function readStringEnv(string $name): ?string

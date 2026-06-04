@@ -86,6 +86,60 @@
       </dl>
     </div>
 
+    <div
+      v-if="updateEntryNotice"
+      class="rounded-3xl border p-5 shadow-sm"
+      :class="updateEntryNotice.severity === 'warning' ? 'border-warning bg-white' : 'border-primary bg-support-1'"
+    >
+      <div class="flex items-start gap-3">
+        <span
+          class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
+          :class="updateEntryNotice.severity === 'warning' ? 'bg-support-2 text-warning' : 'bg-white text-primary'"
+        >
+          <i
+            class="mdi text-xl"
+            :class="updateEntryNotice.severity === 'warning' ? 'mdi-alert-outline' : 'mdi-update'"
+          />
+        </span>
+        <div>
+          <h2 class="text-body-1 font-semibold text-gray-90">
+            {{ updateEntryNotice.title }}
+          </h2>
+          <p class="mt-1 text-body-2 text-gray-50">
+            {{ updateEntryNotice.description }}
+          </p>
+          <p
+            v-if="form.manifestSource"
+            class="mt-2 break-all font-mono text-caption text-gray-90"
+          >
+            {{ form.manifestSource }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div
+      v-if="localTestUpdateEntryPath"
+      class="rounded-3xl border border-gray-20 bg-support-2 p-5 shadow-sm"
+    >
+      <div class="flex items-start gap-3">
+        <span class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-support-1 text-primary">
+          <i class="mdi mdi-link-variant text-xl" />
+        </span>
+        <div>
+          <h2 class="text-body-1 font-semibold text-gray-90">
+            {{ t("Local test update notice link") }}
+          </h2>
+          <p class="mt-1 text-body-2 text-gray-50">
+            {{ t("Use this link to simulate the future Chamilo.org update notice during development tests.") }}
+          </p>
+          <code class="mt-2 block break-all rounded-xl border border-gray-20 bg-white px-3 py-2 font-mono text-caption text-gray-90">
+            {{ localTestUpdateEntryPath }}
+          </code>
+        </div>
+      </div>
+    </div>
+
     <div class="rounded-3xl border border-gray-20 bg-white p-6 shadow-sm">
       <div class="flex items-center gap-3">
         <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-support-1 text-primary">
@@ -659,6 +713,98 @@
       </ResultPanel>
 
       <div
+        v-if="canReviewMigrationSafety"
+        class="mt-6 rounded-2xl border border-warning bg-support-2 p-4"
+      >
+        <div class="flex items-start gap-3">
+          <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-white text-warning">
+            <i class="mdi mdi-database-alert-outline text-xl" />
+          </span>
+          <div>
+            <h3 class="text-body-1 font-semibold text-gray-90">
+              {{ t("Database migration safety review") }}
+            </h3>
+            <p class="mt-1 text-body-2 text-gray-90">
+              {{ t("Review staged Doctrine migrations and dry-run output before running database migrations.") }}
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-4 rounded-2xl border border-danger bg-white p-3 text-caption font-semibold text-danger">
+          <span class="mdi mdi-alert-outline mr-1" />
+          {{ t("This updater does not create a database backup. Create and verify a backup before running migrations.") }}
+        </div>
+
+        <div class="mt-4">
+          <BaseButton
+            :disabled="isCheckingMigrationSafety || !canReviewMigrationSafety"
+            :is-loading="isCheckingMigrationSafety"
+            :label="isCheckingMigrationSafety ? t('Reviewing database migrations...') : t('Review database migrations')"
+            icon="database-search-outline"
+            type="primary"
+            @click="runMigrationSafetyChecks"
+          />
+        </div>
+
+        <ResultPanel
+          v-if="migrationSafety"
+          :details-label="t('Migration safety details')"
+          :details-text="formattedMigrationSafetyDetails"
+          :errors="migrationSafety.migrationSafety.errors"
+          :title="migrationSafety.migrationSafety.valid ? t('Migration safety review ready') : t('Migration safety review failed')"
+          :valid="migrationSafety.migrationSafety.valid"
+          :warnings="migrationSafety.migrationSafety.warnings"
+        >
+          <div
+            v-if="migrationSafety.migrationSafety.migrations.length"
+            class="mb-4 space-y-3"
+          >
+            <div
+              v-for="migration in migrationSafety.migrationSafety.migrations"
+              :key="migration.class"
+              class="rounded-2xl border border-warning bg-white p-4"
+            >
+              <h4 class="break-all text-body-2 font-semibold text-gray-90">
+                {{ migration.class }}
+              </h4>
+              <p class="mt-1 break-all font-mono text-caption text-gray-90">
+                {{ migration.path }}
+              </p>
+              <p class="mt-2 text-caption text-gray-90">
+                {{ migration.description }}
+              </p>
+            </div>
+          </div>
+
+          <div
+            v-if="migrationSafety.migrationSafety.dryRunCommand"
+            class="mb-4 rounded-2xl border border-gray-20 bg-white p-4"
+          >
+            <h4 class="text-body-2 font-semibold text-gray-90">
+              {{ t("Doctrine dry-run command") }}
+            </h4>
+            <code class="mt-2 block break-all rounded-xl border border-gray-20 bg-support-2 px-3 py-2 font-mono text-caption text-gray-90">
+              {{ migrationSafety.migrationSafety.dryRunCommand }}
+            </code>
+            <p class="mt-2 text-caption font-semibold text-gray-90">
+              {{ t("Dry-run exit code") }}: {{ migrationSafety.migrationSafety.dryRunExitCode }}
+            </p>
+            <pre
+              v-if="migrationSafety.migrationSafety.dryRunOutput"
+              class="mt-3 max-h-96 overflow-auto rounded-xl border border-gray-20 bg-gray-90 p-3 text-caption text-white"
+            >{{ migrationSafety.migrationSafety.dryRunOutput }}</pre>
+          </div>
+
+          <CheckTable
+            v-if="migrationSafety.migrationSafety.checks.length"
+            :checks="migrationSafety.migrationSafety.checks"
+            :status-class="getCheckStatusClass"
+            :status-icon-class="getCheckStatusIconClass"
+          />
+        </ResultPanel>
+      </div>
+
+      <div
         v-if="postApplyChecks?.postApply?.valid"
         class="mt-6 rounded-2xl border border-gray-20 bg-support-2 p-4"
       >
@@ -779,6 +925,47 @@
             </span>
           </label>
 
+          <div
+            v-if="hasSelectedDatabaseMigrationAction"
+            class="space-y-3 rounded-2xl border border-danger bg-white p-3"
+          >
+            <label class="flex items-start gap-3 text-body-2 text-gray-90">
+              <input
+                v-model="form.confirmDatabaseBackup"
+                class="mt-1 rounded border-gray-25 text-danger focus:ring-danger"
+                type="checkbox"
+              />
+              <span>
+                <span class="block font-semibold">
+                  {{ t("I confirm that a database backup exists and was verified before running migrations.") }}
+                </span>
+                <span class="mt-1 block text-caption text-gray-90">
+                  {{ t("The updater does not create or restore database backups.") }}
+                </span>
+              </span>
+            </label>
+
+            <label class="block">
+              <span class="text-body-2 font-semibold text-gray-90">
+                {{ t("Type RUN DATABASE MIGRATIONS to confirm database migrations") }}
+              </span>
+              <input
+                v-model.trim="form.databaseMigrationConfirmationText"
+                class="mt-2 w-full rounded-xl border border-gray-20 px-3 py-2 font-mono text-caption text-gray-90 focus:border-primary focus:ring-primary"
+                placeholder="RUN DATABASE MIGRATIONS"
+                type="text"
+              />
+            </label>
+
+            <div
+              v-if="!migrationSafety?.migrationSafety?.valid"
+              class="rounded-xl border border-warning bg-support-2 p-3 text-caption font-semibold text-gray-90"
+            >
+              <span class="mdi mdi-alert-outline mr-1" />
+              {{ t("Run and pass the migration safety review before executing database migrations.") }}
+            </div>
+          </div>
+
           <label class="flex items-start gap-3 text-body-2 text-gray-90">
             <input
               v-model="form.confirmPostApplyRun"
@@ -896,6 +1083,9 @@ const status = reactive({
   backupDirectory: "",
   lockPath: "",
   defaultManifestSource: "",
+  officialManifestSource: "",
+  localTestManifestSource: "",
+  localTestPackagePath: "",
   allowLocalPaths: false,
   allowSkipSignature: false,
   productionMode: false,
@@ -917,6 +1107,8 @@ const form = reactive({
   selectedPostApplyActionKeys: [],
   confirmPostApplyRun: false,
   confirmAdvancedPostApplyRun: false,
+  confirmDatabaseBackup: false,
+  databaseMigrationConfirmationText: "",
   postApplyRunConfirmationText: "",
 })
 
@@ -927,6 +1119,7 @@ const staging = ref(null)
 const applyPlan = ref(null)
 const applyFilesResult = ref(null)
 const postApplyChecks = ref(null)
+const migrationSafety = ref(null)
 const postApplyRunResult = ref(null)
 const errorMessage = ref("")
 const isChecking = ref(false)
@@ -936,6 +1129,7 @@ const isStaging = ref(false)
 const isPlanningApply = ref(false)
 const isApplyingFiles = ref(false)
 const isCheckingPostApply = ref(false)
+const isCheckingMigrationSafety = ref(false)
 const isRunningPostApplyActions = ref(false)
 const applyOperationId = ref("")
 const applyProgress = ref(null)
@@ -943,9 +1137,41 @@ const applyProgressTimer = ref(null)
 const postApplyRunOperationId = ref("")
 const postApplyRunProgress = ref(null)
 const postApplyRunProgressTimer = ref(null)
+const updateEntrySource = ref("")
+const updateEntryAutoCheck = ref(false)
 
 const applyProgressEvents = computed(() => applyProgress.value?.events || [])
 const postApplyRunProgressEvents = computed(() => postApplyRunProgress.value?.events || [])
+
+const updateEntryNotice = computed(() => {
+  if ("official" === updateEntrySource.value) {
+    return {
+      title: t("Official Chamilo update channel"),
+      description: status.officialManifestSource
+        ? t("This screen was opened from an update notice. Only the manifest check is started automatically.")
+        : t("This screen was opened from an official update notice, but no official manifest source is configured yet."),
+      severity: status.officialManifestSource ? "info" : "warning",
+    }
+  }
+
+  if ("local-test" === updateEntrySource.value) {
+    return {
+      title: t("Local update notice simulation"),
+      description: t("This development entry simulates the future Chamilo.org update notice using local test package paths."),
+      severity: "warning",
+    }
+  }
+
+  return null
+})
+
+const localTestUpdateEntryPath = computed(() => {
+  if (!status.allowLocalPaths || !status.localTestManifestSource) {
+    return ""
+  }
+
+  return "/admin/system-update?source=local-test&check=1"
+})
 
 const showTrustedPublicKeyInput = computed(() => {
   return status.allowLocalPaths && !status.trustedPublicKeyConfigured
@@ -1038,6 +1264,14 @@ const formattedPostApplyDetails = computed(() => {
   return JSON.stringify(postApplyChecks.value.postApply.details || {}, null, 2)
 })
 
+const formattedMigrationSafetyDetails = computed(() => {
+  if (!migrationSafety.value) {
+    return ""
+  }
+
+  return JSON.stringify(migrationSafety.value.migrationSafety.details || {}, null, 2)
+})
+
 const formattedPostApplyRunDetails = computed(() => {
   if (!postApplyRunResult.value) {
     return ""
@@ -1068,6 +1302,18 @@ const hasSelectedAdvancedPostApplyActions = computed(() => {
   )
 })
 
+const hasDatabaseMigrationAction = computed(() => {
+  return postApplyActions.value.some((action) => "database_migrations" === action.key)
+})
+
+const hasSelectedDatabaseMigrationAction = computed(() => {
+  return form.selectedPostApplyActionKeys.includes("doctrine_migrations")
+})
+
+const canReviewMigrationSafety = computed(() => {
+  return Boolean(postApplyChecks.value?.postApply?.valid && hasDatabaseMigrationAction.value && form.stagingPath)
+})
+
 const canRunPostApplyActions = computed(() => {
   return Boolean(
     status.allowUiPostApplyCommands &&
@@ -1075,6 +1321,10 @@ const canRunPostApplyActions = computed(() => {
       form.selectedPostApplyActionKeys.length > 0 &&
       form.confirmPostApplyRun &&
       (!hasSelectedAdvancedPostApplyActions.value || form.confirmAdvancedPostApplyRun) &&
+      (!hasSelectedDatabaseMigrationAction.value ||
+        (migrationSafety.value?.migrationSafety?.valid &&
+          form.confirmDatabaseBackup &&
+          "RUN DATABASE MIGRATIONS" === form.databaseMigrationConfirmationText)) &&
       "RUN POST UPDATE ACTIONS" === form.postApplyRunConfirmationText,
   )
 })
@@ -1233,6 +1483,9 @@ onMounted(async () => {
     status.backupDirectory = data.backupDirectory || ""
     status.lockPath = data.lockPath || ""
     status.defaultManifestSource = data.defaultManifestSource || ""
+    status.officialManifestSource = data.officialManifestSource || ""
+    status.localTestManifestSource = data.localTestManifestSource || ""
+    status.localTestPackagePath = data.localTestPackagePath || ""
     status.allowLocalPaths = Boolean(data.allowLocalPaths)
     status.allowSkipSignature = Boolean(data.allowSkipSignature)
     status.productionMode = Boolean(data.productionMode)
@@ -1241,12 +1494,18 @@ onMounted(async () => {
     status.allowUiPostApplyCommands = Boolean(data.allowUiPostApplyCommands)
     status.commandTimeout = Number(data.commandTimeout || 900)
 
+    applyUpdateEntryQuery()
+
     if (!form.manifestSource && status.defaultManifestSource) {
       form.manifestSource = status.defaultManifestSource
     }
 
     if (!status.allowSkipSignature) {
       form.skipSignature = false
+    }
+
+    if (updateEntryAutoCheck.value && form.manifestSource) {
+      await checkManifest()
     }
   } catch (error) {
     console.error("[SystemUpdate] Failed to load update status:", error)
@@ -1257,6 +1516,48 @@ onBeforeUnmount(() => {
   stopApplyProgressPolling()
   stopPostApplyRunProgressPolling()
 })
+
+function applyUpdateEntryQuery() {
+  const params = new URLSearchParams(window.location.search)
+  const source = params.get("source") || ""
+  const shouldCheck = ["1", "true", "yes", "on"].includes((params.get("check") || "").toLowerCase())
+
+  updateEntryAutoCheck.value = shouldCheck
+
+  if (!source) {
+    return
+  }
+
+  if ("official" === source) {
+    updateEntrySource.value = "official"
+
+    if (status.officialManifestSource) {
+      form.manifestSource = status.officialManifestSource
+    }
+
+    return
+  }
+
+  if ("local-test" === source) {
+    updateEntrySource.value = "local-test"
+
+    if (!status.allowLocalPaths) {
+      errorMessage.value = t("Local update notice simulation is only available in development mode.")
+      return
+    }
+
+    form.manifestSource = status.localTestManifestSource || "/tmp/chamilo-update-slow-manifest.json"
+    form.packagePath = status.localTestPackagePath || "/tmp/chamilo-update-slow.zip"
+
+    if (status.allowSkipSignature) {
+      form.skipSignature = true
+    }
+
+    return
+  }
+
+  errorMessage.value = t("Unknown update notice source.")
+}
 
 async function checkManifest() {
   errorMessage.value = ""
@@ -1331,6 +1632,7 @@ async function stagePackage() {
   errorMessage.value = ""
   applyFilesResult.value = null
   postApplyChecks.value = null
+  migrationSafety.value = null
   postApplyRunResult.value = null
   resetPostApplyRunProgress()
   isStaging.value = true
@@ -1482,6 +1784,7 @@ async function runPostApplyChecks() {
     })
 
     postApplyChecks.value = data
+    migrationSafety.value = null
     postApplyRunResult.value = null
     resetPostApplyRunProgress()
     form.selectedPostApplyActionKeys = buildExecutablePostApplyActions(data.postApply?.actions || [])
@@ -1489,6 +1792,8 @@ async function runPostApplyChecks() {
       .map((action) => action.key)
     form.confirmPostApplyRun = false
     form.confirmAdvancedPostApplyRun = false
+    form.confirmDatabaseBackup = false
+    form.databaseMigrationConfirmationText = ""
     form.postApplyRunConfirmationText = ""
   } catch (error) {
     const responseData = error?.response?.data || null
@@ -1501,6 +1806,35 @@ async function runPostApplyChecks() {
       : null
   } finally {
     isCheckingPostApply.value = false
+  }
+}
+
+
+
+async function runMigrationSafetyChecks() {
+  errorMessage.value = ""
+  isCheckingMigrationSafety.value = true
+  migrationSafety.value = null
+
+  try {
+    const data = await adminService.runSystemUpdateMigrationSafetyChecks({
+      stagingPath: form.stagingPath,
+    })
+
+    migrationSafety.value = data
+    form.confirmDatabaseBackup = false
+    form.databaseMigrationConfirmationText = ""
+  } catch (error) {
+    const responseData = error?.response?.data || null
+
+    errorMessage.value = getErrorMessage(error)
+    migrationSafety.value = responseData?.migrationSafety
+      ? {
+          migrationSafety: responseData.migrationSafety,
+        }
+      : null
+  } finally {
+    isCheckingMigrationSafety.value = false
   }
 }
 
@@ -1524,6 +1858,8 @@ async function runPostApplyActions() {
       actions: form.selectedPostApplyActionKeys,
       confirmPostApplyRun: form.confirmPostApplyRun,
       confirmAdvancedPostApplyRun: form.confirmAdvancedPostApplyRun,
+      confirmDatabaseBackup: form.confirmDatabaseBackup,
+      databaseMigrationConfirmationText: form.databaseMigrationConfirmationText,
       postApplyRunConfirmationText: form.postApplyRunConfirmationText,
       operationId: postApplyRunOperationId.value,
     })

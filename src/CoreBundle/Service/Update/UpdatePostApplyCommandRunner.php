@@ -43,7 +43,9 @@ final readonly class UpdatePostApplyCommandRunner
         array $requestedActions,
         bool $confirmed,
         ?string $operationId = null,
-        bool $confirmedAdvanced = false
+        bool $confirmedAdvanced = false,
+        bool $confirmedDatabaseBackup = false,
+        bool $confirmedDatabaseMigrations = false
     ): UpdatePostApplyRunResult {
         $checks = [];
         $warnings = [];
@@ -54,6 +56,8 @@ final readonly class UpdatePostApplyCommandRunner
             'requested_actions' => array_values($requestedActions),
             'confirmed' => $confirmed,
             'confirmed_advanced' => $confirmedAdvanced,
+            'confirmed_database_backup' => $confirmedDatabaseBackup,
+            'confirmed_database_migrations' => $confirmedDatabaseMigrations,
             'environment' => $this->updateConfiguration->isProduction() ? 'prod' : 'dev',
         ];
         $metadataPath = null;
@@ -101,6 +105,10 @@ final readonly class UpdatePostApplyCommandRunner
                     'advanced_action_keys' => $this->filterAdvancedActionKeys($selectedActionKeys),
                 ]);
                 $this->logOperation($operationId, 'warning', 'advanced_actions_confirmation', 'Advanced post-apply actions were explicitly confirmed.');
+            }
+
+            if (isset($selectedActions['doctrine_migrations'])) {
+                $this->validateDatabaseMigrationReview($stagingPath, $confirmedDatabaseBackup, $confirmedDatabaseMigrations, $checks, $warnings, $details, $operationId);
             }
 
             $this->validateExecutableActions($selectedActions, $checks, $warnings, $details, $operationId);
@@ -450,6 +458,61 @@ final readonly class UpdatePostApplyCommandRunner
             'COMPOSER_HOME' => $homeDirectory,
             'COMPOSER_CACHE_DIR' => $cacheDirectory,
         ];
+    }
+
+
+    /**
+     * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}> $checks
+     * @param string[] $warnings
+     * @param array<string, mixed> $details
+     */
+    private function validateDatabaseMigrationReview(
+        string $stagingPath,
+        bool $confirmedDatabaseBackup,
+        bool $confirmedDatabaseMigrations,
+        array &$checks,
+        array &$warnings,
+        array &$details,
+        string $operationId
+    ): void {
+        $migrationSafetyPath = $stagingPath.'/MIGRATION-SAFETY-CHECKS.json';
+
+        if (!is_file($migrationSafetyPath) || !is_readable($migrationSafetyPath)) {
+            throw new RuntimeException('Database migrations require a migration safety review before execution.');
+        }
+
+        $migrationSafety = $this->readJsonFile($migrationSafetyPath, 'migration safety checks');
+
+        if (true !== ($migrationSafety['success'] ?? false)) {
+            throw new RuntimeException('Database migrations cannot run because the migration safety review did not pass.');
+        }
+
+        if (!$confirmedDatabaseBackup) {
+            throw new RuntimeException('Database migrations require confirmation that a database backup exists.');
+        }
+
+        if (!$confirmedDatabaseMigrations) {
+            throw new RuntimeException('Database migrations require the confirmation text "RUN DATABASE MIGRATIONS".');
+        }
+
+        $migrationCount = \is_array($migrationSafety['migrations'] ?? null) ? \count($migrationSafety['migrations']) : 0;
+        $details['migration_safety'] = [
+            'metadata_file' => $migrationSafetyPath,
+            'migration_count' => $migrationCount,
+            'dry_run_exit_code' => $migrationSafety['dry_run_exit_code'] ?? null,
+        ];
+
+        $this->addCheck($checks, 'database_migration_safety', 'passed', 'Database migration safety review was completed before execution.', [
+            'metadata_file' => $migrationSafetyPath,
+            'migration_count' => $migrationCount,
+        ]);
+        $this->addCheck($checks, 'database_backup_confirmation', 'passed', 'Database backup existence was explicitly confirmed.');
+        $this->logOperation($operationId, 'warning', 'database_migration_safety', 'Database migration safety review and backup confirmation were provided.', [
+            'metadata_file' => $migrationSafetyPath,
+            'migration_count' => $migrationCount,
+        ]);
+
+        $warnings[] = 'Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup.';
     }
 
     /**

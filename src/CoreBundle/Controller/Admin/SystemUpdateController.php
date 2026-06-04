@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Service\Update\UpdateApplyPlanner;
 use Chamilo\CoreBundle\Service\Update\UpdateConfiguration;
 use Chamilo\CoreBundle\Service\Update\UpdateFileApplier;
 use Chamilo\CoreBundle\Service\Update\UpdateManifestClient;
+use Chamilo\CoreBundle\Service\Update\UpdateMigrationSafetyChecker;
 use Chamilo\CoreBundle\Service\Update\UpdateOperationLogger;
 use Chamilo\CoreBundle\Service\Update\UpdatePackageDownloader;
 use Chamilo\CoreBundle\Service\Update\UpdatePackageVerifier;
@@ -39,6 +40,7 @@ final class SystemUpdateController extends AbstractController
         private readonly UpdatePreflightChecker $preflightChecker,
         private readonly UpdateStagingManager $stagingManager,
         private readonly UpdateConfiguration $updateConfiguration,
+        private readonly UpdateMigrationSafetyChecker $migrationSafetyChecker,
         private readonly UpdateApplyPlanner $applyPlanner,
         private readonly UpdateFileApplier $fileApplier,
         private readonly UpdatePostApplyChecker $postApplyChecker,
@@ -58,6 +60,9 @@ final class SystemUpdateController extends AbstractController
             'verificationOnly' => false,
             'fileApplyAvailable' => true,
             'defaultManifestSource' => $this->updateConfiguration->getDefaultManifestSource(),
+            'officialManifestSource' => $this->updateConfiguration->getOfficialManifestSource(),
+            'localTestManifestSource' => $this->updateConfiguration->getLocalTestManifestSource(),
+            'localTestPackagePath' => $this->updateConfiguration->getLocalTestPackagePath(),
             'allowLocalPaths' => $this->updateConfiguration->allowsLocalPaths(),
             'allowSkipSignature' => $this->updateConfiguration->allowsSkipSignature(),
             'productionMode' => $this->updateConfiguration->isProduction(),
@@ -320,6 +325,26 @@ final class SystemUpdateController extends AbstractController
     }
 
 
+
+    #[Route('/migration-safety', name: 'migration_safety', methods: ['POST'])]
+    public function migrationSafety(Request $request): JsonResponse
+    {
+        $payload = $this->readJsonPayload($request);
+
+        try {
+            $stagingPath = $this->readRequiredString($payload, 'stagingPath');
+            $result = $this->migrationSafetyChecker->check($stagingPath);
+
+            return $this->json([
+                'migrationSafety' => $result->toArray(),
+            ], $result->isValid() ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
+        } catch (Throwable $exception) {
+            return $this->json([
+                'error' => $exception->getMessage(),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
     #[Route('/run-post-apply', name: 'run_post_apply', methods: ['POST'])]
     public function runPostApply(Request $request): JsonResponse
     {
@@ -334,9 +359,19 @@ final class SystemUpdateController extends AbstractController
             $actions = $this->readStringList($payload, 'actions');
             $confirmed = $this->readPostApplyRunConfirmation($payload);
             $confirmedAdvanced = $this->readAdvancedPostApplyRunConfirmation($payload);
+            $confirmedDatabaseBackup = $this->readDatabaseBackupConfirmation($payload);
+            $confirmedDatabaseMigrations = $this->readDatabaseMigrationConfirmation($payload);
             $operationId = $this->readNullableString($payload, 'operationId');
 
-            $result = $this->postApplyCommandRunner->run($stagingPath, $actions, $confirmed, $operationId, $confirmedAdvanced);
+            $result = $this->postApplyCommandRunner->run(
+                $stagingPath,
+                $actions,
+                $confirmed,
+                $operationId,
+                $confirmedAdvanced,
+                $confirmedDatabaseBackup,
+                $confirmedDatabaseMigrations
+            );
 
             return $this->json([
                 'operationId' => $result->getOperationId() ?? $operationId,
@@ -524,6 +559,22 @@ final class SystemUpdateController extends AbstractController
     private function readAdvancedPostApplyRunConfirmation(array $payload): bool
     {
         return true === ($payload['confirmAdvancedPostApplyRun'] ?? false);
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     */
+    private function readDatabaseBackupConfirmation(array $payload): bool
+    {
+        return true === ($payload['confirmDatabaseBackup'] ?? false);
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     */
+    private function readDatabaseMigrationConfirmation(array $payload): bool
+    {
+        return 'RUN DATABASE MIGRATIONS' === $this->readNullableString($payload, 'databaseMigrationConfirmationText');
     }
 
     /**

@@ -36,6 +36,8 @@ final class UpdateRunPostApplyCommand extends Command
             ->addOption('all', null, InputOption::VALUE_NONE, 'Run all actions recommended by POST-APPLY-CHECKS.json.')
             ->addOption('confirm', null, InputOption::VALUE_NONE, 'Required confirmation to execute post-apply commands.')
             ->addOption('confirm-advanced', null, InputOption::VALUE_NONE, 'Required when running Composer, Yarn or database migration actions.')
+            ->addOption('confirm-database-backup', null, InputOption::VALUE_NONE, 'Required when running database migrations. Confirms that a database backup exists.')
+            ->addOption('confirm-database-migrations', null, InputOption::VALUE_NONE, 'Required when running database migrations after reviewing MIGRATION-SAFETY-CHECKS.json.')
             ->addOption('operation-id', null, InputOption::VALUE_REQUIRED, 'Optional operation id used to write live progress logs.')
             ->setHelp(
                 <<<'HELP'
@@ -50,10 +52,11 @@ Allowed action keys:
 
 This command does not accept arbitrary shell commands.
 Composer, Yarn and database migration actions require --confirm-advanced.
+Database migration actions also require --confirm-database-backup and --confirm-database-migrations.
 
 Examples:
   php bin/console chamilo:update:run-post-apply var/update/staging/2.1.0-20260603163014-bc4b52a8 --action=cache_clear --confirm
-  php bin/console chamilo:update:run-post-apply var/update/staging/2.1.0-20260603163014-bc4b52a8 --all --confirm --confirm-advanced
+  php bin/console chamilo:update:run-post-apply var/update/staging/2.1.0-20260603163014-bc4b52a8 --all --confirm --confirm-advanced --confirm-database-backup --confirm-database-migrations
 HELP
             )
         ;
@@ -65,6 +68,8 @@ HELP
         $stagingPath = (string) $input->getArgument('staging-path');
         $confirmed = (bool) $input->getOption('confirm');
         $confirmedAdvanced = (bool) $input->getOption('confirm-advanced');
+        $confirmedDatabaseBackup = (bool) $input->getOption('confirm-database-backup');
+        $confirmedDatabaseMigrations = (bool) $input->getOption('confirm-database-migrations');
         $operationId = $this->readNullableStringOption($input, 'operation-id');
         $actions = $this->readActionKeys($input);
 
@@ -81,7 +86,15 @@ HELP
         }
 
         try {
-            $result = $this->commandRunner->run($stagingPath, $actions, true, $operationId, $confirmedAdvanced);
+            $result = $this->commandRunner->run(
+                $stagingPath,
+                $actions,
+                true,
+                $operationId,
+                $confirmedAdvanced,
+                $confirmedDatabaseBackup,
+                $confirmedDatabaseMigrations
+            );
         } catch (Throwable $exception) {
             $io->error($exception->getMessage());
 

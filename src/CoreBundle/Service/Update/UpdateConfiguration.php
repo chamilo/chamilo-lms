@@ -16,6 +16,8 @@ final readonly class UpdateConfiguration
     private const ENV_MINISIGN_PUBLIC_KEY = 'CHAMILO_UPDATE_MINISIGN_PUBLIC_KEY';
     private const ENV_DEBUG_SLOW_COPY_MS = 'CHAMILO_UPDATE_DEBUG_SLOW_COPY_MS';
     private const ENV_COMMAND_TIMEOUT = 'CHAMILO_UPDATE_COMMAND_TIMEOUT';
+    private const LOCAL_TEST_MANIFEST_SOURCE = '/tmp/chamilo-update-slow-manifest.json';
+    private const LOCAL_TEST_PACKAGE_PATH = '/tmp/chamilo-update-slow.zip';
 
     public function __construct(
         #[Autowire(param: 'kernel.environment')]
@@ -25,6 +27,29 @@ final readonly class UpdateConfiguration
     public function getDefaultManifestSource(): ?string
     {
         return $this->readStringEnv(self::ENV_MANIFEST_URL);
+    }
+
+    public function getOfficialManifestSource(): ?string
+    {
+        return $this->getDefaultManifestSource();
+    }
+
+    public function getLocalTestManifestSource(): ?string
+    {
+        if ($this->isProduction()) {
+            return null;
+        }
+
+        return self::LOCAL_TEST_MANIFEST_SOURCE;
+    }
+
+    public function getLocalTestPackagePath(): ?string
+    {
+        if ($this->isProduction()) {
+            return null;
+        }
+
+        return self::LOCAL_TEST_PACKAGE_PATH;
     }
 
     public function getTrustedPublicKey(): ?string

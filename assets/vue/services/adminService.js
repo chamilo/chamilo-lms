@@ -28,6 +28,8 @@ export default {
 
   runSystemUpdatePostApplyChecks: (payload) => baseService.post("/admin/system-update/post-apply", payload),
 
+  runSystemUpdateMigrationSafetyChecks: (payload) => baseService.post("/admin/system-update/migration-safety", payload),
+
   runSystemUpdatePostApplyActions: (payload) => baseService.post("/admin/system-update/run-post-apply", payload),
 
   findSystemUpdateProgress: (operationId) =>

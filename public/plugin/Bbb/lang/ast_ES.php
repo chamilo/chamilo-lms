@@ -76,3 +76,6 @@ $strings['defaultVisibilityInCourseHomepage'] = 'Visibilidá por omisión na pá
 $strings['ViewActivityDashboard'] = "Ver panel d'actividá";
 $strings['Participants'] = 'Participants';
 $strings['CountUsers'] = 'Contar usuarios';
+$strings['NoRecording'] = 'Sin grabacion';
+$strings['presentation'] = 'Presentacion';
+$strings['video'] = 'Video';

@@ -77,3 +77,6 @@ $strings['defaultVisibilityInCourseHomepage'] = 'נראות ברירת מחדל 
 $strings['ViewActivityDashboard'] = 'תצוגת לוח מחוונים של פעילות';
 $strings['Participants'] = 'משתתפים';
 $strings['CountUsers'] = 'ספירת משתמשים';
+$strings['NoRecording'] = 'אין הקלטה';
+$strings['presentation'] = 'מצגת';
+$strings['video'] = 'וידאו';

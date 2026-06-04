@@ -77,3 +77,6 @@ $strings['defaultVisibilityInCourseHomepage'] = '课程首页默认可见性';
 $strings['ViewActivityDashboard'] = '查看活动仪表板';
 $strings['Participants'] = '参与者';
 $strings['CountUsers'] = '统计用户';
+$strings['NoRecording'] = '无录像';
+$strings['presentation'] = '演示';
+$strings['video'] = '视频';

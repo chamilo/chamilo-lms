@@ -35839,3 +35839,24 @@ msgstr "Aucun commentaire pour l'instant."
 
 msgid "A user with this username already exists"
 msgstr "Un utilisateur avec ce nom d'utilisateur existe déjà"
+
+msgid "Manage meetings, review recordings and update course-wide BBB settings from one place."
+msgstr "Gérez les réunions, visionnez les enregistrements et modifiez les paramètres BBB à l'échelle du cours depuis un seul et même endroit."
+
+msgid "Review the current defaults and propagate them to every course when needed."
+msgstr "Vérifiez les paramètres par défaut actuels et appliquez-les à tous les cours si nécessaire."
+
+msgid "Filter the list by meeting date range."
+msgstr "Filtrer la liste par période de réunion."
+
+msgid "Review meeting history, participants and recording actions."
+msgstr "Consulter l'historique des réunions, la liste des participants et les enregistrements."
+
+msgid "Participants"
+msgstr "Participants"
+
+msgid "CountUsers"
+msgstr "Nombre d'utilisateurs"
+
+msgid "No data found"
+msgstr "Aucune donnée trouvée"

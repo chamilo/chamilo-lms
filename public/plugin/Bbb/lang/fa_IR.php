@@ -77,3 +77,6 @@ $strings['defaultVisibilityInCourseHomepage'] = 'نمایش پیش‌فرض در
 $strings['ViewActivityDashboard'] = 'مشاهده داشبورد فعالیت';
 $strings['Participants'] = 'شرکت‌کنندگان';
 $strings['CountUsers'] = 'شمارش کاربران';
+$strings['NoRecording'] = 'بدون ضبط';
+$strings['presentation'] = 'ارائه';
+$strings['video'] = 'ویدیو';

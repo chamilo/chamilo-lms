@@ -77,3 +77,6 @@ $strings['defaultVisibilityInCourseHomepage'] = 'पाठ्यक्रम ह
 $strings['ViewActivityDashboard'] = 'गतिविधि डैशबोर्ड देखें';
 $strings['Participants'] = 'प्रतिभागी';
 $strings['CountUsers'] = 'उपयोगकर्ताओं की गिनती';
+$strings['NoRecording'] = 'कोई रिकॉर्डिंग नहीं';
+$strings['presentation'] = 'प्रस्तुति';
+$strings['video'] = 'वीडियो';

@@ -85,3 +85,5 @@ $strings['No documents found'] = 'No documents found';
 $strings['Failed to load documents'] = 'Failed to load documents';
 $strings['No meetings or recordings are available yet.'] = 'No meetings or recordings are available yet.';
 $strings['Share the conference link with allowed participants.'] = 'Share the conference link with allowed participants.';
+$strings['presentation'] = 'Presentation';
+$strings['video'] = 'Video';

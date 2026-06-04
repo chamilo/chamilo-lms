@@ -77,3 +77,6 @@ $strings['defaultVisibilityInCourseHomepage'] = 'Visibilità predefinita nella h
 $strings['ViewActivityDashboard'] = 'Visualizza dashboard attività';
 $strings['Participants'] = 'Partecipanti';
 $strings['CountUsers'] = 'Conta utenti';
+$strings['NoRecording'] = 'Nessuna registrazione';
+$strings['presentation'] = 'Presentazione';
+$strings['video'] = 'Video';

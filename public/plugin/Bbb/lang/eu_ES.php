@@ -77,3 +77,6 @@ $strings['defaultVisibilityInCourseHomepage'] = 'Ikastaroaren orri nagusian ikus
 $strings['ViewActivityDashboard'] = 'Ikusi jardueraren panela';
 $strings['Participants'] = 'Parte-hartzaileak';
 $strings['CountUsers'] = 'Erabiltzaile kopurua';
+$strings['NoRecording'] = 'Grabaziorik ez';
+$strings['presentation'] = 'Aurkezpena';
+$strings['video'] = 'Bideoa';

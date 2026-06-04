@@ -388,6 +388,14 @@ These roles **only exist for the current request**. They are computed and publis
 
 The relationship logic lives in `CourseAccessResolver` (`src/CoreBundle/Security/CourseAccessResolver.php`), a pure service consumed by the listener. **Voters must never call `$user->addRole(ROLE_CURRENT_COURSE_*)`** — that pattern was removed in #8486 because Voter side-effects break Symfony's contract (non-deterministic order, short-circuit evaluation, etc.).
 
+#### When the contextual-role model applies (scope)
+
+The contextual-role model governs API operations that act **inside a course tool** — the request carries `cid`/`sid`/`gid` and the resource is course-scoped content. It is **not** a blanket rule for every entity:
+
+- **`CourseBundle` `#[ApiResource]` entities** — applies to **all except `CCalendarEvent`**, which is authorized by its dedicated `CCalendarEventVoter` (creator / collective-subscription ownership, not course context).
+- **`CoreBundle` `#[ApiResource]` entities** — **review case by case.** Many are not course-scoped (users, messages, social posts, user relations, sessions) and are governed by their own dedicated voters; only apply the contextual-role patterns to entities that genuinely operate inside a course tool.
+- Any resource with a **dedicated voter** (e.g. `CCalendarEventVoter`, `UsergroupVoter`, `SessionVoter`) keeps that voter as the authority — do not bolt contextual-role expressions on top of it.
+
 #### Role hierarchy
 
 `config/packages/security.yaml` declares one-way implications **within each axis**:
@@ -425,5 +433,6 @@ security: "is_granted('ROLE_CURRENT_COURSE_TEACHER')
 #### Caveats
 
 - **Body-only `cid` doesn't work.** `CidReqListener` reads `Request::get('cid')`, which sees query params and route attributes but not request bodies. Endpoints that pass `cid` only inside the JSON body need either an extra `cid` query param (preferred) or post-security validation in a `StateProcessor`.
+- **`Post` (create) can't use object-level checks.** On create the `resourceNode` does not exist yet, so `is_granted('CREATE', object)` / `object.resourceNode` fails closed. Gate creation with the contextual teacher roles through an operation-own `security:` (not `securityPostDenormalize`), which also avoids inheriting a resource-level `security:` that may omit `SESSION_TEACHER` and would otherwise block session teachers. `CToolIntro` is the reference.
 - **Output format negotiation runs before security.** Endpoints with binary `outputFormats` (`zip`, `bin`) reject the request with 406 if the `Accept` header is `application/ld+json`. Regression tests must send `Accept: application/zip` (or the matching MIME type) to reach the security gate.
 - **The skill `/migrate-contextual-roles <Entity>`** automates this migration for a single entity, including Vue-caller compatibility checks and lint/test runs.

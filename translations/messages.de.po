@@ -21800,7 +21800,7 @@ msgid "Message resent"
 msgstr "Nachricht gesendet"
 
 msgid "Ticket assigned to %s. Follow-up at <a href='%s'>#%s</a>."
-msgstr "Ticket wurde %s zugewiesen. Weiterverfolgung auf #%s."
+msgstr "Ticket wurde %s zugewiesen. Weiterverfolgung auf <a href='%s'>#%s</a>."
 
 msgid "Ticket %s assigned"
 msgstr "Ticket %s zugewiesen"

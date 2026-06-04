@@ -35495,3 +35495,21 @@ msgstr "Kommentare werden geladen..."
 
 msgid "No comments yet."
 msgstr "Noch keine Kommentare."
+
+msgid "Manage meetings, review recordings and update course-wide BBB settings from one place."
+msgstr "Verwalten Sie Konferenzen, sehen Sie sich Aufzeichnungen an und passen Sie die kursweiten BBB-Einstellungen an einem Ort an."
+
+msgid "Review the current defaults and propagate them to every course when needed."
+msgstr "Überprüfen Sie die aktuellen Standardeinstellungen und übertragen Sie diese bei Bedarf auf alle Kurse."
+
+msgid "Filter the list by meeting date range."
+msgstr "Filtern Sie die Liste nach dem Zeitraum der Konferenz."
+
+msgid "Review meeting history, participants and recording actions."
+msgstr "Rückblick auf die Besprechungshistorie, die Teilnehmer und die Aufzeichnungen."
+
+msgid "Participants"
+msgstr "Teilnehmer"
+
+msgid "CountUsers"
+msgstr "Anzahl der Nutzer"

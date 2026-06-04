@@ -33988,3 +33988,21 @@ msgstr "No comments yet."
 
 msgid "A user with this username already exists"
 msgstr "A user with this username already exists"
+
+msgid "Manage meetings, review recordings and update course-wide BBB settings from one place."
+msgstr "Manage meetings, review recordings and update course-wide BBB settings from one place."
+
+msgid "Review the current defaults and propagate them to every course when needed."
+msgstr "Review the current defaults and propagate them to every course when needed."
+
+msgid "Filter the list by meeting date range."
+msgstr "Filter the list by meeting date range."
+
+msgid "Review meeting history, participants and recording actions."
+msgstr "Review meeting history, participants and recording actions."
+
+msgid "Participants"
+msgstr "Participants"
+
+msgid "CountUsers"
+msgstr "CountUsers"

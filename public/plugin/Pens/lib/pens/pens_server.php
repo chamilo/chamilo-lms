@@ -24,6 +24,10 @@
  * @author Guillaume Viguier-Just <guillaume@viguierjust.com>
  * @licence http://www.gnu.org/licenses/gpl.txt
  */
+
+use Chamilo\CoreBundle\Helpers\SafeHttpClientHelper;
+use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
+
 require_once __DIR__.'/pens_controller.php';
 require_once __DIR__.'/pens_package_handler.php';
 require_once __DIR__.'/pens_exception.php';
@@ -160,13 +164,13 @@ class PENSServer extends PENSController
     /**
      * Collects the package onto the local server.
      *
-     * @param PENSRequest $request
+     * @param  PENSRequest  $request
      *
      * @return string Path to the package on the hard drive
      *
      * @throws PENSException if an exception occurred
      */
-    protected function collectPackage($request)
+    protected function collectPackage(PENSRequest $request): string
     {
         $supported_package_types = $this->_package_handler->getSupportedPackageTypes();
         if (!in_array($request->getPackageType(), $supported_package_types)) {
@@ -181,55 +185,45 @@ class PENSServer extends PENSController
         }
 
         // Try to download the package in the temporary directory
-        $tmp = null;
         if (function_exists('sys_get_temp_dir')) {
             $tmp = sys_get_temp_dir();
         } else {
             $tmp = '/tmp';
         }
         $path_to_file = $tmp.'/'.$request->getFilename();
-        $fp = fopen($path_to_file, 'w');
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $request->getPackageUrl());
-        curl_setopt($ch, CURLOPT_HEADER, false);
-        curl_setopt($ch, CURLOPT_FILE, $fp);
+        // SSRF-safe download: blocks targets resolving to loopback/private/
+        // reserved ranges (incl. the cloud metadata endpoint), validates each
+        // redirect hop and speaks only http(s). Any transport/HTTP failure is
+        // reported as the PENS "could not retrieve package" error (1310).
+        $options = [];
+
         if (null !== $request->getPackageUrlUserId()) {
-            curl_setopt($ch, CURLOPT_USERPWD, $request->getPackageUrlUserId().':'.$request->getPackageUrlPassword());
+            $options['auth_basic'] = [
+                (string) $request->getPackageUrlUserId(),
+                (string) $request->getPackageUrlPassword(),
+            ];
         }
-        if (false === curl_exec($ch)) {
-            $errno = curl_errno($ch);
-            curl_close($ch);
-            // Error occurred. Throw an exception
-            switch ($errno) {
-                case CURLE_UNSUPPORTED_PROTOCOL:
-                    throw new PENSException(1301);
 
-                    break;
-                case CURLE_URL_MALFORMAT:
-                case CURLE_COULDNT_RESOLVE_PROXY:
-                case CURLE_COULDNT_RESOLVE_HOST:
-                case CURLE_COULDNT_CONNECT:
-                case CURLE_OPERATION_TIMEOUTED:
-                case 78: //CURLE_REMOTE_FILE_NOT_FOUND
-                    throw new PENSException(1310);
+        $fp = fopen($path_to_file, 'w');
 
-                    break;
-                case CURLE_FTP_ACCESS_DENIED: //CURLE_REMOTE_ACCESS_DENIED
-                    throw new PENSException(1312);
+        try {
+            $client = SafeHttpClientHelper::create();
+            $response = $client->request('GET', (string) $request->getPackageUrl(), $options);
 
-                    break;
-                default:
-                    throw new PENSException(1301);
-
-                    break;
+            foreach ($client->stream($response) as $chunk) {
+                fwrite($fp, $chunk->getContent());
             }
 
-            return null;
-        } else {
-            curl_close($ch);
+            fclose($fp);
+        } catch (ExceptionInterface $e) {
+            if (is_resource($fp)) {
+                fclose($fp);
+            }
 
-            return $path_to_file;
+            throw new PENSException(1310);
         }
+
+        return $path_to_file;
     }
 
     /**
@@ -285,17 +279,18 @@ class PENSServer extends PENSController
                 } else {
                     $params = array_merge($request->getSendReceiptArray(), $response->getArray());
                 }
-                $ch = curl_init($url);
-                curl_setopt($ch, CURLOPT_POST, true);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                $data = curl_exec($ch);
-                curl_close($ch);
-                if (false === $data) {
+                // SSRF-safe POST: blocks targets resolving to loopback/private/
+                // reserved ranges (incl. the cloud metadata endpoint) and
+                // validates each redirect hop.
+                try {
+                    $data = SafeHttpClientHelper::create()
+                        ->request('POST', $url, ['body' => $params])
+                        ->getContent(false);
+                } catch (ExceptionInterface $e) {
                     return null;
-                } else {
-                    return new PENSResponse($data);
                 }
+
+                return new PENSResponse($data);
             }
         }
     }

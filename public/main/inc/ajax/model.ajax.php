@@ -1568,7 +1568,8 @@ switch ($action) {
         $titleToSearch = $_REQUEST['title_to_search'] ?? '';
         $userIdToSearch = $_REQUEST['user_id_to_search'] ?? 0;
 
-        $result = AnnouncementManager::getAnnouncements(null, null, $courseId, $sessionId, $groupId);
+        $allResults = AnnouncementManager::getAnnouncements(null, null, $courseId, $sessionId, $groupId);
+        $result = array_slice($allResults, $start, $limit);
         break;
     case 'get_work_teacher':
         $columns = [

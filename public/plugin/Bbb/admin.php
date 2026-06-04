@@ -679,6 +679,12 @@ foreach ($settings as $setting) {
     $setting = $setting['name'];
     $text = $settingsForm->addText($setting, $plugin->get_lang($setting), false);
     $text->freeze();
+    $text->setCustomFrozenTemplate('
+        <div class="py-1">
+            <div class="text-body-2 font-semibold text-gray-90">{label}</div>
+            <div class="text-body-2 text-gray-50 mt-0.5">{element}</div>
+        </div>
+    ');
     $defaults[$setting] = 'true' === api_get_plugin_setting('bbb', $setting) ? get_lang('Yes') : get_lang('No');
 }
 

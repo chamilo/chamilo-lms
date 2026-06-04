@@ -77,3 +77,6 @@ $strings['defaultVisibilityInCourseHomepage'] = 'Стандартна видим
 $strings['ViewActivityDashboard'] = 'Преглед на таблото за активност';
 $strings['Participants'] = 'Участници';
 $strings['CountUsers'] = 'Брой потребители';
+$strings['NoRecording'] = 'Без запис';
+$strings['presentation'] = 'Презентация';
+$strings['video'] = 'Видео';

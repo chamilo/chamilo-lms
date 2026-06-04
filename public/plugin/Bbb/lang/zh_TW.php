@@ -77,3 +77,6 @@ $strings['defaultVisibilityInCourseHomepage'] = '課程首頁預設可見度';
 $strings['ViewActivityDashboard'] = '檢視活動儀表板';
 $strings['Participants'] = '參與者';
 $strings['CountUsers'] = '計數使用者';
+$strings['NoRecording'] = '無錄影';
+$strings['presentation'] = '簡報';
+$strings['video'] = '影片';

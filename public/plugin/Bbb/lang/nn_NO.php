@@ -77,3 +77,6 @@ $strings['defaultVisibilityInCourseHomepage'] = 'Standard synleggje på kurs sta
 $strings['ViewActivityDashboard'] = 'Vis aktivitetsdashbord';
 $strings['Participants'] = 'Deltakarar';
 $strings['CountUsers'] = 'Tel brukerar';
+$strings['NoRecording'] = 'Ingen opptak';
+$strings['presentation'] = 'Presentasjon';
+$strings['video'] = 'Video';

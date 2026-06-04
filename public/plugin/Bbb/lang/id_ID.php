@@ -77,3 +77,6 @@ $strings['defaultVisibilityInCourseHomepage'] = 'Visibilitas default di halaman 
 $strings['ViewActivityDashboard'] = 'Lihat dasbor aktivitas';
 $strings['Participants'] = 'Peserta';
 $strings['CountUsers'] = 'Hitung pengguna';
+$strings['NoRecording'] = 'Tidak ada rekaman';
+$strings['presentation'] = 'Presentasi';
+$strings['video'] = 'Video';

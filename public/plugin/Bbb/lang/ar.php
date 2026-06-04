@@ -77,3 +77,6 @@ $strings['defaultVisibilityInCourseHomepage'] = 'الرؤية الافتراضي
 $strings['ViewActivityDashboard'] = 'عرض لوحة تحكم النشاط';
 $strings['Participants'] = 'المشتركون';
 $strings['CountUsers'] = 'عدد المستخدمين';
+$strings['NoRecording'] = 'لا تسجيل';
+$strings['presentation'] = 'عرض تقديمي';
+$strings['video'] = 'فيديو';

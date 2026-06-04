@@ -77,3 +77,6 @@ $strings['defaultVisibilityInCourseHomepage'] = 'Numatytasis matomumas kurso pra
 $strings['ViewActivityDashboard'] = 'Peržiūrėti veiklos skydelį';
 $strings['Participants'] = 'Dalyviai';
 $strings['CountUsers'] = 'Skaičiuoti vartotojus';
+$strings['NoRecording'] = 'Nera iraso';
+$strings['presentation'] = 'Pristatymas';
+$strings['video'] = 'Video';

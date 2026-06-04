@@ -77,3 +77,6 @@ $strings['defaultVisibilityInCourseHomepage'] = 'コースホームページで�
 $strings['ViewActivityDashboard'] = 'アクティビティダッシュボードを表示';
 $strings['Participants'] = '参加者';
 $strings['CountUsers'] = 'ユーザー数';
+$strings['NoRecording'] = '録画なし';
+$strings['presentation'] = 'プレゼンテーション';
+$strings['video'] = 'ビデオ';

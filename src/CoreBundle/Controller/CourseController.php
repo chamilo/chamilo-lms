@@ -30,6 +30,8 @@ use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
 use Chamilo\CoreBundle\Repository\TagRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
+use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
+use Chamilo\CoreBundle\Security\CourseAccessResolver;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
@@ -1115,8 +1117,12 @@ class CourseController extends ToolBaseController
     }
 
     #[Route('/{id}/addToolIntro', name: 'chamilo_core_course_addtoolintro')]
-    public function addToolIntro(Request $request, Course $course, EntityManagerInterface $em): Response
-    {
+    public function addToolIntro(
+        Request $request,
+        Course $course,
+        EntityManagerInterface $em,
+        CourseAccessResolver $courseAccessResolver,
+    ): Response {
         $data = json_decode($request->getContent());
 
         $toolTitle = trim((string) ($data->tool ?? 'course_homepage'));
@@ -1128,6 +1134,27 @@ class CourseController extends ToolBaseController
         $introText = $data->introText ?? null;
 
         $session = $sessionId ? $em->getRepository(Session::class)->find($sessionId) : null;
+
+        // Writing a tool introduction is teacher-only. The contextual course
+        // roles are unavailable here (cid travels in the body, not the query, so
+        // CidReqListener cannot resolve them), so resolve them directly from the
+        // course/session objects with CourseAccessResolver — the same source of
+        // truth CourseContextRoleListener uses — keeping this gate consistent with
+        // the CToolIntro API write operations. Admins are allowed separately, as
+        // the resolver does not grant them course roles.
+        $user = $this->getUser();
+        $courseRoles = $user instanceof User
+            ? $courseAccessResolver->resolveCourseRoles($user, $course, $session)
+            : [];
+
+        $canManage = $this->isGranted('ROLE_ADMIN')
+            || \in_array(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER, $courseRoles, true)
+            || \in_array(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_TEACHER, $courseRoles, true);
+
+        if (!$canManage) {
+            throw $this->createAccessDeniedException();
+        }
+
         $ctoolintroRepo = $em->getRepository(CToolIntro::class);
 
         $ctoolSession = $this->findCourseTool($course, $toolTitle, $session, $em);

@@ -6,7 +6,7 @@ $(document).ready(function(){
 	
 	insertMRight();
 	
-	$('.gjs-pn-buttons').prepend('<span onClick="saveSourceFrame(false,false,0)" class="gjs-pn-btn fa fa-save"></span>');
+	$('.gjs-pn-buttons').prepend('<span onClick="saveSourceFrame(false,false,0)" class="gjs-pn-btn fa fa-save" title="Save" aria-label="Save"></span>');
 	
 	var bdDiv = '<div id="loadsave" ><img src="img/loadsave.gif" /></div>';
 	bdDiv += '<div id="logMsgLoad" ';
@@ -32,6 +32,9 @@ $(document).ready(function(){
 
 	setTimeout(function(){
 		traductAll();
+        cstudioApplyEditorTooltips();
+        cstudioFixVisibleEditorLabels();
+        cstudioStartEditorUiEnhancements();
 	},200);
 
 	if (renderFromSvg!=''){
@@ -45,6 +48,77 @@ $(document).ready(function(){
 });
 
 var modeUIeol='a';
+
+function cstudioSetCheckboxChecked(id, checked){
+    var element = document.getElementById(id);
+    if (element) {
+        element.checked = checked;
+    }
+}
+
+function cstudioIsCheckboxChecked(id){
+    var element = document.getElementById(id);
+    return element ? element.checked : false;
+}
+
+function cstudioTranslateTerm(term) {
+    if (typeof returnTradTerm === 'function') {
+        return returnTradTerm(term);
+    }
+
+    return term;
+}
+
+function cstudioSetElementTooltip(selector, label) {
+    var translatedLabel = cstudioTranslateTerm(label);
+    $(selector).each(function () {
+        $(this).attr('title', translatedLabel);
+        $(this).attr('aria-label', translatedLabel);
+        $(this).attr('data-cstudio-tooltip', translatedLabel);
+    });
+}
+
+function cstudioApplyEditorTooltips() {
+    cstudioSetElementTooltip('#btnsave, .fa-save, [class*="fa-save"]', 'Save');
+    cstudioSetElementTooltip('.fa-th-large, .fa-columns, [class*="fa-th-large"], [class*="fa-columns"]', 'Layout');
+    cstudioSetElementTooltip('.fa-eye, [class*="fa-eye"]', 'Hide menus');
+    cstudioSetElementTooltip('.fa-arrows-alt, .fa-expand, [class*="fa-arrows"], [class*="fa-expand"]', 'Toggle fullscreen');
+    cstudioSetElementTooltip('.fa-undo, [class*="fa-undo"]', 'Undo');
+    cstudioSetElementTooltip('.fa-repeat, .fa-redo, [class*="fa-repeat"], [class*="fa-redo"]', 'Redo');
+    cstudioSetElementTooltip('.cstudio-delete-page-action', 'Delete this page');
+    cstudioSetElementTooltip('.uPIcon', 'Move page up');
+    cstudioSetElementTooltip('.dowNIcon', 'Move page down');
+}
+
+function cstudioStartEditorUiEnhancements() {
+    var attempts = 0;
+    var interval = setInterval(function () {
+        cstudioApplyEditorTooltips();
+        cstudioFixVisibleEditorLabels();
+        attempts++;
+        if (attempts > 20) {
+            clearInterval(interval);
+        }
+    }, 500);
+}
+
+function cstudioFixVisibleEditorLabels() {
+    $('.ludiButtonSaveMenu').each(function () {
+        $(this).html(cstudioTranslateTerm('Save'));
+        $(this).attr('value', cstudioTranslateTerm('Save'));
+    });
+
+    $('.oelTitlePage .cstudio-title-label').each(function () {
+        $(this).html(cstudioTranslateTerm('Title'));
+    });
+
+    $('.topmenuabout a').each(function () {
+        if ($(this).html() === 'Help and services') {
+            $(this).html(cstudioTranslateTerm('Help and pro services'));
+        }
+    });
+}
+
 
 function upldImgRenderFromSvg(){
 
@@ -145,6 +219,10 @@ function restyleCadre(){
 			}
 		
 		});
+
+        cstudioApplyEditorTooltips();
+        cstudioFixVisibleEditorLabels();
+        cstudioStartEditorUiEnhancements();
 		
 		$("div[title='Interactive Map']").css("display","none").addClass("extraPluginRightPanel");
 		$("div[title='Section collapse']").css("display","none").addClass("extraPluginRightPanel");
@@ -736,8 +814,11 @@ function restyleCadreImage(){
 
 		//showFileManagerStudio(0,0,0);
 		var bh = "<div class='trd' id='chamiloImages' onClick='showFileManagerStudio2(13,\"imgprocessclipart\",\"pushToCollAfterSelect\");' ";
+		bh += " title='" + cstudioTranslateTerm('Open image library') + "' ";
+		bh += " aria-label='" + cstudioTranslateTerm('Open image library') + "' ";
 		bh += " style='width:100%;height:128px;border:solid 1px gray;";
-		bh += "background-image:url(img/galery-01.png);";
+		bh += "background-color:#ffffff;background-image:url(icon/folder64.png);";
+		bh += "background-repeat:no-repeat;background-position:center;background-size:64px 64px;";
 		bh += "text-align:center;cursor:pointer;' >";
 		bh += "</div>";
 
@@ -818,6 +899,7 @@ var onRenderUpdate = false;
 var globalQuitAction = false;
 
 var alcLogs = "";
+
 
 function activeEventSave(){
 	
@@ -1202,7 +1284,7 @@ function getMenuTop(){
 	if (modeUIeol=='a') {
 		h += '<div class="topsubmenublock topsubmenublockEdit trd" onClick="deleteAllTopMenu();" ><a style="text-decoration:none;" target="_blank" href="https://www.batisseurs-numeriques.fr/c-studio-help.html" >Help and pro services</a></div>';
 	} else {
-		h += '<div class="topsubmenublock topsubmenublockEdit trd" onClick="deleteAllTopMenu();" ><a style="text-decoration:none;" target="_blank" href="https://www.batisseurs-numeriques.fr/c-studio-help.html" >Help and services</a></div>';
+		h += '<div class="topsubmenublock topsubmenublockEdit trd" onClick="deleteAllTopMenu();" ><a style="text-decoration:none;" target="_blank" href="https://www.batisseurs-numeriques.fr/c-studio-help.html" >Help and pro services</a></div>';
 	}
 	h += '</div>';
 	
@@ -1299,8 +1381,8 @@ function getMenuR(){
 	h += '<div class="ludiEditMenuContext" >';
 	h += '<input id="changeTitlePage" type="text" value="" style="width:333px;margin:11px;font-size:12px;padding:5px;" />';
 	
-	h += '<div class="uPIcon minIcon" onClick="upContextMenuSub(0);" >'+getISVG('arrow',0)+'</div>';
-	h += '<div class="dowNIcon minIcon" onClick="upContextMenuSub(1);" >'+getISVG('arrow',180)+'</div>';
+	h += '<div class="uPIcon minIcon" title="Move page up" aria-label="Move page up" onClick="upContextMenuSub(0);" >'+getISVG('arrow',0)+'</div>';
+	h += '<div class="dowNIcon minIcon" title="Move page down" aria-label="Move page down" onClick="upContextMenuSub(1);" >'+getISVG('arrow',180)+'</div>';
 	
 	h += '<p style="display:inline-flex;align-items:center;min-height:28px;line-height:1;font-size:14px;position:absolute;left:12px;top:90px;padding:0px;margin:0 5px 0;" >';
 	h += '<input style="margin:0 5px 0 0;" type="radio" class=checkBehaviorWind id="Behavior0" name="behaviorPage" ></input>';
@@ -1340,7 +1422,7 @@ function getMenuR(){
 	h += '<div class="leveldifficultyc" onClick="selectLayerC()" ></div>';
 	h += '</div>';
 
-	h += '<a onClick="deleteContextMenuSub();" ';
+	h += '<a class="cstudio-delete-page-action" title="Delete this page" aria-label="Delete this page" onClick="deleteContextMenuSub();" ';
 	h += ' style="position:absolute;bottom:10px;left:5px;"  >';
 	h += '<img src="icon/delete-icon-24.png" /></a>';
 
@@ -2594,6 +2676,7 @@ function displaySubProgressClean(){
 		
 		bdDiv += '<div class="gjs-am-add-asset" ';
 		bdDiv += 'style="padding:25px;font-size:16px;" >';
+		bdDiv += '<p class="trd cstudio-clean-data-help">Clean traces removes the saved learner progress for this CStudio learning path. It does not delete pages or project content.</p>';
 		bdDiv += '<br/>';
 		bdDiv += '<img class="brossIcons" src="img/bross.png" />';
 		bdDiv += '<br/>';
@@ -3191,7 +3274,7 @@ function saveQcmEdit() {
 
 	renderH += "<div class='quizzblockdeco' ></div>";
 	var letbeg = 'm';
-	if (document.getElementById('checkboxMulti').checked) {
+	if (cstudioIsCheckboxChecked('checkboxMulti')) {
 		renderH += "<div class='multiqcmopts' ></div>";
 		letbeg = 'c';
 	}
@@ -7026,7 +7109,7 @@ editor.BlockManager.add('plugTeachSorttheparagraphs',{
 firstSrcT = GplugSrcT.replace("{content}",renderpluginschemasvgobj('',''));
 
 editor.BlockManager.add('plugTeachschemasvgobj',{
-	label: 'Schema obj',
+	label: 'Object schema',
 	attributes: {
 		class: 'fa fa-text icon-plugTeach',
 		style: "background-image: url('icon/plug-schemasvgobj.png');background-repeat:no-repeat;background-position:center center;"
@@ -9500,7 +9583,12 @@ function getCollectionsColorsThemes(){
 function changColor(t){
 	
 	var urlNc = 'index.php?action=edit&id='+ idPageHtml +'&changc=' + t + '&cotk=' + $('#cotk').val();
-	window.location.href = urlNc;
+    $('#btnsave').css("display","none");
+    $('#loadsave').css("display","block");
+    saveSourceFrame(false,false,0);
+    setTimeout(function(){
+        window.location.href = urlNc;
+    },1600);
 
 }
 
@@ -9531,7 +9619,12 @@ function getCollectionsQuizzThemes(){
 function changQuizzColor(t){
 	
 	var urlNc = 'index.php?action=edit&id='+ idPageHtml +'&changquizz=' + t + '&cotk=' + $('#cotk').val();
-	window.location.href = urlNc;
+    $('#btnsave').css("display","none");
+    $('#loadsave').css("display","block");
+    saveSourceFrame(false,false,0);
+    setTimeout(function(){
+        window.location.href = urlNc;
+    },1600);
 
 }
 
@@ -9555,7 +9648,7 @@ function displayParamsTeachEdit() {
         // reloadEditorAll();
         
         h += '<a class="tool-play tool-base" onClick="playAllinCore();" style="cursor:pointer;" >';
-        h += '<div class="trd" >Play</div>';
+        h += '<div class="trd" >Preview</div>';
         h += '</a>';
         
         h += '<a class="tool-colors-editor tool-base" onClick="displayEditThemeParamsProject();" style="cursor:pointer;" >';
@@ -9566,9 +9659,11 @@ function displayParamsTeachEdit() {
         h += '<div class="trd" >Options</div>';
         h += '</a>';
         
-        h += '<a id="tool-colors-paste" name="tool-colors-paste" class="tool-colors-paste tool-base" onClick="pasteWindowsShow(false);" style="cursor:pointer;" >';
-        h += '<div class="trd" >Integration</div>';
-        h += '</a>';
+        if (cstudioShowExperimentalTabs) {
+            h += '<a id="tool-colors-paste" name="tool-colors-paste" class="tool-colors-paste tool-base" onClick="pasteWindowsShow(false);" style="cursor:pointer;" >';
+            h += '<div class="trd" >Integration</div>';
+            h += '</a>';
+        }
         
         h += '<a id="tool-quit" name="tool-quit" class="tool-quit tool-base" onClick="quitEditorAll();"style="cursor:pointer;" >';
         h += '<div class="trd" >Quit</div>';
@@ -9617,6 +9712,7 @@ function quitEditorAll(){
     
 }
 var startTab = 1;
+var cstudioShowExperimentalTabs = false;
 
 function displayGlobalParams(){
 	
@@ -9644,23 +9740,25 @@ function displayGlobalParams(){
         bdDiv += '<div id="paramstablist" class="gjs-am-add-asset" ';
 		bdDiv += 'style="padding:25px;padding-top:5px;padding-bottom:5px;font-size:16px;display:none;" >';
         bdDiv += '<a class="monotablist monotablist1 trd monotablistselect noselect" onclick="displayParamsTab1();" >General</a>';
-        bdDiv += '<a class="monotablist monotablist2 trd noselect" onclick="displayParamsTab2();" >Navigation</a>';
-        bdDiv += '<a class="monotablist monotablist3 trd noselect" onclick="displayParamsTab3();" >Interactions</a>';
+        if (cstudioShowExperimentalTabs) {
+            bdDiv += '<a class="monotablist monotablist2 trd noselect" onclick="displayParamsTab2();" >Navigation</a>';
+            bdDiv += '<a class="monotablist monotablist3 trd noselect" onclick="displayParamsTab3();" >Interactions</a>';
+        }
         bdDiv += '</div>';
 
         // allParamsArea 1
 		bdDiv += '<div id="allParamsArea" class="gjs-am-add-asset containBlocParams" >';
         
-        bdDiv += '<p class="trd" style="position:relative;margin-left:80px;" >Project image :</p>';
+        bdDiv += '<p class="trd" style="position:relative;margin-left:80px;" >Learning path thumbnail (click to change)</p>';
         
-        bdDiv += '<div ';
+        bdDiv += '<div title="Learning path thumbnail (click to change)" ';
         bdDiv += ' style="position:absolute;left:55%;top:14px;width:30%;height:79px;';
         bdDiv += 'max-height:80px;cursor:pointer;overflow:hidden;border:solid 1px gray;" >';
-        bdDiv += '<img onClick="loadAnImage();" onerror="this.src=\'img/classique/oel_back.jpg\';" id="imgshow" src="img/classique/oel_back.jpg" ';
+        bdDiv += '<img title="Learning path thumbnail (click to change)" onClick="loadAnImage();" onerror="this.src=\'img/classique/oel_back.jpg\';" id="imgshow" src="img/classique/oel_back.jpg" ';
         bdDiv += ' style="position:absolute;width:100%;height:auto;cursor:pointer;" />';
         bdDiv += '</div>';
 
-        bdDiv += '<img onClick="initProjectImage();" src="img/bross.png" ';
+        bdDiv += '<img title="Reset thumbnail" onClick="initProjectImage();" src="img/bross.png" ';
         bdDiv += ' style="position:absolute;right:40px;top:15px;';
         bdDiv += 'width:22px;height:22px;cursor:pointer;" />';
 
@@ -9683,7 +9781,9 @@ function displayGlobalParams(){
         if (modeUIeol=='a') {
             bdDiv += addCheckOptions('Option Accessibility Tools','I');
         }
-        bdDiv += addCheckOptions('Automatic language translation','G');
+        if (cstudioShowExperimentalTabs) {
+            bdDiv += addCheckOptions('Automatic language translation','G');
+        }
         
         bdDiv += '<div class="bottomSaveParamsBloc" >';
 		bdDiv += '<input onClick="saveParamsGlobal()" ';
@@ -9825,91 +9925,91 @@ function loadOptGlobal(){
     }
     var checkB = getObjD[1];
     if (checkB.indexOf("T")!=-1) {
-        document.getElementById('checkboxT').checked = true;
+        cstudioSetCheckboxChecked('checkboxT', true);
     }else{
-        document.getElementById('checkboxT').checked = false;
+        cstudioSetCheckboxChecked('checkboxT', false);
     }
     if (checkB.indexOf("N")!=-1) {
-        document.getElementById('checkboxN').checked = true;
+        cstudioSetCheckboxChecked('checkboxN', true);
     }else{
-        document.getElementById('checkboxN').checked = false;
+        cstudioSetCheckboxChecked('checkboxN', false);
     }
     if (checkB.indexOf("L")!=-1) {
-        document.getElementById('checkboxL').checked = true;
+        cstudioSetCheckboxChecked('checkboxL', true);
     }else{
-        document.getElementById('checkboxL').checked = false;
+        cstudioSetCheckboxChecked('checkboxL', false);
     }
     if (checkB.indexOf("P")!=-1) {
-        document.getElementById('checkboxP').checked = true;
+        cstudioSetCheckboxChecked('checkboxP', true);
     }else{
-        document.getElementById('checkboxP').checked = false;
+        cstudioSetCheckboxChecked('checkboxP', false);
     }
     if (checkB.indexOf("R")!=-1) {
-        document.getElementById('checkboxR').checked = true;
+        cstudioSetCheckboxChecked('checkboxR', true);
     }else{
-        document.getElementById('checkboxR').checked = false;
+        cstudioSetCheckboxChecked('checkboxR', false);
     }
     if (checkB.indexOf("F")!=-1) {
-        document.getElementById('checkboxF').checked = true;
+        cstudioSetCheckboxChecked('checkboxF', true);
     }else{
-        document.getElementById('checkboxF').checked = false;
+        cstudioSetCheckboxChecked('checkboxF', false);
     }
     if (checkB.indexOf("M")!=-1) {
-        document.getElementById('checkboxM').checked = true;
+        cstudioSetCheckboxChecked('checkboxM', true);
     }else{
-        document.getElementById('checkboxM').checked = false;
+        cstudioSetCheckboxChecked('checkboxM', false);
     }
     if (checkB.indexOf("E")!=-1) {
-        document.getElementById('checkboxE').checked = true;
+        cstudioSetCheckboxChecked('checkboxE', true);
     }else{
-        document.getElementById('checkboxE').checked = false;
+        cstudioSetCheckboxChecked('checkboxE', false);
     }
     if (checkB.indexOf("G")!=-1) {
-        document.getElementById('checkboxG').checked = true;
+        cstudioSetCheckboxChecked('checkboxG', true);
     }else{
-        document.getElementById('checkboxG').checked = false;
+        cstudioSetCheckboxChecked('checkboxG', false);
     }
     if (modeUIeol=='a') {
         if (checkB.indexOf("I")!=-1) {
-            document.getElementById('checkboxI').checked = true;
+            cstudioSetCheckboxChecked('checkboxI', true);
         }else{
-            document.getElementById('checkboxI').checked = false;
+            cstudioSetCheckboxChecked('checkboxI', false);
         }
         if (checkB.indexOf("D")!=-1) {
-            document.getElementById('checkboxD').checked = true;
+            cstudioSetCheckboxChecked('checkboxD', true);
             haveprogressiveLevels = true;
         }else{
-            document.getElementById('checkboxD').checked = false;
+            cstudioSetCheckboxChecked('checkboxD', false);
             haveprogressiveLevels = false;
         }
         if (checkB.indexOf("S")!=-1) {
-            document.getElementById('checkboxS').checked = true;
+            cstudioSetCheckboxChecked('checkboxS', true);
         }else{
-            document.getElementById('checkboxS').checked = false;
+            cstudioSetCheckboxChecked('checkboxS', false);
         }
     }
     if (checkB.indexOf("V")!=-1) {
-        document.getElementById('checkboxV').checked = true;
+        cstudioSetCheckboxChecked('checkboxV', true);
         $('#editgameover').css("display","block");
     }else{
-        document.getElementById('checkboxV').checked = false;
+        cstudioSetCheckboxChecked('checkboxV', false);
     }
 
-    document.getElementById('H3').checked = true;
+    cstudioSetCheckboxChecked('H3', true);
     if (checkB.indexOf("H4")!=-1) {
-        document.getElementById('H4').checked = true;
+        cstudioSetCheckboxChecked('H4', true);
     }
     if (checkB.indexOf("H5")!=-1) {
-        document.getElementById('H5').checked = true;
+        cstudioSetCheckboxChecked('H5', true);
     }
     if (checkB.indexOf("H6")!=-1) {
-        document.getElementById('H6').checked = true;
+        cstudioSetCheckboxChecked('H6', true);
     }
     if (checkB.indexOf("H7")!=-1) {
-        document.getElementById('H7').checked = true;
+        cstudioSetCheckboxChecked('H7', true);
     }
     if (checkB.indexOf("H8")!=-1) {
-        document.getElementById('H8').checked = true;
+        cstudioSetCheckboxChecked('H8', true);
     }
 
     var messageNoOk = getObjD[2];
@@ -9942,6 +10042,9 @@ function getParamsGlobal() {
             setTimeout(function(){
                 loadOptGlobal();
                 $('#allParamsAreaload').css("display","none");
+                if (!cstudioShowExperimentalTabs && startTab!=1) {
+                    startTab = 1;
+                }
                 if (startTab==3) {
                     displayParamsTab3();
                 } else {
@@ -9973,67 +10076,67 @@ function saveParamsGlobal(){
 	
     var optdata = $('#dataimgglobal').val() + "@";
 
-    if (document.getElementById('checkboxT').checked) {
+    if (cstudioIsCheckboxChecked('checkboxT')) {
 		optdata += "T";
     }
-    if (document.getElementById('checkboxN').checked) {
+    if (cstudioIsCheckboxChecked('checkboxN')) {
 		optdata += "N";
     }
-    if (document.getElementById('checkboxL').checked) {
+    if (cstudioIsCheckboxChecked('checkboxL')) {
 		optdata += "L";
     }
-    if (document.getElementById('checkboxP').checked) {
+    if (cstudioIsCheckboxChecked('checkboxP')) {
 		optdata += "P";
     }
-    if (document.getElementById('checkboxR').checked) {
+    if (cstudioIsCheckboxChecked('checkboxR')) {
 		optdata += "R";
     }
-    if (document.getElementById('checkboxF').checked) {
+    if (cstudioIsCheckboxChecked('checkboxF')) {
 		optdata += "F";
     }
-    if (document.getElementById('checkboxM').checked) {
+    if (cstudioIsCheckboxChecked('checkboxM')) {
 		optdata += "M";
     }
-    if (document.getElementById('checkboxE').checked) {
+    if (cstudioIsCheckboxChecked('checkboxE')) {
 		optdata += "E";
     }
-    if (document.getElementById('checkboxG').checked) {
+    if (cstudioIsCheckboxChecked('checkboxG')) {
 		optdata += "G";
     }
     if (modeUIeol=='a') {
-        if (document.getElementById('checkboxI').checked) {
+        if (cstudioIsCheckboxChecked('checkboxI')) {
             optdata += "I";
         }
-        if (document.getElementById('checkboxD').checked) {
+        if (cstudioIsCheckboxChecked('checkboxD')) {
             optdata += "D";
         }
     }
-    if (document.getElementById('checkboxV').checked) {
+    if (cstudioIsCheckboxChecked('checkboxV')) {
 		optdata += "V";
     }
 
     if (document.getElementById('checkboxS')){
-        if (document.getElementById('checkboxS').checked) {
+        if (cstudioIsCheckboxChecked('checkboxS')) {
             optdata += "S";
         }
     }
     
-    if (document.getElementById('H3').checked) {
+    if (cstudioIsCheckboxChecked('H3')) {
 		optdata += "H3";
     }
-    if (document.getElementById('H4').checked) {
+    if (cstudioIsCheckboxChecked('H4')) {
 		optdata += "H4";
     }
-    if (document.getElementById('H5').checked) {
+    if (cstudioIsCheckboxChecked('H5')) {
 		optdata += "H5";
     }
-    if (document.getElementById('H6').checked) {
+    if (cstudioIsCheckboxChecked('H6')) {
 		optdata += "H6";
     }
-    if (document.getElementById('H7').checked) {
+    if (cstudioIsCheckboxChecked('H7')) {
 		optdata += "H7";
     }
-    if (document.getElementById('H8').checked) {
+    if (cstudioIsCheckboxChecked('H8')) {
 		optdata += "H8";
     }
     
@@ -10048,7 +10151,7 @@ function saveParamsGlobal(){
 			optionsGlobalPage = optdata;
             $('#pageEditGlobalParams').css("display","none");
             closeAllEditWindows();
-            if (document.getElementById('checkboxV').checked) {
+            if (cstudioIsCheckboxChecked('checkboxV')) {
                 uploadGameOverImage();
             }
             forceProcessRenderSco();
@@ -15405,19 +15508,25 @@ function selectLangUI(lg) {
 	}
 
 	setCstudioLangCookie(lg);
+	langselectUI = lg;
 
-	if (langselectUI=='en_US') {
-		if(localStorage){
-			localStorage.setItem("langselectUI",lg);
-		}
-		closeAllEditWindows();
-		cstudioI18nInit(lg, traductAll);
-	} else {
-		if(localStorage){
-			localStorage.setItem("langselectUI",lg);
-			reloadEditorAll();
-		}
+	if(localStorage){
+		localStorage.setItem("langselectUI",lg);
 	}
+
+	closeAllEditWindows();
+
+	$('#btnsave').css("display","none");
+	$('#loadsave').css("display","block");
+	saveSourceFrame(false,false,0);
+
+	// The editor is generated by legacy JavaScript, so changing the language in
+	// place leaves many already-rendered controls with their previous text.
+	// Reload the editor after saving so all UI strings are rebuilt with the
+	// selected locale and the user does not have to refresh manually.
+	setTimeout(function(){
+		window.location.reload();
+	},1600);
 
 }
 
@@ -15555,9 +15664,8 @@ function traductAll() {
 
     langselectUI = langselectUIStore;
     
-    if (langselectUI=='en_US') { 
-        return false;
-    }
+    // Keep processing English too, so UI can be restored after switching
+    // from another language without leaving already translated labels in place.
 
     $( ".gjs-block-label" ).not('.onetrd').each(function( index ) {
         $(this).addClass("trd");
@@ -15593,6 +15701,18 @@ function traductAll() {
         $(this).removeClass("trd");
         
     });
+
+    $('.trd-title').each(function () {
+        var label = $(this).attr('title');
+        if (label) {
+            var translatedLabel = returnTradTerm(label);
+            $(this).attr('title', translatedLabel);
+            $(this).attr('aria-label', translatedLabel);
+        }
+    });
+
+    cstudioApplyEditorTooltips();
+    cstudioFixVisibleEditorLabels();
 
 }
 
@@ -16390,7 +16510,7 @@ function displaySubPageEdit(i){
 		bdDiv += '<div class="gjs-am-add-asset" ';
 		bdDiv += 'style="padding:25px;padding-top:15px;font-size:16px;" >';
 
-		bdDiv += '<div class="gjs-am-add-asset oelTitlePage" style="padding:4px;" >Title&nbsp;:&nbsp;';
+		bdDiv += '<div class="gjs-am-add-asset oelTitlePage" style="padding:4px;" ><span class="trd cstudio-title-label">Title</span>&nbsp;:&nbsp;';
 		bdDiv += '<input id="inputTitlePage" type="text" value="" style="width:450px;font-size:14px;padding:4px;" />';
 		bdDiv += '</div>';
 
@@ -16431,6 +16551,7 @@ function displaySubPageEdit(i){
 		bdDiv += '</div>';
 
 		$('body').append(bdDiv);
+        traductAll();
 
 	}
 

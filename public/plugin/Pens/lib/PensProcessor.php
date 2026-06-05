@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt. */
 
+use Chamilo\CoreBundle\Helpers\SafeHttpClientHelper;
+use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
+
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 require_once __DIR__.'/pens.php';
 
@@ -141,66 +144,74 @@ class PensProcessor
             throw new PENSException(1432);
         }
 
-        $curlHandle = curl_init();
-        curl_setopt($curlHandle, CURLOPT_URL, $request->getPackageUrl());
-        curl_setopt($curlHandle, CURLOPT_HEADER, false);
-        curl_setopt($curlHandle, CURLOPT_FILE, $fileHandle);
-        curl_setopt($curlHandle, CURLOPT_FOLLOWLOCATION, false);
-        curl_setopt($curlHandle, CURLOPT_CONNECTTIMEOUT, 15);
-        curl_setopt($curlHandle, CURLOPT_TIMEOUT, 300);
+        $options = [
+            'timeout' => 15,
+            'max_duration' => 300,
+        ];
 
         if (null !== $request->getPackageUrlUserId()) {
-            curl_setopt(
-                $curlHandle,
-                CURLOPT_USERPWD,
-                $request->getPackageUrlUserId().':'.$request->getPackageUrlPassword()
-            );
+            $options['auth_basic'] = [
+                (string) $request->getPackageUrlUserId(),
+                (string) $request->getPackageUrlPassword(),
+            ];
         }
 
-        $result = curl_exec($curlHandle);
-        $curlErrorNumber = curl_errno($curlHandle);
-        $curlErrorMessage = curl_error($curlHandle);
-        $httpStatusCode = (int) curl_getinfo($curlHandle, CURLINFO_RESPONSE_CODE);
+        // SSRF-safe download: NoPrivateNetworkHttpClient refuses any target that
+        // resolves to a loopback/private/reserved range (incl. the metadata
+        // endpoint) and re-validates every redirect hop at connection time, so it
+        // also stops DNS-rebinding the static URL allowlist cannot catch.
+        $client = SafeHttpClientHelper::create();
 
-        curl_close($curlHandle);
-        fclose($fileHandle);
+        try {
+            $response = $client->request('GET', (string) $request->getPackageUrl(), $options);
+            $httpStatusCode = $response->getStatusCode();
+        } catch (ExceptionInterface $exception) {
+            fclose($fileHandle);
 
-        error_log('[Pens][collectPackage] curl result='.var_export($result, true).' errno='.$curlErrorNumber.' http='.$httpStatusCode.' error='.$curlErrorMessage);
-
-        if (false === $result) {
             if (is_file($temporaryPackagePath)) {
                 unlink($temporaryPackagePath);
             }
 
-            switch ($curlErrorNumber) {
-                case CURLE_UNSUPPORTED_PROTOCOL:
-                    throw new PENSException(1301);
+            error_log('[Pens][collectPackage] safe download failed: '.$exception->getMessage());
 
-                case CURLE_URL_MALFORMAT:
-                case CURLE_COULDNT_RESOLVE_PROXY:
-                case CURLE_COULDNT_RESOLVE_HOST:
-                case CURLE_COULDNT_CONNECT:
-                case CURLE_OPERATION_TIMEOUTED:
-                case 78: //CURLE_REMOTE_FILE_NOT_FOUND
-                    throw new PENSException(1310);
-
-                case CURLE_FTP_ACCESS_DENIED: //CURLE_REMOTE_ACCESS_DENIED
-                    throw new PENSException(1312);
-
-                default:
-                    throw new PENSException(1301);
-            }
+            throw new PENSException(1310);
         }
 
+        error_log('[Pens][collectPackage] http='.$httpStatusCode);
+
         if (401 === $httpStatusCode || 403 === $httpStatusCode) {
+            fclose($fileHandle);
             unlink($temporaryPackagePath);
             error_log('[Pens][collectPackage] rejected by remote server');
+
             throw new PENSException(1312);
         }
 
         if ($httpStatusCode >= 400) {
+            fclose($fileHandle);
             unlink($temporaryPackagePath);
             error_log('[Pens][collectPackage] remote server returned http >= 400');
+
+            throw new PENSException(1310);
+        }
+
+        try {
+            foreach ($client->stream($response) as $chunk) {
+                fwrite($fileHandle, $chunk->getContent());
+            }
+
+            fclose($fileHandle);
+        } catch (ExceptionInterface $exception) {
+            if (is_resource($fileHandle)) {
+                fclose($fileHandle);
+            }
+
+            if (is_file($temporaryPackagePath)) {
+                unlink($temporaryPackagePath);
+            }
+
+            error_log('[Pens][collectPackage] safe download stream failed: '.$exception->getMessage());
+
             throw new PENSException(1310);
         }
 
@@ -378,15 +389,20 @@ class PensProcessor
             ? array_merge($request->getSendAlertArray(), $response->getArray())
             : array_merge($request->getSendReceiptArray(), $response->getArray());
 
-        $curlHandle = curl_init($url);
-        curl_setopt($curlHandle, CURLOPT_POST, true);
-        curl_setopt($curlHandle, CURLOPT_POSTFIELDS, $parameters);
-        curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curlHandle, CURLOPT_FOLLOWLOCATION, false);
-        curl_setopt($curlHandle, CURLOPT_CONNECTTIMEOUT, 15);
-        curl_setopt($curlHandle, CURLOPT_TIMEOUT, 60);
-        curl_exec($curlHandle);
-        curl_close($curlHandle);
+        // SSRF-safe callback: the same NoPrivateNetworkHttpClient guard blocks a
+        // receipt/alert POST aimed at loopback or internal hosts, including the
+        // IPv4-mapped IPv6 literal that defeated the static host allowlist.
+        try {
+            SafeHttpClientHelper::create()
+                ->request('POST', $url, [
+                    'body' => $parameters,
+                    'timeout' => 15,
+                    'max_duration' => 60,
+                ])
+                ->getContent(false);
+        } catch (ExceptionInterface $exception) {
+            error_log('[Pens][sendCallback] safe callback failed: '.$exception->getMessage());
+        }
     }
 
     /**
@@ -455,19 +471,21 @@ class PensProcessor
             return false;
         }
 
+        // Strip IPv6 brackets so literals such as [::1] or the IPv4-mapped
+        // [0:0:0:0:0:ffff:7f00:1] are normalized before any host comparison.
+        $host = trim($host, '[]');
+        if ('' === $host) {
+            return false;
+        }
+
         if ($this->isLocalHostName($host)) {
             return $allowCurrentHost && $this->isCurrentApplicationHost($host);
         }
 
-        $resolvedIp = gethostbyname($host);
-        if (filter_var($resolvedIp, FILTER_VALIDATE_IP)) {
-            $isPublicIp = filter_var(
-                $resolvedIp,
-                FILTER_VALIDATE_IP,
-                FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
-            );
-
-            if (!$isPublicIp) {
+        // Reject the URL if any address the host will connect to maps into a
+        // loopback/private/reserved range once normalized through inet_pton.
+        foreach ($this->resolveHostAddresses($host) as $ip) {
+            if (!$this->isPublicIpAddress($ip)) {
                 return $allowCurrentHost && $this->isCurrentApplicationHost($host);
             }
         }
@@ -496,6 +514,62 @@ class PensProcessor
     private function isLocalHostName(string $host): bool
     {
         return in_array($host, ['localhost', '127.0.0.1', '::1'], true);
+    }
+
+    /**
+     * Resolve the host to the list of IP addresses cURL will connect to.
+     *
+     * Literal IPs (v4 or v6) are returned as-is; named hosts are resolved
+     * through gethostbyname, matching the previous behaviour for hostnames.
+     *
+     * @return string[]
+     */
+    private function resolveHostAddresses(string $host): array
+    {
+        if (false !== filter_var($host, FILTER_VALIDATE_IP)) {
+            return [$host];
+        }
+
+        $resolvedIp = gethostbyname($host);
+
+        if ($resolvedIp !== $host && false !== filter_var($resolvedIp, FILTER_VALIDATE_IP)) {
+            return [$resolvedIp];
+        }
+
+        return [];
+    }
+
+    /**
+     * Determine whether an IP literal is publicly routable.
+     *
+     * IPv4-mapped and IPv4-compatible IPv6 literals are collapsed to their
+     * embedded IPv4 address so that, e.g., ::ffff:7f00:1 is judged as the
+     * 127.0.0.1 loopback it really targets instead of slipping through as an
+     * unrecognized IPv6 host.
+     */
+    private function isPublicIpAddress(string $ip): bool
+    {
+        $binary = inet_pton($ip);
+
+        if (false === $binary) {
+            return false;
+        }
+
+        if (16 === strlen($binary)) {
+            $prefix = substr($binary, 0, 12);
+            $ipv4Mapped = "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xff\xff";
+            $ipv4Compatible = str_repeat("\x00", 12);
+
+            if ($prefix === $ipv4Mapped || $prefix === $ipv4Compatible) {
+                $ip = (string) inet_ntop(substr($binary, 12));
+            }
+        }
+
+        return false !== filter_var(
+            $ip,
+            FILTER_VALIDATE_IP,
+            FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
+        );
     }
 
     /**

@@ -84,7 +84,11 @@ class UserRelUserVoter extends Voter
                 break;
 
             case self::VIEW:
-                return true;
+                if ($userRelUser->getUser() === $user || $userRelUser->getFriend() === $user) {
+                    return true;
+                }
+
+                break;
 
             case self::DELETE:
                 if ($userRelUser->getUser() === $user) {

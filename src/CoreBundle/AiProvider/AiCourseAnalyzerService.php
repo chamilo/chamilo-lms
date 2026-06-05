@@ -31,7 +31,6 @@ use const JSON_THROW_ON_ERROR;
 use const JSON_UNESCAPED_SLASHES;
 use const JSON_UNESCAPED_UNICODE;
 use const PATHINFO_EXTENSION;
-use function http_build_query;
 
 final class AiCourseAnalyzerService
 {
@@ -489,7 +488,7 @@ final class AiCourseAnalyzerService
             'origin' => '',
         ];
 
-        return $path.'?'.http_build_query(array_merge($baseParameters, $parameters));
+        return $path.'?'.\http_build_query(array_merge($baseParameters, $parameters));
     }
 
     private function buildLearningPathEditUrl(CLp $learningPath, Course $course, ?Session $session): string
@@ -526,7 +525,7 @@ final class AiCourseAnalyzerService
             'filetype' => $document->getFiletype(),
         ];
 
-        return '/resources/document/'.(int) $courseResourceNode->getId().'/edit_file?'.http_build_query($query);
+        return '/resources/document/'.(int) $courseResourceNode->getId().'/edit_file?'.\http_build_query($query);
     }
 
     private function buildExerciseEditUrl(CQuiz $quiz, Course $course, ?Session $session): string
@@ -535,7 +534,6 @@ final class AiCourseAnalyzerService
             'exerciseId' => (int) $quiz->getIid(),
         ]);
     }
-
 
     /**
      * @param array<int, int> $excludedDocumentIds
@@ -651,8 +649,7 @@ final class AiCourseAnalyzerService
         int &$totalCharacters,
         ?Course $course = null,
         ?Session $session = null,
-    ): array
-    {
+    ): array {
         $resourceNode = $document->getResourceNode();
 
         $metadata = [
@@ -862,7 +859,6 @@ final class AiCourseAnalyzerService
         return mb_substr($text, 0, $maxCharacters).'…';
     }
 
-
     /**
      * @param array<string, mixed> $payload
      * @param array<string, mixed> $structured
@@ -1048,7 +1044,7 @@ final class AiCourseAnalyzerService
     }
 
     /**
-     * @param array<int, mixed> $structuredItems
+     * @param array<int, mixed>    $structuredItems
      * @param array<string, mixed> $payloadItem
      *
      * @return array<string, mixed>
@@ -1146,9 +1142,8 @@ final class AiCourseAnalyzerService
         }
 
         $value = mb_strtolower(trim($value));
-        $value = preg_replace('/\s+/', ' ', $value) ?? $value;
 
-        return $value;
+        return preg_replace('/\s+/', ' ', $value) ?? $value;
     }
 
     /**

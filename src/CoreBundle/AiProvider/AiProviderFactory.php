@@ -9,9 +9,9 @@ namespace Chamilo\CoreBundle\AiProvider;
 use Chamilo\CoreBundle\Repository\AiRequestsRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use InvalidArgumentException;
-use Throwable;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Throwable;
 
 final class AiProviderFactory
 {

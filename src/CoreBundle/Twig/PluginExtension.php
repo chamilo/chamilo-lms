@@ -19,8 +19,7 @@ final class PluginExtension extends AbstractExtension
 
     public function __construct(
         private readonly PluginHelper $pluginHelper,
-    ) {
-    }
+    ) {}
 
     public function getFunctions(): array
     {

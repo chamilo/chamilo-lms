@@ -21,7 +21,6 @@ use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
-use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;

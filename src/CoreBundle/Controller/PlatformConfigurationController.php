@@ -8,8 +8,6 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Bbb;
 use BuyCoursesPlugin;
-use DashboardPlugin;
-use DictionaryPlugin;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CoreBundle\Helpers\TicketProjectHelper;
@@ -19,6 +17,8 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
+use DashboardPlugin;
+use DictionaryPlugin;
 use Doctrine\ORM\EntityManagerInterface;
 use OnlyofficePlugin;
 use RssPlugin;
@@ -399,8 +399,6 @@ class PlatformConfigurationController extends AbstractController
         return [];
     }
 
-
-
     private function getDashboardFrontendConfig(): array
     {
         if (!$this->loadLegacyPluginClass('Dashboard/src/DashboardPlugin.php')
@@ -475,7 +473,7 @@ class PlatformConfigurationController extends AbstractController
 
     private function loadLegacyPluginClass(string $relativePath): bool
     {
-        $filePath = dirname(__DIR__, 3).'/public/plugin/'.$relativePath;
+        $filePath = \dirname(__DIR__, 3).'/public/plugin/'.$relativePath;
 
         if (!is_file($filePath)) {
             return false;

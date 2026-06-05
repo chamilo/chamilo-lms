@@ -221,13 +221,10 @@ final readonly class UpdatePostApplyCommandRunner
             'command' => $displayCommand,
         ]);
 
-        $environment = $definition['environment'] ?? null;
-        if ('composer_install' === $key) {
-            $environment = array_merge(
-                \is_array($environment) ? $environment : [],
-                $this->getComposerEnvironment()
-            );
-        }
+        $environment = array_merge(
+            $this->getCommandRuntimeEnvironment(),
+            \is_array($definition['environment'] ?? null) ? $definition['environment'] : []
+        );
 
         $startedAt = microtime(true);
         $outputBuffer = '';
@@ -498,6 +495,37 @@ final readonly class UpdatePostApplyCommandRunner
     /**
      * @return array<string, string>
      */
+    private function getCommandRuntimeEnvironment(): array
+    {
+        $runtimeBaseDirectory = $this->projectDir.'/var/update/runtime';
+        $runtimeHomeDirectory = $runtimeBaseDirectory.'/home';
+        $runtimeCacheDirectory = $runtimeBaseDirectory.'/cache';
+        $runtimeConfigDirectory = $runtimeBaseDirectory.'/config';
+        $runtimeDataDirectory = $runtimeBaseDirectory.'/data';
+        $npmCacheDirectory = $this->projectDir.'/var/update/npm/cache';
+
+        $this->ensureDirectory($runtimeHomeDirectory);
+        $this->ensureDirectory($runtimeCacheDirectory);
+        $this->ensureDirectory($runtimeConfigDirectory);
+        $this->ensureDirectory($runtimeDataDirectory);
+        $this->ensureDirectory($npmCacheDirectory);
+
+        return array_merge(
+            [
+                'HOME' => $runtimeHomeDirectory,
+                'XDG_CACHE_HOME' => $runtimeCacheDirectory,
+                'XDG_CONFIG_HOME' => $runtimeConfigDirectory,
+                'XDG_DATA_HOME' => $runtimeDataDirectory,
+                'npm_config_cache' => $npmCacheDirectory,
+            ],
+            $this->getComposerEnvironment(),
+            $this->getYarnEnvironment()
+        );
+    }
+
+    /**
+     * @return array<string, string>
+     */
     private function getComposerEnvironment(): array
     {
         $baseDirectory = $this->projectDir.'/var/update/composer';
@@ -510,6 +538,25 @@ final readonly class UpdatePostApplyCommandRunner
         return [
             'COMPOSER_HOME' => $homeDirectory,
             'COMPOSER_CACHE_DIR' => $cacheDirectory,
+        ];
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function getYarnEnvironment(): array
+    {
+        $baseDirectory = $this->projectDir.'/var/update/yarn';
+        $corepackDirectory = $baseDirectory.'/corepack';
+        $cacheDirectory = $baseDirectory.'/cache';
+
+        $this->ensureDirectory($corepackDirectory);
+        $this->ensureDirectory($cacheDirectory);
+
+        return [
+            'COREPACK_HOME' => $corepackDirectory,
+            'YARN_CACHE_FOLDER' => $cacheDirectory,
+            'YARN_ENABLE_GLOBAL_CACHE' => 'false',
         ];
     }
 
@@ -622,9 +669,12 @@ final readonly class UpdatePostApplyCommandRunner
             $this->assertWritablePathForAction($this->projectDir.'/var/cache', $this->projectDir.'/var', 'cache_clear');
         }
 
+        $requiresIsolatedRuntime = isset($selectedActions['composer_install'])
+            || isset($selectedActions['yarn_install'])
+            || isset($selectedActions['yarn_build']);
+
         if (isset($selectedActions['composer_install'])) {
             $this->assertWritablePathForAction($this->projectDir.'/vendor', $this->projectDir, 'composer_install');
-            $this->getComposerEnvironment();
         }
 
         if (isset($selectedActions['yarn_install'])) {
@@ -633,6 +683,21 @@ final readonly class UpdatePostApplyCommandRunner
 
         if (isset($selectedActions['yarn_build'])) {
             $this->assertWritablePathForAction($this->projectDir.'/public/build', $this->projectDir.'/public', 'yarn_build');
+        }
+
+        if ($requiresIsolatedRuntime) {
+            $runtimeEnvironment = $this->getCommandRuntimeEnvironment();
+            $details['command_runtime_environment'] = [
+                'home' => $runtimeEnvironment['HOME'],
+                'xdg_cache_home' => $runtimeEnvironment['XDG_CACHE_HOME'],
+                'xdg_config_home' => $runtimeEnvironment['XDG_CONFIG_HOME'],
+                'xdg_data_home' => $runtimeEnvironment['XDG_DATA_HOME'],
+                'composer_home' => $runtimeEnvironment['COMPOSER_HOME'],
+                'composer_cache_dir' => $runtimeEnvironment['COMPOSER_CACHE_DIR'],
+                'corepack_home' => $runtimeEnvironment['COREPACK_HOME'],
+                'yarn_cache_folder' => $runtimeEnvironment['YARN_CACHE_FOLDER'],
+                'npm_config_cache' => $runtimeEnvironment['npm_config_cache'],
+            ];
         }
 
         if (isset($selectedActions['doctrine_migrations']) && !is_file($this->projectDir.'/bin/console')) {

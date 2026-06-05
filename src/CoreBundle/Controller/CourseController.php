@@ -872,6 +872,16 @@ class CourseController extends ToolBaseController
     #[Route('/{id}/getToolIntro', name: 'chamilo_core_course_gettoolintro')]
     public function getToolIntro(Request $request, Course $course, EntityManagerInterface $em): Response
     {
+        // Reading a tool introduction requires access to the course. CourseVoter::VIEW
+        // grants course members (students/teachers), session users and anonymous users
+        // on public courses, while honoring course visibility and prerequisite locks.
+        $this->denyAccessUnlessGranted(CourseVoter::VIEW, $course);
+
+        $toolTitle = trim((string) $request->query->get('tool', 'course_homepage'));
+        if ('' === $toolTitle) {
+            $toolTitle = 'course_homepage';
+        }
+
         $sessionId = (int) $request->query->get('sid', 0);
 
         $session = null;

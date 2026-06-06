@@ -79,6 +79,15 @@ $fsPath = 'CStudio/editor/img_cache/'.$requestedPath;
 $pluginFileSystem = Container::getPluginsFileSystem();
 
 if (!$pluginFileSystem->fileExists($fsPath)) {
+    if ('css' === $ext && 'customcode.css' === basename($requestedPath)) {
+        header('Content-Type: text/css; charset=utf-8');
+        header('Content-Length: 0');
+        header('Cache-Control: private, max-age=60');
+        header('X-Content-Type-Options: nosniff');
+
+        exit;
+    }
+
     http_response_code(404);
 
     exit;

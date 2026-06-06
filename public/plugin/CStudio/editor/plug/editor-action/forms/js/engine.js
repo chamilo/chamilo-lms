@@ -3,6 +3,161 @@
 
 var globalSortable;
 
+var cstudioButtonEditorMessages = {
+    en: {
+        main: 'Main',
+        game: 'Game',
+        fx: 'Fx',
+        availableActions: 'Available actions',
+        currentActions: 'Current button actions',
+        dragActionsHere: 'Drag actions here',
+        helpTitle: 'Button behavior help',
+        helpText: 'Choose a simple behavior with the radio buttons, or use the no-code editor to build advanced behavior. Drag actions from the left list to the right list. Conditions run the following actions only when question objects are OK or KO.',
+        ifQuestionOk: 'If the question objects are OK',
+        ifQuestionKo: 'If the question objects are KO',
+        deleteLife: 'Delete life',
+        addLife: 'Add life',
+        nextPage: 'Next page',
+        nextPageIfOk: 'Next page if OK',
+        previousPage: 'Previous page',
+        reset: 'Reset',
+        functionCall: 'Function',
+        goPage: 'Go to page',
+        autoLevel: 'Auto level',
+        viewErrors: 'View errors',
+        noCodeEditor: 'No-code editor'
+    },
+    es: {
+        main: 'Principal',
+        game: 'Juego',
+        fx: 'Efectos',
+        availableActions: 'Acciones disponibles',
+        currentActions: 'Acciones del botón',
+        dragActionsHere: 'Arrastra acciones aquí',
+        helpTitle: 'Ayuda del comportamiento del botón',
+        helpText: 'Elige un comportamiento simple con los botones de opción, o usa el editor sin código para crear un comportamiento avanzado. Arrastra acciones de la lista izquierda a la lista derecha. Las condiciones ejecutan las acciones siguientes solo cuando los objetos de pregunta están correctos o incorrectos.',
+        ifQuestionOk: 'Si los objetos de pregunta están correctos',
+        ifQuestionKo: 'Si los objetos de pregunta están incorrectos',
+        deleteLife: 'Quitar vida',
+        addLife: 'Agregar vida',
+        nextPage: 'Página siguiente',
+        nextPageIfOk: 'Página siguiente si está correcto',
+        previousPage: 'Página anterior',
+        reset: 'Reiniciar',
+        functionCall: 'Función',
+        goPage: 'Ir a la página',
+        autoLevel: 'Nivel automático',
+        viewErrors: 'Ver errores',
+        noCodeEditor: 'Editor sin código'
+    },
+    fr: {
+        main: 'Principal',
+        game: 'Jeu',
+        fx: 'Effets',
+        availableActions: 'Actions disponibles',
+        currentActions: 'Actions du bouton',
+        dragActionsHere: 'Glissez les actions ici',
+        helpTitle: 'Aide sur le comportement du bouton',
+        helpText: 'Choisissez un comportement simple avec les boutons radio, ou utilisez l’éditeur sans code pour créer un comportement avancé. Glissez les actions de la liste de gauche vers la liste de droite. Les conditions exécutent les actions suivantes uniquement lorsque les objets de question sont corrects ou incorrects.',
+        ifQuestionOk: 'Si les objets de question sont corrects',
+        ifQuestionKo: 'Si les objets de question sont incorrects',
+        deleteLife: 'Retirer une vie',
+        addLife: 'Ajouter une vie',
+        nextPage: 'Page suivante',
+        nextPageIfOk: 'Page suivante si correct',
+        previousPage: 'Page précédente',
+        reset: 'Réinitialiser',
+        functionCall: 'Fonction',
+        goPage: 'Aller à la page',
+        autoLevel: 'Niveau automatique',
+        viewErrors: 'Voir les erreurs',
+        noCodeEditor: 'Éditeur sans code'
+    },
+    it: {
+        main: 'Principale',
+        game: 'Gioco',
+        fx: 'Effetti',
+        availableActions: 'Azioni disponibili',
+        currentActions: 'Azioni del pulsante',
+        dragActionsHere: 'Trascina qui le azioni',
+        helpTitle: 'Aiuto sul comportamento del pulsante',
+        helpText: 'Scegli un comportamento semplice con i pulsanti di opzione, oppure usa l’editor senza codice per creare un comportamento avanzato. Trascina le azioni dalla lista di sinistra alla lista di destra. Le condizioni eseguono le azioni successive solo quando gli oggetti domanda sono corretti o errati.',
+        ifQuestionOk: 'Se gli oggetti domanda sono corretti',
+        ifQuestionKo: 'Se gli oggetti domanda sono errati',
+        deleteLife: 'Rimuovi vita',
+        addLife: 'Aggiungi vita',
+        nextPage: 'Pagina successiva',
+        nextPageIfOk: 'Pagina successiva se corretta',
+        previousPage: 'Pagina precedente',
+        reset: 'Reimposta',
+        functionCall: 'Funzione',
+        goPage: 'Vai alla pagina',
+        autoLevel: 'Livello automatico',
+        viewErrors: 'Vedi errori',
+        noCodeEditor: 'Editor senza codice'
+    }
+};
+
+function cstudioButtonEditorLanguage() {
+    var lang = '';
+
+    try {
+        if (window.parent && window.parent.langselectUI) {
+            lang = window.parent.langselectUI;
+        }
+    } catch (e) {
+        lang = '';
+    }
+
+    if (!lang && window.navigator) {
+        lang = window.navigator.language || window.navigator.userLanguage || '';
+    }
+
+    lang = (lang || 'en').toLowerCase();
+
+    if (lang.indexOf('es') === 0) {
+        return 'es';
+    }
+
+    if (lang.indexOf('fr') === 0) {
+        return 'fr';
+    }
+
+    if (lang.indexOf('it') === 0) {
+        return 'it';
+    }
+
+    return 'en';
+}
+
+function cstudioButtonEditorText(key) {
+    var lang = cstudioButtonEditorLanguage();
+    var messages = cstudioButtonEditorMessages[lang] || cstudioButtonEditorMessages.en;
+
+    return messages[key] || cstudioButtonEditorMessages.en[key] || key;
+}
+
+function cstudioButtonEditorEscape(value) {
+    return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+function cstudioButtonEditorHelpHtml() {
+    var h = '';
+
+    h += '<div class="cstudio-button-editor-help">';
+    h += '<strong>' + cstudioButtonEditorEscape(cstudioButtonEditorText('helpTitle')) + '</strong>';
+    h += '<p>' + cstudioButtonEditorEscape(cstudioButtonEditorText('helpText')) + '</p>';
+    h += '</div>';
+
+    return h;
+}
+
+
 //init
 function actionspersoShow(){
 	
@@ -67,10 +222,12 @@ function fctInnerActionsEdit(lst,lst2){
 	var params =  lst2.split('|');
 
 	p += '<div class="actionsThemes" >';
-	p += '<a class="tabMain tabBtn" onClick="showTabMain();" >Main</a>';
-	p += '<a class="tabGame tabBtn" onClick="showTabGame();" >Game</a>';
-	p += '<a class="tabFx tabBtn" onClick="showTabFx();" >Fx</a>';
+	p += '<a class="tabMain tabBtn" onClick="showTabMain();" title="' + cstudioButtonEditorEscape(cstudioButtonEditorText('availableActions')) + '" >' + cstudioButtonEditorEscape(cstudioButtonEditorText('main')) + '</a>';
+	p += '<a class="tabGame tabBtn" onClick="showTabGame();" >' + cstudioButtonEditorEscape(cstudioButtonEditorText('game')) + '</a>';
+	p += '<a class="tabFx tabBtn" onClick="showTabFx();" >' + cstudioButtonEditorEscape(cstudioButtonEditorText('fx')) + '</a>';
 	p += '</div>';
+
+	p += cstudioButtonEditorHelpHtml();
 
 	p += '<ul id="listactions2" style="background-color:#BDBDBD;" ';
 	p += ' class="actionsliste '+ globalSortable +'" >';
@@ -93,7 +250,7 @@ function fctInnerActionsEdit(lst,lst2){
 	p += '</ul>';
 
 	if(lst.indexOf("|")==-1){
-		p += '<div class="actionslistehelp" >Drag actions here</div>';
+		p += '<div class="actionslistehelp" >' + cstudioButtonEditorEscape(cstudioButtonEditorText('dragActionsHere')) + '</div>';
 	}
 
 	p += '<ul id="listactions1" style="border:dotted 1px gray;" class="actionsliste '+globalSortable+'" >';
@@ -174,49 +331,49 @@ function lineActionsEdit(id,pa,vi){
 	
 	switch(id){
 		case "cod1":
-			p = '<li ' + sty + ' id="cod1" class="cod1" ><div class="minCondi Pos" >&nbsp;If the question objects are OK</div></li>';
+			p = '<li ' + sty + ' id="cod1" class="cod1" ><div class="minCondi Pos" >&nbsp;' + cstudioButtonEditorEscape(cstudioButtonEditorText('ifQuestionOk')) + '</div></li>';
 			break;
 		case "cod2":
-			p = '<li ' + sty + ' id="cod2" class="cod2" ><div class="minCondi Neg" >&nbsp;If the question objects are KO</div></li>';
+			p = '<li ' + sty + ' id="cod2" class="cod2" ><div class="minCondi Neg" >&nbsp;' + cstudioButtonEditorEscape(cstudioButtonEditorText('ifQuestionKo')) + '</div></li>';
 			break;
 		case "act1":
-			p = '<li ' + sty + ' id="act1" class="act1" ><div class="minAction" >Delete&nbsp;life&nbsp;<img src="img/life.png" /></div></li>';
+			p = '<li ' + sty + ' id="act1" class="act1" ><div class="minAction" >' + cstudioButtonEditorEscape(cstudioButtonEditorText('deleteLife')) + '&nbsp;<img src="img/life.png" /></div></li>';
 			break;
 		case "act2":
-			p = '<li ' + sty + ' id="act2" class="act2" ><div class="minAction" >Add&nbsp;life&nbsp;<img src="img/life.png" /></div></li>';
+			p = '<li ' + sty + ' id="act2" class="act2" ><div class="minAction" >' + cstudioButtonEditorEscape(cstudioButtonEditorText('addLife')) + '&nbsp;<img src="img/life.png" /></div></li>';
 			break;
 		case "act3":
-			p = '<li ' + sty + ' id="act3" class="act3" ><div class="minAction" >Next page</div></li>';
+			p = '<li ' + sty + ' id="act3" class="act3" ><div class="minAction" >' + cstudioButtonEditorEscape(cstudioButtonEditorText('nextPage')) + '</div></li>';
 			break;
 		case "act4":
-			p = '<li ' + sty + ' id="act4" class="act4" ><div class="minAction" >Next page if OK</div></li>';
+			p = '<li ' + sty + ' id="act4" class="act4" ><div class="minAction" >' + cstudioButtonEditorEscape(cstudioButtonEditorText('nextPageIfOk')) + '</div></li>';
 			break;
 		case "act5":
-			p = '<li ' + sty + ' id="act5" class="act5" ><div class="minAction" >Prev page</div></li>';
+			p = '<li ' + sty + ' id="act5" class="act5" ><div class="minAction" >' + cstudioButtonEditorEscape(cstudioButtonEditorText('previousPage')) + '</div></li>';
 			break;
 		case "act6":
-			p = '<li ' + sty + ' id="act6" class="act6" ><div class="minAction" >Reset</div></li>';
+			p = '<li ' + sty + ' id="act6" class="act6" ><div class="minAction" >' + cstudioButtonEditorEscape(cstudioButtonEditorText('reset')) + '</div></li>';
 			break;
 		
 		case "act7":
 			var pasc = parseFctTxt(pa);
-			p = '<li ' + sty + ' id="act7" class="act7" ><div class="minAction" >F:&nbsp;';
+			p = '<li ' + sty + ' id="act7" class="act7" ><div class="minAction" >' + cstudioButtonEditorEscape(cstudioButtonEditorText('functionCall')) + ':&nbsp;';
 			p += '<input type="text" class="minFct valFct" value="'+pasc+'" /></div></li>';
 			break;
 		case "act8":
 			var pasc = parseFctTxt(pa);
-			p = '<li ' + sty + ' id="act8" class="act8" ><div class="minAction" >goPage:&nbsp;';
+			p = '<li ' + sty + ' id="act8" class="act8" ><div class="minAction" >' + cstudioButtonEditorEscape(cstudioButtonEditorText('goPage')) + ':&nbsp;';
 			p += '<input type="number" class="numFct valFct" value="'+pasc+'" /></div></li>';
 			break;
 		case "act9":
-			p = '<li ' + sty + ' id="act9" class="act9" ><div class="minAction" >auto level&nbsp;';
+			p = '<li ' + sty + ' id="act9" class="act9" ><div class="minAction" >' + cstudioButtonEditorEscape(cstudioButtonEditorText('autoLevel')) + '&nbsp;';
 			p += '<span style="position:relative;display:inline-block;width:12px;height:12px;background-color:#52BE80;"></span>';
 			p += '<span style="position:relative;display:inline-block;width:12px;height:12px;background-color:#3b97e3;"></span>';
 			p += '<span style="position:relative;display:inline-block;width:12px;height:12px;background-color:#EB984E;"></span>';
 			p += '</div></li>';
 			break;
 		case "cor3":
-			p = '<li ' + sty + ' id="cor3" class="cor3" ><div class="minAction" >&nbsp;View&nbsp;errors&nbsp;</div></li>';
+			p = '<li ' + sty + ' id="cor3" class="cor3" ><div class="minAction" >&nbsp;' + cstudioButtonEditorEscape(cstudioButtonEditorText('viewErrors')) + '&nbsp;</div></li>';
 			break;
 	}
 	

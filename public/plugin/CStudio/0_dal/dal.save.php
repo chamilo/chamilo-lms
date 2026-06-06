@@ -208,82 +208,100 @@ function get_top_page_by_lpid($idLudiLP)
 
 function range_all_pages($idTopPage, $idPage, $action, $idUrl): void
 {
+    $idTopPage = (int) $idTopPage;
     $idPage = (int) $idPage;
     $action = (int) $action;
-    $findBefore = false;
-    $idOld = 0;
-    $orderOld = 0;
-    $orderActual = 0;
-    $idBefore = 0;
-    $orderBefore = 0;
-    $idAfter = 0;
-    $orderAfter = 0;
+
+    if ($idTopPage <= 0 || $idPage <= 0 || !in_array($action, [0, 1], true)) {
+        echo 'KO';
+
+        return;
+    }
+
+    $VDB = new VirtualDatabase();
     $table = 'plugin_oel_tools_teachdoc';
 
-    // MAJ
-    $sqlSubs = 'SELECT id,order_lst FROM plugin_oel_tools_teachdoc ';
-    $sqlSubs .= " WHERE type_node <> -1 AND id_parent = $idTopPage ORDER BY order_lst ";
+    $sqlSubs = 'SELECT id FROM plugin_oel_tools_teachdoc ';
+    $sqlSubs .= " WHERE type_node <> -1 AND id_parent = $idTopPage ";
+    $sqlSubs .= ' ORDER BY order_lst, id';
+
+    $resultSubs = $VDB->query_to_array($sqlSubs);
+    $pageIds = [];
+
+    foreach ($resultSubs as $PartSub) {
+        $pageIds[] = (int) $PartSub['id'];
+    }
+
+    if (count($pageIds) < 2) {
+        echo 'KO';
+
+        return;
+    }
+
+    $currentPosition = array_search($idPage, $pageIds, true);
+
+    if (false === $currentPosition) {
+        echo 'KO';
+
+        return;
+    }
+
+    $targetPosition = 0 === $action ? $currentPosition - 1 : $currentPosition + 1;
+
+    if (!isset($pageIds[$targetPosition])) {
+        echo 'KO';
+
+        return;
+    }
+
+    $tmpPageId = $pageIds[$currentPosition];
+    $pageIds[$currentPosition] = $pageIds[$targetPosition];
+    $pageIds[$targetPosition] = $tmpPageId;
 
     $indexOrder = 1;
 
-    $VDB = new VirtualDatabase();
-    $resultSubs = $VDB->query_to_array($sqlSubs);
-
-    foreach ($resultSubs as $key => $PartSub) {
-        $id = $PartSub['id'];
-        $sqlUpdate = ' UPDATE plugin_oel_tools_teachdoc ';
-        $sqlUpdate .= " SET order_lst = $indexOrder ";
-        $sqlUpdate .= " WHERE plugin_oel_tools_teachdoc.id = $id ";
+    foreach ($pageIds as $orderedPageId) {
+        $orderedPageId = (int) $orderedPageId;
+        $sqlUpdate = "UPDATE $table ";
+        $sqlUpdate .= "SET order_lst = $indexOrder ";
+        $sqlUpdate .= "WHERE id = $orderedPageId AND id_parent = $idTopPage";
         $VDB->query($sqlUpdate);
+
         ++$indexOrder;
     }
 
-    // BEFORE NEXT
-    $resultSubs = $VDB->query_to_array($sqlSubs);
-    foreach ($resultSubs as $key => $PartSub) {
-        if ($findBefore) {
-            $idAfter = $PartSub['id'];
-            $orderAfter = $PartSub['order_lst'];
-            $findBefore = false;
-        }
-        if ($idPage == $PartSub['id']) {
-            $findBefore = true;
-            $orderActual = $PartSub['order_lst'];
-            $idBefore = $idOld;
-            $orderBefore = $orderOld;
-        }
-        $idOld = $PartSub['id'];
-        $orderOld = $PartSub['order_lst'];
+    echo 'OK';
+}
+
+
+function cstudio_course_project_language_default($projectLang): string
+{
+    $lang = str_replace('-', '_', trim((string) $projectLang));
+
+    if ('' === $lang) {
+        return 'en';
     }
 
-    if (0 == $action) {
-        if ($idBefore > 0) {
-            $params = ['order_lst' => $orderActual];
-            $VDB->update($table, $params, ['id = ? AND id_url = ?' => [$idBefore, $idUrl]]);
-            if ($orderActual > 0) {
-                $params = ['order_lst' => ($orderActual - 1)];
-                $VDB->update($table, $params, ['id = ? AND id_url = ?' => [$idPage, $idUrl]]);
-                echo 'OK';
-            } else {
-                echo 'KO';
-            }
-        }
+    $aliases = [
+        'en_US' => 'en',
+        'fr_FR' => 'fr',
+        'es_ES' => 'es',
+        'pt_BR' => 'pt',
+        'pt_PT' => 'pt',
+        'zh_CN' => 'zh',
+        'zh_TW' => 'zh',
+        'nn_NO' => 'no',
+    ];
+
+    if (isset($aliases[$lang])) {
+        return $aliases[$lang];
     }
 
-    if (1 == $action) {
-        if ($idAfter > 0) {
-            $params = ['order_lst' => $orderActual];
-            $VDB->update($table, $params, ['id = ? AND id_url = ?' => [$idAfter, $idUrl]]);
-
-            if ($orderActual > 0) {
-                $params = ['order_lst' => ($orderActual + 1)];
-                $VDB->update($table, $params, ['id = ? AND id_url = ?' => [$idPage, $idUrl]]);
-                echo 'OK';
-            } else {
-                echo 'KO';
-            }
-        }
+    if (str_contains($lang, '_')) {
+        return strtolower((string) strstr($lang, '_', true));
     }
+
+    return strtolower($lang);
 }
 
 function get_oel_tools_infos($idPageTop)
@@ -293,6 +311,8 @@ function get_oel_tools_infos($idPageTop)
     $idPageTop = (int) $idPageTop;
     $UrlWhere = '';
 
+    $defaultProjectLang = cstudio_course_project_language_default($VDB->w_api_get_course_locale());
+
     $arrayKeys = [
         'lp_id' => 0,
         'title' => '',
@@ -301,6 +321,7 @@ function get_oel_tools_infos($idPageTop)
         'optionsProjectImg' => '',
         'optionsProjectCheck' => '',
         'optionsProjectMessKo' => '',
+        'optionsProjectLang' => $defaultProjectLang,
         'quizztheme' => '',
         'date_create' => '',
     ];
@@ -321,7 +342,7 @@ function get_oel_tools_infos($idPageTop)
         $arrayKeys['optionsProject'] = $Part['options'];
         $arrayKeys['quizztheme'] = $Part['quizztheme'];
         $arrayKeys['date_create'] = $Part['date_create'];
-        $arrayKeys['optionsProjectLang'] = 'en';
+        $arrayKeys['optionsProjectLang'] = $defaultProjectLang;
         $arrayKeys['optionsProjectMessKo'] = 'Page incomplete';
         $arrayKeys['optionsProjectImg'] = '';
         $arrayKeys['optionsProjectCheck'] = ' ';
@@ -345,7 +366,7 @@ function get_oel_tools_infos($idPageTop)
             if ('' != $optD[3]) {
                 $arrayKeys['optionsProjectLang'] = $optD[3];
             } else {
-                $arrayKeys['optionsProjectLang'] = 'en';
+                $arrayKeys['optionsProjectLang'] = $defaultProjectLang;
             }
         }
     }

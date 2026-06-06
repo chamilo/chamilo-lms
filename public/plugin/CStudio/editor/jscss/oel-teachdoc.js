@@ -69,6 +69,30 @@ function cstudioTranslateTerm(term) {
     return term;
 }
 
+function cstudioEscapeHtml(value) {
+    return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+function cstudioBuildQuizCheckButtonHtml() {
+    var label = cstudioEscapeHtml(cstudioTranslateTerm('Check answers'));
+
+    var html = '<tr class="cstudio-qcm-check-row">';
+    html += '<td colspan="2" style="text-align:center;padding:12px;">';
+    html += '<button type="button" class="cstudio-quiz-check-button" ';
+    html += 'onclick="if (typeof LUDI !== \'undefined\' && typeof LUDI.checkAll === \'function\') { LUDI.checkAll(); } return false;">';
+    html += label;
+    html += '</button>';
+    html += '</td>';
+    html += '</tr>';
+
+    return html;
+}
+
 function cstudioSetElementTooltip(selector, label) {
     var translatedLabel = cstudioTranslateTerm(label);
     $(selector).each(function () {
@@ -102,6 +126,51 @@ function cstudioStartEditorUiEnhancements() {
     }, 500);
 }
 
+function cstudioTranslateDefaultCheckAnswerLabel(label) {
+    var normalizedLabel = $.trim(String(label || '')).replace(/\s+/g, ' ');
+
+    var defaultLabels = [
+        'Check answers',
+        'Check the answers',
+        'Comprobar respuestas',
+        'Vérifier les réponses',
+        'Controlla le risposte'
+    ];
+
+    if (defaultLabels.indexOf(normalizedLabel) === -1) {
+        return label;
+    }
+
+    return cstudioTranslateTerm('Check answers');
+}
+
+function cstudioTranslateBlockLabels() {
+    $('.gjs-block').each(function () {
+        var block = $(this);
+        var labelNode = block.find('.gjs-block-label').first();
+
+        if (!labelNode.length) {
+            return;
+        }
+
+        var rawLabel = $.trim(labelNode.text()).replace(/\s+/g, ' ');
+        if (!rawLabel) {
+            return;
+        }
+
+        var translatedLabel = cstudioTranslateTerm(rawLabel);
+        if (translatedLabel !== rawLabel) {
+            labelNode.text(translatedLabel);
+        }
+
+        var rawTitle = block.attr('title');
+        if (rawTitle) {
+            var translatedTitle = cstudioTranslateTerm($.trim(rawTitle).replace(/\s+/g, ' '));
+            block.attr('title', translatedTitle);
+        }
+    });
+}
+
 function cstudioFixVisibleEditorLabels() {
     $('.ludiButtonSaveMenu').each(function () {
         $(this).html(cstudioTranslateTerm('Save'));
@@ -117,6 +186,15 @@ function cstudioFixVisibleEditorLabels() {
             $(this).html(cstudioTranslateTerm('Help and pro services'));
         }
     });
+
+    $('.btn-btnTeach, .cstudio-quiz-check-button').each(function () {
+        var translatedLabel = cstudioTranslateDefaultCheckAnswerLabel($(this).text());
+        if (translatedLabel !== $(this).text()) {
+            $(this).text(translatedLabel);
+        }
+    });
+
+    cstudioTranslateBlockLabels();
 }
 
 
@@ -1756,39 +1834,11 @@ function upContextMenuSub(u){
 
 		onlyOneUpdate = false;
 		updateMenuEvent = true;
-		
+
 		scrollTeachdoc = $('.ludimenuteachdoc').scrollTop();
 
 		$('.minIcon').css("display","none");
 		$('#labelMenuLudi'+refIdPageLudi).css('color','orange');
-		
-		if(u==0){
-
-			if(refPosiPageLudi>0){
-				refPosiPageLudi = refPosiPageLudi - 1;
-				$('.ludiEditMenuContext').css("top",parseInt(78 + (refPosiPageLudi * 35) - scrollTeachdoc)+"px");
-			}
-			
-			var $current = $('#labelMenuLudi'+refIdPageLudi).parent();
-			var $previous = $current.prev('li');
-			if($previous.length !== 0){
-			  $current.insertBefore($previous);
-			}
-		}
-
-		if(u==1){
-
-			if(refPosiPageLudi>0){
-				refPosiPageLudi = refPosiPageLudi + 1;
-				$('.ludiEditMenuContext').css("top",parseInt(78 + (refPosiPageLudi * 35) - scrollTeachdoc)+"px");
-			}
-
-			var $current = $('#labelMenuLudi'+refIdPageLudi).parent().next();
-			var $previous = $current.prev('li');
-			if($previous.length !== 0){
-			  $current.insertBefore($previous);
-			}
-		}
 
 		$.ajax({
 			url : '../ajax/save/ajax.subdocmoveup.php?a='+u+'&id=' + refIdPageLudi + '&pt=' + idPageHtmlTop + '&cotk=' + $('#cotk').val(),
@@ -1796,21 +1846,32 @@ function upContextMenuSub(u){
 			data : formData,
 			success: function(data,textStatus,jqXHR){
 
-				if(data.indexOf('KO')==-1){
+				if(String(data).indexOf('OK')!=-1){
+					if(u==0){
+						refPosiPageLudi = Math.max(1, refPosiPageLudi - 1);
+					}
+
+					if(u==1){
+						refPosiPageLudi = refPosiPageLudi + 1;
+					}
+
+					$('.ludiEditMenuContext').css("top",parseInt(78 + (refPosiPageLudi * 35) - scrollTeachdoc)+"px");
 					$('#labelMenuLudi'+refIdPageLudi).css('color','black');
 					$('#labelMenuLudi'+refIdPageLudi).css('background','#F3E2A9');
-					$('.minIcon').css("display","block");
+					refreshMenu(refIdPageLudi);
 				}else{
 					$('#labelMenuLudi'+refIdPageLudi).css('color','orange');
 					$('#labelMenuLudi'+refIdPageLudi).css('text-decoration','none');
 				}
-				refreshMenu(refIdPageLudi);
+
+				$('.minIcon').css("display","block");
 				onlyOneUpdate = true;
-				
+
 			},error: function (jqXHR, textStatus, errorThrown)
 			{
 				$('#logMsgLoad').css("display","block");
 				$('#logMsgLoad').html("Error !");
+				$('.minIcon').css("display","block");
 				onlyOneUpdate = true;
 			}
 		});
@@ -3361,6 +3422,7 @@ function saveQcmEdit() {
 		renderH += "</tr>";	
 	}
 
+	renderH += cstudioBuildQuizCheckButtonHtml();
 	renderH += "</tbody>";
 	
 	if(GlobalTagGrappeObj=='div'){
@@ -5310,7 +5372,7 @@ btnSrc += '<tr><td style="text-align:center;padding:10px;width:100%;" >';
 
 btnSrc += '<a href="" class="btn-btnTeach btnteachblue" ';
 btnSrc += 'name="submit" type="button"  >';
-btnSrc += 'Check the answers</a>';
+btnSrc += cstudioEscapeHtml(cstudioTranslateTerm('Check answers')) + '</a>';
 
 btnSrc += '</td></tr></table>';
 
@@ -6915,6 +6977,7 @@ baseRenderLUDIQcm += '<tr class=quizzTextTr ><td class=quizzTextTd ><img class=c
 baseRenderLUDIQcm += '</td><td style="text-align:left;" >'+returnTradTerm("Answer 2")+'</td></tr>';
 baseRenderLUDIQcm += '<tr class=quizzTextTr ><td class=quizzTextTd ><img class=checkboxqcm src="img/qcm/matgreen0.png" />';
 baseRenderLUDIQcm += '</td><td style="text-align:left;" >'+returnTradTerm("Answer 3")+'</td></tr>';
+baseRenderLUDIQcm += cstudioBuildQuizCheckButtonHtml();
 baseRenderLUDIQcm +='</table>';
 
 bCMQ = baseRenderLUDIQcm;
@@ -9714,6 +9777,152 @@ function quitEditorAll(){
 var startTab = 1;
 var cstudioShowExperimentalTabs = false;
 
+function cstudioGetLanguageNames(){
+    return {
+        'ar':'العربية','ast_ES':'Asturianu','bg':'Български','bs_BA':'Bosanski',
+        'ca_ES':'Català','cs_CZ':'Čeština','da':'Dansk','de':'Deutsch',
+        'el':'Ελληνικά','en_US':'English','eo':'Esperanto','es':'Español',
+        'eu_ES':'Euskara','fa_IR':'فارسی','fi_FI':'Suomi','fr_FR':'Français',
+        'gl':'Galego','he_IL':'עברית','hi':'हिन्दी','hr_HR':'Hrvatski',
+        'hu_HU':'Magyar','id_ID':'Bahasa Indonesia','it':'Italiano','ja':'日本語',
+        'ka_GE':'ქართული','ko_KR':'한국어','lt_LT':'Lietuvių','lv_LV':'Latviešu',
+        'ms_MY':'Bahasa Melayu','nl':'Nederlands','nn_NO':'Norsk nynorsk',
+        'pl_PL':'Polski','pt_BR':'Português (Brasil)','pt_PT':'Português (Portugal)',
+        'ro_RO':'Română','ru_RU':'Русский','sk_SK':'Slovenčina','sl_SI':'Slovenščina',
+        'sr_RS':'Српски','sv_SE':'Svenska','th':'ภาษาไทย','tr':'Türkçe',
+        'uk_UA':'Українська','vi_VN':'Tiếng Việt','zh_CN':'中文（简体）','zh_TW':'中文（繁體）'
+    };
+}
+
+function cstudioGetAvailableProjectLocales(){
+    var available = (typeof cstudioAvailableLocales !== 'undefined') ? cstudioAvailableLocales : ['en_US'];
+    var locales = [];
+    for (var i = 0; i < available.length; i++) {
+        var locale = String(available[i] || '').replace('-', '_');
+        if (locale !== '' && locales.indexOf(locale) === -1) {
+            locales.push(locale);
+        }
+    }
+    if (locales.length === 0) {
+        locales.push('en_US');
+    }
+    return locales;
+}
+
+function cstudioCanonicalProjectLocale(value){
+    var locale = String(value || '').replace('-', '_');
+    if (locale === '') {
+        return '';
+    }
+
+    var aliases = {
+        'en':'en_US',
+        'fr':'fr_FR',
+        'es_ES':'es',
+        'pt':'pt_PT',
+        'zh':'zh_CN',
+        'no':'nn_NO'
+    };
+
+    if (typeof aliases[locale] !== 'undefined') {
+        locale = aliases[locale];
+    }
+
+    var available = cstudioGetAvailableProjectLocales();
+    if (available.indexOf(locale) !== -1) {
+        return locale;
+    }
+
+    var base = locale.split('_')[0];
+    for (var i = 0; i < available.length; i++) {
+        if (available[i].split('_')[0] === base) {
+            return available[i];
+        }
+    }
+
+    return '';
+}
+
+function cstudioGetDefaultProjectLanguage(){
+    var courseLocale = (typeof cstudioCourseLocale !== 'undefined') ? cstudioCourseLocale : '';
+    var canonicalCourseLocale = cstudioCanonicalProjectLocale(courseLocale);
+    if (canonicalCourseLocale !== '') {
+        return canonicalCourseLocale;
+    }
+
+    var currentUiLocale = cstudioCanonicalProjectLocale(langselectUI);
+    if (currentUiLocale !== '') {
+        return currentUiLocale;
+    }
+
+    return cstudioCanonicalProjectLocale('en_US') || 'en_US';
+}
+
+function cstudioBuildProjectLanguageSelect(){
+    var names = cstudioGetLanguageNames();
+    var locales = cstudioGetAvailableProjectLocales();
+    var options = [];
+
+    for (var i = 0; i < locales.length; i++) {
+        var locale = locales[i];
+        options.push({
+            code: locale,
+            label: names[locale] || locale
+        });
+    }
+
+    options.sort(function(a, b) {
+        return a.label.localeCompare(b.label);
+    });
+
+    var select = '<select name="projectLangSelect" id="projectLangSelect" style="padding:5px;" class="projectLangSelect" >';
+    for (var j = 0; j < options.length; j++) {
+        select += '<option value="' + options[j].code + '">' + options[j].label + '</option>';
+    }
+    select += '</select>';
+
+    return select;
+}
+
+function cstudioSetProjectLanguageValue(value){
+    var selectedLocale = cstudioCanonicalProjectLocale(value);
+    if (selectedLocale === '') {
+        selectedLocale = cstudioGetDefaultProjectLanguage();
+    }
+
+    var select = $('#projectLangSelect');
+    if (select.find('option[value="' + selectedLocale + '"]').length === 0) {
+        selectedLocale = cstudioCanonicalProjectLocale('en_US') || 'en_US';
+    }
+
+    select.val(selectedLocale);
+}
+
+function cstudioGetDefaultPageIncompleteMessage(){
+    if (typeof returnTradTerm === 'function') {
+        return returnTradTerm('Page incomplete');
+    }
+
+    return 'Page incomplete';
+}
+
+function cstudioIsDefaultPageIncompleteMessage(message){
+    var value = String(message || '').trim();
+
+    if (value === '') {
+        return true;
+    }
+
+    var defaultMessages = [
+        'Page incomplete',
+        'Página incompleta',
+        'Page incomplète',
+        'Pagina incompleta'
+    ];
+
+    return defaultMessages.indexOf(value) !== -1;
+}
+
 function displayGlobalParams(){
 	
 	$('.ludimenu').css("z-index","2");
@@ -9749,33 +9958,27 @@ function displayGlobalParams(){
         // allParamsArea 1
 		bdDiv += '<div id="allParamsArea" class="gjs-am-add-asset containBlocParams" >';
         
-        bdDiv += '<p class="trd" style="position:relative;margin-left:80px;" >Learning path thumbnail (click to change)</p>';
-        
-        bdDiv += '<div title="Learning path thumbnail (click to change)" ';
-        bdDiv += ' style="position:absolute;left:55%;top:14px;width:30%;height:79px;';
-        bdDiv += 'max-height:80px;cursor:pointer;overflow:hidden;border:solid 1px gray;" >';
-        bdDiv += '<img title="Learning path thumbnail (click to change)" onClick="loadAnImage();" onerror="this.src=\'img/classique/oel_back.jpg\';" id="imgshow" src="img/classique/oel_back.jpg" ';
-        bdDiv += ' style="position:absolute;width:100%;height:auto;cursor:pointer;" />';
+        bdDiv += '<div class="cstudio-project-thumbnail-row">';
+        bdDiv += '<div class="cstudio-project-thumbnail-label trd">Learning path thumbnail (click to change)</div>';
+        bdDiv += '<div class="cstudio-project-thumbnail-controls">';
+        bdDiv += '<div class="cstudio-project-thumbnail-preview" title="Learning path thumbnail (click to change)" onClick="loadAnImage();">';
+        bdDiv += '<img title="Learning path thumbnail (click to change)" onerror="this.src=\'img/classique/oel_back.jpg\';" id="imgshow" src="img/classique/oel_back.jpg" />';
         bdDiv += '</div>';
-
-        bdDiv += '<img title="Reset thumbnail" onClick="initProjectImage();" src="img/bross.png" ';
-        bdDiv += ' style="position:absolute;right:40px;top:15px;';
-        bdDiv += 'width:22px;height:22px;cursor:pointer;" />';
+        bdDiv += '<img class="cstudio-project-thumbnail-reset" title="Reset thumbnail" onClick="initProjectImage();" src="img/bross.png" />';
+        bdDiv += '</div>';
+        bdDiv += '</div>';
 
         bdDiv += '<input id="dataimgglobal" style="display:none;" type="text" value="" />';
 
-        bdDiv += '<div style="position:relative;margin:15px;margin-top:45px;" >';
+        bdDiv += '<div class="cstudio-options-field-row" >';
+
         bdDiv += '<span class="trd" >&nbsp;&nbsp;Message&nbsp;page&nbsp;Ko&nbsp;:&nbsp;</span>';
         bdDiv += '<input style="position:relative;width:300px;padding:5px;" id="messageNoOk" type="text" value="" />';
         bdDiv += '</div>';
 
         bdDiv += '<div style="position:relative;margin:15px;" >';
         bdDiv += '<span>&nbsp;&nbsp;<span class="trd" >Language of the project</span>&nbsp;:&nbsp;</span>';
-        bdDiv += '<select name="projectLangSelect" id="projectLangSelect" style="padding:5px;" class="projectLangSelect" >';
-        bdDiv += '<option value="en">English</option>';
-        bdDiv += '<option value="fr">Francais</option>';
-        bdDiv += '<option value="es">Spanish</option>';
-        bdDiv += '</select>';
+        bdDiv += cstudioBuildProjectLanguageSelect();
         bdDiv += '</div>';
         
         if (modeUIeol=='a') {
@@ -10013,16 +10216,14 @@ function loadOptGlobal(){
     }
 
     var messageNoOk = getObjD[2];
-    if (messageNoOk!='') {
-        $('#messageNoOk').val(messageNoOk);
+    if (cstudioIsDefaultPageIncompleteMessage(messageNoOk)) {
+        $('#messageNoOk').val(cstudioGetDefaultPageIncompleteMessage());
     } else {
-        $('#messageNoOk').val('Page incomplete');
+        $('#messageNoOk').val(messageNoOk);
     }
 
     var langLST = parseTexte(getObjD[3]);
-    if (langLST!='') {
-        $('#projectLangSelect').val(langLST);
-    }
+    cstudioSetProjectLanguageValue(langLST);
     
 }
 

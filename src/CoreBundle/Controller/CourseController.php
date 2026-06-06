@@ -270,7 +270,7 @@ class CourseController extends ToolBaseController
                 && $pluginConfiguration
                 && $pluginConfiguration->isActive();
 
-            $topLinksRelationClass = 'Chamilo\\PluginBundle\\TopLinks\\Entity\\TopLinkRelShortcut';
+            $topLinksRelationClass = 'Chamilo\PluginBundle\TopLinks\Entity\TopLinkRelShortcut';
             $topLinksEntityPath = \dirname(__DIR__, 3).'/public/plugin/TopLinks/src/Entity/TopLinkRelShortcut.php';
             $topLinksRepositoryPath = \dirname(__DIR__, 3).'/public/plugin/TopLinks/src/Entity/Repository/TopLinkRelShortcutRepository.php';
 
@@ -292,8 +292,7 @@ class CourseController extends ToolBaseController
                 && $topLinksPluginEntity->isInstalled()
                 && $topLinksConfiguration
                 && $topLinksConfiguration->isActive()
-                && class_exists($topLinksRelationClass)
-            ;
+                && class_exists($topLinksRelationClass);
 
             if ($isTopLinksEnabled) {
                 try {
@@ -325,8 +324,7 @@ class CourseController extends ToolBaseController
                 && $embedRegistryPluginEntity->isInstalled()
                 && $embedRegistryConfiguration
                 && $embedRegistryConfiguration->isActive()
-                && $isEmbedRegistryAvailable
-            ;
+                && $isEmbedRegistryAvailable;
 
             $courseNodeId = $course->getResourceNode()->getId();
             $cid = $course->getId();

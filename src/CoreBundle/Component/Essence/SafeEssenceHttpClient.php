@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Component\Essence;
 use Chamilo\CoreBundle\Helpers\SafeHttpClientHelper;
 use Essence\Http\Client;
 use Essence\Http\Exception as EssenceHttpException;
+use Exception;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 
 /**
@@ -52,7 +53,7 @@ final class SafeEssenceHttpClient implements Client
         } catch (ExceptionInterface $e) {
             // Blocked, unreachable or HTTP error: surface as Essence's own
             // exception so the provider skips the embed instead of leaking.
-            throw new EssenceHttpException((string) $url, 0, $e instanceof \Exception ? $e : null);
+            throw new EssenceHttpException((string) $url, 0, $e instanceof Exception ? $e : null);
         }
     }
 }

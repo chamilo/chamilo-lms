@@ -70,7 +70,7 @@ final readonly class CBlogAssignAuthorProcessor implements ProcessorInterface
      * has at least VIEW access on the target blog's resource node, so a comment,
      * post or task cannot be created against a blog the user cannot reach.
      */
-    private function assertCanWriteToTargetBlog(CBlogPost|CBlogComment|CBlogTask $data): void
+    private function assertCanWriteToTargetBlog(CBlogComment|CBlogPost|CBlogTask $data): void
     {
         $blog = $data->getBlog();
 

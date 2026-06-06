@@ -363,7 +363,6 @@ class CidReqListener
         $this->resetContextRolesOnTokenUser();
     }
 
-
     private function denyRequest(RequestEvent $event, Request $request, string $message): void
     {
         if ($request->isXmlHttpRequest() || str_contains((string) $request->headers->get('Accept'), 'application/json')) {

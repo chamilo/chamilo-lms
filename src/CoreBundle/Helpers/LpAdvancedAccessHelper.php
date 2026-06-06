@@ -113,9 +113,7 @@ final readonly class LpAdvancedAccessHelper
         }
 
         /** @var list<CLpRelUser> $restrictions */
-        $restrictions = $qb->getQuery()->getResult();
-
-        return $restrictions;
+        return $qb->getQuery()->getResult();
     }
 
     private function restrictionAllowsAccess(CLpRelUser $restriction): bool

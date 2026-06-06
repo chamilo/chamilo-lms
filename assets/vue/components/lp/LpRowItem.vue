@@ -56,6 +56,22 @@ const updateScormUrl = computed(() =>
   }),
 )
 
+const isLpSubscriptionMode = computed(() => Number(props.lp?.subscribeUsers ?? props.lp?.subscribe_users ?? 0) === 1)
+
+const isLpVisible = computed(() => {
+  const value = props.lp?.visible ?? props.lp?.visibility
+
+  if (typeof value === "undefined" || value === null || value === "") {
+    return true
+  }
+
+  if (typeof value === "string") {
+    return ["1", "true", "v", "visible", "published"].includes(value.toLowerCase())
+  }
+
+  return Boolean(value)
+})
+
 const togglePublishUrl = computed(() =>
   lpService.buildLegacyActionUrl(props.lp.iid, "toggle_publish", {
     ...props.legacyContext,
@@ -66,7 +82,7 @@ const togglePublishUrl = computed(() =>
 const toggleVisibleUrl = computed(() =>
   lpService.buildLegacyActionUrl(props.lp.iid, "toggle_visible", {
     ...props.legacyContext,
-    params: { new_status: typeof props.lp.visible !== "undefined" ? (props.lp.visible ? 0 : 1) : 1 },
+    params: { new_status: isLpVisible.value ? 0 : 1 },
   }),
 )
 
@@ -87,6 +103,24 @@ const advancedAccessUrl = computed(() => {
   search.set("lp_id", props.lp.iid)
 
   return `/resources/lp/${props.legacyContext.node}/advanced-access?${search.toString()}`
+})
+
+const visibilityAction = computed(() => {
+  if (isLpSubscriptionMode.value) {
+    return {
+      label: t("Learning path only visible to selected learners"),
+      icon: "eye-on",
+      disabled: true,
+      toUrl: null,
+    }
+  }
+
+  return {
+    label: isLpVisible.value ? t("Hide") : t("Show"),
+    icon: isLpVisible.value ? "eye-on" : "eye-off",
+    disabled: false,
+    toUrl: toggleVisibleUrl.value,
+  }
 })
 
 const onDelete = () => {
@@ -129,16 +163,17 @@ const buttonActions = computed(() =>
       visible: true,
     },
     {
-      label: t("Visibility"),
-      icon: "visible",
-      toUrl: toggleVisibleUrl.value,
+      label: visibilityAction.value.label,
+      icon: visibilityAction.value.icon,
+      toUrl: visibilityAction.value.toUrl,
+      disabled: visibilityAction.value.disabled,
       visible: true,
     },
     {
-      label: t("Advanced access"),
-      icon: "calendar-plus",
+      label: t("Subscribe users to learning path"),
+      icon: "join-group",
       toUrl: advancedAccessUrl.value,
-      visible: true,
+      visible: isLpSubscriptionMode.value,
     },
     {
       label: t("Settings"),
@@ -190,14 +225,20 @@ const itemActions = computed(() => [
 
 const mItemActionsMobile = ref()
 
-const itemActionsMobile = computed(() => [
-  { label: t("Publish / Hide"), url: togglePublishUrl.value },
-  { label: t("Advanced access"), url: advancedAccessUrl.value },
-  { label: t("Export as SCORM"), url: exportScormUrl.value, visible: props.canExportScorm },
-  { label: t("Update SCORM"), visible: canUpdateScorm.value, url: updateScormUrl.value },
-  { label: t("Settings"), url: lpService.buildLegacyActionUrl(props.lp.iid, "edit", props.legacyContext) },
-  { label: t("Delete"), command: onDelete },
-])
+const itemActionsMobile = computed(() =>
+  [
+    { label: t("Publish / Hide"), url: togglePublishUrl.value },
+    {
+      label: t("Subscribe users to learning path"),
+      url: advancedAccessUrl.value,
+      visible: isLpSubscriptionMode.value,
+    },
+    { label: t("Export as SCORM"), url: exportScormUrl.value, visible: props.canExportScorm },
+    { label: t("Update SCORM"), visible: canUpdateScorm.value, url: updateScormUrl.value },
+    { label: t("Settings"), url: lpService.buildLegacyActionUrl(props.lp.iid, "edit", props.legacyContext) },
+    { label: t("Delete"), command: onDelete },
+  ].filter((item) => item.visible !== false),
+)
 </script>
 
 <template>
@@ -355,6 +396,7 @@ const itemActionsMobile = computed(() => [
               :key="i"
               :class="buttonAction.styleClass"
               :icon="buttonAction.icon"
+              :disabled="buttonAction.disabled"
               :label="buttonAction.label"
               :route="buttonAction.route"
               :to-url="buttonAction.toUrl"

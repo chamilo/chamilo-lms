@@ -246,6 +246,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     protected int $maxAttempts;
 
     #[ORM\Column(name: 'subscribe_users', type: 'integer', nullable: false)]
+    #[Groups(['lp:read'])]
     protected int $subscribeUsers;
 
     #[Gedmo\Timestampable(on: 'create')]
@@ -301,6 +302,10 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     #[Groups(['lp:read'])]
     #[SerializedName('progress')]
     private ?int $progress = null;
+
+    #[Groups(['lp:read'])]
+    #[SerializedName('visible')]
+    private ?bool $visible = null;
 
     public function __construct()
     {
@@ -807,9 +812,20 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     {
         return $this->progress ?? 0;
     }
+
     public function setProgress(?int $progress): void
     {
         $this->progress = $progress;
+    }
+
+    public function getVisible(): bool
+    {
+        return $this->visible ?? true;
+    }
+
+    public function setVisible(?bool $visible): void
+    {
+        $this->visible = $visible;
     }
 
     public function getResourceIdentifier(): int|Uuid

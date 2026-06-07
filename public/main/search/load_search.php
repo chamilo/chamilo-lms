@@ -117,7 +117,7 @@ if ($userToLoad) {
     $formSearch->setDefaults(['user_id' => $userToLoad]);
     $items = $em->getRepository(ExtraFieldSavedSearch::class)->findBy(['user' => api_get_user_entity($userToLoad)]);
     if (empty($items)) {
-        Display::addFlash(Display::return_message('No data found'));
+        Display::addFlash(Display::return_message(get_lang('No data found')));
     }
 }
 

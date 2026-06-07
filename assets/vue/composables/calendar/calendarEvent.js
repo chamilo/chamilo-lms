@@ -1,5 +1,6 @@
 import { DateTime } from "luxon"
 
+import baseService from "../../services/baseService"
 import cCalendarEventService from "../../services/ccalendarevent"
 import { subscriptionVisibility, type } from "../../constants/entity/ccalendarevent"
 import { useFormatDate } from "../formatDate"
@@ -126,24 +127,12 @@ async function requestLearningCalendarEvents(startDate, endDate, commonParams) {
     return []
   }
 
-  const params = new URLSearchParams({
-    startDate: startDate.toISOString(),
-    endDate: endDate.toISOString(),
-  })
-
   try {
-    const response = await fetch(`/plugin/LearningCalendar/my_events.php?${params.toString()}`, {
-      credentials: "same-origin",
-      headers: {
-        Accept: "application/json",
-      },
+    const payload = await baseService.get("/plugin/LearningCalendar/my_events.php", {
+      startDate: startDate.toISOString(),
+      endDate: endDate.toISOString(),
     })
 
-    if (!response.ok) {
-      return []
-    }
-
-    const payload = await response.json()
     const events = Array.isArray(payload.events) ? payload.events : []
 
     return events.map(mapCalendarEvent)

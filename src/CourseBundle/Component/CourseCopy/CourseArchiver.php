@@ -6,19 +6,22 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Component\CourseCopy;
 
+use __PHP_Incomplete_Class;
+use Chamilo\CoreBundle\Helpers\DateTimeHelper;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Asset;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Document;
-use Chamilo\CoreBundle\Helpers\DateTimeHelper;
-use DateTime;
 use PclZip;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RuntimeException;
+use stdClass;
 use Symfony\Component\Filesystem\Filesystem;
 use Throwable;
 use UnserializeApi;
 use ZipArchive;
 
+use const JSON_UNESCAPED_SLASHES;
+use const JSON_UNESCAPED_UNICODE;
 use const PATHINFO_EXTENSION;
 
 /**
@@ -31,37 +34,51 @@ use const PATHINFO_EXTENSION;
  */
 class CourseArchiver
 {
-    /** @var bool Global debug flag (true by default) */
+    /**
+     * @var bool Global debug flag (true by default)
+     */
     private static bool $debug = false;
 
-    /** Debug logger (safe JSON, truncated) */
+    /**
+     * Debug logger (safe JSON, truncated).
+     */
     private static function dlog(string $stage, mixed $payload = null): void
     {
-        if (!self::$debug) { return; }
-        $prefix = 'COURSE_ARCHIVER';
-        if ($payload === null) {
-            error_log("$prefix: $stage");
+        if (!self::$debug) {
             return;
         }
+        $prefix = 'COURSE_ARCHIVER';
+        if (null === $payload) {
+            error_log("$prefix: $stage");
+
+            return;
+        }
+
         try {
             $json = json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-            if ($json !== null && strlen($json) > 8000) {
-                $json = substr($json, 0, 8000) . '…(truncated)';
+            if (null !== $json && \strlen($json) > 8000) {
+                $json = substr($json, 0, 8000).'…(truncated)';
             }
         } catch (Throwable $e) {
-            $json = '[payload_json_error: ' . $e->getMessage() . ']';
+            $json = '[payload_json_error: '.$e->getMessage().']';
         }
-        error_log("$prefix: $stage -> " . $json);
+        error_log("$prefix: $stage -> ".$json);
     }
 
-    /** Allow toggling debug at runtime. */
+    /**
+     * Allow toggling debug at runtime.
+     */
     public static function setDebug(?bool $flag): void
     {
-        if ($flag === null) { return; }
+        if (null === $flag) {
+            return;
+        }
         self::$debug = (bool) $flag;
     }
 
-    /** Expose aliases/typed-props helpers to other components. */
+    /**
+     * Expose aliases/typed-props helpers to other components.
+     */
     public static function preprocessSerializedPayloadForTypedProps(string $serialized): string
     {
         return self::coerceNumericStringsInSerialized($serialized);
@@ -71,13 +88,17 @@ class CourseArchiver
         self::registerLegacyAliases();
     }
 
-    /** @return string */
+    /**
+     * @return string
+     */
     public static function getBackupDir()
     {
-        return api_get_path(SYS_ARCHIVE_PATH) . 'course_backups/';
+        return api_get_path(SYS_ARCHIVE_PATH).'course_backups/';
     }
 
-    /** @return string */
+    /**
+     * @return string
+     */
     public static function createBackupDir()
     {
         $perms = api_get_permissions_for_new_directories();
@@ -89,7 +110,9 @@ class CourseArchiver
         return $dir;
     }
 
-    /** Delete old temp-dirs. */
+    /**
+     * Delete old temp-dirs.
+     */
     public static function cleanBackupDir(): void
     {
         $dir = self::getBackupDir();
@@ -98,12 +121,12 @@ class CourseArchiver
         if (is_dir($dir)) {
             if ($handle = @opendir($dir)) {
                 while (false !== ($file = readdir($handle))) {
-                    if ($file !== '.' && $file !== '..'
+                    if ('.' !== $file && '..' !== $file
                         && str_starts_with($file, 'CourseArchiver_')
-                        && is_dir($dir . '/' . $file)
+                        && is_dir($dir.'/'.$file)
                     ) {
-                        @rmdirr($dir . '/' . $file);
-                        self::dlog('cleanBackupDir.removed', ['path' => $dir . '/' . $file]);
+                        @rmdirr($dir.'/'.$file);
+                        self::dlog('cleanBackupDir.removed', ['path' => $dir.'/'.$file]);
                     }
                 }
                 closedir($handle);
@@ -117,6 +140,7 @@ class CourseArchiver
      * Write a course and all its resources to a zip-file.
      *
      * @param mixed $course
+     *
      * @return string A pointer to the zip-file
      */
     public static function createBackup($course)
@@ -128,15 +152,15 @@ class CourseArchiver
         $backupDirectory = self::getBackupDir();
 
         // Create a temp directory
-        $backup_dir = $backupDirectory . 'CourseArchiver_' . api_get_unique_id() . '/';
+        $backup_dir = $backupDirectory.'CourseArchiver_'.api_get_unique_id().'/';
 
         // All course-information will be stored in course_info.dat
-        $course_info_file = $backup_dir . 'course_info.dat';
+        $course_info_file = $backup_dir.'course_info.dat';
 
         $user = api_get_user_info();
         $date = DateTimeHelper::nowLocalDateTime();
-        $zipFileName = $user['user_id'] . '_' . $course->code . '_' . $date->format('Ymd-His') . '.zip';
-        $zipFilePath = $backupDirectory . $zipFileName;
+        $zipFileName = $user['user_id'].'_'.$course->code.'_'.$date->format('Ymd-His').'.zip';
+        $zipFilePath = $backupDirectory.$zipFileName;
 
         self::dlog('createBackup.begin', [
             'zip' => $zipFileName,
@@ -146,23 +170,23 @@ class CourseArchiver
 
         $php_errormsg = '';
         $res = @mkdir($backup_dir, $perm_dirs);
-        if ($res === false) {
-            error_log(__FILE__ . ' line ' . __LINE__ . ': ' . ($php_errormsg ?: 'mkdir failed') . ' - Archive directory not writable; will prevent backups.', 0);
+        if (false === $res) {
+            error_log(__FILE__.' line '.__LINE__.': '.($php_errormsg ?: 'mkdir failed').' - Archive directory not writable; will prevent backups.', 0);
         }
 
         // Write the course-object to the file
         $fp = @fopen($course_info_file, 'w');
-        if ($fp === false) {
-            error_log(__FILE__ . ' line ' . __LINE__ . ': ' . ($php_errormsg ?: 'fopen failed for course_info.dat'), 0);
+        if (false === $fp) {
+            error_log(__FILE__.' line '.__LINE__.': '.($php_errormsg ?: 'fopen failed for course_info.dat'), 0);
         }
 
         $serialized = @serialize($course);
         $b64 = base64_encode($serialized);
-        $okWrite = $fp !== false ? @fwrite($fp, $b64) : false;
-        if ($okWrite === false) {
-            error_log(__FILE__ . ' line ' . __LINE__ . ': ' . ($php_errormsg ?: 'fwrite failed for course_info.dat'), 0);
+        $okWrite = false !== $fp ? @fwrite($fp, $b64) : false;
+        if (false === $okWrite) {
+            error_log(__FILE__.' line '.__LINE__.': '.($php_errormsg ?: 'fwrite failed for course_info.dat'), 0);
         }
-        if ($fp !== false) {
+        if (false !== $fp) {
             @fclose($fp);
         }
 
@@ -172,23 +196,24 @@ class CourseArchiver
         ]);
 
         // Copy all documents to the temp-dir
-        if (isset($course->resources[RESOURCE_DOCUMENT]) && is_array($course->resources[RESOURCE_DOCUMENT])) {
-            $webEditorCss = api_get_path(WEB_CSS_PATH) . 'editor.css';
+        if (isset($course->resources[RESOURCE_DOCUMENT]) && \is_array($course->resources[RESOURCE_DOCUMENT])) {
+            $webEditorCss = api_get_path(WEB_CSS_PATH).'editor.css';
 
             /** @var Document $document */
             foreach ($course->resources[RESOURCE_DOCUMENT] as $document) {
                 if ('document' === $document->file_type) {
-                    $doc_dir = $backup_dir . $document->path;
-                    @mkdir(dirname($doc_dir), $perm_dirs, true);
-                    if (file_exists($course->path . $document->path)) {
-                        @copy($course->path . $document->path, $doc_dir);
+                    $doc_dir = $backup_dir.$document->path;
+                    @mkdir(\dirname($doc_dir), $perm_dirs, true);
+                    if (file_exists($course->path.$document->path)) {
+                        @copy($course->path.$document->path, $doc_dir);
                         // Check if is html or htm
                         $extension = pathinfo(basename($document->path), PATHINFO_EXTENSION);
+
                         switch ($extension) {
                             case 'html':
                             case 'htm':
                                 $contents = @file_get_contents($doc_dir);
-                                if ($contents !== false) {
+                                if (false !== $contents) {
                                     $contents = str_replace(
                                         $webEditorCss,
                                         '{{css_editor}}',
@@ -196,56 +221,57 @@ class CourseArchiver
                                     );
                                     @file_put_contents($doc_dir, $contents);
                                 }
+
                                 break;
                         }
                     }
                 } else {
-                    @mkdir($backup_dir . $document->path, $perm_dirs, true);
+                    @mkdir($backup_dir.$document->path, $perm_dirs, true);
                 }
             }
         }
 
         // Copy all scorm documents to the temp-dir
-        if (isset($course->resources[RESOURCE_SCORM]) && is_array($course->resources[RESOURCE_SCORM])) {
+        if (isset($course->resources[RESOURCE_SCORM]) && \is_array($course->resources[RESOURCE_SCORM])) {
             foreach ($course->resources[RESOURCE_SCORM] as $document) {
-                @copyDirTo($course->path . $document->path, $backup_dir . $document->path, false);
+                @copyDirTo($course->path.$document->path, $backup_dir.$document->path, false);
             }
         }
 
         // Copy calendar attachments.
-        if (isset($course->resources[RESOURCE_EVENT]) && is_array($course->resources[RESOURCE_EVENT])) {
-            $doc_dir = dirname($backup_dir . '/upload/calendar/');
+        if (isset($course->resources[RESOURCE_EVENT]) && \is_array($course->resources[RESOURCE_EVENT])) {
+            $doc_dir = \dirname($backup_dir.'/upload/calendar/');
             @mkdir($doc_dir, $perm_dirs, true);
-            @copyDirTo($course->path . 'upload/calendar/', $doc_dir, false);
+            @copyDirTo($course->path.'upload/calendar/', $doc_dir, false);
         }
 
         // Copy Learning path author image.
-        if (isset($course->resources[RESOURCE_LEARNPATH]) && is_array($course->resources[RESOURCE_LEARNPATH])) {
-            $doc_dir = dirname($backup_dir . '/upload/learning_path/');
+        if (isset($course->resources[RESOURCE_LEARNPATH]) && \is_array($course->resources[RESOURCE_LEARNPATH])) {
+            $doc_dir = \dirname($backup_dir.'/upload/learning_path/');
             @mkdir($doc_dir, $perm_dirs, true);
-            @copyDirTo($course->path . 'upload/learning_path/', $doc_dir, false);
+            @copyDirTo($course->path.'upload/learning_path/', $doc_dir, false);
         }
 
         // Copy announcements attachments.
-        if (isset($course->resources[RESOURCE_ANNOUNCEMENT]) && is_array($course->resources[RESOURCE_ANNOUNCEMENT])) {
-            $doc_dir = dirname($backup_dir . '/upload/announcements/');
+        if (isset($course->resources[RESOURCE_ANNOUNCEMENT]) && \is_array($course->resources[RESOURCE_ANNOUNCEMENT])) {
+            $doc_dir = \dirname($backup_dir.'/upload/announcements/');
             @mkdir($doc_dir, $perm_dirs, true);
-            @copyDirTo($course->path . 'upload/announcements/', $doc_dir, false);
+            @copyDirTo($course->path.'upload/announcements/', $doc_dir, false);
         }
 
         // Copy work folders (only folders)
-        if (isset($course->resources[RESOURCE_WORK]) && is_array($course->resources[RESOURCE_WORK])) {
-            $doc_dir = $backup_dir . 'work';
+        if (isset($course->resources[RESOURCE_WORK]) && \is_array($course->resources[RESOURCE_WORK])) {
+            $doc_dir = $backup_dir.'work';
             @mkdir($doc_dir, $perm_dirs, true);
-            @copyDirWithoutFilesTo($course->path . 'work/', $doc_dir);
+            @copyDirWithoutFilesTo($course->path.'work/', $doc_dir);
         }
 
-        if (isset($course->resources[RESOURCE_ASSET]) && is_array($course->resources[RESOURCE_ASSET])) {
+        if (isset($course->resources[RESOURCE_ASSET]) && \is_array($course->resources[RESOURCE_ASSET])) {
             /** @var Asset $asset */
             foreach ($course->resources[RESOURCE_ASSET] as $asset) {
-                $doc_dir = $backup_dir . $asset->path;
-                @mkdir(dirname($doc_dir), $perm_dirs, true);
-                $assetPath = $course->path . $asset->path;
+                $doc_dir = $backup_dir.$asset->path;
+                @mkdir(\dirname($doc_dir), $perm_dirs, true);
+                $assetPath = $course->path.$asset->path;
 
                 if (!file_exists($assetPath)) {
                     continue;
@@ -273,6 +299,7 @@ class CourseArchiver
 
     /**
      * @param int $user_id
+     *
      * @return array
      */
     public static function getAvailableBackups($user_id = null)
@@ -287,7 +314,7 @@ class CourseArchiver
         if ($dir = opendir($dirname)) {
             while (false !== ($file = readdir($dir))) {
                 $file_parts = explode('_', $file);
-                if (3 == count($file_parts)) {
+                if (3 == \count($file_parts)) {
                     $owner_id = $file_parts[0];
                     $course_code = $file_parts[1];
                     $file_parts = explode('.', $file_parts[2]);
@@ -295,9 +322,9 @@ class CourseArchiver
                     $ext = $file_parts[1] ?? null;
                     if ('zip' == $ext && ((null != $user_id && $owner_id == $user_id) || (null == $user_id))) {
                         $date =
-                            substr($date, 0, 4) . '-' . substr($date, 4, 2) . '-' .
-                            substr($date, 6, 2) . ' ' . substr($date, 9, 2) . ':' .
-                            substr($date, 11, 2) . ':' . substr($date, 13, 2);
+                            substr($date, 0, 4).'-'.substr($date, 4, 2).'-'.
+                            substr($date, 6, 2).' '.substr($date, 9, 2).':'.
+                            substr($date, 11, 2).':'.substr($date, 13, 2);
                         $backup_files[] = [
                             'file' => $file,
                             'date' => $date,
@@ -314,11 +341,12 @@ class CourseArchiver
 
     /**
      * @param array|string $file path or $_FILES['tmp_name']
+     *
      * @return bool|string
      */
     public static function importUploadedFile($file)
     {
-        $new_filename = uniqid('import_file', true) . '.zip';
+        $new_filename = uniqid('import_file', true).'.zip';
         $new_dir = self::getBackupDir();
         if (!is_dir($new_dir)) {
             $fs = new Filesystem();
@@ -326,8 +354,8 @@ class CourseArchiver
         }
         if (is_dir($new_dir) && is_writable($new_dir)) {
             // move_uploaded_file() may fail in CLI/tests; try rename() as fallback
-            $src = is_array($file) ? ($file['tmp_name'] ?? '') : (string) $file;
-            $dst = $new_dir . $new_filename;
+            $src = \is_array($file) ? ($file['tmp_name'] ?? '') : (string) $file;
+            $dst = $new_dir.$new_filename;
 
             $moved = @move_uploaded_file($src, $dst);
             if (!$moved) {
@@ -335,14 +363,17 @@ class CourseArchiver
             }
             if ($moved) {
                 self::dlog('importUploadedFile.ok', ['dst' => $dst, 'size' => @filesize($dst)]);
+
                 return $new_filename;
             }
 
             self::dlog('importUploadedFile.fail', ['src' => $src, 'dst' => $dst]);
+
             return false;
         }
 
         self::dlog('importUploadedFile.dir_not_writable', ['dir' => $new_dir]);
+
         return false;
     }
 
@@ -358,38 +389,39 @@ class CourseArchiver
      *
      * @throws RuntimeException
      */
-    public static function readCourse(string $filename, bool $delete = false): false|Course
+    public static function readCourse(string $filename, bool $delete = false): Course|false
     {
         self::cleanBackupDir();
         self::createBackupDir();
 
-        $backupDir = rtrim(self::getBackupDir(), '/') . '/';
-        $zipPath = $backupDir . $filename;
+        $backupDir = rtrim(self::getBackupDir(), '/').'/';
+        $zipPath = $backupDir.$filename;
 
         if (!is_file($zipPath)) {
-            throw new RuntimeException('Backup file not found: ' . $filename);
+            throw new RuntimeException('Backup file not found: '.$filename);
         }
 
         self::dlog('readCourse.begin', ['filename' => $filename, 'zipPath' => $zipPath]);
 
         // 1) Extract zip into a temp directory
-        $tmp = $backupDir . 'CourseArchiver_' . uniqid('', true) . '/';
+        $tmp = $backupDir.'CourseArchiver_'.uniqid('', true).'/';
         (new Filesystem())->mkdir($tmp);
 
         $zip = new ZipArchive();
         if (true !== $zip->open($zipPath)) {
-            throw new RuntimeException('Cannot open zip: ' . $filename);
+            throw new RuntimeException('Cannot open zip: '.$filename);
         }
         if (!$zip->extractTo(rtrim($tmp, '/'))) {
             $zip->close();
-            throw new RuntimeException('Cannot extract zip: ' . $filename);
+
+            throw new RuntimeException('Cannot extract zip: '.$filename);
         }
         $zip->close();
 
         // Preserve a local copy of the uploaded zip inside the extracted temp directory.
         // This allows later fallback extraction of individual assets even if the original
         // uploaded zip gets deleted after readCourse().
-        $preservedZipPath = $tmp . '__source_backup.zip';
+        $preservedZipPath = $tmp.'__source_backup.zip';
         $preservedZipOk = @copy($zipPath, $preservedZipPath);
 
         self::dlog('readCourse.preserve_zip', [
@@ -400,12 +432,13 @@ class CourseArchiver
         ]);
 
         // 2) Read course_info.dat (search nested if necessary)
-        $courseInfoDat = $tmp . 'course_info.dat';
+        $courseInfoDat = $tmp.'course_info.dat';
         if (!is_file($courseInfoDat)) {
             $rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($tmp));
             foreach ($rii as $f) {
-                if ($f->isFile() && $f->getFilename() === 'course_info.dat') {
+                if ($f->isFile() && 'course_info.dat' === $f->getFilename()) {
                     $courseInfoDat = $f->getPathname();
+
                     break;
                 }
             }
@@ -415,23 +448,23 @@ class CourseArchiver
         }
 
         $raw = (string) @file_get_contents($courseInfoDat);
-        if ($raw === '') {
+        if ('' === $raw) {
             throw new RuntimeException('course_info.dat is empty');
         }
 
         self::dlog('readCourse.course_info', [
             'path' => $courseInfoDat,
-            'size' => strlen($raw),
-            'md5'  => md5($raw),
+            'size' => \strlen($raw),
+            'md5' => md5($raw),
             'magic_ascii' => preg_replace('/[^\x20-\x7E]/', '.', substr($raw, 0, 16)),
-            'magic_hex'   => bin2hex(substr($raw, 0, 8)),
+            'magic_hex' => bin2hex(substr($raw, 0, 8)),
         ]);
 
         // 3) Decode: prefer base64(serialize), else raw serialize
         $payload = base64_decode($raw, true);
         $encoding = 'base64(php-serialize)';
 
-        if ($payload === false) {
+        if (false === $payload) {
             // Some very old backups stored raw serialize without base64
             $payload = $raw;
             $encoding = 'php-serialize';
@@ -449,19 +482,21 @@ class CourseArchiver
         $unserErr = null;
         $usedRelaxed = false;
 
-        set_error_handler(static function () { /* suppress E_NOTICE/E_WARNING from unserialize */ });
+        set_error_handler(static function (): void { /* suppress E_NOTICE/E_WARNING from unserialize */ });
+
         try {
             if (class_exists('UnserializeApi')) {
                 /** @var Course $c */
                 $c = UnserializeApi::unserialize('course', $payload);
                 $course = $c;
-                $unserOk = is_object($course);
+                $unserOk = \is_object($course);
             } else {
                 /** @var Course|false $c */
-                $c = @unserialize($payload, ['allowed_classes' => true]); // may throw TypeError with typed props
-                if (is_object($c) || ($c === false && trim($payload) === 'b:0;')) {
+                // Defense-in-depth: never instantiate arbitrary classes from a backup payload.
+                $c = @unserialize($payload, ['allowed_classes' => false]);
+                if (\is_object($c) || (false === $c && 'b:0;' === trim($payload))) {
                     $course = $c;
-                    $unserOk = is_object($course);
+                    $unserOk = \is_object($course);
                 } else {
                     $unserOk = false;
                 }
@@ -470,9 +505,9 @@ class CourseArchiver
                 if (!$unserOk) {
                     /** @var mixed $c2 */
                     $c2 = @unserialize($payload, ['allowed_classes' => false]);
-                    if ($c2 !== false || trim($payload) === 'b:0;') {
+                    if (false !== $c2 || 'b:0;' === trim($payload)) {
                         $c2 = self::deincomplete($c2);
-                        if (is_object($c2)) {
+                        if (\is_object($c2)) {
                             $course = $c2;
                             $unserOk = true;
                             $usedRelaxed = true;
@@ -486,9 +521,9 @@ class CourseArchiver
             // Hard fallback inside catch as well
             try {
                 $c2 = @unserialize($payload, ['allowed_classes' => false]);
-                if ($c2 !== false || trim($payload) === 'b:0;') {
+                if (false !== $c2 || 'b:0;' === trim($payload)) {
                     $c2 = self::deincomplete($c2);
-                    if (is_object($c2)) {
+                    if (\is_object($c2)) {
                         $course = $c2;
                         $unserOk = true;
                         $usedRelaxed = true;
@@ -496,7 +531,7 @@ class CourseArchiver
                     }
                 }
             } catch (Throwable $e2) {
-                $unserErr = $unserErr . ' | relaxed: ' . $e2->getMessage();
+                $unserErr = $unserErr.' | relaxed: '.$e2->getMessage();
             }
         } finally {
             restore_error_handler();
@@ -509,7 +544,7 @@ class CourseArchiver
             'error' => $unserErr,
         ]);
 
-        if (!$unserOk || !is_object($course)) {
+        if (!$unserOk || !\is_object($course)) {
             throw new RuntimeException('Could not unserialize legacy course');
         }
 
@@ -519,10 +554,10 @@ class CourseArchiver
         // 8) Expose extraction metadata for downstream restore helpers
         $effectiveZipPath = is_file($preservedZipPath) ? $preservedZipPath : $zipPath;
 
-        if (!isset($course->resources) || !is_array($course->resources)) {
+        if (!isset($course->resources) || !\is_array($course->resources)) {
             $course->resources = [];
         }
-        if (!isset($course->resources['__meta']) || !is_array($course->resources['__meta'])) {
+        if (!isset($course->resources['__meta']) || !\is_array($course->resources['__meta'])) {
             $course->resources['__meta'] = [];
         }
 
@@ -554,43 +589,46 @@ class CourseArchiver
     {
         // If it looks like JSON, do nothing (defensive)
         $t = ltrim($ser);
-        if ($t !== '' && ($t[0] === '{' || $t[0] === '[')) {
+        if ('' !== $t && ('{' === $t[0] || '[' === $t[0])) {
             self::dlog('coerceNumericStrings.skip_json');
+
             return $ser;
         }
 
         // Common identifier keys (conservative list)
         $keys = [
-            'id','iid','c_id','parent_id','thematic_id','attendance_id',
-            'room_id','display_order','session_id','category_id',
+            'id', 'iid', 'c_id', 'parent_id', 'thematic_id', 'attendance_id',
+            'room_id', 'display_order', 'session_id', 'category_id',
             // forum/link/doc/quiz/survey typical relations:
-            'forum_id','thread_id','post_id','survey_id','question_id',
-            'document_id','doc_id','link_id','quiz_id','work_id',
+            'forum_id', 'thread_id', 'post_id', 'survey_id', 'question_id',
+            'document_id', 'doc_id', 'link_id', 'quiz_id', 'work_id',
         ];
 
         $alternatives = [];
         foreach ($keys as $k) {
             $alternatives[] = preg_quote($k, '/');                      // public
-            $alternatives[] = "\x00\\*\x00" . preg_quote($k, '/');      // protected
-            $alternatives[] = "\x00[^\x00]+\x00" . preg_quote($k, '/'); // private (any class)
+            $alternatives[] = "\x00\\*\x00".preg_quote($k, '/');      // protected
+            $alternatives[] = "\x00[^\x00]+\x00".preg_quote($k, '/'); // private (any class)
         }
-        $nameAlt = '(?:' . implode('|', $alternatives) . ')';
+        $nameAlt = '(?:'.implode('|', $alternatives).')';
 
         // Pattern: property name token, then value token -> coerce s:"123" to i:123
-        $pattern = '/(s:\d+:"' . $nameAlt . '";)s:\d+:"(\d+)";/s';
+        $pattern = '/(s:\d+:"'.$nameAlt.'";)s:\d+:"(\d+)";/s';
 
         $fixed = preg_replace_callback(
             $pattern,
-            static fn($m) => $m[1] . 'i:' . $m[2] . ';',
+            static fn ($m) => $m[1].'i:'.$m[2].';',
             $ser
         );
 
-        if ($fixed !== null && $fixed !== $ser) {
-            self::dlog('coerceNumericStrings.changed', ['delta_len' => strlen($fixed) - strlen($ser)]);
+        if (null !== $fixed && $fixed !== $ser) {
+            self::dlog('coerceNumericStrings.changed', ['delta_len' => \strlen($fixed) - \strlen($ser)]);
+
             return $fixed;
         }
 
         self::dlog('coerceNumericStrings.no_change');
+
         return $ser;
     }
 
@@ -602,33 +640,36 @@ class CourseArchiver
     private static function normalizeIds(mixed &$node): void
     {
         $castKeys = [
-            'id','iid','c_id','parent_id','thematic_id','attendance_id',
-            'room_id','display_order','session_id','category_id',
-            'forum_id','thread_id','post_id','survey_id','question_id',
-            'document_id','doc_id','link_id','quiz_id','work_id',
+            'id', 'iid', 'c_id', 'parent_id', 'thematic_id', 'attendance_id',
+            'room_id', 'display_order', 'session_id', 'category_id',
+            'forum_id', 'thread_id', 'post_id', 'survey_id', 'question_id',
+            'document_id', 'doc_id', 'link_id', 'quiz_id', 'work_id',
         ];
 
-        if (is_array($node)) {
+        if (\is_array($node)) {
             foreach ($node as &$v) {
                 self::normalizeIds($v);
             }
+
             return;
         }
 
-        if (is_object($node)) {
+        if (\is_object($node)) {
             foreach (get_object_vars($node) as $k => $v) {
                 // Skip private/protected property names (start with NUL)
-                if (is_string($k) && $k !== '' && $k[0] === "\0") {
+                if (\is_string($k) && '' !== $k && "\0" === $k[0]) {
                     self::normalizeIds($v);
+
                     continue;
                 }
 
-                if (in_array($k, $castKeys, true) && (is_string($v) || is_numeric($v))) {
+                if (\in_array($k, $castKeys, true) && (\is_string($v) || is_numeric($v))) {
                     try {
                         $node->{$k} = (int) $v;
                     } catch (Throwable) {
                         // Read-only or typed mismatch: ignore
                     }
+
                     continue;
                 }
 
@@ -643,46 +684,51 @@ class CourseArchiver
      */
     private static function deincomplete(mixed $v): mixed
     {
-        if ($v instanceof \__PHP_Incomplete_Class) {
-            $o = new \stdClass();
+        if ($v instanceof __PHP_Incomplete_Class) {
+            $o = new stdClass();
             foreach (get_object_vars($v) as $k => $vv) {
-                if (is_string($k) && str_contains($k, "\0")) {
+                if (\is_string($k) && str_contains($k, "\0")) {
                     $parts = explode("\0", $k);
                     $k = end($parts); // e.g. "\0Course\0code" → "code"
-                    if ($k === '' || $k === false) {
+                    if ('' === $k || false === $k) {
                         continue; // degenerate key — skip
                     }
                 }
                 $o->{$k} = self::deincomplete($vv);
             }
+
             return $o;
         }
         // Recurse arrays
-        if (is_array($v)) {
+        if (\is_array($v)) {
             foreach ($v as $k => $vv) {
                 $v[$k] = self::deincomplete($vv);
             }
+
             return $v;
         }
         // Recurse stdClass or any object (non-incomplete)
-        if (is_object($v)) {
+        if (\is_object($v)) {
             foreach (get_object_vars($v) as $k => $vv) {
                 // Same guard for any object that may have been partially incomplete.
-                if (is_string($k) && str_contains($k, "\0")) {
+                if (\is_string($k) && str_contains($k, "\0")) {
                     $parts = explode("\0", $k);
                     $k = end($parts);
-                    if ($k === '' || $k === false) {
+                    if ('' === $k || false === $k) {
                         continue;
                     }
                 }
+
                 try {
                     $v->{$k} = self::deincomplete($vv);
-                } catch (\Throwable) {
+                } catch (Throwable) {
                     // Read-only or inaccessible property — skip silently.
                 }
             }
+
             return $v;
         }
+
         return $v;
     }
 
@@ -728,6 +774,6 @@ class CourseArchiver
             }
         }
 
-        self::dlog('registerLegacyAliases.done', ['count' => count($aliases)]);
+        self::dlog('registerLegacyAliases.done', ['count' => \count($aliases)]);
     }
 }

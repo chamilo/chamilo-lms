@@ -76,3 +76,6 @@ $strings['defaultVisibilityInCourseHomepage'] = 'Visibilitat per defecte a la p√
 $strings['ViewActivityDashboard'] = "Veure el tauler d'activitat";
 $strings['Participants'] = 'Participants';
 $strings['CountUsers'] = 'Comptar usuaris';
+$strings['NoRecording'] = 'Sense gravacio';
+$strings['presentation'] = 'Presentacio';
+$strings['video'] = 'Video';

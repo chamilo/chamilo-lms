@@ -11,6 +11,9 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use SessionManager;
 use UserManager;
 
+use const COURSEMANAGER;
+use const STUDENT;
+
 /**
  * Centralized authorization policy for "login as" / Symfony switch_user impersonation.
  *
@@ -89,7 +92,7 @@ final class LoginAsAuthorizationChecker
             return false;
         }
 
-        return \api_is_global_platform_admin($user->getId());
+        return api_is_global_platform_admin($user->getId());
     }
 
     /**
@@ -117,13 +120,13 @@ final class LoginAsAuthorizationChecker
      */
     private function canSessionAdminLoginAs(User $target): bool
     {
-        $allowed = [\STUDENT];
+        $allowed = [STUDENT];
 
         if ('true' === (string) $this->settingsManager->getSetting('session.allow_session_admin_login_as_teacher')) {
-            $allowed[] = \COURSEMANAGER;
+            $allowed[] = COURSEMANAGER;
         }
 
-        return in_array((int) $target->getStatus(), $allowed, true);
+        return \in_array((int) $target->getStatus(), $allowed, true);
     }
 
     /**
@@ -135,7 +138,7 @@ final class LoginAsAuthorizationChecker
     {
         if ('true' === (string) $this->settingsManager->getSetting('drh_can_access_all_session_content')) {
             $users = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus('drh_all', $impersonator->getId());
-            if (is_array($users)) {
+            if (\is_array($users)) {
                 foreach ($users as $row) {
                     if (isset($row['id']) && (int) $row['id'] === $target->getId()) {
                         return true;

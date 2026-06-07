@@ -1,5 +1,5 @@
 import { useI18n } from "vue-i18n"
-import { computed } from "vue"
+import { computed, ref } from "vue"
 import { useSecurityStore } from "../store/securityStore"
 import { usePlatformConfig } from "../store/platformConfig"
 import { useEnrolledStore } from "../store/enrolledStore"
@@ -31,6 +31,7 @@ const KNOWN_MENU_TABS = [
   "session_admin",
   "search",
   "question_manager",
+  "extra_menu_from_webservice",
 ]
 
 // Topbar keys (new + legacy alias)
@@ -163,12 +164,11 @@ function mergeConfig(baseCfg, overrideCfg) {
 }
 
 function resolveDisplayTabsConfig(platformConfigStore, securityStore) {
-  // display.show_tabs (default)
+  // display.show_tabs is the Chamilo 2 setting whose title is "Main menu entries".
   const showTabsRaw = platformConfigStore.getSetting("display.show_tabs")
   let defaultCfg = makeEmptyConfig()
 
   if (Array.isArray(showTabsRaw)) {
-    // Very old installations may still provide an array
     defaultCfg = configFromLegacyList(showTabsRaw)
   } else if ("string" === typeof showTabsRaw && showTabsRaw.trim() !== "") {
     const parsed = safeParseJson(showTabsRaw, "[Sidebar] Invalid JSON in display.show_tabs")
@@ -229,6 +229,9 @@ export function useSidebarMenu() {
   const searchCourseConfig = computed(() => platformConfigStore.plugins?.searchcourse || {})
   const rssConfig = computed(() => platformConfigStore.plugins?.rss || {})
   const dictionaryConfig = computed(() => platformConfigStore.plugins?.dictionary || {})
+  const extraMenuFromWebserviceItems = ref([])
+  const extraMenuFromWebserviceTitle = ref(t("Extra menu"))
+  const extraMenuFromWebserviceLoaded = ref(false)
 
   const showBuyCoursesMenuItem = computed(() => {
     if (!securityStore.isAuthenticated) {
@@ -289,6 +292,73 @@ export function useSidebarMenu() {
   const dictionaryMenuTitle = computed(() => {
     return dictionaryConfig.value?.title || t("Dictionary")
   })
+
+  const showExtraMenuFromWebserviceMenuItem = computed(() => {
+    return securityStore.isAuthenticated && isMenuTabEnabled("extra_menu_from_webservice")
+  })
+
+  const normalizeExtraMenuFromWebserviceItems = (items) => {
+    if (!Array.isArray(items)) {
+      return []
+    }
+
+    return items
+      .filter((item) => item && typeof item.title === "string" && typeof item.url === "string")
+      .map((item) => {
+        const menuItem = {
+          label: item.title,
+          url: item.url,
+          icon: item.icon ? `mdi ${item.icon}` : "mdi mdi-menu-right",
+          class: "pl-4",
+        }
+
+        if (item.target === "_blank") {
+          menuItem.target = "_blank"
+        }
+
+        if (Array.isArray(item.children) && item.children.length > 0) {
+          const children = normalizeExtraMenuFromWebserviceItems(item.children)
+          if (children.length > 0) {
+            menuItem.items = children
+          }
+        }
+
+        return menuItem
+      })
+  }
+
+  async function loadExtraMenuFromWebserviceItems() {
+    if (extraMenuFromWebserviceLoaded.value || !showExtraMenuFromWebserviceMenuItem.value) {
+      return
+    }
+
+    extraMenuFromWebserviceLoaded.value = true
+
+    try {
+      const response = await fetch("/plugin/ExtraMenuFromWebservice/menu.php", {
+        credentials: "same-origin",
+        headers: {
+          Accept: "application/json",
+        },
+      })
+
+      if (!response.ok) {
+        return
+      }
+
+      const data = await response.json()
+
+      if (typeof data.title === "string" && data.title.trim()) {
+        extraMenuFromWebserviceTitle.value = data.title
+      }
+
+      extraMenuFromWebserviceItems.value = data.enabled
+        ? normalizeExtraMenuFromWebserviceItems(data.items)
+        : []
+    } catch (error) {
+      extraMenuFromWebserviceItems.value = []
+    }
+  }
 
   const allowStudentCatalogue = computed(() => {
     if (isAnonymous) {
@@ -420,6 +490,15 @@ export function useSidebarMenu() {
         icon: "mdi mdi-rss",
         label: rssMenuTitle.value,
         url: rssIndexPath.value,
+      })
+    }
+
+    if (showExtraMenuFromWebserviceMenuItem.value && extraMenuFromWebserviceItems.value.length > 0) {
+      items.push({
+        icon: "mdi mdi-menu-open",
+        label: extraMenuFromWebserviceTitle.value,
+        items: extraMenuFromWebserviceItems.value,
+        expanded: isActive({ items: extraMenuFromWebserviceItems.value }),
       })
     }
 
@@ -644,6 +723,7 @@ export function useSidebarMenu() {
 
   async function initialize() {
     await enrolledStore.initialize()
+    await loadExtraMenuFromWebserviceItems()
   }
 
   return {

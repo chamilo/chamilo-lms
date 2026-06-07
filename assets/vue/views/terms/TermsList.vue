@@ -89,22 +89,17 @@ async function fetchLanguageName(languageId) {
 onMounted(async () => {
   isLoading.value = true
   try {
-    const response = await legalService.findAllType0()
-    if (response.ok) {
-      const data = await response.json()
-      terms.value = await Promise.all(
-        data["hydra:member"].map(async (term) => {
-          const languageName = await fetchLanguageName(term.languageId)
-          return {
-            ...term,
-            language: languageName,
-            typeLabel: getTypeLabel(term.type),
-          }
-        }),
-      )
-    } else {
-      console.error("The request to the API was not successful:", response.statusText)
-    }
+    const { items } = await legalService.findAllType0()
+    terms.value = await Promise.all(
+      items.map(async (term) => {
+        const languageName = await fetchLanguageName(term.languageId)
+        return {
+          ...term,
+          language: languageName,
+          typeLabel: getTypeLabel(term.type),
+        }
+      }),
+    )
   } catch (error) {
     console.error("Error loading legal terms:", error)
   } finally {

@@ -8723,7 +8723,7 @@ msgid "Help"
 msgstr "Hilfe"
 
 msgid "Add"
-msgstr "hinzufügen"
+msgstr "Hinzufügen"
 
 msgid "Add an introduction text"
 msgstr "Einführungstext hinzufügen"
@@ -21800,7 +21800,7 @@ msgid "Message resent"
 msgstr "Nachricht gesendet"
 
 msgid "Ticket assigned to %s. Follow-up at <a href='%s'>#%s</a>."
-msgstr "Ticket wurde %s zugewiesen. Weiterverfolgung auf #%s."
+msgstr "Ticket wurde %s zugewiesen. Weiterverfolgung auf <a href='%s'>#%s</a>."
 
 msgid "Ticket %s assigned"
 msgstr "Ticket %s zugewiesen"
@@ -32800,7 +32800,7 @@ msgid "Allow PDF export for this item"
 msgstr "PDF-Export für diesen Eintrag erlauben"
 
 msgid "Hide free users (not enrolled)"
-msgstr "Kostenlose Benutzer (nicht eingeschrieben) ausblenden"
+msgstr "Freie Nutzer (nicht eingeschrieben) ausblenden"
 
 msgid "Question statistics"
 msgstr "Fragenstatistik"
@@ -35495,3 +35495,24 @@ msgstr "Kommentare werden geladen..."
 
 msgid "No comments yet."
 msgstr "Noch keine Kommentare."
+
+msgid "Manage meetings, review recordings and update course-wide BBB settings from one place."
+msgstr "Verwalten Sie Konferenzen, sehen Sie sich Aufzeichnungen an und passen Sie die kursweiten BBB-Einstellungen an einem Ort an."
+
+msgid "Review the current defaults and propagate them to every course when needed."
+msgstr "Überprüfen Sie die aktuellen Standardeinstellungen und übertragen Sie diese bei Bedarf auf alle Kurse."
+
+msgid "Filter the list by meeting date range."
+msgstr "Filtern Sie die Liste nach dem Zeitraum der Konferenz."
+
+msgid "Review meeting history, participants and recording actions."
+msgstr "Rückblick auf die Besprechungshistorie, die Teilnehmer und die Aufzeichnungen."
+
+msgid "Participants"
+msgstr "Teilnehmer"
+
+msgid "CountUsers"
+msgstr "Anzahl der Nutzer"
+
+msgid "No data found"
+msgstr "Keine Daten gefunden"

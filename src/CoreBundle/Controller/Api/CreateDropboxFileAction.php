@@ -6,12 +6,12 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
-use Chamilo\CoreBundle\Repository\Node\CourseRepository;
-use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDropboxFile;
@@ -35,32 +35,28 @@ final class CreateDropboxFileAction
     public function __invoke(
         Request $request,
         CDropboxFileRepository $repo,
-        CourseRepository $courseRepo,
-        SessionRepository $sessionRepo,
         EntityManagerInterface $em,
         UserHelper $userHelper,
         Security $security,
-        SettingsManager $settingsManager
+        SettingsManager $settingsManager,
+        CidReqHelper $cidReqHelper
     ): JsonResponse {
-        $cid = (int) $request->query->get('cid', 0);
-        $sid = (int) $request->query->get('sid', 0);
-        $gid = (int) $request->query->get('gid', 0);
-        if ($cid <= 0) {
-            throw new BadRequestHttpException('Missing or invalid "cid".');
-        }
-        $user = $userHelper->getCurrent();
-        if (!$user) {
-            throw new UnauthorizedHttpException('', 'Unauthorized.');
-        }
-
-        $course = $courseRepo->find($cid);
-
-        if (!$course) {
+        // cid/sid/gid travel in the query, so CidReqListener has already resolved the
+        // course into the session and enforced CourseVoter::VIEW; the operation security
+        // further requires course membership. Read the authorized context from the helper
+        // instead of re-fetching and re-checking the raw query cid.
+        $course = $cidReqHelper->getDoctrineCourseEntity();
+        if (!$course instanceof Course) {
             throw new BadRequestHttpException('Course not found.');
         }
 
-        if (!$security->isGranted(CourseVoter::VIEW, $course)) {
-            throw new AccessDeniedHttpException('You do not have access to this course.');
+        $cid = (int) $course->getId();
+        $sid = (int) $cidReqHelper->getSessionId();
+        $gid = (int) $cidReqHelper->getGroupId();
+
+        $user = $userHelper->getCurrent();
+        if (!$user) {
+            throw new UnauthorizedHttpException('', 'Unauthorized.');
         }
 
         /** @var UploadedFile|null $file */
@@ -161,7 +157,7 @@ final class CreateDropboxFileAction
             // Create post (feedback/thread seed)
             $post = new CDropboxPost();
             $post->setCId($cid);
-            $post->setSessionId($sid ?? 0);
+            $post->setSessionId($sid);
             $post->setFileId($e->getIid());
             $post->setDestUserId($destUid);
             $post->setCatId($categoryId);

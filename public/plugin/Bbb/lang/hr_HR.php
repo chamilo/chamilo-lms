@@ -77,3 +77,6 @@ $strings['defaultVisibilityInCourseHomepage'] = 'Zadana vidljivost na početnoj 
 $strings['ViewActivityDashboard'] = 'Pogledaj nadzornu ploču aktivnosti';
 $strings['Participants'] = 'Sudionici';
 $strings['CountUsers'] = 'Broj korisnika';
+$strings['NoRecording'] = 'Nema snimke';
+$strings['presentation'] = 'Prezentacija';
+$strings['video'] = 'Video';

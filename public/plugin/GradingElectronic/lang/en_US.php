@@ -8,3 +8,6 @@ $strings['PluginDisabled'] = 'Grading Electronic is disabed';
 $strings['StudentId'] = 'Student ID';
 $strings['ProviderId'] = 'Provider ID';
 $strings['CourseHours'] = 'Course hours';
+
+$strings['GenerateFile'] = 'Generate file';
+$strings['CourseId'] = 'Course ID';

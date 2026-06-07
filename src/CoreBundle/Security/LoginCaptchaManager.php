@@ -47,6 +47,27 @@ class LoginCaptchaManager
         );
     }
 
+    public function shouldRequireCaptcha(string $username): bool
+    {
+        if (!$this->isEnabled()) {
+            return false;
+        }
+
+        $username = trim($username);
+        if ('' === $username) {
+            return false;
+        }
+
+        if ($this->isBlocked($username)) {
+            return true;
+        }
+
+        $state = $this->getState($username);
+
+        return (int) ($state['failed_login_attempts'] ?? 0) > 0
+            || (int) ($state['mistakes'] ?? 0) > 0;
+    }
+
     public function isBlocked(string $username): bool
     {
         $state = $this->getState($username);
@@ -70,12 +91,26 @@ class LoginCaptchaManager
         return $blockedUntil - time();
     }
 
+    public function registerFailedLogin(string $username): void
+    {
+        $username = trim($username);
+        if ('' === $username || !$this->isEnabled()) {
+            return;
+        }
+
+        $state = $this->getState($username);
+        $state['failed_login_attempts'] = (int) ($state['failed_login_attempts'] ?? 0) + 1;
+
+        $this->saveState($username, $state);
+    }
+
     public function registerCaptchaMistake(string $username): void
     {
         $state = $this->getState($username);
         $mistakes = (int) ($state['mistakes'] ?? 0) + 1;
 
         $newState = [
+            'failed_login_attempts' => (int) ($state['failed_login_attempts'] ?? 0),
             'mistakes' => $mistakes,
             'blocked_until' => null,
         ];
@@ -117,7 +152,8 @@ class LoginCaptchaManager
         $expectedCode = (string) $request->getSession()->get(self::SESSION_CODE_KEY, '');
         $request->getSession()->remove(self::SESSION_CODE_KEY);
 
-        $submittedCode = strtoupper(trim((string) $submittedCode));
+        $expectedCode = mb_strtolower(trim($expectedCode));
+        $submittedCode = mb_strtolower(trim((string) $submittedCode));
 
         if ('' === $expectedCode || '' === $submittedCode) {
             return false;
@@ -164,6 +200,7 @@ SVG;
             $item->expiresAfter(86400);
 
             return [
+                'failed_login_attempts' => 0,
                 'mistakes' => 0,
                 'blocked_until' => null,
             ];

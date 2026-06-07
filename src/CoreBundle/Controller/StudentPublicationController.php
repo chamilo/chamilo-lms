@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\AiProvider\AiProviderFactory;
 use Chamilo\CoreBundle\AiProvider\AiTaskGraderService;
+use Chamilo\CoreBundle\Component\Mpdf\SafeMpdfHttpClient;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
@@ -147,6 +148,13 @@ class StudentPublicationController extends AbstractController
         SerializerInterface $serializer,
         CStudentPublicationRepository $repo
     ): JsonResponse {
+        $assignment = $repo->find($assignmentId);
+        if (!$assignment) {
+            return new JsonResponse(['error' => 'Assignment not found.'], 404);
+        }
+        // Teacher-only listing: must be allowed to edit the assignment's course resource.
+        $this->denyAccessUnlessGranted('EDIT', $assignment->getResourceNode());
+
         $page = (int) $request->query->get('page', 1);
         $itemsPerPage = (int) $request->query->get('itemsPerPage', 10);
         $order = $request->query->all('order');
@@ -289,6 +297,13 @@ class StudentPublicationController extends AbstractController
         CStudentPublicationRepository $repo,
         CourseRelUserRepository $courseRelUserRepo
     ): JsonResponse {
+        $assignment = $repo->find($assignmentId);
+        if (!$assignment) {
+            return new JsonResponse(['error' => 'Assignment not found.'], 404);
+        }
+        // Teacher-only: must be allowed to edit the assignment's course resource.
+        $this->denyAccessUnlessGranted('EDIT', $assignment->getResourceNode());
+
         $course = $this->cidReqHelper->getCourseEntity();
         $session = $this->cidReqHelper->getSessionEntity();
 
@@ -325,6 +340,13 @@ class StudentPublicationController extends AbstractController
         MessageHelper $messageHelper,
         Security $security
     ): JsonResponse {
+        $assignment = $repo->find($assignmentId);
+        if (!$assignment) {
+            return new JsonResponse(['error' => 'Assignment not found.'], 404);
+        }
+        // Teacher-only: only a teacher of the assignment's course may message students.
+        $this->denyAccessUnlessGranted('EDIT', $assignment->getResourceNode());
+
         $course = $this->cidReqHelper->getCourseEntity();
         $session = $this->cidReqHelper->getSessionEntity();
 
@@ -371,6 +393,9 @@ class StudentPublicationController extends AbstractController
             throw $this->createNotFoundException('Assignment not found');
         }
 
+        // Teacher-only export: must be allowed to edit the assignment's course resource.
+        $this->denyAccessUnlessGranted('EDIT', $assignment->getResourceNode());
+
         [$submissions] = $repo->findAllSubmissionsByAssignment(
             assignmentId: $assignment->getIid(),
             page: 1,
@@ -387,7 +412,7 @@ class StudentPublicationController extends AbstractController
         try {
             $mpdf = new Mpdf([
                 'tempDir' => api_get_path(SYS_ARCHIVE_PATH).'mpdf/',
-            ]);
+            ], SafeMpdfHttpClient::container());
             $mpdf->WriteHTML($html);
 
             return new Response(
@@ -406,6 +431,13 @@ class StudentPublicationController extends AbstractController
         EntityManagerInterface $em,
         CStudentPublicationRepository $repo
     ): JsonResponse {
+        $assignment = $repo->find($assignmentId);
+        if (!$assignment) {
+            return new JsonResponse(['error' => 'Assignment not found.'], 404);
+        }
+        // Destructive teacher-only op: must be allowed to edit the assignment's course resource.
+        $this->denyAccessUnlessGranted('EDIT', $assignment->getResourceNode());
+
         $submissions = $repo->findAllSubmissionsByAssignment($assignmentId, 1, 10000)[0];
 
         $count = 0;
@@ -443,6 +475,10 @@ class StudentPublicationController extends AbstractController
         if (!$assignment) {
             throw $this->createNotFoundException('Assignment not found.');
         }
+
+        // Teacher-only: downloading every student's submission requires edit rights on
+        // the assignment's course resource.
+        $this->denyAccessUnlessGranted('EDIT', $assignment->getResourceNode());
 
         [$submissions] = $repo->findAllSubmissionsByAssignment($assignmentId, 1, 10000);
         $zipPath = api_get_path(SYS_ARCHIVE_PATH).uniqid('assignment_', true).'.zip';
@@ -485,6 +521,14 @@ class StudentPublicationController extends AbstractController
         EntityManagerInterface $em,
         TranslatorInterface $translator
     ): JsonResponse {
+        $assignment = $repo->find($assignmentId);
+        if (!$assignment) {
+            return new JsonResponse(['error' => 'Assignment not found.'], 404);
+        }
+        // Teacher-only: uploading corrections mutates grading state (qualification,
+        // accepted, dateOfQualification) for the whole class. Authorize before any work.
+        $this->denyAccessUnlessGranted('EDIT', $assignment->getResourceNode());
+
         $file = $request->files->get('file');
         if (!$file || 'zip' !== $file->getClientOriginalExtension()) {
             return new JsonResponse(['error' => 'Invalid file'], 400);

@@ -24,9 +24,16 @@
         :class="['menu-item', { active: isActive('/resources/messages') }]"
       >
         <BaseAppLink to="/resources/messages">
-          <i aria-hidden="true" class="mdi mdi-email"></i>
+          <i
+            aria-hidden="true"
+            class="mdi mdi-email"
+          ></i>
           {{ t("Messages") }}
-          <span v-if="unreadMessagesCount > 0" class="badge badge-warning">{{ unreadMessagesCount }}</span>
+          <span
+            v-if="unreadMessagesCount > 0"
+            class="badge badge-warning"
+            >{{ unreadMessagesCount }}</span
+          >
         </BaseAppLink>
       </li>
       <li :class="['menu-item', { active: isActive('/resources/friends/invitations') }]">
@@ -85,6 +92,18 @@
         </BaseAppLink>
       </li>
       <li
+        v-if="socialMapEnabled"
+        :class="['menu-item', { active: isActive('/social/map') }]"
+      >
+        <BaseAppLink to="/social/map">
+          <i
+            aria-hidden="true"
+            class="mdi mdi-map-marker"
+          ></i>
+          {{ t("Map") }}
+        </BaseAppLink>
+      </li>
+      <li
         v-if="allowMyFiles"
         :class="['menu-item', { active: isActive('/resources/personal_files') }]"
       >
@@ -125,13 +144,19 @@
           {{ t("Home") }}
         </BaseAppLink>
       </li>
-      <li class="menu-item" v-if="messagingEnabled">
+      <li
+        class="menu-item"
+        v-if="messagingEnabled"
+      >
         <a
           class="ajax"
           href="/main/inc/ajax/user_manager.ajax.php?a=get_user_popup&user_id={{user.id}}"
           rel="noopener noreferrer"
         >
-          <i aria-hidden="true" class="mdi mdi-email"></i>
+          <i
+            aria-hidden="true"
+            class="mdi mdi-email"
+          ></i>
           {{ t("Send message") }}
         </a>
       </li>
@@ -146,7 +171,7 @@ import { useI18n } from "vue-i18n"
 import { useMessageRelUserStore } from "../../store/messageRelUserStore"
 import { computed, inject, onMounted, ref, watchEffect } from "vue"
 import { useSecurityStore } from "../../store/securityStore"
-import axios from "axios"
+import socialService from "../../services/socialService"
 import { usePlatformConfig } from "../../store/platformConfig"
 
 const { t } = useI18n()
@@ -156,6 +181,7 @@ const currentNodeId = ref(0)
 const messageRelUserStore = useMessageRelUserStore()
 const unreadMessagesCount = computed(() => messageRelUserStore.countUnread)
 const invitationsCount = ref(0)
+const socialMapEnabled = ref(false)
 
 const user = inject("social-user")
 const isCurrentUser = inject("is-current-user")
@@ -170,9 +196,9 @@ const isValidGlobalForumsCourse = computed(() => {
 })
 const getGroupLink = async () => {
   try {
-    const response = await axios.get("/social-network/get-forum-link")
+    const data = await socialService.getForumLink()
     if (isValidGlobalForumsCourse.value) {
-      groupLink.value = response.data.go_to
+      groupLink.value = data.go_to
     } else {
       groupLink.value = { name: "UserGroupList" }
     }
@@ -185,10 +211,20 @@ const getGroupLink = async () => {
 const fetchInvitationsCount = async (userId) => {
   if (!userId) return
   try {
-    const { data } = await axios.get(`/social-network/invitations/count/${userId}`)
+    const data = await socialService.getInvitationsCount(userId)
     invitationsCount.value = data.totalInvitationsCount
   } catch (error) {
     console.error("Error fetching invitations count:", error)
+  }
+}
+
+const fetchSocialMapConfig = async () => {
+  try {
+    const data = await socialService.getMapConfig()
+    socialMapEnabled.value = Boolean(data?.enabled)
+  } catch (error) {
+    socialMapEnabled.value = false
+    console.error("Error fetching social map configuration:", error)
   }
 }
 watchEffect(() => {
@@ -213,23 +249,26 @@ watchEffect(() => {
 })
 
 const isActive = (path, filterType = null) => {
-  if (path === "/resources/friends/invitations" || path === "/social/search") {
+  if (path === "/resources/friends/invitations" || path === "/social/search" || path === "/social/map") {
     return route.path === path
+  }
+
+  if (path === "/social") {
+    const hasQueryParams = Object.keys(route.query).length > 0
+    const filterMatch = filterType ? route.query.filterType === filterType && hasQueryParams : !hasQueryParams
+
+    return route.path === "/social" && filterMatch
   }
 
   const pathMatch = route.path.startsWith(path)
   const hasQueryParams = Object.keys(route.query).length > 0
   const filterMatch = filterType ? route.query.filterType === filterType && hasQueryParams : !hasQueryParams
-  return (
-    pathMatch &&
-    filterMatch &&
-    !route.path.startsWith("/resources/friends/invitations") &&
-    !route.path.startsWith("/social/search")
-  )
+  return pathMatch && filterMatch
 }
 
 onMounted(async () => {
   await getGroupLink()
+  await fetchSocialMapConfig()
   if (user.value && user.value.id) {
     await fetchInvitationsCount(user.value.id)
   }

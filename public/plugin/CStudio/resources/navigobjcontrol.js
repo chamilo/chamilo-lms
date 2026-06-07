@@ -926,6 +926,15 @@ function getLangTerm(term) {
         &&projLang=='es') {
         term = "Continuar";
     }
+    if (term=='Check answers') {
+        if (projLang=='fr') {
+            term = "Vérifier les réponses";
+        } else if (projLang=='es') {
+            term = "Comprobar respuestas";
+        } else if (projLang=='it') {
+            term = "Controlla le risposte";
+        }
+    }
     return term;
 }
 
@@ -1063,7 +1072,7 @@ function Teachscript(){
     };
 
     this.checkAll = function(){
-        checkAnswers();
+        cstudioRunQuestionCheck();
     }
 
     this.nextPageIsOK = function(){
@@ -3189,6 +3198,8 @@ function installCmq() {
         );
         
 	});
+
+    cstudioInstallQcmCheckButtons();
     
     $(".checkboxqcm").click(
 		function(){
@@ -3198,6 +3209,77 @@ function installCmq() {
     );
     
     setTimeout(function(){applyGlossaryAllTxt();},500);
+}
+
+function cstudioInstallQcmCheckButtons() {
+    var label = getLangTerm('Check answers');
+
+    $(".qcmbarre").each(function() {
+        var qcmTable = $(this);
+
+        if (qcmTable.find('.cstudio-qcm-check-row').length > 0) {
+            return;
+        }
+
+        var buttonRow = '<tr class="cstudio-qcm-check-row">';
+        buttonRow += '<td colspan="2" style="text-align:center;padding:12px;">';
+        buttonRow += '<button type="button" class="cstudio-quiz-check-button" ';
+        buttonRow += 'style="display:inline-block;padding:8px 16px;border-radius:5px;border:1px solid #2f80ed;background:#2f80ed;color:#fff;font-size:15px;cursor:pointer;" ';
+        buttonRow += 'onclick="return cstudioRunQuestionCheck();">';
+        buttonRow += label;
+        buttonRow += '</button>';
+        buttonRow += '</td>';
+        buttonRow += '</tr>';
+
+        var body = qcmTable.children('tbody').first();
+        if (body.length > 0) {
+            body.append(buttonRow);
+        } else {
+            qcmTable.append(buttonRow);
+        }
+    });
+}
+
+function cstudioTriggerHvpQuestionChecks() {
+    $(".plugteachcontain").find("iframe").each(function() {
+        try {
+            var frameContent = $(this).contents();
+            var nestedFrames = frameContent.find("iframe");
+
+            if (nestedFrames.length > 0) {
+                nestedFrames.each(function() {
+                    try {
+                        cstudioClickHvpCheckButtons($(this).contents());
+                    } catch (err) {
+                    }
+                });
+            } else {
+                cstudioClickHvpCheckButtons(frameContent);
+            }
+        } catch (err) {
+        }
+    });
+}
+
+function cstudioClickHvpCheckButtons(frameContent) {
+    frameContent.find(".h5p-question-check-answer").each(function() {
+        var button = $(this);
+
+        if (!button.is(":disabled") && button.is(":visible")) {
+            button.trigger("click");
+        }
+    });
+}
+
+function cstudioRunQuestionCheck() {
+    cstudioTriggerHvpQuestionChecks();
+    checkAnswers();
+
+    setTimeout(function() {
+        checkAnswers();
+    }, 700);
+
+    return false;
 }
 
 function checkObj(obj) {

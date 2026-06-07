@@ -8,8 +8,10 @@ use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\SafeHttpClientHelper;
 use Chamilo\CourseBundle\Entity\CLink;
 use Chamilo\CourseBundle\Entity\CLinkCategory;
+use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 
 /**
  * Function library for the links tool.
@@ -1264,14 +1266,20 @@ Do you really want to delete this category and its links ?')."')) return false;\
         $categoryId = isset($linkInfo['category_id']) ? $linkInfo['category_id'] : '';
         $lpId = isset($_GET['lp_id']) ? Security::remove_XSS($_GET['lp_id']) : null;
 
-        $form = new FormValidator(
-            'link',
-            'post',
-            api_get_self().'?action='.$action.
+        $formAction = api_get_self().'?action='.$action.
             '&category_id='.$categoryId.
             '&'.api_get_cidreq().
             '&id='.$linkId.
-            '&sec_token='.$token
+            '&sec_token='.$token;
+
+        if (!empty($lpId)) {
+            $formAction .= '&lp_id='.(int) $lpId;
+        }
+
+        $form = new FormValidator(
+            'link',
+            'post',
+            $formAction
         );
 
         if ('addlink' === $action) {
@@ -1366,8 +1374,24 @@ Do you really want to delete this category and its links ?')."')) return false;\
                         $default_values = implode(', ', $arr_str_values);
                     }
                 }
-                $form->addText($specific_field['name'], $specific_field['code']);
-                $defaults[$specific_field['name']] = $default_values;
+                $specificFieldName = (string) ($specific_field['name'] ?? '');
+                if ('' === trim($specificFieldName)) {
+                    $specificFieldName = (string) ($specific_field['code'] ?? '');
+                }
+
+                if ('' === trim($specificFieldName)) {
+                    continue;
+                }
+
+                $specificFieldLabel = (string) (
+                    $specific_field['title'] ??
+                    $specific_field['name'] ??
+                    $specific_field['code'] ??
+                    $specificFieldName
+                );
+
+                $form->addText($specificFieldName, $specificFieldLabel);
+                $defaults[$specificFieldName] = $default_values;
             }
         }
 
@@ -1473,42 +1497,19 @@ Do you really want to delete this category and its links ?')."')) return false;\
      */
     public static function checkUrl($url)
     {
-        // Check if curl is available.
-        if (!in_array('curl', get_loaded_extensions())) {
+        // SSRF-safe fetch (blocks loopback/private/reserved/metadata targets,
+        // validates redirects, http(s) only); honours the platform proxy setting.
+        $options = SafeHttpClientHelper::withChamiloProxy(['timeout' => 4]);
+
+        try {
+            // getStatusCode() forces the transport to complete; a blocked or
+            // unreachable target throws and the link is reported as invalid.
+            SafeHttpClientHelper::create()->request('GET', (string) $url, $options)->getStatusCode();
+        } catch (ExceptionInterface $e) {
             return false;
         }
 
-        // set URL and other appropriate options
-        $defaults = [
-            CURLOPT_URL => $url,
-            CURLOPT_FOLLOWLOCATION => true, // follow redirects accept youtube.com
-            CURLOPT_HEADER => 0,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => 4,
-        ];
-
-        $proxySettings = api_get_setting('security.proxy_settings', true);
-
-        if (!empty($proxySettings) &&
-            isset($proxySettings['curl_setopt_array'])
-        ) {
-            $defaults[CURLOPT_PROXY] = $proxySettings['curl_setopt_array']['CURLOPT_PROXY'];
-            $defaults[CURLOPT_PROXYPORT] = $proxySettings['curl_setopt_array']['CURLOPT_PROXYPORT'];
-        }
-
-        // Create a new cURL resource
-        $ch = curl_init();
-        curl_setopt_array($ch, $defaults);
-
-        // grab URL and pass it to the browser
-        ob_start();
-        $result = curl_exec($ch);
-        ob_get_clean();
-
-        // close cURL resource, and free up system resources
-        curl_close($ch);
-
-        return $result;
+        return true;
     }
 
     /**

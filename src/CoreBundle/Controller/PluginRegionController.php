@@ -7,9 +7,11 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use AppPlugin;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\PluginRepository;
+use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use LogicException;
 use Plugin;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -43,6 +45,10 @@ class PluginRegionController extends AbstractController
         $appPlugin = new AppPlugin();
         $context = self::sanitizeContext($request);
         $courseId = $this->cidReqHelper->getCourseId();
+        // Course-scoped plugin output is only rendered when the caller can view the
+        // current course (defense-in-depth on top of CidReqListener's VIEW enforcement).
+        $course = $this->cidReqHelper->getCourseEntity();
+        $canViewCourse = $course instanceof Course && $this->isGranted(CourseVoter::VIEW, $course);
         $blocks = [];
 
         foreach ($installedPlugins as $plugin) {
@@ -64,6 +70,7 @@ class PluginRegionController extends AbstractController
 
             if (($pluginInfo['is_course_plugin'] ?? false)
                 && $courseId
+                && $canViewCourse
                 && isset($pluginInfo['obj']) && $pluginInfo['obj'] instanceof Plugin
             ) {
                 $html .= $pluginInfo['obj']->renderRegion($region);

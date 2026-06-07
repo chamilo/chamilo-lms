@@ -72,7 +72,6 @@ import BaseAdvancedSettingsButton from "../basecomponents/BaseAdvancedSettingsBu
 import ResourceLanguageSelector from "../resources/ResourceLanguageSelector.vue"
 import { useNotification } from "../../composables/notification"
 import glossaryService from "../../services/glossaryService"
-import { useCidReq } from "../../composables/cidReq"
 import { useSecurityStore } from "../../store/securityStore"
 import { useIsAllowedToEdit } from "../../composables/userPermissions"
 
@@ -80,7 +79,6 @@ const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
 const notification = useNotification()
-const { sid, cid } = useCidReq()
 const securityStore = useSecurityStore()
 
 const props = defineProps({
@@ -95,15 +93,8 @@ const emit = defineEmits(["backPressed"])
 const parentResourceNodeId = ref(Number(route.params.node))
 const showAdvancedSettings = ref(false)
 
-const resourceLinkList = ref(
-  JSON.stringify([
-    {
-      sid,
-      cid,
-      visibility: RESOURCE_LINK_PUBLISHED, // visible by default
-    },
-  ]),
-)
+// Course context derived server-side from the gated session course.
+const resourceLinkList = ref(JSON.stringify([{ visibility: RESOURCE_LINK_PUBLISHED }]))
 
 const { isAllowedToEdit } = useIsAllowedToEdit({ tutor: true, coach: true, sessionCoach: true })
 

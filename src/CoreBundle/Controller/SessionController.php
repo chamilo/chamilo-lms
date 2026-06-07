@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use BuyCoursesPlugin;
+use Chamilo\CoreBundle\Component\Essence\SafeEssenceHttpClient;
 use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\SequenceResource;
@@ -235,7 +236,9 @@ class SessionController extends AbstractController
             ? ($redirectToSession.'&cr='.array_values($coursesInThisSession)[0]['directory'])
             : $redirectToSession;
 
-        $essence = new Essence();
+        // SSRF protection: route Essence's server-side OEmbed/OpenGraph fetches
+        // of the teacher-set course video URL through an IP-filtered HTTP client.
+        $essence = new Essence(['Http' => new SafeEssenceHttpClient()]);
 
         $params = [
             'session' => $session,

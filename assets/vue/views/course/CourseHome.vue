@@ -314,7 +314,6 @@
 <script setup>
 import { computed, onMounted, provide, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
-import axios from "axios"
 import CourseTool from "../../components/course/CourseTool"
 import ShortCutList from "../../components/course/ShortCutList.vue"
 import Skeleton from "primevue/skeleton"
@@ -597,10 +596,10 @@ async function enforceCourseLegalAgreement() {
   }
 
   try {
-    const response = await axios.get(`/plugin/CourseLegal/check.php?cid=${course.value.id}&sid=${session.value?.id || 0}&gid=0`)
+    const data = await courseService.checkCourseLegalPlugin(course.value.id, session.value?.id || 0)
 
-    if (response.data?.required && !response.data?.accepted && response.data?.url) {
-      window.location.href = response.data.url
+    if (data?.required && !data?.accepted && data?.url) {
+      window.location.href = data.url
     }
   } catch (error) {
     console.error("[CourseLegal] Failed to check course legal agreement", error)
@@ -613,18 +612,16 @@ async function loadCourseHomeNotification() {
   }
 
   try {
-    const response = await axios.get(
-      `/plugin/CourseHomeNotify/ajax.php?cid=${course.value.id}&sid=${session.value?.id || 0}&gid=0`,
-    )
+    const data = await courseService.getCourseHomeNotification(course.value.id, session.value?.id || 0)
 
-    if (!response.data?.show) {
+    if (!data?.show) {
       courseHomeNotify.value = {}
       courseHomeNotifyVisible.value = false
 
       return
     }
 
-    courseHomeNotify.value = response.data
+    courseHomeNotify.value = data
     courseHomeNotifyVisible.value = true
   } catch (error) {
     console.error("[CourseHomeNotify] Failed to load course notification", error)

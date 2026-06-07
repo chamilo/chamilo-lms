@@ -77,3 +77,6 @@ $strings['defaultVisibilityInCourseHomepage'] = 'Defaŭlta videbleco en hejmpaĝ
 $strings['ViewActivityDashboard'] = 'Vidi paĝon de agadoj';
 $strings['Participants'] = 'Partoprenantoj';
 $strings['CountUsers'] = 'Nombro de uzantoj';
+$strings['NoRecording'] = 'Neniu registrado';
+$strings['presentation'] = 'Prezentado';
+$strings['video'] = 'Video';

@@ -484,7 +484,8 @@ function buildToolCrumbs() {
       toolLabel = gidVal > 0 ? "Group agenda" : cidVal > 0 ? "Agenda" : "Personal agenda"
     }
 
-    items.push({ label: t(toolLabel), route: { name: toolBase.name, params: route.params, query: route.query } })
+    const toolBaseRouteName = toolBase.name === "admin" ? "AdminIndex" : toolBase.name
+    items.push({ label: t(toolLabel), route: { name: toolBaseRouteName, params: route.params, query: route.query } })
 
     const label = currentMatched.meta?.breadcrumb
 

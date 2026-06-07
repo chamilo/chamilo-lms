@@ -414,7 +414,9 @@ $tpl->assign('course_list', $courseListToShow);
 $tpl->assign('user_list', $userListToShow);
 $tpl->assign('dependencies', $dependencies);
 $tpl->assign('requirements', $requirements);
-$tpl->assign('show_session_data', 'true' === api_get_setting('session.show_session_data'));
+// The session summary page is an administration page. The session.show_session_data
+// setting is intended for learner-facing session catalog views, not for admins.
+$tpl->assign('show_session_data', true);
 
 $layout = $tpl->get_template('session/resume_session.tpl');
 $tpl->display($layout);

@@ -48,7 +48,9 @@ if (isset($_GET['id'])) {
     <link href="templates/styles/classic.css?v=<?php echo $version; ?>" rel="stylesheet"/>
     <link href="jscss/oel-teachdoc.css?v=<?php echo $version; ?>" rel="stylesheet" />
     <link href="templates/styles/plug.css?v=<?php echo $version; ?>" rel="stylesheet" />
+    <?php if (file_exists(__DIR__.'/../vendor/html2canvas/html2canvas.min.js')) { ?>
     <script src="../vendor/html2canvas/html2canvas.min.js?v=<?php echo $version; ?>"></script>
+    <?php } ?>
   
 </head>
 <body style="background:white;" >

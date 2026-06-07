@@ -981,6 +981,7 @@ switch ($action) {
                       <option value="d">'.addslashes(get_lang('Days')).'</option>
                       <option value="w">'.addslashes(get_lang('Weeks')).'</option>
                     </select>
+                    <span>'.addslashes(get_lang('Before')).'</span>
                     <button type="button" class="btn btn--danger js-reminder-remove" title="'.addslashes(get_lang('Delete')).'">×</button>
                   </div>
                 `);

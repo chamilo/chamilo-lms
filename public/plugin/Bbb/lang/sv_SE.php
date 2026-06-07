@@ -77,3 +77,6 @@ $strings['defaultVisibilityInCourseHomepage'] = 'Standardvisning på kursens sta
 $strings['ViewActivityDashboard'] = 'Visa aktivitetsinstrumentpanel';
 $strings['Participants'] = 'Deltagare';
 $strings['CountUsers'] = 'Räkna användare';
+$strings['NoRecording'] = 'Ingen inspelning';
+$strings['presentation'] = 'Presentation';
+$strings['video'] = 'Video';

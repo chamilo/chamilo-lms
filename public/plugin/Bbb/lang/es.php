@@ -77,3 +77,6 @@ $strings['ViewActivityDashboard'] = 'Ver el panel de actividades';
 $strings['Participants'] = 'Participantes';
 $strings['CountUsers'] = 'Contar usuarios';
 $strings['RoomExit'] = 'Ha salido de la sesión de Videoconferencia';
+$strings['NoRecording'] = 'No hay grabacion';
+$strings['presentation'] = 'Presentacion';
+$strings['video'] = 'Video';

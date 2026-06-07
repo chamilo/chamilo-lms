@@ -6,7 +6,10 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use CourseManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,12 +23,20 @@ use UserGroupModel;
 class UserController extends AbstractController
 {
     #[Route(path: '/usergroup_overview', name: 'overview_class', methods: ['GET'])]
-    public function overview(Request $request): Response
+    public function overview(Request $request, EntityManagerInterface $em): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $usergroupId = $request->query->getInt('usergroup');
         $courseId = $request->query->getInt('course');
+
+        // Resolve the target course and require access to it: the roster must not be
+        // disclosed for a course the caller cannot view (cross-course IDOR).
+        $course = $em->getRepository(Course::class)->find($courseId);
+        if (!$course instanceof Course) {
+            throw $this->createNotFoundException('Course not found');
+        }
+        $this->denyAccessUnlessGranted(CourseVoter::VIEW, $course);
 
         $usergroupLib = new UserGroupModel();
         $usergroup = $usergroupLib->get($usergroupId);

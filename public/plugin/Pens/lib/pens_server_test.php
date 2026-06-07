@@ -1,4 +1,11 @@
 <?php
+
+// Security (SSRF): this legacy php-pens demo harness is web-reachable under public/
+// and is NOT part of Chamilo's PENS flow (handled by PensController/PensProcessor).
+// Reaching PENSServer::receiveCollect() unauthenticated exposed SSRF vectors
+// (Host-header self-curl, package-url, receipt callback). Keep it inert.
+exit();
+
 /**
  * This file is part of php-pens.
  *

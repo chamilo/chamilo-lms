@@ -77,3 +77,6 @@ $strings['defaultVisibilityInCourseHomepage'] = 'Alapértelmezett láthatóság 
 $strings['ViewActivityDashboard'] = 'Tevékenység dashboard megtekintése';
 $strings['Participants'] = 'Résztvevők';
 $strings['CountUsers'] = 'Felhasználók számolása';
+$strings['NoRecording'] = 'Nincs felvetel';
+$strings['presentation'] = 'Prezentacio';
+$strings['video'] = 'Video';

@@ -18,7 +18,9 @@
       v-if="allowedExtensions.length > 0"
       class="text-gray-600"
     >
-      <span class="font-semibold">{{ t("Allowed file formats: {0}", [allowedExtensions.map(ext => '.' + ext).join(', ')]) }}</span>
+      <span class="font-semibold">{{
+        t("Allowed file formats: {0}", [allowedExtensions.map((ext) => "." + ext).join(", ")])
+      }}</span>
     </p>
 
     <div
@@ -113,7 +115,7 @@
 <script setup>
 import { ref, onMounted } from "vue"
 import { useRoute, useRouter } from "vue-router"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import { useI18n } from "vue-i18n"
 import { useNotification } from "../../composables/notification"
 import "@uppy/core/dist/style.css"
@@ -121,14 +123,14 @@ import "@uppy/dashboard/dist/style.css"
 import { Dashboard } from "@uppy/vue"
 import Uppy from "@uppy/core"
 import XHRUpload from "@uppy/xhr-upload"
-import axios from "axios"
+import cStudentPublicationService from "../../services/cstudentpublication"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
-const { cid, sid, gid } = useCidReq()
+const { cid, sid, gid } = getCourseContext()
 const { showSuccessNotification, showErrorNotification } = useNotification()
 const allowText = route.query.allowText === "1"
 const allowFile = route.query.allowFile === "1"
@@ -149,17 +151,19 @@ function isDeadlinePassed() {
 onMounted(loadPublicationTitle)
 async function loadPublicationTitle() {
   try {
-    const { data } = await axios.get(`/api/c_student_publications/${publicationId}`, {
-      params: { cid, ...(sid && { sid }), ...(gid && { gid }) },
+    const data = await cStudentPublicationService.getPublication(publicationId, {
+      cid,
+      ...(sid && { sid }),
+      ...(gid && { gid }),
     })
     publicationTitle.value = data.title
     submissionTitle.value = data.title
 
     if (data.extensions) {
       allowedExtensions.value = data.extensions
-        .split(' ')
-        .map(ext => ext.trim().toLowerCase())
-        .filter(ext => ext.length > 0)
+        .split(" ")
+        .map((ext) => ext.trim().toLowerCase())
+        .filter((ext) => ext.length > 0)
     }
 
     endsOn.value = data.assignment?.endsOn ?? null
@@ -182,10 +186,9 @@ function isFileExtensionAllowed(filename) {
     return true
   }
 
-  const fileExtension = filename.split('.').pop().toLowerCase()
+  const fileExtension = filename.split(".").pop().toLowerCase()
   return allowedExtensions.value.includes(fileExtension)
 }
-
 
 const queryParams = new URLSearchParams({
   cid,
@@ -203,7 +206,9 @@ const uppy = new Uppy({
     }
     if (!isFileExtensionAllowed(currentFile.name)) {
       showErrorNotification(
-        t("File type not allowed. Allowed extensions: {0}", [allowedExtensions.value.map(ext => '.' + ext).join(', ')])
+        t("File type not allowed. Allowed extensions: {0}", [
+          allowedExtensions.value.map((ext) => "." + ext).join(", "),
+        ]),
       )
       return false
     }
@@ -221,7 +226,7 @@ uppy.on("file-added", (file) => {
     filetype: "file",
     parentResourceNodeId,
     parentId: publicationId,
-    resourceLinkList: JSON.stringify([{ cid, sid, gid, visibility: 2 }]),
+    resourceLinkList: JSON.stringify([{ visibility: 2 }]),
   })
 })
 uppy.on("upload-success", () => {
@@ -252,12 +257,10 @@ async function submitText() {
   formData.append("filetype", "file") // ahora sí "file"
   formData.append("parentId", publicationId)
   formData.append("parentResourceNodeId", parentResourceNodeId)
-  formData.append("resourceLinkList", JSON.stringify([{ cid, sid, gid, visibility: 2 }]))
+  formData.append("resourceLinkList", JSON.stringify([{ visibility: 2 }]))
 
   try {
-    await axios.post(`/api/c_student_publications/upload?${queryParams}`, formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    })
+    await cStudentPublicationService.uploadStudentAssignment(formData, queryParams)
     showSuccessNotification(t("Text submitted successfully"))
     router.push({
       name: "AssignmentDetail",

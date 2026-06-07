@@ -4279,3 +4279,180 @@ z-index : 10014;
     background-size : contain;
 }
 
+
+
+#pageEditThemeParams .gjs-am-add-asset {
+    text-align: center;
+}
+
+#pageEditThemeParams .innerEditTitleTeach,
+#pageEditThemeParams .innerEditColorsTeach,
+#pageEditThemeParams .innerEditQuizzTeach {
+    display: inline-block;
+    float: none;
+    vertical-align: top;
+}
+
+#pageEditThemeParams .innerEditColorsTeach,
+#pageEditThemeParams .innerEditQuizzTeach {
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
+.cstudio-clean-data-help {
+    margin: 0 0 16px;
+    padding: 12px;
+    border: 1px solid #D6DBDF;
+    border-radius: 4px;
+    background: #F8F9F9;
+    color: #2C3E50;
+    line-height: 1.4;
+    text-align: left;
+}
+
+
+/* CStudio visible UI fixes */
+.cstudio-preview-back-button {
+    position: fixed;
+    top: 132px;
+    left: max(112px, calc(50vw - 575px));
+    z-index: 99999;
+    padding: 8px 14px;
+    border: 1px solid #6b7280;
+    border-radius: 6px;
+    background: #ffffff;
+    color: #111827;
+    box-shadow: 0 2px 8px rgba(0,0,0,.18);
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 18px;
+}
+
+.cstudio-preview-back-button:hover,
+.cstudio-preview-back-button:focus {
+    background: #f3f4f6;
+}
+
+#pageEditThemeParams .innerLeftBannerTeach {
+    display: none !important;
+}
+
+#pageEditThemeParams .gjs-am-add-asset {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(305px, 1fr));
+    gap: 8px;
+    justify-items: center;
+    align-items: start;
+    text-align: center;
+}
+
+#pageEditThemeParams .innerEditTitleTeach,
+#pageEditThemeParams .innerEditColorsTeach,
+#pageEditThemeParams .innerEditQuizzTeach {
+    float: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+#pageEditThemeParams .innerEditTitleTeach {
+    width: 100%;
+    max-width: 305px;
+}
+
+#pageEditThemeParams .innerEditColorsTeach,
+#pageEditThemeParams .innerEditQuizzTeach {
+    width: 305px;
+}
+
+#pageEditThemeParams .colorCube {
+    float: none;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.gjs-pn-btn.fa-eye,
+.gjs-pn-btn[class*="fa-eye"],
+.fa-eye[data-cstudio-tooltip],
+[class*="fa-eye"][data-cstudio-tooltip] {
+    min-width: 28px !important;
+    min-height: 28px !important;
+    font-size: 18px !important;
+    line-height: 28px !important;
+    text-align: center !important;
+}
+
+@media screen and (max-width: 900px) {
+    #pageEditThemeParams .gjs-am-add-asset {
+        grid-template-columns: 1fr;
+    }
+
+    .cstudio-preview-back-button {
+        left: 96px;
+    }
+}
+
+
+/* CStudio options modal thumbnail layout */
+#allParamsArea .cstudio-project-thumbnail-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 0 0 20px;
+    min-height: 92px;
+}
+
+#allParamsArea .cstudio-project-thumbnail-label {
+    flex: 1 1 auto;
+    min-width: 0;
+    line-height: 1.35;
+    text-align: right;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+#allParamsArea .cstudio-project-thumbnail-controls {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+#allParamsArea .cstudio-project-thumbnail-preview {
+    width: 180px;
+    height: 82px;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid gray;
+    background: #ffffff;
+    cursor: pointer;
+}
+
+#allParamsArea .cstudio-project-thumbnail-preview img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#allParamsArea .cstudio-project-thumbnail-reset {
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+}
+
+#allParamsArea .cstudio-options-field-row {
+    position: relative;
+    margin: 15px;
+}
+
+@media screen and (max-width: 720px) {
+    #allParamsArea .cstudio-project-thumbnail-row {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    #allParamsArea .cstudio-project-thumbnail-label {
+        text-align: left;
+    }
+}

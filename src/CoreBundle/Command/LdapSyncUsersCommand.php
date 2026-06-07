@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Command;
 
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\TrackEDefault;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
@@ -82,6 +83,19 @@ class LdapSyncUsersCommand extends Command
                 'Usernames to skip even if absent from LDAP (e.g. --skip=admin --skip=anonymous)',
                 []
             )
+            ->addOption(
+                'search_extra_field',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Extra field variable name used to match LDAP entries to existing Chamilo users when the username does not match (e.g. --search_extra_field=matricule)'
+            )
+            ->addOption(
+                'force_adding_extra_authsource',
+                null,
+                InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
+                'Add an extra auth source to every created or updated user (e.g. --force_adding_extra_authsource=oauth2). Can be repeated for multiple sources.',
+                []
+            )
             ->setHelp(<<<'HELP'
                 This command synchronizes user accounts between Chamilo and one or more LDAP directories.
 
@@ -102,6 +116,23 @@ class LdapSyncUsersCommand extends Command
 
                   <info>php bin/console app:ldap-sync-users --skip=admin --skip=anonymous</info>
 
+                Use <info>--search_extra_field</info> to match LDAP entries to existing Chamilo users via an extra field
+                when the username does not match. The extra field variable name must correspond to an <comment>extra_*</comment>
+                key in <comment>data_correspondence</comment>. When a match is found the existing user is updated and their
+                username is set to the LDAP value so future syncs recognise them directly:
+
+                  <info>php bin/console app:ldap-sync-users --search_extra_field=matricule</info>
+
+                Use <info>--force_adding_extra_authsource</info> to add an extra authentication source to every user
+                created or updated by the sync (idempotent — already-assigned sources are not duplicated).
+                Useful to allow OAuth2 login alongside LDAP:
+
+                  <info>php bin/console app:ldap-sync-users --force_adding_extra_authsource=oauth2</info>
+
+                The option can be repeated to add several sources at once:
+
+                  <info>php bin/console app:ldap-sync-users --force_adding_extra_authsource=oauth2 --force_adding_extra_authsource=azure</info>
+
                 Run in dry-run mode first to preview all changes without writing to the database:
 
                   <info>php bin/console app:ldap-sync-users --dry-run -v</info>
@@ -120,6 +151,12 @@ class LdapSyncUsersCommand extends Command
 
         /** @var string[] $skipList */
         $skipList = $input->getOption('skip');
+
+        /** @var string|null $searchExtraField */
+        $searchExtraField = $input->getOption('search_extra_field') ?: null;
+
+        /** @var string[] $extraAuthSources */
+        $extraAuthSources = $input->getOption('force_adding_extra_authsource');
 
         if ($testMode) {
             $io->note('Running in TEST mode — no changes will be written to the database.');
@@ -199,6 +236,41 @@ class LdapSyncUsersCommand extends Command
 
                 $isNew = !isset($dbUsers[$username]);
 
+                // When the username is unknown, try to match via an extra field value.
+                if ($isNew && null !== $searchExtraField) {
+                    $ldapAttrConfig = $dataCorrespondence['extra_'.$searchExtraField] ?? null;
+                    if (null !== $ldapAttrConfig) {
+                        $ldapAttrStr = (string) $ldapAttrConfig;
+                        $extraFieldValue = str_starts_with($ldapAttrStr, '=')
+                            ? substr($ldapAttrStr, 1)
+                            : ($entry->getAttribute($ldapAttrStr) ?? [])[0] ?? null;
+
+                        if (null !== $extraFieldValue) {
+                            $extraField = $this->extraFieldRepo->findByVariable(ExtraField::USER_FIELD_TYPE, $searchExtraField);
+                            if (null !== $extraField) {
+                                $match = $this->extraFieldValuesRepo->findByVariableAndValue($extraField, $extraFieldValue);
+                                if ($match instanceof ExtraFieldValues) {
+                                    $matchedUser = $this->userRepository->find($match->getItemId());
+                                    if (null !== $matchedUser) {
+                                        $isNew = false;
+                                        $oldUsername = mb_strtolower($matchedUser->getUsername());
+                                        unset($dbUsers[$oldUsername]);
+                                        $dbUsers[$username] = $matchedUser;
+                                        $io->writeln(\sprintf(
+                                            '%sMatched LDAP entry to existing user "%s" via extra field "%s"="%s" — username will be updated to "%s".',
+                                            $testMode ? '[TEST] ' : '',
+                                            $matchedUser->getUsername(),
+                                            $searchExtraField,
+                                            $extraFieldValue,
+                                            $username,
+                                        ));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
                 if ($testMode) {
                     $io->writeln(\sprintf('[TEST] Would %s user: %s', $isNew ? 'create' : 'update', $username));
 
@@ -217,6 +289,10 @@ class LdapSyncUsersCommand extends Command
 
                 $this->applyLdapFields($user, $entry, $dataCorrespondence, $isNew, (bool) $ldapConfig['synch_user_role_on_update']);
                 $user->setUsername($username);
+
+                foreach ($extraAuthSources as $authSource) {
+                    $user->addAuthSourceByAuthentication($authSource, $accessUrl);
+                }
 
                 if (!$user->isActive() && $reenableFound) {
                     $user->setActive(1);

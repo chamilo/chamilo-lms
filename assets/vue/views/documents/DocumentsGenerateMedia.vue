@@ -109,13 +109,6 @@
         />
       </div>
 
-      <BaseAdvancedSettingsButton
-        v-if="showResourceLanguageAdvancedSettings"
-        v-model="showAdvancedSettings"
-      >
-        <ResourceLanguageSelector v-model="selectedLanguage" />
-      </BaseAdvancedSettingsButton>
-
       <!-- Name -->
       <div class="space-y-1">
         <label class="font-semibold text-sm">{{ t("Filename") }}</label>
@@ -308,10 +301,11 @@
 
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref, watch, nextTick } from "vue"
-import axios from "axios"
+import documentService from "../../services/documents"
+import aiService from "../../services/aiService"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
@@ -325,7 +319,7 @@ import { checkIsAllowedToEdit } from "../../composables/userPermissions"
 const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
-const { cid, sid, gid } = useCidReq()
+const { cid, sid, gid } = getCourseContext()
 
 const platformConfig = usePlatformConfig()
 const courseSettingsStore = useCourseSettings()
@@ -607,8 +601,9 @@ function base64ToFile(base64, filename, mime) {
   return new File([blob], filename, { type: mime })
 }
 
+// Course context derived server-side from the gated session course.
 function buildResourceLinkList() {
-  return JSON.stringify([{ gid, sid, cid, visibility: RESOURCE_LINK_PUBLISHED }])
+  return JSON.stringify([{ visibility: RESOURCE_LINK_PUBLISHED }])
 }
 
 function canvasMimeFromContentType(contentType) {
@@ -692,11 +687,7 @@ async function saveToDocuments(file) {
   // Mark as AI-assisted (same request, no extra calls)
   formData.append("ai_assisted", "1")
 
-  const response = await axios.post("/api/documents", formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  })
-
-  const data = response?.data || {}
+  const data = (await documentService.uploadDocumentFile(formData)) || {}
   savedIri.value = String(data?.["@id"] || data?.id || "")
   return data
 }
@@ -724,20 +715,18 @@ async function fetchFolders(nodeId = null) {
         continue
       }
 
-      const response = await axios.get("/api/documents", {
-        params: {
-          loadNode: 1,
-          filetype: ["folder"],
-          "resourceNode.parent": currentNodeId,
-          cid,
-          sid,
-          gid,
-          page: 1,
-          itemsPerPage: 200,
-        },
+      const { items } = await documentService.listDocuments({
+        loadNode: 1,
+        filetype: ["folder"],
+        "resourceNode.parent": currentNodeId,
+        cid,
+        sid,
+        gid,
+        page: 1,
+        itemsPerPage: 200,
       })
 
-      const members = response.data?.["hydra:member"] || []
+      const members = items || []
       for (const folder of members) {
         const folderNodeId =
           normalizeResourceNodeId(folder?.resourceNode?.id) ?? normalizeResourceNodeId(folder?.resourceNodeId)
@@ -760,7 +749,7 @@ async function loadCapabilities() {
   isLoadingCaps.value = true
 
   try {
-    const { data } = await axios.get("/ai/capabilities")
+    const data = await aiService.getCapabilities()
 
     hasImage.value = !!data?.has?.image
     hasVideo.value = !!data?.has?.video
@@ -809,10 +798,7 @@ function stopVideoPolling(reason = "") {
 }
 
 async function pollVideoJobOnce(jobId, providerCode) {
-  const response = await axios.get(`/ai/video_job/${encodeURIComponent(jobId)}`, {
-    params: { ai_provider: providerCode || null },
-  })
-  return response?.data
+  return aiService.getVideoJob(jobId, providerCode)
 }
 
 function isTerminalVideoStatus(status) {
@@ -969,7 +955,7 @@ async function generate() {
       payload.height = parsedHeight.value
     }
 
-    const { data } = await axios.post(endpoint, payload, { headers: { "Content-Type": "application/json" } })
+    const data = await aiService.generateMedia(endpoint, payload)
 
     if (!data?.success) {
       const msg = String(data?.text || "")

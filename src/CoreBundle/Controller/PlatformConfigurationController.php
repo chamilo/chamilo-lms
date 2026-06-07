@@ -8,7 +8,6 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Bbb;
 use BuyCoursesPlugin;
-use DictionaryPlugin;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CoreBundle\Helpers\TicketProjectHelper;
@@ -18,6 +17,8 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
+use DashboardPlugin;
+use DictionaryPlugin;
 use Doctrine\ORM\EntityManagerInterface;
 use OnlyofficePlugin;
 use RssPlugin;
@@ -116,6 +117,7 @@ class PlatformConfigurationController extends AbstractController
         $configuration['settings']['platform.use_custom_pages'] = $settingsManager->getSetting('platform.use_custom_pages', true);
 
         $configuration['plugins']['buycourses'] = $this->getBuyCoursesFrontendConfig();
+        $configuration['plugins']['dashboard'] = $this->getDashboardFrontendConfig();
         $configuration['plugins']['tour'] = $this->getTourFrontendConfig();
         $configuration['plugins']['searchcourse'] = $this->getSearchCourseFrontendConfig();
         $configuration['plugins']['rss'] = $this->getRssFrontendConfig();
@@ -141,7 +143,7 @@ class PlatformConfigurationController extends AbstractController
                 'editor.enable_iframe_inclusion',
                 'editor.enable_uploadimage_editor',
                 'editor.video_context_menu_hidden',
-                'display.show_admin_toolbar',
+                'display.accessibility_font_resize',
                 'registration.allow_terms_conditions',
                 'agenda.allow_personal_agenda',
                 'agenda.personal_calendar_show_sessions_occupation',
@@ -397,6 +399,23 @@ class PlatformConfigurationController extends AbstractController
         return [];
     }
 
+    private function getDashboardFrontendConfig(): array
+    {
+        if (!$this->loadLegacyPluginClass('Dashboard/src/DashboardPlugin.php')
+            || !class_exists('DashboardPlugin')
+        ) {
+            return ['enabled' => false];
+        }
+
+        $plugin = DashboardPlugin::create();
+        $enabled = $plugin->isEnabled();
+
+        return [
+            'enabled' => $enabled,
+            'title' => $enabled ? $plugin->get_title() : '',
+            'adminPath' => '/plugin/Dashboard/admin.php',
+        ];
+    }
 
     private function getSearchCourseFrontendConfig(): array
     {
@@ -454,7 +473,7 @@ class PlatformConfigurationController extends AbstractController
 
     private function loadLegacyPluginClass(string $relativePath): bool
     {
-        $filePath = dirname(__DIR__, 3).'/public/plugin/'.$relativePath;
+        $filePath = \dirname(__DIR__, 3).'/public/plugin/'.$relativePath;
 
         if (!is_file($filePath)) {
             return false;

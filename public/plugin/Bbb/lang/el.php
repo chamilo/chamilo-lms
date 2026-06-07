@@ -77,3 +77,6 @@ $strings['defaultVisibilityInCourseHomepage'] = 'Προεπιλεγμένη ορ
 $strings['ViewActivityDashboard'] = 'Προβολή πίνακα ελέγχου δραστηριότητας';
 $strings['Participants'] = 'Συνεργάτες';
 $strings['CountUsers'] = 'Μέτρηση χρηστών';
+$strings['NoRecording'] = 'Καμία εγγραφή';
+$strings['presentation'] = 'Παρουσίαση';
+$strings['video'] = 'Βίντεο';

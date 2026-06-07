@@ -15,6 +15,7 @@ import CatalogueRequirementModal from "./CatalogueRequirementModal.vue"
 import courseRelUserService from "../../services/courseRelUserService"
 import { useCourseRequirementStatus } from "../../composables/course/useCourseRequirementStatus"
 import { useLocale } from "../../composables/locale"
+import baseService from "../../services/baseService"
 
 const { t } = useI18n()
 const { getOriginalLanguageName } = useLocale()
@@ -53,13 +54,8 @@ localCourse.value.ratingCount = Number(
 const fetchRating = async () => {
   if (!localCourse.value?.id) return
   try {
-    const sessionQuery = localCourse.value?.sessionId ? `?session=${localCourse.value.sessionId}` : ""
-    const res = await fetch(`/catalogue/api/courses/${localCourse.value.id}/rating${sessionQuery}`, {
-      headers: { Accept: "application/json" },
-      credentials: "same-origin",
-    })
-    if (!res.ok) return
-    const data = await res.json()
+    const params = localCourse.value?.sessionId ? { session: localCourse.value.sessionId } : {}
+    const data = await baseService.get(`/catalogue/api/courses/${localCourse.value.id}/rating`, params)
     localCourse.value.ratingAvg = Number(data.average ?? data.avg ?? data.ratingAvg ?? 0)
     localCourse.value.ratingCount = Number(data.count ?? data.countVotes ?? localCourse.value.ratingCount ?? 0)
   } catch (e) {
@@ -136,13 +132,8 @@ localCourse.value.nbVisits = Number(localCourse.value.nbVisits ?? 0)
 const fetchVisits = async () => {
   if (!localCourse.value?.id) return
   try {
-    const sessionQuery = localCourse.value?.sessionId ? `?session=${localCourse.value.sessionId}` : ""
-    const res = await fetch(`/catalogue/api/courses/${localCourse.value.id}/visits${sessionQuery}`, {
-      headers: { Accept: "application/json" },
-      credentials: "same-origin",
-    })
-    if (!res.ok) return
-    const data = await res.json()
+    const params = localCourse.value?.sessionId ? { session: localCourse.value.sessionId } : {}
+    const data = await baseService.get(`/catalogue/api/courses/${localCourse.value.id}/visits`, params)
     localCourse.value.nbVisits = Number(data.visits ?? 0)
   } catch (e) {
     console.error("fetchVisits error", e)

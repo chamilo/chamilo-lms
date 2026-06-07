@@ -57,6 +57,22 @@ const exportScormUrl = computed(() =>
   }),
 )
 
+const isLpSubscriptionMode = computed(() => Number(props.lp?.subscribeUsers ?? props.lp?.subscribe_users ?? 0) === 1)
+
+const isLpVisible = computed(() => {
+  const value = props.lp?.visible ?? props.lp?.visibility
+
+  if (typeof value === "undefined" || value === null || value === "") {
+    return true
+  }
+
+  if (typeof value === "string") {
+    return ["1", "true", "v", "visible", "published"].includes(value.toLowerCase())
+  }
+
+  return Boolean(value)
+})
+
 const togglePublishUrl = computed(() =>
   lpService.buildLegacyActionUrl(props.lp.iid, "toggle_publish", {
     ...routeCtx.value,
@@ -67,9 +83,37 @@ const togglePublishUrl = computed(() =>
 const toggleVisibleUrl = computed(() =>
   lpService.buildLegacyActionUrl(props.lp.iid, "toggle_visible", {
     ...routeCtx.value,
-    params: { new_status: typeof props.lp.visible !== "undefined" ? (props.lp.visible ? 0 : 1) : 1 },
+    params: { new_status: isLpVisible.value ? 0 : 1 },
   }),
 )
+
+const advancedAccessUrl = computed(() => {
+  const search = new URLSearchParams()
+
+  search.set("cid", routeCtx.value.cid || 0)
+  search.set("sid", routeCtx.value.sid || 0)
+  search.set("lp_id", props.lp.iid)
+
+  return `/resources/lp/${routeCtx.value.node}/advanced-access?${search.toString()}`
+})
+
+const visibilityAction = computed(() => {
+  if (isLpSubscriptionMode.value) {
+    return {
+      label: t("Learning path only visible to selected learners"),
+      icon: "eye-on",
+      disabled: true,
+      toUrl: null,
+    }
+  }
+
+  return {
+    label: isLpVisible.value ? t("Hide") : t("Show"),
+    icon: isLpVisible.value ? "eye-on" : "eye-off",
+    disabled: false,
+    toUrl: toggleVisibleUrl.value,
+  }
+})
 
 const deleteUrl = computed(() => lpService.buildLegacyActionUrl(props.lp.iid, "delete", routeCtx.value))
 
@@ -247,6 +291,13 @@ const progressTextClass = computed(() =>
                   {{ t("Publish / Hide") }}
                 </BaseAppLink>
                 <BaseAppLink
+                  v-if="isLpSubscriptionMode"
+                  :url="advancedAccessUrl"
+                  class="block w-full text-left px-3 py-2 rounded hover:bg-gray-15 md:hidden"
+                >
+                  {{ t("Subscribe users to learning path") }}
+                </BaseAppLink>
+                <BaseAppLink
                   v-if="canExportScorm"
                   :url="exportScormUrl"
                   class="block w-full text-left px-3 py-2 rounded hover:bg-gray-15 md:hidden"
@@ -343,9 +394,20 @@ const progressTextClass = computed(() =>
         />
 
         <BaseButton
-          :label="t('Visibility')"
-          :to-url="toggleVisibleUrl"
-          icon="eye-on"
+          :disabled="visibilityAction.disabled"
+          :label="visibilityAction.label"
+          :to-url="visibilityAction.toUrl"
+          :icon="visibilityAction.icon"
+          only-icon
+          size="small"
+          type="tertiary-alternative-text"
+        />
+
+        <BaseButton
+          v-if="isLpSubscriptionMode"
+          :label="t('Subscribe users to learning path')"
+          :to-url="advancedAccessUrl"
+          icon="join-group"
           only-icon
           size="small"
           type="tertiary-alternative-text"
@@ -387,6 +449,14 @@ const progressTextClass = computed(() =>
                   class="block w-full text-left px-3 py-2 rounded hover:bg-gray-15"
                 >
                   {{ t("Publish / Hide") }}
+                </BaseAppLink>
+
+                <BaseAppLink
+                  v-if="isLpSubscriptionMode"
+                  :url="advancedAccessUrl"
+                  class="block w-full text-left px-3 py-2 rounded hover:bg-gray-15"
+                >
+                  {{ t("Subscribe users to learning path") }}
                 </BaseAppLink>
 
                 <BaseAppLink

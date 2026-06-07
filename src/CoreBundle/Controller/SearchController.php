@@ -74,11 +74,24 @@ final class SearchController extends AbstractController
                 ]
             );
 
+            $results = $result['results'];
+
+            // Mirror the page action: drop hits the caller cannot access unless the
+            // platform is configured to show unlinked results. Without this, the JSON
+            // endpoint leaks titles/snippets from courses the user cannot view.
+            $showUnlinked = 'true' === (string) $this->settingsManager->getSetting('search.search_show_unlinked_results', true);
+            if (!$showUnlinked) {
+                $results = array_values(array_filter(
+                    $results,
+                    fn ($item) => $this->isResultAccessible(\is_array($item['data'] ?? null) ? $item['data'] : [])
+                ));
+            }
+
             return $this->json([
                 'query' => $q,
                 'language' => $languageIso,
-                'total' => $result['count'],
-                'results' => $result['results'],
+                'total' => \count($results),
+                'results' => $results,
             ]);
         } catch (Throwable $e) {
             return $this->json([

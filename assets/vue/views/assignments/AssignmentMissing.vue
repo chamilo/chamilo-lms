@@ -76,7 +76,7 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import Column from "primevue/column"
 import ProgressSpinner from "primevue/progressspinner"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import { useNotification } from "../../composables/notification"
 
 const props = defineProps({
@@ -90,7 +90,7 @@ const loading = ref(true)
 const router = useRouter()
 const route = useRoute()
 const { t } = useI18n()
-const { cid, sid, gid } = useCidReq()
+const { cid, sid, gid } = getCourseContext()
 const notification = useNotification()
 
 onMounted(async () => {

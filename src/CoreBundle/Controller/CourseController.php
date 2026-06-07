@@ -30,6 +30,8 @@ use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
 use Chamilo\CoreBundle\Repository\TagRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
+use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
+use Chamilo\CoreBundle\Security\CourseAccessResolver;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
@@ -268,7 +270,7 @@ class CourseController extends ToolBaseController
                 && $pluginConfiguration
                 && $pluginConfiguration->isActive();
 
-            $topLinksRelationClass = 'Chamilo\\PluginBundle\\TopLinks\\Entity\\TopLinkRelShortcut';
+            $topLinksRelationClass = 'Chamilo\PluginBundle\TopLinks\Entity\TopLinkRelShortcut';
             $topLinksEntityPath = \dirname(__DIR__, 3).'/public/plugin/TopLinks/src/Entity/TopLinkRelShortcut.php';
             $topLinksRepositoryPath = \dirname(__DIR__, 3).'/public/plugin/TopLinks/src/Entity/Repository/TopLinkRelShortcutRepository.php';
 
@@ -290,8 +292,7 @@ class CourseController extends ToolBaseController
                 && $topLinksPluginEntity->isInstalled()
                 && $topLinksConfiguration
                 && $topLinksConfiguration->isActive()
-                && class_exists($topLinksRelationClass)
-            ;
+                && class_exists($topLinksRelationClass);
 
             if ($isTopLinksEnabled) {
                 try {
@@ -323,8 +324,7 @@ class CourseController extends ToolBaseController
                 && $embedRegistryPluginEntity->isInstalled()
                 && $embedRegistryConfiguration
                 && $embedRegistryConfiguration->isActive()
-                && $isEmbedRegistryAvailable
-            ;
+                && $isEmbedRegistryAvailable;
 
             $courseNodeId = $course->getResourceNode()->getId();
             $cid = $course->getId();
@@ -1038,6 +1038,11 @@ class CourseController extends ToolBaseController
     #[Route('/{id}/getToolIntro', name: 'chamilo_core_course_gettoolintro')]
     public function getToolIntro(Request $request, Course $course, EntityManagerInterface $em): Response
     {
+        // Reading a tool introduction requires access to the course. CourseVoter::VIEW
+        // grants course members (students/teachers), session users and anonymous users
+        // on public courses, while honoring course visibility and prerequisite locks.
+        $this->denyAccessUnlessGranted(CourseVoter::VIEW, $course);
+
         $toolTitle = trim((string) $request->query->get('tool', 'course_homepage'));
         if ('' === $toolTitle) {
             $toolTitle = 'course_homepage';
@@ -1115,8 +1120,12 @@ class CourseController extends ToolBaseController
     }
 
     #[Route('/{id}/addToolIntro', name: 'chamilo_core_course_addtoolintro')]
-    public function addToolIntro(Request $request, Course $course, EntityManagerInterface $em): Response
-    {
+    public function addToolIntro(
+        Request $request,
+        Course $course,
+        EntityManagerInterface $em,
+        CourseAccessResolver $courseAccessResolver,
+    ): Response {
         $data = json_decode($request->getContent());
 
         $toolTitle = trim((string) ($data->tool ?? 'course_homepage'));
@@ -1128,6 +1137,27 @@ class CourseController extends ToolBaseController
         $introText = $data->introText ?? null;
 
         $session = $sessionId ? $em->getRepository(Session::class)->find($sessionId) : null;
+
+        // Writing a tool introduction is teacher-only. The contextual course
+        // roles are unavailable here (cid travels in the body, not the query, so
+        // CidReqListener cannot resolve them), so resolve them directly from the
+        // course/session objects with CourseAccessResolver — the same source of
+        // truth CourseContextRoleListener uses — keeping this gate consistent with
+        // the CToolIntro API write operations. Admins are allowed separately, as
+        // the resolver does not grant them course roles.
+        $user = $this->getUser();
+        $courseRoles = $user instanceof User
+            ? $courseAccessResolver->resolveCourseRoles($user, $course, $session)
+            : [];
+
+        $canManage = $this->isGranted('ROLE_ADMIN')
+            || \in_array(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER, $courseRoles, true)
+            || \in_array(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_TEACHER, $courseRoles, true);
+
+        if (!$canManage) {
+            throw $this->createAccessDeniedException();
+        }
+
         $ctoolintroRepo = $em->getRepository(CToolIntro::class);
 
         $ctoolSession = $this->findCourseTool($course, $toolTitle, $session, $em);
@@ -1232,6 +1262,7 @@ class CourseController extends ToolBaseController
         return new JsonResponse($results);
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/create', name: 'chamilo_core_course_create')]
     public function createCourse(
         Request $request,
@@ -1439,6 +1470,7 @@ class CourseController extends ToolBaseController
         );
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/create-capability', name: 'chamilo_core_course_create_capability', methods: ['GET'])]
     public function createCourseCapability(
         TranslatorInterface $translator,
@@ -1505,6 +1537,10 @@ class CourseController extends ToolBaseController
                         $currentCount,
                         $effectiveLimit
                     );
+                } elseif ('role' === $limitSource) {
+                    $message = $translator->trans('Only trainers and administrators can create courses.');
+                } elseif ('setting' === $limitSource) {
+                    $message = $translator->trans('Course creation by trainers is disabled on this platform.');
                 } else {
                     $message = \sprintf(
                         $translator->trans(

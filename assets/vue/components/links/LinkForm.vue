@@ -117,7 +117,6 @@ import linkService from "../../services/linkService"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { computed, onMounted, reactive, ref, watch } from "vue"
-import { useCidReq } from "../../composables/cidReq"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import { required, url } from "@vuelidate/validators"
 import useVuelidate from "@vuelidate/core"
@@ -138,7 +137,6 @@ import { Dashboard } from "@uppy/vue"
 
 const notification = useNotification()
 const { t } = useI18n()
-const { cid, sid } = useCidReq()
 const router = useRouter()
 const route = useRoute()
 const selectedFile = ref(null)
@@ -210,16 +208,30 @@ const props = defineProps({
 const emit = defineEmits(["backPressed"])
 
 const parentResourceNodeId = ref(Number(route.params.node))
-const resourceLinkList = ref(
-  JSON.stringify([
-    {
-      sid,
-      cid,
-      visibility: RESOURCE_LINK_PUBLISHED,
-    },
-  ]),
-)
+// Course context derived server-side from the gated session course.
+const resourceLinkList = ref(JSON.stringify([{ visibility: RESOURCE_LINK_PUBLISHED }]))
 const categories = ref([])
+
+const courseContextParams = computed(() => {
+  const params = {}
+  const cid = Number(route.query.cid || 0)
+  const sid = Number(route.query.sid || 0)
+  const gid = Number(route.query.gid || 0)
+
+  if (cid > 0) {
+    params.cid = cid
+  }
+
+  if (sid > 0) {
+    params.sid = sid
+  }
+
+  if (gid > 0) {
+    params.gid = gid
+  }
+
+  return params
+})
 
 const formData = reactive({
   url: "https://",
@@ -256,9 +268,31 @@ onMounted(() => {
 })
 
 const fetchCategories = async () => {
+  const params = {
+    cid: courseContextParams.value.cid || null,
+    sid: courseContextParams.value.sid || null,
+  }
+
   try {
-    categories.value = await linkService.getCategories(parentResourceNodeId.value)
+    const data = await linkService.getLinks(params)
+    categories.value = Object.values(data.categories || {})
+      .map((category) => {
+        const info = category.info || category
+        const id = Number(info.iid || info.id || 0)
+
+        if (!id) {
+          return null
+        }
+
+        return {
+          ...info,
+          iid: id,
+          title: info.title || "",
+        }
+      })
+      .filter(Boolean)
   } catch (error) {
+    categories.value = []
     console.error("Error fetching categories:", error)
   }
 }

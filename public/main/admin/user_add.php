@@ -47,6 +47,41 @@ function password_switch_radio_button() {
         }
     }
 }
+
+function update_user_add_password_section() {
+    var authSourceSelect = document.getElementById("auth_source");
+    var passwordSection = document.getElementById("user-add-password-section");
+
+    if (!authSourceSelect || !passwordSection) {
+        return;
+    }
+
+    var hasPlatformAuth = false;
+    for (var i = 0; i < authSourceSelect.options.length; i++) {
+        if (authSourceSelect.options[i].selected && "platform" === authSourceSelect.options[i].value) {
+            hasPlatformAuth = true;
+            break;
+        }
+    }
+
+    passwordSection.classList.toggle("hidden", !hasPlatformAuth);
+
+    if (!hasPlatformAuth) {
+        var autoPasswordRadio = document.querySelector("input[name=\"password[password_auto]\"][value=\"1\"]");
+        if (autoPasswordRadio) {
+            autoPasswordRadio.checked = true;
+        }
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    var authSourceSelect = document.getElementById("auth_source");
+
+    if (authSourceSelect) {
+        authSourceSelect.addEventListener("change", update_user_add_password_section);
+        update_user_add_password_section();
+    }
+});
 </script>';
 
 if (!empty($_GET['message'])) {
@@ -159,57 +194,82 @@ if ('true' !== api_get_setting('login_is_email')) {
     $form->addRule('username', get_lang('This login is already in use'), 'username_available');
 }
 
-// Password
-$group = [];
 $extAuthSource = $authenticationConfigHelper->getAuthSourceAuthentications($accessUrl);
-$auth_sources = 0; //make available wider as we need it in case of form reset (see below)
-$nb_ext_auth_source_added = 0;
-if (count($extAuthSource) > 0) {
-    $auth_sources = [];
+$authSources = [
+    UserAuthSource::PLATFORM => get_lang('Platform'),
+];
+
+if (!empty($extAuthSource) && count($extAuthSource) > 0) {
     foreach ($extAuthSource as $key) {
-        // @todo : make uniform external authentification configuration (ex : cas and external_login ldap)
+        // @todo : make uniform external authentication configuration (ex : cas and external_login ldap)
         // Special case for CAS. CAS is activated from Chamilo > Administration > Configuration > CAS
         // extAuthSource always on for CAS even if not activated
         // same action for file user_edit.php
         if ((UserAuthSource::CAS == $key && 'true' === api_get_setting('cas_activate')) || (UserAuthSource::CAS != $key)) {
-            $auth_sources[$key] = $key;
-            $nb_ext_auth_source_added++;
+            $authSources[$key] = $key;
         }
-    }
-    if ($nb_ext_auth_source_added > 0) {
-        $group[] = $form->createElement('radio', 'password_auto', null, get_lang('External authentification').' ', 2);
-        $group[] = $form->createElement('select', 'auth_source', null, $auth_sources, ['multiple' => 'multiple', 'size' => 2]);;
-        $group[] = $form->createElement('static', '', '', '<br />');
     }
 }
 
+$form->addHtml(
+    '<div class="mb-6 rounded-2xl border border-gray-25 bg-white p-6 shadow-sm">'.
+    '<div class="mb-4">'.
+    '<h3 class="mb-1 text-heading-4 font-semibold text-gray-90">'.get_lang('Authentication').'</h3>'.
+    '<p class="text-body-2 text-gray-50">'.get_lang('Choose how this user can authenticate on the platform.').'</p>'.
+    '</div>'
+);
+
+$form->addElement(
+    'select',
+    'auth_source',
+    get_lang('Authentication methods'),
+    $authSources,
+    [
+        'id' => 'auth_source',
+        'multiple' => 'multiple',
+        'size' => max(3, min(count($authSources), 8)),
+        'class' => 'w-full rounded-lg border border-gray-25 bg-white px-3 py-2 text-body-2 text-gray-90 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary',
+    ]
+);
+$form->addRule('auth_source', get_lang('Required field'), 'required');
+
+$form->addHtml(
+    '<div id="user-add-password-section" class="mt-6 rounded-xl border border-gray-25 bg-gray-5 p-4">'.
+    '<h4 class="mb-3 text-body-1 font-semibold text-gray-90">'.get_lang('Password').'</h4>'
+);
+
+$passwordGroup = [];
+$passwordGroup[] = $form->createElement(
+    'radio',
+    'password_auto',
+    null,
+    get_lang('Automatically generate a new password'),
+    1
+);
+
 if ($adminsCanSetUsersPass) {
-    $group[] = $form->createElement(
+    $passwordGroup[] = $form->createElement(
         'radio',
         'password_auto',
         'id="radio_user_password"',
-        get_lang('Enter password'),
+        get_lang('Set password manually'),
         0
     );
-    $group[] = $form->createElement(
+    $passwordGroup[] = $form->createElement(
         'password',
         'password',
         null,
         [
             'id' => 'password',
-            'autocomplete' => 'off',
+            'autocomplete' => 'new-password',
             'onkeydown' => 'javascript: password_switch_radio_button();',
             'show_hide' => true,
         ]
     );
 }
 
-$form->addGroup($group, 'password', get_lang('Password'));
-
-if ($adminsCanSetUsersPass) {
-    $form->addPasswordRule('password', 'password');
-    $form->addGroupRule('password', get_lang('Enter password'), 'required', null, 1);
-}
+$form->addGroup($passwordGroup, 'password', null, null, false);
+$form->addHtml('</div></div>');
 
 // Status
 $roleOptions = UserManager::getAllowedRoleOptionsForUserForm();
@@ -323,6 +383,7 @@ $(function () {
 
 // Set default values
 $defaults['mail']['send_mail'] = 1;
+$defaults['auth_source'] = [UserAuthSource::PLATFORM];
 $defaults['password']['password_auto'] = 1;
 $defaults['active'] = 1;
 $days = api_get_setting('account_valid_duration');
@@ -368,20 +429,45 @@ if ($form->validate()) {
 
         $hr_dept_id = isset($user['hr_dept_id']) ? (int) $user['hr_dept_id'] : 0;
 
+        $allowedAuthSources = array_map('strval', array_keys($authSources));
+        $auth_source = array_values(array_intersect(
+            array_map('strval', (array) ($user['auth_source'] ?? [])),
+            $allowedAuthSources
+        ));
+
+        if (empty($auth_source)) {
+            Display::addFlash(Display::return_message(get_lang('Required field'), 'error'));
+            header('Location: user_add.php?sec_token='.Security::get_token());
+            exit;
+        }
+
+        $hasPlatformAuth = in_array(UserAuthSource::PLATFORM, $auth_source, true);
         $passwordData = $user['password'] ?? [];
         $passwordAuto = (string) ($passwordData['password_auto'] ?? '1');
-        if (
-            isset($extAuthSource)
-            && count($extAuthSource) > 0
-            && '2' === $passwordAuto
-        ) {
-            $auth_source = $passwordData['auth_source'] ?? [];
+
+        if (!$hasPlatformAuth) {
             $password = 'PLACEHOLDER';
+        } elseif ('0' === $passwordAuto && $adminsCanSetUsersPass) {
+            $password = (string) ($passwordData['password'] ?? '');
+
+            if (empty($password)) {
+                Display::addFlash(Display::return_message(get_lang('The password is too short'), 'error'));
+                header('Location: user_add.php?sec_token='.Security::get_token());
+                exit;
+            }
+
+            if ('true' === api_get_setting('security.check_password') && !api_check_password($password)) {
+                Display::addFlash(
+                    Display::return_message(
+                        get_lang('this password  is too simple. Use a pass like this').': '.api_generate_password(),
+                        'error'
+                    )
+                );
+                header('Location: user_add.php?sec_token='.Security::get_token());
+                exit;
+            }
         } else {
-            $auth_source = [UserAuthSource::PLATFORM];
-            $password = '1' === $passwordAuto
-                ? api_generate_password()
-                : (string) ($passwordData['password'] ?? '');
+            $password = api_generate_password();
         }
 
         $expiration_date = null;

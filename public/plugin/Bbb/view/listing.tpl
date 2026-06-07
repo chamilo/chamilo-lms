@@ -1,8 +1,8 @@
 {% autoescape false %}
-<div class="mx-auto w-full max-w-7xl space-y-6 px-4 pb-8">
+<div class="mx-auto w-full max-w-none space-y-6 px-4 pb-8 lg:px-6 xl:px-8">
     {% if bbb_status %}
     {% if form or show_join_button %}
-    <section class="mx-auto max-w-4xl rounded-2xl border border-gray-25 bg-white p-6 shadow-sm">
+    <section class="mx-auto w-full max-w-none rounded-2xl border border-gray-25 bg-white p-6 shadow-sm">
         {% if form %}
         {{ form|raw }}
         {% endif %}
@@ -18,7 +18,7 @@
     {% endif %}
 
     {% if show_join_button and can_see_share_link %}
-    <section class="mx-auto max-w-4xl rounded-2xl border border-gray-25 bg-white p-6 shadow-sm">
+    <section class="mx-auto w-full max-w-none rounded-2xl border border-gray-25 bg-white p-6 shadow-sm">
         <div class="mb-4 text-center">
             <h3 class="mb-1 text-xl font-semibold text-gray-90">
                 {{ 'UrlMeetingToShare'|get_plugin_lang('BBBPlugin') }}

@@ -26,7 +26,7 @@ class learnpathItem
     public $current_stop_time;
     public $current_data = '';
     public $db_id;
-    public ?int $db_item_view_id;
+    public ?int $db_item_view_id = 0;
     public $description = '';
     public $file;
 
@@ -3036,11 +3036,11 @@ class learnpathItem
     /**
      * Sets the lp_view id this item view is registered to.
      *
-     * @param int $lp_view_id lp_view DB ID
+     * @param int|null $lp_view_id lp_view DB ID
      *
      * @todo //todo insert into lp_item_view if lp_view not exists
      */
-    public function set_lp_view(int $lp_view_id): bool
+    public function set_lp_view(?int $lp_view_id): bool
     {
         $lpItemId = $this->get_id();
 
@@ -3049,8 +3049,13 @@ class learnpathItem
         }
 
         if (empty($lp_view_id)) {
+            $this->view_id = 0;
+            $this->db_item_view_id = 0;
+
             return false;
         }
+
+        $lp_view_id = (int) $lp_view_id;
 
         if (self::DEBUG > 0) {
             error_log('learnpathItem::set_lp_view('.$lp_view_id.')', 0);
@@ -3114,6 +3119,10 @@ class learnpathItem
             if (false !== $res) {
                 $this->objectives_count = Database::num_rows($res);
             }
+        }
+
+        if (empty($this->db_item_view_id)) {
+            $this->db_item_view_id = 0;
         }
 
         return true;
@@ -3679,6 +3688,14 @@ class learnpathItem
 
             // If the user is an invitee, we don't write anything to DB
             return true;
+        }
+
+        if (empty($this->view_id)) {
+            if ($debug) {
+                error_log('learnpathItem::write_to_db() skipped because lp_view_id is empty');
+            }
+
+            return false;
         }
 
         $courseId = api_get_course_int_id();

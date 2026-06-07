@@ -224,9 +224,11 @@ class CidReqListener
                 ChamiloSession::write('gid', $groupId);
             }
 
-            $origin = $request->get('origin');
-            if (!empty($origin)) {
+            $origin = self::normalizeOrigin($request->get('origin'));
+            if (null !== $origin) {
                 $sessionHandler->set('origin', $origin);
+            } else {
+                $sessionHandler->remove('origin');
             }
 
             $courseParams = $this->generateCourseUrl($course, $sessionId, $groupId, $origin);
@@ -361,7 +363,6 @@ class CidReqListener
         $this->resetContextRolesOnTokenUser();
     }
 
-
     private function denyRequest(RequestEvent $event, Request $request, string $message): void
     {
         if ($request->isXmlHttpRequest() || str_contains((string) $request->headers->get('Accept'), 'application/json')) {
@@ -397,13 +398,42 @@ class CidReqListener
         }
     }
 
+    private static function normalizeOrigin(mixed $origin): ?string
+    {
+        if (\is_array($origin)) {
+            foreach ($origin as $value) {
+                $normalizedOrigin = self::normalizeOrigin($value);
+                if (null !== $normalizedOrigin) {
+                    return $normalizedOrigin;
+                }
+            }
+
+            return null;
+        }
+
+        if (!\is_scalar($origin)) {
+            return null;
+        }
+
+        $origin = trim((string) $origin);
+
+        if ('' === $origin) {
+            return null;
+        }
+
+        return $origin;
+    }
+
     private function generateCourseUrl(?Course $course, int $sessionId, int $groupId, ?string $origin): string
     {
         if (null !== $course) {
             $cidReqURL = '&cid='.$course->getId();
             $cidReqURL .= '&sid='.$sessionId;
             $cidReqURL .= '&gid='.$groupId;
-            $cidReqURL .= '&origin='.$origin;
+
+            if (null !== $origin) {
+                $cidReqURL .= '&origin='.urlencode($origin);
+            }
 
             return $cidReqURL;
         }

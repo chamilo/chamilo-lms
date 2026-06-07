@@ -458,7 +458,7 @@ router.beforeEach(async (to, from, next) => {
   startRouteLoading()
 
   const securityStore = useSecurityStore()
-  const preservedParams = ["origin", "isStudentView"]
+  const preservedParams = ["origin"]
   const mergedQuery = { ...to.query }
 
   let shouldRedirect = false

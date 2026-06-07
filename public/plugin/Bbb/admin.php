@@ -464,10 +464,14 @@ function bbb_admin_render_records(array $meeting, BbbPlugin $plugin): string
         return '<span class="text-gray-50">'.bbb_admin_escape($plugin->get_lang('NoRecording')).'</span>';
     }
 
-    $links = (string) ($meeting['show_links'] ?? '');
+    $links = $meeting['show_links'] ?? '';
+    if (is_array($links)) {
+        $links = implode(PHP_EOL, array_filter($links, static fn ($link) => is_scalar($link)));
+    }
+    $links = (string) $links;
 
-    if ('' === trim($links)) {
-        return '<span class="text-gray-50">-</span>';
+    if ('' === trim($links) || trim($links) === $plugin->get_lang('NoRecording')) {
+        return '<span class="text-gray-50">'.bbb_admin_escape($plugin->get_lang('NoRecording')).'</span>';
     }
 
     return '<div class="flex flex-wrap">'.bbb_admin_style_action_links_html($links).'</div>';
@@ -675,6 +679,12 @@ foreach ($settings as $setting) {
     $setting = $setting['name'];
     $text = $settingsForm->addText($setting, $plugin->get_lang($setting), false);
     $text->freeze();
+    $text->setCustomFrozenTemplate('
+        <div class="py-1">
+            <div class="text-body-2 font-semibold text-gray-90">{label}</div>
+            <div class="text-body-2 text-gray-50 mt-0.5">{element}</div>
+        </div>
+    ');
     $defaults[$setting] = 'true' === api_get_plugin_setting('bbb', $setting) ? get_lang('Yes') : get_lang('No');
 }
 
@@ -741,7 +751,7 @@ $content = '
     <section class="rounded-2xl border border-gray-25 bg-white p-6 shadow-sm">
         <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div>
-                <div class="inline-flex items-center gap-2 rounded-full bg-support-2 px-3 py-1 text-caption font-semibold text-white">
+                <div class="inline-flex items-center gap-2 rounded-full bg-support-2 px-3 py-1 text-caption font-semibold">
                     <em class="mdi mdi-video-outline text-base"></em>
                     '.bbb_admin_escape($plugin->get_lang('RecordList')).'
                 </div>

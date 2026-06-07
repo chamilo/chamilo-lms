@@ -25,7 +25,7 @@ import { Dashboard } from "@uppy/vue"
 import Uppy from "@uppy/core"
 import Dialog from "primevue/dialog"
 import { useNotification } from "../../composables/notification"
-import axios from "axios"
+import cStudentPublicationService from "../../services/cstudentpublication"
 import "@uppy/core/dist/style.css"
 import "@uppy/dashboard/dist/style.css"
 
@@ -81,17 +81,9 @@ function setupUppy() {
       const formData = new FormData()
       formData.append("uploadFile", file.data)
 
-      const uploadUrl =
-        `/api/c_student_publication_corrections/upload` +
-        `?parentResourceNodeId=${props.parentResourceNodeId}` +
-        `&submissionId=${props.submissionId}` +
-        `&filetype=file`
-
-      await axios.post(uploadUrl, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Accept: "application/json",
-        },
+      await cStudentPublicationService.uploadCorrection(formData, {
+        parentResourceNodeId: props.parentResourceNodeId,
+        submissionId: props.submissionId,
       })
 
       showSuccessNotification("Correction uploaded successfully!")

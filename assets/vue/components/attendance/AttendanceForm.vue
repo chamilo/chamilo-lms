@@ -110,13 +110,13 @@ import BaseInputText from "../basecomponents/BaseInputText.vue"
 import ResourceLanguageSelector from "../resources/ResourceLanguageSelector.vue"
 import { useRoute, useRouter } from "vue-router"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import gradebookService from "../../services/gradebookService"
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
-const { sid, cid } = useCidReq()
+const { sid, cid } = getCourseContext()
 const emit = defineEmits(["backPressed"])
 const props = defineProps({
   initialData: {
@@ -126,13 +126,8 @@ const props = defineProps({
 })
 
 const parentResourceNodeId = ref(Number(route.params.node))
-const resourceLinkList = ref([
-  {
-    sid,
-    cid,
-    visibility: RESOURCE_LINK_PUBLISHED,
-  },
-])
+// Course context derived server-side from the gated session course.
+const resourceLinkList = ref([{ visibility: RESOURCE_LINK_PUBLISHED }])
 
 const formData = reactive({
   id: null,

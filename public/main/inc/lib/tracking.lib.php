@@ -3279,6 +3279,98 @@ class Tracking
     }
 
     /**
+     * Gets the average learning path progress for a list of learners.
+     *
+     * Learners without learning path tracking are counted as zero, so the
+     * returned value represents the full learner list shown in the dashboard.
+     */
+    public static function getAverageLearningPathProgressForStudentList(array $studentIdList): float
+    {
+        $studentIdList = self::cleanUserIdList($studentIdList);
+
+        if (empty($studentIdList)) {
+            return 0.0;
+        }
+
+        $lpViewTable = Database::get_course_table(TABLE_LP_VIEW);
+        $studentIdListToString = implode(',', $studentIdList);
+
+        $sql = "SELECT user_progress.user_id, AVG(user_progress.progress) average_progress
+                FROM (
+                    SELECT user_id, c_id, session_id, lp_id, MAX(progress) progress
+                    FROM $lpViewTable
+                    WHERE
+                        user_id IN ($studentIdListToString) AND
+                        progress IS NOT NULL
+                    GROUP BY user_id, c_id, session_id, lp_id
+                ) user_progress
+                GROUP BY user_progress.user_id";
+
+        $result = Database::query($sql);
+        $progressSum = 0.0;
+
+        while ($row = Database::fetch_assoc($result)) {
+            $progressSum += (float) $row['average_progress'];
+        }
+
+        return $progressSum / count($studentIdList);
+    }
+
+    /**
+     * Counts visible forum posts created by a list of learners.
+     */
+    public static function countForumPostsForStudentList(array $studentIdList): int
+    {
+        $studentIdList = self::cleanUserIdList($studentIdList);
+
+        if (empty($studentIdList)) {
+            return 0;
+        }
+
+        $forumPostTable = Database::get_course_table(TABLE_FORUM_POST);
+        $studentIdListToString = implode(',', $studentIdList);
+
+        $sql = "SELECT COUNT(iid) total
+                FROM $forumPostTable
+                WHERE
+                    poster_id IN ($studentIdListToString) AND
+                    visible = 1";
+
+        $result = Database::query($sql);
+        $row = Database::fetch_assoc($result);
+
+        return (int) ($row['total'] ?? 0);
+    }
+
+    /**
+     * Counts assignment submissions created by a list of learners.
+     */
+    public static function countAssignmentsForStudentList(array $studentIdList): int
+    {
+        $studentIdList = self::cleanUserIdList($studentIdList);
+
+        if (empty($studentIdList)) {
+            return 0;
+        }
+
+        $publicationTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+        $studentIdListToString = implode(',', $studentIdList);
+
+        $sql = "SELECT COUNT(iid) total
+                FROM $publicationTable
+                WHERE
+                    user_id IN ($studentIdListToString) AND
+                    parent_id IS NOT NULL AND
+                    active IN (0, 1)";
+
+        $result = Database::query($sql);
+        $row = Database::fetch_assoc($result);
+
+        return (int) ($row['total'] ?? 0);
+    }
+
+
+    /**
      * This function gets time spent in learning path for a student inside a course.
      *
      * @param int|array $student_id Student id(s)
@@ -8276,4 +8368,13 @@ class Tracking
 
         return Database::num_rows($rs);
     }
+
+    private static function cleanUserIdList(array $userIdList): array
+    {
+        $userIdList = array_map('intval', $userIdList);
+        $userIdList = array_filter($userIdList, static fn (int $userId): bool => $userId > 0);
+
+        return array_values(array_unique($userIdList));
+    }
+
 }

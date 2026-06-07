@@ -3,7 +3,7 @@ import { useI18n } from "vue-i18n"
 import { useMessageRelUserStore } from "../store/messageRelUserStore"
 import { useSecurityStore } from "../store/securityStore"
 import { usePlatformConfig } from "../store/platformConfig"
-import axios from "axios"
+import socialService from "../services/socialService"
 import { useSocialInfo } from "./useSocialInfo"
 import { storeToRefs } from "pinia"
 
@@ -36,7 +36,7 @@ export function useSocialMenuItems() {
   const fetchInvitationsCount = async (userId) => {
     if (!userId) return
     try {
-      const { data } = await axios.get(`/social-network/invitations/count/${userId}`)
+      const data = await socialService.getInvitationsCount(userId)
       invitationsCount.value = data.totalInvitationsCount
     } catch (error) {
       console.error("Error fetching invitations count:", error)
@@ -45,8 +45,8 @@ export function useSocialMenuItems() {
 
   const getGroupLink = async () => {
     try {
-      const response = await axios.get("/social-network/get-forum-link")
-      groupLink.value = isValidGlobalForumsCourse.value ? response.data.go_to : { name: "UserGroupList" }
+      const data = await socialService.getForumLink()
+      groupLink.value = isValidGlobalForumsCourse.value ? data.go_to : { name: "UserGroupList" }
     } catch (error) {
       console.error("Error fetching forum link:", error)
       groupLink.value = { name: "UserGroupList" }

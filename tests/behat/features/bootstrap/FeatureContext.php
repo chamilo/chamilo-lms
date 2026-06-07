@@ -1023,6 +1023,115 @@ JS;
     }
 
     /**
+     * @When /^I set flatpickr field "([^"]*)" to "([^"]*)"$/
+     */
+    public function iSetFlatpickrField($fieldId, $value)
+    {
+        $this->getSession()->executeScript(
+            "var el = document.getElementById('" . $fieldId . "');
+             if (el && el._flatpickr) {
+                 el._flatpickr.setDate('" . $value . "', true);
+             } else {
+                 el.value = '" . $value . "';
+             }"
+        );
+    }
+
+    /**
+     * @When /^I set primevue datepicker "([^"]*)" range from "([^"]*)" to "([^"]*)"$/
+     */
+    public function iSetPrimevueDatepickerRange($inputId, $startDate, $endDate)
+    {
+        $session = $this->getSession();
+
+        $startDay   = (int) date('j', strtotime($startDate));
+        $startMonth = (int) date('n', strtotime($startDate));
+        $startYear  = (int) date('Y', strtotime($startDate));
+        $endDay     = (int) date('j', strtotime($endDate));
+        $endMonth   = (int) date('n', strtotime($endDate));
+        $endYear    = (int) date('Y', strtotime($endDate));
+
+        // Open the range datepicker (ONE input handles both dates)
+        $input = $session->getPage()->find('css', '#' . $inputId);
+        if ($input) { $input->click(); }
+
+        // Wait for calendar panel to appear
+        for ($attempt = 0; $attempt < 25; $attempt++) {
+            $session->wait(200);
+            if ($session->getPage()->find('css', '[data-pc-section="month"]')) break;
+        }
+
+        // Step 1 — navigate to start month: read displayed month ONCE then navigate the exact diff
+        $cur   = $this->calendarReadMonth();
+        $steps = ($startYear - $cur['year']) * 12 + ($startMonth - $cur['month']);
+        $this->calendarNavigateSteps($steps);
+        $this->calendarClickDay($startDay);
+
+        // Step 2 — navigate to end month: diff relative to start month (no DOM re-read needed)
+        $steps = ($endYear - $startYear) * 12 + ($endMonth - $startMonth);
+        $this->calendarNavigateSteps($steps);
+        $this->calendarClickDay($endDay);
+
+        // Click "Select" to commit internalValue → modelValue and close panel
+        $footerBtns = $session->getPage()->findAll('css', '.base-calendar-footer .p-button');
+        foreach ($footerBtns as $btn) {
+            if (stripos(trim($btn->getText()), 'Select') !== false) {
+                $btn->click();
+                $session->wait(400);
+                break;
+            }
+        }
+    }
+
+    private function calendarReadMonth(): array
+    {
+        $session = $this->getSession();
+        $monthNames = [
+            'January'=>1,'February'=>2,'March'=>3,'April'=>4,'May'=>5,'June'=>6,
+            'July'=>7,'August'=>8,'September'=>9,'October'=>10,'November'=>11,'December'=>12,
+        ];
+        for ($w = 0; $w < 10; $w++) {
+            $session->wait(200);
+            $monthEl = $session->getPage()->find('css', '[data-pc-section="month"]');
+            $yearEl  = $session->getPage()->find('css', '[data-pc-section="year"]');
+            if ($monthEl && $yearEl) {
+                $mn = $monthNames[trim($monthEl->getText())] ?? 0;
+                $yr = (int) trim($yearEl->getText());
+                if ($mn > 0 && $yr > 2000) return ['month' => $mn, 'year' => $yr];
+            }
+        }
+        return ['month' => (int) date('n'), 'year' => (int) date('Y')];
+    }
+
+    private function calendarNavigateSteps(int $steps): void
+    {
+        if ($steps === 0) return;
+        $session = $this->getSession();
+        $btnCss = $steps < 0 ? '.p-datepicker-prev-button' : '.p-datepicker-next-button';
+        for ($i = 0; $i < abs($steps); $i++) {
+            $btn = $session->getPage()->find('css', $btnCss);
+            if ($btn) { $btn->click(); $session->wait(500); }
+        }
+    }
+
+    private function calendarClickDay(int $day): void
+    {
+        $session = $this->getSession();
+        $session->wait(300);
+        $spans = $session->getPage()->findAll(
+            'css',
+            'td[data-pc-section="daycell"]:not([data-p-other-month="true"]) span[data-pc-section="day"]'
+        );
+        foreach ($spans as $span) {
+            if ((int) trim($span->getText()) === $day) {
+                $span->click();
+                $session->wait(600);
+                break;
+            }
+        }
+    }
+
+    /**
      * @When /^I type and select "([^"]*)" in inline select2 "([^"]*)"$/
      */
     public function iTypeAndSelectInInlineSelect2($value, $fieldId)

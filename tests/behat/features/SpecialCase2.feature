@@ -545,3 +545,286 @@ Feature: Special admin settings flows — case 2
     And I click the "i.mdi-bullhorn" element
     And I wait very long for the page to be loaded
     Then I should not see an error
+    And I fill in "announcement_title" with "Test announcement"
+    And I wait very long for the page to be loaded
+    And I fill in tinymce field "content" with "Test announcement content"
+    And I wait very long for the page to be loaded
+    And I press "choose_recipients"
+    And I wait very long for the page to be loaded
+    Then I should see "users"
+    Then I should see "Test Learner"
+    And I press "choose_recipients"
+    And I wait very long for the page to be loaded
+    And I zoom out to maximum
+    And I should see "Send this announcement by email to selected groups/users"
+    And I should see "description"
+    And I should see "Send a copy by email to myself"
+    When I click the "#announcement_preview" element
+    And I wait very long for the page to be loaded
+    Then I should see "Send announcement"
+    And I should see "Test Learner"
+    When I click the "em.mdi-check" element
+    And I wait very long for the page to be loaded
+    Then I should not see an error
+
+    # ---- NOUVELLE ANNONCE AVEC DATE ET RAPPEL ----
+    When I am on "/course/15/home?sid=1"
+    And I wait very long for the page to be loaded
+    Then I should not see an error
+    When I follow "Annonces"
+    And I wait very long for the page to be loaded
+    And I click the "i.mdi-bullhorn" element
+    And I wait very long for the page to be loaded
+    And I zoom out to maximum
+    Then I should not see an error
+    And I fill in "announcement_title" with "Test announcement"
+    And I wait very long for the page to be loaded
+    And I fill in tinymce field "content" with "Test announcement content"
+    And I wait very long for the page to be loaded
+    And I press "add_event"
+    And I wait very long for the page to be loaded
+    And I set flatpickr field "event_date_start" to "2026-06-02 08:00:00"
+    And I set flatpickr field "event_date_end" to "2026-06-30 23:59:00"
+    And I wait very long for the page to be loaded
+    And I press "announcement_add_notification"
+    And I wait very long for the page to be loaded
+    Then I should not see an error
+    When I click the "#announcement_preview" element
+    And I wait very long for the page to be loaded
+    Then I should not see an error
+    When I click the "em.mdi-check" element
+    And I wait very long for the page to be loaded
+    Then I should not see an error
+
+    # ---- CRÉATION D'ENQUÊTE ----
+      When I am on "/course/15/home?sid=1"
+      And I wait very long for the page to be loaded
+      And I zoom out to maximum
+      Then I should not see an error
+      When I follow "Enquêtes"
+    And I wait very long for the page to be loaded
+    And I click the "i.mdi-calendar-multiselect" element
+    And I wait very long for the page to be loaded
+    And I zoom out to maximum
+    Then I should see "Title"
+    And I should see "Start Date"
+    And I should see "End Date"
+    And I should not see an error
+    And I fill in "survey_survey_title" with "Test survey"
+    And I wait very long for the page to be loaded
+    And I set flatpickr field "start_date" to "2026-06-02 08:00"
+    And I set flatpickr field "end_date" to "2026-06-30 23:59"
+    And I wait very long for the page to be loaded
+    And I click the "em.mdi-plus" element
+    And I wait very long for the page to be loaded
+    Then I should not see an error
+
+    # ---- ENVOI EMAIL ENQUÊTE ----
+    When I click the "i.mdi-email-alert" element
+    And I wait very long for the page to be loaded
+    And I zoom out to maximum
+    Then I should see "Users"
+    And I should see "Test Learner"
+    And I should see "Remind all users of the survey"
+    And I should see "Remind only users who didn't answer"
+    And I should see "Hide survey invitation link"
+    And I should see "Users who are not invited can use this link to take the survey:"
+    And I should not see an error
+    And I fill in "publish_form_mail_title" with "Test survey invitation"
+    And I wait very long for the page to be loaded
+    And I fill in tinymce field "mail_text" with "Please take the survey."
+    And I wait very long for the page to be loaded
+    When I click the "em.mdi-check" element
+    And I wait very long for the page to be loaded
+    Then I should not see an error
+
+    # ---- NAVIGATION ENQUÊTE ----
+    When I am on "/course/15/home?sid=1"
+    And I wait very long for the page to be loaded
+    And I zoom out to maximum
+    Then I should not see an error
+    When I follow "Enquêtes"
+    And I wait very long for the page to be loaded
+    When I follow "Test survey"
+    And I wait very long for the page to be loaded
+    Then I should not see an error
+
+    # ---- VIDÉOCONFÉRENCE ----
+    When I am on "/course/15/home?sid=1"
+    And I wait very long for the page to be loaded
+    And I zoom out to maximum
+    Then I should not see an error
+    When I follow "Vidéoconférence"
+    And I wait very long for the page to be loaded
+    And I zoom out to maximum
+    Then I should see "Copy text"
+    And I should not see an error
+
+    # ---- CONNEXION EN TANT QUE PARKUR01 ----
+    Given I am not logged
+    And I am logged as "parkur01"
+    And I wait very long for the page to be loaded
+
+    # ---- MY SKILLS ----
+    When I am on "/main/social/my_skills_report.php"
+    And I wait very long for the page to be loaded
+    And I zoom out to maximum
+    Then I should see "NewSkill"
+    And I should not see an error
+
+    # ---- RÉSEAU SOCIAL ----
+    When I am on "/social"
+    And I wait very long for the page to be loaded
+    And I click the "span.mdi-pencil" element
+    And I wait very long for the page to be loaded
+    And I zoom out to maximum
+    Then I should see "First name"
+    And I should see "Last name"
+    And I should see "E-mail"
+    And I should see the "input#profile_illustration" element
+    And I should not see an error
+
+    # ---- BOÎTE DE RÉCEPTION ----
+    When I am on "/resources/messages"
+    And I wait very long for the page to be loaded
+    When I follow "Vous avez obtenu une nouvelle compétence."
+    And I wait very long for the page to be loaded
+    And I zoom out to maximum
+    Then I should see "NewSkill"
+    And I should see "/skill/2/user/67"
+    And I should not see an error
+
+    # ---- PAGE COMPÉTENCE ----
+    When I am on "/skill/2/user/67"
+    And I wait very long for the page to be loaded
+    And I zoom out to maximum
+    Then I should see "Recipient details"
+    And I should not see an error
+
+    # ---- EXERCICE OPEN QUESTION ----
+    When I am on "/course/15/home?sid=1"
+    And I wait very long for the page to be loaded
+    And I zoom out to maximum
+    Then I should not see an error
+    When I follow "Exercices"
+    And I wait very long for the page to be loaded
+    When I follow "Open question exercise"
+    And I wait very long for the page to be loaded
+    And I zoom out to maximum
+    When I follow "Start test"
+    And I wait very long for the page to be loaded
+    And I fill in the first textarea with "example"
+    And I press "save_now"
+    And I wait very long for the page to be loaded
+    Then I should not see an error
+
+    # ---- RECONNEXION EN TANT QUE TEACHER ----
+    Given I am not logged
+    And I am logged as "teacher"
+    And I wait very long for the page to be loaded
+
+    # ---- BOÎTE DE RÉCEPTION ----
+    When I click the "i.mdi-inbox" element
+    And I wait very long for the page to be loaded
+    And I zoom out to maximum
+    Then I should see "A learner attempted an exercise"
+    And I should not see an error
+
+    # ---- SUIVI COURS ----
+    When I am on "/course/15/home?sid=1"
+    And I wait very long for the page to be loaded
+    And I zoom out to maximum
+    Then I should not see an error
+    When I click the "#course-tool-404" element
+    And I wait very long for the page to be loaded
+    And I zoom out to maximum
+    Then I should not see an error
+
+    # ---- DÉTAILS APPRENANT ----
+    When I am on "/main/my_space/myStudents.php?details=true&cid=15&course=TESTINGCOURSEFR&origin=tracking_course&sid=1&student=67"
+    And I wait very long for the page to be loaded
+    And I zoom out to maximum
+    Then I should not see an error
+
+    # ---- CORRECTION OPEN QUESTION ----
+    When I click the "i.mdi-order-bool-ascending-variant" element
+    And I wait very long for the page to be loaded
+    And I zoom out to maximum
+    Then I should see "Open question exercise : Result"
+    And I press "show_ck"
+    And I wait very long for the page to be loaded
+    And I fill in tinymce field "comments_12" with "ZYX"
+    And I wait very long for the page to be loaded
+    And I click the "input[name='send_notification']" element
+    And I wait very long for the page to be loaded
+    Then I should not see an error
+    And I should not see an error
+    When I click the "em.mdi-send" element
+    And I wait very long for the page to be loaded
+    Then I should not see an error
+
+    # ---- CONNEXION EN TANT QU'ADMIN ----
+    Given I am not logged
+    And I am a platform administrator
+    And I wait very long for the page to be loaded
+    Then I should not see an error
+
+    # ---- AGENDA ----
+    When I follow "Agenda"
+    And I wait very long for the page to be loaded
+    Then I should see "Agenda"
+    When I click the "span.mdi-calendar-plus" element
+    And I wait very long for the page to be loaded
+    Then I should see "Add event"
+    And I fill in "event-title" with "Evenement 4 jours"
+    And I wait very long for the page to be loaded
+    When I set primevue datepicker "calendar-id" range from "2026-06-15" to "2026-06-18"
+    And I wait very long for the page to be loaded
+    And I fill in tinymce field "calendar-event-content" with "Evenement 4 jours"
+    And I wait very long for the page to be loaded
+    And I press "Add"
+    And I wait very long for the page to be loaded
+    Then I should not see an error
+
+    # ---- DEUXIÈME ÉVÉNEMENT : mois précédent → mois en cours ----
+    When I click the "span.mdi-calendar-plus" element
+    And I wait very long for the page to be loaded
+    Then I should see "Add event"
+    And I fill in "event-title" with "Evenement mois avant"
+    And I wait very long for the page to be loaded
+    When I set primevue datepicker "calendar-id" range from "2026-05-15" to "2026-06-18"
+    And I wait very long for the page to be loaded
+    And I fill in tinymce field "calendar-event-content" with "Evenement mois avant"
+    And I wait very long for the page to be loaded
+    And I press "Add"
+    And I wait very long for the page to be loaded
+    Then I should not see an error
+
+    # ---- TROISIÈME ÉVÉNEMENT : mois en cours → mois suivant ----
+    When I click the "span.mdi-calendar-plus" element
+    And I wait very long for the page to be loaded
+    Then I should see "Add event"
+    And I fill in "event-title" with "Evenement mois apres"
+    And I wait very long for the page to be loaded
+    When I set primevue datepicker "calendar-id" range from "2026-06-15" to "2026-07-18"
+    And I wait very long for the page to be loaded
+    And I fill in tinymce field "calendar-event-content" with "Evenement mois apres"
+    And I wait very long for the page to be loaded
+    And I press "Add"
+    And I wait very long for the page to be loaded
+    Then I should not see an error
+
+    # ---- QUATRIÈME ÉVÉNEMENT : mois précédent → mois suivant ----
+    When I click the "span.mdi-calendar-plus" element
+    And I wait very long for the page to be loaded
+    Then I should see "Add event"
+    And I fill in "event-title" with "Evenement avant et apres"
+    And I wait very long for the page to be loaded
+    When I set primevue datepicker "calendar-id" range from "2026-05-15" to "2026-07-18"
+    And I wait very long for the page to be loaded
+    And I fill in tinymce field "calendar-event-content" with "Evenement avant et apres"
+    And I wait very long for the page to be loaded
+    And I press "Add"
+    And I wait very long for the page to be loaded
+    Then I should not see an error
+

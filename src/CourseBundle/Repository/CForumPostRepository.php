@@ -86,9 +86,15 @@ class CForumPostRepository extends ResourceRepository
     public function delete(ResourceInterface $resource): void
     {
         /** @var CForumPost $resource */
+        $thread = $resource->getThread();
+        if (null !== $thread) {
+            $resource->setParent($thread);
+        }
+
         $attachments = $resource->getAttachments();
 
         foreach ($attachments as $attachment) {
+            $attachment->setParent($resource);
             $this->getEntityManager()->remove($attachment);
         }
 

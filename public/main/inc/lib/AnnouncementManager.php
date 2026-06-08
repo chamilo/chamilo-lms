@@ -1699,7 +1699,7 @@ class AnnouncementManager
             // check teacher status
             if (empty($_GET['origin']) || 'learnpath' !== $_GET['origin']) {
                 $qb = $repo->getResourcesByCourse($course, $session, $group);
-                $qb->select('count(resource)');
+                $qb->select('count(DISTINCT resource)');
 
                 return $qb->getQuery()->getSingleScalarResult();
             }
@@ -1711,7 +1711,7 @@ class AnnouncementManager
             }
 
             $qb = $repo->getResourcesByCourseLinkedToUser($user, $course, $session, $group);
-            $qb->select('count(resource)');
+            $qb->select('count(DISTINCT resource)');
 
             return $qb->getQuery()->getSingleScalarResult();
         }

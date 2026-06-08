@@ -31,6 +31,7 @@ class IndexController extends BaseController
     #[Route('/resources/courses/{vueRouting}', name: 'resources_courses_vue_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
     #[Route('/resources/document/{nodeId}/manager', name: 'resources_filemanager', methods: ['GET'])]
     #[Route('/resources/lp/{node}/advanced-access', name: 'resources_lp_advanced_access', methods: ['GET'])]
+    #[Route('/resources/forum/{vueRouting}', name: 'resources_forum_vue_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
     #[Route('/resources/accessurl/{id}/delete', name: 'access_url_delete', methods: ['GET'])]
     #[Route('/account/home', name: 'chamilo_core_account_home', options: ['expose' => true])]
     #[Route('/social', name: 'chamilo_core_socialnetwork', options: ['expose' => true])]

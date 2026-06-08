@@ -99,6 +99,14 @@ readonly class AzureAuthenticatorHelper
             $user = $existingUser;
 
             if (!$this->providerParams['update_users']) {
+                if (!$user->hasAuthSourceByAuthentication(UserAuthSource::AZURE)) {
+                    $user->addAuthSourceByAuthentication(
+                        UserAuthSource::AZURE,
+                        $this->accessUrlHelper->getCurrent()
+                    );
+                    $this->entityManager->flush();
+                }
+
                 return $user;
             }
             // Get existing language config to avoid blanking

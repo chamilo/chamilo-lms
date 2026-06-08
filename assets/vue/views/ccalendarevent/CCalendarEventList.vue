@@ -587,6 +587,11 @@ async function hydrateEventForEdition() {
   try {
     const fullEvent = await baseService.get(eventIri)
 
+    const rawReminders = (fullEvent.reminders ?? item.value?.reminders ?? [])
+    const normalizedReminders = rawReminders
+      .map((r) => (r && typeof r === "object" ? { count: r.count ?? 0, period: r.period ?? "i" } : null))
+      .filter(Boolean)
+
     item.value = {
       ...item.value,
       ...fullEvent,
@@ -599,6 +604,7 @@ async function hydrateEventForEdition() {
       language: extractResourceLanguage(fullEvent),
       startDate: fullEvent.startDate ? new Date(fullEvent.startDate) : item.value.startDate,
       endDate: fullEvent.endDate ? new Date(fullEvent.endDate) : item.value.endDate,
+      reminders: normalizedReminders,
     }
   } catch (error) {
     console.error("Failed to hydrate calendar event before editing.", error)

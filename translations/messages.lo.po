@@ -38068,3 +38068,762 @@ msgstr "ບໍ່ສາມາດສ້າງການປະເມີນຜົນ
 msgid "The gradebook evaluation could not be linked"
 msgstr "ບໍ່ສາມາດເຊື່ອມຕໍ່ການປະເມີນຜົນບັນຊີຄະແນນໄດ້"
 
+msgid "Survey questions"
+msgstr ""
+
+msgid "Back to survey list"
+msgstr ""
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr ""
+
+msgid "Choose the type of question you want to add."
+msgstr ""
+
+msgid "The free text option is added automatically."
+msgstr ""
+
+msgid "No questions found"
+msgstr ""
+
+msgid "Mandatory"
+msgstr ""
+
+msgid "Unsupported question type"
+msgstr ""
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr ""
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr ""
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr ""
+
+msgid "Could not load survey questions"
+msgstr ""
+
+msgid "The question text is required."
+msgstr ""
+
+msgid "The maximum score is required."
+msgstr ""
+
+msgid "Please select a parent option."
+msgstr ""
+
+msgid "Please fill all answer options."
+msgstr ""
+
+msgid "QuestionUpdated"
+msgstr ""
+
+msgid "Could not save survey question"
+msgstr ""
+
+msgid "Could not delete survey question"
+msgstr ""
+
+msgid "Could not move survey question"
+msgstr ""
+
+msgid "Could not copy survey question"
+msgstr ""
+
+msgid "Hide search"
+msgstr ""
+
+msgid "Showing results for: %s"
+msgstr ""
+
+msgid "Search by survey title, code or description."
+msgstr ""
+
+msgid "Search surveys"
+msgstr ""
+
+msgid "%s surveys selected"
+msgstr ""
+
+msgid "Clear selection"
+msgstr ""
+
+msgid "No surveys found"
+msgstr ""
+
+msgid "Unsupported"
+msgstr ""
+
+msgid "Could not load surveys"
+msgstr ""
+
+msgid "Delete selected surveys"
+msgstr ""
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr ""
+
+msgid "Could not delete selected surveys"
+msgstr ""
+
+msgid "Survey action"
+msgstr ""
+
+msgid "A copy of this survey will be created: %s"
+msgstr ""
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr ""
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr ""
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr ""
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr ""
+
+msgid "Could not complete survey action"
+msgstr ""
+
+msgid "Not started"
+msgstr ""
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr ""
+
+msgid "Back to surveys"
+msgstr ""
+
+msgid "Edit meeting poll"
+msgstr ""
+
+msgid "View meeting poll"
+msgstr ""
+
+msgid "Basic information"
+msgstr ""
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr ""
+
+msgid "Availability"
+msgstr ""
+
+msgid "Meeting dates"
+msgstr ""
+
+msgid "Meeting poll"
+msgstr ""
+
+msgid "My availability"
+msgstr ""
+
+msgid "Meeting poll results"
+msgstr ""
+
+msgid "No invitations found"
+msgstr ""
+
+msgid "available"
+msgstr ""
+
+msgid "Could not load meeting poll"
+msgstr ""
+
+msgid "Please complete the required fields"
+msgstr ""
+
+msgid "Could not save meeting poll"
+msgstr ""
+
+msgid "Could not save meeting availability"
+msgstr ""
+
+msgid "Copy this survey to another course or session"
+msgstr ""
+
+msgid "The survey will be copied without answers or invitations."
+msgstr ""
+
+msgid "No target courses found"
+msgstr ""
+
+msgid "Search by course title, course code or session name."
+msgstr ""
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr ""
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr ""
+
+msgid "Selected target"
+msgstr ""
+
+msgid "Could not load copy form"
+msgstr ""
+
+msgid "The survey will be copied to: %s"
+msgstr ""
+
+msgid "Survey copied."
+msgstr ""
+
+msgid "Could not copy survey"
+msgstr ""
+
+msgid "Answer survey"
+msgstr ""
+
+msgid "Preview mode does not save answers."
+msgstr ""
+
+msgid "Survey completed"
+msgstr ""
+
+msgid "Thank you for answering the survey."
+msgstr ""
+
+msgid "Profile information"
+msgstr ""
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr ""
+
+msgid "This profile field is read-only."
+msgstr ""
+
+msgid "You already filled this survey."
+msgstr ""
+
+msgid "Please specify"
+msgstr ""
+
+msgid "This question type is not supported in the modern survey view."
+msgstr ""
+
+msgid "Preview only"
+msgstr ""
+
+msgid "Submit answers"
+msgstr ""
+
+msgid "Could not load survey"
+msgstr ""
+
+msgid "Please complete the required profile fields."
+msgstr ""
+
+msgid "Please answer all mandatory questions."
+msgstr ""
+
+msgid "Could not save survey answers"
+msgstr ""
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr ""
+
+msgid "The survey code cannot be changed after creation."
+msgstr ""
+
+msgid "Survey behavior"
+msgstr ""
+
+msgid "Use 0 for no time limit."
+msgstr ""
+
+msgid "Survey messages"
+msgstr ""
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr ""
+
+msgid "No profile fields are currently available."
+msgstr ""
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr ""
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr ""
+
+msgid "Could not load survey configuration"
+msgstr ""
+
+msgid "The survey code is required."
+msgstr ""
+
+msgid "The survey title is required."
+msgstr ""
+
+msgid "The survey has been saved successfully"
+msgstr ""
+
+msgid "Could not save survey configuration"
+msgstr ""
+
+msgid "Course users"
+msgstr ""
+
+msgid "Already invited"
+msgstr "ໄດ້ຖືກເຊີນແລ້ວ"
+
+msgid "No users found"
+msgstr "ບໍ່ພົບຜູ້ໃຊ້"
+
+msgid "No groups found"
+msgstr "ບໍ່ພົບກຸ່ມ"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "ໃຊ້ **link** ບ່ອນທີ່ຄວນໃສ່ລິ້ງແບບສຳຫຼວດ."
+
+msgid "Remind all selected users"
+msgstr "ເຕືອນຜູ້ໃຊ້ທີ່ເລືອກທັງໝົດ"
+
+msgid "Anonymous access link"
+msgstr "ລິ້ງເຂົ້າເຖິງແບບບໍ່ເປີດເຜີຍຊື່"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "ຜູ້ໃຊ້ທີ່ບໍ່ໄດ້ຮັບການເຊີນສາມາດໃຊ້ລິ້ງນີ້ເພື່ອເຮັດແບບສຳຫຼວດ."
+
+msgid "Answered anonymously"
+msgstr "ຕອບແບບບໍ່ເປີດເຜີຍຊື່"
+
+msgid "Could not load survey invitations"
+msgstr "ບໍ່ສາມາດໂຫຼດການເຊີນແບບສຳຫຼວດໄດ້"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "ຕ້ອງມີຫົວຂໍ້ແລະຂໍ້ຄວາມເມື່ອສົ່ງອີເມວ."
+
+msgid "Could not publish survey"
+msgstr "ບໍ່ສາມາດເຜີຍແຜ່ແບບສຳຫຼວດໄດ້"
+
+msgid "Could not copy the link"
+msgstr "ບໍ່ສາມາດສຳເນົາລິ້ງໄດ້"
+
+msgid "Please answer this survey using the following link"
+msgstr "ກະລຸນາຕອບແບບສຳຫຼວດນີ້ໂດຍໃຊ້ລິ້ງຕໍ່ໄປນີ້"
+
+msgid "Export CSV"
+msgstr "ສົ່ງອອກ CSV"
+
+msgid "Export compact CSV"
+msgstr "ສົ່ງອອກ CSV ແບບຫຍໍ້"
+
+msgid "Export Excel"
+msgstr "ສົ່ງອອກ Excel"
+
+msgid "Export package"
+msgstr "ສົ່ງອອກແພັກເກັດ"
+
+msgid "Results summary"
+msgstr "ສະຫຼຸບຜົນ"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "ມຸມມອງນີ້ສະແດງຂໍ້ມູນການລາຍງານທີ່ຍ້າຍມາແລ້ວສຳລັບແບບສຳຫຼວດນີ້."
+
+msgid "Select user"
+msgstr "ເລືອກຜູ້ໃຊ້"
+
+msgid "No answers found"
+msgstr "ບໍ່ພົບຄຳຕອບ"
+
+msgid "answers"
+msgstr "ຄຳຕອບ"
+
+msgid "Could not load survey reporting"
+msgstr "ບໍ່ສາມາດໂຫຼດການລາຍງານແບບສຳຫຼວດໄດ້"
+
+msgid "Back to threads"
+msgstr "ກັບໄປທີ່ກະທູ້"
+
+msgid "Back to learning path"
+msgstr "ກັບໄປທີ່ເສັ້ນທາງການຮຽນ"
+
+msgid "Remove sticky"
+msgstr "ເອົາການປັກໝຸດອອກ"
+
+msgid "Make sticky"
+msgstr "ປັກໝຸດ"
+
+msgid "Open thread"
+msgstr "ເປີດກະທູ້"
+
+msgid "Close thread"
+msgstr "ປິດກະທູ້"
+
+msgid "Delete thread"
+msgstr "ລຶບກະທູ້"
+
+msgid "This thread is hidden from learners."
+msgstr "ກະທູ້ນີ້ຖືກເຊື່ອງຈາກຜູ້ຮຽນ."
+
+msgid "Revision requested"
+msgstr "ຮ້ອງຂໍການແກ້ໄຂ"
+
+msgid "Revision"
+msgstr "ການແກ້ໄຂ"
+
+msgid "Approve post"
+msgstr "ອະນຸມັດໂພສ"
+
+msgid "Reject post"
+msgstr "ປະຕິເສດໂພສ"
+
+msgid "Cancel revision request"
+msgstr "ຍົກເລີກການຮ້ອງຂໍການແກ້ໄຂ"
+
+msgid "Delete post"
+msgstr "ລຶບໂພສ"
+
+msgid "Message is required"
+msgstr "ຕ້ອງມີຂໍ້ຄວາມ"
+
+msgid "Target thread is required"
+msgstr "ຕ້ອງມີກະທູ້ເປົ້າໝາຍ"
+
+msgid "Could not retrieve posts"
+msgstr "ບໍ່ສາມາດດຶງໂພສໄດ້"
+
+msgid "Thread shown"
+msgstr "ກະທູ້ຖືກສະແດງ"
+
+msgid "Thread hidden"
+msgstr "ກະທູ້ຖືກເຊື່ອງ"
+
+msgid "Could not update thread"
+msgstr "ບໍ່ສາມາດອັບເດດກະທູ້ໄດ້"
+
+msgid "Thread closed"
+msgstr "ກະທູ້ຖືກປິດ"
+
+msgid "Thread opened"
+msgstr "ກະທູ້ຖືກເປີດ"
+
+msgid "Thread marked as sticky"
+msgstr "ກະທູ້ຖືກໝາຍເປັນການປັກໝຸດ"
+
+msgid "Thread unmarked as sticky"
+msgstr "ກະທູ້ຖືກຍົກເລີກການໝາຍເປັນການປັກໝຸດ"
+
+msgid "Thread notifications enabled"
+msgstr "ເປີດການແຈ້ງເຕືອນກະທູ້ແລ້ວ"
+
+msgid "Thread notifications disabled"
+msgstr "ປິດການແຈ້ງເຕືອນກະທູ້ແລ້ວ"
+
+msgid "Could not update thread notification"
+msgstr "ບໍ່ສາມາດອັບເດດການແຈ້ງເຕືອນກະທູ້ໄດ້"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບກະທູ້ນີ້?"
+
+msgid "Could not delete thread"
+msgstr "ບໍ່ສາມາດລຶບກະທູ້ໄດ້"
+
+msgid "Post approved"
+msgstr "ໂພສຕ໌ໄດ້ຮັບການອະນຸມັດ"
+
+msgid "Could not approve post"
+msgstr "ບໍ່ສາມາດອະນຸມັດໂພສຕ໌ໄດ້"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການປະຕິເສດໂພສຕ໌ນີ້?"
+
+msgid "Post rejected"
+msgstr "ໂພສຕ໌ຖືກປະຕິເສດ"
+
+msgid "Could not reject post"
+msgstr "ບໍ່ສາມາດປະຕິເສດໂພສຕ໌ໄດ້"
+
+msgid "Post shown"
+msgstr "ໂພສຕ໌ສະແດງ"
+
+msgid "Post hidden"
+msgstr "ໂພສຕ໌ຖືກເຊື່ອງ"
+
+msgid "Could not update post"
+msgstr "ບໍ່ສາມາດອັບເດດໂພສຕ໌ໄດ້"
+
+msgid "Post updated"
+msgstr "ໂພສຕ໌ອັບເດດແລ້ວ"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບໂພສຕ໌ນີ້?"
+
+msgid "Post deleted"
+msgstr "ໂພສຕ໌ຖືກລຶບ"
+
+msgid "Could not delete post"
+msgstr "ບໍ່ສາມາດລຶບໂພສຕ໌ໄດ້"
+
+msgid "Untitled thread"
+msgstr "ກະທູ້ບໍ່ມີຊື່"
+
+msgid "Could not retrieve threads"
+msgstr "ບໍ່ສາມາດດຶງກະທູ້ໄດ້"
+
+msgid "Post moved"
+msgstr "ໂພສຕ໌ຖືກຍ້າຍ"
+
+msgid "Could not move post"
+msgstr "ບໍ່ສາມາດຍ້າຍໂພສຕ໌ໄດ້"
+
+msgid "Revision request removed"
+msgstr "ການຮ້ອງຂໍການແກ້ໄຂຖືກລຶບ"
+
+msgid "Could not update revision request"
+msgstr "ບໍ່ສາມາດອັບເດດການຮ້ອງຂໍການແກ້ໄຂໄດ້"
+
+msgid "Are you sure you want to report this post?"
+msgstr "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລາຍງານໂພສຕ໌ນີ້?"
+
+msgid "Could not report post"
+msgstr "ບໍ່ສາມາດລາຍງານໂພສຕ໌ໄດ້"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບໄຟລ໌ແນບນີ້?"
+
+msgid "Attachment deleted"
+msgstr "ໄຟລ໌ແນບຖືກລຶບ"
+
+msgid "Could not delete attachment"
+msgstr "ບໍ່ສາມາດລຶບໄຟລ໌ແນບໄດ້"
+
+msgid "Thread title"
+msgstr "ຫົວຂໍ້ກະທູ້"
+
+msgid "Sticky thread"
+msgstr "ກະທູ້ຕິດປ້າຍ"
+
+msgid "Attach files"
+msgstr "ແນບໄຟລ໌"
+
+msgid "Attachments are disabled for this forum"
+msgstr "ການແນບໄຟລ໌ຖືກປິດໃຊ້ງານສຳລັບກະດານນີ້"
+
+msgid "The forum is not open yet."
+msgstr "ກະດານຍັງບໍ່ເປີດ."
+
+msgid "The forum is closed."
+msgstr "ກະດານຖືກປິດ."
+
+msgid "The forum is locked."
+msgstr "ກະດານຖືກລັອກ."
+
+msgid "New threads are not allowed in this forum."
+msgstr "ບໍ່ອະນຸຍາດໃຫ້ສ້າງກະທູ້ໃໝ່ໃນກະດານນີ້."
+
+msgid "Thread created"
+msgstr "ກະທູ້ຖືກສ້າງ"
+
+msgid "Could not create thread"
+msgstr "ບໍ່ສາມາດສ້າງກະທູ້ໄດ້"
+
+msgid "Back to posts"
+msgstr "ກັບໄປຫາໂພສຕ໌"
+
+msgid "This reply will be stored as a revision."
+msgstr "ການຕອບກັບນີ້ຈະຖືກບັນທຶກເປັນການແກ້ໄຂ."
+
+msgid "Post reply"
+msgstr "ຕອບກັບໂພສຕ໌"
+
+msgid "The thread is locked."
+msgstr "ກະທູ້ຖືກລັອກ."
+
+msgid "Reply added"
+msgstr "ເພີ່ມການຕອບກັບແລ້ວ"
+
+msgid "Could not add reply"
+msgstr "ບໍ່ສາມາດເພີ່ມການຕອບກັບໄດ້"
+
+msgid "Add forum"
+msgstr "ເພີ່ມກະດານ"
+
+msgid "No forums found"
+msgstr "ບໍ່ພົບກະດານ"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "ສ້າງໝວດກະດານຫຼືກະດານທຳອິດຂອງທ່ານເພື່ອເລີ່ມການສົນທະນາ."
+
+msgid "Locked"
+msgstr "ຖືກລັອກ"
+
+msgid "No forums in this category"
+msgstr "ບໍ່ມີກະດານໃນໝວດນີ້"
+
+msgid "Posts require approval"
+msgstr "ໂພສຕ໌ຕ້ອງການການອະນຸມັດ"
+
+msgid "Forum for current group"
+msgstr "ກະດານສຳລັບກຸ່ມປັດຈຸບັນ"
+
+msgid "Group forum visibility"
+msgstr "ການເບິ່ງເຫັນກະດານກຸ່ມ"
+
+msgid "No category"
+msgstr "ບໍ່ມີໝວດ"
+
+msgid "Could not retrieve forums"
+msgstr "ບໍ່ສາມາດດຶງຂໍ້ມູນກະດານສົນທະນາໄດ້"
+
+msgid "Forum category updated"
+msgstr "ໝວດກະດານສົນທະນາໄດ້ຖືກປັບປຸງແລ້ວ"
+
+msgid "Forum category created"
+msgstr "ໝວດກະດານສົນທະນາໄດ້ຖືກສ້າງແລ້ວ"
+
+msgid "Could not save forum category"
+msgstr "ບໍ່ສາມາດບັນທຶກໝວດກະດານສົນທະນາໄດ້"
+
+msgid "Forum updated"
+msgstr "ກະດານສົນທະນາໄດ້ຖືກປັບປຸງແລ້ວ"
+
+msgid "Forum created"
+msgstr "ກະດານສົນທະນາໄດ້ຖືກສ້າງແລ້ວ"
+
+msgid "Could not save forum"
+msgstr "ບໍ່ສາມາດບັນທຶກກະດານສົນທະນາໄດ້"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບໝວດກະດານສົນທະນານີ້?"
+
+msgid "Could not delete forum category"
+msgstr "ບໍ່ສາມາດລຶບໝວດກະດານສົນທະນາໄດ້"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບກະດານສົນທະນານີ້?"
+
+msgid "Could not delete forum"
+msgstr "ບໍ່ສາມາດລຶບກະດານສົນທະນາໄດ້"
+
+msgid "Forum category unlocked"
+msgstr "ໝວດກະດານສົນທະນາໄດ້ຖືກປົດລັອກແລ້ວ"
+
+msgid "Forum category locked"
+msgstr "ໝວດກະດານສົນທະນາໄດ້ຖືກລັອກແລ້ວ"
+
+msgid "Could not update forum category"
+msgstr "ບໍ່ສາມາດປັບປຸງໝວດກະດານສົນທະນາໄດ້"
+
+msgid "Forum category shown"
+msgstr "ໝວດກະດານສົນທະນາໄດ້ຖືກສະແດງແລ້ວ"
+
+msgid "Forum category hidden"
+msgstr "ໝວດກະດານສົນທະນາໄດ້ຖືກເຊື່ອງແລ້ວ"
+
+msgid "Forum unlocked"
+msgstr "ກະດານສົນທະນາໄດ້ຖືກປົດລັອກແລ້ວ"
+
+msgid "Forum locked"
+msgstr "ກະດານສົນທະນາໄດ້ຖືກລັອກແລ້ວ"
+
+msgid "Could not update forum"
+msgstr "ບໍ່ສາມາດປັບປຸງກະດານສົນທະນາໄດ້"
+
+msgid "Forum shown"
+msgstr "ກະດານສົນທະນາໄດ້ຖືກສະແດງແລ້ວ"
+
+msgid "Forum hidden"
+msgstr "ກະດານສົນທະນາໄດ້ຖືກເຊື່ອງແລ້ວ"
+
+msgid "Forum notifications enabled"
+msgstr "ການແຈ້ງເຕືອນກະດານສົນທະນາໄດ້ເປີດໃຊ້ແລ້ວ"
+
+msgid "Forum notifications disabled"
+msgstr "ການແຈ້ງເຕືອນກະດານສົນທະນາໄດ້ປິດໃຊ້ແລ້ວ"
+
+msgid "Could not update forum notification"
+msgstr "ບໍ່ສາມາດປັບປຸງການແຈ້ງເຕືອນກະດານສົນທະນາໄດ້"
+
+msgid "Forum category moved"
+msgstr "ໝວດກະດານສົນທະນາໄດ້ຖືກຍ້າຍແລ້ວ"
+
+msgid "Could not move forum category"
+msgstr "ບໍ່ສາມາດຍ້າຍໝວດກະດານສົນທະນາໄດ້"
+
+msgid "Forum moved"
+msgstr "ກະດານສົນທະນາໄດ້ຖືກຍ້າຍແລ້ວ"
+
+msgid "Could not move forum"
+msgstr "ບໍ່ສາມາດຍ້າຍກະດານສົນທະນາໄດ້"
+
+msgid "Back to forums"
+msgstr "ກັບໄປຫາກະດານສົນທະນາ"
+
+msgid "New thread"
+msgstr "ກະທູ້ໃໝ່"
+
+msgid "No threads found"
+msgstr "ບໍ່ພົບກະທູ້"
+
+msgid "Sticky"
+msgstr "ປັກໝຸດ"
+
+msgid "Graded"
+msgstr "ໄດ້ຮັບການປະເມີນ"
+
+msgid "Grade peers"
+msgstr "ປະເມີນເພື່ອນຮ່ວມງານ"
+
+msgid "Move thread"
+msgstr "ຍ້າຍກະທູ້"
+
+msgid "Target forum"
+msgstr "ກະດານສົນທະນາເປົ້າໝາຍ"
+
+msgid "Target forum is required"
+msgstr "ກະດານສົນທະນາເປົ້າໝາຍແມ່ນຕ້ອງການ"
+
+msgid "Students"
+msgstr "ນັກສຶກສາ"
+
+msgid "No students found"
+msgstr "ບໍ່ພົບນັກສຶກສາ"
+
+msgid "No peers available to grade."
+msgstr "ບໍ່ມີເພື່ອນຮ່ວມງານທີ່ສາມາດປະເມີນໄດ້."
+
+msgid "Qualified"
+msgstr "ມີຄຸນສົມບັດ"
+
+msgid "Not qualified"
+msgstr "ບໍ່ມີຄຸນສົມບັດ"
+
+msgid "Could not retrieve thread grading"
+msgstr "ບໍ່ສາມາດດຶງຂໍ້ມູນການປະເມີນກະທູ້ໄດ້"
+
+msgid "Thread grading updated"
+msgstr "ການປະເມີນກະທູ້ໄດ້ຖືກປັບປຸງແລ້ວ"
+
+msgid "Could not update thread grading"
+msgstr "ບໍ່ສາມາດປັບປຸງການປະເມີນກະທູ້ໄດ້"
+
+msgid "Thread score saved"
+msgstr "ຄະແນນກະທູ້ໄດ້ຖືກບັນທຶກແລ້ວ"
+
+msgid "Could not save thread score"
+msgstr "ບໍ່ສາມາດບັນທຶກຄະແນນກະທູ້ໄດ້"
+
+msgid "Could not move thread"
+msgstr "ບໍ່ສາມາດຍ້າຍກະທູ້ໄດ້"
+
+msgid "Thread updated"
+msgstr "ກະທູ້ໄດ້ຖືກປັບປຸງແລ້ວ"
+
+msgid "Search term is too short"
+msgstr "ຄຳຄົ້ນຫາສັ້ນເກີນໄປ"
+
+msgid "Could not search forums"
+msgstr "ບໍ່ສາມາດຄົ້ນຫາກະດານສົນທະນາໄດ້"
+
+msgid "Moderated"
+msgstr "ຄວບຄຸມ"
+
+msgid "View threads"
+msgstr "ເບິ່ງກະທູ້"
+

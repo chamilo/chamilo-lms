@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Le meas"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Sampla foirmle: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Sampla foirmle: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Raonta athróg"
@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:cóipcheart,, no:gan cóipcheart"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Fillteán,, application/msword:MsWord,, application/octet-stream:Sruth ochtáid,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:Fillteán,, application\/msword:MsWord,, application\/octet-stream:Sruth ochtánach,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:cleachtadh,,      simulation:insamhal,,      questionnaire:fiosrúchán,,      diagram:léaráid,,      figure:figiúr,,      graph:graf,,      index:innéacs,,      slide:sleamhnán,,      table:tábla,,      narrative text:téacs insinte,,      exam:scrúdú,,      experiment:turgnamh,,      problem statement:ráiteas fadhb,,      self assessment:féimmeasúnú,,      lecture:léacht"
@@ -35630,95 +35630,854 @@ msgid "Invalid token"
 msgstr "Taisce neamhbhailí"
 
 msgid "Unable to save the item"
-msgstr ""
+msgstr "Ní féidir an mír a shábháil"
 
 msgid "Only HTTP and HTTPS URLs are allowed."
-msgstr ""
+msgstr "Ní cheadaítear ach URLanna HTTP agus HTTPS."
 
 msgid "Invalid URL host."
-msgstr ""
+msgstr "Óstach URL neamhbhailí."
 
 msgid "This cloud provider is not allowed."
-msgstr ""
+msgstr "Ní cheadaítear an soláthraí scamall seo."
 
 msgid "Documents used"
-msgstr ""
+msgstr "Doiciméid a úsáideadh"
 
 msgid "No document usage"
-msgstr ""
+msgstr "Gan úsáid doiciméad"
 
 msgid "Invalid action."
-msgstr ""
+msgstr "Gníomh neamhbhailí."
 
 msgid "No users selected."
-msgstr ""
+msgstr "Níl aon úsáideoirí roghnaithe."
 
 msgid "%s user(s) processed."
-msgstr ""
+msgstr "%s úsáideoir(í) próiseáilte."
 
 msgid "Invalid CSRF token."
-msgstr ""
+msgstr "Comhartha CSRF neamhbhailí."
 
 msgid "[%s] Please change your password"
-msgstr ""
+msgstr "[%s] Athraigh do phasfhocal le do thoil"
 
 msgid "Dear %s,\n\nOur security enforcing process shows you use a password that is commonly used on the internet, which means your account could easily be stolen. It is probably a simple sequence or a very common word, we don't really know (we cannot see your password), but we ask you to please connect to the platform and request a password change. You can follow the link here: %s to do that now.\n\nPlease note we will never ask for your password in this process. You just enter your username or e-mail and we send you a link. If you are asked to introduce your existing password to do that, someone is probably trying to do Phishing on your account. Be safe, change your password now!\n\n%s\n%s"
-msgstr ""
+msgstr "A chara %s,\n\nLéiríonn ár bpróiseas forfheidhmithe slándála go bhfuil pasfhocal á úsáid agat atá coitianta ar an idirlíon, rud a chiallaíonn go bhféadfaí do chuntas a ghoid go héasca. Is dócha gur seicheamh simplí nó focal an-choitianta é, nílimid cinnte (ní féidir linn do phasfhocal a fheiceáil), ach iarraimid ort logáil isteach ar an ardán agus pasfhocal nua a iarraidh. Is féidir leat an nasc seo a leanúint: %s chun é sin a dhéanamh anois.\n\nTabhair faoi deara nach n-iarrfaimid do phasfhocal riamh sa phróiseas seo. Níl ort ach d’ainm úsáideora nó do ríomhphost a chur isteach agus seolfaimid nasc chugat. Má iarrtar ort do phasfhocal reatha a chur isteach chun é sin a dhéanamh, is dócha go bhfuil duine éigin ag iarraidh Phishing a dhéanamh ar do chuntas. Bí sábháilte, athraigh do phasfhocal anois!\n\n%s\n%s"
 
 msgid "[%s] Your password has been reset"
-msgstr ""
+msgstr "[%s] Athshocraíodh do phasfhocal"
 
 msgid "Dear %s,\n\nOur security enforcing process flagged you as using a password that is commonly used on the internet, which means your account could easily be stolen. As a prevention measure, we have decided to initiate a password reset process. Your new, automatically generated password is now:\n\n%s\n\nPlease login to the platform soon (using this new password) to set your own, personal and secure, password.\n\nBe safe.\n\n%s\n%s"
-msgstr ""
+msgstr "A chara %s,\n\nChuir ár bpróiseas forfheidhmithe slándála in iúl duit go bhfuil pasfhocal á úsáid agat atá coitianta ar an idirlíon, rud a chiallaíonn go bhféadfaí do chuntas a ghoid go héasca. Mar bheart coisctheach, shocraigh muid tús a chur le próiseas athshocraithe pasfhocail. Is é do phasfhocal nua, a ghintear go huathoibríoch anois:\n\n%s\n\nLogáil isteach ar an ardán go luath (ag úsáid an phasfhocail nua seo) chun do phasfhocal pearsanta agus slán féin a shocrú.\n\nBí sábháilte.\n\n%s\n%s"
 
 msgid "Signature saved successfully"
-msgstr ""
+msgstr "Sínithe sábháilte go rathúil"
 
 msgid "Invalid request payload."
-msgstr ""
+msgstr "Lasta iarratais neamhbhailí."
 
 msgid "Authentication required."
-msgstr ""
+msgstr "Fíordheimhniú ag teastáil."
 
 msgid "The course title is required."
-msgstr ""
+msgstr "Tá teideal an chúrsa ag teastáil."
 
 msgid "Only trainers and administrators can create courses."
-msgstr ""
+msgstr "Ní féidir ach le traenálaithe agus riarthóirí cúrsaí a chruthú."
 
 msgid "Course creation by trainers is disabled on this platform."
-msgstr ""
+msgstr "Tá cruthú cúrsaí ag traenálaithe díchumasaithe ar an ardán seo."
 
 msgid "The selected BuyCourses service cannot be used to create this course."
-msgstr ""
+msgstr "Ní féidir an tseirbhís BuyCourses roghnaithe a úsáid chun an cúrsa seo a chruthú."
 
 msgid "You have reached the maximum number of courses allowed (%d)."
-msgstr ""
+msgstr "Tá tú tar éis uasmhéid na gcúrsaí a cheadaítear (%d) a bhaint amach."
 
 msgid "The selected BuyCourses service is invalid."
-msgstr ""
+msgstr "Tá an tseirbhís BuyCourses roghnaithe neamhbhailí."
 
 msgid "BuyCourses is not available right now."
-msgstr ""
+msgstr "Níl BuyCourses ar fáil faoi láthair."
 
 msgid "BuyCourses cannot validate the selected service right now."
-msgstr ""
+msgstr "Ní féidir le BuyCourses an tseirbhís roghnaithe a bhailíochtú faoi láthair."
 
 msgid "Unable to validate the selected BuyCourses service right now."
-msgstr ""
+msgstr "Ní féidir an tseirbhís BuyCourses roghnaithe a bhailíochtú faoi láthair."
 
 msgid "External tool removed from course"
-msgstr ""
+msgstr "Uirlis sheachtrach bainte den chúrsa"
 
 msgid "External tool was removed from the course, but kept internally because it is linked to the gradebook"
-msgstr ""
+msgstr "Baineadh an uirlis sheachtrach den chúrsa, ach coimeádadh go hinmheánach í toisc go bhfuil sí nasctha leis an leabhar grád"
 
 msgid "There are no external tools available to add to the gradebook"
-msgstr ""
+msgstr "Níl aon uirlisí seachtracha ar fáil le cur leis an leabhar grád"
 
 msgid "The evaluation could not be created"
-msgstr ""
+msgstr "Níorbh fhéidir an mheastóireacht a chruthú"
 
 msgid "The gradebook evaluation could not be linked"
-msgstr ""
+msgstr "Níorbh fhéidir an mheastóireacht leabhar grád a nascadh"
+
+msgid "Survey questions"
+msgstr "Ceisteanna suirbhé"
+
+msgid "Back to survey list"
+msgstr "Ar ais go liosta na suirbhéanna"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "Tá freagraí ag an suirbhé seo cheana. Tá eagarthóireacht ceisteanna díchumasaithe de réir chumraíochta."
+
+msgid "Choose the type of question you want to add."
+msgstr "Roghnaigh an cineál ceiste is mian leat a chur leis."
+
+msgid "The free text option is added automatically."
+msgstr "Cuirtear an rogha téacs saor in aisce leis go huathoibríoch."
+
+msgid "No questions found"
+msgstr "Níor aimsíodh aon cheisteanna"
+
+msgid "Mandatory"
+msgstr "Éigeantach"
+
+msgid "Unsupported question type"
+msgstr "Cineál ceiste nach dtacaítear leis"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "Is féidir leat na clibeanna {%s} agus {%s} a úsáid sa cheist."
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "Taispeántar an cheist seo go coinníollach agus an suirbhé á fhreagairt."
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "Gintear na roghanna céatadáin ó 1 go 100 go huathoibríoch."
+
+msgid "Could not load survey questions"
+msgstr "Níorbh fhéidir ceisteanna an tsuirbhé a luchtú"
+
+msgid "The question text is required."
+msgstr "Tá téacs na ceiste riachtanach."
+
+msgid "The maximum score is required."
+msgstr "Tá an scór uasta riachtanach."
+
+msgid "Please select a parent option."
+msgstr "Roghnaigh rogha tuismitheora le do thoil."
+
+msgid "Please fill all answer options."
+msgstr "Líon gach rogha freagra le do thoil."
+
+msgid "QuestionUpdated"
+msgstr "CeistNuashonraithe"
+
+msgid "Could not save survey question"
+msgstr "Níorbh fhéidir ceist an tsuirbhé a shábháil"
+
+msgid "Could not delete survey question"
+msgstr "Níorbh fhéidir ceist an tsuirbhé a scriosadh"
+
+msgid "Could not move survey question"
+msgstr "Níorbh fhéidir ceist an tsuirbhé a bhogadh"
+
+msgid "Could not copy survey question"
+msgstr "Níorbh fhéidir ceist an tsuirbhé a chóipeáil"
+
+msgid "Hide search"
+msgstr "Folaigh an cuardach"
+
+msgid "Showing results for: %s"
+msgstr "Ag taispeáint torthaí do: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "Cuardaigh de réir teideal an tsuirbhé, cód nó cur síos."
+
+msgid "Search surveys"
+msgstr "Cuardaigh suirbhéanna"
+
+msgid "%s surveys selected"
+msgstr "%s suirbhé roghnaithe"
+
+msgid "Clear selection"
+msgstr "Glan an roghnú"
+
+msgid "No surveys found"
+msgstr "Níor aimsíodh aon suirbhéanna"
+
+msgid "Unsupported"
+msgstr "Gan tacaíocht"
+
+msgid "Could not load surveys"
+msgstr "Níorbh fhéidir na suirbhéanna a luchtú"
+
+msgid "Delete selected surveys"
+msgstr "Scrios na suirbhéanna roghnaithe"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "Scriosfar na suirbhéanna roghnaithe agus a gcuid ceisteanna. Ní féidir an gníomh seo a chealú."
+
+msgid "Could not delete selected surveys"
+msgstr "Níorbh fhéidir na suirbhéanna roghnaithe a scriosadh"
+
+msgid "Survey action"
+msgstr "Gníomh suirbhé"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "Cruthófar cóip den suirbhé seo: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "Scriosfar gach freagra agus cuireadh don suirbhé seo: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "Bainfear na ceisteanna iolracha ginte ón suirbhé seo: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "Foilseofar an suirbhé seo do na teagascóirí grúpa nasctha: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "Scriosfar an suirbhé seo agus a cheisteanna: %s"
+
+msgid "Could not complete survey action"
+msgstr "Níorbh fhéidir gníomh an tsuirbhé a chur i gcrích"
+
+msgid "Not started"
+msgstr "Gan tosú"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "Ligeann pobalbhreitheanna cruinnithe d’úsáideoirí cuireadh na dátaí a roghnú nuair atá siad ar fáil."
+
+msgid "Back to surveys"
+msgstr "Ar ais chuig na suirbhéanna"
+
+msgid "Edit meeting poll"
+msgstr "Cuir pobalbhreith cruinnithe in eagar"
+
+msgid "View meeting poll"
+msgstr "Féach ar phobalbhreith an chruinnithe"
+
+msgid "Basic information"
+msgstr "Eolas bunúsach"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "Cruthóidh sé seo suirbhé de chineál pobalbhreith cruinnithe. Láimhseáiltear freagraí agus cuirí ar leithligh."
+
+msgid "Availability"
+msgstr "Infhaighteacht"
+
+msgid "Meeting dates"
+msgstr "Dátaí an chruinnithe"
+
+msgid "Meeting poll"
+msgstr "Pobalbhreith cruinnithe"
+
+msgid "My availability"
+msgstr "Mo infhaighteacht"
+
+msgid "Meeting poll results"
+msgstr "Torthaí phobalbhreith an chruinnithe"
+
+msgid "No invitations found"
+msgstr "Níor aimsíodh aon chuirí"
+
+msgid "available"
+msgstr "ar fáil"
+
+msgid "Could not load meeting poll"
+msgstr "Níorbh fhéidir an vótaíocht cruinnithe a luchtú"
+
+msgid "Please complete the required fields"
+msgstr "Comhlánaigh na réimsí riachtanacha"
+
+msgid "Could not save meeting poll"
+msgstr "Níorbh fhéidir an vótaíocht cruinnithe a shábháil"
+
+msgid "Could not save meeting availability"
+msgstr "Níorbh fhéidir infhaighteacht an chruinnithe a shábháil"
+
+msgid "Copy this survey to another course or session"
+msgstr "Cóipeáil an suirbhé seo go cúrsa nó seisiún eile"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "Cóipeálfar an suirbhé gan freagraí ná cuireadh."
+
+msgid "No target courses found"
+msgstr "Níor aimsíodh aon chúrsaí spriocdhírithe"
+
+msgid "Search by course title, course code or session name."
+msgstr "Cuardaigh de réir teideal an chúrsa, cód an chúrsa nó ainm an tseisiúin."
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "Úsáid 'Cóipeáil an suirbhé' nuair is mian leat cóip sa chúrsa céanna."
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "Cóipeálfar na ceisteanna agus na roghanna. Fanfaidh na freagraí, na cuirí agus na tuairiscí sa suirbhé bunaidh amháin."
+
+msgid "Selected target"
+msgstr "Sprioc roghnaithe"
+
+msgid "Could not load copy form"
+msgstr "Níorbh fhéidir an fhoirm chóipeála a luchtú"
+
+msgid "The survey will be copied to: %s"
+msgstr "Cóipeálfar an suirbhé chuig: %s"
+
+msgid "Survey copied."
+msgstr "Suirbhé cóipeáilte."
+
+msgid "Could not copy survey"
+msgstr "Níorbh fhéidir an suirbhé a chóipeáil"
+
+msgid "Answer survey"
+msgstr "Freagair an suirbhé"
+
+msgid "Preview mode does not save answers."
+msgstr "Ní shábhálann mód réamhamhairc na freagraí."
+
+msgid "Survey completed"
+msgstr "Suirbhé curtha i gcrích"
+
+msgid "Thank you for answering the survey."
+msgstr "Go raibh maith agat as an suirbhé a fhreagairt."
+
+msgid "Profile information"
+msgstr "Eolas próifíle"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "Athbhreithnigh na réimsí próifíle iarrtha sula bhfreagraíonn tú an suirbhé."
+
+msgid "This profile field is read-only."
+msgstr "Tá an réimse próifíle seo inléite amháin."
+
+msgid "You already filled this survey."
+msgstr "Tá an suirbhé seo líonta agat cheana."
+
+msgid "Please specify"
+msgstr "Sonraigh le do thoil"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "Ní thacaítear leis an gcineál ceiste seo sa radharc suirbhé nua-aimseartha."
+
+msgid "Preview only"
+msgstr "Réamhamharc amháin"
+
+msgid "Submit answers"
+msgstr "Cuir na freagraí isteach"
+
+msgid "Could not load survey"
+msgstr "Níorbh fhéidir an suirbhé a luchtú"
+
+msgid "Please complete the required profile fields."
+msgstr "Comhlánaigh na réimsí próifíle riachtanacha."
+
+msgid "Please answer all mandatory questions."
+msgstr "Freagair gach ceist éigeantach."
+
+msgid "Could not save survey answers"
+msgstr "Níorbh fhéidir freagraí an tsuirbhé a shábháil"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "Cumraigh príomhfhaisnéis an tsuirbhé sula mbainistíonn tú na ceisteanna agus na cuirí."
+
+msgid "The survey code cannot be changed after creation."
+msgstr "Ní féidir cód an tsuirbhé a athrú tar éis a chruthaithe."
+
+msgid "Survey behavior"
+msgstr "Iompar an tsuirbhé"
+
+msgid "Use 0 for no time limit."
+msgstr "Úsáid 0 mura bhfuil aon teorainn ama."
+
+msgid "Survey messages"
+msgstr "Teachtaireachtaí an tsuirbhé"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "Taispeánfar na réimsí próifíle a roghnaítear anseo roimh cheisteanna an tsuirbhé."
+
+msgid "No profile fields are currently available."
+msgstr "Níl aon réimsí próifíle ar fáil faoi láthair."
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "Níl roghnú réimsí próifíle ar fáil ach amháin do shuirbhéanna neamhanainmneacha."
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "Déanfar nascáil scileanna a aistriú i mbaisce tiomnaithe."
+
+msgid "Could not load survey configuration"
+msgstr "Níorbh fhéidir cumraíocht an tsuirbhé a luchtú"
+
+msgid "The survey code is required."
+msgstr "Tá cód an tsuirbhé riachtanach."
+
+msgid "The survey title is required."
+msgstr "Tá teideal an tsuirbhé riachtanach."
+
+msgid "The survey has been saved successfully"
+msgstr "Sábháladh an suirbhé go rathúil"
+
+msgid "Could not save survey configuration"
+msgstr "Níorbh fhéidir cumraíocht an tsuirbhé a shábháil"
+
+msgid "Course users"
+msgstr "Úsáideoirí an chúrsa"
+
+msgid "Already invited"
+msgstr "Cuireadh cheana"
+
+msgid "No users found"
+msgstr "Níor aimsíodh aon úsáideoirí"
+
+msgid "No groups found"
+msgstr "Níor aimsíodh aon ghrúpaí"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "Úsáid **nasc** mar áit a mbeidh nasc an tsuirbhé le feiceáil."
+
+msgid "Remind all selected users"
+msgstr "Cuir i gcuimhne do gach úsáideoir roghnaithe"
+
+msgid "Anonymous access link"
+msgstr "Nasc rochtana gan ainm"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "Is féidir le húsáideoirí nach bhfuil cuireadh faighte acu an nasc seo a úsáid chun an suirbhé a dhéanamh."
+
+msgid "Answered anonymously"
+msgstr "Freagartha gan ainm"
+
+msgid "Could not load survey invitations"
+msgstr "Níorbh fhéidir cuirí an tsuirbhé a luchtú"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "Tá ábhar agus teachtaireacht an ríomhphoist riachtanach agus ríomhphost á sheoladh."
+
+msgid "Could not publish survey"
+msgstr "Níorbh fhéidir an suirbhé a fhoilsiú"
+
+msgid "Could not copy the link"
+msgstr "Níorbh fhéidir an nasc a chóipeáil"
+
+msgid "Please answer this survey using the following link"
+msgstr "Freagair an suirbhé seo ag úsáid an naisc seo a leanas"
+
+msgid "Export CSV"
+msgstr "Easpórtáil CSV"
+
+msgid "Export compact CSV"
+msgstr "Easpórtáil CSV dlúth"
+
+msgid "Export Excel"
+msgstr "Easpórtáil Excel"
+
+msgid "Export package"
+msgstr "Easpórtáil pacáiste"
+
+msgid "Results summary"
+msgstr "Achoimre torthaí"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "Taispeánann an t-amharc seo na sonraí tuairiscithe imirceacha don suirbhé seo."
+
+msgid "Select user"
+msgstr "Roghnaigh úsáideoir"
+
+msgid "No answers found"
+msgstr "Níor aimsíodh aon fhreagraí"
+
+msgid "answers"
+msgstr "freagraí"
+
+msgid "Could not load survey reporting"
+msgstr "Níorbh fhéidir tuairisciú an tsuirbhé a luchtú"
+
+msgid "Back to threads"
+msgstr "Ar ais go dtí na snáitheanna"
+
+msgid "Back to learning path"
+msgstr "Ar ais go dtí an chonair foghlama"
+
+msgid "Remove sticky"
+msgstr "Bain greamaitheacht"
+
+msgid "Make sticky"
+msgstr "Déan greamaithe"
+
+msgid "Open thread"
+msgstr "Oscail snáithe"
+
+msgid "Close thread"
+msgstr "Dún snáithe"
+
+msgid "Delete thread"
+msgstr "Scrios snáithe"
+
+msgid "This thread is hidden from learners."
+msgstr "Tá an snáithe seo folaithe ó fhoghlaimeoirí."
+
+msgid "Revision requested"
+msgstr "Athbhreithniú iarrtha"
+
+msgid "Revision"
+msgstr "Athbhreithniú"
+
+msgid "Approve post"
+msgstr "Ceadaigh postáil"
+
+msgid "Reject post"
+msgstr "Diúltaigh postáil"
+
+msgid "Cancel revision request"
+msgstr "Cealaigh iarratas athbhreithnithe"
+
+msgid "Delete post"
+msgstr "Scrios postáil"
+
+msgid "Message is required"
+msgstr "Tá teachtaireacht riachtanach"
+
+msgid "Target thread is required"
+msgstr "Tá snáithe sprioc riachtanach"
+
+msgid "Could not retrieve posts"
+msgstr "Níorbh fhéidir na postálacha a aisghabháil"
+
+msgid "Thread shown"
+msgstr "Snáithe taispeánta"
+
+msgid "Thread hidden"
+msgstr "Snáithe folaithe"
+
+msgid "Could not update thread"
+msgstr "Níorbh fhéidir an snáithe a nuashonrú"
+
+msgid "Thread closed"
+msgstr "Snáithe dúnta"
+
+msgid "Thread opened"
+msgstr "Snáithe oscailte"
+
+msgid "Thread marked as sticky"
+msgstr "Snáithe marcáilte mar ghreamaithe"
+
+msgid "Thread unmarked as sticky"
+msgstr "Snáithe gan mharcáil mar ghreamaithe"
+
+msgid "Thread notifications enabled"
+msgstr "Fógraí snáithe cumasaithe"
+
+msgid "Thread notifications disabled"
+msgstr "Fógraí snáithe díchumasaithe"
+
+msgid "Could not update thread notification"
+msgstr "Níorbh fhéidir fógra an tsnáithe a nuashonrú"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "An bhfuil tú cinnte gur mian leat an snáithe seo a scriosadh?"
+
+msgid "Could not delete thread"
+msgstr "Níorbh fhéidir an snáithe a scriosadh"
+
+msgid "Post approved"
+msgstr "Postáil ceadaithe"
+
+msgid "Could not approve post"
+msgstr "Níorbh fhéidir an post a cheadú"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "An bhfuil tú cinnte gur mian leat an post seo a dhiúltú?"
+
+msgid "Post rejected"
+msgstr "Post diúltaithe"
+
+msgid "Could not reject post"
+msgstr "Níorbh fhéidir an post a dhiúltú"
+
+msgid "Post shown"
+msgstr "Post taispeánta"
+
+msgid "Post hidden"
+msgstr "Post folaithe"
+
+msgid "Could not update post"
+msgstr "Níorbh fhéidir an post a nuashonrú"
+
+msgid "Post updated"
+msgstr "Post nuashonraithe"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "An bhfuil tú cinnte gur mian leat an post seo a scriosadh?"
+
+msgid "Post deleted"
+msgstr "Post scriosta"
+
+msgid "Could not delete post"
+msgstr "Níorbh fhéidir an post a scriosadh"
+
+msgid "Untitled thread"
+msgstr "Snáithe gan teideal"
+
+msgid "Could not retrieve threads"
+msgstr "Níorbh fhéidir na snáitheanna a aisghabháil"
+
+msgid "Post moved"
+msgstr "Post bogtha"
+
+msgid "Could not move post"
+msgstr "Níorbh fhéidir an post a bhogadh"
+
+msgid "Revision request removed"
+msgstr "Iarratas athbhreithnithe bainte"
+
+msgid "Could not update revision request"
+msgstr "Níorbh fhéidir an t-iarratas athbhreithnithe a nuashonrú"
+
+msgid "Are you sure you want to report this post?"
+msgstr "An bhfuil tú cinnte gur mian leat an post seo a thuairisciú?"
+
+msgid "Could not report post"
+msgstr "Níorbh fhéidir an post a thuairisciú"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "An bhfuil tú cinnte gur mian leat an ceangaltán seo a scriosadh?"
+
+msgid "Attachment deleted"
+msgstr "Ceangaltán scriosta"
+
+msgid "Could not delete attachment"
+msgstr "Níorbh fhéidir an ceangaltán a scriosadh"
+
+msgid "Thread title"
+msgstr "Teideal an tsnáithe"
+
+msgid "Sticky thread"
+msgstr "Snáithe greamaitheach"
+
+msgid "Attach files"
+msgstr "Ceangail comhaid"
+
+msgid "Attachments are disabled for this forum"
+msgstr "Tá ceangaltáin díchumasaithe don fhóram seo"
+
+msgid "The forum is not open yet."
+msgstr "Níl an fóram oscailte fós."
+
+msgid "The forum is closed."
+msgstr "Tá an fóram dúnta."
+
+msgid "The forum is locked."
+msgstr "Tá an fóram faoi ghlas."
+
+msgid "New threads are not allowed in this forum."
+msgstr "Ní cheadaítear snáitheanna nua sa bhfóram seo."
+
+msgid "Thread created"
+msgstr "Snáithe cruthaithe"
+
+msgid "Could not create thread"
+msgstr "Níorbh fhéidir an snáithe a chruthú"
+
+msgid "Back to posts"
+msgstr "Ar ais chuig na poist"
+
+msgid "This reply will be stored as a revision."
+msgstr "Stórálfar an freagra seo mar athbhreithniú."
+
+msgid "Post reply"
+msgstr "Freagra a phostáil"
+
+msgid "The thread is locked."
+msgstr "Tá an snáithe faoi ghlas."
+
+msgid "Reply added"
+msgstr "Freagra curtha leis"
+
+msgid "Could not add reply"
+msgstr "Níorbh fhéidir freagra a chur leis"
+
+msgid "Add forum"
+msgstr "Cuir fóram leis"
+
+msgid "No forums found"
+msgstr "Níor aimsíodh aon fhóraim"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "Cruthaigh do chéad chatagóir fóraim nó fóram chun tús a chur le díospóireachtaí."
+
+msgid "Locked"
+msgstr "Faoi ghlas"
+
+msgid "No forums in this category"
+msgstr "Níl aon fhóraim sa chatagóir seo"
+
+msgid "Posts require approval"
+msgstr "Éilíonn poist ceadú"
+
+msgid "Forum for current group"
+msgstr "Fóram don ghrúpa reatha"
+
+msgid "Group forum visibility"
+msgstr "Infheictheacht fhóraim an ghrúpa"
+
+msgid "No category"
+msgstr "Gan chatagóir"
+
+msgid "Could not retrieve forums"
+msgstr "Níorbh fhéidir na fóraim a aisghabháil"
+
+msgid "Forum category updated"
+msgstr "Catagóir fóraim nuashonraithe"
+
+msgid "Forum category created"
+msgstr "Catagóir fóraim cruthaithe"
+
+msgid "Could not save forum category"
+msgstr "Níorbh fhéidir an chatagóir fóraim a shábháil"
+
+msgid "Forum updated"
+msgstr "Fóram nuashonraithe"
+
+msgid "Forum created"
+msgstr "Fóram cruthaithe"
+
+msgid "Could not save forum"
+msgstr "Níorbh fhéidir an fóram a shábháil"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "An bhfuil tú cinnte gur mian leat an chatagóir fóraim seo a scriosadh?"
+
+msgid "Could not delete forum category"
+msgstr "Níorbh fhéidir an chatagóir fóraim a scriosadh"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "An bhfuil tú cinnte gur mian leat an fóram seo a scriosadh?"
+
+msgid "Could not delete forum"
+msgstr "Níorbh fhéidir an fóram a scriosadh"
+
+msgid "Forum category unlocked"
+msgstr "Catagóir fóraim díghlasáilte"
+
+msgid "Forum category locked"
+msgstr "Catagóir fóraim glasáilte"
+
+msgid "Could not update forum category"
+msgstr "Níorbh fhéidir an chatagóir fóraim a nuashonrú"
+
+msgid "Forum category shown"
+msgstr "Catagóir fóraim taispeáinte"
+
+msgid "Forum category hidden"
+msgstr "Catagóir fóraim folaithe"
+
+msgid "Forum unlocked"
+msgstr "Fóram díghlasáilte"
+
+msgid "Forum locked"
+msgstr "Fóram glasáilte"
+
+msgid "Could not update forum"
+msgstr "Níorbh fhéidir an fóram a nuashonrú"
+
+msgid "Forum shown"
+msgstr "Fóram taispeáinte"
+
+msgid "Forum hidden"
+msgstr "Fóram folaithe"
+
+msgid "Forum notifications enabled"
+msgstr "Fógraí fóraim cumasaithe"
+
+msgid "Forum notifications disabled"
+msgstr "Fógraí fóraim díchumasaithe"
+
+msgid "Could not update forum notification"
+msgstr "Níorbh fhéidir fógra an fhóraim a nuashonrú"
+
+msgid "Forum category moved"
+msgstr "Catagóir fóraim bogtha"
+
+msgid "Could not move forum category"
+msgstr "Níorbh fhéidir an chatagóir fóraim a bhogadh"
+
+msgid "Forum moved"
+msgstr "Fóram bogtha"
+
+msgid "Could not move forum"
+msgstr "Níorbh fhéidir an fóram a bhogadh"
+
+msgid "Back to forums"
+msgstr "Ar ais chuig na fóraim"
+
+msgid "New thread"
+msgstr "Snáithe nua"
+
+msgid "No threads found"
+msgstr "Níor aimsíodh aon snáithe"
+
+msgid "Sticky"
+msgstr "Greamaithe"
+
+msgid "Graded"
+msgstr "Grádaithe"
+
+msgid "Grade peers"
+msgstr "Piaraí a ghrádú"
+
+msgid "Move thread"
+msgstr "Snáithe a bhogadh"
+
+msgid "Target forum"
+msgstr "Spriocfhóram"
+
+msgid "Target forum is required"
+msgstr "Tá an spriocfhóram riachtanach"
+
+msgid "Students"
+msgstr "Mic léinn"
+
+msgid "No students found"
+msgstr "Níor aimsíodh aon mhac léinn"
+
+msgid "No peers available to grade."
+msgstr "Níl aon phiaraí ar fáil le grádú."
+
+msgid "Qualified"
+msgstr "Cáilithe"
+
+msgid "Not qualified"
+msgstr "Gan cháiliú"
+
+msgid "Could not retrieve thread grading"
+msgstr "Níorbh fhéidir grádú an tsnáithe a aisghabháil"
+
+msgid "Thread grading updated"
+msgstr "Grádú an tsnáithe nuashonraithe"
+
+msgid "Could not update thread grading"
+msgstr "Níorbh fhéidir grádú an tsnáithe a nuashonrú"
+
+msgid "Thread score saved"
+msgstr "Scór an tsnáithe sábháilte"
+
+msgid "Could not save thread score"
+msgstr "Níorbh fhéidir scór an tsnáithe a shábháil"
+
+msgid "Could not move thread"
+msgstr "Níorbh fhéidir an snáithe a bhogadh"
+
+msgid "Thread updated"
+msgstr "Snáithe nuashonraithe"
+
+msgid "Search term is too short"
+msgstr "Tá an téarma cuardaigh ró-ghearr"
+
+msgid "Could not search forums"
+msgstr "Níorbh fhéidir na fóraim a chuardach"
+
+msgid "Moderated"
+msgstr "Modhnaithe"
+
+msgid "View threads"
+msgstr "Snáitheanna a fheiceáil"
 

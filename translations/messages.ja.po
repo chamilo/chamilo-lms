@@ -35788,3 +35788,762 @@ msgstr "評価を作成できませんでした"
 msgid "The gradebook evaluation could not be linked"
 msgstr "成績表の評価をリンクできませんでした"
 
+msgid "Survey questions"
+msgstr "アンケート設問"
+
+msgid "Back to survey list"
+msgstr "アンケート一覧に戻る"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "このアンケートには既に回答があります。設問の編集は設定により無効になっています。"
+
+msgid "Choose the type of question you want to add."
+msgstr "追加する設問の種類を選択してください。"
+
+msgid "The free text option is added automatically."
+msgstr "自由記述オプションは自動的に追加されます。"
+
+msgid "No questions found"
+msgstr "設問が見つかりません"
+
+msgid "Mandatory"
+msgstr "必須"
+
+msgid "Unsupported question type"
+msgstr "サポートされていない設問タイプ"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "設問内で {%s} と {%s} のタグを使用できます。"
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "この設問はアンケート回答中に条件付きで表示されます。"
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "1から100までのパーセントオプションは自動生成されます。"
+
+msgid "Could not load survey questions"
+msgstr "アンケート設問を読み込めませんでした"
+
+msgid "The question text is required."
+msgstr "設問文は必須です。"
+
+msgid "The maximum score is required."
+msgstr "最大スコアは必須です。"
+
+msgid "Please select a parent option."
+msgstr "親オプションを選択してください。"
+
+msgid "Please fill all answer options."
+msgstr "すべての回答オプションを入力してください。"
+
+msgid "QuestionUpdated"
+msgstr "QuestionUpdated"
+
+msgid "Could not save survey question"
+msgstr "アンケート設問を保存できませんでした"
+
+msgid "Could not delete survey question"
+msgstr "アンケート設問を削除できませんでした"
+
+msgid "Could not move survey question"
+msgstr "アンケート設問を移動できませんでした"
+
+msgid "Could not copy survey question"
+msgstr "アンケート設問をコピーできませんでした"
+
+msgid "Hide search"
+msgstr "検索を非表示"
+
+msgid "Showing results for: %s"
+msgstr "検索結果: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "アンケートのタイトル、コード、説明で検索します。"
+
+msgid "Search surveys"
+msgstr "アンケートを検索"
+
+msgid "%s surveys selected"
+msgstr "%s 件のアンケートを選択中"
+
+msgid "Clear selection"
+msgstr "選択を解除"
+
+msgid "No surveys found"
+msgstr "アンケートが見つかりません"
+
+msgid "Unsupported"
+msgstr "未対応"
+
+msgid "Could not load surveys"
+msgstr "アンケートを読み込めませんでした"
+
+msgid "Delete selected surveys"
+msgstr "選択したアンケートを削除"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "選択したアンケートとその質問が削除されます。この操作は元に戻せません。"
+
+msgid "Could not delete selected surveys"
+msgstr "選択したアンケートを削除できませんでした"
+
+msgid "Survey action"
+msgstr "アンケート操作"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "このアンケートのコピーが作成されます: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "このアンケートの回答と招待はすべて削除されます: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "このアンケートから生成された複数質問が削除されます: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "このアンケートはリンクされたグループのチューター向けに公開されます: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "このアンケートとその質問が削除されます: %s"
+
+msgid "Could not complete survey action"
+msgstr "アンケート操作を完了できませんでした"
+
+msgid "Not started"
+msgstr "未開始"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "ミーティング投票では、招待されたユーザーが参加可能な日付を選択できます。"
+
+msgid "Back to surveys"
+msgstr "アンケートに戻る"
+
+msgid "Edit meeting poll"
+msgstr "ミーティング投票を編集"
+
+msgid "View meeting poll"
+msgstr "ミーティング投票を表示"
+
+msgid "Basic information"
+msgstr "基本情報"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "ミーティング投票タイプのアンケートを作成します。回答と招待は別途管理されます。"
+
+msgid "Availability"
+msgstr "利用可能時間"
+
+msgid "Meeting dates"
+msgstr "ミーティング日程"
+
+msgid "Meeting poll"
+msgstr "ミーティング投票"
+
+msgid "My availability"
+msgstr "自分の利用可能時間"
+
+msgid "Meeting poll results"
+msgstr "ミーティング投票結果"
+
+msgid "No invitations found"
+msgstr "招待が見つかりません"
+
+msgid "available"
+msgstr "利用可能"
+
+msgid "Could not load meeting poll"
+msgstr "ミーティング投票を読み込めませんでした"
+
+msgid "Please complete the required fields"
+msgstr "必須項目を入力してください"
+
+msgid "Could not save meeting poll"
+msgstr "ミーティング投票を保存できませんでした"
+
+msgid "Could not save meeting availability"
+msgstr "ミーティングの利用可能時間を保存できませんでした"
+
+msgid "Copy this survey to another course or session"
+msgstr "このアンケートを別のコースまたはセッションにコピー"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "アンケートは回答や招待なしでコピーされます。"
+
+msgid "No target courses found"
+msgstr "コピー先のコースが見つかりません"
+
+msgid "Search by course title, course code or session name."
+msgstr "コース名、コースコード、またはセッション名で検索してください。"
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "同じコース内にコピーする場合、「アンケートの複製」を使用してください。"
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "質問と選択肢がコピーされます。回答、招待、レポートは元のアンケートにのみ残ります。"
+
+msgid "Selected target"
+msgstr "選択したコピー先"
+
+msgid "Could not load copy form"
+msgstr "コピーフォームを読み込めませんでした"
+
+msgid "The survey will be copied to: %s"
+msgstr "アンケートは次の場所にコピーされます: %s"
+
+msgid "Survey copied."
+msgstr "アンケートをコピーしました。"
+
+msgid "Could not copy survey"
+msgstr "アンケートをコピーできませんでした"
+
+msgid "Answer survey"
+msgstr "アンケートに回答"
+
+msgid "Preview mode does not save answers."
+msgstr "プレビューモードでは回答は保存されません。"
+
+msgid "Survey completed"
+msgstr "アンケート完了"
+
+msgid "Thank you for answering the survey."
+msgstr "アンケートにご回答いただきありがとうございます。"
+
+msgid "Profile information"
+msgstr "プロフィール情報"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "アンケートに回答する前に、要求されたプロフィール項目を確認してください。"
+
+msgid "This profile field is read-only."
+msgstr "このプロフィール項目は読み取り専用です。"
+
+msgid "You already filled this survey."
+msgstr "このアンケートには既に回答済みです。"
+
+msgid "Please specify"
+msgstr "詳細を入力してください"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "この質問タイプは、モダンなアンケート表示ではサポートされていません。"
+
+msgid "Preview only"
+msgstr "プレビューのみ"
+
+msgid "Submit answers"
+msgstr "回答を送信"
+
+msgid "Could not load survey"
+msgstr "アンケートを読み込めませんでした"
+
+msgid "Please complete the required profile fields."
+msgstr "必須のプロフィール項目を入力してください。"
+
+msgid "Please answer all mandatory questions."
+msgstr "すべての必須質問に回答してください。"
+
+msgid "Could not save survey answers"
+msgstr "アンケートの回答を保存できませんでした"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "質問や招待を管理する前に、アンケートの基本情報を設定してください。"
+
+msgid "The survey code cannot be changed after creation."
+msgstr "アンケートコードは作成後に変更できません。"
+
+msgid "Survey behavior"
+msgstr "アンケートの動作"
+
+msgid "Use 0 for no time limit."
+msgstr "時間制限なしの場合は 0 を使用してください。"
+
+msgid "Survey messages"
+msgstr "アンケートメッセージ"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "ここで選択したプロフィール項目は、アンケートの質問の前に表示されます。"
+
+msgid "No profile fields are currently available."
+msgstr "現在利用可能なプロフィール項目はありません。"
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "プロフィール項目の選択は、非匿名アンケートでのみ利用できます。"
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "スキル連携は、専用バッチで移行されます。"
+
+msgid "Could not load survey configuration"
+msgstr "アンケート設定を読み込めませんでした"
+
+msgid "The survey code is required."
+msgstr "アンケートコードは必須です。"
+
+msgid "The survey title is required."
+msgstr "アンケートタイトルは必須です。"
+
+msgid "The survey has been saved successfully"
+msgstr "アンケートは正常に保存されました"
+
+msgid "Could not save survey configuration"
+msgstr "アンケート設定を保存できませんでした"
+
+msgid "Course users"
+msgstr "コースユーザー"
+
+msgid "Already invited"
+msgstr "招待済み"
+
+msgid "No users found"
+msgstr "ユーザーが見つかりません"
+
+msgid "No groups found"
+msgstr "グループが見つかりません"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "アンケートリンクを表示する場所に **link** を使用してください。"
+
+msgid "Remind all selected users"
+msgstr "選択したすべてのユーザーにリマインド"
+
+msgid "Anonymous access link"
+msgstr "匿名アクセスリンク"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "招待されていないユーザーも、このリンクを使用してアンケートに回答できます。"
+
+msgid "Answered anonymously"
+msgstr "匿名で回答済み"
+
+msgid "Could not load survey invitations"
+msgstr "アンケート招待を読み込めませんでした"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "メールを送信する場合は、件名と本文が必要です。"
+
+msgid "Could not publish survey"
+msgstr "アンケートを公開できませんでした"
+
+msgid "Could not copy the link"
+msgstr "リンクをコピーできませんでした"
+
+msgid "Please answer this survey using the following link"
+msgstr "以下のリンクを使用してこのアンケートに回答してください"
+
+msgid "Export CSV"
+msgstr "CSVをエクスポート"
+
+msgid "Export compact CSV"
+msgstr "コンパクトCSVをエクスポート"
+
+msgid "Export Excel"
+msgstr "Excelをエクスポート"
+
+msgid "Export package"
+msgstr "パッケージをエクスポート"
+
+msgid "Results summary"
+msgstr "結果サマリー"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "このビューには、このアンケートの移行済みレポートデータが表示されます。"
+
+msgid "Select user"
+msgstr "ユーザーを選択"
+
+msgid "No answers found"
+msgstr "回答が見つかりません"
+
+msgid "answers"
+msgstr "回答"
+
+msgid "Could not load survey reporting"
+msgstr "アンケートレポートを読み込めませんでした"
+
+msgid "Back to threads"
+msgstr "スレッドに戻る"
+
+msgid "Back to learning path"
+msgstr "ラーニングパスに戻る"
+
+msgid "Remove sticky"
+msgstr "固定を解除"
+
+msgid "Make sticky"
+msgstr "固定する"
+
+msgid "Open thread"
+msgstr "スレッドを開く"
+
+msgid "Close thread"
+msgstr "スレッドを閉じる"
+
+msgid "Delete thread"
+msgstr "スレッドを削除"
+
+msgid "This thread is hidden from learners."
+msgstr "このスレッドは学習者から非表示になっています。"
+
+msgid "Revision requested"
+msgstr "修正依頼済み"
+
+msgid "Revision"
+msgstr "修正"
+
+msgid "Approve post"
+msgstr "投稿を承認"
+
+msgid "Reject post"
+msgstr "投稿を却下"
+
+msgid "Cancel revision request"
+msgstr "修正依頼をキャンセル"
+
+msgid "Delete post"
+msgstr "投稿を削除"
+
+msgid "Message is required"
+msgstr "メッセージは必須です"
+
+msgid "Target thread is required"
+msgstr "対象スレッドは必須です"
+
+msgid "Could not retrieve posts"
+msgstr "投稿を取得できませんでした"
+
+msgid "Thread shown"
+msgstr "スレッドを表示しました"
+
+msgid "Thread hidden"
+msgstr "スレッドを非表示にしました"
+
+msgid "Could not update thread"
+msgstr "スレッドを更新できませんでした"
+
+msgid "Thread closed"
+msgstr "スレッドを閉じました"
+
+msgid "Thread opened"
+msgstr "スレッドを開きました"
+
+msgid "Thread marked as sticky"
+msgstr "スレッドを固定にしました"
+
+msgid "Thread unmarked as sticky"
+msgstr "スレッドの固定を解除しました"
+
+msgid "Thread notifications enabled"
+msgstr "スレッド通知を有効にしました"
+
+msgid "Thread notifications disabled"
+msgstr "スレッド通知を無効にしました"
+
+msgid "Could not update thread notification"
+msgstr "スレッド通知を更新できませんでした"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "このスレッドを削除してもよろしいですか？"
+
+msgid "Could not delete thread"
+msgstr "スレッドを削除できませんでした"
+
+msgid "Post approved"
+msgstr "投稿を承認しました"
+
+msgid "Could not approve post"
+msgstr "投稿を承認できませんでした"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "この投稿を却下してもよろしいですか？"
+
+msgid "Post rejected"
+msgstr "投稿を却下しました"
+
+msgid "Could not reject post"
+msgstr "投稿を却下できませんでした"
+
+msgid "Post shown"
+msgstr "投稿を表示しました"
+
+msgid "Post hidden"
+msgstr "投稿を非表示にしました"
+
+msgid "Could not update post"
+msgstr "投稿を更新できませんでした"
+
+msgid "Post updated"
+msgstr "投稿を更新しました"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "この投稿を削除してもよろしいですか？"
+
+msgid "Post deleted"
+msgstr "投稿を削除しました"
+
+msgid "Could not delete post"
+msgstr "投稿を削除できませんでした"
+
+msgid "Untitled thread"
+msgstr "無題のスレッド"
+
+msgid "Could not retrieve threads"
+msgstr "スレッドを取得できませんでした"
+
+msgid "Post moved"
+msgstr "投稿を移動しました"
+
+msgid "Could not move post"
+msgstr "投稿を移動できませんでした"
+
+msgid "Revision request removed"
+msgstr "修正依頼を削除しました"
+
+msgid "Could not update revision request"
+msgstr "修正依頼を更新できませんでした"
+
+msgid "Are you sure you want to report this post?"
+msgstr "この投稿を報告してもよろしいですか？"
+
+msgid "Could not report post"
+msgstr "投稿を報告できませんでした"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "この添付ファイルを削除してもよろしいですか？"
+
+msgid "Attachment deleted"
+msgstr "添付ファイルを削除しました"
+
+msgid "Could not delete attachment"
+msgstr "添付ファイルを削除できませんでした"
+
+msgid "Thread title"
+msgstr "スレッドのタイトル"
+
+msgid "Sticky thread"
+msgstr "固定スレッド"
+
+msgid "Attach files"
+msgstr "ファイルを添付"
+
+msgid "Attachments are disabled for this forum"
+msgstr "このフォーラムでは添付ファイルが無効です"
+
+msgid "The forum is not open yet."
+msgstr "フォーラムはまだ開いていません。"
+
+msgid "The forum is closed."
+msgstr "フォーラムは終了しています。"
+
+msgid "The forum is locked."
+msgstr "フォーラムはロックされています。"
+
+msgid "New threads are not allowed in this forum."
+msgstr "このフォーラムでは新規スレッドは許可されていません。"
+
+msgid "Thread created"
+msgstr "スレッドを作成しました"
+
+msgid "Could not create thread"
+msgstr "スレッドを作成できませんでした"
+
+msgid "Back to posts"
+msgstr "投稿に戻る"
+
+msgid "This reply will be stored as a revision."
+msgstr "この返信はリビジョンとして保存されます。"
+
+msgid "Post reply"
+msgstr "返信を投稿"
+
+msgid "The thread is locked."
+msgstr "スレッドはロックされています。"
+
+msgid "Reply added"
+msgstr "返信を追加しました"
+
+msgid "Could not add reply"
+msgstr "返信を追加できませんでした"
+
+msgid "Add forum"
+msgstr "フォーラムを追加"
+
+msgid "No forums found"
+msgstr "フォーラムが見つかりません"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "ディスカッションを開始するには、最初のカテゴリまたはフォーラムを作成してください。"
+
+msgid "Locked"
+msgstr "ロック済み"
+
+msgid "No forums in this category"
+msgstr "このカテゴリにフォーラムはありません"
+
+msgid "Posts require approval"
+msgstr "投稿には承認が必要です"
+
+msgid "Forum for current group"
+msgstr "現在のグループ用フォーラム"
+
+msgid "Group forum visibility"
+msgstr "グループフォーラムの表示設定"
+
+msgid "No category"
+msgstr "カテゴリなし"
+
+msgid "Could not retrieve forums"
+msgstr "フォーラムを取得できませんでした"
+
+msgid "Forum category updated"
+msgstr "フォーラムカテゴリを更新しました"
+
+msgid "Forum category created"
+msgstr "フォーラムカテゴリを作成しました"
+
+msgid "Could not save forum category"
+msgstr "フォーラムカテゴリを保存できませんでした"
+
+msgid "Forum updated"
+msgstr "フォーラムを更新しました"
+
+msgid "Forum created"
+msgstr "フォーラムを作成しました"
+
+msgid "Could not save forum"
+msgstr "フォーラムを保存できませんでした"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "このフォーラムカテゴリを削除してもよろしいですか？"
+
+msgid "Could not delete forum category"
+msgstr "フォーラムカテゴリを削除できませんでした"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "このフォーラムを削除してもよろしいですか？"
+
+msgid "Could not delete forum"
+msgstr "フォーラムを削除できませんでした"
+
+msgid "Forum category unlocked"
+msgstr "フォーラムカテゴリのロックを解除しました"
+
+msgid "Forum category locked"
+msgstr "フォーラムカテゴリをロックしました"
+
+msgid "Could not update forum category"
+msgstr "フォーラムカテゴリを更新できませんでした"
+
+msgid "Forum category shown"
+msgstr "フォーラムカテゴリを表示しました"
+
+msgid "Forum category hidden"
+msgstr "フォーラムカテゴリを非表示にしました"
+
+msgid "Forum unlocked"
+msgstr "フォーラムのロックを解除しました"
+
+msgid "Forum locked"
+msgstr "フォーラムをロックしました"
+
+msgid "Could not update forum"
+msgstr "フォーラムを更新できませんでした"
+
+msgid "Forum shown"
+msgstr "フォーラムを表示しました"
+
+msgid "Forum hidden"
+msgstr "フォーラムを非表示にしました"
+
+msgid "Forum notifications enabled"
+msgstr "フォーラム通知を有効にしました"
+
+msgid "Forum notifications disabled"
+msgstr "フォーラム通知を無効にしました"
+
+msgid "Could not update forum notification"
+msgstr "フォーラム通知を更新できませんでした"
+
+msgid "Forum category moved"
+msgstr "フォーラムカテゴリを移動しました"
+
+msgid "Could not move forum category"
+msgstr "フォーラムカテゴリを移動できませんでした"
+
+msgid "Forum moved"
+msgstr "フォーラムを移動しました"
+
+msgid "Could not move forum"
+msgstr "フォーラムを移動できませんでした"
+
+msgid "Back to forums"
+msgstr "フォーラムに戻る"
+
+msgid "New thread"
+msgstr "新規スレッド"
+
+msgid "No threads found"
+msgstr "スレッドが見つかりません"
+
+msgid "Sticky"
+msgstr "固定"
+
+msgid "Graded"
+msgstr "採点済み"
+
+msgid "Grade peers"
+msgstr "ピアを採点"
+
+msgid "Move thread"
+msgstr "スレッドを移動"
+
+msgid "Target forum"
+msgstr "移動先フォーラム"
+
+msgid "Target forum is required"
+msgstr "移動先フォーラムは必須です"
+
+msgid "Students"
+msgstr "受講者"
+
+msgid "No students found"
+msgstr "受講者が見つかりません"
+
+msgid "No peers available to grade."
+msgstr "採点可能なピアがありません。"
+
+msgid "Qualified"
+msgstr "合格"
+
+msgid "Not qualified"
+msgstr "不合格"
+
+msgid "Could not retrieve thread grading"
+msgstr "スレッドの採点を取得できませんでした"
+
+msgid "Thread grading updated"
+msgstr "スレッドの採点を更新しました"
+
+msgid "Could not update thread grading"
+msgstr "スレッドの採点を更新できませんでした"
+
+msgid "Thread score saved"
+msgstr "スレッドの得点を保存しました"
+
+msgid "Could not save thread score"
+msgstr "スレッドの得点を保存できませんでした"
+
+msgid "Could not move thread"
+msgstr "スレッドを移動できませんでした"
+
+msgid "Thread updated"
+msgstr "スレッドを更新しました"
+
+msgid "Search term is too short"
+msgstr "検索語が短すぎます"
+
+msgid "Could not search forums"
+msgstr "フォーラムを検索できませんでした"
+
+msgid "Moderated"
+msgstr "モデレート済み"
+
+msgid "View threads"
+msgstr "スレッドを表示"
+

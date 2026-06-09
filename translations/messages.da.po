@@ -35485,7 +35485,7 @@ msgid "%s results"
 msgstr "%s resultater"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Eksempel på udfyldningsaktivitet: beregn Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Alder</strong></td>            <td width=\"75%\" style=\"\">[25] år</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Køn</strong></td>            <td style=\"\" text-align:=\"\">[M] (M eller F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Vægt</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Højde</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI = Vægt/Højde<sup>2</sup> (Se <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\">Wikipedia-artikel</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Eksempel på udfyldning af formularaktivitet: beregn Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Alder</strong></td>            <td width=\"75%\" style=\"\">[25] år</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Køn</strong></td>            <td style=\"\" text-align:=\"\">[M] (M eller K)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Vægt</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Højde</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI = Vægt/Højde<sup>2</sup> (Se <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\">Wikipedia-artikel</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Fjernet"
@@ -35723,4 +35723,763 @@ msgstr "Evalueringen kunne ikke oprettes"
 
 msgid "The gradebook evaluation could not be linked"
 msgstr "Karakterbogsevalueringen kunne ikke knyttes"
+
+msgid "Survey questions"
+msgstr "Undersøgelsesspørgsmål"
+
+msgid "Back to survey list"
+msgstr "Tilbage til undersøgelseslisten"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "Denne undersøgelse har allerede svar. Redigering af spørgsmål er deaktiveret via konfigurationen."
+
+msgid "Choose the type of question you want to add."
+msgstr "Vælg den type spørgsmål, du vil tilføje."
+
+msgid "The free text option is added automatically."
+msgstr "Muligheden for fri tekst tilføjes automatisk."
+
+msgid "No questions found"
+msgstr "Ingen spørgsmål fundet"
+
+msgid "Mandatory"
+msgstr "Obligatorisk"
+
+msgid "Unsupported question type"
+msgstr "Ikke-understøttet spørgsmålstype"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "Du kan bruge tags {%s} og {%s} i spørgsmålet."
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "Dette spørgsmål vises betinget under besvarelse af undersøgelsen."
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "Procentmulighederne fra 1 til 100 genereres automatisk."
+
+msgid "Could not load survey questions"
+msgstr "Kunne ikke indlæse undersøgelsesspørgsmål"
+
+msgid "The question text is required."
+msgstr "Spørgsmålsteksten er påkrævet."
+
+msgid "The maximum score is required."
+msgstr "Maksimumscoren er påkrævet."
+
+msgid "Please select a parent option."
+msgstr "Vælg venligst en overordnet mulighed."
+
+msgid "Please fill all answer options."
+msgstr "Udfyld venligst alle svarmuligheder."
+
+msgid "QuestionUpdated"
+msgstr "QuestionUpdated"
+
+msgid "Could not save survey question"
+msgstr "Kunne ikke gemme undersøgelsesspørgsmål"
+
+msgid "Could not delete survey question"
+msgstr "Kunne ikke slette undersøgelsesspørgsmål"
+
+msgid "Could not move survey question"
+msgstr "Kunne ikke flytte undersøgelsesspørgsmål"
+
+msgid "Could not copy survey question"
+msgstr "Kunne ikke kopiere undersøgelsesspørgsmål"
+
+msgid "Hide search"
+msgstr "Skjul søgning"
+
+msgid "Showing results for: %s"
+msgstr "Viser resultater for: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "Søg efter undersøgelsestitel, kode eller beskrivelse."
+
+msgid "Search surveys"
+msgstr "Søg i undersøgelser"
+
+msgid "%s surveys selected"
+msgstr "%s undersøgelser valgt"
+
+msgid "Clear selection"
+msgstr "Ryd markering"
+
+msgid "No surveys found"
+msgstr "Ingen undersøgelser fundet"
+
+msgid "Unsupported"
+msgstr "Ikke understøttet"
+
+msgid "Could not load surveys"
+msgstr "Kunne ikke indlæse undersøgelser"
+
+msgid "Delete selected surveys"
+msgstr "Slet valgte undersøgelser"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "De valgte undersøgelser og deres spørgsmål vil blive slettet. Denne handling kan ikke fortrydes."
+
+msgid "Could not delete selected surveys"
+msgstr "Kunne ikke slette valgte undersøgelser"
+
+msgid "Survey action"
+msgstr "Undersøgelseshandling"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "En kopi af denne undersøgelse vil blive oprettet: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "Alle svar og invitationer vil blive slettet for denne undersøgelse: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "Genererede multiplikerede spørgsmål vil blive fjernet fra denne undersøgelse: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "Denne undersøgelse vil blive offentliggjort for de tilknyttede gruppevejledere: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "Denne undersøgelse og dens spørgsmål vil blive slettet: %s"
+
+msgid "Could not complete survey action"
+msgstr "Kunne ikke fuldføre undersøgelseshandling"
+
+msgid "Not started"
+msgstr "Ikke påbegyndt"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "Mødeafstemninger lader inviterede brugere vælge de datoer, hvor de er tilgængelige."
+
+msgid "Back to surveys"
+msgstr "Tilbage til undersøgelser"
+
+msgid "Edit meeting poll"
+msgstr "Rediger mødeafstemning"
+
+msgid "View meeting poll"
+msgstr "Vis mødeafstemning"
+
+msgid "Basic information"
+msgstr "Grundlæggende oplysninger"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "Dette vil oprette en undersøgelse af typen mødeafstemning. Svar og invitationer håndteres separat."
+
+msgid "Availability"
+msgstr "Tilgængelighed"
+
+msgid "Meeting dates"
+msgstr "Mødedatoer"
+
+msgid "Meeting poll"
+msgstr "Mødeafstemning"
+
+msgid "My availability"
+msgstr "Min tilgængelighed"
+
+msgid "Meeting poll results"
+msgstr "Resultater af mødeafstemning"
+
+msgid "No invitations found"
+msgstr "Ingen invitationer fundet"
+
+msgid "available"
+msgstr "tilgængelig"
+
+msgid "Could not load meeting poll"
+msgstr "Kunne ikke indlæse mødeafstemning"
+
+msgid "Please complete the required fields"
+msgstr "Udfyld venligst de påkrævede felter"
+
+msgid "Could not save meeting poll"
+msgstr "Kunne ikke gemme mødeafstemning"
+
+msgid "Could not save meeting availability"
+msgstr "Kunne ikke gemme mødetilgængelighed"
+
+msgid "Copy this survey to another course or session"
+msgstr "Kopier denne undersøgelse til et andet kursus eller en anden session"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "Undersøgelsen vil blive kopieret uden svar eller invitationer."
+
+msgid "No target courses found"
+msgstr "Ingen målkurser fundet"
+
+msgid "Search by course title, course code or session name."
+msgstr "Søg efter kursustitel, kursuskode eller sessionsnavn."
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "Brug Dupliker undersøgelse, når du ønsker en kopi i det samme kursus."
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "Spørgsmål og svarmuligheder vil blive kopieret. Svar, invitationer og rapporter forbliver kun i den oprindelige undersøgelse."
+
+msgid "Selected target"
+msgstr "Valgt mål"
+
+msgid "Could not load copy form"
+msgstr "Kunne ikke indlæse kopiformular"
+
+msgid "The survey will be copied to: %s"
+msgstr "Undersøgelsen vil blive kopieret til: %s"
+
+msgid "Survey copied."
+msgstr "Undersøgelse kopieret."
+
+msgid "Could not copy survey"
+msgstr "Kunne ikke kopiere undersøgelse"
+
+msgid "Answer survey"
+msgstr "Besvar undersøgelse"
+
+msgid "Preview mode does not save answers."
+msgstr "Forhåndsvisning gemmer ikke svar."
+
+msgid "Survey completed"
+msgstr "Undersøgelse gennemført"
+
+msgid "Thank you for answering the survey."
+msgstr "Tak, fordi du besvarede undersøgelsen."
+
+msgid "Profile information"
+msgstr "Profiloplysninger"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "Gennemgå venligst de ønskede profilfelter, før du besvarer undersøgelsen."
+
+msgid "This profile field is read-only."
+msgstr "Dette profilfelt er skrivebeskyttet."
+
+msgid "You already filled this survey."
+msgstr "Du har allerede udfyldt denne undersøgelse."
+
+msgid "Please specify"
+msgstr "Angiv venligst"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "Denne spørgsmålstype understøttes ikke i den moderne undersøgelsesvisning."
+
+msgid "Preview only"
+msgstr "Kun forhåndsvisning"
+
+msgid "Submit answers"
+msgstr "Indsend svar"
+
+msgid "Could not load survey"
+msgstr "Kunne ikke indlæse undersøgelse"
+
+msgid "Please complete the required profile fields."
+msgstr "Udfyld venligst de påkrævede profilfelder."
+
+msgid "Please answer all mandatory questions."
+msgstr "Besvar venligst alle obligatoriske spørgsmål."
+
+msgid "Could not save survey answers"
+msgstr "Kunne ikke gemme undersøgelsessvar"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "Konfigurer hovedoplysningerne for undersøgelsen, før du administrerer spørgsmål og invitationer."
+
+msgid "The survey code cannot be changed after creation."
+msgstr "Undersøgelseskoden kan ikke ændres efter oprettelse."
+
+msgid "Survey behavior"
+msgstr "Undersøgelsesadfærd"
+
+msgid "Use 0 for no time limit."
+msgstr "Brug 0 for ingen tidsbegrænsning."
+
+msgid "Survey messages"
+msgstr "Undersøgelsesbeskeder"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "Profilfelter valgt her vil blive vist før undersøgelsesspørgsmålene."
+
+msgid "No profile fields are currently available."
+msgstr "Ingen profilfelter er tilgængelige i øjeblikket."
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "Valg af profilfelter er kun tilgængeligt for ikke-anonyme undersøgelser."
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "Færdighedstilknytning vil blive migreret i et dedikeret batch."
+
+msgid "Could not load survey configuration"
+msgstr "Kunne ikke indlæse undersøgelseskonfiguration"
+
+msgid "The survey code is required."
+msgstr "Undersøgelseskoden er påkrævet."
+
+msgid "The survey title is required."
+msgstr "Undersøgelsestitlen er påkrævet."
+
+msgid "The survey has been saved successfully"
+msgstr "Undersøgelsen er blevet gemt"
+
+msgid "Could not save survey configuration"
+msgstr "Kunne ikke gemme undersøgelseskonfiguration"
+
+msgid "Course users"
+msgstr "Kursusdeltagere"
+
+msgid "Already invited"
+msgstr "Allerede inviteret"
+
+msgid "No users found"
+msgstr "Ingen brugere fundet"
+
+msgid "No groups found"
+msgstr "Ingen grupper fundet"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "Brug **link**, hvor undersøgelseslinket skal vises."
+
+msgid "Remind all selected users"
+msgstr "Påmind alle valgte brugere"
+
+msgid "Anonymous access link"
+msgstr "Anonymt adgangslink"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "Brugere, der ikke er inviteret, kan bruge dette link til at besvare undersøgelsen."
+
+msgid "Answered anonymously"
+msgstr "Besvaret anonymt"
+
+msgid "Could not load survey invitations"
+msgstr "Kunne ikke indlæse undersøgelsesinvitationer"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "Emne og besked er påkrævet ved afsendelse af mail."
+
+msgid "Could not publish survey"
+msgstr "Kunne ikke publicere undersøgelse"
+
+msgid "Could not copy the link"
+msgstr "Kunne ikke kopiere linket"
+
+msgid "Please answer this survey using the following link"
+msgstr "Besvar venligst denne undersøgelse via følgende link"
+
+msgid "Export CSV"
+msgstr "Eksportér CSV"
+
+msgid "Export compact CSV"
+msgstr "Eksportér kompakt CSV"
+
+msgid "Export Excel"
+msgstr "Eksportér Excel"
+
+msgid "Export package"
+msgstr "Eksportér pakke"
+
+msgid "Results summary"
+msgstr "Resultatoversigt"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "Denne visning viser de migrerede rapportdata for denne undersøgelse."
+
+msgid "Select user"
+msgstr "Vælg bruger"
+
+msgid "No answers found"
+msgstr "Ingen svar fundet"
+
+msgid "answers"
+msgstr "svar"
+
+msgid "Could not load survey reporting"
+msgstr "Kunne ikke indlæse undersøgelsesrapportering"
+
+msgid "Back to threads"
+msgstr "Tilbage til tråde"
+
+msgid "Back to learning path"
+msgstr "Tilbage til læringssti"
+
+msgid "Remove sticky"
+msgstr "Fjern fastgørelse"
+
+msgid "Make sticky"
+msgstr "Fastgør"
+
+msgid "Open thread"
+msgstr "Åbn tråd"
+
+msgid "Close thread"
+msgstr "Luk tråd"
+
+msgid "Delete thread"
+msgstr "Slet tråd"
+
+msgid "This thread is hidden from learners."
+msgstr "Denne tråd er skjult for deltagere."
+
+msgid "Revision requested"
+msgstr "Revision anmodet"
+
+msgid "Revision"
+msgstr "Revision"
+
+msgid "Approve post"
+msgstr "Godkend indlæg"
+
+msgid "Reject post"
+msgstr "Afvis indlæg"
+
+msgid "Cancel revision request"
+msgstr "Annullér revisionsanmodning"
+
+msgid "Delete post"
+msgstr "Slet indlæg"
+
+msgid "Message is required"
+msgstr "Besked er påkrævet"
+
+msgid "Target thread is required"
+msgstr "Måltråd er påkrævet"
+
+msgid "Could not retrieve posts"
+msgstr "Kunne ikke hente indlæg"
+
+msgid "Thread shown"
+msgstr "Tråd vist"
+
+msgid "Thread hidden"
+msgstr "Tråd skjult"
+
+msgid "Could not update thread"
+msgstr "Kunne ikke opdatere tråd"
+
+msgid "Thread closed"
+msgstr "Tråd lukket"
+
+msgid "Thread opened"
+msgstr "Tråd åbnet"
+
+msgid "Thread marked as sticky"
+msgstr "Tråd markeret som fastgjort"
+
+msgid "Thread unmarked as sticky"
+msgstr "Tråd umarkeret som fastgjort"
+
+msgid "Thread notifications enabled"
+msgstr "Trådnotifikationer aktiveret"
+
+msgid "Thread notifications disabled"
+msgstr "Trådnotifikationer deaktiveret"
+
+msgid "Could not update thread notification"
+msgstr "Kunne ikke opdatere trådnotifikation"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "Er du sikker på, at du vil slette denne tråd?"
+
+msgid "Could not delete thread"
+msgstr "Kunne ikke slette tråd"
+
+msgid "Post approved"
+msgstr "Indlæg godkendt"
+
+msgid "Could not approve post"
+msgstr "Kunne ikke godkende indlæg"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "Er du sikker på, at du vil afvise dette indlæg?"
+
+msgid "Post rejected"
+msgstr "Indlæg afvist"
+
+msgid "Could not reject post"
+msgstr "Kunne ikke afvise indlæg"
+
+msgid "Post shown"
+msgstr "Indlæg vist"
+
+msgid "Post hidden"
+msgstr "Indlæg skjult"
+
+msgid "Could not update post"
+msgstr "Kunne ikke opdatere indlæg"
+
+msgid "Post updated"
+msgstr "Indlæg opdateret"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "Er du sikker på, at du vil slette dette indlæg?"
+
+msgid "Post deleted"
+msgstr "Indlæg slettet"
+
+msgid "Could not delete post"
+msgstr "Kunne ikke slette indlæg"
+
+msgid "Untitled thread"
+msgstr "Unavngiven tråd"
+
+msgid "Could not retrieve threads"
+msgstr "Kunne ikke hente tråde"
+
+msgid "Post moved"
+msgstr "Indlæg flyttet"
+
+msgid "Could not move post"
+msgstr "Kunne ikke flytte indlæg"
+
+msgid "Revision request removed"
+msgstr "Revisionsanmodning fjernet"
+
+msgid "Could not update revision request"
+msgstr "Kunne ikke opdatere revisionsanmodning"
+
+msgid "Are you sure you want to report this post?"
+msgstr "Er du sikker på, at du vil rapportere dette indlæg?"
+
+msgid "Could not report post"
+msgstr "Kunne ikke rapportere indlæg"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "Er du sikker på, at du vil slette denne vedhæftning?"
+
+msgid "Attachment deleted"
+msgstr "Vedhæftning slettet"
+
+msgid "Could not delete attachment"
+msgstr "Kunne ikke slette vedhæftning"
+
+msgid "Thread title"
+msgstr "Trådtitel"
+
+msgid "Sticky thread"
+msgstr "Fastgjort tråd"
+
+msgid "Attach files"
+msgstr "Vedhæft filer"
+
+msgid "Attachments are disabled for this forum"
+msgstr "Vedhæftninger er deaktiveret for dette forum"
+
+msgid "The forum is not open yet."
+msgstr "Forummet er ikke åbent endnu."
+
+msgid "The forum is closed."
+msgstr "Forummet er lukket."
+
+msgid "The forum is locked."
+msgstr "Forummet er låst."
+
+msgid "New threads are not allowed in this forum."
+msgstr "Nye tråde er ikke tilladt i dette forum."
+
+msgid "Thread created"
+msgstr "Tråd oprettet"
+
+msgid "Could not create thread"
+msgstr "Kunne ikke oprette tråd"
+
+msgid "Back to posts"
+msgstr "Tilbage til indlæg"
+
+msgid "This reply will be stored as a revision."
+msgstr "Dette svar gemmes som en revision."
+
+msgid "Post reply"
+msgstr "Svar på indlæg"
+
+msgid "The thread is locked."
+msgstr "Tråden er låst."
+
+msgid "Reply added"
+msgstr "Svar tilføjet"
+
+msgid "Could not add reply"
+msgstr "Kunne ikke tilføje svar"
+
+msgid "Add forum"
+msgstr "Tilføj forum"
+
+msgid "No forums found"
+msgstr "Ingen fora fundet"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "Opret din første forumkategori eller dit første forum for at starte diskussioner."
+
+msgid "Locked"
+msgstr "Låst"
+
+msgid "No forums in this category"
+msgstr "Ingen fora i denne kategori"
+
+msgid "Posts require approval"
+msgstr "Indlæg kræver godkendelse"
+
+msgid "Forum for current group"
+msgstr "Forum for aktuel gruppe"
+
+msgid "Group forum visibility"
+msgstr "Forumets synlighed for gruppe"
+
+msgid "No category"
+msgstr "Ingen kategori"
+
+msgid "Could not retrieve forums"
+msgstr "Kunne ikke hente fora"
+
+msgid "Forum category updated"
+msgstr "Forumkategori opdateret"
+
+msgid "Forum category created"
+msgstr "Forumkategori oprettet"
+
+msgid "Could not save forum category"
+msgstr "Kunne ikke gemme forumkategori"
+
+msgid "Forum updated"
+msgstr "Forum opdateret"
+
+msgid "Forum created"
+msgstr "Forum oprettet"
+
+msgid "Could not save forum"
+msgstr "Kunne ikke gemme forum"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "Er du sikker på, at du vil slette denne forumkategori?"
+
+msgid "Could not delete forum category"
+msgstr "Kunne ikke slette forumkategori"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "Er du sikker på, at du vil slette dette forum?"
+
+msgid "Could not delete forum"
+msgstr "Kunne ikke slette forum"
+
+msgid "Forum category unlocked"
+msgstr "Forumkategori låst op"
+
+msgid "Forum category locked"
+msgstr "Forumkategori låst"
+
+msgid "Could not update forum category"
+msgstr "Kunne ikke opdatere forumkategori"
+
+msgid "Forum category shown"
+msgstr "Forumkategori vist"
+
+msgid "Forum category hidden"
+msgstr "Forumkategori skjult"
+
+msgid "Forum unlocked"
+msgstr "Forum låst op"
+
+msgid "Forum locked"
+msgstr "Forum låst"
+
+msgid "Could not update forum"
+msgstr "Kunne ikke opdatere forum"
+
+msgid "Forum shown"
+msgstr "Forum vist"
+
+msgid "Forum hidden"
+msgstr "Forum skjult"
+
+msgid "Forum notifications enabled"
+msgstr "Forumnotifikationer aktiveret"
+
+msgid "Forum notifications disabled"
+msgstr "Forumnotifikationer deaktiveret"
+
+msgid "Could not update forum notification"
+msgstr "Kunne ikke opdatere forumnotifikation"
+
+msgid "Forum category moved"
+msgstr "Forumkategori flyttet"
+
+msgid "Could not move forum category"
+msgstr "Kunne ikke flytte forumkategori"
+
+msgid "Forum moved"
+msgstr "Forum flyttet"
+
+msgid "Could not move forum"
+msgstr "Kunne ikke flytte forum"
+
+msgid "Back to forums"
+msgstr "Tilbage til fora"
+
+msgid "New thread"
+msgstr "Ny tråd"
+
+msgid "No threads found"
+msgstr "Ingen tråde fundet"
+
+msgid "Sticky"
+msgstr "Fastgjort"
+
+msgid "Graded"
+msgstr "Bedømt"
+
+msgid "Grade peers"
+msgstr "Bedøm medstuderende"
+
+msgid "Move thread"
+msgstr "Flyt tråd"
+
+msgid "Target forum"
+msgstr "Målforum"
+
+msgid "Target forum is required"
+msgstr "Målforum er påkrævet"
+
+msgid "Students"
+msgstr "Studerende"
+
+msgid "No students found"
+msgstr "Ingen studerende fundet"
+
+msgid "No peers available to grade."
+msgstr "Ingen medstuderende tilgængelige til bedømmelse."
+
+msgid "Qualified"
+msgstr "Kvalificeret"
+
+msgid "Not qualified"
+msgstr "Ikke kvalificeret"
+
+msgid "Could not retrieve thread grading"
+msgstr "Kunne ikke hente trådbedømmelse"
+
+msgid "Thread grading updated"
+msgstr "Trådbedømmelse opdateret"
+
+msgid "Could not update thread grading"
+msgstr "Kunne ikke opdatere trådbedømmelse"
+
+msgid "Thread score saved"
+msgstr "Trådscore gemt"
+
+msgid "Could not save thread score"
+msgstr "Kunne ikke gemme trådscore"
+
+msgid "Could not move thread"
+msgstr "Kunne ikke flytte tråd"
+
+msgid "Thread updated"
+msgstr "Tråd opdateret"
+
+msgid "Search term is too short"
+msgstr "Søgeordet er for kort"
+
+msgid "Could not search forums"
+msgstr "Kunne ikke søge i fora"
+
+msgid "Moderated"
+msgstr "Modereret"
+
+msgid "View threads"
+msgstr "Vis tråde"
 

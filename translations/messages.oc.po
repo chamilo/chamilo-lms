@@ -35479,7 +35479,7 @@ msgid "%s results"
 msgstr "%s resultats"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Exemple d'activitat de formulari de rempliment : calcular l'Indici de Massa Corporela</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Atge</strong></td>            <td width=\"75%\" style=\"\">[25] ans</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sexe</strong></td>            <td style=\"\" text-align:=\"\">[M] (M o F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Pès</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Talha</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Indici de Massa Corporela</strong></td>            <td style=\"vertical-align: top;\">[29] IMC =Pès/Talha<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Article de Wikipèdia</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Exemple de rempliment del formulari : calcular l’indèx de massa corporala</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Atge</strong></td>            <td width=\"75%\" style=\"\">[25] ans</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sexe</strong></td>            <td style=\"\" text-align:=\"\">[M] (M o F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Pès</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Talha</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Indèx de massa corporala</strong></td>            <td style=\"vertical-align: top;\">[29] IMC =Pès/Talha<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Article de Wikipèdia</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Suprimit"
@@ -35717,4 +35717,763 @@ msgstr "L'evaluacion a pas pogut èsser creada"
 
 msgid "The gradebook evaluation could not be linked"
 msgstr "L'evaluacion del catalòg de nòtas a pas pogut èsser ligada"
+
+msgid "Survey questions"
+msgstr "Questions del sondatge"
+
+msgid "Back to survey list"
+msgstr "Tornar a la lista dels sondatges"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "Aqueste sondatge a ja de responsas. L’edicion de las questions es desactivada per la configuracion."
+
+msgid "Choose the type of question you want to add."
+msgstr "Causissètz lo tipe de question que volètz apondre."
+
+msgid "The free text option is added automatically."
+msgstr "L’opcion tèxte liure es aponduda automaticament."
+
+msgid "No questions found"
+msgstr "Cap de question pas trobada"
+
+msgid "Mandatory"
+msgstr "Obligatòri"
+
+msgid "Unsupported question type"
+msgstr "Tipe de question pas suportat"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "Podètz utilizar las balisas {%s} e {%s} dins la question."
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "Aquesta question s’aficha de manièra condicionala al moment de la responsa al sondatge."
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "Las opcions de percentatge de 1 a 100 son generadas automaticament."
+
+msgid "Could not load survey questions"
+msgstr "Impossible de cargar las questions del sondatge"
+
+msgid "The question text is required."
+msgstr "Lo tèxte de la question es obligatòri."
+
+msgid "The maximum score is required."
+msgstr "Lo puntatge maximum es requerit."
+
+msgid "Please select a parent option."
+msgstr "Seleccionatz una opcion parent."
+
+msgid "Please fill all answer options."
+msgstr "Completatz totas las opcions de responsa."
+
+msgid "QuestionUpdated"
+msgstr "QuestionUpdated"
+
+msgid "Could not save survey question"
+msgstr "Impossible d'enregistrar la question del sondatge"
+
+msgid "Could not delete survey question"
+msgstr "Impossible de suprimir la question del sondatge"
+
+msgid "Could not move survey question"
+msgstr "Impossible de desplaçar la question del sondatge"
+
+msgid "Could not copy survey question"
+msgstr "Impossible de copiar la question del sondatge"
+
+msgid "Hide search"
+msgstr "Amagar la recèrca"
+
+msgid "Showing results for: %s"
+msgstr "Afichatge dels resultats per : %s"
+
+msgid "Search by survey title, code or description."
+msgstr "Recercar per títol, còdi o descripcion del sondatge."
+
+msgid "Search surveys"
+msgstr "Recercar de sondatges"
+
+msgid "%s surveys selected"
+msgstr "%s sondatges seleccionats"
+
+msgid "Clear selection"
+msgstr "Escafar la seleccion"
+
+msgid "No surveys found"
+msgstr "Cap de sondatge pas trobat"
+
+msgid "Unsupported"
+msgstr "Pas suportat"
+
+msgid "Could not load surveys"
+msgstr "Impossible de cargar los sondatges"
+
+msgid "Delete selected surveys"
+msgstr "Suprimir los sondatges seleccionats"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "Los sondatges seleccionats e lors questions seràn suprimits. Aquesta accion pòt pas èsser anullada."
+
+msgid "Could not delete selected surveys"
+msgstr "Impossible de suprimir los sondatges seleccionats"
+
+msgid "Survey action"
+msgstr "Accion de sondatge"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "Una còpia d'aqueste sondatge serà creada : %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "Totas las responsas e invitacions seràn suprimidas per aqueste sondatge : %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "Las questions multiplicadas generadas seràn levadas d'aqueste sondatge : %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "Aqueste sondatge serà publicat pels tutors del grop ligat : %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "Aqueste sondatge e sas questions seràn suprimits : %s"
+
+msgid "Could not complete survey action"
+msgstr "Impossible de completar l'accion de sondatge"
+
+msgid "Not started"
+msgstr "Pas començat"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "Los sondatges de reünion permeton als utilizaires convidats de causir las datas quand son disponibles."
+
+msgid "Back to surveys"
+msgstr "Tornar als sondatges"
+
+msgid "Edit meeting poll"
+msgstr "Modificar lo sondatge de reünion"
+
+msgid "View meeting poll"
+msgstr "Veire lo sondatge de reünion"
+
+msgid "Basic information"
+msgstr "Informacions de basa"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "Aquò crearà un sondatge de tipe sondatge de reünion. Las responsas e invitacions son gerits separadament."
+
+msgid "Availability"
+msgstr "Disponibilitat"
+
+msgid "Meeting dates"
+msgstr "Datas de reünion"
+
+msgid "Meeting poll"
+msgstr "Sondatge de reünion"
+
+msgid "My availability"
+msgstr "Ma disponibilitat"
+
+msgid "Meeting poll results"
+msgstr "Resultats del sondatge de reünion"
+
+msgid "No invitations found"
+msgstr "Cap d'invitacion pas trobada"
+
+msgid "available"
+msgstr "disponible"
+
+msgid "Could not load meeting poll"
+msgstr "Impossible de cargar lo sondatge de reünion"
+
+msgid "Please complete the required fields"
+msgstr "Completatz los camps requerits"
+
+msgid "Could not save meeting poll"
+msgstr "Impossible d'enregistrar lo sondatge de reünion"
+
+msgid "Could not save meeting availability"
+msgstr "Impossible d'enregistrar la disponibilitat de reünion"
+
+msgid "Copy this survey to another course or session"
+msgstr "Copiar aqueste sondatge dins un autre cors o session"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "Lo sondatge serà copiat sens responsas ni invitacions."
+
+msgid "No target courses found"
+msgstr "Cap de cors cibla pas trobat"
+
+msgid "Search by course title, course code or session name."
+msgstr "Recercar per títol de cors, còdi de cors o nom de session."
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "Utilizatz Duplicar lo sondatge quand volètz una còpia dins lo meteis cors."
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "Las questions e las opcions seràn copiadas. Las responsas, las invitacions e los rapòrts demoraràn solament dins l'enquista originala."
+
+msgid "Selected target"
+msgstr "Cibla seleccionada"
+
+msgid "Could not load copy form"
+msgstr "Impossible de cargar lo formulari de còpia"
+
+msgid "The survey will be copied to: %s"
+msgstr "L'enquista serà copiada dins : %s"
+
+msgid "Survey copied."
+msgstr "Enquista copiada."
+
+msgid "Could not copy survey"
+msgstr "Impossible de copiar l'enquista"
+
+msgid "Answer survey"
+msgstr "Respondre a l'enquista"
+
+msgid "Preview mode does not save answers."
+msgstr "Lo mòde previsualizacion salva pas las responsas."
+
+msgid "Survey completed"
+msgstr "Enquista acabada"
+
+msgid "Thank you for answering the survey."
+msgstr "Mercé d'aver respondut a l'enquista."
+
+msgid "Profile information"
+msgstr "Informacions de perfil"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "Mercé de verificar los camps de perfil demandats abans de respondre a l'enquista."
+
+msgid "This profile field is read-only."
+msgstr "Aqueste camp de perfil es en lectura sola."
+
+msgid "You already filled this survey."
+msgstr "Avètz ja emplenat aquesta enquista."
+
+msgid "Please specify"
+msgstr "Preciséser"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "Aqueste tipe de question es pas suportat dins la vista modèrna de l'enquista."
+
+msgid "Preview only"
+msgstr "Previsualizacion solament"
+
+msgid "Submit answers"
+msgstr "Mandar las responsas"
+
+msgid "Could not load survey"
+msgstr "Impossible de cargar l'enquista"
+
+msgid "Please complete the required profile fields."
+msgstr "Mercé de completar los camps de perfil obligatòris."
+
+msgid "Please answer all mandatory questions."
+msgstr "Mercé de respondre a totas las questions obligatòrias."
+
+msgid "Could not save survey answers"
+msgstr "Impossible de salvar las responsas de l'enquista"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "Configurar las informacions principalas de l'enquista abans de gerir las questions e las invitacions."
+
+msgid "The survey code cannot be changed after creation."
+msgstr "Lo còde de l'enquista pòt pas èsser modificat aprèp la creacion."
+
+msgid "Survey behavior"
+msgstr "Comportament de l'enquista"
+
+msgid "Use 0 for no time limit."
+msgstr "Utilizar 0 per cap de limit de temps."
+
+msgid "Survey messages"
+msgstr "Messatges de l'enquista"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "Los camps de perfil seleccionats aicí seràn afichats abans las questions de l'enquista."
+
+msgid "No profile fields are currently available."
+msgstr "Cap de camp de perfil es pas disponible actualament."
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "La seleccion dels camps de perfil es pas disponibla que per las enquistas non anonimas."
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "Lo ligam de las competéncias serà migrat dins un lot dedicat."
+
+msgid "Could not load survey configuration"
+msgstr "Impossible de cargar la configuracion de l'enquista"
+
+msgid "The survey code is required."
+msgstr "Lo còde de l'enquista es obligatòri."
+
+msgid "The survey title is required."
+msgstr "Lo títol de l'enquista es obligatòri."
+
+msgid "The survey has been saved successfully"
+msgstr "L'enquista es estada salvada amb succès"
+
+msgid "Could not save survey configuration"
+msgstr "Impossible de salvar la configuracion de l'enquista"
+
+msgid "Course users"
+msgstr "Utilizaires del cors"
+
+msgid "Already invited"
+msgstr "Ja convidat"
+
+msgid "No users found"
+msgstr "Cap d'utilizaire pas trobat"
+
+msgid "No groups found"
+msgstr "Cap de grop pas trobat"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "Utilizar **link** ont lo ligam de l'enquista deu aparéisser."
+
+msgid "Remind all selected users"
+msgstr "Rapelar a totes los utilizaires seleccionats"
+
+msgid "Anonymous access link"
+msgstr "Ligam d'accès anonim"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "Los utilizaires que son pas convidats pòdon utilizar aqueste ligam per respondre a l'enquista."
+
+msgid "Answered anonymously"
+msgstr "Respondut anonimament"
+
+msgid "Could not load survey invitations"
+msgstr "Impossible de cargar las invitacions de l'enquista"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "Lo subjècte e lo messatge del corrièr son obligatòris quand se manda un corrièr."
+
+msgid "Could not publish survey"
+msgstr "Impossible de publicar l'enquista"
+
+msgid "Could not copy the link"
+msgstr "Impossible de copiar lo ligam"
+
+msgid "Please answer this survey using the following link"
+msgstr "Mercé de respondre a aquesta enquista en utilizant lo ligam seguent"
+
+msgid "Export CSV"
+msgstr "Exportar CSV"
+
+msgid "Export compact CSV"
+msgstr "Exportar CSV compact"
+
+msgid "Export Excel"
+msgstr "Exportar Excel"
+
+msgid "Export package"
+msgstr "Exportar paquet"
+
+msgid "Results summary"
+msgstr "Resum dels resultats"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "Aquesta vista aficha las donadas de rapòrt migradas per aqueste sondatge."
+
+msgid "Select user"
+msgstr "Seleccionar un utilizaire"
+
+msgid "No answers found"
+msgstr "Cap de responsa pas trobada"
+
+msgid "answers"
+msgstr "responsas"
+
+msgid "Could not load survey reporting"
+msgstr "Impossible de cargar lo rapòrt del sondatge"
+
+msgid "Back to threads"
+msgstr "Tornar als fials"
+
+msgid "Back to learning path"
+msgstr "Tornar al camin d'aprendissatge"
+
+msgid "Remove sticky"
+msgstr "Levar lo marcatge"
+
+msgid "Make sticky"
+msgstr "Marcar"
+
+msgid "Open thread"
+msgstr "Dobrir lo fial"
+
+msgid "Close thread"
+msgstr "Tampar lo fial"
+
+msgid "Delete thread"
+msgstr "Suprimir lo fial"
+
+msgid "This thread is hidden from learners."
+msgstr "Aqueste fial es amagat als aprendents."
+
+msgid "Revision requested"
+msgstr "Revision demandada"
+
+msgid "Revision"
+msgstr "Revision"
+
+msgid "Approve post"
+msgstr "Aprovar lo messatge"
+
+msgid "Reject post"
+msgstr "Regetar lo messatge"
+
+msgid "Cancel revision request"
+msgstr "Anullar la demanda de revision"
+
+msgid "Delete post"
+msgstr "Suprimir lo messatge"
+
+msgid "Message is required"
+msgstr "Lo messatge es obligatòri"
+
+msgid "Target thread is required"
+msgstr "Lo fial cibla es obligatòri"
+
+msgid "Could not retrieve posts"
+msgstr "Impossible de recuperar los messatges"
+
+msgid "Thread shown"
+msgstr "Fial afichat"
+
+msgid "Thread hidden"
+msgstr "Fial amagat"
+
+msgid "Could not update thread"
+msgstr "Impossible de metre a jorn lo fial"
+
+msgid "Thread closed"
+msgstr "Fial tampat"
+
+msgid "Thread opened"
+msgstr "Fial dobèrt"
+
+msgid "Thread marked as sticky"
+msgstr "Fial marcat coma persistent"
+
+msgid "Thread unmarked as sticky"
+msgstr "Fial desmarcat coma persistent"
+
+msgid "Thread notifications enabled"
+msgstr "Notificacions del fial activadas"
+
+msgid "Thread notifications disabled"
+msgstr "Notificacions del fial desactivadas"
+
+msgid "Could not update thread notification"
+msgstr "Impossible de metre a jorn la notificacion del fial"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "Sètz segur que volètz suprimir aqueste fial ?"
+
+msgid "Could not delete thread"
+msgstr "Impossible de suprimir lo fial"
+
+msgid "Post approved"
+msgstr "Messatge aprovat"
+
+msgid "Could not approve post"
+msgstr "Impossible d'aprovar lo messatge"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "Sètz segur que volètz regetar aqueste messatge ?"
+
+msgid "Post rejected"
+msgstr "Messatge regetat"
+
+msgid "Could not reject post"
+msgstr "Impossible de regetar lo messatge"
+
+msgid "Post shown"
+msgstr "Messatge afichat"
+
+msgid "Post hidden"
+msgstr "Messatge amagat"
+
+msgid "Could not update post"
+msgstr "Impossible de metre a jorn lo messatge"
+
+msgid "Post updated"
+msgstr "Messatge mes a jorn"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "Sètz segur que volètz suprimir aqueste messatge ?"
+
+msgid "Post deleted"
+msgstr "Messatge suprimit"
+
+msgid "Could not delete post"
+msgstr "Impossible de suprimir lo messatge"
+
+msgid "Untitled thread"
+msgstr "Fial sens títol"
+
+msgid "Could not retrieve threads"
+msgstr "Impossible de recobrar los fials"
+
+msgid "Post moved"
+msgstr "Messatge desplaçat"
+
+msgid "Could not move post"
+msgstr "Impossible de desplaçar lo messatge"
+
+msgid "Revision request removed"
+msgstr "Demanda de revision suprimida"
+
+msgid "Could not update revision request"
+msgstr "Impossible de metre a jorn la demanda de revision"
+
+msgid "Are you sure you want to report this post?"
+msgstr "Sètz segur(a) que volètz senhalar aqueste messatge ?"
+
+msgid "Could not report post"
+msgstr "Impossible de senhalar lo messatge"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "Sètz segur(a) que volètz suprimir aquesta pèça junta ?"
+
+msgid "Attachment deleted"
+msgstr "Pèça junta suprimida"
+
+msgid "Could not delete attachment"
+msgstr "Impossible de suprimir la pèça junta"
+
+msgid "Thread title"
+msgstr "Títol del fial"
+
+msgid "Sticky thread"
+msgstr "Fial penjat"
+
+msgid "Attach files"
+msgstr "Jónher de fichièrs"
+
+msgid "Attachments are disabled for this forum"
+msgstr "Las pèças juntas son desactivadas per aqueste forum"
+
+msgid "The forum is not open yet."
+msgstr "Lo forum es pas encara dobèrt."
+
+msgid "The forum is closed."
+msgstr "Lo forum es tampat."
+
+msgid "The forum is locked."
+msgstr "Lo forum es verrolhat."
+
+msgid "New threads are not allowed in this forum."
+msgstr "Los fials novèls son pas autorizats dins aqueste forum."
+
+msgid "Thread created"
+msgstr "Fial creat"
+
+msgid "Could not create thread"
+msgstr "Impossible de crear lo fial"
+
+msgid "Back to posts"
+msgstr "Tornar als messatges"
+
+msgid "This reply will be stored as a revision."
+msgstr "Aquesta responsa serà enregistrada coma revision."
+
+msgid "Post reply"
+msgstr "Respondre al messatge"
+
+msgid "The thread is locked."
+msgstr "Lo fial es verrolhat."
+
+msgid "Reply added"
+msgstr "Responsa aponduda"
+
+msgid "Could not add reply"
+msgstr "Impossible d'apondre la responsa"
+
+msgid "Add forum"
+msgstr "Apondre un forum"
+
+msgid "No forums found"
+msgstr "Cap de forum pas trobat"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "Creatz vòstra primièra categoria de forum o vòstre primièr forum per començar las discussions."
+
+msgid "Locked"
+msgstr "Verrolhat"
+
+msgid "No forums in this category"
+msgstr "Cap de forum dins aquesta categoria"
+
+msgid "Posts require approval"
+msgstr "Los messatges necessitan una aprobacion"
+
+msgid "Forum for current group"
+msgstr "Forum del grop actual"
+
+msgid "Group forum visibility"
+msgstr "Visibilitat del forum de grop"
+
+msgid "No category"
+msgstr "Cap de categoria"
+
+msgid "Could not retrieve forums"
+msgstr "Impossible de recobrar los forums"
+
+msgid "Forum category updated"
+msgstr "Categoria de forum mesa a jorn"
+
+msgid "Forum category created"
+msgstr "Categoria de forum creada"
+
+msgid "Could not save forum category"
+msgstr "Impossible d'enregistrar la categoria de forum"
+
+msgid "Forum updated"
+msgstr "Forum mes a jorn"
+
+msgid "Forum created"
+msgstr "Forum creat"
+
+msgid "Could not save forum"
+msgstr "Impossible d'enregistrar lo forum"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "Sètz segur(a) que volètz suprimir aquesta categoria de forum ?"
+
+msgid "Could not delete forum category"
+msgstr "Impossible de suprimir la categoria de forum"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "Sètz segur(a) que volètz suprimir aqueste forum ?"
+
+msgid "Could not delete forum"
+msgstr "Impossible de suprimir lo forum"
+
+msgid "Forum category unlocked"
+msgstr "Categoria de forum desverrolhada"
+
+msgid "Forum category locked"
+msgstr "Categoria de forum verrolhada"
+
+msgid "Could not update forum category"
+msgstr "Impossible de metre a jorn la categoria de fòrum"
+
+msgid "Forum category shown"
+msgstr "Categoria de fòrum afichada"
+
+msgid "Forum category hidden"
+msgstr "Categoria de fòrum amagada"
+
+msgid "Forum unlocked"
+msgstr "Fòrum desvarrolhat"
+
+msgid "Forum locked"
+msgstr "Fòrum varrolhat"
+
+msgid "Could not update forum"
+msgstr "Impossible de metre a jorn lo fòrum"
+
+msgid "Forum shown"
+msgstr "Fòrum afichat"
+
+msgid "Forum hidden"
+msgstr "Fòrum amagat"
+
+msgid "Forum notifications enabled"
+msgstr "Notificacions de fòrum activadas"
+
+msgid "Forum notifications disabled"
+msgstr "Notificacions de fòrum desactivadas"
+
+msgid "Could not update forum notification"
+msgstr "Impossible de metre a jorn la notificacion de fòrum"
+
+msgid "Forum category moved"
+msgstr "Categoria de fòrum desplaçada"
+
+msgid "Could not move forum category"
+msgstr "Impossible de desplaçar la categoria de fòrum"
+
+msgid "Forum moved"
+msgstr "Fòrum desplaçat"
+
+msgid "Could not move forum"
+msgstr "Impossible de desplaçar lo fòrum"
+
+msgid "Back to forums"
+msgstr "Tornar als fòrums"
+
+msgid "New thread"
+msgstr "Fil novèl"
+
+msgid "No threads found"
+msgstr "Cap de fil pas trobat"
+
+msgid "Sticky"
+msgstr "Fixat"
+
+msgid "Graded"
+msgstr "Notat"
+
+msgid "Grade peers"
+msgstr "Notar los companhs"
+
+msgid "Move thread"
+msgstr "Desplaçar lo fil"
+
+msgid "Target forum"
+msgstr "Fòrum cibla"
+
+msgid "Target forum is required"
+msgstr "Lo fòrum cibla es obligatòri"
+
+msgid "Students"
+msgstr "Estudiants"
+
+msgid "No students found"
+msgstr "Cap d'estudiant pas trobat"
+
+msgid "No peers available to grade."
+msgstr "Cap de companh disponible per notar."
+
+msgid "Qualified"
+msgstr "Qualificat"
+
+msgid "Not qualified"
+msgstr "Pas qualificat"
+
+msgid "Could not retrieve thread grading"
+msgstr "Impossible de recuperar la notacion del fil"
+
+msgid "Thread grading updated"
+msgstr "Notacion del fil mesa a jorn"
+
+msgid "Could not update thread grading"
+msgstr "Impossible de metre a jorn la notacion del fil"
+
+msgid "Thread score saved"
+msgstr "Nòta del fil enregistrada"
+
+msgid "Could not save thread score"
+msgstr "Impossible d'enregistrar la nòta del fil"
+
+msgid "Could not move thread"
+msgstr "Impossible de desplaçar lo fil"
+
+msgid "Thread updated"
+msgstr "Fil mes a jorn"
+
+msgid "Search term is too short"
+msgstr "Lo tèrme de recèrca es tròp cort"
+
+msgid "Could not search forums"
+msgstr "Impossible de recercar los fòrums"
+
+msgid "Moderated"
+msgstr "Moderat"
+
+msgid "View threads"
+msgstr "Veire los fils"
 

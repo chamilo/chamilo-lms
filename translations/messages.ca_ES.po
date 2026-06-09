@@ -35737,3 +35737,762 @@ msgstr "No s'ha pogut crear l'avaluació"
 msgid "The gradebook evaluation could not be linked"
 msgstr "No s'ha pogut vincular l'avaluació del llibre de qualificacions"
 
+msgid "Survey questions"
+msgstr "Preguntes de l'enquesta"
+
+msgid "Back to survey list"
+msgstr "Tornar a la llista d'enquestes"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "Aquesta enquesta ja té respostes. L'edició de preguntes està desactivada per configuració."
+
+msgid "Choose the type of question you want to add."
+msgstr "Trieu el tipus de pregunta que voleu afegir."
+
+msgid "The free text option is added automatically."
+msgstr "L'opció de text lliure s'afegeix automàticament."
+
+msgid "No questions found"
+msgstr "No s'han trobat preguntes"
+
+msgid "Mandatory"
+msgstr "Obligatòria"
+
+msgid "Unsupported question type"
+msgstr "Tipus de pregunta no admès"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "Podeu utilitzar les etiquetes {%s} i {%s} a la pregunta."
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "Aquesta pregunta es mostra de manera condicional mentre es respon l'enquesta."
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "Les opcions de percentatge de l'1 al 100 es generen automàticament."
+
+msgid "Could not load survey questions"
+msgstr "No s'han pogut carregar les preguntes de l'enquesta"
+
+msgid "The question text is required."
+msgstr "El text de la pregunta és obligatori."
+
+msgid "The maximum score is required."
+msgstr "La puntuació màxima és obligatòria."
+
+msgid "Please select a parent option."
+msgstr "Seleccioneu una opció pare."
+
+msgid "Please fill all answer options."
+msgstr "Empleneu totes les opcions de resposta."
+
+msgid "QuestionUpdated"
+msgstr "QuestionUpdated"
+
+msgid "Could not save survey question"
+msgstr "No s'ha pogut desar la pregunta de l'enquesta"
+
+msgid "Could not delete survey question"
+msgstr "No s'ha pogut suprimir la pregunta de l'enquesta"
+
+msgid "Could not move survey question"
+msgstr "No s'ha pogut moure la pregunta de l'enquesta"
+
+msgid "Could not copy survey question"
+msgstr "No s'ha pogut copiar la pregunta de l'enquesta"
+
+msgid "Hide search"
+msgstr "Oculta la cerca"
+
+msgid "Showing results for: %s"
+msgstr "Mostrant resultats per a: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "Cerca per títol, codi o descripció de l'enquesta."
+
+msgid "Search surveys"
+msgstr "Cerca d'enquestes"
+
+msgid "%s surveys selected"
+msgstr "%s enquestes seleccionades"
+
+msgid "Clear selection"
+msgstr "Neteja la selecció"
+
+msgid "No surveys found"
+msgstr "No s'han trobat enquestes"
+
+msgid "Unsupported"
+msgstr "No admès"
+
+msgid "Could not load surveys"
+msgstr "No s'han pogut carregar les enquestes"
+
+msgid "Delete selected surveys"
+msgstr "Suprimeix les enquestes seleccionades"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "Les enquestes seleccionades i les seves preguntes seran suprimides. Aquesta acció no es pot desfer."
+
+msgid "Could not delete selected surveys"
+msgstr "No s'han pogut suprimir les enquestes seleccionades"
+
+msgid "Survey action"
+msgstr "Acció de l'enquesta"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "Es crearà una còpia d'aquesta enquesta: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "S'eliminaran totes les respostes i invitacions d'aquesta enquesta: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "Les preguntes multiplicades generades s'eliminaran d'aquesta enquesta: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "Aquesta enquesta es publicarà per als tutors del grup enllaçat: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "Aquesta enquesta i les seves preguntes seran suprimides: %s"
+
+msgid "Could not complete survey action"
+msgstr "No s'ha pogut completar l'acció de l'enquesta"
+
+msgid "Not started"
+msgstr "No iniciada"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "Les enquestes de reunió permeten als usuaris convidats seleccionar les dates en què estan disponibles."
+
+msgid "Back to surveys"
+msgstr "Torna a les enquestes"
+
+msgid "Edit meeting poll"
+msgstr "Edita l'enquesta de reunió"
+
+msgid "View meeting poll"
+msgstr "Visualitza l'enquesta de reunió"
+
+msgid "Basic information"
+msgstr "Informació bàsica"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "Això crearà una enquesta de tipus enquesta de reunió. Les respostes i invitacions es gestionen per separat."
+
+msgid "Availability"
+msgstr "Disponibilitat"
+
+msgid "Meeting dates"
+msgstr "Dates de la reunió"
+
+msgid "Meeting poll"
+msgstr "Enquesta de reunió"
+
+msgid "My availability"
+msgstr "La meva disponibilitat"
+
+msgid "Meeting poll results"
+msgstr "Resultats de l'enquesta de reunió"
+
+msgid "No invitations found"
+msgstr "No s'han trobat invitacions"
+
+msgid "available"
+msgstr "disponible"
+
+msgid "Could not load meeting poll"
+msgstr "No s'ha pogut carregar l'enquesta de reunió"
+
+msgid "Please complete the required fields"
+msgstr "Completeu els camps obligatoris"
+
+msgid "Could not save meeting poll"
+msgstr "No s'ha pogut desar l'enquesta de reunió"
+
+msgid "Could not save meeting availability"
+msgstr "No s'ha pogut desar la disponibilitat de la reunió"
+
+msgid "Copy this survey to another course or session"
+msgstr "Copia aquesta enquesta a un altre curs o sessió"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "L'enquesta es copiarà sense respostes ni invitacions."
+
+msgid "No target courses found"
+msgstr "No s'han trobat cursos de destinació"
+
+msgid "Search by course title, course code or session name."
+msgstr "Cerca per títol de curs, codi de curs o nom de sessió."
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "Utilitzeu Duplica l'enquesta quan vulgueu una còpia al mateix curs."
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "Les preguntes i opcions es copiaran. Les respostes, invitacions i informes romandran només a l'enquesta original."
+
+msgid "Selected target"
+msgstr "Destinació seleccionada"
+
+msgid "Could not load copy form"
+msgstr "No s'ha pogut carregar el formulari de còpia"
+
+msgid "The survey will be copied to: %s"
+msgstr "L'enquesta es copiarà a: %s"
+
+msgid "Survey copied."
+msgstr "Enquesta copiada."
+
+msgid "Could not copy survey"
+msgstr "No s'ha pogut copiar l'enquesta"
+
+msgid "Answer survey"
+msgstr "Respon l'enquesta"
+
+msgid "Preview mode does not save answers."
+msgstr "El mode de previsualització no desa les respostes."
+
+msgid "Survey completed"
+msgstr "Enquesta completada"
+
+msgid "Thank you for answering the survey."
+msgstr "Gràcies per respondre l'enquesta."
+
+msgid "Profile information"
+msgstr "Informació del perfil"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "Reviseu els camps de perfil sol·licitats abans de respondre l'enquesta."
+
+msgid "This profile field is read-only."
+msgstr "Aquest camp de perfil és només de lectura."
+
+msgid "You already filled this survey."
+msgstr "Ja heu omplert aquesta enquesta."
+
+msgid "Please specify"
+msgstr "Especifiqueu-ho"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "Aquest tipus de pregunta no és compatible amb la vista moderna de l'enquesta."
+
+msgid "Preview only"
+msgstr "Només previsualització"
+
+msgid "Submit answers"
+msgstr "Envia les respostes"
+
+msgid "Could not load survey"
+msgstr "No s'ha pogut carregar l'enquesta"
+
+msgid "Please complete the required profile fields."
+msgstr "Completeu els camps de perfil obligatoris."
+
+msgid "Please answer all mandatory questions."
+msgstr "Responeu totes les preguntes obligatòries."
+
+msgid "Could not save survey answers"
+msgstr "No s'han pogut desar les respostes de l'enquesta"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "Configureu la informació principal de l'enquesta abans de gestionar les preguntes i les invitacions."
+
+msgid "The survey code cannot be changed after creation."
+msgstr "El codi de l'enquesta no es pot canviar després de la creació."
+
+msgid "Survey behavior"
+msgstr "Comportament de l'enquesta"
+
+msgid "Use 0 for no time limit."
+msgstr "Utilitzeu 0 per no establir cap límit de temps."
+
+msgid "Survey messages"
+msgstr "Missatges de l'enquesta"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "Els camps de perfil seleccionats aquí es mostraran abans de les preguntes de l'enquesta."
+
+msgid "No profile fields are currently available."
+msgstr "Actualment no hi ha cap camp de perfil disponible."
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "La selecció de camps de perfil només està disponible per a enquestes no anònimes."
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "L'enllaç a les competències es migrarà en un procés per lots dedicat."
+
+msgid "Could not load survey configuration"
+msgstr "No s'ha pogut carregar la configuració de l'enquesta"
+
+msgid "The survey code is required."
+msgstr "El codi de l'enquesta és obligatori."
+
+msgid "The survey title is required."
+msgstr "El títol de l'enquesta és obligatori."
+
+msgid "The survey has been saved successfully"
+msgstr "L'enquesta s'ha desat correctament"
+
+msgid "Could not save survey configuration"
+msgstr "No s'ha pogut desar la configuració de l'enquesta"
+
+msgid "Course users"
+msgstr "Usuaris del curs"
+
+msgid "Already invited"
+msgstr "Ja convidat"
+
+msgid "No users found"
+msgstr "No s'han trobat usuaris"
+
+msgid "No groups found"
+msgstr "No s'han trobat grups"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "Utilitzeu **link** on ha d'aparèixer l'enllaç de l'enquesta."
+
+msgid "Remind all selected users"
+msgstr "Recorda a tots els usuaris seleccionats"
+
+msgid "Anonymous access link"
+msgstr "Enllaç d'accés anònim"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "Els usuaris que no han estat convidats poden utilitzar aquest enllaç per respondre l'enquesta."
+
+msgid "Answered anonymously"
+msgstr "Respost de manera anònima"
+
+msgid "Could not load survey invitations"
+msgstr "No s'han pogut carregar les invitacions de l'enquesta"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "L'assumpte i el missatge del correu són obligatoris quan s'envia un correu."
+
+msgid "Could not publish survey"
+msgstr "No s'ha pogut publicar l'enquesta"
+
+msgid "Could not copy the link"
+msgstr "No s'ha pogut copiar l'enllaç"
+
+msgid "Please answer this survey using the following link"
+msgstr "Responeu aquesta enquesta utilitzant l'enllaç següent"
+
+msgid "Export CSV"
+msgstr "Exporta CSV"
+
+msgid "Export compact CSV"
+msgstr "Exporta CSV compacte"
+
+msgid "Export Excel"
+msgstr "Exporta Excel"
+
+msgid "Export package"
+msgstr "Exporta paquet"
+
+msgid "Results summary"
+msgstr "Resum de resultats"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "Aquesta vista mostra les dades d'informes migrades d'aquesta enquesta."
+
+msgid "Select user"
+msgstr "Selecciona usuari"
+
+msgid "No answers found"
+msgstr "No s'han trobat respostes"
+
+msgid "answers"
+msgstr "respostes"
+
+msgid "Could not load survey reporting"
+msgstr "No s'ha pogut carregar l'informe de l'enquesta"
+
+msgid "Back to threads"
+msgstr "Torna als fils"
+
+msgid "Back to learning path"
+msgstr "Torna al camí d'aprenentatge"
+
+msgid "Remove sticky"
+msgstr "Elimina l'adhesiu"
+
+msgid "Make sticky"
+msgstr "Fes adhesiu"
+
+msgid "Open thread"
+msgstr "Obrir fil"
+
+msgid "Close thread"
+msgstr "Tancar fil"
+
+msgid "Delete thread"
+msgstr "Suprimir fil"
+
+msgid "This thread is hidden from learners."
+msgstr "Aquest fil està ocult per als estudiants."
+
+msgid "Revision requested"
+msgstr "Revisió sol·licitada"
+
+msgid "Revision"
+msgstr "Revisió"
+
+msgid "Approve post"
+msgstr "Aprovar publicació"
+
+msgid "Reject post"
+msgstr "Rebutjar publicació"
+
+msgid "Cancel revision request"
+msgstr "Cancel·lar sol·licitud de revisió"
+
+msgid "Delete post"
+msgstr "Suprimir publicació"
+
+msgid "Message is required"
+msgstr "El missatge és obligatori"
+
+msgid "Target thread is required"
+msgstr "El fil de destinació és obligatori"
+
+msgid "Could not retrieve posts"
+msgstr "No s'han pogut recuperar les publicacions"
+
+msgid "Thread shown"
+msgstr "Fil mostrat"
+
+msgid "Thread hidden"
+msgstr "Fil ocult"
+
+msgid "Could not update thread"
+msgstr "No s'ha pogut actualitzar el fil"
+
+msgid "Thread closed"
+msgstr "Fil tancat"
+
+msgid "Thread opened"
+msgstr "Fil obert"
+
+msgid "Thread marked as sticky"
+msgstr "Fil marcat com a fixat"
+
+msgid "Thread unmarked as sticky"
+msgstr "Fil desmarcat com a fixat"
+
+msgid "Thread notifications enabled"
+msgstr "Notificacions del fil activades"
+
+msgid "Thread notifications disabled"
+msgstr "Notificacions del fil desactivades"
+
+msgid "Could not update thread notification"
+msgstr "No s'ha pogut actualitzar la notificació del fil"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "Segur que voleu suprimir aquest fil?"
+
+msgid "Could not delete thread"
+msgstr "No s'ha pogut suprimir el fil"
+
+msgid "Post approved"
+msgstr "Publicació aprovada"
+
+msgid "Could not approve post"
+msgstr "No s'ha pogut aprovar la publicació"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "Segur que voleu rebutjar aquesta publicació?"
+
+msgid "Post rejected"
+msgstr "Publicació rebutjada"
+
+msgid "Could not reject post"
+msgstr "No s'ha pogut rebutjar la publicació"
+
+msgid "Post shown"
+msgstr "Publicació mostrada"
+
+msgid "Post hidden"
+msgstr "Publicació oculta"
+
+msgid "Could not update post"
+msgstr "No s'ha pogut actualitzar la publicació"
+
+msgid "Post updated"
+msgstr "Publicació actualitzada"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "Segur que voleu suprimir aquesta publicació?"
+
+msgid "Post deleted"
+msgstr "Publicació suprimida"
+
+msgid "Could not delete post"
+msgstr "No s'ha pogut suprimir la publicació"
+
+msgid "Untitled thread"
+msgstr "Fil sense títol"
+
+msgid "Could not retrieve threads"
+msgstr "No s'han pogut recuperar els fils"
+
+msgid "Post moved"
+msgstr "Publicació moguda"
+
+msgid "Could not move post"
+msgstr "No s'ha pogut moure la publicació"
+
+msgid "Revision request removed"
+msgstr "Sol·licitud de revisió eliminada"
+
+msgid "Could not update revision request"
+msgstr "No s'ha pogut actualitzar la sol·licitud de revisió"
+
+msgid "Are you sure you want to report this post?"
+msgstr "Segur que voleu informar d'aquesta publicació?"
+
+msgid "Could not report post"
+msgstr "No s'ha pogut informar de la publicació"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "Segur que voleu suprimir aquest adjunt?"
+
+msgid "Attachment deleted"
+msgstr "Adjunt suprimit"
+
+msgid "Could not delete attachment"
+msgstr "No s'ha pogut suprimir l'adjunt"
+
+msgid "Thread title"
+msgstr "Títol del fil"
+
+msgid "Sticky thread"
+msgstr "Fil fixat"
+
+msgid "Attach files"
+msgstr "Adjunta fitxers"
+
+msgid "Attachments are disabled for this forum"
+msgstr "Els fitxers adjunts estan desactivats per a aquest fòrum"
+
+msgid "The forum is not open yet."
+msgstr "El fòrum encara no està obert."
+
+msgid "The forum is closed."
+msgstr "El fòrum està tancat."
+
+msgid "The forum is locked."
+msgstr "El fòrum està bloquejat."
+
+msgid "New threads are not allowed in this forum."
+msgstr "No es permeten nous fils en aquest fòrum."
+
+msgid "Thread created"
+msgstr "Fil creat"
+
+msgid "Could not create thread"
+msgstr "No s'ha pogut crear el fil"
+
+msgid "Back to posts"
+msgstr "Torna als missatges"
+
+msgid "This reply will be stored as a revision."
+msgstr "Aquesta resposta es desarà com a revisió."
+
+msgid "Post reply"
+msgstr "Publica resposta"
+
+msgid "The thread is locked."
+msgstr "El fil està bloquejat."
+
+msgid "Reply added"
+msgstr "Resposta afegida"
+
+msgid "Could not add reply"
+msgstr "No s'ha pogut afegir la resposta"
+
+msgid "Add forum"
+msgstr "Afegeix fòrum"
+
+msgid "No forums found"
+msgstr "No s'han trobat fòrums"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "Creeu la vostra primera categoria de fòrum o fòrum per iniciar discussions."
+
+msgid "Locked"
+msgstr "Bloquejat"
+
+msgid "No forums in this category"
+msgstr "No hi ha fòrums en aquesta categoria"
+
+msgid "Posts require approval"
+msgstr "Les publicacions requereixen aprovació"
+
+msgid "Forum for current group"
+msgstr "Fòrum per al grup actual"
+
+msgid "Group forum visibility"
+msgstr "Visibilitat del fòrum del grup"
+
+msgid "No category"
+msgstr "Sense categoria"
+
+msgid "Could not retrieve forums"
+msgstr "No s'han pogut obtenir els fòrums"
+
+msgid "Forum category updated"
+msgstr "Categoria de fòrum actualitzada"
+
+msgid "Forum category created"
+msgstr "Categoria de fòrum creada"
+
+msgid "Could not save forum category"
+msgstr "No s'ha pogut desar la categoria de fòrum"
+
+msgid "Forum updated"
+msgstr "Fòrum actualitzat"
+
+msgid "Forum created"
+msgstr "Fòrum creat"
+
+msgid "Could not save forum"
+msgstr "No s'ha pogut desar el fòrum"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "Segur que voleu suprimir aquesta categoria de fòrum?"
+
+msgid "Could not delete forum category"
+msgstr "No s'ha pogut suprimir la categoria de fòrum"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "Segur que voleu suprimir aquest fòrum?"
+
+msgid "Could not delete forum"
+msgstr "No s'ha pogut suprimir el fòrum"
+
+msgid "Forum category unlocked"
+msgstr "Categoria de fòrum desbloquejada"
+
+msgid "Forum category locked"
+msgstr "Categoria de fòrum bloquejada"
+
+msgid "Could not update forum category"
+msgstr "No s'ha pogut actualitzar la categoria de fòrum"
+
+msgid "Forum category shown"
+msgstr "Categoria de fòrum mostrada"
+
+msgid "Forum category hidden"
+msgstr "Categoria de fòrum oculta"
+
+msgid "Forum unlocked"
+msgstr "Fòrum desbloquejat"
+
+msgid "Forum locked"
+msgstr "Fòrum bloquejat"
+
+msgid "Could not update forum"
+msgstr "No s'ha pogut actualitzar el fòrum"
+
+msgid "Forum shown"
+msgstr "Fòrum mostrat"
+
+msgid "Forum hidden"
+msgstr "Fòrum ocult"
+
+msgid "Forum notifications enabled"
+msgstr "Notificacions del fòrum activades"
+
+msgid "Forum notifications disabled"
+msgstr "Notificacions del fòrum desactivades"
+
+msgid "Could not update forum notification"
+msgstr "No s'ha pogut actualitzar la notificació del fòrum"
+
+msgid "Forum category moved"
+msgstr "Categoria de fòrum moguda"
+
+msgid "Could not move forum category"
+msgstr "No s'ha pogut moure la categoria de fòrum"
+
+msgid "Forum moved"
+msgstr "Fòrum mogut"
+
+msgid "Could not move forum"
+msgstr "No s'ha pogut moure el fòrum"
+
+msgid "Back to forums"
+msgstr "Torna als fòrums"
+
+msgid "New thread"
+msgstr "Nou fil"
+
+msgid "No threads found"
+msgstr "No s'han trobat fils"
+
+msgid "Sticky"
+msgstr "Destacat"
+
+msgid "Graded"
+msgstr "Qualificat"
+
+msgid "Grade peers"
+msgstr "Qualificar companys"
+
+msgid "Move thread"
+msgstr "Mou el fil"
+
+msgid "Target forum"
+msgstr "Fòrum de destinació"
+
+msgid "Target forum is required"
+msgstr "El fòrum de destinació és obligatori"
+
+msgid "Students"
+msgstr "Estudiants"
+
+msgid "No students found"
+msgstr "No s'han trobat estudiants"
+
+msgid "No peers available to grade."
+msgstr "No hi ha companys disponibles per qualificar."
+
+msgid "Qualified"
+msgstr "Qualificat"
+
+msgid "Not qualified"
+msgstr "No qualificat"
+
+msgid "Could not retrieve thread grading"
+msgstr "No s'ha pogut obtenir la qualificació del fil"
+
+msgid "Thread grading updated"
+msgstr "Qualificació del fil actualitzada"
+
+msgid "Could not update thread grading"
+msgstr "No s'ha pogut actualitzar la qualificació del fil"
+
+msgid "Thread score saved"
+msgstr "Puntuació del fil desada"
+
+msgid "Could not save thread score"
+msgstr "No s'ha pogut desar la puntuació del fil"
+
+msgid "Could not move thread"
+msgstr "No s'ha pogut moure el fil"
+
+msgid "Thread updated"
+msgstr "Fil actualitzat"
+
+msgid "Search term is too short"
+msgstr "El terme de cerca és massa curt"
+
+msgid "Could not search forums"
+msgstr "No s'han pogut cercar els fòrums"
+
+msgid "Moderated"
+msgstr "Moderat"
+
+msgid "View threads"
+msgstr "Mostra els fils"
+

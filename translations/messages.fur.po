@@ -35479,7 +35479,7 @@ msgid "%s results"
 msgstr "%s risultâts"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Esempli di ativitât di compilazion dal formulari : calcolâ l’Indici di masse corporâl</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Etât</strong></td>            <td width=\"75%\" style=\"\">[25] agns</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sès</strong></td>            <td style=\"\" text-align:=\"\">[M] (M o F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Pês</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Altèzze</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Indici di masse corporâl</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Pês/Altèzze<sup>2</sup> (Vd.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> articul di Wikipedia</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Esempli di ativitât di compilazion dal formulari : calcolâ l’Indice di masse corporee</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Etât</strong></td>            <td width=\"75%\" style=\"\">[25] agns</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sès</strong></td>            <td style=\"\" text-align:=\"\">[M] (M o F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Pês</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Altèzze</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Indice di masse corporee</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Pês/Altèzze<sup>2</sup> (Vd.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> articul di Wikipedia</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Gjavât"
@@ -35717,4 +35717,763 @@ msgstr "La valutazion no à podût jessi creade"
 
 msgid "The gradebook evaluation could not be linked"
 msgstr "La valutazion dal regjistri dai vôts no à podût jessi colegade"
+
+msgid "Survey questions"
+msgstr "Domandis dal sondagi"
+
+msgid "Back to survey list"
+msgstr "Torne ae liste dai sondagis"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "Chest sondagi al à za rispuestis. La modifiche des domandis e je disabilitade de configurazion."
+
+msgid "Choose the type of question you want to add."
+msgstr "Sielç il gjenar di domande che tu vuelis zontâ."
+
+msgid "The free text option is added automatically."
+msgstr "La opzion di test libar e je zontade in automatic."
+
+msgid "No questions found"
+msgstr "Nissune domande cjatade"
+
+msgid "Mandatory"
+msgstr "Obligatòrie"
+
+msgid "Unsupported question type"
+msgstr "Gjenar di domande no supuartât"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "Tu puedis doprâ lis etichetis {%s} e {%s} te domande."
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "Cheste domande e ven mostrade in maniere condizionade cuant che si rispuint al sondagi."
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "Lis opzions di percentuâl dal 1 al 100 a vegnin gjeneradis in automatic."
+
+msgid "Could not load survey questions"
+msgstr "No si à podût cjariâ lis domandis dal sondagi"
+
+msgid "The question text is required."
+msgstr "Il test de domande al è obligatori."
+
+msgid "The maximum score is required."
+msgstr "Il puntuâl massim al è obligatori."
+
+msgid "Please select a parent option."
+msgstr "Par plasê sielç une opzion gjenitôre."
+
+msgid "Please fill all answer options."
+msgstr "Par plasê completâ dutis lis opzions di rispueste."
+
+msgid "QuestionUpdated"
+msgstr "QuestionUpdated"
+
+msgid "Could not save survey question"
+msgstr "No si à podût salvâ la domande dal sondagi"
+
+msgid "Could not delete survey question"
+msgstr "No si à podût eliminâ la domande dal sondagi"
+
+msgid "Could not move survey question"
+msgstr "No si è podût spostâ la domande dal sondagi"
+
+msgid "Could not copy survey question"
+msgstr "No si è podût copiâ la domande dal sondagi"
+
+msgid "Hide search"
+msgstr "Plate la ricercje"
+
+msgid "Showing results for: %s"
+msgstr "Mostre i risultâts par: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "Cîr par titul, codiç o descrizion dal sondagi."
+
+msgid "Search surveys"
+msgstr "Cîr sondagis"
+
+msgid "%s surveys selected"
+msgstr "%s sondagis selezionâts"
+
+msgid "Clear selection"
+msgstr "Nete la selezion"
+
+msgid "No surveys found"
+msgstr "Nissun sondagi cjatât"
+
+msgid "Unsupported"
+msgstr "No supuartât"
+
+msgid "Could not load surveys"
+msgstr "No si è podût cjariâ i sondagis"
+
+msgid "Delete selected surveys"
+msgstr "Elimine i sondagis selezionâts"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "I sondagis selezionâts e lis lôr domandis a saran eliminâts. Cheste azion no si pues anulâ."
+
+msgid "Could not delete selected surveys"
+msgstr "No si è podût eliminâ i sondagis selezionâts"
+
+msgid "Survey action"
+msgstr "Azion dal sondagi"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "E sarà creade une copie di chest sondagi: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "Dutis lis rispuestis e lis invitazions a saran eliminadis par chest sondagi: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "Lis domandis moltiplicadis gjeneradis a saran gjavadis di chest sondagi: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "Chest sondagi al sarà publicât pai tutors dal grup colegât: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "Chest sondagi e lis sôs domandis a saran eliminâts: %s"
+
+msgid "Could not complete survey action"
+msgstr "No si è podût completâ l'azion dal sondagi"
+
+msgid "Not started"
+msgstr "No iniziât"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "I sondagis di riunion permetin ai utents invitâts di selezionâ lis datis cuant che a son disponibii."
+
+msgid "Back to surveys"
+msgstr "Torne ai sondagis"
+
+msgid "Edit meeting poll"
+msgstr "Modifiche il sondagi di riunion"
+
+msgid "View meeting poll"
+msgstr "Viôt il sondagi di riunion"
+
+msgid "Basic information"
+msgstr "Informazions di base"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "Cheste operazion e crearà un sondagi di gjenar sondagi di riunion. Rispuestis e invitazions a son gjestîts in maniere separade."
+
+msgid "Availability"
+msgstr "Disponibilitât"
+
+msgid "Meeting dates"
+msgstr "Datis de riunion"
+
+msgid "Meeting poll"
+msgstr "Sondagi di riunion"
+
+msgid "My availability"
+msgstr "Mê disponibilitât"
+
+msgid "Meeting poll results"
+msgstr "Risultâts dal sondagi di riunion"
+
+msgid "No invitations found"
+msgstr "Nissune invitazion cjatade"
+
+msgid "available"
+msgstr "disponibil"
+
+msgid "Could not load meeting poll"
+msgstr "No si è podût cjariâ il sondagi di riunion"
+
+msgid "Please complete the required fields"
+msgstr "Par plasê completâ i cjamps obligatoris"
+
+msgid "Could not save meeting poll"
+msgstr "No si è podût salvâ il sondagi di riunion"
+
+msgid "Could not save meeting availability"
+msgstr "No si è podût salvâ la disponibilitât pe riunion"
+
+msgid "Copy this survey to another course or session"
+msgstr "Copie chest sondagi suntun altri cors o session"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "Il sondagi al sarà copiât cence rispuestis o invitazions."
+
+msgid "No target courses found"
+msgstr "Nissun cors di destinazion cjatât"
+
+msgid "Search by course title, course code or session name."
+msgstr "Cîr par titul dal cors, codiç dal cors o non de session."
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "Dopre Dupliche sondagi cuant che tu vuelis une copie tal stes cors."
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "Domandis e opzions a saran copiadis. Rispuestis, invitazions e rapuarts a restaran dome tal sondagi origjinâl."
+
+msgid "Selected target"
+msgstr "Destinazion selezionade"
+
+msgid "Could not load copy form"
+msgstr "No si è podût cjariâ il formulari di copie"
+
+msgid "The survey will be copied to: %s"
+msgstr "Il sondagi al sarà copiât su: %s"
+
+msgid "Survey copied."
+msgstr "Sondagi copiât."
+
+msgid "Could not copy survey"
+msgstr "No si è podût copiâ il sondagi"
+
+msgid "Answer survey"
+msgstr "Rispuint al sondâi"
+
+msgid "Preview mode does not save answers."
+msgstr "La modalitât di anteprime no salve lis rispuindis."
+
+msgid "Survey completed"
+msgstr "Sondâi completât"
+
+msgid "Thank you for answering the survey."
+msgstr "Graciis par vê rispuindût al sondâi."
+
+msgid "Profile information"
+msgstr "Informazions dal profîl"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "Par plasê controle i cjamps dal profîl domandâts prime di rispuindi al sondâi."
+
+msgid "This profile field is read-only."
+msgstr "Chest cjamp dal profîl al è in sôl-leture."
+
+msgid "You already filled this survey."
+msgstr "Tu âs za completât chest sondâi."
+
+msgid "Please specify"
+msgstr "Specifiche"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "Chest gjenar di domande nol è supuartât te viodude moderne dal sondâi."
+
+msgid "Preview only"
+msgstr "Dome anteprime"
+
+msgid "Submit answers"
+msgstr "Mande lis rispuindis"
+
+msgid "Could not load survey"
+msgstr "No si à podût cjariâ il sondâi"
+
+msgid "Please complete the required profile fields."
+msgstr "Par plasê complete i cjamps obligatôrs dal profîl."
+
+msgid "Please answer all mandatory questions."
+msgstr "Par plasê rispuint a ducj i dîs obligatôrs."
+
+msgid "Could not save survey answers"
+msgstr "No si à podût salvâ lis rispuindis dal sondâi"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "Configure lis informazions principâls dal sondâi prime di gjestî lis domandis e i invîts."
+
+msgid "The survey code cannot be changed after creation."
+msgstr "Il codiç dal sondâi nol pues jessi cambiât dopo de creazion."
+
+msgid "Survey behavior"
+msgstr "Comportament dal sondâi"
+
+msgid "Use 0 for no time limit."
+msgstr "Dopre 0 par nissun limit di timp."
+
+msgid "Survey messages"
+msgstr "Messaçs dal sondâi"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "I cjamps dal profîl selezionâts achì a vignaran mostrâts prime des domandis dal sondâi."
+
+msgid "No profile fields are currently available."
+msgstr "Nissun cjamp dal profîl al è disponibil."
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "La selezion dai cjamps dal profîl e je disponibile dome pai sondâi no-anonims."
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "Il colegament des competencis al vignarà migrât intun procès dedicât."
+
+msgid "Could not load survey configuration"
+msgstr "No si à podût cjariâ la configurazion dal sondâi"
+
+msgid "The survey code is required."
+msgstr "Il codiç dal sondâi al è obligatori."
+
+msgid "The survey title is required."
+msgstr "Il titul dal sondâi al è obligatori."
+
+msgid "The survey has been saved successfully"
+msgstr "Il sondâi al è stât salvât cun sucès"
+
+msgid "Could not save survey configuration"
+msgstr "No si à podût salvâ la configurazion dal sondâi"
+
+msgid "Course users"
+msgstr "Utents dal cors"
+
+msgid "Already invited"
+msgstr "Za invitât"
+
+msgid "No users found"
+msgstr "Nissun utent cjatât"
+
+msgid "No groups found"
+msgstr "Nissun grup cjatât"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "Dopre **link** là che al à di comparî il colegament al sondâi."
+
+msgid "Remind all selected users"
+msgstr "Ricorde a ducj i utents selezionâts"
+
+msgid "Anonymous access link"
+msgstr "Colegament di acès anonim"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "I utents che no son stâts invitâts a puedin doprâ chest colegament par rispuindi al sondâi."
+
+msgid "Answered anonymously"
+msgstr "Rispuint in maniere anonime"
+
+msgid "Could not load survey invitations"
+msgstr "No si à podût cjariâ i invîts dal sondâi"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "Il ogjet e il messaç de mail a son obligatôrs cuant che si mande une mail."
+
+msgid "Could not publish survey"
+msgstr "No si à podût publicâ il sondâi"
+
+msgid "Could not copy the link"
+msgstr "No si à podût copiâ il colegament"
+
+msgid "Please answer this survey using the following link"
+msgstr "Par plasê rispuint a chest sondâi doprant il colegament chi daurman"
+
+msgid "Export CSV"
+msgstr "Espuarte CSV"
+
+msgid "Export compact CSV"
+msgstr "Espuarte CSV compat"
+
+msgid "Export Excel"
+msgstr "Espuarte Excel"
+
+msgid "Export package"
+msgstr "Espuarte pachet"
+
+msgid "Results summary"
+msgstr "Sintesi dai risultâts"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "Cheste viodude e mostre i dâts migrâts dal rapuart par chest sondâi."
+
+msgid "Select user"
+msgstr "Selezione utent"
+
+msgid "No answers found"
+msgstr "Nissune rispueste cjatade"
+
+msgid "answers"
+msgstr "rispuestis"
+
+msgid "Could not load survey reporting"
+msgstr "No si è podût cjariâ il rapuart dal sondaç"
+
+msgid "Back to threads"
+msgstr "Torne ai threads"
+
+msgid "Back to learning path"
+msgstr "Torne al percors di aprendiment"
+
+msgid "Remove sticky"
+msgstr "Gjave in evidence"
+
+msgid "Make sticky"
+msgstr "Met in evidence"
+
+msgid "Open thread"
+msgstr "Vierç thread"
+
+msgid "Close thread"
+msgstr "Siere thread"
+
+msgid "Delete thread"
+msgstr "Elimine thread"
+
+msgid "This thread is hidden from learners."
+msgstr "Chest thread al è platât pai students."
+
+msgid "Revision requested"
+msgstr "Revision domandade"
+
+msgid "Revision"
+msgstr "Revision"
+
+msgid "Approve post"
+msgstr "Aprove publicazion"
+
+msgid "Reject post"
+msgstr "Refude publicazion"
+
+msgid "Cancel revision request"
+msgstr "Anule domande di revision"
+
+msgid "Delete post"
+msgstr "Elimine publicazion"
+
+msgid "Message is required"
+msgstr "Il messaç al è obligatori"
+
+msgid "Target thread is required"
+msgstr "Il thread di destinazion al è obligatori"
+
+msgid "Could not retrieve posts"
+msgstr "No si è podût recuperâ lis publicazions"
+
+msgid "Thread shown"
+msgstr "Thread mostrât"
+
+msgid "Thread hidden"
+msgstr "Thread platât"
+
+msgid "Could not update thread"
+msgstr "No si è podût inzornâ il thread"
+
+msgid "Thread closed"
+msgstr "Thread sierât"
+
+msgid "Thread opened"
+msgstr "Thread viert"
+
+msgid "Thread marked as sticky"
+msgstr "Thread segnât come in evidence"
+
+msgid "Thread unmarked as sticky"
+msgstr "Thread gjavât di in evidence"
+
+msgid "Thread notifications enabled"
+msgstr "Notifichis dal thread abilitadis"
+
+msgid "Thread notifications disabled"
+msgstr "Notifichis dal thread disabilitadis"
+
+msgid "Could not update thread notification"
+msgstr "No si è podût inzornâ la notifiche dal thread"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "Sêstu sigûr di volê eliminâ chest thread?"
+
+msgid "Could not delete thread"
+msgstr "No si è podût eliminâ il thread"
+
+msgid "Post approved"
+msgstr "Publicazion aprovade"
+
+msgid "Could not approve post"
+msgstr "No si è podût aprovâ la publicazion"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "Sêstu sigûr di volê refudâ cheste publicazion?"
+
+msgid "Post rejected"
+msgstr "Publicazion refudade"
+
+msgid "Could not reject post"
+msgstr "No si è podût refudâ la publicazion"
+
+msgid "Post shown"
+msgstr "Publicazion mostrade"
+
+msgid "Post hidden"
+msgstr "Publicazion platade"
+
+msgid "Could not update post"
+msgstr "No si è podût inzornâ la publicazion"
+
+msgid "Post updated"
+msgstr "Publicazion inzornade"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "Sêstu sigûr di volê eliminâ cheste publicazion?"
+
+msgid "Post deleted"
+msgstr "Publicazion eliminade"
+
+msgid "Could not delete post"
+msgstr "No si è podût eliminâ la publicazion"
+
+msgid "Untitled thread"
+msgstr "Thread cence titul"
+
+msgid "Could not retrieve threads"
+msgstr "No si è podût recuperâ i threads"
+
+msgid "Post moved"
+msgstr "Publicazion spostade"
+
+msgid "Could not move post"
+msgstr "No si è podût spostâ la publicazion"
+
+msgid "Revision request removed"
+msgstr "Domande di revision gjavade"
+
+msgid "Could not update revision request"
+msgstr "No si è podût inzornâ la richieste di revision"
+
+msgid "Are you sure you want to report this post?"
+msgstr "Sêstu sigûr di volê segnalâ chest post?"
+
+msgid "Could not report post"
+msgstr "No si è podût segnalâ il post"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "Sêstu sigûr di volê eliminâ chest allegât?"
+
+msgid "Attachment deleted"
+msgstr "Allegât eliminât"
+
+msgid "Could not delete attachment"
+msgstr "No si è podût eliminâ l’allegât"
+
+msgid "Thread title"
+msgstr "Titul dal thread"
+
+msgid "Sticky thread"
+msgstr "Thread fissât"
+
+msgid "Attach files"
+msgstr "Zonte files"
+
+msgid "Attachments are disabled for this forum"
+msgstr "I alegâts a son disabilitâts par chest forum"
+
+msgid "The forum is not open yet."
+msgstr "Il forum no è ancjemò viert."
+
+msgid "The forum is closed."
+msgstr "Il forum al è sierât."
+
+msgid "The forum is locked."
+msgstr "Il forum al è blocât."
+
+msgid "New threads are not allowed in this forum."
+msgstr "No si podin creâ gnûfs thread in chest forum."
+
+msgid "Thread created"
+msgstr "Thread creât"
+
+msgid "Could not create thread"
+msgstr "No si è podût creâ il thread"
+
+msgid "Back to posts"
+msgstr "Torne ai posts"
+
+msgid "This reply will be stored as a revision."
+msgstr "Cheste rispueste e vignarà salvade come revision."
+
+msgid "Post reply"
+msgstr "Rispuint al post"
+
+msgid "The thread is locked."
+msgstr "Il thread al è blocât."
+
+msgid "Reply added"
+msgstr "Rispueste zontade"
+
+msgid "Could not add reply"
+msgstr "No si è podût zontâ la rispueste"
+
+msgid "Add forum"
+msgstr "Zonte forum"
+
+msgid "No forums found"
+msgstr "Nissun forum cjatât"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "Cree la tô prime categorie o forum par tacjâ lis discussions."
+
+msgid "Locked"
+msgstr "Blocât"
+
+msgid "No forums in this category"
+msgstr "Nissun forum in cheste categorie"
+
+msgid "Posts require approval"
+msgstr "I posts a àn bisugne di aprovazion"
+
+msgid "Forum for current group"
+msgstr "Forum pal grup atuâl"
+
+msgid "Group forum visibility"
+msgstr "Visibilitât dal forum dal grup"
+
+msgid "No category"
+msgstr "Nissune categorie"
+
+msgid "Could not retrieve forums"
+msgstr "No si è podût recuperâ i forums"
+
+msgid "Forum category updated"
+msgstr "Categorie di forum inzornade"
+
+msgid "Forum category created"
+msgstr "Categorie di forum creade"
+
+msgid "Could not save forum category"
+msgstr "No si è podût salvâ la categorie di forum"
+
+msgid "Forum updated"
+msgstr "Forum inzornât"
+
+msgid "Forum created"
+msgstr "Forum creât"
+
+msgid "Could not save forum"
+msgstr "No si è podût salvâ il forum"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "Sêstu sigûr di volê eliminâ cheste categorie di forum?"
+
+msgid "Could not delete forum category"
+msgstr "No si è podût eliminâ la categorie di forum"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "Sêstu sigûr di volê eliminâ chest forum?"
+
+msgid "Could not delete forum"
+msgstr "No si è podût eliminâ il forum"
+
+msgid "Forum category unlocked"
+msgstr "Categorie di forum sblocade"
+
+msgid "Forum category locked"
+msgstr "Categorie di forum blocade"
+
+msgid "Could not update forum category"
+msgstr "No si è podût inzornâ la categorie di forum"
+
+msgid "Forum category shown"
+msgstr "Categorie di forum mostrade"
+
+msgid "Forum category hidden"
+msgstr "Categorie di forum platade"
+
+msgid "Forum unlocked"
+msgstr "Forum sblocât"
+
+msgid "Forum locked"
+msgstr "Forum blocât"
+
+msgid "Could not update forum"
+msgstr "No si è podût inzornâ il forum"
+
+msgid "Forum shown"
+msgstr "Forum mostrât"
+
+msgid "Forum hidden"
+msgstr "Forum platât"
+
+msgid "Forum notifications enabled"
+msgstr "Notifichis dal forum abilitadis"
+
+msgid "Forum notifications disabled"
+msgstr "Notifichis dal forum disabilitadis"
+
+msgid "Could not update forum notification"
+msgstr "No si à podût inzornâ lis notifichis dal forum"
+
+msgid "Forum category moved"
+msgstr "Categoriâ dal forum spostade"
+
+msgid "Could not move forum category"
+msgstr "No si à podût spostâ la categoriâ dal forum"
+
+msgid "Forum moved"
+msgstr "Forum spostât"
+
+msgid "Could not move forum"
+msgstr "No si à podût spostâ il forum"
+
+msgid "Back to forums"
+msgstr "Torne ai forums"
+
+msgid "New thread"
+msgstr "Gnûf thread"
+
+msgid "No threads found"
+msgstr "Nissun thread cjatât"
+
+msgid "Sticky"
+msgstr "Fis"
+
+msgid "Graded"
+msgstr "Valutât"
+
+msgid "Grade peers"
+msgstr "Valute i coleghis"
+
+msgid "Move thread"
+msgstr "Sposte il thread"
+
+msgid "Target forum"
+msgstr "Forum di destinazion"
+
+msgid "Target forum is required"
+msgstr "Il forum di destinazion al è obligatori"
+
+msgid "Students"
+msgstr "Students"
+
+msgid "No students found"
+msgstr "Nissun student cjatât"
+
+msgid "No peers available to grade."
+msgstr "Nissun colegh disponibil pe valutazion."
+
+msgid "Qualified"
+msgstr "Cualificât"
+
+msgid "Not qualified"
+msgstr "No cualificât"
+
+msgid "Could not retrieve thread grading"
+msgstr "No si à podût recuperâ la valutazion dal thread"
+
+msgid "Thread grading updated"
+msgstr "Valutazion dal thread inzornade"
+
+msgid "Could not update thread grading"
+msgstr "No si à podût inzornâ la valutazion dal thread"
+
+msgid "Thread score saved"
+msgstr "Punteg dal thread salvât"
+
+msgid "Could not save thread score"
+msgstr "No si à podût salvâ il punteg dal thread"
+
+msgid "Could not move thread"
+msgstr "No si à podût spostâ il thread"
+
+msgid "Thread updated"
+msgstr "Thread inzornât"
+
+msgid "Search term is too short"
+msgstr "Il tiermin di ricercje al è masse curt"
+
+msgid "Could not search forums"
+msgstr "No si à podût cirî tai forums"
+
+msgid "Moderated"
+msgstr "Moderât"
+
+msgid "View threads"
+msgstr "Viôt i threads"
 

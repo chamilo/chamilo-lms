@@ -35724,3 +35724,762 @@ msgstr "La taksado ne povis esti kreita"
 msgid "The gradebook evaluation could not be linked"
 msgstr "La gradlibra taksado ne povis esti ligita"
 
+msgid "Survey questions"
+msgstr "Enketaj demandoj"
+
+msgid "Back to survey list"
+msgstr "Reen al la listo de enketoj"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "Ĉi tiu enketo jam havas respondojn. Redaktado de demandoj estas malŝaltita laŭ agordo."
+
+msgid "Choose the type of question you want to add."
+msgstr "Elektu la tipon de demando, kiun vi volas aldoni."
+
+msgid "The free text option is added automatically."
+msgstr "La libera teksta opcio aldoniĝas aŭtomate."
+
+msgid "No questions found"
+msgstr "Neniuj demandoj trovitaj"
+
+msgid "Mandatory"
+msgstr "Deviga"
+
+msgid "Unsupported question type"
+msgstr "Nesubtenata demando-tipo"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "Vi povas uzi la etikedojn {%s} kaj {%s} en la demando."
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "Ĉi tiu demando montriĝas kondiĉe dum respondado de la enketo."
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "La procentaj opcioj de 1 ĝis 100 generiĝas aŭtomate."
+
+msgid "Could not load survey questions"
+msgstr "Ne eblis ŝargi la demandojn de la enketo"
+
+msgid "The question text is required."
+msgstr "La demando-teksto estas deviga."
+
+msgid "The maximum score is required."
+msgstr "La maksimuma poentaro estas deviga."
+
+msgid "Please select a parent option."
+msgstr "Bonvolu elekti gepatran opcion."
+
+msgid "Please fill all answer options."
+msgstr "Bonvolu plenigi ĉiujn respondajn opciojn."
+
+msgid "QuestionUpdated"
+msgstr "QuestionUpdated"
+
+msgid "Could not save survey question"
+msgstr "Ne eblis konservi la enketan demandon"
+
+msgid "Could not delete survey question"
+msgstr "Ne eblis forigi la enketan demandon"
+
+msgid "Could not move survey question"
+msgstr "Ne eblis movi la enketan demandon"
+
+msgid "Could not copy survey question"
+msgstr "Ne eblis kopii la enketan demandon"
+
+msgid "Hide search"
+msgstr "Kaŝi serĉon"
+
+msgid "Showing results for: %s"
+msgstr "Montras rezultojn por: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "Serĉi laŭ titolo, kodo aŭ priskribo de la enketo."
+
+msgid "Search surveys"
+msgstr "Serĉi enketojn"
+
+msgid "%s surveys selected"
+msgstr "%s enketoj elektitaj"
+
+msgid "Clear selection"
+msgstr "Forigi elekton"
+
+msgid "No surveys found"
+msgstr "Neniuj enketoj trovitaj"
+
+msgid "Unsupported"
+msgstr "Ne subtenata"
+
+msgid "Could not load surveys"
+msgstr "Ne eblis ŝargi enketojn"
+
+msgid "Delete selected surveys"
+msgstr "Forigi elektitajn enketojn"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "La elektitaj enketoj kaj iliaj demandoj estos forigitaj. Ĉi tiu ago ne povas esti malfarita."
+
+msgid "Could not delete selected surveys"
+msgstr "Ne eblis forigi la elektitajn enketojn"
+
+msgid "Survey action"
+msgstr "Ago pri enketo"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "Kopio de ĉi tiu enketo estos kreita: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "Ĉiuj respondoj kaj invitoj estos forigitaj por ĉi tiu enketo: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "Generitaj multobligitaj demandoj estos forigitaj el ĉi tiu enketo: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "Ĉi tiu enketo estos publikigita por la ligitaj grupaj gvidantoj: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "Ĉi tiu enketo kaj ĝiaj demandoj estos forigitaj: %s"
+
+msgid "Could not complete survey action"
+msgstr "Ne eblis plenumi la enketan agon"
+
+msgid "Not started"
+msgstr "Ne komencita"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "Renkontiĝaj balotoj permesas al invititaj uzantoj elekti la datojn kiam ili estas disponeblaj."
+
+msgid "Back to surveys"
+msgstr "Reen al enketoj"
+
+msgid "Edit meeting poll"
+msgstr "Redakti renkontiĝan baloton"
+
+msgid "View meeting poll"
+msgstr "Vidi renkontiĝan baloton"
+
+msgid "Basic information"
+msgstr "Bazaj informoj"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "Ĉi tio kreos enketon de tipo renkontiĝa baloto. Respondoj kaj invitoj estas traktataj aparte."
+
+msgid "Availability"
+msgstr "Disponebleco"
+
+msgid "Meeting dates"
+msgstr "Renkontiĝaj datoj"
+
+msgid "Meeting poll"
+msgstr "Renkontiĝa baloto"
+
+msgid "My availability"
+msgstr "Mia disponebleco"
+
+msgid "Meeting poll results"
+msgstr "Rezultoj de renkontiĝa baloto"
+
+msgid "No invitations found"
+msgstr "Neniuj invitoj trovitaj"
+
+msgid "available"
+msgstr "disponebla"
+
+msgid "Could not load meeting poll"
+msgstr "Ne eblis ŝargi renkontiĝan baloton"
+
+msgid "Please complete the required fields"
+msgstr "Bonvolu plenigi la postulatajn kampojn"
+
+msgid "Could not save meeting poll"
+msgstr "Ne eblis konservi renkontiĝan baloton"
+
+msgid "Could not save meeting availability"
+msgstr "Ne eblis konservi renkontiĝan disponeblecon"
+
+msgid "Copy this survey to another course or session"
+msgstr "Kopii ĉi tiun enketon al alia kurso aŭ seanco"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "La enketo estos kopiita sen respondoj aŭ invitoj."
+
+msgid "No target courses found"
+msgstr "Neniuj celaj kursoj trovitaj"
+
+msgid "Search by course title, course code or session name."
+msgstr "Serĉi laŭ titolo, kodo de la kurso aŭ nomo de la seanco."
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "Uzu Duobligi enketon kiam vi volas kopion en la sama kurso."
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "Demandoj kaj opcioj estos kopiitaj. Respondoj, invitoj kaj raportoj restos nur en la originala enketo."
+
+msgid "Selected target"
+msgstr "Elektita celo"
+
+msgid "Could not load copy form"
+msgstr "Ne eblis ŝargi la kopian formularon"
+
+msgid "The survey will be copied to: %s"
+msgstr "La enketo estos kopiita al: %s"
+
+msgid "Survey copied."
+msgstr "Enketo kopiita."
+
+msgid "Could not copy survey"
+msgstr "Ne eblis kopii la enketon"
+
+msgid "Answer survey"
+msgstr "Respondi enketon"
+
+msgid "Preview mode does not save answers."
+msgstr "Antaŭrigarda reĝimo ne konservas respondojn."
+
+msgid "Survey completed"
+msgstr "Enketo kompletigita"
+
+msgid "Thank you for answering the survey."
+msgstr "Dankon pro respondado al la enketo."
+
+msgid "Profile information"
+msgstr "Profilinformoj"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "Bonvolu revizii la petatajn profilajn kampojn antaŭ ol respondi la enketon."
+
+msgid "This profile field is read-only."
+msgstr "Ĉi tiu profila kampo estas nurlegebla."
+
+msgid "You already filled this survey."
+msgstr "Vi jam plenigis ĉi tiun enketon."
+
+msgid "Please specify"
+msgstr "Bonvolu specifi"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "Ĉi tiu demandotipo ne estas subtenata en la moderna enketa vido."
+
+msgid "Preview only"
+msgstr "Nur antaŭrigardo"
+
+msgid "Submit answers"
+msgstr "Sendi respondojn"
+
+msgid "Could not load survey"
+msgstr "Ne eblis ŝargi la enketon"
+
+msgid "Please complete the required profile fields."
+msgstr "Bonvolu kompletigi la postulatajn profilajn kampojn."
+
+msgid "Please answer all mandatory questions."
+msgstr "Bonvolu respondi ĉiujn devigajn demandojn."
+
+msgid "Could not save survey answers"
+msgstr "Ne eblis konservi la respondojn de la enketo"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "Agordu la ĉefajn informojn de la enketo antaŭ ol administri demandojn kaj invitojn."
+
+msgid "The survey code cannot be changed after creation."
+msgstr "La kodo de la enketo ne povas esti ŝanĝita post kreado."
+
+msgid "Survey behavior"
+msgstr "Enketa konduto"
+
+msgid "Use 0 for no time limit."
+msgstr "Uzu 0 por neniu tempolimo."
+
+msgid "Survey messages"
+msgstr "Enketaj mesaĝoj"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "Profilaj kampoj elektitaj ĉi tie montriĝos antaŭ la enketaj demandoj."
+
+msgid "No profile fields are currently available."
+msgstr "Neniuj profilaj kampoj estas nuntempe disponeblaj."
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "Elekto de profilaj kampoj disponeblas nur por ne-anonimaj enketoj."
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "Ligado de kapabloj estos migrata en aparta aro."
+
+msgid "Could not load survey configuration"
+msgstr "Ne eblis ŝargi la agordon de la enketo"
+
+msgid "The survey code is required."
+msgstr "La kodo de la enketo estas postulata."
+
+msgid "The survey title is required."
+msgstr "La titolo de la enketo estas postulata."
+
+msgid "The survey has been saved successfully"
+msgstr "La enketo sukcese konserviĝis"
+
+msgid "Could not save survey configuration"
+msgstr "Ne eblis konservi la agordon de la enketo"
+
+msgid "Course users"
+msgstr "Kursuzantoj"
+
+msgid "Already invited"
+msgstr "Jam invitita"
+
+msgid "No users found"
+msgstr "Neniuj uzantoj trovitaj"
+
+msgid "No groups found"
+msgstr "Neniuj grupoj trovitaj"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "Uzu **ligilon** kie la enketligilo devus aperi."
+
+msgid "Remind all selected users"
+msgstr "Rememorigi ĉiujn elektitajn uzantojn"
+
+msgid "Anonymous access link"
+msgstr "Anonima alirligilo"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "Uzantoj kiuj ne estas invititaj povas uzi ĉi tiun ligilon por respondi la enketon."
+
+msgid "Answered anonymously"
+msgstr "Respondita anonime"
+
+msgid "Could not load survey invitations"
+msgstr "Ne eblis ŝargi la invitojn de la enketo"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "Retpoŝta temo kaj mesaĝo estas postulataj kiam oni sendas retpoŝton."
+
+msgid "Could not publish survey"
+msgstr "Ne eblis publikigi la enketon"
+
+msgid "Could not copy the link"
+msgstr "Ne eblis kopii la ligilon"
+
+msgid "Please answer this survey using the following link"
+msgstr "Bonvolu respondi ĉi tiun enketon per la sekva ligilo"
+
+msgid "Export CSV"
+msgstr "Eksporti CSV"
+
+msgid "Export compact CSV"
+msgstr "Eksporti kompaktan CSV"
+
+msgid "Export Excel"
+msgstr "Eksporti Excel"
+
+msgid "Export package"
+msgstr "Eksporti pakon"
+
+msgid "Results summary"
+msgstr "Rezultoresumo"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "Ĉi tiu vido montras la migratajn raportajn datumojn por ĉi tiu enketo."
+
+msgid "Select user"
+msgstr "Elekti uzanton"
+
+msgid "No answers found"
+msgstr "Neniuj respondoj trovitaj"
+
+msgid "answers"
+msgstr "respondoj"
+
+msgid "Could not load survey reporting"
+msgstr "Ne eblis ŝargi la enketa raporton"
+
+msgid "Back to threads"
+msgstr "Reen al fadenoj"
+
+msgid "Back to learning path"
+msgstr "Reen al lernpado"
+
+msgid "Remove sticky"
+msgstr "Forigi fiksadon"
+
+msgid "Make sticky"
+msgstr "Fiksi"
+
+msgid "Open thread"
+msgstr "Malfermi fadenon"
+
+msgid "Close thread"
+msgstr "Fermi fadenon"
+
+msgid "Delete thread"
+msgstr "Forigi fadenon"
+
+msgid "This thread is hidden from learners."
+msgstr "Ĉi tiu fadeno estas kaŝita por lernantoj."
+
+msgid "Revision requested"
+msgstr "Revizio petita"
+
+msgid "Revision"
+msgstr "Revizio"
+
+msgid "Approve post"
+msgstr "Aprobi afiŝon"
+
+msgid "Reject post"
+msgstr "Malakcepti afiŝon"
+
+msgid "Cancel revision request"
+msgstr "Nuligi revizian peton"
+
+msgid "Delete post"
+msgstr "Forigi afiŝon"
+
+msgid "Message is required"
+msgstr "Mesaĝo estas bezonata"
+
+msgid "Target thread is required"
+msgstr "Celita fadeno estas bezonata"
+
+msgid "Could not retrieve posts"
+msgstr "Ne eblis akiri afiŝojn"
+
+msgid "Thread shown"
+msgstr "Fadeno montrita"
+
+msgid "Thread hidden"
+msgstr "Fadeno kaŝita"
+
+msgid "Could not update thread"
+msgstr "Ne eblis ĝisdatigi fadenon"
+
+msgid "Thread closed"
+msgstr "Fadeno fermita"
+
+msgid "Thread opened"
+msgstr "Fadeno malfermita"
+
+msgid "Thread marked as sticky"
+msgstr "Fadeno markita kiel fiksita"
+
+msgid "Thread unmarked as sticky"
+msgstr "Fadeno malmarkita kiel fiksita"
+
+msgid "Thread notifications enabled"
+msgstr "Fadenaj sciigoj ebligitaj"
+
+msgid "Thread notifications disabled"
+msgstr "Fadenaj sciigoj malŝaltitaj"
+
+msgid "Could not update thread notification"
+msgstr "Ne eblis ĝisdatigi fadenan sciigon"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "Ĉu vi certas, ke vi volas forigi ĉi tiun fadenon?"
+
+msgid "Could not delete thread"
+msgstr "Ne eblis forigi fadenon"
+
+msgid "Post approved"
+msgstr "Afiŝo aprobita"
+
+msgid "Could not approve post"
+msgstr "Ne eblis aprobi afiŝon"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "Ĉu vi certas, ke vi volas malakcepti ĉi tiun afiŝon?"
+
+msgid "Post rejected"
+msgstr "Afiŝo malakceptita"
+
+msgid "Could not reject post"
+msgstr "Ne eblis malakcepti afiŝon"
+
+msgid "Post shown"
+msgstr "Afiŝo montrita"
+
+msgid "Post hidden"
+msgstr "Afiŝo kaŝita"
+
+msgid "Could not update post"
+msgstr "Ne eblis ĝisdatigi afiŝon"
+
+msgid "Post updated"
+msgstr "Afiŝo ĝisdatigita"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "Ĉu vi certas, ke vi volas forigi ĉi tiun afiŝon?"
+
+msgid "Post deleted"
+msgstr "Afiŝo forigita"
+
+msgid "Could not delete post"
+msgstr "Ne eblis forigi afiŝon"
+
+msgid "Untitled thread"
+msgstr "Sentitola fadeno"
+
+msgid "Could not retrieve threads"
+msgstr "Ne eblis akiri fadenojn"
+
+msgid "Post moved"
+msgstr "Afiŝo movita"
+
+msgid "Could not move post"
+msgstr "Ne eblis movi afiŝon"
+
+msgid "Revision request removed"
+msgstr "Revizia peto forigita"
+
+msgid "Could not update revision request"
+msgstr "Ne eblis ĝisdatigi revizian peton"
+
+msgid "Are you sure you want to report this post?"
+msgstr "Ĉu vi certas, ke vi volas raporti ĉi tiun afiŝon?"
+
+msgid "Could not report post"
+msgstr "Ne eblis raporti la afiŝon"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "Ĉu vi certas, ke vi volas forigi ĉi tiun aldonaĵon?"
+
+msgid "Attachment deleted"
+msgstr "Aldonaĵo forigita"
+
+msgid "Could not delete attachment"
+msgstr "Ne eblis forigi la aldonaĵon"
+
+msgid "Thread title"
+msgstr "Titolo de la fadeno"
+
+msgid "Sticky thread"
+msgstr "Fiksita fadeno"
+
+msgid "Attach files"
+msgstr "Aldoni dosierojn"
+
+msgid "Attachments are disabled for this forum"
+msgstr "Aldonaĵoj estas malŝaltitaj por ĉi tiu forumo"
+
+msgid "The forum is not open yet."
+msgstr "La forumo ankoraŭ ne estas malfermita."
+
+msgid "The forum is closed."
+msgstr "La forumo estas fermita."
+
+msgid "The forum is locked."
+msgstr "La forumo estas ŝlosita."
+
+msgid "New threads are not allowed in this forum."
+msgstr "Novaj fadenoj ne estas permesitaj en ĉi tiu forumo."
+
+msgid "Thread created"
+msgstr "Fadeno kreita"
+
+msgid "Could not create thread"
+msgstr "Ne eblis krei fadenon"
+
+msgid "Back to posts"
+msgstr "Reen al afiŝoj"
+
+msgid "This reply will be stored as a revision."
+msgstr "Ĉi tiu respondo estos konservita kiel revizio."
+
+msgid "Post reply"
+msgstr "Afiŝi respondon"
+
+msgid "The thread is locked."
+msgstr "La fadeno estas ŝlosita."
+
+msgid "Reply added"
+msgstr "Respondo aldonita"
+
+msgid "Could not add reply"
+msgstr "Ne eblis aldoni respondon"
+
+msgid "Add forum"
+msgstr "Aldoni forumon"
+
+msgid "No forums found"
+msgstr "Neniuj forumoj trovitaj"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "Kreu vian unuan forumkategorion aŭ forumon por komenci diskutojn."
+
+msgid "Locked"
+msgstr "Ŝlosita"
+
+msgid "No forums in this category"
+msgstr "Neniuj forumoj en ĉi tiu kategorio"
+
+msgid "Posts require approval"
+msgstr "Afiŝoj postulas aprobon"
+
+msgid "Forum for current group"
+msgstr "Forumo por la nuna grupo"
+
+msgid "Group forum visibility"
+msgstr "Videbleco de la grupa forumo"
+
+msgid "No category"
+msgstr "Neniu kategorio"
+
+msgid "Could not retrieve forums"
+msgstr "Ne eblis preni la forumojn"
+
+msgid "Forum category updated"
+msgstr "Forumkategorio ĝisdatigita"
+
+msgid "Forum category created"
+msgstr "Forumkategorio kreita"
+
+msgid "Could not save forum category"
+msgstr "Ne eblis konservi la forumkategorion"
+
+msgid "Forum updated"
+msgstr "Forumo ĝisdatigita"
+
+msgid "Forum created"
+msgstr "Forumo kreita"
+
+msgid "Could not save forum"
+msgstr "Ne eblis konservi la forumon"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "Ĉu vi certas, ke vi volas forigi ĉi tiun forumkategorion?"
+
+msgid "Could not delete forum category"
+msgstr "Ne eblis forigi la forumkategorion"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "Ĉu vi certas, ke vi volas forigi ĉi tiun forumon?"
+
+msgid "Could not delete forum"
+msgstr "Ne eblis forigi la forumon"
+
+msgid "Forum category unlocked"
+msgstr "Forumkategorio malŝlosita"
+
+msgid "Forum category locked"
+msgstr "Forumkategorio ŝlosita"
+
+msgid "Could not update forum category"
+msgstr "Ne eblis ĝisdatigi la forumkategorion"
+
+msgid "Forum category shown"
+msgstr "Forumkategorio montrita"
+
+msgid "Forum category hidden"
+msgstr "Forumkategorio kaŝita"
+
+msgid "Forum unlocked"
+msgstr "Forumo malŝlosita"
+
+msgid "Forum locked"
+msgstr "Forumo ŝlosita"
+
+msgid "Could not update forum"
+msgstr "Ne eblis ĝisdatigi la forumon"
+
+msgid "Forum shown"
+msgstr "Forumo montrita"
+
+msgid "Forum hidden"
+msgstr "Forumo kaŝita"
+
+msgid "Forum notifications enabled"
+msgstr "Forumaj sciigoj ebligitaj"
+
+msgid "Forum notifications disabled"
+msgstr "Forumaj sciigoj malŝaltitaj"
+
+msgid "Could not update forum notification"
+msgstr "Ne eblis ĝisdatigi la foruman sciigon"
+
+msgid "Forum category moved"
+msgstr "Forumkategorio movita"
+
+msgid "Could not move forum category"
+msgstr "Ne eblis movi la forumkategorion"
+
+msgid "Forum moved"
+msgstr "Forumo movita"
+
+msgid "Could not move forum"
+msgstr "Ne eblis movi la forumon"
+
+msgid "Back to forums"
+msgstr "Reen al forumoj"
+
+msgid "New thread"
+msgstr "Nova fadeno"
+
+msgid "No threads found"
+msgstr "Neniuj fadenoj trovitaj"
+
+msgid "Sticky"
+msgstr "Fiksita"
+
+msgid "Graded"
+msgstr "Taksita"
+
+msgid "Grade peers"
+msgstr "Taksi samklasanojn"
+
+msgid "Move thread"
+msgstr "Movi fadenon"
+
+msgid "Target forum"
+msgstr "Cela forumo"
+
+msgid "Target forum is required"
+msgstr "Cela forumo estas postulata"
+
+msgid "Students"
+msgstr "Studentoj"
+
+msgid "No students found"
+msgstr "Neniuj studentoj trovitaj"
+
+msgid "No peers available to grade."
+msgstr "Neniuj samklasanoj disponeblaj por taksi."
+
+msgid "Qualified"
+msgstr "Kvalifikita"
+
+msgid "Not qualified"
+msgstr "Ne kvalifikita"
+
+msgid "Could not retrieve thread grading"
+msgstr "Ne eblis retrovi la fadenan taksadon"
+
+msgid "Thread grading updated"
+msgstr "Fadena taksado ĝisdatigita"
+
+msgid "Could not update thread grading"
+msgstr "Ne eblis ĝisdatigi la fadenan taksadon"
+
+msgid "Thread score saved"
+msgstr "Fadena poentaro konservita"
+
+msgid "Could not save thread score"
+msgstr "Ne eblis konservi la fadenan poentaron"
+
+msgid "Could not move thread"
+msgstr "Ne eblis movi la fadenon"
+
+msgid "Thread updated"
+msgstr "Fadeno ĝisdatigita"
+
+msgid "Search term is too short"
+msgstr "Serĉvorto estas tro mallonga"
+
+msgid "Could not search forums"
+msgstr "Ne eblis serĉi forumojn"
+
+msgid "Moderated"
+msgstr "Moderatita"
+
+msgid "View threads"
+msgstr "Vidi fadenojn"
+

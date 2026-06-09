@@ -35737,3 +35737,762 @@ msgstr "A avaliação não pôde ser criada"
 msgid "The gradebook evaluation could not be linked"
 msgstr "A avaliação do boletim não pôde ser vinculada"
 
+msgid "Survey questions"
+msgstr "Perguntas da pesquisa"
+
+msgid "Back to survey list"
+msgstr "Voltar à lista de pesquisas"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "Esta pesquisa já possui respostas. A edição de perguntas está desativada por configuração."
+
+msgid "Choose the type of question you want to add."
+msgstr "Escolha o tipo de pergunta que deseja adicionar."
+
+msgid "The free text option is added automatically."
+msgstr "A opção de texto livre é adicionada automaticamente."
+
+msgid "No questions found"
+msgstr "Nenhuma pergunta encontrada"
+
+msgid "Mandatory"
+msgstr "Obrigatório"
+
+msgid "Unsupported question type"
+msgstr "Tipo de pergunta não suportado"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "Você pode usar as tags {%s} e {%s} na pergunta."
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "Esta pergunta é exibida condicionalmente ao responder a pesquisa."
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "As opções de porcentagem de 1 a 100 são geradas automaticamente."
+
+msgid "Could not load survey questions"
+msgstr "Não foi possível carregar as perguntas da pesquisa"
+
+msgid "The question text is required."
+msgstr "O texto da pergunta é obrigatório."
+
+msgid "The maximum score is required."
+msgstr "A pontuação máxima é obrigatória."
+
+msgid "Please select a parent option."
+msgstr "Selecione uma opção pai."
+
+msgid "Please fill all answer options."
+msgstr "Preencha todas as opções de resposta."
+
+msgid "QuestionUpdated"
+msgstr "QuestionUpdated"
+
+msgid "Could not save survey question"
+msgstr "Não foi possível salvar a pergunta da pesquisa"
+
+msgid "Could not delete survey question"
+msgstr "Não foi possível excluir a pergunta da pesquisa"
+
+msgid "Could not move survey question"
+msgstr "Não foi possível mover a pergunta da pesquisa"
+
+msgid "Could not copy survey question"
+msgstr "Não foi possível copiar a pergunta da pesquisa"
+
+msgid "Hide search"
+msgstr "Ocultar pesquisa"
+
+msgid "Showing results for: %s"
+msgstr "Mostrando resultados para: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "Pesquise por título, código ou descrição da pesquisa."
+
+msgid "Search surveys"
+msgstr "Pesquisar pesquisas"
+
+msgid "%s surveys selected"
+msgstr "%s pesquisas selecionadas"
+
+msgid "Clear selection"
+msgstr "Limpar seleção"
+
+msgid "No surveys found"
+msgstr "Nenhuma pesquisa encontrada"
+
+msgid "Unsupported"
+msgstr "Não suportado"
+
+msgid "Could not load surveys"
+msgstr "Não foi possível carregar as pesquisas"
+
+msgid "Delete selected surveys"
+msgstr "Excluir pesquisas selecionadas"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "As pesquisas selecionadas e suas perguntas serão excluídas. Esta ação não poderá ser desfeita."
+
+msgid "Could not delete selected surveys"
+msgstr "Não foi possível excluir as pesquisas selecionadas"
+
+msgid "Survey action"
+msgstr "Ação da pesquisa"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "Uma cópia desta pesquisa será criada: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "Todas as respostas e convites serão excluídos para esta pesquisa: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "As perguntas multiplicadas geradas serão removidas desta pesquisa: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "Esta pesquisa será publicada para os tutores do grupo vinculado: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "Esta pesquisa e suas perguntas serão excluídas: %s"
+
+msgid "Could not complete survey action"
+msgstr "Não foi possível concluir a ação da pesquisa"
+
+msgid "Not started"
+msgstr "Não iniciado"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "Enquetes de reunião permitem que os usuários convidados selecionem as datas em que estão disponíveis."
+
+msgid "Back to surveys"
+msgstr "Voltar às pesquisas"
+
+msgid "Edit meeting poll"
+msgstr "Editar enquete de reunião"
+
+msgid "View meeting poll"
+msgstr "Visualizar enquete de reunião"
+
+msgid "Basic information"
+msgstr "Informações básicas"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "Isso criará uma pesquisa do tipo enquete de reunião. Respostas e convites são tratados separadamente."
+
+msgid "Availability"
+msgstr "Disponibilidade"
+
+msgid "Meeting dates"
+msgstr "Datas da reunião"
+
+msgid "Meeting poll"
+msgstr "Enquete de reunião"
+
+msgid "My availability"
+msgstr "Minha disponibilidade"
+
+msgid "Meeting poll results"
+msgstr "Resultados da enquete de reunião"
+
+msgid "No invitations found"
+msgstr "Nenhum convite encontrado"
+
+msgid "available"
+msgstr "disponível"
+
+msgid "Could not load meeting poll"
+msgstr "Não foi possível carregar a enquete de reunião"
+
+msgid "Please complete the required fields"
+msgstr "Por favor, preencha os campos obrigatórios"
+
+msgid "Could not save meeting poll"
+msgstr "Não foi possível salvar a enquete de reunião"
+
+msgid "Could not save meeting availability"
+msgstr "Não foi possível salvar a disponibilidade da reunião"
+
+msgid "Copy this survey to another course or session"
+msgstr "Copiar esta pesquisa para outro curso ou sessão"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "A pesquisa será copiada sem respostas ou convites."
+
+msgid "No target courses found"
+msgstr "Nenhum curso de destino encontrado"
+
+msgid "Search by course title, course code or session name."
+msgstr "Pesquise por título do curso, código do curso ou nome da sessão."
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "Use Duplicar pesquisa quando desejar uma cópia no mesmo curso."
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "Perguntas e opções serão copiadas. Respostas, convites e relatórios permanecerão apenas na pesquisa original."
+
+msgid "Selected target"
+msgstr "Destino selecionado"
+
+msgid "Could not load copy form"
+msgstr "Não foi possível carregar o formulário de cópia"
+
+msgid "The survey will be copied to: %s"
+msgstr "A pesquisa será copiada para: %s"
+
+msgid "Survey copied."
+msgstr "Pesquisa copiada."
+
+msgid "Could not copy survey"
+msgstr "Não foi possível copiar a pesquisa"
+
+msgid "Answer survey"
+msgstr "Responder pesquisa"
+
+msgid "Preview mode does not save answers."
+msgstr "O modo de visualização não salva as respostas."
+
+msgid "Survey completed"
+msgstr "Pesquisa concluída"
+
+msgid "Thank you for answering the survey."
+msgstr "Obrigado por responder à pesquisa."
+
+msgid "Profile information"
+msgstr "Informações do perfil"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "Por favor, revise os campos de perfil solicitados antes de responder à pesquisa."
+
+msgid "This profile field is read-only."
+msgstr "Este campo de perfil é somente leitura."
+
+msgid "You already filled this survey."
+msgstr "Você já preencheu esta pesquisa."
+
+msgid "Please specify"
+msgstr "Por favor, especifique"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "Este tipo de pergunta não é suportado na visualização moderna da pesquisa."
+
+msgid "Preview only"
+msgstr "Apenas visualização"
+
+msgid "Submit answers"
+msgstr "Enviar respostas"
+
+msgid "Could not load survey"
+msgstr "Não foi possível carregar a pesquisa"
+
+msgid "Please complete the required profile fields."
+msgstr "Por favor, preencha os campos de perfil obrigatórios."
+
+msgid "Please answer all mandatory questions."
+msgstr "Por favor, responda todas as perguntas obrigatórias."
+
+msgid "Could not save survey answers"
+msgstr "Não foi possível salvar as respostas da pesquisa"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "Configure as informações principais da pesquisa antes de gerenciar perguntas e convites."
+
+msgid "The survey code cannot be changed after creation."
+msgstr "O código da pesquisa não pode ser alterado após a criação."
+
+msgid "Survey behavior"
+msgstr "Comportamento da pesquisa"
+
+msgid "Use 0 for no time limit."
+msgstr "Use 0 para sem limite de tempo."
+
+msgid "Survey messages"
+msgstr "Mensagens da pesquisa"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "Os campos de perfil selecionados aqui serão exibidos antes das perguntas da pesquisa."
+
+msgid "No profile fields are currently available."
+msgstr "Nenhum campo de perfil está disponível no momento."
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "A seleção de campos de perfil está disponível apenas para pesquisas não anônimas."
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "A vinculação de competências será migrada em um lote dedicado."
+
+msgid "Could not load survey configuration"
+msgstr "Não foi possível carregar a configuração da pesquisa"
+
+msgid "The survey code is required."
+msgstr "O código da pesquisa é obrigatório."
+
+msgid "The survey title is required."
+msgstr "O título da pesquisa é obrigatório."
+
+msgid "The survey has been saved successfully"
+msgstr "A pesquisa foi salva com sucesso"
+
+msgid "Could not save survey configuration"
+msgstr "Não foi possível salvar a configuração da pesquisa"
+
+msgid "Course users"
+msgstr "Usuários do curso"
+
+msgid "Already invited"
+msgstr "Já convidado"
+
+msgid "No users found"
+msgstr "Nenhum usuário encontrado"
+
+msgid "No groups found"
+msgstr "Nenhum grupo encontrado"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "Use **link** onde o link da pesquisa deve aparecer."
+
+msgid "Remind all selected users"
+msgstr "Lembrar todos os usuários selecionados"
+
+msgid "Anonymous access link"
+msgstr "Link de acesso anônimo"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "Usuários que não foram convidados podem usar este link para responder à pesquisa."
+
+msgid "Answered anonymously"
+msgstr "Respondido anonimamente"
+
+msgid "Could not load survey invitations"
+msgstr "Não foi possível carregar os convites da pesquisa"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "O assunto e a mensagem do e-mail são obrigatórios ao enviar e-mail."
+
+msgid "Could not publish survey"
+msgstr "Não foi possível publicar a pesquisa"
+
+msgid "Could not copy the link"
+msgstr "Não foi possível copiar o link"
+
+msgid "Please answer this survey using the following link"
+msgstr "Por favor, responda esta pesquisa usando o seguinte link"
+
+msgid "Export CSV"
+msgstr "Exportar CSV"
+
+msgid "Export compact CSV"
+msgstr "Exportar CSV compacto"
+
+msgid "Export Excel"
+msgstr "Exportar Excel"
+
+msgid "Export package"
+msgstr "Exportar pacote"
+
+msgid "Results summary"
+msgstr "Resumo dos resultados"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "Esta visualização mostra os dados de relatórios migrados para esta pesquisa."
+
+msgid "Select user"
+msgstr "Selecionar usuário"
+
+msgid "No answers found"
+msgstr "Nenhuma resposta encontrada"
+
+msgid "answers"
+msgstr "respostas"
+
+msgid "Could not load survey reporting"
+msgstr "Não foi possível carregar o relatório da pesquisa"
+
+msgid "Back to threads"
+msgstr "Voltar aos tópicos"
+
+msgid "Back to learning path"
+msgstr "Voltar ao caminho de aprendizagem"
+
+msgid "Remove sticky"
+msgstr "Remover fixação"
+
+msgid "Make sticky"
+msgstr "Fixar"
+
+msgid "Open thread"
+msgstr "Abrir tópico"
+
+msgid "Close thread"
+msgstr "Fechar tópico"
+
+msgid "Delete thread"
+msgstr "Excluir tópico"
+
+msgid "This thread is hidden from learners."
+msgstr "Este tópico está oculto para os alunos."
+
+msgid "Revision requested"
+msgstr "Revisão solicitada"
+
+msgid "Revision"
+msgstr "Revisão"
+
+msgid "Approve post"
+msgstr "Aprovar postagem"
+
+msgid "Reject post"
+msgstr "Rejeitar postagem"
+
+msgid "Cancel revision request"
+msgstr "Cancelar solicitação de revisão"
+
+msgid "Delete post"
+msgstr "Excluir postagem"
+
+msgid "Message is required"
+msgstr "Mensagem é obrigatória"
+
+msgid "Target thread is required"
+msgstr "Tópico de destino é obrigatório"
+
+msgid "Could not retrieve posts"
+msgstr "Não foi possível recuperar as postagens"
+
+msgid "Thread shown"
+msgstr "Tópico exibido"
+
+msgid "Thread hidden"
+msgstr "Tópico oculto"
+
+msgid "Could not update thread"
+msgstr "Não foi possível atualizar o tópico"
+
+msgid "Thread closed"
+msgstr "Tópico fechado"
+
+msgid "Thread opened"
+msgstr "Tópico aberto"
+
+msgid "Thread marked as sticky"
+msgstr "Tópico marcado como fixo"
+
+msgid "Thread unmarked as sticky"
+msgstr "Tópico desmarcado como fixo"
+
+msgid "Thread notifications enabled"
+msgstr "Notificações do tópico ativadas"
+
+msgid "Thread notifications disabled"
+msgstr "Notificações do tópico desativadas"
+
+msgid "Could not update thread notification"
+msgstr "Não foi possível atualizar a notificação do tópico"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "Tem certeza de que deseja excluir este tópico?"
+
+msgid "Could not delete thread"
+msgstr "Não foi possível excluir o tópico"
+
+msgid "Post approved"
+msgstr "Postagem aprovada"
+
+msgid "Could not approve post"
+msgstr "Não foi possível aprovar a postagem"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "Tem certeza de que deseja rejeitar esta postagem?"
+
+msgid "Post rejected"
+msgstr "Postagem rejeitada"
+
+msgid "Could not reject post"
+msgstr "Não foi possível rejeitar a postagem"
+
+msgid "Post shown"
+msgstr "Postagem exibida"
+
+msgid "Post hidden"
+msgstr "Postagem ocultada"
+
+msgid "Could not update post"
+msgstr "Não foi possível atualizar a postagem"
+
+msgid "Post updated"
+msgstr "Postagem atualizada"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "Tem certeza de que deseja excluir esta postagem?"
+
+msgid "Post deleted"
+msgstr "Postagem excluída"
+
+msgid "Could not delete post"
+msgstr "Não foi possível excluir a postagem"
+
+msgid "Untitled thread"
+msgstr "Tópico sem título"
+
+msgid "Could not retrieve threads"
+msgstr "Não foi possível recuperar os tópicos"
+
+msgid "Post moved"
+msgstr "Postagem movida"
+
+msgid "Could not move post"
+msgstr "Não foi possível mover a postagem"
+
+msgid "Revision request removed"
+msgstr "Solicitação de revisão removida"
+
+msgid "Could not update revision request"
+msgstr "Não foi possível atualizar a solicitação de revisão"
+
+msgid "Are you sure you want to report this post?"
+msgstr "Tem certeza de que deseja denunciar esta postagem?"
+
+msgid "Could not report post"
+msgstr "Não foi possível denunciar a postagem"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "Tem certeza de que deseja excluir este anexo?"
+
+msgid "Attachment deleted"
+msgstr "Anexo excluído"
+
+msgid "Could not delete attachment"
+msgstr "Não foi possível excluir o anexo"
+
+msgid "Thread title"
+msgstr "Título do tópico"
+
+msgid "Sticky thread"
+msgstr "Tópico fixado"
+
+msgid "Attach files"
+msgstr "Anexar arquivos"
+
+msgid "Attachments are disabled for this forum"
+msgstr "Anexos estão desativados para este fórum"
+
+msgid "The forum is not open yet."
+msgstr "O fórum ainda não está aberto."
+
+msgid "The forum is closed."
+msgstr "O fórum está fechado."
+
+msgid "The forum is locked."
+msgstr "O fórum está bloqueado."
+
+msgid "New threads are not allowed in this forum."
+msgstr "Novos tópicos não são permitidos neste fórum."
+
+msgid "Thread created"
+msgstr "Tópico criado"
+
+msgid "Could not create thread"
+msgstr "Não foi possível criar o tópico"
+
+msgid "Back to posts"
+msgstr "Voltar às postagens"
+
+msgid "This reply will be stored as a revision."
+msgstr "Esta resposta será armazenada como uma revisão."
+
+msgid "Post reply"
+msgstr "Responder à postagem"
+
+msgid "The thread is locked."
+msgstr "O tópico está bloqueado."
+
+msgid "Reply added"
+msgstr "Resposta adicionada"
+
+msgid "Could not add reply"
+msgstr "Não foi possível adicionar a resposta"
+
+msgid "Add forum"
+msgstr "Adicionar fórum"
+
+msgid "No forums found"
+msgstr "Nenhum fórum encontrado"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "Crie sua primeira categoria de fórum ou fórum para iniciar discussões."
+
+msgid "Locked"
+msgstr "Bloqueado"
+
+msgid "No forums in this category"
+msgstr "Nenhum fórum nesta categoria"
+
+msgid "Posts require approval"
+msgstr "Postagens requerem aprovação"
+
+msgid "Forum for current group"
+msgstr "Fórum do grupo atual"
+
+msgid "Group forum visibility"
+msgstr "Visibilidade do fórum do grupo"
+
+msgid "No category"
+msgstr "Sem categoria"
+
+msgid "Could not retrieve forums"
+msgstr "Não foi possível recuperar os fóruns"
+
+msgid "Forum category updated"
+msgstr "Categoria de fórum atualizada"
+
+msgid "Forum category created"
+msgstr "Categoria de fórum criada"
+
+msgid "Could not save forum category"
+msgstr "Não foi possível salvar a categoria de fórum"
+
+msgid "Forum updated"
+msgstr "Fórum atualizado"
+
+msgid "Forum created"
+msgstr "Fórum criado"
+
+msgid "Could not save forum"
+msgstr "Não foi possível salvar o fórum"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "Tem certeza de que deseja excluir esta categoria de fórum?"
+
+msgid "Could not delete forum category"
+msgstr "Não foi possível excluir a categoria de fórum"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "Tem certeza de que deseja excluir este fórum?"
+
+msgid "Could not delete forum"
+msgstr "Não foi possível excluir o fórum"
+
+msgid "Forum category unlocked"
+msgstr "Categoria de fórum desbloqueada"
+
+msgid "Forum category locked"
+msgstr "Categoria de fórum bloqueada"
+
+msgid "Could not update forum category"
+msgstr "Não foi possível atualizar a categoria de fórum"
+
+msgid "Forum category shown"
+msgstr "Categoria de fórum exibida"
+
+msgid "Forum category hidden"
+msgstr "Categoria de fórum oculta"
+
+msgid "Forum unlocked"
+msgstr "Fórum desbloqueado"
+
+msgid "Forum locked"
+msgstr "Fórum bloqueado"
+
+msgid "Could not update forum"
+msgstr "Não foi possível atualizar o fórum"
+
+msgid "Forum shown"
+msgstr "Fórum exibido"
+
+msgid "Forum hidden"
+msgstr "Fórum oculto"
+
+msgid "Forum notifications enabled"
+msgstr "Notificações do fórum ativadas"
+
+msgid "Forum notifications disabled"
+msgstr "Notificações do fórum desativadas"
+
+msgid "Could not update forum notification"
+msgstr "Não foi possível atualizar a notificação do fórum"
+
+msgid "Forum category moved"
+msgstr "Categoria de fórum movida"
+
+msgid "Could not move forum category"
+msgstr "Não foi possível mover a categoria de fórum"
+
+msgid "Forum moved"
+msgstr "Fórum movido"
+
+msgid "Could not move forum"
+msgstr "Não foi possível mover o fórum"
+
+msgid "Back to forums"
+msgstr "Voltar aos fóruns"
+
+msgid "New thread"
+msgstr "Novo tópico"
+
+msgid "No threads found"
+msgstr "Nenhum tópico encontrado"
+
+msgid "Sticky"
+msgstr "Fixado"
+
+msgid "Graded"
+msgstr "Avaliado"
+
+msgid "Grade peers"
+msgstr "Avaliar colegas"
+
+msgid "Move thread"
+msgstr "Mover tópico"
+
+msgid "Target forum"
+msgstr "Fórum de destino"
+
+msgid "Target forum is required"
+msgstr "Fórum de destino é obrigatório"
+
+msgid "Students"
+msgstr "Estudantes"
+
+msgid "No students found"
+msgstr "Nenhum estudante encontrado"
+
+msgid "No peers available to grade."
+msgstr "Nenhum colega disponível para avaliação."
+
+msgid "Qualified"
+msgstr "Qualificado"
+
+msgid "Not qualified"
+msgstr "Não qualificado"
+
+msgid "Could not retrieve thread grading"
+msgstr "Não foi possível recuperar a avaliação do tópico"
+
+msgid "Thread grading updated"
+msgstr "Avaliação do tópico atualizada"
+
+msgid "Could not update thread grading"
+msgstr "Não foi possível atualizar a avaliação do tópico"
+
+msgid "Thread score saved"
+msgstr "Pontuação do tópico salva"
+
+msgid "Could not save thread score"
+msgstr "Não foi possível salvar a pontuação do tópico"
+
+msgid "Could not move thread"
+msgstr "Não foi possível mover o tópico"
+
+msgid "Thread updated"
+msgstr "Tópico atualizado"
+
+msgid "Search term is too short"
+msgstr "O termo de pesquisa é muito curto"
+
+msgid "Could not search forums"
+msgstr "Não foi possível pesquisar nos fóruns"
+
+msgid "Moderated"
+msgstr "Moderado"
+
+msgid "View threads"
+msgstr "Ver tópicos"
+

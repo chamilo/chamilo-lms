@@ -35722,3 +35722,762 @@ msgstr "मूल्यांकन सिर्जना गर्न सकि
 msgid "The gradebook evaluation could not be linked"
 msgstr "ग्रेडबुक मूल्यांकन लिङ्क गर्न सकिएन"
 
+msgid "Survey questions"
+msgstr "सर्वेक्षण प्रश्नहरू"
+
+msgid "Back to survey list"
+msgstr "सर्वेक्षण सूचीमा फर्कनुहोस्"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "यो सर्वेक्षणमा पहिले नै उत्तरहरू छन्। प्रश्न सम्पादन कन्फिगरेसनद्वारा असक्षम गरिएको छ।"
+
+msgid "Choose the type of question you want to add."
+msgstr "तपाईंले थप्न चाहनुभएको प्रश्नको प्रकार चयन गर्नुहोस्।"
+
+msgid "The free text option is added automatically."
+msgstr "स्वतन्त्र पाठ विकल्प स्वतः थपिन्छ।"
+
+msgid "No questions found"
+msgstr "कुनै प्रश्न फेला परेन"
+
+msgid "Mandatory"
+msgstr "अनिवार्य"
+
+msgid "Unsupported question type"
+msgstr "असमर्थित प्रश्न प्रकार"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "तपाईंले प्रश्नमा {%s} र {%s} ट्यागहरू प्रयोग गर्न सक्नुहुन्छ।"
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "यो प्रश्न सर्वेक्षणको उत्तर दिँदा सशर्त देखाइन्छ।"
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "१ देखि १०० सम्मको प्रतिशत विकल्पहरू स्वतः उत्पन्न हुन्छन्।"
+
+msgid "Could not load survey questions"
+msgstr "सर्वेक्षण प्रश्नहरू लोड गर्न सकिएन"
+
+msgid "The question text is required."
+msgstr "प्रश्न पाठ आवश्यक छ।"
+
+msgid "The maximum score is required."
+msgstr "अधिकतम स्कोर आवश्यक छ।"
+
+msgid "Please select a parent option."
+msgstr "कृपया एउटा अभिभावक विकल्प चयन गर्नुहोस्।"
+
+msgid "Please fill all answer options."
+msgstr "कृपया सबै उत्तर विकल्पहरू भर्नुहोस्।"
+
+msgid "QuestionUpdated"
+msgstr "QuestionUpdated"
+
+msgid "Could not save survey question"
+msgstr "सर्वेक्षण प्रश्न बचत गर्न सकिएन"
+
+msgid "Could not delete survey question"
+msgstr "सर्वेक्षण प्रश्न मेटाउन सकिएन"
+
+msgid "Could not move survey question"
+msgstr "सर्वेक्षण प्रश्न सार्न सकिएन"
+
+msgid "Could not copy survey question"
+msgstr "सर्वेक्षण प्रश्न प्रतिलिपि गर्न सकिएन"
+
+msgid "Hide search"
+msgstr "खोज लुकाउनुहोस्"
+
+msgid "Showing results for: %s"
+msgstr "नतिजाहरू देखाउँदै: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "सर्वेक्षण शीर्षक, कोड वा विवरणद्वारा खोज्नुहोस्।"
+
+msgid "Search surveys"
+msgstr "सर्वेक्षणहरू खोज्नुहोस्"
+
+msgid "%s surveys selected"
+msgstr "%s सर्वेक्षणहरू चयन गरियो"
+
+msgid "Clear selection"
+msgstr "चयन खाली गर्नुहोस्"
+
+msgid "No surveys found"
+msgstr "कुनै सर्वेक्षण फेला परेन"
+
+msgid "Unsupported"
+msgstr "असमर्थित"
+
+msgid "Could not load surveys"
+msgstr "सर्वेक्षणहरू लोड गर्न सकिएन"
+
+msgid "Delete selected surveys"
+msgstr "चयन गरिएका सर्वेक्षणहरू मेटाउनुहोस्"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "चयन गरिएका सर्वेक्षणहरू र तिनीहरूका प्रश्नहरू मेटिनेछन्। यो कार्य पूर्ववत गर्न सकिँदैन।"
+
+msgid "Could not delete selected surveys"
+msgstr "चयन गरिएका सर्वेक्षणहरू मेटाउन सकिएन"
+
+msgid "Survey action"
+msgstr "सर्वेक्षण कार्य"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "यस सर्वेक्षणको प्रतिलिपि सिर्जना गरिनेछ: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "यस सर्वेक्षणका लागि सबै उत्तरहरू र निमन्त्रणाहरू मेटिनेछन्: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "यस सर्वेक्षणबाट उत्पन्न गरिएका गुणन प्रश्नहरू हटाइनेछन्: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "यो सर्वेक्षण सम्बन्धित समूहका ट्यूटरहरूलाई प्रकाशित गरिनेछ: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "यो सर्वेक्षण र यसका प्रश्नहरू मेटिनेछन्: %s"
+
+msgid "Could not complete survey action"
+msgstr "सर्वेक्षण कार्य पूरा गर्न सकिएन"
+
+msgid "Not started"
+msgstr "सुरु गरिएको छैन"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "बैठक मतदानले आमन्त्रित प्रयोगकर्ताहरूलाई उनीहरू उपलब्ध हुने मितिहरू चयन गर्न दिन्छ।"
+
+msgid "Back to surveys"
+msgstr "सर्वेक्षणहरूमा फर्कनुहोस्"
+
+msgid "Edit meeting poll"
+msgstr "बैठक मतदान सम्पादन गर्नुहोस्"
+
+msgid "View meeting poll"
+msgstr "बैठक मतदान हेर्नुहोस्"
+
+msgid "Basic information"
+msgstr "आधारभूत जानकारी"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "यसले बैठक मतदान प्रकारको सर्वेक्षण सिर्जना गर्नेछ। उत्तरहरू र निमन्त्रणाहरू अलग रूपमा व्यवस्थापन गरिन्छ।"
+
+msgid "Availability"
+msgstr "उपलब्धता"
+
+msgid "Meeting dates"
+msgstr "बैठक मितिहरू"
+
+msgid "Meeting poll"
+msgstr "बैठक मतदान"
+
+msgid "My availability"
+msgstr "मेरो उपलब्धता"
+
+msgid "Meeting poll results"
+msgstr "बैठक मतदानका नतिजाहरू"
+
+msgid "No invitations found"
+msgstr "कुनै निमन्त्रणा फेला परेन"
+
+msgid "available"
+msgstr "उपलब्ध"
+
+msgid "Could not load meeting poll"
+msgstr "बैठक मतदान लोड गर्न सकिएन"
+
+msgid "Please complete the required fields"
+msgstr "कृपया आवश्यक फिल्डहरू पूरा गर्नुहोस्"
+
+msgid "Could not save meeting poll"
+msgstr "बैठक मतदान बचत गर्न सकिएन"
+
+msgid "Could not save meeting availability"
+msgstr "बैठक उपलब्धता बचत गर्न सकिएन"
+
+msgid "Copy this survey to another course or session"
+msgstr "यो सर्वेक्षण अर्को कोर्स वा सत्रमा प्रतिलिपि गर्नुहोस्"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "सर्वेक्षण उत्तर वा निमन्त्रणाहरू बिना प्रतिलिपि गरिनेछ।"
+
+msgid "No target courses found"
+msgstr "कुनै लक्ष्य कोर्सहरू फेला परेनन्"
+
+msgid "Search by course title, course code or session name."
+msgstr "कोर्स शीर्षक, कोर्स कोड वा सत्र नामद्वारा खोज्नुहोस्।"
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "एउटै कोर्समा प्रतिलिपि चाहिने बेला डुप्लिकेट सर्वेक्षण प्रयोग गर्नुहोस्।"
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "प्रश्नहरू र विकल्पहरू प्रतिलिपि गरिनेछ। उत्तरहरू, निमन्त्रणाहरू र प्रतिवेदनहरू मूल सर्वेक्षणमा मात्र रहनेछन्।"
+
+msgid "Selected target"
+msgstr "चयन गरिएको लक्ष्य"
+
+msgid "Could not load copy form"
+msgstr "प्रतिलिपि फारम लोड गर्न सकिएन"
+
+msgid "The survey will be copied to: %s"
+msgstr "सर्वेक्षण यहाँ प्रतिलिपि गरिनेछ: %s"
+
+msgid "Survey copied."
+msgstr "सर्वेक्षण प्रतिलिपि गरियो।"
+
+msgid "Could not copy survey"
+msgstr "सर्वेक्षण प्रतिलिपि गर्न सकिएन"
+
+msgid "Answer survey"
+msgstr "सर्वेक्षणको उत्तर दिनुहोस्"
+
+msgid "Preview mode does not save answers."
+msgstr "पूर्वावलोकन मोडले उत्तरहरू बचत गर्दैन।"
+
+msgid "Survey completed"
+msgstr "सर्वेक्षण पूरा भयो"
+
+msgid "Thank you for answering the survey."
+msgstr "सर्वेक्षणको उत्तर दिनुभएकोमा धन्यवाद।"
+
+msgid "Profile information"
+msgstr "प्रोफाइल जानकारी"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "सर्वेक्षणको उत्तर दिनुअघि अनुरोध गरिएका प्रोफाइल फिल्डहरू समीक्षा गर्नुहोस्।"
+
+msgid "This profile field is read-only."
+msgstr "यो प्रोफाइल फिल्ड केवल पढ्नका लागि मात्र हो।"
+
+msgid "You already filled this survey."
+msgstr "तपाईंले यो सर्वेक्षण पहिले नै भर्नुभएको छ।"
+
+msgid "Please specify"
+msgstr "कृपया निर्दिष्ट गर्नुहोस्"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "यो प्रश्न प्रकार आधुनिक सर्वेक्षण दृश्यमा समर्थित छैन।"
+
+msgid "Preview only"
+msgstr "पूर्वावलोकन मात्र"
+
+msgid "Submit answers"
+msgstr "उत्तरहरू पेस गर्नुहोस्"
+
+msgid "Could not load survey"
+msgstr "सर्वेक्षण लोड गर्न सकिएन"
+
+msgid "Please complete the required profile fields."
+msgstr "कृपया आवश्यक प्रोफाइल फिल्डहरू पूरा गर्नुहोस्।"
+
+msgid "Please answer all mandatory questions."
+msgstr "कृपया सबै अनिवार्य प्रश्नहरूको उत्तर दिनुहोस्।"
+
+msgid "Could not save survey answers"
+msgstr "सर्वेक्षण उत्तरहरू बचत गर्न सकिएन"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "प्रश्नहरू र निमन्त्रणाहरू व्यवस्थापन गर्नुअघि मुख्य सर्वेक्षण जानकारी कन्फिगर गर्नुहोस्।"
+
+msgid "The survey code cannot be changed after creation."
+msgstr "सर्वेक्षण कोड सिर्जना पछि परिवर्तन गर्न सकिँदैन।"
+
+msgid "Survey behavior"
+msgstr "सर्वेक्षण व्यवहार"
+
+msgid "Use 0 for no time limit."
+msgstr "समय सीमा नराख्न ० प्रयोग गर्नुहोस्।"
+
+msgid "Survey messages"
+msgstr "सर्वेक्षण सन्देशहरू"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "यहाँ चयन गरिएका प्रोफाइल फिल्डहरू सर्वेक्षण प्रश्नहरू अघि देखाइनेछन्।"
+
+msgid "No profile fields are currently available."
+msgstr "हाल कुनै प्रोफाइल फिल्ड उपलब्ध छैन।"
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "प्रोफाइल फिल्ड चयन गैर-अनाम सर्वेक्षणका लागि मात्र उपलब्ध छ।"
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "सीप लिङ्केज समर्पित ब्याचमा माइग्रेट गरिनेछ।"
+
+msgid "Could not load survey configuration"
+msgstr "सर्वेक्षण कन्फिगरेसन लोड गर्न सकिएन"
+
+msgid "The survey code is required."
+msgstr "सर्वेक्षण कोड आवश्यक छ।"
+
+msgid "The survey title is required."
+msgstr "सर्वेक्षण शीर्षक आवश्यक छ।"
+
+msgid "The survey has been saved successfully"
+msgstr "सर्वेक्षण सफलतापूर्वक बचत गरिएको छ"
+
+msgid "Could not save survey configuration"
+msgstr "सर्वेक्षण कन्फिगरेसन बचत गर्न सकिएन"
+
+msgid "Course users"
+msgstr "पाठ्यक्रम प्रयोगकर्ताहरू"
+
+msgid "Already invited"
+msgstr "पहिले नै निमन्त्रणा गरिएको"
+
+msgid "No users found"
+msgstr "कुनै प्रयोगकर्ता फेला परेन"
+
+msgid "No groups found"
+msgstr "कुनै समूह फेला परेन"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "सर्वेक्षण लिङ्क देखिनुपर्ने ठाउँमा **link** प्रयोग गर्नुहोस्।"
+
+msgid "Remind all selected users"
+msgstr "चयन गरिएका सबै प्रयोगकर्ताहरूलाई सम्झाउनुहोस्"
+
+msgid "Anonymous access link"
+msgstr "अनाम पहुँच लिङ्क"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "निमन्त्रणा नगरिएका प्रयोगकर्ताहरूले सर्वेक्षण लिन यो लिङ्क प्रयोग गर्न सक्छन्।"
+
+msgid "Answered anonymously"
+msgstr "अनाम रूपमा उत्तर दिइयो"
+
+msgid "Could not load survey invitations"
+msgstr "सर्वेक्षण निमन्त्रणाहरू लोड गर्न सकिएन"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "मेल पठाउँदा मेल विषय र सन्देश आवश्यक छ।"
+
+msgid "Could not publish survey"
+msgstr "सर्वेक्षण प्रकाशित गर्न सकिएन"
+
+msgid "Could not copy the link"
+msgstr "लिङ्क प्रतिलिपि गर्न सकिएन"
+
+msgid "Please answer this survey using the following link"
+msgstr "कृपया निम्न लिङ्क प्रयोग गरी यो सर्वेक्षणको उत्तर दिनुहोस्"
+
+msgid "Export CSV"
+msgstr "CSV निर्यात गर्नुहोस्"
+
+msgid "Export compact CSV"
+msgstr "संक्षिप्त CSV निर्यात गर्नुहोस्"
+
+msgid "Export Excel"
+msgstr "Excel निर्यात गर्नुहोस्"
+
+msgid "Export package"
+msgstr "प्याकेज निर्यात गर्नुहोस्"
+
+msgid "Results summary"
+msgstr "नतिजा सारांश"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "यो दृश्यले यस सर्वेक्षणको माइग्रेट गरिएको रिपोर्टिङ डाटा देखाउँछ।"
+
+msgid "Select user"
+msgstr "प्रयोगकर्ता चयन गर्नुहोस्"
+
+msgid "No answers found"
+msgstr "कुनै उत्तर फेला परेन"
+
+msgid "answers"
+msgstr "उत्तरहरू"
+
+msgid "Could not load survey reporting"
+msgstr "सर्वेक्षण रिपोर्टिङ लोड गर्न सकिएन"
+
+msgid "Back to threads"
+msgstr "थ्रेडहरूमा फर्कनुहोस्"
+
+msgid "Back to learning path"
+msgstr "सिकाइ मार्गमा फर्कनुहोस्"
+
+msgid "Remove sticky"
+msgstr "स्टिकी हटाउनुहोस्"
+
+msgid "Make sticky"
+msgstr "स्टिकी बनाउनुहोस्"
+
+msgid "Open thread"
+msgstr "थ्रेड खोल्नुहोस्"
+
+msgid "Close thread"
+msgstr "थ्रेड बन्द गर्नुहोस्"
+
+msgid "Delete thread"
+msgstr "थ्रेड मेटाउनुहोस्"
+
+msgid "This thread is hidden from learners."
+msgstr "यो थ्रेड शिक्षार्थीहरूबाट लुकाइएको छ।"
+
+msgid "Revision requested"
+msgstr "संशोधन अनुरोध गरिएको"
+
+msgid "Revision"
+msgstr "संशोधन"
+
+msgid "Approve post"
+msgstr "पोस्ट स्वीकृत गर्नुहोस्"
+
+msgid "Reject post"
+msgstr "पोस्ट अस्वीकृत गर्नुहोस्"
+
+msgid "Cancel revision request"
+msgstr "संशोधन अनुरोध रद्द गर्नुहोस्"
+
+msgid "Delete post"
+msgstr "पोस्ट मेटाउनुहोस्"
+
+msgid "Message is required"
+msgstr "सन्देश आवश्यक छ"
+
+msgid "Target thread is required"
+msgstr "लक्ष्य थ्रेड आवश्यक छ"
+
+msgid "Could not retrieve posts"
+msgstr "पोस्टहरू प्राप्त गर्न सकिएन"
+
+msgid "Thread shown"
+msgstr "थ्रेड देखाइयो"
+
+msgid "Thread hidden"
+msgstr "थ्रेड लुकाइयो"
+
+msgid "Could not update thread"
+msgstr "थ्रेड अद्यावधिक गर्न सकिएन"
+
+msgid "Thread closed"
+msgstr "थ्रेड बन्द गरियो"
+
+msgid "Thread opened"
+msgstr "थ्रेड खोलियो"
+
+msgid "Thread marked as sticky"
+msgstr "थ्रेड स्टिकीको रूपमा चिन्हित गरियो"
+
+msgid "Thread unmarked as sticky"
+msgstr "थ्रेड स्टिकीको रूपमा चिन्ह हटाइयो"
+
+msgid "Thread notifications enabled"
+msgstr "थ्रेड सूचनाहरू सक्षम गरियो"
+
+msgid "Thread notifications disabled"
+msgstr "थ्रेड सूचनाहरू असक्षम गरियो"
+
+msgid "Could not update thread notification"
+msgstr "थ्रेड सूचना अद्यावधिक गर्न सकिएन"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "के तपाईं यो थ्रेड मेटाउन निश्चित हुनुहुन्छ?"
+
+msgid "Could not delete thread"
+msgstr "थ्रेड मेटाउन सकिएन"
+
+msgid "Post approved"
+msgstr "पोस्ट स्वीकृत गरियो"
+
+msgid "Could not approve post"
+msgstr "पोस्ट स्वीकृत गर्न सकिएन"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "के तपाईं यो पोस्ट अस्वीकृत गर्न निश्चित हुनुहुन्छ?"
+
+msgid "Post rejected"
+msgstr "पोस्ट अस्वीकृत गरियो"
+
+msgid "Could not reject post"
+msgstr "पोस्ट अस्वीकृत गर्न सकिएन"
+
+msgid "Post shown"
+msgstr "पोस्ट देखाइयो"
+
+msgid "Post hidden"
+msgstr "पोस्ट लुकाइयो"
+
+msgid "Could not update post"
+msgstr "पोस्ट अद्यावधिक गर्न सकिएन"
+
+msgid "Post updated"
+msgstr "पोस्ट अद्यावधिक गरियो"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "के तपाईं यो पोस्ट मेटाउन निश्चित हुनुहुन्छ?"
+
+msgid "Post deleted"
+msgstr "पोस्ट मेटाइयो"
+
+msgid "Could not delete post"
+msgstr "पोस्ट मेटाउन सकिएन"
+
+msgid "Untitled thread"
+msgstr "शीर्षकविहीन थ्रेड"
+
+msgid "Could not retrieve threads"
+msgstr "थ्रेडहरू प्राप्त गर्न सकिएन"
+
+msgid "Post moved"
+msgstr "पोस्ट सारियो"
+
+msgid "Could not move post"
+msgstr "पोस्ट सार्न सकिएन"
+
+msgid "Revision request removed"
+msgstr "संशोधन अनुरोध हटाइयो"
+
+msgid "Could not update revision request"
+msgstr "संशोधन अनुरोध अद्यावधिक गर्न सकिएन"
+
+msgid "Are you sure you want to report this post?"
+msgstr "के तपाईं यो पोस्ट रिपोर्ट गर्न निश्चित हुनुहुन्छ?"
+
+msgid "Could not report post"
+msgstr "पोस्ट रिपोर्ट गर्न सकिएन"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "के तपाईं यो संलग्नक मेटाउन निश्चित हुनुहुन्छ?"
+
+msgid "Attachment deleted"
+msgstr "संलग्नक मेटाइयो"
+
+msgid "Could not delete attachment"
+msgstr "संलग्नक मेटाउन सकिएन"
+
+msgid "Thread title"
+msgstr "थ्रेड शीर्षक"
+
+msgid "Sticky thread"
+msgstr "स्टिकी थ्रेड"
+
+msgid "Attach files"
+msgstr "फाइलहरू संलग्न गर्नुहोस्"
+
+msgid "Attachments are disabled for this forum"
+msgstr "यो फोरमका लागि संलग्नकहरू असक्षम गरिएका छन्"
+
+msgid "The forum is not open yet."
+msgstr "फोरम अझै खुला भएको छैन।"
+
+msgid "The forum is closed."
+msgstr "फोरम बन्द गरिएको छ।"
+
+msgid "The forum is locked."
+msgstr "फोरम ताल्चा लगाइएको छ।"
+
+msgid "New threads are not allowed in this forum."
+msgstr "यो फोरममा नयाँ थ्रेडहरू अनुमति छैन।"
+
+msgid "Thread created"
+msgstr "थ्रेड सिर्जना गरियो"
+
+msgid "Could not create thread"
+msgstr "थ्रेड सिर्जना गर्न सकिएन"
+
+msgid "Back to posts"
+msgstr "पोस्टहरूमा फर्कनुहोस्"
+
+msgid "This reply will be stored as a revision."
+msgstr "यो जवाफ संशोधनको रूपमा भण्डारण गरिनेछ।"
+
+msgid "Post reply"
+msgstr "जवाफ पठाउनुहोस्"
+
+msgid "The thread is locked."
+msgstr "थ्रेड ताल्चा लगाइएको छ।"
+
+msgid "Reply added"
+msgstr "जवाफ थपियो"
+
+msgid "Could not add reply"
+msgstr "जवाफ थप्न सकिएन"
+
+msgid "Add forum"
+msgstr "फोरम थप्नुहोस्"
+
+msgid "No forums found"
+msgstr "कुनै फोरम फेला परेन"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "छलफल सुरु गर्न आफ्नो पहिलो फोरम कोटि वा फोरम सिर्जना गर्नुहोस्।"
+
+msgid "Locked"
+msgstr "ताल्चा लगाइएको"
+
+msgid "No forums in this category"
+msgstr "यो कोटिमा कुनै फोरम छैन"
+
+msgid "Posts require approval"
+msgstr "पोस्टहरूलाई स्वीकृति आवश्यक छ"
+
+msgid "Forum for current group"
+msgstr "हालको समूहका लागि फोरम"
+
+msgid "Group forum visibility"
+msgstr "समूह फोरम दृश्यता"
+
+msgid "No category"
+msgstr "कुनै कोटि छैन"
+
+msgid "Could not retrieve forums"
+msgstr "फोरमहरू प्राप्त गर्न सकिएन"
+
+msgid "Forum category updated"
+msgstr "फोरम कोटि अद्यावधिक गरियो"
+
+msgid "Forum category created"
+msgstr "फोरम कोटि सिर्जना गरियो"
+
+msgid "Could not save forum category"
+msgstr "फोरम कोटि बचत गर्न सकिएन"
+
+msgid "Forum updated"
+msgstr "फोरम अद्यावधिक गरियो"
+
+msgid "Forum created"
+msgstr "फोरम सिर्जना गरियो"
+
+msgid "Could not save forum"
+msgstr "फोरम बचत गर्न सकिएन"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "के तपाईं यो फोरम कोटि मेटाउन निश्चित हुनुहुन्छ?"
+
+msgid "Could not delete forum category"
+msgstr "फोरम कोटि मेटाउन सकिएन"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "के तपाईं यो फोरम मेटाउन निश्चित हुनुहुन्छ?"
+
+msgid "Could not delete forum"
+msgstr "फोरम मेटाउन सकिएन"
+
+msgid "Forum category unlocked"
+msgstr "फोरम कोटि ताल्चा खोलियो"
+
+msgid "Forum category locked"
+msgstr "फोरम कोटि ताल्चा लगाइयो"
+
+msgid "Could not update forum category"
+msgstr "फोरम कोटि अद्यावधिक गर्न सकिएन"
+
+msgid "Forum category shown"
+msgstr "फोरम कोटि देखाइयो"
+
+msgid "Forum category hidden"
+msgstr "फोरम कोटि लुकाइयो"
+
+msgid "Forum unlocked"
+msgstr "फोरम ताल्चा खोलियो"
+
+msgid "Forum locked"
+msgstr "फोरम ताल्चा लगाइयो"
+
+msgid "Could not update forum"
+msgstr "फोरम अद्यावधिक गर्न सकिएन"
+
+msgid "Forum shown"
+msgstr "फोरम देखाइयो"
+
+msgid "Forum hidden"
+msgstr "फोरम लुकाइयो"
+
+msgid "Forum notifications enabled"
+msgstr "फोरम सूचनाहरू सक्षम गरियो"
+
+msgid "Forum notifications disabled"
+msgstr "फोरम सूचनाहरू असक्षम गरियो"
+
+msgid "Could not update forum notification"
+msgstr "फोरम सूचना अद्यावधिक गर्न सकिएन"
+
+msgid "Forum category moved"
+msgstr "फोरम कोटि सारियो"
+
+msgid "Could not move forum category"
+msgstr "फोरम कोटि सार्न सकिएन"
+
+msgid "Forum moved"
+msgstr "फोरम सारियो"
+
+msgid "Could not move forum"
+msgstr "फोरम सार्न सकिएन"
+
+msgid "Back to forums"
+msgstr "फोरममा फर्कनुहोस्"
+
+msgid "New thread"
+msgstr "नयाँ थ्रेड"
+
+msgid "No threads found"
+msgstr "कुनै थ्रेड फेला परेन"
+
+msgid "Sticky"
+msgstr "स्टिकी"
+
+msgid "Graded"
+msgstr "ग्रेड गरिएको"
+
+msgid "Grade peers"
+msgstr "साथीहरूलाई ग्रेड गर्नुहोस्"
+
+msgid "Move thread"
+msgstr "थ्रेड सार्नुहोस्"
+
+msgid "Target forum"
+msgstr "लक्ष्य फोरम"
+
+msgid "Target forum is required"
+msgstr "लक्ष्य फोरम आवश्यक छ"
+
+msgid "Students"
+msgstr "विद्यार्थीहरू"
+
+msgid "No students found"
+msgstr "कुनै विद्यार्थी फेला परेन"
+
+msgid "No peers available to grade."
+msgstr "ग्रेड गर्न कुनै साथी उपलब्ध छैन।"
+
+msgid "Qualified"
+msgstr "योग्य"
+
+msgid "Not qualified"
+msgstr "योग्य छैन"
+
+msgid "Could not retrieve thread grading"
+msgstr "थ्रेड ग्रेडिङ पुनःप्राप्त गर्न सकिएन"
+
+msgid "Thread grading updated"
+msgstr "थ्रेड ग्रेडिङ अद्यावधिक गरियो"
+
+msgid "Could not update thread grading"
+msgstr "थ्रेड ग्रेडिङ अद्यावधिक गर्न सकिएन"
+
+msgid "Thread score saved"
+msgstr "थ्रेड स्कोर बचत गरियो"
+
+msgid "Could not save thread score"
+msgstr "थ्रेड स्कोर बचत गर्न सकिएन"
+
+msgid "Could not move thread"
+msgstr "थ्रेड सार्न सकिएन"
+
+msgid "Thread updated"
+msgstr "थ्रेड अद्यावधिक गरियो"
+
+msgid "Search term is too short"
+msgstr "खोज शब्द धेरै छोटो छ"
+
+msgid "Could not search forums"
+msgstr "फोरम खोज्न सकिएन"
+
+msgid "Moderated"
+msgstr "मध्यस्थ गरिएको"
+
+msgid "View threads"
+msgstr "थ्रेडहरू हेर्नुहोस्"
+

@@ -14663,7 +14663,7 @@ msgid "Enable button bars extended when the WYSIWYG editor is maximized"
 msgstr "Povoliť tlačidlo rozšírené, pokiaľ je editor WYSIWYG maximalizovaný"
 
 msgid "HTML Editor"
-msgstr "HTML editor"
+msgstr "HTML Editor"
 
 msgid "Go directly to the course after login"
 msgstr "Priamo prejdite do kurzu po prihlásení"
@@ -35736,4 +35736,763 @@ msgstr "Hodnotenie nebolo možné vytvoriť"
 
 msgid "The gradebook evaluation could not be linked"
 msgstr "Hodnotenie klasifikácie nebolo možné prepojiť"
+
+msgid "Survey questions"
+msgstr "Otázky prieskumu"
+
+msgid "Back to survey list"
+msgstr "Späť na zoznam prieskumov"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "Tento prieskum už obsahuje odpovede. Úprava otázok je zakázaná konfiguráciou."
+
+msgid "Choose the type of question you want to add."
+msgstr "Vyberte typ otázky, ktorú chcete pridať."
+
+msgid "The free text option is added automatically."
+msgstr "Možnosť voľného textu sa pridá automaticky."
+
+msgid "No questions found"
+msgstr "Nenašli sa žiadne otázky"
+
+msgid "Mandatory"
+msgstr "Povinné"
+
+msgid "Unsupported question type"
+msgstr "Nepodporovaný typ otázky"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "V otázke môžete použiť značky {%s} a {%s}."
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "Táto otázka sa zobrazuje podmienečne pri vyplňovaní prieskumu."
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "Percentuálne možnosti od 1 do 100 sa generujú automaticky."
+
+msgid "Could not load survey questions"
+msgstr "Nepodarilo sa načítať otázky prieskumu"
+
+msgid "The question text is required."
+msgstr "Text otázky je povinný."
+
+msgid "The maximum score is required."
+msgstr "Maximálne skóre je povinné."
+
+msgid "Please select a parent option."
+msgstr "Vyberte rodičovskú možnosť."
+
+msgid "Please fill all answer options."
+msgstr "Vyplňte všetky možnosti odpovedí."
+
+msgid "QuestionUpdated"
+msgstr "QuestionUpdated"
+
+msgid "Could not save survey question"
+msgstr "Nepodarilo sa uložiť otázku prieskumu"
+
+msgid "Could not delete survey question"
+msgstr "Nepodarilo sa odstrániť otázku prieskumu"
+
+msgid "Could not move survey question"
+msgstr "Nepodarilo sa presunúť otázku prieskumu"
+
+msgid "Could not copy survey question"
+msgstr "Nepodarilo sa skopírovať otázku prieskumu"
+
+msgid "Hide search"
+msgstr "Skryť vyhľadávanie"
+
+msgid "Showing results for: %s"
+msgstr "Zobrazujú sa výsledky pre: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "Vyhľadávanie podľa názvu, kódu alebo popisu prieskumu."
+
+msgid "Search surveys"
+msgstr "Vyhľadať prieskumy"
+
+msgid "%s surveys selected"
+msgstr "Vybrané prieskumy: %s"
+
+msgid "Clear selection"
+msgstr "Zrušiť výber"
+
+msgid "No surveys found"
+msgstr "Nenašli sa žiadne prieskumy"
+
+msgid "Unsupported"
+msgstr "Nepodporované"
+
+msgid "Could not load surveys"
+msgstr "Nepodarilo sa načítať prieskumy"
+
+msgid "Delete selected surveys"
+msgstr "Odstrániť vybrané prieskumy"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "Vybrané prieskumy a ich otázky budú odstránené. Túto akciu nie je možné vrátiť späť."
+
+msgid "Could not delete selected surveys"
+msgstr "Nepodarilo sa odstrániť vybrané prieskumy"
+
+msgid "Survey action"
+msgstr "Akcia prieskumu"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "Vytvorí sa kópia tohto prieskumu: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "Všetky odpovede a pozvánky budú odstránené pre tento prieskum: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "Vygenerované násobené otázky budú odstránené z tohto prieskumu: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "Tento prieskum bude zverejnený pre prepojených tútorov skupiny: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "Tento prieskum a jeho otázky budú odstránené: %s"
+
+msgid "Could not complete survey action"
+msgstr "Nepodarilo sa dokončiť akciu prieskumu"
+
+msgid "Not started"
+msgstr "Nespustené"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "Ankety o stretnutiach umožňujú pozvaným používateľom vybrať dátumy, kedy sú dostupní."
+
+msgid "Back to surveys"
+msgstr "Späť na prieskumy"
+
+msgid "Edit meeting poll"
+msgstr "Upraviť anketu o stretnutí"
+
+msgid "View meeting poll"
+msgstr "Zobraziť anketu o stretnutí"
+
+msgid "Basic information"
+msgstr "Základné informácie"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "Týmto sa vytvorí prieskum typu anketa o stretnutí. Odpovede a pozvánky sa spracúvajú samostatne."
+
+msgid "Availability"
+msgstr "Dostupnosť"
+
+msgid "Meeting dates"
+msgstr "Dátumy stretnutí"
+
+msgid "Meeting poll"
+msgstr "Anketa o stretnutí"
+
+msgid "My availability"
+msgstr "Moja dostupnosť"
+
+msgid "Meeting poll results"
+msgstr "Výsledky ankety o stretnutí"
+
+msgid "No invitations found"
+msgstr "Nenašli sa žiadne pozvánky"
+
+msgid "available"
+msgstr "dostupný"
+
+msgid "Could not load meeting poll"
+msgstr "Nepodarilo sa načítať anketu o stretnutí"
+
+msgid "Please complete the required fields"
+msgstr "Vyplňte povinné polia"
+
+msgid "Could not save meeting poll"
+msgstr "Nepodarilo sa uložiť anketu o stretnutí"
+
+msgid "Could not save meeting availability"
+msgstr "Nepodarilo sa uložiť dostupnosť na stretnutie"
+
+msgid "Copy this survey to another course or session"
+msgstr "Kopírovať tento prieskum do iného kurzu alebo relácie"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "Prieskum bude skopírovaný bez odpovedí alebo pozvánok."
+
+msgid "No target courses found"
+msgstr "Nenašli sa žiadne cieľové kurzy"
+
+msgid "Search by course title, course code or session name."
+msgstr "Vyhľadávanie podľa názvu kurzu, kódu kurzu alebo názvu relácie."
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "Použite Duplikovať prieskum, ak chcete kópiu v rovnakom kurze."
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "Otázky a možnosti budú skopírované. Odpovede, pozvánky a správy zostanú len v pôvodnom prieskume."
+
+msgid "Selected target"
+msgstr "Vybraný cieľ"
+
+msgid "Could not load copy form"
+msgstr "Nepodarilo sa načítať formulár na kopírovanie"
+
+msgid "The survey will be copied to: %s"
+msgstr "Prieskum bude skopírovaný do: %s"
+
+msgid "Survey copied."
+msgstr "Prieskum bol skopírovaný."
+
+msgid "Could not copy survey"
+msgstr "Prieskum sa nepodarilo skopírovať."
+
+msgid "Answer survey"
+msgstr "Vyplniť prieskum"
+
+msgid "Preview mode does not save answers."
+msgstr "V režime náhľadu sa odpovede neukladajú."
+
+msgid "Survey completed"
+msgstr "Prieskum dokončený"
+
+msgid "Thank you for answering the survey."
+msgstr "Ďakujeme za vyplnenie prieskumu."
+
+msgid "Profile information"
+msgstr "Profilové informácie"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "Pred vyplnením prieskumu skontrolujte požadované profilové polia."
+
+msgid "This profile field is read-only."
+msgstr "Toto profilové pole je iba na čítanie."
+
+msgid "You already filled this survey."
+msgstr "Tento prieskum ste už vyplnili."
+
+msgid "Please specify"
+msgstr "Uveďte prosím"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "Tento typ otázky nie je podporovaný v modernom zobrazení prieskumu."
+
+msgid "Preview only"
+msgstr "Iba náhľad"
+
+msgid "Submit answers"
+msgstr "Odoslať odpovede"
+
+msgid "Could not load survey"
+msgstr "Prieskum sa nepodarilo načítať"
+
+msgid "Please complete the required profile fields."
+msgstr "Vyplňte prosím požadované profilové polia."
+
+msgid "Please answer all mandatory questions."
+msgstr "Odpovedzte prosím na všetky povinné otázky."
+
+msgid "Could not save survey answers"
+msgstr "Odpovede na prieskum sa nepodarilo uložiť"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "Pred správou otázok a pozvánok nakonfigurujte hlavné informácie o prieskume."
+
+msgid "The survey code cannot be changed after creation."
+msgstr "Kód prieskumu nie je možné po vytvorení zmeniť."
+
+msgid "Survey behavior"
+msgstr "Správanie prieskumu"
+
+msgid "Use 0 for no time limit."
+msgstr "Pre bez časového obmedzenia použite 0."
+
+msgid "Survey messages"
+msgstr "Správy prieskumu"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "Profilové polia vybrané tu sa zobrazia pred otázkami prieskumu."
+
+msgid "No profile fields are currently available."
+msgstr "Momentálne nie sú dostupné žiadne profilové polia."
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "Výber profilových polí je dostupný iba pre neanonymné prieskumy."
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "Prepojenie zručností bude migrované v samostatnej dávke."
+
+msgid "Could not load survey configuration"
+msgstr "Konfiguráciu prieskumu sa nepodarilo načítať"
+
+msgid "The survey code is required."
+msgstr "Kód prieskumu je povinný."
+
+msgid "The survey title is required."
+msgstr "Názov prieskumu je povinný."
+
+msgid "The survey has been saved successfully"
+msgstr "Prieskum bol úspešne uložený"
+
+msgid "Could not save survey configuration"
+msgstr "Konfiguráciu prieskumu sa nepodarilo uložiť"
+
+msgid "Course users"
+msgstr "Používatelia kurzu"
+
+msgid "Already invited"
+msgstr "Už pozvaní"
+
+msgid "No users found"
+msgstr "Nenašli sa žiadni používatelia"
+
+msgid "No groups found"
+msgstr "Nenašli sa žiadne skupiny"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "Použite **link**, kde sa má zobraziť odkaz na prieskum."
+
+msgid "Remind all selected users"
+msgstr "Pripomenúť všetkým vybraným používateľom"
+
+msgid "Anonymous access link"
+msgstr "Anonymný prístupový odkaz"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "Používatelia, ktorí nie sú pozvaní, môžu tento odkaz použiť na vyplnenie prieskumu."
+
+msgid "Answered anonymously"
+msgstr "Odpovedané anonymne"
+
+msgid "Could not load survey invitations"
+msgstr "Pozvánky na prieskum sa nepodarilo načítať"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "Pri odosielaní e-mailu je vyžadovaný predmet a text správy."
+
+msgid "Could not publish survey"
+msgstr "Prieskum sa nepodarilo zverejniť"
+
+msgid "Could not copy the link"
+msgstr "Odkaz sa nepodarilo skopírovať"
+
+msgid "Please answer this survey using the following link"
+msgstr "Vyplňte tento prieskum pomocou nasledujúceho odkazu"
+
+msgid "Export CSV"
+msgstr "Exportovať CSV"
+
+msgid "Export compact CSV"
+msgstr "Exportovať kompaktné CSV"
+
+msgid "Export Excel"
+msgstr "Exportovať Excel"
+
+msgid "Export package"
+msgstr "Exportovať balík"
+
+msgid "Results summary"
+msgstr "Zhrnutie výsledkov"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "Toto zobrazenie zobrazuje migrované údaje o výsledkoch tohto prieskumu."
+
+msgid "Select user"
+msgstr "Vybrať používateľa"
+
+msgid "No answers found"
+msgstr "Nenašli sa žiadne odpovede"
+
+msgid "answers"
+msgstr "odpovede"
+
+msgid "Could not load survey reporting"
+msgstr "Nepodarilo sa načítať výsledky prieskumu"
+
+msgid "Back to threads"
+msgstr "Späť na vlákna"
+
+msgid "Back to learning path"
+msgstr "Späť na vzdelávaciu cestu"
+
+msgid "Remove sticky"
+msgstr "Odstrániť pripnutie"
+
+msgid "Make sticky"
+msgstr "Pripnúť"
+
+msgid "Open thread"
+msgstr "Otvoriť vlákno"
+
+msgid "Close thread"
+msgstr "Zavrieť vlákno"
+
+msgid "Delete thread"
+msgstr "Odstrániť vlákno"
+
+msgid "This thread is hidden from learners."
+msgstr "Toto vlákno je pre študentov skryté."
+
+msgid "Revision requested"
+msgstr "Požadovaná revízia"
+
+msgid "Revision"
+msgstr "Revízia"
+
+msgid "Approve post"
+msgstr "Schváliť príspevok"
+
+msgid "Reject post"
+msgstr "Odmietnuť príspevok"
+
+msgid "Cancel revision request"
+msgstr "Zrušiť požiadavku na revíziu"
+
+msgid "Delete post"
+msgstr "Odstrániť príspevok"
+
+msgid "Message is required"
+msgstr "Správa je povinná"
+
+msgid "Target thread is required"
+msgstr "Cieľové vlákno je povinné"
+
+msgid "Could not retrieve posts"
+msgstr "Nepodarilo sa načítať príspevky"
+
+msgid "Thread shown"
+msgstr "Vlákno zobrazené"
+
+msgid "Thread hidden"
+msgstr "Vlákno skryté"
+
+msgid "Could not update thread"
+msgstr "Nepodarilo sa aktualizovať vlákno"
+
+msgid "Thread closed"
+msgstr "Vlákno uzavreté"
+
+msgid "Thread opened"
+msgstr "Vlákno otvorené"
+
+msgid "Thread marked as sticky"
+msgstr "Vlákno označené ako pripnuté"
+
+msgid "Thread unmarked as sticky"
+msgstr "Vlákno odznačené ako pripnuté"
+
+msgid "Thread notifications enabled"
+msgstr "Upozornenia na vlákno povolené"
+
+msgid "Thread notifications disabled"
+msgstr "Upozornenia na vlákno zakázané"
+
+msgid "Could not update thread notification"
+msgstr "Nepodarilo sa aktualizovať upozornenie na vlákno"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "Naozaj chcete odstrániť toto vlákno?"
+
+msgid "Could not delete thread"
+msgstr "Nepodarilo sa odstrániť vlákno"
+
+msgid "Post approved"
+msgstr "Príspevok schválený"
+
+msgid "Could not approve post"
+msgstr "Nepodarilo sa schváliť príspevok"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "Naozaj chcete odmietnuť tento príspevok?"
+
+msgid "Post rejected"
+msgstr "Príspevok odmietnutý"
+
+msgid "Could not reject post"
+msgstr "Nepodarilo sa odmietnuť príspevok"
+
+msgid "Post shown"
+msgstr "Príspevok zobrazený"
+
+msgid "Post hidden"
+msgstr "Príspevok skrytý"
+
+msgid "Could not update post"
+msgstr "Nepodarilo sa aktualizovať príspevok"
+
+msgid "Post updated"
+msgstr "Príspevok aktualizovaný"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "Naozaj chcete odstrániť tento príspevok?"
+
+msgid "Post deleted"
+msgstr "Príspevok odstránený"
+
+msgid "Could not delete post"
+msgstr "Nepodarilo sa odstrániť príspevok"
+
+msgid "Untitled thread"
+msgstr "Vlákno bez názvu"
+
+msgid "Could not retrieve threads"
+msgstr "Nepodarilo sa načítať vlákna"
+
+msgid "Post moved"
+msgstr "Príspevok presunutý"
+
+msgid "Could not move post"
+msgstr "Príspevok sa nepodarilo presunúť"
+
+msgid "Revision request removed"
+msgstr "Žiadosť o revíziu odstránená"
+
+msgid "Could not update revision request"
+msgstr "Žiadosť o revíziu sa nepodarilo aktualizovať"
+
+msgid "Are you sure you want to report this post?"
+msgstr "Naozaj chcete nahlásiť tento príspevok?"
+
+msgid "Could not report post"
+msgstr "Príspevok sa nepodarilo nahlásiť"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "Naozaj chcete odstrániť túto prílohu?"
+
+msgid "Attachment deleted"
+msgstr "Príloha odstránená"
+
+msgid "Could not delete attachment"
+msgstr "Prílohu sa nepodarilo odstrániť"
+
+msgid "Thread title"
+msgstr "Názov vlákna"
+
+msgid "Sticky thread"
+msgstr "Pripnuté vlákno"
+
+msgid "Attach files"
+msgstr "Priložiť súbory"
+
+msgid "Attachments are disabled for this forum"
+msgstr "Prílohy sú pre toto fórum zakázané"
+
+msgid "The forum is not open yet."
+msgstr "Fórum ešte nie je otvorené."
+
+msgid "The forum is closed."
+msgstr "Fórum je zatvorené."
+
+msgid "The forum is locked."
+msgstr "Fórum je uzamknuté."
+
+msgid "New threads are not allowed in this forum."
+msgstr "V tomto fóriu nie je možné vytvárať nové vlákna."
+
+msgid "Thread created"
+msgstr "Vlákno vytvorené"
+
+msgid "Could not create thread"
+msgstr "Vlákno sa nepodarilo vytvoriť"
+
+msgid "Back to posts"
+msgstr "Späť na príspevky"
+
+msgid "This reply will be stored as a revision."
+msgstr "Táto odpoveď bude uložená ako revízia."
+
+msgid "Post reply"
+msgstr "Odpovedať na príspevok"
+
+msgid "The thread is locked."
+msgstr "Vlákno je uzamknuté."
+
+msgid "Reply added"
+msgstr "Odpoveď pridaná"
+
+msgid "Could not add reply"
+msgstr "Odpoveď sa nepodarilo pridať"
+
+msgid "Add forum"
+msgstr "Pridať fórum"
+
+msgid "No forums found"
+msgstr "Nenašli sa žiadne fóra"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "Vytvorte svoju prvú kategóriu fóra alebo fórum a začnite diskusie."
+
+msgid "Locked"
+msgstr "Uzamknuté"
+
+msgid "No forums in this category"
+msgstr "V tejto kategórii nie sú žiadne fóra"
+
+msgid "Posts require approval"
+msgstr "Príspevky vyžadujú schválenie"
+
+msgid "Forum for current group"
+msgstr "Fórum pre aktuálnu skupinu"
+
+msgid "Group forum visibility"
+msgstr "Viditeľnosť skupinového fóra"
+
+msgid "No category"
+msgstr "Bez kategórie"
+
+msgid "Could not retrieve forums"
+msgstr "Fóra sa nepodarilo načítať"
+
+msgid "Forum category updated"
+msgstr "Kategória fóra aktualizovaná"
+
+msgid "Forum category created"
+msgstr "Kategória fóra vytvorená"
+
+msgid "Could not save forum category"
+msgstr "Kategóriu fóra sa nepodarilo uložiť"
+
+msgid "Forum updated"
+msgstr "Fórum aktualizované"
+
+msgid "Forum created"
+msgstr "Fórum vytvorené"
+
+msgid "Could not save forum"
+msgstr "Fórum sa nepodarilo uložiť"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "Naozaj chcete odstrániť túto kategóriu fóra?"
+
+msgid "Could not delete forum category"
+msgstr "Kategóriu fóra sa nepodarilo odstrániť"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "Naozaj chcete odstrániť toto fórum?"
+
+msgid "Could not delete forum"
+msgstr "Fórum sa nepodarilo odstrániť"
+
+msgid "Forum category unlocked"
+msgstr "Kategória fóra odomknutá"
+
+msgid "Forum category locked"
+msgstr "Kategória fóra uzamknutá"
+
+msgid "Could not update forum category"
+msgstr "Kategóriu fóra sa nepodarilo aktualizovať"
+
+msgid "Forum category shown"
+msgstr "Kategória fóra zobrazená"
+
+msgid "Forum category hidden"
+msgstr "Kategória fóra skrytá"
+
+msgid "Forum unlocked"
+msgstr "Fórum odomknuté"
+
+msgid "Forum locked"
+msgstr "Fórum zamknuté"
+
+msgid "Could not update forum"
+msgstr "Fórum sa nepodarilo aktualizovať"
+
+msgid "Forum shown"
+msgstr "Fórum zobrazené"
+
+msgid "Forum hidden"
+msgstr "Fórum skryté"
+
+msgid "Forum notifications enabled"
+msgstr "Upozornenia fóra povolené"
+
+msgid "Forum notifications disabled"
+msgstr "Upozornenia fóra zakázané"
+
+msgid "Could not update forum notification"
+msgstr "Upozornenie fóra sa nepodarilo aktualizovať"
+
+msgid "Forum category moved"
+msgstr "Kategória fóra presunutá"
+
+msgid "Could not move forum category"
+msgstr "Kategóriu fóra sa nepodarilo presunúť"
+
+msgid "Forum moved"
+msgstr "Fórum presunuté"
+
+msgid "Could not move forum"
+msgstr "Fórum sa nepodarilo presunúť"
+
+msgid "Back to forums"
+msgstr "Späť na fóra"
+
+msgid "New thread"
+msgstr "Nová téma"
+
+msgid "No threads found"
+msgstr "Nenašli sa žiadne témy"
+
+msgid "Sticky"
+msgstr "Pripnuté"
+
+msgid "Graded"
+msgstr "Hodnotené"
+
+msgid "Grade peers"
+msgstr "Hodnotiť spolužiakov"
+
+msgid "Move thread"
+msgstr "Presunúť tému"
+
+msgid "Target forum"
+msgstr "Cieľové fórum"
+
+msgid "Target forum is required"
+msgstr "Cieľové fórum je povinné"
+
+msgid "Students"
+msgstr "Študenti"
+
+msgid "No students found"
+msgstr "Nenašli sa žiadni študenti"
+
+msgid "No peers available to grade."
+msgstr "Nie sú dostupní žiadni spolužiaci na hodnotenie."
+
+msgid "Qualified"
+msgstr "Kvalifikovaný"
+
+msgid "Not qualified"
+msgstr "Nekvalifikovaný"
+
+msgid "Could not retrieve thread grading"
+msgstr "Hodnotenie témy sa nepodarilo načítať"
+
+msgid "Thread grading updated"
+msgstr "Hodnotenie témy aktualizované"
+
+msgid "Could not update thread grading"
+msgstr "Hodnotenie témy sa nepodarilo aktualizovať"
+
+msgid "Thread score saved"
+msgstr "Skóre témy uložené"
+
+msgid "Could not save thread score"
+msgstr "Skóre témy sa nepodarilo uložiť"
+
+msgid "Could not move thread"
+msgstr "Tému sa nepodarilo presunúť"
+
+msgid "Thread updated"
+msgstr "Téma aktualizovaná"
+
+msgid "Search term is too short"
+msgstr "Hľadaný výraz je príliš krátky"
+
+msgid "Could not search forums"
+msgstr "Fóra sa nepodarilo vyhľadať"
+
+msgid "Moderated"
+msgstr "Moderované"
+
+msgid "View threads"
+msgstr "Zobraziť témy"
 

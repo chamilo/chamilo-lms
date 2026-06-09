@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Jọwọ kọ ọrọ rẹ si isalẹ"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Àpẹẹrẹ fọ́ọ̀mù ìṣe : ṣe iṣiro Ìwọn Ara</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ọjọ́ orí</strong></td>            <td width=\"75%\" style=\"\">[25] ọdún</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Akọ tabi abo</strong></td>            <td style=\"\" text-align:=\"\">[M] (M tabi F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ìwọn</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Gíga</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ìwọn Ara</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ìwọn/Gíga<sup>2</sup> (Wo.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Kọ adirẹẹsi silẹ"
@@ -35479,7 +35479,7 @@ msgid "%s results"
 msgstr "%s àbájáde"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Àpẹẹrẹ ìgbòòrò fọ́ọ̀mù : ṣe iṣẹ́ ìṣirò Ìwọ̀n Ara</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ọjọ́ orí</strong></td>            <td width=\"75%\" style=\"\">[25] ọdún</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ìbálòpọ̀</strong></td>            <td style=\"\" text-align:=\"\">[M] (M tàbí F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ìwọ̀n</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Gíga</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ìwọ̀n Ara</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ìwọ̀n/Gíga<sup>2</sup> (Wo.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> àpilẹ̀kọ Wikipedia</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Ti yọkuro"
@@ -35717,4 +35717,763 @@ msgstr "Ìdájọ́ náà kò ṣeé dá"
 
 msgid "The gradebook evaluation could not be linked"
 msgstr "Ìsopọ̀ ìdájọ́ ìwé ìdájọ́ kò ṣeé ṣe"
+
+msgid "Survey questions"
+msgstr "Àwọn ìbéèrè ìwádìí"
+
+msgid "Back to survey list"
+msgstr "Padà sí àtòjọ ìwádìí"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "Ìwádìí yìí ti ní àwọn ìdáhùn tẹ́lẹ̀. Ṣíṣe àtúnṣe ìbéèrè ti di ìdíwọ́ nípasẹ̀ ààtò."
+
+msgid "Choose the type of question you want to add."
+msgstr "Yan irú ìbéèrè tí o fẹ́ fi kun."
+
+msgid "The free text option is added automatically."
+msgstr "Aṣàyàn ọ̀rọ̀ òmìnira ni a ṣàfikún nípasẹ̀ ara rẹ̀."
+
+msgid "No questions found"
+msgstr "Kò sí ìbéèrè tí a rí"
+
+msgid "Mandatory"
+msgstr "Dandan"
+
+msgid "Unsupported question type"
+msgstr "Iru ibeere ti ko ni atilẹyin"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "O le lo awọn aami {%s} ati {%s} ninu ibeere naa."
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "Ibeere yii han ni ipo nigba ti o n dahun iwadi naa."
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "Awọn aṣayan ogorun lati 1 si 100 ni a ṣe ni adaṣe."
+
+msgid "Could not load survey questions"
+msgstr "Ko le ṣe ikojọpọ awọn ibeere iwadi"
+
+msgid "The question text is required."
+msgstr "Ọrọ ibeere naa jẹ dandan."
+
+msgid "The maximum score is required."
+msgstr "Dókó tó ga jùlọ ni a nílò."
+
+msgid "Please select a parent option."
+msgstr "Jọwọ yan aṣayan obi kan."
+
+msgid "Please fill all answer options."
+msgstr "Jọwọ fọwọsi gbogbo awọn aṣayan idahun."
+
+msgid "QuestionUpdated"
+msgstr "IbeereTi Ṣe Imudojuiwọn"
+
+msgid "Could not save survey question"
+msgstr "Ko le fi ibeere iwadi pamọ"
+
+msgid "Could not delete survey question"
+msgstr "Ko le pa ibeere iwadi rẹ"
+
+msgid "Could not move survey question"
+msgstr "Ko le gbe ibeere iwadi"
+
+msgid "Could not copy survey question"
+msgstr "Ko le daakọ ibeere iwadi"
+
+msgid "Hide search"
+msgstr "Tọju wiwa"
+
+msgid "Showing results for: %s"
+msgstr "Nfihan awọn abajade fun: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "Ṣawari nipasẹ akọle iwadi, koodu tabi apejuwe."
+
+msgid "Search surveys"
+msgstr "Ṣawari awọn iwadi"
+
+msgid "%s surveys selected"
+msgstr "%s awọn iwadi ti a yan"
+
+msgid "Clear selection"
+msgstr "Pa yiyan rẹ"
+
+msgid "No surveys found"
+msgstr "Ko ri awọn iwadi kankan"
+
+msgid "Unsupported"
+msgstr "Ti ko ni atilẹyin"
+
+msgid "Could not load surveys"
+msgstr "Ko le ṣe ikojọpọ awọn iwadi"
+
+msgid "Delete selected surveys"
+msgstr "Pa awọn iwadi ti a yan rẹ"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "Awọn iwadi ti a yan ati awọn ibeere wọn yoo paarẹ. Iṣe yii ko le ṣe pada."
+
+msgid "Could not delete selected surveys"
+msgstr "Ko le pa awọn iwadi ti a yan rẹ"
+
+msgid "Survey action"
+msgstr "Iṣe iwadi"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "Ẹda iwadi yii yoo ṣẹda: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "Gbogbo awọn idahun ati awọn ifiwepe yoo paarẹ fun iwadi yii: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "Awọn ibeere ti a ṣe ni ilọpo yoo yọkuro ninu iwadi yii: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "Iwadi yii yoo ṣe atẹjade fun awọn olukọ ẹgbẹ ti a sopọ mọ: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "Iwadi yii ati awọn ibeere rẹ yoo paarẹ: %s"
+
+msgid "Could not complete survey action"
+msgstr "Ko le pari iṣe iwadi"
+
+msgid "Not started"
+msgstr "Ko bẹrẹ"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "Awọn ibo ipade jẹ ki awọn olumulo ti a pe yan awọn ọjọ ti wọn wa."
+
+msgid "Back to surveys"
+msgstr "Pada si awọn iwadi"
+
+msgid "Edit meeting poll"
+msgstr "Ṣatunkọ ibo ipade"
+
+msgid "View meeting poll"
+msgstr "Wo ibo ipade"
+
+msgid "Basic information"
+msgstr "Alaye ipilẹ"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "Eyi yoo ṣẹda iwadi ti iru ibo ipade. Awọn idahun ati awọn ifiwepe ni a nṣakoso lọtọ."
+
+msgid "Availability"
+msgstr "Wiwa"
+
+msgid "Meeting dates"
+msgstr "Awọn ọjọ ipade"
+
+msgid "Meeting poll"
+msgstr "Ibo ipade"
+
+msgid "My availability"
+msgstr "Wiwa mi"
+
+msgid "Meeting poll results"
+msgstr "Awọn abajade ibo ipade"
+
+msgid "No invitations found"
+msgstr "Ko ri awọn ifiwepe kankan"
+
+msgid "available"
+msgstr "wa"
+
+msgid "Could not load meeting poll"
+msgstr "Ko le ṣe ikojọpọ ibo ipade"
+
+msgid "Please complete the required fields"
+msgstr "Jọwọ pari awọn aaye ti a beere"
+
+msgid "Could not save meeting poll"
+msgstr "Kò ṣeé ṣe láti fi ìbò ìpàdé pamọ́"
+
+msgid "Could not save meeting availability"
+msgstr "Kò ṣeé ṣe láti fi ààyè ìpàdé pamọ́"
+
+msgid "Copy this survey to another course or session"
+msgstr "Da ìwádìí yìí sí ìkẹ́kọ̀ọ́ mìíràn tàbí ìpàdé"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "A ó da ìwádìí náà láìsí àwọn ìdáhùn tàbí ìpè."
+
+msgid "No target courses found"
+msgstr "Kò rí àwọn ìkẹ́kọ̀ọ́ tí a fẹ́"
+
+msgid "Search by course title, course code or session name."
+msgstr "Wa nípa àkọlé ìkẹ́kọ̀ọ́, koodu ìkẹ́kọ̀ọ́ tàbí orúkọ ìpàdé."
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "Lo Ìdàsílẹ̀ ìwádìí nígbà tí o bá fẹ́ ẹ̀dà kan nínú ìkẹ́kọ̀ọ́ kan náà."
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "A ó da àwọn ìbéèrè àti àwọn àṣàyàn. Àwọn ìdáhùn, ìpè àti àwọn ìròyìn yóò dúró nínú ìwádìí ìpilẹ̀ṣẹ̀ nìkan."
+
+msgid "Selected target"
+msgstr "Àfojúsùn tí a yàn"
+
+msgid "Could not load copy form"
+msgstr "Kò ṣeé ṣe láti gbé fọ́ọ̀mù ìdàsílẹ̀"
+
+msgid "The survey will be copied to: %s"
+msgstr "A ó da ìwádìí náà sí: %s"
+
+msgid "Survey copied."
+msgstr "Ìwádìí ti di dídàsílẹ̀."
+
+msgid "Could not copy survey"
+msgstr "Kò ṣeé ṣe láti da ìwádìí"
+
+msgid "Answer survey"
+msgstr "Dáhùn ìwádìí"
+
+msgid "Preview mode does not save answers."
+msgstr "Ìṣàfihàn kò fi àwọn ìdáhùn pamọ́."
+
+msgid "Survey completed"
+msgstr "Ìwádìí ti parí"
+
+msgid "Thank you for answering the survey."
+msgstr "O ṣeun fún dídáhùn ìwádìí náà."
+
+msgid "Profile information"
+msgstr "Àlàyé profaili"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "Jọ̀wọ́ ṣàyẹ̀wò àwọn ààyè profaili tí a béèrè ṣáájú kí o tó dáhùn ìwádìí náà."
+
+msgid "This profile field is read-only."
+msgstr "Ààyè profaili yìí jẹ́ kíkà-nìkan."
+
+msgid "You already filled this survey."
+msgstr "O ti kọ ìwádìí yìí tẹ́lẹ̀."
+
+msgid "Please specify"
+msgstr "Jọ̀wọ́ sọ ní pàtó"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "Irú ìbéèrè yìí kò ṣeé gba ní ìwò ìwádìí òde-òní."
+
+msgid "Preview only"
+msgstr "Ìṣàfihàn nìkan"
+
+msgid "Submit answers"
+msgstr "Fi àwọn ìdáhùn ránṣẹ́"
+
+msgid "Could not load survey"
+msgstr "Kò ṣeé ṣe láti gbé ìwádìí"
+
+msgid "Please complete the required profile fields."
+msgstr "Jọ̀wọ́ parí àwọn ààyè profaili tí a béèrè."
+
+msgid "Please answer all mandatory questions."
+msgstr "Jọ̀wọ́ dáhùn gbogbo àwọn ìbéèrè tí a gba."
+
+msgid "Could not save survey answers"
+msgstr "Kò ṣeé ṣe láti fi àwọn ìdáhùn ìwádìí pamọ́"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "Ṣètò àwọn àlàyé ìwádìí àkọ́kọ́ ṣáájú kí o tó ṣàkóso àwọn ìbéèrè àti ìpè."
+
+msgid "The survey code cannot be changed after creation."
+msgstr "A kò lè yí koodu ìwádìí padà lẹ́yìn ìṣẹ̀dá."
+
+msgid "Survey behavior"
+msgstr "Ìhùwàsí ìwádìí"
+
+msgid "Use 0 for no time limit."
+msgstr "Lo 0 fún ààlà àkókò kankan."
+
+msgid "Survey messages"
+msgstr "Àwọn ìránṣẹ́ ìwádìí"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "Àwọn ààyè profaili tí a yàn níbí ni a ó fi hàn ṣáájú àwọn ìbéèrè ìwádìí."
+
+msgid "No profile fields are currently available."
+msgstr "Kò sí àwọn ààyè profaili tí ó wà lọ́wọ́lọ́wọ́."
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "Yíyan ààyè profaili wà fún àwọn ìwádìí tí kò ní ìdánimọ̀ nìkan."
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "Ìsopọ̀ ìmọ̀-ọgbọ́n yóò di gbigbe ní ìdìpọ̀ tó yàtọ̀."
+
+msgid "Could not load survey configuration"
+msgstr "Kò ṣeé ṣe láti gbé ìtò ìwádìí"
+
+msgid "The survey code is required."
+msgstr "Koodu ìwádìí ni a béèrè."
+
+msgid "The survey title is required."
+msgstr "Àkọlé ìwádìí ni a béèrè."
+
+msgid "The survey has been saved successfully"
+msgstr "Ìwádìí ti di fífipamọ́ láìṣe àṣìṣe"
+
+msgid "Could not save survey configuration"
+msgstr "Kò ṣeé ṣe láti fi ìtò ìwádìí pamọ́"
+
+msgid "Course users"
+msgstr "Àwọn olùkẹ́kọ̀ọ́ ìkẹ́kọ̀ọ́"
+
+msgid "Already invited"
+msgstr "Ti pè tẹ́lẹ̀"
+
+msgid "No users found"
+msgstr "Kò rí àwọn olùlò"
+
+msgid "No groups found"
+msgstr "Kò rí àwọn ẹgbẹ́"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "Lo **ìtọ́ka** níbi tí ìtọ́ka ìwádìí yóò hàn."
+
+msgid "Remind all selected users"
+msgstr "Rán ìránlétí sí gbogbo àwọn olùlò tí a yàn"
+
+msgid "Anonymous access link"
+msgstr "Ìtọ́ka ìráàyè aláìlẹ́tọ̀"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "Àwọn olùkó tí wọn kò ní ìpè lè lo ìsọ̀rí yìí láti dáhùn ìbéèrè náà."
+
+msgid "Answered anonymously"
+msgstr "Dáhùn ní ìkọ̀kọ̀"
+
+msgid "Could not load survey invitations"
+msgstr "Kò le ṣàkóso àwọn ìpè ìbéèrè"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "Kókó àti ìsọ̀rí ìránṣẹ́ jẹ́ dandan nígbà tí a bá ń fi ìránṣẹ́ ránṣẹ́."
+
+msgid "Could not publish survey"
+msgstr "Kò le tẹ̀jáde ìbéèrè"
+
+msgid "Could not copy the link"
+msgstr "Kò le daakọ ìsọ̀rí náà"
+
+msgid "Please answer this survey using the following link"
+msgstr "Jọ̀wọ́ dáhùn ìbéèrè yìí pẹ̀lú ìsọ̀rí tí ó wà nísàlẹ̀"
+
+msgid "Export CSV"
+msgstr "Gbéjáde CSV"
+
+msgid "Export compact CSV"
+msgstr "Gbéjáde CSV kíkuru"
+
+msgid "Export Excel"
+msgstr "Gbéjáde Excel"
+
+msgid "Export package"
+msgstr "Gbéjáde àkójọpọ̀"
+
+msgid "Results summary"
+msgstr "Àkópọ̀ àbájáde"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "Ìwò yìí ṣàfihàn dátà ìròyìn tí a kó lọ́wọ́ fún ìbéèrè yìí."
+
+msgid "Select user"
+msgstr "Yan olùkó"
+
+msgid "No answers found"
+msgstr "Kò rí àwọn ìdáhùn"
+
+msgid "answers"
+msgstr "àwọn ìdáhùn"
+
+msgid "Could not load survey reporting"
+msgstr "Kò le ṣàkóso ìròyìn ìbéèrè"
+
+msgid "Back to threads"
+msgstr "Padà sí àwọn ìsọ̀rí"
+
+msgid "Back to learning path"
+msgstr "Padà sí ọ̀nà ìkẹ́kọ̀ọ́"
+
+msgid "Remove sticky"
+msgstr "Yọ̀ọ́ kúrò ní àkọsílẹ̀"
+
+msgid "Make sticky"
+msgstr "Ṣe àkọsílẹ̀"
+
+msgid "Open thread"
+msgstr "Ṣí ìsọ̀rí"
+
+msgid "Close thread"
+msgstr "Tì ìsọ̀rí"
+
+msgid "Delete thread"
+msgstr "Parẹ́ ìsọ̀rí"
+
+msgid "This thread is hidden from learners."
+msgstr "Ìsọ̀rí yìí ti pamọ́ kúrò lọ́wọ́ àwọn akẹ́kọ̀ọ́."
+
+msgid "Revision requested"
+msgstr "Bẹ̀rẹ̀ àtúnyẹ̀wò"
+
+msgid "Revision"
+msgstr "Àtúnyẹ̀wò"
+
+msgid "Approve post"
+msgstr "Fọwọ́sí ìfiránṣẹ́"
+
+msgid "Reject post"
+msgstr "Kọ ìfiránṣẹ́"
+
+msgid "Cancel revision request"
+msgstr "Fagilé ìbéèrè àtúnyẹ̀wò"
+
+msgid "Delete post"
+msgstr "Parẹ́ ìfiránṣẹ́"
+
+msgid "Message is required"
+msgstr "Ìsọ̀rí jẹ́ dandan"
+
+msgid "Target thread is required"
+msgstr "Ìsọ̀rí àfojúsùn jẹ́ dandan"
+
+msgid "Could not retrieve posts"
+msgstr "Kò le gba àwọn ìfiránṣẹ́ padà"
+
+msgid "Thread shown"
+msgstr "Ìsọ̀rí ti hàn"
+
+msgid "Thread hidden"
+msgstr "Ìsọ̀rí ti pamọ́"
+
+msgid "Could not update thread"
+msgstr "Kò le ṣàtúnṣe ìsọ̀rí"
+
+msgid "Thread closed"
+msgstr "Ìsọ̀rí ti tì"
+
+msgid "Thread opened"
+msgstr "Ìsọ̀rí ti ṣí"
+
+msgid "Thread marked as sticky"
+msgstr "Ìsọ̀rí ti di àkọsílẹ̀"
+
+msgid "Thread unmarked as sticky"
+msgstr "Ìsọ̀rí ti yọ kúrò ní àkọsílẹ̀"
+
+msgid "Thread notifications enabled"
+msgstr "Ìfitónilétí ìsọ̀rí ti ṣiṣẹ́"
+
+msgid "Thread notifications disabled"
+msgstr "Ìfitónilétí ìsọ̀rí ti dáwọ́dúró"
+
+msgid "Could not update thread notification"
+msgstr "Kò le ṣàtúnṣe ìfitónilétí ìsọ̀rí"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "Ṣé o dá ọ lójú pé o fẹ́ parẹ́ ìsọ̀rí yìí?"
+
+msgid "Could not delete thread"
+msgstr "Kò le parẹ́ ìsọ̀rí"
+
+msgid "Post approved"
+msgstr "Ìfiránṣẹ́ ti fọwọ́sí"
+
+msgid "Could not approve post"
+msgstr "Kò le fọwọ́sí ìfiránṣẹ́"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "Ṣé o dá ọ lójú pé o fẹ́ kọ ìfiránṣẹ́ yìí?"
+
+msgid "Post rejected"
+msgstr "Ìfiránṣẹ́ ti kọ"
+
+msgid "Could not reject post"
+msgstr "Kò ṣeé ṣe láti kọ ìfiránṣẹ́"
+
+msgid "Post shown"
+msgstr "Ìfiránṣẹ́ hàn"
+
+msgid "Post hidden"
+msgstr "Ìfiránṣẹ́ pamọ́"
+
+msgid "Could not update post"
+msgstr "Kò ṣeé ṣe láti ṣàtúnṣe ìfiránṣẹ́"
+
+msgid "Post updated"
+msgstr "Ìfiránṣẹ́ ti di àtúnṣe"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "Ṣé o dá ọ lójú pé o fẹ́ pa ìfiránṣẹ́ yìí rẹ́?"
+
+msgid "Post deleted"
+msgstr "Ìfiránṣẹ́ ti parẹ́"
+
+msgid "Could not delete post"
+msgstr "Kò ṣeé ṣe láti pa ìfiránṣẹ́ rẹ́"
+
+msgid "Untitled thread"
+msgstr "Àkórí tí kò ní àkọlé"
+
+msgid "Could not retrieve threads"
+msgstr "Kò ṣeé ṣe láti gba àwọn àkórí"
+
+msgid "Post moved"
+msgstr "Ìfiránṣẹ́ ti yípò"
+
+msgid "Could not move post"
+msgstr "Kò ṣeé ṣe láti yí ìfiránṣẹ́ pò"
+
+msgid "Revision request removed"
+msgstr "Ìbéèrè àtúnyẹ̀wò ti yọkuro"
+
+msgid "Could not update revision request"
+msgstr "Kò ṣeé ṣe láti ṣàtúnṣe ìbéèrè àtúnyẹ̀wò"
+
+msgid "Are you sure you want to report this post?"
+msgstr "Ṣé o dá ọ lójú pé o fẹ́ ròyìn ìfiránṣẹ́ yìí?"
+
+msgid "Could not report post"
+msgstr "Kò ṣeé ṣe láti ròyìn ìfiránṣẹ́"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "Ṣé o dá ọ lójú pé o fẹ́ pa àfikún yìí rẹ́?"
+
+msgid "Attachment deleted"
+msgstr "Àfikún ti parẹ́"
+
+msgid "Could not delete attachment"
+msgstr "Kò ṣeé ṣe láti pa àfikún rẹ́"
+
+msgid "Thread title"
+msgstr "Àkọlé àkórí"
+
+msgid "Sticky thread"
+msgstr "Àkórí onígbàgbọ́"
+
+msgid "Attach files"
+msgstr "Fi fáìlì sóra"
+
+msgid "Attachments are disabled for this forum"
+msgstr "Àfikún ti di àìṣiṣẹ́mọ́ fún fóórọ̀ yìí"
+
+msgid "The forum is not open yet."
+msgstr "Fóórọ̀ kò tíì ṣí sílẹ̀."
+
+msgid "The forum is closed."
+msgstr "Fóórọ̀ ti padé."
+
+msgid "The forum is locked."
+msgstr "Fóórọ̀ ti di títì."
+
+msgid "New threads are not allowed in this forum."
+msgstr "Kò gba àwọn àkórí tuntun ní fóórọ̀ yìí."
+
+msgid "Thread created"
+msgstr "Àkórí ti dá"
+
+msgid "Could not create thread"
+msgstr "Kò ṣeé ṣe láti dá àkórí"
+
+msgid "Back to posts"
+msgstr "Padà sí àwọn ìfiránṣẹ́"
+
+msgid "This reply will be stored as a revision."
+msgstr "Èsì yìí yóò wa fipamọ́ gẹ́gẹ́ bí àtúnyẹ̀wò."
+
+msgid "Post reply"
+msgstr "Fèsì sí ìfiránṣẹ́"
+
+msgid "The thread is locked."
+msgstr "Àkórí ti di títì."
+
+msgid "Reply added"
+msgstr "Èsì ti fi kún"
+
+msgid "Could not add reply"
+msgstr "Kò ṣeé ṣe láti fi èsì kún"
+
+msgid "Add forum"
+msgstr "Ṣàfikún fóórọ̀"
+
+msgid "No forums found"
+msgstr "Kò rí fóórọ̀ kankan"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "Ṣẹ̀dá ẹ̀ka fóórọ̀ tàbí fóórọ̀ rẹ̀ ní àkọ́kọ́ láti bẹ̀rẹ̀ ìjíròrò."
+
+msgid "Locked"
+msgstr "Ti di títì"
+
+msgid "No forums in this category"
+msgstr "Kò sí fóórọ̀ kankan nínú ẹ̀ka yìí"
+
+msgid "Posts require approval"
+msgstr "Àwọn ìfiránṣẹ́ nílò ìfọ̀wọ́sí"
+
+msgid "Forum for current group"
+msgstr "Fóórọ̀ fún ẹgbẹ́ lọ́wọ́lówó"
+
+msgid "Group forum visibility"
+msgstr "Ìfarahàn fóórọ̀ ẹgbẹ́"
+
+msgid "No category"
+msgstr "Kò sí ẹ̀ka"
+
+msgid "Could not retrieve forums"
+msgstr "Kò ṣeé ṣe láti gba àwọn fóórọ̀"
+
+msgid "Forum category updated"
+msgstr "Ẹ̀ka fóórọ̀ ti di àtúnṣe"
+
+msgid "Forum category created"
+msgstr "Ẹ̀ka fóórọ̀ ti dá"
+
+msgid "Could not save forum category"
+msgstr "Kò ṣeé ṣe láti fi ẹ̀ka fóórọ̀ pamọ́"
+
+msgid "Forum updated"
+msgstr "Fóórọ̀ ti di àtúnṣe"
+
+msgid "Forum created"
+msgstr "Fóórọ̀ ti dá"
+
+msgid "Could not save forum"
+msgstr "Kò ṣeé fi fóórọ̀ pamọ́"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "Ṣé o dá ọ lójú pé o fẹ́ pa ẹ̀ka fóórọ̀ yìí rẹ́?"
+
+msgid "Could not delete forum category"
+msgstr "Kò ṣeé pa ẹ̀ka fóórọ̀ rẹ́"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "Ṣé o dá ọ lójú pé o fẹ́ pa fóórọ̀ yìí rẹ́?"
+
+msgid "Could not delete forum"
+msgstr "Kò ṣeé pa fóórọ̀ rẹ́"
+
+msgid "Forum category unlocked"
+msgstr "Ẹ̀ka fóórọ̀ ti ṣí"
+
+msgid "Forum category locked"
+msgstr "Ẹ̀ka fóórọ̀ ti tì"
+
+msgid "Could not update forum category"
+msgstr "Kò ṣeé ṣàtúnṣe ẹ̀ka fóórọ̀"
+
+msgid "Forum category shown"
+msgstr "Ẹ̀ka fóórọ̀ ti hàn"
+
+msgid "Forum category hidden"
+msgstr "Ẹ̀ka fóórọ̀ ti fi pamọ́"
+
+msgid "Forum unlocked"
+msgstr "Fóórọ̀ ti ṣí"
+
+msgid "Forum locked"
+msgstr "Fóórọ̀ ti tì"
+
+msgid "Could not update forum"
+msgstr "Kò ṣeé ṣàtúnṣe fóórọ̀"
+
+msgid "Forum shown"
+msgstr "Fóórọ̀ ti hàn"
+
+msgid "Forum hidden"
+msgstr "Fóórọ̀ ti fi pamọ́"
+
+msgid "Forum notifications enabled"
+msgstr "Ìfitónilétí fóórọ̀ ti tan"
+
+msgid "Forum notifications disabled"
+msgstr "Ìfitónilétí fóórọ̀ ti pa"
+
+msgid "Could not update forum notification"
+msgstr "Kò ṣeé ṣàtúnṣe ìfitónilétí fóórọ̀"
+
+msgid "Forum category moved"
+msgstr "Ẹ̀ka fóórọ̀ ti yípò"
+
+msgid "Could not move forum category"
+msgstr "Kò ṣeé yípò ẹ̀ka fóórọ̀"
+
+msgid "Forum moved"
+msgstr "Fóórọ̀ ti yípò"
+
+msgid "Could not move forum"
+msgstr "Kò ṣeé yípò fóórọ̀"
+
+msgid "Back to forums"
+msgstr "Padà sí àwọn fóórọ̀"
+
+msgid "New thread"
+msgstr "Ìsọ̀rọ̀ tuntun"
+
+msgid "No threads found"
+msgstr "Kò rí ìsọ̀rọ̀ kankan"
+
+msgid "Sticky"
+msgstr "Lẹ́mọ́lẹ́mọ́"
+
+msgid "Graded"
+msgstr "Ti ní ìdájọ́"
+
+msgid "Grade peers"
+msgstr "Ṣe ìdájọ́ ẹlẹgbẹ́"
+
+msgid "Move thread"
+msgstr "Yípò ìsọ̀rọ̀"
+
+msgid "Target forum"
+msgstr "Fóórọ̀ àfojúsùn"
+
+msgid "Target forum is required"
+msgstr "Fóórọ̀ àfojúsùn ni a nílò"
+
+msgid "Students"
+msgstr "Àwọn akẹ́kọ̀ọ́"
+
+msgid "No students found"
+msgstr "Kò rí akẹ́kọ̀ọ́ kankan"
+
+msgid "No peers available to grade."
+msgstr "Kò sí ẹlẹgbẹ́ tó wà láti ṣe ìdájọ́."
+
+msgid "Qualified"
+msgstr "Ti ní ìdájọ́"
+
+msgid "Not qualified"
+msgstr "Kò ní ìdájọ́"
+
+msgid "Could not retrieve thread grading"
+msgstr "Kò ṣeé gba ìdájọ́ ìsọ̀rọ̀"
+
+msgid "Thread grading updated"
+msgstr "Ìdájọ́ ìsọ̀rọ̀ ti ṣàtúnṣe"
+
+msgid "Could not update thread grading"
+msgstr "Kò ṣeé ṣàtúnṣe ìdájọ́ ìsọ̀rọ̀"
+
+msgid "Thread score saved"
+msgstr "Àmì ìsọ̀rọ̀ ti fi pamọ́"
+
+msgid "Could not save thread score"
+msgstr "Kò ṣeé fi àmì ìsọ̀rọ̀ pamọ́"
+
+msgid "Could not move thread"
+msgstr "Kò ṣeé yípò ìsọ̀rọ̀"
+
+msgid "Thread updated"
+msgstr "Ìsọ̀rọ̀ ti ṣàtúnṣe"
+
+msgid "Search term is too short"
+msgstr "Ọ̀rọ̀ ìwádìí ti kéré jù"
+
+msgid "Could not search forums"
+msgstr "Kò ṣeé wádìí àwọn fóórọ̀"
+
+msgid "Moderated"
+msgstr "Ti ṣàkóso"
+
+msgid "View threads"
+msgstr "Wo àwọn ìsọ̀rọ̀"
 

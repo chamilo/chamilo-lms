@@ -35722,3 +35722,762 @@ msgstr "평가를 생성할 수 없습니다"
 msgid "The gradebook evaluation could not be linked"
 msgstr "성적표 평가를 연결할 수 없습니다"
 
+msgid "Survey questions"
+msgstr "설문 문항"
+
+msgid "Back to survey list"
+msgstr "설문 목록으로 돌아가기"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "이 설문은 이미 응답이 있습니다. 문항 편집은 설정에 의해 비활성화되어 있습니다."
+
+msgid "Choose the type of question you want to add."
+msgstr "추가할 문항 유형을 선택하세요."
+
+msgid "The free text option is added automatically."
+msgstr "자유 텍스트 옵션은 자동으로 추가됩니다."
+
+msgid "No questions found"
+msgstr "문항을 찾을 수 없습니다"
+
+msgid "Mandatory"
+msgstr "필수"
+
+msgid "Unsupported question type"
+msgstr "지원되지 않는 문항 유형"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "문항에 {%s} 및 {%s} 태그를 사용할 수 있습니다."
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "이 문항은 설문 응답 중 조건부로 표시됩니다."
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "1부터 100까지의 백분율 옵션은 자동으로 생성됩니다."
+
+msgid "Could not load survey questions"
+msgstr "설문 문항을 불러올 수 없습니다"
+
+msgid "The question text is required."
+msgstr "문항 텍스트는 필수입니다."
+
+msgid "The maximum score is required."
+msgstr "최대 점수는 필수입니다."
+
+msgid "Please select a parent option."
+msgstr "상위 옵션을 선택하세요."
+
+msgid "Please fill all answer options."
+msgstr "모든 답변 옵션을 입력하세요."
+
+msgid "QuestionUpdated"
+msgstr "QuestionUpdated"
+
+msgid "Could not save survey question"
+msgstr "설문 문항을 저장할 수 없습니다"
+
+msgid "Could not delete survey question"
+msgstr "설문 문항을 삭제할 수 없습니다"
+
+msgid "Could not move survey question"
+msgstr "설문 문항을 이동할 수 없습니다"
+
+msgid "Could not copy survey question"
+msgstr "설문 문항을 복사할 수 없습니다"
+
+msgid "Hide search"
+msgstr "검색 숨기기"
+
+msgid "Showing results for: %s"
+msgstr "다음 결과 표시: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "설문 제목, 코드 또는 설명으로 검색하세요."
+
+msgid "Search surveys"
+msgstr "설문 검색"
+
+msgid "%s surveys selected"
+msgstr "%s개의 설문이 선택됨"
+
+msgid "Clear selection"
+msgstr "선택 해제"
+
+msgid "No surveys found"
+msgstr "설문을 찾을 수 없습니다"
+
+msgid "Unsupported"
+msgstr "지원되지 않음"
+
+msgid "Could not load surveys"
+msgstr "설문조사를 불러올 수 없습니다"
+
+msgid "Delete selected surveys"
+msgstr "선택한 설문조사 삭제"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "선택한 설문조사와 해당 질문이 삭제됩니다. 이 작업은 취소할 수 없습니다."
+
+msgid "Could not delete selected surveys"
+msgstr "선택한 설문조사를 삭제할 수 없습니다"
+
+msgid "Survey action"
+msgstr "설문조사 작업"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "이 설문조사의 복사본이 생성됩니다: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "이 설문조사에 대한 모든 답변과 초대가 삭제됩니다: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "이 설문조사에서 생성된 복제 질문이 제거됩니다: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "이 설문조사가 연결된 그룹 튜터에게 공개됩니다: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "이 설문조사와 해당 질문이 삭제됩니다: %s"
+
+msgid "Could not complete survey action"
+msgstr "설문조사 작업을 완료할 수 없습니다"
+
+msgid "Not started"
+msgstr "시작되지 않음"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "미팅 투표를 통해 초대된 사용자가 가능한 날짜를 선택할 수 있습니다."
+
+msgid "Back to surveys"
+msgstr "설문조사로 돌아가기"
+
+msgid "Edit meeting poll"
+msgstr "미팅 투표 편집"
+
+msgid "View meeting poll"
+msgstr "미팅 투표 보기"
+
+msgid "Basic information"
+msgstr "기본 정보"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "미팅 투표 유형의 설문조사가 생성됩니다. 답변과 초대는 별도로 처리됩니다."
+
+msgid "Availability"
+msgstr "가능 여부"
+
+msgid "Meeting dates"
+msgstr "미팅 날짜"
+
+msgid "Meeting poll"
+msgstr "미팅 투표"
+
+msgid "My availability"
+msgstr "내 가능 여부"
+
+msgid "Meeting poll results"
+msgstr "미팅 투표 결과"
+
+msgid "No invitations found"
+msgstr "초대를 찾을 수 없습니다"
+
+msgid "available"
+msgstr "가능"
+
+msgid "Could not load meeting poll"
+msgstr "미팅 투표를 불러올 수 없습니다"
+
+msgid "Please complete the required fields"
+msgstr "필수 항목을 입력해 주세요"
+
+msgid "Could not save meeting poll"
+msgstr "미팅 투표를 저장할 수 없습니다"
+
+msgid "Could not save meeting availability"
+msgstr "미팅 가능 여부를 저장할 수 없습니다"
+
+msgid "Copy this survey to another course or session"
+msgstr "이 설문조사를 다른 강의 또는 세션으로 복사"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "설문조사는 답변과 초대 없이 복사됩니다."
+
+msgid "No target courses found"
+msgstr "대상 강의를 찾을 수 없습니다"
+
+msgid "Search by course title, course code or session name."
+msgstr "강의 제목, 강의 코드 또는 세션 이름으로 검색하세요."
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "동일한 강의 내에 복사본을 만들려면 설문조사 복제를 사용하세요."
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "질문과 옵션이 복사됩니다. 답변, 초대 및 보고서는 원본 설문조사에만 남습니다."
+
+msgid "Selected target"
+msgstr "선택한 대상"
+
+msgid "Could not load copy form"
+msgstr "복사 양식을 불러올 수 없습니다"
+
+msgid "The survey will be copied to: %s"
+msgstr "설문조사가 다음 위치로 복사됩니다: %s"
+
+msgid "Survey copied."
+msgstr "설문조사가 복사되었습니다."
+
+msgid "Could not copy survey"
+msgstr "설문조사를 복사할 수 없습니다"
+
+msgid "Answer survey"
+msgstr "설문조사 답변"
+
+msgid "Preview mode does not save answers."
+msgstr "미리보기 모드에서는 답변이 저장되지 않습니다."
+
+msgid "Survey completed"
+msgstr "설문조사 완료"
+
+msgid "Thank you for answering the survey."
+msgstr "설문조사에 응답해 주셔서 감사합니다."
+
+msgid "Profile information"
+msgstr "프로필 정보"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "설문조사에 답변하기 전에 요청된 프로필 항목을 확인하세요."
+
+msgid "This profile field is read-only."
+msgstr "이 프로필 항목은 읽기 전용입니다."
+
+msgid "You already filled this survey."
+msgstr "이미 이 설문조사를 작성하셨습니다."
+
+msgid "Please specify"
+msgstr "구체적으로 입력해 주세요"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "이 질문 유형은 최신 설문조사 보기에서 지원되지 않습니다."
+
+msgid "Preview only"
+msgstr "미리보기 전용"
+
+msgid "Submit answers"
+msgstr "답변 제출"
+
+msgid "Could not load survey"
+msgstr "설문을 불러올 수 없습니다"
+
+msgid "Please complete the required profile fields."
+msgstr "필수 프로필 항목을 입력해 주세요."
+
+msgid "Please answer all mandatory questions."
+msgstr "필수 질문에 모두 답변해 주세요."
+
+msgid "Could not save survey answers"
+msgstr "설문 답변을 저장할 수 없습니다"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "질문과 초대장을 관리하기 전에 설문 기본 정보를 설정하세요."
+
+msgid "The survey code cannot be changed after creation."
+msgstr "설문 코드는 생성 후 변경할 수 없습니다."
+
+msgid "Survey behavior"
+msgstr "설문 동작"
+
+msgid "Use 0 for no time limit."
+msgstr "시간 제한이 없으면 0을 입력하세요."
+
+msgid "Survey messages"
+msgstr "설문 메시지"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "여기에서 선택한 프로필 항목은 설문 질문 전에 표시됩니다."
+
+msgid "No profile fields are currently available."
+msgstr "현재 사용 가능한 프로필 항목이 없습니다."
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "프로필 항목 선택은 익명 설문이 아닌 경우에만 사용할 수 있습니다."
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "역량 연결은 별도의 배치 작업으로 마이그레이션됩니다."
+
+msgid "Could not load survey configuration"
+msgstr "설문 구성을 불러올 수 없습니다"
+
+msgid "The survey code is required."
+msgstr "설문 코드는 필수입니다."
+
+msgid "The survey title is required."
+msgstr "설문 제목은 필수입니다."
+
+msgid "The survey has been saved successfully"
+msgstr "설문이 성공적으로 저장되었습니다"
+
+msgid "Could not save survey configuration"
+msgstr "설문 구성을 저장할 수 없습니다"
+
+msgid "Course users"
+msgstr "강의 사용자"
+
+msgid "Already invited"
+msgstr "이미 초대됨"
+
+msgid "No users found"
+msgstr "사용자를 찾을 수 없습니다"
+
+msgid "No groups found"
+msgstr "그룹을 찾을 수 없습니다"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "설문 링크가 표시될 위치에 **link**를 사용하세요."
+
+msgid "Remind all selected users"
+msgstr "선택한 모든 사용자에게 재알림"
+
+msgid "Anonymous access link"
+msgstr "익명 접근 링크"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "초대받지 않은 사용자도 이 링크를 사용하여 설문에 참여할 수 있습니다."
+
+msgid "Answered anonymously"
+msgstr "익명으로 답변함"
+
+msgid "Could not load survey invitations"
+msgstr "설문 초대장을 불러올 수 없습니다"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "메일을 보낼 때는 제목과 본문이 모두 필요합니다."
+
+msgid "Could not publish survey"
+msgstr "설문을 게시할 수 없습니다"
+
+msgid "Could not copy the link"
+msgstr "링크를 복사할 수 없습니다"
+
+msgid "Please answer this survey using the following link"
+msgstr "다음 링크를 사용하여 설문에 답변해 주세요"
+
+msgid "Export CSV"
+msgstr "CSV 내보내기"
+
+msgid "Export compact CSV"
+msgstr "간소화된 CSV 내보내기"
+
+msgid "Export Excel"
+msgstr "Excel 내보내기"
+
+msgid "Export package"
+msgstr "패키지 내보내기"
+
+msgid "Results summary"
+msgstr "결과 요약"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "이 보기는 이 설문의 마이그레이션된 보고서 데이터를 보여줍니다."
+
+msgid "Select user"
+msgstr "사용자 선택"
+
+msgid "No answers found"
+msgstr "답변을 찾을 수 없습니다"
+
+msgid "answers"
+msgstr "답변"
+
+msgid "Could not load survey reporting"
+msgstr "설문 보고서를 불러올 수 없습니다"
+
+msgid "Back to threads"
+msgstr "스레드로 돌아가기"
+
+msgid "Back to learning path"
+msgstr "학습 경로로 돌아가기"
+
+msgid "Remove sticky"
+msgstr "고정 해제"
+
+msgid "Make sticky"
+msgstr "고정"
+
+msgid "Open thread"
+msgstr "스레드 열기"
+
+msgid "Close thread"
+msgstr "스레드 닫기"
+
+msgid "Delete thread"
+msgstr "스레드 삭제"
+
+msgid "This thread is hidden from learners."
+msgstr "이 스레드는 학습자에게 숨겨져 있습니다."
+
+msgid "Revision requested"
+msgstr "수정 요청됨"
+
+msgid "Revision"
+msgstr "수정"
+
+msgid "Approve post"
+msgstr "게시물 승인"
+
+msgid "Reject post"
+msgstr "게시물 거부"
+
+msgid "Cancel revision request"
+msgstr "수정 요청 취소"
+
+msgid "Delete post"
+msgstr "게시물 삭제"
+
+msgid "Message is required"
+msgstr "메시지는 필수입니다"
+
+msgid "Target thread is required"
+msgstr "대상 스레드는 필수입니다"
+
+msgid "Could not retrieve posts"
+msgstr "게시물을 불러올 수 없습니다"
+
+msgid "Thread shown"
+msgstr "스레드 표시됨"
+
+msgid "Thread hidden"
+msgstr "스레드 숨겨짐"
+
+msgid "Could not update thread"
+msgstr "스레드를 업데이트할 수 없습니다"
+
+msgid "Thread closed"
+msgstr "스레드 닫힘"
+
+msgid "Thread opened"
+msgstr "스레드 열림"
+
+msgid "Thread marked as sticky"
+msgstr "스레드가 고정으로 표시됨"
+
+msgid "Thread unmarked as sticky"
+msgstr "스레드의 고정 표시 해제됨"
+
+msgid "Thread notifications enabled"
+msgstr "스레드 알림 활성화됨"
+
+msgid "Thread notifications disabled"
+msgstr "스레드 알림 비활성화됨"
+
+msgid "Could not update thread notification"
+msgstr "스레드 알림을 업데이트할 수 없습니다"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "이 스레드를 삭제하시겠습니까?"
+
+msgid "Could not delete thread"
+msgstr "스레드를 삭제할 수 없습니다"
+
+msgid "Post approved"
+msgstr "게시물 승인됨"
+
+msgid "Could not approve post"
+msgstr "게시물을 승인할 수 없습니다"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "이 게시물을 거부하시겠습니까?"
+
+msgid "Post rejected"
+msgstr "게시물 거부됨"
+
+msgid "Could not reject post"
+msgstr "게시물을 거부할 수 없습니다"
+
+msgid "Post shown"
+msgstr "게시물 표시됨"
+
+msgid "Post hidden"
+msgstr "게시물 숨겨짐"
+
+msgid "Could not update post"
+msgstr "게시물을 업데이트할 수 없습니다"
+
+msgid "Post updated"
+msgstr "게시물 업데이트됨"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "이 게시물을 삭제하시겠습니까?"
+
+msgid "Post deleted"
+msgstr "게시물 삭제됨"
+
+msgid "Could not delete post"
+msgstr "게시물을 삭제할 수 없습니다"
+
+msgid "Untitled thread"
+msgstr "제목 없는 스레드"
+
+msgid "Could not retrieve threads"
+msgstr "스레드를 불러올 수 없습니다"
+
+msgid "Post moved"
+msgstr "게시물 이동됨"
+
+msgid "Could not move post"
+msgstr "게시물을 이동할 수 없습니다"
+
+msgid "Revision request removed"
+msgstr "수정 요청 제거됨"
+
+msgid "Could not update revision request"
+msgstr "수정 요청을 업데이트할 수 없습니다"
+
+msgid "Are you sure you want to report this post?"
+msgstr "이 게시물을 신고하시겠습니까?"
+
+msgid "Could not report post"
+msgstr "게시물을 신고할 수 없습니다"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "이 첨부 파일을 삭제하시겠습니까?"
+
+msgid "Attachment deleted"
+msgstr "첨부 파일 삭제됨"
+
+msgid "Could not delete attachment"
+msgstr "첨부 파일을 삭제할 수 없습니다"
+
+msgid "Thread title"
+msgstr "스레드 제목"
+
+msgid "Sticky thread"
+msgstr "고정 스레드"
+
+msgid "Attach files"
+msgstr "파일 첨부"
+
+msgid "Attachments are disabled for this forum"
+msgstr "이 포럼에서는 첨부 파일이 비활성화되어 있습니다"
+
+msgid "The forum is not open yet."
+msgstr "포럼이 아직 열리지 않았습니다."
+
+msgid "The forum is closed."
+msgstr "포럼이 닫혔습니다."
+
+msgid "The forum is locked."
+msgstr "포럼이 잠겨 있습니다."
+
+msgid "New threads are not allowed in this forum."
+msgstr "이 포럼에서는 새 스레드를 생성할 수 없습니다."
+
+msgid "Thread created"
+msgstr "스레드가 생성되었습니다."
+
+msgid "Could not create thread"
+msgstr "스레드를 생성할 수 없습니다."
+
+msgid "Back to posts"
+msgstr "게시물로 돌아가기"
+
+msgid "This reply will be stored as a revision."
+msgstr "이 답글은 수정본으로 저장됩니다."
+
+msgid "Post reply"
+msgstr "답글 게시"
+
+msgid "The thread is locked."
+msgstr "스레드가 잠겨 있습니다."
+
+msgid "Reply added"
+msgstr "답글이 추가되었습니다."
+
+msgid "Could not add reply"
+msgstr "답글을 추가할 수 없습니다."
+
+msgid "Add forum"
+msgstr "포럼 추가"
+
+msgid "No forums found"
+msgstr "포럼을 찾을 수 없습니다."
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "토론을 시작하려면 첫 번째 포럼 카테고리 또는 포럼을 만드세요."
+
+msgid "Locked"
+msgstr "잠김"
+
+msgid "No forums in this category"
+msgstr "이 카테고리에 포럼이 없습니다."
+
+msgid "Posts require approval"
+msgstr "게시물 승인 필요"
+
+msgid "Forum for current group"
+msgstr "현재 그룹용 포럼"
+
+msgid "Group forum visibility"
+msgstr "그룹 포럼 공개 범위"
+
+msgid "No category"
+msgstr "카테고리 없음"
+
+msgid "Could not retrieve forums"
+msgstr "포럼을 불러올 수 없습니다."
+
+msgid "Forum category updated"
+msgstr "포럼 카테고리가 업데이트되었습니다."
+
+msgid "Forum category created"
+msgstr "포럼 카테고리가 생성되었습니다."
+
+msgid "Could not save forum category"
+msgstr "포럼 카테고리를 저장할 수 없습니다."
+
+msgid "Forum updated"
+msgstr "포럼이 업데이트되었습니다."
+
+msgid "Forum created"
+msgstr "포럼이 생성되었습니다."
+
+msgid "Could not save forum"
+msgstr "포럼을 저장할 수 없습니다."
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "이 포럼 카테고리를 삭제하시겠습니까?"
+
+msgid "Could not delete forum category"
+msgstr "포럼 카테고리를 삭제할 수 없습니다."
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "이 포럼을 삭제하시겠습니까?"
+
+msgid "Could not delete forum"
+msgstr "포럼을 삭제할 수 없습니다."
+
+msgid "Forum category unlocked"
+msgstr "포럼 카테고리가 잠금 해제되었습니다."
+
+msgid "Forum category locked"
+msgstr "포럼 카테고리가 잠겼습니다."
+
+msgid "Could not update forum category"
+msgstr "포럼 카테고리를 업데이트할 수 없습니다."
+
+msgid "Forum category shown"
+msgstr "포럼 카테고리가 표시되었습니다."
+
+msgid "Forum category hidden"
+msgstr "포럼 카테고리가 숨겨졌습니다."
+
+msgid "Forum unlocked"
+msgstr "포럼이 잠금 해제되었습니다."
+
+msgid "Forum locked"
+msgstr "포럼이 잠겼습니다."
+
+msgid "Could not update forum"
+msgstr "포럼을 업데이트할 수 없습니다."
+
+msgid "Forum shown"
+msgstr "포럼이 표시되었습니다."
+
+msgid "Forum hidden"
+msgstr "포럼이 숨겨졌습니다."
+
+msgid "Forum notifications enabled"
+msgstr "포럼 알림이 활성화되었습니다."
+
+msgid "Forum notifications disabled"
+msgstr "포럼 알림이 비활성화되었습니다."
+
+msgid "Could not update forum notification"
+msgstr "포럼 알림을 업데이트할 수 없습니다."
+
+msgid "Forum category moved"
+msgstr "포럼 카테고리가 이동되었습니다."
+
+msgid "Could not move forum category"
+msgstr "포럼 카테고리를 이동할 수 없습니다."
+
+msgid "Forum moved"
+msgstr "포럼이 이동되었습니다."
+
+msgid "Could not move forum"
+msgstr "포럼을 이동할 수 없습니다."
+
+msgid "Back to forums"
+msgstr "포럼으로 돌아가기"
+
+msgid "New thread"
+msgstr "새 스레드"
+
+msgid "No threads found"
+msgstr "스레드를 찾을 수 없습니다"
+
+msgid "Sticky"
+msgstr "고정"
+
+msgid "Graded"
+msgstr "채점됨"
+
+msgid "Grade peers"
+msgstr "동료 채점"
+
+msgid "Move thread"
+msgstr "스레드 이동"
+
+msgid "Target forum"
+msgstr "대상 포럼"
+
+msgid "Target forum is required"
+msgstr "대상 포럼은 필수입니다"
+
+msgid "Students"
+msgstr "학생"
+
+msgid "No students found"
+msgstr "학생을 찾을 수 없습니다"
+
+msgid "No peers available to grade."
+msgstr "채점할 동료가 없습니다."
+
+msgid "Qualified"
+msgstr "자격 있음"
+
+msgid "Not qualified"
+msgstr "자격 없음"
+
+msgid "Could not retrieve thread grading"
+msgstr "스레드 채점을 검색할 수 없습니다"
+
+msgid "Thread grading updated"
+msgstr "스레드 채점이 업데이트되었습니다"
+
+msgid "Could not update thread grading"
+msgstr "스레드 채점을 업데이트할 수 없습니다"
+
+msgid "Thread score saved"
+msgstr "스레드 점수가 저장되었습니다"
+
+msgid "Could not save thread score"
+msgstr "스레드 점수를 저장할 수 없습니다"
+
+msgid "Could not move thread"
+msgstr "스레드를 이동할 수 없습니다"
+
+msgid "Thread updated"
+msgstr "스레드가 업데이트되었습니다"
+
+msgid "Search term is too short"
+msgstr "검색어가 너무 짧습니다"
+
+msgid "Could not search forums"
+msgstr "포럼을 검색할 수 없습니다"
+
+msgid "Moderated"
+msgstr "중재됨"
+
+msgid "View threads"
+msgstr "스레드 보기"
+

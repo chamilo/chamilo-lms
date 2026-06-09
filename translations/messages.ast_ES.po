@@ -35724,3 +35724,762 @@ msgstr "Nun se pudo crear la evaluación"
 msgid "The gradebook evaluation could not be linked"
 msgstr "Nun se pudo enllazar la evaluación del llibretu de notes"
 
+msgid "Survey questions"
+msgstr "Entrugues de la encuesta"
+
+msgid "Back to survey list"
+msgstr "Volver a la llista d'encuestes"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "Esta encuesta yá tien respuestes. La edición de entrugues ta desactivada pola configuración."
+
+msgid "Choose the type of question you want to add."
+msgstr "Escueyi'l tipu d'entruga que quies amestar."
+
+msgid "The free text option is added automatically."
+msgstr "L'opción de testu llibre amiéstase automáticamente."
+
+msgid "No questions found"
+msgstr "Nun s'atoparon entrugues"
+
+msgid "Mandatory"
+msgstr "Obligatoriu"
+
+msgid "Unsupported question type"
+msgstr "Tipu d'entruga non sofitáu"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "Pues usar les etiquetes {%s} y {%s} na entruga."
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "Esta entruga amuésase de forma condicional mientres se respuende la encuesta."
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "Les opciones de porcentaxe dende'l 1 al 100 xenerarense automáticamente."
+
+msgid "Could not load survey questions"
+msgstr "Nun se pudieron cargar les entrugues de la encuesta"
+
+msgid "The question text is required."
+msgstr "El testu de la entruga ye obligatoriu."
+
+msgid "The maximum score is required."
+msgstr "La puntuación máxima ye obligatoria."
+
+msgid "Please select a parent option."
+msgstr "Seleiciona una opción padre."
+
+msgid "Please fill all answer options."
+msgstr "Rellena toes les opciones de respuesta."
+
+msgid "QuestionUpdated"
+msgstr "QuestionUpdated"
+
+msgid "Could not save survey question"
+msgstr "Nun se pudo guardar la entruga de la encuesta"
+
+msgid "Could not delete survey question"
+msgstr "Nun se pudo desaniciar la entruga de la encuesta"
+
+msgid "Could not move survey question"
+msgstr "Nun se pudo mover la entruga de la encuesta"
+
+msgid "Could not copy survey question"
+msgstr "Nun se pudo copiar la entruga de la encuesta"
+
+msgid "Hide search"
+msgstr "Anubrir la gueta"
+
+msgid "Showing results for: %s"
+msgstr "Amosando resultaos pa: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "Buscar por títulu, códigu o descripción de la encuesta."
+
+msgid "Search surveys"
+msgstr "Buscar encuestes"
+
+msgid "%s surveys selected"
+msgstr "%s encuestes seleicionaes"
+
+msgid "Clear selection"
+msgstr "Llimpiar seleición"
+
+msgid "No surveys found"
+msgstr "Nun s'atoparon encuestes"
+
+msgid "Unsupported"
+msgstr "Non sofitáu"
+
+msgid "Could not load surveys"
+msgstr "Nun se pudieron cargar les encuestes"
+
+msgid "Delete selected surveys"
+msgstr "Desaniciar les encuestes seleicionaes"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "Desaniciaránse les encuestes seleicionaes y les sos entrugues. Esta aición nun se pue desfacer."
+
+msgid "Could not delete selected surveys"
+msgstr "Nun se pudieron desaniciar les encuestes seleicionaes"
+
+msgid "Survey action"
+msgstr "Aición de la encuesta"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "Va crease una copia d'esta encuesta: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "Van desaniciase toles rempuestes ya invitaciones pa esta encuesta: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "Van desaniciase les entrugues multiplicaes xeneraes d'esta encuesta: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "Esta encuesta va publicase pa los tutores del grupu enllazáu: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "Esta encuesta y les sos entrugues van desaniciase: %s"
+
+msgid "Could not complete survey action"
+msgstr "Nun se pudo completar l'aición de la encuesta"
+
+msgid "Not started"
+msgstr "Non aniciada"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "Les encuestes de reuniones dexen que los usuarios invitaos seleicionen les feches nes que tán disponibles."
+
+msgid "Back to surveys"
+msgstr "Volver a les encuestes"
+
+msgid "Edit meeting poll"
+msgstr "Editar encuesta de reunión"
+
+msgid "View meeting poll"
+msgstr "Ver encuesta de reunión"
+
+msgid "Basic information"
+msgstr "Información básica"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "Esto va crear una encuesta de tipu encuesta de reunión. Les rempuestes ya invitaciones xestiónense per separáu."
+
+msgid "Availability"
+msgstr "Disponibilidá"
+
+msgid "Meeting dates"
+msgstr "Dates de la reunión"
+
+msgid "Meeting poll"
+msgstr "Encuesta de reunión"
+
+msgid "My availability"
+msgstr "La mio disponibilidá"
+
+msgid "Meeting poll results"
+msgstr "Resultaos de la encuesta de reunión"
+
+msgid "No invitations found"
+msgstr "Nun s'atoparon invitaciones"
+
+msgid "available"
+msgstr "disponible"
+
+msgid "Could not load meeting poll"
+msgstr "Nun se pudo cargar la encuesta de reunión"
+
+msgid "Please complete the required fields"
+msgstr "Por favor, completa los campos requeríos"
+
+msgid "Could not save meeting poll"
+msgstr "Nun se pudo guardar la encuesta de reunión"
+
+msgid "Could not save meeting availability"
+msgstr "Nun se pudo guardar la disponibilidá pa la reunión"
+
+msgid "Copy this survey to another course or session"
+msgstr "Copiar esta encuesta a otru cursu o sesión"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "La encuesta va copiase ensin rempuestes nin invitaciones."
+
+msgid "No target courses found"
+msgstr "Nun s'atoparon cursos oxetivu"
+
+msgid "Search by course title, course code or session name."
+msgstr "Buscar por títulu del cursu, códigu del cursu o nome de la sesión."
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "Usa Duplicar encuesta cuando quieras una copia nel mesmu cursu."
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "Les entrugues y opciones van copiase. Les rempuestes, invitaciones ya informes van quedase namás na encuesta orixinal."
+
+msgid "Selected target"
+msgstr "Oxetivu seleicionáu"
+
+msgid "Could not load copy form"
+msgstr "Nun se pudo cargar el formulariu de copia"
+
+msgid "The survey will be copied to: %s"
+msgstr "La encuesta va copiase a: %s"
+
+msgid "Survey copied."
+msgstr "Encuesta copiada."
+
+msgid "Could not copy survey"
+msgstr "Nun se pudo copiar la encuesta"
+
+msgid "Answer survey"
+msgstr "Responder encuesta"
+
+msgid "Preview mode does not save answers."
+msgstr "El mou de vista previa nun guarda rempuestes."
+
+msgid "Survey completed"
+msgstr "Encuesta completada"
+
+msgid "Thank you for answering the survey."
+msgstr "Gracies por responder la encuesta."
+
+msgid "Profile information"
+msgstr "Información del perfil"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "Por favor, revisa los campos del perfil solicitaos enantes de responder la encuesta."
+
+msgid "This profile field is read-only."
+msgstr "Esti campu del perfil ye de namás llectura."
+
+msgid "You already filled this survey."
+msgstr "Yá completasti esta encuesta."
+
+msgid "Please specify"
+msgstr "Por favor, especifica"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "Esti tipu d'entruga nun ta sofitáu na vista moderna de la encuesta."
+
+msgid "Preview only"
+msgstr "Namás vista previa"
+
+msgid "Submit answers"
+msgstr "Unviar rempuestes"
+
+msgid "Could not load survey"
+msgstr "Nun se pudo cargar la encuesta"
+
+msgid "Please complete the required profile fields."
+msgstr "Completa los campos de perfil requeríos."
+
+msgid "Please answer all mandatory questions."
+msgstr "Responde toles entrugues obligatories."
+
+msgid "Could not save survey answers"
+msgstr "Nun se pudieron guardar les rempuestes de la encuesta"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "Configura la información principal de la encuesta enantes de xestionar entrugues ya invitaciones."
+
+msgid "The survey code cannot be changed after creation."
+msgstr "El códigu de la encuesta nun se pue camudar depués de la so creación."
+
+msgid "Survey behavior"
+msgstr "Comportamientu de la encuesta"
+
+msgid "Use 0 for no time limit."
+msgstr "Usa 0 pa nun tener llímite de tiempu."
+
+msgid "Survey messages"
+msgstr "Mensaxes de la encuesta"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "Los campos de perfil seleicionaos equí van amosase enantes de les entrugues de la encuesta."
+
+msgid "No profile fields are currently available."
+msgstr "Nun hai campos de perfil disponibles nestos momentos."
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "La seleición de campos de perfil namás ta disponible pa encuestes non anónimes."
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "L'enllaz de competencies va migrase nuna xera dedicada."
+
+msgid "Could not load survey configuration"
+msgstr "Nun se pudo cargar la configuración de la encuesta"
+
+msgid "The survey code is required."
+msgstr "El códigu de la encuesta ye obligatoriu."
+
+msgid "The survey title is required."
+msgstr "El títulu de la encuesta ye obligatoriu."
+
+msgid "The survey has been saved successfully"
+msgstr "La encuesta guardóse correutamente"
+
+msgid "Could not save survey configuration"
+msgstr "Nun se pudo guardar la configuración de la encuesta"
+
+msgid "Course users"
+msgstr "Usuarios del cursu"
+
+msgid "Already invited"
+msgstr "Yá convidáu"
+
+msgid "No users found"
+msgstr "Nun s'atoparon usuarios"
+
+msgid "No groups found"
+msgstr "Nun s'atoparon grupos"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "Usa **enllaz** onde deba apaecer l'enllaz de la encuesta."
+
+msgid "Remind all selected users"
+msgstr "Recordar a tolos usuarios seleicionaos"
+
+msgid "Anonymous access link"
+msgstr "Enllaz d'accesu anónimu"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "Los usuarios que nun tean convidaos puen usar esti enllaz pa facer la encuesta."
+
+msgid "Answered anonymously"
+msgstr "Respondíu anónimamente"
+
+msgid "Could not load survey invitations"
+msgstr "Nun se pudieron cargar les invitaciones de la encuesta"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "L'asuntu ya'l mensax del corréu son obligatorios al unviar corréu."
+
+msgid "Could not publish survey"
+msgstr "Nun se pudo espublizar la encuesta"
+
+msgid "Could not copy the link"
+msgstr "Nun se pudo copiar l'enllaz"
+
+msgid "Please answer this survey using the following link"
+msgstr "Responde esta encuesta usando'l siguiente enllaz"
+
+msgid "Export CSV"
+msgstr "Esportar CSV"
+
+msgid "Export compact CSV"
+msgstr "Esportar CSV compautu"
+
+msgid "Export Excel"
+msgstr "Esportar Excel"
+
+msgid "Export package"
+msgstr "Esportar paquete"
+
+msgid "Results summary"
+msgstr "Resume de resultaos"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "Esta vista amuesa los datos de los informes migraos pa esta encuesta."
+
+msgid "Select user"
+msgstr "Seleicionar usuariu"
+
+msgid "No answers found"
+msgstr "Nun s'atoparon rempuestes"
+
+msgid "answers"
+msgstr "rempuestes"
+
+msgid "Could not load survey reporting"
+msgstr "Nun se pudo cargar l'informe de la encuesta"
+
+msgid "Back to threads"
+msgstr "Volver a los filos"
+
+msgid "Back to learning path"
+msgstr "Volver al camín d'aprendizaxe"
+
+msgid "Remove sticky"
+msgstr "Quitar fixáu"
+
+msgid "Make sticky"
+msgstr "Fixar"
+
+msgid "Open thread"
+msgstr "Abrir filu"
+
+msgid "Close thread"
+msgstr "Zarrar filu"
+
+msgid "Delete thread"
+msgstr "Desaniciar filu"
+
+msgid "This thread is hidden from learners."
+msgstr "Esti filu ta anubríu pa los alumnos."
+
+msgid "Revision requested"
+msgstr "Revisión solicitada"
+
+msgid "Revision"
+msgstr "Revisión"
+
+msgid "Approve post"
+msgstr "Aprobar mensaxe"
+
+msgid "Reject post"
+msgstr "Refugar mensaxe"
+
+msgid "Cancel revision request"
+msgstr "Cancelar solicitú de revisión"
+
+msgid "Delete post"
+msgstr "Desaniciar mensaxe"
+
+msgid "Message is required"
+msgstr "El mensaxe ye obligatoriu"
+
+msgid "Target thread is required"
+msgstr "El filu destín ye obligatoriu"
+
+msgid "Could not retrieve posts"
+msgstr "Nun se pudieron recuperar los mensaxes"
+
+msgid "Thread shown"
+msgstr "Filu amosáu"
+
+msgid "Thread hidden"
+msgstr "Filu anubríu"
+
+msgid "Could not update thread"
+msgstr "Nun se pudo anovar el filu"
+
+msgid "Thread closed"
+msgstr "Filu zarráu"
+
+msgid "Thread opened"
+msgstr "Filu abiertu"
+
+msgid "Thread marked as sticky"
+msgstr "Filu marcáu como fixu"
+
+msgid "Thread unmarked as sticky"
+msgstr "Filu desmarcáu como fixu"
+
+msgid "Thread notifications enabled"
+msgstr "Avisos del filu activaos"
+
+msgid "Thread notifications disabled"
+msgstr "Avisos del filu desactivaos"
+
+msgid "Could not update thread notification"
+msgstr "Nun se pudo anovar l'avisu del filu"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "¿De xuru que quies desaniciar esti filu?"
+
+msgid "Could not delete thread"
+msgstr "Nun se pudo desaniciar el filu"
+
+msgid "Post approved"
+msgstr "Mensaxe aprobáu"
+
+msgid "Could not approve post"
+msgstr "Nun se pudo aprobar el mensaxe"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "¿De xuru que quies refugar esti mensaxe?"
+
+msgid "Post rejected"
+msgstr "Mensaxe refugáu"
+
+msgid "Could not reject post"
+msgstr "Nun se pudo refugar el mensaxe"
+
+msgid "Post shown"
+msgstr "Mensaxe amosáu"
+
+msgid "Post hidden"
+msgstr "Mensaxe anubríu"
+
+msgid "Could not update post"
+msgstr "Nun se pudo anovar el mensaxe"
+
+msgid "Post updated"
+msgstr "Mensaxe anováu"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "¿De xuru que quies desaniciar esti mensaxe?"
+
+msgid "Post deleted"
+msgstr "Mensaxe desaniciáu"
+
+msgid "Could not delete post"
+msgstr "Nun se pudo desaniciar el mensaxe"
+
+msgid "Untitled thread"
+msgstr "Filu ensin títulu"
+
+msgid "Could not retrieve threads"
+msgstr "Nun se pudieron recuperar los filos"
+
+msgid "Post moved"
+msgstr "Mensaxe movíu"
+
+msgid "Could not move post"
+msgstr "Nun se pudo mover el mensaxe"
+
+msgid "Revision request removed"
+msgstr "Solicitú de revisión desaniciada"
+
+msgid "Could not update revision request"
+msgstr "Nun se pudo anovar la solicitú de revisión"
+
+msgid "Are you sure you want to report this post?"
+msgstr "¿De xuru que quies informar d'esti mensaxe?"
+
+msgid "Could not report post"
+msgstr "Nun se pudo informar del mensaxe"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "¿De xuru que quies desaniciar esti ficheru axuntu?"
+
+msgid "Attachment deleted"
+msgstr "Ficheru axuntu desaniciáu"
+
+msgid "Could not delete attachment"
+msgstr "Nun se pudo desaniciar el ficheru axuntu"
+
+msgid "Thread title"
+msgstr "Títulu del filu"
+
+msgid "Sticky thread"
+msgstr "Filu fixu"
+
+msgid "Attach files"
+msgstr "Axuntar ficheros"
+
+msgid "Attachments are disabled for this forum"
+msgstr "Los ficheros axuntos tán desactivaos pa esti foru"
+
+msgid "The forum is not open yet."
+msgstr "El foru entá nun ta abiertu."
+
+msgid "The forum is closed."
+msgstr "El foru ta zarráu."
+
+msgid "The forum is locked."
+msgstr "El foru ta bloquiáu."
+
+msgid "New threads are not allowed in this forum."
+msgstr "Nun se permiten nuevos filos nesti foru."
+
+msgid "Thread created"
+msgstr "Filu creáu"
+
+msgid "Could not create thread"
+msgstr "Nun se pudo crear el filu"
+
+msgid "Back to posts"
+msgstr "Volver a les entraes"
+
+msgid "This reply will be stored as a revision."
+msgstr "Esta rempuesta va guardase como una revisión."
+
+msgid "Post reply"
+msgstr "Responder a la entrada"
+
+msgid "The thread is locked."
+msgstr "El filu ta bloquiáu."
+
+msgid "Reply added"
+msgstr "Rempuesta añadida"
+
+msgid "Could not add reply"
+msgstr "Nun se pudo amestar la rempuesta"
+
+msgid "Add forum"
+msgstr "Amestar foru"
+
+msgid "No forums found"
+msgstr "Nun s'atoparon foros"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "Crea la to primer categoría de foru o foru pa aniciar discutinios."
+
+msgid "Locked"
+msgstr "Bloquiáu"
+
+msgid "No forums in this category"
+msgstr "Nun hai foros nesta categoría"
+
+msgid "Posts require approval"
+msgstr "Les entraes necesiten aprobación"
+
+msgid "Forum for current group"
+msgstr "Foru pal grupu actual"
+
+msgid "Group forum visibility"
+msgstr "Visibilidá del foru del grupu"
+
+msgid "No category"
+msgstr "Ensin categoría"
+
+msgid "Could not retrieve forums"
+msgstr "Nun se pudieron recuperar los foros"
+
+msgid "Forum category updated"
+msgstr "Categoría de foru anovada"
+
+msgid "Forum category created"
+msgstr "Categoría de foru creada"
+
+msgid "Could not save forum category"
+msgstr "Nun se pudo guardar la categoría de foru"
+
+msgid "Forum updated"
+msgstr "Foru anováu"
+
+msgid "Forum created"
+msgstr "Foru creáu"
+
+msgid "Could not save forum"
+msgstr "Nun se pudo guardar el foru"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "¿De xuru que quies desaniciar esta categoría de foru?"
+
+msgid "Could not delete forum category"
+msgstr "Nun se pudo desaniciar la categoría de foru"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "¿De xuru que quies desaniciar esti foru?"
+
+msgid "Could not delete forum"
+msgstr "Nun se pudo desaniciar el foru"
+
+msgid "Forum category unlocked"
+msgstr "Categoría de foru desbloquiada"
+
+msgid "Forum category locked"
+msgstr "Categoría de foru bloquiada"
+
+msgid "Could not update forum category"
+msgstr "Nun se pudo anovar la categoría de foru"
+
+msgid "Forum category shown"
+msgstr "Categoría de foru amosada"
+
+msgid "Forum category hidden"
+msgstr "Categoría de foru anubada"
+
+msgid "Forum unlocked"
+msgstr "Foru desbloquiáu"
+
+msgid "Forum locked"
+msgstr "Foru bloquiáu"
+
+msgid "Could not update forum"
+msgstr "Nun se pudo anovar el foru"
+
+msgid "Forum shown"
+msgstr "Foru amosáu"
+
+msgid "Forum hidden"
+msgstr "Foru anubáu"
+
+msgid "Forum notifications enabled"
+msgstr "Avisos del foru activaos"
+
+msgid "Forum notifications disabled"
+msgstr "Avisos del foru desactivaos"
+
+msgid "Could not update forum notification"
+msgstr "Nun se pudo anovar l'avisu del foru"
+
+msgid "Forum category moved"
+msgstr "Categoría de foru movida"
+
+msgid "Could not move forum category"
+msgstr "Nun se pudo mover la categoría de foru"
+
+msgid "Forum moved"
+msgstr "Foru movíu"
+
+msgid "Could not move forum"
+msgstr "Nun se pudo mover el foru"
+
+msgid "Back to forums"
+msgstr "Volver a los foros"
+
+msgid "New thread"
+msgstr "Filu nuevu"
+
+msgid "No threads found"
+msgstr "Nun s'atoparon filos"
+
+msgid "Sticky"
+msgstr "Fitu"
+
+msgid "Graded"
+msgstr "Calificáu"
+
+msgid "Grade peers"
+msgstr "Calificar pares"
+
+msgid "Move thread"
+msgstr "Mover filu"
+
+msgid "Target forum"
+msgstr "Foru oxetivu"
+
+msgid "Target forum is required"
+msgstr "Requierse'l foru oxetivu"
+
+msgid "Students"
+msgstr "Estudiantes"
+
+msgid "No students found"
+msgstr "Nun s'atoparon estudiantes"
+
+msgid "No peers available to grade."
+msgstr "Nun hai pares disponibles pa calificar."
+
+msgid "Qualified"
+msgstr "Cualificáu"
+
+msgid "Not qualified"
+msgstr "Non cualificáu"
+
+msgid "Could not retrieve thread grading"
+msgstr "Nun se pudo recuperar la calificación del filu"
+
+msgid "Thread grading updated"
+msgstr "Calificación del filu anovada"
+
+msgid "Could not update thread grading"
+msgstr "Nun se pudo anovar la calificación del filu"
+
+msgid "Thread score saved"
+msgstr "Puntuación del filu guardada"
+
+msgid "Could not save thread score"
+msgstr "Nun se pudo guardar la puntuación del filu"
+
+msgid "Could not move thread"
+msgstr "Nun se pudo mover el filu"
+
+msgid "Thread updated"
+msgstr "Filu anováu"
+
+msgid "Search term is too short"
+msgstr "El términu de busca ye enforma curtiu"
+
+msgid "Could not search forums"
+msgstr "Nun se pudieron buscar foros"
+
+msgid "Moderated"
+msgstr "Moderao"
+
+msgid "View threads"
+msgstr "Ver filos"
+

@@ -35724,3 +35724,762 @@ msgstr "Arviointia ei voitu luoda"
 msgid "The gradebook evaluation could not be linked"
 msgstr "Arviointikirjan arviointia ei voitu linkittää"
 
+msgid "Survey questions"
+msgstr "Kyselyt"
+
+msgid "Back to survey list"
+msgstr "Takaisin kyselyluetteloon"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "Tähän kyselyyn on jo vastattu. Kysymysten muokkaus on poistettu käytöstä asetuksissa."
+
+msgid "Choose the type of question you want to add."
+msgstr "Valitse lisättävän kysymyksen tyyppi."
+
+msgid "The free text option is added automatically."
+msgstr "Vapaa tekstikenttä lisätään automaattisesti."
+
+msgid "No questions found"
+msgstr "Kysymyksiä ei löytynyt"
+
+msgid "Mandatory"
+msgstr "Pakollinen"
+
+msgid "Unsupported question type"
+msgstr "Ei tuettu kysymystyyppi"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "Voit käyttää kysymyksessä tunnisteita {%s} ja {%s}."
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "Tämä kysymys näytetään ehdollisesti kyselyyn vastattaessa."
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "Prosenttiosuudet 1–100 luodaan automaattisesti."
+
+msgid "Could not load survey questions"
+msgstr "Kyselykysymyksiä ei voitu ladata"
+
+msgid "The question text is required."
+msgstr "Kysymyksen teksti on pakollinen."
+
+msgid "The maximum score is required."
+msgstr "Maksimipistemäärä on pakollinen."
+
+msgid "Please select a parent option."
+msgstr "Valitse päävaihtoehto."
+
+msgid "Please fill all answer options."
+msgstr "Täytä kaikki vastausvaihtoehdot."
+
+msgid "QuestionUpdated"
+msgstr "QuestionUpdated"
+
+msgid "Could not save survey question"
+msgstr "Kyselykysymystä ei voitu tallentaa"
+
+msgid "Could not delete survey question"
+msgstr "Kyselykysymystä ei voitu poistaa"
+
+msgid "Could not move survey question"
+msgstr "Kyselykysymystä ei voitu siirtää"
+
+msgid "Could not copy survey question"
+msgstr "Kyselykysymystä ei voitu kopioida"
+
+msgid "Hide search"
+msgstr "Piilota haku"
+
+msgid "Showing results for: %s"
+msgstr "Näytetään tulokset haulle: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "Hae kyselyn otsikolla, koodilla tai kuvauksella."
+
+msgid "Search surveys"
+msgstr "Hae kyselyitä"
+
+msgid "%s surveys selected"
+msgstr "%s kyselyä valittu"
+
+msgid "Clear selection"
+msgstr "Tyhjennä valinta"
+
+msgid "No surveys found"
+msgstr "Kyselyitä ei löytynyt"
+
+msgid "Unsupported"
+msgstr "Ei tuettu"
+
+msgid "Could not load surveys"
+msgstr "Kyselyitä ei voitu ladata"
+
+msgid "Delete selected surveys"
+msgstr "Poista valitut kyselyt"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "Valitut kyselyt ja niiden kysymykset poistetaan. Tätä toimintoa ei voi peruuttaa."
+
+msgid "Could not delete selected surveys"
+msgstr "Valittuja kyselyitä ei voitu poistaa"
+
+msgid "Survey action"
+msgstr "Kyselyn toiminto"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "Tästä kyselystä luodaan kopio: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "Kaikki vastaukset ja kutsut poistetaan tästä kyselystä: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "Luodut monistetut kysymykset poistetaan tästä kyselystä: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "Tämä kysely julkaistaan linkitetyn ryhmän ohjaajille: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "Tämä kysely ja sen kysymykset poistetaan: %s"
+
+msgid "Could not complete survey action"
+msgstr "Kyselytoimintoa ei voitu suorittaa"
+
+msgid "Not started"
+msgstr "Ei aloitettu"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "Kokouskyselyt antavat kutsutuille käyttäjille mahdollisuuden valita päivät, jolloin he ovat käytettävissä."
+
+msgid "Back to surveys"
+msgstr "Takaisin kyselyihin"
+
+msgid "Edit meeting poll"
+msgstr "Muokkaa kokouskyselyä"
+
+msgid "View meeting poll"
+msgstr "Näytä kokouskysely"
+
+msgid "Basic information"
+msgstr "Perustiedot"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "Tämä luo kyselyn tyyppiä kokouskysely. Vastaukset ja kutsut käsitellään erikseen."
+
+msgid "Availability"
+msgstr "Saatavuus"
+
+msgid "Meeting dates"
+msgstr "Kokouspäivät"
+
+msgid "Meeting poll"
+msgstr "Kokouskysely"
+
+msgid "My availability"
+msgstr "Oma saatavuus"
+
+msgid "Meeting poll results"
+msgstr "Kokouskyselyn tulokset"
+
+msgid "No invitations found"
+msgstr "Kutsuja ei löytynyt"
+
+msgid "available"
+msgstr "käytettävissä"
+
+msgid "Could not load meeting poll"
+msgstr "Kokouskyselyä ei voitu ladata"
+
+msgid "Please complete the required fields"
+msgstr "Täytä pakolliset kentät"
+
+msgid "Could not save meeting poll"
+msgstr "Kokouskyselyä ei voitu tallentaa"
+
+msgid "Could not save meeting availability"
+msgstr "Kokoussaatavuutta ei voitu tallentaa"
+
+msgid "Copy this survey to another course or session"
+msgstr "Kopioi tämä kysely toiseen kurssiin tai istuntoon"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "Kysely kopioidaan ilman vastauksia tai kutsuja."
+
+msgid "No target courses found"
+msgstr "Kohdekursseja ei löytynyt"
+
+msgid "Search by course title, course code or session name."
+msgstr "Hae kurssin nimen, kurssikoodin tai istunnon nimen perusteella."
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "Käytä Kyselyn monistamista, kun haluat kopion samaan kurssiin."
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "Kysymykset ja vaihtoehdot kopioidaan. Vastaukset, kutsut ja raportit jäävät vain alkuperäiseen kyselyyn."
+
+msgid "Selected target"
+msgstr "Valittu kohde"
+
+msgid "Could not load copy form"
+msgstr "Kopiointilomaketta ei voitu ladata"
+
+msgid "The survey will be copied to: %s"
+msgstr "Kysely kopioidaan kohteeseen: %s"
+
+msgid "Survey copied."
+msgstr "Kysely kopioitu."
+
+msgid "Could not copy survey"
+msgstr "Kyselyä ei voitu kopioida"
+
+msgid "Answer survey"
+msgstr "Vastaa kyselyyn"
+
+msgid "Preview mode does not save answers."
+msgstr "Esikatselutila ei tallenna vastauksia."
+
+msgid "Survey completed"
+msgstr "Kysely suoritettu"
+
+msgid "Thank you for answering the survey."
+msgstr "Kiitos kyselyyn vastaamisesta."
+
+msgid "Profile information"
+msgstr "Profiilitiedot"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "Tarkista pyydetyt profiilikentät ennen kyselyyn vastaamista."
+
+msgid "This profile field is read-only."
+msgstr "Tämä profiilikenttä on vain luettavissa."
+
+msgid "You already filled this survey."
+msgstr "Olet jo täyttänyt tämän kyselyn."
+
+msgid "Please specify"
+msgstr "Määritä tarkemmin"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "Tätä kysymystyyppiä ei tueta modernissa kyselynäkymässä."
+
+msgid "Preview only"
+msgstr "Vain esikatselu"
+
+msgid "Submit answers"
+msgstr "Lähetä vastaukset"
+
+msgid "Could not load survey"
+msgstr "Kyselyä ei voitu ladata"
+
+msgid "Please complete the required profile fields."
+msgstr "Täytä pakolliset profiilikentät."
+
+msgid "Please answer all mandatory questions."
+msgstr "Vastaa kaikkiin pakollisiin kysymyksiin."
+
+msgid "Could not save survey answers"
+msgstr "Kyselyvastauksia ei voitu tallentaa"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "Määritä kyselyn perustiedot ennen kysymysten ja kutsujen hallintaa."
+
+msgid "The survey code cannot be changed after creation."
+msgstr "Kyselyn koodia ei voi muuttaa luomisen jälkeen."
+
+msgid "Survey behavior"
+msgstr "Kyselyn toiminta"
+
+msgid "Use 0 for no time limit."
+msgstr "Käytä arvoa 0, jos aikarajaa ei ole."
+
+msgid "Survey messages"
+msgstr "Kyselyn viestit"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "Täällä valitut profiilikentät näytetään ennen kyselyn kysymyksiä."
+
+msgid "No profile fields are currently available."
+msgstr "Profiilikenttiä ei ole tällä hetkellä saatavilla."
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "Profiilikenttien valinta on käytettävissä vain ei-anonyymeissä kyselyissä."
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "Taitolinkitys siirretään erillisessä erässä."
+
+msgid "Could not load survey configuration"
+msgstr "Kyselyn asetuksia ei voitu ladata"
+
+msgid "The survey code is required."
+msgstr "Kyselyn koodi on pakollinen."
+
+msgid "The survey title is required."
+msgstr "Kyselyn otsikko on pakollinen."
+
+msgid "The survey has been saved successfully"
+msgstr "Kysely on tallennettu onnistuneesti"
+
+msgid "Could not save survey configuration"
+msgstr "Kyselyn asetuksia ei voitu tallentaa"
+
+msgid "Course users"
+msgstr "Kurssin käyttäjät"
+
+msgid "Already invited"
+msgstr "Jo kutsuttu"
+
+msgid "No users found"
+msgstr "Käyttäjiä ei löytynyt"
+
+msgid "No groups found"
+msgstr "Ryhmiä ei löytynyt"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "Käytä **link** kohtaa, jossa kyselylinkin tulee näkyä."
+
+msgid "Remind all selected users"
+msgstr "Muistuta kaikkia valittuja käyttäjiä"
+
+msgid "Anonymous access link"
+msgstr "Anonyymi pääsylinkki"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "Käyttäjät, joita ei ole kutsuttu, voivat käyttää tätä linkkiä vastatakseen kyselyyn."
+
+msgid "Answered anonymously"
+msgstr "Vastattu anonyymisti"
+
+msgid "Could not load survey invitations"
+msgstr "Kyselykutsuja ei voitu ladata"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "Sähköpostin aihe ja viesti ovat pakollisia, kun lähetetään sähköpostia."
+
+msgid "Could not publish survey"
+msgstr "Kyselyä ei voitu julkaista"
+
+msgid "Could not copy the link"
+msgstr "Linkkiä ei voitu kopioida"
+
+msgid "Please answer this survey using the following link"
+msgstr "Vastaa tähän kyselyyn seuraavalla linkillä"
+
+msgid "Export CSV"
+msgstr "Vie CSV"
+
+msgid "Export compact CSV"
+msgstr "Vie tiivistetty CSV"
+
+msgid "Export Excel"
+msgstr "Vie Excel"
+
+msgid "Export package"
+msgstr "Vie paketti"
+
+msgid "Results summary"
+msgstr "Tulosten yhteenveto"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "Tämä näkymä näyttää siirretyn raportointitiedon tälle kyselylle."
+
+msgid "Select user"
+msgstr "Valitse käyttäjä"
+
+msgid "No answers found"
+msgstr "Vastauksia ei löytynyt"
+
+msgid "answers"
+msgstr "vastausta"
+
+msgid "Could not load survey reporting"
+msgstr "Kyselyn raportointia ei voitu ladata"
+
+msgid "Back to threads"
+msgstr "Takaisin ketjuihin"
+
+msgid "Back to learning path"
+msgstr "Takaisin oppimispolkuun"
+
+msgid "Remove sticky"
+msgstr "Poista kiinnitys"
+
+msgid "Make sticky"
+msgstr "Kiinnitä"
+
+msgid "Open thread"
+msgstr "Avaa ketju"
+
+msgid "Close thread"
+msgstr "Sulje ketju"
+
+msgid "Delete thread"
+msgstr "Poista ketju"
+
+msgid "This thread is hidden from learners."
+msgstr "Tämä ketju on piilotettu oppijoilta."
+
+msgid "Revision requested"
+msgstr "Korjaus pyydetty"
+
+msgid "Revision"
+msgstr "Korjaus"
+
+msgid "Approve post"
+msgstr "Hyväksy viesti"
+
+msgid "Reject post"
+msgstr "Hylkää viesti"
+
+msgid "Cancel revision request"
+msgstr "Peruuta tarkistuspyyntö"
+
+msgid "Delete post"
+msgstr "Poista viesti"
+
+msgid "Message is required"
+msgstr "Viesti on pakollinen"
+
+msgid "Target thread is required"
+msgstr "Kohdelanka on pakollinen"
+
+msgid "Could not retrieve posts"
+msgstr "Viestejä ei voitu hakea"
+
+msgid "Thread shown"
+msgstr "Lanka näytetty"
+
+msgid "Thread hidden"
+msgstr "Lanka piilotettu"
+
+msgid "Could not update thread"
+msgstr "Lankaa ei voitu päivittää"
+
+msgid "Thread closed"
+msgstr "Lanka suljettu"
+
+msgid "Thread opened"
+msgstr "Lanka avattu"
+
+msgid "Thread marked as sticky"
+msgstr "Lanka merkitty kiinnitetyksi"
+
+msgid "Thread unmarked as sticky"
+msgstr "Langan kiinnitysmerkintä poistettu"
+
+msgid "Thread notifications enabled"
+msgstr "Langan ilmoitukset käytössä"
+
+msgid "Thread notifications disabled"
+msgstr "Langan ilmoitukset pois käytöstä"
+
+msgid "Could not update thread notification"
+msgstr "Langan ilmoitusta ei voitu päivittää"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "Haluatko varmasti poistaa tämän langan?"
+
+msgid "Could not delete thread"
+msgstr "Lankaa ei voitu poistaa"
+
+msgid "Post approved"
+msgstr "Viesti hyväksytty"
+
+msgid "Could not approve post"
+msgstr "Viestiä ei voitu hyväksyä"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "Haluatko varmasti hylätä tämän viestin?"
+
+msgid "Post rejected"
+msgstr "Viesti hylätty"
+
+msgid "Could not reject post"
+msgstr "Viestiä ei voitu hylätä"
+
+msgid "Post shown"
+msgstr "Viesti näytetty"
+
+msgid "Post hidden"
+msgstr "Viesti piilotettu"
+
+msgid "Could not update post"
+msgstr "Viestiä ei voitu päivittää"
+
+msgid "Post updated"
+msgstr "Viesti päivitetty"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "Haluatko varmasti poistaa tämän viestin?"
+
+msgid "Post deleted"
+msgstr "Viesti poistettu"
+
+msgid "Could not delete post"
+msgstr "Viestiä ei voitu poistaa"
+
+msgid "Untitled thread"
+msgstr "Nimeämätön lanka"
+
+msgid "Could not retrieve threads"
+msgstr "Lankoja ei voitu hakea"
+
+msgid "Post moved"
+msgstr "Viesti siirretty"
+
+msgid "Could not move post"
+msgstr "Viestiä ei voitu siirtää"
+
+msgid "Revision request removed"
+msgstr "Tarkistuspyyntö poistettu"
+
+msgid "Could not update revision request"
+msgstr "Tarkistuspyyntöä ei voitu päivittää"
+
+msgid "Are you sure you want to report this post?"
+msgstr "Haluatko varmasti ilmoittaa tästä viestistä?"
+
+msgid "Could not report post"
+msgstr "Viestiä ei voitu ilmoittaa"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "Haluatko varmasti poistaa tämän liitteen?"
+
+msgid "Attachment deleted"
+msgstr "Liite poistettu"
+
+msgid "Could not delete attachment"
+msgstr "Liitettä ei voitu poistaa"
+
+msgid "Thread title"
+msgstr "Langan otsikko"
+
+msgid "Sticky thread"
+msgstr "Kiinnitetty lanka"
+
+msgid "Attach files"
+msgstr "Liitä tiedostoja"
+
+msgid "Attachments are disabled for this forum"
+msgstr "Liitteet on poistettu käytöstä tässä keskustelualueessa"
+
+msgid "The forum is not open yet."
+msgstr "Keskustelualue ei ole vielä avoinna."
+
+msgid "The forum is closed."
+msgstr "Keskustelualue on suljettu."
+
+msgid "The forum is locked."
+msgstr "Keskustelualue on lukittu."
+
+msgid "New threads are not allowed in this forum."
+msgstr "Uusia lankoja ei sallita tässä keskustelualueessa."
+
+msgid "Thread created"
+msgstr "Lanka luotu"
+
+msgid "Could not create thread"
+msgstr "Lankaa ei voitu luoda"
+
+msgid "Back to posts"
+msgstr "Takaisin viesteihin"
+
+msgid "This reply will be stored as a revision."
+msgstr "Tämä vastaus tallennetaan versiona."
+
+msgid "Post reply"
+msgstr "Lähetä vastaus"
+
+msgid "The thread is locked."
+msgstr "Ketju on lukittu."
+
+msgid "Reply added"
+msgstr "Vastaus lisätty"
+
+msgid "Could not add reply"
+msgstr "Vastauksen lisääminen epäonnistui"
+
+msgid "Add forum"
+msgstr "Lisää foorumi"
+
+msgid "No forums found"
+msgstr "Foorumeita ei löytynyt"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "Luo ensimmäinen foorumikategoria tai foorumi aloittaaksesi keskustelut."
+
+msgid "Locked"
+msgstr "Lukittu"
+
+msgid "No forums in this category"
+msgstr "Ei foorumeita tässä kategoriassa"
+
+msgid "Posts require approval"
+msgstr "Viestit vaativat hyväksynnän"
+
+msgid "Forum for current group"
+msgstr "Nykyisen ryhmän foorumi"
+
+msgid "Group forum visibility"
+msgstr "Ryhmäfoorumin näkyvyys"
+
+msgid "No category"
+msgstr "Ei kategoriaa"
+
+msgid "Could not retrieve forums"
+msgstr "Foorumien haku epäonnistui"
+
+msgid "Forum category updated"
+msgstr "Foorumikategoria päivitetty"
+
+msgid "Forum category created"
+msgstr "Foorumikategoria luotu"
+
+msgid "Could not save forum category"
+msgstr "Foorumikategorian tallennus epäonnistui"
+
+msgid "Forum updated"
+msgstr "Foorumi päivitetty"
+
+msgid "Forum created"
+msgstr "Foorumi luotu"
+
+msgid "Could not save forum"
+msgstr "Foorumin tallennus epäonnistui"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "Haluatko varmasti poistaa tämän foorumikategorian?"
+
+msgid "Could not delete forum category"
+msgstr "Foorumikategorian poisto epäonnistui"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "Haluatko varmasti poistaa tämän foorumin?"
+
+msgid "Could not delete forum"
+msgstr "Foorumin poisto epäonnistui"
+
+msgid "Forum category unlocked"
+msgstr "Foorumikategoria avattu"
+
+msgid "Forum category locked"
+msgstr "Foorumikategoria lukittu"
+
+msgid "Could not update forum category"
+msgstr "Foorumikategorian päivitys epäonnistui"
+
+msgid "Forum category shown"
+msgstr "Foorumikategoria näytetty"
+
+msgid "Forum category hidden"
+msgstr "Foorumikategoria piilotettu"
+
+msgid "Forum unlocked"
+msgstr "Foorumi avattu"
+
+msgid "Forum locked"
+msgstr "Foorumi lukittu"
+
+msgid "Could not update forum"
+msgstr "Foorumin päivitys epäonnistui"
+
+msgid "Forum shown"
+msgstr "Foorumi näytetty"
+
+msgid "Forum hidden"
+msgstr "Foorumi piilotettu"
+
+msgid "Forum notifications enabled"
+msgstr "Foorumin ilmoitukset käytössä"
+
+msgid "Forum notifications disabled"
+msgstr "Foorumin ilmoitukset pois käytöstä"
+
+msgid "Could not update forum notification"
+msgstr "Foorumin ilmoitusten päivitys epäonnistui"
+
+msgid "Forum category moved"
+msgstr "Foorumikategoria siirretty"
+
+msgid "Could not move forum category"
+msgstr "Foorumikategorian siirto epäonnistui"
+
+msgid "Forum moved"
+msgstr "Foorumi siirretty"
+
+msgid "Could not move forum"
+msgstr "Foorumin siirto epäonnistui"
+
+msgid "Back to forums"
+msgstr "Takaisin foorumeihin"
+
+msgid "New thread"
+msgstr "Uusi ketju"
+
+msgid "No threads found"
+msgstr "Ketjuja ei löytynyt"
+
+msgid "Sticky"
+msgstr "Kiinnitetty"
+
+msgid "Graded"
+msgstr "Arvioitu"
+
+msgid "Grade peers"
+msgstr "Arvioi vertaisia"
+
+msgid "Move thread"
+msgstr "Siirrä ketju"
+
+msgid "Target forum"
+msgstr "Kohdefoorumi"
+
+msgid "Target forum is required"
+msgstr "Kohdefoorumi on pakollinen"
+
+msgid "Students"
+msgstr "Opiskelijat"
+
+msgid "No students found"
+msgstr "Opiskelijoita ei löytynyt"
+
+msgid "No peers available to grade."
+msgstr "Arvioitavia vertaisia ei ole saatavilla."
+
+msgid "Qualified"
+msgstr "Hyväksytty"
+
+msgid "Not qualified"
+msgstr "Ei hyväksytty"
+
+msgid "Could not retrieve thread grading"
+msgstr "Ketjun arviointia ei voitu hakea"
+
+msgid "Thread grading updated"
+msgstr "Ketjun arviointi päivitetty"
+
+msgid "Could not update thread grading"
+msgstr "Ketjun arviointia ei voitu päivittää"
+
+msgid "Thread score saved"
+msgstr "Ketjun pisteet tallennettu"
+
+msgid "Could not save thread score"
+msgstr "Ketjun pisteitä ei voitu tallentaa"
+
+msgid "Could not move thread"
+msgstr "Ketjua ei voitu siirtää"
+
+msgid "Thread updated"
+msgstr "Ketju päivitetty"
+
+msgid "Search term is too short"
+msgstr "Hakutermi on liian lyhyt"
+
+msgid "Could not search forums"
+msgstr "Foorumeita ei voitu hakea"
+
+msgid "Moderated"
+msgstr "Moderoitu"
+
+msgid "View threads"
+msgstr "Näytä ketjut"
+

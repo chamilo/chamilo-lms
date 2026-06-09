@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Allin kuyaywan"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Qillqay ruwana qhawariy: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Qillqaypi ruway: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Sutikuna umu"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ari:copyright nisqawan,, mana:mana copyright nisqawan"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Q'utu,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Carpeta,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ejercicio,,      simulation:simulación,,      questionnaire:cuestionario,,      diagram:diagrama,,      figure:figura,,      graph:gráfico,,      index:índice,,      slide:diapositiva,,      table:tabla,,      narrative text:texto narrativo,,      exam:examen,,      experiment:experiencia,,      problem statement:problema,,      self assessment:autoevaluación,,      lecture:presentación"
@@ -35723,4 +35723,763 @@ msgstr "Yupay qelqana mana ruwasqa"
 
 msgid "The gradebook evaluation could not be linked"
 msgstr "Yupay qelqana mana tinkusqa"
+
+msgid "Survey questions"
+msgstr "Tapukuy tapukuykuna"
+
+msgid "Back to survey list"
+msgstr "Tapukuykuna listaman kutiy"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "Kay tapukuyqa ña kutichiykunaqa kashan. Tapukuy ruwayqa mana ruwakunmanchu kamachisqa."
+
+msgid "Choose the type of question you want to add."
+msgstr "Ima tapukuy ruwayta churayta munanki."
+
+msgid "The free text option is added automatically."
+msgstr "Qispisqa qillqa akllanaqa kikillanmi churakun."
+
+msgid "No questions found"
+msgstr "Mana tapukuykuna tarikunchu"
+
+msgid "Mandatory"
+msgstr "Kamachisqa"
+
+msgid "Unsupported question type"
+msgstr "Mana yanapakusqa tapukuy ruway"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "Tapukuyta {%s} hinaspa {%s} etiquetakunata llamk'achiyta atinki."
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "Kay tapukuyqa tapukuy kutichiy pachapi kamachisqa rikuchikun."
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "1manta 100kama porcentaje akllanakunaqa kikillanmi ruwakun."
+
+msgid "Could not load survey questions"
+msgstr "Tapukuy tapukuykunata mana q'ipiyta atikunchu"
+
+msgid "The question text is required."
+msgstr "Tapukuy qillqaqa kamachisqam."
+
+msgid "The maximum score is required."
+msgstr "Aswan hatun puntaqa kamachisqam."
+
+msgid "Please select a parent option."
+msgstr "Ama hina kaspa, yaya akllanata akllay."
+
+msgid "Please fill all answer options."
+msgstr "Ama hina kaspa, llapan kutichiy akllanakunata hunt'ay."
+
+msgid "QuestionUpdated"
+msgstr "QuestionUpdated"
+
+msgid "Could not save survey question"
+msgstr "Tapukuy tapukuyta mana waqaychayta atikunchu"
+
+msgid "Could not delete survey question"
+msgstr "Tapukuy tapukuyta mana qulluyta atikunchu"
+
+msgid "Could not move survey question"
+msgstr "Tapukuy tapukuyta mana astayta atikunchu"
+
+msgid "Could not copy survey question"
+msgstr "Tapukuy tapukuyta mana kopiyayta atikunchu"
+
+msgid "Hide search"
+msgstr "Maskayta pakay"
+
+msgid "Showing results for: %s"
+msgstr "Kaypaq tarinakuna rikuchisqa: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "Tapukuy sutin, código icha willaypi maskay."
+
+msgid "Search surveys"
+msgstr "Tapukuykuna maskay"
+
+msgid "%s surveys selected"
+msgstr "%s tapukuykuna akllasqa"
+
+msgid "Clear selection"
+msgstr "Qhichuy akllasqa"
+
+msgid "No surveys found"
+msgstr "Mana tapukuykuna tarikunchu"
+
+msgid "Unsupported"
+msgstr "Mana qhawaypi"
+
+msgid "Could not load surveys"
+msgstr "Mana tapukuykunata qhawayta atinchu"
+
+msgid "Delete selected surveys"
+msgstr "Akllasqa tapukuykunata qulluy"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "Akllasqa tapukuykuna hinaspa tapukuykuna qullusqa kanqa. Kay ruway mana kutichiy atina."
+
+msgid "Could not delete selected surveys"
+msgstr "Mana akllasqa tapukuykunata qulluyta atinchu"
+
+msgid "Survey action"
+msgstr "Tapukuy ruway"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "Kay tapukuy qaylla khipu ruwasqa kanqa: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "Kay tapukuy %s qaylla kutichisqa hinaspa qayllakuna qullusqa kanqa"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "Mirachisqa tapukuykuna kay tapukuy %s qayllamanta qullusqa kanqa"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "Kay tapukuy qaylla huñu yachachiqkunaq qayllanpi qhawachisqa kanqa: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "Kay tapukuy hinaspa tapukuykuna qullusqa kanqa: %s"
+
+msgid "Could not complete survey action"
+msgstr "Mana tapukuy ruwayta tukuchiyta atinchu"
+
+msgid "Not started"
+msgstr "Mana qallarisqa"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "Huñunakuy tapukuykuna qayllakunata akllanapaqmi."
+
+msgid "Back to surveys"
+msgstr "Tapukuykunaman kutiy"
+
+msgid "Edit meeting poll"
+msgstr "Huñunakuy tapukuyta qelqay"
+
+msgid "View meeting poll"
+msgstr "Huñunakuy tapukuyta qhaway"
+
+msgid "Basic information"
+msgstr "Sapaq willaykuna"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "Kay huñunakuy tapukuy ruwanqa. Kutichisqa hinaspa qayllakuna sapaq ruwasqa kanqa."
+
+msgid "Availability"
+msgstr "Qhawaypi kay"
+
+msgid "Meeting dates"
+msgstr "Huñunakuy p'unchawkuna"
+
+msgid "Meeting poll"
+msgstr "Huñunakuy tapukuy"
+
+msgid "My availability"
+msgstr "Qaylla kayniy"
+
+msgid "Meeting poll results"
+msgstr "Huñunakuy tapukuy ruwasqakuna"
+
+msgid "No invitations found"
+msgstr "Mana qayllakuna tarikunchu"
+
+msgid "available"
+msgstr "qaylla"
+
+msgid "Could not load meeting poll"
+msgstr "Mana huñunakuy tapukuyta qhawayta atinchu"
+
+msgid "Please complete the required fields"
+msgstr "Ama hina kaspa, ruwanapaq qelqasqakunata hunt'ay"
+
+msgid "Could not save meeting poll"
+msgstr "Mana huñunakuy tapukuyta waqaychayta atinchu"
+
+msgid "Could not save meeting availability"
+msgstr "Mana huñunakuy qayllakunata waqaychayta atinchu"
+
+msgid "Copy this survey to another course or session"
+msgstr "Kay tapukuyta huk yachay wasiman utaq huñunakuyman qayllachiy"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "Tapukuy kutichisqa hinaspa qayllakuna mana qayllachisqa kanqa."
+
+msgid "No target courses found"
+msgstr "Mana tarikuq yachay wasikuna"
+
+msgid "Search by course title, course code or session name."
+msgstr "Yachay wasi sutin, yachay wasi qelqasqa utaq huñunakuy sutiwan maskay."
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "Kay yachay wasipi qaylla ruwanaykiqa 'Tapukuyta qayllachiy' nisqata llamk'achiy."
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "Tapukuykuna hinaspa akllanakuna qayllachisqa kanqa. Kutichisqa, qayllakuna hinaspa willaykuna qallariy tapukuyllapi qhipakunqa."
+
+msgid "Selected target"
+msgstr "Akllasqa tarikuq"
+
+msgid "Could not load copy form"
+msgstr "Mana qayllachiy qelqata qhawayta atinchu"
+
+msgid "The survey will be copied to: %s"
+msgstr "Tapukuy %s qayllaman qayllachisqa kanqa"
+
+msgid "Survey copied."
+msgstr "Tapukuy qayllachisqa."
+
+msgid "Could not copy survey"
+msgstr "Mana tapukuyta qayllachiyta atinchu"
+
+msgid "Answer survey"
+msgstr "Tapukuyta kutichiy"
+
+msgid "Preview mode does not save answers."
+msgstr "Qhawana ñan kutichisqakunata mana waqaychanchu."
+
+msgid "Survey completed"
+msgstr "Tapukuy hunt'asqa"
+
+msgid "Thank you for answering the survey."
+msgstr "Tapukuyta kutichisqaykimanta añay."
+
+msgid "Profile information"
+msgstr "Qelqa willaykuna"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "Tapukuyta kutichiyta qallariy munaq qelqa willaykunata qhawariy."
+
+msgid "This profile field is read-only."
+msgstr "Kay qelqa willay qhawana-llam."
+
+msgid "You already filled this survey."
+msgstr "Kay tapukuytaña huntʼachirqanki."
+
+msgid "Please specify"
+msgstr "Ama hina kaspa willay"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "Kay tapukuy laya kunan tapukuy qhawanaqpi manam yanapanchu."
+
+msgid "Preview only"
+msgstr "Qhawanaqllapaq"
+
+msgid "Submit answers"
+msgstr "Kutichiykunata qoy"
+
+msgid "Could not load survey"
+msgstr "Tapukuytaqa manam qʼipichiyta atirqanichu"
+
+msgid "Please complete the required profile fields."
+msgstr "Ama hina kaspa, perfilpi muchusqa chakrakunata huntʼachiy."
+
+msgid "Please answer all mandatory questions."
+msgstr "Ama hina kaspa, llapan muchusqa tapukuykunata kutichiy."
+
+msgid "Could not save survey answers"
+msgstr "Tapukuy kutichiykunata manam waqaychayta atirqanichu"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "Tapukuy tapukuykunatawan qayllakuykunata kamachinaykipaq ñawpaqta tapukuypa qollanan willakuykunata kamachiy."
+
+msgid "The survey code cannot be changed after creation."
+msgstr "Tapukuypa kódigo ruwasqamanta qhipaqman manam hukchayta atikunchu."
+
+msgid "Survey behavior"
+msgstr "Tapukuy ruwaynin"
+
+msgid "Use 0 for no time limit."
+msgstr "Mana pacha saywiyuq kanapaq 0 nisqata churay."
+
+msgid "Survey messages"
+msgstr "Tapukuy willakuykuna"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "Kaypi akllasqa perfil chakrakuna tapukuy tapukuykunamanta ñawpaqta rikuchisqa kanqa."
+
+msgid "No profile fields are currently available."
+msgstr "Kunanqa perfil chakrakuna manam kanchu."
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "Perfil chakrakunata akllayqa suti mana pakasqa tapukuykunallapaqmi."
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "Yachay waskhana tʼinkikuna huk tʼaqallapi apachisqa kanqa."
+
+msgid "Could not load survey configuration"
+msgstr "Tapukuy kamachiyta manam qʼipichiyta atirqanichu"
+
+msgid "The survey code is required."
+msgstr "Tapukuypa kódigota muchusqa."
+
+msgid "The survey title is required."
+msgstr "Tapukuypa sutinta muchusqa."
+
+msgid "The survey has been saved successfully"
+msgstr "Tapukuy allinlla waqaychasqa karqan"
+
+msgid "Could not save survey configuration"
+msgstr "Tapukuy kamachiyta manam waqaychayta atirqanichu"
+
+msgid "Course users"
+msgstr "Yachachinaq runakuna"
+
+msgid "Already invited"
+msgstr "Qayllasqaña"
+
+msgid "No users found"
+msgstr "Manam runakuna tarikunchu"
+
+msgid "No groups found"
+msgstr "Manam huñukuna tarikunchu"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "Tapukuy tʼinkiy kananman **tʼinki** nisqata churay."
+
+msgid "Remind all selected users"
+msgstr "Akllasqa llapan runakunata yuyarichiy"
+
+msgid "Anonymous access link"
+msgstr "Suti mana pakasqa yaykuy tʼinki"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "Manam qayllasqa runakunapas kay tʼinkiwan tapukuyta ruwanqaku."
+
+msgid "Answered anonymously"
+msgstr "Suti mana pakasqa kutichisqa"
+
+msgid "Could not load survey invitations"
+msgstr "Tapukuy qayllakuykunata manam qʼipichiyta atirqanichu"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "Chaskinaq umallinwan willakuyta qonapaq umallinqa willakuyninpas muchusqa."
+
+msgid "Could not publish survey"
+msgstr "Tapukuyta manam uyanchu atirqanichu"
+
+msgid "Could not copy the link"
+msgstr "Tʼinkita manam kopiayta atirqanichu"
+
+msgid "Please answer this survey using the following link"
+msgstr "Ama hina kaspa kay tʼinkiwan tapukuyta kutichiy"
+
+msgid "Export CSV"
+msgstr "CSV nisqata apachiy"
+
+msgid "Export compact CSV"
+msgstr "Chiklla CSV nisqata apachiy"
+
+msgid "Export Excel"
+msgstr "Excel nisqata apachiy"
+
+msgid "Export package"
+msgstr "Paqeteta apachiy"
+
+msgid "Results summary"
+msgstr "Kutichiykunaq qollanan"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "Kay qhawanaqa kay tapukuypa apachisqa willakuykunata rikuchin."
+
+msgid "Select user"
+msgstr "Runa akllay"
+
+msgid "No answers found"
+msgstr "Manam kutichiykuna tarikunchu"
+
+msgid "answers"
+msgstr "kutichiykuna"
+
+msgid "Could not load survey reporting"
+msgstr "Tapukuy willakuykunata manam qʼipichiyta atirqanichu"
+
+msgid "Back to threads"
+msgstr "Qallariyman kutiy"
+
+msgid "Back to learning path"
+msgstr "Yachanakuy ñanman kutiy"
+
+msgid "Remove sticky"
+msgstr "Chakrata qichuy"
+
+msgid "Make sticky"
+msgstr "Chinkaypi churay"
+
+msgid "Open thread"
+msgstr "Qillqata kichay"
+
+msgid "Close thread"
+msgstr "Qillqata wisq'ay"
+
+msgid "Delete thread"
+msgstr "Qillqata qulluy"
+
+msgid "This thread is hidden from learners."
+msgstr "Kay qillqa yachakuqkunamanta pakasqa."
+
+msgid "Revision requested"
+msgstr "Kutichiy mañakusqa"
+
+msgid "Revision"
+msgstr "Kutichiy"
+
+msgid "Approve post"
+msgstr "Qillqata qhaway"
+
+msgid "Reject post"
+msgstr "Qillqata qarqoy"
+
+msgid "Cancel revision request"
+msgstr "Kutichiy mañakuyta qarqoy"
+
+msgid "Delete post"
+msgstr "Qillqata qulluy"
+
+msgid "Message is required"
+msgstr "Willayqa muchusqa"
+
+msgid "Target thread is required"
+msgstr "Qillqaqa muchusqa"
+
+msgid "Could not retrieve posts"
+msgstr "Qillqakunata mana tariyta atirqanichu"
+
+msgid "Thread shown"
+msgstr "Qillqa rikuchisqa"
+
+msgid "Thread hidden"
+msgstr "Qillqa pakasqa"
+
+msgid "Could not update thread"
+msgstr "Qillqata mana musuqchayta atirqanichu"
+
+msgid "Thread closed"
+msgstr "Qillqa wisq'asqa"
+
+msgid "Thread opened"
+msgstr "Qillqa kichasqa"
+
+msgid "Thread marked as sticky"
+msgstr "Qillqa chinkaypi churasqa"
+
+msgid "Thread unmarked as sticky"
+msgstr "Qillqa chinkaymanta qarquyta qarqosqa"
+
+msgid "Thread notifications enabled"
+msgstr "Qillqa willaykuna qallarisqa"
+
+msgid "Thread notifications disabled"
+msgstr "Qillqa willaykuna wisq'asqa"
+
+msgid "Could not update thread notification"
+msgstr "Qillqa willayta mana musuqchayta atirqanichu"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "¿Kay qillqata qulluyta munankichu?"
+
+msgid "Could not delete thread"
+msgstr "Qillqata mana qulluyta atirqanichu"
+
+msgid "Post approved"
+msgstr "Qillqa qhawasqa"
+
+msgid "Could not approve post"
+msgstr "Qillqata mana qhawayta atirqanichu"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "¿Kay qillqata qarqoyta munankichu?"
+
+msgid "Post rejected"
+msgstr "Qillqa qarqosqa"
+
+msgid "Could not reject post"
+msgstr "Qillqata mana qarqoyta atirqanichu"
+
+msgid "Post shown"
+msgstr "Qillqa rikuchisqa"
+
+msgid "Post hidden"
+msgstr "Qillqa pakasqa"
+
+msgid "Could not update post"
+msgstr "Qillqata mana musuqchayta atirqanichu"
+
+msgid "Post updated"
+msgstr "Qillqa musuqchasqa"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "¿Kay qillqata qulluyta munankichu?"
+
+msgid "Post deleted"
+msgstr "Qillqa qullusqa"
+
+msgid "Could not delete post"
+msgstr "Qillqata mana qulluyta atirqanichu"
+
+msgid "Untitled thread"
+msgstr "Sutiyuq mana qillqa"
+
+msgid "Could not retrieve threads"
+msgstr "Qillqakunata mana tariyta atirqanichu"
+
+msgid "Post moved"
+msgstr "Qillqa astasqa"
+
+msgid "Could not move post"
+msgstr "Qillqata mana astayta atirqanichu"
+
+msgid "Revision request removed"
+msgstr "Kutichiy mañakuy qarqosqa"
+
+msgid "Could not update revision request"
+msgstr "Kutichiy mañakuyta mana musuqchayta atirqanichu"
+
+msgid "Are you sure you want to report this post?"
+msgstr "¿Kay qillqata willayta munankichu?"
+
+msgid "Could not report post"
+msgstr "Qillqata mana willayta atirqanichu"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "¿Kay q'apiyta qulluyta munankichu?"
+
+msgid "Attachment deleted"
+msgstr "Q'apiy qullusqa"
+
+msgid "Could not delete attachment"
+msgstr "Q'apiyta mana qulluyta atirqanichu"
+
+msgid "Thread title"
+msgstr "Qillqa sutichaq"
+
+msgid "Sticky thread"
+msgstr "Qallariy qillqa"
+
+msgid "Attach files"
+msgstr "Qhipaq willañiqikunata yapay"
+
+msgid "Attachments are disabled for this forum"
+msgstr "Kay foroq willañiqikuna mana atikunchu"
+
+msgid "The forum is not open yet."
+msgstr "Foroqa manaraq kichasqachu."
+
+msgid "The forum is closed."
+msgstr "Foroqa wisqasqaña."
+
+msgid "The forum is locked."
+msgstr "Foroqa wisqasqaña."
+
+msgid "New threads are not allowed in this forum."
+msgstr "Kay foroq qallariy qillqakuna mana atikunchu."
+
+msgid "Thread created"
+msgstr "Qallariy qillqa kamarisqa"
+
+msgid "Could not create thread"
+msgstr "Qallariy qillqa mana kamarikunchu"
+
+msgid "Back to posts"
+msgstr "Qillqakunaman kutiy"
+
+msgid "This reply will be stored as a revision."
+msgstr "Kay kutichiyqa musuqchasqa hina waqaychasqa kanqa."
+
+msgid "Post reply"
+msgstr "Kutichiyta qillqay"
+
+msgid "The thread is locked."
+msgstr "Qallariy qillqaqa wisqasqaña."
+
+msgid "Reply added"
+msgstr "Kutichiy yapasqa"
+
+msgid "Could not add reply"
+msgstr "Kutichiy mana yapakunchu"
+
+msgid "Add forum"
+msgstr "Forota yapay"
+
+msgid "No forums found"
+msgstr "Manam forokuna tarikunchu"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "Qallariy foroq qatunanta icha forota kamarispa rimanakuyta qallariy."
+
+msgid "Locked"
+msgstr "Wisqasqa"
+
+msgid "No forums in this category"
+msgstr "Kay qatunapi manam forokuna kanchu"
+
+msgid "Posts require approval"
+msgstr "Qillqakunaq allinchayta munan"
+
+msgid "Forum for current group"
+msgstr "Kunan huñuqpa foron"
+
+msgid "Group forum visibility"
+msgstr "Huñuq foroq rikuy"
+
+msgid "No category"
+msgstr "Manam qatuna kanchu"
+
+msgid "Could not retrieve forums"
+msgstr "Forokuna mana apamukunchu"
+
+msgid "Forum category updated"
+msgstr "Foropa qatunan musuqchasqa"
+
+msgid "Forum category created"
+msgstr "Foropa qatunan kamarisqa"
+
+msgid "Could not save forum category"
+msgstr "Foropa qatunan mana waqaychasqachu"
+
+msgid "Forum updated"
+msgstr "Foro musuqchasqa"
+
+msgid "Forum created"
+msgstr "Foro kamarisqa"
+
+msgid "Could not save forum"
+msgstr "Foro mana waqaychasqachu"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "¿Kay foroq qatunanta qullunayki munankichu?"
+
+msgid "Could not delete forum category"
+msgstr "Foropa qatunan mana qullukunchu"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "¿Kay forota qullunayki munankichu?"
+
+msgid "Could not delete forum"
+msgstr "Foro mana qullukunchu"
+
+msgid "Forum category unlocked"
+msgstr "Foropa qatunan kichasqa"
+
+msgid "Forum category locked"
+msgstr "Foropa qatunan wisqasqa"
+
+msgid "Could not update forum category"
+msgstr "Foropa qatunan mana musuqchasqachu"
+
+msgid "Forum category shown"
+msgstr "Foropa qatunan rikuchisqa"
+
+msgid "Forum category hidden"
+msgstr "Foropa qatunan pakasqa"
+
+msgid "Forum unlocked"
+msgstr "Foro kichasqa"
+
+msgid "Forum locked"
+msgstr "Foro wisqasqa"
+
+msgid "Could not update forum"
+msgstr "Foro mana musuqchasqachu"
+
+msgid "Forum shown"
+msgstr "Foro rikuchisqa"
+
+msgid "Forum hidden"
+msgstr "Foro pakasqa"
+
+msgid "Forum notifications enabled"
+msgstr "Foropa willaykuna atichisqa"
+
+msgid "Forum notifications disabled"
+msgstr "Foropa willaykuna waqaychasqa"
+
+msgid "Could not update forum notification"
+msgstr "Foropa willaykuna mana musuqchasqachu"
+
+msgid "Forum category moved"
+msgstr "Foropa qatunan kuyuchisqa"
+
+msgid "Could not move forum category"
+msgstr "Foropa qatunan mana kuyuchikunchu"
+
+msgid "Forum moved"
+msgstr "Foro kuyuchisqa"
+
+msgid "Could not move forum"
+msgstr "Forota kuyuyta mana atikunchu"
+
+msgid "Back to forums"
+msgstr "Forokunaman kutiy"
+
+msgid "New thread"
+msgstr "Musuq qillqasqa"
+
+msgid "No threads found"
+msgstr "Qillqasqakuna mana tarikunchu"
+
+msgid "Sticky"
+msgstr "Chinkasqa"
+
+msgid "Graded"
+msgstr "Qallariy churay"
+
+msgid "Grade peers"
+msgstr "Masinakunata qallariy"
+
+msgid "Move thread"
+msgstr "Qillqasqata kuyuy"
+
+msgid "Target forum"
+msgstr "Chay foro"
+
+msgid "Target forum is required"
+msgstr "Chay foroqa muchusqa"
+
+msgid "Students"
+msgstr "Yachakuqkuna"
+
+msgid "No students found"
+msgstr "Yachakuqkuna mana tarikunchu"
+
+msgid "No peers available to grade."
+msgstr "Qallarinapaq masikuna mana kanchu."
+
+msgid "Qualified"
+msgstr "Qallarisqa"
+
+msgid "Not qualified"
+msgstr "Mana qallarisqa"
+
+msgid "Could not retrieve thread grading"
+msgstr "Qillqasqa qallarinta mana qokuyta atikunchu"
+
+msgid "Thread grading updated"
+msgstr "Qillqasqa qallarinta musuqchasqa"
+
+msgid "Could not update thread grading"
+msgstr "Qillqasqa qallarinta musuqchayta mana atikunchu"
+
+msgid "Thread score saved"
+msgstr "Qillqasqa yupayta waqaychasqa"
+
+msgid "Could not save thread score"
+msgstr "Qillqasqa yupayta waqaychayta mana atikunchu"
+
+msgid "Could not move thread"
+msgstr "Qillqasqata kuyuyta mana atikunchu"
+
+msgid "Thread updated"
+msgstr "Qillqasqa musuqchasqa"
+
+msgid "Search term is too short"
+msgstr "Maskay simiqa ancha pisilla"
+
+msgid "Could not search forums"
+msgstr "Forokunata maskayta mana atikunchu"
+
+msgid "Moderated"
+msgstr "Churanakusqa"
+
+msgid "View threads"
+msgstr "Qillqasqakunata qhaway"
 

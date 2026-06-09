@@ -35738,3 +35738,762 @@ msgstr "Evaluarea nu a putut fi creată"
 msgid "The gradebook evaluation could not be linked"
 msgstr "Evaluarea catalogului nu a putut fi legată"
 
+msgid "Survey questions"
+msgstr "Întrebări chestionar"
+
+msgid "Back to survey list"
+msgstr "Înapoi la lista de chestionare"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "Acest chestionar are deja răspunsuri. Editarea întrebărilor este dezactivată de configurație."
+
+msgid "Choose the type of question you want to add."
+msgstr "Alegeți tipul de întrebare pe care doriți să-l adăugați."
+
+msgid "The free text option is added automatically."
+msgstr "Opțiunea text liber este adăugată automat."
+
+msgid "No questions found"
+msgstr "Nu s-au găsit întrebări"
+
+msgid "Mandatory"
+msgstr "Obligatoriu"
+
+msgid "Unsupported question type"
+msgstr "Tip de întrebare neacceptat"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "Puteți utiliza etichetele {%s} și {%s} în întrebare."
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "Această întrebare este afișată condiționat în timpul completării chestionarului."
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "Opțiunile procentuale de la 1 la 100 sunt generate automat."
+
+msgid "Could not load survey questions"
+msgstr "Nu s-au putut încărca întrebările chestionarului"
+
+msgid "The question text is required."
+msgstr "Textul întrebării este obligatoriu."
+
+msgid "The maximum score is required."
+msgstr "Scorul maxim este obligatoriu."
+
+msgid "Please select a parent option."
+msgstr "Vă rugăm să selectați o opțiune părinte."
+
+msgid "Please fill all answer options."
+msgstr "Vă rugăm să completați toate opțiunile de răspuns."
+
+msgid "QuestionUpdated"
+msgstr "QuestionUpdated"
+
+msgid "Could not save survey question"
+msgstr "Nu s-a putut salva întrebarea chestionarului"
+
+msgid "Could not delete survey question"
+msgstr "Nu s-a putut șterge întrebarea chestionarului"
+
+msgid "Could not move survey question"
+msgstr "Nu s-a putut muta întrebarea chestionarului"
+
+msgid "Could not copy survey question"
+msgstr "Nu s-a putut copia întrebarea chestionarului"
+
+msgid "Hide search"
+msgstr "Ascunde căutarea"
+
+msgid "Showing results for: %s"
+msgstr "Se afișează rezultatele pentru: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "Căutați după titlul chestionarului, cod sau descriere."
+
+msgid "Search surveys"
+msgstr "Caută sondaje"
+
+msgid "%s surveys selected"
+msgstr "%s sondaje selectate"
+
+msgid "Clear selection"
+msgstr "Șterge selecția"
+
+msgid "No surveys found"
+msgstr "Nu s-au găsit sondaje"
+
+msgid "Unsupported"
+msgstr "Neacceptat"
+
+msgid "Could not load surveys"
+msgstr "Nu s-au putut încărca sondajele"
+
+msgid "Delete selected surveys"
+msgstr "Șterge sondajele selectate"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "Sondajele selectate și întrebările lor vor fi șterse. Această acțiune nu poate fi anulată."
+
+msgid "Could not delete selected surveys"
+msgstr "Nu s-au putut șterge sondajele selectate"
+
+msgid "Survey action"
+msgstr "Acțiune sondaj"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "Va fi creată o copie a acestui sondaj: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "Toate răspunsurile și invitațiile vor fi șterse pentru acest sondaj: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "Întrebările generate multiplu vor fi eliminate din acest sondaj: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "Acest sondaj va fi publicat pentru tutorii grupului asociat: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "Acest sondaj și întrebările sale vor fi șterse: %s"
+
+msgid "Could not complete survey action"
+msgstr "Nu s-a putut finaliza acțiunea sondajului"
+
+msgid "Not started"
+msgstr "Neînceput"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "Sondajele de întâlnire permit utilizatorilor invitați să selecteze datele la care sunt disponibili."
+
+msgid "Back to surveys"
+msgstr "Înapoi la sondaje"
+
+msgid "Edit meeting poll"
+msgstr "Editează sondajul de întâlnire"
+
+msgid "View meeting poll"
+msgstr "Vizualizează sondajul de întâlnire"
+
+msgid "Basic information"
+msgstr "Informații de bază"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "Aceasta va crea un sondaj de tip sondaj de întâlnire. Răspunsurile și invitațiile sunt gestionate separat."
+
+msgid "Availability"
+msgstr "Disponibilitate"
+
+msgid "Meeting dates"
+msgstr "Datele întâlnirii"
+
+msgid "Meeting poll"
+msgstr "Sondaj de întâlnire"
+
+msgid "My availability"
+msgstr "Disponibilitatea mea"
+
+msgid "Meeting poll results"
+msgstr "Rezultatele sondajului de întâlnire"
+
+msgid "No invitations found"
+msgstr "Nu s-au găsit invitații"
+
+msgid "available"
+msgstr "disponibil"
+
+msgid "Could not load meeting poll"
+msgstr "Nu s-a putut încărca sondajul de întâlnire"
+
+msgid "Please complete the required fields"
+msgstr "Vă rugăm să completați câmpurile obligatorii"
+
+msgid "Could not save meeting poll"
+msgstr "Nu s-a putut salva sondajul de întâlnire"
+
+msgid "Could not save meeting availability"
+msgstr "Nu s-a putut salva disponibilitatea la întâlnire"
+
+msgid "Copy this survey to another course or session"
+msgstr "Copiază acest sondaj într-un alt curs sau sesiune"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "Sondajul va fi copiat fără răspunsuri sau invitații."
+
+msgid "No target courses found"
+msgstr "Nu s-au găsit cursuri țintă"
+
+msgid "Search by course title, course code or session name."
+msgstr "Caută după titlul cursului, codul cursului sau numele sesiunii."
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "Folosește Duplicare sondaj atunci când dorești o copie în același curs."
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "Întrebările și opțiunile vor fi copiate. Răspunsurile, invitațiile și rapoartele vor rămâne doar în sondajul original."
+
+msgid "Selected target"
+msgstr "Țintă selectată"
+
+msgid "Could not load copy form"
+msgstr "Nu s-a putut încărca formularul de copiere"
+
+msgid "The survey will be copied to: %s"
+msgstr "Sondajul va fi copiat în: %s"
+
+msgid "Survey copied."
+msgstr "Sondaj copiat."
+
+msgid "Could not copy survey"
+msgstr "Nu s-a putut copia sondajul"
+
+msgid "Answer survey"
+msgstr "Răspunde la sondaj"
+
+msgid "Preview mode does not save answers."
+msgstr "Modul de previzualizare nu salvează răspunsurile."
+
+msgid "Survey completed"
+msgstr "Sondaj completat"
+
+msgid "Thank you for answering the survey."
+msgstr "Vă mulțumim pentru răspunsurile la sondaj."
+
+msgid "Profile information"
+msgstr "Informații de profil"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "Vă rugăm să revizuiți câmpurile de profil solicitate înainte de a răspunde la sondaj."
+
+msgid "This profile field is read-only."
+msgstr "Acest câmp de profil este doar pentru citire."
+
+msgid "You already filled this survey."
+msgstr "Ați completat deja acest sondaj."
+
+msgid "Please specify"
+msgstr "Vă rugăm să specificați"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "Acest tip de întrebare nu este acceptat în vizualizarea modernă a sondajului."
+
+msgid "Preview only"
+msgstr "Doar previzualizare"
+
+msgid "Submit answers"
+msgstr "Trimite răspunsurile"
+
+msgid "Could not load survey"
+msgstr "Nu s-a putut încărca sondajul"
+
+msgid "Please complete the required profile fields."
+msgstr "Vă rugăm să completați câmpurile de profil obligatorii."
+
+msgid "Please answer all mandatory questions."
+msgstr "Vă rugăm să răspundeți la toate întrebările obligatorii."
+
+msgid "Could not save survey answers"
+msgstr "Nu s-au putut salva răspunsurile la sondaj"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "Configurați informațiile principale ale sondajului înainte de a gestiona întrebările și invitațiile."
+
+msgid "The survey code cannot be changed after creation."
+msgstr "Codul sondajului nu poate fi modificat după creare."
+
+msgid "Survey behavior"
+msgstr "Comportamentul sondajului"
+
+msgid "Use 0 for no time limit."
+msgstr "Utilizați 0 pentru nicio limită de timp."
+
+msgid "Survey messages"
+msgstr "Mesaje sondaj"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "Câmpurile de profil selectate aici vor fi afișate înaintea întrebărilor sondajului."
+
+msgid "No profile fields are currently available."
+msgstr "Nu sunt disponibile câmpuri de profil în prezent."
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "Selecția câmpurilor de profil este disponibilă doar pentru sondaje non-anonime."
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "Legătura cu competențele va fi migrată într-un lot dedicat."
+
+msgid "Could not load survey configuration"
+msgstr "Nu s-a putut încărca configurația sondajului"
+
+msgid "The survey code is required."
+msgstr "Codul sondajului este obligatoriu."
+
+msgid "The survey title is required."
+msgstr "Titlul sondajului este obligatoriu."
+
+msgid "The survey has been saved successfully"
+msgstr "Sondajul a fost salvat cu succes"
+
+msgid "Could not save survey configuration"
+msgstr "Nu s-a putut salva configurația sondajului"
+
+msgid "Course users"
+msgstr "Utilizatori curs"
+
+msgid "Already invited"
+msgstr "Deja invitat"
+
+msgid "No users found"
+msgstr "Niciun utilizator găsit"
+
+msgid "No groups found"
+msgstr "Niciun grup găsit"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "Utilizați **link** unde trebuie să apară linkul sondajului."
+
+msgid "Remind all selected users"
+msgstr "Reamintește tuturor utilizatorilor selectați"
+
+msgid "Anonymous access link"
+msgstr "Link de acces anonim"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "Utilizatorii care nu sunt invitați pot folosi acest link pentru a completa sondajul."
+
+msgid "Answered anonymously"
+msgstr "Răspuns anonim"
+
+msgid "Could not load survey invitations"
+msgstr "Nu s-au putut încărca invitațiile la sondaj"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "Subiectul și mesajul e-mailului sunt obligatorii la trimiterea e-mailului."
+
+msgid "Could not publish survey"
+msgstr "Nu s-a putut publica sondajul"
+
+msgid "Could not copy the link"
+msgstr "Nu s-a putut copia linkul"
+
+msgid "Please answer this survey using the following link"
+msgstr "Vă rugăm să răspundeți la acest sondaj utilizând următorul link"
+
+msgid "Export CSV"
+msgstr "Export CSV"
+
+msgid "Export compact CSV"
+msgstr "Export CSV compact"
+
+msgid "Export Excel"
+msgstr "Export Excel"
+
+msgid "Export package"
+msgstr "Export pachet"
+
+msgid "Results summary"
+msgstr "Rezumat rezultate"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "Această vizualizare afișează datele de raportare migrate pentru acest sondaj."
+
+msgid "Select user"
+msgstr "Selectați utilizator"
+
+msgid "No answers found"
+msgstr "Niciun răspuns găsit"
+
+msgid "answers"
+msgstr "răspunsuri"
+
+msgid "Could not load survey reporting"
+msgstr "Nu s-a putut încărca raportarea sondajului"
+
+msgid "Back to threads"
+msgstr "Înapoi la fire"
+
+msgid "Back to learning path"
+msgstr "Înapoi la traseul de învățare"
+
+msgid "Remove sticky"
+msgstr "Elimină fixare"
+
+msgid "Make sticky"
+msgstr "Fixează"
+
+msgid "Open thread"
+msgstr "Deschide subiect"
+
+msgid "Close thread"
+msgstr "Închide subiect"
+
+msgid "Delete thread"
+msgstr "Șterge subiect"
+
+msgid "This thread is hidden from learners."
+msgstr "Acest subiect este ascuns de la cursanți."
+
+msgid "Revision requested"
+msgstr "Revizuire solicitată"
+
+msgid "Revision"
+msgstr "Revizuire"
+
+msgid "Approve post"
+msgstr "Aprobă postare"
+
+msgid "Reject post"
+msgstr "Respinge postare"
+
+msgid "Cancel revision request"
+msgstr "Anulează solicitarea de revizuire"
+
+msgid "Delete post"
+msgstr "Șterge postare"
+
+msgid "Message is required"
+msgstr "Mesajul este obligatoriu"
+
+msgid "Target thread is required"
+msgstr "Subiectul țintă este obligatoriu"
+
+msgid "Could not retrieve posts"
+msgstr "Nu s-au putut prelua postările"
+
+msgid "Thread shown"
+msgstr "Subiect afișat"
+
+msgid "Thread hidden"
+msgstr "Subiect ascuns"
+
+msgid "Could not update thread"
+msgstr "Nu s-a putut actualiza subiectul"
+
+msgid "Thread closed"
+msgstr "Subiect închis"
+
+msgid "Thread opened"
+msgstr "Subiect deschis"
+
+msgid "Thread marked as sticky"
+msgstr "Subiect marcat ca fixat"
+
+msgid "Thread unmarked as sticky"
+msgstr "Subiect demarcat ca fixat"
+
+msgid "Thread notifications enabled"
+msgstr "Notificările subiectului activate"
+
+msgid "Thread notifications disabled"
+msgstr "Notificările subiectului dezactivate"
+
+msgid "Could not update thread notification"
+msgstr "Nu s-a putut actualiza notificarea subiectului"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "Sigur doriți să ștergeți acest subiect?"
+
+msgid "Could not delete thread"
+msgstr "Nu s-a putut șterge subiectul"
+
+msgid "Post approved"
+msgstr "Postare aprobată"
+
+msgid "Could not approve post"
+msgstr "Nu s-a putut aproba postarea"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "Sigur doriți să respingeți această postare?"
+
+msgid "Post rejected"
+msgstr "Postare respinsă"
+
+msgid "Could not reject post"
+msgstr "Nu s-a putut respinge postarea"
+
+msgid "Post shown"
+msgstr "Postare afișată"
+
+msgid "Post hidden"
+msgstr "Postare ascunsă"
+
+msgid "Could not update post"
+msgstr "Nu s-a putut actualiza postarea"
+
+msgid "Post updated"
+msgstr "Postare actualizată"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "Sigur doriți să ștergeți această postare?"
+
+msgid "Post deleted"
+msgstr "Postare ștearsă"
+
+msgid "Could not delete post"
+msgstr "Nu s-a putut șterge postarea"
+
+msgid "Untitled thread"
+msgstr "Subiect fără titlu"
+
+msgid "Could not retrieve threads"
+msgstr "Nu s-au putut prelua subiectele"
+
+msgid "Post moved"
+msgstr "Postare mutată"
+
+msgid "Could not move post"
+msgstr "Nu s-a putut muta postarea"
+
+msgid "Revision request removed"
+msgstr "Solicitarea de revizuire eliminată"
+
+msgid "Could not update revision request"
+msgstr "Nu s-a putut actualiza solicitarea de revizuire"
+
+msgid "Are you sure you want to report this post?"
+msgstr "Sigur doriți să raportați această postare?"
+
+msgid "Could not report post"
+msgstr "Nu s-a putut raporta postarea"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "Sigur doriți să ștergeți acest atașament?"
+
+msgid "Attachment deleted"
+msgstr "Atașament șters"
+
+msgid "Could not delete attachment"
+msgstr "Nu s-a putut șterge atașamentul"
+
+msgid "Thread title"
+msgstr "Titlu subiect"
+
+msgid "Sticky thread"
+msgstr "Subiect fixat"
+
+msgid "Attach files"
+msgstr "Atașare fișiere"
+
+msgid "Attachments are disabled for this forum"
+msgstr "Atașamentele sunt dezactivate pentru acest forum"
+
+msgid "The forum is not open yet."
+msgstr "Forumul nu este încă deschis."
+
+msgid "The forum is closed."
+msgstr "Forumul este închis."
+
+msgid "The forum is locked."
+msgstr "Forumul este blocat."
+
+msgid "New threads are not allowed in this forum."
+msgstr "Subiectele noi nu sunt permise în acest forum."
+
+msgid "Thread created"
+msgstr "Subiect creat"
+
+msgid "Could not create thread"
+msgstr "Nu s-a putut crea subiectul"
+
+msgid "Back to posts"
+msgstr "Înapoi la postări"
+
+msgid "This reply will be stored as a revision."
+msgstr "Acest răspuns va fi salvat ca revizuire."
+
+msgid "Post reply"
+msgstr "Postare răspuns"
+
+msgid "The thread is locked."
+msgstr "Subiectul este blocat."
+
+msgid "Reply added"
+msgstr "Răspuns adăugat"
+
+msgid "Could not add reply"
+msgstr "Nu s-a putut adăuga răspunsul"
+
+msgid "Add forum"
+msgstr "Adăugare forum"
+
+msgid "No forums found"
+msgstr "Nu s-au găsit forumuri"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "Creați prima categorie de forum sau forum pentru a începe discuțiile."
+
+msgid "Locked"
+msgstr "Blocat"
+
+msgid "No forums in this category"
+msgstr "Nu există forumuri în această categorie"
+
+msgid "Posts require approval"
+msgstr "Postările necesită aprobare"
+
+msgid "Forum for current group"
+msgstr "Forum pentru grupul curent"
+
+msgid "Group forum visibility"
+msgstr "Vizibilitate forum grup"
+
+msgid "No category"
+msgstr "Fără categorie"
+
+msgid "Could not retrieve forums"
+msgstr "Nu s-au putut prelua forumurile"
+
+msgid "Forum category updated"
+msgstr "Categorie de forum actualizată"
+
+msgid "Forum category created"
+msgstr "Categorie de forum creată"
+
+msgid "Could not save forum category"
+msgstr "Nu s-a putut salva categoria de forum"
+
+msgid "Forum updated"
+msgstr "Forum actualizat"
+
+msgid "Forum created"
+msgstr "Forum creat"
+
+msgid "Could not save forum"
+msgstr "Nu s-a putut salva forumul"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "Sigur doriți să ștergeți această categorie de forum?"
+
+msgid "Could not delete forum category"
+msgstr "Nu s-a putut șterge categoria de forum"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "Sigur doriți să ștergeți acest forum?"
+
+msgid "Could not delete forum"
+msgstr "Nu s-a putut șterge forumul"
+
+msgid "Forum category unlocked"
+msgstr "Categorie de forum deblocată"
+
+msgid "Forum category locked"
+msgstr "Categorie de forum blocată"
+
+msgid "Could not update forum category"
+msgstr "Nu s-a putut actualiza categoria de forum"
+
+msgid "Forum category shown"
+msgstr "Categorie de forum afișată"
+
+msgid "Forum category hidden"
+msgstr "Categorie de forum ascunsă"
+
+msgid "Forum unlocked"
+msgstr "Forum deblocat"
+
+msgid "Forum locked"
+msgstr "Forum blocat"
+
+msgid "Could not update forum"
+msgstr "Nu s-a putut actualiza forumul"
+
+msgid "Forum shown"
+msgstr "Forum afișat"
+
+msgid "Forum hidden"
+msgstr "Forum ascuns"
+
+msgid "Forum notifications enabled"
+msgstr "Notificări forum activate"
+
+msgid "Forum notifications disabled"
+msgstr "Notificări forum dezactivate"
+
+msgid "Could not update forum notification"
+msgstr "Nu s-a putut actualiza notificarea forumului"
+
+msgid "Forum category moved"
+msgstr "Categorie forum mutată"
+
+msgid "Could not move forum category"
+msgstr "Nu s-a putut muta categoria de forum"
+
+msgid "Forum moved"
+msgstr "Forum mutat"
+
+msgid "Could not move forum"
+msgstr "Nu s-a putut muta forumul"
+
+msgid "Back to forums"
+msgstr "Înapoi la forumuri"
+
+msgid "New thread"
+msgstr "Subiect nou"
+
+msgid "No threads found"
+msgstr "Nu s-au găsit subiecte"
+
+msgid "Sticky"
+msgstr "Fixat"
+
+msgid "Graded"
+msgstr "Evaluat"
+
+msgid "Grade peers"
+msgstr "Evaluare colegi"
+
+msgid "Move thread"
+msgstr "Mută subiectul"
+
+msgid "Target forum"
+msgstr "Forum destinație"
+
+msgid "Target forum is required"
+msgstr "Forumul destinație este obligatoriu"
+
+msgid "Students"
+msgstr "Studenți"
+
+msgid "No students found"
+msgstr "Nu s-au găsit studenți"
+
+msgid "No peers available to grade."
+msgstr "Nu sunt colegi disponibili pentru evaluare."
+
+msgid "Qualified"
+msgstr "Calificat"
+
+msgid "Not qualified"
+msgstr "Ne calificat"
+
+msgid "Could not retrieve thread grading"
+msgstr "Nu s-a putut prelua evaluarea subiectului"
+
+msgid "Thread grading updated"
+msgstr "Evaluarea subiectului a fost actualizată"
+
+msgid "Could not update thread grading"
+msgstr "Nu s-a putut actualiza evaluarea subiectului"
+
+msgid "Thread score saved"
+msgstr "Scorul subiectului a fost salvat"
+
+msgid "Could not save thread score"
+msgstr "Nu s-a putut salva scorul subiectului"
+
+msgid "Could not move thread"
+msgstr "Nu s-a putut muta subiectul"
+
+msgid "Thread updated"
+msgstr "Subiect actualizat"
+
+msgid "Search term is too short"
+msgstr "Termenul de căutare este prea scurt"
+
+msgid "Could not search forums"
+msgstr "Nu s-au putut căuta forumurile"
+
+msgid "Moderated"
+msgstr "Moderat"
+
+msgid "View threads"
+msgstr "Vizualizare subiecte"
+

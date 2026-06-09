@@ -35642,98 +35642,857 @@ msgid "The gradebook table is hidden."
 msgstr "Ο πίνακας βαθμολογίου είναι κρυφός."
 
 msgid "Invalid token"
-msgstr ""
+msgstr "Μη έγκυρο διακριτικό"
 
 msgid "Unable to save the item"
-msgstr ""
+msgstr "Αδυναμία αποθήκευσης του στοιχείου"
 
 msgid "Only HTTP and HTTPS URLs are allowed."
-msgstr ""
+msgstr "Επιτρέπονται μόνο διευθύνσεις URL HTTP και HTTPS."
 
 msgid "Invalid URL host."
-msgstr ""
+msgstr "Μη έγκυρος κεντρικός υπολογιστής URL."
 
 msgid "This cloud provider is not allowed."
-msgstr ""
+msgstr "Αυτός ο πάροχος cloud δεν επιτρέπεται."
 
 msgid "Documents used"
-msgstr ""
+msgstr "Χρησιμοποιούμενα έγγραφα"
 
 msgid "No document usage"
-msgstr ""
+msgstr "Καμία χρήση εγγράφου"
 
 msgid "Invalid action."
-msgstr ""
+msgstr "Μη έγκυρη ενέργεια."
 
 msgid "No users selected."
-msgstr ""
+msgstr "Δεν επιλέχθηκαν χρήστες."
 
 msgid "%s user(s) processed."
-msgstr ""
+msgstr "%s χρήστης(-ες) επεξεργάστηκαν."
 
 msgid "Invalid CSRF token."
-msgstr ""
+msgstr "Μη έγκυρο διακριτικό CSRF."
 
 msgid "[%s] Please change your password"
-msgstr ""
+msgstr "[%s] Αλλάξτε τον κωδικό πρόσβασής σας"
 
 msgid "Dear %s,\n\nOur security enforcing process shows you use a password that is commonly used on the internet, which means your account could easily be stolen. It is probably a simple sequence or a very common word, we don't really know (we cannot see your password), but we ask you to please connect to the platform and request a password change. You can follow the link here: %s to do that now.\n\nPlease note we will never ask for your password in this process. You just enter your username or e-mail and we send you a link. If you are asked to introduce your existing password to do that, someone is probably trying to do Phishing on your account. Be safe, change your password now!\n\n%s\n%s"
-msgstr ""
+msgstr "Αγαπητέ/ή %s,\n\nΗ διαδικασία επιβολής ασφάλειας δείχνει ότι χρησιμοποιείτε έναν κωδικό πρόσβασης που χρησιμοποιείται συνήθως στο διαδίκτυο, γεγονός που σημαίνει ότι ο λογαριασμός σας μπορεί εύκολα να κλαπεί. Πιθανότατα πρόκειται για μια απλή ακολουθία ή μια πολύ συνηθισμένη λέξη, δεν γνωρίζουμε πραγματικά (δεν μπορούμε να δούμε τον κωδικό πρόσβασής σας), αλλά σας ζητάμε να συνδεθείτε στην πλατφόρμα και να ζητήσετε αλλαγή κωδικού πρόσβασης. Μπορείτε να ακολουθήσετε τον σύνδεσμο εδώ: %s για να το κάνετε τώρα.\n\nΣημειώστε ότι δεν θα ζητήσουμε ποτέ τον κωδικό πρόσβασής σας σε αυτή τη διαδικασία. Απλώς εισάγετε το όνομα χρήστη ή το e-mail σας και σας στέλνουμε έναν σύνδεσμο. Αν σας ζητηθεί να εισαγάγετε τον υπάρχοντα κωδικό πρόσβασής σας για να το κάνετε αυτό, κάποιος πιθανώς προσπαθεί να κάνει phishing στον λογαριασμό σας. Για την ασφάλειά σας, αλλάξτε τον κωδικό πρόσβασής σας τώρα!\n\n%s\n%s"
 
 msgid "[%s] Your password has been reset"
-msgstr ""
+msgstr "[%s] Ο κωδικός πρόσβασής σας έχει επαναφερθεί"
 
 msgid "Dear %s,\n\nOur security enforcing process flagged you as using a password that is commonly used on the internet, which means your account could easily be stolen. As a prevention measure, we have decided to initiate a password reset process. Your new, automatically generated password is now:\n\n%s\n\nPlease login to the platform soon (using this new password) to set your own, personal and secure, password.\n\nBe safe.\n\n%s\n%s"
-msgstr ""
+msgstr "Αγαπητέ/ή %s,\n\nΗ διαδικασία επιβολής ασφάλειας σας επεσήμανε ότι χρησιμοποιείτε έναν κωδικό πρόσβασης που χρησιμοποιείται συνήθως στο διαδίκτυο, γεγονός που σημαίνει ότι ο λογαριασμός σας μπορεί εύκολα να κλαπεί. Ως μέτρο πρόληψης, αποφασίσαμε να ξεκινήσουμε μια διαδικασία επαναφοράς κωδικού πρόσβασης. Ο νέος σας, αυτόματα δημιουργημένος κωδικός πρόσβασης είναι τώρα:\n\n%s\n\nΣυνδεθείτε στην πλατφόρμα σύντομα (χρησιμοποιώντας αυτόν τον νέο κωδικό) για να ορίσετε τον δικό σας, προσωπικό και ασφαλή κωδικό πρόσβασης.\n\nΓια την ασφάλειά σας.\n\n%s\n%s"
 
 msgid "Signature saved successfully"
-msgstr ""
+msgstr "Η υπογραφή αποθηκεύτηκε με επιτυχία"
 
 msgid "Invalid request payload."
-msgstr ""
+msgstr "Μη έγκυρο φορτίο αιτήματος."
 
 msgid "Authentication required."
-msgstr ""
+msgstr "Απαιτείται έλεγχος ταυτότητας."
 
 msgid "The course title is required."
-msgstr ""
+msgstr "Ο τίτλος του μαθήματος είναι υποχρεωτικός."
 
 msgid "Only trainers and administrators can create courses."
-msgstr ""
+msgstr "Μόνο εκπαιδευτές και διαχειριστές μπορούν να δημιουργούν μαθήματα."
 
 msgid "Course creation by trainers is disabled on this platform."
-msgstr ""
+msgstr "Η δημιουργία μαθημάτων από εκπαιδευτές είναι απενεργοποιημένη σε αυτή την πλατφόρμα."
 
 msgid "The selected BuyCourses service cannot be used to create this course."
-msgstr ""
+msgstr "Η επιλεγμένη υπηρεσία BuyCourses δεν μπορεί να χρησιμοποιηθεί για τη δημιουργία αυτού του μαθήματος."
 
 msgid "You have reached the maximum number of courses allowed (%d)."
-msgstr ""
+msgstr "Έχετε φτάσει στον μέγιστο αριθμό μαθημάτων που επιτρέπεται (%d)."
 
 msgid "The selected BuyCourses service is invalid."
-msgstr ""
+msgstr "Η επιλεγμένη υπηρεσία BuyCourses δεν είναι έγκυρη."
 
 msgid "BuyCourses is not available right now."
-msgstr ""
+msgstr "Το BuyCourses δεν είναι διαθέσιμο αυτή τη στιγμή."
 
 msgid "BuyCourses cannot validate the selected service right now."
-msgstr ""
+msgstr "Το BuyCourses δεν μπορεί να επικυρώσει την επιλεγμένη υπηρεσία αυτή τη στιγμή."
 
 msgid "Unable to validate the selected BuyCourses service right now."
-msgstr ""
+msgstr "Αδυναμία επικύρωσης της επιλεγμένης υπηρεσίας BuyCourses αυτή τη στιγμή."
 
 msgid "External tool removed from course"
-msgstr ""
+msgstr "Το εξωτερικό εργαλείο αφαιρέθηκε από το μάθημα"
 
 msgid "External tool was removed from the course, but kept internally because it is linked to the gradebook"
-msgstr ""
+msgstr "Το εξωτερικό εργαλείο αφαιρέθηκε από το μάθημα, αλλά διατηρήθηκε εσωτερικά επειδή συνδέεται με το βαθμολόγιο"
 
 msgid "There are no external tools available to add to the gradebook"
-msgstr ""
+msgstr "Δεν υπάρχουν διαθέσιμα εξωτερικά εργαλεία για προσθήκη στο βαθμολόγιο"
 
 msgid "The evaluation could not be created"
-msgstr ""
+msgstr "Η αξιολόγηση δεν μπόρεσε να δημιουργηθεί"
 
 msgid "The gradebook evaluation could not be linked"
-msgstr ""
+msgstr "Η αξιολόγηση του βαθμολογίου δεν ήταν δυνατό να συνδεθεί"
+
+msgid "Survey questions"
+msgstr "Ερωτήσεις ερωτηματολογίου"
+
+msgid "Back to survey list"
+msgstr "Επιστροφή στη λίστα ερωτηματολογίων"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "Αυτό το ερωτηματολόγιο έχει ήδη απαντήσεις. Η επεξεργασία ερωτήσεων είναι απενεργοποιημένη από τις ρυθμίσεις."
+
+msgid "Choose the type of question you want to add."
+msgstr "Επιλέξτε τον τύπο ερώτησης που θέλετε να προσθέσετε."
+
+msgid "The free text option is added automatically."
+msgstr "Η επιλογή ελεύθερου κειμένου προστίθεται αυτόματα."
+
+msgid "No questions found"
+msgstr "Δεν βρέθηκαν ερωτήσεις"
+
+msgid "Mandatory"
+msgstr "Υποχρεωτικό"
+
+msgid "Unsupported question type"
+msgstr "Μη υποστηριζόμενος τύπος ερώτησης"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "Μπορείτε να χρησιμοποιήσετε τις ετικέτες {%s} και {%s} στην ερώτηση."
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "Αυτή η ερώτηση εμφανίζεται υπό όρους κατά την απάντηση του ερωτηματολογίου."
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "Οι επιλογές ποσοστού από 1 έως 100 δημιουργούνται αυτόματα."
+
+msgid "Could not load survey questions"
+msgstr "Αδυναμία φόρτωσης ερωτήσεων ερωτηματολογίου"
+
+msgid "The question text is required."
+msgstr "Το κείμενο της ερώτησης είναι υποχρεωτικό."
+
+msgid "The maximum score is required."
+msgstr "Η μέγιστη βαθμολογία είναι υποχρεωτική."
+
+msgid "Please select a parent option."
+msgstr "Παρακαλώ επιλέξτε μια γονική επιλογή."
+
+msgid "Please fill all answer options."
+msgstr "Παρακαλώ συμπληρώστε όλες τις επιλογές απάντησης."
+
+msgid "QuestionUpdated"
+msgstr "QuestionUpdated"
+
+msgid "Could not save survey question"
+msgstr "Αδυναμία αποθήκευσης ερώτησης ερωτηματολογίου"
+
+msgid "Could not delete survey question"
+msgstr "Αδυναμία διαγραφής ερώτησης ερωτηματολογίου"
+
+msgid "Could not move survey question"
+msgstr "Αδυναμία μετακίνησης ερώτησης ερωτηματολογίου"
+
+msgid "Could not copy survey question"
+msgstr "Αδυναμία αντιγραφής ερώτησης ερωτηματολογίου"
+
+msgid "Hide search"
+msgstr "Απόκρυψη αναζήτησης"
+
+msgid "Showing results for: %s"
+msgstr "Εμφάνιση αποτελεσμάτων για: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "Αναζήτηση κατά τίτλο ερωτηματολογίου, κωδικό ή περιγραφή."
+
+msgid "Search surveys"
+msgstr "Αναζήτηση ερωτηματολογίων"
+
+msgid "%s surveys selected"
+msgstr "%s ερωτηματολόγια επιλέχθηκαν"
+
+msgid "Clear selection"
+msgstr "Καθαρισμός επιλογής"
+
+msgid "No surveys found"
+msgstr "Δεν βρέθηκαν ερωτηματολόγια"
+
+msgid "Unsupported"
+msgstr "Μη υποστηριζόμενο"
+
+msgid "Could not load surveys"
+msgstr "Αδυναμία φόρτωσης ερωτηματολογίων"
+
+msgid "Delete selected surveys"
+msgstr "Διαγραφή επιλεγμένων ερωτηματολογίων"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "Τα επιλεγμένα ερωτηματολόγια και οι ερωτήσεις τους θα διαγραφούν. Αυτή η ενέργεια δεν μπορεί να αναιρεθεί."
+
+msgid "Could not delete selected surveys"
+msgstr "Αδυναμία διαγραφής επιλεγμένων ερωτηματολογίων"
+
+msgid "Survey action"
+msgstr "Ενέργεια ερωτηματολογίου"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "Θα δημιουργηθεί ένα αντίγραφο αυτού του ερωτηματολογίου: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "Όλες οι απαντήσεις και οι προσκλήσεις θα διαγραφούν για αυτό το ερωτηματολόγιο: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "Οι δημιουργημένες πολλαπλές ερωτήσεις θα αφαιρεθούν από αυτό το ερωτηματολόγιο: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "Αυτό το ερωτηματολόγιο θα δημοσιευθεί για τους συνδεδεμένους εκπαιδευτές της ομάδας: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "Αυτό το ερωτηματολόγιο και οι ερωτήσεις του θα διαγραφούν: %s"
+
+msgid "Could not complete survey action"
+msgstr "Αδυναμία ολοκλήρωσης ενέργειας ερωτηματολογίου"
+
+msgid "Not started"
+msgstr "Δεν ξεκίνησε"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "Οι δημοσκοπήσεις συνάντησης επιτρέπουν στους προσκεκλημένους χρήστες να επιλέγουν τις ημερομηνίες που είναι διαθέσιμοι."
+
+msgid "Back to surveys"
+msgstr "Επιστροφή στα ερωτηματολόγια"
+
+msgid "Edit meeting poll"
+msgstr "Επεξεργασία δημοσκόπησης συνάντησης"
+
+msgid "View meeting poll"
+msgstr "Προβολή δημοσκόπησης συνάντησης"
+
+msgid "Basic information"
+msgstr "Βασικές πληροφορίες"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "Αυτό θα δημιουργήσει ένα ερωτηματολόγιο τύπου δημοσκόπησης συνάντησης. Οι απαντήσεις και οι προσκλήσεις διαχειρίζονται ξεχωριστά."
+
+msgid "Availability"
+msgstr "Διαθεσιμότητα"
+
+msgid "Meeting dates"
+msgstr "Ημερομηνίες συνάντησης"
+
+msgid "Meeting poll"
+msgstr "Δημοσκόπηση συνάντησης"
+
+msgid "My availability"
+msgstr "Διαθεσιμότητά μου"
+
+msgid "Meeting poll results"
+msgstr "Αποτελέσματα δημοσκόπησης συνάντησης"
+
+msgid "No invitations found"
+msgstr "Δεν βρέθηκαν προσκλήσεις"
+
+msgid "available"
+msgstr "διαθέσιμος"
+
+msgid "Could not load meeting poll"
+msgstr "Αδυναμία φόρτωσης της δημοσκόπησης συνάντησης"
+
+msgid "Please complete the required fields"
+msgstr "Παρακαλώ συμπληρώστε τα απαιτούμενα πεδία"
+
+msgid "Could not save meeting poll"
+msgstr "Αδυναμία αποθήκευσης της δημοσκόπησης συνάντησης"
+
+msgid "Could not save meeting availability"
+msgstr "Αδυναμία αποθήκευσης της διαθεσιμότητας συνάντησης"
+
+msgid "Copy this survey to another course or session"
+msgstr "Αντιγραφή αυτής της έρευνας σε άλλο μάθημα ή περίοδο"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "Η έρευνα θα αντιγραφεί χωρίς απαντήσεις ή προσκλήσεις."
+
+msgid "No target courses found"
+msgstr "Δεν βρέθηκαν μαθήματα προορισμού"
+
+msgid "Search by course title, course code or session name."
+msgstr "Αναζήτηση κατά τίτλο μαθήματος, κωδικό μαθήματος ή όνομα περιόδου."
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "Χρησιμοποιήστε την Αντιγραφή έρευνας όταν θέλετε ένα αντίγραφο στο ίδιο μάθημα."
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "Οι ερωτήσεις και οι επιλογές θα αντιγραφούν. Οι απαντήσεις, οι προσκλήσεις και οι αναφορές θα παραμείνουν μόνο στην αρχική έρευνα."
+
+msgid "Selected target"
+msgstr "Επιλεγμένος προορισμός"
+
+msgid "Could not load copy form"
+msgstr "Αδυναμία φόρτωσης της φόρμας αντιγραφής"
+
+msgid "The survey will be copied to: %s"
+msgstr "Η έρευνα θα αντιγραφεί στο: %s"
+
+msgid "Survey copied."
+msgstr "Η έρευνα αντιγράφηκε."
+
+msgid "Could not copy survey"
+msgstr "Αδυναμία αντιγραφής της έρευνας"
+
+msgid "Answer survey"
+msgstr "Απάντηση έρευνας"
+
+msgid "Preview mode does not save answers."
+msgstr "Η λειτουργία προεπισκόπησης δεν αποθηκεύει απαντήσεις."
+
+msgid "Survey completed"
+msgstr "Η έρευνα ολοκληρώθηκε"
+
+msgid "Thank you for answering the survey."
+msgstr "Σας ευχαριστούμε που απαντήσατε στην έρευνα."
+
+msgid "Profile information"
+msgstr "Πληροφορίες προφίλ"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "Παρακαλώ ελέγξτε τα ζητούμενα πεδία προφίλ πριν απαντήσετε στην έρευνα."
+
+msgid "This profile field is read-only."
+msgstr "Αυτό το πεδίο προφίλ είναι μόνο για ανάγνωση."
+
+msgid "You already filled this survey."
+msgstr "Έχετε ήδη συμπληρώσει αυτήν την έρευνα."
+
+msgid "Please specify"
+msgstr "Παρακαλώ διευκρινίστε"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "Αυτός ο τύπος ερώτησης δεν υποστηρίζεται στην προβολή σύγχρονης έρευνας."
+
+msgid "Preview only"
+msgstr "Μόνο προεπισκόπηση"
+
+msgid "Submit answers"
+msgstr "Υποβολή απαντήσεων"
+
+msgid "Could not load survey"
+msgstr "Αδυναμία φόρτωσης της έρευνας"
+
+msgid "Please complete the required profile fields."
+msgstr "Παρακαλώ συμπληρώστε τα απαιτούμενα πεδία προφίλ."
+
+msgid "Please answer all mandatory questions."
+msgstr "Παρακαλώ απαντήστε σε όλες τις υποχρεωτικές ερωτήσεις."
+
+msgid "Could not save survey answers"
+msgstr "Αδυναμία αποθήκευσης των απαντήσεων της έρευνας"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "Ρυθμίστε τις κύριες πληροφορίες της έρευνας πριν διαχειριστείτε ερωτήσεις και προσκλήσεις."
+
+msgid "The survey code cannot be changed after creation."
+msgstr "Ο κωδικός της έρευνας δεν μπορεί να αλλάξει μετά τη δημιουργία."
+
+msgid "Survey behavior"
+msgstr "Συμπεριφορά έρευνας"
+
+msgid "Use 0 for no time limit."
+msgstr "Χρησιμοποιήστε το 0 για απεριόριστο χρόνο."
+
+msgid "Survey messages"
+msgstr "Μηνύματα έρευνας"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "Τα πεδία προφίλ που επιλέγονται εδώ θα εμφανίζονται πριν από τις ερωτήσεις της έρευνας."
+
+msgid "No profile fields are currently available."
+msgstr "Δεν υπάρχουν διαθέσιμα πεδία προφίλ αυτήν τη στιγμή."
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "Η επιλογή πεδίων προφίλ είναι διαθέσιμη μόνο για μη ανώνυμες έρευνες."
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "Η σύνδεση δεξιοτήτων θα μεταφερθεί σε ξεχωριστή δέσμη."
+
+msgid "Could not load survey configuration"
+msgstr "Αδυναμία φόρτωσης της διαμόρφωσης της έρευνας"
+
+msgid "The survey code is required."
+msgstr "Ο κωδικός της έρευνας είναι υποχρεωτικός."
+
+msgid "The survey title is required."
+msgstr "Ο τίτλος της έρευνας είναι υποχρεωτικός."
+
+msgid "The survey has been saved successfully"
+msgstr "Η έρευνα αποθηκεύτηκε με επιτυχία"
+
+msgid "Could not save survey configuration"
+msgstr "Αδυναμία αποθήκευσης της διαμόρφωσης της έρευνας"
+
+msgid "Course users"
+msgstr "Χρήστες μαθήματος"
+
+msgid "Already invited"
+msgstr "Ήδη προσκεκλημένοι"
+
+msgid "No users found"
+msgstr "Δεν βρέθηκαν χρήστες"
+
+msgid "No groups found"
+msgstr "Δεν βρέθηκαν ομάδες"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "Χρησιμοποιήστε **link** όπου πρέπει να εμφανίζεται ο σύνδεσμος της έρευνας."
+
+msgid "Remind all selected users"
+msgstr "Υπενθύμιση σε όλους τους επιλεγμένους χρήστες"
+
+msgid "Anonymous access link"
+msgstr "Σύνδεσμος ανώνυμης πρόσβασης"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "Οι χρήστες που δεν έχουν προσκληθεί μπορούν να χρησιμοποιήσουν αυτόν τον σύνδεσμο για να συμμετάσχουν στην έρευνα."
+
+msgid "Answered anonymously"
+msgstr "Απαντήθηκε ανώνυμα"
+
+msgid "Could not load survey invitations"
+msgstr "Αδυναμία φόρτωσης προσκλήσεων έρευνας"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "Απαιτούνται θέμα και μήνυμα email κατά την αποστολή email."
+
+msgid "Could not publish survey"
+msgstr "Αδυναμία δημοσίευσης έρευνας"
+
+msgid "Could not copy the link"
+msgstr "Αδυναμία αντιγραφής του συνδέσμου"
+
+msgid "Please answer this survey using the following link"
+msgstr "Παρακαλούμε απαντήστε σε αυτήν την έρευνα χρησιμοποιώντας τον παρακάτω σύνδεσμο"
+
+msgid "Export CSV"
+msgstr "Εξαγωγή CSV"
+
+msgid "Export compact CSV"
+msgstr "Εξαγωγή συμπαγούς CSV"
+
+msgid "Export Excel"
+msgstr "Εξαγωγή Excel"
+
+msgid "Export package"
+msgstr "Εξαγωγή πακέτου"
+
+msgid "Results summary"
+msgstr "Σύνοψη αποτελεσμάτων"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "Αυτή η προβολή εμφανίζει τα μεταφερθέντα δεδομένα αναφοράς για αυτήν την έρευνα."
+
+msgid "Select user"
+msgstr "Επιλογή χρήστη"
+
+msgid "No answers found"
+msgstr "Δεν βρέθηκαν απαντήσεις"
+
+msgid "answers"
+msgstr "απαντήσεις"
+
+msgid "Could not load survey reporting"
+msgstr "Αδυναμία φόρτωσης αναφοράς έρευνας"
+
+msgid "Back to threads"
+msgstr "Επιστροφή στα θέματα"
+
+msgid "Back to learning path"
+msgstr "Επιστροφή στη διαδρομή μάθησης"
+
+msgid "Remove sticky"
+msgstr "Αφαίρεση καρφιτσώματος"
+
+msgid "Make sticky"
+msgstr "Καρφίτσωμα"
+
+msgid "Open thread"
+msgstr "Άνοιγμα θέματος"
+
+msgid "Close thread"
+msgstr "Κλείσιμο θέματος"
+
+msgid "Delete thread"
+msgstr "Διαγραφή θέματος"
+
+msgid "This thread is hidden from learners."
+msgstr "Αυτό το θέμα είναι κρυφό από τους εκπαιδευόμενους."
+
+msgid "Revision requested"
+msgstr "Ζητήθηκε αναθεώρηση"
+
+msgid "Revision"
+msgstr "Αναθεώρηση"
+
+msgid "Approve post"
+msgstr "Έγκριση ανάρτησης"
+
+msgid "Reject post"
+msgstr "Απόρριψη ανάρτησης"
+
+msgid "Cancel revision request"
+msgstr "Ακύρωση αιτήματος αναθεώρησης"
+
+msgid "Delete post"
+msgstr "Διαγραφή ανάρτησης"
+
+msgid "Message is required"
+msgstr "Απαιτείται μήνυμα"
+
+msgid "Target thread is required"
+msgstr "Απαιτείται το θέμα προορισμού"
+
+msgid "Could not retrieve posts"
+msgstr "Αδυναμία ανάκτησης αναρτήσεων"
+
+msgid "Thread shown"
+msgstr "Το θέμα εμφανίζεται"
+
+msgid "Thread hidden"
+msgstr "Το θέμα είναι κρυφό"
+
+msgid "Could not update thread"
+msgstr "Αδυναμία ενημέρωσης θέματος"
+
+msgid "Thread closed"
+msgstr "Το θέμα έκλεισε"
+
+msgid "Thread opened"
+msgstr "Το θέμα άνοιξε"
+
+msgid "Thread marked as sticky"
+msgstr "Το θέμα επισημάνθηκε ως καρφιτσωμένο"
+
+msgid "Thread unmarked as sticky"
+msgstr "Το θέμα καταργήθηκε από καρφιτσωμένο"
+
+msgid "Thread notifications enabled"
+msgstr "Ειδοποιήσεις θέματος ενεργοποιημένες"
+
+msgid "Thread notifications disabled"
+msgstr "Ειδοποιήσεις θέματος απενεργοποιημένες"
+
+msgid "Could not update thread notification"
+msgstr "Δεν ήταν δυνατή η ενημέρωση της ειδοποίησης του νήματος"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτό το νήμα;"
+
+msgid "Could not delete thread"
+msgstr "Δεν ήταν δυνατή η διαγραφή του νήματος"
+
+msgid "Post approved"
+msgstr "Η δημοσίευση εγκρίθηκε"
+
+msgid "Could not approve post"
+msgstr "Δεν ήταν δυνατή η έγκριση της δημοσίευσης"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "Είστε βέβαιοι ότι θέλετε να απορρίψετε αυτή τη δημοσίευση;"
+
+msgid "Post rejected"
+msgstr "Η δημοσίευση απορρίφθηκε"
+
+msgid "Could not reject post"
+msgstr "Δεν ήταν δυνατή η απόρριψη της δημοσίευσης"
+
+msgid "Post shown"
+msgstr "Η δημοσίευση εμφανίζεται"
+
+msgid "Post hidden"
+msgstr "Η δημοσίευση είναι κρυφή"
+
+msgid "Could not update post"
+msgstr "Δεν ήταν δυνατή η ενημέρωση της δημοσίευσης"
+
+msgid "Post updated"
+msgstr "Η δημοσίευση ενημερώθηκε"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτή τη δημοσίευση;"
+
+msgid "Post deleted"
+msgstr "Η δημοσίευση διαγράφηκε"
+
+msgid "Could not delete post"
+msgstr "Δεν ήταν δυνατή η διαγραφή της δημοσίευσης"
+
+msgid "Untitled thread"
+msgstr "Νήμα χωρίς τίτλο"
+
+msgid "Could not retrieve threads"
+msgstr "Δεν ήταν δυνατή η ανάκτηση των νημάτων"
+
+msgid "Post moved"
+msgstr "Η δημοσίευση μετακινήθηκε"
+
+msgid "Could not move post"
+msgstr "Δεν ήταν δυνατή η μετακίνηση της δημοσίευσης"
+
+msgid "Revision request removed"
+msgstr "Η αίτηση αναθεώρησης αφαιρέθηκε"
+
+msgid "Could not update revision request"
+msgstr "Δεν ήταν δυνατή η ενημέρωση της αίτησης αναθεώρησης"
+
+msgid "Are you sure you want to report this post?"
+msgstr "Είστε βέβαιοι ότι θέλετε να αναφέρετε αυτή τη δημοσίευση;"
+
+msgid "Could not report post"
+msgstr "Δεν ήταν δυνατή η αναφορά της δημοσίευσης"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτό το συνημμένο;"
+
+msgid "Attachment deleted"
+msgstr "Το συνημμένο διαγράφηκε"
+
+msgid "Could not delete attachment"
+msgstr "Δεν ήταν δυνατή η διαγραφή του συνημμένου"
+
+msgid "Thread title"
+msgstr "Τίτλος νήματος"
+
+msgid "Sticky thread"
+msgstr "Καρφιτσωμένο νήμα"
+
+msgid "Attach files"
+msgstr "Επισύναψη αρχείων"
+
+msgid "Attachments are disabled for this forum"
+msgstr "Τα συνημμένα είναι απενεργοποιημένα για αυτό το φόρουμ"
+
+msgid "The forum is not open yet."
+msgstr "Το φόρουμ δεν έχει ανοίξει ακόμη."
+
+msgid "The forum is closed."
+msgstr "Το φόρουμ είναι κλειστό."
+
+msgid "The forum is locked."
+msgstr "Το φόρουμ είναι κλειδωμένο."
+
+msgid "New threads are not allowed in this forum."
+msgstr "Δεν επιτρέπονται νέα νήματα σε αυτό το φόρουμ."
+
+msgid "Thread created"
+msgstr "Το νήμα δημιουργήθηκε"
+
+msgid "Could not create thread"
+msgstr "Δεν ήταν δυνατή η δημιουργία του νήματος"
+
+msgid "Back to posts"
+msgstr "Επιστροφή στις δημοσιεύσεις"
+
+msgid "This reply will be stored as a revision."
+msgstr "Αυτή η απάντηση θα αποθηκευτεί ως αναθεώρηση."
+
+msgid "Post reply"
+msgstr "Απάντηση δημοσίευσης"
+
+msgid "The thread is locked."
+msgstr "Το νήμα είναι κλειδωμένο."
+
+msgid "Reply added"
+msgstr "Η απάντηση προστέθηκε"
+
+msgid "Could not add reply"
+msgstr "Δεν ήταν δυνατή η προσθήκη απάντησης"
+
+msgid "Add forum"
+msgstr "Προσθήκη φόρουμ"
+
+msgid "No forums found"
+msgstr "Δεν βρέθηκαν φόρουμ"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "Δημιουργήστε την πρώτη σας κατηγορία φόρουμ ή φόρουμ για να ξεκινήσετε συζητήσεις."
+
+msgid "Locked"
+msgstr "Κλειδωμένο"
+
+msgid "No forums in this category"
+msgstr "Δεν υπάρχουν φόρουμ σε αυτή την κατηγορία"
+
+msgid "Posts require approval"
+msgstr "Οι δημοσιεύσεις απαιτούν έγκριση"
+
+msgid "Forum for current group"
+msgstr "Φόρουμ για την τρέχουσα ομάδα"
+
+msgid "Group forum visibility"
+msgstr "Ορατότητα φόρουμ ομάδας"
+
+msgid "No category"
+msgstr "Χωρίς κατηγορία"
+
+msgid "Could not retrieve forums"
+msgstr "Αδυναμία ανάκτησης φόρουμ"
+
+msgid "Forum category updated"
+msgstr "Η κατηγορία φόρουμ ενημερώθηκε"
+
+msgid "Forum category created"
+msgstr "Η κατηγορία φόρουμ δημιουργήθηκε"
+
+msgid "Could not save forum category"
+msgstr "Αδυναμία αποθήκευσης κατηγορίας φόρουμ"
+
+msgid "Forum updated"
+msgstr "Το φόρουμ ενημερώθηκε"
+
+msgid "Forum created"
+msgstr "Το φόρουμ δημιουργήθηκε"
+
+msgid "Could not save forum"
+msgstr "Αδυναμία αποθήκευσης φόρουμ"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτήν την κατηγορία φόρουμ;"
+
+msgid "Could not delete forum category"
+msgstr "Αδυναμία διαγραφής κατηγορίας φόρουμ"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτό το φόρουμ;"
+
+msgid "Could not delete forum"
+msgstr "Αδυναμία διαγραφής φόρουμ"
+
+msgid "Forum category unlocked"
+msgstr "Η κατηγορία φόρουμ ξεκλειδώθηκε"
+
+msgid "Forum category locked"
+msgstr "Η κατηγορία φόρουμ κλειδώθηκε"
+
+msgid "Could not update forum category"
+msgstr "Αδυναμία ενημέρωσης κατηγορίας φόρουμ"
+
+msgid "Forum category shown"
+msgstr "Η κατηγορία φόρουμ εμφανίστηκε"
+
+msgid "Forum category hidden"
+msgstr "Η κατηγορία φόρουμ αποκρύφθηκε"
+
+msgid "Forum unlocked"
+msgstr "Το φόρουμ ξεκλείδωσε"
+
+msgid "Forum locked"
+msgstr "Το φόρουμ κλειδώθηκε"
+
+msgid "Could not update forum"
+msgstr "Αδυναμία ενημέρωσης φόρουμ"
+
+msgid "Forum shown"
+msgstr "Το φόρουμ εμφανίστηκε"
+
+msgid "Forum hidden"
+msgstr "Το φόρουμ αποκρύφθηκε"
+
+msgid "Forum notifications enabled"
+msgstr "Οι ειδοποιήσεις φόρουμ ενεργοποιήθηκαν"
+
+msgid "Forum notifications disabled"
+msgstr "Οι ειδοποιήσεις φόρουμ απενεργοποιήθηκαν"
+
+msgid "Could not update forum notification"
+msgstr "Αδυναμία ενημέρωσης ειδοποίησης φόρουμ"
+
+msgid "Forum category moved"
+msgstr "Η κατηγορία φόρουμ μετακινήθηκε"
+
+msgid "Could not move forum category"
+msgstr "Αδυναμία μετακίνησης κατηγορίας φόρουμ"
+
+msgid "Forum moved"
+msgstr "Το φόρουμ μετακινήθηκε"
+
+msgid "Could not move forum"
+msgstr "Αδυναμία μετακίνησης φόρουμ"
+
+msgid "Back to forums"
+msgstr "Επιστροφή στα φόρουμ"
+
+msgid "New thread"
+msgstr "Νέο θέμα"
+
+msgid "No threads found"
+msgstr "Δεν βρέθηκαν θέματα"
+
+msgid "Sticky"
+msgstr "Καρφιτσωμένο"
+
+msgid "Graded"
+msgstr "Βαθμολογημένο"
+
+msgid "Grade peers"
+msgstr "Βαθμολόγηση συμφοιτητών"
+
+msgid "Move thread"
+msgstr "Μετακίνηση θέματος"
+
+msgid "Target forum"
+msgstr "Στοχευμένο φόρουμ"
+
+msgid "Target forum is required"
+msgstr "Το στοχευμένο φόρουμ είναι υποχρεωτικό"
+
+msgid "Students"
+msgstr "Φοιτητές"
+
+msgid "No students found"
+msgstr "Δεν βρέθηκαν φοιτητές"
+
+msgid "No peers available to grade."
+msgstr "Δεν υπάρχουν διαθέσιμοι συμφοιτητές για βαθμολόγηση."
+
+msgid "Qualified"
+msgstr "Πιστοποιημένος"
+
+msgid "Not qualified"
+msgstr "Μη πιστοποιημένος"
+
+msgid "Could not retrieve thread grading"
+msgstr "Αδυναμία ανάκτησης βαθμολόγησης θέματος"
+
+msgid "Thread grading updated"
+msgstr "Η βαθμολόγηση θέματος ενημερώθηκε"
+
+msgid "Could not update thread grading"
+msgstr "Αδυναμία ενημέρωσης βαθμολόγησης θέματος"
+
+msgid "Thread score saved"
+msgstr "Η βαθμολογία θέματος αποθηκεύτηκε"
+
+msgid "Could not save thread score"
+msgstr "Αδυναμία αποθήκευσης βαθμολογίας θέματος"
+
+msgid "Could not move thread"
+msgstr "Αδυναμία μετακίνησης θέματος"
+
+msgid "Thread updated"
+msgstr "Το θέμα ενημερώθηκε"
+
+msgid "Search term is too short"
+msgstr "Ο όρος αναζήτησης είναι πολύ σύντομος"
+
+msgid "Could not search forums"
+msgstr "Αδυναμία αναζήτησης φόρουμ"
+
+msgid "Moderated"
+msgstr "Συντονισμένο"
+
+msgid "View threads"
+msgstr "Προβολή νημάτων"
 

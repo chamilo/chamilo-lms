@@ -37604,3 +37604,762 @@ msgstr "L'évaluation n'a pas pu être créée"
 msgid "The gradebook evaluation could not be linked"
 msgstr "L'évaluation du carnet de notes n'a pas pu être liée"
 
+msgid "Survey questions"
+msgstr "Questions du sondage"
+
+msgid "Back to survey list"
+msgstr "Retour à la liste des sondages"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "Ce sondage contient déjà des réponses. La modification des questions est désactivée par la configuration."
+
+msgid "Choose the type of question you want to add."
+msgstr "Choisissez le type de question que vous souhaitez ajouter."
+
+msgid "The free text option is added automatically."
+msgstr "L'option texte libre est ajoutée automatiquement."
+
+msgid "No questions found"
+msgstr "Aucune question trouvée"
+
+msgid "Mandatory"
+msgstr "Obligatoire"
+
+msgid "Unsupported question type"
+msgstr "Type de question non pris en charge"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "Vous pouvez utiliser les balises {%s} et {%s} dans la question."
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "Cette question s'affiche de manière conditionnelle lors de la réponse au sondage."
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "Les options de pourcentage de 1 à 100 sont générées automatiquement."
+
+msgid "Could not load survey questions"
+msgstr "Impossible de charger les questions du sondage"
+
+msgid "The question text is required."
+msgstr "Le texte de la question est obligatoire."
+
+msgid "The maximum score is required."
+msgstr "Le score maximum est obligatoire."
+
+msgid "Please select a parent option."
+msgstr "Veuillez sélectionner une option parente."
+
+msgid "Please fill all answer options."
+msgstr "Veuillez remplir toutes les options de réponse."
+
+msgid "QuestionUpdated"
+msgstr "QuestionUpdated"
+
+msgid "Could not save survey question"
+msgstr "Impossible d'enregistrer la question du sondage"
+
+msgid "Could not delete survey question"
+msgstr "Impossible de supprimer la question du sondage"
+
+msgid "Could not move survey question"
+msgstr "Impossible de déplacer la question du sondage"
+
+msgid "Could not copy survey question"
+msgstr "Impossible de copier la question du sondage"
+
+msgid "Hide search"
+msgstr "Masquer la recherche"
+
+msgid "Showing results for: %s"
+msgstr "Affichage des résultats pour : %s"
+
+msgid "Search by survey title, code or description."
+msgstr "Rechercher par titre, code ou description du sondage."
+
+msgid "Search surveys"
+msgstr "Rechercher des sondages"
+
+msgid "%s surveys selected"
+msgstr "%s sondages sélectionnés"
+
+msgid "Clear selection"
+msgstr "Effacer la sélection"
+
+msgid "No surveys found"
+msgstr "Aucun sondage trouvé"
+
+msgid "Unsupported"
+msgstr "Non pris en charge"
+
+msgid "Could not load surveys"
+msgstr "Impossible de charger les sondages"
+
+msgid "Delete selected surveys"
+msgstr "Supprimer les sondages sélectionnés"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "Les sondages sélectionnés et leurs questions seront supprimés. Cette action est irréversible."
+
+msgid "Could not delete selected surveys"
+msgstr "Impossible de supprimer les sondages sélectionnés"
+
+msgid "Survey action"
+msgstr "Action sur le sondage"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "Une copie de ce sondage sera créée : %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "Toutes les réponses et invitations seront supprimées pour ce sondage : %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "Les questions générées et multipliées seront supprimées de ce sondage : %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "Ce sondage sera publié pour les tuteurs du groupe lié : %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "Ce sondage et ses questions seront supprimés : %s"
+
+msgid "Could not complete survey action"
+msgstr "Impossible de réaliser l'action sur le sondage"
+
+msgid "Not started"
+msgstr "Non commencé"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "Les sondages de réunion permettent aux utilisateurs invités de sélectionner les dates auxquelles ils sont disponibles."
+
+msgid "Back to surveys"
+msgstr "Retour aux sondages"
+
+msgid "Edit meeting poll"
+msgstr "Modifier le sondage de réunion"
+
+msgid "View meeting poll"
+msgstr "Voir le sondage de réunion"
+
+msgid "Basic information"
+msgstr "Informations de base"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "Cela créera un sondage de type réunion. Les réponses et invitations sont gérées séparément."
+
+msgid "Availability"
+msgstr "Disponibilité"
+
+msgid "Meeting dates"
+msgstr "Dates de la réunion"
+
+msgid "Meeting poll"
+msgstr "Sondage de réunion"
+
+msgid "My availability"
+msgstr "Ma disponibilité"
+
+msgid "Meeting poll results"
+msgstr "Résultats du sondage de réunion"
+
+msgid "No invitations found"
+msgstr "Aucune invitation trouvée"
+
+msgid "available"
+msgstr "disponible"
+
+msgid "Could not load meeting poll"
+msgstr "Impossible de charger le sondage de réunion"
+
+msgid "Please complete the required fields"
+msgstr "Veuillez compléter les champs obligatoires"
+
+msgid "Could not save meeting poll"
+msgstr "Impossible d'enregistrer le sondage de réunion"
+
+msgid "Could not save meeting availability"
+msgstr "Impossible d'enregistrer la disponibilité pour la réunion"
+
+msgid "Copy this survey to another course or session"
+msgstr "Copier ce sondage dans un autre cours ou une autre session"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "Le sondage sera copié sans réponses ni invitations."
+
+msgid "No target courses found"
+msgstr "Aucun cours cible trouvé"
+
+msgid "Search by course title, course code or session name."
+msgstr "Rechercher par intitulé de cours, code de cours ou nom de session."
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "Utilisez Dupliquer le sondage lorsque vous souhaitez une copie dans le même cours."
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "Les questions et options seront copiées. Les réponses, invitations et rapports resteront uniquement dans le sondage d'origine."
+
+msgid "Selected target"
+msgstr "Cible sélectionnée"
+
+msgid "Could not load copy form"
+msgstr "Impossible de charger le formulaire de copie"
+
+msgid "The survey will be copied to: %s"
+msgstr "Le sondage sera copié vers : %s"
+
+msgid "Survey copied."
+msgstr "Sondage copié."
+
+msgid "Could not copy survey"
+msgstr "Impossible de copier le sondage"
+
+msgid "Answer survey"
+msgstr "Répondre au sondage"
+
+msgid "Preview mode does not save answers."
+msgstr "Le mode aperçu n'enregistre pas les réponses."
+
+msgid "Survey completed"
+msgstr "Sondage terminé"
+
+msgid "Thank you for answering the survey."
+msgstr "Merci d'avoir répondu au sondage."
+
+msgid "Profile information"
+msgstr "Informations du profil"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "Veuillez vérifier les champs de profil demandés avant de répondre au sondage."
+
+msgid "This profile field is read-only."
+msgstr "Ce champ de profil est en lecture seule."
+
+msgid "You already filled this survey."
+msgstr "Vous avez déjà répondu à ce sondage."
+
+msgid "Please specify"
+msgstr "Veuillez préciser"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "Ce type de question n'est pas pris en charge dans la vue moderne du sondage."
+
+msgid "Preview only"
+msgstr "Aperçu uniquement"
+
+msgid "Submit answers"
+msgstr "Soumettre les réponses"
+
+msgid "Could not load survey"
+msgstr "Impossible de charger le sondage"
+
+msgid "Please complete the required profile fields."
+msgstr "Veuillez compléter les champs de profil obligatoires."
+
+msgid "Please answer all mandatory questions."
+msgstr "Veuillez répondre à toutes les questions obligatoires."
+
+msgid "Could not save survey answers"
+msgstr "Impossible d'enregistrer les réponses du sondage"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "Configurez les informations principales du sondage avant de gérer les questions et les invitations."
+
+msgid "The survey code cannot be changed after creation."
+msgstr "Le code du sondage ne peut pas être modifié après sa création."
+
+msgid "Survey behavior"
+msgstr "Comportement du sondage"
+
+msgid "Use 0 for no time limit."
+msgstr "Utilisez 0 pour aucune limite de temps."
+
+msgid "Survey messages"
+msgstr "Messages du sondage"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "Les champs de profil sélectionnés ici seront affichés avant les questions du sondage."
+
+msgid "No profile fields are currently available."
+msgstr "Aucun champ de profil n'est disponible pour le moment."
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "La sélection des champs de profil n'est disponible que pour les sondages non anonymes."
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "Le lien avec les compétences sera migré dans un lot dédié."
+
+msgid "Could not load survey configuration"
+msgstr "Impossible de charger la configuration du sondage"
+
+msgid "The survey code is required."
+msgstr "Le code du sondage est obligatoire."
+
+msgid "The survey title is required."
+msgstr "Le titre du sondage est obligatoire."
+
+msgid "The survey has been saved successfully"
+msgstr "Le sondage a été enregistré avec succès"
+
+msgid "Could not save survey configuration"
+msgstr "Impossible d'enregistrer la configuration du sondage"
+
+msgid "Course users"
+msgstr "Utilisateurs du cours"
+
+msgid "Already invited"
+msgstr "Déjà invité"
+
+msgid "No users found"
+msgstr "Aucun utilisateur trouvé"
+
+msgid "No groups found"
+msgstr "Aucun groupe trouvé"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "Utilisez **link** à l'endroit où le lien du sondage doit apparaître."
+
+msgid "Remind all selected users"
+msgstr "Rappeler à tous les utilisateurs sélectionnés"
+
+msgid "Anonymous access link"
+msgstr "Lien d'accès anonyme"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "Les utilisateurs non invités peuvent utiliser ce lien pour répondre au sondage."
+
+msgid "Answered anonymously"
+msgstr "Répondu anonymement"
+
+msgid "Could not load survey invitations"
+msgstr "Impossible de charger les invitations du sondage"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "L'objet et le message du courriel sont obligatoires lors de l'envoi."
+
+msgid "Could not publish survey"
+msgstr "Impossible de publier le sondage"
+
+msgid "Could not copy the link"
+msgstr "Impossible de copier le lien"
+
+msgid "Please answer this survey using the following link"
+msgstr "Veuillez répondre à ce sondage en utilisant le lien suivant"
+
+msgid "Export CSV"
+msgstr "Exporter en CSV"
+
+msgid "Export compact CSV"
+msgstr "Exporter en CSV compact"
+
+msgid "Export Excel"
+msgstr "Exporter en Excel"
+
+msgid "Export package"
+msgstr "Exporter le paquet"
+
+msgid "Results summary"
+msgstr "Résumé des résultats"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "Cette vue affiche les données de reporting migrées pour ce sondage."
+
+msgid "Select user"
+msgstr "Sélectionner un utilisateur"
+
+msgid "No answers found"
+msgstr "Aucune réponse trouvée"
+
+msgid "answers"
+msgstr "réponses"
+
+msgid "Could not load survey reporting"
+msgstr "Impossible de charger le reporting du sondage"
+
+msgid "Back to threads"
+msgstr "Retour aux fils de discussion"
+
+msgid "Back to learning path"
+msgstr "Retour au parcours d'apprentissage"
+
+msgid "Remove sticky"
+msgstr "Supprimer l'épinglage"
+
+msgid "Make sticky"
+msgstr "Épingler"
+
+msgid "Open thread"
+msgstr "Ouvrir le fil"
+
+msgid "Close thread"
+msgstr "Fermer le fil"
+
+msgid "Delete thread"
+msgstr "Supprimer le fil"
+
+msgid "This thread is hidden from learners."
+msgstr "Ce fil est masqué pour les apprenants."
+
+msgid "Revision requested"
+msgstr "Révision demandée"
+
+msgid "Revision"
+msgstr "Révision"
+
+msgid "Approve post"
+msgstr "Approuver le message"
+
+msgid "Reject post"
+msgstr "Rejeter le message"
+
+msgid "Cancel revision request"
+msgstr "Annuler la demande de révision"
+
+msgid "Delete post"
+msgstr "Supprimer le message"
+
+msgid "Message is required"
+msgstr "Le message est obligatoire"
+
+msgid "Target thread is required"
+msgstr "Le fil cible est obligatoire"
+
+msgid "Could not retrieve posts"
+msgstr "Impossible de récupérer les messages"
+
+msgid "Thread shown"
+msgstr "Fil affiché"
+
+msgid "Thread hidden"
+msgstr "Fil masqué"
+
+msgid "Could not update thread"
+msgstr "Impossible de mettre à jour le fil"
+
+msgid "Thread closed"
+msgstr "Fil fermé"
+
+msgid "Thread opened"
+msgstr "Fil ouvert"
+
+msgid "Thread marked as sticky"
+msgstr "Fil marqué comme épinglé"
+
+msgid "Thread unmarked as sticky"
+msgstr "Fil non marqué comme épinglé"
+
+msgid "Thread notifications enabled"
+msgstr "Notifications du fil activées"
+
+msgid "Thread notifications disabled"
+msgstr "Notifications du fil désactivées"
+
+msgid "Could not update thread notification"
+msgstr "Impossible de mettre à jour la notification du fil"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "Voulez-vous vraiment supprimer ce fil ?"
+
+msgid "Could not delete thread"
+msgstr "Impossible de supprimer le fil"
+
+msgid "Post approved"
+msgstr "Message approuvé"
+
+msgid "Could not approve post"
+msgstr "Impossible d'approuver le message"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "Voulez-vous vraiment rejeter ce message ?"
+
+msgid "Post rejected"
+msgstr "Message rejeté"
+
+msgid "Could not reject post"
+msgstr "Impossible de rejeter le message"
+
+msgid "Post shown"
+msgstr "Message affiché"
+
+msgid "Post hidden"
+msgstr "Message masqué"
+
+msgid "Could not update post"
+msgstr "Impossible de mettre à jour le message"
+
+msgid "Post updated"
+msgstr "Message mis à jour"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "Voulez-vous vraiment supprimer ce message ?"
+
+msgid "Post deleted"
+msgstr "Message supprimé"
+
+msgid "Could not delete post"
+msgstr "Impossible de supprimer le message"
+
+msgid "Untitled thread"
+msgstr "Fil sans titre"
+
+msgid "Could not retrieve threads"
+msgstr "Impossible de récupérer les fils"
+
+msgid "Post moved"
+msgstr "Message déplacé"
+
+msgid "Could not move post"
+msgstr "Impossible de déplacer le message"
+
+msgid "Revision request removed"
+msgstr "Demande de révision supprimée"
+
+msgid "Could not update revision request"
+msgstr "Impossible de mettre à jour la demande de révision"
+
+msgid "Are you sure you want to report this post?"
+msgstr "Voulez-vous vraiment signaler ce message ?"
+
+msgid "Could not report post"
+msgstr "Impossible de signaler le message"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "Voulez-vous vraiment supprimer cette pièce jointe ?"
+
+msgid "Attachment deleted"
+msgstr "Pièce jointe supprimée"
+
+msgid "Could not delete attachment"
+msgstr "Impossible de supprimer la pièce jointe"
+
+msgid "Thread title"
+msgstr "Titre du fil de discussion"
+
+msgid "Sticky thread"
+msgstr "Fil épinglé"
+
+msgid "Attach files"
+msgstr "Joindre des fichiers"
+
+msgid "Attachments are disabled for this forum"
+msgstr "Les pièces jointes sont désactivées pour ce forum"
+
+msgid "The forum is not open yet."
+msgstr "Le forum n'est pas encore ouvert."
+
+msgid "The forum is closed."
+msgstr "Le forum est fermé."
+
+msgid "The forum is locked."
+msgstr "Le forum est verrouillé."
+
+msgid "New threads are not allowed in this forum."
+msgstr "Les nouveaux fils de discussion ne sont pas autorisés dans ce forum."
+
+msgid "Thread created"
+msgstr "Fil de discussion créé"
+
+msgid "Could not create thread"
+msgstr "Impossible de créer le fil de discussion"
+
+msgid "Back to posts"
+msgstr "Retour aux messages"
+
+msgid "This reply will be stored as a revision."
+msgstr "Cette réponse sera enregistrée comme une révision."
+
+msgid "Post reply"
+msgstr "Répondre au message"
+
+msgid "The thread is locked."
+msgstr "Le fil de discussion est verrouillé."
+
+msgid "Reply added"
+msgstr "Réponse ajoutée"
+
+msgid "Could not add reply"
+msgstr "Impossible d'ajouter la réponse"
+
+msgid "Add forum"
+msgstr "Ajouter un forum"
+
+msgid "No forums found"
+msgstr "Aucun forum trouvé"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "Créez votre première catégorie de forum ou votre premier forum pour démarrer les discussions."
+
+msgid "Locked"
+msgstr "Verrouillé"
+
+msgid "No forums in this category"
+msgstr "Aucun forum dans cette catégorie"
+
+msgid "Posts require approval"
+msgstr "Les messages nécessitent une approbation"
+
+msgid "Forum for current group"
+msgstr "Forum du groupe actuel"
+
+msgid "Group forum visibility"
+msgstr "Visibilité du forum du groupe"
+
+msgid "No category"
+msgstr "Aucune catégorie"
+
+msgid "Could not retrieve forums"
+msgstr "Impossible de récupérer les forums"
+
+msgid "Forum category updated"
+msgstr "Catégorie de forum mise à jour"
+
+msgid "Forum category created"
+msgstr "Catégorie de forum créée"
+
+msgid "Could not save forum category"
+msgstr "Impossible d'enregistrer la catégorie de forum"
+
+msgid "Forum updated"
+msgstr "Forum mis à jour"
+
+msgid "Forum created"
+msgstr "Forum créé"
+
+msgid "Could not save forum"
+msgstr "Impossible d'enregistrer le forum"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "Êtes-vous sûr de vouloir supprimer cette catégorie de forum ?"
+
+msgid "Could not delete forum category"
+msgstr "Impossible de supprimer la catégorie de forum"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "Êtes-vous sûr de vouloir supprimer ce forum ?"
+
+msgid "Could not delete forum"
+msgstr "Impossible de supprimer le forum"
+
+msgid "Forum category unlocked"
+msgstr "Catégorie de forum déverrouillée"
+
+msgid "Forum category locked"
+msgstr "Catégorie de forum verrouillée"
+
+msgid "Could not update forum category"
+msgstr "Impossible de mettre à jour la catégorie de forum"
+
+msgid "Forum category shown"
+msgstr "Catégorie de forum affichée"
+
+msgid "Forum category hidden"
+msgstr "Catégorie de forum masquée"
+
+msgid "Forum unlocked"
+msgstr "Forum déverrouillé"
+
+msgid "Forum locked"
+msgstr "Forum verrouillé"
+
+msgid "Could not update forum"
+msgstr "Impossible de mettre à jour le forum"
+
+msgid "Forum shown"
+msgstr "Forum affiché"
+
+msgid "Forum hidden"
+msgstr "Forum masqué"
+
+msgid "Forum notifications enabled"
+msgstr "Notifications du forum activées"
+
+msgid "Forum notifications disabled"
+msgstr "Notifications du forum désactivées"
+
+msgid "Could not update forum notification"
+msgstr "Impossible de mettre à jour la notification du forum"
+
+msgid "Forum category moved"
+msgstr "Catégorie de forum déplacée"
+
+msgid "Could not move forum category"
+msgstr "Impossible de déplacer la catégorie de forum"
+
+msgid "Forum moved"
+msgstr "Forum déplacé"
+
+msgid "Could not move forum"
+msgstr "Impossible de déplacer le forum"
+
+msgid "Back to forums"
+msgstr "Retour aux forums"
+
+msgid "New thread"
+msgstr "Nouveau fil de discussion"
+
+msgid "No threads found"
+msgstr "Aucun fil de discussion trouvé"
+
+msgid "Sticky"
+msgstr "Épinglé"
+
+msgid "Graded"
+msgstr "Noté"
+
+msgid "Grade peers"
+msgstr "Noter les pairs"
+
+msgid "Move thread"
+msgstr "Déplacer le fil de discussion"
+
+msgid "Target forum"
+msgstr "Forum cible"
+
+msgid "Target forum is required"
+msgstr "Le forum cible est obligatoire"
+
+msgid "Students"
+msgstr "Étudiants"
+
+msgid "No students found"
+msgstr "Aucun étudiant trouvé"
+
+msgid "No peers available to grade."
+msgstr "Aucun pair disponible pour noter."
+
+msgid "Qualified"
+msgstr "Qualifié"
+
+msgid "Not qualified"
+msgstr "Non qualifié"
+
+msgid "Could not retrieve thread grading"
+msgstr "Impossible de récupérer la notation du fil de discussion"
+
+msgid "Thread grading updated"
+msgstr "Notation du fil de discussion mise à jour"
+
+msgid "Could not update thread grading"
+msgstr "Impossible de mettre à jour la notation du fil de discussion"
+
+msgid "Thread score saved"
+msgstr "Score du fil de discussion enregistré"
+
+msgid "Could not save thread score"
+msgstr "Impossible d'enregistrer le score du fil de discussion"
+
+msgid "Could not move thread"
+msgstr "Impossible de déplacer le fil de discussion"
+
+msgid "Thread updated"
+msgstr "Fil de discussion mis à jour"
+
+msgid "Search term is too short"
+msgstr "Le terme de recherche est trop court"
+
+msgid "Could not search forums"
+msgstr "Impossible de rechercher dans les forums"
+
+msgid "Moderated"
+msgstr "Modéré"
+
+msgid "View threads"
+msgstr "Voir les fils de discussion"
+

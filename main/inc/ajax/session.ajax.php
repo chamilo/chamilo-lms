@@ -136,6 +136,9 @@ switch ($action) {
         }
         break;
     case 'session_info':
+        SessionManager::protectSession(null, false);
+        api_protect_limit_for_session_admin();
+
         $sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : '';
         $sessionInfo = api_get_session_info($sessionId);
 
@@ -166,7 +169,7 @@ switch ($action) {
         }
         break;
     case 'get_description':
-        if (isset($_GET['session'])) {
+        if (CoursesAndSessionsCatalog::userCanView() && isset($_GET['session'])) {
             $sessionInfo = api_get_session_info($_GET['session']);
             echo '<h2>'.$sessionInfo['name'].'</h2>';
             echo '<div class="home-course-intro"><div class="page-course"><div class="page-course-intro">';

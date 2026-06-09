@@ -28,7 +28,7 @@ class Survey extends AbstractTool implements ToolInterface
 
     public function getLink(): string
     {
-        return '/main/survey/survey_list.php';
+        return '/resources/survey/:nodeId/';
     }
 
     public function getResourceTypes(): ?array

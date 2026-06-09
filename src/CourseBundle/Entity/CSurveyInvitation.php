@@ -69,6 +69,11 @@ class CSurveyInvitation
         $this->invitationDate = new DateTime();
     }
 
+    public function getIid(): ?int
+    {
+        return $this->iid;
+    }
+
     public function getSurvey(): CSurvey
     {
         return $this->survey;

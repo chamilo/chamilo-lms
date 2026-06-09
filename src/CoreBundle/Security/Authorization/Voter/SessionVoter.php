@@ -98,35 +98,14 @@ class SessionVoter extends Voter
                     return false;
                 }
 
-                if ($userIsGeneralCoach || $userIsCourseCoach) {
-                    $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_TEACHER);
-                } elseif ($userIsStudent) { // Student access.
-                    $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_STUDENT);
-                }
-
-                if (
-                    ($userIsGeneralCoach || $userIsCourseCoach || $userIsStudent)
-                    && Session::INVISIBLE != $visibilityForUser
-                ) {
-                    return true;
-                }
-
-                return false;
+                return ($userIsGeneralCoach || $userIsCourseCoach || $userIsStudent)
+                    && Session::INVISIBLE != $visibilityForUser;
 
             case self::EDIT:
             case self::DELETE:
-                $canEdit = $this->canEditSession($user, $session, false);
-
-                if ($canEdit) {
-                    $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_TEACHER);
-
-                    return true;
-                }
-
-                return false;
+                return $this->canEditSession($user, $session, false);
         }
 
-        // User don't have access to the session
         return false;
     }
 

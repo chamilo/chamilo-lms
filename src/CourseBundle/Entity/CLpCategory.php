@@ -34,8 +34,9 @@ use Symfony\Component\Validator\Constraints as Assert;
             openapi: new Operation(
                 summary: 'List LP categories by course (resourceNode.parent) or sid',
             ),
+            security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
         ),
-        new Get(security: "is_granted('ROLE_USER')"),
+        new Get(security: "is_granted('VIEW', object.resourceNode)"),
     ],
     normalizationContext: [
         'groups' => ['lp_category:read', 'resource_node:read', 'resource_link:read'],

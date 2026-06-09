@@ -4,7 +4,6 @@ import { useStore } from "vuex"
 import { storeToRefs } from "pinia"
 import { useI18n } from "vue-i18n"
 import { useSecurityStore } from "../store/securityStore"
-import { useCidReq } from "./cidReq"
 import { RESOURCE_LINK_PUBLISHED } from "../constants/entity/resourcelink"
 import { useCidReqStore } from "../store/cidReq"
 import axios from "axios"
@@ -38,7 +37,6 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
   const contextMenuFile = ref(null)
   const previousFolders = ref([])
   const currentFolderTitle = ref("Root")
-  const { cid, sid, gid } = useCidReq()
 
   // ---- Picker type filter (files/images/media) ----
   const filterType = computed(() => {
@@ -321,7 +319,8 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
       if (!item.value.id) {
         item.value.filetype = "folder"
         item.value.parentResourceNodeId = filters.value["resourceNode.parent"]
-        item.value.resourceLinkList = JSON.stringify([{ gid, sid, cid, visibility: RESOURCE_LINK_PUBLISHED }])
+        // Course context derived server-side from the gated session course.
+        item.value.resourceLinkList = JSON.stringify([{ visibility: RESOURCE_LINK_PUBLISHED }])
 
         try {
           await store.dispatch(`${entity}/createWithFormData`, item.value)

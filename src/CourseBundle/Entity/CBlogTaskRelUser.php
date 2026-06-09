@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -22,19 +24,19 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ORM\Entity]
 #[ApiResource(
     operations: [
-        new Get(security: "is_granted('ROLE_USER')"),
-        new GetCollection(security: "is_granted('ROLE_USER')"),
-        new Post(security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_TEACHER')"),
+        new Get(security: "object.getBlog() != null and is_granted('VIEW', object.getBlog().resourceNode)"),
+        new GetCollection(security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')"),
+        new Post(security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')"),
         new Patch(security: "
             object.getUser() === user
             or is_granted('ROLE_CURRENT_COURSE_TEACHER')
-            or is_granted('ROLE_TEACHER')
-            or is_granted('ROLE_ADMIN')
+            or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')
         "),
     ],
     normalizationContext: ['groups' => ['task_rel_user:read']],
     denormalizationContext: ['groups' => ['task_rel_user:write']]
 )]
+#[ApiFilter(SearchFilter::class, properties: ['blog' => 'exact'])]
 class CBlogTaskRelUser
 {
     use UserTrait;

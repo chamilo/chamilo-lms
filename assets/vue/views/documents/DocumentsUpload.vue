@@ -103,7 +103,7 @@
 </template>
 
 <script setup>
-import { computed, ref, watch, onBeforeUnmount, onMounted, unref } from "vue"
+import { computed, ref, watch, onBeforeUnmount, onMounted } from "vue"
 import "@uppy/core/dist/style.css"
 import "@uppy/dashboard/dist/style.css"
 import "@uppy/image-editor/dist/style.css"
@@ -222,11 +222,6 @@ const quotaInfo = ref({
   fetchedAt: 0,
 })
 
-function toInt(value, fallback = 0) {
-  const n = Number(unref(value))
-  return Number.isFinite(n) ? n : fallback
-}
-
 function normalizeCode(code) {
   return String(code || "")
     .trim()
@@ -244,27 +239,22 @@ function buildSearchFieldMeta(values, fields) {
   return meta
 }
 
+// The course context (cid/sid/gid) is derived server-side from the gated
+// session course, so the link list only needs to carry the visibility.
 function buildResourceLinkList() {
-  return JSON.stringify([
-    {
-      gid: toInt(gid, 0),
-      sid: toInt(sid, 0),
-      cid: toInt(cid, 0),
-      visibility: RESOURCE_LINK_PUBLISHED,
-    },
-  ])
+  return JSON.stringify([{ visibility: RESOURCE_LINK_PUBLISHED }])
 }
 
 /**
  * Refresh quota info using documentsService cache and update the banner.
  */
 async function refreshQuota(force = false) {
-  const courseId = toInt(cid, 0)
+  const courseId = cid
   if (!courseId) return null
 
   const info = await documentsService.getQuotaUsage(courseId, {
-    sid: toInt(sid, 0),
-    gid: toInt(gid, 0),
+    sid,
+    gid,
     force,
     staleMs: QUOTA_STALE_MS,
   })
@@ -342,7 +332,10 @@ const uppy = new Uppy({ autoProceed: false })
     },
   })
   .use(XHRUpload, {
-    endpoint: "/api/documents",
+    // Uppy issues a raw XHR that bypasses the axios interceptor, so the course
+    // context must be appended to the URL explicitly. The backend reads it to
+    // gate the upload and to bind the document to the current course.
+    endpoint: `/api/documents?cid=${cid}&sid=${sid}&gid=${gid}`,
     formData: true,
     fieldName: "uploadFile",
     getResponseError: (responseText, xhr) => {
@@ -485,9 +478,9 @@ watch(
 function back() {
   const queryParams = {
     ...buildReturnQuery(),
-    cid: toInt(cid, 0),
-    sid: toInt(sid, 0),
-    gid: toInt(gid, 0),
+    cid,
+    sid,
+    gid,
     tab: route.query.tab,
   }
 

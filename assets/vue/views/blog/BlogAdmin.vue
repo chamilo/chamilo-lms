@@ -178,11 +178,9 @@ import ProjectCreateDialog from "../../components/blog/ProjectCreateDialog.vue"
 import service from "../../services/blogs"
 import { useSecurityStore } from "../../store/securityStore"
 import { RESOURCE_LINK_DRAFT } from "../../constants/entity/resourcelink"
-import { useCidReq } from "../../composables/cidReq"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
 
-const { cid, sid } = useCidReq()
 const { t } = useI18n()
 const route = useRoute()
 
@@ -190,9 +188,11 @@ const route = useRoute()
 const securityStore = useSecurityStore()
 const isAdminOrTeacher = computed(() => securityStore.isAdmin || securityStore.isTeacher)
 
-// Parent node and default link list (created as draft)
+// Parent node and default link list (created as draft). The course context
+// (cid/sid/gid) is derived server-side from the gated session course, so the
+// link list only carries the visibility.
 const parentResourceNodeId = ref(Number(route.params.node))
-const resourceLinkList = ref([{ sid, cid, visibility: RESOURCE_LINK_DRAFT }])
+const resourceLinkList = ref([{ visibility: RESOURCE_LINK_DRAFT }])
 
 // UI state
 const q = ref("")

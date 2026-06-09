@@ -40,7 +40,8 @@ use Symfony\Component\Validator\Constraints as Assert;
                         schema: ['type' => 'integer'],
                     ),
                 ],
-            )
+            ),
+            security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
         ),
         new Get(security: "is_granted('VIEW', object.resourceNode)"),
     ],

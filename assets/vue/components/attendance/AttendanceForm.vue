@@ -121,13 +121,8 @@ const props = defineProps({
 })
 
 const parentResourceNodeId = ref(Number(route.params.node))
-const resourceLinkList = ref([
-  {
-    sid,
-    cid,
-    visibility: RESOURCE_LINK_PUBLISHED,
-  },
-])
+// Course context derived server-side from the gated session course.
+const resourceLinkList = ref([{ visibility: RESOURCE_LINK_PUBLISHED }])
 
 const formData = reactive({
   id: null,

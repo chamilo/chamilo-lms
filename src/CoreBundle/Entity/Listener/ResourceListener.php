@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Entity\Listener;
 use Chamilo\CoreBundle\Controller\Api\BaseResourceFileAction;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\AccessUrl;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\EntityAccessUrlInterface;
 use Chamilo\CoreBundle\Entity\PersonalFile;
 use Chamilo\CoreBundle\Entity\ResourceFile;
@@ -18,12 +19,14 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceToRootInterface;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\ResourceWithAccessUrlInterface;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\ResourceHelper;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CoreBundle\Traits\AccessUrlListenerTrait;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CDocument;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Cocur\Slugify\SlugifyInterface;
 use Doctrine\ORM\Event\PrePersistEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
@@ -296,6 +299,11 @@ class ResourceListener
         // Update resourceNode title from Resource.
         $this->updateResourceName($resource);
 
+        // Bind a single-entry resourceLinkList to the session-resolved course
+        // context before the links are materialized, so the request body cannot
+        // target a foreign course (IDOR).
+        $this->normalizeSingleLinkContextFromSession($resource);
+
         BaseResourceFileAction::setLinks($resource, $em);
 
         // Upload File was set in BaseResourceFileAction.php
@@ -329,6 +337,75 @@ class ResourceListener
         if ($resource instanceof CCalendarEvent) {
             $this->addCCalendarEventGlobalLink($resource, $eventArgs);
         }
+    }
+
+    /**
+     * Forces a single-entry resourceLinkList to bind to the current course
+     * context resolved by CidReqListener (stored in the session), which is the
+     * same context that gated the operation's `security:` expression.
+     *
+     * Only the link visibility is taken from the request body; the cid/sid/gid
+     * are overwritten with the session context, so a request body cannot bind a
+     * resource to a foreign course (IDOR). Requests carrying more than one link
+     * are an explicit multi-context write and are left untouched, as are
+     * user/usergroup-scoped links (e.g. personal files) and any non-API or
+     * out-of-course-context persist (course copy, fixtures, CLI commands).
+     */
+    public function normalizeSingleLinkContextFromSession(AbstractResource $resource): void
+    {
+        $links = $resource->getResourceLinkArray();
+
+        // Multiple entries are an explicit multi-context request: honor as-is.
+        if (1 !== \count($links)) {
+            return;
+        }
+
+        $entry = $links[0];
+        if (!\is_array($entry)) {
+            return;
+        }
+
+        // User/usergroup-scoped links (e.g. personal files) are not course links.
+        if (!empty($entry['uid']) || !empty($entry['ugid'])) {
+            return;
+        }
+
+        $request = $this->request->getMainRequest();
+        if (null === $request || !$request->hasSession()) {
+            return;
+        }
+
+        // Restrict to API Platform requests: the only path where the
+        // resourceLinkList originates from untrusted request input. Programmatic
+        // persists must keep their explicit context.
+        if (!str_starts_with($request->getPathInfo(), '/api/')) {
+            return;
+        }
+
+        $session = $request->getSession();
+
+        $course = $session->get('course');
+        if (!$course instanceof Course) {
+            return;
+        }
+
+        $context = ['cid' => (int) $course->getId()];
+
+        $courseSession = $session->get('session');
+        if ($courseSession instanceof Session) {
+            $context['sid'] = (int) $courseSession->getId();
+        }
+
+        $group = $session->get('group');
+        if ($group instanceof CGroup) {
+            $context['gid'] = (int) $group->getIid();
+        }
+
+        $context['visibility'] = isset($entry['visibility'])
+            ? (int) $entry['visibility']
+            : ResourceLink::VISIBILITY_PUBLISHED;
+
+        $resource->setResourceLinkArray([$context]);
     }
 
     /**

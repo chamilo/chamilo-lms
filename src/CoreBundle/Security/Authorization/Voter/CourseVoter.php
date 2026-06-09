@@ -35,7 +35,7 @@ class CourseVoter extends Voter
         private readonly Security $security,
         private readonly TranslatorInterface $translator,
         RequestStack $requestStack,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
     ) {
         $this->requestStack = $requestStack;
         $this->entityManager = $entityManager;
@@ -60,7 +60,7 @@ class CourseVoter extends Voter
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
-        $tokenUser = $token->getUser();
+        $user = $token->getUser();
 
         // Admins have access to everything.
         if ($this->security->isGranted('ROLE_ADMIN')) {
@@ -69,115 +69,73 @@ class CourseVoter extends Voter
 
         /** @var Course $course */
         $course = $subject;
-
         $request = $this->requestStack->getCurrentRequest();
-        $sessionId = $request?->query?->get('sid');
-        $sessionRepository = $this->entityManager->getRepository(Session::class);
 
+        $sessionId = $request?->query?->get('sid');
         $session = null;
+
         if (!empty($sessionId)) {
             /** @var Session|null $session */
-            $session = $sessionRepository->find($sessionId);
+            $session = $this->entityManager->getRepository(Session::class)->find($sessionId);
         }
 
         switch ($attribute) {
             case self::VIEW:
-                // Course is hidden then is not visible for nobody expect admins.
+                // Course is hidden, so it is not visible for anyone except admins.
                 if ($course->isHidden()) {
                     return false;
                 }
 
                 // Course::OPEN_WORLD
                 if ($course->isPublic()) {
-                    if ($tokenUser instanceof User) {
-                        $user = $this->getTokenSafeUser($token, $tokenUser);
-                        if ($this->isStudent($user, $course, $session)) {
-                            if ($this->isCourseLockedForUser($user, $course, $session?->getId() ?? 0)) {
-                                throw new NotAllowedException($this->translator->trans('This course is locked. You must complete the prerequisite(s) first.'), 'warning', 403);
-                            }
-                        }
-
-                        $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_STUDENT);
-                        if ($course->hasUserAsTeacher($user)) {
-                            $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER);
-                        }
-                        $token->setUser($user);
+                    if ($user instanceof User
+                        && $this->isStudent($user, $course, $session)
+                        && $this->isCourseLockedForUser($user, $course, $session?->getId() ?? 0)
+                    ) {
+                        throw new NotAllowedException($this->translator->trans('This course is locked. You must complete the prerequisite(s) first.'), 'warning', 403);
                     }
 
                     return true;
                 }
 
-                // User should be instance of UserInterface.
-                if (!$tokenUser instanceof UserInterface) {
+                if (!$user instanceof UserInterface) {
                     return false;
                 }
 
                 // Course::OPEN_PLATFORM
                 if (Course::OPEN_PLATFORM === $course->getVisibility()) {
-                    if ($tokenUser instanceof User) {
-                        $user = $this->getTokenSafeUser($token, $tokenUser);
-
-                        if ($this->isStudent($user, $course, $session)) {
-                            if ($this->isCourseLockedForUser($user, $course, $session?->getId() ?? 0)) {
-                                throw new NotAllowedException($this->translator->trans('This course is locked. You must complete the prerequisite(s) first.'), 'warning', 403);
-                            }
-                        }
-
-                        $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_STUDENT);
-
-                        if ($course->hasUserAsTeacher($user)) {
-                            $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER);
-                        }
-
-                        $token->setUser($user);
+                    if ($user instanceof User
+                        && $this->isStudent($user, $course, $session)
+                        && $this->isCourseLockedForUser($user, $course, $session?->getId() ?? 0)
+                    ) {
+                        throw new NotAllowedException($this->translator->trans('This course is locked. You must complete the prerequisite(s) first.'), 'warning', 403);
                     }
 
                     return true;
                 }
 
-                // Validation in session
-                if ($session && $tokenUser instanceof User) {
-                    $user = $this->getTokenSafeUser($token, $tokenUser);
-
-                    $userIsGeneralCoach = $session->hasUserAsGeneralCoach($user);
-                    $userIsCourseCoach = $session->hasCourseCoachInCourse($user, $course);
-                    $userIsStudent = $session->hasUserInCourse($user, $course, Session::STUDENT);
-
-                    if ($userIsGeneralCoach || $userIsCourseCoach) {
-                        $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_TEACHER);
-                        $token->setUser($user);
-
+                // Session-based access.
+                if (null !== $session && $user instanceof User) {
+                    if ($session->hasUserAsGeneralCoach($user)
+                        || $session->hasCourseCoachInCourse($user, $course)
+                    ) {
                         return true;
                     }
 
-                    if ($userIsStudent) {
-                        $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_STUDENT);
-
+                    if ($session->hasUserInCourse($user, $course, Session::STUDENT)) {
                         if ($this->isCourseLockedForUser($user, $course, $session->getId())) {
                             throw new NotAllowedException($this->translator->trans('This course is locked. You must complete the prerequisite(s) first.'), 'warning', 403);
                         }
-
-                        $token->setUser($user);
 
                         return true;
                     }
                 }
 
                 // Course::REGISTERED
-                if ($tokenUser instanceof User && $course->hasSubscriptionByUser($tokenUser)) {
-                    $user = $this->getTokenSafeUser($token, $tokenUser);
-
-                    $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_STUDENT);
-
-                    if ($course->hasUserAsTeacher($user)) {
-                        $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER);
-                    }
-
+                if ($user instanceof User && $course->hasSubscriptionByUser($user)) {
                     if ($this->isCourseLockedForUser($user, $course)) {
                         throw new NotAllowedException($this->translator->trans('This course is locked. You must complete the prerequisite(s) first.'), 'warning', 403);
                     }
-
-                    $token->setUser($user);
 
                     return true;
                 }
@@ -186,34 +144,10 @@ class CourseVoter extends Voter
 
             case self::EDIT:
             case self::DELETE:
-                if ($tokenUser instanceof User && $course->hasUserAsTeacher($tokenUser)) {
-                    $user = $this->getTokenSafeUser($token, $tokenUser);
-                    $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER);
-                    $token->setUser($user);
-
-                    return true;
-                }
-
-                return false;
+                return $user instanceof User && $course->hasUserAsTeacher($user);
         }
 
         return false;
-    }
-
-    /**
-     * Returns a "token-safe" User instance to add context roles without persisting them to DB.
-     *
-     * If the User is managed by Doctrine, we clone it, add roles to the clone,
-     * and store the clone in the token.
-     */
-    private function getTokenSafeUser(TokenInterface $token, User $user): User
-    {
-        if ($this->entityManager->contains($user)) {
-            $user = clone $user;
-            $token->setUser($user);
-        }
-
-        return $user;
     }
 
     /**

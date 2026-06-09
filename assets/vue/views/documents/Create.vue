@@ -48,14 +48,9 @@ export default {
   },
   created() {
     this.item.parentResourceNodeId = this.$route.params.node
-    this.item.resourceLinkList = JSON.stringify([
-      {
-        gid: this.$route.query.gid,
-        sid: this.$route.query.sid,
-        cid: this.$route.query.cid,
-        visibility: RESOURCE_LINK_PUBLISHED, // visible by default
-      },
-    ])
+    // Course context (cid/sid/gid) is derived server-side from the gated
+    // session course; only the visibility needs to travel in the body.
+    this.item.resourceLinkList = JSON.stringify([{ visibility: RESOURCE_LINK_PUBLISHED }])
   },
   methods: {
     ...mapActions("documents", ["createWithFormData", "reset"]),

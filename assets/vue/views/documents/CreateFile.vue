@@ -135,14 +135,9 @@ watch(created, (val) => {
 })
 
 item.value.parentResourceNodeId = route.params.node ?? route.params.id ?? null
-item.value.resourceLinkList = JSON.stringify([
-  {
-    gid: route.query.gid,
-    sid: route.query.sid,
-    cid: route.query.cid,
-    visibility: RESOURCE_LINK_PUBLISHED,
-  },
-])
+// Course context (cid/sid/gid) is derived server-side from the gated session
+// course; only the visibility needs to travel in the body.
+item.value.resourceLinkList = JSON.stringify([{ visibility: RESOURCE_LINK_PUBLISHED }])
 
 onMounted(async () => {
   await fetchTemplates()

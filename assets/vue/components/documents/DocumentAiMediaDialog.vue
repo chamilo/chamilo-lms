@@ -569,8 +569,9 @@ function base64ToFile(base64, filename, mime) {
   return new File([blob], filename, { type: mime })
 }
 
+// Course context derived server-side from the gated session course.
 function buildResourceLinkList() {
-  return JSON.stringify([{ gid, sid, cid, visibility: RESOURCE_LINK_PUBLISHED }])
+  return JSON.stringify([{ visibility: RESOURCE_LINK_PUBLISHED }])
 }
 
 function canvasMimeFromContentType(contentType) {

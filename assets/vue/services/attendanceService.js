@@ -50,8 +50,12 @@ export default {
   },
 
   /**
-   * Creates a new attendance list.
-   * @param {Object} data - Data for the new attendance list.
+   * Creates a new attendance list. The course context is mirrored from the
+   * request body to the query string so CidReqListener can resolve it and
+   * CourseContextRoleListener can publish the contextual TEACHER role that
+   * the operation requires.
+   *
+   * @param {Object} data - Data for the new attendance list (includes cid, sid).
    * @returns {Promise<Object>} - Data of the created attendance list.
    */
   createAttendance: async (data) => {
@@ -71,8 +75,13 @@ export default {
   },
 
   /**
-   * Deletes an attendance list.
+   * Deletes an attendance list. The course context (cid, optional sid/gid)
+   * must be supplied as query parameters so CidReqListener can resolve the
+   * course and CourseContextRoleListener can publish the contextual TEACHER
+   * role that the operation requires.
+   *
    * @param {Number|String} attendanceId - ID of the attendance list.
+   * @param {{cid: Number|String, sid?: Number|String, gid?: Number|String}} context
    * @returns {Promise<Object>} - Result of the deletion.
    */
   deleteAttendance: async (attendanceId) => {

@@ -10547,6 +10547,9 @@ msgstr "ຜົນການຄົ້ນຫາສຳລັບ:"
 msgid "Select a file"
 msgstr "ເລືອກໄຟລ໌"
 
+msgid "Select a file to insert into the editor."
+msgstr ""
+
 msgid "Warning - The FAQ file, located in the /home/ directory of your portal, is not writable. Your text will not be saved until the file permissions are changed."
 msgstr "ຄຳເຕືອນ - ໄຟລ໌ FAQ, ທີ່ຢູ່ໃນໄດເຣັກທໍຣີ /home/ ຂອງພໍທັນຂອງທ່ານ, ບໍ່ສາມາດຂຽນທັບໄດ້. ຂໍ້ຄວາມຂອງທ່ານຈະບໍ່ຖືກບັນທຶກຈົນກວ່າສິດໃນການເຂົ້າເຖິງໄຟລ໌ຈະຖືກປ່ຽນແປງ."
 
@@ -17275,6 +17278,9 @@ msgstr "ວັນທີ ແລະ ເວລາ"
 msgid "Item"
 msgstr "ລາຍການ"
 
+msgid "Items"
+msgstr ""
+
 msgid "Configure Dashboard Plugin"
 msgstr "ຕັ້ງຄ່າປລັກອິນກະດານຄວບຄຸມ"
 
@@ -18636,6 +18642,18 @@ msgstr "ພາກຮຽນໃນກຸ່ມ"
 
 msgid "Courses in group"
 msgstr "ລາຍວິຊາໃນກຸ່ມ"
+
+msgid "Courses on the platform"
+msgstr ""
+
+msgid "%s courses"
+msgstr ""
+
+msgid "%s sessions"
+msgstr ""
+
+msgid "Search by title or code"
+msgstr ""
 
 msgid "Users in group"
 msgstr "ຜູ້ໃຊ້ໃນກຸ່ມ"
@@ -34513,6 +34531,9 @@ msgstr "ການກຳນົດງານ"
 msgid "Allowed file formats: %s"
 msgstr "ຮູບແບບໄຟລ໌ທີ່ອະນຸຍາດ: %s"
 
+msgid "File manager"
+msgstr ""
+
 msgid "File type not allowed. Allowed extensions: %s"
 msgstr "ປະເພດໄຟລ໌ບໍ່ໄດ້ຮັບອະນຸຍາດ. ເສັ້ນຂະແໜງທີ່ອະນຸຍາດ: %s"
 
@@ -36226,6 +36247,1824 @@ msgstr "ຍິນດີຕ້ອນຮັບ"
 msgid "Welcome to Chamilo"
 msgstr "ຍິນດີຕ້ອນຮັບສູ່ Chamilo"
 
+msgid "Check all unanswered questions below"
+msgstr ""
+
 msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
 msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> ຖ້ານີ້ເປັນຄັ້ງທຳອິດທີ່ເຈົ້າໃຊ້ Chamilo, ໃຫ້ກວດເບິ່ງເຄື່ອງມືອ່ວນດ້ານເທິງເພື່ອຊອກຫາທາງໄປສູ່ຄຸນສົມບັດຫຼາຍຢ່າງຂອງມັນ. ຖ້າເຈົ້າຕ້ອງການຄວາມຊ່ວຍເຫຼືອ, ເຈົ້າຈະພົບເຫັນ <a href=\"https://docs.chamilo.org\">ເອກະສານທາງການຂອງເຮົາ</a> ສາມາດຊ່ວຍເພື່ອເອກະສານມາດຕະຖານ, ໃນຂະນະທີ່ <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">ກຸ່ມທະບຽນອອນໄລນ໌</a> ຂອງເຮົາສາມາດຊ່ວຍແບ່ງປັນແນວຄິດແລະຊອກຫາຄຳຕອບຈາກຜູ້ໃຊ້ Chamilo ອື່ນໆ."
+
+msgid "Change password"
+msgstr ""
+
+msgid "Newest first"
+msgstr ""
+
+msgid "Oldest first"
+msgstr ""
+
+msgid "Title A–Z"
+msgstr ""
+
+msgid "Title Z–A"
+msgstr ""
+
+msgid "Send test email"
+msgstr ""
+
+msgid "Show teachers"
+msgstr ""
+
+msgid "Hide teachers"
+msgstr ""
+
+msgid "Delete exercise attempts"
+msgstr ""
+
+msgid "Message sent successfully."
+msgstr ""
+
+msgid "You cannot create a new course right now."
+msgstr ""
+
+msgid "Unable to verify whether you can create a new course right now."
+msgstr ""
+
+msgid "Please try again later or contact the administrator."
+msgstr ""
+
+msgid "You cannot create more courses at this time."
+msgstr ""
+
+msgid "You already manage %d courses and your active service allows up to %d. To create another course, you need a higher service limit or reduce your current active courses."
+msgstr ""
+
+msgid "You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now."
+msgstr ""
+
+msgid "Add a class"
+msgstr ""
+
+msgid "Search classes"
+msgstr ""
+
+msgid "No classes found"
+msgstr ""
+
+msgid "Import classes"
+msgstr ""
+
+msgid "Class users"
+msgstr ""
+
+msgid "%s classes imported"
+msgstr ""
+
+msgid "%s user-class links imported"
+msgstr ""
+
+msgid "Hide comments"
+msgstr ""
+
+msgid "Loading comments..."
+msgstr ""
+
+msgid "No comments yet."
+msgstr ""
+
+msgid "A user with this username already exists"
+msgstr ""
+
+msgid "Manage meetings, review recordings and update course-wide BBB settings from one place."
+msgstr ""
+
+msgid "Review the current defaults and propagate them to every course when needed."
+msgstr ""
+
+msgid "Filter the list by meeting date range."
+msgstr ""
+
+msgid "Review meeting history, participants and recording actions."
+msgstr ""
+
+msgid "Participants"
+msgstr ""
+
+msgid "CountUsers"
+msgstr ""
+
+msgid "No data found"
+msgstr ""
+
+msgid "My justifications"
+msgstr ""
+
+msgid "My services"
+msgstr ""
+
+msgid "Extra menu"
+msgstr ""
+
+msgid "Pending tests"
+msgstr ""
+
+msgid "No specific language"
+msgstr ""
+
+msgid "Source Chamilo version"
+msgstr ""
+
+msgid "Exporting..."
+msgstr ""
+
+msgid "Autosaved drafts available"
+msgstr ""
+
+msgid "Hide drafts"
+msgstr "ເຊື່ອງຮ່າງ"
+
+msgid "Show drafts"
+msgstr "ສະແດງຮ່າງ"
+
+msgid "Drafts are stored only in this browser and are removed after saving the document."
+msgstr "ຮ່າງຖືກເກັບໄວ້ໃນບຣາວເຊີນີ້ເທົ່ານັ້ນ ແລະ ຈະຖືກລຶບຫຼັງຈາກບັນທຶກເອກະສານ."
+
+msgid "Last saved"
+msgstr "ບັນທຶກຄັ້ງສຸດທ້າຍ"
+
+msgid "Restore draft"
+msgstr "ກູ້ຄືນຮ່າງ"
+
+msgid "Delete draft"
+msgstr "ລຶບຮ່າງ"
+
+msgid "Information about indexing document content"
+msgstr "ຂໍ້ມູນກ່ຽວກັບການຈັດສັນດັດສະນີເນື້ອຫາເອກະສານ"
+
+msgid "When enabled, the document text is indexed by the search engine so users can find it from platform search."
+msgstr "ເມື່ອເປີດໃຊ້ງານ, ຂໍ້ຄວາມເອກະສານຈະຖືກຈັດສັນດັດສະນີໂດຍເຄື່ອງມືຊອກຫາ ເພື່ອໃຫ້ຜູ້ໃຊ້ສາມາດຊອກຫາໄດ້ຈາກການຊອກຫາຂອງແພລດຟອມ."
+
+msgid "The editor is not available."
+msgstr "ຕົວແກ້ໄຂບໍ່ສາມາດໃຊ້ງານໄດ້."
+
+msgid "Please place the cursor inside a paragraph first."
+msgstr "ກາລຸນາວາງເຄີເຊີພາຍໃນວັກກ່ອນ."
+
+msgid "The selected paragraph is empty."
+msgstr "ວັກທີ່ເລືອກວ່າງເປົ່າ."
+
+msgid "Loading failed."
+msgstr "ການໂຫຼດລົ້ມເຫຼວ."
+
+msgid "Add introduction"
+msgstr "ເພີ່ມບົດນຳ"
+
+msgid "Course type"
+msgstr "ປະເພດຫຼັກສູດ"
+
+msgid "Choose whether this course uses the standard platform limits or benefits from a purchased service."
+msgstr "ເລືອກວ່າຫຼັກສູດນີ້ໃຊ້ຂອບເຂດມາດຕະຖານຂອງແພລດຟອມ ຫຼື ໄດ້ຮັບຜົນປະໂຫຍດຈາກການບໍລິການທີ່ຊື້ແລ້ວ."
+
+msgid "Standard course"
+msgstr "ຫຼັກສູດມາດຕະຖານ"
+
+msgid "Use the standard platform limits."
+msgstr "ໃຊ້ຂອບເຂດມາດຕະຖານຂອງແພລດຟອມ."
+
+msgid "Selected"
+msgstr "ເລືອກແລ້ວ"
+
+msgid "Hosting limit"
+msgstr "ຂອບເຂດໂຮສຕິງ"
+
+msgid "Document quota"
+msgstr "ໂຄຕ້າເອກະສານ"
+
+msgid "The standard course limit has been reached."
+msgstr "ຂອບເຂດຫຼັກສູດມາດຕະຖານໄດ້ຮອດຂີດຈຳກັດແລ້ວ."
+
+msgid "Use the benefits granted by this service."
+msgstr "ໃຊ້ຜົນປະໂຫຍດທີ່ໄດ້ຮັບຈາກການບໍລິການນີ້."
+
+msgid "Courses with these benefits"
+msgstr "ຫຼັກສູດທີ່ມີຜົນປະໂຫຍດເຫຼົ່ານີ້"
+
+msgid "Active service"
+msgstr "ການບໍລິການທີ່ກຳລັງໃຊ້ງານ"
+
+msgid "Buy service"
+msgstr "ຊື້ການບໍລິການ"
+
+msgid "Select an available course type before creating the course."
+msgstr "ກາລຸນາເລືອກປະເພດຫຼັກສູດທີ່ມີກ່ອນສ້າງຫຼັກສູດ."
+
+msgid "users"
+msgstr "ຜູ້ໃຊ້"
+
+msgid "You need to buy this service before using these benefits."
+msgstr "ທ່ານຕ້ອງຊື້ການບໍລິການນີ້ກ່ອນການໃຊ້ຜົນປະໂຫຍດເຫຼົ່ານີ້."
+
+msgid "You already used all courses available with this service."
+msgstr "ທ່ານໄດ້ໃຊ້ຫຼັກສູດທັງໝົດທີ່ມີກັບການບໍລິການນີ້ແລ້ວ."
+
+msgid "This option is not available."
+msgstr "ຕົວເລືອກນີ້ບໍ່ສາມາດໃຊ້ງານໄດ້."
+
+msgid "This field is required"
+msgstr "ຕ້ອງການຂໍ້ມູນນີ້"
+
+msgid "Show less"
+msgstr "ສະແດງໜ້ອຍລົງ"
+
+msgid "Show full description"
+msgstr "ສະແດງລາຍລະອຽດເຕັມ"
+
+msgid "Virtual keyboard"
+msgstr "ແປ້ນພິມເສມືນ"
+
+msgid "Backspace"
+msgstr "ຖອນຫຼັງ"
+
+msgid "Space"
+msgstr "ຊ່ອງຫວ່າງ"
+
+msgid "Learning path only visible to selected learners"
+msgstr "ເສັ້ນທາງການຮຽນສະເພາະສຳລັບນັກຮຽນທີ່ເລືອກ"
+
+msgid "Create course"
+msgstr "ສ້າງຫຼັກສູດ"
+
+msgid "Tour"
+msgstr "ທົວ"
+
+msgid "Are you sure you want to delete this comment?"
+msgstr "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບຄຳເຫັນນີ້?"
+
+msgid "No posts found"
+msgstr "ບໍ່ພົບບົດຕ່າງໆ"
+
+msgid "No communities"
+msgstr "ບໍ່ມີຊຸມຊົນ"
+
+msgid "No friends found"
+msgstr "ບໍ່ພົບໝູ່"
+
+msgid "Visual overview of your skills"
+msgstr "ພາບລວມທັກສະຂອງທ່ານ"
+
+msgid "Compare your progress"
+msgstr "ປຽບທຽບຄວາມກ້າວໜ້າຂອງທ່ານ"
+
+msgid "Please enter a search term."
+msgstr "ກາລຸນາປ້ອນຄຳຊອກຫາ."
+
+msgid "Enter captcha code"
+msgstr "ປ້ອນລະຫັດ captcha"
+
+msgid "Refresh captcha"
+msgstr "ໂຫຼດ captcha ໃໝ່"
+
+msgid "Captcha is temporarily blocked. Please try again later."
+msgstr "Captcha ຖືກບລັອກຊົ່ວຄາວ. ກາລຸນາລອງໃໝ່ພາຍຫຼັງ."
+
+msgid "Item Details"
+msgstr "ລາຍລະອຽດລາຍການ"
+
+msgid "Open File"
+msgstr ""
+
+msgid "Selection"
+msgstr ""
+
+msgid "Remove selection context"
+msgstr ""
+
+msgid "Source document"
+msgstr ""
+
+msgid "Use the current course context"
+msgstr ""
+
+msgid "Loading documents..."
+msgstr ""
+
+msgid "No compatible PDF or TXT document was found in this course."
+msgstr ""
+
+msgid "Select a PDF or TXT document to generate terms only from that document."
+msgstr ""
+
+msgid "Confidentiality warning"
+msgstr ""
+
+msgid "When a document is selected, the prompt is fixed so the generation uses only that document content."
+msgstr ""
+
+msgid "No document-processing AI providers available."
+msgstr ""
+
+msgid "Failed to save signature. Please try again."
+msgstr ""
+
+msgid "Select and move"
+msgstr ""
+
+msgid "Freehand"
+msgstr ""
+
+msgid "Stroke"
+msgstr ""
+
+msgid "Fill"
+msgstr ""
+
+msgid "Import SVG"
+msgstr ""
+
+msgid "Import image"
+msgstr ""
+
+msgid "Click the drawing area to place this text"
+msgstr ""
+
+msgid "Draw a new SVG, import an existing SVG or embed an image, then save it as a reusable document."
+msgstr ""
+
+msgid "Use Select and move to reposition or resize elements added in this editor."
+msgstr ""
+
+msgid "Stroke width"
+msgstr ""
+
+msgid "Transparent fill"
+msgstr ""
+
+msgid "Invalid id"
+msgstr ""
+
+msgid "Unable to load the drawing"
+msgstr ""
+
+msgid "Only PNG, JPG, WEBP or GIF images are supported."
+msgstr ""
+
+msgid "Unable to read the image file."
+msgstr ""
+
+msgid "Only SVG files are supported."
+msgstr ""
+
+msgid "The SVG file is empty or invalid."
+msgstr ""
+
+msgid "Unable to read the SVG file."
+msgstr ""
+
+msgid "The drawing is empty or invalid."
+msgstr ""
+
+msgid "Unable to save the drawing"
+msgstr ""
+
+msgid "Information about AI-assisted documents"
+msgstr ""
+
+msgid "Location"
+msgstr ""
+
+msgid "Cloud link"
+msgstr ""
+
+msgid "Add a link to a cloud document, such as Google Drive or Google Docs."
+msgstr ""
+
+msgid "Add cloud link"
+msgstr ""
+
+msgid "Document title"
+msgstr ""
+
+msgid "Document options change how uploaded files are processed after saving."
+msgstr ""
+
+msgid "Information about uncompressing zip files"
+msgstr ""
+
+msgid "When enabled, ZIP files are extracted into the current document folder after upload."
+msgstr ""
+
+msgid "The title is required."
+msgstr ""
+
+msgid "The URL is required."
+msgstr ""
+
+msgid "The destination folder is missing."
+msgstr ""
+
+msgid "Unable to create cloud link."
+msgstr ""
+
+msgid "Copy to My Files"
+msgstr ""
+
+msgid "Used space"
+msgstr ""
+
+msgid "Available space"
+msgstr ""
+
+msgid "Available percentage"
+msgstr ""
+
+msgid "Cloud links cannot be downloaded."
+msgstr ""
+
+msgid "Could not copy the file to My Files"
+msgstr "ບໍ່ສາມາດສຳເນົາໄຟລ໌ໄປຍັງໄຟລ໌ຂອງຂ້ອຍໄດ້"
+
+msgid "File copied to My Files"
+msgstr "ໄຟລ໌ຖືກສຳເນົາໄປຍັງໄຟລ໌ຂອງຂ້ອຍແລ້ວ"
+
+msgid "Checking course creation options..."
+msgstr "ກຳລັງກວດສອບຕົວເລືອກການສ້າງຫຼັກສູດ..."
+
+msgid "You cannot create more courses right now."
+msgstr "ຂະນະນີ້ທ່ານບໍ່ສາມາດສ້າງຫຼັກສູດເພີ່ມເຕີມໄດ້."
+
+msgid "AI analyzer"
+msgstr "ເຄື່ອງມືວິເຄາະ AI"
+
+msgid "Expand all"
+msgstr "ຂະຫຍາຍທັງໝົດ"
+
+msgid "Collapse all"
+msgstr "ຫຍໍ້ທັງໝົດ"
+
+msgid "Review your active service benefits, purchase history and available receipts."
+msgstr "ກວດສອບຜົນປະໂຫຍດຂອງການບໍລິການທີ່ກຳລັງໃຊ້ງານ, ປະຫວັດການຊື້ ແລະ ໃບຮັບເງິນທີ່ມີໃຫ້."
+
+msgid "Active services"
+msgstr "ການບໍລິການທີ່ກຳລັງໃຊ້ງານ"
+
+msgid "No active services"
+msgstr "ບໍ່ມີການບໍລິການທີ່ກຳລັງໃຊ້ງານ"
+
+msgid "Valid until"
+msgstr "ໃຊ້ໄດ້ຈົນເຖິງ"
+
+msgid "Recurring payment"
+msgstr "ການຊຳລະເງິນປະຈຳ"
+
+msgid "Next charge"
+msgstr "ການຊຳລະຄັ້ງຕໍ່ໄປ"
+
+msgid "Enable auto billing"
+msgstr "ເປີດໃຊ້ການຮຽກເກັບເງິນອັດຕະໂນມັດ"
+
+msgid "Cancel auto billing"
+msgstr "ຍົກເລີກການຮຽກເກັບເງິນອັດຕະໂນມັດ"
+
+msgid "Granted benefits"
+msgstr "ຜົນປະໂຫຍດທີ່ໄດ້ຮັບ"
+
+msgid "Purchase history"
+msgstr "ປະຫວັດການຊື້"
+
+msgid "No purchases yet"
+msgstr "ຍັງບໍ່ມີການຊື້"
+
+msgid "Product"
+msgstr "ຜະລິດຕະພັນ"
+
+msgid "Reference"
+msgstr "ເລກອ້າງອີງ"
+
+msgid "Amount"
+msgstr "ຈຳນວນເງິນ"
+
+msgid "Receipt"
+msgstr "ໃບຮັບເງິນ"
+
+msgid "Unable to load your services right now."
+msgstr "ບໍ່ສາມາດໂຫຼດການບໍລິການຂອງທ່ານໃນຂະນະນີ້ໄດ້."
+
+msgid "Auto billing enabled"
+msgstr "ເປີດໃຊ້ການຮຽກເກັບເງິນອັດຕະໂນມັດແລ້ວ"
+
+msgid "Auto billing suspended"
+msgstr "ລະງັບການຮຽກເກັບເງິນອັດຕະໂນມັດແລ້ວ"
+
+msgid "Auto billing cancelled"
+msgstr "ຍົກເລີກການຮຽກເກັບເງິນອັດຕະໂນມັດແລ້ວ"
+
+msgid "Auto billing disabled"
+msgstr "ປິດໃຊ້ການຮຽກເກັບເງິນອັດຕະໂນມັດແລ້ວ"
+
+msgid "Cancel auto billing for this service?"
+msgstr "ຍົກເລີກການຮຽກເກັບເງິນອັດຕະໂນມັດສຳລັບການບໍລິການນີ້ບໍ?"
+
+msgid "Preview class members and courses"
+msgstr "ເບິ່ງຕົວຢ່າງສະມາຊິກຫ້ອງຮຽນ ແລະ ຫຼັກສູດ"
+
+msgid "Please select a CSV file to import."
+msgstr "ກາລຸນາເລືອກໄຟລ໌ CSV ເພື່ອນຳເຂົ້າ."
+
+msgid "%d user-class links imported"
+msgstr "ນຳເຂົ້າການເຊື່ອມໂຍງຜູ້ໃຊ້-ຫ້ອງຮຽນ %d ລາຍການ"
+
+msgid "The following errors occurred during import:"
+msgstr "ເກີດຂໍ້ຜິດພາດຕໍ່ໄປນີ້ໃນລະຫວ່າງການນຳເຂົ້າ:"
+
+msgid "CSV file"
+msgstr "ໄຟລ໌ CSV"
+
+msgid "Remove user from all group-related entities if not in the list"
+msgstr "ເອົາຜູ້ໃຊ້ອອກຈາກທຸກຫນ່ວຍງານທີ່ກ່ຽວຂ້ອງກັບກຸ່ມ ຖ້າບໍ່ຢູ່ໃນລາຍຊື່"
+
+msgid "UserName"
+msgstr "ຊື່ຜູ້ໃຊ້"
+
+msgid "ClassName"
+msgstr "ຊື່ຫ້ອງຮຽນ"
+
+msgid "are required for each row."
+msgstr "ຈຳເປັນຕ້ອງມີສຳລັບແຕ່ລະແຖວ."
+
+msgid "title"
+msgstr "ຫົວຂໍ້"
+
+msgid "is required."
+msgstr "ຈຳເປັນຕ້ອງມີ."
+
+msgid "description"
+msgstr "ຄຳອະທິບາຍ"
+
+msgid "are optional."
+msgstr "ບໍ່ຈຳເປັນຕ້ອງມີ."
+
+msgid "Are you sure you want to remove this user from the class?"
+msgstr "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການເອົາຜູ້ໃຊ້ນີ້ອອກຈາກຫ້ອງຮຽນ?"
+
+msgid "Users in class"
+msgstr "ຜູ້ໃຊ້ໃນຫ້ອງຮຽນ"
+
+msgid "Remove user"
+msgstr "ເອົາຜູ້ໃຊ້ອອກ"
+
+msgid "Class not found"
+msgstr "ບໍ່ພົບຫ້ອງຮຽນ"
+
+msgid "Class overview"
+msgstr "ພາບລວມຫ້ອງຮຽນ"
+
+msgid "Back to classes"
+msgstr "ກັບໄປຫ້ອງຮຽນ"
+
+msgid "Search members or courses"
+msgstr "ຄົ້ນຫາສະມາຊິກ ຫຼື ຫຼັກສູດ"
+
+msgid "Search by name, email, username or course title"
+msgstr "ຄົ້ນຫາຕາມຊື່, ອີເມວ, ຊື່ຜູ້ໃຊ້ ຫຼື ຫົວຂໍ້ຫຼັກສູດ"
+
+msgid "Class members"
+msgstr "ສະມາຊິກຫ້ອງຮຽນ"
+
+msgid "No email"
+msgstr "ບໍ່ມີອີເມລ"
+
+msgid "No members found"
+msgstr "ບໍ່ພົບສະມາຊິກ"
+
+msgid "No courses found"
+msgstr "ບໍ່ພົບຫຼັກສູດ"
+
+msgid "The end date must be after the start date."
+msgstr "ວັນທີສິ້ນສຸດຕ້ອງຢູ່ຫຼັງວັນທີເລີ່ມຕົ້ນ."
+
+msgid "Always visible"
+msgstr "ສະແດງຕະຫຼອດ"
+
+msgid "No end date"
+msgstr "ບໍ່ມີວັນທີສິ້ນສຸດ"
+
+msgid "No restriction"
+msgstr "ບໍ່ມີການຈຳກັດ"
+
+msgid "Missing learning path or course identifier"
+msgstr "ບໍ່ມີຕົວລະບຸເສັ້ນທາງການຮຽນຫຼືຫຼັກສູດ"
+
+msgid "Select a user or a group first"
+msgstr "ກະລຸນາເລືອກຜູ້ໃຊ້ຫຼືກຸ່ມກ່ອນ"
+
+msgid "Remove all date restrictions for this learning path?"
+msgstr "ລຶບການຈຳກັດວັນທີທັງໝົດສຳລັບເສັ້ນທາງການຮຽນນີ້ບໍ?"
+
+msgid "Advanced learning path access"
+msgstr "ການເຂົ້າເຖິງເສັ້ນທາງການຮຽນຂັ້ນສູງ"
+
+msgid "Remove date restrictions"
+msgstr "ລຶບການຈຳກັດວັນທີ"
+
+msgid "Search by name, email, username or group"
+msgstr "ຊອກຫາຕາມຊື່, ອີເມລ, ຊື່ຜູ້ໃຊ້ ຫຼືກຸ່ມ"
+
+msgid "Edit user restriction"
+msgstr "ແກ້ໄຂການຈຳກັດຜູ້ໃຊ້"
+
+msgid "Edit group restriction"
+msgstr "ແກ້ໄຂການຈຳກັດກຸ່ມ"
+
+msgid "Select a user or group"
+msgstr "ເລືອກຜູ້ໃຊ້ຫຼືກຸ່ມ"
+
+msgid "Save restriction"
+msgstr "ບັນທຶກການຈຳກັດ"
+
+msgid "members"
+msgstr "ສະມາຊິກ"
+
+msgid "Create Assignment"
+msgstr "ສ້າງໜ້າວຽກ"
+
+msgid "The submission deadline has passed. You can no longer submit."
+msgstr "ກຳນົດເວລາສົ່ງໝົດເວລາແລ້ວ. ທ່ານບໍ່ສາມາດສົ່ງໄດ້ອີກ."
+
+msgid "Mailing cannot be combined with other recipients."
+msgstr "ບໍ່ສາມາດສົ່ງຈົດໝາຍພ້ອມກັບຜູ້ຮັບອື່ນໆໄດ້."
+
+msgid "Social map"
+msgstr "ແຜນທີ່ສັງຄົມ"
+
+msgid "The map plugin is not enabled or configured."
+msgstr "ປລັກອິນແຜນທີ່ບໍ່ໄດ້ເປີດໃຊ້ງານຫຼືຕັ້ງຄ່າ."
+
+msgid "Some configured extra fields were not found"
+msgstr "ບາງຊ່ອງຂໍ້ມູນເພີ່ມເຕີມທີ່ຕັ້ງຄ່າໄວ້ບໍ່ພົບ"
+
+msgid "No user locations were found."
+msgstr "ບໍ່ພົບຕຳແໜ່ງຜູ້ໃຊ້."
+
+msgid "OpenStreetMap needs coordinates to display an embedded marker. Address-only locations are listed below."
+msgstr "OpenStreetMap ຕ້ອງການພິກັດເພື່ອສະແດງຈຸດຝັງ. ຕຳແໜ່ງທີ່ມີພຽງທີ່ຢູ່ຈະຖືກລາຍການຂ້າງລຸ່ມນີ້."
+
+msgid "Locations"
+msgstr "ຕຳແໜ່ງ"
+
+msgid "Open map"
+msgstr "ເປີດແຜນທີ່"
+
+msgid "Provider: OpenStreetMap"
+msgstr "ຜູ້ໃຫ້ບໍລິການ: OpenStreetMap"
+
+msgid "Provider: Google Maps"
+msgstr "ຜູ້ໃຫ້ບໍລິການ: Google Maps"
+
+msgid "Personal files"
+msgstr "ໄຟລ໌ສ່ວນຕົວ"
+
+msgid "Upload image"
+msgstr "ອັບໂຫຼດຮູບພາບ"
+
+msgid "Upload media"
+msgstr "ອັບໂຫຼດມີເດຍ"
+
+msgid "Only image files are allowed in this upload screen."
+msgstr "ອະນຸຍາດໃຫ້ໃຊ້ໄຟລ໌ຮູບພາບເທົ່ານັ້ນໃນໜ້າອັບໂຫຼດນີ້."
+
+msgid "Only audio and video files are allowed in this upload screen."
+msgstr "ອະນຸຍາດໃຫ້ໃຊ້ໄຟລ໌ສຽງແລະວິດີໂອເທົ່ານັ້ນໃນໜ້າອັບໂຫຼດນີ້."
+
+msgid "Upload files to your personal storage."
+msgstr "ອັບໂຫຼດໄຟລ໌ໄປຍັງບ່ອນເກັບຂໍ້ມູນສ່ວນຕົວຂອງທ່ານ."
+
+msgid "Linked"
+msgstr "ເຊື່ອມໂຍງ"
+
+msgid "No audio or video files were found in this folder."
+msgstr "ບໍ່ພົບໄຟລ໌ສຽງຫຼືວິດີໂອໃນໂຟລເດີນີ້."
+
+msgid "No image files were found in this folder."
+msgstr "ບໍ່ພົບໄຟລ໌ຮູບພາບໃນໂຟລເດີນີ້."
+
+msgid "No matching files were found in this folder."
+msgstr "ບໍ່ພົບໄຟລ໌ທີ່ກົງກັບໃນໂຟລເດີນີ້."
+
+msgid "This file type is not allowed in this upload screen."
+msgstr "ປະເພດໄຟລ໌ນີ້ບໍ່ອະນຸຍາດໃນໜ້າອັບໂຫຼດນີ້."
+
+msgid "Manage your personal files and course documents."
+msgstr "ຈັດການໄຟລ໌ສ່ວນຕົວແລະເອກະສານຫຼັກສູດຂອງທ່ານ."
+
+msgid "DateValidity"
+msgstr "DateValidity"
+
+msgid "JustificationSaved"
+msgstr "JustificationSaved"
+
+msgid "ValidityDate"
+msgstr "ValidityDate"
+
+msgid "MyJustifications"
+msgstr "MyJustifications"
+
+msgid "Submission"
+msgstr "Submission"
+
+msgid "Use the filters above to narrow the list."
+msgstr "ໃຊ້ຕົວກອງຂ້າງເທິງເພື່ອຈຳກັດລາຍການ."
+
+msgid "You are not allowed to see this page."
+msgstr "ທ່ານບໍ່ໄດ້ຮັບອະນຸຍາດໃຫ້ເບິ່ງໜ້ານີ້."
+
+msgid "plugin_title"
+msgstr "plugin_title"
+
+msgid "plugin_comment"
+msgstr "plugin_comment"
+
+msgid "Course tracking details"
+msgstr "ລາຍລະອຽດການຕິດຕາມຫຼັກສູດ"
+
+msgid "Course activity statistics"
+msgstr "ສະຖິຕິການເຄື່ອນໄຫວຂອງຫຼັກສູດ"
+
+msgid "mobile_phone_number"
+msgstr "mobile_phone_number"
+
+msgid "Allowed template syntax"
+msgstr "ຮູບແບບແມ່ແບບທີ່ອະນຸຍາດ"
+
+msgid "Functions"
+msgstr "ຟັງຊັນ"
+
+msgid "Available variables depend on the template type, for example {{ user.getUsername() }} or {{ user.getEmail() }}."
+msgstr "ຕົວແປທີ່ມີໃຫ້ໃຊ້ຂຶ້ນກັບປະເພດແມ່ແບບ, ຕົວຢ່າງ {{ user.getUsername() }} ຫຼື {{ user.getEmail() }}."
+
+msgid "For security reasons, any other Twig function, filter (such as filter, map, reduce or sort) or PHP call is blocked."
+msgstr "ເພື່ອຄວາມປອດໄພ, ຟັງຊັນ Twig, ຕົວກອງ (ເຊັ່ນ filter, map, reduce ຫຼື sort) ຫຼືການເອີ້ນ PHP ອື່ນໆທັງໝົດຖືກບລັອກ."
+
+msgid "Global administrator"
+msgstr "ຜູ້ເບິ່ງແຍງລະບົບທົ່ວໄປ"
+
+msgid "Session manager"
+msgstr "ຜູ້ຈັດການເຊດຊັນ"
+
+msgid "Human resources manager"
+msgstr "ຜູ້ຈັດການຊັບພະຍາກອນມະນຸດ"
+
+msgid "Course teacher"
+msgstr "ຄູສອນຫຼັກສູດ"
+
+msgid "Course student"
+msgstr "ນັກສຶກສາຫຼັກສູດ"
+
+msgid "Platform reports"
+msgstr "ບົດລາຍງານຂອງແພລດຟອມ"
+
+msgid "Security reports"
+msgstr "ບົດລາຍງານຄວາມປອດໄພ"
+
+msgid "Course reports"
+msgstr "ບົດລາຍງານຫຼັກສູດ"
+
+msgid "Gradebook reports"
+msgstr "ບົດລາຍງານປື້ມຄະແນນ"
+
+msgid "Social reports"
+msgstr "ບົດລາຍງານສັງຄົມ"
+
+msgid "Exports"
+msgstr "ການສົ່ງອອກ"
+
+msgid "Reports about platform-wide usage, users, courses and sessions."
+msgstr "ບົດລາຍງານກ່ຽວກັບການໃຊ້ງານແພລດຟອມ, ຜູ້ໃຊ້, ຫຼັກສູດ ແລະ ເຊດຊັນ."
+
+msgid "Audit and security-sensitive reports."
+msgstr "ການກວດສອບ ແລະ ບົດລາຍງານທີ່ມີຄວາມສ່ຽງດ້ານຄວາມປອດໄພ."
+
+msgid "Reports scoped to courses managed by the user."
+msgstr "ບົດລາຍງານທີ່ຈຳກັດພາຍໃນຫຼັກສູດທີ່ຜູ້ໃຊ້ຈັດການ."
+
+msgid "Reports related to learner activity and follow-up."
+msgstr "ບົດລາຍງານກ່ຽວກັບການເຄື່ອນໄຫວ ແລະ ການຕິດຕາມຜູ້ຮຽນ."
+
+msgid "Reports related to scores, certificates and gradebook data."
+msgstr "ບົດລາຍງານກ່ຽວກັບຄະແນນ, ໃບຢັ້ງຢືນ ແລະ ຂໍ້ມູນປື້ມຄະແນນ."
+
+msgid "Reports and exports that generate downloadable files."
+msgstr "ບົດລາຍງານ ແລະ ການສົ່ງອອກທີ່ສ້າງໄຟລ໌ທີ່ດາວໂຫຼດໄດ້."
+
+msgid "Main platform statistics dashboard."
+msgstr "ແດຊບອດສະຖິຕິຫຼັກຂອງແພລດຟອມ."
+
+msgid "Number of courses and course distribution report."
+msgstr "ຈຳນວນຫຼັກສູດ ແລະ ບົດລາຍງານການແຈກຢາຍຫຼັກສູດ."
+
+msgid "Platform-wide access to course tools."
+msgstr "ການເຂົ້າເຖິງເຄື່ອງມືຫຼັກສູດທົ່ວແພລດຟອມ."
+
+msgid "Number of resources per tool."
+msgstr "ຈຳນວນຊັບພະຍາກອນຕໍ່ເຄື່ອງມື."
+
+msgid "Latest access to courses."
+msgstr "ການເຂົ້າເຖິງຫຼັກສູດຫຼ້າສຸດ."
+
+msgid "Course distribution by language."
+msgstr "ການແຈກຢາຍຫຼັກສູດຕາມພາສາ."
+
+msgid "Course usage report."
+msgstr "ບົດລາຍງານການໃຊ້ງານຫຼັກສູດ."
+
+msgid "Platform user count report."
+msgstr "ບົດລາຍງານຈຳນວນຜູ້ໃຊ້ແພລດຟອມ."
+
+msgid "Recent logins chart."
+msgstr "ແຜນພາບການເຂົ້າສູ່ລະບົບຫຼ້າສຸດ."
+
+msgid "Login distribution by month."
+msgstr "ການແຈກຢາຍການເຂົ້າສູ່ລະບົບຕາມເດືອນ."
+
+msgid "Login distribution by day."
+msgstr "ການແຈກຢາຍການເຂົ້າສູ່ລະບົບຕາມມື້."
+
+msgid "Login distribution by hour."
+msgstr "ການແຈກຢາຍການເຂົ້າສູ່ລະບົບຕາມຊົ່ວໂມງ."
+
+msgid "Users with profile picture."
+msgstr "ຜູ້ໃຊ້ທີ່ມີຮູບໂປຣໄຟລ໌."
+
+msgid "Login report filtered by date."
+msgstr "ບົດລາຍງານການເຂົ້າສູ່ລະບົບທີ່ກັ່ນຕອງຕາມວັນທີ."
+
+msgid "Users who have not logged in recently."
+msgstr "ຜູ້ໃຊ້ທີ່ບໍ່ໄດ້ເຂົ້າສູ່ລະບົບມາເມື່ອໄວໆນີ້."
+
+msgid "Inactive or suspicious user accounts report."
+msgstr "ບົດລາຍງານບັນຊີຜູ້ໃຊ້ທີ່ບໍ່ເຄື່ອນໄຫວ ຫຼື ມີຄວາມສົງໄສ."
+
+msgid "Users activity statistics."
+msgstr "ສະຖິຕິການເຄື່ອນໄຫວຂອງຜູ້ໃຊ້."
+
+msgid "Currently online users report."
+msgstr "ບົດລາຍງານຜູ້ໃຊ້ທີ່ກຳລັງອອນໄລນ໌."
+
+msgid "New user registrations over time."
+msgstr "ການລົງທະບຽນຜູ້ໃຊ້ໃໝ່ຕາມເວລາ."
+
+msgid "Course and session subscriptions over time."
+msgstr "ການສະໝັກຫຼັກສູດ ແລະ ເຊດຊັນຕາມເວລາ."
+
+msgid "Duplicate user detection and maintenance report."
+msgstr "ການກວດຫາ ແລະ ບົດລາຍງານການບຳລຸງຮັກສາຜູ້ໃຊ້ທີ່ຊ້ຳກັນ."
+
+msgid "Platform user/session statistics."
+msgstr "ສະຖິຕິຜູ້ໃຊ້/ເຊດຊັນຂອງແພລດຟອມ."
+
+msgid "Quarterly platform report."
+msgstr "ບົດລາຍງານແພລດຟອມປະຈຳໄຕມາດ."
+
+msgid "Activities audit"
+msgstr "ການກວດສອບການເຄື່ອນໄຫວ"
+
+msgid "Audit report for important administrative and platform activities."
+msgstr "ບົດລາຍງານການກວດສອບການເຄື່ອນໄຫວທາງດ້ານການບໍລິຫານ ແລະ ແພລດຟອມທີ່ສຳຄັນ."
+
+msgid "Social messages received report."
+msgstr "ບົດລາຍງານການຮັບຂ່າວສານສັງຄົມ."
+
+msgid "Social messages sent report."
+msgstr "ບົດລາຍງານການສົ່ງຂ່າວສານສັງຄົມ."
+
+msgid "Social contacts count report."
+msgstr "ບົດລາຍງານຈຳນວນຜູ້ຕິດຕໍ່ສັງຄົມ."
+
+msgid "Sessions created over time."
+msgstr "ບົດລາຍງານການສ້າງຫ້ອງຮຽນຕາມເວລາ."
+
+msgid "Learning analytics dashboard."
+msgstr "ແຜງຄວບຄຸມການວິເຄາະການຮຽນຮູ້."
+
+msgid "Teacher time report."
+msgstr "ບົດລາຍງານເວລາຂອງຄູ."
+
+msgid "Teachers time by session report"
+msgstr "ບົດລາຍງານເວລາຂອງຄູຕາມຫ້ອງຮຽນ."
+
+msgid "Teacher time report grouped by session."
+msgstr "ບົດລາຍງານເວລາຂອງຄູຈັດກຸ່ມຕາມຫ້ອງຮຽນ."
+
+msgid "Corporate learning analytics report."
+msgstr "ບົດລາຍງານການວິເຄາະການຮຽນຮູ້ຂອງອົງກອນ."
+
+msgid "Course learners tracking report."
+msgstr "ບົດລາຍງານການຕິດຕາມນັກຮຽນຂອງຫຼັກສູດ."
+
+msgid "Course activity statistics with connected and inactive users."
+msgstr "ສະຖິຕິການເຄື່ອນໄຫວຂອງຫຼັກສູດພ້ອມຜູ້ໃຊ້ທີ່ເຊື່ອມຕໍ່ແລະບໍ່ເຄື່ອນໄຫວ."
+
+msgid "Detailed tracking report for a learner inside a course."
+msgstr "ບົດລາຍງານການຕິດຕາມລະອຽດຂອງນັກຮຽນພາຍໃນຫຼັກສູດ."
+
+msgid "Course gradebook overview."
+msgstr "ພາບລວມປື້ມຄະແນນຂອງຫຼັກສູດ."
+
+msgid "Gradebook statistics"
+msgstr "ສະຖິຕິປື້ມຄະແນນ."
+
+msgid "Gradebook statistics report."
+msgstr "ບົດລາຍງານສະຖິຕິປື້ມຄະແນນ."
+
+msgid "Certificate report"
+msgstr "ບົດລາຍງານໃບຢັ້ງຢືນ."
+
+msgid "Certificate report for course gradebook."
+msgstr "ບົດລາຍງານໃບຢັ້ງຢືນສຳລັບປື້ມຄະແນນຂອງຫຼັກສູດ."
+
+msgid "User statistics"
+msgstr "ສະຖິຕິຜູ້ໃຊ້."
+
+msgid "Course gradebook statistics for a user."
+msgstr "ສະຖິຕິປື້ມຄະແນນຂອງຫຼັກສູດສຳລັບຜູ້ໃຊ້."
+
+msgid "Personal statistics"
+msgstr "ສະຖິຕິສ່ວນຕົວ."
+
+msgid "Personal gradebook statistics."
+msgstr "ສະຖິຕິປື້ມຄະແນນສ່ວນຕົວ."
+
+msgid "Reports catalog"
+msgstr "ລາຍການບົດລາຍງານ."
+
+msgid "Central catalog of available reports, roles and permission categories."
+msgstr "ລາຍການສູນກາງຂອງບົດລາຍງານ,ບົດບາດ ແລະ ໝວດໝູ່ການອະນຸຍາດທີ່ມີ."
+
+msgid "Course log events"
+msgstr "ເຫດການບັນທຶກຫຼັກສູດ."
+
+msgid "Detailed course tracking events."
+msgstr "ເຫດການການຕິດຕາມຫຼັກສູດລະອຽດ."
+
+msgid "Course tool usage"
+msgstr "ການໃຊ້ເຄື່ອງມືຫຼັກສູດ."
+
+msgid "Course tracking report grouped by tools."
+msgstr "ບົດລາຍງານການຕິດຕາມຫຼັກສູດຈັດກຸ່ມຕາມເຄື່ອງມື."
+
+msgid "Course resource usage"
+msgstr "ການໃຊ້ຊັບພະຍາກອນຫຼັກສູດ."
+
+msgid "Course tracking report grouped by resources."
+msgstr "ບົດລາຍງານການຕິດຕາມຫຼັກສູດຈັດກຸ່ມຕາມຊັບພະຍາກອນ."
+
+msgid "Course group tracking"
+msgstr "ການຕິດຕາມກຸ່ມຫຼັກສູດ."
+
+msgid "Tracking report for course groups."
+msgstr "ບົດລາຍງານການຕິດຕາມກຸ່ມຫຼັກສູດ."
+
+msgid "Course session report"
+msgstr "ບົດລາຍງານຫ້ອງຮຽນຂອງຫຼັກສູດ."
+
+msgid "Tracking report for a course inside sessions."
+msgstr "ບົດລາຍງານການຕິດຕາມຫຼັກສູດພາຍໃນຫ້ອງຮຽນ."
+
+msgid "Learning path report"
+msgstr "ບົດລາຍງານເສັ້ນທາງການຮຽນ."
+
+msgid "Learning path tracking report."
+msgstr "ບົດລາຍງານການຕິດຕາມເສັ້ນທາງການຮຽນ."
+
+msgid "Learning path results by user"
+msgstr "ຜົນເສັ້ນທາງການຮຽນຕາມຜູ້ໃຊ້."
+
+msgid "Learning path results grouped by user."
+msgstr "ຜົນເສັ້ນທາງການຮຽນຈັດກຸ່ມຕາມຜູ້ໃຊ້."
+
+msgid "Exercises report"
+msgstr "ບົດລາຍງານແບບຝຶກຫັດ."
+
+msgid "Course exercises and exams tracking report."
+msgstr "ບົດລາຍງານການຕິດຕາມແບບຝຶກຫັດ ແລະ ການສອບເສັງຂອງຫຼັກສູດ."
+
+msgid "Question report"
+msgstr "ບົດລາຍງານຄຳຖາມ."
+
+msgid "Course question tracking report."
+msgstr "ບົດລາຍງານການຕິດຕາມຄຳຖາມຂອງຫຼັກສູດ."
+
+msgid "Messages report"
+msgstr "ບົດລາຍງານຂ່າວສານ."
+
+msgid "Course messages tracking report."
+msgstr "ບົດລາຍງານການຕິດຕາມຂ່າວສານຂອງຫຼັກສູດ."
+
+msgid "Total time tracking report for course learners."
+msgstr "ບົດລາຍງານການຕິດຕາມເວລາທັງໝົດສຳລັບນັກຮຽນຂອງຫຼັກສູດ."
+
+msgid "Gradebook summary"
+msgstr "ສະຫຼຸບປື້ມຄະແນນ."
+
+msgid "Summary view of gradebook results."
+msgstr "ມຸມມອງສະຫຼຸບຜົນປື້ມຄະແນນ."
+
+msgid "Flat view"
+msgstr "ມຸມມອງຮາບ."
+
+msgid "Flat gradebook results view."
+msgstr "ມຸມມອງຜົນປື້ມຄະແນນແບບຮາບ."
+
+msgid "Evaluation log"
+msgstr "ບັນທຶກການປະເມີນ."
+
+msgid "Change log for gradebook evaluations."
+msgstr "ບັນທຶກການປ່ຽນແປງສຳລັບການປະເມີນປື້ມຄະແນນ."
+
+msgid "Link log"
+msgstr "ບັນທຶກການເຊື່ອມຕໍ່"
+
+msgid "Change log for gradebook links."
+msgstr "ບັນທຶກການປ່ຽນແປງສຳລັບການເຊື່ອມຕໍ່ປື້ມຄະແນນ."
+
+msgid "Result details"
+msgstr "ລາຍລະອຽດຜົນໄດ້ຮັບ"
+
+msgid "Detailed view of a gradebook result."
+msgstr "ມຸມມອງລາຍລະອຽດຂອງຜົນໄດ້ຮັບປື້ມຄະແນນ."
+
+msgid "Personal certificates report."
+msgstr "ບົດລາຍງານໃບຢັ້ງຢືນສ່ວນຕົວ."
+
+msgid "User move statistics"
+msgstr "ສະຖິຕິການເຄື່ອນຍ້າຍຜູ້ໃຊ້"
+
+msgid "Report for user move and transfer statistics."
+msgstr "ບົດລາຍງານສະຖິຕິການເຄື່ອນຍ້າຍ ແລະ ການໂອນຍ້າຍຜູ້ໃຊ້."
+
+msgid "User consent list"
+msgstr "ລາຍຊື່ການຍິນຍອມຂອງຜູ້ໃຊ້"
+
+msgid "Report of users and consent status."
+msgstr "ບົດລາຍງານຜູ້ໃຊ້ ແລະ ສະຖານະການຍິນຍອມ."
+
+msgid "Special platform exports."
+msgstr "ການສົ່ງອອກແພລດຟອມພິເສດ."
+
+msgid "Export certificates"
+msgstr "ສົ່ງອອກໃບຢັ້ງຢືນ"
+
+msgid "Export platform certificates."
+msgstr "ສົ່ງອອກໃບຢັ້ງຢືນຂອງແພລດຟອມ."
+
+msgid "Export exercise results"
+msgstr "ສົ່ງອອກຜົນໄດ້ຮັບແບບຝຶກຫັດ"
+
+msgid "Export exercise results from the platform."
+msgstr "ສົ່ງອອກຜົນໄດ້ຮັບແບບຝຶກຫັດຈາກແພລດຟອມ."
+
+msgid "Course survey results and reporting."
+msgstr "ຜົນໄດ້ຮັບ ແລະ ການລາຍງານແບບສຳຫຼວດຫຼັກສູດ."
+
+msgid "Attendance report"
+msgstr "ບົດລາຍງານການເຂົ້າຮ່ວມ"
+
+msgid "Course attendance tracking and reports."
+msgstr "ການຕິດຕາມ ແລະ ບົດລາຍງານການເຂົ້າຮ່ວມຫຼັກສູດ."
+
+msgid "Exercises global report"
+msgstr "ບົດລາຍງານແບບຝຶກຫັດທົ່ວໄປ"
+
+msgid "Global exercise results report for the course."
+msgstr "ບົດລາຍງານຜົນໄດ້ຮັບແບບຝຶກຫັດທົ່ວໄປສຳລັບຫຼັກສູດ."
+
+msgid "Exercise report"
+msgstr "ບົດລາຍງານແບບຝຶກຫັດ"
+
+msgid "Detailed exercise report."
+msgstr "ບົດລາຍງານແບບຝຶກຫັດແບບລາຍລະອຽດ."
+
+msgid "Exercise history"
+msgstr "ປະຫວັດແບບຝຶກຫັດ"
+
+msgid "Exercise attempt history."
+msgstr "ປະຫວັດການພະຍາຍາມແບບຝຶກຫັດ."
+
+msgid "Exercise results"
+msgstr "ຜົນໄດ້ຮັບແບບຝຶກຫັດ"
+
+msgid "Exercise results and corrections."
+msgstr "ຜົນໄດ້ຮັບ ແລະ ການແກ້ໄຂແບບຝຶກຫັດ."
+
+msgid "Question-level exercise statistics."
+msgstr "ສະຖິຕິແບບຝຶກຫັດລະດັບຄຳຖາມ."
+
+msgid "Exercise statistics"
+msgstr "ສະຖິຕິແບບຝຶກຫັດ"
+
+msgid "Exercise statistics page."
+msgstr "ໜ້າສະຖິຕິແບບຝຶກຫັດ."
+
+msgid "Live exercise statistics"
+msgstr "ສະຖິຕິແບບຝຶກຫັດແບບສົດ"
+
+msgid "Live exercise statistics for teachers."
+msgstr "ສະຖິຕິແບບຝຶກຫັດແບບສົດສຳລັບຄູ."
+
+msgid "Learning path statistics"
+msgstr "ສະຖິຕິເສັ້ນທາງການຮຽນ"
+
+msgid "Learning path item statistics."
+msgstr "ສະຖິຕິລາຍການເສັ້ນທາງການຮຽນ."
+
+msgid "Learning path report inside a course."
+msgstr "ບົດລາຍງານເສັ້ນທາງການຮຽນພາຍໃນຫຼັກສູດ."
+
+msgid "User skills report."
+msgstr "ບົດລາຍງານທັກສະຂອງຜູ້ໃຊ້."
+
+msgid "Scheduled or periodic export configuration."
+msgstr "ການຕັ້ງຄ່າການສົ່ງອອກຕາມກຳນົດ ຫຼື ເປັນຊ່ວງເວລາ."
+
+msgid "User export"
+msgstr "ການສົ່ງອອກຜູ້ໃຊ້"
+
+msgid "Export users from the platform."
+msgstr "ສົ່ງອອກຜູ້ໃຊ້ຈາກແພລດຟອມ."
+
+msgid "Not classified"
+msgstr "ບໍ່ໄດ້ຈັດປະເພດ"
+
+msgid "You have acquired the skill %s"
+msgstr "ທ່ານໄດ້ຮັບທັກສະ %s"
+
+msgid "You have acquired the skill %s."
+msgstr "ທ່ານໄດ້ຮັບທັກສະ %s."
+
+msgid "Recover your password"
+msgstr "ກູ້ຄືນລະຫັດຜ່ານຂອງທ່ານ"
+
+msgid "Disclaimer"
+msgstr "ຂໍ້ປະຕິເສດ"
+
+msgid "This operation would exceed the limit of %d users allowed for this course."
+msgstr "ການດຳເນີນການນີ້ຈະເກີນຈຳນວນຜູ້ໃຊ້ທີ່ອະນຸຍາດ %d ຄົນສຳລັບຫຼັກສູດນີ້."
+
+msgid "DefaultGroupCategory"
+msgstr "DefaultGroupCategory"
+
+msgid "LearningCalendar"
+msgstr "LearningCalendar"
+
+msgid "Choose how this user can authenticate on the platform."
+msgstr "ເລືອກວິທີທີ່ຜູ້ໃຊ້ນີ້ສາມາດຢັ້ງຢືນຕົວຕົນໃນແພລດຟອມ."
+
+msgid "Authentication methods"
+msgstr "ວິທີການຢັ້ງຢືນຕົວຕົນ"
+
+msgid "Set password manually"
+msgstr "ຕັ້ງລະຫັດຜ່ານດ້ວຍຕົນເອງ"
+
+msgid "Report role matrix"
+msgstr "ບົດລາຍງານເມທຣິກບົດບາດ"
+
+msgid "Report permission categories"
+msgstr "ບົດລາຍງານປະເພດການອະນຸຍາດ"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs enforce the documented report role matrix."
+msgstr ""
+
+msgid "reports"
+msgstr ""
+
+msgid "Canonical URL"
+msgstr ""
+
+msgid "Legacy URL"
+msgstr ""
+
+msgid "Permission category"
+msgstr ""
+
+msgid "This matrix documents the expected audience for each report and is enforced by the canonical report entry point."
+msgstr ""
+
+msgid "These keys group reports by access scope and are used by the report registry. They can later be mapped to finer-grained platform permissions."
+msgstr ""
+
+msgid "Permission"
+msgstr ""
+
+msgid "Clear active session"
+msgstr ""
+
+msgid "Are you sure you want to clear this user active session?"
+msgstr ""
+
+msgid "Preview shown without course context. Some course-specific data may be unavailable."
+msgstr ""
+
+msgid "Preview is not available for this question."
+msgstr ""
+
+msgid "Edition is not allowed without a course context."
+msgstr ""
+
+msgid "This plugin does not use regions."
+msgstr ""
+
+msgid "No plugins with regions were found."
+msgstr ""
+
+msgid "Freemium"
+msgstr ""
+
+msgid "Commercial service"
+msgstr ""
+
+msgid "Commercial"
+msgstr ""
+
+msgid "100% free"
+msgstr ""
+
+msgid "Displayed above the public login form."
+msgstr ""
+
+msgid "Displayed below the public login form."
+msgstr ""
+
+msgid "Displayed before the footer area."
+msgstr ""
+
+msgid "Displayed in the left footer column."
+msgstr ""
+
+msgid "Displayed in the center footer column."
+msgstr ""
+
+msgid "Displayed in the right footer column."
+msgstr ""
+
+msgid "Showing all plugins."
+msgstr ""
+
+msgid "Some plugins are still pending functional verification."
+msgstr ""
+
+msgid "Show verified plugins only"
+msgstr ""
+
+msgid "Showing verified plugins only."
+msgstr ""
+
+msgid "Pending plugins are temporarily hidden until they are adapted and tested."
+msgstr ""
+
+msgid "Show all plugins"
+msgstr ""
+
+msgid "Official and free plugins are listed separately from plugins that may depend on commercial services or paid offers."
+msgstr ""
+
+msgid "Included free plugins"
+msgstr ""
+
+msgid "Commercial and freemium plugins"
+msgstr ""
+
+msgid "All plugins"
+msgstr ""
+
+msgid "No plugins were found for this category."
+msgstr ""
+
+msgid "Search plugins"
+msgstr ""
+
+msgid "Search by name or description"
+msgstr ""
+
+msgid "Advanced filters"
+msgstr ""
+
+msgid "All statuses"
+msgstr ""
+
+msgid "All sources"
+msgstr ""
+
+msgid "All types"
+msgstr ""
+
+msgid "Installed plugins are shown first"
+msgstr ""
+
+msgid "No plugins match the current filters."
+msgstr ""
+
+msgid "Try clearing the search or changing the filters."
+msgstr ""
+
+msgid "README"
+msgstr ""
+
+msgid "Invalid security token"
+msgstr ""
+
+msgid "Please select a destination session"
+msgstr ""
+
+msgid "Cannot move this to the same session"
+msgstr ""
+
+msgid "The destination session must include the selected course"
+msgstr ""
+
+msgid "The source session must include the selected course"
+msgstr ""
+
+msgid "No learners found"
+msgstr ""
+
+msgid "Will be subscribed"
+msgstr ""
+
+msgid "Subscribed"
+msgstr ""
+
+msgid "The move process has finished"
+msgstr ""
+
+msgid "Comparison finished. No data has been moved."
+msgstr ""
+
+msgid "Move tracking data from the base course or a source session to another session. Use comparison first to review the affected learner data."
+msgstr ""
+
+msgid "Search for a course or use the manual course ID field below."
+msgstr ""
+
+msgid "Fallback when the course search is not available."
+msgstr ""
+
+msgid "Load sessions"
+msgstr ""
+
+msgid "Selected course"
+msgstr ""
+
+msgid "Choose the base course or the session where the tracking data currently exists."
+msgstr ""
+
+msgid "Choose the session that will receive the tracking data."
+msgstr ""
+
+msgid "Important"
+msgstr ""
+
+msgid "The move action updates existing tracking data. Run compare first and test this tool with a non-production course before moving real learner data."
+msgstr ""
+
+msgid "No sessions found for this course"
+msgstr ""
+
+msgid "Some users were ignored because they are not subscribed to this session."
+msgstr ""
+
+msgid "Remove selected user"
+msgstr ""
+
+msgid "Add selected user"
+msgstr ""
+
+msgid "No users from the selected list are subscribed to this session."
+msgstr ""
+
+msgid "No image"
+msgstr ""
+
+msgid "Invalid URL."
+msgstr ""
+
+msgid "This cloud document cannot be embedded."
+msgstr ""
+
+msgid "Document not found"
+msgstr ""
+
+msgid "File not found"
+msgstr ""
+
+msgid "This learning path is not available for your user at this time."
+msgstr ""
+
+msgid "StartDateMustBeBeforeTheEndDate"
+msgstr ""
+
+msgid "Next learning path"
+msgstr ""
+
+msgid "Select the learning path that will be available after this one."
+msgstr ""
+
+msgid "Create another learning path in this course to enable learning path flow."
+msgstr ""
+
+msgid "Available from %s"
+msgstr ""
+
+msgid "Available until %s"
+msgstr ""
+
+msgid "Statistics reset date"
+msgstr ""
+
+msgid "Last 24 hours"
+msgstr ""
+
+msgid "This reset date is used as the reference date for the report. It does not delete historical tracking data."
+msgstr ""
+
+msgid "Since reset date"
+msgstr ""
+
+msgid "Users connected in the last 24 hours"
+msgstr ""
+
+msgid "Learners with at least one course access during the last 24 hours."
+msgstr ""
+
+msgid "Users connected in the last week"
+msgstr ""
+
+msgid "Learners with at least one course access during the last 7 days."
+msgstr ""
+
+msgid "Users connected in the last month"
+msgstr ""
+
+msgid "Learners with at least one course access during the last 30 days."
+msgstr ""
+
+msgid "Not recently connected users"
+msgstr ""
+
+msgid "Learners without course access since %s."
+msgstr ""
+
+msgid "Recently used resources"
+msgstr ""
+
+msgid "Course tools/resources used since %s."
+msgstr ""
+
+msgid "%s %% of learners"
+msgstr ""
+
+msgid "Connections"
+msgstr ""
+
+msgid "Total connections"
+msgstr ""
+
+msgid "Downloaded documents"
+msgstr ""
+
+msgid "List of documents downloaded by this learner in this course."
+msgstr ""
+
+msgid "Forum topics"
+msgstr ""
+
+msgid "Forum topics opened by this learner in this course."
+msgstr ""
+
+msgid "Forum posts"
+msgstr ""
+
+msgid "Forum posts written by this learner in this course."
+msgstr ""
+
+msgid "Course connections"
+msgstr ""
+
+msgid "Connection history for this learner in this course."
+msgstr ""
+
+msgid "Resources used"
+msgstr ""
+
+msgid "Latest tools or resources used by this learner in this course."
+msgstr ""
+
+msgid "Logout date"
+msgstr ""
+
+msgid "Imported Aiken quiz"
+msgstr ""
+
+msgid "Only supported documents will be listed here."
+msgstr ""
+
+msgid "Generated Aiken content"
+msgstr ""
+
+msgid "Review the generated content before importing it as a new exercise."
+msgstr ""
+
+msgid "No documents available."
+msgstr ""
+
+msgid "yperbolic arctangent:\\t\\tarctanh(x)"
+msgstr ""
+
+msgid "Exercise"
+msgstr ""
+
+msgid "OfficialCode"
+msgstr ""
+
+msgid "FirstName"
+msgstr ""
+
+msgid "LastName"
+msgstr ""
+
+msgid "LoginName"
+msgstr ""
+
+msgid "MinMinute"
+msgstr ""
+
+msgid "StartDate"
+msgstr ""
+
+msgid "EndDate"
+msgstr ""
+
+msgid "CorrectionDate"
+msgstr ""
+
+msgid "NotValidated"
+msgstr ""
+
+msgid "PendingAttempts"
+msgstr ""
+
+msgid "List of pending test attempts across your courses."
+msgstr ""
+
+msgid "User ID"
+msgstr ""
+
+msgid "QuestionType"
+msgstr ""
+
+msgid "QuestionsWithNoAutomaticCorrection"
+msgstr ""
+
+msgid "There are no pending tests."
+msgstr ""
+
+msgid "%s results"
+msgstr ""
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr ""
+
+msgid "Removed"
+msgstr ""
+
+msgid "NoUsersInTheList"
+msgstr ""
+
+msgid "Are you sure?"
+msgstr ""
+
+msgid "NoResultsAvailable"
+msgstr ""
+
+msgid "Import groups from a CSV file and optionally remove items that are not present in the file."
+msgstr ""
+
+msgid "Use this option carefully because items missing from the CSV can be removed during the import process."
+msgstr ""
+
+msgid "Upload a CSV file with the group data you want to import."
+msgstr ""
+
+msgid "You can download the example file to use the expected format."
+msgstr ""
+
+msgid "If you enable deletion, items not present in the file may be removed."
+msgstr ""
+
+msgid "The CSV file is mandatory to start the import."
+msgstr ""
+
+msgid "Please select at least one class."
+msgstr ""
+
+msgid "Define the properties for each group before creating them."
+msgstr ""
+
+msgid "Apply the first row values"
+msgstr ""
+
+msgid "Create groups manually or generate them from the classes subscribed to this course."
+msgstr ""
+
+msgid "Create manual groups"
+msgstr ""
+
+msgid "Use this form when you want to create empty course groups manually."
+msgstr ""
+
+msgid "Configure manual groups"
+msgstr ""
+
+msgid "Create groups from subscribed classes"
+msgstr ""
+
+msgid "Use this form when you want to create one course group for each selected class."
+msgstr ""
+
+msgid "Keep created groups linked to their source classes"
+msgstr ""
+
+msgid "Create groups from selected classes"
+msgstr ""
+
+msgid "You must be logged in to access this page."
+msgstr ""
+
+msgid "Invalid user"
+msgstr ""
+
+msgid "UseCourseCustomCertificate"
+msgstr ""
+
+msgid "UseDefaultCustomCertificate"
+msgstr ""
+
+msgid "CertificateSetting"
+msgstr ""
+
+msgid "SelectOneOptionBeforeOpeningEditor"
+msgstr ""
+
+msgid "ChooseCustomCertificateModeHelp"
+msgstr ""
+
+msgid "CertificateMode"
+msgstr ""
+
+msgid "Enable student to validate own attendance"
+msgstr ""
+
+msgid "Course block"
+msgstr ""
+
+msgid "Add custom content blocks to course footer regions."
+msgstr ""
+
+msgid "course_block_pre_footer"
+msgstr ""
+
+msgid "Before footer"
+msgstr ""
+
+msgid "course_block_footer_left"
+msgstr ""
+
+msgid "Footer left"
+msgstr ""
+
+msgid "course_block_footer_center"
+msgstr ""
+
+msgid "Footer center"
+msgstr ""
+
+msgid "course_block_footer_right"
+msgstr ""
+
+msgid "Footer right"
+msgstr ""
+
+msgid "SetNotification"
+msgstr ""
+
+msgid "CourseLegal"
+msgstr ""
+
+msgid "Certificates search is not available"
+msgstr ""
+
+msgid "It allows the acquisition of skills by subcategories"
+msgstr ""
+
+msgid "Allow skills by subcategories"
+msgstr ""
+
+msgid "Minimum score for skills"
+msgstr ""
+
+msgid "The gradebook table is hidden."
+msgstr ""
+
+msgid "Invalid token"
+msgstr ""
+
+msgid "Unable to save the item"
+msgstr ""
+
+msgid "Only HTTP and HTTPS URLs are allowed."
+msgstr ""
+
+msgid "Invalid URL host."
+msgstr ""
+
+msgid "This cloud provider is not allowed."
+msgstr ""
+
+msgid "Documents used"
+msgstr ""
+
+msgid "No document usage"
+msgstr ""
+
+msgid "Invalid action."
+msgstr ""
+
+msgid "No users selected."
+msgstr ""
+
+msgid "%s user(s) processed."
+msgstr ""
+
+msgid "Invalid CSRF token."
+msgstr ""
+
+msgid "[%s] Please change your password"
+msgstr ""
+
+msgid "Dear %s,\n\nOur security enforcing process shows you use a password that is commonly used on the internet, which means your account could easily be stolen. It is probably a simple sequence or a very common word, we don't really know (we cannot see your password), but we ask you to please connect to the platform and request a password change. You can follow the link here: %s to do that now.\n\nPlease note we will never ask for your password in this process. You just enter your username or e-mail and we send you a link. If you are asked to introduce your existing password to do that, someone is probably trying to do Phishing on your account. Be safe, change your password now!\n\n%s\n%s"
+msgstr ""
+
+msgid "[%s] Your password has been reset"
+msgstr ""
+
+msgid "Dear %s,\n\nOur security enforcing process flagged you as using a password that is commonly used on the internet, which means your account could easily be stolen. As a prevention measure, we have decided to initiate a password reset process. Your new, automatically generated password is now:\n\n%s\n\nPlease login to the platform soon (using this new password) to set your own, personal and secure, password.\n\nBe safe.\n\n%s\n%s"
+msgstr ""
+
+msgid "Signature saved successfully"
+msgstr ""
+
+msgid "Invalid request payload."
+msgstr ""
+
+msgid "Authentication required."
+msgstr ""
+
+msgid "The course title is required."
+msgstr ""
+
+msgid "Only trainers and administrators can create courses."
+msgstr "ມີພຽງແຕ່ຜູ້ຝຶກອົບຮົມ ແລະ ຜູ້ເບິ່ງແຍງລະບົບເທົ່ານັ້ນທີ່ສາມາດສ້າງຫຼັກສູດໄດ້."
+
+msgid "Course creation by trainers is disabled on this platform."
+msgstr "ການສ້າງຫຼັກສູດໂດຍຜູ້ຝຶກອົບຮົມຖືກປິດໃຊ້ງານໃນແພລດຟອມນີ້."
+
+msgid "The selected BuyCourses service cannot be used to create this course."
+msgstr "ບໍລິການ BuyCourses ທີ່ເລືອກບໍ່ສາມາດໃຊ້ສ້າງຫຼັກສູດນີ້ໄດ້."
+
+msgid "You have reached the maximum number of courses allowed (%d)."
+msgstr "ທ່ານໄດ້ຮອດຈຳນວນຫຼັກສູດສູງສຸດທີ່ອະນຸຍາດໄດ້ (%d)."
+
+msgid "The selected BuyCourses service is invalid."
+msgstr "ບໍລິການ BuyCourses ທີ່ເລືອກບໍ່ຖືກຕ້ອງ."
+
+msgid "BuyCourses is not available right now."
+msgstr "BuyCourses ບໍ່ສາມາດໃຊ້ງານໄດ້ໃນຂະນະນີ້."
+
+msgid "BuyCourses cannot validate the selected service right now."
+msgstr "BuyCourses ບໍ່ສາມາດກວດສອບບໍລິການທີ່ເລືອກໄດ້ໃນຂະນະນີ້."
+
+msgid "Unable to validate the selected BuyCourses service right now."
+msgstr "ບໍ່ສາມາດກວດສອບບໍລິການ BuyCourses ທີ່ເລືອກໄດ້ໃນຂະນະນີ້."
+
+msgid "External tool removed from course"
+msgstr "ເຄື່ອງມືພາຍນອກຖືກລຶບອອກຈາກຫຼັກສູດແລ້ວ"
+
+msgid "External tool was removed from the course, but kept internally because it is linked to the gradebook"
+msgstr "ເຄື່ອງມືພາຍນອກຖືກລຶບອອກຈາກຫຼັກສູດແລ້ວ ແຕ່ຍັງຖືກເກັບໄວ້ພາຍໃນເນື່ອງຈາກມັນເຊື່ອມຕໍ່ກັບບັນຊີຄະແນນ"
+
+msgid "There are no external tools available to add to the gradebook"
+msgstr "ບໍ່ມີເຄື່ອງມືພາຍນອກທີ່ສາມາດເພີ່ມໃສ່ບັນຊີຄະແນນໄດ້"
+
+msgid "The evaluation could not be created"
+msgstr "ບໍ່ສາມາດສ້າງການປະເມີນຜົນໄດ້"
+
+msgid "The gradebook evaluation could not be linked"
+msgstr "ບໍ່ສາມາດເຊື່ອມຕໍ່ການປະເມີນຜົນບັນຊີຄະແນນໄດ້"
 

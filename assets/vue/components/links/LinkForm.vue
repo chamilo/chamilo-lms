@@ -134,9 +134,11 @@ import "@uppy/image-editor/dist/style.css"
 import Uppy from "@uppy/core"
 import ImageEditor from "@uppy/image-editor"
 import { Dashboard } from "@uppy/vue"
+import { useUppyLocale } from "../../composables/uppyLocale"
 
 const notification = useNotification()
 const { t } = useI18n()
+const { uppyLocale } = useUppyLocale()
 const router = useRouter()
 const route = useRoute()
 const selectedFile = ref(null)
@@ -156,6 +158,7 @@ const currentPreviewImage = computed(() => {
 const uppy = new Uppy({
   restrictions: { maxNumberOfFiles: 1, allowedFileTypes: ["image/*"] },
   autoProceed: false,
+  locale: uppyLocale.value,
   debug: false,
 })
   .use(ImageEditor, {

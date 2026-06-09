@@ -92,6 +92,72 @@
     )
   }
 
+  function isGlobalCopyPasteDisabled() {
+    const chamilo = window.Chamilo || {}
+    const settings = chamilo.settings || {}
+    const editor = chamilo.editor || {}
+
+    return (
+      toBool(window.CH_DISABLE_COPY_PASTE) ||
+      toBool(settings.disableCopyPaste) ||
+      toBool(editor.disableCopyPaste)
+    )
+  }
+
+  function applyGlobalEditorFeatureFlags(features) {
+    const nextFeatures = Object.assign({}, features || {})
+
+    if (isGlobalCopyPasteDisabled()) {
+      nextFeatures.disableCopyPaste = true
+    }
+
+    return nextFeatures
+  }
+
+  function patchTinyMceInit() {
+    const tinymce = window.tinymce || window.tinyMCE
+
+    if (!tinymce || tinymce.__chamiloPatched || typeof tinymce.init !== "function") {
+      return false
+    }
+
+    const originalInit = tinymce.init.bind(tinymce)
+    tinymce.__chamiloPatched = true
+
+    tinymce.init = function (config) {
+      let nextConfig = config || {}
+
+      if (window.buildTinyMceConfig && typeof window.buildTinyMceConfig === "function") {
+        try {
+          nextConfig = window.buildTinyMceConfig(nextConfig)
+        } catch (e) {
+          // Ignore optional TinyMCE config merge errors.
+        }
+      }
+
+      return originalInit(nextConfig)
+    }
+
+    return true
+  }
+
+  function scheduleTinyMceInitPatch() {
+    let attempts = 0
+    const maxAttempts = 80
+
+    const tryPatch = function () {
+      attempts += 1
+
+      if (patchTinyMceInit() || attempts >= maxAttempts) {
+        return
+      }
+
+      window.setTimeout(tryPatch, 250)
+    }
+
+    tryPatch()
+  }
+
   function removePlugins(plugins, namesToRemove) {
     const removeSet = new Set((namesToRemove || []).map((item) => String(item).trim()).filter(Boolean))
     return normalizePlugins(plugins)
@@ -224,6 +290,7 @@
     const flags = features || {}
 
     const isLearner = toBool(flags.isLearner)
+    const disableCopyPaste = toBool(flags.disableCopyPaste)
     const blockCopyPasteForStudents = toBool(flags.blockCopyPasteForStudents)
     const youtubeForStudents = toBool(flags.youtubeForStudents)
     const enabledInsertHtml = toBool(flags.enabledInsertHtml)
@@ -285,11 +352,22 @@
 
     config.setup = wrapSetup(config.setup, svgPolicySetup)
 
-    if (isLearner && blockCopyPasteForStudents) {
+    if (disableCopyPaste || (isLearner && blockCopyPasteForStudents)) {
       config.paste_block_drop = true
 
       const policySetup = function (editor) {
+        const guardKey = "__chamiloCopyPasteBlockerAttached"
         const blockedMessage = "Copy and paste is disabled in this editor."
+        const blockedShortcutKeys = new Set(["c", "x", "v"])
+        const blockedClipboardEvents = ["paste", "drop", "copy", "cut", "contextmenu"]
+
+        if (editor && editor[guardKey]) {
+          return
+        }
+
+        if (editor) {
+          editor[guardKey] = true
+        }
 
         const notifyBlockedAction = function () {
           try {
@@ -321,33 +399,56 @@
           return false
         }
 
-        editor.on("BeforeExecCommand", function (event) {
-          const command = String(event?.command || "").toLowerCase()
+        const getPressedKey = function (event) {
+          const key = String(event?.key || "").toLowerCase()
 
-          if (["paste", "copy", "cut"].includes(command)) {
-            preventEditorAction(event)
+          if (key) {
+            return key
           }
-        })
 
-        editor.on("init", function () {
+          const keyCode = event?.keyCode || event?.which || 0
+
+          return String.fromCharCode(keyCode).toLowerCase()
+        }
+
+        const isBlockedShortcut = function (event) {
+          if (!event?.ctrlKey && !event?.metaKey) {
+            return false
+          }
+
+          return blockedShortcutKeys.has(getPressedKey(event))
+        }
+
+        const attachEditorDocumentBlockers = function () {
           try {
             const doc = editor.getDoc()
 
-            if (!doc) {
+            if (!doc || doc.__chamiloTinyCopyPasteDocumentBlockerAttached) {
               return
             }
 
-            doc.addEventListener("paste", preventEditorAction, true)
-            doc.addEventListener("drop", preventEditorAction, true)
-            doc.addEventListener("copy", preventEditorAction, true)
-            doc.addEventListener("cut", preventEditorAction, true)
+            doc.__chamiloTinyCopyPasteDocumentBlockerAttached = true
+
+            blockedClipboardEvents.forEach(function (eventName) {
+              doc.addEventListener(eventName, preventEditorAction, true)
+            })
+
+            doc.addEventListener(
+              "keydown",
+              function (event) {
+                if (isBlockedShortcut(event)) {
+                  preventEditorAction(event)
+                }
+              },
+              true,
+            )
 
             doc.addEventListener(
               "beforeinput",
               function (event) {
                 const inputType = String(event?.inputType || "")
 
-                if (["insertFromPaste", "insertFromDrop"].includes(inputType)) {
+                if (inputType.startsWith("insertFromPaste") || inputType.startsWith("insertFromDrop")) {
                   preventEditorAction(event)
                 }
               },
@@ -356,7 +457,32 @@
           } catch (e) {
             // Ignore
           }
+        }
+
+        editor.on("BeforeExecCommand", function (event) {
+          const command = String(event?.command || "").toLowerCase()
+
+          if (command.includes("paste") || command.includes("copy") || command.includes("cut")) {
+            preventEditorAction(event)
+          }
         })
+
+        editor.on("PastePreProcess", function (event) {
+          if (event) {
+            event.content = ""
+          }
+
+          preventEditorAction(event)
+        })
+
+        editor.on("keydown", function (event) {
+          if (isBlockedShortcut(event)) {
+            preventEditorAction(event)
+          }
+        })
+
+        editor.on("init", attachEditorDocumentBlockers)
+        attachEditorDocumentBlockers()
       }
 
       config.setup = wrapSetup(config.setup, policySetup)
@@ -463,7 +589,7 @@
   window.buildTinyMceConfig = function (local) {
     var base = window.CHAMILO_TINYMCE_BASE_CONFIG || {}
     var localConfig = Object.assign({}, local || {})
-    var features = Object.assign({}, localConfig.chamiloEditorFeatures || {})
+    var features = applyGlobalEditorFeatureFlags(localConfig.chamiloEditorFeatures || {})
 
     delete localConfig.chamiloEditorFeatures
 
@@ -513,4 +639,5 @@
 
     return merged
   }
+  scheduleTinyMceInitPatch()
 })()

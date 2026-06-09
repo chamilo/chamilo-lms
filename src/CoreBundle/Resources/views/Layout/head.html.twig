@@ -42,12 +42,99 @@
     {% set profile_link = '' %}
     {% set message_link = '' %}
 
-    {# Global flag for the AI disclosure feature (used by legacy + Vue + Twig pages). #}
+    {# Global feature flags shared by legacy, Vue and theme-level JavaScript. #}
     {% set ai_disclosure_raw = chamilo_settings_get('ai_helpers.disclose_ai_assistance')|default('')|trim|lower %}
     {% set ai_disclosure_enabled = ai_disclosure_raw in ['true', '1', 'yes', 'on', 'enabled'] %}
+    {% set disable_copy_paste_raw = chamilo_settings_get('platform.disable_copy_paste')|default('')|trim|lower %}
+    {% set disable_copy_paste_enabled = disable_copy_paste_raw in ['true', '1', 'yes', 'on', 'enabled'] %}
 
     <script>
       window.CH_AI_DISCLOSURE_ENABLED = {{ ai_disclosure_enabled ? 'true' : 'false' }};
+      window.CH_DISABLE_COPY_PASTE = {{ disable_copy_paste_enabled ? 'true' : 'false' }};
+      window.Chamilo = window.Chamilo || {};
+      window.Chamilo.settings = window.Chamilo.settings || {};
+      window.Chamilo.editor = window.Chamilo.editor || {};
+      window.Chamilo.settings.disableCopyPaste = window.CH_DISABLE_COPY_PASTE;
+      window.Chamilo.editor.disableCopyPaste = window.CH_DISABLE_COPY_PASTE;
+
+      (function () {
+        "use strict";
+
+        if (!window.CH_DISABLE_COPY_PASTE || window.__chamiloGlobalCopyPasteBlockerAttached) {
+          return;
+        }
+
+        window.__chamiloGlobalCopyPasteBlockerAttached = true;
+
+        var blockedKeys = ["c", "x", "v", "p", "s"];
+        var blockedEvents = ["cut", "copy", "paste", "drop", "contextmenu"];
+
+        function preventAction(event) {
+          if (event && typeof event.preventDefault === "function") {
+            event.preventDefault();
+          }
+
+          if (event && typeof event.stopPropagation === "function") {
+            event.stopPropagation();
+          }
+
+          if (event && typeof event.stopImmediatePropagation === "function") {
+            event.stopImmediatePropagation();
+          }
+
+          return false;
+        }
+
+        function getPressedKey(event) {
+          var key = String((event && event.key) || "").toLowerCase();
+
+          if (key) {
+            return key;
+          }
+
+          var keyCode = (event && (event.keyCode || event.which)) || 0;
+
+          return String.fromCharCode(keyCode).toLowerCase();
+        }
+
+        function isBlockedShortcut(event) {
+          if (!event || (!event.ctrlKey && !event.metaKey)) {
+            return false;
+          }
+
+          return blockedKeys.indexOf(getPressedKey(event)) !== -1;
+        }
+
+        function isBlockedInput(event) {
+          var inputType = String((event && event.inputType) || "");
+
+          return inputType.indexOf("insertFromPaste") === 0 || inputType.indexOf("insertFromDrop") === 0;
+        }
+
+        blockedEvents.forEach(function (eventName) {
+          document.addEventListener(eventName, preventAction, true);
+        });
+
+        document.addEventListener(
+          "keydown",
+          function (event) {
+            if (isBlockedShortcut(event)) {
+              preventAction(event);
+            }
+          },
+          true
+        );
+
+        document.addEventListener(
+          "beforeinput",
+          function (event) {
+            if (isBlockedInput(event)) {
+              preventAction(event);
+            }
+          },
+          true
+        );
+      })();
     </script>
 
     {%- block stylesheets %}

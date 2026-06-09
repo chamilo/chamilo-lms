@@ -47,6 +47,12 @@ if (isset($_GET['course_id'])) {
 $event = $agenda->get_event($id);
 $charset = api_get_system_encoding();
 
+// Only allow redirects back to a local Chamilo URL: the Referer is attacker-controlled
+// and would otherwise enable an open redirect. Fall back to the portal root.
+$webPath = api_get_path(WEB_PATH);
+$referer = $_SERVER['HTTP_REFERER'] ?? '';
+$redirectUrl = (is_string($referer) && 0 === strpos($referer, $webPath)) ? $referer : $webPath;
+
 if (!empty($event)) {
     define('ICAL_LANG', api_get_language_isocode());
 
@@ -79,7 +85,7 @@ if (!empty($event)) {
         case 'platform':
             $vevent->setSummary(api_convert_encoding($event['title'], 'UTF-8', $charset));
             if (empty($event['start_date'])) {
-                header('location:'.Security::remove_XSS($_SERVER['HTTP_REFERER']));
+                header('location:'.$redirectUrl);
                 exit;
             }
             list($y, $m, $d, $h, $M, $s) = preg_split('/[\s:-]/', $event['start_date']);
@@ -114,7 +120,7 @@ if (!empty($event)) {
         case 'course':
             $vevent->setSummary(api_convert_encoding($event['title'], 'UTF-8', $charset));
             if (empty($event['start_date'])) {
-                header('location:'.Security::remove_XSS($_SERVER['HTTP_REFERER']));
+                header('location:'.$redirectUrl);
             }
             list($y, $m, $d, $h, $M, $s) = preg_split('/[\s:-]/', $event['start_date']);
             $vevent->setDtstart(
@@ -155,10 +161,10 @@ if (!empty($event)) {
             $ical->returnCalendar();
             break;
         default:
-            header('location:'.Security::remove_XSS($_SERVER['HTTP_REFERER']));
+            header('location:'.$redirectUrl);
             exit();
     }
 } else {
-    header('location:'.Security::remove_XSS($_SERVER['HTTP_REFERER']));
+    header('location:'.$redirectUrl);
     exit;
 }

@@ -312,6 +312,20 @@ class CourseRestorer
         $path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
         $originalFolderNameList = [];
         foreach ($resources[RESOURCE_DOCUMENT] as $id => $document) {
+            // Security: $document->path comes from the imported backup archive,
+            // which may have been tampered with. Reject path traversal and any
+            // path that escapes the "document" sub-tree, and neutralize
+            // executable filenames, to prevent a crafted backup from writing an
+            // arbitrary (e.g. PHP) file and achieving remote code execution.
+            if (!is_string($document->path)
+                || 0 !== strpos($document->path, 'document')
+                || false !== strpos($document->path, '..')
+                || false !== strpos($document->path, "\0")
+            ) {
+                continue;
+            }
+            $document->path = disable_dangerous_file($document->path);
+
             $my_session_id = empty($document->item_properties[0]['session_id']) ? 0 : $session_id;
 
             if (false === $respect_base_content && $session_id) {

@@ -41,17 +41,51 @@ Display::display_header($nameTools);
 echo Display::page_header($nameTools);
 $action = isset($_POST['action']) ? $_POST['action'] : '';
 $exportOption = isset($_POST['export_option']) ? $_POST['export_option'] : '';
+$debugMoodleExport = MoodleExport::isDebugEnabled();
+MoodleExport::registerDebugShutdownHandler();
+
+if ($debugMoodleExport) {
+    MoodleExport::debugStaticLog('Debug mode enabled from MoodleExport::$debugEnabled', [
+        'script' => 'export_moodle.php',
+        'course_id' => api_get_course_id(),
+        'course_code' => api_get_course_id(),
+        'cidreq' => api_get_cidreq(),
+        'request_method' => $_SERVER['REQUEST_METHOD'] ?? '',
+        'post_action' => $action,
+        'export_option' => $exportOption,
+        'post_keys' => array_keys($_POST),
+        'content_length' => $_SERVER['CONTENT_LENGTH'] ?? '',
+        'debug_file' => MoodleExport::getDebugFilePath(),
+    ]);
+}
 
 // Handle course selection form submission
+MoodleExport::debugStaticLog('Checking export form branch', [
+    'action' => $action,
+    'has_post_token' => isset($_POST['sec_token']),
+]);
+
 if ($action === 'course_select_form' && Security::check_token('post')) {
+    MoodleExport::debugStaticLog('Course selection form submitted');
+
     // Handle the selected resources and continue with export
     $selectedResources = $_POST['resource'] ?? null;
+    MoodleExport::debugStaticLog('Selected resources received', [
+        'resource_groups' => is_array($selectedResources) ? count($selectedResources) : 0,
+    ]);
 
     if (!empty($selectedResources)) {
         // Rebuild the course object based on selected resources
+        MoodleExport::debugStaticLog('Building partial course from selected resources');
         $cb = new CourseBuilder('partial');
         $course = $cb->build(0, null, false, array_keys($selectedResources), $selectedResources);
+        MoodleExport::restoreMainDatabaseConnection();
+        MoodleExport::debugStaticLog('Partial course from selected resources built');
+
+        MoodleExport::debugStaticLog('Normalizing posted course selection');
         $course = CourseSelectForm::get_posted_course(null, 0, '', $course);
+        MoodleExport::restoreMainDatabaseConnection();
+        MoodleExport::debugStaticLog('Posted course selection normalized');
 
         // Get admin details
         $adminId = (int) $_POST['admin_id'];
@@ -67,15 +101,32 @@ if ($action === 'course_select_form' && Security::check_token('post')) {
             exit();
         }
 
+        MoodleExport::debugStaticLog('Creating MoodleExport instance for selected resources');
         $exporter = new MoodleExport($course);
+        MoodleExport::debugStaticLog('MoodleExport instance created for selected resources');
+
         $exporter->setAdminUserData($adminId, $adminUsername, $adminEmail);
+        MoodleExport::debugStaticLog('Admin user data configured', [
+            'admin_id' => $adminId,
+            'admin_username' => $adminUsername,
+            'admin_email' => $adminEmail,
+        ]);
 
         // Perform export
         $courseId = api_get_course_id();
         $exportDir = 'moodle_export_'.$courseId;
         try {
             $moodleVersion = isset($_POST['moodle_version']) ? (int) $_POST['moodle_version'] : 3;
+            MoodleExport::debugStaticLog('Starting selected resources Moodle export', [
+                'course_id' => $courseId,
+                'export_dir' => $exportDir,
+                'moodle_version' => $moodleVersion,
+            ]);
+
             $mbzFile = $exporter->export($courseId, $exportDir, $moodleVersion);
+            MoodleExport::debugStaticLog('Selected resources Moodle export finished', [
+                'mbz_file' => $mbzFile,
+            ]);
 
             echo Display::return_message(get_lang('MoodleExportCreated'), 'confirm');
             echo '<br />';
@@ -84,7 +135,14 @@ if ($action === 'course_select_form' && Security::check_token('post')) {
                 api_get_path(WEB_CODE_PATH).'course_info/download.php?archive_path=1&archive='.basename($mbzFile).'&'.api_get_cidreq(),
                 ['class' => 'btn btn-primary btn-large']
             );
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
+            MoodleExport::restoreMainDatabaseConnection();
+
+            if ($debugMoodleExport) {
+                error_log('[MoodleExport] Export failed: '.$e->getMessage().' in '.$e->getFile().':'.$e->getLine());
+                error_log('[MoodleExport] Stack trace: '.$e->getTraceAsString());
+            }
+
             echo Display::return_message(get_lang('ErrorCreatingExport').': '.$e->getMessage(), 'error');
         }
         exit();
@@ -92,11 +150,14 @@ if ($action === 'course_select_form' && Security::check_token('post')) {
         echo Display::return_message(get_lang('NoResourcesSelected'), 'warning');
     }
 } else {
+    MoodleExport::debugStaticLog('Displaying initial export form or processing initial form submission');
+
     $form = new FormValidator(
         'create_export_form',
         'post',
         api_get_self().'?'.api_get_cidreq()
     );
+
     $form->addElement('radio', 'export_option', '', get_lang('CreateFullBackup'), 'full_export');
     $form->addElement('radio', 'export_option', '', get_lang('LetMeSelectItems'), 'select_items');
     $form->addElement('select', 'moodle_version', get_lang('MoodleVersion'), [
@@ -119,27 +180,59 @@ if ($action === 'course_select_form' && Security::check_token('post')) {
 
     // Add buttons
     $form->addButtonSave(get_lang('CreateExport'));
-    $form->addProgress();
+    MoodleExport::debugStaticLog('Initial export form built');
+    MoodleExport::debugStaticLog('Initial export form validate call started');
+    $isInitialExportFormValid = $form->validate();
+    MoodleExport::debugStaticLog('Initial export form validate call finished', [
+        'is_valid' => $isInitialExportFormValid,
+    ]);
 
-    if ($form->validate()) {
+    if ($isInitialExportFormValid) {
+        MoodleExport::debugStaticLog('Initial export form validated');
+
         $values = $form->exportValues();
+        MoodleExport::debugStaticLog('Initial export form values exported', [
+            'export_option' => (string) ($values['export_option'] ?? ''),
+            'moodle_version' => (string) ($values['moodle_version'] ?? ''),
+        ]);
         $adminId = (int) $values['admin_id'];
         $adminUsername = $values['admin_username'];
         $adminEmail = $values['admin_email'];
 
         if ($values['export_option'] === 'full_export') {
+            MoodleExport::debugStaticLog('Full export selected, building complete course');
             $cb = new CourseBuilder('complete');
             $course = $cb->build();
+            MoodleExport::restoreMainDatabaseConnection();
+            MoodleExport::debugStaticLog('Complete course built for full export');
 
+            MoodleExport::debugStaticLog('Creating MoodleExport instance for full export');
             $exporter = new MoodleExport($course);
+            MoodleExport::debugStaticLog('MoodleExport instance created for full export');
+
             $exporter->setAdminUserData($adminId, $adminUsername, $adminEmail);
+            MoodleExport::debugStaticLog('Admin user data configured', [
+                'admin_id' => $adminId,
+                'admin_username' => $adminUsername,
+                'admin_email' => $adminEmail,
+            ]);
 
             $courseId = api_get_course_id();  // Get course ID
             $exportDir = 'moodle_export_'.$courseId;
 
             try {
-                $moodleVersion = $values['moodle_version'] ?? '3';
+                $moodleVersion = isset($values['moodle_version']) ? (int) $values['moodle_version'] : 3;
+                MoodleExport::debugStaticLog('Starting full Moodle export', [
+                    'course_id' => $courseId,
+                    'export_dir' => $exportDir,
+                    'moodle_version' => $moodleVersion,
+                ]);
+
                 $mbzFile = $exporter->export($courseId, $exportDir, $moodleVersion);
+                MoodleExport::debugStaticLog('Full Moodle export finished', [
+                    'mbz_file' => $mbzFile,
+                ]);
+
                 echo Display::return_message(get_lang('MoodleExportCreated'), 'confirm');
                 echo '<br />';
                 echo Display::url(
@@ -147,14 +240,25 @@ if ($action === 'course_select_form' && Security::check_token('post')) {
                     api_get_path(WEB_CODE_PATH).'course_info/download.php?archive_path=1&archive='.basename($mbzFile).'&'.api_get_cidreq(),
                     ['class' => 'btn btn-primary btn-large']
                 );
-            } catch (Exception $e) {
+            } catch (Throwable $e) {
+                if ($debugMoodleExport) {
+                    error_log('[MoodleExport] Export failed: '.$e->getMessage().' in '.$e->getFile().':'.$e->getLine());
+                    error_log('[MoodleExport] Stack trace: '.$e->getTraceAsString());
+                }
+
                 echo Display::return_message(get_lang('ErrorCreatingExport').': '.$e->getMessage(), 'error');
             }
         } elseif ($values['export_option'] === 'select_items') {
             // Partial export - go to the item selection step
+            MoodleExport::debugStaticLog('Select items selected, building partial course for resource selection form');
             $cb = new CourseBuilder('partial');
             $course = $cb->build();
+            MoodleExport::restoreMainDatabaseConnection();
+            MoodleExport::debugStaticLog('Partial course built for resource selection form');
+
             if ($course->has_resources()) {
+                MoodleExport::debugStaticLog('Partial course has resources, rendering resource selection form');
+
                 // Add token to Course select form
                 $hiddenFields['sec_token'] = Security::get_token();
                 $hiddenFields['admin_id'] = $adminId;
@@ -162,18 +266,27 @@ if ($action === 'course_select_form' && Security::check_token('post')) {
                 $hiddenFields['admin_email'] = $adminEmail;
 
                 CourseSelectForm::display_form($course, $hiddenFields, false, true);
+                MoodleExport::debugStaticLog('Resource selection form rendered');
             } else {
+                MoodleExport::debugStaticLog('Partial course has no resources');
                 echo Display::return_message(get_lang('NoResourcesToExport'), 'warning');
             }
         }
     } else {
+        MoodleExport::debugStaticLog('Initial export form not submitted or not valid, rendering form');
+
         echo '<div class="row">';
         echo '<div class="col-md-12">';
         echo '<div class="tool-export">';
+        MoodleExport::debugStaticLog('Initial export form display started');
         $form->display();
+        MoodleExport::debugStaticLog('Initial export form display finished');
+        echo '</div>';
         echo '</div>';
         echo '</div>';
     }
 }
 
+MoodleExport::debugStaticLog('Displaying page footer');
 Display::display_footer();
+MoodleExport::debugStaticLog('Page footer displayed');

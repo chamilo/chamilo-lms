@@ -136,6 +136,12 @@ readonly class AzureAuthenticatorHelper
             // If no language was set by EntraID *and* we already had the user
             // with a language set, use that one
             $user->setLocale($existingLanguage);
+        } else {
+            // New user with no language from EntraID: fall back to platform default
+            $platformLocale = $this->languageHelper->getPlatformDefaultIso();
+            if (!empty($platformLocale)) {
+                $user->setLocale($platformLocale);
+            }
         }
 
         $this->userRepository->updateUser($user);

@@ -117,10 +117,11 @@ function ldap_find_user_info($login)
             // Search surname entry
             //OLD: $sr=ldap_search($ldapconnect,"dc=rug, dc=ac, dc=be", "uid=$login");
             //echo "<p> ldapDc = '$LDAPbasedn' </p>";
+            $loginFilter = ldap_escape($login, "", LDAP_ESCAPE_FILTER);
             if (!empty($ldap_search_dn)) {
-                $sr = ldap_search($ldap_connect, $ldap_search_dn, "uid=$login");
+                $sr = ldap_search($ldap_connect, $ldap_search_dn, "uid=$loginFilter");
             } else {
-                $sr = ldap_search($ldap_connect, $ldap_basedn, "uid=$login");
+                $sr = ldap_search($ldap_connect, $ldap_basedn, "uid=$loginFilter");
             }
             //echo " Search result is ".$sr;
             //echo " Number of entries returned is ".ldap_count_entries($ldapconnect,$sr);
@@ -272,7 +273,8 @@ function ldap_authentication_check($uname, $passwd)
     if ($ds !== false) {
         //Creation of filter containing values input by the user
         // Here it might be necessary to use $filter="(samaccountName=$uname)"; - see http://support.chamilo.org/issues/4675
-        $filter = "(uid=$uname)";
+        $unameFilter = ldap_escape($uname, "", LDAP_ESCAPE_FILTER);
+        $filter = "(uid=$unameFilter)";
         // Open anonymous LDAP connection
         $result = false;
         $ldap_bind_res = ldap_handle_bind($ds, $result);
@@ -371,10 +373,13 @@ function ldap_get_users()
 {
     global $ldap_basedn, $ldap_host, $ldap_port, $ldap_rdn, $ldap_pass, $ldap_search_dn, $extldap_user_correspondance;
 
-    $keyword_firstname = isset($_GET['keyword_firstname']) ? trim(Database::escape_string($_GET['keyword_firstname'])) : '';
-    $keyword_lastname = isset($_GET['keyword_lastname']) ? trim(Database::escape_string($_GET['keyword_lastname'])) : '';
-    $keyword_username = isset($_GET['keyword_username']) ? trim(Database::escape_string($_GET['keyword_username'])) : '';
-    $keyword_type = isset($_GET['keyword_type']) ? Database::escape_string($_GET['keyword_type']) : '';
+    // These values are interpolated into LDAP filters, so they must be escaped
+    // with ldap_escape() (LDAP_ESCAPE_FILTER); SQL escaping does not neutralize
+    // LDAP metacharacters and would corrupt the search.
+    $keyword_firstname = isset($_GET['keyword_firstname']) ? ldap_escape(trim($_GET['keyword_firstname']), "", LDAP_ESCAPE_FILTER) : '';
+    $keyword_lastname = isset($_GET['keyword_lastname']) ? ldap_escape(trim($_GET['keyword_lastname']), "", LDAP_ESCAPE_FILTER) : '';
+    $keyword_username = isset($_GET['keyword_username']) ? ldap_escape(trim($_GET['keyword_username']), "", LDAP_ESCAPE_FILTER) : '';
+    $keyword_type = isset($_GET['keyword_type']) ? ldap_escape($_GET['keyword_type'], "", LDAP_ESCAPE_FILTER) : '';
 
     $ldap_query = [];
 

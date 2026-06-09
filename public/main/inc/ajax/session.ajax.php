@@ -143,6 +143,8 @@ switch ($action) {
         }
         break;
     case 'session_info':
+        SessionManager::protectSession(null, false);
+        api_protect_limit_for_session_admin();
         $sessionId = $_GET['session_id'] ?? '';
         $sessionInfo = api_get_session_info($sessionId);
         // Close the session as we don't need it any further
@@ -173,6 +175,11 @@ switch ($action) {
         }
         break;
     case 'get_description':
+        // Session descriptions are only public when the catalog itself is published;
+        // otherwise the caller must be authenticated (same gate as the catalog page).
+        if ('true' !== api_get_setting('catalog.course_catalog_published')) {
+            api_block_anonymous_users();
+        }
         if (isset($_GET['session'])) {
             $sessionInfo = api_get_session_info($_GET['session']);
             echo '<h2>'.$sessionInfo['name'].'</h2>';

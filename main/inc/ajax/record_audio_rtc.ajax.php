@@ -36,6 +36,30 @@ if (!isset($_FILES['audio_blob'], $_REQUEST['audio_dir'])) {
 }
 
 $file = isset($_FILES['audio_blob']) ? $_FILES['audio_blob'] : [];
+
+// Only allow audio uploads: sanitize the filename and reject any non-audio
+// extension (e.g. .html) so the result cannot be served as HTML/JS by
+// document.php (stored XSS). The RecordRTC StereoAudioRecorder only ever
+// produces WAV, so .wav is the single legitimate extension here.
+$fileName = disable_dangerous_file(api_replace_dangerous_char($file['name']));
+$fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+$allowedAudioExtensions = ['wav'];
+if (!in_array($fileExtension, $allowedAudioExtensions, true)) {
+    if ($tool === 'exercise') {
+        header('Content-Type: application/json');
+        echo json_encode([
+            'error' => true,
+            'message' => Display::return_message(get_lang('UploadError'), 'error'),
+        ]);
+
+        Display::cleanFlashMessages();
+        exit;
+    }
+
+    Display::addFlash(Display::return_message(get_lang('UploadError'), 'error'));
+    exit;
+}
+$file['name'] = $fileName;
 $file['file'] = $file;
 $audioDir = Security::remove_XSS($_REQUEST['audio_dir']);
 

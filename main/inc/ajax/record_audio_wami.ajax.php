@@ -39,6 +39,20 @@ $waminame = Database::escape_string($waminame);
 $waminame = api_replace_dangerous_char($waminame);
 $waminame = disable_dangerous_file($waminame);
 $wamidir = Security::remove_XSS($wamidir);
+
+// Neutralize path traversal: wamidir must be a relative path inside the course
+// document tree, so drop any traversal or absolute-path segments before it
+// reaches fopen()/DocumentManager::upload_document().
+$wamidir = str_replace("\\", "/", $wamidir);
+$cleanSegments = [];
+foreach (explode("/", $wamidir) as $segment) {
+    if ("" === $segment || "." === $segment || ".." === $segment) {
+        continue;
+    }
+    $cleanSegments[] = $segment;
+}
+$wamidir = empty($cleanSegments) ? "" : "/".implode("/", $cleanSegments);
+
 $content = file_get_contents('php://input');
 
 if (empty($content)) {

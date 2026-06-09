@@ -1014,15 +1014,37 @@ class CourseRestorer
                 return $this->resourceFileAbsPathFromDocument($srcDoc) ?: null;
             }
 
-            $p = $srcRoot.(string) $item->path;
-            if (is_file($p) && is_readable($p)) {
+            // Defense in depth against path traversal: $item->path comes from the
+            // deserialized backup metadata, so an authenticated user importing a tampered
+            // backup fully controls it. Only accept files that resolve *inside* the
+            // extraction root, so a forged path such as "../../../../etc/passwd" cannot
+            // read files outside the backup directory.
+            $containedRealPath = static function (string $root, string $relPath): ?string {
+                $rootReal = realpath(rtrim($root, '/'));
+                if (false === $rootReal) {
+                    return null;
+                }
+                $candidate = realpath($root.$relPath);
+                if (false === $candidate || !is_file($candidate) || !is_readable($candidate)) {
+                    return null;
+                }
+                $rootReal = rtrim($rootReal, '/').'/';
+                if (!str_starts_with($candidate, $rootReal)) {
+                    return null;
+                }
+
+                return $candidate;
+            };
+
+            $p = $containedRealPath((string) $srcRoot, (string) $item->path);
+            if (null !== $p) {
                 return $p;
             }
 
             $altRoot = rtrim((string) ($this->course->resources['__meta']['archiver_root'] ?? ''), '/').'/';
             if ($altRoot && $altRoot !== $srcRoot) {
-                $p2 = $altRoot.(string) $item->path;
-                if (is_file($p2) && is_readable($p2)) {
+                $p2 = $containedRealPath($altRoot, (string) $item->path);
+                if (null !== $p2) {
                     return $p2;
                 }
             }

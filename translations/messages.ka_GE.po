@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "პატივისცემით"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "ფორმულის ნიმუში: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "ფორმულის მაგალითი: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ცვლადის დიაპაზონები"
@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:საავტორო უფლება,, no:საავტორო უფლება არა"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:ფოლდერი,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ვარჯიში,,      simulation:სიმულაცია,,      questionnaire:ანკეტა,,      diagram:დიაგრამა,,      figure:ფიგურა,,      graph:გრაფიკი,,      index:ინდექსი,,      slide:სლაიდი,,      table:ცხრილი,,      narrative text:ნარატიული ტექსტი,,      exam:გამოცდა,,      experiment:ექსპერიმენტი,,      problem statement:პრობლემის ჩამონათვალი,,      self assessment:თვითშეფასება,,      lecture:ლექცია"
@@ -9726,6 +9726,9 @@ msgstr "ძიების შედეგები:"
 msgid "Select a file"
 msgstr "ფაილის შერჩევა"
 
+msgid "Select a file to insert into the editor."
+msgstr "აირჩიეთ ფაილი რედაქტორში ჩასასმელად."
+
 msgid "Warning - The FAQ file, located in the /home/ directory of your portal, is not writable. Your text will not be saved until the file permissions are changed."
 msgstr "გაფრთხილება - FAQ ფაილი, რომელიც მდებარეობს თქვენი პორტალის /home/ დირექტორიაში, არ არის ჩაწერადი. თქვენი ტექსტი არ შენახდება, სანამ ფაილის ნებართვები არ შეიცვლება."
 
@@ -15906,6 +15909,9 @@ msgstr "თარიღი და დრო"
 msgid "Item"
 msgstr "პირველადი"
 
+msgid "Items"
+msgstr "ელემენტები"
+
 msgid "Configure Dashboard Plugin"
 msgstr "Dashboard პლაგინის კონფიგურაცია"
 
@@ -17159,6 +17165,18 @@ msgstr "სესიები ჯგუფში"
 
 msgid "Courses in group"
 msgstr "კურსები ჯგუფში"
+
+msgid "Courses on the platform"
+msgstr "კურსები პლატფორმაზე"
+
+msgid "%s courses"
+msgstr "%s კურსი"
+
+msgid "%s sessions"
+msgstr "%s სესია"
+
+msgid "Search by title or code"
+msgstr "ძებნა სათაურით ან კოდით"
 
 msgid "Users in group"
 msgstr "მომხმარებლები ჯგუფში"
@@ -32163,6 +32181,9 @@ msgstr "შეკვეთა"
 msgid "Allowed file formats: %s"
 msgstr "ნებადართული ფაილის ფორმატები: %s"
 
+msgid "File manager"
+msgstr "ფაილების მენეჯერი"
+
 msgid "File type not allowed. Allowed extensions: %s"
 msgstr "ფაილის ტიპი არ არის ნებადართული. ნებადართული გაფართოებები: %s"
 
@@ -33876,6 +33897,2583 @@ msgstr "მოგესალმებით"
 msgid "Welcome to Chamilo"
 msgstr "მოგესალმებით Chamilo-ში"
 
+msgid "Check all unanswered questions below"
+msgstr "შეამოწმეთ ყველა უპასუხო კითხვა ქვემოთ"
+
 msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
 msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> თუ ეს არის თქვენი პირველი ჯერზე Chamilo-ს გამოყენება, დარწმუნდით რომ შეამოწმებთ გვერდით მენიუს მისი მრავალი ფუნქციის საპოვნელად. თუ დაგჭირდებათ დახმარება, <a href=\"https://docs.chamilo.org\"> ჩვენი ოფიციალური დოკუმენტაცია</a> დაგეხმარებათ სტანდარტული დოკუმენტაციისთვის, ხოლო ჩვენი <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">ონლაინ ფორუმი</a> დაგეხმარებათ იდეების გაზიარებასა და სხვა Chamilo მომხმარებლებისგან პასუხების მოძიებაში."
+
+msgid "Change password"
+msgstr "პაროლის შეცვლა"
+
+msgid "Newest first"
+msgstr "ჯერ უახლესი"
+
+msgid "Oldest first"
+msgstr "ჯერ უძველესი"
+
+msgid "Title A–Z"
+msgstr "სათაური A–Z"
+
+msgid "Title Z–A"
+msgstr "სათაური Z–A"
+
+msgid "Send test email"
+msgstr "სატესტო ელფოსტის გაგზავნა"
+
+msgid "Show teachers"
+msgstr "მასწავლებლების ჩვენება"
+
+msgid "Hide teachers"
+msgstr "მასწავლებლების დამალვა"
+
+msgid "Delete exercise attempts"
+msgstr "სავარჯიშოს მცდელობების წაშლა"
+
+msgid "Message sent successfully."
+msgstr "შეტყობინება წარმატებით გაიგზავნა."
+
+msgid "You cannot create a new course right now."
+msgstr "ახლა ახალი კურსის შექმნა შეუძლებელია."
+
+msgid "Unable to verify whether you can create a new course right now."
+msgstr "შეუძლებელია იმის დადგენა, შეგიძლიათ თუ არა ახლა ახალი კურსის შექმნა."
+
+msgid "Please try again later or contact the administrator."
+msgstr "გთხოვთ, სცადოთ მოგვიანებით ან დაუკავშირდეთ ადმინისტრატორს."
+
+msgid "You cannot create more courses at this time."
+msgstr "ამ დროს მეტი კურსის შექმნა შეუძლებელია."
+
+msgid "You already manage %d courses and your active service allows up to %d. To create another course, you need a higher service limit or reduce your current active courses."
+msgstr "თქვენ უკვე მართავთ %d კურსს და თქვენი აქტიური სერვისი იძლევა %d-მდე. სხვა კურსის შესაქმნელად საჭიროა უფრო მაღალი სერვისის ლიმიტი ან მიმდინარე აქტიური კურსების შემცირება."
+
+msgid "You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now."
+msgstr "თქვენ უკვე მართავთ %d კურსს და პლატფორმა ამჟამად იძლევა %d-მდე თქვენი ანგარიშისთვის. ახლა მეტი კურსის შექმნა შეუძლებელია."
+
+msgid "Add a class"
+msgstr "კლასის დამატება"
+
+msgid "Search classes"
+msgstr "კლასების ძებნა"
+
+msgid "No classes found"
+msgstr "კლასები ვერ მოიძებნა"
+
+msgid "Import classes"
+msgstr "კლასების იმპორტი"
+
+msgid "Class users"
+msgstr "კლასის მომხმარებლები"
+
+msgid "%s classes imported"
+msgstr "%s კლასი იმპორტირებულია"
+
+msgid "%s user-class links imported"
+msgstr "%s მომხმარებელი-კლასის კავშირი იმპორტირებულია"
+
+msgid "Hide comments"
+msgstr "კომენტარების დამალვა"
+
+msgid "Loading comments..."
+msgstr "კომენტარები იტვირთება..."
+
+msgid "No comments yet."
+msgstr "კომენტარები ჯერ არ არის."
+
+msgid "A user with this username already exists"
+msgstr "ამ მომხმარებლის სახელით უკვე არსებობს მომხმარებელი"
+
+msgid "Manage meetings, review recordings and update course-wide BBB settings from one place."
+msgstr "მართეთ შეხვედრები, გადახედეთ ჩანაწერებს და განაახლეთ კურსის BBB პარამეტრები ერთ ადგილას."
+
+msgid "Review the current defaults and propagate them to every course when needed."
+msgstr "გადახედეთ მიმდინარე ნაგულისხმევ პარამეტრებს და საჭიროებისამებრ გაავრცელეთ ისინი ყველა კურსზე."
+
+msgid "Filter the list by meeting date range."
+msgstr "გაფილტრეთ სია შეხვედრის თარიღების მიხედვით."
+
+msgid "Review meeting history, participants and recording actions."
+msgstr "გადახედეთ შეხვედრების ისტორიას, მონაწილეებს და ჩანაწერების მოქმედებებს."
+
+msgid "Participants"
+msgstr "მონაწილეები"
+
+msgid "CountUsers"
+msgstr "CountUsers"
+
+msgid "No data found"
+msgstr "მონაცემები ვერ მოიძებნა"
+
+msgid "My justifications"
+msgstr "ჩემი დასაბუთებები"
+
+msgid "My services"
+msgstr "ჩემი სერვისები"
+
+msgid "Extra menu"
+msgstr "დამატებითი მენიუ"
+
+msgid "Pending tests"
+msgstr "მიმდინარე ტესტები"
+
+msgid "No specific language"
+msgstr "კონკრეტული ენა არ არის"
+
+msgid "Source Chamilo version"
+msgstr "წყარო Chamilo ვერსია"
+
+msgid "Exporting..."
+msgstr "ექსპორტირება..."
+
+msgid "Autosaved drafts available"
+msgstr "ავტომატურად შენახული მონახაზები ხელმისაწვდომია"
+
+msgid "Hide drafts"
+msgstr "მონახაზების დამალვა"
+
+msgid "Show drafts"
+msgstr "მონახაზების ჩვენება"
+
+msgid "Drafts are stored only in this browser and are removed after saving the document."
+msgstr "მონახაზები ინახება მხოლოდ ამ ბრაუზერში და წაიშლება დოკუმენტის შენახვის შემდეგ."
+
+msgid "Last saved"
+msgstr "ბოლოს შენახული"
+
+msgid "Restore draft"
+msgstr "მონახაზის აღდგენა"
+
+msgid "Delete draft"
+msgstr "მონახაზის წაშლა"
+
+msgid "Information about indexing document content"
+msgstr "ინფორმაცია დოკუმენტის შინაარსის ინდექსაციის შესახებ"
+
+msgid "When enabled, the document text is indexed by the search engine so users can find it from platform search."
+msgstr "როდესაც ჩართულია, დოკუმენტის ტექსტი ინდექსირდება საძიებო სისტემის მიერ, რათა მომხმარებლებმა იპოვონ ის პლატფორმის ძიებიდან."
+
+msgid "The editor is not available."
+msgstr "რედაქტორი მიუწვდომელია."
+
+msgid "Please place the cursor inside a paragraph first."
+msgstr "გთხოვთ, ჯერ მოათავსოთ კურსორი პარაგრაფში."
+
+msgid "The selected paragraph is empty."
+msgstr "არჩეული პარაგრაფი ცარიელია."
+
+msgid "Loading failed."
+msgstr "ჩატვირთვა ვერ მოხერხდა."
+
+msgid "Add introduction"
+msgstr "შესავლის დამატება"
+
+msgid "Course type"
+msgstr "კურსის ტიპი"
+
+msgid "Choose whether this course uses the standard platform limits or benefits from a purchased service."
+msgstr "აირჩიეთ, იყენებს თუ არა ეს კურსი სტანდარტულ პლატფორმის ლიმიტებს ან სარგებლობს შეძენილი სერვისით."
+
+msgid "Standard course"
+msgstr "სტანდარტული კურსი"
+
+msgid "Use the standard platform limits."
+msgstr "გამოიყენეთ სტანდარტული პლატფორმის ლიმიტები."
+
+msgid "Selected"
+msgstr "არჩეული"
+
+msgid "Hosting limit"
+msgstr "ჰოსტინგის ლიმიტი"
+
+msgid "Document quota"
+msgstr "დოკუმენტის კვოტა"
+
+msgid "The standard course limit has been reached."
+msgstr "სტანდარტული კურსის ლიმიტი მიღწეულია."
+
+msgid "Use the benefits granted by this service."
+msgstr "გამოიყენეთ ამ სერვისით მინიჭებული სარგებელი."
+
+msgid "Courses with these benefits"
+msgstr "კურსები ამ სარგებლებით"
+
+msgid "Active service"
+msgstr "აქტიური სერვისი"
+
+msgid "Buy service"
+msgstr "სერვისის შეძენა"
+
+msgid "Select an available course type before creating the course."
+msgstr "კურსის შექმნამდე აირჩიეთ ხელმისაწვდომი კურსის ტიპი."
+
+msgid "users"
+msgstr "მომხმარებლები"
+
+msgid "You need to buy this service before using these benefits."
+msgstr "ამ სარგებლების გამოყენებამდე უნდა შეიძინოთ ეს სერვისი."
+
+msgid "You already used all courses available with this service."
+msgstr "თქვენ უკვე გამოიყენეთ ამ სერვისით ხელმისაწვდომი ყველა კურსი."
+
+msgid "This option is not available."
+msgstr "ეს ვარიანტი მიუწვდომელია."
+
+msgid "This field is required"
+msgstr "ეს ველი სავალდებულოა"
+
+msgid "Show less"
+msgstr "ნაკლების ჩვენება"
+
+msgid "Show full description"
+msgstr "სრული აღწერის ჩვენება"
+
+msgid "Virtual keyboard"
+msgstr "ვირტუალური კლავიშთა დაფა"
+
+msgid "Backspace"
+msgstr "უკან წაშლა"
+
+msgid "Space"
+msgstr "ინტერვალი"
+
+msgid "Learning path only visible to selected learners"
+msgstr "სასწავლო გზა მხოლოდ არჩეული მოსწავლეებისთვის ხილული"
+
+msgid "Create course"
+msgstr "კურსის შექმნა"
+
+msgid "Tour"
+msgstr "ტური"
+
+msgid "Are you sure you want to delete this comment?"
+msgstr "დარწმუნებული ხართ, რომ გსურთ ამ კომენტარის წაშლა?"
+
+msgid "No posts found"
+msgstr "პოსტები ვერ მოიძებნა"
+
+msgid "No communities"
+msgstr "საზოგადოებები ვერ მოიძებნა"
+
+msgid "No friends found"
+msgstr "მეგობრები ვერ მოიძებნა"
+
+msgid "Visual overview of your skills"
+msgstr "თქვენი უნარების ვიზუალური მიმოხილვა"
+
+msgid "Compare your progress"
+msgstr "თქვენი პროგრესის შედარება"
+
+msgid "Please enter a search term."
+msgstr "გთხოვთ, შეიყვანოთ საძიებო ტერმინი."
+
+msgid "Enter captcha code"
+msgstr "შეიყვანეთ captcha კოდი"
+
+msgid "Refresh captcha"
+msgstr "captcha-ის განახლება"
+
+msgid "Captcha is temporarily blocked. Please try again later."
+msgstr "Captcha დროებით დაბლოკილია. გთხოვთ, სცადოთ მოგვიანებით."
+
+msgid "Item Details"
+msgstr "ელემენტის დეტალები"
+
+msgid "Open File"
+msgstr "ფაილის გახსნა"
+
+msgid "Selection"
+msgstr "არჩევა"
+
+msgid "Remove selection context"
+msgstr "არჩევის კონტექსტის მოცილება"
+
+msgid "Source document"
+msgstr "წყარო დოკუმენტი"
+
+msgid "Use the current course context"
+msgstr "მიმდინარე კურსის კონტექსტის გამოყენება"
+
+msgid "Loading documents..."
+msgstr "დოკუმენტების ჩატვირთვა..."
+
+msgid "No compatible PDF or TXT document was found in this course."
+msgstr "ამ კურსში თავსებადი PDF ან TXT დოკუმენტი ვერ მოიძებნა."
+
+msgid "Select a PDF or TXT document to generate terms only from that document."
+msgstr "აირჩიეთ PDF ან TXT დოკუმენტი, რომ ტერმინები მხოლოდ ამ დოკუმენტიდან გენერირდეს."
+
+msgid "Confidentiality warning"
+msgstr "კონფიდენციალურობის გაფრთხილება"
+
+msgid "When a document is selected, the prompt is fixed so the generation uses only that document content."
+msgstr "როდესაც დოკუმენტი არჩეულია, მოთხოვნა ფიქსირდება, რათა გენერაცია მხოლოდ ამ დოკუმენტის შიგთავსს იყენებდეს."
+
+msgid "No document-processing AI providers available."
+msgstr "დოკუმენტების დამუშავების AI პროვაიდერები მიუწვდომელია."
+
+msgid "Failed to save signature. Please try again."
+msgstr "ხელმოწერის შენახვა ვერ მოხერხდა. გთხოვთ, სცადოთ ხელახლა."
+
+msgid "Select and move"
+msgstr "არჩევა და გადაადგილება"
+
+msgid "Freehand"
+msgstr "ხელით დახატვა"
+
+msgid "Stroke"
+msgstr "ხაზი"
+
+msgid "Fill"
+msgstr "შევსება"
+
+msgid "Import SVG"
+msgstr "SVG-ის იმპორტი"
+
+msgid "Import image"
+msgstr "გამოსახულების იმპორტი"
+
+msgid "Click the drawing area to place this text"
+msgstr "დააწკაპუნეთ ხატვის არეში ამ ტექსტის განსათავსებლად"
+
+msgid "Draw a new SVG, import an existing SVG or embed an image, then save it as a reusable document."
+msgstr "დახატეთ ახალი SVG, შემოიტანეთ არსებული SVG ან ჩასვით გამოსახულება, შემდეგ შეინახეთ როგორც ხელახლა გამოსაყენებელი დოკუმენტი."
+
+msgid "Use Select and move to reposition or resize elements added in this editor."
+msgstr "გამოიყენეთ „არჩევა და გადაადგილება“ ამ რედაქტორში დამატებული ელემენტების გადასაადგილებლად ან ზომის შესაცვლელად."
+
+msgid "Stroke width"
+msgstr "ხაზის სიგანე"
+
+msgid "Transparent fill"
+msgstr "გამჭვირვალე შევსება"
+
+msgid "Invalid id"
+msgstr "არასწორი id"
+
+msgid "Unable to load the drawing"
+msgstr "ნახატის ჩატვირთვა ვერ მოხერხდა"
+
+msgid "Only PNG, JPG, WEBP or GIF images are supported."
+msgstr "მხარდაჭერილია მხოლოდ PNG, JPG, WEBP ან GIF გამოსახულებები."
+
+msgid "Unable to read the image file."
+msgstr "გამოსახულების ფაილის წაკითხვა ვერ მოხერხდა."
+
+msgid "Only SVG files are supported."
+msgstr "მხარდაჭერილია მხოლოდ SVG ფაილები."
+
+msgid "The SVG file is empty or invalid."
+msgstr "SVG ფაილი ცარიელი ან არასწორია."
+
+msgid "Unable to read the SVG file."
+msgstr "SVG ფაილის წაკითხვა ვერ მოხერხდა."
+
+msgid "The drawing is empty or invalid."
+msgstr "ნახატი ცარიელი ან არასწორია."
+
+msgid "Unable to save the drawing"
+msgstr "ნახატის შენახვა ვერ მოხერხდა"
+
+msgid "Information about AI-assisted documents"
+msgstr "ინფორმაცია AI-ით დახმარებული დოკუმენტების შესახებ"
+
+msgid "Location"
+msgstr "მდებარეობა"
+
+msgid "Cloud link"
+msgstr "ღრუბლოვანი ბმული"
+
+msgid "Add a link to a cloud document, such as Google Drive or Google Docs."
+msgstr "დაამატეთ ბმული ღრუბლოვან დოკუმენტზე, მაგალითად Google Drive ან Google Docs."
+
+msgid "Add cloud link"
+msgstr "ღრუბლოვანი ბმულის დამატება"
+
+msgid "Document title"
+msgstr "დოკუმენტის სათაური"
+
+msgid "Document options change how uploaded files are processed after saving."
+msgstr "დოკუმენტის პარამეტრები განსაზღვრავს, როგორ დამუშავდება ატვირთული ფაილები შენახვის შემდეგ."
+
+msgid "Information about uncompressing zip files"
+msgstr "ინფორმაცია ZIP ფაილების გახსნის შესახებ"
+
+msgid "When enabled, ZIP files are extracted into the current document folder after upload."
+msgstr "როდესაც ჩართულია, ZIP ფაილები ატვირთვის შემდეგ იშლება მიმდინარე დოკუმენტების საქაღალდეში."
+
+msgid "The title is required."
+msgstr "სათაური აუცილებელია."
+
+msgid "The URL is required."
+msgstr "URL აუცილებელია."
+
+msgid "The destination folder is missing."
+msgstr "დანიშნულების საქაღალდე არ არსებობს."
+
+msgid "Unable to create cloud link."
+msgstr "ღრუბლოვანი ბმულის შექმნა ვერ მოხერხდა."
+
+msgid "Copy to My Files"
+msgstr "ჩემს ფაილებში კოპირება"
+
+msgid "Used space"
+msgstr "გამოყენებული სივრცე"
+
+msgid "Available space"
+msgstr "ხელმისაწვდომი სივრცე"
+
+msgid "Available percentage"
+msgstr "ხელმისაწვდომი პროცენტი"
+
+msgid "Cloud links cannot be downloaded."
+msgstr "ღრუბლოვანი ბმულების გადმოწერა შეუძლებელია."
+
+msgid "Could not copy the file to My Files"
+msgstr "ფაილის ჩემს ფაილებში კოპირება ვერ მოხერხდა"
+
+msgid "File copied to My Files"
+msgstr "ფაილი დაკოპირდა ჩემს ფაილებში"
+
+msgid "Checking course creation options..."
+msgstr "კურსის შექმნის პარამეტრების შემოწმება..."
+
+msgid "You cannot create more courses right now."
+msgstr "ამჟამად მეტი კურსის შექმნა არ შეგიძლიათ."
+
+msgid "AI analyzer"
+msgstr "AI ანალიზატორი"
+
+msgid "Expand all"
+msgstr "ყველას გაშლა"
+
+msgid "Collapse all"
+msgstr "ყველას ჩაკეცვა"
+
+msgid "Review your active service benefits, purchase history and available receipts."
+msgstr "გადახედეთ თქვენი აქტიური სერვისების უპირატესობებს, შეძენის ისტორიას და ხელმისაწვდომ ქვითრებს."
+
+msgid "Active services"
+msgstr "აქტიური სერვისები"
+
+msgid "No active services"
+msgstr "აქტიური სერვისები არ არის"
+
+msgid "Valid until"
+msgstr "მოქმედებს"
+
+msgid "Recurring payment"
+msgstr "განმეორებადი გადახდა"
+
+msgid "Next charge"
+msgstr "შემდეგი გადასახადი"
+
+msgid "Enable auto billing"
+msgstr "ავტომატური გადახდის ჩართვა"
+
+msgid "Cancel auto billing"
+msgstr "ავტომატური გადახდის გაუქმება"
+
+msgid "Granted benefits"
+msgstr "მინიჭებული უპირატესობები"
+
+msgid "Purchase history"
+msgstr "შეძენის ისტორია"
+
+msgid "No purchases yet"
+msgstr "ჯერ არაფერი შეძენილი"
+
+msgid "Product"
+msgstr "პროდუქტი"
+
+msgid "Reference"
+msgstr "რეფერენსი"
+
+msgid "Amount"
+msgstr "თანხა"
+
+msgid "Receipt"
+msgstr "ქვითარი"
+
+msgid "Unable to load your services right now."
+msgstr "თქვენი სერვისების ჩატვირთვა ამჟამად ვერ მოხერხდა."
+
+msgid "Auto billing enabled"
+msgstr "ავტომატური გადახდა ჩართულია"
+
+msgid "Auto billing suspended"
+msgstr "ავტომატური გადახდა შეჩერებულია"
+
+msgid "Auto billing cancelled"
+msgstr "ავტომატური გადახდა გაუქმებულია"
+
+msgid "Auto billing disabled"
+msgstr "ავტომატური გადახდა გამორთულია"
+
+msgid "Cancel auto billing for this service?"
+msgstr "გავაუქმო ავტომატური გადახდა ამ სერვისისთვის?"
+
+msgid "Preview class members and courses"
+msgstr "კლასის წევრებისა და კურსების გადახედვა"
+
+msgid "Please select a CSV file to import."
+msgstr "გთხოვთ, აირჩიოთ CSV ფაილი იმპორტისთვის."
+
+msgid "%d user-class links imported"
+msgstr "%d მომხმარებელი-კლასის კავშირი იმპორტირებულია"
+
+msgid "The following errors occurred during import:"
+msgstr "იმპორტისას წარმოიშვა შემდეგი შეცდომები:"
+
+msgid "CSV file"
+msgstr "CSV ფაილი"
+
+msgid "Remove user from all group-related entities if not in the list"
+msgstr "მომხმარებლის ამოღება ყველა ჯგუფთან დაკავშირებული ერთეულიდან, თუ ის არ არის სიაში"
+
+msgid "UserName"
+msgstr "მომხმარებლის სახელი"
+
+msgid "ClassName"
+msgstr "კლასის სახელი"
+
+msgid "are required for each row."
+msgstr "აუცილებელია თითოეული მწკრივისთვის."
+
+msgid "title"
+msgstr "სათაური"
+
+msgid "is required."
+msgstr "აუცილებელია."
+
+msgid "description"
+msgstr "აღწერა"
+
+msgid "are optional."
+msgstr "არასავალდებულოა."
+
+msgid "Are you sure you want to remove this user from the class?"
+msgstr "დარწმუნებული ხართ, რომ გსურთ ამ მომხმარებლის ამოღება კლასიდან?"
+
+msgid "Users in class"
+msgstr "მომხმარებლები კლასში"
+
+msgid "Remove user"
+msgstr "მომხმარებლის ამოღება"
+
+msgid "Class not found"
+msgstr "კლასი ვერ მოიძებნა"
+
+msgid "Class overview"
+msgstr "კლასის მიმოხილვა"
+
+msgid "Back to classes"
+msgstr "კლასებზე დაბრუნება"
+
+msgid "Search members or courses"
+msgstr "წევრების ან კურსების ძებნა"
+
+msgid "Search by name, email, username or course title"
+msgstr "ძებნა სახელით, ელფოსტით, მომხმარებლის სახელით ან კურსის სათაურით"
+
+msgid "Class members"
+msgstr "კლასის წევრები"
+
+msgid "No email"
+msgstr "ელფოსტა არ არის"
+
+msgid "No members found"
+msgstr "წევრები ვერ მოიძებნა"
+
+msgid "No courses found"
+msgstr "კურსები ვერ მოიძებნა"
+
+msgid "The end date must be after the start date."
+msgstr "დასრულების თარიღი უნდა იყოს დაწყების თარიღის შემდეგ."
+
+msgid "Always visible"
+msgstr "ყოველთვის ხილული"
+
+msgid "No end date"
+msgstr "დასრულების თარიღი არ არის"
+
+msgid "No restriction"
+msgstr "შეზღუდვა არ არის"
+
+msgid "Missing learning path or course identifier"
+msgstr "აკლია სასწავლო გზა ან კურსის იდენტიფიკატორი"
+
+msgid "Select a user or a group first"
+msgstr "ჯერ აირჩიეთ მომხმარებელი ან ჯგუფი"
+
+msgid "Remove all date restrictions for this learning path?"
+msgstr "ამოიღოთ ყველა თარიღის შეზღუდვა ამ სასწავლო გზისთვის?"
+
+msgid "Advanced learning path access"
+msgstr "სასწავლო გზაზე წვდომის გაფართოებული პარამეტრები"
+
+msgid "Remove date restrictions"
+msgstr "თარიღის შეზღუდვების ამოღება"
+
+msgid "Search by name, email, username or group"
+msgstr "ძებნა სახელით, ელფოსტით, მომხმარებლის სახელით ან ჯგუფით"
+
+msgid "Edit user restriction"
+msgstr "მომხმარებლის შეზღუდვის რედაქტირება"
+
+msgid "Edit group restriction"
+msgstr "ჯგუფის შეზღუდვის რედაქტირება"
+
+msgid "Select a user or group"
+msgstr "აირჩიეთ მომხმარებელი ან ჯგუფი"
+
+msgid "Save restriction"
+msgstr "შეზღუდვის შენახვა"
+
+msgid "members"
+msgstr "წევრები"
+
+msgid "Create Assignment"
+msgstr "დავალების შექმნა"
+
+msgid "The submission deadline has passed. You can no longer submit."
+msgstr "წარდგენის ვადა გავიდა. აღარ შეგიძლიათ წარდგენა."
+
+msgid "Mailing cannot be combined with other recipients."
+msgstr "ფოსტის გაგზავნა არ შეიძლება სხვა მიმღებებთან კომბინირება."
+
+msgid "Social map"
+msgstr "სოციალური რუკა"
+
+msgid "The map plugin is not enabled or configured."
+msgstr "რუკის პლაგინი არ არის ჩართული ან კონფიგურირებული."
+
+msgid "Some configured extra fields were not found"
+msgstr "ზოგიერთი კონფიგურირებული დამატებითი ველი ვერ მოიძებნა"
+
+msgid "No user locations were found."
+msgstr "მომხმარებლის ადგილმდებარეობები ვერ მოიძებნა."
+
+msgid "OpenStreetMap needs coordinates to display an embedded marker. Address-only locations are listed below."
+msgstr "OpenStreetMap-ს სჭირდება კოორდინატები ჩაშენებული მარკერის საჩვენებლად. მხოლოდ მისამართის მქონე ადგილმდებარეობები ჩამოთვლილია ქვემოთ."
+
+msgid "Locations"
+msgstr "ადგილმდებარეობები"
+
+msgid "Open map"
+msgstr "რუკის გახსნა"
+
+msgid "Provider: OpenStreetMap"
+msgstr "პროვაიდერი: OpenStreetMap"
+
+msgid "Provider: Google Maps"
+msgstr "პროვაიდერი: Google Maps"
+
+msgid "Personal files"
+msgstr "პერსონალური ფაილები"
+
+msgid "Upload image"
+msgstr "სურათის ატვირთვა"
+
+msgid "Upload media"
+msgstr "მედიის ატვირთვა"
+
+msgid "Only image files are allowed in this upload screen."
+msgstr "ამ ატვირთვის ეკრანზე მხოლოდ სურათის ფაილებია დაშვებული."
+
+msgid "Only audio and video files are allowed in this upload screen."
+msgstr "ამ ატვირთვის ეკრანზე მხოლოდ აუდიო და ვიდეო ფაილებია დაშვებული."
+
+msgid "Upload files to your personal storage."
+msgstr "ფაილების ატვირთვა თქვენს პერსონალურ საცავში."
+
+msgid "Linked"
+msgstr "დაკავშირებული"
+
+msgid "No audio or video files were found in this folder."
+msgstr "ამ საქაღალდეში აუდიო ან ვიდეო ფაილები ვერ მოიძებნა."
+
+msgid "No image files were found in this folder."
+msgstr "ამ საქაღალდეში სურათის ფაილები ვერ მოიძებნა."
+
+msgid "No matching files were found in this folder."
+msgstr "ამ საქაღალდეში შესაბამისი ფაილები ვერ მოიძებნა."
+
+msgid "This file type is not allowed in this upload screen."
+msgstr "ამ ატვირთვის ეკრანზე ეს ფაილის ტიპი დაუშვებელია."
+
+msgid "Manage your personal files and course documents."
+msgstr "მართეთ თქვენი პერსონალური ფაილები და კურსის დოკუმენტები."
+
+msgid "DateValidity"
+msgstr "DateValidity"
+
+msgid "JustificationSaved"
+msgstr "JustificationSaved"
+
+msgid "ValidityDate"
+msgstr "ValidityDate"
+
+msgid "MyJustifications"
+msgstr "MyJustifications"
+
+msgid "Submission"
+msgstr "Submission"
+
+msgid "Use the filters above to narrow the list."
+msgstr "გამოიყენეთ ზემოთ მოცემული ფილტრები სიის შესამცირებლად."
+
+msgid "You are not allowed to see this page."
+msgstr "თქვენ არ გაქვთ ამ გვერდის ნახვის უფლება."
+
+msgid "plugin_title"
+msgstr "plugin_title"
+
+msgid "plugin_comment"
+msgstr "plugin_comment"
+
+msgid "Course tracking details"
+msgstr "კურსის თვალყურის დეტალები"
+
+msgid "Course activity statistics"
+msgstr "კურსის აქტივობის სტატისტიკა"
+
+msgid "mobile_phone_number"
+msgstr "mobile_phone_number"
+
+msgid "Allowed template syntax"
+msgstr "დაშვებული შაბლონის სინტაქსი"
+
+msgid "Functions"
+msgstr "ფუნქციები"
+
+msgid "Available variables depend on the template type, for example {{ user.getUsername() }} or {{ user.getEmail() }}."
+msgstr "ხელმისაწვდომი ცვლადები დამოკიდებულია შაბლონის ტიპზე, მაგალითად {{ user.getUsername() }} ან {{ user.getEmail() }}."
+
+msgid "For security reasons, any other Twig function, filter (such as filter, map, reduce or sort) or PHP call is blocked."
+msgstr "უსაფრთხოების მიზნით, ნებისმიერი სხვა Twig ფუნქცია, ფილტრი (როგორიცაა filter, map, reduce ან sort) ან PHP გამოძახება დაბლოკილია."
+
+msgid "Global administrator"
+msgstr "გლობალური ადმინისტრატორი"
+
+msgid "Session manager"
+msgstr "სესიის მენეჯერი"
+
+msgid "Human resources manager"
+msgstr "ადამიანური რესურსების მენეჯერი"
+
+msgid "Course teacher"
+msgstr "კურსის მასწავლებელი"
+
+msgid "Course student"
+msgstr "კურსის სტუდენტი"
+
+msgid "Platform reports"
+msgstr "პლატფორმის ანგარიშები"
+
+msgid "Security reports"
+msgstr "უსაფრთხოების ანგარიშები"
+
+msgid "Course reports"
+msgstr "კურსის ანგარიშები"
+
+msgid "Gradebook reports"
+msgstr "Gradebook ანგარიშები"
+
+msgid "Social reports"
+msgstr "სოციალური ანგარიშები"
+
+msgid "Exports"
+msgstr "ექსპორტები"
+
+msgid "Reports about platform-wide usage, users, courses and sessions."
+msgstr "ანგარიშები პლატფორმის მასშტაბით გამოყენების, მომხმარებლების, კურსებისა და სესიების შესახებ."
+
+msgid "Audit and security-sensitive reports."
+msgstr "აუდიტისა და უსაფრთხოების მგრძნობიარე ანგარიშები."
+
+msgid "Reports scoped to courses managed by the user."
+msgstr "ანგარიშები მომხმარებლის მიერ მართულ კურსებზე."
+
+msgid "Reports related to learner activity and follow-up."
+msgstr "ანგარიშები მოსწავლის აქტივობასა და თვალყურთან დაკავშირებით."
+
+msgid "Reports related to scores, certificates and gradebook data."
+msgstr "ანგარიშები ქულებთან, სერთიფიკატებთან და gradebook მონაცემებთან დაკავშირებით."
+
+msgid "Reports and exports that generate downloadable files."
+msgstr "ანგარიშები და ექსპორტები, რომლებიც ქმნიან ჩამოტვირთვად ფაილებს."
+
+msgid "Main platform statistics dashboard."
+msgstr "მთავარი პლატფორმის სტატისტიკის დაფა."
+
+msgid "Number of courses and course distribution report."
+msgstr "კურსების რაოდენობისა და კურსების განაწილების ანგარიში."
+
+msgid "Platform-wide access to course tools."
+msgstr "პლატფორმის მასშტაბით წვდომა კურსის ინსტრუმენტებზე."
+
+msgid "Number of resources per tool."
+msgstr "რესურსების რაოდენობა თითოეული ინსტრუმენტისთვის."
+
+msgid "Latest access to courses."
+msgstr "კურსებზე ბოლო წვდომა."
+
+msgid "Course distribution by language."
+msgstr "კურსების განაწილება ენების მიხედვით."
+
+msgid "Course usage report."
+msgstr "კურსის გამოყენების ანგარიში."
+
+msgid "Platform user count report."
+msgstr "პლატფორმის მომხმარებელთა რაოდენობის ანგარიში."
+
+msgid "Recent logins chart."
+msgstr "ბოლო შესვლების დიაგრამა."
+
+msgid "Login distribution by month."
+msgstr "შესვლების განაწილება თვეების მიხედვით."
+
+msgid "Login distribution by day."
+msgstr "შესვლების განაწილება დღეების მიხედვით."
+
+msgid "Login distribution by hour."
+msgstr "შესვლების განაწილება საათების მიხედვით."
+
+msgid "Users with profile picture."
+msgstr "მომხმარებლები პროფილის სურათით."
+
+msgid "Login report filtered by date."
+msgstr "შესვლის ანგარიში თარიღის მიხედვით."
+
+msgid "Users who have not logged in recently."
+msgstr "მომხმარებლები, რომლებიც ბოლო დროს არ შესულან."
+
+msgid "Inactive or suspicious user accounts report."
+msgstr "არააქტიური ან საეჭვო მომხმარებლის ანგარიშების ანგარიში."
+
+msgid "Users activity statistics."
+msgstr "მომხმარებელთა აქტივობის სტატისტიკა."
+
+msgid "Currently online users report."
+msgstr "ამჟამად ონლაინ მომხმარებელთა ანგარიში."
+
+msgid "New user registrations over time."
+msgstr "ახალი მომხმარებლების რეგისტრაცია დროთა განმავლობაში."
+
+msgid "Course and session subscriptions over time."
+msgstr "კურსებსა და სესიებზე გამოწერები დროთა განმავლობაში."
+
+msgid "Duplicate user detection and maintenance report."
+msgstr "დუბლირებული მომხმარებლების აღმოჩენა და მოვლის ანგარიში."
+
+msgid "Platform user/session statistics."
+msgstr "პლატფორმის მომხმარებელთა/სესიების სტატისტიკა."
+
+msgid "Quarterly platform report."
+msgstr "კვარტალური პლატფორმის ანგარიში."
+
+msgid "Activities audit"
+msgstr "აქტივობების აუდიტი"
+
+msgid "Audit report for important administrative and platform activities."
+msgstr "მნიშვნელოვანი ადმინისტრაციული და პლატფორმის აქტივობების აუდიტის ანგარიში."
+
+msgid "Social messages received report."
+msgstr "სოციალური შეტყობინებების მიღების ანგარიში."
+
+msgid "Social messages sent report."
+msgstr "სოციალური შეტყობინებების გაგზავნის ანგარიში."
+
+msgid "Social contacts count report."
+msgstr "სოციალური კონტაქტების რაოდენობის ანგარიში."
+
+msgid "Sessions created over time."
+msgstr "სესიების შექმნა დროთა განმავლობაში."
+
+msgid "Learning analytics dashboard."
+msgstr "სწავლის ანალიტიკის დაფა."
+
+msgid "Teacher time report."
+msgstr "მასწავლებლის დროის ანგარიში."
+
+msgid "Teachers time by session report"
+msgstr "მასწავლებელთა დროის ანგარიში სესიის მიხედვით"
+
+msgid "Teacher time report grouped by session."
+msgstr "მასწავლებლის დროის ანგარიში სესიების მიხედვით დაჯგუფებული."
+
+msgid "Corporate learning analytics report."
+msgstr "კორპორატიული სწავლის ანალიტიკის ანგარიში."
+
+msgid "Course learners tracking report."
+msgstr "კურსის მსმენელთა თვალყურის მოხსენება."
+
+msgid "Course activity statistics with connected and inactive users."
+msgstr "კურსის აქტივობის სტატისტიკა დაკავშირებული და არააქტიური მომხმარებლებით."
+
+msgid "Detailed tracking report for a learner inside a course."
+msgstr "მსმენელის დეტალური თვალყურის ანგარიში კურსში."
+
+msgid "Course gradebook overview."
+msgstr "კურსის შეფასების წიგნის მიმოხილვა."
+
+msgid "Gradebook statistics"
+msgstr "შეფასების წიგნის სტატისტიკა"
+
+msgid "Gradebook statistics report."
+msgstr "შეფასების წიგნის სტატისტიკის ანგარიში."
+
+msgid "Certificate report"
+msgstr "სერტიფიკატის ანგარიში"
+
+msgid "Certificate report for course gradebook."
+msgstr "სერტიფიკატის ანგარიში კურსის შეფასების წიგნისთვის."
+
+msgid "User statistics"
+msgstr "მომხმარებლის სტატისტიკა"
+
+msgid "Course gradebook statistics for a user."
+msgstr "კურსის შეფასების წიგნის სტატისტიკა მომხმარებლისთვის."
+
+msgid "Personal statistics"
+msgstr "პერსონალური სტატისტიკა"
+
+msgid "Personal gradebook statistics."
+msgstr "პერსონალური შეფასების წიგნის სტატისტიკა."
+
+msgid "Reports catalog"
+msgstr "ანგარიშების კატალოგი"
+
+msgid "Central catalog of available reports, roles and permission categories."
+msgstr "ხელმისაწვდომი ანგარიშების, როლების და უფლებების კატეგორიების ცენტრალური კატალოგი."
+
+msgid "Course log events"
+msgstr "კურსის ჟურნალის მოვლენები"
+
+msgid "Detailed course tracking events."
+msgstr "კურსის დეტალური თვალყურის მოვლენები."
+
+msgid "Course tool usage"
+msgstr "კურსის ინსტრუმენტის გამოყენება"
+
+msgid "Course tracking report grouped by tools."
+msgstr "კურსის თვალყურის ანგარიში ინსტრუმენტების მიხედვით დაჯგუფებული."
+
+msgid "Course resource usage"
+msgstr "კურსის რესურსის გამოყენება"
+
+msgid "Course tracking report grouped by resources."
+msgstr "რესურსების მიხედვით დაჯგუფებული კურსის თვალყურის მოხსენება."
+
+msgid "Course group tracking"
+msgstr "კურსის ჯგუფის თვალყურის მოხსენება"
+
+msgid "Tracking report for course groups."
+msgstr "კურსის ჯგუფების თვალყურის მოხსენება."
+
+msgid "Course session report"
+msgstr "კურსის სესიის მოხსენება"
+
+msgid "Tracking report for a course inside sessions."
+msgstr "სესიებში კურსის თვალყურის მოხსენება."
+
+msgid "Learning path report"
+msgstr "სასწავლო გზის მოხსენება"
+
+msgid "Learning path tracking report."
+msgstr "სასწავლო გზის თვალყურის მოხსენება."
+
+msgid "Learning path results by user"
+msgstr "სასწავლო გზის შედეგები მომხმარებლების მიხედვით"
+
+msgid "Learning path results grouped by user."
+msgstr "სასწავლო გზის შედეგები დაჯგუფებული მომხმარებლების მიხედვით."
+
+msgid "Exercises report"
+msgstr "სავარჯიშოების მოხსენება"
+
+msgid "Course exercises and exams tracking report."
+msgstr "კურსის სავარჯიშოებისა და გამოცდების თვალყურის მოხსენება."
+
+msgid "Question report"
+msgstr "კითხვის მოხსენება"
+
+msgid "Course question tracking report."
+msgstr "კურსის კითხვების თვალყურის მოხსენება."
+
+msgid "Messages report"
+msgstr "შეტყობინებების მოხსენება"
+
+msgid "Course messages tracking report."
+msgstr "კურსის შეტყობინებების თვალყურის მოხსენება."
+
+msgid "Total time tracking report for course learners."
+msgstr "კურსის მსმენელებისთვის საერთო დროის თვალყურის მოხსენება."
+
+msgid "Gradebook summary"
+msgstr "შეფასებათა წიგნის შეჯამება"
+
+msgid "Summary view of gradebook results."
+msgstr "შეფასებათა წიგნის შედეგების შეჯამებული ხედი."
+
+msgid "Flat view"
+msgstr "ბრტყელი ხედი"
+
+msgid "Flat gradebook results view."
+msgstr "შეფასებათა წიგნის შედეგების ბრტყელი ხედი."
+
+msgid "Evaluation log"
+msgstr "შეფასების ჟურნალი"
+
+msgid "Change log for gradebook evaluations."
+msgstr "შეფასებათა წიგნის შეფასებების ცვლილებების ჟურნალი."
+
+msgid "Link log"
+msgstr "ბმულის ჟურნალი"
+
+msgid "Change log for gradebook links."
+msgstr "შეფასებათა წიგნის ბმულების ცვლილებების ჟურნალი."
+
+msgid "Result details"
+msgstr "შედეგის დეტალები"
+
+msgid "Detailed view of a gradebook result."
+msgstr "შეფასებათა წიგნის შედეგის დეტალური ხედი."
+
+msgid "Personal certificates report."
+msgstr "პერსონალური სერტიფიკატების მოხსენება."
+
+msgid "User move statistics"
+msgstr "მომხმარებლის გადაადგილების სტატისტიკა"
+
+msgid "Report for user move and transfer statistics."
+msgstr "მომხმარებლის გადაადგილებისა და გადაყვანის სტატისტიკის მოხსენება."
+
+msgid "User consent list"
+msgstr "მომხმარებელთა თანხმობის სია"
+
+msgid "Report of users and consent status."
+msgstr "მომხმარებლებისა და თანხმობის სტატუსის მოხსენება."
+
+msgid "Special platform exports."
+msgstr "სპეციალური პლატფორმის ექსპორტები."
+
+msgid "Export certificates"
+msgstr "სერტიფიკატების ექსპორტი"
+
+msgid "Export platform certificates."
+msgstr "პლატფორმის სერტიფიკატების ექსპორტი."
+
+msgid "Export exercise results"
+msgstr "სავარჯიშოების შედეგების ექსპორტი"
+
+msgid "Export exercise results from the platform."
+msgstr "სავარჯიშოების შედეგების ექსპორტი პლატფორმიდან."
+
+msgid "Course survey results and reporting."
+msgstr "კურსის გამოკითხვის შედეგები და მოხსენება."
+
+msgid "Attendance report"
+msgstr "დასწრების მოხსენება"
+
+msgid "Course attendance tracking and reports."
+msgstr "კურსის დასწრების თვალყური და მოხსენებები."
+
+msgid "Exercises global report"
+msgstr "სავარჯიშოების გლობალური მოხსენება"
+
+msgid "Global exercise results report for the course."
+msgstr "კურსის სავარჯიშოების გლობალური შედეგების მოხსენება."
+
+msgid "Exercise report"
+msgstr "სავარჯიშოს მოხსენება"
+
+msgid "Detailed exercise report."
+msgstr "დეტალური სავარჯიშოს მოხსენება."
+
+msgid "Exercise history"
+msgstr "სავარჯიშოს ისტორია"
+
+msgid "Exercise attempt history."
+msgstr "სავარჯიშოს მცდელობების ისტორია."
+
+msgid "Exercise results"
+msgstr "სავარჯიშოს შედეგები"
+
+msgid "Exercise results and corrections."
+msgstr "სავარჯიშოს შედეგები და შესწორებები."
+
+msgid "Question-level exercise statistics."
+msgstr "კითხვის დონის სავარჯიშოს სტატისტიკა."
+
+msgid "Exercise statistics"
+msgstr "სავარჯიშოს სტატისტიკა"
+
+msgid "Exercise statistics page."
+msgstr "სავარჯიშოს სტატისტიკის გვერდი."
+
+msgid "Live exercise statistics"
+msgstr "ცოცხალი სავარჯიშოების სტატისტიკა"
+
+msgid "Live exercise statistics for teachers."
+msgstr "ცოცხალი სავარჯიშოების სტატისტიკა მასწავლებლებისთვის."
+
+msgid "Learning path statistics"
+msgstr "სასწავლო გზის სტატისტიკა"
+
+msgid "Learning path item statistics."
+msgstr "სასწავლო გზის ელემენტის სტატისტიკა."
+
+msgid "Learning path report inside a course."
+msgstr "სასწავლო გზის ანგარიში კურსის შიგნით."
+
+msgid "User skills report."
+msgstr "მომხმარებლის უნარების ანგარიში."
+
+msgid "Scheduled or periodic export configuration."
+msgstr "დაგეგმილი ან პერიოდული ექსპორტის კონფიგურაცია."
+
+msgid "User export"
+msgstr "მომხმარებლის ექსპორტი"
+
+msgid "Export users from the platform."
+msgstr "მომხმარებლების ექსპორტი პლატფორმიდან."
+
+msgid "Not classified"
+msgstr "არ არის კლასიფიცირებული"
+
+msgid "You have acquired the skill %s"
+msgstr "თქვენ შეიძინეთ უნარი %s"
+
+msgid "You have acquired the skill %s."
+msgstr "თქვენ შეიძინეთ უნარი %s."
+
+msgid "Recover your password"
+msgstr "პაროლის აღდგენა"
+
+msgid "Disclaimer"
+msgstr "პასუხისმგებლობის უარყოფა"
+
+msgid "This operation would exceed the limit of %d users allowed for this course."
+msgstr "ეს ოპერაცია გადააჭარბებს ამ კურსისთვის დაშვებულ %d მომხმარებლის ლიმიტს."
+
+msgid "DefaultGroupCategory"
+msgstr "DefaultGroupCategory"
+
+msgid "LearningCalendar"
+msgstr "LearningCalendar"
+
+msgid "Choose how this user can authenticate on the platform."
+msgstr "აირჩიეთ, როგორ შეუძლია ამ მომხმარებელს ავთენტიფიკაცია პლატფორმაზე."
+
+msgid "Authentication methods"
+msgstr "ავთენტიფიკაციის მეთოდები"
+
+msgid "Set password manually"
+msgstr "პაროლის ხელით დაყენება"
+
+msgid "Report role matrix"
+msgstr "როლების მატრიცის ანგარიში"
+
+msgid "Report permission categories"
+msgstr "ნებართვების კატეგორიების ანგარიში"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs enforce the documented report role matrix."
+msgstr "ეს რეესტრი ჩამოთვლის ცნობილ ანგარიშგების გვერდებს, მათ კატეგორიას, კანონიკურ URL-ს, მემკვიდრეობით URL-ს და მოსალოდნელ როლურ აუდიტორიას. კანონიკური URL-ები აძალებენ დოკუმენტირებულ ანგარიშგების როლების მატრიცას."
+
+msgid "reports"
+msgstr "ანგარიშები"
+
+msgid "Canonical URL"
+msgstr "კანონიკური URL"
+
+msgid "Legacy URL"
+msgstr "მემკვიდრეობითი URL"
+
+msgid "Permission category"
+msgstr "ნებართვის კატეგორია"
+
+msgid "This matrix documents the expected audience for each report and is enforced by the canonical report entry point."
+msgstr "ეს მატრიცა აღწერს თითოეული ანგარიშის მოსალოდნელ აუდიტორიას და აღსრულდება კანონიკური ანგარიშგების შესასვლელი წერტილით."
+
+msgid "These keys group reports by access scope and are used by the report registry. They can later be mapped to finer-grained platform permissions."
+msgstr "ეს გასაღებები ჯგუფავს ანგარიშებს წვდომის მასშტაბის მიხედვით და გამოიყენება ანგარიშგების რეესტრის მიერ. მოგვიანებით შესაძლებელია მათი დაკავშირება უფრო დეტალურ პლატფორმულ ნებართვებთან."
+
+msgid "Permission"
+msgstr "ნებართვა"
+
+msgid "Clear active session"
+msgstr "აქტიური სესიის გასუფთავება"
+
+msgid "Are you sure you want to clear this user active session?"
+msgstr "დარწმუნებული ხართ, რომ გსურთ ამ მომხმარებლის აქტიური სესიის გასუფთავება?"
+
+msgid "Preview shown without course context. Some course-specific data may be unavailable."
+msgstr "გადახედვა ნაჩვენებია კურსის კონტექსტის გარეშე. ზოგიერთი კურსის სპეციფიკური მონაცემი შეიძლება მიუწვდომელი იყოს."
+
+msgid "Preview is not available for this question."
+msgstr "ამ კითხვისთვის გადახედვა მიუწვდომელია."
+
+msgid "Edition is not allowed without a course context."
+msgstr "რედაქტირება დაუშვებელია კურსის კონტექსტის გარეშე."
+
+msgid "This plugin does not use regions."
+msgstr "ეს პლაგინი არ იყენებს რეგიონებს."
+
+msgid "No plugins with regions were found."
+msgstr "რეგიონების მქონე პლაგინები ვერ მოიძებნა."
+
+msgid "Freemium"
+msgstr "Freemium"
+
+msgid "Commercial service"
+msgstr "კომერციული სერვისი"
+
+msgid "Commercial"
+msgstr "კომერციული"
+
+msgid "100% free"
+msgstr "100% უფასო"
+
+msgid "Displayed above the public login form."
+msgstr "ნაჩვენებია საჯარო შესვლის ფორმის ზემოთ."
+
+msgid "Displayed below the public login form."
+msgstr "ნაჩვენებია საჯარო შესვლის ფორმის ქვემოთ."
+
+msgid "Displayed before the footer area."
+msgstr "ნაჩვენებია ქვედა კოლონტიტულის არეალის წინ."
+
+msgid "Displayed in the left footer column."
+msgstr "ნაჩვენებია მარცხენა ქვედა კოლონტიტულის სვეტში."
+
+msgid "Displayed in the center footer column."
+msgstr "ნაჩვენებია ცენტრალურ ქვედა კოლონტიტულის სვეტში."
+
+msgid "Displayed in the right footer column."
+msgstr "ნაჩვენებია მარჯვენა ქვედა კოლონტიტულის სვეტში."
+
+msgid "Showing all plugins."
+msgstr "ყველა პლაგინის ჩვენება."
+
+msgid "Some plugins are still pending functional verification."
+msgstr "ზოგიერთი პლაგინი ჯერ კიდევ ელოდება ფუნქციონალური შემოწმებას."
+
+msgid "Show verified plugins only"
+msgstr "მხოლოდ დამოწმებული პლაგინების ჩვენება"
+
+msgid "Showing verified plugins only."
+msgstr "მხოლოდ დადასტურებული პლაგინები ჩანს."
+
+msgid "Pending plugins are temporarily hidden until they are adapted and tested."
+msgstr "დროებით დამალულია პლაგინები, რომლებიც ჯერ არ არის ადაპტირებული და შემოწმებული."
+
+msgid "Show all plugins"
+msgstr "ყველა პლაგინის ჩვენება"
+
+msgid "Official and free plugins are listed separately from plugins that may depend on commercial services or paid offers."
+msgstr "ოფიციალური და უფასო პლაგინები ცალკეა ჩამოთვლილი პლაგინებისგან, რომლებიც შეიძლება დამოკიდებული იყოს კომერციულ სერვისებზე ან ფასიან შეთავაზებებზე."
+
+msgid "Included free plugins"
+msgstr "ჩართული უფასო პლაგინები"
+
+msgid "Commercial and freemium plugins"
+msgstr "კომერციული და freemium პლაგინები"
+
+msgid "All plugins"
+msgstr "ყველა პლაგინი"
+
+msgid "No plugins were found for this category."
+msgstr "ამ კატეგორიისთვის პლაგინები ვერ მოიძებნა."
+
+msgid "Search plugins"
+msgstr "პლაგინების ძებნა"
+
+msgid "Search by name or description"
+msgstr "ძებნა სახელით ან აღწერით"
+
+msgid "Advanced filters"
+msgstr "დამატებითი ფილტრები"
+
+msgid "All statuses"
+msgstr "ყველა სტატუსი"
+
+msgid "All sources"
+msgstr "ყველა წყარო"
+
+msgid "All types"
+msgstr "ყველა ტიპი"
+
+msgid "Installed plugins are shown first"
+msgstr "დაყენებული პლაგინები პირველ რიგში ჩანს"
+
+msgid "No plugins match the current filters."
+msgstr "მიმდინარე ფილტრებს არცერთი პლაგინი არ შეესაბამება."
+
+msgid "Try clearing the search or changing the filters."
+msgstr "სცადეთ ძებნის გასუფთავება ან ფილტრების შეცვლა."
+
+msgid "README"
+msgstr "README"
+
+msgid "Invalid security token"
+msgstr "უსაფრთხოების არასწორი ტოკენი"
+
+msgid "Please select a destination session"
+msgstr "გთხოვთ, აირჩიოთ დანიშნულების სესია"
+
+msgid "Cannot move this to the same session"
+msgstr "ამის გადატანა იმავე სესიაში შეუძლებელია"
+
+msgid "The destination session must include the selected course"
+msgstr "დანიშნულების სესია უნდა შეიცავდეს არჩეულ კურსს"
+
+msgid "The source session must include the selected course"
+msgstr "წყაროს სესია უნდა შეიცავდეს არჩეულ კურსს"
+
+msgid "No learners found"
+msgstr "სტუდენტები ვერ მოიძებნა"
+
+msgid "Will be subscribed"
+msgstr "გამოწერილი იქნება"
+
+msgid "Subscribed"
+msgstr "გამოწერილია"
+
+msgid "The move process has finished"
+msgstr "გადატანის პროცესი დასრულდა"
+
+msgid "Comparison finished. No data has been moved."
+msgstr "შედარება დასრულდა. მონაცემები არ გადატანილა."
+
+msgid "Move tracking data from the base course or a source session to another session. Use comparison first to review the affected learner data."
+msgstr "თვალყურის მონაცემების გადატანა საბაზო კურსიდან ან წყაროს სესიიდან სხვა სესიაში. გამოიყენეთ შედარება ჯერ, რათა გადახედოთ დაზარალებულ სტუდენტთა მონაცემებს."
+
+msgid "Search for a course or use the manual course ID field below."
+msgstr "მოძებნეთ კურსი ან გამოიყენეთ ქვემოთ მოცემული კურსის ID ველი."
+
+msgid "Fallback when the course search is not available."
+msgstr "სარეზერვო ვარიანტი, როდესაც კურსის ძებნა მიუწვდომელია."
+
+msgid "Load sessions"
+msgstr "სესიების ჩატვირთვა"
+
+msgid "Selected course"
+msgstr "არჩეული კურსი"
+
+msgid "Choose the base course or the session where the tracking data currently exists."
+msgstr "აირჩიეთ საბაზო კურსი ან სესია, სადაც თვალყურის მონაცემები ამჟამად არსებობს."
+
+msgid "Choose the session that will receive the tracking data."
+msgstr "აირჩიეთ სესია, რომელიც მიიღებს თვალყურის მონაცემებს."
+
+msgid "Important"
+msgstr "მნიშვნელოვანი"
+
+msgid "The move action updates existing tracking data. Run compare first and test this tool with a non-production course before moving real learner data."
+msgstr "გადატანის მოქმედება ანახლებს არსებულ თვალყურის მონაცემებს. ჯერ გაუშვით შედარება და შეამოწმეთ ეს ინსტრუმენტი არასაწარმოო კურსით, სანამ რეალურ სტუდენტთა მონაცემებს გადაიტანთ."
+
+msgid "No sessions found for this course"
+msgstr "ამ კურსისთვის სესიები ვერ მოიძებნა"
+
+msgid "Some users were ignored because they are not subscribed to this session."
+msgstr "ზოგიერთი მომხმარებელი გამოტოვებულია, რადგან ისინი არ არიან გამოწერილი ამ სესიაზე."
+
+msgid "Remove selected user"
+msgstr "არჩეული მომხმარებლის წაშლა"
+
+msgid "Add selected user"
+msgstr "არჩეული მომხმარებლის დამატება"
+
+msgid "No users from the selected list are subscribed to this session."
+msgstr "არჩეული სიიდან არცერთი მომხმარებელი არ არის გამოწერილი ამ სესიაზე."
+
+msgid "No image"
+msgstr "სურათი არ არის"
+
+msgid "Invalid URL."
+msgstr "არასწორი URL."
+
+msgid "This cloud document cannot be embedded."
+msgstr "ამ ღრუბლოვანი დოკუმენტის ჩაშენება შეუძლებელია."
+
+msgid "Document not found"
+msgstr "დოკუმენტი ვერ მოიძებნა"
+
+msgid "File not found"
+msgstr "ფაილი ვერ მოიძებნა"
+
+msgid "This learning path is not available for your user at this time."
+msgstr "ეს სასწავლო გზა ამ დროისთვის თქვენი მომხმარებლისთვის მიუწვდომელია."
+
+msgid "StartDateMustBeBeforeTheEndDate"
+msgstr "StartDateMustBeBeforeTheEndDate"
+
+msgid "Next learning path"
+msgstr "შემდეგი სასწავლო გზა"
+
+msgid "Select the learning path that will be available after this one."
+msgstr "აირჩიეთ სასწავლო გზა, რომელიც ხელმისაწვდომი იქნება ამის შემდეგ."
+
+msgid "Create another learning path in this course to enable learning path flow."
+msgstr "შექმენით სხვა სასწავლო გზა ამ კურსში სასწავლო გზების ნაკადის გასააქტიურებლად."
+
+msgid "Available from %s"
+msgstr "ხელმისაწვდომია %s-დან"
+
+msgid "Available until %s"
+msgstr "ხელმისაწვდომია %s-მდე"
+
+msgid "Statistics reset date"
+msgstr "სტატისტიკის განულების თარიღი"
+
+msgid "Last 24 hours"
+msgstr "ბოლო 24 საათი"
+
+msgid "This reset date is used as the reference date for the report. It does not delete historical tracking data."
+msgstr "ეს განულების თარიღი გამოიყენება ანგარიშის საცნობარო თარიღად. ის არ შლის ისტორიულ თვალყურის მონაცემებს."
+
+msgid "Since reset date"
+msgstr "განულების თარიღიდან"
+
+msgid "Users connected in the last 24 hours"
+msgstr "მომხმარებლები, რომლებიც დაკავშირებული იყვნენ ბოლო 24 საათში"
+
+msgid "Learners with at least one course access during the last 24 hours."
+msgstr "სტუდენტები, რომლებსაც ჰქონდათ კურსზე მინიმუმ ერთი წვდომა ბოლო 24 საათში."
+
+msgid "Users connected in the last week"
+msgstr "მომხმარებლები, რომლებიც დაკავშირებული იყვნენ ბოლო კვირაში"
+
+msgid "Learners with at least one course access during the last 7 days."
+msgstr "სტუდენტები, რომლებსაც ჰქონდათ კურსზე მინიმუმ ერთი წვდომა ბოლო 7 დღეში."
+
+msgid "Users connected in the last month"
+msgstr "მომხმარებლები, რომლებიც დაკავშირებული იყვნენ ბოლო თვეში"
+
+msgid "Learners with at least one course access during the last 30 days."
+msgstr "სტუდენტები, რომლებსაც ჰქონდათ კურსზე მინიმუმ ერთი წვდომა ბოლო 30 დღეში."
+
+msgid "Not recently connected users"
+msgstr "ბოლო დროს არ დაკავშირებული მომხმარებლები"
+
+msgid "Learners without course access since %s."
+msgstr "სტუდენტები კურსზე წვდომის გარეშე %s-დან."
+
+msgid "Recently used resources"
+msgstr "ბოლოს გამოყენებული რესურსები"
+
+msgid "Course tools/resources used since %s."
+msgstr "კურსის ინსტრუმენტები/რესურსები გამოყენებული %s-დან."
+
+msgid "%s %% of learners"
+msgstr "სტუდენტების %s %%"
+
+msgid "Connections"
+msgstr "კავშირები"
+
+msgid "Total connections"
+msgstr "სულ კავშირები"
+
+msgid "Downloaded documents"
+msgstr "გადმოწერილი დოკუმენტები"
+
+msgid "List of documents downloaded by this learner in this course."
+msgstr "ამ სტუდენტის მიერ ამ კურსში გადმოწერილი დოკუმენტების სია."
+
+msgid "Forum topics"
+msgstr "ფორუმის თემები"
+
+msgid "Forum topics opened by this learner in this course."
+msgstr "ამ სტუდენტის მიერ ამ კურსში გახსნილი ფორუმის თემები."
+
+msgid "Forum posts"
+msgstr "ფორუმის პოსტები"
+
+msgid "Forum posts written by this learner in this course."
+msgstr "ამ სტუდენტის მიერ ამ კურსში დაწერილი ფორუმის პოსტები."
+
+msgid "Course connections"
+msgstr "კურსის კავშირები"
+
+msgid "Connection history for this learner in this course."
+msgstr "ამ სტუდენტის კავშირების ისტორია ამ კურსში."
+
+msgid "Resources used"
+msgstr "გამოყენებული რესურსები"
+
+msgid "Latest tools or resources used by this learner in this course."
+msgstr "ამ სტუდენტის მიერ ამ კურსში ბოლოს გამოყენებული ინსტრუმენტები ან რესურსები."
+
+msgid "Logout date"
+msgstr "გასვლის თარიღი"
+
+msgid "Imported Aiken quiz"
+msgstr "იმპორტირებული Aiken ტესტი"
+
+msgid "Only supported documents will be listed here."
+msgstr "აქ ჩამოთვლილი იქნება მხოლოდ მხარდაჭერილი დოკუმენტები."
+
+msgid "Generated Aiken content"
+msgstr "გენერირებული Aiken შინაარსი"
+
+msgid "Review the generated content before importing it as a new exercise."
+msgstr "გადახედეთ გენერირებულ შინაარსს ახალ სავარჯიშოდ იმპორტირებამდე."
+
+msgid "No documents available."
+msgstr "ხელმისაწვდომი დოკუმენტები არ არის."
+
+msgid "yperbolic arctangent:\\t\\tarctanh(x)"
+msgstr "ჰიპერბოლური არქტანგენსი:\\t\\tarctanh(x)"
+
+msgid "Exercise"
+msgstr "სავარჯიშო"
+
+msgid "OfficialCode"
+msgstr "ოფიციალური კოდი"
+
+msgid "FirstName"
+msgstr "სახელი"
+
+msgid "LastName"
+msgstr "გვარი"
+
+msgid "LoginName"
+msgstr "მომხმარებლის სახელი"
+
+msgid "MinMinute"
+msgstr "მინუტი"
+
+msgid "StartDate"
+msgstr "დაწყების თარიღი"
+
+msgid "EndDate"
+msgstr "დასრულების თარიღი"
+
+msgid "CorrectionDate"
+msgstr "შესწორების თარიღი"
+
+msgid "NotValidated"
+msgstr "არ არის დადასტურებული"
+
+msgid "PendingAttempts"
+msgstr "მიმდინარე მცდელობები"
+
+msgid "List of pending test attempts across your courses."
+msgstr "თქვენს კურსებში მიმდინარე ტესტის მცდელობების სია."
+
+msgid "User ID"
+msgstr "მომხმარებლის ID"
+
+msgid "QuestionType"
+msgstr "კითხვის ტიპი"
+
+msgid "QuestionsWithNoAutomaticCorrection"
+msgstr "კითხვები ავტომატური შეფასების გარეშე"
+
+msgid "There are no pending tests."
+msgstr "არ არის მოლოდინში მყოფი ტესტები."
+
+msgid "%s results"
+msgstr "%s შედეგი"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>ფორმის შევსების მაგალითი: სხეულის მასის ინდექსის გამოთვლა</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>ასაკი</strong></td>            <td width=\"75%\" style=\"\">[25] წლის</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>სქესი</strong></td>            <td style=\"\" text-align:=\"\">[M] (M ან F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>წონა</strong></td>            <td style=\"\" text-align:=\"\">95 კგ</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>სიმაღლე</strong></td>            <td style=\"vertical-align: top;\">1.81 მ</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>სხეულის მასის ინდექსი</strong></td>            <td style=\"vertical-align: top;\">[29] BMI = წონა/სიმაღლე<sup>2</sup> (იხ.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> ვიკიპედიის სტატია</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Removed"
+msgstr "წაშლილი"
+
+msgid "NoUsersInTheList"
+msgstr "სიაში მომხმარებლები არ არიან"
+
+msgid "Are you sure?"
+msgstr "დარწმუნებული ხართ?"
+
+msgid "NoResultsAvailable"
+msgstr "შედეგები არ არის ხელმისაწვდომი"
+
+msgid "Import groups from a CSV file and optionally remove items that are not present in the file."
+msgstr "ჯგუფების იმპორტი CSV ფაილიდან და არარსებული ელემენტების წაშლა."
+
+msgid "Use this option carefully because items missing from the CSV can be removed during the import process."
+msgstr "გამოიყენეთ ეს პარამეტრი სიფრთხილით, რადგან CSV-ში არარსებული ელემენტები შეიძლება წაიშალოს იმპორტის დროს."
+
+msgid "Upload a CSV file with the group data you want to import."
+msgstr "ატვირთეთ CSV ფაილი ჯგუფის მონაცემებით, რომლის იმპორტიც გსურთ."
+
+msgid "You can download the example file to use the expected format."
+msgstr "შეგიძლიათ ჩამოტვირთოთ მაგალითი ფაილი სასურველი ფორმატის გამოსაყენებლად."
+
+msgid "If you enable deletion, items not present in the file may be removed."
+msgstr "თუ ჩართავთ წაშლას, ფაილში არარსებული ელემენტები შეიძლება წაიშალოს."
+
+msgid "The CSV file is mandatory to start the import."
+msgstr "იმპორტის დასაწყებად CSV ფაილი სავალდებულოა."
+
+msgid "Please select at least one class."
+msgstr "გთხოვთ, აირჩიოთ მინიმუმ ერთი კლასი."
+
+msgid "Define the properties for each group before creating them."
+msgstr "განსაზღვრეთ თითოეული ჯგუფის თვისებები მათ შექმნამდე."
+
+msgid "Apply the first row values"
+msgstr "პირველი მწკრივის მნიშვნელობების გამოყენება"
+
+msgid "Create groups manually or generate them from the classes subscribed to this course."
+msgstr "შექმენით ჯგუფები ხელით ან გენერირებული კლასებიდან, რომლებიც ამ კურსზე არიან ჩარიცხულნი."
+
+msgid "Create manual groups"
+msgstr "ჯგუფების ხელით შექმნა"
+
+msgid "Use this form when you want to create empty course groups manually."
+msgstr "გამოიყენეთ ეს ფორმა, როდესაც გსურთ ცარიელი კურსის ჯგუფების ხელით შექმნა."
+
+msgid "Configure manual groups"
+msgstr "ჯგუფების ხელით კონფიგურაცია"
+
+msgid "Create groups from subscribed classes"
+msgstr "ჯგუფების შექმნა ჩარიცხული კლასებიდან"
+
+msgid "Use this form when you want to create one course group for each selected class."
+msgstr "გამოიყენეთ ეს ფორმა, როდესაც გსურთ თითოეული არჩეული კლასისთვის ერთი კურსის ჯგუფის შექმნა."
+
+msgid "Keep created groups linked to their source classes"
+msgstr "შექმნილი ჯგუფების დაკავშირება მათ წყარო კლასებთან"
+
+msgid "Create groups from selected classes"
+msgstr "ჯგუფების შექმნა არჩეული კლასებიდან"
+
+msgid "You must be logged in to access this page."
+msgstr "ამ გვერდზე წვდომისთვის უნდა იყოთ ავტორიზებული."
+
+msgid "Invalid user"
+msgstr "არასწორი მომხმარებელი"
+
+msgid "UseCourseCustomCertificate"
+msgstr "კურსის მორგებული სერტიფიკატის გამოყენება"
+
+msgid "UseDefaultCustomCertificate"
+msgstr "ნაგულისხმევი მორგებული სერტიფიკატის გამოყენება"
+
+msgid "CertificateSetting"
+msgstr "სერტიფიკატის პარამეტრი"
+
+msgid "SelectOneOptionBeforeOpeningEditor"
+msgstr "აირჩიეთ ერთი ვარიანტი რედაქტორის გახსნამდე"
+
+msgid "ChooseCustomCertificateModeHelp"
+msgstr "აირჩიეთ მორგებული სერტიფიკატის რეჟიმი დახმარება"
+
+msgid "CertificateMode"
+msgstr "სერტიფიკატის რეჟიმი"
+
+msgid "Enable student to validate own attendance"
+msgstr "სტუდენტისთვის საკუთარი დასწრების ვალიდაციის უფლების მიცემა"
+
+msgid "Course block"
+msgstr "კურსის ბლოკი"
+
+msgid "Add custom content blocks to course footer regions."
+msgstr "დაამატეთ მორგებული შინაარსის ბლოკები კურსის ქვედა კოლონტიტულის რეგიონებში."
+
+msgid "course_block_pre_footer"
+msgstr "course_block_pre_footer"
+
+msgid "Before footer"
+msgstr "ქვედა კოლონტიტულამდე"
+
+msgid "course_block_footer_left"
+msgstr "course_block_footer_left"
+
+msgid "Footer left"
+msgstr "ქვედა კოლონტიტული მარცხნივ"
+
+msgid "course_block_footer_center"
+msgstr "course_block_footer_center"
+
+msgid "Footer center"
+msgstr "ქვედა კოლონტიტული ცენტრში"
+
+msgid "course_block_footer_right"
+msgstr "course_block_footer_right"
+
+msgid "Footer right"
+msgstr "ქვედა კოლონტიტული მარჯვნივ"
+
+msgid "SetNotification"
+msgstr "შეტყობინების დაყენება"
+
+msgid "CourseLegal"
+msgstr "კურსის იურიდიული"
+
+msgid "Certificates search is not available"
+msgstr "სერტიფიკატების ძებნა არ არის ხელმისაწვდომი"
+
+msgid "It allows the acquisition of skills by subcategories"
+msgstr "უნარების შეძენის საშუალებას იძლევა ქვეკატეგორიების მიხედვით"
+
+msgid "Allow skills by subcategories"
+msgstr "უნარების დაშვება ქვეკატეგორიების მიხედვით"
+
+msgid "Minimum score for skills"
+msgstr "უნარების მინიმალური ქულა"
+
+msgid "The gradebook table is hidden."
+msgstr "შეფასების ცხრილი დამალულია."
+
+msgid "Invalid token"
+msgstr "არასწორი ტოკენი"
+
+msgid "Unable to save the item"
+msgstr "ელემენტის შენახვა ვერ მოხერხდა"
+
+msgid "Only HTTP and HTTPS URLs are allowed."
+msgstr "მხოლოდ HTTP და HTTPS URL-ებია დაშვებული."
+
+msgid "Invalid URL host."
+msgstr "არასწორი URL ჰოსტი."
+
+msgid "This cloud provider is not allowed."
+msgstr "ეს ღრუბლოვანი პროვაიდერი დაუშვებელია."
+
+msgid "Documents used"
+msgstr "გამოყენებული დოკუმენტები"
+
+msgid "No document usage"
+msgstr "დოკუმენტის გამოყენება არ არის"
+
+msgid "Invalid action."
+msgstr "არასწორი მოქმედება."
+
+msgid "No users selected."
+msgstr "მომხმარებელი არ არის არჩეული."
+
+msgid "%s user(s) processed."
+msgstr "%s მომხმარებელი დამუშავდა."
+
+msgid "Invalid CSRF token."
+msgstr "არასწორი CSRF ტოკენი."
+
+msgid "[%s] Please change your password"
+msgstr "[%s] გთხოვთ შეცვალოთ თქვენი პაროლი"
+
+msgid "Dear %s,\n\nOur security enforcing process shows you use a password that is commonly used on the internet, which means your account could easily be stolen. It is probably a simple sequence or a very common word, we don't really know (we cannot see your password), but we ask you to please connect to the platform and request a password change. You can follow the link here: %s to do that now.\n\nPlease note we will never ask for your password in this process. You just enter your username or e-mail and we send you a link. If you are asked to introduce your existing password to do that, someone is probably trying to do Phishing on your account. Be safe, change your password now!\n\n%s\n%s"
+msgstr "ძვირფასო %s,\n\nჩვენი უსაფრთხოების პროცესი აჩვენებს, რომ იყენებთ პაროლს, რომელიც ხშირად გამოიყენება ინტერნეტში, რაც ნიშნავს, რომ თქვენი ანგარიში ადვილად შეიძლება მოიპარონ. ეს ალბათ მარტივი თანმიმდევრობა ან ძალიან გავრცელებული სიტყვაა, ჩვენ ზუსტად არ ვიცით (ჩვენ ვერ ვხედავთ თქვენს პაროლს), მაგრამ გთხოვთ დაუკავშირდეთ პლატფორმას და მოითხოვოთ პაროლის შეცვლა. ამისთვის შეგიძლიათ მიჰყვეთ ამ ბმულს: %s.\n\nგთხოვთ გაითვალისწინოთ, რომ ამ პროცესში ჩვენ არასოდეს მოგთხოვთ თქვენს პაროლს. თქვენ უბრალოდ შეიყვანთ თქვენს მომხმარებლის სახელს ან ელფოსტას და ჩვენ გამოგიგზავნით ბმულს. თუ მოგთხოვენ არსებული პაროლის შეყვანას, ვიღაც ალბათ ცდილობს თქვენი ანგარიშის ფიშინგს. იყავით უსაფრთხოდ, შეცვალეთ პაროლი ახლავე!\n\n%s\n%s"
+
+msgid "[%s] Your password has been reset"
+msgstr "[%s] თქვენი პაროლი განულდა"
+
+msgid "Dear %s,\n\nOur security enforcing process flagged you as using a password that is commonly used on the internet, which means your account could easily be stolen. As a prevention measure, we have decided to initiate a password reset process. Your new, automatically generated password is now:\n\n%s\n\nPlease login to the platform soon (using this new password) to set your own, personal and secure, password.\n\nBe safe.\n\n%s\n%s"
+msgstr "ძვირფასო %s,\n\nჩვენი უსაფრთხოების პროცესი აღნიშნავს, რომ იყენებთ პაროლს, რომელიც ხშირად გამოიყენება ინტერნეტში, რაც ნიშნავს, რომ თქვენი ანგარიში ადვილად შეიძლება მოიპარონ. პრევენციული ღონისძიების სახით, ჩვენ გადავწყვიტეთ პაროლის განულების პროცესის დაწყება. თქვენი ახალი, ავტომატურად გენერირებული პაროლი ახლა არის:\n\n%s\n\nგთხოვთ მალე შეხვიდეთ პლატფორმაზე (ამ ახალი პაროლის გამოყენებით) და დააყენოთ თქვენი პირადი და უსაფრთხო პაროლი.\n\nიყავით უსაფრთხოდ.\n\n%s\n%s"
+
+msgid "Signature saved successfully"
+msgstr "ხელმოწერა წარმატებით შეინახა"
+
+msgid "Invalid request payload."
+msgstr "არასწორი მოთხოვნის პეილოუდი."
+
+msgid "Authentication required."
+msgstr "აუთენტიფიკაცია აუცილებელია."
+
+msgid "The course title is required."
+msgstr "კურსის სათაური აუცილებელია."
+
+msgid "Only trainers and administrators can create courses."
+msgstr "მხოლოდ ტრენერებს და ადმინისტრატორებს შეუძლიათ კურსების შექმნა."
+
+msgid "Course creation by trainers is disabled on this platform."
+msgstr "ტრენერების მიერ კურსების შექმნა გამორთულია ამ პლატფორმაზე."
+
+msgid "The selected BuyCourses service cannot be used to create this course."
+msgstr "არჩეული BuyCourses სერვისი ვერ გამოიყენება ამ კურსის შესაქმნელად."
+
+msgid "You have reached the maximum number of courses allowed (%d)."
+msgstr "თქვენ მიაღწიეთ დაშვებული კურსების მაქსიმალურ რაოდენობას (%d)."
+
+msgid "The selected BuyCourses service is invalid."
+msgstr "არჩეული BuyCourses სერვისი არასწორია."
+
+msgid "BuyCourses is not available right now."
+msgstr "BuyCourses ამჟამად მიუწვდომელია."
+
+msgid "BuyCourses cannot validate the selected service right now."
+msgstr "BuyCourses ამჟამად ვერ ამოწმებს არჩეულ სერვისს."
+
+msgid "Unable to validate the selected BuyCourses service right now."
+msgstr "არჩეული BuyCourses სერვისის ვალიდაცია ამჟამად ვერ მოხერხდა."
+
+msgid "External tool removed from course"
+msgstr "გარე ინსტრუმენტი წაიშალა კურსიდან"
+
+msgid "External tool was removed from the course, but kept internally because it is linked to the gradebook"
+msgstr "გარე ინსტრუმენტი წაიშალა კურსიდან, მაგრამ შენარჩუნდა შიდა სისტემაში, რადგან დაკავშირებულია შეფასების წიგნთან"
+
+msgid "There are no external tools available to add to the gradebook"
+msgstr "არ არის გარე ინსტრუმენტები ხელმისაწვდომი შეფასების წიგნში დასამატებლად"
+
+msgid "The evaluation could not be created"
+msgstr "შეფასების შექმნა ვერ მოხერხდა"
+
+msgid "The gradebook evaluation could not be linked"
+msgstr "შეფასების წიგნის შეფასების დაკავშირება ვერ მოხერხდა"
+
+msgid "Survey questions"
+msgstr "გამოკითხვის კითხვები"
+
+msgid "Back to survey list"
+msgstr "უკან გამოკითხვების სიაში"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "ამ გამოკითხვას უკვე აქვს პასუხები. კითხვების რედაქტირება კონფიგურაციით გამორთულია."
+
+msgid "Choose the type of question you want to add."
+msgstr "აირჩიეთ კითხვის ტიპი, რომლის დამატებაც გსურთ."
+
+msgid "The free text option is added automatically."
+msgstr "თავისუფალი ტექსტის ვარიანტი ავტომატურად ემატება."
+
+msgid "No questions found"
+msgstr "კითხვები ვერ მოიძებნა"
+
+msgid "Mandatory"
+msgstr "სავალდებულო"
+
+msgid "Unsupported question type"
+msgstr "კითხვის მხარდაუჭერელი ტიპი"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "კითხვაში შეგიძლიათ გამოიყენოთ ტეგები {%s} და {%s}."
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "ეს კითხვა ნაჩვენებია პირობითად გამოკითხვაზე პასუხის გაცემისას."
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "პროცენტული ვარიანტები 1-დან 100-მდე ავტომატურად გენერირდება."
+
+msgid "Could not load survey questions"
+msgstr "გამოკითხვის კითხვების ჩატვირთვა ვერ მოხერხდა"
+
+msgid "The question text is required."
+msgstr "კითხვის ტექსტი სავალდებულოა."
+
+msgid "The maximum score is required."
+msgstr "მაქსიმალური ქულა სავალდებულოა."
+
+msgid "Please select a parent option."
+msgstr "გთხოვთ, აირჩიოთ მშობელი ვარიანტი."
+
+msgid "Please fill all answer options."
+msgstr "გთხოვთ, შეავსოთ ყველა პასუხის ვარიანტი."
+
+msgid "QuestionUpdated"
+msgstr "QuestionUpdated"
+
+msgid "Could not save survey question"
+msgstr "გამოკითხვის კითხვის შენახვა ვერ მოხერხდა"
+
+msgid "Could not delete survey question"
+msgstr "გამოკითხვის კითხვის წაშლა ვერ მოხერხდა"
+
+msgid "Could not move survey question"
+msgstr "გამოკითხვის კითხვის გადაადგილება ვერ მოხერხდა"
+
+msgid "Could not copy survey question"
+msgstr "გამოკითხვის კითხვის კოპირება ვერ მოხერხდა"
+
+msgid "Hide search"
+msgstr "ძიების დამალვა"
+
+msgid "Showing results for: %s"
+msgstr "შედეგების ჩვენება: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "ძიება გამოკითხვის სათაურით, კოდით ან აღწერით."
+
+msgid "Search surveys"
+msgstr "გამოკითხვების ძიება"
+
+msgid "%s surveys selected"
+msgstr "%s გამოკითხვა არჩეულია"
+
+msgid "Clear selection"
+msgstr "არჩევის გასუფთავება"
+
+msgid "No surveys found"
+msgstr "გამოკითხვები ვერ მოიძებნა"
+
+msgid "Unsupported"
+msgstr "მხარდაუჭერელი"
+
+msgid "Could not load surveys"
+msgstr "გამოკითხვების ჩატვირთვა ვერ მოხერხდა"
+
+msgid "Delete selected surveys"
+msgstr "არჩეული გამოკითხვების წაშლა"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "არჩეული გამოკითხვები და მათი კითხვები წაიშლება. ეს მოქმედება ვერ გაუქმდება."
+
+msgid "Could not delete selected surveys"
+msgstr "არჩეული გამოკითხვების წაშლა ვერ მოხერხდა"
+
+msgid "Survey action"
+msgstr "გამოკითხვის მოქმედება"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "ამ გამოკითხვის ასლი შეიქმნება: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "ამ გამოკითხვისთვის ყველა პასუხი და მოწვევა წაიშლება: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "ამ გამოკითხვიდან წაიშლება გამრავლებული კითხვები: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "ეს გამოკითხვა გამოქვეყნდება დაკავშირებული ჯგუფის ტუტორებისთვის: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "ეს გამოკითხვა და მისი კითხვები წაიშლება: %s"
+
+msgid "Could not complete survey action"
+msgstr "გამოკითხვის მოქმედების დასრულება ვერ მოხერხდა"
+
+msgid "Not started"
+msgstr "არ დაწყებულა"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "შეხვედრის გამოკითხვები საშუალებას აძლევს მოწვეულ მომხმარებლებს აირჩიონ თარიღები, როდესაც ისინი ხელმისაწვდომი არიან."
+
+msgid "Back to surveys"
+msgstr "გამოკითხვებზე დაბრუნება"
+
+msgid "Edit meeting poll"
+msgstr "შეხვედრის გამოკითხვის რედაქტირება"
+
+msgid "View meeting poll"
+msgstr "შეხვედრის გამოკითხვის ნახვა"
+
+msgid "Basic information"
+msgstr "ძირითადი ინფორმაცია"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "ეს შექმნის გამოკითხვას შეხვედრის გამოკითხვის ტიპის. პასუხები და მოწვევები ცალკე იმართება."
+
+msgid "Availability"
+msgstr "ხელმისაწვდომობა"
+
+msgid "Meeting dates"
+msgstr "შეხვედრის თარიღები"
+
+msgid "Meeting poll"
+msgstr "შეხვედრის გამოკითხვა"
+
+msgid "My availability"
+msgstr "ჩემი ხელმისაწვდომობა"
+
+msgid "Meeting poll results"
+msgstr "შეხვედრის გამოკითხვის შედეგები"
+
+msgid "No invitations found"
+msgstr "მოწვევები ვერ მოიძებნა"
+
+msgid "available"
+msgstr "ხელმისაწვდომი"
+
+msgid "Could not load meeting poll"
+msgstr "შეხვედრის გამოკითხვის ჩატვირთვა ვერ მოხერხდა"
+
+msgid "Please complete the required fields"
+msgstr "გთხოვთ შეავსოთ სავალდებულო ველები"
+
+msgid "Could not save meeting poll"
+msgstr "შეხვედრის გამოკითხვის შენახვა ვერ მოხერხდა"
+
+msgid "Could not save meeting availability"
+msgstr "შეხვედრის ხელმისაწვდომობის შენახვა ვერ მოხერხდა"
+
+msgid "Copy this survey to another course or session"
+msgstr "ამ გამოკითხვის კოპირება სხვა კურსში ან სესიაში"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "გამოკითხვა დაკოპირდება პასუხებისა და მოწვევების გარეშე."
+
+msgid "No target courses found"
+msgstr "სამიზნე კურსები ვერ მოიძებნა"
+
+msgid "Search by course title, course code or session name."
+msgstr "მოძებნეთ კურსის სათაურით, კურსის კოდით ან სესიის სახელით."
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "გამოიყენეთ გამოკითხვის დუბლირება, როდესაც გსურთ ასლი იმავე კურსში."
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "კითხვები და ვარიანტები დაკოპირდება. პასუხები, მოწვევები და ანგარიშები დარჩება მხოლოდ თავდაპირველ გამოკითხვაში."
+
+msgid "Selected target"
+msgstr "არჩეული სამიზნე"
+
+msgid "Could not load copy form"
+msgstr "კოპირების ფორმის ჩატვირთვა ვერ მოხერხდა"
+
+msgid "The survey will be copied to: %s"
+msgstr "გამოკითხვა დაკოპირდება აქ: %s"
+
+msgid "Survey copied."
+msgstr "გამოკითხვა დაკოპირდა."
+
+msgid "Could not copy survey"
+msgstr "გამოკითხვის კოპირება ვერ მოხერხდა"
+
+msgid "Answer survey"
+msgstr "გამოკითხვაზე პასუხის გაცემა"
+
+msgid "Preview mode does not save answers."
+msgstr "გადახედვის რეჟიმი პასუხებს არ ინახავს."
+
+msgid "Survey completed"
+msgstr "გამოკითხვა დასრულდა"
+
+msgid "Thank you for answering the survey."
+msgstr "მადლობა გამოკითხვაზე პასუხის გაცემისთვის."
+
+msgid "Profile information"
+msgstr "პროფილის ინფორმაცია"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "გთხოვთ გადახედოთ მოთხოვნილ პროფილის ველებს გამოკითხვაზე პასუხის გაცემამდე."
+
+msgid "This profile field is read-only."
+msgstr "ეს პროფილის ველი მხოლოდ წასაკითხია."
+
+msgid "You already filled this survey."
+msgstr "თქვენ უკვე შეავსეთ ეს გამოკითხვა."
+
+msgid "Please specify"
+msgstr "გთხოვთ მიუთითოთ"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "ამ კითხვის ტიპი თანამედროვე გამოკითხვის ხედში მხარდაჭერილი არ არის."
+
+msgid "Preview only"
+msgstr "მხოლოდ გადახედვა"
+
+msgid "Submit answers"
+msgstr "პასუხების გაგზავნა"
+
+msgid "Could not load survey"
+msgstr "გამოკითხვის ჩატვირთვა ვერ მოხერხდა"
+
+msgid "Please complete the required profile fields."
+msgstr "გთხოვთ, შეავსოთ სავალდებულო პროფილის ველები."
+
+msgid "Please answer all mandatory questions."
+msgstr "გთხოვთ, უპასუხოთ ყველა სავალდებულო კითხვას."
+
+msgid "Could not save survey answers"
+msgstr "გამოკითხვის პასუხების შენახვა ვერ მოხერხდა"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "კითხვებისა და მოწვევების მართვამდე დააკონფიგურირეთ გამოკითხვის ძირითადი ინფორმაცია."
+
+msgid "The survey code cannot be changed after creation."
+msgstr "გამოკითხვის კოდის შეცვლა შექმნის შემდეგ შეუძლებელია."
+
+msgid "Survey behavior"
+msgstr "გამოკითხვის ქცევა"
+
+msgid "Use 0 for no time limit."
+msgstr "დროის ლიმიტის გარეშე გამოიყენეთ 0."
+
+msgid "Survey messages"
+msgstr "გამოკითხვის შეტყობინებები"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "აქ არჩეული პროფილის ველები გამოჩნდება გამოკითხვის კითხვებამდე."
+
+msgid "No profile fields are currently available."
+msgstr "ამჟამად პროფილის ველები ხელმისაწვდომი არ არის."
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "პროფილის ველების არჩევა ხელმისაწვდომია მხოლოდ არაანონიმური გამოკითხვებისთვის."
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "უნარების დაკავშირება გადაიტანება ცალკე პარტიაში."
+
+msgid "Could not load survey configuration"
+msgstr "გამოკითხვის კონფიგურაციის ჩატვირთვა ვერ მოხერხდა"
+
+msgid "The survey code is required."
+msgstr "გამოკითხვის კოდი სავალდებულოა."
+
+msgid "The survey title is required."
+msgstr "გამოკითხვის სათაური სავალდებულოა."
+
+msgid "The survey has been saved successfully"
+msgstr "გამოკითხვა წარმატებით შეინახა"
+
+msgid "Could not save survey configuration"
+msgstr "გამოკითხვის კონფიგურაციის შენახვა ვერ მოხერხდა"
+
+msgid "Course users"
+msgstr "კურსის მომხმარებლები"
+
+msgid "Already invited"
+msgstr "უკვე მოწვეული"
+
+msgid "No users found"
+msgstr "მომხმარებლები ვერ მოიძებნა"
+
+msgid "No groups found"
+msgstr "ჯგუფები ვერ მოიძებნა"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "გამოიყენეთ **link** იქ, სადაც გამოკითხვის ბმული უნდა გამოჩნდეს."
+
+msgid "Remind all selected users"
+msgstr "შეხსენება ყველა არჩეულ მომხმარებელს"
+
+msgid "Anonymous access link"
+msgstr "ანონიმური წვდომის ბმული"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "მომხმარებლებს, რომლებიც არ არიან მოწვეული, ამ ბმულის გამოყენებით შეუძლიათ გაიარონ გამოკითხვა."
+
+msgid "Answered anonymously"
+msgstr "უპასუხა ანონიმურად"
+
+msgid "Could not load survey invitations"
+msgstr "გამოკითხვის მოწვევების ჩატვირთვა ვერ მოხერხდა"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "ელფოსტის გაგზავნისას საჭიროა თემა და შეტყობინება."
+
+msgid "Could not publish survey"
+msgstr "გამოკითხვის გამოქვეყნება ვერ მოხერხდა"
+
+msgid "Could not copy the link"
+msgstr "ბმულის კოპირება ვერ მოხერხდა"
+
+msgid "Please answer this survey using the following link"
+msgstr "გთხოვთ, უპასუხოთ ამ გამოკითხვას შემდეგი ბმულის გამოყენებით"
+
+msgid "Export CSV"
+msgstr "CSV ექსპორტი"
+
+msgid "Export compact CSV"
+msgstr "კომპაქტური CSV ექსპორტი"
+
+msgid "Export Excel"
+msgstr "Excel ექსპორტი"
+
+msgid "Export package"
+msgstr "პაკეტის ექსპორტი"
+
+msgid "Results summary"
+msgstr "შედეგების შეჯამება"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "ეს ხედი აჩვენებს ამ გამოკითხვისთვის მიგრირებულ ანგარიშგების მონაცემებს."
+
+msgid "Select user"
+msgstr "მომხმარებლის არჩევა"
+
+msgid "No answers found"
+msgstr "პასუხები ვერ მოიძებნა"
+
+msgid "answers"
+msgstr "პასუხები"
+
+msgid "Could not load survey reporting"
+msgstr "გამოკითხვის ანგარიშგების ჩატვირთვა ვერ მოხერხდა"
+
+msgid "Back to threads"
+msgstr "თემებზე დაბრუნება"
+
+msgid "Back to learning path"
+msgstr "სასწავლო გზაზე დაბრუნება"
+
+msgid "Remove sticky"
+msgstr "ფიქსირებულის მოხსნა"
+
+msgid "Make sticky"
+msgstr "ფიქსირებულად გახადე"
+
+msgid "Open thread"
+msgstr "თემის გახსნა"
+
+msgid "Close thread"
+msgstr "თემის დახურვა"
+
+msgid "Delete thread"
+msgstr "თემის წაშლა"
+
+msgid "This thread is hidden from learners."
+msgstr "ეს თემა დამალულია მოსწავლეებისთვის."
+
+msgid "Revision requested"
+msgstr "რევიზია მოთხოვნილია"
+
+msgid "Revision"
+msgstr "რევიზია"
+
+msgid "Approve post"
+msgstr "პოსტის დამტკიცება"
+
+msgid "Reject post"
+msgstr "პოსტის უარყოფა"
+
+msgid "Cancel revision request"
+msgstr "რევიზიის მოთხოვნის გაუქმება"
+
+msgid "Delete post"
+msgstr "პოსტის წაშლა"
+
+msgid "Message is required"
+msgstr "შეტყობინება აუცილებელია"
+
+msgid "Target thread is required"
+msgstr "სამიზნე თემა აუცილებელია"
+
+msgid "Could not retrieve posts"
+msgstr "პოსტების მიღება ვერ მოხერხდა"
+
+msgid "Thread shown"
+msgstr "თემა ნაჩვენებია"
+
+msgid "Thread hidden"
+msgstr "თემა დამალულია"
+
+msgid "Could not update thread"
+msgstr "თემის განახლება ვერ მოხერხდა"
+
+msgid "Thread closed"
+msgstr "თემა დახურულია"
+
+msgid "Thread opened"
+msgstr "თემა გახსნილია"
+
+msgid "Thread marked as sticky"
+msgstr "თემა მონიშნულია როგორც მიმაგრებული"
+
+msgid "Thread unmarked as sticky"
+msgstr "თემა მოხსნილია მიმაგრებულის სტატუსიდან"
+
+msgid "Thread notifications enabled"
+msgstr "თემის შეტყობინებები ჩართულია"
+
+msgid "Thread notifications disabled"
+msgstr "თემის შეტყობინებები გამორთულია"
+
+msgid "Could not update thread notification"
+msgstr "თემის შეტყობინების განახლება ვერ მოხერხდა"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "დარწმუნებული ხართ, რომ გსურთ ამ თემის წაშლა?"
+
+msgid "Could not delete thread"
+msgstr "თემის წაშლა ვერ მოხერხდა"
+
+msgid "Post approved"
+msgstr "პოსტი დამტკიცებულია"
+
+msgid "Could not approve post"
+msgstr "პოსტის დამტკიცება ვერ მოხერხდა"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "დარწმუნებული ხართ, რომ გსურთ ამ პოსტის უარყოფა?"
+
+msgid "Post rejected"
+msgstr "პოსტი უარყოფილია"
+
+msgid "Could not reject post"
+msgstr "პოსტის უარყოფა ვერ მოხერხდა"
+
+msgid "Post shown"
+msgstr "პოსტი ნაჩვენებია"
+
+msgid "Post hidden"
+msgstr "პოსტი დამალულია"
+
+msgid "Could not update post"
+msgstr "პოსტის განახლება ვერ მოხერხდა"
+
+msgid "Post updated"
+msgstr "პოსტი განახლებულია"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "დარწმუნებული ხართ, რომ გსურთ ამ პოსტის წაშლა?"
+
+msgid "Post deleted"
+msgstr "პოსტი წაშლილია"
+
+msgid "Could not delete post"
+msgstr "პოსტის წაშლა ვერ მოხერხდა"
+
+msgid "Untitled thread"
+msgstr "უსათაურო თემა"
+
+msgid "Could not retrieve threads"
+msgstr "თემების მიღება ვერ მოხერხდა"
+
+msgid "Post moved"
+msgstr "პოსტი გადატანილია"
+
+msgid "Could not move post"
+msgstr "პოსტის გადატანა ვერ მოხერხდა"
+
+msgid "Revision request removed"
+msgstr "რევიზიის მოთხოვნა წაშლილია"
+
+msgid "Could not update revision request"
+msgstr "რევიზიის მოთხოვნის განახლება ვერ მოხერხდა"
+
+msgid "Are you sure you want to report this post?"
+msgstr "დარწმუნებული ხართ, რომ გსურთ ამ პოსტის შესახებ ანგარიშის გაგზავნა?"
+
+msgid "Could not report post"
+msgstr "პოსტის შესახებ ანგარიშის გაგზავნა ვერ მოხერხდა"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "დარწმუნებული ხართ, რომ გსურთ ამ დანართის წაშლა?"
+
+msgid "Attachment deleted"
+msgstr "დანართი წაშლილია"
+
+msgid "Could not delete attachment"
+msgstr "დანართის წაშლა ვერ მოხერხდა"
+
+msgid "Thread title"
+msgstr "თემის სათაური"
+
+msgid "Sticky thread"
+msgstr "მიმაგრებული თემა"
+
+msgid "Attach files"
+msgstr "ფაილების მიმაგრება"
+
+msgid "Attachments are disabled for this forum"
+msgstr "ამ ფორუმისთვის დანართები გამორთულია"
+
+msgid "The forum is not open yet."
+msgstr "ფორუმი ჯერ არ გახსნილა."
+
+msgid "The forum is closed."
+msgstr "ფორუმი დახურულია."
+
+msgid "The forum is locked."
+msgstr "ფორუმი დაბლოკილია."
+
+msgid "New threads are not allowed in this forum."
+msgstr "ამ ფორუმში ახალი თემების შექმნა დაუშვებელია."
+
+msgid "Thread created"
+msgstr "თემა შეიქმნა"
+
+msgid "Could not create thread"
+msgstr "თემის შექმნა ვერ მოხერხდა"
+
+msgid "Back to posts"
+msgstr "პოსტებზე დაბრუნება"
+
+msgid "This reply will be stored as a revision."
+msgstr "ეს პასუხი შეინახება როგორც რევიზია."
+
+msgid "Post reply"
+msgstr "პასუხის გამოქვეყნება"
+
+msgid "The thread is locked."
+msgstr "თემა დაბლოკილია."
+
+msgid "Reply added"
+msgstr "პასუხი დაემატა"
+
+msgid "Could not add reply"
+msgstr "პასუხის დამატება ვერ მოხერხდა"
+
+msgid "Add forum"
+msgstr "ფორუმის დამატება"
+
+msgid "No forums found"
+msgstr "ფორუმები ვერ მოიძებნა"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "დისკუსიების დასაწყებად შექმენით თქვენი პირველი ფორუმის კატეგორია ან ფორუმი."
+
+msgid "Locked"
+msgstr "დაბლოკილი"
+
+msgid "No forums in this category"
+msgstr "ამ კატეგორიაში ფორუმები არ არის"
+
+msgid "Posts require approval"
+msgstr "პოსტები საჭიროებს დამტკიცებას"
+
+msgid "Forum for current group"
+msgstr "ფორუმი მიმდინარე ჯგუფისთვის"
+
+msgid "Group forum visibility"
+msgstr "ჯგუფის ფორუმის ხილვადობა"
+
+msgid "No category"
+msgstr "კატეგორია არ არის"
+
+msgid "Could not retrieve forums"
+msgstr "ფორუმების მიღება ვერ მოხერხდა"
+
+msgid "Forum category updated"
+msgstr "ფორუმის კატეგორია განახლდა"
+
+msgid "Forum category created"
+msgstr "ფორუმის კატეგორია შეიქმნა"
+
+msgid "Could not save forum category"
+msgstr "ფორუმის კატეგორიის შენახვა ვერ მოხერხდა"
+
+msgid "Forum updated"
+msgstr "ფორუმი განახლდა"
+
+msgid "Forum created"
+msgstr "ფორუმი შეიქმნა"
+
+msgid "Could not save forum"
+msgstr "ფორუმის შენახვა ვერ მოხერხდა"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "დარწმუნებული ხართ, რომ გსურთ ამ ფორუმის კატეგორიის წაშლა?"
+
+msgid "Could not delete forum category"
+msgstr "ფორუმის კატეგორიის წაშლა ვერ მოხერხდა"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "დარწმუნებული ხართ, რომ გსურთ ამ ფორუმის წაშლა?"
+
+msgid "Could not delete forum"
+msgstr "ფორუმის წაშლა ვერ მოხერხდა"
+
+msgid "Forum category unlocked"
+msgstr "ფორუმის კატეგორია განიბლოკა"
+
+msgid "Forum category locked"
+msgstr "ფორუმის კატეგორია დაიბლოკა"
+
+msgid "Could not update forum category"
+msgstr "ფორუმის კატეგორიის განახლება ვერ მოხერხდა"
+
+msgid "Forum category shown"
+msgstr "ფორუმის კატეგორია ნაჩვენებია"
+
+msgid "Forum category hidden"
+msgstr "ფორუმის კატეგორია დამალულია"
+
+msgid "Forum unlocked"
+msgstr "ფორუმი განიბლოკა"
+
+msgid "Forum locked"
+msgstr "ფორუმი დაიბლოკა"
+
+msgid "Could not update forum"
+msgstr "ფორუმის განახლება ვერ მოხერხდა"
+
+msgid "Forum shown"
+msgstr "ფორუმი ნაჩვენებია"
+
+msgid "Forum hidden"
+msgstr "ფორუმი დამალულია"
+
+msgid "Forum notifications enabled"
+msgstr "ფორუმის შეტყობინებები ჩართულია"
+
+msgid "Forum notifications disabled"
+msgstr "ფორუმის შეტყობინებები გამორთულია"
+
+msgid "Could not update forum notification"
+msgstr "ფორუმის შეტყობინების განახლება ვერ მოხერხდა"
+
+msgid "Forum category moved"
+msgstr "ფორუმის კატეგორია გადაადგილდა"
+
+msgid "Could not move forum category"
+msgstr "ფორუმის კატეგორიის გადაადგილება ვერ მოხერხდა"
+
+msgid "Forum moved"
+msgstr "ფორუმი გადაადგილდა"
+
+msgid "Could not move forum"
+msgstr "ფორუმის გადაადგილება ვერ მოხერხდა"
+
+msgid "Back to forums"
+msgstr "ფორუმებზე დაბრუნება"
+
+msgid "New thread"
+msgstr "ახალი თემა"
+
+msgid "No threads found"
+msgstr "თემები ვერ მოიძებნა"
+
+msgid "Sticky"
+msgstr "მიმაგრებული"
+
+msgid "Graded"
+msgstr "შეფასებული"
+
+msgid "Grade peers"
+msgstr "თანატოლების შეფასება"
+
+msgid "Move thread"
+msgstr "თემის გადატანა"
+
+msgid "Target forum"
+msgstr "სამიზნე ფორუმი"
+
+msgid "Target forum is required"
+msgstr "სამიზნე ფორუმი აუცილებელია"
+
+msgid "Students"
+msgstr "სტუდენტები"
+
+msgid "No students found"
+msgstr "სტუდენტები ვერ მოიძებნა"
+
+msgid "No peers available to grade."
+msgstr "შესაფასებელი თანატოლები არ არის."
+
+msgid "Qualified"
+msgstr "კვალიფიცირებული"
+
+msgid "Not qualified"
+msgstr "არ არის კვალიფიცირებული"
+
+msgid "Could not retrieve thread grading"
+msgstr "თემის შეფასების მიღება ვერ მოხერხდა"
+
+msgid "Thread grading updated"
+msgstr "თემის შეფასება განახლდა"
+
+msgid "Could not update thread grading"
+msgstr "თემის შეფასების განახლება ვერ მოხერხდა"
+
+msgid "Thread score saved"
+msgstr "თემის ქულა შენახულია"
+
+msgid "Could not save thread score"
+msgstr "თემის ქულის შენახვა ვერ მოხერხდა"
+
+msgid "Could not move thread"
+msgstr "თემის გადატანა ვერ მოხერხდა"
+
+msgid "Thread updated"
+msgstr "თემა განახლდა"
+
+msgid "Search term is too short"
+msgstr "ძიების ტერმინი ძალიან მოკლეა"
+
+msgid "Could not search forums"
+msgstr "ფორუმების ძებნა ვერ მოხერხდა"
+
+msgid "Moderated"
+msgstr "მოდერირებული"
+
+msgid "View threads"
+msgstr "თემების ნახვა"
 

@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Við kærleika"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formúluprøva: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formel dæmi: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variablumørk"
@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ja:upphavsrætt,, nei:ikki upphavsrætt"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mappar,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:Folder,, application\/msword:MsWord,, application\/octet-stream:Octet stream,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":uppgáva:uppgáva,,      simuleran:simuleran,,      spurnarkanning:spurnarkanning,,      diagram:diagram,,      talva:talva,,      graf:graf,,      indeks:indeks,,      fólka:folka,,      talva:talva,,      frásagnartextur:frásagnartekstur,,      próv:próv,,      tilfar:tilfar,,      trupulleikafrágreiðing:trupulleikafrágreiðing,,      sjálvmatan:sjálvmatan,,      fyrilestrar:fyrilestrar"
@@ -4636,7 +4636,7 @@ msgid "Invalid end date was given."
 msgstr "Ógyldig endadagur varð givin."
 
 msgid "(d/m/y h:m)"
-msgstr "(d/m/y h:m)"
+msgstr "(d\/m\/y h:m)"
 
 msgid "Homepage-files are not writable!"
 msgstr "Homepage-fílarnir eru ikki skrivligir!"
@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Skriva tegstin niðanfyri"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Dæmumynd fyri at fylla í eyðskema starvsemi: rokna Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Aldur</strong></td>            <td width=\"75%\" style=\"\">[25] ár gammal</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kyni</strong></td>            <td style=\"\" text-align:=\"\">[M] (M ella F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong:Vektur</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong:Hædd</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Vektur/Hædd<sup>2</sup> (Sí.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia grein</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Dømi um at fylla út aktivitet: rokna Kropsmassaindeks</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Aldur</strong></td>            <td width=\"75%\" style=\"\">[25] ára gamal</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kyn</strong></td>            <td style=\"\" text-align:=\"\">[M] (M ella F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Vekt</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Hædd</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Kropsmassaindeks</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Vekt/Stødd<sup>2</sup> (Sjá.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia grein</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Rit upp adressuna"
@@ -9725,6 +9725,9 @@ msgstr "Søkjeftanir fyri:"
 
 msgid "Select a file"
 msgstr "Vel eitt fil"
+
+msgid "Select a file to insert into the editor."
+msgstr "Vel eina fílu at setja inn í ritil."
 
 msgid "Warning - The FAQ file, located in the /home/ directory of your portal, is not writable. Your text will not be saved until the file permissions are changed."
 msgstr "Ávaring - FAQ filin, staðsett í /home/ mappuni á portali tínum, er ikki skrivilig. Teksturin verður ikki goymdur, fyrr enn filroyndirnar eru broyttar."
@@ -15906,6 +15909,9 @@ msgstr "Dagsetning & tíð"
 msgid "Item"
 msgstr "Lið"
 
+msgid "Items"
+msgstr "Lutir"
+
 msgid "Configure Dashboard Plugin"
 msgstr "Stilla Dashboard Plugin"
 
@@ -17159,6 +17165,18 @@ msgstr "Fundir í bólki"
 
 msgid "Courses in group"
 msgstr "Líkindi í bólki"
+
+msgid "Courses on the platform"
+msgstr "Kurser á pallinum"
+
+msgid "%s courses"
+msgstr "%s kurser"
+
+msgid "%s sessions"
+msgstr "%s sessiónir"
+
+msgid "Search by title or code"
+msgstr "Leita eftir heiti ella koda"
 
 msgid "Users in group"
 msgstr "Brúkarar í bólki"
@@ -29839,7 +29857,7 @@ msgid "Recruiter"
 msgstr "Rekruttari"
 
 msgid "Send data"
-msgstr "Send data"
+msgstr "Send dátur"
 
 msgid "Is recruiter?"
 msgstr "Er rekruttari?"
@@ -32163,6 +32181,9 @@ msgstr "Verkefni"
 msgid "Allowed file formats: %s"
 msgstr "Leymdar fílusnið: %s"
 
+msgid "File manager"
+msgstr "Fílustjóri"
+
 msgid "File type not allowed. Allowed extensions: %s"
 msgstr "Fílusnið ikki leyft. Leymdar endingar: %s"
 
@@ -32380,7 +32401,7 @@ msgid "Delete failed: missing course context or invalid question id."
 msgstr "Sletta miseyknaðist: vantar kursus samanhang ella ógilt spurning ID."
 
 msgid "AI Tutor"
-msgstr "AI Tutor"
+msgstr "AI Vegleiðari"
 
 msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
 msgstr "APCu-framburaðan má vera íson sett og virkin fyri at plattformurin kann brúka hana."
@@ -33832,34 +33853,34 @@ msgid "The file was saved, but its URL could not be resolved."
 msgstr "Fílan var goymd, men hennara URL kundi ikki verða løst."
 
 msgid "Generate an Aiken quiz from a topic or from one course document."
-msgstr ""
+msgstr "Ger eina Aiken-prógv úr einum evni ella úr einum kursdokumenti."
 
 msgid "Test from topic"
-msgstr ""
+msgstr "Prógv úr evni"
 
 msgid "Test from document"
-msgstr ""
+msgstr "Prógv úr dokumenti"
 
 msgid "Generate from topic"
-msgstr ""
+msgstr "Stovna úr evni"
 
 msgid "Use a topic prompt to generate a new Aiken questionnaire."
-msgstr ""
+msgstr "Nýt evnisleiðbeining til at stovna nýggjan Aiken spurnarbløð"
 
 msgid "Quiz title"
-msgstr ""
+msgstr "Royndarheiti"
 
 msgid "Generate from document"
-msgstr ""
+msgstr "Stovna úr skjali"
 
 msgid "Select one course document and generate questions based only on its contents."
-msgstr ""
+msgstr "Vel eitt skjal úr kurssinum og stovna spurningar bert út frá innihaldi tess."
 
 msgid "Selected document"
-msgstr ""
+msgstr "Valt skjal"
 
 msgid "The document is selected from the course documents list."
-msgstr ""
+msgstr "Skjalið er valt úr skjalalistanum í kursinum."
 
 msgid "Choose document"
 msgstr "Vel dokument"
@@ -33876,6 +33897,2583 @@ msgstr "Velkomin"
 msgid "Welcome to Chamilo"
 msgstr "Velkomin til Chamilo"
 
+msgid "Check all unanswered questions below"
+msgstr "Kanna allar ósvøruðu spurningar niðanfyri"
+
 msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
 msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Um hetta er fyrstu ferð tú brúkar Chamilo, so trygg at tú skoðar síðuna til at finna veg fram gjøgnum harin mongu funktionirnar. Um tú hevur brúk fyri hjálp, so finnur tú <a href=\"https://docs.chamilo.org\">okkara stovnrætta dokumentation</a> hjálpir við vanligum tingum, meðan okkara <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> kann hjálpa við at deila hugmyndum og finna svar hjá øðrum Chamilo-brúkarum."
+
+msgid "Change password"
+msgstr "Broyt loyniorð"
+
+msgid "Newest first"
+msgstr "Nýggjast fyrst"
+
+msgid "Oldest first"
+msgstr "Elst fyrst"
+
+msgid "Title A–Z"
+msgstr "Heiti A–Z"
+
+msgid "Title Z–A"
+msgstr "Heiti Z–A"
+
+msgid "Send test email"
+msgstr "Send royndar teldupost"
+
+msgid "Show teachers"
+msgstr "Vís undirvísarar"
+
+msgid "Hide teachers"
+msgstr "Fjal undirvísarar"
+
+msgid "Delete exercise attempts"
+msgstr "Strika royndarroyndir"
+
+msgid "Message sent successfully."
+msgstr "Boð sent væleydnað."
+
+msgid "You cannot create a new course right now."
+msgstr "Tú kanst ikki stovna nýggjan kurs nú."
+
+msgid "Unable to verify whether you can create a new course right now."
+msgstr "Ikki møguligt at vátta, um tú kanst stovna nýggjan kurs nú."
+
+msgid "Please try again later or contact the administrator."
+msgstr "Royn aftur seinni ella set teg í samband við umboðsstjóran."
+
+msgid "You cannot create more courses at this time."
+msgstr "Tú kanst ikki stovna fleiri kursir nú."
+
+msgid "You already manage %d courses and your active service allows up to %d. To create another course, you need a higher service limit or reduce your current active courses."
+msgstr "Tú umsitur longu %d kursir og títt virkandi tænasta loyvir upp til %d. Fyri at stovna ein nýggjan kurs, mást tú hava hægri tænastumark ella minka um núverandi virkandi kursir."
+
+msgid "You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now."
+msgstr "Tú umsitur longu %d kursir og skipanin loyvir í løtuni upp til %d fyri tína konto. Tú kanst ikki stovna fleiri kursir nú."
+
+msgid "Add a class"
+msgstr "Legg eina flokk til"
+
+msgid "Search classes"
+msgstr "Leita í flokkum"
+
+msgid "No classes found"
+msgstr "Ongir flokkar funnir"
+
+msgid "Import classes"
+msgstr "Innflyt flokkar"
+
+msgid "Class users"
+msgstr "Flokksbrúkarar"
+
+msgid "%s classes imported"
+msgstr "%s flokkar innfluttir"
+
+msgid "%s user-class links imported"
+msgstr "%s brúkara-flokks tengsl innflutt"
+
+msgid "Hide comments"
+msgstr "Fjal viðmerkingar"
+
+msgid "Loading comments..."
+msgstr "Innlesur viðmerkingar..."
+
+msgid "No comments yet."
+msgstr "Ongar viðmerkingar enn."
+
+msgid "A user with this username already exists"
+msgstr "Ein brúkari við hesum brúkaranavni er longu til"
+
+msgid "Manage meetings, review recordings and update course-wide BBB settings from one place."
+msgstr "Umsit fundir, endurskoða upptøkur og dagfør kursvíðar BBB-stillingar á einum stað."
+
+msgid "Review the current defaults and propagate them to every course when needed."
+msgstr "Endurskoða núverandi forsetingar og útbreiða tær til hvønn kurs, tá neyðugt er."
+
+msgid "Filter the list by meeting date range."
+msgstr "Filtra listan eftir fundardøgum."
+
+msgid "Review meeting history, participants and recording actions."
+msgstr "Endurskoða fundarsøgu, luttakarar og upptøkutiltak."
+
+msgid "Participants"
+msgstr "Luttakarar"
+
+msgid "CountUsers"
+msgstr "TalAvBrúkarum"
+
+msgid "No data found"
+msgstr "Ongin dátufundin"
+
+msgid "My justifications"
+msgstr "Mínar rættvísingar"
+
+msgid "My services"
+msgstr "Mínir tænastur"
+
+msgid "Extra menu"
+msgstr "Ekstra mený"
+
+msgid "Pending tests"
+msgstr "Avbíðandi royndir"
+
+msgid "No specific language"
+msgstr "Eingin serstøk mál"
+
+msgid "Source Chamilo version"
+msgstr "Keldu Chamilo-versjón"
+
+msgid "Exporting..."
+msgstr "Útflýtur..."
+
+msgid "Autosaved drafts available"
+msgstr "Sjálvgoymdar uppkast tøkar"
+
+msgid "Hide drafts"
+msgstr "Fjal drøg"
+
+msgid "Show drafts"
+msgstr "Vís drøg"
+
+msgid "Drafts are stored only in this browser and are removed after saving the document."
+msgstr "Drøg verða bert goymd í hesi kaga og verða strikað, tá skjalið er goymt."
+
+msgid "Last saved"
+msgstr "Seinast goymt"
+
+msgid "Restore draft"
+msgstr "Endurstovna drøg"
+
+msgid "Delete draft"
+msgstr "Strika drøg"
+
+msgid "Information about indexing document content"
+msgstr "Upplýsingar um at indeksera skjalainnihald"
+
+msgid "When enabled, the document text is indexed by the search engine so users can find it from platform search."
+msgstr "Tá ið virkjað, verður skjalateksturin indekseraður av leitimotorinum, so brúkarar kunnu finna hann í leit á pallinum."
+
+msgid "The editor is not available."
+msgstr "Ritil er ikki tøkur."
+
+msgid "Please place the cursor inside a paragraph first."
+msgstr "Vinarliga set bendilin inn í eina málsgrein fyrst."
+
+msgid "The selected paragraph is empty."
+msgstr "Valda málsgreinin er tóm."
+
+msgid "Loading failed."
+msgstr "Innlesing miseydnaðist."
+
+msgid "Add introduction"
+msgstr "Legg inn inngang"
+
+msgid "Course type"
+msgstr "Kurstevna"
+
+msgid "Choose whether this course uses the standard platform limits or benefits from a purchased service."
+msgstr "Vel, um hetta kúrsetið nýtir vanligu markini á pallinum ella fær gagn av einum keyptum tænastum."
+
+msgid "Standard course"
+msgstr "Vanligt kúrseti"
+
+msgid "Use the standard platform limits."
+msgstr "Nýt vanligu markini á pallinum."
+
+msgid "Selected"
+msgstr "Valt"
+
+msgid "Hosting limit"
+msgstr "Hýsingarmark"
+
+msgid "Document quota"
+msgstr "Skjalakvota"
+
+msgid "The standard course limit has been reached."
+msgstr "Markið fyri vanligt kúrseti er rokkið."
+
+msgid "Use the benefits granted by this service."
+msgstr "Nýt gagnini, sum hetta tænastin gevur."
+
+msgid "Courses with these benefits"
+msgstr "Kúrseti við hesum gagnum"
+
+msgid "Active service"
+msgstr "Virkin tænasta"
+
+msgid "Buy service"
+msgstr "Keyp tænastu"
+
+msgid "Select an available course type before creating the course."
+msgstr "Vel eina tøka kurstevnu áðrenn tú skapar kúrsetið."
+
+msgid "users"
+msgstr "brúkarar"
+
+msgid "You need to buy this service before using these benefits."
+msgstr "Tú mást keypa hesa tænastuna áðrenn tú nýtir hesi gagnini."
+
+msgid "You already used all courses available with this service."
+msgstr "Tú hevur longu brúkt øll kúrseti, sum eru tøk við hesi tænastuni."
+
+msgid "This option is not available."
+msgstr "Hetta valið er ikki tøkt."
+
+msgid "This field is required"
+msgstr "Hetta felt er kravt"
+
+msgid "Show less"
+msgstr "Vís minni"
+
+msgid "Show full description"
+msgstr "Vís fulla lýsing"
+
+msgid "Virtual keyboard"
+msgstr "Virtualt knappaborð"
+
+msgid "Backspace"
+msgstr "Backspace"
+
+msgid "Space"
+msgstr "Bil"
+
+msgid "Learning path only visible to selected learners"
+msgstr "Lærugongd bert sjónlig fyri valdum næmingum"
+
+msgid "Create course"
+msgstr "Stovna kúrseti"
+
+msgid "Tour"
+msgstr "Rás"
+
+msgid "Are you sure you want to delete this comment?"
+msgstr "Ert tú vís/ur í at strika hetta viðmerkingina?"
+
+msgid "No posts found"
+msgstr "Ongar postar funnir"
+
+msgid "No communities"
+msgstr "Ongar samkomur"
+
+msgid "No friends found"
+msgstr "Ongir vinir funnir"
+
+msgid "Visual overview of your skills"
+msgstr "Myndalig yvirlit yvir tínar førleikar"
+
+msgid "Compare your progress"
+msgstr "Samanber tín framburð"
+
+msgid "Please enter a search term."
+msgstr "Vinarliga skriva eitt leitiorð."
+
+msgid "Enter captcha code"
+msgstr "Skriva captcha-kodu"
+
+msgid "Refresh captcha"
+msgstr "Endurnýggja captcha"
+
+msgid "Captcha is temporarily blocked. Please try again later."
+msgstr "Captcha er fyribils blokkað. Vinarliga royn aftur seinni."
+
+msgid "Item Details"
+msgstr "Lutadátal"
+
+msgid "Open File"
+msgstr "Opna fílu"
+
+msgid "Selection"
+msgstr "Úrval"
+
+msgid "Remove selection context"
+msgstr "Fjern úrvalssamanhang"
+
+msgid "Source document"
+msgstr "Keldu skjal"
+
+msgid "Use the current course context"
+msgstr "Nýt núverandi skeiðssamanhang"
+
+msgid "Loading documents..."
+msgstr "Innles skjøl..."
+
+msgid "No compatible PDF or TXT document was found in this course."
+msgstr "Einki samsvarandi PDF- ella TXT-skjal var funnið í hesum skeiðnum."
+
+msgid "Select a PDF or TXT document to generate terms only from that document."
+msgstr "Vel eitt PDF- ella TXT-skjal fyri at skapa orð bert úr tí skjalinum."
+
+msgid "Confidentiality warning"
+msgstr "Trúnaðar ávaring"
+
+msgid "When a document is selected, the prompt is fixed so the generation uses only that document content."
+msgstr "Tá ið eitt skjal er valt, er boðin fast so at framleiðslan nýtir bert innihaldið í tí skjalinum."
+
+msgid "No document-processing AI providers available."
+msgstr "Ongin AI-veitarar til skjalaviðgerð eru tøkir."
+
+msgid "Failed to save signature. Please try again."
+msgstr "Miseydnaðist at goyma undirskrift. Vinarliga royn aftur."
+
+msgid "Select and move"
+msgstr "Vel og flyt"
+
+msgid "Freehand"
+msgstr "Fríhond"
+
+msgid "Stroke"
+msgstr "Strik"
+
+msgid "Fill"
+msgstr "Fyll"
+
+msgid "Import SVG"
+msgstr "Innles SVG"
+
+msgid "Import image"
+msgstr "Innles mynd"
+
+msgid "Click the drawing area to place this text"
+msgstr "Klikk á tekningarøkið fyri at setja hesa tekstin"
+
+msgid "Draw a new SVG, import an existing SVG or embed an image, then save it as a reusable document."
+msgstr "Tekna eitt nýtt SVG, innles eitt verandi SVG ella innset eina mynd, síðani goym tað sum eitt endurnýtanligt skjal."
+
+msgid "Use Select and move to reposition or resize elements added in this editor."
+msgstr "Nýt Vel og flyt fyri at flyta ella broyta stødd á lutum, sum eru lagdir afturat í hesi ritil."
+
+msgid "Stroke width"
+msgstr "Strikubreidd"
+
+msgid "Transparent fill"
+msgstr "Gjøgnumskygd fylling"
+
+msgid "Invalid id"
+msgstr "Ógildig id"
+
+msgid "Unable to load the drawing"
+msgstr "Ikki ført fyri at innlesa tekningina"
+
+msgid "Only PNG, JPG, WEBP or GIF images are supported."
+msgstr "Bert PNG, JPG, WEBP ella GIF myndir eru stuðlaðar."
+
+msgid "Unable to read the image file."
+msgstr "Ikki ført fyri at lesa myndafíluna."
+
+msgid "Only SVG files are supported."
+msgstr "Bert SVG fílur eru stuðlaðar."
+
+msgid "The SVG file is empty or invalid."
+msgstr "SVG fílan er tóm ella ógildig."
+
+msgid "Unable to read the SVG file."
+msgstr "Ikki ført fyri at lesa SVG fíluna."
+
+msgid "The drawing is empty or invalid."
+msgstr "Tekningin er tóm ella ógildig."
+
+msgid "Unable to save the drawing"
+msgstr "Ikki ført fyri at goyma tekningina"
+
+msgid "Information about AI-assisted documents"
+msgstr "Upplýsingar um AI-hjálpt skjøl"
+
+msgid "Location"
+msgstr "Stað"
+
+msgid "Cloud link"
+msgstr "Skýleinkja"
+
+msgid "Add a link to a cloud document, such as Google Drive or Google Docs."
+msgstr "Legg eina leinkju til eitt skýskjal, sum Google Drive ella Google Docs."
+
+msgid "Add cloud link"
+msgstr "Legg skýleinkju"
+
+msgid "Document title"
+msgstr "Skjalatitil"
+
+msgid "Document options change how uploaded files are processed after saving."
+msgstr "Skjalamøguleikar broyta, hvussu uppsendar fílur verða viðgjørdar eftir goyming."
+
+msgid "Information about uncompressing zip files"
+msgstr "Upplýsingar um at pakka zip fílur út"
+
+msgid "When enabled, ZIP files are extracted into the current document folder after upload."
+msgstr "Tá ið virkjað, verða ZIP fílur pakkaðar út í núverandi skjalamappu eftir uppsending."
+
+msgid "The title is required."
+msgstr "Titilin er kravdur."
+
+msgid "The URL is required."
+msgstr "URL er kravdur."
+
+msgid "The destination folder is missing."
+msgstr "Málsmappan vantar."
+
+msgid "Unable to create cloud link."
+msgstr "Ikki ført fyri at skapa skýleinkju."
+
+msgid "Copy to My Files"
+msgstr "Avrita til Mínar fílur"
+
+msgid "Used space"
+msgstr "Nýtt pláss"
+
+msgid "Available space"
+msgstr "Tøkt pláss"
+
+msgid "Available percentage"
+msgstr "Tøkt prosent"
+
+msgid "Cloud links cannot be downloaded."
+msgstr "Skýleinkjur kunnu ikki takast niður."
+
+msgid "Could not copy the file to My Files"
+msgstr "Kundi ikki avrita fílu til Míni fílur"
+
+msgid "File copied to My Files"
+msgstr "Fíla avrita til Míni fílur"
+
+msgid "Checking course creation options..."
+msgstr "Kannar møguleikar fyri at stovna skeið..."
+
+msgid "You cannot create more courses right now."
+msgstr "Tú kanst ikki stovna fleiri skeið nú."
+
+msgid "AI analyzer"
+msgstr "AI-greinari"
+
+msgid "Expand all"
+msgstr "Víðka alt"
+
+msgid "Collapse all"
+msgstr "Fella alt saman"
+
+msgid "Review your active service benefits, purchase history and available receipts."
+msgstr "Yvirlit yvir virknar tænastur, keypsøgu og tøkar kvittanir."
+
+msgid "Active services"
+msgstr "Virknar tænastur"
+
+msgid "No active services"
+msgstr "Ongar virknar tænastur"
+
+msgid "Valid until"
+msgstr "Gildistíð"
+
+msgid "Recurring payment"
+msgstr "Endurtakandi gjald"
+
+msgid "Next charge"
+msgstr "Næsta gjald"
+
+msgid "Enable auto billing"
+msgstr "Ger sjálvvirkandi gjalding virkna"
+
+msgid "Cancel auto billing"
+msgstr "Ógilda sjálvvirkandi gjalding"
+
+msgid "Granted benefits"
+msgstr "Veittar fyrimunir"
+
+msgid "Purchase history"
+msgstr "Keypsøga"
+
+msgid "No purchases yet"
+msgstr "Ongin keyp enn"
+
+msgid "Product"
+msgstr "Vøra"
+
+msgid "Reference"
+msgstr "Tilvísing"
+
+msgid "Amount"
+msgstr "Upphædd"
+
+msgid "Receipt"
+msgstr "Kvittan"
+
+msgid "Unable to load your services right now."
+msgstr "Tað bar ikki til at heinta tænastur tínar nú."
+
+msgid "Auto billing enabled"
+msgstr "Sjálvvirkandi gjalding virknað"
+
+msgid "Auto billing suspended"
+msgstr "Sjálvvirkandi gjalding steðgað"
+
+msgid "Auto billing cancelled"
+msgstr "Sjálvvirkandi gjalding ógildað"
+
+msgid "Auto billing disabled"
+msgstr "Sjálvvirkandi gjalding óvirknað"
+
+msgid "Cancel auto billing for this service?"
+msgstr "Ógilda sjálvvirkandi gjalding fyri hesa tænastu?"
+
+msgid "Preview class members and courses"
+msgstr "Forskoða næmingar og skeið"
+
+msgid "Please select a CSV file to import."
+msgstr "Vinarliga vel eina CSV-fílu at innflyta."
+
+msgid "%d user-class links imported"
+msgstr "%d brúkaraflokksleinkjur innfluttar"
+
+msgid "The following errors occurred during import:"
+msgstr "Hesar villur komu fyri undir innflutningi:"
+
+msgid "CSV file"
+msgstr "CSV-fíla"
+
+msgid "Remove user from all group-related entities if not in the list"
+msgstr "Tak brúkara úr øllum bólkagreinum, um hann ikki er á listanum"
+
+msgid "UserName"
+msgstr "Brúkaranavn"
+
+msgid "ClassName"
+msgstr "Floksnavn"
+
+msgid "are required for each row."
+msgstr "eru kravdar fyri hvørja rað."
+
+msgid "title"
+msgstr "heiti"
+
+msgid "is required."
+msgstr "er kravt."
+
+msgid "description"
+msgstr "lýsing"
+
+msgid "are optional."
+msgstr "eru valfrí."
+
+msgid "Are you sure you want to remove this user from the class?"
+msgstr "Ert tú vís/ur í, at tú vilt taka henda brúkaran úr flokkinum?"
+
+msgid "Users in class"
+msgstr "Brúkarar í flokki"
+
+msgid "Remove user"
+msgstr "Tak brúkara burtur"
+
+msgid "Class not found"
+msgstr "Flokkur ikki funnin"
+
+msgid "Class overview"
+msgstr "Yvirlit yvir flokk"
+
+msgid "Back to classes"
+msgstr "Aftur til flokkar"
+
+msgid "Search members or courses"
+msgstr "Leita eftir limum ella skeiðum"
+
+msgid "Search by name, email, username or course title"
+msgstr "Leita eftir navni, telduposti, brúkaranavni ella skeiðsheiti"
+
+msgid "Class members"
+msgstr "Floks limir"
+
+msgid "No email"
+msgstr "Ongin teldupostur"
+
+msgid "No members found"
+msgstr "Ongir limir funnir"
+
+msgid "No courses found"
+msgstr "Ongir skúlarnir funnir"
+
+msgid "The end date must be after the start date."
+msgstr "Endadagurin má vera eftir byrjanardaginum."
+
+msgid "Always visible"
+msgstr "Altíð sjónligt"
+
+msgid "No end date"
+msgstr "Ongin endadagur"
+
+msgid "No restriction"
+msgstr "Ongin avmarking"
+
+msgid "Missing learning path or course identifier"
+msgstr "Vantar læristíg ella skúlaskipan"
+
+msgid "Select a user or a group first"
+msgstr "Vel ein brúkara ella ein bólk fyrst"
+
+msgid "Remove all date restrictions for this learning path?"
+msgstr "Tak burtur allar dagfestingaravmarkingar fyri hesa læristíg?"
+
+msgid "Advanced learning path access"
+msgstr "Víðkaður atgongd til læristíg"
+
+msgid "Remove date restrictions"
+msgstr "Tak burtur dagfestingaravmarkingar"
+
+msgid "Search by name, email, username or group"
+msgstr "Leita eftir navni, telduposti, brúkaranavni ella bólki"
+
+msgid "Edit user restriction"
+msgstr "Rætta brúkaraavmarking"
+
+msgid "Edit group restriction"
+msgstr "Rætta bólkaavmarking"
+
+msgid "Select a user or group"
+msgstr "Vel ein brúkara ella bólk"
+
+msgid "Save restriction"
+msgstr "Goym avmarking"
+
+msgid "members"
+msgstr "limir"
+
+msgid "Create Assignment"
+msgstr "Stovna uppgávu"
+
+msgid "The submission deadline has passed. You can no longer submit."
+msgstr "Inngevingarfreistin er farin. Tú kanst ikki longur geva inn."
+
+msgid "Mailing cannot be combined with other recipients."
+msgstr "Postlisti kann ikki samanberast við øðrum móttakarum."
+
+msgid "Social map"
+msgstr "Sosialt kort"
+
+msgid "The map plugin is not enabled or configured."
+msgstr "Kortstikka er ikki virkjað ella uppsett."
+
+msgid "Some configured extra fields were not found"
+msgstr "Nakrar uppsettar eykaøkir vórðu ikki funnar"
+
+msgid "No user locations were found."
+msgstr "Ongar brúkarastøður vórðu funnar."
+
+msgid "OpenStreetMap needs coordinates to display an embedded marker. Address-only locations are listed below."
+msgstr "OpenStreetMap krevur koordinatar fyri at vísa eitt innbygt merki. Støður við bert adressu eru listaðar niðanfyri."
+
+msgid "Locations"
+msgstr "Støður"
+
+msgid "Open map"
+msgstr "Opna kort"
+
+msgid "Provider: OpenStreetMap"
+msgstr "Veitari: OpenStreetMap"
+
+msgid "Provider: Google Maps"
+msgstr "Veitari: Google Maps"
+
+msgid "Personal files"
+msgstr "Persónligar fílur"
+
+msgid "Upload image"
+msgstr "Legg mynd upp"
+
+msgid "Upload media"
+msgstr "Legg miðil upp"
+
+msgid "Only image files are allowed in this upload screen."
+msgstr "Bert myndafílur eru loyvdar í hesi uppsendingarskjánum."
+
+msgid "Only audio and video files are allowed in this upload screen."
+msgstr "Bert ljóð- og kvikmyndafílur eru loyvdar í hesi uppsendingarskjánum."
+
+msgid "Upload files to your personal storage."
+msgstr "Legg fílur upp í títt persónliga goymslu."
+
+msgid "Linked"
+msgstr "Leinkja"
+
+msgid "No audio or video files were found in this folder."
+msgstr "Ongar ljóð- ella kvikmyndafílur vórðu funnar í hesi mappuni."
+
+msgid "No image files were found in this folder."
+msgstr "Ongar myndafílur vórðu funnar í hesi mappuni."
+
+msgid "No matching files were found in this folder."
+msgstr "Ongar samsvarandi fílur vórðu funnar í hesi mappuni."
+
+msgid "This file type is not allowed in this upload screen."
+msgstr "Hetta fílslag er ikki loyvt í hesi uppsendingarskjánum."
+
+msgid "Manage your personal files and course documents."
+msgstr "Handhevja tínar persónligu fílur og skúlaskjöl."
+
+msgid "DateValidity"
+msgstr "DateValidity"
+
+msgid "JustificationSaved"
+msgstr "JustificationSaved"
+
+msgid "ValidityDate"
+msgstr "ValidityDate"
+
+msgid "MyJustifications"
+msgstr "MyJustifications"
+
+msgid "Submission"
+msgstr "Inngeving"
+
+msgid "Use the filters above to narrow the list."
+msgstr "Nýt filtranar omanfyri fyri at avmarka listan."
+
+msgid "You are not allowed to see this page."
+msgstr "Tú hevur ikki loyvi at síggja hesa síðu."
+
+msgid "plugin_title"
+msgstr "plugin_title"
+
+msgid "plugin_comment"
+msgstr "plugin_comment"
+
+msgid "Course tracking details"
+msgstr "Nágreiniligar upplýsingar um námskeið"
+
+msgid "Course activity statistics"
+msgstr "Virksemisfrøði fyri námskeið"
+
+msgid "mobile_phone_number"
+msgstr "mobile_phone_number"
+
+msgid "Allowed template syntax"
+msgstr "Loyvdar fyrimyndarreglur"
+
+msgid "Functions"
+msgstr "Funksjónir"
+
+msgid "Available variables depend on the template type, for example {{ user.getUsername() }} or {{ user.getEmail() }}."
+msgstr "Tøkar broytibroyti eru treytaðar av fyrimyndarstøddini, t.d. {{ user.getUsername() }} ella {{ user.getEmail() }}."
+
+msgid "For security reasons, any other Twig function, filter (such as filter, map, reduce or sort) or PHP call is blocked."
+msgstr "Av trygdarávum eru allar aðrar Twig-funksjónir, filtra (sum filter, map, reduce ella sort) ella PHP-kall blokkaðar."
+
+msgid "Global administrator"
+msgstr "Globalur umsitarari"
+
+msgid "Session manager"
+msgstr "Session-umsitari"
+
+msgid "Human resources manager"
+msgstr "Manndóms- og tilfeingisumsitari"
+
+msgid "Course teacher"
+msgstr "Námskeiðslærari"
+
+msgid "Course student"
+msgstr "Námskeiðsnæmingur"
+
+msgid "Platform reports"
+msgstr "Pallfrágreiðingar"
+
+msgid "Security reports"
+msgstr "Trygdarfrágreiðingar"
+
+msgid "Course reports"
+msgstr "Námskeiðsfrágreiðingar"
+
+msgid "Gradebook reports"
+msgstr "Einkunnabókarfrágreiðingar"
+
+msgid "Social reports"
+msgstr "Sosialar frágreiðingar"
+
+msgid "Exports"
+msgstr "Útflutningar"
+
+msgid "Reports about platform-wide usage, users, courses and sessions."
+msgstr "Frágreiðingar um nýtslu á pallinum, brúkarar, námskeið og sessionar."
+
+msgid "Audit and security-sensitive reports."
+msgstr "Endurskoðanar- og trygdarviðkvæmar frágreiðingar."
+
+msgid "Reports scoped to courses managed by the user."
+msgstr "Frágreiðingar avmarkaðar til námskeið, sum brúkarin umsitur."
+
+msgid "Reports related to learner activity and follow-up."
+msgstr "Frágreiðingar um næmingavirksemi og eftirfylgjan."
+
+msgid "Reports related to scores, certificates and gradebook data."
+msgstr "Frágreiðingar um stig, prógv og einkunnabókagögn."
+
+msgid "Reports and exports that generate downloadable files."
+msgstr "Frágreiðingar og útflutningar, sum framleiða niðurhaldsfílur."
+
+msgid "Main platform statistics dashboard."
+msgstr "Høvuðsfrágreiðingarpallur fyri pallstødd."
+
+msgid "Number of courses and course distribution report."
+msgstr "Frágreiðing um tal av námskeiðum og námskeiðsbýti."
+
+msgid "Platform-wide access to course tools."
+msgstr "Pallvíð atgongd til námskeiðsamboð."
+
+msgid "Number of resources per tool."
+msgstr "Tal av tilfeingi pr. amboð."
+
+msgid "Latest access to courses."
+msgstr "Seinastu atgongdir til námskeið."
+
+msgid "Course distribution by language."
+msgstr "Námskeiðsbýti eftir máli."
+
+msgid "Course usage report."
+msgstr "Nýtslufrágreiðing fyri námskeið."
+
+msgid "Platform user count report."
+msgstr "Frágreiðing um tal av brúkarum á pallinum."
+
+msgid "Recent logins chart."
+msgstr "Mynd av nýggjustu innritanum."
+
+msgid "Login distribution by month."
+msgstr "Innritanarbýti eftir mánaði."
+
+msgid "Login distribution by day."
+msgstr "Innritanarbýti eftir degi."
+
+msgid "Login distribution by hour."
+msgstr "Innritanarbýti eftir tíma."
+
+msgid "Users with profile picture."
+msgstr "Brúkarar við profilmynd."
+
+msgid "Login report filtered by date."
+msgstr "Innritanarfrágreiðing filtrað eftir dato."
+
+msgid "Users who have not logged in recently."
+msgstr "Brúkarar, sum ikki hava ritað inn nýggjastu tíðina."
+
+msgid "Inactive or suspicious user accounts report."
+msgstr "Frágreiðing um óvirknar ella grunsamligar brúkarakontur."
+
+msgid "Users activity statistics."
+msgstr "Virksemisfrøði fyri brúkarar."
+
+msgid "Currently online users report."
+msgstr "Frágreiðing um brúkarar, sum eru online nú."
+
+msgid "New user registrations over time."
+msgstr "Nýggjar brúkaraskrásetingar yvir tíð."
+
+msgid "Course and session subscriptions over time."
+msgstr "Námskeiðs- og sessionsskrásetingar yvir tíð."
+
+msgid "Duplicate user detection and maintenance report."
+msgstr "Frágreiðing um dupultar brúkarar og viðlíkahald."
+
+msgid "Platform user/session statistics."
+msgstr "Pallbrúkara-/sessionstøddfrøði."
+
+msgid "Quarterly platform report."
+msgstr "Ársfjórðungsfrágreiðing fyri pallin."
+
+msgid "Activities audit"
+msgstr "Virksemisendurskoðan"
+
+msgid "Audit report for important administrative and platform activities."
+msgstr "Endurskoðanarfrágreiðing fyri týdningarmiklar umsitingar- og pallvirksemi."
+
+msgid "Social messages received report."
+msgstr "Frágreiðing um móttiknar sosial boð."
+
+msgid "Social messages sent report."
+msgstr "Frágreiðing um send sosial boð."
+
+msgid "Social contacts count report."
+msgstr "Frágreiðing um tal av sosialum sambondum."
+
+msgid "Sessions created over time."
+msgstr "Sessiónir stovnaðar yvir tíð."
+
+msgid "Learning analytics dashboard."
+msgstr "Læringargreiningarstjórn."
+
+msgid "Teacher time report."
+msgstr "Frágreiðing um læraratíð."
+
+msgid "Teachers time by session report"
+msgstr "Frágreiðing um læraratíð eftir sessión."
+
+msgid "Teacher time report grouped by session."
+msgstr "Frágreiðing um læraratíð bólkað eftir sessión."
+
+msgid "Corporate learning analytics report."
+msgstr "Frágreiðing um virkisins læringargreiningar."
+
+msgid "Course learners tracking report."
+msgstr "Frágreiðing um næmingaávísing í skeiði."
+
+msgid "Course activity statistics with connected and inactive users."
+msgstr "Skeiðsvirksemiðs hagtøl við virknum og óvirknum brúkarum."
+
+msgid "Detailed tracking report for a learner inside a course."
+msgstr "Ítarlig ávísingarfrágreiðing fyri næming í skeiði."
+
+msgid "Course gradebook overview."
+msgstr "Yvirlit yvir skeiðs karakterbók."
+
+msgid "Gradebook statistics"
+msgstr "Hagtøl fyri karakterbók"
+
+msgid "Gradebook statistics report."
+msgstr "Frágreiðing um hagtøl fyri karakterbók."
+
+msgid "Certificate report"
+msgstr "Prógvfrágreiðing"
+
+msgid "Certificate report for course gradebook."
+msgstr "Prógvfrágreiðing fyri skeiðs karakterbók."
+
+msgid "User statistics"
+msgstr "Brúkarahagtøl"
+
+msgid "Course gradebook statistics for a user."
+msgstr "Skeiðs karakterbókshagtøl fyri ein brúkara."
+
+msgid "Personal statistics"
+msgstr "Persónlig hagtøl"
+
+msgid "Personal gradebook statistics."
+msgstr "Persónlig hagtøl fyri karakterbók."
+
+msgid "Reports catalog"
+msgstr "Frágreiðingarkatalogur"
+
+msgid "Central catalog of available reports, roles and permission categories."
+msgstr "Miðdepilskatalogur av tøkum frágreiðingum, leiklutum og heimildarbólkum."
+
+msgid "Course log events"
+msgstr "Skeiðs loggiðir"
+
+msgid "Detailed course tracking events."
+msgstr "Ítarligar skeiðs ávísingarhendingar."
+
+msgid "Course tool usage"
+msgstr "Skeiðs amboðsbrúk"
+
+msgid "Course tracking report grouped by tools."
+msgstr "Skeiðs ávísingarfrágreiðing bólkað eftir amboðum."
+
+msgid "Course resource usage"
+msgstr "Skeiðs tilfeingisbrúk"
+
+msgid "Course tracking report grouped by resources."
+msgstr "Skeiðs ávísingarfrágreiðing bólkað eftir tilfeingi."
+
+msgid "Course group tracking"
+msgstr "Skeiðsbólkaávísing"
+
+msgid "Tracking report for course groups."
+msgstr "Ávísingarfrágreiðing fyri skeiðsbólkar."
+
+msgid "Course session report"
+msgstr "Skeiðssessiónsfrágreiðing"
+
+msgid "Tracking report for a course inside sessions."
+msgstr "Ávísingarfrágreiðing fyri eitt skeið í sessiónum."
+
+msgid "Learning path report"
+msgstr "Lærugongdfrágreiðing"
+
+msgid "Learning path tracking report."
+msgstr "Lærugongd ávísingarfrágreiðing."
+
+msgid "Learning path results by user"
+msgstr "Lærugongd úrslit eftir brúkara"
+
+msgid "Learning path results grouped by user."
+msgstr "Lærugongd úrslit bólkað eftir brúkara."
+
+msgid "Exercises report"
+msgstr "Ætlanarfrágreiðing"
+
+msgid "Course exercises and exams tracking report."
+msgstr "Skeiðs ætlanir og royndir ávísingarfrágreiðing."
+
+msgid "Question report"
+msgstr "Spurningafrágreiðing"
+
+msgid "Course question tracking report."
+msgstr "Skeiðs spurninga ávísingarfrágreiðing."
+
+msgid "Messages report"
+msgstr "Boðafrágreiðing"
+
+msgid "Course messages tracking report."
+msgstr "Skeiðs boða ávísingarfrágreiðing."
+
+msgid "Total time tracking report for course learners."
+msgstr "Samlað tíðarávísingarfrágreiðing fyri skeiðsnæmingar."
+
+msgid "Gradebook summary"
+msgstr "Karakterbókssamandráttur"
+
+msgid "Summary view of gradebook results."
+msgstr "Samandráttur av karakterbóksúrslitum."
+
+msgid "Flat view"
+msgstr "Flatur vísingur"
+
+msgid "Flat gradebook results view."
+msgstr "Flatur vísingur av karakterbóksúrslitum."
+
+msgid "Evaluation log"
+msgstr "Vísingarskráseting"
+
+msgid "Change log for gradebook evaluations."
+msgstr "Broytingarskráseting fyri karakterbóksvísingar."
+
+msgid "Link log"
+msgstr "Leinkjulog"
+
+msgid "Change log for gradebook links."
+msgstr "Broytingarlog fyri stigabókaleinkjur."
+
+msgid "Result details"
+msgstr "Úrslitadetailjar"
+
+msgid "Detailed view of a gradebook result."
+msgstr "Nágreinilig sýning av einum stigabókaúrsliti."
+
+msgid "Personal certificates report."
+msgstr "Persónlig prógvskjalfestingarfrágreiðing."
+
+msgid "User move statistics"
+msgstr "Brúkaraflytingarstøðutøl"
+
+msgid "Report for user move and transfer statistics."
+msgstr "Frágreiðing um brúkaraflyting og flutningsstøðutøl."
+
+msgid "User consent list"
+msgstr "Brúkarasamtykki listi"
+
+msgid "Report of users and consent status."
+msgstr "Frágreiðing um brúkarar og samtykkistøðu."
+
+msgid "Special platform exports."
+msgstr "Serstakar pallútflytingar."
+
+msgid "Export certificates"
+msgstr "Útflyta prógv"
+
+msgid "Export platform certificates."
+msgstr "Útflyta pallprógv."
+
+msgid "Export exercise results"
+msgstr "Útflyta uppgávuúrslit"
+
+msgid "Export exercise results from the platform."
+msgstr "Útflyta uppgávuúrslit frá pallinum."
+
+msgid "Course survey results and reporting."
+msgstr "Kursuskjalakanningarúrslit og frágreiðing."
+
+msgid "Attendance report"
+msgstr "Frásøgn um nærvær"
+
+msgid "Course attendance tracking and reports."
+msgstr "Kursunærværsfylgja og frágreiðingar."
+
+msgid "Exercises global report"
+msgstr "Global uppgávufrágreiðing"
+
+msgid "Global exercise results report for the course."
+msgstr "Global frágreiðing um uppgávuúrslit fyri korsið."
+
+msgid "Exercise report"
+msgstr "Uppgávufrágreiðing"
+
+msgid "Detailed exercise report."
+msgstr "Nágreinilig uppgávufrágreiðing."
+
+msgid "Exercise history"
+msgstr "Uppgávusøga"
+
+msgid "Exercise attempt history."
+msgstr "Uppgávuroynda søga."
+
+msgid "Exercise results"
+msgstr "Uppgávuúrslit"
+
+msgid "Exercise results and corrections."
+msgstr "Uppgávuúrslit og rættingar."
+
+msgid "Question-level exercise statistics."
+msgstr "Spurningsstøðutøl fyri uppgávur."
+
+msgid "Exercise statistics"
+msgstr "Uppgávustøðutøl"
+
+msgid "Exercise statistics page."
+msgstr "Síða við uppgávustøðutølum."
+
+msgid "Live exercise statistics"
+msgstr "Lívandi uppgávustøðutøl"
+
+msgid "Live exercise statistics for teachers."
+msgstr "Lívandi uppgávustøðutøl fyri lærarar."
+
+msgid "Learning path statistics"
+msgstr "Lærugongustøðutøl"
+
+msgid "Learning path item statistics."
+msgstr "Lærugongu eindarstøðutøl."
+
+msgid "Learning path report inside a course."
+msgstr "Lærugongufrágreiðing innan eitt kurs."
+
+msgid "User skills report."
+msgstr "Brúkaraførleikafrágreiðing."
+
+msgid "Scheduled or periodic export configuration."
+msgstr "Ætlað ella reglulig útflytingsuppseting."
+
+msgid "User export"
+msgstr "Brúkaraútflyting"
+
+msgid "Export users from the platform."
+msgstr "Útflyta brúkarar frá pallinum."
+
+msgid "Not classified"
+msgstr "Ikki flokkað"
+
+msgid "You have acquired the skill %s"
+msgstr "Tú hevur fingið førleikan %s"
+
+msgid "You have acquired the skill %s."
+msgstr "Tú hevur fingið førleikan %s."
+
+msgid "Recover your password"
+msgstr "Endurvinna loyniorð"
+
+msgid "Disclaimer"
+msgstr "Frásagn"
+
+msgid "This operation would exceed the limit of %d users allowed for this course."
+msgstr "Hetta vildi gingið um markið á %d brúkarum, ið eru loyvdir í hesum korsi."
+
+msgid "DefaultGroupCategory"
+msgstr "DefaultGroupCategory"
+
+msgid "LearningCalendar"
+msgstr "LearningCalendar"
+
+msgid "Choose how this user can authenticate on the platform."
+msgstr "Vel, hvussu hesin brúkari kann vátta seg á pallinum."
+
+msgid "Authentication methods"
+msgstr "Váttanarmátar"
+
+msgid "Set password manually"
+msgstr "Set loyniorð manuelt"
+
+msgid "Report role matrix"
+msgstr "Frágreiðing um leiklutamatriks"
+
+msgid "Report permission categories"
+msgstr "Frágreiðing um heimildarbólkar"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs enforce the documented report role matrix."
+msgstr "Hetta skráseting listar kendar frágreiðingarsíður, teirra bólk, kanóniska URL, eldri URL og væntaðan leiklut hjá áhoyrandum. Kanóniskar URL-ar handheva skjalaføru frágreiðingar-leiklutsmátrixina."
+
+msgid "reports"
+msgstr "frágreiðingar"
+
+msgid "Canonical URL"
+msgstr "Kanóniskur URL"
+
+msgid "Legacy URL"
+msgstr "Eldri URL"
+
+msgid "Permission category"
+msgstr "Rættindabólkur"
+
+msgid "This matrix documents the expected audience for each report and is enforced by the canonical report entry point."
+msgstr "Hetta mátrix skjalafestir væntaðan áhoyrandan fyri hvørja frágreiðing og verður handhevað av kanóniska frágreiðingar-inngongdinum."
+
+msgid "These keys group reports by access scope and are used by the report registry. They can later be mapped to finer-grained platform permissions."
+msgstr "Hesar lyklar bólka frágreiðingar eftir atgongdsumfangi og verða nýttar av frágreiðingarskrásetingini. Tær kunnu seinni verða knýttar at meira ítøkiligum rættindum á pallinum."
+
+msgid "Permission"
+msgstr "Rættindi"
+
+msgid "Clear active session"
+msgstr "Rýma virka setu"
+
+msgid "Are you sure you want to clear this user active session?"
+msgstr "Ert tú vís/ur í at tú vilt rýma hesa virku setuna hjá brúkaranum?"
+
+msgid "Preview shown without course context. Some course-specific data may be unavailable."
+msgstr "Forskoðan vísast uttan kurssamanhang. Nakrar kurssértæknar upplýsingar kunnu vera óatkomuligar."
+
+msgid "Preview is not available for this question."
+msgstr "Forskoðan er ikki tøkt fyri hesa spurningar."
+
+msgid "Edition is not allowed without a course context."
+msgstr "Rætting er ikki loyvd uttan kurssamanhang."
+
+msgid "This plugin does not use regions."
+msgstr "Hetta ískoyti nýtir ikki øki."
+
+msgid "No plugins with regions were found."
+msgstr "Ongin ískoyti við økjum vórðu funnin."
+
+msgid "Freemium"
+msgstr "Freemium"
+
+msgid "Commercial service"
+msgstr "Handils tænasta"
+
+msgid "Commercial"
+msgstr "Handils"
+
+msgid "100% free"
+msgstr "100% ókeypis"
+
+msgid "Displayed above the public login form."
+msgstr "Vísast oman fyri almenna innritanarformið."
+
+msgid "Displayed below the public login form."
+msgstr "Vísast niðan fyri almenna innritanarformið."
+
+msgid "Displayed before the footer area."
+msgstr "Vísast áðrenn fótøkið."
+
+msgid "Displayed in the left footer column."
+msgstr "Vísast í vinstra fótøki."
+
+msgid "Displayed in the center footer column."
+msgstr "Vísast í miðju fótøki."
+
+msgid "Displayed in the right footer column."
+msgstr "Vísast í høgra fótøki."
+
+msgid "Showing all plugins."
+msgstr "Vísir øll ískoyti."
+
+msgid "Some plugins are still pending functional verification."
+msgstr "Summi ískoyti eru enn bíðandi eftir funksjónalari váttan."
+
+msgid "Show verified plugins only"
+msgstr "Vís bert váttað ískoyti"
+
+msgid "Showing verified plugins only."
+msgstr "Vísir bert váttað ískoyti."
+
+msgid "Pending plugins are temporarily hidden until they are adapted and tested."
+msgstr "Bíðandi ískoyti eru fyribils fjald, til tey eru tillagað og próvroynd."
+
+msgid "Show all plugins"
+msgstr "Vís øll ískoyti"
+
+msgid "Official and free plugins are listed separately from plugins that may depend on commercial services or paid offers."
+msgstr "Alment og ókeypis ískoyti eru listað serstakliga frá ískoytum, sum kunnu hava tørv á handils tænastum ella goldnum tilboðum."
+
+msgid "Included free plugins"
+msgstr "Innihalda ókeypis ískoyti"
+
+msgid "Commercial and freemium plugins"
+msgstr "Handils og freemium ískoyti"
+
+msgid "All plugins"
+msgstr "Øll ískoyti"
+
+msgid "No plugins were found for this category."
+msgstr "Ongin ískoyti vórðu funnin fyri henda bólk."
+
+msgid "Search plugins"
+msgstr "Leita ískoyti"
+
+msgid "Search by name or description"
+msgstr "Leita eftir navni ella lýsing"
+
+msgid "Advanced filters"
+msgstr "Víðkaðar filtrar"
+
+msgid "All statuses"
+msgstr "Øll støðu"
+
+msgid "All sources"
+msgstr "Allar keldur"
+
+msgid "All types"
+msgstr "Øll sløg"
+
+msgid "Installed plugins are shown first"
+msgstr "Innstallerað ískoyti vísast fyrst"
+
+msgid "No plugins match the current filters."
+msgstr "Ongin ískoyti samsvara við núverandi filtrum."
+
+msgid "Try clearing the search or changing the filters."
+msgstr "Royn at rýma leitingina ella broyta filtrarnar."
+
+msgid "README"
+msgstr "README"
+
+msgid "Invalid security token"
+msgstr "Ógildigt trygdartekn"
+
+msgid "Please select a destination session"
+msgstr "Vinarliga vel eina málsetu"
+
+msgid "Cannot move this to the same session"
+msgstr "Kann ikki flyta hetta til somu setu"
+
+msgid "The destination session must include the selected course"
+msgstr "Málsetan má innihalda valda kúrssin"
+
+msgid "The source session must include the selected course"
+msgstr "Upprunasessionin má innihalda valda námskeiðið"
+
+msgid "No learners found"
+msgstr "Ongir næmingar funnir"
+
+msgid "Will be subscribed"
+msgstr "Verður skrásettur"
+
+msgid "Subscribed"
+msgstr "Skrásettur"
+
+msgid "The move process has finished"
+msgstr "Flytingarferlið er liðugt"
+
+msgid "Comparison finished. No data has been moved."
+msgstr "Samanbering liðug. Ongin dáta flutt."
+
+msgid "Move tracking data from the base course or a source session to another session. Use comparison first to review the affected learner data."
+msgstr "Flyt rakstrardáta frá grundleggjandi námskeiðinum ella einum upprunasessioni til ein annan session. Brúka samanbering fyrst fyri at endurskoða ávirkaða næmingadáta."
+
+msgid "Search for a course or use the manual course ID field below."
+msgstr "Leita eftir námskeiði ella brúka manuellu námskeiðs-ID-feltið niðanfyri."
+
+msgid "Fallback when the course search is not available."
+msgstr "Fallback tá námskeiðsleitan ikki er tøkt."
+
+msgid "Load sessions"
+msgstr "Innles sessionar"
+
+msgid "Selected course"
+msgstr "Valt námskeið"
+
+msgid "Choose the base course or the session where the tracking data currently exists."
+msgstr "Vel grundleggjandi námskeiðið ella sessionin har rakstrardáta nú er."
+
+msgid "Choose the session that will receive the tracking data."
+msgstr "Vel sessionin sum skal taka ímóti rakstrardáta."
+
+msgid "Important"
+msgstr "Týdningarmikið"
+
+msgid "The move action updates existing tracking data. Run compare first and test this tool with a non-production course before moving real learner data."
+msgstr "Flytingarhandlið dagførir verandi rakstrardáta. Keyr samanbering fyrst og royn hetta amboðið við einum ikki-produktionsnámskeiði áðrenn tú flytur veruligan næmingadáta."
+
+msgid "No sessions found for this course"
+msgstr "Ongir sessionar funnir fyri hetta námskeiðið"
+
+msgid "Some users were ignored because they are not subscribed to this session."
+msgstr "Nakrir brúkarar vórðu ignoreraðir tí teir eru ikki skrásettir í hesum sessioninum."
+
+msgid "Remove selected user"
+msgstr "Tak burtur valdan brúkara"
+
+msgid "Add selected user"
+msgstr "Legg valdan brúkara afturat"
+
+msgid "No users from the selected list are subscribed to this session."
+msgstr "Ongir brúkarar frá valda listanum eru skrásettir í hesum sessioninum."
+
+msgid "No image"
+msgstr "Ongin mynd"
+
+msgid "Invalid URL."
+msgstr "Ógildig URL."
+
+msgid "This cloud document cannot be embedded."
+msgstr "Hetta skýdokumentið kann ikki verða innbygt."
+
+msgid "Document not found"
+msgstr "Dokument ikki funnið"
+
+msgid "File not found"
+msgstr "Fíla ikki funnin"
+
+msgid "This learning path is not available for your user at this time."
+msgstr "Hetta læringargongdin er ikki tøkt fyri tín brúkara í løtuni."
+
+msgid "StartDateMustBeBeforeTheEndDate"
+msgstr "StartDateMustBeBeforeTheEndDate"
+
+msgid "Next learning path"
+msgstr "Næsta læringargongd"
+
+msgid "Select the learning path that will be available after this one."
+msgstr "Vel læringargongdina sum verður tøkt eftir hesa."
+
+msgid "Create another learning path in this course to enable learning path flow."
+msgstr "Stovna aðra læringargongd í hesum námskeiðinum fyri at virkja læringargongdflæði."
+
+msgid "Available from %s"
+msgstr "Tøkt frá %s"
+
+msgid "Available until %s"
+msgstr "Tøkt til %s"
+
+msgid "Statistics reset date"
+msgstr "Tølfrøði nullstilla dagur"
+
+msgid "Last 24 hours"
+msgstr "Seinastu 24 tímar"
+
+msgid "This reset date is used as the reference date for the report. It does not delete historical tracking data."
+msgstr "Hesin nullstillingsdagur verður brúktur sum viðgerðardagur fyri frágreiðingina. Hann strikar ikki søguligan rakstrardáta."
+
+msgid "Since reset date"
+msgstr "Síðan nullstillingsdag"
+
+msgid "Users connected in the last 24 hours"
+msgstr "Brúkarar innritaðir seinastu 24 tímar"
+
+msgid "Learners with at least one course access during the last 24 hours."
+msgstr "Næmingar við í minsta lagi einum námskeiðsatgongd seinastu 24 tímar."
+
+msgid "Users connected in the last week"
+msgstr "Brúkarar innritaðir seinastu viku"
+
+msgid "Learners with at least one course access during the last 7 days."
+msgstr "Næmingar við í minsta lagi einum námskeiðsatgongd seinastu 7 dagarnar."
+
+msgid "Users connected in the last month"
+msgstr "Brúkarar innritaðir seinasta mánað"
+
+msgid "Learners with at least one course access during the last 30 days."
+msgstr "Næmingar við í minsta lagi einum námskeiðsatgongd seinastu 30 dagarnar."
+
+msgid "Not recently connected users"
+msgstr "Ikki nýliga innritaðir brúkarar"
+
+msgid "Learners without course access since %s."
+msgstr "Næmingar uttan námskeiðsatgongd síðan %s."
+
+msgid "Recently used resources"
+msgstr "Nýliga brúkt tilfeingi"
+
+msgid "Course tools/resources used since %s."
+msgstr "Námskeiðstól/tilfeingi brúkt síðan %s."
+
+msgid "%s %% of learners"
+msgstr "%s %% av næmingum"
+
+msgid "Connections"
+msgstr "Innritingar"
+
+msgid "Total connections"
+msgstr "Samlaðar innritingar"
+
+msgid "Downloaded documents"
+msgstr "Niðurhalað dokument"
+
+msgid "List of documents downloaded by this learner in this course."
+msgstr "Listi av skjølum, sum hesin næmingurin hevur niðurhalað í hesum skeiðnum."
+
+msgid "Forum topics"
+msgstr "Forum evni"
+
+msgid "Forum topics opened by this learner in this course."
+msgstr "Forum evni, sum hesin næmingurin hevur byrjað í hesum skeiðnum."
+
+msgid "Forum posts"
+msgstr "Forum innlegg"
+
+msgid "Forum posts written by this learner in this course."
+msgstr "Forum innlegg, sum hesin næmingurin hevur skrivað í hesum skeiðnum."
+
+msgid "Course connections"
+msgstr "Skeiðstengingar"
+
+msgid "Connection history for this learner in this course."
+msgstr "Tengslasøga fyri henda næmingin í hesum skeiðnum."
+
+msgid "Resources used"
+msgstr "Nýttir tilfeingi"
+
+msgid "Latest tools or resources used by this learner in this course."
+msgstr "Seinastu amboð ella tilfeingi, sum hesin næmingurin hevur nýtt í hesum skeiðnum."
+
+msgid "Logout date"
+msgstr "Útritadagur"
+
+msgid "Imported Aiken quiz"
+msgstr "Innfluttur Aiken próvtøl"
+
+msgid "Only supported documents will be listed here."
+msgstr "Bert stuðlað skjøl verða víst her."
+
+msgid "Generated Aiken content"
+msgstr "Upprættað Aiken innihald"
+
+msgid "Review the generated content before importing it as a new exercise."
+msgstr "Endurskoðað innihaldið áðrenn tú flytur tað inn sum eina nýggja uppgávu."
+
+msgid "No documents available."
+msgstr "Ongin skjøl tøk."
+
+msgid "yperbolic arctangent:\\t\\tarctanh(x)"
+msgstr "Hyperbolisk arctangent:\\t\\tarctanh(x)"
+
+msgid "Exercise"
+msgstr "Uppgáva"
+
+msgid "OfficialCode"
+msgstr "EmbætisKoda"
+
+msgid "FirstName"
+msgstr "Fornavn"
+
+msgid "LastName"
+msgstr "Eftirnavn"
+
+msgid "LoginName"
+msgstr "Innritanarnavn"
+
+msgid "MinMinute"
+msgstr "MinMínuttur"
+
+msgid "StartDate"
+msgstr "Byrjanardagur"
+
+msgid "EndDate"
+msgstr "Endadagur"
+
+msgid "CorrectionDate"
+msgstr "Rættingardagur"
+
+msgid "NotValidated"
+msgstr "Ikki váttað"
+
+msgid "PendingAttempts"
+msgstr "Biðandi royndir"
+
+msgid "List of pending test attempts across your courses."
+msgstr "Listi av biðandi próvtøkuroyndum í øllum tínum skeiðum."
+
+msgid "User ID"
+msgstr "Brúkaranummur"
+
+msgid "QuestionType"
+msgstr "SpurningarSlag"
+
+msgid "QuestionsWithNoAutomaticCorrection"
+msgstr "SpurningarUtanAutomatisktRætting"
+
+msgid "There are no pending tests."
+msgstr "Ongar biðandi próvtøl."
+
+msgid "%s results"
+msgstr "%s úrslit"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Dømi um at fylla út aktivitet: rokna Kropsmassaindeks</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Aldur</strong></td>            <td width=\"75%\" style=\"\">[25] ára gamal</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kyn</strong></td>            <td style=\"\" text-align:=\"\">[M] (M ella F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Vekt</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Hædd</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Kropsmassaindeks</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Vekt/Stødd<sup>2</sup> (Sjá.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia grein</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Removed"
+msgstr "Fjernað"
+
+msgid "NoUsersInTheList"
+msgstr "OngirBrúkararÍListanum"
+
+msgid "Are you sure?"
+msgstr "Ert tú vís/ur?"
+
+msgid "NoResultsAvailable"
+msgstr "OnginÚrslitTøk"
+
+msgid "Import groups from a CSV file and optionally remove items that are not present in the file."
+msgstr "Flyt inn bólkar úr einum CSV fíli og tak valfríliga burtur lutir, sum ikki eru í fílinum."
+
+msgid "Use this option carefully because items missing from the CSV can be removed during the import process."
+msgstr "Nýt hetta valið varisliga, tí lutir, sum vantar í CSV fílinum, kunnu verða burturtiknir undir innflutninginum."
+
+msgid "Upload a CSV file with the group data you want to import."
+msgstr "Legg eitt CSV fíli við bólkadátunum, tú vilt flyta inn."
+
+msgid "You can download the example file to use the expected format."
+msgstr "Tú kanst taka niður dømi fílin fyri at nýta væntaðu støddfrøðina."
+
+msgid "If you enable deletion, items not present in the file may be removed."
+msgstr "Um tú loyvir striking, kunnu lutir, sum ikki eru í fílinum, verða burturtiknir."
+
+msgid "The CSV file is mandatory to start the import."
+msgstr "CSV fílið er neyðugt fyri at byrja innflutningin."
+
+msgid "Please select at least one class."
+msgstr "Vinarliga vel í minsta lagi eina flokk."
+
+msgid "Define the properties for each group before creating them."
+msgstr "Áset eginleikarnar fyri hvønn bólk áðrenn tú skapar teir."
+
+msgid "Apply the first row values"
+msgstr "Nýt virðini í fyrstu raðini"
+
+msgid "Create groups manually or generate them from the classes subscribed to this course."
+msgstr "Skapa bólkar manuelt ella framleið teir úr flokkunum, sum eru skrásettir í hesum skeiðnum."
+
+msgid "Create manual groups"
+msgstr "Skapa manuelt bólkar"
+
+msgid "Use this form when you want to create empty course groups manually."
+msgstr "Nýt hetta formið, tá tú vilt skapa tómar skeiðbólkar manuelt."
+
+msgid "Configure manual groups"
+msgstr "Stilla manuellir bólkar"
+
+msgid "Create groups from subscribed classes"
+msgstr "Stovna bólkar úr skrásettum flokkum"
+
+msgid "Use this form when you want to create one course group for each selected class."
+msgstr "Nýt hetta formið, tá tú vilt stovna ein lærubólk fyri hvønn valdan flokk."
+
+msgid "Keep created groups linked to their source classes"
+msgstr "Halda stovnaðu bólkarnar knýttar at upprunaflokkunum"
+
+msgid "Create groups from selected classes"
+msgstr "Stovna bólkar úr valdum flokkum"
+
+msgid "You must be logged in to access this page."
+msgstr "Tú mást vera innritaður fyri at fáa atgongd til hesa síðu."
+
+msgid "Invalid user"
+msgstr "Ógildigur brúkari"
+
+msgid "UseCourseCustomCertificate"
+msgstr "UseCourseCustomCertificate"
+
+msgid "UseDefaultCustomCertificate"
+msgstr "UseDefaultCustomCertificate"
+
+msgid "CertificateSetting"
+msgstr "CertificateSetting"
+
+msgid "SelectOneOptionBeforeOpeningEditor"
+msgstr "SelectOneOptionBeforeOpeningEditor"
+
+msgid "ChooseCustomCertificateModeHelp"
+msgstr "ChooseCustomCertificateModeHelp"
+
+msgid "CertificateMode"
+msgstr "CertificateMode"
+
+msgid "Enable student to validate own attendance"
+msgstr "Loyv næmingi at vátta egna møting"
+
+msgid "Course block"
+msgstr "Lærubólkur"
+
+msgid "Add custom content blocks to course footer regions."
+msgstr "Legg til innanhýsis innihaldsblokkar í fótasvæðum lærubólksins."
+
+msgid "course_block_pre_footer"
+msgstr "course_block_pre_footer"
+
+msgid "Before footer"
+msgstr "Áðrenn fóta"
+
+msgid "course_block_footer_left"
+msgstr "course_block_footer_left"
+
+msgid "Footer left"
+msgstr "Fóta vinstrumegin"
+
+msgid "course_block_footer_center"
+msgstr "course_block_footer_center"
+
+msgid "Footer center"
+msgstr "Fóta miðskeiðis"
+
+msgid "course_block_footer_right"
+msgstr "course_block_footer_right"
+
+msgid "Footer right"
+msgstr "Fóta høgrumegin"
+
+msgid "SetNotification"
+msgstr "SetNotification"
+
+msgid "CourseLegal"
+msgstr "CourseLegal"
+
+msgid "Certificates search is not available"
+msgstr "Leitan eftir prógvum er ikki tøkt"
+
+msgid "It allows the acquisition of skills by subcategories"
+msgstr "Tað loyvir at fáa førleikar eftir undirbólkum"
+
+msgid "Allow skills by subcategories"
+msgstr "Loyv førleikar eftir undirbólkum"
+
+msgid "Minimum score for skills"
+msgstr "Lágmarkseinkun fyri førleikar"
+
+msgid "The gradebook table is hidden."
+msgstr "Próvtalsbókin er fjald."
+
+msgid "Invalid token"
+msgstr "Ógildigt token"
+
+msgid "Unable to save the item"
+msgstr "Ikki før fyri at goyma lutin"
+
+msgid "Only HTTP and HTTPS URLs are allowed."
+msgstr "Bert HTTP- og HTTPS-slóðir eru loyvdar."
+
+msgid "Invalid URL host."
+msgstr "Ógildigt vertsslóð."
+
+msgid "This cloud provider is not allowed."
+msgstr "Hesin skýggjaveitari er ikki loyvdur."
+
+msgid "Documents used"
+msgstr "Nýttir skjøl"
+
+msgid "No document usage"
+msgstr "Eingin nýtsla av skjølum"
+
+msgid "Invalid action."
+msgstr "Ógildig atgerð."
+
+msgid "No users selected."
+msgstr "Ongir brúkarar valdir."
+
+msgid "%s user(s) processed."
+msgstr "%s brúkari(ar) viðgjørdir."
+
+msgid "Invalid CSRF token."
+msgstr "Ógildigt CSRF token."
+
+msgid "[%s] Please change your password"
+msgstr "[%s] Vinarliga broyt loyniorð títt"
+
+msgid "Dear %s,\n\nOur security enforcing process shows you use a password that is commonly used on the internet, which means your account could easily be stolen. It is probably a simple sequence or a very common word, we don't really know (we cannot see your password), but we ask you to please connect to the platform and request a password change. You can follow the link here: %s to do that now.\n\nPlease note we will never ask for your password in this process. You just enter your username or e-mail and we send you a link. If you are asked to introduce your existing password to do that, someone is probably trying to do Phishing on your account. Be safe, change your password now!\n\n%s\n%s"
+msgstr "Kæri %s,\n\nTrygdarviðgerð okkara vísir, at tú nýtir eitt loyniorð, sum ofta verður nýtt á netinum, og tí kann konta tín lættliga verða stjál. Tað er væntandi ein einføld røð ella eitt vanligt orð, vit vita ikki (vit síggja ikki loyniorð títt), men vit biðja teg vinarliga um at logga inn á pallin og biðja um at broyta loyniorðið. Tú kanst fylgja hesi slóðini: %s fyri at gera tað nú.\n\nVinarliga hava í huga, at vit ongantíð biðja um loyniorð títt í hesi viðgerð. Tú skrivar bert inn brúkaranavn títt ella teldupost og vit senda tær eina slóð. Um tú verður biðin um at skriva inn núverandi loyniorð fyri at gera tað, er onkur væntandi í ferð við at royna Phishing á kontu tíni. Verð tryggur, broyt loyniorð títt nú!\n\n%s\n%s"
+
+msgid "[%s] Your password has been reset"
+msgstr "[%s] Loyniorð títt er endurstovnað"
+
+msgid "Dear %s,\n\nOur security enforcing process flagged you as using a password that is commonly used on the internet, which means your account could easily be stolen. As a prevention measure, we have decided to initiate a password reset process. Your new, automatically generated password is now:\n\n%s\n\nPlease login to the platform soon (using this new password) to set your own, personal and secure, password.\n\nBe safe.\n\n%s\n%s"
+msgstr "Kæri %s,\n\nTrygdarviðgerð okkara flaggar, at tú nýtir eitt loyniorð, sum ofta verður nýtt á netinum, og tí kann konta tín lættliga verða stjál. Sum varnarráðstøðu hava vit valt at seta í verk eina endurstovnan av loyniorði. Nýggja, sjálvvirkandi stovnaða loyniorðið er nú:\n\n%s\n\nVinarliga logga inn á pallin skjótt (við hesum nýggja loyniorðinum) fyri at seta títt egna, persónliga og trygt loyniorð.\n\nVerð tryggur.\n\n%s\n%s"
+
+msgid "Signature saved successfully"
+msgstr "Undirskrift goymd væleydnað"
+
+msgid "Invalid request payload."
+msgstr "Ógildig umbiðin last."
+
+msgid "Authentication required."
+msgstr "Samgilda kravd."
+
+msgid "The course title is required."
+msgstr "Heitið á lærubólkinum er kravt."
+
+msgid "Only trainers and administrators can create courses."
+msgstr "Bert undirvísarar og umboðsmenn kunnu stovna skeið."
+
+msgid "Course creation by trainers is disabled on this platform."
+msgstr "Skeiðsstovnan av undirvísarum er óvirkjað á hesi skipan."
+
+msgid "The selected BuyCourses service cannot be used to create this course."
+msgstr "Valda BuyCourses-tænastan kann ikki nýtast til at stovna hetta skeiðið."
+
+msgid "You have reached the maximum number of courses allowed (%d)."
+msgstr "Tú hevur nátt mesta tal av loyvdu skeiðum (%d)."
+
+msgid "The selected BuyCourses service is invalid."
+msgstr "Valda BuyCourses-tænastan er ógildig."
+
+msgid "BuyCourses is not available right now."
+msgstr "BuyCourses er ikki tøkt nú."
+
+msgid "BuyCourses cannot validate the selected service right now."
+msgstr "BuyCourses kann ikki vátta valdu tænastuna nú."
+
+msgid "Unable to validate the selected BuyCourses service right now."
+msgstr "Tað ber ikki til at vátta valdu BuyCourses-tænastuna nú."
+
+msgid "External tool removed from course"
+msgstr "Yvirtól er tikið burtur úr skeiðinum"
+
+msgid "External tool was removed from the course, but kept internally because it is linked to the gradebook"
+msgstr "Yvirtólið varð tikið burtur úr skeiðinum, men varð varðveitt innanhýsis, tí tað er bundið við karakterbókina"
+
+msgid "There are no external tools available to add to the gradebook"
+msgstr "Ongin yvirtól eru tøk at leggja afturat karakterbókini"
+
+msgid "The evaluation could not be created"
+msgstr "Próvtøkan kundi ikki verða stovnað"
+
+msgid "The gradebook evaluation could not be linked"
+msgstr "Próvtøkan í karakterbókini kundi ikki verða bundin"
+
+msgid "Survey questions"
+msgstr "Kanningarspurningar"
+
+msgid "Back to survey list"
+msgstr "Aftur til kanningarlistan"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "Henda kanningin hevur longu svar. Spurningsritan er óvirkin vegna stilling."
+
+msgid "Choose the type of question you want to add."
+msgstr "Vel slagið av spurningi, tú vilt leggja afturat."
+
+msgid "The free text option is added automatically."
+msgstr "Fríteksturin verður lagdur afturat sjálvvirkandi."
+
+msgid "No questions found"
+msgstr "Ongir spurningar funnir"
+
+msgid "Mandatory"
+msgstr "Kravt"
+
+msgid "Unsupported question type"
+msgstr "Óstuðlað spurningar slag"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "Tú kanst brúka merkin {%s} og {%s} í spurninginum."
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "Hesin spurningur vísir treytisliga meðan tú svarar kanningini."
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "Prosentmøguleikarnir frá 1 til 100 verða framleiddir sjálvvirkandi."
+
+msgid "Could not load survey questions"
+msgstr "Kundi ikki innlesa kanningarspurningar"
+
+msgid "The question text is required."
+msgstr "Spurningsteksturin er kravdur."
+
+msgid "The maximum score is required."
+msgstr "Hámarkseinkun er kravd."
+
+msgid "Please select a parent option."
+msgstr "Vinarliga vel eina foreldramøguleika."
+
+msgid "Please fill all answer options."
+msgstr "Vinarliga fyll allar svarmøguleikar."
+
+msgid "QuestionUpdated"
+msgstr "Spurningur dagførdur"
+
+msgid "Could not save survey question"
+msgstr "Kundi ikki goyma kanningarspurning"
+
+msgid "Could not delete survey question"
+msgstr "Kundi ikki strika kanningarspurning"
+
+msgid "Could not move survey question"
+msgstr "Kundi ikki flyta kanningarspurning"
+
+msgid "Could not copy survey question"
+msgstr "Kundi ikki avrita kanningarspurning"
+
+msgid "Hide search"
+msgstr "Fjal leiting"
+
+msgid "Showing results for: %s"
+msgstr "Vísir úrslit fyri: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "Leita eftir kanningartitli, koda ella lýsing."
+
+msgid "Search surveys"
+msgstr "Leita í kanningum"
+
+msgid "%s surveys selected"
+msgstr "%s kanningar valdar"
+
+msgid "Clear selection"
+msgstr "Rensla val"
+
+msgid "No surveys found"
+msgstr "Ongar kanningar funnar"
+
+msgid "Unsupported"
+msgstr "Ikki stuðlað"
+
+msgid "Could not load surveys"
+msgstr "Kundi ikki innlesa kanningar"
+
+msgid "Delete selected surveys"
+msgstr "Strika valdar kanningar"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "Tær valdu kanningarnar og teirra spurningar verða strikaðir. Hendan atgerð kann ikki gerast ógilda."
+
+msgid "Could not delete selected surveys"
+msgstr "Kundi ikki strika valdar kanningar"
+
+msgid "Survey action"
+msgstr "Kanningaratgerð"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "Ein avrit av hesi kanning verður stovnað: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "Øll svar og boð verða strikað fyri hesa kanning: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "Stovnaðir margfaldaðir spurningar verða strikaðir úr hesi kanning: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "Henda kanning verður kunngjørd fyri knýttu bólkaleiðarunum: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "Henda kanning og hennara spurningar verða strikaðir: %s"
+
+msgid "Could not complete survey action"
+msgstr "Kundi ikki fullføra kanningaratgerð"
+
+msgid "Not started"
+msgstr "Ikki byrjað"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "Fundarkanningar loyva boðnum brúkarum at velja dagarnar, tá ið teir eru tøkir."
+
+msgid "Back to surveys"
+msgstr "Aftur til kanningar"
+
+msgid "Edit meeting poll"
+msgstr "Rætta fundarkanning"
+
+msgid "View meeting poll"
+msgstr "Vís fundarkanning"
+
+msgid "Basic information"
+msgstr "Grundupplýsingar"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "Hetta stovnar eina kanning av slag fundarkanning. Svar og boð verða handfarin serstakliga."
+
+msgid "Availability"
+msgstr "Tøki"
+
+msgid "Meeting dates"
+msgstr "Fundardagar"
+
+msgid "Meeting poll"
+msgstr "Fundarkanning"
+
+msgid "My availability"
+msgstr "Mítt tøki"
+
+msgid "Meeting poll results"
+msgstr "Úrslit av fundarkanning"
+
+msgid "No invitations found"
+msgstr "Ongar boð funnar"
+
+msgid "available"
+msgstr "tøkur"
+
+msgid "Could not load meeting poll"
+msgstr "Kundi ikki innlesa fundarkanning"
+
+msgid "Please complete the required fields"
+msgstr "Vinarliga fullfylg neyðugu teigarnar"
+
+msgid "Could not save meeting poll"
+msgstr "Kundi ikki goyma fundarkanning"
+
+msgid "Could not save meeting availability"
+msgstr "Kundi ikki goyma fundartøki"
+
+msgid "Copy this survey to another course or session"
+msgstr "Avrita hesa kanning til aðra lærugrein ella setu"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "Kanningin verður avritað uttan svar ella boð."
+
+msgid "No target courses found"
+msgstr "Ongar mál lærugreinar funnar"
+
+msgid "Search by course title, course code or session name."
+msgstr "Leita eftir lærugreinartitli, lærugreinkoda ella setunavni."
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "Nýt Tvítaka kanning, tá tú vilt hava eitt avrit í somu lærugrein."
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "Spurningar og svarmøguleikar verða avritaðir. Svar, boð og frágreiðingar verða bert í upprunakanningini."
+
+msgid "Selected target"
+msgstr "Valdur mál"
+
+msgid "Could not load copy form"
+msgstr "Kundi ikki innlesa avritunarskjema"
+
+msgid "The survey will be copied to: %s"
+msgstr "Kanningin verður avritað til: %s"
+
+msgid "Survey copied."
+msgstr "Kanning avritað."
+
+msgid "Could not copy survey"
+msgstr "Kundi ikki avrita kanning"
+
+msgid "Answer survey"
+msgstr "Svara kanning"
+
+msgid "Preview mode does not save answers."
+msgstr "Forskoðan goymir ikki svar."
+
+msgid "Survey completed"
+msgstr "Kanning fullførd"
+
+msgid "Thank you for answering the survey."
+msgstr "Takk fyri at tú svaraði kanningina."
+
+msgid "Profile information"
+msgstr "Profilupplýsingar"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "Vinarliga endurskoðaðu umbidnu profilbólkarnar áðrenn tú svarar kanningini."
+
+msgid "This profile field is read-only."
+msgstr "Hesin profilbólkur er bert til lesna."
+
+msgid "You already filled this survey."
+msgstr "Tú hevur longu svarað hesi kanning."
+
+msgid "Please specify"
+msgstr "Vinarliga tilskila"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "Hetta spurningslagið er ikki stuðlað í nútíðar kanningarsýni."
+
+msgid "Preview only"
+msgstr "Bert forskoðan"
+
+msgid "Submit answers"
+msgstr "Send svar"
+
+msgid "Could not load survey"
+msgstr "Kundi ikki innlesa kanning"
+
+msgid "Please complete the required profile fields."
+msgstr "Vinarliga fullfør umbidnu profilbólkarnar."
+
+msgid "Please answer all mandatory questions."
+msgstr "Vinarliga svara øll kravdir spurningar."
+
+msgid "Could not save survey answers"
+msgstr "Kundi ikki goyma svar á kanning"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "Stilla høvuðsupplýsingar um kanning áðrenn tú handterar spurningar og boð."
+
+msgid "The survey code cannot be changed after creation."
+msgstr "Kanningarkotanin kann ikki broytast eftir at hon er stovnað."
+
+msgid "Survey behavior"
+msgstr "Kanningarvirksemi"
+
+msgid "Use 0 for no time limit."
+msgstr "Nýt 0 fyri onga tíðarmark."
+
+msgid "Survey messages"
+msgstr "Kanningarboð"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "Profilbólkar valdir her verða vístir áðrenn kanningarspurningar."
+
+msgid "No profile fields are currently available."
+msgstr "Ongir profilbólkar eru tøkir í løtuni."
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "Profilbólkaval er bert tøkt fyri ikki-anonymar kanningar."
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "Førleikabinding verður flutt í einum serstøkum loti."
+
+msgid "Could not load survey configuration"
+msgstr "Kundi ikki innlesa kanningaruppseting"
+
+msgid "The survey code is required."
+msgstr "Kanningarkotanin er kravd."
+
+msgid "The survey title is required."
+msgstr "Kanningarheitið er kravt."
+
+msgid "The survey has been saved successfully"
+msgstr "Kanningin er goymd væleydnað"
+
+msgid "Could not save survey configuration"
+msgstr "Kundi ikki goyma kanningaruppseting"
+
+msgid "Course users"
+msgstr "Kursisteinar"
+
+msgid "Already invited"
+msgstr "Longu boðin"
+
+msgid "No users found"
+msgstr "Ongir brúkarar funnir"
+
+msgid "No groups found"
+msgstr "Ongir bólkar funnir"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "Nýt **leinkju** har kanningarleinkjan skal standa."
+
+msgid "Remind all selected users"
+msgstr "Minna allar valdar brúkarar"
+
+msgid "Anonymous access link"
+msgstr "Anonymur atgongd leinkja"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "Brúkarar sum ikki eru boðnir kunnu nýta hesa leinkju at taka kanningina."
+
+msgid "Answered anonymously"
+msgstr "Svarað anonymt"
+
+msgid "Could not load survey invitations"
+msgstr "Kundi ikki innlesa kanningarboð"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "Teldupostevni og boð eru kravd tá teldupostur verður sendur."
+
+msgid "Could not publish survey"
+msgstr "Kundi ikki kunngera kanning"
+
+msgid "Could not copy the link"
+msgstr "Kundi ikki avrita leinkjuna"
+
+msgid "Please answer this survey using the following link"
+msgstr "Vinarliga svara hesi kanning við at nýta fylgjandi leinkju"
+
+msgid "Export CSV"
+msgstr "Flyt CSV"
+
+msgid "Export compact CSV"
+msgstr "Flyt samansett CSV"
+
+msgid "Export Excel"
+msgstr "Flyt Excel"
+
+msgid "Export package"
+msgstr "Flyt pakka"
+
+msgid "Results summary"
+msgstr "Úrslitasamandráttur"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "Hetta vísir fluttar frásagnir fyri hesa kanningina."
+
+msgid "Select user"
+msgstr "Vel brúkara"
+
+msgid "No answers found"
+msgstr "Ongar svar funnin"
+
+msgid "answers"
+msgstr "svar"
+
+msgid "Could not load survey reporting"
+msgstr "Kundi ikki læsa kanningarfrásagnir"
+
+msgid "Back to threads"
+msgstr "Aftur til tráðir"
+
+msgid "Back to learning path"
+msgstr "Aftur til lærustíg"
+
+msgid "Remove sticky"
+msgstr "Tak burtur fastan"
+
+msgid "Make sticky"
+msgstr "Ger fastan"
+
+msgid "Open thread"
+msgstr "Opna tráð"
+
+msgid "Close thread"
+msgstr "Lat tráð aftur"
+
+msgid "Delete thread"
+msgstr "Strika tráð"
+
+msgid "This thread is hidden from learners."
+msgstr "Hesin tráðurin er fjaldur fyri næmingum."
+
+msgid "Revision requested"
+msgstr "Endurskoðan biðin"
+
+msgid "Revision"
+msgstr "Endurskoðan"
+
+msgid "Approve post"
+msgstr "Góðkend innlegg"
+
+msgid "Reject post"
+msgstr "Avvís innlegg"
+
+msgid "Cancel revision request"
+msgstr "Avlýs endurskoðanarbeiðni"
+
+msgid "Delete post"
+msgstr "Strika innlegg"
+
+msgid "Message is required"
+msgstr "Boð eru neyðug"
+
+msgid "Target thread is required"
+msgstr "Máltráður er neyðugur"
+
+msgid "Could not retrieve posts"
+msgstr "Kundi ikki fáa innlegg"
+
+msgid "Thread shown"
+msgstr "Tráður vístur"
+
+msgid "Thread hidden"
+msgstr "Tráður fjaldur"
+
+msgid "Could not update thread"
+msgstr "Kundi ikki dagføra tráð"
+
+msgid "Thread closed"
+msgstr "Tráður latin aftur"
+
+msgid "Thread opened"
+msgstr "Tráður opnaður"
+
+msgid "Thread marked as sticky"
+msgstr "Tráður merktur sum fastur"
+
+msgid "Thread unmarked as sticky"
+msgstr "Tráður avmerktur sum fastur"
+
+msgid "Thread notifications enabled"
+msgstr "Tráðarviðmerkingar virkjaðar"
+
+msgid "Thread notifications disabled"
+msgstr "Tráðarviðmerkingar óvirkjaðar"
+
+msgid "Could not update thread notification"
+msgstr "Kundi ikki dagføra tráðarviðmerking"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "Ert tú vís/ur í at strika henda tráðin?"
+
+msgid "Could not delete thread"
+msgstr "Kundi ikki strika tráð"
+
+msgid "Post approved"
+msgstr "Innlegg góðkent"
+
+msgid "Could not approve post"
+msgstr "Kundi ikki góðkenna innlegg"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "Ert tú vís/ur í at avvísá hetta innleggið?"
+
+msgid "Post rejected"
+msgstr "Innlegg avvíst"
+
+msgid "Could not reject post"
+msgstr "Kundi ikki avvísá innlegg"
+
+msgid "Post shown"
+msgstr "Innlegg víst"
+
+msgid "Post hidden"
+msgstr "Innlegg fjaldur"
+
+msgid "Could not update post"
+msgstr "Kundi ikki dagføra innlegg"
+
+msgid "Post updated"
+msgstr "Innlegg dagført"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "Ert tú vís/ur í at strika hetta innleggið?"
+
+msgid "Post deleted"
+msgstr "Innlegg strikað"
+
+msgid "Could not delete post"
+msgstr "Kundi ikki strika innlegg"
+
+msgid "Untitled thread"
+msgstr "Ónevndur tráður"
+
+msgid "Could not retrieve threads"
+msgstr "Kundi ikki fáa tráðir"
+
+msgid "Post moved"
+msgstr "Innlegg flutt"
+
+msgid "Could not move post"
+msgstr "Kundi ikki flyta innlegg"
+
+msgid "Revision request removed"
+msgstr "Endurskoðanarbeiðni strikað"
+
+msgid "Could not update revision request"
+msgstr "Kundi ikki dagføra endurskoðanarbeiðni"
+
+msgid "Are you sure you want to report this post?"
+msgstr "Ert tú vís/ur í at tú vilt melda hetta innleggið?"
+
+msgid "Could not report post"
+msgstr "Kundi ikki melda innlegg"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "Ert tú vís/ur í at tú vilt strika hesa viðfesti?"
+
+msgid "Attachment deleted"
+msgstr "Viðfesti strikað"
+
+msgid "Could not delete attachment"
+msgstr "Kundi ikki strika viðfesti"
+
+msgid "Thread title"
+msgstr "Tráðheiti"
+
+msgid "Sticky thread"
+msgstr "Fastur tráður"
+
+msgid "Attach files"
+msgstr "Viðfest fílur"
+
+msgid "Attachments are disabled for this forum"
+msgstr "Viðfesti eru óvirkin fyri hetta forum"
+
+msgid "The forum is not open yet."
+msgstr "Forumið er ikki opið enn."
+
+msgid "The forum is closed."
+msgstr "Forumið er afturlatið."
+
+msgid "The forum is locked."
+msgstr "Forumið er læst."
+
+msgid "New threads are not allowed in this forum."
+msgstr "Nýggir tráðir eru ikki loyvdir í hesum forumi."
+
+msgid "Thread created"
+msgstr "Tráður stovnaður"
+
+msgid "Could not create thread"
+msgstr "Kundi ikki stovna tráð"
+
+msgid "Back to posts"
+msgstr "Aftur til innlegg"
+
+msgid "This reply will be stored as a revision."
+msgstr "Hetta svarið verður goymt sum endurskoðan."
+
+msgid "Post reply"
+msgstr "Svara innleggi"
+
+msgid "The thread is locked."
+msgstr "Tráðurin er læstur."
+
+msgid "Reply added"
+msgstr "Svar lagt afturat"
+
+msgid "Could not add reply"
+msgstr "Kundi ikki leggja svar afturat"
+
+msgid "Add forum"
+msgstr "Legg forum afturat"
+
+msgid "No forums found"
+msgstr "Ongin forum funnin"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "Stovna títt fyrsta forumflokk ella forum fyri at byrja samrøður."
+
+msgid "Locked"
+msgstr "Læstur"
+
+msgid "No forums in this category"
+msgstr "Ongin forum í hesum flokki"
+
+msgid "Posts require approval"
+msgstr "Innlegg krevja góðkenning"
+
+msgid "Forum for current group"
+msgstr "Forum fyri núverandi bólk"
+
+msgid "Group forum visibility"
+msgstr "Sjónligheit av bólkforum"
+
+msgid "No category"
+msgstr "Ongin flokkur"
+
+msgid "Could not retrieve forums"
+msgstr "Kundi ikki fáa forum"
+
+msgid "Forum category updated"
+msgstr "Forumflokkur dagførdur"
+
+msgid "Forum category created"
+msgstr "Forumflokkur stovnaður"
+
+msgid "Could not save forum category"
+msgstr "Kundi ikki goyma forumflokk"
+
+msgid "Forum updated"
+msgstr "Forum dagført"
+
+msgid "Forum created"
+msgstr "Forum stovnað"
+
+msgid "Could not save forum"
+msgstr "Kundi ikki goyma forum"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "Ert tú vís/ur í at tú vilt strika henda forumflokkin?"
+
+msgid "Could not delete forum category"
+msgstr "Kundi ikki strika forumflokk"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "Ert tú vís/ur í at tú vilt strika hetta forumið?"
+
+msgid "Could not delete forum"
+msgstr "Kundi ikki strika forum"
+
+msgid "Forum category unlocked"
+msgstr "Forumflokkur læstur upp"
+
+msgid "Forum category locked"
+msgstr "Forumflokkur læstur"
+
+msgid "Could not update forum category"
+msgstr "Kundi ikki dagføra evnisbólk"
+
+msgid "Forum category shown"
+msgstr "Evnisbólkur vístur"
+
+msgid "Forum category hidden"
+msgstr "Evnisbólkur fjaldur"
+
+msgid "Forum unlocked"
+msgstr "Evnið latið upp"
+
+msgid "Forum locked"
+msgstr "Evnið latið aftur"
+
+msgid "Could not update forum"
+msgstr "Kundi ikki dagføra evni"
+
+msgid "Forum shown"
+msgstr "Evni víst"
+
+msgid "Forum hidden"
+msgstr "Evni fjalt"
+
+msgid "Forum notifications enabled"
+msgstr "Fráboðanir um evni virkjaðar"
+
+msgid "Forum notifications disabled"
+msgstr "Fráboðanir um evni óvirkjaðar"
+
+msgid "Could not update forum notification"
+msgstr "Kundi ikki dagføra fráboðan um evni"
+
+msgid "Forum category moved"
+msgstr "Evnisbólkur fluttur"
+
+msgid "Could not move forum category"
+msgstr "Kundi ikki flyta evnisbólk"
+
+msgid "Forum moved"
+msgstr "Evni flutt"
+
+msgid "Could not move forum"
+msgstr "Kundi ikki flyta evni"
+
+msgid "Back to forums"
+msgstr "Aftur til evni"
+
+msgid "New thread"
+msgstr "Nýggj tráð"
+
+msgid "No threads found"
+msgstr "Ongar tráðir funnir"
+
+msgid "Sticky"
+msgstr "Fast"
+
+msgid "Graded"
+msgstr "Stiggevandi"
+
+msgid "Grade peers"
+msgstr "Stiggeva javningum"
+
+msgid "Move thread"
+msgstr "Flyt tráð"
+
+msgid "Target forum"
+msgstr "Evni at flyta til"
+
+msgid "Target forum is required"
+msgstr "Evni at flyta til er kravt"
+
+msgid "Students"
+msgstr "Næmingar"
+
+msgid "No students found"
+msgstr "Ongir næmingar funnir"
+
+msgid "No peers available to grade."
+msgstr "Ongir javninga at stiggeva."
+
+msgid "Qualified"
+msgstr "Virkisgóður"
+
+msgid "Not qualified"
+msgstr "Ikki virkisgóður"
+
+msgid "Could not retrieve thread grading"
+msgstr "Kundi ikki heinta stiggeving av tráð"
+
+msgid "Thread grading updated"
+msgstr "Stiggeving av tráð dagførd"
+
+msgid "Could not update thread grading"
+msgstr "Kundi ikki dagføra stiggeving av tráð"
+
+msgid "Thread score saved"
+msgstr "Stig av tráð goymt"
+
+msgid "Could not save thread score"
+msgstr "Kundi ikki goyma stig av tráð"
+
+msgid "Could not move thread"
+msgstr "Kundi ikki flyta tráð"
+
+msgid "Thread updated"
+msgstr "Tráð dagførdur"
+
+msgid "Search term is too short"
+msgstr "Leitiorð er ov stutt"
+
+msgid "Could not search forums"
+msgstr "Kundi ikki leita í evnum"
+
+msgid "Moderated"
+msgstr "Umsit"
+
+msgid "View threads"
+msgstr "Vís tráðir"
 

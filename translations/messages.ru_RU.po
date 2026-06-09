@@ -2023,7 +2023,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":да:авторское право,, нет:без авторского права"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Папка,, application/msword:MsWord,, application/octet-stream:Поток октетов,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Папка,, application/msword:MsWord,, application/octet-stream:Двоичный поток,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":упражнение:упражнение,, имитация:имитация,, вопросник:вопросник,, диаграмма:диаграмма,, рисунок:рисунок,, график:график,, индекс:индекс,, слайд:слайд,, таблица:таблица,, повествовательный текст:повествовательный текст,, экзамен:экзамен,, эксперимент:эксперимент,, постановка проблемы:постановка проблемы,, самооценка:самооценка,, лекция:лекция"
@@ -9732,6 +9732,9 @@ msgstr "Результаты поиска по:"
 msgid "Select a file"
 msgstr "Выбрать файл"
 
+msgid "Select a file to insert into the editor."
+msgstr "Выберите файл для вставки в редактор."
+
 msgid "Warning - The FAQ file, located in the /home/ directory of your portal, is not writable. Your text will not be saved until the file permissions are changed."
 msgstr "Предупреждение - файл FAQ, расположенный в директории /home/ вашего портала, недоступен для записи. Ваш текст не будет сохранен, пока не изменены права доступа к файлу."
 
@@ -15912,6 +15915,9 @@ msgstr "Дата и время"
 msgid "Item"
 msgstr "Элемент"
 
+msgid "Items"
+msgstr "Элементы"
+
 msgid "Configure Dashboard Plugin"
 msgstr "Настроить плагин панели управления"
 
@@ -17165,6 +17171,18 @@ msgstr "Сессии в группе"
 
 msgid "Courses in group"
 msgstr "Курсы в группе"
+
+msgid "Courses on the platform"
+msgstr "Курсы на платформе"
+
+msgid "%s courses"
+msgstr "%s курсов"
+
+msgid "%s sessions"
+msgstr "%s сессий"
+
+msgid "Search by title or code"
+msgstr "Поиск по названию или коду"
 
 msgid "Users in group"
 msgstr "Пользователи в группе"
@@ -32170,6 +32188,9 @@ msgstr "Задание"
 msgid "Allowed file formats: %s"
 msgstr "Разрешенные форматы файлов: %s"
 
+msgid "File manager"
+msgstr "Менеджер файлов"
+
 msgid "File type not allowed. Allowed extensions: %s"
 msgstr "Тип файла не разрешен. Разрешенные расширения: %s"
 
@@ -33883,6 +33904,2583 @@ msgstr "Добро пожаловать"
 msgid "Welcome to Chamilo"
 msgstr "Добро пожаловать в Chamilo"
 
+msgid "Check all unanswered questions below"
+msgstr "Отметить все неотвеченные вопросы ниже"
+
 msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
 msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Если вы впервые используете Chamilo, обязательно проверьте боковое меню, чтобы найти путь через его множество функций. Если вам нужна помощь, вы найдете <a href=\"https://docs.chamilo.org\">официальную документацию</a> для стандартной документации, а наш <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">онлайн-форум</a> поможет поделиться идеями и найти ответы от других пользователей Chamilo."
+
+msgid "Change password"
+msgstr "Изменить пароль"
+
+msgid "Newest first"
+msgstr "Сначала новые"
+
+msgid "Oldest first"
+msgstr "Сначала старые"
+
+msgid "Title A–Z"
+msgstr "Название А–Я"
+
+msgid "Title Z–A"
+msgstr "Название Я–А"
+
+msgid "Send test email"
+msgstr "Отправить тестовое письмо"
+
+msgid "Show teachers"
+msgstr "Показать преподавателей"
+
+msgid "Hide teachers"
+msgstr "Скрыть преподавателей"
+
+msgid "Delete exercise attempts"
+msgstr "Удалить попытки выполнения упражнения"
+
+msgid "Message sent successfully."
+msgstr "Сообщение успешно отправлено."
+
+msgid "You cannot create a new course right now."
+msgstr "Сейчас вы не можете создать новый курс."
+
+msgid "Unable to verify whether you can create a new course right now."
+msgstr "Невозможно проверить, можете ли вы создать новый курс сейчас."
+
+msgid "Please try again later or contact the administrator."
+msgstr "Пожалуйста, попробуйте позже или свяжитесь с администратором."
+
+msgid "You cannot create more courses at this time."
+msgstr "Сейчас вы не можете создать больше курсов."
+
+msgid "You already manage %d courses and your active service allows up to %d. To create another course, you need a higher service limit or reduce your current active courses."
+msgstr "Вы уже управляете %d курсами, а ваш активный сервис позволяет до %d. Чтобы создать ещё один курс, вам нужно увеличить лимит сервиса или уменьшить количество текущих активных курсов."
+
+msgid "You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now."
+msgstr "Вы уже управляете %d курсами, а платформа в настоящее время позволяет до %d для вашей учётной записи. Сейчас вы не можете создать больше курсов."
+
+msgid "Add a class"
+msgstr "Добавить класс"
+
+msgid "Search classes"
+msgstr "Поиск классов"
+
+msgid "No classes found"
+msgstr "Классы не найдены"
+
+msgid "Import classes"
+msgstr "Импорт классов"
+
+msgid "Class users"
+msgstr "Пользователи класса"
+
+msgid "%s classes imported"
+msgstr "%s классов импортировано"
+
+msgid "%s user-class links imported"
+msgstr "%s связей пользователь-класс импортировано"
+
+msgid "Hide comments"
+msgstr "Скрыть комментарии"
+
+msgid "Loading comments..."
+msgstr "Загрузка комментариев..."
+
+msgid "No comments yet."
+msgstr "Комментариев пока нет."
+
+msgid "A user with this username already exists"
+msgstr "Пользователь с таким именем уже существует"
+
+msgid "Manage meetings, review recordings and update course-wide BBB settings from one place."
+msgstr "Управляйте встречами, просматривайте записи и обновляйте настройки BBB для всего курса в одном месте."
+
+msgid "Review the current defaults and propagate them to every course when needed."
+msgstr "Просмотрите текущие настройки по умолчанию и примените их ко всем курсам при необходимости."
+
+msgid "Filter the list by meeting date range."
+msgstr "Фильтровать список по диапазону дат встреч."
+
+msgid "Review meeting history, participants and recording actions."
+msgstr "Просмотр истории встреч, участников и действий с записями."
+
+msgid "Participants"
+msgstr "Участники"
+
+msgid "CountUsers"
+msgstr "CountUsers"
+
+msgid "No data found"
+msgstr "Данные не найдены"
+
+msgid "My justifications"
+msgstr "Мои обоснования"
+
+msgid "My services"
+msgstr "Мои услуги"
+
+msgid "Extra menu"
+msgstr "Дополнительное меню"
+
+msgid "Pending tests"
+msgstr "Ожидающие тесты"
+
+msgid "No specific language"
+msgstr "Без указания языка"
+
+msgid "Source Chamilo version"
+msgstr "Версия Chamilo-источника"
+
+msgid "Exporting..."
+msgstr "Экспорт..."
+
+msgid "Autosaved drafts available"
+msgstr "Доступны автосохранённые черновики"
+
+msgid "Hide drafts"
+msgstr "Скрыть черновики"
+
+msgid "Show drafts"
+msgstr "Показать черновики"
+
+msgid "Drafts are stored only in this browser and are removed after saving the document."
+msgstr "Черновики сохраняются только в этом браузере и удаляются после сохранения документа."
+
+msgid "Last saved"
+msgstr "Последнее сохранение"
+
+msgid "Restore draft"
+msgstr "Восстановить черновик"
+
+msgid "Delete draft"
+msgstr "Удалить черновик"
+
+msgid "Information about indexing document content"
+msgstr "Информация об индексации содержимого документа"
+
+msgid "When enabled, the document text is indexed by the search engine so users can find it from platform search."
+msgstr "При включении текст документа индексируется поисковой системой, чтобы пользователи могли находить его через поиск платформы."
+
+msgid "The editor is not available."
+msgstr "Редактор недоступен."
+
+msgid "Please place the cursor inside a paragraph first."
+msgstr "Сначала поместите курсор внутрь абзаца."
+
+msgid "The selected paragraph is empty."
+msgstr "Выделенный абзац пуст."
+
+msgid "Loading failed."
+msgstr "Загрузка не удалась."
+
+msgid "Add introduction"
+msgstr "Добавить введение"
+
+msgid "Course type"
+msgstr "Тип курса"
+
+msgid "Choose whether this course uses the standard platform limits or benefits from a purchased service."
+msgstr "Выберите, будет ли этот курс использовать стандартные ограничения платформы или преимущества приобретённой услуги."
+
+msgid "Standard course"
+msgstr "Стандартный курс"
+
+msgid "Use the standard platform limits."
+msgstr "Использовать стандартные ограничения платформы."
+
+msgid "Selected"
+msgstr "Выбрано"
+
+msgid "Hosting limit"
+msgstr "Лимит хостинга"
+
+msgid "Document quota"
+msgstr "Квота документов"
+
+msgid "The standard course limit has been reached."
+msgstr "Достигнут лимит стандартного курса."
+
+msgid "Use the benefits granted by this service."
+msgstr "Использовать преимущества, предоставляемые этой услугой."
+
+msgid "Courses with these benefits"
+msgstr "Курсы с этими преимуществами"
+
+msgid "Active service"
+msgstr "Активная услуга"
+
+msgid "Buy service"
+msgstr "Купить услугу"
+
+msgid "Select an available course type before creating the course."
+msgstr "Выберите доступный тип курса перед созданием курса."
+
+msgid "users"
+msgstr "пользователи"
+
+msgid "You need to buy this service before using these benefits."
+msgstr "Перед использованием этих преимуществ необходимо приобрести эту услугу."
+
+msgid "You already used all courses available with this service."
+msgstr "Вы уже использовали все курсы, доступные с этой услугой."
+
+msgid "This option is not available."
+msgstr "Эта опция недоступна."
+
+msgid "This field is required"
+msgstr "Это поле обязательно"
+
+msgid "Show less"
+msgstr "Показать меньше"
+
+msgid "Show full description"
+msgstr "Показать полное описание"
+
+msgid "Virtual keyboard"
+msgstr "Виртуальная клавиатура"
+
+msgid "Backspace"
+msgstr "Backspace"
+
+msgid "Space"
+msgstr "Пространство"
+
+msgid "Learning path only visible to selected learners"
+msgstr "Курс доступен только выбранным слушателям"
+
+msgid "Create course"
+msgstr "Создать курс"
+
+msgid "Tour"
+msgstr "Тур"
+
+msgid "Are you sure you want to delete this comment?"
+msgstr "Вы уверены, что хотите удалить этот комментарий?"
+
+msgid "No posts found"
+msgstr "Записи не найдены"
+
+msgid "No communities"
+msgstr "Сообщества отсутствуют"
+
+msgid "No friends found"
+msgstr "Друзья не найдены"
+
+msgid "Visual overview of your skills"
+msgstr "Визуальный обзор ваших навыков"
+
+msgid "Compare your progress"
+msgstr "Сравнить ваш прогресс"
+
+msgid "Please enter a search term."
+msgstr "Введите поисковый запрос."
+
+msgid "Enter captcha code"
+msgstr "Введите код captcha"
+
+msgid "Refresh captcha"
+msgstr "Обновить captcha"
+
+msgid "Captcha is temporarily blocked. Please try again later."
+msgstr "Captcha временно заблокирована. Пожалуйста, попробуйте позже."
+
+msgid "Item Details"
+msgstr "Сведения об элементе"
+
+msgid "Open File"
+msgstr "Открыть файл"
+
+msgid "Selection"
+msgstr "Выбор"
+
+msgid "Remove selection context"
+msgstr "Удалить контекст выбора"
+
+msgid "Source document"
+msgstr "Исходный документ"
+
+msgid "Use the current course context"
+msgstr "Использовать текущий контекст курса"
+
+msgid "Loading documents..."
+msgstr "Загрузка документов..."
+
+msgid "No compatible PDF or TXT document was found in this course."
+msgstr "В этом курсе не найдено совместимых документов PDF или TXT."
+
+msgid "Select a PDF or TXT document to generate terms only from that document."
+msgstr "Выберите документ PDF или TXT, чтобы генерировать термины только из этого документа."
+
+msgid "Confidentiality warning"
+msgstr "Предупреждение о конфиденциальности"
+
+msgid "When a document is selected, the prompt is fixed so the generation uses only that document content."
+msgstr "При выборе документа подсказка фиксируется, поэтому генерация использует только содержимое этого документа."
+
+msgid "No document-processing AI providers available."
+msgstr "Нет доступных поставщиков ИИ для обработки документов."
+
+msgid "Failed to save signature. Please try again."
+msgstr "Не удалось сохранить подпись. Пожалуйста, попробуйте снова."
+
+msgid "Select and move"
+msgstr "Выделить и переместить"
+
+msgid "Freehand"
+msgstr "От руки"
+
+msgid "Stroke"
+msgstr "Обводка"
+
+msgid "Fill"
+msgstr "Заливка"
+
+msgid "Import SVG"
+msgstr "Импортировать SVG"
+
+msgid "Import image"
+msgstr "Импортировать изображение"
+
+msgid "Click the drawing area to place this text"
+msgstr "Щёлкните область рисования, чтобы разместить этот текст"
+
+msgid "Draw a new SVG, import an existing SVG or embed an image, then save it as a reusable document."
+msgstr "Нарисуйте новый SVG, импортируйте существующий SVG или вставьте изображение, затем сохраните как повторно используемый документ."
+
+msgid "Use Select and move to reposition or resize elements added in this editor."
+msgstr "Используйте «Выделить и переместить», чтобы переместить или изменить размер элементов, добавленных в этом редакторе."
+
+msgid "Stroke width"
+msgstr "Толщина обводки"
+
+msgid "Transparent fill"
+msgstr "Прозрачная заливка"
+
+msgid "Invalid id"
+msgstr "Неверный идентификатор"
+
+msgid "Unable to load the drawing"
+msgstr "Не удалось загрузить рисунок"
+
+msgid "Only PNG, JPG, WEBP or GIF images are supported."
+msgstr "Поддерживаются только изображения PNG, JPG, WEBP или GIF."
+
+msgid "Unable to read the image file."
+msgstr "Не удалось прочитать файл изображения."
+
+msgid "Only SVG files are supported."
+msgstr "Поддерживаются только файлы SVG."
+
+msgid "The SVG file is empty or invalid."
+msgstr "Файл SVG пуст или недействителен."
+
+msgid "Unable to read the SVG file."
+msgstr "Не удалось прочитать файл SVG."
+
+msgid "The drawing is empty or invalid."
+msgstr "Рисунок пуст или недействителен."
+
+msgid "Unable to save the drawing"
+msgstr "Не удалось сохранить рисунок"
+
+msgid "Information about AI-assisted documents"
+msgstr "Информация об ИИ-ассистированных документах"
+
+msgid "Location"
+msgstr "Местоположение"
+
+msgid "Cloud link"
+msgstr "Облачная ссылка"
+
+msgid "Add a link to a cloud document, such as Google Drive or Google Docs."
+msgstr "Добавьте ссылку на облачный документ, например Google Drive или Google Docs."
+
+msgid "Add cloud link"
+msgstr "Добавить облачную ссылку"
+
+msgid "Document title"
+msgstr "Название документа"
+
+msgid "Document options change how uploaded files are processed after saving."
+msgstr "Параметры документа определяют, как загруженные файлы будут обработаны после сохранения."
+
+msgid "Information about uncompressing zip files"
+msgstr "Информация о распаковке zip-файлов"
+
+msgid "When enabled, ZIP files are extracted into the current document folder after upload."
+msgstr "Если включено, ZIP-файлы извлекаются в текущую папку документов после загрузки."
+
+msgid "The title is required."
+msgstr "Название обязательно."
+
+msgid "The URL is required."
+msgstr "URL обязателен."
+
+msgid "The destination folder is missing."
+msgstr "Целевая папка отсутствует."
+
+msgid "Unable to create cloud link."
+msgstr "Не удалось создать облачную ссылку."
+
+msgid "Copy to My Files"
+msgstr "Копировать в «Мои файлы»"
+
+msgid "Used space"
+msgstr "Использованное место"
+
+msgid "Available space"
+msgstr "Доступное место"
+
+msgid "Available percentage"
+msgstr "Доступный процент"
+
+msgid "Cloud links cannot be downloaded."
+msgstr "Облачные ссылки нельзя скачать."
+
+msgid "Could not copy the file to My Files"
+msgstr "Не удалось скопировать файл в «Мои файлы»"
+
+msgid "File copied to My Files"
+msgstr "Файл скопирован в «Мои файлы»"
+
+msgid "Checking course creation options..."
+msgstr "Проверка параметров создания курса..."
+
+msgid "You cannot create more courses right now."
+msgstr "Сейчас вы не можете создавать больше курсов."
+
+msgid "AI analyzer"
+msgstr "AI-анализатор"
+
+msgid "Expand all"
+msgstr "Развернуть все"
+
+msgid "Collapse all"
+msgstr "Свернуть все"
+
+msgid "Review your active service benefits, purchase history and available receipts."
+msgstr "Просмотрите активные услуги, историю покупок и доступные квитанции."
+
+msgid "Active services"
+msgstr "Активные услуги"
+
+msgid "No active services"
+msgstr "Нет активных услуг"
+
+msgid "Valid until"
+msgstr "Действительно до"
+
+msgid "Recurring payment"
+msgstr "Периодический платёж"
+
+msgid "Next charge"
+msgstr "Следующее списание"
+
+msgid "Enable auto billing"
+msgstr "Включить автоплатежи"
+
+msgid "Cancel auto billing"
+msgstr "Отключить автоплатежи"
+
+msgid "Granted benefits"
+msgstr "Предоставленные преимущества"
+
+msgid "Purchase history"
+msgstr "История покупок"
+
+msgid "No purchases yet"
+msgstr "Покупок ещё нет"
+
+msgid "Product"
+msgstr "Продукт"
+
+msgid "Reference"
+msgstr "Ссылка"
+
+msgid "Amount"
+msgstr "Сумма"
+
+msgid "Receipt"
+msgstr "Квитанция"
+
+msgid "Unable to load your services right now."
+msgstr "Не удалось загрузить ваши услуги."
+
+msgid "Auto billing enabled"
+msgstr "Автоплатежи включены"
+
+msgid "Auto billing suspended"
+msgstr "Автоплатежи приостановлены"
+
+msgid "Auto billing cancelled"
+msgstr "Автоплатежи отменены"
+
+msgid "Auto billing disabled"
+msgstr "Автоплатежи отключены"
+
+msgid "Cancel auto billing for this service?"
+msgstr "Отменить автоплатежи для этой услуги?"
+
+msgid "Preview class members and courses"
+msgstr "Предпросмотр участников класса и курсов"
+
+msgid "Please select a CSV file to import."
+msgstr "Выберите CSV-файл для импорта."
+
+msgid "%d user-class links imported"
+msgstr "%d связей пользователь-класс импортировано"
+
+msgid "The following errors occurred during import:"
+msgstr "При импорте возникли следующие ошибки:"
+
+msgid "CSV file"
+msgstr "CSV-файл"
+
+msgid "Remove user from all group-related entities if not in the list"
+msgstr "Удалить пользователя из всех связанных с группой сущностей, если его нет в списке"
+
+msgid "UserName"
+msgstr "Имя пользователя"
+
+msgid "ClassName"
+msgstr "ClassName"
+
+msgid "are required for each row."
+msgstr "обязательны для каждой строки."
+
+msgid "title"
+msgstr "название"
+
+msgid "is required."
+msgstr "обязательно."
+
+msgid "description"
+msgstr "описание"
+
+msgid "are optional."
+msgstr "необязательны."
+
+msgid "Are you sure you want to remove this user from the class?"
+msgstr "Вы уверены, что хотите удалить этого пользователя из класса?"
+
+msgid "Users in class"
+msgstr "Пользователи в классе"
+
+msgid "Remove user"
+msgstr "Удалить пользователя"
+
+msgid "Class not found"
+msgstr "Класс не найден"
+
+msgid "Class overview"
+msgstr "Обзор класса"
+
+msgid "Back to classes"
+msgstr "Назад к классам"
+
+msgid "Search members or courses"
+msgstr "Поиск участников или курсов"
+
+msgid "Search by name, email, username or course title"
+msgstr "Поиск по имени, адресу электронной почты, имени пользователя или названию курса"
+
+msgid "Class members"
+msgstr "Участники класса"
+
+msgid "No email"
+msgstr "Нет адреса электронной почты"
+
+msgid "No members found"
+msgstr "Участники не найдены"
+
+msgid "No courses found"
+msgstr "Курсы не найдены"
+
+msgid "The end date must be after the start date."
+msgstr "Дата окончания должна быть позже даты начала."
+
+msgid "Always visible"
+msgstr "Всегда видимый"
+
+msgid "No end date"
+msgstr "Без даты окончания"
+
+msgid "No restriction"
+msgstr "Без ограничений"
+
+msgid "Missing learning path or course identifier"
+msgstr "Отсутствует идентификатор учебного пути или курса"
+
+msgid "Select a user or a group first"
+msgstr "Сначала выберите пользователя или группу"
+
+msgid "Remove all date restrictions for this learning path?"
+msgstr "Удалить все ограничения по дате для этого учебного пути?"
+
+msgid "Advanced learning path access"
+msgstr "Расширенный доступ к учебному пути"
+
+msgid "Remove date restrictions"
+msgstr "Удалить ограничения по дате"
+
+msgid "Search by name, email, username or group"
+msgstr "Поиск по имени, адресу электронной почты, имени пользователя или группе"
+
+msgid "Edit user restriction"
+msgstr "Редактировать ограничение пользователя"
+
+msgid "Edit group restriction"
+msgstr "Редактировать ограничение группы"
+
+msgid "Select a user or group"
+msgstr "Выберите пользователя или группу"
+
+msgid "Save restriction"
+msgstr "Сохранить ограничение"
+
+msgid "members"
+msgstr "участники"
+
+msgid "Create Assignment"
+msgstr "Создать задание"
+
+msgid "The submission deadline has passed. You can no longer submit."
+msgstr "Срок подачи работ истёк. Вы больше не можете отправить работу."
+
+msgid "Mailing cannot be combined with other recipients."
+msgstr "Рассылка не может сочетаться с другими получателями."
+
+msgid "Social map"
+msgstr "Социальная карта"
+
+msgid "The map plugin is not enabled or configured."
+msgstr "Плагин карты не включён или не настроен."
+
+msgid "Some configured extra fields were not found"
+msgstr "Некоторые настроенные дополнительные поля не найдены"
+
+msgid "No user locations were found."
+msgstr "Местоположения пользователей не найдены."
+
+msgid "OpenStreetMap needs coordinates to display an embedded marker. Address-only locations are listed below."
+msgstr "OpenStreetMap требует координаты для отображения встроенного маркера. Местоположения только с адресом перечислены ниже."
+
+msgid "Locations"
+msgstr "Местоположения"
+
+msgid "Open map"
+msgstr "Открыть карту"
+
+msgid "Provider: OpenStreetMap"
+msgstr "Поставщик: OpenStreetMap"
+
+msgid "Provider: Google Maps"
+msgstr "Поставщик: Google Maps"
+
+msgid "Personal files"
+msgstr "Личные файлы"
+
+msgid "Upload image"
+msgstr "Загрузить изображение"
+
+msgid "Upload media"
+msgstr "Загрузить медиа"
+
+msgid "Only image files are allowed in this upload screen."
+msgstr "В этом экране загрузки разрешены только файлы изображений."
+
+msgid "Only audio and video files are allowed in this upload screen."
+msgstr "В этом экране загрузки разрешены только аудио- и видеофайлы."
+
+msgid "Upload files to your personal storage."
+msgstr "Загрузите файлы в ваше личное хранилище."
+
+msgid "Linked"
+msgstr "Связанный"
+
+msgid "No audio or video files were found in this folder."
+msgstr "В этой папке не найдено аудио- или видеофайлов."
+
+msgid "No image files were found in this folder."
+msgstr "В этой папке не найдено изображений."
+
+msgid "No matching files were found in this folder."
+msgstr "В этой папке не найдено подходящих файлов."
+
+msgid "This file type is not allowed in this upload screen."
+msgstr "Этот тип файла не разрешён на данном экране загрузки."
+
+msgid "Manage your personal files and course documents."
+msgstr "Управление личными файлами и документами курса."
+
+msgid "DateValidity"
+msgstr "DateValidity"
+
+msgid "JustificationSaved"
+msgstr "JustificationSaved"
+
+msgid "ValidityDate"
+msgstr "ValidityDate"
+
+msgid "MyJustifications"
+msgstr "MyJustifications"
+
+msgid "Submission"
+msgstr "Отправка"
+
+msgid "Use the filters above to narrow the list."
+msgstr "Используйте фильтры выше, чтобы сузить список."
+
+msgid "You are not allowed to see this page."
+msgstr "У вас нет прав для просмотра этой страницы."
+
+msgid "plugin_title"
+msgstr "plugin_title"
+
+msgid "plugin_comment"
+msgstr "plugin_comment"
+
+msgid "Course tracking details"
+msgstr "Детали отслеживания курса"
+
+msgid "Course activity statistics"
+msgstr "Статистика активности курса"
+
+msgid "mobile_phone_number"
+msgstr "mobile_phone_number"
+
+msgid "Allowed template syntax"
+msgstr "Разрешённый синтаксис шаблона"
+
+msgid "Functions"
+msgstr "Функции"
+
+msgid "Available variables depend on the template type, for example {{ user.getUsername() }} or {{ user.getEmail() }}."
+msgstr "Доступные переменные зависят от типа шаблона, например {{ user.getUsername() }} или {{ user.getEmail() }}."
+
+msgid "For security reasons, any other Twig function, filter (such as filter, map, reduce or sort) or PHP call is blocked."
+msgstr "В целях безопасности любые другие функции Twig, фильтры (такие как filter, map, reduce или sort) или вызовы PHP заблокированы."
+
+msgid "Global administrator"
+msgstr "Глобальный администратор"
+
+msgid "Session manager"
+msgstr "Менеджер сессий"
+
+msgid "Human resources manager"
+msgstr "Менеджер по персоналу"
+
+msgid "Course teacher"
+msgstr "Преподаватель курса"
+
+msgid "Course student"
+msgstr "Студент курса"
+
+msgid "Platform reports"
+msgstr "Отчёты платформы"
+
+msgid "Security reports"
+msgstr "Отчёты по безопасности"
+
+msgid "Course reports"
+msgstr "Отчёты курса"
+
+msgid "Gradebook reports"
+msgstr "Отчёты журнала оценок"
+
+msgid "Social reports"
+msgstr "Социальные отчёты"
+
+msgid "Exports"
+msgstr "Экспорт"
+
+msgid "Reports about platform-wide usage, users, courses and sessions."
+msgstr "Отчёты об использовании платформы, пользователях, курсах и сессиях."
+
+msgid "Audit and security-sensitive reports."
+msgstr "Аудит и отчёты, чувствительные к безопасности."
+
+msgid "Reports scoped to courses managed by the user."
+msgstr "Отчёты по курсам, управляемым пользователем."
+
+msgid "Reports related to learner activity and follow-up."
+msgstr "Отчёты, связанные с активностью и сопровождением обучающихся."
+
+msgid "Reports related to scores, certificates and gradebook data."
+msgstr "Отчёты, связанные с оценками, сертификатами и данными журнала оценок."
+
+msgid "Reports and exports that generate downloadable files."
+msgstr "Отчёты и экспорты, генерирующие загружаемые файлы."
+
+msgid "Main platform statistics dashboard."
+msgstr "Основная панель статистики платформы."
+
+msgid "Number of courses and course distribution report."
+msgstr "Отчёт о количестве курсов и их распределении."
+
+msgid "Platform-wide access to course tools."
+msgstr "Доступ к инструментам курса на уровне платформы."
+
+msgid "Number of resources per tool."
+msgstr "Количество ресурсов по инструментам."
+
+msgid "Latest access to courses."
+msgstr "Последний доступ к курсам."
+
+msgid "Course distribution by language."
+msgstr "Распределение курсов по языкам."
+
+msgid "Course usage report."
+msgstr "Отчёт об использовании курса."
+
+msgid "Platform user count report."
+msgstr "Отчёт о количестве пользователей платформы."
+
+msgid "Recent logins chart."
+msgstr "Диаграмма недавних входов."
+
+msgid "Login distribution by month."
+msgstr "Распределение входов по месяцам."
+
+msgid "Login distribution by day."
+msgstr "Распределение входов по дням."
+
+msgid "Login distribution by hour."
+msgstr "Распределение входов по часам."
+
+msgid "Users with profile picture."
+msgstr "Пользователи с фотографией профиля."
+
+msgid "Login report filtered by date."
+msgstr "Отчёт о входах с фильтром по дате."
+
+msgid "Users who have not logged in recently."
+msgstr "Пользователи, не входившие недавно."
+
+msgid "Inactive or suspicious user accounts report."
+msgstr "Отчёт о неактивных или подозрительных учётных записях."
+
+msgid "Users activity statistics."
+msgstr "Статистика активности пользователей."
+
+msgid "Currently online users report."
+msgstr "Отчёт о пользователях онлайн."
+
+msgid "New user registrations over time."
+msgstr "Регистрации новых пользователей со временем."
+
+msgid "Course and session subscriptions over time."
+msgstr "Подписки на курсы и сессии со временем."
+
+msgid "Duplicate user detection and maintenance report."
+msgstr "Отчёт об обнаружении и обслуживании дубликатов пользователей."
+
+msgid "Platform user/session statistics."
+msgstr "Статистика пользователей и сессий платформы."
+
+msgid "Quarterly platform report."
+msgstr "Ежеквартальный отчёт платформы."
+
+msgid "Activities audit"
+msgstr "Аудит действий"
+
+msgid "Audit report for important administrative and platform activities."
+msgstr "Отчёт аудита важных административных действий и действий платформы."
+
+msgid "Social messages received report."
+msgstr "Отчёт о полученных социальных сообщениях."
+
+msgid "Social messages sent report."
+msgstr "Отчёт о отправленных социальных сообщениях."
+
+msgid "Social contacts count report."
+msgstr "Отчёт о количестве социальных контактов."
+
+msgid "Sessions created over time."
+msgstr "Созданные сессии со временем."
+
+msgid "Learning analytics dashboard."
+msgstr "Панель аналитики обучения."
+
+msgid "Teacher time report."
+msgstr "Отчёт о времени преподавателя."
+
+msgid "Teachers time by session report"
+msgstr "Отчёт о времени преподавателей по сессиям"
+
+msgid "Teacher time report grouped by session."
+msgstr "Отчёт о времени преподавателя, сгруппированный по сессиям."
+
+msgid "Corporate learning analytics report."
+msgstr "Корпоративный отчёт по аналитике обучения."
+
+msgid "Course learners tracking report."
+msgstr "Отчёт отслеживания обучающихся курса."
+
+msgid "Course activity statistics with connected and inactive users."
+msgstr "Статистика активности курса с подключёнными и неактивными пользователями."
+
+msgid "Detailed tracking report for a learner inside a course."
+msgstr "Подробный отчёт отслеживания обучающегося в курсе."
+
+msgid "Course gradebook overview."
+msgstr "Обзор журнала оценок курса."
+
+msgid "Gradebook statistics"
+msgstr "Статистика журнала оценок"
+
+msgid "Gradebook statistics report."
+msgstr "Отчёт статистики журнала оценок."
+
+msgid "Certificate report"
+msgstr "Отчёт о сертификатах"
+
+msgid "Certificate report for course gradebook."
+msgstr "Отчёт о сертификатах для журнала оценок курса."
+
+msgid "User statistics"
+msgstr "Статистика пользователя"
+
+msgid "Course gradebook statistics for a user."
+msgstr "Статистика журнала оценок курса для пользователя."
+
+msgid "Personal statistics"
+msgstr "Личная статистика"
+
+msgid "Personal gradebook statistics."
+msgstr "Личная статистика журнала оценок."
+
+msgid "Reports catalog"
+msgstr "Каталог отчётов"
+
+msgid "Central catalog of available reports, roles and permission categories."
+msgstr "Центральный каталог доступных отчётов, ролей и категорий прав."
+
+msgid "Course log events"
+msgstr "События журнала курса"
+
+msgid "Detailed course tracking events."
+msgstr "Подробные события отслеживания курса."
+
+msgid "Course tool usage"
+msgstr "Использование инструментов курса"
+
+msgid "Course tracking report grouped by tools."
+msgstr "Отчёт отслеживания курса, сгруппированный по инструментам."
+
+msgid "Course resource usage"
+msgstr "Использование ресурсов курса"
+
+msgid "Course tracking report grouped by resources."
+msgstr "Отчёт отслеживания курса, сгруппированный по ресурсам."
+
+msgid "Course group tracking"
+msgstr "Отслеживание групп курса"
+
+msgid "Tracking report for course groups."
+msgstr "Отчёт отслеживания групп курса."
+
+msgid "Course session report"
+msgstr "Отчёт сессии курса"
+
+msgid "Tracking report for a course inside sessions."
+msgstr "Отчёт отслеживания курса внутри сессий."
+
+msgid "Learning path report"
+msgstr "Отчёт учебного пути"
+
+msgid "Learning path tracking report."
+msgstr "Отчёт отслеживания учебного пути."
+
+msgid "Learning path results by user"
+msgstr "Результаты учебного пути по пользователю"
+
+msgid "Learning path results grouped by user."
+msgstr "Результаты учебного пути, сгруппированные по пользователю."
+
+msgid "Exercises report"
+msgstr "Отчёт по упражнениям"
+
+msgid "Course exercises and exams tracking report."
+msgstr "Отчёт отслеживания упражнений и экзаменов курса."
+
+msgid "Question report"
+msgstr "Отчёт по вопросам"
+
+msgid "Course question tracking report."
+msgstr "Отчёт отслеживания вопросов курса."
+
+msgid "Messages report"
+msgstr "Отчёт по сообщениям"
+
+msgid "Course messages tracking report."
+msgstr "Отчёт отслеживания сообщений курса."
+
+msgid "Total time tracking report for course learners."
+msgstr "Отчёт отслеживания общего времени для обучающихся курса."
+
+msgid "Gradebook summary"
+msgstr "Сводка журнала оценок"
+
+msgid "Summary view of gradebook results."
+msgstr "Сводный вид результатов журнала оценок."
+
+msgid "Flat view"
+msgstr "Плоский вид"
+
+msgid "Flat gradebook results view."
+msgstr "Плоский вид результатов журнала оценок."
+
+msgid "Evaluation log"
+msgstr "Журнал оценок"
+
+msgid "Change log for gradebook evaluations."
+msgstr "Журнал изменений оценок в журнале оценок."
+
+msgid "Link log"
+msgstr "Журнал ссылок"
+
+msgid "Change log for gradebook links."
+msgstr "Журнал изменений ссылок в журнале оценок."
+
+msgid "Result details"
+msgstr "Детали результата"
+
+msgid "Detailed view of a gradebook result."
+msgstr "Подробный вид результата журнала оценок."
+
+msgid "Personal certificates report."
+msgstr "Отчёт о персональных сертификатах."
+
+msgid "User move statistics"
+msgstr "Статистика перемещения пользователей"
+
+msgid "Report for user move and transfer statistics."
+msgstr "Отчёт статистики перемещения и перевода пользователей."
+
+msgid "User consent list"
+msgstr "Список согласий пользователей"
+
+msgid "Report of users and consent status."
+msgstr "Отчёт о пользователях и статусе согласий."
+
+msgid "Special platform exports."
+msgstr "Специальные экспорты платформы."
+
+msgid "Export certificates"
+msgstr "Экспорт сертификатов"
+
+msgid "Export platform certificates."
+msgstr "Экспорт сертификатов платформы."
+
+msgid "Export exercise results"
+msgstr "Экспорт результатов упражнений"
+
+msgid "Export exercise results from the platform."
+msgstr "Экспорт результатов упражнений с платформы."
+
+msgid "Course survey results and reporting."
+msgstr "Результаты и отчёты опросов курса."
+
+msgid "Attendance report"
+msgstr "Отчёт посещаемости"
+
+msgid "Course attendance tracking and reports."
+msgstr "Отслеживание и отчёты посещаемости курса."
+
+msgid "Exercises global report"
+msgstr "Глобальный отчёт по упражнениям"
+
+msgid "Global exercise results report for the course."
+msgstr "Глобальный отчёт результатов упражнений по курсу."
+
+msgid "Exercise report"
+msgstr "Отчёт по упражнению"
+
+msgid "Detailed exercise report."
+msgstr "Подробный отчёт по упражнению."
+
+msgid "Exercise history"
+msgstr "История упражнений"
+
+msgid "Exercise attempt history."
+msgstr "История попыток упражнений."
+
+msgid "Exercise results"
+msgstr "Результаты упражнений"
+
+msgid "Exercise results and corrections."
+msgstr "Результаты упражнений и исправления."
+
+msgid "Question-level exercise statistics."
+msgstr "Статистика упражнений на уровне вопросов."
+
+msgid "Exercise statistics"
+msgstr "Статистика упражнений"
+
+msgid "Exercise statistics page."
+msgstr "Страница статистики упражнений."
+
+msgid "Live exercise statistics"
+msgstr "Статистика упражнений в реальном времени"
+
+msgid "Live exercise statistics for teachers."
+msgstr "Статистика упражнений в реальном времени для преподавателей."
+
+msgid "Learning path statistics"
+msgstr "Статистика учебного пути"
+
+msgid "Learning path item statistics."
+msgstr "Статистика элементов учебного пути."
+
+msgid "Learning path report inside a course."
+msgstr "Отчёт учебного пути внутри курса."
+
+msgid "User skills report."
+msgstr "Отчёт о навыках пользователя."
+
+msgid "Scheduled or periodic export configuration."
+msgstr "Настройка запланированного или периодического экспорта."
+
+msgid "User export"
+msgstr "Экспорт пользователей"
+
+msgid "Export users from the platform."
+msgstr "Экспорт пользователей платформы."
+
+msgid "Not classified"
+msgstr "Не классифицировано"
+
+msgid "You have acquired the skill %s"
+msgstr "Вы приобрели навык %s"
+
+msgid "You have acquired the skill %s."
+msgstr "Вы приобрели навык %s."
+
+msgid "Recover your password"
+msgstr "Восстановление пароля"
+
+msgid "Disclaimer"
+msgstr "Отказ от ответственности"
+
+msgid "This operation would exceed the limit of %d users allowed for this course."
+msgstr "Эта операция превысит лимит в %d пользователей, разрешённых для этого курса."
+
+msgid "DefaultGroupCategory"
+msgstr "DefaultGroupCategory"
+
+msgid "LearningCalendar"
+msgstr "LearningCalendar"
+
+msgid "Choose how this user can authenticate on the platform."
+msgstr "Выберите способ аутентификации пользователя на платформе."
+
+msgid "Authentication methods"
+msgstr "Методы аутентификации"
+
+msgid "Set password manually"
+msgstr "Задать пароль вручную"
+
+msgid "Report role matrix"
+msgstr "Матрица ролей отчётов"
+
+msgid "Report permission categories"
+msgstr "Категории прав доступа к отчётам"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs enforce the documented report role matrix."
+msgstr "Этот реестр содержит известные страницы отчётов, их категорию, канонический URL, устаревший URL и ожидаемую аудиторию ролей. Канонические URL обеспечивают соблюдение документированной матрицы ролей отчётов."
+
+msgid "reports"
+msgstr "отчёты"
+
+msgid "Canonical URL"
+msgstr "Канонический URL"
+
+msgid "Legacy URL"
+msgstr "Устаревший URL"
+
+msgid "Permission category"
+msgstr "Категория прав доступа"
+
+msgid "This matrix documents the expected audience for each report and is enforced by the canonical report entry point."
+msgstr "Эта матрица документирует ожидаемую аудиторию каждого отчёта и обеспечивается точкой входа канонического отчёта."
+
+msgid "These keys group reports by access scope and are used by the report registry. They can later be mapped to finer-grained platform permissions."
+msgstr "Эти ключи группируют отчёты по области доступа и используются реестром отчётов. В дальнейшем они могут быть сопоставлены с более детализированными правами платформы."
+
+msgid "Permission"
+msgstr "Право доступа"
+
+msgid "Clear active session"
+msgstr "Очистить активную сессию"
+
+msgid "Are you sure you want to clear this user active session?"
+msgstr "Вы уверены, что хотите очистить активную сессию этого пользователя?"
+
+msgid "Preview shown without course context. Some course-specific data may be unavailable."
+msgstr "Предпросмотр показан без контекста курса. Некоторые данные, специфичные для курса, могут быть недоступны."
+
+msgid "Preview is not available for this question."
+msgstr "Предпросмотр недоступен для этого вопроса."
+
+msgid "Edition is not allowed without a course context."
+msgstr "Редактирование недоступно без контекста курса."
+
+msgid "This plugin does not use regions."
+msgstr "Этот плагин не использует регионы."
+
+msgid "No plugins with regions were found."
+msgstr "Плагины с регионами не найдены."
+
+msgid "Freemium"
+msgstr "Freemium"
+
+msgid "Commercial service"
+msgstr "Коммерческая услуга"
+
+msgid "Commercial"
+msgstr "Коммерческий"
+
+msgid "100% free"
+msgstr "100% бесплатно"
+
+msgid "Displayed above the public login form."
+msgstr "Отображается над формой публичного входа."
+
+msgid "Displayed below the public login form."
+msgstr "Отображается под формой публичного входа."
+
+msgid "Displayed before the footer area."
+msgstr "Отображается перед областью футера."
+
+msgid "Displayed in the left footer column."
+msgstr "Отображается в левой колонке футера."
+
+msgid "Displayed in the center footer column."
+msgstr "Отображается в центральной колонке футера."
+
+msgid "Displayed in the right footer column."
+msgstr "Отображается в правой колонке футера."
+
+msgid "Showing all plugins."
+msgstr "Показаны все плагины."
+
+msgid "Some plugins are still pending functional verification."
+msgstr "Некоторые плагины ещё ожидают функциональной проверки."
+
+msgid "Show verified plugins only"
+msgstr "Показывать только проверенные плагины"
+
+msgid "Showing verified plugins only."
+msgstr "Показаны только проверенные плагины."
+
+msgid "Pending plugins are temporarily hidden until they are adapted and tested."
+msgstr "Плагины в ожидании временно скрыты до их адаптации и тестирования."
+
+msgid "Show all plugins"
+msgstr "Показать все плагины"
+
+msgid "Official and free plugins are listed separately from plugins that may depend on commercial services or paid offers."
+msgstr "Официальные и бесплатные плагины перечислены отдельно от плагинов, которые могут зависеть от коммерческих услуг или платных предложений."
+
+msgid "Included free plugins"
+msgstr "Включённые бесплатные плагины"
+
+msgid "Commercial and freemium plugins"
+msgstr "Коммерческие и freemium плагины"
+
+msgid "All plugins"
+msgstr "Все плагины"
+
+msgid "No plugins were found for this category."
+msgstr "Для этой категории плагины не найдены."
+
+msgid "Search plugins"
+msgstr "Поиск плагинов"
+
+msgid "Search by name or description"
+msgstr "Поиск по названию или описанию"
+
+msgid "Advanced filters"
+msgstr "Расширенные фильтры"
+
+msgid "All statuses"
+msgstr "Все статусы"
+
+msgid "All sources"
+msgstr "Все источники"
+
+msgid "All types"
+msgstr "Все типы"
+
+msgid "Installed plugins are shown first"
+msgstr "Сначала показываются установленные плагины"
+
+msgid "No plugins match the current filters."
+msgstr "Нет плагинов, соответствующих текущим фильтрам."
+
+msgid "Try clearing the search or changing the filters."
+msgstr "Попробуйте очистить поиск или изменить фильтры."
+
+msgid "README"
+msgstr "README"
+
+msgid "Invalid security token"
+msgstr "Недействительный токен безопасности"
+
+msgid "Please select a destination session"
+msgstr "Пожалуйста, выберите целевую сессию"
+
+msgid "Cannot move this to the same session"
+msgstr "Невозможно переместить в ту же сессию"
+
+msgid "The destination session must include the selected course"
+msgstr "Целевая сессия должна включать выбранный курс"
+
+msgid "The source session must include the selected course"
+msgstr "Исходная сессия должна включать выбранный курс"
+
+msgid "No learners found"
+msgstr "Обучающиеся не найдены"
+
+msgid "Will be subscribed"
+msgstr "Будет подписан"
+
+msgid "Subscribed"
+msgstr "Подписан"
+
+msgid "The move process has finished"
+msgstr "Процесс перемещения завершён"
+
+msgid "Comparison finished. No data has been moved."
+msgstr "Сравнение завершено. Данные не были перемещены."
+
+msgid "Move tracking data from the base course or a source session to another session. Use comparison first to review the affected learner data."
+msgstr "Переместить данные отслеживания из базового курса или исходной сессии в другую сессию. Сначала выполните сравнение, чтобы просмотреть затрагиваемые данные обучающихся."
+
+msgid "Search for a course or use the manual course ID field below."
+msgstr "Найдите курс или используйте поле ручного ввода ID курса ниже."
+
+msgid "Fallback when the course search is not available."
+msgstr "Резервный вариант, если поиск курса недоступен."
+
+msgid "Load sessions"
+msgstr "Загрузить сессии"
+
+msgid "Selected course"
+msgstr "Выбранный курс"
+
+msgid "Choose the base course or the session where the tracking data currently exists."
+msgstr "Выберите базовый курс или сессию, где в настоящее время находятся данные отслеживания."
+
+msgid "Choose the session that will receive the tracking data."
+msgstr "Выберите сессию, которая получит данные отслеживания."
+
+msgid "Important"
+msgstr "Важно"
+
+msgid "The move action updates existing tracking data. Run compare first and test this tool with a non-production course before moving real learner data."
+msgstr "Действие перемещения обновляет существующие данные отслеживания. Сначала выполните сравнение и протестируйте этот инструмент на нерабочем курсе перед перемещением реальных данных обучающихся."
+
+msgid "No sessions found for this course"
+msgstr "Для этого курса сессии не найдены"
+
+msgid "Some users were ignored because they are not subscribed to this session."
+msgstr "Некоторые пользователи были пропущены, так как они не подписаны на эту сессию."
+
+msgid "Remove selected user"
+msgstr "Удалить выбранного пользователя"
+
+msgid "Add selected user"
+msgstr "Добавить выбранного пользователя"
+
+msgid "No users from the selected list are subscribed to this session."
+msgstr "Ни один пользователь из выбранного списка не подписан на эту сессию."
+
+msgid "No image"
+msgstr "Нет изображения"
+
+msgid "Invalid URL."
+msgstr "Недействительный URL."
+
+msgid "This cloud document cannot be embedded."
+msgstr "Этот облачный документ нельзя встроить."
+
+msgid "Document not found"
+msgstr "Документ не найден"
+
+msgid "File not found"
+msgstr "Файл не найден"
+
+msgid "This learning path is not available for your user at this time."
+msgstr "Этот учебный путь в настоящее время недоступен для вашего пользователя."
+
+msgid "StartDateMustBeBeforeTheEndDate"
+msgstr "StartDateMustBeBeforeTheEndDate"
+
+msgid "Next learning path"
+msgstr "Следующий учебный путь"
+
+msgid "Select the learning path that will be available after this one."
+msgstr "Выберите учебный путь, который будет доступен после этого."
+
+msgid "Create another learning path in this course to enable learning path flow."
+msgstr "Создайте ещё один учебный путь в этом курсе, чтобы включить поток учебных путей."
+
+msgid "Available from %s"
+msgstr "Доступно с %s"
+
+msgid "Available until %s"
+msgstr "Доступно до %s"
+
+msgid "Statistics reset date"
+msgstr "Дата сброса статистики"
+
+msgid "Last 24 hours"
+msgstr "Последние 24 часа"
+
+msgid "This reset date is used as the reference date for the report. It does not delete historical tracking data."
+msgstr "Эта дата сброса используется как опорная дата для отчёта. Она не удаляет исторические данные отслеживания."
+
+msgid "Since reset date"
+msgstr "С даты сброса"
+
+msgid "Users connected in the last 24 hours"
+msgstr "Пользователи, подключавшиеся за последние 24 часа"
+
+msgid "Learners with at least one course access during the last 24 hours."
+msgstr "Обучающиеся, имевшие хотя бы один доступ к курсу за последние 24 часа."
+
+msgid "Users connected in the last week"
+msgstr "Пользователи, подключавшиеся за последнюю неделю"
+
+msgid "Learners with at least one course access during the last 7 days."
+msgstr "Обучающиеся, имевшие хотя бы один доступ к курсу за последние 7 дней."
+
+msgid "Users connected in the last month"
+msgstr "Пользователи, подключавшиеся за последний месяц"
+
+msgid "Learners with at least one course access during the last 30 days."
+msgstr "Обучающиеся, имевшие хотя бы один доступ к курсу за последние 30 дней."
+
+msgid "Not recently connected users"
+msgstr "Пользователи без недавних подключений"
+
+msgid "Learners without course access since %s."
+msgstr "Обучающиеся без доступа к курсу с %s."
+
+msgid "Recently used resources"
+msgstr "Недавно использованные ресурсы"
+
+msgid "Course tools/resources used since %s."
+msgstr "Инструменты/ресурсы курса, использованные с %s."
+
+msgid "%s %% of learners"
+msgstr "%s %% обучающихся"
+
+msgid "Connections"
+msgstr "Подключения"
+
+msgid "Total connections"
+msgstr "Всего подключений"
+
+msgid "Downloaded documents"
+msgstr "Загруженные документы"
+
+msgid "List of documents downloaded by this learner in this course."
+msgstr "Список документов, загруженных этим обучающимся в данном курсе."
+
+msgid "Forum topics"
+msgstr "Темы форума"
+
+msgid "Forum topics opened by this learner in this course."
+msgstr "Темы форума, открытые этим обучающимся в данном курсе."
+
+msgid "Forum posts"
+msgstr "Сообщения форума"
+
+msgid "Forum posts written by this learner in this course."
+msgstr "Сообщения форума, написанные этим обучающимся в данном курсе."
+
+msgid "Course connections"
+msgstr "Подключения к курсу"
+
+msgid "Connection history for this learner in this course."
+msgstr "История подключений этого обучающегося в данном курсе."
+
+msgid "Resources used"
+msgstr "Использованные ресурсы"
+
+msgid "Latest tools or resources used by this learner in this course."
+msgstr "Последние инструменты или ресурсы, использованные этим обучающимся в данном курсе."
+
+msgid "Logout date"
+msgstr "Дата выхода"
+
+msgid "Imported Aiken quiz"
+msgstr "Импортированный тест Aiken"
+
+msgid "Only supported documents will be listed here."
+msgstr "Здесь будут перечислены только поддерживаемые документы."
+
+msgid "Generated Aiken content"
+msgstr "Сгенерированный контент Aiken"
+
+msgid "Review the generated content before importing it as a new exercise."
+msgstr "Проверьте сгенерированный контент перед импортом его как нового упражнения."
+
+msgid "No documents available."
+msgstr "Документы отсутствуют."
+
+msgid "yperbolic arctangent:\\t\\tarctanh(x)"
+msgstr "Гиперболический арктангенс:\\t\\tarctanh(x)"
+
+msgid "Exercise"
+msgstr "Упражнение"
+
+msgid "OfficialCode"
+msgstr "Официальный код"
+
+msgid "FirstName"
+msgstr "Имя"
+
+msgid "LastName"
+msgstr "Фамилия"
+
+msgid "LoginName"
+msgstr "Имя пользователя"
+
+msgid "MinMinute"
+msgstr "Минуты"
+
+msgid "StartDate"
+msgstr "Дата начала"
+
+msgid "EndDate"
+msgstr "Дата окончания"
+
+msgid "CorrectionDate"
+msgstr "Дата проверки"
+
+msgid "NotValidated"
+msgstr "Не подтверждено"
+
+msgid "PendingAttempts"
+msgstr "Ожидающие попытки"
+
+msgid "List of pending test attempts across your courses."
+msgstr "Список ожидающих попыток тестирования по вашим курсам."
+
+msgid "User ID"
+msgstr "ID пользователя"
+
+msgid "QuestionType"
+msgstr "Тип вопроса"
+
+msgid "QuestionsWithNoAutomaticCorrection"
+msgstr "Вопросы без автоматической проверки"
+
+msgid "There are no pending tests."
+msgstr "Нет ожидающих тестов."
+
+msgid "%s results"
+msgstr "%s результатов"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Пример заполнения формы: расчёт индекса массы тела</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Возраст</strong></td>            <td width=\"75%\" style=\"\">[25] лет</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Пол</strong></td>            <td style=\"\" text-align:=\"\">[M] (М или Ж)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Вес</strong></td>            <td style=\"\" text-align:=\"\">95 кг</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Рост</strong></td>            <td style=\"vertical-align: top;\">1,81 м</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Индекс массы тела</strong></td>            <td style=\"vertical-align: top;\">[29] ИМТ = Вес/Рост<sup>2</sup> (См.<a href=\"http://ru.wikipedia.org/wiki/Индекс_массы_тела\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> статью в Википедии</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Removed"
+msgstr "Удалено"
+
+msgid "NoUsersInTheList"
+msgstr "NoUsersInTheList"
+
+msgid "Are you sure?"
+msgstr "Вы уверены?"
+
+msgid "NoResultsAvailable"
+msgstr "NoResultsAvailable"
+
+msgid "Import groups from a CSV file and optionally remove items that are not present in the file."
+msgstr "Импортировать группы из CSV-файла и при необходимости удалить элементы, отсутствующие в файле."
+
+msgid "Use this option carefully because items missing from the CSV can be removed during the import process."
+msgstr "Используйте эту опцию осторожно, так как элементы, отсутствующие в CSV, могут быть удалены в процессе импорта."
+
+msgid "Upload a CSV file with the group data you want to import."
+msgstr "Загрузите CSV-файл с данными групп, которые необходимо импортировать."
+
+msgid "You can download the example file to use the expected format."
+msgstr "Вы можете скачать пример файла, чтобы использовать ожидаемый формат."
+
+msgid "If you enable deletion, items not present in the file may be removed."
+msgstr "Если включено удаление, элементы, отсутствующие в файле, могут быть удалены."
+
+msgid "The CSV file is mandatory to start the import."
+msgstr "CSV-файл обязателен для начала импорта."
+
+msgid "Please select at least one class."
+msgstr "Пожалуйста, выберите хотя бы один класс."
+
+msgid "Define the properties for each group before creating them."
+msgstr "Определите свойства каждой группы перед их созданием."
+
+msgid "Apply the first row values"
+msgstr "Применить значения первой строки"
+
+msgid "Create groups manually or generate them from the classes subscribed to this course."
+msgstr "Создавать группы вручную или генерировать их из классов, записанных на этот курс."
+
+msgid "Create manual groups"
+msgstr "Создать группы вручную"
+
+msgid "Use this form when you want to create empty course groups manually."
+msgstr "Используйте эту форму, если хотите создать пустые группы курса вручную."
+
+msgid "Configure manual groups"
+msgstr "Настроить группы вручную"
+
+msgid "Create groups from subscribed classes"
+msgstr "Создать группы из записанных классов"
+
+msgid "Use this form when you want to create one course group for each selected class."
+msgstr "Используйте эту форму, если хотите создать одну группу курса для каждого выбранного класса."
+
+msgid "Keep created groups linked to their source classes"
+msgstr "Сохранить связь созданных групп с исходными классами"
+
+msgid "Create groups from selected classes"
+msgstr "Создать группы из выбранных классов"
+
+msgid "You must be logged in to access this page."
+msgstr "Для доступа к этой странице необходимо войти в систему."
+
+msgid "Invalid user"
+msgstr "Недействительный пользователь"
+
+msgid "UseCourseCustomCertificate"
+msgstr "UseCourseCustomCertificate"
+
+msgid "UseDefaultCustomCertificate"
+msgstr "UseDefaultCustomCertificate"
+
+msgid "CertificateSetting"
+msgstr "CertificateSetting"
+
+msgid "SelectOneOptionBeforeOpeningEditor"
+msgstr "SelectOneOptionBeforeOpeningEditor"
+
+msgid "ChooseCustomCertificateModeHelp"
+msgstr "ChooseCustomCertificateModeHelp"
+
+msgid "CertificateMode"
+msgstr "CertificateMode"
+
+msgid "Enable student to validate own attendance"
+msgstr "Разрешить студентам подтверждать собственное посещение"
+
+msgid "Course block"
+msgstr "Блок курса"
+
+msgid "Add custom content blocks to course footer regions."
+msgstr "Добавьте пользовательские блоки контента в нижние области курса."
+
+msgid "course_block_pre_footer"
+msgstr "course_block_pre_footer"
+
+msgid "Before footer"
+msgstr "Перед нижним колонтитулом"
+
+msgid "course_block_footer_left"
+msgstr "course_block_footer_left"
+
+msgid "Footer left"
+msgstr "Нижний колонтитул слева"
+
+msgid "course_block_footer_center"
+msgstr "course_block_footer_center"
+
+msgid "Footer center"
+msgstr "Нижний колонтитул по центру"
+
+msgid "course_block_footer_right"
+msgstr "course_block_footer_right"
+
+msgid "Footer right"
+msgstr "Нижний колонтитул справа"
+
+msgid "SetNotification"
+msgstr "SetNotification"
+
+msgid "CourseLegal"
+msgstr "CourseLegal"
+
+msgid "Certificates search is not available"
+msgstr "Поиск сертификатов недоступен"
+
+msgid "It allows the acquisition of skills by subcategories"
+msgstr "Позволяет получать навыки по подкатегориям"
+
+msgid "Allow skills by subcategories"
+msgstr "Разрешить навыки по подкатегориям"
+
+msgid "Minimum score for skills"
+msgstr "Минимальный балл для навыков"
+
+msgid "The gradebook table is hidden."
+msgstr "Таблица журнала оценок скрыта."
+
+msgid "Invalid token"
+msgstr "Недействительный токен"
+
+msgid "Unable to save the item"
+msgstr "Не удалось сохранить элемент"
+
+msgid "Only HTTP and HTTPS URLs are allowed."
+msgstr "Разрешены только URL-адреса HTTP и HTTPS."
+
+msgid "Invalid URL host."
+msgstr "Недействительный хост URL."
+
+msgid "This cloud provider is not allowed."
+msgstr "Этот облачный провайдер не разрешён."
+
+msgid "Documents used"
+msgstr "Использованные документы"
+
+msgid "No document usage"
+msgstr "Нет использованных документов"
+
+msgid "Invalid action."
+msgstr "Недопустимое действие."
+
+msgid "No users selected."
+msgstr "Пользователи не выбраны."
+
+msgid "%s user(s) processed."
+msgstr "Обработано пользователей: %s."
+
+msgid "Invalid CSRF token."
+msgstr "Недействительный CSRF-токен."
+
+msgid "[%s] Please change your password"
+msgstr "[%s] Пожалуйста, смените пароль"
+
+msgid "Dear %s,\n\nOur security enforcing process shows you use a password that is commonly used on the internet, which means your account could easily be stolen. It is probably a simple sequence or a very common word, we don't really know (we cannot see your password), but we ask you to please connect to the platform and request a password change. You can follow the link here: %s to do that now.\n\nPlease note we will never ask for your password in this process. You just enter your username or e-mail and we send you a link. If you are asked to introduce your existing password to do that, someone is probably trying to do Phishing on your account. Be safe, change your password now!\n\n%s\n%s"
+msgstr "Уважаемый(ая) %s,\n\nНаш процесс обеспечения безопасности показывает, что вы используете пароль, который часто встречается в интернете, что означает, что ваша учётная запись может быть легко похищена. Вероятно, это простая последовательность или очень распространённое слово, мы не знаем точно (мы не можем видеть ваш пароль), но просим вас подключиться к платформе и запросить смену пароля. Вы можете перейти по ссылке: %s, чтобы сделать это сейчас.\n\nОбратите внимание, что мы никогда не запрашиваем ваш пароль в этом процессе. Вы просто вводите своё имя пользователя или адрес электронной почты, и мы отправляем вам ссылку. Если вас просят ввести существующий пароль, возможно, кто-то пытается провести фишинг вашей учётной записи. Будьте осторожны, смените пароль сейчас!\n\n%s\n%s"
+
+msgid "[%s] Your password has been reset"
+msgstr "[%s] Ваш пароль был сброшен"
+
+msgid "Dear %s,\n\nOur security enforcing process flagged you as using a password that is commonly used on the internet, which means your account could easily be stolen. As a prevention measure, we have decided to initiate a password reset process. Your new, automatically generated password is now:\n\n%s\n\nPlease login to the platform soon (using this new password) to set your own, personal and secure, password.\n\nBe safe.\n\n%s\n%s"
+msgstr "Уважаемый(ая) %s,\n\nНаш процесс обеспечения безопасности отметил, что вы используете пароль, который часто встречается в интернете, что означает, что ваша учётная запись может быть легко похищена. В качестве меры предосторожности мы решили инициировать процесс сброса пароля. Ваш новый автоматически сгенерированный пароль:\n\n%s\n\nПожалуйста, войдите на платформу в ближайшее время (используя этот новый пароль), чтобы установить свой собственный, личный и безопасный пароль.\n\nБудьте осторожны.\n\n%s\n%s"
+
+msgid "Signature saved successfully"
+msgstr "Подпись успешно сохранена"
+
+msgid "Invalid request payload."
+msgstr "Недопустимая полезная нагрузка запроса."
+
+msgid "Authentication required."
+msgstr "Требуется аутентификация."
+
+msgid "The course title is required."
+msgstr "Название курса обязательно."
+
+msgid "Only trainers and administrators can create courses."
+msgstr "Только преподаватели и администраторы могут создавать курсы."
+
+msgid "Course creation by trainers is disabled on this platform."
+msgstr "Создание курсов преподавателями отключено на этой платформе."
+
+msgid "The selected BuyCourses service cannot be used to create this course."
+msgstr "Выбранный сервис BuyCourses нельзя использовать для создания этого курса."
+
+msgid "You have reached the maximum number of courses allowed (%d)."
+msgstr "Вы достигли максимального количества разрешённых курсов (%d)."
+
+msgid "The selected BuyCourses service is invalid."
+msgstr "Выбранный сервис BuyCourses недействителен."
+
+msgid "BuyCourses is not available right now."
+msgstr "BuyCourses в данный момент недоступен."
+
+msgid "BuyCourses cannot validate the selected service right now."
+msgstr "BuyCourses не может проверить выбранный сервис в данный момент."
+
+msgid "Unable to validate the selected BuyCourses service right now."
+msgstr "Невозможно проверить выбранный сервис BuyCourses в данный момент."
+
+msgid "External tool removed from course"
+msgstr "Внешний инструмент удалён из курса"
+
+msgid "External tool was removed from the course, but kept internally because it is linked to the gradebook"
+msgstr "Внешний инструмент удалён из курса, но сохранён внутренне, так как он связан с журналом оценок"
+
+msgid "There are no external tools available to add to the gradebook"
+msgstr "Нет доступных внешних инструментов для добавления в журнал оценок"
+
+msgid "The evaluation could not be created"
+msgstr "Не удалось создать оценку"
+
+msgid "The gradebook evaluation could not be linked"
+msgstr "Не удалось связать оценку журнала оценок"
+
+msgid "Survey questions"
+msgstr "Вопросы опроса"
+
+msgid "Back to survey list"
+msgstr "Вернуться к списку опросов"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "На этот опрос уже даны ответы. Редактирование вопросов отключено настройками."
+
+msgid "Choose the type of question you want to add."
+msgstr "Выберите тип вопроса, который хотите добавить."
+
+msgid "The free text option is added automatically."
+msgstr "Вариант свободного текста добавляется автоматически."
+
+msgid "No questions found"
+msgstr "Вопросы не найдены"
+
+msgid "Mandatory"
+msgstr "Обязательный"
+
+msgid "Unsupported question type"
+msgstr "Неподдерживаемый тип вопроса"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "В вопросе можно использовать теги {%s} и {%s}."
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "Этот вопрос отображается условно при прохождении опроса."
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "Варианты процентов от 1 до 100 формируются автоматически."
+
+msgid "Could not load survey questions"
+msgstr "Не удалось загрузить вопросы опроса"
+
+msgid "The question text is required."
+msgstr "Текст вопроса обязателен."
+
+msgid "The maximum score is required."
+msgstr "Максимальный балл обязателен."
+
+msgid "Please select a parent option."
+msgstr "Выберите родительский вариант."
+
+msgid "Please fill all answer options."
+msgstr "Заполните все варианты ответов."
+
+msgid "QuestionUpdated"
+msgstr "QuestionUpdated"
+
+msgid "Could not save survey question"
+msgstr "Не удалось сохранить вопрос опроса"
+
+msgid "Could not delete survey question"
+msgstr "Не удалось удалить вопрос опроса"
+
+msgid "Could not move survey question"
+msgstr "Не удалось переместить вопрос опроса"
+
+msgid "Could not copy survey question"
+msgstr "Не удалось скопировать вопрос опроса"
+
+msgid "Hide search"
+msgstr "Скрыть поиск"
+
+msgid "Showing results for: %s"
+msgstr "Отображаются результаты для: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "Поиск по названию, коду или описанию опроса."
+
+msgid "Search surveys"
+msgstr "Поиск опросов"
+
+msgid "%s surveys selected"
+msgstr "Выбрано опросов: %s"
+
+msgid "Clear selection"
+msgstr "Очистить выбор"
+
+msgid "No surveys found"
+msgstr "Опросы не найдены"
+
+msgid "Unsupported"
+msgstr "Не поддерживается"
+
+msgid "Could not load surveys"
+msgstr "Не удалось загрузить опросы"
+
+msgid "Delete selected surveys"
+msgstr "Удалить выбранные опросы"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "Выбранные опросы и их вопросы будут удалены. Это действие нельзя отменить."
+
+msgid "Could not delete selected surveys"
+msgstr "Не удалось удалить выбранные опросы"
+
+msgid "Survey action"
+msgstr "Действие с опросом"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "Будет создана копия этого опроса: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "Все ответы и приглашения для этого опроса будут удалены: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "Сгенерированные умноженные вопросы будут удалены из этого опроса: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "Этот опрос будет опубликован для связанных тьюторов группы: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "Этот опрос и его вопросы будут удалены: %s"
+
+msgid "Could not complete survey action"
+msgstr "Не удалось выполнить действие с опросом"
+
+msgid "Not started"
+msgstr "Не начато"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "Опросы о встречах позволяют приглашённым пользователям выбрать даты, когда они доступны."
+
+msgid "Back to surveys"
+msgstr "Назад к опросам"
+
+msgid "Edit meeting poll"
+msgstr "Редактировать опрос о встрече"
+
+msgid "View meeting poll"
+msgstr "Просмотреть опрос о встрече"
+
+msgid "Basic information"
+msgstr "Основная информация"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "Будет создан опрос типа «опрос о встрече». Ответы и приглашения обрабатываются отдельно."
+
+msgid "Availability"
+msgstr "Доступность"
+
+msgid "Meeting dates"
+msgstr "Даты встречи"
+
+msgid "Meeting poll"
+msgstr "Опрос о встрече"
+
+msgid "My availability"
+msgstr "Моя доступность"
+
+msgid "Meeting poll results"
+msgstr "Результаты опроса о встрече"
+
+msgid "No invitations found"
+msgstr "Приглашения не найдены"
+
+msgid "available"
+msgstr "доступен"
+
+msgid "Could not load meeting poll"
+msgstr "Не удалось загрузить опрос о встрече"
+
+msgid "Please complete the required fields"
+msgstr "Пожалуйста, заполните обязательные поля"
+
+msgid "Could not save meeting poll"
+msgstr "Не удалось сохранить опрос о встрече"
+
+msgid "Could not save meeting availability"
+msgstr "Не удалось сохранить доступность для встречи"
+
+msgid "Copy this survey to another course or session"
+msgstr "Копировать этот опрос в другой курс или сессию"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "Опрос будет скопирован без ответов и приглашений."
+
+msgid "No target courses found"
+msgstr "Целевые курсы не найдены"
+
+msgid "Search by course title, course code or session name."
+msgstr "Поиск по названию курса, коду курса или названию сессии."
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "Используйте «Дублировать опрос», если нужна копия в том же курсе."
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "Вопросы и варианты будут скопированы. Ответы, приглашения и отчёты останутся только в исходном опросе."
+
+msgid "Selected target"
+msgstr "Выбранная цель"
+
+msgid "Could not load copy form"
+msgstr "Не удалось загрузить форму копирования"
+
+msgid "The survey will be copied to: %s"
+msgstr "Опрос будет скопирован в: %s"
+
+msgid "Survey copied."
+msgstr "Опрос скопирован."
+
+msgid "Could not copy survey"
+msgstr "Не удалось скопировать опрос"
+
+msgid "Answer survey"
+msgstr "Ответить на опрос"
+
+msgid "Preview mode does not save answers."
+msgstr "Режим предпросмотра не сохраняет ответы."
+
+msgid "Survey completed"
+msgstr "Опрос завершён"
+
+msgid "Thank you for answering the survey."
+msgstr "Спасибо за участие в опросе."
+
+msgid "Profile information"
+msgstr "Информация профиля"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "Пожалуйста, проверьте запрошенные поля профиля перед ответом на опрос."
+
+msgid "This profile field is read-only."
+msgstr "Это поле профиля доступно только для чтения."
+
+msgid "You already filled this survey."
+msgstr "Вы уже заполнили этот опрос."
+
+msgid "Please specify"
+msgstr "Пожалуйста, уточните"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "Этот тип вопроса не поддерживается в современном представлении опроса."
+
+msgid "Preview only"
+msgstr "Только предпросмотр"
+
+msgid "Submit answers"
+msgstr "Отправить ответы"
+
+msgid "Could not load survey"
+msgstr "Не удалось загрузить опрос"
+
+msgid "Please complete the required profile fields."
+msgstr "Пожалуйста, заполните обязательные поля профиля."
+
+msgid "Please answer all mandatory questions."
+msgstr "Пожалуйста, ответьте на все обязательные вопросы."
+
+msgid "Could not save survey answers"
+msgstr "Не удалось сохранить ответы на опрос"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "Настройте основную информацию опроса перед управлением вопросами и приглашениями."
+
+msgid "The survey code cannot be changed after creation."
+msgstr "Код опроса нельзя изменить после создания."
+
+msgid "Survey behavior"
+msgstr "Поведение опроса"
+
+msgid "Use 0 for no time limit."
+msgstr "Используйте 0, чтобы снять ограничение по времени."
+
+msgid "Survey messages"
+msgstr "Сообщения опроса"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "Выбранные здесь поля профиля будут показаны перед вопросами опроса."
+
+msgid "No profile fields are currently available."
+msgstr "В настоящее время нет доступных полей профиля."
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "Выбор полей профиля доступен только для неанонимных опросов."
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "Связь с навыками будет перенесена в отдельном пакете."
+
+msgid "Could not load survey configuration"
+msgstr "Не удалось загрузить настройки опроса"
+
+msgid "The survey code is required."
+msgstr "Код опроса обязателен."
+
+msgid "The survey title is required."
+msgstr "Название опроса обязательно."
+
+msgid "The survey has been saved successfully"
+msgstr "Опрос успешно сохранён"
+
+msgid "Could not save survey configuration"
+msgstr "Не удалось сохранить настройки опроса"
+
+msgid "Course users"
+msgstr "Пользователи курса"
+
+msgid "Already invited"
+msgstr "Уже приглашён"
+
+msgid "No users found"
+msgstr "Пользователи не найдены"
+
+msgid "No groups found"
+msgstr "Группы не найдены"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "Используйте **link**, где должна появиться ссылка на опрос."
+
+msgid "Remind all selected users"
+msgstr "Напомнить всем выбранным пользователям"
+
+msgid "Anonymous access link"
+msgstr "Ссылка для анонимного доступа"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "Пользователи, не получившие приглашение, могут использовать эту ссылку для прохождения опроса."
+
+msgid "Answered anonymously"
+msgstr "Ответ дан анонимно"
+
+msgid "Could not load survey invitations"
+msgstr "Не удалось загрузить приглашения опроса"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "Тема и текст письма обязательны при отправке."
+
+msgid "Could not publish survey"
+msgstr "Не удалось опубликовать опрос"
+
+msgid "Could not copy the link"
+msgstr "Не удалось скопировать ссылку"
+
+msgid "Please answer this survey using the following link"
+msgstr "Пожалуйста, ответьте на этот опрос по следующей ссылке"
+
+msgid "Export CSV"
+msgstr "Экспорт CSV"
+
+msgid "Export compact CSV"
+msgstr "Экспорт компактного CSV"
+
+msgid "Export Excel"
+msgstr "Экспорт Excel"
+
+msgid "Export package"
+msgstr "Экспорт пакета"
+
+msgid "Results summary"
+msgstr "Сводка результатов"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "В этом представлении отображаются перенесённые данные отчётов по этому опросу."
+
+msgid "Select user"
+msgstr "Выбрать пользователя"
+
+msgid "No answers found"
+msgstr "Ответы не найдены"
+
+msgid "answers"
+msgstr "ответы"
+
+msgid "Could not load survey reporting"
+msgstr "Не удалось загрузить отчёт по опросу"
+
+msgid "Back to threads"
+msgstr "Назад к темам"
+
+msgid "Back to learning path"
+msgstr "Назад к учебному пути"
+
+msgid "Remove sticky"
+msgstr "Снять закрепление"
+
+msgid "Make sticky"
+msgstr "Закрепить"
+
+msgid "Open thread"
+msgstr "Открыть тему"
+
+msgid "Close thread"
+msgstr "Закрыть тему"
+
+msgid "Delete thread"
+msgstr "Удалить тему"
+
+msgid "This thread is hidden from learners."
+msgstr "Эта тема скрыта от обучающихся."
+
+msgid "Revision requested"
+msgstr "Запрошена ревизия"
+
+msgid "Revision"
+msgstr "Ревизия"
+
+msgid "Approve post"
+msgstr "Утвердить сообщение"
+
+msgid "Reject post"
+msgstr "Отклонить сообщение"
+
+msgid "Cancel revision request"
+msgstr "Отменить запрос на ревизию"
+
+msgid "Delete post"
+msgstr "Удалить сообщение"
+
+msgid "Message is required"
+msgstr "Сообщение обязательно"
+
+msgid "Target thread is required"
+msgstr "Целевая тема обязательна"
+
+msgid "Could not retrieve posts"
+msgstr "Не удалось получить сообщения"
+
+msgid "Thread shown"
+msgstr "Тема показана"
+
+msgid "Thread hidden"
+msgstr "Тема скрыта"
+
+msgid "Could not update thread"
+msgstr "Не удалось обновить тему"
+
+msgid "Thread closed"
+msgstr "Тема закрыта"
+
+msgid "Thread opened"
+msgstr "Тема открыта"
+
+msgid "Thread marked as sticky"
+msgstr "Тема отмечена как закреплённая"
+
+msgid "Thread unmarked as sticky"
+msgstr "Тема снята с закрепления"
+
+msgid "Thread notifications enabled"
+msgstr "Уведомления по теме включены"
+
+msgid "Thread notifications disabled"
+msgstr "Уведомления по теме отключены"
+
+msgid "Could not update thread notification"
+msgstr "Не удалось обновить уведомления по теме"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "Вы уверены, что хотите удалить эту тему?"
+
+msgid "Could not delete thread"
+msgstr "Не удалось удалить тему"
+
+msgid "Post approved"
+msgstr "Сообщение одобрено"
+
+msgid "Could not approve post"
+msgstr "Не удалось одобрить сообщение"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "Вы уверены, что хотите отклонить это сообщение?"
+
+msgid "Post rejected"
+msgstr "Сообщение отклонено"
+
+msgid "Could not reject post"
+msgstr "Не удалось отклонить сообщение"
+
+msgid "Post shown"
+msgstr "Сообщение показано"
+
+msgid "Post hidden"
+msgstr "Сообщение скрыто"
+
+msgid "Could not update post"
+msgstr "Не удалось обновить сообщение"
+
+msgid "Post updated"
+msgstr "Сообщение обновлено"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "Вы уверены, что хотите удалить это сообщение?"
+
+msgid "Post deleted"
+msgstr "Сообщение удалено"
+
+msgid "Could not delete post"
+msgstr "Не удалось удалить сообщение"
+
+msgid "Untitled thread"
+msgstr "Без названия"
+
+msgid "Could not retrieve threads"
+msgstr "Не удалось получить темы"
+
+msgid "Post moved"
+msgstr "Сообщение перемещено"
+
+msgid "Could not move post"
+msgstr "Не удалось переместить сообщение"
+
+msgid "Revision request removed"
+msgstr "Запрос на ревизию удалён"
+
+msgid "Could not update revision request"
+msgstr "Не удалось обновить запрос на ревизию"
+
+msgid "Are you sure you want to report this post?"
+msgstr "Вы уверены, что хотите пожаловаться на это сообщение?"
+
+msgid "Could not report post"
+msgstr "Не удалось пожаловаться на сообщение"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "Вы уверены, что хотите удалить это вложение?"
+
+msgid "Attachment deleted"
+msgstr "Вложение удалено"
+
+msgid "Could not delete attachment"
+msgstr "Не удалось удалить вложение"
+
+msgid "Thread title"
+msgstr "Название темы"
+
+msgid "Sticky thread"
+msgstr "Закреплённая тема"
+
+msgid "Attach files"
+msgstr "Прикрепить файлы"
+
+msgid "Attachments are disabled for this forum"
+msgstr "Вложения отключены для этого форума"
+
+msgid "The forum is not open yet."
+msgstr "Форум ещё не открыт."
+
+msgid "The forum is closed."
+msgstr "Форум закрыт."
+
+msgid "The forum is locked."
+msgstr "Форум заблокирован."
+
+msgid "New threads are not allowed in this forum."
+msgstr "Создание новых тем в этом форуме запрещено."
+
+msgid "Thread created"
+msgstr "Тема создана"
+
+msgid "Could not create thread"
+msgstr "Не удалось создать тему"
+
+msgid "Back to posts"
+msgstr "Назад к сообщениям"
+
+msgid "This reply will be stored as a revision."
+msgstr "Этот ответ будет сохранён как ревизия."
+
+msgid "Post reply"
+msgstr "Ответить"
+
+msgid "The thread is locked."
+msgstr "Тема заблокирована."
+
+msgid "Reply added"
+msgstr "Ответ добавлен"
+
+msgid "Could not add reply"
+msgstr "Не удалось добавить ответ"
+
+msgid "Add forum"
+msgstr "Добавить форум"
+
+msgid "No forums found"
+msgstr "Форумы не найдены"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "Создайте первую категорию форума или форум, чтобы начать обсуждения."
+
+msgid "Locked"
+msgstr "Заблокировано"
+
+msgid "No forums in this category"
+msgstr "В этой категории нет форумов"
+
+msgid "Posts require approval"
+msgstr "Сообщения требуют одобрения"
+
+msgid "Forum for current group"
+msgstr "Форум текущей группы"
+
+msgid "Group forum visibility"
+msgstr "Видимость форума группы"
+
+msgid "No category"
+msgstr "Без категории"
+
+msgid "Could not retrieve forums"
+msgstr "Не удалось получить форумы"
+
+msgid "Forum category updated"
+msgstr "Категория форума обновлена"
+
+msgid "Forum category created"
+msgstr "Категория форума создана"
+
+msgid "Could not save forum category"
+msgstr "Не удалось сохранить категорию форума"
+
+msgid "Forum updated"
+msgstr "Форум обновлён"
+
+msgid "Forum created"
+msgstr "Форум создан"
+
+msgid "Could not save forum"
+msgstr "Не удалось сохранить форум"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "Вы уверены, что хотите удалить эту категорию форума?"
+
+msgid "Could not delete forum category"
+msgstr "Не удалось удалить категорию форума"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "Вы уверены, что хотите удалить этот форум?"
+
+msgid "Could not delete forum"
+msgstr "Не удалось удалить форум"
+
+msgid "Forum category unlocked"
+msgstr "Категория форума разблокирована"
+
+msgid "Forum category locked"
+msgstr "Категория форума заблокирована"
+
+msgid "Could not update forum category"
+msgstr "Не удалось обновить категорию форума"
+
+msgid "Forum category shown"
+msgstr "Категория форума показана"
+
+msgid "Forum category hidden"
+msgstr "Категория форума скрыта"
+
+msgid "Forum unlocked"
+msgstr "Форум разблокирован"
+
+msgid "Forum locked"
+msgstr "Форум заблокирован"
+
+msgid "Could not update forum"
+msgstr "Не удалось обновить форум"
+
+msgid "Forum shown"
+msgstr "Форум показан"
+
+msgid "Forum hidden"
+msgstr "Форум скрыт"
+
+msgid "Forum notifications enabled"
+msgstr "Уведомления форума включены"
+
+msgid "Forum notifications disabled"
+msgstr "Уведомления форума отключены"
+
+msgid "Could not update forum notification"
+msgstr "Не удалось обновить уведомления форума"
+
+msgid "Forum category moved"
+msgstr "Категория форума перемещена"
+
+msgid "Could not move forum category"
+msgstr "Не удалось переместить категорию форума"
+
+msgid "Forum moved"
+msgstr "Форум перемещён"
+
+msgid "Could not move forum"
+msgstr "Не удалось переместить форум"
+
+msgid "Back to forums"
+msgstr "Назад к форумам"
+
+msgid "New thread"
+msgstr "Новая тема"
+
+msgid "No threads found"
+msgstr "Темы не найдены"
+
+msgid "Sticky"
+msgstr "Закреплённая"
+
+msgid "Graded"
+msgstr "Оценено"
+
+msgid "Grade peers"
+msgstr "Оценить участников"
+
+msgid "Move thread"
+msgstr "Переместить тему"
+
+msgid "Target forum"
+msgstr "Целевой форум"
+
+msgid "Target forum is required"
+msgstr "Целевой форум обязателен"
+
+msgid "Students"
+msgstr "Студенты"
+
+msgid "No students found"
+msgstr "Студенты не найдены"
+
+msgid "No peers available to grade."
+msgstr "Нет доступных коллег для оценки."
+
+msgid "Qualified"
+msgstr "Квалифицирован"
+
+msgid "Not qualified"
+msgstr "Не квалифицирован"
+
+msgid "Could not retrieve thread grading"
+msgstr "Не удалось получить оценку темы"
+
+msgid "Thread grading updated"
+msgstr "Оценка темы обновлена"
+
+msgid "Could not update thread grading"
+msgstr "Не удалось обновить оценку темы"
+
+msgid "Thread score saved"
+msgstr "Оценка темы сохранена"
+
+msgid "Could not save thread score"
+msgstr "Не удалось сохранить оценку темы"
+
+msgid "Could not move thread"
+msgstr "Не удалось переместить тему"
+
+msgid "Thread updated"
+msgstr "Тема обновлена"
+
+msgid "Search term is too short"
+msgstr "Поисковый запрос слишком короткий"
+
+msgid "Could not search forums"
+msgstr "Не удалось выполнить поиск по форумам"
+
+msgid "Moderated"
+msgstr "Модерируемый"
+
+msgid "View threads"
+msgstr "Просмотреть темы"
 

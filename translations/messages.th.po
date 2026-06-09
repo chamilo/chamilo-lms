@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ใช่ :ลิขสิทธิ์,, ไม่:ไม่มีลิขสิทธิ์ :yes:copyright,, no:no copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:โฟลเดอร์,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:โฟลเดอร์,, application/msword:MsWord,, application/octet-stream:สตรีมออคเต็ต,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:แบบฝึกหัด,, simulation:การจำลอง,, questionnaire:แบบสอบถาม,, diagram:ไดอะแกรม,, figure:รูปภาพ,, graph:กราฟ,, index:ดัชนี,, slide:สไลด์,, table:ตาราง,, narrative text:ข้อความบรรยาย,, exam:ข้อสอบ,, experiment:การทดลอง,, problem statement:ประโยคปัญหา,, self assessment:การประเมินตนเอง,, lecture:การบรรยาย"
@@ -9731,6 +9731,9 @@ msgstr "ผลการค้นหาสำหรับ:"
 msgid "Select a file"
 msgstr "เลือกไฟล์"
 
+msgid "Select a file to insert into the editor."
+msgstr "เลือกไฟล์เพื่อแทรกลงในตัวแก้ไข"
+
 msgid "Warning - The FAQ file, located in the /home/ directory of your portal, is not writable. Your text will not be saved until the file permissions are changed."
 msgstr "คำเตือน - ไฟล์ FAQ ที่อยู่ในไดเรกทอรี /home/ ของพอร์ทัลของคุณไม่สามารถเขียนได้ ข้อความของคุณจะไม่ถูกบันทึกจนกว่าจะเปลี่ยนสิทธิ์ไฟล์"
 
@@ -15911,6 +15914,9 @@ msgstr "วันที่และเวลา"
 msgid "Item"
 msgstr "รายการ"
 
+msgid "Items"
+msgstr "รายการ"
+
 msgid "Configure Dashboard Plugin"
 msgstr "กำหนดค่าพลักอินแดชบอร์ด"
 
@@ -17164,6 +17170,18 @@ msgstr "เซสชันในกลุ่ม"
 
 msgid "Courses in group"
 msgstr "รายวิชาในกลุ่ม"
+
+msgid "Courses on the platform"
+msgstr "หลักสูตรบนแพลตฟอร์ม"
+
+msgid "%s courses"
+msgstr "%s หลักสูตร"
+
+msgid "%s sessions"
+msgstr "%s เซสชัน"
+
+msgid "Search by title or code"
+msgstr "ค้นหาตามชื่อหรือรหัส"
 
 msgid "Users in group"
 msgstr "ผู้ใช้ในกลุ่ม"
@@ -32169,6 +32187,9 @@ msgstr "งาน"
 msgid "Allowed file formats: %s"
 msgstr "รูปแบบไฟล์ที่อนุญาต: %s"
 
+msgid "File manager"
+msgstr "ตัวจัดการไฟล์"
+
 msgid "File type not allowed. Allowed extensions: %s"
 msgstr "ประเภทไฟล์ไม่ได้รับอนุญาต ส่วนขยายที่อนุญาต: %s"
 
@@ -33882,6 +33903,2583 @@ msgstr "ยินดีต้อนรับ"
 msgid "Welcome to Chamilo"
 msgstr "ยินดีต้อนรับสู่ Chamilo"
 
+msgid "Check all unanswered questions below"
+msgstr "ตรวจสอบคำถามที่ยังไม่ได้ตอบทั้งหมดด้านล่าง"
+
 msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
 msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> หากนี่เป็นครั้งแรกที่คุณใช้ Chamilo โปรดตรวจสอบเมนูด้านข้างเพื่อค้นหาวิธีใช้คุณสมบัติต่างๆ หากคุณต้องการความช่วยเหลือ คุณจะพบว่า <a href=\"https://docs.chamilo.org\">เอกสารอย่างเป็นทางการของเรา</a> สามารถช่วยได้สำหรับเอกสารมาตรฐาน ในขณะที่ <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">ฟอรัมออนไลน์</a> สามารถช่วยแบ่งปันไอเดียและค้นหาคำตอบจากผู้ใช้ Chamilo คนอื่นๆ"
+
+msgid "Change password"
+msgstr "เปลี่ยนรหัสผ่าน"
+
+msgid "Newest first"
+msgstr "ใหม่สุดก่อน"
+
+msgid "Oldest first"
+msgstr "เก่าสุดก่อน"
+
+msgid "Title A–Z"
+msgstr "ชื่อเรื่อง ก–ฮ"
+
+msgid "Title Z–A"
+msgstr "ชื่อเรื่อง ฮ–ก"
+
+msgid "Send test email"
+msgstr "ส่งอีเมลทดสอบ"
+
+msgid "Show teachers"
+msgstr "แสดงผู้สอน"
+
+msgid "Hide teachers"
+msgstr "ซ่อนผู้สอน"
+
+msgid "Delete exercise attempts"
+msgstr "ลบความพยายามทำแบบฝึกหัด"
+
+msgid "Message sent successfully."
+msgstr "ส่งข้อความสำเร็จแล้ว"
+
+msgid "You cannot create a new course right now."
+msgstr "คุณไม่สามารถสร้างหลักสูตรใหม่ได้ในขณะนี้"
+
+msgid "Unable to verify whether you can create a new course right now."
+msgstr "ไม่สามารถตรวจสอบได้ว่าคุณสามารถสร้างหลักสูตรใหม่ได้ในขณะนี้หรือไม่"
+
+msgid "Please try again later or contact the administrator."
+msgstr "โปรดลองอีกครั้งในภายหลังหรือติดต่อผู้ดูแลระบบ"
+
+msgid "You cannot create more courses at this time."
+msgstr "คุณไม่สามารถสร้างหลักสูตรเพิ่มได้ในขณะนี้"
+
+msgid "You already manage %d courses and your active service allows up to %d. To create another course, you need a higher service limit or reduce your current active courses."
+msgstr "คุณจัดการ %d หลักสูตรแล้ว และบริการที่ใช้งานอยู่ของคุณอนุญาตได้สูงสุด %d หากต้องการสร้างหลักสูตรเพิ่ม คุณต้องเพิ่มขีดจำกัดบริการหรือลดจำนวนหลักสูตรที่ใช้งานอยู่ปัจจุบัน"
+
+msgid "You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now."
+msgstr "คุณจัดการ %d หลักสูตรแล้ว และแพลตฟอร์มอนุญาตให้คุณได้สูงสุด %d ในขณะนี้ คุณไม่สามารถสร้างหลักสูตรเพิ่มได้"
+
+msgid "Add a class"
+msgstr "เพิ่มชั้นเรียน"
+
+msgid "Search classes"
+msgstr "ค้นหาชั้นเรียน"
+
+msgid "No classes found"
+msgstr "ไม่พบชั้นเรียน"
+
+msgid "Import classes"
+msgstr "นำเข้าชั้นเรียน"
+
+msgid "Class users"
+msgstr "ผู้ใช้ในชั้นเรียน"
+
+msgid "%s classes imported"
+msgstr "นำเข้าชั้นเรียน %s รายการ"
+
+msgid "%s user-class links imported"
+msgstr "นำเข้าลิงก์ผู้ใช้-ชั้นเรียน %s รายการ"
+
+msgid "Hide comments"
+msgstr "ซ่อนความคิดเห็น"
+
+msgid "Loading comments..."
+msgstr "กำลังโหลดความคิดเห็น..."
+
+msgid "No comments yet."
+msgstr "ยังไม่มีความคิดเห็น"
+
+msgid "A user with this username already exists"
+msgstr "มีผู้ใช้ชื่อผู้ใช้นี้อยู่แล้ว"
+
+msgid "Manage meetings, review recordings and update course-wide BBB settings from one place."
+msgstr "จัดการการประชุม ตรวจสอบการบันทึก และอัปเดตการตั้งค่า BBB ทั่วทั้งหลักสูตรได้จากที่เดียว"
+
+msgid "Review the current defaults and propagate them to every course when needed."
+msgstr "ตรวจสอบค่าดีฟอลต์ปัจจุบันและเผยแพร่ไปยังทุกหลักสูตรเมื่อจำเป็น"
+
+msgid "Filter the list by meeting date range."
+msgstr "กรองรายการตามช่วงวันที่ประชุม"
+
+msgid "Review meeting history, participants and recording actions."
+msgstr "ตรวจสอบประวัติการประชุม ผู้เข้าร่วม และการดำเนินการบันทึก"
+
+msgid "Participants"
+msgstr "ผู้เข้าร่วม"
+
+msgid "CountUsers"
+msgstr "จำนวนผู้ใช้"
+
+msgid "No data found"
+msgstr "ไม่พบข้อมูล"
+
+msgid "My justifications"
+msgstr "เหตุผลของฉัน"
+
+msgid "My services"
+msgstr "บริการของฉัน"
+
+msgid "Extra menu"
+msgstr "เมนูเพิ่มเติม"
+
+msgid "Pending tests"
+msgstr "แบบทดสอบที่รอดำเนินการ"
+
+msgid "No specific language"
+msgstr "ไม่มีภาษาที่ระบุ"
+
+msgid "Source Chamilo version"
+msgstr "เวอร์ชัน Chamilo ต้นทาง"
+
+msgid "Exporting..."
+msgstr "กำลังส่งออก..."
+
+msgid "Autosaved drafts available"
+msgstr "มีแบบร่างที่บันทึกอัตโนมัติ"
+
+msgid "Hide drafts"
+msgstr "ซ่อนแบบร่าง"
+
+msgid "Show drafts"
+msgstr "แสดงแบบร่าง"
+
+msgid "Drafts are stored only in this browser and are removed after saving the document."
+msgstr "แบบร่างจะถูกเก็บไว้ในเบราว์เซอร์นี้เท่านั้น และจะถูกลบหลังจากบันทึกเอกสาร"
+
+msgid "Last saved"
+msgstr "บันทึกล่าสุด"
+
+msgid "Restore draft"
+msgstr "คืนค่าแบบร่าง"
+
+msgid "Delete draft"
+msgstr "ลบแบบร่าง"
+
+msgid "Information about indexing document content"
+msgstr "ข้อมูลเกี่ยวกับการจัดทำดัชนีเนื้อหาเอกสาร"
+
+msgid "When enabled, the document text is indexed by the search engine so users can find it from platform search."
+msgstr "เมื่อเปิดใช้งาน ข้อความในเอกสารจะถูกจัดทำดัชนีโดยเครื่องมือค้นหา เพื่อให้ผู้ใช้สามารถค้นหาได้จากระบบ"
+
+msgid "The editor is not available."
+msgstr "ตัวแก้ไขไม่พร้อมใช้งาน"
+
+msgid "Please place the cursor inside a paragraph first."
+msgstr "กรุณาวางเคอร์เซอร์ภายในย่อหน้าก่อน"
+
+msgid "The selected paragraph is empty."
+msgstr "ย่อหน้าที่เลือกว่างเปล่า"
+
+msgid "Loading failed."
+msgstr "โหลดล้มเหลว"
+
+msgid "Add introduction"
+msgstr "เพิ่มบทนำ"
+
+msgid "Course type"
+msgstr "ประเภทหลักสูตร"
+
+msgid "Choose whether this course uses the standard platform limits or benefits from a purchased service."
+msgstr "เลือกว่าหลักสูตรนี้ใช้ขีดจำกัดมาตรฐานของแพลตฟอร์ม หรือใช้ประโยชน์จากบริการที่ซื้อ"
+
+msgid "Standard course"
+msgstr "หลักสูตรมาตรฐาน"
+
+msgid "Use the standard platform limits."
+msgstr "ใช้ขีดจำกัดมาตรฐานของแพลตฟอร์ม"
+
+msgid "Selected"
+msgstr "ที่เลือก"
+
+msgid "Hosting limit"
+msgstr "ขีดจำกัดโฮสติ้ง"
+
+msgid "Document quota"
+msgstr "โควต้าเอกสาร"
+
+msgid "The standard course limit has been reached."
+msgstr "ถึงขีดจำกัดหลักสูตรมาตรฐานแล้ว"
+
+msgid "Use the benefits granted by this service."
+msgstr "ใช้ประโยชน์ที่ได้รับจากบริการนี้"
+
+msgid "Courses with these benefits"
+msgstr "หลักสูตรที่มีประโยชน์เหล่านี้"
+
+msgid "Active service"
+msgstr "บริการที่ใช้งานอยู่"
+
+msgid "Buy service"
+msgstr "ซื้อบริการ"
+
+msgid "Select an available course type before creating the course."
+msgstr "เลือกประเภทหลักสูตรที่ใช้ได้ก่อนสร้างหลักสูตร"
+
+msgid "users"
+msgstr "ผู้ใช้"
+
+msgid "You need to buy this service before using these benefits."
+msgstr "คุณต้องซื้อบริการนี้ก่อนจึงจะสามารถใช้สิทธิประโยชน์เหล่านี้ได้"
+
+msgid "You already used all courses available with this service."
+msgstr "คุณได้ใช้หลักสูตรทั้งหมดที่มีในบริการนี้แล้ว"
+
+msgid "This option is not available."
+msgstr "ตัวเลือกนี้ไม่พร้อมใช้งาน"
+
+msgid "This field is required"
+msgstr "จำเป็นต้องกรอกข้อมูลในช่องนี้"
+
+msgid "Show less"
+msgstr "แสดงน้อยลง"
+
+msgid "Show full description"
+msgstr "แสดงคำอธิบายทั้งหมด"
+
+msgid "Virtual keyboard"
+msgstr "แป้นพิมพ์เสมือน"
+
+msgid "Backspace"
+msgstr "ลบ"
+
+msgid "Space"
+msgstr "เว้นวรรค"
+
+msgid "Learning path only visible to selected learners"
+msgstr "เส้นทางการเรียนรู้แสดงเฉพาะผู้เรียนที่เลือกเท่านั้น"
+
+msgid "Create course"
+msgstr "สร้างหลักสูตร"
+
+msgid "Tour"
+msgstr "ทัวร์"
+
+msgid "Are you sure you want to delete this comment?"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบความคิดเห็นนี้?"
+
+msgid "No posts found"
+msgstr "ไม่พบโพสต์"
+
+msgid "No communities"
+msgstr "ไม่มีชุมชน"
+
+msgid "No friends found"
+msgstr "ไม่พบเพื่อน"
+
+msgid "Visual overview of your skills"
+msgstr "ภาพรวมทักษะของคุณ"
+
+msgid "Compare your progress"
+msgstr "เปรียบเทียบความคืบหน้าของคุณ"
+
+msgid "Please enter a search term."
+msgstr "กรุณากรอกคำค้นหา"
+
+msgid "Enter captcha code"
+msgstr "กรอกรหัสแคปต์ชา"
+
+msgid "Refresh captcha"
+msgstr "รีเฟรชแคปต์ชา"
+
+msgid "Captcha is temporarily blocked. Please try again later."
+msgstr "แคปต์ชาถูกบล็อกชั่วคราว กรุณาลองใหม่อีกครั้งในภายหลัง"
+
+msgid "Item Details"
+msgstr "รายละเอียดรายการ"
+
+msgid "Open File"
+msgstr "เปิดไฟล์"
+
+msgid "Selection"
+msgstr "การเลือก"
+
+msgid "Remove selection context"
+msgstr "ลบบริบทการเลือก"
+
+msgid "Source document"
+msgstr "เอกสารต้นทาง"
+
+msgid "Use the current course context"
+msgstr "ใช้บริบทหลักสูตรปัจจุบัน"
+
+msgid "Loading documents..."
+msgstr "กำลังโหลดเอกสาร..."
+
+msgid "No compatible PDF or TXT document was found in this course."
+msgstr "ไม่พบเอกสาร PDF หรือ TXT ที่เข้ากันได้ในหลักสูตรนี้"
+
+msgid "Select a PDF or TXT document to generate terms only from that document."
+msgstr "เลือกเอกสาร PDF หรือ TXT เพื่อสร้างคำศัพท์จากเอกสารนั้นเท่านั้น"
+
+msgid "Confidentiality warning"
+msgstr "คำเตือนเรื่องความลับ"
+
+msgid "When a document is selected, the prompt is fixed so the generation uses only that document content."
+msgstr "เมื่อเลือกเอกสารแล้ว ข้อความแจ้งจะถูกกำหนดตายตัวเพื่อให้การสร้างใช้เฉพาะเนื้อหาของเอกสารนั้น"
+
+msgid "No document-processing AI providers available."
+msgstr "ไม่มีผู้ให้บริการ AI สำหรับประมวลผลเอกสาร"
+
+msgid "Failed to save signature. Please try again."
+msgstr "บันทึกลายเซ็นไม่สำเร็จ กรุณาลองใหม่อีกครั้ง"
+
+msgid "Select and move"
+msgstr "เลือกและย้าย"
+
+msgid "Freehand"
+msgstr "วาดอิสระ"
+
+msgid "Stroke"
+msgstr "เส้นขอบ"
+
+msgid "Fill"
+msgstr "เติมสี"
+
+msgid "Import SVG"
+msgstr "นำเข้า SVG"
+
+msgid "Import image"
+msgstr "นำเข้าภาพ"
+
+msgid "Click the drawing area to place this text"
+msgstr "คลิกพื้นที่วาดเพื่อวางข้อความนี้"
+
+msgid "Draw a new SVG, import an existing SVG or embed an image, then save it as a reusable document."
+msgstr "วาด SVG ใหม่ นำเข้า SVG ที่มีอยู่ หรือฝังภาพ แล้วบันทึกเป็นเอกสารที่ใช้ซ้ำได้"
+
+msgid "Use Select and move to reposition or resize elements added in this editor."
+msgstr "ใช้เลือกและย้ายเพื่อปรับตำแหน่งหรือปรับขนาดองค์ประกอบที่เพิ่มในตัวแก้ไขนี้"
+
+msgid "Stroke width"
+msgstr "ความหนาของเส้น"
+
+msgid "Transparent fill"
+msgstr "เติมสีโปร่งใส"
+
+msgid "Invalid id"
+msgstr "ไอดีไม่ถูกต้อง"
+
+msgid "Unable to load the drawing"
+msgstr "ไม่สามารถโหลดภาพวาดได้"
+
+msgid "Only PNG, JPG, WEBP or GIF images are supported."
+msgstr "รองรับเฉพาะภาพ PNG, JPG, WEBP หรือ GIF เท่านั้น"
+
+msgid "Unable to read the image file."
+msgstr "ไม่สามารถอ่านไฟล์ภาพได้"
+
+msgid "Only SVG files are supported."
+msgstr "รองรับเฉพาะไฟล์ SVG เท่านั้น"
+
+msgid "The SVG file is empty or invalid."
+msgstr "ไฟล์ SVG ว่างเปล่าหรือไม่ถูกต้อง"
+
+msgid "Unable to read the SVG file."
+msgstr "ไม่สามารถอ่านไฟล์ SVG ได้"
+
+msgid "The drawing is empty or invalid."
+msgstr "ภาพวาดว่างเปล่าหรือไม่ถูกต้อง"
+
+msgid "Unable to save the drawing"
+msgstr "ไม่สามารถบันทึกภาพวาดได้"
+
+msgid "Information about AI-assisted documents"
+msgstr "ข้อมูลเกี่ยวกับเอกสารที่ใช้ AI ช่วยเหลือ"
+
+msgid "Location"
+msgstr "ตำแหน่งที่ตั้ง"
+
+msgid "Cloud link"
+msgstr "ลิงก์คลาวด์"
+
+msgid "Add a link to a cloud document, such as Google Drive or Google Docs."
+msgstr "เพิ่มลิงก์ไปยังเอกสารคลาวด์ เช่น Google Drive หรือ Google Docs"
+
+msgid "Add cloud link"
+msgstr "เพิ่มลิงก์คลาวด์"
+
+msgid "Document title"
+msgstr "ชื่อเอกสาร"
+
+msgid "Document options change how uploaded files are processed after saving."
+msgstr "ตัวเลือกเอกสารจะกำหนดวิธีการประมวลผลไฟล์ที่อัปโหลดหลังจากบันทึก"
+
+msgid "Information about uncompressing zip files"
+msgstr "ข้อมูลเกี่ยวกับการแตกไฟล์ zip"
+
+msgid "When enabled, ZIP files are extracted into the current document folder after upload."
+msgstr "เมื่อเปิดใช้งาน ไฟล์ ZIP จะถูกแตกออกไปยังโฟลเดอร์เอกสารปัจจุบันหลังจากอัปโหลด"
+
+msgid "The title is required."
+msgstr "ต้องระบุชื่อเรื่อง"
+
+msgid "The URL is required."
+msgstr "ต้องระบุ URL"
+
+msgid "The destination folder is missing."
+msgstr "ไม่พบโฟลเดอร์ปลายทาง"
+
+msgid "Unable to create cloud link."
+msgstr "ไม่สามารถสร้างลิงก์คลาวด์ได้"
+
+msgid "Copy to My Files"
+msgstr "คัดลอกไปยังไฟล์ของฉัน"
+
+msgid "Used space"
+msgstr "พื้นที่ที่ใช้"
+
+msgid "Available space"
+msgstr "พื้นที่ว่าง"
+
+msgid "Available percentage"
+msgstr "เปอร์เซ็นต์พื้นที่ว่าง"
+
+msgid "Cloud links cannot be downloaded."
+msgstr "ไม่สามารถดาวน์โหลดลิงก์คลาวด์ได้"
+
+msgid "Could not copy the file to My Files"
+msgstr "ไม่สามารถคัดลอกไฟล์ไปยังไฟล์ของฉันได้"
+
+msgid "File copied to My Files"
+msgstr "คัดลอกไฟล์ไปยังไฟล์ของฉันแล้ว"
+
+msgid "Checking course creation options..."
+msgstr "กำลังตรวจสอบตัวเลือกการสร้างหลักสูตร..."
+
+msgid "You cannot create more courses right now."
+msgstr "คุณไม่สามารถสร้างหลักสูตรเพิ่มเติมได้ในขณะนี้"
+
+msgid "AI analyzer"
+msgstr "ตัววิเคราะห์ AI"
+
+msgid "Expand all"
+msgstr "ขยายทั้งหมด"
+
+msgid "Collapse all"
+msgstr "ยุบทั้งหมด"
+
+msgid "Review your active service benefits, purchase history and available receipts."
+msgstr "ตรวจสอบสิทธิประโยชน์บริการที่ใช้งานอยู่ ประวัติการซื้อ และใบเสร็จที่ใช้ได้"
+
+msgid "Active services"
+msgstr "บริการที่ใช้งานอยู่"
+
+msgid "No active services"
+msgstr "ไม่มีบริการที่ใช้งานอยู่"
+
+msgid "Valid until"
+msgstr "ใช้ได้จนถึง"
+
+msgid "Recurring payment"
+msgstr "การชำระเงินแบบต่อเนื่อง"
+
+msgid "Next charge"
+msgstr "การเรียกเก็บเงินครั้งถัดไป"
+
+msgid "Enable auto billing"
+msgstr "เปิดใช้งานการเรียกเก็บเงินอัตโนมัติ"
+
+msgid "Cancel auto billing"
+msgstr "ยกเลิกการเรียกเก็บเงินอัตโนมัติ"
+
+msgid "Granted benefits"
+msgstr "สิทธิประโยชน์ที่ได้รับ"
+
+msgid "Purchase history"
+msgstr "ประวัติการซื้อ"
+
+msgid "No purchases yet"
+msgstr "ยังไม่มีการซื้อ"
+
+msgid "Product"
+msgstr "ผลิตภัณฑ์"
+
+msgid "Reference"
+msgstr "อ้างอิง"
+
+msgid "Amount"
+msgstr "จำนวนเงิน"
+
+msgid "Receipt"
+msgstr "ใบเสร็จ"
+
+msgid "Unable to load your services right now."
+msgstr "ไม่สามารถโหลดบริการของคุณได้ในขณะนี้"
+
+msgid "Auto billing enabled"
+msgstr "เปิดใช้งานการเรียกเก็บเงินอัตโนมัติแล้ว"
+
+msgid "Auto billing suspended"
+msgstr "ระงับการเรียกเก็บเงินอัตโนมัติแล้ว"
+
+msgid "Auto billing cancelled"
+msgstr "ยกเลิกการเรียกเก็บเงินอัตโนมัติแล้ว"
+
+msgid "Auto billing disabled"
+msgstr "ปิดใช้งานการเรียกเก็บเงินอัตโนมัติแล้ว"
+
+msgid "Cancel auto billing for this service?"
+msgstr "ยกเลิกการเรียกเก็บเงินอัตโนมัติสำหรับบริการนี้?"
+
+msgid "Preview class members and courses"
+msgstr "แสดงตัวอย่างสมาชิกชั้นเรียนและหลักสูตร"
+
+msgid "Please select a CSV file to import."
+msgstr "กรุณาเลือกไฟล์ CSV เพื่อนำเข้า"
+
+msgid "%d user-class links imported"
+msgstr "นำเข้าลิงก์ผู้ใช้-ชั้นเรียนแล้ว %d รายการ"
+
+msgid "The following errors occurred during import:"
+msgstr "เกิดข้อผิดพลาดต่อไปนี้ระหว่างการนำเข้า:"
+
+msgid "CSV file"
+msgstr "ไฟล์ CSV"
+
+msgid "Remove user from all group-related entities if not in the list"
+msgstr "นำผู้ใช้ออกจากหน่วยงานที่เกี่ยวข้องกับกลุ่มทั้งหมด หากไม่อยู่ในรายการ"
+
+msgid "UserName"
+msgstr "ชื่อผู้ใช้"
+
+msgid "ClassName"
+msgstr "ชื่อชั้นเรียน"
+
+msgid "are required for each row."
+msgstr "จำเป็นต้องมีในแต่ละแถว"
+
+msgid "title"
+msgstr "ชื่อเรื่อง"
+
+msgid "is required."
+msgstr "จำเป็นต้องมี"
+
+msgid "description"
+msgstr "คำอธิบาย"
+
+msgid "are optional."
+msgstr "เป็นตัวเลือก"
+
+msgid "Are you sure you want to remove this user from the class?"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการนำผู้ใช้ออกจากชั้นเรียนนี้?"
+
+msgid "Users in class"
+msgstr "ผู้ใช้ในชั้นเรียน"
+
+msgid "Remove user"
+msgstr "นำผู้ใช้ออก"
+
+msgid "Class not found"
+msgstr "ไม่พบชั้นเรียน"
+
+msgid "Class overview"
+msgstr "ภาพรวมชั้นเรียน"
+
+msgid "Back to classes"
+msgstr "กลับไปยังชั้นเรียน"
+
+msgid "Search members or courses"
+msgstr "ค้นหาสมาชิกหรือหลักสูตร"
+
+msgid "Search by name, email, username or course title"
+msgstr "ค้นหาตามชื่อ อีเมล ชื่อผู้ใช้ หรือชื่อหลักสูตร"
+
+msgid "Class members"
+msgstr "สมาชิกชั้นเรียน"
+
+msgid "No email"
+msgstr "ไม่มีอีเมล"
+
+msgid "No members found"
+msgstr "ไม่พบสมาชิก"
+
+msgid "No courses found"
+msgstr "ไม่พบหลักสูตร"
+
+msgid "The end date must be after the start date."
+msgstr "วันที่สิ้นสุดต้องอยู่หลังวันที่เริ่มต้น"
+
+msgid "Always visible"
+msgstr "แสดงตลอดเวลา"
+
+msgid "No end date"
+msgstr "ไม่มีวันที่สิ้นสุด"
+
+msgid "No restriction"
+msgstr "ไม่จำกัด"
+
+msgid "Missing learning path or course identifier"
+msgstr "ไม่พบเส้นทางการเรียนรู้หรือตัวระบุหลักสูตร"
+
+msgid "Select a user or a group first"
+msgstr "เลือกผู้ใช้หรือกลุ่มก่อน"
+
+msgid "Remove all date restrictions for this learning path?"
+msgstr "ลบข้อจำกัดวันที่ทั้งหมดสำหรับเส้นทางการเรียนรู้นี้?"
+
+msgid "Advanced learning path access"
+msgstr "การเข้าถึงเส้นทางการเรียนรู้ขั้นสูง"
+
+msgid "Remove date restrictions"
+msgstr "ลบข้อจำกัดวันที่"
+
+msgid "Search by name, email, username or group"
+msgstr "ค้นหาตามชื่อ อีเมล ชื่อผู้ใช้ หรือกลุ่ม"
+
+msgid "Edit user restriction"
+msgstr "แก้ไขข้อจำกัดผู้ใช้"
+
+msgid "Edit group restriction"
+msgstr "แก้ไขข้อจำกัดกลุ่ม"
+
+msgid "Select a user or group"
+msgstr "เลือกผู้ใช้หรือกลุ่ม"
+
+msgid "Save restriction"
+msgstr "บันทึกข้อจำกัด"
+
+msgid "members"
+msgstr "สมาชิก"
+
+msgid "Create Assignment"
+msgstr "สร้างงานที่มอบหมาย"
+
+msgid "The submission deadline has passed. You can no longer submit."
+msgstr "กำหนดส่งงานผ่านไปแล้ว คุณไม่สามารถส่งงานได้อีก"
+
+msgid "Mailing cannot be combined with other recipients."
+msgstr "ไม่สามารถรวมการส่งจดหมายกับผู้รับรายอื่นได้"
+
+msgid "Social map"
+msgstr "แผนที่สังคม"
+
+msgid "The map plugin is not enabled or configured."
+msgstr "ปลั๊กอินแผนที่ไม่ได้เปิดใช้งานหรือกำหนดค่าไว้"
+
+msgid "Some configured extra fields were not found"
+msgstr "ไม่พบฟิลด์เพิ่มเติมบางรายการที่กำหนดค่าไว้"
+
+msgid "No user locations were found."
+msgstr "ไม่พบตำแหน่งผู้ใช้"
+
+msgid "OpenStreetMap needs coordinates to display an embedded marker. Address-only locations are listed below."
+msgstr "OpenStreetMap ต้องการพิกัดเพื่อแสดงเครื่องหมายฝังตัว ตำแหน่งที่ระบุเฉพาะที่อยู่แสดงด้านล่าง"
+
+msgid "Locations"
+msgstr "ตำแหน่ง"
+
+msgid "Open map"
+msgstr "เปิดแผนที่"
+
+msgid "Provider: OpenStreetMap"
+msgstr "ผู้ให้บริการ: OpenStreetMap"
+
+msgid "Provider: Google Maps"
+msgstr "ผู้ให้บริการ: Google Maps"
+
+msgid "Personal files"
+msgstr "ไฟล์ส่วนตัว"
+
+msgid "Upload image"
+msgstr "อัปโหลดภาพ"
+
+msgid "Upload media"
+msgstr "อัปโหลดสื่อ"
+
+msgid "Only image files are allowed in this upload screen."
+msgstr "อนุญาตเฉพาะไฟล์ภาพในหน้าจออัปโหลดนี้เท่านั้น"
+
+msgid "Only audio and video files are allowed in this upload screen."
+msgstr "อนุญาตเฉพาะไฟล์เสียงและวิดีโอในหน้าจออัปโหลดนี้เท่านั้น"
+
+msgid "Upload files to your personal storage."
+msgstr "อัปโหลดไฟล์ไปยังที่เก็บข้อมูลส่วนตัวของคุณ"
+
+msgid "Linked"
+msgstr "เชื่อมโยงแล้ว"
+
+msgid "No audio or video files were found in this folder."
+msgstr "ไม่พบไฟล์เสียงหรือวิดีโอในโฟลเดอร์นี้"
+
+msgid "No image files were found in this folder."
+msgstr "ไม่พบไฟล์ภาพในโฟลเดอร์นี้"
+
+msgid "No matching files were found in this folder."
+msgstr "ไม่พบไฟล์ที่ตรงกันในโฟลเดอร์นี้"
+
+msgid "This file type is not allowed in this upload screen."
+msgstr "ไม่อนุญาตให้ใช้ประเภทไฟล์นี้ในหน้าจออัปโหลดนี้"
+
+msgid "Manage your personal files and course documents."
+msgstr "จัดการไฟล์ส่วนตัวและเอกสารหลักสูตรของคุณ"
+
+msgid "DateValidity"
+msgstr "DateValidity"
+
+msgid "JustificationSaved"
+msgstr "JustificationSaved"
+
+msgid "ValidityDate"
+msgstr "ValidityDate"
+
+msgid "MyJustifications"
+msgstr "MyJustifications"
+
+msgid "Submission"
+msgstr "การส่งงาน"
+
+msgid "Use the filters above to narrow the list."
+msgstr "ใช้ตัวกรองด้านบนเพื่อจำกัดรายการ"
+
+msgid "You are not allowed to see this page."
+msgstr "คุณไม่ได้รับอนุญาตให้ดูหน้านี้"
+
+msgid "plugin_title"
+msgstr "plugin_title"
+
+msgid "plugin_comment"
+msgstr "plugin_comment"
+
+msgid "Course tracking details"
+msgstr "รายละเอียดการติดตามหลักสูตร"
+
+msgid "Course activity statistics"
+msgstr "สถิติกิจกรรมหลักสูตร"
+
+msgid "mobile_phone_number"
+msgstr "mobile_phone_number"
+
+msgid "Allowed template syntax"
+msgstr "ไวยากรณ์เทมเพลตที่อนุญาต"
+
+msgid "Functions"
+msgstr "ฟังก์ชัน"
+
+msgid "Available variables depend on the template type, for example {{ user.getUsername() }} or {{ user.getEmail() }}."
+msgstr "ตัวแปรที่ใช้ได้ขึ้นอยู่กับประเภทเทมเพลต เช่น {{ user.getUsername() }} หรือ {{ user.getEmail() }}"
+
+msgid "For security reasons, any other Twig function, filter (such as filter, map, reduce or sort) or PHP call is blocked."
+msgstr "เพื่อความปลอดภัย ฟังก์ชัน Twig อื่น ๆ ตัวกรอง (เช่น filter, map, reduce หรือ sort) หรือการเรียก PHP ใด ๆ จะถูกบล็อก"
+
+msgid "Global administrator"
+msgstr "ผู้ดูแลระบบหลัก"
+
+msgid "Session manager"
+msgstr "ผู้จัดการเซสชัน"
+
+msgid "Human resources manager"
+msgstr "ผู้จัดการทรัพยากรบุคคล"
+
+msgid "Course teacher"
+msgstr "อาจารย์หลักสูตร"
+
+msgid "Course student"
+msgstr "นักศึกษาหลักสูตร"
+
+msgid "Platform reports"
+msgstr "รายงานแพลตฟอร์ม"
+
+msgid "Security reports"
+msgstr "รายงานความปลอดภัย"
+
+msgid "Course reports"
+msgstr "รายงานหลักสูตร"
+
+msgid "Gradebook reports"
+msgstr "รายงานสมุดเกรด"
+
+msgid "Social reports"
+msgstr "รายงานสังคม"
+
+msgid "Exports"
+msgstr "การส่งออก"
+
+msgid "Reports about platform-wide usage, users, courses and sessions."
+msgstr "รายงานเกี่ยวกับการใช้งานแพลตฟอร์ม ผู้ใช้ หลักสูตร และเซสชัน"
+
+msgid "Audit and security-sensitive reports."
+msgstr "รายงานการตรวจสอบและความปลอดภัย"
+
+msgid "Reports scoped to courses managed by the user."
+msgstr "รายงานที่จำกัดเฉพาะหลักสูตรที่ผู้ใช้จัดการ"
+
+msgid "Reports related to learner activity and follow-up."
+msgstr "รายงานที่เกี่ยวข้องกับกิจกรรมและการติดตามผู้เรียน"
+
+msgid "Reports related to scores, certificates and gradebook data."
+msgstr "รายงานที่เกี่ยวข้องกับคะแนน ประกาศนียบัตร และข้อมูลสมุดเกรด"
+
+msgid "Reports and exports that generate downloadable files."
+msgstr "รายงานและการส่งออกที่สร้างไฟล์ดาวน์โหลดได้"
+
+msgid "Main platform statistics dashboard."
+msgstr "แดชบอร์ดสถิติหลักของแพลตฟอร์ม"
+
+msgid "Number of courses and course distribution report."
+msgstr "รายงานจำนวนหลักสูตรและการกระจายหลักสูตร"
+
+msgid "Platform-wide access to course tools."
+msgstr "การเข้าถึงเครื่องมือของหลักสูตรทั่วทั้งแพลตฟอร์ม"
+
+msgid "Number of resources per tool."
+msgstr "จำนวนทรัพยากรต่อเครื่องมือ"
+
+msgid "Latest access to courses."
+msgstr "การเข้าถึงหลักสูตรล่าสุด"
+
+msgid "Course distribution by language."
+msgstr "การกระจายหลักสูตรตามภาษา"
+
+msgid "Course usage report."
+msgstr "รายงานการใช้งานหลักสูตร"
+
+msgid "Platform user count report."
+msgstr "รายงานจำนวนผู้ใช้แพลตฟอร์ม"
+
+msgid "Recent logins chart."
+msgstr "แผนภูมิการเข้าสู่ระบบล่าสุด"
+
+msgid "Login distribution by month."
+msgstr "การกระจายการเข้าสู่ระบบตามเดือน"
+
+msgid "Login distribution by day."
+msgstr "การกระจายการเข้าสู่ระบบตามวัน"
+
+msgid "Login distribution by hour."
+msgstr "การกระจายการเข้าสู่ระบบตามชั่วโมง"
+
+msgid "Users with profile picture."
+msgstr "ผู้ใช้ที่มีรูปโปรไฟล์"
+
+msgid "Login report filtered by date."
+msgstr "รายงานการเข้าสู่ระบบกรองตามวันที่"
+
+msgid "Users who have not logged in recently."
+msgstr "ผู้ใช้ที่ไม่ได้เข้าสู่ระบบล่าสุด"
+
+msgid "Inactive or suspicious user accounts report."
+msgstr "รายงานบัญชีผู้ใช้ที่ไม่ใช้งานหรือน่าสงสัย"
+
+msgid "Users activity statistics."
+msgstr "สถิติกิจกรรมของผู้ใช้"
+
+msgid "Currently online users report."
+msgstr "รายงานผู้ใช้ที่ออนไลน์อยู่ขณะนี้"
+
+msgid "New user registrations over time."
+msgstr "การลงทะเบียนผู้ใช้ใหม่ตามช่วงเวลา"
+
+msgid "Course and session subscriptions over time."
+msgstr "การสมัครหลักสูตรและเซสชันตามช่วงเวลา"
+
+msgid "Duplicate user detection and maintenance report."
+msgstr "รายงานการตรวจจับและบำรุงรักษาผู้ใช้ที่ซ้ำกัน"
+
+msgid "Platform user/session statistics."
+msgstr "สถิติผู้ใช้/เซสชันของแพลตฟอร์ม"
+
+msgid "Quarterly platform report."
+msgstr "รายงานแพลตฟอร์มรายไตรมาส"
+
+msgid "Activities audit"
+msgstr "การตรวจสอบกิจกรรม"
+
+msgid "Audit report for important administrative and platform activities."
+msgstr "รายงานการตรวจสอบกิจกรรมการบริหารและแพลตฟอร์มที่สำคัญ"
+
+msgid "Social messages received report."
+msgstr "รายงานข้อความสังคมที่ได้รับ"
+
+msgid "Social messages sent report."
+msgstr "รายงานข้อความสังคมที่ส่ง"
+
+msgid "Social contacts count report."
+msgstr "รายงานจำนวนผู้ติดต่อสังคม"
+
+msgid "Sessions created over time."
+msgstr "เซสชันที่สร้างตามช่วงเวลา"
+
+msgid "Learning analytics dashboard."
+msgstr "แดชบอร์ดการวิเคราะห์การเรียนรู้"
+
+msgid "Teacher time report."
+msgstr "รายงานเวลาในการสอน"
+
+msgid "Teachers time by session report"
+msgstr "รายงานเวลาในการสอนตามเซสชัน"
+
+msgid "Teacher time report grouped by session."
+msgstr "รายงานเวลาในการสอนจัดกลุ่มตามเซสชัน"
+
+msgid "Corporate learning analytics report."
+msgstr "รายงานการวิเคราะห์การเรียนรู้ขององค์กร"
+
+msgid "Course learners tracking report."
+msgstr "รายงานการติดตามผู้เรียนในหลักสูตร"
+
+msgid "Course activity statistics with connected and inactive users."
+msgstr "สถิติกิจกรรมหลักสูตรพร้อมผู้ใช้ที่เชื่อมต่อและไม่ใช้งาน"
+
+msgid "Detailed tracking report for a learner inside a course."
+msgstr "รายงานการติดตามโดยละเอียดของผู้เรียนในหลักสูตร"
+
+msgid "Course gradebook overview."
+msgstr "ภาพรวมสมุดเกรดหลักสูตร"
+
+msgid "Gradebook statistics"
+msgstr "สถิติสมุดเกรด"
+
+msgid "Gradebook statistics report."
+msgstr "รายงานสถิติสมุดเกรด"
+
+msgid "Certificate report"
+msgstr "รายงานใบรับรอง"
+
+msgid "Certificate report for course gradebook."
+msgstr "รายงานใบรับรองสำหรับสมุดเกรดหลักสูตร"
+
+msgid "User statistics"
+msgstr "สถิติผู้ใช้"
+
+msgid "Course gradebook statistics for a user."
+msgstr "สถิติสมุดเกรดหลักสูตรสำหรับผู้ใช้"
+
+msgid "Personal statistics"
+msgstr "สถิติส่วนบุคคล"
+
+msgid "Personal gradebook statistics."
+msgstr "สถิติสมุดเกรดส่วนบุคคล"
+
+msgid "Reports catalog"
+msgstr "แคตตาล็อกรายงาน"
+
+msgid "Central catalog of available reports, roles and permission categories."
+msgstr "แคตตาล็อกกลางของรายงาน บทบาท และหมวดหมู่สิทธิ์ที่มีอยู่"
+
+msgid "Course log events"
+msgstr "เหตุการณ์บันทึกหลักสูตร"
+
+msgid "Detailed course tracking events."
+msgstr "เหตุการณ์การติดตามหลักสูตรโดยละเอียด"
+
+msgid "Course tool usage"
+msgstr "การใช้งานเครื่องมือหลักสูตร"
+
+msgid "Course tracking report grouped by tools."
+msgstr "รายงานการติดตามหลักสูตรจัดกลุ่มตามเครื่องมือ"
+
+msgid "Course resource usage"
+msgstr "การใช้งานทรัพยากรรายวิชา"
+
+msgid "Course tracking report grouped by resources."
+msgstr "รายงานการติดตามรายวิชาจัดกลุ่มตามทรัพยากร"
+
+msgid "Course group tracking"
+msgstr "การติดตามกลุ่มรายวิชา"
+
+msgid "Tracking report for course groups."
+msgstr "รายงานการติดตามสำหรับกลุ่มรายวิชา"
+
+msgid "Course session report"
+msgstr "รายงานเซสชันรายวิชา"
+
+msgid "Tracking report for a course inside sessions."
+msgstr "รายงานการติดตามรายวิชาภายในเซสชัน"
+
+msgid "Learning path report"
+msgstr "รายงานเส้นทางการเรียนรู้"
+
+msgid "Learning path tracking report."
+msgstr "รายงานการติดตามเส้นทางการเรียนรู้"
+
+msgid "Learning path results by user"
+msgstr "ผลลัพธ์เส้นทางการเรียนรู้ตามผู้ใช้"
+
+msgid "Learning path results grouped by user."
+msgstr "ผลลัพธ์เส้นทางการเรียนรู้จัดกลุ่มตามผู้ใช้"
+
+msgid "Exercises report"
+msgstr "รายงานแบบฝึกหัด"
+
+msgid "Course exercises and exams tracking report."
+msgstr "รายงานการติดตามแบบฝึกหัดและการสอบของรายวิชา"
+
+msgid "Question report"
+msgstr "รายงานคำถาม"
+
+msgid "Course question tracking report."
+msgstr "รายงานการติดตามคำถามของรายวิชา"
+
+msgid "Messages report"
+msgstr "รายงานข้อความ"
+
+msgid "Course messages tracking report."
+msgstr "รายงานการติดตามข้อความของรายวิชา"
+
+msgid "Total time tracking report for course learners."
+msgstr "รายงานการติดตามเวลารวมสำหรับผู้เรียนรายวิชา"
+
+msgid "Gradebook summary"
+msgstr "สรุปเกรดบุ๊ก"
+
+msgid "Summary view of gradebook results."
+msgstr "มุมมองสรุปผลลัพธ์เกรดบุ๊ก"
+
+msgid "Flat view"
+msgstr "มุมมองแบน"
+
+msgid "Flat gradebook results view."
+msgstr "มุมมองผลลัพธ์เกรดบุ๊กแบบแบน"
+
+msgid "Evaluation log"
+msgstr "บันทึกการประเมิน"
+
+msgid "Change log for gradebook evaluations."
+msgstr "บันทึกการเปลี่ยนแปลงสำหรับการประเมินเกรดบุ๊ก"
+
+msgid "Link log"
+msgstr "บันทึกลิงก์"
+
+msgid "Change log for gradebook links."
+msgstr "บันทึกการเปลี่ยนแปลงสำหรับลิงก์เกรดบุ๊ก"
+
+msgid "Result details"
+msgstr "รายละเอียดผลลัพธ์"
+
+msgid "Detailed view of a gradebook result."
+msgstr "มุมมองรายละเอียดของผลลัพธ์เกรดบุ๊ก"
+
+msgid "Personal certificates report."
+msgstr "รายงานใบรับรองส่วนบุคคล"
+
+msgid "User move statistics"
+msgstr "สถิติการย้ายผู้ใช้"
+
+msgid "Report for user move and transfer statistics."
+msgstr "รายงานสถิติการย้ายและการโอนย้ายผู้ใช้"
+
+msgid "User consent list"
+msgstr "รายชื่อความยินยอมของผู้ใช้"
+
+msgid "Report of users and consent status."
+msgstr "รายงานผู้ใช้และสถานะความยินยอม"
+
+msgid "Special platform exports."
+msgstr "การส่งออกแพลตฟอร์มพิเศษ"
+
+msgid "Export certificates"
+msgstr "ส่งออกใบรับรอง"
+
+msgid "Export platform certificates."
+msgstr "ส่งออกใบรับรองของแพลตฟอร์ม"
+
+msgid "Export exercise results"
+msgstr "ส่งออกผลลัพธ์แบบฝึกหัด"
+
+msgid "Export exercise results from the platform."
+msgstr "ส่งออกผลลัพธ์แบบฝึกหัดจากแพลตฟอร์ม"
+
+msgid "Course survey results and reporting."
+msgstr "ผลลัพธ์และรายงานแบบสำรวจรายวิชา"
+
+msgid "Attendance report"
+msgstr "รายงานการเข้าเรียน"
+
+msgid "Course attendance tracking and reports."
+msgstr "การติดตามและรายงานการเข้าเรียนของรายวิชา"
+
+msgid "Exercises global report"
+msgstr "รายงานแบบฝึกหัดทั่วไป"
+
+msgid "Global exercise results report for the course."
+msgstr "รายงานผลลัพธ์แบบฝึกหัดทั่วไปสำหรับรายวิชา"
+
+msgid "Exercise report"
+msgstr "รายงานแบบฝึกหัด"
+
+msgid "Detailed exercise report."
+msgstr "รายงานแบบฝึกหัดโดยละเอียด"
+
+msgid "Exercise history"
+msgstr "ประวัติแบบฝึกหัด"
+
+msgid "Exercise attempt history."
+msgstr "ประวัติการพยายามทำแบบฝึกหัด"
+
+msgid "Exercise results"
+msgstr "ผลลัพธ์แบบฝึกหัด"
+
+msgid "Exercise results and corrections."
+msgstr "ผลลัพธ์และการแก้ไขแบบฝึกหัด"
+
+msgid "Question-level exercise statistics."
+msgstr "สถิติแบบฝึกหัดระดับคำถาม"
+
+msgid "Exercise statistics"
+msgstr "สถิติแบบฝึกหัด"
+
+msgid "Exercise statistics page."
+msgstr "หน้าสถิติแบบฝึกหัด"
+
+msgid "Live exercise statistics"
+msgstr "สถิติแบบฝึกหัดแบบเรียลไทม์"
+
+msgid "Live exercise statistics for teachers."
+msgstr "สถิติแบบฝึกหัดแบบเรียลไทม์สำหรับผู้สอน"
+
+msgid "Learning path statistics"
+msgstr "สถิติเส้นทางการเรียนรู้"
+
+msgid "Learning path item statistics."
+msgstr "สถิติรายการเส้นทางการเรียนรู้"
+
+msgid "Learning path report inside a course."
+msgstr "รายงานเส้นทางการเรียนรู้ภายในหลักสูตร"
+
+msgid "User skills report."
+msgstr "รายงานทักษะผู้ใช้"
+
+msgid "Scheduled or periodic export configuration."
+msgstr "การกำหนดค่าการส่งออกตามกำหนดเวลา"
+
+msgid "User export"
+msgstr "ส่งออกผู้ใช้"
+
+msgid "Export users from the platform."
+msgstr "ส่งออกผู้ใช้จากแพลตฟอร์ม"
+
+msgid "Not classified"
+msgstr "ยังไม่ได้จัดหมวดหมู่"
+
+msgid "You have acquired the skill %s"
+msgstr "คุณได้รับทักษะ %s"
+
+msgid "You have acquired the skill %s."
+msgstr "คุณได้รับทักษะ %s"
+
+msgid "Recover your password"
+msgstr "กู้คืนรหัสผ่านของคุณ"
+
+msgid "Disclaimer"
+msgstr "ข้อสงวนสิทธิ์"
+
+msgid "This operation would exceed the limit of %d users allowed for this course."
+msgstr "การดำเนินการนี้จะเกินขีดจำกัด %d ผู้ใช้ที่อนุญาตสำหรับหลักสูตรนี้"
+
+msgid "DefaultGroupCategory"
+msgstr "หมวดหมู่กลุ่มเริ่มต้น"
+
+msgid "LearningCalendar"
+msgstr "ปฏิทินการเรียนรู้"
+
+msgid "Choose how this user can authenticate on the platform."
+msgstr "เลือกวิธีที่ผู้ใช้นี้สามารถยืนยันตัวตนบนแพลตฟอร์ม"
+
+msgid "Authentication methods"
+msgstr "วิธีการยืนยันตัวตน"
+
+msgid "Set password manually"
+msgstr "ตั้งรหัสผ่านด้วยตนเอง"
+
+msgid "Report role matrix"
+msgstr "รายงานเมทริกซ์บทบาท"
+
+msgid "Report permission categories"
+msgstr "รายงานหมวดหมู่สิทธิ์"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs enforce the documented report role matrix."
+msgstr "ทะเบียนนี้แสดงหน้ารายงานที่รู้จัก หมวดหมู่ URL มาตรฐาน URL เดิม และกลุ่มบทบาทที่คาดหวัง URL มาตรฐานบังคับใช้เมทริกซ์บทบาทรายงานที่บันทึกไว้"
+
+msgid "reports"
+msgstr "รายงาน"
+
+msgid "Canonical URL"
+msgstr "URL มาตรฐาน"
+
+msgid "Legacy URL"
+msgstr "URL เดิม"
+
+msgid "Permission category"
+msgstr "หมวดหมู่สิทธิ์"
+
+msgid "This matrix documents the expected audience for each report and is enforced by the canonical report entry point."
+msgstr "เมทริกซ์นี้แสดงกลุ่มเป้าหมายที่คาดหวังสำหรับแต่ละรายงานและถูกบังคับใช้โดยจุดเริ่มต้นรายงานมาตรฐาน"
+
+msgid "These keys group reports by access scope and are used by the report registry. They can later be mapped to finer-grained platform permissions."
+msgstr "คีย์เหล่านี้จัดกลุ่มรายงานตามขอบเขตการเข้าถึงและใช้โดยทะเบียนรายงาน สามารถแมปกับสิทธิ์แพลตฟอร์มที่ละเอียดยิ่งขึ้นในภายหลัง"
+
+msgid "Permission"
+msgstr "สิทธิ์"
+
+msgid "Clear active session"
+msgstr "ล้างเซสชันที่ใช้งานอยู่"
+
+msgid "Are you sure you want to clear this user active session?"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการล้างเซสชันที่ใช้งานอยู่ของผู้ใช้นี้?"
+
+msgid "Preview shown without course context. Some course-specific data may be unavailable."
+msgstr "แสดงตัวอย่างโดยไม่มีบริบทหลักสูตร ข้อมูลเฉพาะหลักสูตรบางอย่างอาจไม่พร้อมใช้งาน"
+
+msgid "Preview is not available for this question."
+msgstr "ไม่สามารถแสดงตัวอย่างคำถามนี้ได้"
+
+msgid "Edition is not allowed without a course context."
+msgstr "ไม่อนุญาตให้แก้ไขโดยไม่มีบริบทหลักสูตร"
+
+msgid "This plugin does not use regions."
+msgstr "ปลั๊กอินนี้ไม่ได้ใช้รีเจียน"
+
+msgid "No plugins with regions were found."
+msgstr "ไม่พบปลั๊กอินที่มีรีเจียน"
+
+msgid "Freemium"
+msgstr "ฟรีเมียม"
+
+msgid "Commercial service"
+msgstr "บริการเชิงพาณิชย์"
+
+msgid "Commercial"
+msgstr "เชิงพาณิชย์"
+
+msgid "100% free"
+msgstr "ฟรี 100%"
+
+msgid "Displayed above the public login form."
+msgstr "แสดงเหนือแบบฟอร์มเข้าสู่ระบบสาธารณะ"
+
+msgid "Displayed below the public login form."
+msgstr "แสดงใต้แบบฟอร์มเข้าสู่ระบบสาธารณะ"
+
+msgid "Displayed before the footer area."
+msgstr "แสดงก่อนพื้นที่ส่วนท้าย"
+
+msgid "Displayed in the left footer column."
+msgstr "แสดงในคอลัมน์ส่วนท้ายด้านซ้าย"
+
+msgid "Displayed in the center footer column."
+msgstr "แสดงในคอลัมน์ส่วนท้ายตรงกลาง"
+
+msgid "Displayed in the right footer column."
+msgstr "แสดงในคอลัมน์ส่วนท้ายด้านขวา"
+
+msgid "Showing all plugins."
+msgstr "แสดงปลั๊กอินทั้งหมด"
+
+msgid "Some plugins are still pending functional verification."
+msgstr "ปลั๊กอินบางตัวยังรอการตรวจสอบการทำงาน"
+
+msgid "Show verified plugins only"
+msgstr "แสดงเฉพาะปลั๊กอินที่ผ่านการตรวจสอบแล้ว"
+
+msgid "Showing verified plugins only."
+msgstr "กำลังแสดงเฉพาะปลั๊กอินที่ผ่านการตรวจสอบแล้ว"
+
+msgid "Pending plugins are temporarily hidden until they are adapted and tested."
+msgstr "ปลั๊กอินที่รอดำเนินการจะถูกซ่อนชั่วคราวจนกว่าจะปรับให้เข้ากันและทดสอบแล้ว"
+
+msgid "Show all plugins"
+msgstr "แสดงปลั๊กอินทั้งหมด"
+
+msgid "Official and free plugins are listed separately from plugins that may depend on commercial services or paid offers."
+msgstr "ปลั๊กอินอย่างเป็นทางการและฟรีจะแสดงแยกจากปลั๊กอินที่อาจต้องพึ่งพาบริการเชิงพาณิชย์หรือข้อเสนอแบบมีค่าใช้จ่าย"
+
+msgid "Included free plugins"
+msgstr "ปลั๊กอินฟรีที่รวมอยู่"
+
+msgid "Commercial and freemium plugins"
+msgstr "ปลั๊กอินเชิงพาณิชย์และฟรีเมียม"
+
+msgid "All plugins"
+msgstr "ปลั๊กอินทั้งหมด"
+
+msgid "No plugins were found for this category."
+msgstr "ไม่พบปลั๊กอินสำหรับหมวดหมู่นี้"
+
+msgid "Search plugins"
+msgstr "ค้นหาปลั๊กอิน"
+
+msgid "Search by name or description"
+msgstr "ค้นหาตามชื่อหรือคำอธิบาย"
+
+msgid "Advanced filters"
+msgstr "ตัวกรองขั้นสูง"
+
+msgid "All statuses"
+msgstr "สถานะทั้งหมด"
+
+msgid "All sources"
+msgstr "แหล่งที่มาทั้งหมด"
+
+msgid "All types"
+msgstr "ประเภททั้งหมด"
+
+msgid "Installed plugins are shown first"
+msgstr "แสดงปลั๊กอินที่ติดตั้งแล้วก่อน"
+
+msgid "No plugins match the current filters."
+msgstr "ไม่มีปลั๊กอินที่ตรงกับตัวกรองปัจจุบัน"
+
+msgid "Try clearing the search or changing the filters."
+msgstr "ลองล้างการค้นหาหรือเปลี่ยนตัวกรอง"
+
+msgid "README"
+msgstr "README"
+
+msgid "Invalid security token"
+msgstr "โทเค็นความปลอดภัยไม่ถูกต้อง"
+
+msgid "Please select a destination session"
+msgstr "กรุณาเลือกเซสชันปลายทาง"
+
+msgid "Cannot move this to the same session"
+msgstr "ไม่สามารถย้ายไปยังเซสชันเดียวกันได้"
+
+msgid "The destination session must include the selected course"
+msgstr "เซสชันปลายทางต้องรวมหลักสูตรที่เลือกไว้"
+
+msgid "The source session must include the selected course"
+msgstr "เซสชันต้นทางต้องรวมหลักสูตรที่เลือกไว้"
+
+msgid "No learners found"
+msgstr "ไม่พบผู้เรียน"
+
+msgid "Will be subscribed"
+msgstr "จะถูกสมัครสมาชิก"
+
+msgid "Subscribed"
+msgstr "สมัครสมาชิกแล้ว"
+
+msgid "The move process has finished"
+msgstr "กระบวนการย้ายเสร็จสิ้นแล้ว"
+
+msgid "Comparison finished. No data has been moved."
+msgstr "การเปรียบเทียบเสร็จสิ้นแล้ว ไม่มีข้อมูลที่ถูกย้าย"
+
+msgid "Move tracking data from the base course or a source session to another session. Use comparison first to review the affected learner data."
+msgstr "ย้ายข้อมูลการติดตามจากหลักสูตรฐานหรือเซสชันต้นทางไปยังเซสชันอื่น ใช้การเปรียบเทียบก่อนเพื่อตรวจสอบข้อมูลผู้เรียนที่ได้รับผลกระทบ"
+
+msgid "Search for a course or use the manual course ID field below."
+msgstr "ค้นหาหลักสูตรหรือใช้ช่องรหัสหลักสูตรด้วยตนเองด้านล่าง"
+
+msgid "Fallback when the course search is not available."
+msgstr "ใช้สำรองเมื่อไม่สามารถค้นหาหลักสูตรได้"
+
+msgid "Load sessions"
+msgstr "โหลดเซสชัน"
+
+msgid "Selected course"
+msgstr "หลักสูตรที่เลือก"
+
+msgid "Choose the base course or the session where the tracking data currently exists."
+msgstr "เลือกหลักสูตรฐานหรือเซสชันที่ข้อมูลการติดตามมีอยู่ในปัจจุบัน"
+
+msgid "Choose the session that will receive the tracking data."
+msgstr "เลือกเซสชันที่จะรับข้อมูลการติดตาม"
+
+msgid "Important"
+msgstr "สำคัญ"
+
+msgid "The move action updates existing tracking data. Run compare first and test this tool with a non-production course before moving real learner data."
+msgstr "การดำเนินการย้ายจะอัปเดตข้อมูลการติดตามที่มีอยู่ เรียกใช้การเปรียบเทียบก่อนและทดสอบเครื่องมือนี้กับหลักสูตรที่ไม่ใช่การผลิตก่อนย้ายข้อมูลผู้เรียนจริง"
+
+msgid "No sessions found for this course"
+msgstr "ไม่พบเซสชันสำหรับหลักสูตรนี้"
+
+msgid "Some users were ignored because they are not subscribed to this session."
+msgstr "ผู้ใช้บางรายถูกข้ามเนื่องจากไม่ได้สมัครสมาชิกเซสชันนี้"
+
+msgid "Remove selected user"
+msgstr "ลบผู้ใช้ที่เลือก"
+
+msgid "Add selected user"
+msgstr "เพิ่มผู้ใช้ที่เลือก"
+
+msgid "No users from the selected list are subscribed to this session."
+msgstr "ไม่มีผู้ใช้จากรายการที่เลือกสมัครสมาชิกเซสชันนี้"
+
+msgid "No image"
+msgstr "ไม่มีภาพ"
+
+msgid "Invalid URL."
+msgstr "URL ไม่ถูกต้อง"
+
+msgid "This cloud document cannot be embedded."
+msgstr "เอกสารคลาวด์นี้ไม่สามารถฝังได้"
+
+msgid "Document not found"
+msgstr "ไม่พบเอกสาร"
+
+msgid "File not found"
+msgstr "ไม่พบไฟล์"
+
+msgid "This learning path is not available for your user at this time."
+msgstr "เส้นทางการเรียนรู้นี้ไม่สามารถใช้ได้สำหรับผู้ใช้ของคุณในขณะนี้"
+
+msgid "StartDateMustBeBeforeTheEndDate"
+msgstr "StartDateMustBeBeforeTheEndDate"
+
+msgid "Next learning path"
+msgstr "เส้นทางการเรียนรู้ถัดไป"
+
+msgid "Select the learning path that will be available after this one."
+msgstr "เลือกเส้นทางการเรียนรู้ที่จะเปิดใช้งานหลังจากนี้"
+
+msgid "Create another learning path in this course to enable learning path flow."
+msgstr "สร้างเส้นทางการเรียนรู้อีกเส้นทางในหลักสูตรนี้เพื่อเปิดใช้งานการไหลของเส้นทางการเรียนรู้"
+
+msgid "Available from %s"
+msgstr "เปิดให้ใช้ได้ตั้งแต่ %s"
+
+msgid "Available until %s"
+msgstr "เปิดให้ใช้ได้จนถึง %s"
+
+msgid "Statistics reset date"
+msgstr "วันที่รีเซ็ตสถิติ"
+
+msgid "Last 24 hours"
+msgstr "24 ชั่วโมงที่ผ่านมา"
+
+msgid "This reset date is used as the reference date for the report. It does not delete historical tracking data."
+msgstr "วันที่รีเซ็ตนี้ใช้เป็นวันที่อ้างอิงสำหรับรายงาน ไม่ได้ลบข้อมูลการติดตามประวัติ"
+
+msgid "Since reset date"
+msgstr "ตั้งแต่วันที่รีเซ็ต"
+
+msgid "Users connected in the last 24 hours"
+msgstr "ผู้ใช้ที่เชื่อมต่อใน 24 ชั่วโมงที่ผ่านมา"
+
+msgid "Learners with at least one course access during the last 24 hours."
+msgstr "ผู้เรียนที่มีการเข้าถึงหลักสูตรอย่างน้อยหนึ่งครั้งใน 24 ชั่วโมงที่ผ่านมา"
+
+msgid "Users connected in the last week"
+msgstr "ผู้ใช้ที่เชื่อมต่อในสัปดาห์ที่ผ่านมา"
+
+msgid "Learners with at least one course access during the last 7 days."
+msgstr "ผู้เรียนที่มีการเข้าถึงหลักสูตรอย่างน้อยหนึ่งครั้งใน 7 วันล่าสุด"
+
+msgid "Users connected in the last month"
+msgstr "ผู้ใช้ที่เชื่อมต่อในเดือนที่ผ่านมา"
+
+msgid "Learners with at least one course access during the last 30 days."
+msgstr "ผู้เรียนที่มีการเข้าถึงหลักสูตรอย่างน้อยหนึ่งครั้งใน 30 วันล่าสุด"
+
+msgid "Not recently connected users"
+msgstr "ผู้ใช้ที่ไม่ได้เชื่อมต่อล่าสุด"
+
+msgid "Learners without course access since %s."
+msgstr "ผู้เรียนที่ไม่มีการเข้าถึงหลักสูตรตั้งแต่ %s"
+
+msgid "Recently used resources"
+msgstr "ทรัพยากรที่ใช้ล่าสุด"
+
+msgid "Course tools/resources used since %s."
+msgstr "เครื่องมือ/ทรัพยากรของหลักสูตรที่ใช้ตั้งแต่ %s"
+
+msgid "%s %% of learners"
+msgstr "%s %% ของผู้เรียน"
+
+msgid "Connections"
+msgstr "การเชื่อมต่อ"
+
+msgid "Total connections"
+msgstr "การเชื่อมต่อทั้งหมด"
+
+msgid "Downloaded documents"
+msgstr "เอกสารที่ดาวน์โหลด"
+
+msgid "List of documents downloaded by this learner in this course."
+msgstr "รายการเอกสารที่ผู้เรียนดาวน์โหลดในหลักสูตรนี้"
+
+msgid "Forum topics"
+msgstr "หัวข้อฟอรัม"
+
+msgid "Forum topics opened by this learner in this course."
+msgstr "หัวข้อฟอรัมที่ผู้เรียนเปิดในหลักสูตรนี้"
+
+msgid "Forum posts"
+msgstr "โพสต์ฟอรัม"
+
+msgid "Forum posts written by this learner in this course."
+msgstr "โพสต์ฟอรัมที่ผู้เรียนเขียนในหลักสูตรนี้"
+
+msgid "Course connections"
+msgstr "การเชื่อมต่อหลักสูตร"
+
+msgid "Connection history for this learner in this course."
+msgstr "ประวัติการเชื่อมต่อของผู้เรียนในหลักสูตรนี้"
+
+msgid "Resources used"
+msgstr "ทรัพยากรที่ใช้"
+
+msgid "Latest tools or resources used by this learner in this course."
+msgstr "เครื่องมือหรือทรัพยากรล่าสุดที่ผู้เรียนใช้ในหลักสูตรนี้"
+
+msgid "Logout date"
+msgstr "วันที่ออกจากระบบ"
+
+msgid "Imported Aiken quiz"
+msgstr "แบบทดสอบ Aiken ที่นำเข้า"
+
+msgid "Only supported documents will be listed here."
+msgstr "จะแสดงเฉพาะเอกสารที่รองรับเท่านั้น"
+
+msgid "Generated Aiken content"
+msgstr "เนื้อหา Aiken ที่สร้างขึ้น"
+
+msgid "Review the generated content before importing it as a new exercise."
+msgstr "ตรวจสอบเนื้อหาที่สร้างก่อนนำเข้าเป็นแบบฝึกหัดใหม่"
+
+msgid "No documents available."
+msgstr "ไม่มีเอกสารที่ใช้ได้"
+
+msgid "yperbolic arctangent:\\t\\tarctanh(x)"
+msgstr "อาร์คแทนเจนต์ไฮเพอร์โบลิก:\\t\\tarctanh(x)"
+
+msgid "Exercise"
+msgstr "แบบฝึกหัด"
+
+msgid "OfficialCode"
+msgstr "รหัสทางการ"
+
+msgid "FirstName"
+msgstr "ชื่อ"
+
+msgid "LastName"
+msgstr "นามสกุล"
+
+msgid "LoginName"
+msgstr "ชื่อผู้ใช้"
+
+msgid "MinMinute"
+msgstr "นาทีต่ำสุด"
+
+msgid "StartDate"
+msgstr "วันที่เริ่ม"
+
+msgid "EndDate"
+msgstr "วันที่สิ้นสุด"
+
+msgid "CorrectionDate"
+msgstr "วันที่แก้ไข"
+
+msgid "NotValidated"
+msgstr "ยังไม่ผ่านการตรวจสอบ"
+
+msgid "PendingAttempts"
+msgstr "ความพยายามที่รอดำเนินการ"
+
+msgid "List of pending test attempts across your courses."
+msgstr "รายการความพยายามในการทดสอบที่รอดำเนินการในหลักสูตรของคุณ"
+
+msgid "User ID"
+msgstr "รหัสผู้ใช้"
+
+msgid "QuestionType"
+msgstr "QuestionType"
+
+msgid "QuestionsWithNoAutomaticCorrection"
+msgstr "QuestionsWithNoAutomaticCorrection"
+
+msgid "There are no pending tests."
+msgstr "ไม่มีแบบทดสอบที่รอดำเนินการ"
+
+msgid "%s results"
+msgstr "%s ผลลัพธ์"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>ตัวอย่างกิจกรรมกรอกแบบฟอร์ม: คำนวณดัชนีมวลกาย</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>อายุ</strong></td>            <td width=\"75%\" style=\"\">[25] ปี</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>เพศ</strong></td>            <td style=\"\" text-align:=\"\">[M] (ชายหรือหญิง)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>น้ำหนัก</strong></td>            <td style=\"\" text-align:=\"\">95 กก.</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>ส่วนสูง</strong></td>            <td style=\"vertical-align: top;\">1.81 ม.</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>ดัชนีมวลกาย</strong></td>            <td style=\"vertical-align: top;\">[29] BMI = น้ำหนัก/ส่วนสูง<sup>2</sup> (ดู<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> บทความวิกิพีเดีย</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Removed"
+msgstr "นำออกแล้ว"
+
+msgid "NoUsersInTheList"
+msgstr "NoUsersInTheList"
+
+msgid "Are you sure?"
+msgstr "คุณแน่ใจหรือไม่?"
+
+msgid "NoResultsAvailable"
+msgstr "NoResultsAvailable"
+
+msgid "Import groups from a CSV file and optionally remove items that are not present in the file."
+msgstr "นำเข้ากลุ่มจากไฟล์ CSV และเลือกที่จะลบรายการที่ไม่มีอยู่ในไฟล์ได้"
+
+msgid "Use this option carefully because items missing from the CSV can be removed during the import process."
+msgstr "ใช้ตัวเลือกนี้ด้วยความระมัดระวัง เนื่องจากรายการที่ไม่มีอยู่ในไฟล์ CSV อาจถูกลบระหว่างกระบวนการนำเข้า"
+
+msgid "Upload a CSV file with the group data you want to import."
+msgstr "อัปโหลดไฟล์ CSV ที่มีข้อมูลกลุ่มที่ต้องการนำเข้า"
+
+msgid "You can download the example file to use the expected format."
+msgstr "คุณสามารถดาวน์โหลดไฟล์ตัวอย่างเพื่อใช้รูปแบบที่ต้องการได้"
+
+msgid "If you enable deletion, items not present in the file may be removed."
+msgstr "หากเปิดใช้งานการลบ รายการที่ไม่มีอยู่ในไฟล์อาจถูกลบได้"
+
+msgid "The CSV file is mandatory to start the import."
+msgstr "ไฟล์ CSV จำเป็นต้องมีเพื่อเริ่มการนำเข้า"
+
+msgid "Please select at least one class."
+msgstr "กรุณาเลือกชั้นเรียนอย่างน้อยหนึ่งชั้น"
+
+msgid "Define the properties for each group before creating them."
+msgstr "กำหนดคุณสมบัติสำหรับแต่ละกลุ่มก่อนสร้าง"
+
+msgid "Apply the first row values"
+msgstr "นำค่าจากแถวแรกมาใช้"
+
+msgid "Create groups manually or generate them from the classes subscribed to this course."
+msgstr "สร้างกลุ่มด้วยตนเองหรือสร้างจากชั้นเรียนที่ลงทะเบียนในหลักสูตรนี้"
+
+msgid "Create manual groups"
+msgstr "สร้างกลุ่มด้วยตนเอง"
+
+msgid "Use this form when you want to create empty course groups manually."
+msgstr "ใช้แบบฟอร์มนี้เมื่อต้องการสร้างกลุ่มหลักสูตรว่างด้วยตนเอง"
+
+msgid "Configure manual groups"
+msgstr "กำหนดค่ากลุ่มด้วยตนเอง"
+
+msgid "Create groups from subscribed classes"
+msgstr "สร้างกลุ่มจากชั้นเรียนที่ลงทะเบียน"
+
+msgid "Use this form when you want to create one course group for each selected class."
+msgstr "ใช้แบบฟอร์มนี้เมื่อต้องการสร้างกลุ่มหลักสูตรหนึ่งกลุ่มต่อชั้นเรียนที่เลือก"
+
+msgid "Keep created groups linked to their source classes"
+msgstr "รักษากลุ่มที่สร้างให้เชื่อมโยงกับชั้นเรียนต้นทาง"
+
+msgid "Create groups from selected classes"
+msgstr "สร้างกลุ่มจากชั้นเรียนที่เลือก"
+
+msgid "You must be logged in to access this page."
+msgstr "คุณต้องเข้าสู่ระบบเพื่อเข้าถึงหน้านี้"
+
+msgid "Invalid user"
+msgstr "ผู้ใช้ไม่ถูกต้อง"
+
+msgid "UseCourseCustomCertificate"
+msgstr "UseCourseCustomCertificate"
+
+msgid "UseDefaultCustomCertificate"
+msgstr "UseDefaultCustomCertificate"
+
+msgid "CertificateSetting"
+msgstr "CertificateSetting"
+
+msgid "SelectOneOptionBeforeOpeningEditor"
+msgstr "SelectOneOptionBeforeOpeningEditor"
+
+msgid "ChooseCustomCertificateModeHelp"
+msgstr "ChooseCustomCertificateModeHelp"
+
+msgid "CertificateMode"
+msgstr "CertificateMode"
+
+msgid "Enable student to validate own attendance"
+msgstr "อนุญาตให้นักเรียนตรวจสอบการเข้าร่วมของตนเอง"
+
+msgid "Course block"
+msgstr "บล็อกหลักสูตร"
+
+msgid "Add custom content blocks to course footer regions."
+msgstr "เพิ่มบล็อกเนื้อหาที่กำหนดเองไปยังส่วนท้ายของหลักสูตร"
+
+msgid "course_block_pre_footer"
+msgstr "course_block_pre_footer"
+
+msgid "Before footer"
+msgstr "ก่อนส่วนท้าย"
+
+msgid "course_block_footer_left"
+msgstr "course_block_footer_left"
+
+msgid "Footer left"
+msgstr "ส่วนท้ายด้านซ้าย"
+
+msgid "course_block_footer_center"
+msgstr "course_block_footer_center"
+
+msgid "Footer center"
+msgstr "ส่วนท้ายตรงกลาง"
+
+msgid "course_block_footer_right"
+msgstr "course_block_footer_right"
+
+msgid "Footer right"
+msgstr "ส่วนท้ายด้านขวา"
+
+msgid "SetNotification"
+msgstr "SetNotification"
+
+msgid "CourseLegal"
+msgstr "CourseLegal"
+
+msgid "Certificates search is not available"
+msgstr "ไม่สามารถค้นหาใบรับรองได้"
+
+msgid "It allows the acquisition of skills by subcategories"
+msgstr "อนุญาตให้ได้รับทักษะตามหมวดหมู่ย่อย"
+
+msgid "Allow skills by subcategories"
+msgstr "อนุญาตทักษะตามหมวดหมู่ย่อย"
+
+msgid "Minimum score for skills"
+msgstr "คะแนนขั้นต่ำสำหรับทักษะ"
+
+msgid "The gradebook table is hidden."
+msgstr "ตารางสมุดคะแนนถูกซ่อนอยู่"
+
+msgid "Invalid token"
+msgstr "โทเค็นไม่ถูกต้อง"
+
+msgid "Unable to save the item"
+msgstr "ไม่สามารถบันทึกรายการได้"
+
+msgid "Only HTTP and HTTPS URLs are allowed."
+msgstr "อนุญาตเฉพาะ URL แบบ HTTP และ HTTPS เท่านั้น"
+
+msgid "Invalid URL host."
+msgstr "โฮสต์ของ URL ไม่ถูกต้อง"
+
+msgid "This cloud provider is not allowed."
+msgstr "ผู้ให้บริการคลาวด์นี้ไม่ได้รับอนุญาต"
+
+msgid "Documents used"
+msgstr "เอกสารที่ใช้"
+
+msgid "No document usage"
+msgstr "ไม่มีการใช้เอกสาร"
+
+msgid "Invalid action."
+msgstr "การกระทำไม่ถูกต้อง"
+
+msgid "No users selected."
+msgstr "ยังไม่ได้เลือกผู้ใช้"
+
+msgid "%s user(s) processed."
+msgstr "ประมวลผลผู้ใช้ %s รายแล้ว"
+
+msgid "Invalid CSRF token."
+msgstr "โทเค็น CSRF ไม่ถูกต้อง"
+
+msgid "[%s] Please change your password"
+msgstr "[%s] กรุณาเปลี่ยนรหัสผ่านของคุณ"
+
+msgid "Dear %s,\n\nOur security enforcing process shows you use a password that is commonly used on the internet, which means your account could easily be stolen. It is probably a simple sequence or a very common word, we don't really know (we cannot see your password), but we ask you to please connect to the platform and request a password change. You can follow the link here: %s to do that now.\n\nPlease note we will never ask for your password in this process. You just enter your username or e-mail and we send you a link. If you are asked to introduce your existing password to do that, someone is probably trying to do Phishing on your account. Be safe, change your password now!\n\n%s\n%s"
+msgstr "เรียน %s,\n\nกระบวนการรักษาความปลอดภัยของเราพบว่าคุณใช้รหัสผ่านที่นิยมใช้กันบนอินเทอร์เน็ต ซึ่งอาจทำให้บัญชีของคุณถูกขโมยได้ง่าย รหัสผ่านนี้อาจเป็นลำดับตัวอักษรธรรมดาหรือคำที่ใช้บ่อย เราขอให้คุณเข้าสู่ระบบและขอเปลี่ยนรหัสผ่าน คุณสามารถคลิกลิงก์นี้เพื่อดำเนินการ: %s\n\nโปรดทราบว่าเราไม่มีวันขอรหัสผ่านของคุณในกระบวนการนี้ คุณเพียงป้อนชื่อผู้ใช้หรืออีเมล แล้วเราจะส่งลิงก์ให้ หากมีผู้ขอให้คุณป้อนรหัสผ่านเดิมเพื่อดำเนินการ อาจมีผู้พยายามฟิชชิ่งบัญชีของคุณ โปรดเปลี่ยนรหัสผ่านของคุณทันทีเพื่อความปลอดภัย!\n\n%s\n%s"
+
+msgid "[%s] Your password has been reset"
+msgstr "[%s] รหัสผ่านของคุณถูกรีเซ็ตแล้ว"
+
+msgid "Dear %s,\n\nOur security enforcing process flagged you as using a password that is commonly used on the internet, which means your account could easily be stolen. As a prevention measure, we have decided to initiate a password reset process. Your new, automatically generated password is now:\n\n%s\n\nPlease login to the platform soon (using this new password) to set your own, personal and secure, password.\n\nBe safe.\n\n%s\n%s"
+msgstr "เรียน %s,\n\nกระบวนการรักษาความปลอดภัยของเราพบว่าคุณใช้รหัสผ่านที่นิยมใช้กันบนอินเทอร์เน็ต ซึ่งอาจทำให้บัญชีของคุณถูกขโมยได้ง่าย เพื่อเป็นมาตรการป้องกัน เราจึงเริ่มกระบวนการรีเซ็ตรหัสผ่าน รหัสผ่านใหม่ที่สร้างโดยอัตโนมัติคือ:\n\n%s\n\nโปรดเข้าสู่ระบบโดยใช้รหัสผ่านใหม่นี้เพื่อตั้งรหัสผ่านส่วนตัวที่ปลอดภัยของคุณเอง\n\nเพื่อความปลอดภัย\n\n%s\n%s"
+
+msgid "Signature saved successfully"
+msgstr "บันทึกลายเซ็นสำเร็จแล้ว"
+
+msgid "Invalid request payload."
+msgstr "เพย์โหลดคำขอไม่ถูกต้อง"
+
+msgid "Authentication required."
+msgstr "จำเป็นต้องตรวจสอบสิทธิ์"
+
+msgid "The course title is required."
+msgstr "ต้องระบุชื่อหลักสูตร"
+
+msgid "Only trainers and administrators can create courses."
+msgstr "เฉพาะผู้ฝึกสอนและผู้ดูแลระบบเท่านั้นที่สามารถสร้างหลักสูตรได้"
+
+msgid "Course creation by trainers is disabled on this platform."
+msgstr "การสร้างหลักสูตรโดยผู้ฝึกสอนถูกปิดใช้งานบนแพลตฟอร์มนี้"
+
+msgid "The selected BuyCourses service cannot be used to create this course."
+msgstr "ไม่สามารถใช้บริการ BuyCourses ที่เลือกเพื่อสร้างหลักสูตรนี้ได้"
+
+msgid "You have reached the maximum number of courses allowed (%d)."
+msgstr "คุณถึงจำนวนหลักสูตรสูงสุดที่อนุญาตแล้ว (%d)"
+
+msgid "The selected BuyCourses service is invalid."
+msgstr "บริการ BuyCourses ที่เลือกไม่ถูกต้อง"
+
+msgid "BuyCourses is not available right now."
+msgstr "BuyCourses ไม่พร้อมใช้งานในขณะนี้"
+
+msgid "BuyCourses cannot validate the selected service right now."
+msgstr "BuyCourses ไม่สามารถตรวจสอบบริการที่เลือกได้ในขณะนี้"
+
+msgid "Unable to validate the selected BuyCourses service right now."
+msgstr "ไม่สามารถตรวจสอบบริการ BuyCourses ที่เลือกได้ในขณะนี้"
+
+msgid "External tool removed from course"
+msgstr "นำเครื่องมือภายนอกออกจากหลักสูตรแล้ว"
+
+msgid "External tool was removed from the course, but kept internally because it is linked to the gradebook"
+msgstr "นำเครื่องมือภายนอกออกจากหลักสูตรแล้ว แต่ยังคงเก็บไว้ภายในเนื่องจากเชื่อมโยงกับสมุดคะแนน"
+
+msgid "There are no external tools available to add to the gradebook"
+msgstr "ไม่มีเครื่องมือภายนอกที่สามารถเพิ่มลงในสมุดคะแนนได้"
+
+msgid "The evaluation could not be created"
+msgstr "ไม่สามารถสร้างการประเมินได้"
+
+msgid "The gradebook evaluation could not be linked"
+msgstr "ไม่สามารถเชื่อมโยงการประเมินสมุดคะแนนได้"
+
+msgid "Survey questions"
+msgstr "คำถามแบบสำรวจ"
+
+msgid "Back to survey list"
+msgstr "กลับไปยังรายการแบบสำรวจ"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "แบบสำรวจนี้มีคำตอบแล้ว การแก้ไขคำถามถูกปิดใช้งานโดยการตั้งค่า"
+
+msgid "Choose the type of question you want to add."
+msgstr "เลือกประเภทคำถามที่ต้องการเพิ่ม"
+
+msgid "The free text option is added automatically."
+msgstr "ตัวเลือกข้อความอิสระจะถูกเพิ่มโดยอัตโนมัติ"
+
+msgid "No questions found"
+msgstr "ไม่พบคำถาม"
+
+msgid "Mandatory"
+msgstr "บังคับ"
+
+msgid "Unsupported question type"
+msgstr "ประเภทคำถามที่ไม่รองรับ"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "คุณสามารถใช้แท็ก {%s} และ {%s} ในคำถามได้"
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "คำถามนี้แสดงแบบมีเงื่อนไขขณะตอบแบบสำรวจ"
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "ตัวเลือกเปอร์เซ็นต์จาก 1 ถึง 100 จะถูกสร้างโดยอัตโนมัติ"
+
+msgid "Could not load survey questions"
+msgstr "ไม่สามารถโหลดคำถามแบบสำรวจได้"
+
+msgid "The question text is required."
+msgstr "ต้องระบุข้อความคำถาม"
+
+msgid "The maximum score is required."
+msgstr "ต้องระบุคะแนนสูงสุด"
+
+msgid "Please select a parent option."
+msgstr "กรุณาเลือกตัวเลือกหลัก"
+
+msgid "Please fill all answer options."
+msgstr "กรุณากรอกตัวเลือกคำตอบทั้งหมด"
+
+msgid "QuestionUpdated"
+msgstr "QuestionUpdated"
+
+msgid "Could not save survey question"
+msgstr "ไม่สามารถบันทึกคำถามแบบสำรวจได้"
+
+msgid "Could not delete survey question"
+msgstr "ไม่สามารถลบคำถามแบบสำรวจได้"
+
+msgid "Could not move survey question"
+msgstr "ไม่สามารถย้ายคำถามแบบสำรวจได้"
+
+msgid "Could not copy survey question"
+msgstr "ไม่สามารถคัดลอกคำถามแบบสำรวจได้"
+
+msgid "Hide search"
+msgstr "ซ่อนการค้นหา"
+
+msgid "Showing results for: %s"
+msgstr "แสดงผลการค้นหาสำหรับ: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "ค้นหาตามชื่อแบบสำรวจ รหัส หรือคำอธิบาย"
+
+msgid "Search surveys"
+msgstr "ค้นหาแบบสำรวจ"
+
+msgid "%s surveys selected"
+msgstr "เลือกแบบสำรวจ %s รายการ"
+
+msgid "Clear selection"
+msgstr "ล้างการเลือก"
+
+msgid "No surveys found"
+msgstr "ไม่พบแบบสำรวจ"
+
+msgid "Unsupported"
+msgstr "ไม่รองรับ"
+
+msgid "Could not load surveys"
+msgstr "ไม่สามารถโหลดแบบสำรวจได้"
+
+msgid "Delete selected surveys"
+msgstr "ลบแบบสำรวจที่เลือก"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "แบบสำรวจที่เลือกและคำถามจะถูกลบ การดำเนินการนี้ไม่สามารถยกเลิกได้"
+
+msgid "Could not delete selected surveys"
+msgstr "ไม่สามารถลบแบบสำรวจที่เลือกได้"
+
+msgid "Survey action"
+msgstr "การดำเนินการแบบสำรวจ"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "จะมีการสร้างสำเนาของแบบสำรวจนี้: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "คำตอบและคำเชิญทั้งหมดจะถูกลบสำหรับแบบสำรวจนี้: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "คำถามที่สร้างแบบคูณจะถูกลบออกจากแบบสำรวจนี้: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "แบบสำรวจนี้จะเผยแพร่ให้กับผู้สอนกลุ่มที่เชื่อมโยง: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "แบบสำรวจนี้และคำถามจะถูกลบ: %s"
+
+msgid "Could not complete survey action"
+msgstr "ไม่สามารถดำเนินการแบบสำรวจให้เสร็จสมบูรณ์ได้"
+
+msgid "Not started"
+msgstr "ยังไม่ได้เริ่ม"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "แบบสำรวจการประชุมช่วยให้ผู้ใช้ที่ได้รับเชิญเลือกวันที่ที่พวกเขาว่าง"
+
+msgid "Back to surveys"
+msgstr "กลับไปยังแบบสำรวจ"
+
+msgid "Edit meeting poll"
+msgstr "แก้ไขแบบสำรวจการประชุม"
+
+msgid "View meeting poll"
+msgstr "ดูแบบสำรวจการประชุม"
+
+msgid "Basic information"
+msgstr "ข้อมูลพื้นฐาน"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "การดำเนินการนี้จะสร้างแบบสำรวจประเภทแบบสำรวจการประชุม คำตอบและคำเชิญจะถูกจัดการแยกต่างหาก"
+
+msgid "Availability"
+msgstr "ความพร้อมใช้งาน"
+
+msgid "Meeting dates"
+msgstr "วันที่ประชุม"
+
+msgid "Meeting poll"
+msgstr "แบบสำรวจการประชุม"
+
+msgid "My availability"
+msgstr "ความพร้อมใช้งานของฉัน"
+
+msgid "Meeting poll results"
+msgstr "ผลลัพธ์แบบสำรวจการประชุม"
+
+msgid "No invitations found"
+msgstr "ไม่พบคำเชิญ"
+
+msgid "available"
+msgstr "ว่าง"
+
+msgid "Could not load meeting poll"
+msgstr "ไม่สามารถโหลดแบบสำรวจการประชุมได้"
+
+msgid "Please complete the required fields"
+msgstr "กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน"
+
+msgid "Could not save meeting poll"
+msgstr "ไม่สามารถบันทึกแบบสำรวจการประชุมได้"
+
+msgid "Could not save meeting availability"
+msgstr "ไม่สามารถบันทึกความพร้อมใช้งานการประชุมได้"
+
+msgid "Copy this survey to another course or session"
+msgstr "คัดลอกแบบสำรวจนี้ไปยังหลักสูตรหรือเซสชันอื่น"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "แบบสำรวจจะถูกคัดลอกโดยไม่มีคำตอบหรือคำเชิญ"
+
+msgid "No target courses found"
+msgstr "ไม่พบหลักสูตรเป้าหมาย"
+
+msgid "Search by course title, course code or session name."
+msgstr "ค้นหาตามชื่อหลักสูตร รหัสหลักสูตร หรือชื่อเซสชัน"
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "ใช้ทำสำเนาแบบสำรวจเมื่อต้องการสำเนาในหลักสูตรเดียวกัน"
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "คำถามและตัวเลือกจะถูกคัดลอก คำตอบ คำเชิญ และรายงานจะยังคงอยู่ในแบบสำรวจต้นฉบับเท่านั้น"
+
+msgid "Selected target"
+msgstr "เป้าหมายที่เลือก"
+
+msgid "Could not load copy form"
+msgstr "ไม่สามารถโหลดแบบฟอร์มคัดลอกได้"
+
+msgid "The survey will be copied to: %s"
+msgstr "แบบสำรวจจะถูกคัดลอกไปยัง: %s"
+
+msgid "Survey copied."
+msgstr "คัดลอกแบบสำรวจแล้ว"
+
+msgid "Could not copy survey"
+msgstr "ไม่สามารถคัดลอกแบบสำรวจได้"
+
+msgid "Answer survey"
+msgstr "ตอบแบบสำรวจ"
+
+msgid "Preview mode does not save answers."
+msgstr "โหมดตัวอย่างไม่บันทึกคำตอบ"
+
+msgid "Survey completed"
+msgstr "แบบสำรวจเสร็จสมบูรณ์"
+
+msgid "Thank you for answering the survey."
+msgstr "ขอบคุณที่ตอบแบบสำรวจ"
+
+msgid "Profile information"
+msgstr "ข้อมูลโปรไฟล์"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "กรุณาตรวจสอบช่องโปรไฟล์ที่ร้องขอก่อนตอบแบบสำรวจ"
+
+msgid "This profile field is read-only."
+msgstr "ช่องโปรไฟล์นี้เป็นแบบอ่านอย่างเดียว"
+
+msgid "You already filled this survey."
+msgstr "คุณได้ตอบแบบสำรวจนี้แล้ว"
+
+msgid "Please specify"
+msgstr "กรุณาระบุ"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "ประเภทคำถามนี้ไม่รองรับในมุมมองแบบสำรวจสมัยใหม่"
+
+msgid "Preview only"
+msgstr "แสดงตัวอย่างเท่านั้น"
+
+msgid "Submit answers"
+msgstr "ส่งคำตอบ"
+
+msgid "Could not load survey"
+msgstr "ไม่สามารถโหลดแบบสำรวจได้"
+
+msgid "Please complete the required profile fields."
+msgstr "กรุณากรอกข้อมูลโปรไฟล์ที่จำเป็นให้ครบถ้วน"
+
+msgid "Please answer all mandatory questions."
+msgstr "กรุณาตอบคำถามที่จำเป็นทั้งหมด"
+
+msgid "Could not save survey answers"
+msgstr "ไม่สามารถบันทึกคำตอบแบบสำรวจได้"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "กำหนดค่าข้อมูลหลักของแบบสำรวจก่อนจัดการคำถามและคำเชิญ"
+
+msgid "The survey code cannot be changed after creation."
+msgstr "ไม่สามารถเปลี่ยนรหัสแบบสำรวจได้หลังจากสร้างแล้ว"
+
+msgid "Survey behavior"
+msgstr "พฤติกรรมแบบสำรวจ"
+
+msgid "Use 0 for no time limit."
+msgstr "ใช้ 0 หากไม่ต้องการกำหนดเวลาจำกัด"
+
+msgid "Survey messages"
+msgstr "ข้อความแบบสำรวจ"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "ฟิลด์โปรไฟล์ที่เลือกที่นี่จะแสดงก่อนคำถามแบบสำรวจ"
+
+msgid "No profile fields are currently available."
+msgstr "ไม่มีฟิลด์โปรไฟล์ที่ใช้ได้ในขณะนี้"
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "การเลือกฟิลด์โปรไฟล์ใช้ได้เฉพาะแบบสำรวจที่ไม่ใช่แบบไม่ระบุตัวตน"
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "การเชื่อมโยงทักษะจะถูกย้ายในชุดงานเฉพาะ"
+
+msgid "Could not load survey configuration"
+msgstr "ไม่สามารถโหลดการกำหนดค่าแบบสำรวจได้"
+
+msgid "The survey code is required."
+msgstr "ต้องระบุรหัสแบบสำรวจ"
+
+msgid "The survey title is required."
+msgstr "ต้องระบุชื่อแบบสำรวจ"
+
+msgid "The survey has been saved successfully"
+msgstr "บันทึกแบบสำรวจเรียบร้อยแล้ว"
+
+msgid "Could not save survey configuration"
+msgstr "ไม่สามารถบันทึกการกำหนดค่าแบบสำรวจได้"
+
+msgid "Course users"
+msgstr "ผู้ใช้ในหลักสูตร"
+
+msgid "Already invited"
+msgstr "ได้รับเชิญแล้ว"
+
+msgid "No users found"
+msgstr "ไม่พบผู้ใช้"
+
+msgid "No groups found"
+msgstr "ไม่พบกลุ่ม"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "ใช้ **link** แทนตำแหน่งที่ลิงก์แบบสำรวจจะปรากฏ"
+
+msgid "Remind all selected users"
+msgstr "เตือนผู้ใช้ที่เลือกทั้งหมด"
+
+msgid "Anonymous access link"
+msgstr "ลิงก์เข้าถึงแบบไม่ระบุตัวตน"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "ผู้ใช้ที่ไม่ได้รับเชิญสามารถใช้ลิงก์นี้เพื่อทำแบบสำรวจได้"
+
+msgid "Answered anonymously"
+msgstr "ตอบแบบไม่ระบุตัวตนแล้ว"
+
+msgid "Could not load survey invitations"
+msgstr "ไม่สามารถโหลดคำเชิญแบบสำรวจได้"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "ต้องระบุหัวเรื่องและข้อความอีเมลเมื่อส่งอีเมล"
+
+msgid "Could not publish survey"
+msgstr "ไม่สามารถเผยแพร่แบบสำรวจได้"
+
+msgid "Could not copy the link"
+msgstr "ไม่สามารถคัดลอกลิงก์ได้"
+
+msgid "Please answer this survey using the following link"
+msgstr "กรุณาตอบแบบสำรวจนี้โดยใช้ลิงก์ต่อไปนี้"
+
+msgid "Export CSV"
+msgstr "ส่งออก CSV"
+
+msgid "Export compact CSV"
+msgstr "ส่งออก CSV แบบย่อ"
+
+msgid "Export Excel"
+msgstr "ส่งออก Excel"
+
+msgid "Export package"
+msgstr "ส่งออกแพ็กเกจ"
+
+msgid "Results summary"
+msgstr "สรุปผลลัพธ์"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "มุมมองนี้แสดงข้อมูลรายงานที่ย้ายมาสำหรับแบบสำรวจนี้"
+
+msgid "Select user"
+msgstr "เลือกผู้ใช้"
+
+msgid "No answers found"
+msgstr "ไม่พบคำตอบ"
+
+msgid "answers"
+msgstr "คำตอบ"
+
+msgid "Could not load survey reporting"
+msgstr "ไม่สามารถโหลดรายงานแบบสำรวจได้"
+
+msgid "Back to threads"
+msgstr "กลับไปยังกระทู้"
+
+msgid "Back to learning path"
+msgstr "กลับไปยังเส้นทางการเรียนรู้"
+
+msgid "Remove sticky"
+msgstr "ยกเลิกการปักหมุด"
+
+msgid "Make sticky"
+msgstr "ปักหมุด"
+
+msgid "Open thread"
+msgstr "เปิดกระทู้"
+
+msgid "Close thread"
+msgstr "ปิดกระทู้"
+
+msgid "Delete thread"
+msgstr "ลบกระทู้"
+
+msgid "This thread is hidden from learners."
+msgstr "กระทู้นี้ถูกซ่อนจากผู้เรียน"
+
+msgid "Revision requested"
+msgstr "ขอให้แก้ไข"
+
+msgid "Revision"
+msgstr "การแก้ไข"
+
+msgid "Approve post"
+msgstr "อนุมัติโพสต์"
+
+msgid "Reject post"
+msgstr "ปฏิเสธโพสต์"
+
+msgid "Cancel revision request"
+msgstr "ยกเลิกคำขอแก้ไข"
+
+msgid "Delete post"
+msgstr "ลบโพสต์"
+
+msgid "Message is required"
+msgstr "จำเป็นต้องมีข้อความ"
+
+msgid "Target thread is required"
+msgstr "จำเป็นต้องมีกระทู้เป้าหมาย"
+
+msgid "Could not retrieve posts"
+msgstr "ไม่สามารถดึงข้อมูลโพสต์ได้"
+
+msgid "Thread shown"
+msgstr "แสดงกระทู้แล้ว"
+
+msgid "Thread hidden"
+msgstr "ซ่อนกระทู้แล้ว"
+
+msgid "Could not update thread"
+msgstr "ไม่สามารถอัปเดตกระทู้ได้"
+
+msgid "Thread closed"
+msgstr "ปิดกระทู้แล้ว"
+
+msgid "Thread opened"
+msgstr "เปิดกระทู้แล้ว"
+
+msgid "Thread marked as sticky"
+msgstr "ปักหมุดกระทู้แล้ว"
+
+msgid "Thread unmarked as sticky"
+msgstr "ยกเลิกการปักหมุดกระทู้แล้ว"
+
+msgid "Thread notifications enabled"
+msgstr "เปิดการแจ้งเตือนกระทู้แล้ว"
+
+msgid "Thread notifications disabled"
+msgstr "ปิดการแจ้งเตือนกระทู้แล้ว"
+
+msgid "Could not update thread notification"
+msgstr "ไม่สามารถอัปเดตการแจ้งเตือนกระทู้ได้"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบกระทู้นี้?"
+
+msgid "Could not delete thread"
+msgstr "ไม่สามารถลบกระทู้ได้"
+
+msgid "Post approved"
+msgstr "อนุมัติโพสต์แล้ว"
+
+msgid "Could not approve post"
+msgstr "ไม่สามารถอนุมัติโพสต์ได้"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการปฏิเสธโพสต์นี้?"
+
+msgid "Post rejected"
+msgstr "ปฏิเสธโพสต์แล้ว"
+
+msgid "Could not reject post"
+msgstr "ไม่สามารถปฏิเสธโพสต์ได้"
+
+msgid "Post shown"
+msgstr "แสดงโพสต์แล้ว"
+
+msgid "Post hidden"
+msgstr "ซ่อนโพสต์แล้ว"
+
+msgid "Could not update post"
+msgstr "ไม่สามารถอัปเดตโพสต์ได้"
+
+msgid "Post updated"
+msgstr "อัปเดตโพสต์แล้ว"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบโพสต์นี้?"
+
+msgid "Post deleted"
+msgstr "ลบโพสต์แล้ว"
+
+msgid "Could not delete post"
+msgstr "ไม่สามารถลบโพสต์ได้"
+
+msgid "Untitled thread"
+msgstr "กระทู้ไม่มีชื่อ"
+
+msgid "Could not retrieve threads"
+msgstr "ไม่สามารถดึงข้อมูลกระทู้ได้"
+
+msgid "Post moved"
+msgstr "ย้ายโพสต์แล้ว"
+
+msgid "Could not move post"
+msgstr "ไม่สามารถย้ายโพสต์ได้"
+
+msgid "Revision request removed"
+msgstr "ลบคำขอแก้ไขแล้ว"
+
+msgid "Could not update revision request"
+msgstr "ไม่สามารถอัปเดตคำขอแก้ไขได้"
+
+msgid "Are you sure you want to report this post?"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการรายงานโพสต์นี้?"
+
+msgid "Could not report post"
+msgstr "ไม่สามารถรายงานโพสต์ได้"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบไฟล์แนบนี้?"
+
+msgid "Attachment deleted"
+msgstr "ลบไฟล์แนบแล้ว"
+
+msgid "Could not delete attachment"
+msgstr "ไม่สามารถลบไฟล์แนบได้"
+
+msgid "Thread title"
+msgstr "ชื่อกระทู้"
+
+msgid "Sticky thread"
+msgstr "กระทู้ปักหมุด"
+
+msgid "Attach files"
+msgstr "แนบไฟล์"
+
+msgid "Attachments are disabled for this forum"
+msgstr "การแนบไฟล์ถูกปิดใช้งานสำหรับฟอรั่มนี้"
+
+msgid "The forum is not open yet."
+msgstr "ฟอรั่มยังไม่เปิด"
+
+msgid "The forum is closed."
+msgstr "ฟอรั่มถูกปิดแล้ว"
+
+msgid "The forum is locked."
+msgstr "ฟอรั่มถูกล็อก"
+
+msgid "New threads are not allowed in this forum."
+msgstr "ไม่อนุญาตให้สร้างกระทู้ใหม่ในฟอรั่มนี้"
+
+msgid "Thread created"
+msgstr "สร้างกระทู้แล้ว"
+
+msgid "Could not create thread"
+msgstr "ไม่สามารถสร้างกระทู้ได้"
+
+msgid "Back to posts"
+msgstr "กลับไปยังโพสต์"
+
+msgid "This reply will be stored as a revision."
+msgstr "การตอบกลับนี้จะถูกบันทึกเป็นการแก้ไข"
+
+msgid "Post reply"
+msgstr "ตอบกลับโพสต์"
+
+msgid "The thread is locked."
+msgstr "กระทู้ถูกล็อก"
+
+msgid "Reply added"
+msgstr "เพิ่มการตอบกลับแล้ว"
+
+msgid "Could not add reply"
+msgstr "ไม่สามารถเพิ่มการตอบกลับได้"
+
+msgid "Add forum"
+msgstr "เพิ่มฟอรั่ม"
+
+msgid "No forums found"
+msgstr "ไม่พบฟอรั่ม"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "สร้างหมวดหมู่ฟอรั่มหรือฟอรั่มแรกของคุณเพื่อเริ่มการสนทนา"
+
+msgid "Locked"
+msgstr "ถูกล็อก"
+
+msgid "No forums in this category"
+msgstr "ไม่มีฟอรั่มในหมวดหมู่นี้"
+
+msgid "Posts require approval"
+msgstr "โพสต์ต้องได้รับการอนุมัติ"
+
+msgid "Forum for current group"
+msgstr "ฟอรั่มสำหรับกลุ่มปัจจุบัน"
+
+msgid "Group forum visibility"
+msgstr "การมองเห็นฟอรั่มกลุ่ม"
+
+msgid "No category"
+msgstr "ไม่มีหมวดหมู่"
+
+msgid "Could not retrieve forums"
+msgstr "ไม่สามารถดึงข้อมูลฟอรั่มได้"
+
+msgid "Forum category updated"
+msgstr "อัปเดตหมวดหมู่ฟอรั่มแล้ว"
+
+msgid "Forum category created"
+msgstr "สร้างหมวดหมู่ฟอรั่มแล้ว"
+
+msgid "Could not save forum category"
+msgstr "ไม่สามารถบันทึกหมวดหมู่ฟอรั่มได้"
+
+msgid "Forum updated"
+msgstr "อัปเดตฟอรั่มแล้ว"
+
+msgid "Forum created"
+msgstr "สร้างฟอรั่มแล้ว"
+
+msgid "Could not save forum"
+msgstr "ไม่สามารถบันทึกฟอรั่มได้"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบหมวดหมู่ฟอรั่มนี้?"
+
+msgid "Could not delete forum category"
+msgstr "ไม่สามารถลบหมวดหมู่ฟอรั่มได้"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบฟอรั่มนี้?"
+
+msgid "Could not delete forum"
+msgstr "ไม่สามารถลบฟอรั่มได้"
+
+msgid "Forum category unlocked"
+msgstr "ปลดล็อกหมวดหมู่ฟอรั่มแล้ว"
+
+msgid "Forum category locked"
+msgstr "ล็อกหมวดหมู่ฟอรั่มแล้ว"
+
+msgid "Could not update forum category"
+msgstr "ไม่สามารถอัปเดตหมวดหมู่ฟอรั่มได้"
+
+msgid "Forum category shown"
+msgstr "แสดงหมวดหมู่ฟอรั่มแล้ว"
+
+msgid "Forum category hidden"
+msgstr "ซ่อนหมวดหมู่ฟอรั่มแล้ว"
+
+msgid "Forum unlocked"
+msgstr "ปลดล็อกฟอรั่มแล้ว"
+
+msgid "Forum locked"
+msgstr "ล็อกฟอรั่มแล้ว"
+
+msgid "Could not update forum"
+msgstr "ไม่สามารถอัปเดตฟอรั่มได้"
+
+msgid "Forum shown"
+msgstr "แสดงฟอรั่มแล้ว"
+
+msgid "Forum hidden"
+msgstr "ซ่อนฟอรั่มแล้ว"
+
+msgid "Forum notifications enabled"
+msgstr "เปิดใช้งานการแจ้งเตือนฟอรั่มแล้ว"
+
+msgid "Forum notifications disabled"
+msgstr "ปิดใช้งานการแจ้งเตือนฟอรั่มแล้ว"
+
+msgid "Could not update forum notification"
+msgstr "ไม่สามารถอัปเดตการแจ้งเตือนฟอรั่มได้"
+
+msgid "Forum category moved"
+msgstr "ย้ายหมวดหมู่ฟอรั่มแล้ว"
+
+msgid "Could not move forum category"
+msgstr "ไม่สามารถย้ายหมวดหมู่ฟอรั่มได้"
+
+msgid "Forum moved"
+msgstr "ย้ายฟอรั่มแล้ว"
+
+msgid "Could not move forum"
+msgstr "ไม่สามารถย้ายฟอรั่มได้"
+
+msgid "Back to forums"
+msgstr "กลับไปยังฟอรั่ม"
+
+msgid "New thread"
+msgstr "กระทู้ใหม่"
+
+msgid "No threads found"
+msgstr "ไม่พบกระทู้"
+
+msgid "Sticky"
+msgstr "ปักหมุด"
+
+msgid "Graded"
+msgstr "ให้คะแนนแล้ว"
+
+msgid "Grade peers"
+msgstr "ให้คะแนนเพื่อน"
+
+msgid "Move thread"
+msgstr "ย้ายกระทู้"
+
+msgid "Target forum"
+msgstr "ฟอรั่มเป้าหมาย"
+
+msgid "Target forum is required"
+msgstr "จำเป็นต้องระบุฟอรั่มเป้าหมาย"
+
+msgid "Students"
+msgstr "นักเรียน"
+
+msgid "No students found"
+msgstr "ไม่พบนักเรียน"
+
+msgid "No peers available to grade."
+msgstr "ไม่มีเพื่อนที่สามารถให้คะแนนได้"
+
+msgid "Qualified"
+msgstr "ผ่านเกณฑ์"
+
+msgid "Not qualified"
+msgstr "ไม่ผ่านเกณฑ์"
+
+msgid "Could not retrieve thread grading"
+msgstr "ไม่สามารถดึงข้อมูลการให้คะแนนกระทู้ได้"
+
+msgid "Thread grading updated"
+msgstr "อัปเดตการให้คะแนนกระทู้แล้ว"
+
+msgid "Could not update thread grading"
+msgstr "ไม่สามารถอัปเดตการให้คะแนนกระทู้ได้"
+
+msgid "Thread score saved"
+msgstr "บันทึกคะแนนกระทู้แล้ว"
+
+msgid "Could not save thread score"
+msgstr "ไม่สามารถบันทึกคะแนนกระทู้ได้"
+
+msgid "Could not move thread"
+msgstr "ไม่สามารถย้ายกระทู้ได้"
+
+msgid "Thread updated"
+msgstr "อัปเดตกระทู้แล้ว"
+
+msgid "Search term is too short"
+msgstr "คำค้นหาสั้นเกินไป"
+
+msgid "Could not search forums"
+msgstr "ไม่สามารถค้นหาฟอรั่มได้"
+
+msgid "Moderated"
+msgstr "มีการกลั่นกรอง"
+
+msgid "View threads"
+msgstr "ดูกระทู้"
 

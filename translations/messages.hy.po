@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Հարգանքով"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Ֆորմուլայի օրինակ՝ sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Բանաձևի օրինակ՝ sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Փոփոխականների տիրույթներ"
@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:հեղինակային իրավունք,, no:առանց հեղինակային իրավունքի"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Փաստաթղթեր,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:Folder,, application\/msword:MsWord,, application\/octet-stream:Octet stream,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:վարժություն,,      simulation:մոդելավորում,,      questionnaire:հարցաթերթիկ,,      diagram:սխեմա,,      figure:նկար,,      graph:գրաֆիկ,,      index:հիմնական ցուցիչ,,      slide:սլայդ,,      table:तालिका,,      narrative text:նարատիվ տեքստ,,      exam:քննություն,,      experiment:փորձ,,      problem statement:պրոբլեմի ձևակերպում,,      self assessment:ինքնագնահատում,,      lecture:դասախոսություն"
@@ -4640,7 +4640,7 @@ msgid "Invalid end date was given."
 msgstr "Տրվել է անվավեր ավարտական ամսաթիվ:"
 
 msgid "(d/m/y h:m)"
-msgstr "(d/m/y h:m)"
+msgstr "(d\/m\/y h:m)"
 
 msgid "Homepage-files are not writable!"
 msgstr "Գլխավոր էջի ֆայլերը չեն գրելի!"
@@ -9729,6 +9729,9 @@ msgstr "Որոնման արդյունքներ՝"
 
 msgid "Select a file"
 msgstr "Ընտրել ֆայլ"
+
+msgid "Select a file to insert into the editor."
+msgstr "Ընտրեք ֆայլը խմբագրիչում տեղադրելու համար:"
 
 msgid "Warning - The FAQ file, located in the /home/ directory of your portal, is not writable. Your text will not be saved until the file permissions are changed."
 msgstr "Զգուշացում - FAQ ֆայլը, որը գտնվում է Ձեր պորտալի /home/ թղթապանակում, գրելի չէ: Ձեր տեքստը չի պահպանվի, մինչև փոխվեն ֆայլի թույլտվությունները:"
@@ -15910,6 +15913,9 @@ msgstr "Ամսաթիվ և ժամ"
 msgid "Item"
 msgstr "Տարր"
 
+msgid "Items"
+msgstr "Տարրեր"
+
 msgid "Configure Dashboard Plugin"
 msgstr "Կարգավորել Dashboard հավելվածը"
 
@@ -17163,6 +17169,18 @@ msgstr "Սեանսներ խմբում"
 
 msgid "Courses in group"
 msgstr "Դասընթացներ խմբում"
+
+msgid "Courses on the platform"
+msgstr "Դասընթացներ հարթակում"
+
+msgid "%s courses"
+msgstr "%s դասընթաց"
+
+msgid "%s sessions"
+msgstr "%s սեսիա"
+
+msgid "Search by title or code"
+msgstr "Որոնել ըստ վերնագրի կամ կոդի"
 
 msgid "Users in group"
 msgstr "Օգտատերեր խմբում"
@@ -32167,6 +32185,9 @@ msgstr "Առաջադրանք"
 msgid "Allowed file formats: %s"
 msgstr "Թույլատրված ֆայլերի ձևաչափեր՝ %s"
 
+msgid "File manager"
+msgstr "Ֆայլերի կառավարիչ"
+
 msgid "File type not allowed. Allowed extensions: %s"
 msgstr "Ֆայլի տիպը թույլատրված չէ: Թույլատրված ընդլայնումներ՝ %s"
 
@@ -33880,6 +33901,2583 @@ msgstr "Բարի գալուստ"
 msgid "Welcome to Chamilo"
 msgstr "Բարի գալուստ Chamilo"
 
+msgid "Check all unanswered questions below"
+msgstr "Ստուգել բոլոր չպատասխանված հարցերը ստորև"
+
 msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
 msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Եթե սա ձեր առաջին անգամն է օգտագործել Chamilo-ն, համոզվեք, որ ստուգեք կողմնակի մենյուն՝ ճանապարհ գտնելու համար դրա բազմաթիվ հնարավորություններով: Եթե օգնության կարիք ունեք, կգտնեք <a href=\"https://docs.chamilo.org\">մեր պաշտոնական փաստաթղթերը</a>, որոնք կարող են օգնել ստանդարտ փաստագրության համար, մինչդեռ մեր <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">ուղղակի ֆորումը</a> կարող է օգնել գաղափարներ կիսվել և գտնել պատասխաններ Chamilo-ի այլ օգտատերերից:"
+
+msgid "Change password"
+msgstr "Փոխել գաղտնաբառը"
+
+msgid "Newest first"
+msgstr "Նորագույնը սկզբում"
+
+msgid "Oldest first"
+msgstr "Հնագույնը սկզբում"
+
+msgid "Title A–Z"
+msgstr "Վերնագիր Ա–Ք"
+
+msgid "Title Z–A"
+msgstr "Վերնագիր Ք–Ա"
+
+msgid "Send test email"
+msgstr "Ուղարկել փորձնական էլ. նամակ"
+
+msgid "Show teachers"
+msgstr "Ցույց տալ դասախոսներին"
+
+msgid "Hide teachers"
+msgstr "Թաքցնել դասախոսներին"
+
+msgid "Delete exercise attempts"
+msgstr "Ջնջել վարժության փորձերը"
+
+msgid "Message sent successfully."
+msgstr "Հաղորդագրությունը հաջողությամբ ուղարկվեց:"
+
+msgid "You cannot create a new course right now."
+msgstr "Այս պահին դուք չեք կարող ստեղծել նոր դասընթաց:"
+
+msgid "Unable to verify whether you can create a new course right now."
+msgstr "Հնարավոր չէ ստուգել՝ արդյոք այս պահին կարող եք ստեղծել նոր դասընթաց:"
+
+msgid "Please try again later or contact the administrator."
+msgstr "Խնդրում ենք փորձել ավելի ուշ կամ դիմել ադմինիստրատորին:"
+
+msgid "You cannot create more courses at this time."
+msgstr "Այս պահին դուք չեք կարող ստեղծել ավելի շատ դասընթացներ:"
+
+msgid "You already manage %d courses and your active service allows up to %d. To create another course, you need a higher service limit or reduce your current active courses."
+msgstr "Դուք արդեն կառավարում եք %d դասընթաց և Ձեր ակտիվ ծառայությունը թույլատրում է մինչև %d։ Մեկ այլ դասընթաց ստեղծելու համար անհրաժեշտ է բարձրացնել ծառայության սահմանաչափը կամ նվազեցնել ընթացիկ ակտիվ դասընթացների քանակը։"
+
+msgid "You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now."
+msgstr "Դուք արդեն կառավարում եք %d դասընթաց և հարթակը ներկայումս թույլատրում է մինչև %d Ձեր հաշվի համար։ Այս պահին չեք կարող ստեղծել ավելի շատ դասընթացներ։"
+
+msgid "Add a class"
+msgstr "Ավելացնել խումբ"
+
+msgid "Search classes"
+msgstr "Փնտրել խմբեր"
+
+msgid "No classes found"
+msgstr "Խմբեր չեն գտնվել"
+
+msgid "Import classes"
+msgstr "Ներմուծել խմբեր"
+
+msgid "Class users"
+msgstr "Խմբի օգտատերեր"
+
+msgid "%s classes imported"
+msgstr "Ներմուծվել է %s խումբ"
+
+msgid "%s user-class links imported"
+msgstr "Ներմուծվել է %s օգտատեր-խումբ կապ"
+
+msgid "Hide comments"
+msgstr "Թաքցնել մեկնաբանությունները"
+
+msgid "Loading comments..."
+msgstr "Մեկնաբանությունները բեռնվում են..."
+
+msgid "No comments yet."
+msgstr "Դեռևս մեկնաբանություններ չկան։"
+
+msgid "A user with this username already exists"
+msgstr "Այս օգտանունով օգտատեր արդեն գոյություն ունի"
+
+msgid "Manage meetings, review recordings and update course-wide BBB settings from one place."
+msgstr "Կառավարեք հանդիպումները, դիտեք ձայնագրությունները և թարմացրեք դասընթացի BBB կարգավորումները մեկ տեղից։"
+
+msgid "Review the current defaults and propagate them to every course when needed."
+msgstr "Վերանայեք ընթացիկ լռելյայն կարգավորումները և անհրաժեշտության դեպքում տարածեք դրանք բոլոր դասընթացներում։"
+
+msgid "Filter the list by meeting date range."
+msgstr "Զտել ցուցակը հանդիպման ամսաթվերի միջակայքով։"
+
+msgid "Review meeting history, participants and recording actions."
+msgstr "Վերանայեք հանդիպումների պատմությունը, մասնակիցներին և ձայնագրության գործողությունները։"
+
+msgid "Participants"
+msgstr "Մասնակիցներ"
+
+msgid "CountUsers"
+msgstr "Օգտատերերի քանակ"
+
+msgid "No data found"
+msgstr "Տվյալներ չեն գտնվել"
+
+msgid "My justifications"
+msgstr "Իմ հիմնավորումները"
+
+msgid "My services"
+msgstr "Իմ ծառայությունները"
+
+msgid "Extra menu"
+msgstr "Լրացուցիչ ընտրացանկ"
+
+msgid "Pending tests"
+msgstr "Սպասող թեստեր"
+
+msgid "No specific language"
+msgstr "Հատուկ լեզու չկա"
+
+msgid "Source Chamilo version"
+msgstr "Սկզբնական Chamilo տարբերակ"
+
+msgid "Exporting..."
+msgstr "Արտահանվում է..."
+
+msgid "Autosaved drafts available"
+msgstr "Հասանելի են ինքնապահպանված սևագրեր"
+
+msgid "Hide drafts"
+msgstr "Թաքցնել սևագրերը"
+
+msgid "Show drafts"
+msgstr "Ցույց տալ սևագրերը"
+
+msgid "Drafts are stored only in this browser and are removed after saving the document."
+msgstr "Սևագրերը պահվում են միայն այս զննարկիչում և հեռացվում են փաստաթուղթը պահպանելուց հետո։"
+
+msgid "Last saved"
+msgstr "Վերջին պահպանումը"
+
+msgid "Restore draft"
+msgstr "Վերականգնել սևագիրը"
+
+msgid "Delete draft"
+msgstr "Ջնջել սևագիրը"
+
+msgid "Information about indexing document content"
+msgstr "Տեղեկություն փաստաթղթի բովանդակության ինդեքսավորման մասին"
+
+msgid "When enabled, the document text is indexed by the search engine so users can find it from platform search."
+msgstr "Եթե միացված է, փաստաթղթի տեքստը ինդեքսավորվում է որոնման համակարգի կողմից, որպեսզի օգտատերերը կարողանան գտնել այն հարթակի որոնման միջոցով։"
+
+msgid "The editor is not available."
+msgstr "Խմբագրիչը հասանելի չէ։"
+
+msgid "Please place the cursor inside a paragraph first."
+msgstr "Նախ խնդրում ենք կուրսորը տեղադրել պարբերության ներսում։"
+
+msgid "The selected paragraph is empty."
+msgstr "Ընտրված պարբերությունը դատարկ է։"
+
+msgid "Loading failed."
+msgstr "Բեռնումը ձախողվեց։"
+
+msgid "Add introduction"
+msgstr "Ավելացնել ներածություն"
+
+msgid "Course type"
+msgstr "Դասընթացի տեսակ"
+
+msgid "Choose whether this course uses the standard platform limits or benefits from a purchased service."
+msgstr "Ընտրեք՝ արդյոք այս դասընթացը օգտագործում է հարթակի ստանդարտ սահմանաչափերը, թե օգտվում է գնված ծառայության առավելություններից։"
+
+msgid "Standard course"
+msgstr "Ստանդարտ դասընթաց"
+
+msgid "Use the standard platform limits."
+msgstr "Օգտագործել հարթակի ստանդարտ սահմանաչափերը։"
+
+msgid "Selected"
+msgstr "Ընտրված"
+
+msgid "Hosting limit"
+msgstr "Հոսթինգի սահմանաչափ"
+
+msgid "Document quota"
+msgstr "Փաստաթղթերի քվոտա"
+
+msgid "The standard course limit has been reached."
+msgstr "Հասել է ստանդարտ դասընթացի սահմանաչափին։"
+
+msgid "Use the benefits granted by this service."
+msgstr "Օգտագործել այս ծառայության կողմից տրամադրված առավելությունները։"
+
+msgid "Courses with these benefits"
+msgstr "Այս առավելություններով դասընթացներ"
+
+msgid "Active service"
+msgstr "Ակտիվ ծառայություն"
+
+msgid "Buy service"
+msgstr "Գնել ծառայություն"
+
+msgid "Select an available course type before creating the course."
+msgstr "Դասընթաց ստեղծելուց առաջ ընտրեք հասանելի դասընթացի տեսակը։"
+
+msgid "users"
+msgstr "օգտատերեր"
+
+msgid "You need to buy this service before using these benefits."
+msgstr "Այս առավելություններից օգտվելուց առաջ անհրաժեշտ է գնել այս ծառայությունը։"
+
+msgid "You already used all courses available with this service."
+msgstr "Այս ծառայությամբ հասանելի բոլոր դասընթացներն արդեն օգտագործվել են։"
+
+msgid "This option is not available."
+msgstr "Այս տարբերակը հասանելի չէ։"
+
+msgid "This field is required"
+msgstr "Այս դաշտը պարտադիր է"
+
+msgid "Show less"
+msgstr "Ցույց տալ ավելի քիչ"
+
+msgid "Show full description"
+msgstr "Ցույց տալ ամբողջ նկարագրությունը"
+
+msgid "Virtual keyboard"
+msgstr "Վիրտուալ ստեղնաշար"
+
+msgid "Backspace"
+msgstr "Հետքայլ"
+
+msgid "Space"
+msgstr "Բացատ"
+
+msgid "Learning path only visible to selected learners"
+msgstr "Ուսումնական ուղին տեսանելի է միայն ընտրված սովորողներին"
+
+msgid "Create course"
+msgstr "Ստեղծել դասընթաց"
+
+msgid "Tour"
+msgstr "Շրջագայություն"
+
+msgid "Are you sure you want to delete this comment?"
+msgstr "Վստա՞հ եք, որ ցանկանում եք ջնջել այս մեկնաբանությունը։"
+
+msgid "No posts found"
+msgstr "Գրառումներ չեն գտնվել"
+
+msgid "No communities"
+msgstr "Համայնքներ չկան"
+
+msgid "No friends found"
+msgstr "Ընկերներ չեն գտնվել"
+
+msgid "Visual overview of your skills"
+msgstr "Ձեր հմտությունների տեսողական ակնարկ"
+
+msgid "Compare your progress"
+msgstr "Համեմատել ձեր առաջընթացը"
+
+msgid "Please enter a search term."
+msgstr "Խնդրում ենք մուտքագրել որոնման տերմին։"
+
+msgid "Enter captcha code"
+msgstr "Մուտքագրեք captcha կոդը"
+
+msgid "Refresh captcha"
+msgstr "Թարմացնել captcha-ն"
+
+msgid "Captcha is temporarily blocked. Please try again later."
+msgstr "Captcha-ն ժամանակավորապես արգելափակված է։ Խնդրում ենք փորձել ավելի ուշ։"
+
+msgid "Item Details"
+msgstr "Տարրի մանրամասներ"
+
+msgid "Open File"
+msgstr "Բացել ֆայլը"
+
+msgid "Selection"
+msgstr "Ընտրություն"
+
+msgid "Remove selection context"
+msgstr "Հեռացնել ընտրության համատեքստը"
+
+msgid "Source document"
+msgstr "Աղբյուր փաստաթուղթ"
+
+msgid "Use the current course context"
+msgstr "Օգտագործել ընթացիկ դասընթացի համատեքստը"
+
+msgid "Loading documents..."
+msgstr "Փաստաթղթերը բեռնվում են..."
+
+msgid "No compatible PDF or TXT document was found in this course."
+msgstr "Այս դասընթացում համատեղելի PDF կամ TXT փաստաթուղթ չի գտնվել։"
+
+msgid "Select a PDF or TXT document to generate terms only from that document."
+msgstr "Ընտրեք PDF կամ TXT փաստաթուղթ՝ տերմինները միայն այդ փաստաթղթի բովանդակությունից ստեղծելու համար։"
+
+msgid "Confidentiality warning"
+msgstr "Գաղտնիության նախազգուշացում"
+
+msgid "When a document is selected, the prompt is fixed so the generation uses only that document content."
+msgstr "Երբ փաստաթուղթ է ընտրվում, հուշումը ամրագրվում է, որպեսզի ստեղծումը օգտագործի միայն այդ փաստաթղթի բովանդակությունը։"
+
+msgid "No document-processing AI providers available."
+msgstr "Փաստաթղթերի մշակման AI մատակարարներ հասանելի չեն։"
+
+msgid "Failed to save signature. Please try again."
+msgstr "Ստորագրությունը պահպանելը ձախողվեց։ Խնդրում ենք փորձել կրկին։"
+
+msgid "Select and move"
+msgstr "Ընտրել և տեղափոխել"
+
+msgid "Freehand"
+msgstr "Ազատ ձեռքով"
+
+msgid "Stroke"
+msgstr "Հարված"
+
+msgid "Fill"
+msgstr "Լցնել"
+
+msgid "Import SVG"
+msgstr "Ներմուծել SVG"
+
+msgid "Import image"
+msgstr "Ներմուծել պատկեր"
+
+msgid "Click the drawing area to place this text"
+msgstr "Սեղմեք գծագրման տարածքում՝ այս տեքստը տեղադրելու համար"
+
+msgid "Draw a new SVG, import an existing SVG or embed an image, then save it as a reusable document."
+msgstr "Ստեղծեք նոր SVG, ներմուծեք գոյություն ունեցող SVG կամ ներդրեք պատկեր, ապա պահպանեք այն որպես վերօգտագործելի փաստաթուղթ։"
+
+msgid "Use Select and move to reposition or resize elements added in this editor."
+msgstr "Օգտագործեք «Ընտրել և տեղափոխել»՝ այս խմբագրիչում ավելացված տարրերը վերադիրքավորելու կամ չափափոխելու համար։"
+
+msgid "Stroke width"
+msgstr "Հարվածի լայնություն"
+
+msgid "Transparent fill"
+msgstr "Թափանցիկ լցոնում"
+
+msgid "Invalid id"
+msgstr "Անվավեր ID"
+
+msgid "Unable to load the drawing"
+msgstr "Չհաջողվեց բեռնել գծագիրը"
+
+msgid "Only PNG, JPG, WEBP or GIF images are supported."
+msgstr "Աջակցվում են միայն PNG, JPG, WEBP կամ GIF պատկերներ։"
+
+msgid "Unable to read the image file."
+msgstr "Չհաջողվեց կարդալ պատկերի ֆայլը։"
+
+msgid "Only SVG files are supported."
+msgstr "Աջակցվում են միայն SVG ֆայլեր։"
+
+msgid "The SVG file is empty or invalid."
+msgstr "SVG ֆայլը դատարկ է կամ անվավեր։"
+
+msgid "Unable to read the SVG file."
+msgstr "Չհաջողվեց կարդալ SVG ֆայլը։"
+
+msgid "The drawing is empty or invalid."
+msgstr "Գծագիրը դատարկ է կամ անվավեր։"
+
+msgid "Unable to save the drawing"
+msgstr "Չհաջողվեց պահպանել գծագիրը"
+
+msgid "Information about AI-assisted documents"
+msgstr "Տեղեկություն AI-ի օգնությամբ ստեղծված փաստաթղթերի մասին"
+
+msgid "Location"
+msgstr "Տեղադրություն"
+
+msgid "Cloud link"
+msgstr "Ամպային հղում"
+
+msgid "Add a link to a cloud document, such as Google Drive or Google Docs."
+msgstr "Ավելացնել հղում դեպի ամպային փաստաթուղթ, օրինակ՝ Google Drive կամ Google Docs։"
+
+msgid "Add cloud link"
+msgstr "Ավելացնել ամպային հղում"
+
+msgid "Document title"
+msgstr "Փաստաթղթի վերնագիր"
+
+msgid "Document options change how uploaded files are processed after saving."
+msgstr "Փաստաթղթի ընտրանքները փոխում են, թե ինչպես են մշակվում վերբեռնված ֆայլերը պահպանումից հետո։"
+
+msgid "Information about uncompressing zip files"
+msgstr "Տեղեկություն ZIP ֆայլերի ապաարխիվացման մասին"
+
+msgid "When enabled, ZIP files are extracted into the current document folder after upload."
+msgstr "Եթե միացված է, ZIP ֆայլերը վերբեռնումից հետո կհանվեն ընթացիկ փաստաթղթերի պանակում։"
+
+msgid "The title is required."
+msgstr "Վերնագիրը պարտադիր է։"
+
+msgid "The URL is required."
+msgstr "URL-ը պարտադիր է։"
+
+msgid "The destination folder is missing."
+msgstr "Նպատակային պանակը բացակայում է։"
+
+msgid "Unable to create cloud link."
+msgstr "Չհաջողվեց ստեղծել ամպային հղում։"
+
+msgid "Copy to My Files"
+msgstr "Պատճենել Իմ ֆայլերում"
+
+msgid "Used space"
+msgstr "Օգտագործված տարածք"
+
+msgid "Available space"
+msgstr "Հասանելի տարածք"
+
+msgid "Available percentage"
+msgstr "Հասանելի տոկոս"
+
+msgid "Cloud links cannot be downloaded."
+msgstr "Ամպային հղումները հնարավոր չէ ներբեռնել։"
+
+msgid "Could not copy the file to My Files"
+msgstr "Չհաջողվեց պատճենել ֆայլը Իմ ֆայլերում"
+
+msgid "File copied to My Files"
+msgstr "Ֆայլը պատճենվեց Իմ ֆայլերում"
+
+msgid "Checking course creation options..."
+msgstr "Ստուգվում են դասընթացի ստեղծման ընտրանքները..."
+
+msgid "You cannot create more courses right now."
+msgstr "Այս պահին դուք չեք կարող ստեղծել ավելի շատ դասընթացներ։"
+
+msgid "AI analyzer"
+msgstr "AI վերլուծիչ"
+
+msgid "Expand all"
+msgstr "Ընդլայնել բոլորը"
+
+msgid "Collapse all"
+msgstr "Ծալել բոլորը"
+
+msgid "Review your active service benefits, purchase history and available receipts."
+msgstr "Վերանայեք ձեր ակտիվ ծառայությունների առավելությունները, գնումների պատմությունը և հասանելի անդորրագրերը։"
+
+msgid "Active services"
+msgstr "Ակտիվ ծառայություններ"
+
+msgid "No active services"
+msgstr "Ակտիվ ծառայություններ չկան"
+
+msgid "Valid until"
+msgstr "Վավեր մինչև"
+
+msgid "Recurring payment"
+msgstr "Կրկնվող վճարում"
+
+msgid "Next charge"
+msgstr "Հաջորդ գանձում"
+
+msgid "Enable auto billing"
+msgstr "Միացնել ավտոմատ վճարումը"
+
+msgid "Cancel auto billing"
+msgstr "Չեղարկել ավտոմատ վճարումը"
+
+msgid "Granted benefits"
+msgstr "Տրամադրված առավելություններ"
+
+msgid "Purchase history"
+msgstr "Գնումների պատմություն"
+
+msgid "No purchases yet"
+msgstr "Դեռևս գնումներ չկան"
+
+msgid "Product"
+msgstr "Ապրանք"
+
+msgid "Reference"
+msgstr "Հղում"
+
+msgid "Amount"
+msgstr "Գումար"
+
+msgid "Receipt"
+msgstr "Անդորրագիր"
+
+msgid "Unable to load your services right now."
+msgstr "Ձեր ծառայությունները հնարավոր չէ բեռնել հիմա։"
+
+msgid "Auto billing enabled"
+msgstr "Ավտոմատ վճարումը միացված է"
+
+msgid "Auto billing suspended"
+msgstr "Ավտոմատ վճարումը դադարեցված է"
+
+msgid "Auto billing cancelled"
+msgstr "Ավտոմատ վճարումը չեղարկված է"
+
+msgid "Auto billing disabled"
+msgstr "Ավտոմատ վճարումը անջատված է"
+
+msgid "Cancel auto billing for this service?"
+msgstr "Չեղարկե՞լ այս ծառայության ավտոմատ վճարումը։"
+
+msgid "Preview class members and courses"
+msgstr "Դիտել դասարանի անդամներին և դասընթացները"
+
+msgid "Please select a CSV file to import."
+msgstr "Խնդրում ենք ընտրել CSV ֆայլ ներմուծման համար։"
+
+msgid "%d user-class links imported"
+msgstr "%d օգտատեր-դասարան կապ ներմուծվեց"
+
+msgid "The following errors occurred during import:"
+msgstr "Ներմուծման ընթացքում առաջացան հետևյալ սխալները՝"
+
+msgid "CSV file"
+msgstr "CSV ֆայլ"
+
+msgid "Remove user from all group-related entities if not in the list"
+msgstr "Հեռացնել օգտատերին բոլոր խմբային կապերից, եթե նա չկա ցուցակում"
+
+msgid "UserName"
+msgstr "Օգտանուն"
+
+msgid "ClassName"
+msgstr "Դասարանի անուն"
+
+msgid "are required for each row."
+msgstr "պարտադիր են յուրաքանչյուր տողի համար։"
+
+msgid "title"
+msgstr "վերնագիր"
+
+msgid "is required."
+msgstr "պարտադիր է։"
+
+msgid "description"
+msgstr "նկարագրություն"
+
+msgid "are optional."
+msgstr "կամընտիր են։"
+
+msgid "Are you sure you want to remove this user from the class?"
+msgstr "Համոզվա՞ծ եք, որ ցանկանում եք հեռացնել այս օգտատերին դասարանից։"
+
+msgid "Users in class"
+msgstr "Օգտատերեր դասարանում"
+
+msgid "Remove user"
+msgstr "Հեռացնել օգտատերին"
+
+msgid "Class not found"
+msgstr "Դասարանը չի գտնվել"
+
+msgid "Class overview"
+msgstr "Դասարանի ակնարկ"
+
+msgid "Back to classes"
+msgstr "Վերադառնալ դասարաններին"
+
+msgid "Search members or courses"
+msgstr "Փնտրել անդամներ կամ դասընթացներ"
+
+msgid "Search by name, email, username or course title"
+msgstr "Փնտրել անունով, էլ․ փոստով, օգտանունով կամ դասընթացի վերնագրով"
+
+msgid "Class members"
+msgstr "Դասարանի անդամներ"
+
+msgid "No email"
+msgstr "Էլ․ փոստ չկա"
+
+msgid "No members found"
+msgstr "Անդամներ չեն գտնվել"
+
+msgid "No courses found"
+msgstr "Դասընթացներ չեն գտնվել"
+
+msgid "The end date must be after the start date."
+msgstr "Ավարտի ամսաթիվը պետք է լինի մեկնարկի ամսաթվից հետո։"
+
+msgid "Always visible"
+msgstr "Միշտ տեսանելի"
+
+msgid "No end date"
+msgstr "Ավարտի ամսաթիվ չկա"
+
+msgid "No restriction"
+msgstr "Սահմանափակում չկա"
+
+msgid "Missing learning path or course identifier"
+msgstr "Բացակայում է ուսումնական ուղու կամ դասընթացի նույնացուցիչը"
+
+msgid "Select a user or a group first"
+msgstr "Նախ ընտրեք օգտատեր կամ խումբ"
+
+msgid "Remove all date restrictions for this learning path?"
+msgstr "Հեռացնե՞լ բոլոր ամսաթվային սահմանափակումները այս ուսումնական ուղու համար։"
+
+msgid "Advanced learning path access"
+msgstr "Ուսումնական ուղու հասանելիության առաջադեմ կարգավորումներ"
+
+msgid "Remove date restrictions"
+msgstr "Հեռացնել ամսաթվային սահմանափակումները"
+
+msgid "Search by name, email, username or group"
+msgstr "Փնտրել անունով, էլ․ փոստով, օգտանունով կամ խմբով"
+
+msgid "Edit user restriction"
+msgstr "Խմբագրել օգտատիրոջ սահմանափակումը"
+
+msgid "Edit group restriction"
+msgstr "Խմբագրել խմբի սահմանափակումը"
+
+msgid "Select a user or group"
+msgstr "Ընտրեք օգտատեր կամ խումբ"
+
+msgid "Save restriction"
+msgstr "Պահպանել սահմանափակումը"
+
+msgid "members"
+msgstr "անդամներ"
+
+msgid "Create Assignment"
+msgstr "Ստեղծել առաջադրանք"
+
+msgid "The submission deadline has passed. You can no longer submit."
+msgstr "Ներկայացման վերջնաժամկետն անցել է։ Դուք այլևս չեք կարող ներկայացնել։"
+
+msgid "Mailing cannot be combined with other recipients."
+msgstr "Փոստարկղը չի կարող համատեղվել այլ ստացողների հետ։"
+
+msgid "Social map"
+msgstr "Սոցիալական քարտեզ"
+
+msgid "The map plugin is not enabled or configured."
+msgstr "Քարտեզի հավելվածը միացված չէ կամ կազմաձևված չէ։"
+
+msgid "Some configured extra fields were not found"
+msgstr "Որոշ կազմաձևված լրացուցիչ դաշտեր չեն գտնվել"
+
+msgid "No user locations were found."
+msgstr "Օգտատերերի գտնվելու վայրեր չեն գտնվել։"
+
+msgid "OpenStreetMap needs coordinates to display an embedded marker. Address-only locations are listed below."
+msgstr "OpenStreetMap-ին անհրաժեշտ են կոորդինատներ՝ ներկառուցված նշիչ ցուցադրելու համար։ Միայն հասցեով գտնվելու վայրերը նշված են ստորև։"
+
+msgid "Locations"
+msgstr "Գտնվելու վայրեր"
+
+msgid "Open map"
+msgstr "Բացել քարտեզը"
+
+msgid "Provider: OpenStreetMap"
+msgstr "Մատակարար՝ OpenStreetMap"
+
+msgid "Provider: Google Maps"
+msgstr "Մատակարար՝ Google Maps"
+
+msgid "Personal files"
+msgstr "Անձնական ֆայլեր"
+
+msgid "Upload image"
+msgstr "Վերբեռնել պատկեր"
+
+msgid "Upload media"
+msgstr "Վերբեռնել մեդիա"
+
+msgid "Only image files are allowed in this upload screen."
+msgstr "Այս վերբեռնման էկրանում թույլատրվում են միայն պատկերային ֆայլեր։"
+
+msgid "Only audio and video files are allowed in this upload screen."
+msgstr "Այս վերբեռնման էկրանում թույլատրվում են միայն աուդիո և վիդեո ֆայլեր։"
+
+msgid "Upload files to your personal storage."
+msgstr "Վերբեռնել ֆայլեր ձեր անձնական պահեստում։"
+
+msgid "Linked"
+msgstr "Կապակցված"
+
+msgid "No audio or video files were found in this folder."
+msgstr "Այս թղթապանակում աուդիո կամ վիդեո ֆայլեր չեն գտնվել։"
+
+msgid "No image files were found in this folder."
+msgstr "Այս թղթապանակում պատկերային ֆայլեր չեն գտնվել։"
+
+msgid "No matching files were found in this folder."
+msgstr "Այս թղթապանակում համապատասխանող ֆայլեր չեն գտնվել։"
+
+msgid "This file type is not allowed in this upload screen."
+msgstr "Այս վերբեռնման էկրանում այս ֆայլի տեսակը թույլատրված չէ։"
+
+msgid "Manage your personal files and course documents."
+msgstr "Կառավարել ձեր անձնական ֆայլերը և դասընթացի փաստաթղթերը։"
+
+msgid "DateValidity"
+msgstr "DateValidity"
+
+msgid "JustificationSaved"
+msgstr "JustificationSaved"
+
+msgid "ValidityDate"
+msgstr "ValidityDate"
+
+msgid "MyJustifications"
+msgstr "MyJustifications"
+
+msgid "Submission"
+msgstr "Submission"
+
+msgid "Use the filters above to narrow the list."
+msgstr "Օգտագործեք վերևի զտիչները՝ ցուցակը նեղացնելու համար։"
+
+msgid "You are not allowed to see this page."
+msgstr "Դուք իրավունք չունեք տեսնելու այս էջը։"
+
+msgid "plugin_title"
+msgstr "plugin_title"
+
+msgid "plugin_comment"
+msgstr "plugin_comment"
+
+msgid "Course tracking details"
+msgstr "Դասընթացի հետևման մանրամասներ"
+
+msgid "Course activity statistics"
+msgstr "Դասընթացի գործունեության վիճակագրություն"
+
+msgid "mobile_phone_number"
+msgstr "mobile_phone_number"
+
+msgid "Allowed template syntax"
+msgstr "Թույլատրված ձևանմուշի շարահյուսություն"
+
+msgid "Functions"
+msgstr "Ֆունկցիաներ"
+
+msgid "Available variables depend on the template type, for example {{ user.getUsername() }} or {{ user.getEmail() }}."
+msgstr "Հասանելի փոփոխականները կախված են ձևանմուշի տեսակից, օրինակ՝ {{ user.getUsername() }} կամ {{ user.getEmail() }}։"
+
+msgid "For security reasons, any other Twig function, filter (such as filter, map, reduce or sort) or PHP call is blocked."
+msgstr "Անվտանգության նկատառումներով ցանկացած այլ Twig ֆունկցիա, զտիչ (օրինակ՝ filter, map, reduce կամ sort) կամ PHP կանչ արգելափակված է։"
+
+msgid "Global administrator"
+msgstr "Համընդհանուր ադմինիստրատոր"
+
+msgid "Session manager"
+msgstr "Սեսիայի կառավարիչ"
+
+msgid "Human resources manager"
+msgstr "Մարդկային ռեսուրսների կառավարիչ"
+
+msgid "Course teacher"
+msgstr "Դասընթացի դասախոս"
+
+msgid "Course student"
+msgstr "Դասընթացի ուսանող"
+
+msgid "Platform reports"
+msgstr "Հարթակի հաշվետվություններ"
+
+msgid "Security reports"
+msgstr "Անվտանգության հաշվետվություններ"
+
+msgid "Course reports"
+msgstr "Դասընթացի հաշվետվություններ"
+
+msgid "Gradebook reports"
+msgstr "Գնահատման գրքույկի հաշվետվություններ"
+
+msgid "Social reports"
+msgstr "Սոցիալական հաշվետվություններ"
+
+msgid "Exports"
+msgstr "Արտահանումներ"
+
+msgid "Reports about platform-wide usage, users, courses and sessions."
+msgstr "Հաշվետվություններ հարթակի օգտագործման, օգտատերերի, դասընթացների և սեսիաների մասին։"
+
+msgid "Audit and security-sensitive reports."
+msgstr "Աուդիտի և անվտանգության զգայուն հաշվետվություններ։"
+
+msgid "Reports scoped to courses managed by the user."
+msgstr "Հաշվետվություններ օգտատիրոջ կողմից կառավարվող դասընթացների շրջանակում։"
+
+msgid "Reports related to learner activity and follow-up."
+msgstr "Զեկույցներ սովորողների գործունեության և հետևման վերաբերյալ։"
+
+msgid "Reports related to scores, certificates and gradebook data."
+msgstr "Զեկույցներ գնահատականների, վկայականների և գնահատման գրքույկի տվյալների վերաբերյալ։"
+
+msgid "Reports and exports that generate downloadable files."
+msgstr "Զեկույցներ և արտահանումներ, որոնք ստեղծում են ներբեռնվող ֆայլեր։"
+
+msgid "Main platform statistics dashboard."
+msgstr "Հիմնական հարթակի վիճակագրության վահանակ։"
+
+msgid "Number of courses and course distribution report."
+msgstr "Դասընթացների քանակի և դասընթացների բաշխման զեկույց։"
+
+msgid "Platform-wide access to course tools."
+msgstr "Հարթակի մասշտաբով դասընթացների գործիքների հասանելիություն։"
+
+msgid "Number of resources per tool."
+msgstr "Յուրաքանչյուր գործիքի ռեսուրսների քանակ։"
+
+msgid "Latest access to courses."
+msgstr "Դասընթացների վերջին մուտքեր։"
+
+msgid "Course distribution by language."
+msgstr "Դասընթացների բաշխում ըստ լեզվի։"
+
+msgid "Course usage report."
+msgstr "Դասընթացների օգտագործման զեկույց։"
+
+msgid "Platform user count report."
+msgstr "Հարթակի օգտատերերի քանակի զեկույց։"
+
+msgid "Recent logins chart."
+msgstr "Վերջին մուտքերի գրաֆիկ։"
+
+msgid "Login distribution by month."
+msgstr "Մուտքերի բաշխում ըստ ամիսների։"
+
+msgid "Login distribution by day."
+msgstr "Մուտքերի բաշխում ըստ օրերի։"
+
+msgid "Login distribution by hour."
+msgstr "Մուտքերի բաշխում ըստ ժամերի։"
+
+msgid "Users with profile picture."
+msgstr "Օգտատերեր պրոֆիլի նկարով։"
+
+msgid "Login report filtered by date."
+msgstr "Մուտքերի զեկույց՝ ըստ ամսաթվի զտված։"
+
+msgid "Users who have not logged in recently."
+msgstr "Օգտատերեր, որոնք վերջին անգամ մուտք չեն գործել։"
+
+msgid "Inactive or suspicious user accounts report."
+msgstr "Անգործուն կամ կասկածելի օգտատերերի հաշիվների զեկույց։"
+
+msgid "Users activity statistics."
+msgstr "Օգտատերերի գործունեության վիճակագրություն։"
+
+msgid "Currently online users report."
+msgstr "Ներկայումս առցանց օգտատերերի զեկույց։"
+
+msgid "New user registrations over time."
+msgstr "Նոր օգտատերերի գրանցումներ ժամանակի ընթացքում։"
+
+msgid "Course and session subscriptions over time."
+msgstr "Դասընթացների և սեսիաների բաժանորդագրություններ ժամանակի ընթացքում։"
+
+msgid "Duplicate user detection and maintenance report."
+msgstr "Կրկնօրինակ օգտատերերի հայտնաբերում և սպասարկման զեկույց։"
+
+msgid "Platform user/session statistics."
+msgstr "Հարթակի օգտատերերի/սեսիաների վիճակագրություն։"
+
+msgid "Quarterly platform report."
+msgstr "Հարթակի եռամսյակային զեկույց։"
+
+msgid "Activities audit"
+msgstr "Գործունեությունների աուդիտ"
+
+msgid "Audit report for important administrative and platform activities."
+msgstr "Աուդիտի զեկույց կարևոր վարչական և հարթակային գործունեությունների համար։"
+
+msgid "Social messages received report."
+msgstr "Սոցիալական հաղորդագրությունների ստացման զեկույց։"
+
+msgid "Social messages sent report."
+msgstr "Սոցիալական հաղորդագրությունների ուղարկման զեկույց։"
+
+msgid "Social contacts count report."
+msgstr "Սոցիալական կոնտակտների քանակի զեկույց։"
+
+msgid "Sessions created over time."
+msgstr "Սեսիաների ստեղծում ժամանակի ընթացքում։"
+
+msgid "Learning analytics dashboard."
+msgstr "Ուսուցման վերլուծության վահանակ։"
+
+msgid "Teacher time report."
+msgstr "Դասախոսի ժամանակի զեկույց։"
+
+msgid "Teachers time by session report"
+msgstr "Դասախոսների ժամանակի զեկույց ըստ սեսիայի"
+
+msgid "Teacher time report grouped by session."
+msgstr "Դասախոսի ժամանակի զեկույց՝ խմբավորված ըստ սեսիայի։"
+
+msgid "Corporate learning analytics report."
+msgstr "Կորպորատիվ ուսուցման վերլուծության զեկույց։"
+
+msgid "Course learners tracking report."
+msgstr "Դասընթացի սովորողների հետևման զեկույց։"
+
+msgid "Course activity statistics with connected and inactive users."
+msgstr "Դասընթացի գործունեության վիճակագրություն կապված և անգործուն օգտատերերով։"
+
+msgid "Detailed tracking report for a learner inside a course."
+msgstr "Մանրամասն հետևման զեկույց սովորողի համար դասընթացի ներսում։"
+
+msgid "Course gradebook overview."
+msgstr "Դասընթացի գնահատման գրքույկի ակնարկ։"
+
+msgid "Gradebook statistics"
+msgstr "Գնահատման գրքույկի վիճակագրություն"
+
+msgid "Gradebook statistics report."
+msgstr "Գնահատման գրքույկի վիճակագրության զեկույց։"
+
+msgid "Certificate report"
+msgstr "Վկայականի զեկույց"
+
+msgid "Certificate report for course gradebook."
+msgstr "Վկայականի զեկույց դասընթացի գնահատման գրքույկի համար։"
+
+msgid "User statistics"
+msgstr "Օգտատիրոջ վիճակագրություն"
+
+msgid "Course gradebook statistics for a user."
+msgstr "Դասընթացի գնահատման գրքույկի վիճակագրություն օգտատիրոջ համար։"
+
+msgid "Personal statistics"
+msgstr "Անձնական վիճակագրություն"
+
+msgid "Personal gradebook statistics."
+msgstr "Անձնական գնահատման գրքույկի վիճակագրություն։"
+
+msgid "Reports catalog"
+msgstr "Զեկույցների կատալոգ"
+
+msgid "Central catalog of available reports, roles and permission categories."
+msgstr "Հասանելի հաշվետվությունների, դերերի և թույլտվությունների կատեգորիաների կենտրոնական կատալոգ։"
+
+msgid "Course log events"
+msgstr "Դասընթացի իրադարձությունների գրանցամատյան"
+
+msgid "Detailed course tracking events."
+msgstr "Դասընթացի հետևման մանրամասն իրադարձություններ։"
+
+msgid "Course tool usage"
+msgstr "Դասընթացի գործիքների օգտագործում"
+
+msgid "Course tracking report grouped by tools."
+msgstr "Դասընթացի հետևման հաշվետվություն՝ խմբավորված գործիքներով։"
+
+msgid "Course resource usage"
+msgstr "Դասընթացի ռեսուրսների օգտագործում"
+
+msgid "Course tracking report grouped by resources."
+msgstr "Դասընթացի հետևման հաշվետվություն՝ խմբավորված ռեսուրսներով։"
+
+msgid "Course group tracking"
+msgstr "Դասընթացի խմբերի հետևում"
+
+msgid "Tracking report for course groups."
+msgstr "Հետևման հաշվետվություն դասընթացի խմբերի համար։"
+
+msgid "Course session report"
+msgstr "Դասընթացի սեսիայի հաշվետվություն"
+
+msgid "Tracking report for a course inside sessions."
+msgstr "Հետևման հաշվետվություն դասընթացի համար սեսիաների ներսում։"
+
+msgid "Learning path report"
+msgstr "Ուսուցման ուղու հաշվետվություն"
+
+msgid "Learning path tracking report."
+msgstr "Ուսուցման ուղու հետևման հաշվետվություն։"
+
+msgid "Learning path results by user"
+msgstr "Ուսուցման ուղու արդյունքներ ըստ օգտատիրոջ"
+
+msgid "Learning path results grouped by user."
+msgstr "Ուսուցման ուղու արդյունքներ՝ խմբավորված օգտատիրոջ կողմից։"
+
+msgid "Exercises report"
+msgstr "Վարժությունների հաշվետվություն"
+
+msgid "Course exercises and exams tracking report."
+msgstr "Դասընթացի վարժությունների և քննությունների հետևման հաշվետվություն։"
+
+msgid "Question report"
+msgstr "Հարցի հաշվետվություն"
+
+msgid "Course question tracking report."
+msgstr "Դասընթացի հարցերի հետևման հաշվետվություն։"
+
+msgid "Messages report"
+msgstr "Հաղորդագրությունների հաշվետվություն"
+
+msgid "Course messages tracking report."
+msgstr "Դասընթացի հաղորդագրությունների հետևման հաշվետվություն։"
+
+msgid "Total time tracking report for course learners."
+msgstr "Դասընթացի սովորողների ընդհանուր ժամանակի հետևման հաշվետվություն։"
+
+msgid "Gradebook summary"
+msgstr "Գնահատականների գրքույկի ամփոփում"
+
+msgid "Summary view of gradebook results."
+msgstr "Գնահատականների գրքույկի արդյունքների ամփոփ տեսք։"
+
+msgid "Flat view"
+msgstr "Հարթ տեսք"
+
+msgid "Flat gradebook results view."
+msgstr "Գնահատականների գրքույկի արդյունքների հարթ տեսք։"
+
+msgid "Evaluation log"
+msgstr "Գնահատման գրանցամատյան"
+
+msgid "Change log for gradebook evaluations."
+msgstr "Գնահատականների գրքույկի գնահատումների փոփոխությունների գրանցամատյան։"
+
+msgid "Link log"
+msgstr "Հղման գրանցամատյան"
+
+msgid "Change log for gradebook links."
+msgstr "Գնահատականների գրքույկի հղումների փոփոխությունների գրանցամատյան։"
+
+msgid "Result details"
+msgstr "Արդյունքների մանրամասներ"
+
+msgid "Detailed view of a gradebook result."
+msgstr "Գնահատականների գրքույկի արդյունքի մանրամասն տեսք։"
+
+msgid "Personal certificates report."
+msgstr "Անձնական վկայականների հաշվետվություն։"
+
+msgid "User move statistics"
+msgstr "Օգտատիրոջ տեղափոխման վիճակագրություն"
+
+msgid "Report for user move and transfer statistics."
+msgstr "Օգտատիրոջ տեղափոխման և փոխանցման վիճակագրության հաշվետվություն։"
+
+msgid "User consent list"
+msgstr "Օգտատերերի համաձայնության ցուցակ"
+
+msgid "Report of users and consent status."
+msgstr "Օգտատերերի և համաձայնության կարգավիճակի հաշվետվություն։"
+
+msgid "Special platform exports."
+msgstr "Հատուկ հարթակի արտահանումներ։"
+
+msgid "Export certificates"
+msgstr "Արտահանել վկայականները"
+
+msgid "Export platform certificates."
+msgstr "Արտահանել հարթակի վկայականները։"
+
+msgid "Export exercise results"
+msgstr "Արտահանել վարժությունների արդյունքները"
+
+msgid "Export exercise results from the platform."
+msgstr "Արտահանել վարժությունների արդյունքները հարթակից։"
+
+msgid "Course survey results and reporting."
+msgstr "Դասընթացի հարցումների արդյունքներ և հաշվետվություն։"
+
+msgid "Attendance report"
+msgstr "Ներկայության հաշվետվություն"
+
+msgid "Course attendance tracking and reports."
+msgstr "Դասընթացի ներկայության հետևում և հաշվետվություններ։"
+
+msgid "Exercises global report"
+msgstr "Վարժությունների գլոբալ հաշվետվություն"
+
+msgid "Global exercise results report for the course."
+msgstr "Դասընթացի վարժությունների գլոբալ արդյունքների հաշվետվություն։"
+
+msgid "Exercise report"
+msgstr "Վարժության հաշվետվություն"
+
+msgid "Detailed exercise report."
+msgstr "Մանրամասն վարժության հաշվետվություն։"
+
+msgid "Exercise history"
+msgstr "Վարժության պատմություն"
+
+msgid "Exercise attempt history."
+msgstr "Թեստի փորձերի պատմություն։"
+
+msgid "Exercise results"
+msgstr "Թեստի արդյունքներ"
+
+msgid "Exercise results and corrections."
+msgstr "Թեստի արդյունքներ և ուղղումներ։"
+
+msgid "Question-level exercise statistics."
+msgstr "Հարցերի մակարդակով թեստի վիճակագրություն։"
+
+msgid "Exercise statistics"
+msgstr "Թեստի վիճակագրություն"
+
+msgid "Exercise statistics page."
+msgstr "Թեստի վիճակագրության էջ։"
+
+msgid "Live exercise statistics"
+msgstr "Թեստի ընթացիկ վիճակագրություն"
+
+msgid "Live exercise statistics for teachers."
+msgstr "Թեստի ընթացիկ վիճակագրություն դասախոսների համար։"
+
+msgid "Learning path statistics"
+msgstr "Ուսումնական ուղու վիճակագրություն"
+
+msgid "Learning path item statistics."
+msgstr "Ուսումնական ուղու տարրերի վիճակագրություն։"
+
+msgid "Learning path report inside a course."
+msgstr "Ուսումնական ուղու հաշվետվություն դասընթացի ներսում։"
+
+msgid "User skills report."
+msgstr "Օգտատիրոջ հմտությունների հաշվետվություն։"
+
+msgid "Scheduled or periodic export configuration."
+msgstr "Պլանավորված կամ պարբերական արտահանման կարգավորում։"
+
+msgid "User export"
+msgstr "Օգտատերերի արտահանում"
+
+msgid "Export users from the platform."
+msgstr "Օգտատերերի արտահանում հարթակից։"
+
+msgid "Not classified"
+msgstr "Չդասակարգված"
+
+msgid "You have acquired the skill %s"
+msgstr "Դուք ձեռք եք բերել %s հմտությունը"
+
+msgid "You have acquired the skill %s."
+msgstr "Դուք ձեռք եք բերել %s հմտությունը։"
+
+msgid "Recover your password"
+msgstr "Վերականգնել գաղտնաբառը"
+
+msgid "Disclaimer"
+msgstr "Հրաժարում"
+
+msgid "This operation would exceed the limit of %d users allowed for this course."
+msgstr "Այս գործողությունը կգերազանցի այս դասընթացի համար թույլատրված %d օգտատերերի սահմանը։"
+
+msgid "DefaultGroupCategory"
+msgstr "DefaultGroupCategory"
+
+msgid "LearningCalendar"
+msgstr "LearningCalendar"
+
+msgid "Choose how this user can authenticate on the platform."
+msgstr "Ընտրեք, թե ինչպես այս օգտատերը կարող է նույնականացվել հարթակում։"
+
+msgid "Authentication methods"
+msgstr "Նույնականացման մեթոդներ"
+
+msgid "Set password manually"
+msgstr "Գաղտնաբառը սահմանել ձեռքով"
+
+msgid "Report role matrix"
+msgstr "Հաշվետվության դերերի մատրից"
+
+msgid "Report permission categories"
+msgstr "Հաշվետվության թույլտվությունների կատեգորիաներ"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs enforce the documented report role matrix."
+msgstr "Այս գրանցամատյանը պարունակում է հայտնի հաշվետվության էջերը, դրանց կատեգորիան, կանոնական URL-ը, ժառանգական URL-ը և սպասվող դերային լսարանը։ Կանոնական URL-ները կիրառում են փաստաթղթավորված հաշվետվության դերերի մատրիցը։"
+
+msgid "reports"
+msgstr "հաշվետվություններ"
+
+msgid "Canonical URL"
+msgstr "Կանոնական URL"
+
+msgid "Legacy URL"
+msgstr "ժառանգական URL"
+
+msgid "Permission category"
+msgstr "Թույլտվության կատեգորիա"
+
+msgid "This matrix documents the expected audience for each report and is enforced by the canonical report entry point."
+msgstr "Այս մատրիցը փաստաթղթավորում է յուրաքանչյուր հաշվետվության սպասվող լսարանը և կիրառվում է կանոնական հաշվետվության մուտքի կետով։"
+
+msgid "These keys group reports by access scope and are used by the report registry. They can later be mapped to finer-grained platform permissions."
+msgstr "Այս բանալիները խմբավորում են հաշվետվությունները ըստ մուտքի շրջանակի և օգտագործվում են հաշվետվությունների գրանցամատյանի կողմից։ Դրանք հետագայում կարող են քարտեզագրվել ավելի մանրամասն հարթակային թույլտվություններին։"
+
+msgid "Permission"
+msgstr "Թույլտվություն"
+
+msgid "Clear active session"
+msgstr "Մաքրել ակտիվ նստաշրջանը"
+
+msgid "Are you sure you want to clear this user active session?"
+msgstr "Համոզվա՞ծ եք, որ ցանկանում եք մաքրել այս օգտատիրոջ ակտիվ նստաշրջանը։"
+
+msgid "Preview shown without course context. Some course-specific data may be unavailable."
+msgstr "Նախադիտումը ցուցադրվում է առանց դասընթացի համատեքստի։ Որոշ դասընթացին հատուկ տվյալներ կարող են անհասանելի լինել։"
+
+msgid "Preview is not available for this question."
+msgstr "Այս հարցի համար նախադիտումը հասանելի չէ։"
+
+msgid "Edition is not allowed without a course context."
+msgstr "Խմբագրումը թույլատրված չէ առանց դասընթացի համատեքստի։"
+
+msgid "This plugin does not use regions."
+msgstr "Այս հավելումը չի օգտագործում տարածքներ։"
+
+msgid "No plugins with regions were found."
+msgstr "Տարածքներով հավելումներ չեն գտնվել։"
+
+msgid "Freemium"
+msgstr "Freemium"
+
+msgid "Commercial service"
+msgstr "Վճարովի ծառայություն"
+
+msgid "Commercial"
+msgstr "Վճարովի"
+
+msgid "100% free"
+msgstr "100% անվճար"
+
+msgid "Displayed above the public login form."
+msgstr "Ցուցադրվում է հանրային մուտքի ձևի վերևում։"
+
+msgid "Displayed below the public login form."
+msgstr "Ցուցադրվում է հանրային մուտքի ձևի ներքևում։"
+
+msgid "Displayed before the footer area."
+msgstr "Ցուցադրվում է էջատակի տարածքից առաջ։"
+
+msgid "Displayed in the left footer column."
+msgstr "Ցուցադրվում է ձախ ստորագիր սյունակում։"
+
+msgid "Displayed in the center footer column."
+msgstr "Ցուցադրվում է կենտրոնական ստորագիր սյունակում։"
+
+msgid "Displayed in the right footer column."
+msgstr "Ցուցադրվում է աջ ստորագիր սյունակում։"
+
+msgid "Showing all plugins."
+msgstr "Ցուցադրվում են բոլոր հավելումները։"
+
+msgid "Some plugins are still pending functional verification."
+msgstr "Որոշ հավելումներ դեռևս սպասում են ֆունկցիոնալ ստուգման։"
+
+msgid "Show verified plugins only"
+msgstr "Ցույց տալ միայն ստուգված հավելումները"
+
+msgid "Showing verified plugins only."
+msgstr "Ցուցադրվում են միայն ստուգված հավելումները։"
+
+msgid "Pending plugins are temporarily hidden until they are adapted and tested."
+msgstr "Սպասող հավելումները ժամանակավորապես թաքցված են մինչև դրանք հարմարեցվեն և փորձարկվեն։"
+
+msgid "Show all plugins"
+msgstr "Ցույց տալ բոլոր հավելումները"
+
+msgid "Official and free plugins are listed separately from plugins that may depend on commercial services or paid offers."
+msgstr "Պաշտոնական և անվճար հավելումները ցուցադրվում են առանձին այն հավելումներից, որոնք կարող են կախված լինել առևտրային ծառայություններից կամ վճարովի առաջարկներից։"
+
+msgid "Included free plugins"
+msgstr "Ներառված անվճար հավելումներ"
+
+msgid "Commercial and freemium plugins"
+msgstr "Առևտրային և freemium հավելումներ"
+
+msgid "All plugins"
+msgstr "Բոլոր հավելումները"
+
+msgid "No plugins were found for this category."
+msgstr "Այս կատեգորիայի համար հավելումներ չեն գտնվել։"
+
+msgid "Search plugins"
+msgstr "Որոնել հավելումներ"
+
+msgid "Search by name or description"
+msgstr "Որոնել անունով կամ նկարագրությամբ"
+
+msgid "Advanced filters"
+msgstr "Ընդլայնված զտիչներ"
+
+msgid "All statuses"
+msgstr "Բոլոր կարգավիճակները"
+
+msgid "All sources"
+msgstr "Բոլոր աղբյուրները"
+
+msgid "All types"
+msgstr "Բոլոր տեսակները"
+
+msgid "Installed plugins are shown first"
+msgstr "Տեղադրված հավելումները ցուցադրվում են առաջինը"
+
+msgid "No plugins match the current filters."
+msgstr "Ընթացիկ զտիչներին համապատասխանող հավելումներ չկան։"
+
+msgid "Try clearing the search or changing the filters."
+msgstr "Փորձեք մաքրել որոնումը կամ փոխել զտիչները։"
+
+msgid "README"
+msgstr "README"
+
+msgid "Invalid security token"
+msgstr "Անվավեր անվտանգության նշան"
+
+msgid "Please select a destination session"
+msgstr "Խնդրում ենք ընտրել նպատակային սեսիա"
+
+msgid "Cannot move this to the same session"
+msgstr "Չի կարող տեղափոխվել նույն սեսիա"
+
+msgid "The destination session must include the selected course"
+msgstr "Նպատակային սեսիան պետք է ներառի ընտրված դասընթացը"
+
+msgid "The source session must include the selected course"
+msgstr "Աղբյուր սեսիան պետք է ներառի ընտրված դասընթացը"
+
+msgid "No learners found"
+msgstr "Ուսանողներ չեն գտնվել"
+
+msgid "Will be subscribed"
+msgstr "Կգրանցվի"
+
+msgid "Subscribed"
+msgstr "Գրանցված է"
+
+msgid "The move process has finished"
+msgstr "Տեղափոխման գործընթացն ավարտվեց"
+
+msgid "Comparison finished. No data has been moved."
+msgstr "Համեմատումն ավարտվեց։ Տվյալներ չեն տեղափոխվել։"
+
+msgid "Move tracking data from the base course or a source session to another session. Use comparison first to review the affected learner data."
+msgstr "Տեղափոխել հետևման տվյալները հիմնական դասընթացից կամ աղբյուր սեսիայից մեկ այլ սեսիա։ Օգտագործեք համեմատումը նախ՝ ազդեցության ենթարկվող ուսանողների տվյալները վերանայելու համար։"
+
+msgid "Search for a course or use the manual course ID field below."
+msgstr "Որոնել դասընթաց կամ օգտագործել ձեռքով դասընթացի ID դաշտը ստորև։"
+
+msgid "Fallback when the course search is not available."
+msgstr "Պահեստային տարբերակ, երբ դասընթացի որոնումը հասանելի չէ։"
+
+msgid "Load sessions"
+msgstr "Բեռնել սեսիաները"
+
+msgid "Selected course"
+msgstr "Ընտրված դասընթաց"
+
+msgid "Choose the base course or the session where the tracking data currently exists."
+msgstr "Ընտրեք հիմնական դասընթացը կամ սեսիան, որտեղ հետևման տվյալները ներկայումս գոյություն ունեն։"
+
+msgid "Choose the session that will receive the tracking data."
+msgstr "Ընտրեք սեսիան, որը կստանա հետևման տվյալները։"
+
+msgid "Important"
+msgstr "Կարևոր"
+
+msgid "The move action updates existing tracking data. Run compare first and test this tool with a non-production course before moving real learner data."
+msgstr "Տեղափոխման գործողությունը թարմացնում է գոյություն ունեցող հետևման տվյալները։ Նախ կատարեք համեմատում և փորձարկեք այս գործիքը ոչ արտադրական դասընթացով՝ նախքան իրական ուսանողների տվյալների տեղափոխումը։"
+
+msgid "No sessions found for this course"
+msgstr "Այս դասընթացի համար սեսիաներ չեն գտնվել"
+
+msgid "Some users were ignored because they are not subscribed to this session."
+msgstr "Որոշ օգտատերեր անտեսվել են, քանի որ նրանք գրանցված չեն այս սեսիայում։"
+
+msgid "Remove selected user"
+msgstr "Հեռացնել ընտրված օգտատերին"
+
+msgid "Add selected user"
+msgstr "Ավելացնել ընտրված օգտատերին"
+
+msgid "No users from the selected list are subscribed to this session."
+msgstr "Ընտրված ցուցակի ոչ մի օգտատեր գրանցված չէ այս սեսիայում։"
+
+msgid "No image"
+msgstr "Պատկեր չկա"
+
+msgid "Invalid URL."
+msgstr "Անվավեր URL։"
+
+msgid "This cloud document cannot be embedded."
+msgstr "Այս ամպային փաստաթուղթը չի կարող ներդրվել։"
+
+msgid "Document not found"
+msgstr "Փաստաթուղթը չի գտնվել"
+
+msgid "File not found"
+msgstr "Ֆայլը չի գտնվել"
+
+msgid "This learning path is not available for your user at this time."
+msgstr "Այս ուսումնական ուղին այս պահին հասանելի չէ Ձեր օգտատիրոջ համար։"
+
+msgid "StartDateMustBeBeforeTheEndDate"
+msgstr "StartDateMustBeBeforeTheEndDate"
+
+msgid "Next learning path"
+msgstr "Հաջորդ ուսումնական ուղին"
+
+msgid "Select the learning path that will be available after this one."
+msgstr "Ընտրեք ուսումնական ուղին, որը հասանելի կլինի այս մեկից հետո։"
+
+msgid "Create another learning path in this course to enable learning path flow."
+msgstr "Ստեղծեք ևս մեկ ուսումնական ուղի այս դասընթացում՝ ուսումնական ուղիների հոսքը միացնելու համար։"
+
+msgid "Available from %s"
+msgstr "Հասանելի է %s-ից"
+
+msgid "Available until %s"
+msgstr "Հասանելի է մինչև %s"
+
+msgid "Statistics reset date"
+msgstr "Վիճակագրության վերակայման ամսաթիվ"
+
+msgid "Last 24 hours"
+msgstr "Վերջին 24 ժամը"
+
+msgid "This reset date is used as the reference date for the report. It does not delete historical tracking data."
+msgstr "Այս վերակայման ամսաթիվը օգտագործվում է որպես հաշվետվության հղման ամսաթիվ։ Այն չի ջնջում պատմական հետևման տվյալները։"
+
+msgid "Since reset date"
+msgstr "Վերակայման ամսաթվից ի վեր"
+
+msgid "Users connected in the last 24 hours"
+msgstr "Օգտատերեր, որոնք միացել են վերջին 24 ժամվա ընթացքում"
+
+msgid "Learners with at least one course access during the last 24 hours."
+msgstr "Ուսանողներ, որոնք ունեցել են առնվազն մեկ դասընթացի մուտք վերջին 24 ժամվա ընթացքում։"
+
+msgid "Users connected in the last week"
+msgstr "Օգտատերեր, որոնք միացել են վերջին շաբաթվա ընթացքում"
+
+msgid "Learners with at least one course access during the last 7 days."
+msgstr "Ուսանողներ, որոնք ունեցել են առնվազն մեկ դասընթացի մուտք վերջին 7 օրվա ընթացքում։"
+
+msgid "Users connected in the last month"
+msgstr "Օգտատերեր, որոնք միացել են վերջին ամսվա ընթացքում"
+
+msgid "Learners with at least one course access during the last 30 days."
+msgstr "Ուսանողներ, որոնք ունեցել են առնվազն մեկ դասընթացի մուտք վերջին 30 օրվա ընթացքում։"
+
+msgid "Not recently connected users"
+msgstr "Վերջին անգամ չմիացած օգտատերեր"
+
+msgid "Learners without course access since %s."
+msgstr "Ուսանողներ առանց դասընթացի մուտքի %s-ից ի վեր։"
+
+msgid "Recently used resources"
+msgstr "Վերջին անգամ օգտագործված ռեսուրսներ"
+
+msgid "Course tools/resources used since %s."
+msgstr "Դասընթացի գործիքներ/ռեսուրսներ, որոնք օգտագործվել են %s-ից ի վեր։"
+
+msgid "%s %% of learners"
+msgstr "%s %% ուսանողներից"
+
+msgid "Connections"
+msgstr "Միացումներ"
+
+msgid "Total connections"
+msgstr "Ընդհանուր միացումներ"
+
+msgid "Downloaded documents"
+msgstr "Ներբեռնված փաստաթղթեր"
+
+msgid "List of documents downloaded by this learner in this course."
+msgstr "Այս դասընթացում այս ուսանողի կողմից ներբեռնված փաստաթղթերի ցանկը։"
+
+msgid "Forum topics"
+msgstr "Ֆորումի թեմաներ"
+
+msgid "Forum topics opened by this learner in this course."
+msgstr "Այս դասընթացում այս ուսանողի կողմից բացված ֆորումի թեմաներ։"
+
+msgid "Forum posts"
+msgstr "Ֆորումի գրառումներ"
+
+msgid "Forum posts written by this learner in this course."
+msgstr "Այս դասընթացում այս ուսանողի կողմից գրված ֆորումի գրառումներ։"
+
+msgid "Course connections"
+msgstr "Դասընթացի միացումներ"
+
+msgid "Connection history for this learner in this course."
+msgstr "Այս դասընթացում այս ուսանողի միացումների պատմություն։"
+
+msgid "Resources used"
+msgstr "Օգտագործված ռեսուրսներ"
+
+msgid "Latest tools or resources used by this learner in this course."
+msgstr "Այս դասընթացում այս ուսանողի կողմից վերջին անգամ օգտագործված գործիքներ կամ ռեսուրսներ։"
+
+msgid "Logout date"
+msgstr "Դուրս գալու ամսաթիվ"
+
+msgid "Imported Aiken quiz"
+msgstr "Ներմուծված Aiken թեստ"
+
+msgid "Only supported documents will be listed here."
+msgstr "Այստեղ կցուցադրվեն միայն աջակցվող փաստաթղթերը։"
+
+msgid "Generated Aiken content"
+msgstr "Ստեղծված Aiken բովանդակություն"
+
+msgid "Review the generated content before importing it as a new exercise."
+msgstr "Վերանայեք ստեղծված բովանդակությունը՝ նախքան այն որպես նոր վարժություն ներմուծելը։"
+
+msgid "No documents available."
+msgstr "Հասանելի փաստաթղթեր չկան։"
+
+msgid "yperbolic arctangent:\\t\\tarctanh(x)"
+msgstr "Հիպերբոլիկ արկտանգենս՝\t\tarctanh(x)"
+
+msgid "Exercise"
+msgstr "Վարժություն"
+
+msgid "OfficialCode"
+msgstr "OfficialCode"
+
+msgid "FirstName"
+msgstr "FirstName"
+
+msgid "LastName"
+msgstr "LastName"
+
+msgid "LoginName"
+msgstr "LoginName"
+
+msgid "MinMinute"
+msgstr "MinMinute"
+
+msgid "StartDate"
+msgstr "Սկսման ամսաթիվ"
+
+msgid "EndDate"
+msgstr "Ավարտման ամսաթիվ"
+
+msgid "CorrectionDate"
+msgstr "Ուղղման ամսաթիվ"
+
+msgid "NotValidated"
+msgstr "Չհաստատված"
+
+msgid "PendingAttempts"
+msgstr "Սպասող փորձեր"
+
+msgid "List of pending test attempts across your courses."
+msgstr "Ձեր դասընթացներում սպասող թեստերի փորձերի ցանկը։"
+
+msgid "User ID"
+msgstr "Օգտատիրոջ ID"
+
+msgid "QuestionType"
+msgstr "Հարցի տեսակ"
+
+msgid "QuestionsWithNoAutomaticCorrection"
+msgstr "Ավտոմատ ուղղում չունեցող հարցեր"
+
+msgid "There are no pending tests."
+msgstr "Սպասող թեստեր չկան։"
+
+msgid "%s results"
+msgstr "%s արդյունք"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Օրինակ՝ լրացրեք ձևը՝ հաշվարկելով մարմնի զանգվածի ինդեքսը</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Տարիք</strong></td>            <td width=\"75%\" style=\"\">[25] տարեկան</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Սեռ</strong></td>            <td style=\"\" text-align:=\"\">[M] (Ա կամ Ի)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Քաշ</strong></td>            <td style=\"\" text-align:=\"\">95 կգ</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Հասակ</strong></td>            <td style=\"vertical-align: top;\">1.81 մ</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Մարմնի զանգվածի ինդեքս</strong></td>            <td style=\"vertical-align: top;\">[29] BMI = Քաշ/Հասակ<sup>2</sup> (Տե՛ս <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\">Վիքիպեդիայի հոդվածը</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Removed"
+msgstr "Հեռացված"
+
+msgid "NoUsersInTheList"
+msgstr "Ցանկում օգտատերեր չկան"
+
+msgid "Are you sure?"
+msgstr "Համոզվա՞ծ եք։"
+
+msgid "NoResultsAvailable"
+msgstr "Արդյունքներ չկան"
+
+msgid "Import groups from a CSV file and optionally remove items that are not present in the file."
+msgstr "Ներմուծեք խմբերը CSV ֆայլից և անհրաժեշտության դեպքում հեռացրեք այն տարրերը, որոնք չկան ֆայլում։"
+
+msgid "Use this option carefully because items missing from the CSV can be removed during the import process."
+msgstr "Օգտագործեք այս ընտրանքը զգուշությամբ, քանի որ CSV-ում բացակայող տարրերը կարող են հեռացվել ներմուծման ընթացքում։"
+
+msgid "Upload a CSV file with the group data you want to import."
+msgstr "Վերբեռնեք CSV ֆայլը խմբերի տվյալներով, որոնք ցանկանում եք ներմուծել։"
+
+msgid "You can download the example file to use the expected format."
+msgstr "Կարող եք ներբեռնել օրինակելի ֆայլը՝ սպասվող ձևաչափն օգտագործելու համար։"
+
+msgid "If you enable deletion, items not present in the file may be removed."
+msgstr "Եթե միացնեք հեռացումը, ապա ֆայլում չառկա տարրերը կարող են հեռացվել։"
+
+msgid "The CSV file is mandatory to start the import."
+msgstr "Ներմուծումը սկսելու համար CSV ֆայլը պարտադիր է։"
+
+msgid "Please select at least one class."
+msgstr "Խնդրում ենք ընտրել առնվազն մեկ դասարան։"
+
+msgid "Define the properties for each group before creating them."
+msgstr "Սահմանեք յուրաքանչյուր խմբի հատկությունները՝ նախքան դրանք ստեղծելը։"
+
+msgid "Apply the first row values"
+msgstr "Կիրառել առաջին տողի արժեքները"
+
+msgid "Create groups manually or generate them from the classes subscribed to this course."
+msgstr "Ստեղծեք խմբերը ձեռքով կամ ստեղծեք դրանք այս դասընթացին գրանցված դասարաններից։"
+
+msgid "Create manual groups"
+msgstr "Ստեղծել ձեռքով խմբեր"
+
+msgid "Use this form when you want to create empty course groups manually."
+msgstr "Օգտագործեք այս ձևը, երբ ցանկանում եք ձեռքով ստեղծել դատարկ դասընթացային խմբեր։"
+
+msgid "Configure manual groups"
+msgstr "Կարգավորել ձեռքով խմբերը"
+
+msgid "Create groups from subscribed classes"
+msgstr "Ստեղծել խմբեր գրանցված դասարաններից"
+
+msgid "Use this form when you want to create one course group for each selected class."
+msgstr "Օգտագործեք այս ձևը, երբ ցանկանում եք յուրաքանչյուր ընտրված դասարանի համար մեկ դասընթացային խումբ ստեղծել։"
+
+msgid "Keep created groups linked to their source classes"
+msgstr "Պահպանել ստեղծված խմբերը կապված իրենց սկզբնական դասարանների հետ"
+
+msgid "Create groups from selected classes"
+msgstr "Ստեղծել խմբեր ընտրված դասարաններից"
+
+msgid "You must be logged in to access this page."
+msgstr "Այս էջ մուտք գործելու համար անհրաժեշտ է մուտք գործել համակարգ։"
+
+msgid "Invalid user"
+msgstr "Անվավեր օգտատեր"
+
+msgid "UseCourseCustomCertificate"
+msgstr "Օգտագործել դասընթացի անհատականացված վկայական"
+
+msgid "UseDefaultCustomCertificate"
+msgstr "Օգտագործել լռելյայն անհատականացված վկայական"
+
+msgid "CertificateSetting"
+msgstr "Վկայականի կարգավորում"
+
+msgid "SelectOneOptionBeforeOpeningEditor"
+msgstr "Խմբագրիչը բացելուց առաջ ընտրեք մեկ տարբերակ"
+
+msgid "ChooseCustomCertificateModeHelp"
+msgstr "Ընտրեք անհատականացված վկայականի ռեժիմի օգնություն"
+
+msgid "CertificateMode"
+msgstr "Վկայականի ռեժիմ"
+
+msgid "Enable student to validate own attendance"
+msgstr "Թույլատրել ուսանողին հաստատել սեփական ներկայությունը"
+
+msgid "Course block"
+msgstr "Դասընթացի բլոկ"
+
+msgid "Add custom content blocks to course footer regions."
+msgstr "Ավելացրեք անհատականացված բովանդակության բլոկներ դասընթացի ստորին հատվածներում։"
+
+msgid "course_block_pre_footer"
+msgstr "course_block_pre_footer"
+
+msgid "Before footer"
+msgstr "Ստորագիրից առաջ"
+
+msgid "course_block_footer_left"
+msgstr "course_block_footer_left"
+
+msgid "Footer left"
+msgstr "Ստորագիր ձախ"
+
+msgid "course_block_footer_center"
+msgstr "course_block_footer_center"
+
+msgid "Footer center"
+msgstr "Ստորագիր կենտրոն"
+
+msgid "course_block_footer_right"
+msgstr "course_block_footer_right"
+
+msgid "Footer right"
+msgstr "Footer right"
+
+msgid "SetNotification"
+msgstr "SetNotification"
+
+msgid "CourseLegal"
+msgstr "CourseLegal"
+
+msgid "Certificates search is not available"
+msgstr "Վկայականների որոնումը հասանելի չէ"
+
+msgid "It allows the acquisition of skills by subcategories"
+msgstr "Այն թույլ է տալիս ձեռք բերել հմտություններ ենթակատեգորիաների միջոցով"
+
+msgid "Allow skills by subcategories"
+msgstr "Թույլատրել հմտություններ ենթակատեգորիաների միջոցով"
+
+msgid "Minimum score for skills"
+msgstr "Հմտությունների նվազագույն միավոր"
+
+msgid "The gradebook table is hidden."
+msgstr "Գնահատականների աղյուսակը թաքցված է։"
+
+msgid "Invalid token"
+msgstr "Անվավեր նշան"
+
+msgid "Unable to save the item"
+msgstr "Չհաջողվեց պահպանել տարրը"
+
+msgid "Only HTTP and HTTPS URLs are allowed."
+msgstr "Թույլատրվում են միայն HTTP և HTTPS URL-ներ։"
+
+msgid "Invalid URL host."
+msgstr "Անվավեր URL հոսթ։"
+
+msgid "This cloud provider is not allowed."
+msgstr "Այս ամպային մատակարարը թույլատրված չէ։"
+
+msgid "Documents used"
+msgstr "Օգտագործված փաստաթղթեր"
+
+msgid "No document usage"
+msgstr "Փաստաթղթերի օգտագործում չկա"
+
+msgid "Invalid action."
+msgstr "Անվավեր գործողություն։"
+
+msgid "No users selected."
+msgstr "Օգտատերեր ընտրված չեն։"
+
+msgid "%s user(s) processed."
+msgstr "%s օգտատեր(ներ) մշակվել են։"
+
+msgid "Invalid CSRF token."
+msgstr "Անվավեր CSRF նշան։"
+
+msgid "[%s] Please change your password"
+msgstr "[%s] Խնդրում ենք փոխել ձեր գաղտնաբառը"
+
+msgid "Dear %s,\n\nOur security enforcing process shows you use a password that is commonly used on the internet, which means your account could easily be stolen. It is probably a simple sequence or a very common word, we don't really know (we cannot see your password), but we ask you to please connect to the platform and request a password change. You can follow the link here: %s to do that now.\n\nPlease note we will never ask for your password in this process. You just enter your username or e-mail and we send you a link. If you are asked to introduce your existing password to do that, someone is probably trying to do Phishing on your account. Be safe, change your password now!\n\n%s\n%s"
+msgstr "Հարգելի %s,\n\nՄեր անվտանգության գործընթացը ցույց է տալիս, որ դուք օգտագործում եք գաղտնաբառ, որը լայնորեն օգտագործվում է ինտերնետում, ինչը նշանակում է, որ ձեր հաշիվը հեշտությամբ կարող է գողացվել։ Այն հավանաբար պարզ հաջորդականություն է կամ շատ տարածված բառ, մենք իսկապես չգիտենք (մենք չենք կարող տեսնել ձեր գաղտնաբառը), բայց խնդրում ենք միանալ հարթակին և պահանջել գաղտնաբառի փոփոխություն։ Դուք կարող եք հետևել այս հղմանը՝ %s, որպեսզի դա անեք հիմա։\n\nԽնդրում ենք նկատի ունենալ, որ մենք երբեք չենք խնդրի ձեր գաղտնաբառը այս գործընթացում։ Դուք պարզապես մուտքագրում եք ձեր օգտանունը կամ էլ․ փոստը, և մենք ձեզ հղում ենք ուղարկում։ Եթե ձեզ խնդրում են մուտքագրել ձեր գործող գաղտնաբառը դա անելու համար, ապա հավանաբար ինչ-որ մեկը փորձում է Ֆիշինգ կատարել ձեր հաշվի վրա։ Եղեք անվտանգ, փոխեք ձեր գաղտնաբառը հիմա։\n\n%s\n%s"
+
+msgid "[%s] Your password has been reset"
+msgstr "[%s] Ձեր գաղտնաբառը վերականգնվել է"
+
+msgid "Dear %s,\n\nOur security enforcing process flagged you as using a password that is commonly used on the internet, which means your account could easily be stolen. As a prevention measure, we have decided to initiate a password reset process. Your new, automatically generated password is now:\n\n%s\n\nPlease login to the platform soon (using this new password) to set your own, personal and secure, password.\n\nBe safe.\n\n%s\n%s"
+msgstr "Հարգելի %s,\n\nՄեր անվտանգության գործընթացը հայտնաբերել է, որ դուք օգտագործում եք գաղտնաբառ, որը հաճախ օգտագործվում է ինտերնետում, ինչը նշանակում է, որ ձեր հաշիվը հեշտությամբ կարող է գողացվել: Որպես կանխարգելիչ միջոց, մենք որոշել ենք սկսել գաղտնաբառի վերականգնման գործընթացը: Ձեր նոր, ավտոմատ ստեղծված գաղտնաբառն այժմ է՝\n\n%s\n\nԽնդրում ենք շուտով մուտք գործել հարթակ (օգտագործելով այս նոր գաղտնաբառը)՝ սահմանելու ձեր անձնական և անվտանգ գաղտնաբառը:\n\nԵղեք զգույշ:\n\n%s\n%s"
+
+msgid "Signature saved successfully"
+msgstr "Ստորագրությունը հաջողությամբ պահպանվեց"
+
+msgid "Invalid request payload."
+msgstr "Հայտի անվավեր բեռնում:"
+
+msgid "Authentication required."
+msgstr "Պահանջվում է նույնականացում:"
+
+msgid "The course title is required."
+msgstr "Դասընթացի անվանումը պարտադիր է:"
+
+msgid "Only trainers and administrators can create courses."
+msgstr "Միայն դասախոսներն ու ադմինիստրատորները կարող են ստեղծել դասընթացներ:"
+
+msgid "Course creation by trainers is disabled on this platform."
+msgstr "Այս հարթակում դասախոսների կողմից դասընթացների ստեղծումն անջատված է:"
+
+msgid "The selected BuyCourses service cannot be used to create this course."
+msgstr "Ընտրված BuyCourses ծառայությունը չի կարող օգտագործվել այս դասընթացը ստեղծելու համար:"
+
+msgid "You have reached the maximum number of courses allowed (%d)."
+msgstr "Դուք հասել եք թույլատրելի դասընթացների առավելագույն քանակին (%d):"
+
+msgid "The selected BuyCourses service is invalid."
+msgstr "Ընտրված BuyCourses ծառայությունն անվավեր է:"
+
+msgid "BuyCourses is not available right now."
+msgstr "BuyCourses-ը այս պահին հասանելի չէ:"
+
+msgid "BuyCourses cannot validate the selected service right now."
+msgstr "BuyCourses-ը այս պահին չի կարող վավերացնել ընտրված ծառայությունը:"
+
+msgid "Unable to validate the selected BuyCourses service right now."
+msgstr "Այս պահին հնարավոր չէ վավերացնել ընտրված BuyCourses ծառայությունը:"
+
+msgid "External tool removed from course"
+msgstr "Արտաքին գործիքը հեռացվել է դասընթացից"
+
+msgid "External tool was removed from the course, but kept internally because it is linked to the gradebook"
+msgstr "Արտաքին գործիքը հեռացվել է դասընթացից, սակայն պահպանվել է ներքին համակարգում, քանի որ այն կապված է գնահատման գրքի հետ"
+
+msgid "There are no external tools available to add to the gradebook"
+msgstr "Գնահատման գրքին ավելացնելու համար հասանելի արտաքին գործիքներ չկան"
+
+msgid "The evaluation could not be created"
+msgstr "Գնահատումը չհաջողվեց ստեղծել"
+
+msgid "The gradebook evaluation could not be linked"
+msgstr "Գնահատման գրքի գնահատումը չհաջողվեց կապակցել"
+
+msgid "Survey questions"
+msgstr "Հարցման հարցեր"
+
+msgid "Back to survey list"
+msgstr "Վերադառնալ հարցումների ցանկին"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "Այս հարցումն արդեն ունի պատասխաններ: Հարցերի խմբագրումն անջատված է կարգավորումներով:"
+
+msgid "Choose the type of question you want to add."
+msgstr "Ընտրեք հարցի տեսակը, որը ցանկանում եք ավելացնել:"
+
+msgid "The free text option is added automatically."
+msgstr "Ազատ տեքստի տարբերակն ավելացվում է ավտոմատ կերպով:"
+
+msgid "No questions found"
+msgstr "Հարցեր չեն գտնվել"
+
+msgid "Mandatory"
+msgstr "Պարտադիր"
+
+msgid "Unsupported question type"
+msgstr "Անհայտ հարցի տեսակ"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "Դուք կարող եք օգտագործել {%s} և {%s} պիտակները հարցում:"
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "Այս հարցը ցուցադրվում է պայմանականորեն հարցմանը պատասխանելիս:"
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "1-ից 100 տոկոսային տարբերակները ստեղծվում են ավտոմատ կերպով:"
+
+msgid "Could not load survey questions"
+msgstr "Հնարավոր չէ բեռնել հարցման հարցերը"
+
+msgid "The question text is required."
+msgstr "Հարցի տեքստը պարտադիր է:"
+
+msgid "The maximum score is required."
+msgstr "Առավելագույն միավորը պարտադիր է:"
+
+msgid "Please select a parent option."
+msgstr "Խնդրում ենք ընտրել ծնողական տարբերակ:"
+
+msgid "Please fill all answer options."
+msgstr "Խնդրում ենք լրացնել բոլոր պատասխանների տարբերակները:"
+
+msgid "QuestionUpdated"
+msgstr "QuestionUpdated"
+
+msgid "Could not save survey question"
+msgstr "Հնարավոր չէ պահպանել հարցման հարցը"
+
+msgid "Could not delete survey question"
+msgstr "Հնարավոր չէ ջնջել հարցման հարցը"
+
+msgid "Could not move survey question"
+msgstr "Հնարավոր չէ տեղափոխել հարցման հարցը"
+
+msgid "Could not copy survey question"
+msgstr "Հնարավոր չէ պատճենել հարցման հարցը"
+
+msgid "Hide search"
+msgstr "Թաքցնել որոնումը"
+
+msgid "Showing results for: %s"
+msgstr "Ցուցադրվում են արդյունքները՝ %s"
+
+msgid "Search by survey title, code or description."
+msgstr "Որոնել հարցման վերնագրով, կոդով կամ նկարագրությամբ:"
+
+msgid "Search surveys"
+msgstr "Որոնել հարցումներ"
+
+msgid "%s surveys selected"
+msgstr "%s հարցում ընտրված է"
+
+msgid "Clear selection"
+msgstr "Մաքրել ընտրությունը"
+
+msgid "No surveys found"
+msgstr "Հարցումներ չեն գտնվել"
+
+msgid "Unsupported"
+msgstr "Անհայտ"
+
+msgid "Could not load surveys"
+msgstr "Հնարավոր չէ բեռնել հարցումները"
+
+msgid "Delete selected surveys"
+msgstr "Ջնջել ընտրված հարցումները"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "Ընտրված հարցումները և դրանց հարցերը կջնջվեն։ Այս գործողությունը չի կարող հետարկվել։"
+
+msgid "Could not delete selected surveys"
+msgstr "Չհաջողվեց ջնջել ընտրված հարցումները"
+
+msgid "Survey action"
+msgstr "Հարցման գործողություն"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "Կստեղծվի այս հարցման պատճենը՝ %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "Այս հարցման համար կջնջվեն բոլոր պատասխանները և հրավերները՝ %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "Այս հարցումից կհեռացվեն բազմապատկված հարցերը՝ %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "Այս հարցումը կհրապարակվի կապված խմբի դասախոսների համար՝ %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "Այս հարցումը և դրա հարցերը կջնջվեն՝ %s"
+
+msgid "Could not complete survey action"
+msgstr "Չհաջողվեց ավարտել հարցման գործողությունը"
+
+msgid "Not started"
+msgstr "Չսկսված"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "Հանդիպման հարցումները թույլ են տալիս հրավիրված օգտատերերին ընտրել այն ամսաթվերը, երբ նրանք հասանելի են։"
+
+msgid "Back to surveys"
+msgstr "Վերադառնալ հարցումներին"
+
+msgid "Edit meeting poll"
+msgstr "Խմբագրել հանդիպման հարցումը"
+
+msgid "View meeting poll"
+msgstr "Դիտել հանդիպման հարցումը"
+
+msgid "Basic information"
+msgstr "Հիմնական տեղեկություններ"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "Սա կստեղծի հանդիպման հարցում տիպի հարցում։ Պատասխաններն ու հրավերները կառավարվում են առանձին։"
+
+msgid "Availability"
+msgstr "Հասանելիություն"
+
+msgid "Meeting dates"
+msgstr "Հանդիպման ամսաթվեր"
+
+msgid "Meeting poll"
+msgstr "Հանդիպման հարցում"
+
+msgid "My availability"
+msgstr "Իմ հասանելիությունը"
+
+msgid "Meeting poll results"
+msgstr "Հանդիպման հարցման արդյունքներ"
+
+msgid "No invitations found"
+msgstr "Հրավերներ չեն գտնվել"
+
+msgid "available"
+msgstr "հասանելի"
+
+msgid "Could not load meeting poll"
+msgstr "Չհաջողվեց բեռնել հանդիպման հարցումը"
+
+msgid "Please complete the required fields"
+msgstr "Խնդրում ենք լրացնել պարտադիր դաշտերը"
+
+msgid "Could not save meeting poll"
+msgstr "Չհաջողվեց պահպանել հանդիպման հարցումը"
+
+msgid "Could not save meeting availability"
+msgstr "Չհաջողվեց պահպանել հանդիպման հասանելիությունը"
+
+msgid "Copy this survey to another course or session"
+msgstr "Պատճենել այս հարցումը մեկ այլ դասընթացի կամ սեսիայի համար"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "Հարցումը կպատճենվի առանց պատասխանների կամ հրավերների։"
+
+msgid "No target courses found"
+msgstr "Թիրախային դասընթացներ չեն գտնվել"
+
+msgid "Search by course title, course code or session name."
+msgstr "Որոնել ըստ դասընթացի անվանման, դասընթացի կոդի կամ սեսիայի անվանման։"
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "Օգտագործեք «Կրկնօրինակել հարցումը», եթե ցանկանում եք պատճեն ստեղծել նույն դասընթացում։"
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "Հարցերը և տարբերակները կպատճենվեն։ Պատասխանները, հրավերները և հաշվետվությունները կմնան միայն սկզբնական հարցումում։"
+
+msgid "Selected target"
+msgstr "Ընտրված թիրախ"
+
+msgid "Could not load copy form"
+msgstr "Չհաջողվեց բեռնել պատճենման ձևը"
+
+msgid "The survey will be copied to: %s"
+msgstr "Հարցումը կպատճենվի՝ %s"
+
+msgid "Survey copied."
+msgstr "Հարցումը պատճենվեց։"
+
+msgid "Could not copy survey"
+msgstr "Չհաջողվեց պատճենել հարցումը"
+
+msgid "Answer survey"
+msgstr "Պատասխանել հարցմանը"
+
+msgid "Preview mode does not save answers."
+msgstr "Նախադիտման ռեժիմը չի պահպանում պատասխանները։"
+
+msgid "Survey completed"
+msgstr "Հարցումն ավարտված է"
+
+msgid "Thank you for answering the survey."
+msgstr "Շնորհակալություն հարցմանը պատասխանելու համար։"
+
+msgid "Profile information"
+msgstr "Պրոֆիլի տեղեկություններ"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "Նախքան հարցմանը պատասխանելը խնդրում ենք վերանայել պահանջվող պրոֆիլային դաշտերը։"
+
+msgid "This profile field is read-only."
+msgstr "Այս պրոֆիլային դաշտը միայն ընթերցման համար է։"
+
+msgid "You already filled this survey."
+msgstr "Դուք արդեն լրացրել եք այս հարցումը։"
+
+msgid "Please specify"
+msgstr "Խնդրում ենք նշել"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "Այս հարցի տիպը չի աջակցվում հարցումների ժամանակակից դիտումում։"
+
+msgid "Preview only"
+msgstr "Միայն նախադիտում"
+
+msgid "Submit answers"
+msgstr "Ուղարկել պատասխանները"
+
+msgid "Could not load survey"
+msgstr "Հարցումը չհաջողվեց բեռնել"
+
+msgid "Please complete the required profile fields."
+msgstr "Խնդրում ենք լրացնել պահանջվող պրոֆիլի դաշտերը։"
+
+msgid "Please answer all mandatory questions."
+msgstr "Խնդրում ենք պատասխանել բոլոր պարտադիր հարցերին։"
+
+msgid "Could not save survey answers"
+msgstr "Հարցման պատասխանները չհաջողվեց պահպանել"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "Հարցերի և հրավերների կառավարումից առաջ կարգավորեք հարցման հիմնական տեղեկությունները։"
+
+msgid "The survey code cannot be changed after creation."
+msgstr "Հարցման կոդը ստեղծումից հետո չի կարող փոխվել։"
+
+msgid "Survey behavior"
+msgstr "Հարցման վարքագիծ"
+
+msgid "Use 0 for no time limit."
+msgstr "Առանց ժամանակային սահմանափակման օգտագործեք 0։"
+
+msgid "Survey messages"
+msgstr "Հարցման հաղորդագրություններ"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "Այստեղ ընտրված պրոֆիլի դաշտերը կցուցադրվեն հարցումների հարցերից առաջ։"
+
+msgid "No profile fields are currently available."
+msgstr "Ներկայումս հասանելի պրոֆիլի դաշտեր չկան։"
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "Պրոֆիլի դաշտերի ընտրությունը հասանելի է միայն ոչ անանուն հարցումների համար։"
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "Հմտությունների կապը կտեղափոխվի առանձին խմբաքանակով։"
+
+msgid "Could not load survey configuration"
+msgstr "Հարցման կարգավորումները չհաջողվեց բեռնել"
+
+msgid "The survey code is required."
+msgstr "Հարցման կոդը պարտադիր է։"
+
+msgid "The survey title is required."
+msgstr "Հարցման վերնագիրը պարտադիր է։"
+
+msgid "The survey has been saved successfully"
+msgstr "Հարցումը հաջողությամբ պահպանվեց"
+
+msgid "Could not save survey configuration"
+msgstr "Հարցման կարգավորումները չհաջողվեց պահպանել"
+
+msgid "Course users"
+msgstr "Դասընթացի օգտատերեր"
+
+msgid "Already invited"
+msgstr "Արդեն հրավիրված"
+
+msgid "No users found"
+msgstr "Օգտատերեր չեն գտնվել"
+
+msgid "No groups found"
+msgstr "Խմբեր չեն գտնվել"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "Օգտագործեք **link** այնտեղ, որտեղ պետք է հայտնվի հարցման հղումը։"
+
+msgid "Remind all selected users"
+msgstr "Հիշեցնել բոլոր ընտրված օգտատերերին"
+
+msgid "Anonymous access link"
+msgstr "Անանուն մուտքի հղում"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "Չհրավիրված օգտատերերը կարող են օգտագործել այս հղումը հարցումը լրացնելու համար։"
+
+msgid "Answered anonymously"
+msgstr "Պատասխանվել է անանուն"
+
+msgid "Could not load survey invitations"
+msgstr "Հարցման հրավերները չհաջողվեց բեռնել"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "Փոստ ուղարկելիս պահանջվում են նամակի վերնագիր և հաղորդագրություն։"
+
+msgid "Could not publish survey"
+msgstr "Հարցումը չհաջողվեց հրապարակել"
+
+msgid "Could not copy the link"
+msgstr "Հղումը չհաջողվեց պատճենել"
+
+msgid "Please answer this survey using the following link"
+msgstr "Խնդրում ենք պատասխանել այս հարցումը՝ օգտագործելով հետևյալ հղումը"
+
+msgid "Export CSV"
+msgstr "Արտահանել CSV"
+
+msgid "Export compact CSV"
+msgstr "Արտահանել կոմպակտ CSV"
+
+msgid "Export Excel"
+msgstr "Արտահանել Excel"
+
+msgid "Export package"
+msgstr "Արտահանել փաթեթ"
+
+msgid "Results summary"
+msgstr "Արդյունքների ամփոփում"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "Այս տեսքը ցույց է տալիս այս հարցման տեղափոխված հաշվետվության տվյալները։"
+
+msgid "Select user"
+msgstr "Ընտրել օգտատեր"
+
+msgid "No answers found"
+msgstr "Պատասխաններ չեն գտնվել"
+
+msgid "answers"
+msgstr "պատասխաններ"
+
+msgid "Could not load survey reporting"
+msgstr "Հարցման հաշվետվությունը չհաջողվեց բեռնել"
+
+msgid "Back to threads"
+msgstr "Վերադառնալ թեմաներին"
+
+msgid "Back to learning path"
+msgstr "Վերադառնալ ուսումնական ուղուն"
+
+msgid "Remove sticky"
+msgstr "Հեռացնել կցվածը"
+
+msgid "Make sticky"
+msgstr "Դարձնել կցված"
+
+msgid "Open thread"
+msgstr "Բացել թեման"
+
+msgid "Close thread"
+msgstr "Փակել թեման"
+
+msgid "Delete thread"
+msgstr "Ջնջել թեման"
+
+msgid "This thread is hidden from learners."
+msgstr "Այս թեման թաքցված է սովորողներից։"
+
+msgid "Revision requested"
+msgstr "Վերանայում պահանջվեց"
+
+msgid "Revision"
+msgstr "Վերանայում"
+
+msgid "Approve post"
+msgstr "Հաստատել գրառումը"
+
+msgid "Reject post"
+msgstr "Մերժել գրառումը"
+
+msgid "Cancel revision request"
+msgstr "Չեղարկել վերանայման պահանջը"
+
+msgid "Delete post"
+msgstr "Ջնջել գրառումը"
+
+msgid "Message is required"
+msgstr "Հաղորդագրությունը պարտադիր է"
+
+msgid "Target thread is required"
+msgstr "Թիրախային թեման պարտադիր է"
+
+msgid "Could not retrieve posts"
+msgstr "Հնարավոր չէ ստանալ գրառումները"
+
+msgid "Thread shown"
+msgstr "Թեման ցուցադրված է"
+
+msgid "Thread hidden"
+msgstr "Թեման թաքցված է"
+
+msgid "Could not update thread"
+msgstr "Հնարավոր չէ թարմացնել թեման"
+
+msgid "Thread closed"
+msgstr "Թեման փակված է"
+
+msgid "Thread opened"
+msgstr "Թեման բացված է"
+
+msgid "Thread marked as sticky"
+msgstr "Թեման նշված է որպես կպչուն"
+
+msgid "Thread unmarked as sticky"
+msgstr "Թեմայի կպչուն նշումը հանված է"
+
+msgid "Thread notifications enabled"
+msgstr "Թեմայի ծանուցումները միացված են"
+
+msgid "Thread notifications disabled"
+msgstr "Թեմայի ծանուցումները անջատված են"
+
+msgid "Could not update thread notification"
+msgstr "Հնարավոր չէ թարմացնել թեմայի ծանուցումը"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "Համոզվա՞ծ եք, որ ցանկանում եք ջնջել այս թեման։"
+
+msgid "Could not delete thread"
+msgstr "Հնարավոր չէ ջնջել թեման"
+
+msgid "Post approved"
+msgstr "Գրառումը հաստատված է"
+
+msgid "Could not approve post"
+msgstr "Հնարավոր չէ հաստատել գրառումը"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "Համոզվա՞ծ եք, որ ցանկանում եք մերժել այս գրառումը։"
+
+msgid "Post rejected"
+msgstr "Գրառումը մերժված է"
+
+msgid "Could not reject post"
+msgstr "Հնարավոր չէ մերժել գրառումը"
+
+msgid "Post shown"
+msgstr "Գրառումը ցուցադրված է"
+
+msgid "Post hidden"
+msgstr "Գրառումը թաքցված է"
+
+msgid "Could not update post"
+msgstr "Հնարավոր չէ թարմացնել գրառումը"
+
+msgid "Post updated"
+msgstr "Գրառումը թարմացված է"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "Համոզվա՞ծ եք, որ ցանկանում եք ջնջել այս գրառումը։"
+
+msgid "Post deleted"
+msgstr "Գրառումը ջնջված է"
+
+msgid "Could not delete post"
+msgstr "Հնարավոր չէ ջնջել գրառումը"
+
+msgid "Untitled thread"
+msgstr "Անանուն թեմա"
+
+msgid "Could not retrieve threads"
+msgstr "Հնարավոր չէ ստանալ թեմաները"
+
+msgid "Post moved"
+msgstr "Գրառումը տեղափոխված է"
+
+msgid "Could not move post"
+msgstr "Հնարավոր չէ տեղափոխել գրառումը"
+
+msgid "Revision request removed"
+msgstr "Վերանայման պահանջը հեռացված է"
+
+msgid "Could not update revision request"
+msgstr "Հնարավոր չէ թարմացնել վերանայման պահանջը"
+
+msgid "Are you sure you want to report this post?"
+msgstr "Համոզվա՞ծ եք, որ ցանկանում եք զեկուցել այս գրառումը։"
+
+msgid "Could not report post"
+msgstr "Հնարավոր չէ զեկուցել գրառումը"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "Համոզվա՞ծ եք, որ ցանկանում եք ջնջել այս կցորդը։"
+
+msgid "Attachment deleted"
+msgstr "Կցորդը ջնջված է"
+
+msgid "Could not delete attachment"
+msgstr "Հնարավոր չէ ջնջել կցորդը"
+
+msgid "Thread title"
+msgstr "Թեմայի վերնագիր"
+
+msgid "Sticky thread"
+msgstr "Կպչուն թեմա"
+
+msgid "Attach files"
+msgstr "Կցել ֆայլեր"
+
+msgid "Attachments are disabled for this forum"
+msgstr "Կցորդները անջատված են այս ֆորումի համար"
+
+msgid "The forum is not open yet."
+msgstr "Ֆորումը դեռ բաց չէ։"
+
+msgid "The forum is closed."
+msgstr "Ֆորումը փակված է։"
+
+msgid "The forum is locked."
+msgstr "Ֆորումը կողպված է։"
+
+msgid "New threads are not allowed in this forum."
+msgstr "Այս ֆորումում նոր թեմաներ չեն թույլատրվում։"
+
+msgid "Thread created"
+msgstr "Թեման ստեղծվեց"
+
+msgid "Could not create thread"
+msgstr "Չհաջողվեց ստեղծել թեմա"
+
+msgid "Back to posts"
+msgstr "Վերադառնալ գրառումներին"
+
+msgid "This reply will be stored as a revision."
+msgstr "Այս պատասխանը կպահվի որպես վերանայում։"
+
+msgid "Post reply"
+msgstr "Պատասխանել գրառմանը"
+
+msgid "The thread is locked."
+msgstr "Թեման կողպված է։"
+
+msgid "Reply added"
+msgstr "Պատասխանն ավելացվեց"
+
+msgid "Could not add reply"
+msgstr "Չհաջողվեց ավելացնել պատասխան"
+
+msgid "Add forum"
+msgstr "Ավելացնել ֆորում"
+
+msgid "No forums found"
+msgstr "Ֆորումներ չեն գտնվել"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "Սկսեք քննարկումները՝ ստեղծելով ձեր առաջին ֆորումի կատեգորիան կամ ֆորումը։"
+
+msgid "Locked"
+msgstr "Կողպված"
+
+msgid "No forums in this category"
+msgstr "Այս կատեգորիայում ֆորումներ չկան"
+
+msgid "Posts require approval"
+msgstr "Գրառումները պահանջում են հաստատում"
+
+msgid "Forum for current group"
+msgstr "Ընթացիկ խմբի ֆորում"
+
+msgid "Group forum visibility"
+msgstr "Խմբի ֆորումի տեսանելիություն"
+
+msgid "No category"
+msgstr "Կատեգորիա չկա"
+
+msgid "Could not retrieve forums"
+msgstr "Չհաջողվեց ստանալ ֆորումները"
+
+msgid "Forum category updated"
+msgstr "Ֆորումի կատեգորիան թարմացվեց"
+
+msgid "Forum category created"
+msgstr "Ֆորումի կատեգորիան ստեղծվեց"
+
+msgid "Could not save forum category"
+msgstr "Չհաջողվեց պահպանել ֆորումի կատեգորիան"
+
+msgid "Forum updated"
+msgstr "Ֆորումը թարմացվեց"
+
+msgid "Forum created"
+msgstr "Ֆորումը ստեղծվեց"
+
+msgid "Could not save forum"
+msgstr "Չհաջողվեց պահպանել ֆորումը"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "Վստա՞հ եք, որ ցանկանում եք ջնջել այս ֆորումի կատեգորիան։"
+
+msgid "Could not delete forum category"
+msgstr "Չհաջողվեց ջնջել ֆորումի կատեգորիան"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "Վստա՞հ եք, որ ցանկանում եք ջնջել այս ֆորումը։"
+
+msgid "Could not delete forum"
+msgstr "Չհաջողվեց ջնջել ֆորումը"
+
+msgid "Forum category unlocked"
+msgstr "Ֆորումի կատեգորիան ապակողպվեց"
+
+msgid "Forum category locked"
+msgstr "Ֆորումի կատեգորիան կողպվեց"
+
+msgid "Could not update forum category"
+msgstr "Չհաջողվեց թարմացնել ֆորումի կատեգորիան"
+
+msgid "Forum category shown"
+msgstr "Ֆորումի կատեգորիան ցուցադրվեց"
+
+msgid "Forum category hidden"
+msgstr "Ֆորումի կատեգորիան թաքցվեց"
+
+msgid "Forum unlocked"
+msgstr "Ֆորումը ապակողպվեց"
+
+msgid "Forum locked"
+msgstr "Ֆորումը կողպվեց"
+
+msgid "Could not update forum"
+msgstr "Չհաջողվեց թարմացնել ֆորումը"
+
+msgid "Forum shown"
+msgstr "Ֆորումը ցուցադրվեց"
+
+msgid "Forum hidden"
+msgstr "Ֆորումը թաքցվեց"
+
+msgid "Forum notifications enabled"
+msgstr "Ֆորումի ծանուցումները միացվեցին"
+
+msgid "Forum notifications disabled"
+msgstr "Ֆորումի ծանուցումները անջատվեցին"
+
+msgid "Could not update forum notification"
+msgstr "Չհաջողվեց թարմացնել ֆորումի ծանուցումը"
+
+msgid "Forum category moved"
+msgstr "Ֆորումի կատեգորիան տեղափոխվեց"
+
+msgid "Could not move forum category"
+msgstr "Չհաջողվեց տեղափոխել ֆորումի կատեգորիան"
+
+msgid "Forum moved"
+msgstr "Ֆորումը տեղափոխվեց"
+
+msgid "Could not move forum"
+msgstr "Չհաջողվեց տեղափոխել ֆորումը"
+
+msgid "Back to forums"
+msgstr "Վերադառնալ ֆորումներին"
+
+msgid "New thread"
+msgstr "Նոր թեմա"
+
+msgid "No threads found"
+msgstr "Թեմաներ չեն գտնվել"
+
+msgid "Sticky"
+msgstr "Կպչուն"
+
+msgid "Graded"
+msgstr "Գնահատված"
+
+msgid "Grade peers"
+msgstr "Գնահատել հասակակիցներին"
+
+msgid "Move thread"
+msgstr "Տեղափոխել թեման"
+
+msgid "Target forum"
+msgstr "Թիրախային ֆորում"
+
+msgid "Target forum is required"
+msgstr "Թիրախային ֆորումը պարտադիր է"
+
+msgid "Students"
+msgstr "Ուսանողներ"
+
+msgid "No students found"
+msgstr "Ուսանողներ չեն գտնվել"
+
+msgid "No peers available to grade."
+msgstr "Գնահատման համար հասակակիցներ չկան։"
+
+msgid "Qualified"
+msgstr "Որակավորված"
+
+msgid "Not qualified"
+msgstr "Ոչ որակավորված"
+
+msgid "Could not retrieve thread grading"
+msgstr "Չհաջողվեց ստանալ թեմայի գնահատումը"
+
+msgid "Thread grading updated"
+msgstr "Թեմայի գնահատումը թարմացվեց"
+
+msgid "Could not update thread grading"
+msgstr "Չհաջողվեց թարմացնել թեմայի գնահատումը"
+
+msgid "Thread score saved"
+msgstr "Թեմայի միավորը պահպանվեց"
+
+msgid "Could not save thread score"
+msgstr "Չհաջողվեց պահպանել թեմայի միավորը"
+
+msgid "Could not move thread"
+msgstr "Չհաջողվեց տեղափոխել թեման"
+
+msgid "Thread updated"
+msgstr "Թեման թարմացվեց"
+
+msgid "Search term is too short"
+msgstr "Որոնման տերմինը չափազանց կարճ է"
+
+msgid "Could not search forums"
+msgstr "Չհաջողվեց որոնել ֆորումները"
+
+msgid "Moderated"
+msgstr "Մոդերացված"
+
+msgid "View threads"
+msgstr "Դիտել թեմաները"
 

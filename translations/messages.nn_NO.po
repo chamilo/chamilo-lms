@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Helsingar"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formel eksempel: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formelprøve: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variabelintervall"
@@ -2020,7 +2020,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ja:opphavsrett,, nei:ingen opphavsrett"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mappe,, application/msword:MsWord,, application/octet-stream:Okettstrøm,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:Mappe,, application\/msword:MsWord,, application\/octet-stream:Octet stream,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":øving:øving,,      simulering:simulering,,      spørreskjema:spørreskjema,,      diagram:diagram,,      figur:figur,,      graf:graf,,      indeks:indeks,,      lysbilete:lysbilete,,      tabell:tabell,,      forteljande tekst:forteljande tekst,,      eksamen:eksamen,,      eksperiment:eksperiment,,      problemstilling:problemstilling,,      sjølvoppgåve:sjølvoppgåve,,      forelesning:forelesning"
@@ -4639,7 +4639,7 @@ msgid "Invalid end date was given."
 msgstr "feil sluttdato angitt"
 
 msgid "(d/m/y h:m)"
-msgstr "(d/m/y h:m)"
+msgstr "(d\/m\/y h:m)"
 
 msgid "Homepage-files are not writable!"
 msgstr "Hjemmesidefilene er ikke skrivbare!"
@@ -5596,7 +5596,7 @@ msgid "If you are using an LDAP server that does not support or accept anonymous
 msgstr "Om du brukar ein LDAP-tenar som ikkje støttar eller akzeptterer anonym tilgang, fyll inn brukarpassordet som skal brukast i dette feltet."
 
 msgid "LDAP Import"
-msgstr "LDAP Import"
+msgstr "LDAP-import"
 
 msgid "Notify subscribed users by e-mail"
 msgstr "Varsle abonnerte brukarar på e-post"
@@ -9728,6 +9728,9 @@ msgstr "Søkeresultat for:"
 
 msgid "Select a file"
 msgstr "Vel ein fil"
+
+msgid "Select a file to insert into the editor."
+msgstr "Vel ei fil å setja inn i redigeraren."
 
 msgid "Warning - The FAQ file, located in the /home/ directory of your portal, is not writable. Your text will not be saved until the file permissions are changed."
 msgstr "Åtvaring - FAQ-fila, som ligg i /home/-katalog på portala di, er ikkje skrivbar. Teksten din blir ikkje lagra før filrettane er endra."
@@ -15909,6 +15912,9 @@ msgstr "Dato og tid"
 msgid "Item"
 msgstr "Element"
 
+msgid "Items"
+msgstr "Element"
+
 msgid "Configure Dashboard Plugin"
 msgstr "Oppsett Dashboard tillegg"
 
@@ -17162,6 +17168,18 @@ msgstr "Økter i gruppe"
 
 msgid "Courses in group"
 msgstr "Kurs i gruppe"
+
+msgid "Courses on the platform"
+msgstr "Kurs på plattforma"
+
+msgid "%s courses"
+msgstr "%s kurs"
+
+msgid "%s sessions"
+msgstr "%s økter"
+
+msgid "Search by title or code"
+msgstr "Søk etter tittel eller kode"
 
 msgid "Users in group"
 msgstr "Brukere i gruppe"
@@ -32167,6 +32185,9 @@ msgstr "Oppgåve"
 msgid "Allowed file formats: %s"
 msgstr "Tillatte filformat: %s"
 
+msgid "File manager"
+msgstr "Filhandterar"
+
 msgid "File type not allowed. Allowed extensions: %s"
 msgstr "Filtyp ikkje tillatt. Tillatte endelser: %s"
 
@@ -33880,6 +33901,2583 @@ msgstr "Velkommen"
 msgid "Welcome to Chamilo"
 msgstr "Velkommen til Chamilo"
 
+msgid "Check all unanswered questions below"
+msgstr "Merk alle ubesvarte spørsmål nedanfor"
+
 msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
 msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Om dette er første gong du brukar Chamilo, sjekk side-menyen for å finne vegen gjennom mange funksjonar. Om du treng hjelp, finn <a href=\"https://docs.chamilo.org\">offisiell dokumentasjon</a> for standard dokumentasjon, medan <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">nettforumet vårt</a> kan hjelpe med å dele idéar og finne svar frå andre Chamilo-brukarar."
+
+msgid "Change password"
+msgstr "Endra passord"
+
+msgid "Newest first"
+msgstr "Nyaste fyrst"
+
+msgid "Oldest first"
+msgstr "Eldste fyrst"
+
+msgid "Title A–Z"
+msgstr "Tittel A–Å"
+
+msgid "Title Z–A"
+msgstr "Tittel Å–A"
+
+msgid "Send test email"
+msgstr "Send test-e-post"
+
+msgid "Show teachers"
+msgstr "Vis lærarar"
+
+msgid "Hide teachers"
+msgstr "Gøym lærarar"
+
+msgid "Delete exercise attempts"
+msgstr "Slett øvingsforsøk"
+
+msgid "Message sent successfully."
+msgstr "Melding sendt."
+
+msgid "You cannot create a new course right now."
+msgstr "Du kan ikkje oppretta eit nytt kurs akkurat no."
+
+msgid "Unable to verify whether you can create a new course right now."
+msgstr "Klarte ikkje å stadfesta om du kan oppretta eit nytt kurs akkurat no."
+
+msgid "Please try again later or contact the administrator."
+msgstr "Prøv igjen seinare eller kontakt administratoren."
+
+msgid "You cannot create more courses at this time."
+msgstr "Du kan ikkje oppretta fleire kurs no."
+
+msgid "You already manage %d courses and your active service allows up to %d. To create another course, you need a higher service limit or reduce your current active courses."
+msgstr "Du administrerer allereie %d kurs, og tenesta di tillèt opptil %d. For å oppretta eit nytt kurs må du ha høgare tenestegrense eller redusera talet på aktive kurs."
+
+msgid "You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now."
+msgstr "Du administrerer allereie %d kurs, og plattforma tillèt opptil %d for kontoen din. Du kan ikkje oppretta fleire kurs akkurat no."
+
+msgid "Add a class"
+msgstr "Legg til ein klasse"
+
+msgid "Search classes"
+msgstr "Søk i klassar"
+
+msgid "No classes found"
+msgstr "Fann ingen klassar"
+
+msgid "Import classes"
+msgstr "Importer klassar"
+
+msgid "Class users"
+msgstr "Klassebrukarar"
+
+msgid "%s classes imported"
+msgstr "%s klassar importert"
+
+msgid "%s user-class links imported"
+msgstr "%s brukar-klasse-koplingar importert"
+
+msgid "Hide comments"
+msgstr "Gøym kommentarar"
+
+msgid "Loading comments..."
+msgstr "Lastar kommentarar..."
+
+msgid "No comments yet."
+msgstr "Ingen kommentarar enno."
+
+msgid "A user with this username already exists"
+msgstr "Ein brukar med dette brukarnamnet finst allereie"
+
+msgid "Manage meetings, review recordings and update course-wide BBB settings from one place."
+msgstr "Handter møte, sjå opptak og oppdater BBB-innstillingar for heile kurset på éin stad."
+
+msgid "Review the current defaults and propagate them to every course when needed."
+msgstr "Sjå gjeldande standardverdiar og bruk dei på alle kurs når det trengst."
+
+msgid "Filter the list by meeting date range."
+msgstr "Filtrer lista etter møtedatointervall."
+
+msgid "Review meeting history, participants and recording actions."
+msgstr "Sjå møtehistorikk, deltakarar og opptakshandlingar."
+
+msgid "Participants"
+msgstr "Deltakarar"
+
+msgid "CountUsers"
+msgstr "CountUsers"
+
+msgid "No data found"
+msgstr "Fann ingen data"
+
+msgid "My justifications"
+msgstr "Mine grunngjevingar"
+
+msgid "My services"
+msgstr "Mine tenester"
+
+msgid "Extra menu"
+msgstr "Ekstra meny"
+
+msgid "Pending tests"
+msgstr "Ventande testar"
+
+msgid "No specific language"
+msgstr "Ingen spesifikk språk"
+
+msgid "Source Chamilo version"
+msgstr "Kjelde Chamilo-versjon"
+
+msgid "Exporting..."
+msgstr "Eksporterer..."
+
+msgid "Autosaved drafts available"
+msgstr "Autolagra utkast tilgjengelege"
+
+msgid "Hide drafts"
+msgstr "Gøym utkast"
+
+msgid "Show drafts"
+msgstr "Vis utkast"
+
+msgid "Drafts are stored only in this browser and are removed after saving the document."
+msgstr "Utkasta vert berre lagra i denne nettlesaren og vert fjerna etter at dokumentet er lagra."
+
+msgid "Last saved"
+msgstr "Sist lagra"
+
+msgid "Restore draft"
+msgstr "Gjenopprett utkast"
+
+msgid "Delete draft"
+msgstr "Slett utkast"
+
+msgid "Information about indexing document content"
+msgstr "Informasjon om indeksering av dokumentinnhald"
+
+msgid "When enabled, the document text is indexed by the search engine so users can find it from platform search."
+msgstr "Når dette er slått på, vert dokumentteksten indeksert av søkjemotoren slik at brukarar kan finna det via plattformsøk."
+
+msgid "The editor is not available."
+msgstr "Redigeringsverktøyet er ikkje tilgjengeleg."
+
+msgid "Please place the cursor inside a paragraph first."
+msgstr "Plasser markøren inne i ein avsnitt først."
+
+msgid "The selected paragraph is empty."
+msgstr "Det valde avsnittet er tomt."
+
+msgid "Loading failed."
+msgstr "Lasting mislukkast."
+
+msgid "Add introduction"
+msgstr "Legg til introduksjon"
+
+msgid "Course type"
+msgstr "Kurstype"
+
+msgid "Choose whether this course uses the standard platform limits or benefits from a purchased service."
+msgstr "Vel om dette kurset nyttar standard plattformgrenser eller nyt godt av ein kjøpt teneste."
+
+msgid "Standard course"
+msgstr "Standard kurs"
+
+msgid "Use the standard platform limits."
+msgstr "Bruk standard plattformgrenser."
+
+msgid "Selected"
+msgstr "Valt"
+
+msgid "Hosting limit"
+msgstr "Lagringsgrense"
+
+msgid "Document quota"
+msgstr "Dokumentkvote"
+
+msgid "The standard course limit has been reached."
+msgstr "Standard grense for kurs er nådd."
+
+msgid "Use the benefits granted by this service."
+msgstr "Bruk fordelane som denne tenesta gjev."
+
+msgid "Courses with these benefits"
+msgstr "Kurs med desse fordelane"
+
+msgid "Active service"
+msgstr "Aktiv teneste"
+
+msgid "Buy service"
+msgstr "Kjøp teneste"
+
+msgid "Select an available course type before creating the course."
+msgstr "Vel ein tilgjengeleg kurstype før du opprettar kurset."
+
+msgid "users"
+msgstr "brukarar"
+
+msgid "You need to buy this service before using these benefits."
+msgstr "Du må kjøpe denne tenesta før du kan bruke desse fordelane."
+
+msgid "You already used all courses available with this service."
+msgstr "Du har allereie brukt alle kursa som er tilgjengelege med denne tenesta."
+
+msgid "This option is not available."
+msgstr "Dette valet er ikkje tilgjengeleg."
+
+msgid "This field is required"
+msgstr "Dette feltet er påkravd"
+
+msgid "Show less"
+msgstr "Vis mindre"
+
+msgid "Show full description"
+msgstr "Vis full skildring"
+
+msgid "Virtual keyboard"
+msgstr "Virtuelt tastatur"
+
+msgid "Backspace"
+msgstr "Backspace"
+
+msgid "Space"
+msgstr "Mellomrom"
+
+msgid "Learning path only visible to selected learners"
+msgstr "Læringssti berre synleg for valde studentar"
+
+msgid "Create course"
+msgstr "Opprett kurs"
+
+msgid "Tour"
+msgstr "Omvising"
+
+msgid "Are you sure you want to delete this comment?"
+msgstr "Er du sikker på at du vil slette denne kommentaren?"
+
+msgid "No posts found"
+msgstr "Ingen innlegg funne"
+
+msgid "No communities"
+msgstr "Ingen fellesskap"
+
+msgid "No friends found"
+msgstr "Ingen vener funne"
+
+msgid "Visual overview of your skills"
+msgstr "Visuell oversikt over ferdigheitene dine"
+
+msgid "Compare your progress"
+msgstr "Samanlikn framgangen din"
+
+msgid "Please enter a search term."
+msgstr "Skriv inn eit søkjeord."
+
+msgid "Enter captcha code"
+msgstr "Skriv inn captcha-kode"
+
+msgid "Refresh captcha"
+msgstr "Oppdater captcha"
+
+msgid "Captcha is temporarily blocked. Please try again later."
+msgstr "Captcha er mellombels blokkert. Prøv igjen seinare."
+
+msgid "Item Details"
+msgstr "Elementdetaljar"
+
+msgid "Open File"
+msgstr "Opne fil"
+
+msgid "Selection"
+msgstr "Utval"
+
+msgid "Remove selection context"
+msgstr "Fjern utvalskontekst"
+
+msgid "Source document"
+msgstr "Kjeldedokument"
+
+msgid "Use the current course context"
+msgstr "Bruk gjeldande kurskontekst"
+
+msgid "Loading documents..."
+msgstr "Lastar dokument..."
+
+msgid "No compatible PDF or TXT document was found in this course."
+msgstr "Ingen kompatibelt PDF- eller TXT-dokument vart funne i dette kurset."
+
+msgid "Select a PDF or TXT document to generate terms only from that document."
+msgstr "Vel eit PDF- eller TXT-dokument for å generere omgrep berre frå det dokumentet."
+
+msgid "Confidentiality warning"
+msgstr "Konfidensialitetsåtvaring"
+
+msgid "When a document is selected, the prompt is fixed so the generation uses only that document content."
+msgstr "Når eit dokument er valt, er prompten låst slik at genereringa berre brukar innhaldet i det dokumentet."
+
+msgid "No document-processing AI providers available."
+msgstr "Ingen AI-leverandørar for dokumenthandsaming tilgjengelege."
+
+msgid "Failed to save signature. Please try again."
+msgstr "Kunne ikkje lagre signatur. Prøv igjen."
+
+msgid "Select and move"
+msgstr "Vel og flytt"
+
+msgid "Freehand"
+msgstr "Frihand"
+
+msgid "Stroke"
+msgstr "Strek"
+
+msgid "Fill"
+msgstr "Fyll"
+
+msgid "Import SVG"
+msgstr "Importer SVG"
+
+msgid "Import image"
+msgstr "Importer bilete"
+
+msgid "Click the drawing area to place this text"
+msgstr "Klikk på teikneområdet for å plassere denne teksten"
+
+msgid "Draw a new SVG, import an existing SVG or embed an image, then save it as a reusable document."
+msgstr "Teikn ein ny SVG, importer ein eksisterande SVG eller legg inn eit bilete, og lagre det som eit gjenbrukbart dokument."
+
+msgid "Use Select and move to reposition or resize elements added in this editor."
+msgstr "Bruk Vel og flytt for å flytte eller endre storleik på element som er lagt til i denne redigeraren."
+
+msgid "Stroke width"
+msgstr "Strekbreidd"
+
+msgid "Transparent fill"
+msgstr "Gjennomsiktig fyll"
+
+msgid "Invalid id"
+msgstr "Ugyldig id"
+
+msgid "Unable to load the drawing"
+msgstr "Kan ikkje laste teikninga"
+
+msgid "Only PNG, JPG, WEBP or GIF images are supported."
+msgstr "Berre PNG-, JPG-, WEBP- eller GIF-bilete er støtta."
+
+msgid "Unable to read the image file."
+msgstr "Kan ikkje lese biletefila."
+
+msgid "Only SVG files are supported."
+msgstr "Berre SVG-filer er støtta."
+
+msgid "The SVG file is empty or invalid."
+msgstr "SVG-fila er tom eller ugyldig."
+
+msgid "Unable to read the SVG file."
+msgstr "Kan ikkje lese SVG-fila."
+
+msgid "The drawing is empty or invalid."
+msgstr "Teikninga er tom eller ugyldig."
+
+msgid "Unable to save the drawing"
+msgstr "Kan ikkje lagre teikninga"
+
+msgid "Information about AI-assisted documents"
+msgstr "Informasjon om AI-assisterte dokument"
+
+msgid "Location"
+msgstr "Plassering"
+
+msgid "Cloud link"
+msgstr "Sky-lenke"
+
+msgid "Add a link to a cloud document, such as Google Drive or Google Docs."
+msgstr "Legg til ei lenke til eit skydokument, som Google Drive eller Google Docs."
+
+msgid "Add cloud link"
+msgstr "Legg til sky-lenke"
+
+msgid "Document title"
+msgstr "Dokumenttittel"
+
+msgid "Document options change how uploaded files are processed after saving."
+msgstr "Dokumentinnstillingar endrar korleis opplasta filer blir handsama etter lagring."
+
+msgid "Information about uncompressing zip files"
+msgstr "Informasjon om utpakking av zip-filer"
+
+msgid "When enabled, ZIP files are extracted into the current document folder after upload."
+msgstr "Når dette er slått på, blir ZIP-filer pakkast ut i den gjeldande dokumentmappa etter opplasting."
+
+msgid "The title is required."
+msgstr "Tittelen er påkravd."
+
+msgid "The URL is required."
+msgstr "URL-en er påkravd."
+
+msgid "The destination folder is missing."
+msgstr "Målmappa manglar."
+
+msgid "Unable to create cloud link."
+msgstr "Kan ikkje opprette sky-lenke."
+
+msgid "Copy to My Files"
+msgstr "Kopier til Mine filer"
+
+msgid "Used space"
+msgstr "Brukt plass"
+
+msgid "Available space"
+msgstr "Tilgjengeleg plass"
+
+msgid "Available percentage"
+msgstr "Tilgjengeleg prosentdel"
+
+msgid "Cloud links cannot be downloaded."
+msgstr "Sky-lenker kan ikkje lastast ned."
+
+msgid "Could not copy the file to My Files"
+msgstr "Kunne ikkje kopiere fila til Mine filer"
+
+msgid "File copied to My Files"
+msgstr "Fila er kopiert til Mine filer"
+
+msgid "Checking course creation options..."
+msgstr "Kontrollerer kursopprettingsalternativ..."
+
+msgid "You cannot create more courses right now."
+msgstr "Du kan ikkje opprette fleire kurs akkurat no."
+
+msgid "AI analyzer"
+msgstr "AI-analysator"
+
+msgid "Expand all"
+msgstr "Utvid alle"
+
+msgid "Collapse all"
+msgstr "Kollaps alle"
+
+msgid "Review your active service benefits, purchase history and available receipts."
+msgstr "Sjå gjennom fordelane dine frå aktive tenester, kjøpshistorikk og tilgjengelege kvitteringar."
+
+msgid "Active services"
+msgstr "Aktive tenester"
+
+msgid "No active services"
+msgstr "Ingen aktive tenester"
+
+msgid "Valid until"
+msgstr "Gyldig til"
+
+msgid "Recurring payment"
+msgstr "Gjentakande betaling"
+
+msgid "Next charge"
+msgstr "Neste belastning"
+
+msgid "Enable auto billing"
+msgstr "Slå på automatisk fakturering"
+
+msgid "Cancel auto billing"
+msgstr "Avbryt automatisk fakturering"
+
+msgid "Granted benefits"
+msgstr "Innvilga fordelar"
+
+msgid "Purchase history"
+msgstr "Kjøpshistorikk"
+
+msgid "No purchases yet"
+msgstr "Ingen kjøp enno"
+
+msgid "Product"
+msgstr "Produkt"
+
+msgid "Reference"
+msgstr "Referanse"
+
+msgid "Amount"
+msgstr "Beløp"
+
+msgid "Receipt"
+msgstr "Kvittering"
+
+msgid "Unable to load your services right now."
+msgstr "Kan ikkje laste tenestene dine akkurat no."
+
+msgid "Auto billing enabled"
+msgstr "Automatisk fakturering aktivert"
+
+msgid "Auto billing suspended"
+msgstr "Automatisk fakturering sett på pause"
+
+msgid "Auto billing cancelled"
+msgstr "Automatisk fakturering avbroten"
+
+msgid "Auto billing disabled"
+msgstr "Automatisk fakturering deaktivert"
+
+msgid "Cancel auto billing for this service?"
+msgstr "Avbryte automatisk fakturering for denne tenesta?"
+
+msgid "Preview class members and courses"
+msgstr "Førehandsvis klassemedlemer og kurs"
+
+msgid "Please select a CSV file to import."
+msgstr "Vel ei CSV-fil å importere."
+
+msgid "%d user-class links imported"
+msgstr "%d brukar-klasse-koplingar importert"
+
+msgid "The following errors occurred during import:"
+msgstr "Følgjande feil oppstod under import:"
+
+msgid "CSV file"
+msgstr "CSV-fil"
+
+msgid "Remove user from all group-related entities if not in the list"
+msgstr "Fjern brukar frå alle gruppe-relaterte einingar om ikkje i lista"
+
+msgid "UserName"
+msgstr "Brukarnamn"
+
+msgid "ClassName"
+msgstr "Klassenamn"
+
+msgid "are required for each row."
+msgstr "er påkravd for kvar rad."
+
+msgid "title"
+msgstr "tittel"
+
+msgid "is required."
+msgstr "er påkravd."
+
+msgid "description"
+msgstr "skildring"
+
+msgid "are optional."
+msgstr "er valfrie."
+
+msgid "Are you sure you want to remove this user from the class?"
+msgstr "Er du sikker på at du vil fjerne denne brukaren frå klassa?"
+
+msgid "Users in class"
+msgstr "Brukarar i klassa"
+
+msgid "Remove user"
+msgstr "Fjern brukar"
+
+msgid "Class not found"
+msgstr "Klasse ikkje funnen"
+
+msgid "Class overview"
+msgstr "Klasseoversikt"
+
+msgid "Back to classes"
+msgstr "Tilbake til klassar"
+
+msgid "Search members or courses"
+msgstr "Søk medlemer eller kurs"
+
+msgid "Search by name, email, username or course title"
+msgstr "Søk etter namn, e-post, brukarnamn eller kurstittel"
+
+msgid "Class members"
+msgstr "Klassemedlemer"
+
+msgid "No email"
+msgstr "Ingen e-post"
+
+msgid "No members found"
+msgstr "Ingen medlemer funne"
+
+msgid "No courses found"
+msgstr "Ingen kurs funne"
+
+msgid "The end date must be after the start date."
+msgstr "Sluttdatoen må vere etter startdatoen."
+
+msgid "Always visible"
+msgstr "Alltid synleg"
+
+msgid "No end date"
+msgstr "Ingen sluttdato"
+
+msgid "No restriction"
+msgstr "Ingen avgrensing"
+
+msgid "Missing learning path or course identifier"
+msgstr "Manglar læringssti eller kursidentifikator"
+
+msgid "Select a user or a group first"
+msgstr "Vel ein brukar eller ei gruppe først"
+
+msgid "Remove all date restrictions for this learning path?"
+msgstr "Fjern alle datoavgrensingar for denne læringsstien?"
+
+msgid "Advanced learning path access"
+msgstr "Avansert tilgang til læringssti"
+
+msgid "Remove date restrictions"
+msgstr "Fjern datoavgrensingar"
+
+msgid "Search by name, email, username or group"
+msgstr "Søk etter namn, e-post, brukarnamn eller gruppe"
+
+msgid "Edit user restriction"
+msgstr "Rediger brukaravgrensing"
+
+msgid "Edit group restriction"
+msgstr "Rediger gruppeavgrensing"
+
+msgid "Select a user or group"
+msgstr "Vel ein brukar eller gruppe"
+
+msgid "Save restriction"
+msgstr "Lagre avgrensing"
+
+msgid "members"
+msgstr "medlemer"
+
+msgid "Create Assignment"
+msgstr "Opprett oppgåve"
+
+msgid "The submission deadline has passed. You can no longer submit."
+msgstr "Innleveringsfristen har gått ut. Du kan ikkje lenger levere inn."
+
+msgid "Mailing cannot be combined with other recipients."
+msgstr "E-postutsending kan ikkje kombinerast med andre mottakarar."
+
+msgid "Social map"
+msgstr "Sosialt kart"
+
+msgid "The map plugin is not enabled or configured."
+msgstr "Karttillegget er ikkje aktivert eller konfigurert."
+
+msgid "Some configured extra fields were not found"
+msgstr "Nokre konfigurerte ekstrafelt vart ikkje funne"
+
+msgid "No user locations were found."
+msgstr "Ingen brukarplasseringar vart funne."
+
+msgid "OpenStreetMap needs coordinates to display an embedded marker. Address-only locations are listed below."
+msgstr "OpenStreetMap treng koordinatar for å visa ein innebygd markør. Adresseberre plasseringar er lista nedanfor."
+
+msgid "Locations"
+msgstr "Plasseringar"
+
+msgid "Open map"
+msgstr "Opna kart"
+
+msgid "Provider: OpenStreetMap"
+msgstr "Leverandør: OpenStreetMap"
+
+msgid "Provider: Google Maps"
+msgstr "Leverandør: Google Maps"
+
+msgid "Personal files"
+msgstr "Personlege filer"
+
+msgid "Upload image"
+msgstr "Last opp bilete"
+
+msgid "Upload media"
+msgstr "Last opp media"
+
+msgid "Only image files are allowed in this upload screen."
+msgstr "Berre biletfiler er tillatne i dette opplastingsskjermbiletet."
+
+msgid "Only audio and video files are allowed in this upload screen."
+msgstr "Berre lyd- og videofiler er tillatne i dette opplastingsskjermbiletet."
+
+msgid "Upload files to your personal storage."
+msgstr "Last opp filer til den personlege lagringa di."
+
+msgid "Linked"
+msgstr "Lenkja"
+
+msgid "No audio or video files were found in this folder."
+msgstr "Ingen lyd- eller videofiler vart funne i denne mappa."
+
+msgid "No image files were found in this folder."
+msgstr "Ingen biletfiler vart funne i denne mappa."
+
+msgid "No matching files were found in this folder."
+msgstr "Ingen samsvarande filer vart funne i denne mappa."
+
+msgid "This file type is not allowed in this upload screen."
+msgstr "Denne filtypen er ikkje tillaten i dette opplastingsskjermbiletet."
+
+msgid "Manage your personal files and course documents."
+msgstr "Handter dei personlege filene dine og kursdokumenta."
+
+msgid "DateValidity"
+msgstr "DateValidity"
+
+msgid "JustificationSaved"
+msgstr "JustificationSaved"
+
+msgid "ValidityDate"
+msgstr "ValidityDate"
+
+msgid "MyJustifications"
+msgstr "MyJustifications"
+
+msgid "Submission"
+msgstr "Innlevering"
+
+msgid "Use the filters above to narrow the list."
+msgstr "Bruk filtra ovanfor for å avgrensa lista."
+
+msgid "You are not allowed to see this page."
+msgstr "Du har ikkje løyve til å sjå denne sida."
+
+msgid "plugin_title"
+msgstr "plugin_title"
+
+msgid "plugin_comment"
+msgstr "plugin_comment"
+
+msgid "Course tracking details"
+msgstr "Kurssporingsdetaljar"
+
+msgid "Course activity statistics"
+msgstr "Kursaktivitetstatistikk"
+
+msgid "mobile_phone_number"
+msgstr "mobile_phone_number"
+
+msgid "Allowed template syntax"
+msgstr "Tillaten malsyntaks"
+
+msgid "Functions"
+msgstr "Funksjonar"
+
+msgid "Available variables depend on the template type, for example {{ user.getUsername() }} or {{ user.getEmail() }}."
+msgstr "Tilgjengelege variablar avheng av maltypen, til dømes {{ user.getUsername() }} eller {{ user.getEmail() }}."
+
+msgid "For security reasons, any other Twig function, filter (such as filter, map, reduce or sort) or PHP call is blocked."
+msgstr "Av tryggleiksgrunnar er alle andre Twig-funksjonar, filter (som filter, map, reduce eller sort) eller PHP-kall blokkerte."
+
+msgid "Global administrator"
+msgstr "Global administrator"
+
+msgid "Session manager"
+msgstr "Øktadministrator"
+
+msgid "Human resources manager"
+msgstr "Personalansvarleg"
+
+msgid "Course teacher"
+msgstr "Kurslærar"
+
+msgid "Course student"
+msgstr "Kursstudent"
+
+msgid "Platform reports"
+msgstr "Plattformrapportar"
+
+msgid "Security reports"
+msgstr "Tryggleiksrapportar"
+
+msgid "Course reports"
+msgstr "Kursrapportar"
+
+msgid "Gradebook reports"
+msgstr "Karakterbokrapportar"
+
+msgid "Social reports"
+msgstr "Sosiale rapportar"
+
+msgid "Exports"
+msgstr "Eksportar"
+
+msgid "Reports about platform-wide usage, users, courses and sessions."
+msgstr "Rapportar om plattformbruk, brukarar, kurs og økter."
+
+msgid "Audit and security-sensitive reports."
+msgstr "Revisjons- og tryggingsrapportar."
+
+msgid "Reports scoped to courses managed by the user."
+msgstr "Rapportar avgrensa til kurs som brukaren administrerer."
+
+msgid "Reports related to learner activity and follow-up."
+msgstr "Rapportar om elevaktivitet og oppfølging."
+
+msgid "Reports related to scores, certificates and gradebook data."
+msgstr "Rapportar om resultat, sertifikat og karakterbokdata."
+
+msgid "Reports and exports that generate downloadable files."
+msgstr "Rapportar og eksportar som genererer nedlastbare filer."
+
+msgid "Main platform statistics dashboard."
+msgstr "Hovudoversikt over plattformstatistikk."
+
+msgid "Number of courses and course distribution report."
+msgstr "Rapport om tal på kurs og kursfordeling."
+
+msgid "Platform-wide access to course tools."
+msgstr "Plattformomfattande tilgang til kursverktøy."
+
+msgid "Number of resources per tool."
+msgstr "Tal på ressursar per verktøy."
+
+msgid "Latest access to courses."
+msgstr "Siste tilgang til kurs."
+
+msgid "Course distribution by language."
+msgstr "Kursfordeling etter språk."
+
+msgid "Course usage report."
+msgstr "Rapport om kursbruk."
+
+msgid "Platform user count report."
+msgstr "Rapport om tal på brukarar på plattforma."
+
+msgid "Recent logins chart."
+msgstr "Diagram over siste påloggingar."
+
+msgid "Login distribution by month."
+msgstr "Fordeling av påloggingar etter månad."
+
+msgid "Login distribution by day."
+msgstr "Fordeling av påloggingar etter dag."
+
+msgid "Login distribution by hour."
+msgstr "Fordeling av påloggingar etter time."
+
+msgid "Users with profile picture."
+msgstr "Brukarar med profilbilete."
+
+msgid "Login report filtered by date."
+msgstr "Påloggingsrapport filtrert etter dato."
+
+msgid "Users who have not logged in recently."
+msgstr "Brukarar som ikkje har logga inn nyleg."
+
+msgid "Inactive or suspicious user accounts report."
+msgstr "Rapport om inaktive eller mistenkelege brukarkontoar."
+
+msgid "Users activity statistics."
+msgstr "Brukaraktivitetstatistikk."
+
+msgid "Currently online users report."
+msgstr "Rapport om brukarar som er pålogga no."
+
+msgid "New user registrations over time."
+msgstr "Nye brukarregistreringar over tid."
+
+msgid "Course and session subscriptions over time."
+msgstr "Abonnement på kurs og økter over tid."
+
+msgid "Duplicate user detection and maintenance report."
+msgstr "Rapport om oppdaging og vedlikehald av dupliserte brukarar."
+
+msgid "Platform user/session statistics."
+msgstr "Statistikk over brukarar og økter på plattforma."
+
+msgid "Quarterly platform report."
+msgstr "Kvartalsrapport for plattforma."
+
+msgid "Activities audit"
+msgstr "Aktivitetsrevisjon"
+
+msgid "Audit report for important administrative and platform activities."
+msgstr "Revisjonsrapport for viktige administrative og plattformaktivitetar."
+
+msgid "Social messages received report."
+msgstr "Rapport om mottatte sosiale meldingar."
+
+msgid "Social messages sent report."
+msgstr "Rapport om sendte sosiale meldingar."
+
+msgid "Social contacts count report."
+msgstr "Rapport om tal på sosiale kontaktar."
+
+msgid "Sessions created over time."
+msgstr "Økter oppretta over tid."
+
+msgid "Learning analytics dashboard."
+msgstr "Læringsanalyseoversikt."
+
+msgid "Teacher time report."
+msgstr "Lærartidsrapport."
+
+msgid "Teachers time by session report"
+msgstr "Lærartidsrapport etter økt"
+
+msgid "Teacher time report grouped by session."
+msgstr "Lærartidsrapport gruppert etter økt."
+
+msgid "Corporate learning analytics report."
+msgstr "Rapport om bedriftslæringsanalyse."
+
+msgid "Course learners tracking report."
+msgstr "Rapport om elevsporing i kurs."
+
+msgid "Course activity statistics with connected and inactive users."
+msgstr "Kursaktivitetstatistikk med tilkopla og inaktive brukarar."
+
+msgid "Detailed tracking report for a learner inside a course."
+msgstr "Detaljert sporingsrapport for ein elev i eit kurs."
+
+msgid "Course gradebook overview."
+msgstr "Oversikt over kurskarakterbok."
+
+msgid "Gradebook statistics"
+msgstr "Karakterbokstatistikk"
+
+msgid "Gradebook statistics report."
+msgstr "Rapport om karakterbokstatistikk."
+
+msgid "Certificate report"
+msgstr "Sertifikatrapport"
+
+msgid "Certificate report for course gradebook."
+msgstr "Sertifikatrapport for kurskarakterbok."
+
+msgid "User statistics"
+msgstr "Brukarstatistikk"
+
+msgid "Course gradebook statistics for a user."
+msgstr "Kursvurderingsstatistikk for ein brukar."
+
+msgid "Personal statistics"
+msgstr "Personleg statistikk"
+
+msgid "Personal gradebook statistics."
+msgstr "Personleg vurderingsstatistikk."
+
+msgid "Reports catalog"
+msgstr "Rapportkatalog"
+
+msgid "Central catalog of available reports, roles and permission categories."
+msgstr "Sentral katalog over tilgjengelege rapportar, roller og løyvegrupper."
+
+msgid "Course log events"
+msgstr "Kurslogghendingar"
+
+msgid "Detailed course tracking events."
+msgstr "Detaljerte kurssporingshendingar."
+
+msgid "Course tool usage"
+msgstr "Kursverktøybruk"
+
+msgid "Course tracking report grouped by tools."
+msgstr "Kurssporingsrapport gruppert etter verktøy."
+
+msgid "Course resource usage"
+msgstr "Kursressursbruk"
+
+msgid "Course tracking report grouped by resources."
+msgstr "Kurssporingsrapport gruppert etter ressursar."
+
+msgid "Course group tracking"
+msgstr "Kursgruppesporing"
+
+msgid "Tracking report for course groups."
+msgstr "Sporingsrapport for kursgrupper."
+
+msgid "Course session report"
+msgstr "Kursøktrapport"
+
+msgid "Tracking report for a course inside sessions."
+msgstr "Sporingsrapport for eit kurs i økter."
+
+msgid "Learning path report"
+msgstr "Læringsstirapport"
+
+msgid "Learning path tracking report."
+msgstr "Sporingsrapport for læringssti."
+
+msgid "Learning path results by user"
+msgstr "Læringsstiresultat etter brukar"
+
+msgid "Learning path results grouped by user."
+msgstr "Læringsstiresultat gruppert etter brukar."
+
+msgid "Exercises report"
+msgstr "Øvingsrapport"
+
+msgid "Course exercises and exams tracking report."
+msgstr "Sporingsrapport for kursøvingar og eksamenar."
+
+msgid "Question report"
+msgstr "Spørsmålsrapport"
+
+msgid "Course question tracking report."
+msgstr "Sporingsrapport for kursspørsmål."
+
+msgid "Messages report"
+msgstr "Meldingarapport"
+
+msgid "Course messages tracking report."
+msgstr "Sporingsrapport for kursmeldingar."
+
+msgid "Total time tracking report for course learners."
+msgstr "Total tidssporingsrapport for kursdeltakarar."
+
+msgid "Gradebook summary"
+msgstr "Vurderingsboksamandrag"
+
+msgid "Summary view of gradebook results."
+msgstr "Samandrag av vurderingsbokresultat."
+
+msgid "Flat view"
+msgstr "Flat visning"
+
+msgid "Flat gradebook results view."
+msgstr "Flat visning av vurderingsbokresultat."
+
+msgid "Evaluation log"
+msgstr "Evalueringslogg"
+
+msgid "Change log for gradebook evaluations."
+msgstr "Endringslogg for vurderingsbokevalueringar."
+
+msgid "Link log"
+msgstr "Lenkelogg"
+
+msgid "Change log for gradebook links."
+msgstr "Endringslogg for vurderingsboklenker."
+
+msgid "Result details"
+msgstr "Resultatdetaljar"
+
+msgid "Detailed view of a gradebook result."
+msgstr "Detaljert visning av eit vurderingsbokresultat."
+
+msgid "Personal certificates report."
+msgstr "Personleg sertifikatrapport."
+
+msgid "User move statistics"
+msgstr "Brukarflyttestatistikk"
+
+msgid "Report for user move and transfer statistics."
+msgstr "Rapport for brukarflytte- og overføringsstatistikk."
+
+msgid "User consent list"
+msgstr "Brukarsamtykkeliste"
+
+msgid "Report of users and consent status."
+msgstr "Rapport over brukarar og samtykkestatus."
+
+msgid "Special platform exports."
+msgstr "Spesielle plattformeksportar."
+
+msgid "Export certificates"
+msgstr "Eksporter sertifikat"
+
+msgid "Export platform certificates."
+msgstr "Eksporter plattformsertifikat."
+
+msgid "Export exercise results"
+msgstr "Eksporter øvingsresultat"
+
+msgid "Export exercise results from the platform."
+msgstr "Eksporter øvingsresultat frå plattforma."
+
+msgid "Course survey results and reporting."
+msgstr "Kursundersøkingsresultat og rapportering."
+
+msgid "Attendance report"
+msgstr "Frammøterapport"
+
+msgid "Course attendance tracking and reports."
+msgstr "Kursframmøtesporing og rapportar."
+
+msgid "Exercises global report"
+msgstr "Global øvingsrapport"
+
+msgid "Global exercise results report for the course."
+msgstr "Global øvingsresultatrapport for kurset."
+
+msgid "Exercise report"
+msgstr "Øvingsrapport"
+
+msgid "Detailed exercise report."
+msgstr "Detaljert øvingsrapport."
+
+msgid "Exercise history"
+msgstr "Øvingshistorikk"
+
+msgid "Exercise attempt history."
+msgstr "Øvingsforsøkshistorikk."
+
+msgid "Exercise results"
+msgstr "Øvingsresultat"
+
+msgid "Exercise results and corrections."
+msgstr "Øvingsresultat og rettingar."
+
+msgid "Question-level exercise statistics."
+msgstr "Oppgåvenivå øvingsstatistikk."
+
+msgid "Exercise statistics"
+msgstr "Øvingsstatistikk"
+
+msgid "Exercise statistics page."
+msgstr "Øvingsstatistikk-side."
+
+msgid "Live exercise statistics"
+msgstr "Live øvingsstatistikk"
+
+msgid "Live exercise statistics for teachers."
+msgstr "Live øvingsstatistikk for lærarar."
+
+msgid "Learning path statistics"
+msgstr "Læringssti-statistikk"
+
+msgid "Learning path item statistics."
+msgstr "Læringsstielement-statistikk."
+
+msgid "Learning path report inside a course."
+msgstr "Læringsstirapport inne i eit kurs."
+
+msgid "User skills report."
+msgstr "Brukarferdigheitsrapport."
+
+msgid "Scheduled or periodic export configuration."
+msgstr "Planlagd eller periodisk eksportkonfigurasjon."
+
+msgid "User export"
+msgstr "Brukareksport"
+
+msgid "Export users from the platform."
+msgstr "Eksporter brukarar frå plattforma."
+
+msgid "Not classified"
+msgstr "Ikkje klassifisert"
+
+msgid "You have acquired the skill %s"
+msgstr "Du har tileigna deg ferdigheita %s"
+
+msgid "You have acquired the skill %s."
+msgstr "Du har tileigna deg ferdigheita %s."
+
+msgid "Recover your password"
+msgstr "Gjenopprett passordet ditt"
+
+msgid "Disclaimer"
+msgstr "Ansvarsfråsegn"
+
+msgid "This operation would exceed the limit of %d users allowed for this course."
+msgstr "Denne operasjonen ville overskride grensa på %d brukarar som er tillatne for dette kurset."
+
+msgid "DefaultGroupCategory"
+msgstr "Standardgruppe-kategori"
+
+msgid "LearningCalendar"
+msgstr "Læringskalender"
+
+msgid "Choose how this user can authenticate on the platform."
+msgstr "Vel korleis denne brukaren kan autentisere seg på plattforma."
+
+msgid "Authentication methods"
+msgstr "Autentiseringsmetodar"
+
+msgid "Set password manually"
+msgstr "Set passord manuelt"
+
+msgid "Report role matrix"
+msgstr "Rapport rollematrise"
+
+msgid "Report permission categories"
+msgstr "Rapport løyve-kategoriar"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs enforce the documented report role matrix."
+msgstr "Dette registeret listar kjende rapportsider, deira kategori, kanonisk URL, eldre URL og forventa rollepublikum. Kanoniske URL-ar handhevar den dokumenterte rapport-rollematrisen."
+
+msgid "reports"
+msgstr "rapportar"
+
+msgid "Canonical URL"
+msgstr "Kanonisk URL"
+
+msgid "Legacy URL"
+msgstr "Eldre URL"
+
+msgid "Permission category"
+msgstr "Løyve-kategori"
+
+msgid "This matrix documents the expected audience for each report and is enforced by the canonical report entry point."
+msgstr "Denne matrisen dokumenterer det forventa publikummet for kvar rapport og vert handheva av det kanoniske rapport-inngangspunktet."
+
+msgid "These keys group reports by access scope and are used by the report registry. They can later be mapped to finer-grained platform permissions."
+msgstr "Desse nøklane grupperer rapportar etter tilgangsomfang og vert brukte av rapportregisteret. Dei kan seinare bli tilordna meir detaljerte plattformløyve."
+
+msgid "Permission"
+msgstr "Løyve"
+
+msgid "Clear active session"
+msgstr "Tøm aktiv økt"
+
+msgid "Are you sure you want to clear this user active session?"
+msgstr "Er du sikker på at du vil tømma denne brukaren si aktive økt?"
+
+msgid "Preview shown without course context. Some course-specific data may be unavailable."
+msgstr "Førehandsvising vist utan kurskontekst. Nokre kursspesifikke data kan vere utilgjengelege."
+
+msgid "Preview is not available for this question."
+msgstr "Førehandsvising er ikkje tilgjengeleg for dette spørsmålet."
+
+msgid "Edition is not allowed without a course context."
+msgstr "Redigering er ikkje tillate utan kurskontekst."
+
+msgid "This plugin does not use regions."
+msgstr "Dette programtillegget brukar ikkje område."
+
+msgid "No plugins with regions were found."
+msgstr "Ingen programtillegg med område vart funne."
+
+msgid "Freemium"
+msgstr "Freemium"
+
+msgid "Commercial service"
+msgstr "Kommersiell teneste"
+
+msgid "Commercial"
+msgstr "Kommersiell"
+
+msgid "100% free"
+msgstr "100 % gratis"
+
+msgid "Displayed above the public login form."
+msgstr "Vist over det offentlege innloggingskjemaet."
+
+msgid "Displayed below the public login form."
+msgstr "Vist under det offentlege innloggingskjemaet."
+
+msgid "Displayed before the footer area."
+msgstr "Vist før bunnområdet."
+
+msgid "Displayed in the left footer column."
+msgstr "Vist i venstre kolonne i botnen."
+
+msgid "Displayed in the center footer column."
+msgstr "Vist i midtre kolonne i botnen."
+
+msgid "Displayed in the right footer column."
+msgstr "Vist i høgre kolonne i botnen."
+
+msgid "Showing all plugins."
+msgstr "Viser alle programtillegg."
+
+msgid "Some plugins are still pending functional verification."
+msgstr "Nokre programtillegg ventar framleis på funksjonell verifisering."
+
+msgid "Show verified plugins only"
+msgstr "Vis berre verifiserte programtillegg"
+
+msgid "Showing verified plugins only."
+msgstr "Viser berre verifiserte programtillegg."
+
+msgid "Pending plugins are temporarily hidden until they are adapted and tested."
+msgstr "Ventande programtillegg er mellombels gøymde til dei er tilpassa og testa."
+
+msgid "Show all plugins"
+msgstr "Vis alle programtillegg"
+
+msgid "Official and free plugins are listed separately from plugins that may depend on commercial services or paid offers."
+msgstr "Offisielle og gratis programtillegg er lista separat frå programtillegg som kan vere avhengige av kommersielle tenester eller betalte tilbod."
+
+msgid "Included free plugins"
+msgstr "Inkluderte gratis programtillegg"
+
+msgid "Commercial and freemium plugins"
+msgstr "Kommersielle og freemium programtillegg"
+
+msgid "All plugins"
+msgstr "Alle programtillegg"
+
+msgid "No plugins were found for this category."
+msgstr "Ingen programtillegg vart funne for denne kategorien."
+
+msgid "Search plugins"
+msgstr "Søk i programtillegg"
+
+msgid "Search by name or description"
+msgstr "Søk etter namn eller skildring"
+
+msgid "Advanced filters"
+msgstr "Avanserte filter"
+
+msgid "All statuses"
+msgstr "Alle statusar"
+
+msgid "All sources"
+msgstr "Alle kjelder"
+
+msgid "All types"
+msgstr "Alle typar"
+
+msgid "Installed plugins are shown first"
+msgstr "Installerte programtillegg vert viste først"
+
+msgid "No plugins match the current filters."
+msgstr "Ingen programtillegg samsvarar med gjeldande filter."
+
+msgid "Try clearing the search or changing the filters."
+msgstr "Prøv å tømme søket eller endre filtra."
+
+msgid "README"
+msgstr "LES MEG"
+
+msgid "Invalid security token"
+msgstr "Ugyldig tryggingstoken"
+
+msgid "Please select a destination session"
+msgstr "Vel ei måløkt"
+
+msgid "Cannot move this to the same session"
+msgstr "Kan ikkje flytte dette til same økta"
+
+msgid "The destination session must include the selected course"
+msgstr "Måløkta må innehalde det valde kurset"
+
+msgid "The source session must include the selected course"
+msgstr "Kjeldeøkta må innehalde det valde kurset"
+
+msgid "No learners found"
+msgstr "Ingen deltakarar funne"
+
+msgid "Will be subscribed"
+msgstr "Vert abonnerte"
+
+msgid "Subscribed"
+msgstr "Abonnert"
+
+msgid "The move process has finished"
+msgstr "Flytteprosessen er ferdig"
+
+msgid "Comparison finished. No data has been moved."
+msgstr "Samanlikning ferdig. Ingen data vart flytte."
+
+msgid "Move tracking data from the base course or a source session to another session. Use comparison first to review the affected learner data."
+msgstr "Flytt sporingsdata frå grunnkurset eller ei kjeldeøkt til ei anna økt. Bruk samanlikning først for å sjå gjennom dei påverka deltakardataa."
+
+msgid "Search for a course or use the manual course ID field below."
+msgstr "Søk etter eit kurs eller bruk feltet for manuell kurs-ID nedanfor."
+
+msgid "Fallback when the course search is not available."
+msgstr "Reserve når kurssøket ikkje er tilgjengeleg."
+
+msgid "Load sessions"
+msgstr "Last økter"
+
+msgid "Selected course"
+msgstr "Valt kurs"
+
+msgid "Choose the base course or the session where the tracking data currently exists."
+msgstr "Vel grunnkurset eller økta der sporingsdataa no finst."
+
+msgid "Choose the session that will receive the tracking data."
+msgstr "Vel økta som skal motta sporingsdataa."
+
+msgid "Important"
+msgstr "Viktig"
+
+msgid "The move action updates existing tracking data. Run compare first and test this tool with a non-production course before moving real learner data."
+msgstr "Flyttehandlinga oppdaterer eksisterande sporingsdata. Køyr samanlikning først og test dette verktøyet med eit ikkje-produksjonskurs før du flyttar reelle deltakardata."
+
+msgid "No sessions found for this course"
+msgstr "Ingen økter funne for dette kurset"
+
+msgid "Some users were ignored because they are not subscribed to this session."
+msgstr "Nokre brukarar vart ignorert fordi dei ikkje er abonnerte på denne økta."
+
+msgid "Remove selected user"
+msgstr "Fjern vald brukar"
+
+msgid "Add selected user"
+msgstr "Legg til vald brukar"
+
+msgid "No users from the selected list are subscribed to this session."
+msgstr "Ingen brukarar frå den valde lista er påmelde denne økta."
+
+msgid "No image"
+msgstr "Inga bilete"
+
+msgid "Invalid URL."
+msgstr "Ugyldig URL."
+
+msgid "This cloud document cannot be embedded."
+msgstr "Dette skydokumentet kan ikkje byggjast inn."
+
+msgid "Document not found"
+msgstr "Dokument ikkje funne"
+
+msgid "File not found"
+msgstr "Fil ikkje funne"
+
+msgid "This learning path is not available for your user at this time."
+msgstr "Denne læringsstien er ikkje tilgjengeleg for brukaren din no."
+
+msgid "StartDateMustBeBeforeTheEndDate"
+msgstr "StartDateMustBeBeforeTheEndDate"
+
+msgid "Next learning path"
+msgstr "Neste læringssti"
+
+msgid "Select the learning path that will be available after this one."
+msgstr "Vel læringsstien som skal vere tilgjengeleg etter denne."
+
+msgid "Create another learning path in this course to enable learning path flow."
+msgstr "Opprett ein annan læringssti i dette kurset for å aktivere flyt mellom læringsstiar."
+
+msgid "Available from %s"
+msgstr "Tilgjengeleg frå %s"
+
+msgid "Available until %s"
+msgstr "Tilgjengeleg til %s"
+
+msgid "Statistics reset date"
+msgstr "Statistikk nullstilt dato"
+
+msgid "Last 24 hours"
+msgstr "Siste 24 timar"
+
+msgid "This reset date is used as the reference date for the report. It does not delete historical tracking data."
+msgstr "Denne nullstillingsdatoen vert brukt som referansedato for rapporten. Han slettar ikkje historiske sporingsdata."
+
+msgid "Since reset date"
+msgstr "Sidan nullstillingsdato"
+
+msgid "Users connected in the last 24 hours"
+msgstr "Brukarar tilkopla siste 24 timar"
+
+msgid "Learners with at least one course access during the last 24 hours."
+msgstr "Studentar med minst éin kurstilgang dei siste 24 timane."
+
+msgid "Users connected in the last week"
+msgstr "Brukarar tilkopla siste veke"
+
+msgid "Learners with at least one course access during the last 7 days."
+msgstr "Studentar med minst éin kurstilgang dei siste 7 dagane."
+
+msgid "Users connected in the last month"
+msgstr "Brukarar tilkopla siste månad"
+
+msgid "Learners with at least one course access during the last 30 days."
+msgstr "Studentar med minst éin kurstilgang dei siste 30 dagane."
+
+msgid "Not recently connected users"
+msgstr "Ikkje nyleg tilkopla brukarar"
+
+msgid "Learners without course access since %s."
+msgstr "Studentar utan kurstilgang sidan %s."
+
+msgid "Recently used resources"
+msgstr "Nyleg brukte ressursar"
+
+msgid "Course tools/resources used since %s."
+msgstr "Kursverktøy/ressursar brukte sidan %s."
+
+msgid "%s %% of learners"
+msgstr "%s %% av studentar"
+
+msgid "Connections"
+msgstr "Tilkoplingar"
+
+msgid "Total connections"
+msgstr "Totalt tilkoplingar"
+
+msgid "Downloaded documents"
+msgstr "Nedlasta dokument"
+
+msgid "List of documents downloaded by this learner in this course."
+msgstr "Liste over dokument nedlasta av denne studenten i dette kurset."
+
+msgid "Forum topics"
+msgstr "Forumemne"
+
+msgid "Forum topics opened by this learner in this course."
+msgstr "Forumemne opna av denne studenten i dette kurset."
+
+msgid "Forum posts"
+msgstr "Forumpostar"
+
+msgid "Forum posts written by this learner in this course."
+msgstr "Forumpostar skrivne av denne studenten i dette kurset."
+
+msgid "Course connections"
+msgstr "Kurstillkoplingar"
+
+msgid "Connection history for this learner in this course."
+msgstr "Tilkoplingshistorikk for denne studenten i dette kurset."
+
+msgid "Resources used"
+msgstr "Ressursar brukte"
+
+msgid "Latest tools or resources used by this learner in this course."
+msgstr "Siste verktøy eller ressursar brukte av denne studenten i dette kurset."
+
+msgid "Logout date"
+msgstr "Avmeldingsdato"
+
+msgid "Imported Aiken quiz"
+msgstr "Importert Aiken-prøve"
+
+msgid "Only supported documents will be listed here."
+msgstr "Berre støtta dokument vert lista her."
+
+msgid "Generated Aiken content"
+msgstr "Generert Aiken-innhald"
+
+msgid "Review the generated content before importing it as a new exercise."
+msgstr "Gå gjennom det genererte innhaldet før du importerer det som ei ny øving."
+
+msgid "No documents available."
+msgstr "Ingen dokument tilgjengelege."
+
+msgid "yperbolic arctangent:\\t\\tarctanh(x)"
+msgstr "hyperbolsk arctangens:\\t\\tarctanh(x)"
+
+msgid "Exercise"
+msgstr "Øving"
+
+msgid "OfficialCode"
+msgstr "Offisiell kode"
+
+msgid "FirstName"
+msgstr "Fornamn"
+
+msgid "LastName"
+msgstr "Etternamn"
+
+msgid "LoginName"
+msgstr "Brukarnamn"
+
+msgid "MinMinute"
+msgstr "Minutt"
+
+msgid "StartDate"
+msgstr "Startdato"
+
+msgid "EndDate"
+msgstr "Sluttdato"
+
+msgid "CorrectionDate"
+msgstr "Rettingsdato"
+
+msgid "NotValidated"
+msgstr "Ikkje godkjend"
+
+msgid "PendingAttempts"
+msgstr "Ventande forsøk"
+
+msgid "List of pending test attempts across your courses."
+msgstr "Liste over ventande prøveforsøk i kursa dine."
+
+msgid "User ID"
+msgstr "Brukar-ID"
+
+msgid "QuestionType"
+msgstr "Spørsmålstype"
+
+msgid "QuestionsWithNoAutomaticCorrection"
+msgstr "Spørsmål utan automatisk retting"
+
+msgid "There are no pending tests."
+msgstr "Det finst ingen ventande prøvar."
+
+msgid "%s results"
+msgstr "%s resultat"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Eksempel på utfyllingsaktivitet: rekne ut kroppsmasseindeks</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Alder</strong></td>            <td width=\"75%\" style=\"\">[25] år</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kjønn</strong></td>            <td style=\"\" text-align:=\"\">[M] (M eller F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Vekt</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Høgd</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Kroppsmasseindeks</strong></td>            <td style=\"vertical-align: top;\">[29] KMI = Vekt/Høgd<sup>2</sup> (Sjå <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\">Wikipedia-artikkel</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Removed"
+msgstr "Fjerna"
+
+msgid "NoUsersInTheList"
+msgstr "Ingen brukarar i lista"
+
+msgid "Are you sure?"
+msgstr "Er du sikker?"
+
+msgid "NoResultsAvailable"
+msgstr "Ingen resultat tilgjengelege"
+
+msgid "Import groups from a CSV file and optionally remove items that are not present in the file."
+msgstr "Importer grupper frå ei CSV-fil og fjern eventuelt element som ikkje finst i fila."
+
+msgid "Use this option carefully because items missing from the CSV can be removed during the import process."
+msgstr "Bruk dette valet med varsemd, då element som manglar i CSV-fila kan bli fjerna under importen."
+
+msgid "Upload a CSV file with the group data you want to import."
+msgstr "Last opp ei CSV-fil med gruppedata du ønskjer å importere."
+
+msgid "You can download the example file to use the expected format."
+msgstr "Du kan laste ned eksempel-fila for å bruke det forventa formatet."
+
+msgid "If you enable deletion, items not present in the file may be removed."
+msgstr "Viss du aktiverer sletting, kan element som ikkje finst i fila bli fjerna."
+
+msgid "The CSV file is mandatory to start the import."
+msgstr "CSV-fila er påkravd for å starte importen."
+
+msgid "Please select at least one class."
+msgstr "Vel minst éin klasse."
+
+msgid "Define the properties for each group before creating them."
+msgstr "Definer eigenskapane for kvar gruppe før du opprettar dei."
+
+msgid "Apply the first row values"
+msgstr "Bruk verdiane frå første rad"
+
+msgid "Create groups manually or generate them from the classes subscribed to this course."
+msgstr "Opprett grupper manuelt eller generer dei frå klassane som er påmelde dette kurset."
+
+msgid "Create manual groups"
+msgstr "Opprett manuelle grupper"
+
+msgid "Use this form when you want to create empty course groups manually."
+msgstr "Bruk dette skjemaet når du ønskjer å opprette tomme kursgrupper manuelt."
+
+msgid "Configure manual groups"
+msgstr "Konfigurer manuelle grupper"
+
+msgid "Create groups from subscribed classes"
+msgstr "Opprett grupper frå påmelde klassar"
+
+msgid "Use this form when you want to create one course group for each selected class."
+msgstr "Bruk dette skjemaet når du ønskjer å opprette éin kursgruppe for kvar vald klasse."
+
+msgid "Keep created groups linked to their source classes"
+msgstr "Hald oppretta grupper knytte til kjeldeklassane"
+
+msgid "Create groups from selected classes"
+msgstr "Opprett grupper frå valde klassar"
+
+msgid "You must be logged in to access this page."
+msgstr "Du må vere innlogga for å få tilgang til denne sida."
+
+msgid "Invalid user"
+msgstr "Ugyldig brukar"
+
+msgid "UseCourseCustomCertificate"
+msgstr "Bruk tilpassa kursbevis"
+
+msgid "UseDefaultCustomCertificate"
+msgstr "Bruk standard tilpassa bevis"
+
+msgid "CertificateSetting"
+msgstr "Bevisinnstilling"
+
+msgid "SelectOneOptionBeforeOpeningEditor"
+msgstr "Vel eitt alternativ før du opnar redigeringsverktøyet"
+
+msgid "ChooseCustomCertificateModeHelp"
+msgstr "Vel modus for tilpassa bevis – hjelp"
+
+msgid "CertificateMode"
+msgstr "Bevismodus"
+
+msgid "Enable student to validate own attendance"
+msgstr "La studenten godkjenne eigen frammøte"
+
+msgid "Course block"
+msgstr "Kursblokk"
+
+msgid "Add custom content blocks to course footer regions."
+msgstr "Legg til tilpassa innhaldsblokker i bunnen av kurssidene."
+
+msgid "course_block_pre_footer"
+msgstr "course_block_pre_footer"
+
+msgid "Before footer"
+msgstr "Før bunntekst"
+
+msgid "course_block_footer_left"
+msgstr "course_block_footer_left"
+
+msgid "Footer left"
+msgstr "Bunntekst venstre"
+
+msgid "course_block_footer_center"
+msgstr "course_block_footer_center"
+
+msgid "Footer center"
+msgstr "Bunntekst senter"
+
+msgid "course_block_footer_right"
+msgstr "course_block_footer_right"
+
+msgid "Footer right"
+msgstr "Bunntekst høgre"
+
+msgid "SetNotification"
+msgstr "SetNotification"
+
+msgid "CourseLegal"
+msgstr "CourseLegal"
+
+msgid "Certificates search is not available"
+msgstr "Søk etter sertifikat er ikkje tilgjengeleg"
+
+msgid "It allows the acquisition of skills by subcategories"
+msgstr "Det tillèt tileigning av ferdigheiter etter underkategoriar"
+
+msgid "Allow skills by subcategories"
+msgstr "Tillat ferdigheiter etter underkategoriar"
+
+msgid "Minimum score for skills"
+msgstr "Minimumspoeng for ferdigheiter"
+
+msgid "The gradebook table is hidden."
+msgstr "Karaktertavla er gøymd."
+
+msgid "Invalid token"
+msgstr "Ugyldig token"
+
+msgid "Unable to save the item"
+msgstr "Kan ikkje lagra elementet"
+
+msgid "Only HTTP and HTTPS URLs are allowed."
+msgstr "Berre HTTP- og HTTPS-adresser er tillatne."
+
+msgid "Invalid URL host."
+msgstr "Ugyldig vertsnamn i URL."
+
+msgid "This cloud provider is not allowed."
+msgstr "Denne skyleverandøren er ikkje tillaten."
+
+msgid "Documents used"
+msgstr "Dokument nytta"
+
+msgid "No document usage"
+msgstr "Ingen dokumentnytting"
+
+msgid "Invalid action."
+msgstr "Ugyldig handling."
+
+msgid "No users selected."
+msgstr "Ingen brukarar valde."
+
+msgid "%s user(s) processed."
+msgstr "%s brukar(ar) handsama."
+
+msgid "Invalid CSRF token."
+msgstr "Ugyldig CSRF-token."
+
+msgid "[%s] Please change your password"
+msgstr "[%s] Endre passordet ditt"
+
+msgid "Dear %s,\n\nOur security enforcing process shows you use a password that is commonly used on the internet, which means your account could easily be stolen. It is probably a simple sequence or a very common word, we don't really know (we cannot see your password), but we ask you to please connect to the platform and request a password change. You can follow the link here: %s to do that now.\n\nPlease note we will never ask for your password in this process. You just enter your username or e-mail and we send you a link. If you are asked to introduce your existing password to do that, someone is probably trying to do Phishing on your account. Be safe, change your password now!\n\n%s\n%s"
+msgstr "Kjære %s,\n\nVår tryggingsprosess viser at du nyttar eit passord som er vanleg på internett, noko som betyr at kontoen din lett kan bli stjålen. Det er truleg ei enkel sekvens eller eit svært vanleg ord, vi veit ikkje (vi kan ikkje sjå passordet ditt), men vi ber deg om å logga inn på plattforma og be om å endra passordet. Du kan følgja lenka her: %s for å gjera det no.\n\nMerk at vi aldri vil be om passordet ditt i denne prosessen. Du skriv berre inn brukarnamnet eller e-postadressa di, og vi sender deg ei lenke. Dersom du blir beden om å skriva inn det eksisterande passordet ditt, prøver nokon truleg å utføra phishing på kontoen din. Ver trygg, endra passordet ditt no!\n\n%s\n%s"
+
+msgid "[%s] Your password has been reset"
+msgstr "[%s] Passordet ditt er tilbakestilt"
+
+msgid "Dear %s,\n\nOur security enforcing process flagged you as using a password that is commonly used on the internet, which means your account could easily be stolen. As a prevention measure, we have decided to initiate a password reset process. Your new, automatically generated password is now:\n\n%s\n\nPlease login to the platform soon (using this new password) to set your own, personal and secure, password.\n\nBe safe.\n\n%s\n%s"
+msgstr "Kjære %s,\n\nVår tryggingsprosess har flagga at du nyttar eit passord som er vanleg på internett, noko som betyr at kontoen din lett kan bli stjålen. Som eit førebyggjande tiltak har vi valt å starta ein prosess for tilbakestilling av passord. Det nye, automatisk genererte passordet ditt er no:\n\n%s\n\nLogg inn på plattforma snart (med dette nye passordet) for å setja ditt eige, personlege og trygge passord.\n\nVer trygg.\n\n%s\n%s"
+
+msgid "Signature saved successfully"
+msgstr "Signatur lagra"
+
+msgid "Invalid request payload."
+msgstr "Ugyldig førespurnad."
+
+msgid "Authentication required."
+msgstr "Autentisering påkravd."
+
+msgid "The course title is required."
+msgstr "Kursnamnet er påkravd."
+
+msgid "Only trainers and administrators can create courses."
+msgstr "Berre instruktørar og administratorar kan oppretta kurs."
+
+msgid "Course creation by trainers is disabled on this platform."
+msgstr "Oppretting av kurs av instruktørar er deaktivert på denne plattforma."
+
+msgid "The selected BuyCourses service cannot be used to create this course."
+msgstr "Den valde BuyCourses-tenesta kan ikkje nyttast til å oppretta dette kurset."
+
+msgid "You have reached the maximum number of courses allowed (%d)."
+msgstr "Du har nådd maksimalt tal på tillatne kurs (%d)."
+
+msgid "The selected BuyCourses service is invalid."
+msgstr "Den valde BuyCourses-tenesta er ugyldig."
+
+msgid "BuyCourses is not available right now."
+msgstr "BuyCourses er ikkje tilgjengeleg akkurat no."
+
+msgid "BuyCourses cannot validate the selected service right now."
+msgstr "BuyCourses kan ikkje validera den valde tenesta akkurat no."
+
+msgid "Unable to validate the selected BuyCourses service right now."
+msgstr "Kan ikkje validera den valde BuyCourses-tenesta akkurat no."
+
+msgid "External tool removed from course"
+msgstr "Eksternt verktøy fjerna frå kurset"
+
+msgid "External tool was removed from the course, but kept internally because it is linked to the gradebook"
+msgstr "Eksternt verktøy vart fjerna frå kurset, men halde internt fordi det er kopla til karakterboka"
+
+msgid "There are no external tools available to add to the gradebook"
+msgstr "Det finst ingen eksterne verktøy tilgjengelege for å leggja til i karakterboka"
+
+msgid "The evaluation could not be created"
+msgstr "Evalueringa kunne ikkje opprettast"
+
+msgid "The gradebook evaluation could not be linked"
+msgstr "Karakterboksevalueringa kunne ikkje koplast"
+
+msgid "Survey questions"
+msgstr "Undersøkingsspørsmål"
+
+msgid "Back to survey list"
+msgstr "Tilbake til undersøkingsliste"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "Denne undersøkinga har allereie svar. Redigering av spørsmål er deaktivert av konfigurasjonen."
+
+msgid "Choose the type of question you want to add."
+msgstr "Vel typen spørsmål du ønskjer å leggja til."
+
+msgid "The free text option is added automatically."
+msgstr "Alternativet for fri tekst vert lagt til automatisk."
+
+msgid "No questions found"
+msgstr "Ingen spørsmål funne"
+
+msgid "Mandatory"
+msgstr "Obligatorisk"
+
+msgid "Unsupported question type"
+msgstr "Ikkje støtta spørsmålstype"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "Du kan bruka taggane {%s} og {%s} i spørsmålet."
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "Dette spørsmålet vert vist betinga medan du svarar på undersøkinga."
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "Prosentalternativa frå 1 til 100 vert genererte automatisk."
+
+msgid "Could not load survey questions"
+msgstr "Kunne ikkje lasta undersøkingsspørsmål"
+
+msgid "The question text is required."
+msgstr "Spørsmålsteksten er påkravd."
+
+msgid "The maximum score is required."
+msgstr "Maksimal poengsum er påkravd."
+
+msgid "Please select a parent option."
+msgstr "Vel eit foreldreval."
+
+msgid "Please fill all answer options."
+msgstr "Fyll ut alle svaralternativ."
+
+msgid "QuestionUpdated"
+msgstr "QuestionUpdated"
+
+msgid "Could not save survey question"
+msgstr "Kunne ikkje lagra undersøkingsspørsmål"
+
+msgid "Could not delete survey question"
+msgstr "Kunne ikkje sletta undersøkingsspørsmål"
+
+msgid "Could not move survey question"
+msgstr "Kunne ikkje flytte underspørsmål"
+
+msgid "Could not copy survey question"
+msgstr "Kunne ikkje kopiere underspørsmål"
+
+msgid "Hide search"
+msgstr "Gøym søk"
+
+msgid "Showing results for: %s"
+msgstr "Viser resultat for: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "Søk etter undersøkingstittel, kode eller skildring."
+
+msgid "Search surveys"
+msgstr "Søk i undersøkingar"
+
+msgid "%s surveys selected"
+msgstr "%s undersøkingar valde"
+
+msgid "Clear selection"
+msgstr "Tøm utval"
+
+msgid "No surveys found"
+msgstr "Fann ingen undersøkingar"
+
+msgid "Unsupported"
+msgstr "Ikkje støtta"
+
+msgid "Could not load surveys"
+msgstr "Kunne ikkje laste undersøkingar"
+
+msgid "Delete selected surveys"
+msgstr "Slett valde undersøkingar"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "Dei valde undersøkingane og spørsmåla deira vert sletta. Denne handlinga kan ikkje angrast."
+
+msgid "Could not delete selected surveys"
+msgstr "Kunne ikkje slette valde undersøkingar"
+
+msgid "Survey action"
+msgstr "Undersøkingshandling"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "Ein kopi av denne undersøkinga vert oppretta: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "Alle svar og invitasjonar vert sletta for denne undersøkinga: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "Genererte fleirvalsspørsmål vert fjerna frå denne undersøkinga: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "Denne undersøkinga vert publisert for dei tilknytte gruppeleiarane: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "Denne undersøkinga og spørsmåla hennar vert sletta: %s"
+
+msgid "Could not complete survey action"
+msgstr "Kunne ikkje fullføre undersøkingshandling"
+
+msgid "Not started"
+msgstr "Ikkje starta"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "Møteavstemmingar let inviterte brukarar velje datoar dei er tilgjengelege."
+
+msgid "Back to surveys"
+msgstr "Tilbake til undersøkingar"
+
+msgid "Edit meeting poll"
+msgstr "Rediger møteavstemming"
+
+msgid "View meeting poll"
+msgstr "Vis møteavstemming"
+
+msgid "Basic information"
+msgstr "Grunnleggjande informasjon"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "Dette vil opprette ei undersøking av typen møteavstemming. Svar og invitasjonar vert handterte separat."
+
+msgid "Availability"
+msgstr "Tilgjenge"
+
+msgid "Meeting dates"
+msgstr "Møtedatoar"
+
+msgid "Meeting poll"
+msgstr "Møteavstemming"
+
+msgid "My availability"
+msgstr "Mi tilgjenge"
+
+msgid "Meeting poll results"
+msgstr "Resultat frå møteavstemming"
+
+msgid "No invitations found"
+msgstr "Fann ingen invitasjonar"
+
+msgid "available"
+msgstr "tilgjengeleg"
+
+msgid "Could not load meeting poll"
+msgstr "Kunne ikkje laste møteavstemming"
+
+msgid "Please complete the required fields"
+msgstr "Vennlegst fyll ut dei påkravde felta"
+
+msgid "Could not save meeting poll"
+msgstr "Kunne ikkje lagre møteavstemming"
+
+msgid "Could not save meeting availability"
+msgstr "Kunne ikkje lagre møtetilgjenge"
+
+msgid "Copy this survey to another course or session"
+msgstr "Kopier denne undersøkinga til eit anna kurs eller ei anna økt"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "Undersøkinga vert kopiert utan svar eller invitasjonar."
+
+msgid "No target courses found"
+msgstr "Fann ingen målkurs"
+
+msgid "Search by course title, course code or session name."
+msgstr "Søk etter kurstittel, kurskode eller øktnamn."
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "Bruk Dupliser undersøking når du ønskjer ein kopi i same kurs."
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "Spørsmål og alternativ vert kopierte. Svar, invitasjonar og rapportar vert berre i den opphavlege undersøkinga."
+
+msgid "Selected target"
+msgstr "Vald mål"
+
+msgid "Could not load copy form"
+msgstr "Kunne ikkje laste kopieringsskjema"
+
+msgid "The survey will be copied to: %s"
+msgstr "Undersøkinga vert kopiert til: %s"
+
+msgid "Survey copied."
+msgstr "Undersøking kopiert."
+
+msgid "Could not copy survey"
+msgstr "Kunne ikkje kopiere undersøking"
+
+msgid "Answer survey"
+msgstr "Svar på undersøking"
+
+msgid "Preview mode does not save answers."
+msgstr "Førehandsvising lagrar ikkje svar."
+
+msgid "Survey completed"
+msgstr "Undersøking fullført"
+
+msgid "Thank you for answering the survey."
+msgstr "Takk for at du svarte på undersøkinga."
+
+msgid "Profile information"
+msgstr "Profilinformasjon"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "Vennlegast sjå gjennom dei etterspurde profilfelta før du svarar på undersøkinga."
+
+msgid "This profile field is read-only."
+msgstr "Dette profilfeltet er skriveverna."
+
+msgid "You already filled this survey."
+msgstr "Du har allereie svart på denne undersøkinga."
+
+msgid "Please specify"
+msgstr "Vennlegast spesifiser"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "Denne spørsmålstypen er ikkje støtta i den moderne undersøkingsvisinga."
+
+msgid "Preview only"
+msgstr "Berre førehandsvising"
+
+msgid "Submit answers"
+msgstr "Send inn svar"
+
+msgid "Could not load survey"
+msgstr "Kunne ikkje laste undersøking"
+
+msgid "Please complete the required profile fields."
+msgstr "Vennlegast fyll ut dei påkravde profilfelta."
+
+msgid "Please answer all mandatory questions."
+msgstr "Vennlegast svar på alle obligatoriske spørsmål."
+
+msgid "Could not save survey answers"
+msgstr "Kunne ikkje lagre undersøkingsvar"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "Konfigurer hovudinformasjonen for undersøkinga før du handsamar spørsmål og invitasjonar."
+
+msgid "The survey code cannot be changed after creation."
+msgstr "Undersøkingskoden kan ikkje endrast etter oppretting."
+
+msgid "Survey behavior"
+msgstr "Undersøkingsåtferd"
+
+msgid "Use 0 for no time limit."
+msgstr "Bruk 0 for ingen tidsgrense."
+
+msgid "Survey messages"
+msgstr "Undersøkingsmeldingar"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "Profilfelta som er valde her, vil bli viste før undersøkingsspørsmåla."
+
+msgid "No profile fields are currently available."
+msgstr "Ingen profilfelt er tilgjengelege for augneblinken."
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "Val av profilfelt er berre tilgjengeleg for ikkje-anonyme undersøkingar."
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "Kompetanselenking vil bli migrert i ein eigen batch."
+
+msgid "Could not load survey configuration"
+msgstr "Kunne ikkje laste undersøkingskonfigurasjon"
+
+msgid "The survey code is required."
+msgstr "Undersøkingskoden er påkravd."
+
+msgid "The survey title is required."
+msgstr "Undersøkingstittelen er påkravd."
+
+msgid "The survey has been saved successfully"
+msgstr "Undersøkinga har vorte lagra"
+
+msgid "Could not save survey configuration"
+msgstr "Kunne ikkje lagre undersøkingskonfigurasjon"
+
+msgid "Course users"
+msgstr "Kursbrukarar"
+
+msgid "Already invited"
+msgstr "Allereie invitert"
+
+msgid "No users found"
+msgstr "Ingen brukarar funne"
+
+msgid "No groups found"
+msgstr "Ingen grupper funne"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "Bruk **lenke** der undersøkingslenka skal visast."
+
+msgid "Remind all selected users"
+msgstr "Minn alle valde brukarar"
+
+msgid "Anonymous access link"
+msgstr "Anonym tilgangslenke"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "Brukarar som ikkje er inviterte kan bruke denne lenka til å ta undersøkinga."
+
+msgid "Answered anonymously"
+msgstr "Svarte anonymt"
+
+msgid "Could not load survey invitations"
+msgstr "Kunne ikkje laste undersøkingsinvitasjonar"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "E-postemne og melding er påkravde når du sender e-post."
+
+msgid "Could not publish survey"
+msgstr "Kunne ikkje publisere undersøking"
+
+msgid "Could not copy the link"
+msgstr "Kunne ikkje kopiere lenka"
+
+msgid "Please answer this survey using the following link"
+msgstr "Vennlegast svar på denne undersøkinga ved å bruke følgjande lenke"
+
+msgid "Export CSV"
+msgstr "Eksporter CSV"
+
+msgid "Export compact CSV"
+msgstr "Eksporter kompakt CSV"
+
+msgid "Export Excel"
+msgstr "Eksporter Excel"
+
+msgid "Export package"
+msgstr "Eksporter pakke"
+
+msgid "Results summary"
+msgstr "Resultatsamandrag"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "Denne visinga viser dei migrerte rapportdataa for denne undersøkinga."
+
+msgid "Select user"
+msgstr "Vel brukar"
+
+msgid "No answers found"
+msgstr "Ingen svar funne"
+
+msgid "answers"
+msgstr "svar"
+
+msgid "Could not load survey reporting"
+msgstr "Kunne ikkje laste undersøkingsrapport"
+
+msgid "Back to threads"
+msgstr "Tilbake til trådar"
+
+msgid "Back to learning path"
+msgstr "Tilbake til læringssti"
+
+msgid "Remove sticky"
+msgstr "Fjern merke"
+
+msgid "Make sticky"
+msgstr "Merk som viktig"
+
+msgid "Open thread"
+msgstr "Opne tråd"
+
+msgid "Close thread"
+msgstr "Lukk tråd"
+
+msgid "Delete thread"
+msgstr "Slett tråd"
+
+msgid "This thread is hidden from learners."
+msgstr "Denne tråden er skjult for studentar."
+
+msgid "Revision requested"
+msgstr "Revisjon etterspurt"
+
+msgid "Revision"
+msgstr "Revisjon"
+
+msgid "Approve post"
+msgstr "Godkjenn innlegg"
+
+msgid "Reject post"
+msgstr "Avvis innlegg"
+
+msgid "Cancel revision request"
+msgstr "Avbryt revisjonsførespurnad"
+
+msgid "Delete post"
+msgstr "Slett innlegg"
+
+msgid "Message is required"
+msgstr "Melding er påkravd"
+
+msgid "Target thread is required"
+msgstr "Måltråd er påkravd"
+
+msgid "Could not retrieve posts"
+msgstr "Kunne ikkje hente innlegg"
+
+msgid "Thread shown"
+msgstr "Tråd vist"
+
+msgid "Thread hidden"
+msgstr "Tråd skjult"
+
+msgid "Could not update thread"
+msgstr "Kunne ikkje oppdatere tråd"
+
+msgid "Thread closed"
+msgstr "Tråd lukka"
+
+msgid "Thread opened"
+msgstr "Tråd opna"
+
+msgid "Thread marked as sticky"
+msgstr "Tråd merkt som viktig"
+
+msgid "Thread unmarked as sticky"
+msgstr "Tråd avmerkt som viktig"
+
+msgid "Thread notifications enabled"
+msgstr "Trådvarslingar slått på"
+
+msgid "Thread notifications disabled"
+msgstr "Trådvarslingar slått av"
+
+msgid "Could not update thread notification"
+msgstr "Kunne ikkje oppdatere trådvarsling"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "Er du sikker på at du vil slette denne tråden?"
+
+msgid "Could not delete thread"
+msgstr "Kunne ikkje slette tråd"
+
+msgid "Post approved"
+msgstr "Innlegg godkjent"
+
+msgid "Could not approve post"
+msgstr "Kunne ikkje godkjenne innlegg"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "Er du sikker på at du vil avvise dette innlegget?"
+
+msgid "Post rejected"
+msgstr "Innlegg avvist"
+
+msgid "Could not reject post"
+msgstr "Kunne ikkje avvise innlegg"
+
+msgid "Post shown"
+msgstr "Innlegg vist"
+
+msgid "Post hidden"
+msgstr "Innlegg skjult"
+
+msgid "Could not update post"
+msgstr "Kunne ikkje oppdatere innlegg"
+
+msgid "Post updated"
+msgstr "Innlegg oppdatert"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "Er du sikker på at du vil slette dette innlegget?"
+
+msgid "Post deleted"
+msgstr "Innlegg sletta"
+
+msgid "Could not delete post"
+msgstr "Kunne ikkje slette innlegg"
+
+msgid "Untitled thread"
+msgstr "Tråd utan tittel"
+
+msgid "Could not retrieve threads"
+msgstr "Kunne ikkje hente trådar"
+
+msgid "Post moved"
+msgstr "Innlegg flytta"
+
+msgid "Could not move post"
+msgstr "Kunne ikkje flytte innlegg"
+
+msgid "Revision request removed"
+msgstr "Revisjonsførespurnad fjerna"
+
+msgid "Could not update revision request"
+msgstr "Kunne ikkje oppdatere revisjonsførespurnad"
+
+msgid "Are you sure you want to report this post?"
+msgstr "Er du sikker på at du vil rapportere dette innlegget?"
+
+msgid "Could not report post"
+msgstr "Kunne ikkje rapportere innlegget"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "Er du sikker på at du vil slette dette vedlegget?"
+
+msgid "Attachment deleted"
+msgstr "Vedlegg sletta"
+
+msgid "Could not delete attachment"
+msgstr "Kunne ikkje slette vedlegget"
+
+msgid "Thread title"
+msgstr "Tittel på tråd"
+
+msgid "Sticky thread"
+msgstr "Fast tråd"
+
+msgid "Attach files"
+msgstr "Legg ved filer"
+
+msgid "Attachments are disabled for this forum"
+msgstr "Vedlegg er slått av for dette forumet"
+
+msgid "The forum is not open yet."
+msgstr "Forumet er ikkje opna enno."
+
+msgid "The forum is closed."
+msgstr "Forumet er stengt."
+
+msgid "The forum is locked."
+msgstr "Forumet er låst."
+
+msgid "New threads are not allowed in this forum."
+msgstr "Nye trådar er ikkje tillatne i dette forumet."
+
+msgid "Thread created"
+msgstr "Tråd oppretta"
+
+msgid "Could not create thread"
+msgstr "Kunne ikkje opprette tråd"
+
+msgid "Back to posts"
+msgstr "Tilbake til innlegg"
+
+msgid "This reply will be stored as a revision."
+msgstr "Dette svaret vil bli lagra som ein revisjon."
+
+msgid "Post reply"
+msgstr "Legg til svar"
+
+msgid "The thread is locked."
+msgstr "Tråden er låst."
+
+msgid "Reply added"
+msgstr "Svar lagt til"
+
+msgid "Could not add reply"
+msgstr "Kunne ikkje leggje til svar"
+
+msgid "Add forum"
+msgstr "Legg til forum"
+
+msgid "No forums found"
+msgstr "Ingen forum funne"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "Opprett den første forumkategorien eller forumet for å starte diskusjonar."
+
+msgid "Locked"
+msgstr "Låst"
+
+msgid "No forums in this category"
+msgstr "Ingen forum i denne kategorien"
+
+msgid "Posts require approval"
+msgstr "Innlegg krev godkjenning"
+
+msgid "Forum for current group"
+msgstr "Forum for gjeldande gruppe"
+
+msgid "Group forum visibility"
+msgstr "Synlegheit for gruppeforum"
+
+msgid "No category"
+msgstr "Ingen kategori"
+
+msgid "Could not retrieve forums"
+msgstr "Kunne ikkje hente forum"
+
+msgid "Forum category updated"
+msgstr "Forumkategori oppdatert"
+
+msgid "Forum category created"
+msgstr "Forumkategori oppretta"
+
+msgid "Could not save forum category"
+msgstr "Kunne ikkje lagre forumkategori"
+
+msgid "Forum updated"
+msgstr "Forum oppdatert"
+
+msgid "Forum created"
+msgstr "Forum oppretta"
+
+msgid "Could not save forum"
+msgstr "Kunne ikkje lagre forum"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "Er du sikker på at du vil slette denne forumkategorien?"
+
+msgid "Could not delete forum category"
+msgstr "Kunne ikkje slette forumkategori"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "Er du sikker på at du vil slette dette forumet?"
+
+msgid "Could not delete forum"
+msgstr "Kunne ikkje slette forum"
+
+msgid "Forum category unlocked"
+msgstr "Forumkategori låst opp"
+
+msgid "Forum category locked"
+msgstr "Forumkategori låst"
+
+msgid "Could not update forum category"
+msgstr "Kunne ikkje oppdatere forumkategori"
+
+msgid "Forum category shown"
+msgstr "Forumkategori vist"
+
+msgid "Forum category hidden"
+msgstr "Forumkategori gøymd"
+
+msgid "Forum unlocked"
+msgstr "Forum låst opp"
+
+msgid "Forum locked"
+msgstr "Forum låst"
+
+msgid "Could not update forum"
+msgstr "Kunne ikkje oppdatere forum"
+
+msgid "Forum shown"
+msgstr "Forum vist"
+
+msgid "Forum hidden"
+msgstr "Forum gøymd"
+
+msgid "Forum notifications enabled"
+msgstr "Forumvarslingar aktiverte"
+
+msgid "Forum notifications disabled"
+msgstr "Forumvarslingar deaktiverte"
+
+msgid "Could not update forum notification"
+msgstr "Kunne ikkje oppdatere forumvarsling"
+
+msgid "Forum category moved"
+msgstr "Forumkategori flytta"
+
+msgid "Could not move forum category"
+msgstr "Kunne ikkje flytte forumkategori"
+
+msgid "Forum moved"
+msgstr "Forum flytta"
+
+msgid "Could not move forum"
+msgstr "Kunne ikkje flytte forum"
+
+msgid "Back to forums"
+msgstr "Tilbake til forum"
+
+msgid "New thread"
+msgstr "Ny tråd"
+
+msgid "No threads found"
+msgstr "Ingen trådar funne"
+
+msgid "Sticky"
+msgstr "Klistra"
+
+msgid "Graded"
+msgstr "Vurdert"
+
+msgid "Grade peers"
+msgstr "Vurder medstudentar"
+
+msgid "Move thread"
+msgstr "Flytt tråd"
+
+msgid "Target forum"
+msgstr "Målforum"
+
+msgid "Target forum is required"
+msgstr "Målforum er påkravd"
+
+msgid "Students"
+msgstr "Studentar"
+
+msgid "No students found"
+msgstr "Ingen studentar funne"
+
+msgid "No peers available to grade."
+msgstr "Ingen medstudentar tilgjengelege for vurdering."
+
+msgid "Qualified"
+msgstr "Kvalifisert"
+
+msgid "Not qualified"
+msgstr "Ikkje kvalifisert"
+
+msgid "Could not retrieve thread grading"
+msgstr "Kunne ikkje hente trådvurdering"
+
+msgid "Thread grading updated"
+msgstr "Trådvurdering oppdatert"
+
+msgid "Could not update thread grading"
+msgstr "Kunne ikkje oppdatere trådvurdering"
+
+msgid "Thread score saved"
+msgstr "Trådpoeng lagra"
+
+msgid "Could not save thread score"
+msgstr "Kunne ikkje lagre trådpoeng"
+
+msgid "Could not move thread"
+msgstr "Kunne ikkje flytte tråd"
+
+msgid "Thread updated"
+msgstr "Tråd oppdatert"
+
+msgid "Search term is too short"
+msgstr "Søkeordet er for kort"
+
+msgid "Could not search forums"
+msgstr "Kunne ikkje søkje i forum"
+
+msgid "Moderated"
+msgstr "Modererert"
+
+msgid "View threads"
+msgstr "Vis trådar"
 

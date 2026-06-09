@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\State;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session as CoreSession;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
@@ -94,6 +95,8 @@ final readonly class LpCollectionStateProvider implements ProviderInterface
             }
         }
 
+        $this->applyContextualVisibility($lps, $course, $session);
+
         if ($user instanceof User) {
             $progress = $this->lpRepo->lastProgressForUser($lps, $user, $session);
 
@@ -140,6 +143,21 @@ final readonly class LpCollectionStateProvider implements ProviderInterface
                 }
             )
         );
+    }
+
+    /**
+     * @param array<int, CLp> $lps
+     */
+    private function applyContextualVisibility(array $lps, Course $course, ?CoreSession $session): void
+    {
+        foreach ($lps as $lp) {
+            $link = $lp->getFirstResourceLinkFromCourseSession($course, $session);
+            if (null === $link) {
+                $link = $lp->getFirstResourceLinkFromCourseSession($course);
+            }
+
+            $lp->setVisible($link instanceof ResourceLink && ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility());
+        }
     }
 
     private function shouldShowUnavailableLearningPathsWithDates(): bool

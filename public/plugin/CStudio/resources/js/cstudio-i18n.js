@@ -10,6 +10,19 @@
     var _src = (document.currentScript || {}).src || ''
     var _idx = _src.indexOf(_marker)
     var _root = _idx !== -1 ? _src.slice(0, _idx + _marker.length) : '/plugin/CStudio/'
+    var _version = ''
+    var _queryIndex = _src.indexOf('?')
+    if (_queryIndex !== -1) {
+        _version = _src.slice(_queryIndex + 1)
+    }
+
+    function cstudioWithCacheBuster(url) {
+        if (_version === '') {
+            return url + '?v=' + Date.now()
+        }
+
+        return url + '?' + _version
+    }
 
     /**
      * Look up a UI string in the loaded translation table.
@@ -32,9 +45,9 @@
      */
     function cstudioI18nInit(langCode, callback) {
         var lang = langCode || 'en_US'
-        var url  = _root + 'lang/json/' + lang + '.json'
+        var url  = cstudioWithCacheBuster(_root + 'lang/json/' + lang + '.json')
 
-        fetch(url)
+        fetch(url, { cache: 'no-store' })
             .then(function (r) {
                 if (!r.ok) { throw new Error('HTTP ' + r.status) }
                 return r.json()
@@ -50,7 +63,7 @@
                     return
                 }
                 // Try English as fallback
-                fetch(_root + 'lang/json/en_US.json')
+                fetch(cstudioWithCacheBuster(_root + 'lang/json/en_US.json'), { cache: 'no-store' })
                     .then(function (r) { return r.ok ? r.json() : {} })
                     .then(function (data) { _translations = data })
                     .catch(function () { /* stay with empty table */ })

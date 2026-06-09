@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Trân trọng"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Mẫu công thức: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Công thức mẫu: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Phạm vi biến"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:bản quyền,, no:không bản quyền"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Thư mục,, application/msword:MsWord,, application/octet-stream:Dòng octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:Thư mục,, application\/msword:MsWord,, application\/octet-stream:Dòng octet,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:bài tập,,      simulation:mô phỏng,,      questionnaire:bảng câu hỏi,,      diagram:sơ đồ,,      figure:hình vẽ,,      graph:đồ thị,,      index:chỉ mục,,      slide:slide,,      table:bảng,,      narrative text:văn bản kể chuyện,,      exam:kỳ thi,,      experiment:thí nghiệm,,      problem statement:đề bài,,      self assessment:tự đánh giá,,      lecture:bài giảng"
@@ -4641,7 +4641,7 @@ msgid "Invalid end date was given."
 msgstr "Ngày kết thúc không hợp lệ."
 
 msgid "(d/m/y h:m)"
-msgstr "(d/m/y h:m)"
+msgstr "(d\/m\/y h:m)"
 
 msgid "Homepage-files are not writable!"
 msgstr "Tệp trang chủ không thể ghi!"
@@ -9730,6 +9730,9 @@ msgstr "Kết quả tìm kiếm cho:"
 
 msgid "Select a file"
 msgstr "Chọn tệp"
+
+msgid "Select a file to insert into the editor."
+msgstr "Chọn một tệp để chèn vào trình soạn thảo."
 
 msgid "Warning - The FAQ file, located in the /home/ directory of your portal, is not writable. Your text will not be saved until the file permissions are changed."
 msgstr "Cảnh báo - Tệp FAQ, nằm trong thư mục /home/ của cổng thông tin, không thể ghi. Văn bản của bạn sẽ không được lưu cho đến khi quyền tệp được thay đổi."
@@ -15911,6 +15914,9 @@ msgstr "Ngày & giờ"
 msgid "Item"
 msgstr "Mục"
 
+msgid "Items"
+msgstr "Mục"
+
 msgid "Configure Dashboard Plugin"
 msgstr "Cấu hình tiện ích Bảng điều khiển"
 
@@ -17164,6 +17170,18 @@ msgstr "Phiên trong nhóm"
 
 msgid "Courses in group"
 msgstr "Khóa học trong nhóm"
+
+msgid "Courses on the platform"
+msgstr "Khóa học trên nền tảng"
+
+msgid "%s courses"
+msgstr "%s khóa học"
+
+msgid "%s sessions"
+msgstr "%s phiên học"
+
+msgid "Search by title or code"
+msgstr "Tìm kiếm theo tiêu đề hoặc mã"
 
 msgid "Users in group"
 msgstr "Người dùng trong nhóm"
@@ -32169,6 +32187,9 @@ msgstr "Bài tập"
 msgid "Allowed file formats: %s"
 msgstr "Định dạng tệp được phép: %s"
 
+msgid "File manager"
+msgstr "Trình quản lý tệp"
+
 msgid "File type not allowed. Allowed extensions: %s"
 msgstr "Loại tệp không được phép. Phần mở rộng được phép: %s"
 
@@ -33882,6 +33903,2583 @@ msgstr "Chào mừng"
 msgid "Welcome to Chamilo"
 msgstr "Chào mừng đến với Chamilo"
 
+msgid "Check all unanswered questions below"
+msgstr "Kiểm tra tất cả câu hỏi chưa trả lời bên dưới"
+
 msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
 msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Nếu đây là lần đầu bạn sử dụng Chamilo, hãy kiểm tra menu bên để tìm đường qua nhiều tính năng của nó. Nếu bạn cần trợ giúp, bạn sẽ tìm thấy <a href=\"https://docs.chamilo.org\">tài liệu chính thức của chúng tôi</a> có thể giúp cho tài liệu tiêu chuẩn, trong khi <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">diễn đàn trực tuyến</a> của chúng tôi có thể giúp chia sẻ ý tưởng và tìm câu trả lời từ các người dùng Chamilo khác."
+
+msgid "Change password"
+msgstr "Đổi mật khẩu"
+
+msgid "Newest first"
+msgstr "Mới nhất trước"
+
+msgid "Oldest first"
+msgstr "Cũ nhất trước"
+
+msgid "Title A–Z"
+msgstr "Tiêu đề A–Z"
+
+msgid "Title Z–A"
+msgstr "Tiêu đề Z–A"
+
+msgid "Send test email"
+msgstr "Gửi email thử nghiệm"
+
+msgid "Show teachers"
+msgstr "Hiển thị giáo viên"
+
+msgid "Hide teachers"
+msgstr "Ẩn giáo viên"
+
+msgid "Delete exercise attempts"
+msgstr "Xóa các lần thử bài tập"
+
+msgid "Message sent successfully."
+msgstr "Đã gửi tin nhắn thành công."
+
+msgid "You cannot create a new course right now."
+msgstr "Bạn không thể tạo khóa học mới ngay bây giờ."
+
+msgid "Unable to verify whether you can create a new course right now."
+msgstr "Không thể xác minh xem bạn có thể tạo khóa học mới ngay bây giờ hay không."
+
+msgid "Please try again later or contact the administrator."
+msgstr "Vui lòng thử lại sau hoặc liên hệ với quản trị viên."
+
+msgid "You cannot create more courses at this time."
+msgstr "Bạn không thể tạo thêm khóa học lúc này."
+
+msgid "You already manage %d courses and your active service allows up to %d. To create another course, you need a higher service limit or reduce your current active courses."
+msgstr "Bạn đã quản lý %d khóa học và gói dịch vụ hiện tại của bạn cho phép tối đa %d. Để tạo khóa học khác, bạn cần nâng cấp giới hạn gói dịch vụ hoặc giảm số khóa học đang hoạt động."
+
+msgid "You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now."
+msgstr "Bạn đã quản lý %d khóa học và nền tảng hiện tại cho phép tối đa %d cho tài khoản của bạn. Bạn không thể tạo thêm khóa học ngay bây giờ."
+
+msgid "Add a class"
+msgstr "Thêm một lớp"
+
+msgid "Search classes"
+msgstr "Tìm kiếm lớp"
+
+msgid "No classes found"
+msgstr "Không tìm thấy lớp nào"
+
+msgid "Import classes"
+msgstr "Nhập lớp"
+
+msgid "Class users"
+msgstr "Người dùng của lớp"
+
+msgid "%s classes imported"
+msgstr "Đã nhập %s lớp"
+
+msgid "%s user-class links imported"
+msgstr "%s liên kết lớp người dùng đã được nhập"
+
+msgid "Hide comments"
+msgstr "Ẩn bình luận"
+
+msgid "Loading comments..."
+msgstr "Đang tải bình luận..."
+
+msgid "No comments yet."
+msgstr "Chưa có bình luận nào."
+
+msgid "A user with this username already exists"
+msgstr "Tên đăng nhập này đã tồn tại"
+
+msgid "Manage meetings, review recordings and update course-wide BBB settings from one place."
+msgstr "Quản lý các cuộc họp, xem lại bản ghi và cập nhật cài đặt BBB toàn khóa học từ một nơi."
+
+msgid "Review the current defaults and propagate them to every course when needed."
+msgstr "Xem lại các giá trị mặc định hiện tại và áp dụng chúng cho mọi khóa học khi cần."
+
+msgid "Filter the list by meeting date range."
+msgstr "Lọc danh sách theo khoảng ngày họp."
+
+msgid "Review meeting history, participants and recording actions."
+msgstr "Xem lịch sử họp, người tham gia và các hành động ghi âm."
+
+msgid "Participants"
+msgstr "Người tham gia"
+
+msgid "CountUsers"
+msgstr "Số người dùng"
+
+msgid "No data found"
+msgstr "Không tìm thấy dữ liệu"
+
+msgid "My justifications"
+msgstr "Lý do của tôi"
+
+msgid "My services"
+msgstr "Dịch vụ của tôi"
+
+msgid "Extra menu"
+msgstr "Menu mở rộng"
+
+msgid "Pending tests"
+msgstr "Bài kiểm tra đang chờ"
+
+msgid "No specific language"
+msgstr "Không có ngôn ngữ cụ thể"
+
+msgid "Source Chamilo version"
+msgstr "Phiên bản Chamilo nguồn"
+
+msgid "Exporting..."
+msgstr "Đang xuất..."
+
+msgid "Autosaved drafts available"
+msgstr "Có bản nháp tự động lưu"
+
+msgid "Hide drafts"
+msgstr "Ẩn bản nháp"
+
+msgid "Show drafts"
+msgstr "Hiện bản nháp"
+
+msgid "Drafts are stored only in this browser and are removed after saving the document."
+msgstr "Bản nháp chỉ được lưu trong trình duyệt này và sẽ bị xóa sau khi lưu tài liệu."
+
+msgid "Last saved"
+msgstr "Lần lưu cuối"
+
+msgid "Restore draft"
+msgstr "Khôi phục bản nháp"
+
+msgid "Delete draft"
+msgstr "Xóa bản nháp"
+
+msgid "Information about indexing document content"
+msgstr "Thông tin về việc lập chỉ mục nội dung tài liệu"
+
+msgid "When enabled, the document text is indexed by the search engine so users can find it from platform search."
+msgstr "Khi được bật, văn bản tài liệu sẽ được lập chỉ mục bởi công cụ tìm kiếm để người dùng có thể tìm thấy từ tìm kiếm nền tảng."
+
+msgid "The editor is not available."
+msgstr "Trình soạn thảo không khả dụng."
+
+msgid "Please place the cursor inside a paragraph first."
+msgstr "Vui lòng đặt con trỏ vào bên trong một đoạn văn trước."
+
+msgid "The selected paragraph is empty."
+msgstr "Đoạn văn đã chọn đang trống."
+
+msgid "Loading failed."
+msgstr "Tải thất bại."
+
+msgid "Add introduction"
+msgstr "Thêm giới thiệu"
+
+msgid "Course type"
+msgstr "Loại khóa học"
+
+msgid "Choose whether this course uses the standard platform limits or benefits from a purchased service."
+msgstr "Chọn xem khóa học này sử dụng giới hạn nền tảng tiêu chuẩn hay hưởng lợi từ dịch vụ đã mua."
+
+msgid "Standard course"
+msgstr "Khóa học tiêu chuẩn"
+
+msgid "Use the standard platform limits."
+msgstr "Sử dụng giới hạn nền tảng tiêu chuẩn."
+
+msgid "Selected"
+msgstr "Đã chọn"
+
+msgid "Hosting limit"
+msgstr "Giới hạn lưu trữ"
+
+msgid "Document quota"
+msgstr "Hạn ngạch tài liệu"
+
+msgid "The standard course limit has been reached."
+msgstr "Đã đạt giới hạn khóa học tiêu chuẩn."
+
+msgid "Use the benefits granted by this service."
+msgstr "Sử dụng các lợi ích do dịch vụ này cấp."
+
+msgid "Courses with these benefits"
+msgstr "Các khóa học với các lợi ích này"
+
+msgid "Active service"
+msgstr "Dịch vụ đang hoạt động"
+
+msgid "Buy service"
+msgstr "Mua dịch vụ"
+
+msgid "Select an available course type before creating the course."
+msgstr "Chọn một loại khóa học khả dụng trước khi tạo khóa học."
+
+msgid "users"
+msgstr "người dùng"
+
+msgid "You need to buy this service before using these benefits."
+msgstr "Bạn cần mua dịch vụ này trước khi sử dụng các lợi ích."
+
+msgid "You already used all courses available with this service."
+msgstr "Bạn đã sử dụng hết tất cả các khóa học có sẵn với dịch vụ này."
+
+msgid "This option is not available."
+msgstr "Tùy chọn này không khả dụng."
+
+msgid "This field is required"
+msgstr "Trường này là bắt buộc"
+
+msgid "Show less"
+msgstr "Thu gọn"
+
+msgid "Show full description"
+msgstr "Xem mô tả đầy đủ"
+
+msgid "Virtual keyboard"
+msgstr "Bàn phím ảo"
+
+msgid "Backspace"
+msgstr "Phím xóa"
+
+msgid "Space"
+msgstr "Khoảng trắng"
+
+msgid "Learning path only visible to selected learners"
+msgstr "Lộ trình học chỉ hiển thị cho người học được chọn"
+
+msgid "Create course"
+msgstr "Tạo khóa học"
+
+msgid "Tour"
+msgstr "Hướng dẫn"
+
+msgid "Are you sure you want to delete this comment?"
+msgstr "Bạn có chắc muốn xóa bình luận này?"
+
+msgid "No posts found"
+msgstr "Không tìm thấy bài viết nào"
+
+msgid "No communities"
+msgstr "Không có cộng đồng nào"
+
+msgid "No friends found"
+msgstr "Không tìm thấy bạn bè nào"
+
+msgid "Visual overview of your skills"
+msgstr "Tổng quan trực quan về kỹ năng của bạn"
+
+msgid "Compare your progress"
+msgstr "So sánh tiến độ của bạn"
+
+msgid "Please enter a search term."
+msgstr "Vui lòng nhập từ khóa tìm kiếm."
+
+msgid "Enter captcha code"
+msgstr "Nhập mã captcha"
+
+msgid "Refresh captcha"
+msgstr "Làm mới captcha"
+
+msgid "Captcha is temporarily blocked. Please try again later."
+msgstr "Captcha tạm thời bị chặn. Vui lòng thử lại sau."
+
+msgid "Item Details"
+msgstr "Chi tiết mục"
+
+msgid "Open File"
+msgstr "Mở tệp"
+
+msgid "Selection"
+msgstr "Lựa chọn"
+
+msgid "Remove selection context"
+msgstr "Xóa ngữ cảnh lựa chọn"
+
+msgid "Source document"
+msgstr "Tài liệu nguồn"
+
+msgid "Use the current course context"
+msgstr "Sử dụng ngữ cảnh khóa học hiện tại"
+
+msgid "Loading documents..."
+msgstr "Đang tải tài liệu..."
+
+msgid "No compatible PDF or TXT document was found in this course."
+msgstr "Không tìm thấy tài liệu PDF hoặc TXT tương thích nào trong khóa học này."
+
+msgid "Select a PDF or TXT document to generate terms only from that document."
+msgstr "Chọn một tài liệu PDF hoặc TXT để chỉ tạo thuật ngữ từ tài liệu đó."
+
+msgid "Confidentiality warning"
+msgstr "Cảnh báo bảo mật"
+
+msgid "When a document is selected, the prompt is fixed so the generation uses only that document content."
+msgstr "Khi một tài liệu được chọn, lời nhắc sẽ được cố định để quá trình tạo chỉ sử dụng nội dung của tài liệu đó."
+
+msgid "No document-processing AI providers available."
+msgstr "Không có nhà cung cấp AI xử lý tài liệu nào khả dụng."
+
+msgid "Failed to save signature. Please try again."
+msgstr "Lưu chữ ký thất bại. Vui lòng thử lại."
+
+msgid "Select and move"
+msgstr "Chọn và di chuyển"
+
+msgid "Freehand"
+msgstr "Vẽ tự do"
+
+msgid "Stroke"
+msgstr "Nét vẽ"
+
+msgid "Fill"
+msgstr "Tô màu"
+
+msgid "Import SVG"
+msgstr "Nhập SVG"
+
+msgid "Import image"
+msgstr "Nhập hình ảnh"
+
+msgid "Click the drawing area to place this text"
+msgstr "Nhấp vào vùng vẽ để đặt văn bản này"
+
+msgid "Draw a new SVG, import an existing SVG or embed an image, then save it as a reusable document."
+msgstr "Vẽ một SVG mới, nhập SVG hiện có hoặc nhúng hình ảnh, sau đó lưu nó dưới dạng tài liệu có thể tái sử dụng."
+
+msgid "Use Select and move to reposition or resize elements added in this editor."
+msgstr "Sử dụng Chọn và di chuyển để định vị lại hoặc thay đổi kích thước các phần tử được thêm trong trình soạn thảo này."
+
+msgid "Stroke width"
+msgstr "Độ rộng nét vẽ"
+
+msgid "Transparent fill"
+msgstr "Tô trong suốt"
+
+msgid "Invalid id"
+msgstr "ID không hợp lệ"
+
+msgid "Unable to load the drawing"
+msgstr "Không thể tải bản vẽ"
+
+msgid "Only PNG, JPG, WEBP or GIF images are supported."
+msgstr "Chỉ hỗ trợ hình ảnh PNG, JPG, WEBP hoặc GIF."
+
+msgid "Unable to read the image file."
+msgstr "Không thể đọc tệp hình ảnh."
+
+msgid "Only SVG files are supported."
+msgstr "Chỉ hỗ trợ tệp SVG."
+
+msgid "The SVG file is empty or invalid."
+msgstr "Tệp SVG trống hoặc không hợp lệ."
+
+msgid "Unable to read the SVG file."
+msgstr "Không thể đọc tệp SVG."
+
+msgid "The drawing is empty or invalid."
+msgstr "Bản vẽ trống hoặc không hợp lệ."
+
+msgid "Unable to save the drawing"
+msgstr "Không thể lưu bản vẽ"
+
+msgid "Information about AI-assisted documents"
+msgstr "Thông tin về tài liệu hỗ trợ AI"
+
+msgid "Location"
+msgstr "Vị trí"
+
+msgid "Cloud link"
+msgstr "Liên kết đám mây"
+
+msgid "Add a link to a cloud document, such as Google Drive or Google Docs."
+msgstr "Thêm liên kết đến tài liệu đám mây, ví dụ Google Drive hoặc Google Docs."
+
+msgid "Add cloud link"
+msgstr "Thêm liên kết đám mây"
+
+msgid "Document title"
+msgstr "Tiêu đề tài liệu"
+
+msgid "Document options change how uploaded files are processed after saving."
+msgstr "Tùy chọn tài liệu thay đổi cách xử lý tệp đã tải lên sau khi lưu."
+
+msgid "Information about uncompressing zip files"
+msgstr "Thông tin về việc giải nén tệp zip"
+
+msgid "When enabled, ZIP files are extracted into the current document folder after upload."
+msgstr "Khi bật, các tệp ZIP sẽ được giải nén vào thư mục tài liệu hiện tại sau khi tải lên."
+
+msgid "The title is required."
+msgstr "Tiêu đề là bắt buộc."
+
+msgid "The URL is required."
+msgstr "URL là bắt buộc."
+
+msgid "The destination folder is missing."
+msgstr "Thư mục đích bị thiếu."
+
+msgid "Unable to create cloud link."
+msgstr "Không thể tạo liên kết đám mây."
+
+msgid "Copy to My Files"
+msgstr "Sao chép vào Tệp của tôi"
+
+msgid "Used space"
+msgstr "Dung lượng đã dùng"
+
+msgid "Available space"
+msgstr "Dung lượng khả dụng"
+
+msgid "Available percentage"
+msgstr "Phần trăm khả dụng"
+
+msgid "Cloud links cannot be downloaded."
+msgstr "Không thể tải xuống các liên kết đám mây."
+
+msgid "Could not copy the file to My Files"
+msgstr "Không thể sao chép tệp vào Tệp của tôi"
+
+msgid "File copied to My Files"
+msgstr "Đã sao chép tệp vào Tệp của tôi"
+
+msgid "Checking course creation options..."
+msgstr "Đang kiểm tra tùy chọn tạo khóa học..."
+
+msgid "You cannot create more courses right now."
+msgstr "Bạn không thể tạo thêm khóa học lúc này."
+
+msgid "AI analyzer"
+msgstr "Bộ phân tích AI"
+
+msgid "Expand all"
+msgstr "Mở rộng tất cả"
+
+msgid "Collapse all"
+msgstr "Thu gọn tất cả"
+
+msgid "Review your active service benefits, purchase history and available receipts."
+msgstr "Xem lại quyền lợi dịch vụ đang hoạt động, lịch sử mua hàng và biên nhận khả dụng."
+
+msgid "Active services"
+msgstr "Dịch vụ đang hoạt động"
+
+msgid "No active services"
+msgstr "Không có dịch vụ đang hoạt động"
+
+msgid "Valid until"
+msgstr "Có hiệu lực đến"
+
+msgid "Recurring payment"
+msgstr "Thanh toán định kỳ"
+
+msgid "Next charge"
+msgstr "Lần tính phí tiếp theo"
+
+msgid "Enable auto billing"
+msgstr "Bật thanh toán tự động"
+
+msgid "Cancel auto billing"
+msgstr "Hủy thanh toán tự động"
+
+msgid "Granted benefits"
+msgstr "Quyền lợi được cấp"
+
+msgid "Purchase history"
+msgstr "Lịch sử mua hàng"
+
+msgid "No purchases yet"
+msgstr "Chưa có giao dịch mua nào"
+
+msgid "Product"
+msgstr "Sản phẩm"
+
+msgid "Reference"
+msgstr "Mã tham chiếu"
+
+msgid "Amount"
+msgstr "Số tiền"
+
+msgid "Receipt"
+msgstr "Biên nhận"
+
+msgid "Unable to load your services right now."
+msgstr "Không thể tải dịch vụ của bạn lúc này."
+
+msgid "Auto billing enabled"
+msgstr "Đã bật thanh toán tự động"
+
+msgid "Auto billing suspended"
+msgstr "Đã tạm dừng thanh toán tự động"
+
+msgid "Auto billing cancelled"
+msgstr "Đã hủy thanh toán tự động"
+
+msgid "Auto billing disabled"
+msgstr "Đã tắt thanh toán tự động"
+
+msgid "Cancel auto billing for this service?"
+msgstr "Hủy thanh toán tự động cho dịch vụ này?"
+
+msgid "Preview class members and courses"
+msgstr "Xem trước thành viên lớp và khóa học"
+
+msgid "Please select a CSV file to import."
+msgstr "Vui lòng chọn tệp CSV để nhập."
+
+msgid "%d user-class links imported"
+msgstr "%d liên kết lớp người dùng đã được nhập"
+
+msgid "The following errors occurred during import:"
+msgstr "Các lỗi sau đã xảy ra trong quá trình nhập:"
+
+msgid "CSV file"
+msgstr "Tệp CSV"
+
+msgid "Remove user from all group-related entities if not in the list"
+msgstr "Xóa người dùng khỏi tất cả các thực thể liên quan đến nhóm nếu không có trong danh sách"
+
+msgid "UserName"
+msgstr "Tên người dùng"
+
+msgid "ClassName"
+msgstr "Tên lớp"
+
+msgid "are required for each row."
+msgstr "là bắt buộc cho mỗi dòng."
+
+msgid "title"
+msgstr "tiêu đề"
+
+msgid "is required."
+msgstr "là bắt buộc."
+
+msgid "description"
+msgstr "mô tả"
+
+msgid "are optional."
+msgstr "là tùy chọn."
+
+msgid "Are you sure you want to remove this user from the class?"
+msgstr "Bạn có chắc chắn muốn xóa người dùng này khỏi lớp không?"
+
+msgid "Users in class"
+msgstr "Người dùng trong lớp"
+
+msgid "Remove user"
+msgstr "Xóa người dùng"
+
+msgid "Class not found"
+msgstr "Không tìm thấy lớp"
+
+msgid "Class overview"
+msgstr "Tổng quan lớp"
+
+msgid "Back to classes"
+msgstr "Quay lại các lớp"
+
+msgid "Search members or courses"
+msgstr "Tìm kiếm thành viên hoặc khóa học"
+
+msgid "Search by name, email, username or course title"
+msgstr "Tìm kiếm theo tên, email, tên người dùng hoặc tiêu đề khóa học"
+
+msgid "Class members"
+msgstr "Thành viên lớp"
+
+msgid "No email"
+msgstr "Không có email"
+
+msgid "No members found"
+msgstr "Không tìm thấy thành viên"
+
+msgid "No courses found"
+msgstr "Không tìm thấy khóa học"
+
+msgid "The end date must be after the start date."
+msgstr "Ngày kết thúc phải sau ngày bắt đầu."
+
+msgid "Always visible"
+msgstr "Luôn hiển thị"
+
+msgid "No end date"
+msgstr "Không có ngày kết thúc"
+
+msgid "No restriction"
+msgstr "Không có hạn chế"
+
+msgid "Missing learning path or course identifier"
+msgstr "Thiếu lộ trình học tập hoặc mã định danh khóa học"
+
+msgid "Select a user or a group first"
+msgstr "Chọn một người dùng hoặc nhóm trước"
+
+msgid "Remove all date restrictions for this learning path?"
+msgstr "Xóa tất cả các hạn chế ngày cho lộ trình học tập này?"
+
+msgid "Advanced learning path access"
+msgstr "Truy cập lộ trình học tập nâng cao"
+
+msgid "Remove date restrictions"
+msgstr "Xóa hạn chế ngày"
+
+msgid "Search by name, email, username or group"
+msgstr "Tìm kiếm theo tên, email, tên người dùng hoặc nhóm"
+
+msgid "Edit user restriction"
+msgstr "Chỉnh sửa hạn chế người dùng"
+
+msgid "Edit group restriction"
+msgstr "Chỉnh sửa hạn chế nhóm"
+
+msgid "Select a user or group"
+msgstr "Chọn một người dùng hoặc nhóm"
+
+msgid "Save restriction"
+msgstr "Lưu hạn chế"
+
+msgid "members"
+msgstr "thành viên"
+
+msgid "Create Assignment"
+msgstr "Tạo bài tập"
+
+msgid "The submission deadline has passed. You can no longer submit."
+msgstr "Đã quá hạn nộp bài. Bạn không thể nộp bài nữa."
+
+msgid "Mailing cannot be combined with other recipients."
+msgstr "Thư không thể kết hợp với các người nhận khác."
+
+msgid "Social map"
+msgstr "Bản đồ xã hội"
+
+msgid "The map plugin is not enabled or configured."
+msgstr "Plugin bản đồ chưa được bật hoặc cấu hình."
+
+msgid "Some configured extra fields were not found"
+msgstr "Một số trường bổ sung đã cấu hình không được tìm thấy"
+
+msgid "No user locations were found."
+msgstr "Không tìm thấy vị trí người dùng."
+
+msgid "OpenStreetMap needs coordinates to display an embedded marker. Address-only locations are listed below."
+msgstr "OpenStreetMap cần tọa độ để hiển thị điểm đánh dấu nhúng. Các vị trí chỉ có địa chỉ được liệt kê bên dưới."
+
+msgid "Locations"
+msgstr "Vị trí"
+
+msgid "Open map"
+msgstr "Mở bản đồ"
+
+msgid "Provider: OpenStreetMap"
+msgstr "Nhà cung cấp: OpenStreetMap"
+
+msgid "Provider: Google Maps"
+msgstr "Nhà cung cấp: Google Maps"
+
+msgid "Personal files"
+msgstr "Tệp cá nhân"
+
+msgid "Upload image"
+msgstr "Tải lên hình ảnh"
+
+msgid "Upload media"
+msgstr "Tải lên phương tiện"
+
+msgid "Only image files are allowed in this upload screen."
+msgstr "Chỉ cho phép tệp hình ảnh trong màn hình tải lên này."
+
+msgid "Only audio and video files are allowed in this upload screen."
+msgstr "Chỉ cho phép tệp âm thanh và video trong màn hình tải lên này."
+
+msgid "Upload files to your personal storage."
+msgstr "Tải tệp lên kho lưu trữ cá nhân của bạn."
+
+msgid "Linked"
+msgstr "Đã liên kết"
+
+msgid "No audio or video files were found in this folder."
+msgstr "Không tìm thấy tệp âm thanh hoặc video nào trong thư mục này."
+
+msgid "No image files were found in this folder."
+msgstr "Không tìm thấy tệp hình ảnh nào trong thư mục này."
+
+msgid "No matching files were found in this folder."
+msgstr "Không tìm thấy tệp phù hợp nào trong thư mục này."
+
+msgid "This file type is not allowed in this upload screen."
+msgstr "Loại tệp này không được phép trong màn hình tải lên này."
+
+msgid "Manage your personal files and course documents."
+msgstr "Quản lý tệp cá nhân và tài liệu khóa học của bạn."
+
+msgid "DateValidity"
+msgstr "DateValidity"
+
+msgid "JustificationSaved"
+msgstr "JustificationSaved"
+
+msgid "ValidityDate"
+msgstr "ValidityDate"
+
+msgid "MyJustifications"
+msgstr "MyJustifications"
+
+msgid "Submission"
+msgstr "Nộp bài"
+
+msgid "Use the filters above to narrow the list."
+msgstr "Sử dụng bộ lọc ở trên để thu hẹp danh sách."
+
+msgid "You are not allowed to see this page."
+msgstr "Bạn không được phép xem trang này."
+
+msgid "plugin_title"
+msgstr "plugin_title"
+
+msgid "plugin_comment"
+msgstr "plugin_comment"
+
+msgid "Course tracking details"
+msgstr "Chi tiết theo dõi khóa học"
+
+msgid "Course activity statistics"
+msgstr "Thống kê hoạt động khóa học"
+
+msgid "mobile_phone_number"
+msgstr "mobile_phone_number"
+
+msgid "Allowed template syntax"
+msgstr "Cú pháp mẫu được phép"
+
+msgid "Functions"
+msgstr "Hàm"
+
+msgid "Available variables depend on the template type, for example {{ user.getUsername() }} or {{ user.getEmail() }}."
+msgstr "Các biến khả dụng phụ thuộc vào loại mẫu, ví dụ {{ user.getUsername() }} hoặc {{ user.getEmail() }}."
+
+msgid "For security reasons, any other Twig function, filter (such as filter, map, reduce or sort) or PHP call is blocked."
+msgstr "Vì lý do bảo mật, mọi hàm Twig, bộ lọc khác (như filter, map, reduce hoặc sort) hoặc lệnh gọi PHP đều bị chặn."
+
+msgid "Global administrator"
+msgstr "Quản trị viên toàn cục"
+
+msgid "Session manager"
+msgstr "Quản lý phiên học"
+
+msgid "Human resources manager"
+msgstr "Quản lý nguồn nhân lực"
+
+msgid "Course teacher"
+msgstr "Giáo viên khóa học"
+
+msgid "Course student"
+msgstr "Học viên khóa học"
+
+msgid "Platform reports"
+msgstr "Báo cáo nền tảng"
+
+msgid "Security reports"
+msgstr "Báo cáo bảo mật"
+
+msgid "Course reports"
+msgstr "Báo cáo khóa học"
+
+msgid "Gradebook reports"
+msgstr "Báo cáo sổ điểm"
+
+msgid "Social reports"
+msgstr "Báo cáo xã hội"
+
+msgid "Exports"
+msgstr "Xuất dữ liệu"
+
+msgid "Reports about platform-wide usage, users, courses and sessions."
+msgstr "Báo cáo về mức sử dụng toàn nền tảng, người dùng, khóa học và phiên học."
+
+msgid "Audit and security-sensitive reports."
+msgstr "Báo cáo kiểm toán và nhạy cảm về bảo mật."
+
+msgid "Reports scoped to courses managed by the user."
+msgstr "Báo cáo giới hạn trong các khóa học do người dùng quản lý."
+
+msgid "Reports related to learner activity and follow-up."
+msgstr "Báo cáo liên quan đến hoạt động và theo dõi của người học."
+
+msgid "Reports related to scores, certificates and gradebook data."
+msgstr "Báo cáo liên quan đến điểm số, chứng chỉ và dữ liệu sổ điểm."
+
+msgid "Reports and exports that generate downloadable files."
+msgstr "Báo cáo và xuất dữ liệu tạo tệp có thể tải xuống."
+
+msgid "Main platform statistics dashboard."
+msgstr "Bảng điều khiển thống kê nền tảng chính."
+
+msgid "Number of courses and course distribution report."
+msgstr "Số lượng khóa học và báo cáo phân bố khóa học."
+
+msgid "Platform-wide access to course tools."
+msgstr "Truy cập toàn nền tảng đến các công cụ khóa học."
+
+msgid "Number of resources per tool."
+msgstr "Số lượng tài nguyên theo từng công cụ."
+
+msgid "Latest access to courses."
+msgstr "Lần truy cập khóa học gần nhất."
+
+msgid "Course distribution by language."
+msgstr "Phân bổ khóa học theo ngôn ngữ."
+
+msgid "Course usage report."
+msgstr "Báo cáo sử dụng khóa học."
+
+msgid "Platform user count report."
+msgstr "Báo cáo số lượng người dùng nền tảng."
+
+msgid "Recent logins chart."
+msgstr "Biểu đồ đăng nhập gần đây."
+
+msgid "Login distribution by month."
+msgstr "Phân bổ đăng nhập theo tháng."
+
+msgid "Login distribution by day."
+msgstr "Phân bổ đăng nhập theo ngày."
+
+msgid "Login distribution by hour."
+msgstr "Phân bổ đăng nhập theo giờ."
+
+msgid "Users with profile picture."
+msgstr "Người dùng có ảnh đại diện."
+
+msgid "Login report filtered by date."
+msgstr "Báo cáo đăng nhập theo ngày lọc."
+
+msgid "Users who have not logged in recently."
+msgstr "Người dùng chưa đăng nhập gần đây."
+
+msgid "Inactive or suspicious user accounts report."
+msgstr "Báo cáo tài khoản người dùng không hoạt động hoặc đáng ngờ."
+
+msgid "Users activity statistics."
+msgstr "Thống kê hoạt động của người dùng."
+
+msgid "Currently online users report."
+msgstr "Báo cáo người dùng đang trực tuyến."
+
+msgid "New user registrations over time."
+msgstr "Đăng ký người dùng mới theo thời gian."
+
+msgid "Course and session subscriptions over time."
+msgstr "Đăng ký khóa học và phiên theo thời gian."
+
+msgid "Duplicate user detection and maintenance report."
+msgstr "Báo cáo phát hiện và bảo trì người dùng trùng lặp."
+
+msgid "Platform user/session statistics."
+msgstr "Thống kê người dùng/phiên của nền tảng."
+
+msgid "Quarterly platform report."
+msgstr "Báo cáo nền tảng hàng quý."
+
+msgid "Activities audit"
+msgstr "Kiểm toán hoạt động"
+
+msgid "Audit report for important administrative and platform activities."
+msgstr "Báo cáo kiểm toán cho các hoạt động quản trị và nền tảng quan trọng."
+
+msgid "Social messages received report."
+msgstr "Báo cáo tin nhắn xã hội đã nhận."
+
+msgid "Social messages sent report."
+msgstr "Báo cáo tin nhắn xã hội đã gửi."
+
+msgid "Social contacts count report."
+msgstr "Báo cáo số lượng liên hệ xã hội."
+
+msgid "Sessions created over time."
+msgstr "Phiên được tạo theo thời gian."
+
+msgid "Learning analytics dashboard."
+msgstr "Bảng điều khiển phân tích học tập."
+
+msgid "Teacher time report."
+msgstr "Báo cáo thời gian của giáo viên."
+
+msgid "Teachers time by session report"
+msgstr "Báo cáo thời gian giáo viên theo phiên"
+
+msgid "Teacher time report grouped by session."
+msgstr "Báo cáo thời gian giáo viên được nhóm theo phiên."
+
+msgid "Corporate learning analytics report."
+msgstr "Báo cáo phân tích học tập doanh nghiệp."
+
+msgid "Course learners tracking report."
+msgstr "Báo cáo theo dõi người học khóa học."
+
+msgid "Course activity statistics with connected and inactive users."
+msgstr "Thống kê hoạt động khóa học với người dùng đã kết nối và không hoạt động."
+
+msgid "Detailed tracking report for a learner inside a course."
+msgstr "Báo cáo theo dõi chi tiết cho người học trong khóa học."
+
+msgid "Course gradebook overview."
+msgstr "Tổng quan sổ điểm khóa học."
+
+msgid "Gradebook statistics"
+msgstr "Thống kê sổ điểm"
+
+msgid "Gradebook statistics report."
+msgstr "Báo cáo thống kê sổ điểm."
+
+msgid "Certificate report"
+msgstr "Báo cáo chứng chỉ"
+
+msgid "Certificate report for course gradebook."
+msgstr "Báo cáo chứng chỉ cho sổ điểm khóa học."
+
+msgid "User statistics"
+msgstr "Thống kê người dùng"
+
+msgid "Course gradebook statistics for a user."
+msgstr "Thống kê sổ điểm khóa học cho người dùng."
+
+msgid "Personal statistics"
+msgstr "Thống kê cá nhân"
+
+msgid "Personal gradebook statistics."
+msgstr "Thống kê sổ điểm cá nhân."
+
+msgid "Reports catalog"
+msgstr "Danh mục báo cáo"
+
+msgid "Central catalog of available reports, roles and permission categories."
+msgstr "Danh mục trung tâm các báo cáo, vai trò và danh mục quyền có sẵn."
+
+msgid "Course log events"
+msgstr "Sự kiện nhật ký khóa học"
+
+msgid "Detailed course tracking events."
+msgstr "Sự kiện theo dõi chi tiết khóa học."
+
+msgid "Course tool usage"
+msgstr "Sử dụng công cụ khóa học"
+
+msgid "Course tracking report grouped by tools."
+msgstr "Báo cáo theo dõi khóa học được nhóm theo công cụ."
+
+msgid "Course resource usage"
+msgstr "Sử dụng tài nguyên khóa học"
+
+msgid "Course tracking report grouped by resources."
+msgstr "Báo cáo theo dõi khóa học được nhóm theo tài nguyên."
+
+msgid "Course group tracking"
+msgstr "Theo dõi nhóm khóa học"
+
+msgid "Tracking report for course groups."
+msgstr "Báo cáo theo dõi cho nhóm khóa học."
+
+msgid "Course session report"
+msgstr "Báo cáo phiên học khóa học"
+
+msgid "Tracking report for a course inside sessions."
+msgstr "Báo cáo theo dõi cho khóa học trong các phiên học."
+
+msgid "Learning path report"
+msgstr "Báo cáo lộ trình học tập"
+
+msgid "Learning path tracking report."
+msgstr "Báo cáo theo dõi lộ trình học tập."
+
+msgid "Learning path results by user"
+msgstr "Kết quả lộ trình học tập theo người dùng"
+
+msgid "Learning path results grouped by user."
+msgstr "Kết quả lộ trình học tập được nhóm theo người dùng."
+
+msgid "Exercises report"
+msgstr "Báo cáo bài tập"
+
+msgid "Course exercises and exams tracking report."
+msgstr "Báo cáo theo dõi bài tập và kỳ thi của khóa học."
+
+msgid "Question report"
+msgstr "Báo cáo câu hỏi"
+
+msgid "Course question tracking report."
+msgstr "Báo cáo theo dõi câu hỏi của khóa học."
+
+msgid "Messages report"
+msgstr "Báo cáo tin nhắn"
+
+msgid "Course messages tracking report."
+msgstr "Báo cáo theo dõi tin nhắn của khóa học."
+
+msgid "Total time tracking report for course learners."
+msgstr "Báo cáo theo dõi tổng thời gian cho người học khóa học."
+
+msgid "Gradebook summary"
+msgstr "Tóm tắt sổ điểm"
+
+msgid "Summary view of gradebook results."
+msgstr "Chế độ xem tóm tắt kết quả sổ điểm."
+
+msgid "Flat view"
+msgstr "Chế độ xem phẳng"
+
+msgid "Flat gradebook results view."
+msgstr "Chế độ xem kết quả sổ điểm dạng phẳng."
+
+msgid "Evaluation log"
+msgstr "Nhật ký đánh giá"
+
+msgid "Change log for gradebook evaluations."
+msgstr "Nhật ký thay đổi cho các đánh giá sổ điểm."
+
+msgid "Link log"
+msgstr "Nhật ký liên kết"
+
+msgid "Change log for gradebook links."
+msgstr "Nhật ký thay đổi cho các liên kết sổ điểm."
+
+msgid "Result details"
+msgstr "Chi tiết kết quả"
+
+msgid "Detailed view of a gradebook result."
+msgstr "Chế độ xem chi tiết của một kết quả sổ điểm."
+
+msgid "Personal certificates report."
+msgstr "Báo cáo chứng chỉ cá nhân."
+
+msgid "User move statistics"
+msgstr "Thống kê di chuyển người dùng"
+
+msgid "Report for user move and transfer statistics."
+msgstr "Báo cáo thống kê di chuyển và chuyển nhượng người dùng."
+
+msgid "User consent list"
+msgstr "Danh sách đồng ý của người dùng"
+
+msgid "Report of users and consent status."
+msgstr "Báo cáo người dùng và trạng thái đồng ý."
+
+msgid "Special platform exports."
+msgstr "Xuất đặc biệt của nền tảng."
+
+msgid "Export certificates"
+msgstr "Xuất chứng chỉ"
+
+msgid "Export platform certificates."
+msgstr "Xuất chứng chỉ của nền tảng."
+
+msgid "Export exercise results"
+msgstr "Xuất kết quả bài tập"
+
+msgid "Export exercise results from the platform."
+msgstr "Xuất kết quả bài tập từ nền tảng."
+
+msgid "Course survey results and reporting."
+msgstr "Kết quả khảo sát khóa học và báo cáo."
+
+msgid "Attendance report"
+msgstr "Báo cáo điểm danh"
+
+msgid "Course attendance tracking and reports."
+msgstr "Theo dõi điểm danh khóa học và báo cáo."
+
+msgid "Exercises global report"
+msgstr "Báo cáo toàn cục bài tập"
+
+msgid "Global exercise results report for the course."
+msgstr "Báo cáo kết quả bài tập toàn cục cho khóa học."
+
+msgid "Exercise report"
+msgstr "Báo cáo bài tập"
+
+msgid "Detailed exercise report."
+msgstr "Báo cáo bài tập chi tiết."
+
+msgid "Exercise history"
+msgstr "Lịch sử bài tập"
+
+msgid "Exercise attempt history."
+msgstr "Lịch sử lần thử bài tập."
+
+msgid "Exercise results"
+msgstr "Kết quả bài tập"
+
+msgid "Exercise results and corrections."
+msgstr "Kết quả và sửa bài tập."
+
+msgid "Question-level exercise statistics."
+msgstr "Thống kê bài tập theo mức câu hỏi."
+
+msgid "Exercise statistics"
+msgstr "Thống kê bài tập"
+
+msgid "Exercise statistics page."
+msgstr "Trang thống kê bài tập."
+
+msgid "Live exercise statistics"
+msgstr "Thống kê bài tập trực tiếp"
+
+msgid "Live exercise statistics for teachers."
+msgstr "Thống kê bài tập trực tiếp cho giáo viên."
+
+msgid "Learning path statistics"
+msgstr "Thống kê lộ trình học tập"
+
+msgid "Learning path item statistics."
+msgstr "Thống kê mục lộ trình học tập."
+
+msgid "Learning path report inside a course."
+msgstr "Báo cáo lộ trình học tập trong khóa học."
+
+msgid "User skills report."
+msgstr "Báo cáo kỹ năng người dùng."
+
+msgid "Scheduled or periodic export configuration."
+msgstr "Cấu hình xuất định kỳ hoặc theo lịch."
+
+msgid "User export"
+msgstr "Xuất người dùng"
+
+msgid "Export users from the platform."
+msgstr "Xuất người dùng từ nền tảng."
+
+msgid "Not classified"
+msgstr "Chưa phân loại"
+
+msgid "You have acquired the skill %s"
+msgstr "Bạn đã đạt được kỹ năng %s"
+
+msgid "You have acquired the skill %s."
+msgstr "Bạn đã đạt được kỹ năng %s."
+
+msgid "Recover your password"
+msgstr "Khôi phục mật khẩu"
+
+msgid "Disclaimer"
+msgstr "Tuyên bố miễn trừ"
+
+msgid "This operation would exceed the limit of %d users allowed for this course."
+msgstr "Thao tác này sẽ vượt quá giới hạn %d người dùng cho phép của khóa học."
+
+msgid "DefaultGroupCategory"
+msgstr "DefaultGroupCategory"
+
+msgid "LearningCalendar"
+msgstr "LearningCalendar"
+
+msgid "Choose how this user can authenticate on the platform."
+msgstr "Chọn cách người dùng này xác thực trên nền tảng."
+
+msgid "Authentication methods"
+msgstr "Phương thức xác thực"
+
+msgid "Set password manually"
+msgstr "Đặt mật khẩu thủ công"
+
+msgid "Report role matrix"
+msgstr "Ma trận vai trò báo cáo"
+
+msgid "Report permission categories"
+msgstr "Danh mục quyền báo cáo"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs enforce the documented report role matrix."
+msgstr "Danh sách này ghi nhận các trang báo cáo đã biết, danh mục, URL chuẩn, URL cũ và đối tượng vai trò dự kiến. URL chuẩn thực thi ma trận vai trò báo cáo đã ghi nhận."
+
+msgid "reports"
+msgstr "báo cáo"
+
+msgid "Canonical URL"
+msgstr "URL chuẩn"
+
+msgid "Legacy URL"
+msgstr "URL cũ"
+
+msgid "Permission category"
+msgstr "Danh mục quyền"
+
+msgid "This matrix documents the expected audience for each report and is enforced by the canonical report entry point."
+msgstr "Ma trận này ghi nhận đối tượng dự kiến cho mỗi báo cáo và được thực thi bởi điểm vào báo cáo chuẩn."
+
+msgid "These keys group reports by access scope and are used by the report registry. They can later be mapped to finer-grained platform permissions."
+msgstr "Các khóa này nhóm báo cáo theo phạm vi truy cập và được sử dụng bởi sổ đăng ký báo cáo. Chúng có thể được ánh xạ sau này thành các quyền nền tảng chi tiết hơn."
+
+msgid "Permission"
+msgstr "Quyền"
+
+msgid "Clear active session"
+msgstr "Xóa phiên hoạt động"
+
+msgid "Are you sure you want to clear this user active session?"
+msgstr "Bạn có chắc muốn xóa phiên hoạt động của người dùng này không?"
+
+msgid "Preview shown without course context. Some course-specific data may be unavailable."
+msgstr "Bản xem trước được hiển thị không có ngữ cảnh khóa học. Một số dữ liệu đặc thù khóa học có thể không khả dụng."
+
+msgid "Preview is not available for this question."
+msgstr "Bản xem trước không khả dụng cho câu hỏi này."
+
+msgid "Edition is not allowed without a course context."
+msgstr "Không cho phép chỉnh sửa khi không có ngữ cảnh khóa học."
+
+msgid "This plugin does not use regions."
+msgstr "Plugin này không sử dụng vùng."
+
+msgid "No plugins with regions were found."
+msgstr "Không tìm thấy plugin nào có vùng."
+
+msgid "Freemium"
+msgstr "Freemium"
+
+msgid "Commercial service"
+msgstr "Dịch vụ thương mại"
+
+msgid "Commercial"
+msgstr "Thương mại"
+
+msgid "100% free"
+msgstr "100% miễn phí"
+
+msgid "Displayed above the public login form."
+msgstr "Hiển thị phía trên biểu mẫu đăng nhập công khai."
+
+msgid "Displayed below the public login form."
+msgstr "Hiển thị phía dưới biểu mẫu đăng nhập công khai."
+
+msgid "Displayed before the footer area."
+msgstr "Hiển thị trước khu vực chân trang."
+
+msgid "Displayed in the left footer column."
+msgstr "Hiển thị ở cột chân trang bên trái."
+
+msgid "Displayed in the center footer column."
+msgstr "Hiển thị ở cột chân trang giữa."
+
+msgid "Displayed in the right footer column."
+msgstr "Hiển thị ở cột chân trang bên phải."
+
+msgid "Showing all plugins."
+msgstr "Hiển thị tất cả plugin."
+
+msgid "Some plugins are still pending functional verification."
+msgstr "Một số plugin vẫn đang chờ xác minh chức năng."
+
+msgid "Show verified plugins only"
+msgstr "Chỉ hiển thị plugin đã xác minh"
+
+msgid "Showing verified plugins only."
+msgstr "Chỉ hiển thị plugin đã xác minh."
+
+msgid "Pending plugins are temporarily hidden until they are adapted and tested."
+msgstr "Các plugin đang chờ được ẩn tạm thời cho đến khi chúng được điều chỉnh và kiểm thử."
+
+msgid "Show all plugins"
+msgstr "Hiển thị tất cả plugin"
+
+msgid "Official and free plugins are listed separately from plugins that may depend on commercial services or paid offers."
+msgstr "Các plugin chính thức và miễn phí được liệt kê riêng với các plugin có thể phụ thuộc vào dịch vụ thương mại hoặc gói trả phí."
+
+msgid "Included free plugins"
+msgstr "Plugin miễn phí có sẵn"
+
+msgid "Commercial and freemium plugins"
+msgstr "Plugin thương mại và freemium"
+
+msgid "All plugins"
+msgstr "Tất cả plugin"
+
+msgid "No plugins were found for this category."
+msgstr "Không tìm thấy plugin nào cho danh mục này."
+
+msgid "Search plugins"
+msgstr "Tìm kiếm plugin"
+
+msgid "Search by name or description"
+msgstr "Tìm theo tên hoặc mô tả"
+
+msgid "Advanced filters"
+msgstr "Bộ lọc nâng cao"
+
+msgid "All statuses"
+msgstr "Tất cả trạng thái"
+
+msgid "All sources"
+msgstr "Tất cả nguồn"
+
+msgid "All types"
+msgstr "Tất cả loại"
+
+msgid "Installed plugins are shown first"
+msgstr "Plugin đã cài đặt được hiển thị trước"
+
+msgid "No plugins match the current filters."
+msgstr "Không có plugin nào khớp với bộ lọc hiện tại."
+
+msgid "Try clearing the search or changing the filters."
+msgstr "Thử xóa tìm kiếm hoặc thay đổi bộ lọc."
+
+msgid "README"
+msgstr "README"
+
+msgid "Invalid security token"
+msgstr "Mã bảo mật không hợp lệ"
+
+msgid "Please select a destination session"
+msgstr "Vui lòng chọn một phiên đích"
+
+msgid "Cannot move this to the same session"
+msgstr "Không thể di chuyển đến cùng một phiên"
+
+msgid "The destination session must include the selected course"
+msgstr "Phiên đích phải bao gồm khóa học đã chọn"
+
+msgid "The source session must include the selected course"
+msgstr "Phiên nguồn phải bao gồm khóa học đã chọn"
+
+msgid "No learners found"
+msgstr "Không tìm thấy người học nào"
+
+msgid "Will be subscribed"
+msgstr "Sẽ được đăng ký"
+
+msgid "Subscribed"
+msgstr "Đã đăng ký"
+
+msgid "The move process has finished"
+msgstr "Quá trình di chuyển đã hoàn tất"
+
+msgid "Comparison finished. No data has been moved."
+msgstr "So sánh hoàn tất. Không có dữ liệu nào được di chuyển."
+
+msgid "Move tracking data from the base course or a source session to another session. Use comparison first to review the affected learner data."
+msgstr "Di chuyển dữ liệu theo dõi từ khóa học cơ sở hoặc phiên nguồn sang phiên khác. Sử dụng chức năng so sánh trước để xem xét dữ liệu người học bị ảnh hưởng."
+
+msgid "Search for a course or use the manual course ID field below."
+msgstr "Tìm kiếm khóa học hoặc sử dụng trường ID khóa học thủ công bên dưới."
+
+msgid "Fallback when the course search is not available."
+msgstr "Dự phòng khi tìm kiếm khóa học không khả dụng."
+
+msgid "Load sessions"
+msgstr "Tải phiên"
+
+msgid "Selected course"
+msgstr "Khóa học đã chọn"
+
+msgid "Choose the base course or the session where the tracking data currently exists."
+msgstr "Chọn khóa học cơ sở hoặc phiên nơi dữ liệu theo dõi hiện đang tồn tại."
+
+msgid "Choose the session that will receive the tracking data."
+msgstr "Chọn phiên sẽ nhận dữ liệu theo dõi."
+
+msgid "Important"
+msgstr "Quan trọng"
+
+msgid "The move action updates existing tracking data. Run compare first and test this tool with a non-production course before moving real learner data."
+msgstr "Hành động di chuyển cập nhật dữ liệu theo dõi hiện có. Chạy so sánh trước và kiểm thử công cụ này với khóa học không phải sản xuất trước khi di chuyển dữ liệu người học thực tế."
+
+msgid "No sessions found for this course"
+msgstr "Không tìm thấy phiên nào cho khóa học này"
+
+msgid "Some users were ignored because they are not subscribed to this session."
+msgstr "Một số người dùng đã bị bỏ qua vì họ không đăng ký phiên này."
+
+msgid "Remove selected user"
+msgstr "Xóa người dùng đã chọn"
+
+msgid "Add selected user"
+msgstr "Thêm người dùng đã chọn"
+
+msgid "No users from the selected list are subscribed to this session."
+msgstr "Không có người dùng nào từ danh sách đã chọn đăng ký phiên này."
+
+msgid "No image"
+msgstr "Không có hình ảnh"
+
+msgid "Invalid URL."
+msgstr "URL không hợp lệ."
+
+msgid "This cloud document cannot be embedded."
+msgstr "Tài liệu đám mây này không thể nhúng."
+
+msgid "Document not found"
+msgstr "Không tìm thấy tài liệu"
+
+msgid "File not found"
+msgstr "Không tìm thấy tệp"
+
+msgid "This learning path is not available for your user at this time."
+msgstr "Lộ trình học tập này hiện không khả dụng cho người dùng của bạn."
+
+msgid "StartDateMustBeBeforeTheEndDate"
+msgstr "StartDateMustBeBeforeTheEndDate"
+
+msgid "Next learning path"
+msgstr "Lộ trình học tập tiếp theo"
+
+msgid "Select the learning path that will be available after this one."
+msgstr "Chọn lộ trình học tập sẽ khả dụng sau lộ trình này."
+
+msgid "Create another learning path in this course to enable learning path flow."
+msgstr "Tạo thêm lộ trình học tập trong khóa học này để kích hoạt luồng lộ trình học tập."
+
+msgid "Available from %s"
+msgstr "Khả dụng từ %s"
+
+msgid "Available until %s"
+msgstr "Khả dụng đến %s"
+
+msgid "Statistics reset date"
+msgstr "Ngày đặt lại thống kê"
+
+msgid "Last 24 hours"
+msgstr "24 giờ qua"
+
+msgid "This reset date is used as the reference date for the report. It does not delete historical tracking data."
+msgstr "Ngày đặt lại này được dùng làm ngày tham chiếu cho báo cáo. Nó không xóa dữ liệu theo dõi lịch sử."
+
+msgid "Since reset date"
+msgstr "Từ ngày đặt lại"
+
+msgid "Users connected in the last 24 hours"
+msgstr "Người dùng đã kết nối trong 24 giờ qua"
+
+msgid "Learners with at least one course access during the last 24 hours."
+msgstr "Học viên có ít nhất một lần truy cập khóa học trong 24 giờ qua."
+
+msgid "Users connected in the last week"
+msgstr "Người dùng đã kết nối trong tuần qua"
+
+msgid "Learners with at least one course access during the last 7 days."
+msgstr "Học viên có ít nhất một lần truy cập khóa học trong 7 ngày qua."
+
+msgid "Users connected in the last month"
+msgstr "Người dùng đã kết nối trong tháng qua"
+
+msgid "Learners with at least one course access during the last 30 days."
+msgstr "Học viên có ít nhất một lần truy cập khóa học trong 30 ngày qua."
+
+msgid "Not recently connected users"
+msgstr "Người dùng chưa kết nối gần đây"
+
+msgid "Learners without course access since %s."
+msgstr "Học viên chưa truy cập khóa học kể từ %s."
+
+msgid "Recently used resources"
+msgstr "Tài nguyên đã sử dụng gần đây"
+
+msgid "Course tools/resources used since %s."
+msgstr "Công cụ/tài nguyên khóa học được sử dụng kể từ %s."
+
+msgid "%s %% of learners"
+msgstr "%s %% học viên"
+
+msgid "Connections"
+msgstr "Kết nối"
+
+msgid "Total connections"
+msgstr "Tổng số kết nối"
+
+msgid "Downloaded documents"
+msgstr "Tài liệu đã tải xuống"
+
+msgid "List of documents downloaded by this learner in this course."
+msgstr "Danh sách tài liệu được tải xuống bởi học viên này trong khóa học."
+
+msgid "Forum topics"
+msgstr "Chủ đề diễn đàn"
+
+msgid "Forum topics opened by this learner in this course."
+msgstr "Chủ đề diễn đàn do học viên này mở trong khóa học."
+
+msgid "Forum posts"
+msgstr "Bài đăng diễn đàn"
+
+msgid "Forum posts written by this learner in this course."
+msgstr "Bài đăng diễn đàn do học viên này viết trong khóa học."
+
+msgid "Course connections"
+msgstr "Kết nối khóa học"
+
+msgid "Connection history for this learner in this course."
+msgstr "Lịch sử kết nối của học viên này trong khóa học."
+
+msgid "Resources used"
+msgstr "Tài nguyên đã sử dụng"
+
+msgid "Latest tools or resources used by this learner in this course."
+msgstr "Công cụ hoặc tài nguyên mới nhất được sử dụng bởi học viên này trong khóa học."
+
+msgid "Logout date"
+msgstr "Ngày đăng xuất"
+
+msgid "Imported Aiken quiz"
+msgstr "Bài kiểm tra Aiken đã nhập"
+
+msgid "Only supported documents will be listed here."
+msgstr "Chỉ các tài liệu được hỗ trợ sẽ được liệt kê tại đây."
+
+msgid "Generated Aiken content"
+msgstr "Nội dung Aiken đã tạo"
+
+msgid "Review the generated content before importing it as a new exercise."
+msgstr "Xem lại nội dung đã tạo trước khi nhập nó dưới dạng bài tập mới."
+
+msgid "No documents available."
+msgstr "Không có tài liệu nào."
+
+msgid "yperbolic arctangent:\\t\\tarctanh(x)"
+msgstr "Arctang hyperbolic:\\t\\tarctanh(x)"
+
+msgid "Exercise"
+msgstr "Bài tập"
+
+msgid "OfficialCode"
+msgstr "Mã chính thức"
+
+msgid "FirstName"
+msgstr "Tên"
+
+msgid "LastName"
+msgstr "Họ"
+
+msgid "LoginName"
+msgstr "Tên đăng nhập"
+
+msgid "MinMinute"
+msgstr "Phút tối thiểu"
+
+msgid "StartDate"
+msgstr "Ngày bắt đầu"
+
+msgid "EndDate"
+msgstr "Ngày kết thúc"
+
+msgid "CorrectionDate"
+msgstr "Ngày sửa"
+
+msgid "NotValidated"
+msgstr "Chưa xác thực"
+
+msgid "PendingAttempts"
+msgstr "Lần thử đang chờ"
+
+msgid "List of pending test attempts across your courses."
+msgstr "Danh sách các lần thử bài kiểm tra đang chờ trong các khóa học của bạn."
+
+msgid "User ID"
+msgstr "ID người dùng"
+
+msgid "QuestionType"
+msgstr "Loại câu hỏi"
+
+msgid "QuestionsWithNoAutomaticCorrection"
+msgstr "Câu hỏi không có chấm điểm tự động"
+
+msgid "There are no pending tests."
+msgstr "Không có bài kiểm tra nào đang chờ."
+
+msgid "%s results"
+msgstr "%s kết quả"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Ví dụ hoạt động điền biểu mẫu: tính chỉ số khối cơ thể</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Tuổi</strong></td>            <td width=\"75%\" style=\"\">[25] tuổi</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Giới tính</strong></td>            <td style=\"\" text-align:=\"\">[M] (M hoặc F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Cân nặng</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Chiều cao</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Chỉ số khối cơ thể</strong></td>            <td style=\"vertical-align: top;\">[29] BMI = Cân nặng/Chiều cao<sup>2</sup> (Xem <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\">bài viết Wikipedia</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Removed"
+msgstr "Đã xóa"
+
+msgid "NoUsersInTheList"
+msgstr "Không có người dùng trong danh sách"
+
+msgid "Are you sure?"
+msgstr "Bạn có chắc chắn không?"
+
+msgid "NoResultsAvailable"
+msgstr "Không có kết quả nào"
+
+msgid "Import groups from a CSV file and optionally remove items that are not present in the file."
+msgstr "Nhập nhóm từ tệp CSV và tùy chọn xóa các mục không có trong tệp."
+
+msgid "Use this option carefully because items missing from the CSV can be removed during the import process."
+msgstr "Sử dụng tùy chọn này cẩn thận vì các mục thiếu trong CSV có thể bị xóa trong quá trình nhập."
+
+msgid "Upload a CSV file with the group data you want to import."
+msgstr "Tải lên tệp CSV chứa dữ liệu nhóm bạn muốn nhập."
+
+msgid "You can download the example file to use the expected format."
+msgstr "Bạn có thể tải tệp mẫu để sử dụng định dạng mong đợi."
+
+msgid "If you enable deletion, items not present in the file may be removed."
+msgstr "Nếu bạn bật xóa, các mục không có trong tệp có thể bị xóa."
+
+msgid "The CSV file is mandatory to start the import."
+msgstr "Tệp CSV là bắt buộc để bắt đầu nhập."
+
+msgid "Please select at least one class."
+msgstr "Vui lòng chọn ít nhất một lớp."
+
+msgid "Define the properties for each group before creating them."
+msgstr "Xác định thuộc tính cho mỗi nhóm trước khi tạo chúng."
+
+msgid "Apply the first row values"
+msgstr "Áp dụng giá trị hàng đầu tiên"
+
+msgid "Create groups manually or generate them from the classes subscribed to this course."
+msgstr "Tạo nhóm thủ công hoặc tạo nhóm từ các lớp đã đăng ký khóa học này."
+
+msgid "Create manual groups"
+msgstr "Tạo nhóm thủ công"
+
+msgid "Use this form when you want to create empty course groups manually."
+msgstr "Sử dụng biểu mẫu này khi bạn muốn tạo nhóm khóa học trống thủ công."
+
+msgid "Configure manual groups"
+msgstr "Cấu hình nhóm thủ công"
+
+msgid "Create groups from subscribed classes"
+msgstr "Tạo nhóm từ các lớp đã đăng ký"
+
+msgid "Use this form when you want to create one course group for each selected class."
+msgstr "Sử dụng biểu mẫu này khi bạn muốn tạo một nhóm khóa học cho mỗi lớp đã chọn."
+
+msgid "Keep created groups linked to their source classes"
+msgstr "Giữ nhóm đã tạo liên kết với lớp nguồn của chúng"
+
+msgid "Create groups from selected classes"
+msgstr "Tạo nhóm từ các lớp đã chọn"
+
+msgid "You must be logged in to access this page."
+msgstr "Bạn phải đăng nhập để truy cập trang này."
+
+msgid "Invalid user"
+msgstr "Người dùng không hợp lệ"
+
+msgid "UseCourseCustomCertificate"
+msgstr "Sử dụng chứng chỉ tùy chỉnh khóa học"
+
+msgid "UseDefaultCustomCertificate"
+msgstr "Sử dụng chứng chỉ tùy chỉnh mặc định"
+
+msgid "CertificateSetting"
+msgstr "Cài đặt chứng chỉ"
+
+msgid "SelectOneOptionBeforeOpeningEditor"
+msgstr "Chọn một tùy chọn trước khi mở trình soạn thảo"
+
+msgid "ChooseCustomCertificateModeHelp"
+msgstr "Chọn chế độ chứng chỉ tùy chỉnh Trợ giúp"
+
+msgid "CertificateMode"
+msgstr "Chế độ chứng chỉ"
+
+msgid "Enable student to validate own attendance"
+msgstr "Cho phép sinh viên tự xác nhận điểm danh"
+
+msgid "Course block"
+msgstr "Khối khóa học"
+
+msgid "Add custom content blocks to course footer regions."
+msgstr "Thêm khối nội dung tùy chỉnh vào vùng chân trang khóa học."
+
+msgid "course_block_pre_footer"
+msgstr "course_block_pre_footer"
+
+msgid "Before footer"
+msgstr "Trước chân trang"
+
+msgid "course_block_footer_left"
+msgstr "course_block_footer_left"
+
+msgid "Footer left"
+msgstr "Chân trang bên trái"
+
+msgid "course_block_footer_center"
+msgstr "course_block_footer_center"
+
+msgid "Footer center"
+msgstr "Chân trang giữa"
+
+msgid "course_block_footer_right"
+msgstr "course_block_footer_right"
+
+msgid "Footer right"
+msgstr "Chân trang bên phải"
+
+msgid "SetNotification"
+msgstr "Thiết lập thông báo"
+
+msgid "CourseLegal"
+msgstr "Pháp lý khóa học"
+
+msgid "Certificates search is not available"
+msgstr "Tìm kiếm chứng chỉ không khả dụng"
+
+msgid "It allows the acquisition of skills by subcategories"
+msgstr "Nó cho phép thu nhận kỹ năng theo danh mục con"
+
+msgid "Allow skills by subcategories"
+msgstr "Cho phép kỹ năng theo danh mục con"
+
+msgid "Minimum score for skills"
+msgstr "Điểm tối thiểu cho kỹ năng"
+
+msgid "The gradebook table is hidden."
+msgstr "Bảng điểm bị ẩn."
+
+msgid "Invalid token"
+msgstr "Mã thông báo không hợp lệ"
+
+msgid "Unable to save the item"
+msgstr "Không thể lưu mục"
+
+msgid "Only HTTP and HTTPS URLs are allowed."
+msgstr "Chỉ cho phép URL HTTP và HTTPS."
+
+msgid "Invalid URL host."
+msgstr "Máy chủ URL không hợp lệ."
+
+msgid "This cloud provider is not allowed."
+msgstr "Nhà cung cấp đám mây này không được phép."
+
+msgid "Documents used"
+msgstr "Tài liệu đã sử dụng"
+
+msgid "No document usage"
+msgstr "Không có sử dụng tài liệu"
+
+msgid "Invalid action."
+msgstr "Hành động không hợp lệ."
+
+msgid "No users selected."
+msgstr "Chưa chọn người dùng nào."
+
+msgid "%s user(s) processed."
+msgstr "Đã xử lý %s người dùng."
+
+msgid "Invalid CSRF token."
+msgstr "Mã thông báo CSRF không hợp lệ."
+
+msgid "[%s] Please change your password"
+msgstr "[%s] Vui lòng thay đổi mật khẩu của bạn"
+
+msgid "Dear %s,\n\nOur security enforcing process shows you use a password that is commonly used on the internet, which means your account could easily be stolen. It is probably a simple sequence or a very common word, we don't really know (we cannot see your password), but we ask you to please connect to the platform and request a password change. You can follow the link here: %s to do that now.\n\nPlease note we will never ask for your password in this process. You just enter your username or e-mail and we send you a link. If you are asked to introduce your existing password to do that, someone is probably trying to do Phishing on your account. Be safe, change your password now!\n\n%s\n%s"
+msgstr "Kính gửi %s,\n\nQuy trình bảo mật của chúng tôi cho thấy bạn đang sử dụng mật khẩu phổ biến trên internet, điều này có nghĩa là tài khoản của bạn có thể dễ dàng bị đánh cắp. Có thể là một chuỗi đơn giản hoặc từ rất phổ biến, chúng tôi không thực sự biết (chúng tôi không thể xem mật khẩu của bạn), nhưng chúng tôi yêu cầu bạn vui lòng kết nối với nền tảng và yêu cầu thay đổi mật khẩu. Bạn có thể theo liên kết sau: %s để thực hiện ngay.\n\nLưu ý rằng chúng tôi sẽ không bao giờ yêu cầu mật khẩu của bạn trong quá trình này. Bạn chỉ cần nhập tên người dùng hoặc email và chúng tôi sẽ gửi cho bạn một liên kết. Nếu bạn được yêu cầu nhập mật khẩu hiện tại để thực hiện, có thể ai đó đang cố gắng lừa đảo tài khoản của bạn. Hãy an toàn, hãy thay đổi mật khẩu ngay bây giờ!\n\n%s\n%s"
+
+msgid "[%s] Your password has been reset"
+msgstr "[%s] Mật khẩu của bạn đã được đặt lại"
+
+msgid "Dear %s,\n\nOur security enforcing process flagged you as using a password that is commonly used on the internet, which means your account could easily be stolen. As a prevention measure, we have decided to initiate a password reset process. Your new, automatically generated password is now:\n\n%s\n\nPlease login to the platform soon (using this new password) to set your own, personal and secure, password.\n\nBe safe.\n\n%s\n%s"
+msgstr "Kính gửi %s,\n\nQuy trình bảo mật của chúng tôi đã phát hiện bạn đang sử dụng mật khẩu phổ biến trên internet, điều này có nghĩa là tài khoản của bạn có thể dễ dàng bị đánh cắp. Như một biện pháp phòng ngừa, chúng tôi đã quyết định khởi động quy trình đặt lại mật khẩu. Mật khẩu mới, được tạo tự động của bạn hiện là:\n\n%s\n\nVui lòng đăng nhập vào nền tảng sớm (sử dụng mật khẩu mới này) để đặt mật khẩu cá nhân và an toàn của riêng bạn.\n\nHãy an toàn.\n\n%s\n%s"
+
+msgid "Signature saved successfully"
+msgstr "Chữ ký đã lưu thành công"
+
+msgid "Invalid request payload."
+msgstr "Tải trọng yêu cầu không hợp lệ."
+
+msgid "Authentication required."
+msgstr "Yêu cầu xác thực."
+
+msgid "The course title is required."
+msgstr "Tiêu đề khóa học là bắt buộc."
+
+msgid "Only trainers and administrators can create courses."
+msgstr "Chỉ giảng viên và quản trị viên mới có thể tạo khóa học."
+
+msgid "Course creation by trainers is disabled on this platform."
+msgstr "Tạo khóa học bởi giảng viên đã bị vô hiệu hóa trên nền tảng này."
+
+msgid "The selected BuyCourses service cannot be used to create this course."
+msgstr "Dịch vụ BuyCourses đã chọn không thể sử dụng để tạo khóa học này."
+
+msgid "You have reached the maximum number of courses allowed (%d)."
+msgstr "Bạn đã đạt đến số lượng khóa học tối đa cho phép (%d)."
+
+msgid "The selected BuyCourses service is invalid."
+msgstr "Dịch vụ BuyCourses đã chọn không hợp lệ."
+
+msgid "BuyCourses is not available right now."
+msgstr "BuyCourses hiện không khả dụng."
+
+msgid "BuyCourses cannot validate the selected service right now."
+msgstr "BuyCourses không thể xác thực dịch vụ đã chọn ngay bây giờ."
+
+msgid "Unable to validate the selected BuyCourses service right now."
+msgstr "Không thể xác thực dịch vụ BuyCourses đã chọn ngay bây giờ."
+
+msgid "External tool removed from course"
+msgstr "Công cụ bên ngoài đã bị xóa khỏi khóa học"
+
+msgid "External tool was removed from the course, but kept internally because it is linked to the gradebook"
+msgstr "Công cụ bên ngoài đã bị xóa khỏi khóa học, nhưng vẫn được giữ nội bộ vì nó được liên kết với bảng điểm"
+
+msgid "There are no external tools available to add to the gradebook"
+msgstr "Không có công cụ bên ngoài nào có sẵn để thêm vào bảng điểm"
+
+msgid "The evaluation could not be created"
+msgstr "Không thể tạo đánh giá"
+
+msgid "The gradebook evaluation could not be linked"
+msgstr "Không thể liên kết đánh giá bảng điểm"
+
+msgid "Survey questions"
+msgstr "Câu hỏi khảo sát"
+
+msgid "Back to survey list"
+msgstr "Quay lại danh sách khảo sát"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "Khảo sát này đã có câu trả lời. Việc chỉnh sửa câu hỏi bị vô hiệu hóa theo cấu hình."
+
+msgid "Choose the type of question you want to add."
+msgstr "Chọn loại câu hỏi bạn muốn thêm."
+
+msgid "The free text option is added automatically."
+msgstr "Tùy chọn văn bản tự do được thêm tự động."
+
+msgid "No questions found"
+msgstr "Không tìm thấy câu hỏi nào"
+
+msgid "Mandatory"
+msgstr "Bắt buộc"
+
+msgid "Unsupported question type"
+msgstr "Loại câu hỏi không được hỗ trợ"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "Bạn có thể sử dụng các thẻ {%s} và {%s} trong câu hỏi."
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "Câu hỏi này được hiển thị có điều kiện khi trả lời khảo sát."
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "Các tùy chọn phần trăm từ 1 đến 100 được tạo tự động."
+
+msgid "Could not load survey questions"
+msgstr "Không thể tải câu hỏi khảo sát"
+
+msgid "The question text is required."
+msgstr "Văn bản câu hỏi là bắt buộc."
+
+msgid "The maximum score is required."
+msgstr "Điểm tối đa là bắt buộc."
+
+msgid "Please select a parent option."
+msgstr "Vui lòng chọn một tùy chọn cha."
+
+msgid "Please fill all answer options."
+msgstr "Vui lòng điền đầy đủ các tùy chọn trả lời."
+
+msgid "QuestionUpdated"
+msgstr "QuestionUpdated"
+
+msgid "Could not save survey question"
+msgstr "Không thể lưu câu hỏi khảo sát"
+
+msgid "Could not delete survey question"
+msgstr "Không thể xóa câu hỏi khảo sát"
+
+msgid "Could not move survey question"
+msgstr "Không thể di chuyển câu hỏi khảo sát"
+
+msgid "Could not copy survey question"
+msgstr "Không thể sao chép câu hỏi khảo sát"
+
+msgid "Hide search"
+msgstr "Ẩn tìm kiếm"
+
+msgid "Showing results for: %s"
+msgstr "Đang hiển thị kết quả cho: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "Tìm kiếm theo tiêu đề, mã hoặc mô tả khảo sát."
+
+msgid "Search surveys"
+msgstr "Tìm kiếm khảo sát"
+
+msgid "%s surveys selected"
+msgstr "%s khảo sát được chọn"
+
+msgid "Clear selection"
+msgstr "Xóa lựa chọn"
+
+msgid "No surveys found"
+msgstr "Không tìm thấy khảo sát nào"
+
+msgid "Unsupported"
+msgstr "Không được hỗ trợ"
+
+msgid "Could not load surveys"
+msgstr "Không thể tải khảo sát"
+
+msgid "Delete selected surveys"
+msgstr "Xóa các khảo sát đã chọn"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "Các khảo sát đã chọn và câu hỏi của chúng sẽ bị xóa. Hành động này không thể hoàn tác."
+
+msgid "Could not delete selected surveys"
+msgstr "Không thể xóa các khảo sát đã chọn"
+
+msgid "Survey action"
+msgstr "Hành động khảo sát"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "Một bản sao của khảo sát này sẽ được tạo: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "Tất cả câu trả lời và lời mời sẽ bị xóa đối với khảo sát này: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "Các câu hỏi nhân bản sẽ bị xóa khỏi khảo sát này: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "Khảo sát này sẽ được công bố cho các trợ giảng nhóm liên kết: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "Khảo sát này và các câu hỏi của nó sẽ bị xóa: %s"
+
+msgid "Could not complete survey action"
+msgstr "Không thể hoàn tất hành động khảo sát"
+
+msgid "Not started"
+msgstr "Chưa bắt đầu"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "Thăm dò cuộc họp cho phép người dùng được mời chọn các ngày họ có sẵn."
+
+msgid "Back to surveys"
+msgstr "Quay lại khảo sát"
+
+msgid "Edit meeting poll"
+msgstr "Chỉnh sửa thăm dò cuộc họp"
+
+msgid "View meeting poll"
+msgstr "Xem thăm dò cuộc họp"
+
+msgid "Basic information"
+msgstr "Thông tin cơ bản"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "Thao tác này sẽ tạo một khảo sát loại thăm dò cuộc họp. Câu trả lời và lời mời được xử lý riêng."
+
+msgid "Availability"
+msgstr "Khả dụng"
+
+msgid "Meeting dates"
+msgstr "Ngày họp"
+
+msgid "Meeting poll"
+msgstr "Thăm dò cuộc họp"
+
+msgid "My availability"
+msgstr "Khả dụng của tôi"
+
+msgid "Meeting poll results"
+msgstr "Kết quả thăm dò cuộc họp"
+
+msgid "No invitations found"
+msgstr "Không tìm thấy lời mời nào"
+
+msgid "available"
+msgstr "có sẵn"
+
+msgid "Could not load meeting poll"
+msgstr "Không thể tải thăm dò cuộc họp"
+
+msgid "Please complete the required fields"
+msgstr "Vui lòng điền các trường bắt buộc"
+
+msgid "Could not save meeting poll"
+msgstr "Không thể lưu thăm dò cuộc họp"
+
+msgid "Could not save meeting availability"
+msgstr "Không thể lưu khả dụng cuộc họp"
+
+msgid "Copy this survey to another course or session"
+msgstr "Sao chép khảo sát này sang khóa học hoặc phiên khác"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "Khảo sát sẽ được sao chép mà không có câu trả lời hoặc lời mời."
+
+msgid "No target courses found"
+msgstr "Không tìm thấy khóa học đích"
+
+msgid "Search by course title, course code or session name."
+msgstr "Tìm kiếm theo tiêu đề khóa học, mã khóa học hoặc tên phiên."
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "Sử dụng Nhân bản khảo sát khi bạn muốn một bản sao trong cùng khóa học."
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "Các câu hỏi và tùy chọn sẽ được sao chép. Câu trả lời, lời mời và báo cáo chỉ ở lại trong khảo sát gốc."
+
+msgid "Selected target"
+msgstr "Đích đã chọn"
+
+msgid "Could not load copy form"
+msgstr "Không thể tải biểu mẫu sao chép"
+
+msgid "The survey will be copied to: %s"
+msgstr "Khảo sát sẽ được sao chép đến: %s"
+
+msgid "Survey copied."
+msgstr "Đã sao chép khảo sát."
+
+msgid "Could not copy survey"
+msgstr "Không thể sao chép khảo sát"
+
+msgid "Answer survey"
+msgstr "Trả lời khảo sát"
+
+msgid "Preview mode does not save answers."
+msgstr "Chế độ xem trước không lưu câu trả lời."
+
+msgid "Survey completed"
+msgstr "Khảo sát đã hoàn thành"
+
+msgid "Thank you for answering the survey."
+msgstr "Cảm ơn bạn đã trả lời khảo sát."
+
+msgid "Profile information"
+msgstr "Thông tin hồ sơ"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "Vui lòng xem xét các trường hồ sơ được yêu cầu trước khi trả lời khảo sát."
+
+msgid "This profile field is read-only."
+msgstr "Trường hồ sơ này chỉ đọc."
+
+msgid "You already filled this survey."
+msgstr "Bạn đã điền khảo sát này."
+
+msgid "Please specify"
+msgstr "Vui lòng chỉ rõ"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "Loại câu hỏi này không được hỗ trợ trong chế độ xem khảo sát hiện đại."
+
+msgid "Preview only"
+msgstr "Chỉ xem trước"
+
+msgid "Submit answers"
+msgstr "Gửi câu trả lời"
+
+msgid "Could not load survey"
+msgstr "Không thể tải khảo sát"
+
+msgid "Please complete the required profile fields."
+msgstr "Vui lòng điền các trường hồ sơ bắt buộc."
+
+msgid "Please answer all mandatory questions."
+msgstr "Vui lòng trả lời tất cả các câu hỏi bắt buộc."
+
+msgid "Could not save survey answers"
+msgstr "Không thể lưu câu trả lời khảo sát"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "Cấu hình thông tin khảo sát chính trước khi quản lý câu hỏi và lời mời."
+
+msgid "The survey code cannot be changed after creation."
+msgstr "Mã khảo sát không thể thay đổi sau khi tạo."
+
+msgid "Survey behavior"
+msgstr "Hành vi khảo sát"
+
+msgid "Use 0 for no time limit."
+msgstr "Sử dụng 0 nếu không giới hạn thời gian."
+
+msgid "Survey messages"
+msgstr "Thông báo khảo sát"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "Các trường hồ sơ được chọn ở đây sẽ hiển thị trước các câu hỏi khảo sát."
+
+msgid "No profile fields are currently available."
+msgstr "Hiện không có trường hồ sơ nào."
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "Chọn trường hồ sơ chỉ khả dụng cho khảo sát không ẩn danh."
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "Liên kết kỹ năng sẽ được di chuyển trong một lô riêng."
+
+msgid "Could not load survey configuration"
+msgstr "Không thể tải cấu hình khảo sát"
+
+msgid "The survey code is required."
+msgstr "Mã khảo sát là bắt buộc."
+
+msgid "The survey title is required."
+msgstr "Tiêu đề khảo sát là bắt buộc."
+
+msgid "The survey has been saved successfully"
+msgstr "Khảo sát đã được lưu thành công"
+
+msgid "Could not save survey configuration"
+msgstr "Không thể lưu cấu hình khảo sát"
+
+msgid "Course users"
+msgstr "Người dùng khóa học"
+
+msgid "Already invited"
+msgstr "Đã được mời"
+
+msgid "No users found"
+msgstr "Không tìm thấy người dùng"
+
+msgid "No groups found"
+msgstr "Không tìm thấy nhóm"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "Sử dụng **link** ở vị trí cần hiển thị liên kết khảo sát."
+
+msgid "Remind all selected users"
+msgstr "Nhắc nhở tất cả người dùng đã chọn"
+
+msgid "Anonymous access link"
+msgstr "Liên kết truy cập ẩn danh"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "Người dùng chưa được mời có thể sử dụng liên kết này để tham gia khảo sát."
+
+msgid "Answered anonymously"
+msgstr "Đã trả lời ẩn danh"
+
+msgid "Could not load survey invitations"
+msgstr "Không thể tải lời mời khảo sát"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "Chủ đề và nội dung thư là bắt buộc khi gửi thư."
+
+msgid "Could not publish survey"
+msgstr "Không thể công bố khảo sát"
+
+msgid "Could not copy the link"
+msgstr "Không thể sao chép liên kết"
+
+msgid "Please answer this survey using the following link"
+msgstr "Vui lòng trả lời khảo sát này bằng liên kết sau"
+
+msgid "Export CSV"
+msgstr "Xuất CSV"
+
+msgid "Export compact CSV"
+msgstr "Xuất CSV rút gọn"
+
+msgid "Export Excel"
+msgstr "Xuất Excel"
+
+msgid "Export package"
+msgstr "Xuất gói"
+
+msgid "Results summary"
+msgstr "Tóm tắt kết quả"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "Chế độ xem này hiển thị dữ liệu báo cáo đã di chuyển cho khảo sát này."
+
+msgid "Select user"
+msgstr "Chọn người dùng"
+
+msgid "No answers found"
+msgstr "Không tìm thấy câu trả lời"
+
+msgid "answers"
+msgstr "câu trả lời"
+
+msgid "Could not load survey reporting"
+msgstr "Không thể tải báo cáo khảo sát"
+
+msgid "Back to threads"
+msgstr "Quay lại chủ đề"
+
+msgid "Back to learning path"
+msgstr "Quay lại lộ trình học tập"
+
+msgid "Remove sticky"
+msgstr "Bỏ ghim"
+
+msgid "Make sticky"
+msgstr "Ghim"
+
+msgid "Open thread"
+msgstr "Mở chủ đề"
+
+msgid "Close thread"
+msgstr "Đóng chủ đề"
+
+msgid "Delete thread"
+msgstr "Xóa chủ đề"
+
+msgid "This thread is hidden from learners."
+msgstr "Chủ đề này bị ẩn đối với người học."
+
+msgid "Revision requested"
+msgstr "Yêu cầu sửa đổi"
+
+msgid "Revision"
+msgstr "Sửa đổi"
+
+msgid "Approve post"
+msgstr "Duyệt bài viết"
+
+msgid "Reject post"
+msgstr "Từ chối bài viết"
+
+msgid "Cancel revision request"
+msgstr "Hủy yêu cầu sửa đổi"
+
+msgid "Delete post"
+msgstr "Xóa bài viết"
+
+msgid "Message is required"
+msgstr "Tin nhắn là bắt buộc"
+
+msgid "Target thread is required"
+msgstr "Chủ đề đích là bắt buộc"
+
+msgid "Could not retrieve posts"
+msgstr "Không thể lấy bài viết"
+
+msgid "Thread shown"
+msgstr "Chủ đề đã hiển thị"
+
+msgid "Thread hidden"
+msgstr "Chủ đề đã ẩn"
+
+msgid "Could not update thread"
+msgstr "Không thể cập nhật chủ đề"
+
+msgid "Thread closed"
+msgstr "Chủ đề đã đóng"
+
+msgid "Thread opened"
+msgstr "Chủ đề đã mở"
+
+msgid "Thread marked as sticky"
+msgstr "Chủ đề được đánh dấu là dán"
+
+msgid "Thread unmarked as sticky"
+msgstr "Chủ đề bỏ đánh dấu dán"
+
+msgid "Thread notifications enabled"
+msgstr "Đã bật thông báo chủ đề"
+
+msgid "Thread notifications disabled"
+msgstr "Đã tắt thông báo chủ đề"
+
+msgid "Could not update thread notification"
+msgstr "Không thể cập nhật thông báo chủ đề"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "Bạn có chắc muốn xóa chủ đề này không?"
+
+msgid "Could not delete thread"
+msgstr "Không thể xóa chủ đề"
+
+msgid "Post approved"
+msgstr "Bài viết đã duyệt"
+
+msgid "Could not approve post"
+msgstr "Không thể duyệt bài viết"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "Bạn có chắc muốn từ chối bài viết này không?"
+
+msgid "Post rejected"
+msgstr "Bài viết đã bị từ chối"
+
+msgid "Could not reject post"
+msgstr "Không thể từ chối bài viết"
+
+msgid "Post shown"
+msgstr "Bài viết đã hiển thị"
+
+msgid "Post hidden"
+msgstr "Bài viết đã ẩn"
+
+msgid "Could not update post"
+msgstr "Không thể cập nhật bài viết"
+
+msgid "Post updated"
+msgstr "Bài viết đã cập nhật"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "Bạn có chắc muốn xóa bài viết này không?"
+
+msgid "Post deleted"
+msgstr "Bài viết đã xóa"
+
+msgid "Could not delete post"
+msgstr "Không thể xóa bài viết"
+
+msgid "Untitled thread"
+msgstr "Chủ đề không tiêu đề"
+
+msgid "Could not retrieve threads"
+msgstr "Không thể lấy chủ đề"
+
+msgid "Post moved"
+msgstr "Bài viết đã di chuyển"
+
+msgid "Could not move post"
+msgstr "Không thể di chuyển bài viết"
+
+msgid "Revision request removed"
+msgstr "Yêu cầu sửa đổi đã xóa"
+
+msgid "Could not update revision request"
+msgstr "Không thể cập nhật yêu cầu sửa đổi"
+
+msgid "Are you sure you want to report this post?"
+msgstr "Bạn có chắc muốn báo cáo bài viết này không?"
+
+msgid "Could not report post"
+msgstr "Không thể báo cáo bài viết"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "Bạn có chắc muốn xóa tệp đính kèm này không?"
+
+msgid "Attachment deleted"
+msgstr "Tệp đính kèm đã xóa"
+
+msgid "Could not delete attachment"
+msgstr "Không thể xóa tệp đính kèm"
+
+msgid "Thread title"
+msgstr "Tiêu đề chủ đề"
+
+msgid "Sticky thread"
+msgstr "Chủ đề dán"
+
+msgid "Attach files"
+msgstr "Đính kèm tệp"
+
+msgid "Attachments are disabled for this forum"
+msgstr "Tệp đính kèm bị vô hiệu hóa cho diễn đàn này"
+
+msgid "The forum is not open yet."
+msgstr "Diễn đàn chưa mở."
+
+msgid "The forum is closed."
+msgstr "Diễn đàn đã đóng."
+
+msgid "The forum is locked."
+msgstr "Diễn đàn đã bị khóa."
+
+msgid "New threads are not allowed in this forum."
+msgstr "Không được phép tạo chủ đề mới trong diễn đàn này."
+
+msgid "Thread created"
+msgstr "Chủ đề đã được tạo"
+
+msgid "Could not create thread"
+msgstr "Không thể tạo chủ đề"
+
+msgid "Back to posts"
+msgstr "Quay lại bài viết"
+
+msgid "This reply will be stored as a revision."
+msgstr "Phản hồi này sẽ được lưu dưới dạng bản sửa đổi."
+
+msgid "Post reply"
+msgstr "Gửi phản hồi"
+
+msgid "The thread is locked."
+msgstr "Chủ đề đã bị khóa."
+
+msgid "Reply added"
+msgstr "Phản hồi đã được thêm"
+
+msgid "Could not add reply"
+msgstr "Không thể thêm phản hồi"
+
+msgid "Add forum"
+msgstr "Thêm diễn đàn"
+
+msgid "No forums found"
+msgstr "Không tìm thấy diễn đàn nào"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "Tạo danh mục diễn đàn hoặc diễn đàn đầu tiên để bắt đầu thảo luận."
+
+msgid "Locked"
+msgstr "Đã khóa"
+
+msgid "No forums in this category"
+msgstr "Không có diễn đàn nào trong danh mục này"
+
+msgid "Posts require approval"
+msgstr "Bài viết cần được phê duyệt"
+
+msgid "Forum for current group"
+msgstr "Diễn đàn của nhóm hiện tại"
+
+msgid "Group forum visibility"
+msgstr "Hiển thị diễn đàn nhóm"
+
+msgid "No category"
+msgstr "Không có danh mục"
+
+msgid "Could not retrieve forums"
+msgstr "Không thể truy xuất diễn đàn"
+
+msgid "Forum category updated"
+msgstr "Danh mục diễn đàn đã được cập nhật"
+
+msgid "Forum category created"
+msgstr "Danh mục diễn đàn đã được tạo"
+
+msgid "Could not save forum category"
+msgstr "Không thể lưu danh mục diễn đàn"
+
+msgid "Forum updated"
+msgstr "Diễn đàn đã được cập nhật"
+
+msgid "Forum created"
+msgstr "Diễn đàn đã được tạo"
+
+msgid "Could not save forum"
+msgstr "Không thể lưu diễn đàn"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "Bạn có chắc chắn muốn xóa danh mục diễn đàn này không?"
+
+msgid "Could not delete forum category"
+msgstr "Không thể xóa danh mục diễn đàn"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "Bạn có chắc chắn muốn xóa diễn đàn này không?"
+
+msgid "Could not delete forum"
+msgstr "Không thể xóa diễn đàn"
+
+msgid "Forum category unlocked"
+msgstr "Danh mục diễn đàn đã được mở khóa"
+
+msgid "Forum category locked"
+msgstr "Danh mục diễn đàn đã bị khóa"
+
+msgid "Could not update forum category"
+msgstr "Không thể cập nhật danh mục diễn đàn"
+
+msgid "Forum category shown"
+msgstr "Danh mục diễn đàn đã được hiển thị"
+
+msgid "Forum category hidden"
+msgstr "Danh mục diễn đàn đã bị ẩn"
+
+msgid "Forum unlocked"
+msgstr "Diễn đàn đã được mở khóa"
+
+msgid "Forum locked"
+msgstr "Diễn đàn đã bị khóa"
+
+msgid "Could not update forum"
+msgstr "Không thể cập nhật diễn đàn"
+
+msgid "Forum shown"
+msgstr "Diễn đàn đã được hiển thị"
+
+msgid "Forum hidden"
+msgstr "Diễn đàn đã bị ẩn"
+
+msgid "Forum notifications enabled"
+msgstr "Đã bật thông báo diễn đàn"
+
+msgid "Forum notifications disabled"
+msgstr "Đã tắt thông báo diễn đàn"
+
+msgid "Could not update forum notification"
+msgstr "Không thể cập nhật thông báo diễn đàn"
+
+msgid "Forum category moved"
+msgstr "Danh mục diễn đàn đã được di chuyển"
+
+msgid "Could not move forum category"
+msgstr "Không thể di chuyển danh mục diễn đàn"
+
+msgid "Forum moved"
+msgstr "Diễn đàn đã được di chuyển"
+
+msgid "Could not move forum"
+msgstr "Không thể di chuyển diễn đàn"
+
+msgid "Back to forums"
+msgstr "Quay lại diễn đàn"
+
+msgid "New thread"
+msgstr "Chủ đề mới"
+
+msgid "No threads found"
+msgstr "Không tìm thấy chủ đề nào"
+
+msgid "Sticky"
+msgstr "Ghim"
+
+msgid "Graded"
+msgstr "Đã chấm điểm"
+
+msgid "Grade peers"
+msgstr "Chấm điểm bạn học"
+
+msgid "Move thread"
+msgstr "Di chuyển chủ đề"
+
+msgid "Target forum"
+msgstr "Diễn đàn đích"
+
+msgid "Target forum is required"
+msgstr "Diễn đàn đích là bắt buộc"
+
+msgid "Students"
+msgstr "Học viên"
+
+msgid "No students found"
+msgstr "Không tìm thấy học viên nào"
+
+msgid "No peers available to grade."
+msgstr "Không có bạn học nào để chấm điểm."
+
+msgid "Qualified"
+msgstr "Đủ điều kiện"
+
+msgid "Not qualified"
+msgstr "Chưa đủ điều kiện"
+
+msgid "Could not retrieve thread grading"
+msgstr "Không thể lấy điểm chủ đề"
+
+msgid "Thread grading updated"
+msgstr "Điểm chủ đề đã được cập nhật"
+
+msgid "Could not update thread grading"
+msgstr "Không thể cập nhật điểm chủ đề"
+
+msgid "Thread score saved"
+msgstr "Điểm chủ đề đã được lưu"
+
+msgid "Could not save thread score"
+msgstr "Không thể lưu điểm chủ đề"
+
+msgid "Could not move thread"
+msgstr "Không thể di chuyển chủ đề"
+
+msgid "Thread updated"
+msgstr "Chủ đề đã được cập nhật"
+
+msgid "Search term is too short"
+msgstr "Từ khóa tìm kiếm quá ngắn"
+
+msgid "Could not search forums"
+msgstr "Không thể tìm kiếm diễn đàn"
+
+msgid "Moderated"
+msgstr "Được kiểm duyệt"
+
+msgid "View threads"
+msgstr "Xem chủ đề"
 

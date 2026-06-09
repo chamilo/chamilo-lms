@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "शुभकामना"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "सूत्र नमूना: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "सूत्र नमुना: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "चलहरूको दायरा"
@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:कपीराइट,, no:कपीराइट नभएको"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:फोल्डर,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:व्यायाम,,      simulation:सिमुलेशन,,      questionnaire:प्रश्नावली,,      diagram:डायाग्राम,,      figure:चित्र,,      graph:ग्राफ,,      index:सूची,,      slide:स्लाइड,,      table:तालिका,,      narrative text:कथन पाठ,,      exam:परीक्षा,,      experiment:प्रयोग,,      problem statement:समस्या कथन,,      self assessment:आत्म मूल्याङ्कन,,      lecture:व्याख्यान"
@@ -9730,6 +9730,9 @@ msgstr "खोजी परिणामहरू:"
 msgid "Select a file"
 msgstr "फाइल छान्नुहोस्"
 
+msgid "Select a file to insert into the editor."
+msgstr "सम्पादकमा घुसाउन फाइल चयन गर्नुहोस्।"
+
 msgid "Warning - The FAQ file, located in the /home/ directory of your portal, is not writable. Your text will not be saved until the file permissions are changed."
 msgstr "चेतावनी - तपाईंको पोर्टलको /home/ निर्देशिकामा रहेको FAQ फाइल लेख्न सकिँदैन। फाइल अनुमतिहरू परिवर्तन नगरेसम्म तपाईंको पाठ बचत हुनेछैन।"
 
@@ -15910,6 +15913,9 @@ msgstr "मिति र समय"
 msgid "Item"
 msgstr "वस्तु"
 
+msgid "Items"
+msgstr "वस्तुहरू"
+
 msgid "Configure Dashboard Plugin"
 msgstr "ड्यासबोर्ड प्लगइन कन्फिगर गर्नुहोस्"
 
@@ -17163,6 +17169,18 @@ msgstr "समूहमा सत्रहरू"
 
 msgid "Courses in group"
 msgstr "समूहमा कोर्सहरू"
+
+msgid "Courses on the platform"
+msgstr "प्लेटफर्ममा पाठ्यक्रमहरू"
+
+msgid "%s courses"
+msgstr "%s पाठ्यक्रमहरू"
+
+msgid "%s sessions"
+msgstr "%s सत्रहरू"
+
+msgid "Search by title or code"
+msgstr "शीर्षक वा कोडद्वारा खोज्नुहोस्"
 
 msgid "Users in group"
 msgstr "समूहमा प्रयोगकर्ताहरू"
@@ -32167,6 +32185,9 @@ msgstr "कार्यभार"
 msgid "Allowed file formats: %s"
 msgstr "अनुमति दिइएका फाइल ढाँचाहरू: %s"
 
+msgid "File manager"
+msgstr "फाइल प्रबन्धक"
+
 msgid "File type not allowed. Allowed extensions: %s"
 msgstr "फाइल प्रकार अनुमति छैन। अनुमति दिइएका एक्सटेन्सनहरू: %s"
 
@@ -33880,6 +33901,2583 @@ msgstr "स्वागत छ"
 msgid "Welcome to Chamilo"
 msgstr "Chamilo मा स्वागत छ"
 
+msgid "Check all unanswered questions below"
+msgstr "तलका सबै अनुत्तरित प्रश्नहरू जाँच गर्नुहोस्"
+
 msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
 msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> यदि यो तपाईंको पहिलो पटक Chamilo प्रयोग गर्दै हुनुहुन्छ भने, यसका धेरै सुविधाहरू मार्फत आफ्नो बाटो पत्ता लगाउन साइड मेनु जाँच गर्नुहोस्। यदि तपाईंलाई सहयोग चाहिन्छ भने, तपाईंले <a href=\"https://docs.chamilo.org\">हाम्रो आधिकारिक कागजात</a> लाई मानक कागजातका लागि सहयोग गर्न सक्नुहुन्छ, जबकि हाम्रो <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">अनलाइन फोरम</a> ले अन्य Chamilo प्रयोगकर्ताहरूबाट विचारहरू साझा गर्न र उत्तरहरू फेला पार्न सहयोग गर्न सक्छ।"
+
+msgid "Change password"
+msgstr "पासवर्ड परिवर्तन गर्नुहोस्"
+
+msgid "Newest first"
+msgstr "नयाँ पहिले"
+
+msgid "Oldest first"
+msgstr "पुरानो पहिले"
+
+msgid "Title A–Z"
+msgstr "शीर्षक A–Z"
+
+msgid "Title Z–A"
+msgstr "शीर्षक Z–A"
+
+msgid "Send test email"
+msgstr "परीक्षण इमेल पठाउनुहोस्"
+
+msgid "Show teachers"
+msgstr "शिक्षकहरू देखाउनुहोस्"
+
+msgid "Hide teachers"
+msgstr "शिक्षकहरू लुकाउनुहोस्"
+
+msgid "Delete exercise attempts"
+msgstr "अभ्यास प्रयासहरू मेटाउनुहोस्"
+
+msgid "Message sent successfully."
+msgstr "सन्देश सफलतापूर्वक पठाइयो।"
+
+msgid "You cannot create a new course right now."
+msgstr "तपाईं अहिले नयाँ पाठ्यक्रम सिर्जना गर्न सक्नुहुन्न।"
+
+msgid "Unable to verify whether you can create a new course right now."
+msgstr "तपाईं अहिले नयाँ पाठ्यक्रम सिर्जना गर्न सक्नुहुन्छ कि भनेर प्रमाणित गर्न असमर्थ।"
+
+msgid "Please try again later or contact the administrator."
+msgstr "कृपया पछि फेरि प्रयास गर्नुहोस् वा प्रशासकलाई सम्पर्क गर्नुहोस्।"
+
+msgid "You cannot create more courses at this time."
+msgstr "तपाईं यस समयमा थप पाठ्यक्रमहरू सिर्जना गर्न सक्नुहुन्न।"
+
+msgid "You already manage %d courses and your active service allows up to %d. To create another course, you need a higher service limit or reduce your current active courses."
+msgstr "तपाईंले पहिले नै %d पाठ्यक्रमहरू व्यवस्थापन गर्नुहुन्छ र तपाईंको सक्रिय सेवाले %d सम्म अनुमति दिन्छ। अर्को पाठ्यक्रम सिर्जना गर्न, तपाईंलाई उच्च सेवा सीमा चाहिन्छ वा तपाईंको हालका सक्रिय पाठ्यक्रमहरू घटाउनुहोस्।"
+
+msgid "You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now."
+msgstr "तपाईंले पहिले नै %d पाठ्यक्रमहरू व्यवस्थापन गर्नुहुन्छ र प्लेटफर्मले हाल तपाईंको खाताका लागि %d सम्म अनुमति दिन्छ। तपाईं अहिले थप पाठ्यक्रमहरू सिर्जना गर्न सक्नुहुन्न।"
+
+msgid "Add a class"
+msgstr "कक्षा थप्नुहोस्"
+
+msgid "Search classes"
+msgstr "कक्षाहरू खोज्नुहोस्"
+
+msgid "No classes found"
+msgstr "कुनै कक्षा फेला परेन"
+
+msgid "Import classes"
+msgstr "कक्षाहरू आयात गर्नुहोस्"
+
+msgid "Class users"
+msgstr "कक्षा प्रयोगकर्ताहरू"
+
+msgid "%s classes imported"
+msgstr "%s कक्षाहरू आयात गरियो"
+
+msgid "%s user-class links imported"
+msgstr "%s प्रयोगकर्ता-कक्षा लिङ्कहरू आयात गरियो"
+
+msgid "Hide comments"
+msgstr "टिप्पणीहरू लुकाउनुहोस्"
+
+msgid "Loading comments..."
+msgstr "टिप्पणीहरू लोड हुँदैछ..."
+
+msgid "No comments yet."
+msgstr "अहिलेसम्म कुनै टिप्पणी छैन।"
+
+msgid "A user with this username already exists"
+msgstr "यो प्रयोगकर्ता नाम भएको प्रयोगकर्ता पहिले नै अवस्थित छ"
+
+msgid "Manage meetings, review recordings and update course-wide BBB settings from one place."
+msgstr "एउटै ठाउँबाट बैठकहरू प्रबन्ध गर्नुहोस्, रेकर्डिङहरू समीक्षा गर्नुहोस् र पाठ्यक्रम-व्यापी BBB सेटिङहरू अद्यावधिक गर्नुहोस्।"
+
+msgid "Review the current defaults and propagate them to every course when needed."
+msgstr "हालका पूर्वनिर्धारितहरू समीक्षा गर्नुहोस् र आवश्यक परेमा तिनीहरूलाई हरेक पाठ्यक्रममा प्रसारित गर्नुहोस्।"
+
+msgid "Filter the list by meeting date range."
+msgstr "बैठक मिति दायरा अनुसार सूची फिल्टर गर्नुहोस्।"
+
+msgid "Review meeting history, participants and recording actions."
+msgstr "बैठक इतिहास, सहभागीहरू र रेकर्डिङ कार्यहरू समीक्षा गर्नुहोस्।"
+
+msgid "Participants"
+msgstr "सहभागीहरू"
+
+msgid "CountUsers"
+msgstr "CountUsers"
+
+msgid "No data found"
+msgstr "कुनै डाटा फेला परेन"
+
+msgid "My justifications"
+msgstr "मेरा औचित्यहरू"
+
+msgid "My services"
+msgstr "मेरा सेवाहरू"
+
+msgid "Extra menu"
+msgstr "अतिरिक्त मेनु"
+
+msgid "Pending tests"
+msgstr "पेन्डिङ परीक्षणहरू"
+
+msgid "No specific language"
+msgstr "कुनै विशिष्ट भाषा छैन"
+
+msgid "Source Chamilo version"
+msgstr "स्रोत Chamilo संस्करण"
+
+msgid "Exporting..."
+msgstr "निर्यात गर्दै..."
+
+msgid "Autosaved drafts available"
+msgstr "स्वतःसेभ गरिएका ड्राफ्टहरू उपलब्ध छन्"
+
+msgid "Hide drafts"
+msgstr "ड्राफ्टहरू लुकाउनुहोस्"
+
+msgid "Show drafts"
+msgstr "ड्राफ्टहरू देखाउनुहोस्"
+
+msgid "Drafts are stored only in this browser and are removed after saving the document."
+msgstr "ड्राफ्टहरू केवल यस ब्राउजरमा भण्डारण गरिन्छन् र कागजात बचत गरेपछि हटाइन्छन्।"
+
+msgid "Last saved"
+msgstr "अन्तिम पटक बचत गरिएको"
+
+msgid "Restore draft"
+msgstr "ड्राफ्ट पुनर्स्थापना गर्नुहोस्"
+
+msgid "Delete draft"
+msgstr "ड्राफ्ट मेटाउनुहोस्"
+
+msgid "Information about indexing document content"
+msgstr "कागजात सामग्री अनुक्रमणिका बारे जानकारी"
+
+msgid "When enabled, the document text is indexed by the search engine so users can find it from platform search."
+msgstr "सक्षम पार्दा, कागजात पाठ खोज इन्जिनद्वारा अनुक्रमणिका गरिन्छ ताकि प्रयोगकर्ताहरूले प्लेटफर्म खोजबाट यसलाई फेला पार्न सकून्।"
+
+msgid "The editor is not available."
+msgstr "सम्पादक उपलब्ध छैन।"
+
+msgid "Please place the cursor inside a paragraph first."
+msgstr "कृपया पहिले कर्सरलाई अनुच्छेद भित्र राख्नुहोस्।"
+
+msgid "The selected paragraph is empty."
+msgstr "चयन गरिएको अनुच्छेद खाली छ।"
+
+msgid "Loading failed."
+msgstr "लोडिङ असफल भयो।"
+
+msgid "Add introduction"
+msgstr "परिचय थप्नुहोस्"
+
+msgid "Course type"
+msgstr "पाठ्यक्रम प्रकार"
+
+msgid "Choose whether this course uses the standard platform limits or benefits from a purchased service."
+msgstr "यो पाठ्यक्रमले मानक प्लेटफर्म सीमाहरू प्रयोग गर्छ वा खरिद गरिएको सेवाबाट फाइदा लिन्छ भन्ने छनोट गर्नुहोस्।"
+
+msgid "Standard course"
+msgstr "मानक पाठ्यक्रम"
+
+msgid "Use the standard platform limits."
+msgstr "मानक प्लेटफर्म सीमाहरू प्रयोग गर्नुहोस्।"
+
+msgid "Selected"
+msgstr "चयन गरिएको"
+
+msgid "Hosting limit"
+msgstr "होस्टिङ सीमा"
+
+msgid "Document quota"
+msgstr "कागजात कोटा"
+
+msgid "The standard course limit has been reached."
+msgstr "मानक पाठ्यक्रम सीमा पुगिसकेको छ।"
+
+msgid "Use the benefits granted by this service."
+msgstr "यो सेवाद्वारा प्रदान गरिएका फाइदाहरू प्रयोग गर्नुहोस्।"
+
+msgid "Courses with these benefits"
+msgstr "यी फाइदाहरू भएका पाठ्यक्रमहरू"
+
+msgid "Active service"
+msgstr "सक्रिय सेवा"
+
+msgid "Buy service"
+msgstr "सेवा किन्नुहोस्"
+
+msgid "Select an available course type before creating the course."
+msgstr "पाठ्यक्रम सिर्जना गर्नुअघि एउटा उपलब्ध पाठ्यक्रम प्रकार चयन गर्नुहोस्।"
+
+msgid "users"
+msgstr "प्रयोगकर्ताहरू"
+
+msgid "You need to buy this service before using these benefits."
+msgstr "यी फाइदाहरू प्रयोग गर्नुअघि तपाईंले यो सेवा किन्नु आवश्यक छ।"
+
+msgid "You already used all courses available with this service."
+msgstr "तपाईंले यो सेवासँग उपलब्ध सबै पाठ्यक्रमहरू प्रयोग गरिसक्नुभएको छ।"
+
+msgid "This option is not available."
+msgstr "यो विकल्प उपलब्ध छैन।"
+
+msgid "This field is required"
+msgstr "यो क्षेत्र अनिवार्य छ"
+
+msgid "Show less"
+msgstr "कम देखाउनुहोस्"
+
+msgid "Show full description"
+msgstr "पूरा विवरण देखाउनुहोस्"
+
+msgid "Virtual keyboard"
+msgstr "भर्चुअल किबोर्ड"
+
+msgid "Backspace"
+msgstr "ब्याकस्पेस"
+
+msgid "Space"
+msgstr "स्पेस"
+
+msgid "Learning path only visible to selected learners"
+msgstr "चयन गरिएका शिक्षार्थीहरूलाई मात्र दृश्यात्मक सिकाइ मार्ग"
+
+msgid "Create course"
+msgstr "पाठ्यक्रम सिर्जना गर्नुहोस्"
+
+msgid "Tour"
+msgstr "भ्रमण"
+
+msgid "Are you sure you want to delete this comment?"
+msgstr "के तपाईं यो टिप्पणी मेटाउन निश्चित हुनुहुन्छ?"
+
+msgid "No posts found"
+msgstr "कुनै पोस्ट फेला परेन"
+
+msgid "No communities"
+msgstr "कुनै समुदाय छैन"
+
+msgid "No friends found"
+msgstr "कुनै साथी फेला परेन"
+
+msgid "Visual overview of your skills"
+msgstr "तपाईंको सीपहरूको दृश्यात्मक अवलोकन"
+
+msgid "Compare your progress"
+msgstr "तपाईंको प्रगति तुलना गर्नुहोस्"
+
+msgid "Please enter a search term."
+msgstr "कृपया खोज शब्द प्रविष्ट गर्नुहोस्।"
+
+msgid "Enter captcha code"
+msgstr "क्याप्चा कोड प्रविष्ट गर्नुहोस्"
+
+msgid "Refresh captcha"
+msgstr "क्याप्चा ताजा गर्नुहोस्"
+
+msgid "Captcha is temporarily blocked. Please try again later."
+msgstr "क्याप्चा अस्थायी रूपमा अवरुद्ध छ। कृपया पछि फेरि प्रयास गर्नुहोस्।"
+
+msgid "Item Details"
+msgstr "वस्तु विवरण"
+
+msgid "Open File"
+msgstr "फाइल खोल्नुहोस्"
+
+msgid "Selection"
+msgstr "चयन"
+
+msgid "Remove selection context"
+msgstr "चयन सन्दर्भ हटाउनुहोस्"
+
+msgid "Source document"
+msgstr "स्रोत कागजात"
+
+msgid "Use the current course context"
+msgstr "हालको पाठ्यक्रम सन्दर्भ प्रयोग गर्नुहोस्"
+
+msgid "Loading documents..."
+msgstr "कागजातहरू लोड गर्दै..."
+
+msgid "No compatible PDF or TXT document was found in this course."
+msgstr "यो पाठ्यक्रममा कुनै मिल्दो PDF वा TXT कागजात फेला परेन।"
+
+msgid "Select a PDF or TXT document to generate terms only from that document."
+msgstr "केवल त्यो कागजातको सामग्रीबाट शब्दहरू उत्पन्न गर्न PDF वा TXT कागजात चयन गर्नुहोस्।"
+
+msgid "Confidentiality warning"
+msgstr "गोपनीयता चेतावनी"
+
+msgid "When a document is selected, the prompt is fixed so the generation uses only that document content."
+msgstr "जब कागजात चयन गरिन्छ, प्रम्प्ट स्थिर रहन्छ जसले गर्दा उत्पत्ति केवल त्यो कागजातको सामग्री प्रयोग गर्दछ।"
+
+msgid "No document-processing AI providers available."
+msgstr "कुनै कागजात-प्रशोधन AI प्रदायक उपलब्ध छैन।"
+
+msgid "Failed to save signature. Please try again."
+msgstr "हस्ताक्षर बचत गर्न असफल भयो। कृपया फेरि प्रयास गर्नुहोस्।"
+
+msgid "Select and move"
+msgstr "चयन गर्नुहोस् र सार्नुहोस्"
+
+msgid "Freehand"
+msgstr "हातले कोर्नु"
+
+msgid "Stroke"
+msgstr "स्ट्रोक"
+
+msgid "Fill"
+msgstr "भर्नुहोस्"
+
+msgid "Import SVG"
+msgstr "SVG आयात गर्नुहोस्"
+
+msgid "Import image"
+msgstr "छवि आयात गर्नुहोस्"
+
+msgid "Click the drawing area to place this text"
+msgstr "यो पाठ राख्न कोर्ने क्षेत्रमा क्लिक गर्नुहोस्"
+
+msgid "Draw a new SVG, import an existing SVG or embed an image, then save it as a reusable document."
+msgstr "नयाँ SVG कोर्नुहोस्, अवस्थित SVG आयात गर्नुहोस् वा छवि समावेश गर्नुहोस्, त्यसपछि यसलाई पुन: प्रयोग गर्न मिल्ने कागजातको रूपमा बचत गर्नुहोस्।"
+
+msgid "Use Select and move to reposition or resize elements added in this editor."
+msgstr "यो सम्पादकमा थपिएका तत्वहरू पुन:स्थापना वा आकार परिवर्तन गर्न चयन र सार्ने प्रयोग गर्नुहोस्।"
+
+msgid "Stroke width"
+msgstr "स्ट्रोक चौडाइ"
+
+msgid "Transparent fill"
+msgstr "पारदर्शी भर्नु"
+
+msgid "Invalid id"
+msgstr "अवैध आईडी"
+
+msgid "Unable to load the drawing"
+msgstr "कोराइ लोड गर्न असमर्थ"
+
+msgid "Only PNG, JPG, WEBP or GIF images are supported."
+msgstr "केवल PNG, JPG, WEBP वा GIF छविहरू समर्थित छन्।"
+
+msgid "Unable to read the image file."
+msgstr "छवि फाइल पढ्न असमर्थ।"
+
+msgid "Only SVG files are supported."
+msgstr "केवल SVG फाइलहरू समर्थित छन्।"
+
+msgid "The SVG file is empty or invalid."
+msgstr "SVG फाइल खाली वा अवैध छ।"
+
+msgid "Unable to read the SVG file."
+msgstr "SVG फाइल पढ्न असमर्थ।"
+
+msgid "The drawing is empty or invalid."
+msgstr "रेखाचित्र खाली वा अवैध छ।"
+
+msgid "Unable to save the drawing"
+msgstr "रेखाचित्र बचत गर्न असमर्थ"
+
+msgid "Information about AI-assisted documents"
+msgstr "AI सहायता प्राप्त कागजातहरूको बारेमा जानकारी"
+
+msgid "Location"
+msgstr "स्थान"
+
+msgid "Cloud link"
+msgstr "क्लाउड लिङ्क"
+
+msgid "Add a link to a cloud document, such as Google Drive or Google Docs."
+msgstr "Google Drive वा Google Docs जस्ता क्लाउड कागजातमा लिङ्क थप्नुहोस्।"
+
+msgid "Add cloud link"
+msgstr "क्लाउड लिङ्क थप्नुहोस्"
+
+msgid "Document title"
+msgstr "कागजात शीर्षक"
+
+msgid "Document options change how uploaded files are processed after saving."
+msgstr "कागजात विकल्पहरूले बचत गरेपछि अपलोड गरिएका फाइलहरू कसरी प्रशोधन गरिन्छ भन्ने निर्धारण गर्दछ।"
+
+msgid "Information about uncompressing zip files"
+msgstr "ZIP फाइलहरू अनकम्प्रेस गर्ने बारेमा जानकारी"
+
+msgid "When enabled, ZIP files are extracted into the current document folder after upload."
+msgstr "सक्षम पार्दा, ZIP फाइलहरू अपलोड पछि हालको कागजात फोल्डरमा निकालिन्छन्।"
+
+msgid "The title is required."
+msgstr "शीर्षक आवश्यक छ।"
+
+msgid "The URL is required."
+msgstr "URL आवश्यक छ।"
+
+msgid "The destination folder is missing."
+msgstr "गन्तव्य फोल्डर हराइरहेको छ।"
+
+msgid "Unable to create cloud link."
+msgstr "क्लाउड लिङ्क सिर्जना गर्न असमर्थ।"
+
+msgid "Copy to My Files"
+msgstr "मेरो फाइलहरूमा प्रतिलिपि गर्नुहोस्"
+
+msgid "Used space"
+msgstr "प्रयोग गरिएको ठाउँ"
+
+msgid "Available space"
+msgstr "उपलब्ध ठाउँ"
+
+msgid "Available percentage"
+msgstr "उपलब्ध प्रतिशत"
+
+msgid "Cloud links cannot be downloaded."
+msgstr "क्लाउड लिङ्कहरू डाउनलोड गर्न सकिँदैन।"
+
+msgid "Could not copy the file to My Files"
+msgstr "फाइल मेरो फाइलहरूमा प्रतिलिपि गर्न सकिएन"
+
+msgid "File copied to My Files"
+msgstr "फाइल मेरो फाइलहरूमा प्रतिलिपि गरियो"
+
+msgid "Checking course creation options..."
+msgstr "पाठ्यक्रम सिर्जना विकल्पहरू जाँच गर्दै..."
+
+msgid "You cannot create more courses right now."
+msgstr "तपाईं अहिले थप पाठ्यक्रमहरू सिर्जना गर्न सक्नुहुन्न।"
+
+msgid "AI analyzer"
+msgstr "AI विश्लेषक"
+
+msgid "Expand all"
+msgstr "सबै विस्तार गर्नुहोस्"
+
+msgid "Collapse all"
+msgstr "सबै संकुचित गर्नुहोस्"
+
+msgid "Review your active service benefits, purchase history and available receipts."
+msgstr "तपाईंको सक्रिय सेवाका फाइदाहरू, खरिद इतिहास र उपलब्ध रसिदहरू समीक्षा गर्नुहोस्।"
+
+msgid "Active services"
+msgstr "सक्रिय सेवाहरू"
+
+msgid "No active services"
+msgstr "कुनै सक्रिय सेवा छैन"
+
+msgid "Valid until"
+msgstr "सम्म मान्य"
+
+msgid "Recurring payment"
+msgstr "आवर्ती भुक्तानी"
+
+msgid "Next charge"
+msgstr "अर्को शुल्क"
+
+msgid "Enable auto billing"
+msgstr "स्वतः बिलिङ सक्षम गर्नुहोस्"
+
+msgid "Cancel auto billing"
+msgstr "स्वतः बिलिङ रद्द गर्नुहोस्"
+
+msgid "Granted benefits"
+msgstr "प्रदान गरिएका फाइदाहरू"
+
+msgid "Purchase history"
+msgstr "खरिद इतिहास"
+
+msgid "No purchases yet"
+msgstr "अहिलेसम्म कुनै खरिद छैन"
+
+msgid "Product"
+msgstr "उत्पादन"
+
+msgid "Reference"
+msgstr "सन्दर्भ"
+
+msgid "Amount"
+msgstr "रकम"
+
+msgid "Receipt"
+msgstr "रसिद"
+
+msgid "Unable to load your services right now."
+msgstr "तपाईंको सेवाहरू अहिले लोड गर्न असमर्थ।"
+
+msgid "Auto billing enabled"
+msgstr "स्वतः बिलिङ सक्षम गरियो"
+
+msgid "Auto billing suspended"
+msgstr "स्वतः बिलिङ निलम्बित गरियो"
+
+msgid "Auto billing cancelled"
+msgstr "स्वतः बिलिङ रद्द गरियो"
+
+msgid "Auto billing disabled"
+msgstr "स्वतः बिलिङ असक्षम गरियो"
+
+msgid "Cancel auto billing for this service?"
+msgstr "यो सेवाको लागि स्वतः बिलिङ रद्द गर्नुहुन्छ?"
+
+msgid "Preview class members and courses"
+msgstr "कक्षा सदस्यहरू र पाठ्यक्रमहरू पूर्वावलोकन गर्नुहोस्"
+
+msgid "Please select a CSV file to import."
+msgstr "कृपया आयात गर्न CSV फाइल चयन गर्नुहोस्।"
+
+msgid "%d user-class links imported"
+msgstr "%d प्रयोगकर्ता-कक्षा लिङ्कहरू आयात गरियो"
+
+msgid "The following errors occurred during import:"
+msgstr "आयात गर्दा निम्न त्रुटिहरू देखा परे:"
+
+msgid "CSV file"
+msgstr "CSV फाइल"
+
+msgid "Remove user from all group-related entities if not in the list"
+msgstr "सूचीमा नभएमा प्रयोगकर्तालाई सबै समूह-सम्बन्धित निकायहरूबाट हटाउनुहोस्"
+
+msgid "UserName"
+msgstr "प्रयोगकर्ता नाम"
+
+msgid "ClassName"
+msgstr "कक्षा नाम"
+
+msgid "are required for each row."
+msgstr "प्रत्येक पङ्क्तिका लागि आवश्यक छन्।"
+
+msgid "title"
+msgstr "शीर्षक"
+
+msgid "is required."
+msgstr "आवश्यक छ।"
+
+msgid "description"
+msgstr "विवरण"
+
+msgid "are optional."
+msgstr "वैकल्पिक छन्।"
+
+msgid "Are you sure you want to remove this user from the class?"
+msgstr "के तपाईं यो प्रयोगकर्तालाई कक्षाबाट हटाउन निश्चित हुनुहुन्छ?"
+
+msgid "Users in class"
+msgstr "कक्षाका प्रयोगकर्ताहरू"
+
+msgid "Remove user"
+msgstr "प्रयोगकर्ता हटाउनुहोस्"
+
+msgid "Class not found"
+msgstr "कक्षा फेला परेन"
+
+msgid "Class overview"
+msgstr "कक्षा अवलोकन"
+
+msgid "Back to classes"
+msgstr "कक्षाहरूमा फर्कनुहोस्"
+
+msgid "Search members or courses"
+msgstr "सदस्य वा पाठ्यक्रम खोज्नुहोस्"
+
+msgid "Search by name, email, username or course title"
+msgstr "नाम, इमेल, प्रयोगकर्ता नाम वा पाठ्यक्रम शीर्षकद्वारा खोज्नुहोस्"
+
+msgid "Class members"
+msgstr "कक्षा सदस्यहरू"
+
+msgid "No email"
+msgstr "इमेल छैन"
+
+msgid "No members found"
+msgstr "कुनै सदस्य फेला परेन"
+
+msgid "No courses found"
+msgstr "कुनै पाठ्यक्रम फेला परेन"
+
+msgid "The end date must be after the start date."
+msgstr "समाप्ति मिति सुरु मितिपछि हुनुपर्छ।"
+
+msgid "Always visible"
+msgstr "सधैं दृश्यात्मक"
+
+msgid "No end date"
+msgstr "समाप्ति मिति छैन"
+
+msgid "No restriction"
+msgstr "कुनै प्रतिबन्ध छैन"
+
+msgid "Missing learning path or course identifier"
+msgstr "सिकाइ मार्ग वा पाठ्यक्रम पहिचानकर्ता हराइरहेको छ"
+
+msgid "Select a user or a group first"
+msgstr "पहिले प्रयोगकर्ता वा समूह चयन गर्नुहोस्"
+
+msgid "Remove all date restrictions for this learning path?"
+msgstr "यो सिकाइ मार्गका लागि सबै मिति प्रतिबन्धहरू हटाउने हो?"
+
+msgid "Advanced learning path access"
+msgstr "उन्नत सिकाइ मार्ग पहुँच"
+
+msgid "Remove date restrictions"
+msgstr "मिति प्रतिबन्धहरू हटाउनुहोस्"
+
+msgid "Search by name, email, username or group"
+msgstr "नाम, इमेल, प्रयोगकर्ता नाम वा समूहद्वारा खोज्नुहोस्"
+
+msgid "Edit user restriction"
+msgstr "प्रयोगकर्ता प्रतिबन्ध सम्पादन गर्नुहोस्"
+
+msgid "Edit group restriction"
+msgstr "समूह प्रतिबन्ध सम्पादन गर्नुहोस्"
+
+msgid "Select a user or group"
+msgstr "प्रयोगकर्ता वा समूह चयन गर्नुहोस्"
+
+msgid "Save restriction"
+msgstr "प्रतिबन्ध बचत गर्नुहोस्"
+
+msgid "members"
+msgstr "सदस्यहरू"
+
+msgid "Create Assignment"
+msgstr "असाइनमेन्ट सिर्जना गर्नुहोस्"
+
+msgid "The submission deadline has passed. You can no longer submit."
+msgstr "बुझाउने अन्तिम मिति बितिसकेको छ। तपाईं अब बुझाउन सक्नुहुन्न।"
+
+msgid "Mailing cannot be combined with other recipients."
+msgstr "मेलिङ अन्य प्राप्तकर्ताहरूसँग संयोजन गर्न सकिँदैन।"
+
+msgid "Social map"
+msgstr "सामाजिक नक्सा"
+
+msgid "The map plugin is not enabled or configured."
+msgstr "नक्सा प्लगइन सक्षम वा कन्फिगर गरिएको छैन।"
+
+msgid "Some configured extra fields were not found"
+msgstr "केही कन्फिगर गरिएका अतिरिक्त फिल्डहरू फेला परेनन्"
+
+msgid "No user locations were found."
+msgstr "कुनै प्रयोगकर्ता स्थानहरू फेला परेनन्।"
+
+msgid "OpenStreetMap needs coordinates to display an embedded marker. Address-only locations are listed below."
+msgstr "OpenStreetMap ले एम्बेडेड मार्कर देखाउन निर्देशाङ्क आवश्यक छ। ठेगाना-मात्र स्थानहरू तल सूचीबद्ध छन्।"
+
+msgid "Locations"
+msgstr "स्थानहरू"
+
+msgid "Open map"
+msgstr "नक्सा खोल्नुहोस्"
+
+msgid "Provider: OpenStreetMap"
+msgstr "प्रदायक: OpenStreetMap"
+
+msgid "Provider: Google Maps"
+msgstr "प्रदायक: Google Maps"
+
+msgid "Personal files"
+msgstr "व्यक्तिगत फाइलहरू"
+
+msgid "Upload image"
+msgstr "छवि अपलोड गर्नुहोस्"
+
+msgid "Upload media"
+msgstr "मिडिया अपलोड गर्नुहोस्"
+
+msgid "Only image files are allowed in this upload screen."
+msgstr "यो अपलोड स्क्रिनमा केवल छवि फाइलहरू मात्र अनुमति दिइन्छ।"
+
+msgid "Only audio and video files are allowed in this upload screen."
+msgstr "यो अपलोड स्क्रिनमा केवल अडियो र भिडियो फाइलहरू मात्र अनुमति दिइन्छ।"
+
+msgid "Upload files to your personal storage."
+msgstr "तपाईंको व्यक्तिगत भण्डारणमा फाइलहरू अपलोड गर्नुहोस्।"
+
+msgid "Linked"
+msgstr "लिङ्क गरिएको"
+
+msgid "No audio or video files were found in this folder."
+msgstr "यो फोल्डरमा कुनै अडियो वा भिडियो फाइलहरू फेला परेनन्।"
+
+msgid "No image files were found in this folder."
+msgstr "यो फोल्डरमा कुनै छवि फाइलहरू फेला परेनन्।"
+
+msgid "No matching files were found in this folder."
+msgstr "यो फोल्डरमा कुनै मिल्दो फाइलहरू फेला परेनन्।"
+
+msgid "This file type is not allowed in this upload screen."
+msgstr "यो फाइल प्रकार यस अपलोड स्क्रिनमा अनुमति दिइएको छैन।"
+
+msgid "Manage your personal files and course documents."
+msgstr "आफ्ना व्यक्तिगत फाइलहरू र कोर्स कागजातहरू व्यवस्थापन गर्नुहोस्।"
+
+msgid "DateValidity"
+msgstr "मितिValidity"
+
+msgid "JustificationSaved"
+msgstr "JustificationSaved"
+
+msgid "ValidityDate"
+msgstr "ValidityDate"
+
+msgid "MyJustifications"
+msgstr "MyJustifications"
+
+msgid "Submission"
+msgstr "Submission"
+
+msgid "Use the filters above to narrow the list."
+msgstr "सूची संकीर्ण गर्न माथिका फिल्टरहरू प्रयोग गर्नुहोस्।"
+
+msgid "You are not allowed to see this page."
+msgstr "तपाईंलाई यो पृष्ठ हेर्न अनुमति छैन।"
+
+msgid "plugin_title"
+msgstr "plugin_title"
+
+msgid "plugin_comment"
+msgstr "plugin_comment"
+
+msgid "Course tracking details"
+msgstr "कोर्स ट्र्याकिङ विवरणहरू"
+
+msgid "Course activity statistics"
+msgstr "कोर्स गतिविधि तथ्याङ्क"
+
+msgid "mobile_phone_number"
+msgstr "mobile_phone_number"
+
+msgid "Allowed template syntax"
+msgstr "अनुमति दिइएको टेम्प्लेट सिन्ट्याक्स"
+
+msgid "Functions"
+msgstr "कार्यहरू"
+
+msgid "Available variables depend on the template type, for example {{ user.getUsername() }} or {{ user.getEmail() }}."
+msgstr "उपलब्ध चरहरू टेम्प्लेट प्रकारमा निर्भर गर्दछ, उदाहरणका लागि {{ user.getUsername() }} वा {{ user.getEmail() }}।"
+
+msgid "For security reasons, any other Twig function, filter (such as filter, map, reduce or sort) or PHP call is blocked."
+msgstr "सुरक्षा कारणहरूले गर्दा, कुनै पनि अन्य Twig प्रकार्य, फिल्टर (जस्तै filter, map, reduce वा sort) वा PHP कल अवरुद्ध गरिएको छ।"
+
+msgid "Global administrator"
+msgstr "विश्वव्यापी प्रशासक"
+
+msgid "Session manager"
+msgstr "सत्र प्रबन्धक"
+
+msgid "Human resources manager"
+msgstr "मानव संसाधन प्रबन्धक"
+
+msgid "Course teacher"
+msgstr "कोर्स शिक्षक"
+
+msgid "Course student"
+msgstr "कोर्स विद्यार्थी"
+
+msgid "Platform reports"
+msgstr "प्लेटफर्म प्रतिवेदनहरू"
+
+msgid "Security reports"
+msgstr "सुरक्षा प्रतिवेदनहरू"
+
+msgid "Course reports"
+msgstr "कोर्स प्रतिवेदनहरू"
+
+msgid "Gradebook reports"
+msgstr "Gradebook प्रतिवेदनहरू"
+
+msgid "Social reports"
+msgstr "सामाजिक प्रतिवेदनहरू"
+
+msgid "Exports"
+msgstr "निर्यातहरू"
+
+msgid "Reports about platform-wide usage, users, courses and sessions."
+msgstr "प्लेटफर्म-व्यापी प्रयोग, प्रयोगकर्ता, कोर्स र सत्रहरूका बारेमा प्रतिवेदनहरू।"
+
+msgid "Audit and security-sensitive reports."
+msgstr "अडिट र सुरक्षा-संवेदनशील प्रतिवेदनहरू।"
+
+msgid "Reports scoped to courses managed by the user."
+msgstr "प्रयोगकर्ताद्वारा व्यवस्थित कोर्सहरूसँग सम्बन्धित प्रतिवेदनहरू।"
+
+msgid "Reports related to learner activity and follow-up."
+msgstr "सिकारु गतिविधि र अनुसरणसँग सम्बन्धित प्रतिवेदनहरू।"
+
+msgid "Reports related to scores, certificates and gradebook data."
+msgstr "स्कोर, प्रमाणपत्र र gradebook डेटासँग सम्बन्धित प्रतिवेदनहरू।"
+
+msgid "Reports and exports that generate downloadable files."
+msgstr "डाउनलोड गर्न मिल्ने फाइलहरू उत्पन्न गर्ने प्रतिवेदनहरू र निर्यातहरू।"
+
+msgid "Main platform statistics dashboard."
+msgstr "मुख्य प्लेटफर्म तथ्याङ्क ड्यासबोर्ड।"
+
+msgid "Number of courses and course distribution report."
+msgstr "कोर्सहरूको संख्या र कोर्स वितरण प्रतिवेदन।"
+
+msgid "Platform-wide access to course tools."
+msgstr "कोर्स उपकरणहरूमा प्लेटफर्म-व्यापी पहुँच।"
+
+msgid "Number of resources per tool."
+msgstr "प्रति उपकरण स्रोतहरूको संख्या।"
+
+msgid "Latest access to courses."
+msgstr "पाठ्यक्रमहरूमा नवीनतम पहुँच।"
+
+msgid "Course distribution by language."
+msgstr "भाषा अनुसार पाठ्यक्रम वितरण।"
+
+msgid "Course usage report."
+msgstr "पाठ्यक्रम उपयोग प्रतिवेदन।"
+
+msgid "Platform user count report."
+msgstr "प्लेटफर्म प्रयोगकर्ता गणना प्रतिवेदन।"
+
+msgid "Recent logins chart."
+msgstr "हालैका लगइन चार्ट।"
+
+msgid "Login distribution by month."
+msgstr "महिना अनुसार लगइन वितरण।"
+
+msgid "Login distribution by day."
+msgstr "दिन अनुसार लगइन वितरण।"
+
+msgid "Login distribution by hour."
+msgstr "घण्टा अनुसार लगइन वितरण।"
+
+msgid "Users with profile picture."
+msgstr "प्रोफाइल तस्बिर भएका प्रयोगकर्ताहरू।"
+
+msgid "Login report filtered by date."
+msgstr "मिति अनुसार फिल्टर गरिएको लगइन प्रतिवेदन।"
+
+msgid "Users who have not logged in recently."
+msgstr "हालै लगइन नगरेका प्रयोगकर्ताहरू।"
+
+msgid "Inactive or suspicious user accounts report."
+msgstr "निष्क्रिय वा शंकास्पद प्रयोगकर्ता खाता प्रतिवेदन।"
+
+msgid "Users activity statistics."
+msgstr "प्रयोगकर्ता गतिविधि तथ्याङ्क।"
+
+msgid "Currently online users report."
+msgstr "हाल अनलाइन प्रयोगकर्ता प्रतिवेदन।"
+
+msgid "New user registrations over time."
+msgstr "समय अनुसार नयाँ प्रयोगकर्ता दर्ता।"
+
+msgid "Course and session subscriptions over time."
+msgstr "समय अनुसार पाठ्यक्रम र सत्र सदस्यता।"
+
+msgid "Duplicate user detection and maintenance report."
+msgstr "नक्कली प्रयोगकर्ता पहिचान र मर्मत प्रतिवेदन।"
+
+msgid "Platform user/session statistics."
+msgstr "प्लेटफर्म प्रयोगकर्ता/सत्र तथ्याङ्क।"
+
+msgid "Quarterly platform report."
+msgstr "त्रैमासिक प्लेटफर्म प्रतिवेदन।"
+
+msgid "Activities audit"
+msgstr "गतिविधि अडिट"
+
+msgid "Audit report for important administrative and platform activities."
+msgstr "महत्वपूर्ण प्रशासनिक र प्लेटफर्म गतिविधिहरूको अडिट प्रतिवेदन।"
+
+msgid "Social messages received report."
+msgstr "प्राप्त सामाजिक सन्देश प्रतिवेदन।"
+
+msgid "Social messages sent report."
+msgstr "पठाइएका सामाजिक सन्देश प्रतिवेदन।"
+
+msgid "Social contacts count report."
+msgstr "सामाजिक सम्पर्क गणना प्रतिवेदन।"
+
+msgid "Sessions created over time."
+msgstr "समय अनुसार सिर्जना गरिएका सत्रहरू।"
+
+msgid "Learning analytics dashboard."
+msgstr "सिकाइ विश्लेषण ड्यासबोर्ड।"
+
+msgid "Teacher time report."
+msgstr "शिक्षक समय प्रतिवेदन।"
+
+msgid "Teachers time by session report"
+msgstr "सत्र अनुसार शिक्षक समय प्रतिवेदन"
+
+msgid "Teacher time report grouped by session."
+msgstr "सत्र अनुसार समूहबद्ध शिक्षक समय प्रतिवेदन।"
+
+msgid "Corporate learning analytics report."
+msgstr "कर्पोरेट सिकाइ विश्लेषण प्रतिवेदन।"
+
+msgid "Course learners tracking report."
+msgstr "पाठ्यक्रम शिक्षार्थी ट्र्याकिङ प्रतिवेदन।"
+
+msgid "Course activity statistics with connected and inactive users."
+msgstr "जोडिएका र निष्क्रिय प्रयोगकर्तासहित पाठ्यक्रम गतिविधि तथ्याङ्क।"
+
+msgid "Detailed tracking report for a learner inside a course."
+msgstr "पाठ्यक्रमभित्र शिक्षार्थीको विस्तृत ट्र्याकिङ प्रतिवेदन।"
+
+msgid "Course gradebook overview."
+msgstr "पाठ्यक्रम ग्रेडबुक अवलोकन।"
+
+msgid "Gradebook statistics"
+msgstr "ग्रेडबुक तथ्याङ्क"
+
+msgid "Gradebook statistics report."
+msgstr "ग्रेडबुक तथ्याङ्क प्रतिवेदन।"
+
+msgid "Certificate report"
+msgstr "प्रमाणपत्र प्रतिवेदन"
+
+msgid "Certificate report for course gradebook."
+msgstr "पाठ्यक्रम ग्रेडबुकको प्रमाणपत्र प्रतिवेदन।"
+
+msgid "User statistics"
+msgstr "प्रयोगकर्ता तथ्याङ्क"
+
+msgid "Course gradebook statistics for a user."
+msgstr "प्रयोगकर्ताको पाठ्यक्रम ग्रेडबुक तथ्याङ्क।"
+
+msgid "Personal statistics"
+msgstr "व्यक्तिगत तथ्याङ्क"
+
+msgid "Personal gradebook statistics."
+msgstr "व्यक्तिगत ग्रेडबुक तथ्याङ्क।"
+
+msgid "Reports catalog"
+msgstr "प्रतिवेदन क्याटलग"
+
+msgid "Central catalog of available reports, roles and permission categories."
+msgstr "उपलब्ध प्रतिवेदन, भूमिका र अनुमति कोटिहरूको केन्द्रीय क्याटलग।"
+
+msgid "Course log events"
+msgstr "पाठ्यक्रम लग घटनाहरू"
+
+msgid "Detailed course tracking events."
+msgstr "विस्तृत पाठ्यक्रम ट्र्याकिङ घटनाहरू।"
+
+msgid "Course tool usage"
+msgstr "पाठ्यक्रम उपकरण उपयोग"
+
+msgid "Course tracking report grouped by tools."
+msgstr "उपकरण अनुसार समूहबद्ध पाठ्यक्रम ट्र्याकिङ प्रतिवेदन।"
+
+msgid "Course resource usage"
+msgstr "पाठ्यक्रम स्रोत उपयोग"
+
+msgid "Course tracking report grouped by resources."
+msgstr "स्रोतहरू अनुसार समूहबद्ध गरिएको कोर्स ट्र्याकिङ प्रतिवेदन।"
+
+msgid "Course group tracking"
+msgstr "कोर्स समूह ट्र्याकिङ"
+
+msgid "Tracking report for course groups."
+msgstr "कोर्स समूहहरूको लागि ट्र्याकिङ प्रतिवेदन।"
+
+msgid "Course session report"
+msgstr "कोर्स सत्र प्रतिवेदन"
+
+msgid "Tracking report for a course inside sessions."
+msgstr "सत्रहरूभित्रको कोर्सको लागि ट्र्याकिङ प्रतिवेदन।"
+
+msgid "Learning path report"
+msgstr "सिकाइ मार्ग प्रतिवेदन"
+
+msgid "Learning path tracking report."
+msgstr "सिकाइ मार्ग ट्र्याकिङ प्रतिवेदन।"
+
+msgid "Learning path results by user"
+msgstr "प्रयोगकर्ता अनुसार सिकाइ मार्ग परिणामहरू"
+
+msgid "Learning path results grouped by user."
+msgstr "प्रयोगकर्ता अनुसार समूहबद्ध गरिएको सिकाइ मार्ग परिणामहरू।"
+
+msgid "Exercises report"
+msgstr "अभ्यास प्रतिवेदन"
+
+msgid "Course exercises and exams tracking report."
+msgstr "कोर्स अभ्यास र परीक्षा ट्र्याकिङ प्रतिवेदन।"
+
+msgid "Question report"
+msgstr "प्रश्न प्रतिवेदन"
+
+msgid "Course question tracking report."
+msgstr "कोर्स प्रश्न ट्र्याकिङ प्रतिवेदन।"
+
+msgid "Messages report"
+msgstr "सन्देश प्रतिवेदन"
+
+msgid "Course messages tracking report."
+msgstr "कोर्स सन्देश ट्र्याकिङ प्रतिवेदन।"
+
+msgid "Total time tracking report for course learners."
+msgstr "कोर्स सिकारुहरूको लागि कुल समय ट्र्याकिङ प्रतिवेदन।"
+
+msgid "Gradebook summary"
+msgstr "ग्रेडबुक सारांश"
+
+msgid "Summary view of gradebook results."
+msgstr "ग्रेडबुक परिणामहरूको सारांश दृश्य।"
+
+msgid "Flat view"
+msgstr "समतल दृश्य"
+
+msgid "Flat gradebook results view."
+msgstr "समतल ग्रेडबुक परिणाम दृश्य।"
+
+msgid "Evaluation log"
+msgstr "मूल्यांकन लग"
+
+msgid "Change log for gradebook evaluations."
+msgstr "ग्रेडबुक मूल्यांकनहरूको लागि परिवर्तन लग।"
+
+msgid "Link log"
+msgstr "लिङ्क लग"
+
+msgid "Change log for gradebook links."
+msgstr "ग्रेडबुक लिङ्कहरूको लागि परिवर्तन लग।"
+
+msgid "Result details"
+msgstr "परिणाम विवरणहरू"
+
+msgid "Detailed view of a gradebook result."
+msgstr "ग्रेडबुक परिणामको विस्तृत दृश्य।"
+
+msgid "Personal certificates report."
+msgstr "व्यक्तिगत प्रमाणपत्र प्रतिवेदन।"
+
+msgid "User move statistics"
+msgstr "प्रयोगकर्ता स्थानान्तरण तथ्याङ्क"
+
+msgid "Report for user move and transfer statistics."
+msgstr "प्रयोगकर्ता स्थानान्तरण र स्थानान्तरण तथ्याङ्कको लागि प्रतिवेदन।"
+
+msgid "User consent list"
+msgstr "प्रयोगकर्ता सहमति सूची"
+
+msgid "Report of users and consent status."
+msgstr "प्रयोगकर्ताहरू र सहमति स्थिति को प्रतिवेदन।"
+
+msgid "Special platform exports."
+msgstr "विशेष प्लेटफर्म निर्यातहरू।"
+
+msgid "Export certificates"
+msgstr "प्रमाणपत्र निर्यात गर्नुहोस्"
+
+msgid "Export platform certificates."
+msgstr "प्लेटफर्म प्रमाणपत्रहरू निर्यात गर्नुहोस्।"
+
+msgid "Export exercise results"
+msgstr "अभ्यास परिणाम निर्यात गर्नुहोस्"
+
+msgid "Export exercise results from the platform."
+msgstr "प्लेटफर्मबाट अभ्यास परिणाम निर्यात गर्नुहोस्।"
+
+msgid "Course survey results and reporting."
+msgstr "कोर्स सर्वेक्षण परिणाम र प्रतिवेदन।"
+
+msgid "Attendance report"
+msgstr "उपस्थिति प्रतिवेदन"
+
+msgid "Course attendance tracking and reports."
+msgstr "कोर्स उपस्थिति ट्र्याकिङ र प्रतिवेदनहरू।"
+
+msgid "Exercises global report"
+msgstr "अभ्यास विश्वव्यापी प्रतिवेदन"
+
+msgid "Global exercise results report for the course."
+msgstr "कोर्सको लागि विश्वव्यापी अभ्यास परिणाम प्रतिवेदन।"
+
+msgid "Exercise report"
+msgstr "अभ्यास प्रतिवेदन"
+
+msgid "Detailed exercise report."
+msgstr "विस्तृत अभ्यास प्रतिवेदन।"
+
+msgid "Exercise history"
+msgstr "अभ्यास इतिहास"
+
+msgid "Exercise attempt history."
+msgstr "अभ्यास प्रयास इतिहास।"
+
+msgid "Exercise results"
+msgstr "अभ्यास परिणाम"
+
+msgid "Exercise results and corrections."
+msgstr "अभ्यास परिणाम र सुधारहरू।"
+
+msgid "Question-level exercise statistics."
+msgstr "प्रश्न-स्तर अभ्यास तथ्याङ्क।"
+
+msgid "Exercise statistics"
+msgstr "अभ्यास तथ्याङ्क"
+
+msgid "Exercise statistics page."
+msgstr "अभ्यास तथ्याङ्क पृष्ठ।"
+
+msgid "Live exercise statistics"
+msgstr "लाइभ अभ्यास तथ्याङ्क"
+
+msgid "Live exercise statistics for teachers."
+msgstr "शिक्षकहरूका लागि लाइभ अभ्यास तथ्याङ्क।"
+
+msgid "Learning path statistics"
+msgstr "सिकाइ मार्ग तथ्याङ्क"
+
+msgid "Learning path item statistics."
+msgstr "सिकाइ मार्ग वस्तु तथ्याङ्क।"
+
+msgid "Learning path report inside a course."
+msgstr "पाठ्यक्रमभित्रको सिकाइ मार्ग प्रतिवेदन।"
+
+msgid "User skills report."
+msgstr "प्रयोगकर्ता सीप प्रतिवेदन।"
+
+msgid "Scheduled or periodic export configuration."
+msgstr "तालिकाबद्ध वा आवधिक निर्यात कन्फिगरेसन।"
+
+msgid "User export"
+msgstr "प्रयोगकर्ता निर्यात"
+
+msgid "Export users from the platform."
+msgstr "प्लेटफर्मबाट प्रयोगकर्ताहरू निर्यात गर्नुहोस्।"
+
+msgid "Not classified"
+msgstr "वर्गीकरण नगरिएको"
+
+msgid "You have acquired the skill %s"
+msgstr "तपाईंले सीप %s प्राप्त गर्नुभयो"
+
+msgid "You have acquired the skill %s."
+msgstr "तपाईंले सीप %s प्राप्त गर्नुभयो।"
+
+msgid "Recover your password"
+msgstr "आफ्नो पासवर्ड पुनःप्राप्त गर्नुहोस्"
+
+msgid "Disclaimer"
+msgstr "अस्वीकरण"
+
+msgid "This operation would exceed the limit of %d users allowed for this course."
+msgstr "यो कार्यले यस पाठ्यक्रमका लागि अनुमति दिइएको %d प्रयोगकर्ताहरूको सीमा नाघ्नेछ।"
+
+msgid "DefaultGroupCategory"
+msgstr "पूर्वनिर्धारितसमूहकोटि"
+
+msgid "LearningCalendar"
+msgstr "सिकाइक्यालेन्डर"
+
+msgid "Choose how this user can authenticate on the platform."
+msgstr "यो प्रयोगकर्ताले प्लेटफर्ममा कसरी प्रमाणीकरण गर्न सक्छ छान्नुहोस्।"
+
+msgid "Authentication methods"
+msgstr "प्रमाणीकरण विधिहरू"
+
+msgid "Set password manually"
+msgstr "पासवर्ड म्यानुअली सेट गर्नुहोस्"
+
+msgid "Report role matrix"
+msgstr "भूमिका म्याट्रिक्स प्रतिवेदन"
+
+msgid "Report permission categories"
+msgstr "अनुमति कोटि प्रतिवेदन"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs enforce the documented report role matrix."
+msgstr "यो रेजिस्ट्रीले ज्ञात प्रतिवेदन पृष्ठहरू, तिनीहरूको कोटि, क्यानोनिकल यूआरएल, लेगेसी यूआरएल र अपेक्षित भूमिका दर्शकहरू सूचीबद्ध गर्दछ। क्यानोनिकल यूआरएलहरूले दस्तावेज गरिएको प्रतिवेदन भूमिका म्याट्रिक्स लागू गर्दछ।"
+
+msgid "reports"
+msgstr "प्रतिवेदनहरू"
+
+msgid "Canonical URL"
+msgstr "क्यानोनिकल यूआरएल"
+
+msgid "Legacy URL"
+msgstr "लेगेसी यूआरएल"
+
+msgid "Permission category"
+msgstr "अनुमति कोटि"
+
+msgid "This matrix documents the expected audience for each report and is enforced by the canonical report entry point."
+msgstr "यो म्याट्रिक्सले प्रत्येक प्रतिवेदनका लागि अपेक्षित दर्शक दस्तावेज गर्दछ र क्यानोनिकल प्रतिवेदन प्रवेश बिन्दुले लागू गर्दछ।"
+
+msgid "These keys group reports by access scope and are used by the report registry. They can later be mapped to finer-grained platform permissions."
+msgstr "यी कुञ्जीहरूले पहुँच स्कोप अनुसार प्रतिवेदनहरूलाई समूहबद्ध गर्दछन् र प्रतिवेदन रेजिस्ट्रीद्वारा प्रयोग गरिन्छ। तिनीहरूलाई पछि थप सूक्ष्म प्लेटफर्म अनुमतिहरूसँग म्याप गर्न सकिन्छ।"
+
+msgid "Permission"
+msgstr "अनुमति"
+
+msgid "Clear active session"
+msgstr "सक्रिय सत्र खाली गर्नुहोस्"
+
+msgid "Are you sure you want to clear this user active session?"
+msgstr "के तपाईं यो प्रयोगकर्ताको सक्रिय सत्र खाली गर्न निश्चित हुनुहुन्छ?"
+
+msgid "Preview shown without course context. Some course-specific data may be unavailable."
+msgstr "पाठ्यक्रम सन्दर्भ बिना पूर्वावलोकन देखाइएको छ। केही पाठ्यक्रम-विशेष डाटा उपलब्ध नहुन सक्छ।"
+
+msgid "Preview is not available for this question."
+msgstr "यो प्रश्नका लागि पूर्वावलोकन उपलब्ध छैन।"
+
+msgid "Edition is not allowed without a course context."
+msgstr "पाठ्यक्रम सन्दर्भ बिना संस्करण अनुमति छैन।"
+
+msgid "This plugin does not use regions."
+msgstr "यो प्लगइनले क्षेत्रहरू प्रयोग गर्दैन।"
+
+msgid "No plugins with regions were found."
+msgstr "क्षेत्रहरूसँग कुनै पनि प्लगइन फेला परेन।"
+
+msgid "Freemium"
+msgstr "फ्रीमियम"
+
+msgid "Commercial service"
+msgstr "व्यावसायिक सेवा"
+
+msgid "Commercial"
+msgstr "व्यावसायिक"
+
+msgid "100% free"
+msgstr "१००% निःशुल्क"
+
+msgid "Displayed above the public login form."
+msgstr "सार्वजनिक लगइन फारम माथि प्रदर्शित।"
+
+msgid "Displayed below the public login form."
+msgstr "सार्वजनिक लगइन फारम तल प्रदर्शित।"
+
+msgid "Displayed before the footer area."
+msgstr "फुटर क्षेत्र अघि प्रदर्शित।"
+
+msgid "Displayed in the left footer column."
+msgstr "बायाँ फुटर स्तम्भमा प्रदर्शित।"
+
+msgid "Displayed in the center footer column."
+msgstr "केन्द्र फुटर स्तम्भमा प्रदर्शित।"
+
+msgid "Displayed in the right footer column."
+msgstr "दायाँ फुटर स्तम्भमा प्रदर्शित।"
+
+msgid "Showing all plugins."
+msgstr "सबै प्लगइनहरू देखाउँदै।"
+
+msgid "Some plugins are still pending functional verification."
+msgstr "केही प्लगइनहरू अझै कार्यात्मक प्रमाणीकरणको प्रतीक्षामा छन्।"
+
+msgid "Show verified plugins only"
+msgstr "प्रमाणित प्लगइनहरू मात्र देखाउनुहोस्"
+
+msgid "Showing verified plugins only."
+msgstr "केवल प्रमाणित प्लगइनहरू मात्र देखाउँदै।"
+
+msgid "Pending plugins are temporarily hidden until they are adapted and tested."
+msgstr "पेन्डिङ प्लगइनहरू अस्थायी रूपमा लुकाइएका छन् जबसम्म तिनीहरू अनुकूलित र परीक्षण गरिँदैनन्।"
+
+msgid "Show all plugins"
+msgstr "सबै प्लगइनहरू देखाउनुहोस्"
+
+msgid "Official and free plugins are listed separately from plugins that may depend on commercial services or paid offers."
+msgstr "आधिकारिक र निःशुल्क प्लगइनहरूलाई व्यावसायिक सेवाहरू वा भुक्तानी प्रस्तावमा निर्भर रहन सक्ने प्लगइनहरूबाट अलग सूचीकृत गरिएको छ।"
+
+msgid "Included free plugins"
+msgstr "समावेश गरिएका निःशुल्क प्लगइनहरू"
+
+msgid "Commercial and freemium plugins"
+msgstr "व्यावसायिक र फ्रिमियम प्लगइनहरू"
+
+msgid "All plugins"
+msgstr "सबै प्लगइनहरू"
+
+msgid "No plugins were found for this category."
+msgstr "यस कोटिको लागि कुनै पनि प्लगइन फेला परेन।"
+
+msgid "Search plugins"
+msgstr "प्लगइनहरू खोज्नुहोस्"
+
+msgid "Search by name or description"
+msgstr "नाम वा विवरण अनुसार खोज्नुहोस्"
+
+msgid "Advanced filters"
+msgstr "उन्नत फिल्टरहरू"
+
+msgid "All statuses"
+msgstr "सबै स्थिति"
+
+msgid "All sources"
+msgstr "सबै स्रोत"
+
+msgid "All types"
+msgstr "सबै प्रकार"
+
+msgid "Installed plugins are shown first"
+msgstr "स्थापना गरिएका प्लगइनहरू पहिले देखाइन्छ"
+
+msgid "No plugins match the current filters."
+msgstr "हालको फिल्टरहरूसँग कुनै पनि प्लगइन मेल खाँदैन।"
+
+msgid "Try clearing the search or changing the filters."
+msgstr "खोज खाली गर्न वा फिल्टरहरू परिवर्तन गर्न प्रयास गर्नुहोस्।"
+
+msgid "README"
+msgstr "README"
+
+msgid "Invalid security token"
+msgstr "अवैध सुरक्षा टोकन"
+
+msgid "Please select a destination session"
+msgstr "कृपया गन्तव्य सत्र चयन गर्नुहोस्"
+
+msgid "Cannot move this to the same session"
+msgstr "यसलाई एउटै सत्रमा सार्न सकिँदैन"
+
+msgid "The destination session must include the selected course"
+msgstr "गन्तव्य सत्रमा चयन गरिएको कोर्स समावेश हुनुपर्छ"
+
+msgid "The source session must include the selected course"
+msgstr "स्रोत सत्रमा चयन गरिएको कोर्स समावेश हुनुपर्छ"
+
+msgid "No learners found"
+msgstr "कुनै पनि शिक्षार्थी फेला परेन"
+
+msgid "Will be subscribed"
+msgstr "सदस्यता लिइनेछ"
+
+msgid "Subscribed"
+msgstr "सदस्यता लिइयो"
+
+msgid "The move process has finished"
+msgstr "सार्ने प्रक्रिया समाप्त भयो"
+
+msgid "Comparison finished. No data has been moved."
+msgstr "तुलना समाप्त भयो। कुनै पनि डाटा सारिएको छैन।"
+
+msgid "Move tracking data from the base course or a source session to another session. Use comparison first to review the affected learner data."
+msgstr "आधार कोर्स वा स्रोत सत्रबाट अर्को सत्रमा ट्र्याकिङ डाटा सार्नुहोस्। प्रभावित शिक्षार्थी डाटा समीक्षा गर्न पहिले तुलना चलाउनुहोस्।"
+
+msgid "Search for a course or use the manual course ID field below."
+msgstr "कोर्स खोज्नुहोस् वा तलको म्यानुअल कोर्स आईडी फिल्ड प्रयोग गर्नुहोस्।"
+
+msgid "Fallback when the course search is not available."
+msgstr "जब कोर्स खोज उपलब्ध हुँदैन तब फलब्याक।"
+
+msgid "Load sessions"
+msgstr "सत्रहरू लोड गर्नुहोस्"
+
+msgid "Selected course"
+msgstr "चयन गरिएको कोर्स"
+
+msgid "Choose the base course or the session where the tracking data currently exists."
+msgstr "आधार कोर्स वा सत्र चयन गर्नुहोस् जहाँ ट्र्याकिङ डाटा हाल अवस्थित छ।"
+
+msgid "Choose the session that will receive the tracking data."
+msgstr "ट्र्याकिङ डाटा प्राप्त गर्ने सत्र चयन गर्नुहोस्।"
+
+msgid "Important"
+msgstr "महत्वपूर्ण"
+
+msgid "The move action updates existing tracking data. Run compare first and test this tool with a non-production course before moving real learner data."
+msgstr "सार्ने कार्यले अवस्थित ट्र्याकिङ डाटा अद्यावधिक गर्छ। पहिले तुलना चलाउनुहोस् र वास्तविक शिक्षार्थी डाटा सार्नुअघि उत्पादन नभएको कोर्ससँग यो उपकरण परीक्षण गर्नुहोस्।"
+
+msgid "No sessions found for this course"
+msgstr "यस कोर्सको लागि कुनै पनि सत्र फेला परेन"
+
+msgid "Some users were ignored because they are not subscribed to this session."
+msgstr "केही प्रयोगकर्ताहरूलाई बेवास्ता गरियो किनकि उनीहरू यस सत्रमा सदस्यता लिएका छैनन्।"
+
+msgid "Remove selected user"
+msgstr "चयन गरिएको प्रयोगकर्ता हटाउनुहोस्"
+
+msgid "Add selected user"
+msgstr "चयन गरिएको प्रयोगकर्ता थप्नुहोस्"
+
+msgid "No users from the selected list are subscribed to this session."
+msgstr "चयन गरिएको सूचीबाट कुनै पनि प्रयोगकर्ता यस सत्रमा सदस्यता लिएका छैनन्।"
+
+msgid "No image"
+msgstr "कुनै पनि छवि छैन"
+
+msgid "Invalid URL."
+msgstr "अवैध URL।"
+
+msgid "This cloud document cannot be embedded."
+msgstr "यो क्लाउड कागजात एम्बेड गर्न सकिँदैन।"
+
+msgid "Document not found"
+msgstr "कागजात फेला परेन"
+
+msgid "File not found"
+msgstr "फाइल फेला परेन"
+
+msgid "This learning path is not available for your user at this time."
+msgstr "यो सिकाइ मार्ग तपाईंको प्रयोगकर्ताका लागि अहिले उपलब्ध छैन।"
+
+msgid "StartDateMustBeBeforeTheEndDate"
+msgstr "StartDateMustBeBeforeTheEndDate"
+
+msgid "Next learning path"
+msgstr "अर्को सिकाइ मार्ग"
+
+msgid "Select the learning path that will be available after this one."
+msgstr "यो पछि उपलब्ध हुने सिकाइ मार्ग चयन गर्नुहोस्।"
+
+msgid "Create another learning path in this course to enable learning path flow."
+msgstr "सिकाइ मार्ग प्रवाह सक्षम गर्न यस कोर्समा अर्को सिकाइ मार्ग सिर्जना गर्नुहोस्।"
+
+msgid "Available from %s"
+msgstr "%s बाट उपलब्ध"
+
+msgid "Available until %s"
+msgstr "%s सम्म उपलब्ध"
+
+msgid "Statistics reset date"
+msgstr "तथ्याङ्क रिसेट मिति"
+
+msgid "Last 24 hours"
+msgstr "पछिल्लो २४ घण्टा"
+
+msgid "This reset date is used as the reference date for the report. It does not delete historical tracking data."
+msgstr "यो रिसेट मिति प्रतिवेदनको सन्दर्भ मिति रूपमा प्रयोग गरिन्छ। यसले ऐतिहासिक ट्र्याकिङ डाटा मेटाउँदैन।"
+
+msgid "Since reset date"
+msgstr "रिसेट मिति देखि"
+
+msgid "Users connected in the last 24 hours"
+msgstr "पछिल्लो २४ घण्टामा जडान भएका प्रयोगकर्ताहरू"
+
+msgid "Learners with at least one course access during the last 24 hours."
+msgstr "पछिल्लो २४ घण्टामा कम्तिमा एक कोर्स पहुँच भएका शिक्षार्थीहरू।"
+
+msgid "Users connected in the last week"
+msgstr "पछिल्लो हप्तामा जडान भएका प्रयोगकर्ताहरू"
+
+msgid "Learners with at least one course access during the last 7 days."
+msgstr "पछिल्लो ७ दिनमा कम्तिमा एक कोर्स पहुँच भएका शिक्षार्थीहरू।"
+
+msgid "Users connected in the last month"
+msgstr "पछिल्लो महिनामा जडान भएका प्रयोगकर्ताहरू"
+
+msgid "Learners with at least one course access during the last 30 days."
+msgstr "पछिल्लो ३० दिनमा कम्तिमा एक कोर्स पहुँच भएका शिक्षार्थीहरू।"
+
+msgid "Not recently connected users"
+msgstr "हालै जडान नभएका प्रयोगकर्ताहरू"
+
+msgid "Learners without course access since %s."
+msgstr "%s देखि कोर्स पहुँच नभएका शिक्षार्थीहरू।"
+
+msgid "Recently used resources"
+msgstr "हालै प्रयोग भएका स्रोतहरू"
+
+msgid "Course tools/resources used since %s."
+msgstr "%s देखि प्रयोग भएका कोर्स उपकरण/स्रोतहरू।"
+
+msgid "%s %% of learners"
+msgstr "%s %% शिक्षार्थीहरू"
+
+msgid "Connections"
+msgstr "जडानहरू"
+
+msgid "Total connections"
+msgstr "कुल जडानहरू"
+
+msgid "Downloaded documents"
+msgstr "डाउनलोड गरिएका कागजातहरू"
+
+msgid "List of documents downloaded by this learner in this course."
+msgstr "यस कोर्समा यस शिक्षार्थीले डाउनलोड गरेका कागजातहरूको सूची।"
+
+msgid "Forum topics"
+msgstr "फोरम विषयहरू"
+
+msgid "Forum topics opened by this learner in this course."
+msgstr "यस कोर्समा यस शिक्षार्थीले खोलेका फोरम विषयहरू।"
+
+msgid "Forum posts"
+msgstr "फोरम पोस्टहरू"
+
+msgid "Forum posts written by this learner in this course."
+msgstr "यस कोर्समा यस शिक्षार्थीले लेखेका फोरम पोस्टहरू।"
+
+msgid "Course connections"
+msgstr "कोर्स जडानहरू"
+
+msgid "Connection history for this learner in this course."
+msgstr "यस कोर्समा यस शिक्षार्थीको जडान इतिहास।"
+
+msgid "Resources used"
+msgstr "प्रयोग भएका स्रोतहरू"
+
+msgid "Latest tools or resources used by this learner in this course."
+msgstr "यस कोर्समा यस शिक्षार्थीले प्रयोग गरेका नवीनतम उपकरण वा स्रोतहरू।"
+
+msgid "Logout date"
+msgstr "लगआउट मिति"
+
+msgid "Imported Aiken quiz"
+msgstr "आयात गरिएको Aiken क्विज"
+
+msgid "Only supported documents will be listed here."
+msgstr "यहाँ केवल समर्थित कागजातहरू सूचीबद्ध गरिनेछ।"
+
+msgid "Generated Aiken content"
+msgstr "उत्पन्न गरिएको Aiken सामग्री"
+
+msgid "Review the generated content before importing it as a new exercise."
+msgstr "नयाँ अभ्यासको रूपमा आयात गर्नुअघि उत्पन्न सामग्री समीक्षा गर्नुहोस्।"
+
+msgid "No documents available."
+msgstr "कुनै कागजात उपलब्ध छैन।"
+
+msgid "yperbolic arctangent:\\t\\tarctanh(x)"
+msgstr "हाइपरबोलिक आर्कट्यान्जेन्ट:\\t\\tarctanh(x)"
+
+msgid "Exercise"
+msgstr "अभ्यास"
+
+msgid "OfficialCode"
+msgstr "आधिकारिककोड"
+
+msgid "FirstName"
+msgstr "पहिलो नाम"
+
+msgid "LastName"
+msgstr "थर"
+
+msgid "LoginName"
+msgstr "लगइन नाम"
+
+msgid "MinMinute"
+msgstr "न्यूनतम मिनेट"
+
+msgid "StartDate"
+msgstr "सुरु मिति"
+
+msgid "EndDate"
+msgstr "अन्त्य मिति"
+
+msgid "CorrectionDate"
+msgstr "सुधार मिति"
+
+msgid "NotValidated"
+msgstr "प्रमाणित नभएको"
+
+msgid "PendingAttempts"
+msgstr "पेन्डिङ प्रयासहरू"
+
+msgid "List of pending test attempts across your courses."
+msgstr "तपाईंका कोर्सहरूमा पेन्डिङ परीक्षण प्रयासहरूको सूची।"
+
+msgid "User ID"
+msgstr "प्रयोगकर्ता आईडी"
+
+msgid "QuestionType"
+msgstr "प्रश्न प्रकार"
+
+msgid "QuestionsWithNoAutomaticCorrection"
+msgstr "स्वतः सुधार नभएका प्रश्नहरू"
+
+msgid "There are no pending tests."
+msgstr "कुनै पनि परीक्षा बाँकी छैन।"
+
+msgid "%s results"
+msgstr "%s नतिजाहरू"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>उदाहरण फारम भर्ने गतिविधि : शारीरिक द्रव्यमान सूचकांक गणना गर्नुहोस्</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>उमेर</strong></td>            <td width=\"75%\" style=\"\">[25] वर्ष</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>लिङ्ग</strong></td>            <td style=\"\" text-align:=\"\">[M] (M वा F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>तौल</strong></td>            <td style=\"\" text-align:=\"\">९५ के.जी.</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>उचाइ</strong></td>            <td style=\"vertical-align: top;\">१.८१ मि.</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>शारीरिक द्रव्यमान सूचकांक</strong></td>            <td style=\"vertical-align: top;\">[२९] BMI = तौल/उचाइ<sup>२</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> विकिपिडिया लेख</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Removed"
+msgstr "हटाइयो"
+
+msgid "NoUsersInTheList"
+msgstr "सूचीमा कुनै प्रयोगकर्ता छैन"
+
+msgid "Are you sure?"
+msgstr "के तपाईं निश्चित हुनुहुन्छ?"
+
+msgid "NoResultsAvailable"
+msgstr "कुनै नतिजा उपलब्ध छैन"
+
+msgid "Import groups from a CSV file and optionally remove items that are not present in the file."
+msgstr "CSV फाइलबाट समूहहरू आयात गर्नुहोस् र वैकल्पिक रूपमा फाइलमा नभएका वस्तुहरू हटाउनुहोस्।"
+
+msgid "Use this option carefully because items missing from the CSV can be removed during the import process."
+msgstr "यो विकल्प सावधानीपूर्वक प्रयोग गर्नुहोस् किनकि CSV मा नभएका वस्तुहरू आयात प्रक्रियामा हटाइन सक्छन्।"
+
+msgid "Upload a CSV file with the group data you want to import."
+msgstr "आयात गर्न चाहनुभएको समूह डाटासहितको CSV फाइल अपलोड गर्नुहोस्।"
+
+msgid "You can download the example file to use the expected format."
+msgstr "अपेक्षित ढाँचा प्रयोग गर्न उदाहरण फाइल डाउनलोड गर्न सक्नुहुन्छ।"
+
+msgid "If you enable deletion, items not present in the file may be removed."
+msgstr "यदि तपाईंले मेटाउने विकल्प सक्षम गर्नुभयो भने, फाइलमा नभएका वस्तुहरू हटाइन सक्छन्।"
+
+msgid "The CSV file is mandatory to start the import."
+msgstr "आयात सुरु गर्न CSV फाइल अनिवार्य छ।"
+
+msgid "Please select at least one class."
+msgstr "कृपया कम्तिमा एउटा कक्षा चयन गर्नुहोस्।"
+
+msgid "Define the properties for each group before creating them."
+msgstr "समूहहरू सिर्जना गर्नुअघि प्रत्येक समूहको गुणहरू परिभाषित गर्नुहोस्।"
+
+msgid "Apply the first row values"
+msgstr "पहिलो पङ्क्तिका मानहरू लागू गर्नुहोस्"
+
+msgid "Create groups manually or generate them from the classes subscribed to this course."
+msgstr "म्यानुअल रूपमा समूहहरू सिर्जना गर्नुहोस् वा यस कोर्समा दर्ता भएका कक्षाहरूबाट उत्पन्न गर्नुहोस्।"
+
+msgid "Create manual groups"
+msgstr "म्यानुअल समूहहरू सिर्जना गर्नुहोस्"
+
+msgid "Use this form when you want to create empty course groups manually."
+msgstr "खाली कोर्स समूहहरू म्यानुअल रूपमा सिर्जना गर्न चाहनुभएमा यो फारम प्रयोग गर्नुहोस्।"
+
+msgid "Configure manual groups"
+msgstr "म्यानुअल समूहहरू कन्फिगर गर्नुहोस्"
+
+msgid "Create groups from subscribed classes"
+msgstr "दर्ता भएका कक्षाहरूबाट समूहहरू सिर्जना गर्नुहोस्"
+
+msgid "Use this form when you want to create one course group for each selected class."
+msgstr "प्रत्येक चयन गरिएको कक्षाका लागि एउटा कोर्स समूह सिर्जना गर्न चाहनुभएमा यो फारम प्रयोग गर्नुहोस्।"
+
+msgid "Keep created groups linked to their source classes"
+msgstr "सिर्जना गरिएका समूहहरूलाई तिनीहरूको स्रोत कक्षाहरूसँग जोडेर राख्नुहोस्"
+
+msgid "Create groups from selected classes"
+msgstr "चयन गरिएका कक्षाहरूबाट समूहहरू सिर्जना गर्नुहोस्"
+
+msgid "You must be logged in to access this page."
+msgstr "यो पृष्ठ पहुँच गर्न तपाईं लग इन हुनुपर्छ।"
+
+msgid "Invalid user"
+msgstr "अवैध प्रयोगकर्ता"
+
+msgid "UseCourseCustomCertificate"
+msgstr "कोर्स अनुकूलन प्रमाणपत्र प्रयोग गर्नुहोस्"
+
+msgid "UseDefaultCustomCertificate"
+msgstr "पूर्वनिर्धारित अनुकूलन प्रमाणपत्र प्रयोग गर्नुहोस्"
+
+msgid "CertificateSetting"
+msgstr "प्रमाणपत्र सेटिङ"
+
+msgid "SelectOneOptionBeforeOpeningEditor"
+msgstr "सम्पादक खोल्नुअघि एउटा विकल्प चयन गर्नुहोस्"
+
+msgid "ChooseCustomCertificateModeHelp"
+msgstr "अनुकूलन प्रमाणपत्र मोड छनोट गर्न मद्दत"
+
+msgid "CertificateMode"
+msgstr "प्रमाणपत्र मोड"
+
+msgid "Enable student to validate own attendance"
+msgstr "विद्यार्थीलाई आफ्नो उपस्थिति प्रमाणित गर्न सक्षम गर्नुहोस्"
+
+msgid "Course block"
+msgstr "कोर्स ब्लक"
+
+msgid "Add custom content blocks to course footer regions."
+msgstr "कोर्स फुटर क्षेत्रहरूमा अनुकूलन सामग्री ब्लकहरू थप्नुहोस्।"
+
+msgid "course_block_pre_footer"
+msgstr "course_block_pre_footer"
+
+msgid "Before footer"
+msgstr "फुटर अघि"
+
+msgid "course_block_footer_left"
+msgstr "course_block_footer_left"
+
+msgid "Footer left"
+msgstr "फुटर बायाँ"
+
+msgid "course_block_footer_center"
+msgstr "course_block_footer_center"
+
+msgid "Footer center"
+msgstr "फुटर केन्द्र"
+
+msgid "course_block_footer_right"
+msgstr "course_block_footer_right"
+
+msgid "Footer right"
+msgstr "फुटर दायाँ"
+
+msgid "SetNotification"
+msgstr "सूचना सेट गर्नुहोस्"
+
+msgid "CourseLegal"
+msgstr "कोर्स कानुनी"
+
+msgid "Certificates search is not available"
+msgstr "प्रमाणपत्र खोज उपलब्ध छैन"
+
+msgid "It allows the acquisition of skills by subcategories"
+msgstr "उपश्रेणीहरूद्वारा सीपहरू प्राप्त गर्न अनुमति दिन्छ"
+
+msgid "Allow skills by subcategories"
+msgstr "उपश्रेणी अनुसार सीपहरूलाई अनुमति दिनुहोस्"
+
+msgid "Minimum score for skills"
+msgstr "सीपका लागि न्यूनतम अंक"
+
+msgid "The gradebook table is hidden."
+msgstr "ग्रेडबुक तालिका लुकाइएको छ।"
+
+msgid "Invalid token"
+msgstr "अवैध टोकन"
+
+msgid "Unable to save the item"
+msgstr "वस्तु बचत गर्न असमर्थ"
+
+msgid "Only HTTP and HTTPS URLs are allowed."
+msgstr "केवल HTTP र HTTPS URL हरू अनुमति दिइएका छन्।"
+
+msgid "Invalid URL host."
+msgstr "अवैध URL होस्ट।"
+
+msgid "This cloud provider is not allowed."
+msgstr "यो क्लाउड प्रदायकलाई अनुमति दिइएको छैन।"
+
+msgid "Documents used"
+msgstr "प्रयोग गरिएका कागजातहरू"
+
+msgid "No document usage"
+msgstr "कुनै कागजात प्रयोग छैन"
+
+msgid "Invalid action."
+msgstr "अवैध कार्य।"
+
+msgid "No users selected."
+msgstr "कुनै प्रयोगकर्ता चयन गरिएको छैन।"
+
+msgid "%s user(s) processed."
+msgstr "%s प्रयोगकर्ता(हरू) प्रशोधन गरियो।"
+
+msgid "Invalid CSRF token."
+msgstr "अवैध CSRF टोकन।"
+
+msgid "[%s] Please change your password"
+msgstr "[%s] कृपया आफ्नो पासवर्ड परिवर्तन गर्नुहोस्"
+
+msgid "Dear %s,\n\nOur security enforcing process shows you use a password that is commonly used on the internet, which means your account could easily be stolen. It is probably a simple sequence or a very common word, we don't really know (we cannot see your password), but we ask you to please connect to the platform and request a password change. You can follow the link here: %s to do that now.\n\nPlease note we will never ask for your password in this process. You just enter your username or e-mail and we send you a link. If you are asked to introduce your existing password to do that, someone is probably trying to do Phishing on your account. Be safe, change your password now!\n\n%s\n%s"
+msgstr "प्रिय %s,\n\nहाम्रो सुरक्षा लागू गर्ने प्रक्रियाले देखाउँछ कि तपाईंले इन्टरनेटमा सामान्य रूपमा प्रयोग हुने पासवर्ड प्रयोग गर्नुभएको छ, जसको अर्थ तपाईंको खाता सजिलै चोरी हुन सक्छ। यो सम्भवतः एउटा सरल अनुक्रम वा धेरै सामान्य शब्द हो, हामीलाई वास्तवमा थाहा छैन (हामी तपाईंको पासवर्ड देख्न सक्दैनौं), तर हामी तपाईंलाई प्लेटफर्ममा जडान गर्न र पासवर्ड परिवर्तन अनुरोध गर्न अनुरोध गर्दछौं। त्यसो गर्नका लागि तपाईं यहाँ लिङ्क पालना गर्न सक्नुहुन्छ: %s।\n\nकृपया ध्यान दिनुहोस् कि हामी यस प्रक्रियामा तपाईंको पासवर्ड कहिल्यै माग्दैनौं। तपाईंले आफ्नो प्रयोगकर्ता नाम वा इमेल प्रविष्ट गर्नुहुन्छ र हामी तपाईंलाई लिङ्क पठाउँछौं। यदि त्यसो गर्नका लागि तपाईंको विद्यमान पासवर्ड प्रविष्ट गर्न भनियो भने, सम्भवतः कसैले तपाईंको खातामा फिसिङ गर्ने प्रयास गरिरहेको छ। सुरक्षित रहनुहोस्, अहिले नै आफ्नो पासवर्ड परिवर्तन गर्नुहोस्!\n\n%s\n%s"
+
+msgid "[%s] Your password has been reset"
+msgstr "[%s] तपाईंको पासवर्ड रिसेट गरिएको छ"
+
+msgid "Dear %s,\n\nOur security enforcing process flagged you as using a password that is commonly used on the internet, which means your account could easily be stolen. As a prevention measure, we have decided to initiate a password reset process. Your new, automatically generated password is now:\n\n%s\n\nPlease login to the platform soon (using this new password) to set your own, personal and secure, password.\n\nBe safe.\n\n%s\n%s"
+msgstr "प्रिय %s,\n\nहाम्रो सुरक्षा लागू गर्ने प्रक्रियाले तपाईंलाई इन्टरनेटमा सामान्य रूपमा प्रयोग हुने पासवर्ड प्रयोग गरेको रूपमा चिन्ह लगाएको छ, जसको अर्थ तपाईंको खाता सजिलै चोरी हुन सक्छ। रोकथाम उपायको रूपमा, हामीले पासवर्ड रिसेट प्रक्रिया सुरु गर्ने निर्णय गरेका छौं। तपाईंको नयाँ, स्वचालित रूपमा उत्पन्न पासवर्ड अब:\n\n%s\n\nयो नयाँ पासवर्ड प्रयोग गरेर चाँडै प्लेटफर्ममा लगइन गर्नुहोस् र आफ्नो व्यक्तिगत र सुरक्षित पासवर्ड सेट गर्नुहोस्।\n\nसुरक्षित रहनुहोस्।\n\n%s\n%s"
+
+msgid "Signature saved successfully"
+msgstr "हस्ताक्षर सफलतापूर्वक बचत गरियो"
+
+msgid "Invalid request payload."
+msgstr "अवैध अनुरोध पेलोड।"
+
+msgid "Authentication required."
+msgstr "प्रमाणीकरण आवश्यक।"
+
+msgid "The course title is required."
+msgstr "पाठ्यक्रम शीर्षक आवश्यक छ।"
+
+msgid "Only trainers and administrators can create courses."
+msgstr "केवल प्रशिक्षक र प्रशासकहरूले पाठ्यक्रम सिर्जना गर्न सक्छन्।"
+
+msgid "Course creation by trainers is disabled on this platform."
+msgstr "यस प्लेटफर्ममा प्रशिक्षकहरूद्वारा पाठ्यक्रम सिर्जना अक्षम गरिएको छ।"
+
+msgid "The selected BuyCourses service cannot be used to create this course."
+msgstr "चयन गरिएको BuyCourses सेवालाई यो पाठ्यक्रम सिर्जना गर्न प्रयोग गर्न सकिँदैन।"
+
+msgid "You have reached the maximum number of courses allowed (%d)."
+msgstr "तपाईंले अनुमति दिइएको अधिकतम पाठ्यक्रम संख्या (%d) पुग्नुभएको छ।"
+
+msgid "The selected BuyCourses service is invalid."
+msgstr "चयन गरिएको BuyCourses सेवा अवैध छ।"
+
+msgid "BuyCourses is not available right now."
+msgstr "BuyCourses अहिले उपलब्ध छैन।"
+
+msgid "BuyCourses cannot validate the selected service right now."
+msgstr "BuyCourses ले अहिले चयन गरिएको सेवालाई मान्यता दिन सक्दैन।"
+
+msgid "Unable to validate the selected BuyCourses service right now."
+msgstr "अहिले चयन गरिएको BuyCourses सेवालाई मान्यता दिन असमर्थ।"
+
+msgid "External tool removed from course"
+msgstr "पाठ्यक्रमबाट बाह्य उपकरण हटाइयो"
+
+msgid "External tool was removed from the course, but kept internally because it is linked to the gradebook"
+msgstr "बाह्य उपकरण पाठ्यक्रमबाट हटाइयो, तर ग्रेडबुकसँग लिङ्क गरिएको हुनाले आन्तरिक रूपमा राखियो"
+
+msgid "There are no external tools available to add to the gradebook"
+msgstr "ग्रेडबुकमा थप्न कुनै बाह्य उपकरण उपलब्ध छैन"
+
+msgid "The evaluation could not be created"
+msgstr "मूल्यांकन सिर्जना गर्न सकिएन"
+
+msgid "The gradebook evaluation could not be linked"
+msgstr "ग्रेडबुक मूल्यांकन लिङ्क गर्न सकिएन"
+
+msgid "Survey questions"
+msgstr "सर्वेक्षण प्रश्नहरू"
+
+msgid "Back to survey list"
+msgstr "सर्वेक्षण सूचीमा फर्कनुहोस्"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "यो सर्वेक्षणमा पहिले नै उत्तरहरू छन्। प्रश्न सम्पादन कन्फिगरेसनद्वारा असक्षम गरिएको छ।"
+
+msgid "Choose the type of question you want to add."
+msgstr "तपाईंले थप्न चाहनुभएको प्रश्नको प्रकार चयन गर्नुहोस्।"
+
+msgid "The free text option is added automatically."
+msgstr "स्वतन्त्र पाठ विकल्प स्वतः थपिन्छ।"
+
+msgid "No questions found"
+msgstr "कुनै प्रश्न फेला परेन"
+
+msgid "Mandatory"
+msgstr "अनिवार्य"
+
+msgid "Unsupported question type"
+msgstr "असमर्थित प्रश्न प्रकार"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "तपाईंले प्रश्नमा {%s} र {%s} ट्यागहरू प्रयोग गर्न सक्नुहुन्छ।"
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "यो प्रश्न सर्वेक्षणको उत्तर दिँदा सशर्त देखाइन्छ।"
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "१ देखि १०० सम्मको प्रतिशत विकल्पहरू स्वतः उत्पन्न हुन्छन्।"
+
+msgid "Could not load survey questions"
+msgstr "सर्वेक्षण प्रश्नहरू लोड गर्न सकिएन"
+
+msgid "The question text is required."
+msgstr "प्रश्न पाठ आवश्यक छ।"
+
+msgid "The maximum score is required."
+msgstr "अधिकतम स्कोर आवश्यक छ।"
+
+msgid "Please select a parent option."
+msgstr "कृपया एउटा अभिभावक विकल्प चयन गर्नुहोस्।"
+
+msgid "Please fill all answer options."
+msgstr "कृपया सबै उत्तर विकल्पहरू भर्नुहोस्।"
+
+msgid "QuestionUpdated"
+msgstr "QuestionUpdated"
+
+msgid "Could not save survey question"
+msgstr "सर्वेक्षण प्रश्न बचत गर्न सकिएन"
+
+msgid "Could not delete survey question"
+msgstr "सर्वेक्षण प्रश्न मेटाउन सकिएन"
+
+msgid "Could not move survey question"
+msgstr "सर्वेक्षण प्रश्न सार्न सकिएन"
+
+msgid "Could not copy survey question"
+msgstr "सर्वेक्षण प्रश्न प्रतिलिपि गर्न सकिएन"
+
+msgid "Hide search"
+msgstr "खोज लुकाउनुहोस्"
+
+msgid "Showing results for: %s"
+msgstr "नतिजाहरू देखाउँदै: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "सर्वेक्षण शीर्षक, कोड वा विवरणद्वारा खोज्नुहोस्।"
+
+msgid "Search surveys"
+msgstr "सर्वेक्षणहरू खोज्नुहोस्"
+
+msgid "%s surveys selected"
+msgstr "%s सर्वेक्षणहरू चयन गरियो"
+
+msgid "Clear selection"
+msgstr "चयन खाली गर्नुहोस्"
+
+msgid "No surveys found"
+msgstr "कुनै सर्वेक्षण फेला परेन"
+
+msgid "Unsupported"
+msgstr "असमर्थित"
+
+msgid "Could not load surveys"
+msgstr "सर्वेक्षणहरू लोड गर्न सकिएन"
+
+msgid "Delete selected surveys"
+msgstr "चयन गरिएका सर्वेक्षणहरू मेटाउनुहोस्"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "चयन गरिएका सर्वेक्षणहरू र तिनीहरूका प्रश्नहरू मेटिनेछन्। यो कार्य पूर्ववत गर्न सकिँदैन।"
+
+msgid "Could not delete selected surveys"
+msgstr "चयन गरिएका सर्वेक्षणहरू मेटाउन सकिएन"
+
+msgid "Survey action"
+msgstr "सर्वेक्षण कार्य"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "यस सर्वेक्षणको प्रतिलिपि सिर्जना गरिनेछ: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "यस सर्वेक्षणका लागि सबै उत्तरहरू र निमन्त्रणाहरू मेटिनेछन्: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "यस सर्वेक्षणबाट उत्पन्न गरिएका गुणन प्रश्नहरू हटाइनेछन्: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "यो सर्वेक्षण सम्बन्धित समूहका ट्यूटरहरूलाई प्रकाशित गरिनेछ: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "यो सर्वेक्षण र यसका प्रश्नहरू मेटिनेछन्: %s"
+
+msgid "Could not complete survey action"
+msgstr "सर्वेक्षण कार्य पूरा गर्न सकिएन"
+
+msgid "Not started"
+msgstr "सुरु गरिएको छैन"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "बैठक मतदानले आमन्त्रित प्रयोगकर्ताहरूलाई उनीहरू उपलब्ध हुने मितिहरू चयन गर्न दिन्छ।"
+
+msgid "Back to surveys"
+msgstr "सर्वेक्षणहरूमा फर्कनुहोस्"
+
+msgid "Edit meeting poll"
+msgstr "बैठक मतदान सम्पादन गर्नुहोस्"
+
+msgid "View meeting poll"
+msgstr "बैठक मतदान हेर्नुहोस्"
+
+msgid "Basic information"
+msgstr "आधारभूत जानकारी"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "यसले बैठक मतदान प्रकारको सर्वेक्षण सिर्जना गर्नेछ। उत्तरहरू र निमन्त्रणाहरू अलग रूपमा व्यवस्थापन गरिन्छ।"
+
+msgid "Availability"
+msgstr "उपलब्धता"
+
+msgid "Meeting dates"
+msgstr "बैठक मितिहरू"
+
+msgid "Meeting poll"
+msgstr "बैठक मतदान"
+
+msgid "My availability"
+msgstr "मेरो उपलब्धता"
+
+msgid "Meeting poll results"
+msgstr "बैठक मतदानका नतिजाहरू"
+
+msgid "No invitations found"
+msgstr "कुनै निमन्त्रणा फेला परेन"
+
+msgid "available"
+msgstr "उपलब्ध"
+
+msgid "Could not load meeting poll"
+msgstr "बैठक मतदान लोड गर्न सकिएन"
+
+msgid "Please complete the required fields"
+msgstr "कृपया आवश्यक फिल्डहरू पूरा गर्नुहोस्"
+
+msgid "Could not save meeting poll"
+msgstr "बैठक मतदान बचत गर्न सकिएन"
+
+msgid "Could not save meeting availability"
+msgstr "बैठक उपलब्धता बचत गर्न सकिएन"
+
+msgid "Copy this survey to another course or session"
+msgstr "यो सर्वेक्षण अर्को कोर्स वा सत्रमा प्रतिलिपि गर्नुहोस्"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "सर्वेक्षण उत्तर वा निमन्त्रणाहरू बिना प्रतिलिपि गरिनेछ।"
+
+msgid "No target courses found"
+msgstr "कुनै लक्ष्य कोर्सहरू फेला परेनन्"
+
+msgid "Search by course title, course code or session name."
+msgstr "कोर्स शीर्षक, कोर्स कोड वा सत्र नामद्वारा खोज्नुहोस्।"
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "एउटै कोर्समा प्रतिलिपि चाहिने बेला डुप्लिकेट सर्वेक्षण प्रयोग गर्नुहोस्।"
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "प्रश्नहरू र विकल्पहरू प्रतिलिपि गरिनेछ। उत्तरहरू, निमन्त्रणाहरू र प्रतिवेदनहरू मूल सर्वेक्षणमा मात्र रहनेछन्।"
+
+msgid "Selected target"
+msgstr "चयन गरिएको लक्ष्य"
+
+msgid "Could not load copy form"
+msgstr "प्रतिलिपि फारम लोड गर्न सकिएन"
+
+msgid "The survey will be copied to: %s"
+msgstr "सर्वेक्षण यहाँ प्रतिलिपि गरिनेछ: %s"
+
+msgid "Survey copied."
+msgstr "सर्वेक्षण प्रतिलिपि गरियो।"
+
+msgid "Could not copy survey"
+msgstr "सर्वेक्षण प्रतिलिपि गर्न सकिएन"
+
+msgid "Answer survey"
+msgstr "सर्वेक्षणको उत्तर दिनुहोस्"
+
+msgid "Preview mode does not save answers."
+msgstr "पूर्वावलोकन मोडले उत्तरहरू बचत गर्दैन।"
+
+msgid "Survey completed"
+msgstr "सर्वेक्षण पूरा भयो"
+
+msgid "Thank you for answering the survey."
+msgstr "सर्वेक्षणको उत्तर दिनुभएकोमा धन्यवाद।"
+
+msgid "Profile information"
+msgstr "प्रोफाइल जानकारी"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "सर्वेक्षणको उत्तर दिनुअघि अनुरोध गरिएका प्रोफाइल फिल्डहरू समीक्षा गर्नुहोस्।"
+
+msgid "This profile field is read-only."
+msgstr "यो प्रोफाइल फिल्ड केवल पढ्नका लागि मात्र हो।"
+
+msgid "You already filled this survey."
+msgstr "तपाईंले यो सर्वेक्षण पहिले नै भर्नुभएको छ।"
+
+msgid "Please specify"
+msgstr "कृपया निर्दिष्ट गर्नुहोस्"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "यो प्रश्न प्रकार आधुनिक सर्वेक्षण दृश्यमा समर्थित छैन।"
+
+msgid "Preview only"
+msgstr "पूर्वावलोकन मात्र"
+
+msgid "Submit answers"
+msgstr "उत्तरहरू पेस गर्नुहोस्"
+
+msgid "Could not load survey"
+msgstr "सर्वेक्षण लोड गर्न सकिएन"
+
+msgid "Please complete the required profile fields."
+msgstr "कृपया आवश्यक प्रोफाइल फिल्डहरू पूरा गर्नुहोस्।"
+
+msgid "Please answer all mandatory questions."
+msgstr "कृपया सबै अनिवार्य प्रश्नहरूको उत्तर दिनुहोस्।"
+
+msgid "Could not save survey answers"
+msgstr "सर्वेक्षण उत्तरहरू बचत गर्न सकिएन"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "प्रश्नहरू र निमन्त्रणाहरू व्यवस्थापन गर्नुअघि मुख्य सर्वेक्षण जानकारी कन्फिगर गर्नुहोस्।"
+
+msgid "The survey code cannot be changed after creation."
+msgstr "सर्वेक्षण कोड सिर्जना पछि परिवर्तन गर्न सकिँदैन।"
+
+msgid "Survey behavior"
+msgstr "सर्वेक्षण व्यवहार"
+
+msgid "Use 0 for no time limit."
+msgstr "समय सीमा नराख्न ० प्रयोग गर्नुहोस्।"
+
+msgid "Survey messages"
+msgstr "सर्वेक्षण सन्देशहरू"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "यहाँ चयन गरिएका प्रोफाइल फिल्डहरू सर्वेक्षण प्रश्नहरू अघि देखाइनेछन्।"
+
+msgid "No profile fields are currently available."
+msgstr "हाल कुनै प्रोफाइल फिल्ड उपलब्ध छैन।"
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "प्रोफाइल फिल्ड चयन गैर-अनाम सर्वेक्षणका लागि मात्र उपलब्ध छ।"
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "सीप लिङ्केज समर्पित ब्याचमा माइग्रेट गरिनेछ।"
+
+msgid "Could not load survey configuration"
+msgstr "सर्वेक्षण कन्फिगरेसन लोड गर्न सकिएन"
+
+msgid "The survey code is required."
+msgstr "सर्वेक्षण कोड आवश्यक छ।"
+
+msgid "The survey title is required."
+msgstr "सर्वेक्षण शीर्षक आवश्यक छ।"
+
+msgid "The survey has been saved successfully"
+msgstr "सर्वेक्षण सफलतापूर्वक बचत गरिएको छ"
+
+msgid "Could not save survey configuration"
+msgstr "सर्वेक्षण कन्फिगरेसन बचत गर्न सकिएन"
+
+msgid "Course users"
+msgstr "पाठ्यक्रम प्रयोगकर्ताहरू"
+
+msgid "Already invited"
+msgstr "पहिले नै निमन्त्रणा गरिएको"
+
+msgid "No users found"
+msgstr "कुनै प्रयोगकर्ता फेला परेन"
+
+msgid "No groups found"
+msgstr "कुनै समूह फेला परेन"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "सर्वेक्षण लिङ्क देखिनुपर्ने ठाउँमा **link** प्रयोग गर्नुहोस्।"
+
+msgid "Remind all selected users"
+msgstr "चयन गरिएका सबै प्रयोगकर्ताहरूलाई सम्झाउनुहोस्"
+
+msgid "Anonymous access link"
+msgstr "अनाम पहुँच लिङ्क"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "निमन्त्रणा नगरिएका प्रयोगकर्ताहरूले सर्वेक्षण लिन यो लिङ्क प्रयोग गर्न सक्छन्।"
+
+msgid "Answered anonymously"
+msgstr "अनाम रूपमा उत्तर दिइयो"
+
+msgid "Could not load survey invitations"
+msgstr "सर्वेक्षण निमन्त्रणाहरू लोड गर्न सकिएन"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "मेल पठाउँदा मेल विषय र सन्देश आवश्यक छ।"
+
+msgid "Could not publish survey"
+msgstr "सर्वेक्षण प्रकाशित गर्न सकिएन"
+
+msgid "Could not copy the link"
+msgstr "लिङ्क प्रतिलिपि गर्न सकिएन"
+
+msgid "Please answer this survey using the following link"
+msgstr "कृपया निम्न लिङ्क प्रयोग गरी यो सर्वेक्षणको उत्तर दिनुहोस्"
+
+msgid "Export CSV"
+msgstr "CSV निर्यात गर्नुहोस्"
+
+msgid "Export compact CSV"
+msgstr "संक्षिप्त CSV निर्यात गर्नुहोस्"
+
+msgid "Export Excel"
+msgstr "Excel निर्यात गर्नुहोस्"
+
+msgid "Export package"
+msgstr "प्याकेज निर्यात गर्नुहोस्"
+
+msgid "Results summary"
+msgstr "नतिजा सारांश"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "यो दृश्यले यस सर्वेक्षणको माइग्रेट गरिएको रिपोर्टिङ डाटा देखाउँछ।"
+
+msgid "Select user"
+msgstr "प्रयोगकर्ता चयन गर्नुहोस्"
+
+msgid "No answers found"
+msgstr "कुनै उत्तर फेला परेन"
+
+msgid "answers"
+msgstr "उत्तरहरू"
+
+msgid "Could not load survey reporting"
+msgstr "सर्वेक्षण रिपोर्टिङ लोड गर्न सकिएन"
+
+msgid "Back to threads"
+msgstr "थ्रेडहरूमा फर्कनुहोस्"
+
+msgid "Back to learning path"
+msgstr "सिकाइ मार्गमा फर्कनुहोस्"
+
+msgid "Remove sticky"
+msgstr "स्टिकी हटाउनुहोस्"
+
+msgid "Make sticky"
+msgstr "स्टिकी बनाउनुहोस्"
+
+msgid "Open thread"
+msgstr "थ्रेड खोल्नुहोस्"
+
+msgid "Close thread"
+msgstr "थ्रेड बन्द गर्नुहोस्"
+
+msgid "Delete thread"
+msgstr "थ्रेड मेटाउनुहोस्"
+
+msgid "This thread is hidden from learners."
+msgstr "यो थ्रेड शिक्षार्थीहरूबाट लुकाइएको छ।"
+
+msgid "Revision requested"
+msgstr "संशोधन अनुरोध गरिएको"
+
+msgid "Revision"
+msgstr "संशोधन"
+
+msgid "Approve post"
+msgstr "पोस्ट स्वीकृत गर्नुहोस्"
+
+msgid "Reject post"
+msgstr "पोस्ट अस्वीकृत गर्नुहोस्"
+
+msgid "Cancel revision request"
+msgstr "संशोधन अनुरोध रद्द गर्नुहोस्"
+
+msgid "Delete post"
+msgstr "पोस्ट मेटाउनुहोस्"
+
+msgid "Message is required"
+msgstr "सन्देश आवश्यक छ"
+
+msgid "Target thread is required"
+msgstr "लक्ष्य थ्रेड आवश्यक छ"
+
+msgid "Could not retrieve posts"
+msgstr "पोस्टहरू प्राप्त गर्न सकिएन"
+
+msgid "Thread shown"
+msgstr "थ्रेड देखाइयो"
+
+msgid "Thread hidden"
+msgstr "थ्रेड लुकाइयो"
+
+msgid "Could not update thread"
+msgstr "थ्रेड अद्यावधिक गर्न सकिएन"
+
+msgid "Thread closed"
+msgstr "थ्रेड बन्द गरियो"
+
+msgid "Thread opened"
+msgstr "थ्रेड खोलियो"
+
+msgid "Thread marked as sticky"
+msgstr "थ्रेड स्टिकीको रूपमा चिन्हित गरियो"
+
+msgid "Thread unmarked as sticky"
+msgstr "थ्रेड स्टिकीको रूपमा चिन्ह हटाइयो"
+
+msgid "Thread notifications enabled"
+msgstr "थ्रेड सूचनाहरू सक्षम गरियो"
+
+msgid "Thread notifications disabled"
+msgstr "थ्रेड सूचनाहरू असक्षम गरियो"
+
+msgid "Could not update thread notification"
+msgstr "थ्रेड सूचना अद्यावधिक गर्न सकिएन"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "के तपाईं यो थ्रेड मेटाउन निश्चित हुनुहुन्छ?"
+
+msgid "Could not delete thread"
+msgstr "थ्रेड मेटाउन सकिएन"
+
+msgid "Post approved"
+msgstr "पोस्ट स्वीकृत गरियो"
+
+msgid "Could not approve post"
+msgstr "पोस्ट स्वीकृत गर्न सकिएन"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "के तपाईं यो पोस्ट अस्वीकृत गर्न निश्चित हुनुहुन्छ?"
+
+msgid "Post rejected"
+msgstr "पोस्ट अस्वीकृत गरियो"
+
+msgid "Could not reject post"
+msgstr "पोस्ट अस्वीकृत गर्न सकिएन"
+
+msgid "Post shown"
+msgstr "पोस्ट देखाइयो"
+
+msgid "Post hidden"
+msgstr "पोस्ट लुकाइयो"
+
+msgid "Could not update post"
+msgstr "पोस्ट अद्यावधिक गर्न सकिएन"
+
+msgid "Post updated"
+msgstr "पोस्ट अद्यावधिक गरियो"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "के तपाईं यो पोस्ट मेटाउन निश्चित हुनुहुन्छ?"
+
+msgid "Post deleted"
+msgstr "पोस्ट मेटाइयो"
+
+msgid "Could not delete post"
+msgstr "पोस्ट मेटाउन सकिएन"
+
+msgid "Untitled thread"
+msgstr "शीर्षकविहीन थ्रेड"
+
+msgid "Could not retrieve threads"
+msgstr "थ्रेडहरू प्राप्त गर्न सकिएन"
+
+msgid "Post moved"
+msgstr "पोस्ट सारियो"
+
+msgid "Could not move post"
+msgstr "पोस्ट सार्न सकिएन"
+
+msgid "Revision request removed"
+msgstr "संशोधन अनुरोध हटाइयो"
+
+msgid "Could not update revision request"
+msgstr "संशोधन अनुरोध अद्यावधिक गर्न सकिएन"
+
+msgid "Are you sure you want to report this post?"
+msgstr "के तपाईं यो पोस्ट रिपोर्ट गर्न निश्चित हुनुहुन्छ?"
+
+msgid "Could not report post"
+msgstr "पोस्ट रिपोर्ट गर्न सकिएन"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "के तपाईं यो संलग्नक मेटाउन निश्चित हुनुहुन्छ?"
+
+msgid "Attachment deleted"
+msgstr "संलग्नक मेटाइयो"
+
+msgid "Could not delete attachment"
+msgstr "संलग्नक मेटाउन सकिएन"
+
+msgid "Thread title"
+msgstr "थ्रेड शीर्षक"
+
+msgid "Sticky thread"
+msgstr "स्टिकी थ्रेड"
+
+msgid "Attach files"
+msgstr "फाइलहरू संलग्न गर्नुहोस्"
+
+msgid "Attachments are disabled for this forum"
+msgstr "यो फोरमका लागि संलग्नकहरू असक्षम गरिएका छन्"
+
+msgid "The forum is not open yet."
+msgstr "फोरम अझै खुला भएको छैन।"
+
+msgid "The forum is closed."
+msgstr "फोरम बन्द गरिएको छ।"
+
+msgid "The forum is locked."
+msgstr "फोरम ताल्चा लगाइएको छ।"
+
+msgid "New threads are not allowed in this forum."
+msgstr "यो फोरममा नयाँ थ्रेडहरू अनुमति छैन।"
+
+msgid "Thread created"
+msgstr "थ्रेड सिर्जना गरियो"
+
+msgid "Could not create thread"
+msgstr "थ्रेड सिर्जना गर्न सकिएन"
+
+msgid "Back to posts"
+msgstr "पोस्टहरूमा फर्कनुहोस्"
+
+msgid "This reply will be stored as a revision."
+msgstr "यो जवाफ संशोधनको रूपमा भण्डारण गरिनेछ।"
+
+msgid "Post reply"
+msgstr "जवाफ पठाउनुहोस्"
+
+msgid "The thread is locked."
+msgstr "थ्रेड ताल्चा लगाइएको छ।"
+
+msgid "Reply added"
+msgstr "जवाफ थपियो"
+
+msgid "Could not add reply"
+msgstr "जवाफ थप्न सकिएन"
+
+msgid "Add forum"
+msgstr "फोरम थप्नुहोस्"
+
+msgid "No forums found"
+msgstr "कुनै फोरम फेला परेन"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "छलफल सुरु गर्न आफ्नो पहिलो फोरम कोटि वा फोरम सिर्जना गर्नुहोस्।"
+
+msgid "Locked"
+msgstr "ताल्चा लगाइएको"
+
+msgid "No forums in this category"
+msgstr "यो कोटिमा कुनै फोरम छैन"
+
+msgid "Posts require approval"
+msgstr "पोस्टहरूलाई स्वीकृति आवश्यक छ"
+
+msgid "Forum for current group"
+msgstr "हालको समूहका लागि फोरम"
+
+msgid "Group forum visibility"
+msgstr "समूह फोरम दृश्यता"
+
+msgid "No category"
+msgstr "कुनै कोटि छैन"
+
+msgid "Could not retrieve forums"
+msgstr "फोरमहरू प्राप्त गर्न सकिएन"
+
+msgid "Forum category updated"
+msgstr "फोरम कोटि अद्यावधिक गरियो"
+
+msgid "Forum category created"
+msgstr "फोरम कोटि सिर्जना गरियो"
+
+msgid "Could not save forum category"
+msgstr "फोरम कोटि बचत गर्न सकिएन"
+
+msgid "Forum updated"
+msgstr "फोरम अद्यावधिक गरियो"
+
+msgid "Forum created"
+msgstr "फोरम सिर्जना गरियो"
+
+msgid "Could not save forum"
+msgstr "फोरम बचत गर्न सकिएन"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "के तपाईं यो फोरम कोटि मेटाउन निश्चित हुनुहुन्छ?"
+
+msgid "Could not delete forum category"
+msgstr "फोरम कोटि मेटाउन सकिएन"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "के तपाईं यो फोरम मेटाउन निश्चित हुनुहुन्छ?"
+
+msgid "Could not delete forum"
+msgstr "फोरम मेटाउन सकिएन"
+
+msgid "Forum category unlocked"
+msgstr "फोरम कोटि ताल्चा खोलियो"
+
+msgid "Forum category locked"
+msgstr "फोरम कोटि ताल्चा लगाइयो"
+
+msgid "Could not update forum category"
+msgstr "फोरम कोटि अद्यावधिक गर्न सकिएन"
+
+msgid "Forum category shown"
+msgstr "फोरम कोटि देखाइयो"
+
+msgid "Forum category hidden"
+msgstr "फोरम कोटि लुकाइयो"
+
+msgid "Forum unlocked"
+msgstr "फोरम ताल्चा खोलियो"
+
+msgid "Forum locked"
+msgstr "फोरम ताल्चा लगाइयो"
+
+msgid "Could not update forum"
+msgstr "फोरम अद्यावधिक गर्न सकिएन"
+
+msgid "Forum shown"
+msgstr "फोरम देखाइयो"
+
+msgid "Forum hidden"
+msgstr "फोरम लुकाइयो"
+
+msgid "Forum notifications enabled"
+msgstr "फोरम सूचनाहरू सक्षम गरियो"
+
+msgid "Forum notifications disabled"
+msgstr "फोरम सूचनाहरू असक्षम गरियो"
+
+msgid "Could not update forum notification"
+msgstr "फोरम सूचना अद्यावधिक गर्न सकिएन"
+
+msgid "Forum category moved"
+msgstr "फोरम कोटि सारियो"
+
+msgid "Could not move forum category"
+msgstr "फोरम कोटि सार्न सकिएन"
+
+msgid "Forum moved"
+msgstr "फोरम सारियो"
+
+msgid "Could not move forum"
+msgstr "फोरम सार्न सकिएन"
+
+msgid "Back to forums"
+msgstr "फोरममा फर्कनुहोस्"
+
+msgid "New thread"
+msgstr "नयाँ थ्रेड"
+
+msgid "No threads found"
+msgstr "कुनै थ्रेड फेला परेन"
+
+msgid "Sticky"
+msgstr "स्टिकी"
+
+msgid "Graded"
+msgstr "ग्रेड गरिएको"
+
+msgid "Grade peers"
+msgstr "साथीहरूलाई ग्रेड गर्नुहोस्"
+
+msgid "Move thread"
+msgstr "थ्रेड सार्नुहोस्"
+
+msgid "Target forum"
+msgstr "लक्ष्य फोरम"
+
+msgid "Target forum is required"
+msgstr "लक्ष्य फोरम आवश्यक छ"
+
+msgid "Students"
+msgstr "विद्यार्थीहरू"
+
+msgid "No students found"
+msgstr "कुनै विद्यार्थी फेला परेन"
+
+msgid "No peers available to grade."
+msgstr "ग्रेड गर्न कुनै साथी उपलब्ध छैन।"
+
+msgid "Qualified"
+msgstr "योग्य"
+
+msgid "Not qualified"
+msgstr "योग्य छैन"
+
+msgid "Could not retrieve thread grading"
+msgstr "थ्रेड ग्रेडिङ पुनःप्राप्त गर्न सकिएन"
+
+msgid "Thread grading updated"
+msgstr "थ्रेड ग्रेडिङ अद्यावधिक गरियो"
+
+msgid "Could not update thread grading"
+msgstr "थ्रेड ग्रेडिङ अद्यावधिक गर्न सकिएन"
+
+msgid "Thread score saved"
+msgstr "थ्रेड स्कोर बचत गरियो"
+
+msgid "Could not save thread score"
+msgstr "थ्रेड स्कोर बचत गर्न सकिएन"
+
+msgid "Could not move thread"
+msgstr "थ्रेड सार्न सकिएन"
+
+msgid "Thread updated"
+msgstr "थ्रेड अद्यावधिक गरियो"
+
+msgid "Search term is too short"
+msgstr "खोज शब्द धेरै छोटो छ"
+
+msgid "Could not search forums"
+msgstr "फोरम खोज्न सकिएन"
+
+msgid "Moderated"
+msgstr "मध्यस्थ गरिएको"
+
+msgid "View threads"
+msgstr "थ्रेडहरू हेर्नुहोस्"
 

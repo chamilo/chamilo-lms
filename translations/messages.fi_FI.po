@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Ystävällisin terveisin,"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Kaavan esimerkki: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Kaavan esimerkki: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Muuttujien alueet"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":kyllä:tekijänoikeudet,, ei:ei tekijänoikeuksia"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Kansio,, application/msword:MsWord,, application/octet-stream:Okteettivirta,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:Kansio,, application\/msword:MsWord,, application\/octet-stream:Okteettivirta,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":harjoitus:harjoitus,,      simulaatio:simulaatio,,      kyselylomake:kyselylomake,,      kaavio:kaavio,,      kuvio:kuvio,,      graafi:graafi,,      indeksi:indeksi,,      dia:dia,,      taulukko:taulukko,,      kertova teksti:kertova teksti,,      koe:koe,,      koe:koe,,      ongelman määrittely:ongelman määrittely,,      itsearviointi:itsearviointi,,      luento:luento"
@@ -9731,6 +9731,9 @@ msgstr "Etsinnän tulokset:"
 msgid "Select a file"
 msgstr "Valitse tiedosto"
 
+msgid "Select a file to insert into the editor."
+msgstr "Valitse tiedosto lisättäväksi editoriin."
+
 msgid "Warning - The FAQ file, located in the /home/ directory of your portal, is not writable. Your text will not be saved until the file permissions are changed."
 msgstr "Varoitus - UKK-tiedosto, joka sijaitsee portaalin /home/-kansiossa, ei ole kirjoitettavissa. Tekstisi ei tallennu ennen kuin tiedoston käyttöoikeudet muutetaan."
 
@@ -15911,6 +15914,9 @@ msgstr "Päiväys ja aika"
 msgid "Item"
 msgstr "Kohde"
 
+msgid "Items"
+msgstr "Kohteet"
+
 msgid "Configure Dashboard Plugin"
 msgstr "Muokkaa työpöytälisäosan asetuksia"
 
@@ -17164,6 +17170,18 @@ msgstr "Istunnot ryhmässä"
 
 msgid "Courses in group"
 msgstr "Kursseja ryhmässä"
+
+msgid "Courses on the platform"
+msgstr "Kurssit alustalla"
+
+msgid "%s courses"
+msgstr "%s kurssia"
+
+msgid "%s sessions"
+msgstr "%s istuntoa"
+
+msgid "Search by title or code"
+msgstr "Hae otsikolla tai koodilla"
 
 msgid "Users in group"
 msgstr "Käyttäjiä ryhmässä"
@@ -32169,6 +32187,9 @@ msgstr "Tehtävä"
 msgid "Allowed file formats: %s"
 msgstr "Sallitut tiedostomuodot: %s"
 
+msgid "File manager"
+msgstr "Tiedostonhallinta"
+
 msgid "File type not allowed. Allowed extensions: %s"
 msgstr "Tiedostotyyppi ei ole sallittu. Sallitut lisäykset: %s"
 
@@ -33882,6 +33903,2583 @@ msgstr "Tervetuloa"
 msgid "Welcome to Chamilo"
 msgstr "Tervetuloa Chamilo-opintojärjestelmään"
 
+msgid "Check all unanswered questions below"
+msgstr "Tarkista kaikki vastaamattomat kysymykset alla"
+
 msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
 msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Jos tämä on ensimmäinen kerta, kun käytät Chamiloa, tarkista sivupaneeli löytääksesi tiellesi sen monien ominaisuuksien läpi. Jos tarvitset apua, löydät <a href=\"https://docs.chamilo.org\">viralliset dokumentaatiomme</a> standardidokumentaatiosta, kun taas <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">verkkofoorumimme</a> auttaa jakamaan ideoita ja löytämään vastauksia muilta Chamilo-käyttäjiltä."
+
+msgid "Change password"
+msgstr "Vaihda salasana"
+
+msgid "Newest first"
+msgstr "Uusin ensin"
+
+msgid "Oldest first"
+msgstr "Vanhin ensin"
+
+msgid "Title A–Z"
+msgstr "Otsikko A–Ö"
+
+msgid "Title Z–A"
+msgstr "Otsikko Ö–A"
+
+msgid "Send test email"
+msgstr "Lähetä testisähköposti"
+
+msgid "Show teachers"
+msgstr "Näytä opettajat"
+
+msgid "Hide teachers"
+msgstr "Piilota opettajat"
+
+msgid "Delete exercise attempts"
+msgstr "Poista harjoitusyritykset"
+
+msgid "Message sent successfully."
+msgstr "Viesti lähetetty onnistuneesti."
+
+msgid "You cannot create a new course right now."
+msgstr "Et voi luoda uutta kurssia juuri nyt."
+
+msgid "Unable to verify whether you can create a new course right now."
+msgstr "Ei voida tarkistaa, voitko luoda uuden kurssin juuri nyt."
+
+msgid "Please try again later or contact the administrator."
+msgstr "Yritä myöhemmin uudelleen tai ota yhteyttä ylläpitäjään."
+
+msgid "You cannot create more courses at this time."
+msgstr "Et voi luoda enempää kursseja tällä hetkellä."
+
+msgid "You already manage %d courses and your active service allows up to %d. To create another course, you need a higher service limit or reduce your current active courses."
+msgstr "Hallinnoit jo %d kurssia ja aktiivinen palvelusi sallii enintään %d. Toisen kurssin luomiseen tarvitset korkeamman palvelurajan tai vähennä nykyisiä aktiivisia kurssejasi."
+
+msgid "You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now."
+msgstr "Hallinnoit jo %d kurssia ja alusta sallii tällä hetkellä enintään %d tilillesi. Et voi luoda enempää kursseja juuri nyt."
+
+msgid "Add a class"
+msgstr "Lisää luokka"
+
+msgid "Search classes"
+msgstr "Hae luokkia"
+
+msgid "No classes found"
+msgstr "Luokkia ei löytynyt"
+
+msgid "Import classes"
+msgstr "Tuo luokkia"
+
+msgid "Class users"
+msgstr "Luokan käyttäjät"
+
+msgid "%s classes imported"
+msgstr "%s luokkaa tuotu"
+
+msgid "%s user-class links imported"
+msgstr "%s käyttäjä-luokka-linkkiä tuotu"
+
+msgid "Hide comments"
+msgstr "Piilota kommentit"
+
+msgid "Loading comments..."
+msgstr "Ladataan kommentteja..."
+
+msgid "No comments yet."
+msgstr "Ei kommentteja vielä."
+
+msgid "A user with this username already exists"
+msgstr "Tämä käyttäjätunnus on jo käytössä"
+
+msgid "Manage meetings, review recordings and update course-wide BBB settings from one place."
+msgstr "Hallinnoi kokouksia, tarkastele tallenteita ja päivitä kurssikohtaisia BBB-asetuksia yhdestä paikasta."
+
+msgid "Review the current defaults and propagate them to every course when needed."
+msgstr "Tarkista nykyiset oletusasetukset ja levitä ne tarvittaessa kaikille kursseille."
+
+msgid "Filter the list by meeting date range."
+msgstr "Suodata lista kokousten päivämääräalueen mukaan."
+
+msgid "Review meeting history, participants and recording actions."
+msgstr "Tarkastele kokoushistoriaa, osallistujia ja tallennustoimintoja."
+
+msgid "Participants"
+msgstr "Osallistujat"
+
+msgid "CountUsers"
+msgstr "CountUsers"
+
+msgid "No data found"
+msgstr "Tietoja ei löytynyt"
+
+msgid "My justifications"
+msgstr "Omat perustelut"
+
+msgid "My services"
+msgstr "Omat palvelut"
+
+msgid "Extra menu"
+msgstr "Lisävalikko"
+
+msgid "Pending tests"
+msgstr "Odottavat testit"
+
+msgid "No specific language"
+msgstr "Ei määritettyä kieltä"
+
+msgid "Source Chamilo version"
+msgstr "Lähde Chamilo-versio"
+
+msgid "Exporting..."
+msgstr "Viedään..."
+
+msgid "Autosaved drafts available"
+msgstr "Automaattisesti tallennettuja luonnoksia saatavilla"
+
+msgid "Hide drafts"
+msgstr "Piilota luonnokset"
+
+msgid "Show drafts"
+msgstr "Näytä luonnokset"
+
+msgid "Drafts are stored only in this browser and are removed after saving the document."
+msgstr "Luonnokset tallennetaan vain tähän selaimeen ja poistetaan asiakirjan tallentamisen jälkeen."
+
+msgid "Last saved"
+msgstr "Viimeksi tallennettu"
+
+msgid "Restore draft"
+msgstr "Palauta luonnos"
+
+msgid "Delete draft"
+msgstr "Poista luonnos"
+
+msgid "Information about indexing document content"
+msgstr "Tietoa asiakirjan sisällön indeksoinnista"
+
+msgid "When enabled, the document text is indexed by the search engine so users can find it from platform search."
+msgstr "Kun tämä on käytössä, asiakirjan teksti indeksoidaan hakukoneeseen, jotta käyttäjät voivat löytää sen alustan hausta."
+
+msgid "The editor is not available."
+msgstr "Editori ei ole käytettävissä."
+
+msgid "Please place the cursor inside a paragraph first."
+msgstr "Aseta kohdistin ensin kappaleen sisään."
+
+msgid "The selected paragraph is empty."
+msgstr "Valittu kappale on tyhjä."
+
+msgid "Loading failed."
+msgstr "Lataus epäonnistui."
+
+msgid "Add introduction"
+msgstr "Lisää johdanto"
+
+msgid "Course type"
+msgstr "Kurssityyppi"
+
+msgid "Choose whether this course uses the standard platform limits or benefits from a purchased service."
+msgstr "Valitse, käyttääkö tämä kurssi alustan vakiokäytäntöjä vai hyötyykö se ostetusta palvelusta."
+
+msgid "Standard course"
+msgstr "Vakiokurssi"
+
+msgid "Use the standard platform limits."
+msgstr "Käytä alustan vakiokäytäntöjä."
+
+msgid "Selected"
+msgstr "Valittu"
+
+msgid "Hosting limit"
+msgstr "Hosting-rajoitus"
+
+msgid "Document quota"
+msgstr "Asiakirjakiintiö"
+
+msgid "The standard course limit has been reached."
+msgstr "Vakiokurssin raja on saavutettu."
+
+msgid "Use the benefits granted by this service."
+msgstr "Käytä tämän palvelun myöntämiä etuja."
+
+msgid "Courses with these benefits"
+msgstr "Kurssit näillä eduilla"
+
+msgid "Active service"
+msgstr "Aktiivinen palvelu"
+
+msgid "Buy service"
+msgstr "Osta palvelu"
+
+msgid "Select an available course type before creating the course."
+msgstr "Valitse käytettävissä oleva kurssityyppi ennen kurssin luomista."
+
+msgid "users"
+msgstr "käyttäjät"
+
+msgid "You need to buy this service before using these benefits."
+msgstr "Sinun on ostettava tämä palvelu ennen näiden etujen käyttöä."
+
+msgid "You already used all courses available with this service."
+msgstr "Olet jo käyttänyt kaikki tämän palvelun käytettävissä olevat kurssit."
+
+msgid "This option is not available."
+msgstr "Tämä vaihtoehto ei ole käytettävissä."
+
+msgid "This field is required"
+msgstr "Tämä kenttä on pakollinen"
+
+msgid "Show less"
+msgstr "Näytä vähemmän"
+
+msgid "Show full description"
+msgstr "Näytä koko kuvaus"
+
+msgid "Virtual keyboard"
+msgstr "Virtuaalinäppäimistö"
+
+msgid "Backspace"
+msgstr "Askelpalautin"
+
+msgid "Space"
+msgstr "Välilyönti"
+
+msgid "Learning path only visible to selected learners"
+msgstr "Oppimispolku näkyvissä vain valituille oppijoille"
+
+msgid "Create course"
+msgstr "Luo kurssi"
+
+msgid "Tour"
+msgstr "Kierros"
+
+msgid "Are you sure you want to delete this comment?"
+msgstr "Haluatko varmasti poistaa tämän kommentin?"
+
+msgid "No posts found"
+msgstr "Viestejä ei löytynyt"
+
+msgid "No communities"
+msgstr "Yhteisöjä ei löytynyt"
+
+msgid "No friends found"
+msgstr "Ystäviä ei löytynyt"
+
+msgid "Visual overview of your skills"
+msgstr "Visuaalinen katsaus osaamiseesi"
+
+msgid "Compare your progress"
+msgstr "Vertaa edistymistäsi"
+
+msgid "Please enter a search term."
+msgstr "Anna hakutermi."
+
+msgid "Enter captcha code"
+msgstr "Syötä captcha-koodi"
+
+msgid "Refresh captcha"
+msgstr "Päivitä captcha"
+
+msgid "Captcha is temporarily blocked. Please try again later."
+msgstr "Captcha on tilapäisesti lukittu. Yritä myöhemmin uudelleen."
+
+msgid "Item Details"
+msgstr "Kohteen tiedot"
+
+msgid "Open File"
+msgstr "Avaa tiedosto"
+
+msgid "Selection"
+msgstr "Valinta"
+
+msgid "Remove selection context"
+msgstr "Poista valinnan konteksti"
+
+msgid "Source document"
+msgstr "Lähdedokumentti"
+
+msgid "Use the current course context"
+msgstr "Käytä nykyistä kurssikontekstia"
+
+msgid "Loading documents..."
+msgstr "Ladataan dokumentteja..."
+
+msgid "No compatible PDF or TXT document was found in this course."
+msgstr "Tältä kurssilta ei löytynyt yhteensopivaa PDF- tai TXT-dokumenttia."
+
+msgid "Select a PDF or TXT document to generate terms only from that document."
+msgstr "Valitse PDF- tai TXT-dokumentti, josta termit luodaan."
+
+msgid "Confidentiality warning"
+msgstr "Luottamuksellisuusvaroitus"
+
+msgid "When a document is selected, the prompt is fixed so the generation uses only that document content."
+msgstr "Kun dokumentti on valittu, kehotetta ei voi muuttaa, joten generointi käyttää vain kyseisen dokumentin sisältöä."
+
+msgid "No document-processing AI providers available."
+msgstr "Dokumenttien käsittelyyn sopivia tekoälypalveluita ei ole saatavilla."
+
+msgid "Failed to save signature. Please try again."
+msgstr "Allekirjoituksen tallentaminen epäonnistui. Yritä uudelleen."
+
+msgid "Select and move"
+msgstr "Valitse ja siirrä"
+
+msgid "Freehand"
+msgstr "Vapaakäsi"
+
+msgid "Stroke"
+msgstr "Viiva"
+
+msgid "Fill"
+msgstr "Täytä"
+
+msgid "Import SVG"
+msgstr "Tuo SVG"
+
+msgid "Import image"
+msgstr "Tuo kuva"
+
+msgid "Click the drawing area to place this text"
+msgstr "Napsauta piirtoaluetta sijoittaaksesi tämän tekstin"
+
+msgid "Draw a new SVG, import an existing SVG or embed an image, then save it as a reusable document."
+msgstr "Piirrä uusi SVG, tuo olemassa oleva SVG tai upota kuva, ja tallenna se uudelleenkäytettävänä dokumenttina."
+
+msgid "Use Select and move to reposition or resize elements added in this editor."
+msgstr "Käytä Valitse ja siirrä -työkalua siirtääksesi tai muuttaaksesi tässä editorissa lisättyjä elementtejä."
+
+msgid "Stroke width"
+msgstr "Viivan leveys"
+
+msgid "Transparent fill"
+msgstr "Läpinäkyvä täyttö"
+
+msgid "Invalid id"
+msgstr "Virheellinen tunnus"
+
+msgid "Unable to load the drawing"
+msgstr "Piirroksen lataaminen epäonnistui"
+
+msgid "Only PNG, JPG, WEBP or GIF images are supported."
+msgstr "Vain PNG-, JPG-, WEBP- tai GIF-kuvat ovat tuettuja."
+
+msgid "Unable to read the image file."
+msgstr "Kuvatiedoston lukeminen epäonnistui."
+
+msgid "Only SVG files are supported."
+msgstr "Vain SVG-tiedostot ovat tuettuja."
+
+msgid "The SVG file is empty or invalid."
+msgstr "SVG-tiedosto on tyhjä tai virheellinen."
+
+msgid "Unable to read the SVG file."
+msgstr "SVG-tiedoston lukeminen epäonnistui."
+
+msgid "The drawing is empty or invalid."
+msgstr "Piirros on tyhjä tai virheellinen."
+
+msgid "Unable to save the drawing"
+msgstr "Piirroksen tallentaminen epäonnistui"
+
+msgid "Information about AI-assisted documents"
+msgstr "Tietoja tekoälyavusteisista dokumenteista"
+
+msgid "Location"
+msgstr "Sijainti"
+
+msgid "Cloud link"
+msgstr "Pilvlinkki"
+
+msgid "Add a link to a cloud document, such as Google Drive or Google Docs."
+msgstr "Lisää linkki pilvidokumenttiin, kuten Google Driveen tai Google Docsiin."
+
+msgid "Add cloud link"
+msgstr "Lisää pilvilinkki"
+
+msgid "Document title"
+msgstr "Dokumentin otsikko"
+
+msgid "Document options change how uploaded files are processed after saving."
+msgstr "Dokumenttivalinnat määrittävät, miten ladatut tiedostot käsitellään tallentamisen jälkeen."
+
+msgid "Information about uncompressing zip files"
+msgstr "Tietoja ZIP-tiedostojen purkamisesta"
+
+msgid "When enabled, ZIP files are extracted into the current document folder after upload."
+msgstr "Kun tämä on käytössä, ZIP-tiedostot puretaan nykyiseen dokumenttikansioon latauksen jälkeen."
+
+msgid "The title is required."
+msgstr "Otsikko on pakollinen."
+
+msgid "The URL is required."
+msgstr "URL-osoite on pakollinen."
+
+msgid "The destination folder is missing."
+msgstr "Kohdekansio puuttuu."
+
+msgid "Unable to create cloud link."
+msgstr "Pilvlinkkiä ei voitu luoda."
+
+msgid "Copy to My Files"
+msgstr "Kopioi omiin tiedostoihini"
+
+msgid "Used space"
+msgstr "Käytetty tila"
+
+msgid "Available space"
+msgstr "Käytettävissä oleva tila"
+
+msgid "Available percentage"
+msgstr "Käytettävissä oleva prosenttiosuus"
+
+msgid "Cloud links cannot be downloaded."
+msgstr "Pilvlinkkejä ei voi ladata."
+
+msgid "Could not copy the file to My Files"
+msgstr "Tiedostoa ei voitu kopioida omiin tiedostoihini"
+
+msgid "File copied to My Files"
+msgstr "Tiedosto kopioitu omiin tiedostoihini"
+
+msgid "Checking course creation options..."
+msgstr "Tarkistetaan kurssin luontiasetuksia..."
+
+msgid "You cannot create more courses right now."
+msgstr "Et voi luoda lisää kursseja juuri nyt."
+
+msgid "AI analyzer"
+msgstr "Tekoälyanalysaattori"
+
+msgid "Expand all"
+msgstr "Laajenna kaikki"
+
+msgid "Collapse all"
+msgstr "Kutista kaikki"
+
+msgid "Review your active service benefits, purchase history and available receipts."
+msgstr "Tarkastele aktiivisten palvelujesi etuja, ostohistoriaa ja saatavilla olevia kuitteja."
+
+msgid "Active services"
+msgstr "Aktiiviset palvelut"
+
+msgid "No active services"
+msgstr "Ei aktiivisia palveluita"
+
+msgid "Valid until"
+msgstr "Voimassa asti"
+
+msgid "Recurring payment"
+msgstr "Toistuva maksu"
+
+msgid "Next charge"
+msgstr "Seuraava veloitus"
+
+msgid "Enable auto billing"
+msgstr "Ota automaattinen laskutus käyttöön"
+
+msgid "Cancel auto billing"
+msgstr "Peru automaattinen laskutus"
+
+msgid "Granted benefits"
+msgstr "Myönnetyt edut"
+
+msgid "Purchase history"
+msgstr "Ostohistoria"
+
+msgid "No purchases yet"
+msgstr "Ei vielä ostoksia"
+
+msgid "Product"
+msgstr "Tuote"
+
+msgid "Reference"
+msgstr "Viite"
+
+msgid "Amount"
+msgstr "Summa"
+
+msgid "Receipt"
+msgstr "Kuitti"
+
+msgid "Unable to load your services right now."
+msgstr "Palveluitasi ei voida ladata juuri nyt."
+
+msgid "Auto billing enabled"
+msgstr "Automaattinen laskutus käytössä"
+
+msgid "Auto billing suspended"
+msgstr "Automaattinen laskutus keskeytetty"
+
+msgid "Auto billing cancelled"
+msgstr "Automaattinen laskutus peruutettu"
+
+msgid "Auto billing disabled"
+msgstr "Automaattinen laskutus poistettu käytöstä"
+
+msgid "Cancel auto billing for this service?"
+msgstr "Peruutetaanko tämän palvelun automaattinen laskutus?"
+
+msgid "Preview class members and courses"
+msgstr "Esikatsele luokan jäseniä ja kursseja"
+
+msgid "Please select a CSV file to import."
+msgstr "Valitse tuotava CSV-tiedosto."
+
+msgid "%d user-class links imported"
+msgstr "%d käyttäjä-luokka-linkkiä tuotu"
+
+msgid "The following errors occurred during import:"
+msgstr "Tuonnin aikana tapahtui seuraavat virheet:"
+
+msgid "CSV file"
+msgstr "CSV-tiedosto"
+
+msgid "Remove user from all group-related entities if not in the list"
+msgstr "Poista käyttäjä kaikista ryhmään liittyvistä entiteeteistä, jos hän ei ole listalla"
+
+msgid "UserName"
+msgstr "Käyttäjänimi"
+
+msgid "ClassName"
+msgstr "Luokan nimi"
+
+msgid "are required for each row."
+msgstr "vaaditaan jokaisella rivillä."
+
+msgid "title"
+msgstr "otsikko"
+
+msgid "is required."
+msgstr "vaaditaan."
+
+msgid "description"
+msgstr "kuvaus"
+
+msgid "are optional."
+msgstr "valinnaisia."
+
+msgid "Are you sure you want to remove this user from the class?"
+msgstr "Haluatko varmasti poistaa tämän käyttäjän luokasta?"
+
+msgid "Users in class"
+msgstr "Käyttäjät luokassa"
+
+msgid "Remove user"
+msgstr "Poista käyttäjä"
+
+msgid "Class not found"
+msgstr "Luokkaa ei löytynyt"
+
+msgid "Class overview"
+msgstr "Luokan yleiskatsaus"
+
+msgid "Back to classes"
+msgstr "Takaisin luokkiin"
+
+msgid "Search members or courses"
+msgstr "Hae jäseniä tai kursseja"
+
+msgid "Search by name, email, username or course title"
+msgstr "Hae nimellä, sähköpostilla, käyttäjänimellä tai kurssin nimellä"
+
+msgid "Class members"
+msgstr "Luokan jäsenet"
+
+msgid "No email"
+msgstr "Ei sähköpostia"
+
+msgid "No members found"
+msgstr "Jäseniä ei löytynyt"
+
+msgid "No courses found"
+msgstr "Kursseja ei löytynyt"
+
+msgid "The end date must be after the start date."
+msgstr "Päättymispäivän on oltava alkamispäivän jälkeen."
+
+msgid "Always visible"
+msgstr "Aina näkyvissä"
+
+msgid "No end date"
+msgstr "Ei päättymispäivää"
+
+msgid "No restriction"
+msgstr "Ei rajoitusta"
+
+msgid "Missing learning path or course identifier"
+msgstr "Oppimispolku tai kurssitunniste puuttuu"
+
+msgid "Select a user or a group first"
+msgstr "Valitse ensin käyttäjä tai ryhmä"
+
+msgid "Remove all date restrictions for this learning path?"
+msgstr "Poistetaanko kaikki päivämäärärajoitukset tältä oppimispolulta?"
+
+msgid "Advanced learning path access"
+msgstr "Edistynyt oppimispolun käyttöoikeus"
+
+msgid "Remove date restrictions"
+msgstr "Poista päivämäärärajoitukset"
+
+msgid "Search by name, email, username or group"
+msgstr "Hae nimellä, sähköpostilla, käyttäjänimellä tai ryhmällä"
+
+msgid "Edit user restriction"
+msgstr "Muokkaa käyttäjärajoitusta"
+
+msgid "Edit group restriction"
+msgstr "Muokkaa ryhmärajoitusta"
+
+msgid "Select a user or group"
+msgstr "Valitse käyttäjä tai ryhmä"
+
+msgid "Save restriction"
+msgstr "Tallenna rajoitus"
+
+msgid "members"
+msgstr "jäsenet"
+
+msgid "Create Assignment"
+msgstr "Luo tehtävä"
+
+msgid "The submission deadline has passed. You can no longer submit."
+msgstr "Palautuksen määräaika on umpeutunut. Et voi enää palauttaa."
+
+msgid "Mailing cannot be combined with other recipients."
+msgstr "Postitus ei voi yhdistää muiden vastaanottajien kanssa."
+
+msgid "Social map"
+msgstr "Sosiaalinen kartta"
+
+msgid "The map plugin is not enabled or configured."
+msgstr "Karttalisäosa ei ole käytössä tai määritetty."
+
+msgid "Some configured extra fields were not found"
+msgstr "Joitakin määritettyjä lisäkenttiä ei löytynyt"
+
+msgid "No user locations were found."
+msgstr "Käyttäjien sijainteja ei löytynyt."
+
+msgid "OpenStreetMap needs coordinates to display an embedded marker. Address-only locations are listed below."
+msgstr "OpenStreetMap tarvitsee koordinaatit upotetun merkin näyttämiseen. Vain osoitteella varustetut sijainnit on lueteltu alla."
+
+msgid "Locations"
+msgstr "Sijainnit"
+
+msgid "Open map"
+msgstr "Avaa kartta"
+
+msgid "Provider: OpenStreetMap"
+msgstr "Palveluntarjoaja: OpenStreetMap"
+
+msgid "Provider: Google Maps"
+msgstr "Palveluntarjoaja: Google Maps"
+
+msgid "Personal files"
+msgstr "Henkilökohtaiset tiedostot"
+
+msgid "Upload image"
+msgstr "Lataa kuva"
+
+msgid "Upload media"
+msgstr "Lataa media"
+
+msgid "Only image files are allowed in this upload screen."
+msgstr "Vain kuvatiedostot ovat sallittuja tässä latausnäkymässä."
+
+msgid "Only audio and video files are allowed in this upload screen."
+msgstr "Vain ääni- ja videotiedostot ovat sallittuja tässä latausnäkymässä."
+
+msgid "Upload files to your personal storage."
+msgstr "Lataa tiedostoja henkilökohtaiseen tallennustilaasi."
+
+msgid "Linked"
+msgstr "Linkitetty"
+
+msgid "No audio or video files were found in this folder."
+msgstr "Tästä kansiosta ei löytynyt ääni- tai videotiedostoja."
+
+msgid "No image files were found in this folder."
+msgstr "Tästä kansiosta ei löytynyt kuvatiedostoja."
+
+msgid "No matching files were found in this folder."
+msgstr "Tästä kansiosta ei löytynyt vastaavia tiedostoja."
+
+msgid "This file type is not allowed in this upload screen."
+msgstr "Tämä tiedostotyyppi ei ole sallittu tässä latausnäkymässä."
+
+msgid "Manage your personal files and course documents."
+msgstr "Hallitse henkilökohtaisia tiedostojasi ja kurssimateriaaleja."
+
+msgid "DateValidity"
+msgstr "DateValidity"
+
+msgid "JustificationSaved"
+msgstr "JustificationSaved"
+
+msgid "ValidityDate"
+msgstr "ValidityDate"
+
+msgid "MyJustifications"
+msgstr "MyJustifications"
+
+msgid "Submission"
+msgstr "Submission"
+
+msgid "Use the filters above to narrow the list."
+msgstr "Käytä yllä olevia suodattimia listan rajaamiseen."
+
+msgid "You are not allowed to see this page."
+msgstr "Sinulla ei ole oikeutta nähdä tätä sivua."
+
+msgid "plugin_title"
+msgstr "plugin_title"
+
+msgid "plugin_comment"
+msgstr "plugin_comment"
+
+msgid "Course tracking details"
+msgstr "Kurssin seurannan tiedot"
+
+msgid "Course activity statistics"
+msgstr "Kurssin aktiviteettitilastot"
+
+msgid "mobile_phone_number"
+msgstr "mobile_phone_number"
+
+msgid "Allowed template syntax"
+msgstr "Sallittu mallipohjan syntaksi"
+
+msgid "Functions"
+msgstr "Funktiot"
+
+msgid "Available variables depend on the template type, for example {{ user.getUsername() }} or {{ user.getEmail() }}."
+msgstr "Käytettävissä olevat muuttujat riippuvat mallipohjan tyypistä, esimerkiksi {{ user.getUsername() }} tai {{ user.getEmail() }}."
+
+msgid "For security reasons, any other Twig function, filter (such as filter, map, reduce or sort) or PHP call is blocked."
+msgstr "Turvallisuussyistä kaikki muut Twig-funktiot, suodattimet (kuten filter, map, reduce tai sort) tai PHP-kutsut on estetty."
+
+msgid "Global administrator"
+msgstr "Pääylläpitäjä"
+
+msgid "Session manager"
+msgstr "Istunnon hallinnoija"
+
+msgid "Human resources manager"
+msgstr "Henkilöstöhallinnon johtaja"
+
+msgid "Course teacher"
+msgstr "Kurssin opettaja"
+
+msgid "Course student"
+msgstr "Kurssin opiskelija"
+
+msgid "Platform reports"
+msgstr "Alustan raportit"
+
+msgid "Security reports"
+msgstr "Turvallisuusraportit"
+
+msgid "Course reports"
+msgstr "Kurssiraportit"
+
+msgid "Gradebook reports"
+msgstr "Arviointikirjaraportit"
+
+msgid "Social reports"
+msgstr "Sosiaalisen median raportit"
+
+msgid "Exports"
+msgstr "Vientitoiminnot"
+
+msgid "Reports about platform-wide usage, users, courses and sessions."
+msgstr "Raportit alustan laajuisesta käytöstä, käyttäjistä, kursseista ja istunnoista."
+
+msgid "Audit and security-sensitive reports."
+msgstr "Tarkastus- ja turvallisuuteen liittyvät raportit."
+
+msgid "Reports scoped to courses managed by the user."
+msgstr "Raportit käyttäjän hallinnoimista kursseista."
+
+msgid "Reports related to learner activity and follow-up."
+msgstr "Raportit oppijoiden aktiviteeteista ja seurannasta."
+
+msgid "Reports related to scores, certificates and gradebook data."
+msgstr "Raportit arvosanoista, todistuksista ja arviointikirjan tiedoista."
+
+msgid "Reports and exports that generate downloadable files."
+msgstr "Raportit ja viennit, jotka tuottavat ladattavia tiedostoja."
+
+msgid "Main platform statistics dashboard."
+msgstr "Alustan päätilastojen kojelauta."
+
+msgid "Number of courses and course distribution report."
+msgstr "Kurssien määrä ja kurssijakaumaraportti."
+
+msgid "Platform-wide access to course tools."
+msgstr "Alustan laajuinen pääsy kurssityökaluihin."
+
+msgid "Number of resources per tool."
+msgstr "Resurssien määrä työkalua kohden."
+
+msgid "Latest access to courses."
+msgstr "Viimeisimmät kurssikäynnit."
+
+msgid "Course distribution by language."
+msgstr "Kurssijakauma kielen mukaan."
+
+msgid "Course usage report."
+msgstr "Kurssin käyttöraportti."
+
+msgid "Platform user count report."
+msgstr "Alustan käyttäjämäärän raportti."
+
+msgid "Recent logins chart."
+msgstr "Viimeisimpien kirjautumisten kaavio."
+
+msgid "Login distribution by month."
+msgstr "Kirjautumisten jakauma kuukausittain."
+
+msgid "Login distribution by day."
+msgstr "Kirjautumisten jakauma päivittäin."
+
+msgid "Login distribution by hour."
+msgstr "Kirjautumisten jakauma tunneittain."
+
+msgid "Users with profile picture."
+msgstr "Käyttäjät, joilla on profiilikuva."
+
+msgid "Login report filtered by date."
+msgstr "Kirjautumisraportti päiväyksen mukaan suodatettuna."
+
+msgid "Users who have not logged in recently."
+msgstr "Käyttäjät, jotka eivät ole kirjautuneet viime aikoina."
+
+msgid "Inactive or suspicious user accounts report."
+msgstr "Passiivisten tai epäilyttävien käyttäjätilien raportti."
+
+msgid "Users activity statistics."
+msgstr "Käyttäjien aktiviteettitilastot."
+
+msgid "Currently online users report."
+msgstr "Tällä hetkellä online-käyttäjien raportti."
+
+msgid "New user registrations over time."
+msgstr "Uusien käyttäjien rekisteröitymiset ajan mittaan."
+
+msgid "Course and session subscriptions over time."
+msgstr "Kurssien ja istuntojen tilaukset ajan mittaan."
+
+msgid "Duplicate user detection and maintenance report."
+msgstr "Kaksoiskäyttäjien havaitsemis- ja ylläpitoraportti."
+
+msgid "Platform user/session statistics."
+msgstr "Alustan käyttäjä- ja istuntotilastot."
+
+msgid "Quarterly platform report."
+msgstr "Alustan neljännesvuosittainen raportti."
+
+msgid "Activities audit"
+msgstr "Toimintojen auditointi"
+
+msgid "Audit report for important administrative and platform activities."
+msgstr "Tärkeiden hallinnollisten ja alustan toimintojen auditointiraportti."
+
+msgid "Social messages received report."
+msgstr "Vastaanotettujen sosiaalisten viestien raportti."
+
+msgid "Social messages sent report."
+msgstr "Lähetettyjen sosiaalisten viestien raportti."
+
+msgid "Social contacts count report."
+msgstr "Sosiaalisten kontaktien määrän raportti."
+
+msgid "Sessions created over time."
+msgstr "Istuntojen luominen ajan mittaan."
+
+msgid "Learning analytics dashboard."
+msgstr "Oppimisanalytiikan kojelauta."
+
+msgid "Teacher time report."
+msgstr "Opettajan ajankäyttöraportti."
+
+msgid "Teachers time by session report"
+msgstr "Opettajien ajankäyttö istunnoittain -raportti"
+
+msgid "Teacher time report grouped by session."
+msgstr "Opettajan ajankäyttöraportti ryhmiteltynä istunnoittain."
+
+msgid "Corporate learning analytics report."
+msgstr "Yritysoppimisen analytiikkaraportti."
+
+msgid "Course learners tracking report."
+msgstr "Kurssin oppijoiden seurantaraportti."
+
+msgid "Course activity statistics with connected and inactive users."
+msgstr "Kurssin aktiviteettitilastot yhdistetyistä ja passiivisista käyttäjistä."
+
+msgid "Detailed tracking report for a learner inside a course."
+msgstr "Yksityiskohtainen oppijan seurantaraportti kurssin sisällä."
+
+msgid "Course gradebook overview."
+msgstr "Kurssin arviointikirjan yleiskatsaus."
+
+msgid "Gradebook statistics"
+msgstr "Arviointikirjan tilastot"
+
+msgid "Gradebook statistics report."
+msgstr "Arviointikirjan tilastoraportti."
+
+msgid "Certificate report"
+msgstr "Todistusraportti"
+
+msgid "Certificate report for course gradebook."
+msgstr "Todistusraportti kurssin arviointikirjalle."
+
+msgid "User statistics"
+msgstr "Käyttäjätilastot"
+
+msgid "Course gradebook statistics for a user."
+msgstr "Kurssin arviointikirjan tilastot käyttäjälle."
+
+msgid "Personal statistics"
+msgstr "Henkilökohtaiset tilastot"
+
+msgid "Personal gradebook statistics."
+msgstr "Henkilökohtaiset arviointikirjan tilastot."
+
+msgid "Reports catalog"
+msgstr "Raporttien luettelo"
+
+msgid "Central catalog of available reports, roles and permission categories."
+msgstr "Käytettävissä olevien raporttien, roolien ja käyttöoikeusluokkien keskitetty luettelo."
+
+msgid "Course log events"
+msgstr "Kurssin lokitapahtumat"
+
+msgid "Detailed course tracking events."
+msgstr "Yksityiskohtaiset kurssin seurannan tapahtumat."
+
+msgid "Course tool usage"
+msgstr "Kurssityökalujen käyttö"
+
+msgid "Course tracking report grouped by tools."
+msgstr "Kurssin seurantaraportti ryhmiteltynä työkalujen mukaan."
+
+msgid "Course resource usage"
+msgstr "Kurssiresurssien käyttö"
+
+msgid "Course tracking report grouped by resources."
+msgstr "Kurssin seurantaraportti ryhmiteltynä resurssien mukaan."
+
+msgid "Course group tracking"
+msgstr "Kurssiryhmien seuranta"
+
+msgid "Tracking report for course groups."
+msgstr "Kurssiryhmien seurantaraportti."
+
+msgid "Course session report"
+msgstr "Kurssi-istuntoraportti"
+
+msgid "Tracking report for a course inside sessions."
+msgstr "Kurssin seurantaraportti istuntojen sisällä."
+
+msgid "Learning path report"
+msgstr "Oppimispolun raportti"
+
+msgid "Learning path tracking report."
+msgstr "Oppimispolun seurantaraportti."
+
+msgid "Learning path results by user"
+msgstr "Oppimispolun tulokset käyttäjittäin"
+
+msgid "Learning path results grouped by user."
+msgstr "Oppimispolun tulokset ryhmiteltynä käyttäjittäin."
+
+msgid "Exercises report"
+msgstr "Harjoitusten raportti"
+
+msgid "Course exercises and exams tracking report."
+msgstr "Kurssin harjoitusten ja kokeiden seurantaraportti."
+
+msgid "Question report"
+msgstr "Kysymysraportti"
+
+msgid "Course question tracking report."
+msgstr "Kurssin kysymysten seurantaraportti."
+
+msgid "Messages report"
+msgstr "Viestiraportti"
+
+msgid "Course messages tracking report."
+msgstr "Kurssin viestien seurantaraportti."
+
+msgid "Total time tracking report for course learners."
+msgstr "Kurssin oppijoiden kokonaisaikaseurantaraportti."
+
+msgid "Gradebook summary"
+msgstr "Arviointikirjan yhteenveto"
+
+msgid "Summary view of gradebook results."
+msgstr "Arviointikirjan tulosten yhteenvetonäkymä."
+
+msgid "Flat view"
+msgstr "Tasainen näkymä"
+
+msgid "Flat gradebook results view."
+msgstr "Arviointikirjan tulosten tasainen näkymä."
+
+msgid "Evaluation log"
+msgstr "Arviointiloki"
+
+msgid "Change log for gradebook evaluations."
+msgstr "Arviointikirjan arviointien muutosloki."
+
+msgid "Link log"
+msgstr "Linkkiloki"
+
+msgid "Change log for gradebook links."
+msgstr "Arviointikirjan linkkien muutosloki."
+
+msgid "Result details"
+msgstr "Tuloksen tiedot"
+
+msgid "Detailed view of a gradebook result."
+msgstr "Arviointikirjan tuloksen yksityiskohtainen näkymä."
+
+msgid "Personal certificates report."
+msgstr "Henkilökohtaiset todistusraportit."
+
+msgid "User move statistics"
+msgstr "Käyttäjän siirtotilastot"
+
+msgid "Report for user move and transfer statistics."
+msgstr "Käyttäjän siirto- ja siirtymätilastoraportti."
+
+msgid "User consent list"
+msgstr "Käyttäjien suostumusluettelo"
+
+msgid "Report of users and consent status."
+msgstr "Käyttäjien ja suostumustilanteen raportti."
+
+msgid "Special platform exports."
+msgstr "Erityiset alustan viennit."
+
+msgid "Export certificates"
+msgstr "Vie todistukset"
+
+msgid "Export platform certificates."
+msgstr "Vie alustan todistukset."
+
+msgid "Export exercise results"
+msgstr "Vie harjoitustulokset"
+
+msgid "Export exercise results from the platform."
+msgstr "Vie harjoitustulokset alustalta."
+
+msgid "Course survey results and reporting."
+msgstr "Kurssin kyselytulokset ja raportointi."
+
+msgid "Attendance report"
+msgstr "Läsnäoloraportti"
+
+msgid "Course attendance tracking and reports."
+msgstr "Kurssin läsnäolon seuranta ja raportit."
+
+msgid "Exercises global report"
+msgstr "Harjoitusten globaali raportti"
+
+msgid "Global exercise results report for the course."
+msgstr "Kurssin harjoitustulosten globaali raportti."
+
+msgid "Exercise report"
+msgstr "Harjoitusraportti"
+
+msgid "Detailed exercise report."
+msgstr "Yksityiskohtainen harjoitusraportti."
+
+msgid "Exercise history"
+msgstr "Harjoitushistoria"
+
+msgid "Exercise attempt history."
+msgstr "Harjoitusyritysten historia."
+
+msgid "Exercise results"
+msgstr "Harjoitustulokset"
+
+msgid "Exercise results and corrections."
+msgstr "Harjoitustulokset ja korjaukset."
+
+msgid "Question-level exercise statistics."
+msgstr "Kysymystason harjoitustilastot."
+
+msgid "Exercise statistics"
+msgstr "Harjoitustilastot"
+
+msgid "Exercise statistics page."
+msgstr "Harjoitustilastosivu."
+
+msgid "Live exercise statistics"
+msgstr "Reaaliaikaiset harjoitustilastot"
+
+msgid "Live exercise statistics for teachers."
+msgstr "Reaaliaikaiset harjoitustilastot opettajille."
+
+msgid "Learning path statistics"
+msgstr "Oppimispolun tilastot"
+
+msgid "Learning path item statistics."
+msgstr "Oppimispolun kohteen tilastot."
+
+msgid "Learning path report inside a course."
+msgstr "Oppimispolun raportti kurssin sisällä."
+
+msgid "User skills report."
+msgstr "Käyttäjän taitoraportti."
+
+msgid "Scheduled or periodic export configuration."
+msgstr "Ajoitettu tai säännöllinen vientimääritys."
+
+msgid "User export"
+msgstr "Käyttäjien vienti"
+
+msgid "Export users from the platform."
+msgstr "Vie käyttäjät alustalta."
+
+msgid "Not classified"
+msgstr "Ei luokiteltu"
+
+msgid "You have acquired the skill %s"
+msgstr "Olet hankkinut taidon %s"
+
+msgid "You have acquired the skill %s."
+msgstr "Olet hankkinut taidon %s."
+
+msgid "Recover your password"
+msgstr "Palauta salasanasi"
+
+msgid "Disclaimer"
+msgstr "Vastuuvapauslauseke"
+
+msgid "This operation would exceed the limit of %d users allowed for this course."
+msgstr "Tämä toiminto ylittäisi kurssille sallitun %d käyttäjän enimmäismäärän."
+
+msgid "DefaultGroupCategory"
+msgstr "DefaultGroupCategory"
+
+msgid "LearningCalendar"
+msgstr "LearningCalendar"
+
+msgid "Choose how this user can authenticate on the platform."
+msgstr "Valitse, miten tämä käyttäjä voi todentautua alustalla."
+
+msgid "Authentication methods"
+msgstr "Todentamismenetelmät"
+
+msgid "Set password manually"
+msgstr "Aseta salasana manuaalisesti"
+
+msgid "Report role matrix"
+msgstr "Raportoi roolien matriisi"
+
+msgid "Report permission categories"
+msgstr "Raportoi käyttöoikeusluokat"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs enforce the documented report role matrix."
+msgstr "Tämä rekisteri luettelee tunnetut raportointisivut, niiden luokan, kanonisen URL-osoitteen, vanhan URL-osoitteen ja odotetun roolijoukon. Kanoniset URL-osoitteet noudattavat dokumentoitua raporttien roolien matriisia."
+
+msgid "reports"
+msgstr "raportit"
+
+msgid "Canonical URL"
+msgstr "Kanoninen URL"
+
+msgid "Legacy URL"
+msgstr "Vanha URL"
+
+msgid "Permission category"
+msgstr "Käyttöoikeusluokka"
+
+msgid "This matrix documents the expected audience for each report and is enforced by the canonical report entry point."
+msgstr "Tämä matriisi dokumentoi kunkin raportin odotetun kohderyhmän ja kanoninen raporttien sisääntulopiste valvoo sitä."
+
+msgid "These keys group reports by access scope and are used by the report registry. They can later be mapped to finer-grained platform permissions."
+msgstr "Nämä avaimet ryhmittelevät raportit käyttöalueen mukaan ja raporttirekisteri käyttää niitä. Ne voidaan myöhemmin liittää tarkempiin alustan käyttöoikeuksiin."
+
+msgid "Permission"
+msgstr "Käyttöoikeus"
+
+msgid "Clear active session"
+msgstr "Tyhjennä aktiivinen istunto"
+
+msgid "Are you sure you want to clear this user active session?"
+msgstr "Haluatko varmasti tyhjentää tämän käyttäjän aktiivisen istunnon?"
+
+msgid "Preview shown without course context. Some course-specific data may be unavailable."
+msgstr "Esikatselu näytetään ilman kurssikontekstia. Jotkin kurssikohtaiset tiedot eivät ehkä ole käytettävissä."
+
+msgid "Preview is not available for this question."
+msgstr "Tälle kysymykselle ei ole esikatselua saatavilla."
+
+msgid "Edition is not allowed without a course context."
+msgstr "Muokkaus ei ole sallittua ilman kurssikontekstia."
+
+msgid "This plugin does not use regions."
+msgstr "Tämä lisäosa ei käytä alueita."
+
+msgid "No plugins with regions were found."
+msgstr "Alueita käyttäviä lisäosia ei löytynyt."
+
+msgid "Freemium"
+msgstr "Freemium"
+
+msgid "Commercial service"
+msgstr "Kaupallinen palvelu"
+
+msgid "Commercial"
+msgstr "Kaupallinen"
+
+msgid "100% free"
+msgstr "100 % ilmainen"
+
+msgid "Displayed above the public login form."
+msgstr "Näytetään julkisen kirjautumislomakkeen yläpuolella."
+
+msgid "Displayed below the public login form."
+msgstr "Näytetään julkisen kirjautumislomakkeen alapuolella."
+
+msgid "Displayed before the footer area."
+msgstr "Näytetään ennen alatunnistetta."
+
+msgid "Displayed in the left footer column."
+msgstr "Näytetään vasemmassa alatunnisteen sarakkeessa."
+
+msgid "Displayed in the center footer column."
+msgstr "Näytetään keskimmäisessä alatunnisteen sarakkeessa."
+
+msgid "Displayed in the right footer column."
+msgstr "Näytetään oikeassa alatunnisteen sarakkeessa."
+
+msgid "Showing all plugins."
+msgstr "Näytetään kaikki lisäosat."
+
+msgid "Some plugins are still pending functional verification."
+msgstr "Jotkin lisäosat odottavat edelleen toiminnallista tarkistusta."
+
+msgid "Show verified plugins only"
+msgstr "Näytä vain varmennetut lisäosat"
+
+msgid "Showing verified plugins only."
+msgstr "Näytetään vain varmennetut lisäosat."
+
+msgid "Pending plugins are temporarily hidden until they are adapted and tested."
+msgstr "Odottavat lisäosat on väliaikaisesti piilotettu, kunnes ne on mukautettu ja testattu."
+
+msgid "Show all plugins"
+msgstr "Näytä kaikki lisäosat"
+
+msgid "Official and free plugins are listed separately from plugins that may depend on commercial services or paid offers."
+msgstr "Viralliset ja ilmaiset lisäosat on lueteltu erikseen lisäosista, jotka voivat riippua kaupallisista palveluista tai maksullisista tarjouksista."
+
+msgid "Included free plugins"
+msgstr "Mukana olevat ilmaiset lisäosat"
+
+msgid "Commercial and freemium plugins"
+msgstr "Kaupalliset ja freemium-lisäosat"
+
+msgid "All plugins"
+msgstr "Kaikki lisäosat"
+
+msgid "No plugins were found for this category."
+msgstr "Tälle kategorialle ei löytynyt lisäosia."
+
+msgid "Search plugins"
+msgstr "Hae lisäosia"
+
+msgid "Search by name or description"
+msgstr "Hae nimen tai kuvauksen perusteella"
+
+msgid "Advanced filters"
+msgstr "Edistyneet suodattimet"
+
+msgid "All statuses"
+msgstr "Kaikki tilat"
+
+msgid "All sources"
+msgstr "Kaikki lähteet"
+
+msgid "All types"
+msgstr "Kaikki tyypit"
+
+msgid "Installed plugins are shown first"
+msgstr "Asennetut lisäosat näytetään ensin"
+
+msgid "No plugins match the current filters."
+msgstr "Yksikään lisäosa ei vastaa nykyisiä suodattimia."
+
+msgid "Try clearing the search or changing the filters."
+msgstr "Kokeile tyhjentää haku tai muuttaa suodattimia."
+
+msgid "README"
+msgstr "README"
+
+msgid "Invalid security token"
+msgstr "Virheellinen turvatunnus"
+
+msgid "Please select a destination session"
+msgstr "Valitse kohdesessio"
+
+msgid "Cannot move this to the same session"
+msgstr "Tätä ei voi siirtää samaan sessioon"
+
+msgid "The destination session must include the selected course"
+msgstr "Kohdesession on sisällettävä valittu kurssi"
+
+msgid "The source session must include the selected course"
+msgstr "Lähdesession on sisällettävä valittu kurssi"
+
+msgid "No learners found"
+msgstr "Oppijoita ei löytynyt"
+
+msgid "Will be subscribed"
+msgstr "Tilatut"
+
+msgid "Subscribed"
+msgstr "Tilattu"
+
+msgid "The move process has finished"
+msgstr "Siirtoprosessi on päättynyt"
+
+msgid "Comparison finished. No data has been moved."
+msgstr "Vertailu päättynyt. Tietoja ei siirretty."
+
+msgid "Move tracking data from the base course or a source session to another session. Use comparison first to review the affected learner data."
+msgstr "Siirrä seurannan tiedot peruskurssilta tai lähdesessiosta toiseen sessioon. Käytä ensin vertailua tarkistaaksesi vaikutuksen oppijoiden tietoihin."
+
+msgid "Search for a course or use the manual course ID field below."
+msgstr "Etsi kurssi tai käytä alla olevaa manuaalista kurssitunnuskenttää."
+
+msgid "Fallback when the course search is not available."
+msgstr "Varmistus, kun kurssihakua ei ole käytettävissä."
+
+msgid "Load sessions"
+msgstr "Lataa sessiot"
+
+msgid "Selected course"
+msgstr "Valittu kurssi"
+
+msgid "Choose the base course or the session where the tracking data currently exists."
+msgstr "Valitse peruskurssi tai sessio, jossa seurannan tiedot tällä hetkellä ovat."
+
+msgid "Choose the session that will receive the tracking data."
+msgstr "Valitse sessio, joka vastaanottaa seurannan tiedot."
+
+msgid "Important"
+msgstr "Tärkeää"
+
+msgid "The move action updates existing tracking data. Run compare first and test this tool with a non-production course before moving real learner data."
+msgstr "Siirtotoiminto päivittää olemassa olevia seurannan tietoja. Suorita ensin vertailu ja testaa tätä työkalua ei-tuotantokurssilla ennen todellisten oppijoiden tietojen siirtämistä."
+
+msgid "No sessions found for this course"
+msgstr "Tälle kurssille ei löytynyt sessioita"
+
+msgid "Some users were ignored because they are not subscribed to this session."
+msgstr "Joitakin käyttäjiä ei otettu huomioon, koska he eivät ole tilanneet tätä sessiota."
+
+msgid "Remove selected user"
+msgstr "Poista valittu käyttäjä"
+
+msgid "Add selected user"
+msgstr "Lisää valittu käyttäjä"
+
+msgid "No users from the selected list are subscribed to this session."
+msgstr "Yksikään valitun listan käyttäjistä ei ole tilannut tätä sessiota."
+
+msgid "No image"
+msgstr "Ei kuvaa"
+
+msgid "Invalid URL."
+msgstr "Virheellinen URL."
+
+msgid "This cloud document cannot be embedded."
+msgstr "Tätä pilvidokumenttia ei voi upottaa."
+
+msgid "Document not found"
+msgstr "Dokumenttia ei löytynyt"
+
+msgid "File not found"
+msgstr "Tiedostoa ei löytynyt"
+
+msgid "This learning path is not available for your user at this time."
+msgstr "Tämä oppimispolku ei ole tällä hetkellä käytettävissä käyttäjällesi."
+
+msgid "StartDateMustBeBeforeTheEndDate"
+msgstr "StartDateMustBeBeforeTheEndDate"
+
+msgid "Next learning path"
+msgstr "Seuraava oppimispolku"
+
+msgid "Select the learning path that will be available after this one."
+msgstr "Valitse oppimispolku, joka on käytettävissä tämän jälkeen."
+
+msgid "Create another learning path in this course to enable learning path flow."
+msgstr "Luo toinen oppimispolku tähän kurssiin ottaaksesi oppimispolun kulun käyttöön."
+
+msgid "Available from %s"
+msgstr "Saatavilla alkaen %s"
+
+msgid "Available until %s"
+msgstr "Saatavilla %s asti"
+
+msgid "Statistics reset date"
+msgstr "Tilastojen nollauspäivämäärä"
+
+msgid "Last 24 hours"
+msgstr "Viimeiset 24 tuntia"
+
+msgid "This reset date is used as the reference date for the report. It does not delete historical tracking data."
+msgstr "Tätä nollauspäivämäärää käytetään raportin viitepäivämääränä. Se ei poista historiallisia seurantatietoja."
+
+msgid "Since reset date"
+msgstr "Nollauspäivämäärästä lähtien"
+
+msgid "Users connected in the last 24 hours"
+msgstr "Viimeisen 24 tunnin aikana kirjautuneet käyttäjät"
+
+msgid "Learners with at least one course access during the last 24 hours."
+msgstr "Oppijat, joilla on ollut vähintään yksi kurssikäyttö viimeisen 24 tunnin aikana."
+
+msgid "Users connected in the last week"
+msgstr "Viimeisen viikon aikana kirjautuneet käyttäjät"
+
+msgid "Learners with at least one course access during the last 7 days."
+msgstr "Oppijat, joilla on ollut vähintään yksi kurssikäyttö viimeisen 7 päivän aikana."
+
+msgid "Users connected in the last month"
+msgstr "Viimeisen kuukauden aikana kirjautuneet käyttäjät"
+
+msgid "Learners with at least one course access during the last 30 days."
+msgstr "Oppijat, joilla on ollut vähintään yksi kurssikäyttö viimeisen 30 päivän aikana."
+
+msgid "Not recently connected users"
+msgstr "Viime aikoina kirjautumattomat käyttäjät"
+
+msgid "Learners without course access since %s."
+msgstr "Oppijat ilman kurssikäyttöä %s lähtien."
+
+msgid "Recently used resources"
+msgstr "Viimeksi käytetyt resurssit"
+
+msgid "Course tools/resources used since %s."
+msgstr "Kurssityökalut/-resurssit käytetty %s lähtien."
+
+msgid "%s %% of learners"
+msgstr "%s %% oppijoista"
+
+msgid "Connections"
+msgstr "Kirjautumiset"
+
+msgid "Total connections"
+msgstr "Kirjautumisia yhteensä"
+
+msgid "Downloaded documents"
+msgstr "Ladatut asiakirjat"
+
+msgid "List of documents downloaded by this learner in this course."
+msgstr "Luettelo tämän oppijan tässä kurssissa lataamista asiakirjoista."
+
+msgid "Forum topics"
+msgstr "Keskustelualueen aiheet"
+
+msgid "Forum topics opened by this learner in this course."
+msgstr "Tämän oppijan tässä kurssissa avaamat keskustelualueen aiheet."
+
+msgid "Forum posts"
+msgstr "Keskustelualueen viestit"
+
+msgid "Forum posts written by this learner in this course."
+msgstr "Tämän oppijan tässä kurssissa kirjoittamat keskustelualueen viestit."
+
+msgid "Course connections"
+msgstr "Kurssikirjautumiset"
+
+msgid "Connection history for this learner in this course."
+msgstr "Tämän oppijan kirjautumishistoria tässä kurssissa."
+
+msgid "Resources used"
+msgstr "Käytetyt resurssit"
+
+msgid "Latest tools or resources used by this learner in this course."
+msgstr "Tämän oppijan tässä kurssissa viimeksi käyttämät työkalut tai resurssit."
+
+msgid "Logout date"
+msgstr "Uloskirjautumispäivämäärä"
+
+msgid "Imported Aiken quiz"
+msgstr "Tuotu Aiken-testi"
+
+msgid "Only supported documents will be listed here."
+msgstr "Vain tuetut asiakirjat luetellaan tässä."
+
+msgid "Generated Aiken content"
+msgstr "Luotu Aiken-sisältö"
+
+msgid "Review the generated content before importing it as a new exercise."
+msgstr "Tarkista luotu sisältö ennen sen tuomista uudeksi harjoitukseksi."
+
+msgid "No documents available."
+msgstr "Ei käytettävissä olevia asiakirjoja."
+
+msgid "yperbolic arctangent:\\t\\tarctanh(x)"
+msgstr "hyperbolinen arkustangentti:\\t\\tarctanh(x)"
+
+msgid "Exercise"
+msgstr "Harjoitus"
+
+msgid "OfficialCode"
+msgstr "VirallinenTunnus"
+
+msgid "FirstName"
+msgstr "Etunimi"
+
+msgid "LastName"
+msgstr "Sukunimi"
+
+msgid "LoginName"
+msgstr "Kirjautumisnimi"
+
+msgid "MinMinute"
+msgstr "Minuuttiminimi"
+
+msgid "StartDate"
+msgstr "Aloituspäivämäärä"
+
+msgid "EndDate"
+msgstr "Lopetuspäivämäärä"
+
+msgid "CorrectionDate"
+msgstr "Korjauspäivämäärä"
+
+msgid "NotValidated"
+msgstr "Ei vahvistettu"
+
+msgid "PendingAttempts"
+msgstr "Odottavat yritykset"
+
+msgid "List of pending test attempts across your courses."
+msgstr "Luettelo odottavista testiyrityksistä kaikissa kursseissasi."
+
+msgid "User ID"
+msgstr "Käyttäjätunnus"
+
+msgid "QuestionType"
+msgstr "Kysymystyyppi"
+
+msgid "QuestionsWithNoAutomaticCorrection"
+msgstr "Kysymykset ilman automaattista korjausta"
+
+msgid "There are no pending tests."
+msgstr "Ei odottavia testejä."
+
+msgid "%s results"
+msgstr "%s tulosta"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Esimerkki lomakkeen täyttämistehtävä: laske painoindeksi</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ikä</strong></td>            <td width=\"75%\" style=\"\">[25] vuotta</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sukupuoli</strong></td>            <td style=\"\" text-align:=\"\">[M] (M tai N)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Paino</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Pituus</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Painoindeksi</strong></td>            <td style=\"vertical-align: top;\">[29] BMI = Paino/Pituus<sup>2</sup> (Ks.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia-artikkeli</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Removed"
+msgstr "Poistettu"
+
+msgid "NoUsersInTheList"
+msgstr "NoUsersInTheList"
+
+msgid "Are you sure?"
+msgstr "Oletko varma?"
+
+msgid "NoResultsAvailable"
+msgstr "NoResultsAvailable"
+
+msgid "Import groups from a CSV file and optionally remove items that are not present in the file."
+msgstr "Tuo ryhmät CSV-tiedostosta ja poista valinnaisesti kohteet, joita ei ole tiedostossa."
+
+msgid "Use this option carefully because items missing from the CSV can be removed during the import process."
+msgstr "Käytä tätä vaihtoehtoa varoen, koska CSV-tiedostosta puuttuvat kohteet voidaan poistaa tuontiprosessin aikana."
+
+msgid "Upload a CSV file with the group data you want to import."
+msgstr "Lataa CSV-tiedosto, jossa on tuotavat ryhmätiedot."
+
+msgid "You can download the example file to use the expected format."
+msgstr "Voit ladata esimerkkitiedoston käyttääksesi odotettua muotoa."
+
+msgid "If you enable deletion, items not present in the file may be removed."
+msgstr "Jos otat poiston käyttöön, tiedostossa ei olevat kohteet voidaan poistaa."
+
+msgid "The CSV file is mandatory to start the import."
+msgstr "CSV-tiedosto on pakollinen tuonnin aloittamiseksi."
+
+msgid "Please select at least one class."
+msgstr "Valitse vähintään yksi luokka."
+
+msgid "Define the properties for each group before creating them."
+msgstr "Määritä kunkin ryhmän ominaisuudet ennen niiden luomista."
+
+msgid "Apply the first row values"
+msgstr "Käytä ensimmäisen rivin arvoja"
+
+msgid "Create groups manually or generate them from the classes subscribed to this course."
+msgstr "Luo ryhmät manuaalisesti tai luo ne tähän kurssille ilmoittautuneista luokista."
+
+msgid "Create manual groups"
+msgstr "Luo manuaaliset ryhmät"
+
+msgid "Use this form when you want to create empty course groups manually."
+msgstr "Käytä tätä lomaketta, kun haluat luoda tyhjiä kurssiryhmiä manuaalisesti."
+
+msgid "Configure manual groups"
+msgstr "Määritä manuaaliset ryhmät"
+
+msgid "Create groups from subscribed classes"
+msgstr "Luo ryhmät ilmoittautuneista luokista"
+
+msgid "Use this form when you want to create one course group for each selected class."
+msgstr "Käytä tätä lomaketta, kun haluat luoda yhden kurssiryhmän kullekin valitulle luokalle."
+
+msgid "Keep created groups linked to their source classes"
+msgstr "Pidä luodut ryhmät linkitettyinä lähdeluokkiinsa"
+
+msgid "Create groups from selected classes"
+msgstr "Luo ryhmät valituista luokista"
+
+msgid "You must be logged in to access this page."
+msgstr "Sinun täytyy olla kirjautuneena sisään päästäksesi tälle sivulle."
+
+msgid "Invalid user"
+msgstr "Virheellinen käyttäjä"
+
+msgid "UseCourseCustomCertificate"
+msgstr "UseCourseCustomCertificate"
+
+msgid "UseDefaultCustomCertificate"
+msgstr "UseDefaultCustomCertificate"
+
+msgid "CertificateSetting"
+msgstr "CertificateSetting"
+
+msgid "SelectOneOptionBeforeOpeningEditor"
+msgstr "SelectOneOptionBeforeOpeningEditor"
+
+msgid "ChooseCustomCertificateModeHelp"
+msgstr "ChooseCustomCertificateModeHelp"
+
+msgid "CertificateMode"
+msgstr "CertificateMode"
+
+msgid "Enable student to validate own attendance"
+msgstr "Salli opiskelijan vahvistaa oma läsnäolonsa"
+
+msgid "Course block"
+msgstr "Kurssilohko"
+
+msgid "Add custom content blocks to course footer regions."
+msgstr "Lisää mukautettuja sisältölohkoja kurssin alatunnistealueisiin."
+
+msgid "course_block_pre_footer"
+msgstr "course_block_pre_footer"
+
+msgid "Before footer"
+msgstr "Ennen alatunnistetta"
+
+msgid "course_block_footer_left"
+msgstr "course_block_footer_left"
+
+msgid "Footer left"
+msgstr "Alatunniste vasen"
+
+msgid "course_block_footer_center"
+msgstr "course_block_footer_center"
+
+msgid "Footer center"
+msgstr "Alatunniste keskellä"
+
+msgid "course_block_footer_right"
+msgstr "course_block_footer_right"
+
+msgid "Footer right"
+msgstr "Alatunniste oikea"
+
+msgid "SetNotification"
+msgstr "SetNotification"
+
+msgid "CourseLegal"
+msgstr "CourseLegal"
+
+msgid "Certificates search is not available"
+msgstr "Todistushakua ei ole käytettävissä"
+
+msgid "It allows the acquisition of skills by subcategories"
+msgstr "Se mahdollistaa taitojen hankkimisen alaluokittain"
+
+msgid "Allow skills by subcategories"
+msgstr "Salli taidot alaluokittain"
+
+msgid "Minimum score for skills"
+msgstr "Taitojen vähimmäispistemäärä"
+
+msgid "The gradebook table is hidden."
+msgstr "Arviointikirjataulukko on piilotettu."
+
+msgid "Invalid token"
+msgstr "Virheellinen tunnus"
+
+msgid "Unable to save the item"
+msgstr "Kohteen tallentaminen epäonnistui"
+
+msgid "Only HTTP and HTTPS URLs are allowed."
+msgstr "Vain HTTP- ja HTTPS-URL-osoitteet ovat sallittuja."
+
+msgid "Invalid URL host."
+msgstr "Virheellinen URL-isäntä."
+
+msgid "This cloud provider is not allowed."
+msgstr "Tämä pilvipalveluntarjoaja ei ole sallittu."
+
+msgid "Documents used"
+msgstr "Käytetyt asiakirjat"
+
+msgid "No document usage"
+msgstr "Ei asiakirjojen käyttöä"
+
+msgid "Invalid action."
+msgstr "Virheellinen toiminto."
+
+msgid "No users selected."
+msgstr "Ei valittuja käyttäjiä."
+
+msgid "%s user(s) processed."
+msgstr "%s käyttäjää käsitelty."
+
+msgid "Invalid CSRF token."
+msgstr "Virheellinen CSRF-tunnus."
+
+msgid "[%s] Please change your password"
+msgstr "[%s] Vaihda salasanasi"
+
+msgid "Dear %s,\n\nOur security enforcing process shows you use a password that is commonly used on the internet, which means your account could easily be stolen. It is probably a simple sequence or a very common word, we don't really know (we cannot see your password), but we ask you to please connect to the platform and request a password change. You can follow the link here: %s to do that now.\n\nPlease note we will never ask for your password in this process. You just enter your username or e-mail and we send you a link. If you are asked to introduce your existing password to do that, someone is probably trying to do Phishing on your account. Be safe, change your password now!\n\n%s\n%s"
+msgstr "Hyvä %s,\n\nTurvallisuusprosessimme mukaan käytät internetissä yleisesti käytettyä salasanaa, mikä tarkoittaa, että tilisi voidaan helposti varastaa. Se on todennäköisesti yksinkertainen sarja tai hyvin yleinen sana, emme tiedä varmasti (emme näe salasanaasi), mutta pyydämme sinua kirjautumaan alustalle ja pyytämään salasanan vaihtoa. Voit seurata tätä linkkiä: %s tehdäksesi sen nyt.\n\nHuomaa, ettemme koskaan pyydä salasanaasi tässä prosessissa. Syötät vain käyttäjätunnuksesi tai sähköpostiosoitteesi, ja lähetämme sinulle linkin. Jos sinua pyydetään antamaan nykyinen salasanasi, joku yrittää todennäköisesti tietojenkalastelua tilillesi. Ole turvassa, vaihda salasanasi nyt!\n\n%s\n%s"
+
+msgid "[%s] Your password has been reset"
+msgstr "[%s] Salasanasi on nollattu"
+
+msgid "Dear %s,\n\nOur security enforcing process flagged you as using a password that is commonly used on the internet, which means your account could easily be stolen. As a prevention measure, we have decided to initiate a password reset process. Your new, automatically generated password is now:\n\n%s\n\nPlease login to the platform soon (using this new password) to set your own, personal and secure, password.\n\nBe safe.\n\n%s\n%s"
+msgstr "Hyvä %s,\n\nTurvallisuusprosessimme on havainnut, että käytät internetissä yleisesti käytettyä salasanaa, mikä tarkoittaa, että tilisi voidaan helposti varastaa. Ennaltaehkäisevänä toimenpiteenä olemme päättäneet käynnistää salasanan nollausprosessin. Uusi, automaattisesti luotu salasanasi on nyt:\n\n%s\n\nKirjaudu alustalle pian (käyttäen tätä uutta salasanaa) asettaaksesi oman, henkilökohtaisen ja turvallisen salasanasi.\n\nOle turvassa.\n\n%s\n%s"
+
+msgid "Signature saved successfully"
+msgstr "Allekirjoitus tallennettu onnistuneesti"
+
+msgid "Invalid request payload."
+msgstr "Virheellinen pyynnön hyötykuorma."
+
+msgid "Authentication required."
+msgstr "Todennus vaaditaan."
+
+msgid "The course title is required."
+msgstr "Kurssin nimi on pakollinen."
+
+msgid "Only trainers and administrators can create courses."
+msgstr "Vain kouluttajat ja ylläpitäjät voivat luoda kursseja."
+
+msgid "Course creation by trainers is disabled on this platform."
+msgstr "Kurssien luonti kouluttajien toimesta on poistettu käytöstä tällä alustalla."
+
+msgid "The selected BuyCourses service cannot be used to create this course."
+msgstr "Valittua BuyCourses-palvelua ei voi käyttää tämän kurssin luomiseen."
+
+msgid "You have reached the maximum number of courses allowed (%d)."
+msgstr "Olet saavuttanut sallitun kurssien enimmäismäärän (%d)."
+
+msgid "The selected BuyCourses service is invalid."
+msgstr "Valittu BuyCourses-palvelu on virheellinen."
+
+msgid "BuyCourses is not available right now."
+msgstr "BuyCourses ei ole tällä hetkellä käytettävissä."
+
+msgid "BuyCourses cannot validate the selected service right now."
+msgstr "BuyCourses ei voi vahvistaa valittua palvelua juuri nyt."
+
+msgid "Unable to validate the selected BuyCourses service right now."
+msgstr "Valittua BuyCourses-palvelua ei voida vahvistaa juuri nyt."
+
+msgid "External tool removed from course"
+msgstr "Ulkoinen työkalu poistettu kurssilta"
+
+msgid "External tool was removed from the course, but kept internally because it is linked to the gradebook"
+msgstr "Ulkoinen työkalu poistettiin kurssilta, mutta se säilytettiin sisäisesti, koska se on linkitetty arviointikirjaan"
+
+msgid "There are no external tools available to add to the gradebook"
+msgstr "Arviointikirjaan lisättäväksi ei ole saatavilla ulkoisia työkaluja"
+
+msgid "The evaluation could not be created"
+msgstr "Arviointia ei voitu luoda"
+
+msgid "The gradebook evaluation could not be linked"
+msgstr "Arviointikirjan arviointia ei voitu linkittää"
+
+msgid "Survey questions"
+msgstr "Kyselyt"
+
+msgid "Back to survey list"
+msgstr "Takaisin kyselyluetteloon"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "Tähän kyselyyn on jo vastattu. Kysymysten muokkaus on poistettu käytöstä asetuksissa."
+
+msgid "Choose the type of question you want to add."
+msgstr "Valitse lisättävän kysymyksen tyyppi."
+
+msgid "The free text option is added automatically."
+msgstr "Vapaa tekstikenttä lisätään automaattisesti."
+
+msgid "No questions found"
+msgstr "Kysymyksiä ei löytynyt"
+
+msgid "Mandatory"
+msgstr "Pakollinen"
+
+msgid "Unsupported question type"
+msgstr "Ei tuettu kysymystyyppi"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "Voit käyttää kysymyksessä tunnisteita {%s} ja {%s}."
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "Tämä kysymys näytetään ehdollisesti kyselyyn vastattaessa."
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "Prosenttiosuudet 1–100 luodaan automaattisesti."
+
+msgid "Could not load survey questions"
+msgstr "Kyselykysymyksiä ei voitu ladata"
+
+msgid "The question text is required."
+msgstr "Kysymyksen teksti on pakollinen."
+
+msgid "The maximum score is required."
+msgstr "Maksimipistemäärä on pakollinen."
+
+msgid "Please select a parent option."
+msgstr "Valitse päävaihtoehto."
+
+msgid "Please fill all answer options."
+msgstr "Täytä kaikki vastausvaihtoehdot."
+
+msgid "QuestionUpdated"
+msgstr "QuestionUpdated"
+
+msgid "Could not save survey question"
+msgstr "Kyselykysymystä ei voitu tallentaa"
+
+msgid "Could not delete survey question"
+msgstr "Kyselykysymystä ei voitu poistaa"
+
+msgid "Could not move survey question"
+msgstr "Kyselykysymystä ei voitu siirtää"
+
+msgid "Could not copy survey question"
+msgstr "Kyselykysymystä ei voitu kopioida"
+
+msgid "Hide search"
+msgstr "Piilota haku"
+
+msgid "Showing results for: %s"
+msgstr "Näytetään tulokset haulle: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "Hae kyselyn otsikolla, koodilla tai kuvauksella."
+
+msgid "Search surveys"
+msgstr "Hae kyselyitä"
+
+msgid "%s surveys selected"
+msgstr "%s kyselyä valittu"
+
+msgid "Clear selection"
+msgstr "Tyhjennä valinta"
+
+msgid "No surveys found"
+msgstr "Kyselyitä ei löytynyt"
+
+msgid "Unsupported"
+msgstr "Ei tuettu"
+
+msgid "Could not load surveys"
+msgstr "Kyselyitä ei voitu ladata"
+
+msgid "Delete selected surveys"
+msgstr "Poista valitut kyselyt"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "Valitut kyselyt ja niiden kysymykset poistetaan. Tätä toimintoa ei voi peruuttaa."
+
+msgid "Could not delete selected surveys"
+msgstr "Valittuja kyselyitä ei voitu poistaa"
+
+msgid "Survey action"
+msgstr "Kyselyn toiminto"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "Tästä kyselystä luodaan kopio: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "Kaikki vastaukset ja kutsut poistetaan tästä kyselystä: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "Luodut monistetut kysymykset poistetaan tästä kyselystä: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "Tämä kysely julkaistaan linkitetyn ryhmän ohjaajille: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "Tämä kysely ja sen kysymykset poistetaan: %s"
+
+msgid "Could not complete survey action"
+msgstr "Kyselytoimintoa ei voitu suorittaa"
+
+msgid "Not started"
+msgstr "Ei aloitettu"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "Kokouskyselyt antavat kutsutuille käyttäjille mahdollisuuden valita päivät, jolloin he ovat käytettävissä."
+
+msgid "Back to surveys"
+msgstr "Takaisin kyselyihin"
+
+msgid "Edit meeting poll"
+msgstr "Muokkaa kokouskyselyä"
+
+msgid "View meeting poll"
+msgstr "Näytä kokouskysely"
+
+msgid "Basic information"
+msgstr "Perustiedot"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "Tämä luo kyselyn tyyppiä kokouskysely. Vastaukset ja kutsut käsitellään erikseen."
+
+msgid "Availability"
+msgstr "Saatavuus"
+
+msgid "Meeting dates"
+msgstr "Kokouspäivät"
+
+msgid "Meeting poll"
+msgstr "Kokouskysely"
+
+msgid "My availability"
+msgstr "Oma saatavuus"
+
+msgid "Meeting poll results"
+msgstr "Kokouskyselyn tulokset"
+
+msgid "No invitations found"
+msgstr "Kutsuja ei löytynyt"
+
+msgid "available"
+msgstr "käytettävissä"
+
+msgid "Could not load meeting poll"
+msgstr "Kokouskyselyä ei voitu ladata"
+
+msgid "Please complete the required fields"
+msgstr "Täytä pakolliset kentät"
+
+msgid "Could not save meeting poll"
+msgstr "Kokouskyselyä ei voitu tallentaa"
+
+msgid "Could not save meeting availability"
+msgstr "Kokoussaatavuutta ei voitu tallentaa"
+
+msgid "Copy this survey to another course or session"
+msgstr "Kopioi tämä kysely toiseen kurssiin tai istuntoon"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "Kysely kopioidaan ilman vastauksia tai kutsuja."
+
+msgid "No target courses found"
+msgstr "Kohdekursseja ei löytynyt"
+
+msgid "Search by course title, course code or session name."
+msgstr "Hae kurssin nimen, kurssikoodin tai istunnon nimen perusteella."
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "Käytä Kyselyn monistamista, kun haluat kopion samaan kurssiin."
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "Kysymykset ja vaihtoehdot kopioidaan. Vastaukset, kutsut ja raportit jäävät vain alkuperäiseen kyselyyn."
+
+msgid "Selected target"
+msgstr "Valittu kohde"
+
+msgid "Could not load copy form"
+msgstr "Kopiointilomaketta ei voitu ladata"
+
+msgid "The survey will be copied to: %s"
+msgstr "Kysely kopioidaan kohteeseen: %s"
+
+msgid "Survey copied."
+msgstr "Kysely kopioitu."
+
+msgid "Could not copy survey"
+msgstr "Kyselyä ei voitu kopioida"
+
+msgid "Answer survey"
+msgstr "Vastaa kyselyyn"
+
+msgid "Preview mode does not save answers."
+msgstr "Esikatselutila ei tallenna vastauksia."
+
+msgid "Survey completed"
+msgstr "Kysely suoritettu"
+
+msgid "Thank you for answering the survey."
+msgstr "Kiitos kyselyyn vastaamisesta."
+
+msgid "Profile information"
+msgstr "Profiilitiedot"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "Tarkista pyydetyt profiilikentät ennen kyselyyn vastaamista."
+
+msgid "This profile field is read-only."
+msgstr "Tämä profiilikenttä on vain luettavissa."
+
+msgid "You already filled this survey."
+msgstr "Olet jo täyttänyt tämän kyselyn."
+
+msgid "Please specify"
+msgstr "Määritä tarkemmin"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "Tätä kysymystyyppiä ei tueta modernissa kyselynäkymässä."
+
+msgid "Preview only"
+msgstr "Vain esikatselu"
+
+msgid "Submit answers"
+msgstr "Lähetä vastaukset"
+
+msgid "Could not load survey"
+msgstr "Kyselyä ei voitu ladata"
+
+msgid "Please complete the required profile fields."
+msgstr "Täytä pakolliset profiilikentät."
+
+msgid "Please answer all mandatory questions."
+msgstr "Vastaa kaikkiin pakollisiin kysymyksiin."
+
+msgid "Could not save survey answers"
+msgstr "Kyselyvastauksia ei voitu tallentaa"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "Määritä kyselyn perustiedot ennen kysymysten ja kutsujen hallintaa."
+
+msgid "The survey code cannot be changed after creation."
+msgstr "Kyselyn koodia ei voi muuttaa luomisen jälkeen."
+
+msgid "Survey behavior"
+msgstr "Kyselyn toiminta"
+
+msgid "Use 0 for no time limit."
+msgstr "Käytä arvoa 0, jos aikarajaa ei ole."
+
+msgid "Survey messages"
+msgstr "Kyselyn viestit"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "Täällä valitut profiilikentät näytetään ennen kyselyn kysymyksiä."
+
+msgid "No profile fields are currently available."
+msgstr "Profiilikenttiä ei ole tällä hetkellä saatavilla."
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "Profiilikenttien valinta on käytettävissä vain ei-anonyymeissä kyselyissä."
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "Taitolinkitys siirretään erillisessä erässä."
+
+msgid "Could not load survey configuration"
+msgstr "Kyselyn asetuksia ei voitu ladata"
+
+msgid "The survey code is required."
+msgstr "Kyselyn koodi on pakollinen."
+
+msgid "The survey title is required."
+msgstr "Kyselyn otsikko on pakollinen."
+
+msgid "The survey has been saved successfully"
+msgstr "Kysely on tallennettu onnistuneesti"
+
+msgid "Could not save survey configuration"
+msgstr "Kyselyn asetuksia ei voitu tallentaa"
+
+msgid "Course users"
+msgstr "Kurssin käyttäjät"
+
+msgid "Already invited"
+msgstr "Jo kutsuttu"
+
+msgid "No users found"
+msgstr "Käyttäjiä ei löytynyt"
+
+msgid "No groups found"
+msgstr "Ryhmiä ei löytynyt"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "Käytä **link** kohtaa, jossa kyselylinkin tulee näkyä."
+
+msgid "Remind all selected users"
+msgstr "Muistuta kaikkia valittuja käyttäjiä"
+
+msgid "Anonymous access link"
+msgstr "Anonyymi pääsylinkki"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "Käyttäjät, joita ei ole kutsuttu, voivat käyttää tätä linkkiä vastatakseen kyselyyn."
+
+msgid "Answered anonymously"
+msgstr "Vastattu anonyymisti"
+
+msgid "Could not load survey invitations"
+msgstr "Kyselykutsuja ei voitu ladata"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "Sähköpostin aihe ja viesti ovat pakollisia, kun lähetetään sähköpostia."
+
+msgid "Could not publish survey"
+msgstr "Kyselyä ei voitu julkaista"
+
+msgid "Could not copy the link"
+msgstr "Linkkiä ei voitu kopioida"
+
+msgid "Please answer this survey using the following link"
+msgstr "Vastaa tähän kyselyyn seuraavalla linkillä"
+
+msgid "Export CSV"
+msgstr "Vie CSV"
+
+msgid "Export compact CSV"
+msgstr "Vie tiivistetty CSV"
+
+msgid "Export Excel"
+msgstr "Vie Excel"
+
+msgid "Export package"
+msgstr "Vie paketti"
+
+msgid "Results summary"
+msgstr "Tulosten yhteenveto"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "Tämä näkymä näyttää siirretyn raportointitiedon tälle kyselylle."
+
+msgid "Select user"
+msgstr "Valitse käyttäjä"
+
+msgid "No answers found"
+msgstr "Vastauksia ei löytynyt"
+
+msgid "answers"
+msgstr "vastausta"
+
+msgid "Could not load survey reporting"
+msgstr "Kyselyn raportointia ei voitu ladata"
+
+msgid "Back to threads"
+msgstr "Takaisin ketjuihin"
+
+msgid "Back to learning path"
+msgstr "Takaisin oppimispolkuun"
+
+msgid "Remove sticky"
+msgstr "Poista kiinnitys"
+
+msgid "Make sticky"
+msgstr "Kiinnitä"
+
+msgid "Open thread"
+msgstr "Avaa ketju"
+
+msgid "Close thread"
+msgstr "Sulje ketju"
+
+msgid "Delete thread"
+msgstr "Poista ketju"
+
+msgid "This thread is hidden from learners."
+msgstr "Tämä ketju on piilotettu oppijoilta."
+
+msgid "Revision requested"
+msgstr "Korjaus pyydetty"
+
+msgid "Revision"
+msgstr "Korjaus"
+
+msgid "Approve post"
+msgstr "Hyväksy viesti"
+
+msgid "Reject post"
+msgstr "Hylkää viesti"
+
+msgid "Cancel revision request"
+msgstr "Peruuta tarkistuspyyntö"
+
+msgid "Delete post"
+msgstr "Poista viesti"
+
+msgid "Message is required"
+msgstr "Viesti on pakollinen"
+
+msgid "Target thread is required"
+msgstr "Kohdelanka on pakollinen"
+
+msgid "Could not retrieve posts"
+msgstr "Viestejä ei voitu hakea"
+
+msgid "Thread shown"
+msgstr "Lanka näytetty"
+
+msgid "Thread hidden"
+msgstr "Lanka piilotettu"
+
+msgid "Could not update thread"
+msgstr "Lankaa ei voitu päivittää"
+
+msgid "Thread closed"
+msgstr "Lanka suljettu"
+
+msgid "Thread opened"
+msgstr "Lanka avattu"
+
+msgid "Thread marked as sticky"
+msgstr "Lanka merkitty kiinnitetyksi"
+
+msgid "Thread unmarked as sticky"
+msgstr "Langan kiinnitysmerkintä poistettu"
+
+msgid "Thread notifications enabled"
+msgstr "Langan ilmoitukset käytössä"
+
+msgid "Thread notifications disabled"
+msgstr "Langan ilmoitukset pois käytöstä"
+
+msgid "Could not update thread notification"
+msgstr "Langan ilmoitusta ei voitu päivittää"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "Haluatko varmasti poistaa tämän langan?"
+
+msgid "Could not delete thread"
+msgstr "Lankaa ei voitu poistaa"
+
+msgid "Post approved"
+msgstr "Viesti hyväksytty"
+
+msgid "Could not approve post"
+msgstr "Viestiä ei voitu hyväksyä"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "Haluatko varmasti hylätä tämän viestin?"
+
+msgid "Post rejected"
+msgstr "Viesti hylätty"
+
+msgid "Could not reject post"
+msgstr "Viestiä ei voitu hylätä"
+
+msgid "Post shown"
+msgstr "Viesti näytetty"
+
+msgid "Post hidden"
+msgstr "Viesti piilotettu"
+
+msgid "Could not update post"
+msgstr "Viestiä ei voitu päivittää"
+
+msgid "Post updated"
+msgstr "Viesti päivitetty"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "Haluatko varmasti poistaa tämän viestin?"
+
+msgid "Post deleted"
+msgstr "Viesti poistettu"
+
+msgid "Could not delete post"
+msgstr "Viestiä ei voitu poistaa"
+
+msgid "Untitled thread"
+msgstr "Nimeämätön lanka"
+
+msgid "Could not retrieve threads"
+msgstr "Lankoja ei voitu hakea"
+
+msgid "Post moved"
+msgstr "Viesti siirretty"
+
+msgid "Could not move post"
+msgstr "Viestiä ei voitu siirtää"
+
+msgid "Revision request removed"
+msgstr "Tarkistuspyyntö poistettu"
+
+msgid "Could not update revision request"
+msgstr "Tarkistuspyyntöä ei voitu päivittää"
+
+msgid "Are you sure you want to report this post?"
+msgstr "Haluatko varmasti ilmoittaa tästä viestistä?"
+
+msgid "Could not report post"
+msgstr "Viestiä ei voitu ilmoittaa"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "Haluatko varmasti poistaa tämän liitteen?"
+
+msgid "Attachment deleted"
+msgstr "Liite poistettu"
+
+msgid "Could not delete attachment"
+msgstr "Liitettä ei voitu poistaa"
+
+msgid "Thread title"
+msgstr "Langan otsikko"
+
+msgid "Sticky thread"
+msgstr "Kiinnitetty lanka"
+
+msgid "Attach files"
+msgstr "Liitä tiedostoja"
+
+msgid "Attachments are disabled for this forum"
+msgstr "Liitteet on poistettu käytöstä tässä keskustelualueessa"
+
+msgid "The forum is not open yet."
+msgstr "Keskustelualue ei ole vielä avoinna."
+
+msgid "The forum is closed."
+msgstr "Keskustelualue on suljettu."
+
+msgid "The forum is locked."
+msgstr "Keskustelualue on lukittu."
+
+msgid "New threads are not allowed in this forum."
+msgstr "Uusia lankoja ei sallita tässä keskustelualueessa."
+
+msgid "Thread created"
+msgstr "Lanka luotu"
+
+msgid "Could not create thread"
+msgstr "Lankaa ei voitu luoda"
+
+msgid "Back to posts"
+msgstr "Takaisin viesteihin"
+
+msgid "This reply will be stored as a revision."
+msgstr "Tämä vastaus tallennetaan versiona."
+
+msgid "Post reply"
+msgstr "Lähetä vastaus"
+
+msgid "The thread is locked."
+msgstr "Ketju on lukittu."
+
+msgid "Reply added"
+msgstr "Vastaus lisätty"
+
+msgid "Could not add reply"
+msgstr "Vastauksen lisääminen epäonnistui"
+
+msgid "Add forum"
+msgstr "Lisää foorumi"
+
+msgid "No forums found"
+msgstr "Foorumeita ei löytynyt"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "Luo ensimmäinen foorumikategoria tai foorumi aloittaaksesi keskustelut."
+
+msgid "Locked"
+msgstr "Lukittu"
+
+msgid "No forums in this category"
+msgstr "Ei foorumeita tässä kategoriassa"
+
+msgid "Posts require approval"
+msgstr "Viestit vaativat hyväksynnän"
+
+msgid "Forum for current group"
+msgstr "Nykyisen ryhmän foorumi"
+
+msgid "Group forum visibility"
+msgstr "Ryhmäfoorumin näkyvyys"
+
+msgid "No category"
+msgstr "Ei kategoriaa"
+
+msgid "Could not retrieve forums"
+msgstr "Foorumien haku epäonnistui"
+
+msgid "Forum category updated"
+msgstr "Foorumikategoria päivitetty"
+
+msgid "Forum category created"
+msgstr "Foorumikategoria luotu"
+
+msgid "Could not save forum category"
+msgstr "Foorumikategorian tallennus epäonnistui"
+
+msgid "Forum updated"
+msgstr "Foorumi päivitetty"
+
+msgid "Forum created"
+msgstr "Foorumi luotu"
+
+msgid "Could not save forum"
+msgstr "Foorumin tallennus epäonnistui"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "Haluatko varmasti poistaa tämän foorumikategorian?"
+
+msgid "Could not delete forum category"
+msgstr "Foorumikategorian poisto epäonnistui"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "Haluatko varmasti poistaa tämän foorumin?"
+
+msgid "Could not delete forum"
+msgstr "Foorumin poisto epäonnistui"
+
+msgid "Forum category unlocked"
+msgstr "Foorumikategoria avattu"
+
+msgid "Forum category locked"
+msgstr "Foorumikategoria lukittu"
+
+msgid "Could not update forum category"
+msgstr "Foorumikategorian päivitys epäonnistui"
+
+msgid "Forum category shown"
+msgstr "Foorumikategoria näytetty"
+
+msgid "Forum category hidden"
+msgstr "Foorumikategoria piilotettu"
+
+msgid "Forum unlocked"
+msgstr "Foorumi avattu"
+
+msgid "Forum locked"
+msgstr "Foorumi lukittu"
+
+msgid "Could not update forum"
+msgstr "Foorumin päivitys epäonnistui"
+
+msgid "Forum shown"
+msgstr "Foorumi näytetty"
+
+msgid "Forum hidden"
+msgstr "Foorumi piilotettu"
+
+msgid "Forum notifications enabled"
+msgstr "Foorumin ilmoitukset käytössä"
+
+msgid "Forum notifications disabled"
+msgstr "Foorumin ilmoitukset pois käytöstä"
+
+msgid "Could not update forum notification"
+msgstr "Foorumin ilmoitusten päivitys epäonnistui"
+
+msgid "Forum category moved"
+msgstr "Foorumikategoria siirretty"
+
+msgid "Could not move forum category"
+msgstr "Foorumikategorian siirto epäonnistui"
+
+msgid "Forum moved"
+msgstr "Foorumi siirretty"
+
+msgid "Could not move forum"
+msgstr "Foorumin siirto epäonnistui"
+
+msgid "Back to forums"
+msgstr "Takaisin foorumeihin"
+
+msgid "New thread"
+msgstr "Uusi ketju"
+
+msgid "No threads found"
+msgstr "Ketjuja ei löytynyt"
+
+msgid "Sticky"
+msgstr "Kiinnitetty"
+
+msgid "Graded"
+msgstr "Arvioitu"
+
+msgid "Grade peers"
+msgstr "Arvioi vertaisia"
+
+msgid "Move thread"
+msgstr "Siirrä ketju"
+
+msgid "Target forum"
+msgstr "Kohdefoorumi"
+
+msgid "Target forum is required"
+msgstr "Kohdefoorumi on pakollinen"
+
+msgid "Students"
+msgstr "Opiskelijat"
+
+msgid "No students found"
+msgstr "Opiskelijoita ei löytynyt"
+
+msgid "No peers available to grade."
+msgstr "Arvioitavia vertaisia ei ole saatavilla."
+
+msgid "Qualified"
+msgstr "Hyväksytty"
+
+msgid "Not qualified"
+msgstr "Ei hyväksytty"
+
+msgid "Could not retrieve thread grading"
+msgstr "Ketjun arviointia ei voitu hakea"
+
+msgid "Thread grading updated"
+msgstr "Ketjun arviointi päivitetty"
+
+msgid "Could not update thread grading"
+msgstr "Ketjun arviointia ei voitu päivittää"
+
+msgid "Thread score saved"
+msgstr "Ketjun pisteet tallennettu"
+
+msgid "Could not save thread score"
+msgstr "Ketjun pisteitä ei voitu tallentaa"
+
+msgid "Could not move thread"
+msgstr "Ketjua ei voitu siirtää"
+
+msgid "Thread updated"
+msgstr "Ketju päivitetty"
+
+msgid "Search term is too short"
+msgstr "Hakutermi on liian lyhyt"
+
+msgid "Could not search forums"
+msgstr "Foorumeita ei voitu hakea"
+
+msgid "Moderated"
+msgstr "Moderoitu"
+
+msgid "View threads"
+msgstr "Näytä ketjut"
 

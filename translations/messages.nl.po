@@ -9772,6 +9772,9 @@ msgstr "Zoekresultaten voor:"
 msgid "Select a file"
 msgstr "Selecteer een bestand"
 
+msgid "Select a file to insert into the editor."
+msgstr "Selecteer een bestand om in de editor in te voegen."
+
 msgid "Warning - The FAQ file, located in the /home/ directory of your portal, is not writable. Your text will not be saved until the file permissions are changed."
 msgstr "Aandacht - het FAQ bestand in de /home/ folder van uw platform is niet schrijfbaar. Uw tekst zal niet opgeslagen worden totdat u de bestandspermissies gewijzigd worden."
 
@@ -15985,6 +15988,9 @@ msgstr "datum & tijd"
 msgid "Item"
 msgstr "Item"
 
+msgid "Items"
+msgstr "Items"
+
 msgid "Configure Dashboard Plugin"
 msgstr "Configureer dashboard plugin"
 
@@ -16967,7 +16973,7 @@ msgid "Choose whether you want to enable the BigBlueButton videoconference tool.
 msgstr "Bepaal of je de BigBlueButton videoconferentietool wil inschakelen. Eenmaal ingeschakeld, zal het als een cursustool verschijnen in al je cursuspagina's, en docenten zullen een online conferentie kunnen activeren wanneer ze willen. Cursisten zullen enkel kunnen deelnemen aan een actieve conferentie. Heb je geen BigBlueButton server, dan moet je er <a href=\"http://bigbluebutton.org/\">een opzetten</a>, of contacteer een van de <a href=\"http://www.chamilo.org/en/providers\">officiële Chamilo providers</a> voor een offerte. BigBlueButtons is vrij te gebruiken (gratis, zoals in bier, maar ook vrij zoals in vrijheid), maar de installatie vraagt wel heel wat technische vaardigheden die niet iedereen beheerst. Je kunt het zelf installeren, of professionele hulp zoeken om je te helpen bij de installatie. Deze hulp zal echter niet gratis zijn. In de geest van vrije software, kun je vrij beschikken over alle tools nodig om de applicatie te kunnen installeren, maar we adviseren om professionele (de Chamilo officiële providers) ondersteuning te vragen hiervoor, als het te moeilijk is."
 
 msgid "BigBlueButton server host"
-msgstr "BigBlueButton server host"
+msgstr "BigBlueButton-serverhost"
 
 msgid "This is the name of the server where your BigBlueButton server is running. Might be <i>localhost</i>, an IP address (e.g. 192.168.13.54) or a domain name (e.g. my.video.com)."
 msgstr "Dit is de naam van de server waarop je BigBlueButton server draait. Mogelijk hs het <em>localhost</em>, een IP adres (bijv. 192.168.13.54) of een domeinnaam (bijv. mijnvideo.com)."
@@ -17262,6 +17268,18 @@ msgstr "Sessies in groep"
 
 msgid "Courses in group"
 msgstr "Cursussen in groep"
+
+msgid "Courses on the platform"
+msgstr "Cursussen op het platform"
+
+msgid "%s courses"
+msgstr "%s cursussen"
+
+msgid "%s sessions"
+msgstr "%s sessies"
+
+msgid "Search by title or code"
+msgstr "Zoeken op titel of code"
 
 msgid "Users in group"
 msgstr "Gebruikers in groep"
@@ -21265,7 +21283,7 @@ msgid "Business card"
 msgstr "Visitekaartje"
 
 msgid "Badge details"
-msgstr "Badge details"
+msgstr "Badge-details"
 
 msgid "The user %s has not achieved the skill \"%s\" yet"
 msgstr "De gebruiker %s beheerst deze vaardigheid nog niet \"%s\""
@@ -22881,7 +22899,7 @@ msgid "Cloud file link"
 msgstr "Link naar cloud-bestand"
 
 msgid "Reset %s"
-msgstr "Reset %s"
+msgstr "%s resetten"
 
 msgid "My global certificate"
 msgstr "Mijn wereldwijd certificaat"
@@ -32949,7 +32967,7 @@ msgid "Account locked until"
 msgstr "Account vergrendeld tot"
 
 msgid "Google Calendar URL"
-msgstr "Google Calendar URL"
+msgstr "Google Agenda-URL"
 
 msgid "User chat status"
 msgstr "Gebruikers chatstatus"
@@ -33273,7 +33291,7 @@ msgid "Admin Restart Courses"
 msgstr "Admin Herstart Cursussen"
 
 msgid "Admin Dashboard"
-msgstr "Admin Dashboard"
+msgstr "Beheerdersdashboard"
 
 msgid "Threads"
 msgstr "Threads"
@@ -34247,6 +34265,9 @@ msgstr "Opdracht"
 msgid "Allowed file formats: %s"
 msgstr "Toegestane bestandsformaten: %s"
 
+msgid "File manager"
+msgstr "Bestandsbeheer"
+
 msgid "File type not allowed. Allowed extensions: %s"
 msgstr "Bestandstype niet toegestaan. Toegestane extensies: %s"
 
@@ -35139,40 +35160,40 @@ msgid "MDI icon name"
 msgstr "MDI-pictogramnaam"
 
 msgid "Assign authentication sources"
-msgstr ""
+msgstr "Authenticatiebronnen toewijzen"
 
 msgid "Assignment details"
-msgstr ""
+msgstr "Opdrachtdetails"
 
 msgid "Terms and conditions"
-msgstr ""
+msgstr "Algemene voorwaarden"
 
 msgid "Icons"
-msgstr ""
+msgstr "Pictogrammen"
 
 msgid "Create backup"
-msgstr ""
+msgstr "Back-up maken"
 
 msgid "Create file"
-msgstr ""
+msgstr "Bestand maken"
 
 msgid "Create link"
-msgstr ""
+msgstr "Link maken"
 
 msgid "Edit template"
-msgstr ""
+msgstr "Sjabloon bewerken"
 
 msgid "Shared files"
-msgstr ""
+msgstr "Gedeelde bestanden"
 
 msgid "Skill wheel"
-msgstr ""
+msgstr "Vaardighedencirkel"
 
 msgid "Favourite courses"
-msgstr ""
+msgstr "Favoriete cursussen"
 
 msgid "Restart courses"
-msgstr ""
+msgstr "Cursussen herstarten"
 
 msgid "Generate terms"
 msgstr "Voorwaarden genereren"
@@ -35181,7 +35202,7 @@ msgid "Add variation"
 msgstr "Variatie toevoegen"
 
 msgid "Editor demo"
-msgstr "Editor demo"
+msgstr "Editor-demo"
 
 msgid "Tool introduction"
 msgstr "Introductietekst"
@@ -35960,6 +35981,2583 @@ msgstr "Welkom"
 msgid "Welcome to Chamilo"
 msgstr "Welkom bij Chamilo"
 
+msgid "Check all unanswered questions below"
+msgstr "Alle onbeantwoorde vragen hieronder controleren"
+
 msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
 msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Als dit je eerste keer is dat je Chamilo gebruikt, zorg er dan voor dat je het zijmenu bekijkt om je weg te vinden door de vele functies. Als je hulp nodig hebt, vind je <a href=\"https://docs.chamilo.org\">onze officiële documentatie</a> voor standaarddocumentatie, terwijl ons <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> kan helpen om ideeën te delen en antwoorden te vinden van andere Chamilo-gebruikers."
+
+msgid "Change password"
+msgstr "Wachtwoord wijzigen"
+
+msgid "Newest first"
+msgstr "Nieuwste eerst"
+
+msgid "Oldest first"
+msgstr "Oudste eerst"
+
+msgid "Title A–Z"
+msgstr "Titel A–Z"
+
+msgid "Title Z–A"
+msgstr "Titel Z–A"
+
+msgid "Send test email"
+msgstr "Test-e-mail verzenden"
+
+msgid "Show teachers"
+msgstr "Docenten tonen"
+
+msgid "Hide teachers"
+msgstr "Docenten verbergen"
+
+msgid "Delete exercise attempts"
+msgstr "Oefenpogingen verwijderen"
+
+msgid "Message sent successfully."
+msgstr "Bericht succesvol verzonden."
+
+msgid "You cannot create a new course right now."
+msgstr "U kunt op dit moment geen nieuwe cursus aanmaken."
+
+msgid "Unable to verify whether you can create a new course right now."
+msgstr "Kan niet controleren of u op dit moment een nieuwe cursus kunt aanmaken."
+
+msgid "Please try again later or contact the administrator."
+msgstr "Probeer het later opnieuw of neem contact op met de beheerder."
+
+msgid "You cannot create more courses at this time."
+msgstr "U kunt op dit moment geen extra cursussen aanmaken."
+
+msgid "You already manage %d courses and your active service allows up to %d. To create another course, you need a higher service limit or reduce your current active courses."
+msgstr "U beheert al %d cursussen en uw actieve dienst staat maximaal %d toe. Om een extra cursus aan te maken, hebt u een hogere dienstlimiet nodig of moet u uw huidige actieve cursussen verminderen."
+
+msgid "You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now."
+msgstr "U beheert al %d cursussen en het platform staat momenteel maximaal %d toe voor uw account. U kunt op dit moment geen extra cursussen aanmaken."
+
+msgid "Add a class"
+msgstr "Klas toevoegen"
+
+msgid "Search classes"
+msgstr "Klassen zoeken"
+
+msgid "No classes found"
+msgstr "Geen klassen gevonden"
+
+msgid "Import classes"
+msgstr "Klassen importeren"
+
+msgid "Class users"
+msgstr "Klasgebruikers"
+
+msgid "%s classes imported"
+msgstr "%s klassen geïmporteerd"
+
+msgid "%s user-class links imported"
+msgstr "%s gebruiker-klas-koppelingen geïmporteerd"
+
+msgid "Hide comments"
+msgstr "Opmerkingen verbergen"
+
+msgid "Loading comments..."
+msgstr "Opmerkingen laden..."
+
+msgid "No comments yet."
+msgstr "Nog geen opmerkingen."
+
+msgid "A user with this username already exists"
+msgstr "Een gebruiker met deze gebruikersnaam bestaat al"
+
+msgid "Manage meetings, review recordings and update course-wide BBB settings from one place."
+msgstr "Beheer vergaderingen, bekijk opnames en update cursusbrede BBB-instellingen op één plek."
+
+msgid "Review the current defaults and propagate them to every course when needed."
+msgstr "Bekijk de huidige standaardinstellingen en pas ze indien nodig toe op elke cursus."
+
+msgid "Filter the list by meeting date range."
+msgstr "Filter de lijst op vergaderdatumreeks."
+
+msgid "Review meeting history, participants and recording actions."
+msgstr "Bekijk vergadergeschiedenis, deelnemers en opname-acties."
+
+msgid "Participants"
+msgstr "Deelnemers"
+
+msgid "CountUsers"
+msgstr "CountUsers"
+
+msgid "No data found"
+msgstr "Geen gegevens gevonden"
+
+msgid "My justifications"
+msgstr "Mijn verantwoordingen"
+
+msgid "My services"
+msgstr "Mijn diensten"
+
+msgid "Extra menu"
+msgstr "Extra menu"
+
+msgid "Pending tests"
+msgstr "In afwachting zijnde toetsen"
+
+msgid "No specific language"
+msgstr "Geen specifieke taal"
+
+msgid "Source Chamilo version"
+msgstr "Bron Chamilo-versie"
+
+msgid "Exporting..."
+msgstr "Exporteren..."
+
+msgid "Autosaved drafts available"
+msgstr "Automatisch opgeslagen concepten beschikbaar"
+
+msgid "Hide drafts"
+msgstr "Concepten verbergen"
+
+msgid "Show drafts"
+msgstr "Concepten tonen"
+
+msgid "Drafts are stored only in this browser and are removed after saving the document."
+msgstr "Concepten worden alleen in deze browser opgeslagen en worden verwijderd na het opslaan van het document."
+
+msgid "Last saved"
+msgstr "Laatst opgeslagen"
+
+msgid "Restore draft"
+msgstr "Concept herstellen"
+
+msgid "Delete draft"
+msgstr "Concept verwijderen"
+
+msgid "Information about indexing document content"
+msgstr "Informatie over het indexeren van documentinhoud"
+
+msgid "When enabled, the document text is indexed by the search engine so users can find it from platform search."
+msgstr "Indien ingeschakeld, wordt de documenttekst geïndexeerd door de zoekmachine zodat gebruikers deze kunnen vinden via de platformzoekfunctie."
+
+msgid "The editor is not available."
+msgstr "De editor is niet beschikbaar."
+
+msgid "Please place the cursor inside a paragraph first."
+msgstr "Plaats de cursor eerst in een alinea."
+
+msgid "The selected paragraph is empty."
+msgstr "De geselecteerde alinea is leeg."
+
+msgid "Loading failed."
+msgstr "Laden mislukt."
+
+msgid "Add introduction"
+msgstr "Inleiding toevoegen"
+
+msgid "Course type"
+msgstr "Cursustype"
+
+msgid "Choose whether this course uses the standard platform limits or benefits from a purchased service."
+msgstr "Kies of deze cursus de standaard platformlimieten gebruikt of profiteert van een aangekochte dienst."
+
+msgid "Standard course"
+msgstr "Standaardcursus"
+
+msgid "Use the standard platform limits."
+msgstr "Gebruik de standaard platformlimieten."
+
+msgid "Selected"
+msgstr "Geselecteerd"
+
+msgid "Hosting limit"
+msgstr "Hostinglimiet"
+
+msgid "Document quota"
+msgstr "Documentquota"
+
+msgid "The standard course limit has been reached."
+msgstr "De limiet voor de standaardcursus is bereikt."
+
+msgid "Use the benefits granted by this service."
+msgstr "Gebruik de voordelen die door deze dienst worden toegekend."
+
+msgid "Courses with these benefits"
+msgstr "Cursussen met deze voordelen"
+
+msgid "Active service"
+msgstr "Actieve dienst"
+
+msgid "Buy service"
+msgstr "Dienst kopen"
+
+msgid "Select an available course type before creating the course."
+msgstr "Selecteer een beschikbaar cursustype voordat u de cursus aanmaakt."
+
+msgid "users"
+msgstr "gebruikers"
+
+msgid "You need to buy this service before using these benefits."
+msgstr "U moet deze dienst kopen voordat u deze voordelen kunt gebruiken."
+
+msgid "You already used all courses available with this service."
+msgstr "U hebt alle cursussen die met deze dienst beschikbaar zijn al gebruikt."
+
+msgid "This option is not available."
+msgstr "Deze optie is niet beschikbaar."
+
+msgid "This field is required"
+msgstr "Dit veld is verplicht"
+
+msgid "Show less"
+msgstr "Minder tonen"
+
+msgid "Show full description"
+msgstr "Volledige beschrijving tonen"
+
+msgid "Virtual keyboard"
+msgstr "Virtueel toetsenbord"
+
+msgid "Backspace"
+msgstr "Backspace"
+
+msgid "Space"
+msgstr "Spatie"
+
+msgid "Learning path only visible to selected learners"
+msgstr "Leerpad alleen zichtbaar voor geselecteerde cursisten"
+
+msgid "Create course"
+msgstr "Cursus aanmaken"
+
+msgid "Tour"
+msgstr "Rondleiding"
+
+msgid "Are you sure you want to delete this comment?"
+msgstr "Weet u zeker dat u deze opmerking wilt verwijderen?"
+
+msgid "No posts found"
+msgstr "Geen berichten gevonden"
+
+msgid "No communities"
+msgstr "Geen communities"
+
+msgid "No friends found"
+msgstr "Geen vrienden gevonden"
+
+msgid "Visual overview of your skills"
+msgstr "Visueel overzicht van uw vaardigheden"
+
+msgid "Compare your progress"
+msgstr "Vergelijk uw vooruitgang"
+
+msgid "Please enter a search term."
+msgstr "Voer een zoekterm in."
+
+msgid "Enter captcha code"
+msgstr "Voer de captcha-code in"
+
+msgid "Refresh captcha"
+msgstr "Captcha vernieuwen"
+
+msgid "Captcha is temporarily blocked. Please try again later."
+msgstr "Captcha is tijdelijk geblokkeerd. Probeer het later opnieuw."
+
+msgid "Item Details"
+msgstr "Itemdetails"
+
+msgid "Open File"
+msgstr "Bestand openen"
+
+msgid "Selection"
+msgstr "Selectie"
+
+msgid "Remove selection context"
+msgstr "Selectiecontext verwijderen"
+
+msgid "Source document"
+msgstr "Brondocument"
+
+msgid "Use the current course context"
+msgstr "Huidige cursuscontext gebruiken"
+
+msgid "Loading documents..."
+msgstr "Documenten laden..."
+
+msgid "No compatible PDF or TXT document was found in this course."
+msgstr "Er is geen compatibel PDF- of TXT-document gevonden in deze cursus."
+
+msgid "Select a PDF or TXT document to generate terms only from that document."
+msgstr "Selecteer een PDF- of TXT-document om termen alleen uit dat document te genereren."
+
+msgid "Confidentiality warning"
+msgstr "Vertrouwelijkheidswaarschuwing"
+
+msgid "When a document is selected, the prompt is fixed so the generation uses only that document content."
+msgstr "Wanneer een document is geselecteerd, wordt de prompt vastgezet zodat de generatie alleen de inhoud van dat document gebruikt."
+
+msgid "No document-processing AI providers available."
+msgstr "Geen AI-providers voor documentverwerking beschikbaar."
+
+msgid "Failed to save signature. Please try again."
+msgstr "Handtekening opslaan mislukt. Probeer het opnieuw."
+
+msgid "Select and move"
+msgstr "Selecteren en verplaatsen"
+
+msgid "Freehand"
+msgstr "Vrije hand"
+
+msgid "Stroke"
+msgstr "Lijn"
+
+msgid "Fill"
+msgstr "Vulling"
+
+msgid "Import SVG"
+msgstr "SVG importeren"
+
+msgid "Import image"
+msgstr "Afbeelding importeren"
+
+msgid "Click the drawing area to place this text"
+msgstr "Klik op het tekengebied om deze tekst te plaatsen"
+
+msgid "Draw a new SVG, import an existing SVG or embed an image, then save it as a reusable document."
+msgstr "Teken een nieuwe SVG, importeer een bestaande SVG of voeg een afbeelding in en sla het op als herbruikbaar document."
+
+msgid "Use Select and move to reposition or resize elements added in this editor."
+msgstr "Gebruik Selecteren en verplaatsen om elementen die in deze editor zijn toegevoegd te verplaatsen of te schalen."
+
+msgid "Stroke width"
+msgstr "Lijndikte"
+
+msgid "Transparent fill"
+msgstr "Transparante vulling"
+
+msgid "Invalid id"
+msgstr "Ongeldig id"
+
+msgid "Unable to load the drawing"
+msgstr "Kan de tekening niet laden"
+
+msgid "Only PNG, JPG, WEBP or GIF images are supported."
+msgstr "Alleen PNG-, JPG-, WEBP- of GIF-afbeeldingen worden ondersteund."
+
+msgid "Unable to read the image file."
+msgstr "Kan het afbeeldingsbestand niet lezen."
+
+msgid "Only SVG files are supported."
+msgstr "Alleen SVG-bestanden worden ondersteund."
+
+msgid "The SVG file is empty or invalid."
+msgstr "Het SVG-bestand is leeg of ongeldig."
+
+msgid "Unable to read the SVG file."
+msgstr "Kan het SVG-bestand niet lezen."
+
+msgid "The drawing is empty or invalid."
+msgstr "De tekening is leeg of ongeldig."
+
+msgid "Unable to save the drawing"
+msgstr "Kan de tekening niet opslaan"
+
+msgid "Information about AI-assisted documents"
+msgstr "Informatie over AI-ondersteunde documenten"
+
+msgid "Location"
+msgstr "Locatie"
+
+msgid "Cloud link"
+msgstr "Cloudlink"
+
+msgid "Add a link to a cloud document, such as Google Drive or Google Docs."
+msgstr "Voeg een link toe aan een cloud-document, zoals Google Drive of Google Docs."
+
+msgid "Add cloud link"
+msgstr "Cloudlink toevoegen"
+
+msgid "Document title"
+msgstr "Documenttitel"
+
+msgid "Document options change how uploaded files are processed after saving."
+msgstr "Documentopties bepalen hoe geüploade bestanden na opslaan worden verwerkt."
+
+msgid "Information about uncompressing zip files"
+msgstr "Informatie over het uitpakken van zip-bestanden"
+
+msgid "When enabled, ZIP files are extracted into the current document folder after upload."
+msgstr "Indien ingeschakeld, worden ZIP-bestanden na upload uitgepakt in de huidige documentmap."
+
+msgid "The title is required."
+msgstr "De titel is verplicht."
+
+msgid "The URL is required."
+msgstr "De URL is verplicht."
+
+msgid "The destination folder is missing."
+msgstr "De doelmap ontbreekt."
+
+msgid "Unable to create cloud link."
+msgstr "Kan de cloudlink niet aanmaken."
+
+msgid "Copy to My Files"
+msgstr "Kopiëren naar Mijn bestanden"
+
+msgid "Used space"
+msgstr "Gebruikte ruimte"
+
+msgid "Available space"
+msgstr "Beschikbare ruimte"
+
+msgid "Available percentage"
+msgstr "Beschikbaar percentage"
+
+msgid "Cloud links cannot be downloaded."
+msgstr "Cloudkoppelingen kunnen niet worden gedownload."
+
+msgid "Could not copy the file to My Files"
+msgstr "Het bestand kon niet worden gekopieerd naar Mijn bestanden"
+
+msgid "File copied to My Files"
+msgstr "Bestand gekopieerd naar Mijn bestanden"
+
+msgid "Checking course creation options..."
+msgstr "Cursusaanmaakopties controleren..."
+
+msgid "You cannot create more courses right now."
+msgstr "U kunt op dit moment geen extra cursussen aanmaken."
+
+msgid "AI analyzer"
+msgstr "AI-analyzer"
+
+msgid "Expand all"
+msgstr "Alles uitvouwen"
+
+msgid "Collapse all"
+msgstr "Alles samenvouwen"
+
+msgid "Review your active service benefits, purchase history and available receipts."
+msgstr "Bekijk uw actieve servicevoordelen, aankoopgeschiedenis en beschikbare facturen."
+
+msgid "Active services"
+msgstr "Actieve services"
+
+msgid "No active services"
+msgstr "Geen actieve services"
+
+msgid "Valid until"
+msgstr "Geldig tot"
+
+msgid "Recurring payment"
+msgstr "Terugkerende betaling"
+
+msgid "Next charge"
+msgstr "Volgende afrekening"
+
+msgid "Enable auto billing"
+msgstr "Automatische facturering inschakelen"
+
+msgid "Cancel auto billing"
+msgstr "Automatische facturering annuleren"
+
+msgid "Granted benefits"
+msgstr "Toegekende voordelen"
+
+msgid "Purchase history"
+msgstr "Aankoopgeschiedenis"
+
+msgid "No purchases yet"
+msgstr "Nog geen aankopen"
+
+msgid "Product"
+msgstr "Product"
+
+msgid "Reference"
+msgstr "Referentie"
+
+msgid "Amount"
+msgstr "Bedrag"
+
+msgid "Receipt"
+msgstr "Factuur"
+
+msgid "Unable to load your services right now."
+msgstr "Uw services kunnen op dit moment niet worden geladen."
+
+msgid "Auto billing enabled"
+msgstr "Automatische facturering ingeschakeld"
+
+msgid "Auto billing suspended"
+msgstr "Automatische facturering opgeschort"
+
+msgid "Auto billing cancelled"
+msgstr "Automatische facturering geannuleerd"
+
+msgid "Auto billing disabled"
+msgstr "Automatische facturering uitgeschakeld"
+
+msgid "Cancel auto billing for this service?"
+msgstr "Automatische facturering voor deze service annuleren?"
+
+msgid "Preview class members and courses"
+msgstr "Klasleden en cursussen bekijken"
+
+msgid "Please select a CSV file to import."
+msgstr "Selecteer een CSV-bestand om te importeren."
+
+msgid "%d user-class links imported"
+msgstr "%d gebruikers-klas-koppelingen geïmporteerd"
+
+msgid "The following errors occurred during import:"
+msgstr "De volgende fouten traden op tijdens het importeren:"
+
+msgid "CSV file"
+msgstr "CSV-bestand"
+
+msgid "Remove user from all group-related entities if not in the list"
+msgstr "Gebruiker verwijderen uit alle groepsgerelateerde entiteiten als deze niet in de lijst staat"
+
+msgid "UserName"
+msgstr "Gebruikersnaam"
+
+msgid "ClassName"
+msgstr "Klasnaam"
+
+msgid "are required for each row."
+msgstr "zijn vereist voor elke rij."
+
+msgid "title"
+msgstr "titel"
+
+msgid "is required."
+msgstr "is vereist."
+
+msgid "description"
+msgstr "beschrijving"
+
+msgid "are optional."
+msgstr "zijn optioneel."
+
+msgid "Are you sure you want to remove this user from the class?"
+msgstr "Weet u zeker dat u deze gebruiker uit de klas wilt verwijderen?"
+
+msgid "Users in class"
+msgstr "Gebruikers in klas"
+
+msgid "Remove user"
+msgstr "Gebruiker verwijderen"
+
+msgid "Class not found"
+msgstr "Klas niet gevonden"
+
+msgid "Class overview"
+msgstr "Klasoverzicht"
+
+msgid "Back to classes"
+msgstr "Terug naar klassen"
+
+msgid "Search members or courses"
+msgstr "Leden of cursussen zoeken"
+
+msgid "Search by name, email, username or course title"
+msgstr "Zoeken op naam, e-mail, gebruikersnaam of cursustitel"
+
+msgid "Class members"
+msgstr "Klasleden"
+
+msgid "No email"
+msgstr "Geen e-mail"
+
+msgid "No members found"
+msgstr "Geen leden gevonden"
+
+msgid "No courses found"
+msgstr "Geen cursussen gevonden"
+
+msgid "The end date must be after the start date."
+msgstr "De einddatum moet na de startdatum liggen."
+
+msgid "Always visible"
+msgstr "Altijd zichtbaar"
+
+msgid "No end date"
+msgstr "Geen einddatum"
+
+msgid "No restriction"
+msgstr "Geen beperking"
+
+msgid "Missing learning path or course identifier"
+msgstr "Ontbrekende leerpad- of cursusidentificatie"
+
+msgid "Select a user or a group first"
+msgstr "Selecteer eerst een gebruiker of een groep"
+
+msgid "Remove all date restrictions for this learning path?"
+msgstr "Alle datumbeperkingen voor dit leerpad verwijderen?"
+
+msgid "Advanced learning path access"
+msgstr "Geavanceerde toegang tot leerpad"
+
+msgid "Remove date restrictions"
+msgstr "Datumbeperkingen verwijderen"
+
+msgid "Search by name, email, username or group"
+msgstr "Zoeken op naam, e-mail, gebruikersnaam of groep"
+
+msgid "Edit user restriction"
+msgstr "Gebruikersbeperking bewerken"
+
+msgid "Edit group restriction"
+msgstr "Groepsbeperking bewerken"
+
+msgid "Select a user or group"
+msgstr "Selecteer een gebruiker of groep"
+
+msgid "Save restriction"
+msgstr "Beperking opslaan"
+
+msgid "members"
+msgstr "leden"
+
+msgid "Create Assignment"
+msgstr "Opdracht maken"
+
+msgid "The submission deadline has passed. You can no longer submit."
+msgstr "De indieningstermijn is verstreken. U kunt niet meer indienen."
+
+msgid "Mailing cannot be combined with other recipients."
+msgstr "Mailing kan niet worden gecombineerd met andere ontvangers."
+
+msgid "Social map"
+msgstr "Sociale kaart"
+
+msgid "The map plugin is not enabled or configured."
+msgstr "De map-plug-in is niet ingeschakeld of geconfigureerd."
+
+msgid "Some configured extra fields were not found"
+msgstr "Sommige geconfigureerde extra velden zijn niet gevonden"
+
+msgid "No user locations were found."
+msgstr "Geen gebruikerslocaties gevonden."
+
+msgid "OpenStreetMap needs coordinates to display an embedded marker. Address-only locations are listed below."
+msgstr "OpenStreetMap heeft coördinaten nodig om een ingesloten marker weer te geven. Locaties met alleen een adres staan hieronder."
+
+msgid "Locations"
+msgstr "Locaties"
+
+msgid "Open map"
+msgstr "Kaart openen"
+
+msgid "Provider: OpenStreetMap"
+msgstr "Provider: OpenStreetMap"
+
+msgid "Provider: Google Maps"
+msgstr "Provider: Google Maps"
+
+msgid "Personal files"
+msgstr "Persoonlijke bestanden"
+
+msgid "Upload image"
+msgstr "Afbeelding uploaden"
+
+msgid "Upload media"
+msgstr "Media uploaden"
+
+msgid "Only image files are allowed in this upload screen."
+msgstr "Alleen afbeeldingsbestanden zijn toegestaan in dit uploads scherm."
+
+msgid "Only audio and video files are allowed in this upload screen."
+msgstr "Alleen audio- en videobestanden zijn toegestaan in dit uploads scherm."
+
+msgid "Upload files to your personal storage."
+msgstr "Bestanden uploaden naar uw persoonlijke opslag."
+
+msgid "Linked"
+msgstr "Gekoppeld"
+
+msgid "No audio or video files were found in this folder."
+msgstr "Geen audio- of videobestanden gevonden in deze map."
+
+msgid "No image files were found in this folder."
+msgstr "Geen afbeeldingsbestanden gevonden in deze map."
+
+msgid "No matching files were found in this folder."
+msgstr "Geen overeenkomende bestanden gevonden in deze map."
+
+msgid "This file type is not allowed in this upload screen."
+msgstr "Dit bestandstype is niet toegestaan in dit uploads scherm."
+
+msgid "Manage your personal files and course documents."
+msgstr "Beheer uw persoonlijke bestanden en cursusdocumenten."
+
+msgid "DateValidity"
+msgstr "DateValidity"
+
+msgid "JustificationSaved"
+msgstr "JustificationSaved"
+
+msgid "ValidityDate"
+msgstr "ValidityDate"
+
+msgid "MyJustifications"
+msgstr "Mijn rechtvaardigingen"
+
+msgid "Submission"
+msgstr "Indiening"
+
+msgid "Use the filters above to narrow the list."
+msgstr "Gebruik de filters hierboven om de lijst te verfijnen."
+
+msgid "You are not allowed to see this page."
+msgstr "U mag deze pagina niet bekijken."
+
+msgid "plugin_title"
+msgstr "plugin_title"
+
+msgid "plugin_comment"
+msgstr "plugin_comment"
+
+msgid "Course tracking details"
+msgstr "Cursusvolgdetails"
+
+msgid "Course activity statistics"
+msgstr "Cursusactiviteitsstatistieken"
+
+msgid "mobile_phone_number"
+msgstr "mobile_phone_number"
+
+msgid "Allowed template syntax"
+msgstr "Toegestane sjabloonsyntax"
+
+msgid "Functions"
+msgstr "Functies"
+
+msgid "Available variables depend on the template type, for example {{ user.getUsername() }} or {{ user.getEmail() }}."
+msgstr "Beschikbare variabelen zijn afhankelijk van het sjabloontype, bijvoorbeeld {{ user.getUsername() }} of {{ user.getEmail() }}."
+
+msgid "For security reasons, any other Twig function, filter (such as filter, map, reduce or sort) or PHP call is blocked."
+msgstr "Om veiligheidsredenen zijn alle andere Twig-functies, filters (zoals filter, map, reduce of sort) of PHP-aanroepen geblokkeerd."
+
+msgid "Global administrator"
+msgstr "Globale beheerder"
+
+msgid "Session manager"
+msgstr "Sessiemanager"
+
+msgid "Human resources manager"
+msgstr "Personeelsmanager"
+
+msgid "Course teacher"
+msgstr "Cursusdocent"
+
+msgid "Course student"
+msgstr "Cursusstudent"
+
+msgid "Platform reports"
+msgstr "Platformrapporten"
+
+msgid "Security reports"
+msgstr "Beveiligingsrapporten"
+
+msgid "Course reports"
+msgstr "Cursusrapporten"
+
+msgid "Gradebook reports"
+msgstr "Cijferlijstrapporten"
+
+msgid "Social reports"
+msgstr "Sociale rapporten"
+
+msgid "Exports"
+msgstr "Exporten"
+
+msgid "Reports about platform-wide usage, users, courses and sessions."
+msgstr "Rapporten over platformgebruik, gebruikers, cursussen en sessies."
+
+msgid "Audit and security-sensitive reports."
+msgstr "Audit- en beveiligingsgevoelige rapporten."
+
+msgid "Reports scoped to courses managed by the user."
+msgstr "Rapporten beperkt tot cursussen die door de gebruiker worden beheerd."
+
+msgid "Reports related to learner activity and follow-up."
+msgstr "Rapporten met betrekking tot leeractiviteit en opvolging."
+
+msgid "Reports related to scores, certificates and gradebook data."
+msgstr "Rapporten met betrekking tot scores, certificaten en cijferlijstgegevens."
+
+msgid "Reports and exports that generate downloadable files."
+msgstr "Rapporten en exporten die downloadbare bestanden genereren."
+
+msgid "Main platform statistics dashboard."
+msgstr "Hoofddashboard met platformstatistieken."
+
+msgid "Number of courses and course distribution report."
+msgstr "Aantal cursussen en cursusverdelingsrapport."
+
+msgid "Platform-wide access to course tools."
+msgstr "Platformbrede toegang tot cursustools."
+
+msgid "Number of resources per tool."
+msgstr "Aantal bronnen per tool."
+
+msgid "Latest access to courses."
+msgstr "Laatste toegang tot cursussen."
+
+msgid "Course distribution by language."
+msgstr "Cursusverdeling per taal."
+
+msgid "Course usage report."
+msgstr "Cursusgebruikrapport."
+
+msgid "Platform user count report."
+msgstr "Platformgebruikersaantalrapport."
+
+msgid "Recent logins chart."
+msgstr "Recente aanmeldingen grafiek."
+
+msgid "Login distribution by month."
+msgstr "Aanmeldingsverdeling per maand."
+
+msgid "Login distribution by day."
+msgstr "Aanmeldingsverdeling per dag."
+
+msgid "Login distribution by hour."
+msgstr "Aanmeldingsverdeling per uur."
+
+msgid "Users with profile picture."
+msgstr "Gebruikers met profielfoto."
+
+msgid "Login report filtered by date."
+msgstr "Aanmeldingsrapport gefilterd op datum."
+
+msgid "Users who have not logged in recently."
+msgstr "Gebruikers die recent niet zijn aangemeld."
+
+msgid "Inactive or suspicious user accounts report."
+msgstr "Inactieve of verdachte gebruikersaccounts rapport."
+
+msgid "Users activity statistics."
+msgstr "Gebruikersactiviteitsstatistieken."
+
+msgid "Currently online users report."
+msgstr "Momenteel online gebruikersrapport."
+
+msgid "New user registrations over time."
+msgstr "Nieuwe gebruikersregistraties in de loop van de tijd."
+
+msgid "Course and session subscriptions over time."
+msgstr "Cursus- en sessie-inschrijvingen in de loop van de tijd."
+
+msgid "Duplicate user detection and maintenance report."
+msgstr "Dubbele gebruikersdetectie en onderhoudsrapport."
+
+msgid "Platform user/session statistics."
+msgstr "Platformgebruiker-/sessiestatistieken."
+
+msgid "Quarterly platform report."
+msgstr "Kwartaalrapport platform."
+
+msgid "Activities audit"
+msgstr "Activiteitencontrole"
+
+msgid "Audit report for important administrative and platform activities."
+msgstr "Controleverslag voor belangrijke administratieve en platformactiviteiten."
+
+msgid "Social messages received report."
+msgstr "Ontvangen sociale berichtenrapport."
+
+msgid "Social messages sent report."
+msgstr "Verzonden sociale berichtenrapport."
+
+msgid "Social contacts count report."
+msgstr "Aantal sociale contactenrapport."
+
+msgid "Sessions created over time."
+msgstr "Sessies aangemaakt in de loop van de tijd."
+
+msgid "Learning analytics dashboard."
+msgstr "Leeranalyse-dashboard."
+
+msgid "Teacher time report."
+msgstr "Docententijdrapport."
+
+msgid "Teachers time by session report"
+msgstr "Docententijd per sessierapport"
+
+msgid "Teacher time report grouped by session."
+msgstr "Docententijdrapport gegroepeerd per sessie."
+
+msgid "Corporate learning analytics report."
+msgstr "Rapport bedrijfslerenanalyse."
+
+msgid "Course learners tracking report."
+msgstr "Cursusvolgrapport voor cursisten."
+
+msgid "Course activity statistics with connected and inactive users."
+msgstr "Cursusactiviteitsstatistieken met verbonden en inactieve gebruikers."
+
+msgid "Detailed tracking report for a learner inside a course."
+msgstr "Gedetailleerd volgverslag voor een cursist binnen een cursus."
+
+msgid "Course gradebook overview."
+msgstr "Cursuscijferboekoverzicht."
+
+msgid "Gradebook statistics"
+msgstr "Cijferboekstatistieken"
+
+msgid "Gradebook statistics report."
+msgstr "Cijferboekstatistiekenrapport."
+
+msgid "Certificate report"
+msgstr "Certificaatrapport"
+
+msgid "Certificate report for course gradebook."
+msgstr "Certificaatrapport voor cursuscijferboek."
+
+msgid "User statistics"
+msgstr "Gebruikersstatistieken"
+
+msgid "Course gradebook statistics for a user."
+msgstr "Cursuscijferboekstatistieken voor een gebruiker."
+
+msgid "Personal statistics"
+msgstr "Persoonlijke statistieken"
+
+msgid "Personal gradebook statistics."
+msgstr "Persoonlijke cijferboekstatistieken."
+
+msgid "Reports catalog"
+msgstr "Rapportencatalogus"
+
+msgid "Central catalog of available reports, roles and permission categories."
+msgstr "Centrale catalogus van beschikbare rapporten, rollen en machtigingscategorieën."
+
+msgid "Course log events"
+msgstr "Cursusloggebeurtenissen"
+
+msgid "Detailed course tracking events."
+msgstr "Gedetailleerde cursusvolggebeurtenissen."
+
+msgid "Course tool usage"
+msgstr "Cursustoolgebruik"
+
+msgid "Course tracking report grouped by tools."
+msgstr "Cursusvolgrapport gegroepeerd per tools."
+
+msgid "Course resource usage"
+msgstr "Cursusresourcegebruik"
+
+msgid "Course tracking report grouped by resources."
+msgstr "Cursusvolgrapport gegroepeerd per resources."
+
+msgid "Course group tracking"
+msgstr "Cursusgroepvolging"
+
+msgid "Tracking report for course groups."
+msgstr "Volgrapport voor cursusgroepen."
+
+msgid "Course session report"
+msgstr "Cursussessierapport"
+
+msgid "Tracking report for a course inside sessions."
+msgstr "Volgrapport voor een cursus binnen sessies."
+
+msgid "Learning path report"
+msgstr "Leerpadrapport"
+
+msgid "Learning path tracking report."
+msgstr "Leerpadvolgrapport."
+
+msgid "Learning path results by user"
+msgstr "Leerpadresultaten per gebruiker"
+
+msgid "Learning path results grouped by user."
+msgstr "Leerpadresultaten gegroepeerd per gebruiker."
+
+msgid "Exercises report"
+msgstr "Oefeningenrapport"
+
+msgid "Course exercises and exams tracking report."
+msgstr "Cursus- en examenvolgrapport."
+
+msgid "Question report"
+msgstr "Vragenrapport"
+
+msgid "Course question tracking report."
+msgstr "Cursusvragenvolgrapport."
+
+msgid "Messages report"
+msgstr "Berichtenrapport"
+
+msgid "Course messages tracking report."
+msgstr "Cursusberichtenvolgrapport."
+
+msgid "Total time tracking report for course learners."
+msgstr "Totaaltijdvolgrapport voor cursisten."
+
+msgid "Gradebook summary"
+msgstr "Cijferboeksamenvatting"
+
+msgid "Summary view of gradebook results."
+msgstr "Samenvattingweergave van cijferboekresultaten."
+
+msgid "Flat view"
+msgstr "Platte weergave"
+
+msgid "Flat gradebook results view."
+msgstr "Platte weergave van cijferboekresultaten."
+
+msgid "Evaluation log"
+msgstr "Evaluatielog"
+
+msgid "Change log for gradebook evaluations."
+msgstr "Wijzigingslog voor cijferboekevaluaties."
+
+msgid "Link log"
+msgstr "Koppelingslog"
+
+msgid "Change log for gradebook links."
+msgstr "Wijzigingslog voor cijferboekkoppelingen."
+
+msgid "Result details"
+msgstr "Resultaatdetails"
+
+msgid "Detailed view of a gradebook result."
+msgstr "Gedetailleerde weergave van een cijferboekresultaat."
+
+msgid "Personal certificates report."
+msgstr "Persoonlijk certificatenrapport."
+
+msgid "User move statistics"
+msgstr "Gebruikersverplaatsingsstatistieken"
+
+msgid "Report for user move and transfer statistics."
+msgstr "Rapport voor gebruikersverplaatsings- en overdrachtsstatistieken."
+
+msgid "User consent list"
+msgstr "Gebruikers-toestemmingslijst"
+
+msgid "Report of users and consent status."
+msgstr "Rapport van gebruikers en toestemmingsstatus."
+
+msgid "Special platform exports."
+msgstr "Speciale platformexports."
+
+msgid "Export certificates"
+msgstr "Certificaten exporteren"
+
+msgid "Export platform certificates."
+msgstr "Platformcertificaten exporteren."
+
+msgid "Export exercise results"
+msgstr "Oefenresultaten exporteren"
+
+msgid "Export exercise results from the platform."
+msgstr "Oefenresultaten van het platform exporteren."
+
+msgid "Course survey results and reporting."
+msgstr "Cursus-enquêteresultaten en rapportage."
+
+msgid "Attendance report"
+msgstr "Aanwezigheidsrapport"
+
+msgid "Course attendance tracking and reports."
+msgstr "Cursusaanwezigheidsregistratie en -rapporten."
+
+msgid "Exercises global report"
+msgstr "Globale oefeningenrapport"
+
+msgid "Global exercise results report for the course."
+msgstr "Globaal oefeningenresultatenrapport voor de cursus."
+
+msgid "Exercise report"
+msgstr "Oefeningenrapport"
+
+msgid "Detailed exercise report."
+msgstr "Gedetailleerd oefeningenrapport."
+
+msgid "Exercise history"
+msgstr "Oefengeschiedenis"
+
+msgid "Exercise attempt history."
+msgstr "Geschiedenis van oefenpogingen."
+
+msgid "Exercise results"
+msgstr "Oefenresultaten"
+
+msgid "Exercise results and corrections."
+msgstr "Oefenresultaten en correcties."
+
+msgid "Question-level exercise statistics."
+msgstr "Oefenstatistieken op vraagniveau."
+
+msgid "Exercise statistics"
+msgstr "Oefenstatistieken"
+
+msgid "Exercise statistics page."
+msgstr "Pagina met oefenstatistieken."
+
+msgid "Live exercise statistics"
+msgstr "Live oefenstatistieken"
+
+msgid "Live exercise statistics for teachers."
+msgstr "Live oefenstatistieken voor docenten."
+
+msgid "Learning path statistics"
+msgstr "Leerpadstatistieken"
+
+msgid "Learning path item statistics."
+msgstr "Statistieken van leerpaditems."
+
+msgid "Learning path report inside a course."
+msgstr "Leerpadrapport binnen een cursus."
+
+msgid "User skills report."
+msgstr "Gebruikersvaardighedenrapport."
+
+msgid "Scheduled or periodic export configuration."
+msgstr "Configuratie van geplande of periodieke export."
+
+msgid "User export"
+msgstr "Gebruikersexport"
+
+msgid "Export users from the platform."
+msgstr "Gebruikers van het platform exporteren."
+
+msgid "Not classified"
+msgstr "Niet geclassificeerd"
+
+msgid "You have acquired the skill %s"
+msgstr "Je hebt de vaardigheid %s verworven"
+
+msgid "You have acquired the skill %s."
+msgstr "Je hebt de vaardigheid %s verworven."
+
+msgid "Recover your password"
+msgstr "Wachtwoord herstellen"
+
+msgid "Disclaimer"
+msgstr "Disclaimer"
+
+msgid "This operation would exceed the limit of %d users allowed for this course."
+msgstr "Deze handeling zou de limiet van %d toegestane gebruikers voor deze cursus overschrijden."
+
+msgid "DefaultGroupCategory"
+msgstr "DefaultGroupCategory"
+
+msgid "LearningCalendar"
+msgstr "LearningCalendar"
+
+msgid "Choose how this user can authenticate on the platform."
+msgstr "Kies hoe deze gebruiker zich kan authenticeren op het platform."
+
+msgid "Authentication methods"
+msgstr "Authenticatiemethoden"
+
+msgid "Set password manually"
+msgstr "Wachtwoord handmatig instellen"
+
+msgid "Report role matrix"
+msgstr "Rapportrolmatrix"
+
+msgid "Report permission categories"
+msgstr "Rapportmachtigingcategorieën"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs enforce the documented report role matrix."
+msgstr "Dit register bevat bekende rapportpagina's, hun categorie, canonieke URL, legacy-URL en verwachte rolpubliek. Canonieke URL's handhaven de gedocumenteerde rapportrolmatrix."
+
+msgid "reports"
+msgstr "rapporten"
+
+msgid "Canonical URL"
+msgstr "Canonieke URL"
+
+msgid "Legacy URL"
+msgstr "Legacy-URL"
+
+msgid "Permission category"
+msgstr "Machtigingscategorie"
+
+msgid "This matrix documents the expected audience for each report and is enforced by the canonical report entry point."
+msgstr "Deze matrix documenteert het verwachte publiek voor elk rapport en wordt afgedwongen door het canonieke rapporttoegangspunt."
+
+msgid "These keys group reports by access scope and are used by the report registry. They can later be mapped to finer-grained platform permissions."
+msgstr "Deze sleutels groeperen rapporten per toegangsbereik en worden gebruikt door het rapportregister. Ze kunnen later worden gekoppeld aan fijnmazigere platformmachtigingen."
+
+msgid "Permission"
+msgstr "Machtiging"
+
+msgid "Clear active session"
+msgstr "Actieve sessie wissen"
+
+msgid "Are you sure you want to clear this user active session?"
+msgstr "Weet u zeker dat u de actieve sessie van deze gebruiker wilt wissen?"
+
+msgid "Preview shown without course context. Some course-specific data may be unavailable."
+msgstr "Voorvertoning getoond zonder cursuscontext. Sommige cursusspecifieke gegevens kunnen niet beschikbaar zijn."
+
+msgid "Preview is not available for this question."
+msgstr "Voorvertoning is niet beschikbaar voor deze vraag."
+
+msgid "Edition is not allowed without a course context."
+msgstr "Bewerken is niet toegestaan zonder cursuscontext."
+
+msgid "This plugin does not use regions."
+msgstr "Deze plug-in gebruikt geen regio's."
+
+msgid "No plugins with regions were found."
+msgstr "Geen plug-ins met regio's gevonden."
+
+msgid "Freemium"
+msgstr "Freemium"
+
+msgid "Commercial service"
+msgstr "Commerciële dienst"
+
+msgid "Commercial"
+msgstr "Commercieel"
+
+msgid "100% free"
+msgstr "100% gratis"
+
+msgid "Displayed above the public login form."
+msgstr "Weergegeven boven het openbare aanmeldingsformulier."
+
+msgid "Displayed below the public login form."
+msgstr "Weergegeven onder het openbare aanmeldingsformulier."
+
+msgid "Displayed before the footer area."
+msgstr "Weergegeven vóór de voettekst."
+
+msgid "Displayed in the left footer column."
+msgstr "Weergegeven in de linkervoettekstkolom."
+
+msgid "Displayed in the center footer column."
+msgstr "Weergegeven in de middenvoettekstkolom."
+
+msgid "Displayed in the right footer column."
+msgstr "Weergegeven in de rechtervoettekstkolom."
+
+msgid "Showing all plugins."
+msgstr "Alle plug-ins worden weergegeven."
+
+msgid "Some plugins are still pending functional verification."
+msgstr "Sommige plug-ins wachten nog op functionele verificatie."
+
+msgid "Show verified plugins only"
+msgstr "Alleen geverifieerde plug-ins tonen"
+
+msgid "Showing verified plugins only."
+msgstr "Alleen geverifieerde plug-ins worden weergegeven."
+
+msgid "Pending plugins are temporarily hidden until they are adapted and tested."
+msgstr "In afwachting zijnde plug-ins zijn tijdelijk verborgen totdat ze zijn aangepast en getest."
+
+msgid "Show all plugins"
+msgstr "Alle plug-ins tonen"
+
+msgid "Official and free plugins are listed separately from plugins that may depend on commercial services or paid offers."
+msgstr "Officiële en gratis plug-ins worden apart vermeld van plug-ins die afhankelijk kunnen zijn van commerciële diensten of betaalde aanbiedingen."
+
+msgid "Included free plugins"
+msgstr "Inbegrepen gratis plug-ins"
+
+msgid "Commercial and freemium plugins"
+msgstr "Commerciële en freemium-plug-ins"
+
+msgid "All plugins"
+msgstr "Alle plug-ins"
+
+msgid "No plugins were found for this category."
+msgstr "Geen plug-ins gevonden voor deze categorie."
+
+msgid "Search plugins"
+msgstr "Plug-ins zoeken"
+
+msgid "Search by name or description"
+msgstr "Zoeken op naam of beschrijving"
+
+msgid "Advanced filters"
+msgstr "Geavanceerde filters"
+
+msgid "All statuses"
+msgstr "Alle statussen"
+
+msgid "All sources"
+msgstr "Alle bronnen"
+
+msgid "All types"
+msgstr "Alle typen"
+
+msgid "Installed plugins are shown first"
+msgstr "Geïnstalleerde plug-ins worden als eerste weergegeven"
+
+msgid "No plugins match the current filters."
+msgstr "Geen plug-ins komen overeen met de huidige filters."
+
+msgid "Try clearing the search or changing the filters."
+msgstr "Probeer de zoekopdracht te wissen of de filters te wijzigen."
+
+msgid "README"
+msgstr "README"
+
+msgid "Invalid security token"
+msgstr "Ongeldig beveiligingstoken"
+
+msgid "Please select a destination session"
+msgstr "Selecteer een bestemmingssessie"
+
+msgid "Cannot move this to the same session"
+msgstr "Kan dit niet naar dezelfde sessie verplaatsen"
+
+msgid "The destination session must include the selected course"
+msgstr "De bestemmingssessie moet de geselecteerde cursus bevatten"
+
+msgid "The source session must include the selected course"
+msgstr "De bronsessie moet de geselecteerde cursus bevatten"
+
+msgid "No learners found"
+msgstr "Geen leerlingen gevonden"
+
+msgid "Will be subscribed"
+msgstr "Wordt ingeschreven"
+
+msgid "Subscribed"
+msgstr "Ingeschreven"
+
+msgid "The move process has finished"
+msgstr "Het verplaatsingsproces is voltooid"
+
+msgid "Comparison finished. No data has been moved."
+msgstr "Vergelijking voltooid. Er zijn geen gegevens verplaatst."
+
+msgid "Move tracking data from the base course or a source session to another session. Use comparison first to review the affected learner data."
+msgstr "Verplaats volggegevens van de basiscursus of een bronsessie naar een andere sessie. Gebruik eerst vergelijken om de getroffen leerlinggegevens te bekijken."
+
+msgid "Search for a course or use the manual course ID field below."
+msgstr "Zoek een cursus of gebruik het handmatige cursus-ID-veld hieronder."
+
+msgid "Fallback when the course search is not available."
+msgstr "Terugvaloptie wanneer cursuszoeken niet beschikbaar is."
+
+msgid "Load sessions"
+msgstr "Sessies laden"
+
+msgid "Selected course"
+msgstr "Geselecteerde cursus"
+
+msgid "Choose the base course or the session where the tracking data currently exists."
+msgstr "Kies de basiscursus of de sessie waar de volggegevens momenteel bestaan."
+
+msgid "Choose the session that will receive the tracking data."
+msgstr "Kies de sessie die de volggegevens zal ontvangen."
+
+msgid "Important"
+msgstr "Belangrijk"
+
+msgid "The move action updates existing tracking data. Run compare first and test this tool with a non-production course before moving real learner data."
+msgstr "De verplaatsingsactie werkt bestaande volggegevens bij. Voer eerst vergelijken uit en test dit hulpmiddel met een niet-productiecursus voordat u echte leerlinggegevens verplaatst."
+
+msgid "No sessions found for this course"
+msgstr "Geen sessies gevonden voor deze cursus"
+
+msgid "Some users were ignored because they are not subscribed to this session."
+msgstr "Sommige gebruikers zijn genegeerd omdat ze niet zijn ingeschreven voor deze sessie."
+
+msgid "Remove selected user"
+msgstr "Geselecteerde gebruiker verwijderen"
+
+msgid "Add selected user"
+msgstr "Geselecteerde gebruiker toevoegen"
+
+msgid "No users from the selected list are subscribed to this session."
+msgstr "Geen gebruikers uit de geselecteerde lijst zijn ingeschreven voor deze sessie."
+
+msgid "No image"
+msgstr "Geen afbeelding"
+
+msgid "Invalid URL."
+msgstr "Ongeldige URL."
+
+msgid "This cloud document cannot be embedded."
+msgstr "Dit cloud-document kan niet worden ingebed."
+
+msgid "Document not found"
+msgstr "Document niet gevonden"
+
+msgid "File not found"
+msgstr "Bestand niet gevonden"
+
+msgid "This learning path is not available for your user at this time."
+msgstr "Dit leerpad is op dit moment niet beschikbaar voor uw gebruiker."
+
+msgid "StartDateMustBeBeforeTheEndDate"
+msgstr "StartDateMustBeBeforeTheEndDate"
+
+msgid "Next learning path"
+msgstr "Volgend leerpad"
+
+msgid "Select the learning path that will be available after this one."
+msgstr "Selecteer het leerpad dat na dit leerpad beschikbaar zal zijn."
+
+msgid "Create another learning path in this course to enable learning path flow."
+msgstr "Maak een ander leerpad in deze cursus om de leerpadstroom in te schakelen."
+
+msgid "Available from %s"
+msgstr "Beschikbaar vanaf %s"
+
+msgid "Available until %s"
+msgstr "Beschikbaar tot %s"
+
+msgid "Statistics reset date"
+msgstr "Statistieken-resetdatum"
+
+msgid "Last 24 hours"
+msgstr "Laatste 24 uur"
+
+msgid "This reset date is used as the reference date for the report. It does not delete historical tracking data."
+msgstr "Deze resetdatum wordt gebruikt als referentiedatum voor het rapport. Hiermee worden geen historische volggegevens verwijderd."
+
+msgid "Since reset date"
+msgstr "Sinds resetdatum"
+
+msgid "Users connected in the last 24 hours"
+msgstr "Gebruikers verbonden in de laatste 24 uur"
+
+msgid "Learners with at least one course access during the last 24 hours."
+msgstr "Leerlingen met ten minste één cursus-toegang gedurende de laatste 24 uur."
+
+msgid "Users connected in the last week"
+msgstr "Gebruikers verbonden in de laatste week"
+
+msgid "Learners with at least one course access during the last 7 days."
+msgstr "Leerlingen met ten minste één cursus-toegang gedurende de laatste 7 dagen."
+
+msgid "Users connected in the last month"
+msgstr "Gebruikers verbonden in de laatste maand"
+
+msgid "Learners with at least one course access during the last 30 days."
+msgstr "Leerlingen met ten minste één cursus-toegang gedurende de laatste 30 dagen."
+
+msgid "Not recently connected users"
+msgstr "Niet recent verbonden gebruikers"
+
+msgid "Learners without course access since %s."
+msgstr "Leerlingen zonder cursus-toegang sinds %s."
+
+msgid "Recently used resources"
+msgstr "Recent gebruikte bronnen"
+
+msgid "Course tools/resources used since %s."
+msgstr "Cursustools/-bronnen gebruikt sinds %s."
+
+msgid "%s %% of learners"
+msgstr "%s %% van de cursisten"
+
+msgid "Connections"
+msgstr "Verbindingen"
+
+msgid "Total connections"
+msgstr "Totaal aantal verbindingen"
+
+msgid "Downloaded documents"
+msgstr "Gedownloade documenten"
+
+msgid "List of documents downloaded by this learner in this course."
+msgstr "Lijst van documenten die deze cursist in deze cursus heeft gedownload."
+
+msgid "Forum topics"
+msgstr "Forumonderwerpen"
+
+msgid "Forum topics opened by this learner in this course."
+msgstr "Forumonderwerpen geopend door deze cursist in deze cursus."
+
+msgid "Forum posts"
+msgstr "Forumposts"
+
+msgid "Forum posts written by this learner in this course."
+msgstr "Forumposts geschreven door deze cursist in deze cursus."
+
+msgid "Course connections"
+msgstr "Cursusverbindingen"
+
+msgid "Connection history for this learner in this course."
+msgstr "Verbindingsgeschiedenis van deze cursist in deze cursus."
+
+msgid "Resources used"
+msgstr "Gebruikte bronnen"
+
+msgid "Latest tools or resources used by this learner in this course."
+msgstr "Laatst gebruikte tools of bronnen door deze cursist in deze cursus."
+
+msgid "Logout date"
+msgstr "Uitlogdatum"
+
+msgid "Imported Aiken quiz"
+msgstr "Geïmporteerde Aiken-toets"
+
+msgid "Only supported documents will be listed here."
+msgstr "Alleen ondersteunde documenten worden hier weergegeven."
+
+msgid "Generated Aiken content"
+msgstr "Gegenereerde Aiken-inhoud"
+
+msgid "Review the generated content before importing it as a new exercise."
+msgstr "Controleer de gegenereerde inhoud voordat u deze als nieuwe oefening importeert."
+
+msgid "No documents available."
+msgstr "Geen documenten beschikbaar."
+
+msgid "yperbolic arctangent:\\t\\tarctanh(x)"
+msgstr "hyperbolische arctangens:\\t\\tarctanh(x)"
+
+msgid "Exercise"
+msgstr "Oefening"
+
+msgid "OfficialCode"
+msgstr "OfficiëleCode"
+
+msgid "FirstName"
+msgstr "Voornaam"
+
+msgid "LastName"
+msgstr "Achternaam"
+
+msgid "LoginName"
+msgstr "LoginNaam"
+
+msgid "MinMinute"
+msgstr "MinMinuut"
+
+msgid "StartDate"
+msgstr "Startdatum"
+
+msgid "EndDate"
+msgstr "Einddatum"
+
+msgid "CorrectionDate"
+msgstr "Correctiedatum"
+
+msgid "NotValidated"
+msgstr "NietGevalideerd"
+
+msgid "PendingAttempts"
+msgstr "InBehandelingPogingen"
+
+msgid "List of pending test attempts across your courses."
+msgstr "Lijst van lopende testpogingen in uw cursussen."
+
+msgid "User ID"
+msgstr "Gebruikers-ID"
+
+msgid "QuestionType"
+msgstr "VraagType"
+
+msgid "QuestionsWithNoAutomaticCorrection"
+msgstr "VragenZonderAutomatischeCorrectie"
+
+msgid "There are no pending tests."
+msgstr "Er zijn geen lopende toetsen."
+
+msgid "%s results"
+msgstr "%s resultaten"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Removed"
+msgstr "Verwijderd"
+
+msgid "NoUsersInTheList"
+msgstr "GeenGebruikersInDeLijst"
+
+msgid "Are you sure?"
+msgstr "Weet u het zeker?"
+
+msgid "NoResultsAvailable"
+msgstr "GeenResultatenBeschikbaar"
+
+msgid "Import groups from a CSV file and optionally remove items that are not present in the file."
+msgstr "Importeer groepen uit een CSV-bestand en verwijder optioneel items die niet in het bestand voorkomen."
+
+msgid "Use this option carefully because items missing from the CSV can be removed during the import process."
+msgstr "Gebruik deze optie voorzichtig, omdat items die ontbreken in het CSV-bestand tijdens het importproces kunnen worden verwijderd."
+
+msgid "Upload a CSV file with the group data you want to import."
+msgstr "Upload een CSV-bestand met de groepsgegevens die u wilt importeren."
+
+msgid "You can download the example file to use the expected format."
+msgstr "U kunt het voorbeeldbestand downloaden om de verwachte indeling te gebruiken."
+
+msgid "If you enable deletion, items not present in the file may be removed."
+msgstr "Als u verwijdering inschakelt, kunnen items die niet in het bestand voorkomen, worden verwijderd."
+
+msgid "The CSV file is mandatory to start the import."
+msgstr "Het CSV-bestand is verplicht om de import te starten."
+
+msgid "Please select at least one class."
+msgstr "Selecteer ten minste één klas."
+
+msgid "Define the properties for each group before creating them."
+msgstr "Definieer de eigenschappen voor elke groep voordat u ze aanmaakt."
+
+msgid "Apply the first row values"
+msgstr "Pas de waarden van de eerste rij toe"
+
+msgid "Create groups manually or generate them from the classes subscribed to this course."
+msgstr "Maak groepen handmatig aan of genereer ze op basis van de klassen die voor deze cursus zijn ingeschreven."
+
+msgid "Create manual groups"
+msgstr "Handmatige groepen aanmaken"
+
+msgid "Use this form when you want to create empty course groups manually."
+msgstr "Gebruik dit formulier wanneer u lege cursusgroepen handmatig wilt aanmaken."
+
+msgid "Configure manual groups"
+msgstr "Handmatige groepen configureren"
+
+msgid "Create groups from subscribed classes"
+msgstr "Groepen aanmaken op basis van ingeschreven klassen"
+
+msgid "Use this form when you want to create one course group for each selected class."
+msgstr "Gebruik dit formulier wanneer u één cursusgroep per geselecteerde klas wilt aanmaken."
+
+msgid "Keep created groups linked to their source classes"
+msgstr "Gemaakte groepen aan hun bronklassen koppelen"
+
+msgid "Create groups from selected classes"
+msgstr "Groepen aanmaken op basis van geselecteerde klassen"
+
+msgid "You must be logged in to access this page."
+msgstr "U moet ingelogd zijn om deze pagina te openen."
+
+msgid "Invalid user"
+msgstr "Ongeldige gebruiker"
+
+msgid "UseCourseCustomCertificate"
+msgstr "UseCourseCustomCertificate"
+
+msgid "UseDefaultCustomCertificate"
+msgstr "UseDefaultCustomCertificate"
+
+msgid "CertificateSetting"
+msgstr "CertificateSetting"
+
+msgid "SelectOneOptionBeforeOpeningEditor"
+msgstr "SelectOneOptionBeforeOpeningEditor"
+
+msgid "ChooseCustomCertificateModeHelp"
+msgstr "ChooseCustomCertificateModeHelp"
+
+msgid "CertificateMode"
+msgstr "CertificateMode"
+
+msgid "Enable student to validate own attendance"
+msgstr "Student toestaan om eigen aanwezigheid te valideren"
+
+msgid "Course block"
+msgstr "Cursusblok"
+
+msgid "Add custom content blocks to course footer regions."
+msgstr "Voeg aangepaste inhoudsblokken toe aan de voettekstgebieden van de cursus."
+
+msgid "course_block_pre_footer"
+msgstr "course_block_pre_footer"
+
+msgid "Before footer"
+msgstr "Voor de voettekst"
+
+msgid "course_block_footer_left"
+msgstr "course_block_footer_left"
+
+msgid "Footer left"
+msgstr "Voettekst links"
+
+msgid "course_block_footer_center"
+msgstr "course_block_footer_center"
+
+msgid "Footer center"
+msgstr "Voettekst midden"
+
+msgid "course_block_footer_right"
+msgstr "course_block_footer_right"
+
+msgid "Footer right"
+msgstr "Voettekst rechts"
+
+msgid "SetNotification"
+msgstr "SetNotification"
+
+msgid "CourseLegal"
+msgstr "CourseLegal"
+
+msgid "Certificates search is not available"
+msgstr "Certificaatzoekopdracht is niet beschikbaar"
+
+msgid "It allows the acquisition of skills by subcategories"
+msgstr "Het maakt het verwerven van vaardigheden per subcategorie mogelijk"
+
+msgid "Allow skills by subcategories"
+msgstr "Vaardigheden per subcategorie toestaan"
+
+msgid "Minimum score for skills"
+msgstr "Minimumscore voor vaardigheden"
+
+msgid "The gradebook table is hidden."
+msgstr "De cijferlijst is verborgen."
+
+msgid "Invalid token"
+msgstr "Ongeldig token"
+
+msgid "Unable to save the item"
+msgstr "Kan het item niet opslaan"
+
+msgid "Only HTTP and HTTPS URLs are allowed."
+msgstr "Alleen HTTP- en HTTPS-URL's zijn toegestaan."
+
+msgid "Invalid URL host."
+msgstr "Ongeldige URL-host."
+
+msgid "This cloud provider is not allowed."
+msgstr "Deze cloudprovider is niet toegestaan."
+
+msgid "Documents used"
+msgstr "Gebruikte documenten"
+
+msgid "No document usage"
+msgstr "Geen documentgebruik"
+
+msgid "Invalid action."
+msgstr "Ongeldige actie."
+
+msgid "No users selected."
+msgstr "Geen gebruikers geselecteerd."
+
+msgid "%s user(s) processed."
+msgstr "%s gebruiker(s) verwerkt."
+
+msgid "Invalid CSRF token."
+msgstr "Ongeldig CSRF-token."
+
+msgid "[%s] Please change your password"
+msgstr "[%s] Wijzig uw wachtwoord"
+
+msgid "Dear %s,\n\nOur security enforcing process shows you use a password that is commonly used on the internet, which means your account could easily be stolen. It is probably a simple sequence or a very common word, we don't really know (we cannot see your password), but we ask you to please connect to the platform and request a password change. You can follow the link here: %s to do that now.\n\nPlease note we will never ask for your password in this process. You just enter your username or e-mail and we send you a link. If you are asked to introduce your existing password to do that, someone is probably trying to do Phishing on your account. Be safe, change your password now!\n\n%s\n%s"
+msgstr "Beste %s,\n\nOns beveiligingsproces toont aan dat u een wachtwoord gebruikt dat vaak op het internet voorkomt, waardoor uw account gemakkelijk gestolen kan worden. Het is waarschijnlijk een eenvoudige reeks of een veelgebruikt woord, we weten het niet zeker (we kunnen uw wachtwoord niet zien), maar we vragen u om alstublieft in te loggen op het platform en een wachtwoordwijziging aan te vragen. U kunt hiervoor nu de volgende link volgen: %s.\n\nLet op: we zullen u nooit om uw wachtwoord vragen in dit proces. U voert alleen uw gebruikersnaam of e-mailadres in en wij sturen u een link. Als u gevraagd wordt uw bestaande wachtwoord in te voeren, probeert iemand mogelijk phishing op uw account. Wees veilig, wijzig nu uw wachtwoord!\n\n%s\n%s"
+
+msgid "[%s] Your password has been reset"
+msgstr "[%s] Uw wachtwoord is opnieuw ingesteld"
+
+msgid "Dear %s,\n\nOur security enforcing process flagged you as using a password that is commonly used on the internet, which means your account could easily be stolen. As a prevention measure, we have decided to initiate a password reset process. Your new, automatically generated password is now:\n\n%s\n\nPlease login to the platform soon (using this new password) to set your own, personal and secure, password.\n\nBe safe.\n\n%s\n%s"
+msgstr "Beste %s,\n\nOns beveiligingsproces heeft vastgesteld dat u een wachtwoord gebruikt dat vaak op het internet voorkomt, waardoor uw account gemakkelijk gestolen kan worden. Als preventieve maatregel hebben we besloten een wachtwoordresetproces te starten. Uw nieuwe, automatisch gegenereerde wachtwoord is nu:\n\n%s\n\nLog snel in op het platform (met dit nieuwe wachtwoord) om uw eigen, persoonlijke en veilige wachtwoord in te stellen.\n\nBlijf veilig.\n\n%s\n%s"
+
+msgid "Signature saved successfully"
+msgstr "Handtekening succesvol opgeslagen"
+
+msgid "Invalid request payload."
+msgstr "Ongeldige aanvraaggegevens."
+
+msgid "Authentication required."
+msgstr "Authenticatie vereist."
+
+msgid "The course title is required."
+msgstr "De cursustitel is verplicht."
+
+msgid "Only trainers and administrators can create courses."
+msgstr "Alleen docenten en beheerders kunnen cursussen aanmaken."
+
+msgid "Course creation by trainers is disabled on this platform."
+msgstr "Het aanmaken van cursussen door docenten is uitgeschakeld op dit platform."
+
+msgid "The selected BuyCourses service cannot be used to create this course."
+msgstr "De geselecteerde BuyCourses-service kan niet worden gebruikt om deze cursus aan te maken."
+
+msgid "You have reached the maximum number of courses allowed (%d)."
+msgstr "U heeft het maximum aantal toegestane cursussen bereikt (%d)."
+
+msgid "The selected BuyCourses service is invalid."
+msgstr "De geselecteerde BuyCourses-service is ongeldig."
+
+msgid "BuyCourses is not available right now."
+msgstr "BuyCourses is momenteel niet beschikbaar."
+
+msgid "BuyCourses cannot validate the selected service right now."
+msgstr "BuyCourses kan de geselecteerde service momenteel niet valideren."
+
+msgid "Unable to validate the selected BuyCourses service right now."
+msgstr "De geselecteerde BuyCourses-service kan momenteel niet worden gevalideerd."
+
+msgid "External tool removed from course"
+msgstr "Externe tool verwijderd uit de cursus"
+
+msgid "External tool was removed from the course, but kept internally because it is linked to the gradebook"
+msgstr "De externe tool is uit de cursus verwijderd, maar intern behouden omdat deze aan het cijferboek is gekoppeld"
+
+msgid "There are no external tools available to add to the gradebook"
+msgstr "Er zijn geen externe tools beschikbaar om toe te voegen aan het cijferboek"
+
+msgid "The evaluation could not be created"
+msgstr "De evaluatie kon niet worden aangemaakt"
+
+msgid "The gradebook evaluation could not be linked"
+msgstr "De cijferboekevaluatie kon niet worden gekoppeld"
+
+msgid "Survey questions"
+msgstr "Survey questions"
+
+msgid "Back to survey list"
+msgstr "Back to survey list"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "This survey already has answers. Question editing is disabled by configuration."
+
+msgid "Choose the type of question you want to add."
+msgstr "Choose the type of question you want to add."
+
+msgid "The free text option is added automatically."
+msgstr "The free text option is added automatically."
+
+msgid "No questions found"
+msgstr "No questions found"
+
+msgid "Mandatory"
+msgstr "Mandatory"
+
+msgid "Unsupported question type"
+msgstr "Unsupported question type"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "You can use the tags {%s} and {%s} in the question."
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "Deze vraag wordt voorwaardelijk getoond tijdens het invullen van de enquête."
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "De procentuele opties van 1 tot 100 worden automatisch gegenereerd."
+
+msgid "Could not load survey questions"
+msgstr "Kan enquêtevragen niet laden"
+
+msgid "The question text is required."
+msgstr "De vraagtekst is verplicht."
+
+msgid "The maximum score is required."
+msgstr "De maximumscore is verplicht."
+
+msgid "Please select a parent option."
+msgstr "Selecteer een bovenliggende optie."
+
+msgid "Please fill all answer options."
+msgstr "Vul alle antwoordopties in."
+
+msgid "QuestionUpdated"
+msgstr "QuestionUpdated"
+
+msgid "Could not save survey question"
+msgstr "Kan enquêtevraag niet opslaan"
+
+msgid "Could not delete survey question"
+msgstr "Kan enquêtevraag niet verwijderen"
+
+msgid "Could not move survey question"
+msgstr "Kan enquêtevraag niet verplaatsen"
+
+msgid "Could not copy survey question"
+msgstr "Kan enquêtevraag niet kopiëren"
+
+msgid "Hide search"
+msgstr "Zoekopdracht verbergen"
+
+msgid "Showing results for: %s"
+msgstr "Resultaten weergeven voor: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "Zoeken op enquêtetitel, code of beschrijving."
+
+msgid "Search surveys"
+msgstr "Enquêtes zoeken"
+
+msgid "%s surveys selected"
+msgstr "%s enquêtes geselecteerd"
+
+msgid "Clear selection"
+msgstr "Selectie wissen"
+
+msgid "No surveys found"
+msgstr "Geen enquêtes gevonden"
+
+msgid "Unsupported"
+msgstr "Niet ondersteund"
+
+msgid "Could not load surveys"
+msgstr "Kan enquêtes niet laden"
+
+msgid "Delete selected surveys"
+msgstr "Geselecteerde enquêtes verwijderen"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "De geselecteerde enquêtes en hun vragen worden verwijderd. Deze actie kan niet ongedaan worden gemaakt."
+
+msgid "Could not delete selected surveys"
+msgstr "Kan geselecteerde enquêtes niet verwijderen"
+
+msgid "Survey action"
+msgstr "Enquête-actie"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "Er wordt een kopie van deze enquête gemaakt: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "Alle antwoorden en uitnodigingen voor deze enquête worden verwijderd: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "Gegenereerde vermenigvuldigde vragen worden uit deze enquête verwijderd: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "Deze enquête wordt gepubliceerd voor de gekoppelde groepsbegeleiders: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "Deze enquête en de bijbehorende vragen worden verwijderd: %s"
+
+msgid "Could not complete survey action"
+msgstr "Kan enquête-actie niet voltooien"
+
+msgid "Not started"
+msgstr "Niet gestart"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "Bij vergaderpeilingen kunnen uitgenodigde gebruikers de data selecteren waarop ze beschikbaar zijn."
+
+msgid "Back to surveys"
+msgstr "Terug naar enquêtes"
+
+msgid "Edit meeting poll"
+msgstr "Vergaderpeiling bewerken"
+
+msgid "View meeting poll"
+msgstr "Vergaderpeiling bekijken"
+
+msgid "Basic information"
+msgstr "Basisinformatie"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "Hiermee wordt een enquête van het type vergaderpeiling gemaakt. Antwoorden en uitnodigingen worden apart afgehandeld."
+
+msgid "Availability"
+msgstr "Beschikbaarheid"
+
+msgid "Meeting dates"
+msgstr "Vergaderdata"
+
+msgid "Meeting poll"
+msgstr "Vergaderpeiling"
+
+msgid "My availability"
+msgstr "Mijn beschikbaarheid"
+
+msgid "Meeting poll results"
+msgstr "Resultaten vergaderpeiling"
+
+msgid "No invitations found"
+msgstr "Geen uitnodigingen gevonden"
+
+msgid "available"
+msgstr "beschikbaar"
+
+msgid "Could not load meeting poll"
+msgstr "Kan vergaderpeiling niet laden"
+
+msgid "Please complete the required fields"
+msgstr "Vul de verplichte velden in"
+
+msgid "Could not save meeting poll"
+msgstr "Kan vergaderpeiling niet opslaan"
+
+msgid "Could not save meeting availability"
+msgstr "Kan vergaderbeschikbaarheid niet opslaan"
+
+msgid "Copy this survey to another course or session"
+msgstr "Deze enquête naar een andere cursus of sessie kopiëren"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "De enquête wordt gekopieerd zonder antwoorden of uitnodigingen."
+
+msgid "No target courses found"
+msgstr "Geen doelcursussen gevonden"
+
+msgid "Search by course title, course code or session name."
+msgstr "Zoek op cursustitel, cursuscode of sessienaam."
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "Gebruik Enquête dupliceren als u een kopie in dezelfde cursus wilt."
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "Vragen en opties worden gekopieerd. Antwoorden, uitnodigingen en rapporten blijven alleen in de oorspronkelijke enquête."
+
+msgid "Selected target"
+msgstr "Geselecteerd doel"
+
+msgid "Could not load copy form"
+msgstr "Kan kopieerformulier niet laden"
+
+msgid "The survey will be copied to: %s"
+msgstr "De enquête wordt gekopieerd naar: %s"
+
+msgid "Survey copied."
+msgstr "Enquête gekopieerd."
+
+msgid "Could not copy survey"
+msgstr "Kan enquête niet kopiëren"
+
+msgid "Answer survey"
+msgstr "Enquête beantwoorden"
+
+msgid "Preview mode does not save answers."
+msgstr "Voorvertoningsmodus slaat geen antwoorden op."
+
+msgid "Survey completed"
+msgstr "Enquête voltooid"
+
+msgid "Thank you for answering the survey."
+msgstr "Bedankt voor het beantwoorden van de enquête."
+
+msgid "Profile information"
+msgstr "Profielinformatie"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "Controleer de gevraagde profielvelden voordat u de enquête beantwoordt."
+
+msgid "This profile field is read-only."
+msgstr "Dit profielveld is alleen-lezen."
+
+msgid "You already filled this survey."
+msgstr "U heeft deze enquête al ingevuld."
+
+msgid "Please specify"
+msgstr "Geef een specificatie"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "Dit vraagtype wordt niet ondersteund in de moderne enquêteweergave."
+
+msgid "Preview only"
+msgstr "Alleen voorvertoning"
+
+msgid "Submit answers"
+msgstr "Antwoorden indienen"
+
+msgid "Could not load survey"
+msgstr "Kan enquête niet laden"
+
+msgid "Please complete the required profile fields."
+msgstr "Vul de vereiste profielvelden in."
+
+msgid "Please answer all mandatory questions."
+msgstr "Beantwoord alle verplichte vragen."
+
+msgid "Could not save survey answers"
+msgstr "Kan enquêteantwoorden niet opslaan"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "Configureer de hoofdgegevens van de enquête voordat u vragen en uitnodigingen beheert."
+
+msgid "The survey code cannot be changed after creation."
+msgstr "De enquêtecode kan na aanmaak niet meer worden gewijzigd."
+
+msgid "Survey behavior"
+msgstr "Enquêtegedrag"
+
+msgid "Use 0 for no time limit."
+msgstr "Gebruik 0 voor geen tijdslimiet."
+
+msgid "Survey messages"
+msgstr "Enquêteberichten"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "Profielvelden die hier zijn geselecteerd, worden getoond vóór de enquêtevragen."
+
+msgid "No profile fields are currently available."
+msgstr "Er zijn momenteel geen profielvelden beschikbaar."
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "Profielveldselectie is alleen beschikbaar voor niet-anonieme enquêtes."
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "De koppeling met vaardigheden wordt gemigreerd in een aparte batch."
+
+msgid "Could not load survey configuration"
+msgstr "Kan enquêteconfiguratie niet laden"
+
+msgid "The survey code is required."
+msgstr "De enquêtecode is verplicht."
+
+msgid "The survey title is required."
+msgstr "De enquêtetitel is verplicht."
+
+msgid "The survey has been saved successfully"
+msgstr "De enquête is succesvol opgeslagen"
+
+msgid "Could not save survey configuration"
+msgstr "Kan enquêteconfiguratie niet opslaan"
+
+msgid "Course users"
+msgstr "Cursusgebruikers"
+
+msgid "Already invited"
+msgstr "Al uitgenodigd"
+
+msgid "No users found"
+msgstr "Geen gebruikers gevonden"
+
+msgid "No groups found"
+msgstr "Geen groepen gevonden"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "Gebruik **link** waar de enquêtekoppeling moet verschijnen."
+
+msgid "Remind all selected users"
+msgstr "Herinner alle geselecteerde gebruikers"
+
+msgid "Anonymous access link"
+msgstr "Anonieme toegangslink"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "Gebruikers die niet zijn uitgenodigd, kunnen deze link gebruiken om de enquête in te vullen."
+
+msgid "Answered anonymously"
+msgstr "Anoniem beantwoord"
+
+msgid "Could not load survey invitations"
+msgstr "Kan enquête-uitnodigingen niet laden"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "Onderwerp en bericht zijn verplicht bij het versturen van e-mail."
+
+msgid "Could not publish survey"
+msgstr "Kon de enquête niet publiceren"
+
+msgid "Could not copy the link"
+msgstr "Kon de link niet kopiëren"
+
+msgid "Please answer this survey using the following link"
+msgstr "Beantwoord deze enquête via de volgende link"
+
+msgid "Export CSV"
+msgstr "Exporteer CSV"
+
+msgid "Export compact CSV"
+msgstr "Exporteer compacte CSV"
+
+msgid "Export Excel"
+msgstr "Exporteer Excel"
+
+msgid "Export package"
+msgstr "Exporteer pakket"
+
+msgid "Results summary"
+msgstr "Resultatenoverzicht"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "Deze weergave toont de gemigreerde rapportagegegevens voor deze enquête."
+
+msgid "Select user"
+msgstr "Selecteer gebruiker"
+
+msgid "No answers found"
+msgstr "Geen antwoorden gevonden"
+
+msgid "answers"
+msgstr "antwoorden"
+
+msgid "Could not load survey reporting"
+msgstr "Kon de enquêterapportage niet laden"
+
+msgid "Back to threads"
+msgstr "Terug naar discussies"
+
+msgid "Back to learning path"
+msgstr "Terug naar leerpad"
+
+msgid "Remove sticky"
+msgstr "Sticky verwijderen"
+
+msgid "Make sticky"
+msgstr "Sticky maken"
+
+msgid "Open thread"
+msgstr "Discussie openen"
+
+msgid "Close thread"
+msgstr "Discussie sluiten"
+
+msgid "Delete thread"
+msgstr "Discussie verwijderen"
+
+msgid "This thread is hidden from learners."
+msgstr "Deze discussie is verborgen voor cursisten."
+
+msgid "Revision requested"
+msgstr "Revisie aangevraagd"
+
+msgid "Revision"
+msgstr "Revisie"
+
+msgid "Approve post"
+msgstr "Bericht goedkeuren"
+
+msgid "Reject post"
+msgstr "Bericht afwijzen"
+
+msgid "Cancel revision request"
+msgstr "Revisieaanvraag annuleren"
+
+msgid "Delete post"
+msgstr "Bericht verwijderen"
+
+msgid "Message is required"
+msgstr "Bericht is verplicht"
+
+msgid "Target thread is required"
+msgstr "Doeldiscussie is verplicht"
+
+msgid "Could not retrieve posts"
+msgstr "Kon berichten niet ophalen"
+
+msgid "Thread shown"
+msgstr "Discussie getoond"
+
+msgid "Thread hidden"
+msgstr "Discussie verborgen"
+
+msgid "Could not update thread"
+msgstr "Kon discussie niet bijwerken"
+
+msgid "Thread closed"
+msgstr "Discussie gesloten"
+
+msgid "Thread opened"
+msgstr "Discussie geopend"
+
+msgid "Thread marked as sticky"
+msgstr "Discussie gemarkeerd als sticky"
+
+msgid "Thread unmarked as sticky"
+msgstr "Sticky-markering van discussie verwijderd"
+
+msgid "Thread notifications enabled"
+msgstr "Meldingen voor discussie ingeschakeld"
+
+msgid "Thread notifications disabled"
+msgstr "Meldingen voor discussie uitgeschakeld"
+
+msgid "Could not update thread notification"
+msgstr "Kon meldingsinstelling van discussie niet bijwerken"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "Weet u zeker dat u deze discussie wilt verwijderen?"
+
+msgid "Could not delete thread"
+msgstr "Kon discussie niet verwijderen"
+
+msgid "Post approved"
+msgstr "Bericht goedgekeurd"
+
+msgid "Could not approve post"
+msgstr "Kon bericht niet goedkeuren"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "Weet u zeker dat u dit bericht wilt afwijzen?"
+
+msgid "Post rejected"
+msgstr "Bericht afgewezen"
+
+msgid "Could not reject post"
+msgstr "Kon bericht niet afwijzen"
+
+msgid "Post shown"
+msgstr "Bericht getoond"
+
+msgid "Post hidden"
+msgstr "Bericht verborgen"
+
+msgid "Could not update post"
+msgstr "Kon het bericht niet bijwerken"
+
+msgid "Post updated"
+msgstr "Bericht bijgewerkt"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "Weet u zeker dat u dit bericht wilt verwijderen?"
+
+msgid "Post deleted"
+msgstr "Bericht verwijderd"
+
+msgid "Could not delete post"
+msgstr "Kon het bericht niet verwijderen"
+
+msgid "Untitled thread"
+msgstr "Naamloos gesprek"
+
+msgid "Could not retrieve threads"
+msgstr "Kon de gesprekken niet ophalen"
+
+msgid "Post moved"
+msgstr "Bericht verplaatst"
+
+msgid "Could not move post"
+msgstr "Kon het bericht niet verplaatsen"
+
+msgid "Revision request removed"
+msgstr "Revisieverzoek verwijderd"
+
+msgid "Could not update revision request"
+msgstr "Kon het revisieverzoek niet bijwerken"
+
+msgid "Are you sure you want to report this post?"
+msgstr "Weet u zeker dat u dit bericht wilt rapporteren?"
+
+msgid "Could not report post"
+msgstr "Kon het bericht niet rapporteren"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "Weet u zeker dat u deze bijlage wilt verwijderen?"
+
+msgid "Attachment deleted"
+msgstr "Bijlage verwijderd"
+
+msgid "Could not delete attachment"
+msgstr "Kon de bijlage niet verwijderen"
+
+msgid "Thread title"
+msgstr "Titel van het gesprek"
+
+msgid "Sticky thread"
+msgstr "Vastgezet gesprek"
+
+msgid "Attach files"
+msgstr "Bestanden bijvoegen"
+
+msgid "Attachments are disabled for this forum"
+msgstr "Bijlagen zijn uitgeschakeld voor dit forum"
+
+msgid "The forum is not open yet."
+msgstr "Het forum is nog niet geopend."
+
+msgid "The forum is closed."
+msgstr "Het forum is gesloten."
+
+msgid "The forum is locked."
+msgstr "Het forum is vergrendeld."
+
+msgid "New threads are not allowed in this forum."
+msgstr "Nieuwe gesprekken zijn niet toegestaan in dit forum."
+
+msgid "Thread created"
+msgstr "Gesprek aangemaakt"
+
+msgid "Could not create thread"
+msgstr "Kon het gesprek niet aanmaken"
+
+msgid "Back to posts"
+msgstr "Terug naar berichten"
+
+msgid "This reply will be stored as a revision."
+msgstr "Dit antwoord wordt opgeslagen als een revisie."
+
+msgid "Post reply"
+msgstr "Antwoord plaatsen"
+
+msgid "The thread is locked."
+msgstr "Het gesprek is vergrendeld."
+
+msgid "Reply added"
+msgstr "Antwoord toegevoegd"
+
+msgid "Could not add reply"
+msgstr "Kon het antwoord niet toevoegen"
+
+msgid "Add forum"
+msgstr "Forum toevoegen"
+
+msgid "No forums found"
+msgstr "Geen forums gevonden"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "Maak uw eerste forumcategorie of forum aan om discussies te starten."
+
+msgid "Locked"
+msgstr "Vergrendeld"
+
+msgid "No forums in this category"
+msgstr "Geen forums in deze categorie"
+
+msgid "Posts require approval"
+msgstr "Berichten vereisen goedkeuring"
+
+msgid "Forum for current group"
+msgstr "Forum voor huidige groep"
+
+msgid "Group forum visibility"
+msgstr "Zichtbaarheid groepsforum"
+
+msgid "No category"
+msgstr "Geen categorie"
+
+msgid "Could not retrieve forums"
+msgstr "Kon de forums niet ophalen"
+
+msgid "Forum category updated"
+msgstr "Forumcategorie bijgewerkt"
+
+msgid "Forum category created"
+msgstr "Forumcategorie aangemaakt"
+
+msgid "Could not save forum category"
+msgstr "Kon de forumcategorie niet opslaan"
+
+msgid "Forum updated"
+msgstr "Forum bijgewerkt"
+
+msgid "Forum created"
+msgstr "Forum aangemaakt"
+
+msgid "Could not save forum"
+msgstr "Kon het forum niet opslaan"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "Weet u zeker dat u deze forumcategorie wilt verwijderen?"
+
+msgid "Could not delete forum category"
+msgstr "Kon de forumcategorie niet verwijderen"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "Weet u zeker dat u dit forum wilt verwijderen?"
+
+msgid "Could not delete forum"
+msgstr "Kon forum niet verwijderen"
+
+msgid "Forum category unlocked"
+msgstr "Forumcategorie ontgrendeld"
+
+msgid "Forum category locked"
+msgstr "Forumcategorie vergrendeld"
+
+msgid "Could not update forum category"
+msgstr "Kon forumcategorie niet bijwerken"
+
+msgid "Forum category shown"
+msgstr "Forumcategorie getoond"
+
+msgid "Forum category hidden"
+msgstr "Forumcategorie verborgen"
+
+msgid "Forum unlocked"
+msgstr "Forum ontgrendeld"
+
+msgid "Forum locked"
+msgstr "Forum vergrendeld"
+
+msgid "Could not update forum"
+msgstr "Kon forum niet bijwerken"
+
+msgid "Forum shown"
+msgstr "Forum getoond"
+
+msgid "Forum hidden"
+msgstr "Forum verborgen"
+
+msgid "Forum notifications enabled"
+msgstr "Forummeldingen ingeschakeld"
+
+msgid "Forum notifications disabled"
+msgstr "Forummeldingen uitgeschakeld"
+
+msgid "Could not update forum notification"
+msgstr "Kon forummelding niet bijwerken"
+
+msgid "Forum category moved"
+msgstr "Forumcategorie verplaatst"
+
+msgid "Could not move forum category"
+msgstr "Kon forumcategorie niet verplaatsen"
+
+msgid "Forum moved"
+msgstr "Forum verplaatst"
+
+msgid "Could not move forum"
+msgstr "Kon forum niet verplaatsen"
+
+msgid "Back to forums"
+msgstr "Terug naar forums"
+
+msgid "New thread"
+msgstr "Nieuw onderwerp"
+
+msgid "No threads found"
+msgstr "Geen onderwerpen gevonden"
+
+msgid "Sticky"
+msgstr "Vastgezet"
+
+msgid "Graded"
+msgstr "Beoordeeld"
+
+msgid "Grade peers"
+msgstr "Beoordeel medestudenten"
+
+msgid "Move thread"
+msgstr "Onderwerp verplaatsen"
+
+msgid "Target forum"
+msgstr "Doelforum"
+
+msgid "Target forum is required"
+msgstr "Doelforum is verplicht"
+
+msgid "Students"
+msgstr "Studenten"
+
+msgid "No students found"
+msgstr "Geen studenten gevonden"
+
+msgid "No peers available to grade."
+msgstr "Geen medestudenten beschikbaar om te beoordelen."
+
+msgid "Qualified"
+msgstr "Gekwalificeerd"
+
+msgid "Not qualified"
+msgstr "Niet gekwalificeerd"
+
+msgid "Could not retrieve thread grading"
+msgstr "Kon threadbeoordeling niet ophalen"
+
+msgid "Thread grading updated"
+msgstr "Threadbeoordeling bijgewerkt"
+
+msgid "Could not update thread grading"
+msgstr "Kon threadbeoordeling niet bijwerken"
+
+msgid "Thread score saved"
+msgstr "Threadscore opgeslagen"
+
+msgid "Could not save thread score"
+msgstr "Kon threadscore niet opslaan"
+
+msgid "Could not move thread"
+msgstr "Kon onderwerp niet verplaatsen"
+
+msgid "Thread updated"
+msgstr "Onderwerp bijgewerkt"
+
+msgid "Search term is too short"
+msgstr "Zoekterm is te kort"
+
+msgid "Could not search forums"
+msgstr "Kon forums niet doorzoeken"
+
+msgid "Moderated"
+msgstr "Gemodereerd"
+
+msgid "View threads"
+msgstr "Onderwerpen bekijken"
 

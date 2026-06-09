@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "감사합니다"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "수식 샘플: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "수식 예시: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "변수 범위"
@@ -2020,7 +2020,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:저작권,, no:저작권 없음"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:폴더,, application/msword:MsWord,, application/octet-stream:옥텟 스트림,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:폴더,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:연습,,      simulation:시뮬레이션,,      questionnaire:설문조사,,      diagram:다이어그램,,      figure:그림,,      graph:그래프,,      index:색인,,      slide:슬라이드,,      table:표,,      narrative text:서술 텍스트,,      exam:시험,,      experiment:실험,,      problem statement:문제 설명,,      self assessment:자기 평가,,      lecture:강의"
@@ -9729,6 +9729,9 @@ msgstr "검색 결과:"
 msgid "Select a file"
 msgstr "파일 선택"
 
+msgid "Select a file to insert into the editor."
+msgstr "편집기에 삽입할 파일을 선택하세요."
+
 msgid "Warning - The FAQ file, located in the /home/ directory of your portal, is not writable. Your text will not be saved until the file permissions are changed."
 msgstr "경고 - 포털의 /home/ 디렉토리에 있는 FAQ 파일에 쓰기 권한이 없습니다. 파일 권한을 변경할 때까지 텍스트가 저장되지 않습니다."
 
@@ -15909,6 +15912,9 @@ msgstr "날짜 및 시간"
 msgid "Item"
 msgstr "항목"
 
+msgid "Items"
+msgstr "항목"
+
 msgid "Configure Dashboard Plugin"
 msgstr "대시보드 플러그인 설정"
 
@@ -17162,6 +17168,18 @@ msgstr "그룹의 세션"
 
 msgid "Courses in group"
 msgstr "그룹의 과정"
+
+msgid "Courses on the platform"
+msgstr "플랫폼의 강좌"
+
+msgid "%s courses"
+msgstr "%s 강좌"
+
+msgid "%s sessions"
+msgstr "%s 세션"
+
+msgid "Search by title or code"
+msgstr "제목 또는 코드로 검색"
 
 msgid "Users in group"
 msgstr "그룹의 사용자"
@@ -32167,6 +32185,9 @@ msgstr "과제"
 msgid "Allowed file formats: %s"
 msgstr "허용된 파일 형식: %s"
 
+msgid "File manager"
+msgstr "파일 관리자"
+
 msgid "File type not allowed. Allowed extensions: %s"
 msgstr "허용되지 않은 파일 유형입니다. 허용된 확장자: %s"
 
@@ -33880,6 +33901,2583 @@ msgstr "환영합니다"
 msgid "Welcome to Chamilo"
 msgstr "Chamilo에 오신 것을 환영합니다"
 
+msgid "Check all unanswered questions below"
+msgstr "아래의 모든 미답변 문제 확인"
+
 msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
 msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Chamilo를 처음 사용하신다면, 다양한 기능을 탐색하기 위해 사이드 메뉴를 확인하세요. 도움이 필요하시면 <a href=\"https://docs.chamilo.org\">공식 문서</a>에서 표준 문서를 확인하거나, <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">온라인 포럼</a>에서 다른 Chamilo 사용자들과 아이디어를 공유하고 답변을 찾을 수 있습니다."
+
+msgid "Change password"
+msgstr "비밀번호 변경"
+
+msgid "Newest first"
+msgstr "최신순"
+
+msgid "Oldest first"
+msgstr "오래된 순"
+
+msgid "Title A–Z"
+msgstr "제목 A–Z"
+
+msgid "Title Z–A"
+msgstr "제목 Z–A"
+
+msgid "Send test email"
+msgstr "테스트 이메일 보내기"
+
+msgid "Show teachers"
+msgstr "강사 표시"
+
+msgid "Hide teachers"
+msgstr "강사 숨기기"
+
+msgid "Delete exercise attempts"
+msgstr "연습 문제 시도 삭제"
+
+msgid "Message sent successfully."
+msgstr "메시지가 성공적으로 전송되었습니다."
+
+msgid "You cannot create a new course right now."
+msgstr "지금은 새 강좌를 생성할 수 없습니다."
+
+msgid "Unable to verify whether you can create a new course right now."
+msgstr "지금 새 강좌를 생성할 수 있는지 확인할 수 없습니다."
+
+msgid "Please try again later or contact the administrator."
+msgstr "나중에 다시 시도하거나 관리자에게 문의하세요."
+
+msgid "You cannot create more courses at this time."
+msgstr "지금은 더 이상 강좌를 생성할 수 없습니다."
+
+msgid "You already manage %d courses and your active service allows up to %d. To create another course, you need a higher service limit or reduce your current active courses."
+msgstr "이미 %d개의 강좌를 관리 중이며, 활성 서비스는 최대 %d개까지 허용합니다. 다른 강좌를 생성하려면 더 높은 서비스 한도가 필요하거나 현재 활성 강좌 수를 줄여야 합니다."
+
+msgid "You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now."
+msgstr "이미 %d개의 강좌를 관리 중이며, 플랫폼은 현재 계정에 최대 %d개까지 허용합니다. 지금은 더 이상 강좌를 생성할 수 없습니다."
+
+msgid "Add a class"
+msgstr "클래스 추가"
+
+msgid "Search classes"
+msgstr "클래스 검색"
+
+msgid "No classes found"
+msgstr "클래스를 찾을 수 없습니다"
+
+msgid "Import classes"
+msgstr "클래스 가져오기"
+
+msgid "Class users"
+msgstr "클래스 사용자"
+
+msgid "%s classes imported"
+msgstr "%s 클래스 가져오기 완료"
+
+msgid "%s user-class links imported"
+msgstr "%s 사용자-클래스 연결 가져오기 완료"
+
+msgid "Hide comments"
+msgstr "댓글 숨기기"
+
+msgid "Loading comments..."
+msgstr "댓글 불러오는 중..."
+
+msgid "No comments yet."
+msgstr "아직 댓글이 없습니다."
+
+msgid "A user with this username already exists"
+msgstr "이미 사용 중인 사용자 이름입니다"
+
+msgid "Manage meetings, review recordings and update course-wide BBB settings from one place."
+msgstr "한 곳에서 회의 관리, 녹화 검토 및 코스 전체 BBB 설정을 업데이트하세요."
+
+msgid "Review the current defaults and propagate them to every course when needed."
+msgstr "현재 기본값을 검토하고 필요한 경우 모든 코스에 적용하세요."
+
+msgid "Filter the list by meeting date range."
+msgstr "회의 날짜 범위로 목록을 필터링하세요."
+
+msgid "Review meeting history, participants and recording actions."
+msgstr "회의 기록, 참가자 및 녹화 작업을 검토하세요."
+
+msgid "Participants"
+msgstr "참가자"
+
+msgid "CountUsers"
+msgstr "CountUsers"
+
+msgid "No data found"
+msgstr "데이터를 찾을 수 없습니다"
+
+msgid "My justifications"
+msgstr "내 사유"
+
+msgid "My services"
+msgstr "내 서비스"
+
+msgid "Extra menu"
+msgstr "추가 메뉴"
+
+msgid "Pending tests"
+msgstr "대기 중인 시험"
+
+msgid "No specific language"
+msgstr "특정 언어 없음"
+
+msgid "Source Chamilo version"
+msgstr "소스 Chamilo 버전"
+
+msgid "Exporting..."
+msgstr "내보내는 중..."
+
+msgid "Autosaved drafts available"
+msgstr "자동 저장된 초안 사용 가능"
+
+msgid "Hide drafts"
+msgstr "초안 숨기기"
+
+msgid "Show drafts"
+msgstr "초안 표시"
+
+msgid "Drafts are stored only in this browser and are removed after saving the document."
+msgstr "초안은 이 브라우저에만 저장되며 문서를 저장한 후 삭제됩니다."
+
+msgid "Last saved"
+msgstr "마지막 저장"
+
+msgid "Restore draft"
+msgstr "초안 복원"
+
+msgid "Delete draft"
+msgstr "초안 삭제"
+
+msgid "Information about indexing document content"
+msgstr "문서 콘텐츠 색인에 대한 정보"
+
+msgid "When enabled, the document text is indexed by the search engine so users can find it from platform search."
+msgstr "활성화하면 문서 텍스트가 검색 엔진에 의해 색인되어 사용자가 플랫폼 검색에서 찾을 수 있습니다."
+
+msgid "The editor is not available."
+msgstr "편집기를 사용할 수 없습니다."
+
+msgid "Please place the cursor inside a paragraph first."
+msgstr "먼저 단락 안에 커서를 놓으세요."
+
+msgid "The selected paragraph is empty."
+msgstr "선택한 단락이 비어 있습니다."
+
+msgid "Loading failed."
+msgstr "불러오기에 실패했습니다."
+
+msgid "Add introduction"
+msgstr "소개 추가"
+
+msgid "Course type"
+msgstr "코스 유형"
+
+msgid "Choose whether this course uses the standard platform limits or benefits from a purchased service."
+msgstr "이 코스가 표준 플랫폼 제한을 사용하는지 또는 구매한 서비스의 혜택을 받는지 선택하세요."
+
+msgid "Standard course"
+msgstr "표준 코스"
+
+msgid "Use the standard platform limits."
+msgstr "표준 플랫폼 제한을 사용합니다."
+
+msgid "Selected"
+msgstr "선택됨"
+
+msgid "Hosting limit"
+msgstr "호스팅 제한"
+
+msgid "Document quota"
+msgstr "문서 할당량"
+
+msgid "The standard course limit has been reached."
+msgstr "표준 코스 제한에 도달했습니다."
+
+msgid "Use the benefits granted by this service."
+msgstr "이 서비스에서 제공하는 혜택을 사용합니다."
+
+msgid "Courses with these benefits"
+msgstr "이 혜택이 적용된 코스"
+
+msgid "Active service"
+msgstr "활성 서비스"
+
+msgid "Buy service"
+msgstr "서비스 구매"
+
+msgid "Select an available course type before creating the course."
+msgstr "코스를 생성하기 전에 사용 가능한 코스 유형을 선택하세요."
+
+msgid "users"
+msgstr "사용자"
+
+msgid "You need to buy this service before using these benefits."
+msgstr "이 혜택을 사용하려면 먼저 이 서비스를 구매해야 합니다."
+
+msgid "You already used all courses available with this service."
+msgstr "이 서비스로 이용할 수 있는 모든 코스를 이미 사용했습니다."
+
+msgid "This option is not available."
+msgstr "이 옵션은 사용할 수 없습니다."
+
+msgid "This field is required"
+msgstr "이 필드는 필수입니다"
+
+msgid "Show less"
+msgstr "간략히 보기"
+
+msgid "Show full description"
+msgstr "전체 설명 보기"
+
+msgid "Virtual keyboard"
+msgstr "가상 키보드"
+
+msgid "Backspace"
+msgstr "백스페이스"
+
+msgid "Space"
+msgstr "스페이스"
+
+msgid "Learning path only visible to selected learners"
+msgstr "선택한 학습자에게만 보이는 학습 경로"
+
+msgid "Create course"
+msgstr "강좌 생성"
+
+msgid "Tour"
+msgstr "투어"
+
+msgid "Are you sure you want to delete this comment?"
+msgstr "이 댓글을 삭제하시겠습니까?"
+
+msgid "No posts found"
+msgstr "게시물이 없습니다"
+
+msgid "No communities"
+msgstr "커뮤니티가 없습니다"
+
+msgid "No friends found"
+msgstr "친구를 찾을 수 없습니다"
+
+msgid "Visual overview of your skills"
+msgstr "기술 시각적 개요"
+
+msgid "Compare your progress"
+msgstr "진행 상황 비교"
+
+msgid "Please enter a search term."
+msgstr "검색어를 입력하세요."
+
+msgid "Enter captcha code"
+msgstr "보안 문자 코드 입력"
+
+msgid "Refresh captcha"
+msgstr "보안 문자 새로고침"
+
+msgid "Captcha is temporarily blocked. Please try again later."
+msgstr "보안 문자가 일시적으로 차단되었습니다. 나중에 다시 시도하세요."
+
+msgid "Item Details"
+msgstr "항목 세부 정보"
+
+msgid "Open File"
+msgstr "파일 열기"
+
+msgid "Selection"
+msgstr "선택"
+
+msgid "Remove selection context"
+msgstr "선택 컨텍스트 제거"
+
+msgid "Source document"
+msgstr "원본 문서"
+
+msgid "Use the current course context"
+msgstr "현재 강좌 컨텍스트 사용"
+
+msgid "Loading documents..."
+msgstr "문서 로딩 중..."
+
+msgid "No compatible PDF or TXT document was found in this course."
+msgstr "이 강좌에서 호환되는 PDF 또는 TXT 문서를 찾을 수 없습니다."
+
+msgid "Select a PDF or TXT document to generate terms only from that document."
+msgstr "용어를 생성할 PDF 또는 TXT 문서를 선택하세요."
+
+msgid "Confidentiality warning"
+msgstr "기밀 경고"
+
+msgid "When a document is selected, the prompt is fixed so the generation uses only that document content."
+msgstr "문서가 선택되면 프롬프트가 고정되어 해당 문서 내용만 사용하여 생성합니다."
+
+msgid "No document-processing AI providers available."
+msgstr "사용 가능한 문서 처리 AI 제공자가 없습니다."
+
+msgid "Failed to save signature. Please try again."
+msgstr "서명을 저장하지 못했습니다. 다시 시도하세요."
+
+msgid "Select and move"
+msgstr "선택 및 이동"
+
+msgid "Freehand"
+msgstr "자유 그리기"
+
+msgid "Stroke"
+msgstr "획"
+
+msgid "Fill"
+msgstr "채우기"
+
+msgid "Import SVG"
+msgstr "SVG 가져오기"
+
+msgid "Import image"
+msgstr "이미지 가져오기"
+
+msgid "Click the drawing area to place this text"
+msgstr "이 텍스트를 배치하려면 그리기 영역을 클릭하세요"
+
+msgid "Draw a new SVG, import an existing SVG or embed an image, then save it as a reusable document."
+msgstr "새 SVG를 그리거나 기존 SVG를 가져오거나 이미지를 삽입한 후 재사용 가능한 문서로 저장하세요."
+
+msgid "Use Select and move to reposition or resize elements added in this editor."
+msgstr "선택 및 이동을 사용하여 이 편집기에서 추가한 요소의 위치를 변경하거나 크기를 조정하세요."
+
+msgid "Stroke width"
+msgstr "획 너비"
+
+msgid "Transparent fill"
+msgstr "투명 채우기"
+
+msgid "Invalid id"
+msgstr "잘못된 ID"
+
+msgid "Unable to load the drawing"
+msgstr "그리기를 로드할 수 없습니다"
+
+msgid "Only PNG, JPG, WEBP or GIF images are supported."
+msgstr "PNG, JPG, WEBP 또는 GIF 이미지만 지원됩니다."
+
+msgid "Unable to read the image file."
+msgstr "이미지 파일을 읽을 수 없습니다."
+
+msgid "Only SVG files are supported."
+msgstr "SVG 파일만 지원됩니다."
+
+msgid "The SVG file is empty or invalid."
+msgstr "SVG 파일이 비어 있거나 유효하지 않습니다."
+
+msgid "Unable to read the SVG file."
+msgstr "SVG 파일을 읽을 수 없습니다."
+
+msgid "The drawing is empty or invalid."
+msgstr "그림이 비어 있거나 유효하지 않습니다."
+
+msgid "Unable to save the drawing"
+msgstr "그림을 저장할 수 없습니다."
+
+msgid "Information about AI-assisted documents"
+msgstr "AI 지원 문서에 대한 정보"
+
+msgid "Location"
+msgstr "위치"
+
+msgid "Cloud link"
+msgstr "클라우드 링크"
+
+msgid "Add a link to a cloud document, such as Google Drive or Google Docs."
+msgstr "Google Drive 또는 Google Docs와 같은 클라우드 문서에 대한 링크를 추가합니다."
+
+msgid "Add cloud link"
+msgstr "클라우드 링크 추가"
+
+msgid "Document title"
+msgstr "문서 제목"
+
+msgid "Document options change how uploaded files are processed after saving."
+msgstr "문서 옵션은 저장 후 업로드된 파일의 처리 방식을 변경합니다."
+
+msgid "Information about uncompressing zip files"
+msgstr "ZIP 파일 압축 해제에 대한 정보"
+
+msgid "When enabled, ZIP files are extracted into the current document folder after upload."
+msgstr "활성화되면 ZIP 파일이 업로드 후 현재 문서 폴더로 추출됩니다."
+
+msgid "The title is required."
+msgstr "제목은 필수입니다."
+
+msgid "The URL is required."
+msgstr "URL은 필수입니다."
+
+msgid "The destination folder is missing."
+msgstr "대상 폴더가 없습니다."
+
+msgid "Unable to create cloud link."
+msgstr "클라우드 링크를 생성할 수 없습니다."
+
+msgid "Copy to My Files"
+msgstr "내 파일로 복사"
+
+msgid "Used space"
+msgstr "사용된 공간"
+
+msgid "Available space"
+msgstr "사용 가능한 공간"
+
+msgid "Available percentage"
+msgstr "사용 가능한 비율"
+
+msgid "Cloud links cannot be downloaded."
+msgstr "클라우드 링크는 다운로드할 수 없습니다."
+
+msgid "Could not copy the file to My Files"
+msgstr "파일을 내 파일로 복사할 수 없습니다."
+
+msgid "File copied to My Files"
+msgstr "파일이 내 파일로 복사되었습니다."
+
+msgid "Checking course creation options..."
+msgstr "강좌 생성 옵션을 확인하는 중..."
+
+msgid "You cannot create more courses right now."
+msgstr "지금은 더 이상 강좌를 생성할 수 없습니다."
+
+msgid "AI analyzer"
+msgstr "AI 분석기"
+
+msgid "Expand all"
+msgstr "모두 펼치기"
+
+msgid "Collapse all"
+msgstr "모두 접기"
+
+msgid "Review your active service benefits, purchase history and available receipts."
+msgstr "활성 서비스 혜택, 구매 내역 및 사용 가능한 영수증을 검토합니다."
+
+msgid "Active services"
+msgstr "활성 서비스"
+
+msgid "No active services"
+msgstr "활성 서비스 없음"
+
+msgid "Valid until"
+msgstr "유효 기간"
+
+msgid "Recurring payment"
+msgstr "반복 결제"
+
+msgid "Next charge"
+msgstr "다음 청구"
+
+msgid "Enable auto billing"
+msgstr "자동 청구 활성화"
+
+msgid "Cancel auto billing"
+msgstr "자동 청구 취소"
+
+msgid "Granted benefits"
+msgstr "부여된 혜택"
+
+msgid "Purchase history"
+msgstr "구매 내역"
+
+msgid "No purchases yet"
+msgstr "아직 구매 내역이 없습니다."
+
+msgid "Product"
+msgstr "제품"
+
+msgid "Reference"
+msgstr "참조"
+
+msgid "Amount"
+msgstr "금액"
+
+msgid "Receipt"
+msgstr "영수증"
+
+msgid "Unable to load your services right now."
+msgstr "현재 서비스를 불러올 수 없습니다."
+
+msgid "Auto billing enabled"
+msgstr "자동 청구가 활성화되었습니다."
+
+msgid "Auto billing suspended"
+msgstr "자동 청구가 일시 중지되었습니다."
+
+msgid "Auto billing cancelled"
+msgstr "자동 청구가 취소되었습니다."
+
+msgid "Auto billing disabled"
+msgstr "자동 청구가 비활성화되었습니다."
+
+msgid "Cancel auto billing for this service?"
+msgstr "이 서비스에 대한 자동 청구를 취소하시겠습니까?"
+
+msgid "Preview class members and courses"
+msgstr "수업 구성원 및 강좌 미리보기"
+
+msgid "Please select a CSV file to import."
+msgstr "가져올 CSV 파일을 선택하세요."
+
+msgid "%d user-class links imported"
+msgstr "%d개의 사용자-클래스 연결이 가져오기되었습니다."
+
+msgid "The following errors occurred during import:"
+msgstr "가져오는 동안 다음 오류가 발생했습니다:"
+
+msgid "CSV file"
+msgstr "CSV 파일"
+
+msgid "Remove user from all group-related entities if not in the list"
+msgstr "목록에 없는 경우 모든 그룹 관련 항목에서 사용자를 제거"
+
+msgid "UserName"
+msgstr "사용자 이름"
+
+msgid "ClassName"
+msgstr "클래스 이름"
+
+msgid "are required for each row."
+msgstr "각 행에 필요합니다."
+
+msgid "title"
+msgstr "제목"
+
+msgid "is required."
+msgstr "필수 항목입니다."
+
+msgid "description"
+msgstr "설명"
+
+msgid "are optional."
+msgstr "선택 사항입니다."
+
+msgid "Are you sure you want to remove this user from the class?"
+msgstr "이 사용자를 클래스에서 제거하시겠습니까?"
+
+msgid "Users in class"
+msgstr "클래스 내 사용자"
+
+msgid "Remove user"
+msgstr "사용자 제거"
+
+msgid "Class not found"
+msgstr "클래스를 찾을 수 없습니다."
+
+msgid "Class overview"
+msgstr "클래스 개요"
+
+msgid "Back to classes"
+msgstr "클래스로 돌아가기"
+
+msgid "Search members or courses"
+msgstr "구성원 또는 강좌 검색"
+
+msgid "Search by name, email, username or course title"
+msgstr "이름, 이메일, 사용자 이름 또는 강좌 제목으로 검색"
+
+msgid "Class members"
+msgstr "클래스 구성원"
+
+msgid "No email"
+msgstr "이메일 없음"
+
+msgid "No members found"
+msgstr "구성원을 찾을 수 없습니다."
+
+msgid "No courses found"
+msgstr "강좌를 찾을 수 없습니다."
+
+msgid "The end date must be after the start date."
+msgstr "종료일은 시작일 이후여야 합니다."
+
+msgid "Always visible"
+msgstr "항상 표시"
+
+msgid "No end date"
+msgstr "종료일 없음"
+
+msgid "No restriction"
+msgstr "제한 없음"
+
+msgid "Missing learning path or course identifier"
+msgstr "학습 경로 또는 강좌 식별자가 누락되었습니다."
+
+msgid "Select a user or a group first"
+msgstr "먼저 사용자 또는 그룹을 선택하세요."
+
+msgid "Remove all date restrictions for this learning path?"
+msgstr "이 학습 경로의 모든 날짜 제한을 제거하시겠습니까?"
+
+msgid "Advanced learning path access"
+msgstr "고급 학습 경로 접근"
+
+msgid "Remove date restrictions"
+msgstr "날짜 제한 제거"
+
+msgid "Search by name, email, username or group"
+msgstr "이름, 이메일, 사용자 이름 또는 그룹으로 검색"
+
+msgid "Edit user restriction"
+msgstr "사용자 제한 편집"
+
+msgid "Edit group restriction"
+msgstr "그룹 제한 편집"
+
+msgid "Select a user or group"
+msgstr "사용자 또는 그룹 선택"
+
+msgid "Save restriction"
+msgstr "제한 저장"
+
+msgid "members"
+msgstr "구성원"
+
+msgid "Create Assignment"
+msgstr "과제 생성"
+
+msgid "The submission deadline has passed. You can no longer submit."
+msgstr "제출 기한이 지났습니다. 더 이상 제출할 수 없습니다."
+
+msgid "Mailing cannot be combined with other recipients."
+msgstr "메일링은 다른 수신자와 함께 사용할 수 없습니다."
+
+msgid "Social map"
+msgstr "소셜 지도"
+
+msgid "The map plugin is not enabled or configured."
+msgstr "지도 플러그인이 활성화되어 있지 않거나 구성되지 않았습니다."
+
+msgid "Some configured extra fields were not found"
+msgstr "일부 구성된 추가 필드를 찾을 수 없습니다."
+
+msgid "No user locations were found."
+msgstr "사용자 위치를 찾을 수 없습니다."
+
+msgid "OpenStreetMap needs coordinates to display an embedded marker. Address-only locations are listed below."
+msgstr "OpenStreetMap은 내장 마커를 표시하기 위해 좌표가 필요합니다. 주소만 있는 위치는 아래에 나열됩니다."
+
+msgid "Locations"
+msgstr "위치"
+
+msgid "Open map"
+msgstr "지도 열기"
+
+msgid "Provider: OpenStreetMap"
+msgstr "제공자: OpenStreetMap"
+
+msgid "Provider: Google Maps"
+msgstr "제공자: Google Maps"
+
+msgid "Personal files"
+msgstr "개인 파일"
+
+msgid "Upload image"
+msgstr "이미지 업로드"
+
+msgid "Upload media"
+msgstr "미디어 업로드"
+
+msgid "Only image files are allowed in this upload screen."
+msgstr "이 업로드 화면에서는 이미지 파일만 허용됩니다."
+
+msgid "Only audio and video files are allowed in this upload screen."
+msgstr "이 업로드 화면에서는 오디오 및 비디오 파일만 허용됩니다."
+
+msgid "Upload files to your personal storage."
+msgstr "개인 저장소에 파일을 업로드합니다."
+
+msgid "Linked"
+msgstr "연결됨"
+
+msgid "No audio or video files were found in this folder."
+msgstr "이 폴더에서 오디오 또는 비디오 파일을 찾을 수 없습니다."
+
+msgid "No image files were found in this folder."
+msgstr "이 폴더에서 이미지 파일을 찾을 수 없습니다."
+
+msgid "No matching files were found in this folder."
+msgstr "이 폴더에서 일치하는 파일을 찾을 수 없습니다."
+
+msgid "This file type is not allowed in this upload screen."
+msgstr "이 업로드 화면에서는 이 파일 형식이 허용되지 않습니다."
+
+msgid "Manage your personal files and course documents."
+msgstr "개인 파일과 강의 문서를 관리합니다."
+
+msgid "DateValidity"
+msgstr "유효기간"
+
+msgid "JustificationSaved"
+msgstr "사유저장됨"
+
+msgid "ValidityDate"
+msgstr "유효일자"
+
+msgid "MyJustifications"
+msgstr "내사유"
+
+msgid "Submission"
+msgstr "제출"
+
+msgid "Use the filters above to narrow the list."
+msgstr "목록을 좁히려면 위의 필터를 사용하세요."
+
+msgid "You are not allowed to see this page."
+msgstr "이 페이지를 볼 수 있는 권한이 없습니다."
+
+msgid "plugin_title"
+msgstr "plugin_title"
+
+msgid "plugin_comment"
+msgstr "plugin_comment"
+
+msgid "Course tracking details"
+msgstr "강의 추적 상세 정보"
+
+msgid "Course activity statistics"
+msgstr "강의 활동 통계"
+
+msgid "mobile_phone_number"
+msgstr "mobile_phone_number"
+
+msgid "Allowed template syntax"
+msgstr "허용된 템플릿 구문"
+
+msgid "Functions"
+msgstr "함수"
+
+msgid "Available variables depend on the template type, for example {{ user.getUsername() }} or {{ user.getEmail() }}."
+msgstr "사용 가능한 변수는 템플릿 유형에 따라 달라집니다. 예: {{ user.getUsername() }} 또는 {{ user.getEmail() }}."
+
+msgid "For security reasons, any other Twig function, filter (such as filter, map, reduce or sort) or PHP call is blocked."
+msgstr "보안상의 이유로 다른 Twig 함수, 필터(filter, map, reduce, sort 등) 또는 PHP 호출은 차단됩니다."
+
+msgid "Global administrator"
+msgstr "전체 관리자"
+
+msgid "Session manager"
+msgstr "세션 관리자"
+
+msgid "Human resources manager"
+msgstr "인사 관리자"
+
+msgid "Course teacher"
+msgstr "강의 교사"
+
+msgid "Course student"
+msgstr "강의 수강생"
+
+msgid "Platform reports"
+msgstr "플랫폼 보고서"
+
+msgid "Security reports"
+msgstr "보안 보고서"
+
+msgid "Course reports"
+msgstr "강의 보고서"
+
+msgid "Gradebook reports"
+msgstr "성적부 보고서"
+
+msgid "Social reports"
+msgstr "소셜 보고서"
+
+msgid "Exports"
+msgstr "내보내기"
+
+msgid "Reports about platform-wide usage, users, courses and sessions."
+msgstr "플랫폼 전체 사용량, 사용자, 강의 및 세션에 대한 보고서."
+
+msgid "Audit and security-sensitive reports."
+msgstr "감사 및 보안 관련 보고서."
+
+msgid "Reports scoped to courses managed by the user."
+msgstr "사용자가 관리하는 강의 범위의 보고서."
+
+msgid "Reports related to learner activity and follow-up."
+msgstr "학습자 활동 및 후속 조치 관련 보고서."
+
+msgid "Reports related to scores, certificates and gradebook data."
+msgstr "점수, 수료증 및 성적부 데이터 관련 보고서."
+
+msgid "Reports and exports that generate downloadable files."
+msgstr "다운로드 가능한 파일을 생성하는 보고서 및 내보내기."
+
+msgid "Main platform statistics dashboard."
+msgstr "주요 플랫폼 통계 대시보드."
+
+msgid "Number of courses and course distribution report."
+msgstr "강의 수 및 강의 분포 보고서."
+
+msgid "Platform-wide access to course tools."
+msgstr "강의 도구에 대한 플랫폼 전체 접근."
+
+msgid "Number of resources per tool."
+msgstr "도구별 리소스 수."
+
+msgid "Latest access to courses."
+msgstr "최근 코스 접속 기록."
+
+msgid "Course distribution by language."
+msgstr "언어별 코스 분포."
+
+msgid "Course usage report."
+msgstr "코스 사용 보고서."
+
+msgid "Platform user count report."
+msgstr "플랫폼 사용자 수 보고서."
+
+msgid "Recent logins chart."
+msgstr "최근 로그인 차트."
+
+msgid "Login distribution by month."
+msgstr "월별 로그인 분포."
+
+msgid "Login distribution by day."
+msgstr "일별 로그인 분포."
+
+msgid "Login distribution by hour."
+msgstr "시간별 로그인 분포."
+
+msgid "Users with profile picture."
+msgstr "프로필 사진이 있는 사용자."
+
+msgid "Login report filtered by date."
+msgstr "날짜별 로그인 보고서."
+
+msgid "Users who have not logged in recently."
+msgstr "최근 로그인하지 않은 사용자."
+
+msgid "Inactive or suspicious user accounts report."
+msgstr "비활성 또는 의심스러운 사용자 계정 보고서."
+
+msgid "Users activity statistics."
+msgstr "사용자 활동 통계."
+
+msgid "Currently online users report."
+msgstr "현재 접속 중인 사용자 보고서."
+
+msgid "New user registrations over time."
+msgstr "신규 사용자 등록 추이."
+
+msgid "Course and session subscriptions over time."
+msgstr "코스 및 세션 구독 추이."
+
+msgid "Duplicate user detection and maintenance report."
+msgstr "중복 사용자 탐지 및 유지보수 보고서."
+
+msgid "Platform user/session statistics."
+msgstr "플랫폼 사용자/세션 통계."
+
+msgid "Quarterly platform report."
+msgstr "분기별 플랫폼 보고서."
+
+msgid "Activities audit"
+msgstr "활동 감사"
+
+msgid "Audit report for important administrative and platform activities."
+msgstr "주요 관리 및 플랫폼 활동에 대한 감사 보고서."
+
+msgid "Social messages received report."
+msgstr "수신된 소셜 메시지 보고서."
+
+msgid "Social messages sent report."
+msgstr "송신된 소셜 메시지 보고서."
+
+msgid "Social contacts count report."
+msgstr "소셜 연락처 수 보고서."
+
+msgid "Sessions created over time."
+msgstr "세션 생성 추이."
+
+msgid "Learning analytics dashboard."
+msgstr "학습 분석 대시보드."
+
+msgid "Teacher time report."
+msgstr "강사 시간 보고서."
+
+msgid "Teachers time by session report"
+msgstr "세션별 강사 시간 보고서"
+
+msgid "Teacher time report grouped by session."
+msgstr "세션별로 그룹화된 강사 시간 보고서."
+
+msgid "Corporate learning analytics report."
+msgstr "기업 학습 분석 보고서."
+
+msgid "Course learners tracking report."
+msgstr "코스 학습자 추적 보고서."
+
+msgid "Course activity statistics with connected and inactive users."
+msgstr "접속 및 비활성 사용자 포함 코스 활동 통계."
+
+msgid "Detailed tracking report for a learner inside a course."
+msgstr "코스 내 학습자에 대한 상세 추적 보고서."
+
+msgid "Course gradebook overview."
+msgstr "코스 성적부 개요."
+
+msgid "Gradebook statistics"
+msgstr "성적부 통계"
+
+msgid "Gradebook statistics report."
+msgstr "성적부 통계 보고서."
+
+msgid "Certificate report"
+msgstr "수료증 보고서"
+
+msgid "Certificate report for course gradebook."
+msgstr "코스 성적부 수료증 보고서."
+
+msgid "User statistics"
+msgstr "사용자 통계"
+
+msgid "Course gradebook statistics for a user."
+msgstr "사용자별 코스 성적부 통계."
+
+msgid "Personal statistics"
+msgstr "개인 통계"
+
+msgid "Personal gradebook statistics."
+msgstr "개인 성적부 통계."
+
+msgid "Reports catalog"
+msgstr "보고서 카탈로그"
+
+msgid "Central catalog of available reports, roles and permission categories."
+msgstr "사용 가능한 보고서, 역할 및 권한 범주 중앙 카탈로그."
+
+msgid "Course log events"
+msgstr "코스 로그 이벤트"
+
+msgid "Detailed course tracking events."
+msgstr "상세 코스 추적 이벤트."
+
+msgid "Course tool usage"
+msgstr "코스 도구 사용"
+
+msgid "Course tracking report grouped by tools."
+msgstr "도구별 코스 추적 보고서."
+
+msgid "Course resource usage"
+msgstr "코스 리소스 사용"
+
+msgid "Course tracking report grouped by resources."
+msgstr "리소스별 코스 추적 보고서."
+
+msgid "Course group tracking"
+msgstr "강의 그룹 추적"
+
+msgid "Tracking report for course groups."
+msgstr "강의 그룹 추적 보고서."
+
+msgid "Course session report"
+msgstr "강의 세션 보고서"
+
+msgid "Tracking report for a course inside sessions."
+msgstr "세션 내 강의 추적 보고서."
+
+msgid "Learning path report"
+msgstr "학습 경로 보고서"
+
+msgid "Learning path tracking report."
+msgstr "학습 경로 추적 보고서."
+
+msgid "Learning path results by user"
+msgstr "사용자별 학습 경로 결과"
+
+msgid "Learning path results grouped by user."
+msgstr "사용자별로 그룹화된 학습 경로 결과."
+
+msgid "Exercises report"
+msgstr "퀴즈 보고서"
+
+msgid "Course exercises and exams tracking report."
+msgstr "강의 퀴즈 및 시험 추적 보고서."
+
+msgid "Question report"
+msgstr "문제 보고서"
+
+msgid "Course question tracking report."
+msgstr "강의 문제 추적 보고서."
+
+msgid "Messages report"
+msgstr "메시지 보고서"
+
+msgid "Course messages tracking report."
+msgstr "강의 메시지 추적 보고서."
+
+msgid "Total time tracking report for course learners."
+msgstr "강의 학습자 총 학습 시간 추적 보고서."
+
+msgid "Gradebook summary"
+msgstr "성적부 요약"
+
+msgid "Summary view of gradebook results."
+msgstr "성적부 결과 요약 보기."
+
+msgid "Flat view"
+msgstr "평면 보기"
+
+msgid "Flat gradebook results view."
+msgstr "성적부 결과 평면 보기."
+
+msgid "Evaluation log"
+msgstr "평가 로그"
+
+msgid "Change log for gradebook evaluations."
+msgstr "성적부 평가 변경 로그."
+
+msgid "Link log"
+msgstr "링크 로그"
+
+msgid "Change log for gradebook links."
+msgstr "성적부 링크 변경 로그."
+
+msgid "Result details"
+msgstr "결과 상세"
+
+msgid "Detailed view of a gradebook result."
+msgstr "성적부 결과 상세 보기."
+
+msgid "Personal certificates report."
+msgstr "개인 수료증 보고서."
+
+msgid "User move statistics"
+msgstr "사용자 이동 통계"
+
+msgid "Report for user move and transfer statistics."
+msgstr "사용자 이동 및 전송 통계 보고서."
+
+msgid "User consent list"
+msgstr "사용자 동의 목록"
+
+msgid "Report of users and consent status."
+msgstr "사용자 및 동의 상태 보고서."
+
+msgid "Special platform exports."
+msgstr "특수 플랫폼 내보내기."
+
+msgid "Export certificates"
+msgstr "수료증 내보내기"
+
+msgid "Export platform certificates."
+msgstr "플랫폼 수료증 내보내기."
+
+msgid "Export exercise results"
+msgstr "퀴즈 결과 내보내기"
+
+msgid "Export exercise results from the platform."
+msgstr "플랫폼에서 퀴즈 결과 내보내기."
+
+msgid "Course survey results and reporting."
+msgstr "강의 설문 결과 및 보고."
+
+msgid "Attendance report"
+msgstr "출석 보고서"
+
+msgid "Course attendance tracking and reports."
+msgstr "강의 출석 추적 및 보고서."
+
+msgid "Exercises global report"
+msgstr "퀴즈 전체 보고서"
+
+msgid "Global exercise results report for the course."
+msgstr "강의 전체 퀴즈 결과 보고서."
+
+msgid "Exercise report"
+msgstr "퀴즈 보고서"
+
+msgid "Detailed exercise report."
+msgstr "상세 퀴즈 보고서."
+
+msgid "Exercise history"
+msgstr "퀴즈 기록"
+
+msgid "Exercise attempt history."
+msgstr "퀴즈 시도 기록."
+
+msgid "Exercise results"
+msgstr "퀴즈 결과"
+
+msgid "Exercise results and corrections."
+msgstr "퀴즈 결과 및 정답 확인."
+
+msgid "Question-level exercise statistics."
+msgstr "문항별 퀴즈 통계."
+
+msgid "Exercise statistics"
+msgstr "퀴즈 통계"
+
+msgid "Exercise statistics page."
+msgstr "퀴즈 통계 페이지."
+
+msgid "Live exercise statistics"
+msgstr "실시간 퀴즈 통계"
+
+msgid "Live exercise statistics for teachers."
+msgstr "교사를 위한 실시간 연습 통계."
+
+msgid "Learning path statistics"
+msgstr "학습 경로 통계"
+
+msgid "Learning path item statistics."
+msgstr "학습 경로 항목 통계."
+
+msgid "Learning path report inside a course."
+msgstr "강좌 내 학습 경로 보고서."
+
+msgid "User skills report."
+msgstr "사용자 역량 보고서."
+
+msgid "Scheduled or periodic export configuration."
+msgstr "예약 또는 주기적 내보내기 설정."
+
+msgid "User export"
+msgstr "사용자 내보내기"
+
+msgid "Export users from the platform."
+msgstr "플랫폼에서 사용자 내보내기."
+
+msgid "Not classified"
+msgstr "미분류"
+
+msgid "You have acquired the skill %s"
+msgstr "스킬 %s을(를) 획득했습니다"
+
+msgid "You have acquired the skill %s."
+msgstr "스킬 %s을(를) 획득했습니다."
+
+msgid "Recover your password"
+msgstr "비밀번호 찾기"
+
+msgid "Disclaimer"
+msgstr "면책 조항"
+
+msgid "This operation would exceed the limit of %d users allowed for this course."
+msgstr "이 작업은 이 강좌에 허용된 %d명의 사용자 제한을 초과합니다."
+
+msgid "DefaultGroupCategory"
+msgstr "DefaultGroupCategory"
+
+msgid "LearningCalendar"
+msgstr "LearningCalendar"
+
+msgid "Choose how this user can authenticate on the platform."
+msgstr "이 사용자가 플랫폼에서 인증하는 방법을 선택하세요."
+
+msgid "Authentication methods"
+msgstr "인증 방법"
+
+msgid "Set password manually"
+msgstr "수동으로 비밀번호 설정"
+
+msgid "Report role matrix"
+msgstr "역할 매트릭스 보고서"
+
+msgid "Report permission categories"
+msgstr "권한 범주 보고서"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs enforce the documented report role matrix."
+msgstr "이 레지스트리는 알려진 보고 페이지, 해당 범주, 정식 URL, 레거시 URL 및 예상 역할 대상을 나열합니다. 정식 URL은 문서화된 보고 역할 매트릭스를 적용합니다."
+
+msgid "reports"
+msgstr "보고서"
+
+msgid "Canonical URL"
+msgstr "정식 URL"
+
+msgid "Legacy URL"
+msgstr "레거시 URL"
+
+msgid "Permission category"
+msgstr "권한 범주"
+
+msgid "This matrix documents the expected audience for each report and is enforced by the canonical report entry point."
+msgstr "이 매트릭스는 각 보고서의 예상 대상을 문서화하며 정식 보고서 진입점에 의해 적용됩니다."
+
+msgid "These keys group reports by access scope and are used by the report registry. They can later be mapped to finer-grained platform permissions."
+msgstr "이 키는 접근 범위에 따라 보고서를 그룹화하며 보고서 레지스트리에서 사용됩니다. 나중에 더 세분화된 플랫폼 권한에 매핑될 수 있습니다."
+
+msgid "Permission"
+msgstr "권한"
+
+msgid "Clear active session"
+msgstr "활성 세션 지우기"
+
+msgid "Are you sure you want to clear this user active session?"
+msgstr "이 사용자의 활성 세션을 지우시겠습니까?"
+
+msgid "Preview shown without course context. Some course-specific data may be unavailable."
+msgstr "강좌 컨텍스트 없이 미리보기가 표시됩니다. 일부 강좌별 데이터는 사용할 수 없을 수 있습니다."
+
+msgid "Preview is not available for this question."
+msgstr "이 질문에 대한 미리보기를 사용할 수 없습니다."
+
+msgid "Edition is not allowed without a course context."
+msgstr "강좌 컨텍스트 없이 편집할 수 없습니다."
+
+msgid "This plugin does not use regions."
+msgstr "이 플러그인은 영역을 사용하지 않습니다."
+
+msgid "No plugins with regions were found."
+msgstr "영역이 있는 플러그인을 찾을 수 없습니다."
+
+msgid "Freemium"
+msgstr "프리미엄"
+
+msgid "Commercial service"
+msgstr "상업 서비스"
+
+msgid "Commercial"
+msgstr "상업용"
+
+msgid "100% free"
+msgstr "100% 무료"
+
+msgid "Displayed above the public login form."
+msgstr "공개 로그인 양식 위에 표시됩니다."
+
+msgid "Displayed below the public login form."
+msgstr "공개 로그인 양식 아래에 표시됩니다."
+
+msgid "Displayed before the footer area."
+msgstr "푸터 영역 앞에 표시됩니다."
+
+msgid "Displayed in the left footer column."
+msgstr "왼쪽 푸터 열에 표시됩니다."
+
+msgid "Displayed in the center footer column."
+msgstr "가운데 푸터 열에 표시됩니다."
+
+msgid "Displayed in the right footer column."
+msgstr "오른쪽 푸터 열에 표시됩니다."
+
+msgid "Showing all plugins."
+msgstr "모든 플러그인을 표시합니다."
+
+msgid "Some plugins are still pending functional verification."
+msgstr "일부 플러그인은 아직 기능 검증이 진행 중입니다."
+
+msgid "Show verified plugins only"
+msgstr "검증된 플러그인만 표시"
+
+msgid "Showing verified plugins only."
+msgstr "검증된 플러그인만 표시합니다."
+
+msgid "Pending plugins are temporarily hidden until they are adapted and tested."
+msgstr "적응 및 테스트가 완료될 때까지 보류 중인 플러그인은 일시적으로 숨겨집니다."
+
+msgid "Show all plugins"
+msgstr "모든 플러그인 표시"
+
+msgid "Official and free plugins are listed separately from plugins that may depend on commercial services or paid offers."
+msgstr "공식 및 무료 플러그인은 상업적 서비스나 유료 상품에 의존할 수 있는 플러그인과 별도로 나열됩니다."
+
+msgid "Included free plugins"
+msgstr "포함된 무료 플러그인"
+
+msgid "Commercial and freemium plugins"
+msgstr "상업 및 프리미엄 플러그인"
+
+msgid "All plugins"
+msgstr "모든 플러그인"
+
+msgid "No plugins were found for this category."
+msgstr "이 카테고리에 해당하는 플러그인이 없습니다."
+
+msgid "Search plugins"
+msgstr "플러그인 검색"
+
+msgid "Search by name or description"
+msgstr "이름 또는 설명으로 검색"
+
+msgid "Advanced filters"
+msgstr "고급 필터"
+
+msgid "All statuses"
+msgstr "모든 상태"
+
+msgid "All sources"
+msgstr "모든 소스"
+
+msgid "All types"
+msgstr "모든 유형"
+
+msgid "Installed plugins are shown first"
+msgstr "설치된 플러그인이 먼저 표시됩니다"
+
+msgid "No plugins match the current filters."
+msgstr "현재 필터와 일치하는 플러그인이 없습니다."
+
+msgid "Try clearing the search or changing the filters."
+msgstr "검색어를 지우거나 필터를 변경해 보세요."
+
+msgid "README"
+msgstr "README"
+
+msgid "Invalid security token"
+msgstr "유효하지 않은 보안 토큰"
+
+msgid "Please select a destination session"
+msgstr "대상 세션을 선택하세요"
+
+msgid "Cannot move this to the same session"
+msgstr "동일한 세션으로 이동할 수 없습니다"
+
+msgid "The destination session must include the selected course"
+msgstr "대상 세션에 선택한 강좌가 포함되어야 합니다"
+
+msgid "The source session must include the selected course"
+msgstr "원본 세션에 선택한 강좌가 포함되어야 합니다"
+
+msgid "No learners found"
+msgstr "학습자를 찾을 수 없습니다"
+
+msgid "Will be subscribed"
+msgstr "구독 예정"
+
+msgid "Subscribed"
+msgstr "구독됨"
+
+msgid "The move process has finished"
+msgstr "이동 작업이 완료되었습니다"
+
+msgid "Comparison finished. No data has been moved."
+msgstr "비교가 완료되었습니다. 이동된 데이터가 없습니다."
+
+msgid "Move tracking data from the base course or a source session to another session. Use comparison first to review the affected learner data."
+msgstr "기본 강좌 또는 원본 세션의 추적 데이터를 다른 세션으로 이동합니다. 영향을 받는 학습자 데이터를 먼저 비교하여 검토하세요."
+
+msgid "Search for a course or use the manual course ID field below."
+msgstr "강좌를 검색하거나 아래의 수동 강좌 ID 필드를 사용하세요."
+
+msgid "Fallback when the course search is not available."
+msgstr "강좌 검색을 사용할 수 없을 때 대체합니다."
+
+msgid "Load sessions"
+msgstr "세션 불러오기"
+
+msgid "Selected course"
+msgstr "선택한 강좌"
+
+msgid "Choose the base course or the session where the tracking data currently exists."
+msgstr "현재 추적 데이터가 있는 기본 강좌 또는 세션을 선택하세요."
+
+msgid "Choose the session that will receive the tracking data."
+msgstr "추적 데이터를 받을 세션을 선택하세요."
+
+msgid "Important"
+msgstr "중요"
+
+msgid "The move action updates existing tracking data. Run compare first and test this tool with a non-production course before moving real learner data."
+msgstr "이동 작업은 기존 추적 데이터를 업데이트합니다. 실제 학습자 데이터를 이동하기 전에 먼저 비교를 실행하고 비운영 강좌로 이 도구를 테스트하세요."
+
+msgid "No sessions found for this course"
+msgstr "이 강좌에 대한 세션을 찾을 수 없습니다"
+
+msgid "Some users were ignored because they are not subscribed to this session."
+msgstr "일부 사용자는 이 세션에 구독되어 있지 않아 무시되었습니다."
+
+msgid "Remove selected user"
+msgstr "선택한 사용자 제거"
+
+msgid "Add selected user"
+msgstr "선택한 사용자 추가"
+
+msgid "No users from the selected list are subscribed to this session."
+msgstr "선택한 목록의 사용자가 이 세션에 구독되어 있지 않습니다."
+
+msgid "No image"
+msgstr "이미지 없음"
+
+msgid "Invalid URL."
+msgstr "유효하지 않은 URL입니다."
+
+msgid "This cloud document cannot be embedded."
+msgstr "이 클라우드 문서는 임베드할 수 없습니다."
+
+msgid "Document not found"
+msgstr "문서를 찾을 수 없습니다"
+
+msgid "File not found"
+msgstr "파일을 찾을 수 없습니다"
+
+msgid "This learning path is not available for your user at this time."
+msgstr "이 학습 경로는 현재 사용자에게 제공되지 않습니다."
+
+msgid "StartDateMustBeBeforeTheEndDate"
+msgstr "StartDateMustBeBeforeTheEndDate"
+
+msgid "Next learning path"
+msgstr "다음 학습 경로"
+
+msgid "Select the learning path that will be available after this one."
+msgstr "이 학습 경로 이후에 제공될 학습 경로를 선택하세요."
+
+msgid "Create another learning path in this course to enable learning path flow."
+msgstr "이 코스에 다른 학습 경로를 생성하여 학습 경로 흐름을 활성화하세요."
+
+msgid "Available from %s"
+msgstr "%s부터 사용 가능"
+
+msgid "Available until %s"
+msgstr "%s까지 사용 가능"
+
+msgid "Statistics reset date"
+msgstr "통계 초기화 날짜"
+
+msgid "Last 24 hours"
+msgstr "지난 24시간"
+
+msgid "This reset date is used as the reference date for the report. It does not delete historical tracking data."
+msgstr "이 초기화 날짜는 보고서의 기준 날짜로 사용됩니다. 과거 추적 데이터는 삭제되지 않습니다."
+
+msgid "Since reset date"
+msgstr "초기화 날짜 이후"
+
+msgid "Users connected in the last 24 hours"
+msgstr "지난 24시간 동안 접속한 사용자"
+
+msgid "Learners with at least one course access during the last 24 hours."
+msgstr "지난 24시간 동안 코스에 한 번 이상 접속한 학습자입니다."
+
+msgid "Users connected in the last week"
+msgstr "지난 주 동안 접속한 사용자"
+
+msgid "Learners with at least one course access during the last 7 days."
+msgstr "지난 7일 동안 코스에 한 번 이상 접속한 학습자입니다."
+
+msgid "Users connected in the last month"
+msgstr "지난 달 동안 접속한 사용자"
+
+msgid "Learners with at least one course access during the last 30 days."
+msgstr "지난 30일 동안 코스에 한 번 이상 접속한 학습자입니다."
+
+msgid "Not recently connected users"
+msgstr "최근에 접속하지 않은 사용자"
+
+msgid "Learners without course access since %s."
+msgstr "%s 이후 코스에 접속하지 않은 학습자입니다."
+
+msgid "Recently used resources"
+msgstr "최근에 사용된 리소스"
+
+msgid "Course tools/resources used since %s."
+msgstr "%s 이후 사용된 코스 도구/리소스입니다."
+
+msgid "%s %% of learners"
+msgstr "학습자의 %s %%"
+
+msgid "Connections"
+msgstr "접속"
+
+msgid "Total connections"
+msgstr "총 접속 수"
+
+msgid "Downloaded documents"
+msgstr "다운로드한 문서"
+
+msgid "List of documents downloaded by this learner in this course."
+msgstr "이 학습자가 이 코스에서 다운로드한 문서 목록입니다."
+
+msgid "Forum topics"
+msgstr "포럼 주제"
+
+msgid "Forum topics opened by this learner in this course."
+msgstr "이 학습자가 이 코스에서 개설한 포럼 주제입니다."
+
+msgid "Forum posts"
+msgstr "포럼 게시물"
+
+msgid "Forum posts written by this learner in this course."
+msgstr "이 학습자가 이 코스에서 작성한 포럼 게시물입니다."
+
+msgid "Course connections"
+msgstr "코스 접속"
+
+msgid "Connection history for this learner in this course."
+msgstr "이 학습자가 이 코스에서 접속한 기록입니다."
+
+msgid "Resources used"
+msgstr "사용된 리소스"
+
+msgid "Latest tools or resources used by this learner in this course."
+msgstr "이 학습자가 이 코스에서 최근에 사용한 도구 또는 리소스입니다."
+
+msgid "Logout date"
+msgstr "로그아웃 날짜"
+
+msgid "Imported Aiken quiz"
+msgstr "가져온 Aiken 퀴즈"
+
+msgid "Only supported documents will be listed here."
+msgstr "지원되는 문서만 여기에 표시됩니다."
+
+msgid "Generated Aiken content"
+msgstr "생성된 Aiken 콘텐츠"
+
+msgid "Review the generated content before importing it as a new exercise."
+msgstr "새 연습 문제로 가져오기 전에 생성된 콘텐츠를 검토하세요."
+
+msgid "No documents available."
+msgstr "사용 가능한 문서가 없습니다."
+
+msgid "yperbolic arctangent:\\t\\tarctanh(x)"
+msgstr "쌍곡 아크탄젠트:\\t\\tarctanh(x)"
+
+msgid "Exercise"
+msgstr "연습 문제"
+
+msgid "OfficialCode"
+msgstr "공식코드"
+
+msgid "FirstName"
+msgstr "이름"
+
+msgid "LastName"
+msgstr "성"
+
+msgid "LoginName"
+msgstr "로그인 이름"
+
+msgid "MinMinute"
+msgstr "최소분"
+
+msgid "StartDate"
+msgstr "시작일"
+
+msgid "EndDate"
+msgstr "종료일"
+
+msgid "CorrectionDate"
+msgstr "채점일"
+
+msgid "NotValidated"
+msgstr "미승인"
+
+msgid "PendingAttempts"
+msgstr "대기 중인 시도"
+
+msgid "List of pending test attempts across your courses."
+msgstr "귀하의 코스 전반에 걸친 대기 중인 시험 시도 목록입니다."
+
+msgid "User ID"
+msgstr "사용자 ID"
+
+msgid "QuestionType"
+msgstr "문제 유형"
+
+msgid "QuestionsWithNoAutomaticCorrection"
+msgstr "자동 채점이 불가능한 문제"
+
+msgid "There are no pending tests."
+msgstr "대기 중인 시험이 없습니다."
+
+msgid "%s results"
+msgstr "%s 결과"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>예시 양식 작성 활동: 체질량 지수 계산</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>나이</strong></td>            <td width=\"75%\" style=\"\">[25] 세</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>성별</strong></td>            <td style=\"\" text-align:=\"\">[M] (M 또는 F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>체중</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>키</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>체질량 지수</strong></td>            <td style=\"vertical-align: top;\">[29] BMI = 체중/키<sup>2</sup> (참고: <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\">위키백과 문서</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Removed"
+msgstr "삭제됨"
+
+msgid "NoUsersInTheList"
+msgstr "목록에 사용자가 없습니다"
+
+msgid "Are you sure?"
+msgstr "확실합니까?"
+
+msgid "NoResultsAvailable"
+msgstr "사용 가능한 결과가 없습니다"
+
+msgid "Import groups from a CSV file and optionally remove items that are not present in the file."
+msgstr "CSV 파일에서 그룹을 가져오고 파일에 없는 항목을 선택적으로 제거합니다."
+
+msgid "Use this option carefully because items missing from the CSV can be removed during the import process."
+msgstr "CSV에 없는 항목이 가져오기 과정에서 제거될 수 있으므로 이 옵션은 신중하게 사용하십시오."
+
+msgid "Upload a CSV file with the group data you want to import."
+msgstr "가져올 그룹 데이터가 포함된 CSV 파일을 업로드하십시오."
+
+msgid "You can download the example file to use the expected format."
+msgstr "예상 형식을 사용하기 위해 예제 파일을 다운로드할 수 있습니다."
+
+msgid "If you enable deletion, items not present in the file may be removed."
+msgstr "삭제를 활성화하면 파일에 없는 항목이 제거될 수 있습니다."
+
+msgid "The CSV file is mandatory to start the import."
+msgstr "가져오기를 시작하려면 CSV 파일이 필수입니다."
+
+msgid "Please select at least one class."
+msgstr "최소한 하나의 클래스를 선택하십시오."
+
+msgid "Define the properties for each group before creating them."
+msgstr "그룹을 생성하기 전에 각 그룹의 속성을 정의하십시오."
+
+msgid "Apply the first row values"
+msgstr "첫 번째 행 값 적용"
+
+msgid "Create groups manually or generate them from the classes subscribed to this course."
+msgstr "수동으로 그룹을 생성하거나 이 강좌에 등록된 클래스에서 그룹을 생성합니다."
+
+msgid "Create manual groups"
+msgstr "수동 그룹 생성"
+
+msgid "Use this form when you want to create empty course groups manually."
+msgstr "빈 강좌 그룹을 수동으로 생성하려는 경우 이 양식을 사용하십시오."
+
+msgid "Configure manual groups"
+msgstr "수동 그룹 구성"
+
+msgid "Create groups from subscribed classes"
+msgstr "등록된 클래스에서 그룹 생성"
+
+msgid "Use this form when you want to create one course group for each selected class."
+msgstr "선택한 각 클래스에 대해 하나의 강좌 그룹을 생성하려는 경우 이 양식을 사용하십시오."
+
+msgid "Keep created groups linked to their source classes"
+msgstr "생성된 그룹을 원본 클래스에 연결된 상태로 유지"
+
+msgid "Create groups from selected classes"
+msgstr "선택한 클래스에서 그룹 생성"
+
+msgid "You must be logged in to access this page."
+msgstr "이 페이지에 접근하려면 로그인해야 합니다."
+
+msgid "Invalid user"
+msgstr "잘못된 사용자"
+
+msgid "UseCourseCustomCertificate"
+msgstr "강좌 사용자 지정 인증서 사용"
+
+msgid "UseDefaultCustomCertificate"
+msgstr "기본 사용자 지정 인증서 사용"
+
+msgid "CertificateSetting"
+msgstr "인증서 설정"
+
+msgid "SelectOneOptionBeforeOpeningEditor"
+msgstr "편집기를 열기 전에 옵션을 하나 선택하십시오"
+
+msgid "ChooseCustomCertificateModeHelp"
+msgstr "사용자 지정 인증서 모드 선택 도움말"
+
+msgid "CertificateMode"
+msgstr "인증서 모드"
+
+msgid "Enable student to validate own attendance"
+msgstr "학생이 자신의 출석을 직접 확인할 수 있도록 허용"
+
+msgid "Course block"
+msgstr "강좌 블록"
+
+msgid "Add custom content blocks to course footer regions."
+msgstr "강좌 푸터 영역에 사용자 지정 콘텐츠 블록을 추가합니다."
+
+msgid "course_block_pre_footer"
+msgstr "course_block_pre_footer"
+
+msgid "Before footer"
+msgstr "푸터 앞"
+
+msgid "course_block_footer_left"
+msgstr "course_block_footer_left"
+
+msgid "Footer left"
+msgstr "푸터 왼쪽"
+
+msgid "course_block_footer_center"
+msgstr "course_block_footer_center"
+
+msgid "Footer center"
+msgstr "푸터 중앙"
+
+msgid "course_block_footer_right"
+msgstr "course_block_footer_right"
+
+msgid "Footer right"
+msgstr "푸터 오른쪽"
+
+msgid "SetNotification"
+msgstr "알림 설정"
+
+msgid "CourseLegal"
+msgstr "강좌 법적 고지"
+
+msgid "Certificates search is not available"
+msgstr "인증서 검색을 사용할 수 없습니다"
+
+msgid "It allows the acquisition of skills by subcategories"
+msgstr "하위 범주별로 역량을 획득할 수 있습니다"
+
+msgid "Allow skills by subcategories"
+msgstr "하위 범주별 역량 허용"
+
+msgid "Minimum score for skills"
+msgstr "스킬 최소 점수"
+
+msgid "The gradebook table is hidden."
+msgstr "성적표가 숨겨져 있습니다."
+
+msgid "Invalid token"
+msgstr "유효하지 않은 토큰"
+
+msgid "Unable to save the item"
+msgstr "항목을 저장할 수 없습니다"
+
+msgid "Only HTTP and HTTPS URLs are allowed."
+msgstr "HTTP 및 HTTPS URL만 허용됩니다."
+
+msgid "Invalid URL host."
+msgstr "유효하지 않은 URL 호스트입니다."
+
+msgid "This cloud provider is not allowed."
+msgstr "이 클라우드 제공자는 허용되지 않습니다."
+
+msgid "Documents used"
+msgstr "사용된 문서"
+
+msgid "No document usage"
+msgstr "문서 사용 없음"
+
+msgid "Invalid action."
+msgstr "유효하지 않은 작업입니다."
+
+msgid "No users selected."
+msgstr "선택된 사용자가 없습니다."
+
+msgid "%s user(s) processed."
+msgstr "%s명의 사용자가 처리되었습니다."
+
+msgid "Invalid CSRF token."
+msgstr "유효하지 않은 CSRF 토큰입니다."
+
+msgid "[%s] Please change your password"
+msgstr "[%s] 비밀번호를 변경하세요"
+
+msgid "Dear %s,\n\nOur security enforcing process shows you use a password that is commonly used on the internet, which means your account could easily be stolen. It is probably a simple sequence or a very common word, we don't really know (we cannot see your password), but we ask you to please connect to the platform and request a password change. You can follow the link here: %s to do that now.\n\nPlease note we will never ask for your password in this process. You just enter your username or e-mail and we send you a link. If you are asked to introduce your existing password to do that, someone is probably trying to do Phishing on your account. Be safe, change your password now!\n\n%s\n%s"
+msgstr "%s 님께,\n\n보안 강화 프로세스에 따르면 인터넷에서 흔히 사용되는 비밀번호를 사용하고 계십니다. 이는 계정이 쉽게 도용될 수 있음을 의미합니다. 아마도 간단한 순서나 매우 흔한 단어일 가능성이 높습니다(비밀번호는 확인할 수 없습니다). 플랫폼에 접속하여 비밀번호 변경을 요청해 주시기 바랍니다. 지금 변경하려면 다음 링크를 따르세요: %s.\n\n이 과정에서 비밀번호를 요청하는 경우는 절대 없습니다. 사용자 이름이나 이메일을 입력하면 링크를 보내드립니다. 기존 비밀번호를 입력하라는 요청을 받는다면 피싱 시도일 수 있습니다. 안전을 위해 지금 비밀번호를 변경하세요!\n\n%s\n%s"
+
+msgid "[%s] Your password has been reset"
+msgstr "[%s] 비밀번호가 재설정되었습니다"
+
+msgid "Dear %s,\n\nOur security enforcing process flagged you as using a password that is commonly used on the internet, which means your account could easily be stolen. As a prevention measure, we have decided to initiate a password reset process. Your new, automatically generated password is now:\n\n%s\n\nPlease login to the platform soon (using this new password) to set your own, personal and secure, password.\n\nBe safe.\n\n%s\n%s"
+msgstr "%s 님께,\n\n보안 강화 프로세스에 따라 인터넷에서 흔히 사용되는 비밀번호를 사용 중인 것으로 확인되었습니다. 이는 계정이 쉽게 도용될 수 있음을 의미합니다. 예방 조치로 비밀번호 재설정 프로세스를 시작하기로 결정했습니다. 새로 자동 생성된 비밀번호는 다음과 같습니다:\n\n%s\n\n이 새 비밀번호를 사용하여 플랫폼에 로그인한 후 개인적이고 안전한 비밀번호로 변경해 주세요.\n\n안전을 위해.\n\n%s\n%s"
+
+msgid "Signature saved successfully"
+msgstr "서명이 성공적으로 저장되었습니다"
+
+msgid "Invalid request payload."
+msgstr "유효하지 않은 요청 페이로드입니다."
+
+msgid "Authentication required."
+msgstr "인증이 필요합니다."
+
+msgid "The course title is required."
+msgstr "강의 제목은 필수입니다."
+
+msgid "Only trainers and administrators can create courses."
+msgstr "트레이너와 관리자만 강의를 생성할 수 있습니다."
+
+msgid "Course creation by trainers is disabled on this platform."
+msgstr "이 플랫폼에서는 트레이너의 강의 생성이 비활성화되어 있습니다."
+
+msgid "The selected BuyCourses service cannot be used to create this course."
+msgstr "선택한 BuyCourses 서비스는 이 강의를 생성하는 데 사용할 수 없습니다."
+
+msgid "You have reached the maximum number of courses allowed (%d)."
+msgstr "허용된 최대 강의 수(%d)에 도달했습니다."
+
+msgid "The selected BuyCourses service is invalid."
+msgstr "선택한 BuyCourses 서비스가 유효하지 않습니다."
+
+msgid "BuyCourses is not available right now."
+msgstr "BuyCourses를 현재 사용할 수 없습니다."
+
+msgid "BuyCourses cannot validate the selected service right now."
+msgstr "BuyCourses가 현재 선택한 서비스를 검증할 수 없습니다."
+
+msgid "Unable to validate the selected BuyCourses service right now."
+msgstr "선택한 BuyCourses 서비스를 현재 검증할 수 없습니다."
+
+msgid "External tool removed from course"
+msgstr "외부 도구가 강의에서 제거되었습니다"
+
+msgid "External tool was removed from the course, but kept internally because it is linked to the gradebook"
+msgstr "외부 도구가 강의에서 제거되었으나, 성적표에 연결되어 있어 내부적으로 유지됩니다"
+
+msgid "There are no external tools available to add to the gradebook"
+msgstr "성적표에 추가할 수 있는 외부 도구가 없습니다"
+
+msgid "The evaluation could not be created"
+msgstr "평가를 생성할 수 없습니다"
+
+msgid "The gradebook evaluation could not be linked"
+msgstr "성적표 평가를 연결할 수 없습니다"
+
+msgid "Survey questions"
+msgstr "설문 문항"
+
+msgid "Back to survey list"
+msgstr "설문 목록으로 돌아가기"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "이 설문은 이미 응답이 있습니다. 문항 편집은 설정에 의해 비활성화되어 있습니다."
+
+msgid "Choose the type of question you want to add."
+msgstr "추가할 문항 유형을 선택하세요."
+
+msgid "The free text option is added automatically."
+msgstr "자유 텍스트 옵션은 자동으로 추가됩니다."
+
+msgid "No questions found"
+msgstr "문항을 찾을 수 없습니다"
+
+msgid "Mandatory"
+msgstr "필수"
+
+msgid "Unsupported question type"
+msgstr "지원되지 않는 문항 유형"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "문항에 {%s} 및 {%s} 태그를 사용할 수 있습니다."
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "이 문항은 설문 응답 중 조건부로 표시됩니다."
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "1부터 100까지의 백분율 옵션은 자동으로 생성됩니다."
+
+msgid "Could not load survey questions"
+msgstr "설문 문항을 불러올 수 없습니다"
+
+msgid "The question text is required."
+msgstr "문항 텍스트는 필수입니다."
+
+msgid "The maximum score is required."
+msgstr "최대 점수는 필수입니다."
+
+msgid "Please select a parent option."
+msgstr "상위 옵션을 선택하세요."
+
+msgid "Please fill all answer options."
+msgstr "모든 답변 옵션을 입력하세요."
+
+msgid "QuestionUpdated"
+msgstr "QuestionUpdated"
+
+msgid "Could not save survey question"
+msgstr "설문 문항을 저장할 수 없습니다"
+
+msgid "Could not delete survey question"
+msgstr "설문 문항을 삭제할 수 없습니다"
+
+msgid "Could not move survey question"
+msgstr "설문 문항을 이동할 수 없습니다"
+
+msgid "Could not copy survey question"
+msgstr "설문 문항을 복사할 수 없습니다"
+
+msgid "Hide search"
+msgstr "검색 숨기기"
+
+msgid "Showing results for: %s"
+msgstr "다음 결과 표시: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "설문 제목, 코드 또는 설명으로 검색하세요."
+
+msgid "Search surveys"
+msgstr "설문 검색"
+
+msgid "%s surveys selected"
+msgstr "%s개의 설문이 선택됨"
+
+msgid "Clear selection"
+msgstr "선택 해제"
+
+msgid "No surveys found"
+msgstr "설문을 찾을 수 없습니다"
+
+msgid "Unsupported"
+msgstr "지원되지 않음"
+
+msgid "Could not load surveys"
+msgstr "설문조사를 불러올 수 없습니다"
+
+msgid "Delete selected surveys"
+msgstr "선택한 설문조사 삭제"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "선택한 설문조사와 해당 질문이 삭제됩니다. 이 작업은 취소할 수 없습니다."
+
+msgid "Could not delete selected surveys"
+msgstr "선택한 설문조사를 삭제할 수 없습니다"
+
+msgid "Survey action"
+msgstr "설문조사 작업"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "이 설문조사의 복사본이 생성됩니다: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "이 설문조사에 대한 모든 답변과 초대가 삭제됩니다: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "이 설문조사에서 생성된 복제 질문이 제거됩니다: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "이 설문조사가 연결된 그룹 튜터에게 공개됩니다: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "이 설문조사와 해당 질문이 삭제됩니다: %s"
+
+msgid "Could not complete survey action"
+msgstr "설문조사 작업을 완료할 수 없습니다"
+
+msgid "Not started"
+msgstr "시작되지 않음"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "미팅 투표를 통해 초대된 사용자가 가능한 날짜를 선택할 수 있습니다."
+
+msgid "Back to surveys"
+msgstr "설문조사로 돌아가기"
+
+msgid "Edit meeting poll"
+msgstr "미팅 투표 편집"
+
+msgid "View meeting poll"
+msgstr "미팅 투표 보기"
+
+msgid "Basic information"
+msgstr "기본 정보"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "미팅 투표 유형의 설문조사가 생성됩니다. 답변과 초대는 별도로 처리됩니다."
+
+msgid "Availability"
+msgstr "가능 여부"
+
+msgid "Meeting dates"
+msgstr "미팅 날짜"
+
+msgid "Meeting poll"
+msgstr "미팅 투표"
+
+msgid "My availability"
+msgstr "내 가능 여부"
+
+msgid "Meeting poll results"
+msgstr "미팅 투표 결과"
+
+msgid "No invitations found"
+msgstr "초대를 찾을 수 없습니다"
+
+msgid "available"
+msgstr "가능"
+
+msgid "Could not load meeting poll"
+msgstr "미팅 투표를 불러올 수 없습니다"
+
+msgid "Please complete the required fields"
+msgstr "필수 항목을 입력해 주세요"
+
+msgid "Could not save meeting poll"
+msgstr "미팅 투표를 저장할 수 없습니다"
+
+msgid "Could not save meeting availability"
+msgstr "미팅 가능 여부를 저장할 수 없습니다"
+
+msgid "Copy this survey to another course or session"
+msgstr "이 설문조사를 다른 강의 또는 세션으로 복사"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "설문조사는 답변과 초대 없이 복사됩니다."
+
+msgid "No target courses found"
+msgstr "대상 강의를 찾을 수 없습니다"
+
+msgid "Search by course title, course code or session name."
+msgstr "강의 제목, 강의 코드 또는 세션 이름으로 검색하세요."
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "동일한 강의 내에 복사본을 만들려면 설문조사 복제를 사용하세요."
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "질문과 옵션이 복사됩니다. 답변, 초대 및 보고서는 원본 설문조사에만 남습니다."
+
+msgid "Selected target"
+msgstr "선택한 대상"
+
+msgid "Could not load copy form"
+msgstr "복사 양식을 불러올 수 없습니다"
+
+msgid "The survey will be copied to: %s"
+msgstr "설문조사가 다음 위치로 복사됩니다: %s"
+
+msgid "Survey copied."
+msgstr "설문조사가 복사되었습니다."
+
+msgid "Could not copy survey"
+msgstr "설문조사를 복사할 수 없습니다"
+
+msgid "Answer survey"
+msgstr "설문조사 답변"
+
+msgid "Preview mode does not save answers."
+msgstr "미리보기 모드에서는 답변이 저장되지 않습니다."
+
+msgid "Survey completed"
+msgstr "설문조사 완료"
+
+msgid "Thank you for answering the survey."
+msgstr "설문조사에 응답해 주셔서 감사합니다."
+
+msgid "Profile information"
+msgstr "프로필 정보"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "설문조사에 답변하기 전에 요청된 프로필 항목을 확인하세요."
+
+msgid "This profile field is read-only."
+msgstr "이 프로필 항목은 읽기 전용입니다."
+
+msgid "You already filled this survey."
+msgstr "이미 이 설문조사를 작성하셨습니다."
+
+msgid "Please specify"
+msgstr "구체적으로 입력해 주세요"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "이 질문 유형은 최신 설문조사 보기에서 지원되지 않습니다."
+
+msgid "Preview only"
+msgstr "미리보기 전용"
+
+msgid "Submit answers"
+msgstr "답변 제출"
+
+msgid "Could not load survey"
+msgstr "설문을 불러올 수 없습니다"
+
+msgid "Please complete the required profile fields."
+msgstr "필수 프로필 항목을 입력해 주세요."
+
+msgid "Please answer all mandatory questions."
+msgstr "필수 질문에 모두 답변해 주세요."
+
+msgid "Could not save survey answers"
+msgstr "설문 답변을 저장할 수 없습니다"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "질문과 초대장을 관리하기 전에 설문 기본 정보를 설정하세요."
+
+msgid "The survey code cannot be changed after creation."
+msgstr "설문 코드는 생성 후 변경할 수 없습니다."
+
+msgid "Survey behavior"
+msgstr "설문 동작"
+
+msgid "Use 0 for no time limit."
+msgstr "시간 제한이 없으면 0을 입력하세요."
+
+msgid "Survey messages"
+msgstr "설문 메시지"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "여기에서 선택한 프로필 항목은 설문 질문 전에 표시됩니다."
+
+msgid "No profile fields are currently available."
+msgstr "현재 사용 가능한 프로필 항목이 없습니다."
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "프로필 항목 선택은 익명 설문이 아닌 경우에만 사용할 수 있습니다."
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "역량 연결은 별도의 배치 작업으로 마이그레이션됩니다."
+
+msgid "Could not load survey configuration"
+msgstr "설문 구성을 불러올 수 없습니다"
+
+msgid "The survey code is required."
+msgstr "설문 코드는 필수입니다."
+
+msgid "The survey title is required."
+msgstr "설문 제목은 필수입니다."
+
+msgid "The survey has been saved successfully"
+msgstr "설문이 성공적으로 저장되었습니다"
+
+msgid "Could not save survey configuration"
+msgstr "설문 구성을 저장할 수 없습니다"
+
+msgid "Course users"
+msgstr "강의 사용자"
+
+msgid "Already invited"
+msgstr "이미 초대됨"
+
+msgid "No users found"
+msgstr "사용자를 찾을 수 없습니다"
+
+msgid "No groups found"
+msgstr "그룹을 찾을 수 없습니다"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "설문 링크가 표시될 위치에 **link**를 사용하세요."
+
+msgid "Remind all selected users"
+msgstr "선택한 모든 사용자에게 재알림"
+
+msgid "Anonymous access link"
+msgstr "익명 접근 링크"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "초대받지 않은 사용자도 이 링크를 사용하여 설문에 참여할 수 있습니다."
+
+msgid "Answered anonymously"
+msgstr "익명으로 답변함"
+
+msgid "Could not load survey invitations"
+msgstr "설문 초대장을 불러올 수 없습니다"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "메일을 보낼 때는 제목과 본문이 모두 필요합니다."
+
+msgid "Could not publish survey"
+msgstr "설문을 게시할 수 없습니다"
+
+msgid "Could not copy the link"
+msgstr "링크를 복사할 수 없습니다"
+
+msgid "Please answer this survey using the following link"
+msgstr "다음 링크를 사용하여 설문에 답변해 주세요"
+
+msgid "Export CSV"
+msgstr "CSV 내보내기"
+
+msgid "Export compact CSV"
+msgstr "간소화된 CSV 내보내기"
+
+msgid "Export Excel"
+msgstr "Excel 내보내기"
+
+msgid "Export package"
+msgstr "패키지 내보내기"
+
+msgid "Results summary"
+msgstr "결과 요약"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "이 보기는 이 설문의 마이그레이션된 보고서 데이터를 보여줍니다."
+
+msgid "Select user"
+msgstr "사용자 선택"
+
+msgid "No answers found"
+msgstr "답변을 찾을 수 없습니다"
+
+msgid "answers"
+msgstr "답변"
+
+msgid "Could not load survey reporting"
+msgstr "설문 보고서를 불러올 수 없습니다"
+
+msgid "Back to threads"
+msgstr "스레드로 돌아가기"
+
+msgid "Back to learning path"
+msgstr "학습 경로로 돌아가기"
+
+msgid "Remove sticky"
+msgstr "고정 해제"
+
+msgid "Make sticky"
+msgstr "고정"
+
+msgid "Open thread"
+msgstr "스레드 열기"
+
+msgid "Close thread"
+msgstr "스레드 닫기"
+
+msgid "Delete thread"
+msgstr "스레드 삭제"
+
+msgid "This thread is hidden from learners."
+msgstr "이 스레드는 학습자에게 숨겨져 있습니다."
+
+msgid "Revision requested"
+msgstr "수정 요청됨"
+
+msgid "Revision"
+msgstr "수정"
+
+msgid "Approve post"
+msgstr "게시물 승인"
+
+msgid "Reject post"
+msgstr "게시물 거부"
+
+msgid "Cancel revision request"
+msgstr "수정 요청 취소"
+
+msgid "Delete post"
+msgstr "게시물 삭제"
+
+msgid "Message is required"
+msgstr "메시지는 필수입니다"
+
+msgid "Target thread is required"
+msgstr "대상 스레드는 필수입니다"
+
+msgid "Could not retrieve posts"
+msgstr "게시물을 불러올 수 없습니다"
+
+msgid "Thread shown"
+msgstr "스레드 표시됨"
+
+msgid "Thread hidden"
+msgstr "스레드 숨겨짐"
+
+msgid "Could not update thread"
+msgstr "스레드를 업데이트할 수 없습니다"
+
+msgid "Thread closed"
+msgstr "스레드 닫힘"
+
+msgid "Thread opened"
+msgstr "스레드 열림"
+
+msgid "Thread marked as sticky"
+msgstr "스레드가 고정으로 표시됨"
+
+msgid "Thread unmarked as sticky"
+msgstr "스레드의 고정 표시 해제됨"
+
+msgid "Thread notifications enabled"
+msgstr "스레드 알림 활성화됨"
+
+msgid "Thread notifications disabled"
+msgstr "스레드 알림 비활성화됨"
+
+msgid "Could not update thread notification"
+msgstr "스레드 알림을 업데이트할 수 없습니다"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "이 스레드를 삭제하시겠습니까?"
+
+msgid "Could not delete thread"
+msgstr "스레드를 삭제할 수 없습니다"
+
+msgid "Post approved"
+msgstr "게시물 승인됨"
+
+msgid "Could not approve post"
+msgstr "게시물을 승인할 수 없습니다"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "이 게시물을 거부하시겠습니까?"
+
+msgid "Post rejected"
+msgstr "게시물 거부됨"
+
+msgid "Could not reject post"
+msgstr "게시물을 거부할 수 없습니다"
+
+msgid "Post shown"
+msgstr "게시물 표시됨"
+
+msgid "Post hidden"
+msgstr "게시물 숨겨짐"
+
+msgid "Could not update post"
+msgstr "게시물을 업데이트할 수 없습니다"
+
+msgid "Post updated"
+msgstr "게시물 업데이트됨"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "이 게시물을 삭제하시겠습니까?"
+
+msgid "Post deleted"
+msgstr "게시물 삭제됨"
+
+msgid "Could not delete post"
+msgstr "게시물을 삭제할 수 없습니다"
+
+msgid "Untitled thread"
+msgstr "제목 없는 스레드"
+
+msgid "Could not retrieve threads"
+msgstr "스레드를 불러올 수 없습니다"
+
+msgid "Post moved"
+msgstr "게시물 이동됨"
+
+msgid "Could not move post"
+msgstr "게시물을 이동할 수 없습니다"
+
+msgid "Revision request removed"
+msgstr "수정 요청 제거됨"
+
+msgid "Could not update revision request"
+msgstr "수정 요청을 업데이트할 수 없습니다"
+
+msgid "Are you sure you want to report this post?"
+msgstr "이 게시물을 신고하시겠습니까?"
+
+msgid "Could not report post"
+msgstr "게시물을 신고할 수 없습니다"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "이 첨부 파일을 삭제하시겠습니까?"
+
+msgid "Attachment deleted"
+msgstr "첨부 파일 삭제됨"
+
+msgid "Could not delete attachment"
+msgstr "첨부 파일을 삭제할 수 없습니다"
+
+msgid "Thread title"
+msgstr "스레드 제목"
+
+msgid "Sticky thread"
+msgstr "고정 스레드"
+
+msgid "Attach files"
+msgstr "파일 첨부"
+
+msgid "Attachments are disabled for this forum"
+msgstr "이 포럼에서는 첨부 파일이 비활성화되어 있습니다"
+
+msgid "The forum is not open yet."
+msgstr "포럼이 아직 열리지 않았습니다."
+
+msgid "The forum is closed."
+msgstr "포럼이 닫혔습니다."
+
+msgid "The forum is locked."
+msgstr "포럼이 잠겨 있습니다."
+
+msgid "New threads are not allowed in this forum."
+msgstr "이 포럼에서는 새 스레드를 생성할 수 없습니다."
+
+msgid "Thread created"
+msgstr "스레드가 생성되었습니다."
+
+msgid "Could not create thread"
+msgstr "스레드를 생성할 수 없습니다."
+
+msgid "Back to posts"
+msgstr "게시물로 돌아가기"
+
+msgid "This reply will be stored as a revision."
+msgstr "이 답글은 수정본으로 저장됩니다."
+
+msgid "Post reply"
+msgstr "답글 게시"
+
+msgid "The thread is locked."
+msgstr "스레드가 잠겨 있습니다."
+
+msgid "Reply added"
+msgstr "답글이 추가되었습니다."
+
+msgid "Could not add reply"
+msgstr "답글을 추가할 수 없습니다."
+
+msgid "Add forum"
+msgstr "포럼 추가"
+
+msgid "No forums found"
+msgstr "포럼을 찾을 수 없습니다."
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "토론을 시작하려면 첫 번째 포럼 카테고리 또는 포럼을 만드세요."
+
+msgid "Locked"
+msgstr "잠김"
+
+msgid "No forums in this category"
+msgstr "이 카테고리에 포럼이 없습니다."
+
+msgid "Posts require approval"
+msgstr "게시물 승인 필요"
+
+msgid "Forum for current group"
+msgstr "현재 그룹용 포럼"
+
+msgid "Group forum visibility"
+msgstr "그룹 포럼 공개 범위"
+
+msgid "No category"
+msgstr "카테고리 없음"
+
+msgid "Could not retrieve forums"
+msgstr "포럼을 불러올 수 없습니다."
+
+msgid "Forum category updated"
+msgstr "포럼 카테고리가 업데이트되었습니다."
+
+msgid "Forum category created"
+msgstr "포럼 카테고리가 생성되었습니다."
+
+msgid "Could not save forum category"
+msgstr "포럼 카테고리를 저장할 수 없습니다."
+
+msgid "Forum updated"
+msgstr "포럼이 업데이트되었습니다."
+
+msgid "Forum created"
+msgstr "포럼이 생성되었습니다."
+
+msgid "Could not save forum"
+msgstr "포럼을 저장할 수 없습니다."
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "이 포럼 카테고리를 삭제하시겠습니까?"
+
+msgid "Could not delete forum category"
+msgstr "포럼 카테고리를 삭제할 수 없습니다."
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "이 포럼을 삭제하시겠습니까?"
+
+msgid "Could not delete forum"
+msgstr "포럼을 삭제할 수 없습니다."
+
+msgid "Forum category unlocked"
+msgstr "포럼 카테고리가 잠금 해제되었습니다."
+
+msgid "Forum category locked"
+msgstr "포럼 카테고리가 잠겼습니다."
+
+msgid "Could not update forum category"
+msgstr "포럼 카테고리를 업데이트할 수 없습니다."
+
+msgid "Forum category shown"
+msgstr "포럼 카테고리가 표시되었습니다."
+
+msgid "Forum category hidden"
+msgstr "포럼 카테고리가 숨겨졌습니다."
+
+msgid "Forum unlocked"
+msgstr "포럼이 잠금 해제되었습니다."
+
+msgid "Forum locked"
+msgstr "포럼이 잠겼습니다."
+
+msgid "Could not update forum"
+msgstr "포럼을 업데이트할 수 없습니다."
+
+msgid "Forum shown"
+msgstr "포럼이 표시되었습니다."
+
+msgid "Forum hidden"
+msgstr "포럼이 숨겨졌습니다."
+
+msgid "Forum notifications enabled"
+msgstr "포럼 알림이 활성화되었습니다."
+
+msgid "Forum notifications disabled"
+msgstr "포럼 알림이 비활성화되었습니다."
+
+msgid "Could not update forum notification"
+msgstr "포럼 알림을 업데이트할 수 없습니다."
+
+msgid "Forum category moved"
+msgstr "포럼 카테고리가 이동되었습니다."
+
+msgid "Could not move forum category"
+msgstr "포럼 카테고리를 이동할 수 없습니다."
+
+msgid "Forum moved"
+msgstr "포럼이 이동되었습니다."
+
+msgid "Could not move forum"
+msgstr "포럼을 이동할 수 없습니다."
+
+msgid "Back to forums"
+msgstr "포럼으로 돌아가기"
+
+msgid "New thread"
+msgstr "새 스레드"
+
+msgid "No threads found"
+msgstr "스레드를 찾을 수 없습니다"
+
+msgid "Sticky"
+msgstr "고정"
+
+msgid "Graded"
+msgstr "채점됨"
+
+msgid "Grade peers"
+msgstr "동료 채점"
+
+msgid "Move thread"
+msgstr "스레드 이동"
+
+msgid "Target forum"
+msgstr "대상 포럼"
+
+msgid "Target forum is required"
+msgstr "대상 포럼은 필수입니다"
+
+msgid "Students"
+msgstr "학생"
+
+msgid "No students found"
+msgstr "학생을 찾을 수 없습니다"
+
+msgid "No peers available to grade."
+msgstr "채점할 동료가 없습니다."
+
+msgid "Qualified"
+msgstr "자격 있음"
+
+msgid "Not qualified"
+msgstr "자격 없음"
+
+msgid "Could not retrieve thread grading"
+msgstr "스레드 채점을 검색할 수 없습니다"
+
+msgid "Thread grading updated"
+msgstr "스레드 채점이 업데이트되었습니다"
+
+msgid "Could not update thread grading"
+msgstr "스레드 채점을 업데이트할 수 없습니다"
+
+msgid "Thread score saved"
+msgstr "스레드 점수가 저장되었습니다"
+
+msgid "Could not save thread score"
+msgstr "스레드 점수를 저장할 수 없습니다"
+
+msgid "Could not move thread"
+msgstr "스레드를 이동할 수 없습니다"
+
+msgid "Thread updated"
+msgstr "스레드가 업데이트되었습니다"
+
+msgid "Search term is too short"
+msgstr "검색어가 너무 짧습니다"
+
+msgid "Could not search forums"
+msgstr "포럼을 검색할 수 없습니다"
+
+msgid "Moderated"
+msgstr "중재됨"
+
+msgid "View threads"
+msgstr "스레드 보기"
 

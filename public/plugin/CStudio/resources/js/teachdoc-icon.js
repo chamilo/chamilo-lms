@@ -4,38 +4,112 @@ var ludiiconplus = '/plugin/CStudio/img/base/oeltools32plus.png';
 var caneditparamicon = false;
 
 $(document).ready(function($){
-	
-	var teachdocLstIds = $('#teachdocLstIds').html();
-
-	if (teachdocLstIds!="no") {
-
-    var h = '<a href="/plugin/CStudio/oel_tools_teachdoc_link.php?action=add&' + window.chamiloCidReq.queryParams + '" ';
-    h += ' class="btn btn--plain-outline" ';
-		h += ' alt="Studio Tools" title="Studio Tools">';
-		h += '<img id="studioeltools" class="h-6" src="'+ ludiiconplus + '" ';
-		h += ' alt="Studio Tools" title="Studio Tools" /> ';
-		h += '</a>';
-		$('.section-header__actions').prepend(h);
-
-		if(teachdocLstIds==''){
-			getIdsLocalStorage();
-      getOelToolsId();
-    }else{
-      document.addEventListener("chamilo:lp-list-loaded", function () {
-        installExtrasToolsOelTools(teachdocLstIds);
-        getOelToolsId();
-      });
-
-      if (window.location.href.indexOf("/main/lp/lp_controller.php") !== -1) {
-        getOelToolsId();
-      }
-		}
-
-	}
-
-	setTimeout(function(){processExtraPour();},100);
-
+    initializeCStudioLpTools();
 });
+
+function initializeCStudioLpTools() {
+    var teachdocLstIds = $('#teachdocLstIds').html();
+
+    if (typeof teachdocLstIds == 'undefined') {
+        teachdocLstIds = '';
+    }
+
+    if (teachdocLstIds != "no") {
+        installCStudioCreateButton(30);
+
+        if(teachdocLstIds==''){
+            getIdsLocalStorage();
+            getOelToolsId();
+        }else{
+            document.addEventListener("chamilo:lp-list-loaded", function () {
+                installExtrasToolsOelTools(teachdocLstIds);
+                getOelToolsId();
+            });
+
+            if (window.location.href.indexOf("/main/lp/lp_controller.php") !== -1) {
+                getOelToolsId();
+            }
+        }
+    }
+
+    setTimeout(function(){processExtraPour();},100);
+}
+
+
+
+function installCStudioCreateButton(retries) {
+    if ($('#cstudio-lp-create-button').length > 0) {
+        refreshCStudioCreateButtonUrl();
+
+        return true;
+    }
+
+    var actions = $('.section-header__actions');
+
+    if (actions.length == 0) {
+        if (retries > 0) {
+            setTimeout(function () {
+                installCStudioCreateButton(retries - 1);
+            }, 250);
+        }
+
+        return false;
+    }
+
+    var cidQueryParams = getChamiloCidQueryParamsForCStudio();
+
+    if (cidQueryParams == '') {
+        if (retries > 0) {
+            setTimeout(function () {
+                installCStudioCreateButton(retries - 1);
+            }, 250);
+        }
+
+        return false;
+    }
+
+    var h = '<a id="cstudio-lp-create-button" href="#" ';
+    h += ' class="btn btn--plain-outline" ';
+    h += ' alt="Studio Tools" title="Studio Tools">';
+    h += '<img id="studioeltools" class="h-6" src="'+ ludiiconplus + '" ';
+    h += ' alt="Studio Tools" title="Studio Tools" /> ';
+    h += '</a>';
+
+    actions.prepend(h);
+    refreshCStudioCreateButtonUrl();
+
+    $('#cstudio-lp-create-button').on('click', function (event) {
+        refreshCStudioCreateButtonUrl();
+
+        var href = $(this).attr('href');
+
+        if (typeof href == 'undefined' || href == '' || href == '#') {
+            event.preventDefault();
+            console.log('CStudio: course context is not ready yet.');
+        }
+    });
+
+    return true;
+}
+
+function refreshCStudioCreateButtonUrl() {
+    var cidQueryParams = getChamiloCidQueryParamsForCStudio();
+
+    if (cidQueryParams == '') {
+        return false;
+    }
+
+    if (cidQueryParams.charAt(0) != '&') {
+        cidQueryParams = '&' + cidQueryParams;
+    }
+
+    $('#cstudio-lp-create-button').attr(
+        'href',
+        '/plugin/CStudio/oel_tools_teachdoc_link.php?action=add' + cidQueryParams
+    );
+
+    return true;
+}
 
 function installExtrasToolsOelTools(teachdocLstIds) {
 
@@ -162,6 +236,56 @@ function installExtrasToolsLp(teachdocLstIds) {
 
 }
 
+function getChamiloCidQueryParamsForCStudio() {
+    if (window.chamiloCidReq && window.chamiloCidReq.queryParams) {
+        return window.chamiloCidReq.queryParams;
+    }
+
+    if (
+        window.parent
+        && window.parent !== window
+        && window.parent.chamiloCidReq
+        && window.parent.chamiloCidReq.queryParams
+    ) {
+        return window.parent.chamiloCidReq.queryParams;
+    }
+
+    if (
+        window.top
+        && window.top !== window
+        && window.top.chamiloCidReq
+        && window.top.chamiloCidReq.queryParams
+    ) {
+        return window.top.chamiloCidReq.queryParams;
+    }
+
+    var params = new URLSearchParams(window.location.search);
+    var cid = params.get('cid');
+
+    if (cid !== null && cid !== '') {
+        var cidQueryParams = 'cid=' + encodeURIComponent(cid);
+        var sid = params.get('sid');
+        var gid = params.get('gid');
+        var gradebook = params.get('gradebook');
+
+        if (sid !== null && sid !== '') {
+            cidQueryParams += '&sid=' + encodeURIComponent(sid);
+        }
+
+        if (gid !== null && gid !== '') {
+            cidQueryParams += '&gid=' + encodeURIComponent(gid);
+        }
+
+        if (gradebook !== null && gradebook !== '') {
+            cidQueryParams += '&gradebook=' + encodeURIComponent(gradebook);
+        }
+
+        return cidQueryParams;
+    }
+
+    return '';
+}
+
 function getParamValueForOelTools(param) {
 	var u = window.top.location.href;var reg=new RegExp('(\\?|&|^)'+param+'=(.*?)(&|$)');
 	matches=u.match(reg);
@@ -237,7 +361,7 @@ function processExtraPour() {
 
 		var lk = '/plugin/CStudio/ajax/sco/scorm-save-location.php';
 		$.ajax({
-			url: lk + "?loc=0&id=" + mem_idstudio + '&pour=' + mem_pourcstudio + '&' + window.chamiloCidReq.queryParams
+			url: lk + "?loc=0&id=" + mem_idstudio + '&pour=' + mem_pourcstudio + '&' + getChamiloCidQueryParamsForCStudio()
 		}).done(function(){
 			window.localStorage.setItem('idstudio',0);
 			window.localStorage.setItem('pourcstudio',0);

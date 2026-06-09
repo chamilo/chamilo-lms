@@ -354,6 +354,7 @@ const allowSvgInEditor = computed(() => {
 
 const editorFeatureFlags = computed(() => ({
   isLearner: securityStore.isStudent === true,
+  disableCopyPaste: toBool(platformConfigStore.getSetting("platform.disable_copy_paste")),
   blockCopyPasteForStudents: toBool(platformConfigStore.getSetting("editor.block_copy_paste_for_students")),
   youtubeForStudents: toBool(platformConfigStore.getSetting("editor.youtube_for_students")),
   enabledInsertHtml: toBool(platformConfigStore.getSetting("editor.enabled_insertHtml")),

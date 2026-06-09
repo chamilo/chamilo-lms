@@ -6,45 +6,14 @@ import Audio from "@uppy/audio"
 import XHRUpload from "@uppy/xhr-upload"
 import ImageEditor from "@uppy/image-editor"
 
-import es_ES from "@uppy/locales/lib/es_ES"
-import en_US from "@uppy/locales/lib/en_US"
-import fr_FR from "@uppy/locales/lib/fr_FR"
-import de_DE from "@uppy/locales/lib/de_DE"
-import it_IT from "@uppy/locales/lib/it_IT"
-import pl_PL from "@uppy/locales/lib/pl_PL"
-import pt_PT from "@uppy/locales/lib/pt_PT"
-
 import "@uppy/core/dist/style.css"
 import "@uppy/dashboard/dist/style.css"
 import "@uppy/image-editor/dist/style.css"
 import "@uppy/webcam/dist/style.css"
 import "@uppy/audio/dist/style.css"
-import { useLocale } from "../../composables/locale"
+import { useUppyLocale } from "../../composables/uppyLocale"
 
-const { appLocale } = useLocale()
-const supportedLanguages = {
-  es: es_ES,
-  en: en_US,
-  fr: fr_FR,
-  de: de_DE,
-  it: it_IT,
-  pl: pl_PL,
-  pt: pt_PT,
-}
-
-function getUppyLanguageConfig(appLocale) {
-  const defaultLang = en_US
-
-  if (typeof appLocale !== "string") {
-    return defaultLang
-  }
-
-  const localePrefix = appLocale.split("_")[0]
-
-  return supportedLanguages[localePrefix] || defaultLang
-}
-
-const locale = getUppyLanguageConfig(appLocale.value)
+const { uppyLocale } = useUppyLocale()
 
 const props = defineProps({
   endpoint: {
@@ -66,7 +35,7 @@ const emit = defineEmits(["upload", "upload-success", "complete"])
 
 const uppy = new Uppy({
   autoProceed: props.autoProceed,
-  locale: locale,
+  locale: uppyLocale.value,
 })
   .use(ImageEditor, {
     cropperOptions: {
@@ -100,11 +69,38 @@ const uppy = new Uppy({
 </script>
 
 <template>
-  <Dashboard
-    :plugins="['Webcam', 'ImageEditor', 'Audio']"
-    :props="{
-      proudlyDisplayPoweredByUppy: false,
-    }"
-    :uppy="uppy"
-  />
+  <div class="ch-uppy-dashboard">
+    <Dashboard
+      :plugins="['Webcam', 'ImageEditor', 'Audio']"
+      :props="{
+        proudlyDisplayPoweredByUppy: false,
+        hideCancelButton: true,
+      }"
+      :uppy="uppy"
+    />
+  </div>
 </template>
+
+
+<style scoped>
+.ch-uppy-dashboard :deep(.uppy-StatusBar-actions) {
+  @apply flex flex-wrap items-center justify-end gap-2;
+}
+
+.ch-uppy-dashboard :deep(.uppy-StatusBar-actionBtn--upload) {
+  @apply inline-flex min-h-10 items-center justify-center rounded-xl border-0 bg-primary px-4 py-2 text-body-2 font-semibold text-white shadow-sm transition;
+}
+
+.ch-uppy-dashboard :deep(.uppy-StatusBar-actionBtn--upload:hover),
+.ch-uppy-dashboard :deep(.uppy-StatusBar-actionBtn--upload:focus) {
+  @apply bg-primary text-white;
+}
+
+.ch-uppy-dashboard :deep(.uppy-StatusBar-actionBtn--upload:disabled) {
+  @apply cursor-not-allowed opacity-60;
+}
+
+.ch-uppy-dashboard :deep(.uppy-StatusBar-actionBtn--cancel) {
+  @apply hidden;
+}
+</style>

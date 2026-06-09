@@ -35,11 +35,12 @@
         </span>
       </div>
 
-      <div class="rounded-2xl border border-gray-25 bg-white p-3">
+      <div class="ch-uppy-dashboard rounded-2xl border border-gray-25 bg-white p-3">
         <Dashboard
           :plugins="['Webcam', 'ImageEditor']"
           :props="{
             proudlyDisplayPoweredByUppy: false,
+            hideCancelButton: true,
             width: '100%',
             height: '380px',
           }"
@@ -72,6 +73,7 @@ import { storeToRefs } from "pinia"
 import { useI18n } from "vue-i18n"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import { useUppyLocale } from "../../composables/uppyLocale"
 
 const servicePrefix = "PersonalFile"
 
@@ -94,6 +96,7 @@ export default {
     const router = useRouter()
     const securityStore = useSecurityStore()
     const { t } = useI18n()
+    const { uppyLocale } = useUppyLocale()
 
     const { user, isAuthenticated, isAdmin } = storeToRefs(securityStore)
 
@@ -151,7 +154,10 @@ export default {
     }
 
     const uppy = ref()
-    uppy.value = new Uppy({ autoProceed: false })
+    uppy.value = new Uppy({
+      autoProceed: false,
+      locale: uppyLocale.value,
+    })
       .use(Webcam)
       .use(ImageEditor, {
         cropperOptions: {
@@ -246,3 +252,27 @@ export default {
   },
 }
 </script>
+
+
+<style scoped>
+.ch-uppy-dashboard :deep(.uppy-StatusBar-actions) {
+  @apply flex flex-wrap items-center justify-end gap-2;
+}
+
+.ch-uppy-dashboard :deep(.uppy-StatusBar-actionBtn--upload) {
+  @apply inline-flex min-h-10 items-center justify-center rounded-xl border-0 bg-primary px-4 py-2 text-body-2 font-semibold text-white shadow-sm transition;
+}
+
+.ch-uppy-dashboard :deep(.uppy-StatusBar-actionBtn--upload:hover),
+.ch-uppy-dashboard :deep(.uppy-StatusBar-actionBtn--upload:focus) {
+  @apply bg-primary text-white;
+}
+
+.ch-uppy-dashboard :deep(.uppy-StatusBar-actionBtn--upload:disabled) {
+  @apply cursor-not-allowed opacity-60;
+}
+
+.ch-uppy-dashboard :deep(.uppy-StatusBar-actionBtn--cancel) {
+  @apply hidden;
+}
+</style>

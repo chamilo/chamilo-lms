@@ -21,11 +21,13 @@ import Uppy from "@uppy/core"
 import { DashboardModal } from "@uppy/vue"
 import "@uppy/core/dist/style.css"
 import "@uppy/dashboard/dist/style.css"
+import { useUppyLocale } from "../../composables/uppyLocale"
 
 const props = defineProps({
   visible: { type: Boolean, default: false },
 })
 const emit = defineEmits(["close", "files-selected", "file-added"])
+const { uppyLocale } = useUppyLocale()
 const uppy = shallowRef(null)
 const ready = ref(false)
 let onFileAddedHandler = null
@@ -46,6 +48,7 @@ onMounted(() => {
     new Uppy({
       autoProceed: false,
       allowMultipleUploads: true,
+      locale: uppyLocale.value,
       restrictions: { maxNumberOfFiles: null },
     }),
   )

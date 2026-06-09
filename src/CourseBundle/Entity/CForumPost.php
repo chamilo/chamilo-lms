@@ -6,21 +6,221 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\OpenApi\Model\Operation;
+use ApiPlatform\OpenApi\Model\Parameter;
+use ApiPlatform\OpenApi\Model\RequestBody;
+use ArrayObject;
+use Chamilo\CoreBundle\ApiResource\Forum\ForumPostWriteInput;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\State\ForumPostActionProvider;
+use Chamilo\CoreBundle\State\ForumPostProcessor;
 use Chamilo\CourseBundle\Repository\CForumPostRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CForumPost.
  */
+#[ApiResource(
+    shortName: 'ForumPost',
+    operations: [
+        new Post(
+            uriTemplate: '/forum_posts/reply',
+            inputFormats: [
+                'jsonld' => ['application/ld+json'],
+                'json' => ['application/json'],
+                'multipart' => ['multipart/form-data'],
+            ],
+            openapi: new Operation(
+                summary: 'Reply to a forum thread',
+                requestBody: new RequestBody(
+                    content: new ArrayObject([
+                        'application/json' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'forumId' => ['type' => 'integer'],
+                                    'threadId' => ['type' => 'integer'],
+                                    'parentPostId' => ['type' => 'integer'],
+                                    'title' => ['type' => 'string'],
+                                    'text' => ['type' => 'string'],
+                                    'csrfToken' => ['type' => 'string'],
+                                ],
+                                'required' => ['forumId', 'threadId', 'title', 'text', 'csrfToken'],
+                            ],
+                        ],
+                        'multipart/form-data' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'forumId' => ['type' => 'integer'],
+                                    'threadId' => ['type' => 'integer'],
+                                    'parentPostId' => ['type' => 'integer'],
+                                    'title' => ['type' => 'string'],
+                                    'text' => ['type' => 'string'],
+                                    'csrfToken' => ['type' => 'string'],
+                                    'attachments' => [
+                                        'type' => 'array',
+                                        'items' => ['type' => 'string', 'format' => 'binary'],
+                                    ],
+                                ],
+                                'required' => ['forumId', 'threadId', 'title', 'text', 'csrfToken'],
+                            ],
+                        ],
+                    ]),
+                ),
+            ),
+            security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
+            input: ForumPostWriteInput::class,
+            read: false,
+            name: 'create_forum_reply',
+            processor: ForumPostProcessor::class,
+        ),
+        new Put(
+            uriTemplate: '/forum_posts/{iid}/update',
+            security: "is_granted('VIEW', object.resourceNode)",
+            deserialize: false,
+            name: 'update_forum_post',
+            provider: ForumPostActionProvider::class,
+            processor: ForumPostProcessor::class,
+        ),
+        new Put(
+            uriTemplate: '/forum_posts/{iid}/toggle-visibility',
+            security: "is_granted('EDIT', object.resourceNode)",
+            deserialize: false,
+            name: 'toggle_forum_post_visibility',
+            provider: ForumPostActionProvider::class,
+            processor: ForumPostProcessor::class,
+        ),
+        new Put(
+            uriTemplate: '/forum_posts/{iid}/approve',
+            security: "is_granted('EDIT', object.resourceNode)",
+            deserialize: false,
+            name: 'approve_forum_post',
+            provider: ForumPostActionProvider::class,
+            processor: ForumPostProcessor::class,
+        ),
+        new Put(
+            uriTemplate: '/forum_posts/{iid}/reject',
+            security: "is_granted('EDIT', object.resourceNode)",
+            deserialize: false,
+            name: 'reject_forum_post',
+            provider: ForumPostActionProvider::class,
+            processor: ForumPostProcessor::class,
+        ),
+        new Put(
+            uriTemplate: '/forum_posts/{iid}/move',
+            security: "is_granted('EDIT', object.resourceNode)",
+            deserialize: false,
+            name: 'move_forum_post',
+            provider: ForumPostActionProvider::class,
+            processor: ForumPostProcessor::class,
+        ),
+        new Put(
+            uriTemplate: '/forum_posts/{iid}/ask-revision',
+            security: "is_granted('VIEW', object.resourceNode)",
+            deserialize: false,
+            name: 'ask_forum_post_revision',
+            provider: ForumPostActionProvider::class,
+            processor: ForumPostProcessor::class,
+        ),
+        new Put(
+            uriTemplate: '/forum_posts/{iid}/report',
+            security: "is_granted('VIEW', object.resourceNode)",
+            deserialize: false,
+            name: 'report_forum_post',
+            provider: ForumPostActionProvider::class,
+            processor: ForumPostProcessor::class,
+        ),
+        new Delete(
+            uriTemplate: '/forum_posts/{iid}',
+            security: "is_granted('VIEW', object.resourceNode)",
+            deserialize: false,
+            name: 'delete_forum_post',
+            provider: ForumPostActionProvider::class,
+            processor: ForumPostProcessor::class,
+        ),
+        new Get(security: "is_granted('VIEW', object.resourceNode)"),
+        new GetCollection(
+            openapi: new Operation(
+                parameters: [
+                    new Parameter(
+                        name: 'thread',
+                        in: 'query',
+                        description: 'Thread IRI',
+                        required: true,
+                        schema: ['type' => 'string'],
+                    ),
+                    new Parameter(
+                        name: 'forum',
+                        in: 'query',
+                        description: 'Forum IRI',
+                        required: false,
+                        schema: ['type' => 'string'],
+                    ),
+                    new Parameter(
+                        name: 'visible',
+                        in: 'query',
+                        description: 'Visible posts only',
+                        required: false,
+                        schema: ['type' => 'boolean'],
+                    ),
+                    new Parameter(
+                        name: 'cid',
+                        in: 'query',
+                        description: 'Course id',
+                        required: true,
+                        schema: ['type' => 'integer'],
+                    ),
+                    new Parameter(
+                        name: 'sid',
+                        in: 'query',
+                        description: 'Session id',
+                        required: false,
+                        schema: ['type' => 'integer'],
+                    ),
+                    new Parameter(
+                        name: 'gid',
+                        in: 'query',
+                        description: 'Group id',
+                        required: false,
+                        schema: ['type' => 'integer'],
+                    ),
+                ],
+            ),
+            security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
+        ),
+    ],
+    normalizationContext: [
+        'groups' => ['forum_post:read', 'resource_node:read'],
+    ],
+)]
+#[ApiFilter(SearchFilter::class, properties: [
+    'title' => 'partial',
+    'thread' => 'exact',
+    'forum' => 'exact',
+    'visible' => 'exact',
+    'status' => 'exact',
+])]
+#[ApiFilter(OrderFilter::class, properties: ['postDate', 'iid'])]
 #[ORM\Table(name: 'c_forum_post')]
 #[ORM\Index(name: 'forum_id', columns: ['forum_id'])]
 #[ORM\Index(name: 'idx_forum_post_thread_id', columns: ['thread_id'])]
@@ -32,19 +232,24 @@ class CForumPost extends AbstractResource implements ResourceInterface, Stringab
     public const STATUS_WAITING_MODERATION = 2;
     public const STATUS_REJECTED = 3;
 
+    #[ApiProperty(identifier: true)]
+    #[Groups(['forum_post:read'])]
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $iid = null;
 
+    #[Groups(['forum_post:read'])]
     #[Assert\NotBlank]
     #[ORM\Column(name: 'title', type: 'string', length: 250, nullable: false)]
     protected string $title;
 
+    #[Groups(['forum_post:read'])]
     #[ORM\Column(name: 'post_text', type: 'text', nullable: true)]
     protected ?string $postText = null;
 
     #[Assert\NotBlank]
+    #[Groups(['forum_post:read'])]
     #[ORM\Column(name: 'post_date', type: 'datetime', nullable: false)]
     protected DateTime $postDate;
 
@@ -52,16 +257,20 @@ class CForumPost extends AbstractResource implements ResourceInterface, Stringab
     protected ?bool $postNotification = null;
 
     #[Assert\NotNull]
+    #[Groups(['forum_post:read'])]
     #[ORM\Column(name: 'visible', type: 'boolean', nullable: false)]
     protected bool $visible;
 
+    #[Groups(['forum_post:read'])]
     #[ORM\Column(name: 'status', type: 'integer', nullable: true)]
     protected ?int $status = null;
 
+    #[Groups(['forum_post:read'])]
     #[ORM\ManyToOne(targetEntity: CForumThread::class, inversedBy: 'posts')]
     #[ORM\JoinColumn(name: 'thread_id', referencedColumnName: 'iid', nullable: true, onDelete: 'SET NULL')]
     protected ?CForumThread $thread = null;
 
+    #[Groups(['forum_post:read'])]
     #[ORM\ManyToOne(targetEntity: CForum::class, inversedBy: 'posts')]
     #[ORM\JoinColumn(name: 'forum_id', referencedColumnName: 'iid', nullable: true, onDelete: 'SET NULL')]
     protected ?CForum $forum = null;
@@ -84,6 +293,7 @@ class CForumPost extends AbstractResource implements ResourceInterface, Stringab
     /**
      * @var Collection|CForumAttachment[]
      */
+    #[Groups(['forum_post:read'])]
     #[ORM\OneToMany(targetEntity: CForumAttachment::class, mappedBy: 'post', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $attachments;
 
@@ -277,6 +487,16 @@ class CForumPost extends AbstractResource implements ResourceInterface, Stringab
         $this->children = $children;
 
         return $this;
+    }
+
+    #[Groups(['forum_post:read'])]
+    public function getPosterFullName(): string
+    {
+        if (null === $this->user) {
+            return '';
+        }
+
+        return $this->user->getFullName();
     }
 
     public function getResourceIdentifier(): int|Uuid

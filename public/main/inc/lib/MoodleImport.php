@@ -382,8 +382,13 @@ class MoodleImport
                     $moduleDir = $currentItem['directory'];
                     $moduleXml = @file_get_contents($destinationDir.'/'.$moduleDir.'/'.$moduleName.'.xml');
                     $moduleValues = $this->readUrlModule($moduleXml);
+                    $externalUrl = isset($moduleValues['externalurl']) ? (string) $moduleValues['externalurl'] : '';
+                    // Only import http(s) links; reject dangerous schemes (javascript:, data:, etc.)
+                    if (!preg_match('#^https?://#i', $externalUrl)) {
+                        break;
+                    }
                     $_POST['title'] = $moduleValues['name'];
-                    $_POST['url'] = $moduleValues['externalurl'];
+                    $_POST['url'] = $externalUrl;
                     $_POST['description'] = $moduleValues['intro'];
                     $_POST['category_id'] = 0;
                     $_POST['target'] = '_blank';

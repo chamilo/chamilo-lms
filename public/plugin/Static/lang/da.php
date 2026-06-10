@@ -9,3 +9,4 @@ $strings['plugin_comment'] = 'Vis statisk HTML-indhold.';
 $strings['block_title'] = 'Bloktitel';
 
 //$strings['title'] = "Title";
+$strings['content'] = 'Indhold';

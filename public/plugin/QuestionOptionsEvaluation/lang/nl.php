@@ -4,7 +4,6 @@
 $strings['plugin_title'] = 'Evaluatie van vraagopties';
 $strings['plugin_comment'] = 'Herberekening van de scores van opties in vragen toestaan';
 
-$strings['enable'] = 'Inschakelen';
 $strings['exercise_max_score'] = 'Max score in oefeningen';
 $strings['exercise_max_score_help'] = 'Standaard is 10.';
 
@@ -17,3 +16,5 @@ $strings['Formula3'] = 'Successen - Fouten / 3';
 $strings['QuestionsEvaluated'] = 'Geëvalueerde vragen';
 $strings['RecalculateQuestionScores'] = 'Vraagscores herberekenen';
 $strings['FormulaSavedForExerciseX'] = 'Formule opgeslagen voor oefening "%s".';
+$strings['NoFormulaHelp'] = 'Behoud het standaard Chamilo-scoringsgedrag voor deze test.';
+$strings['enable'] = 'Inschakelen';

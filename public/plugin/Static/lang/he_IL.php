@@ -9,3 +9,4 @@ $strings['plugin_comment'] = 'הצגת תוכן HTML סטטי.';
 $strings['block_title'] = 'כותרת הבלוק';
 
 //$strings['title'] = "Title";
+$strings['content'] = 'תוכן';

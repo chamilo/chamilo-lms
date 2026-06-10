@@ -20,3 +20,7 @@ $strings['EmbedDateRangeHelp'] = 'Bu tarihler arasında, bu gömülü içerik sa
 $strings['HtmlCode'] = 'HTML kodu';
 $strings['HtmlCodeHelp'] = 'Dış hizmet tarafından Gömülü formatında paylaşma istendiğinde sağlanan paylaşılan HTML kodu.';
 $strings['LaunchContent'] = 'İçeriği başlat';
+
+$strings['InvalidDateRange'] = 'Başlangıç tarihi, bitiş tarihinden önce veya eşit olmalıdır.';
+
+$strings['InvalidSecurityToken'] = 'Geçersiz güvenlik belirteci. Lütfen sayfayı yeniden yükleyin ve tekrar deneyin.';

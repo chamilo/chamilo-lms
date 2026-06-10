@@ -1,0 +1,95 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+$strings['plugin_title'] = 'Uvoz iz Moodla';
+$strings['plugin_comment'] = 'Izvedi postopek uvoza iz Moodle podatkovne baze in datotek v Chamilo.';
+
+$strings['MoodlePassword'] = 'Geslo za Moodle';
+$strings['UninstallError'] = 'Prišlo je do napake pri odstranjevanju vtičnika.';
+
+$strings['db_host'] = 'Gostitelj Moodle DB';
+$strings['db_user'] = 'Uporabnik Moodle DB';
+$strings['db_password'] = 'Geslo za Moodle DB';
+$strings['db_name'] = 'Ime Moodle DB';
+$strings['user_filter'] = 'Filter za uporabnike';
+$strings['user_filter_help'] = 'Uvozi samo uporabnike, katerih uporabniško ime se začne s tem nizom.<br>Uvoz predmetov je prav tako odvisen od te nastavitve, saj uvozi samo predmete, v katere so vpisani uporabniki s tem predpono uporabniškega imena.';
+$strings['url_id'] = 'ID URL';
+$strings['url_id_help'] = 'ID URL za dostop, kamor se shranijo predmeti, uporabniki in seje (če se uporablja multi-url).';
+$strings['moodle_path'] = 'Pot do moodledata';
+$strings['moodle_path_help'] = 'Pot do mape moodledata. Običajno nekaj takega kot <pre>/var/www/moodledata</pre>';
+
+// Tasks
+$strings['UsersTask'] = 'Uporabniki';
+$strings['CourseCategoriesTask'] = 'Kategorije predmetov';
+$strings['CoursesTask'] = 'Predmeti';
+$strings['CourseSectionsTask'] = 'Odseki predmeta';
+$strings['CourseModulesLessonTask'] = 'Moduli predmeta: Lekcije';
+$strings['LessonPagesTask'] = 'Strani lekcij';
+$strings['LessonPagesDocumentTask'] = 'Strani lekcij: Dokumenti';
+$strings['FilesForLessonPagesTask'] = 'Datoteke za strani lekcij';
+$strings['LessonPagesQuizTask'] = 'Strani lekcij: Vprašanja';
+$strings['LessonPagesQuizQuestionTask'] = 'Vprašanja za strani z vprašanji';
+$strings['LessonAnswersTrueFalseTask'] = 'Odgovori za vprašanja Resnično/Napačno';
+$strings['LessonAnswersMultipleChoiceTask'] = 'Odgovori za vprašanja z več možnostmi';
+$strings['LessonAnswersMultipleAnswerTask'] = 'Odgovori za vprašanja z več odgovori';
+$strings['LessonAnswersMatchingTask'] = 'Odgovori za vprašanja ujemanja';
+$strings['LessonAnswersEssayTask'] = 'Odgovori za vprašanja z eseji';
+$strings['LessonAnswersShortAnswerTask'] = 'Odgovori za vprašanja s kratkim odgovorom';
+$strings['FilesForLessonAnswersTask'] = 'Datoteke za odgovore lekcij';
+$strings['CourseModulesQuizTask'] = 'Moduli predmeta: Kvizi';
+$strings['CQuizTask'] = 'Kvizi v C';
+$strings['RoleAssignmentsTask'] = 'Dodelitve vlog';
+$strings['QuizzesTask'] = 'Kvizi';
+$strings['FilesForQuizzesTask'] = 'Datoteke za kvize';
+$strings['QuestionCategoriesTask'] = 'Kategorije vprašanj';
+$strings['QuestionsTask'] = 'Vprašanja';
+$strings['QuestionMultiChoiceSingleTask'] = 'Odgovori za vprašanja z več možnostmi (eno)';
+$strings['QuestionMultiChoiceMultipleTask'] = 'Odgovori za vprašanja z več možnostmi (več)';
+$strings['QuestionsTrueFalseTask'] = 'Odgovori za vprašanja resnično/napačno';
+$strings['QuestionShortAnswerTask'] = 'Odgovori za vprašanja s kratkim odgovorom';
+$strings['CourseModulesScormTask'] = 'SCORM predmeti';
+$strings['ScormScoesTask'] = 'SCORM elementi';
+$strings['FilesForScormScoesTask'] = 'Datoteke za SCORM elemente';
+$strings['UserSessionsTask'] = 'Seje predmetov za uporabnike';
+$strings['CourseIntroductionsTask'] = 'Uvod v predmet';
+$strings['FilesForCourseIntroductionsTask'] = 'Datoteke za uvode v predmet';
+$strings['FilesForCourseSectionsTask'] = 'Datoteke za odseke predmeta';
+$strings['CourseModulesUrlTask'] = 'Moduli predmeta: URL-ji';
+$strings['UrlsTask'] = 'URL-ji';
+$strings['SortSectionModulesTask'] = 'Razvrsti module v odseku';
+$strings['UsersScormsViewTask'] = 'SCORM ogledi za uporabnike';
+$strings['UsersScormsProgressTask'] = 'SCORM napredek';
+$strings['UsersLearnPathsTask'] = 'Ogledi učnih poti za uporabnike';
+$strings['UsersLearnPathsLessonTimerTask'] = 'Časovnik lekcije za začetni čas odseka učnih poti';
+$strings['QuizzesScoresTask'] = 'Posodobi rezultate kvizov v učni poti';
+$strings['QuestionGapselectTask'] = 'Odgovori za vprašanja z vrzeli';
+$strings['UsersLearnPathsLessonBranchTask'] = 'Razvejanje lekcije v skupni čas v dokumentih učnih poti';
+$strings['UsersLearnPathsLessonAttemptsTask'] = 'Poskusi lekcije v skupni čas v kvizih učnih poti';
+$strings['UsersLearnPathsQuizzesTask'] = 'Poskusi kvizov v poskuse kvizov učnih poti';
+$strings['UsersQuizzesAttemptsTask'] = 'Poskusi kvizov za uporabnike';
+$strings['UserQuestionAttemptsShortanswerTask'] = 'Poskusi vprašanj za uporabnike pri kratkih odgovorih';
+$strings['UserQuestionAttemptsGapselectTask'] = 'Poskusi vprašanj za uporabnike pri vprašanjih z vrzeli';
+$strings['UserQuestionAttemptsTruefalseTask'] = 'Poskusi vprašanj za uporabnike pri pravilno/ Napačno';
+$strings['UsersLastLoginTask'] = 'Zadnje prijave za uporabnike';
+$strings['TrackLoginTask'] = 'Prva prijava in zadnja odjava';
+$strings['TrackCourseAccessTask'] = 'Dostop uporabnika do predmeta';
+$strings['UserLearnPathsProgressScript'] = 'Posodobi napredek v učnih poteh za uporabnike.';
+$strings['UserScormsProgressScript'] = 'Posodobi napredek v SCORM-ih za uporabnike.';
+
+$strings['InstallError'] = 'Prišlo je do napake pri nameščanju vtičnika: %s';
+$strings['AdminIntro'] = 'Zaženi opravila migracije iz Moodla po vrstnem redu. Vsak korak je omogočen šele po dokončanju nadrejenega koraka.';
+$strings['MoodleDatabase'] = 'Moodle podatkovna baza';
+$strings['MoodledataPath'] = 'Pot do Moodledata';
+$strings['AccessUrlId'] = 'ID URL-ja za dostop';
+$strings['Configured'] = 'Konfigurirano';
+$strings['NotConfigured'] = 'Ni konfigurirano';
+$strings['ConfigurePlugin'] = 'Konfiguriraj vtičnik';
+$strings['MissingRequiredDatabaseConfiguration'] = 'Konfigurirajte gostitelja Moodle podatkovne baze, uporabnika in ime baze pred zagonom opravil migracije.';
+$strings['MissingMoodledataPathWarning'] = 'Pot do Moodledata je prazna. Opravila, povezana z datotekami, lahko spodletijo, dokler ta nastavitev ni konfigurirana.';
+$strings['InvalidMigrationAction'] = 'Neveljavno dejanje migracije.';
+$strings['InvalidSecurityToken'] = 'Neveljaven varnostni žeton. Ponovno naložite stran in poskusite znova.';
+$strings['MigrationTasks'] = 'Opravila migracije';
+$strings['MaintenanceScripts'] = 'Vzdrževalni skripti';
+$strings['ExecutionOutput'] = 'Izhod izvajanja';
+$strings['TaskAlreadyExecuted'] = 'To opravilo ali skript je bilo že izvedeno.';
+$strings['SelectTaskToRun'] = 'Izberite opravilo migracije za izvedbo. Izhod se bo prikazal tukaj.';

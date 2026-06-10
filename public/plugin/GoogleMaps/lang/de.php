@@ -1,0 +1,39 @@
+<?php
+
+$strings['plugin_title'] = 'Google Maps';
+$strings['plugin_comment'] = 'Zeigt eine Google-Karte mit Benutzerstandorten an, die in zusätzlichen Feldern gespeichert sind.';
+$strings['enable_api'] = 'Google Maps API laden';
+$strings['api_key'] = 'API-Schlüssel';
+$strings['extra_field_name'] = 'Name des Zusatzfeldes';
+$strings['extra_field_name_help'] = 'Geben Sie einen oder mehrere Variablennamen von Benutzer-Zusatzfeldern ein, getrennt durch Kommata. Die Karte kann bis zu 5 Felder anzeigen. Beispiel: address, office_address, city';
+$strings['UsersCoordinatesMap'] = 'Benutzerstandort-Karte';
+$strings['UsersCoordinatesMapHelp'] = 'Diese Karte zeigt Benutzerstandorte basierend auf konfigurierten Benutzer-Zusatzfeldern an.';
+$strings['GoogleMapsAdminIntro'] = 'Konfigurieren Sie den Google Maps API-Schlüssel und die Benutzer-Zusatzfelder, die Adressen oder Standorte enthalten.';
+$strings['GoogleMapsApi'] = 'Google Maps API';
+$strings['ExtraFields'] = 'Zusatzfelder';
+$strings['Access'] = 'Zugriff';
+$strings['AdministratorsOnly'] = 'Nur Administratoren';
+$strings['OpenMap'] = 'Karte öffnen';
+$strings['ConfigurePlugin'] = 'Plugin konfigurieren';
+$strings['Configured'] = 'Konfiguriert';
+$strings['NotConfigured'] = 'Nicht konfiguriert';
+$strings['GoogleMapsApiDisabledWarning'] = 'Das Laden der Google Maps API ist in der Plugin-Konfiguration deaktiviert.';
+$strings['GoogleMapsApiKeyMissingWarning'] = 'Der Google Maps API-Schlüssel fehlt.';
+$strings['ExtraFieldNameMissingWarning'] = 'Es wurde kein Benutzer-Zusatzfeld konfiguriert.';
+$strings['ExtraFieldsNotFoundWarning'] = 'Die folgenden Benutzer-Zusatzfelder wurden nicht gefunden: %s.';
+$strings['NoUserCoordinatesFound'] = 'Für die konfigurierten Zusatzfelder wurden keine Benutzerstandorte gefunden.';
+$strings['ConfigureGoogleMapsFirst'] = 'Konfigurieren und aktivieren Sie die Google Maps API, bevor Sie die Karte öffnen.';
+
+$strings['map_provider'] = 'Kartenanbieter';
+$strings['map_provider_help'] = 'Wählen Sie den Kartenanbieter aus, der vom Plugin und von der Social-Karte verwendet wird.';
+$strings['GoogleMapsProvider'] = 'Google Maps';
+$strings['OpenStreetMapProvider'] = 'OpenStreetMap';
+$strings['MapProvider'] = 'Kartenanbieter';
+$strings['MapProviderConfiguration'] = 'Anbieterkonfiguration';
+$strings['default_latitude'] = 'Standard-Breitengrad';
+$strings['default_latitude_help'] = 'Standard-Breitengrad der Kartenmitte. Wird verwendet, wenn kein Marker verfügbar ist.';
+$strings['default_longitude'] = 'Standard-Längengrad';
+$strings['default_longitude_help'] = 'Standard-Längengrad der Kartenmitte. Wird verwendet, wenn kein Marker verfügbar ist.';
+$strings['default_zoom'] = 'Standard-Zoom';
+$strings['default_zoom_help'] = 'Standard-Kartenzoom zwischen 1 und 20.';
+$strings['OpenStreetMapInfo'] = 'OpenStreetMap erfordert keinen API-Schlüssel. Adress-Marker werden als Suchlinks angezeigt, sofern keine Koordinaten verfügbar sind.';

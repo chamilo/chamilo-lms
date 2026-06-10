@@ -9,3 +9,4 @@ $strings['plugin_comment'] = 'Rādīt statisku HTML saturu.';
 $strings['block_title'] = 'Bloka virsraksts';
 
 //$strings['title'] = "Title";
+$strings['content'] = 'Saturs';

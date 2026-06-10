@@ -4,7 +4,6 @@
 $strings['plugin_title'] = 'הערכת אפשרויות השאלה';
 $strings['plugin_comment'] = 'אפשר חישוב מחדש של הניקוד של האפשרויות בשאלות';
 
-$strings['enable'] = 'הפעל';
 $strings['exercise_max_score'] = 'ניקוד מקסימלי בתרגילים';
 $strings['exercise_max_score_help'] = 'ברירת מחדל היא 10.';
 
@@ -17,3 +16,5 @@ $strings['Formula3'] = 'הצלחות - כשלונות / 3';
 $strings['QuestionsEvaluated'] = 'שאלות שהוערכו';
 $strings['RecalculateQuestionScores'] = 'חשב מחדש ניקודי שאלות';
 $strings['FormulaSavedForExerciseX'] = 'הנוסחה נשמרה עבור התרגיל "%s".';
+$strings['NoFormulaHelp'] = 'שמור על התנהגות הניקוד המוגדרת כברירת מחדל של Chamilo עבור מבחן זה.';
+$strings['enable'] = 'הפעל';

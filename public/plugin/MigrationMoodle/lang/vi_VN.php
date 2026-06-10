@@ -1,0 +1,95 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+$strings['plugin_title'] = 'Nhập từ Moodle';
+$strings['plugin_comment'] = 'Thực hiện quá trình nhập từ cơ sở dữ liệu và tệp Moodle sang Chamilo.';
+
+$strings['MoodlePassword'] = 'Mật khẩu Moodle';
+$strings['UninstallError'] = 'Đã xảy ra lỗi khi gỡ cài đặt plugin.';
+
+$strings['db_host'] = 'Máy chủ DB Moodle';
+$strings['db_user'] = 'Người dùng DB Moodle';
+$strings['db_password'] = 'Mật khẩu DB Moodle';
+$strings['db_name'] = 'Tên DB Moodle';
+$strings['user_filter'] = 'Bộ lọc cho người dùng';
+$strings['user_filter_help'] = 'Chỉ nhập những người dùng có tên đăng nhập bắt đầu bằng chuỗi này.<br>Việc nhập khóa học cũng bị ảnh hưởng bởi cấu hình này, vì nó chỉ nhập các khóa học mà người dùng có tiền tố tên đăng nhập này đã đăng ký.';
+$strings['url_id'] = 'ID URL';
+$strings['url_id_help'] = 'ID URL truy cập để lưu khóa học, người dùng và phiên (nếu sử dụng multi-url).';
+$strings['moodle_path'] = 'Đường dẫn moodledata';
+$strings['moodle_path_help'] = 'Đường dẫn thư mục moodledata. Thường là <pre>/var/www/moodledata</pre>';
+
+// Tasks
+$strings['UsersTask'] = 'Người dùng';
+$strings['CourseCategoriesTask'] = 'Danh mục khóa học';
+$strings['CoursesTask'] = 'Khóa học';
+$strings['CourseSectionsTask'] = 'Phần khóa học';
+$strings['CourseModulesLessonTask'] = 'Mô-đun khóa học: Bài học';
+$strings['LessonPagesTask'] = 'Trang bài học';
+$strings['LessonPagesDocumentTask'] = 'Trang bài học: Tài liệu';
+$strings['FilesForLessonPagesTask'] = 'Tệp cho trang bài học';
+$strings['LessonPagesQuizTask'] = 'Trang bài học: Câu hỏi';
+$strings['LessonPagesQuizQuestionTask'] = 'Câu hỏi cho trang câu hỏi';
+$strings['LessonAnswersTrueFalseTask'] = 'Câu trả lời cho câu hỏi Đúng/Sai';
+$strings['LessonAnswersMultipleChoiceTask'] = 'Câu trả lời cho câu hỏi Trắc nghiệm';
+$strings['LessonAnswersMultipleAnswerTask'] = 'Câu trả lời cho câu hỏi Nhiều lựa chọn';
+$strings['LessonAnswersMatchingTask'] = 'Câu trả lời cho câu hỏi Ghép đôi';
+$strings['LessonAnswersEssayTask'] = 'Câu trả lời cho câu hỏi Tự luận';
+$strings['LessonAnswersShortAnswerTask'] = 'Câu trả lời cho câu hỏi Trả lời ngắn';
+$strings['FilesForLessonAnswersTask'] = 'Tệp cho câu trả lời bài học';
+$strings['CourseModulesQuizTask'] = 'Mô-đun khóa học: Bài kiểm tra';
+$strings['CQuizTask'] = 'Bài kiểm tra C';
+$strings['RoleAssignmentsTask'] = 'Phân quyền vai trò';
+$strings['QuizzesTask'] = 'Bài kiểm tra';
+$strings['FilesForQuizzesTask'] = 'Tệp cho bài kiểm tra';
+$strings['QuestionCategoriesTask'] = 'Danh mục câu hỏi';
+$strings['QuestionsTask'] = 'Câu hỏi';
+$strings['QuestionMultiChoiceSingleTask'] = 'Câu trả lời cho câu hỏi trắc nghiệm (đơn)';
+$strings['QuestionMultiChoiceMultipleTask'] = 'Câu trả lời cho câu hỏi trắc nghiệm (nhiều)';
+$strings['QuestionsTrueFalseTask'] = 'Câu trả lời cho câu hỏi đúng/sai';
+$strings['QuestionShortAnswerTask'] = 'Câu trả lời cho câu hỏi trả lời ngắn';
+$strings['CourseModulesScormTask'] = 'Khóa học SCORM';
+$strings['ScormScoesTask'] = 'Mục SCORM';
+$strings['FilesForScormScoesTask'] = 'Tệp cho mục SCORM';
+$strings['UserSessionsTask'] = 'Phiên khóa học cho người dùng';
+$strings['CourseIntroductionsTask'] = 'Giới thiệu khóa học';
+$strings['FilesForCourseIntroductionsTask'] = 'Tệp cho phần giới thiệu khóa học';
+$strings['FilesForCourseSectionsTask'] = 'Tệp cho phần khóa học';
+$strings['CourseModulesUrlTask'] = 'Mô-đun khóa học: URL';
+$strings['UrlsTask'] = 'URL';
+$strings['SortSectionModulesTask'] = 'Sắp xếp mô-đun trong phần';
+$strings['UsersScormsViewTask'] = 'Lượt xem SCORM của người dùng';
+$strings['UsersScormsProgressTask'] = 'Tiến độ SCORM';
+$strings['UsersLearnPathsTask'] = 'Lượt xem học liệu của người dùng';
+$strings['UsersLearnPathsLessonTimerTask'] = 'Thời gian bắt đầu bài học trong phần học liệu';
+$strings['QuizzesScoresTask'] = 'Cập nhật điểm trắc nghiệm trong học liệu';
+$strings['QuestionGapselectTask'] = 'Câu trả lời cho câu hỏi điền vào chỗ trống';
+$strings['UsersLearnPathsLessonBranchTask'] = 'Nhánh bài học sang tổng thời gian trong tài liệu học liệu';
+$strings['UsersLearnPathsLessonAttemptsTask'] = 'Số lần thử bài học sang tổng thời gian trong bài trắc nghiệm học liệu';
+$strings['UsersLearnPathsQuizzesTask'] = 'Số lần thử trắc nghiệm sang số lần thử trắc nghiệm học liệu';
+$strings['UsersQuizzesAttemptsTask'] = 'Số lần thử trắc nghiệm của người dùng';
+$strings['UserQuestionAttemptsShortanswerTask'] = 'Số lần thử câu hỏi của người dùng cho dạng trả lời ngắn';
+$strings['UserQuestionAttemptsGapselectTask'] = 'Số lần thử câu hỏi của người dùng cho dạng điền vào chỗ trống';
+$strings['UserQuestionAttemptsTruefalseTask'] = 'Số lần thử câu hỏi của người dùng cho dạng đúng/sai';
+$strings['UsersLastLoginTask'] = 'Lần đăng nhập cuối của người dùng';
+$strings['TrackLoginTask'] = 'Lần đăng nhập đầu và lần đăng xuất cuối';
+$strings['TrackCourseAccessTask'] = 'Truy cập khóa học của người dùng';
+$strings['UserLearnPathsProgressScript'] = 'Cập nhật tiến độ trong học liệu cho người dùng.';
+$strings['UserScormsProgressScript'] = 'Cập nhật tiến độ trong SCORM cho người dùng.';
+
+$strings['InstallError'] = 'Đã xảy ra lỗi khi cài đặt plugin: %s';
+$strings['AdminIntro'] = 'Chạy các tác vụ di chuyển Moodle theo thứ tự. Mỗi bước chỉ được kích hoạt sau khi bước cha của nó đã hoàn thành.';
+$strings['MoodleDatabase'] = 'Cơ sở dữ liệu Moodle';
+$strings['MoodledataPath'] = 'Đường dẫn Moodledata';
+$strings['AccessUrlId'] = 'ID URL truy cập';
+$strings['Configured'] = 'Đã cấu hình';
+$strings['NotConfigured'] = 'Chưa cấu hình';
+$strings['ConfigurePlugin'] = 'Cấu hình plugin';
+$strings['MissingRequiredDatabaseConfiguration'] = 'Cấu hình máy chủ cơ sở dữ liệu Moodle, người dùng và tên cơ sở dữ liệu trước khi chạy các tác vụ di chuyển.';
+$strings['MissingMoodledataPathWarning'] = 'Đường dẫn Moodledata trống. Các tác vụ liên quan đến tệp có thể thất bại cho đến khi thiết lập này được cấu hình.';
+$strings['InvalidMigrationAction'] = 'Hành động di chuyển không hợp lệ.';
+$strings['InvalidSecurityToken'] = 'Mã thông báo bảo mật không hợp lệ. Vui lòng tải lại trang và thử lại.';
+$strings['MigrationTasks'] = 'Tác vụ di chuyển';
+$strings['MaintenanceScripts'] = 'Tập lệnh bảo trì';
+$strings['ExecutionOutput'] = 'Kết quả thực thi';
+$strings['TaskAlreadyExecuted'] = 'Tác vụ hoặc tập lệnh này đã được thực thi.';
+$strings['SelectTaskToRun'] = 'Chọn một tác vụ di chuyển để chạy. Kết quả sẽ xuất hiện ở đây.';

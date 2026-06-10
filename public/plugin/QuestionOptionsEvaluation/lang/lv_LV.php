@@ -4,7 +4,6 @@
 $strings['plugin_title'] = 'Jautājuma opciju novērtēšana';
 $strings['plugin_comment'] = 'Atļaut opciju punktu pārrēķināšanu jautājumos';
 
-$strings['enable'] = 'Ieslēgt';
 $strings['exercise_max_score'] = 'Maksimālais punktu skaits vingrinājumos';
 $strings['exercise_max_score_help'] = 'Noklusējums ir 10.';
 
@@ -17,3 +16,5 @@ $strings['Formula3'] = 'Veiksmes - neveiksmes / 3';
 $strings['QuestionsEvaluated'] = 'Novērtētie jautājumi';
 $strings['RecalculateQuestionScores'] = 'Pārrēķināt jautājumu punktus';
 $strings['FormulaSavedForExerciseX'] = 'Formula saglabāta vingrinājumam "%s".';
+$strings['NoFormulaHelp'] = 'Saglabāt noklusējuma Chamilo vērtēšanas uzvedību šim testam.';
+$strings['enable'] = 'Ieslēgt';

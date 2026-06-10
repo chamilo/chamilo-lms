@@ -5,6 +5,17 @@
 $strings['plugin_title'] = 'Zoom 화상 회의';
 $strings['plugin_comment'] = '강의 및 세션에서의 Zoom 화상 회의 통합';
 
+$strings['accountId'] = '계정 ID';
+$strings['clientId'] = '클라이언트 ID';
+$strings['clientSecret'] = '클라이언트 시크릿';
+$strings['webhookSecretToken'] = '웹훅 시크릿 토큰';
+$strings['apiKey_help'] = '레거시 JWT API 키. Zoom Server-to-Server OAuth의 경우 Account ID, Client ID, Client Secret을 사용하는 것을 권장합니다.';
+$strings['apiSecret_help'] = '레거시 JWT API 시크릿. Zoom Server-to-Server OAuth의 경우 Account ID, Client ID, Client Secret을 사용하는 것을 권장합니다.';
+$strings['verificationToken_help'] = '레거시 웹훅 검증 토큰. Webhook Secret Token을 사용하는 것을 권장합니다.';
+$strings['accountId_help'] = 'Zoom Server-to-Server OAuth 계정 ID.';
+$strings['clientId_help'] = 'Zoom Server-to-Server OAuth 클라이언트 ID.';
+$strings['clientSecret_help'] = 'Zoom Server-to-Server OAuth 클라이언트 시크릿.';
+$strings['webhookSecretToken_help'] = 'Zoom 웹훅 요청을 검증하는 데 사용되는 시크릿 토큰입니다.';
 $strings['apiKey'] = 'API 키';
 $strings['apiSecret'] = 'API 시크릿';
 $strings['verificationToken'] = '검증 토큰';

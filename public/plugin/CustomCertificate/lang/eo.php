@@ -75,3 +75,18 @@ $strings['QuestionDelete'] = 'Ĉu vi volas forigi la specifan diplomon kaj uzi l
 $strings['SuccessDelete'] = 'Sukcese forigita';
 $strings['ProblemDelete'] = 'Problemo forigante la atestilon';
 $strings['OnlyCustomCertificates'] = 'Nur kursoj kun propra atestilo estas eksportitaj';
+$strings['CertificateMode'] = 'Atestila reĝimo';
+$strings['UseCourseCustomCertificate'] = 'Uzi kurs-specifan personigitan atestilon';
+$strings['UseDefaultCustomCertificate'] = 'Uzi defaŭltan platforman personigitan atestilon';
+
+$strings['CreateCertificateWithTags'] = 'Krei la atestilon per ĉi tiuj etikedoj';
+
+$strings['DeleteCertificate'] = 'Forigi atestilon';
+
+$strings['SaveCertificate'] = 'Konservi atestilon';
+
+$strings['SelectOneOptionBeforeOpeningEditor'] = 'Elektu unu opcion kaj konservu agordojn antaŭ ol malfermi la atestilan redaktilon.';
+
+$strings['ChooseCustomCertificateModeHelp'] = 'Elektu kiel ĉi tiu kurso uzu personigitajn atestilojn.';
+
+$strings['CouldNotSaveCertificate'] = 'Ne eblis konservi la atestilan agordon.';

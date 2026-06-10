@@ -75,3 +75,18 @@ $strings['QuestionDelete'] = 'Bạn có muốn xóa bằng cấp cụ thể và 
 $strings['SuccessDelete'] = 'Xóa thành công';
 $strings['ProblemDelete'] = 'Có vấn đề khi xóa chứng chỉ';
 $strings['OnlyCustomCertificates'] = 'Chỉ các khóa học có chứng chỉ cá nhân hóa mới được xuất';
+$strings['CertificateMode'] = 'Chế độ chứng chỉ';
+$strings['UseCourseCustomCertificate'] = 'Sử dụng chứng chỉ tùy chỉnh theo khóa học';
+$strings['UseDefaultCustomCertificate'] = 'Sử dụng chứng chỉ tùy chỉnh mặc định của nền tảng';
+
+$strings['CreateCertificateWithTags'] = 'Tạo chứng chỉ bằng các thẻ này';
+
+$strings['DeleteCertificate'] = 'Xóa chứng chỉ';
+
+$strings['SaveCertificate'] = 'Lưu chứng chỉ';
+
+$strings['SelectOneOptionBeforeOpeningEditor'] = 'Chọn một tùy chọn và lưu cài đặt trước khi mở trình chỉnh sửa chứng chỉ.';
+
+$strings['ChooseCustomCertificateModeHelp'] = 'Chọn cách khóa học này sử dụng chứng chỉ tùy chỉnh.';
+
+$strings['CouldNotSaveCertificate'] = 'Không thể lưu cấu hình chứng chỉ.';

@@ -5,6 +5,17 @@
 $strings['plugin_title'] = 'Zoom 视频会议';
 $strings['plugin_comment'] = '课程和会话中的 Zoom 视频会议集成';
 
+$strings['accountId'] = '账户 ID';
+$strings['clientId'] = '客户端 ID';
+$strings['clientSecret'] = '客户端密钥';
+$strings['webhookSecretToken'] = 'Webhook 密钥令牌';
+$strings['apiKey_help'] = '旧版 JWT API 密钥。建议使用账户 ID、客户端 ID 和客户端密钥进行 Zoom Server-to-Server OAuth。';
+$strings['apiSecret_help'] = '旧版 JWT API 密钥。建议使用账户 ID、客户端 ID 和客户端密钥进行 Zoom Server-to-Server OAuth。';
+$strings['verificationToken_help'] = '旧版 Webhook 验证令牌。建议使用 Webhook 密钥令牌。';
+$strings['accountId_help'] = 'Zoom Server-to-Server OAuth 账户 ID。';
+$strings['clientId_help'] = 'Zoom Server-to-Server OAuth 客户端 ID。';
+$strings['clientSecret_help'] = 'Zoom Server-to-Server OAuth 客户端密钥。';
+$strings['webhookSecretToken_help'] = '用于验证 Zoom Webhook 请求的密钥令牌。';
 $strings['apiKey'] = 'API 密钥';
 $strings['apiSecret'] = 'API 密钥';
 $strings['verificationToken'] = '验证令牌';

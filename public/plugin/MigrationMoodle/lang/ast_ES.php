@@ -1,0 +1,95 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+$strings['plugin_title'] = 'Importar dende Moodle';
+$strings['plugin_comment'] = "Executar un procesu d'importación dende una base de datos y ficheros de Moodle a Chamilo.";
+
+$strings['MoodlePassword'] = 'Contraseña de Moodle';
+$strings['UninstallError'] = 'Prodúxose un error al desinstalar el plugin.';
+
+$strings['db_host'] = 'Agospiador de la BD de Moodle';
+$strings['db_user'] = 'Usuariu de la BD de Moodle';
+$strings['db_password'] = 'Contraseña de la BD de Moodle';
+$strings['db_name'] = 'Nome de la BD de Moodle';
+$strings['user_filter'] = 'Filtru pa usuarios';
+$strings['user_filter_help'] = "Importar namái los usuarios que tengan un nome d'usuariu col prefixu d'esta cadena.<br>L'importación de cursos tamién se ve afeutada por esta configuración, pos namái importa los cursos nos que tán matriculaos usuarios con esti prefixu de nome d'usuariu.";
+$strings['url_id'] = 'ID de la URL';
+$strings['url_id_help'] = "ID de la URL d'accesu pa guardar cursos, usuarios y sesiones (si s'usa multi-url).";
+$strings['moodle_path'] = 'Camín de moodledata';
+$strings['moodle_path_help'] = 'El camín de la carpeta moodledata. De normal daqué como <pre>/var/www/moodledata</pre>';
+
+// Tasks
+$strings['UsersTask'] = 'Usuarios';
+$strings['CourseCategoriesTask'] = 'Categoríes de cursos';
+$strings['CoursesTask'] = 'Cursos';
+$strings['CourseSectionsTask'] = 'Seiciones de cursu';
+$strings['CourseModulesLessonTask'] = 'Módulos de cursu: Lleiciones';
+$strings['LessonPagesTask'] = 'Páxines de lleición';
+$strings['LessonPagesDocumentTask'] = 'Páxines de lleición: Documentos';
+$strings['FilesForLessonPagesTask'] = 'Ficheros pa páxines de lleición';
+$strings['LessonPagesQuizTask'] = 'Páxines de lleición: Entrugues';
+$strings['LessonPagesQuizQuestionTask'] = "Entrugues pa páxines d'entrugues";
+$strings['LessonAnswersTrueFalseTask'] = 'Respuestes pa entrugues Verdaderu/Falsu';
+$strings['LessonAnswersMultipleChoiceTask'] = "Respuestes pa entrugues d'Escoyeta múltiple";
+$strings['LessonAnswersMultipleAnswerTask'] = 'Respuestes pa entrugues de Respuestes múltiples';
+$strings['LessonAnswersMatchingTask'] = "Respuestes pa entrugues d'Empareyamientu";
+$strings['LessonAnswersEssayTask'] = 'Respuestes pa entrugues de Redaición';
+$strings['LessonAnswersShortAnswerTask'] = 'Respuestes pa entrugues de Respuesta curtia';
+$strings['FilesForLessonAnswersTask'] = 'Ficheros pa respuestes de lleición';
+$strings['CourseModulesQuizTask'] = 'Módulos de cursu: Cuestionarios';
+$strings['CQuizTask'] = 'Cuestionariu C';
+$strings['RoleAssignmentsTask'] = 'Asignaciones de rol';
+$strings['QuizzesTask'] = 'Cuestionarios';
+$strings['FilesForQuizzesTask'] = 'Ficheros pa cuestionarios';
+$strings['QuestionCategoriesTask'] = "Categoríes d'entrugues";
+$strings['QuestionsTask'] = 'Entrugues';
+$strings['QuestionMultiChoiceSingleTask'] = "Respuestes pa entrugues d'escoyeta múltiple (única)";
+$strings['QuestionMultiChoiceMultipleTask'] = "Respuestes pa entrugues d'escoyeta múltiple (múltiple)";
+$strings['QuestionsTrueFalseTask'] = 'Respuestes pa entrugues verdaderu/falsu';
+$strings['QuestionShortAnswerTask'] = 'Respuestes pa entrugues de respuesta curtia';
+$strings['CourseModulesScormTask'] = 'Cursos SCORM';
+$strings['ScormScoesTask'] = 'Elementos SCORM';
+$strings['FilesForScormScoesTask'] = 'Ficheros pa elementos SCORM';
+$strings['UserSessionsTask'] = 'Sesiones de cursu pa usuarios';
+$strings['CourseIntroductionsTask'] = 'Introducciones de cursu';
+$strings['FilesForCourseIntroductionsTask'] = 'Ficheros pa introducciones de cursu';
+$strings['FilesForCourseSectionsTask'] = 'Ficheros pa seiciones de cursu';
+$strings['CourseModulesUrlTask'] = 'Módulos de cursu: URLs';
+$strings['UrlsTask'] = 'URLs';
+$strings['SortSectionModulesTask'] = 'Ordenar módulos na seición';
+$strings['UsersScormsViewTask'] = 'Vistes SCORM pa usuarios';
+$strings['UsersScormsProgressTask'] = 'Progresu SCORM';
+$strings['UsersLearnPathsTask'] = "Vistes de caminos d'aprendizaxe de los usuarios";
+$strings['UsersLearnPathsLessonTimerTask'] = "Temporizador de la llección pal entamu del tiempu na seición de caminos d'aprendizaxe";
+$strings['QuizzesScoresTask'] = "Anovar les puntuaciones de los cuestionarios nel camín d'aprendizaxe";
+$strings['QuestionGapselectTask'] = 'Respuestes pa entrugues de tipu gapselect';
+$strings['UsersLearnPathsLessonBranchTask'] = "Ramificación de la llección pal tiempu total nos documentos de caminos d'aprendizaxe";
+$strings['UsersLearnPathsLessonAttemptsTask'] = "Intentos de llección pal tiempu total nos cuestionarios de caminos d'aprendizaxe";
+$strings['UsersLearnPathsQuizzesTask'] = "Intentos de cuestionarios a intentos de cuestionarios en caminos d'aprendizaxe";
+$strings['UsersQuizzesAttemptsTask'] = 'Intentos de cuestionarios de los usuarios';
+$strings['UserQuestionAttemptsShortanswerTask'] = "Intentos d'entrada de los usuarios pa entrugues de respuesta curtia";
+$strings['UserQuestionAttemptsGapselectTask'] = "Intentos d'entrada de los usuarios pa entrugues gapselect";
+$strings['UserQuestionAttemptsTruefalseTask'] = "Intentos d'entrada de los usuarios pa entrugues verdaderu/falsu";
+$strings['UsersLastLoginTask'] = 'Últimes conexiones de los usuarios';
+$strings['TrackLoginTask'] = 'Primer aniciu de sesión y última salida';
+$strings['TrackCourseAccessTask'] = 'Accesu del usuariu al cursu';
+$strings['UserLearnPathsProgressScript'] = "Anovar el progresu nos caminos d'aprendizaxe pa usuarios.";
+$strings['UserScormsProgressScript'] = 'Anovar el progresu nos SCORM pa usuarios.';
+
+$strings['InstallError'] = 'Prodúxose un error al instalar el plugin: %s';
+$strings['AdminIntro'] = "Executar les xeres de migración de Moodle n'orde. Cada pasu namái s'activa dempués de que'l so pasu padre se completó.";
+$strings['MoodleDatabase'] = 'Base de datos de Moodle';
+$strings['MoodledataPath'] = 'Camín de Moodledata';
+$strings['AccessUrlId'] = "ID de la URL d'accesu";
+$strings['Configured'] = 'Configuráu';
+$strings['NotConfigured'] = 'Non configuráu';
+$strings['ConfigurePlugin'] = 'Configurar el plugin';
+$strings['MissingRequiredDatabaseConfiguration'] = "Configura l'anfitrión, usuariu y nome de la base de datos de Moodle enantes d'executar les xeres de migración.";
+$strings['MissingMoodledataPathWarning'] = 'El camín de Moodledata ta baleru. Les xeres rellacionaes con ficheros puen fallar hasta que se configure esti axuste.';
+$strings['InvalidMigrationAction'] = 'Aición de migración inválida.';
+$strings['InvalidSecurityToken'] = 'Token de seguridá inválidu. Por favor, recarga la páxina y vuelvi a intentalo.';
+$strings['MigrationTasks'] = 'Xeres de migración';
+$strings['MaintenanceScripts'] = 'Scripts de mantenimientu';
+$strings['ExecutionOutput'] = "Salida d'execución";
+$strings['TaskAlreadyExecuted'] = 'Esta xera o script yá foi executáu.';
+$strings['SelectTaskToRun'] = 'Seleiciona una xera de migración pa executar. La salida apaecerá equí.';

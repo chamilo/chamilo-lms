@@ -5,6 +5,17 @@
 $strings['plugin_title'] = 'Zoom Video Konferans';
 $strings['plugin_comment'] = 'Derslerde ve oturumlarda Zoom Video Konferans entegrasyonu';
 
+$strings['accountId'] = 'Hesap Kimliği';
+$strings['clientId'] = 'İstemci Kimliği';
+$strings['clientSecret'] = 'İstemci Gizli Anahtarı';
+$strings['webhookSecretToken'] = 'Webhook Gizli Anahtarı';
+$strings['apiKey_help'] = 'Eski JWT API anahtarı. Zoom Sunucudan Sunucuya OAuth için Hesap Kimliği, İstemci Kimliği ve İstemci Gizli Anahtarını tercih edin.';
+$strings['apiSecret_help'] = 'Eski JWT API gizli anahtarı. Zoom Sunucudan Sunucuya OAuth için Hesap Kimliği, İstemci Kimliği ve İstemci Gizli Anahtarını tercih edin.';
+$strings['verificationToken_help'] = 'Eski webhook doğrulama belirteci. Webhook Gizli Anahtarını tercih edin.';
+$strings['accountId_help'] = 'Zoom Sunucudan Sunucuya OAuth Hesap Kimliği.';
+$strings['clientId_help'] = 'Zoom Sunucudan Sunucuya OAuth İstemci Kimliği.';
+$strings['clientSecret_help'] = 'Zoom Sunucudan Sunucuya OAuth İstemci Gizli Anahtarı.';
+$strings['webhookSecretToken_help'] = 'Zoom webhook isteklerini doğrulamak için kullanılan gizli belirteç.';
 $strings['apiKey'] = 'API Anahtarı';
 $strings['apiSecret'] = 'API Gizli Anahtarı';
 $strings['verificationToken'] = 'Doğrulama Jetonu';

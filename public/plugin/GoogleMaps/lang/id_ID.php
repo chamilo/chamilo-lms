@@ -1,0 +1,39 @@
+<?php
+
+$strings['plugin_title'] = 'Google Maps';
+$strings['plugin_comment'] = 'Tampilkan peta Google dengan lokasi pengguna yang disimpan di bidang tambahan.';
+$strings['enable_api'] = 'Muat Google Maps API';
+$strings['api_key'] = 'Kunci API';
+$strings['extra_field_name'] = 'Nama bidang tambahan';
+$strings['extra_field_name_help'] = 'Masukkan satu atau lebih variabel bidang tambahan pengguna yang dipisahkan dengan koma. Peta dapat menampilkan hingga 5 bidang. Contoh: address, office_address, city';
+$strings['UsersCoordinatesMap'] = 'Peta lokasi pengguna';
+$strings['UsersCoordinatesMapHelp'] = 'Peta ini menampilkan lokasi pengguna berdasarkan bidang tambahan pengguna yang dikonfigurasi.';
+$strings['GoogleMapsAdminIntro'] = 'Konfigurasikan kunci Google Maps API dan bidang tambahan pengguna yang berisi alamat atau lokasi.';
+$strings['GoogleMapsApi'] = 'Google Maps API';
+$strings['ExtraFields'] = 'Bidang tambahan';
+$strings['Access'] = 'Akses';
+$strings['AdministratorsOnly'] = 'Hanya administrator';
+$strings['OpenMap'] = 'Buka peta';
+$strings['ConfigurePlugin'] = 'Konfigurasi plugin';
+$strings['Configured'] = 'Telah dikonfigurasi';
+$strings['NotConfigured'] = 'Belum dikonfigurasi';
+$strings['GoogleMapsApiDisabledWarning'] = 'Pemuatan Google Maps API dinonaktifkan dalam konfigurasi plugin.';
+$strings['GoogleMapsApiKeyMissingWarning'] = 'Kunci Google Maps API tidak ditemukan.';
+$strings['ExtraFieldNameMissingWarning'] = 'Tidak ada bidang tambahan pengguna yang dikonfigurasi.';
+$strings['ExtraFieldsNotFoundWarning'] = 'Bidang tambahan pengguna berikut tidak ditemukan: %s.';
+$strings['NoUserCoordinatesFound'] = 'Tidak ada lokasi pengguna yang ditemukan untuk bidang tambahan yang dikonfigurasi.';
+$strings['ConfigureGoogleMapsFirst'] = 'Konfigurasikan dan aktifkan Google Maps API sebelum membuka peta.';
+
+$strings['map_provider'] = 'Penyedia peta';
+$strings['map_provider_help'] = 'Pilih penyedia peta yang digunakan oleh plugin dan oleh Peta Sosial.';
+$strings['GoogleMapsProvider'] = 'Google Maps';
+$strings['OpenStreetMapProvider'] = 'OpenStreetMap';
+$strings['MapProvider'] = 'Penyedia peta';
+$strings['MapProviderConfiguration'] = 'Konfigurasi penyedia';
+$strings['default_latitude'] = 'Lintang bawaan';
+$strings['default_latitude_help'] = 'Lintang pusat peta bawaan. Digunakan ketika tidak ada penanda yang tersedia.';
+$strings['default_longitude'] = 'Bujur bawaan';
+$strings['default_longitude_help'] = 'Bujur pusat peta bawaan. Digunakan ketika tidak ada penanda yang tersedia.';
+$strings['default_zoom'] = 'Zum bawaan';
+$strings['default_zoom_help'] = 'Zum peta bawaan antara 1 dan 20.';
+$strings['OpenStreetMapInfo'] = 'OpenStreetMap tidak memerlukan kunci API. Penanda hanya-alamat ditampilkan sebagai tautan pencarian kecuali jika koordinat tersedia.';

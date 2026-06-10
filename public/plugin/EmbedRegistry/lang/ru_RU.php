@@ -20,3 +20,7 @@ $strings['EmbedDateRangeHelp'] = 'В эти даты встраиваемый к
 $strings['HtmlCode'] = 'HTML-код';
 $strings['HtmlCodeHelp'] = 'Предоставленный внешним сервисом HTML-код для встраивания.';
 $strings['LaunchContent'] = 'Запустить контент';
+
+$strings['InvalidDateRange'] = 'Дата начала должна быть раньше или равна дате окончания.';
+
+$strings['InvalidSecurityToken'] = 'Неверный токен безопасности. Пожалуйста, перезагрузите страницу и попробуйте снова.';

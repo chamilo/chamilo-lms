@@ -1,0 +1,39 @@
+<?php
+
+$strings['plugin_title'] = 'Google Maps';
+$strings['plugin_comment'] = 'Afișează o hartă Google cu locațiile utilizatorilor stocate în câmpuri extra.';
+$strings['enable_api'] = 'Încarcă API Google Maps';
+$strings['api_key'] = 'Cheie API';
+$strings['extra_field_name'] = 'Nume câmp extra';
+$strings['extra_field_name_help'] = 'Introduceți una sau mai multe variabile de câmpuri extra ale utilizatorului separate prin virgulă. Harta poate afișa maximum 5 câmpuri. Exemplu: address, office_address, city';
+$strings['UsersCoordinatesMap'] = 'Harta locațiilor utilizatorilor';
+$strings['UsersCoordinatesMapHelp'] = 'Această hartă afișează locațiile utilizatorilor pe baza câmpurilor extra configurate.';
+$strings['GoogleMapsAdminIntro'] = 'Configurați cheia API Google Maps și câmpurile extra ale utilizatorului care conțin adrese sau locații.';
+$strings['GoogleMapsApi'] = 'API Google Maps';
+$strings['ExtraFields'] = 'Câmpuri extra';
+$strings['Access'] = 'Acces';
+$strings['AdministratorsOnly'] = 'Doar administratori';
+$strings['OpenMap'] = 'Deschide harta';
+$strings['ConfigurePlugin'] = 'Configurează plugin';
+$strings['Configured'] = 'Configurat';
+$strings['NotConfigured'] = 'Neconfigurat';
+$strings['GoogleMapsApiDisabledWarning'] = 'Încărcarea API Google Maps este dezactivată în configurația pluginului.';
+$strings['GoogleMapsApiKeyMissingWarning'] = 'Cheia API Google Maps lipsește.';
+$strings['ExtraFieldNameMissingWarning'] = 'Niciun câmp extra al utilizatorului nu a fost configurat.';
+$strings['ExtraFieldsNotFoundWarning'] = 'Următoarele câmpuri extra ale utilizatorului nu au fost găsite: %s.';
+$strings['NoUserCoordinatesFound'] = 'Nu au fost găsite locații ale utilizatorilor pentru câmpurile extra configurate.';
+$strings['ConfigureGoogleMapsFirst'] = 'Configurați și activați API Google Maps înainte de a deschide harta.';
+
+$strings['map_provider'] = 'Furnizor de hartă';
+$strings['map_provider_help'] = 'Selectați furnizorul de hartă utilizat de plugin și de harta Social.';
+$strings['GoogleMapsProvider'] = 'Google Maps';
+$strings['OpenStreetMapProvider'] = 'OpenStreetMap';
+$strings['MapProvider'] = 'Furnizor de hartă';
+$strings['MapProviderConfiguration'] = 'Configurație furnizor';
+$strings['default_latitude'] = 'Latitudine implicită';
+$strings['default_latitude_help'] = 'Latitudinea implicită a centrului hărții. Utilizată când nu există niciun marcaj.';
+$strings['default_longitude'] = 'Longitudine implicită';
+$strings['default_longitude_help'] = 'Longitudinea implicită a centrului hărții. Utilizată când nu există niciun marcaj.';
+$strings['default_zoom'] = 'Zoom implicit';
+$strings['default_zoom_help'] = 'Zoom implicit al hărții între 1 și 20.';
+$strings['OpenStreetMapInfo'] = 'OpenStreetMap nu necesită o cheie API. Marcajele bazate doar pe adresă sunt afișate ca linkuri de căutare dacă nu sunt disponibile coordonate.';

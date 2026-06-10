@@ -75,3 +75,18 @@ $strings['QuestionDelete'] = 'Vil du slette det spesifikke diplomaet og bruke st
 $strings['SuccessDelete'] = 'Velykkesleg sletta';
 $strings['ProblemDelete'] = 'Problem med å slette sertifikatet';
 $strings['OnlyCustomCertificates'] = 'Berre kurs med eit tilpassa sertifikat blir eksportért';
+$strings['CertificateMode'] = 'Sertifikatmodus';
+$strings['UseCourseCustomCertificate'] = 'Bruk emnespesifikt tilpassa sertifikat';
+$strings['UseDefaultCustomCertificate'] = 'Bruk standard tilpassa sertifikat for plattforma';
+
+$strings['CreateCertificateWithTags'] = 'Lag sertifikatet ved hjelp av desse taggane';
+
+$strings['DeleteCertificate'] = 'Slett sertifikat';
+
+$strings['SaveCertificate'] = 'Lagre sertifikat';
+
+$strings['SelectOneOptionBeforeOpeningEditor'] = 'Vel eitt alternativ og lagre innstillingane før du opnar sertifikatredigeringa.';
+
+$strings['ChooseCustomCertificateModeHelp'] = 'Vel korleis dette emnet skal bruke tilpassa sertifikat.';
+
+$strings['CouldNotSaveCertificate'] = 'Kunne ikkje lagre sertifikatkonfigurasjonen.';

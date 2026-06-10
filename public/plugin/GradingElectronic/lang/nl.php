@@ -8,3 +8,6 @@ $strings['PluginDisabled'] = 'Elektronisch Beoordelen is uitgeschakeld';
 $strings['StudentId'] = 'Student-ID';
 $strings['ProviderId'] = 'Aanbieder-ID';
 $strings['CourseHours'] = 'Cursusuren';
+
+$strings['GenerateFile'] = 'Bestand genereren';
+$strings['CourseId'] = 'Cursus-ID';

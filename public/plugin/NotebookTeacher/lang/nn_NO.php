@@ -13,3 +13,7 @@ $strings['NoNotebookFilter'] = 'Ingen notatar oppretta med det gjeldande filtere
 $strings['NoNotebook'] = 'Ingen notatar oppretta i systemet';
 $strings['NoNotebookUser'] = 'Ingen notatar for denne studenten';
 $strings['NotebookNoStudentAssigned'] = 'Notatar utan tildeelte studentar';
+
+$strings['TeacherNotesHelp'] = 'Opprett private lærarnotat knytt til deltakarar i dette kurset.';
+$strings['CurrentFilter'] = 'Gjeldande filter';
+$strings['EmptyStateHelp'] = 'Opprett eit nytt notat eller endre deltakerfilteret.';

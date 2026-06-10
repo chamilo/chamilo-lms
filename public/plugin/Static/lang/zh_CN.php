@@ -9,3 +9,4 @@ $strings['plugin_comment'] = '显示静态 HTML 内容。';
 $strings['block_title'] = '区块标题';
 
 //$strings['title'] = "Title";
+$strings['content'] = '内容';

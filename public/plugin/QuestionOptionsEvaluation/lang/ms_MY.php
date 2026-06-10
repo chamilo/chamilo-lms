@@ -4,7 +4,6 @@
 $strings['plugin_title'] = 'Penilaian pilihan soalan';
 $strings['plugin_comment'] = 'Benarkan pengiraan semula skor pilihan dalam soalan';
 
-$strings['enable'] = 'Dayakan';
 $strings['exercise_max_score'] = 'Skor maksimum dalam latihan';
 $strings['exercise_max_score_help'] = 'Lalai ialah 10.';
 
@@ -17,3 +16,5 @@ $strings['Formula3'] = 'Keberkesanan - Kegagalan / 3';
 $strings['QuestionsEvaluated'] = 'Soalan dinilai';
 $strings['RecalculateQuestionScores'] = 'Kira semula skor soalan';
 $strings['FormulaSavedForExerciseX'] = 'Formula disimpan untuk latihan "%s".';
+$strings['NoFormulaHelp'] = 'Kekalkan tingkah laku pemarkahan Chamilo lalai untuk ujian ini.';
+$strings['enable'] = 'Dayakan';

@@ -74,3 +74,18 @@ $strings['QuestionDelete'] = 'آیا می‌خواهید دیپلم خاص را 
 $strings['SuccessDelete'] = 'با موفقیت حذف شد';
 $strings['ProblemDelete'] = 'مشکل در حذف گواهینامه';
 $strings['OnlyCustomCertificates'] = 'فقط دوره‌هایی که گواهینامه شخصی‌سازی‌شده دارند صادر می‌شوند';
+$strings['CertificateMode'] = 'حالت گواهینامه';
+$strings['UseCourseCustomCertificate'] = 'استفاده از گواهینامه سفارشی مخصوص دوره';
+$strings['UseDefaultCustomCertificate'] = 'استفاده از گواهینامه سفارشی پیش‌فرض پلتفرم';
+
+$strings['CreateCertificateWithTags'] = 'ایجاد گواهینامه با استفاده از این برچسب‌ها';
+
+$strings['DeleteCertificate'] = 'حذف گواهینامه';
+
+$strings['SaveCertificate'] = 'ذخیره گواهینامه';
+
+$strings['SelectOneOptionBeforeOpeningEditor'] = 'یک گزینه را انتخاب کرده و تنظیمات را قبل از باز کردن ویرایشگر گواهینامه ذخیره کنید.';
+
+$strings['ChooseCustomCertificateModeHelp'] = 'انتخاب کنید که این دوره چگونه باید از گواهینامه‌های سفارشی استفاده کند.';
+
+$strings['CouldNotSaveCertificate'] = 'امکان ذخیره پیکربندی گواهینامه وجود نداشت.';

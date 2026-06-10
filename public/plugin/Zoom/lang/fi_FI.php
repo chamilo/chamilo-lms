@@ -5,6 +5,17 @@
 $strings['plugin_title'] = 'Zoom-videokokous';
 $strings['plugin_comment'] = 'Zoom-videokokouksen integrointi kursseihin ja sessioihin';
 
+$strings['accountId'] = 'Tilin tunnus';
+$strings['clientId'] = 'Asiakastunnus';
+$strings['clientSecret'] = 'Asiakkaan salaisuus';
+$strings['webhookSecretToken'] = 'Webhook-salaisuustunnus';
+$strings['apiKey_help'] = 'Vanha JWT API-avain. Suositellaan tilin tunnusta, asiakastunnusta ja asiakkaan salaisuutta Zoom Server-to-Server OAuth -käyttöön.';
+$strings['apiSecret_help'] = 'Vanha JWT API-salaisuus. Suositellaan tilin tunnusta, asiakastunnusta ja asiakkaan salaisuutta Zoom Server-to-Server OAuth -käyttöön.';
+$strings['verificationToken_help'] = 'Vanha webhook-vahvistustunnus. Suositellaan webhook-salaisuustunnusta.';
+$strings['accountId_help'] = 'Zoom Server-to-Server OAuth -tilin tunnus.';
+$strings['clientId_help'] = 'Zoom Server-to-Server OAuth -asiakastunnus.';
+$strings['clientSecret_help'] = 'Zoom Server-to-Server OAuth -asiakkaan salaisuus.';
+$strings['webhookSecretToken_help'] = 'Salaisuustunnus Zoom-webhook-pyyntöjen validointiin.';
 $strings['apiKey'] = 'API-avain';
 $strings['apiSecret'] = 'API-salasana';
 $strings['verificationToken'] = 'Tunnisteen varmistus';

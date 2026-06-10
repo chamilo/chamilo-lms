@@ -4,7 +4,6 @@
 $strings['plugin_title'] = 'Оценка на опциите на въпроса';
 $strings['plugin_comment'] = 'Разреши преизчисляване на резултатите на опциите във въпросите';
 
-$strings['enable'] = 'Включи';
 $strings['exercise_max_score'] = 'Макс. резултат в упражненията';
 $strings['exercise_max_score_help'] = 'По подразбиране е 10.';
 
@@ -17,3 +16,5 @@ $strings['Formula3'] = 'Успехи - Неуспехи / 3';
 $strings['QuestionsEvaluated'] = 'Оценени въпроси';
 $strings['RecalculateQuestionScores'] = 'Преизчисли резултатите на въпросите';
 $strings['FormulaSavedForExerciseX'] = 'Формулата е запазена за упражнението „%s“.';
+$strings['NoFormulaHelp'] = 'Запазване на стандартното поведение на Chamilo за оценяване на този тест.';
+$strings['enable'] = 'Включи';

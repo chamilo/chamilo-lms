@@ -1,0 +1,39 @@
+<?php
+
+$strings['plugin_title'] = 'Google Maps';
+$strings['plugin_comment'] = 'Rādīt Google karti ar lietotāju atrašanās vietām, kas saglabātas papildlaukos.';
+$strings['enable_api'] = 'Ielādēt Google Maps API';
+$strings['api_key'] = 'API atslēga';
+$strings['extra_field_name'] = 'Papildlauka nosaukums';
+$strings['extra_field_name_help'] = 'Ievadiet vienu vai vairākus lietotāju papildlauku mainīgos, atdalot tos ar komatiem. Karte var attēlot līdz 5 laukiem. Piemērs: address, office_address, city';
+$strings['UsersCoordinatesMap'] = 'Lietotāju atrašanās vietu karte';
+$strings['UsersCoordinatesMapHelp'] = 'Šī karte attēlo lietotāju atrašanās vietas, pamatojoties uz konfigurētajiem lietotāju papildlaukiem.';
+$strings['GoogleMapsAdminIntro'] = 'Konfigurējiet Google Maps API atslēgu un lietotāju papildlaukus, kas satur adreses vai atrašanās vietas.';
+$strings['GoogleMapsApi'] = 'Google Maps API';
+$strings['ExtraFields'] = 'Papildlauki';
+$strings['Access'] = 'Piekļuve';
+$strings['AdministratorsOnly'] = 'Tikai administratoriem';
+$strings['OpenMap'] = 'Atvērt karti';
+$strings['ConfigurePlugin'] = 'Konfigurēt spraudni';
+$strings['Configured'] = 'Konfigurēts';
+$strings['NotConfigured'] = 'Nav konfigurēts';
+$strings['GoogleMapsApiDisabledWarning'] = 'Google Maps API ielāde ir atspējota spraudņa konfigurācijā.';
+$strings['GoogleMapsApiKeyMissingWarning'] = 'Trūkst Google Maps API atslēgas.';
+$strings['ExtraFieldNameMissingWarning'] = 'Nav konfigurēts neviens lietotāju papildlauks.';
+$strings['ExtraFieldsNotFoundWarning'] = 'Sekojošie lietotāju papildlauki netika atrasti: %s.';
+$strings['NoUserCoordinatesFound'] = 'Nav atrasta neviena lietotāju atrašanās vieta konfigurētajiem papildlaukiem.';
+$strings['ConfigureGoogleMapsFirst'] = 'Konfigurējiet un aktivizējiet Google Maps API pirms kartes atvēršanas.';
+
+$strings['map_provider'] = 'Kartes nodrošinātājs';
+$strings['map_provider_help'] = 'Izvēlieties kartes nodrošinātāju, ko izmanto spraudnis un Sociālā karte.';
+$strings['GoogleMapsProvider'] = 'Google Maps';
+$strings['OpenStreetMapProvider'] = 'OpenStreetMap';
+$strings['MapProvider'] = 'Kartes nodrošinātājs';
+$strings['MapProviderConfiguration'] = 'Nodrošinātāja konfigurācija';
+$strings['default_latitude'] = 'Noklusējuma platums';
+$strings['default_latitude_help'] = 'Noklusējuma kartes centra platums. Izmanto, ja nav pieejams marķieris.';
+$strings['default_longitude'] = 'Noklusējuma garums';
+$strings['default_longitude_help'] = 'Noklusējuma kartes centra garums. Izmanto, ja nav pieejams marķieris.';
+$strings['default_zoom'] = 'Noklusējuma tālums';
+$strings['default_zoom_help'] = 'Noklusējuma kartes tālums no 1 līdz 20.';
+$strings['OpenStreetMapInfo'] = 'OpenStreetMap neprasa API atslēgu. Tikai adreses marķieri tiek attēloti kā meklēšanas saites, ja vien nav pieejamas koordinātas.';

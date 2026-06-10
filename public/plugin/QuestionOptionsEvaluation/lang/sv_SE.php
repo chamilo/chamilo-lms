@@ -4,7 +4,6 @@
 $strings['plugin_title'] = 'Utvärdering av frågealternativ';
 $strings['plugin_comment'] = 'Tillåt omberäkning av poäng för alternativen i frågor';
 
-$strings['enable'] = 'Aktivera';
 $strings['exercise_max_score'] = 'Maxpoäng i övningar';
 $strings['exercise_max_score_help'] = 'Standard är 10.';
 
@@ -17,3 +16,5 @@ $strings['Formula3'] = 'Framgångar - Misslyckanden / 3';
 $strings['QuestionsEvaluated'] = 'Utvärderade frågor';
 $strings['RecalculateQuestionScores'] = 'Ombekäkna frågpoäng';
 $strings['FormulaSavedForExerciseX'] = 'Formel sparad för övningen "%s".';
+$strings['NoFormulaHelp'] = 'Behåll Chamilos standardbeteende för poängsättning för detta test.';
+$strings['enable'] = 'Aktivera';

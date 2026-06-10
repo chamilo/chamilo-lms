@@ -20,3 +20,7 @@ $strings['EmbedDateRangeHelp'] = 'इन तारीखों के बीच,
 $strings['HtmlCode'] = 'HTML कोड';
 $strings['HtmlCodeHelp'] = 'साझा किया गया HTML कोड, जैसा कि बाहरी सेवा द्वारा प्रदान किया गया हो जब एम्बेडेड प्रारूप में साझा करने के लिए कहा जाए।';
 $strings['LaunchContent'] = 'सामग्री चलाएं';
+
+$strings['InvalidDateRange'] = 'प्रारंभ तिथि समाप्ति तिथि से पहले या उसके बराबर होनी चाहिए।';
+
+$strings['InvalidSecurityToken'] = 'अमान्य सुरक्षा टोकन। कृपया पृष्ठ को पुनः लोड करें और पुनः प्रयास करें।';

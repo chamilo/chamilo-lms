@@ -9,8 +9,13 @@ $strings['plugin_title'] = 'RSS';
 $strings['plugin_comment'] = 'Prikaži RSS sadržaj.';
 
 $strings['rss'] = 'RSS';
+$strings['rss_help'] = 'Javni HTTP ili HTTPS URL RSS/Atom feed-a za prikaz.';
 $strings['block_title'] = 'Naslov bloka';
+$strings['block_title_help'] = 'Opcioni naslov prikazan iznad stavki feed-a.';
 
 $strings['title'] = 'Naslov';
+$strings['Feed'] = 'Feed';
 $strings['no_rss'] = 'Nema podešenog RSS-a. Molimo dodajte RSS';
 $strings['no_valid_rss'] = 'Proverite da li URL sadrži validan RSS URL';
+$strings['invalid_rss_url'] = 'RSS URL mora biti važeći javni HTTP ili HTTPS URL.';
+$strings['no_items'] = 'Nisu pronađene RSS stavke.';

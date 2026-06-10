@@ -1,0 +1,39 @@
+<?php
+
+$strings['plugin_title'] = 'Google Maps';
+$strings['plugin_comment'] = 'Vis et Google-kort med brugerplaceringer gemt i ekstra felter.';
+$strings['enable_api'] = 'Indlæs Google Maps API';
+$strings['api_key'] = 'API-nøgle';
+$strings['extra_field_name'] = 'Ekstra felt-navn';
+$strings['extra_field_name_help'] = 'Indtast en eller flere bruger-ekstrafelt-variabler adskilt af kommaer. Kortet kan vise op til 5 felter. Eksempel: address, office_address, city';
+$strings['UsersCoordinatesMap'] = 'Brugeres placeringer på kort';
+$strings['UsersCoordinatesMapHelp'] = 'Dette kort viser brugernes placeringer baseret på konfigurerede bruger-ekstrafelter.';
+$strings['GoogleMapsAdminIntro'] = 'Konfigurer Google Maps API-nøglen og de bruger-ekstrafelter, der indeholder adresser eller placeringer.';
+$strings['GoogleMapsApi'] = 'Google Maps API';
+$strings['ExtraFields'] = 'Ekstra felter';
+$strings['Access'] = 'Adgang';
+$strings['AdministratorsOnly'] = 'Kun administratorer';
+$strings['OpenMap'] = 'Åbn kort';
+$strings['ConfigurePlugin'] = 'Konfigurer plugin';
+$strings['Configured'] = 'Konfigureret';
+$strings['NotConfigured'] = 'Ikke konfigureret';
+$strings['GoogleMapsApiDisabledWarning'] = 'Indlæsning af Google Maps API er deaktiveret i plugin-konfigurationen.';
+$strings['GoogleMapsApiKeyMissingWarning'] = 'Google Maps API-nøgle mangler.';
+$strings['ExtraFieldNameMissingWarning'] = 'Ingen bruger-ekstrafelter er blevet konfigureret.';
+$strings['ExtraFieldsNotFoundWarning'] = 'Følgende bruger-ekstrafelter blev ikke fundet: %s.';
+$strings['NoUserCoordinatesFound'] = 'Ingen brugerplaceringer blev fundet for de konfigurerede ekstrafelter.';
+$strings['ConfigureGoogleMapsFirst'] = 'Konfigurer og aktiver Google Maps API, før kortet åbnes.';
+
+$strings['map_provider'] = 'Kortudbyder';
+$strings['map_provider_help'] = "Vælg den kortudbyder, der bruges af plugin'et og af det sociale kort.";
+$strings['GoogleMapsProvider'] = 'Google Maps';
+$strings['OpenStreetMapProvider'] = 'OpenStreetMap';
+$strings['MapProvider'] = 'Kortudbyder';
+$strings['MapProviderConfiguration'] = 'Udbyderkonfiguration';
+$strings['default_latitude'] = 'Standard breddegrad';
+$strings['default_latitude_help'] = 'Standard kortcenter-breddegrad. Bruges, når ingen markør er tilgængelig.';
+$strings['default_longitude'] = 'Standard længdegrad';
+$strings['default_longitude_help'] = 'Standard kortcenter-længdegrad. Bruges, når ingen markør er tilgængelig.';
+$strings['default_zoom'] = 'Standard zoom';
+$strings['default_zoom_help'] = 'Standard kortzoom mellem 1 og 20.';
+$strings['OpenStreetMapInfo'] = 'OpenStreetMap kræver ikke en API-nøgle. Markører med kun adresse vises som søgelinks, medmindre koordinater er tilgængelige.';

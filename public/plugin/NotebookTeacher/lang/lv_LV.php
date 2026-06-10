@@ -13,3 +13,7 @@ $strings['NoNotebookFilter'] = 'Ar pašreizējo filtru piezīmes nav izveidotas'
 $strings['NoNotebook'] = 'Sistēmā piezīmes nav izveidotas';
 $strings['NoNotebookUser'] = 'Šim studentam piezīmes nav';
 $strings['NotebookNoStudentAssigned'] = 'Piezīmes bez piešķirtiem studentiem';
+
+$strings['TeacherNotesHelp'] = 'Izveidot privātas pasniedzēja piezīmes, kas saistītas ar audzēkņiem šajā kursā.';
+$strings['CurrentFilter'] = 'Pašreizējais filtrs';
+$strings['EmptyStateHelp'] = 'Izveidot jaunu piezīmi vai mainīt audzēkņu filtru.';

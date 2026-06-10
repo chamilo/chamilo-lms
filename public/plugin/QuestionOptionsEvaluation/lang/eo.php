@@ -4,7 +4,6 @@
 $strings['plugin_title'] = 'Taksigantoj por opcioj';
 $strings['plugin_comment'] = 'Permesi rekalkulon de poentoj de opcioj en demandoj';
 
-$strings['enable'] = 'Aktivi';
 $strings['exercise_max_score'] = 'Maksimuma poento en ekzercoj';
 $strings['exercise_max_score_help'] = 'Defaŭlta valoro estas 10.';
 
@@ -17,3 +16,5 @@ $strings['Formula3'] = 'Sukceso - Fiaskoj / 3';
 $strings['QuestionsEvaluated'] = 'Taksitaj demandoj';
 $strings['RecalculateQuestionScores'] = 'Rekalkuli poentojn de demandoj';
 $strings['FormulaSavedForExerciseX'] = 'Formulo konservita por ekzerco "%s".';
+$strings['NoFormulaHelp'] = 'Konservu la defaŭltan poentadon de Chamilo por ĉi tiu testo.';
+$strings['enable'] = 'Aktivi';

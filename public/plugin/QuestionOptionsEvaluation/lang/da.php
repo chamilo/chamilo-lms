@@ -4,7 +4,6 @@
 $strings['plugin_title'] = 'Evaluering af spørgsmålsindstillinger';
 $strings['plugin_comment'] = 'Tillad genberegning af indstillingers point i spørgsmål';
 
-$strings['enable'] = 'Aktivér';
 $strings['exercise_max_score'] = 'Maks. point i øvelser';
 $strings['exercise_max_score_help'] = 'Standard er 10.';
 
@@ -17,3 +16,5 @@ $strings['Formula3'] = 'Succeser - Fejl / 3';
 $strings['QuestionsEvaluated'] = 'Evaluerede spørgsmål';
 $strings['RecalculateQuestionScores'] = 'Genberegne spørgsmåls point';
 $strings['FormulaSavedForExerciseX'] = 'Formel gemt for øvelse "%s".';
+$strings['NoFormulaHelp'] = 'Behold standard Chamilo-scoringsadfærden for denne test.';
+$strings['enable'] = 'Aktivér';

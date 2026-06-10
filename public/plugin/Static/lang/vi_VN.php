@@ -9,3 +9,4 @@ $strings['plugin_comment'] = 'Hiển thị nội dung HTML tĩnh.';
 $strings['block_title'] = 'Tiêu đề khối';
 
 //$strings['title'] = "Title";
+$strings['content'] = 'Nội dung';

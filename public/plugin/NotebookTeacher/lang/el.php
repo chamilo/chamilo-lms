@@ -13,3 +13,7 @@ $strings['NoNotebookFilter'] = 'Δεν δημιουργήθηκαν σημειώ
 $strings['NoNotebook'] = 'Δεν δημιουργήθηκαν σημειώσεις στο σύστημα';
 $strings['NoNotebookUser'] = 'Καμία σημείωση για αυτόν τον φοιτητή';
 $strings['NotebookNoStudentAssigned'] = 'Σημειώσεις χωρίς ανατεθειμένους φοιτητές';
+
+$strings['TeacherNotesHelp'] = 'Δημιουργία ιδιωτικών σημειώσεων διδάσκοντα συνδεδεμένων με εκπαιδευόμενους σε αυτό το μάθημα.';
+$strings['CurrentFilter'] = 'Τρέχον φίλτρο';
+$strings['EmptyStateHelp'] = 'Δημιουργία νέας σημείωσης ή αλλαγή του φίλτρου εκπαιδευομένων.';

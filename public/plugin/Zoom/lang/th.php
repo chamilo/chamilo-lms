@@ -5,6 +5,17 @@
 $strings['plugin_title'] = 'วิดีโอคอนเฟอเรนซ์ Zoom';
 $strings['plugin_comment'] = 'การรวม Zoom วิดีโอคอนเฟอเรนซ์ในหลักสูตรและเซสชัน';
 
+$strings['accountId'] = 'รหัสบัญชี';
+$strings['clientId'] = 'รหัสลูกค้า';
+$strings['clientSecret'] = 'รหัสลับของลูกค้า';
+$strings['webhookSecretToken'] = 'โทเค็นลับของ Webhook';
+$strings['apiKey_help'] = 'Legacy JWT API key. Prefer Account ID, Client ID and Client Secret for Zoom Server-to-Server OAuth.';
+$strings['apiSecret_help'] = 'Legacy JWT API secret. Prefer Account ID, Client ID and Client Secret for Zoom Server-to-Server OAuth.';
+$strings['verificationToken_help'] = 'Legacy webhook verification token. Prefer Webhook Secret Token.';
+$strings['accountId_help'] = 'รหัสบัญชี Zoom Server-to-Server OAuth';
+$strings['clientId_help'] = 'รหัสลูกค้า Zoom Server-to-Server OAuth';
+$strings['clientSecret_help'] = 'รหัสลับของลูกค้า Zoom Server-to-Server OAuth';
+$strings['webhookSecretToken_help'] = 'โทเค็นลับที่ใช้ในการตรวจสอบคำขอ Webhook จาก Zoom';
 $strings['apiKey'] = 'API Key';
 $strings['apiSecret'] = 'API Secret';
 $strings['verificationToken'] = 'Verification Token';

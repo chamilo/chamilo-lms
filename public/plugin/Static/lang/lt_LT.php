@@ -9,3 +9,4 @@ $strings['plugin_comment'] = 'Rodyti statinį HTML turinį.';
 $strings['block_title'] = 'Bloko pavadinimas';
 
 //$strings['title'] = "Title";
+$strings['content'] = 'Turinys';

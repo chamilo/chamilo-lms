@@ -4,7 +4,6 @@
 $strings['plugin_title'] = 'تقييم خيارات الأسئلة';
 $strings['plugin_comment'] = 'السماح بإعادة حساب درجات خيارات الأسئلة';
 
-$strings['enable'] = 'تفعيل';
 $strings['exercise_max_score'] = 'الدرجة القصوى في التمارين';
 $strings['exercise_max_score_help'] = 'الافتراضي 10.';
 
@@ -17,3 +16,5 @@ $strings['Formula3'] = 'النجاحات - الإخفاقات / 3';
 $strings['QuestionsEvaluated'] = 'الأسئلة المقيّمة';
 $strings['RecalculateQuestionScores'] = 'إعادة حساب درجات الأسئلة';
 $strings['FormulaSavedForExerciseX'] = 'تم حفظ الصيغة للتمرين "%s".';
+$strings['NoFormulaHelp'] = 'الاحتفاظ بسلوك التقييم الافتراضي لشاميلو في هذا الاختبار.';
+$strings['enable'] = 'تفعيل';

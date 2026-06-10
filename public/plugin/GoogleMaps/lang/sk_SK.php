@@ -1,0 +1,39 @@
+<?php
+
+$strings['plugin_title'] = 'Google Maps';
+$strings['plugin_comment'] = 'Zobraziť mapu Google s polohami používateľov uloženými v dodatočných poliach.';
+$strings['enable_api'] = 'Načítať Google Maps API';
+$strings['api_key'] = 'API kľúč';
+$strings['extra_field_name'] = 'Názov dodatočného poľa';
+$strings['extra_field_name_help'] = 'Zadajte jeden alebo viacero premenných dodatočných polí používateľa oddelených čiarkami. Mapa môže zobraziť maximálne 5 polí. Príklad: address, office_address, city';
+$strings['UsersCoordinatesMap'] = 'Mapa polohy používateľov';
+$strings['UsersCoordinatesMapHelp'] = 'Táto mapa zobrazuje polohy používateľov na základe nakonfigurovaných dodatočných polí používateľa.';
+$strings['GoogleMapsAdminIntro'] = 'Nakonfigurujte API kľúč Google Maps a dodatočné polia používateľa, ktoré obsahujú adresy alebo polohy.';
+$strings['GoogleMapsApi'] = 'Google Maps API';
+$strings['ExtraFields'] = 'Dodatočné polia';
+$strings['Access'] = 'Prístup';
+$strings['AdministratorsOnly'] = 'Iba administrátori';
+$strings['OpenMap'] = 'Otvoriť mapu';
+$strings['ConfigurePlugin'] = 'Konfigurovať plugin';
+$strings['Configured'] = 'Nakonfigurované';
+$strings['NotConfigured'] = 'Nenakonfigurované';
+$strings['GoogleMapsApiDisabledWarning'] = 'Načítanie Google Maps API je vypnuté v konfigurácii pluginu.';
+$strings['GoogleMapsApiKeyMissingWarning'] = 'Chýba API kľúč Google Maps.';
+$strings['ExtraFieldNameMissingWarning'] = 'Nebolo nakonfigurované žiadne dodatočné pole používateľa.';
+$strings['ExtraFieldsNotFoundWarning'] = 'Nasledujúce dodatočné polia používateľa sa nenašli: %s.';
+$strings['NoUserCoordinatesFound'] = 'Pre nakonfigurované dodatočné polia neboli nájdené žiadne polohy používateľov.';
+$strings['ConfigureGoogleMapsFirst'] = 'Pred otvorením mapy nakonfigurujte a povoľte Google Maps API.';
+
+$strings['map_provider'] = 'Poskytovateľ mapy';
+$strings['map_provider_help'] = 'Vyberte poskytovateľa mapy, ktorý používa plugin a Sociálna mapa.';
+$strings['GoogleMapsProvider'] = 'Google Maps';
+$strings['OpenStreetMapProvider'] = 'OpenStreetMap';
+$strings['MapProvider'] = 'Poskytovateľ mapy';
+$strings['MapProviderConfiguration'] = 'Konfigurácia poskytovateľa';
+$strings['default_latitude'] = 'Predvolená zemepisná šírka';
+$strings['default_latitude_help'] = 'Predvolená zemepisná šírka stredu mapy. Používa sa, keď nie je dostupný žiadny marker.';
+$strings['default_longitude'] = 'Predvolená zemepisná dĺžka';
+$strings['default_longitude_help'] = 'Predvolená zemepisná dĺžka stredu mapy. Používa sa, keď nie je dostupný žiadny marker.';
+$strings['default_zoom'] = 'Predvolené priblíženie';
+$strings['default_zoom_help'] = 'Predvolené priblíženie mapy medzi 1 a 20.';
+$strings['OpenStreetMapInfo'] = 'OpenStreetMap nevyžaduje API kľúč. Markery obsahujúce iba adresu sa zobrazujú ako odkazy na vyhľadávanie, pokiaľ nie sú dostupné súradnice.';

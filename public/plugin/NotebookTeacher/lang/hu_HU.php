@@ -13,3 +13,7 @@ $strings['NoNotebookFilter'] = 'Nincsenek a jelenlegi szűrővel létrehozott je
 $strings['NoNotebook'] = 'Nincsenek a rendszerben létrehozott jegyzetek';
 $strings['NoNotebookUser'] = 'Nincsenek jegyzetek ehhez a diákhoz';
 $strings['NotebookNoStudentAssigned'] = 'Diákhoz nem rendelt jegyzetek';
+
+$strings['TeacherNotesHelp'] = 'Privát tanári jegyzetek létrehozása a kurzus tanulóihoz kapcsolva.';
+$strings['CurrentFilter'] = 'Aktuális szűrő';
+$strings['EmptyStateHelp'] = 'Hozzon létre új jegyzetet vagy módosítsa a tanulói szűrőt.';

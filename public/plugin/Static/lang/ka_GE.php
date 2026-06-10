@@ -9,3 +9,4 @@ $strings['plugin_comment'] = 'სტატიკური HTML შინაა�
 $strings['block_title'] = 'ბლოკის სათაური';
 
 //$strings['title'] = "Title";
+$strings['content'] = 'შიგთავსი';

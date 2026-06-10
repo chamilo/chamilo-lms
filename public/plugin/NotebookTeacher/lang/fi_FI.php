@@ -13,3 +13,7 @@ $strings['NoNotebookFilter'] = 'Ei muistiinpanoja nykyisellä suodattimella';
 $strings['NoNotebook'] = 'Ei muistiinpanoja järjestelmässä';
 $strings['NoNotebookUser'] = 'Ei muistiinpanoja tälle opiskelijalle';
 $strings['NotebookNoStudentAssigned'] = 'Muistiinpanot ilman määriteltyjä opiskelijoita';
+
+$strings['TeacherNotesHelp'] = 'Luo yksityisiä opettajan muistiinpanoja, jotka liittyvät tämän kurssin oppijoihin.';
+$strings['CurrentFilter'] = 'Nykyinen suodatin';
+$strings['EmptyStateHelp'] = 'Luo uusi muistiinpano tai vaihda oppijasuodatinta.';

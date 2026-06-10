@@ -8,3 +8,6 @@ $strings['PluginDisabled'] = 'Chấm điểm điện tử đã bị vô hiệu h
 $strings['StudentId'] = 'Mã sinh viên';
 $strings['ProviderId'] = 'Mã nhà cung cấp';
 $strings['CourseHours'] = 'Số giờ khóa học';
+
+$strings['GenerateFile'] = 'Tạo tệp';
+$strings['CourseId'] = 'Mã khóa học';

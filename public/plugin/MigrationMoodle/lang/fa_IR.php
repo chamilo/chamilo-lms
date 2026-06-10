@@ -1,0 +1,95 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+$strings['plugin_title'] = 'وارد کردن از Moodle';
+$strings['plugin_comment'] = 'اجرای فرآیند وارد کردن از پایگاه داده و فایل‌های Moodle به Chamilo.';
+
+$strings['MoodlePassword'] = 'گذرواژه Moodle';
+$strings['UninstallError'] = 'خطایی هنگام حذف افزونه رخ داد.';
+
+$strings['db_host'] = 'میزبان پایگاه داده Moodle';
+$strings['db_user'] = 'کاربر پایگاه داده Moodle';
+$strings['db_password'] = 'گذرواژه پایگاه داده Moodle';
+$strings['db_name'] = 'نام پایگاه داده Moodle';
+$strings['user_filter'] = 'فیلتر برای کاربران';
+$strings['user_filter_help'] = 'فقط کاربرانی را وارد کنید که نام کاربری‌شان با این رشته آغاز شود.<br>وارد کردن دوره‌ها نیز تحت تأثیر این تنظیم قرار می‌گیرد، زیرا فقط دوره‌هایی وارد می‌شوند که کاربران دارای این پیشوند نام کاربری در آن‌ها ثبت‌نام کرده باشند.';
+$strings['url_id'] = 'شناسه URL';
+$strings['url_id_help'] = 'شناسه URL دسترسی برای ذخیره دوره‌ها، کاربران و جلسات (در صورت استفاده از multi-url).';
+$strings['moodle_path'] = 'مسیر Moodledata';
+$strings['moodle_path_help'] = 'مسیر پوشه moodledata. معمولاً چیزی شبیه <pre>/var/www/moodledata</pre>';
+
+// Tasks
+$strings['UsersTask'] = 'کاربران';
+$strings['CourseCategoriesTask'] = 'دسته‌بندی‌های دوره';
+$strings['CoursesTask'] = 'دوره‌ها';
+$strings['CourseSectionsTask'] = 'بخش‌های دوره';
+$strings['CourseModulesLessonTask'] = 'ماژول‌های دوره: درس‌ها';
+$strings['LessonPagesTask'] = 'صفحات درس';
+$strings['LessonPagesDocumentTask'] = 'صفحات درس: اسناد';
+$strings['FilesForLessonPagesTask'] = 'فایل‌های صفحات درس';
+$strings['LessonPagesQuizTask'] = 'صفحات درس: سؤالات';
+$strings['LessonPagesQuizQuestionTask'] = 'سؤالات صفحات سؤال';
+$strings['LessonAnswersTrueFalseTask'] = 'پاسخ‌های سؤالات درست/غلط';
+$strings['LessonAnswersMultipleChoiceTask'] = 'پاسخ‌های سؤالات چندگزینه‌ای';
+$strings['LessonAnswersMultipleAnswerTask'] = 'پاسخ‌های سؤالات چندپاسخی';
+$strings['LessonAnswersMatchingTask'] = 'پاسخ‌های سؤالات تطبیقی';
+$strings['LessonAnswersEssayTask'] = 'پاسخ‌های سؤالات تشریحی';
+$strings['LessonAnswersShortAnswerTask'] = 'پاسخ‌های سؤالات پاسخ کوتاه';
+$strings['FilesForLessonAnswersTask'] = 'فایل‌های پاسخ‌های درس';
+$strings['CourseModulesQuizTask'] = 'ماژول‌های دوره: آزمون‌ها';
+$strings['CQuizTask'] = 'آزمون C';
+$strings['RoleAssignmentsTask'] = 'تخصیص نقش‌ها';
+$strings['QuizzesTask'] = 'آزمون‌ها';
+$strings['FilesForQuizzesTask'] = 'فایل‌های آزمون‌ها';
+$strings['QuestionCategoriesTask'] = 'دسته‌بندی‌های سؤال';
+$strings['QuestionsTask'] = 'سؤالات';
+$strings['QuestionMultiChoiceSingleTask'] = 'پاسخ‌های سؤالات چندگزینه‌ای (تکی)';
+$strings['QuestionMultiChoiceMultipleTask'] = 'پاسخ‌های سؤالات چندگزینه‌ای (چندگانه)';
+$strings['QuestionsTrueFalseTask'] = 'پاسخ‌های سؤالات درست/غلط';
+$strings['QuestionShortAnswerTask'] = 'پاسخ‌های سؤالات پاسخ کوتاه';
+$strings['CourseModulesScormTask'] = 'دوره‌های SCORM';
+$strings['ScormScoesTask'] = 'آیتم‌های SCORM';
+$strings['FilesForScormScoesTask'] = 'فایل‌های آیتم‌های SCORM';
+$strings['UserSessionsTask'] = 'جلسات دوره برای کاربران';
+$strings['CourseIntroductionsTask'] = 'مقدمه‌های دوره';
+$strings['FilesForCourseIntroductionsTask'] = 'فایل‌های مقدمه‌های دوره';
+$strings['FilesForCourseSectionsTask'] = 'فایل‌های بخش‌های دوره';
+$strings['CourseModulesUrlTask'] = 'ماژول‌های دوره: URLها';
+$strings['UrlsTask'] = 'آدرس‌های اینترنتی';
+$strings['SortSectionModulesTask'] = 'مرتب‌سازی ماژول‌ها در بخش';
+$strings['UsersScormsViewTask'] = 'مشاهدات SCORM برای کاربران';
+$strings['UsersScormsProgressTask'] = 'پیشرفت SCORM';
+$strings['UsersLearnPathsTask'] = 'مشاهدات مسیرهای یادگیری کاربران';
+$strings['UsersLearnPathsLessonTimerTask'] = 'زمان‌سنج درس برای زمان شروع بخش مسیرهای یادگیری';
+$strings['QuizzesScoresTask'] = 'به‌روزرسانی نمرات آزمون در مسیر یادگیری';
+$strings['QuestionGapselectTask'] = 'پاسخ‌ها برای سؤالات gapselect';
+$strings['UsersLearnPathsLessonBranchTask'] = 'شاخه درس به زمان کل در اسناد مسیرهای یادگیری';
+$strings['UsersLearnPathsLessonAttemptsTask'] = 'تلاش‌های درس به زمان کل در آزمون‌های مسیرهای یادگیری';
+$strings['UsersLearnPathsQuizzesTask'] = 'تلاش‌های آزمون به تلاش‌های آزمون‌های مسیر یادگیری';
+$strings['UsersQuizzesAttemptsTask'] = 'تلاش‌های آزمون کاربران';
+$strings['UserQuestionAttemptsShortanswerTask'] = 'تلاش‌های سؤال کاربران برای پاسخ کوتاه';
+$strings['UserQuestionAttemptsGapselectTask'] = 'تلاش‌های سؤال کاربران برای gapselect';
+$strings['UserQuestionAttemptsTruefalseTask'] = 'تلاش‌های سؤال کاربران برای درست/نادرست';
+$strings['UsersLastLoginTask'] = 'آخرین ورودها برای کاربران';
+$strings['TrackLoginTask'] = 'اولین ورود و آخرین خروج';
+$strings['TrackCourseAccessTask'] = 'دسترسی کاربر به دوره';
+$strings['UserLearnPathsProgressScript'] = 'به‌روزرسانی پیشرفت در مسیرهای یادگیری برای کاربران.';
+$strings['UserScormsProgressScript'] = 'به‌روزرسانی پیشرفت در SCORMها برای کاربران.';
+
+$strings['InstallError'] = 'خطایی هنگام نصب افزونه رخ داد: %s';
+$strings['AdminIntro'] = 'وظایف مهاجرت Moodle را به ترتیب اجرا کنید. هر مرحله تنها پس از تکمیل مرحله والد خود فعال می‌شود.';
+$strings['MoodleDatabase'] = 'پایگاه داده Moodle';
+$strings['MoodledataPath'] = 'مسیر Moodledata';
+$strings['AccessUrlId'] = 'شناسه آدرس دسترسی';
+$strings['Configured'] = 'پیکربندی شده';
+$strings['NotConfigured'] = 'پیکربندی نشده';
+$strings['ConfigurePlugin'] = 'پیکربندی افزونه';
+$strings['MissingRequiredDatabaseConfiguration'] = 'میزبان، کاربر و نام پایگاه داده Moodle را قبل از اجرای وظایف مهاجرت پیکربندی کنید.';
+$strings['MissingMoodledataPathWarning'] = 'مسیر Moodledata خالی است. وظایف مرتبط با فایل تا زمانی که این تنظیم پیکربندی نشود ممکن است با شکست مواجه شوند.';
+$strings['InvalidMigrationAction'] = 'عملیات مهاجرت نامعتبر است.';
+$strings['InvalidSecurityToken'] = 'توکن امنیتی نامعتبر است. لطفاً صفحه را مجدداً بارگذاری کنید و دوباره امتحان کنید.';
+$strings['MigrationTasks'] = 'وظایف مهاجرت';
+$strings['MaintenanceScripts'] = 'اسکریپت‌های نگهداری';
+$strings['ExecutionOutput'] = 'خروجی اجرا';
+$strings['TaskAlreadyExecuted'] = 'این وظیفه یا اسکریپت قبلاً اجرا شده است.';
+$strings['SelectTaskToRun'] = 'یک وظیفه مهاجرت برای اجرا انتخاب کنید. خروجی در اینجا نمایش داده خواهد شد.';

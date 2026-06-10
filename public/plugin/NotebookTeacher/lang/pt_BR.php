@@ -13,3 +13,7 @@ $strings['NoNotebookFilter'] = 'Nenhuma nota criada com o filtro atual';
 $strings['NoNotebook'] = 'Nenhuma nota criada no sistema';
 $strings['NoNotebookUser'] = 'Nenhuma nota para este aluno';
 $strings['NotebookNoStudentAssigned'] = 'Notas sem alunos atribuídos';
+
+$strings['TeacherNotesHelp'] = 'Criar anotações privadas do professor vinculadas aos alunos neste curso.';
+$strings['CurrentFilter'] = 'Filtro atual';
+$strings['EmptyStateHelp'] = 'Criar uma nova anotação ou alterar o filtro de alunos.';

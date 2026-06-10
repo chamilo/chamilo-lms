@@ -75,3 +75,18 @@ $strings['QuestionDelete'] = 'Chcete zmazať špecifický diplom a použiť pred
 $strings['SuccessDelete'] = 'Úspešne zmazané';
 $strings['ProblemDelete'] = 'Problém pri mazaní certifikátu';
 $strings['OnlyCustomCertificates'] = 'Exportujú sa iba kurzy s personalizovaným certifikátom';
+$strings['CertificateMode'] = 'Režim certifikátu';
+$strings['UseCourseCustomCertificate'] = 'Použiť vlastný certifikát špecifický pre kurz';
+$strings['UseDefaultCustomCertificate'] = 'Použiť predvolený vlastný certifikát platformy';
+
+$strings['CreateCertificateWithTags'] = 'Vytvoriť certifikát pomocou týchto značiek';
+
+$strings['DeleteCertificate'] = 'Odstrániť certifikát';
+
+$strings['SaveCertificate'] = 'Uložiť certifikát';
+
+$strings['SelectOneOptionBeforeOpeningEditor'] = 'Vyberte jednu možnosť a uložte nastavenia pred otvorením editora certifikátu.';
+
+$strings['ChooseCustomCertificateModeHelp'] = 'Vyberte, ako má tento kurz používať vlastné certifikáty.';
+
+$strings['CouldNotSaveCertificate'] = 'Nepodarilo sa uložiť konfiguráciu certifikátu.';

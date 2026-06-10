@@ -201,6 +201,11 @@ class MoodleImport
                 error_log('moduleName: '.$moduleName);
             }
 
+            // Guard against path traversal: <directory> comes from the untrusted backup XML
+            if (isset($currentItem['directory'])) {
+                $this->assertSafeEntryPath($currentItem['directory']);
+            }
+
             switch ($moduleName) {
                 case 'forum':
                     $catForumValues = [];

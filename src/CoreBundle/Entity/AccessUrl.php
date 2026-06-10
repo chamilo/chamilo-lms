@@ -44,7 +44,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     ],
     normalizationContext: ['groups' => ['user_access_url:read']],
     paginationEnabled: false,
-    security: "is_granted('ROLE_ADMIN')",
+    security: "is_granted('ROLE_ADMIN') or (is_granted('ROLE_USER') and request.attributes.get('id') == user.getId())",
 )]
 class AccessUrl extends AbstractResource implements ResourceInterface, Stringable
 {

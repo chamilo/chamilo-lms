@@ -57,9 +57,7 @@ class MoodleImport
                     $entryPath = str_replace('\\', '/', $pharEntry->getPathname());
                     $pharPath = str_replace('\\', '/', $filePath);
                     $relative = ltrim(substr($entryPath, strlen($pharPath)), '/');
-                    if (str_contains($relative, '../') || str_starts_with($relative, '/')) {
-                        throw new Exception(get_lang('Error importing file'));
-                    }
+                    $this->assertSafeEntryPath($relative);
                 }
 
                 if (false === $backUpFile->extractTo($destinationDir)) {
@@ -87,6 +85,11 @@ class MoodleImport
 
                 if (!$mainFileKey) {
                     throw new Exception(get_lang("Failed to import: this doesn't seem to be a Moodle course backup file (.mbz)"));
+                }
+
+                // Guard against ZIP Slip: validate all entry paths before extraction
+                foreach ($packageContent as $value) {
+                    $this->assertSafeEntryPath($value['filename']);
                 }
 
                 $package->extract(PCLZIP_OPT_PATH, $destinationDir);
@@ -391,6 +394,26 @@ class MoodleImport
         unlink($filePath);
 
         return true;
+    }
+
+    /**
+     * Reject a path entry that could escape the extraction directory (Zip Slip / path traversal).
+     *
+     * The path may come from an archive entry name or from an untrusted value inside the
+     * backup XML. Any entry containing a "../" sequence or an absolute path is rejected.
+     *
+     * @param string $path
+     *
+     * @throws Exception
+     *
+     * @return void
+     */
+    private function assertSafeEntryPath($path)
+    {
+        $normalized = str_replace('\\', '/', (string) $path);
+        if (str_contains($normalized, '../') || str_starts_with($normalized, '/')) {
+            throw new Exception(get_lang('Error importing file'));
+        }
     }
 
     /**

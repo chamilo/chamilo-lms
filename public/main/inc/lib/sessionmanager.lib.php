@@ -1912,9 +1912,9 @@ class SessionManager
                     $sessionEntity->setParentId(null);
                 }
 
-                $sessionEntity->setDaysToReinscription($daysBeforeFinishingForReinscription);
+                $sessionEntity->setDaysToReinscription('' !== (string) $daysBeforeFinishingForReinscription ? (int) $daysBeforeFinishingForReinscription : null);
                 $sessionEntity->setLastRepetition($lastRepetition);
-                $sessionEntity->setDaysToNewRepetition($daysBeforeFinishingToCreateNewRepetition);
+                $sessionEntity->setDaysToNewRepetition('' !== (string) $daysBeforeFinishingToCreateNewRepetition ? (int) $daysBeforeFinishingToCreateNewRepetition : null);
 
                 $newGeneralCoaches = array_map(
                     fn($coachId) => api_get_user_entity($coachId),

@@ -1021,15 +1021,37 @@ class CourseRestorer
                 return $this->resourceFileAbsPathFromDocument($srcDoc) ?: null;
             }
 
-            $p = $srcRoot.(string) $item->path;
-            if (is_file($p) && is_readable($p)) {
+            // Defense in depth against path traversal: $item->path comes from the
+            // deserialized backup metadata, so an authenticated user importing a tampered
+            // backup fully controls it. Only accept files that resolve *inside* the
+            // extraction root, so a forged path such as "../../../../etc/passwd" cannot
+            // read files outside the backup directory.
+            $containedRealPath = static function (string $root, string $relPath): ?string {
+                $rootReal = realpath(rtrim($root, '/'));
+                if (false === $rootReal) {
+                    return null;
+                }
+                $candidate = realpath($root.$relPath);
+                if (false === $candidate || !is_file($candidate) || !is_readable($candidate)) {
+                    return null;
+                }
+                $rootReal = rtrim($rootReal, '/').'/';
+                if (!str_starts_with($candidate, $rootReal)) {
+                    return null;
+                }
+
+                return $candidate;
+            };
+
+            $p = $containedRealPath((string) $srcRoot, (string) $item->path);
+            if (null !== $p) {
                 return $p;
             }
 
             $altRoot = rtrim((string) ($this->course->resources['__meta']['archiver_root'] ?? ''), '/').'/';
             if ($altRoot && $altRoot !== $srcRoot) {
-                $p2 = $altRoot.(string) $item->path;
-                if (is_file($p2) && is_readable($p2)) {
+                $p2 = $containedRealPath($altRoot, (string) $item->path);
+                if (null !== $p2) {
                     return $p2;
                 }
             }
@@ -7327,6 +7349,12 @@ class CourseRestorer
             $path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
 
             foreach ($resources[RESOURCE_ASSET] as $asset) {
+                // Security: confine the backup-supplied asset path to prevent a tampered
+                // backup from escaping the course directory (-> arbitrary file write -> RCE).
+                if (!$this->isSafeBackupPath((string) $asset->path)) {
+                    continue;
+                }
+
                 if (is_file($this->course->backup_path.'/'.$asset->path)
                     && is_readable($this->course->backup_path.'/'.$asset->path)
                     && is_dir(\dirname($path.$asset->path))
@@ -7647,6 +7675,28 @@ class CourseRestorer
         return '';
     }
 
+    /**
+     * Validates a relative path coming from an (untrusted) course backup archive
+     * before it is used in a file operation.
+     *
+     * Rejects path traversal ("..") and NUL bytes, and optionally enforces that the
+     * path stays within an expected sub-directory. This prevents a tampered backup
+     * from escaping the extraction directory and writing an arbitrary file
+     * (ZIP-slip -> arbitrary file write -> RCE).
+     */
+    private function isSafeBackupPath(string $path, string $requiredPrefix = ''): bool
+    {
+        if (str_contains($path, '..') || str_contains($path, "\0")) {
+            return false;
+        }
+
+        if ('' !== $requiredPrefix && !str_starts_with($path, $requiredPrefix)) {
+            return false;
+        }
+
+        return true;
+    }
+
     private function extractSingleDocumentEntryFromBackupZip(
         string $rel,
         string $srcRoot,
@@ -7739,6 +7789,18 @@ class CourseRestorer
         }
 
         $targetRel = '' !== $normalizedRel ? $normalizedRel : $requestedRel;
+
+        // Security: the target rel comes from the (untrusted) backup ZIP entry name.
+        // Confine it to the "document" sub-tree and reject traversal/NUL bytes so a
+        // crafted entry cannot escape $srcRoot and write an arbitrary file (ZIP-slip -> RCE).
+        if (!$this->isSafeBackupPath($targetRel, 'document')) {
+            $DBG('html.rewrite.zip.unsafe_target', [
+                'rel' => $targetRel,
+            ]);
+
+            return null;
+        }
+
         $target = rtrim($srcRoot, '/').'/'.$targetRel;
         $targetDir = dirname($target);
 
@@ -7761,7 +7823,8 @@ class CourseRestorer
         }
 
         // Keep a legacy alias when the HTML asked for document/t/... but the ZIP stored document/...
-        if ($requestedRel !== $targetRel) {
+        // The alias path also comes from the (untrusted) requested rel — confine it too.
+        if ($requestedRel !== $targetRel && $this->isSafeBackupPath($requestedRel, 'document')) {
             $aliasTarget = rtrim($srcRoot, '/').'/'.$requestedRel;
             $aliasDir = dirname($aliasTarget);
 

@@ -126,8 +126,10 @@ import XHRUpload from "@uppy/xhr-upload"
 import cStudentPublicationService from "../../services/cstudentpublication"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
+import { useUppyLocale } from "../../composables/uppyLocale"
 
 const { t } = useI18n()
+const { uppyLocale } = useUppyLocale()
 const route = useRoute()
 const router = useRouter()
 const { cid, sid, gid } = getCourseContext()
@@ -199,6 +201,7 @@ const queryParams = new URLSearchParams({
 const uppy = new Uppy({
   restrictions: { maxNumberOfFiles: 1 },
   autoProceed: true,
+  locale: uppyLocale.value,
   onBeforeFileAdded: (currentFile) => {
     if (isDeadlinePassed()) {
       showErrorNotification(t("The submission deadline has passed. You can no longer submit."))

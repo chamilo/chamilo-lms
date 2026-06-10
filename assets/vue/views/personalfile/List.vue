@@ -197,9 +197,10 @@
               />
 
               <Button
-                v-if="slotProps.data?.resourceNode?.firstResourceFile"
+                v-if="canDeleteEntry(slotProps.data)"
                 class="!rounded-xl !border-0 !bg-danger !px-3 !py-2 !text-danger-button-text hover:!bg-danger"
                 icon="mdi mdi-delete"
+                :aria-label="$t('Delete')"
                 @click="confirmDeleteItem(slotProps.data)"
               />
             </div>
@@ -377,14 +378,6 @@
       @done="onUploaded"
       @cancel="closeUploadDialog"
     />
-    <template #footer>
-      <Button
-        class="p-button-text"
-        icon="mdi mdi-close"
-        :label="$t('Cancel')"
-        @click="closeUploadDialog"
-      />
-    </template>
   </Dialog>
 </template>
 
@@ -553,6 +546,18 @@ function getFileExtension(name) {
 
 function isFolderEntry(entry) {
   return !entry?.resourceNode?.firstResourceFile
+}
+
+function canDeleteEntry(entry) {
+  if (!entry?.id) {
+    return false
+  }
+
+  if (isTinyPicker.value && isFolderEntry(entry)) {
+    return false
+  }
+
+  return true
 }
 
 function isImageLike(entryOrFile) {

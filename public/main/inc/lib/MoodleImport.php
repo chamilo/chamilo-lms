@@ -29,8 +29,10 @@ class MoodleImport
         $cachePath = api_get_path(SYS_ARCHIVE_PATH);
         $tempPath = $uploadedFile['tmp_name'];
         $nameParts = explode('.', $uploadedFile['name']);
-        $extension = array_pop($nameParts);
-        $name = basename($tempPath).".$extension";
+        // Keep only alphanumerics from the user-supplied extension to prevent path separators
+        // or traversal sequences leaking into the stored filename.
+        $extension = preg_replace('/[^a-z0-9]/i', '', (string) array_pop($nameParts));
+        $name = basename($tempPath).('' !== $extension ? ".$extension" : '');
 
         if (!move_uploaded_file($tempPath, api_get_path(SYS_ARCHIVE_PATH).$name)) {
             throw new Exception(get_lang('Upload failed, please check maximum file size limits and folder rights.'));

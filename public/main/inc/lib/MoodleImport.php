@@ -174,7 +174,7 @@ class MoodleImport
 
         $xml = @file_get_contents($destinationDir.'/moodle_backup.xml');
         $doc = new DOMDocument();
-        $res = @$doc->loadXML($xml);
+        $res = @$doc->loadXML($xml, LIBXML_NONET);
 
         if (empty($res)) {
             removeDir($destinationDir);
@@ -433,7 +433,7 @@ class MoodleImport
     public function readForumModule($moduleXml)
     {
         $moduleDoc = new DOMDocument();
-        $moduleRes = @$moduleDoc->loadXML($moduleXml);
+        $moduleRes = @$moduleDoc->loadXML($moduleXml, LIBXML_NONET);
         if (empty($moduleRes)) {
             return false;
         }
@@ -460,7 +460,7 @@ class MoodleImport
     public function readResourceModule($moduleXml)
     {
         $moduleDoc = new DOMDocument();
-        $moduleRes = @$moduleDoc->loadXML($moduleXml);
+        $moduleRes = @$moduleDoc->loadXML($moduleXml, LIBXML_NONET);
         if (empty($moduleRes)) {
             return false;
         }
@@ -491,7 +491,7 @@ class MoodleImport
     public function readUrlModule($moduleXml)
     {
         $moduleDoc = new DOMDocument();
-        $moduleRes = @$moduleDoc->loadXML($moduleXml);
+        $moduleRes = @$moduleDoc->loadXML($moduleXml, LIBXML_NONET);
         if (empty($moduleRes)) {
             return false;
         }
@@ -518,7 +518,7 @@ class MoodleImport
     public function readQuizModule($moduleXml)
     {
         $moduleDoc = new DOMDocument();
-        $moduleRes = @$moduleDoc->loadXML($moduleXml);
+        $moduleRes = @$moduleDoc->loadXML($moduleXml, LIBXML_NONET);
         if (empty($moduleRes)) {
             return false;
         }
@@ -560,7 +560,7 @@ class MoodleImport
     public function readMainFilesXml($filesXml, $contextId)
     {
         $moduleDoc = new DOMDocument();
-        $moduleRes = @$moduleDoc->loadXML($filesXml);
+        $moduleRes = @$moduleDoc->loadXML($filesXml, LIBXML_NONET);
 
         if (empty($moduleRes)) {
             return false;
@@ -622,7 +622,7 @@ class MoodleImport
     public function readMainQuestionsXml($questionsXml, $questionId)
     {
         $moduleDoc = new DOMDocument();
-        $moduleRes = @$moduleDoc->loadXML($questionsXml);
+        $moduleRes = @$moduleDoc->loadXML($questionsXml, LIBXML_NONET);
         if (empty($moduleRes)) {
             return false;
         }
@@ -1160,7 +1160,7 @@ class MoodleImport
     public function getAllQuestionFiles($filesXml)
     {
         $moduleDoc = new DOMDocument();
-        $moduleRes = @$moduleDoc->loadXML($filesXml);
+        $moduleRes = @$moduleDoc->loadXML($filesXml, LIBXML_NONET);
 
         if (empty($moduleRes)) {
             return [];

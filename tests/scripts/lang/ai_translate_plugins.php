@@ -399,7 +399,9 @@ EOT;
         .json_encode($inputList, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 
     $payload = [
-        'model'       => 'grok-4-1-fast-non-reasoning',
+        //'model'       => 'grok-4-1-fast-non-reasoning',
+        'model'       => 'grok-4.20-0309-non-reasoning',
+        //'model'       => 'grok-build-0.1',
         'messages'    => [
             ['role' => 'system', 'content' => $systemPrompt],
             ['role' => 'user',   'content' => $userPrompt],
@@ -664,6 +666,22 @@ foreach ($plugins as $plugin) {
     eprintln("============================================================");
     eprintln("[{$pluginName}] {$totalTerms} term(s) in en_US.php", true);
 
+    // Flag empty/blank source strings once per plugin: they cannot be translated
+    // and are skipped below, but the source file should be cleaned up by hand.
+    $blankSourceKeys = [];
+    foreach ($sourceStrings as $key => $sourceValue) {
+        if (trim((string) $sourceValue) === '') {
+            $blankSourceKeys[] = $key;
+        }
+    }
+    if (!empty($blankSourceKeys)) {
+        eprintln(
+            "[{$pluginName}] WARNING: ".count($blankSourceKeys)." empty/blank source string(s) in en_US.php"
+            ." (skipped, please fix): ".implode(', ', $blankSourceKeys),
+            true
+        );
+    }
+
     foreach ($requestedLangs as $langCode) {
         $langName   = $langCodeToName[$langCode];
         $langLabel  = pluginGetLanguageName($langCode);
@@ -688,9 +706,16 @@ foreach ($plugins as $plugin) {
 
         $existing = parsePluginLangFile($targetFile);
 
-        // Keys that need translation: absent or empty in the target file
+        // Keys that need translation: absent or empty in the target file.
+        // Source keys whose own value is empty or whitespace-only carry no
+        // translatable content, so they are never sent to the API (otherwise a
+        // whitespace-only source like ' ' would be re-flagged on every run,
+        // since trim() reduces it to '' regardless of how it was written back).
         $toTranslate = [];
         foreach ($sourceStrings as $key => $sourceValue) {
+            if (trim((string) $sourceValue) === '') {
+                continue;
+            }
             if (!array_key_exists($key, $existing) || trim((string) $existing[$key]) === '') {
                 $toTranslate[$key] = $sourceValue;
             }

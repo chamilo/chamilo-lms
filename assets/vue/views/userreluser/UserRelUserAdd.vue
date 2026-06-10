@@ -46,6 +46,7 @@ import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import userService from "../../services/userService"
 import userRelUserService from "../../services/userRelUserService"
+import baseService from "../../services/baseService"
 import { useSecurityStore } from "../../store/securityStore"
 
 const emit = defineEmits(["friend-request-sent"])
@@ -109,14 +110,7 @@ const sendNotificationMessage = async (friend) => {
   }
 
   try {
-    const response = await fetch("/social-network/user-action", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(messageData),
-    })
-    const result = await response.json()
+    const result = await baseService.post("/social-network/user-action", messageData)
     if (result.success) {
       showSuccessNotification(t("Notification message sent successfully"))
     } else {

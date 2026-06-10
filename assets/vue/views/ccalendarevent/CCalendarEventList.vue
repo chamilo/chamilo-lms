@@ -718,18 +718,10 @@ async function onCreateEventForm() {
     if (itemModel["@id"]) {
       await store.dispatch("ccalendarevent/update", itemModel)
     } else {
+      // Course event: bind only the visibility; the course context
+      // (cid/sid/gid) is derived server-side from the gated session course.
       if (course.value) {
-        const gidFromRoute = Number(route.query.gid ?? 0)
-        const gidFromStore = Number(group.value?.id ?? 0)
-        const effectiveGid = gidFromStore > 0 ? gidFromStore : gidFromRoute
-        itemModel.resourceLinkList = [
-          {
-            cid: course.value.id,
-            sid: session.value?.id ?? null,
-            gid: effectiveGid > 0 ? effectiveGid : null,
-            visibility: RESOURCE_LINK_PUBLISHED,
-          },
-        ]
+        itemModel.resourceLinkList = [{ visibility: RESOURCE_LINK_PUBLISHED }]
       }
       await store.dispatch("ccalendarevent/create", itemModel)
     }

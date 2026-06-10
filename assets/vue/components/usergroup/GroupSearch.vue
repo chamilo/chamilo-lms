@@ -75,6 +75,7 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import { useI18n } from "vue-i18n"
 import { useNotification } from "../../composables/notification"
 import { useSocialInfo } from "../../composables/useSocialInfo"
+import baseService from "../../services/baseService"
 
 const query = ref("")
 const { t } = useI18n()
@@ -92,11 +93,7 @@ const handleFormSearch = async () => {
     return
   }
   try {
-    const response = await fetch(`/social-network/search?query=${query.value}&type=group`)
-    const data = await response.json()
-    if (!response.ok) {
-      throw new Error(data.message || "Server response error")
-    }
+    const data = await baseService.get("/social-network/search", { query: query.value, type: "group" })
     groups.value = data.results
   } catch (error) {
     console.error("There has been a problem with your fetch operation:", error)

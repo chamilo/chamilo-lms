@@ -582,10 +582,11 @@ function toggleActive(data) {
     message,
     async accept() {
       try {
-        const res = await fetch(
-          `/main/inc/ajax/user_manager.ajax.php?a=active_user&user_id=${data.id}&status=${newStatus}`,
-        )
-        const text = await res.text()
+        const res = await baseService.getRaw("/main/inc/ajax/user_manager.ajax.php", {
+          params: { a: "active_user", user_id: data.id, status: newStatus },
+          responseType: "text",
+        })
+        const text = String(res.data ?? "")
         data.active = text.trim() === "1" ? 1 : 0
       } catch (e) {
         console.error(e)
@@ -606,21 +607,21 @@ function canLoginAs(data) {
 function confirmAction(action, data, title) {
   requireConfirmation({
     title,
-    accept() {
-      const form = document.createElement("form")
-      form.method = "POST"
-      form.action = `/admin/user-list-action`
+    async accept() {
+      try {
+        const formData = new URLSearchParams()
+        formData.set("action", action)
+        formData.set("user_id", String(data.id))
+        formData.set("_token", csrfToken.value)
 
-      const fields = { action, user_id: data.id, view: view.value, _token: csrfToken.value }
-      for (const [k, v] of Object.entries(fields)) {
-        const input = document.createElement("input")
-        input.type = "hidden"
-        input.name = k
-        input.value = v
-        form.appendChild(input)
+        // URLSearchParams body makes axios send application/x-www-form-urlencoded.
+        await baseService.post("/admin/user-list-action", formData)
+
+        selectedItems.value = []
+        await load()
+      } catch (e) {
+        console.error("Error performing action:", e)
       }
-      document.body.appendChild(form)
-      form.submit()
     },
   })
 }
@@ -634,11 +635,8 @@ function confirmBulkAction(action) {
         formData.set("_token", csrfToken.value)
         selectedItems.value.forEach((item) => formData.append("user_ids[]", String(item.id)))
 
-        await fetch("/admin/user-list-action", {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: formData.toString(),
-        })
+        // URLSearchParams body makes axios send application/x-www-form-urlencoded.
+        await baseService.post("/admin/user-list-action", formData)
 
         selectedItems.value = []
         await load()

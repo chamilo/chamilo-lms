@@ -283,6 +283,7 @@ import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import ResourceFileLink from "../../components/documents/ResourceFileLink.vue"
 import DataFilter from "../../components/DataFilter"
 import DocumentsFilterForm from "../../components/documents/Filter"
+import resourceNodeService from "../../services/resourcenode"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import { useI18n } from "vue-i18n"
 import { useFormatDate } from "../../composables/formatDate"
@@ -639,14 +640,6 @@ export default {
       return n || 1
     },
 
-    getContextIds() {
-      const q = this.$route?.query || {}
-      const cid = this.normalizeNodeId(q.cid) || 0
-      const sid = this.normalizeNodeId(q.sid) || 0
-      const gid = this.normalizeNodeId(q.gid) || 0
-      return { cid, sid, gid }
-    },
-
     getRootNodeId() {
       return this.trailRootId || this.folderTrail?.[0]?.id || null
     },
@@ -660,17 +653,7 @@ export default {
       }
 
       try {
-        const resp = await fetch(`/api/resource_nodes/${id}`, {
-          headers: { Accept: "application/ld+json" },
-          credentials: "same-origin",
-        })
-
-        if (!resp.ok) {
-          console.warn("[DOC PICKER] Failed to fetch resource node info", { id, status: resp.status })
-          return null
-        }
-
-        const data = await resp.json()
+        const data = await resourceNodeService.findById(id)
         const title = String(data?.title || "").trim() || `#${id}`
         const parentRaw = data?.parent
         const parentId = this.normalizeNodeId(parentRaw)
@@ -781,19 +764,11 @@ export default {
       this.submitted = true
       if (!this.item.title?.trim()) return
 
-      const { cid, sid, gid } = this.getContextIds()
-
       try {
         this.item.filetype = "folder"
         this.item.parentResourceNodeId = this.getCurrentNodeId()
-        this.item.resourceLinkList = JSON.stringify([
-          {
-            gid,
-            sid,
-            cid,
-            visibility: RESOURCE_LINK_PUBLISHED,
-          },
-        ])
+        // Course context derived server-side from the gated session course.
+        this.item.resourceLinkList = JSON.stringify([{ visibility: RESOURCE_LINK_PUBLISHED }])
 
         await this.create(this.item)
 
@@ -837,21 +812,13 @@ export default {
         return
       }
 
-      const { cid, sid, gid } = this.getContextIds()
-
       const payload = {
         title: file.name,
         filetype: "file",
         uploadFile: file,
         parentResourceNodeId: this.getCurrentNodeId(),
-        resourceLinkList: JSON.stringify([
-          {
-            gid,
-            sid,
-            cid,
-            visibility: RESOURCE_LINK_PUBLISHED,
-          },
-        ]),
+        // Course context derived server-side from the gated session course.
+        resourceLinkList: JSON.stringify([{ visibility: RESOURCE_LINK_PUBLISHED }]),
       }
 
       try {

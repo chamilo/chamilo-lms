@@ -1,7 +1,8 @@
 import { onMounted, readonly, ref } from "vue"
 import { useStore } from "vuex"
 import { useRoute } from "vue-router"
-import axios from "axios"
+import socialService from "../services/socialService"
+import userService from "../services/userService"
 import { useSecurityStore } from "../store/securityStore"
 
 export function useSocialInfo() {
@@ -22,11 +23,11 @@ export function useSocialInfo() {
     isLoading.value = true
     if (groupId) {
       try {
-        const response = await axios.get(`/social-network/group-details/${groupId}`)
+        const data = await socialService.getGroupDetails(groupId)
         groupInfo.value = {
-          ...response.data,
-          isMember: response.data.isMember,
-          role: response.data.role,
+          ...data,
+          isMember: data.isMember,
+          role: data.role,
         }
         isGroup.value = true
       } catch (error) {
@@ -51,8 +52,7 @@ export function useSocialInfo() {
         delete params.id
 
         params.page_origin = "social"
-        const response = await axios.get(`/api/users/${uid}`, { params })
-        user.value = response.data
+        user.value = await userService.findById(uid, params)
         isCurrentUser.value = false
       } else {
         user.value = securityStore.user

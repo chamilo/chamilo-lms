@@ -44,7 +44,7 @@ import BaseDialogDelete from "../../components/basecomponents/BaseDialogDelete.v
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import StudentViewButton from "../../components/StudentViewButton.vue"
 import { useI18n } from "vue-i18n"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
 
@@ -61,7 +61,7 @@ const isDeleteDialogVisible = ref(false)
 const attendanceToDelete = ref({ id: null, title: "" })
 const totalAttendances = ref(0)
 const isLoading = ref(false)
-const { sid, cid, gid } = useCidReq()
+const { sid, cid, gid } = getCourseContext()
 const parentResourceNodeId = ref(Number(route.params.node))
 
 const redirectToCreateAttendance = () => {

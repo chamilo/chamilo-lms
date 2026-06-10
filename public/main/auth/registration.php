@@ -1256,6 +1256,17 @@ if ($form->validate()) {
         $values['status'] = STUDENT;
     }
 
+    // Security rule: server-side allow-list on submitted status to prevent
+    // privilege mass-assignment (CWE-915). The UI only offers STUDENT/COURSEMANAGER;
+    // any other value (e.g. SESSIONADMIN, DRH, COURSEMANAGERLOWSECURITY) coming
+    // from a tampered POST must be downgraded to STUDENT.
+    $allowedSelfRegistrationStatus = $allowTeacherRegistration
+        ? [STUDENT, COURSEMANAGER]
+        : [STUDENT];
+    if (!in_array((int) ($values['status'] ?? STUDENT), $allowedSelfRegistrationStatus, true)) {
+        $values['status'] = STUDENT;
+    }
+
     if (empty($values['official_code']) && !empty($values['username'])) {
         $values['official_code'] = api_strtoupper($values['username']);
     }

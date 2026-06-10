@@ -30,7 +30,7 @@ const isLoading = ref(false)
 async function createItem(formData) {
   isLoading.value = true
   try {
-    await baseService.post("/api/branches", formData, true)
+    await baseService.post("/api/branches", formData)
     toast.add({ severity: "success", detail: t("{0} created", [formData.title]), life: 3500 })
     router.push({ name: "BranchList" })
   } catch (e) {

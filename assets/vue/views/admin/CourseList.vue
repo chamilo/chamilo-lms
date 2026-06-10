@@ -584,16 +584,10 @@ async function toggleCatalogue(data) {
     formData.append("course_id", String(data.id))
     formData.append("_token", csrfToken.value)
 
-    const res = await fetch("/admin/course-list-action", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: formData.toString(),
-    })
+    // URLSearchParams body makes axios send application/x-www-form-urlencoded.
+    const result = await baseService.post("/admin/course-list-action", formData)
 
-    if (res.ok) {
-      const result = await res.json()
-      data.inCatalogue = result.inCatalogue
-    }
+    data.inCatalogue = result.inCatalogue
   } catch (e) {
     console.error(e)
   }

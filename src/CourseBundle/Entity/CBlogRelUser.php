@@ -18,9 +18,9 @@ use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(
     operations: [
-        new GetCollection(security: "is_granted('ROLE_USER')"),
-        new Post(security: "is_granted('ROLE_USER')"),
-        new Delete(security: "is_granted('ROLE_USER')"),
+        new GetCollection(security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')"),
+        new Post(securityPostDenormalize: "object.getBlog() != null and is_granted('EDIT', object.getBlog().resourceNode)"),
+        new Delete(security: "object.getBlog() != null and is_granted('EDIT', object.getBlog().resourceNode)"),
     ],
     normalizationContext: ['groups' => ['blog_rel_user:read']],
     denormalizationContext: ['groups' => ['blog_rel_user:write']],

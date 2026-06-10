@@ -104,7 +104,6 @@ async function loginTokenCheck(portalUrl, token) {
   await baseService.post(
     `${portalUrl}/login/token/check`,
     {},
-    false,
     { Authorization: `Bearer ${token}` },
     { withCredentials: true },
   )

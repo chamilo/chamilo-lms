@@ -50,11 +50,11 @@ import { ref } from "vue"
 import LayoutFormButtons from "../layout/LayoutFormButtons.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import BaseSelect from "../basecomponents/BaseSelect.vue"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import { useNotification } from "../../composables/notification"
 
 const { t } = useI18n()
-const { sid, cid } = useCidReq()
+const { sid, cid } = getCourseContext()
 const notification = useNotification()
 
 const emit = defineEmits(["backPressed"])

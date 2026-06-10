@@ -69,17 +69,18 @@
 <script setup>
 import { ref, onMounted } from "vue"
 import { useI18n } from "vue-i18n"
-import axios from "axios"
+import cStudentPublicationService from "../../services/cstudentpublication"
+import documentService from "../../services/documents"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import { useRoute, useRouter } from "vue-router"
 import { useNotification } from "../../composables/notification"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const notification = useNotification()
-const { cid, sid, gid } = useCidReq()
+const { cid, sid, gid } = getCourseContext()
 
 const publicationId = parseInt(route.params.id, 10)
 const publicationTitle = ref("")
@@ -106,10 +107,7 @@ function extractIdFromIri(iri) {
 
 async function loadPublicationMetadata() {
   try {
-    const response = await axios.get(`/api/c_student_publications/${publicationId}`, {
-      params: buildCidParams(),
-    })
-    const data = response.data
+    const data = await cStudentPublicationService.getPublication(publicationId, buildCidParams())
     publicationTitle.value = data.title
 
     parentResourceNodeId.value = extractIdFromIri(data.resourceLinkListFromEntity?.[0]?.course?.resourceNode?.["@id"])
@@ -124,13 +122,11 @@ async function loadPublicationMetadata() {
 
 async function loadAddedDocuments() {
   try {
-    const response = await axios.get(`/api/c_student_publication_rel_documents`, {
-      params: {
-        ...buildCidParams(),
-        publication: `/api/c_student_publications/${publicationId}`,
-      },
+    const { items } = await cStudentPublicationService.getRelDocuments({
+      ...buildCidParams(),
+      publication: `/api/c_student_publications/${publicationId}`,
     })
-    addedDocuments.value = response.data["hydra:member"]
+    addedDocuments.value = items
   } catch (e) {
     console.error("Error loading added documents", e)
   }
@@ -138,15 +134,13 @@ async function loadAddedDocuments() {
 
 async function loadAvailableDocuments() {
   try {
-    const response = await axios.get(`/api/documents`, {
-      params: {
-        "resourceNode.parent": parentResourceNodeId.value,
-        "filetype[]": ["file"],
-        loadNode: 1,
-        ...buildCidParams(),
-      },
+    const { items } = await documentService.listDocuments({
+      "resourceNode.parent": parentResourceNodeId.value,
+      "filetype[]": ["file"],
+      loadNode: 1,
+      ...buildCidParams(),
     })
-    availableDocuments.value = response.data["hydra:member"]
+    availableDocuments.value = items
   } catch (e) {
     console.error("Error loading available documents", e)
   }
@@ -154,15 +148,12 @@ async function loadAvailableDocuments() {
 
 async function addDocument(documentId) {
   try {
-    await axios.post(
-      `/api/c_student_publication_rel_documents`,
+    await cStudentPublicationService.addRelDocument(
       {
         publication: `/api/c_student_publications/${publicationId}`,
         document: `/api/documents/${documentId}`,
       },
-      {
-        params: buildCidParams(),
-      },
+      buildCidParams(),
     )
     notification.showSuccessNotification(t("Document added"))
     await loadAddedDocuments()
@@ -173,9 +164,7 @@ async function addDocument(documentId) {
 
 async function removeDocument(relId) {
   try {
-    await axios.delete(`/api/c_student_publication_rel_documents/${relId}`, {
-      params: buildCidParams(),
-    })
+    await cStudentPublicationService.removeRelDocument(relId, buildCidParams())
     await loadAddedDocuments()
     notification.showSuccessNotification(t("Document removed"))
   } catch (e) {

@@ -59,14 +59,8 @@ async function updateIntroLinks() {
   const payload = {
     introText: updatedIntroText,
     iid: intro.value.c_tool.iid,
-    resourceLinkList: [
-      {
-        sid: currentSessionId,
-        cid: course.value.id,
-        introText: updatedIntroText,
-        visibility: "published",
-      },
-    ],
+    // Course context derived server-side from the gated session course.
+    resourceLinkList: [{ visibility: "published" }],
     ...(intro.value.iid && { iid: intro.value.iid }),
   }
 

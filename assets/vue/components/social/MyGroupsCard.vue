@@ -111,7 +111,7 @@
 import BaseCard from "../basecomponents/BaseCard.vue"
 import { useI18n } from "vue-i18n"
 import { computed, inject, ref, watchEffect } from "vue"
-import axios from "axios"
+import socialService from "../../services/socialService"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useRouter } from "vue-router"
 
@@ -136,11 +136,11 @@ function search() {
 
 async function fetchGroups(userId) {
   try {
-    const response = await axios.get(`/social-network/groups/${userId}`)
+    const data = await socialService.getGroups(userId)
 
-    if (response.data) {
-      groups.value = response.data.items || []
-      goToUrl.value = response.data.go_to || ""
+    if (data) {
+      groups.value = data.items || []
+      goToUrl.value = data.go_to || ""
     }
   } catch (error) {
     groups.value = []

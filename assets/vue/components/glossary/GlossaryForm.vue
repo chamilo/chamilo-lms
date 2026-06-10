@@ -61,7 +61,7 @@ import useVuelidate from "@vuelidate/core"
 import BaseTextAreaWithVuelidate from "../basecomponents/BaseTextAreaWithVuelidate.vue"
 import { useNotification } from "../../composables/notification"
 import glossaryService from "../../services/glossaryService"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import { useSecurityStore } from "../../store/securityStore"
 import { useIsAllowedToEdit } from "../../composables/userPermissions"
 
@@ -69,7 +69,7 @@ const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
 const notification = useNotification()
-const { sid, cid } = useCidReq()
+const { sid, cid } = getCourseContext()
 const securityStore = useSecurityStore()
 
 const props = defineProps({
@@ -83,15 +83,8 @@ const emit = defineEmits(["backPressed"])
 
 const parentResourceNodeId = ref(Number(route.params.node))
 
-const resourceLinkList = ref(
-  JSON.stringify([
-    {
-      sid,
-      cid,
-      visibility: RESOURCE_LINK_PUBLISHED, // visible by default
-    },
-  ]),
-)
+// Course context derived server-side from the gated session course.
+const resourceLinkList = ref(JSON.stringify([{ visibility: RESOURCE_LINK_PUBLISHED }]))
 
 const { isAllowedToEdit } = useIsAllowedToEdit({ tutor: true, coach: true, sessionCoach: true })
 

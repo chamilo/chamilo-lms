@@ -13,17 +13,17 @@
 
 <script setup>
 import { ref } from "vue"
-import axios from "axios"
+import systemAnnouncementService from "../../services/systemAnnouncementService"
 
 import SystemAnnouncementCard from "./SystemAnnouncementCard.vue"
 
 const announcements = ref([])
 
-axios
-  .get("/news/list")
-  .then((response) => {
-    if (Array.isArray(response.data)) {
-      announcements.value = response.data
+systemAnnouncementService
+  .list()
+  .then((data) => {
+    if (Array.isArray(data)) {
+      announcements.value = data
     }
   })
   .catch(function (error) {

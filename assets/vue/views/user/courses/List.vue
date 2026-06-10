@@ -64,8 +64,7 @@ import EmptyState from "../../../components/EmptyState"
 import { useSecurityStore } from "../../../store/securityStore"
 import Loading from "../../../components/Loading.vue"
 import { usePlatformConfig } from "../../../store/platformConfig"
-
-const ME_COURSES_ENDPOINT = "/api/me/courses"
+import courseService from "../../../services/courseService"
 const securityStore = useSecurityStore()
 const platformConfigStore = usePlatformConfig()
 const { t } = useI18n()
@@ -256,14 +255,6 @@ const observeLast = async () => {
   observer.value.observe(lastCourseRef.value)
 }
 
-const buildPagedUrl = (page) => {
-  const p = Math.max(1, Number(page) || 1)
-  const qs = new URLSearchParams()
-  qs.set("page", String(p))
-  qs.set("itemsPerPage", String(PAGE_SIZE))
-  return `${ME_COURSES_ENDPOINT}?${qs.toString()}`
-}
-
 const fetchServerPage = async (pageToLoad, { reset = false } = {}) => {
   if (!securityStore.user) return
   if (serverFetching.value) return
@@ -275,29 +266,17 @@ const fetchServerPage = async (pageToLoad, { reset = false } = {}) => {
   fetchAbort = new AbortController()
 
   try {
-    const url = buildPagedUrl(pageToLoad)
-    const resp = await fetch(url, {
-      method: "GET",
-      credentials: "same-origin",
-      headers: { Accept: "application/ld+json, application/json" },
-      signal: fetchAbort.signal,
-    })
-
-    if (!resp.ok) {
-      serverHasMore.value = false
-      return
-    }
-
-    const data = await resp.json()
+    const page = Math.max(1, Number(pageToLoad) || 1)
+    const data = await courseService.listMyCourses(page, PAGE_SIZE, { signal: fetchAbort.signal })
     const items = normalizeCollection(data)
 
     serverHasMore.value = Array.isArray(items) && items.length >= PAGE_SIZE
-    serverPage.value = Math.max(1, Number(pageToLoad) || 1)
+    serverPage.value = page
 
     mergeCoursesFromProvider(items, { reset })
     await observeLast()
   } catch (e) {
-    if (e?.name !== "AbortError") {
+    if (e?.name !== "AbortError" && e?.code !== "ERR_CANCELED") {
       console.warn("[CoursesList] Failed to fetch /me/courses page.", e)
     }
     serverHasMore.value = false

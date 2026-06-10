@@ -220,7 +220,7 @@ import { useI18n } from "vue-i18n"
 import LayoutFormGeneric from "../../components/layout/LayoutFormGeneric.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import glossaryService from "../../services/glossaryService"
 import { useNotification } from "../../composables/notification"
@@ -240,7 +240,7 @@ const platform = usePlatformConfig()
 const cidReqStore = useCidReqStore()
 const { course } = storeToRefs(cidReqStore)
 
-const { cid, sid } = useCidReq()
+const { cid, sid } = getCourseContext()
 
 const { isAllowedToEdit } = useIsAllowedToEdit({ tutor: true, coach: true, sessionCoach: true })
 
@@ -269,15 +269,8 @@ const isBusy = ref(false)
 
 const parentResourceNodeId = ref(Number(route.params.node))
 
-const resourceLinkList = ref(
-  JSON.stringify([
-    {
-      sid,
-      cid,
-      visibility: RESOURCE_LINK_PUBLISHED,
-    },
-  ]),
-)
+// Course context derived server-side from the gated session course.
+const resourceLinkList = ref(JSON.stringify([{ visibility: RESOURCE_LINK_PUBLISHED }]))
 
 const canGenerate = computed(() => {
   return canEditGlossary.value && providers.value.length > 0 && prompt.value.trim().length > 0 && !isBusy.value

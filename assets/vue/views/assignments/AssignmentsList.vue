@@ -102,7 +102,10 @@ const { isAllowedToEdit } = useIsAllowedToEdit({ tutor: true, coach: true, sessi
 
 const isTeacherUI = computed(
   () =>
-    (securityStore.isCurrentTeacher || securityStore.isCourseAdmin || securityStore.isAdmin) &&
+    (securityStore.isCurrentTeacher ||
+      securityStore.isCourseAdmin ||
+      securityStore.isAdmin ||
+      securityStore.isTeacher) &&
     !platformConfigStore.isStudentViewActive,
 )
 

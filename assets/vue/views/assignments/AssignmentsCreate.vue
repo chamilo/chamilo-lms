@@ -23,14 +23,14 @@
 import AssignmentsForm from "../../components/assignments/AssignmentsForm.vue"
 import { useI18n } from "vue-i18n"
 import { ref } from "vue"
-import axios from "axios"
-import { useCidReq } from "../../composables/cidReq"
+import cStudentPublicationService from "../../services/cstudentpublication"
+import { getCourseContext } from "../../utils/courseContext"
 import { useNotification } from "../../composables/notification"
 import { useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 
 const { t } = useI18n()
-const { cid, sid, gid } = useCidReq()
+const { cid, sid, gid } = getCourseContext()
 const router = useRouter()
 
 const { showSuccessNotification, showErrorNotification } = useNotification()
@@ -40,9 +40,9 @@ const isFormLoading = ref(false)
 function onSubmit(publicationStudent) {
   isFormLoading.value = true
 
-  axios
-    .post(`/api/c_student_publications`, publicationStudent)
-    .then(({ data }) => {
+  cStudentPublicationService
+    .createPublication(publicationStudent)
+    .then((data) => {
       console.log("cstudentpublication", data)
 
       showSuccessNotification(t("Assignment created"))

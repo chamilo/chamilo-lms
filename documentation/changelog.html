@@ -110,6 +110,63 @@
 
     </table>
 
+    <div class="version" aria-label="1.11.40">
+        <a id="1.11.40"></a>
+        <h1>Chamilo 1.11.40 - Quimper, ?/06/2026</h1>
+        <h3>Release notes - summary</h3>
+        <p>Chamilo 1.11.40 is a security and bugfix release on top of 1.11.38. For any significant change, please check the 1.11.30 release notes.</p>
+        <h3>Release name</h3>
+        <p><a href="https://en.wikipedia.org/wiki/Quimper">Quimper</a> is the prefecture of the Finistère department in Brittany, north-western France. It is known for its Gothic cathedral, well-preserved medieval old town, and its centuries-old tradition of hand-painted Quimper faïence pottery.</p>
+        <h3>Security fixes</h3>
+        <ul aria-live="off">
+            <li>[2026-05-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/064787b28633b00218a6bf365248fdbf07b00e79">064787b2</a> - <a href="https://github.com/chamilo/chamilo-lms/security/advisories/GHSA-wjxh-pvwh-h84p">GHSA-wjxh-pvwh-h84p</a>) Security: LP: Using current user ID instead of request uid</li>
+            <li>[2026-04-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/c497f7ef7fadeabb80ba27046a3ad5ce0edfc139">c497f7ef</a> - <a href="https://github.com/chamilo/chamilo-lms/security/advisories/GHSA-8rj2-88v5-mx6w">GHSA-8rj2-88v5-mx6w</a>) Security: Remove <code>eval</code> usage in <code>HTML_QuickForm</code> library and replace with safer array operations</li>
+            <li>[2026-04-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/7cc961d60ac27eaccd6bcc8db201de2c65adfdf3">7cc961d6</a> - <a href="https://github.com/chamilo/chamilo-lms/security/advisories/GHSA-prqp-8x29-cr88">GHSA-prqp-8x29-cr88</a>) Security: Validate and enforce <code>groupOp</code> keyword in AJAX filters to prevent improper usage or invalid values</li>
+            <li>[2026-03-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/823ed10b983981cdaf0a44f79041757e08ffb3c1">823ed10b</a> - <a href="https://github.com/chamilo/chamilo-lms/security/advisories/GHSA-gcjp-f7jm-rrrg">GHSA-gcjp-f7jm-rrrg</a>) Security: Fix stored XSS via null-byte bypass in user registration</li>
+            <li>[2026-03-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/08b4fbf3e8ec957a982805997c080762394d714b">08b4fbf3</a> - <a href="https://github.com/chamilo/chamilo-lms/security/advisories/GHSA-4hwq-pv7c-3928">GHSA-4hwq-pv7c-3928</a>) Security: Improve languages and sublanguages scripts security</li>
+            <li>[2026-03-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/836c5c9ad6fb4ccf40f8c0c015e1bb38a81f91c8">836c5c9a</a>) Security: Fix multiple filtering issues about session_lifetime</li>
+        </ul>
+        <h3>Notable new Features</h3>
+        <h4>For end-users, teachers and Chamilo admins</h4>
+        These features are immediately available to users through the web interface.<br />
+        <ul aria-live="off">
+            <li>No notable new feature</li>
+        </ul>
+        <h4>For developers and sysadmins</h4>
+        Although most features here will be used by teachers or Chamilo admins, they require sysadmin privileges to enable them on the server.
+        <ul aria-live="off">
+            <li>[2026-04-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/7e081bbf88524dea854c5699899c1aa69acbb7d4">7e081bbf</a> - <a href="https://task.beeznest.com/issues/23138">BT#23138</a>) Webservice: Add <code>delete_session</code> method in API</li>
+            <li>[2026-04-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/8660b53d3eb529a1a42d4c3caaad625462dd5ea2">8660b53d</a> - <a href="https://task.beeznest.com/issues/23138">BT#23138</a>) Webservice: Add <code>update_course</code> method in API</li>
+        </ul>
+        <h3>Improvements (minor features) and debug</h3>
+        In reverse chronological order...
+        <ul aria-live="off">
+            <li>[2026-05-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/61d29b7da232cd59f43c1fa16cca4372e67f5073">61d29b7d</a> - <a href="https://task.beeznest.com/issues/23439">BT#23439</a>) User: Internal: fix user update when imported user already exist and status with value user or teacher</li>
+            <li>[2026-04-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/729353b329a95b4e6b1eca393d8907a8df262058">729353b3</a> - <a href="https://task.beeznest.com/issues/23282">BT#23282</a>) Admin: Fix weird array-reference issue in user_move_stats.php</li>
+            <li>[2026-04-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/5b555a74357e3a96803e99c7ba5005001b38ccf6">5b555a74</a> - <a href="https://task.beeznest.com/issues/23282">BT#23282</a>) Tracking: Fix processUserDataMove() for main/admin/user_move_stats.php if some data are empty</li>
+            <li>[2026-04-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/389ce3b62012ace163c28d91b68f6a4f09ea5aaa">389ce3b6</a>) Course: Set Moodle display defaults for PDFs and links</li>
+            <li>[2026-04-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/9531ba05f88f119ed9f4d0b593a07c97c217b78a">9531ba05</a> - <a href="https://task.beeznest.com/issues/23208">BT#23208</a>) Group: Fix group ordering to be the same for admin, teacher and student</li>
+            <li>[2026-03-25] (<a href="https://github.com/chamilo/chamilo-lms/commit/b8b9c76bd88ad297c3a0e669a84fac64a0646b50">b8b9c76b</a>) Vendor: Upgrade <code>enshrined/svg-sanitize</code> to ^0.22.0</li>
+        </ul>
+        <h3>Stylesheets and theming</h3>
+        <ul aria-live="off">
+            <li>No notable style change</li>
+        </ul>
+        <h3>Web services</h3>
+        <ul aria-live="off">
+            <li>See new <code>delete_session</code> and <code>update_course</code> API methods in notable new features above</li>
+        </ul>
+        <h3>Removals</h3>
+        <ul aria-live="off">
+            <li>No notable removal</li>
+        </ul>
+        <h3>Known issues</h3>
+        <ul aria-live="off">
+            <li>(<a href="https://github.com/chamilo/chamilo-lms/issues/5910">GH#5910</a>, <a href="https://github.com/chamilo/chamilo-lms/issues/7354">GH#7354</a>, <a href="https://github.com/chamilo/chamilo-lms/issues/7676">GH#7676</a>) PDF certificate generation may fail to export embedded images in some configurations</li>
+            <li>(<a href="https://github.com/chamilo/chamilo-lms/issues/8153">GH#8153</a>, <a href="https://github.com/chamilo/chamilo-lms/issues/8406">GH#8406</a>) Learning paths may be invisible to students in some PHP 8.3 configurations despite being set to public</li>
+        </ul>
+    </div>
+
     <div class="version" aria-label="1.11.38">
         <a id="1.11.38"></a>
         <h1>Chamilo 1.11.38 - Pontorson, 23/03/2026</h1>

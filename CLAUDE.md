@@ -65,6 +65,19 @@ If you genuinely think a convention is harmful, surface it. Don't fork silently.
 "Tests pass" is wrong if any were skipped.
 Default to surfacing uncertainty, not hiding it.
 
+### Rule 13 - OWASP security review
+
+Review **every** new and modified file (controller, Vue component, updated legacy links) for common vulnerabilities. This step must be re-run after any subsequent change request (e.g., adding features, fixing bugs, updating links) — not only on the initial pass.
+
+### Checklist
+
+- **CSRF on state-changing endpoints.** Any POST/PUT/DELETE controller that performs destructive or sensitive actions (delete, copy, anonymize, restore, status toggle, etc.) must validate a CSRF token. Use `$this->isCsrfTokenValid('intent_name', $token)` in the controller. Generate the token via `CsrfTokenManagerInterface::getToken('intent_name')`, return it in the data endpoint JSON, and include it as a hidden `_token` field in the Vue form submission.
+- **Broken access control.** Verify that `#[IsGranted(...)]` on the controller matches the legacy page's access checks. If the legacy page allowed both admins and session admins, use the `Expression` form. Verify that **every** destructive action inside the controller re-checks the role (e.g., session admins should not be able to delete sessions they don't manage just because they can reach the endpoint). For non-admin roles, filter actionable entity IDs to only those the current user is authorized to manage.
+- **SQL injection.** Never interpolate user input into DQL/SQL strings. Always use bound parameters (`:paramName` + `setParameter()`). The QueryBuilder already does this — verify no raw concatenation slipped in. Sort field values must use an allowlist mapping, never be passed directly into `orderBy()`.
+- **XSS.** Vue's template syntax (`{{ }}`) auto-escapes by default. Verify no `v-html` is used with user-supplied data. If linking to legacy PHP pages with query params built from data, ensure values are not attacker-controlled HTML. Check that dynamic `:href` bindings only interpolate integer IDs or known-safe strings.
+- **Open redirects.** If a controller builds a redirect URL using user-supplied or database values (e.g., a username), always `urlencode()` those values before embedding them in the URL. Verify that the Vue component does not use `window.location.href` with unsanitized query param values.
+- **Mass parameter manipulation.** Verify that array parameters from the client (e.g., `sessionIds[]`) are cast to safe types (`array_map('intval', ...)`) before use. Verify that a non-admin user cannot supply IDs of entities they do not own/manage.
+
 ## Project Overview
 
 Chamilo LMS 2.0 — an open-source e-learning platform built on **Symfony 6.4** (PHP 8.2/8.3) with a **Vue 3** frontend. Uses **API Platform 3.0** for REST/GraphQL APIs, **Doctrine ORM** for persistence, and **Webpack Encore** for asset compilation.

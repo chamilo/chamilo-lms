@@ -16,6 +16,12 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_MYAGENDA;
 api_block_anonymous_users();
 
+// Only redirect back to the referrer when it points to this Chamilo portal;
+// otherwise fall back to the portal root to prevent an open redirect.
+$webPath = api_get_path(WEB_PATH);
+$referer = $_SERVER['HTTP_REFERER'] ?? '';
+$redirectUrl = (is_string($referer) && 0 === strpos($referer, $webPath)) ? $referer : $webPath;
+
 // setting the name of the tool
 $nameTools = get_lang('MyAgenda');
 
@@ -77,7 +83,7 @@ if (!empty($event)) {
         case 'platform':
             $vevent->setProperty('summary', api_convert_encoding($event['title'], 'UTF-8', $charset));
             if (empty($event['start_date'])) {
-                header('location:'.Security::remove_XSS($_SERVER['HTTP_REFERER']));
+                header('location:'.$redirectUrl);
             }
             list($y, $m, $d, $h, $M, $s) = preg_split('/[\s:-]/', $event['start_date']);
             $vevent->setProperty(
@@ -116,7 +122,7 @@ if (!empty($event)) {
         case 'course':
             $vevent->setProperty('summary', api_convert_encoding($event['title'], 'UTF-8', $charset));
             if (empty($event['start_date'])) {
-                header('location:'.Security::remove_XSS($_SERVER['HTTP_REFERER']));
+                header('location:'.$redirectUrl);
             }
             list($y, $m, $d, $h, $M, $s) = preg_split('/[\s:-]/', $event['start_date']);
             $vevent->setProperty(
@@ -160,10 +166,10 @@ if (!empty($event)) {
             $ical->returnCalendar();
             break;
         default:
-            header('location:'.Security::remove_XSS($_SERVER['HTTP_REFERER']));
+            header('location:'.$redirectUrl);
             exit();
     }
 } else {
-    header('location:'.Security::remove_XSS($_SERVER['HTTP_REFERER']));
+    header('location:'.$redirectUrl);
     exit;
 }

@@ -6562,11 +6562,16 @@ function exportPendingWorksToExcel($values)
     ];
     $tableXls[] = $headers;
 
-    $courseId = $values['course'] ?? 0;
+    $courseId = (int) ($values['course'] ?? 0);
     $status = $values['status'] ?? 0;
     $whereCondition = '';
     if (!empty($values['work_parent_ids'])) {
-        $whereCondition = ' parent_id IN('.implode(',', $values['work_parent_ids']).')';
+        $workParentIds = array_filter(
+            array_map('intval', (array) $values['work_parent_ids'])
+        );
+        if (!empty($workParentIds)) {
+            $whereCondition = ' parent_id IN('.implode(',', $workParentIds).')';
+        }
     }
     $allWork = getAllWork(
         null,

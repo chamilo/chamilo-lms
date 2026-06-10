@@ -570,10 +570,15 @@ switch ($action) {
         break;
     case 'get_work_pending_list':
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
-        $courseId = $_REQUEST['course'] ?? 0;
+        $courseId = (int) ($_REQUEST['course'] ?? 0);
         $status = $_REQUEST['status'] ?? 0;
         if (isset($_REQUEST['work_parent_ids'])) {
-            $whereCondition = ' parent_id IN('.Security::remove_XSS($_REQUEST['work_parent_ids']).')';
+            $workParentIds = array_filter(
+                array_map('intval', explode(',', (string) $_REQUEST['work_parent_ids']))
+            );
+            if (!empty($workParentIds)) {
+                $whereCondition = ' parent_id IN('.implode(',', $workParentIds).')';
+            }
         }
         $count = getAllWork(
             null,
@@ -651,7 +656,7 @@ switch ($action) {
         }
         $search_start_date = isset($_REQUEST['start_date']) && !empty($_REQUEST['start_date']) ? $_REQUEST['start_date'] : null;
         $search_end_date = isset($_REQUEST['end_date']) && !empty($_REQUEST['end_date']) ? $_REQUEST['end_date'] : null;
-        $courseId = $_REQUEST['course_id'] ?? 0;
+        $courseId = (int) ($_REQUEST['course_id'] ?? 0);
         $exerciseId = $_REQUEST['exercise_id'] ?? 0;
         $status = $_REQUEST['status'] ?? 0;
         $questionType = $_REQUEST['questionType'] ?? 0;

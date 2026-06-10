@@ -102,7 +102,8 @@ elseif (!empty($annee) && !empty($id_session) && empty($_POST['confirmed'])) {
 
         //$sr = @ ldap_search($ds, "ou=people,$LDAPbasedn", "(|(edupersonprimaryorgunitdn=ou=$etape,ou=$annee,ou=diploma,o=Paris1,$LDAPbasedn)(edupersonprimaryorgunitdn=ou=02PEL,ou=$annee,ou=diploma,o=Paris1,$LDAPbasedn))");
         //echo "(ou=*$annee,ou=$composante)";
-        $sr = @ldap_search($ds, $ldap_basedn, "(ou=*$annee)");
+        $anneeFilter = ldap_escape($annee, "", LDAP_ESCAPE_FILTER);
+        $sr = @ldap_search($ds, $ldap_basedn, "(ou=*$anneeFilter)");
 
         $info = ldap_get_entries($ds, $sr);
 

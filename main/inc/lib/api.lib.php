@@ -10355,12 +10355,6 @@ function api_set_noreply_and_from_address_to_mailer(PHPMailer $mailer, array $se
     $senderName = !empty($sender['name']) ? $sender['name'] : $notification->getDefaultPlatformSenderName();
     $senderEmail = !empty($sender['email']) ? $sender['email'] : $notification->getDefaultPlatformSenderEmail();
 
-    // Send errors to the platform admin
-    $adminEmail = api_get_setting('emailAdministrator');
-    if (PHPMailer::ValidateAddress($adminEmail)) {
-        $mailer->AddCustomHeader('Errors-To: '.$adminEmail);
-    }
-
     // Reply to first
     if (!$avoidReplyToAddress) {
         if (

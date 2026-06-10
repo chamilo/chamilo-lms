@@ -96,7 +96,7 @@
         "phpoffice/phpspreadsheet": "^1.28",
         "phpoffice/phpword": "~0.14",
         "phpseclib/phpseclib": "^2.0",
-        "robrichards/xmlseclibs": "3.0.*",
+        "robrichards/xmlseclibs": "^3.1.5",
         "sabre/vobject": "~3.1",
         "sonata-project/admin-bundle": "~3.1|~4.0",
         "sonata-project/core-bundle": "~3.1|~4.0",
@@ -198,6 +198,9 @@
     ],
     "config": {
         "sort-packages": true,
-        "component-dir": "web/assets"
+        "component-dir": "web/assets",
+        "audit": {
+            "block-insecure": false
+        }
     }
 }

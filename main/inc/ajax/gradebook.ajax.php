@@ -80,14 +80,19 @@ switch ($action) {
 
         $userList = implode(',', $userList);
 
-        shell_exec(sprintf(
-            "php %s %s %s %s %s > /dev/null &",
+        $command = sprintf(
+            "php %s %s %s %s",
             escapeshellarg($commandScript),
             escapeshellarg($courseCode),
             escapeshellarg((string) $sessionId),
-            escapeshellarg((string) $categoryId),
-            escapeshellarg($userList)
-        ));
+            escapeshellarg((string) $categoryId)
+        );
+
+        if ('' !== $userList) {
+            $command .= ' '.escapeshellarg($userList);
+        }
+
+        shell_exec($command.' > /dev/null &');
         break;
     case 'verify_export_all_certificates':
         $categoryId = (int) $_GET['cat_id'];

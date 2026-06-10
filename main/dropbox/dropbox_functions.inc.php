@@ -1094,8 +1094,8 @@ function store_add_dropbox($file = [], $work = null)
         $dropbox_filename = add_ext_on_mime($dropbox_filename, $dropbox_filetype);
         // Replace dangerous characters
         $dropbox_filename = api_replace_dangerous_char($dropbox_filename);
-        // Transform any .php file in .phps fo security
-        $dropbox_filename = php2phps($dropbox_filename);
+        // Transform any .php file in .phps and any .htaccess in htaccess.txt for security
+        $dropbox_filename = disable_dangerous_file($dropbox_filename);
 
         //filter extension
         if (!filter_extension($dropbox_filename)) {

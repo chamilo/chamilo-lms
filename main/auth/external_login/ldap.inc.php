@@ -277,8 +277,8 @@ function extldap_get_user_search_string($username)
     global $extldap_config;
     // init
     $filter = '('.$extldap_config['user_search'].')';
-    // replacing %username% by the actual username
-    $filter = str_replace('%username%', $username, $filter);
+    // replacing %username% by the actual username (escaped to prevent LDAP injection)
+    $filter = str_replace('%username%', ldap_escape($username, "", LDAP_ESCAPE_FILTER), $filter);
     // append a global filter if needed
     if (isset($extldap_config['filter']) && $extldap_config['filter'] != "") {
         $filter = '(&'.$filter.'('.$extldap_config['filter'].'))';
@@ -518,5 +518,7 @@ function extldapCasUserLogin($casUser)
     }
 
     // return the value
-    return extldapGetUserAttributeValue("($attributeToFilterOn=$casUser)", $attributeToRead);
+    $casUserFilter = ldap_escape($casUser, "", LDAP_ESCAPE_FILTER);
+
+    return extldapGetUserAttributeValue("($attributeToFilterOn=$casUserFilter)", $attributeToRead);
 }

@@ -464,6 +464,8 @@ switch ($action) {
         echo json_encode(['items' => $items]);
         break;
     case 'update_users':
+        api_protect_admin_script(true);
+
         $usersData = json_decode($_POST['users'], true);
         $updatedCount = 0;
 
@@ -480,11 +482,11 @@ switch ($action) {
             }
 
             $updatedData = [
-                'firstname' => $userData['firstname'] ?? $currentUserData['firstname'],
-                'lastname' => $userData['lastname'] ?? $currentUserData['lastname'],
-                'email' => $userData['email'] ?? $currentUserData['email'],
-                'phone' => $userData['phone'] ?? $currentUserData['phone'],
-                'official_code' => $userData['official_code'] ?? $currentUserData['official_code'],
+                'firstname' => attr_on_filter(html_filter($userData['firstname'] ?? $currentUserData['firstname'])),
+                'lastname' => attr_on_filter(html_filter($userData['lastname'] ?? $currentUserData['lastname'])),
+                'email' => attr_on_filter(html_filter($userData['email'] ?? $currentUserData['email'])),
+                'phone' => attr_on_filter(html_filter($userData['phone'] ?? $currentUserData['phone'])),
+                'official_code' => attr_on_filter(html_filter($userData['official_code'] ?? $currentUserData['official_code'])),
                 'status' => isset($userData['status']) ? (int) $userData['status'] : $currentUserData['status'],
                 'active' => isset($userData['active']) ? (int) $userData['active'] : $currentUserData['active'],
             ];

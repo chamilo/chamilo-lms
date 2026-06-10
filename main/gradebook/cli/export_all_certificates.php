@@ -16,7 +16,7 @@ if (PHP_SAPI !== 'cli') {
 $courseCode = $argv[1];
 $sessionId = $argv[2];
 $categoryId = $argv[3];
-$userList = isset($argv[4]) ? explode(',', $argv[4]) : [];
+$userList = !empty($argv[4]) ? explode(',', $argv[4]) : [];
 
 $date = api_get_utc_datetime(null, false, true);
 

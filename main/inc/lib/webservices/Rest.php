@@ -115,12 +115,14 @@ class Rest extends WebService
     public const UPDATE_COURSE = 'update_course';
     public const DELETE_COURSE = 'delete_course';
     public const GET_SESSION_FROM_EXTRA_FIELD = 'get_session_from_extra_field';
+    public const GET_SESSION_INFO = 'session_info';
     public const GET_SESSION_INFO_FROM_EXTRA_FIELD = 'get_session_info_from_extra_field';
     public const SAVE_SESSION = 'save_session';
     public const CREATE_SESSION_FROM_MODEL = 'create_session_from_model';
     public const UPDATE_SESSION = 'update_session';
     public const DELETE_SESSION = 'delete_session';
     public const GET_SESSIONS = 'get_sessions';
+    public const GET_COURSE_SESSIONS = 'get_course_sessions';
 
     public const SUBSCRIBE_USER_TO_COURSE = 'subscribe_user_to_course';
     public const SUBSCRIBE_USER_TO_COURSE_PASSWORD = 'subscribe_user_to_course_password';
@@ -1762,6 +1764,40 @@ class Rest extends WebService
         return $shortList;
     }
 
+    public function getSessionsByCourse(): array
+    {
+        self::protectAdminEndpoint();
+
+        $sessions = SessionManager::get_session_by_course($this->course->getId());
+        $extraFieldValues = new ExtraFieldValue('session');
+        $filter = ['variable', 'value', 'display_text'];
+        $list = [];
+
+        foreach ($sessions as $sessionInfo) {
+            $session = api_get_session_info($sessionInfo['id']);
+
+            if (empty($session)) {
+                continue;
+            }
+
+            $extraFields = $extraFieldValues->getAllValuesByItem($session['id']);
+            $list[] = [
+                'id' => $session['id'],
+                'name' => $session['name'],
+                'access_start_date' => $session['access_start_date'],
+                'access_end_date' => $session['access_end_date'],
+                'extra_fields' => array_map(
+                    function ($item) use ($filter) {
+                        return array_intersect_key($item, array_flip($filter));
+                    },
+                    $extraFields
+                ),
+            ];
+        }
+
+        return $list;
+    }
+
     /**
      * Returns an array of groups with id, group_type, name, description, visibility.
      *
@@ -2711,6 +2747,33 @@ class Rest extends WebService
 
         // return sessionId
         return (int) $sessionIdList[0]['item_id'];
+    }
+
+    public function getSessionInfo(): array
+    {
+        self::protectAdminEndpoint();
+
+        $bundle = [
+            'id' => $this->session->getId(),
+            'name' => $this->session->getName(),
+            'access_start_date' => $this->session->getAccessStartDate()->format('Y-m-d H:i:s'),
+            'access_end_date' => $this->session->getAccessEndDate()
+                ? $this->session->getAccessEndDate()->format('Y-m-d H:i:s')
+                : null,
+        ];
+        $extraFieldValues = new ExtraFieldValue('session');
+        $extraFields = $extraFieldValues->getAllValuesByItem($this->session->getId());
+        // Only return these properties for each extra_field (the rest is not relevant to a webservice)
+        $filter = ['variable', 'value', 'display_text'];
+        $bundle['extra_fields'] = array_map(
+            function ($item) use ($filter) {
+                return array_intersect_key($item, array_flip($filter));
+            },
+            $extraFields
+        );
+
+        // return session details, including extra fields that have filter=1
+        return $bundle;
     }
 
     /**

@@ -239,7 +239,10 @@ if (!empty($courses)) {
             $url .= '&status='.(int) $status;
         }
         if (!empty($values['work_parent_ids'])) {
-            $url .= '&work_parent_ids='.Security::remove_XSS(implode(',', $values['work_parent_ids']));
+            $values['work_parent_ids'] = array_filter(
+                array_map('intval', (array) $values['work_parent_ids'])
+            );
+            $url .= '&work_parent_ids='.implode(',', $values['work_parent_ids']);
         }
         if ($exportXls) {
             exportPendingWorksToExcel($values);

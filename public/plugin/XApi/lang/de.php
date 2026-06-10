@@ -7,11 +7,9 @@ declare(strict_types=1);
 $strings['plugin_title'] = 'Experience API (xAPI)';
 $strings['plugin_comment'] = 'Ermöglicht die Verbindung zu einem externen (oder internen) Learning Record Store und die Nutzung von Aktivitäten, die mit dem xAPI-Standard kompatibel sind.';
 
-/*
-$strings[XApi::SETTING_UUID_NAMESPACE] = 'UUID Namespace';
-$strings[XApi::SETTING_UUID_NAMESPACE.'_help'] = 'Namespace for universally unique identifiers used as statement IDs.'
+$strings['uuid_namespace'] = 'UUID Namespace';
+$strings['uuid_namespace_help'] = 'Namespace for universally unique identifiers used as statement IDs.'
     .'<br>This is generated automatically by Chamilo LMS. <strong>Don\'t replace it.</strong>';
- */
 $strings['lrs_url'] = 'LRS-Endpunkt';
 $strings['lrs_url_help'] = 'Basis-URL des LRS';
 $strings['lrs_auth_username'] = 'LRS-Benutzer';

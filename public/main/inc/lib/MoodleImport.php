@@ -97,6 +97,12 @@ class MoodleImport
                 $package->extract(PCLZIP_OPT_PATH, $destinationDir);
 
                 break;
+            default:
+                // Reject anything that is not a recognised Moodle backup archive (gzip/zip)
+                removeDir($destinationDir);
+                unlink($filePath);
+
+                throw new Exception(get_lang("Failed to import: this doesn't seem to be a Moodle course backup file (.mbz)"));
         }
 
         $courseInfo = api_get_course_info();

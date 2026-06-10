@@ -107,6 +107,7 @@
         "sylius/attribute": "0.13.0",
         "sylius/translation": "0.13.0",
         "symfony/console": "~3.0|~4.0",
+	"symfony/css-selector": "~3.4|~4.0",
         "symfony/doctrine-bridge": "~2.8",
         "symfony/dom-crawler": "~3.4|~4.0",
         "symfony/filesystem": "~3.0|~4.0",

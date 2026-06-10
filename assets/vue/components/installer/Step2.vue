@@ -212,12 +212,17 @@
         <FloatLabel variant="on">
           <InputText
             id="updatePath"
-            :value="installerData.badUpdatePath && installerData.updatePath ? updatePath : ''"
-            name="updatePath"
+            v-model="updatePathInput"
+            autocomplete="off"
             size="50"
           />
           <label v-text="t('Old version\'s root path')" />
         </FloatLabel>
+        <input
+          :value="updatePathInput"
+          name="updatePath"
+          type="hidden"
+        />
       </div>
 
       <div class="formgroup-inline">
@@ -348,7 +353,7 @@
 
 <script setup>
 import { useI18n } from "vue-i18n"
-import { inject } from "vue"
+import { inject, ref, watch } from "vue"
 
 import Message from "primevue/message"
 import Tag from "primevue/tag"
@@ -360,6 +365,14 @@ import SectionHeader from "../layout/SectionHeader.vue"
 const { t } = useI18n()
 
 const installerData = inject("installerData")
+const updatePathInput = ref(installerData.value?.updatePath || "")
+
+watch(
+  () => installerData.value?.updatePath,
+  (value) => {
+    updatePathInput.value = value || ""
+  },
+)
 
 function goToUpgrade() {
   window.location = `/main/install/index.php?running=1&installType=${installerData.installType || "update"}&step=step2_update_8`

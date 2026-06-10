@@ -29,8 +29,10 @@ class MoodleImport
         $cachePath = api_get_path(SYS_ARCHIVE_PATH);
         $tempPath = $uploadedFile['tmp_name'];
         $nameParts = explode('.', $uploadedFile['name']);
-        $extension = array_pop($nameParts);
-        $name = basename($tempPath).".$extension";
+        // Keep only alphanumerics from the user-supplied extension to prevent path separators
+        // or traversal sequences leaking into the stored filename.
+        $extension = preg_replace('/[^a-z0-9]/i', '', (string) array_pop($nameParts));
+        $name = basename($tempPath).('' !== $extension ? ".$extension" : '');
 
         if (!move_uploaded_file($tempPath, api_get_path(SYS_ARCHIVE_PATH).$name)) {
             throw new Exception(get_lang('Upload failed, please check maximum file size limits and folder rights.'));
@@ -57,9 +59,7 @@ class MoodleImport
                     $entryPath = str_replace('\\', '/', $pharEntry->getPathname());
                     $pharPath = str_replace('\\', '/', $filePath);
                     $relative = ltrim(substr($entryPath, strlen($pharPath)), '/');
-                    if (str_contains($relative, '../') || str_starts_with($relative, '/')) {
-                        throw new Exception(get_lang('Error importing file'));
-                    }
+                    $this->assertSafeEntryPath($relative);
                 }
 
                 if (false === $backUpFile->extractTo($destinationDir)) {
@@ -89,9 +89,20 @@ class MoodleImport
                     throw new Exception(get_lang("Failed to import: this doesn't seem to be a Moodle course backup file (.mbz)"));
                 }
 
+                // Guard against ZIP Slip: validate all entry paths before extraction
+                foreach ($packageContent as $value) {
+                    $this->assertSafeEntryPath($value['filename']);
+                }
+
                 $package->extract(PCLZIP_OPT_PATH, $destinationDir);
 
                 break;
+            default:
+                // Reject anything that is not a recognised Moodle backup archive (gzip/zip)
+                removeDir($destinationDir);
+                unlink($filePath);
+
+                throw new Exception(get_lang("Failed to import: this doesn't seem to be a Moodle course backup file (.mbz)"));
         }
 
         $courseInfo = api_get_course_info();
@@ -169,7 +180,7 @@ class MoodleImport
 
         $xml = @file_get_contents($destinationDir.'/moodle_backup.xml');
         $doc = new DOMDocument();
-        $res = @$doc->loadXML($xml);
+        $res = @$doc->loadXML($xml, LIBXML_NONET);
 
         if (empty($res)) {
             removeDir($destinationDir);
@@ -196,6 +207,11 @@ class MoodleImport
             $moduleName = isset($currentItem['modulename']) ? $currentItem['modulename'] : false;
             if ($debug) {
                 error_log('moduleName: '.$moduleName);
+            }
+
+            // Guard against path traversal: <directory> comes from the untrusted backup XML
+            if (isset($currentItem['directory'])) {
+                $this->assertSafeEntryPath($currentItem['directory']);
             }
 
             switch ($moduleName) {
@@ -372,8 +388,13 @@ class MoodleImport
                     $moduleDir = $currentItem['directory'];
                     $moduleXml = @file_get_contents($destinationDir.'/'.$moduleDir.'/'.$moduleName.'.xml');
                     $moduleValues = $this->readUrlModule($moduleXml);
+                    $externalUrl = isset($moduleValues['externalurl']) ? (string) $moduleValues['externalurl'] : '';
+                    // Only import http(s) links; reject dangerous schemes (javascript:, data:, etc.)
+                    if (!preg_match('#^https?://#i', $externalUrl)) {
+                        break;
+                    }
                     $_POST['title'] = $moduleValues['name'];
-                    $_POST['url'] = $moduleValues['externalurl'];
+                    $_POST['url'] = $externalUrl;
                     $_POST['description'] = $moduleValues['intro'];
                     $_POST['category_id'] = 0;
                     $_POST['target'] = '_blank';
@@ -394,6 +415,26 @@ class MoodleImport
     }
 
     /**
+     * Reject a path entry that could escape the extraction directory (Zip Slip / path traversal).
+     *
+     * The path may come from an archive entry name or from an untrusted value inside the
+     * backup XML. Any entry containing a "../" sequence or an absolute path is rejected.
+     *
+     * @param string $path
+     *
+     * @throws Exception
+     *
+     * @return void
+     */
+    private function assertSafeEntryPath($path)
+    {
+        $normalized = str_replace('\\', '/', (string) $path);
+        if (str_contains($normalized, '../') || str_starts_with($normalized, '/')) {
+            throw new Exception(get_lang('Error importing file'));
+        }
+    }
+
+    /**
      * Read and validate the forum module XML.
      *
      * @param resource $moduleXml XML file
@@ -403,7 +444,7 @@ class MoodleImport
     public function readForumModule($moduleXml)
     {
         $moduleDoc = new DOMDocument();
-        $moduleRes = @$moduleDoc->loadXML($moduleXml);
+        $moduleRes = @$moduleDoc->loadXML($moduleXml, LIBXML_NONET);
         if (empty($moduleRes)) {
             return false;
         }
@@ -430,7 +471,7 @@ class MoodleImport
     public function readResourceModule($moduleXml)
     {
         $moduleDoc = new DOMDocument();
-        $moduleRes = @$moduleDoc->loadXML($moduleXml);
+        $moduleRes = @$moduleDoc->loadXML($moduleXml, LIBXML_NONET);
         if (empty($moduleRes)) {
             return false;
         }
@@ -461,7 +502,7 @@ class MoodleImport
     public function readUrlModule($moduleXml)
     {
         $moduleDoc = new DOMDocument();
-        $moduleRes = @$moduleDoc->loadXML($moduleXml);
+        $moduleRes = @$moduleDoc->loadXML($moduleXml, LIBXML_NONET);
         if (empty($moduleRes)) {
             return false;
         }
@@ -488,7 +529,7 @@ class MoodleImport
     public function readQuizModule($moduleXml)
     {
         $moduleDoc = new DOMDocument();
-        $moduleRes = @$moduleDoc->loadXML($moduleXml);
+        $moduleRes = @$moduleDoc->loadXML($moduleXml, LIBXML_NONET);
         if (empty($moduleRes)) {
             return false;
         }
@@ -530,7 +571,7 @@ class MoodleImport
     public function readMainFilesXml($filesXml, $contextId)
     {
         $moduleDoc = new DOMDocument();
-        $moduleRes = @$moduleDoc->loadXML($filesXml);
+        $moduleRes = @$moduleDoc->loadXML($filesXml, LIBXML_NONET);
 
         if (empty($moduleRes)) {
             return false;
@@ -592,7 +633,7 @@ class MoodleImport
     public function readMainQuestionsXml($questionsXml, $questionId)
     {
         $moduleDoc = new DOMDocument();
-        $moduleRes = @$moduleDoc->loadXML($questionsXml);
+        $moduleRes = @$moduleDoc->loadXML($questionsXml, LIBXML_NONET);
         if (empty($moduleRes)) {
             return false;
         }
@@ -1130,7 +1171,7 @@ class MoodleImport
     public function getAllQuestionFiles($filesXml)
     {
         $moduleDoc = new DOMDocument();
-        $moduleRes = @$moduleDoc->loadXML($filesXml);
+        $moduleRes = @$moduleDoc->loadXML($filesXml, LIBXML_NONET);
 
         if (empty($moduleRes)) {
             return [];

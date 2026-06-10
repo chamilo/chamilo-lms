@@ -5704,15 +5704,7 @@ function api_is_global_platform_admin($user_id = null)
         return false;
     }
 
-    if ($user->isAdmin()) {
-        $urlList = api_get_access_url_from_user($user->getId());
-        // The admin is registered in the first "main" site with access_url_id = 1
-        if (in_array(1, $urlList)) {
-            return true;
-        }
-    }
-
-    return false;
+    return $user->isSuperAdmin();
 }
 
 /**

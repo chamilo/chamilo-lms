@@ -539,6 +539,48 @@ class PDF
     }
 
     /**
+     * Renders single-page HTML (e.g. a certificate) to a downloadable PDF.
+     *
+     * Unlike content_to_pdf()/html_to_pdf_with_template(), this method does NOT
+     * call format_pdf(): it deliberately skips the book-layout decoration
+     * (mirrorMargins, header/footer margins) that would otherwise insert blank
+     * pages around a single-page document. Remote asset fetches are routed
+     * through SafeMpdfHttpClient to prevent SSRF.
+     *
+     * @param string $html        HTML content to render
+     * @param string $fileName    Output file name (without extension)
+     * @param string $orientation 'landscape' or 'portrait'
+     *
+     * @throws MpdfException
+     */
+    public static function singlePageHtmlToPdfDownload(
+        string $html,
+        string $fileName,
+        string $orientation = 'landscape'
+    ): void {
+        $pageFormat = 'landscape' === $orientation ? 'A4-L' : 'A4';
+
+        $mpdf = new Mpdf([
+            'tempDir'       => Container::getCacheDir(),
+            'mode'          => 'utf-8',
+            'format'        => $pageFormat,
+            'orientation'   => $orientation,
+            'margin_left'   => 0,
+            'margin_right'  => 0,
+            'margin_top'    => 0,
+            'margin_bottom' => 0,
+            'margin_header' => 0,
+            'margin_footer' => 0,
+        ], SafeMpdfHttpClient::container());
+        $mpdf->mirrorMargins = 0;
+
+        @$mpdf->WriteHTML($html);
+
+        $mpdf->Output(api_replace_dangerous_char($fileName).'.pdf', Destination::DOWNLOAD);
+        exit;
+    }
+
+    /**
      * Gets the watermark from the platform or a course.
      *
      * @param   string  course code (optional)

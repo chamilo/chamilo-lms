@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Mpdf\SafeMpdfHttpClient;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\PersonalFile;
 use Chamilo\CoreBundle\Entity\ResourceFile;
@@ -1030,7 +1031,7 @@ class Certificate extends Model
             'margin_bottom'  => 0,
             'margin_header'  => 0,
             'margin_footer'  => 0,
-        ]);
+        ], SafeMpdfHttpClient::container());
         $mpdf->mirrorMargins = 0;
 
         // Safety: ensure HTML content is present; fetch from Resource if needed.

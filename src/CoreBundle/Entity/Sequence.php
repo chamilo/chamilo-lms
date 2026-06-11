@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Fhaculty\Graph\Graph;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Stringable;
+use UnserializeApi;
 
 #[ORM\Table(name: 'sequence')]
 #[ORM\Entity(repositoryClass: SequenceRepository::class)]
@@ -82,7 +83,7 @@ class Sequence implements Stringable
      */
     public function getUnSerializeGraph()
     {
-        return unserialize($this->graph);
+        return UnserializeApi::unserialize('sequence_graph', $this->graph);
     }
 
     public function setGraphAndSerialize(Graph $graph): self

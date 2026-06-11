@@ -179,6 +179,7 @@ switch ($action) {
                 $learner['username'],
                 $learner['firstname'],
                 $learner['lastname'],
+                $learner['email'],
             ];
         }, $certificate_list);
 
@@ -188,6 +189,7 @@ switch ($action) {
         $csvHeaders[] = get_lang('UserName');
         $csvHeaders[] = get_lang('FirstName');
         $csvHeaders[] = get_lang('LastName');
+        $csvHeaders[] = get_lang('Email');
         $csvHeaders[] = get_lang('Score');
         $csvHeaders[] = get_lang('Date');
 

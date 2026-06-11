@@ -22667,7 +22667,7 @@ msgid "After or before"
 msgstr "Avant ou après"
 
 msgid "Before"
-msgstr "Avant le"
+msgstr "Avant"
 
 msgid "This form allows scheduling announcements to be sent automatically to the students who are taking a course in a session."
 msgstr ""

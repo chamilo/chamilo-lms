@@ -52,6 +52,7 @@ class PDF
         $params['right'] = $params['right'] ?? 15;
         $params['top'] = $params['top'] ?? 30;
         $params['bottom'] = $params['bottom'] ?? 30;
+        $params['margin_header'] = $params['margin_header'] ?? 8;
         $params['margin_footer'] = $params['margin_footer'] ?? 8;
 
         $this->params['filename'] = $params['filename'] ?? api_get_local_time();
@@ -77,8 +78,8 @@ class PDF
             'margin_right' => $params['right'],
             'margin_top' => $params['top'],
             'margin_bottom' => $params['bottom'],
-            'margin_header' => 8,
-            'margin_footer' => 8,
+            'margin_header' => $params['margin_header'],
+            'margin_footer' => $params['margin_footer'],
         ];
 
         // Default value is 96 set in the mpdf library file config.php
@@ -541,11 +542,10 @@ class PDF
     /**
      * Renders single-page HTML (e.g. a certificate) to a downloadable PDF.
      *
-     * Unlike content_to_pdf()/html_to_pdf_with_template(), this method does NOT
-     * call format_pdf(): it deliberately skips the book-layout decoration
-     * (mirrorMargins, header/footer margins) that would otherwise insert blank
-     * pages around a single-page document. Remote asset fetches are routed
-     * through SafeMpdfHttpClient to prevent SSRF.
+     * Reuses the SSRF-guarded mPDF instance built by the constructor, with all
+     * margins set to 0 and without calling format_pdf(): this deliberately
+     * skips the book-layout decoration (mirrorMargins, header/footer margins)
+     * that would otherwise insert blank pages around a single-page document.
      *
      * @param string $html        HTML content to render
      * @param string $fileName    Output file name (without extension)
@@ -559,24 +559,21 @@ class PDF
         string $orientation = 'landscape'
     ): void {
         $pageFormat = 'landscape' === $orientation ? 'A4-L' : 'A4';
+        $mpdfOrientation = 'landscape' === $orientation ? 'L' : 'P';
 
-        $mpdf = new Mpdf([
-            'tempDir'       => Container::getCacheDir(),
-            'mode'          => 'utf-8',
-            'format'        => $pageFormat,
-            'orientation'   => $orientation,
-            'margin_left'   => 0,
-            'margin_right'  => 0,
-            'margin_top'    => 0,
-            'margin_bottom' => 0,
+        $pdf = new self($pageFormat, $mpdfOrientation, [
+            'left'          => 0,
+            'right'         => 0,
+            'top'           => 0,
+            'bottom'        => 0,
             'margin_header' => 0,
             'margin_footer' => 0,
-        ], SafeMpdfHttpClient::container());
-        $mpdf->mirrorMargins = 0;
+        ]);
+        $pdf->pdf->mirrorMargins = 0;
 
-        @$mpdf->WriteHTML($html);
+        @$pdf->pdf->WriteHTML($html);
 
-        $mpdf->Output(api_replace_dangerous_char($fileName).'.pdf', Destination::DOWNLOAD);
+        $pdf->pdf->Output(api_replace_dangerous_char($fileName).'.pdf', Destination::DOWNLOAD);
         exit;
     }
 

@@ -315,7 +315,6 @@ function bbb_admin_style_action_links_html(string $html): string
                 'shadow-sm',
                 'transition',
                 'hover:bg-gray-15',
-                'hover:text-white',
             ];
 
             if (str_contains($href, 'delete')) {

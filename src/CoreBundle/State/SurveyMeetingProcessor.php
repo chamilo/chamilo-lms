@@ -14,7 +14,6 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CSurveyAnswer;
-use Chamilo\CourseBundle\Entity\CSurveyInvitation;
 use Chamilo\CourseBundle\Entity\CSurveyQuestion;
 use Chamilo\CourseBundle\Repository\CSurveyRepository;
 use DateTime;
@@ -28,6 +27,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Throwable;
 
 /**
  * @implements ProcessorInterface<SurveyMeeting, SurveyMeeting>
@@ -237,8 +237,6 @@ final readonly class SurveyMeetingProcessor implements ProcessorInterface
     }
 
     /**
-     * @param mixed $slots
-     *
      * @return array<int, array{id: int|null, start: DateTime, end: DateTime}>
      */
     private function normalizeSlots(mixed $slots): array
@@ -266,7 +264,7 @@ final readonly class SurveyMeetingProcessor implements ProcessorInterface
             }
 
             $normalized[] = [
-                'id' => isset($slot['id']) && 0 < (int) $slot['id'] ? (int) $slot['id'] : null,
+                'id' => isset($slot['id']) && (int) $slot['id'] > 0 ? (int) $slot['id'] : null,
                 'start' => $start,
                 'end' => $end,
             ];
@@ -330,7 +328,7 @@ final readonly class SurveyMeetingProcessor implements ProcessorInterface
      */
     private function submitAnswer(int $surveyId, array $payload, Course $course, ?Session $session, Request $request): SurveyMeeting
     {
-        if (0 >= $surveyId) {
+        if ($surveyId <= 0) {
             throw new BadRequestHttpException('A valid survey id is required.');
         }
 
@@ -361,7 +359,7 @@ final readonly class SurveyMeetingProcessor implements ProcessorInterface
                 ->setOptionId('1')
                 ->setValue(1)
                 ->setLpItemId($request->query->getInt('lpItemId'))
-                ->setSessionId(0 < $request->query->getInt('sid') ? $request->query->getInt('sid') : null)
+                ->setSessionId($request->query->getInt('sid') > 0 ? $request->query->getInt('sid') : null)
             ;
             $this->entityManager->persist($answer);
         }
@@ -402,7 +400,7 @@ final readonly class SurveyMeetingProcessor implements ProcessorInterface
         ;
 
         $sessionId = $request->query->getInt('sid');
-        if (0 < $sessionId) {
+        if ($sessionId > 0) {
             $queryBuilder
                 ->andWhere('answer.sessionId = :sessionId')
                 ->setParameter('sessionId', $sessionId, Types::INTEGER)
@@ -422,7 +420,7 @@ final readonly class SurveyMeetingProcessor implements ProcessorInterface
 
         try {
             $date = new DateTime((string) $value);
-        } catch (\Throwable) {
+        } catch (Throwable) {
             throw new BadRequestHttpException('The '.$field.' field contains an invalid date.');
         }
 
@@ -450,7 +448,7 @@ final readonly class SurveyMeetingProcessor implements ProcessorInterface
 
     private function surveyCodeExists(string $code, string $language): bool
     {
-        return 0 < (int) $this->entityManager->createQueryBuilder()
+        return (int) $this->entityManager->createQueryBuilder()
             ->select('COUNT(survey.iid)')
             ->from(CSurvey::class, 'survey')
             ->andWhere('survey.code = :code')
@@ -458,7 +456,7 @@ final readonly class SurveyMeetingProcessor implements ProcessorInterface
             ->setParameter('code', $code)
             ->setParameter('language', $language)
             ->getQuery()
-            ->getSingleScalarResult()
+            ->getSingleScalarResult() > 0
         ;
     }
 

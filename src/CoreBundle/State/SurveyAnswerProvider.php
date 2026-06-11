@@ -81,7 +81,7 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
         $course = $this->getCourse($request);
         $session = $this->getSession($request);
         $surveyId = isset($uriVariables['surveyId']) ? (int) $uriVariables['surveyId'] : 0;
-        if (0 >= $surveyId) {
+        if ($surveyId <= 0) {
             throw new BadRequestHttpException('A valid survey id is required.');
         }
 
@@ -145,7 +145,7 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
     public function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -160,7 +160,7 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
     public function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -356,11 +356,13 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
                     $pages[] = $currentPage;
                     $currentPage = [];
                 }
+
                 continue;
             }
 
             if ($survey->getOneQuestionPerPage()) {
                 $pages[] = [$questionId];
+
                 continue;
             }
 
@@ -431,7 +433,7 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
         ;
 
         $sessionId = $request->query->getInt('sid');
-        if (0 < $sessionId) {
+        if ($sessionId > 0) {
             $queryBuilder
                 ->andWhere('answer.sessionId = :sessionId')
                 ->setParameter('sessionId', $sessionId, Types::INTEGER)

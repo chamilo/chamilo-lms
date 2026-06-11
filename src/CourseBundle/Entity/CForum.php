@@ -21,13 +21,13 @@ use ApiPlatform\OpenApi\Model\Parameter;
 use ApiPlatform\OpenApi\Model\RequestBody;
 use ArrayObject;
 use Chamilo\CoreBundle\ApiResource\Forum\ForumWriteInput;
-use Chamilo\CoreBundle\State\ForumCollectionStateProvider;
-use Chamilo\CoreBundle\State\ForumDeleteProcessor;
-use Chamilo\CoreBundle\State\ForumProcessor;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
+use Chamilo\CoreBundle\State\ForumCollectionStateProvider;
+use Chamilo\CoreBundle\State\ForumDeleteProcessor;
+use Chamilo\CoreBundle\State\ForumProcessor;
 use Chamilo\CourseBundle\Repository\CForumRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -565,7 +565,6 @@ class CForum extends AbstractResource implements ResourceInterface, ResourceShow
     {
         return $this->posts;
     }
-
 
     #[Groups(['forum:read'])]
     public function getForumVisible(): bool

@@ -23,7 +23,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Get(
             uriTemplate: '/survey/questions/{surveyId}',
-            requirements: ['surveyId' => '\\d+'],
+            requirements: ['surveyId' => '\d+'],
             openapi: new Operation(
                 summary: 'Survey questions for edition',
                 parameters: [
@@ -39,7 +39,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
         new Post(
             uriTemplate: '/survey/questions/{surveyId}',
-            requirements: ['surveyId' => '\\d+'],
+            requirements: ['surveyId' => '\d+'],
             openapi: new Operation(
                 summary: 'Create a survey question',
                 parameters: [
@@ -55,7 +55,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
         new Put(
             uriTemplate: '/survey/questions/{surveyId}/{questionId}',
-            requirements: ['surveyId' => '\\d+', 'questionId' => '\\d+'],
+            requirements: ['surveyId' => '\d+', 'questionId' => '\d+'],
             openapi: new Operation(
                 summary: 'Update a survey question',
                 parameters: [
@@ -73,7 +73,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
         new Delete(
             uriTemplate: '/survey/questions/{surveyId}/{questionId}',
-            requirements: ['surveyId' => '\\d+', 'questionId' => '\\d+'],
+            requirements: ['surveyId' => '\d+', 'questionId' => '\d+'],
             openapi: new Operation(
                 summary: 'Delete a survey question',
                 parameters: [
@@ -91,7 +91,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
         new Post(
             uriTemplate: '/survey/questions/{surveyId}/{questionId}/move',
-            requirements: ['surveyId' => '\\d+', 'questionId' => '\\d+'],
+            requirements: ['surveyId' => '\d+', 'questionId' => '\d+'],
             openapi: new Operation(
                 summary: 'Move a survey question',
                 parameters: [
@@ -109,7 +109,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
         new Post(
             uriTemplate: '/survey/questions/{surveyId}/{questionId}/copy',
-            requirements: ['surveyId' => '\\d+', 'questionId' => '\\d+'],
+            requirements: ['surveyId' => '\d+', 'questionId' => '\d+'],
             openapi: new Operation(
                 summary: 'Copy a survey question',
                 parameters: [

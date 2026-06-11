@@ -21,7 +21,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Get(
             uriTemplate: '/survey/answer/{surveyId}',
-            requirements: ['surveyId' => '\\d+'],
+            requirements: ['surveyId' => '\d+'],
             openapi: new Operation(
                 summary: 'Survey answer or preview data',
                 parameters: [
@@ -40,7 +40,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
         new Post(
             uriTemplate: '/survey/answer/{surveyId}',
-            requirements: ['surveyId' => '\\d+'],
+            requirements: ['surveyId' => '\d+'],
             openapi: new Operation(
                 summary: 'Submit survey answers',
                 parameters: [

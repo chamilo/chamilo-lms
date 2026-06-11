@@ -105,7 +105,7 @@ final readonly class SurveyQuestionProcessor implements ProcessorInterface
         }
 
         $surveyId = isset($uriVariables['surveyId']) ? (int) $uriVariables['surveyId'] : 0;
-        if (0 >= $surveyId) {
+        if ($surveyId <= 0) {
             throw new BadRequestHttpException('A valid survey id is required.');
         }
 
@@ -142,7 +142,7 @@ final readonly class SurveyQuestionProcessor implements ProcessorInterface
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -157,7 +157,7 @@ final readonly class SurveyQuestionProcessor implements ProcessorInterface
     private function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -392,6 +392,7 @@ final readonly class SurveyQuestionProcessor implements ProcessorInterface
         foreach ($questions as $index => $question) {
             if ((int) $question->getIid() === $questionId) {
                 $currentIndex = $index;
+
                 break;
             }
         }
@@ -436,7 +437,7 @@ final readonly class SurveyQuestionProcessor implements ProcessorInterface
             return;
         }
 
-        if ('score' === $type && 0 >= $this->getMaxValue($type, $payload)) {
+        if ('score' === $type && $this->getMaxValue($type, $payload) <= 0) {
             throw new BadRequestHttpException('The maximum score is required.');
         }
 
@@ -465,7 +466,7 @@ final readonly class SurveyQuestionProcessor implements ProcessorInterface
 
         $parentQuestionId = (int) ($payload['parentQuestionId'] ?? 0);
         $parentOptionId = (int) ($payload['parentOptionId'] ?? 0);
-        if (0 >= $parentQuestionId || 0 >= $parentOptionId) {
+        if ($parentQuestionId <= 0 || $parentOptionId <= 0) {
             $question->setParent(null);
             $question->setParentOption(null);
 
@@ -542,7 +543,7 @@ final readonly class SurveyQuestionProcessor implements ProcessorInterface
         $sort = 1;
         foreach ($payloadOptions as $payloadOption) {
             $optionId = (int) ($payloadOption['iid'] ?? 0);
-            $option = 0 < $optionId && isset($existingOptions[$optionId])
+            $option = $optionId > 0 && isset($existingOptions[$optionId])
                 ? $existingOptions[$optionId]
                 : new CSurveyQuestionOption();
 
@@ -555,7 +556,7 @@ final readonly class SurveyQuestionProcessor implements ProcessorInterface
             ;
             $this->entityManager->persist($option);
 
-            if (0 < $optionId) {
+            if ($optionId > 0) {
                 $keptOptionIds[$optionId] = true;
             }
             $sort++;
@@ -648,7 +649,7 @@ final readonly class SurveyQuestionProcessor implements ProcessorInterface
 
     private function getQuestion(CSurvey $survey, int $questionId): CSurveyQuestion
     {
-        if (0 >= $questionId) {
+        if ($questionId <= 0) {
             throw new BadRequestHttpException('A valid question id is required.');
         }
 
@@ -715,13 +716,13 @@ final readonly class SurveyQuestionProcessor implements ProcessorInterface
 
     private function surveyHasAnswers(CSurvey $survey): bool
     {
-        return 0 < (int) $this->entityManager->createQueryBuilder()
+        return (int) $this->entityManager->createQueryBuilder()
             ->select('COUNT(answer.iid)')
             ->from(CSurveyAnswer::class, 'answer')
             ->andWhere('IDENTITY(answer.survey) = :surveyId')
             ->setParameter('surveyId', (int) $survey->getIid(), Types::INTEGER)
             ->getQuery()
-            ->getSingleScalarResult()
+            ->getSingleScalarResult() > 0
         ;
     }
 

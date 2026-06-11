@@ -12,8 +12,10 @@ use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CourseBundle\Entity\CSurvey;
-use Doctrine\DBAL\Types\Types;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+
+use const FILTER_VALIDATE_EMAIL;
+use const JSON_THROW_ON_ERROR;
 
 /**
  * Shared helpers for the legacy survey profile form.
@@ -179,6 +181,7 @@ trait SurveyProfileFieldsTrait
 
             if ('extra' === $field['source']) {
                 $this->saveSurveyExtraProfileValue($field, $user, $value);
+
                 continue;
             }
 
@@ -450,7 +453,7 @@ trait SurveyProfileFieldsTrait
     /**
      * @param array<string, mixed> $field
      */
-    private function getSurveyProfileFieldValue(array $field, User $user): string|array
+    private function getSurveyProfileFieldValue(array $field, User $user): array|string
     {
         if ('extra' === $field['source']) {
             return $this->getSurveyExtraProfileValue((int) $field['extraFieldId'], (int) $user->getId(), 'multiselect' === $field['type']);
@@ -467,7 +470,7 @@ trait SurveyProfileFieldsTrait
         };
     }
 
-    private function getSurveyExtraProfileValue(int $fieldId, int $userId, bool $multiple): string|array
+    private function getSurveyExtraProfileValue(int $fieldId, int $userId, bool $multiple): array|string
     {
         $extraField = $this->entityManager->getRepository(ExtraField::class)->find($fieldId);
         if (!$extraField instanceof ExtraField) {
@@ -497,10 +500,10 @@ trait SurveyProfileFieldsTrait
     }
 
     /**
-     * @param array<string, mixed> $field
+     * @param array<string, mixed>      $field
      * @param string|array<int, string> $value
      */
-    private function saveSurveyExtraProfileValue(array $field, User $user, string|array $value): void
+    private function saveSurveyExtraProfileValue(array $field, User $user, array|string $value): void
     {
         $extraField = $this->entityManager->getRepository(ExtraField::class)->find((int) $field['extraFieldId']);
         if (!$extraField instanceof ExtraField) {

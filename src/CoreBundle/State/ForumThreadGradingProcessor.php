@@ -39,9 +39,9 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
  */
 final class ForumThreadGradingProcessor implements ProcessorInterface
 {
+    use ForumActionStateHelperTrait;
     use ForumStateHelperTrait;
     use ForumWriteHelperTrait;
-    use ForumActionStateHelperTrait;
 
     private const LINK_FORUM_THREAD = 5;
 
@@ -162,7 +162,7 @@ final class ForumThreadGradingProcessor implements ProcessorInterface
         $this->validateCsrfToken($this->csrfTokenManager, $payload['csrfToken'] ?? null);
 
         $thread = $this->getThread($uriVariables, $request);
-        if (0 >= $thread->getThreadQualifyMax()) {
+        if ($thread->getThreadQualifyMax() <= 0) {
             throw new BadRequestHttpException('Thread grading is not enabled.');
         }
 
@@ -266,7 +266,7 @@ final class ForumThreadGradingProcessor implements ProcessorInterface
             ->getSingleScalarResult()
         ;
 
-        return 0 < (int) $count;
+        return (int) $count > 0;
     }
 
     private function isStudentSubscribed(User $user, Course $course, ?Session $session): bool
@@ -343,7 +343,7 @@ final class ForumThreadGradingProcessor implements ProcessorInterface
     private function getThread(array $uriVariables, Request $request): CForumThread
     {
         $threadId = $uriVariables['threadId'] ?? $request->attributes->get('threadId');
-        if (!is_numeric($threadId) || 0 >= (int) $threadId) {
+        if (!is_numeric($threadId) || (int) $threadId <= 0) {
             throw new BadRequestHttpException('Invalid thread id.');
         }
 
@@ -370,7 +370,7 @@ final class ForumThreadGradingProcessor implements ProcessorInterface
     private function getPositiveFloat(array $payload, string $key): float
     {
         $value = (float) ($payload[$key] ?? 0);
-        if (0 >= $value) {
+        if ($value <= 0) {
             throw new BadRequestHttpException('Invalid '.$key.'.');
         }
 
@@ -383,7 +383,7 @@ final class ForumThreadGradingProcessor implements ProcessorInterface
     private function getScore(array $payload, float $maxScore): float
     {
         $score = (float) ($payload['score'] ?? -1);
-        if (0 > $score || $score > $maxScore) {
+        if ($score < 0 || $score > $maxScore) {
             throw new BadRequestHttpException('Grade cannot exceed max score.');
         }
 

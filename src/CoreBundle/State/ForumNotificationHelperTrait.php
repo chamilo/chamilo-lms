@@ -20,6 +20,9 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
+use const ENT_QUOTES;
+use const FILTER_VALIDATE_BOOLEAN;
+
 trait ForumNotificationHelperTrait
 {
     private function getCurrentForumUser(Security $security): User
@@ -128,14 +131,13 @@ trait ForumNotificationHelperTrait
         return false;
     }
 
-
     private function areForumPostNotificationsHidden(Course $course): bool
     {
         if (!\function_exists('api_get_course_setting')) {
             return false;
         }
 
-        return 1 === (int) \api_get_course_setting('hide_forum_notifications', $course);
+        return 1 === (int) api_get_course_setting('hide_forum_notifications', $course);
     }
 
     private function shouldStorePostNotification(Course $course, bool $requestedNotification): bool
@@ -228,7 +230,7 @@ trait ForumNotificationHelperTrait
 
         return array_values(array_filter(
             $recipientIds,
-            static fn (int $recipientId): bool => 0 < $recipientId && $recipientId !== $authorId,
+            static fn (int $recipientId): bool => $recipientId > 0 && $recipientId !== $authorId,
         ));
     }
 
@@ -242,7 +244,7 @@ trait ForumNotificationHelperTrait
         User $author,
     ): string {
         $postText = trim(strip_tags((string) $post->getPostText()));
-        if (100 < mb_strlen($postText)) {
+        if (mb_strlen($postText) > 100) {
             $postText = mb_substr($postText, 0, 100).'...';
         }
 
@@ -253,7 +255,7 @@ trait ForumNotificationHelperTrait
         $safeText = htmlspecialchars($postText, ENT_QUOTES, 'UTF-8');
         $safeUrl = htmlspecialchars($threadUrl, ENT_QUOTES, 'UTF-8');
 
-        return sprintf(
+        return \sprintf(
             '%s posted a new message in forum "%s", thread "%s".<br><br>%s<br><br><a href="%s">%s</a>',
             $authorName,
             $forumTitle,

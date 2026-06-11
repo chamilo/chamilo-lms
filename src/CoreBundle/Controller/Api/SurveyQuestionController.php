@@ -26,7 +26,7 @@ final class SurveyQuestionController extends AbstractController
         private readonly SurveyQuestionProcessor $surveyQuestionProcessor,
     ) {}
 
-    #[Route('/{surveyId}', name: 'api_survey_questions_get', requirements: ['surveyId' => '\\d+'], methods: ['GET'])]
+    #[Route('/{surveyId}', name: 'api_survey_questions_get', requirements: ['surveyId' => '\d+'], methods: ['GET'])]
     public function getQuestions(int $surveyId): JsonResponse
     {
         $data = $this->surveyQuestionProvider->provide(
@@ -37,7 +37,7 @@ final class SurveyQuestionController extends AbstractController
         return $this->json($data);
     }
 
-    #[Route('/{surveyId}', name: 'api_survey_questions_create', requirements: ['surveyId' => '\\d+'], methods: ['POST'])]
+    #[Route('/{surveyId}', name: 'api_survey_questions_create', requirements: ['surveyId' => '\d+'], methods: ['POST'])]
     public function createQuestion(int $surveyId): JsonResponse
     {
         $data = $this->surveyQuestionProcessor->process(
@@ -49,7 +49,7 @@ final class SurveyQuestionController extends AbstractController
         return $this->json($data);
     }
 
-    #[Route('/{surveyId}/{questionId}', name: 'api_survey_questions_update', requirements: ['surveyId' => '\\d+', 'questionId' => '\\d+'], methods: ['PUT'])]
+    #[Route('/{surveyId}/{questionId}', name: 'api_survey_questions_update', requirements: ['surveyId' => '\d+', 'questionId' => '\d+'], methods: ['PUT'])]
     public function updateQuestion(int $surveyId, int $questionId): JsonResponse
     {
         $data = $this->surveyQuestionProcessor->process(
@@ -64,7 +64,7 @@ final class SurveyQuestionController extends AbstractController
         return $this->json($data);
     }
 
-    #[Route('/{surveyId}/{questionId}', name: 'api_survey_questions_delete', requirements: ['surveyId' => '\\d+', 'questionId' => '\\d+'], methods: ['DELETE'])]
+    #[Route('/{surveyId}/{questionId}', name: 'api_survey_questions_delete', requirements: ['surveyId' => '\d+', 'questionId' => '\d+'], methods: ['DELETE'])]
     public function deleteQuestion(int $surveyId, int $questionId): JsonResponse
     {
         $data = $this->surveyQuestionProcessor->process(
@@ -79,7 +79,7 @@ final class SurveyQuestionController extends AbstractController
         return $this->json($data);
     }
 
-    #[Route('/{surveyId}/{questionId}/move', name: 'api_survey_questions_move', requirements: ['surveyId' => '\\d+', 'questionId' => '\\d+'], methods: ['POST'])]
+    #[Route('/{surveyId}/{questionId}/move', name: 'api_survey_questions_move', requirements: ['surveyId' => '\d+', 'questionId' => '\d+'], methods: ['POST'])]
     public function moveQuestion(int $surveyId, int $questionId): JsonResponse
     {
         $data = $this->surveyQuestionProcessor->process(
@@ -94,7 +94,7 @@ final class SurveyQuestionController extends AbstractController
         return $this->json($data);
     }
 
-    #[Route('/{surveyId}/{questionId}/copy', name: 'api_survey_questions_copy', requirements: ['surveyId' => '\\d+', 'questionId' => '\\d+'], methods: ['POST'])]
+    #[Route('/{surveyId}/{questionId}/copy', name: 'api_survey_questions_copy', requirements: ['surveyId' => '\d+', 'questionId' => '\d+'], methods: ['POST'])]
     public function copyQuestion(int $surveyId, int $questionId): JsonResponse
     {
         $data = $this->surveyQuestionProcessor->process(

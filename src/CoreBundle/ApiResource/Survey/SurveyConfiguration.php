@@ -36,7 +36,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
         new Get(
             uriTemplate: '/survey/configuration/{surveyId}',
-            requirements: ['surveyId' => '\\d+'],
+            requirements: ['surveyId' => '\d+'],
             openapi: new Operation(
                 summary: 'Survey configuration for edition',
                 parameters: [
@@ -66,7 +66,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
         new Put(
             uriTemplate: '/survey/configuration/{surveyId}',
-            requirements: ['surveyId' => '\\d+'],
+            requirements: ['surveyId' => '\d+'],
             openapi: new Operation(
                 summary: 'Update a survey configuration',
                 parameters: [

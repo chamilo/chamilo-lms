@@ -11,12 +11,12 @@ use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumCategory;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Chamilo\CourseBundle\Repository\CForumRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
@@ -26,10 +26,10 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
  */
 final class ForumProcessor implements ProcessorInterface
 {
-    use ForumStateHelperTrait;
-    use ForumWriteHelperTrait;
     use ForumActionStateHelperTrait;
     use ForumNotificationHelperTrait;
+    use ForumStateHelperTrait;
+    use ForumWriteHelperTrait;
 
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
@@ -272,7 +272,7 @@ final class ForumProcessor implements ProcessorInterface
 
     private function getCategory(int $categoryId): ?CForumCategory
     {
-        if (0 >= $categoryId) {
+        if ($categoryId <= 0) {
             return null;
         }
 

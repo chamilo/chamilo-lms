@@ -18,7 +18,6 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Repository\CSurveyRepository;
 use DateTime;
-use DateTimeInterface;
 use DateTimeZone;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
@@ -30,6 +29,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Throwable;
 
 /**
  * @implements ProcessorInterface<SurveyConfiguration, SurveyConfiguration>
@@ -78,7 +78,7 @@ final readonly class SurveyConfigurationProcessor implements ProcessorInterface
         }
 
         $surveyId = isset($uriVariables['surveyId']) ? (int) $uriVariables['surveyId'] : (int) ($data->surveyId ?? 0);
-        if (0 < $surveyId) {
+        if ($surveyId > 0) {
             $survey = $this->updateSurvey($surveyId, $data, $course, $session);
         } else {
             $survey = $this->createSurvey($data, $course, $session);
@@ -229,7 +229,7 @@ final readonly class SurveyConfigurationProcessor implements ProcessorInterface
 
         try {
             $date = new DateTime($value);
-        } catch (\Throwable) {
+        } catch (Throwable) {
             throw new BadRequestHttpException('The '.$field.' field contains an invalid date.');
         }
 
@@ -279,7 +279,7 @@ final readonly class SurveyConfigurationProcessor implements ProcessorInterface
             ;
         }
 
-        return 0 < (int) $queryBuilder->getQuery()->getSingleScalarResult();
+        return (int) $queryBuilder->getQuery()->getSingleScalarResult() > 0;
     }
 
     private function applyResourceLanguage(CSurvey $survey, string $rawLanguage): void
@@ -326,7 +326,7 @@ final readonly class SurveyConfigurationProcessor implements ProcessorInterface
             return;
         }
 
-        if (null === $data->gradebookCategoryId || 0 >= $data->gradebookCategoryId) {
+        if (null === $data->gradebookCategoryId || $data->gradebookCategoryId <= 0) {
             throw new BadRequestHttpException('A gradebook category is required.');
         }
 
@@ -443,7 +443,7 @@ final readonly class SurveyConfigurationProcessor implements ProcessorInterface
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -458,7 +458,7 @@ final readonly class SurveyConfigurationProcessor implements ProcessorInterface
     private function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -509,17 +509,17 @@ final readonly class SurveyConfigurationProcessor implements ProcessorInterface
         }
 
         $code = (string) $survey->getCode();
-        if (is_array($value)) {
+        if (\is_array($value)) {
             if (isset($value['codes']) && '*' === $value['codes']) {
                 return true;
             }
 
             $codes = $value['codes'] ?? $value;
 
-            return is_array($codes) && \in_array($code, $codes, true);
+            return \is_array($codes) && \in_array($code, $codes, true);
         }
 
-        if (!is_string($value)) {
+        if (!\is_string($value)) {
             return false;
         }
 
@@ -554,7 +554,7 @@ final readonly class SurveyConfigurationProcessor implements ProcessorInterface
             ? (int) $survey->getResourceNode()->getId()
             : (int) $course->getId();
 
-        return sprintf(
+        return \sprintf(
             '/resources/survey/%d/%d/questions?%s',
             $nodeId,
             (int) $survey->getIid(),
@@ -564,5 +564,4 @@ final readonly class SurveyConfigurationProcessor implements ProcessorInterface
             ]),
         );
     }
-
 }

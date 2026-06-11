@@ -80,7 +80,7 @@ final readonly class SurveyQuestionProvider implements ProviderInterface
         }
 
         $surveyId = isset($uriVariables['surveyId']) ? (int) $uriVariables['surveyId'] : 0;
-        if (0 >= $surveyId) {
+        if ($surveyId <= 0) {
             throw new BadRequestHttpException('A valid survey id is required.');
         }
 
@@ -108,7 +108,7 @@ final readonly class SurveyQuestionProvider implements ProviderInterface
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -123,7 +123,7 @@ final readonly class SurveyQuestionProvider implements ProviderInterface
     private function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -255,7 +255,7 @@ final readonly class SurveyQuestionProvider implements ProviderInterface
                 'canEdit' => $canWriteQuestion,
                 'canDelete' => $canWriteQuestion,
                 'canCopy' => $canEditSurvey && $isSupported,
-                'canMoveUp' => $canWriteQuestion && 0 < $index,
+                'canMoveUp' => $canWriteQuestion && $index > 0,
                 'canMoveDown' => $canWriteQuestion && $index < $total - 1,
                 'lockedByAnswers' => $hasAnswers && !$this->isSettingEnabled('survey.survey_allow_answered_question_edit'),
             ];
@@ -416,13 +416,13 @@ final readonly class SurveyQuestionProvider implements ProviderInterface
 
     private function surveyHasAnswers(CSurvey $survey): bool
     {
-        return 0 < (int) $this->entityManager->createQueryBuilder()
+        return (int) $this->entityManager->createQueryBuilder()
             ->select('COUNT(answer.iid)')
             ->from(CSurveyAnswer::class, 'answer')
             ->andWhere('IDENTITY(answer.survey) = :surveyId')
             ->setParameter('surveyId', (int) $survey->getIid(), Types::INTEGER)
             ->getQuery()
-            ->getSingleScalarResult()
+            ->getSingleScalarResult() > 0
         ;
     }
 
@@ -481,5 +481,4 @@ final readonly class SurveyQuestionProvider implements ProviderInterface
             default => ucfirst($type),
         };
     }
-
 }

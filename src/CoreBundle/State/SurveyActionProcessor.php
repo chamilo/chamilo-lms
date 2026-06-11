@@ -25,6 +25,8 @@ use Chamilo\CourseBundle\Repository\CSurveyRepository;
 use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
+use ExtraFieldValue;
+use MessageManager;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -33,6 +35,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Throwable;
 
 /**
  * @implements ProcessorInterface<SurveyAction, SurveyAction>
@@ -88,7 +91,7 @@ final readonly class SurveyActionProcessor implements ProcessorInterface
         }
 
         $surveyId = isset($uriVariables['surveyId']) ? (int) $uriVariables['surveyId'] : 0;
-        if (0 >= $surveyId) {
+        if ($surveyId <= 0) {
             throw new BadRequestHttpException('A valid survey id is required.');
         }
 
@@ -137,7 +140,7 @@ final readonly class SurveyActionProcessor implements ProcessorInterface
 
         if ('post_survey_action_send_to_tutors' === $operationName) {
             $result = $this->sendToTutors($survey, $course, $session);
-            $response->message = sprintf(
+            $response->message = \sprintf(
                 'The invitation has been sent. Created: %d. Messages sent: %d.',
                 $result['created'],
                 $result['sent'],
@@ -161,7 +164,7 @@ final readonly class SurveyActionProcessor implements ProcessorInterface
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -176,7 +179,7 @@ final readonly class SurveyActionProcessor implements ProcessorInterface
     private function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -365,7 +368,7 @@ final readonly class SurveyActionProcessor implements ProcessorInterface
 
     private function surveyCodeExists(string $code, string $language): bool
     {
-        return 0 < (int) $this->entityManager->createQueryBuilder()
+        return (int) $this->entityManager->createQueryBuilder()
             ->select('COUNT(survey.iid)')
             ->from(CSurvey::class, 'survey')
             ->andWhere('survey.code = :code')
@@ -373,7 +376,7 @@ final readonly class SurveyActionProcessor implements ProcessorInterface
             ->setParameter('code', $code)
             ->setParameter('language', $language)
             ->getQuery()
-            ->getSingleScalarResult()
+            ->getSingleScalarResult() > 0
         ;
     }
 
@@ -522,7 +525,7 @@ final readonly class SurveyActionProcessor implements ProcessorInterface
                 $groupGenerated++;
             }
 
-            if (0 < $groupGenerated && $groupIndex < $lastGroupIndex) {
+            if ($groupGenerated > 0 && $groupIndex < $lastGroupIndex) {
                 $this->createGeneratedPageBreak($survey, $nextSort++);
                 $generated++;
             }
@@ -583,6 +586,7 @@ final readonly class SurveyActionProcessor implements ProcessorInterface
     private function getCourseUsergroupsFromUsergroupTables(int $courseId): array
     {
         $connection = $this->entityManager->getConnection();
+
         try {
             $rows = $connection->fetchAllAssociative(
                 'SELECT ug.id AS group_id, ug.title AS group_title, uru.user_id AS user_id
@@ -593,7 +597,7 @@ final readonly class SurveyActionProcessor implements ProcessorInterface
                ORDER BY ug.title ASC, uru.user_id ASC',
                 ['courseId' => $courseId],
             );
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return [];
         }
 
@@ -656,7 +660,7 @@ final readonly class SurveyActionProcessor implements ProcessorInterface
         foreach ($rows as $row) {
             $groupId = (int) ($row['group_id'] ?? 0);
             $userId = (int) ($row['user_id'] ?? 0);
-            if (0 >= $groupId || 0 >= $userId) {
+            if ($groupId <= 0 || $userId <= 0) {
                 continue;
             }
 
@@ -877,11 +881,12 @@ final readonly class SurveyActionProcessor implements ProcessorInterface
     private function getSurveyExtraFieldIntegerValue(int $surveyId, string $variable): ?int
     {
         $legacyValue = $this->getLegacyExtraFieldValue('survey', $surveyId, $variable);
-        if (null !== $legacyValue && 0 < (int) $legacyValue) {
+        if (null !== $legacyValue && (int) $legacyValue > 0) {
             return (int) $legacyValue;
         }
 
         $connection = $this->entityManager->getConnection();
+
         try {
             $value = $connection->fetchOne(
                 'SELECT efv.field_value
@@ -896,25 +901,25 @@ final readonly class SurveyActionProcessor implements ProcessorInterface
                     'itemId' => $surveyId,
                 ],
             );
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return null;
         }
 
         $groupId = (int) $value;
 
-        return 0 < $groupId ? $groupId : null;
+        return $groupId > 0 ? $groupId : null;
     }
 
     private function getLegacyExtraFieldValue(string $itemType, int $itemId, string $variable): mixed
     {
-        if (!\class_exists('ExtraFieldValue')) {
+        if (!class_exists('ExtraFieldValue')) {
             return null;
         }
 
         try {
-            $extraFieldValue = new \ExtraFieldValue($itemType);
+            $extraFieldValue = new ExtraFieldValue($itemType);
             $value = $extraFieldValue->get_values_by_handler_and_field_variable($itemId, $variable);
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return null;
         }
 
@@ -1040,7 +1045,7 @@ final readonly class SurveyActionProcessor implements ProcessorInterface
         ?Session $session,
         CGroup $group,
     ): bool {
-        if (!\class_exists('MessageManager')) {
+        if (!class_exists('MessageManager')) {
             return false;
         }
 
@@ -1050,8 +1055,8 @@ final readonly class SurveyActionProcessor implements ProcessorInterface
             return false;
         }
 
-        $subject = sprintf('Group survey for %s', $group->getTitle());
-        $content = sprintf(
+        $subject = \sprintf('Group survey for %s', $group->getTitle());
+        $content = \sprintf(
             'Hi %s <br/><br/>As group tutor for the group %s you are invited to participate at the following survey:',
             $user->getFullName(),
             $group->getTitle(),
@@ -1061,12 +1066,12 @@ final readonly class SurveyActionProcessor implements ProcessorInterface
         $body = $this->buildMessageBody($content, $link);
 
         try {
-            $messageId = \MessageManager::send_message_simple((int) $userId, $subject, $body);
-        } catch (\Throwable) {
+            $messageId = MessageManager::send_message_simple((int) $userId, $subject, $body);
+        } catch (Throwable) {
             return false;
         }
 
-        return false !== $messageId && 0 < (int) $messageId;
+        return false !== $messageId && (int) $messageId > 0;
     }
 
     private function buildMessageBody(string $content, string $link): string
@@ -1075,7 +1080,7 @@ final readonly class SurveyActionProcessor implements ProcessorInterface
         $replaceCount = 0;
         $body = str_ireplace('**link**', $linkHtml, $content, $replaceCount);
 
-        if (1 > $replaceCount) {
+        if ($replaceCount < 1) {
             $body .= '<br><br>'.$linkHtml;
         }
 
@@ -1089,7 +1094,7 @@ final readonly class SurveyActionProcessor implements ProcessorInterface
             : (int) $course->getId();
         $route = 3 === $survey->getSurveyType() ? 'meeting' : 'answer';
 
-        return sprintf(
+        return \sprintf(
             '/resources/survey/%d/%d/%s?%s',
             $nodeId,
             (int) $survey->getIid(),
@@ -1102,7 +1107,7 @@ final readonly class SurveyActionProcessor implements ProcessorInterface
         );
     }
 
-private function updateSurveyCounters(CSurvey $survey, Course $course, ?Session $session): void
+    private function updateSurveyCounters(CSurvey $survey, Course $course, ?Session $session): void
     {
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('COUNT(invitation.iid) AS invitedCount')
@@ -1129,7 +1134,6 @@ private function updateSurveyCounters(CSurvey $survey, Course $course, ?Session 
         $this->entityManager->persist($survey);
     }
 
-
     /**
      * @param array<string, mixed> $payload
      *
@@ -1145,7 +1149,7 @@ private function updateSurveyCounters(CSurvey $survey, Course $course, ?Session 
         $normalizedSurveyIds = [];
         foreach ($surveyIds as $surveyId) {
             $surveyId = (int) $surveyId;
-            if (0 < $surveyId) {
+            if ($surveyId > 0) {
                 $normalizedSurveyIds[$surveyId] = $surveyId;
             }
         }

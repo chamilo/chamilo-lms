@@ -22,11 +22,14 @@ use Chamilo\CourseBundle\Repository\CForumAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CForumPostRepository;
 use Chamilo\CourseBundle\Repository\CForumRepository;
 use Chamilo\CourseBundle\Repository\CForumThreadRepository;
+use CourseManager;
 use DateTime;
 use DateTimeZone;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
+use ExtraFieldValue;
 use JsonException;
+use MessageManager;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -37,6 +40,10 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use UserManager;
+
+use const FILTER_VALIDATE_BOOLEAN;
+use const JSON_THROW_ON_ERROR;
 
 /**
  * Handles forum post reply/update/delete operations.
@@ -45,10 +52,10 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
  */
 final class ForumPostProcessor implements ProcessorInterface
 {
+    use ForumActionStateHelperTrait;
+    use ForumNotificationHelperTrait;
     use ForumStateHelperTrait;
     use ForumWriteHelperTrait;
-    use ForumNotificationHelperTrait;
-    use ForumActionStateHelperTrait;
 
     public function __construct(
         private readonly CForumRepository $forumRepository,
@@ -247,7 +254,7 @@ final class ForumPostProcessor implements ProcessorInterface
 
         $postId = (int) $data->getIid();
         $postCount = $this->countThreadPosts($thread);
-        if (1 >= $postCount) {
+        if ($postCount <= 1) {
             $this->assertTeacher($this->security);
             $forum->setForumThreads(max(0, (int) ($forum->getForumThreads() ?? 0) - 1));
             $forum->setForumPosts(max(0, (int) ($forum->getForumPosts() ?? 0) - 1));
@@ -305,7 +312,6 @@ final class ForumPostProcessor implements ProcessorInterface
     /**
      * @return array<string, mixed>
      */
-
     private function togglePostVisibility(Request $request, mixed $data): JsonResponse
     {
         $payload = $this->getJsonData($request);
@@ -498,7 +504,7 @@ final class ForumPostProcessor implements ProcessorInterface
         $currentUser = $this->security->getUser();
         $currentUserName = $currentUser instanceof User ? $currentUser->getFullName() : 'Unknown user';
         $subject = 'Post reported';
-        $content = sprintf(
+        $content = \sprintf(
             'User %s has reported the message %s in the forum %s',
             $currentUserName,
             $data->getTitle(),
@@ -506,8 +512,8 @@ final class ForumPostProcessor implements ProcessorInterface
         );
 
         foreach ($recipientIds as $recipientId) {
-            if (\class_exists('MessageManager')) {
-                \MessageManager::send_message_simple($recipientId, $subject, $content);
+            if (class_exists('MessageManager')) {
+                MessageManager::send_message_simple($recipientId, $subject, $content);
             }
         }
 
@@ -668,7 +674,7 @@ final class ForumPostProcessor implements ProcessorInterface
     private function findParentPost(array $data, CForum $forum, CForumThread $thread): ?CForumPost
     {
         $parentPostId = (int) ($data['parentPostId'] ?? $data['postParentId'] ?? $data['post_parent_id'] ?? 0);
-        if (0 >= $parentPostId) {
+        if ($parentPostId <= 0) {
             return null;
         }
 
@@ -980,7 +986,7 @@ final class ForumPostProcessor implements ProcessorInterface
             return false;
         }
 
-        return $this->isTruthySetting(\api_get_setting('forum.allow_forum_post_revisions'));
+        return $this->isTruthySetting(api_get_setting('forum.allow_forum_post_revisions'));
     }
 
     private function isTruthySetting(mixed $value): bool
@@ -1005,11 +1011,11 @@ final class ForumPostProcessor implements ProcessorInterface
             return $databaseValue;
         }
 
-        if (!\class_exists('ExtraFieldValue')) {
+        if (!class_exists('ExtraFieldValue')) {
             return null;
         }
 
-        $extraFieldValue = new \ExtraFieldValue($itemType);
+        $extraFieldValue = new ExtraFieldValue($itemType);
         $value = $extraFieldValue->get_values_by_handler_and_field_variable($itemId, $variable);
 
         return \is_array($value) ? ($value['value'] ?? null) : null;
@@ -1021,11 +1027,11 @@ final class ForumPostProcessor implements ProcessorInterface
             return;
         }
 
-        if (!\class_exists('ExtraFieldValue')) {
+        if (!class_exists('ExtraFieldValue')) {
             return;
         }
 
-        $extraFieldValue = new \ExtraFieldValue($itemType);
+        $extraFieldValue = new ExtraFieldValue($itemType);
         $params = ['item_id' => $itemId];
         if (null !== $value && '' !== (string) $value) {
             $params['extra_'.$variable] = ['extra_'.$variable => $value];
@@ -1181,22 +1187,22 @@ final class ForumPostProcessor implements ProcessorInterface
         $recipientIds = [];
 
         foreach ($recipientTypes as $recipientType) {
-            if ('teachers' === $recipientType && \class_exists('CourseManager')) {
-                $teachers = \CourseManager::get_teacher_list_from_course_code($course->getCode());
+            if ('teachers' === $recipientType && class_exists('CourseManager')) {
+                $teachers = CourseManager::get_teacher_list_from_course_code($course->getCode());
                 foreach ($teachers as $teacher) {
                     $recipientIds[] = (int) ($teacher['user_id'] ?? 0);
                 }
             }
 
-            if ('admins' === $recipientType && \class_exists('UserManager')) {
-                $admins = \UserManager::get_all_administrators();
+            if ('admins' === $recipientType && class_exists('UserManager')) {
+                $admins = UserManager::get_all_administrators();
                 foreach ($admins as $admin) {
                     $recipientIds[] = (int) ($admin['user_id'] ?? $admin['id'] ?? 0);
                 }
             }
 
             if ('community_managers' === $recipientType && \function_exists('api_get_setting')) {
-                $managers = \api_get_setting('forum.community_managers_user_list', true);
+                $managers = api_get_setting('forum.community_managers_user_list', true);
                 if (\is_array($managers) && isset($managers['users']) && \is_array($managers['users'])) {
                     foreach ($managers['users'] as $managerId) {
                         $recipientIds[] = (int) $managerId;
@@ -1205,8 +1211,8 @@ final class ForumPostProcessor implements ProcessorInterface
             }
         }
 
-        if ([] === $recipientIds && \class_exists('CourseManager')) {
-            $teachers = \CourseManager::get_teacher_list_from_course_code($course->getCode());
+        if ([] === $recipientIds && class_exists('CourseManager')) {
+            $teachers = CourseManager::get_teacher_list_from_course_code($course->getCode());
             foreach ($teachers as $teacher) {
                 $recipientIds[] = (int) ($teacher['user_id'] ?? 0);
             }

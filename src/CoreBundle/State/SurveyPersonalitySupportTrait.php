@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\State;
 
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Throwable;
 
 trait SurveyPersonalitySupportTrait
 {
@@ -15,7 +16,7 @@ trait SurveyPersonalitySupportTrait
     {
         try {
             return $this->entityManager->getConnection()->createSchemaManager()->tablesExist(['c_survey_group']);
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return false;
         }
     }

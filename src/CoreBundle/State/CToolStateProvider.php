@@ -29,6 +29,8 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Throwable;
 
+use const JSON_ERROR_NONE;
+
 /**
  * @template-implements ProviderInterface<CTool>
  */
@@ -136,8 +138,7 @@ final class CToolStateProvider implements ProviderInterface
 
             if ($session && $allowVisibilityInSession) {
                 $sessionLink = $resourceLinks->findFirst(
-                    fn (int $key, ResourceLink $resourceLink): bool =>
-                        $resourceLink->getSession()?->getId() === $session->getId(),
+                    fn (int $key, ResourceLink $resourceLink): bool => $resourceLink->getSession()?->getId() === $session->getId(),
                 );
 
                 if ($sessionLink) {

@@ -40,6 +40,8 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
+use const JSON_THROW_ON_ERROR;
+
 /**
  * Handles forum thread create/update/delete operations.
  *
@@ -47,12 +49,11 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
  */
 final class ForumThreadProcessor implements ProcessorInterface
 {
-    private const LINK_FORUM_THREAD = 5;
-
+    use ForumActionStateHelperTrait;
+    use ForumNotificationHelperTrait;
     use ForumStateHelperTrait;
     use ForumWriteHelperTrait;
-    use ForumNotificationHelperTrait;
-    use ForumActionStateHelperTrait;
+    private const LINK_FORUM_THREAD = 5;
 
     public function __construct(
         private readonly CForumRepository $forumRepository,
@@ -276,7 +277,6 @@ final class ForumThreadProcessor implements ProcessorInterface
     /**
      * @return array<string, mixed>
      */
-
     private function toggleThreadLock(Request $request, mixed $data): JsonResponse
     {
         $payload = $this->getJsonData($request);
@@ -477,7 +477,6 @@ final class ForumThreadProcessor implements ProcessorInterface
         ]);
     }
 
-
     /**
      * @param array<string, mixed> $data
      */
@@ -568,7 +567,7 @@ final class ForumThreadProcessor implements ProcessorInterface
     private function getPositiveFloat(array $data, string $key): float
     {
         $value = (float) ($data[$key] ?? 0);
-        if (0 >= $value) {
+        if ($value <= 0) {
             throw new BadRequestHttpException('Invalid '.$key.'.');
         }
 
@@ -802,7 +801,7 @@ final class ForumThreadProcessor implements ProcessorInterface
     private function assertEditableResource(?ResourceNode $resourceNode, string $action): void
     {
         if (null === $resourceNode || !$this->security->isGranted('EDIT', $resourceNode)) {
-            throw new AccessDeniedHttpException(sprintf('You are not allowed to %s this forum resource.', $action));
+            throw new AccessDeniedHttpException(\sprintf('You are not allowed to %s this forum resource.', $action));
         }
     }
 

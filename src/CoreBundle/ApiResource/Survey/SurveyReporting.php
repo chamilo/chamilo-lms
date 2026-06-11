@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Get(
             uriTemplate: '/survey/reporting/{surveyId}',
-            requirements: ['surveyId' => '\\d+'],
+            requirements: ['surveyId' => '\d+'],
             openapi: new Operation(
                 summary: 'Survey reporting data',
                 parameters: [

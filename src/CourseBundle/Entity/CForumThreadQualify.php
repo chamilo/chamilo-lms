@@ -98,7 +98,6 @@ class CForumThreadQualify
         return $this->cId;
     }
 
-
     public function getUser(): User
     {
         return $this->user;

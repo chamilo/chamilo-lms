@@ -13,10 +13,10 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Chamilo\CourseBundle\Entity\CSurvey;
-use Chamilo\CourseBundle\Entity\CSurveyInvitation;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CGroupRelTutor;
+use Chamilo\CourseBundle\Entity\CSurvey;
+use Chamilo\CourseBundle\Entity\CSurveyInvitation;
 use Chamilo\CourseBundle\Entity\CSurveyQuestion;
 use Chamilo\CourseBundle\Repository\CSurveyRepository;
 use DateTime;
@@ -24,12 +24,17 @@ use DateTimeInterface;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
+use ExtraFieldValue;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Throwable;
+
+use const ENT_HTML5;
+use const ENT_QUOTES;
 
 /**
  * @implements ProviderInterface<SurveyList>
@@ -79,7 +84,7 @@ final readonly class SurveyListProvider implements ProviderInterface
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -94,7 +99,7 @@ final readonly class SurveyListProvider implements ProviderInterface
     private function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -272,7 +277,7 @@ final readonly class SurveyListProvider implements ProviderInterface
 
         $decodedValue = trim($decodedValue);
 
-        return function_exists('mb_strtolower') ? mb_strtolower($decodedValue) : strtolower($decodedValue);
+        return \function_exists('mb_strtolower') ? mb_strtolower($decodedValue) : strtolower($decodedValue);
     }
 
     /**
@@ -431,8 +436,7 @@ final readonly class SurveyListProvider implements ProviderInterface
         CSurveyInvitation $invitation,
         Course $course,
         ?Session $session
-    ): array
-    {
+    ): array {
         $isAnswered = 1 === (int) $invitation->getAnswered();
         $isMeetingPoll = 3 === $survey->getSurveyType();
         $isUnsupportedPersonality = $this->isUnsupportedPersonalitySurvey($survey);
@@ -487,7 +491,7 @@ final readonly class SurveyListProvider implements ProviderInterface
             : (int) $course->getId();
         $route = 3 === $survey->getSurveyType() ? 'meeting' : 'answer';
 
-        return sprintf(
+        return \sprintf(
             '/resources/survey/%d/%d/%s?%s',
             $nodeId,
             (int) $survey->getIid(),
@@ -500,7 +504,7 @@ final readonly class SurveyListProvider implements ProviderInterface
         );
     }
 
-private function hasSurveyGroupForTutors(CSurvey $survey, Course $course): bool
+    private function hasSurveyGroupForTutors(CSurvey $survey, Course $course): bool
     {
         $groupId = $this->getSurveyExtraFieldIntegerValue((int) $survey->getIid(), 'group_id');
         if (null === $groupId) {
@@ -512,7 +516,7 @@ private function hasSurveyGroupForTutors(CSurvey $survey, Course $course): bool
             return false;
         }
 
-        return 0 < (int) $this->entityManager->createQueryBuilder()
+        return (int) $this->entityManager->createQueryBuilder()
             ->select('COUNT(relation.iid)')
             ->from(CGroupRelTutor::class, 'relation')
             ->andWhere('relation.cId = :courseId')
@@ -520,18 +524,19 @@ private function hasSurveyGroupForTutors(CSurvey $survey, Course $course): bool
             ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
             ->setParameter('group', $group)
             ->getQuery()
-            ->getSingleScalarResult()
+            ->getSingleScalarResult() > 0
         ;
     }
 
     private function getSurveyExtraFieldIntegerValue(int $surveyId, string $variable): ?int
     {
         $legacyValue = $this->getLegacyExtraFieldValue('survey', $surveyId, $variable);
-        if (null !== $legacyValue && 0 < (int) $legacyValue) {
+        if (null !== $legacyValue && (int) $legacyValue > 0) {
             return (int) $legacyValue;
         }
 
         $connection = $this->entityManager->getConnection();
+
         try {
             $value = $connection->fetchOne(
                 'SELECT efv.field_value
@@ -546,25 +551,25 @@ private function hasSurveyGroupForTutors(CSurvey $survey, Course $course): bool
                     'itemId' => $surveyId,
                 ],
             );
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return null;
         }
 
         $groupId = (int) $value;
 
-        return 0 < $groupId ? $groupId : null;
+        return $groupId > 0 ? $groupId : null;
     }
 
     private function getLegacyExtraFieldValue(string $itemType, int $itemId, string $variable): mixed
     {
-        if (!\class_exists('ExtraFieldValue')) {
+        if (!class_exists('ExtraFieldValue')) {
             return null;
         }
 
         try {
-            $extraFieldValue = new \ExtraFieldValue($itemType);
+            $extraFieldValue = new ExtraFieldValue($itemType);
             $value = $extraFieldValue->get_values_by_handler_and_field_variable($itemId, $variable);
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return null;
         }
 
@@ -587,17 +592,17 @@ private function hasSurveyGroupForTutors(CSurvey $survey, Course $course): bool
         }
 
         $code = (string) $survey->getCode();
-        if (is_array($value)) {
+        if (\is_array($value)) {
             if (isset($value['codes']) && '*' === $value['codes']) {
                 return true;
             }
 
             $codes = $value['codes'] ?? $value;
 
-            return is_array($codes) && \in_array($code, $codes, true);
+            return \is_array($codes) && \in_array($code, $codes, true);
         }
 
-        if (!is_string($value)) {
+        if (!\is_string($value)) {
             return false;
         }
 

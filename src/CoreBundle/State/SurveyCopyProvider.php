@@ -61,7 +61,7 @@ final readonly class SurveyCopyProvider implements ProviderInterface
         }
 
         $surveyId = isset($uriVariables['surveyId']) ? (int) $uriVariables['surveyId'] : 0;
-        if (0 >= $surveyId) {
+        if ($surveyId <= 0) {
             throw new BadRequestHttpException('A valid survey id is required.');
         }
 
@@ -93,7 +93,7 @@ final readonly class SurveyCopyProvider implements ProviderInterface
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -108,7 +108,7 @@ final readonly class SurveyCopyProvider implements ProviderInterface
     private function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -345,7 +345,7 @@ final readonly class SurveyCopyProvider implements ProviderInterface
             $courseTitle = trim((string) ($row['courseTitle'] ?? ''));
             $courseCode = trim((string) ($row['courseCode'] ?? ''));
             $sessionTitle = trim((string) ($row['sessionTitle'] ?? ''));
-            $label = '' !== $sessionTitle ? sprintf('%s (%s)', $courseTitle, $sessionTitle) : $courseTitle;
+            $label = '' !== $sessionTitle ? \sprintf('%s (%s)', $courseTitle, $sessionTitle) : $courseTitle;
 
             $targets[] = [
                 'id' => $key,
@@ -353,7 +353,7 @@ final readonly class SurveyCopyProvider implements ProviderInterface
                 'sublabel' => '' !== $courseCode ? $courseCode : null,
                 'targetCourseId' => $courseId,
                 'targetSessionId' => $sessionId,
-                'targetType' => 0 < $sessionId ? 'session' : 'course',
+                'targetType' => $sessionId > 0 ? 'session' : 'course',
             ];
         }
 

@@ -16,14 +16,12 @@ use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroup;
-use Chamilo\CourseBundle\Entity\CGroupRelUser;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CSurveyInvitation;
 use Chamilo\CourseBundle\Repository\CGroupRepository;
 use Chamilo\CourseBundle\Repository\CSurveyRepository;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
-use Throwable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,6 +30,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Throwable;
 
 /**
  * @implements ProviderInterface<SurveyInvitation>
@@ -66,7 +65,7 @@ final readonly class SurveyInvitationProvider implements ProviderInterface
         $course = $this->getCourse($request);
         $session = $this->getSession($request);
         $surveyId = isset($uriVariables['surveyId']) ? (int) $uriVariables['surveyId'] : 0;
-        if (0 >= $surveyId) {
+        if ($surveyId <= 0) {
             throw new BadRequestHttpException('A valid survey id is required.');
         }
 
@@ -108,7 +107,7 @@ final readonly class SurveyInvitationProvider implements ProviderInterface
     public function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -123,7 +122,7 @@ final readonly class SurveyInvitationProvider implements ProviderInterface
     public function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -531,7 +530,7 @@ final readonly class SurveyInvitationProvider implements ProviderInterface
             : (int) $course->getId();
         $route = 3 === $survey->getSurveyType() ? 'meeting' : 'answer';
 
-        return sprintf(
+        return \sprintf(
             '/resources/survey/%d/%d/%s?%s',
             $nodeId,
             (int) $survey->getIid(),
@@ -543,5 +542,4 @@ final readonly class SurveyInvitationProvider implements ProviderInterface
             ]),
         );
     }
-
 }

@@ -21,12 +21,14 @@ use Chamilo\CourseBundle\Repository\CForumAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CForumThreadRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
+use ExtraFieldValue;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Throwable;
 
 /**
  * @implements ProviderInterface<ForumThreadPosts>
@@ -100,7 +102,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         }
 
         $requestedForumId = $request->query->getInt('forumId');
-        if (0 < $requestedForumId && $requestedForumId !== $forum->getIid()) {
+        if ($requestedForumId > 0 && $requestedForumId !== $forum->getIid()) {
             throw new BadRequestHttpException('Forum does not match the requested thread.');
         }
 
@@ -184,7 +186,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
             return false;
         }
 
-        return 1 === (int) \api_get_course_setting('hide_forum_notifications', $course);
+        return 1 === (int) api_get_course_setting('hide_forum_notifications', $course);
     }
 
     private function isSubscribedToThread(Course $course, User $user, int $threadId): bool
@@ -308,7 +310,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
             return false;
         }
 
-        return $this->isTruthySetting(\api_get_setting('forum.allow_forum_post_revisions'));
+        return $this->isTruthySetting(api_get_setting('forum.allow_forum_post_revisions'));
     }
 
     private function isTruthySetting(mixed $value): bool
@@ -335,7 +337,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
 
         try {
             $course = $this->getCourse($this->entityManager, $request);
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return false;
         }
 
@@ -349,11 +351,11 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
             return $databaseValue;
         }
 
-        if (!\class_exists('ExtraFieldValue')) {
+        if (!class_exists('ExtraFieldValue')) {
             return null;
         }
 
-        $extraFieldValue = new \ExtraFieldValue($itemType);
+        $extraFieldValue = new ExtraFieldValue($itemType);
         $value = $extraFieldValue->get_values_by_handler_and_field_variable($itemId, $variable);
 
         return \is_array($value) ? ($value['value'] ?? null) : null;

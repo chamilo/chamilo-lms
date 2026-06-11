@@ -68,7 +68,7 @@ final readonly class SurveyCopyProcessor implements ProcessorInterface
         $this->validateCsrfToken((string) ($payload['csrfToken'] ?? ''));
 
         $surveyId = isset($uriVariables['surveyId']) ? (int) $uriVariables['surveyId'] : 0;
-        if (0 >= $surveyId) {
+        if ($surveyId <= 0) {
             throw new BadRequestHttpException('A valid survey id is required.');
         }
 
@@ -78,7 +78,7 @@ final readonly class SurveyCopyProcessor implements ProcessorInterface
 
         $targetCourseId = (int) ($payload['targetCourseId'] ?? $payload['target_course_id'] ?? 0);
         $targetSessionId = (int) ($payload['targetSessionId'] ?? $payload['target_session_id'] ?? 0);
-        if (0 >= $targetCourseId) {
+        if ($targetCourseId <= 0) {
             throw new BadRequestHttpException('A target course is required.');
         }
 
@@ -113,7 +113,7 @@ final readonly class SurveyCopyProcessor implements ProcessorInterface
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -128,7 +128,7 @@ final readonly class SurveyCopyProcessor implements ProcessorInterface
     private function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -152,7 +152,7 @@ final readonly class SurveyCopyProcessor implements ProcessorInterface
 
     private function getTargetSession(Course $targetCourse, int $targetSessionId): ?Session
     {
-        if (0 >= $targetSessionId) {
+        if ($targetSessionId <= 0) {
             return null;
         }
 
@@ -168,7 +168,7 @@ final readonly class SurveyCopyProcessor implements ProcessorInterface
                 'courseId' => (int) $targetCourse->getId(),
             ],
         );
-        if (0 >= $exists) {
+        if ($exists <= 0) {
             throw new BadRequestHttpException('The target session does not contain the selected course.');
         }
 
@@ -303,19 +303,19 @@ final readonly class SurveyCopyProcessor implements ProcessorInterface
 
     private function isTargetCourseTeacher(int $userId, int $courseId): bool
     {
-        return 0 < (int) $this->entityManager->getConnection()->fetchOne(
+        return (int) $this->entityManager->getConnection()->fetchOne(
             'SELECT COUNT(1) FROM course_rel_user WHERE user_id = :userId AND c_id = :courseId AND status = :status',
             [
                 'userId' => $userId,
                 'courseId' => $courseId,
                 'status' => $this->getCourseManagerStatus(),
             ],
-        );
+        ) > 0;
     }
 
     private function isTargetSessionCourseCoach(int $userId, int $courseId, int $sessionId): bool
     {
-        return 0 < (int) $this->entityManager->getConnection()->fetchOne(
+        return (int) $this->entityManager->getConnection()->fetchOne(
             'SELECT COUNT(1) FROM session_rel_course_rel_user WHERE user_id = :userId AND c_id = :courseId AND session_id = :sessionId AND status = :status',
             [
                 'userId' => $userId,
@@ -323,7 +323,7 @@ final readonly class SurveyCopyProcessor implements ProcessorInterface
                 'sessionId' => $sessionId,
                 'status' => Session::COURSE_COACH,
             ],
-        );
+        ) > 0;
     }
 
     private function copySurvey(CSurvey $source, Course $targetCourse, ?Session $targetSession, bool $appendCopyToTitle): CSurvey
@@ -404,7 +404,7 @@ final readonly class SurveyCopyProcessor implements ProcessorInterface
 
     private function surveyCodeExists(string $code, string $language): bool
     {
-        return 0 < (int) $this->entityManager->createQueryBuilder()
+        return (int) $this->entityManager->createQueryBuilder()
             ->select('COUNT(survey.iid)')
             ->from(CSurvey::class, 'survey')
             ->andWhere('survey.code = :code')
@@ -412,7 +412,7 @@ final readonly class SurveyCopyProcessor implements ProcessorInterface
             ->setParameter('code', $code)
             ->setParameter('language', $language)
             ->getQuery()
-            ->getSingleScalarResult()
+            ->getSingleScalarResult() > 0
         ;
     }
 

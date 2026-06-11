@@ -488,7 +488,7 @@ final class AiCourseAnalyzerService
             'origin' => '',
         ];
 
-        return $path.'?'.\http_build_query(array_merge($baseParameters, $parameters));
+        return $path.'?'.http_build_query(array_merge($baseParameters, $parameters));
     }
 
     private function buildLearningPathEditUrl(CLp $learningPath, Course $course, ?Session $session): string
@@ -525,7 +525,7 @@ final class AiCourseAnalyzerService
             'filetype' => $document->getFiletype(),
         ];
 
-        return '/resources/document/'.(int) $courseResourceNode->getId().'/edit_file?'.\http_build_query($query);
+        return '/resources/document/'.(int) $courseResourceNode->getId().'/edit_file?'.http_build_query($query);
     }
 
     private function buildExerciseEditUrl(CQuiz $quiz, Course $course, ?Session $session): string

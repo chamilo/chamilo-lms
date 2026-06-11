@@ -21,7 +21,9 @@ use Chamilo\CourseBundle\Entity\CSurveyQuestionOption;
 use Chamilo\CourseBundle\Repository\CSurveyRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -32,6 +34,11 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use TypeError;
+use ZipArchive;
+
+use const ENT_HTML5;
+use const ENT_QUOTES;
 
 /**
  * @implements ProviderInterface<SurveyReporting>
@@ -67,7 +74,7 @@ final readonly class SurveyReportingProvider implements ProviderInterface
         $course = $this->getCourse($request);
         $session = $this->getSession($request);
         $surveyId = isset($uriVariables['surveyId']) ? (int) $uriVariables['surveyId'] : 0;
-        if (0 >= $surveyId) {
+        if ($surveyId <= 0) {
             throw new BadRequestHttpException('A valid survey id is required.');
         }
 
@@ -133,9 +140,10 @@ final readonly class SurveyReportingProvider implements ProviderInterface
             throw new BadRequestHttpException('Could not create export package.');
         }
 
-        $zip = new \ZipArchive();
-        if (true !== $zip->open($zipFile, \ZipArchive::OVERWRITE)) {
+        $zip = new ZipArchive();
+        if (true !== $zip->open($zipFile, ZipArchive::OVERWRITE)) {
             @unlink($zipFile);
+
             throw new BadRequestHttpException('Could not create export package.');
         }
 
@@ -167,7 +175,7 @@ final readonly class SurveyReportingProvider implements ProviderInterface
     public function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -182,7 +190,7 @@ final readonly class SurveyReportingProvider implements ProviderInterface
     public function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -396,7 +404,7 @@ final readonly class SurveyReportingProvider implements ProviderInterface
 
     /**
      * @param array<int, CSurveyInvitation> $invitations
-     * @param array<int, CSurveyAnswer> $answers
+     * @param array<int, CSurveyAnswer>     $answers
      *
      * @return array<string, array<string, mixed>>
      */
@@ -438,7 +446,6 @@ final readonly class SurveyReportingProvider implements ProviderInterface
         return $users;
     }
 
-
     private function formatAnsweredAt(CSurveyInvitation $invitation): ?string
     {
         if (1 !== (int) $invitation->getAnswered()) {
@@ -447,7 +454,7 @@ final readonly class SurveyReportingProvider implements ProviderInterface
 
         try {
             $answeredAt = $invitation->getAnsweredAt();
-        } catch (\TypeError) {
+        } catch (TypeError) {
             return null;
         }
 
@@ -468,7 +475,7 @@ final readonly class SurveyReportingProvider implements ProviderInterface
 
     /**
      * @param array<int, CSurveyInvitation> $invitations
-     * @param array<int, CSurveyAnswer> $answers
+     * @param array<int, CSurveyAnswer>     $answers
      *
      * @return array<string, int>
      */
@@ -509,9 +516,9 @@ final readonly class SurveyReportingProvider implements ProviderInterface
     }
 
     /**
-     * @param array<int, CSurveyQuestion> $questions
+     * @param array<int, CSurveyQuestion>                   $questions
      * @param array<int, array<int, CSurveyQuestionOption>> $optionsByQuestion
-     * @param array<int, CSurveyAnswer> $answers
+     * @param array<int, CSurveyAnswer>                     $answers
      *
      * @return array<int, array<string, mixed>>
      */
@@ -560,7 +567,7 @@ final readonly class SurveyReportingProvider implements ProviderInterface
 
     /**
      * @param array<int, CSurveyQuestionOption> $options
-     * @param array<int, CSurveyAnswer> $answers
+     * @param array<int, CSurveyAnswer>         $answers
      *
      * @return array<int, array<string, mixed>>
      */
@@ -574,7 +581,7 @@ final readonly class SurveyReportingProvider implements ProviderInterface
         $counts = [];
         foreach ($answers as $answer) {
             $optionId = $this->getBaseOptionId($answer->getOptionId());
-            if (0 >= $optionId) {
+            if ($optionId <= 0) {
                 continue;
             }
 
@@ -594,7 +601,7 @@ final readonly class SurveyReportingProvider implements ProviderInterface
                 'id' => $optionId,
                 'label' => $this->cleanOptionText($option->getOptionText()),
                 'count' => $count,
-                'percentage' => 0 < $total ? round($count / $total * 100, 2) : 0,
+                'percentage' => $total > 0 ? round($count / $total * 100, 2) : 0,
             ];
         }
 
@@ -635,7 +642,7 @@ final readonly class SurveyReportingProvider implements ProviderInterface
 
     /**
      * @param array<int, CSurveyQuestionOption> $options
-     * @param array<int, CSurveyAnswer> $answers
+     * @param array<int, CSurveyAnswer>         $answers
      *
      * @return array<int, array<string, mixed>>
      */
@@ -649,7 +656,7 @@ final readonly class SurveyReportingProvider implements ProviderInterface
         foreach ($answers as $answer) {
             $optionId = $this->getBaseOptionId($answer->getOptionId());
             $score = (int) $answer->getValue();
-            if (0 >= $optionId || 0 >= $score) {
+            if ($optionId <= 0 || $score <= 0) {
                 continue;
             }
 
@@ -691,9 +698,9 @@ final readonly class SurveyReportingProvider implements ProviderInterface
     }
 
     /**
-     * @param array<int, CSurveyQuestion> $questions
+     * @param array<int, CSurveyQuestion>                   $questions
      * @param array<int, array<int, CSurveyQuestionOption>> $optionsByQuestion
-     * @param array<int, CSurveyAnswer> $answers
+     * @param array<int, CSurveyAnswer>                     $answers
      *
      * @return array<int, array<string, mixed>>
      */
@@ -727,10 +734,10 @@ final readonly class SurveyReportingProvider implements ProviderInterface
     }
 
     /**
-     * @param array<string, array<string, mixed>>|null $users
-     * @param array<int, CSurveyQuestion>|null $questions
+     * @param array<string, array<string, mixed>>|null           $users
+     * @param array<int, CSurveyQuestion>|null                   $questions
      * @param array<int, array<int, CSurveyQuestionOption>>|null $optionsByQuestion
-     * @param array<int, CSurveyAnswer>|null $answers
+     * @param array<int, CSurveyAnswer>|null                     $answers
      *
      * @return array<int, array<string, mixed>>
      */
@@ -776,7 +783,7 @@ final readonly class SurveyReportingProvider implements ProviderInterface
 
     /**
      * @param array<int, CSurveyQuestionOption> $options
-     * @param array<int, CSurveyAnswer> $answers
+     * @param array<int, CSurveyAnswer>         $answers
      */
     private function formatAnswerText(CSurveyQuestion $question, array $options, array $answers): string
     {
@@ -794,17 +801,20 @@ final readonly class SurveyReportingProvider implements ProviderInterface
             $type = $question->getType();
             if ('open' === $type || 'comment' === $type) {
                 $items[] = $this->cleanText($answer->getOptionId());
+
                 continue;
             }
 
             if ('score' === $type) {
                 $optionId = $this->getBaseOptionId($answer->getOptionId());
                 $items[] = ($optionLabels[$optionId] ?? (string) $optionId).': '.(int) $answer->getValue();
+
                 continue;
             }
 
             if ('multiplechoiceother' === $type && '' !== $this->getOtherText($answer->getOptionId())) {
                 $items[] = $this->getOtherText($answer->getOptionId());
+
                 continue;
             }
 
@@ -859,7 +869,6 @@ final readonly class SurveyReportingProvider implements ProviderInterface
             'zip' => $baseUrl.'/export.zip',
         ];
     }
-
 
     private function buildCsvContent(CSurvey $survey, Course $course, ?Session $session, Request $request, bool $compact): string
     {
@@ -933,6 +942,7 @@ final readonly class SurveyReportingProvider implements ProviderInterface
 
             if ($this->questionUsesSingleExportColumn($question, $options)) {
                 $optionHeader[] = '';
+
                 continue;
             }
 
@@ -996,7 +1006,7 @@ final readonly class SurveyReportingProvider implements ProviderInterface
                 $matrix[] = $row['values'];
             }
 
-            if (3 === count($matrix)) {
+            if (3 === \count($matrix)) {
                 $matrix[] = ['No answers found'];
             }
 
@@ -1009,7 +1019,7 @@ final readonly class SurveyReportingProvider implements ProviderInterface
     }
 
     /**
-     * @param array<int, CSurveyQuestion> $questions
+     * @param array<int, CSurveyQuestion>                   $questions
      * @param array<int, array<int, CSurveyQuestionOption>> $optionsByQuestion
      *
      * @return array<int, array<int, string>>
@@ -1027,6 +1037,7 @@ final readonly class SurveyReportingProvider implements ProviderInterface
 
             if ($this->questionUsesSingleExportColumn($question, $options)) {
                 $optionHeader[] = '';
+
                 continue;
             }
 
@@ -1039,10 +1050,10 @@ final readonly class SurveyReportingProvider implements ProviderInterface
     }
 
     /**
-     * @param array<int, CSurveyQuestion> $questions
+     * @param array<int, CSurveyQuestion>                   $questions
      * @param array<int, array<int, CSurveyQuestionOption>> $optionsByQuestion
-     * @param array<int, CSurveyAnswer> $answers
-     * @param array<string, array<string, mixed>> $users
+     * @param array<int, CSurveyAnswer>                     $answers
+     * @param array<string, array<string, mixed>>           $users
      *
      * @return array<int, array<string, mixed>>
      */
@@ -1075,7 +1086,7 @@ final readonly class SurveyReportingProvider implements ProviderInterface
 
     /**
      * @param array<int, CSurveyQuestionOption> $options
-     * @param array<int, CSurveyAnswer> $answers
+     * @param array<int, CSurveyAnswer>         $answers
      *
      * @return array<int, string>
      */
@@ -1103,7 +1114,7 @@ final readonly class SurveyReportingProvider implements ProviderInterface
                 continue;
             }
 
-            if ('score' === $question->getType() && 0 < (int) $answer->getValue()) {
+            if ('score' === $question->getType() && (int) $answer->getValue() > 0) {
                 return (string) (int) $answer->getValue();
             }
 
@@ -1111,7 +1122,7 @@ final readonly class SurveyReportingProvider implements ProviderInterface
                 return $this->getOtherText($answer->getOptionId());
             }
 
-            if (0 < (int) $answer->getValue()) {
+            if ((int) $answer->getValue() > 0) {
                 return (string) (int) $answer->getValue();
             }
 
@@ -1170,7 +1181,7 @@ final readonly class SurveyReportingProvider implements ProviderInterface
         ));
     }
 
-    private function fillWorksheet(\PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $sheet, array $matrix): void
+    private function fillWorksheet(Worksheet $sheet, array $matrix): void
     {
         foreach ($matrix as $rowIndex => $row) {
             foreach ($row as $columnIndex => $value) {
@@ -1178,9 +1189,9 @@ final readonly class SurveyReportingProvider implements ProviderInterface
             }
         }
 
-        $highestColumnIndex = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($sheet->getHighestColumn());
+        $highestColumnIndex = Coordinate::columnIndexFromString($sheet->getHighestColumn());
         for ($columnIndex = 1; $columnIndex <= $highestColumnIndex; $columnIndex++) {
-            $column = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($columnIndex);
+            $column = Coordinate::stringFromColumnIndex($columnIndex);
             $sheet->getColumnDimension($column)->setAutoSize(true);
         }
     }
@@ -1210,7 +1221,7 @@ final readonly class SurveyReportingProvider implements ProviderInterface
 
     private function buildWorksheetTitle(string $title): string
     {
-        $title = preg_replace('/[\\/?*:\[\]]+/', ' ', $this->cleanText($title)) ?: 'Class';
+        $title = preg_replace('/[\/?*:\[\]]+/', ' ', $this->cleanText($title)) ?: 'Class';
         $title = trim($title);
 
         return mb_substr('' !== $title ? $title : 'Class', 0, 31);

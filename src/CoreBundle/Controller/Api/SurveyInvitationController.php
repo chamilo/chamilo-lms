@@ -24,7 +24,7 @@ final class SurveyInvitationController extends AbstractController
         private readonly SurveyInvitationProcessor $surveyInvitationProcessor,
     ) {}
 
-    #[Route('/{surveyId}', name: 'api_survey_invitations_get', requirements: ['surveyId' => '\\d+'], methods: ['GET'])]
+    #[Route('/{surveyId}', name: 'api_survey_invitations_get', requirements: ['surveyId' => '\d+'], methods: ['GET'])]
     public function getInvitations(int $surveyId): JsonResponse
     {
         $data = $this->surveyInvitationProvider->provide(
@@ -35,7 +35,7 @@ final class SurveyInvitationController extends AbstractController
         return $this->json($data);
     }
 
-    #[Route('/{surveyId}/publish', name: 'api_survey_invitations_publish', requirements: ['surveyId' => '\\d+'], methods: ['POST'])]
+    #[Route('/{surveyId}/publish', name: 'api_survey_invitations_publish', requirements: ['surveyId' => '\d+'], methods: ['POST'])]
     public function publishInvitations(int $surveyId): JsonResponse
     {
         $data = $this->surveyInvitationProcessor->process(

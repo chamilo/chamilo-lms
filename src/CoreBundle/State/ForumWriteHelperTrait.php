@@ -20,6 +20,9 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
+use const FILTER_VALIDATE_BOOLEAN;
+use const JSON_THROW_ON_ERROR;
+
 trait ForumWriteHelperTrait
 {
     private const FORUM_ACTION_TOKEN_INTENTION = 'forum_action';
@@ -68,7 +71,7 @@ trait ForumWriteHelperTrait
     private function getRequiredInt(array $data, string $key): int
     {
         $value = (int) ($data[$key] ?? 0);
-        if (0 >= $value) {
+        if ($value <= 0) {
             throw new BadRequestHttpException('Invalid '.$key.'.');
         }
 
@@ -93,7 +96,7 @@ trait ForumWriteHelperTrait
             throw new BadRequestHttpException('Missing '.$key.'.');
         }
 
-        if (0 < $maxLength) {
+        if ($maxLength > 0) {
             $value = mb_substr(strip_tags($value), 0, $maxLength);
         }
 
@@ -106,7 +109,7 @@ trait ForumWriteHelperTrait
     private function getOptionalText(array $data, string $key, int $maxLength = 0): string
     {
         $value = trim((string) ($data[$key] ?? ''));
-        if (0 < $maxLength) {
+        if ($maxLength > 0) {
             $value = mb_substr(strip_tags($value), 0, $maxLength);
         }
 

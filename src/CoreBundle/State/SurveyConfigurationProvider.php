@@ -71,7 +71,7 @@ final readonly class SurveyConfigurationProvider implements ProviderInterface
         }
 
         $surveyId = isset($uriVariables['surveyId']) ? (int) $uriVariables['surveyId'] : 0;
-        if (0 < $surveyId) {
+        if ($surveyId > 0) {
             return $this->buildEditConfiguration($surveyId, $course, $session);
         }
 
@@ -149,7 +149,7 @@ final readonly class SurveyConfigurationProvider implements ProviderInterface
     private function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -164,7 +164,7 @@ final readonly class SurveyConfigurationProvider implements ProviderInterface
     private function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -433,7 +433,7 @@ final readonly class SurveyConfigurationProvider implements ProviderInterface
             ? (int) $survey->getResourceNode()->getId()
             : (int) $course->getId();
 
-        return sprintf(
+        return \sprintf(
             '/resources/survey/%d/%d/questions?%s',
             $nodeId,
             (int) $survey->getIid(),
@@ -443,7 +443,6 @@ final readonly class SurveyConfigurationProvider implements ProviderInterface
             ]),
         );
     }
-
 
     private function isSurveyEditionHidden(CSurvey $survey): bool
     {
@@ -457,17 +456,17 @@ final readonly class SurveyConfigurationProvider implements ProviderInterface
         }
 
         $code = (string) $survey->getCode();
-        if (is_array($value)) {
+        if (\is_array($value)) {
             if (isset($value['codes']) && '*' === $value['codes']) {
                 return true;
             }
 
             $codes = $value['codes'] ?? $value;
 
-            return is_array($codes) && \in_array($code, $codes, true);
+            return \is_array($codes) && \in_array($code, $codes, true);
         }
 
-        if (!is_string($value)) {
+        if (!\is_string($value)) {
             return false;
         }
 
@@ -498,5 +497,4 @@ final readonly class SurveyConfigurationProvider implements ProviderInterface
     {
         return $date?->format(DateTimeInterface::ATOM);
     }
-
 }

@@ -103,7 +103,7 @@ final class ForumCollectionStateProvider implements ProviderInterface
 
     private function shouldDisplayGroupForumsInGeneralTool(Request $request): bool
     {
-        if (0 < $request->query->getInt('gid')) {
+        if ($request->query->getInt('gid') > 0) {
             return true;
         }
 
@@ -126,7 +126,7 @@ final class ForumCollectionStateProvider implements ProviderInterface
             return false;
         }
 
-        return 1 === (int) \api_get_course_setting('hide_forum_notifications', $course);
+        return 1 === (int) api_get_course_setting('hide_forum_notifications', $course);
     }
 
     private function isSubscribedToForum(Course $course, User $user, int $forumId): bool

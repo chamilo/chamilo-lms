@@ -21,7 +21,6 @@ use Chamilo\CourseBundle\Entity\CSurveyInvitation;
 use Chamilo\CourseBundle\Repository\CGroupRepository;
 use DateTime;
 use Doctrine\DBAL\Types\Types;
-use Throwable;
 use Doctrine\ORM\EntityManagerInterface;
 use MessageManager;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,6 +29,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Throwable;
 
 /**
  * @implements ProcessorInterface<SurveyInvitation, SurveyInvitation>
@@ -64,7 +64,7 @@ final readonly class SurveyInvitationProcessor implements ProcessorInterface
         $course = $this->surveyInvitationProvider->getCourse($request);
         $session = $this->surveyInvitationProvider->getSession($request);
         $surveyId = isset($uriVariables['surveyId']) ? (int) $uriVariables['surveyId'] : 0;
-        if (0 >= $surveyId) {
+        if ($surveyId <= 0) {
             throw new BadRequestHttpException('A valid survey id is required.');
         }
 
@@ -136,7 +136,7 @@ final readonly class SurveyInvitationProcessor implements ProcessorInterface
         $this->updateSurveyCounters($survey, $course, $session);
         $this->entityManager->flush();
 
-        $message = sprintf('Survey published. Created: %d. Updated: %d. Messages sent: %d.', $created, $updated, $sent);
+        $message = \sprintf('Survey published. Created: %d. Updated: %d. Messages sent: %d.', $created, $updated, $sent);
 
         return $this->surveyInvitationProvider->buildResponse($survey, $course, $session, $message);
     }
@@ -318,9 +318,9 @@ final readonly class SurveyInvitationProcessor implements ProcessorInterface
     }
 
     /**
-     * @param array<int, int> $selectedUserIds
-     * @param array<int, int> $selectedGroupIds
-     * @param array<int, User> $availableUsers
+     * @param array<int, int>    $selectedUserIds
+     * @param array<int, int>    $selectedGroupIds
+     * @param array<int, User>   $availableUsers
      * @param array<int, CGroup> $groups
      *
      * @return array<int, array{user: User, group?: CGroup}>
@@ -444,7 +444,7 @@ final readonly class SurveyInvitationProcessor implements ProcessorInterface
 
         $messageId = MessageManager::send_message_simple((int) $userId, $subject, $body);
 
-        return false !== $messageId && 0 < (int) $messageId;
+        return false !== $messageId && (int) $messageId > 0;
     }
 
     private function buildMailBody(string $content, string $link, bool $hideLink): string
@@ -457,7 +457,7 @@ final readonly class SurveyInvitationProcessor implements ProcessorInterface
         $replaceCount = 0;
         $body = str_ireplace('**link**', $linkHtml, $content, $replaceCount);
 
-        if (1 > $replaceCount) {
+        if ($replaceCount < 1) {
             $body .= '<br><br>'.$linkHtml;
         }
 
@@ -502,7 +502,7 @@ final readonly class SurveyInvitationProcessor implements ProcessorInterface
         $items = [];
         foreach ($value as $item) {
             $id = (int) $item;
-            if (0 < $id) {
+            if ($id > 0) {
                 $items[] = $id;
             }
         }
@@ -537,7 +537,7 @@ final readonly class SurveyInvitationProcessor implements ProcessorInterface
             : (int) $course->getId();
         $route = 3 === $survey->getSurveyType() ? 'meeting' : 'answer';
 
-        return sprintf(
+        return \sprintf(
             '/resources/survey/%d/%d/%s?%s',
             $nodeId,
             (int) $survey->getIid(),
@@ -549,5 +549,4 @@ final readonly class SurveyInvitationProcessor implements ProcessorInterface
             ]),
         );
     }
-
 }

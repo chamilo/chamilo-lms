@@ -9,10 +9,10 @@ namespace Chamilo\CoreBundle\State;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CourseBundle\Entity\CForumCategory;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Chamilo\CourseBundle\Repository\CForumCategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
@@ -22,9 +22,9 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
  */
 final class ForumCategoryProcessor implements ProcessorInterface
 {
+    use ForumActionStateHelperTrait;
     use ForumStateHelperTrait;
     use ForumWriteHelperTrait;
-    use ForumActionStateHelperTrait;
 
     public function __construct(
         private readonly EntityManagerInterface $entityManager,

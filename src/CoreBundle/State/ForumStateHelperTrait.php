@@ -16,11 +16,13 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
+use Event;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Throwable;
 
 trait ForumStateHelperTrait
 {
@@ -56,7 +58,7 @@ trait ForumStateHelperTrait
     private function getCourse(EntityManagerInterface $entityManager, Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('Missing course id.');
         }
 
@@ -71,7 +73,7 @@ trait ForumStateHelperTrait
     private function getSession(EntityManagerInterface $entityManager, Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -86,7 +88,7 @@ trait ForumStateHelperTrait
     private function getGroup(EntityManagerInterface $entityManager, Request $request): ?CGroup
     {
         $groupId = $request->query->getInt('gid');
-        if (0 >= $groupId) {
+        if ($groupId <= 0) {
             return null;
         }
 
@@ -101,7 +103,7 @@ trait ForumStateHelperTrait
     private function getParentNode(EntityManagerInterface $entityManager, Request $request): ResourceNode
     {
         $parentNodeId = $request->query->getInt('resourceNode_parent', $request->query->getInt('resourceNode.parent'));
-        if (0 >= $parentNodeId) {
+        if ($parentNodeId <= 0) {
             throw new BadRequestHttpException('Missing resource node parent.');
         }
 
@@ -173,7 +175,7 @@ trait ForumStateHelperTrait
 
     private function canListForumWithCurrentSettings(CForum $forum, Request $request, bool $displayGroupForums): bool
     {
-        if ($displayGroupForums || 0 < $request->query->getInt('gid')) {
+        if ($displayGroupForums || $request->query->getInt('gid') > 0) {
             return true;
         }
 
@@ -182,7 +184,7 @@ trait ForumStateHelperTrait
 
     private function registerForumEventLog(string $action, string $details = '', string $info = ''): void
     {
-        if (!\class_exists('Event')) {
+        if (!class_exists('Event')) {
             return;
         }
 
@@ -197,8 +199,8 @@ trait ForumStateHelperTrait
         }
 
         try {
-            \Event::registerLog($logInfo);
-        } catch (\Throwable) {
+            Event::registerLog($logInfo);
+        } catch (Throwable) {
             // Tracking must never break forum actions.
         }
     }

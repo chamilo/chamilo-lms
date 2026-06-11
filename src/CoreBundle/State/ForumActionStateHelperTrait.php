@@ -17,6 +17,8 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
+use const FILTER_VALIDATE_BOOLEAN;
+
 trait ForumActionStateHelperTrait
 {
     private function assertEditableForumResource(?ResourceNode $resourceNode, Security $security): void

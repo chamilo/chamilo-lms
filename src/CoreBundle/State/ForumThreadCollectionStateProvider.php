@@ -10,7 +10,6 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Forum\ForumThreadsByForum;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumCategory;
@@ -18,7 +17,6 @@ use Chamilo\CourseBundle\Entity\CForumNotification;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use Chamilo\CourseBundle\Repository\CForumRepository;
-use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -59,7 +57,7 @@ final class ForumThreadCollectionStateProvider implements ProviderInterface
         }
 
         $forumId = (int) ($uriVariables['forumId'] ?? 0);
-        if (0 >= $forumId) {
+        if ($forumId <= 0) {
             $forumId = $this->parseApiId($request->query->get('forum'));
         }
 
@@ -150,7 +148,7 @@ final class ForumThreadCollectionStateProvider implements ProviderInterface
             return false;
         }
 
-        return 1 === (int) \api_get_course_setting('hide_forum_notifications', $course);
+        return 1 === (int) api_get_course_setting('hide_forum_notifications', $course);
     }
 
     private function isSubscribedToThread(Course $course, User $user, int $threadId): bool
@@ -188,7 +186,7 @@ final class ForumThreadCollectionStateProvider implements ProviderInterface
             'threadQualifyMax' => $thread->getThreadQualifyMax(),
             'threadWeight' => $thread->getThreadWeight(),
             'threadPeerQualify' => $thread->isThreadPeerQualify(),
-            'gradebookEnabled' => 0 < $thread->getThreadQualifyMax(),
+            'gradebookEnabled' => $thread->getThreadQualifyMax() > 0,
             'posterFullName' => $thread->getPosterFullName(),
             'pendingPostCount' => $pendingPostCount,
             'subscribed' => $subscribed,

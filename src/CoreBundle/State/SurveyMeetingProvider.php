@@ -62,7 +62,7 @@ final readonly class SurveyMeetingProvider implements ProviderInterface
         $session = $this->getSession($request);
         $surveyId = isset($uriVariables['surveyId']) ? (int) $uriVariables['surveyId'] : 0;
 
-        if (0 >= $surveyId) {
+        if ($surveyId <= 0) {
             if (!$this->canManageSurveys()) {
                 throw new AccessDeniedHttpException('You are not allowed to create meeting polls.');
             }
@@ -168,7 +168,7 @@ final readonly class SurveyMeetingProvider implements ProviderInterface
     public function getCourse(Request $request): Course
     {
         $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
+        if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -183,7 +183,7 @@ final readonly class SurveyMeetingProvider implements ProviderInterface
     public function getSession(Request $request): ?Session
     {
         $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
+        if ($sessionId <= 0) {
             return null;
         }
 
@@ -304,7 +304,7 @@ final readonly class SurveyMeetingProvider implements ProviderInterface
         $base = new DateTime('tomorrow 09:00');
         $slots = [];
         for ($i = 0; $i < 3; $i++) {
-            $start = (clone $base)->modify(sprintf('+%d day', $i));
+            $start = (clone $base)->modify(\sprintf('+%d day', $i));
             $end = (clone $start)->modify('+1 hour');
             $slots[] = [
                 'id' => null,
@@ -336,7 +336,7 @@ final readonly class SurveyMeetingProvider implements ProviderInterface
         ;
 
         $sessionId = $request->query->getInt('sid');
-        if (0 < $sessionId) {
+        if ($sessionId > 0) {
             $rows
                 ->andWhere('answer.sessionId = :sessionId')
                 ->setParameter('sessionId', $sessionId, Types::INTEGER)

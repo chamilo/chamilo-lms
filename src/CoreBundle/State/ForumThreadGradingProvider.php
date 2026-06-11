@@ -87,7 +87,7 @@ final class ForumThreadGradingProvider implements ProviderInterface
         $link = $this->findGradebookLink($course, $thread);
 
         return ForumThreadGrading::fromArray($threadId, [
-            'enabled' => $link instanceof GradebookLink || 0 < $thread->getThreadQualifyMax(),
+            'enabled' => $link instanceof GradebookLink || $thread->getThreadQualifyMax() > 0,
             'categoryId' => $link?->getCategory()->getId(),
             'title' => $thread->getThreadTitleQualify() ?: $thread->getTitle(),
             'maxScore' => $thread->getThreadQualifyMax(),
@@ -121,7 +121,7 @@ final class ForumThreadGradingProvider implements ProviderInterface
         ?Session $session,
         User $currentUser,
     ): bool {
-        if (!$thread->isThreadPeerQualify() || 0 >= $thread->getThreadQualifyMax()) {
+        if (!$thread->isThreadPeerQualify() || $thread->getThreadQualifyMax() <= 0) {
             return false;
         }
 

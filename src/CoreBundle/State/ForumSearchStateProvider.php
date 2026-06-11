@@ -114,10 +114,9 @@ final class ForumSearchStateProvider implements ProviderInterface
         ];
     }
 
-
     private function shouldDisplayGroupForumsInGeneralTool(Request $request): bool
     {
-        if (0 < $request->query->getInt('gid')) {
+        if ($request->query->getInt('gid') > 0) {
             return true;
         }
 
@@ -126,7 +125,7 @@ final class ForumSearchStateProvider implements ProviderInterface
 
     private function canListForumWithCurrentSettings(CForum $forum, Request $request, bool $displayGroupForums): bool
     {
-        if ($displayGroupForums || 0 < $request->query->getInt('gid')) {
+        if ($displayGroupForums || $request->query->getInt('gid') > 0) {
             return true;
         }
 
@@ -380,7 +379,7 @@ final class ForumSearchStateProvider implements ProviderInterface
             return false;
         }
 
-        return $showHidden || 0 < $this->countVisiblePosts($thread);
+        return $showHidden || $this->countVisiblePosts($thread) > 0;
     }
 
     private function canReadPost(
@@ -402,7 +401,6 @@ final class ForumSearchStateProvider implements ProviderInterface
 
         return $post->getVisible() && CForumPost::STATUS_VALIDATED === $status;
     }
-
 
     private function resourceBelongsToContext(AbstractResource $resource, Course $course, ?Session $session): bool
     {

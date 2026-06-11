@@ -9,13 +9,12 @@ namespace Chamilo\CoreBundle\State;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Survey\SurveyAnswer;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CSurveyAnswer as CSurveyAnswerEntity;
-use Chamilo\CourseBundle\Entity\CSurveyInvitation;
 use Chamilo\CourseBundle\Entity\CSurveyQuestion;
 use Chamilo\CourseBundle\Entity\CSurveyQuestionOption;
 use DateTime;
-use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -53,7 +52,7 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
         }
 
         $surveyId = isset($uriVariables['surveyId']) ? (int) $uriVariables['surveyId'] : 0;
-        if (0 >= $surveyId) {
+        if ($surveyId <= 0) {
             throw new BadRequestHttpException('A valid survey id is required.');
         }
 
@@ -152,8 +151,8 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
 
     /**
      * @param array<int, CSurveyQuestion> $questions
-     * @param array<string, mixed> $answers
-     * @param array<string, mixed> $otherAnswers
+     * @param array<string, mixed>        $answers
+     * @param array<string, mixed>        $otherAnswers
      */
     private function validateMandatoryAnswers(array $questions, array $answers, array $otherAnswers): void
     {
@@ -194,7 +193,7 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
         }
 
         if ('multipleresponse' === $type) {
-            return \is_array($value) && [] !== array_filter($value, static fn (mixed $optionId): bool => 0 < (int) $optionId);
+            return \is_array($value) && [] !== array_filter($value, static fn (mixed $optionId): bool => (int) $optionId > 0);
         }
 
         return null !== $value && '' !== trim((string) $value) && 0 !== (int) $value;
@@ -236,7 +235,7 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
         ;
 
         $sessionId = $request->query->getInt('sid');
-        if (0 < $sessionId) {
+        if ($sessionId > 0) {
             $queryBuilder
                 ->andWhere('answer.sessionId = :sessionId')
                 ->setParameter('sessionId', $sessionId, Types::INTEGER)
@@ -280,7 +279,7 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
 
         if ('multipleresponse' === $type && \is_array($value)) {
             foreach ($value as $optionId) {
-                if (0 < (int) $optionId) {
+                if ((int) $optionId > 0) {
                     $this->persistAnswer($survey, $question, $answerUserKey, (string) (int) $optionId, 0, $request);
                 }
             }
@@ -290,7 +289,7 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
 
         if ('score' === $type && \is_array($value)) {
             foreach ($value as $optionId => $score) {
-                if (0 < (int) $optionId && '' !== (string) $score) {
+                if ((int) $optionId > 0 && '' !== (string) $score) {
                     $this->persistAnswer($survey, $question, $answerUserKey, (string) (int) $optionId, (int) $score, $request);
                 }
             }
@@ -308,7 +307,7 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
         }
 
         $optionId = (int) $value;
-        if (0 >= $optionId) {
+        if ($optionId <= 0) {
             return;
         }
 
@@ -337,15 +336,15 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
         $optionId = (int) ($answers[$questionId] ?? 0);
         $otherText = trim((string) ($otherAnswers[$questionId] ?? ''));
 
-        if (0 >= $optionId && '' === $otherText) {
+        if ($optionId <= 0 && '' === $otherText) {
             return;
         }
 
-        if ('' !== $otherText && (0 >= $optionId || !$this->isOtherOption($question, $optionId))) {
+        if ('' !== $otherText && ($optionId <= 0 || !$this->isOtherOption($question, $optionId))) {
             $optionId = $this->findOtherOptionId($question);
         }
 
-        if (0 >= $optionId) {
+        if ($optionId <= 0) {
             return;
         }
 
@@ -373,7 +372,7 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
             ->setOptionId($optionId)
             ->setValue($value)
             ->setLpItemId($request->query->getInt('lpItemId'))
-            ->setSessionId(0 < $request->query->getInt('sid') ? $request->query->getInt('sid') : null)
+            ->setSessionId($request->query->getInt('sid') > 0 ? $request->query->getInt('sid') : null)
         ;
 
         $this->entityManager->persist($answer);

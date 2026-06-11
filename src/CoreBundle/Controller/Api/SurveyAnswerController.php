@@ -24,7 +24,7 @@ final class SurveyAnswerController extends AbstractController
         private readonly SurveyAnswerProcessor $surveyAnswerProcessor,
     ) {}
 
-    #[Route('/{surveyId}', name: 'api_survey_answer_get', requirements: ['surveyId' => '\\d+'], methods: ['GET'])]
+    #[Route('/{surveyId}', name: 'api_survey_answer_get', requirements: ['surveyId' => '\d+'], methods: ['GET'])]
     public function getSurveyAnswer(int $surveyId): JsonResponse
     {
         $data = $this->surveyAnswerProvider->provide(
@@ -35,7 +35,7 @@ final class SurveyAnswerController extends AbstractController
         return $this->json($data);
     }
 
-    #[Route('/{surveyId}', name: 'api_survey_answer_submit', requirements: ['surveyId' => '\\d+'], methods: ['POST'])]
+    #[Route('/{surveyId}', name: 'api_survey_answer_submit', requirements: ['surveyId' => '\d+'], methods: ['POST'])]
     public function submitSurveyAnswer(int $surveyId): JsonResponse
     {
         $data = $this->surveyAnswerProcessor->process(

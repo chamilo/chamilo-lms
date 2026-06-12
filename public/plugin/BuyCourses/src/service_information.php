@@ -77,10 +77,6 @@ if (!empty($service['service_information'])) {
     $serviceDetailsHtml = (string) $service['description'];
 }
 
-$serviceImage = !empty($service['image'])
-    ? (string) $service['image']
-    : Template::get_icon_path('session_default.png');
-
 $durationDays = (int) ($service['duration_days'] ?? 0);
 $durationLabel = $durationDays > 0
     ? $durationDays.' '.($durationDays === 1 ? 'day' : 'days')
@@ -111,7 +107,6 @@ $backUrl = $isPurchasedContext
 $template = new Template($service['name'] ?? $plugin->get_lang('ServiceInformation'));
 $template->assign('service', $service);
 $template->assign('service_sale', $serviceSale);
-$template->assign('service_image', $serviceImage);
 $template->assign('service_details_html', $serviceDetailsHtml);
 $template->assign('service_description', $serviceDescription);
 $template->assign('pageUrl', $pageUrl);

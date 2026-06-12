@@ -47,7 +47,7 @@
     </div>
 
     <article class="bc-info-hero">
-        <div class="bc-info-hero__image-wrap"><img src="{{ service_image|e }}" alt="{{ service.name|e }}" class="bc-info-hero__image"></div>
+        <div class="bc-info-hero__image-wrap"><img src="{{ (service.image|default('') ?: _p.web_img ~ 'session_default.svg')|e }}" alt="{{ service.name|e }}" class="bc-info-hero__image"></div>
         <div class="bc-info-hero__body">
             <div class="bc-info-badges">
                 {% if applies_to_label %}<span class="bc-info-badge">{{ applies_to_label|e }}</span>{% endif %}

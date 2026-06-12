@@ -117,7 +117,7 @@ class BuyCoursesPlugin extends Plugin
     public function __construct()
     {
         parent::__construct(
-            '7.1',
+            '7.5',
             '
                 Jose Angel Ruiz - NoSoloRed (original author) <br/>
                 Francis Gonzales and Yannick Warnier - BeezNest (integration) <br/>
@@ -363,6 +363,16 @@ class BuyCoursesPlugin extends Plugin
             if (!$res) {
                 echo Display::return_message($this->get_lang('ErrorUpdateFieldDB'), 'warning');
             }
+        } else {
+            // An empty tax rate must be stored as NULL so the service falls back to the
+            // global tax rate. Older installations created this column as NOT NULL.
+            $column = Database::fetch_assoc($res);
+            if (isset($column['Null']) && 'NO' === $column['Null']) {
+                $res = Database::query("ALTER TABLE $table MODIFY tax_perc int unsigned NULL");
+                if (!$res) {
+                    echo Display::return_message($this->get_lang('ErrorUpdateFieldDB'), 'warning');
+                }
+            }
         }
 
         $table = Database::get_main_table(self::TABLE_SALE);
@@ -575,6 +585,17 @@ class BuyCoursesPlugin extends Plugin
             PRIMARY KEY (product_type, product_id, duration)
         )";
         Database::query($sql);
+
+        // An empty tax rate must be stored as NULL so the subscription falls back to the
+        // global tax rate. Older installations created this column as NOT NULL.
+        $res = Database::query("SHOW COLUMNS FROM $table WHERE Field = 'tax_perc'");
+        $column = Database::fetch_assoc($res);
+        if (isset($column['Null']) && 'NO' === $column['Null']) {
+            $res = Database::query("ALTER TABLE $table MODIFY tax_perc int unsigned NULL");
+            if (!$res) {
+                echo Display::return_message($this->get_lang('ErrorUpdateFieldDB'), 'warning');
+            }
+        }
 
         $table = Database::get_main_table(self::TABLE_SUBSCRIPTION_SALE);
         $sql = "CREATE TABLE IF NOT EXISTS $table (
@@ -1740,7 +1761,7 @@ class BuyCoursesPlugin extends Plugin
             return null;
         }
 
-        $this->setPriceSettings($product, self::TAX_APPLIES_TO_ONLY_COURSE, $coupon);
+        $this->setPriceSettings($product, $this->getTaxCategoryForProductType($itemType), $coupon);
 
         return $product;
     }
@@ -1810,7 +1831,7 @@ class BuyCoursesPlugin extends Plugin
             return null;
         }
 
-        $this->setPriceSettings($item, self::TAX_APPLIES_TO_ONLY_COURSE, $coupon);
+        $this->setPriceSettings($item, $this->getTaxCategoryForProductType($itemType), $coupon);
 
         return $item;
     }
@@ -1850,7 +1871,7 @@ class BuyCoursesPlugin extends Plugin
         }
 
         for ($i = 0; $i < count($items); $i++) {
-            $this->setPriceSettings($items[$i], self::TAX_APPLIES_TO_ONLY_COURSE);
+            $this->setPriceSettings($items[$i], $this->getTaxCategoryForProductType($itemType));
         }
 
         if (empty($items)) {
@@ -6020,6 +6041,20 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
+     * Map a product type to the matching "tax applies to" category, so the displayed
+     * price uses the same tax rule as the sale. Services are always services; everything
+     * else is a course unless it is explicitly a session.
+     */
+    public function getTaxCategoryForProductType(int $productType): int
+    {
+        return match ($productType) {
+            self::PRODUCT_TYPE_SESSION => self::TAX_APPLIES_TO_ONLY_SESSION,
+            self::PRODUCT_TYPE_SERVICE => self::TAX_APPLIES_TO_ONLY_SERVICES,
+            default => self::TAX_APPLIES_TO_ONLY_COURSE,
+        };
+    }
+
+    /**
      * Get the path.
      */
     public function getPath(string $var): string
@@ -6696,7 +6731,7 @@ class BuyCoursesPlugin extends Plugin
 
         $subscription['iso_code'] = $currency['iso_code'];
 
-        $this->setPriceSettings($subscription, self::TAX_APPLIES_TO_ONLY_COURSE, $coupon);
+        $this->setPriceSettings($subscription, $this->getTaxCategoryForProductType($productType), $coupon);
 
         return $subscription;
     }

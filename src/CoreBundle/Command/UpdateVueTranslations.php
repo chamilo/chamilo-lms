@@ -13,6 +13,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Translation\TranslatorBagInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -43,6 +44,19 @@ class UpdateVueTranslations extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        // Clear the compiled translation catalogue cache first. In prod the translator
+        // serves cached catalogues from var/cache/<env>/translations without checking
+        // whether the .po files changed, so without this step the command would write
+        // stale English fallbacks into the locale JSON files. The translator loads
+        // catalogues lazily, so removing the cache here forces a rebuild from the .po
+        // files on first use below.
+        $translationCacheDir = $this->parameterBag->get('kernel.cache_dir').'/translations';
+        $filesystem = new Filesystem();
+        if ($filesystem->exists($translationCacheDir)) {
+            $filesystem->remove($translationCacheDir);
+            $output->writeln("Cleared compiled translation cache: $translationCacheDir");
+        }
+
         $languages = $this->languageRepository->findAll();
         $dir = $this->parameterBag->get('kernel.project_dir');
 

@@ -117,7 +117,7 @@ class BuyCoursesPlugin extends Plugin
     public function __construct()
     {
         parent::__construct(
-            '7.1',
+            '7.5',
             '
                 Jose Angel Ruiz - NoSoloRed (original author) <br/>
                 Francis Gonzales and Yannick Warnier - BeezNest (integration) <br/>
@@ -363,6 +363,16 @@ class BuyCoursesPlugin extends Plugin
             if (!$res) {
                 echo Display::return_message($this->get_lang('ErrorUpdateFieldDB'), 'warning');
             }
+        } else {
+            // An empty tax rate must be stored as NULL so the service falls back to the
+            // global tax rate. Older installations created this column as NOT NULL.
+            $column = Database::fetch_assoc($res);
+            if (isset($column['Null']) && 'NO' === $column['Null']) {
+                $res = Database::query("ALTER TABLE $table MODIFY tax_perc int unsigned NULL");
+                if (!$res) {
+                    echo Display::return_message($this->get_lang('ErrorUpdateFieldDB'), 'warning');
+                }
+            }
         }
 
         $table = Database::get_main_table(self::TABLE_SALE);
@@ -575,6 +585,17 @@ class BuyCoursesPlugin extends Plugin
             PRIMARY KEY (product_type, product_id, duration)
         )";
         Database::query($sql);
+
+        // An empty tax rate must be stored as NULL so the subscription falls back to the
+        // global tax rate. Older installations created this column as NOT NULL.
+        $res = Database::query("SHOW COLUMNS FROM $table WHERE Field = 'tax_perc'");
+        $column = Database::fetch_assoc($res);
+        if (isset($column['Null']) && 'NO' === $column['Null']) {
+            $res = Database::query("ALTER TABLE $table MODIFY tax_perc int unsigned NULL");
+            if (!$res) {
+                echo Display::return_message($this->get_lang('ErrorUpdateFieldDB'), 'warning');
+            }
+        }
 
         $table = Database::get_main_table(self::TABLE_SUBSCRIPTION_SALE);
         $sql = "CREATE TABLE IF NOT EXISTS $table (

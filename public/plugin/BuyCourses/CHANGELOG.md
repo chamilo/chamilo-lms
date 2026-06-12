@@ -1,3 +1,18 @@
+v7.5 - 2026-06-12
+====
+Fix: an empty tax rate on a service or a subscription can now be saved again, and is stored
+as NULL so the item falls back to the global tax rate (as intended). Older installations
+created the `tax_perc` column as NOT NULL on the services and subscription tables, which made
+saving an empty tax rate fail with "Column 'tax_perc' cannot be null".
+
+ACTION REQUIRED for installations updated from an earlier version: run the update procedure
+so these columns are made nullable. Either load [your-host]/plugin/BuyCourses/update.php in
+your browser as a platform administrator, or run this SQL manually:
+```sql
+ALTER TABLE plugin_buycourses_services MODIFY tax_perc int unsigned NULL;
+ALTER TABLE plugin_buycourses_subscription MODIFY tax_perc int unsigned NULL;
+```
+
 v7.4 - 2022-04-28
 ====
 Add subscriptions support.

@@ -63,6 +63,11 @@ if ($form->validate()) {
     if (isset($values['min_score']) && $values['min_score'] !== '') {
         $link->set_min_score(api_float_val($values['min_score']));
     }
+
+    if (LINK_FORUM_PARTICIPATION == $link->get_type()) {
+        $link->set_points_one(isset($values['points_one']) ? api_float_val($values['points_one']) : null);
+        $link->set_points_many(isset($values['points_many']) ? api_float_val($values['points_many']) : null);
+    }
     $link->save();
 
     //Update weight for attendance

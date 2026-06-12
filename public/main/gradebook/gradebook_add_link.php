@@ -99,6 +99,11 @@ if (isset($typeSelected) && '0' != $typeSelected) {
             $link->set_min_score(api_float_val($addvalues['min_score']));
         }
 
+        if (LINK_FORUM_PARTICIPATION == $link->get_type()) {
+            $link->set_points_one(isset($addvalues['points_one']) ? api_float_val($addvalues['points_one']) : null);
+            $link->set_points_many(isset($addvalues['points_many']) ? api_float_val($addvalues['points_many']) : null);
+        }
+
         if ($link->needs_max()) {
             $link->set_max($addvalues['max']);
         }

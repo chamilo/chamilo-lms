@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Enums\GradebookCalculationMode;
 use Chamilo\CourseBundle\Entity\CDocument;
 
 /**
@@ -181,6 +182,7 @@ class CatForm extends FormValidator
                 'generate_certificates' => $this->category_object->getGenerateCertificates(),
                 'is_requirement' => $this->category_object->getIsRequirement(),
                 'allow_skills_by_subcategory' => $this->category_object->getAllowSkillBySubCategory() ? 1 : 0,
+                'calculation_mode' => $this->category_object->getCalculationMode(),
             ]
         );
 
@@ -253,6 +255,18 @@ class CatForm extends FormValidator
             ],
             true,
             ['value' => $value, 'maxlength' => '5']
+        );
+
+        $this->addSelect(
+            'calculation_mode',
+            [
+                get_lang('Calculation mode'),
+                get_lang('Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing.'),
+            ],
+            [
+                GradebookCalculationMode::WEIGHTED_AVERAGE->value => get_lang('Weighted average'),
+                GradebookCalculationMode::POINTS_SUM->value => get_lang('Points sum'),
+            ]
         );
 
         $skillsDefaults = [];

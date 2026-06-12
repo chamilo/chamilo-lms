@@ -14,6 +14,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use Chamilo\CoreBundle\Enums\GradebookCalculationMode;
 use Chamilo\CoreBundle\Traits\CourseTrait;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Chamilo\CourseBundle\Entity\CDocument;
@@ -29,9 +30,9 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new Get(security: "is_granted('ROLE_USER')"),
         new GetCollection(security: "is_granted('ROLE_USER')"),
-        new Post(security: "is_granted('ROLE_TEACHER')"),
-        new Put(security: "is_granted('ROLE_TEACHER')"),
-        new Delete(security: "is_granted('ROLE_TEACHER')"),
+        new Post(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER')"),
+        new Put(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER')"),
+        new Delete(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER')"),
     ],
     normalizationContext: [
         'groups' => ['gradebookCategory:read'],
@@ -158,6 +159,11 @@ class GradebookCategory
 
     #[ORM\Column(name: 'allow_skills_by_subcategory', type: 'integer', nullable: true, options: ['default' => 1])]
     protected ?int $allowSkillsBySubcategory;
+
+    #[Assert\NotNull]
+    #[Groups(['gradebookCategory:read', 'gradebookCategory:write'])]
+    #[ORM\Column(name: 'calculation_mode', type: 'string', length: 32, nullable: false, enumType: GradebookCalculationMode::class, options: ['default' => GradebookCalculationMode::WEIGHTED_AVERAGE->value])]
+    protected GradebookCalculationMode $calculationMode = GradebookCalculationMode::WEIGHTED_AVERAGE;
 
     public function __construct()
     {
@@ -560,6 +566,18 @@ class GradebookCategory
     public function setAllowSkillsBySubcategory($allowSkillsBySubcategory)
     {
         $this->allowSkillsBySubcategory = $allowSkillsBySubcategory;
+
+        return $this;
+    }
+
+    public function getCalculationMode(): GradebookCalculationMode
+    {
+        return $this->calculationMode;
+    }
+
+    public function setCalculationMode(GradebookCalculationMode $calculationMode): self
+    {
+        $this->calculationMode = $calculationMode;
 
         return $this;
     }

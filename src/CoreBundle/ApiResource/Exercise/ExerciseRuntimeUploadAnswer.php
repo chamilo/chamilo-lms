@@ -26,7 +26,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 'attemptId' => '\\d+',
             ],
             openapi: new Operation(
-                summary: 'Upload a file as a Vue exercise runtime answer',
+                summary: 'Upload a file or oral recording as a Vue exercise runtime answer',
                 parameters: [
                     new Parameter(name: 'exerciseId', in: 'path', required: true, schema: ['type' => 'integer']),
                     new Parameter(name: 'attemptId', in: 'path', required: true, schema: ['type' => 'integer']),
@@ -45,6 +45,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
                                     'file' => [
                                         'type' => 'string',
                                         'format' => 'binary',
+                                        'description' => 'Upload answer file or oral expression audio file',
                                     ],
                                 ],
                             ],

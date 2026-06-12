@@ -335,6 +335,8 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
             ->getResult()
         ;
 
+        $mustShuffle = self::QUESTION_SELECTION_RANDOM === (int) ($quiz->getQuestionSelectionType() ?? 0);
+        $randomCount = (int) $quiz->getRandom();
         $questionIds = [];
         foreach ($relations as $relation) {
             if (!$relation instanceof CQuizRelQuestion) {
@@ -346,19 +348,22 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
                 continue;
             }
 
-            if (\in_array((int) $question->getType(), [self::PAGE_BREAK, self::MEDIA_QUESTION], true)) {
+            $type = (int) $question->getType();
+            if (self::MEDIA_QUESTION === $type) {
+                continue;
+            }
+
+            if (self::PAGE_BREAK === $type && ($mustShuffle || 0 < $randomCount)) {
                 continue;
             }
 
             $questionIds[] = (int) $question->getIid();
         }
 
-        $mustShuffle = self::QUESTION_SELECTION_RANDOM === (int) ($quiz->getQuestionSelectionType() ?? 0);
-        if ($mustShuffle || 0 < (int) $quiz->getRandom()) {
+        if ($mustShuffle || 0 < $randomCount) {
             shuffle($questionIds);
         }
 
-        $randomCount = (int) $quiz->getRandom();
         if (0 < $randomCount && $randomCount < \count($questionIds)) {
             $questionIds = \array_slice($questionIds, 0, $randomCount);
         }

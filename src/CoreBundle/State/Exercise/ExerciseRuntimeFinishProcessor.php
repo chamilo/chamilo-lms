@@ -47,11 +47,19 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
     private const FILL_IN_BLANKS = 3;
     private const MATCHING = 4;
     private const FREE_ANSWER = 5;
+    private const HOT_SPOT = 6;
+    private const CALCULATED_ANSWER = 16;
+    private const MEDIA_QUESTION = 15;
+    private const READING_COMPREHENSION = 21;
+    private const PAGE_BREAK = 31;
+    private const ORAL_EXPRESSION = 13;
     private const UPLOAD_ANSWER = 23;
+    private const ANNOTATION = 20;
     private const MULTIPLE_ANSWER_COMBINATION = 9;
     private const UNIQUE_ANSWER_NO_OPTION = 10;
     private const MULTIPLE_ANSWER_TRUE_FALSE = 11;
     private const MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE = 12;
+    private const MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY = 22;
     private const GLOBAL_MULTIPLE_ANSWER = 14;
     private const UNIQUE_ANSWER_IMAGE = 17;
     private const MATCHING_DRAGGABLE = 19;
@@ -60,6 +68,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
     private const MULTIPLE_ANSWER_DROPDOWN = 29;
     private const MATCHING_COMBINATION = 24;
     private const MATCHING_DRAGGABLE_COMBINATION = 25;
+    private const HOT_SPOT_COMBINATION = 26;
 
     /**
      * @var array<int, string>
@@ -73,16 +82,25 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
         self::MULTIPLE_ANSWER_COMBINATION => 'Multiple answer combination',
         self::MULTIPLE_ANSWER_TRUE_FALSE => 'Multiple answer true/false',
         self::MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE => 'Multiple answer combination true/false',
+        self::MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY => 'Multiple answer true/false with degree of certainty',
         self::FILL_IN_BLANKS => 'Fill in blanks',
         self::FILL_IN_BLANKS_COMBINATION => 'Fill in blanks combination',
         self::MATCHING => 'Matching',
         self::MATCHING_DRAGGABLE => 'Matching draggable',
         self::MATCHING_COMBINATION => 'Matching combination',
         self::MATCHING_DRAGGABLE_COMBINATION => 'Matching draggable combination',
+        self::HOT_SPOT_COMBINATION => 'Hotspot combination',
         self::MULTIPLE_ANSWER_DROPDOWN => 'Multiple answer dropdown',
         self::MULTIPLE_ANSWER_DROPDOWN_COMBINATION => 'Multiple answer dropdown combination',
         self::FREE_ANSWER => 'Free answer',
+        self::HOT_SPOT => 'Hotspot',
+        self::CALCULATED_ANSWER => 'Calculated answer',
+        self::ORAL_EXPRESSION => 'Oral expression',
         self::UPLOAD_ANSWER => 'Upload answer',
+        self::ANNOTATION => 'Annotation',
+        self::MEDIA_QUESTION => 'Media question',
+        self::READING_COMPREHENSION => 'Reading comprehension',
+        self::PAGE_BREAK => 'Page break',
     ];
 
     public function __construct(
@@ -487,13 +505,15 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
         return match ((int) $question->getType()) {
             self::UNIQUE_ANSWER,
             self::UNIQUE_ANSWER_NO_OPTION,
-            self::UNIQUE_ANSWER_IMAGE => $this->scoreUniqueAnswer($answers, $rows),
+            self::UNIQUE_ANSWER_IMAGE,
+            self::READING_COMPREHENSION => $this->scoreUniqueAnswer($answers, $rows),
             self::MULTIPLE_ANSWER,
             self::GLOBAL_MULTIPLE_ANSWER,
             self::MULTIPLE_ANSWER_DROPDOWN => $this->scoreMultipleAnswer($answers, $rows),
             self::MULTIPLE_ANSWER_COMBINATION,
             self::MULTIPLE_ANSWER_DROPDOWN_COMBINATION => $this->scoreMultipleCombination($question, $answers, $rows),
             self::MULTIPLE_ANSWER_TRUE_FALSE => $this->scoreTrueFalseAnswer($question, $answers, $options, $rows),
+            self::MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY => $this->scoreTrueFalseDegreeCertaintyAnswer($question, $answers, $options, $rows),
             self::MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE => $this->scoreTrueFalseCombination($question, $answers, $options, $rows),
             self::FILL_IN_BLANKS,
             self::FILL_IN_BLANKS_COMBINATION => $this->scoreFillBlanks($quiz, $question, $answers, $rows),
@@ -501,8 +521,13 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
             self::MATCHING_DRAGGABLE => $this->scoreMatchingAnswer($answers, $rows),
             self::MATCHING_COMBINATION,
             self::MATCHING_DRAGGABLE_COMBINATION => $this->scoreMatchingCombination($question, $answers, $rows),
+            self::CALCULATED_ANSWER => $this->scoreCalculatedAnswer($question, $answers, $rows),
+            self::HOT_SPOT => $this->scoreHotspotAnswer($answers, $rows, false, (float) $question->getPonderation()),
+            self::HOT_SPOT_COMBINATION => $this->scoreHotspotAnswer($answers, $rows, true, (float) $question->getPonderation()),
             self::FREE_ANSWER,
-            self::UPLOAD_ANSWER => $this->scoreManualAnswer($rows),
+            self::ORAL_EXPRESSION,
+            self::UPLOAD_ANSWER,
+            self::ANNOTATION => $this->scoreManualAnswer($rows),
             default => 0.0,
         };
     }
@@ -599,6 +624,63 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
      * @param array<int, CQuizQuestionOption> $options
      * @param array<int, TrackEAttempt>       $rows
      */
+    /**
+     * @param array<int, CQuizAnswer>         $answers
+     * @param array<int, CQuizQuestionOption> $options
+     * @param array<int, TrackEAttempt>       $rows
+     */
+    private function scoreTrueFalseDegreeCertaintyAnswer(CQuizQuestion $question, array $answers, array $options, array $rows): float
+    {
+        [$trueScore, $falseScore, $doubtScore] = $this->getTrueFalseScores((string) $question->getExtra());
+        $choices = $this->getSavedTrueFalseDegreeCertaintyChoices($rows);
+        $score = 0.0;
+
+        foreach ($answers as $answer) {
+            $answerId = (int) $answer->getIid();
+            $studentChoice = (int) ($choices[$answerId]['choice'] ?? 0);
+            if (0 >= $studentChoice) {
+                continue;
+            }
+
+            $studentDegreeChoice = (int) ($choices[$answerId]['degree'] ?? 0);
+            $studentDegreeChoicePosition = $this->getTrueFalseOptionPosition($studentDegreeChoice, $options);
+            $hasCertainty = 3 <= $studentDegreeChoicePosition && 9 > $studentDegreeChoicePosition;
+
+            if ($this->isTrueFalseChoiceCorrect($studentChoice, (int) $answer->getCorrect(), $options)) {
+                $score += $hasCertainty ? $trueScore : $doubtScore;
+                continue;
+            }
+
+            $score += $hasCertainty ? $falseScore : $doubtScore;
+        }
+
+        return $score;
+    }
+
+    /**
+     * @param array<int, TrackEAttempt> $rows
+     *
+     * @return array<int, array{choice: int, degree: int}>
+     */
+    private function getSavedTrueFalseDegreeCertaintyChoices(array $rows): array
+    {
+        $choices = [];
+        foreach ($rows as $row) {
+            $parts = explode(':', (string) $row->getAnswer());
+            $answerId = isset($parts[0]) ? (int) $parts[0] : 0;
+            $optionId = isset($parts[1]) ? (int) $parts[1] : 0;
+            $degreeId = isset($parts[2]) ? (int) $parts[2] : 0;
+            if (0 < $answerId && 0 < $optionId) {
+                $choices[$answerId] = [
+                    'choice' => $optionId,
+                    'degree' => $degreeId,
+                ];
+            }
+        }
+
+        return $choices;
+    }
+
     private function scoreTrueFalseCombination(CQuizQuestion $question, array $answers, array $options, array $rows): float
     {
         $choices = $this->getSavedTrueFalseChoices($rows);
@@ -991,6 +1073,245 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
     }
 
     /**
+     * @param array<int, CQuizAnswer>   $answers
+     * @param array<int, TrackEAttempt> $rows
+     */
+    private function scoreHotspotAnswer(array $answers, array $rows, bool $combination, float $questionWeight): float
+    {
+        $points = $this->getSavedHotspotPoints($rows);
+        if ([] === $points) {
+            return 0.0;
+        }
+
+        $matchedAnswerIds = [];
+        $score = 0.0;
+        $scoringZoneCount = 0;
+
+        foreach ($answers as $answer) {
+            $answerId = (int) $answer->getIid();
+            $hotspotType = (string) ($answer->getHotspotType() ?: 'square');
+            if (!\in_array($hotspotType, ['square', 'circle', 'poly'], true)) {
+                continue;
+            }
+
+            if (0.0 < (float) $answer->getPonderation()) {
+                ++$scoringZoneCount;
+            }
+
+            foreach ($points as $point) {
+                $pointAnswerId = (int) ($point['answerId'] ?? 0);
+                if (0 < $pointAnswerId && $pointAnswerId !== $answerId) {
+                    continue;
+                }
+
+                if ($this->isPointInHotspot($point, $hotspotType, (string) $answer->getHotspotCoordinates())) {
+                    $matchedAnswerIds[$answerId] = true;
+                    if (!$combination) {
+                        $score += (float) $answer->getPonderation();
+                    }
+                    break;
+                }
+            }
+        }
+
+        if (!$combination) {
+            return $score;
+        }
+
+        return 0 < $scoringZoneCount && \count($matchedAnswerIds) >= $scoringZoneCount ? $questionWeight : 0.0;
+    }
+
+    /**
+     * @param array<int, TrackEAttempt> $rows
+     *
+     * @return array<int, array{x: float, y: float, answerId?: int}>
+     */
+    private function getSavedHotspotPoints(array $rows): array
+    {
+        $points = [];
+        foreach ($rows as $row) {
+            foreach (explode('|', (string) $row->getAnswer()) as $coordinate) {
+                $point = $this->decodeHotspotPoint($coordinate);
+                if (null !== $point) {
+                    $points[] = $point;
+                }
+            }
+        }
+
+        return $points;
+    }
+
+    /**
+     * @return array{x: float, y: float, answerId?: int}|null
+     */
+    private function decodeHotspotPoint(string $coordinate): ?array
+    {
+        $answerId = 0;
+        $coordinateValue = trim($coordinate);
+        if (str_contains($coordinateValue, ':')) {
+            [$answerIdValue, $coordinateValue] = explode(':', $coordinateValue, 2);
+            $answerId = (int) $answerIdValue;
+        }
+
+        $parts = array_map('trim', explode(';', $coordinateValue));
+        if (2 > \count($parts) || !is_numeric($parts[0]) || !is_numeric($parts[1])) {
+            return null;
+        }
+
+        $point = ['x' => (float) $parts[0], 'y' => (float) $parts[1]];
+        if (0 < $answerId) {
+            $point['answerId'] = $answerId;
+        }
+
+        return $point;
+    }
+
+    /**
+     * @param array{x: float, y: float} $point
+     */
+    private function isPointInHotspot(array $point, string $hotspotType, string $coordinates): bool
+    {
+        return match ($hotspotType) {
+            'square' => $this->isPointInSquare($point, $coordinates),
+            'circle' => $this->isPointInEllipse($point, $coordinates),
+            'poly' => $this->isPointInPolygon($point, $coordinates),
+            default => false,
+        };
+    }
+
+    /**
+     * @param array{x: float, y: float} $point
+     */
+    private function isPointInSquare(array $point, string $coordinates): bool
+    {
+        [$origin, $width, $height] = $this->parseBoxCoordinates($coordinates);
+        if (null === $origin) {
+            return false;
+        }
+
+        return $point['x'] >= $origin['x']
+            && $point['x'] <= $origin['x'] + $width
+            && $point['y'] >= $origin['y']
+            && $point['y'] <= $origin['y'] + $height;
+    }
+
+    /**
+     * @param array{x: float, y: float} $point
+     */
+    private function isPointInEllipse(array $point, string $coordinates): bool
+    {
+        [$origin, $width, $height] = $this->parseBoxCoordinates($coordinates);
+        if (null === $origin || 0.0 >= $width || 0.0 >= $height) {
+            return false;
+        }
+
+        $radiusX = $width / 2;
+        $radiusY = $height / 2;
+        $centerX = $origin['x'] + $radiusX;
+        $centerY = $origin['y'] + $radiusY;
+
+        return ((($point['x'] - $centerX) ** 2) / ($radiusX ** 2))
+            + ((($point['y'] - $centerY) ** 2) / ($radiusY ** 2)) <= 1.0;
+    }
+
+    /**
+     * @return array{0: array{x: float, y: float}|null, 1: float, 2: float}
+     */
+    private function parseBoxCoordinates(string $coordinates): array
+    {
+        $parts = explode('|', $coordinates);
+        $origin = $this->decodeHotspotPoint((string) ($parts[0] ?? ''));
+        $width = isset($parts[1]) && is_numeric($parts[1]) ? (float) $parts[1] : 0.0;
+        $height = isset($parts[2]) && is_numeric($parts[2]) ? (float) $parts[2] : 0.0;
+
+        return [$origin, $width, $height];
+    }
+
+    /**
+     * @param array{x: float, y: float} $point
+     */
+    private function isPointInPolygon(array $point, string $coordinates): bool
+    {
+        $vertices = [];
+        foreach (explode('|', $coordinates) as $coordinate) {
+            $decoded = $this->decodeHotspotPoint($coordinate);
+            if (null !== $decoded) {
+                $vertices[] = $decoded;
+            }
+        }
+
+        $count = \count($vertices);
+        if (3 > $count) {
+            return false;
+        }
+
+        $inside = false;
+        for ($i = 0, $j = $count - 1; $i < $count; $j = $i++) {
+            $xi = $vertices[$i]['x'];
+            $yi = $vertices[$i]['y'];
+            $xj = $vertices[$j]['x'];
+            $yj = $vertices[$j]['y'];
+
+            $intersects = (($yi > $point['y']) !== ($yj > $point['y']))
+                && ($point['x'] < ($xj - $xi) * ($point['y'] - $yi) / (($yj - $yi) ?: 0.000001) + $xi);
+            if ($intersects) {
+                $inside = !$inside;
+            }
+        }
+
+        return $inside;
+    }
+
+    /**
+     * @param array<int, CQuizAnswer>   $answers
+     * @param array<int, TrackEAttempt> $rows
+     */
+    private function scoreCalculatedAnswer(CQuizQuestion $question, array $answers, array $rows): float
+    {
+        $row = $rows[0] ?? null;
+        if (!$row instanceof TrackEAttempt) {
+            return 0.0;
+        }
+
+        [$answerId, $studentAnswer] = $this->parseCalculatedStudentAnswer((string) $row->getAnswer());
+        $teacherAnswer = 0 < $answerId && isset($answers[$answerId]) ? $answers[$answerId] : reset($answers);
+        if (!$teacherAnswer instanceof CQuizAnswer) {
+            return 0.0;
+        }
+
+        $expectedAnswer = $this->extractCalculatedExpectedAnswer((string) $teacherAnswer->getAnswer());
+        if ('' === $expectedAnswer || '' === $studentAnswer) {
+            return 0.0;
+        }
+
+        return trim($studentAnswer) === trim($expectedAnswer) ? (float) $question->getPonderation() : 0.0;
+    }
+
+    /**
+     * @return array{0: int, 1: string}
+     */
+    private function parseCalculatedStudentAnswer(string $value): array
+    {
+        $parts = explode(':', $value, 2);
+        if (2 === \count($parts)) {
+            return [(int) $parts[0], trim((string) $parts[1])];
+        }
+
+        return [0, trim($value)];
+    }
+
+    private function extractCalculatedExpectedAnswer(string $answer): string
+    {
+        $parts = explode('@@', $answer, 2);
+        $text = (string) ($parts[0] ?? $answer);
+        if (1 === preg_match('/\[([^\[\]]*)\]\s*$/', $text, $matches)) {
+            return trim((string) ($matches[1] ?? ''));
+        }
+
+        return '';
+    }
+
+    /**
      * @param array<int, TrackEAttempt> $rows
      */
     private function scoreManualAnswer(array $rows): float
@@ -1006,6 +1327,14 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
     private function getQuestionWeight(CQuizQuestion $question, array $answers): float
     {
         $type = (int) $question->getType();
+        if (\in_array($type, [self::MEDIA_QUESTION, self::PAGE_BREAK], true)) {
+            return 0.0;
+        }
+
+        if (self::CALCULATED_ANSWER === $type) {
+            return (float) $question->getPonderation();
+        }
+
         if (\in_array($type, [self::MULTIPLE_ANSWER_COMBINATION, self::MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE], true)) {
             $firstAnswer = reset($answers);
             if ($firstAnswer instanceof CQuizAnswer && 0.0 !== $firstAnswer->getPonderation()) {
@@ -1033,7 +1362,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
      */
     private function requiresManualCorrection(CQuizQuestion $question): bool
     {
-        return \in_array((int) $question->getType(), [self::FREE_ANSWER, self::UPLOAD_ANSWER], true);
+        return \in_array((int) $question->getType(), [self::FREE_ANSWER, self::ORAL_EXPRESSION, self::UPLOAD_ANSWER, self::ANNOTATION], true);
     }
 
     private function getSavedAnswerIds(array $rows): array

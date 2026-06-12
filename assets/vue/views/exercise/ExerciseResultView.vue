@@ -184,11 +184,30 @@
 
       <div class="space-y-4">
         <article
-          v-for="question in questions"
+          v-for="(question, index) in questions"
           :key="question.id"
           class="overflow-hidden rounded-xl border bg-white shadow-sm"
           :class="questionCardClass(question)"
         >
+          <div
+            v-if="shouldShowParentMedia(question, index)"
+            class="border-b border-dashed border-gray-40 bg-gray-10 p-4"
+          >
+            <div class="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500">
+              {{ t("Media question") }}
+            </div>
+            <h2
+              v-if="question.parent?.title"
+              class="exercise-result-html text-lg font-semibold text-gray-90"
+              v-html="question.parent.title"
+            />
+            <div
+              v-if="question.parent?.description || question.parent?.content?.description"
+              class="exercise-result-html mt-2 text-sm text-gray-700"
+              v-html="question.parent.description || question.parent.content?.description"
+            />
+          </div>
+
           <div class="border-b border-gray-20 bg-gray-10 p-4">
             <div class="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
               <div class="flex gap-3">
@@ -216,7 +235,7 @@
 
               <div class="flex flex-wrap items-center gap-2 md:justify-end">
                 <span
-                  v-if="visibility.showQuestionScore"
+                  v-if="visibility.showQuestionScore && question.score !== null && question.maxScore !== null"
                   class="rounded-full border px-3 py-1 text-xs font-semibold"
                   :class="questionScoreClass(question)"
                 >
@@ -297,6 +316,12 @@
                     {{ t("Your answer") }}: {{ choice.selectedOptionLabel || t("No answer") }}
                   </span>
                   <span
+                    v-if="choice.selectedDegreeLabel"
+                    class="rounded-full bg-support-1 px-2 py-1 text-support-4"
+                  >
+                    {{ t("Degree of certainty that my answer will be considered correct") }}: {{ choice.selectedDegreeLabel }}
+                  </span>
+                  <span
                     v-if="choice.correctOptionLabel"
                     class="rounded-full bg-success/10 px-2 py-1 text-success"
                   >
@@ -371,6 +396,302 @@
                   class="exercise-result-html mt-2 rounded bg-white/70 p-2 text-xs text-gray-700"
                   v-html="prompt.comment"
                 />
+              </div>
+            </template>
+
+
+            <template v-else-if="question.answer.kind === 'calculated'">
+              <div class="space-y-3 rounded-lg border border-gray-20 bg-gray-10 p-3 text-sm">
+                <div
+                  v-if="question.answer.text"
+                  class="exercise-result-html rounded bg-white p-3 text-gray-800"
+                  v-html="question.answer.text"
+                />
+                <div class="grid gap-2 md:grid-cols-2">
+                  <div class="rounded bg-info/10 p-2 text-info">
+                    <span class="font-semibold">{{ t("Your answer") }}:</span>
+                    {{ question.answer.studentAnswer || t("No answer") }}
+                  </div>
+                  <div
+                    v-if="question.answer.expectedAnswer"
+                    class="rounded bg-success/10 p-2 text-success"
+                  >
+                    <span class="font-semibold">{{ t("Correct answer") }}:</span>
+                    {{ question.answer.expectedAnswer }}
+                  </div>
+                </div>
+              </div>
+            </template>
+
+            <template v-else-if="question.answer.kind === 'hotspot'">
+              <div class="space-y-3">
+                <div class="rounded-lg border border-gray-20 bg-gray-10 p-3">
+                  <div class="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500">
+                    {{ t("Learner clicks") }}
+                  </div>
+                  <div
+                    v-if="question.answer.imageUrl"
+                    class="inline-block max-w-full rounded-lg border border-gray-20 bg-white p-2"
+                  >
+                    <div class="relative inline-block max-w-full">
+                      <img
+                        class="max-h-[32rem] max-w-full object-contain"
+                        :alt="question.answer.imageName || t('Question image')"
+                        :src="question.answer.imageUrl"
+                        @load="onResultHotspotImageLoad(question, $event)"
+                      />
+                      <span
+                        v-for="point in question.answer.studentPoints"
+                        :key="`${question.id}-result-hotspot-${point.label}`"
+                        class="absolute flex h-7 w-7 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-white bg-primary text-xs font-bold text-white shadow"
+                        :style="resultHotspotPointStyle(question, point)"
+                      >
+                        {{ point.label }}
+                      </span>
+                    </div>
+                  </div>
+                  <div
+                    v-else
+                    class="text-sm text-gray-600"
+                  >
+                    {{ t("No hotspot image available") }}
+                  </div>
+                  <div
+                    v-if="!question.answer.studentPoints?.length"
+                    class="mt-2 text-sm text-gray-600"
+                  >
+                    {{ t("No answer") }}
+                  </div>
+                </div>
+
+                <div
+                  v-if="question.answer.zones?.length"
+                  class="rounded-lg border border-success/30 bg-success/10 p-3 text-sm text-success"
+                >
+                  <div class="mb-2 text-xs font-semibold uppercase tracking-wide">
+                    {{ t("Expected zones") }}
+                  </div>
+                  <ul class="list-disc space-y-1 pl-5">
+                    <li
+                      v-for="zone in question.answer.zones"
+                      :key="zone.id"
+                    >
+                      <span class="font-semibold">{{ displayText(zone.answer, t("Zone")) }}</span>
+                      <span> · {{ zone.hotspotType }}</span>
+                      <span v-if="zone.score !== null && zone.score !== undefined"> · {{ t("Score") }}: {{ formatNumber(zone.score) }}</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </template>
+
+            <template v-else-if="question.answer.kind === 'annotation'">
+              <div class="space-y-3">
+                <div class="rounded-lg border border-gray-20 bg-gray-10 p-3">
+                  <div class="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500">
+                    {{ t("Learner annotation") }}
+                  </div>
+                  <div
+                    v-if="question.answer.imageUrl"
+                    class="inline-block max-w-full rounded-lg border border-gray-20 bg-white p-2"
+                  >
+                    <div class="relative inline-block max-w-full">
+                      <img
+                        class="max-h-[32rem] max-w-full object-contain"
+                        :alt="question.answer.imageName || t('Question image')"
+                        :src="question.answer.imageUrl"
+                        @load="onResultHotspotImageLoad(question, $event)"
+                      />
+                      <svg
+                        v-if="resultAnnotationImageReady(question)"
+                        class="pointer-events-none absolute inset-0 h-full w-full"
+                        :viewBox="resultAnnotationViewBox(question)"
+                        preserveAspectRatio="none"
+                      >
+                        <polyline
+                          v-for="(path, pathIndex) in question.answer.paths || []"
+                          :key="`${question.id}-result-annotation-path-${pathIndex}`"
+                          fill="none"
+                          :points="resultAnnotationPolylinePoints(path)"
+                          stroke="currentColor"
+                          stroke-width="3"
+                          class="text-primary"
+                        />
+                      </svg>
+                      <span
+                        v-for="(textAnnotation, textIndex) in question.answer.texts || []"
+                        :key="`${question.id}-result-annotation-text-${textIndex}`"
+                        class="absolute -translate-x-1/2 -translate-y-1/2 rounded bg-white/90 px-2 py-1 text-xs font-semibold text-primary shadow"
+                        :style="resultHotspotPointStyle(question, textAnnotation)"
+                      >
+                        {{ textAnnotation.text }}
+                      </span>
+                    </div>
+                  </div>
+                  <div
+                    v-else
+                    class="text-sm text-gray-600"
+                  >
+                    {{ t("No annotation image available") }}
+                  </div>
+                  <div
+                    v-if="!(question.answer.paths?.length || question.answer.texts?.length)"
+                    class="mt-2 text-sm text-gray-600"
+                  >
+                    {{ t("No answer") }}
+                  </div>
+                </div>
+
+                <div
+                  v-if="question.pendingCorrection"
+                  class="rounded-lg border border-warning/30 bg-warning/10 p-3 text-sm text-warning"
+                >
+                  {{ t("This answer is pending teacher correction.") }}
+                </div>
+
+                <div
+                  v-if="question.answer.teacherComment"
+                  class="rounded-lg border border-info/30 bg-support-1 p-3 text-sm text-support-4"
+                >
+                  <div class="mb-1 text-xs font-semibold uppercase tracking-wide">
+                    {{ t("Teacher comment") }}
+                  </div>
+                  {{ question.answer.teacherComment }}
+                </div>
+
+                <div
+                  v-if="question.canCorrect && correctionForms[question.id]"
+                  class="rounded-lg border border-gray-20 bg-white p-4"
+                >
+                  <div class="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-800">
+                    <BaseIcon icon="edit" size="small" />
+                    {{ t("Teacher correction") }}
+                  </div>
+                  <div class="grid gap-3 md:grid-cols-[220px_1fr_auto] md:items-start">
+                    <BaseInputNumber
+                      v-model="correctionForms[question.id].marks"
+                      :disabled="correctionSavingQuestionId === question.id"
+                      :id="correctionScoreInputId(question)"
+                      :label="t('Correction score')"
+                      :max="Number(question.maxScore || 0)"
+                      :min="0"
+                      :step="0.5"
+                      name="correction_score"
+                    />
+                    <BaseTextArea
+                      v-model="correctionForms[question.id].teacherComment"
+                      :disabled="correctionSavingQuestionId === question.id"
+                      :id="correctionCommentInputId(question)"
+                      :label="t('Teacher comment')"
+                      name="teacher_comment"
+                      rows="3"
+                    />
+                    <BaseButton
+                      :disabled="correctionSavingQuestionId === question.id"
+                      :is-loading="correctionSavingQuestionId === question.id"
+                      :label="t('Save correction')"
+                      icon="content-save"
+                      type="success"
+                      @click="saveManualCorrection(question)"
+                    />
+                  </div>
+                </div>
+              </div>
+            </template>
+
+            <template v-else-if="question.answer.kind === 'oral_expression'">
+              <div class="space-y-3">
+                <div class="rounded-lg border border-gray-20 bg-gray-10 p-3">
+                  <div class="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500">
+                    {{ t("Learner audio") }}
+                  </div>
+                  <div
+                    v-if="question.answer.files?.length"
+                    class="space-y-3"
+                  >
+                    <div
+                      v-for="file in question.answer.files"
+                      :key="file.id || file.name"
+                      class="space-y-2"
+                    >
+                      <audio
+                        class="max-w-full"
+                        controls
+                        :src="file.inlineUrl || file.url"
+                      />
+                      <a
+                        class="inline-flex items-center gap-2 rounded border border-primary/30 bg-white px-3 py-2 text-sm font-semibold text-primary hover:bg-support-1"
+                        :href="file.url"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <BaseIcon icon="download" size="small" />
+                        {{ file.name || t("Download audio") }}
+                      </a>
+                    </div>
+                  </div>
+                  <div
+                    v-else
+                    class="text-sm text-gray-600"
+                  >
+                    {{ t("No uploaded audio") }}
+                  </div>
+                </div>
+
+                <div
+                  v-if="question.pendingCorrection"
+                  class="rounded-lg border border-warning/30 bg-warning/10 p-3 text-sm text-warning"
+                >
+                  {{ t("This answer is pending teacher correction.") }}
+                </div>
+
+                <div
+                  v-if="question.answer.teacherComment"
+                  class="rounded-lg border border-info/30 bg-support-1 p-3 text-sm text-support-4"
+                >
+                  <div class="mb-1 text-xs font-semibold uppercase tracking-wide">
+                    {{ t("Teacher comment") }}
+                  </div>
+                  {{ question.answer.teacherComment }}
+                </div>
+
+                <div
+                  v-if="question.canCorrect && correctionForms[question.id]"
+                  class="rounded-lg border border-gray-20 bg-white p-4"
+                >
+                  <div class="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-800">
+                    <BaseIcon icon="edit" size="small" />
+                    {{ t("Teacher correction") }}
+                  </div>
+                  <div class="grid gap-3 md:grid-cols-[220px_1fr_auto] md:items-start">
+                    <BaseInputNumber
+                      v-model="correctionForms[question.id].marks"
+                      :disabled="correctionSavingQuestionId === question.id"
+                      :id="correctionScoreInputId(question)"
+                      :label="t('Correction score')"
+                      :max="Number(question.maxScore || 0)"
+                      :min="0"
+                      :step="0.5"
+                      name="correction_score"
+                    />
+                    <BaseTextArea
+                      v-model="correctionForms[question.id].teacherComment"
+                      :disabled="correctionSavingQuestionId === question.id"
+                      :id="correctionCommentInputId(question)"
+                      :label="t('Teacher comment')"
+                      name="teacher_comment"
+                      rows="3"
+                    />
+                    <BaseButton
+                      :disabled="correctionSavingQuestionId === question.id"
+                      :is-loading="correctionSavingQuestionId === question.id"
+                      :label="t('Save correction')"
+                      icon="content-save"
+                      type="success"
+                      @click="saveManualCorrection(question)"
+                    />
+                  </div>
+                </div>
               </div>
             </template>
 
@@ -458,6 +779,20 @@
                     />
                   </div>
                 </div>
+              </div>
+            </template>
+
+            <template v-else-if="question.answer.kind === 'content'">
+              <div
+                v-if="question.answer.description"
+                class="exercise-result-html rounded-lg border border-gray-20 bg-gray-10 p-4 text-gray-800"
+                v-html="question.answer.description"
+              />
+              <div
+                v-else
+                class="rounded-lg border border-gray-20 bg-gray-10 p-3 text-sm text-gray-700"
+              >
+                {{ t("Content item") }}
               </div>
             </template>
 
@@ -572,6 +907,7 @@ const correctionForms = ref({})
 const correctionSavingQuestionId = ref(null)
 const correctionError = ref("")
 const correctionMessage = ref("")
+const resultHotspotImageSizes = ref({})
 
 function getQueryValue(value) {
   return Array.isArray(value) ? value[0] : value
@@ -638,6 +974,68 @@ async function loadResult() {
   }
 }
 
+function onResultHotspotImageLoad(question, event) {
+  const image = event?.target
+  if (!image || !question?.id) {
+    return
+  }
+
+  resultHotspotImageSizes.value = {
+    ...resultHotspotImageSizes.value,
+    [question.id]: {
+      width: Number(image.naturalWidth || image.width || 0),
+      height: Number(image.naturalHeight || image.height || 0),
+    },
+  }
+}
+
+function resultHotspotPointStyle(question, point) {
+  const size = resultHotspotImageSizes.value[question.id] || {}
+  const width = Number(size.width || 0)
+  const height = Number(size.height || 0)
+
+  if (width > 0 && height > 0) {
+    return {
+      left: `${(Number(point.x || 0) / width) * 100}%`,
+      top: `${(Number(point.y || 0) / height) * 100}%`,
+    }
+  }
+
+  return {
+    left: `${Number(point.x || 0)}px`,
+    top: `${Number(point.y || 0)}px`,
+  }
+}
+
+function resultAnnotationImageReady(question) {
+  const size = resultHotspotImageSizes.value[question.id] || {}
+
+  return Number(size.width || 0) > 0 && Number(size.height || 0) > 0
+}
+
+function resultAnnotationViewBox(question) {
+  const size = resultHotspotImageSizes.value[question.id] || {}
+
+  return `0 0 ${Number(size.width || 1)} ${Number(size.height || 1)}`
+}
+
+function resultAnnotationPolylinePoints(path) {
+  const points = Array.isArray(path?.points) ? path.points : []
+
+  return points.map((point) => `${Number(point.x || 0)},${Number(point.y || 0)}`).join(" ")
+}
+
+function shouldShowParentMedia(question, index) {
+  const parentId = Number(question?.parent?.id || question?.parentId || 0)
+  if (parentId <= 0) {
+    return false
+  }
+
+  const previousQuestion = questions.value[index - 1] || null
+
+  return Number(previousQuestion?.parent?.id || previousQuestion?.parentId || 0) !== parentId
+}
+
 function questionLabel(position) {
   const safePosition = Number(position || 0)
 
@@ -645,7 +1043,7 @@ function questionLabel(position) {
 }
 
 function isManualCorrectionQuestion(question) {
-  return ["free_answer", "upload_answer"].includes(question?.answer?.kind)
+  return ["free_answer", "oral_expression", "upload_answer"].includes(question?.answer?.kind)
 }
 
 function hasPartialManualScore(question) {

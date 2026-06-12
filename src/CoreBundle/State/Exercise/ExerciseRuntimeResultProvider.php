@@ -43,6 +43,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
 {
     private const STATUS_COMPLETED = 'completed';
+    private const ANNOTATION = 20;
     private const VISIBILITY_PUBLISHED = 2;
     private const FEEDBACK_TYPE_EXAM = 2;
     private const RESULT_SHOW_SCORE_AND_EXPECTED_ANSWERS = 0;
@@ -548,8 +549,9 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         $questionScore = $this->getQuestionScore($rows);
         $maxScore = $this->getQuestionMaxScore($question);
         $requiresManualCorrection = $this->requiresManualCorrection($question);
+        $isStructuralContent = $this->isStructuralContentQuestion($question);
         $isCorrect = 0 < $maxScore ? $questionScore >= $maxScore : 0 < $questionScore;
-        if ($requiresManualCorrection && $pendingCorrection) {
+        if ($isStructuralContent || ($requiresManualCorrection && $pendingCorrection)) {
             $isCorrect = null;
         }
         $showQuestionCorrection = $this->shouldShowQuestionCorrection($rows, $visibility, true === $isCorrect);
@@ -561,9 +563,11 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             'type' => (int) $question->getType(),
             'typeLabel' => $this->getQuestionTypeLabel((int) $question->getType()),
             'position' => 0,
-            'score' => true === ($visibility['showQuestionScore'] ?? false) ? $questionScore : null,
-            'maxScore' => true === ($visibility['showQuestionScore'] ?? false) ? $maxScore : null,
-            'isCorrect' => true === ($visibility['showQuestionScore'] ?? false) ? $isCorrect : null,
+            'parentId' => (int) ($question->getParentMediaId() ?? 0),
+            'parent' => $this->normalizeParentMediaQuestion($question),
+            'score' => !$isStructuralContent && true === ($visibility['showQuestionScore'] ?? false) ? $questionScore : null,
+            'maxScore' => !$isStructuralContent && true === ($visibility['showQuestionScore'] ?? false) ? $maxScore : null,
+            'isCorrect' => !$isStructuralContent && true === ($visibility['showQuestionScore'] ?? false) ? $isCorrect : null,
             'requiresManualCorrection' => $requiresManualCorrection,
             'pendingCorrection' => $pendingCorrection,
             'canCorrect' => $canManage && $requiresManualCorrection,
@@ -573,8 +577,41 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
     }
 
 
+    /**
+     * @return array<string, mixed>|null
+     */
+    private function normalizeParentMediaQuestion(CQuizQuestion $question): ?array
+    {
+        $parentId = (int) ($question->getParentMediaId() ?? 0);
+        if (0 >= $parentId) {
+            return null;
+        }
+
+        $parent = $this->entityManager->getRepository(CQuizQuestion::class)->find($parentId);
+        if (!$parent instanceof CQuizQuestion || 15 !== (int) $parent->getType()) {
+            return null;
+        }
+
+        return [
+            'id' => (int) $parent->getIid(),
+            'title' => $parent->getQuestion(),
+            'description' => (string) $parent->getDescription(),
+            'type' => 15,
+            'typeLabel' => $this->getQuestionTypeLabel(15),
+            'content' => [
+                'title' => $parent->getQuestion(),
+                'description' => (string) $parent->getDescription(),
+            ],
+        ];
+    }
+
+
     private function getQuestionMaxScore(CQuizQuestion $question): float
     {
+        if ($this->isStructuralContentQuestion($question)) {
+            return 0.0;
+        }
+
         if (\in_array((int) $question->getType(), [9, 12], true)) {
             $answer = $this->getFirstAnswer($question);
             if ($answer instanceof CQuizAnswer && 0.0 !== $answer->getPonderation()) {
@@ -633,7 +670,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
     private function normalizeQuestionAnswer(CQuizQuestion $question, array $rows, array $visibility, bool $showQuestionCorrection): array
     {
         $type = (int) $question->getType();
-        if (\in_array($type, [1, 2, 9, 10, 11, 12, 14, 17], true)) {
+        if (\in_array($type, [1, 2, 9, 10, 11, 12, 14, 17, 21, 22], true)) {
             return $this->normalizeChoiceAnswer($question, $rows, $visibility, $showQuestionCorrection);
         }
 
@@ -649,17 +686,49 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             return $this->normalizeDropdownAnswer($question, $rows, $visibility, $showQuestionCorrection);
         }
 
+        if (16 === $type) {
+            return $this->normalizeCalculatedAnswer($question, $rows, $showQuestionCorrection);
+        }
+
+        if (\in_array($type, [6, 26], true)) {
+            return $this->normalizeHotspotAnswer($question, $rows, $showQuestionCorrection);
+        }
+
         if (5 === $type) {
             return $this->normalizeFreeAnswer($rows, $visibility);
+        }
+
+        if (13 === $type) {
+            return $this->normalizeOralExpressionAnswer($rows, $visibility);
         }
 
         if (23 === $type) {
             return $this->normalizeUploadAnswer($rows, $visibility);
         }
 
+        if (self::ANNOTATION === $type) {
+            return $this->normalizeAnnotationAnswer($question, $rows, $visibility);
+        }
+
+        if (\in_array($type, [15, 31], true)) {
+            return $this->normalizeContentAnswer($question);
+        }
+
         return [
             'kind' => 'unsupported',
             'studentAnswer' => $this->normalizeRawRows($rows),
+        ];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function normalizeContentAnswer(CQuizQuestion $question): array
+    {
+        return [
+            'kind' => 'content',
+            'title' => $question->getQuestion(),
+            'description' => (string) $question->getDescription(),
         ];
     }
 
@@ -673,7 +742,9 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
     {
         $selectedIds = array_flip($this->getSavedAnswerIds($rows));
         $trueFalseChoices = $this->getSavedTrueFalseChoices($rows);
-        $isTrueFalse = \in_array((int) $question->getType(), [11, 12], true);
+        $isTrueFalse = \in_array((int) $question->getType(), [11, 12, 22], true);
+        $isDegreeCertainty = 22 === (int) $question->getType();
+        $degreeCertaintyChoices = $isDegreeCertainty ? $this->getSavedTrueFalseDegreeCertaintyChoices($rows) : [];
         $options = $this->getQuestionOptions($question);
         $choices = [];
 
@@ -686,7 +757,15 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             ];
 
             if ($isTrueFalse) {
-                $selectedOption = $trueFalseChoices[$answerId] ?? 0;
+                if ($isDegreeCertainty) {
+                    $selectedOption = (int) ($degreeCertaintyChoices[$answerId]['choice'] ?? 0);
+                    $selectedDegree = (int) ($degreeCertaintyChoices[$answerId]['degree'] ?? 0);
+                    $choice['selectedDegreeId'] = $selectedDegree ?: null;
+                    $choice['selectedDegreeLabel'] = $this->getOptionTitle($options, $selectedDegree);
+                } else {
+                    $selectedOption = $trueFalseChoices[$answerId] ?? 0;
+                }
+
                 $choice['selectedOptionId'] = $selectedOption ?: null;
                 $choice['selectedOptionLabel'] = $this->getOptionTitle($options, $selectedOption);
             }
@@ -711,7 +790,32 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             'kind' => $isTrueFalse ? 'true_false' : 'choice',
             'choices' => $choices,
             'options' => array_values($options),
+            'hasDegreeCertainty' => $isDegreeCertainty,
         ];
+    }
+
+    /**
+     * @param array<int, TrackEAttempt> $rows
+     *
+     * @return array<int, array{choice: int, degree: int}>
+     */
+    private function getSavedTrueFalseDegreeCertaintyChoices(array $rows): array
+    {
+        $choices = [];
+        foreach ($rows as $row) {
+            $parts = explode(':', (string) $row->getAnswer());
+            $answerId = isset($parts[0]) ? (int) $parts[0] : 0;
+            $optionId = isset($parts[1]) ? (int) $parts[1] : 0;
+            $degreeId = isset($parts[2]) ? (int) $parts[2] : 0;
+            if (0 < $answerId && 0 < $optionId) {
+                $choices[$answerId] = [
+                    'choice' => $optionId,
+                    'degree' => $degreeId,
+                ];
+            }
+        }
+
+        return $choices;
     }
 
     /**
@@ -844,6 +948,173 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
 
     /**
      * @param array<int, TrackEAttempt> $rows
+     *
+     * @return array<string, mixed>
+     */
+    private function normalizeCalculatedAnswer(CQuizQuestion $question, array $rows, bool $showQuestionCorrection): array
+    {
+        $row = $rows[0] ?? null;
+        $studentAnswer = '';
+        $answerId = 0;
+        if ($row instanceof TrackEAttempt) {
+            [$answerId, $studentAnswer] = $this->parseCalculatedStudentAnswer((string) $row->getAnswer());
+        }
+
+        $teacherAnswer = 0 < $answerId ? $this->getAnswerById($question, $answerId) : $this->getFirstAnswer($question);
+        $parsedTeacherAnswer = $teacherAnswer instanceof CQuizAnswer
+            ? $this->parseCalculatedTeacherAnswer((string) $teacherAnswer->getAnswer())
+            : ['text' => '', 'expectedAnswer' => ''];
+
+        return [
+            'kind' => 'calculated',
+            'text' => (string) ($parsedTeacherAnswer['text'] ?? ''),
+            'studentAnswer' => $studentAnswer,
+            'expectedAnswer' => $showQuestionCorrection ? (string) ($parsedTeacherAnswer['expectedAnswer'] ?? '') : null,
+        ];
+    }
+
+    /**
+     * @return array{0: int, 1: string}
+     */
+    private function parseCalculatedStudentAnswer(string $value): array
+    {
+        $parts = explode(':', $value, 2);
+        if (2 === \count($parts)) {
+            return [(int) $parts[0], trim((string) $parts[1])];
+        }
+
+        return [0, trim($value)];
+    }
+
+    /**
+     * @return array{text: string, expectedAnswer: string}
+     */
+    private function parseCalculatedTeacherAnswer(string $answer): array
+    {
+        $parts = explode('@@', $answer, 2);
+        $textWithExpectedAnswer = (string) ($parts[0] ?? $answer);
+        $expectedAnswer = '';
+        $text = $textWithExpectedAnswer;
+
+        if (1 === preg_match('/\[([^\[\]]*)\]\s*$/', $textWithExpectedAnswer, $matches)) {
+            $expectedAnswer = trim((string) ($matches[1] ?? ''));
+            $text = (string) preg_replace('/\s*\[[^\[\]]*\]\s*$/', '', $textWithExpectedAnswer);
+        }
+
+        return [
+            'text' => $text,
+            'expectedAnswer' => $expectedAnswer,
+        ];
+    }
+
+    private function getAnswerById(CQuizQuestion $question, int $answerId): ?CQuizAnswer
+    {
+        foreach ($this->getOrderedAnswers($question) as $answer) {
+            if ((int) $answer->getIid() === $answerId) {
+                return $answer;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param array<int, TrackEAttempt> $rows
+     *
+     * @return array<string, mixed>
+     */
+    private function normalizeHotspotAnswer(CQuizQuestion $question, array $rows, bool $showQuestionCorrection): array
+    {
+        $row = $rows[0] ?? null;
+        $studentPoints = $row instanceof TrackEAttempt ? $this->parseHotspotCoordinates((string) $row->getAnswer()) : [];
+        $zones = [];
+
+        if ($showQuestionCorrection) {
+            foreach ($this->getOrderedAnswers($question) as $answer) {
+                $hotspotType = (string) ($answer->getHotspotType() ?: 'square');
+                if (!\in_array($hotspotType, ['square', 'circle', 'poly'], true)) {
+                    continue;
+                }
+
+                $zones[] = [
+                    'id' => (int) $answer->getIid(),
+                    'answer' => $answer->getAnswer(),
+                    'comment' => (string) $answer->getComment(),
+                    'score' => (float) $answer->getPonderation(),
+                    'position' => (int) $answer->getPosition(),
+                    'hotspotType' => $hotspotType,
+                    'coordinates' => (string) ($answer->getHotspotCoordinates() ?: ''),
+                ];
+            }
+        }
+
+        return [
+            'kind' => 'hotspot',
+            'imageUrl' => $this->getHotspotImageUrl($question),
+            'imageName' => $this->getHotspotImageName($question),
+            'studentPoints' => $studentPoints,
+            'zones' => $zones,
+            'combination' => 26 === (int) $question->getType(),
+        ];
+    }
+
+    /**
+     * @return array<int, array{x: float, y: float, label: int, answerId?: int}>
+     */
+    private function parseHotspotCoordinates(string $value): array
+    {
+        $points = [];
+        foreach (explode('|', $value) as $index => $coordinate) {
+            $answerId = 0;
+            $coordinateValue = trim($coordinate);
+            if (str_contains($coordinateValue, ':')) {
+                [$answerIdValue, $coordinateValue] = explode(':', $coordinateValue, 2);
+                $answerId = (int) $answerIdValue;
+            }
+
+            $parts = array_map('trim', explode(';', $coordinateValue));
+            if (2 > \count($parts) || !is_numeric($parts[0]) || !is_numeric($parts[1])) {
+                continue;
+            }
+
+            $point = [
+                'x' => (float) $parts[0],
+                'y' => (float) $parts[1],
+                'label' => $index + 1,
+            ];
+            if (0 < $answerId) {
+                $point['answerId'] = $answerId;
+            }
+
+            $points[] = $point;
+        }
+
+        return $points;
+    }
+
+    private function getHotspotImageUrl(CQuizQuestion $question): string
+    {
+        try {
+            return $this->resourceNodeRepository->getResourceFileUrl($question->getResourceNode());
+        } catch (\Throwable) {
+            return '';
+        }
+    }
+
+    private function getHotspotImageName(CQuizQuestion $question): string
+    {
+        $resourceNode = $question->getResourceNode();
+        if (!$resourceNode instanceof ResourceNode) {
+            return '';
+        }
+
+        $resourceFile = $resourceNode->getResourceFiles()->first();
+
+        return $resourceFile instanceof ResourceFile ? (string) $resourceFile->getOriginalName() : (string) $resourceNode->getTitle();
+    }
+
+    /**
+     * @param array<int, TrackEAttempt> $rows
      * @param array<string, mixed>      $visibility
      *
      * @return array<string, mixed>
@@ -874,6 +1145,92 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
      *
      * @return array<string, mixed>
      */
+    private function normalizeAnnotationAnswer(CQuizQuestion $question, array $rows, array $visibility): array
+    {
+        $row = $rows[0] ?? null;
+
+        return [
+            'kind' => 'annotation',
+            'imageUrl' => $this->getHotspotImageUrl($question),
+            'imageName' => $this->getHotspotImageName($question),
+            'paths' => $row instanceof TrackEAttempt ? $this->parseAnnotationAnswer((string) $row->getAnswer())['paths'] : [],
+            'texts' => $row instanceof TrackEAttempt ? $this->parseAnnotationAnswer((string) $row->getAnswer())['texts'] : [],
+            'teacherComment' => $row instanceof TrackEAttempt && true === ($visibility['showFeedback'] ?? false) && '' !== $row->getTeacherComment() ? $row->getTeacherComment() : null,
+            'marks' => $row instanceof TrackEAttempt ? (float) $row->getMarks() : 0.0,
+        ];
+    }
+
+    /**
+     * @return array{paths: array<int, array{points: array<int, array{x: float, y: float}>}>, texts: array<int, array{text: string, x: float, y: float}>}
+     */
+    private function parseAnnotationAnswer(string $value): array
+    {
+        $result = [
+            'paths' => [],
+            'texts' => [],
+        ];
+
+        foreach (explode('|', $value) as $item) {
+            $item = trim($item);
+            if ('' === $item) {
+                continue;
+            }
+
+            $parts = explode(')(', $item);
+            $type = array_shift($parts);
+            if ('P' === $type) {
+                $points = [];
+                foreach ($parts as $point) {
+                    $decoded = $this->decodeAnnotationPoint($point);
+                    if (null !== $decoded) {
+                        $points[] = $decoded;
+                    }
+                }
+
+                if (2 <= \count($points)) {
+                    $result['paths'][] = ['points' => $points];
+                }
+                continue;
+            }
+
+            if ('T' === $type && 2 <= \count($parts)) {
+                $text = trim((string) array_shift($parts));
+                $decoded = $this->decodeAnnotationPoint((string) ($parts[0] ?? ''));
+                if ('' !== $text && null !== $decoded) {
+                    $result['texts'][] = [
+                        'text' => $text,
+                        'x' => $decoded['x'],
+                        'y' => $decoded['y'],
+                    ];
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return array{x: float, y: float}|null
+     */
+    private function decodeAnnotationPoint(string $value): ?array
+    {
+        $parts = array_map('trim', explode(';', $value));
+        if (2 > \count($parts) || !is_numeric($parts[0]) || !is_numeric($parts[1])) {
+            return null;
+        }
+
+        return [
+            'x' => (float) $parts[0],
+            'y' => (float) $parts[1],
+        ];
+    }
+
+    /**
+     * @param array<int, TrackEAttempt> $rows
+     * @param array<string, mixed>      $visibility
+     *
+     * @return array<string, mixed>
+     */
     private function normalizeUploadAnswer(array $rows, array $visibility): array
     {
         $row = $rows[0] ?? null;
@@ -895,9 +1252,35 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
     }
 
     /**
+     * @param array<int, TrackEAttempt> $rows
+     * @param array<string, mixed>      $visibility
+     *
+     * @return array<string, mixed>
+     */
+    private function normalizeOralExpressionAnswer(array $rows, array $visibility): array
+    {
+        $row = $rows[0] ?? null;
+        if (!$row instanceof TrackEAttempt) {
+            return [
+                'kind' => 'oral_expression',
+                'files' => [],
+                'teacherComment' => null,
+                'marks' => 0.0,
+            ];
+        }
+
+        return [
+            'kind' => 'oral_expression',
+            'files' => $this->normalizeAttemptFiles($row, true),
+            'teacherComment' => true === ($visibility['showFeedback'] ?? false) && '' !== $row->getTeacherComment() ? $row->getTeacherComment() : null,
+            'marks' => (float) $row->getMarks(),
+        ];
+    }
+
+    /**
      * @return array<int, array{id: int, name: string, size: int, mimeType: string, url: string}>
      */
-    private function normalizeAttemptFiles(TrackEAttempt $row): array
+    private function normalizeAttemptFiles(TrackEAttempt $row, bool $withInlineUrl = false): array
     {
         $files = [];
         foreach ($row->getAttemptFiles() as $attemptFile) {
@@ -919,6 +1302,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
                 'size' => (int) ($resourceFile instanceof ResourceFile ? $resourceFile->getSize() : 0),
                 'mimeType' => (string) ($resourceFile instanceof ResourceFile ? $resourceFile->getMimeType() : ''),
                 'url' => $url,
+                'inlineUrl' => $withInlineUrl ? $this->getAttemptFileDownloadUrl($row, $resourceNode, true) : $url,
             ];
         }
 
@@ -926,7 +1310,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
     }
 
 
-    private function getAttemptFileDownloadUrl(TrackEAttempt $attemptRow, ResourceNode $resourceNode): string
+    private function getAttemptFileDownloadUrl(TrackEAttempt $attemptRow, ResourceNode $resourceNode, bool $inline = false): string
     {
         $attempt = $attemptRow->getTrackEExercise();
         $quiz = $attempt->getQuiz();
@@ -945,7 +1329,11 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
 
         $request = $this->requestStack->getCurrentRequest();
         if (null !== $request) {
-            foreach (['gid', 'origin', 'learnpath_id', 'learnpath_item_id', 'learnpath_item_view_id'] as $queryKey) {
+            if ($inline) {
+            $query['inline'] = 1;
+        }
+
+        foreach (['gid', 'origin', 'learnpath_id', 'learnpath_item_id', 'learnpath_item_view_id'] as $queryKey) {
                 $value = $request->query->get($queryKey);
                 if (null !== $value && '' !== (string) $value) {
                     $query[$queryKey] = (string) $value;
@@ -1206,9 +1594,14 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         };
     }
 
+    private function isStructuralContentQuestion(CQuizQuestion $question): bool
+    {
+        return \in_array((int) $question->getType(), [15, 31], true);
+    }
+
     private function requiresManualCorrection(CQuizQuestion $question): bool
     {
-        return \in_array((int) $question->getType(), [5, 23], true);
+        return \in_array((int) $question->getType(), [5, 13, 20, 23], true);
     }
 
     private function getQuestionTypeLabel(int $type): string
@@ -1219,6 +1612,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             3 => 'Fill in blanks',
             4 => 'Matching',
             5 => 'Open question',
+            6 => 'Hotspot',
             9 => 'Exact Selection',
             10 => 'Unique answer with unknown',
             11 => 'Multiple answer true/false',
@@ -1226,12 +1620,17 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             14 => 'Global multiple answer',
             17 => 'Unique answer with images',
             19 => 'Matching draggable',
+            20 => 'Annotation',
+            21 => 'Reading comprehension',
+            22 => 'Multiple answer true/false with degree of certainty',
             23 => 'Upload answer',
             24 => 'Matching combination',
             25 => 'Matching draggable combination',
+            26 => 'Hotspot combination',
             27 => 'Fill in blanks combination',
             28 => 'Multiple answer dropdown combination',
             29 => 'Multiple answer dropdown',
+            31 => 'Page break',
             default => 'Question',
         };
     }

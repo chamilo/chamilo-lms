@@ -47,14 +47,22 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
 {
     private const VISIBILITY_PUBLISHED = 2;
     private const STATUS_INCOMPLETE = 'incomplete';
-    private const UNIQUE_TYPES = [1, 10, 17];
+    private const UNIQUE_TYPES = [1, 10, 17, 21];
     private const MULTIPLE_TYPES = [2, 9, 14];
-    private const TRUE_FALSE_TYPES = [11, 12];
+    private const TRUE_FALSE_TYPES = [11, 12, 22];
     private const FILL_BLANK_TYPES = [3, 27];
     private const MATCHING_TYPES = [4, 19, 24, 25];
     private const DROPDOWN_TYPES = [28, 29];
+    private const CALCULATED_TYPES = [16];
     private const FREE_ANSWER_TYPES = [5];
+    private const ORAL_EXPRESSION_TYPES = [13];
     private const UPLOAD_ANSWER_TYPES = [23];
+    private const ANNOTATION_TYPES = [20];
+    private const HOTSPOT_TYPES = [6, 26];
+    private const MEDIA_QUESTION = 15;
+    private const PAGE_BREAK = 31;
+    private const QUESTION_SELECTION_RANDOM = 2;
+    private const STRUCTURAL_CONTENT_TYPES = [self::MEDIA_QUESTION, self::PAGE_BREAK];
 
     public function __construct(
         private RequestStack $requestStack,
@@ -92,15 +100,21 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
         $attempt = $this->getRuntimeAttempt($request, $quiz, $course, $session, $canManage);
         $attemptQuestionIds = $attempt instanceof TrackEExercise ? $this->parseQuestionIds((string) $attempt->getDataTracking()) : null;
         $questions = $this->getRuntimeQuestions($quiz, $course, $session, $canManage, $attemptQuestionIds);
+        $runtimePages = $this->buildRuntimePages($quiz, $questions);
+        $settings = $this->getRuntimeSettings($quiz);
+        $settings['runtimePages'] = $runtimePages['pages'];
+        $settings['usesStructuralPages'] = $runtimePages['usesStructuralPages'];
+        $settings['forceGroupedByMedia'] = $runtimePages['forceGroupedByMedia'];
+        $settings['effectiveOneQuestionPerPage'] = $runtimePages['effectiveOneQuestionPerPage'];
 
         $response = new ExerciseRuntime();
         $response->exerciseId = $exerciseId;
         $response->title = $quiz->getTitle();
         $response->description = (string) $quiz->getDescription();
-        $response->settings = $this->getRuntimeSettings($quiz);
+        $response->settings = $settings;
         $response->questions = $questions;
         $response->legacyUrls = $this->getLegacyUrls($quiz, $course, $session);
-        $response->questionCount = \count($questions);
+        $response->questionCount = $this->countAnswerableQuestions($questions);
         $response->totalScore = $this->getTotalScore($questions);
         $canSubmit = !$canManage
             && $attempt instanceof TrackEExercise
@@ -143,8 +157,13 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
             || \in_array($type, self::FILL_BLANK_TYPES, true)
             || \in_array($type, self::MATCHING_TYPES, true)
             || \in_array($type, self::DROPDOWN_TYPES, true)
+            || \in_array($type, self::CALCULATED_TYPES, true)
             || \in_array($type, self::FREE_ANSWER_TYPES, true)
-            || \in_array($type, self::UPLOAD_ANSWER_TYPES, true);
+            || \in_array($type, self::ORAL_EXPRESSION_TYPES, true)
+            || \in_array($type, self::UPLOAD_ANSWER_TYPES, true)
+            || \in_array($type, self::ANNOTATION_TYPES, true)
+            || \in_array($type, self::HOTSPOT_TYPES, true)
+            || \in_array($type, self::STRUCTURAL_CONTENT_TYPES, true);
     }
 
     private function getRuntimeAttempt(Request $request, CQuiz $quiz, Course $course, ?Session $session, bool $canManage): ?TrackEExercise
@@ -427,26 +446,15 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
      */
     private function getRuntimeQuestions(CQuiz $quiz, Course $course, ?Session $session, bool $canManage, ?array $questionIds = null): array
     {
-        $queryBuilder = $this->entityManager->createQueryBuilder()
-            ->select('relQuestion')
-            ->addSelect('question')
-            ->from(CQuizRelQuestion::class, 'relQuestion')
-            ->innerJoin('relQuestion.question', 'question')
-            ->andWhere('IDENTITY(relQuestion.quiz) = :exerciseId')
-            ->setParameter('exerciseId', (int) $quiz->getIid(), Types::INTEGER)
-            ->orderBy('relQuestion.questionOrder', 'ASC')
-        ;
+        $relations = $this->getOrderedQuestionRelations($quiz);
+        $selectedQuestionIds = null !== $questionIds && [] !== $questionIds
+            ? array_values(array_unique(array_map('intval', $questionIds)))
+            : null;
+        $selectedQuestionIdMap = null !== $selectedQuestionIds ? array_flip($selectedQuestionIds) : [];
+        $mediaParents = [];
+        $normalizedById = [];
+        $includePageBreaks = !$this->usesRandomQuestionOrder($quiz);
 
-        if (null !== $questionIds && [] !== $questionIds) {
-            $queryBuilder
-                ->andWhere('IDENTITY(relQuestion.question) IN (:questionIds)')
-                ->setParameter('questionIds', $questionIds, ArrayParameterType::INTEGER)
-            ;
-        }
-
-        $relations = $queryBuilder->getQuery()->getResult();
-
-        $items = [];
         foreach ($relations as $relation) {
             if (!$relation instanceof CQuizRelQuestion) {
                 continue;
@@ -457,17 +465,54 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
                 continue;
             }
 
-            $items[(int) $question->getIid()] = $this->normalizeQuestion($question, $relation, $course, $session, $canManage);
+            $questionId = (int) $question->getIid();
+            $questionType = (int) $question->getType();
+
+            if (self::MEDIA_QUESTION === $questionType) {
+                $mediaParents[$questionId] = $this->normalizeMediaParentQuestion($question);
+                continue;
+            }
+
+            $isSelectedAttemptQuestion = null === $selectedQuestionIds || isset($selectedQuestionIdMap[$questionId]);
+            $isPageBreak = self::PAGE_BREAK === $questionType;
+
+            if (!$isSelectedAttemptQuestion && !($isPageBreak && $includePageBreaks)) {
+                continue;
+            }
+
+            if ($isPageBreak && !$includePageBreaks) {
+                continue;
+            }
+
+            $item = $this->normalizeQuestion($question, $relation, $course, $session, $canManage);
+            $normalizedById[$questionId] = $item;
         }
 
-        if (null !== $questionIds && [] !== $questionIds) {
+        foreach ($normalizedById as $questionId => &$item) {
+            $parentId = (int) ($item['parentId'] ?? 0);
+            if (0 < $parentId) {
+                if (!isset($mediaParents[$parentId])) {
+                    $mediaQuestion = $this->entityManager->getRepository(CQuizQuestion::class)->find($parentId);
+                    if ($mediaQuestion instanceof CQuizQuestion && self::MEDIA_QUESTION === (int) $mediaQuestion->getType()) {
+                        $mediaParents[$parentId] = $this->normalizeMediaParentQuestion($mediaQuestion);
+                    }
+                }
+
+                if (isset($mediaParents[$parentId])) {
+                    $item['parent'] = $mediaParents[$parentId];
+                }
+            }
+        }
+        unset($item);
+
+        if (null !== $selectedQuestionIds && $this->usesRandomQuestionOrder($quiz)) {
             $orderedItems = [];
-            foreach ($questionIds as $position => $questionId) {
-                if (!isset($items[$questionId])) {
+            foreach ($selectedQuestionIds as $position => $questionId) {
+                if (!isset($normalizedById[$questionId])) {
                     continue;
                 }
 
-                $item = $items[$questionId];
+                $item = $normalizedById[$questionId];
                 $item['position'] = $position + 1;
                 $orderedItems[] = $item;
             }
@@ -475,7 +520,38 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
             return $orderedItems;
         }
 
-        return array_values($items);
+        $orderedItems = [];
+        $position = 1;
+        foreach ($normalizedById as $questionId => $item) {
+            if (self::PAGE_BREAK !== (int) ($item['type'] ?? 0)) {
+                $item['position'] = $position;
+                $position++;
+            }
+
+            $orderedItems[] = $item;
+        }
+
+        return $orderedItems;
+    }
+
+    /**
+     * @return array<int, CQuizRelQuestion>
+     */
+    private function getOrderedQuestionRelations(CQuiz $quiz): array
+    {
+        $relations = $this->entityManager->createQueryBuilder()
+            ->select('relQuestion')
+            ->addSelect('question')
+            ->from(CQuizRelQuestion::class, 'relQuestion')
+            ->innerJoin('relQuestion.question', 'question')
+            ->andWhere('IDENTITY(relQuestion.quiz) = :exerciseId')
+            ->setParameter('exerciseId', (int) $quiz->getIid(), Types::INTEGER)
+            ->orderBy('relQuestion.questionOrder', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        return array_values(array_filter($relations, static fn (mixed $relation): bool => $relation instanceof CQuizRelQuestion));
     }
 
     /**
@@ -493,6 +569,8 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
             'typeLabel' => $this->getQuestionTypeLabel($type),
             'score' => (float) $question->getPonderation(),
             'position' => (int) $relation->getQuestionOrder(),
+            'parentId' => (int) ($question->getParentMediaId() ?? 0),
+            'parent' => null,
             'mandatory' => 1 === (int) $question->getMandatory(),
             'duration' => $question->getDuration(),
             'difficulty' => max(1, (int) $question->getLevel()),
@@ -505,9 +583,257 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
             'dropdown' => $this->getDropdownRuntime($question),
             'calculated' => $this->getCalculatedRuntime($question),
             'annotation' => $this->getImageRuntime($question, $course, $session, [20]),
-            'hotspot' => $this->getImageRuntime($question, $course, $session, [6, 8, 26]),
+            'hotspot' => $this->getHotspotRuntime($question, $course, $session, $canManage),
             'reading' => $this->getReadingRuntime($question),
+            'content' => $this->getContentRuntime($question),
+            'isContent' => \in_array($type, self::STRUCTURAL_CONTENT_TYPES, true),
         ];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function normalizeMediaParentQuestion(CQuizQuestion $question): array
+    {
+        return [
+            'id' => (int) $question->getIid(),
+            'title' => $question->getQuestion(),
+            'description' => (string) $question->getDescription(),
+            'type' => self::MEDIA_QUESTION,
+            'typeLabel' => $this->getQuestionTypeLabel(self::MEDIA_QUESTION),
+            'content' => [
+                'title' => $question->getQuestion(),
+                'description' => (string) $question->getDescription(),
+            ],
+        ];
+    }
+
+    private function usesRandomQuestionOrder(CQuiz $quiz): bool
+    {
+        return 0 < (int) $quiz->getRandom()
+            || self::QUESTION_SELECTION_RANDOM === (int) ($quiz->getQuestionSelectionType() ?? 0);
+    }
+
+    /**
+     * @param array<int, array<string, mixed>> $questions
+     *
+     * @return array{pages: array<int, array<string, mixed>>, usesStructuralPages: bool, forceGroupedByMedia: bool, effectiveOneQuestionPerPage: bool}
+     */
+    private function buildRuntimePages(CQuiz $quiz, array $questions): array
+    {
+        $questions = $this->trimPageBreakEdges($questions);
+        $oneQuestionPerPage = CQuiz::ONE_PER_PAGE === (int) $quiz->getType();
+        $hasMediaWithChildren = $this->hasMediaQuestionChildren($questions);
+        $forceGroupedByMedia = $oneQuestionPerPage && $hasMediaWithChildren;
+        $pages = [];
+
+        if ($hasMediaWithChildren) {
+            $groupIndexByParent = [];
+            foreach ($questions as $question) {
+                $type = (int) ($question['type'] ?? 0);
+                if (self::PAGE_BREAK === $type || self::MEDIA_QUESTION === $type) {
+                    continue;
+                }
+
+                $parentId = (int) ($question['parentId'] ?? 0);
+                if (0 < $parentId) {
+                    if (!isset($groupIndexByParent[$parentId])) {
+                        $groupIndexByParent[$parentId] = \count($pages);
+                        $pages[] = [
+                            'type' => 'media_group',
+                            'media' => $question['parent'] ?? null,
+                            'questionIds' => [],
+                        ];
+                    }
+
+                    $pages[$groupIndexByParent[$parentId]]['questionIds'][] = (int) $question['id'];
+                    continue;
+                }
+
+                $pages[] = [
+                    'type' => 'questions',
+                    'media' => null,
+                    'questionIds' => [(int) $question['id']],
+                ];
+            }
+
+            return [
+                'pages' => $this->reindexPages($pages),
+                'usesStructuralPages' => true,
+                'forceGroupedByMedia' => $forceGroupedByMedia,
+                'effectiveOneQuestionPerPage' => true,
+            ];
+        }
+
+        if (!$oneQuestionPerPage) {
+            $currentPage = [
+                'type' => 'questions',
+                'media' => null,
+                'pageBreak' => null,
+                'questionIds' => [],
+            ];
+
+            foreach ($questions as $question) {
+                $type = (int) ($question['type'] ?? 0);
+                if (self::MEDIA_QUESTION === $type) {
+                    continue;
+                }
+
+                if (self::PAGE_BREAK === $type) {
+                    if ([] !== $currentPage['questionIds'] || null !== $currentPage['pageBreak']) {
+                        $pages[] = $currentPage;
+                    }
+
+                    $currentPage = [
+                        'type' => 'questions',
+                        'media' => null,
+                        'pageBreak' => $this->normalizePageBreakForPage($question),
+                        'questionIds' => [],
+                    ];
+                    continue;
+                }
+
+                $currentPage['questionIds'][] = (int) $question['id'];
+            }
+
+            if ([] !== $currentPage['questionIds'] || null !== $currentPage['pageBreak']) {
+                $pages[] = $currentPage;
+            }
+
+            if ([] === $pages) {
+                $pages[] = [
+                    'type' => 'questions',
+                    'media' => null,
+                    'pageBreak' => null,
+                    'questionIds' => [],
+                ];
+            }
+
+            $usesStructuralPages = 1 < \count($pages) || $this->containsPageBreak($questions);
+
+            return [
+                'pages' => $this->reindexPages($pages),
+                'usesStructuralPages' => $usesStructuralPages,
+                'forceGroupedByMedia' => false,
+                'effectiveOneQuestionPerPage' => $usesStructuralPages,
+            ];
+        }
+
+        foreach ($questions as $question) {
+            $type = (int) ($question['type'] ?? 0);
+            if (\in_array($type, [self::MEDIA_QUESTION, self::PAGE_BREAK], true)) {
+                continue;
+            }
+
+            $pages[] = [
+                'type' => 'questions',
+                'media' => null,
+                'pageBreak' => null,
+                'questionIds' => [(int) $question['id']],
+            ];
+        }
+
+        return [
+            'pages' => $this->reindexPages($pages),
+            'usesStructuralPages' => false,
+            'forceGroupedByMedia' => false,
+            'effectiveOneQuestionPerPage' => true,
+        ];
+    }
+
+    /**
+     * @param array<int, array<string, mixed>> $questions
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private function trimPageBreakEdges(array $questions): array
+    {
+        while ([] !== $questions && self::PAGE_BREAK === (int) ($questions[array_key_first($questions)]['type'] ?? 0)) {
+            array_shift($questions);
+        }
+
+        while ([] !== $questions && self::PAGE_BREAK === (int) ($questions[array_key_last($questions)]['type'] ?? 0)) {
+            array_pop($questions);
+        }
+
+        return array_values($questions);
+    }
+
+    /**
+     * @param array<int, array<string, mixed>> $questions
+     */
+    private function hasMediaQuestionChildren(array $questions): bool
+    {
+        foreach ($questions as $question) {
+            if (0 < (int) ($question['parentId'] ?? 0)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param array<int, array<string, mixed>> $questions
+     */
+    private function containsPageBreak(array $questions): bool
+    {
+        foreach ($questions as $question) {
+            if (self::PAGE_BREAK === (int) ($question['type'] ?? 0)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param array<string, mixed> $question
+     *
+     * @return array<string, mixed>
+     */
+    private function normalizePageBreakForPage(array $question): array
+    {
+        return [
+            'id' => (int) ($question['id'] ?? 0),
+            'title' => (string) ($question['title'] ?? ''),
+            'description' => (string) ($question['description'] ?? ''),
+            'content' => $question['content'] ?? null,
+        ];
+    }
+
+    /**
+     * @param array<int, array<string, mixed>> $pages
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private function reindexPages(array $pages): array
+    {
+        $result = [];
+        foreach (array_values($pages) as $index => $page) {
+            $page['index'] = $index;
+            $page['number'] = $index + 1;
+            $result[] = $page;
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param array<int, array<string, mixed>> $questions
+     */
+    private function countAnswerableQuestions(array $questions): int
+    {
+        $total = 0;
+        foreach ($questions as $question) {
+            if (\in_array((int) ($question['type'] ?? 0), self::STRUCTURAL_CONTENT_TYPES, true)) {
+                continue;
+            }
+
+            $total++;
+        }
+
+        return $total;
     }
 
     /**
@@ -516,7 +842,7 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
     private function getChoiceItems(CQuizQuestion $question): array
     {
         $type = (int) $question->getType();
-        if (!\in_array($type, [1, 2, 9, 10, 11, 12, 14, 17, 22], true)) {
+        if (!\in_array($type, [1, 2, 9, 10, 11, 12, 14, 17, 21, 22], true)) {
             return [];
         }
 
@@ -768,17 +1094,77 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
      */
     private function getCalculatedRuntime(CQuizQuestion $question): ?array
     {
-        if (16 !== (int) $question->getType()) {
+        if (!\in_array((int) $question->getType(), self::CALCULATED_TYPES, true)) {
             return null;
         }
 
-        $text = '';
-        $answer = $this->getFirstAnswer($question);
-        if ($answer instanceof CQuizAnswer) {
-            $text = $this->stripCalculatedMetadata($answer->getAnswer());
+        $variations = [];
+        foreach ($this->getOrderedAnswers($question) as $answer) {
+            $parsedAnswer = $this->parseCalculatedAnswer((string) $answer->getAnswer());
+            $variations[] = [
+                'id' => (int) $answer->getIid(),
+                'text' => $parsedAnswer['text'],
+                'position' => (int) $answer->getPosition(),
+            ];
         }
 
-        return ['text' => $text];
+        $firstVariation = $variations[0] ?? null;
+
+        return [
+            'answerId' => null !== $firstVariation ? (int) $firstVariation['id'] : null,
+            'text' => (string) ($firstVariation['text'] ?? ''),
+            'variations' => $variations,
+        ];
+    }
+
+    /**
+     * @return array<string, mixed>|null
+     */
+    private function getHotspotRuntime(CQuizQuestion $question, Course $course, ?Session $session, bool $canManage): ?array
+    {
+        if (!\in_array((int) $question->getType(), self::HOTSPOT_TYPES, true)) {
+            return null;
+        }
+
+        $image = $this->getImageRuntime($question, $course, $session, self::HOTSPOT_TYPES) ?? [
+            'imageName' => '',
+            'imageUrl' => '',
+        ];
+        $zones = [];
+        $maxClicks = 0;
+
+        foreach ($this->getOrderedAnswers($question) as $answer) {
+            $hotspotType = (string) ($answer->getHotspotType() ?: 'square');
+            if (!\in_array($hotspotType, ['square', 'circle', 'poly'], true)) {
+                continue;
+            }
+
+            if (0.0 < (float) $answer->getPonderation()) {
+                ++$maxClicks;
+            }
+
+            $zone = [
+                'id' => (int) $answer->getIid(),
+                'answer' => $answer->getAnswer(),
+                'position' => (int) $answer->getPosition(),
+                'hotspotType' => $hotspotType,
+            ];
+
+            if ($canManage) {
+                $zone['score'] = (float) $answer->getPonderation();
+                $zone['coordinates'] = (string) ($answer->getHotspotCoordinates() ?: '');
+            }
+
+            $zones[] = $zone;
+        }
+
+        return [
+            'imageName' => (string) ($image['imageName'] ?? ''),
+            'imageUrl' => (string) ($image['imageUrl'] ?? ''),
+            'maxClicks' => max(1, $maxClicks),
+            'combination' => 26 === (int) $question->getType(),
+            'zones' => $zones,
+        ];
     }
 
     /**
@@ -831,6 +1217,21 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
     }
 
     /**
+     * @return array<string, mixed>|null
+     */
+    private function getContentRuntime(CQuizQuestion $question): ?array
+    {
+        if (!\in_array((int) $question->getType(), self::STRUCTURAL_CONTENT_TYPES, true)) {
+            return null;
+        }
+
+        return [
+            'title' => $question->getQuestion(),
+            'description' => (string) $question->getDescription(),
+        ];
+    }
+
+    /**
      * @return array<int, CQuizAnswer>
      */
     private function getOrderedAnswers(CQuizQuestion $question): array
@@ -871,11 +1272,27 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
         return $url.(str_contains($url, '?') ? '&' : '?').http_build_query($params);
     }
 
-    private function stripCalculatedMetadata(string $answer): string
+    /**
+     * @return array{text: string, expectedAnswer: string, formula: string}
+     */
+    private function parseCalculatedAnswer(string $answer): array
     {
         $parts = explode('@@', $answer, 2);
+        $textWithExpectedAnswer = (string) ($parts[0] ?? $answer);
+        $formula = (string) ($parts[1] ?? '');
+        $expectedAnswer = '';
+        $text = $textWithExpectedAnswer;
 
-        return (string) ($parts[0] ?? $answer);
+        if (1 === preg_match('/\[([^\[\]]*)\]\s*$/', $textWithExpectedAnswer, $matches)) {
+            $expectedAnswer = trim((string) ($matches[1] ?? ''));
+            $text = (string) preg_replace('/\s*\[[^\[\]]*\]\s*$/', '', $textWithExpectedAnswer);
+        }
+
+        return [
+            'text' => $text,
+            'expectedAnswer' => $expectedAnswer,
+            'formula' => $formula,
+        ];
     }
 
     /**
@@ -918,6 +1335,10 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
     {
         $total = 0.0;
         foreach ($questions as $question) {
+            if (\in_array((int) ($question['type'] ?? 0), self::STRUCTURAL_CONTENT_TYPES, true)) {
+                continue;
+            }
+
             $total += (float) ($question['score'] ?? 0.0);
         }
 

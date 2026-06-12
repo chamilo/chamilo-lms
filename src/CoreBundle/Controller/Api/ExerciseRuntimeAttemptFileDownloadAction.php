@@ -93,7 +93,7 @@ final class ExerciseRuntimeAttemptFileDownloadAction extends AbstractController
         $response->headers->set(
             'Content-Disposition',
             $response->headers->makeDisposition(
-                ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+                true === $request->query->getBoolean('inline') ? ResponseHeaderBag::DISPOSITION_INLINE : ResponseHeaderBag::DISPOSITION_ATTACHMENT,
                 $fileName,
                 $this->getAsciiFileName($fileName)
             )

@@ -36,7 +36,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * Uploads a learner file answer and attaches it to a track_e_attempt row as AttemptFile, matching legacy upload answer tracking.
+ * Uploads a learner file/audio answer and attaches it to a track_e_attempt row as AttemptFile, matching legacy manual answer tracking.
  *
  * @implements ProcessorInterface<ExerciseRuntimeUploadAnswer, ExerciseRuntimeUploadAnswer>
  */
@@ -44,8 +44,10 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
 {
     private const VISIBILITY_PUBLISHED = 2;
     private const STATUS_INCOMPLETE = 'incomplete';
+    private const ORAL_EXPRESSION = 13;
     private const UPLOAD_ANSWER = 23;
     private const ATTEMPT_FILE_RESOURCE_TYPE = 'attempt_file';
+    private const ORAL_EXPRESSION_ALLOWED_EXTENSIONS = ['wav', 'ogg'];
 
     public function __construct(
         private RequestStack $requestStack,
@@ -93,8 +95,8 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
             throw new NotFoundHttpException('The requested question was not found in this exercise.');
         }
 
-        if (self::UPLOAD_ANSWER !== (int) $question->getType()) {
-            throw new BadRequestHttpException('This endpoint only supports upload answer questions.');
+        if (!\in_array((int) $question->getType(), [self::UPLOAD_ANSWER, self::ORAL_EXPRESSION], true)) {
+            throw new BadRequestHttpException('This endpoint only supports upload answer and oral expression questions.');
         }
 
         if (!$this->questionBelongsToAttempt($questionId, $attempt)) {
@@ -104,11 +106,12 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
         $uploadedFiles = $this->getUploadedFiles($request);
         $postedNodeIds = $this->getPostedResourceNodeIds($request);
         if ([] === $uploadedFiles && [] === $postedNodeIds) {
-            throw new BadRequestHttpException('A file is required for this upload answer.');
+            throw new BadRequestHttpException('A file is required for this answer.');
         }
 
         $resourceNodes = [];
         foreach ($uploadedFiles as $uploadedFile) {
+            $this->validateUploadedFileForQuestion($uploadedFile, $question);
             $resourceNodes[] = $this->createAttemptFileResourceNode($uploadedFile, $user);
         }
         foreach ($postedNodeIds as $postedNodeId) {
@@ -368,6 +371,22 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
         }
 
         return $nodeIds;
+    }
+
+    private function validateUploadedFileForQuestion(UploadedFile $uploadedFile, CQuizQuestion $question): void
+    {
+        if (self::ORAL_EXPRESSION !== (int) $question->getType()) {
+            return;
+        }
+
+        $extension = strtolower((string) $uploadedFile->getClientOriginalExtension());
+        if ('' === $extension) {
+            $extension = strtolower((string) $uploadedFile->guessExtension());
+        }
+
+        if (!\in_array($extension, self::ORAL_EXPRESSION_ALLOWED_EXTENSIONS, true)) {
+            throw new BadRequestHttpException('Only WAV and OGG audio files are accepted for oral expression questions.');
+        }
     }
 
     private function createAttemptFileResourceNode(UploadedFile $uploadedFile, User $user): ResourceNode

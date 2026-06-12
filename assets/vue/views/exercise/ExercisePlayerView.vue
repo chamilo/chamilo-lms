@@ -126,7 +126,7 @@
               {{ t("Teacher preview does not create a tracked attempt.") }}
             </div>
             <div v-else-if="activeAttempt">
-              {{ t("Attempt") }} #{{ activeAttempt.attemptId }} · {{ t("Question") }} {{ currentQuestionIndex + 1 }} / {{ visibleQuestionTotal }}
+              {{ t("Attempt") }} #{{ activeAttempt.attemptId }} · {{ progressLabel }}
               <span v-if="activeAttempt.remainingSeconds !== null && activeAttempt.remainingSeconds !== undefined">
                 · {{ t("Time left") }}: {{ formatSeconds(activeAttempt.remainingSeconds) }}
               </span>
@@ -174,6 +174,46 @@
       </div>
 
       <form v-if="canManage || activeAttempt" class="space-y-4" @submit.prevent="submitDisabled">
+        <div
+          v-if="currentRuntimePage?.pageBreak || currentRuntimePage?.media"
+          class="space-y-4 rounded-xl border border-gray-20 bg-white p-5 shadow-sm"
+        >
+          <div
+            v-if="currentRuntimePage?.pageBreak"
+            class="rounded-lg border border-gray-20 bg-gray-10 p-4"
+          >
+            <div
+              v-if="currentRuntimePage.pageBreak.title"
+              class="exercise-runtime-html text-lg font-semibold text-gray-90"
+              v-html="currentRuntimePage.pageBreak.title"
+            />
+            <div
+              v-if="currentRuntimePage.pageBreak.description"
+              class="exercise-runtime-html mt-2 text-sm text-gray-700"
+              v-html="currentRuntimePage.pageBreak.description"
+            />
+          </div>
+
+          <div
+            v-if="currentRuntimePage?.media"
+            class="rounded-lg border border-dashed border-gray-40 bg-gray-10 p-4"
+          >
+            <div class="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500">
+              {{ t("Media question") }}
+            </div>
+            <h2
+              v-if="currentRuntimePage.media.title"
+              class="exercise-runtime-html text-lg font-semibold text-gray-90"
+              v-html="currentRuntimePage.media.title"
+            />
+            <div
+              v-if="currentRuntimePage.media.description || currentRuntimePage.media.content?.description"
+              class="exercise-runtime-html mt-2 text-sm text-gray-700"
+              v-html="currentRuntimePage.media.description || currentRuntimePage.media.content?.description"
+            />
+          </div>
+        </div>
+
         <article
           v-for="(question, index) in visibleQuestions"
           :key="question.id"
@@ -210,6 +250,11 @@
 
           <div v-if="answers[question.id]" class="space-y-4">
             <div v-if="isRadioChoice(question)" class="space-y-3">
+              <div
+                v-if="isReadingQuestion(question) && question.reading?.text"
+                class="exercise-runtime-html rounded-lg border border-gray-20 bg-gray-10 p-4 text-gray-800"
+                v-html="question.reading.text"
+              />
               <label
                 v-for="choice in question.choices"
                 :key="choice.id"
@@ -245,27 +290,94 @@
 
             <div v-else-if="isTrueFalseQuestion(question)" class="space-y-3">
               <div
-                v-for="choice in question.choices"
-                :key="choice.id"
-                class="rounded-lg border border-gray-20 p-3"
+                v-if="isDegreeCertaintyQuestion(question)"
+                class="overflow-x-auto rounded-lg border border-gray-20"
               >
-                <div class="exercise-runtime-html mb-3 font-medium text-gray-90" v-html="choice.answer" />
-                <div class="flex flex-wrap gap-3">
-                  <label
-                    v-for="option in trueFalseOptions(question)"
-                    :key="`${choice.id}-${option.value}`"
-                    class="inline-flex items-center gap-2 text-sm text-gray-700"
-                  >
-                    <input
-                      v-model="answers[question.id].trueFalse[choice.id]"
-                      :name="`question_${question.id}_${choice.id}`"
-                      type="radio"
-                      :value="option.value"
-                    />
-                    <span>{{ option.label }}</span>
-                  </label>
-                </div>
+                <table class="min-w-full divide-y divide-gray-20 text-sm">
+                  <thead class="bg-gray-10 text-left text-xs font-semibold uppercase tracking-wide text-gray-600">
+                    <tr>
+                      <th class="w-full px-4 py-3">
+                        {{ t("Statement") }}
+                      </th>
+                      <th
+                        v-for="option in trueFalseChoiceOptions(question)"
+                        :key="`degree-certainty-answer-header-${option.value}`"
+                        class="whitespace-nowrap px-3 py-3 text-center"
+                      >
+                        {{ option.label }}
+                      </th>
+                      <th
+                        v-for="option in degreeCertaintyOptions(question)"
+                        :key="`degree-certainty-header-${option.value}`"
+                        class="whitespace-nowrap px-3 py-3 text-center"
+                      >
+                        {{ option.label }}
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-gray-20 bg-white">
+                    <tr
+                      v-for="choice in question.choices"
+                      :key="choice.id"
+                    >
+                      <td class="min-w-[18rem] px-4 py-3 align-top">
+                        <div class="exercise-runtime-html font-medium text-gray-90" v-html="choice.answer" />
+                      </td>
+                      <td
+                        v-for="option in trueFalseChoiceOptions(question)"
+                        :key="`${choice.id}-${option.value}`"
+                        class="px-3 py-3 text-center align-middle"
+                      >
+                        <input
+                          v-model="answers[question.id].trueFalse[choice.id]"
+                          :aria-label="`${displayText(choice.answer)} - ${option.label}`"
+                          :name="`question_${question.id}_${choice.id}`"
+                          type="radio"
+                          :value="option.value"
+                        />
+                      </td>
+                      <td
+                        v-for="option in degreeCertaintyOptions(question)"
+                        :key="`${choice.id}-degree-${option.value}`"
+                        class="px-3 py-3 text-center align-middle"
+                      >
+                        <input
+                          v-model="answers[question.id].degreeCertainty[choice.id]"
+                          :aria-label="`${displayText(choice.answer)} - ${option.label}`"
+                          :name="`question_${question.id}_${choice.id}_degree`"
+                          type="radio"
+                          :value="option.value"
+                        />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
+
+              <template v-else>
+                <div
+                  v-for="choice in question.choices"
+                  :key="choice.id"
+                  class="rounded-lg border border-gray-20 p-3"
+                >
+                  <div class="exercise-runtime-html mb-3 font-medium text-gray-90" v-html="choice.answer" />
+                  <div class="flex flex-wrap gap-3">
+                    <label
+                      v-for="option in trueFalseChoiceOptions(question)"
+                      :key="`${choice.id}-${option.value}`"
+                      class="inline-flex items-center gap-2 text-sm text-gray-700"
+                    >
+                      <input
+                        v-model="answers[question.id].trueFalse[choice.id]"
+                        :name="`question_${question.id}_${choice.id}`"
+                        type="radio"
+                        :value="option.value"
+                      />
+                      <span>{{ option.label }}</span>
+                    </label>
+                  </div>
+                </div>
+              </template>
             </div>
 
             <div v-else-if="isFillBlanksQuestion(question)" class="rounded-lg border border-gray-20 p-4 text-gray-800">
@@ -287,6 +399,85 @@
                   type="text"
                 />
               </template>
+            </div>
+
+            <div v-else-if="isMatchingDraggableQuestion(question)" class="space-y-4">
+              <div class="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,22rem)]">
+                <div class="space-y-3">
+                  <div class="text-sm font-semibold text-gray-80">
+                    {{ t("Drop each option on the matching answer") }}
+                  </div>
+
+                  <div
+                    v-for="prompt in question.matching.prompts"
+                    :key="prompt.id"
+                    class="grid gap-3 rounded-lg border border-gray-20 bg-white p-3 md:grid-cols-[minmax(0,1fr)_minmax(14rem,18rem)] md:items-stretch"
+                    @dragover.prevent
+                    @drop.prevent="onMatchingDrop(question, prompt.id)"
+                  >
+                    <div class="exercise-runtime-html min-w-0 text-gray-900" v-html="prompt.answer" />
+
+                    <button
+                      type="button"
+                      class="min-h-[3.25rem] rounded-lg border border-dashed px-3 py-2 text-left text-sm transition"
+                      :class="selectedMatchingOptionId(question, prompt.id)
+                        ? 'border-primary bg-primary/5 text-gray-900'
+                        : 'border-gray-30 bg-gray-15 text-gray-500 hover:border-primary hover:bg-primary/5'"
+                      @click="assignSelectedMatchingOption(question, prompt.id)"
+                    >
+                      <template v-if="selectedMatchingOption(question, prompt.id)">
+                        <span class="mb-1 block text-xs font-semibold uppercase text-primary">
+                          {{ matchingOptionDisplayLabel(selectedMatchingOption(question, prompt.id)) }}
+                        </span>
+                        <span
+                          class="exercise-runtime-html block"
+                          v-html="selectedMatchingOption(question, prompt.id).answer"
+                        />
+                        <span
+                          class="mt-2 inline-flex text-xs text-danger"
+                          @click.stop="clearMatchingOption(question, prompt.id)"
+                        >
+                          {{ t("Clear match") }}
+                        </span>
+                      </template>
+                      <template v-else>
+                        {{ selectedMatchingOptionForQuestion(question)
+                          ? t("Click to place the selected option here")
+                          : t("Select an option, then click here") }}
+                      </template>
+                    </button>
+                  </div>
+                </div>
+
+                <aside class="space-y-3 rounded-lg border border-gray-20 bg-gray-15 p-3">
+                  <div class="text-sm font-semibold text-gray-80">
+                    {{ t("Options") }}
+                  </div>
+
+                  <button
+                    v-for="option in question.matching.options"
+                    :key="option.id"
+                    type="button"
+                    draggable="true"
+                    class="w-full rounded-lg border px-3 py-2 text-left text-sm transition"
+                    :class="matchingOptionButtonClass(question, option.id)"
+                    @click="selectMatchingOption(question, option.id)"
+                    @dragstart="onMatchingDragStart(option.id)"
+                  >
+                    <span class="mb-1 block text-xs font-semibold uppercase">
+                      {{ matchingOptionDisplayLabel(option) }}
+                    </span>
+                    <span class="exercise-runtime-html block" v-html="option.answer" />
+                    <span v-if="isMatchingOptionAssigned(question, option.id)" class="mt-1 block text-xs text-gray-500">
+                      {{ t("Already matched") }}
+                    </span>
+                  </button>
+
+                  <p class="text-xs text-gray-500">
+                    {{ t("You can drag an option to an answer, or select an option and then click a target box.") }}
+                  </p>
+                </aside>
+              </div>
             </div>
 
             <div v-else-if="isMatchingQuestion(question)" class="space-y-3">
@@ -346,9 +537,9 @@
 
             <div v-else-if="isCalculatedQuestion(question)" class="space-y-3">
               <div
-                v-if="question.calculated.text"
+                v-if="currentCalculatedVariation(question).text"
                 class="exercise-runtime-html rounded-lg border border-gray-20 p-3 text-sm text-gray-800"
-                v-html="question.calculated.text"
+                v-html="currentCalculatedVariation(question).text"
               />
               <input
                 v-model="answers[question.id].calculated"
@@ -393,41 +584,270 @@
               </div>
             </div>
 
-            <div v-else-if="isOralQuestion(question)" class="space-y-2">
-              <div class="rounded-lg border border-yellow-100 bg-yellow-50 p-3 text-sm text-yellow-800">
-                {{ t("Audio recording and upload will be connected in the submit processor batch.") }}
+            <div v-else-if="isOralQuestion(question)" class="space-y-3">
+              <div class="rounded-lg border border-gray-20 bg-gray-10 p-3">
+                <div class="mb-2 text-sm font-semibold text-gray-800">
+                  {{ t("Record oral answer") }}
+                </div>
+                <AudioRecorder
+                  :multiple="false"
+                  @recorded-audio="onOralRecorded(question, $event)"
+                />
               </div>
-              <input
-                class="block w-full text-sm text-gray-700"
-                :name="`question_${question.id}_audio`"
-                type="file"
-                accept="audio/*"
+
+              <div class="space-y-2 rounded-lg border border-gray-20 bg-white p-3">
+                <div class="text-sm font-semibold text-gray-800">
+                  {{ t("Or upload an audio file") }}
+                </div>
+                <input
+                  class="block w-full text-sm text-gray-700"
+                  :name="`question_${question.id}_audio`"
+                  type="file"
+                  accept=".wav,.ogg,audio/wav,audio/ogg"
+                  @change="onOralFileChange(question, $event)"
+                />
+              </div>
+
+              <audio
+                v-if="answers[question.id]?.oralPreviewUrl"
+                class="max-w-full"
+                controls
+                :src="answers[question.id].oralPreviewUrl"
               />
+
+              <div
+                v-if="answers[question.id]?.oralFileName"
+                class="rounded-lg border border-info/30 bg-support-1 p-3 text-sm text-support-4"
+              >
+                {{ t("Selected audio") }}: {{ answers[question.id].oralFileName }}
+              </div>
+              <div
+                v-if="answers[question.id]?.uploadedFiles?.length"
+                class="space-y-2 rounded-lg border border-success/30 bg-success/10 p-3 text-sm text-success"
+              >
+                <div class="font-semibold">{{ t("Uploaded audio") }}</div>
+                <div
+                  v-for="file in answers[question.id].uploadedFiles"
+                  :key="file.id || file.name"
+                >
+                  {{ file.name || t("Uploaded audio") }}
+                </div>
+              </div>
             </div>
 
             <div v-else-if="isAnnotationQuestion(question)" class="space-y-3">
-              <img
-                v-if="question.annotation.imageUrl"
-                class="max-h-[32rem] max-w-full rounded-lg border border-gray-20 object-contain"
-                :alt="question.annotation.imageName || t('Question image')"
-                :src="question.annotation.imageUrl"
-              />
-              <textarea
-                v-model="answers[question.id].text"
-                class="min-h-28 w-full rounded border border-gray-30 px-3 py-2 text-sm"
-                :name="`question_${question.id}_annotation`"
-              />
+              <div class="grid gap-4 lg:grid-cols-[minmax(0,1fr)_20rem]">
+                <div
+                  v-if="question.annotation.imageUrl"
+                  class="inline-block max-w-full rounded-lg border border-gray-20 bg-gray-10 p-2"
+                >
+                  <div class="relative inline-block max-w-full">
+                    <img
+                      class="max-h-[32rem] max-w-full cursor-crosshair object-contain"
+                      :alt="question.annotation.imageName || t('Question image')"
+                      :src="question.annotation.imageUrl"
+                      @click="onAnnotationImageClick(question, $event)"
+                      @load="onAnnotationImageLoad(question, $event)"
+                    />
+                    <svg
+                      v-if="annotationImageReady(question)"
+                      class="pointer-events-none absolute inset-0 h-full w-full"
+                      :viewBox="annotationViewBox(question)"
+                      preserveAspectRatio="none"
+                    >
+                      <polyline
+                        v-for="(path, pathIndex) in annotationPaths(question)"
+                        :key="`${question.id}-annotation-path-${pathIndex}`"
+                        fill="none"
+                        :points="annotationPolylinePoints(path)"
+                        stroke="currentColor"
+                        stroke-width="3"
+                        class="text-primary"
+                      />
+                    </svg>
+                    <span
+                      v-for="(textAnnotation, textIndex) in annotationTexts(question)"
+                      :key="`${question.id}-annotation-text-${textIndex}`"
+                      class="pointer-events-none absolute -translate-x-1/2 -translate-y-1/2 rounded bg-white/90 px-2 py-1 text-xs font-semibold text-primary shadow"
+                      :style="annotationPointStyle(question, textAnnotation)"
+                    >
+                      {{ textAnnotation.text }}
+                    </span>
+                  </div>
+                </div>
+                <div
+                  v-else
+                  class="rounded-lg border border-warning/30 bg-warning/10 p-3 text-sm text-warning"
+                >
+                  {{ t("No annotation image available") }}
+                </div>
+
+                <aside class="space-y-3 rounded-lg border border-gray-20 bg-white p-3">
+                  <div class="text-sm font-semibold text-gray-90">
+                    {{ t("Annotation tools") }}
+                  </div>
+                  <div class="grid grid-cols-2 gap-2">
+                    <button
+                      class="rounded border px-3 py-2 text-sm font-semibold"
+                      :class="answers[question.id]?.annotationMode === 'path' ? 'border-primary bg-primary/10 text-primary' : 'border-gray-30 text-gray-700'"
+                      type="button"
+                      @click="setAnnotationMode(question, 'path')"
+                    >
+                      {{ t("Add annotation path") }}
+                    </button>
+                    <button
+                      class="rounded border px-3 py-2 text-sm font-semibold"
+                      :class="answers[question.id]?.annotationMode === 'text' ? 'border-primary bg-primary/10 text-primary' : 'border-gray-30 text-gray-700'"
+                      type="button"
+                      @click="setAnnotationMode(question, 'text')"
+                    >
+                      {{ t("Add annotation text") }}
+                    </button>
+                  </div>
+
+                  <div
+                    v-if="answers[question.id]?.annotationMode === 'text'"
+                    class="space-y-2"
+                  >
+                    <label class="text-xs font-semibold uppercase tracking-wide text-gray-500">
+                      {{ t("Text to place") }}
+                    </label>
+                    <input
+                      v-model="answers[question.id].annotationTextDraft"
+                      class="w-full rounded border border-gray-30 px-3 py-2 text-sm"
+                      :name="`question_${question.id}_annotation_text`"
+                      type="text"
+                    />
+                    <p class="text-xs text-gray-500">
+                      {{ t("Click the image to place the text annotation.") }}
+                    </p>
+                  </div>
+                  <p
+                    v-else
+                    class="text-xs text-gray-500"
+                  >
+                    {{ t("Click the image to add path points. Use Start new path to separate paths.") }}
+                  </p>
+
+                  <div class="flex flex-wrap gap-2">
+                    <button
+                      class="rounded border border-gray-30 px-3 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-10"
+                      type="button"
+                      @click="startNewAnnotationPath(question)"
+                    >
+                      {{ t("Start new path") }}
+                    </button>
+                    <button
+                      class="rounded border border-gray-30 px-3 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-10"
+                      type="button"
+                      @click="undoAnnotation(question)"
+                    >
+                      {{ t("Undo") }}
+                    </button>
+                    <button
+                      class="rounded border border-danger/30 px-3 py-2 text-xs font-semibold text-danger hover:bg-danger/10"
+                      type="button"
+                      @click="clearAnnotation(question)"
+                    >
+                      {{ t("Clear") }}
+                    </button>
+                  </div>
+
+                  <div class="space-y-2 text-xs text-gray-700">
+                    <div class="font-semibold text-gray-90">
+                      {{ t("Current annotations") }}
+                    </div>
+                    <div>{{ t("Paths") }}: {{ annotationPaths(question).length }}</div>
+                    <div>{{ t("Texts") }}: {{ annotationTexts(question).length }}</div>
+                  </div>
+                </aside>
+              </div>
             </div>
 
             <div v-else-if="isHotspotQuestion(question)" class="space-y-3">
-              <img
-                v-if="question.hotspot.imageUrl"
-                class="max-h-[32rem] max-w-full rounded-lg border border-gray-20 object-contain"
-                :alt="question.hotspot.imageName || t('Question image')"
-                :src="question.hotspot.imageUrl"
+              <div class="grid gap-4 lg:grid-cols-[minmax(0,1fr)_20rem]">
+                <div
+                  v-if="question.hotspot.imageUrl"
+                  class="inline-block max-w-full rounded-lg border border-gray-20 bg-gray-10 p-2"
+                >
+                  <div class="relative inline-block max-w-full">
+                    <img
+                      class="max-h-[32rem] max-w-full cursor-crosshair object-contain"
+                      :alt="question.hotspot.imageName || t('Question image')"
+                      :src="question.hotspot.imageUrl"
+                      @click="onHotspotImageClick(question, $event)"
+                      @load="onHotspotImageLoad(question, $event)"
+                    />
+                    <button
+                      v-for="point in hotspotPlacedPoints(question)"
+                      :key="`${question.id}-hotspot-point-${point.answerId || point.label}`"
+                      class="absolute flex h-7 w-7 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-white bg-primary text-xs font-bold text-white shadow"
+                      :style="hotspotPointStyle(question, point)"
+                      type="button"
+                      :title="t('Remove point')"
+                      @click.stop="removeHotspotPoint(question, point.answerId)"
+                    >
+                      {{ hotspotPointLabel(question, point) }}
+                    </button>
+                  </div>
+                </div>
+                <div
+                  v-else
+                  class="rounded-lg border border-warning/30 bg-warning/10 p-3 text-sm text-warning"
+                >
+                  {{ t("No hotspot image available") }}
+                </div>
+
+                <aside class="space-y-3 rounded-lg border border-gray-20 bg-white p-3">
+                  <div class="text-sm font-semibold text-gray-90">
+                    {{ t("Answers") }}
+                  </div>
+                  <div class="space-y-2">
+                    <button
+                      v-for="(zone, zoneIndex) in hotspotZones(question)"
+                      :key="zone.id"
+                      class="w-full rounded-lg border px-3 py-2 text-left text-sm transition hover:bg-gray-10"
+                      :class="Number(answers[question.id].selectedHotspotAnswerId) === Number(zone.id) ? 'border-primary bg-primary/5 text-primary' : 'border-gray-20 text-gray-700'"
+                      type="button"
+                      @click="selectHotspotZone(question, zone.id)"
+                    >
+                      <div class="flex items-start gap-2">
+                        <span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-white">
+                          {{ zone.position || zoneIndex + 1 }}
+                        </span>
+                        <span class="min-w-0 flex-1">
+                          <span class="exercise-runtime-html block font-medium" v-html="zone.answer" />
+                          <span
+                            v-if="hotspotPointByAnswer(question, zone.id)"
+                            class="mt-1 block text-xs text-success"
+                          >
+                            {{ t("Placed") }}
+                          </span>
+                        </span>
+                      </div>
+                    </button>
+                  </div>
+                  <div class="rounded-lg border border-info/30 bg-support-1 p-3 text-sm text-support-4">
+                    {{ t("Select an answer, then click on the image to mark it.") }}
+                    <span v-if="hotspotPlacedPoints(question).length">
+                      {{ t("Click a marker to remove it.") }}
+                    </span>
+                  </div>
+                </aside>
+              </div>
+            </div>
+
+            <div v-else-if="isMediaQuestion(question)" class="space-y-3">
+              <div
+                v-if="question.content?.description || question.description"
+                class="exercise-runtime-html rounded-lg border border-gray-20 bg-gray-10 p-4 text-gray-800"
+                v-html="question.content?.description || question.description"
               />
-              <div class="rounded-lg border border-yellow-100 bg-yellow-50 p-3 text-sm text-yellow-800">
-                {{ t("Hotspot click capture and scoring will be migrated in the submit processor batch.") }}
+              <div
+                v-else
+                class="rounded-lg border border-gray-20 bg-gray-10 p-3 text-sm text-gray-700"
+              >
+                {{ t("Media question") }}
               </div>
             </div>
 
@@ -441,11 +861,18 @@
               />
             </div>
 
-            <div
-              v-else-if="isPageBreak(question)"
-              class="rounded-lg border border-gray-20 bg-gray-10 p-3 text-sm text-gray-700"
-            >
-              {{ t("Page break") }}
+            <div v-else-if="isPageBreak(question)" class="space-y-3">
+              <div
+                v-if="question.content?.description || question.description"
+                class="exercise-runtime-html rounded-lg border border-gray-20 bg-gray-10 p-4 text-gray-800"
+                v-html="question.content?.description || question.description"
+              />
+              <div
+                v-else
+                class="rounded-lg border border-gray-20 bg-gray-10 p-3 text-sm text-gray-700"
+              >
+                {{ t("Page break") }}
+              </div>
             </div>
 
             <div
@@ -460,7 +887,7 @@
         <div class="flex flex-wrap justify-between gap-2 rounded-xl border border-gray-20 bg-white p-4 shadow-sm">
           <BaseButton
             :disabled="!canMovePrevious || isSavingAnswer"
-            :label="t('Previous question')"
+            :label="previousNavigationLabel"
             icon="back"
             type="secondary"
             @click="goToPreviousQuestion"
@@ -475,14 +902,14 @@
               @click="saveVisibleAnswers"
             />
             <BaseButton
-              v-if="settings.oneQuestionPerPage"
-              :disabled="!canMoveNext || isSavingAnswer"
-              :label="t('Next question')"
+              v-if="canMoveNext"
+              :disabled="isSavingAnswer"
+              :label="nextNavigationLabel"
               type="primary"
               @click="goToNextQuestion"
             />
             <BaseButton
-              v-if="!canManage && activeAttempt"
+              v-if="!canManage && activeAttempt && canFinishCurrentPage"
               :disabled="!canSubmit || isSavingAnswer || isFinishingAttempt"
               :label="isFinishingAttempt ? t('Finishing') : t('Finish in Vue')"
               icon="check"
@@ -508,6 +935,7 @@ import { computed, onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import AudioRecorder from "../../components/AudioRecorder.vue"
 import exerciseService from "../../services/exerciseService"
 
 const { t } = useI18n()
@@ -540,20 +968,64 @@ const isFinishingAttempt = ref(false)
 const finishError = ref("")
 const finishMessage = ref("")
 const savedQuestionIds = ref(new Set())
+const draggedMatchingOptionId = ref(null)
+const selectedMatchingOptions = ref({})
 
-const visibleQuestions = computed(() => {
-  if (!settings.value.oneQuestionPerPage) {
-    return questions.value
+const questionMap = computed(() => new Map(questions.value.map((question) => [Number(question.id), question])))
+
+const runtimePages = computed(() => {
+  const pages = settings.value?.runtimePages
+
+  return Array.isArray(pages) ? pages : []
+})
+
+const usesPagedNavigation = computed(() => {
+  if (runtimePages.value.length > 0 && (settings.value.effectiveOneQuestionPerPage || settings.value.usesStructuralPages)) {
+    return true
   }
 
-  const question = questions.value[currentQuestionIndex.value]
+  return true === settings.value.oneQuestionPerPage
+})
+
+const currentRuntimePage = computed(() => {
+  if (runtimePages.value.length === 0) {
+    return null
+  }
+
+  return runtimePages.value[Math.min(Math.max(0, currentQuestionIndex.value), runtimePages.value.length - 1)] || null
+})
+
+const visibleQuestions = computed(() => {
+  if (currentRuntimePage.value && usesPagedNavigation.value) {
+    return (currentRuntimePage.value.questionIds || [])
+      .map((questionId) => questionMap.value.get(Number(questionId)))
+      .filter(Boolean)
+  }
+
+  if (!settings.value.oneQuestionPerPage) {
+    return questions.value.filter((question) => !isStructuralQuestion(question))
+  }
+
+  const question = questions.value.filter((item) => !isStructuralQuestion(item))[currentQuestionIndex.value]
 
   return question ? [question] : []
 })
 
-const visibleQuestionTotal = computed(() => questions.value.length)
-const canMovePrevious = computed(() => settings.value.oneQuestionPerPage && currentQuestionIndex.value > 0)
-const canMoveNext = computed(() => settings.value.oneQuestionPerPage && currentQuestionIndex.value < questions.value.length - 1)
+const visibleQuestionTotal = computed(() => answerableQuestions.value.length)
+const navigationTotal = computed(() => usesPagedNavigation.value ? Math.max(1, runtimePages.value.length || visibleQuestionTotal.value) : visibleQuestionTotal.value)
+const canMovePrevious = computed(() => usesPagedNavigation.value && currentQuestionIndex.value > 0)
+const canMoveNext = computed(() => usesPagedNavigation.value && currentQuestionIndex.value < navigationTotal.value - 1)
+const canFinishCurrentPage = computed(() => !usesPagedNavigation.value || !canMoveNext.value)
+const answerableQuestions = computed(() => questions.value.filter((question) => !isStructuralQuestion(question)))
+const progressLabel = computed(() => {
+  if (usesPagedNavigation.value && currentRuntimePage.value && (settings.value.usesStructuralPages || visibleQuestions.value.length > 1)) {
+    return `${t("Page")} ${currentQuestionIndex.value + 1} / ${navigationTotal.value}`
+  }
+
+  return `${t("Question")} ${currentQuestionIndex.value + 1} / ${navigationTotal.value}`
+})
+const previousNavigationLabel = computed(() => usesPagedNavigation.value && (settings.value.usesStructuralPages || visibleQuestions.value.length > 1) ? t("Previous page") : t("Previous question"))
+const nextNavigationLabel = computed(() => usesPagedNavigation.value && (settings.value.usesStructuralPages || visibleQuestions.value.length > 1) ? t("Next page") : t("Next question"))
 
 function getQueryValue(value) {
   return Array.isArray(value) ? value[0] : value
@@ -667,22 +1139,42 @@ function reorderQuestionsFromAttempt(questionIds = []) {
     return
   }
 
-  const questionMap = new Map(questions.value.map((question) => [Number(question.id), question]))
-  const orderedQuestions = []
+  const selectedIds = new Set(questionIds.map(Number))
+  const orderedAttemptIds = questionIds.map(Number)
+  const originalQuestionMap = new Map(questions.value.map((question) => [Number(question.id), question]))
 
-  for (const questionId of questionIds.map(Number)) {
-    const question = questionMap.get(questionId)
+  if (settings.value?.usesStructuralPages || settings.value?.forceGroupedByMedia) {
+    questionCount.value = answerableQuestions.value.length
+    return
+  }
+
+  const orderedQuestions = []
+  for (const questionId of orderedAttemptIds) {
+    const question = originalQuestionMap.get(questionId)
     if (question) {
       orderedQuestions.push(question)
     }
   }
 
+  for (const question of questions.value) {
+    if (isStructuralQuestion(question) && !selectedIds.has(Number(question.id))) {
+      orderedQuestions.push(question)
+    }
+  }
+
   if (orderedQuestions.length > 0) {
-    questions.value = orderedQuestions.map((question, index) => ({
-      ...question,
-      position: index + 1,
-    }))
-    questionCount.value = questions.value.length
+    let position = 1
+    questions.value = orderedQuestions.map((question) => {
+      if (isStructuralQuestion(question)) {
+        return question
+      }
+
+      return {
+        ...question,
+        position: position++,
+      }
+    })
+    questionCount.value = answerableQuestions.value.length
   }
 }
 
@@ -799,7 +1291,7 @@ async function saveQuestionDraftAnswer(question) {
     return
   }
 
-  const response = isUploadQuestion(question)
+  const response = isUploadQuestion(question) || isOralQuestion(question)
     ? await saveUploadQuestionAnswer(question, exerciseId, attemptId)
     : await exerciseService.saveExerciseRuntimeAnswer(
       {
@@ -838,14 +1330,14 @@ async function saveQuestionDraftAnswer(question) {
 
 async function saveUploadQuestionAnswer(question, exerciseId, attemptId) {
   const questionAnswer = answers.value[question.id] || {}
-  if (!questionAnswer.uploadFile) {
+  if (!questionAnswer.uploadFile && !questionAnswer.oralFile) {
     return null
   }
 
   const formData = new FormData()
   formData.append("questionId", String(Number(question.id)))
   formData.append("secondsSpent", "0")
-  formData.append("file", questionAnswer.uploadFile)
+  formData.append("file", questionAnswer.uploadFile || questionAnswer.oralFile)
 
   const response = await exerciseService.uploadExerciseRuntimeAnswer(
     formData,
@@ -857,10 +1349,158 @@ async function saveUploadQuestionAnswer(question, exerciseId, attemptId) {
   if (response?.success) {
     questionAnswer.uploadFile = null
     questionAnswer.uploadFileName = ""
+    questionAnswer.oralFile = null
+    questionAnswer.oralFileName = ""
+    questionAnswer.oralPreviewUrl = ""
     questionAnswer.uploadedFiles = Array.isArray(response.files) ? response.files : []
   }
 
   return response
+}
+
+
+function getMatchingAnswerState(question) {
+  if (!answers.value[question.id]) {
+    answers.value[question.id] = { matching: {} }
+  }
+
+  if (!answers.value[question.id].matching || typeof answers.value[question.id].matching !== "object") {
+    answers.value[question.id].matching = {}
+  }
+
+  return answers.value[question.id].matching
+}
+
+function matchingOptionById(question, optionId) {
+  const safeOptionId = Number(optionId || 0)
+
+  return (question.matching?.options || []).find((option) => Number(option.id) === safeOptionId) || null
+}
+
+function selectedMatchingOptionId(question, promptId) {
+  return Number(getMatchingAnswerState(question)[promptId] || 0)
+}
+
+function selectedMatchingOption(question, promptId) {
+  return matchingOptionById(question, selectedMatchingOptionId(question, promptId))
+}
+
+function selectedMatchingOptionForQuestion(question) {
+  return matchingOptionById(question, selectedMatchingOptions.value[question.id])
+}
+
+function matchingOptionDisplayLabel(option) {
+  if (!option) {
+    return ""
+  }
+
+  return option.label ? `${option.label}.` : `#${option.position || option.id}`
+}
+
+function isMatchingOptionAssigned(question, optionId) {
+  const safeOptionId = Number(optionId || 0)
+  if (safeOptionId <= 0) {
+    return false
+  }
+
+  return Object.values(getMatchingAnswerState(question)).some((value) => Number(value) === safeOptionId)
+}
+
+function matchingOptionButtonClass(question, optionId) {
+  const safeOptionId = Number(optionId || 0)
+  const isSelected = Number(selectedMatchingOptions.value[question.id] || 0) === safeOptionId
+  const isAssigned = isMatchingOptionAssigned(question, safeOptionId)
+
+  if (isSelected) {
+    return "border-primary bg-primary/10 text-primary"
+  }
+
+  if (isAssigned) {
+    return "border-gray-25 bg-white text-gray-500 opacity-70 hover:border-primary"
+  }
+
+  return "border-gray-30 bg-white text-gray-900 hover:border-primary hover:bg-primary/5"
+}
+
+function selectMatchingOption(question, optionId) {
+  const safeOptionId = Number(optionId || 0)
+  if (safeOptionId <= 0) {
+    return
+  }
+
+  selectedMatchingOptions.value = {
+    ...selectedMatchingOptions.value,
+    [question.id]: safeOptionId,
+  }
+}
+
+function assignSelectedMatchingOption(question, promptId) {
+  const selectedOptionId = Number(selectedMatchingOptions.value[question.id] || 0)
+  if (selectedOptionId <= 0) {
+    return
+  }
+
+  assignMatchingOption(question, promptId, selectedOptionId)
+}
+
+function assignMatchingOption(question, promptId, optionId) {
+  const safePromptId = Number(promptId || 0)
+  const safeOptionId = Number(optionId || 0)
+  if (safePromptId <= 0 || safeOptionId <= 0) {
+    return
+  }
+
+  const matching = getMatchingAnswerState(question)
+  for (const existingPromptId of Object.keys(matching)) {
+    if (Number(existingPromptId) !== safePromptId && Number(matching[existingPromptId]) === safeOptionId) {
+      delete matching[existingPromptId]
+    }
+  }
+
+  matching[safePromptId] = safeOptionId
+  selectedMatchingOptions.value = {
+    ...selectedMatchingOptions.value,
+    [question.id]: nextUnassignedMatchingOptionId(question) || safeOptionId,
+  }
+}
+
+function clearMatchingOption(question, promptId) {
+  const safePromptId = Number(promptId || 0)
+  if (safePromptId <= 0) {
+    return
+  }
+
+  const matching = getMatchingAnswerState(question)
+  const removedOptionId = Number(matching[safePromptId] || 0)
+  delete matching[safePromptId]
+
+  if (removedOptionId > 0) {
+    selectedMatchingOptions.value = {
+      ...selectedMatchingOptions.value,
+      [question.id]: removedOptionId,
+    }
+  }
+}
+
+function nextUnassignedMatchingOptionId(question) {
+  const assignedOptionIds = new Set(Object.values(getMatchingAnswerState(question)).map((value) => Number(value || 0)))
+  const option = (question.matching?.options || []).find((candidate) => !assignedOptionIds.has(Number(candidate.id)))
+
+  return Number(option?.id || 0)
+}
+
+function onMatchingDragStart(optionId) {
+  draggedMatchingOptionId.value = Number(optionId || 0)
+}
+
+function onMatchingDrop(question, promptId) {
+  const optionId = Number(draggedMatchingOptionId.value || 0)
+  draggedMatchingOptionId.value = null
+  if (optionId <= 0) {
+    return
+  }
+
+  assignMatchingOption(question, promptId, optionId)
 }
 
 function buildAnswerPayload(question) {
@@ -875,7 +1515,10 @@ function buildAnswerPayload(question) {
   }
 
   if (isTrueFalseQuestion(question)) {
-    return { trueFalse: questionAnswer.trueFalse || {} }
+    return {
+      trueFalse: questionAnswer.trueFalse || {},
+      degreeCertainty: questionAnswer.degreeCertainty || {},
+    }
   }
 
   if (isFillBlanksQuestion(question)) {
@@ -888,6 +1531,24 @@ function buildAnswerPayload(question) {
 
   if (isDropdownQuestion(question)) {
     return { dropdown: questionAnswer.dropdown }
+  }
+
+  if (isCalculatedQuestion(question)) {
+    return {
+      calculated: questionAnswer.calculated || "",
+      answerId: questionAnswer.calculatedAnswerId || currentCalculatedVariation(question).id || question.calculated?.answerId || null,
+    }
+  }
+
+  if (isAnnotationQuestion(question)) {
+    return {
+      paths: annotationPaths(question),
+      texts: annotationTexts(question),
+    }
+  }
+
+  if (isHotspotQuestion(question)) {
+    return { points: hotspotPlacedPoints(question) }
   }
 
   if (isDraftFreeAnswerQuestion(question)) {
@@ -904,12 +1565,16 @@ function isDraftSaveSupported(question) {
     || isFillBlanksQuestion(question)
     || isMatchingQuestion(question)
     || isDropdownQuestion(question)
+    || isCalculatedQuestion(question)
+    || isHotspotQuestion(question)
+    || isAnnotationQuestion(question)
     || isDraftFreeAnswerQuestion(question)
     || isUploadQuestion(question)
+    || isOralQuestion(question)
 }
 
 function isDraftTrueFalseQuestion(question) {
-  return [11, 12].includes(Number(question.type))
+  return [11, 12, 22].includes(Number(question.type))
 }
 
 function isDraftFreeAnswerQuestion(question) {
@@ -952,12 +1617,17 @@ function applySavedAnswer(question, rows) {
 
   if (isTrueFalseQuestion(question)) {
     questionAnswer.trueFalse = {}
+    questionAnswer.degreeCertainty = {}
     for (const row of rows) {
       const parts = String(row.answer || "").split(":")
       const answerId = Number(parts[0] || 0)
       const optionValue = Number(parts[1] || 0)
+      const degreeValue = Number(parts[2] || 0)
       if (answerId > 0 && optionValue > 0) {
         questionAnswer.trueFalse[answerId] = optionValue
+      }
+      if (answerId > 0 && degreeValue > 0) {
+        questionAnswer.degreeCertainty[answerId] = degreeValue
       }
     }
     return
@@ -985,6 +1655,27 @@ function applySavedAnswer(question, rows) {
     return
   }
 
+  if (isCalculatedQuestion(question)) {
+    const [answerId, value] = parseSavedCalculatedAnswer(rows[0]?.answer || "")
+    questionAnswer.calculatedAnswerId = answerId || question.calculated?.answerId || currentCalculatedVariation(question).id || null
+    questionAnswer.calculated = value
+    return
+  }
+
+  if (isAnnotationQuestion(question)) {
+    const annotation = parseSavedAnnotationAnswer(rows[0]?.answer || "")
+    questionAnswer.annotationPaths = annotation.paths
+    questionAnswer.annotationTexts = annotation.texts
+    questionAnswer.annotationMode = "path"
+    return
+  }
+
+  if (isHotspotQuestion(question)) {
+    questionAnswer.hotspotPoints = parseSavedHotspotPoints(rows[0]?.answer || "")
+    questionAnswer.selectedHotspotAnswerId = firstMissingHotspotZoneId(question) || hotspotZones(question)[0]?.id || null
+    return
+  }
+
   if (isOpenQuestion(question)) {
     questionAnswer.text = rows[0]?.answer || ""
     return
@@ -992,6 +1683,11 @@ function applySavedAnswer(question, rows) {
 
   if (isUploadQuestion(question)) {
     questionAnswer.uploadedFiles = rows.length > 0 ? [{ name: t("Uploaded file") }] : []
+    return
+  }
+
+  if (isOralQuestion(question)) {
+    questionAnswer.uploadedFiles = rows.length > 0 ? [{ name: t("Uploaded audio") }] : []
   }
 }
 
@@ -1037,24 +1733,43 @@ function formatSeconds(seconds) {
 
 function initializeAnswerState() {
   const nextAnswers = {}
+  const nextSelectedMatchingOptions = {}
 
   for (const question of questions.value) {
     nextAnswers[question.id] = {
       choice: null,
       choices: [],
       trueFalse: {},
+      degreeCertainty: {},
       blanks: {},
       matching: {},
       dropdown: "",
       calculated: "",
+      calculatedAnswerId: currentCalculatedVariation(question).id || question.calculated?.answerId || null,
       text: "",
       uploadFile: null,
       uploadFileName: "",
       uploadedFiles: [],
+      oralFile: null,
+      oralFileName: "",
+      oralPreviewUrl: "",
+      annotationMode: "path",
+      annotationPaths: [[]],
+      annotationTexts: [],
+      annotationTextDraft: "",
+      annotationImageSize: null,
+      hotspotPoints: [],
+      hotspotImageSize: null,
+      selectedHotspotAnswerId: hotspotZones(question)[0]?.id || null,
+    }
+
+    if (isMatchingDraggableQuestion(question)) {
+      nextSelectedMatchingOptions[question.id] = question.matching?.options?.[0]?.id || null
     }
   }
 
   answers.value = nextAnswers
+  selectedMatchingOptions.value = nextSelectedMatchingOptions
 }
 
 
@@ -1069,16 +1784,443 @@ function onUploadAnswerFileChange(question, event) {
   questionAnswer.uploadFileName = file?.name || ""
 }
 
+function onOralRecorded(question, audioBlob) {
+  const questionAnswer = answers.value[question.id]
+  if (!questionAnswer || !audioBlob) {
+    return
+  }
+
+  const fileName = `oral-expression-${question.id}.wav`
+  questionAnswer.oralFile = new File([audioBlob], fileName, { type: "audio/wav" })
+  questionAnswer.oralFileName = fileName
+  questionAnswer.uploadFile = null
+  questionAnswer.uploadFileName = ""
+  questionAnswer.oralPreviewUrl = window.URL.createObjectURL(audioBlob)
+}
+
+function onOralFileChange(question, event) {
+  const file = event?.target?.files?.[0] || null
+  const questionAnswer = answers.value[question.id]
+  if (!questionAnswer) {
+    return
+  }
+
+  questionAnswer.oralFile = file
+  questionAnswer.oralFileName = file?.name || ""
+  questionAnswer.uploadFile = null
+  questionAnswer.uploadFileName = ""
+  questionAnswer.oralPreviewUrl = file ? window.URL.createObjectURL(file) : ""
+}
+
+function setAnnotationMode(question, mode) {
+  const questionAnswer = answers.value[question.id]
+  if (!questionAnswer) {
+    return
+  }
+
+  questionAnswer.annotationMode = mode
+  if (mode === "path") {
+    ensureCurrentAnnotationPath(question)
+  }
+}
+
+function onAnnotationImageLoad(question, event) {
+  const questionAnswer = answers.value[question.id]
+  const image = event?.target
+  if (!questionAnswer || !image) {
+    return
+  }
+
+  questionAnswer.annotationImageSize = {
+    width: Number(image.naturalWidth || image.width || 0),
+    height: Number(image.naturalHeight || image.height || 0),
+  }
+}
+
+function onAnnotationImageClick(question, event) {
+  const questionAnswer = answers.value[question.id]
+  const image = event?.target
+  if (!questionAnswer || !image) {
+    return
+  }
+
+  const point = getImageNaturalPoint(image, event)
+  if (!point) {
+    return
+  }
+
+  questionAnswer.annotationImageSize = point.size
+  if (questionAnswer.annotationMode === "text") {
+    const text = String(questionAnswer.annotationTextDraft || "").trim()
+    if (!text) {
+      return
+    }
+
+    questionAnswer.annotationTexts.push({ text, x: point.x, y: point.y })
+    questionAnswer.annotationTextDraft = ""
+    return
+  }
+
+  const currentPath = ensureCurrentAnnotationPath(question)
+  currentPath.push({ x: point.x, y: point.y })
+}
+
+function getImageNaturalPoint(image, event) {
+  const rect = image.getBoundingClientRect()
+  const naturalWidth = Number(image.naturalWidth || rect.width || 0)
+  const naturalHeight = Number(image.naturalHeight || rect.height || 0)
+  if (!rect.width || !rect.height || !naturalWidth || !naturalHeight) {
+    return null
+  }
+
+  return {
+    x: Math.max(0, Math.round(((event.clientX - rect.left) / rect.width) * naturalWidth)),
+    y: Math.max(0, Math.round(((event.clientY - rect.top) / rect.height) * naturalHeight)),
+    size: { width: naturalWidth, height: naturalHeight },
+  }
+}
+
+function ensureCurrentAnnotationPath(question) {
+  const questionAnswer = answers.value[question.id]
+  if (!questionAnswer.annotationPaths || !Array.isArray(questionAnswer.annotationPaths)) {
+    questionAnswer.annotationPaths = [[]]
+  }
+
+  if (questionAnswer.annotationPaths.length === 0) {
+    questionAnswer.annotationPaths.push([])
+  }
+
+  return questionAnswer.annotationPaths[questionAnswer.annotationPaths.length - 1]
+}
+
+function startNewAnnotationPath(question) {
+  const questionAnswer = answers.value[question.id]
+  if (!questionAnswer) {
+    return
+  }
+
+  const currentPath = ensureCurrentAnnotationPath(question)
+  if (currentPath.length === 0) {
+    return
+  }
+
+  questionAnswer.annotationPaths.push([])
+}
+
+function undoAnnotation(question) {
+  const questionAnswer = answers.value[question.id]
+  if (!questionAnswer) {
+    return
+  }
+
+  if (questionAnswer.annotationMode === "text" && questionAnswer.annotationTexts.length > 0) {
+    questionAnswer.annotationTexts.pop()
+    return
+  }
+
+  const currentPath = ensureCurrentAnnotationPath(question)
+  if (currentPath.length > 0) {
+    currentPath.pop()
+    return
+  }
+
+  if (questionAnswer.annotationPaths.length > 1) {
+    questionAnswer.annotationPaths.pop()
+  }
+}
+
+function clearAnnotation(question) {
+  const questionAnswer = answers.value[question.id]
+  if (!questionAnswer) {
+    return
+  }
+
+  questionAnswer.annotationPaths = [[]]
+  questionAnswer.annotationTexts = []
+  questionAnswer.annotationTextDraft = ""
+}
+
+function annotationPaths(question) {
+  const questionAnswer = answers.value[question.id] || {}
+  const paths = Array.isArray(questionAnswer.annotationPaths) ? questionAnswer.annotationPaths : []
+
+  return paths
+    .map((path) => Array.isArray(path) ? path.filter((point) => Number.isFinite(Number(point.x)) && Number.isFinite(Number(point.y))) : [])
+    .filter((path) => path.length > 0)
+    .map((points) => ({ points }))
+}
+
+function annotationTexts(question) {
+  const questionAnswer = answers.value[question.id] || {}
+  const texts = Array.isArray(questionAnswer.annotationTexts) ? questionAnswer.annotationTexts : []
+
+  return texts.filter((item) => String(item.text || "").trim() && Number.isFinite(Number(item.x)) && Number.isFinite(Number(item.y)))
+}
+
+function annotationImageReady(question) {
+  const size = answers.value[question.id]?.annotationImageSize || {}
+
+  return Number(size.width || 0) > 0 && Number(size.height || 0) > 0
+}
+
+function annotationViewBox(question) {
+  const size = answers.value[question.id]?.annotationImageSize || {}
+
+  return `0 0 ${Number(size.width || 1)} ${Number(size.height || 1)}`
+}
+
+function annotationPolylinePoints(path) {
+  const points = Array.isArray(path?.points) ? path.points : []
+
+  return points.map((point) => `${Number(point.x || 0)},${Number(point.y || 0)}`).join(" ")
+}
+
+function annotationPointStyle(question, point) {
+  const size = answers.value[question.id]?.annotationImageSize || {}
+  const width = Number(size.width || 0)
+  const height = Number(size.height || 0)
+  if (width > 0 && height > 0) {
+    return {
+      left: `${(Number(point.x || 0) / width) * 100}%`,
+      top: `${(Number(point.y || 0) / height) * 100}%`,
+    }
+  }
+
+  return {
+    left: "0%",
+    top: "0%",
+  }
+}
+
+function parseSavedAnnotationAnswer(value) {
+  const result = { paths: [], texts: [] }
+  for (const item of String(value || "").split("|")) {
+    const parts = item.split(")(")
+    const type = parts.shift()
+    if (type === "P") {
+      const points = parts.map(decodeAnnotationPoint).filter(Boolean)
+      if (points.length > 0) {
+        result.paths.push(points)
+      }
+      continue
+    }
+
+    if (type === "T" && parts.length >= 2) {
+      const text = String(parts.shift() || "").trim()
+      const point = decodeAnnotationPoint(parts[0])
+      if (text && point) {
+        result.texts.push({ text, ...point })
+      }
+    }
+  }
+
+  if (result.paths.length === 0) {
+    result.paths = [[]]
+  }
+
+  return result
+}
+
+function decodeAnnotationPoint(value) {
+  const parts = String(value || "").split(";")
+  const x = Number(parts[0] || NaN)
+  const y = Number(parts[1] || NaN)
+  if (!Number.isFinite(x) || !Number.isFinite(y)) {
+    return null
+  }
+
+  return { x, y }
+}
+
+function onHotspotImageLoad(question, event) {
+  const questionAnswer = answers.value[question.id]
+  const image = event?.target
+  if (!questionAnswer || !image) {
+    return
+  }
+
+  questionAnswer.hotspotImageSize = {
+    width: Number(image.naturalWidth || image.width || 0),
+    height: Number(image.naturalHeight || image.height || 0),
+  }
+}
+
+function onHotspotImageClick(question, event) {
+  const questionAnswer = answers.value[question.id]
+  const image = event?.target
+  const selectedAnswerId = Number(questionAnswer?.selectedHotspotAnswerId || 0)
+  if (!questionAnswer || !image || selectedAnswerId <= 0) {
+    return
+  }
+
+  const rect = image.getBoundingClientRect()
+  const naturalWidth = Number(image.naturalWidth || rect.width || 0)
+  const naturalHeight = Number(image.naturalHeight || rect.height || 0)
+  if (!rect.width || !rect.height || !naturalWidth || !naturalHeight) {
+    return
+  }
+
+  const x = Math.round(((event.clientX - rect.left) / rect.width) * naturalWidth)
+  const y = Math.round(((event.clientY - rect.top) / rect.height) * naturalHeight)
+  questionAnswer.hotspotImageSize = { width: naturalWidth, height: naturalHeight }
+
+  const nextPoint = {
+    answerId: selectedAnswerId,
+    x: Math.max(0, x),
+    y: Math.max(0, y),
+  }
+  const existingIndex = questionAnswer.hotspotPoints.findIndex((point) => Number(point.answerId || 0) === selectedAnswerId)
+  if (existingIndex >= 0) {
+    questionAnswer.hotspotPoints.splice(existingIndex, 1, nextPoint)
+  } else {
+    questionAnswer.hotspotPoints.push(nextPoint)
+  }
+
+  questionAnswer.selectedHotspotAnswerId = firstMissingHotspotZoneId(question) || selectedAnswerId
+}
+
+function selectHotspotZone(question, answerId) {
+  const questionAnswer = answers.value[question.id]
+  if (!questionAnswer) {
+    return
+  }
+
+  questionAnswer.selectedHotspotAnswerId = Number(answerId || 0) || null
+}
+
+function removeHotspotPoint(question, answerId) {
+  const questionAnswer = answers.value[question.id]
+  if (!questionAnswer) {
+    return
+  }
+
+  const numericAnswerId = Number(answerId || 0)
+  if (numericAnswerId > 0) {
+    questionAnswer.hotspotPoints = questionAnswer.hotspotPoints.filter((point) => Number(point.answerId || 0) !== numericAnswerId)
+    questionAnswer.selectedHotspotAnswerId = numericAnswerId
+    return
+  }
+
+  questionAnswer.hotspotPoints.pop()
+}
+
+function hotspotZones(question) {
+  const zones = Array.isArray(question?.hotspot?.zones) ? question.hotspot.zones : []
+
+  return zones.length ? zones : (Array.isArray(question?.hotspot?.items) ? question.hotspot.items : [])
+}
+
+function hotspotPointByAnswer(question, answerId) {
+  const questionAnswer = answers.value[question.id] || {}
+  const numericAnswerId = Number(answerId || 0)
+
+  return (questionAnswer.hotspotPoints || []).find((point) => Number(point.answerId || 0) === numericAnswerId) || null
+}
+
+function hotspotPlacedPoints(question) {
+  const questionAnswer = answers.value[question.id] || {}
+  const zones = hotspotZones(question)
+  const rawPoints = questionAnswer.hotspotPoints || []
+  const orderedPoints = []
+
+  for (const [zoneIndex, zone] of zones.entries()) {
+    const answerId = Number(zone.id || 0)
+    const point = rawPoints.find((item) => Number(item.answerId || 0) === answerId)
+    if (!point) {
+      continue
+    }
+
+    orderedPoints.push({
+      ...point,
+      answerId,
+      label: zone.position || zoneIndex + 1,
+    })
+  }
+
+  for (const [pointIndex, point] of rawPoints.entries()) {
+    const answerId = Number(point.answerId || 0)
+    if (answerId > 0 && zones.some((zone) => Number(zone.id || 0) === answerId)) {
+      continue
+    }
+
+    orderedPoints.push({
+      ...point,
+      answerId,
+      label: point.label || orderedPoints.length + pointIndex + 1,
+    })
+  }
+
+  return orderedPoints
+}
+
+function hotspotPointLabel(question, point) {
+  return point.label || hotspotZones(question).findIndex((zone) => Number(zone.id || 0) === Number(point.answerId || 0)) + 1 || ''
+}
+
+function firstMissingHotspotZoneId(question) {
+  const questionAnswer = answers.value[question.id] || {}
+  const placedAnswerIds = new Set((questionAnswer.hotspotPoints || []).map((point) => Number(point.answerId || 0)).filter((value) => value > 0))
+  const missingZone = hotspotZones(question).find((zone) => !placedAnswerIds.has(Number(zone.id || 0)))
+
+  return missingZone?.id || null
+}
+
+function hotspotPointStyle(question, point) {
+  const questionAnswer = answers.value[question.id] || {}
+  const size = questionAnswer.hotspotImageSize || {}
+  const width = Number(size.width || 0)
+  const height = Number(size.height || 0)
+
+  if (width > 0 && height > 0) {
+    return {
+      left: `${(Number(point.x || 0) / width) * 100}%`,
+      top: `${(Number(point.y || 0) / height) * 100}%`,
+    }
+  }
+
+  return {
+    left: `${Number(point.x || 0)}px`,
+    top: `${Number(point.y || 0)}px`,
+  }
+}
+
+function parseSavedHotspotPoints(value) {
+  return String(value || "")
+    .split("|")
+    .map((coordinate, index) => {
+      const trimmedCoordinate = String(coordinate || "").trim()
+      if (!trimmedCoordinate) {
+        return null
+      }
+
+      const [answerPrefix, pointValue] = trimmedCoordinate.includes(":")
+        ? trimmedCoordinate.split(":", 2)
+        : ["", trimmedCoordinate]
+      const [x, y] = String(pointValue || "").split(";").map((part) => Number(part))
+      if (!Number.isFinite(x) || !Number.isFinite(y)) {
+        return null
+      }
+
+      return {
+        answerId: Number(answerPrefix || 0) || 0,
+        x,
+        y,
+        label: index + 1,
+      }
+    })
+    .filter(Boolean)
+}
+
 function questionNumberLabel(question, index) {
   if (settings.value.hideQuestionNumber) {
     return t("Question")
   }
 
-  return t("Question {0}", [question.position || index + 1])
+  return `${t("Question")} ${question.position || index + 1}`
 }
 
 function isRadioChoice(question) {
-  return [1, 10, 17].includes(Number(question.type))
+  return [1, 10, 17, 21].includes(Number(question.type))
 }
 
 function isCheckboxChoice(question) {
@@ -1089,12 +2231,20 @@ function isTrueFalseQuestion(question) {
   return [11, 12, 22].includes(Number(question.type))
 }
 
+function isDegreeCertaintyQuestion(question) {
+  return Number(question.type) === 22
+}
+
 function isFillBlanksQuestion(question) {
   return [3, 27].includes(Number(question.type)) && question.fillBlanks && Array.isArray(question.fillBlanks.segments)
 }
 
 function isMatchingQuestion(question) {
   return [4, 19, 24, 25].includes(Number(question.type)) && question.matching
+}
+
+function isMatchingDraggableQuestion(question) {
+  return [19, 25].includes(Number(question.type)) && question.matching
 }
 
 function isDraggableQuestion(question) {
@@ -1105,12 +2255,37 @@ function isDropdownQuestion(question) {
   return [28, 29].includes(Number(question.type)) && question.dropdown
 }
 
+function currentCalculatedVariation(question) {
+  const variations = Array.isArray(question?.calculated?.variations) ? question.calculated.variations : []
+  const questionAnswer = answers.value?.[question?.id] || {}
+  const selectedAnswerId = Number(questionAnswer.calculatedAnswerId || question?.calculated?.answerId || 0)
+
+  if (selectedAnswerId > 0) {
+    const selectedVariation = variations.find((variation) => Number(variation.id) === selectedAnswerId)
+    if (selectedVariation) {
+      return selectedVariation
+    }
+  }
+
+  return variations[0] || { id: question?.calculated?.answerId || null, text: question?.calculated?.text || "" }
+}
+
+function parseSavedCalculatedAnswer(value) {
+  const parts = String(value || "").split(":")
+  if (parts.length >= 2) {
+    const answerId = Number(parts.shift() || 0)
+    return [answerId, parts.join(":")]
+  }
+
+  return [0, String(value || "")]
+}
+
 function isCalculatedQuestion(question) {
   return Number(question.type) === 16
 }
 
 function isOpenQuestion(question) {
-  return [5, 15].includes(Number(question.type))
+  return Number(question.type) === 5
 }
 
 function isUploadQuestion(question) {
@@ -1121,12 +2296,20 @@ function isOralQuestion(question) {
   return Number(question.type) === 13
 }
 
+function isStructuralQuestion(question) {
+  return [15, 31].includes(Number(question?.type))
+}
+
+function isMediaQuestion(question) {
+  return Number(question.type) === 15
+}
+
 function isAnnotationQuestion(question) {
   return Number(question.type) === 20 && question.annotation
 }
 
 function isHotspotQuestion(question) {
-  return [6, 8, 26].includes(Number(question.type)) && question.hotspot
+  return [6, 26].includes(Number(question.type)) && question.hotspot
 }
 
 function isReadingQuestion(question) {
@@ -1140,16 +2323,35 @@ function isPageBreak(question) {
 function trueFalseOptions(question) {
   if (Array.isArray(question.trueFalseOptions) && question.trueFalseOptions.length > 0) {
     return question.trueFalseOptions.map((option) => ({
-      value: Number(option.position || option.id),
+      value: Number(option.id || option.position),
+      position: Number(option.position || 0),
       label: displayText(option.title),
     }))
   }
 
   return [
-    { value: 1, label: t("True") },
-    { value: 2, label: t("False") },
-    { value: 3, label: t("Don't know") },
+    { value: 1, position: 1, label: t("True") },
+    { value: 2, position: 2, label: t("False") },
+    { value: 3, position: 3, label: t("Don't know") },
   ]
+}
+
+function trueFalseChoiceOptions(question) {
+  const options = trueFalseOptions(question)
+
+  if (isDegreeCertaintyQuestion(question)) {
+    return options.filter((option) => [1, 2].includes(Number(option.position || option.value)))
+  }
+
+  return options
+}
+
+function degreeCertaintyOptions(question) {
+  return trueFalseOptions(question).filter((option) => {
+    const position = Number(option.position || option.value)
+
+    return position >= 3 && position < 9
+  })
 }
 
 function submitDisabled() {

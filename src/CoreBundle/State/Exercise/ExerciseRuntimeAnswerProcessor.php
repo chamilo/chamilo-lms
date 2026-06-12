@@ -42,13 +42,17 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
 {
     private const VISIBILITY_PUBLISHED = 2;
     private const STATUS_INCOMPLETE = 'incomplete';
-    private const UNIQUE_TYPES = [1, 10, 17];
+    private const UNIQUE_TYPES = [1, 10, 17, 21];
     private const MULTIPLE_TYPES = [2, 9, 14];
     private const TRUE_FALSE_TYPES = [11, 12];
+    private const TRUE_FALSE_DEGREE_CERTAINTY_TYPES = [22];
     private const FILL_BLANK_TYPES = [3, 27];
     private const MATCHING_TYPES = [4, 19, 24, 25];
     private const DROPDOWN_TYPES = [28, 29];
+    private const CALCULATED_TYPES = [16];
     private const FREE_ANSWER_TYPES = [5];
+    private const ANNOTATION_TYPES = [20];
+    private const HOTSPOT_TYPES = [6, 26];
 
     public function __construct(
         private RequestStack $requestStack,
@@ -326,6 +330,10 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
             return $this->buildTrueFalseRows($payload, $secondsSpent);
         }
 
+        if (\in_array($type, self::TRUE_FALSE_DEGREE_CERTAINTY_TYPES, true)) {
+            return $this->buildTrueFalseDegreeCertaintyRows($payload, $secondsSpent);
+        }
+
         if (\in_array($type, self::FILL_BLANK_TYPES, true)) {
             return $this->buildFillBlankRows($question, $payload, $secondsSpent);
         }
@@ -338,8 +346,20 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
             return $this->buildDropdownRows($payload, $secondsSpent);
         }
 
+        if (\in_array($type, self::CALCULATED_TYPES, true)) {
+            return $this->buildCalculatedRows($question, $payload, $secondsSpent);
+        }
+
         if (\in_array($type, self::FREE_ANSWER_TYPES, true)) {
             return $this->buildFreeAnswerRows($payload, $secondsSpent);
+        }
+
+        if (\in_array($type, self::ANNOTATION_TYPES, true)) {
+            return $this->buildAnnotationRows($payload, $secondsSpent);
+        }
+
+        if (\in_array($type, self::HOTSPOT_TYPES, true)) {
+            return $this->buildHotspotRows($payload, $secondsSpent);
         }
 
         throw new BadRequestHttpException('This question type is not supported by the draft answer processor yet.');
@@ -412,6 +432,43 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
 
             $rows[] = [
                 'answer' => $safeAnswerId.':'.$safeOptionValue,
+                'position' => $position,
+                'secondsSpent' => $secondsSpent,
+            ];
+            ++$position;
+        }
+
+        return $rows;
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     *
+     * @return array<int, array{answer: string, position: int, secondsSpent: int}>
+     */
+    private function buildTrueFalseDegreeCertaintyRows(array $payload, int $secondsSpent): array
+    {
+        $values = $payload['trueFalse'] ?? [];
+        $certaintyValues = $payload['degreeCertainty'] ?? [];
+        if (!\is_array($values)) {
+            return [];
+        }
+        if (!\is_array($certaintyValues)) {
+            $certaintyValues = [];
+        }
+
+        $rows = [];
+        $position = 0;
+        foreach ($values as $answerId => $optionValue) {
+            $safeAnswerId = $this->toPositiveInt($answerId);
+            $safeOptionValue = $this->toPositiveInt($optionValue);
+            if (0 >= $safeAnswerId || 0 >= $safeOptionValue) {
+                continue;
+            }
+
+            $safeCertaintyValue = $this->toPositiveInt($certaintyValues[$answerId] ?? 0);
+            $rows[] = [
+                'answer' => $safeAnswerId.':'.$safeOptionValue.':'.$safeCertaintyValue,
                 'position' => $position,
                 'secondsSpent' => $secondsSpent,
             ];
@@ -558,11 +615,170 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
      *
      * @return array<int, array{answer: string, position: int, secondsSpent: int}>
      */
+    private function buildCalculatedRows(CQuizQuestion $question, array $payload, int $secondsSpent): array
+    {
+        $studentAnswer = trim((string) ($payload['calculated'] ?? $payload['value'] ?? ''));
+        if ('' === $studentAnswer) {
+            return [];
+        }
+
+        $answerId = $this->toPositiveInt($payload['answerId'] ?? 0);
+        if (0 >= $answerId) {
+            $firstAnswer = $this->getFirstAnswer($question);
+            $answerId = $firstAnswer instanceof CQuizAnswer ? (int) $firstAnswer->getIid() : 0;
+        }
+
+        if (0 >= $answerId) {
+            return [];
+        }
+
+        return [[
+            'answer' => $answerId.':'.$studentAnswer,
+            'position' => 0,
+            'secondsSpent' => $secondsSpent,
+        ]];
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     *
+     * @return array<int, array{answer: string, position: int, secondsSpent: int}>
+     */
     private function buildFreeAnswerRows(array $payload, int $secondsSpent): array
     {
         $text = (string) ($payload['text'] ?? $payload['value'] ?? '');
 
         return '' !== $text ? [['answer' => $text, 'position' => 0, 'secondsSpent' => $secondsSpent]] : [];
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     *
+     * @return array<int, array{answer: string, position: int, secondsSpent: int}>
+     */
+    private function buildAnnotationRows(array $payload, int $secondsSpent): array
+    {
+        $encodedItems = [];
+
+        $paths = $payload['paths'] ?? $payload['annotation']['paths'] ?? [];
+        if (\is_array($paths)) {
+            foreach ($paths as $path) {
+                if (!\is_array($path)) {
+                    continue;
+                }
+
+                $rawPoints = $path['points'] ?? $path;
+                if (!\is_array($rawPoints)) {
+                    continue;
+                }
+
+                $points = [];
+                foreach ($rawPoints as $point) {
+                    if (!\is_array($point)) {
+                        continue;
+                    }
+
+                    $x = $this->toCoordinate($point['x'] ?? null);
+                    $y = $this->toCoordinate($point['y'] ?? null);
+                    if (null === $x || null === $y) {
+                        continue;
+                    }
+
+                    $points[] = $x.';'.$y;
+                }
+
+                if (2 <= \count($points)) {
+                    $encodedItems[] = 'P)('.implode(')(', $points);
+                }
+            }
+        }
+
+        $texts = $payload['texts'] ?? $payload['annotation']['texts'] ?? [];
+        if (\is_array($texts)) {
+            foreach ($texts as $textAnnotation) {
+                if (!\is_array($textAnnotation)) {
+                    continue;
+                }
+
+                $text = $this->sanitizeAnnotationText($textAnnotation['text'] ?? '');
+                $x = $this->toCoordinate($textAnnotation['x'] ?? null);
+                $y = $this->toCoordinate($textAnnotation['y'] ?? null);
+                if ('' === $text || null === $x || null === $y) {
+                    continue;
+                }
+
+                $encodedItems[] = 'T)('.$text.')('.$x.';'.$y;
+            }
+        }
+
+        if ([] === $encodedItems) {
+            return [];
+        }
+
+        return [[
+            'answer' => implode('|', $encodedItems),
+            'position' => 0,
+            'secondsSpent' => $secondsSpent,
+        ]];
+    }
+
+    private function sanitizeAnnotationText(mixed $value): string
+    {
+        $text = trim(strip_tags((string) $value));
+        if ('' === $text) {
+            return '';
+        }
+
+        return str_replace(['|', ')(', "\r", "\n"], [' ', ' ', ' ', ' '], $text);
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     *
+     * @return array<int, array{answer: string, position: int, secondsSpent: int}>
+     */
+    private function buildHotspotRows(array $payload, int $secondsSpent): array
+    {
+        $points = $payload['points'] ?? $payload['hotspot']['points'] ?? $payload['answers'] ?? $payload['value'] ?? [];
+        if (!\is_array($points)) {
+            return [];
+        }
+
+        $coordinates = [];
+        foreach ($points as $point) {
+            if (!\is_array($point)) {
+                continue;
+            }
+
+            $x = $this->toCoordinate($point['x'] ?? null);
+            $y = $this->toCoordinate($point['y'] ?? null);
+            if (null === $x || null === $y) {
+                continue;
+            }
+
+            $answerId = $this->toPositiveInt($point['answerId'] ?? $point['answer_id'] ?? $point['id'] ?? 0);
+            $coordinate = $x.';'.$y;
+            $coordinates[] = 0 < $answerId ? $answerId.':'.$coordinate : $coordinate;
+        }
+
+        if ([] === $coordinates) {
+            return [];
+        }
+
+        return [[
+            'answer' => implode('|', $coordinates),
+            'position' => 0,
+            'secondsSpent' => $secondsSpent,
+        ]];
+    }
+
+    private function toCoordinate(mixed $value): ?int
+    {
+        if (null === $value || '' === $value || !is_numeric($value)) {
+            return null;
+        }
+
+        return max(0, (int) round((float) $value));
     }
 
     /**

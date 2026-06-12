@@ -37,7 +37,9 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
 {
     private const STATUS_COMPLETED = 'completed';
     private const FREE_ANSWER = 5;
+    private const ORAL_EXPRESSION = 13;
     private const UPLOAD_ANSWER = 23;
+    private const ANNOTATION = 20;
 
     public function __construct(
         private RequestStack $requestStack,
@@ -130,7 +132,7 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
 
     private function isManualCorrectionQuestion(CQuizQuestion $question): bool
     {
-        return \in_array((int) $question->getType(), [self::FREE_ANSWER, self::UPLOAD_ANSWER], true);
+        return \in_array((int) $question->getType(), [self::FREE_ANSWER, self::ORAL_EXPRESSION, self::UPLOAD_ANSWER, self::ANNOTATION], true);
     }
 
     private function canCorrectAttempts(): bool

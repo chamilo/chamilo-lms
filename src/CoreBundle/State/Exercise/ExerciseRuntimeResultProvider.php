@@ -1,0 +1,1267 @@
+<?php
+
+/* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
+
+namespace Chamilo\CoreBundle\State\Exercise;
+
+use ApiPlatform\Metadata\Operation;
+use ApiPlatform\State\ProviderInterface;
+use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseRuntimeResult;
+use Chamilo\CoreBundle\Entity\AttemptFile;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ResourceFile;
+use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\TrackEAttempt;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
+use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CourseBundle\Entity\CQuiz;
+use Chamilo\CourseBundle\Entity\CQuizAnswer;
+use Chamilo\CourseBundle\Entity\CQuizQuestion;
+use Chamilo\CourseBundle\Entity\CQuizQuestionOption;
+use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
+use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
+use Chamilo\CourseBundle\Repository\CQuizRepository;
+use DateTimeInterface;
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
+/**
+ * Read-only provider for migrated exercise runtime result/review data.
+ *
+ * @implements ProviderInterface<ExerciseRuntimeResult>
+ */
+final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
+{
+    private const STATUS_COMPLETED = 'completed';
+    private const VISIBILITY_PUBLISHED = 2;
+    private const FEEDBACK_TYPE_EXAM = 2;
+    private const RESULT_SHOW_SCORE_AND_EXPECTED_ANSWERS = 0;
+    private const RESULT_NO_SCORE_AND_EXPECTED_ANSWERS = 1;
+    private const RESULT_SHOW_SCORE_ONLY = 2;
+    private const RESULT_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES = 3;
+    private const RESULT_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT = 4;
+    private const RESULT_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK = 5;
+    private const RESULT_RANKING = 6;
+    private const RESULT_SHOW_ONLY_IN_CORRECT_ANSWER = 7;
+    private const RESULT_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING = 8;
+    private const RESULT_RADAR = 9;
+    private const RESULT_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK = 10;
+
+    public function __construct(
+        private RequestStack $requestStack,
+        private EntityManagerInterface $entityManager,
+        private CQuizRepository $quizRepository,
+        private ResourceNodeRepository $resourceNodeRepository,
+        private Security $security,
+    ) {}
+
+    /**
+     * @param array<string, mixed> $uriVariables
+     * @param array<string, mixed> $context
+     */
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): ExerciseRuntimeResult
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        if (null === $request) {
+            throw new BadRequestHttpException('The current request is required.');
+        }
+
+        $course = $this->getCourse($request);
+        $session = $this->getSession($request);
+        $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : 0;
+        $attemptId = isset($uriVariables['attemptId']) ? (int) $uriVariables['attemptId'] : 0;
+        if (0 >= $exerciseId || 0 >= $attemptId) {
+            throw new BadRequestHttpException('A valid exercise and attempt are required.');
+        }
+
+        $canManage = $this->canManageExercises();
+        if (!$canManage && !$this->canViewExercises()) {
+            throw new AccessDeniedHttpException('You are not allowed to view this exercise result.');
+        }
+
+        $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session, $canManage);
+        $attempt = $this->getAttempt($attemptId, $quiz, $course, $session, $canManage);
+        if (self::STATUS_COMPLETED !== (string) $attempt->getStatus()) {
+            throw new BadRequestHttpException('The requested attempt has not been completed yet.');
+        }
+
+        $questionIds = $this->parseQuestionIds((string) $attempt->getDataTracking());
+        if ([] === $questionIds) {
+            $questionIds = $this->getExerciseQuestionIds($quiz);
+        }
+
+        $rowsByQuestion = $this->getAttemptRowsByQuestion((int) $attempt->getExeId());
+        $pendingQuestionIds = $this->parseQuestionIds((string) $attempt->getQuestionsToCheck());
+        $isLastAllowedAttempt = $this->isLastAllowedAttempt($quiz, $attempt, $course, $session);
+        $visibility = $this->getResultVisibility($quiz, $isLastAllowedAttempt);
+        $questions = $this->getQuestions($quiz, $questionIds, $rowsByQuestion, $visibility, $pendingQuestionIds, $canManage);
+        if (true === ($visibility['hideCorrectAnsweredQuestions'] ?? false) && true === ($visibility['showQuestionScore'] ?? false)) {
+            $questions = array_values(array_filter(
+                $questions,
+                static fn (array $question): bool => true !== ($question['isCorrect'] ?? false)
+            ));
+        }
+
+        $response = new ExerciseRuntimeResult();
+        $response->exerciseId = $exerciseId;
+        $response->attemptId = $attemptId;
+        $response->title = $quiz->getTitle();
+        $response->description = (string) $quiz->getDescription();
+        $response->attempt = $this->normalizeAttempt($attempt, $quiz, $visibility);
+        $response->visibility = $visibility;
+        $response->questions = $questions;
+        $response->legacyUrls = $this->getLegacyUrls($quiz, $attempt, $course, $session, $request);
+        $response->canManage = $canManage;
+
+        return $response;
+    }
+
+    private function getCourse(Request $request): Course
+    {
+        $courseId = $request->query->getInt('cid');
+        if (0 >= $courseId) {
+            throw new BadRequestHttpException('A valid course id is required.');
+        }
+
+        $course = $this->entityManager->getRepository(Course::class)->find($courseId);
+        if (!$course instanceof Course) {
+            throw new BadRequestHttpException('The requested course was not found.');
+        }
+
+        return $course;
+    }
+
+    private function getSession(Request $request): ?Session
+    {
+        $sessionId = $request->query->getInt('sid');
+        if (0 >= $sessionId) {
+            return null;
+        }
+
+        $session = $this->entityManager->getRepository(Session::class)->find($sessionId);
+        if (!$session instanceof Session) {
+            throw new BadRequestHttpException('The requested session was not found.');
+        }
+
+        return $session;
+    }
+
+    private function canViewExercises(): bool
+    {
+        return $this->security->isGranted('ROLE_CURRENT_COURSE_STUDENT')
+            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_STUDENT')
+            || $this->canManageExercises();
+    }
+
+    private function canManageExercises(): bool
+    {
+        return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
+            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
+    }
+
+    private function getExerciseFromCurrentContext(int $exerciseId, Course $course, ?Session $session, bool $canManage): CQuiz
+    {
+        $quiz = $this->quizRepository->find($exerciseId);
+        if (!$quiz instanceof CQuiz) {
+            throw new NotFoundHttpException('The requested exercise was not found.');
+        }
+
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('quiz.iid')
+            ->addSelect('links.visibility AS linkVisibility')
+            ->from(CQuiz::class, 'quiz')
+            ->innerJoin('quiz.resourceNode', 'node')
+            ->innerJoin('node.resourceLinks', 'links')
+            ->andWhere('quiz.iid = :exerciseId')
+            ->andWhere('IDENTITY(links.course) = :courseId')
+            ->andWhere('links.deletedAt IS NULL')
+            ->andWhere('links.endVisibilityAt IS NULL')
+            ->setParameter('exerciseId', $exerciseId, Types::INTEGER)
+            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
+            ->setMaxResults(1)
+        ;
+
+        if (null !== $session) {
+            $queryBuilder
+                ->andWhere('IDENTITY(links.session) = :sessionId')
+                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
+            ;
+        } else {
+            $queryBuilder->andWhere('links.session IS NULL');
+        }
+
+        $row = $queryBuilder->getQuery()->getOneOrNullResult();
+        if (null === $row) {
+            throw new AccessDeniedHttpException('The requested exercise does not belong to the current course context.');
+        }
+
+        if (!$canManage) {
+            $visibility = \is_array($row) ? (int) ($row['linkVisibility'] ?? 0) : 0;
+            if (self::VISIBILITY_PUBLISHED !== $visibility) {
+                throw new AccessDeniedHttpException('The requested exercise is not visible.');
+            }
+        }
+
+        return $quiz;
+    }
+
+    private function getAttempt(int $attemptId, CQuiz $quiz, Course $course, ?Session $session, bool $canManage): TrackEExercise
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('attempt')
+            ->from(TrackEExercise::class, 'attempt')
+            ->andWhere('attempt.exeId = :attemptId')
+            ->andWhere('IDENTITY(attempt.quiz) = :exerciseId')
+            ->andWhere('IDENTITY(attempt.course) = :courseId')
+            ->setParameter('attemptId', $attemptId, Types::INTEGER)
+            ->setParameter('exerciseId', (int) $quiz->getIid(), Types::INTEGER)
+            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
+            ->setMaxResults(1)
+        ;
+
+        if (null !== $session) {
+            $queryBuilder
+                ->andWhere('IDENTITY(attempt.session) = :sessionId')
+                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
+            ;
+        } else {
+            $queryBuilder->andWhere('attempt.session IS NULL');
+        }
+
+        if (!$canManage) {
+            $user = $this->security->getUser();
+            if (!$user instanceof User) {
+                throw new AccessDeniedHttpException('A valid authenticated user is required.');
+            }
+
+            $queryBuilder
+                ->andWhere('IDENTITY(attempt.user) = :userId')
+                ->setParameter('userId', (int) $user->getId(), Types::INTEGER)
+            ;
+        }
+
+        $attempt = $queryBuilder->getQuery()->getOneOrNullResult();
+        if (!$attempt instanceof TrackEExercise) {
+            throw new NotFoundHttpException('The requested attempt was not found.');
+        }
+
+        return $attempt;
+    }
+
+    /**
+     * @return array<int, int>
+     */
+    private function parseQuestionIds(string $value): array
+    {
+        if ('' === trim($value)) {
+            return [];
+        }
+
+        return array_values(array_filter(array_map(static fn (string $id): int => (int) trim($id), explode(',', $value))));
+    }
+
+    /**
+     * @return array<int, int>
+     */
+    private function getExerciseQuestionIds(CQuiz $quiz): array
+    {
+        $rows = $this->entityManager->createQueryBuilder()
+            ->select('IDENTITY(relQuestion.question) AS questionId')
+            ->from(CQuizRelQuestion::class, 'relQuestion')
+            ->andWhere('IDENTITY(relQuestion.quiz) = :exerciseId')
+            ->setParameter('exerciseId', (int) $quiz->getIid(), Types::INTEGER)
+            ->orderBy('relQuestion.questionOrder', 'ASC')
+            ->getQuery()
+            ->getArrayResult()
+        ;
+
+        $questionIds = [];
+        foreach ($rows as $row) {
+            if (!\is_array($row)) {
+                continue;
+            }
+
+            $questionId = (int) ($row['questionId'] ?? 0);
+            if (0 < $questionId) {
+                $questionIds[] = $questionId;
+            }
+        }
+
+        return $questionIds;
+    }
+
+    /**
+     * @return array<int, array<int, TrackEAttempt>>
+     */
+    private function getAttemptRowsByQuestion(int $attemptId): array
+    {
+        $rows = $this->entityManager->createQueryBuilder()
+            ->select('attemptRow')
+            ->from(TrackEAttempt::class, 'attemptRow')
+            ->andWhere('IDENTITY(attemptRow.trackExercise) = :attemptId')
+            ->setParameter('attemptId', $attemptId, Types::INTEGER)
+            ->orderBy('attemptRow.questionId', 'ASC')
+            ->addOrderBy('attemptRow.position', 'ASC')
+            ->addOrderBy('attemptRow.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        $groupedRows = [];
+        foreach ($rows as $row) {
+            if (!$row instanceof TrackEAttempt) {
+                continue;
+            }
+
+            $questionId = (int) $row->getQuestionId();
+            if (0 >= $questionId) {
+                continue;
+            }
+
+            $groupedRows[$questionId][] = $row;
+        }
+
+        return $groupedRows;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function getResultVisibility(CQuiz $quiz, bool $isLastAllowedAttempt): array
+    {
+        $resultsDisabled = (int) $quiz->getResultsDisabled();
+        $pageResultConfiguration = $this->normalizePageResultConfiguration($quiz->getPageResultConfiguration());
+        $showScore = self::RESULT_NO_SCORE_AND_EXPECTED_ANSWERS !== $resultsDisabled;
+        $showCorrections = \in_array($resultsDisabled, [
+            self::RESULT_SHOW_SCORE_AND_EXPECTED_ANSWERS,
+            self::RESULT_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
+            self::RESULT_SHOW_ONLY_IN_CORRECT_ANSWER,
+        ], true);
+
+        if (\in_array($resultsDisabled, [
+            self::RESULT_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
+            self::RESULT_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK,
+        ], true)) {
+            $showCorrections = $isLastAllowedAttempt;
+        }
+
+        if (true === $pageResultConfiguration['hideExpectedAnswers']) {
+            $showCorrections = false;
+        }
+
+        $showOnlyIncorrect = self::RESULT_SHOW_ONLY_IN_CORRECT_ANSWER === $resultsDisabled;
+        $showFeedback = $showCorrections
+            && self::FEEDBACK_TYPE_EXAM !== (int) $quiz->getFeedbackType()
+            && self::RESULT_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK !== $resultsDisabled;
+
+        return [
+            'resultsDisabled' => $resultsDisabled,
+            'feedbackType' => (int) $quiz->getFeedbackType(),
+            'reviewAnswers' => 1 === (int) $quiz->getReviewAnswers(),
+            'saveCorrectAnswers' => (int) ($quiz->getSaveCorrectAnswers() ?? 0),
+            'showScore' => $showScore,
+            'showTotalScore' => $showScore && false === $pageResultConfiguration['hideTotalScore'],
+            'showQuestionScore' => $showScore && false === $pageResultConfiguration['hideQuestionScore'],
+            'showCorrections' => $showCorrections,
+            'showOnlyIncorrect' => $showOnlyIncorrect,
+            'showFeedback' => $showFeedback,
+            'hideCorrectAnsweredQuestions' => $pageResultConfiguration['hideCorrectAnsweredQuestions'],
+            'showCategoryTable' => false === $pageResultConfiguration['hideCategoryTable'],
+            'isLastAllowedAttempt' => $isLastAllowedAttempt,
+            'pageResultConfiguration' => $pageResultConfiguration,
+        ];
+    }
+
+    /**
+     * @param array<string, mixed> $configuration
+     *
+     * @return array<string, bool>
+     */
+    private function normalizePageResultConfiguration(array $configuration): array
+    {
+        return [
+            'hideExpectedAnswers' => $this->isEnabledPageResultFlag($configuration, 'hideExpectedAnswers', 'hide_expected_answer'),
+            'hideTotalScore' => $this->isEnabledPageResultFlag($configuration, 'hideTotalScore', 'hide_total_score'),
+            'hideQuestionScore' => $this->isEnabledPageResultFlag($configuration, 'hideQuestionScore', 'hide_question_score'),
+            'hideCategoryTable' => $this->isEnabledPageResultFlag($configuration, 'hideCategoryTable', 'hide_category_table'),
+            'hideCorrectAnsweredQuestions' => $this->isEnabledPageResultFlag($configuration, 'hideCorrectAnsweredQuestions', 'hide_correct_answered_questions'),
+        ];
+    }
+
+    /**
+     * @param array<string, mixed> $configuration
+     */
+    private function isEnabledPageResultFlag(array $configuration, string $camelKey, string $legacyKey): bool
+    {
+        $value = $configuration[$camelKey] ?? $configuration[$legacyKey] ?? false;
+
+        return true === $value || 1 === $value || '1' === (string) $value || 'on' === strtolower((string) $value);
+    }
+
+    private function isLastAllowedAttempt(CQuiz $quiz, TrackEExercise $attempt, Course $course, ?Session $session): bool
+    {
+        $maxAttempt = (int) $quiz->getMaxAttempt();
+        if (0 >= $maxAttempt) {
+            return false;
+        }
+
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('COUNT(completedAttempt.exeId)')
+            ->from(TrackEExercise::class, 'completedAttempt')
+            ->andWhere('IDENTITY(completedAttempt.quiz) = :exerciseId')
+            ->andWhere('IDENTITY(completedAttempt.course) = :courseId')
+            ->andWhere('IDENTITY(completedAttempt.user) = :userId')
+            ->andWhere('completedAttempt.status = :status')
+            ->setParameter('exerciseId', (int) $quiz->getIid(), Types::INTEGER)
+            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
+            ->setParameter('userId', (int) $attempt->getUser()->getId(), Types::INTEGER)
+            ->setParameter('status', self::STATUS_COMPLETED)
+        ;
+
+        if (null !== $session) {
+            $queryBuilder
+                ->andWhere('IDENTITY(completedAttempt.session) = :sessionId')
+                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
+            ;
+        } else {
+            $queryBuilder->andWhere('completedAttempt.session IS NULL');
+        }
+
+        return (int) $queryBuilder->getQuery()->getSingleScalarResult() >= $maxAttempt;
+    }
+
+    /**
+     * @param array<string, mixed> $visibility
+     *
+     * @return array<string, mixed>
+     */
+    private function normalizeAttempt(TrackEExercise $attempt, CQuiz $quiz, array $visibility): array
+    {
+        $score = (float) $attempt->getScore();
+        $maxScore = (float) $attempt->getMaxScore();
+        $percentage = 0.0 < $maxScore ? round(($score / $maxScore) * 100, 2) : 0.0;
+        $passPercentage = (int) ($quiz->getPassPercentage() ?? 0);
+        $hasPassPercentage = 0 < $passPercentage;
+        $passed = $hasPassPercentage ? $percentage >= (float) $passPercentage : null;
+
+        return [
+            'attemptId' => (int) $attempt->getExeId(),
+            'status' => (string) $attempt->getStatus(),
+            'score' => true === ($visibility['showTotalScore'] ?? false) ? $score : null,
+            'maxScore' => true === ($visibility['showTotalScore'] ?? false) ? $maxScore : null,
+            'percentage' => true === ($visibility['showTotalScore'] ?? false) ? $percentage : null,
+            'passPercentage' => $hasPassPercentage ? $passPercentage : null,
+            'passed' => true === ($visibility['showTotalScore'] ?? false) ? $passed : null,
+            'startedAt' => $attempt->getStartDate()->format(DateTimeInterface::ATOM),
+            'completedAt' => $attempt->getExeDate()->format(DateTimeInterface::ATOM),
+            'duration' => (int) $attempt->getExeDuration(),
+            'questionsToCheck' => $this->parseQuestionIds((string) $attempt->getQuestionsToCheck()),
+            'textWhenFinished' => $this->getFinishedText($quiz, $passed),
+        ];
+    }
+
+    private function getFinishedText(CQuiz $quiz, ?bool $passed): string
+    {
+        if (false === $passed && '' !== (string) $quiz->getTextWhenFinishedFailure()) {
+            return (string) $quiz->getTextWhenFinishedFailure();
+        }
+
+        return (string) $quiz->getTextWhenFinished();
+    }
+
+    /**
+     * @param array<int, int>                      $questionIds
+     * @param array<int, array<int, TrackEAttempt>> $rowsByQuestion
+     * @param array<string, mixed>                 $visibility
+     * @param array<int, int>                      $pendingQuestionIds
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private function getQuestions(CQuiz $quiz, array $questionIds, array $rowsByQuestion, array $visibility, array $pendingQuestionIds, bool $canManage): array
+    {
+        $relations = $this->entityManager->createQueryBuilder()
+            ->select('relQuestion')
+            ->addSelect('question')
+            ->from(CQuizRelQuestion::class, 'relQuestion')
+            ->innerJoin('relQuestion.question', 'question')
+            ->andWhere('IDENTITY(relQuestion.quiz) = :exerciseId')
+            ->andWhere('IDENTITY(relQuestion.question) IN (:questionIds)')
+            ->setParameter('exerciseId', (int) $quiz->getIid(), Types::INTEGER)
+            ->setParameter('questionIds', $questionIds, ArrayParameterType::INTEGER)
+            ->getQuery()
+            ->getResult()
+        ;
+
+        $questions = [];
+        foreach ($relations as $relation) {
+            if (!$relation instanceof CQuizRelQuestion) {
+                continue;
+            }
+
+            $question = $relation->getQuestion();
+            if (null === $question->getIid()) {
+                continue;
+            }
+
+            $questionId = (int) $question->getIid();
+            $questions[$questionId] = $this->normalizeQuestion(
+                $question,
+                $rowsByQuestion[$questionId] ?? [],
+                $visibility,
+                \in_array($questionId, $pendingQuestionIds, true),
+                $canManage,
+            );
+        }
+
+        $orderedQuestions = [];
+        foreach ($questionIds as $position => $questionId) {
+            if (!isset($questions[$questionId])) {
+                continue;
+            }
+
+            $question = $questions[$questionId];
+            $question['position'] = $position + 1;
+            $orderedQuestions[] = $question;
+        }
+
+        return $orderedQuestions;
+    }
+
+    /**
+     * @param array<int, TrackEAttempt> $rows
+     * @param array<string, mixed>      $visibility
+     *
+     * @return array<string, mixed>
+     */
+    private function normalizeQuestion(CQuizQuestion $question, array $rows, array $visibility, bool $pendingCorrection, bool $canManage): array
+    {
+        $questionScore = $this->getQuestionScore($rows);
+        $maxScore = $this->getQuestionMaxScore($question);
+        $requiresManualCorrection = $this->requiresManualCorrection($question);
+        $isCorrect = 0 < $maxScore ? $questionScore >= $maxScore : 0 < $questionScore;
+        if ($requiresManualCorrection && $pendingCorrection) {
+            $isCorrect = null;
+        }
+        $showQuestionCorrection = $this->shouldShowQuestionCorrection($rows, $visibility, true === $isCorrect);
+
+        return [
+            'id' => (int) $question->getIid(),
+            'title' => $question->getQuestion(),
+            'description' => (string) $question->getDescription(),
+            'type' => (int) $question->getType(),
+            'typeLabel' => $this->getQuestionTypeLabel((int) $question->getType()),
+            'position' => 0,
+            'score' => true === ($visibility['showQuestionScore'] ?? false) ? $questionScore : null,
+            'maxScore' => true === ($visibility['showQuestionScore'] ?? false) ? $maxScore : null,
+            'isCorrect' => true === ($visibility['showQuestionScore'] ?? false) ? $isCorrect : null,
+            'requiresManualCorrection' => $requiresManualCorrection,
+            'pendingCorrection' => $pendingCorrection,
+            'canCorrect' => $canManage && $requiresManualCorrection,
+            'feedback' => $this->getQuestionFeedback($question, $visibility, $showQuestionCorrection),
+            'answer' => $this->normalizeQuestionAnswer($question, $rows, $visibility, $showQuestionCorrection),
+        ];
+    }
+
+
+    private function getQuestionMaxScore(CQuizQuestion $question): float
+    {
+        if (\in_array((int) $question->getType(), [9, 12], true)) {
+            $answer = $this->getFirstAnswer($question);
+            if ($answer instanceof CQuizAnswer && 0.0 !== $answer->getPonderation()) {
+                return (float) $answer->getPonderation();
+            }
+        }
+
+        return (float) $question->getPonderation();
+    }
+
+    /**
+     * @param array<int, TrackEAttempt> $rows
+     */
+    private function getQuestionScore(array $rows): float
+    {
+        $row = $rows[0] ?? null;
+
+        return $row instanceof TrackEAttempt ? (float) $row->getMarks() : 0.0;
+    }
+
+    /**
+     * @param array<int, TrackEAttempt> $rows
+     * @param array<string, mixed>      $visibility
+     */
+    private function shouldShowQuestionCorrection(array $rows, array $visibility, bool $isCorrect): bool
+    {
+        if (true !== ($visibility['showCorrections'] ?? false)) {
+            return false;
+        }
+
+        if (true === ($visibility['showOnlyIncorrect'] ?? false) && $isCorrect) {
+            return false;
+        }
+
+        return [] !== $rows;
+    }
+
+    /**
+     * @param array<string, mixed> $visibility
+     */
+    private function getQuestionFeedback(CQuizQuestion $question, array $visibility, bool $showQuestionCorrection): ?string
+    {
+        if (!$showQuestionCorrection || true !== ($visibility['showFeedback'] ?? false)) {
+            return null;
+        }
+
+        return '' !== (string) $question->getFeedback() ? (string) $question->getFeedback() : null;
+    }
+
+    /**
+     * @param array<int, TrackEAttempt> $rows
+     * @param array<string, mixed>      $visibility
+     *
+     * @return array<string, mixed>
+     */
+    private function normalizeQuestionAnswer(CQuizQuestion $question, array $rows, array $visibility, bool $showQuestionCorrection): array
+    {
+        $type = (int) $question->getType();
+        if (\in_array($type, [1, 2, 9, 10, 11, 12, 14, 17], true)) {
+            return $this->normalizeChoiceAnswer($question, $rows, $visibility, $showQuestionCorrection);
+        }
+
+        if (\in_array($type, [3, 27], true)) {
+            return $this->normalizeFillBlankAnswer($question, $rows, $showQuestionCorrection);
+        }
+
+        if (\in_array($type, [4, 19, 24, 25], true)) {
+            return $this->normalizeMatchingAnswer($question, $rows, $visibility, $showQuestionCorrection);
+        }
+
+        if (\in_array($type, [28, 29], true)) {
+            return $this->normalizeDropdownAnswer($question, $rows, $visibility, $showQuestionCorrection);
+        }
+
+        if (5 === $type) {
+            return $this->normalizeFreeAnswer($rows, $visibility);
+        }
+
+        if (23 === $type) {
+            return $this->normalizeUploadAnswer($rows, $visibility);
+        }
+
+        return [
+            'kind' => 'unsupported',
+            'studentAnswer' => $this->normalizeRawRows($rows),
+        ];
+    }
+
+    /**
+     * @param array<int, TrackEAttempt> $rows
+     * @param array<string, mixed>      $visibility
+     *
+     * @return array<string, mixed>
+     */
+    private function normalizeChoiceAnswer(CQuizQuestion $question, array $rows, array $visibility, bool $showQuestionCorrection): array
+    {
+        $selectedIds = array_flip($this->getSavedAnswerIds($rows));
+        $trueFalseChoices = $this->getSavedTrueFalseChoices($rows);
+        $isTrueFalse = \in_array((int) $question->getType(), [11, 12], true);
+        $options = $this->getQuestionOptions($question);
+        $choices = [];
+
+        foreach ($this->getOrderedAnswers($question) as $answer) {
+            $answerId = (int) $answer->getIid();
+            $choice = [
+                'id' => $answerId,
+                'answer' => $answer->getAnswer(),
+                'selected' => isset($selectedIds[$answerId]),
+            ];
+
+            if ($isTrueFalse) {
+                $selectedOption = $trueFalseChoices[$answerId] ?? 0;
+                $choice['selectedOptionId'] = $selectedOption ?: null;
+                $choice['selectedOptionLabel'] = $this->getOptionTitle($options, $selectedOption);
+            }
+
+            if ($showQuestionCorrection) {
+                if ($isTrueFalse) {
+                    $choice['correctOptionId'] = (int) $answer->getCorrect();
+                    $choice['correctOptionLabel'] = $this->getOptionTitle($options, (int) $answer->getCorrect());
+                } else {
+                    $choice['correct'] = 1 === (int) $answer->getCorrect();
+                }
+
+                if (true === ($visibility['showFeedback'] ?? false) && '' !== (string) $answer->getComment()) {
+                    $choice['comment'] = (string) $answer->getComment();
+                }
+            }
+
+            $choices[] = $choice;
+        }
+
+        return [
+            'kind' => $isTrueFalse ? 'true_false' : 'choice',
+            'choices' => $choices,
+            'options' => array_values($options),
+        ];
+    }
+
+    /**
+     * @param array<int, TrackEAttempt> $rows
+     *
+     * @return array<string, mixed>
+     */
+    private function normalizeFillBlankAnswer(CQuizQuestion $question, array $rows, bool $showQuestionCorrection): array
+    {
+        $row = $rows[0] ?? null;
+        $answer = $this->getFirstAnswer($question);
+        $teacherInfo = $answer instanceof CQuizAnswer ? $this->parseFillBlankAnswer($answer->getAnswer(), false) : null;
+        $studentInfo = $row instanceof TrackEAttempt ? $this->parseFillBlankAnswer($row->getAnswer(), true) : null;
+        $blankCount = null !== $teacherInfo ? \count($teacherInfo['words']) : \count($studentInfo['student_answer'] ?? []);
+        $blanks = [];
+
+        for ($index = 0; $index < $blankCount; ++$index) {
+            $blank = [
+                'position' => $index + 1,
+                'studentAnswer' => (string) ($studentInfo['student_answer'][$index] ?? ''),
+                'studentScore' => (string) ($studentInfo['student_score'][$index] ?? ''),
+            ];
+
+            if ($showQuestionCorrection && null !== $teacherInfo) {
+                $blank['correctAnswer'] = (string) ($teacherInfo['words'][$index] ?? '');
+            }
+
+            $blanks[] = $blank;
+        }
+
+        return [
+            'kind' => 'fill_blanks',
+            'text' => (string) ($teacherInfo['text'] ?? ''),
+            'blanks' => $blanks,
+        ];
+    }
+
+    /**
+     * @param array<int, TrackEAttempt> $rows
+     * @param array<string, mixed>      $visibility
+     *
+     * @return array<string, mixed>
+     */
+    private function normalizeMatchingAnswer(CQuizQuestion $question, array $rows, array $visibility, bool $showQuestionCorrection): array
+    {
+        $selected = $this->getSavedMatchingChoices($rows);
+        $options = [];
+        $prompts = [];
+        $answers = $this->getOrderedAnswers($question);
+
+        foreach ($answers as $answer) {
+            $answerId = (int) $answer->getIid();
+            if (0 < (int) ($answer->getCorrect() ?? 0)) {
+                continue;
+            }
+
+            $options[$answerId] = [
+                'id' => $answerId,
+                'answer' => $answer->getAnswer(),
+                'position' => (int) $answer->getPosition(),
+            ];
+        }
+
+        foreach ($answers as $answer) {
+            $answerId = (int) $answer->getIid();
+            $correct = (int) ($answer->getCorrect() ?? 0);
+            if (0 >= $correct) {
+                continue;
+            }
+
+            $prompt = [
+                'id' => $answerId,
+                'answer' => $answer->getAnswer(),
+                'selectedOptionId' => $selected[$answerId] ?? null,
+                'selectedOptionAnswer' => isset($selected[$answerId]) ? (string) ($options[$selected[$answerId]]['answer'] ?? '') : '',
+            ];
+
+            if ($showQuestionCorrection) {
+                $prompt['correctOptionId'] = $correct;
+                $prompt['correctOptionAnswer'] = (string) ($options[$correct]['answer'] ?? '');
+                if (true === ($visibility['showFeedback'] ?? false) && '' !== (string) $answer->getComment()) {
+                    $prompt['comment'] = (string) $answer->getComment();
+                }
+            }
+
+            $prompts[] = $prompt;
+        }
+
+        return [
+            'kind' => 'matching',
+            'prompts' => $prompts,
+            'options' => array_values($options),
+        ];
+    }
+
+    /**
+     * @param array<int, TrackEAttempt> $rows
+     * @param array<string, mixed>      $visibility
+     *
+     * @return array<string, mixed>
+     */
+    private function normalizeDropdownAnswer(CQuizQuestion $question, array $rows, array $visibility, bool $showQuestionCorrection): array
+    {
+        $selectedId = $this->getFirstSavedAnswerId($rows);
+        $options = [];
+        foreach ($this->getOrderedAnswers($question) as $answer) {
+            $answerId = (int) $answer->getIid();
+            $option = [
+                'id' => $answerId,
+                'answer' => $answer->getAnswer(),
+                'selected' => $answerId === $selectedId,
+            ];
+
+            if ($showQuestionCorrection) {
+                $option['correct'] = 1 === (int) $answer->getCorrect();
+                if (true === ($visibility['showFeedback'] ?? false) && '' !== (string) $answer->getComment()) {
+                    $option['comment'] = (string) $answer->getComment();
+                }
+            }
+
+            $options[] = $option;
+        }
+
+        return [
+            'kind' => 'dropdown',
+            'selectedId' => $selectedId ?: null,
+            'options' => $options,
+        ];
+    }
+
+    /**
+     * @param array<int, TrackEAttempt> $rows
+     * @param array<string, mixed>      $visibility
+     *
+     * @return array<string, mixed>
+     */
+    private function normalizeFreeAnswer(array $rows, array $visibility): array
+    {
+        $row = $rows[0] ?? null;
+        if (!$row instanceof TrackEAttempt) {
+            return [
+                'kind' => 'free_answer',
+                'studentAnswer' => '',
+                'teacherComment' => null,
+                'marks' => 0.0,
+            ];
+        }
+
+        return [
+            'kind' => 'free_answer',
+            'studentAnswer' => $row->getAnswer(),
+            'teacherComment' => true === ($visibility['showFeedback'] ?? false) && '' !== $row->getTeacherComment() ? $row->getTeacherComment() : null,
+            'marks' => (float) $row->getMarks(),
+        ];
+    }
+
+    /**
+     * @param array<int, TrackEAttempt> $rows
+     * @param array<string, mixed>      $visibility
+     *
+     * @return array<string, mixed>
+     */
+    private function normalizeUploadAnswer(array $rows, array $visibility): array
+    {
+        $row = $rows[0] ?? null;
+        if (!$row instanceof TrackEAttempt) {
+            return [
+                'kind' => 'upload_answer',
+                'files' => [],
+                'teacherComment' => null,
+                'marks' => 0.0,
+            ];
+        }
+
+        return [
+            'kind' => 'upload_answer',
+            'files' => $this->normalizeAttemptFiles($row),
+            'teacherComment' => true === ($visibility['showFeedback'] ?? false) && '' !== $row->getTeacherComment() ? $row->getTeacherComment() : null,
+            'marks' => (float) $row->getMarks(),
+        ];
+    }
+
+    /**
+     * @return array<int, array{id: int, name: string, size: int, mimeType: string, url: string}>
+     */
+    private function normalizeAttemptFiles(TrackEAttempt $row): array
+    {
+        $files = [];
+        foreach ($row->getAttemptFiles() as $attemptFile) {
+            if (!$attemptFile instanceof AttemptFile) {
+                continue;
+            }
+
+            $resourceNode = $attemptFile->getResourceNode();
+            if (!$resourceNode instanceof ResourceNode) {
+                continue;
+            }
+
+            $resourceFile = $resourceNode->getResourceFiles()->first();
+            $url = $this->getAttemptFileDownloadUrl($row, $resourceNode);
+
+            $files[] = [
+                'id' => (int) $resourceNode->getId(),
+                'name' => (string) ($resourceFile instanceof ResourceFile ? $resourceFile->getOriginalName() : $resourceNode->getTitle()),
+                'size' => (int) ($resourceFile instanceof ResourceFile ? $resourceFile->getSize() : 0),
+                'mimeType' => (string) ($resourceFile instanceof ResourceFile ? $resourceFile->getMimeType() : ''),
+                'url' => $url,
+            ];
+        }
+
+        return $files;
+    }
+
+
+    private function getAttemptFileDownloadUrl(TrackEAttempt $attemptRow, ResourceNode $resourceNode): string
+    {
+        $attempt = $attemptRow->getTrackEExercise();
+        $quiz = $attempt->getQuiz();
+        if (null === $quiz || null === $quiz->getIid() || null === $resourceNode->getId()) {
+            return '';
+        }
+
+        $query = [
+            'cid' => (int) $attempt->getCourse()->getId(),
+        ];
+
+        $session = $attempt->getSession();
+        if (null !== $session) {
+            $query['sid'] = (int) $session->getId();
+        }
+
+        $request = $this->requestStack->getCurrentRequest();
+        if (null !== $request) {
+            foreach (['gid', 'origin', 'learnpath_id', 'learnpath_item_id', 'learnpath_item_view_id'] as $queryKey) {
+                $value = $request->query->get($queryKey);
+                if (null !== $value && '' !== (string) $value) {
+                    $query[$queryKey] = (string) $value;
+                }
+            }
+        }
+
+        return sprintf(
+            '/api/exercise/runtime/%d/attempt/%d/file/%d/download?%s',
+            (int) $quiz->getIid(),
+            (int) $attempt->getExeId(),
+            (int) $resourceNode->getId(),
+            http_build_query($query)
+        );
+    }
+
+    /**
+     * @return array<int, CQuizAnswer>
+     */
+    private function getOrderedAnswers(CQuizQuestion $question): array
+    {
+        $rows = $this->entityManager->createQueryBuilder()
+            ->select('answer')
+            ->from(CQuizAnswer::class, 'answer')
+            ->andWhere('IDENTITY(answer.question) = :questionId')
+            ->setParameter('questionId', (int) $question->getIid(), Types::INTEGER)
+            ->orderBy('answer.position', 'ASC')
+            ->addOrderBy('answer.iid', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        return array_values(array_filter($rows, static fn (mixed $answer): bool => $answer instanceof CQuizAnswer));
+    }
+
+    private function getFirstAnswer(CQuizQuestion $question): ?CQuizAnswer
+    {
+        $answers = $this->getOrderedAnswers($question);
+
+        return $answers[0] ?? null;
+    }
+
+    /**
+     * @return array<int, array{id: int, title: string, position: int}>
+     */
+    private function getQuestionOptions(CQuizQuestion $question): array
+    {
+        $options = [];
+        foreach ($question->getOptions() as $option) {
+            if (!$option instanceof CQuizQuestionOption || null === $option->getIid()) {
+                continue;
+            }
+
+            $options[(int) $option->getIid()] = [
+                'id' => (int) $option->getIid(),
+                'title' => (string) $option->getTitle(),
+                'position' => (int) $option->getPosition(),
+            ];
+        }
+
+        uasort($options, static fn (array $a, array $b): int => ((int) $a['position']) <=> ((int) $b['position']));
+
+        return $options;
+    }
+
+    /**
+     * @param array<int, array{id: int, title: string, position: int}> $options
+     */
+    private function getOptionTitle(array $options, int $optionId): string
+    {
+        if (isset($options[$optionId])) {
+            return (string) ($options[$optionId]['title'] ?? '');
+        }
+
+        foreach ($options as $option) {
+            if ((int) ($option['position'] ?? 0) === $optionId) {
+                return (string) ($option['title'] ?? '');
+            }
+        }
+
+        return '';
+    }
+
+    /**
+     * @param array<int, TrackEAttempt> $rows
+     *
+     * @return array<int, int>
+     */
+    private function getSavedAnswerIds(array $rows): array
+    {
+        $answerIds = [];
+        foreach ($rows as $row) {
+            $answerId = (int) $row->getAnswer();
+            if (0 < $answerId && !\in_array($answerId, $answerIds, true)) {
+                $answerIds[] = $answerId;
+            }
+        }
+
+        return $answerIds;
+    }
+
+    /**
+     * @param array<int, TrackEAttempt> $rows
+     */
+    private function getFirstSavedAnswerId(array $rows): int
+    {
+        $row = $rows[0] ?? null;
+
+        return $row instanceof TrackEAttempt ? (int) $row->getAnswer() : 0;
+    }
+
+    /**
+     * @param array<int, TrackEAttempt> $rows
+     *
+     * @return array<int, int>
+     */
+    private function getSavedTrueFalseChoices(array $rows): array
+    {
+        $choices = [];
+        foreach ($rows as $row) {
+            $parts = explode(':', (string) $row->getAnswer());
+            $answerId = isset($parts[0]) ? (int) $parts[0] : 0;
+            $optionId = isset($parts[1]) ? (int) $parts[1] : 0;
+            if (0 < $answerId && 0 < $optionId) {
+                $choices[$answerId] = $optionId;
+            }
+        }
+
+        return $choices;
+    }
+
+    /**
+     * @param array<int, TrackEAttempt> $rows
+     *
+     * @return array<int, int>
+     */
+    private function getSavedMatchingChoices(array $rows): array
+    {
+        $choices = [];
+        foreach ($rows as $row) {
+            $position = $row->getPosition();
+            if (null === $position || 0 >= $position) {
+                continue;
+            }
+
+            $choices[(int) $position] = (int) $row->getAnswer();
+        }
+
+        return $choices;
+    }
+
+    /**
+     * @param array<int, TrackEAttempt> $rows
+     *
+     * @return array<int, array{answer: string, position: int|null, marks: float}>
+     */
+    private function normalizeRawRows(array $rows): array
+    {
+        $result = [];
+        foreach ($rows as $row) {
+            $result[] = [
+                'answer' => $row->getAnswer(),
+                'position' => $row->getPosition(),
+                'marks' => (float) $row->getMarks(),
+            ];
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return array{
+     *     text: string,
+     *     system_string: string,
+     *     words: array<int, string>,
+     *     words_with_bracket: array<int, string>,
+     *     common_words: array<int, string>,
+     *     student_answer: array<int, string>,
+     *     student_score: array<int, string>,
+     *     blank_separator_start: string,
+     *     blank_separator_end: string
+     * }
+     */
+    private function parseFillBlankAnswer(string $answer, bool $isStudentAnswer): array
+    {
+        $parts = [];
+        if (1 === preg_match('/(.*)::(.*)$/s', $answer, $matches)) {
+            $parts = [(string) ($matches[1] ?? ''), (string) ($matches[2] ?? '')];
+        } else {
+            $parts = [$answer, ''];
+        }
+
+        $systemString = $parts[1];
+        $systemParts = explode('@', $systemString, 2);
+        $details = explode(':', (string) ($systemParts[0] ?? ''));
+        $separatorNumber = \count($details) >= 3 ? (int) ($details[2] ?? 0) : 0;
+        [$start, $end] = $this->getFillBlankSeparators($separatorNumber);
+        $startPattern = preg_quote($start, '/');
+        $endPattern = preg_quote($end, '/');
+        $wordMatches = [];
+        preg_match_all('/'.$startPattern.'[^'.$endPattern.']*'.$endPattern.'/', $parts[0], $wordMatches);
+        $wordsWithBracket = \is_array($wordMatches[0] ?? null) ? $wordMatches[0] : [];
+        $words = [];
+        foreach ($wordsWithBracket as $word) {
+            $words[] = trim((string) $word, $start.$end);
+        }
+
+        $commonWordsString = preg_replace('/'.$startPattern.'[^'.$endPattern.']*'.$endPattern.'/', '::', $parts[0]);
+        if (!\is_string($commonWordsString)) {
+            $commonWordsString = '';
+        }
+
+        $studentAnswer = [];
+        $studentScore = [];
+        if ($isStudentAnswer) {
+            $baseWords = [];
+            $baseWordsWithBracket = [];
+            $count = \count($words);
+            for ($index = 0; $index < $count; ++$index) {
+                $baseWordsWithBracket[] = $wordsWithBracket[$index] ?? '';
+                $baseWords[] = $words[$index] ?? '';
+                ++$index;
+                $studentAnswer[] = $words[$index] ?? '';
+                ++$index;
+                $studentScore[] = $words[$index] ?? '0';
+            }
+            $words = $baseWords;
+            $wordsWithBracket = $baseWordsWithBracket;
+            $commonWordsString = preg_replace('/::::::/', '::', $commonWordsString) ?: '';
+        }
+
+        return [
+            'text' => $parts[0],
+            'system_string' => $systemString,
+            'words' => $words,
+            'words_with_bracket' => $wordsWithBracket,
+            'common_words' => explode('::', $commonWordsString),
+            'student_answer' => $studentAnswer,
+            'student_score' => $studentScore,
+            'blank_separator_start' => $start,
+            'blank_separator_end' => $end,
+        ];
+    }
+
+    /**
+     * @return array{0: string, 1: string}
+     */
+    private function getFillBlankSeparators(int $separator): array
+    {
+        return match ($separator) {
+            1 => ['{', '}'],
+            2 => ['(', ')'],
+            3 => ['*', '*'],
+            4 => ['#', '#'],
+            5 => ['%', '%'],
+            6 => ['$', '$'],
+            default => ['[', ']'],
+        };
+    }
+
+    private function requiresManualCorrection(CQuizQuestion $question): bool
+    {
+        return \in_array((int) $question->getType(), [5, 23], true);
+    }
+
+    private function getQuestionTypeLabel(int $type): string
+    {
+        return match ($type) {
+            1 => 'Unique answer',
+            2 => 'Multiple answer',
+            3 => 'Fill in blanks',
+            4 => 'Matching',
+            5 => 'Open question',
+            9 => 'Exact Selection',
+            10 => 'Unique answer with unknown',
+            11 => 'Multiple answer true/false',
+            12 => 'Multiple answer combination true/false',
+            14 => 'Global multiple answer',
+            17 => 'Unique answer with images',
+            19 => 'Matching draggable',
+            23 => 'Upload answer',
+            24 => 'Matching combination',
+            25 => 'Matching draggable combination',
+            27 => 'Fill in blanks combination',
+            28 => 'Multiple answer dropdown combination',
+            29 => 'Multiple answer dropdown',
+            default => 'Question',
+        };
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function getLegacyUrls(CQuiz $quiz, TrackEExercise $attempt, Course $course, ?Session $session, Request $request): array
+    {
+        $baseParams = [
+            'exerciseId' => (int) $quiz->getIid(),
+            'cid' => (int) $course->getId(),
+            'sid' => (int) ($session?->getId() ?? 0),
+        ];
+        $resultParams = [
+            'cid' => (int) $course->getId(),
+            'sid' => (int) ($session?->getId() ?? $request->query->getInt('sid')),
+            'gid' => $request->query->getInt('gid'),
+            'exe_id' => (int) $attempt->getExeId(),
+            'learnpath_id' => (int) $attempt->getOrigLpId(),
+            'learnpath_item_id' => (int) $attempt->getOrigLpItemId(),
+            'learnpath_item_view_id' => (int) $attempt->getOrigLpItemViewId(),
+            'origin' => (string) $request->query->get('origin', ''),
+        ];
+
+        return [
+            'overview' => '/main/exercise/overview.php?'.http_build_query($baseParams),
+            'legacyResult' => api_get_path(WEB_CODE_PATH).'exercise/exercise_result.php?'.http_build_query($resultParams),
+            'results' => '/main/exercise/exercise_report.php?'.http_build_query($baseParams),
+            'list' => '/main/exercise/exercise.php?'.http_build_query($baseParams),
+        ];
+    }
+}

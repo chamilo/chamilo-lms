@@ -13,6 +13,12 @@ ALTER TABLE plugin_buycourses_services MODIFY tax_perc int unsigned NULL;
 ALTER TABLE plugin_buycourses_subscription MODIFY tax_perc int unsigned NULL;
 ```
 
+Fix: when tax is restricted to a single product type ("Only sessions" / "Only courses"), the
+catalog now applies tax to sessions consistently with what is actually charged at purchase.
+Previously the displayed price for sessions and session subscriptions always used the
+"courses" tax rule, so the shown tax could differ from the amount charged. No action required
+(code-only fix); the common "All" setting was never affected.
+
 v7.4 - 2022-04-28
 ====
 Add subscriptions support.

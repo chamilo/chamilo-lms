@@ -1761,7 +1761,7 @@ class BuyCoursesPlugin extends Plugin
             return null;
         }
 
-        $this->setPriceSettings($product, self::TAX_APPLIES_TO_ONLY_COURSE, $coupon);
+        $this->setPriceSettings($product, $this->getTaxCategoryForProductType($itemType), $coupon);
 
         return $product;
     }
@@ -1831,7 +1831,7 @@ class BuyCoursesPlugin extends Plugin
             return null;
         }
 
-        $this->setPriceSettings($item, self::TAX_APPLIES_TO_ONLY_COURSE, $coupon);
+        $this->setPriceSettings($item, $this->getTaxCategoryForProductType($itemType), $coupon);
 
         return $item;
     }
@@ -1871,7 +1871,7 @@ class BuyCoursesPlugin extends Plugin
         }
 
         for ($i = 0; $i < count($items); $i++) {
-            $this->setPriceSettings($items[$i], self::TAX_APPLIES_TO_ONLY_COURSE);
+            $this->setPriceSettings($items[$i], $this->getTaxCategoryForProductType($itemType));
         }
 
         if (empty($items)) {
@@ -6041,6 +6041,20 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
+     * Map a product type to the matching "tax applies to" category, so the displayed
+     * price uses the same tax rule as the sale. Services are always services; everything
+     * else is a course unless it is explicitly a session.
+     */
+    public function getTaxCategoryForProductType(int $productType): int
+    {
+        return match ($productType) {
+            self::PRODUCT_TYPE_SESSION => self::TAX_APPLIES_TO_ONLY_SESSION,
+            self::PRODUCT_TYPE_SERVICE => self::TAX_APPLIES_TO_ONLY_SERVICES,
+            default => self::TAX_APPLIES_TO_ONLY_COURSE,
+        };
+    }
+
+    /**
      * Get the path.
      */
     public function getPath(string $var): string
@@ -6717,7 +6731,7 @@ class BuyCoursesPlugin extends Plugin
 
         $subscription['iso_code'] = $currency['iso_code'];
 
-        $this->setPriceSettings($subscription, self::TAX_APPLIES_TO_ONLY_COURSE, $coupon);
+        $this->setPriceSettings($subscription, $this->getTaxCategoryForProductType($productType), $coupon);
 
         return $subscription;
     }

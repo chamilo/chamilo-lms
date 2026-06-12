@@ -142,6 +142,36 @@ class LinkAddEditForm extends FormValidator
             0
         );
 
+        // ELEMENTS: forum participation points (only for the forum participation link type)
+        if (LINK_FORUM_PARTICIPATION == $link->get_type()) {
+            $this->addFloat(
+                'points_one',
+                [
+                    get_lang('Points for one message'),
+                    get_lang('Points awarded when the student posted exactly one message in the thread.'),
+                ],
+                true,
+                ['size' => '4', 'maxlength' => '8']
+            );
+            $this->addRule('points_one', get_lang('Only numbers'), 'numeric');
+
+            $this->addFloat(
+                'points_many',
+                [
+                    get_lang('Points for two or more messages'),
+                    get_lang('Points awarded when the student posted two or more messages in the thread.'),
+                ],
+                true,
+                ['size' => '4', 'maxlength' => '8']
+            );
+            $this->addRule('points_many', get_lang('Only numbers'), 'numeric');
+
+            if (self::TYPE_EDIT == $form_type) {
+                $defaults['points_one'] = $link->get_points_one();
+                $defaults['points_many'] = $link->get_points_many();
+            }
+        }
+
         $this->addElement('hidden', 'weight');
 
         if (self::TYPE_EDIT == $form_type) {

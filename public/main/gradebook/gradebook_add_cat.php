@@ -71,6 +71,10 @@ if ($form->validate()) {
     $cat->set_parent_id($values['hid_parent_id']);
     $cat->set_weight($values['weight']);
 
+    if (isset($values['calculation_mode'])) {
+        $cat->setCalculationMode($values['calculation_mode']);
+    }
+
     if (isset($values['generate_certificates'])) {
         $cat->setGenerateCertificates(true);
     } else {

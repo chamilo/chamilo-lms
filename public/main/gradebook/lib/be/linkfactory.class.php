@@ -90,6 +90,8 @@ class LinkFactory
                 return new LearnpathLink();
             case LINK_FORUM_THREAD:
                 return new ForumThreadLink();
+            case LINK_FORUM_PARTICIPATION:
+                return new ForumParticipationLink();
             case LINK_ATTENDANCE:
                 return new AttendanceLink();
             case LINK_SURVEY:
@@ -114,6 +116,7 @@ class LinkFactory
             LINK_STUDENTPUBLICATION,
             LINK_LEARNPATH,
             LINK_FORUM_THREAD,
+            LINK_FORUM_PARTICIPATION,
             LINK_ATTENDANCE,
             LINK_SURVEY,
         ];

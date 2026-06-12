@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Enums\GradebookCalculationMode;
 use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 
@@ -41,6 +42,7 @@ class Category implements GradebookItem
     private $gradeBooksToValidateInDependence;
     private $locked;
     private int $allowSkillsBySubcategory;
+    private string $calculationMode;
 
     /**
      * Consctructor.
@@ -64,6 +66,7 @@ class Category implements GradebookItem
         $this->documentId = 0;
         $this->minimumToValidate = null;
         $this->allowSkillsBySubcategory = 1;
+        $this->calculationMode = GradebookCalculationMode::WEIGHTED_AVERAGE->value;
     }
 
     /**
@@ -72,6 +75,17 @@ class Category implements GradebookItem
     public function get_id()
     {
         return $this->id;
+    }
+
+    public function getCalculationMode(): string
+    {
+        return $this->calculationMode;
+    }
+
+    public function setCalculationMode(?string $calculationMode): void
+    {
+        $this->calculationMode = GradebookCalculationMode::tryFrom((string) $calculationMode)?->value
+            ?? GradebookCalculationMode::WEIGHTED_AVERAGE->value;
     }
 
     /**
@@ -574,6 +588,9 @@ class Category implements GradebookItem
                 );
             }
             $category->setAllowSkillsBySubcategory((int) $this->allowSkillsBySubcategory);
+            $category->setCalculationMode(
+                GradebookCalculationMode::tryFrom($this->calculationMode) ?? GradebookCalculationMode::WEIGHTED_AVERAGE
+            );
             $category->setLocked(0);
 
             $em->persist($category);
@@ -678,6 +695,9 @@ class Category implements GradebookItem
         }
 
         $category->setAllowSkillsBySubcategory((int) $this->allowSkillsBySubcategory);
+        $category->setCalculationMode(
+            GradebookCalculationMode::tryFrom($this->calculationMode) ?? GradebookCalculationMode::WEIGHTED_AVERAGE
+        );
         $em->persist($category);
         $em->flush();
 
@@ -1097,6 +1117,13 @@ class Category implements GradebookItem
             }
         }
 
+        // In POINTS_SUM mode each weight is the item's max points; the category grade is the
+        // raw points sum (Σ score/max × weight) and is NOT normalized by Σweight. Every
+        // downstream consumer computes num/den*100, so returning den=100 yields exactly $ressum.
+        $scoreDenominator = GradebookCalculationMode::POINTS_SUM->value === $this->calculationMode
+            ? 100
+            : $weightsum;
+
         switch ($type) {
             case 'best':
                 arsort($totalScorePerStudent);
@@ -1118,12 +1145,12 @@ class Category implements GradebookItem
 
                 if ($cacheAvailable) {
                     $cacheItem = $cache->getItem($key);
-                    $cacheItem->set([$ressum, $weightsum]);
+                    $cacheItem->set([$ressum, $scoreDenominator]);
 
                     $cache->save($cacheItem);
                 }
 
-                return [$ressum, $weightsum];
+                return [$ressum, $scoreDenominator];
                 //break;
             case 'ranking':
                 // category ranking is calculated in gradebook_data_generator.class.php
@@ -1135,12 +1162,12 @@ class Category implements GradebookItem
             default:
                 if ($cacheAvailable) {
                     $cacheItem = $cache->getItem($key);
-                    $cacheItem->set([$ressum, $weightsum]);
+                    $cacheItem->set([$ressum, $scoreDenominator]);
 
                     $cache->save($cacheItem);
                 }
 
-                return [$ressum, $weightsum];
+                return [$ressum, $scoreDenominator];
         }
     }
 
@@ -2752,6 +2779,7 @@ class Category implements GradebookItem
                 $cat->setGenerateCertificates($data['generate_certificates']);
                 $cat->setIsRequirement($data['is_requirement']);
                 $cat->setAllowSkillBySubCategory($data['allow_skills_by_subcategory'] ?? 1);
+                $cat->setCalculationMode($data['calculation_mode'] ?? null);
                 $cat->setMinimumToValidate(isset($data['minimum_to_validate']) ? $data['minimum_to_validate'] : null);
                 $cat->setGradeBooksToValidateInDependence(isset($data['gradebooks_to_validate_in_dependence']) ? $data['gradebooks_to_validate_in_dependence'] : null);
                 $cat->setDocumentId($data['document_id']);

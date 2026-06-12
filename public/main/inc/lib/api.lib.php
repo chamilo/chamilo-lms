@@ -389,6 +389,7 @@ define('LINK_ATTENDANCE', 7);
 define('LINK_SURVEY', 8);
 define('LINK_HOTPOTATOES', 9);
 define('LINK_PORTFOLIO', 10);
+define('LINK_FORUM_PARTICIPATION', 11);
 
 // Score display types constants
 define('SCORE_DIV', 1); // X / Y

@@ -1,6 +1,9 @@
 <template>
-  <section class="space-y-5">
-    <div class="flex w-fit flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm">
+  <section
+    class="exercise-result-page space-y-5"
+    :class="{ 'exercise-result-print-mode': shouldAutoPrint() }"
+  >
+    <div class="exercise-result-toolbar flex w-fit flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm">
       <BaseButton
         :label="t('Back to exercises')"
         :route="{ name: 'ExerciseList', params: getBaseRouteParams(), query: getContextParams() }"
@@ -18,13 +21,12 @@
         type="primary-text"
       />
       <BaseButton
-        v-if="legacyUrls.legacyResult"
-        :label="t('Open legacy result')"
-        :to-url="legacyUrls.legacyResult"
-        icon="tracking"
+        :label="t('Export PDF')"
+        icon="file-pdf"
         only-icon
         size="small"
-        type="secondary-text"
+        type="primary-text"
+        @click="downloadResultPdf"
       />
     </div>
 
@@ -182,7 +184,66 @@
         </div>
       </header>
 
-      <div class="space-y-4">
+      <div
+        v-if="visibility.showRadar"
+        class="rounded-xl border border-info/30 bg-support-1 p-4 text-sm text-support-4"
+      >
+        {{ t("This exercise uses the radar/spiderweb result mode. The chart is not available in the Vue result page yet.") }}
+      </div>
+
+      <div
+        v-if="visibility.showRanking"
+        class="overflow-hidden rounded-xl border border-gray-20 bg-white shadow-sm"
+      >
+        <div class="border-b border-gray-20 bg-gray-10 p-4">
+          <h2 class="text-lg font-semibold text-gray-90">{{ t("Ranking") }}</h2>
+        </div>
+        <div class="overflow-x-auto p-4">
+          <table class="min-w-full text-sm">
+            <thead>
+              <tr class="border-b border-gray-20 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                <th class="px-3 py-2 text-right">{{ t("Position") }}</th>
+                <th class="px-3 py-2">{{ t("Username") }}</th>
+                <th class="px-3 py-2 text-right">{{ t("Score") }}</th>
+                <th class="px-3 py-2 text-center">{{ t("Date") }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="item in ranking"
+                :key="`${item.position}-${item.userId}`"
+                class="border-b border-gray-20"
+                :class="item.currentUser ? 'bg-warning/10' : ''"
+              >
+                <td class="px-3 py-2 text-right font-semibold">{{ item.position }}</td>
+                <td class="px-3 py-2">{{ item.user }}</td>
+                <td class="px-3 py-2 text-right">{{ formatNumber(item.score) }} / {{ formatNumber(item.maxScore) }}</td>
+                <td class="px-3 py-2 text-center">{{ formatDate(item.date) }}</td>
+              </tr>
+              <tr v-if="!ranking.length">
+                <td
+                  class="px-3 py-3 text-center text-gray-500"
+                  colspan="4"
+                >
+                  {{ t("No ranking data available") }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div
+        v-if="!questions.length && visibility.showQuestionDetails === false"
+        class="rounded-xl border border-info/30 bg-support-1 p-4 text-sm text-support-4"
+      >
+        {{ t("Question details are hidden according to the exercise result settings.") }}
+      </div>
+
+      <div
+        v-else
+        class="space-y-4"
+      >
         <article
           v-for="(question, index) in questions"
           :key="question.id"
@@ -276,7 +337,7 @@
                   </div>
                   <div class="flex flex-wrap gap-2 text-xs font-semibold">
                     <span
-                      v-if="choice.selected"
+                      v-if="visibility.showStudentAnswers !== false && choice.selected"
                       class="rounded-full bg-info/10 px-2 py-1 text-info"
                     >
                       {{ t("Your answer") }}
@@ -312,7 +373,10 @@
                   />
                 </div>
                 <div class="mt-2 flex flex-wrap gap-2 text-xs font-semibold">
-                  <span class="rounded-full bg-info/10 px-2 py-1 text-info">
+                  <span
+                    v-if="visibility.showStudentAnswers !== false"
+                    class="rounded-full bg-info/10 px-2 py-1 text-info"
+                  >
                     {{ t("Your answer") }}: {{ choice.selectedOptionLabel || t("No answer") }}
                   </span>
                   <span
@@ -350,8 +414,10 @@
                       :class="blankIconClass(blank)"
                     />
                     <div>
-                      <span class="font-semibold">{{ t("Blank {0}", [blank.position]) }}:</span>
-                      {{ blank.studentAnswer || t("No answer") }}
+                      <span class="font-semibold">{{ t("Blank {0}", [blank.position]) }}</span>
+                      <template v-if="visibility.showStudentAnswers !== false">
+                        : {{ blank.studentAnswer || t("No answer") }}
+                      </template>
                     </div>
                   </div>
                   <div
@@ -379,7 +445,10 @@
                   />
                 </div>
                 <div class="mt-2 grid gap-2 text-sm md:grid-cols-2">
-                  <div class="rounded bg-info/10 p-2 text-info">
+                  <div
+                    v-if="visibility.showStudentAnswers !== false"
+                    class="rounded bg-info/10 p-2 text-info"
+                  >
                     <span class="font-semibold">{{ t("Your answer") }}:</span>
                     {{ displayText(prompt.selectedOptionAnswer, t("No answer")) }}
                   </div>
@@ -400,6 +469,69 @@
             </template>
 
 
+            <template v-else-if="question.answer.kind === 'draggable'">
+              <div class="grid gap-3 md:grid-cols-2">
+                <div
+                  v-if="visibility.showStudentAnswers !== false"
+                  class="rounded-lg border border-gray-20 bg-gray-10 p-3"
+                >
+                  <h3 class="mb-3 text-sm font-semibold text-gray-80">{{ t("Your order") }}</h3>
+                  <ol
+                    :class="question.answer.orientation === 'h'
+                      ? 'flex gap-2 overflow-x-auto text-sm'
+                      : 'list-decimal space-y-2 pl-5 text-sm'"
+                  >
+                    <li
+                      v-for="(item, index) in question.answer.studentItems"
+                      :key="`student-${item.id}`"
+                      :class="question.answer.orientation === 'h'
+                        ? 'flex min-w-[12rem] items-center gap-2 rounded border border-gray-20 bg-white p-2'
+                        : 'exercise-result-html'"
+                    >
+                      <span
+                        v-if="question.answer.orientation === 'h'"
+                        class="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary"
+                      >
+                        {{ index + 1 }}
+                      </span>
+                      <span class="exercise-result-html" v-html="item.answer" />
+                    </li>
+                  </ol>
+                  <p v-if="!question.answer.studentItems?.length" class="text-sm text-gray-500">
+                    {{ t("No answer") }}
+                  </p>
+                </div>
+
+                <div
+                  v-if="question.answer.expectedItems?.length"
+                  class="rounded-lg border border-success/30 bg-success/10 p-3"
+                >
+                  <h3 class="mb-3 text-sm font-semibold text-success">{{ t("Correct order") }}</h3>
+                  <ol
+                    :class="question.answer.orientation === 'h'
+                      ? 'flex gap-2 overflow-x-auto text-sm'
+                      : 'list-decimal space-y-2 pl-5 text-sm'"
+                  >
+                    <li
+                      v-for="(item, index) in question.answer.expectedItems"
+                      :key="`expected-${item.id}`"
+                      :class="question.answer.orientation === 'h'
+                        ? 'flex min-w-[12rem] items-center gap-2 rounded border border-success/30 bg-white p-2'
+                        : 'exercise-result-html'"
+                    >
+                      <span
+                        v-if="question.answer.orientation === 'h'"
+                        class="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-success/10 text-xs font-semibold text-success"
+                      >
+                        {{ index + 1 }}
+                      </span>
+                      <span class="exercise-result-html" v-html="item.answer" />
+                    </li>
+                  </ol>
+                </div>
+              </div>
+            </template>
+
             <template v-else-if="question.answer.kind === 'calculated'">
               <div class="space-y-3 rounded-lg border border-gray-20 bg-gray-10 p-3 text-sm">
                 <div
@@ -408,7 +540,10 @@
                   v-html="question.answer.text"
                 />
                 <div class="grid gap-2 md:grid-cols-2">
-                  <div class="rounded bg-info/10 p-2 text-info">
+                  <div
+                    v-if="visibility.showStudentAnswers !== false"
+                    class="rounded bg-info/10 p-2 text-info"
+                  >
                     <span class="font-semibold">{{ t("Your answer") }}:</span>
                     {{ question.answer.studentAnswer || t("No answer") }}
                   </div>
@@ -425,7 +560,10 @@
 
             <template v-else-if="question.answer.kind === 'hotspot'">
               <div class="space-y-3">
-                <div class="rounded-lg border border-gray-20 bg-gray-10 p-3">
+                <div
+                  v-if="visibility.showStudentAnswers !== false"
+                  class="rounded-lg border border-gray-20 bg-gray-10 p-3"
+                >
                   <div class="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500">
                     {{ t("Learner clicks") }}
                   </div>
@@ -487,7 +625,10 @@
 
             <template v-else-if="question.answer.kind === 'annotation'">
               <div class="space-y-3">
-                <div class="rounded-lg border border-gray-20 bg-gray-10 p-3">
+                <div
+                  v-if="visibility.showStudentAnswers !== false"
+                  class="rounded-lg border border-gray-20 bg-gray-10 p-3"
+                >
                   <div class="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500">
                     {{ t("Learner annotation") }}
                   </div>
@@ -561,7 +702,7 @@
 
                 <div
                   v-if="question.canCorrect && correctionForms[question.id]"
-                  class="rounded-lg border border-gray-20 bg-white p-4"
+                  class="exercise-result-correction-form rounded-lg border border-gray-20 bg-white p-4"
                 >
                   <div class="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-800">
                     <BaseIcon icon="edit" size="small" />
@@ -601,7 +742,10 @@
 
             <template v-else-if="question.answer.kind === 'oral_expression'">
               <div class="space-y-3">
-                <div class="rounded-lg border border-gray-20 bg-gray-10 p-3">
+                <div
+                  v-if="visibility.showStudentAnswers !== false"
+                  class="rounded-lg border border-gray-20 bg-gray-10 p-3"
+                >
                   <div class="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500">
                     {{ t("Learner audio") }}
                   </div>
@@ -657,7 +801,7 @@
 
                 <div
                   v-if="question.canCorrect && correctionForms[question.id]"
-                  class="rounded-lg border border-gray-20 bg-white p-4"
+                  class="exercise-result-correction-form rounded-lg border border-gray-20 bg-white p-4"
                 >
                   <div class="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-800">
                     <BaseIcon icon="edit" size="small" />
@@ -697,7 +841,10 @@
 
             <template v-else-if="question.answer.kind === 'upload_answer'">
               <div class="space-y-3">
-                <div class="rounded-lg border border-gray-20 bg-gray-10 p-3">
+                <div
+                  v-if="visibility.showStudentAnswers !== false"
+                  class="rounded-lg border border-gray-20 bg-gray-10 p-3"
+                >
                   <div class="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500">
                     {{ t("Learner file") }}
                   </div>
@@ -744,7 +891,7 @@
 
                 <div
                   v-if="question.canCorrect && correctionForms[question.id]"
-                  class="rounded-lg border border-gray-20 bg-white p-4"
+                  class="exercise-result-correction-form rounded-lg border border-gray-20 bg-white p-4"
                 >
                   <div class="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-800">
                     <BaseIcon icon="edit" size="small" />
@@ -798,7 +945,10 @@
 
             <template v-else-if="question.answer.kind === 'free_answer'">
               <div class="space-y-3">
-                <div class="rounded-lg border border-gray-20 bg-gray-10 p-3">
+                <div
+                  v-if="visibility.showStudentAnswers !== false"
+                  class="rounded-lg border border-gray-20 bg-gray-10 p-3"
+                >
                   <div class="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500">
                     {{ t("Learner answer") }}
                   </div>
@@ -826,7 +976,7 @@
 
                 <div
                   v-if="question.canCorrect && correctionForms[question.id]"
-                  class="rounded-lg border border-gray-20 bg-white p-4"
+                  class="exercise-result-correction-form rounded-lg border border-gray-20 bg-white p-4"
                 >
                   <div class="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-800">
                     <BaseIcon icon="edit" size="small" />
@@ -883,7 +1033,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from "vue"
+import { nextTick, onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
@@ -902,12 +1052,13 @@ const description = ref("")
 const attempt = ref({})
 const visibility = ref({})
 const questions = ref([])
-const legacyUrls = ref({})
+const ranking = ref([])
 const correctionForms = ref({})
 const correctionSavingQuestionId = ref(null)
 const correctionError = ref("")
 const correctionMessage = ref("")
 const resultHotspotImageSizes = ref({})
+const autoPrintDone = ref(false)
 
 function getQueryValue(value) {
   return Array.isArray(value) ? value[0] : value
@@ -964,8 +1115,9 @@ async function loadResult() {
     attempt.value = response.attempt || {}
     visibility.value = response.visibility || {}
     questions.value = Array.isArray(response.questions) ? response.questions : []
-    legacyUrls.value = response.legacyUrls || {}
+    ranking.value = Array.isArray(response.ranking) ? response.ranking : []
     initializeCorrectionForms()
+    scheduleAutoPrintIfRequested()
   } catch (error) {
     console.error("Error loading exercise result", error)
     errorMessage.value = t("Could not load exercise result")
@@ -1182,6 +1334,10 @@ function trueFalseClass(choice) {
     return "border-success/40 bg-success/10"
   }
 
+  if (visibility.value.showStudentAnswers === false && choice.correctOptionLabel) {
+    return "border-success/40 bg-success/10"
+  }
+
   if (choice.selectedOptionLabel) {
     return "border-danger/40 bg-danger/10"
   }
@@ -1191,6 +1347,10 @@ function trueFalseClass(choice) {
 
 function trueFalseIconClass(choice) {
   if (isTrueFalseChoiceCorrect(choice)) {
+    return "mdi-check-circle text-success"
+  }
+
+  if (visibility.value.showStudentAnswers === false && choice.correctOptionLabel) {
     return "mdi-check-circle text-success"
   }
 
@@ -1206,6 +1366,10 @@ function isTrueFalseChoiceCorrect(choice) {
 }
 
 function blankClass(blank) {
+  if (visibility.value.showStudentAnswers === false && blank.correctAnswer) {
+    return "border-success/30"
+  }
+
   if (isBlankCorrect(blank)) {
     return "border-success/30"
   }
@@ -1214,6 +1378,10 @@ function blankClass(blank) {
 }
 
 function blankIconClass(blank) {
+  if (visibility.value.showStudentAnswers === false && blank.correctAnswer) {
+    return "mdi-check-circle text-success"
+  }
+
   return isBlankCorrect(blank) ? "mdi-check-circle text-success" : "mdi-alert-circle text-danger"
 }
 
@@ -1226,6 +1394,10 @@ function matchingClass(prompt) {
     return "border-success/40 bg-success/10"
   }
 
+  if (visibility.value.showStudentAnswers === false && prompt.correctOptionAnswer) {
+    return "border-success/40 bg-success/10"
+  }
+
   if (prompt.selectedOptionAnswer) {
     return "border-danger/40 bg-danger/10"
   }
@@ -1235,6 +1407,10 @@ function matchingClass(prompt) {
 
 function matchingIconClass(prompt) {
   if (isMatchingCorrect(prompt)) {
+    return "mdi-check-circle text-success"
+  }
+
+  if (visibility.value.showStudentAnswers === false && prompt.correctOptionAnswer) {
     return "mdi-check-circle text-success"
   }
 
@@ -1315,6 +1491,39 @@ async function saveManualCorrection(question) {
   }
 }
 
+function shouldAutoPrint() {
+  return ['1', 'true', 'pdf', 'print'].includes(String(getQueryValue(route.query.print) || '').toLowerCase())
+}
+
+function scheduleAutoPrintIfRequested() {
+  if (!shouldAutoPrint() || autoPrintDone.value) {
+    return
+  }
+
+  autoPrintDone.value = true
+  nextTick(() => {
+    window.setTimeout(() => printResult(), 350)
+  })
+}
+
+function downloadResultPdf() {
+  const exerciseId = getExerciseId()
+  const attemptId = getAttemptId()
+  if (!exerciseId || !attemptId || typeof window === "undefined") {
+    return
+  }
+
+  window.open(exerciseService.buildExerciseRuntimeAttemptPdfUrl(getContextParams(), exerciseId, attemptId), "_blank", "noopener")
+}
+
+function printResult() {
+  if (typeof window === 'undefined') {
+    return
+  }
+
+  window.print()
+}
+
 function formatNumber(value) {
   if (value === null || value === undefined || value === "") {
     return "—"
@@ -1381,12 +1590,38 @@ function displayText(value, fallback = "") {
 onMounted(loadResult)
 
 watch(
-  () => [route.params.exerciseId, route.params.attemptId, route.query.cid, route.query.sid, route.query.gid],
-  () => loadResult(),
+  () => [route.params.exerciseId, route.params.attemptId, route.query.cid, route.query.sid, route.query.gid, route.query.print],
+  () => {
+    autoPrintDone.value = false
+    loadResult()
+  },
 )
 </script>
 
 <style scoped>
+:deep(.exercise-result-toolbar .p-button) {
+  min-width: 2.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+:deep(.exercise-result-toolbar .p-button-icon) {
+  font-size: 1.25rem;
+}
+
+@media print {
+  .exercise-result-toolbar,
+  .exercise-result-correction-form {
+    display: none !important;
+  }
+
+  article,
+  header {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
+
 .exercise-result-html :deep(img) {
   max-width: 100%;
   height: auto;
@@ -1402,5 +1637,33 @@ watch(
 
 .exercise-result-html :deep(p:last-child) {
   margin-bottom: 0;
+}
+</style>
+
+<style>
+@media print {
+  body:has(.exercise-result-print-mode) * {
+    visibility: hidden !important;
+  }
+
+  body:has(.exercise-result-print-mode) .exercise-result-print-mode,
+  body:has(.exercise-result-print-mode) .exercise-result-print-mode * {
+    visibility: visible !important;
+  }
+
+  body:has(.exercise-result-print-mode) .exercise-result-print-mode {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+  }
+
+  body:has(.exercise-result-print-mode) .exercise-result-toolbar,
+  body:has(.exercise-result-print-mode) .exercise-result-correction-form {
+    display: none !important;
+  }
 }
 </style>

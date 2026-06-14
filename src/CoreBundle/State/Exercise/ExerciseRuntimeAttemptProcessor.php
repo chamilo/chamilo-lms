@@ -14,10 +14,12 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
+use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\DBAL\ArrayParameterType;
@@ -45,6 +47,10 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
     private const VISIBILITY_PUBLISHED = 2;
     private const STATUS_INCOMPLETE = 'incomplete';
     private const QUESTION_SELECTION_RANDOM = 2;
+    private const QUESTION_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED = 3;
+    private const QUESTION_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED = 4;
+    private const QUESTION_SELECTION_CATEGORIES_ORDERED_QUESTIONS_RANDOM = 5;
+    private const QUESTION_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM = 6;
     private const PAGE_BREAK = 31;
     private const MEDIA_QUESTION = 15;
 
@@ -53,6 +59,7 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
         private EntityManagerInterface $entityManager,
         private CQuizRepository $quizRepository,
         private Security $security,
+        private SettingsManager $settingsManager,
     ) {}
 
     /**
@@ -100,7 +107,17 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
                 $course,
                 $session,
                 $request,
-                'This exercise uses category-based question selection. Continue in legacy exercise until the Vue selector reaches parity.'
+                'This exercise uses a question selection mode that is not supported by the Vue runtime yet.'
+            );
+        }
+
+        if (0 < (int) $quiz->getRandomByCategory() && 0 >= (int) $quiz->getRandom()) {
+            return $this->createLegacyRequiredResponse(
+                $quiz,
+                $course,
+                $session,
+                $request,
+                'Please select some random question.'
             );
         }
 
@@ -242,8 +259,7 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
 
     private function requiresLegacyQuestionSelection(CQuiz $quiz): bool
     {
-        return 0 < (int) $quiz->getRandomByCategory()
-            || (int) ($quiz->getQuestionSelectionType() ?? 0) > self::QUESTION_SELECTION_RANDOM;
+        return (int) ($quiz->getQuestionSelectionType() ?? 0) > self::QUESTION_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM;
     }
 
     private function findIncompleteAttempt(CQuiz $quiz, Course $course, ?Session $session, User $user, Request $request): ?TrackEExercise
@@ -335,8 +351,39 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
             ->getResult()
         ;
 
-        $mustShuffle = self::QUESTION_SELECTION_RANDOM === (int) ($quiz->getQuestionSelectionType() ?? 0);
+        $selectionType = (int) ($quiz->getQuestionSelectionType() ?? 0);
         $randomCount = (int) $quiz->getRandom();
+        if (0 < (int) $quiz->getRandomByCategory() && 0 !== $randomCount) {
+            return $this->buildRandomByCategoryQuestionList($quiz, $relations, $randomCount);
+        }
+
+        if ($selectionType >= self::QUESTION_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED
+            && $selectionType <= self::QUESTION_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM
+        ) {
+            return $this->buildCategoryMatrixQuestionList($quiz, $relations, $selectionType);
+        }
+
+        $mustShuffle = self::QUESTION_SELECTION_RANDOM === $selectionType;
+        $questionIds = $this->buildOrderedQuestionIds($relations, $mustShuffle || 0 < $randomCount);
+
+        if ($mustShuffle || 0 < $randomCount) {
+            shuffle($questionIds);
+        }
+
+        if (0 < $randomCount && $randomCount < \count($questionIds)) {
+            $questionIds = \array_slice($questionIds, 0, $randomCount);
+        }
+
+        return $questionIds;
+    }
+
+    /**
+     * @param array<int, mixed> $relations
+     *
+     * @return array<int, int>
+     */
+    private function buildOrderedQuestionIds(array $relations, bool $skipStructuralQuestions): array
+    {
         $questionIds = [];
         foreach ($relations as $relation) {
             if (!$relation instanceof CQuizRelQuestion) {
@@ -353,22 +400,319 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
                 continue;
             }
 
-            if (self::PAGE_BREAK === $type && ($mustShuffle || 0 < $randomCount)) {
+            if ($skipStructuralQuestions && self::PAGE_BREAK === $type) {
                 continue;
             }
 
             $questionIds[] = (int) $question->getIid();
         }
 
-        if ($mustShuffle || 0 < $randomCount) {
-            shuffle($questionIds);
+        return $questionIds;
+    }
+
+    /**
+     * @param array<int, mixed> $relations
+     *
+     * @return array<int, int>
+     */
+    private function buildCategoryMatrixQuestionList(CQuiz $quiz, array $relations, int $selectionType): array
+    {
+        $categoryRows = $this->getExerciseCategoryRows((int) ($quiz->getIid() ?? 0));
+        if ([] === $categoryRows) {
+            return $this->buildOrderedQuestionIds($relations, true);
         }
 
-        if (0 < $randomCount && $randomCount < \count($questionIds)) {
-            $questionIds = \array_slice($questionIds, 0, $randomCount);
+        $questionsByCategory = $this->groupQuestionsByCategory($relations, true);
+        if ([] === $questionsByCategory) {
+            return $this->buildOrderedQuestionIds($relations, true);
+        }
+
+        if (\in_array($selectionType, [
+            self::QUESTION_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED,
+            self::QUESTION_SELECTION_CATEGORIES_ORDERED_QUESTIONS_RANDOM,
+        ], true)) {
+            uasort(
+                $categoryRows,
+                static fn (array $left, array $right): int => strcasecmp((string) $left['title'], (string) $right['title'])
+            );
+        } else {
+            shuffle($categoryRows);
+        }
+
+        $randomizeQuestions = \in_array($selectionType, [
+            self::QUESTION_SELECTION_CATEGORIES_ORDERED_QUESTIONS_RANDOM,
+            self::QUESTION_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM,
+        ], true);
+
+        $questionIds = [];
+        foreach ($categoryRows as $categoryRow) {
+            $categoryId = (int) $categoryRow['categoryId'];
+            $countQuestions = (int) $categoryRow['countQuestions'];
+            if (0 === $countQuestions || !isset($questionsByCategory[$categoryId])) {
+                continue;
+            }
+
+            $categoryQuestionIds = $questionsByCategory[$categoryId];
+            $mandatoryQuestionIds = $this->getMandatoryQuestionIdsForCategory($quiz, $categoryId, $selectionType);
+            if ($randomizeQuestions) {
+                shuffle($categoryQuestionIds);
+            }
+
+            if (-1 !== $countQuestions) {
+                $categoryQuestionIds = $this->pickCategoryQuestions(
+                    $categoryQuestionIds,
+                    max(0, $countQuestions),
+                    $randomizeQuestions,
+                    $mandatoryQuestionIds
+                );
+            }
+
+            foreach ($categoryQuestionIds as $questionId) {
+                if (\in_array($questionId, $questionIds, true)) {
+                    continue;
+                }
+
+                $questionIds[] = $questionId;
+            }
+        }
+
+        if ([] === $questionIds) {
+            return $this->buildOrderedQuestionIds($relations, true);
         }
 
         return $questionIds;
+    }
+
+    /**
+     * @param array<int, mixed> $relations
+     *
+     * @return array<int, int>
+     */
+    private function buildRandomByCategoryQuestionList(CQuiz $quiz, array $relations, int $randomCount): array
+    {
+        $questionsByCategory = $this->groupQuestionsByCategory($relations, true);
+        if ([] === $questionsByCategory) {
+            return $this->buildOrderedQuestionIds($relations, true);
+        }
+
+        $categoryRows = [];
+        foreach (array_keys($questionsByCategory) as $categoryId) {
+            $categoryRows[] = [
+                'categoryId' => (int) $categoryId,
+                'title' => $this->getCategoryTitle((int) $categoryId),
+            ];
+        }
+
+        if (2 === (int) $quiz->getRandomByCategory()) {
+            uasort(
+                $categoryRows,
+                static fn (array $left, array $right): int => strcasecmp((string) $left['title'], (string) $right['title'])
+            );
+        }
+
+        $questionIds = [];
+        foreach ($categoryRows as $categoryRow) {
+            $categoryQuestionIds = $questionsByCategory[(int) $categoryRow['categoryId']] ?? [];
+            if ([] === $categoryQuestionIds) {
+                continue;
+            }
+
+            shuffle($categoryQuestionIds);
+            if (-1 !== $randomCount) {
+                $categoryQuestionIds = \array_slice($categoryQuestionIds, 0, max(0, $randomCount));
+            }
+
+            foreach ($categoryQuestionIds as $questionId) {
+                if (\in_array($questionId, $questionIds, true)) {
+                    continue;
+                }
+
+                $questionIds[] = $questionId;
+            }
+        }
+
+        if (1 === (int) $quiz->getRandomByCategory()) {
+            shuffle($questionIds);
+        }
+
+        if ([] === $questionIds) {
+            return $this->buildOrderedQuestionIds($relations, true);
+        }
+
+        return $questionIds;
+    }
+
+    /**
+     * @param array<int, int> $questionIds
+     * @param array<int, int> $mandatoryQuestionIds
+     *
+     * @return array<int, int>
+     */
+    private function pickCategoryQuestions(array $questionIds, int $countQuestions, bool $randomizeQuestions, array $mandatoryQuestionIds): array
+    {
+        if ([] === $mandatoryQuestionIds) {
+            return \array_slice($questionIds, 0, $countQuestions);
+        }
+
+        $mandatoryQuestionIds = array_values(array_intersect($mandatoryQuestionIds, $questionIds));
+        if (\count($mandatoryQuestionIds) >= $countQuestions) {
+            if ($randomizeQuestions) {
+                shuffle($mandatoryQuestionIds);
+            }
+
+            return \array_slice($mandatoryQuestionIds, 0, $countQuestions);
+        }
+
+        $remainingQuestionIds = array_values(array_diff($questionIds, $mandatoryQuestionIds));
+        if ($randomizeQuestions) {
+            shuffle($remainingQuestionIds);
+        }
+
+        $selectedQuestionIds = array_merge(
+            $mandatoryQuestionIds,
+            \array_slice($remainingQuestionIds, 0, $countQuestions - \count($mandatoryQuestionIds))
+        );
+
+        if ($randomizeQuestions) {
+            shuffle($selectedQuestionIds);
+        }
+
+        return $selectedQuestionIds;
+    }
+
+    /**
+     * @return array<int, int>
+     */
+    private function getMandatoryQuestionIdsForCategory(CQuiz $quiz, int $categoryId, int $selectionType): array
+    {
+        if (self::QUESTION_SELECTION_CATEGORIES_ORDERED_QUESTIONS_RANDOM !== $selectionType) {
+            return [];
+        }
+
+        if ('true' !== $this->settingsManager->getSetting('exercise.allow_mandatory_question_in_category', true)
+            || !$this->hasMandatoryQuestionCategoryColumn()
+        ) {
+            return [];
+        }
+
+        $rows = $this->entityManager->getConnection()->fetchFirstColumn(
+            'SELECT qrc.question_id '
+            .'FROM c_quiz_question_rel_category qrc '
+            .'INNER JOIN c_quiz_rel_question rel ON rel.question_id = qrc.question_id '
+            .'WHERE rel.quiz_id = :exerciseId AND qrc.category_id = :categoryId AND qrc.mandatory = 1',
+            [
+                'exerciseId' => (int) ($quiz->getIid() ?? 0),
+                'categoryId' => $categoryId,
+            ],
+            [
+                'exerciseId' => Types::INTEGER,
+                'categoryId' => Types::INTEGER,
+            ]
+        );
+
+        return array_values(array_map(static fn (mixed $questionId): int => (int) $questionId, $rows));
+    }
+
+    private function hasMandatoryQuestionCategoryColumn(): bool
+    {
+        try {
+            return $this->entityManager
+                ->getConnection()
+                ->createSchemaManager()
+                ->introspectTable('c_quiz_question_rel_category')
+                ->hasColumn('mandatory');
+        } catch (\Throwable) {
+            return false;
+        }
+    }
+
+    /**
+     * @param array<int, mixed> $relations
+     *
+     * @return array<int, array<int, int>>
+     */
+    private function groupQuestionsByCategory(array $relations, bool $skipStructuralQuestions): array
+    {
+        $questionsByCategory = [];
+        foreach ($relations as $relation) {
+            if (!$relation instanceof CQuizRelQuestion) {
+                continue;
+            }
+
+            $question = $relation->getQuestion();
+            if (!$question instanceof CQuizQuestion || null === $question->getIid()) {
+                continue;
+            }
+
+            $type = (int) $question->getType();
+            if (self::MEDIA_QUESTION === $type) {
+                continue;
+            }
+
+            if ($skipStructuralQuestions && self::PAGE_BREAK === $type) {
+                continue;
+            }
+
+            $questionId = (int) $question->getIid();
+            $categories = $question->getCategories();
+            if (0 === $categories->count()) {
+                $questionsByCategory[0][] = $questionId;
+                continue;
+            }
+
+            foreach ($categories as $category) {
+                $categoryId = (int) ($category->getIid() ?? 0);
+                $questionsByCategory[$categoryId][] = $questionId;
+            }
+        }
+
+        return $questionsByCategory;
+    }
+
+    /**
+     * @return array<int, array{categoryId: int, title: string, countQuestions: int}>
+     */
+    private function getExerciseCategoryRows(int $exerciseId): array
+    {
+        if (0 >= $exerciseId) {
+            return [];
+        }
+
+        $rows = $this->entityManager->getConnection()->fetchAllAssociative(
+            'SELECT rel.category_id, rel.count_questions, category.title '
+            .'FROM c_quiz_rel_category rel '
+            .'LEFT JOIN c_quiz_question_category category ON category.iid = rel.category_id '
+            .'WHERE rel.exercise_id = :exerciseId',
+            ['exerciseId' => $exerciseId],
+            ['exerciseId' => Types::INTEGER]
+        );
+
+        $categories = [];
+        foreach ($rows as $row) {
+            $categoryId = (int) $row['category_id'];
+            $categories[] = [
+                'categoryId' => $categoryId,
+                'title' => 0 === $categoryId ? 'General' : (string) ($row['title'] ?? ''),
+                'countQuestions' => (int) $row['count_questions'],
+            ];
+        }
+
+        return $categories;
+    }
+
+    private function getCategoryTitle(int $categoryId): string
+    {
+        if (0 === $categoryId) {
+            return 'General';
+        }
+
+        $row = $this->entityManager->getConnection()->fetchAssociative(
+            'SELECT title FROM c_quiz_question_category WHERE iid = :categoryId',
+            ['categoryId' => $categoryId],
+            ['categoryId' => Types::INTEGER]
+        );
+
+        return \is_array($row) ? (string) ($row['title'] ?? '') : '';
     }
 
     /**
@@ -392,14 +736,14 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
         return (float) ($rows[0]['totalScore'] ?? 0.0);
     }
 
-    private function buildExpiredAt(CQuiz $quiz): ?DateTimeImmutable
+    private function buildExpiredAt(CQuiz $quiz): ?DateTime
     {
         $expiredMinutes = (int) $quiz->getExpiredTime();
         if (0 >= $expiredMinutes) {
             return null;
         }
 
-        return (new DateTimeImmutable())->modify(sprintf('+%d minutes', $expiredMinutes));
+        return (new DateTime())->modify(sprintf('+%d minutes', $expiredMinutes));
     }
 
     private function createTeacherPreviewResponse(CQuiz $quiz, Course $course, ?Session $session, Request $request): ExerciseRuntimeAttempt

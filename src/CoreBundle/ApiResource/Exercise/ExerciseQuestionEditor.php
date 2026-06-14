@@ -303,6 +303,9 @@ final class ExerciseQuestionEditor
     #[Groups(['exercise_question_editor:read'])]
     public bool $imageZoomEnabled = false;
 
+    #[Groups(['exercise_question_editor:read'])]
+    public bool $allowMandatoryQuestion = false;
+
     #[Groups(['exercise_question_editor:write'])]
     public string $submittedCsrfToken = '';
 

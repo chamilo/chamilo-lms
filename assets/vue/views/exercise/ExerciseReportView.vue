@@ -1,7 +1,8 @@
 <template>
   <section class="space-y-5">
-    <div class="flex w-fit flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm">
+    <div class="exercise-report-toolbar flex w-fit flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm">
       <BaseButton
+        class="exercise-report-toolbar__button"
         :label="t('Back to exercises')"
         :route="{ name: 'ExerciseList', params: getBaseRouteParams(), query: getContextParams() }"
         :icon="safeIcon('back')"
@@ -10,6 +11,7 @@
         type="primary-text"
       />
       <BaseButton
+        class="exercise-report-toolbar__button"
         :label="t('Edit questions')"
         :route="{ name: 'ExerciseQuestions', params: getExerciseRouteParams(), query: getContextParams() }"
         :icon="safeIcon('edit')"
@@ -18,77 +20,105 @@
         type="secondary-text"
       />
       <BaseButton
-        v-if="legacyUrls.liveStats"
+        class="exercise-report-toolbar__button"
         :label="t('Live results')"
-        :to-url="legacyUrls.liveStats"
-        :icon="safeIcon('table', 'information')"
+        :route="{ name: 'ExerciseLiveResults', params: getExerciseRouteParams(), query: getContextParams() }"
+        :icon="safeIcon('usage', 'table')"
         only-icon
         size="small"
         type="primary-text"
       />
       <BaseButton
-        v-if="legacyUrls.questionReport"
+        class="exercise-report-toolbar__button"
         :label="t('Report by question')"
-        :to-url="legacyUrls.questionReport"
-        :icon="safeIcon('table', 'information')"
+        :route="{ name: 'ExerciseReportByQuestion', params: getExerciseRouteParams(), query: getContextParams() }"
+        :icon="safeIcon('view-table', 'table')"
         only-icon
         size="small"
         type="primary-text"
       />
       <BaseButton
-        v-if="legacyUrls.export"
-        :label="t('Export')"
-        :to-url="legacyUrls.export"
+        v-if="actionUrls.exportCsv"
+        class="exercise-report-toolbar__button"
+        :label="t('Export CSV')"
+        :to-url="actionUrls.exportCsv"
+        :icon="safeIcon('file-delimited-outline', 'file-excel')"
+        only-icon
+        size="small"
+        type="primary-text"
+      />
+      <BaseButton
+        v-if="actionUrls.exportXlsx"
+        class="exercise-report-toolbar__button"
+        :label="t('Export XLSX')"
+        :to-url="actionUrls.exportXlsx"
         :icon="safeIcon('file-excel', 'information')"
         only-icon
         size="small"
         type="primary-text"
       />
       <BaseButton
-        v-if="legacyUrls.recalculateAll"
-        :label="t('Recalculate results')"
-        :to-url="legacyUrls.recalculateAll"
+        v-if="canBulkDelete"
+        class="exercise-report-toolbar__button"
+        :class="{ 'opacity-50': !hasSelectedAttempts }"
+        :label="t('Delete selected attempts')"
+        :icon="safeIcon('delete', 'information')"
+        only-icon
+        size="small"
+        type="danger-text"
+        @click="confirmDeleteSelected"
+      />
+      <BaseButton
+        v-if="canCleanResults"
+        class="exercise-report-toolbar__button"
+        :label="t('Clean all results before a selected date')"
+        :icon="safeIcon('delete-clock', 'delete')"
+        only-icon
+        size="small"
+        type="danger-text"
+        @click="toggleCleanForm"
+      />
+      <BaseButton
+        v-if="canBulkRecalculate"
+        class="exercise-report-toolbar__button"
+        :label="t('Recalculate all results')"
         :icon="safeIcon('refresh', 'information')"
         only-icon
         size="small"
         type="secondary-text"
+        @click="confirmRecalculateAll"
       />
       <BaseButton
-        v-if="legacyUrls.exportAllPdf"
+        v-if="actionUrls.exportAllAttempts"
+        class="exercise-report-toolbar__button"
         :label="t('Export all attempts')"
-        :to-url="legacyUrls.exportAllPdf"
-        :icon="safeIcon('file-excel', 'information')"
+        :to-url="actionUrls.exportAllAttempts"
+        :icon="safeIcon('file-pdf', 'file-excel')"
         only-icon
         size="small"
         type="primary-text"
       />
       <BaseButton
-        v-if="legacyUrls.sendAllEmails"
+        class="exercise-report-toolbar__button"
         :label="t('Send all results/corrections by email')"
-        :to-url="legacyUrls.sendAllEmails"
-        :icon="safeIcon('information')"
+        :icon="safeIcon('email-plus', 'send')"
+        :is-loading="isEmailActionLoading"
         only-icon
         size="small"
         type="primary-text"
+        @click="confirmEmailAllAttempts"
       />
       <BaseButton
-        v-if="legacyUrls.questionStats"
+        class="exercise-report-toolbar__button"
         :label="t('Question stats')"
-        :to-url="legacyUrls.questionStats"
-        :icon="safeIcon('table', 'information')"
+        :route="{ name: 'ExerciseQuestionStats', params: getExerciseRouteParams(), query: getContextParams() }"
+        :icon="safeIcon('tracking', 'view-table')"
+        only-icon
         size="small"
         type="primary-text"
       />
       <BaseButton
-        v-if="legacyUrls.legacyReport"
-        :label="t('Open legacy report')"
-        :to-url="legacyUrls.legacyReport"
-        :icon="safeIcon('table', 'information')"
-        only-icon
-        size="small"
-        type="secondary-text"
-      />
-      <BaseButton
+        class="exercise-report-toolbar__button"
         :label="isSearchVisible ? t('Hide search') : t('Search')"
         :icon="isSearchVisible ? safeIcon('close', 'information') : safeIcon('search')"
         only-icon
@@ -97,6 +127,35 @@
         @click="toggleSearch"
       />
     </div>
+
+    <form
+      v-if="isCleanFormVisible"
+      class="flex flex-wrap items-end gap-3 rounded-xl border border-danger/20 bg-danger/5 p-4 shadow-sm"
+      @submit.prevent="confirmCleanBeforeDate"
+    >
+      <label class="flex flex-col gap-1 text-sm font-semibold text-gray-700">
+        {{ t('Before date') }}
+        <input
+          v-model="cleanBeforeDateValue"
+          class="rounded border border-gray-30 px-3 py-2 text-sm font-normal text-gray-90"
+          name="cleanBeforeDate"
+          type="date"
+        />
+      </label>
+      <BaseButton
+        :is-loading="isBulkActionLoading"
+        :label="t('Delete')"
+        :icon="safeIcon('delete', 'information')"
+        :is-submit="true"
+        type="danger"
+      />
+      <BaseButton
+        :label="t('Cancel')"
+        :icon="safeIcon('close', 'information')"
+        type="plain"
+        @click.prevent="toggleCleanForm"
+      />
+    </form>
 
     <div class="border-b border-gray-20" />
 
@@ -188,13 +247,26 @@
       {{ successMessage }}
     </div>
 
+    <div
+      v-if="lockedByGradebook"
+      class="rounded-xl border border-warning/30 bg-warning/10 p-4 text-sm text-warning"
+    >
+      {{ t("This exercise is locked by gradebook. Attempt cleanup actions are disabled.") }}
+    </div>
+
     <BaseTable
       :is-loading="isLoading"
       :text-for-empty="t('No attempts found')"
       :total-items="attempts.length"
+      v-model:selected-items="selectedAttempts"
       :values="attempts"
       data-key="id"
     >
+      <Column
+        v-if="canBulkDelete"
+        selection-mode="multiple"
+        header-style="width: 3rem"
+      />
       <Column :header="t('First name')" field="firstName" sortable>
         <template #body="{ data }">
           <div class="font-semibold text-gray-90">{{ displayText(data.firstName, '-') }}</div>
@@ -255,57 +327,63 @@
       </Column>
       <Column :header="t('Detail')">
         <template #body="{ data }">
-          <div class="flex flex-wrap justify-end gap-1">
+          <div class="exercise-report-row-actions flex flex-wrap justify-end gap-2">
             <BaseButton
               v-if="data.canReview"
-              :label="data.pendingCorrection ? t('Review / Correct') : t('Review attempt')"
-              :route="{ name: 'ExerciseResult', params: { ...getExerciseRouteParams(), attemptId: data.attemptId }, query: getContextParams() }"
-              :icon="data.pendingCorrection ? safeIcon('edit') : safeIcon('information')"
+              class="exercise-report-row-action"
+              :label="data.pendingCorrection ? t('Correct') : t('Review')"
               only-icon
+              :route="{ name: 'ExerciseResult', params: { ...getExerciseRouteParams(), attemptId: data.attemptId }, query: getContextParams() }"
+              :icon="data.pendingCorrection ? safeIcon('edit') : safeIcon('eye-on', 'information')"
               size="small"
               :type="data.pendingCorrection ? 'secondary-text' : 'primary-text'"
             />
             <BaseButton
-              v-if="data.legacyUrls?.result"
-              :label="t('Open legacy result')"
-              :to-url="data.legacyUrls.result"
-              :icon="safeIcon('information')"
+              v-if="data.canRecalculate"
+              class="exercise-report-row-action"
+              :label="t('Recalculate')"
               only-icon
-              size="small"
-              type="primary-text"
-            />
-            <BaseButton
-              v-if="data.legacyUrls?.recalculate"
-              :label="t('Recalculate results')"
-              :to-url="data.legacyUrls.recalculate"
               :icon="safeIcon('refresh', 'information')"
-              only-icon
               size="small"
               type="secondary-text"
+              @click="confirmRecalculateAttempt(data)"
             />
             <BaseButton
-              v-if="data.legacyUrls?.pdf"
-              :label="t('Export to PDF')"
-              :to-url="data.legacyUrls.pdf"
-              :icon="safeIcon('file-excel', 'information')"
+              v-if="data.canReview"
+              class="exercise-report-row-action"
+              :label="t('Print/PDF')"
               only-icon
+              :to-url="getAttemptPdfUrl(data)"
+              :icon="safeIcon('file-pdf', 'file-excel')"
               size="small"
               type="primary-text"
             />
             <BaseButton
-              v-if="data.legacyUrls?.sendEmail"
-              :label="t('Send by e-mail')"
-              :to-url="data.legacyUrls.sendEmail"
-              :icon="safeIcon('information')"
+              v-if="data.canReview"
+              class="exercise-report-row-action"
+              :label="t('Email')"
               only-icon
+              :icon="safeIcon('email-plus', 'send')"
               size="small"
               type="primary-text"
+              @click="confirmEmailAttempt(data)"
+            />
+            <BaseButton
+              v-if="data.canClose"
+              class="exercise-report-row-action"
+              :label="t('Close')"
+              only-icon
+              :icon="safeIcon('stop', 'close')"
+              size="small"
+              type="secondary-text"
+              @click="confirmCloseAttempt(data)"
             />
             <BaseButton
               v-if="data.canDelete"
-              :label="t('Delete attempt')"
-              :icon="safeIcon('delete', 'information')"
+              class="exercise-report-row-action"
+              :label="t('Delete')"
               only-icon
+              :icon="safeIcon('delete', 'information')"
               size="small"
               type="danger-text"
               @click="confirmDeleteAttempt(data)"
@@ -335,12 +413,23 @@ const router = useRouter()
 const { requireConfirmation } = useConfirmation()
 
 const isLoading = ref(false)
+const isBulkActionLoading = ref(false)
+const isEmailActionLoading = ref(false)
 const errorMessage = ref("")
 const successMessage = ref("")
 const title = ref("")
 const description = ref("")
 const attempts = ref([])
-const legacyUrls = ref({})
+const selectedAttempts = ref([])
+const actionUrls = ref({})
+const lockedByGradebook = ref(false)
+const canBulkDelete = ref(false)
+const canCleanResults = ref(false)
+const canBulkRecalculate = ref(false)
+const bulkActionToken = ref("")
+const emailActionToken = ref("")
+const isCleanFormVisible = ref(false)
+const cleanBeforeDateValue = ref("")
 const filterForm = reactive({
   firstName: getQueryValue(route.query.firstName) || "",
   lastName: getQueryValue(route.query.lastName) || "",
@@ -355,6 +444,10 @@ const statusOptions = computed(() => [
   { label: t("Ongoing"), value: "incomplete" },
 ])
 const pendingCorrectionCount = computed(() => attempts.value.filter((attempt) => attempt.pendingCorrection).length)
+const selectedAttemptIds = computed(() =>
+  selectedAttempts.value.map((attempt) => Number(attempt.attemptId || attempt.id || 0)).filter((attemptId) => attemptId > 0),
+)
+const hasSelectedAttempts = computed(() => selectedAttemptIds.value.length > 0)
 const hasFilters = computed(() => Boolean(getQueryValue(route.query.firstName) || getQueryValue(route.query.lastName) || getQueryValue(route.query.status)))
 const availableIcons = Object.keys(chamiloIconToClass)
 
@@ -408,6 +501,17 @@ function getReportParams() {
   }
 }
 
+function getAttemptPdfUrl(attempt) {
+  const exerciseId = getExerciseId()
+  const attemptId = Number(attempt?.attemptId || 0)
+
+  if (!exerciseId || !attemptId) {
+    return '#'
+  }
+
+  return exerciseService.buildExerciseRuntimeAttemptPdfUrl(getContextParams(), exerciseId, attemptId)
+}
+
 async function loadReport() {
   const exerciseId = getExerciseId()
   if (!exerciseId) {
@@ -423,7 +527,14 @@ async function loadReport() {
     title.value = response.title || ""
     description.value = response.description || ""
     attempts.value = Array.isArray(response.attempts) ? response.attempts : []
-    legacyUrls.value = response.legacyUrls || {}
+    selectedAttempts.value = []
+    actionUrls.value = response.actionUrls || {}
+    lockedByGradebook.value = true === response.lockedByGradebook
+    canBulkDelete.value = true === response.canBulkDelete
+    canCleanResults.value = true === response.canCleanResults
+    canBulkRecalculate.value = true === response.canBulkRecalculate
+    bulkActionToken.value = response.bulkActionToken || ""
+    emailActionToken.value = response.emailActionToken || ""
   } catch (error) {
     console.error("Error loading exercise report", error)
     errorMessage.value = t("Could not load exercise report")
@@ -469,6 +580,230 @@ function clearFilters() {
   delete query.lastName
   delete query.status
   router.push({ name: route.name, params: route.params, query })
+}
+
+function toggleCleanForm() {
+  isCleanFormVisible.value = !isCleanFormVisible.value
+}
+
+function confirmDeleteSelected() {
+  if (!hasSelectedAttempts.value) {
+    errorMessage.value = t("Select at least one attempt")
+    return
+  }
+
+  requireConfirmation({
+    message: t("Delete selected attempts?"),
+    accept: () => runBulkAction("delete_selected", { attemptIds: selectedAttemptIds.value }),
+  })
+}
+
+function confirmCleanBeforeDate() {
+  if (!cleanBeforeDateValue.value) {
+    errorMessage.value = t("Select a date from the calendar")
+    return
+  }
+
+  requireConfirmation({
+    message: `${t("Are you sure you want to clean results for this test before the selected date ?")} ${cleanBeforeDateValue.value}`,
+    accept: () => runBulkAction("clean_before_date", { beforeDate: cleanBeforeDateValue.value }),
+  })
+}
+
+function confirmRecalculateAll() {
+  requireConfirmation({
+    message: t("Recalculate all results?"),
+    accept: () => runBulkAction("recalculate_all"),
+  })
+}
+
+function confirmEmailAllAttempts() {
+  requireConfirmation({
+    message: t("Send reviewed attempt result emails?"),
+    accept: () => emailAllAttempts(),
+  })
+}
+
+async function emailAllAttempts() {
+  const exerciseId = getExerciseId()
+  if (!exerciseId) {
+    return
+  }
+
+  errorMessage.value = ""
+  successMessage.value = ""
+  isEmailActionLoading.value = true
+
+  try {
+    const response = await exerciseService.emailExerciseRuntimeReportAttempts(
+      {
+        node: String(route.params.node || ""),
+        submittedCsrfToken: emailActionToken.value,
+      },
+      getReportParams(),
+      exerciseId,
+    )
+    if (!response?.success) {
+      throw new Error(response?.message || "Could not send emails")
+    }
+
+    successMessage.value = formatEmailActionMessage(response)
+  } catch (error) {
+    console.error("Error sending exercise report emails", error)
+    errorMessage.value = t("Could not send emails")
+  } finally {
+    isEmailActionLoading.value = false
+  }
+}
+
+function formatEmailActionMessage(response) {
+  const sentCount = Number(response?.sentCount || 0)
+  const skippedCount = Number(response?.skippedCount || 0)
+  const failedCount = Number(response?.failedCount || 0)
+  const message = response?.message ? t(response.message) : t("Exercise result emails sent")
+
+  return `${message} (${t("Sent")}: ${sentCount}, ${t("Skipped")}: ${skippedCount}, ${t("Failed")}: ${failedCount})`
+}
+
+async function runBulkAction(action, extraPayload = {}) {
+  const exerciseId = getExerciseId()
+  if (!exerciseId) {
+    return
+  }
+
+  errorMessage.value = ""
+  successMessage.value = ""
+  isBulkActionLoading.value = true
+
+  try {
+    const response = await exerciseService.runExerciseRuntimeReportBulkAction(
+      {
+        action,
+        submittedCsrfToken: bulkActionToken.value,
+        ...extraPayload,
+      },
+      getContextParams(),
+      exerciseId,
+    )
+    if (!response?.success) {
+      throw new Error(response?.message || "Could not run bulk action")
+    }
+
+    successMessage.value = getBulkActionMessage(response)
+    isCleanFormVisible.value = false
+    cleanBeforeDateValue.value = ""
+    selectedAttempts.value = []
+    await loadReport()
+  } catch (error) {
+    console.error("Error running exercise report bulk action", error)
+    errorMessage.value = t("Could not run bulk action")
+  } finally {
+    isBulkActionLoading.value = false
+  }
+}
+
+function getBulkActionMessage(response) {
+  const processedCount = Number(response?.processedCount || 0)
+
+  if (response?.message) {
+    return `${t(response.message)} (${processedCount})`
+  }
+
+  return t("Bulk action completed")
+}
+
+function confirmCloseAttempt(attempt) {
+  requireConfirmation({
+    message: t("Close attempt?"),
+    accept: () => closeAttempt(attempt),
+  })
+}
+
+async function closeAttempt(attempt) {
+  const exerciseId = getExerciseId()
+  const attemptId = Number(attempt.attemptId || 0)
+  if (!exerciseId || !attemptId) {
+    return
+  }
+
+  errorMessage.value = ""
+  successMessage.value = ""
+  try {
+    const response = await exerciseService.closeExerciseRuntimeAttempt({}, getContextParams(), exerciseId, attemptId)
+    if (!response?.success) {
+      throw new Error(response?.message || "Could not close attempt")
+    }
+
+    successMessage.value = t("Attempt closed")
+    await loadReport()
+  } catch (error) {
+    console.error("Error closing exercise attempt", error)
+    errorMessage.value = t("Could not close attempt")
+  }
+}
+
+function confirmRecalculateAttempt(attempt) {
+  requireConfirmation({
+    message: t("Recalculate attempt?"),
+    accept: () => recalculateAttempt(attempt),
+  })
+}
+
+async function recalculateAttempt(attempt) {
+  const exerciseId = getExerciseId()
+  const attemptId = Number(attempt.attemptId || 0)
+  if (!exerciseId || !attemptId) {
+    return
+  }
+
+  errorMessage.value = ""
+  successMessage.value = ""
+  try {
+    const response = await exerciseService.recalculateExerciseRuntimeAttempt({}, getContextParams(), exerciseId, attemptId)
+    if (!response?.success) {
+      throw new Error(response?.message || "Could not recalculate attempt")
+    }
+
+    successMessage.value = t("Attempt recalculated")
+    await loadReport()
+  } catch (error) {
+    console.error("Error recalculating exercise attempt", error)
+    errorMessage.value = t("Could not recalculate attempt")
+  }
+}
+
+function confirmEmailAttempt(attempt) {
+  requireConfirmation({
+    message: t("Send this attempt result by email to the learner?"),
+    accept: () => emailAttempt(attempt),
+  })
+}
+
+async function emailAttempt(attempt) {
+  const exerciseId = getExerciseId()
+  const attemptId = Number(attempt.attemptId || 0)
+  if (!exerciseId || !attemptId) {
+    return
+  }
+
+  errorMessage.value = ""
+  successMessage.value = ""
+  try {
+    const response = await exerciseService.emailExerciseRuntimeAttempt(
+      { node: String(route.params.node || "") },
+      getContextParams(),
+      exerciseId,
+      attemptId,
+    )
+    if (!response?.success) {
+      throw new Error(response?.message || "Could not send email")
+    }
+
+    successMessage.value = t("Email sent")
+  } catch (error) {
+    console.error("Error sending exercise attempt email", error)
+    errorMessage.value = t("Could not send email")
+  }
 }
 
 function confirmDeleteAttempt(attempt) {
@@ -593,6 +928,26 @@ watch(
 </script>
 
 <style scoped>
+
+:deep(.exercise-report-toolbar__button) {
+  min-width: 2.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+:deep(.exercise-report-toolbar__button .p-button-icon) {
+  font-size: 1.25rem;
+}
+
+:deep(.exercise-report-row-action) {
+  min-width: 2rem;
+  width: 2rem;
+  height: 2rem;
+}
+
+:deep(.exercise-report-row-action .p-button-icon) {
+  font-size: 1rem;
+}
 .exercise-report-html :deep(img) {
   max-width: 100%;
   height: auto;

@@ -13,21 +13,11 @@
           type="primary-text"
         />
         <BaseButton
-          v-if="canCreate"
-          class="exercise-list-toolbar__button"
-          :label="t('Create question')"
-          :to-url="legacyUrl('question_create.php')"
-          icon="help"
-          only-icon
-          size="small"
-          type="primary-text"
-        />
-        <BaseButton
           v-if="canManage && settings.allowExerciseCategories"
           class="exercise-list-toolbar__button"
           :label="t('Exercise categories')"
-          :to-url="legacyUrl('category.php')"
-          icon="folder-generic"
+          :route="{ name: 'ExerciseCategories', params: route.params, query: getContextParams() }"
+          icon="folder-open"
           only-icon
           size="small"
           type="primary-text"
@@ -36,18 +26,8 @@
           v-if="canManage"
           class="exercise-list-toolbar__button"
           :label="t('Question categories')"
-          :to-url="legacyUrl('tests_category.php')"
-          icon="folder-generic"
-          only-icon
-          size="small"
-          type="primary-text"
-        />
-        <BaseButton
-          v-if="canManage"
-          class="exercise-list-toolbar__button"
-          :label="t('Question bank')"
-          :to-url="legacyUrl('question_pool.php')"
-          icon="table"
+          :route="{ name: 'ExerciseQuestionCategories', params: route.params, query: getContextParams() }"
+          icon="tag-outline"
           only-icon
           size="small"
           type="primary-text"
@@ -56,7 +36,7 @@
           v-if="canManage"
           class="exercise-list-toolbar__button"
           :label="t('Import exercises QTI2')"
-          :to-url="legacyUrl('qti2.php')"
+          :route="{ name: 'ExerciseImportQti2', params: route.params, query: getContextParams() }"
           icon="import"
           only-icon
           size="small"
@@ -66,7 +46,7 @@
           v-if="canManage"
           class="exercise-list-toolbar__button"
           :label="t('Import Aiken quiz')"
-          :to-url="legacyUrl('aiken.php')"
+          :route="{ name: 'ExerciseImportAiken', params: route.params, query: getContextParams() }"
           icon="file-text"
           only-icon
           size="small"
@@ -76,8 +56,18 @@
           v-if="canManage"
           class="exercise-list-toolbar__button"
           :label="t('Import quiz from Excel')"
-          :to-url="legacyUrl('upload_exercise.php')"
+          :route="{ name: 'ExerciseImportExcel', params: route.params, query: getContextParams() }"
           icon="file-excel"
+          only-icon
+          size="small"
+          type="primary-text"
+        />
+        <BaseButton
+          v-if="canManage && settings.exerciseGeneratorEnabled"
+          class="exercise-list-toolbar__button"
+          :label="t('AI Aiken generator')"
+          :to-url="aiAikenGeneratorUrl()"
+          :icon="safeIcon('robot', 'settings')"
           only-icon
           size="small"
           type="primary-text"
@@ -173,13 +163,6 @@
       {{ errorMessage }}
     </div>
 
-    <div
-      v-if="usesLegacyActions"
-      class="rounded-xl border border-blue-100 bg-blue-50 p-4 text-sm text-blue-700"
-    >
-      {{ t("Exercise questions, attempts and reports are still handled by the legacy exercise tool in this batch.") }}
-    </div>
-
     <BaseTable
       :is-loading="isLoading"
       :text-for-empty="t('No exercises found')"
@@ -200,7 +183,17 @@
                 class="ch-tool-icon"
                 aria-hidden="true"
               />
-              <span class="font-semibold text-gray-90">
+              <router-link
+                v-if="data.canOverview"
+                class="font-semibold text-gray-90 hover:underline"
+                :to="{ name: 'ExerciseOverview', params: { ...route.params, exerciseId: data.iid }, query: getContextParams() }"
+              >
+                {{ displayText(data.title, t("Untitled")) }}
+              </router-link>
+              <span
+                v-else
+                class="font-semibold text-gray-90"
+              >
                 {{ displayText(data.title, t("Untitled")) }}
               </span>
             </div>
@@ -298,17 +291,8 @@
             <BaseButton
               v-if="data.canOpen"
               :label="t('Open exercise')"
-              :to-url="legacyUrl('overview.php', { exerciseId: data.iid })"
-              icon="play-box-outline"
-              only-icon
-              size="small"
-              type="primary-text"
-            />
-            <BaseButton
-              v-if="data.canOpen"
-              :label="t('Open Vue player')"
               :route="{ name: 'ExercisePlayer', params: { ...route.params, exerciseId: data.iid }, query: getContextParams() }"
-              icon="eye-on"
+              icon="play-box-outline"
               only-icon
               size="small"
               type="primary-text"
@@ -343,11 +327,38 @@
             <BaseButton
               v-if="data.canExport"
               :label="t('Export QTI2')"
-              :to-url="legacyUrl('exercise.php', { exerciseId: data.iid, action: 'exportqti2' })"
+              :to-url="qti2ExportUrl(data.iid)"
               icon="export"
               only-icon
               size="small"
               type="primary-text"
+            />
+            <BaseButton
+              v-if="data.canToggleVisibility"
+              :label="data.visible ? t('Deactivate') : t('Activate')"
+              :icon="safeIcon(data.visible ? 'eye-on' : 'eye-off', data.visible ? 'visible' : 'invisible')"
+              only-icon
+              size="small"
+              type="primary-text"
+              @click="toggleVisibility(data)"
+            />
+            <BaseButton
+              v-if="data.canCopy"
+              :label="t('Copy this exercise as a new one')"
+              icon="copy"
+              only-icon
+              size="small"
+              type="secondary-text"
+              @click="confirmCopyExercise(data)"
+            />
+            <BaseButton
+              v-if="data.canDelete"
+              :label="t('Delete')"
+              icon="delete"
+              only-icon
+              size="small"
+              type="danger-text"
+              @click="confirmDeleteExercise(data)"
             />
           </div>
         </template>
@@ -364,10 +375,12 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
+import { useConfirmation } from "../../composables/useConfirmation"
 import { chamiloIconToClass } from "../../components/basecomponents/ChamiloIcons"
 import exerciseService from "../../services/exerciseService"
 
 const { t } = useI18n()
+const { requireConfirmation } = useConfirmation()
 const route = useRoute()
 const router = useRouter()
 
@@ -376,9 +389,9 @@ const categories = ref([])
 const settings = ref({})
 const canManage = ref(false)
 const canCreate = ref(false)
-const usesLegacyActions = ref(true)
 const isLoading = ref(false)
 const errorMessage = ref("")
+const actionCsrfToken = ref("")
 const searchTerm = ref(getSearchQuery())
 const selectedCategoryId = ref(getCategoryQuery())
 const isSearchVisible = ref(Boolean(getSearchQuery() || getCategoryQuery()))
@@ -388,6 +401,19 @@ const categoryOptions = computed(() => [
   { label: t("All categories"), value: 0 },
   ...categories.value.map((category) => ({ label: displayText(category.title, t("Untitled")), value: Number(category.id) })),
 ])
+const availableIcons = Object.keys(chamiloIconToClass)
+
+function safeIcon(icon, fallback = "information") {
+  if (icon && availableIcons.includes(icon)) {
+    return icon
+  }
+
+  if (fallback && availableIcons.includes(fallback)) {
+    return fallback
+  }
+
+  return availableIcons[0] || "information"
+}
 
 function getQueryValue(value) {
   return Array.isArray(value) ? value[0] : value
@@ -439,8 +465,12 @@ function buildQueryString(params = {}) {
   return queryString ? `?${queryString}` : ""
 }
 
-function legacyUrl(path, params = {}) {
-  return `/main/exercise/${path}${buildQueryString({ ...getContextParams(), ...params })}`
+function qti2ExportUrl(exerciseId) {
+  return `/api/exercise/${exerciseId}/qti2-export.zip${buildQueryString(getContextParams())}`
+}
+
+function aiAikenGeneratorUrl() {
+  return `/main/exercise/exercise_aiken_generator.php${buildQueryString(getContextParams())}`
 }
 
 function toggleSearchForm() {
@@ -485,6 +515,48 @@ async function clearSearch() {
   await applySearch()
 }
 
+async function runExerciseAction(exercise, action) {
+  isLoading.value = true
+  errorMessage.value = ""
+
+  try {
+    await exerciseService.saveExerciseListAction(
+      {
+        action,
+        exerciseId: Number(exercise.iid || 0),
+        submittedCsrfToken: actionCsrfToken.value,
+      },
+      getContextParams(),
+    )
+    await loadExercises()
+  } catch (error) {
+    console.error("Error running exercise action", error)
+    errorMessage.value = t("Could not update exercise")
+  } finally {
+    isLoading.value = false
+  }
+}
+
+function toggleVisibility(exercise) {
+  runExerciseAction(exercise, "toggle_visibility")
+}
+
+function confirmCopyExercise(exercise) {
+  requireConfirmation({
+    title: t("Copy exercise"),
+    message: t("Are you sure to copy {0}?", [displayText(exercise.title, t("Untitled"))]),
+    accept: () => runExerciseAction(exercise, "copy"),
+  })
+}
+
+function confirmDeleteExercise(exercise) {
+  requireConfirmation({
+    title: t("Delete exercise"),
+    message: t("Are you sure you want to delete {0}?", [displayText(exercise.title, t("Untitled"))]),
+    accept: () => runExerciseAction(exercise, "delete"),
+  })
+}
+
 async function loadExercises() {
   isLoading.value = true
   errorMessage.value = ""
@@ -494,9 +566,9 @@ async function loadExercises() {
     exercises.value = Array.isArray(response.items) ? response.items : []
     categories.value = Array.isArray(response.categories) ? response.categories : []
     settings.value = response.settings || {}
+    actionCsrfToken.value = response.submittedCsrfToken || ""
     canManage.value = true === response.canManage
     canCreate.value = true === response.canCreate
-    usesLegacyActions.value = true === response.usesLegacyActions
   } catch (error) {
     console.error("Error loading exercises", error)
     errorMessage.value = t("Could not load exercises")
@@ -587,12 +659,12 @@ watch(
 
 <style scoped>
 :deep(.exercise-list-toolbar__button) {
-  min-width: 2.25rem;
-  width: 2.25rem;
-  height: 2.25rem;
+  min-width: 2.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
 }
 
 :deep(.exercise-list-toolbar__button .p-button-icon) {
-  font-size: 1.1rem;
+  font-size: 1.25rem;
 }
 </style>

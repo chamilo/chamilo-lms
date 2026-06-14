@@ -26,6 +26,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProviderInterface<ExerciseList>
@@ -33,12 +34,14 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 final readonly class ExerciseListProvider implements ProviderInterface
 {
     private const VISIBILITY_PUBLISHED = 2;
+    private const CSRF_TOKEN_ID = 'exercise_list_action';
 
     public function __construct(
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private Security $security,
         private SettingsManager $settingsManager,
+        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -67,9 +70,11 @@ final readonly class ExerciseListProvider implements ProviderInterface
         $response->items = $items;
         $response->categories = $this->getCategories($course);
         $response->settings = $this->getSettings();
+        $response->submittedCsrfToken = (string) $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID);
         $response->totalItems = \count($items);
         $response->canManage = $canManage;
         $response->canCreate = $canCreate;
+        $response->usesLegacyActions = false;
 
         return $response;
     }
@@ -338,6 +343,8 @@ final readonly class ExerciseListProvider implements ProviderInterface
             'disableNewAttempts' => $this->isSettingEnabled('exercise.exercises_disable_new_attempts'),
             'hideAttemptsTableOnStartPage' => $this->isSettingEnabled('exercise.quiz_hide_attempts_table_on_start_page'),
             'limitTeacherAccess' => $this->isSettingEnabled('exercise.limit_exercise_teacher_access'),
+            'exerciseGeneratorEnabled' => $this->isSettingEnabled('ai_helpers.enable_ai_helpers')
+                && $this->isSettingEnabled('ai_helpers.exercise_generator'),
         ];
     }
 
@@ -355,6 +362,7 @@ final readonly class ExerciseListProvider implements ProviderInterface
         $startTime = $quiz->getStartTime();
         $endTime = $quiz->getEndTime();
         $availabilityStatus = $this->getAvailabilityStatus($startTime, $endTime);
+        $canRunRestrictedActions = $this->canRunRestrictedActions();
 
         return [
             'iid' => (int) $quiz->getIid(),
@@ -372,10 +380,14 @@ final readonly class ExerciseListProvider implements ProviderInterface
             'questionCount' => $questionCount,
             'attemptCount' => $attemptCount,
             'canOpen' => $visible || $canManage,
+            'canOverview' => $visible || $canManage,
             'canEdit' => $canManage,
             'canConfigure' => $canManage,
             'canReport' => $canManage,
             'canExport' => $canManage,
+            'canCopy' => $canManage,
+            'canDelete' => $canManage && $canRunRestrictedActions,
+            'canToggleVisibility' => $canManage && $canRunRestrictedActions,
         ];
     }
 
@@ -394,6 +406,16 @@ final readonly class ExerciseListProvider implements ProviderInterface
         return 'open';
     }
 
+
+    private function canRunRestrictedActions(): bool
+    {
+        if (!$this->isSettingEnabled('exercise.limit_exercise_teacher_access')) {
+            return true;
+        }
+
+        return $this->security->isGranted('ROLE_ADMIN');
+    }
+
     private function formatDate(?DateTimeInterface $date): ?string
     {
         if (null === $date) {
@@ -405,6 +427,6 @@ final readonly class ExerciseListProvider implements ProviderInterface
 
     private function isSettingEnabled(string $name): bool
     {
-        return 'true' === $this->settingsManager->getSetting($name);
+        return 'true' === $this->settingsManager->getSetting($name, true);
     }
 }

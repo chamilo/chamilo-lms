@@ -253,6 +253,27 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
         $response->csrfToken = $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID)->getValue();
         $response->allowQuestionFeedback = $this->isQuestionFeedbackEnabled();
         $response->imageZoomEnabled = $this->isImageZoomEnabled();
+        $response->allowMandatoryQuestion = $this->isMandatoryQuestionInCategoryEnabled($quiz);
+    }
+
+    private function isMandatoryQuestionInCategoryEnabled(CQuiz $quiz): bool
+    {
+        return 5 === (int) ($quiz->getQuestionSelectionType() ?? 0)
+            && 'true' === $this->settingsManager->getSetting('exercise.allow_mandatory_question_in_category', true)
+            && $this->hasMandatoryQuestionCategoryColumn();
+    }
+
+    private function hasMandatoryQuestionCategoryColumn(): bool
+    {
+        try {
+            return $this->entityManager
+                ->getConnection()
+                ->createSchemaManager()
+                ->introspectTable('c_quiz_question_rel_category')
+                ->hasColumn('mandatory');
+        } catch (\Throwable) {
+            return false;
+        }
     }
 
     private function getCourse(Request $request): Course

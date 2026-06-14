@@ -84,6 +84,12 @@ final class ExerciseRuntimeAnswer
     #[Groups(['exercise_runtime_answer:read'])]
     public bool $canFinish = false;
 
+    /**
+     * @var array<string, mixed>
+     */
+    #[Groups(['exercise_runtime_answer:read'])]
+    public array $feedback = [];
+
     public function getExerciseId(): ?int
     {
         return $this->exerciseId;

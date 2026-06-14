@@ -10,14 +10,17 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseRuntimeCorrection;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
+use Chamilo\CoreBundle\Entity\TrackEAttemptQualify;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
@@ -29,7 +32,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * Corrects manual Vue runtime answers using the same tracking tables as the legacy correction flow.
+ * Corrects manual Vue runtime answers using the migrated tracking flow.
  *
  * @implements ProcessorInterface<ExerciseRuntimeCorrection, ExerciseRuntimeCorrection>
  */
@@ -40,12 +43,14 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
     private const ORAL_EXPRESSION = 13;
     private const UPLOAD_ANSWER = 23;
     private const ANNOTATION = 20;
+    private const LINK_TYPE_EXERCISE = 1;
 
     public function __construct(
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CQuizRepository $quizRepository,
         private Security $security,
+        private SettingsManager $settingsManager,
     ) {}
 
     /**
@@ -82,6 +87,10 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
         }
 
         $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session);
+        if ($this->isGradebookLocked((int) $quiz->getIid(), $course)) {
+            throw new BadRequestHttpException('This exercise is locked by gradebook.');
+        }
+
         $attempt = $this->getCompletedAttempt($attemptId, $quiz, $course, $session);
         $question = $this->getQuestionFromExercise($questionId, $quiz);
         if (!$question instanceof CQuizQuestion) {
@@ -111,6 +120,7 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
             ;
         }
 
+        $this->recordCorrectionHistory($attempt, $questionId, $marks, (string) $data->teacherComment, (int) ($session?->getId() ?? 0));
         $this->removeQuestionToCheck($attempt, $questionId);
         $this->recalculateAttemptScore($attempt, $quiz);
         $this->entityManager->flush();
@@ -305,6 +315,58 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
         return $row;
     }
 
+
+    private function isGradebookLocked(int $exerciseId, Course $course): bool
+    {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return false;
+        }
+
+        if (!$this->isSettingEnabled('gradebook.gradebook_locking_enabled')) {
+            return false;
+        }
+
+        $lockedLink = $this->entityManager->createQueryBuilder()
+            ->select('link.id')
+            ->from(GradebookLink::class, 'link')
+            ->andWhere('link.locked = :locked')
+            ->andWhere('link.refId = :exerciseId')
+            ->andWhere('link.type = :linkType')
+            ->andWhere('IDENTITY(link.course) = :courseId')
+            ->setParameter('locked', 1, Types::INTEGER)
+            ->setParameter('exerciseId', $exerciseId, Types::INTEGER)
+            ->setParameter('linkType', self::LINK_TYPE_EXERCISE, Types::INTEGER)
+            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+
+        return null !== $lockedLink;
+    }
+
+    private function isSettingEnabled(string $name): bool
+    {
+        return 'true' === $this->settingsManager->getSetting($name, true);
+    }
+
+    private function recordCorrectionHistory(TrackEExercise $attempt, int $questionId, float $marks, string $teacherComment, int $sessionId): void
+    {
+        $user = $this->security->getUser();
+        $authorId = $user instanceof User ? (int) $user->getId() : 0;
+
+        $recording = (new TrackEAttemptQualify())
+            ->setTrackExercise($attempt)
+            ->setQuestionId($questionId)
+            ->setAuthor($authorId)
+            ->setTeacherComment($teacherComment)
+            ->setMarks($marks)
+            ->setSessionId($sessionId)
+        ;
+
+        $this->entityManager->persist($recording);
+    }
+
     private function removeQuestionToCheck(TrackEExercise $attempt, int $questionId): void
     {
         $pendingQuestions = array_values(array_filter(
@@ -362,6 +424,6 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
             return [];
         }
 
-        return array_values(array_filter(array_map(static fn (string $id): int => (int) trim($id), explode(',', $value))));
+        return array_values(array_filter(array_map(static fn (string $id): int => (int) trim($id), preg_split('/[,;]+/', $value) ?: [])));
     }
 }

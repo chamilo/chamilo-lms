@@ -1,7 +1,8 @@
 <template>
   <section class="space-y-5">
-    <div class="flex flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm w-fit">
+    <div class="exercise-question-toolbar flex w-fit flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm">
       <BaseButton
+        class="exercise-question-toolbar__button"
         :label="t('Back to exercises')"
         :route="{ name: 'ExerciseList', params: route.params, query: getContextParams() }"
         icon="back"
@@ -10,15 +11,16 @@
         type="primary-text"
       />
       <BaseButton
-        v-if="legacyUrls.preview"
+        class="exercise-question-toolbar__button"
         :label="t('Preview')"
-        :to-url="legacyUrls.preview"
-        icon="eye-on"
+        :route="{ name: 'ExercisePlayer', params: { ...route.params, exerciseId }, query: getContextParams() }"
+        icon="play-box-outline"
         only-icon
         size="small"
         type="primary-text"
       />
       <BaseButton
+        class="exercise-question-toolbar__button"
         :label="t('Results')"
         :route="{ name: 'ExerciseReport', params: { ...route.params, exerciseId }, query: getContextParams() }"
         icon="tracking"
@@ -27,7 +29,7 @@
         type="primary-text"
       />
       <BaseButton
-        v-if="legacyUrls.configure"
+        class="exercise-question-toolbar__button"
         :label="t('Edit test name and settings')"
         :route="{ name: 'ExerciseEdit', params: { ...route.params, exerciseId }, query: getContextParams() }"
         icon="settings"
@@ -65,9 +67,8 @@
             </p>
           </div>
           <BaseButton
-            v-if="legacyUrls.questionPool"
             :label="t('Question bank')"
-            :to-url="legacyUrls.questionPool"
+            :route="{ name: 'ExerciseQuestionBank', params: { ...route.params, exerciseId }, query: getContextParams() }"
             icon="table"
             type="primary"
           />
@@ -202,7 +203,7 @@
                     <div class="flex justify-end gap-1" @click.stop>
                       <BaseButton
                         :label="expandedQuestionId === question.id ? t('Hide preview') : t('Preview')"
-                        :icon="expandedQuestionId === question.id ? 'fold' : 'eye-on'"
+                        :icon="expandedQuestionId === question.id ? 'fold' : 'information'"
                         only-icon
                         size="small"
                         type="primary-text"
@@ -623,7 +624,6 @@ const questionCount = ref(0)
 const totalScore = ref(0)
 const questionTypes = ref([])
 const questions = ref([])
-const legacyUrls = ref({})
 const csrfToken = ref("")
 const expandedQuestionId = ref(null)
 const draggedQuestionId = ref(null)
@@ -701,6 +701,7 @@ function questionTypeHelp(questionTypeOrId) {
     4: "Match each item with the correct option. Score per item.",
     5: "Learners write a free text answer.",
     6: "Select areas in an image.",
+    8: "Draw or delineate an area.",
     9: "Score only when the exact selection is correct.",
     10: "Single choice with a fixed Don't know option.",
     11: "Mark each statement as True, False or Don't know.",
@@ -741,21 +742,24 @@ function questionTypeHref(questionType) {
 function questionTypeTitle(questionType) {
   const label = t(questionType.label)
 
+  if (!questionType.enabled) {
+    return `${label} - ${t("Not available with the current exercise feedback mode")}`
+  }
+
   return `${label} - ${t(questionTypeHelp(questionType))}`
 }
 
 function questionTypeCardClass(questionType) {
   return [
-    "group inline-flex h-20 w-20 items-center justify-center rounded-lg border bg-white p-1 text-center shadow-none transition duration-150 focus:outline-none focus:ring-2 focus:ring-info/20",
-    questionType.enabled
-      ? "border-gray-25 hover:border-info/50 hover:bg-support-2 hover:shadow-sm"
-      : "pointer-events-none border-gray-20 bg-gray-10 opacity-60",
+    "group inline-flex h-20 w-20 items-center justify-center rounded-md border-2 text-center transition hover:bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary/30",
+    isVueQuestionType(questionType) ? "border-primary/60 bg-primary/5" : "border-transparent",
+    !questionType.enabled ? "pointer-events-none opacity-50" : "",
   ]
 }
 
 function questionTypeIconClass(questionType) {
   return [
-    "relative flex h-16 w-16 items-center justify-center rounded-md transition duration-150 group-hover:scale-105",
+    "relative flex h-16 w-16 items-center justify-center transition group-hover:scale-105",
   ]
 }
 
@@ -847,7 +851,9 @@ function legacyQuestionEditUrl(questionId) {
 }
 
 function questionIconUrl(questionType) {
-  return `/img/icons/64/${questionType.icon || "new_question.png"}`
+  const icon = questionType.enabled ? questionType.icon : questionType.icon?.replace(/\.png$/, "_na.png")
+
+  return `/img/icons/64/${icon || "new_question.png"}`
 }
 
 function useFallbackIcon(event) {
@@ -994,7 +1000,6 @@ async function loadQuestionSelector() {
     totalScore.value = Number(response.totalScore || 0)
     questionTypes.value = Array.isArray(response.questionTypes) ? response.questionTypes : []
     questions.value = Array.isArray(response.questions) ? response.questions : []
-    legacyUrls.value = response.legacyUrls || {}
     csrfToken.value = response.csrfToken || ""
   } catch (error) {
     console.error("Error loading exercise questions", error)
@@ -1006,3 +1011,15 @@ async function loadQuestionSelector() {
 
 onMounted(loadQuestionSelector)
 </script>
+
+<style scoped>
+:deep(.exercise-question-toolbar__button) {
+  min-width: 2.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+:deep(.exercise-question-toolbar__button .p-button-icon) {
+  font-size: 1.25rem;
+}
+</style>

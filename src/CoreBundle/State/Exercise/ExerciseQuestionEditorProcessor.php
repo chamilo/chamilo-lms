@@ -121,6 +121,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         }
 
         $this->entityManager->flush();
+        $this->syncQuestionCategoryMandatory($quiz, $question, $data);
 
         return $this->buildResponse($quiz, $question, $course, $session);
     }
@@ -184,7 +185,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
             ->setLevel($this->normalizeDifficulty($data->difficulty))
             ->setPosition($position)
             ->setPonderation($score)
-            ->setMandatory($this->isStructuralQuestionType($type) ? 0 : ($data->mandatory ? 1 : 0))
+            ->setMandatory($this->isStructuralQuestionType($type) ? 0 : ($this->isMandatoryQuestionInCategoryEnabled($quiz) && $data->mandatory ? 1 : 0))
             ->setDuration($this->isStructuralQuestionType($type) ? null : $this->normalizeNullablePositiveInteger($data->duration))
             ->setParentMediaId($this->isStructuralQuestionType($type) ? null : $this->normalizeParentMediaId($quiz, $data, $question))
         ;
@@ -685,6 +686,47 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         $question->addCategory($category);
     }
 
+    private function syncQuestionCategoryMandatory(CQuiz $quiz, CQuizQuestion $question, ExerciseQuestionEditor $data): void
+    {
+        $questionId = (int) ($question->getIid() ?? 0);
+        if (0 >= $questionId || !$this->hasMandatoryQuestionCategoryColumn()) {
+            return;
+        }
+
+        $mandatory = $this->isMandatoryQuestionInCategoryEnabled($quiz) && $data->mandatory ? 1 : 0;
+        $this->entityManager->getConnection()->executeStatement(
+            'UPDATE c_quiz_question_rel_category SET mandatory = :mandatory WHERE question_id = :questionId',
+            [
+                'mandatory' => $mandatory,
+                'questionId' => $questionId,
+            ],
+            [
+                'mandatory' => Types::INTEGER,
+                'questionId' => Types::INTEGER,
+            ]
+        );
+    }
+
+    private function isMandatoryQuestionInCategoryEnabled(CQuiz $quiz): bool
+    {
+        return 5 === (int) ($quiz->getQuestionSelectionType() ?? 0)
+            && 'true' === $this->settingsManager->getSetting('exercise.allow_mandatory_question_in_category', true)
+            && $this->hasMandatoryQuestionCategoryColumn();
+    }
+
+    private function hasMandatoryQuestionCategoryColumn(): bool
+    {
+        try {
+            return $this->entityManager
+                ->getConnection()
+                ->createSchemaManager()
+                ->introspectTable('c_quiz_question_rel_category')
+                ->hasColumn('mandatory');
+        } catch (\Throwable) {
+            return false;
+        }
+    }
+
     private function getQuestionCategory(int $categoryId, ?Course $course, ?Session $session): CQuizQuestionCategory
     {
         $category = $this->entityManager->getRepository(CQuizQuestionCategory::class)->find($categoryId);
@@ -757,7 +799,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
 
         $mediaQuestion = $this->questionRepository->find($mediaId);
         if (!$mediaQuestion instanceof CQuizQuestion || self::MEDIA_QUESTION !== (int) $mediaQuestion->getType()) {
-            throw new BadRequestHttpException('The selected media question is not valid.');
+            return null;
         }
 
         if (!$this->isQuestionInExercise($quiz, $mediaId)) {
@@ -2520,7 +2562,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         [$response->correctScore, $response->wrongScore, $response->unknownScore] = $this->getTrueFalseScores($question);
         $response->usesGlobalScore = $this->usesGlobalScore((int) $question->getType());
         $response->hasFixedUnknownAnswer = self::UNIQUE_ANSWER_NO_OPTION === (int) $question->getType();
-        $response->mandatory = 1 === (int) $question->getMandatory();
+        $response->mandatory = $this->isQuestionMandatoryInCategory($question);
         $response->duration = $question->getDuration();
         $response->difficulty = max(1, (int) $question->getLevel());
         $response->categoryId = $this->getFirstCategoryId($question);
@@ -2545,7 +2587,28 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         ];
         $response->csrfToken = $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID)->getValue();
         $response->allowQuestionFeedback = $this->isQuestionFeedbackEnabled();
+        $response->allowMandatoryQuestion = $this->isMandatoryQuestionInCategoryEnabled($quiz);
 
         return $response;
+    }
+
+    private function isQuestionMandatoryInCategory(CQuizQuestion $question): bool
+    {
+        $questionId = (int) ($question->getIid() ?? 0);
+        if (0 >= $questionId || !$this->hasMandatoryQuestionCategoryColumn()) {
+            return 1 === (int) $question->getMandatory();
+        }
+
+        $value = $this->entityManager->getConnection()->fetchOne(
+            'SELECT mandatory FROM c_quiz_question_rel_category WHERE question_id = :questionId ORDER BY iid ASC LIMIT 1',
+            ['questionId' => $questionId],
+            ['questionId' => Types::INTEGER]
+        );
+
+        if (false === $value) {
+            return 1 === (int) $question->getMandatory();
+        }
+
+        return 1 === (int) $value;
     }
 }

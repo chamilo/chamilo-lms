@@ -49,6 +49,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
     private const FREE_ANSWER = 5;
     private const HOT_SPOT = 6;
     private const CALCULATED_ANSWER = 16;
+    private const DRAGGABLE = 18;
     private const MEDIA_QUESTION = 15;
     private const READING_COMPREHENSION = 21;
     private const PAGE_BREAK = 31;
@@ -95,6 +96,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
         self::FREE_ANSWER => 'Free answer',
         self::HOT_SPOT => 'Hotspot',
         self::CALCULATED_ANSWER => 'Calculated answer',
+        self::DRAGGABLE => 'Sequence ordering',
         self::ORAL_EXPRESSION => 'Oral expression',
         self::UPLOAD_ANSWER => 'Upload answer',
         self::ANNOTATION => 'Annotation',
@@ -519,6 +521,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
             self::FILL_IN_BLANKS_COMBINATION => $this->scoreFillBlanks($quiz, $question, $answers, $rows),
             self::MATCHING,
             self::MATCHING_DRAGGABLE => $this->scoreMatchingAnswer($answers, $rows),
+            self::DRAGGABLE => $this->scoreDraggableAnswer($answers, $rows),
             self::MATCHING_COMBINATION,
             self::MATCHING_DRAGGABLE_COMBINATION => $this->scoreMatchingCombination($question, $answers, $rows),
             self::CALCULATED_ANSWER => $this->scoreCalculatedAnswer($question, $answers, $rows),
@@ -1031,6 +1034,30 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
      * @param array<int, CQuizAnswer>   $answers
      * @param array<int, TrackEAttempt> $rows
      */
+    private function scoreDraggableAnswer(array $answers, array $rows): float
+    {
+        $positions = $this->getSavedDraggablePositions($rows);
+        $score = 0.0;
+
+        foreach ($answers as $answer) {
+            $correctPosition = (int) ($answer->getCorrect() ?? 0);
+            if (0 >= $correctPosition) {
+                continue;
+            }
+
+            $answerId = (int) $answer->getIid();
+            if (($positions[$answerId] ?? 0) === $correctPosition) {
+                $score += $answer->getPonderation();
+            }
+        }
+
+        return $score;
+    }
+
+    /**
+     * @param array<int, CQuizAnswer>   $answers
+     * @param array<int, TrackEAttempt> $rows
+     */
     private function scoreMatchingCombination(CQuizQuestion $question, array $answers, array $rows): float
     {
         $choices = $this->getSavedMatchingChoices($rows);
@@ -1353,6 +1380,25 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
         $row = $rows[0] ?? null;
 
         return $row instanceof TrackEAttempt ? (int) $row->getAnswer() : 0;
+    }
+
+    /**
+     * @param array<int, TrackEAttempt> $rows
+     *
+     * @return array<int, int>
+     */
+    private function getSavedDraggablePositions(array $rows): array
+    {
+        $positions = [];
+        foreach ($rows as $row) {
+            $answerId = (int) $row->getPosition();
+            $selectedPosition = (int) $row->getAnswer();
+            if (0 < $answerId && 0 < $selectedPosition) {
+                $positions[$answerId] = $selectedPosition;
+            }
+        }
+
+        return $positions;
     }
 
     /**

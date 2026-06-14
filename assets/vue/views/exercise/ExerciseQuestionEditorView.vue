@@ -105,7 +105,10 @@
               :min="0"
             />
 
-            <div class="flex items-end pb-2">
+            <div
+              v-if="canMarkMandatoryQuestion"
+              class="flex items-end pb-2"
+            >
               <BaseCheckbox
                 id="exercise-question-mandatory"
                 v-model="form.mandatory"
@@ -1533,6 +1536,7 @@ const mediaOptions = ref([])
 const showAdvancedSettings = ref(false)
 const allowQuestionFeedback = ref(false)
 const imageZoomEnabled = ref(false)
+const allowMandatoryQuestion = ref(false)
 let answerCounter = 0
 let matchingOptionCounter = 0
 let matchingPairCounter = 0
@@ -1711,6 +1715,7 @@ const isMediaQuestion = computed(() => MEDIA_QUESTION === Number(form.type))
 const isReadingComprehensionQuestion = computed(() => READING_COMPREHENSION === Number(form.type))
 const isPageBreakQuestion = computed(() => PAGE_BREAK === Number(form.type))
 const isStructuralQuestion = computed(() => isMediaQuestion.value || isReadingComprehensionQuestion.value || isPageBreakQuestion.value)
+const canMarkMandatoryQuestion = computed(() => allowMandatoryQuestion.value && !isStructuralQuestion.value)
 const isFillBlanksQuestion = computed(() => [FILL_IN_BLANKS, FILL_IN_BLANKS_COMBINATION].includes(Number(form.type)))
 const isFillBlanksCombination = computed(() => FILL_IN_BLANKS_COMBINATION === Number(form.type))
 const isDropdownQuestion = computed(() => [MULTIPLE_ANSWER_DROPDOWN, MULTIPLE_ANSWER_DROPDOWN_COMBINATION].includes(Number(form.type)))
@@ -2214,6 +2219,7 @@ function fillForm(data) {
   csrfToken.value = data.csrfToken || ""
   allowQuestionFeedback.value = true === data.allowQuestionFeedback
   imageZoomEnabled.value = true === data.imageZoomEnabled
+  allowMandatoryQuestion.value = true === data.allowMandatoryQuestion
 
   if (isDropdownQuestion.value) {
     form.matchingOptions = []
@@ -2992,6 +2998,16 @@ function displayText(value, fallback = "") {
   return plainValue || fallback
 }
 
+function normalizeParentMediaIdForPayload() {
+  const mediaId = Number(form.parentMediaId || 0)
+
+  if (mediaId <= 0) {
+    return 0
+  }
+
+  return mediaOptions.value.some((option) => Number(option.value) === mediaId) ? mediaId : 0
+}
+
 function buildPayload() {
   return {
     exerciseId: exerciseId.value,
@@ -3048,11 +3064,11 @@ function buildPayload() {
     wrongScore: Number(form.wrongScore || 0),
     unknownScore: isDegreeCertaintyQuestion.value ? 0 : Number(form.unknownScore || 0),
     noNegativeScore: true === form.noNegativeScore,
-    mandatory: isStructuralQuestion.value ? false : form.mandatory,
+    mandatory: canMarkMandatoryQuestion.value ? form.mandatory : false,
     duration: isStructuralQuestion.value ? null : (form.duration ? Number(form.duration) : null),
     difficulty: Number(form.difficulty || 1),
     categoryId: isStructuralQuestion.value ? 0 : Number(form.categoryId || 0),
-    parentMediaId: isStructuralQuestion.value ? 0 : Number(form.parentMediaId || 0),
+    parentMediaId: isStructuralQuestion.value ? 0 : normalizeParentMediaIdForPayload(),
     matchingOptions: isMatchingQuestion.value
       ? form.matchingOptions.map((option, index) => ({
           localId: option.localId,

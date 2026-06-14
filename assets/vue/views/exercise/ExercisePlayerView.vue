@@ -10,7 +10,7 @@
         type="primary-text"
       />
       <BaseButton
-        v-if="legacyUrls.overview"
+        v-if="showLegacyRuntimeFallback"
         :label="t('Open legacy exercise')"
         :to-url="legacyUrls.overview"
         icon="play-box-outline"
@@ -95,16 +95,28 @@
           >
             {{ t("Random answers") }}
           </span>
+          <span
+            v-if="settings.preventBackwards"
+            class="rounded-full bg-gray-100 px-2 py-1 text-gray-700"
+          >
+            {{ t("Prevent moving backwards") }}
+          </span>
+          <span
+            v-if="settings.showPreviousButton === false"
+            class="rounded-full bg-gray-100 px-2 py-1 text-gray-700"
+          >
+            {{ t("Previous button hidden") }}
+          </span>
         </div>
       </header>
 
       <div
-        v-if="usesLegacySubmit && activeAttempt"
+        v-if="showLegacyRuntimeFallback"
         class="rounded-xl border border-info/30 bg-support-1 p-4 text-sm text-support-4"
       >
         <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <p>
-            {{ t("This Vue player can save draft answers for simple question types. Final submission, scoring, results and review still use the legacy exercise runtime in this batch.") }}
+            {{ t("This exercise contains options or question types that are not fully supported by the Vue runtime yet. You can continue with the legacy exercise runtime.") }}
           </p>
           <BaseButton
             v-if="legacyUrls.overview"
@@ -127,12 +139,13 @@
             </div>
             <div v-else-if="activeAttempt">
               {{ t("Attempt") }} #{{ activeAttempt.attemptId }} · {{ progressLabel }}
-              <span v-if="activeAttempt.remainingSeconds !== null && activeAttempt.remainingSeconds !== undefined">
-                · {{ t("Time left") }}: {{ formatSeconds(activeAttempt.remainingSeconds) }}
+              <span v-if="hasTimeControl">
+                · {{ t("Time left") }}:
+                <strong :class="isTimeExpired ? 'text-danger' : 'text-gray-90'">{{ formatSeconds(countdownRemainingSeconds) }}</strong>
               </span>
             </div>
             <div v-else>
-              {{ t("Start or resume a Vue attempt. Draft answers for simple question types can be saved before final legacy submission.") }}
+              {{ t("Start or resume an exercise attempt. Draft answers can be saved before final submission.") }}
             </div>
             <div v-if="attemptMessage" class="text-support-4">
               {{ attemptMessage }}
@@ -145,6 +158,9 @@
             </div>
             <div v-if="answerSaveError" class="text-danger">
               {{ answerSaveError }}
+            </div>
+            <div v-if="isTimeExpired" class="text-danger">
+              {{ t("Time limit reached. Finishing the attempt.") }}
             </div>
             <div v-if="finishMessage" class="text-support-4">
               {{ finishMessage }}
@@ -163,7 +179,7 @@
               @click="startAttempt"
             />
             <BaseButton
-              v-if="legacyUrls.overview"
+              v-if="showLegacyRuntimeFallback"
               :label="t('Use legacy runtime')"
               :to-url="legacyUrls.overview"
               icon="play-box-outline"
@@ -505,17 +521,98 @@
             </div>
 
             <div v-else-if="isDraggableQuestion(question)" class="space-y-3">
-              <div class="rounded-lg border border-yellow-100 bg-yellow-50 p-3 text-sm text-yellow-800">
-                {{ t("Sequence ordering is displayed here as a temporary list. Drag and drop submission will be migrated in the submit processor batch.") }}
+              <div class="rounded-lg border border-gray-20 bg-gray-15 p-3 text-sm text-gray-700">
+                {{ t("Put the items in the correct order.") }}
               </div>
-              <ol class="list-decimal space-y-2 pl-6">
+
+              <div
+                v-if="isDraggableHorizontal(question)"
+                class="overflow-x-auto rounded-lg border border-gray-20 bg-white p-3"
+              >
+                <ol class="flex min-w-max items-stretch gap-3">
+                  <li
+                    v-for="(item, index) in draggableAnswerItems(question)"
+                    :key="item.id"
+                    class="flex w-64 shrink-0 flex-col gap-3 rounded-lg border border-gray-20 bg-white p-3 shadow-sm"
+                    draggable="true"
+                    @dragstart="onDraggableOrderDragStart(item.id)"
+                    @dragover.prevent
+                    @drop="onDraggableOrderDrop(question, item.id)"
+                  >
+                    <div class="flex min-w-0 flex-1 items-start gap-3">
+                      <span class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
+                        {{ index + 1 }}
+                      </span>
+                      <span class="exercise-runtime-html min-w-0 flex-1" v-html="item.answer" />
+                    </div>
+
+                    <div class="flex shrink-0 flex-wrap gap-2">
+                      <button
+                        type="button"
+                        class="rounded border border-gray-30 px-2 py-1 text-xs text-gray-700 transition hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
+                        :disabled="index === 0"
+                        @click="moveDraggableItem(question, index, index - 1)"
+                      >
+                        {{ t("Move left") }}
+                      </button>
+                      <button
+                        type="button"
+                        class="rounded border border-gray-30 px-2 py-1 text-xs text-gray-700 transition hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
+                        :disabled="index === draggableAnswerItems(question).length - 1"
+                        @click="moveDraggableItem(question, index, index + 1)"
+                      >
+                        {{ t("Move right") }}
+                      </button>
+                    </div>
+                  </li>
+                </ol>
+              </div>
+
+              <ol v-else class="space-y-2">
                 <li
-                  v-for="item in question.draggable.items"
+                  v-for="(item, index) in draggableAnswerItems(question)"
                   :key="item.id"
-                  class="exercise-runtime-html"
-                  v-html="item.answer"
-                />
+                  class="rounded-lg border border-gray-20 bg-white p-3 shadow-sm"
+                  draggable="true"
+                  @dragstart="onDraggableOrderDragStart(item.id)"
+                  @dragover.prevent
+                  @drop="onDraggableOrderDrop(question, item.id)"
+                >
+                  <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                    <div class="flex min-w-0 flex-1 items-start gap-3">
+                      <span class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
+                        {{ index + 1 }}
+                      </span>
+                      <span class="exercise-runtime-html min-w-0 flex-1" v-html="item.answer" />
+                    </div>
+
+                    <div class="flex shrink-0 flex-wrap gap-2">
+                      <button
+                        type="button"
+                        class="rounded border border-gray-30 px-2 py-1 text-xs text-gray-700 transition hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
+                        :disabled="index === 0"
+                        @click="moveDraggableItem(question, index, index - 1)"
+                      >
+                        {{ t("Move up") }}
+                      </button>
+                      <button
+                        type="button"
+                        class="rounded border border-gray-30 px-2 py-1 text-xs text-gray-700 transition hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
+                        :disabled="index === draggableAnswerItems(question).length - 1"
+                        @click="moveDraggableItem(question, index, index + 1)"
+                      >
+                        {{ t("Move down") }}
+                      </button>
+                    </div>
+                  </div>
+                </li>
               </ol>
+
+              <p class="text-xs text-gray-500">
+                {{ isDraggableHorizontal(question)
+                  ? t("You can drag items left or right, or use the move buttons to change the order.")
+                  : t("You can drag items or use the move buttons to change the order.") }}
+              </p>
             </div>
 
             <div v-else-if="isDropdownQuestion(question)" class="space-y-3">
@@ -579,7 +676,16 @@
                   v-for="file in answers[question.id].uploadedFiles"
                   :key="file.id || file.name"
                 >
-                  {{ file.name || t("Uploaded file") }}
+                  <a
+                    v-if="file.url"
+                    class="text-primary underline"
+                    :href="file.url"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    {{ file.name || t("Uploaded file") }}
+                  </a>
+                  <span v-else>{{ file.name || t("Uploaded file") }}</span>
                 </div>
               </div>
             </div>
@@ -591,6 +697,7 @@
                 </div>
                 <AudioRecorder
                   :multiple="false"
+                  :show-recorded-audios="false"
                   @recorded-audio="onOralRecorded(question, $event)"
                 />
               </div>
@@ -630,7 +737,16 @@
                   v-for="file in answers[question.id].uploadedFiles"
                   :key="file.id || file.name"
                 >
-                  {{ file.name || t("Uploaded audio") }}
+                  <a
+                    v-if="file.url"
+                    class="text-primary underline"
+                    :href="file.url"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    {{ file.name || t("Uploaded audio") }}
+                  </a>
+                  <span v-else>{{ file.name || t("Uploaded audio") }}</span>
                 </div>
               </div>
             </div>
@@ -882,10 +998,61 @@
               {{ t("This question type is pending runtime rendering in Vue.") }}
             </div>
           </div>
+
+          <div
+            v-if="directFeedbackForQuestion(question)"
+            class="mt-4 space-y-3 rounded-lg border p-4 text-sm"
+            :class="feedbackStatusClass(directFeedbackForQuestion(question))"
+          >
+            <div class="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
+              <div>
+                <div class="font-semibold">
+                  {{ t(directFeedbackForQuestion(question).title || "Feedback") }}
+                </div>
+                <div>
+                  {{ t("Score") }}: {{ formatScore(directFeedbackForQuestion(question).score) }} / {{ formatScore(directFeedbackForQuestion(question).maxScore) }}
+                </div>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <BaseButton
+                  :label="directFeedbackForQuestion(question).afterAction === 'finish' ? t('End test') : t('Proceed with the test')"
+                  icon="check"
+                  type="primary"
+                  @click="proceedAfterFeedback(directFeedbackForQuestion(question))"
+                />
+              </div>
+            </div>
+
+            <div
+              v-if="feedbackEntries(directFeedbackForQuestion(question)).length"
+              class="space-y-2"
+            >
+              <div
+                v-for="(entry, entryIndex) in feedbackEntries(directFeedbackForQuestion(question))"
+                :key="`${question.id}-feedback-${entryIndex}`"
+                class="rounded border border-gray-20 bg-white/80 p-3"
+              >
+                <div
+                  v-if="entry.answer"
+                  class="exercise-runtime-html font-medium text-gray-90"
+                  v-html="entry.answer"
+                />
+                <div
+                  v-if="entry.comment"
+                  class="exercise-runtime-html mt-1 text-gray-700"
+                  v-html="entry.comment"
+                />
+              </div>
+            </div>
+            <div v-else>
+              {{ t("No detailed feedback is available for this question.") }}
+            </div>
+          </div>
         </article>
 
         <div class="flex flex-wrap justify-between gap-2 rounded-xl border border-gray-20 bg-white p-4 shadow-sm">
           <BaseButton
+            v-if="showPreviousNavigationButton"
             :disabled="!canMovePrevious || isSavingAnswer"
             :label="previousNavigationLabel"
             icon="back"
@@ -895,29 +1062,29 @@
           <div class="flex flex-wrap gap-2">
             <BaseButton
               v-if="!canManage && activeAttempt"
-              :disabled="isSavingAnswer || !visibleQuestions.some(isDraftSaveSupported)"
+              :disabled="isSavingAnswer || isTimeExpired || !visibleQuestions.some(isDraftSaveSupported)"
               :label="isSavingAnswer ? t('Saving') : t('Save draft')"
               icon="check"
               type="success"
-              @click="saveVisibleAnswers"
+              @click="saveVisibleAnswers()"
             />
             <BaseButton
               v-if="canMoveNext"
-              :disabled="isSavingAnswer"
+              :disabled="isSavingAnswer || isTimeExpired"
               :label="nextNavigationLabel"
               type="primary"
               @click="goToNextQuestion"
             />
             <BaseButton
               v-if="!canManage && activeAttempt && canFinishCurrentPage"
-              :disabled="!canSubmit || isSavingAnswer || isFinishingAttempt"
+              :disabled="!canSubmit || isSavingAnswer || isFinishingAttempt || isAutoFinishingExpiredAttempt"
               :label="isFinishingAttempt ? t('Finishing') : t('Finish in Vue')"
               icon="check"
               type="primary"
               @click="finishAttempt"
             />
             <BaseButton
-              v-if="legacyUrls.overview"
+              v-if="showLegacyRuntimeFallback"
               :label="t('Continue in legacy exercise')"
               :to-url="legacyUrls.overview"
               icon="play-box-outline"
@@ -927,14 +1094,71 @@
         </div>
       </form>
     </template>
+
+    <BaseDialog
+      v-if="feedbackDialog"
+      v-model:is-visible="isFeedbackDialogVisible"
+      :show-close-button="false"
+      :title="feedbackDialogTitle"
+      header-icon="information"
+    >
+      <div class="space-y-3 text-sm">
+        <div
+          class="rounded-lg border p-4"
+          :class="feedbackStatusClass(feedbackDialog)"
+        >
+          <div class="font-semibold">
+            {{ t(feedbackDialog.title || "Feedback") }}
+          </div>
+          <div>
+            {{ t("Score") }}: {{ formatScore(feedbackDialog.score) }} / {{ formatScore(feedbackDialog.maxScore) }}
+          </div>
+        </div>
+
+        <div
+          v-if="feedbackEntries(feedbackDialog).length"
+          class="space-y-2"
+        >
+          <div
+            v-for="(entry, entryIndex) in feedbackEntries(feedbackDialog)"
+            :key="`popup-feedback-${entryIndex}`"
+            class="rounded border border-gray-20 bg-white p-3"
+          >
+            <div
+              v-if="entry.answer"
+              class="exercise-runtime-html font-medium text-gray-90"
+              v-html="entry.answer"
+            />
+            <div
+              v-if="entry.comment"
+              class="exercise-runtime-html mt-1 text-gray-700"
+              v-html="entry.comment"
+            />
+          </div>
+        </div>
+        <div v-else>
+          {{ t("No detailed feedback is available for this question.") }}
+        </div>
+      </div>
+
+      <template #footer>
+        <BaseButton
+          :label="feedbackDialog.afterAction === 'finish' ? t('End test') : t('Proceed with the test')"
+          icon="check"
+          type="primary"
+          @click="proceedAfterFeedback(feedbackDialog)"
+        />
+      </template>
+    </BaseDialog>
   </section>
 </template>
 
 <script setup>
-import { computed, onMounted, ref, watch } from "vue"
+import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import BaseDialog from "../../components/basecomponents/BaseDialog.vue"
 import AudioRecorder from "../../components/AudioRecorder.vue"
 import exerciseService from "../../services/exerciseService"
 
@@ -970,13 +1194,25 @@ const finishMessage = ref("")
 const savedQuestionIds = ref(new Set())
 const draggedMatchingOptionId = ref(null)
 const selectedMatchingOptions = ref({})
+const draggedDraggableItemId = ref(null)
+const countdownRemainingSeconds = ref(null)
+const countdownTimer = ref(null)
+const isTimeExpired = ref(false)
+const isAutoFinishingExpiredAttempt = ref(false)
+const directFeedbackByQuestion = ref({})
+const feedbackDialog = ref(null)
+const isFeedbackDialogVisible = ref(false)
+const feedbackShownOnLastSave = ref(false)
 
 const questionMap = computed(() => new Map(questions.value.map((question) => [Number(question.id), question])))
 
 const runtimePages = computed(() => {
   const pages = settings.value?.runtimePages
+  if (!Array.isArray(pages)) {
+    return []
+  }
 
-  return Array.isArray(pages) ? pages : []
+  return normalizeRuntimePages(pages)
 })
 
 const usesPagedNavigation = computed(() => {
@@ -985,6 +1221,10 @@ const usesPagedNavigation = computed(() => {
   }
 
   return true === settings.value.oneQuestionPerPage
+})
+
+const showLegacyRuntimeFallback = computed(() => {
+  return !canManage.value && true === usesLegacySubmit.value && Boolean(legacyUrls.value?.overview)
 })
 
 const currentRuntimePage = computed(() => {
@@ -1013,19 +1253,128 @@ const visibleQuestions = computed(() => {
 
 const visibleQuestionTotal = computed(() => answerableQuestions.value.length)
 const navigationTotal = computed(() => usesPagedNavigation.value ? Math.max(1, runtimePages.value.length || visibleQuestionTotal.value) : visibleQuestionTotal.value)
-const canMovePrevious = computed(() => usesPagedNavigation.value && currentQuestionIndex.value > 0)
+const previousNavigationAllowed = computed(() => !settings.value.preventBackwards && settings.value.showPreviousButton !== false)
+const showPreviousNavigationButton = computed(() => usesPagedNavigation.value && previousNavigationAllowed.value)
+const canMovePrevious = computed(() => showPreviousNavigationButton.value && currentQuestionIndex.value > 0)
 const canMoveNext = computed(() => usesPagedNavigation.value && currentQuestionIndex.value < navigationTotal.value - 1)
 const canFinishCurrentPage = computed(() => !usesPagedNavigation.value || !canMoveNext.value)
+const hasTimeControl = computed(() => null !== countdownRemainingSeconds.value && undefined !== countdownRemainingSeconds.value)
 const answerableQuestions = computed(() => questions.value.filter((question) => !isStructuralQuestion(question)))
+const currentNavigationIndex = computed(() => Math.min(Math.max(0, currentQuestionIndex.value), Math.max(0, navigationTotal.value - 1)))
 const progressLabel = computed(() => {
   if (usesPagedNavigation.value && currentRuntimePage.value && (settings.value.usesStructuralPages || visibleQuestions.value.length > 1)) {
-    return `${t("Page")} ${currentQuestionIndex.value + 1} / ${navigationTotal.value}`
+    return `${t("Page")} ${currentNavigationIndex.value + 1} / ${navigationTotal.value}`
   }
 
-  return `${t("Question")} ${currentQuestionIndex.value + 1} / ${navigationTotal.value}`
+  return `${t("Question")} ${currentNavigationIndex.value + 1} / ${navigationTotal.value}`
 })
 const previousNavigationLabel = computed(() => usesPagedNavigation.value && (settings.value.usesStructuralPages || visibleQuestions.value.length > 1) ? t("Previous page") : t("Previous question"))
 const nextNavigationLabel = computed(() => usesPagedNavigation.value && (settings.value.usesStructuralPages || visibleQuestions.value.length > 1) ? t("Next page") : t("Next question"))
+const feedbackDialogTitle = computed(() => t(feedbackDialog.value?.title || "Feedback"))
+
+watch(navigationTotal, (total) => {
+  const safeTotal = Number(total || 0)
+  if (safeTotal <= 0) {
+    currentQuestionIndex.value = 0
+    return
+  }
+
+  if (currentQuestionIndex.value > safeTotal - 1) {
+    currentQuestionIndex.value = safeTotal - 1
+  }
+})
+
+function normalizeRuntimePages(pages = []) {
+  const normalizedPages = []
+
+  for (const page of pages) {
+    if (!page || typeof page !== "object") {
+      continue
+    }
+
+    const questionIds = Array.isArray(page.questionIds)
+      ? page.questionIds
+        .map((questionId) => Number(questionId || 0))
+        .filter((questionId) => questionId > 0 && questionMap.value.has(questionId) && !isStructuralQuestion(questionMap.value.get(questionId)))
+      : []
+
+    if (questionIds.length > 0 || hasRuntimePageContent(page)) {
+      normalizedPages.push({
+        ...page,
+        questionIds,
+      })
+    }
+  }
+
+  return normalizedPages
+}
+
+function hasRuntimePageContent(page = {}) {
+  const media = page.media || null
+  const pageBreak = page.pageBreak || null
+
+  return Boolean(
+    nonEmptyText(media?.title)
+    || nonEmptyText(media?.description)
+    || nonEmptyText(media?.content?.description)
+    || nonEmptyText(pageBreak?.title)
+    || nonEmptyText(pageBreak?.description)
+    || nonEmptyText(pageBreak?.content?.description)
+  )
+}
+
+function nonEmptyText(value) {
+  return typeof value === "string" && value.trim() !== ""
+}
+
+
+function syncCountdownFromAttempt(attempt) {
+  stopCountdownTimer()
+  isTimeExpired.value = false
+  isAutoFinishingExpiredAttempt.value = false
+
+  if (!attempt?.expiredAt) {
+    countdownRemainingSeconds.value = null
+    return
+  }
+
+  updateCountdown(attempt.expiredAt)
+  countdownTimer.value = window.setInterval(() => updateCountdown(attempt.expiredAt), 1000)
+}
+
+function stopCountdownTimer() {
+  if (countdownTimer.value) {
+    window.clearInterval(countdownTimer.value)
+    countdownTimer.value = null
+  }
+}
+
+function updateCountdown(expiredAt) {
+  const expiresAt = new Date(expiredAt).getTime()
+  if (Number.isNaN(expiresAt)) {
+    countdownRemainingSeconds.value = null
+    return
+  }
+
+  const remaining = Math.max(0, Math.ceil((expiresAt - Date.now()) / 1000))
+  countdownRemainingSeconds.value = remaining
+
+  if (remaining <= 0 && !canManage.value && activeAttempt.value?.status === "incomplete") {
+    handleExpiredTimeLimit()
+  }
+}
+
+async function handleExpiredTimeLimit() {
+  if (isAutoFinishingExpiredAttempt.value || isFinishingAttempt.value) {
+    return
+  }
+
+  isTimeExpired.value = true
+  isAutoFinishingExpiredAttempt.value = true
+  attemptMessage.value = t("Time limit reached. Finishing the attempt.")
+
+  await finishAttempt({ skipDraftSave: false, expiredByTimer: true })
+}
 
 function getQueryValue(value) {
   return Array.isArray(value) ? value[0] : value
@@ -1074,6 +1423,10 @@ async function loadRuntime() {
     applyAttemptState(activeAttempt.value)
     initializeAnswerState()
     applySavedAnswers(activeAttempt.value?.savedAnswers || {})
+    directFeedbackByQuestion.value = {}
+    feedbackDialog.value = null
+    isFeedbackDialogVisible.value = false
+    syncCountdownFromAttempt(activeAttempt.value)
   } catch (error) {
     console.error("Error loading exercise runtime", error)
     errorMessage.value = t("Could not load exercise")
@@ -1104,6 +1457,7 @@ async function startAttempt() {
       reorderQuestionsFromAttempt(response.questionIds || [])
       initializeAnswerState()
       applySavedAnswers(response.savedAnswers || {})
+      syncCountdownFromAttempt(response)
       return
     }
 
@@ -1125,6 +1479,7 @@ async function startAttempt() {
 function applyAttemptState(attempt) {
   if (!attempt) {
     currentQuestionIndex.value = 0
+    syncCountdownFromAttempt(null)
     return
   }
 
@@ -1179,26 +1534,30 @@ function reorderQuestionsFromAttempt(questionIds = []) {
 }
 
 async function goToPreviousQuestion() {
-  if (!canMovePrevious.value) {
+  if (isTimeExpired.value || !canMovePrevious.value) {
     return
   }
 
-  if (await saveVisibleAnswers()) {
-    currentQuestionIndex.value -= 1
+  if (await saveVisibleAnswers({ afterFeedback: "previous" })) {
+    if (!feedbackShownOnLastSave.value) {
+      currentQuestionIndex.value -= 1
+    }
   }
 }
 
 async function goToNextQuestion() {
-  if (!canMoveNext.value) {
+  if (isTimeExpired.value || !canMoveNext.value) {
     return
   }
 
-  if (await saveVisibleAnswers()) {
-    currentQuestionIndex.value += 1
+  if (await saveVisibleAnswers({ afterFeedback: "next" })) {
+    if (!feedbackShownOnLastSave.value) {
+      currentQuestionIndex.value += 1
+    }
   }
 }
 
-async function saveVisibleAnswers() {
+async function saveVisibleAnswers(options = {}) {
   if (canManage.value || !activeAttempt.value?.attemptId) {
     return true
   }
@@ -1211,10 +1570,11 @@ async function saveVisibleAnswers() {
   isSavingAnswer.value = true
   answerSaveError.value = ""
   answerSaveMessage.value = ""
+  feedbackShownOnLastSave.value = false
 
   try {
     for (const question of saveTargets) {
-      await saveQuestionDraftAnswer(question)
+      await saveQuestionDraftAnswer(question, options.afterFeedback || "none")
     }
 
     answerSaveMessage.value = t("Draft answer saved")
@@ -1230,14 +1590,20 @@ async function saveVisibleAnswers() {
   }
 }
 
-async function finishAttempt() {
+async function finishAttempt(options = {}) {
   const exerciseId = getExerciseId()
   const attemptId = Number(activeAttempt.value?.attemptId || 0)
   if (canManage.value || !exerciseId || !attemptId) {
     return
   }
 
-  if (!(await saveVisibleAnswers())) {
+  const skipDraftSave = true === options.skipDraftSave
+  const ignoreFeedback = true === options.ignoreFeedback
+  if (!skipDraftSave && !(await saveVisibleAnswers({ afterFeedback: "finish" }))) {
+    return
+  }
+
+  if (!ignoreFeedback && feedbackShownOnLastSave.value) {
     return
   }
 
@@ -1265,6 +1631,7 @@ async function finishAttempt() {
       status: response.status || "completed",
     }
     canSubmit.value = false
+    stopCountdownTimer()
     finishMessage.value = response.message ? t(response.message) : t("Attempt finished")
 
     await router.push({
@@ -1281,10 +1648,11 @@ async function finishAttempt() {
     finishError.value = t("Could not finish the attempt")
   } finally {
     isFinishingAttempt.value = false
+    isAutoFinishingExpiredAttempt.value = false
   }
 }
 
-async function saveQuestionDraftAnswer(question) {
+async function saveQuestionDraftAnswer(question, afterFeedback = "none") {
   const exerciseId = getExerciseId()
   const attemptId = Number(activeAttempt.value?.attemptId || 0)
   if (!exerciseId || !attemptId || !question?.id) {
@@ -1325,6 +1693,10 @@ async function saveQuestionDraftAnswer(question) {
     nextSavedQuestionIds.delete(Number(question.id))
     savedQuestionIds.value = nextSavedQuestionIds
   }
+
+  handleRuntimeFeedback(question, response.feedback || null, afterFeedback)
+
+  return response
 }
 
 
@@ -1358,6 +1730,93 @@ async function saveUploadQuestionAnswer(question, exerciseId, attemptId) {
   return response
 }
 
+
+function isRuntimeFeedbackMode() {
+  return [1, 3].includes(Number(settings.value.feedbackType || 0))
+}
+
+function handleRuntimeFeedback(question, feedback, afterAction = "none") {
+  if (!isRuntimeFeedbackMode() || !feedback?.enabled) {
+    return
+  }
+
+  const normalizedFeedback = {
+    ...feedback,
+    questionId: Number(feedback.questionId || question.id || 0),
+    afterAction,
+  }
+
+  feedbackShownOnLastSave.value = true
+
+  if (feedback.mode === "popup") {
+    feedbackDialog.value = normalizedFeedback
+    isFeedbackDialogVisible.value = true
+    return
+  }
+
+  directFeedbackByQuestion.value = {
+    ...directFeedbackByQuestion.value,
+    [Number(question.id)]: normalizedFeedback,
+  }
+}
+
+function directFeedbackForQuestion(question) {
+  return directFeedbackByQuestion.value[Number(question?.id || 0)] || null
+}
+
+function feedbackEntries(feedback) {
+  return Array.isArray(feedback?.entries) ? feedback.entries : []
+}
+
+function feedbackStatusClass(feedback) {
+  const status = feedback?.status || ""
+
+  if (status === "correct") {
+    return "border-success/30 bg-success/10 text-success"
+  }
+
+  if (status === "partial" || status === "pending") {
+    return "border-warning/30 bg-warning/10 text-warning"
+  }
+
+  return "border-danger/30 bg-danger/10 text-danger"
+}
+
+function formatScore(value) {
+  const number = Number(value || 0)
+
+  return Number.isInteger(number) ? String(number) : number.toFixed(2)
+}
+
+async function proceedAfterFeedback(feedback) {
+  if (!feedback) {
+    return
+  }
+
+  const questionId = Number(feedback.questionId || 0)
+  if (questionId > 0) {
+    const nextFeedback = { ...directFeedbackByQuestion.value }
+    delete nextFeedback[questionId]
+    directFeedbackByQuestion.value = nextFeedback
+  }
+
+  isFeedbackDialogVisible.value = false
+  feedbackDialog.value = null
+
+  if (feedback.afterAction === "finish") {
+    await finishAttempt({ skipDraftSave: true, ignoreFeedback: true })
+    return
+  }
+
+  if (feedback.afterAction === "next" && canMoveNext.value) {
+    currentQuestionIndex.value += 1
+    return
+  }
+
+  if (feedback.afterAction === "previous" && canMovePrevious.value) {
+    currentQuestionIndex.value -= 1
+  }
+}
 
 function getMatchingAnswerState(question) {
   if (!answers.value[question.id]) {
@@ -1529,6 +1988,10 @@ function buildAnswerPayload(question) {
     return { matching: questionAnswer.matching || {} }
   }
 
+  if (isDraggableQuestion(question)) {
+    return { order: draggableAnswerItems(question).map((item) => Number(item.id || 0)).filter((itemId) => itemId > 0) }
+  }
+
   if (isDropdownQuestion(question)) {
     return { dropdown: questionAnswer.dropdown }
   }
@@ -1564,6 +2027,7 @@ function isDraftSaveSupported(question) {
     || isDraftTrueFalseQuestion(question)
     || isFillBlanksQuestion(question)
     || isMatchingQuestion(question)
+    || isDraggableQuestion(question)
     || isDropdownQuestion(question)
     || isCalculatedQuestion(question)
     || isHotspotQuestion(question)
@@ -1650,6 +2114,24 @@ function applySavedAnswer(question, rows) {
     return
   }
 
+  if (isDraggableQuestion(question)) {
+    const orderedIds = [...rows]
+      .sort((left, right) => Number(left.answer || 0) - Number(right.answer || 0))
+      .map((row) => Number(row.position || 0))
+      .filter((itemId) => itemId > 0)
+    const availableItems = Array.isArray(question.draggable?.items) ? question.draggable.items : []
+    const availableIds = new Set(availableItems.map((item) => Number(item.id || 0)))
+    const restoredIds = orderedIds.filter((itemId) => availableIds.has(itemId))
+    for (const item of availableItems) {
+      const itemId = Number(item.id || 0)
+      if (itemId > 0 && !restoredIds.includes(itemId)) {
+        restoredIds.push(itemId)
+      }
+    }
+    questionAnswer.draggableOrder = restoredIds
+    return
+  }
+
   if (isDropdownQuestion(question)) {
     questionAnswer.dropdown = Number(rows[0]?.answer || 0) || ""
     return
@@ -1682,13 +2164,34 @@ function applySavedAnswer(question, rows) {
   }
 
   if (isUploadQuestion(question)) {
-    questionAnswer.uploadedFiles = rows.length > 0 ? [{ name: t("Uploaded file") }] : []
+    const files = extractSavedAttemptFiles(rows)
+    questionAnswer.uploadedFiles = files.length > 0 ? files : (rows.length > 0 ? [{ name: t("Uploaded file") }] : [])
     return
   }
 
   if (isOralQuestion(question)) {
-    questionAnswer.uploadedFiles = rows.length > 0 ? [{ name: t("Uploaded audio") }] : []
+    const files = extractSavedAttemptFiles(rows)
+    questionAnswer.uploadedFiles = files.length > 0 ? files : (rows.length > 0 ? [{ name: t("Uploaded audio") }] : [])
   }
+}
+
+
+function extractSavedAttemptFiles(rows = []) {
+  const files = []
+
+  for (const row of rows) {
+    if (!Array.isArray(row?.files)) {
+      continue
+    }
+
+    for (const file of row.files) {
+      if (file && typeof file === "object") {
+        files.push(file)
+      }
+    }
+  }
+
+  return files
 }
 
 function extractSavedBlankValues(savedAnswer, separator = 0) {
@@ -1743,6 +2246,7 @@ function initializeAnswerState() {
       degreeCertainty: {},
       blanks: {},
       matching: {},
+      draggableOrder: draggableInitialOrder(question),
       dropdown: "",
       calculated: "",
       calculatedAnswerId: currentCalculatedVariation(question).id || question.calculated?.answerId || null,
@@ -2251,6 +2755,94 @@ function isDraggableQuestion(question) {
   return Number(question.type) === 18 && question.draggable
 }
 
+
+function draggableOrientation(question) {
+  const orientation = String(question.draggable?.orientation || "").toLowerCase()
+
+  return ["h", "horizontal"].includes(orientation) ? "horizontal" : "vertical"
+}
+
+function isDraggableHorizontal(question) {
+  return draggableOrientation(question) === "horizontal"
+}
+
+function draggableInitialOrder(question) {
+  return (question.draggable?.items || [])
+    .map((item) => Number(item.id || 0))
+    .filter((itemId) => itemId > 0)
+}
+
+function draggableAnswerItems(question) {
+  const items = Array.isArray(question.draggable?.items) ? question.draggable.items : []
+  const itemMap = new Map(items.map((item) => [Number(item.id || 0), item]))
+  const storedOrder = Array.isArray(answers.value?.[question.id]?.draggableOrder)
+    ? answers.value[question.id].draggableOrder.map((itemId) => Number(itemId || 0)).filter((itemId) => itemId > 0)
+    : []
+
+  const orderedItems = []
+  const usedIds = new Set()
+  for (const itemId of storedOrder) {
+    if (itemMap.has(itemId) && !usedIds.has(itemId)) {
+      orderedItems.push(itemMap.get(itemId))
+      usedIds.add(itemId)
+    }
+  }
+
+  for (const item of items) {
+    const itemId = Number(item.id || 0)
+    if (itemId > 0 && !usedIds.has(itemId)) {
+      orderedItems.push(item)
+    }
+  }
+
+  return orderedItems
+}
+
+function setDraggableOrder(question, items) {
+  if (!answers.value?.[question.id]) {
+    return
+  }
+
+  answers.value[question.id].draggableOrder = items
+    .map((item) => Number(item.id || item || 0))
+    .filter((itemId) => itemId > 0)
+}
+
+function moveDraggableItem(question, fromIndex, toIndex) {
+  const items = draggableAnswerItems(question)
+  if (fromIndex < 0 || toIndex < 0 || fromIndex >= items.length || toIndex >= items.length) {
+    return
+  }
+
+  const [item] = items.splice(fromIndex, 1)
+  items.splice(toIndex, 0, item)
+  setDraggableOrder(question, items)
+}
+
+function onDraggableOrderDragStart(itemId) {
+  draggedDraggableItemId.value = Number(itemId || 0)
+}
+
+function onDraggableOrderDrop(question, targetItemId) {
+  const draggedItemId = Number(draggedDraggableItemId.value || 0)
+  draggedDraggableItemId.value = null
+  const safeTargetItemId = Number(targetItemId || 0)
+  if (draggedItemId <= 0 || safeTargetItemId <= 0 || draggedItemId === safeTargetItemId) {
+    return
+  }
+
+  const items = draggableAnswerItems(question)
+  const fromIndex = items.findIndex((item) => Number(item.id || 0) === draggedItemId)
+  const toIndex = items.findIndex((item) => Number(item.id || 0) === safeTargetItemId)
+  if (fromIndex < 0 || toIndex < 0) {
+    return
+  }
+
+  const [item] = items.splice(fromIndex, 1)
+  items.splice(toIndex, 0, item)
+  setDraggableOrder(question, items)
+}
+
 function isDropdownQuestion(question) {
   return [28, 29].includes(Number(question.type)) && question.dropdown
 }
@@ -2381,6 +2973,8 @@ function displayText(value, fallback = "") {
 
   return plainValue || fallback
 }
+
+onBeforeUnmount(stopCountdownTimer)
 
 onMounted(loadRuntime)
 

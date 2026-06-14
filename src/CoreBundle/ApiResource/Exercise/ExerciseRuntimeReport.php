@@ -67,13 +67,31 @@ final class ExerciseRuntimeReport
      * @var array<string, string>
      */
     #[Groups(['exercise_runtime_report:read'])]
-    public array $legacyUrls = [];
+    public array $actionUrls = [];
 
     #[Groups(['exercise_runtime_report:read'])]
     public int $totalItems = 0;
 
     #[Groups(['exercise_runtime_report:read'])]
     public bool $canManage = true;
+
+    #[Groups(['exercise_runtime_report:read'])]
+    public bool $lockedByGradebook = false;
+
+    #[Groups(['exercise_runtime_report:read'])]
+    public bool $canBulkDelete = false;
+
+    #[Groups(['exercise_runtime_report:read'])]
+    public bool $canCleanResults = false;
+
+    #[Groups(['exercise_runtime_report:read'])]
+    public bool $canBulkRecalculate = false;
+
+    #[Groups(['exercise_runtime_report:read'])]
+    public string $bulkActionToken = '';
+
+    #[Groups(['exercise_runtime_report:read'])]
+    public string $emailActionToken = '';
 
     public function getExerciseId(): ?int
     {

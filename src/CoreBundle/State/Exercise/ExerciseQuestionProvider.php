@@ -78,7 +78,7 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
         $response->questionTypes = $this->getQuestionTypes($quiz);
         $response->questionCount = \count($questions);
         $response->totalScore = $this->getTotalScore($questions);
-        $response->legacyUrls = $this->getLegacyUrls($quiz, $course, $session);
+        $response->legacyUrls = [];
         $response->canManage = true;
         $response->csrfToken = $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID)->getValue();
 
@@ -697,17 +697,20 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
      */
     private function getQuestionTypes(CQuiz $quiz): array
     {
-        $feedbackType = $quiz->getFeedbackType();
+        $feedbackType = (int) $quiz->getFeedbackType();
         $types = [];
 
         foreach ($this->getLegacyQuestionTypeDefinitions() as $definition) {
             $type = (int) $definition['type'];
-            $isVueEditor = $this->isVueQuestionEditorType($type);
-
-            if (!$this->isQuestionTypeAllowedByFeedback($type, (int) $feedbackType)) {
+            if (!$this->isQuestionTypeVisibleInSelector($type, $feedbackType)) {
                 continue;
             }
 
+            if (!$this->isQuestionTypeAllowedByFeedback($type, $feedbackType)) {
+                continue;
+            }
+
+            $isVueEditor = $this->isVueQuestionEditorType($type);
             $types[] = [
                 'type' => $type,
                 'label' => $definition['label'],
@@ -728,37 +731,43 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
     private function getLegacyQuestionTypeDefinitions(): array
     {
         return [
-            ['type' => 1, 'label' => 'Unique answer', 'icon' => 'mcua.png'],
+            ['type' => 1, 'label' => 'Multiple choice', 'icon' => 'mcua.png'],
             ['type' => 2, 'label' => 'Multiple answer', 'icon' => 'mcma.png'],
-            ['type' => 3, 'label' => 'Fill in blanks', 'icon' => 'fill_in_blanks.png'],
+            ['type' => 3, 'label' => 'Fill blanks or form', 'icon' => 'fill_in_blanks.png'],
             ['type' => 4, 'label' => 'Matching', 'icon' => 'matching.png'],
             ['type' => 5, 'label' => 'Open question', 'icon' => 'open_answer.png'],
-            ['type' => 6, 'label' => 'Hotspot', 'icon' => 'hotspot.png'],
+            ['type' => 6, 'label' => 'Image zones', 'icon' => 'hotspot.png'],
+            ['type' => 8, 'label' => 'Hotspot delineation', 'icon' => 'hotspot_delineation.png'],
             ['type' => 9, 'label' => 'Exact Selection', 'icon' => 'mcmac.png'],
             ['type' => 10, 'label' => 'Unique answer with unknown', 'icon' => 'mcuao.png'],
-            ['type' => 11, 'label' => 'Multiple answer true/false', 'icon' => 'mcmao.png'],
-            ['type' => 12, 'label' => 'Multiple answer combination true/false', 'icon' => 'mcmaco.png'],
+            ['type' => 11, 'label' => "Multiple answer true/false/don't know", 'icon' => 'mcmao.png'],
+            ['type' => 12, 'label' => "Combination true/false/don't-know", 'icon' => 'mcmaco.png'],
             ['type' => 13, 'label' => 'Oral expression', 'icon' => 'audio_question.png'],
             ['type' => 14, 'label' => 'Global multiple answer', 'icon' => 'mcmagl.png'],
             ['type' => 15, 'label' => 'Media question', 'icon' => 'media.png'],
             ['type' => 16, 'label' => 'Calculated answer', 'icon' => 'calculated_answer.png'],
             ['type' => 17, 'label' => 'Unique answer with images', 'icon' => 'uaimg.png'],
             ['type' => 18, 'label' => 'Sequence ordering', 'icon' => 'ordering.png'],
-            ['type' => 19, 'label' => 'Matching draggable', 'icon' => 'matchingdrag.png'],
+            ['type' => 19, 'label' => 'Match by dragging', 'icon' => 'matchingdrag.png'],
             ['type' => 20, 'label' => 'Annotation', 'icon' => 'annotation.png'],
             ['type' => 21, 'label' => 'Reading comprehension', 'icon' => 'reading_comprehension.png'],
             ['type' => 22, 'label' => 'Multiple answer true/false with degree of certainty', 'icon' => 'mccert.png'],
-            ['type' => 23, 'label' => 'Upload answer', 'icon' => 'file_upload_question.png'],
+            ['type' => 23, 'label' => 'Upload Answer', 'icon' => 'file_upload_question.png'],
             ['type' => 24, 'label' => 'Matching combination', 'icon' => 'matching_co.png'],
             ['type' => 25, 'label' => 'Matching draggable combination', 'icon' => 'matchingdrag_co.png'],
             ['type' => 26, 'label' => 'Hotspot combination', 'icon' => 'hotspot_co.png'],
             ['type' => 27, 'label' => 'Fill in blanks combination', 'icon' => 'fill_in_blanks_co.png'],
-            ['type' => 28, 'label' => 'Multiple answer dropdown combination', 'icon' => 'mcma_dropdown_co.png'],
-            ['type' => 29, 'label' => 'Multiple answer dropdown', 'icon' => 'mcma_dropdown.png'],
+            ['type' => 28, 'label' => 'Multiple Answer Dropdown Combination', 'icon' => 'mcma_dropdown_co.png'],
+            ['type' => 29, 'label' => 'Multiple Answer Dropdown', 'icon' => 'mcma_dropdown.png'],
             ['type' => 31, 'label' => 'Page break', 'icon' => 'page_end.png'],
         ];
     }
 
+
+    private function isQuestionTypeVisibleInSelector(int $type, int $feedbackType): bool
+    {
+        return 8 !== $type;
+    }
 
     private function isQuestionTypeAllowedByFeedback(int $type, int $feedbackType): bool
     {
@@ -798,41 +807,5 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
         }
 
         return 'quiz.png';
-    }
-
-
-    /**
-     * @param array<string, int> $baseParams
-     *
-     * @return array<string, int>
-     */
-    private function getQuestionPoolParams(CQuiz $quiz, array $baseParams): array
-    {
-        $feedbackType = (int) $quiz->getFeedbackType();
-        if (\in_array($feedbackType, [1, 3], true)) {
-            $baseParams['type'] = 1;
-        }
-
-        return $baseParams;
-    }
-
-    /**
-     * @return array<string, string>
-     */
-    private function getLegacyUrls(CQuiz $quiz, Course $course, ?Session $session): array
-    {
-        $baseParams = [
-            'exerciseId' => (int) $quiz->getIid(),
-            'cid' => (int) $course->getId(),
-            'sid' => (int) ($session?->getId() ?? 0),
-        ];
-
-        return [
-            'list' => '/main/exercise/exercise.php?'.http_build_query($baseParams),
-            'configure' => '/main/exercise/exercise_admin.php?'.http_build_query($baseParams + ['modifyExercise' => 'yes']),
-            'preview' => '/main/exercise/overview.php?'.http_build_query($baseParams),
-            'results' => '/main/exercise/exercise_report.php?'.http_build_query($baseParams),
-            'questionPool' => '/main/exercise/question_pool.php?'.http_build_query($this->getQuestionPoolParams($quiz, $baseParams)),
-        ];
     }
 }

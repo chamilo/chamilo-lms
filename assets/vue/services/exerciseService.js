@@ -36,6 +36,31 @@ export default {
     return await baseService.get("/api/exercise/list", cleanParams(params), exerciseRequestConfig())
   },
 
+  async saveExerciseListAction(payload = {}, params = {}) {
+    const queryString = buildQueryString(params)
+
+    return await baseService.post(`/api/exercise/list/action${queryString}`, payload, {}, exerciseRequestConfig())
+  },
+
+  async getExerciseOverview(params = {}, exerciseId) {
+    return await baseService.get(`/api/exercise/overview/${exerciseId}`, cleanParams(params), exerciseRequestConfig())
+  },
+
+  async getExerciseCategories(categoryType, params = {}) {
+    return await baseService.get(`/api/exercise/categories/${categoryType}`, cleanParams(params), exerciseRequestConfig())
+  },
+
+  async saveExerciseCategoryAction(categoryType, payload = {}, params = {}) {
+    const queryString = buildQueryString(params)
+
+    return await baseService.post(
+      `/api/exercise/categories/${categoryType}/action${queryString}`,
+      payload,
+      {},
+      exerciseRequestConfig(),
+    )
+  },
+
   async getExerciseConfiguration(params = {}, exerciseId = null) {
     const endpoint = exerciseId ? `/api/exercise/configuration/${exerciseId}` : "/api/exercise/configuration"
 
@@ -111,6 +136,41 @@ export default {
     )
   },
 
+  async runExerciseRuntimeReportBulkAction(payload = {}, params = {}, exerciseId) {
+    const queryString = buildQueryString(params)
+
+    return await baseService.post(
+      `/api/exercise/runtime/${exerciseId}/attempts/action${queryString}`,
+      payload,
+      {},
+      exerciseRequestConfig(),
+    )
+  },
+
+  async getExerciseQuestionStats(params = {}, exerciseId) {
+    return await baseService.get(
+      `/api/exercise/runtime/${exerciseId}/question-stats`,
+      cleanParams(params),
+      exerciseRequestConfig(),
+    )
+  },
+
+  async getExerciseReportByQuestion(params = {}, exerciseId) {
+    return await baseService.get(
+      `/api/exercise/runtime/${exerciseId}/report-by-question`,
+      cleanParams(params),
+      exerciseRequestConfig(),
+    )
+  },
+
+  async getExerciseLiveResults(params = {}, exerciseId) {
+    return await baseService.get(
+      `/api/exercise/runtime/${exerciseId}/live-results`,
+      cleanParams(params),
+      exerciseRequestConfig(),
+    )
+  },
+
   async deleteExerciseRuntimeAttempt(payload = {}, params = {}, exerciseId, attemptId) {
     const queryString = buildQueryString(params)
 
@@ -120,6 +180,54 @@ export default {
       {},
       exerciseRequestConfig(),
     )
+  },
+
+  async closeExerciseRuntimeAttempt(payload = {}, params = {}, exerciseId, attemptId) {
+    const queryString = buildQueryString(params)
+
+    return await baseService.post(
+      `/api/exercise/runtime/${exerciseId}/attempt/${attemptId}/close${queryString}`,
+      payload,
+      {},
+      exerciseRequestConfig(),
+    )
+  },
+
+  async recalculateExerciseRuntimeAttempt(payload = {}, params = {}, exerciseId, attemptId) {
+    const queryString = buildQueryString(params)
+
+    return await baseService.post(
+      `/api/exercise/runtime/${exerciseId}/attempt/${attemptId}/recalculate${queryString}`,
+      payload,
+      {},
+      exerciseRequestConfig(),
+    )
+  },
+
+  async emailExerciseRuntimeAttempt(payload = {}, params = {}, exerciseId, attemptId) {
+    const queryString = buildQueryString(params)
+
+    return await baseService.post(
+      `/api/exercise/runtime/${exerciseId}/attempt/${attemptId}/email${queryString}`,
+      payload,
+      {},
+      exerciseRequestConfig(),
+    )
+  },
+
+  async emailExerciseRuntimeReportAttempts(payload = {}, params = {}, exerciseId) {
+    const queryString = buildQueryString(params)
+
+    return await baseService.post(
+      `/api/exercise/runtime/${exerciseId}/attempts/email${queryString}`,
+      payload,
+      {},
+      exerciseRequestConfig(),
+    )
+  },
+
+  buildExerciseRuntimeAttemptPdfUrl(params = {}, exerciseId, attemptId) {
+    return `/api/exercise/runtime/${exerciseId}/attempt/${attemptId}/pdf${buildQueryString(params)}`
   },
 
   async saveExerciseRuntimeCorrection(payload = {}, params = {}, exerciseId, attemptId) {
@@ -165,6 +273,31 @@ export default {
       {},
       exerciseRequestConfig(),
     )
+  },
+
+  async getExerciseQuestionBank(params = {}, exerciseId) {
+    return await baseService.get(`/api/exercise/questions/${exerciseId}/bank`, cleanParams(params), exerciseRequestConfig())
+  },
+
+  async saveExerciseQuestionBankAction(payload, params = {}, exerciseId) {
+    const queryString = buildQueryString(params)
+
+    return await baseService.post(
+      `/api/exercise/questions/${exerciseId}/bank/action${queryString}`,
+      payload,
+      {},
+      exerciseRequestConfig(),
+    )
+  },
+
+  async getExerciseQuestionImport(importType, params = {}) {
+    return await baseService.get(`/api/exercise/import/${importType}`, cleanParams(params), exerciseRequestConfig())
+  },
+
+  async importExerciseQuestions(importType, formData, params = {}) {
+    const queryString = buildQueryString(params)
+
+    return await baseService.postForm(`/api/exercise/import/${importType}${queryString}`, formData, exerciseRequestConfig())
   },
 
   async saveExerciseConfiguration(payload, params = {}, exerciseId = null) {

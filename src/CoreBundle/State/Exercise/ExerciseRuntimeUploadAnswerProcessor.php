@@ -104,8 +104,7 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
         }
 
         $uploadedFiles = $this->getUploadedFiles($request);
-        $postedNodeIds = $this->getPostedResourceNodeIds($request);
-        if ([] === $uploadedFiles && [] === $postedNodeIds) {
+        if ([] === $uploadedFiles) {
             throw new BadRequestHttpException('A file is required for this answer.');
         }
 
@@ -113,12 +112,6 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
         foreach ($uploadedFiles as $uploadedFile) {
             $this->validateUploadedFileForQuestion($uploadedFile, $question);
             $resourceNodes[] = $this->createAttemptFileResourceNode($uploadedFile, $user);
-        }
-        foreach ($postedNodeIds as $postedNodeId) {
-            $node = $this->entityManager->getRepository(ResourceNode::class)->find($postedNodeId);
-            if ($node instanceof ResourceNode) {
-                $resourceNodes[] = $node;
-            }
         }
 
         if ([] === $resourceNodes) {
@@ -351,27 +344,6 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
         return array_values(array_filter($files, static fn (mixed $item): bool => $item instanceof UploadedFile));
     }
 
-    /**
-     * @return array<int, int>
-     */
-    private function getPostedResourceNodeIds(Request $request): array
-    {
-        $value = $request->request->all('resourceNodeIds');
-        if ([] === $value) {
-            $singleValue = $request->request->get('resourceNodeId');
-            $value = null === $singleValue ? [] : [$singleValue];
-        }
-
-        $nodeIds = [];
-        foreach ($value as $item) {
-            $nodeId = (int) $item;
-            if (0 < $nodeId && !\in_array($nodeId, $nodeIds, true)) {
-                $nodeIds[] = $nodeId;
-            }
-        }
-
-        return $nodeIds;
-    }
 
     private function validateUploadedFileForQuestion(UploadedFile $uploadedFile, CQuizQuestion $question): void
     {

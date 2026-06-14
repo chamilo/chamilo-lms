@@ -107,6 +107,29 @@ final class ExerciseConfiguration
     public ?int $categoryId = null;
 
     #[Groups(['exercise_configuration:read', 'exercise_configuration:write'])]
+    public string $language = '';
+
+    #[Groups(['exercise_configuration:read', 'exercise_configuration:write'])]
+    public bool $updateTitleInLearningPaths = false;
+
+    /**
+     * @var array<int, int>
+     */
+    #[Groups(['exercise_configuration:read', 'exercise_configuration:write'])]
+    public array $skillIds = [];
+
+    /**
+     * Legacy extra field values keyed by extra field variable.
+     *
+     * @var array<string, mixed>
+     */
+    #[Groups(['exercise_configuration:read', 'exercise_configuration:write'])]
+    public array $extraFieldValues = [];
+
+    #[Groups(['exercise_configuration:read', 'exercise_configuration:write'])]
+    public string $extraNotification = '';
+
+    #[Groups(['exercise_configuration:read', 'exercise_configuration:write'])]
     public ?string $startTime = null;
 
     #[Groups(['exercise_configuration:read', 'exercise_configuration:write'])]
@@ -126,6 +149,14 @@ final class ExerciseConfiguration
 
     #[Groups(['exercise_configuration:read', 'exercise_configuration:write'])]
     public int $randomByCategory = 0;
+
+    /**
+     * Legacy category matrix stored in c_quiz_rel_category.
+     *
+     * @var array<int, array<string, mixed>>
+     */
+    #[Groups(['exercise_configuration:read', 'exercise_configuration:write'])]
+    public array $categoryMatrix = [];
 
     #[Groups(['exercise_configuration:read', 'exercise_configuration:write'])]
     public bool $randomAnswers = false;
@@ -230,6 +261,14 @@ final class ExerciseConfiguration
 
     #[Groups(['exercise_configuration:read'])]
     public bool $canEdit = false;
+
+    /**
+     * Legacy freezes these fields after an exercise has been created.
+     *
+     * @var array<int, string>
+     */
+    #[Groups(['exercise_configuration:read'])]
+    public array $lockedFields = [];
 
     #[Groups(['exercise_configuration:read'])]
     public bool $canCreate = false;

@@ -44,6 +44,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
 {
     private const STATUS_COMPLETED = 'completed';
     private const ANNOTATION = 20;
+    private const DRAGGABLE = 18;
     private const VISIBILITY_PUBLISHED = 2;
     private const FEEDBACK_TYPE_EXAM = 2;
     private const RESULT_SHOW_SCORE_AND_EXPECTED_ANSWERS = 0;
@@ -105,12 +106,22 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         $pendingQuestionIds = $this->parseQuestionIds((string) $attempt->getQuestionsToCheck());
         $isLastAllowedAttempt = $this->isLastAllowedAttempt($quiz, $attempt, $course, $session);
         $visibility = $this->getResultVisibility($quiz, $isLastAllowedAttempt);
-        $questions = $this->getQuestions($quiz, $questionIds, $rowsByQuestion, $visibility, $pendingQuestionIds, $canManage);
-        if (true === ($visibility['hideCorrectAnsweredQuestions'] ?? false) && true === ($visibility['showQuestionScore'] ?? false)) {
-            $questions = array_values(array_filter(
-                $questions,
-                static fn (array $question): bool => true !== ($question['isCorrect'] ?? false)
-            ));
+        if ($canManage) {
+            $visibility = $this->getManagerResultVisibility($visibility);
+        }
+
+        $questions = [];
+        if ($canManage || true === ($visibility['showQuestionDetails'] ?? false)) {
+            $questions = $this->getQuestions($quiz, $questionIds, $rowsByQuestion, $visibility, $pendingQuestionIds, $canManage);
+            if (
+                true === ($visibility['hideCorrectAnsweredQuestions'] ?? false)
+                && true === ($visibility['showQuestionScore'] ?? false)
+            ) {
+                $questions = array_values(array_filter(
+                    $questions,
+                    static fn (array $question): bool => true !== ($question['isCorrect'] ?? false)
+                ));
+            }
         }
 
         $response = new ExerciseRuntimeResult();
@@ -121,7 +132,9 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         $response->attempt = $this->normalizeAttempt($attempt, $quiz, $visibility);
         $response->visibility = $visibility;
         $response->questions = $questions;
-        $response->legacyUrls = $this->getLegacyUrls($quiz, $attempt, $course, $session, $request);
+        $response->ranking = true === ($visibility['showRanking'] ?? false)
+            ? $this->getRanking($quiz, $course, $session, $attempt)
+            : [];
         $response->canManage = $canManage;
 
         return $response;
@@ -341,46 +354,101 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
     private function getResultVisibility(CQuiz $quiz, bool $isLastAllowedAttempt): array
     {
         $resultsDisabled = (int) $quiz->getResultsDisabled();
+        $feedbackType = (int) $quiz->getFeedbackType();
         $pageResultConfiguration = $this->normalizePageResultConfiguration($quiz->getPageResultConfiguration());
+
         $showScore = self::RESULT_NO_SCORE_AND_EXPECTED_ANSWERS !== $resultsDisabled;
-        $showCorrections = \in_array($resultsDisabled, [
-            self::RESULT_SHOW_SCORE_AND_EXPECTED_ANSWERS,
-            self::RESULT_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
-            self::RESULT_SHOW_ONLY_IN_CORRECT_ANSWER,
+        if (
+            self::RESULT_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK === $resultsDisabled
+            && !$isLastAllowedAttempt
+        ) {
+            $showScore = false;
+        }
+
+        $showQuestionDetails = !\in_array($resultsDisabled, [
+            self::RESULT_NO_SCORE_AND_EXPECTED_ANSWERS,
+            self::RESULT_SHOW_SCORE_ONLY,
+            self::RESULT_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES,
+            self::RESULT_RANKING,
+            self::RESULT_RADAR,
         ], true);
 
-        if (\in_array($resultsDisabled, [
+        $showExpectedAnswers = match ($resultsDisabled) {
+            self::RESULT_SHOW_SCORE_AND_EXPECTED_ANSWERS,
+            self::RESULT_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
+            self::RESULT_SHOW_ONLY_IN_CORRECT_ANSWER => true,
             self::RESULT_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
-            self::RESULT_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK,
-        ], true)) {
-            $showCorrections = $isLastAllowedAttempt;
-        }
+            self::RESULT_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
+            self::RESULT_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK => $isLastAllowedAttempt,
+            default => false,
+        };
 
         if (true === $pageResultConfiguration['hideExpectedAnswers']) {
-            $showCorrections = false;
+            $showExpectedAnswers = false;
         }
 
-        $showOnlyIncorrect = self::RESULT_SHOW_ONLY_IN_CORRECT_ANSWER === $resultsDisabled;
-        $showFeedback = $showCorrections
-            && self::FEEDBACK_TYPE_EXAM !== (int) $quiz->getFeedbackType()
-            && self::RESULT_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK !== $resultsDisabled;
+        $showOnlyCorrectAnswers = self::RESULT_SHOW_ONLY_IN_CORRECT_ANSWER === $resultsDisabled;
+        $showFeedback = self::FEEDBACK_TYPE_EXAM !== $feedbackType && match ($resultsDisabled) {
+            self::RESULT_SHOW_SCORE_AND_EXPECTED_ANSWERS,
+            self::RESULT_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
+            self::RESULT_SHOW_ONLY_IN_CORRECT_ANSWER => $showExpectedAnswers,
+            self::RESULT_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT => $showExpectedAnswers,
+            self::RESULT_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
+            self::RESULT_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK => true,
+            default => false,
+        };
+
+        $showQuestionScore = $showScore
+            && $showQuestionDetails
+            && false === $pageResultConfiguration['hideQuestionScore']
+            && !$showOnlyCorrectAnswers;
 
         return [
             'resultsDisabled' => $resultsDisabled,
-            'feedbackType' => (int) $quiz->getFeedbackType(),
+            'feedbackType' => $feedbackType,
             'reviewAnswers' => 1 === (int) $quiz->getReviewAnswers(),
             'saveCorrectAnswers' => (int) ($quiz->getSaveCorrectAnswers() ?? 0),
             'showScore' => $showScore,
             'showTotalScore' => $showScore && false === $pageResultConfiguration['hideTotalScore'],
-            'showQuestionScore' => $showScore && false === $pageResultConfiguration['hideQuestionScore'],
-            'showCorrections' => $showCorrections,
-            'showOnlyIncorrect' => $showOnlyIncorrect,
+            'showQuestionScore' => $showQuestionScore,
+            'showQuestionStatus' => $showQuestionScore,
+            'showQuestionDetails' => $showQuestionDetails,
+            'showCorrections' => $showExpectedAnswers,
+            'showExpectedAnswers' => $showExpectedAnswers,
+            'showStudentAnswers' => !$showOnlyCorrectAnswers,
+            'showOnlyCorrectAnswers' => $showOnlyCorrectAnswers,
             'showFeedback' => $showFeedback,
             'hideCorrectAnsweredQuestions' => $pageResultConfiguration['hideCorrectAnsweredQuestions'],
             'showCategoryTable' => false === $pageResultConfiguration['hideCategoryTable'],
+            'showRanking' => \in_array($resultsDisabled, [
+                self::RESULT_RANKING,
+                self::RESULT_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
+            ], true),
+            'showRadar' => self::RESULT_RADAR === $resultsDisabled,
             'isLastAllowedAttempt' => $isLastAllowedAttempt,
             'pageResultConfiguration' => $pageResultConfiguration,
         ];
+    }
+
+    /**
+     * @param array<string, mixed> $visibility
+     *
+     * @return array<string, mixed>
+     */
+    private function getManagerResultVisibility(array $visibility): array
+    {
+        $visibility['showScore'] = true;
+        $visibility['showTotalScore'] = true;
+        $visibility['showQuestionScore'] = true;
+        $visibility['showQuestionStatus'] = true;
+        $visibility['showQuestionDetails'] = true;
+        $visibility['showCorrections'] = true;
+        $visibility['showExpectedAnswers'] = true;
+        $visibility['showStudentAnswers'] = true;
+        $visibility['showOnlyCorrectAnswers'] = false;
+        $visibility['showFeedback'] = true;
+
+        return $visibility;
     }
 
     /**
@@ -567,7 +635,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             'parent' => $this->normalizeParentMediaQuestion($question),
             'score' => !$isStructuralContent && true === ($visibility['showQuestionScore'] ?? false) ? $questionScore : null,
             'maxScore' => !$isStructuralContent && true === ($visibility['showQuestionScore'] ?? false) ? $maxScore : null,
-            'isCorrect' => !$isStructuralContent && true === ($visibility['showQuestionScore'] ?? false) ? $isCorrect : null,
+            'isCorrect' => !$isStructuralContent && true === ($visibility['showQuestionStatus'] ?? false) ? $isCorrect : null,
             'requiresManualCorrection' => $requiresManualCorrection,
             'pendingCorrection' => $pendingCorrection,
             'canCorrect' => $canManage && $requiresManualCorrection,
@@ -675,11 +743,15 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         }
 
         if (\in_array($type, [3, 27], true)) {
-            return $this->normalizeFillBlankAnswer($question, $rows, $showQuestionCorrection);
+            return $this->normalizeFillBlankAnswer($question, $rows, $visibility, $showQuestionCorrection);
         }
 
         if (\in_array($type, [4, 19, 24, 25], true)) {
             return $this->normalizeMatchingAnswer($question, $rows, $visibility, $showQuestionCorrection);
+        }
+
+        if (self::DRAGGABLE === $type) {
+            return $this->normalizeDraggableAnswer($question, $rows, $visibility, $showQuestionCorrection);
         }
 
         if (\in_array($type, [28, 29], true)) {
@@ -687,11 +759,11 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         }
 
         if (16 === $type) {
-            return $this->normalizeCalculatedAnswer($question, $rows, $showQuestionCorrection);
+            return $this->normalizeCalculatedAnswer($question, $rows, $visibility, $showQuestionCorrection);
         }
 
         if (\in_array($type, [6, 26], true)) {
-            return $this->normalizeHotspotAnswer($question, $rows, $showQuestionCorrection);
+            return $this->normalizeHotspotAnswer($question, $rows, $visibility, $showQuestionCorrection);
         }
 
         if (5 === $type) {
@@ -747,38 +819,50 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         $degreeCertaintyChoices = $isDegreeCertainty ? $this->getSavedTrueFalseDegreeCertaintyChoices($rows) : [];
         $options = $this->getQuestionOptions($question);
         $choices = [];
+        $showStudentAnswers = true === ($visibility['showStudentAnswers'] ?? true);
+        $showExpectedAnswers = $showQuestionCorrection && true === ($visibility['showExpectedAnswers'] ?? false);
+        $showOnlyCorrectAnswers = true === ($visibility['showOnlyCorrectAnswers'] ?? false);
+        $showFeedback = true === ($visibility['showFeedback'] ?? false);
 
         foreach ($this->getOrderedAnswers($question) as $answer) {
             $answerId = (int) $answer->getIid();
+            $isCorrectAnswer = 1 === (int) $answer->getCorrect();
+            if ($showOnlyCorrectAnswers && !$isTrueFalse && !$isCorrectAnswer) {
+                continue;
+            }
+
+            $isSelected = isset($selectedIds[$answerId]);
             $choice = [
                 'id' => $answerId,
                 'answer' => $answer->getAnswer(),
-                'selected' => isset($selectedIds[$answerId]),
+                'selected' => $showStudentAnswers && $isSelected,
             ];
 
             if ($isTrueFalse) {
                 if ($isDegreeCertainty) {
                     $selectedOption = (int) ($degreeCertaintyChoices[$answerId]['choice'] ?? 0);
                     $selectedDegree = (int) ($degreeCertaintyChoices[$answerId]['degree'] ?? 0);
-                    $choice['selectedDegreeId'] = $selectedDegree ?: null;
-                    $choice['selectedDegreeLabel'] = $this->getOptionTitle($options, $selectedDegree);
+                    $choice['selectedDegreeId'] = $showStudentAnswers && 0 < $selectedDegree ? $selectedDegree : null;
+                    $choice['selectedDegreeLabel'] = $showStudentAnswers ? $this->getOptionTitle($options, $selectedDegree) : '';
                 } else {
                     $selectedOption = $trueFalseChoices[$answerId] ?? 0;
                 }
 
-                $choice['selectedOptionId'] = $selectedOption ?: null;
-                $choice['selectedOptionLabel'] = $this->getOptionTitle($options, $selectedOption);
+                $choice['selectedOptionId'] = $showStudentAnswers && 0 < $selectedOption ? $selectedOption : null;
+                $choice['selectedOptionLabel'] = $showStudentAnswers ? $this->getOptionTitle($options, $selectedOption) : '';
             }
 
-            if ($showQuestionCorrection) {
+            if ($showExpectedAnswers) {
                 if ($isTrueFalse) {
                     $choice['correctOptionId'] = (int) $answer->getCorrect();
                     $choice['correctOptionLabel'] = $this->getOptionTitle($options, (int) $answer->getCorrect());
                 } else {
-                    $choice['correct'] = 1 === (int) $answer->getCorrect();
+                    $choice['correct'] = $isCorrectAnswer;
                 }
+            }
 
-                if (true === ($visibility['showFeedback'] ?? false) && '' !== (string) $answer->getComment()) {
+            if ($showFeedback && '' !== (string) $answer->getComment()) {
+                if ($showExpectedAnswers || $isSelected || ($showOnlyCorrectAnswers && $isCorrectAnswer)) {
                     $choice['comment'] = (string) $answer->getComment();
                 }
             }
@@ -823,23 +907,25 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
      *
      * @return array<string, mixed>
      */
-    private function normalizeFillBlankAnswer(CQuizQuestion $question, array $rows, bool $showQuestionCorrection): array
+    private function normalizeFillBlankAnswer(CQuizQuestion $question, array $rows, array $visibility, bool $showQuestionCorrection): array
     {
         $row = $rows[0] ?? null;
         $answer = $this->getFirstAnswer($question);
         $teacherInfo = $answer instanceof CQuizAnswer ? $this->parseFillBlankAnswer($answer->getAnswer(), false) : null;
         $studentInfo = $row instanceof TrackEAttempt ? $this->parseFillBlankAnswer($row->getAnswer(), true) : null;
+        $showStudentAnswers = true === ($visibility['showStudentAnswers'] ?? true);
+        $showExpectedAnswers = $showQuestionCorrection && true === ($visibility['showExpectedAnswers'] ?? false);
         $blankCount = null !== $teacherInfo ? \count($teacherInfo['words']) : \count($studentInfo['student_answer'] ?? []);
         $blanks = [];
 
         for ($index = 0; $index < $blankCount; ++$index) {
             $blank = [
                 'position' => $index + 1,
-                'studentAnswer' => (string) ($studentInfo['student_answer'][$index] ?? ''),
-                'studentScore' => (string) ($studentInfo['student_score'][$index] ?? ''),
+                'studentAnswer' => $showStudentAnswers ? (string) ($studentInfo['student_answer'][$index] ?? '') : '',
+                'studentScore' => $showStudentAnswers ? (string) ($studentInfo['student_score'][$index] ?? '') : '',
             ];
 
-            if ($showQuestionCorrection && null !== $teacherInfo) {
+            if ($showExpectedAnswers && null !== $teacherInfo) {
                 $blank['correctAnswer'] = (string) ($teacherInfo['words'][$index] ?? '');
             }
 
@@ -850,6 +936,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             'kind' => 'fill_blanks',
             'text' => (string) ($teacherInfo['text'] ?? ''),
             'blanks' => $blanks,
+            'showStudentAnswers' => $showStudentAnswers,
         ];
     }
 
@@ -865,6 +952,9 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         $options = [];
         $prompts = [];
         $answers = $this->getOrderedAnswers($question);
+        $showStudentAnswers = true === ($visibility['showStudentAnswers'] ?? true);
+        $showExpectedAnswers = $showQuestionCorrection && true === ($visibility['showExpectedAnswers'] ?? false);
+        $showFeedback = true === ($visibility['showFeedback'] ?? false);
 
         foreach ($answers as $answer) {
             $answerId = (int) $answer->getIid();
@@ -886,17 +976,21 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
                 continue;
             }
 
+            $hasStudentAnswer = isset($selected[$answerId]);
             $prompt = [
                 'id' => $answerId,
                 'answer' => $answer->getAnswer(),
-                'selectedOptionId' => $selected[$answerId] ?? null,
-                'selectedOptionAnswer' => isset($selected[$answerId]) ? (string) ($options[$selected[$answerId]]['answer'] ?? '') : '',
+                'selectedOptionId' => $showStudentAnswers ? ($selected[$answerId] ?? null) : null,
+                'selectedOptionAnswer' => $showStudentAnswers && $hasStudentAnswer ? (string) ($options[$selected[$answerId]]['answer'] ?? '') : '',
             ];
 
-            if ($showQuestionCorrection) {
+            if ($showExpectedAnswers) {
                 $prompt['correctOptionId'] = $correct;
                 $prompt['correctOptionAnswer'] = (string) ($options[$correct]['answer'] ?? '');
-                if (true === ($visibility['showFeedback'] ?? false) && '' !== (string) $answer->getComment()) {
+            }
+
+            if ($showFeedback && '' !== (string) $answer->getComment()) {
+                if ($showExpectedAnswers || $hasStudentAnswer) {
                     $prompt['comment'] = (string) $answer->getComment();
                 }
             }
@@ -913,6 +1007,55 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
 
     /**
      * @param array<int, TrackEAttempt> $rows
+     *
+     * @return array<string, mixed>
+     */
+    private function normalizeDraggableAnswer(CQuizQuestion $question, array $rows, array $visibility, bool $showQuestionCorrection): array
+    {
+        $savedPositions = $this->getSavedMatchingChoices($rows);
+        $studentItems = [];
+        $expectedItems = [];
+        $showStudentAnswers = true === ($visibility['showStudentAnswers'] ?? true);
+        $showExpectedAnswers = $showQuestionCorrection && true === ($visibility['showExpectedAnswers'] ?? false);
+
+        foreach ($this->getOrderedAnswers($question) as $answer) {
+            $answerId = (int) $answer->getIid();
+            $targetPosition = (int) ($answer->getCorrect() ?? 0);
+            if (0 >= $targetPosition) {
+                continue;
+            }
+
+            $selectedPosition = $savedPositions[$answerId] ?? null;
+            $item = [
+                'id' => $answerId,
+                'answer' => $answer->getAnswer(),
+                'selectedPosition' => $selectedPosition,
+                'correctPosition' => $showQuestionCorrection ? $targetPosition : null,
+                'isCorrect' => null !== $selectedPosition && $selectedPosition === $targetPosition,
+            ];
+
+            if ($showStudentAnswers && null !== $selectedPosition) {
+                $studentItems[] = $item;
+            }
+
+            if ($showExpectedAnswers) {
+                $expectedItems[] = $item;
+            }
+        }
+
+        usort($studentItems, static fn (array $left, array $right): int => ((int) ($left['selectedPosition'] ?? 0)) <=> ((int) ($right['selectedPosition'] ?? 0)));
+        usort($expectedItems, static fn (array $left, array $right): int => ((int) ($left['correctPosition'] ?? 0)) <=> ((int) ($right['correctPosition'] ?? 0)));
+
+        return [
+            'kind' => 'draggable',
+            'orientation' => \in_array((string) $question->getExtra(), ['h', 'v'], true) ? (string) $question->getExtra() : 'h',
+            'studentItems' => $studentItems,
+            'expectedItems' => $showExpectedAnswers ? $expectedItems : [],
+        ];
+    }
+
+    /**
+     * @param array<int, TrackEAttempt> $rows
      * @param array<string, mixed>      $visibility
      *
      * @return array<string, mixed>
@@ -920,18 +1063,31 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
     private function normalizeDropdownAnswer(CQuizQuestion $question, array $rows, array $visibility, bool $showQuestionCorrection): array
     {
         $selectedId = $this->getFirstSavedAnswerId($rows);
+        $showStudentAnswers = true === ($visibility['showStudentAnswers'] ?? true);
+        $showExpectedAnswers = $showQuestionCorrection && true === ($visibility['showExpectedAnswers'] ?? false);
+        $showOnlyCorrectAnswers = true === ($visibility['showOnlyCorrectAnswers'] ?? false);
+        $showFeedback = true === ($visibility['showFeedback'] ?? false);
         $options = [];
         foreach ($this->getOrderedAnswers($question) as $answer) {
             $answerId = (int) $answer->getIid();
+            $isCorrectAnswer = 1 === (int) $answer->getCorrect();
+            if ($showOnlyCorrectAnswers && !$isCorrectAnswer) {
+                continue;
+            }
+
+            $isSelected = $answerId === $selectedId;
             $option = [
                 'id' => $answerId,
                 'answer' => $answer->getAnswer(),
-                'selected' => $answerId === $selectedId,
+                'selected' => $showStudentAnswers && $isSelected,
             ];
 
-            if ($showQuestionCorrection) {
-                $option['correct'] = 1 === (int) $answer->getCorrect();
-                if (true === ($visibility['showFeedback'] ?? false) && '' !== (string) $answer->getComment()) {
+            if ($showExpectedAnswers) {
+                $option['correct'] = $isCorrectAnswer;
+            }
+
+            if ($showFeedback && '' !== (string) $answer->getComment()) {
+                if ($showExpectedAnswers || $isSelected || ($showOnlyCorrectAnswers && $isCorrectAnswer)) {
                     $option['comment'] = (string) $answer->getComment();
                 }
             }
@@ -941,7 +1097,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
 
         return [
             'kind' => 'dropdown',
-            'selectedId' => $selectedId ?: null,
+            'selectedId' => $showStudentAnswers && 0 < $selectedId ? $selectedId : null,
             'options' => $options,
         ];
     }
@@ -951,7 +1107,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
      *
      * @return array<string, mixed>
      */
-    private function normalizeCalculatedAnswer(CQuizQuestion $question, array $rows, bool $showQuestionCorrection): array
+    private function normalizeCalculatedAnswer(CQuizQuestion $question, array $rows, array $visibility, bool $showQuestionCorrection): array
     {
         $row = $rows[0] ?? null;
         $studentAnswer = '';
@@ -965,11 +1121,14 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             ? $this->parseCalculatedTeacherAnswer((string) $teacherAnswer->getAnswer())
             : ['text' => '', 'expectedAnswer' => ''];
 
+        $showStudentAnswers = true === ($visibility['showStudentAnswers'] ?? true);
+        $showExpectedAnswers = $showQuestionCorrection && true === ($visibility['showExpectedAnswers'] ?? false);
+
         return [
             'kind' => 'calculated',
             'text' => (string) ($parsedTeacherAnswer['text'] ?? ''),
-            'studentAnswer' => $studentAnswer,
-            'expectedAnswer' => $showQuestionCorrection ? (string) ($parsedTeacherAnswer['expectedAnswer'] ?? '') : null,
+            'studentAnswer' => $showStudentAnswers ? $studentAnswer : '',
+            'expectedAnswer' => $showExpectedAnswers ? (string) ($parsedTeacherAnswer['expectedAnswer'] ?? '') : null,
         ];
     }
 
@@ -1023,13 +1182,15 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
      *
      * @return array<string, mixed>
      */
-    private function normalizeHotspotAnswer(CQuizQuestion $question, array $rows, bool $showQuestionCorrection): array
+    private function normalizeHotspotAnswer(CQuizQuestion $question, array $rows, array $visibility, bool $showQuestionCorrection): array
     {
         $row = $rows[0] ?? null;
-        $studentPoints = $row instanceof TrackEAttempt ? $this->parseHotspotCoordinates((string) $row->getAnswer()) : [];
+        $showStudentAnswers = true === ($visibility['showStudentAnswers'] ?? true);
+        $showExpectedAnswers = $showQuestionCorrection && true === ($visibility['showExpectedAnswers'] ?? false);
+        $studentPoints = $showStudentAnswers && $row instanceof TrackEAttempt ? $this->parseHotspotCoordinates((string) $row->getAnswer()) : [];
         $zones = [];
 
-        if ($showQuestionCorrection) {
+        if ($showExpectedAnswers) {
             foreach ($this->getOrderedAnswers($question) as $answer) {
                 $hotspotType = (string) ($answer->getHotspotType() ?: 'square');
                 if (!\in_array($hotspotType, ['square', 'circle', 'poly'], true)) {
@@ -1131,11 +1292,14 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             ];
         }
 
+        $showStudentAnswers = true === ($visibility['showStudentAnswers'] ?? true);
+
         return [
             'kind' => 'free_answer',
-            'studentAnswer' => $row->getAnswer(),
+            'studentAnswer' => $showStudentAnswers ? $row->getAnswer() : '',
             'teacherComment' => true === ($visibility['showFeedback'] ?? false) && '' !== $row->getTeacherComment() ? $row->getTeacherComment() : null,
             'marks' => (float) $row->getMarks(),
+            'showStudentAnswers' => $showStudentAnswers,
         ];
     }
 
@@ -1149,14 +1313,20 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
     {
         $row = $rows[0] ?? null;
 
+        $showStudentAnswers = true === ($visibility['showStudentAnswers'] ?? true);
+        $annotationAnswer = $showStudentAnswers && $row instanceof TrackEAttempt
+            ? $this->parseAnnotationAnswer((string) $row->getAnswer())
+            : ['paths' => [], 'texts' => []];
+
         return [
             'kind' => 'annotation',
             'imageUrl' => $this->getHotspotImageUrl($question),
             'imageName' => $this->getHotspotImageName($question),
-            'paths' => $row instanceof TrackEAttempt ? $this->parseAnnotationAnswer((string) $row->getAnswer())['paths'] : [],
-            'texts' => $row instanceof TrackEAttempt ? $this->parseAnnotationAnswer((string) $row->getAnswer())['texts'] : [],
+            'paths' => $annotationAnswer['paths'],
+            'texts' => $annotationAnswer['texts'],
             'teacherComment' => $row instanceof TrackEAttempt && true === ($visibility['showFeedback'] ?? false) && '' !== $row->getTeacherComment() ? $row->getTeacherComment() : null,
             'marks' => $row instanceof TrackEAttempt ? (float) $row->getMarks() : 0.0,
+            'showStudentAnswers' => $showStudentAnswers,
         ];
     }
 
@@ -1243,11 +1413,14 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             ];
         }
 
+        $showStudentAnswers = true === ($visibility['showStudentAnswers'] ?? true);
+
         return [
             'kind' => 'upload_answer',
-            'files' => $this->normalizeAttemptFiles($row),
+            'files' => $showStudentAnswers ? $this->normalizeAttemptFiles($row) : [],
             'teacherComment' => true === ($visibility['showFeedback'] ?? false) && '' !== $row->getTeacherComment() ? $row->getTeacherComment() : null,
             'marks' => (float) $row->getMarks(),
+            'showStudentAnswers' => $showStudentAnswers,
         ];
     }
 
@@ -1269,11 +1442,14 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             ];
         }
 
+        $showStudentAnswers = true === ($visibility['showStudentAnswers'] ?? true);
+
         return [
             'kind' => 'oral_expression',
-            'files' => $this->normalizeAttemptFiles($row, true),
+            'files' => $showStudentAnswers ? $this->normalizeAttemptFiles($row, true) : [],
             'teacherComment' => true === ($visibility['showFeedback'] ?? false) && '' !== $row->getTeacherComment() ? $row->getTeacherComment() : null,
             'marks' => (float) $row->getMarks(),
+            'showStudentAnswers' => $showStudentAnswers,
         ];
     }
 
@@ -1619,6 +1795,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             12 => 'Multiple answer combination true/false',
             14 => 'Global multiple answer',
             17 => 'Unique answer with images',
+            18 => 'Sequence ordering',
             19 => 'Matching draggable',
             20 => 'Annotation',
             21 => 'Reading comprehension',
@@ -1636,31 +1813,79 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
     }
 
     /**
-     * @return array<string, string>
+     * @return array<int, array<string, mixed>>
      */
-    private function getLegacyUrls(CQuiz $quiz, TrackEExercise $attempt, Course $course, ?Session $session, Request $request): array
+    private function getRanking(CQuiz $quiz, Course $course, ?Session $session, TrackEExercise $currentAttempt): array
     {
-        $baseParams = [
-            'exerciseId' => (int) $quiz->getIid(),
-            'cid' => (int) $course->getId(),
-            'sid' => (int) ($session?->getId() ?? 0),
-        ];
-        $resultParams = [
-            'cid' => (int) $course->getId(),
-            'sid' => (int) ($session?->getId() ?? $request->query->getInt('sid')),
-            'gid' => $request->query->getInt('gid'),
-            'exe_id' => (int) $attempt->getExeId(),
-            'learnpath_id' => (int) $attempt->getOrigLpId(),
-            'learnpath_item_id' => (int) $attempt->getOrigLpItemId(),
-            'learnpath_item_view_id' => (int) $attempt->getOrigLpItemViewId(),
-            'origin' => (string) $request->query->get('origin', ''),
-        ];
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('attempt')
+            ->from(TrackEExercise::class, 'attempt')
+            ->andWhere('IDENTITY(attempt.quiz) = :exerciseId')
+            ->andWhere('IDENTITY(attempt.course) = :courseId')
+            ->andWhere('attempt.status = :status')
+            ->setParameter('exerciseId', (int) $quiz->getIid(), Types::INTEGER)
+            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
+            ->setParameter('status', self::STATUS_COMPLETED)
+            ->orderBy('attempt.score', 'DESC')
+            ->addOrderBy('attempt.exeDate', 'ASC')
+        ;
 
-        return [
-            'overview' => '/main/exercise/overview.php?'.http_build_query($baseParams),
-            'legacyResult' => api_get_path(WEB_CODE_PATH).'exercise/exercise_result.php?'.http_build_query($resultParams),
-            'results' => '/main/exercise/exercise_report.php?'.http_build_query($baseParams),
-            'list' => '/main/exercise/exercise.php?'.http_build_query($baseParams),
-        ];
+        if (null !== $session) {
+            $queryBuilder
+                ->andWhere('IDENTITY(attempt.session) = :sessionId')
+                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
+            ;
+        } else {
+            $queryBuilder->andWhere('attempt.session IS NULL');
+        }
+
+        $rows = $queryBuilder->getQuery()->getResult();
+        $bestAttemptsByUser = [];
+        foreach ($rows as $row) {
+            if (!$row instanceof TrackEExercise) {
+                continue;
+            }
+
+            $userId = (int) $row->getUser()->getId();
+            if (0 >= $userId || isset($bestAttemptsByUser[$userId])) {
+                continue;
+            }
+
+            $bestAttemptsByUser[$userId] = $row;
+        }
+
+        $ranking = [];
+        $position = 0;
+        $lastScore = null;
+        foreach (array_values($bestAttemptsByUser) as $index => $row) {
+            $score = (float) $row->getScore();
+            if (null === $lastScore || $score < $lastScore) {
+                $position = $index + 1;
+            }
+            $lastScore = $score;
+
+            $ranking[] = [
+                'position' => $position,
+                'userId' => (int) $row->getUser()->getId(),
+                'user' => $this->getUserDisplayName($row->getUser()),
+                'score' => $score,
+                'maxScore' => (float) $row->getMaxScore(),
+                'date' => $row->getExeDate()->format(DateTimeInterface::ATOM),
+                'currentUser' => (int) $row->getUser()->getId() === (int) $currentAttempt->getUser()->getId(),
+            ];
+        }
+
+        return $ranking;
     }
+
+    private function getUserDisplayName(User $user): string
+    {
+        $username = method_exists($user, 'getUsername') ? trim((string) $user->getUsername()) : '';
+        if ('' !== $username) {
+            return $username;
+        }
+
+        return 'User #'.(int) $user->getId();
+    }
+
 }

@@ -17,6 +17,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
+use Chamilo\CourseBundle\Entity\CQuizQuestionOption;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
 use DateTime;
@@ -42,12 +43,15 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
 {
     private const VISIBILITY_PUBLISHED = 2;
     private const STATUS_INCOMPLETE = 'incomplete';
+    private const FEEDBACK_TYPE_DIRECT = 1;
+    private const FEEDBACK_TYPE_POPUP = 3;
     private const UNIQUE_TYPES = [1, 10, 17, 21];
     private const MULTIPLE_TYPES = [2, 9, 14];
     private const TRUE_FALSE_TYPES = [11, 12];
     private const TRUE_FALSE_DEGREE_CERTAINTY_TYPES = [22];
     private const FILL_BLANK_TYPES = [3, 27];
     private const MATCHING_TYPES = [4, 19, 24, 25];
+    private const DRAGGABLE_TYPES = [18];
     private const DROPDOWN_TYPES = [28, 29];
     private const CALCULATED_TYPES = [16];
     private const FREE_ANSWER_TYPES = [5];
@@ -108,6 +112,8 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
         }
 
         $rows = $this->buildDraftRows($question, $data->answer, max(0, (int) $data->secondsSpent));
+        $feedback = $this->buildFeedback($quiz, $question, $rows);
+        $marks = [] !== $feedback ? (float) ($feedback['score'] ?? 0.0) : 0.0;
         $this->deletePreviousDraftRows($attempt, $questionId);
 
         foreach ($rows as $row) {
@@ -117,7 +123,7 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
                 ->setQuestionId($questionId)
                 ->setAnswer($row['answer'])
                 ->setTeacherComment('')
-                ->setMarks(0.0)
+                ->setMarks($marks)
                 ->setPosition($row['position'])
                 ->setTms(new DateTime())
                 ->setSecondsSpent($row['secondsSpent'])
@@ -137,6 +143,7 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
         $response->answeredQuestionIds = $this->getAnsweredQuestionIds($attemptId);
         $response->answeredCount = \count($response->answeredQuestionIds);
         $response->canFinish = false;
+        $response->feedback = $feedback;
 
         return $response;
     }
@@ -340,6 +347,10 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
 
         if (\in_array($type, self::MATCHING_TYPES, true)) {
             return $this->buildMatchingRows($payload, $secondsSpent);
+        }
+
+        if (\in_array($type, self::DRAGGABLE_TYPES, true)) {
+            return $this->buildDraggableRows($question, $payload, $secondsSpent);
         }
 
         if (\in_array($type, self::DROPDOWN_TYPES, true)) {
@@ -599,6 +610,46 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
      *
      * @return array<int, array{answer: string, position: int, secondsSpent: int}>
      */
+    private function buildDraggableRows(CQuizQuestion $question, array $payload, int $secondsSpent): array
+    {
+        $order = $payload['order'] ?? $payload['value'] ?? [];
+        if (!\is_array($order)) {
+            return [];
+        }
+
+        $validAnswerIds = [];
+        foreach ($this->getOrderedAnswers($question) as $answer) {
+            if (0 < (int) ($answer->getCorrect() ?? 0)) {
+                $validAnswerIds[(int) $answer->getIid()] = true;
+            }
+        }
+
+        $rows = [];
+        $position = 1;
+        $usedAnswerIds = [];
+        foreach ($order as $answerId) {
+            $safeAnswerId = $this->toPositiveInt($answerId);
+            if (0 >= $safeAnswerId || !isset($validAnswerIds[$safeAnswerId]) || isset($usedAnswerIds[$safeAnswerId])) {
+                continue;
+            }
+
+            $rows[] = [
+                'answer' => (string) $position,
+                'position' => $safeAnswerId,
+                'secondsSpent' => $secondsSpent,
+            ];
+            $usedAnswerIds[$safeAnswerId] = true;
+            ++$position;
+        }
+
+        return $rows;
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     *
+     * @return array<int, array{answer: string, position: int, secondsSpent: int}>
+     */
     private function buildDropdownRows(array $payload, int $secondsSpent): array
     {
         if (isset($payload['choices'])) {
@@ -824,6 +875,617 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
         ;
 
         return $answer instanceof CQuizAnswer ? $answer : null;
+    }
+
+    /**
+     * @return list<CQuizAnswer>
+     */
+    private function getOrderedAnswers(CQuizQuestion $question): array
+    {
+        return $this->entityManager->createQueryBuilder()
+            ->select('answer')
+            ->from(CQuizAnswer::class, 'answer')
+            ->andWhere('IDENTITY(answer.question) = :questionId')
+            ->setParameter('questionId', (int) $question->getIid(), Types::INTEGER)
+            ->orderBy('answer.position', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+
+    /**
+     * @param array<int, array{answer: string, position: int, secondsSpent: int}> $rows
+     *
+     * @return array<string, mixed>
+     */
+    private function buildFeedback(CQuiz $quiz, CQuizQuestion $question, array $rows): array
+    {
+        $feedbackType = (int) $quiz->getFeedbackType();
+        if (!\in_array($feedbackType, [self::FEEDBACK_TYPE_DIRECT, self::FEEDBACK_TYPE_POPUP], true)) {
+            return [];
+        }
+
+        $answers = $this->getQuestionAnswerMap($question);
+        $options = $this->getQuestionOptionMap($question);
+        $score = $this->scoreFeedbackQuestion($quiz, $question, $answers, $options, $rows);
+        if (0 === (int) $quiz->getPropagateNeg() && 0 > $score) {
+            $score = 0.0;
+        }
+
+        $maxScore = $this->getQuestionWeight($question, $answers);
+        $status = $this->getFeedbackStatus($question, $score, $maxScore, $rows);
+
+        return [
+            'enabled' => true,
+            'mode' => self::FEEDBACK_TYPE_POPUP === $feedbackType ? 'popup' : 'direct',
+            'questionId' => (int) $question->getIid(),
+            'status' => $status,
+            'title' => $this->getFeedbackTitle($status),
+            'score' => $score,
+            'maxScore' => $maxScore,
+            'entries' => $this->buildFeedbackEntries($question, $answers, $rows),
+        ];
+    }
+
+    /**
+     * @return array<int, CQuizAnswer>
+     */
+    private function getQuestionAnswerMap(CQuizQuestion $question): array
+    {
+        $answers = [];
+        foreach ($this->getOrderedAnswers($question) as $answer) {
+            if (null !== $answer->getIid()) {
+                $answers[(int) $answer->getIid()] = $answer;
+            }
+        }
+
+        return $answers;
+    }
+
+    /**
+     * @return array<int, CQuizQuestionOption>
+     */
+    private function getQuestionOptionMap(CQuizQuestion $question): array
+    {
+        $options = [];
+        foreach ($question->getOptions() as $option) {
+            if ($option instanceof CQuizQuestionOption && null !== $option->getIid()) {
+                $options[(int) $option->getIid()] = $option;
+            }
+        }
+
+        return $options;
+    }
+
+    /**
+     * @param array<int, CQuizAnswer>         $answers
+     * @param array<int, CQuizQuestionOption> $options
+     * @param array<int, array{answer: string, position: int, secondsSpent: int}> $rows
+     */
+    private function scoreFeedbackQuestion(CQuiz $quiz, CQuizQuestion $question, array $answers, array $options, array $rows): float
+    {
+        $type = (int) $question->getType();
+
+        if (\in_array($type, self::UNIQUE_TYPES, true) || \in_array($type, self::DROPDOWN_TYPES, true)) {
+            return $this->scoreSelectedAnswerRows($answers, $rows);
+        }
+
+        if (\in_array($type, self::MULTIPLE_TYPES, true)) {
+            if (\in_array($type, [9, 28], true)) {
+                return $this->scoreCombinationRows($question, $answers, $rows);
+            }
+
+            return $this->scoreSelectedAnswerRows($answers, $rows);
+        }
+
+        if (\in_array($type, self::TRUE_FALSE_TYPES, true)) {
+            return $this->scoreTrueFalseRows($question, $answers, $options, $rows, false);
+        }
+
+        if (\in_array($type, self::TRUE_FALSE_DEGREE_CERTAINTY_TYPES, true)) {
+            return $this->scoreTrueFalseRows($question, $answers, $options, $rows, true);
+        }
+
+        if (\in_array($type, self::FILL_BLANK_TYPES, true)) {
+            return $this->scoreFillBlankRowsForFeedback($quiz, $question, $rows);
+        }
+
+        if (\in_array($type, self::MATCHING_TYPES, true)) {
+            if (\in_array($type, [24, 25], true)) {
+                return $this->scoreMatchingCombinationRows($question, $answers, $rows);
+            }
+
+            return $this->scoreMatchingRowsForFeedback($answers, $rows);
+        }
+
+        if (\in_array($type, self::DRAGGABLE_TYPES, true)) {
+            return $this->scoreDraggableRowsForFeedback($answers, $rows);
+        }
+
+        if (\in_array($type, self::CALCULATED_TYPES, true)) {
+            return $this->scoreCalculatedRowsForFeedback($question, $answers, $rows);
+        }
+
+        return 0.0;
+    }
+
+    /**
+     * @param array<int, CQuizAnswer> $answers
+     * @param array<int, array{answer: string, position: int, secondsSpent: int}> $rows
+     */
+    private function scoreSelectedAnswerRows(array $answers, array $rows): float
+    {
+        $score = 0.0;
+        foreach ($rows as $row) {
+            $answerId = (int) $row['answer'];
+            if (isset($answers[$answerId])) {
+                $score += (float) $answers[$answerId]->getPonderation();
+            }
+        }
+
+        return $score;
+    }
+
+    /**
+     * @param array<int, CQuizAnswer> $answers
+     * @param array<int, array{answer: string, position: int, secondsSpent: int}> $rows
+     */
+    private function scoreCombinationRows(CQuizQuestion $question, array $answers, array $rows): float
+    {
+        $selected = array_flip($this->getRowAnswerIds($rows));
+        foreach ($answers as $answer) {
+            $answerId = (int) $answer->getIid();
+            $isCorrect = 1 === (int) $answer->getCorrect();
+            $isSelected = isset($selected[$answerId]);
+            if ($isCorrect !== $isSelected) {
+                return 0.0;
+            }
+        }
+
+        $firstAnswer = reset($answers);
+        if ($firstAnswer instanceof CQuizAnswer && 0.0 !== (float) $firstAnswer->getPonderation()) {
+            return (float) $firstAnswer->getPonderation();
+        }
+
+        return (float) $question->getPonderation();
+    }
+
+    /**
+     * @param array<int, CQuizAnswer>         $answers
+     * @param array<int, CQuizQuestionOption> $options
+     * @param array<int, array{answer: string, position: int, secondsSpent: int}> $rows
+     */
+    private function scoreTrueFalseRows(CQuizQuestion $question, array $answers, array $options, array $rows, bool $withDegreeCertainty): float
+    {
+        [$trueScore, $falseScore, $doubtScore] = $this->getTrueFalseScores((string) $question->getExtra());
+        $choices = [];
+        foreach ($rows as $row) {
+            $parts = explode(':', (string) $row['answer']);
+            $answerId = (int) ($parts[0] ?? 0);
+            $optionId = (int) ($parts[1] ?? 0);
+            $degreeId = (int) ($parts[2] ?? 0);
+            if (0 < $answerId && 0 < $optionId) {
+                $choices[$answerId] = ['choice' => $optionId, 'degree' => $degreeId];
+            }
+        }
+
+        $score = 0.0;
+        foreach ($answers as $answer) {
+            $answerId = (int) $answer->getIid();
+            $studentChoice = (int) ($choices[$answerId]['choice'] ?? 0);
+            if (0 >= $studentChoice) {
+                $score += $withDegreeCertainty ? 0.0 : $doubtScore;
+                continue;
+            }
+
+            if ($this->isTrueFalseChoiceCorrect($studentChoice, (int) $answer->getCorrect(), $options)) {
+                if (!$withDegreeCertainty) {
+                    $score += $trueScore;
+                    continue;
+                }
+
+                $degreePosition = $this->getTrueFalseOptionPosition((int) ($choices[$answerId]['degree'] ?? 0), $options);
+                $score += 3 <= $degreePosition && 9 > $degreePosition ? $trueScore : $doubtScore;
+                continue;
+            }
+
+            if ($withDegreeCertainty) {
+                $degreePosition = $this->getTrueFalseOptionPosition((int) ($choices[$answerId]['degree'] ?? 0), $options);
+                $score += 3 <= $degreePosition && 9 > $degreePosition ? $falseScore : $doubtScore;
+                continue;
+            }
+
+            $optionTitle = $this->getTrueFalseOptionTitle($studentChoice, $options);
+            $score += \in_array($optionTitle, ["Don't know", 'DoubtScore'], true) ? $doubtScore : $falseScore;
+        }
+
+        return $score;
+    }
+
+    /**
+     * @return array{0: float, 1: float, 2: float}
+     */
+    private function getTrueFalseScores(string $extra): array
+    {
+        if ('' === trim($extra)) {
+            return [1.0, -0.5, 0.0];
+        }
+
+        $parts = explode(':', $extra);
+
+        return [
+            isset($parts[0]) ? (float) trim($parts[0]) : 1.0,
+            isset($parts[1]) ? (float) trim($parts[1]) : -0.5,
+            isset($parts[2]) ? (float) trim($parts[2]) : 0.0,
+        ];
+    }
+
+    /**
+     * @param array<int, CQuizQuestionOption> $options
+     */
+    private function isTrueFalseChoiceCorrect(int $studentChoice, int $correctChoice, array $options): bool
+    {
+        if (0 >= $studentChoice || 0 >= $correctChoice) {
+            return false;
+        }
+
+        if ($studentChoice === $correctChoice) {
+            return true;
+        }
+
+        $studentPosition = $this->getTrueFalseOptionPosition($studentChoice, $options);
+        $correctPosition = $this->getTrueFalseOptionPosition($correctChoice, $options);
+
+        return 0 < $studentPosition && $studentPosition === $correctPosition;
+    }
+
+    /**
+     * @param array<int, CQuizQuestionOption> $options
+     */
+    private function getTrueFalseOptionPosition(int $choice, array $options): int
+    {
+        $option = $options[$choice] ?? null;
+        if ($option instanceof CQuizQuestionOption) {
+            return (int) $option->getPosition();
+        }
+
+        foreach ($options as $candidate) {
+            if ($candidate instanceof CQuizQuestionOption && (int) $candidate->getPosition() === $choice) {
+                return (int) $candidate->getPosition();
+            }
+        }
+
+        return $choice;
+    }
+
+    /**
+     * @param array<int, CQuizQuestionOption> $options
+     */
+    private function getTrueFalseOptionTitle(int $choice, array $options): string
+    {
+        $option = $options[$choice] ?? null;
+        if ($option instanceof CQuizQuestionOption) {
+            return (string) $option->getTitle();
+        }
+
+        foreach ($options as $candidate) {
+            if ($candidate instanceof CQuizQuestionOption && (int) $candidate->getPosition() === $choice) {
+                return (string) $candidate->getTitle();
+            }
+        }
+
+        return '';
+    }
+
+    /**
+     * @param array<int, array{answer: string, position: int, secondsSpent: int}> $rows
+     */
+    private function scoreFillBlankRowsForFeedback(CQuiz $quiz, CQuizQuestion $question, array $rows): float
+    {
+        $row = $rows[0] ?? null;
+        if (!\is_array($row)) {
+            return 0.0;
+        }
+
+        $parsed = $this->parseFillBlankStudentRows((string) $row['answer']);
+        $caseInsensitive = 'case:false' === (string) $question->getExtra();
+        $score = 0.0;
+        $allCorrect = [] !== $parsed['items'];
+
+        foreach ($parsed['items'] as $index => $item) {
+            $expected = (string) ($item['expected'] ?? '');
+            $student = (string) ($item['student'] ?? '');
+            $isCorrect = $caseInsensitive ? 0 === strcasecmp($expected, $student) : $expected === $student;
+            if ($isCorrect) {
+                $score += (float) ($parsed['weights'][$index] ?? 0.0);
+                continue;
+            }
+
+            $allCorrect = false;
+        }
+
+        if (27 === (int) $question->getType()) {
+            return $allCorrect ? (float) $question->getPonderation() : 0.0;
+        }
+
+        return $score;
+    }
+
+    /**
+     * @return array{items: array<int, array{expected: string, student: string}>, weights: array<int, float>}
+     */
+    private function parseFillBlankStudentRows(string $encodedAnswer): array
+    {
+        $parts = explode('::', $encodedAnswer, 2);
+        $text = (string) ($parts[0] ?? '');
+        $system = (string) ($parts[1] ?? '');
+        $separator = $this->getFillBlankSeparator($system);
+        [$start, $end] = $this->getFillBlankSeparators($separator);
+        $pattern = '/'.preg_quote($start, '/').'(.*?)'.preg_quote($end, '/').'/s';
+        preg_match_all($pattern, $text, $matches);
+        $values = $matches[1] ?? [];
+        $items = [];
+        for ($index = 0; $index < \count($values); $index += 3) {
+            $items[] = [
+                'expected' => htmlspecialchars_decode((string) ($values[$index] ?? ''), ENT_QUOTES),
+                'student' => htmlspecialchars_decode((string) ($values[$index + 1] ?? ''), ENT_QUOTES),
+            ];
+        }
+
+        $systemParts = explode('@', $system, 2);
+        $details = explode(':', (string) ($systemParts[0] ?? ''));
+        $weights = [];
+        foreach (explode(',', (string) ($details[0] ?? '')) as $weight) {
+            if ('' !== trim($weight)) {
+                $weights[] = (float) trim($weight);
+            }
+        }
+
+        return ['items' => $items, 'weights' => $weights];
+    }
+
+    /**
+     * @param array<int, CQuizAnswer> $answers
+     * @param array<int, array{answer: string, position: int, secondsSpent: int}> $rows
+     */
+    private function scoreMatchingRowsForFeedback(array $answers, array $rows): float
+    {
+        $score = 0.0;
+        foreach ($rows as $row) {
+            $promptId = (int) $row['position'];
+            $optionId = (int) $row['answer'];
+            $answer = $answers[$promptId] ?? null;
+            if ($answer instanceof CQuizAnswer && $optionId === (int) $answer->getCorrect()) {
+                $score += (float) $answer->getPonderation();
+            }
+        }
+
+        return $score;
+    }
+
+    /**
+     * @param array<int, CQuizAnswer> $answers
+     * @param array<int, array{answer: string, position: int, secondsSpent: int}> $rows
+     */
+    private function scoreMatchingCombinationRows(CQuizQuestion $question, array $answers, array $rows): float
+    {
+        $choices = [];
+        foreach ($rows as $row) {
+            $choices[(int) $row['position']] = (int) $row['answer'];
+        }
+
+        $optionCount = 0;
+        $correctCount = 0;
+        foreach ($answers as $answer) {
+            if (0 === (int) $answer->getCorrect()) {
+                ++$optionCount;
+                continue;
+            }
+
+            if (($choices[(int) $answer->getIid()] ?? 0) === (int) $answer->getCorrect()) {
+                ++$correctCount;
+            }
+        }
+
+        return 0 < $optionCount && $correctCount >= $optionCount ? (float) $question->getPonderation() : 0.0;
+    }
+
+    /**
+     * @param array<int, CQuizAnswer> $answers
+     * @param array<int, array{answer: string, position: int, secondsSpent: int}> $rows
+     */
+    private function scoreDraggableRowsForFeedback(array $answers, array $rows): float
+    {
+        $score = 0.0;
+        foreach ($rows as $row) {
+            $answerId = (int) $row['position'];
+            $selectedPosition = (int) $row['answer'];
+            $answer = $answers[$answerId] ?? null;
+            if ($answer instanceof CQuizAnswer && $selectedPosition === (int) $answer->getCorrect()) {
+                $score += (float) $answer->getPonderation();
+            }
+        }
+
+        return $score;
+    }
+
+    /**
+     * @param array<int, CQuizAnswer> $answers
+     * @param array<int, array{answer: string, position: int, secondsSpent: int}> $rows
+     */
+    private function scoreCalculatedRowsForFeedback(CQuizQuestion $question, array $answers, array $rows): float
+    {
+        $row = $rows[0] ?? null;
+        if (!\is_array($row)) {
+            return 0.0;
+        }
+
+        [$answerId, $studentAnswer] = $this->parseCalculatedStudentAnswer((string) $row['answer']);
+        $teacherAnswer = 0 < $answerId && isset($answers[$answerId]) ? $answers[$answerId] : reset($answers);
+        if (!$teacherAnswer instanceof CQuizAnswer) {
+            return 0.0;
+        }
+
+        $expectedAnswer = $this->extractCalculatedExpectedAnswer((string) $teacherAnswer->getAnswer());
+        if ('' === $expectedAnswer || '' === $studentAnswer) {
+            return 0.0;
+        }
+
+        return trim($studentAnswer) === trim($expectedAnswer) ? (float) $question->getPonderation() : 0.0;
+    }
+
+    /**
+     * @return array{0: int, 1: string}
+     */
+    private function parseCalculatedStudentAnswer(string $value): array
+    {
+        $parts = explode(':', $value, 2);
+        if (2 === \count($parts)) {
+            return [(int) $parts[0], trim((string) $parts[1])];
+        }
+
+        return [0, trim($value)];
+    }
+
+    private function extractCalculatedExpectedAnswer(string $answer): string
+    {
+        $parts = explode('@@', $answer, 2);
+        $text = (string) ($parts[0] ?? $answer);
+        if (1 === preg_match('/\[([^\[\]]*)\]\s*$/', $text, $matches)) {
+            return trim((string) ($matches[1] ?? ''));
+        }
+
+        return '';
+    }
+
+    /**
+     * @param array<int, CQuizAnswer> $answers
+     */
+    private function getQuestionWeight(CQuizQuestion $question, array $answers): float
+    {
+        if (\in_array((int) $question->getType(), [9, 12, 24, 25, 27, 28], true)) {
+            $firstAnswer = reset($answers);
+            if ($firstAnswer instanceof CQuizAnswer && 0.0 !== (float) $firstAnswer->getPonderation()) {
+                return (float) $firstAnswer->getPonderation();
+            }
+        }
+
+        return (float) $question->getPonderation();
+    }
+
+    /**
+     * @param array<int, array{answer: string, position: int, secondsSpent: int}> $rows
+     *
+     * @return array<int, int>
+     */
+    private function getRowAnswerIds(array $rows): array
+    {
+        $answerIds = [];
+        foreach ($rows as $row) {
+            $answerId = (int) $row['answer'];
+            if (0 < $answerId && !\in_array($answerId, $answerIds, true)) {
+                $answerIds[] = $answerId;
+            }
+        }
+
+        return $answerIds;
+    }
+
+    /**
+     * @param array<int, CQuizAnswer> $answers
+     * @param array<int, array{answer: string, position: int, secondsSpent: int}> $rows
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private function buildFeedbackEntries(CQuizQuestion $question, array $answers, array $rows): array
+    {
+        $entries = [];
+        $type = (int) $question->getType();
+        $answerIds = $this->getFeedbackAnswerIds($type, $rows);
+
+        foreach ($answerIds as $answerId) {
+            $answer = $answers[$answerId] ?? null;
+            if (!$answer instanceof CQuizAnswer) {
+                continue;
+            }
+
+            $entries[] = [
+                'answer' => $answer->getAnswer(),
+                'comment' => (string) $answer->getComment(),
+                'correct' => 0 < (float) $answer->getPonderation() || 1 === (int) $answer->getCorrect(),
+            ];
+        }
+
+        if ([] === $entries) {
+            $firstAnswer = reset($answers);
+            if ($firstAnswer instanceof CQuizAnswer && '' !== trim((string) $firstAnswer->getComment())) {
+                $entries[] = [
+                    'answer' => '',
+                    'comment' => (string) $firstAnswer->getComment(),
+                    'correct' => false,
+                ];
+            }
+        }
+
+        return $entries;
+    }
+
+    /**
+     * @param array<int, array{answer: string, position: int, secondsSpent: int}> $rows
+     *
+     * @return array<int, int>
+     */
+    private function getFeedbackAnswerIds(int $type, array $rows): array
+    {
+        if (\in_array($type, self::MATCHING_TYPES, true)) {
+            return array_values(array_filter(array_map(static fn (array $row): int => (int) $row['answer'], $rows)));
+        }
+
+        if (\in_array($type, self::TRUE_FALSE_TYPES, true) || \in_array($type, self::TRUE_FALSE_DEGREE_CERTAINTY_TYPES, true)) {
+            return array_values(array_filter(array_map(static function (array $row): int {
+                $parts = explode(':', (string) $row['answer']);
+
+                return (int) ($parts[0] ?? 0);
+            }, $rows)));
+        }
+
+        return $this->getRowAnswerIds($rows);
+    }
+
+    /**
+     * @param array<int, array{answer: string, position: int, secondsSpent: int}> $rows
+     */
+    private function getFeedbackStatus(CQuizQuestion $question, float $score, float $maxScore, array $rows): string
+    {
+        if ([] === $rows) {
+            return 'empty';
+        }
+
+        if (\in_array((int) $question->getType(), self::FREE_ANSWER_TYPES, true)) {
+            return 'pending';
+        }
+
+        if (0.0 < $maxScore && $score >= $maxScore) {
+            return 'correct';
+        }
+
+        if (0.0 < $score) {
+            return 'partial';
+        }
+
+        return 'incorrect';
+    }
+
+    private function getFeedbackTitle(string $status): string
+    {
+        return match ($status) {
+            'correct' => 'Correct',
+            'partial' => 'Partially correct',
+            'pending' => 'Pending correction',
+            'empty' => 'No answer selected',
+            default => 'Incorrect',
+        };
     }
 
     private function deletePreviousDraftRows(TrackEExercise $attempt, int $questionId): void

@@ -10,9 +10,11 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseRuntimeReport;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
 use DateTimeInterface;
@@ -24,6 +26,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * Read-only provider for the migrated exercise learner attempts report.
@@ -32,7 +35,11 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
 {
+    public const BULK_ACTION_CSRF_TOKEN_ID = 'exercise_runtime_report_bulk_action';
+    public const EMAIL_ACTION_CSRF_TOKEN_ID = 'exercise_runtime_report_email_action';
+
     private const VISIBILITY_PUBLISHED = 2;
+    private const LINK_TYPE_EXERCISE = 1;
     private const STATUS_INCOMPLETE = 'incomplete';
     private const STATUS_PENDING_CORRECTION = 'pending_correction';
     private const STATUS_COMPLETED = 'completed';
@@ -42,6 +49,8 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
         private EntityManagerInterface $entityManager,
         private CQuizRepository $quizRepository,
         private Security $security,
+        private SettingsManager $settingsManager,
+        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -67,7 +76,8 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
         }
 
         $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session);
-        $attempts = $this->getAttempts($request, $quiz, $course, $session);
+        $lockedByGradebook = $this->isGradebookLocked((int) $quiz->getIid(), $course);
+        $attempts = $this->getAttempts($request, $quiz, $course, $session, $lockedByGradebook);
 
         $response = new ExerciseRuntimeReport();
         $response->exerciseId = $exerciseId;
@@ -79,9 +89,15 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
             'lastName' => trim((string) $request->query->get('lastName', '')),
             'status' => trim((string) $request->query->get('status', '')),
         ];
-        $response->legacyUrls = $this->getLegacyUrls($quiz, $course, $session, $request);
+        $response->actionUrls = $this->getActionUrls($quiz, $request);
         $response->totalItems = \count($attempts);
         $response->canManage = true;
+        $response->lockedByGradebook = $lockedByGradebook;
+        $response->canBulkDelete = !$lockedByGradebook && $this->canDeleteResults();
+        $response->canCleanResults = !$lockedByGradebook && $this->canCleanResults();
+        $response->canBulkRecalculate = !$lockedByGradebook;
+        $response->bulkActionToken = $this->csrfTokenManager->getToken(self::BULK_ACTION_CSRF_TOKEN_ID)->getValue();
+        $response->emailActionToken = $this->csrfTokenManager->getToken(self::EMAIL_ACTION_CSRF_TOKEN_ID)->getValue();
 
         return $response;
     }
@@ -169,7 +185,7 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
     /**
      * @return array<int, array<string, mixed>>
      */
-    private function getAttempts(Request $request, CQuiz $quiz, Course $course, ?Session $session): array
+    private function getAttempts(Request $request, CQuiz $quiz, Course $course, ?Session $session, bool $lockedByGradebook): array
     {
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('attempt', 'user')
@@ -230,7 +246,7 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
                 continue;
             }
 
-            $attempts[] = $this->normalizeAttempt($attempt, $quiz, $request);
+            $attempts[] = $this->normalizeAttempt($attempt, $quiz, $request, $lockedByGradebook);
         }
 
         return $attempts;
@@ -239,7 +255,7 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
     /**
      * @return array<string, mixed>
      */
-    private function normalizeAttempt(TrackEExercise $attempt, CQuiz $quiz, Request $request): array
+    private function normalizeAttempt(TrackEExercise $attempt, CQuiz $quiz, Request $request, bool $lockedByGradebook): array
     {
         $user = $attempt->getUser();
         $questionsToCheck = $this->parseQuestionIds($attempt->getQuestionsToCheck());
@@ -253,7 +269,6 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
         $score = $attempt->getScore();
         $maxScore = $attempt->getMaxScore();
         $percentage = 0.0 < $maxScore ? round(($score * 100) / $maxScore, 2) : 0.0;
-        $baseParams = $this->getBaseParams((int) $quiz->getIid(), $request);
         $attemptId = (int) $attempt->getExeId();
         $userId = (int) $user->getId();
 
@@ -280,13 +295,9 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
             'questionsToCheck' => $questionsToCheck,
             'learningPath' => $this->formatLearningPath($attempt),
             'canReview' => self::STATUS_INCOMPLETE !== $status,
-            'canDelete' => true,
-            'legacyUrls' => [
-                'result' => api_get_path(WEB_CODE_PATH).'exercise/exercise_result.php?'.http_build_query(['exe_id' => $attemptId] + $baseParams),
-                'pdf' => api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.http_build_query(['action' => 'export_pdf', 'attemptId' => $attemptId, 'userId' => $userId] + $baseParams),
-                'sendEmail' => api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.http_build_query(['action' => 'send_email', 'attemptId' => $attemptId] + $baseParams),
-                'recalculate' => api_get_path(WEB_CODE_PATH).'exercise/recalculate.php?'.http_build_query(['id' => $attemptId, 'exercise' => (int) $quiz->getIid(), 'user' => $userId] + $this->getContextParams($request)),
-            ],
+            'canClose' => self::STATUS_INCOMPLETE === $status && !$lockedByGradebook,
+            'canRecalculate' => !$lockedByGradebook,
+            'canDelete' => !$lockedByGradebook && $this->canDeleteResults(),
         ];
     }
 
@@ -333,25 +344,102 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
         return array_values(array_unique($ids));
     }
 
+    private function canDeleteResults(): bool
+    {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return true;
+        }
+
+        return !$this->isSettingEnabled('exercise.limit_exercise_teacher_access');
+    }
+
+    private function canCleanResults(): bool
+    {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return true;
+        }
+
+        return !$this->isSettingEnabled('exercise.limit_exercise_teacher_access')
+            && !$this->isSettingEnabled('exercise.disable_clean_exercise_results_for_teachers');
+    }
+
+    private function isGradebookLocked(int $exerciseId, Course $course): bool
+    {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return false;
+        }
+
+        if (!$this->isSettingEnabled('gradebook.gradebook_locking_enabled')) {
+            return false;
+        }
+
+        $lockedLink = $this->entityManager->createQueryBuilder()
+            ->select('link.id')
+            ->from(GradebookLink::class, 'link')
+            ->andWhere('link.locked = :locked')
+            ->andWhere('link.refId = :exerciseId')
+            ->andWhere('link.type = :linkType')
+            ->andWhere('IDENTITY(link.course) = :courseId')
+            ->setParameter('locked', 1, Types::INTEGER)
+            ->setParameter('exerciseId', $exerciseId, Types::INTEGER)
+            ->setParameter('linkType', self::LINK_TYPE_EXERCISE, Types::INTEGER)
+            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+
+        return null !== $lockedLink;
+    }
+
+    private function isSettingEnabled(string $name): bool
+    {
+        return 'true' === $this->settingsManager->getSetting($name, true);
+    }
+
     /**
      * @return array<string, string>
      */
-    private function getLegacyUrls(CQuiz $quiz, Course $course, ?Session $session, Request $request): array
+    private function getActionUrls(CQuiz $quiz, Request $request): array
     {
-        $baseParams = $this->getBaseParams((int) $quiz->getIid(), $request);
-        $contextParams = $this->getContextParams($request);
+        $exerciseId = (int) $quiz->getIid();
 
         return [
-            'legacyReport' => api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.http_build_query($baseParams),
-            'backToQuestions' => api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.http_build_query($contextParams),
-            'liveStats' => api_get_path(WEB_CODE_PATH).'exercise/live_stats.php?'.http_build_query($baseParams),
-            'questionReport' => api_get_path(WEB_CODE_PATH).'exercise/stats.php?'.http_build_query($baseParams),
-            'questionStats' => api_get_path(WEB_CODE_PATH).'exercise/question_stats.php?'.http_build_query(['id' => (int) $quiz->getIid()] + $contextParams),
-            'export' => api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.http_build_query(['export_report' => 1] + $baseParams),
-            'recalculateAll' => api_get_path(WEB_CODE_PATH).'exercise/recalculate_all.php?'.http_build_query(['exercise' => (int) $quiz->getIid()] + $contextParams),
-            'exportAllPdf' => api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.http_build_query(['action' => 'export_all_results'] + $baseParams),
-            'sendAllEmails' => api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.http_build_query(['action' => 'send_all_emails'] + $baseParams),
+            'exportCsv' => $this->getModernExportUrl($exerciseId, 'csv', $request),
+            'exportXlsx' => $this->getModernExportUrl($exerciseId, 'xlsx', $request),
+            'exportAllAttempts' => $this->getModernExportAllAttemptsUrl($exerciseId, $request),
         ];
+    }
+
+    private function getModernExportUrl(int $exerciseId, string $extension, Request $request): string
+    {
+        $params = $this->getExportParams($exerciseId, $request);
+
+        return '/api/exercise/runtime/'.$exerciseId.'/attempts/export.'.$extension.'?'.http_build_query($params);
+    }
+
+    private function getModernExportAllAttemptsUrl(int $exerciseId, Request $request): string
+    {
+        $params = $this->getExportParams($exerciseId, $request);
+
+        return '/api/exercise/runtime/'.$exerciseId.'/attempts/export-all.zip?'.http_build_query($params);
+    }
+
+    /**
+     * @return array<string, int|string>
+     */
+    private function getExportParams(int $exerciseId, Request $request): array
+    {
+        $params = $this->getBaseParams($exerciseId, $request);
+
+        foreach (['firstName', 'lastName', 'status'] as $filterName) {
+            $value = trim((string) $request->query->get($filterName, ''));
+            if ('' !== $value) {
+                $params[$filterName] = $value;
+            }
+        }
+
+        return $params;
     }
 
     /**

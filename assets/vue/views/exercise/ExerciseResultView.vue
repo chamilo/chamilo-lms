@@ -237,6 +237,40 @@
       </div>
 
       <div
+        v-if="shouldShowCategoryScores"
+        class="overflow-hidden rounded-xl border border-gray-20 bg-white shadow-sm"
+      >
+        <div class="border-b border-gray-20 bg-gray-10 p-4">
+          <h2 class="text-lg font-semibold text-gray-90">{{ t("Categories") }}</h2>
+        </div>
+        <div class="overflow-x-auto p-4">
+          <table class="min-w-full text-sm">
+            <thead>
+              <tr class="border-b border-gray-20 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                <th class="px-3 py-2">{{ t("Categories") }}</th>
+                <th class="px-3 py-2 text-right">{{ t("Absolute score") }}</th>
+                <th class="px-3 py-2 text-right">{{ t("Relative score") }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="categoryScore in categoryScores"
+                :key="categoryScoreKey(categoryScore)"
+                class="border-b border-gray-20"
+                :class="categoryScore.isTotal ? 'bg-gray-10 font-semibold' : ''"
+              >
+                <td class="px-3 py-2">{{ categoryScoreTitle(categoryScore) }}</td>
+                <td class="px-3 py-2 text-right">
+                  {{ formatNumber(categoryScore.score) }} / {{ formatNumber(categoryScore.maxScore) }}
+                </td>
+                <td class="px-3 py-2 text-right">{{ formatNumber(categoryScore.percentage) }}%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div
         v-if="!questions.length && visibility.showQuestionDetails === false"
         class="rounded-xl border border-info/30 bg-support-1 p-4 text-sm text-support-4"
       >
@@ -1514,6 +1548,7 @@ const description = ref("")
 const attempt = ref({})
 const visibility = ref({})
 const questions = ref([])
+const categoryScores = ref([])
 const ranking = ref([])
 const finalActions = ref({})
 const aiCorrection = ref({})
@@ -1628,6 +1663,32 @@ const showStandaloneFinalActions = computed(() => {
     && getCourseId() > 0
 })
 
+const shouldShowCategoryScores = computed(() => {
+  return visibility.value?.showScore === true
+    && visibility.value?.showCategoryTable !== false
+    && categoryScores.value.length > 0
+})
+
+function categoryScoreKey(categoryScore) {
+  if (categoryScore?.isTotal) {
+    return "total"
+  }
+
+  if (categoryScore?.labelKey) {
+    return `label-${categoryScore.labelKey}`
+  }
+
+  return `category-${Number(categoryScore?.categoryId || 0)}`
+}
+
+function categoryScoreTitle(categoryScore) {
+  if (categoryScore?.labelKey) {
+    return t(categoryScore.labelKey)
+  }
+
+  return displayText(categoryScore?.title || "", t("None"))
+}
+
 function buildPlayerQuery(startResponse = null) {
   const query = { ...getContextParams() }
   const attemptId = Number(startResponse?.attemptId || 0)
@@ -1703,6 +1764,7 @@ async function loadResult() {
     attempt.value = response.attempt || {}
     visibility.value = response.visibility || {}
     questions.value = Array.isArray(response.questions) ? response.questions : []
+    categoryScores.value = Array.isArray(response.categoryScores) ? response.categoryScores : []
     ranking.value = Array.isArray(response.ranking) ? response.ranking : []
     finalActions.value = response.finalActions || {}
     aiCorrection.value = response.aiCorrection || {}

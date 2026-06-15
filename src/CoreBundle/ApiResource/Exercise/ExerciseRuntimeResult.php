@@ -78,6 +78,12 @@ final class ExerciseRuntimeResult
      * @var array<int, array<string, mixed>>
      */
     #[Groups(['exercise_runtime_result:read'])]
+    public array $categoryScores = [];
+
+    /**
+     * @var array<int, array<string, mixed>>
+     */
+    #[Groups(['exercise_runtime_result:read'])]
     public array $ranking = [];
 
     /**

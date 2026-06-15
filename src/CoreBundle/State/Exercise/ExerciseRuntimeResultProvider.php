@@ -20,6 +20,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
+use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
 use Chamilo\CourseBundle\Entity\CQuizQuestionOption;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use Chamilo\CourseBundle\Entity\CLpItem;
@@ -118,6 +119,8 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         }
         $visibility['isReviewMode'] = $isReviewMode;
 
+        $categoryScores = $this->getCategoryScores($questionIds, $rowsByQuestion, $attempt, $visibility);
+
         $questions = [];
         if ($canManage || true === ($visibility['showQuestionDetails'] ?? false)) {
             $questions = $this->getQuestions($quiz, $questionIds, $rowsByQuestion, $visibility, $pendingQuestionIds, $canManage, $isReviewMode);
@@ -140,6 +143,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         $response->attempt = $this->normalizeAttempt($attempt, $quiz, $visibility);
         $response->visibility = $visibility;
         $response->questions = $questions;
+        $response->categoryScores = $categoryScores;
         $response->ranking = true === ($visibility['showRanking'] ?? false)
             ? $this->getRanking($quiz, $course, $session, $attempt)
             : [];
@@ -734,6 +738,156 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         }
 
         return (string) $quiz->getTextWhenFinished();
+    }
+
+    /**
+     * @param array<int, int>                       $questionIds
+     * @param array<int, array<int, TrackEAttempt>> $rowsByQuestion
+     * @param array<string, mixed>                  $visibility
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private function getCategoryScores(array $questionIds, array $rowsByQuestion, TrackEExercise $attempt, array $visibility): array
+    {
+        if ([] === $questionIds || true !== ($visibility['showScore'] ?? false) || true !== ($visibility['showCategoryTable'] ?? false)) {
+            return [];
+        }
+
+        $questionsById = $this->getQuestionsById($questionIds);
+        $categoryRows = [];
+        $noneRow = null;
+        $hasNamedCategory = false;
+
+        foreach ($questionIds as $questionId) {
+            $question = $questionsById[$questionId] ?? null;
+            if (!$question instanceof CQuizQuestion || $this->isStructuralContentQuestion($question)) {
+                continue;
+            }
+
+            $score = $this->getQuestionScore($rowsByQuestion[$questionId] ?? []);
+            $maxScore = $this->getQuestionMaxScore($question);
+            if (0.0 === $score && 0.0 === $maxScore) {
+                continue;
+            }
+
+            $categories = $question->getCategories();
+            if (0 === $categories->count()) {
+                if (null === $noneRow) {
+                    $noneRow = [
+                        'categoryId' => null,
+                        'title' => '',
+                        'labelKey' => 'None',
+                        'score' => 0.0,
+                        'maxScore' => 0.0,
+                    ];
+                }
+
+                $noneRow['score'] += $score;
+                $noneRow['maxScore'] += $maxScore;
+
+                continue;
+            }
+
+            foreach ($categories as $category) {
+                if (!$category instanceof CQuizQuestionCategory || null === $category->getIid()) {
+                    continue;
+                }
+
+                $categoryId = (int) $category->getIid();
+                if (!isset($categoryRows[$categoryId])) {
+                    $categoryRows[$categoryId] = [
+                        'categoryId' => $categoryId,
+                        'title' => $category->getTitle(),
+                        'labelKey' => null,
+                        'score' => 0.0,
+                        'maxScore' => 0.0,
+                    ];
+                }
+
+                $categoryRows[$categoryId]['score'] += $score;
+                $categoryRows[$categoryId]['maxScore'] += $maxScore;
+                $hasNamedCategory = true;
+            }
+        }
+
+        if (!$hasNamedCategory) {
+            return [];
+        }
+
+        uasort($categoryRows, static function (array $left, array $right): int {
+            return strcasecmp((string) ($left['title'] ?? ''), (string) ($right['title'] ?? ''));
+        });
+
+        $rows = [];
+        foreach ($categoryRows as $row) {
+            $rows[] = $this->normalizeCategoryScoreRow($row);
+        }
+
+        if (null !== $noneRow && 0.0 < (float) ($noneRow['maxScore'] ?? 0.0)) {
+            $rows[] = $this->normalizeCategoryScoreRow($noneRow);
+        }
+
+        $rows[] = $this->normalizeCategoryScoreRow([
+            'categoryId' => null,
+            'title' => '',
+            'labelKey' => 'Total',
+            'score' => (float) $attempt->getScore(),
+            'maxScore' => (float) $attempt->getMaxScore(),
+            'isTotal' => true,
+        ]);
+
+        return $rows;
+    }
+
+    /**
+     * @param array<int, int> $questionIds
+     *
+     * @return array<int, CQuizQuestion>
+     */
+    private function getQuestionsById(array $questionIds): array
+    {
+        $rows = $this->entityManager->createQueryBuilder()
+            ->select('question')
+            ->addSelect('category')
+            ->from(CQuizQuestion::class, 'question')
+            ->leftJoin('question.categories', 'category')
+            ->andWhere('question.iid IN (:questionIds)')
+            ->setParameter('questionIds', $questionIds, ArrayParameterType::INTEGER)
+            ->getQuery()
+            ->getResult()
+        ;
+
+        $questions = [];
+        foreach ($rows as $row) {
+            if (!$row instanceof CQuizQuestion || null === $row->getIid()) {
+                continue;
+            }
+
+            $questions[(int) $row->getIid()] = $row;
+        }
+
+        return $questions;
+    }
+
+    /**
+     * @param array<string, mixed> $row
+     *
+     * @return array<string, mixed>
+     */
+    private function normalizeCategoryScoreRow(array $row): array
+    {
+        $score = (float) ($row['score'] ?? 0.0);
+        $maxScore = (float) ($row['maxScore'] ?? 0.0);
+
+        return [
+            'categoryId' => isset($row['categoryId']) ? (int) $row['categoryId'] : null,
+            'title' => (string) ($row['title'] ?? ''),
+            'labelKey' => isset($row['labelKey']) ? (string) $row['labelKey'] : null,
+            'score' => $score,
+            'maxScore' => $maxScore,
+            'percentage' => 0.0 < $maxScore ? round(($score / $maxScore) * 100, 2) : 0.0,
+            'isTotal' => true === ($row['isTotal'] ?? false),
+        ];
     }
 
     /**

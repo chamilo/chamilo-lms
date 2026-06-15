@@ -237,6 +237,26 @@ $form->addElement(
     ['step' => 1, 'min' => 0]
 );
 
+$form->addHtml(
+    '<div class="mt-4 rounded-2xl border border-gray-20 bg-support-2 p-4">'.
+    '<div class="text-body-2 font-semibold text-primary">'.$plugin->get_lang('AiCourseFeaturesGranted').'</div>'.
+    '<div class="mt-1 text-caption text-gray-50">'.$plugin->get_lang('AiCourseFeaturesGrantedHelp').'</div>'.
+    '</div>'
+);
+
+foreach ($plugin->getAiCourseFeatureDefinitions() as $feature => $definition) {
+    $description = (string) ($definition['description'] ?? '');
+    if (!empty($definition['expensive'])) {
+        $description .= ' '.$plugin->get_lang('AiCourseFeatureVideoWarning');
+    }
+
+    $form->addCheckBox(
+        $plugin->getAiCourseFeatureFormField((string) $feature),
+        (string) ($definition['title'] ?? $feature),
+        $description
+    );
+}
+
 $form->addHtml('</div>');
 
 $form->addHidden('id', (string) $serviceId);
@@ -245,7 +265,7 @@ $form->addButtonDelete($plugin->get_lang('DeleteThisService'), 'delete_service')
 $form->setDefaults($formDefaultValues);
 
 if ('POST' === $_SERVER['REQUEST_METHOD']) {
-    $values = buycoursesBuildPostedServicePayload($serviceId);
+    $values = buycoursesBuildPostedServicePayload($serviceId, $plugin);
 
     if (isset($_POST['delete_service'])) {
         $plugin->deleteService($serviceId);
@@ -776,10 +796,12 @@ function buycoursesValidateServicePayload(array $values, BuyCoursesPlugin $plugi
     $benefitMaxCourses = isset($values['benefit_max_courses']) ? (int) ($values['benefit_max_courses'] ?? 0) : 0;
     $benefitHostingLimit = isset($values['benefit_hosting_limit']) ? (int) ($values['benefit_hosting_limit'] ?? 0) : 0;
     $benefitDocumentQuota = isset($values['benefit_document_quota']) ? (int) ($values['benefit_document_quota'] ?? 0) : 0;
+    $aiCourseFeatures = $plugin->getAiCourseFeaturesFromServiceData($values);
 
     $hasAnyBenefit = $benefitMaxCourses > 0
         || $benefitHostingLimit > 0
-        || $benefitDocumentQuota > 0;
+        || $benefitDocumentQuota > 0
+        || !empty($aiCourseFeatures);
 
     if ('' === $name) {
         $errors[] = get_lang('ThisFieldIsRequired').': '.$plugin->get_lang('ServiceName');
@@ -811,9 +833,9 @@ function buycoursesValidateServicePayload(array $values, BuyCoursesPlugin $plugi
     return $errors;
 }
 
-function buycoursesBuildPostedServicePayload(int $serviceId): array
+function buycoursesBuildPostedServicePayload(int $serviceId, BuyCoursesPlugin $plugin): array
 {
-    return [
+    $payload = [
         'id' => $serviceId,
         'name' => trim((string) ($_POST['name'] ?? '')),
         'description' => (string) ($_POST['description'] ?? ''),
@@ -841,4 +863,11 @@ function buycoursesBuildPostedServicePayload(int $serviceId): array
         'picture_crop_image_base_64' => (string) ($_POST['picture_crop_image_base_64'] ?? ''),
         'picture_crop_result' => (string) ($_POST['picture_crop_result'] ?? ''),
     ];
+
+    foreach ($plugin->getAiCourseFeatureDefinitions() as $feature => $definition) {
+        $formField = $plugin->getAiCourseFeatureFormField((string) $feature);
+        $payload[$formField] = isset($_POST[$formField]) ? 1 : 0;
+    }
+
+    return $payload;
 }

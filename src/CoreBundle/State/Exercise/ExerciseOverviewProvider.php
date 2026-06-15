@@ -115,6 +115,7 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
         $overview->maxAttempt = $maxAttempt;
         $overview->feedbackType = $quiz->getFeedbackType();
         $overview->resultsDisabled = $quiz->getResultsDisabled();
+        $overview->oneQuestionPerPage = CQuiz::ONE_PER_PAGE === (int) $quiz->getType();
         $overview->randomAnswers = $quiz->getRandomAnswers();
         $overview->random = (int) $quiz->getRandom();
         $overview->randomByCategory = (int) $quiz->getRandomByCategory();

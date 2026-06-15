@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
@@ -372,10 +373,7 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
 
     private function createAttemptFileResourceNode(UploadedFile $uploadedFile, User $user): ResourceNode
     {
-        $resourceType = $this->entityManager->getRepository(ResourceType::class)->findOneBy(['title' => self::ATTEMPT_FILE_RESOURCE_TYPE]);
-        if (!$resourceType instanceof ResourceType) {
-            throw new BadRequestHttpException('Missing ResourceType "attempt_file".');
-        }
+        $resourceType = $this->getOrCreateAttemptFileResourceType();
 
         $originalName = $this->sanitizeFileName($uploadedFile->getClientOriginalName());
         $node = new ResourceNode();
@@ -390,6 +388,31 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
         $this->entityManager->persist($resourceFile);
 
         return $node;
+    }
+
+    private function getOrCreateAttemptFileResourceType(): ResourceType
+    {
+        $resourceType = $this->entityManager->getRepository(ResourceType::class)->findOneBy([
+            'title' => self::ATTEMPT_FILE_RESOURCE_TYPE,
+        ]);
+        if ($resourceType instanceof ResourceType) {
+            return $resourceType;
+        }
+
+        $tool = $this->entityManager->getRepository(Tool::class)->findOneBy([
+            'title' => 'quiz',
+        ]);
+        if (!$tool instanceof Tool) {
+            throw new BadRequestHttpException('Missing Tool "quiz" for attempt file uploads.');
+        }
+
+        $resourceType = new ResourceType();
+        $resourceType->setTitle(self::ATTEMPT_FILE_RESOURCE_TYPE);
+        $resourceType->setTool($tool);
+
+        $this->entityManager->persist($resourceType);
+
+        return $resourceType;
     }
 
     private function sanitizeFileName(string $fileName): string

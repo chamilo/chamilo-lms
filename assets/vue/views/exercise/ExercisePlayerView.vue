@@ -1587,21 +1587,35 @@ function getQueryValue(value) {
   return Array.isArray(value) ? value[0] : value
 }
 
-function getContextParams() {
-  return {
-    cid: getQueryValue(route.query.cid),
-    sid: getQueryValue(route.query.sid),
-    gid: getQueryValue(route.query.gid),
-    origin: getQueryValue(route.query.origin),
-    lp_init: getQueryValue(route.query.lp_init),
-    learnpath_id: getQueryValue(route.query.learnpath_id),
-    learnpath_item_id: getQueryValue(route.query.learnpath_item_id),
-    learnpath_item_view_id: getQueryValue(route.query.learnpath_item_view_id),
-    isStudentView: getQueryValue(route.query.isStudentView),
-    preview: getQueryValue(route.query.preview),
+function addOptionalQueryParam(params, key) {
+  const value = getQueryValue(route.query[key])
+  if (value !== undefined && value !== null && value !== "") {
+    params[key] = value
   }
 }
 
+function getContextParams() {
+  const params = {
+    cid: getQueryValue(route.query.cid),
+    sid: getQueryValue(route.query.sid),
+    gid: getQueryValue(route.query.gid),
+  }
+
+  addOptionalQueryParam(params, "origin")
+  addOptionalQueryParam(params, "lp_init")
+  addOptionalQueryParam(params, "learnpath_id")
+  addOptionalQueryParam(params, "learnpath_item_id")
+  addOptionalQueryParam(params, "learnpath_item_view_id")
+  addOptionalQueryParam(params, "lp_id")
+  addOptionalQueryParam(params, "node")
+  addOptionalQueryParam(params, "type")
+  addOptionalQueryParam(params, "returnToLp")
+  addOptionalQueryParam(params, "isStudentView")
+  addOptionalQueryParam(params, "preview")
+  addOptionalQueryParam(params, "attemptId")
+
+  return params
+}
 
 function isEmbeddedInLearnpath() {
   if (typeof window === "undefined") {
@@ -3372,7 +3386,15 @@ onBeforeUnmount(() => {
 onMounted(loadRuntime)
 
 watch(
-  () => [route.params.exerciseId, route.query.cid, route.query.sid, route.query.gid],
+  () => [
+    route.params.exerciseId,
+    route.query.cid,
+    route.query.sid,
+    route.query.gid,
+    route.query.attemptId,
+    route.query.preview,
+    route.query.isStudentView,
+  ],
   () => loadRuntime(),
 )
 

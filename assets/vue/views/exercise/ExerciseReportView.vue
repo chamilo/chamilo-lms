@@ -333,7 +333,7 @@
               class="exercise-report-row-action"
               :label="data.pendingCorrection ? t('Correct') : t('Review')"
               only-icon
-              :route="{ name: 'ExerciseResult', params: { ...getExerciseRouteParams(), attemptId: data.attemptId }, query: getContextParams() }"
+              :route="{ name: 'ExerciseResult', params: { ...getExerciseRouteParams(), attemptId: data.attemptId }, query: getReviewContextParams() }"
               :icon="data.pendingCorrection ? safeIcon('edit') : safeIcon('eye-on', 'information')"
               size="small"
               :type="data.pendingCorrection ? 'secondary-text' : 'primary-text'"
@@ -472,6 +472,14 @@ function getContextParams() {
     cid: getQueryValue(route.query.cid),
     sid: getQueryValue(route.query.sid),
     gid: getQueryValue(route.query.gid),
+  }
+}
+
+function getReviewContextParams() {
+  return {
+    ...getContextParams(),
+    review: "1",
+    mode: "review",
   }
 }
 

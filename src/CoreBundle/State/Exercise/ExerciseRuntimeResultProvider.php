@@ -107,15 +107,17 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
 
         $rowsByQuestion = $this->getAttemptRowsByQuestion((int) $attempt->getExeId());
         $pendingQuestionIds = $this->parseQuestionIds((string) $attempt->getQuestionsToCheck());
+        $isReviewMode = $this->isReviewMode($attempt, $canManage, $request);
         $isLastAllowedAttempt = $this->isLastAllowedAttempt($quiz, $attempt, $course, $session);
         $visibility = $this->getResultVisibility($quiz, $isLastAllowedAttempt);
         if ($canManage) {
             $visibility = $this->getManagerResultVisibility($visibility);
         }
+        $visibility['isReviewMode'] = $isReviewMode;
 
         $questions = [];
         if ($canManage || true === ($visibility['showQuestionDetails'] ?? false)) {
-            $questions = $this->getQuestions($quiz, $questionIds, $rowsByQuestion, $visibility, $pendingQuestionIds, $canManage);
+            $questions = $this->getQuestions($quiz, $questionIds, $rowsByQuestion, $visibility, $pendingQuestionIds, $canManage, $isReviewMode);
             if (
                 true === ($visibility['hideCorrectAnsweredQuestions'] ?? false)
                 && true === ($visibility['showQuestionScore'] ?? false)
@@ -138,8 +140,8 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         $response->ranking = true === ($visibility['showRanking'] ?? false)
             ? $this->getRanking($quiz, $course, $session, $attempt)
             : [];
-        $response->finalActions = $this->getFinalActions($quiz, $attempt, $course, $session);
-        $response->aiCorrection = $this->getAiCorrectionConfiguration($canManage);
+        $response->finalActions = $this->getFinalActions($quiz, $attempt, $course, $session, $isReviewMode);
+        $response->aiCorrection = $this->getAiCorrectionConfiguration($canManage && $isReviewMode);
         $response->canManage = $canManage;
 
         return $response;
@@ -186,6 +188,24 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
     {
         return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
             || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
+    }
+
+    private function isReviewMode(TrackEExercise $attempt, bool $canManage, Request $request): bool
+    {
+        if (!$canManage) {
+            return false;
+        }
+
+        if ('1' === (string) $request->query->get('review', '') || 'review' === strtolower((string) $request->query->get('mode', ''))) {
+            return true;
+        }
+
+        $user = $this->security->getUser();
+        if (!$user instanceof User) {
+            return false;
+        }
+
+        return (int) $attempt->getUser()->getId() !== (int) $user->getId();
     }
 
     /**
@@ -589,7 +609,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
      *
      * @return array<int, array<string, mixed>>
      */
-    private function getQuestions(CQuiz $quiz, array $questionIds, array $rowsByQuestion, array $visibility, array $pendingQuestionIds, bool $canManage): array
+    private function getQuestions(CQuiz $quiz, array $questionIds, array $rowsByQuestion, array $visibility, array $pendingQuestionIds, bool $canManage, bool $isReviewMode): array
     {
         $relations = $this->entityManager->createQueryBuilder()
             ->select('relQuestion')
@@ -622,6 +642,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
                 $visibility,
                 \in_array($questionId, $pendingQuestionIds, true),
                 $canManage,
+                $isReviewMode,
             );
         }
 
@@ -645,7 +666,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
      *
      * @return array<string, mixed>
      */
-    private function normalizeQuestion(CQuizQuestion $question, array $rows, array $visibility, bool $pendingCorrection, bool $canManage): array
+    private function normalizeQuestion(CQuizQuestion $question, array $rows, array $visibility, bool $pendingCorrection, bool $canManage, bool $isReviewMode): array
     {
         $questionScore = $this->getQuestionScore($rows);
         $maxScore = $this->getQuestionMaxScore($question);
@@ -656,6 +677,10 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             $isCorrect = null;
         }
         $showQuestionCorrection = $this->shouldShowQuestionCorrection($rows, $visibility, true === $isCorrect);
+        $feedback = $this->getQuestionFeedback($question, $visibility, $showQuestionCorrection);
+        if ($this->shouldHideManualCorrectionFeedback($requiresManualCorrection, $pendingCorrection, $questionScore)) {
+            $feedback = null;
+        }
 
         return [
             'id' => (int) $question->getIid(),
@@ -671,8 +696,8 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             'isCorrect' => !$isStructuralContent && true === ($visibility['showQuestionStatus'] ?? false) ? $isCorrect : null,
             'requiresManualCorrection' => $requiresManualCorrection,
             'pendingCorrection' => $pendingCorrection,
-            'canCorrect' => $canManage && $requiresManualCorrection,
-            'feedback' => $this->getQuestionFeedback($question, $visibility, $showQuestionCorrection),
+            'canCorrect' => $isReviewMode && $canManage && $requiresManualCorrection,
+            'feedback' => $feedback,
             'answer' => $this->normalizeQuestionAnswer($question, $rows, $visibility, $showQuestionCorrection),
         ];
     }
@@ -760,6 +785,15 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         }
 
         return '' !== (string) $question->getFeedback() ? (string) $question->getFeedback() : null;
+    }
+
+    private function shouldHideManualCorrectionFeedback(bool $requiresManualCorrection, bool $pendingCorrection, float $questionScore): bool
+    {
+        if (!$requiresManualCorrection || $pendingCorrection) {
+            return false;
+        }
+
+        return 0.0 < $questionScore;
     }
 
     /**
@@ -1848,7 +1882,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
     /**
      * @return array<string, mixed>
      */
-    private function getFinalActions(CQuiz $quiz, TrackEExercise $attempt, Course $course, ?Session $session): array
+    private function getFinalActions(CQuiz $quiz, TrackEExercise $attempt, Course $course, ?Session $session, bool $isReviewMode): array
     {
         $currentUser = $this->security->getUser();
         $currentUserId = $currentUser instanceof User ? (int) $currentUser->getId() : 0;
@@ -1857,7 +1891,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             || 0 < (int) $attempt->getOrigLpItemId()
             || 0 < (int) $attempt->getOrigLpItemViewId();
         $isOwnAttempt = $currentUserId > 0 && $currentUserId === $attemptUserId;
-        $showFinalActions = !$isLearningPathAttempt && $isOwnAttempt;
+        $showFinalActions = !$isReviewMode && !$isLearningPathAttempt && $isOwnAttempt;
         $attemptCount = $this->getAttemptCountForResultContext($quiz, $attempt, $course, $session);
         $maxAttempt = (int) $quiz->getMaxAttempt();
         $attemptLimitReached = 0 < $maxAttempt && $attemptCount >= $maxAttempt;

@@ -88,6 +88,9 @@ final class ExerciseOverview
     public int $resultsDisabled = 0;
 
     #[Groups(['exercise_overview:read'])]
+    public bool $oneQuestionPerPage = false;
+
+    #[Groups(['exercise_overview:read'])]
     public bool $randomAnswers = false;
 
     #[Groups(['exercise_overview:read'])]

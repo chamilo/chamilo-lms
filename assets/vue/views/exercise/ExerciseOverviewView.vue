@@ -68,6 +68,12 @@
             >
               {{ displayText(overview.description) }}
             </div>
+            <div class="flex flex-wrap gap-3 text-xs font-medium text-gray-700">
+              <span>{{ t("Questions") }}: {{ overview.questionCount || 0 }}</span>
+              <span>{{ t("Total score") }}: {{ formatScore(overview.maxScore) }}</span>
+              <span v-if="overview.oneQuestionPerPage">{{ t("One question per page") }}</span>
+              <span v-if="overview.duration">{{ t("Duration") }}: {{ t("{0} min", [overview.duration]) }}</span>
+            </div>
           </div>
           <div class="flex flex-wrap gap-2">
             <span :class="['rounded-full px-3 py-1 text-xs font-semibold', availabilityBadgeClass(overview.availabilityStatus)]">
@@ -218,6 +224,7 @@ const overview = reactive({
   maxAttempt: 0,
   feedbackType: 0,
   resultsDisabled: 0,
+  oneQuestionPerPage: false,
   randomAnswers: false,
   random: 0,
   randomByCategory: 0,

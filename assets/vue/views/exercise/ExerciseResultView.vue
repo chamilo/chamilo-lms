@@ -1450,6 +1450,8 @@ function getContextParams() {
     learnpath_item_id: getQueryValue(route.query.learnpath_item_id),
     learnpath_item_view_id: getQueryValue(route.query.learnpath_item_view_id),
     isStudentView: getQueryValue(route.query.isStudentView),
+    review: getQueryValue(route.query.review),
+    mode: getQueryValue(route.query.mode),
   }
 }
 
@@ -1528,7 +1530,10 @@ function getCourseHomeQuery() {
 }
 
 const showStandaloneFinalActions = computed(() => {
-  return finalActions.value?.showFinalActions === true && !isLearnpathContext.value && getCourseId() > 0
+  return finalActions.value?.showFinalActions === true
+    && visibility.value?.isReviewMode !== true
+    && !isLearnpathContext.value
+    && getCourseId() > 0
 })
 
 function buildPlayerQuery(startResponse = null) {

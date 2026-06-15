@@ -28,6 +28,8 @@ use DateTime;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
+use Event;
+use MessageManager;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -121,15 +123,28 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
             $rows[] = $this->createEmptyAttemptRow($attempt, $questionId);
         }
 
+        $teacherComment = (string) $data->teacherComment;
+        $previousMarks = $this->getCurrentQuestionMarks($rows);
+        $correctionChanged = $this->hasCorrectionChanged($rows, $marks, $teacherComment);
+
         foreach ($rows as $row) {
             $row
                 ->setMarks($marks)
-                ->setTeacherComment((string) $data->teacherComment)
+                ->setTeacherComment($teacherComment)
                 ->setTms(new DateTime())
             ;
         }
 
-        $this->recordCorrectionHistory($attempt, $questionId, $marks, (string) $data->teacherComment, (int) ($session?->getId() ?? 0));
+        if ($correctionChanged && $this->hasScoreChanged($previousMarks, $marks)) {
+            $this->recordQuestionScoreUpdateEvent($attempt, $questionId, $previousMarks, $marks);
+        }
+
+        $notificationSent = false;
+        if ($correctionChanged && $data->sendNotification) {
+            $notificationSent = $this->sendCorrectionNotification($attempt, $teacherComment, (string) $data->notificationContent);
+        }
+
+        $this->recordCorrectionHistory($attempt, $questionId, $marks, $teacherComment, (int) ($session?->getId() ?? 0));
         $this->removeQuestionToCheck($attempt, $questionId);
         $this->recalculateAttemptScore($attempt, $quiz);
         $this->synchronizeLearnpathTrackingAfterCorrection($attempt, $quiz, $course, $session);
@@ -140,8 +155,9 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
         $response->attemptId = $attemptId;
         $response->questionId = $questionId;
         $response->marks = $marks;
-        $response->teacherComment = (string) $data->teacherComment;
+        $response->teacherComment = $teacherComment;
         $response->success = true;
+        $response->notificationSent = $notificationSent;
         $response->message = 'Correction saved';
         $response->score = (float) $attempt->getScore();
         $response->maxScore = (float) $attempt->getMaxScore();
@@ -375,6 +391,85 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
         ;
 
         $this->entityManager->persist($recording);
+    }
+
+    /**
+     * @param array<int, TrackEAttempt> $rows
+     */
+    private function getCurrentQuestionMarks(array $rows): float
+    {
+        foreach ($rows as $row) {
+            return (float) $row->getMarks();
+        }
+
+        return 0.0;
+    }
+
+    /**
+     * @param array<int, TrackEAttempt> $rows
+     */
+    private function hasCorrectionChanged(array $rows, float $newMarks, string $newTeacherComment): bool
+    {
+        foreach ($rows as $row) {
+            return $this->hasScoreChanged((float) $row->getMarks(), $newMarks)
+                || $row->getTeacherComment() !== $newTeacherComment;
+        }
+
+        return 0.0 !== $newMarks || '' !== $newTeacherComment;
+    }
+
+    private function hasScoreChanged(float $oldMarks, float $newMarks): bool
+    {
+        return 0.00001 < abs($oldMarks - $newMarks);
+    }
+
+    private function recordQuestionScoreUpdateEvent(TrackEExercise $attempt, int $questionId, float $oldMarks, float $newMarks): void
+    {
+        if (!class_exists(Event::class) || !defined('LOG_QUESTION_SCORE_UPDATE') || !defined('LOG_EXERCISE_ATTEMPT_QUESTION_ID')) {
+            return;
+        }
+
+        Event::addEvent(
+            LOG_QUESTION_SCORE_UPDATE,
+            LOG_EXERCISE_ATTEMPT_QUESTION_ID,
+            [
+                'exe_id' => (int) $attempt->getExeId(),
+                'question_id' => $questionId,
+                'old_marks' => $oldMarks,
+                'new_marks' => $newMarks,
+            ],
+        );
+    }
+
+    private function sendCorrectionNotification(TrackEExercise $attempt, string $teacherComment, string $notificationContent): bool
+    {
+        $teacher = $this->security->getUser();
+        if (!$teacher instanceof User || !class_exists(MessageManager::class)) {
+            return false;
+        }
+
+        $content = trim($notificationContent);
+        if ('' === $content) {
+            $content = trim($teacherComment);
+        }
+
+        if ('' === $content) {
+            return false;
+        }
+
+        $subject = 'Examsheet viewed/corrected/commented by the trainer';
+        if (function_exists('get_lang')) {
+            $subject = get_lang('Examsheet viewed/corrected/commented by the trainer');
+        }
+
+        MessageManager::send_message_simple(
+            (int) $attempt->getUser()->getId(),
+            $subject,
+            $content,
+            (int) $teacher->getId(),
+        );
+
+        return true;
     }
 
     private function removeQuestionToCheck(TrackEExercise $attempt, int $questionId): void

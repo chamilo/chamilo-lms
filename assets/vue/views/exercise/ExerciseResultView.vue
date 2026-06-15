@@ -821,6 +821,29 @@
                       @click="saveManualCorrection(question)"
                     />
                   </div>
+                  <div class="mt-3 rounded-lg border border-gray-20 bg-gray-10 p-3">
+                    <label class="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                      <input
+                        v-model="correctionForms[question.id].sendNotification"
+                        :disabled="correctionSavingQuestionId === question.id"
+                        class="h-4 w-4 rounded border-gray-30 text-primary focus:ring-primary"
+                        name="send_notification"
+                        type="checkbox"
+                        @change="prepareCorrectionNotificationContent(question)"
+                      />
+                      {{ t("Send email") }}
+                    </label>
+                    <BaseTextArea
+                      v-if="correctionForms[question.id].sendNotification"
+                      v-model="correctionForms[question.id].notificationContent"
+                      :disabled="correctionSavingQuestionId === question.id"
+                      :id="correctionNotificationInputId(question)"
+                      :label="t('Content')"
+                      class="mt-3"
+                      name="notification_content"
+                      rows="3"
+                    />
+                  </div>
                 </div>
               </div>
             </template>
@@ -1002,6 +1025,29 @@
                       @click="saveManualCorrection(question)"
                     />
                   </div>
+                  <div class="mt-3 rounded-lg border border-gray-20 bg-gray-10 p-3">
+                    <label class="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                      <input
+                        v-model="correctionForms[question.id].sendNotification"
+                        :disabled="correctionSavingQuestionId === question.id"
+                        class="h-4 w-4 rounded border-gray-30 text-primary focus:ring-primary"
+                        name="send_notification"
+                        type="checkbox"
+                        @change="prepareCorrectionNotificationContent(question)"
+                      />
+                      {{ t("Send email") }}
+                    </label>
+                    <BaseTextArea
+                      v-if="correctionForms[question.id].sendNotification"
+                      v-model="correctionForms[question.id].notificationContent"
+                      :disabled="correctionSavingQuestionId === question.id"
+                      :id="correctionNotificationInputId(question)"
+                      :label="t('Content')"
+                      class="mt-3"
+                      name="notification_content"
+                      rows="3"
+                    />
+                  </div>
                 </div>
               </div>
             </template>
@@ -1174,6 +1220,29 @@
                       @click="saveManualCorrection(question)"
                     />
                   </div>
+                  <div class="mt-3 rounded-lg border border-gray-20 bg-gray-10 p-3">
+                    <label class="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                      <input
+                        v-model="correctionForms[question.id].sendNotification"
+                        :disabled="correctionSavingQuestionId === question.id"
+                        class="h-4 w-4 rounded border-gray-30 text-primary focus:ring-primary"
+                        name="send_notification"
+                        type="checkbox"
+                        @change="prepareCorrectionNotificationContent(question)"
+                      />
+                      {{ t("Send email") }}
+                    </label>
+                    <BaseTextArea
+                      v-if="correctionForms[question.id].sendNotification"
+                      v-model="correctionForms[question.id].notificationContent"
+                      :disabled="correctionSavingQuestionId === question.id"
+                      :id="correctionNotificationInputId(question)"
+                      :label="t('Content')"
+                      class="mt-3"
+                      name="notification_content"
+                      rows="3"
+                    />
+                  </div>
                 </div>
               </div>
             </template>
@@ -1339,6 +1408,29 @@
                       icon="content-save"
                       type="success"
                       @click="saveManualCorrection(question)"
+                    />
+                  </div>
+                  <div class="mt-3 rounded-lg border border-gray-20 bg-gray-10 p-3">
+                    <label class="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                      <input
+                        v-model="correctionForms[question.id].sendNotification"
+                        :disabled="correctionSavingQuestionId === question.id"
+                        class="h-4 w-4 rounded border-gray-30 text-primary focus:ring-primary"
+                        name="send_notification"
+                        type="checkbox"
+                        @change="prepareCorrectionNotificationContent(question)"
+                      />
+                      {{ t("Send email") }}
+                    </label>
+                    <BaseTextArea
+                      v-if="correctionForms[question.id].sendNotification"
+                      v-model="correctionForms[question.id].notificationContent"
+                      :disabled="correctionSavingQuestionId === question.id"
+                      :id="correctionNotificationInputId(question)"
+                      :label="t('Content')"
+                      class="mt-3"
+                      name="notification_content"
+                      rows="3"
                     />
                   </div>
                 </div>
@@ -1935,6 +2027,8 @@ function initializeCorrectionForms() {
     forms[question.id] = {
       marks: Number(question.score ?? question.answer?.marks ?? 0),
       teacherComment: question.answer?.teacherComment || "",
+      sendNotification: false,
+      notificationContent: "",
     }
   }
 
@@ -2137,6 +2231,19 @@ function correctionCommentInputId(question) {
   return `teacher_comment_${Number(question.id || 0)}`
 }
 
+function correctionNotificationInputId(question) {
+  return `notification_content_${Number(question.id || 0)}`
+}
+
+function prepareCorrectionNotificationContent(question) {
+  const form = correctionForms.value[question.id]
+  if (!form?.sendNotification || form.notificationContent) {
+    return
+  }
+
+  form.notificationContent = form.teacherComment || ""
+}
+
 async function saveManualCorrection(question) {
   const form = correctionForms.value[question.id]
   const exerciseId = getExerciseId()
@@ -2158,6 +2265,8 @@ async function saveManualCorrection(question) {
         questionId,
         marks: Number(form.marks || 0),
         teacherComment: form.teacherComment || "",
+        sendNotification: Boolean(form.sendNotification),
+        notificationContent: form.notificationContent || form.teacherComment || "",
       },
       getContextParams(),
       exerciseId,
@@ -2168,7 +2277,7 @@ async function saveManualCorrection(question) {
       throw new Error(response?.message || "Could not save correction")
     }
 
-    correctionMessage.value = t("Correction saved")
+    correctionMessage.value = response?.notificationSent ? t("Message Sent") : t("Correction saved")
     await loadResult()
   } catch (error) {
     console.error("Error saving exercise correction", error)

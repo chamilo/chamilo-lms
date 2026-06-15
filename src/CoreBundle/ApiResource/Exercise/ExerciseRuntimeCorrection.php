@@ -60,8 +60,17 @@ final class ExerciseRuntimeCorrection
     #[Groups(['exercise_runtime_correction:read', 'exercise_runtime_correction:write'])]
     public string $teacherComment = '';
 
+    #[Groups(['exercise_runtime_correction:write'])]
+    public bool $sendNotification = false;
+
+    #[Groups(['exercise_runtime_correction:write'])]
+    public string $notificationContent = '';
+
     #[Groups(['exercise_runtime_correction:read'])]
     public bool $success = false;
+
+    #[Groups(['exercise_runtime_correction:read'])]
+    public bool $notificationSent = false;
 
     #[Groups(['exercise_runtime_correction:read'])]
     public string $message = '';

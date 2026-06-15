@@ -6,10 +6,12 @@
     users. Card markup mirrors view/catalog.tpl and view/subscription_catalog.tpl
     so the look and the buy/description links stay consistent. The buy script
     (process.php vs subscription_process.php) and product type (1 course, 2
-    session) are passed in per section.
+    session) can be defined per item, with section values as fallback.
 #}
 
 {% macro course_card(course, buy_script, t) %}
+    {% set item_buy_script = course.buy_script|default(buy_script) %}
+    {% set item_buy_type = course.buy_type|default(t) %}
     {% set description_url = url('index') ~ 'plugin/BuyCourses/src/course_information.php?' ~ {'course_id': course.id}|url_encode %}
     <article class="overflow-hidden rounded-3xl border border-gray-25 bg-white shadow-sm transition hover:shadow-md">
         <div class="aspect-[16/9] overflow-hidden bg-support-2">
@@ -85,7 +87,7 @@
 
                     <a
                         class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-success px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-success/30 focus:ring-offset-2"
-                        href="{{ url('index') ~ 'plugin/BuyCourses/src/' ~ buy_script ~ '?' ~ {'i': course.id, 't': t}|url_encode }}"
+                        href="{{ url('index') ~ 'plugin/BuyCourses/src/' ~ item_buy_script ~ '?' ~ {'i': course.id, 't': item_buy_type}|url_encode }}"
                     >
                         <em class="fa fa-shopping-cart fa-fw"></em>
                         {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
@@ -97,6 +99,8 @@
 {% endmacro %}
 
 {% macro session_card(session, buy_script, t) %}
+    {% set item_buy_script = session.buy_script|default(buy_script) %}
+    {% set item_buy_type = session.buy_type|default(t) %}
     <article class="overflow-hidden rounded-3xl border border-gray-25 bg-white shadow-sm transition hover:shadow-md">
         <div class="aspect-[16/9] overflow-hidden bg-support-2">
             <img
@@ -164,7 +168,7 @@
 
                     <a
                         class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-success px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-success/30 focus:ring-offset-2"
-                        href="{{ url('index') ~ 'plugin/BuyCourses/src/' ~ buy_script ~ '?' ~ {'i': session.id, 't': t}|url_encode }}"
+                        href="{{ url('index') ~ 'plugin/BuyCourses/src/' ~ item_buy_script ~ '?' ~ {'i': session.id, 't': item_buy_type}|url_encode }}"
                     >
                         <em class="fa fa-shopping-cart fa-fw"></em>
                         {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
@@ -259,6 +263,17 @@
 {% endmacro %}
 
 <div class="mt-8 space-y-12">
+    {% if sections is empty %}
+        <section class="rounded-3xl border border-gray-25 bg-white p-10 text-center shadow-sm">
+            <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-support-2 text-primary">
+                <em class="fa fa-shopping-cart text-xl"></em>
+            </div>
+            <h2 class="mt-4 text-lg font-semibold text-gray-90">
+                {{ 'NoProductsAvailable'|get_plugin_lang('BuyCoursesPlugin') }}
+            </h2>
+        </section>
+    {% endif %}
+
     {% for section in sections %}
         <section>
             <div class="mb-5 flex items-center justify-between gap-4">
@@ -266,7 +281,19 @@
                     {{ section.title }}
                 </h2>
 
-                {% if section.total > section.items|length %}
+                {% if section.see_all_links is defined and section.see_all_links %}
+                    <div class="flex flex-wrap justify-end gap-2">
+                        {% for seeAllLink in section.see_all_links %}
+                            <a
+                                href="{{ seeAllLink.url }}"
+                                class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
+                            >
+                                {{ 'See all'|get_lang }} ({{ seeAllLink.total }})
+                                <span class="font-semibold text-primary">&rarr;</span>
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% elseif section.total > section.items|length and section.see_all_url is defined and section.see_all_url %}
                     <a
                         href="{{ section.see_all_url }}"
                         class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"

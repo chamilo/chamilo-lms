@@ -42,7 +42,7 @@ $tpl->assign('services_are_included', $includeServices);
 
 /*
  * For non-admin users, build the product sections rendered directly on the
- * landing page (one section per non-empty catalog list), so visitors see the
+ * landing page (one section per non-empty product family), so visitors see the
  * products without first having to pick a product type. Each section shows a
  * preview (BuyCoursesPlugin::PAGINATION_PAGE_SIZE items) and links to the full
  * catalog when more items exist. Admins keep the navigation/configuration grid.
@@ -53,36 +53,15 @@ $buyerRoleNotice = null;
 
 if (!api_is_platform_admin()) {
     $previewSize = BuyCoursesPlugin::PAGINATION_PAGE_SIZE;
-
-    $courseItems = $plugin->getCatalogCourseList(0, $previewSize);
-    $courseTotal = (int) $plugin->getCatalogCourseList(0, $previewSize, null, 0, 0, 'count');
-    if ($courseTotal > 0) {
-        $sections[] = [
-            'card' => 'course',
-            'title' => get_lang('Courses'),
-            'items' => $courseItems,
-            'total' => $courseTotal,
-            'see_all_url' => 'src/course_catalog.php',
-            'buy_script' => 'process.php',
-            'buy_type' => 1,
-        ];
-    }
-
-    if ($includeSessions) {
-        $sessionItems = $plugin->getCatalogSessionList(0, $previewSize, null, 0, 0, 'all', 0);
-        $sessionTotal = (int) $plugin->getCatalogSessionList(0, $previewSize, null, 0, 0, 'count', 0);
-        if ($sessionTotal > 0) {
-            $sections[] = [
-                'card' => 'session',
-                'title' => get_lang('Sessions'),
-                'items' => $sessionItems,
-                'total' => $sessionTotal,
-                'see_all_url' => 'src/session_catalog.php',
-                'buy_script' => 'process.php',
-                'buy_type' => 2,
-            ];
+    $withBuyMetadata = static function (array $items, string $buyScript, int $buyType): array {
+        foreach ($items as &$item) {
+            $item['buy_script'] = $buyScript;
+            $item['buy_type'] = $buyType;
         }
-    }
+        unset($item);
+
+        return $items;
+    };
 
     if ($includeServices) {
         $appliesTo = (string) BuyCoursesPlugin::SERVICE_TYPE_USER;
@@ -117,9 +96,26 @@ if (!api_is_platform_admin()) {
             'count',
             'yearly'
         );
-        $serviceCatalogTotal = $monthlyServiceTotal + $yearlyServiceTotal;
+        $availableBillingCycles = [];
+        if ($monthlyServiceTotal > 0) {
+            $availableBillingCycles['monthly'] = [
+                'label' => $plugin->get_lang('MonthlyPlans'),
+                'total' => $monthlyServiceTotal,
+            ];
+        }
+        if ($yearlyServiceTotal > 0) {
+            $availableBillingCycles['yearly'] = [
+                'label' => $plugin->get_lang('YearlyPlans'),
+                'total' => $yearlyServiceTotal,
+            ];
+        }
 
+        $serviceCatalogTotal = $monthlyServiceTotal + $yearlyServiceTotal;
         if ($serviceCatalogTotal > 0) {
+            if (!isset($availableBillingCycles[$billingCycleFilter])) {
+                $billingCycleFilter = (string) array_key_first($availableBillingCycles);
+            }
+
             $serviceItems = $plugin->getCatalogServiceList(
                 0,
                 $previewSize,
@@ -180,12 +176,14 @@ if (!api_is_platform_admin()) {
             }
 
             $billingCycleTabs = [];
-            foreach (['monthly' => 'MonthlyPlans', 'yearly' => 'YearlyPlans'] as $cycle => $labelKey) {
-                $billingCycleTabs[] = [
-                    'label' => $plugin->get_lang($labelKey),
-                    'url' => 'index.php?'.http_build_query(['billing_cycle' => $cycle]),
-                    'active' => $cycle === $billingCycleFilter,
-                ];
+            if (count($availableBillingCycles) > 1) {
+                foreach ($availableBillingCycles as $cycle => $billingCycle) {
+                    $billingCycleTabs[] = [
+                        'label' => $billingCycle['label'],
+                        'url' => 'index.php?'.http_build_query(['billing_cycle' => $cycle]),
+                        'active' => $cycle === $billingCycleFilter,
+                    ];
+                }
             }
 
             $sections[] = [
@@ -199,32 +197,100 @@ if (!api_is_platform_admin()) {
         }
     }
 
-    $subscriptionCourseItems = $plugin->getCatalogSubscriptionCourseList(0, $previewSize);
+    $courseItems = $withBuyMetadata(
+        $plugin->getCatalogCourseList(0, $previewSize),
+        'process.php',
+        BuyCoursesPlugin::PRODUCT_TYPE_COURSE
+    );
+    $courseTotal = (int) $plugin->getCatalogCourseList(0, $previewSize, null, 0, 0, 'count');
+    $subscriptionCourseItems = $withBuyMetadata(
+        $plugin->getCatalogSubscriptionCourseList(0, $previewSize),
+        'subscription_process.php',
+        BuyCoursesPlugin::PRODUCT_TYPE_COURSE
+    );
     $subscriptionCourseTotal = (int) $plugin->getCatalogSubscriptionCourseList(0, $previewSize, null, 'count');
-    if ($subscriptionCourseTotal > 0) {
+    $courseCatalogTotal = $courseTotal + $subscriptionCourseTotal;
+    if ($courseCatalogTotal > 0) {
+        $courseSectionItems = array_slice(
+            array_merge($courseItems, $subscriptionCourseItems),
+            0,
+            $previewSize
+        );
+        $courseSeeAllLinks = [];
+        if ($courseCatalogTotal > count($courseSectionItems)) {
+            if ($courseTotal > 0) {
+                $courseSeeAllLinks[] = [
+                    'label' => get_lang('Courses'),
+                    'url' => 'src/course_catalog.php',
+                    'total' => $courseTotal,
+                ];
+            }
+            if ($subscriptionCourseTotal > 0) {
+                $courseSeeAllLinks[] = [
+                    'label' => get_lang('Courses'),
+                    'url' => 'src/subscription_course_catalog.php',
+                    'total' => $subscriptionCourseTotal,
+                ];
+            }
+        }
+
         $sections[] = [
             'card' => 'course',
-            'title' => $plugin->get_lang('Subscriptions').' – '.get_lang('Courses'),
-            'items' => $subscriptionCourseItems,
-            'total' => $subscriptionCourseTotal,
-            'see_all_url' => 'src/subscription_course_catalog.php',
-            'buy_script' => 'subscription_process.php',
-            'buy_type' => 1,
+            'title' => get_lang('Courses'),
+            'items' => $courseSectionItems,
+            'total' => $courseCatalogTotal,
+            'buy_script' => 'process.php',
+            'buy_type' => BuyCoursesPlugin::PRODUCT_TYPE_COURSE,
+            'see_all_links' => $courseSeeAllLinks,
         ];
     }
 
     if ($includeSessions) {
-        $subscriptionSessionItems = $plugin->getCatalogSubscriptionSessionList(0, $previewSize, null, 'all', 0);
+        $sessionItems = $withBuyMetadata(
+            $plugin->getCatalogSessionList(0, $previewSize, null, 0, 0, 'all', 0),
+            'process.php',
+            BuyCoursesPlugin::PRODUCT_TYPE_SESSION
+        );
+        $sessionTotal = (int) $plugin->getCatalogSessionList(0, $previewSize, null, 0, 0, 'count', 0);
+        $subscriptionSessionItems = $withBuyMetadata(
+            $plugin->getCatalogSubscriptionSessionList(0, $previewSize, null, 'all', 0),
+            'subscription_process.php',
+            BuyCoursesPlugin::PRODUCT_TYPE_SESSION
+        );
         $subscriptionSessionTotal = (int) $plugin->getCatalogSubscriptionSessionList(0, $previewSize, null, 'count', 0);
-        if ($subscriptionSessionTotal > 0) {
+        $sessionCatalogTotal = $sessionTotal + $subscriptionSessionTotal;
+        if ($sessionCatalogTotal > 0) {
+            $sessionSectionItems = array_slice(
+                array_merge($sessionItems, $subscriptionSessionItems),
+                0,
+                $previewSize
+            );
+            $sessionSeeAllLinks = [];
+            if ($sessionCatalogTotal > count($sessionSectionItems)) {
+                if ($sessionTotal > 0) {
+                    $sessionSeeAllLinks[] = [
+                        'label' => get_lang('Sessions'),
+                        'url' => 'src/session_catalog.php',
+                        'total' => $sessionTotal,
+                    ];
+                }
+                if ($subscriptionSessionTotal > 0) {
+                    $sessionSeeAllLinks[] = [
+                        'label' => get_lang('Sessions'),
+                        'url' => 'src/subscription_session_catalog.php',
+                        'total' => $subscriptionSessionTotal,
+                    ];
+                }
+            }
+
             $sections[] = [
                 'card' => 'session',
-                'title' => $plugin->get_lang('Subscriptions').' – '.get_lang('Sessions'),
-                'items' => $subscriptionSessionItems,
-                'total' => $subscriptionSessionTotal,
-                'see_all_url' => 'src/subscription_session_catalog.php',
-                'buy_script' => 'subscription_process.php',
-                'buy_type' => 2,
+                'title' => get_lang('Sessions'),
+                'items' => $sessionSectionItems,
+                'total' => $sessionCatalogTotal,
+                'buy_script' => 'process.php',
+                'buy_type' => BuyCoursesPlugin::PRODUCT_TYPE_SESSION,
+                'see_all_links' => $sessionSeeAllLinks,
             ];
         }
     }

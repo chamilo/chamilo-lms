@@ -14,7 +14,7 @@
 
                 <div>
                     <h1 class="text-2xl font-semibold tracking-tight text-gray-90 sm:text-3xl">
-                        {{ page_title|default('AvailableCourses'|get_lang) }}
+                        {{ page_title|default('AvailableCourses'|get_plugin_lang('BuyCoursesPlugin')) }}
                     </h1>
                     <p class="mt-2 max-w-3xl text-sm leading-6 text-gray-50">
                         {{ 'SubscriptionsPageIntro'|get_plugin_lang('BuyCoursesPlugin') }}

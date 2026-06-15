@@ -86,9 +86,61 @@ if (!api_is_platform_admin()) {
 
     if ($includeServices) {
         $appliesTo = (string) BuyCoursesPlugin::SERVICE_TYPE_USER;
-        $serviceItems = $plugin->getCatalogServiceList(0, $previewSize, null, 0, 0, $appliesTo);
-        $serviceTotal = (int) $plugin->getCatalogServiceList(0, $previewSize, null, 0, 0, $appliesTo, 'count');
-        if ($serviceTotal > 0) {
+        $billingCycleFilter = isset($_GET['billing_cycle'])
+            ? trim((string) $_GET['billing_cycle'])
+            : 'monthly';
+        $allowedBillingCycleFilters = [
+            'monthly',
+            'yearly',
+        ];
+        if (!in_array($billingCycleFilter, $allowedBillingCycleFilters, true)) {
+            $billingCycleFilter = 'monthly';
+        }
+
+        $monthlyServiceTotal = (int) $plugin->getCatalogServiceList(
+            0,
+            $previewSize,
+            null,
+            0,
+            0,
+            $appliesTo,
+            'count',
+            'monthly'
+        );
+        $yearlyServiceTotal = (int) $plugin->getCatalogServiceList(
+            0,
+            $previewSize,
+            null,
+            0,
+            0,
+            $appliesTo,
+            'count',
+            'yearly'
+        );
+        $serviceCatalogTotal = $monthlyServiceTotal + $yearlyServiceTotal;
+
+        if ($serviceCatalogTotal > 0) {
+            $serviceItems = $plugin->getCatalogServiceList(
+                0,
+                $previewSize,
+                null,
+                0,
+                0,
+                $appliesTo,
+                'all',
+                $billingCycleFilter
+            );
+            $serviceTotal = (int) $plugin->getCatalogServiceList(
+                0,
+                $previewSize,
+                null,
+                0,
+                0,
+                $appliesTo,
+                'count',
+                $billingCycleFilter
+            );
+
             try {
                 $selectedCurrency = $plugin->getSelectedCurrency();
             } catch (Exception) {
@@ -98,6 +150,7 @@ if (!api_is_platform_admin()) {
 
             foreach ($serviceItems as &$service) {
                 $serviceId = (int) $service['id'];
+                $durationDays = (int) ($service['duration_days'] ?? 0);
                 $service['has_blocking_sale'] = $plugin->hasBlockingUserServiceSaleForCurrentBuyer($serviceId);
                 $service['has_pending_sale'] = $plugin->hasPendingUserServiceSaleForCurrentBuyer($serviceId);
 
@@ -110,6 +163,14 @@ if (!api_is_platform_admin()) {
                 } else {
                     $service['display_price'] = number_format($priceValue, 2, '.', ',');
                 }
+
+                $service['billing_cycle_label'] = $durationDays >= 365
+                    ? $plugin->get_lang('YearlyPlan')
+                    : $plugin->get_lang('MonthlyPlan');
+
+                $service['duration_label'] = $durationDays > 0
+                    ? sprintf($plugin->get_lang('ServiceDurationXDays'), $durationDays)
+                    : '';
             }
             unset($service);
 
@@ -118,12 +179,22 @@ if (!api_is_platform_admin()) {
                 $buyerRoleNotice = $plugin->get_lang('ServicesOnlyForTeachers');
             }
 
+            $billingCycleTabs = [];
+            foreach (['monthly' => 'MonthlyPlans', 'yearly' => 'YearlyPlans'] as $cycle => $labelKey) {
+                $billingCycleTabs[] = [
+                    'label' => $plugin->get_lang($labelKey),
+                    'url' => 'index.php?'.http_build_query(['billing_cycle' => $cycle]),
+                    'active' => $cycle === $billingCycleFilter,
+                ];
+            }
+
             $sections[] = [
                 'card' => 'service',
                 'title' => $plugin->get_lang('Services'),
                 'items' => $serviceItems,
                 'total' => $serviceTotal,
-                'see_all_url' => 'src/service_catalog.php',
+                'see_all_url' => 'src/service_catalog.php?'.http_build_query(['billing_cycle' => $billingCycleFilter]),
+                'billing_cycle_tabs' => $billingCycleTabs,
             ];
         }
     }

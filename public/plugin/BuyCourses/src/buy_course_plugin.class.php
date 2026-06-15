@@ -5076,7 +5076,8 @@ class BuyCoursesPlugin extends Plugin
         int $min = 0,
         int $max = 0,
         $appliesTo = '',
-        string $typeResult = 'all'
+        string $typeResult = 'all',
+        ?string $billingCycle = null
     ) {
         $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
@@ -5099,6 +5100,13 @@ class BuyCoursesPlugin extends Plugin
 
         if ('' == !$appliesTo) {
             $whereConditions['AND s.applies_to = ?'] = $appliesTo;
+        }
+
+        if ('monthly' === $billingCycle) {
+            $whereConditions['AND s.duration_days > ?'] = 0;
+            $whereConditions['AND s.duration_days <= ?'] = 31;
+        } elseif ('yearly' === $billingCycle) {
+            $whereConditions['AND s.duration_days >= ?'] = 365;
         }
 
         $innerJoins = "INNER JOIN $userTable u ON s.owner_id = u.id";

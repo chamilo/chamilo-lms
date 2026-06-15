@@ -154,6 +154,18 @@ $appliesToFilter = isset($_GET['applies_to'])
     ? (string) $_GET['applies_to']
     : (string) BuyCoursesPlugin::SERVICE_TYPE_USER;
 
+$billingCycleFilter = isset($_GET['billing_cycle'])
+    ? trim((string) $_GET['billing_cycle'])
+    : 'monthly';
+
+$allowedBillingCycleFilters = [
+    'monthly',
+    'yearly',
+];
+if (!in_array($billingCycleFilter, $allowedBillingCycleFilters, true)) {
+    $billingCycleFilter = 'monthly';
+}
+
 $allowedAppliesToValues = [
     (string) BuyCoursesPlugin::SERVICE_TYPE_USER,
 ];
@@ -179,7 +191,9 @@ $serviceList = $plugin->getCatalogServiceList(
     '' !== $nameFilter ? $nameFilter : null,
     $minFilter,
     $maxFilter,
-    $appliesToFilter
+    $appliesToFilter,
+    'all',
+    $billingCycleFilter
 );
 
 foreach ($serviceList as &$service) {
@@ -196,7 +210,8 @@ $totalItems = (int) $plugin->getCatalogServiceList(
     $minFilter,
     $maxFilter,
     $appliesToFilter,
-    'count'
+    'count',
+    $billingCycleFilter
 );
 
 try {
@@ -210,6 +225,7 @@ $selectedCurrencyIsoCode = (string) ($selectedCurrency['iso_code'] ?? '');
 foreach ($serviceList as &$service) {
     $isoCode = (string) ($service['iso_code'] ?? $selectedCurrencyIsoCode);
     $priceValue = (float) ($service['total_price'] ?? 0);
+    $durationDays = (int) ($service['duration_days'] ?? 0);
 
     if (!empty($service['total_price_formatted'])) {
         $service['display_price'] = (string) $service['total_price_formatted'];
@@ -218,6 +234,14 @@ foreach ($serviceList as &$service) {
     } else {
         $service['display_price'] = number_format($priceValue, 2, '.', ',');
     }
+
+    $service['billing_cycle_label'] = $durationDays >= 365
+        ? $plugin->get_lang('YearlyPlan')
+        : $plugin->get_lang('MonthlyPlan');
+
+    $service['duration_label'] = $durationDays > 0
+        ? sprintf($plugin->get_lang('ServiceDurationXDays'), $durationDays)
+        : '';
 }
 unset($service);
 
@@ -229,6 +253,38 @@ if (!$canBuyServices) {
 }
 
 $pagesCount = $totalItems > 0 ? (int) ceil($totalItems / $pageSize) : 1;
+
+$billingTabBaseParams = [];
+if ('' !== $nameFilter) {
+    $billingTabBaseParams['name'] = $nameFilter;
+}
+if ('' !== $minFilterValue) {
+    $billingTabBaseParams['min'] = $minFilterValue;
+}
+if ('' !== $maxFilterValue) {
+    $billingTabBaseParams['max'] = $maxFilterValue;
+}
+
+$buildServiceCatalogUrl = static function (array $params): string {
+    return 'service_catalog.php?'.http_build_query($params);
+};
+
+$billingCycleTabs = [
+    [
+        'key' => 'monthly',
+        'label' => $plugin->get_lang('MonthlyPlans'),
+        'url' => $buildServiceCatalogUrl(array_merge($billingTabBaseParams, ['billing_cycle' => 'monthly'])),
+        'active' => 'monthly' === $billingCycleFilter,
+    ],
+    [
+        'key' => 'yearly',
+        'label' => $plugin->get_lang('YearlyPlans'),
+        'url' => $buildServiceCatalogUrl(array_merge($billingTabBaseParams, ['billing_cycle' => 'yearly'])),
+        'active' => 'yearly' === $billingCycleFilter,
+    ],
+];
+
+$serviceCatalogResetUrl = $buildServiceCatalogUrl(['billing_cycle' => $billingCycleFilter]);
 
 $pluginIndexUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/index.php';
 $backUrl = $pluginIndexUrl;
@@ -279,6 +335,9 @@ $tpl->assign('name_filter_value', $nameFilter);
 $tpl->assign('min_filter_value', $minFilterValue);
 $tpl->assign('max_filter_value', $maxFilterValue);
 $tpl->assign('applies_to_filter_value', $appliesToFilter);
+$tpl->assign('billing_cycle_filter_value', $billingCycleFilter);
+$tpl->assign('billing_cycle_tabs', $billingCycleTabs);
+$tpl->assign('service_catalog_reset_url', $serviceCatalogResetUrl);
 
 $tpl->assign('pagination_current_page', $currentPage);
 $tpl->assign('pagination_pages_count', $pagesCount);

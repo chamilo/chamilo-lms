@@ -109,6 +109,17 @@ class BuyCoursesPlugin extends Plugin
     public const EXTRA_FIELD_HOSTING_LIMIT = 'buycourses_hosting_limit';
     public const EXTRA_FIELD_DOCUMENT_QUOTA = 'buycourses_document_quota';
 
+    public const AI_COURSE_FEATURE_LEARNING_PATH_GENERATOR = 'learning_path_generator';
+    public const AI_COURSE_FEATURE_EXERCISE_GENERATOR = 'exercise_generator';
+    public const AI_COURSE_FEATURE_OPEN_ANSWERS_GRADER = 'open_answers_grader';
+    public const AI_COURSE_FEATURE_TUTOR_CHATBOT = 'tutor_chatbot';
+    public const AI_COURSE_FEATURE_TASK_GRADER = 'task_grader';
+    public const AI_COURSE_FEATURE_CONTENT_ANALYSER = 'content_analyser';
+    public const AI_COURSE_FEATURE_IMAGE_GENERATOR = 'image_generator';
+    public const AI_COURSE_FEATURE_GLOSSARY_TERMS_GENERATOR = 'glossary_terms_generator';
+    public const AI_COURSE_FEATURE_COURSE_ANALYSER = 'course_analyser';
+    public const AI_COURSE_FEATURE_VIDEO_GENERATOR = 'video_generator';
+
     /**
      * @var bool
      */
@@ -446,6 +457,7 @@ class BuyCoursesPlugin extends Plugin
             'subscription_behavior_json' => 'LONGTEXT DEFAULT NULL',
             'stripe_price_id' => 'VARCHAR(255) DEFAULT NULL',
             'display_on_course_creation_page' => 'TINYINT(1) NOT NULL DEFAULT 0',
+            'ai_course_features_json' => 'LONGTEXT DEFAULT NULL',
         ];
 
         foreach ($recurringServiceColumns as $field => $definition) {
@@ -944,6 +956,146 @@ class BuyCoursesPlugin extends Plugin
         ];
     }
 
+    public function getAiCourseFeatureDefinitions(): array
+    {
+        return [
+            self::AI_COURSE_FEATURE_LEARNING_PATH_GENERATOR => [
+                'variable' => self::AI_COURSE_FEATURE_LEARNING_PATH_GENERATOR,
+                'title' => $this->get_lang('AiCourseFeatureLearningPathGeneratorTitle'),
+                'description' => $this->get_lang('AiCourseFeatureLearningPathGeneratorDescription'),
+            ],
+            self::AI_COURSE_FEATURE_EXERCISE_GENERATOR => [
+                'variable' => self::AI_COURSE_FEATURE_EXERCISE_GENERATOR,
+                'title' => $this->get_lang('AiCourseFeatureExerciseGeneratorTitle'),
+                'description' => $this->get_lang('AiCourseFeatureExerciseGeneratorDescription'),
+            ],
+            self::AI_COURSE_FEATURE_OPEN_ANSWERS_GRADER => [
+                'variable' => self::AI_COURSE_FEATURE_OPEN_ANSWERS_GRADER,
+                'title' => $this->get_lang('AiCourseFeatureOpenAnswersGraderTitle'),
+                'description' => $this->get_lang('AiCourseFeatureOpenAnswersGraderDescription'),
+            ],
+            self::AI_COURSE_FEATURE_TUTOR_CHATBOT => [
+                'variable' => self::AI_COURSE_FEATURE_TUTOR_CHATBOT,
+                'title' => $this->get_lang('AiCourseFeatureTutorChatbotTitle'),
+                'description' => $this->get_lang('AiCourseFeatureTutorChatbotDescription'),
+            ],
+            self::AI_COURSE_FEATURE_TASK_GRADER => [
+                'variable' => self::AI_COURSE_FEATURE_TASK_GRADER,
+                'title' => $this->get_lang('AiCourseFeatureTaskGraderTitle'),
+                'description' => $this->get_lang('AiCourseFeatureTaskGraderDescription'),
+            ],
+            self::AI_COURSE_FEATURE_CONTENT_ANALYSER => [
+                'variable' => self::AI_COURSE_FEATURE_CONTENT_ANALYSER,
+                'title' => $this->get_lang('AiCourseFeatureContentAnalyserTitle'),
+                'description' => $this->get_lang('AiCourseFeatureContentAnalyserDescription'),
+            ],
+            self::AI_COURSE_FEATURE_IMAGE_GENERATOR => [
+                'variable' => self::AI_COURSE_FEATURE_IMAGE_GENERATOR,
+                'title' => $this->get_lang('AiCourseFeatureImageGeneratorTitle'),
+                'description' => $this->get_lang('AiCourseFeatureImageGeneratorDescription'),
+            ],
+            self::AI_COURSE_FEATURE_GLOSSARY_TERMS_GENERATOR => [
+                'variable' => self::AI_COURSE_FEATURE_GLOSSARY_TERMS_GENERATOR,
+                'title' => $this->get_lang('AiCourseFeatureGlossaryTermsGeneratorTitle'),
+                'description' => $this->get_lang('AiCourseFeatureGlossaryTermsGeneratorDescription'),
+            ],
+            self::AI_COURSE_FEATURE_COURSE_ANALYSER => [
+                'variable' => self::AI_COURSE_FEATURE_COURSE_ANALYSER,
+                'title' => $this->get_lang('AiCourseFeatureCourseAnalyserTitle'),
+                'description' => $this->get_lang('AiCourseFeatureCourseAnalyserDescription'),
+            ],
+            self::AI_COURSE_FEATURE_VIDEO_GENERATOR => [
+                'variable' => self::AI_COURSE_FEATURE_VIDEO_GENERATOR,
+                'title' => $this->get_lang('AiCourseFeatureVideoGeneratorTitle'),
+                'description' => $this->get_lang('AiCourseFeatureVideoGeneratorDescription'),
+                'expensive' => true,
+            ],
+        ];
+    }
+
+    public function getAiCourseFeatureFormField(string $feature): string
+    {
+        return 'ai_course_feature_'.$feature;
+    }
+
+    public function getAiCourseFeatureFormDefaults(array $service = []): array
+    {
+        $enabledFeatures = $this->normalizeAiCourseFeatures($service['ai_course_features_json'] ?? []);
+        $defaults = [];
+
+        foreach (array_keys($this->getAiCourseFeatureDefinitions()) as $feature) {
+            $defaults[$this->getAiCourseFeatureFormField($feature)] = in_array($feature, $enabledFeatures, true) ? 1 : 0;
+        }
+
+        return $defaults;
+    }
+
+    public function getAiCourseFeaturesFromServiceData(array $serviceData): array
+    {
+        $features = [];
+
+        foreach (array_keys($this->getAiCourseFeatureDefinitions()) as $feature) {
+            $formField = $this->getAiCourseFeatureFormField($feature);
+            if (!empty($serviceData[$formField])) {
+                $features[] = $feature;
+            }
+        }
+
+        return $this->normalizeAiCourseFeatures($features);
+    }
+
+    public function normalizeAiCourseFeatures(mixed $rawFeatures): array
+    {
+        if (is_string($rawFeatures)) {
+            $decoded = json_decode($rawFeatures, true);
+            $rawFeatures = is_array($decoded) ? $decoded : [];
+        }
+
+        if (!is_array($rawFeatures)) {
+            return [];
+        }
+
+        $allowed = array_keys($this->getAiCourseFeatureDefinitions());
+        $features = [];
+
+        foreach ($rawFeatures as $feature) {
+            $feature = (string) $feature;
+            if (in_array($feature, $allowed, true)) {
+                $features[] = $feature;
+            }
+        }
+
+        return array_values(array_unique($features));
+    }
+
+    public function buildAiCourseFeaturesJson(array $features): ?string
+    {
+        $features = $this->normalizeAiCourseFeatures($features);
+        if (empty($features)) {
+            return null;
+        }
+
+        return json_encode($features, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    }
+
+    public function getAiCourseFeatureSummary(array|string|null $rawFeatures): string
+    {
+        $features = $this->normalizeAiCourseFeatures($rawFeatures ?? []);
+        if (empty($features)) {
+            return '';
+        }
+
+        $definitions = $this->getAiCourseFeatureDefinitions();
+        $labels = [];
+        foreach ($features as $feature) {
+            if (isset($definitions[$feature])) {
+                $labels[] = $definitions[$feature]['title'];
+            }
+        }
+
+        return implode(', ', $labels);
+    }
+
     public function getAvailableBenefitExtraFields(): array
     {
         $fields = [];
@@ -1011,12 +1163,19 @@ class BuyCoursesPlugin extends Plugin
             $defaults[$definition['form_field']] = 0;
         }
 
+        $defaults = array_merge($defaults, $this->getAiCourseFeatureFormDefaults());
+
         if ($serviceId <= 0) {
             return $defaults;
         }
 
         foreach ($this->getServiceBenefitConfigurations($serviceId) as $configuration) {
             $defaults[$configuration['form_field']] = (int) ($configuration['granted_value'] ?? 0);
+        }
+
+        $service = $this->getService($serviceId);
+        if (!empty($service) && is_array($service)) {
+            $defaults = array_replace($defaults, $this->getAiCourseFeatureFormDefaults($service));
         }
 
         return $defaults;
@@ -3882,6 +4041,7 @@ class BuyCoursesPlugin extends Plugin
                 'subscription_behavior_json' => $service['subscription_behavior_json'],
                 'stripe_price_id' => $service['stripe_price_id'],
                 'display_on_course_creation_page' => $service['display_on_course_creation_page'],
+                'ai_course_features_json' => $service['ai_course_features_json'],
                 'applies_to' => $service['applies_to'],
                 'owner_id' => $service['owner_id'],
                 'visibility' => $service['visibility'],
@@ -3940,6 +4100,141 @@ class BuyCoursesPlugin extends Plugin
         }
     }
 
+    public function copyService(int $id)
+    {
+        if ($id <= 0) {
+            return false;
+        }
+
+        $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
+        $service = Database::select(
+            '*',
+            $servicesTable,
+            [
+                'where' => ['id = ?' => $id],
+            ],
+            'first'
+        );
+
+        if (empty($service) || !is_array($service)) {
+            return false;
+        }
+
+        $sourceName = trim((string) ($service['name'] ?? ''));
+        if ('' === $sourceName) {
+            $sourceName = $this->get_lang('Service');
+        }
+
+        $sourceImageName = (string) ($service['image'] ?? '');
+
+        $copiedServiceId = Database::insert(
+            $servicesTable,
+            [
+                'name' => $sourceName.' (copy)',
+                'description' => (string) ($service['description'] ?? ''),
+                'price' => isset($service['price']) ? (float) $service['price'] : 0.0,
+                'tax_perc' => '' !== (string) ($service['tax_perc'] ?? '') ? (int) $service['tax_perc'] : null,
+                'duration_days' => isset($service['duration_days']) ? (int) $service['duration_days'] : 0,
+                'renewable' => !empty($service['renewable']) ? 1 : 0,
+                'total_charges' => isset($service['total_charges']) ? (int) $service['total_charges'] : 0,
+                'allow_trial' => !empty($service['allow_trial']) ? 1 : 0,
+                'trial_period' => (string) ($service['trial_period'] ?? ''),
+                'trial_frequency' => isset($service['trial_frequency']) ? (int) $service['trial_frequency'] : 0,
+                'trial_total_charges' => isset($service['trial_total_charges']) ? (int) $service['trial_total_charges'] : 0,
+                'max_subscribers' => isset($service['max_subscribers']) ? (int) $service['max_subscribers'] : 0,
+                'subscription_behavior_json' => (string) ($service['subscription_behavior_json'] ?? ''),
+                'stripe_price_id' => (string) ($service['stripe_price_id'] ?? ''),
+                'display_on_course_creation_page' => !empty($service['display_on_course_creation_page']) ? 1 : 0,
+                'ai_course_features_json' => (string) ($service['ai_course_features_json'] ?? ''),
+                'applies_to' => isset($service['applies_to']) ? (int) $service['applies_to'] : self::SERVICE_TYPE_NONE,
+                'owner_id' => isset($service['owner_id']) ? (int) $service['owner_id'] : api_get_user_id(),
+                'visibility' => !empty($service['visibility']) ? 1 : 0,
+                'image' => '',
+                'video_url' => (string) ($service['video_url'] ?? ''),
+                'service_information' => (string) ($service['service_information'] ?? ''),
+            ]
+        );
+
+        if (!$copiedServiceId) {
+            return false;
+        }
+
+        $copiedImageName = 'simg-'.(int) $copiedServiceId.'.png';
+        if ($this->copyServiceImage($sourceImageName, $copiedImageName)) {
+            Database::update(
+                $servicesTable,
+                ['image' => $copiedImageName],
+                ['id = ?' => (int) $copiedServiceId]
+            );
+        }
+
+        $this->copyServiceBenefitConfigurations($id, (int) $copiedServiceId);
+
+        return (int) $copiedServiceId;
+    }
+
+    private function copyServiceBenefitConfigurations(int $sourceServiceId, int $targetServiceId): void
+    {
+        if ($sourceServiceId <= 0 || $targetServiceId <= 0) {
+            return;
+        }
+
+        if (!$this->hasPluginTable(self::TABLE_SERVICE_REL_EXTRA_FIELD)) {
+            return;
+        }
+
+        $serviceRelTable = Database::get_main_table(self::TABLE_SERVICE_REL_EXTRA_FIELD);
+        $rows = Database::select(
+            '*',
+            $serviceRelTable,
+            [
+                'where' => ['service_id = ?' => $sourceServiceId],
+            ]
+        );
+
+        foreach ($rows as $row) {
+            $extraFieldId = isset($row['extra_field_id']) ? (int) $row['extra_field_id'] : 0;
+            $grantedValue = isset($row['granted_value']) ? (int) $row['granted_value'] : 0;
+
+            if ($extraFieldId <= 0 || $grantedValue <= 0) {
+                continue;
+            }
+
+            Database::insert($serviceRelTable, [
+                'service_id' => $targetServiceId,
+                'extra_field_id' => $extraFieldId,
+                'granted_value' => $grantedValue,
+            ]);
+        }
+    }
+
+    private function copyServiceImage(string $sourceImageName, string $targetImageName): bool
+    {
+        if ('' === $sourceImageName || '' === $targetImageName) {
+            return false;
+        }
+
+        if (!$this->serviceImageExists($sourceImageName)) {
+            return false;
+        }
+
+        try {
+            $pluginsFilesystem = Container::getPluginsFileSystem();
+            $directory = $this->getServiceImagesDirectory();
+
+            if (!$pluginsFilesystem->directoryExists($directory)) {
+                $pluginsFilesystem->createDirectory($directory);
+            }
+
+            $content = $pluginsFilesystem->read($this->getServiceImageStoragePath($sourceImageName));
+            $pluginsFilesystem->write($this->getServiceImageStoragePath($targetImageName), $content);
+        } catch (\Throwable) {
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * update a service.
      *
@@ -3990,6 +4285,7 @@ class BuyCoursesPlugin extends Plugin
                 'subscription_behavior_json' => $service['subscription_behavior_json'],
                 'stripe_price_id' => $service['stripe_price_id'],
                 'display_on_course_creation_page' => $service['display_on_course_creation_page'],
+                'ai_course_features_json' => $service['ai_course_features_json'],
                 'applies_to' => $service['applies_to'],
                 'owner_id' => $service['owner_id'],
                 'visibility' => $service['visibility'],
@@ -4028,6 +4324,9 @@ class BuyCoursesPlugin extends Plugin
             'display_on_course_creation_page' => array_key_exists('display_on_course_creation_page', $service)
                 ? (!empty($service['display_on_course_creation_page']) ? 1 : 0)
                 : (int) ($existingService['display_on_course_creation_page'] ?? 0),
+            'ai_course_features_json' => $this->buildAiCourseFeaturesJson(
+                $this->getAiCourseFeaturesFromServiceData($service)
+            ),
             'applies_to' => $appliesTo,
             'owner_id' => isset($service['owner_id']) ? (int) $service['owner_id'] : api_get_user_id(),
             'visibility' => $visibility,
@@ -4047,6 +4346,8 @@ class BuyCoursesPlugin extends Plugin
             foreach ($this->getBenefitExtraFieldDefinitions() as $definition) {
                 $payload[$definition['form_field']] = 0;
             }
+
+            $payload['ai_course_features_json'] = null;
         }
 
         return $payload;
@@ -9172,6 +9473,8 @@ class BuyCoursesPlugin extends Plugin
                 'maxCourses' => $benefits['maxCourses'],
                 'hostingLimit' => $benefits['hostingLimit'],
                 'documentQuotaMb' => $benefits['documentQuotaMb'],
+                'aiFeatures' => $benefits['aiFeatures'],
+                'aiFeatureSummary' => $this->getAiCourseFeatureSummary($benefits['aiFeatures']),
                 'price' => $service['price_label'] ?? ($service['price_with_tax'] ?? ($service['price'] ?? null)),
                 'currency' => $service['iso_code'] ?? null,
                 'buyUrl' => api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_process.php?i='.$serviceId.'&t='.self::SERVICE_TYPE_USER,
@@ -9189,10 +9492,15 @@ class BuyCoursesPlugin extends Plugin
     {
         $configurations = $this->getServiceBenefitConfigurations($serviceId);
 
+        $service = $this->getService($serviceId);
+
         return [
             'maxCourses' => (int) ($configurations[self::EXTRA_FIELD_MAX_COURSES]['granted_value'] ?? 0),
             'hostingLimit' => (int) ($configurations[self::EXTRA_FIELD_HOSTING_LIMIT]['granted_value'] ?? 0),
             'documentQuotaMb' => (int) ($configurations[self::EXTRA_FIELD_DOCUMENT_QUOTA]['granted_value'] ?? 0),
+            'aiFeatures' => !empty($service) && is_array($service)
+                ? $this->normalizeAiCourseFeatures($service['ai_course_features_json'] ?? [])
+                : [],
         ];
     }
 
@@ -9281,6 +9589,7 @@ class BuyCoursesPlugin extends Plugin
         $sale['max_courses_with_benefits'] = max(0, (int) ($benefits['maxCourses'] ?? 0));
         $sale['hosting_limit'] = max(0, (int) ($benefits['hostingLimit'] ?? 0));
         $sale['document_quota_mb'] = max(0, (int) ($benefits['documentQuotaMb'] ?? 0));
+        $sale['ai_features'] = $this->normalizeAiCourseFeatures($benefits['aiFeatures'] ?? []);
 
         if ($maxCourses > 0 && $usedCourses >= $maxCourses) {
             return [
@@ -9364,6 +9673,48 @@ class BuyCoursesPlugin extends Plugin
         $row = Database::fetch_array($result, 'ASSOC');
 
         return (int) ($row['total'] ?? 0);
+    }
+
+    public function applyAiCourseFeatureSettingsToCourse(int $courseId, array $enabledFeatures): void
+    {
+        $courseId = (int) $courseId;
+        if ($courseId <= 0) {
+            return;
+        }
+
+        $enabledFeatures = $this->normalizeAiCourseFeatures($enabledFeatures);
+        $table = Database::get_course_table(TABLE_COURSE_SETTING);
+
+        foreach (array_keys($this->getAiCourseFeatureDefinitions()) as $feature) {
+            $value = in_array($feature, $enabledFeatures, true) ? 'true' : 'false';
+            $featureEsc = Database::escape_string($feature);
+            $valueEsc = Database::escape_string($value);
+            $categoryEsc = Database::escape_string('ai_helpers');
+
+            $result = Database::query(
+                "SELECT id FROM $table WHERE c_id = $courseId AND variable = '$featureEsc' LIMIT 1"
+            );
+
+            if (false !== $result && Database::num_rows($result) > 0) {
+                Database::update(
+                    $table,
+                    [
+                        'value' => $value,
+                        'category' => 'ai_helpers',
+                    ],
+                    [
+                        'c_id = ? AND variable = ?' => [$courseId, $feature],
+                    ]
+                );
+
+                continue;
+            }
+
+            Database::query(
+                "INSERT INTO $table (c_id, title, variable, value, category) " .
+                "VALUES ($courseId, '', '$featureEsc', '$valueEsc', '$categoryEsc')"
+            );
+        }
     }
 
     /**
@@ -9749,6 +10100,7 @@ class BuyCoursesPlugin extends Plugin
 
             $this->processExpiredCourseCreationForUser($userId);
             $this->processExpiredHostingLimitForUser($userId);
+            $this->processExpiredAiCourseFeaturesForUser($userId);
 
             $processedUsers++;
         }
@@ -9795,6 +10147,53 @@ class BuyCoursesPlugin extends Plugin
         foreach ($courseIds as $courseId) {
             $limit = $this->getEffectiveUsersPerCourseLimitForCourse($courseId);
             $this->freezeExcessEnrollmentsForCourse($courseId, $limit);
+        }
+    }
+
+    private function processExpiredAiCourseFeaturesForUser(int $userId): void
+    {
+        if ($userId <= 0 || !$this->hasSubscriptionCourseInfrastructure()) {
+            return;
+        }
+
+        $subscriptionCourseTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_COURSE);
+        $serviceSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
+        $now = Database::escape_string(api_get_utc_datetime());
+
+        $sql = "SELECT sc.id, sc.course_id
+            FROM $subscriptionCourseTable sc
+            INNER JOIN $serviceSaleTable ss ON ss.id = sc.service_sale_id
+            WHERE sc.user_id = $userId
+              AND sc.status = 'active'
+              AND ss.status = ".self::SERVICE_STATUS_COMPLETED."
+              AND ss.date_end IS NOT NULL
+              AND ss.date_end < '$now'";
+
+        $result = Database::query($sql);
+        if (false === $result) {
+            return;
+        }
+
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $subscriptionCourseId = (int) ($row['id'] ?? 0);
+            $courseId = (int) ($row['course_id'] ?? 0);
+
+            if ($courseId <= 0) {
+                continue;
+            }
+
+            $this->applyAiCourseFeatureSettingsToCourse($courseId, []);
+
+            if ($subscriptionCourseId > 0) {
+                Database::update(
+                    $subscriptionCourseTable,
+                    [
+                        'updated_at' => api_get_utc_datetime(),
+                        'last_action' => 'ai_expired',
+                    ],
+                    ['id = ?' => $subscriptionCourseId]
+                );
+            }
         }
     }
 

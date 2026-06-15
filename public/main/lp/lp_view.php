@@ -347,6 +347,7 @@ foreach ($aiProviders as $providerConfig) {
 $aiLearningHelperEnabled = (
     'document' === $itemType
     && 'true' === api_get_setting('ai_helpers.enable_ai_helpers')
+    && 'true' === api_get_course_setting('content_analyser')
     && $hasAiTextProvider
 );
 

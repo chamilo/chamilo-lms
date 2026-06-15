@@ -603,13 +603,32 @@
                     {% endif %}
 
                     <td class="px-6 py-4 text-right">
-                        <a
-                                href="{{ url('index') ~ 'plugin/BuyCourses/src/services_edit.php?' ~ {'id': item.id}|url_encode }}"
-                                class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2"
-                        >
-                            <em class="fa fa-wrench fa-fw"></em>
-                            {{ 'Edit'|get_lang }}
-                        </a>
+                        <div class="inline-flex flex-wrap items-center justify-end gap-2">
+                            <a
+                                    href="{{ url('index') ~ 'plugin/BuyCourses/src/services_edit.php?' ~ {'id': item.id}|url_encode }}"
+                                    class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2"
+                            >
+                                <em class="fa fa-wrench fa-fw"></em>
+                                {{ 'Edit'|get_lang }}
+                            </a>
+
+                            <form
+                                    method="post"
+                                    action="{{ url('index') ~ 'plugin/BuyCourses/src/list_service.php' }}"
+                                    class="inline-flex"
+                            >
+                                <input type="hidden" name="action" value="copy_service">
+                                <input type="hidden" name="id" value="{{ item.id }}">
+                                <input type="hidden" name="copy_service_token" value="{{ copy_service_token }}">
+                                <button
+                                        type="submit"
+                                        class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 shadow-sm transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
+                                >
+                                    <em class="fa fa-copy fa-fw"></em>
+                                    {{ 'Copy'|get_lang }}
+                                </button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
                 {% else %}

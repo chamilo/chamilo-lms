@@ -571,6 +571,8 @@ $strings['RecurringPaymentAlreadyEnabled'] = 'La renovación automática ya est�
 $strings['RecurringPaymentEnabledSuccessfully'] = 'La renovación automática fue activada correctamente.';
 $strings['RecurringPaymentCancelledSuccessfully'] = 'La renovación automática fue cancelada correctamente.';
 
+$strings['DisplayServiceOnCourseCreationPage'] = 'Mostrar este servicio en la página de creación de cursos';
+$strings['DisplayServiceOnCourseCreationPageHelp'] = 'Si está activado, los profesores que compraron este servicio podrán seleccionarlo al crear un curso para que el curso reciba los beneficios del servicio.';
 $strings['StandardCourseOption'] = 'Curso estándar';
 $strings['StandardCourseOptionDescription'] = 'Crear un curso usando los límites estándar de la plataforma.';
 $strings['ServiceNotPurchasedForCourseCreation'] = 'Debes comprar este servicio antes de crear un curso con estos beneficios.';

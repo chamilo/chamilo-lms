@@ -104,6 +104,8 @@ async function submit() {
     await gradebookService.updateForumParticipationLink(props.link.id, {
       pointsOne: String(form.pointsOne),
       pointsMany: String(form.pointsMany),
+      // Keep weight in sync with pointsMany (the item's max points).
+      weight: Number(form.pointsMany),
     })
   } else {
     await gradebookService.createForumParticipationLink({

@@ -78,6 +78,11 @@ class ForumParticipationLink extends AbstractLink
         $pointsOne = (float) ($this->get_points_one() ?? 0);
         $pointsMany = (float) ($this->get_points_many() ?? 0);
 
+        // The maximum a student can earn here is pointsMany; it is used as the item max so the
+        // per-item display stays within 0-100% and, with weight = pointsMany in POINTS_SUM,
+        // the contribution equals the earned points (score/max × weight = score).
+        $max = $pointsMany > 0 ? $pointsMany : 1.0;
+
         // Aggregate (all students) is not meaningful for a fixed-points item.
         if (!isset($studentId)) {
             return [null, null];
@@ -93,8 +98,7 @@ class ForumParticipationLink extends AbstractLink
             $score = $pointsMany;
         }
 
-        // max = 1 so that, with weight = 1 in POINTS_SUM, the item contributes its raw points.
-        return [$score, 1];
+        return [$score, $max];
     }
 
     public function needs_name_and_description(): bool

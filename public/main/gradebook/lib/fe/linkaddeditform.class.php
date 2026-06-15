@@ -105,20 +105,25 @@ class LinkAddEditForm extends FormValidator
             }
         }
 
-        $this->addFloat(
-            'weight_mask',
-            [
-                get_lang('Weight'),
-                null,
-                ' [0 .. <span id="max_weight">'.$category_object[0]->get_weight(
-                ).'</span>] ',
-            ],
-            true,
-            [
-                'size' => '4',
-                'maxlength' => '5',
-            ]
-        );
+        // Forum participation derives its weight from pointsMany (its maximum points),
+        // so the manual weight field is hidden for that type.
+        $isForumParticipation = LINK_FORUM_PARTICIPATION == $link->get_type();
+        if (!$isForumParticipation) {
+            $this->addFloat(
+                'weight_mask',
+                [
+                    get_lang('Weight'),
+                    null,
+                    ' [0 .. <span id="max_weight">'.$category_object[0]->get_weight(
+                    ).'</span>] ',
+                ],
+                true,
+                [
+                    'size' => '4',
+                    'maxlength' => '5',
+                ]
+            );
+        }
 
         // ELEMENT: min_score
         $this->addFloat(

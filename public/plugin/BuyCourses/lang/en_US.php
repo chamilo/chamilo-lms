@@ -211,6 +211,9 @@ $strings['YouNeedToBeRegisteredInAtLeastOneCourse'] = 'You need to be registered
 $strings['YouNeedToBeRegisteredInAtLeastOneSession'] = 'You need to be registered in at least one session';
 $strings['IfYouWantToGetTheCertificateAndOrSkillsAsociatedToThisCourseYouNeedToBuyTheCertificateServiceYouCanGoToServiceCatalogClickingHere'] = "To obtain the certificate and/or the skills associated to this course, you need to buy the <b> Certificate </b> service. Go to the services catalogue to buy it by clicking <a target='_blank' href='%s'>here</a>";
 $strings['ServiceDeleted'] = 'Service deleted';
+$strings['ServiceCopied'] = 'Service copied successfully.';
+$strings['ServiceCopyFailed'] = 'The service could not be copied.';
+$strings['ServiceCopyInvalidSecurityToken'] = 'The copy request is no longer valid. Please try again.';
 $strings['YourCoursesNeedAtLeastOneLearningPath'] = 'The courses to which you are subscribed need at least one learning path that contains a final certificate item';
 $strings['GlobalTaxPerc'] = 'Global tax rate';
 $strings['GlobalTaxPercDescription'] = 'Default tax rate that will be used unless there is a specific tax rate for the course, session or service.';

@@ -506,6 +506,25 @@ class BuyCoursesPlugin extends Plugin
             }
         }
 
+        // Course/session and subscription sales share the same per-country VAT evidence
+        // columns as service sales, so they can apply and record the destination VAT rate.
+        $vatEvidenceTables = [
+            Database::get_main_table(self::TABLE_SALE),
+            Database::get_main_table(self::TABLE_SUBSCRIPTION_SALE),
+        ];
+
+        foreach ($vatEvidenceTables as $vatEvidenceTable) {
+            foreach ($serviceSaleVatColumns as $field => $definition) {
+                $res = Database::query("SHOW COLUMNS FROM $vatEvidenceTable WHERE Field = '$field'");
+                if (0 === Database::num_rows($res)) {
+                    $res = Database::query("ALTER TABLE $vatEvidenceTable ADD $field $definition");
+                    if (!$res) {
+                        echo Display::return_message($this->get_lang('ErrorUpdateFieldDB'), 'warning');
+                    }
+                }
+            }
+        }
+
         $table = Database::get_main_table(self::TABLE_INVOICE);
         $sql = "CREATE TABLE IF NOT EXISTS $table (
             id int unsigned NOT NULL AUTO_INCREMENT,
@@ -2493,7 +2512,7 @@ class BuyCoursesPlugin extends Plugin
      * @param int $paymentType The payment type
      * @param int $couponId    The coupon ID
      */
-    public function registerSale(int $itemId, int $paymentType, ?int $couponId = null): ?int
+    public function registerSale(int $itemId, int $paymentType, ?int $couponId = null, array $vatBuyerData = []): ?int
     {
         if (!in_array(
             $paymentType,
@@ -2553,30 +2572,18 @@ class BuyCoursesPlugin extends Plugin
             $priceWithoutDiscount = $item['price'];
         }
         $item['price'] -= $couponDiscount;
-        $price = $item['price'];
-        $priceWithoutTax = null;
-        $taxPerc = null;
-        $taxAmount = 0;
-        $taxEnable = 'true' === $this->get('tax_enable');
         $globalParameters = $this->getGlobalParameters();
-        $taxAppliesTo = $globalParameters['tax_applies_to'];
 
-        if ($taxEnable
-            && (
-                self::TAX_APPLIES_TO_ALL == $taxAppliesTo
-                || (self::TAX_APPLIES_TO_ONLY_COURSE == $taxAppliesTo && self::PRODUCT_TYPE_COURSE == $item['product_type'])
-                || (self::TAX_APPLIES_TO_ONLY_SESSION == $taxAppliesTo && self::PRODUCT_TYPE_SESSION == $item['product_type'])
-            )
-        ) {
-            $priceWithoutTax = $item['price'];
-            $globalTaxPerc = $globalParameters['global_tax_perc'];
-            $precision = 2;
-            $taxPerc = null === $item['tax_perc'] ? $globalTaxPerc : $item['tax_perc'];
-            $taxAmount = round($priceWithoutTax * $taxPerc / 100, $precision);
-            $price = $priceWithoutTax + $taxAmount;
-        }
+        $normalizedVatBuyerData = $this->normalizeVatBuyerData($vatBuyerData);
+        $vat = $this->resolveSaleVat(
+            (float) $item['price'],
+            null === $item['tax_perc'] ? null : (int) $item['tax_perc'],
+            $this->getTaxCategoryForProductType((int) $item['product_type']),
+            $normalizedVatBuyerData,
+            $globalParameters
+        );
 
-        $values = [
+        $values = array_merge([
             'reference' => $this->generateReference(
                 api_get_user_id(),
                 $item['product_type'],
@@ -2588,18 +2595,24 @@ class BuyCoursesPlugin extends Plugin
             'product_type' => $item['product_type'],
             'product_name' => $productName,
             'product_id' => $item['product_id'],
-            'price' => $price,
-            'price_without_tax' => $priceWithoutTax,
-            'tax_perc' => $taxPerc,
-            'tax_amount' => $taxAmount,
+            'price' => $vat['price'],
+            'price_without_tax' => $vat['price_without_tax'],
+            'tax_perc' => $vat['tax_perc'],
+            'tax_amount' => $vat['tax_amount'],
             'status' => self::SALE_STATUS_PENDING,
             'payment_type' => $paymentType,
             'price_without_discount' => $priceWithoutDiscount,
             'discount_amount' => $couponDiscount,
             'invoice' => 0,
-        ];
+        ], $this->buildSaleVatColumns($normalizedVatBuyerData, $vat));
 
-        return Database::insert(self::TABLE_SALE, $values);
+        $saleId = Database::insert(self::TABLE_SALE, $values);
+
+        if ($saleId) {
+            $this->saveVatBuyerDataInUserExtraFields(api_get_user_id(), $normalizedVatBuyerData);
+        }
+
+        return $saleId;
     }
 
     /**
@@ -5714,6 +5727,118 @@ class BuyCoursesPlugin extends Plugin
      *
      * @throws \Doctrine\DBAL\Exception
      */
+    /**
+     * Resolve the tax/VAT to apply to a sale.
+     *
+     * When the buyer declares a country and postcode, the per-country EU VAT rules
+     * (destination VAT, B2B reverse charge, exports, OSS) computed by determineVatTreatment()
+     * are applied. Otherwise it falls back to the flat global/product rate, gated by the
+     * plugin tax settings for the given tax category.
+     *
+     * $normalizedBuyer is passed by reference because the VIES lookup enriches it with the
+     * validation result and any business name/address returned by VIES.
+     *
+     * @param float      $netPrice        Price after discount, before tax
+     * @param int|null   $productTaxPerc  Product-level tax rate (null means "use global")
+     * @param int        $taxCategory     One of the TAX_APPLIES_TO_* constants for this product
+     * @param array      $normalizedBuyer Buyer data already passed through normalizeVatBuyerData()
+     * @param array      $globalParameters Plugin global parameters (seller/tax configuration)
+     *
+     * @return array{price: float, price_without_tax: float|null, tax_perc: float|null, tax_amount: float, vat_treatment: array, vat_evidence: array, buyer_ip: string, buyer_ip_country: string}
+     */
+    private function resolveSaleVat(
+        float $netPrice,
+        ?int $productTaxPerc,
+        int $taxCategory,
+        array &$normalizedBuyer,
+        array $globalParameters
+    ): array {
+        $precision = 2;
+        $taxEnable = 'true' === $this->get('tax_enable');
+        $taxAppliesTo = (int) $globalParameters['tax_applies_to'];
+
+        $price = $netPrice;
+        $priceWithoutTax = null;
+        $taxPerc = null;
+        $taxAmount = 0;
+
+        $hasVatBuyerDeclaration = '' !== $normalizedBuyer['buyer_country']
+            && '' !== $normalizedBuyer['buyer_postcode'];
+
+        $viesResult = $this->validateBuyerVatNumberWithVies($normalizedBuyer);
+        if (in_array($viesResult['status'], ['valid', 'invalid', 'unavailable'], true)) {
+            $normalizedBuyer['buyer_vat_valid'] = $viesResult['valid'];
+            $normalizedBuyer['vies_result'] = $viesResult;
+
+            if (true === $viesResult['valid']) {
+                if ('' !== trim((string) ($viesResult['business_name'] ?? ''))) {
+                    $normalizedBuyer['buyer_business_name'] = substr((string) $viesResult['business_name'], 0, 255);
+                }
+
+                if ('' !== trim((string) ($viesResult['business_address'] ?? ''))) {
+                    $normalizedBuyer['buyer_business_address'] = (string) $viesResult['business_address'];
+                }
+            }
+        }
+
+        $vatTreatment = $this->determineVatTreatment($normalizedBuyer, $globalParameters);
+
+        if ($hasVatBuyerDeclaration) {
+            $priceWithoutTax = $netPrice;
+            $taxPerc = !empty($vatTreatment['charge_vat']) && null !== $vatTreatment['vat_rate']
+                ? (float) $vatTreatment['vat_rate']
+                : 0.00;
+            $taxAmount = round($priceWithoutTax * $taxPerc / 100, $precision);
+            $price = $priceWithoutTax + $taxAmount;
+        } elseif ($taxEnable
+            && (self::TAX_APPLIES_TO_ALL == $taxAppliesTo || $taxCategory == $taxAppliesTo)
+        ) {
+            $priceWithoutTax = $netPrice;
+            $globalTaxPerc = $globalParameters['global_tax_perc'];
+            $taxPerc = null === $productTaxPerc ? $globalTaxPerc : $productTaxPerc;
+            $taxAmount = round($priceWithoutTax * $taxPerc / 100, $precision);
+            $price = $priceWithoutTax + $taxAmount;
+        }
+
+        $vatEvidence = $this->buildVatEvidenceSnapshot($normalizedBuyer, $vatTreatment);
+
+        return [
+            'price' => $price,
+            'price_without_tax' => $priceWithoutTax,
+            'tax_perc' => $taxPerc,
+            'tax_amount' => $taxAmount,
+            'vat_treatment' => $vatTreatment,
+            'vat_evidence' => $vatEvidence,
+            'buyer_ip' => (string) ($vatEvidence['buyer']['ip'] ?? ''),
+            'buyer_ip_country' => (string) ($vatEvidence['buyer']['ip_country'] ?? ''),
+        ];
+    }
+
+    /**
+     * Build the persisted VAT/buyer columns shared by all sale tables.
+     *
+     * @param array $normalizedBuyer Buyer data enriched by resolveSaleVat()
+     * @param array $vat             Result array returned by resolveSaleVat()
+     */
+    private function buildSaleVatColumns(array $normalizedBuyer, array $vat): array
+    {
+        return [
+            'buyer_country' => $normalizedBuyer['buyer_country'] ?: null,
+            'buyer_postcode' => $normalizedBuyer['buyer_postcode'] ?: null,
+            'buyer_ip' => '' !== $vat['buyer_ip'] ? $vat['buyer_ip'] : null,
+            'buyer_ip_country' => '' !== $vat['buyer_ip_country'] ? $vat['buyer_ip_country'] : null,
+            'buyer_vat_number' => $normalizedBuyer['buyer_vat_number'] ?: null,
+            'buyer_vat_valid' => null === $normalizedBuyer['buyer_vat_valid']
+                ? null
+                : (int) (bool) $normalizedBuyer['buyer_vat_valid'],
+            'buyer_business_name' => $normalizedBuyer['buyer_business_name'] ?: null,
+            'buyer_business_address' => $normalizedBuyer['buyer_business_address'] ?: null,
+            'vat_treatment' => $vat['vat_treatment']['treatment'] ?? 'pending_vat_calculation',
+            'vat_rate' => $vat['vat_treatment']['vat_rate'] ?? null,
+            'vat_evidence_json' => json_encode($vat['vat_evidence'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+        ];
+    }
+
     public function registerServiceSale(int $serviceId, int $paymentType, int $infoSelect, ?int $couponId = null, array $vatBuyerData = []): int|bool
     {
         if (!in_array(
@@ -5755,59 +5880,18 @@ class BuyCoursesPlugin extends Plugin
         }
         $service['price'] -= $couponDiscount;
         $currency = $this->getSelectedCurrency();
-        $price = $service['price'];
-        $priceWithoutTax = null;
-        $taxPerc = null;
-        $taxEnable = 'true' === $this->get('tax_enable');
         $globalParameters = $this->getGlobalParameters();
-        $taxAppliesTo = $globalParameters['tax_applies_to'];
-        $taxAmount = 0;
-        $precision = 2;
 
         $normalizedVatBuyerData = $this->normalizeVatBuyerData($vatBuyerData);
-        $hasVatBuyerDeclaration = '' !== $normalizedVatBuyerData['buyer_country']
-            && '' !== $normalizedVatBuyerData['buyer_postcode'];
+        $vat = $this->resolveSaleVat(
+            (float) $service['price'],
+            null === $service['tax_perc'] ? null : (int) $service['tax_perc'],
+            self::TAX_APPLIES_TO_ONLY_SERVICES,
+            $normalizedVatBuyerData,
+            $globalParameters
+        );
 
-        $viesResult = $this->validateBuyerVatNumberWithVies($normalizedVatBuyerData);
-        if (in_array($viesResult['status'], ['valid', 'invalid', 'unavailable'], true)) {
-            $normalizedVatBuyerData['buyer_vat_valid'] = $viesResult['valid'];
-            $normalizedVatBuyerData['vies_result'] = $viesResult;
-
-            if (true === $viesResult['valid']) {
-                if ('' !== trim((string) ($viesResult['business_name'] ?? ''))) {
-                    $normalizedVatBuyerData['buyer_business_name'] = substr((string) $viesResult['business_name'], 0, 255);
-                }
-
-                if ('' !== trim((string) ($viesResult['business_address'] ?? ''))) {
-                    $normalizedVatBuyerData['buyer_business_address'] = (string) $viesResult['business_address'];
-                }
-            }
-        }
-
-        $vatTreatment = $this->determineVatTreatment($normalizedVatBuyerData, $globalParameters);
-
-        if ($hasVatBuyerDeclaration) {
-            $priceWithoutTax = $service['price'];
-            $taxPerc = !empty($vatTreatment['charge_vat']) && null !== $vatTreatment['vat_rate']
-                ? (float) $vatTreatment['vat_rate']
-                : 0.00;
-            $taxAmount = round($priceWithoutTax * $taxPerc / 100, $precision);
-            $price = $priceWithoutTax + $taxAmount;
-        } elseif ($taxEnable
-            && (self::TAX_APPLIES_TO_ALL == $taxAppliesTo || self::TAX_APPLIES_TO_ONLY_SERVICES == $taxAppliesTo)
-        ) {
-            $priceWithoutTax = $service['price'];
-            $globalTaxPerc = $globalParameters['global_tax_perc'];
-            $taxPerc = null === $service['tax_perc'] ? $globalTaxPerc : $service['tax_perc'];
-            $taxAmount = round($priceWithoutTax * $taxPerc / 100, $precision);
-            $price = $priceWithoutTax + $taxAmount;
-        }
-
-        $vatEvidence = $this->buildVatEvidenceSnapshot($normalizedVatBuyerData, $vatTreatment);
-        $buyerIp = (string) ($vatEvidence['buyer']['ip'] ?? '');
-        $buyerIpCountry = (string) ($vatEvidence['buyer']['ip_country'] ?? '');
-
-        $values = [
+        $values = array_merge([
             'service_id' => $serviceId,
             'reference' => $this->generateReference(
                 $userId,
@@ -5815,10 +5899,10 @@ class BuyCoursesPlugin extends Plugin
                 $infoSelect
             ),
             'currency_id' => $currency['id'],
-            'price' => $price,
-            'price_without_tax' => $priceWithoutTax,
-            'tax_perc' => $taxPerc,
-            'tax_amount' => $taxAmount,
+            'price' => $vat['price'],
+            'price_without_tax' => $vat['price_without_tax'],
+            'tax_perc' => $vat['tax_perc'],
+            'tax_amount' => $vat['tax_amount'],
             'node_type' => $nodeType,
             'node_id' => $nodeId,
             'buyer_id' => $userId,
@@ -5835,21 +5919,8 @@ class BuyCoursesPlugin extends Plugin
             'payment_type' => $paymentType,
             'price_without_discount' => $priceWithoutDiscount,
             'discount_amount' => $couponDiscount,
-            'buyer_country' => $normalizedVatBuyerData['buyer_country'] ?: null,
-            'buyer_postcode' => $normalizedVatBuyerData['buyer_postcode'] ?: null,
-            'buyer_ip' => '' !== $buyerIp ? $buyerIp : null,
-            'buyer_ip_country' => '' !== $buyerIpCountry ? $buyerIpCountry : null,
-            'buyer_vat_number' => $normalizedVatBuyerData['buyer_vat_number'] ?: null,
-            'buyer_vat_valid' => null === $normalizedVatBuyerData['buyer_vat_valid']
-                ? null
-                : (int) (bool) $normalizedVatBuyerData['buyer_vat_valid'],
-            'buyer_business_name' => $normalizedVatBuyerData['buyer_business_name'] ?: null,
-            'buyer_business_address' => $normalizedVatBuyerData['buyer_business_address'] ?: null,
-            'vat_treatment' => $vatTreatment['treatment'] ?? 'pending_vat_calculation',
-            'vat_rate' => $vatTreatment['vat_rate'] ?? null,
-            'vat_evidence_json' => json_encode($vatEvidence, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
             'invoice' => 0,
-        ];
+        ], $this->buildSaleVatColumns($normalizedVatBuyerData, $vat));
 
         $serviceSaleId = Database::insert(self::TABLE_SERVICES_SALE, $values);
 
@@ -6486,7 +6557,8 @@ class BuyCoursesPlugin extends Plugin
         int $productType,
         int $paymentType,
         int $duration,
-        ?int $couponId = null
+        ?int $couponId = null,
+        array $vatBuyerData = []
     ) {
         if (!in_array(
             $paymentType,
@@ -6546,32 +6618,20 @@ class BuyCoursesPlugin extends Plugin
             $priceWithoutDiscount = $item['price'];
         }
         $item['price'] -= $couponDiscount;
-        $price = $item['price'];
-        $priceWithoutTax = null;
-        $taxPerc = null;
-        $taxAmount = 0;
-        $taxEnable = 'true' === $this->get('tax_enable');
         $globalParameters = $this->getGlobalParameters();
-        $taxAppliesTo = $globalParameters['tax_applies_to'];
 
-        if ($taxEnable
-            && (
-                self::TAX_APPLIES_TO_ALL == $taxAppliesTo
-                || (self::TAX_APPLIES_TO_ONLY_COURSE == $taxAppliesTo && self::PRODUCT_TYPE_COURSE == $item['product_type'])
-                || (self::TAX_APPLIES_TO_ONLY_SESSION == $taxAppliesTo && self::PRODUCT_TYPE_SESSION == $item['product_type'])
-            )
-        ) {
-            $priceWithoutTax = $item['price'];
-            $globalTaxPerc = $globalParameters['global_tax_perc'];
-            $precision = 2;
-            $taxPerc = null === $item['tax_perc'] ? $globalTaxPerc : $item['tax_perc'];
-            $taxAmount = round($priceWithoutTax * $taxPerc / 100, $precision);
-            $price = $priceWithoutTax + $taxAmount;
-        }
+        $normalizedVatBuyerData = $this->normalizeVatBuyerData($vatBuyerData);
+        $vat = $this->resolveSaleVat(
+            (float) $item['price'],
+            null === $item['tax_perc'] ? null : (int) $item['tax_perc'],
+            $this->getTaxCategoryForProductType((int) $item['product_type']),
+            $normalizedVatBuyerData,
+            $globalParameters
+        );
 
         $subscriptionEnd = date('Y-m-d H:i:s', strtotime('+'.$duration.' days'));
 
-        $values = [
+        $values = array_merge([
             'reference' => $this->generateReference(
                 api_get_user_id(),
                 $item['product_type'],
@@ -6583,10 +6643,10 @@ class BuyCoursesPlugin extends Plugin
             'product_type' => $item['product_type'],
             'product_name' => $productName,
             'product_id' => $item['product_id'],
-            'price' => $price,
-            'price_without_tax' => $priceWithoutTax,
-            'tax_perc' => $taxPerc,
-            'tax_amount' => $taxAmount,
+            'price' => $vat['price'],
+            'price_without_tax' => $vat['price_without_tax'],
+            'tax_perc' => $vat['tax_perc'],
+            'tax_amount' => $vat['tax_amount'],
             'status' => self::SALE_STATUS_PENDING,
             'payment_type' => $paymentType,
             'price_without_discount' => $priceWithoutDiscount,
@@ -6594,9 +6654,15 @@ class BuyCoursesPlugin extends Plugin
             'invoice' => 0,
             'subscription_end' => $subscriptionEnd,
             'expired' => 0,
-        ];
+        ], $this->buildSaleVatColumns($normalizedVatBuyerData, $vat));
 
-        return Database::insert(self::TABLE_SUBSCRIPTION_SALE, $values);
+        $subscriptionSaleId = Database::insert(self::TABLE_SUBSCRIPTION_SALE, $values);
+
+        if ($subscriptionSaleId) {
+            $this->saveVatBuyerDataInUserExtraFields(api_get_user_id(), $normalizedVatBuyerData);
+        }
+
+        return $subscriptionSaleId;
     }
 
     /**

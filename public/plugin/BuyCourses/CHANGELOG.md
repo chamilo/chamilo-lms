@@ -1,5 +1,17 @@
 v7.5 - 2026-06-12
 ====
+Feature: per-country EU VAT now applies to course, session and subscription sales, not only
+services. At checkout the buyer fills in the same VAT declaration (country, postcode,
+individual/business, VAT number) already used for services; the sale then applies the correct
+destination-country VAT rate, B2B reverse charge, or export exemption, and stores the full VAT
+evidence. When no buyer country is declared, the previous flat global/product rate still
+applies. The catalog preview price stays on the flat rate for all product types (unchanged) —
+the per-country rate is computed at the point of sale.
+
+ACTION REQUIRED for installations updated from an earlier version: run the update procedure
+(see below) so the new VAT evidence columns are added to the `plugin_buycourses_sale` and
+`plugin_buycourses_subscription_rel_sale` tables.
+
 Fix: an empty tax rate on a service or a subscription can now be saved again, and is stored
 as NULL so the item falls back to the global tax rate (as intended). Older installations
 created the `tax_perc` column as NOT NULL on the services and subscription tables, which made

@@ -3596,10 +3596,10 @@ class Exercise
             && !empty($extra)
         ) {
             $extra = explode(':', $extra);
-            // Fixes problems with negatives values using intval
-            $true_score = (float) trim($extra[0]);
-            $false_score = (float) trim($extra[1]);
-            $doubt_score = (float) trim($extra[2]);
+            // Fixes problems with negatives values using intval and keeps older questions compatible.
+            $true_score = isset($extra[0]) ? (float) trim($extra[0]) : 1.0;
+            $false_score = isset($extra[1]) ? (float) trim($extra[1]) : -0.5;
+            $doubt_score = isset($extra[2]) ? (float) trim($extra[2]) : 0.0;
         }
 
         // Construction of the Answer object

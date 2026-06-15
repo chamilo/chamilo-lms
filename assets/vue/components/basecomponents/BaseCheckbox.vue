@@ -3,13 +3,14 @@
     <Checkbox
       v-model="modelValue"
       :binary="value === undefined"
+      :disabled="disabled"
       :inputId="id"
       :name="name"
       :value="value"
     />
     <label
       :for="id"
-      class="ml-2 cursor-pointer"
+      :class="['ml-2', disabled ? 'cursor-not-allowed text-gray-50' : 'cursor-pointer']"
       >{{ label }}</label
     >
   </div>
@@ -39,6 +40,10 @@ defineProps({
   value: {
     type: [String, Number, Object],
     default: undefined,
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
   },
 })
 </script>

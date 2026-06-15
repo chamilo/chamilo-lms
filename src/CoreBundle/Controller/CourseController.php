@@ -727,6 +727,10 @@ class CourseController extends ToolBaseController
         CToolRepository $repo,
         ToolChain $toolChain
     ): RedirectResponse {
+        if (null === $this->getCourse()) {
+            throw new NotFoundHttpException($this->trans('Course not found'));
+        }
+
         /** @var CTool|null $tool */
         $tool = $repo->findOneBy([
             'title' => $toolName,
@@ -736,12 +740,16 @@ class CourseController extends ToolBaseController
             throw new NotFoundHttpException($this->trans('Tool not found'));
         }
 
-        $tool = $toolChain->getToolFromName($tool->getTool()->getTitle());
-        $link = $tool->getLink();
+        $toolDefinition = $toolChain->getToolFromName($tool->getTool()->getTitle());
+        $link = $toolDefinition->getLink();
 
-        if (null === $this->getCourse()) {
-            throw new NotFoundHttpException($this->trans('Course not found'));
+        if ($this->isExerciseToolEntry($toolName, $tool->getTool()->getTitle(), $link)) {
+            $exerciseUrl = $this->buildExerciseVueToolUrl();
+            if (null !== $exerciseUrl) {
+                return $this->redirect($exerciseUrl);
+            }
         }
+
         $optionalParams = '';
 
         $optionalParams = $request->query->get('cert') ? '&cert='.$request->query->get('cert') : '';
@@ -1903,8 +1911,11 @@ class CourseController extends ToolBaseController
                     );
                 }
             } else {
-                // Redirecting to the document
-                $url = api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq();
+                $url = $this->buildExerciseVueToolUrl();
+                if (null === $url) {
+                    $url = api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq();
+                }
+
                 header(\sprintf('Location: %s', $url));
 
                 exit;
@@ -1939,8 +1950,12 @@ class CourseController extends ToolBaseController
                 if (Database::num_rows($result) > 0) {
                     $row = Database::fetch_array($result);
                     $exerciseId = $row['iid'];
-                    $url = api_get_path(WEB_CODE_PATH).
-                        'exercise/overview.php?exerciseId='.$exerciseId.'&'.api_get_cidreq();
+                    $url = $this->buildExerciseVueToolUrl((int) $exerciseId);
+                    if (null === $url) {
+                        $url = api_get_path(WEB_CODE_PATH).
+                            'exercise/overview.php?exerciseId='.$exerciseId.'&'.api_get_cidreq();
+                    }
+
                     header(\sprintf('Location: %s', $url));
 
                     exit;
@@ -1977,6 +1992,50 @@ class CourseController extends ToolBaseController
                 )
             );
         }
+    }
+
+    private function buildExerciseVueToolUrl(?int $exerciseId = null): ?string
+    {
+        $course = $this->getCourse();
+        if (!$course instanceof Course) {
+            $course = api_get_course_entity();
+        }
+
+        if (!$course instanceof Course || null === $course->getResourceNode()) {
+            return null;
+        }
+
+        $nodeId = $course->getResourceNode()->getId();
+        if (null === $nodeId) {
+            return null;
+        }
+
+        $path = '/resources/exercise/'.(int) $nodeId.'/';
+        if (null !== $exerciseId && 0 < $exerciseId) {
+            $path .= $exerciseId.'/overview';
+        }
+
+        $query = http_build_query([
+            'cid' => (int) api_get_course_int_id(),
+            'sid' => (int) api_get_session_id(),
+            'gid' => (int) api_get_group_id(),
+        ]);
+
+        return rtrim(api_get_path(WEB_PATH), '/').$path.'?'.$query;
+    }
+
+    private function isExerciseToolEntry(string $toolName, string $toolTitle, string $link): bool
+    {
+        $toolCandidates = array_map('strtolower', [$toolName, $toolTitle]);
+
+        foreach ($toolCandidates as $candidate) {
+            if (\in_array($candidate, ['quiz', 'exercise', 'exercises', 'tests'], true)) {
+                return true;
+            }
+        }
+
+        return str_contains($link, 'exercise/exercise.php')
+            || str_contains($link, '/main/exercise/exercise.php');
     }
 
     /**

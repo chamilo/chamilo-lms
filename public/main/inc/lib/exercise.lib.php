@@ -7281,4 +7281,94 @@ EOT;
 
         $exerciseStatInfo['data_tracking'] = $newTracking;
     }
+
+    /**
+     * Build the modern Vue create URL for an exercise when a legacy integration
+     * still needs to create a test without showing legacy exercise UI.
+     */
+    public static function buildVueCreateUrl(
+        array $extraParams = [],
+        ?int $courseId = null,
+        ?int $sessionId = null,
+        ?int $groupId = null
+    ): ?string {
+        $courseId = $courseId ?? (int) api_get_course_int_id();
+        if ($courseId <= 0) {
+            return null;
+        }
+
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+        $sql = "SELECT resource_node_id FROM $courseTable WHERE id = $courseId LIMIT 1";
+        $result = Database::query($sql);
+        $row = Database::fetch_assoc($result);
+        $nodeId = isset($row['resource_node_id']) ? (int) $row['resource_node_id'] : 0;
+        if ($nodeId <= 0) {
+            return null;
+        }
+
+        $sessionId = $sessionId ?? (int) api_get_session_id();
+        $groupId = $groupId ?? (int) api_get_group_id();
+        $params = [
+            'cid' => $courseId,
+            'sid' => max(0, $sessionId),
+            'gid' => max(0, $groupId),
+        ];
+
+        foreach ($extraParams as $key => $value) {
+            if (null === $value || '' === (string) $value) {
+                continue;
+            }
+            $params[$key] = $value;
+        }
+
+        return rtrim(api_get_path(WEB_PATH), '/').'/resources/exercise/'.$nodeId.'/create?'.http_build_query($params);
+    }
+
+    /**
+     * Build the modern Vue overview URL for an exercise when a legacy integration
+     * still needs to point to a test.
+     */
+    public static function buildVueOverviewUrl(
+        int $exerciseId,
+        array $extraParams = [],
+        ?int $courseId = null,
+        ?int $sessionId = null,
+        ?int $groupId = null
+    ): ?string {
+        if ($exerciseId <= 0) {
+            return null;
+        }
+
+        $courseId = $courseId ?? (int) api_get_course_int_id();
+        if ($courseId <= 0) {
+            return null;
+        }
+
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+        $sql = "SELECT resource_node_id FROM $courseTable WHERE id = $courseId LIMIT 1";
+        $result = Database::query($sql);
+        $row = Database::fetch_assoc($result);
+        $nodeId = isset($row['resource_node_id']) ? (int) $row['resource_node_id'] : 0;
+        if ($nodeId <= 0) {
+            return null;
+        }
+
+        $sessionId = $sessionId ?? (int) api_get_session_id();
+        $groupId = $groupId ?? (int) api_get_group_id();
+        $params = [
+            'cid' => $courseId,
+            'sid' => max(0, $sessionId),
+            'gid' => max(0, $groupId),
+        ];
+
+        foreach ($extraParams as $key => $value) {
+            if (null === $value || '' === (string) $value) {
+                continue;
+            }
+            $params[$key] = $value;
+        }
+
+        return rtrim(api_get_path(WEB_PATH), '/').'/resources/exercise/'.$nodeId.'/'.$exerciseId.'/overview?'.http_build_query($params);
+    }
+
 }

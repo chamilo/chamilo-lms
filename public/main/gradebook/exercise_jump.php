@@ -12,6 +12,7 @@
  * @author Bert Steppé
  */
 require_once __DIR__.'/../inc/global.inc.php';
+require_once __DIR__.'/../inc/lib/exercise.lib.php';
 api_block_anonymous_users();
 $this_section = SECTION_COURSES;
 
@@ -68,17 +69,32 @@ if (!empty($doExerciseUrl)) {
                     }
                 }
             } else {
-                $url = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.http_build_query(
+                $vueUrl = ExerciseLib::buildVueOverviewUrl(
+                    (int) $_GET['exerciseId'],
                     [
-                        'sid' => $session_id,
-                        'cid' => $courseId,
                         'gradebook' => $gradebook,
                         'origin' => '',
                         'learnpath_id' => '',
                         'learnpath_item_id' => '',
-                        'exerciseId' => (int) $_GET['exerciseId'],
-                    ]
+                    ],
+                    (int) $courseId,
+                    (int) $session_id
                 );
+                if (null !== $vueUrl) {
+                    $url = $vueUrl;
+                } else {
+                    $url = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.http_build_query(
+                        [
+                            'sid' => $session_id,
+                            'cid' => $courseId,
+                            'gradebook' => $gradebook,
+                            'origin' => '',
+                            'learnpath_id' => '',
+                            'learnpath_item_id' => '',
+                            'exerciseId' => (int) $_GET['exerciseId'],
+                        ]
+                    );
+                }
             }
         }
     }

@@ -32,7 +32,7 @@ class Exercise extends AbstractTool implements ToolInterface
 
     public function getLink(): string
     {
-        return '/main/exercise/exercise.php';
+        return '/resources/exercise/:nodeId/';
     }
 
     public function getCategory(): string

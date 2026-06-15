@@ -368,6 +368,73 @@ const courseSettingsStore = useCourseSettings()
 
 const TOOL_VISIBILITY_VISIBLE = 2
 
+function extractIdFromIri(value) {
+  if (!value) {
+    return 0
+  }
+
+  const match = String(value).match(/\/(\d+)$/)
+
+  return match ? Number(match[1]) : 0
+}
+
+function getCourseResourceNodeId() {
+  return Number(course.value?.resourceNode?.id) || extractIdFromIri(course.value?.resourceNode?.["@id"])
+}
+
+function getCourseContextQuery() {
+  return {
+    cid: Number(course.value?.id) || 0,
+    sid: Number(session.value?.id) || 0,
+    gid: 0,
+  }
+}
+
+function isExerciseTool(tool) {
+  const toolTitle = String(tool?.title || tool?.tool?.title || "").toLowerCase()
+  const toolUrl = String(tool?.url || "").toLowerCase()
+
+  return ["quiz", "exercise", "exercises"].includes(toolTitle) || toolUrl.includes("/main/exercise/exercise.php") || toolUrl.includes("exercise/exercise.php")
+}
+
+function getExerciseToolUrl() {
+  const nodeId = getCourseResourceNodeId()
+
+  if (nodeId <= 0) {
+    return null
+  }
+
+  const query = getCourseContextQuery()
+  const params = new URLSearchParams()
+
+  params.set("cid", String(query.cid))
+  params.set("sid", String(query.sid))
+  params.set("gid", String(query.gid))
+
+  return `/resources/exercise/${nodeId}/?${params.toString()}`
+}
+
+function normalizeToolNavigation(tool) {
+  if (!isExerciseTool(tool)) {
+    if (routerTools.includes(tool.title)) {
+      tool.to = tool.url
+    }
+
+    return tool
+  }
+
+  const exerciseUrl = getExerciseToolUrl()
+
+  if (!exerciseUrl) {
+    return tool
+  }
+
+  tool.to = null
+  tool.url = exerciseUrl
+
+  return tool
+}
+
 function getToolVisibility(tool) {
   return tool?.resourceNode?.resourceLinks?.[0]?.visibility
 }
@@ -437,11 +504,7 @@ async function loadCourseTools(showSkeleton = true) {
     const cTools = await courseService.loadCTools(course.value.id, session.value?.id)
 
     const normalizedTools = cTools.map((rawTool) => {
-      const tool = { ...rawTool }
-
-      if (routerTools.includes(tool.title)) {
-        tool.to = tool.url
-      }
+      const tool = normalizeToolNavigation({ ...rawTool })
 
       // Convenience flag for UI states (e.g. customize mode)
       tool.isEnabled =

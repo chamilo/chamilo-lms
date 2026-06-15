@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CourseBundle\Entity\CGroupRelUser;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
 use DateTimeInterface;
@@ -227,6 +228,7 @@ final readonly class ExerciseRuntimeReportExportService
 
         $users = $includeAllUsers ? $this->getSubscribedUsers($course, $session, $request) : [];
         $userIds = $this->collectUserIds($attempts, $users);
+        $groupNamesByUser = $this->getGroupNamesByUserIds($userIds, $course);
         $extraFieldValues = [] !== $extraFields ? $this->getExtraFieldValues($extraFields, $userIds) : [];
 
         $rows = [];
@@ -234,7 +236,13 @@ final readonly class ExerciseRuntimeReportExportService
         foreach ($attempts as $attempt) {
             $userId = (int) $attempt->getUser()->getId();
             $attemptedUserIds[$userId] = true;
-            $rows[] = $this->buildAttemptRow($attempt, $showOfficialCode, $extraFields, $extraFieldValues);
+            $rows[] = $this->buildAttemptRow(
+                $attempt,
+                $showOfficialCode,
+                $extraFields,
+                $extraFieldValues,
+                $groupNamesByUser[$userId] ?? '-'
+            );
         }
 
         if ($includeAllUsers && $this->shouldAppendNotAttemptedUsers($request)) {
@@ -244,7 +252,13 @@ final readonly class ExerciseRuntimeReportExportService
                     continue;
                 }
 
-                $rows[] = $this->buildNotAttemptedUserRow($user, $showOfficialCode, $extraFields, $extraFieldValues);
+                $rows[] = $this->buildNotAttemptedUserRow(
+                    $user,
+                    $showOfficialCode,
+                    $extraFields,
+                    $extraFieldValues,
+                    $groupNamesByUser[$userId] ?? '-'
+                );
             }
         }
 
@@ -297,6 +311,7 @@ final readonly class ExerciseRuntimeReportExportService
         bool $showOfficialCode,
         array $extraFields,
         array $extraFieldValues,
+        string $groupName,
     ): array {
         $user = $attempt->getUser();
         $score = $attempt->getScore();
@@ -307,7 +322,7 @@ final readonly class ExerciseRuntimeReportExportService
             (string) $user->getFirstname(),
             (string) $user->getLastname(),
             (string) $user->getUsername(),
-            '-',
+            $groupName,
             $this->formatDuration($attempt->getExeDuration()),
             $this->formatDate($attempt->getStartDate()),
             $this->formatDate($attempt->getExeDate()),
@@ -339,12 +354,13 @@ final readonly class ExerciseRuntimeReportExportService
         bool $showOfficialCode,
         array $extraFields,
         array $extraFieldValues,
+        string $groupName,
     ): array {
         $row = [
             (string) $user->getFirstname(),
             (string) $user->getLastname(),
             (string) $user->getUsername(),
-            '-',
+            $groupName,
             '',
             '',
             '',
@@ -406,6 +422,7 @@ final readonly class ExerciseRuntimeReportExportService
         }
 
         $this->applyUserFilters($queryBuilder, $request);
+        $this->applyGroupFilter($queryBuilder, $course, $request);
         $this->applyStatusFilter($queryBuilder, $request);
 
         $attempts = [];
@@ -435,6 +452,47 @@ final readonly class ExerciseRuntimeReportExportService
                 ->setParameter('lastName', '%'.mb_strtolower($lastName).'%', Types::STRING)
             ;
         }
+    }
+
+    private function applyGroupFilter(QueryBuilder $queryBuilder, Course $course, Request $request): void
+    {
+        $groupFilter = $this->getGroupFilterValue($request);
+        if ('' === $groupFilter || 'group_all' === $groupFilter) {
+            return;
+        }
+
+        $joinType = 'group_none' === $groupFilter ? 'leftJoin' : 'innerJoin';
+        $queryBuilder
+            ->{$joinType}(
+                CGroupRelUser::class,
+                'groupRelFilter',
+                'WITH',
+                'groupRelFilter.user = user AND groupRelFilter.cId = :groupCourseId'
+            )
+            ->setParameter('groupCourseId', (int) $course->getId(), Types::INTEGER)
+        ;
+
+        if ('group_none' === $groupFilter) {
+            $queryBuilder->andWhere('groupRelFilter.iid IS NULL');
+
+            return;
+        }
+
+        $groupId = (int) $groupFilter;
+        if (0 < $groupId) {
+            $queryBuilder
+                ->andWhere('IDENTITY(groupRelFilter.group) = :groupId')
+                ->setParameter('groupId', $groupId, Types::INTEGER)
+            ;
+        }
+    }
+
+    private function getGroupFilterValue(Request $request): string
+    {
+        return trim((string) $request->query->get(
+            'groupId',
+            $request->query->get('group_id', $request->query->get('group_id_in_toolbar', ''))
+        ));
     }
 
     private function applyStatusFilter(QueryBuilder $queryBuilder, Request $request): void
@@ -535,6 +593,7 @@ final readonly class ExerciseRuntimeReportExportService
         }
 
         $this->applyUserFilters($queryBuilder, $request);
+        $this->applyGroupFilter($queryBuilder, $course, $request);
         $queryBuilder
             ->orderBy('user.lastname', 'ASC')
             ->addOrderBy('user.firstname', 'ASC')
@@ -576,6 +635,56 @@ final readonly class ExerciseRuntimeReportExportService
         }
 
         return array_values(array_unique(array_filter($userIds, static fn (int $userId): bool => 0 < $userId)));
+    }
+
+    /**
+     * @param array<int, int> $userIds
+     *
+     * @return array<int, string>
+     */
+    private function getGroupNamesByUserIds(array $userIds, Course $course): array
+    {
+        if ([] === $userIds) {
+            return [];
+        }
+
+        $rows = $this->entityManager->createQueryBuilder()
+            ->select('rel', 'groupInfo')
+            ->from(CGroupRelUser::class, 'rel')
+            ->innerJoin('rel.group', 'groupInfo')
+            ->andWhere('rel.cId = :courseId')
+            ->andWhere('IDENTITY(rel.user) IN (:userIds)')
+            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
+            ->setParameter('userIds', $userIds, ArrayParameterType::INTEGER)
+            ->orderBy('groupInfo.title', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        $names = [];
+        foreach ($rows as $row) {
+            if (!$row instanceof CGroupRelUser) {
+                continue;
+            }
+
+            $userId = (int) $row->getUser()->getId();
+            $title = trim($row->getGroup()->getTitle());
+            if ('' === $title) {
+                continue;
+            }
+
+            if (!isset($names[$userId])) {
+                $names[$userId] = [];
+            }
+            $names[$userId][] = $title;
+        }
+
+        $formatted = [];
+        foreach ($names as $userId => $groupNames) {
+            $formatted[$userId] = implode(', ', array_values(array_unique($groupNames)));
+        }
+
+        return $formatted;
     }
 
     /**

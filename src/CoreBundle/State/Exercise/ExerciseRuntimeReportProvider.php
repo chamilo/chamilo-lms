@@ -15,12 +15,15 @@ use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CourseBundle\Entity\CGroupRelUser;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
 use DateTimeInterface;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -80,6 +83,7 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
         $lockedByGradebook = $this->isGradebookLocked((int) $quiz->getIid(), $course);
         $attempts = $this->getAttempts($request, $quiz, $course, $session, $lockedByGradebook);
         $showOfficialCode = $this->shouldShowOfficialCode();
+        $groupOptions = $this->getGroupOptions($course);
 
         $response = new ExerciseRuntimeReport();
         $response->exerciseId = $exerciseId;
@@ -90,7 +94,9 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
             'firstName' => trim((string) $request->query->get('firstName', '')),
             'lastName' => trim((string) $request->query->get('lastName', '')),
             'status' => trim((string) $request->query->get('status', '')),
+            'groupId' => $this->getGroupFilterValue($request),
         ];
+        $response->groupOptions = $groupOptions;
         $response->actionUrls = $this->getActionUrls($quiz, $request);
         $response->totalItems = \count($attempts);
         $response->canManage = true;
@@ -212,21 +218,8 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
             $queryBuilder->andWhere('attempt.session IS NULL');
         }
 
-        $firstName = trim((string) $request->query->get('firstName', ''));
-        if ('' !== $firstName) {
-            $queryBuilder
-                ->andWhere('LOWER(user.firstname) LIKE :firstName')
-                ->setParameter('firstName', '%'.mb_strtolower($firstName).'%', Types::STRING)
-            ;
-        }
-
-        $lastName = trim((string) $request->query->get('lastName', ''));
-        if ('' !== $lastName) {
-            $queryBuilder
-                ->andWhere('LOWER(user.lastname) LIKE :lastName')
-                ->setParameter('lastName', '%'.mb_strtolower($lastName).'%', Types::STRING)
-            ;
-        }
+        $this->applyUserFilters($queryBuilder, $request);
+        $this->applyGroupFilter($queryBuilder, $course, $request);
 
         $status = trim((string) $request->query->get('status', ''));
         if (self::STATUS_PENDING_CORRECTION === $status) {
@@ -244,13 +237,25 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
             ;
         }
 
-        $attempts = [];
+        $attemptRows = [];
         foreach ($queryBuilder->getQuery()->getResult() as $attempt) {
-            if (!$attempt instanceof TrackEExercise) {
-                continue;
+            if ($attempt instanceof TrackEExercise) {
+                $attemptRows[] = $attempt;
             }
+        }
 
-            $attempts[] = $this->normalizeAttempt($attempt, $quiz, $request, $lockedByGradebook);
+        $groupNamesByUser = $this->getGroupNamesByUserIds($this->collectUserIdsFromAttempts($attemptRows), $course);
+
+        $attempts = [];
+        foreach ($attemptRows as $attempt) {
+            $userId = (int) $attempt->getUser()->getId();
+            $attempts[] = $this->normalizeAttempt(
+                $attempt,
+                $quiz,
+                $request,
+                $lockedByGradebook,
+                $groupNamesByUser[$userId] ?? '-'
+            );
         }
 
         return $attempts;
@@ -259,7 +264,7 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
     /**
      * @return array<string, mixed>
      */
-    private function normalizeAttempt(TrackEExercise $attempt, CQuiz $quiz, Request $request, bool $lockedByGradebook): array
+    private function normalizeAttempt(TrackEExercise $attempt, CQuiz $quiz, Request $request, bool $lockedByGradebook, string $groupName): array
     {
         $user = $attempt->getUser();
         $questionsToCheck = $this->parseQuestionIds($attempt->getQuestionsToCheck());
@@ -286,7 +291,7 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
             'firstName' => (string) $user->getFirstname(),
             'lastName' => (string) $user->getLastname(),
             'fullName' => $user->getFullName(),
-            'groupName' => '-',
+            'groupName' => $groupName,
             'duration' => $attempt->getExeDuration(),
             'startedAt' => $this->formatDate($attempt->getStartDate()),
             'completedAt' => $this->formatDate($attempt->getExeDate()),
@@ -347,6 +352,168 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
         }
 
         return array_values(array_unique($ids));
+    }
+
+    private function applyUserFilters(QueryBuilder $queryBuilder, Request $request): void
+    {
+        $firstName = trim((string) $request->query->get('firstName', ''));
+        if ('' !== $firstName) {
+            $queryBuilder
+                ->andWhere('LOWER(user.firstname) LIKE :firstName')
+                ->setParameter('firstName', '%'.mb_strtolower($firstName).'%', Types::STRING)
+            ;
+        }
+
+        $lastName = trim((string) $request->query->get('lastName', ''));
+        if ('' !== $lastName) {
+            $queryBuilder
+                ->andWhere('LOWER(user.lastname) LIKE :lastName')
+                ->setParameter('lastName', '%'.mb_strtolower($lastName).'%', Types::STRING)
+            ;
+        }
+    }
+
+    private function applyGroupFilter(QueryBuilder $queryBuilder, Course $course, Request $request): void
+    {
+        $groupFilter = $this->getGroupFilterValue($request);
+        if ('' === $groupFilter || 'group_all' === $groupFilter) {
+            return;
+        }
+
+        $joinType = 'group_none' === $groupFilter ? 'leftJoin' : 'innerJoin';
+        $queryBuilder
+            ->{$joinType}(
+                CGroupRelUser::class,
+                'groupRelFilter',
+                'WITH',
+                'groupRelFilter.user = user AND groupRelFilter.cId = :groupCourseId'
+            )
+            ->setParameter('groupCourseId', (int) $course->getId(), Types::INTEGER)
+        ;
+
+        if ('group_none' === $groupFilter) {
+            $queryBuilder->andWhere('groupRelFilter.iid IS NULL');
+
+            return;
+        }
+
+        $groupId = (int) $groupFilter;
+        if (0 < $groupId) {
+            $queryBuilder
+                ->andWhere('IDENTITY(groupRelFilter.group) = :groupId')
+                ->setParameter('groupId', $groupId, Types::INTEGER)
+            ;
+        }
+    }
+
+    private function getGroupFilterValue(Request $request): string
+    {
+        return trim((string) $request->query->get(
+            'groupId',
+            $request->query->get('group_id', $request->query->get('group_id_in_toolbar', ''))
+        ));
+    }
+
+    /**
+     * @param array<int, TrackEExercise> $attempts
+     *
+     * @return array<int, int>
+     */
+    private function collectUserIdsFromAttempts(array $attempts): array
+    {
+        $userIds = [];
+        foreach ($attempts as $attempt) {
+            $userIds[] = (int) $attempt->getUser()->getId();
+        }
+
+        return array_values(array_unique(array_filter($userIds, static fn (int $userId): bool => 0 < $userId)));
+    }
+
+    /**
+     * @param array<int, int> $userIds
+     *
+     * @return array<int, string>
+     */
+    private function getGroupNamesByUserIds(array $userIds, Course $course): array
+    {
+        if ([] === $userIds) {
+            return [];
+        }
+
+        $rows = $this->entityManager->createQueryBuilder()
+            ->select('rel', 'groupInfo')
+            ->from(CGroupRelUser::class, 'rel')
+            ->innerJoin('rel.group', 'groupInfo')
+            ->andWhere('rel.cId = :courseId')
+            ->andWhere('IDENTITY(rel.user) IN (:userIds)')
+            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
+            ->setParameter('userIds', $userIds, ArrayParameterType::INTEGER)
+            ->orderBy('groupInfo.title', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        $names = [];
+        foreach ($rows as $row) {
+            if (!$row instanceof CGroupRelUser) {
+                continue;
+            }
+
+            $userId = (int) $row->getUser()->getId();
+            $title = trim($row->getGroup()->getTitle());
+            if ('' === $title) {
+                continue;
+            }
+
+            if (!isset($names[$userId])) {
+                $names[$userId] = [];
+            }
+            $names[$userId][] = $title;
+        }
+
+        $formatted = [];
+        foreach ($names as $userId => $groupNames) {
+            $formatted[$userId] = implode(', ', array_values(array_unique($groupNames)));
+        }
+
+        return $formatted;
+    }
+
+    /**
+     * @return array<int, array<string, int|string>>
+     */
+    private function getGroupOptions(Course $course): array
+    {
+        $rows = $this->entityManager->createQueryBuilder()
+            ->select('rel', 'groupInfo')
+            ->from(CGroupRelUser::class, 'rel')
+            ->innerJoin('rel.group', 'groupInfo')
+            ->andWhere('rel.cId = :courseId')
+            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
+            ->orderBy('groupInfo.title', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        $options = [];
+        foreach ($rows as $row) {
+            if (!$row instanceof CGroupRelUser) {
+                continue;
+            }
+
+            $group = $row->getGroup();
+            $groupId = (int) $group->getIid();
+            if (0 >= $groupId || isset($options[$groupId])) {
+                continue;
+            }
+
+            $options[$groupId] = [
+                'label' => $group->getTitle(),
+                'value' => $groupId,
+            ];
+        }
+
+        return array_values($options);
     }
 
     private function canDeleteResults(): bool
@@ -487,6 +654,11 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
             if ('' !== $value) {
                 $params[$filterName] = $value;
             }
+        }
+
+        $groupFilter = $this->getGroupFilterValue($request);
+        if ('' !== $groupFilter && 'group_all' !== $groupFilter) {
+            $params['groupId'] = $groupFilter;
         }
 
         return $params;

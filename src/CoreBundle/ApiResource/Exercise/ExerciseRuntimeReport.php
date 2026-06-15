@@ -30,6 +30,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     new Parameter(name: 'firstName', in: 'query', required: false, schema: ['type' => 'string']),
                     new Parameter(name: 'lastName', in: 'query', required: false, schema: ['type' => 'string']),
                     new Parameter(name: 'status', in: 'query', required: false, schema: ['type' => 'string']),
+                    new Parameter(name: 'groupId', in: 'query', required: false, schema: ['type' => 'string']),
                 ],
             ),
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
@@ -62,6 +63,12 @@ final class ExerciseRuntimeReport
      */
     #[Groups(['exercise_runtime_report:read'])]
     public array $filters = [];
+
+    /**
+     * @var array<int, array<string, int|string>>
+     */
+    #[Groups(['exercise_runtime_report:read'])]
+    public array $groupOptions = [];
 
     /**
      * @var array<string, string>

@@ -261,7 +261,7 @@
       class="rounded-xl border border-gray-20 bg-white p-4 shadow-sm"
       @submit.prevent="applyFilters"
     >
-      <div class="grid gap-3 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_auto] md:items-end">
+      <div class="grid gap-3 md:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_auto] lg:items-end">
         <BaseInputText
           id="exercise-report-first-name"
           v-model="filterForm.firstName"
@@ -280,6 +280,15 @@
           :label="t('Status')"
           name="status"
           :options="statusOptions"
+          option-label="label"
+          option-value="value"
+        />
+        <BaseSelect
+          id="exercise-report-group"
+          v-model="filterForm.groupId"
+          :label="t('Group')"
+          name="groupId"
+          :options="groupOptions"
           option-label="label"
           option-value="value"
         />
@@ -501,6 +510,7 @@ const description = ref("")
 const attempts = ref([])
 const selectedAttempts = ref([])
 const actionUrls = ref({})
+const groupOptions = ref([])
 const showOfficialCode = ref(false)
 const lockedByGradebook = ref(false)
 const canBulkDelete = ref(false)
@@ -521,8 +531,9 @@ const filterForm = reactive({
   firstName: getQueryValue(route.query.firstName) || "",
   lastName: getQueryValue(route.query.lastName) || "",
   status: getQueryValue(route.query.status) || "",
+  groupId: getQueryValue(route.query.groupId) || getQueryValue(route.query.group_id) || "",
 })
-const isSearchVisible = ref(Boolean(filterForm.firstName || filterForm.lastName || filterForm.status))
+const isSearchVisible = ref(Boolean(filterForm.firstName || filterForm.lastName || filterForm.status || filterForm.groupId))
 
 const statusOptions = computed(() => [
   { label: t("All"), value: "" },
@@ -539,7 +550,15 @@ const selectedAttemptIds = computed(() =>
   selectedAttempts.value.map((attempt) => Number(attempt.attemptId || attempt.id || 0)).filter((attemptId) => attemptId > 0),
 )
 const hasSelectedAttempts = computed(() => selectedAttemptIds.value.length > 0)
-const hasFilters = computed(() => Boolean(getQueryValue(route.query.firstName) || getQueryValue(route.query.lastName) || getQueryValue(route.query.status)))
+const hasFilters = computed(() =>
+  Boolean(
+    getQueryValue(route.query.firstName) ||
+      getQueryValue(route.query.lastName) ||
+      getQueryValue(route.query.status) ||
+      getQueryValue(route.query.groupId) ||
+      getQueryValue(route.query.group_id),
+  ),
+)
 const availableIcons = Object.keys(chamiloIconToClass)
 
 function safeIcon(icon, fallback = "information") {
@@ -556,6 +575,29 @@ function safeIcon(icon, fallback = "information") {
 
 function getQueryValue(value) {
   return Array.isArray(value) ? value[0] : value
+}
+
+function buildGroupOptions(options) {
+  const normalizedOptions = [
+    { label: t("All"), value: "" },
+    { label: t("None"), value: "group_none" },
+  ]
+
+  if (!Array.isArray(options)) {
+    return normalizedOptions
+  }
+
+  for (const option of options) {
+    const value = String(option?.value || "")
+    if (value) {
+      normalizedOptions.push({
+        label: String(option?.label || value),
+        value,
+      })
+    }
+  }
+
+  return normalizedOptions
 }
 
 function getContextParams() {
@@ -597,6 +639,7 @@ function getReportParams() {
     firstName: getQueryValue(route.query.firstName),
     lastName: getQueryValue(route.query.lastName),
     status: getQueryValue(route.query.status),
+    groupId: getQueryValue(route.query.groupId) || getQueryValue(route.query.group_id),
   }
 }
 
@@ -628,6 +671,7 @@ async function loadReport() {
     attempts.value = Array.isArray(response.attempts) ? response.attempts : []
     selectedAttempts.value = []
     actionUrls.value = response.actionUrls || {}
+    groupOptions.value = buildGroupOptions(response.groupOptions)
     showOfficialCode.value = true === response.showOfficialCode
     lockedByGradebook.value = true === response.lockedByGradebook
     canBulkDelete.value = true === response.canBulkDelete
@@ -668,6 +712,14 @@ function applyFilters() {
     delete query.status
   }
 
+  if (filterForm.groupId) {
+    query.groupId = filterForm.groupId
+  } else {
+    delete query.groupId
+  }
+  delete query.group_id
+  delete query.group_id_in_toolbar
+
   router.push({ name: route.name, params: route.params, query })
 }
 
@@ -675,10 +727,14 @@ function clearFilters() {
   filterForm.firstName = ""
   filterForm.lastName = ""
   filterForm.status = ""
+  filterForm.groupId = ""
   const query = { ...route.query }
   delete query.firstName
   delete query.lastName
   delete query.status
+  delete query.groupId
+  delete query.group_id
+  delete query.group_id_in_toolbar
   router.push({ name: route.name, params: route.params, query })
 }
 

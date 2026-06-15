@@ -36481,3 +36481,39 @@ msgstr "Moderated"
 
 msgid "View threads"
 msgstr "View threads"
+
+msgid "Calculation mode"
+msgstr "Calculation mode"
+
+msgid "Weighted average"
+msgstr "Weighted average"
+
+msgid "Points sum"
+msgstr "Points sum"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "The grade is the weighted average of items, normalized by the sum of weights."
+
+msgid "Forum participation"
+msgstr "Forum participation"
+
+msgid "Forum thread"
+msgstr "Forum thread"
+
+msgid "Points for one message"
+msgstr "Points for one message"
+
+msgid "Points for two or more messages"
+msgstr "Points for two or more messages"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "Points awarded when the student posted exactly one message in the thread."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "Points awarded when the student posted two or more messages in the thread."

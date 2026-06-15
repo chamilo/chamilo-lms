@@ -72,13 +72,14 @@ export default {
    * @returns {Promise<Object>} The created gradebook link resource.
    */
   async createForumParticipationLink({ threadId, courseId, categoryId, pointsOne, pointsMany }) {
-    // 11 = LINK_FORUM_PARTICIPATION. Weight is 1 so the item contributes its raw points.
+    // 11 = LINK_FORUM_PARTICIPATION. Weight equals pointsMany (the item's max points) so in
+    // points_sum the contribution equals the earned points.
     return await baseService.post("/api/gradebook_links", {
       type: 11,
       refId: threadId,
       course: `/api/courses/${courseId}`,
       category: `/api/gradebook_categories/${categoryId}`,
-      weight: 1,
+      weight: Number(pointsMany),
       pointsOne: String(pointsOne),
       pointsMany: String(pointsMany),
     })

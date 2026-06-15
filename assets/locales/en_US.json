@@ -1,4 +1,12 @@
 {
+    "Calculation mode": "Calculation mode",
+    "Weighted average": "Weighted average",
+    "Points sum": "Points sum",
+    "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized.": "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized.",
+    "The grade is the weighted average of items, normalized by the sum of weights.": "The grade is the weighted average of items, normalized by the sum of weights.",
+    "Forum thread": "Forum thread",
+    "Points for one message": "Points for one message",
+    "Points for two or more messages": "Points for two or more messages",
     "Agenda": "Agenda",
     "Documents": "Documents",
     "Groups": "Groups",

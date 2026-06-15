@@ -53,8 +53,6 @@ $form = new LinkAddEditForm(
 if ($form->validate()) {
     $values = $form->exportValues();
     $parent_cat = Category::load($values['select_gradebook']);
-    $final_weight = $values['weight_mask'];
-    $link->set_weight($final_weight);
 
     if (!empty($values['select_gradebook'])) {
         $link->set_category_id($values['select_gradebook']);
@@ -65,8 +63,14 @@ if ($form->validate()) {
     }
 
     if (LINK_FORUM_PARTICIPATION == $link->get_type()) {
-        $link->set_points_one(isset($values['points_one']) ? api_float_val($values['points_one']) : null);
-        $link->set_points_many(isset($values['points_many']) ? api_float_val($values['points_many']) : null);
+        $pointsOne = isset($values['points_one']) ? api_float_val($values['points_one']) : null;
+        $pointsMany = isset($values['points_many']) ? api_float_val($values['points_many']) : null;
+        $link->set_points_one($pointsOne);
+        $link->set_points_many($pointsMany);
+        // The item's max points (pointsMany) is also its weight in POINTS_SUM.
+        $link->set_weight((float) $pointsMany);
+    } else {
+        $link->set_weight($values['weight_mask']);
     }
     $link->save();
 

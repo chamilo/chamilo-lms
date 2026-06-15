@@ -27,7 +27,10 @@
 
     <form
       v-if="!isLoading"
-      class="space-y-5"
+      :class="[
+        'space-y-5',
+        isReadOnlyFromLearningPath ? 'pointer-events-none opacity-75' : '',
+      ]"
       @submit.prevent="saveQuestion"
     >
       <div class="space-y-3 border-b border-gray-20 pb-4">
@@ -40,6 +43,13 @@
           class="rounded-lg border border-info/30 bg-support-1 px-4 py-3 text-sm font-medium text-support-4"
         >
           {{ summaryText }}
+        </div>
+
+        <div
+          v-if="isReadOnlyFromLearningPath"
+          class="rounded-lg border border-yellow-200 bg-yellow-50 px-4 py-3 text-sm font-medium text-yellow-800"
+        >
+          {{ t(learningPathReadOnlyMessage) }}
         </div>
 
         <BaseInputText
@@ -1119,6 +1129,7 @@
             @click="addMatchingElement"
           />
           <BaseButton
+            v-if="!isReadOnlyFromLearningPath"
             :is-loading="isSaving"
             :label="t('Add this question to the test')"
             icon="check"
@@ -1217,6 +1228,7 @@
             @click="addDraggableItem"
           />
           <BaseButton
+            v-if="!isReadOnlyFromLearningPath"
             :is-loading="isSaving"
             :label="t('Add this question to the test')"
             icon="check"
@@ -1231,6 +1243,7 @@
         class="flex flex-wrap items-center gap-2"
       >
         <BaseButton
+          v-if="!isReadOnlyFromLearningPath"
           :is-loading="isSaving"
           :label="t('Save the question')"
           icon="check"
@@ -1537,6 +1550,10 @@ const showAdvancedSettings = ref(false)
 const allowQuestionFeedback = ref(false)
 const imageZoomEnabled = ref(false)
 const allowMandatoryQuestion = ref(false)
+const isReadOnlyFromLearningPath = ref(false)
+const learningPathReadOnlyMessage = ref(
+  "This exercise has been included in a learning path, so it cannot be accessed by students directly from here. If you want to put the same exercise available through the exercises tool, please make a copy of the current exercise using the copy icon.",
+)
 let answerCounter = 0
 let matchingOptionCounter = 0
 let matchingPairCounter = 0
@@ -1697,6 +1714,7 @@ const form = reactive({
 })
 
 const exerciseId = computed(() => Number(getQueryValue(route.params.exerciseId) || 0))
+const isGlobalQuestionMode = computed(() => ['ExerciseGlobalQuestionCreate', 'ExerciseGlobalQuestionEdit'].includes(String(route.name)))
 const questionId = computed(() => Number(getQueryValue(route.params.questionId) || 0))
 const questionType = computed(() => Number(getQueryValue(route.params.questionType) || UNIQUE_ANSWER))
 const isEditMode = computed(() => questionId.value > 0)
@@ -1751,13 +1769,21 @@ const dropdownOptionCount = computed(() => form.answers.length)
 const editorTitle = computed(() => {
   const label = typeLabel.value || getTypeLabel(Number(form.type))
 
-  return isEditMode.value
-    ? formatTranslatedText("Edit question: {0}", [t(label)])
+  if (isEditMode.value) {
+    return formatTranslatedText("Edit question: {0}", [t(label)])
+  }
+
+  return isGlobalQuestionMode.value
+    ? formatTranslatedText("Add a question: {0}", [t(label)])
     : formatTranslatedText("Add this question to the test: {0}", [t(label)])
 })
-const summaryText = computed(() =>
-  formatTranslatedText("{0} questions, for a total score (all questions) of {1}.", [questionCount.value, totalScore.value]),
-)
+const summaryText = computed(() => {
+  if (isGlobalQuestionMode.value) {
+    return ""
+  }
+
+  return formatTranslatedText("{0} questions, for a total score (all questions) of {1}.", [questionCount.value, totalScore.value])
+})
 const manualCorrectionHelpText = computed(() => {
   if (isUploadAnswerQuestion.value) {
     return t("This upload question has no answer options. Its score is assigned during correction/results review.")
@@ -1806,22 +1832,51 @@ const matchingOptionSelectOptions = computed(() =>
     value: option.localId,
   })),
 )
-const questionsRoute = computed(() => ({
-  name: "ExerciseQuestions",
-  params: { node: route.params.node, exerciseId: exerciseId.value },
-  query: getContextParams(),
-}))
+const questionsRoute = computed(() => {
+  if (isGlobalQuestionMode.value) {
+    return {
+      name: isEditMode.value ? "ExerciseQuestionPool" : "ExerciseList",
+      params: { node: route.params.node },
+      query: getContextParams(),
+    }
+  }
+
+  return {
+    name: "ExerciseQuestions",
+    params: { node: route.params.node, exerciseId: exerciseId.value },
+    query: getContextParams(),
+  }
+})
 
 function getQueryValue(value) {
   return Array.isArray(value) ? value[0] : value
 }
 
 function getContextParams() {
-  return {
+  const params = {
     cid: getQueryValue(route.query.cid),
     sid: getQueryValue(route.query.sid),
     gid: getQueryValue(route.query.gid),
   }
+
+  for (const key of ["origin", "lp_id", "learnpath_id", "node", "type", "returnToLp", "isStudentView", "gradebook"]) {
+    const value = getQueryValue(route.query[key])
+    if (value !== undefined && value !== null && String(value) !== "") {
+      params[key] = value
+    }
+  }
+
+  return params
+}
+
+function getEditorParams() {
+  const params = { ...getContextParams() }
+
+  if (!isEditMode.value && route.query.isContent !== undefined) {
+    params.isContent = getQueryValue(route.query.isContent)
+  }
+
+  return params
 }
 
 function formatTranslatedText(key, replacements = []) {
@@ -2168,6 +2223,8 @@ function normalizeOption(option) {
 }
 
 function fillForm(data) {
+  isReadOnlyFromLearningPath.value = true === data.isReadOnlyFromLearningPath
+  learningPathReadOnlyMessage.value = data.learningPathReadOnlyMessage || learningPathReadOnlyMessage.value
   form.type = Number(data.type || questionType.value || UNIQUE_ANSWER)
   typeLabel.value = data.typeLabel || getTypeLabel(form.type)
   form.title = data.title || ""
@@ -3383,7 +3440,7 @@ function validateForm() {
 }
 
 async function loadQuestionEditor() {
-  if (!exerciseId.value) {
+  if (!isGlobalQuestionMode.value && !exerciseId.value) {
     errorMessage.value = t("A valid exercise id is required.")
     return
   }
@@ -3392,12 +3449,17 @@ async function loadQuestionEditor() {
   errorMessage.value = ""
 
   try {
-    const response = await exerciseService.getExerciseQuestionEditor(
-      getContextParams(),
-      exerciseId.value,
-      isEditMode.value ? questionId.value : null,
-      isEditMode.value ? null : questionType.value,
-    )
+    const response = isGlobalQuestionMode.value
+      ? await exerciseService.getExerciseGlobalQuestionEditor(
+          { ...getEditorParams(), questionId: isEditMode.value ? questionId.value : null },
+          isEditMode.value ? null : questionType.value,
+        )
+      : await exerciseService.getExerciseQuestionEditor(
+          getEditorParams(),
+          exerciseId.value,
+          isEditMode.value ? questionId.value : null,
+          isEditMode.value ? null : questionType.value,
+        )
     fillForm(response)
   } catch (error) {
     console.error("Error loading exercise question editor", error)
@@ -3410,6 +3472,11 @@ async function loadQuestionEditor() {
 async function saveQuestion() {
   errorMessage.value = ""
 
+  if (isReadOnlyFromLearningPath.value) {
+    errorMessage.value = t("This exercise is read-only because it is included in a learning path.")
+    return
+  }
+
   if (!validateForm()) {
     return
   }
@@ -3417,12 +3484,20 @@ async function saveQuestion() {
   isSaving.value = true
 
   try {
-    await exerciseService.saveExerciseQuestion(
-      buildPayload(),
-      getContextParams(),
-      exerciseId.value,
-      isEditMode.value ? questionId.value : null,
-    )
+    if (isGlobalQuestionMode.value) {
+      await exerciseService.saveExerciseGlobalQuestion(
+        buildPayload(),
+        getContextParams(),
+        isEditMode.value ? questionId.value : null,
+      )
+    } else {
+      await exerciseService.saveExerciseQuestion(
+        buildPayload(),
+        getContextParams(),
+        exerciseId.value,
+        isEditMode.value ? questionId.value : null,
+      )
+    }
     await router.push(questionsRoute.value)
   } catch (error) {
     console.error("Error saving exercise question", error)

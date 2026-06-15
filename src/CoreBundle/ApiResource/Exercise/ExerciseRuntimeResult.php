@@ -86,6 +86,18 @@ final class ExerciseRuntimeResult
     #[Groups(['exercise_runtime_result:read'])]
     public array $legacyUrls = [];
 
+    /**
+     * @var array<string, mixed>
+     */
+    #[Groups(['exercise_runtime_result:read'])]
+    public array $finalActions = [];
+
+    /**
+     * @var array<string, mixed>
+     */
+    #[Groups(['exercise_runtime_result:read'])]
+    public array $aiCorrection = [];
+
     #[Groups(['exercise_runtime_result:read'])]
     public bool $canManage = false;
 

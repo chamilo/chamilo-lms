@@ -76,6 +76,17 @@ final class ExerciseRuntimeFinish
     #[Groups(['exercise_runtime_finish:read'])]
     public string $resultUrl = '';
 
+    /**
+     * Runtime data used by the embedded learning path page to update its TOC and progress bar without reloading.
+     *
+     * @var array<string, mixed>
+     */
+    #[Groups(['exercise_runtime_finish:read'])]
+    public array $learnpathTracking = [];
+
+    #[Groups(['exercise_runtime_finish:write'])]
+    public bool $confirmedSavedAnswers = false;
+
     public function getExerciseId(): ?int
     {
         return $this->exerciseId;

@@ -21,7 +21,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
             uriTemplate: '/exercise/runtime/{exerciseId}/attempt',
             requirements: ['exerciseId' => '\\d+'],
             openapi: new Operation(
-                summary: 'Start or resume a Vue exercise runtime attempt',
+                summary: 'Start or resume an exercise runtime attempt',
                 parameters: [
                     new Parameter(name: 'exerciseId', in: 'path', required: true, schema: ['type' => 'integer']),
                     new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
@@ -49,6 +49,9 @@ final class ExerciseRuntimeAttempt
 
     #[Groups(['exercise_runtime_attempt:read'])]
     public ?int $attemptId = null;
+
+    #[Groups(['exercise_runtime_attempt:read'])]
+    public ?int $attemptNumber = null;
 
     #[Groups(['exercise_runtime_attempt:read'])]
     public string $status = '';

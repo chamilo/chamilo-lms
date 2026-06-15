@@ -2,8 +2,8 @@
   <section class="space-y-5">
     <div class="flex flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm w-fit">
       <BaseButton
-        :label="t('Back to questions')"
-        :route="{ name: 'ExerciseQuestions', params: { ...route.params, exerciseId }, query: getContextParams() }"
+        :label="isGlobalMode ? t('Back to exercises') : t('Back to questions')"
+        :route="backRoute"
         icon="back"
         only-icon
         size="small"
@@ -15,10 +15,10 @@
 
     <section class="space-y-1">
       <h1 class="text-xl font-semibold text-gray-90">
-        {{ t("Question bank") }}
+        {{ t("Recycle existing questions") }}
       </h1>
       <p class="text-sm text-gray-600">
-        {{ t("Reuse existing questions in this test.") }}
+        {{ isGlobalMode ? t("Manage all questions") : t("Add question to test") }}
       </p>
     </section>
 
@@ -104,9 +104,12 @@
 
     <div class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-gray-20 bg-white px-4 py-3 shadow-sm">
       <div class="text-sm text-gray-700">
-        {{ t("{0} questions found", [totalItems]) }}
+        {{ t("Questions") }}: {{ totalItems }}
       </div>
-      <div class="flex flex-wrap gap-2">
+      <div
+        v-if="!isGlobalMode"
+        class="flex flex-wrap gap-2"
+      >
         <BaseButton
           :disabled="0 === selectedQuestionIds.length || isSaving"
           :is-loading="isSaving"
@@ -119,13 +122,20 @@
     </div>
 
     <BaseTable
+      :key="tableKey"
+      v-model:rows="filters.itemsPerPage"
       :is-loading="isLoading"
+      lazy
       :text-for-empty="t('No questions found')"
       :total-items="totalItems"
       :values="questions"
       data-key="id"
+      @page="handleTablePage"
     >
-      <Column class="w-12">
+      <Column
+        v-if="!isGlobalMode"
+        class="w-12"
+      >
         <template #header>
           <input
             :checked="areAllReusableQuestionsSelected"
@@ -213,53 +223,71 @@
       >
         <template #body="{ data }">
           <div class="flex justify-end gap-1">
-            <span
-              v-if="data.alreadyInExercise"
-              class="rounded-full bg-gray-100 px-2 py-1 text-xs font-semibold text-gray-700"
-            >
-              {{ t("Already in test") }}
-            </span>
-            <span
-              v-else-if="!data.canReuse"
-              class="rounded-full bg-yellow-100 px-2 py-1 text-xs font-semibold text-yellow-800"
-              :title="t(data.blockedReason || 'This question cannot be reused here.')"
-            >
-              {{ t("Not compatible") }}
-            </span>
-            <BaseButton
-              v-else
-              :disabled="isSaving"
-              :label="t('Use this question in the test as a link (not a copy)')"
-              icon="plus"
-              only-icon
-              size="small"
-              type="success-text"
-              @click="addQuestion(data)"
-            />
+            <template v-if="isGlobalMode">
+              <BaseButton
+                v-if="data.canEdit"
+                :label="t('Edit')"
+                icon="edit"
+                only-icon
+                :route="{ name: 'ExerciseGlobalQuestionEdit', params: { node: route.params.node, questionId: data.id }, query: getContextParams() }"
+                size="small"
+                type="secondary-text"
+              />
+              <BaseButton
+                v-else
+                :disabled="true"
+                :label="getEditBlockedLabel(data)"
+                icon="edit"
+                only-icon
+                size="small"
+                type="secondary-text"
+              />
+              <BaseButton
+                v-if="data.canDelete"
+                :disabled="isSaving"
+                :label="t('Delete')"
+                icon="delete"
+                only-icon
+                size="small"
+                type="danger-text"
+                @click="confirmDeleteQuestion(data)"
+              />
+              <BaseButton
+                v-else
+                :disabled="true"
+                :label="getDeleteBlockedLabel(data)"
+                icon="delete"
+                only-icon
+                size="small"
+                type="danger-text"
+              />
+            </template>
+            <template v-else>
+              <BaseButton
+                v-if="data.canReuse"
+                :disabled="isSaving"
+                :label="t('Use this question in the test as a link (not a copy)')"
+                icon="plus"
+                only-icon
+                size="small"
+                type="success-text"
+                @click="addQuestion(data)"
+              />
+              <BaseButton
+                v-else
+                :disabled="true"
+                :label="getReuseBlockedLabel(data)"
+                icon="plus"
+                only-icon
+                size="small"
+                type="success-text"
+              />
+            </template>
           </div>
         </template>
       </Column>
     </BaseTable>
 
-    <div class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-gray-20 bg-white px-4 py-3 shadow-sm">
-      <BaseButton
-        :disabled="1 >= filters.page || isLoading"
-        :label="t('Previous')"
-        icon="back"
-        type="plain"
-        @click="changePage(filters.page - 1)"
-      />
-      <span class="text-sm text-gray-700">
-        {{ t("Page {0} of {1}", [filters.page, pageCount]) }}
-      </span>
-      <BaseButton
-        :disabled="filters.page >= pageCount || isLoading"
-        :label="t('Next')"
-        icon="next"
-        type="plain"
-        @click="changePage(filters.page + 1)"
-      />
-    </div>
   </section>
 </template>
 
@@ -271,13 +299,17 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
+import { useConfirmation } from "../../composables/useConfirmation"
 import exerciseService from "../../services/exerciseService"
 
 const { t } = useI18n()
 const route = useRoute()
+const { requireConfirmation } = useConfirmation()
 
 const exerciseId = Number(getQueryValue(route.params.exerciseId) || 0)
+const responseGlobalMode = ref(0 >= exerciseId)
 const questions = ref([])
+const tableKey = ref(0)
 const categoryOptions = ref([])
 const exerciseOptions = ref([])
 const difficultyOptions = ref([])
@@ -299,22 +331,38 @@ const filters = reactive({
   questionType: Number(getQueryValue(route.query.questionType) || -1),
 })
 
+const isGlobalMode = computed(() => responseGlobalMode.value)
+const backRoute = computed(() => {
+  if (isGlobalMode.value) {
+    return { name: "ExerciseList", params: { node: route.params.node }, query: getContextParams() }
+  }
+
+  return { name: "ExerciseQuestions", params: { ...route.params, exerciseId }, query: getContextParams() }
+})
 const reusableQuestionIds = computed(() => questions.value.filter((question) => question.canReuse).map((question) => Number(question.id)))
 const areAllReusableQuestionsSelected = computed(
   () => reusableQuestionIds.value.length > 0 && reusableQuestionIds.value.every((id) => selectedQuestionIds.value.includes(id)),
 )
-const pageCount = computed(() => Math.max(1, Math.ceil(totalItems.value / Math.max(1, filters.itemsPerPage))))
 
 function getQueryValue(value) {
   return Array.isArray(value) ? value[0] : value
 }
 
 function getContextParams() {
-  return {
+  const params = {
     cid: getQueryValue(route.query.cid),
     sid: getQueryValue(route.query.sid),
     gid: getQueryValue(route.query.gid),
   }
+
+  for (const key of ["origin", "lp_id", "learnpath_id", "node", "type", "returnToLp", "isStudentView", "gradebook"]) {
+    const value = getQueryValue(route.query[key])
+    if (value !== undefined && value !== null && String(value) !== "") {
+      params[key] = value
+    }
+  }
+
+  return params
 }
 
 function getBankParams() {
@@ -364,8 +412,13 @@ function useFallbackIcon(event) {
   event.target.src = "/img/icons/64/new_question.png"
 }
 
+function resetTablePagination() {
+  tableKey.value += 1
+}
+
 function applyFilters() {
   filters.page = 1
+  resetTablePagination()
   loadQuestionBank()
 }
 
@@ -376,16 +429,49 @@ function clearFilters() {
   filters.sourceExerciseId = 0
   filters.difficulty = -1
   filters.questionType = -1
+  resetTablePagination()
   loadQuestionBank()
 }
 
-function changePage(page) {
-  filters.page = Math.max(1, Math.min(page, pageCount.value))
+function handleTablePage(event) {
+  filters.page = Number(event.page || 0) + 1
+  filters.itemsPerPage = Number(event.rows || filters.itemsPerPage || 20)
   loadQuestionBank()
+}
+
+function getEditBlockedLabel(question) {
+  if (question.usedInActiveTest) {
+    return t("This question is used in an active test and cannot be edited here.")
+  }
+
+  return t("This question cannot be edited here.")
+}
+
+function getDeleteBlockedLabel(question) {
+  if (question.usedInActiveTest) {
+    return t("This question is used in an active test and cannot be deleted here.")
+  }
+
+  return t("This question cannot be deleted because your access is limited by the platform settings.")
+}
+
+function getReuseBlockedLabel(question) {
+  if (question.alreadyInExercise) {
+    return t("Already in test")
+  }
+
+  return t(question.blockedReason || "This question cannot be reused here.")
 }
 
 function toggleAllQuestions(event) {
   selectedQuestionIds.value = event.target.checked ? [...reusableQuestionIds.value] : []
+}
+
+function confirmDeleteQuestion(question) {
+  requireConfirmation({
+    message: t("Are you sure you want to delete this question?"),
+    accept: () => deleteQuestion(question),
+  })
 }
 
 async function addQuestion(question) {
@@ -396,7 +482,15 @@ async function addSelectedQuestions() {
   await runReuseAction(selectedQuestionIds.value)
 }
 
+async function deleteQuestion(question) {
+  await runBankAction("delete", [Number(question.id)])
+}
+
 async function runReuseAction(questionIds) {
+  await runBankAction("reuse", questionIds)
+}
+
+async function runBankAction(action, questionIds) {
   if (isSaving.value) {
     return
   }
@@ -415,14 +509,14 @@ async function runReuseAction(questionIds) {
     const response = await exerciseService.saveExerciseQuestionBankAction(
       {
         exerciseId,
-        action: "reuse",
+        action,
         questionIds: safeQuestionIds,
         submittedCsrfToken: csrfToken.value,
       },
       getContextParams(),
-      exerciseId,
+      isGlobalMode.value ? null : exerciseId,
     )
-    infoMessage.value = response?.message ? t(response.message) : t("Questions added to the test")
+    infoMessage.value = response?.message ? t(response.message) : t("Question bank updated")
     selectedQuestionIds.value = []
     await loadQuestionBank()
   } catch (error) {
@@ -434,16 +528,12 @@ async function runReuseAction(questionIds) {
 }
 
 async function loadQuestionBank() {
-  if (!exerciseId) {
-    errorMessage.value = t("A valid exercise id is required.")
-    return
-  }
-
   isLoading.value = true
   errorMessage.value = ""
 
   try {
-    const response = await exerciseService.getExerciseQuestionBank(getBankParams(), exerciseId)
+    const response = await exerciseService.getExerciseQuestionBank(getBankParams(), isGlobalMode.value ? null : exerciseId)
+    responseGlobalMode.value = true === response.globalMode || 0 >= exerciseId
     questions.value = Array.isArray(response.items) ? response.items : []
     categoryOptions.value = Array.isArray(response.categoryOptions) ? response.categoryOptions : []
     exerciseOptions.value = Array.isArray(response.exerciseOptions) ? response.exerciseOptions : []

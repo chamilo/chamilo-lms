@@ -1,7 +1,10 @@
 <template>
   <section class="space-y-6">
     <div class="flex flex-wrap items-center justify-between gap-3">
-      <div class="exercise-overview-toolbar flex flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm">
+      <div
+        v-if="!isLearnpathContext"
+        class="exercise-overview-toolbar flex flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm"
+      >
         <BaseButton
           :label="t('Back to exercises')"
           :route="{ name: 'ExerciseList', params: route.params, query: getContextParams() }"
@@ -33,7 +36,7 @@
 
     <div
       v-if="errorMessage"
-      class="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700"
+      class="rounded-xl border border-danger/30 bg-danger/10 p-4 text-sm text-danger"
     >
       {{ errorMessage }}
     </div>
@@ -82,26 +85,16 @@
 
       <div
         v-if="overview.notice"
-        class="rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-700"
+        :class="overviewAlertClass('info')"
       >
         {{ t(overview.notice) }}
       </div>
 
       <div
         v-if="overview.maxAttempt > 0"
-        :class="[
-          'rounded-xl border p-4 text-sm',
-          overview.attemptLimitReached ? 'border-red-200 bg-red-50 text-red-700' : 'border-blue-200 bg-blue-50 text-blue-700',
-        ]"
+        :class="overviewAlertClass(overview.attemptLimitReached ? 'danger' : 'info')"
       >
-        {{ t("Attempts {0} / {1}", [overview.currentUserAttemptCount || 0, overview.maxAttempt]) }}
-      </div>
-
-      <div
-        v-if="overview.attemptLimitReached"
-        class="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700"
-      >
-        {{ t("Maximum number of attempts reached") }}
+        {{ t("Attempts") }}: {{ overview.currentUserAttemptCount || 0 }} / {{ overview.maxAttempt || 0 }}
       </div>
 
       <div
@@ -109,11 +102,12 @@
         class="rounded-xl border border-gray-20 bg-white p-5 shadow-sm"
       >
         <BaseButton
-          :label="t(overview.startButtonLabel || 'Start test')"
-          :route="{ name: 'ExercisePlayer', params: route.params, query: getContextParams() }"
+          :disabled="isStartingAttempt"
+          :label="isStartingAttempt ? t('Starting') : t(overview.startButtonLabel || 'Start test')"
           icon="play-box-outline"
           size="normal"
           type="success"
+          @click="startAndOpenPlayer"
         />
       </div>
 
@@ -172,9 +166,10 @@
                   type="plain"
                 />
                 <span
+                  v-if="data.showValidationStatus"
                   :class="[
                     'rounded-full px-2 py-0.5 text-xs font-semibold',
-                    data.revised ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700',
+                    data.revised ? 'bg-success/10 text-success' : 'bg-info/10 text-info',
                   ]"
                 >
                   {{ data.revised ? t("Validated") : t("Not validated") }}
@@ -189,9 +184,9 @@
 </template>
 
 <script setup>
-import { onMounted, reactive, ref, watch } from "vue"
+import { computed, onMounted, reactive, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import { chamiloIconToClass } from "../../components/basecomponents/ChamiloIcons"
@@ -199,8 +194,10 @@ import exerciseService from "../../services/exerciseService"
 
 const { t } = useI18n()
 const route = useRoute()
+const router = useRouter()
 
 const isLoading = ref(false)
+const isStartingAttempt = ref(false)
 const errorMessage = ref("")
 const overview = reactive({
   exerciseId: 0,
@@ -255,16 +252,135 @@ function getContextParams() {
     gid: getQueryValue(route.query.gid),
   }
 
+  addOptionalQueryParam(params, "origin")
+  addOptionalQueryParam(params, "lp_init")
   addOptionalQueryParam(params, "learnpath_id")
   addOptionalQueryParam(params, "learnpath_item_id")
   addOptionalQueryParam(params, "learnpath_item_view_id")
+  addOptionalQueryParam(params, "lp_id")
+  addOptionalQueryParam(params, "node")
+  addOptionalQueryParam(params, "type")
+  addOptionalQueryParam(params, "returnToLp")
+  addOptionalQueryParam(params, "isStudentView")
   addOptionalQueryParam(params, "preview")
 
   return params
 }
 
+
+function isEmbeddedInLearnpath() {
+  if (typeof window === "undefined") {
+    return false
+  }
+
+  try {
+    if (window.parent && window.parent !== window) {
+      const parentPath = window.parent.location?.pathname || ""
+      const referrer = document.referrer || ""
+
+      return parentPath.includes("/main/lp/")
+        || parentPath.includes("/main/newscorm/")
+        || referrer.includes("/main/lp/")
+        || referrer.includes("/main/newscorm/")
+    }
+  } catch (error) {
+    return (document.referrer || "").includes("/main/lp/")
+      || (document.referrer || "").includes("/main/newscorm/")
+  }
+
+  return false
+}
+
+const isLearnpathContext = computed(() => {
+  const origin = String(getQueryValue(route.query.origin) || "")
+
+  return origin === "learnpath"
+    || Boolean(getQueryValue(route.query.lp_init))
+    || Boolean(getQueryValue(route.query.learnpath_id))
+    || isEmbeddedInLearnpath()
+})
+
 function getExerciseId() {
   return Number(getQueryValue(route.params.exerciseId) || 0)
+}
+
+function getRuntimeStartContextParams() {
+  const params = { ...getContextParams() }
+
+  if (
+    overview.canManage
+    && !isLearnpathContext.value
+    && !Object.prototype.hasOwnProperty.call(params, "preview")
+    && !Object.prototype.hasOwnProperty.call(params, "isStudentView")
+  ) {
+    params.preview = 1
+  }
+
+  return params
+}
+
+function buildPlayerQuery(startResponse = null, contextParams = null) {
+  const query = { ...(contextParams || getContextParams()) }
+  const attemptId = Number(startResponse?.attemptId || 0)
+
+  if (attemptId > 0) {
+    query.attemptId = attemptId
+  }
+
+  return query
+}
+
+async function openPlayer(startResponse = null, contextParams = null) {
+  await router.push({
+    name: "ExercisePlayer",
+    params: route.params,
+    query: buildPlayerQuery(startResponse, contextParams),
+  })
+}
+
+function openLegacyRuntime(startResponse = null) {
+  const overviewUrl = startResponse?.legacyUrls?.overview || startResponse?.legacyUrls?.exercise || ""
+  if (overviewUrl && typeof window !== "undefined") {
+    window.location.href = overviewUrl
+
+    return true
+  }
+
+  return false
+}
+
+async function startAndOpenPlayer() {
+  const exerciseId = getExerciseId()
+  if (exerciseId <= 0) {
+    errorMessage.value = t("Invalid exercise")
+
+    return
+  }
+
+  isStartingAttempt.value = true
+  errorMessage.value = ""
+
+  try {
+    const runtimeContextParams = getRuntimeStartContextParams()
+    const response = await exerciseService.startExerciseAttempt({ exerciseId }, runtimeContextParams, exerciseId)
+
+    if (response?.success) {
+      await openPlayer(response, runtimeContextParams)
+
+      return
+    }
+
+    if (true === response?.usesLegacyRuntime && openLegacyRuntime(response)) {
+      return
+    }
+
+    errorMessage.value = response?.message ? t(response.message) : t("Could not start the attempt")
+  } catch (error) {
+    console.error("Error starting exercise attempt from overview", error)
+    errorMessage.value = t("Could not start the attempt")
+  } finally {
+    isStartingAttempt.value = false
+  }
 }
 
 async function loadOverview() {
@@ -287,6 +403,21 @@ async function loadOverview() {
     errorMessage.value = t("Could not load exercise overview")
   } finally {
     isLoading.value = false
+  }
+}
+
+
+function overviewAlertClass(type) {
+  switch (type) {
+    case "danger":
+    case "error":
+      return "rounded-xl border border-danger/30 bg-danger/10 p-4 text-sm font-medium text-danger"
+    case "warning":
+      return "rounded-xl border border-warning/30 bg-warning/10 p-4 text-sm font-medium text-warning"
+    case "success":
+      return "rounded-xl border border-success/30 bg-success/10 p-4 text-sm font-medium text-success"
+    default:
+      return "rounded-xl border border-info/30 bg-info/10 p-4 text-sm font-medium text-info"
   }
 }
 

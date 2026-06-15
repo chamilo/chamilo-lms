@@ -10,7 +10,9 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseList;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -18,9 +20,11 @@ use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
 use Chamilo\CourseBundle\Entity\CQuizQuestionOption;
+use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use Chamilo\CourseBundle\Repository\CQuizQuestionRepository;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -41,7 +45,15 @@ final readonly class ExerciseListActionProcessor implements ProcessorInterface
     private const ACTION_COPY = 'copy';
     private const ACTION_DELETE = 'delete';
     private const ACTION_TOGGLE_VISIBILITY = 'toggle_visibility';
+    private const ACTION_TOGGLE_AUTO_LAUNCH = 'toggle_auto_launch';
+    private const ACTION_CLEAN_RESULTS = 'clean_results';
+    private const ACTION_CLEAN_ALL_RESULTS = 'clean_all_results';
+    private const ACTION_BULK_ACTIVATE = 'bulk_activate';
+    private const ACTION_BULK_DEACTIVATE = 'bulk_deactivate';
+    private const ACTION_BULK_DELETE = 'bulk_delete';
     private const VISIBILITY_PUBLISHED = 2;
+    private const LINK_TYPE_EXERCISE = 1;
+    private const LP_ITEM_TYPE_QUIZ = 'quiz';
     private const MATCHING = 4;
     private const MATCHING_DRAGGABLE = 19;
     private const MATCHING_DRAGGABLE_COMBINATION = 25;
@@ -80,18 +92,41 @@ final readonly class ExerciseListActionProcessor implements ProcessorInterface
 
         $course = $this->getCourse($request);
         $session = $this->getSession($request);
+        $action = strtolower(trim($data->action));
+
+        if (self::ACTION_CLEAN_ALL_RESULTS === $action) {
+            $message = $this->cleanAllResults($course, $session);
+            $this->entityManager->flush();
+
+            $response = new ExerciseList();
+            $response->exerciseId = 0;
+            $response->action = $action;
+            $response->success = true;
+            $response->message = $message;
+
+            return $response;
+        }
+
+        if ($this->isBulkAction($action)) {
+            $response = $this->runBulkAction($action, $data->exerciseIds, $course, $session);
+            $this->entityManager->flush();
+
+            return $response;
+        }
+
         $exerciseId = (int) $data->exerciseId;
         if (0 >= $exerciseId) {
             throw new BadRequestHttpException('A valid exercise id is required.');
         }
 
         $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session);
-        $action = strtolower(trim($data->action));
 
         $message = match ($action) {
             self::ACTION_COPY => $this->copyExercise($quiz, $course, $session),
             self::ACTION_DELETE => $this->deleteExercise($quiz, $course, $session),
             self::ACTION_TOGGLE_VISIBILITY => $this->toggleVisibility($quiz, $course, $session),
+            self::ACTION_TOGGLE_AUTO_LAUNCH => $this->toggleAutoLaunch($quiz, $course, $session),
+            self::ACTION_CLEAN_RESULTS => $this->cleanExerciseResults($quiz, $course, $session),
             default => throw new BadRequestHttpException('Unsupported exercise action.'),
         };
 
@@ -104,6 +139,111 @@ final readonly class ExerciseListActionProcessor implements ProcessorInterface
         $response->message = $message;
 
         return $response;
+    }
+
+    private function isBulkAction(string $action): bool
+    {
+        return \in_array(
+            $action,
+            [
+                self::ACTION_BULK_ACTIVATE,
+                self::ACTION_BULK_DEACTIVATE,
+                self::ACTION_BULK_DELETE,
+            ],
+            true,
+        );
+    }
+
+    /**
+     * @param array<int, int|string> $exerciseIds
+     */
+    private function runBulkAction(string $action, array $exerciseIds, Course $course, ?Session $session): ExerciseList
+    {
+        $ids = $this->normalizeExerciseIds($exerciseIds);
+        if ([] === $ids) {
+            throw new BadRequestHttpException('At least one exercise must be selected.');
+        }
+
+        $processed = 0;
+        $skipped = 0;
+
+        foreach ($ids as $exerciseId) {
+            try {
+                $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session);
+                $this->runBulkActionForExercise($action, $quiz, $course, $session);
+                ++$processed;
+            } catch (AccessDeniedHttpException|BadRequestHttpException|NotFoundHttpException) {
+                ++$skipped;
+            }
+        }
+
+        $response = new ExerciseList();
+        $response->exerciseId = 0;
+        $response->exerciseIds = $ids;
+        $response->action = $action;
+        $response->success = true;
+        $response->processedCount = $processed;
+        $response->skippedCount = $skipped;
+        $response->message = $this->buildBulkActionMessage($action, $processed, $skipped);
+
+        return $response;
+    }
+
+    private function runBulkActionForExercise(string $action, CQuiz $quiz, Course $course, ?Session $session): void
+    {
+        match ($action) {
+            self::ACTION_BULK_ACTIVATE => $this->setExerciseVisibility($quiz, $course, $session, true),
+            self::ACTION_BULK_DEACTIVATE => $this->setExerciseVisibility($quiz, $course, $session, false),
+            self::ACTION_BULK_DELETE => $this->deleteExercise($quiz, $course, $session),
+            default => throw new BadRequestHttpException('Unsupported bulk exercise action.'),
+        };
+    }
+
+    /**
+     * @param array<int, int|string> $exerciseIds
+     *
+     * @return array<int, int>
+     */
+    private function normalizeExerciseIds(array $exerciseIds): array
+    {
+        $ids = [];
+        foreach ($exerciseIds as $exerciseId) {
+            $id = (int) $exerciseId;
+            if (0 < $id) {
+                $ids[$id] = $id;
+            }
+        }
+
+        return array_values($ids);
+    }
+
+    private function buildBulkActionMessage(string $action, int $processed, int $skipped): string
+    {
+        $label = match ($action) {
+            self::ACTION_BULK_DELETE => 'exercises deleted',
+            default => 'exercises updated',
+        };
+
+        return \sprintf('%d %s (%d skipped)', $processed, $label, $skipped);
+    }
+
+    private function setExerciseVisibility(CQuiz $quiz, Course $course, ?Session $session, bool $visible): void
+    {
+        if (!$this->canRunRestrictedAction()) {
+            throw new AccessDeniedHttpException('You are not allowed to change this exercise visibility.');
+        }
+
+        if ($this->isExerciseReadOnlyFromLearningPath((int) $quiz->getIid())) {
+            throw new AccessDeniedHttpException('This exercise visibility is managed from the learning path.');
+        }
+
+        if ($visible) {
+            $this->quizRepository->setVisibilityPublished($quiz, $course, $session);
+
+            return;
+        }
+
+        $this->quizRepository->setVisibilityDraft($quiz, $course, $session);
     }
 
     private function getCourse(Request $request): Course
@@ -151,6 +291,16 @@ final readonly class ExerciseListActionProcessor implements ProcessorInterface
         return $this->security->isGranted('ROLE_ADMIN');
     }
 
+    private function canCleanResults(): bool
+    {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return true;
+        }
+
+        return !$this->isSettingEnabled('exercise.limit_exercise_teacher_access')
+            && !$this->isSettingEnabled('exercise.disable_clean_exercise_results_for_teachers');
+    }
+
     private function getExerciseFromCurrentContext(int $exerciseId, Course $course, ?Session $session): CQuiz
     {
         $quiz = $this->quizRepository->find($exerciseId);
@@ -168,7 +318,7 @@ final readonly class ExerciseListActionProcessor implements ProcessorInterface
     private function isExerciseInContext(int $exerciseId, Course $course, ?Session $session): bool
     {
         $queryBuilder = $this->entityManager->createQueryBuilder()
-            ->select('quiz.iid')
+            ->select('quiz.iid AS exerciseId')
             ->from(CQuiz::class, 'quiz')
             ->innerJoin('quiz.resourceNode', 'node')
             ->innerJoin('node.resourceLinks', 'links')
@@ -183,7 +333,7 @@ final readonly class ExerciseListActionProcessor implements ProcessorInterface
 
         if (null !== $session) {
             $queryBuilder
-                ->andWhere('IDENTITY(links.session) = :sessionId')
+                ->andWhere('(IDENTITY(links.session) = :sessionId OR links.session IS NULL)')
                 ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
             ;
         } else {
@@ -280,6 +430,10 @@ final readonly class ExerciseListActionProcessor implements ProcessorInterface
             throw new AccessDeniedHttpException('You are not allowed to delete this exercise.');
         }
 
+        if ($this->isGradebookLocked((int) $quiz->getIid(), $course)) {
+            throw new AccessDeniedHttpException('This exercise is locked by the gradebook.');
+        }
+
         $this->resourceLinkRepository->removeByResourceInContext($quiz, $course, $session);
 
         return 'Exercise deleted';
@@ -291,6 +445,10 @@ final readonly class ExerciseListActionProcessor implements ProcessorInterface
             throw new AccessDeniedHttpException('You are not allowed to change this exercise visibility.');
         }
 
+        if ($this->isExerciseReadOnlyFromLearningPath((int) $quiz->getIid())) {
+            throw new AccessDeniedHttpException('This exercise visibility is managed from the learning path.');
+        }
+
         if ($this->isExerciseVisible($quiz, $course, $session)) {
             $this->quizRepository->setVisibilityDraft($quiz, $course, $session);
 
@@ -300,6 +458,45 @@ final readonly class ExerciseListActionProcessor implements ProcessorInterface
         $this->quizRepository->setVisibilityPublished($quiz, $course, $session);
 
         return 'Exercise visible';
+    }
+
+    private function toggleAutoLaunch(CQuiz $quiz, Course $course, ?Session $session): string
+    {
+        if ($quiz->isAutoLaunch()) {
+            $quiz->setAutoLaunch(false);
+            $this->entityManager->persist($quiz);
+
+            return 'Autolaunch disabled';
+        }
+
+        foreach ($this->getExercisesFromCurrentContext($course, $session) as $currentQuiz) {
+            $currentQuiz->setAutoLaunch(false);
+            $this->entityManager->persist($currentQuiz);
+        }
+
+        $quiz->setAutoLaunch(true);
+        $this->entityManager->persist($quiz);
+
+        return 'Autolaunch enabled';
+    }
+
+    private function cleanExerciseResults(CQuiz $quiz, Course $course, ?Session $session): string
+    {
+        if (!$this->canCleanResults()) {
+            throw new AccessDeniedHttpException('Cleaning exercise results is not allowed.');
+        }
+
+        $exerciseId = (int) $quiz->getIid();
+        if ($this->isGradebookLocked($exerciseId, $course)) {
+            throw new AccessDeniedHttpException('This exercise is locked by the gradebook.');
+        }
+
+        $attempts = $this->getAttemptsForExercises([$exerciseId], $course, $session);
+        foreach ($attempts as $attempt) {
+            $this->entityManager->remove($attempt);
+        }
+
+        return trim($quiz->getTitle()).': '.\count($attempts).' results cleaned';
     }
 
     private function isExerciseVisible(CQuiz $quiz, Course $course, ?Session $session): bool
@@ -320,7 +517,7 @@ final readonly class ExerciseListActionProcessor implements ProcessorInterface
 
         if (null !== $session) {
             $queryBuilder
-                ->andWhere('IDENTITY(links.session) = :sessionId')
+                ->andWhere('(IDENTITY(links.session) = :sessionId OR links.session IS NULL)')
                 ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
             ;
         } else {
@@ -328,6 +525,151 @@ final readonly class ExerciseListActionProcessor implements ProcessorInterface
         }
 
         return self::VISIBILITY_PUBLISHED === (int) $queryBuilder->getQuery()->getSingleScalarResult();
+    }
+
+    private function cleanAllResults(Course $course, ?Session $session): string
+    {
+        if (!$this->canCleanResults()) {
+            throw new AccessDeniedHttpException('Cleaning exercise results is not allowed.');
+        }
+
+        $exerciseIds = array_values(array_filter(
+            $this->getExerciseIdsFromCurrentContext($course, $session),
+            fn (int $exerciseId): bool => !$this->isGradebookLocked($exerciseId, $course),
+        ));
+
+        if ([] === $exerciseIds) {
+            return '0 results cleaned';
+        }
+
+        $attempts = $this->getAttemptsForExercises($exerciseIds, $course, $session);
+        foreach ($attempts as $attempt) {
+            $this->entityManager->remove($attempt);
+        }
+
+        return \count($attempts).' results cleaned';
+    }
+
+    /**
+     * @return array<int, CQuiz>
+     */
+    private function getExercisesFromCurrentContext(Course $course, ?Session $session): array
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('quiz')
+            ->from(CQuiz::class, 'quiz')
+            ->innerJoin('quiz.resourceNode', 'node')
+            ->innerJoin('node.resourceLinks', 'links')
+            ->andWhere('IDENTITY(links.course) = :courseId')
+            ->andWhere('links.deletedAt IS NULL')
+            ->andWhere('links.endVisibilityAt IS NULL')
+            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
+        ;
+
+        if (null !== $session) {
+            $queryBuilder
+                ->andWhere('(IDENTITY(links.session) = :sessionId OR links.session IS NULL)')
+                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
+            ;
+        } else {
+            $queryBuilder->andWhere('links.session IS NULL');
+        }
+
+        return array_values(array_filter(
+            $queryBuilder->getQuery()->getResult(),
+            static fn (mixed $quiz): bool => $quiz instanceof CQuiz,
+        ));
+    }
+
+    /**
+     * @return array<int, int>
+     */
+    private function getExerciseIdsFromCurrentContext(Course $course, ?Session $session): array
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('quiz.iid AS exerciseId')
+            ->from(CQuiz::class, 'quiz')
+            ->innerJoin('quiz.resourceNode', 'node')
+            ->innerJoin('node.resourceLinks', 'links')
+            ->andWhere('IDENTITY(links.course) = :courseId')
+            ->andWhere('links.deletedAt IS NULL')
+            ->andWhere('links.endVisibilityAt IS NULL')
+            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
+        ;
+
+        if (null !== $session) {
+            $queryBuilder
+                ->andWhere('(IDENTITY(links.session) = :sessionId OR links.session IS NULL)')
+                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
+            ;
+        } else {
+            $queryBuilder->andWhere('links.session IS NULL');
+        }
+
+        return array_values(array_unique(array_map(
+            static fn (mixed $exerciseId): int => (int) $exerciseId,
+            array_column($queryBuilder->getQuery()->getScalarResult(), 'exerciseId'),
+        )));
+    }
+
+    /**
+     * @param array<int, int> $exerciseIds
+     *
+     * @return array<int, TrackEExercise>
+     */
+    private function getAttemptsForExercises(array $exerciseIds, Course $course, ?Session $session): array
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('attempt')
+            ->from(TrackEExercise::class, 'attempt')
+            ->andWhere('IDENTITY(attempt.quiz) IN (:exerciseIds)')
+            ->andWhere('IDENTITY(attempt.course) = :courseId')
+            ->setParameter('exerciseIds', $exerciseIds, ArrayParameterType::INTEGER)
+            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
+        ;
+
+        if (null !== $session) {
+            $queryBuilder
+                ->andWhere('IDENTITY(attempt.session) = :sessionId')
+                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
+            ;
+        } else {
+            $queryBuilder->andWhere('attempt.session IS NULL');
+        }
+
+        return array_values(array_filter(
+            $queryBuilder->getQuery()->getResult(),
+            static fn (mixed $attempt): bool => $attempt instanceof TrackEExercise,
+        ));
+    }
+
+    private function isGradebookLocked(int $exerciseId, Course $course): bool
+    {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return false;
+        }
+
+        if (!$this->isSettingEnabled('gradebook.gradebook_locking_enabled')) {
+            return false;
+        }
+
+        $lockedLink = $this->entityManager->createQueryBuilder()
+            ->select('link.id')
+            ->from(GradebookLink::class, 'link')
+            ->andWhere('link.locked = :locked')
+            ->andWhere('link.refId = :exerciseId')
+            ->andWhere('link.type = :linkType')
+            ->andWhere('IDENTITY(link.course) = :courseId')
+            ->setParameter('locked', 1, Types::INTEGER)
+            ->setParameter('exerciseId', $exerciseId, Types::INTEGER)
+            ->setParameter('linkType', self::LINK_TYPE_EXERCISE, Types::INTEGER)
+            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+
+        return null !== $lockedLink;
     }
 
     private function duplicateQuestion(CQuizQuestion $sourceQuestion, Course $course, ?Session $session, int $position): CQuizQuestion
@@ -494,6 +836,28 @@ final readonly class ExerciseListActionProcessor implements ProcessorInterface
             ->getQuery()
             ->getResult()
         ;
+    }
+
+    private function isExerciseReadOnlyFromLearningPath(int $exerciseId): bool
+    {
+        if ($this->isSettingEnabled('lp.force_edit_exercise_in_lp')) {
+            return false;
+        }
+
+        $exerciseIdAsString = (string) $exerciseId;
+        $lpItem = $this->entityManager->createQueryBuilder()
+            ->select('lpItem.iid')
+            ->from(CLpItem::class, 'lpItem')
+            ->andWhere('lpItem.itemType = :itemType')
+            ->andWhere('lpItem.path = :exerciseId OR lpItem.ref = :exerciseId')
+            ->setParameter('itemType', self::LP_ITEM_TYPE_QUIZ, Types::STRING)
+            ->setParameter('exerciseId', $exerciseIdAsString, Types::STRING)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+
+        return null !== $lpItem;
     }
 
     private function isSettingEnabled(string $name): bool

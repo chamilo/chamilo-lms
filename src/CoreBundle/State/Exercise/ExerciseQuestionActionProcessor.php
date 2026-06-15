@@ -11,6 +11,7 @@ use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseQuestionAction;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
@@ -42,6 +43,7 @@ final readonly class ExerciseQuestionActionProcessor implements ProcessorInterfa
     private const MATCHING = 4;
     private const MATCHING_DRAGGABLE = 19;
     private const MATCHING_DRAGGABLE_COMBINATION = 25;
+    private const LP_ITEM_TYPE_QUIZ = 'quiz';
 
     public function __construct(
         private RequestStack $requestStack,
@@ -81,6 +83,10 @@ final readonly class ExerciseQuestionActionProcessor implements ProcessorInterfa
         }
 
         $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session);
+        if ($this->isExerciseReadOnlyFromLearningPath((int) $quiz->getIid())) {
+            throw new AccessDeniedHttpException('This exercise is read-only because it is included in a learning path.');
+        }
+
         $action = strtolower(trim($data->action));
 
         $message = match ($action) {
@@ -153,6 +159,32 @@ final readonly class ExerciseQuestionActionProcessor implements ProcessorInterfa
         throw new AccessDeniedHttpException('The requested exercise does not belong to the current course context.');
     }
 
+    private function isExerciseReadOnlyFromLearningPath(int $exerciseId): bool
+    {
+        if ($this->isSettingEnabled('lp.force_edit_exercise_in_lp')) {
+            return false;
+        }
+
+        return null !== $this->entityManager->createQueryBuilder()
+            ->select('lpItem.iid')
+            ->from(CLpItem::class, 'lpItem')
+            ->andWhere('lpItem.itemType = :itemType')
+            ->andWhere('lpItem.path = :exerciseId OR lpItem.ref = :exerciseId')
+            ->setParameter('itemType', self::LP_ITEM_TYPE_QUIZ, Types::STRING)
+            ->setParameter('exerciseId', (string) $exerciseId, Types::STRING)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+    private function isSettingEnabled(string $settingName): bool
+    {
+        $value = api_get_setting($settingName);
+
+        return true === $value || 'true' === strtolower((string) $value) || '1' === (string) $value;
+    }
+
     private function isExerciseInContext(int $exerciseId, Course $course, ?Session $session): bool
     {
         $queryBuilder = $this->entityManager->createQueryBuilder()
@@ -171,7 +203,7 @@ final readonly class ExerciseQuestionActionProcessor implements ProcessorInterfa
 
         if (null !== $session) {
             $queryBuilder
-                ->andWhere('IDENTITY(links.session) = :sessionId')
+                ->andWhere('(IDENTITY(links.session) = :sessionId OR links.session IS NULL)')
                 ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
             ;
         } else {

@@ -217,18 +217,21 @@ async function courseHomeBeforeEnter(to) {
 
     // Exercise auto-launch
     const exerciseAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_exercise_auto_launch"), 10) || 0
+    const exerciseResourceNodeId = cidReqStore.course?.resourceNode?.id
+    const gid = "&gid=0"
 
-    if (exerciseAutoLaunch === 2) {
+    if (exerciseAutoLaunch === 2 && exerciseResourceNodeId) {
       sessionStorage.setItem(autoLaunchKey, "true")
-      window.location.href = `/main/exercise/exercise.php?cid=${courseId}` + sid
+      window.location.href = `/resources/exercise/${exerciseResourceNodeId}/?cid=${courseId}` + sid + gid
 
       return false
     } else if (exerciseAutoLaunch === 1) {
       const exerciseId = await courseService.getAutoLaunchExerciseId(courseId, sessionId)
 
-      if (exerciseId) {
+      if (exerciseId && exerciseResourceNodeId) {
         sessionStorage.setItem(autoLaunchKey, "true")
-        window.location.href = `/main/exercise/overview.php?exerciseId=${exerciseId}&cid=${courseId}` + sid
+        window.location.href =
+          `/resources/exercise/${exerciseResourceNodeId}/${exerciseId}/overview?cid=${courseId}` + sid + gid
 
         return false
       }

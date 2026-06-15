@@ -11,8 +11,10 @@ use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseQuestionEditor;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceFile;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
@@ -23,6 +25,7 @@ use Chamilo\CourseBundle\Repository\CQuizQuestionRepository;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -67,6 +70,8 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
     private const MULTIPLE_ANSWER_DROPDOWN_COMBINATION = 28;
     private const MULTIPLE_ANSWER_DROPDOWN = 29;
     private const UNKNOWN_ANSWER_POSITION = 666;
+    private const LP_ITEM_TYPE_QUIZ = 'quiz';
+    private const LP_READ_ONLY_MESSAGE = 'This exercise has been included in a learning path, so it cannot be accessed by students directly from here. If you want to put the same exercise available through the exercises tool, please make a copy of the current exercise using the copy icon.';
 
     public function __construct(
         private RequestStack $requestStack,
@@ -96,15 +101,15 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
         }
 
         $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : 0;
-        if (0 >= $exerciseId) {
-            throw new BadRequestHttpException('A valid exercise id is required.');
-        }
-
-        $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session);
         $questionId = isset($uriVariables['questionId']) ? (int) $uriVariables['questionId'] : 0;
+        $quiz = 0 < $exerciseId ? $this->getExerciseFromCurrentContext($exerciseId, $course, $session) : null;
 
         if (0 < $questionId) {
-            return $this->buildExistingQuestionResponse($quiz, $questionId, $course, $session);
+            if ($quiz instanceof CQuiz) {
+                return $this->buildExistingQuestionResponse($quiz, $questionId, $course, $session);
+            }
+
+            return $this->buildGlobalExistingQuestionResponse($questionId, $course, $session);
         }
 
         $type = $request->query->getInt('type', self::UNIQUE_ANSWER);
@@ -112,13 +117,46 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
             throw new BadRequestHttpException('This question type is still managed by the legacy exercise tool.');
         }
 
-        return $this->buildNewQuestionResponse($quiz, $type, $course, $session);
+        $response = $this->buildNewQuestionResponse($quiz, $type, $course, $session);
+        if (!$this->shouldGenerateDefaultContent($request)) {
+            $this->clearDefaultContent($response);
+        }
+
+        return $response;
     }
 
-    private function buildNewQuestionResponse(CQuiz $quiz, int $type, Course $course, ?Session $session): ExerciseQuestionEditor
+    private function shouldGenerateDefaultContent(Request $request): bool
+    {
+        $value = $request->query->get('isContent');
+        if (null === $value) {
+            return true;
+        }
+
+        return !\in_array((string) $value, ['0', 'false', 'off', ''], true);
+    }
+
+    private function clearDefaultContent(ExerciseQuestionEditor $response): void
+    {
+        $response->description = '';
+        $response->feedback = '';
+        $response->fillBlanksText = '';
+        $response->fillBlankItems = [];
+        $response->fillBlanksComment = '';
+        $response->calculatedText = '';
+        $response->calculatedFormula = '';
+        $response->calculatedRanges = [];
+        $response->calculatedComment = '';
+        $response->matchingOptions = [];
+        $response->matchingPairs = [];
+        $response->draggableItems = [];
+        $response->hotspotItems = [];
+        $response->dropdownListText = '';
+    }
+
+    private function buildNewQuestionResponse(?CQuiz $quiz, int $type, Course $course, ?Session $session): ExerciseQuestionEditor
     {
         $response = new ExerciseQuestionEditor();
-        $response->exerciseId = (int) $quiz->getIid();
+        $response->exerciseId = (int) ($quiz?->getIid() ?? 0);
         $response->questionId = null;
         $response->type = $type;
         $response->typeLabel = $this->getQuestionTypeLabel($type);
@@ -147,7 +185,7 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
             $response->score = self::HOT_SPOT_COMBINATION === $type ? 0.0 : 10.0;
             $response->globalScore = self::HOT_SPOT_COMBINATION === $type ? 10.0 : 0.0;
             $response->hotspotItems = $this->getDefaultHotspotItems($type);
-            if (self::HOT_SPOT_DELINEATION === $type) {
+            if (self::HOT_SPOT_DELINEATION === $type && $quiz instanceof CQuiz) {
                 $this->addHotspotScenarioOptions($response, $quiz, null);
             }
             $response->answers = [];
@@ -192,7 +230,11 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
         if ($this->usesMatching($type) || $this->usesDraggableOrdering($type) || $this->usesHotspot($type) || $this->isStructuralQuestionType($type)) {
             $response->answers = [];
         }
-        $this->addSharedEditorData($response, $quiz, null, $course, $session);
+        if ($quiz instanceof CQuiz) {
+            $this->addSharedEditorData($response, $quiz, null, $course, $session);
+        } else {
+            $this->addGlobalSharedEditorData($response, $course, $session);
+        }
 
         return $response;
     }
@@ -254,6 +296,50 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
         $response->allowQuestionFeedback = $this->isQuestionFeedbackEnabled();
         $response->imageZoomEnabled = $this->isImageZoomEnabled();
         $response->allowMandatoryQuestion = $this->isMandatoryQuestionInCategoryEnabled($quiz);
+        $response->isLinkedToLearningPath = $this->isExerciseLinkedToLearningPath((int) $quiz->getIid());
+        $response->isReadOnlyFromLearningPath = $response->isLinkedToLearningPath && !$this->isSettingEnabled('lp.force_edit_exercise_in_lp');
+        $response->learningPathReadOnlyMessage = $response->isLinkedToLearningPath ? self::LP_READ_ONLY_MESSAGE : '';
+    }
+
+    private function addGlobalSharedEditorData(
+        ExerciseQuestionEditor $response,
+        Course $course,
+        ?Session $session,
+    ): void {
+        $response->questionCount = 0;
+        $response->totalScore = 0.0;
+        $response->categoryOptions = $this->getCategoryOptions($course, $session);
+        $response->mediaOptions = [];
+        $response->legacyUrls = [];
+        $response->csrfToken = $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID)->getValue();
+        $response->allowQuestionFeedback = $this->isQuestionFeedbackEnabled();
+        $response->imageZoomEnabled = $this->isImageZoomEnabled();
+        $response->allowMandatoryQuestion = false;
+        $response->isLinkedToLearningPath = false;
+        $response->isReadOnlyFromLearningPath = false;
+        $response->learningPathReadOnlyMessage = '';
+    }
+
+    private function isExerciseLinkedToLearningPath(int $exerciseId): bool
+    {
+        return null !== $this->entityManager->createQueryBuilder()
+            ->select('lpItem.iid')
+            ->from(CLpItem::class, 'lpItem')
+            ->andWhere('lpItem.itemType = :itemType')
+            ->andWhere('lpItem.path = :exerciseId OR lpItem.ref = :exerciseId')
+            ->setParameter('itemType', self::LP_ITEM_TYPE_QUIZ, Types::STRING)
+            ->setParameter('exerciseId', (string) $exerciseId, Types::STRING)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+    private function isSettingEnabled(string $settingName): bool
+    {
+        $value = $this->settingsManager->getSetting($settingName, true);
+
+        return true === $value || 'true' === strtolower((string) $value) || '1' === (string) $value;
     }
 
     private function isMandatoryQuestionInCategoryEnabled(CQuiz $quiz): bool
@@ -344,7 +430,7 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
 
         if (null !== $session) {
             $queryBuilder
-                ->andWhere('IDENTITY(links.session) = :sessionId')
+                ->andWhere('(IDENTITY(links.session) = :sessionId OR links.session IS NULL)')
                 ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
             ;
         } else {
@@ -376,6 +462,93 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
         return $relation->getQuestion();
     }
 
+
+    private function getQuestionFromCurrentContext(int $questionId, Course $course, ?Session $session): CQuizQuestion
+    {
+        $question = $this->entityManager->getRepository(CQuizQuestion::class)->find($questionId);
+        if (!$question instanceof CQuizQuestion || null === $question->getIid()) {
+            throw new NotFoundHttpException('The requested question was not found.');
+        }
+
+        if ($this->isQuestionInContext($question, $course, $session)) {
+            return $question;
+        }
+
+        throw new AccessDeniedHttpException('The requested question does not belong to the current course context.');
+    }
+
+    private function isQuestionInContext(CQuizQuestion $question, Course $course, ?Session $session): bool
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('question.iid')
+            ->from(CQuizQuestion::class, 'question')
+            ->leftJoin('question.resourceNode', 'questionNode')
+            ->andWhere('question = :question')
+            ->setParameter('question', $question)
+            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
+            ->setMaxResults(1)
+        ;
+
+        $existsQuestionLink = $this->entityManager->createQueryBuilder()
+            ->select('1')
+            ->from(ResourceLink::class, 'questionLink')
+            ->where('questionLink.resourceNode = questionNode')
+            ->andWhere('IDENTITY(questionLink.course) = :courseId')
+        ;
+        $this->applyActiveLinkConstraints($existsQuestionLink, 'questionLink', $session, true);
+
+        $existsViaQuiz = $this->entityManager->createQueryBuilder()
+            ->select('1')
+            ->from(CQuizRelQuestion::class, 'scopeRelation')
+            ->innerJoin('scopeRelation.quiz', 'scopeQuiz')
+            ->innerJoin('scopeQuiz.resourceNode', 'scopeNode')
+            ->innerJoin('scopeNode.resourceLinks', 'scopeLinks')
+            ->where('scopeRelation.question = question')
+            ->andWhere('IDENTITY(scopeLinks.course) = :courseId')
+        ;
+        $this->applyActiveLinkConstraints($existsViaQuiz, 'scopeLinks', $session, true);
+
+        $queryBuilder->andWhere(
+            $queryBuilder->expr()->orX(
+                $queryBuilder->expr()->exists($existsQuestionLink->getDQL()),
+                $queryBuilder->expr()->exists($existsViaQuiz->getDQL())
+            )
+        );
+
+        if (null !== $session) {
+            $queryBuilder->setParameter('sessionId', (int) $session->getId(), Types::INTEGER);
+        }
+
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    private function applyActiveLinkConstraints(QueryBuilder $queryBuilder, string $alias, ?Session $session, bool $includeCourseWhenSessionSelected): void
+    {
+        $queryBuilder
+            ->andWhere($alias.'.deletedAt IS NULL')
+            ->andWhere($alias.'.endVisibilityAt IS NULL')
+            ->andWhere($alias.'.visibility IN (0,2)')
+        ;
+
+        $this->applySessionFilter($queryBuilder, $alias, $session, $includeCourseWhenSessionSelected);
+    }
+
+    private function applySessionFilter(QueryBuilder $queryBuilder, string $alias, ?Session $session, bool $includeCourseWhenSessionSelected = false): void
+    {
+        if (null !== $session) {
+            if ($includeCourseWhenSessionSelected) {
+                $queryBuilder->andWhere('(IDENTITY('.$alias.'.session) = :sessionId OR '.$alias.'.session IS NULL)');
+
+                return;
+            }
+
+            $queryBuilder->andWhere('IDENTITY('.$alias.'.session) = :sessionId');
+
+            return;
+        }
+
+        $queryBuilder->andWhere($alias.'.session IS NULL');
+    }
 
     private function buildDropdownListText(CQuizQuestion $question): string
     {
@@ -533,7 +706,7 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
 
         if (null !== $session) {
             $queryBuilder
-                ->andWhere('IDENTITY(links.session) = :sessionId')
+                ->andWhere('(IDENTITY(links.session) = :sessionId OR links.session IS NULL)')
                 ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
             ;
         } else {
@@ -1464,7 +1637,6 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
 
         return [
             'questions' => '/main/exercise/admin.php?'.http_build_query($baseParams),
-            'questionPool' => '/main/exercise/question_pool.php?'.http_build_query($baseParams),
         ];
     }
 }

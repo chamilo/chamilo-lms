@@ -76,6 +76,15 @@ final class ExerciseQuestion
     public bool $usesLegacyQuestionEditors = true;
 
     #[Groups(['exercise_question:read'])]
+    public bool $isLinkedToLearningPath = false;
+
+    #[Groups(['exercise_question:read'])]
+    public bool $isReadOnlyFromLearningPath = false;
+
+    #[Groups(['exercise_question:read'])]
+    public string $learningPathReadOnlyMessage = '';
+
+    #[Groups(['exercise_question:read'])]
     public string $csrfToken = '';
 
     public function getExerciseId(): ?int

@@ -225,6 +225,37 @@ const isEmbeddedContext = computed(() => {
   return isPickerContext.value || isIframeContext.value || isDialogContext.value
 })
 
+const isTruthyQueryValue = (value) => {
+  return ["1", "true", "yes", "on"].includes(String(value || "").toLowerCase())
+}
+
+const isLearnpathEmbeddedRoute = computed(() => {
+  const qp = queryParams.value
+  const origin = String(qp.get("origin") || "").toLowerCase()
+
+  if (qp.has("lp_id") && "view" === qp.get("action")) {
+    return true
+  }
+
+  if ("learnpath" !== origin) {
+    return false
+  }
+
+  // Exercise creation launched from the LP add-item screen must keep the full
+  // course layout. Only the runtime/result embedded inside the LP player needs
+  // the empty layout to avoid duplicated Chamilo menus.
+  if (isTruthyQueryValue(qp.get("returnToLp"))) {
+    return false
+  }
+
+  return (
+    qp.has("lp_init") ||
+    qp.has("learnpath_id") ||
+    qp.has("learnpath_item_id") ||
+    qp.has("learnpath_item_view_id")
+  )
+})
+
 const layout = computed(() => {
   if (showAccessUrlChosserLayout.value) {
     return AccessUrlChooserLayout
@@ -242,7 +273,7 @@ const layout = computed(() => {
     return EmptyLayout
   }
 
-  if ((qp.has("lp_id") && "view" === qp.get("action")) || (qp.has("origin") && "learnpath" === qp.get("origin"))) {
+  if (isLearnpathEmbeddedRoute.value) {
     return EmptyLayout
   }
 

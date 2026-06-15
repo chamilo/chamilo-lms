@@ -72,7 +72,6 @@ final readonly class ExerciseCategoryManagementProvider implements ProviderInter
         $response->items = self::TYPE_EXERCISE === $categoryType
             ? $this->getExerciseCategories($course)
             : $this->getQuestionCategories($course, $session);
-        $response->legacyUrls = $this->getLegacyUrls($categoryType, $request);
         $response->csrfToken = $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID)->getValue();
         $response->canManage = true;
 
@@ -219,7 +218,7 @@ final readonly class ExerciseCategoryManagementProvider implements ProviderInter
 
         if (null !== $session) {
             $queryBuilder
-                ->andWhere('IDENTITY(links.session) = :sessionId')
+                ->andWhere('(IDENTITY(links.session) = :sessionId OR links.session IS NULL)')
                 ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
             ;
         } else {
@@ -241,30 +240,6 @@ final readonly class ExerciseCategoryManagementProvider implements ProviderInter
         }
 
         return $items;
-    }
-
-    /**
-     * @return array<string, string>
-     */
-    private function getLegacyUrls(string $categoryType, Request $request): array
-    {
-        $baseParams = [
-            'cid' => $request->query->getInt('cid'),
-            'sid' => $request->query->getInt('sid'),
-            'gid' => $request->query->getInt('gid'),
-        ];
-        $queryString = http_build_query(array_filter($baseParams, static fn (int $value): bool => 0 < $value));
-
-        if (self::TYPE_QUESTION === $categoryType) {
-            return [
-                'export' => '/main/exercise/tests_category.php?action=export_category&'.$queryString,
-                'import' => '/main/exercise/tests_category.php?action=import_category&'.$queryString,
-            ];
-        }
-
-        return [
-            'legacy' => '/main/exercise/category.php?'.$queryString,
-        ];
     }
 
     private function isSettingEnabled(string $name): bool

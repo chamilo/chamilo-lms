@@ -10,13 +10,17 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseRuntimeAnswer;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
+use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
 use Chamilo\CourseBundle\Entity\CQuizQuestionOption;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
@@ -63,6 +67,7 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
         private EntityManagerInterface $entityManager,
         private CQuizRepository $quizRepository,
         private Security $security,
+        private SettingsManager $settingsManager,
     ) {}
 
     /**
@@ -99,7 +104,7 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
             throw new BadRequestHttpException('A valid exercise, attempt and question are required.');
         }
 
-        $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session);
+        $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session, $this->canManageExercises());
         $attempt = $this->getIncompleteAttempt($attemptId, $quiz, $course, $session, $user);
         $question = $this->getQuestionFromExercise($questionId, $quiz);
 
@@ -131,6 +136,8 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
             $this->entityManager->persist($attemptRow);
         }
 
+        $this->blockCategoryIfNeeded($attempt, $quiz, $question, (string) $data->navigationAction);
+
         $this->entityManager->flush();
 
         $response = new ExerciseRuntimeAnswer();
@@ -148,10 +155,118 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
         return $response;
     }
 
+    private function blockCategoryIfNeeded(TrackEExercise $attempt, CQuiz $quiz, CQuizQuestion $question, string $navigationAction): void
+    {
+        if (!\in_array($navigationAction, ['next', 'finish'], true) || !$this->isBlockCategoryRuntimeEnabled($quiz)) {
+            return;
+        }
+
+        $categoryId = $this->getPrimaryCategoryId($question);
+        if (!$this->isLastQuestionInCategory($attempt, $question, $categoryId)) {
+            return;
+        }
+
+        $blockedCategories = $this->parseBlockedCategories((string) $attempt->getBlockedCategories());
+        if (\in_array($categoryId, $blockedCategories, true)) {
+            return;
+        }
+
+        $blockedCategories[] = $categoryId;
+        $attempt->setBlockedCategories(implode(',', $blockedCategories));
+    }
+
+    private function isBlockCategoryRuntimeEnabled(CQuiz $quiz): bool
+    {
+        if ('true' !== $this->settingsManager->getSetting('exercise.block_category_questions', true)) {
+            return false;
+        }
+
+        $exerciseId = (int) ($quiz->getIid() ?? 0);
+        if (0 >= $exerciseId) {
+            return false;
+        }
+
+        $row = $this->entityManager->createQueryBuilder()
+            ->select('value')
+            ->from(ExtraFieldValues::class, 'value')
+            ->innerJoin('value.field', 'field')
+            ->andWhere('value.itemId = :itemId')
+            ->andWhere('field.itemType = :itemType')
+            ->andWhere('field.variable = :variable')
+            ->setParameter('itemId', $exerciseId, Types::INTEGER)
+            ->setParameter('itemType', ExtraField::EXERCISE_FIELD_TYPE, Types::INTEGER)
+            ->setParameter('variable', 'block_category', Types::STRING)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+
+        if (!$row instanceof ExtraFieldValues) {
+            return false;
+        }
+
+        return \in_array(strtolower((string) ($row->getFieldValue() ?? '')), ['1', 'true', 'yes', 'on'], true);
+    }
+
+    private function isLastQuestionInCategory(TrackEExercise $attempt, CQuizQuestion $question, int $categoryId): bool
+    {
+        $questionId = (int) ($question->getIid() ?? 0);
+        if (0 >= $questionId) {
+            return false;
+        }
+
+        $lastQuestionId = 0;
+        foreach ($this->parseQuestionIds((string) $attempt->getDataTracking()) as $attemptQuestionId) {
+            $attemptQuestion = $this->entityManager->getRepository(CQuizQuestion::class)->find($attemptQuestionId);
+            if (!$attemptQuestion instanceof CQuizQuestion) {
+                continue;
+            }
+
+            if ($this->getPrimaryCategoryId($attemptQuestion) === $categoryId) {
+                $lastQuestionId = (int) ($attemptQuestion->getIid() ?? 0);
+            }
+        }
+
+        return $questionId === $lastQuestionId;
+    }
+
+    private function getPrimaryCategoryId(CQuizQuestion $question): int
+    {
+        foreach ($question->getCategories() as $category) {
+            if ($category instanceof CQuizQuestionCategory && null !== $category->getIid()) {
+                return (int) $category->getIid();
+            }
+        }
+
+        return 0;
+    }
+
+    /**
+     * @return array<int, int>
+     */
+    private function parseBlockedCategories(string $value): array
+    {
+        if ('' === trim($value)) {
+            return [];
+        }
+
+        return array_values(array_unique(array_filter(
+            array_map(static fn (string $id): int => (int) trim($id), explode(',', $value)),
+            static fn (int $id): bool => 0 <= $id
+        )));
+    }
+
     private function canSaveDraftAnswers(): bool
     {
         return $this->security->isGranted('ROLE_CURRENT_COURSE_STUDENT')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_STUDENT');
+            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_STUDENT')
+            || $this->canManageExercises();
+    }
+
+    private function canManageExercises(): bool
+    {
+        return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
+            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
     }
 
     private function getCourse(Request $request): Course
@@ -184,7 +299,7 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
         return $session;
     }
 
-    private function getExerciseFromCurrentContext(int $exerciseId, Course $course, ?Session $session): CQuiz
+    private function getExerciseFromCurrentContext(int $exerciseId, Course $course, ?Session $session, bool $canManage): CQuiz
     {
         $quiz = $this->quizRepository->find($exerciseId);
         if (!$quiz instanceof CQuiz) {
@@ -208,7 +323,7 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
 
         if (null !== $session) {
             $queryBuilder
-                ->andWhere('IDENTITY(links.session) = :sessionId')
+                ->andWhere('(IDENTITY(links.session) = :sessionId OR links.session IS NULL)')
                 ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
             ;
         } else {
@@ -220,18 +335,20 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
             throw new AccessDeniedHttpException('The requested exercise does not belong to the current course context.');
         }
 
-        $visibility = \is_array($row) ? (int) ($row['linkVisibility'] ?? 0) : 0;
-        $now = new DateTimeImmutable();
-        if (self::VISIBILITY_PUBLISHED !== $visibility) {
-            throw new AccessDeniedHttpException('The requested exercise is not visible.');
-        }
+        if (!$canManage) {
+            $visibility = \is_array($row) ? (int) ($row['linkVisibility'] ?? 0) : 0;
+            $now = new DateTimeImmutable();
+            if (self::VISIBILITY_PUBLISHED !== $visibility) {
+                throw new AccessDeniedHttpException('The requested exercise is not visible.');
+            }
 
-        if (null !== $quiz->getStartTime() && $quiz->getStartTime() > $now) {
-            throw new AccessDeniedHttpException('The requested exercise is not available yet.');
-        }
+            if (null !== $quiz->getStartTime() && $quiz->getStartTime() > $now) {
+                throw new AccessDeniedHttpException('The requested exercise is not available yet.');
+            }
 
-        if (null !== $quiz->getEndTime() && $quiz->getEndTime() < $now) {
-            throw new AccessDeniedHttpException('The requested exercise is closed.');
+            if (null !== $quiz->getEndTime() && $quiz->getEndTime() < $now) {
+                throw new AccessDeniedHttpException('The requested exercise is closed.');
+            }
         }
 
         return $quiz;
@@ -1509,13 +1626,14 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
     }
 
     /**
-     * @return array<int, array{answer: string, position: int|null}>
+     * @return array<int, array{answer: string, position: int|null, secondsSpent: int}>
      */
     private function getSavedAnswerRows(int $attemptId, int $questionId): array
     {
         $rows = $this->entityManager->createQueryBuilder()
             ->select('saved.answer AS answer')
             ->addSelect('saved.position AS position')
+            ->addSelect('saved.secondsSpent AS secondsSpent')
             ->from(TrackEAttempt::class, 'saved')
             ->andWhere('IDENTITY(saved.trackExercise) = :attemptId')
             ->andWhere('saved.questionId = :questionId')
@@ -1535,6 +1653,7 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
             $result[] = [
                 'answer' => (string) ($row['answer'] ?? ''),
                 'position' => null !== ($row['position'] ?? null) ? (int) $row['position'] : null,
+                'secondsSpent' => (int) ($row['secondsSpent'] ?? 0),
             ];
         }
 

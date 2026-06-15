@@ -3,14 +3,16 @@
     <div class="exercise-question-toolbar flex w-fit flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm">
       <BaseButton
         class="exercise-question-toolbar__button"
-        :label="t('Back to exercises')"
-        :route="{ name: 'ExerciseList', params: route.params, query: getContextParams() }"
+        :label="backButtonLabel"
+        :route="learningPathContext ? null : { name: 'ExerciseList', params: route.params, query: getContextParams() }"
+        :to-url="learningPathContext ? learningPathBackUrl : null"
         icon="back"
         only-icon
         size="small"
         type="primary-text"
       />
       <BaseButton
+        v-if="!learningPathContext"
         class="exercise-question-toolbar__button"
         :label="t('Preview')"
         :route="{ name: 'ExercisePlayer', params: { ...route.params, exerciseId }, query: getContextParams() }"
@@ -20,6 +22,7 @@
         type="primary-text"
       />
       <BaseButton
+        v-if="!learningPathContext"
         class="exercise-question-toolbar__button"
         :label="t('Results')"
         :route="{ name: 'ExerciseReport', params: { ...route.params, exerciseId }, query: getContextParams() }"
@@ -63,15 +66,42 @@
               {{ displayText(title, t("Questions")) }}
             </h1>
             <p class="text-sm text-gray-600">
-              {{ t("Select a question type to create a question.") }}
+              {{
+                isReadOnlyFromLearningPath
+                  ? t("This exercise is read-only because it is included in a learning path.")
+                  : t("Select a question type to create a question.")
+              }}
             </p>
           </div>
-          <BaseButton
-            :label="t('Question bank')"
-            :route="{ name: 'ExerciseQuestionBank', params: { ...route.params, exerciseId }, query: getContextParams() }"
-            icon="table"
-            type="primary"
-          />
+          <div class="flex flex-wrap items-center gap-2">
+            <BaseButton
+              v-if="learningPathContext"
+              :disabled="questionCount <= 0"
+              :is-loading="isAttachingToLearningPath"
+              :label="t('Finish and return to learning path')"
+              icon="check"
+              type="success"
+              @click="finishLearningPathCreation"
+            />
+            <BaseButton
+              :disabled="isReadOnlyFromLearningPath"
+              :label="t('Recycle existing questions')"
+              :route="
+                isReadOnlyFromLearningPath
+                  ? null
+                  : { name: 'ExerciseQuestionBank', params: { ...route.params, exerciseId }, query: getContextParams() }
+              "
+              icon="table"
+              type="primary"
+            />
+          </div>
+        </div>
+
+        <div
+          v-if="isReadOnlyFromLearningPath"
+          class="rounded-lg border border-yellow-200 bg-yellow-50 px-4 py-3 text-sm font-medium text-yellow-800"
+        >
+          {{ t(learningPathReadOnlyMessage) }}
         </div>
 
         <div class="rounded-lg border border-info/30 bg-support-1 px-4 py-3 text-sm font-medium text-support-4">
@@ -83,7 +113,7 @@
             <a
               v-for="questionType in questionTypes"
               :key="`question-type-${questionType.type}`"
-              :aria-disabled="!questionType.enabled"
+              :aria-disabled="isQuestionTypeDisabled(questionType)"
               :aria-label="questionTypeTitle(questionType)"
               :class="questionTypeCardClass(questionType)"
               :href="questionTypeHref(questionType)"
@@ -219,7 +249,7 @@
                         type="secondary-text"
                       />
                       <BaseButton
-                        v-else
+                        v-else-if="!learningPathContext"
                         :label="t('Edit')"
                         :to-url="legacyQuestionEditUrl(question.id)"
                         icon="edit"
@@ -228,7 +258,7 @@
                         type="secondary-text"
                       />
                       <BaseButton
-                        :disabled="isActionSaving"
+                        :disabled="isActionSaving || isReadOnlyFromLearningPath"
                         :label="t('Copy')"
                         icon="copy"
                         only-icon
@@ -237,7 +267,7 @@
                         @click="duplicateQuestion(question)"
                       />
                       <BaseButton
-                        :disabled="isActionSaving"
+                        :disabled="isActionSaving || isReadOnlyFromLearningPath"
                         :label="t('Delete')"
                         icon="delete"
                         only-icon
@@ -618,6 +648,7 @@ const { requireConfirmation } = useConfirmation()
 
 const isLoading = ref(false)
 const isActionSaving = ref(false)
+const isAttachingToLearningPath = ref(false)
 const errorMessage = ref("")
 const title = ref("")
 const questionCount = ref(0)
@@ -625,6 +656,10 @@ const totalScore = ref(0)
 const questionTypes = ref([])
 const questions = ref([])
 const csrfToken = ref("")
+const isReadOnlyFromLearningPath = ref(false)
+const learningPathReadOnlyMessage = ref(
+  "This exercise has been included in a learning path, so it cannot be accessed by students directly from here. If you want to put the same exercise available through the exercises tool, please make a copy of the current exercise using the copy icon.",
+)
 const expandedQuestionId = ref(null)
 const draggedQuestionId = ref(null)
 
@@ -632,17 +667,53 @@ const exerciseId = Number(getQueryValue(route.params.exerciseId) || 0)
 const summaryText = computed(() =>
   formatTranslatedText("{0} questions, for a total score (all questions) of {1}.", [questionCount.value, formatScore(totalScore.value)]),
 )
+const learningPathContext = computed(() => isLearningPathContext())
+const learningPathBackUrl = computed(() => buildLearningPathBackUrl())
+const backButtonLabel = computed(() => (learningPathContext.value ? t("Back to learning path") : t("Back to exercises")))
 
 function getQueryValue(value) {
   return Array.isArray(value) ? value[0] : value
 }
 
 function getContextParams() {
-  return {
+  const params = {
     cid: getQueryValue(route.query.cid),
     sid: getQueryValue(route.query.sid),
     gid: getQueryValue(route.query.gid),
   }
+
+  for (const key of ["origin", "lp_id", "learnpath_id", "node", "type", "returnToLp", "isStudentView", "gradebook"]) {
+    const value = getQueryValue(route.query[key])
+    if (value !== undefined && value !== null && String(value) !== "") {
+      params[key] = value
+    }
+  }
+
+  return params
+}
+
+function isLearningPathContext() {
+  const origin = String(getQueryValue(route.query.origin) || "").toLowerCase()
+  const returnToLp = String(getQueryValue(route.query.returnToLp) || "").toLowerCase()
+  const lpId = Number(getQueryValue(route.query.lp_id) || getQueryValue(route.query.learnpath_id) || 0)
+
+  return lpId > 0 && (origin === "learnpath" || ["1", "true", "yes"].includes(returnToLp))
+}
+
+function buildLearningPathBackUrl() {
+  const params = new URLSearchParams()
+  params.set("action", "build")
+  params.set("type", getQueryValue(route.query.type) || "step")
+  params.set("lp_id", getQueryValue(route.query.lp_id) || getQueryValue(route.query.learnpath_id) || "0")
+
+  for (const key of ["cid", "sid", "gid", "gradebook", "origin", "node", "isStudentView"]) {
+    const value = getQueryValue(route.query[key])
+    if (value !== undefined && value !== null && String(value) !== "") {
+      params.set(key, String(value))
+    }
+  }
+
+  return `/main/lp/lp_controller.php?${params.toString()}#resource_tab-2`
 }
 
 function buildQueryString(params = {}) {
@@ -728,12 +799,16 @@ function questionTypeHelp(questionTypeOrId) {
 }
 
 function questionTypeHref(questionType) {
-  if (!questionType.enabled) {
+  if (isQuestionTypeDisabled(questionType)) {
     return undefined
   }
 
   if (isVueQuestionType(questionType)) {
     return router.resolve(questionCreateRoute(questionType)).href
+  }
+
+  if (learningPathContext.value) {
+    return undefined
   }
 
   return buildLegacyCreateQuestionUrl(questionType.type)
@@ -742,18 +817,33 @@ function questionTypeHref(questionType) {
 function questionTypeTitle(questionType) {
   const label = t(questionType.label)
 
+  if (isReadOnlyFromLearningPath.value) {
+    return `${label} - ${t("This exercise is read-only because it is included in a learning path.")}`
+  }
+
   if (!questionType.enabled) {
     return `${label} - ${t("Not available with the current exercise feedback mode")}`
+  }
+
+  if (learningPathContext.value && !isVueQuestionType(questionType)) {
+    return `${label} - ${t("Not available in the learning path creation flow")}`
   }
 
   return `${label} - ${t(questionTypeHelp(questionType))}`
 }
 
+function isQuestionTypeDisabled(questionType) {
+  return (
+    isReadOnlyFromLearningPath.value ||
+    !questionType.enabled ||
+    (learningPathContext.value && !isVueQuestionType(questionType))
+  )
+}
+
 function questionTypeCardClass(questionType) {
   return [
-    "group inline-flex h-20 w-20 items-center justify-center rounded-md border-2 text-center transition hover:bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary/30",
-    isVueQuestionType(questionType) ? "border-primary/60 bg-primary/5" : "border-transparent",
-    !questionType.enabled ? "pointer-events-none opacity-50" : "",
+    "group inline-flex h-20 w-20 items-center justify-center rounded-md border-2 border-transparent text-center transition hover:bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary/30",
+    isQuestionTypeDisabled(questionType) ? "pointer-events-none opacity-50" : "",
   ]
 }
 
@@ -830,12 +920,15 @@ function questionEditRoute(question) {
 }
 
 async function openQuestionType(questionType, event) {
-  if (!questionType.enabled) {
+  if (isQuestionTypeDisabled(questionType)) {
     event.preventDefault()
     return
   }
 
   if (!isVueQuestionType(questionType)) {
+    if (learningPathContext.value) {
+      event.preventDefault()
+    }
     return
   }
 
@@ -908,6 +1001,11 @@ function startDrag(question) {
 }
 
 async function dropQuestion(targetQuestion) {
+  if (isReadOnlyFromLearningPath.value) {
+    draggedQuestionId.value = null
+    return
+  }
+
   const draggedId = Number(draggedQuestionId.value || 0)
   const targetId = Number(targetQuestion.id || 0)
   draggedQuestionId.value = null
@@ -935,6 +1033,10 @@ async function dropQuestion(targetQuestion) {
 }
 
 function confirmDeleteQuestion(question) {
+  if (isReadOnlyFromLearningPath.value) {
+    return
+  }
+
   requireConfirmation({
     title: t("Delete question"),
     message: t("Are you sure you want to delete this question?"),
@@ -950,6 +1052,10 @@ async function deleteQuestion(question) {
 }
 
 async function duplicateQuestion(question) {
+  if (isReadOnlyFromLearningPath.value) {
+    return
+  }
+
   await runQuestionAction({
     action: "duplicate",
     questionId: Number(question.id),
@@ -984,6 +1090,38 @@ async function runQuestionAction(payload) {
   }
 }
 
+async function finishLearningPathCreation() {
+  errorMessage.value = ""
+
+  if (!learningPathContext.value) {
+    return
+  }
+
+  if (questionCount.value <= 0) {
+    errorMessage.value = t("Add at least one question before returning to the learning path.")
+    return
+  }
+
+  isAttachingToLearningPath.value = true
+
+  try {
+    await exerciseService.attachExerciseToLearningPath(
+      {
+        exerciseId,
+        submittedCsrfToken: csrfToken.value,
+      },
+      getContextParams(),
+      exerciseId,
+    )
+    window.location.href = learningPathBackUrl.value
+  } catch (error) {
+    console.error("Error adding exercise to learning path", error)
+    errorMessage.value = error?.response?.data?.detail || error?.response?.data?.["hydra:description"] || t("Could not add the exercise to the learning path")
+  } finally {
+    isAttachingToLearningPath.value = false
+  }
+}
+
 async function loadQuestionSelector() {
   if (!exerciseId) {
     errorMessage.value = t("A valid exercise id is required.")
@@ -996,6 +1134,8 @@ async function loadQuestionSelector() {
   try {
     const response = await exerciseService.getExerciseQuestions(getContextParams(), exerciseId)
     title.value = response.title || ""
+    isReadOnlyFromLearningPath.value = true === response.isReadOnlyFromLearningPath
+    learningPathReadOnlyMessage.value = response.learningPathReadOnlyMessage || learningPathReadOnlyMessage.value
     questionCount.value = Number(response.questionCount || 0)
     totalScore.value = Number(response.totalScore || 0)
     questionTypes.value = Array.isArray(response.questionTypes) ? response.questionTypes : []

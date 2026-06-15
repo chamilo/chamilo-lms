@@ -20,6 +20,27 @@ use Symfony\Component\Serializer\Attribute\Groups;
     shortName: 'ExerciseQuestionBank',
     operations: [
         new Get(
+            uriTemplate: '/exercise/questions/bank',
+            openapi: new Operation(
+                summary: 'Global exercise question bank data',
+                parameters: [
+                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
+                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
+                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
+                    new Parameter(name: 'page', in: 'query', required: false, schema: ['type' => 'integer']),
+                    new Parameter(name: 'itemsPerPage', in: 'query', required: false, schema: ['type' => 'integer']),
+                    new Parameter(name: 'search', in: 'query', required: false, schema: ['type' => 'string']),
+                    new Parameter(name: 'categoryId', in: 'query', required: false, schema: ['type' => 'integer']),
+                    new Parameter(name: 'sourceExerciseId', in: 'query', required: false, schema: ['type' => 'integer']),
+                    new Parameter(name: 'difficulty', in: 'query', required: false, schema: ['type' => 'integer']),
+                    new Parameter(name: 'questionType', in: 'query', required: false, schema: ['type' => 'integer']),
+                ],
+            ),
+            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
+            name: 'get_exercise_global_question_bank',
+            provider: ExerciseQuestionBankProvider::class,
+        ),
+        new Get(
             uriTemplate: '/exercise/questions/{exerciseId}/bank',
             requirements: ['exerciseId' => '\\d+'],
             openapi: new Operation(
@@ -41,6 +62,20 @@ use Symfony\Component\Serializer\Attribute\Groups;
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             name: 'get_exercise_question_bank',
             provider: ExerciseQuestionBankProvider::class,
+        ),
+        new Post(
+            uriTemplate: '/exercise/questions/bank/action',
+            openapi: new Operation(
+                summary: 'Run a global exercise question bank action',
+                parameters: [
+                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
+                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
+                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
+                ],
+            ),
+            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
+            name: 'post_exercise_global_question_bank_action',
+            processor: ExerciseQuestionBankProcessor::class,
         ),
         new Post(
             uriTemplate: '/exercise/questions/{exerciseId}/bank/action',
@@ -142,6 +177,12 @@ final class ExerciseQuestionBank
 
     #[Groups(['exercise_question_bank:read'])]
     public bool $canManage = false;
+
+    #[Groups(['exercise_question_bank:read'])]
+    public bool $globalMode = false;
+
+    #[Groups(['exercise_question_bank:read'])]
+    public bool $canDelete = false;
 
     #[Groups(['exercise_question_bank:read'])]
     public bool $success = false;

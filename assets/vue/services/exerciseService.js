@@ -72,6 +72,10 @@ export default {
     return await baseService.get(`/api/exercise/questions/${exerciseId}`, cleanParams(params), exerciseRequestConfig())
   },
 
+  async getExerciseGlobalQuestionTypes(params = {}) {
+    return await baseService.get('/api/exercise/questions/global', cleanParams(params), exerciseRequestConfig())
+  },
+
   async getExerciseRuntime(params = {}, exerciseId) {
     return await baseService.get(`/api/exercise/runtime/${exerciseId}`, cleanParams(params), exerciseRequestConfig())
   },
@@ -241,6 +245,31 @@ export default {
     )
   },
 
+  async getExerciseGlobalQuestionEditor(params = {}, questionType = null) {
+    const queryParams = { ...params }
+
+    if (questionType !== null && questionType !== undefined) {
+      queryParams.type = questionType
+    }
+
+    const endpoint = questionType !== null && questionType !== undefined
+      ? '/api/exercise/questions/global/editor'
+      : `/api/exercise/questions/global/editor/${params.questionId}`
+
+    delete queryParams.questionId
+
+    return await baseService.get(endpoint, cleanParams(queryParams), exerciseRequestConfig())
+  },
+
+  async saveExerciseGlobalQuestion(payload, params = {}, questionId = null) {
+    const queryString = buildQueryString(params)
+    const endpoint = questionId
+      ? `/api/exercise/questions/global/editor/${questionId}${queryString}`
+      : `/api/exercise/questions/global/editor${queryString}`
+
+    return await baseService.post(endpoint, payload, {}, exerciseRequestConfig())
+  },
+
   async getExerciseQuestionEditor(params = {}, exerciseId, questionId = null, questionType = null) {
     const queryParams = { ...params }
 
@@ -275,19 +304,42 @@ export default {
     )
   },
 
-  async getExerciseQuestionBank(params = {}, exerciseId) {
-    return await baseService.get(`/api/exercise/questions/${exerciseId}/bank`, cleanParams(params), exerciseRequestConfig())
-  },
-
-  async saveExerciseQuestionBankAction(payload, params = {}, exerciseId) {
+  async attachExerciseToLearningPath(payload = {}, params = {}, exerciseId) {
     const queryString = buildQueryString(params)
 
     return await baseService.post(
-      `/api/exercise/questions/${exerciseId}/bank/action${queryString}`,
+      `/api/exercise/questions/${exerciseId}/learning-path-item${queryString}`,
       payload,
       {},
       exerciseRequestConfig(),
     )
+  },
+
+  async getExerciseQuestionBank(params = {}, exerciseId = null) {
+    const endpoint = exerciseId ? `/api/exercise/questions/${exerciseId}/bank` : '/api/exercise/questions/bank'
+
+    return await baseService.get(endpoint, cleanParams(params), exerciseRequestConfig())
+  },
+
+  async saveExerciseQuestionBankAction(payload, params = {}, exerciseId = null) {
+    const queryString = buildQueryString(params)
+    const endpoint = exerciseId
+      ? `/api/exercise/questions/${exerciseId}/bank/action${queryString}`
+      : `/api/exercise/questions/bank/action${queryString}`
+
+    return await baseService.post(endpoint, payload, {}, exerciseRequestConfig())
+  },
+
+  async getExerciseAiAikenGenerator(params = {}) {
+    return await baseService.get("/api/exercise/ai-aiken-generator", cleanParams(params), exerciseRequestConfig())
+  },
+
+  async generateExerciseAikenFromTopic(payload = {}) {
+    return await baseService.post("/ai/generate_aiken", payload, {}, exerciseRequestConfig())
+  },
+
+  async generateExerciseAikenFromDocument(payload = {}) {
+    return await baseService.post("/ai/generate_aiken_from_document", payload, {}, exerciseRequestConfig())
   },
 
   async getExerciseQuestionImport(importType, params = {}) {

@@ -20,6 +20,37 @@ use Symfony\Component\Serializer\Attribute\Groups;
     shortName: 'ExerciseQuestionEditor',
     operations: [
         new Get(
+            uriTemplate: '/exercise/questions/global/editor',
+            openapi: new Operation(
+                summary: 'Exercise question editor for a new global question',
+                parameters: [
+                    new Parameter(name: 'type', in: 'query', required: true, schema: ['type' => 'integer']),
+                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
+                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
+                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
+                ],
+            ),
+            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
+            name: 'get_exercise_global_question_editor_create',
+            provider: ExerciseQuestionEditorProvider::class,
+        ),
+        new Get(
+            uriTemplate: '/exercise/questions/global/editor/{questionId}',
+            requirements: ['questionId' => '\\d+'],
+            openapi: new Operation(
+                summary: 'Exercise question editor for an existing global question',
+                parameters: [
+                    new Parameter(name: 'questionId', in: 'path', required: true, schema: ['type' => 'integer']),
+                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
+                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
+                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
+                ],
+            ),
+            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
+            name: 'get_exercise_global_question_editor_edit',
+            provider: ExerciseQuestionEditorProvider::class,
+        ),
+        new Get(
             uriTemplate: '/exercise/questions/{exerciseId}/editor',
             requirements: ['exerciseId' => '\\d+'],
             openapi: new Operation(
@@ -52,6 +83,36 @@ use Symfony\Component\Serializer\Attribute\Groups;
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             name: 'get_exercise_question_editor_edit',
             provider: ExerciseQuestionEditorProvider::class,
+        ),
+        new Post(
+            uriTemplate: '/exercise/questions/global/editor',
+            openapi: new Operation(
+                summary: 'Create a global exercise question',
+                parameters: [
+                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
+                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
+                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
+                ],
+            ),
+            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
+            name: 'post_exercise_global_question_editor_create',
+            processor: ExerciseQuestionEditorProcessor::class,
+        ),
+        new Post(
+            uriTemplate: '/exercise/questions/global/editor/{questionId}',
+            requirements: ['questionId' => '\\d+'],
+            openapi: new Operation(
+                summary: 'Update a global exercise question',
+                parameters: [
+                    new Parameter(name: 'questionId', in: 'path', required: true, schema: ['type' => 'integer']),
+                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
+                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
+                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
+                ],
+            ),
+            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
+            name: 'post_exercise_global_question_editor_update',
+            processor: ExerciseQuestionEditorProcessor::class,
         ),
         new Post(
             uriTemplate: '/exercise/questions/{exerciseId}/editor',
@@ -305,6 +366,15 @@ final class ExerciseQuestionEditor
 
     #[Groups(['exercise_question_editor:read'])]
     public bool $allowMandatoryQuestion = false;
+
+    #[Groups(['exercise_question_editor:read'])]
+    public bool $isLinkedToLearningPath = false;
+
+    #[Groups(['exercise_question_editor:read'])]
+    public bool $isReadOnlyFromLearningPath = false;
+
+    #[Groups(['exercise_question_editor:read'])]
+    public string $learningPathReadOnlyMessage = '';
 
     #[Groups(['exercise_question_editor:write'])]
     public string $submittedCsrfToken = '';

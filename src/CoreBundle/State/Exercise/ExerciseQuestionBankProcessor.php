@@ -12,7 +12,10 @@ use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseQuestionBank;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CQuiz;
+use Chamilo\CourseBundle\Entity\CLpItem;
+use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
@@ -34,12 +37,15 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 final readonly class ExerciseQuestionBankProcessor implements ProcessorInterface
 {
     private const ACTION_REUSE = 'reuse';
+    private const ACTION_DELETE = 'delete';
+    private const LP_ITEM_TYPE_QUIZ = 'quiz';
 
     public function __construct(
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CQuizRepository $quizRepository,
         private Security $security,
+        private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
@@ -66,17 +72,22 @@ final readonly class ExerciseQuestionBankProcessor implements ProcessorInterface
         $course = $this->getCourse($request);
         $session = $this->getSession($request);
         $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : (int) ($data->exerciseId ?? 0);
-        if (0 >= $exerciseId) {
-            throw new BadRequestHttpException('A valid exercise id is required.');
+        $quiz = 0 < $exerciseId ? $this->getExerciseFromCurrentContext($exerciseId, $course, $session) : null;
+        if ($quiz instanceof CQuiz && $this->isExerciseReadOnlyFromLearningPath((int) $quiz->getIid())) {
+            throw new AccessDeniedHttpException('This exercise is read-only because it is included in a learning path.');
         }
 
-        $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session);
         $action = strtolower(trim($data->action));
-        if (self::ACTION_REUSE !== $action) {
+        if (!\in_array($action, [self::ACTION_REUSE, self::ACTION_DELETE], true)) {
             throw new BadRequestHttpException('Unsupported question bank action.');
         }
 
-        [$addedCount, $skippedCount] = $this->reuseQuestions($quiz, $data, $course, $session);
+        if (self::ACTION_REUSE === $action) {
+            [$addedCount, $skippedCount] = $this->reuseQuestions($quiz, $data, $course, $session);
+        } else {
+            $addedCount = $this->deleteQuestions($data, $course, $session);
+            $skippedCount = 0;
+        }
         $this->entityManager->flush();
 
         $response = new ExerciseQuestionBank();
@@ -87,6 +98,12 @@ final readonly class ExerciseQuestionBankProcessor implements ProcessorInterface
         $response->success = true;
         $response->addedCount = $addedCount;
         $response->skippedCount = $skippedCount;
+        if (self::ACTION_DELETE === $action) {
+            $response->message = 1 === $addedCount ? 'Question deleted' : 'Questions deleted';
+
+            return $response;
+        }
+
         $response->message = 1 === $addedCount ? 'Question added to the test' : 'Questions added to the test';
 
         return $response;
@@ -138,7 +155,7 @@ final readonly class ExerciseQuestionBankProcessor implements ProcessorInterface
     private function getExerciseFromCurrentContext(int $exerciseId, Course $course, ?Session $session): CQuiz
     {
         $quiz = $this->quizRepository->find($exerciseId);
-        if (!$quiz instanceof CQuiz) {
+        if (!($quiz instanceof CQuiz)) {
             throw new NotFoundHttpException('The requested exercise was not found.');
         }
 
@@ -147,6 +164,25 @@ final readonly class ExerciseQuestionBankProcessor implements ProcessorInterface
         }
 
         throw new AccessDeniedHttpException('The requested exercise does not belong to the current course context.');
+    }
+
+    private function isExerciseReadOnlyFromLearningPath(int $exerciseId): bool
+    {
+        if ($this->isSettingEnabled('lp.force_edit_exercise_in_lp')) {
+            return false;
+        }
+
+        return null !== $this->entityManager->createQueryBuilder()
+            ->select('lpItem.iid')
+            ->from(CLpItem::class, 'lpItem')
+            ->andWhere('lpItem.itemType = :itemType')
+            ->andWhere('lpItem.path = :exerciseId OR lpItem.ref = :exerciseId')
+            ->setParameter('itemType', self::LP_ITEM_TYPE_QUIZ, Types::STRING)
+            ->setParameter('exerciseId', (string) $exerciseId, Types::STRING)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
     }
 
     private function isExerciseInContext(int $exerciseId, Course $course, ?Session $session): bool
@@ -173,8 +209,12 @@ final readonly class ExerciseQuestionBankProcessor implements ProcessorInterface
     /**
      * @return array{0: int, 1: int}
      */
-    private function reuseQuestions(CQuiz $quiz, ExerciseQuestionBank $data, Course $course, ?Session $session): array
+    private function reuseQuestions(?CQuiz $quiz, ExerciseQuestionBank $data, Course $course, ?Session $session): array
     {
+        if (!($quiz instanceof CQuiz)) {
+            throw new BadRequestHttpException('A valid exercise id is required.');
+        }
+
         $questionIds = $this->getSubmittedQuestionIds($data);
         if ([] === $questionIds) {
             throw new BadRequestHttpException('Select at least one question.');
@@ -211,6 +251,38 @@ final readonly class ExerciseQuestionBankProcessor implements ProcessorInterface
         }
 
         return [$addedCount, $skippedCount];
+    }
+
+    private function deleteQuestions(ExerciseQuestionBank $data, Course $course, ?Session $session): int
+    {
+        if (!$this->canRunRestrictedAction()) {
+            throw new AccessDeniedHttpException('You are not allowed to delete questions in this context.');
+        }
+
+        $questionIds = $this->getSubmittedQuestionIds($data);
+        if ([] === $questionIds) {
+            throw new BadRequestHttpException('Select at least one question.');
+        }
+
+        $deletedCount = 0;
+        foreach ($questionIds as $questionId) {
+            $question = $this->getQuestionFromCurrentContext($questionId, $course, $session);
+            if ($this->isQuestionUsedInActiveQuiz($question, $course, $session)) {
+                continue;
+            }
+
+            foreach ($this->getAnswers($question) as $answer) {
+                $this->entityManager->remove($answer);
+            }
+            $this->entityManager->remove($question);
+            $deletedCount++;
+        }
+
+        if (0 === $deletedCount) {
+            throw new BadRequestHttpException('No question was deleted.');
+        }
+
+        return $deletedCount;
     }
 
     /**
@@ -327,6 +399,65 @@ final readonly class ExerciseQuestionBankProcessor implements ProcessorInterface
         }
 
         return true;
+    }
+
+    /**
+     * @return array<int, CQuizAnswer>
+     */
+    private function getAnswers(CQuizQuestion $question): array
+    {
+        return $this->entityManager->createQueryBuilder()
+            ->select('answer')
+            ->from(CQuizAnswer::class, 'answer')
+            ->andWhere('IDENTITY(answer.question) = :questionId')
+            ->setParameter('questionId', (int) $question->getIid(), Types::INTEGER)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    private function canRunRestrictedAction(): bool
+    {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return true;
+        }
+
+        return !$this->isSettingEnabled('exercise.limit_exercise_teacher_access');
+    }
+
+    private function isSettingEnabled(string $name): bool
+    {
+        return 'true' === $this->settingsManager->getSetting($name, true);
+    }
+
+    private function isQuestionUsedInActiveQuiz(CQuizQuestion $question, Course $course, ?Session $session): bool
+    {
+        $questionId = (int) ($question->getIid() ?? 0);
+        if (0 >= $questionId) {
+            return false;
+        }
+
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('relQuestion.iid')
+            ->from(CQuizRelQuestion::class, 'relQuestion')
+            ->innerJoin('relQuestion.quiz', 'quiz')
+            ->innerJoin('quiz.resourceNode', 'node')
+            ->innerJoin('node.resourceLinks', 'links')
+            ->andWhere('IDENTITY(relQuestion.question) = :questionId')
+            ->andWhere('IDENTITY(links.course) = :courseId')
+            ->andWhere('links.deletedAt IS NULL')
+            ->andWhere('links.endVisibilityAt IS NULL')
+            ->setParameter('questionId', $questionId, Types::INTEGER)
+            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
+            ->setMaxResults(1)
+        ;
+
+        $this->applySessionFilter($queryBuilder, 'links', $session, true);
+        if (null !== $session) {
+            $queryBuilder->setParameter('sessionId', (int) $session->getId(), Types::INTEGER);
+        }
+
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
     private function applyActiveLinkConstraints(QueryBuilder $queryBuilder, string $alias, ?Session $session, bool $includeCourseWhenSessionSelected): void

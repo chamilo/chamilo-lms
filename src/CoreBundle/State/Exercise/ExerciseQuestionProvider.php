@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseQuestion;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
@@ -36,6 +37,8 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 final readonly class ExerciseQuestionProvider implements ProviderInterface
 {
     private const CSRF_TOKEN_ID = 'exercise_question_action';
+    private const LP_ITEM_TYPE_QUIZ = 'quiz';
+    private const LP_READ_ONLY_MESSAGE = 'This exercise has been included in a learning path, so it cannot be accessed by students directly from here. If you want to put the same exercise available through the exercises tool, please make a copy of the current exercise using the copy icon.';
 
     public function __construct(
         private RequestStack $requestStack,
@@ -70,6 +73,8 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
 
         $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session);
         $questions = $this->getQuestions($quiz, $course, $session);
+        $isLinkedToLearningPath = $this->isExerciseLinkedToLearningPath((int) $quiz->getIid());
+        $isReadOnlyFromLearningPath = $isLinkedToLearningPath && !$this->isSettingEnabled('lp.force_edit_exercise_in_lp');
 
         $response = new ExerciseQuestion();
         $response->exerciseId = $exerciseId;
@@ -80,6 +85,9 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
         $response->totalScore = $this->getTotalScore($questions);
         $response->legacyUrls = [];
         $response->canManage = true;
+        $response->isLinkedToLearningPath = $isLinkedToLearningPath;
+        $response->isReadOnlyFromLearningPath = $isReadOnlyFromLearningPath;
+        $response->learningPathReadOnlyMessage = $isLinkedToLearningPath ? self::LP_READ_ONLY_MESSAGE : '';
         $response->csrfToken = $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID)->getValue();
 
         return $response;
@@ -121,6 +129,28 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
             || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
     }
 
+    private function isExerciseLinkedToLearningPath(int $exerciseId): bool
+    {
+        return null !== $this->entityManager->createQueryBuilder()
+            ->select('lpItem.iid')
+            ->from(CLpItem::class, 'lpItem')
+            ->andWhere('lpItem.itemType = :itemType')
+            ->andWhere('lpItem.path = :exerciseId OR lpItem.ref = :exerciseId')
+            ->setParameter('itemType', self::LP_ITEM_TYPE_QUIZ, Types::STRING)
+            ->setParameter('exerciseId', (string) $exerciseId, Types::STRING)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+    private function isSettingEnabled(string $settingName): bool
+    {
+        $value = api_get_setting($settingName);
+
+        return true === $value || 'true' === strtolower((string) $value) || '1' === (string) $value;
+    }
+
     private function getExerciseFromCurrentContext(int $exerciseId, Course $course, ?Session $session): CQuiz
     {
         $quiz = $this->quizRepository->find($exerciseId);
@@ -153,7 +183,7 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
 
         if (null !== $session) {
             $queryBuilder
-                ->andWhere('IDENTITY(links.session) = :sessionId')
+                ->andWhere('(IDENTITY(links.session) = :sessionId OR links.session IS NULL)')
                 ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
             ;
         } else {

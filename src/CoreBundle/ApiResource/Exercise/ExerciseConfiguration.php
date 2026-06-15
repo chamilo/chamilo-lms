@@ -173,6 +173,18 @@ final class ExerciseConfiguration
     #[Groups(['exercise_configuration:read', 'exercise_configuration:write'])]
     public bool $autoLaunch = false;
 
+    #[Groups(['exercise_configuration:read', 'exercise_configuration:write'])]
+    public bool $addToGradebook = false;
+
+    #[Groups(['exercise_configuration:read', 'exercise_configuration:write'])]
+    public ?int $gradebookCategoryId = null;
+
+    #[Groups(['exercise_configuration:read', 'exercise_configuration:write'])]
+    public int $gradebookWeight = 100;
+
+    #[Groups(['exercise_configuration:read', 'exercise_configuration:write'])]
+    public bool $gradebookVisible = true;
+
     /**
      * Legacy comma-separated notification ids stored as an array for Vue.
      *

@@ -1,6 +1,9 @@
 <template>
   <section class="space-y-5">
-    <div class="flex flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm w-fit">
+    <div
+      v-if="!isLearnpathContext"
+      class="flex flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm w-fit"
+    >
       <BaseButton
         :label="t('Back to exercises')"
         :route="{ name: 'ExerciseList', params: route.params, query: getContextParams() }"
@@ -11,7 +14,7 @@
       />
       <BaseButton
         v-if="showLegacyRuntimeFallback"
-        :label="t('Open legacy exercise')"
+        :label="t('Open test')"
         :to-url="legacyUrls.overview"
         icon="play-box-outline"
         only-icon
@@ -29,7 +32,7 @@
       />
     </div>
 
-    <div class="border-b border-gray-20" />
+    <div v-if="!isLearnpathContext" class="border-b border-gray-20" />
 
     <div
       v-if="isLoading"
@@ -115,12 +118,25 @@
         class="rounded-xl border border-info/30 bg-support-1 p-4 text-sm text-support-4"
       >
         <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-          <p>
-            {{ t("This exercise contains options or question types that are not fully supported by the Vue runtime yet. You can continue with the legacy exercise runtime.") }}
-          </p>
+          <div class="space-y-2">
+            <p>
+              {{ t("This exercise uses options that require a different test player.") }}
+            </p>
+            <ul
+              v-if="legacyRuntimeReasons.length"
+              class="list-disc pl-5 text-xs"
+            >
+              <li
+                v-for="reason in legacyRuntimeReasons"
+                :key="reason"
+              >
+                {{ t(reason) }}
+              </li>
+            </ul>
+          </div>
           <BaseButton
             v-if="legacyUrls.overview"
-            :label="t('Continue in legacy exercise')"
+            :label="t('Continue test')"
             :to-url="legacyUrls.overview"
             icon="play-box-outline"
             type="primary"
@@ -128,24 +144,30 @@
         </div>
       </div>
 
-      <div class="rounded-xl border border-gray-20 bg-white p-4 shadow-sm">
+      <div
+        v-if="!showLegacyRuntimeFallback"
+        class="rounded-xl border border-gray-20 bg-white p-4 shadow-sm"
+      >
         <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div class="space-y-1 text-sm text-gray-700">
             <div class="font-semibold text-gray-90">
-              {{ activeAttempt ? t("Vue attempt started") : t("Vue attempt") }}
+              {{ activeAttempt ? t("Attempt started") : t("Attempt") }}
             </div>
             <div v-if="canManage">
               {{ t("Teacher preview does not create a tracked attempt.") }}
             </div>
             <div v-else-if="activeAttempt">
-              {{ t("Attempt") }} #{{ activeAttempt.attemptId }} · {{ progressLabel }}
+              {{ currentAttemptLabel }} · {{ progressLabel }}
               <span v-if="hasTimeControl">
-                · {{ t("Time left") }}:
-                <strong :class="isTimeExpired ? 'text-danger' : 'text-gray-90'">{{ formatSeconds(countdownRemainingSeconds) }}</strong>
+                · {{ timeControlLabel }}:
+                <strong :class="isDisplayedTimeExpired ? 'text-danger' : 'text-gray-90'">{{ formatSeconds(displayedRemainingSeconds) }}</strong>
               </span>
             </div>
             <div v-else>
               {{ t("Start or resume an exercise attempt. Draft answers can be saved before final submission.") }}
+            </div>
+            <div v-if="currentCategoryLabel" class="text-support-4">
+              {{ t("Category") }}: {{ currentCategoryLabel }}
             </div>
             <div v-if="attemptMessage" class="text-support-4">
               {{ attemptMessage }}
@@ -162,6 +184,9 @@
             <div v-if="isTimeExpired" class="text-danger">
               {{ t("Time limit reached. Finishing the attempt.") }}
             </div>
+            <div v-if="isQuestionTimeExpired" class="text-warning">
+              {{ t("Question time reached. Saving your answer.") }}
+            </div>
             <div v-if="finishMessage" class="text-support-4">
               {{ finishMessage }}
             </div>
@@ -171,19 +196,12 @@
           </div>
           <div class="flex flex-wrap gap-2">
             <BaseButton
-              v-if="!canManage && !activeAttempt"
+              v-if="!canManage && !activeAttempt && canStartAttempt"
               :disabled="isStartingAttempt"
-              :label="isStartingAttempt ? t('Starting') : t('Start Vue attempt')"
+              :label="isStartingAttempt ? t('Starting') : t('Start test')"
               icon="play-box-outline"
               type="primary"
               @click="startAttempt"
-            />
-            <BaseButton
-              v-if="showLegacyRuntimeFallback"
-              :label="t('Use legacy runtime')"
-              :to-url="legacyUrls.overview"
-              icon="play-box-outline"
-              type="secondary"
             />
           </div>
         </div>
@@ -995,7 +1013,7 @@
               v-else
               class="rounded-lg border border-yellow-100 bg-yellow-50 p-3 text-sm text-yellow-800"
             >
-              {{ t("This question type is pending runtime rendering in Vue.") }}
+              {{ t("This question type cannot be displayed in this player.") }}
             </div>
           </div>
 
@@ -1050,10 +1068,30 @@
           </div>
         </article>
 
+        <div
+          v-if="requiresSavedAnswerConfirmation"
+          class="rounded-xl border border-info/30 bg-support-1 p-4 text-sm text-support-4"
+        >
+          <label class="flex items-start gap-3">
+            <input
+              v-model="confirmedSavedAnswers"
+              class="mt-1"
+              name="confirm_saved_answers"
+              type="checkbox"
+            />
+            <span>
+              {{ t("I confirm that my answers were saved.") }}
+              <span class="block text-xs">
+                {{ t("Saved answers: {0} / {1}", [savedQuestionIds.size, visibleQuestionTotal]) }}
+              </span>
+            </span>
+          </label>
+        </div>
+
         <div class="flex flex-wrap justify-between gap-2 rounded-xl border border-gray-20 bg-white p-4 shadow-sm">
           <BaseButton
             v-if="showPreviousNavigationButton"
-            :disabled="!canMovePrevious || isSavingAnswer"
+            :disabled="!canMovePrevious || isSavingAnswer || isQuestionTimeExpired || isAutoAdvancingTimedQuestion"
             :label="previousNavigationLabel"
             icon="back"
             type="secondary"
@@ -1062,7 +1100,7 @@
           <div class="flex flex-wrap gap-2">
             <BaseButton
               v-if="!canManage && activeAttempt"
-              :disabled="isSavingAnswer || isTimeExpired || !visibleQuestions.some(isDraftSaveSupported)"
+              :disabled="isSavingAnswer || isTimeExpired || isQuestionTimeExpired || isAutoAdvancingTimedQuestion || !visibleQuestions.some(isDraftSaveSupported)"
               :label="isSavingAnswer ? t('Saving') : t('Save draft')"
               icon="check"
               type="success"
@@ -1070,25 +1108,18 @@
             />
             <BaseButton
               v-if="canMoveNext"
-              :disabled="isSavingAnswer || isTimeExpired"
+              :disabled="isSavingAnswer || isTimeExpired || isQuestionTimeExpired || isAutoAdvancingTimedQuestion"
               :label="nextNavigationLabel"
               type="primary"
               @click="goToNextQuestion"
             />
             <BaseButton
               v-if="!canManage && activeAttempt && canFinishCurrentPage"
-              :disabled="!canSubmit || isSavingAnswer || isFinishingAttempt || isAutoFinishingExpiredAttempt"
-              :label="isFinishingAttempt ? t('Finishing') : t('Finish in Vue')"
+              :disabled="!canSubmit || !canFinishWithConfirmation || isSavingAnswer || isFinishingAttempt || isAutoFinishingExpiredAttempt || isQuestionTimeExpired || isAutoAdvancingTimedQuestion"
+              :label="isFinishingAttempt ? t('Finishing') : t('Finish test')"
               icon="check"
               type="primary"
               @click="finishAttempt"
-            />
-            <BaseButton
-              v-if="showLegacyRuntimeFallback"
-              :label="t('Continue in legacy exercise')"
-              :to-url="legacyUrls.overview"
-              icon="play-box-outline"
-              type="secondary"
             />
           </div>
         </div>
@@ -1197,12 +1228,21 @@ const selectedMatchingOptions = ref({})
 const draggedDraggableItemId = ref(null)
 const countdownRemainingSeconds = ref(null)
 const countdownTimer = ref(null)
+const questionCountdownRemainingSeconds = ref(null)
+const questionCountdownTimer = ref(null)
+const questionTimerStartedAt = ref(null)
+const questionTimerSavedSeconds = ref({})
 const isTimeExpired = ref(false)
+const isQuestionTimeExpired = ref(false)
 const isAutoFinishingExpiredAttempt = ref(false)
+const isAutoAdvancingTimedQuestion = ref(false)
 const directFeedbackByQuestion = ref({})
 const feedbackDialog = ref(null)
 const isFeedbackDialogVisible = ref(false)
 const feedbackShownOnLastSave = ref(false)
+const confirmedSavedAnswers = ref(false)
+let copyPasteCleanup = null
+let keepAliveTimer = null
 
 const questionMap = computed(() => new Map(questions.value.map((question) => [Number(question.id), question])))
 
@@ -1224,7 +1264,9 @@ const usesPagedNavigation = computed(() => {
 })
 
 const showLegacyRuntimeFallback = computed(() => {
-  return !canManage.value && true === usesLegacySubmit.value && Boolean(legacyUrls.value?.overview)
+  return !canManage.value
+    && Boolean(legacyUrls.value?.overview)
+    && (true === settings.value.requiresLegacyRuntime || (Boolean(activeAttempt.value) && true === usesLegacySubmit.value))
 })
 
 const currentRuntimePage = computed(() => {
@@ -1253,12 +1295,32 @@ const visibleQuestions = computed(() => {
 
 const visibleQuestionTotal = computed(() => answerableQuestions.value.length)
 const navigationTotal = computed(() => usesPagedNavigation.value ? Math.max(1, runtimePages.value.length || visibleQuestionTotal.value) : visibleQuestionTotal.value)
-const previousNavigationAllowed = computed(() => !settings.value.preventBackwards && settings.value.showPreviousButton !== false)
+const previousNavigationAllowed = computed(() => !settings.value.preventBackwards && true !== settings.value.blockCategoryQuestions && settings.value.showPreviousButton !== false)
 const showPreviousNavigationButton = computed(() => usesPagedNavigation.value && previousNavigationAllowed.value)
 const canMovePrevious = computed(() => showPreviousNavigationButton.value && currentQuestionIndex.value > 0)
 const canMoveNext = computed(() => usesPagedNavigation.value && currentQuestionIndex.value < navigationTotal.value - 1)
 const canFinishCurrentPage = computed(() => !usesPagedNavigation.value || !canMoveNext.value)
-const hasTimeControl = computed(() => null !== countdownRemainingSeconds.value && undefined !== countdownRemainingSeconds.value)
+const currentTimedQuestion = computed(() => {
+  if (!activeAttempt.value || canManage.value || true !== settings.value.allowTimePerQuestion) {
+    return null
+  }
+
+  if (!usesPagedNavigation.value || visibleQuestions.value.length !== 1) {
+    return null
+  }
+
+  const question = visibleQuestions.value.find((item) => !isStructuralQuestion(item))
+  const duration = Number(question?.duration || 0)
+
+  return duration > 0 ? question : null
+})
+const currentTimedQuestionId = computed(() => Number(currentTimedQuestion.value?.id || 0))
+const hasGlobalTimeControl = computed(() => null !== countdownRemainingSeconds.value && undefined !== countdownRemainingSeconds.value)
+const hasQuestionTimeControl = computed(() => null !== questionCountdownRemainingSeconds.value && undefined !== questionCountdownRemainingSeconds.value)
+const hasTimeControl = computed(() => hasGlobalTimeControl.value || hasQuestionTimeControl.value)
+const displayedRemainingSeconds = computed(() => hasQuestionTimeControl.value ? questionCountdownRemainingSeconds.value : countdownRemainingSeconds.value)
+const isDisplayedTimeExpired = computed(() => isTimeExpired.value || isQuestionTimeExpired.value)
+const timeControlLabel = computed(() => hasQuestionTimeControl.value ? t("Question time left") : t("Time left"))
 const answerableQuestions = computed(() => questions.value.filter((question) => !isStructuralQuestion(question)))
 const currentNavigationIndex = computed(() => Math.min(Math.max(0, currentQuestionIndex.value), Math.max(0, navigationTotal.value - 1)))
 const progressLabel = computed(() => {
@@ -1268,9 +1330,40 @@ const progressLabel = computed(() => {
 
   return `${t("Question")} ${currentNavigationIndex.value + 1} / ${navigationTotal.value}`
 })
+const currentAttemptLabel = computed(() => {
+  const attemptNumber = Number(activeAttempt.value?.attemptNumber || 0)
+  const maxAttempt = Number(settings.value.maxAttempt || 0)
+
+  if (attemptNumber > 0 && maxAttempt > 0) {
+    return `${t("Attempt")} ${attemptNumber} / ${maxAttempt}`
+  }
+
+  if (attemptNumber > 0) {
+    return `${t("Attempt")} ${attemptNumber}`
+  }
+
+  return t("Current attempt")
+})
+const currentCategoryLabel = computed(() => {
+  if (true !== settings.value.blockCategoryQuestions) {
+    return ""
+  }
+
+  const question = visibleQuestions.value.find((item) => !isStructuralQuestion(item))
+  return displayText(question?.primaryCategoryTitle || "")
+})
 const previousNavigationLabel = computed(() => usesPagedNavigation.value && (settings.value.usesStructuralPages || visibleQuestions.value.length > 1) ? t("Previous page") : t("Previous question"))
 const nextNavigationLabel = computed(() => usesPagedNavigation.value && (settings.value.usesStructuralPages || visibleQuestions.value.length > 1) ? t("Next page") : t("Next question"))
 const feedbackDialogTitle = computed(() => t(feedbackDialog.value?.title || "Feedback"))
+const requiresSavedAnswerConfirmation = computed(() => {
+  return !canManage.value && Boolean(activeAttempt.value?.attemptId) && true === settings.value.confirmSavedAnswers
+})
+const canFinishWithConfirmation = computed(() => {
+  return !requiresSavedAnswerConfirmation.value || true === confirmedSavedAnswers.value
+})
+const legacyRuntimeReasons = computed(() => {
+  return Array.isArray(settings.value.legacyRuntimeReasons) ? settings.value.legacyRuntimeReasons : []
+})
 
 watch(navigationTotal, (total) => {
   const safeTotal = Number(total || 0)
@@ -1376,6 +1469,120 @@ async function handleExpiredTimeLimit() {
   await finishAttempt({ skipDraftSave: false, expiredByTimer: true })
 }
 
+function syncQuestionCountdown() {
+  stopQuestionCountdownTimer()
+  isQuestionTimeExpired.value = false
+  isAutoAdvancingTimedQuestion.value = false
+
+  const question = currentTimedQuestion.value
+  if (!question || activeAttempt.value?.status !== "incomplete") {
+    questionCountdownRemainingSeconds.value = null
+    questionTimerStartedAt.value = null
+    return
+  }
+
+  const questionId = Number(question.id || 0)
+  questionTimerSavedSeconds.value = {
+    ...questionTimerSavedSeconds.value,
+    [questionId]: getSavedQuestionSecondsSpent(questionId),
+  }
+  questionTimerStartedAt.value = Date.now()
+  updateQuestionCountdown()
+  questionCountdownTimer.value = window.setInterval(updateQuestionCountdown, 1000)
+}
+
+function stopQuestionCountdownTimer() {
+  if (questionCountdownTimer.value) {
+    window.clearInterval(questionCountdownTimer.value)
+    questionCountdownTimer.value = null
+  }
+}
+
+function updateQuestionCountdown() {
+  const question = currentTimedQuestion.value
+  if (!question || activeAttempt.value?.status !== "incomplete") {
+    questionCountdownRemainingSeconds.value = null
+    return
+  }
+
+  const duration = Number(question.duration || 0)
+  if (duration <= 0) {
+    questionCountdownRemainingSeconds.value = null
+    return
+  }
+
+  const remaining = Math.max(0, duration - getQuestionSecondsSpent(question))
+  questionCountdownRemainingSeconds.value = remaining
+
+  if (remaining <= 0) {
+    handleQuestionTimeLimit()
+  }
+}
+
+async function handleQuestionTimeLimit() {
+  if (isAutoAdvancingTimedQuestion.value || isSavingAnswer.value || isFinishingAttempt.value) {
+    return
+  }
+
+  isQuestionTimeExpired.value = true
+  isAutoAdvancingTimedQuestion.value = true
+  answerSaveMessage.value = t("Question time reached. Saving your answer.")
+
+  const saved = await saveVisibleAnswers({ afterFeedback: canMoveNext.value ? "next" : "finish" })
+  if (!saved || feedbackShownOnLastSave.value) {
+    isAutoAdvancingTimedQuestion.value = false
+    return
+  }
+
+  if (canMoveNext.value) {
+    currentQuestionIndex.value += 1
+    isAutoAdvancingTimedQuestion.value = false
+    syncQuestionCountdown()
+    return
+  }
+
+  await finishAttempt({ skipDraftSave: true, expiredByTimer: true })
+}
+
+function getSavedQuestionSecondsSpent(questionId) {
+  const rows = activeAttempt.value?.savedAnswers?.[questionId] || activeAttempt.value?.savedAnswers?.[String(questionId)] || []
+  if (!Array.isArray(rows)) {
+    return 0
+  }
+
+  return rows.reduce((maxSeconds, row) => Math.max(maxSeconds, Number(row?.secondsSpent || 0)), 0)
+}
+
+function getQuestionSecondsSpent(question) {
+  const questionId = Number(question?.id || 0)
+  if (questionId <= 0) {
+    return 0
+  }
+
+  const savedSeconds = Number(questionTimerSavedSeconds.value[questionId] ?? getSavedQuestionSecondsSpent(questionId))
+  if (questionId !== currentTimedQuestionId.value || !questionTimerStartedAt.value) {
+    return savedSeconds
+  }
+
+  return savedSeconds + Math.max(0, Math.floor((Date.now() - questionTimerStartedAt.value) / 1000))
+}
+
+function rememberQuestionSecondsSpent(question) {
+  const questionId = Number(question?.id || 0)
+  if (questionId <= 0) {
+    return
+  }
+
+  questionTimerSavedSeconds.value = {
+    ...questionTimerSavedSeconds.value,
+    [questionId]: getQuestionSecondsSpent(question),
+  }
+
+  if (questionId === currentTimedQuestionId.value) {
+    questionTimerStartedAt.value = Date.now()
+  }
+}
+
 function getQueryValue(value) {
   return Array.isArray(value) ? value[0] : value
 }
@@ -1386,9 +1593,93 @@ function getContextParams() {
     sid: getQueryValue(route.query.sid),
     gid: getQueryValue(route.query.gid),
     origin: getQueryValue(route.query.origin),
+    lp_init: getQueryValue(route.query.lp_init),
     learnpath_id: getQueryValue(route.query.learnpath_id),
     learnpath_item_id: getQueryValue(route.query.learnpath_item_id),
     learnpath_item_view_id: getQueryValue(route.query.learnpath_item_view_id),
+    isStudentView: getQueryValue(route.query.isStudentView),
+    preview: getQueryValue(route.query.preview),
+  }
+}
+
+
+function isEmbeddedInLearnpath() {
+  if (typeof window === "undefined") {
+    return false
+  }
+
+  try {
+    if (window.parent && window.parent !== window) {
+      const parentPath = window.parent.location?.pathname || ""
+      const referrer = document.referrer || ""
+
+      return parentPath.includes("/main/lp/")
+        || parentPath.includes("/main/newscorm/")
+        || referrer.includes("/main/lp/")
+        || referrer.includes("/main/newscorm/")
+    }
+  } catch (error) {
+    return (document.referrer || "").includes("/main/lp/")
+      || (document.referrer || "").includes("/main/newscorm/")
+  }
+
+  return false
+}
+
+const isLearnpathContext = computed(() => {
+  const origin = String(getQueryValue(route.query.origin) || "")
+
+  return origin === "learnpath"
+    || Boolean(getQueryValue(route.query.lp_init))
+    || Boolean(getQueryValue(route.query.learnpath_id))
+    || isEmbeddedInLearnpath()
+})
+
+function syncLearnpathParentFromFinish(response) {
+  const tracking = response?.learnpathTracking || {}
+  if (!tracking?.enabled || !isLearnpathContext.value || typeof window === "undefined") {
+    return
+  }
+
+  let parentWindow = null
+  try {
+    parentWindow = window.parent && window.parent !== window ? window.parent : null
+  } catch (error) {
+    parentWindow = null
+  }
+
+  if (!parentWindow) {
+    return
+  }
+
+  const itemId = Number(tracking.lpItemId || getQueryValue(route.query.learnpath_item_id) || 0)
+  const status = String(tracking.status || response?.status || "completed")
+  const completedItems = Number(tracking.completedItems || 0)
+  const totalItems = Number(tracking.totalItems || 0)
+  const progressMode = String(tracking.progressMode || "%")
+
+  try {
+    if (itemId > 0 && typeof parentWindow.update_toc === "function") {
+      parentWindow.update_toc(status, itemId)
+    }
+  } catch (error) {
+    console.warn("Could not update learning path TOC after exercise finish", error)
+  }
+
+  try {
+    if (completedItems >= 0 && totalItems > 0 && typeof parentWindow.update_progress_bar === "function") {
+      parentWindow.update_progress_bar(completedItems, totalItems, progressMode)
+    }
+  } catch (error) {
+    console.warn("Could not update learning path progress after exercise finish", error)
+  }
+
+  try {
+    if (itemId > 0 && typeof parentWindow.checkCurrentItemPosition === "function") {
+      parentWindow.checkCurrentItemPosition(itemId)
+    }
+  } catch (error) {
+    console.warn("Could not update learning path navigation after exercise finish", error)
   }
 }
 
@@ -1416,7 +1707,7 @@ async function loadRuntime() {
     questionCount.value = Number(response.questionCount || questions.value.length)
     totalScore.value = Number(response.totalScore || 0)
     canManage.value = true === response.canManage
-    canStartAttempt.value = true === response.canStartAttempt
+    canStartAttempt.value = true === response.canStartAttempt && true !== settings.value.requiresLegacyRuntime
     activeAttempt.value = response.attempt || null
     canSubmit.value = true === response.canSubmit
     usesLegacySubmit.value = true === response.usesLegacySubmit && Boolean(activeAttempt.value)
@@ -1426,7 +1717,10 @@ async function loadRuntime() {
     directFeedbackByQuestion.value = {}
     feedbackDialog.value = null
     isFeedbackDialogVisible.value = false
+    confirmedSavedAnswers.value = false
     syncCountdownFromAttempt(activeAttempt.value)
+    syncRuntimeSettingsEffects()
+    syncQuestionCountdown()
   } catch (error) {
     console.error("Error loading exercise runtime", error)
     errorMessage.value = t("Could not load exercise")
@@ -1453,11 +1747,14 @@ async function startAttempt() {
       canSubmit.value = true === response.canFinish && true !== response.usesLegacyRuntime
       usesLegacySubmit.value = true === response.usesLegacyRuntime || false === response.canFinish
       attemptMessage.value = response.message || t("Attempt started")
+      confirmedSavedAnswers.value = false
       applyAttemptState(response)
       reorderQuestionsFromAttempt(response.questionIds || [])
       initializeAnswerState()
       applySavedAnswers(response.savedAnswers || {})
       syncCountdownFromAttempt(response)
+      syncRuntimeSettingsEffects()
+      syncQuestionCountdown()
       return
     }
 
@@ -1467,10 +1764,10 @@ async function startAttempt() {
 
     canSubmit.value = false
     usesLegacySubmit.value = true === response.usesLegacyRuntime
-    attemptError.value = response.message || t("Could not start the Vue attempt")
+    attemptError.value = response.message || t("Could not start the attempt")
   } catch (error) {
     console.error("Error starting exercise attempt", error)
-    attemptError.value = t("Could not start the Vue attempt")
+    attemptError.value = t("Could not start the attempt")
   } finally {
     isStartingAttempt.value = false
   }
@@ -1480,6 +1777,7 @@ function applyAttemptState(attempt) {
   if (!attempt) {
     currentQuestionIndex.value = 0
     syncCountdownFromAttempt(null)
+    syncQuestionCountdown()
     return
   }
 
@@ -1534,25 +1832,27 @@ function reorderQuestionsFromAttempt(questionIds = []) {
 }
 
 async function goToPreviousQuestion() {
-  if (isTimeExpired.value || !canMovePrevious.value) {
+  if (isTimeExpired.value || isQuestionTimeExpired.value || isAutoAdvancingTimedQuestion.value || !canMovePrevious.value) {
     return
   }
 
   if (await saveVisibleAnswers({ afterFeedback: "previous" })) {
     if (!feedbackShownOnLastSave.value) {
       currentQuestionIndex.value -= 1
+      syncQuestionCountdown()
     }
   }
 }
 
 async function goToNextQuestion() {
-  if (isTimeExpired.value || !canMoveNext.value) {
+  if (isTimeExpired.value || isQuestionTimeExpired.value || isAutoAdvancingTimedQuestion.value || !canMoveNext.value) {
     return
   }
 
   if (await saveVisibleAnswers({ afterFeedback: "next" })) {
     if (!feedbackShownOnLastSave.value) {
       currentQuestionIndex.value += 1
+      syncQuestionCountdown()
     }
   }
 }
@@ -1616,6 +1916,7 @@ async function finishAttempt(options = {}) {
       {
         exerciseId,
         attemptId,
+        confirmedSavedAnswers: true === confirmedSavedAnswers.value,
       },
       getContextParams(),
       exerciseId,
@@ -1633,6 +1934,7 @@ async function finishAttempt(options = {}) {
     canSubmit.value = false
     stopCountdownTimer()
     finishMessage.value = response.message ? t(response.message) : t("Attempt finished")
+    syncLearnpathParentFromFinish(response)
 
     await router.push({
       name: "ExerciseResult",
@@ -1667,7 +1969,8 @@ async function saveQuestionDraftAnswer(question, afterFeedback = "none") {
         attemptId,
         questionId: Number(question.id),
         answer: buildAnswerPayload(question),
-        secondsSpent: 0,
+        secondsSpent: getQuestionSecondsSpent(question),
+        navigationAction: afterFeedback,
       },
       getContextParams(),
       exerciseId,
@@ -1694,6 +1997,8 @@ async function saveQuestionDraftAnswer(question, afterFeedback = "none") {
     savedQuestionIds.value = nextSavedQuestionIds
   }
 
+  rememberQuestionSecondsSpent(question)
+  updateQuestionCountdown()
   handleRuntimeFeedback(question, response.feedback || null, afterFeedback)
 
   return response
@@ -1708,7 +2013,7 @@ async function saveUploadQuestionAnswer(question, exerciseId, attemptId) {
 
   const formData = new FormData()
   formData.append("questionId", String(Number(question.id)))
-  formData.append("secondsSpent", "0")
+  formData.append("secondsSpent", String(getQuestionSecondsSpent(question)))
   formData.append("file", questionAnswer.uploadFile || questionAnswer.oralFile)
 
   const response = await exerciseService.uploadExerciseRuntimeAnswer(
@@ -1810,11 +2115,13 @@ async function proceedAfterFeedback(feedback) {
 
   if (feedback.afterAction === "next" && canMoveNext.value) {
     currentQuestionIndex.value += 1
+    syncQuestionCountdown()
     return
   }
 
   if (feedback.afterAction === "previous" && canMovePrevious.value) {
     currentQuestionIndex.value -= 1
+    syncQuestionCountdown()
   }
 }
 
@@ -2946,6 +3253,88 @@ function degreeCertaintyOptions(question) {
   })
 }
 
+function syncRuntimeSettingsEffects() {
+  syncCopyPasteProtection()
+  syncKeepAlivePing()
+}
+
+function stopRuntimeSettingsEffects() {
+  stopCopyPasteProtection()
+  stopKeepAlivePing()
+}
+
+function syncCopyPasteProtection() {
+  stopCopyPasteProtection()
+  if (canManage.value || !activeAttempt.value || true !== settings.value.preventCopyPaste) {
+    return
+  }
+
+  const preventDefault = (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+  }
+  const preventKeyboardShortcut = (event) => {
+    if (!event?.ctrlKey && !event?.metaKey) {
+      return
+    }
+
+    const key = String(event.key || "").toLowerCase()
+    if (["a", "c", "p", "s", "u", "v", "x"].includes(key)) {
+      preventDefault(event)
+    }
+  }
+  const handlers = [
+    [document, "copy", preventDefault],
+    [document, "cut", preventDefault],
+    [document, "paste", preventDefault],
+    [document, "contextmenu", preventDefault],
+    [document, "dragstart", preventDefault],
+    [document, "keydown", preventKeyboardShortcut],
+  ]
+
+  for (const [target, eventName, handler] of handlers) {
+    target.addEventListener(eventName, handler, true)
+  }
+
+  copyPasteCleanup = () => {
+    for (const [target, eventName, handler] of handlers) {
+      target.removeEventListener(eventName, handler, true)
+    }
+  }
+}
+
+function stopCopyPasteProtection() {
+  if (copyPasteCleanup) {
+    copyPasteCleanup()
+    copyPasteCleanup = null
+  }
+}
+
+function syncKeepAlivePing() {
+  stopKeepAlivePing()
+  const interval = Number(settings.value.keepAlivePingInterval || 0)
+  if (interval <= 0 || canManage.value || !activeAttempt.value) {
+    return
+  }
+
+  const sendKeepAlivePing = () => {
+    fetch("/main/inc/ajax/keepalive.ajax.php", {
+      method: "GET",
+      credentials: "same-origin",
+      cache: "no-store",
+    }).catch(() => {})
+  }
+
+  keepAliveTimer = window.setInterval(sendKeepAlivePing, Math.max(60, interval) * 1000)
+}
+
+function stopKeepAlivePing() {
+  if (keepAliveTimer) {
+    window.clearInterval(keepAliveTimer)
+    keepAliveTimer = null
+  }
+}
+
 function submitDisabled() {
   return false
 }
@@ -2974,13 +3363,22 @@ function displayText(value, fallback = "") {
   return plainValue || fallback
 }
 
-onBeforeUnmount(stopCountdownTimer)
+onBeforeUnmount(() => {
+  stopCountdownTimer()
+  stopQuestionCountdownTimer()
+  stopRuntimeSettingsEffects()
+})
 
 onMounted(loadRuntime)
 
 watch(
   () => [route.params.exerciseId, route.query.cid, route.query.sid, route.query.gid],
   () => loadRuntime(),
+)
+
+watch(
+  () => [currentTimedQuestionId.value, activeAttempt.value?.attemptId, activeAttempt.value?.status],
+  () => syncQuestionCountdown(),
 )
 </script>
 

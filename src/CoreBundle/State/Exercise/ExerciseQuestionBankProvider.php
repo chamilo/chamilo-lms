@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseQuestionBank;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
@@ -41,6 +42,7 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
         private EntityManagerInterface $entityManager,
         private CQuizRepository $quizRepository,
         private Security $security,
+        private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
@@ -62,26 +64,22 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
         $course = $this->getCourse($request);
         $session = $this->getSession($request);
         $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : 0;
-        if (0 >= $exerciseId) {
-            throw new BadRequestHttpException('A valid exercise id is required.');
-        }
-
-        $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session);
+        $quiz = 0 < $exerciseId ? $this->getExerciseFromCurrentContext($exerciseId, $course, $session) : null;
         $filters = $this->getFilters($request);
         $page = max(1, (int) $filters['page']);
         $itemsPerPage = min(100, max(5, (int) $filters['itemsPerPage']));
-        $existingQuestionIds = $this->getExistingQuestionIds($quiz);
+        $existingQuestionIds = $quiz instanceof CQuiz ? $this->getExistingQuestionIds($quiz) : [];
         $totalItems = $this->countQuestions($quiz, $course, $session, $filters);
         $items = $this->getQuestions($quiz, $course, $session, $filters, $existingQuestionIds, $page, $itemsPerPage);
 
         $response = new ExerciseQuestionBank();
         $response->exerciseId = $exerciseId;
-        $response->title = $quiz->getTitle();
+        $response->title = $quiz instanceof CQuiz ? $quiz->getTitle() : 'Recycle existing questions';
         $response->items = $items;
         $response->categoryOptions = $this->getCategoryOptions($course, $session);
         $response->exerciseOptions = $this->getExerciseOptions($quiz, $course, $session);
         $response->difficultyOptions = $this->getDifficultyOptions();
-        $response->questionTypeOptions = $this->getQuestionTypeOptions((int) $quiz->getFeedbackType());
+        $response->questionTypeOptions = $this->getQuestionTypeOptions($quiz instanceof CQuiz ? (int) $quiz->getFeedbackType() : 0);
         $response->filters = $filters;
         $response->legacyUrls = [];
         $response->page = $page;
@@ -89,6 +87,8 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
         $response->totalItems = $totalItems;
         $response->csrfToken = $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID)->getValue();
         $response->canManage = true;
+        $response->globalMode = !($quiz instanceof CQuiz);
+        $response->canDelete = $this->canRunRestrictedAction();
 
         return $response;
     }
@@ -132,7 +132,7 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
     private function getExerciseFromCurrentContext(int $exerciseId, Course $course, ?Session $session): CQuiz
     {
         $quiz = $this->quizRepository->find($exerciseId);
-        if (!$quiz instanceof CQuiz) {
+        if (!($quiz instanceof CQuiz)) {
             throw new NotFoundHttpException('The requested exercise was not found.');
         }
 
@@ -200,7 +200,7 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
     /**
      * @param array<string, mixed> $filters
      */
-    private function countQuestions(CQuiz $quiz, Course $course, ?Session $session, array $filters): int
+    private function countQuestions(?CQuiz $quiz, Course $course, ?Session $session, array $filters): int
     {
         $queryBuilder = $this->createQuestionQueryBuilder($quiz, $course, $session, $filters);
         $queryBuilder->select('COUNT(DISTINCT question.iid)');
@@ -215,7 +215,7 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
      * @return array<int, array<string, mixed>>
      */
     private function getQuestions(
-        CQuiz $quiz,
+        ?CQuiz $quiz,
         Course $course,
         ?Session $session,
         array $filters,
@@ -240,7 +240,8 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
             $questionId = (int) $question->getIid();
             $type = (int) $question->getType();
             $alreadyInExercise = \in_array($questionId, $existingQuestionIds, true);
-            $allowedByFeedback = $this->isQuestionTypeAllowedByFeedback($type, (int) $quiz->getFeedbackType());
+            $allowedByFeedback = $quiz instanceof CQuiz ? $this->isQuestionTypeAllowedByFeedback($type, (int) $quiz->getFeedbackType()) : true;
+            $usedInActiveQuiz = $this->isQuestionUsedInActiveQuiz($question, $course, $session);
             $items[] = [
                 'id' => $questionId,
                 'title' => $question->getQuestion(),
@@ -252,7 +253,10 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
                 'difficulty' => max(1, (int) $question->getLevel()),
                 'score' => (float) $question->getPonderation(),
                 'alreadyInExercise' => $alreadyInExercise,
-                'canReuse' => !$alreadyInExercise && $allowedByFeedback,
+                'usedInActiveTest' => $usedInActiveQuiz,
+                'canReuse' => $quiz instanceof CQuiz && !$alreadyInExercise && $allowedByFeedback,
+                'canEdit' => !($quiz instanceof CQuiz) && !$usedInActiveQuiz,
+                'canDelete' => !($quiz instanceof CQuiz) && !$usedInActiveQuiz && $this->canRunRestrictedAction(),
                 'blockedReason' => $allowedByFeedback ? '' : 'This question type is not compatible with the current feedback mode.',
             ];
         }
@@ -263,7 +267,7 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
     /**
      * @param array<string, mixed> $filters
      */
-    private function createQuestionQueryBuilder(CQuiz $quiz, Course $course, ?Session $session, array $filters): QueryBuilder
+    private function createQuestionQueryBuilder(?CQuiz $quiz, Course $course, ?Session $session, array $filters): QueryBuilder
     {
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->from(CQuizQuestion::class, 'question')
@@ -309,7 +313,7 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
     /**
      * @param array<string, mixed> $filters
      */
-    private function applyQuestionFilters(QueryBuilder $queryBuilder, CQuiz $quiz, Course $course, ?Session $session, array $filters): void
+    private function applyQuestionFilters(QueryBuilder $queryBuilder, ?CQuiz $quiz, Course $course, ?Session $session, array $filters): void
     {
         $categoryId = (int) ($filters['categoryId'] ?? 0);
         if (0 < $categoryId) {
@@ -460,7 +464,7 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
     /**
      * @return array<int, array<string, mixed>>
      */
-    private function getExerciseOptions(CQuiz $currentQuiz, Course $course, ?Session $session): array
+    private function getExerciseOptions(?CQuiz $currentQuiz, Course $course, ?Session $session): array
     {
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('quiz')
@@ -486,7 +490,7 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
         foreach ($queryBuilder->getQuery()->getResult() as $quiz) {
             if ($quiz instanceof CQuiz && null !== $quiz->getIid()) {
                 $label = $quiz->getTitle();
-                if ((int) $quiz->getIid() === (int) $currentQuiz->getIid()) {
+                if ($currentQuiz instanceof CQuiz && (int) $quiz->getIid() === (int) $currentQuiz->getIid()) {
                     $label = '> '.$label;
                 }
                 $items[] = ['value' => (int) $quiz->getIid(), 'label' => $label];
@@ -549,6 +553,51 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
         }
 
         return true;
+    }
+
+
+    private function canRunRestrictedAction(): bool
+    {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return true;
+        }
+
+        return !$this->isSettingEnabled('exercise.limit_exercise_teacher_access');
+    }
+
+    private function isSettingEnabled(string $name): bool
+    {
+        return 'true' === $this->settingsManager->getSetting($name, true);
+    }
+
+    private function isQuestionUsedInActiveQuiz(CQuizQuestion $question, Course $course, ?Session $session): bool
+    {
+        $questionId = (int) ($question->getIid() ?? 0);
+        if (0 >= $questionId) {
+            return false;
+        }
+
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('relQuestion.iid')
+            ->from(CQuizRelQuestion::class, 'relQuestion')
+            ->innerJoin('relQuestion.quiz', 'quiz')
+            ->innerJoin('quiz.resourceNode', 'node')
+            ->innerJoin('node.resourceLinks', 'links')
+            ->andWhere('IDENTITY(relQuestion.question) = :questionId')
+            ->andWhere('IDENTITY(links.course) = :courseId')
+            ->andWhere('links.deletedAt IS NULL')
+            ->andWhere('links.endVisibilityAt IS NULL')
+            ->setParameter('questionId', $questionId, Types::INTEGER)
+            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
+            ->setMaxResults(1)
+        ;
+
+        $this->applySessionFilter($queryBuilder, 'links', $session, true);
+        if (null !== $session) {
+            $queryBuilder->setParameter('sessionId', (int) $session->getId(), Types::INTEGER);
+        }
+
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
     private function getQuestionTypeLabel(int $type): string

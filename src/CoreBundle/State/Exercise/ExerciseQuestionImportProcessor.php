@@ -175,7 +175,7 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
             throw new BadRequestHttpException('No valid Aiken questions were found in the uploaded file.');
         }
 
-        $exerciseTitle = $this->buildAikenExerciseTitle($uploadedFile);
+        $exerciseTitle = $this->buildAikenExerciseTitle($uploadedFile, $request);
         $quiz = $this->createExercise($exerciseTitle, $course, $session);
         $importedQuestionCount = $this->createAikenQuestions($quiz, $parsedQuestions['questions'], $course, $session);
 
@@ -466,8 +466,15 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
         return '' !== $normalized ? $normalized : $line;
     }
 
-    private function buildAikenExerciseTitle(UploadedFile $uploadedFile): string
+    private function buildAikenExerciseTitle(UploadedFile $uploadedFile, Request $request): string
     {
+        foreach (['exerciseTitle', 'exercise_title', 'quiz_name'] as $fieldName) {
+            $title = trim((string) $request->request->get($fieldName, ''));
+            if ('' !== $title) {
+                return $title;
+            }
+        }
+
         $name = $uploadedFile->getClientOriginalName();
         $title = preg_replace('/\.(zip|txt)$/i', '', $name) ?? $name;
         $title = trim($title);

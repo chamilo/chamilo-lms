@@ -58,6 +58,12 @@ export default {
       props: { importType: "qti2" },
     },
     {
+      name: "ExerciseAiAikenGenerator",
+      path: "aiken-generator",
+      meta: { breadcrumb: "AI Aiken generator" },
+      component: () => import("../views/exercise/ExerciseAiAikenGeneratorView.vue"),
+    },
+    {
       name: "ExerciseOverview",
       path: ":exerciseId/overview",
       meta: { breadcrumb: "Exercise overview" },
@@ -106,6 +112,30 @@ export default {
       component: () => import("../views/exercise/ExerciseLiveResultsView.vue"),
     },
     {
+      name: "ExerciseGlobalQuestionSelector",
+      path: "questions/create",
+      meta: { breadcrumb: "Add a question" },
+      component: () => import("../views/exercise/ExerciseGlobalQuestionSelectorView.vue"),
+    },
+    {
+      name: "ExerciseGlobalQuestionCreate",
+      path: "questions/create/:questionType",
+      meta: { breadcrumb: "Create question" },
+      component: () => import("../views/exercise/ExerciseQuestionEditorView.vue"),
+    },
+    {
+      name: "ExerciseQuestionPool",
+      path: "questions/recycle",
+      meta: { breadcrumb: "Recycle existing questions" },
+      component: () => import("../views/exercise/ExerciseQuestionBankView.vue"),
+    },
+    {
+      name: "ExerciseGlobalQuestionEdit",
+      path: "questions/:questionId/edit",
+      meta: { breadcrumb: "Edit question" },
+      component: () => import("../views/exercise/ExerciseQuestionEditorView.vue"),
+    },
+    {
       name: "ExerciseQuestions",
       path: ":exerciseId/questions",
       meta: { breadcrumb: "Questions" },
@@ -114,7 +144,7 @@ export default {
     {
       name: "ExerciseQuestionBank",
       path: ":exerciseId/question-bank",
-      meta: { breadcrumb: "Question bank" },
+      meta: { breadcrumb: "Recycle existing questions" },
       component: () => import("../views/exercise/ExerciseQuestionBankView.vue"),
     },
     {

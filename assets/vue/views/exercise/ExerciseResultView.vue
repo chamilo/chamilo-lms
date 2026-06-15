@@ -3,7 +3,10 @@
     class="exercise-result-page space-y-5"
     :class="{ 'exercise-result-print-mode': shouldAutoPrint() }"
   >
-    <div class="exercise-result-toolbar flex w-fit flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm">
+    <div
+      v-if="!isLearnpathContext"
+      class="exercise-result-toolbar flex w-fit flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm"
+    >
       <BaseButton
         :label="t('Back to exercises')"
         :route="{ name: 'ExerciseList', params: getBaseRouteParams(), query: getContextParams() }"
@@ -30,7 +33,7 @@
       />
     </div>
 
-    <div class="border-b border-gray-20" />
+    <div v-if="!isLearnpathContext" class="border-b border-gray-20" />
 
     <div
       v-if="isLoading"
@@ -188,7 +191,7 @@
         v-if="visibility.showRadar"
         class="rounded-xl border border-info/30 bg-support-1 p-4 text-sm text-support-4"
       >
-        {{ t("This exercise uses the radar/spiderweb result mode. The chart is not available in the Vue result page yet.") }}
+        {{ t("This exercise uses the radar/spiderweb result mode. The chart is not available on this page.") }}
       </div>
 
       <div
@@ -708,6 +711,88 @@
                     <BaseIcon icon="edit" size="small" />
                     {{ t("Teacher correction") }}
                   </div>
+                  <div
+                    v-if="canUseAiCorrection(question) && aiCorrectionForms[question.id]"
+                    class="mb-3 rounded-lg border border-info/30 bg-support-1 p-3"
+                  >
+                    <div class="mb-3 flex items-center gap-2 text-sm font-semibold text-support-4">
+                      <BaseIcon icon="robot-outline" size="small" />
+                      {{ t("AI suggestion") }}
+                    </div>
+
+                    <div class="flex flex-wrap items-end gap-3">
+                      <label class="flex min-w-[220px] flex-col gap-1 text-sm font-semibold text-gray-700">
+                        {{ t("AI provider") }}
+                        <select
+                          v-model="aiCorrectionForms[question.id].provider"
+                          class="rounded border border-gray-30 bg-white px-3 py-2 text-sm font-normal text-gray-90"
+                          :disabled="aiCorrectionForms[question.id].isLoadingProviders || aiCorrectionForms[question.id].isGenerating"
+                          name="ai_provider"
+                          @change="saveAiCorrectionProvider(question)"
+                        >
+                          <option value="">{{ t("Default") }}</option>
+                          <option
+                            v-for="provider in aiCorrectionForms[question.id].providers"
+                            :key="provider.key"
+                            :value="provider.key"
+                          >
+                            {{ provider.label }}
+                          </option>
+                        </select>
+                      </label>
+
+                      <BaseButton
+                        :disabled="aiCorrectionForms[question.id].isGenerating"
+                        :is-loading="aiCorrectionForms[question.id].isGenerating"
+                        :label="aiCorrectionForms[question.id].feedback ? t('Regenerate') : t('Generate')"
+                        icon="lightning-bolt"
+                        type="secondary"
+                        @click="generateAiCorrection(question)"
+                      />
+
+                      <BaseButton
+                        v-if="aiCorrectionForms[question.id].feedback"
+                        :disabled="aiCorrectionForms[question.id].isGenerating"
+                        :label="t('Apply suggestion')"
+                        icon="arrow-down"
+                        type="primary"
+                        @click="applyAiCorrectionSuggestion(question)"
+                      />
+                    </div>
+
+                    <div
+                      v-if="aiCorrectionForms[question.id].providerHint"
+                      class="mt-2 text-xs text-gray-600"
+                    >
+                      {{ aiCorrectionForms[question.id].providerHint }}
+                    </div>
+
+                    <div
+                      v-if="aiCorrectionForms[question.id].error"
+                      class="mt-3 rounded-lg border border-danger/30 bg-danger/10 p-3 text-sm text-danger"
+                    >
+                      {{ aiCorrectionForms[question.id].error }}
+                    </div>
+
+                    <div
+                      v-if="aiCorrectionForms[question.id].feedback"
+                      class="mt-3 space-y-2"
+                    >
+                      <div
+                        v-if="aiCorrectionForms[question.id].score !== null"
+                        class="inline-flex items-center gap-2 rounded-full border border-info/30 bg-white px-3 py-1 text-xs font-semibold text-info"
+                      >
+                        {{ t("Suggested score") }}: {{ aiCorrectionForms[question.id].score }} / {{ formatNumber(question.maxScore || 0) }}
+                      </div>
+                      <BaseTextArea
+                        v-model="aiCorrectionForms[question.id].feedback"
+                        :id="aiCorrectionFeedbackInputId(question)"
+                        :label="t('Suggested feedback')"
+                        name="ai_feedback"
+                        rows="4"
+                      />
+                    </div>
+                  </div>
                   <div class="grid gap-3 md:grid-cols-[220px_1fr_auto] md:items-start">
                     <BaseInputNumber
                       v-model="correctionForms[question.id].marks"
@@ -807,6 +892,88 @@
                     <BaseIcon icon="edit" size="small" />
                     {{ t("Teacher correction") }}
                   </div>
+                  <div
+                    v-if="canUseAiCorrection(question) && aiCorrectionForms[question.id]"
+                    class="mb-3 rounded-lg border border-info/30 bg-support-1 p-3"
+                  >
+                    <div class="mb-3 flex items-center gap-2 text-sm font-semibold text-support-4">
+                      <BaseIcon icon="robot-outline" size="small" />
+                      {{ t("AI suggestion") }}
+                    </div>
+
+                    <div class="flex flex-wrap items-end gap-3">
+                      <label class="flex min-w-[220px] flex-col gap-1 text-sm font-semibold text-gray-700">
+                        {{ t("AI provider") }}
+                        <select
+                          v-model="aiCorrectionForms[question.id].provider"
+                          class="rounded border border-gray-30 bg-white px-3 py-2 text-sm font-normal text-gray-90"
+                          :disabled="aiCorrectionForms[question.id].isLoadingProviders || aiCorrectionForms[question.id].isGenerating"
+                          name="ai_provider"
+                          @change="saveAiCorrectionProvider(question)"
+                        >
+                          <option value="">{{ t("Default") }}</option>
+                          <option
+                            v-for="provider in aiCorrectionForms[question.id].providers"
+                            :key="provider.key"
+                            :value="provider.key"
+                          >
+                            {{ provider.label }}
+                          </option>
+                        </select>
+                      </label>
+
+                      <BaseButton
+                        :disabled="aiCorrectionForms[question.id].isGenerating"
+                        :is-loading="aiCorrectionForms[question.id].isGenerating"
+                        :label="aiCorrectionForms[question.id].feedback ? t('Regenerate') : t('Generate')"
+                        icon="lightning-bolt"
+                        type="secondary"
+                        @click="generateAiCorrection(question)"
+                      />
+
+                      <BaseButton
+                        v-if="aiCorrectionForms[question.id].feedback"
+                        :disabled="aiCorrectionForms[question.id].isGenerating"
+                        :label="t('Apply suggestion')"
+                        icon="arrow-down"
+                        type="primary"
+                        @click="applyAiCorrectionSuggestion(question)"
+                      />
+                    </div>
+
+                    <div
+                      v-if="aiCorrectionForms[question.id].providerHint"
+                      class="mt-2 text-xs text-gray-600"
+                    >
+                      {{ aiCorrectionForms[question.id].providerHint }}
+                    </div>
+
+                    <div
+                      v-if="aiCorrectionForms[question.id].error"
+                      class="mt-3 rounded-lg border border-danger/30 bg-danger/10 p-3 text-sm text-danger"
+                    >
+                      {{ aiCorrectionForms[question.id].error }}
+                    </div>
+
+                    <div
+                      v-if="aiCorrectionForms[question.id].feedback"
+                      class="mt-3 space-y-2"
+                    >
+                      <div
+                        v-if="aiCorrectionForms[question.id].score !== null"
+                        class="inline-flex items-center gap-2 rounded-full border border-info/30 bg-white px-3 py-1 text-xs font-semibold text-info"
+                      >
+                        {{ t("Suggested score") }}: {{ aiCorrectionForms[question.id].score }} / {{ formatNumber(question.maxScore || 0) }}
+                      </div>
+                      <BaseTextArea
+                        v-model="aiCorrectionForms[question.id].feedback"
+                        :id="aiCorrectionFeedbackInputId(question)"
+                        :label="t('Suggested feedback')"
+                        name="ai_feedback"
+                        rows="4"
+                      />
+                    </div>
+                  </div>
                   <div class="grid gap-3 md:grid-cols-[220px_1fr_auto] md:items-start">
                     <BaseInputNumber
                       v-model="correctionForms[question.id].marks"
@@ -897,6 +1064,88 @@
                     <BaseIcon icon="edit" size="small" />
                     {{ t("Teacher correction") }}
                   </div>
+                  <div
+                    v-if="canUseAiCorrection(question) && aiCorrectionForms[question.id]"
+                    class="mb-3 rounded-lg border border-info/30 bg-support-1 p-3"
+                  >
+                    <div class="mb-3 flex items-center gap-2 text-sm font-semibold text-support-4">
+                      <BaseIcon icon="robot-outline" size="small" />
+                      {{ t("AI suggestion") }}
+                    </div>
+
+                    <div class="flex flex-wrap items-end gap-3">
+                      <label class="flex min-w-[220px] flex-col gap-1 text-sm font-semibold text-gray-700">
+                        {{ t("AI provider") }}
+                        <select
+                          v-model="aiCorrectionForms[question.id].provider"
+                          class="rounded border border-gray-30 bg-white px-3 py-2 text-sm font-normal text-gray-90"
+                          :disabled="aiCorrectionForms[question.id].isLoadingProviders || aiCorrectionForms[question.id].isGenerating"
+                          name="ai_provider"
+                          @change="saveAiCorrectionProvider(question)"
+                        >
+                          <option value="">{{ t("Default") }}</option>
+                          <option
+                            v-for="provider in aiCorrectionForms[question.id].providers"
+                            :key="provider.key"
+                            :value="provider.key"
+                          >
+                            {{ provider.label }}
+                          </option>
+                        </select>
+                      </label>
+
+                      <BaseButton
+                        :disabled="aiCorrectionForms[question.id].isGenerating"
+                        :is-loading="aiCorrectionForms[question.id].isGenerating"
+                        :label="aiCorrectionForms[question.id].feedback ? t('Regenerate') : t('Generate')"
+                        icon="lightning-bolt"
+                        type="secondary"
+                        @click="generateAiCorrection(question)"
+                      />
+
+                      <BaseButton
+                        v-if="aiCorrectionForms[question.id].feedback"
+                        :disabled="aiCorrectionForms[question.id].isGenerating"
+                        :label="t('Apply suggestion')"
+                        icon="arrow-down"
+                        type="primary"
+                        @click="applyAiCorrectionSuggestion(question)"
+                      />
+                    </div>
+
+                    <div
+                      v-if="aiCorrectionForms[question.id].providerHint"
+                      class="mt-2 text-xs text-gray-600"
+                    >
+                      {{ aiCorrectionForms[question.id].providerHint }}
+                    </div>
+
+                    <div
+                      v-if="aiCorrectionForms[question.id].error"
+                      class="mt-3 rounded-lg border border-danger/30 bg-danger/10 p-3 text-sm text-danger"
+                    >
+                      {{ aiCorrectionForms[question.id].error }}
+                    </div>
+
+                    <div
+                      v-if="aiCorrectionForms[question.id].feedback"
+                      class="mt-3 space-y-2"
+                    >
+                      <div
+                        v-if="aiCorrectionForms[question.id].score !== null"
+                        class="inline-flex items-center gap-2 rounded-full border border-info/30 bg-white px-3 py-1 text-xs font-semibold text-info"
+                      >
+                        {{ t("Suggested score") }}: {{ aiCorrectionForms[question.id].score }} / {{ formatNumber(question.maxScore || 0) }}
+                      </div>
+                      <BaseTextArea
+                        v-model="aiCorrectionForms[question.id].feedback"
+                        :id="aiCorrectionFeedbackInputId(question)"
+                        :label="t('Suggested feedback')"
+                        name="ai_feedback"
+                        rows="4"
+                      />
+                    </div>
+                  </div>
                   <div class="grid gap-3 md:grid-cols-[220px_1fr_auto] md:items-start">
                     <BaseInputNumber
                       v-model="correctionForms[question.id].marks"
@@ -982,6 +1231,88 @@
                     <BaseIcon icon="edit" size="small" />
                     {{ t("Teacher correction") }}
                   </div>
+                  <div
+                    v-if="canUseAiCorrection(question) && aiCorrectionForms[question.id]"
+                    class="mb-3 rounded-lg border border-info/30 bg-support-1 p-3"
+                  >
+                    <div class="mb-3 flex items-center gap-2 text-sm font-semibold text-support-4">
+                      <BaseIcon icon="robot-outline" size="small" />
+                      {{ t("AI suggestion") }}
+                    </div>
+
+                    <div class="flex flex-wrap items-end gap-3">
+                      <label class="flex min-w-[220px] flex-col gap-1 text-sm font-semibold text-gray-700">
+                        {{ t("AI provider") }}
+                        <select
+                          v-model="aiCorrectionForms[question.id].provider"
+                          class="rounded border border-gray-30 bg-white px-3 py-2 text-sm font-normal text-gray-90"
+                          :disabled="aiCorrectionForms[question.id].isLoadingProviders || aiCorrectionForms[question.id].isGenerating"
+                          name="ai_provider"
+                          @change="saveAiCorrectionProvider(question)"
+                        >
+                          <option value="">{{ t("Default") }}</option>
+                          <option
+                            v-for="provider in aiCorrectionForms[question.id].providers"
+                            :key="provider.key"
+                            :value="provider.key"
+                          >
+                            {{ provider.label }}
+                          </option>
+                        </select>
+                      </label>
+
+                      <BaseButton
+                        :disabled="aiCorrectionForms[question.id].isGenerating"
+                        :is-loading="aiCorrectionForms[question.id].isGenerating"
+                        :label="aiCorrectionForms[question.id].feedback ? t('Regenerate') : t('Generate')"
+                        icon="lightning-bolt"
+                        type="secondary"
+                        @click="generateAiCorrection(question)"
+                      />
+
+                      <BaseButton
+                        v-if="aiCorrectionForms[question.id].feedback"
+                        :disabled="aiCorrectionForms[question.id].isGenerating"
+                        :label="t('Apply suggestion')"
+                        icon="arrow-down"
+                        type="primary"
+                        @click="applyAiCorrectionSuggestion(question)"
+                      />
+                    </div>
+
+                    <div
+                      v-if="aiCorrectionForms[question.id].providerHint"
+                      class="mt-2 text-xs text-gray-600"
+                    >
+                      {{ aiCorrectionForms[question.id].providerHint }}
+                    </div>
+
+                    <div
+                      v-if="aiCorrectionForms[question.id].error"
+                      class="mt-3 rounded-lg border border-danger/30 bg-danger/10 p-3 text-sm text-danger"
+                    >
+                      {{ aiCorrectionForms[question.id].error }}
+                    </div>
+
+                    <div
+                      v-if="aiCorrectionForms[question.id].feedback"
+                      class="mt-3 space-y-2"
+                    >
+                      <div
+                        v-if="aiCorrectionForms[question.id].score !== null"
+                        class="inline-flex items-center gap-2 rounded-full border border-info/30 bg-white px-3 py-1 text-xs font-semibold text-info"
+                      >
+                        {{ t("Suggested score") }}: {{ aiCorrectionForms[question.id].score }} / {{ formatNumber(question.maxScore || 0) }}
+                      </div>
+                      <BaseTextArea
+                        v-model="aiCorrectionForms[question.id].feedback"
+                        :id="aiCorrectionFeedbackInputId(question)"
+                        :label="t('Suggested feedback')"
+                        name="ai_feedback"
+                        rows="4"
+                      />
+                    </div>
+                  </div>
                   <div class="grid gap-3 md:grid-cols-[220px_1fr_auto] md:items-start">
                     <BaseInputNumber
                       v-model="correctionForms[question.id].marks"
@@ -1016,7 +1347,7 @@
 
             <template v-else>
               <div class="rounded-lg border border-warning/30 bg-warning/10 p-3 text-sm text-warning">
-                {{ t("This question type is not available in the Vue result review yet.") }}
+                {{ t("This question type cannot be reviewed on this page.") }}
               </div>
             </template>
 
@@ -1028,14 +1359,52 @@
           </div>
         </article>
       </div>
+
+      <section
+        v-if="showStandaloneFinalActions"
+        class="exercise-result-final-actions rounded-xl border border-gray-20 bg-white p-5 shadow-sm"
+      >
+        <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h2 class="text-base font-semibold text-gray-90">{{ t("Exercise completed") }}</h2>
+            <p
+              v-if="finalActions.maxAttempt > 0"
+              class="mt-1 text-sm text-gray-600"
+            >
+              {{ t("Attempts") }}: {{ finalActions.attemptCount || 0 }} / {{ finalActions.maxAttempt }}
+            </p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <BaseButton
+              v-if="finalActions.canTryAgain"
+              :disabled="isStartingAttempt"
+              :is-loading="isStartingAttempt"
+              :label="t('Try again')"
+              icon="replay"
+              type="success"
+              @click="startAnotherAttempt"
+            />
+            <BaseButton
+              :label="t('Return to Course Homepage')"
+              :route="{
+                name: 'CourseHome',
+                params: { id: getCourseId() },
+                query: getCourseHomeQuery(),
+              }"
+              icon="home"
+              type="primary"
+            />
+          </div>
+        </div>
+      </section>
     </template>
   </section>
 </template>
 
 <script setup>
-import { nextTick, onMounted, ref, watch } from "vue"
+import { computed, nextTick, onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseInputNumber from "../../components/basecomponents/BaseInputNumber.vue"
@@ -1044,6 +1413,7 @@ import exerciseService from "../../services/exerciseService"
 
 const { t } = useI18n()
 const route = useRoute()
+const router = useRouter()
 
 const isLoading = ref(false)
 const errorMessage = ref("")
@@ -1053,12 +1423,17 @@ const attempt = ref({})
 const visibility = ref({})
 const questions = ref([])
 const ranking = ref([])
+const finalActions = ref({})
+const aiCorrection = ref({})
+const isStartingAttempt = ref(false)
 const correctionForms = ref({})
+const aiCorrectionForms = ref({})
 const correctionSavingQuestionId = ref(null)
 const correctionError = ref("")
 const correctionMessage = ref("")
 const resultHotspotImageSizes = ref({})
 const autoPrintDone = ref(false)
+const AI_CORRECTION_PROVIDER_STORAGE_KEY = "chamilo.ai.open_answer.provider"
 
 function getQueryValue(value) {
   return Array.isArray(value) ? value[0] : value
@@ -1070,11 +1445,46 @@ function getContextParams() {
     sid: getQueryValue(route.query.sid),
     gid: getQueryValue(route.query.gid),
     origin: getQueryValue(route.query.origin),
+    lp_init: getQueryValue(route.query.lp_init),
     learnpath_id: getQueryValue(route.query.learnpath_id),
     learnpath_item_id: getQueryValue(route.query.learnpath_item_id),
     learnpath_item_view_id: getQueryValue(route.query.learnpath_item_view_id),
+    isStudentView: getQueryValue(route.query.isStudentView),
   }
 }
+
+
+function isEmbeddedInLearnpath() {
+  if (typeof window === "undefined") {
+    return false
+  }
+
+  try {
+    if (window.parent && window.parent !== window) {
+      const parentPath = window.parent.location?.pathname || ""
+      const referrer = document.referrer || ""
+
+      return parentPath.includes("/main/lp/")
+        || parentPath.includes("/main/newscorm/")
+        || referrer.includes("/main/lp/")
+        || referrer.includes("/main/newscorm/")
+    }
+  } catch (error) {
+    return (document.referrer || "").includes("/main/lp/")
+      || (document.referrer || "").includes("/main/newscorm/")
+  }
+
+  return false
+}
+
+const isLearnpathContext = computed(() => {
+  const origin = String(getQueryValue(route.query.origin) || "")
+
+  return origin === "learnpath"
+    || Boolean(getQueryValue(route.query.lp_init))
+    || Boolean(getQueryValue(route.query.learnpath_id))
+    || isEmbeddedInLearnpath()
+})
 
 function getBaseRouteParams() {
   return {
@@ -1097,6 +1507,87 @@ function getAttemptId() {
   return Number(route.params.attemptId || 0)
 }
 
+function getCourseId() {
+  return Number(getQueryValue(route.query.cid) || 0)
+}
+
+function getCourseHomeQuery() {
+  const query = {}
+  const sid = getQueryValue(route.query.sid)
+
+  if (
+    sid !== undefined
+    && sid !== null
+    && String(sid) !== ""
+    && Number(sid) > 0
+  ) {
+    query.sid = sid
+  }
+
+  return query
+}
+
+const showStandaloneFinalActions = computed(() => {
+  return finalActions.value?.showFinalActions === true && !isLearnpathContext.value && getCourseId() > 0
+})
+
+function buildPlayerQuery(startResponse = null) {
+  const query = { ...getContextParams() }
+  const attemptId = Number(startResponse?.attemptId || 0)
+
+  if (attemptId > 0) {
+    query.attemptId = attemptId
+  }
+
+  return query
+}
+
+function openLegacyRuntime(startResponse = null) {
+  const overviewUrl = startResponse?.legacyUrls?.overview || startResponse?.legacyUrls?.exercise || ""
+  if (overviewUrl && typeof window !== "undefined") {
+    window.location.href = overviewUrl
+
+    return true
+  }
+
+  return false
+}
+
+async function startAnotherAttempt() {
+  const exerciseId = getExerciseId()
+  if (exerciseId <= 0 || !finalActions.value?.canTryAgain) {
+    return
+  }
+
+  isStartingAttempt.value = true
+  errorMessage.value = ""
+
+  try {
+    const response = await exerciseService.startExerciseAttempt({ exerciseId }, getContextParams(), exerciseId)
+
+    if (response?.success) {
+      await router.push({
+        name: "ExercisePlayer",
+        params: getPlayerRouteParams(),
+        query: buildPlayerQuery(response),
+      })
+
+      return
+    }
+
+    if (true === response?.usesLegacyRuntime && openLegacyRuntime(response)) {
+      return
+    }
+
+    errorMessage.value = response?.message ? t(response.message) : t("Could not start the attempt")
+  } catch (error) {
+    console.error("Error starting another exercise attempt from result", error)
+    errorMessage.value = t("Could not start the attempt")
+  } finally {
+    isStartingAttempt.value = false
+  }
+}
+
 async function loadResult() {
   const exerciseId = getExerciseId()
   const attemptId = getAttemptId()
@@ -1116,7 +1607,10 @@ async function loadResult() {
     visibility.value = response.visibility || {}
     questions.value = Array.isArray(response.questions) ? response.questions : []
     ranking.value = Array.isArray(response.ranking) ? response.ranking : []
+    finalActions.value = response.finalActions || {}
+    aiCorrection.value = response.aiCorrection || {}
     initializeCorrectionForms()
+    initializeAiCorrectionForms()
     scheduleAutoPrintIfRequested()
   } catch (error) {
     console.error("Error loading exercise result", error)
@@ -1442,6 +1936,194 @@ function initializeCorrectionForms() {
   correctionForms.value = forms
 }
 
+function initializeAiCorrectionForms() {
+  const forms = {}
+  const savedProvider = getSavedAiCorrectionProvider()
+
+  for (const question of questions.value) {
+    if (!question.canCorrect) {
+      continue
+    }
+
+    forms[question.id] = {
+      provider: savedProvider,
+      providers: [],
+      providersLoaded: false,
+      isLoadingProviders: false,
+      isGenerating: false,
+      score: null,
+      feedback: "",
+      error: "",
+      providerHint: "",
+    }
+  }
+
+  aiCorrectionForms.value = forms
+}
+
+function canUseAiCorrection(question) {
+  return Boolean(aiCorrection.value?.enabled && question?.canCorrect && aiCorrectionForms.value[question.id])
+}
+
+function aiCorrectionFeedbackInputId(question) {
+  return `ai_feedback_${Number(question.id || 0)}`
+}
+
+function getSavedAiCorrectionProvider() {
+  if (typeof window === "undefined") {
+    return ""
+  }
+
+  try {
+    return window.localStorage.getItem(AI_CORRECTION_PROVIDER_STORAGE_KEY) || ""
+  } catch (error) {
+    return ""
+  }
+}
+
+function saveAiCorrectionProvider(question) {
+  const state = aiCorrectionForms.value[question.id]
+  if (!state || typeof window === "undefined") {
+    return
+  }
+
+  try {
+    window.localStorage.setItem(AI_CORRECTION_PROVIDER_STORAGE_KEY, state.provider || "")
+  } catch (error) {
+    // Ignore local storage failures.
+  }
+}
+
+async function loadAiCorrectionProviders(question) {
+  const state = aiCorrectionForms.value[question.id]
+  if (!state || state.providersLoaded || state.isLoadingProviders) {
+    return
+  }
+
+  state.isLoadingProviders = true
+  state.error = ""
+
+  try {
+    const response = await fetch("/ai/text_providers", {
+      credentials: "same-origin",
+      headers: {
+        Accept: "application/json",
+      },
+      method: "GET",
+    })
+    const data = await response.json().catch(() => ({}))
+
+    if (!response.ok) {
+      throw new Error(data?.error || data?.message || "Could not load AI providers")
+    }
+
+    state.providers = Array.isArray(data.providers)
+      ? data.providers.filter((provider) => provider?.key).map((provider) => ({
+          key: String(provider.key),
+          label: String(provider.label || provider.key),
+        }))
+      : []
+    state.providersLoaded = true
+  } catch (error) {
+    console.error("Error loading AI correction providers", error)
+    state.providers = []
+    state.providersLoaded = true
+    state.providerHint = t("Could not load AI providers")
+  } finally {
+    state.isLoadingProviders = false
+  }
+}
+
+async function generateAiCorrection(question) {
+  const state = aiCorrectionForms.value[question.id]
+  const questionId = Number(question?.id || 0)
+  const attemptId = getAttemptId()
+  const courseId = getCourseId()
+
+  if (!state || !canUseAiCorrection(question) || questionId <= 0 || attemptId <= 0 || courseId <= 0) {
+    return
+  }
+
+  await loadAiCorrectionProviders(question)
+
+  state.isGenerating = true
+  state.error = ""
+  state.providerHint = ""
+
+  const payload = new URLSearchParams({
+    exeId: String(attemptId),
+    questionId: String(questionId),
+    courseId: String(courseId),
+  })
+
+  if (state.provider) {
+    payload.set("ai_provider", state.provider)
+  }
+
+  try {
+    const response = await fetch("/ai/open_answer_grade", {
+      body: payload,
+      credentials: "same-origin",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      method: "POST",
+    })
+    const text = await response.text()
+    let data = {}
+
+    try {
+      data = JSON.parse(text)
+    } catch (error) {
+      data = {}
+    }
+
+    if (!response.ok) {
+      throw new Error(data?.error || data?.text || data?.message || text || "Could not generate AI suggestion")
+    }
+
+    state.score = normalizeAiCorrectionScore(data?.score, question)
+    state.feedback = String(data?.feedback || "")
+    state.providerHint = data?.provider_used ? `${t("Provider used")}: ${data.provider_used}` : ""
+  } catch (error) {
+    console.error("Error generating AI correction suggestion", error)
+    state.error = error?.message || t("Could not generate AI suggestion")
+  } finally {
+    state.isGenerating = false
+  }
+}
+
+function normalizeAiCorrectionScore(value, question) {
+  const score = Number(value)
+  if (!Number.isFinite(score)) {
+    return null
+  }
+
+  const maxScore = Number(question?.maxScore || 0)
+  if (maxScore <= 0) {
+    return Math.max(0, score)
+  }
+
+  return Math.min(Math.max(0, score), maxScore)
+}
+
+function applyAiCorrectionSuggestion(question) {
+  const correctionForm = correctionForms.value[question.id]
+  const aiForm = aiCorrectionForms.value[question.id]
+  if (!correctionForm || !aiForm) {
+    return
+  }
+
+  if (aiForm.score !== null) {
+    correctionForm.marks = aiForm.score
+  }
+
+  if (aiForm.feedback) {
+    correctionForm.teacherComment = aiForm.feedback
+  }
+}
+
 function correctionScoreInputId(question) {
   return `correction_score_${Number(question.id || 0)}`
 }
@@ -1611,7 +2293,8 @@ watch(
 
 @media print {
   .exercise-result-toolbar,
-  .exercise-result-correction-form {
+  .exercise-result-correction-form,
+  .exercise-result-final-actions {
     display: none !important;
   }
 
@@ -1662,7 +2345,8 @@ watch(
   }
 
   body:has(.exercise-result-print-mode) .exercise-result-toolbar,
-  body:has(.exercise-result-print-mode) .exercise-result-correction-form {
+  body:has(.exercise-result-print-mode) .exercise-result-correction-form,
+  body:has(.exercise-result-print-mode) .exercise-result-final-actions {
     display: none !important;
   }
 }

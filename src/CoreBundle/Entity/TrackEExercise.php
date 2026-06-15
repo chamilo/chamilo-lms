@@ -354,6 +354,18 @@ class TrackEExercise
         return $this;
     }
 
+    public function getBlockedCategories(): ?string
+    {
+        return $this->blockedCategories;
+    }
+
+    public function setBlockedCategories(?string $blockedCategories): self
+    {
+        $this->blockedCategories = $blockedCategories;
+
+        return $this;
+    }
+
     public function getExeId(): int
     {
         return $this->exeId;

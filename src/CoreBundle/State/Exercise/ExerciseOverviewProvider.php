@@ -209,7 +209,7 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
 
         if (null !== $session) {
             $queryBuilder
-                ->andWhere('IDENTITY(links.session) = :sessionId')
+                ->andWhere('(IDENTITY(links.session) = :sessionId OR links.session IS NULL)')
                 ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
             ;
         } else {
@@ -263,7 +263,7 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
             ->from(TrackEExercise::class, 'attempt')
             ->andWhere('IDENTITY(attempt.quiz) = :exerciseId')
             ->andWhere('IDENTITY(attempt.course) = :courseId')
-            ->andWhere("attempt.status = ''")
+            ->andWhere("(attempt.status = '' OR attempt.status = 'completed')")
             ->setParameter('exerciseId', (int) $quiz->getIid(), Types::INTEGER)
             ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
         ;
@@ -294,7 +294,7 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('attempt')
             ->from(TrackEExercise::class, 'attempt')
-            ->andWhere("attempt.status = ''")
+            ->andWhere("(attempt.status = '' OR attempt.status = 'completed')")
             ->andWhere('IDENTITY(attempt.user) = :userId')
             ->andWhere('IDENTITY(attempt.quiz) = :exerciseId')
             ->andWhere('IDENTITY(attempt.course) = :courseId')
@@ -327,6 +327,7 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
             }
 
             $maxScore = $attempt->getMaxScore();
+            $revised = $this->isAttemptRevised((int) $attempt->getExeId());
             $items[] = [
                 'attemptId' => (int) $attempt->getExeId(),
                 'number' => $total - $index,
@@ -335,7 +336,8 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
                 'score' => round($attempt->getScore(), 2),
                 'maxScore' => round($maxScore, 2),
                 'percentage' => 0 < $maxScore ? round(($attempt->getScore() / $maxScore) * 100, 2) : 0.0,
-                'revised' => $this->isAttemptRevised((int) $attempt->getExeId()),
+                'revised' => $revised,
+                'showValidationStatus' => $revised || $this->hasPendingManualCorrection($attempt),
             ];
         }
 
@@ -355,6 +357,12 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
         ;
 
         return 0 < (int) $total;
+    }
+
+
+    private function hasPendingManualCorrection(TrackEExercise $attempt): bool
+    {
+        return '' !== trim($attempt->getQuestionsToCheck(), " \t\n\r\0\x0B,");
     }
 
     private function shouldShowScoreColumn(CQuiz $quiz, int $attemptCount): bool

@@ -2,8 +2,9 @@
   <section class="space-y-5">
     <div class="flex flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm w-fit">
       <BaseButton
-        :label="t('Back to exercises')"
-        :route="{ name: 'ExerciseList', params: route.params, query: getContextParams() }"
+        :label="backButtonLabel"
+        :route="learningPathContext ? null : { name: 'ExerciseList', params: route.params, query: getContextParams() }"
+        :to-url="learningPathContext ? learningPathBackUrl : null"
         icon="back"
         only-icon
         size="small"
@@ -188,7 +189,7 @@
                 id="exercise-random"
                 v-model="form.random"
                 :disabled="isFieldLocked('random')"
-                :help-text="t('Use 0 to keep all available questions. Use -1 for all questions where legacy accepts it.')"
+                :help-text="t('Use 0 to keep all available questions. Use -1 where all available questions are allowed.')"
                 :label="t('Random questions')"
                 name="random"
                 :min="-1"
@@ -419,7 +420,7 @@
               id="exercise-expired-time"
               v-model="form.expiredTime"
               :disabled="isFieldLocked('expiredTime')"
-              :help-text="t('Legacy stores this value as total duration in minutes.')"
+              :help-text="t('This value is stored as total duration in minutes.')"
               :label="t('Total duration in minutes of the test')"
               name="expiredTime"
               :min="0"
@@ -446,6 +447,46 @@
             :min="0"
           />
           <p class="-mt-3 text-sm text-gray-50">%</p>
+
+          <div
+            v-if="gradebookCategoryOptions.length > 0"
+            class="space-y-3 rounded-lg border border-gray-20 bg-gray-5 p-3"
+          >
+            <h3 class="text-sm font-semibold text-gray-90">{{ t("Assessment") }}</h3>
+            <BaseCheckbox
+              id="exercise-add-to-gradebook"
+              v-model="form.addToGradebook"
+              :label="t('Add this test to the assessment tool')"
+              name="addToGradebook"
+            />
+            <div
+              v-if="form.addToGradebook"
+              class="grid gap-4 md:grid-cols-3"
+            >
+              <BaseSelect
+                id="exercise-gradebook-category"
+                v-model="form.gradebookCategoryId"
+                :label="t('Assessment')"
+                name="gradebookCategoryId"
+                :options="gradebookCategoryOptions"
+                option-label="label"
+                option-value="value"
+              />
+              <BaseInputNumber
+                id="exercise-gradebook-weight"
+                v-model="form.gradebookWeight"
+                :label="t('Weight')"
+                name="gradebookWeight"
+                :min="0"
+              />
+              <BaseCheckbox
+                id="exercise-gradebook-visible"
+                v-model="form.gradebookVisible"
+                :label="t('Visible')"
+                name="gradebookVisible"
+              />
+            </div>
+          </div>
 
           <BaseTinyEditor
             editor-id="exercise-text-when-finished"
@@ -607,8 +648,9 @@
 
       <div class="flex flex-col-reverse items-stretch gap-3 pt-4 md:flex-row md:items-center md:justify-end">
         <BaseButton
-          :label="t('Cancel')"
-          :route="{ name: 'ExerciseList', params: route.params, query: getContextParams() }"
+          :label="learningPathContext ? t('Cancel and return to learning path') : t('Cancel')"
+          :route="learningPathContext ? null : { name: 'ExerciseList', params: route.params, query: getContextParams() }"
+          :to-url="learningPathContext ? learningPathBackUrl : null"
           icon="close"
           type="black"
         />
@@ -768,6 +810,10 @@ const form = reactive({
   preventBackwards: false,
   hideAttemptsTable: false,
   autoLaunch: false,
+  addToGradebook: false,
+  gradebookCategoryId: null,
+  gradebookWeight: 100,
+  gradebookVisible: true,
   notifications: [],
   accessCondition: "",
   sound: "",
@@ -805,6 +851,9 @@ const questionsRoute = computed(() => ({
   params: { ...route.params, exerciseId: exerciseId.value },
   query: getContextParams(),
 }))
+const learningPathContext = computed(() => isLearningPathContext())
+const learningPathBackUrl = computed(() => buildLearningPathBackUrl())
+const backButtonLabel = computed(() => (learningPathContext.value ? t("Back to learning path") : t("Back to exercises")))
 const typeOptions = computed(() => {
   const items = (options.value.typeOptions || []).map((option) => ({
     value: Number(option.value),
@@ -824,6 +873,12 @@ const categoryOptions = computed(() => [
     label: option.label,
   })),
 ])
+const gradebookCategoryOptions = computed(() =>
+  (options.value.gradebookCategoryOptions || []).map((option) => ({
+    value: Number(option.value),
+    label: option.label,
+  })),
+)
 const languageOptions = computed(() =>
   (options.value.languageOptions || []).map((option) => ({
     value: option.value || "",
@@ -893,11 +948,44 @@ function getQueryValue(value) {
 }
 
 function getContextParams() {
-  return {
+  const params = {
     cid: getQueryValue(route.query.cid),
     sid: getQueryValue(route.query.sid),
     gid: getQueryValue(route.query.gid),
   }
+
+  for (const key of ["origin", "lp_id", "learnpath_id", "node", "type", "returnToLp", "isStudentView", "gradebook"]) {
+    const value = getQueryValue(route.query[key])
+    if (value !== undefined && value !== null && String(value) !== "") {
+      params[key] = value
+    }
+  }
+
+  return params
+}
+
+function isLearningPathContext() {
+  const origin = String(getQueryValue(route.query.origin) || "").toLowerCase()
+  const returnToLp = String(getQueryValue(route.query.returnToLp) || "").toLowerCase()
+  const lpId = Number(getQueryValue(route.query.lp_id) || getQueryValue(route.query.learnpath_id) || 0)
+
+  return lpId > 0 && (origin === "learnpath" || ["1", "true", "yes"].includes(returnToLp))
+}
+
+function buildLearningPathBackUrl() {
+  const params = new URLSearchParams()
+  params.set("action", "build")
+  params.set("type", getQueryValue(route.query.type) || "step")
+  params.set("lp_id", getQueryValue(route.query.lp_id) || getQueryValue(route.query.learnpath_id) || "0")
+
+  for (const key of ["cid", "sid", "gid", "gradebook", "origin", "node", "isStudentView"]) {
+    const value = getQueryValue(route.query[key])
+    if (value !== undefined && value !== null && String(value) !== "") {
+      params.set(key, String(value))
+    }
+  }
+
+  return `/main/lp/lp_controller.php?${params.toString()}#resource_tab-2`
 }
 
 function fillForm(data) {
@@ -924,6 +1012,10 @@ function fillForm(data) {
   form.preventBackwards = true === data.preventBackwards
   form.hideAttemptsTable = true === data.hideAttemptsTable
   form.autoLaunch = true === data.autoLaunch
+  form.addToGradebook = true === data.addToGradebook
+  form.gradebookCategoryId = data.gradebookCategoryId ? Number(data.gradebookCategoryId) : null
+  form.gradebookWeight = Number(data.gradebookWeight || 100)
+  form.gradebookVisible = false !== data.gradebookVisible
   form.notifications = normalizeNotificationValues(data.notifications || [])
   form.accessCondition = data.accessCondition || ""
   form.sound = data.sound || ""
@@ -1133,6 +1225,10 @@ function buildPayload() {
     preventBackwards: form.preventBackwards,
     hideAttemptsTable: form.hideAttemptsTable,
     autoLaunch: form.autoLaunch,
+    addToGradebook: form.addToGradebook,
+    gradebookCategoryId: form.addToGradebook ? Number(form.gradebookCategoryId || 0) : null,
+    gradebookWeight: Number(form.gradebookWeight || 0),
+    gradebookVisible: form.gradebookVisible,
     notifications: normalizeNotificationValues(form.notifications),
     accessCondition: form.accessCondition,
     sound: form.sound,

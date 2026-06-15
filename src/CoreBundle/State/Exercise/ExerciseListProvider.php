@@ -10,10 +10,13 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseList;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CQuiz;
+use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuizCategory;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use DateTimeImmutable;
@@ -35,6 +38,9 @@ final readonly class ExerciseListProvider implements ProviderInterface
 {
     private const VISIBILITY_PUBLISHED = 2;
     private const CSRF_TOKEN_ID = 'exercise_list_action';
+    private const LINK_TYPE_EXERCISE = 1;
+    private const LP_ITEM_TYPE_QUIZ = 'quiz';
+    private const LP_READ_ONLY_MESSAGE = 'This exercise has been included in a learning path, so it cannot be accessed by students directly from here. If you want to put the same exercise available through the exercises tool, please make a copy of the current exercise using the copy icon.';
 
     public function __construct(
         private RequestStack $requestStack,
@@ -69,7 +75,7 @@ final readonly class ExerciseListProvider implements ProviderInterface
         $response = new ExerciseList();
         $response->items = $items;
         $response->categories = $this->getCategories($course);
-        $response->settings = $this->getSettings();
+        $response->settings = $this->getSettings($course);
         $response->submittedCsrfToken = (string) $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID);
         $response->totalItems = \count($items);
         $response->canManage = $canManage;
@@ -144,7 +150,7 @@ final readonly class ExerciseListProvider implements ProviderInterface
 
         if (null !== $session) {
             $queryBuilder
-                ->andWhere('IDENTITY(links.session) = :sessionId')
+                ->andWhere('(IDENTITY(links.session) = :sessionId OR links.session IS NULL)')
                 ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
             ;
         } else {
@@ -211,9 +217,17 @@ final readonly class ExerciseListProvider implements ProviderInterface
         $quizIds = array_keys($quizzes);
         $questionCounts = $this->getQuestionCounts($quizIds);
         $attemptCounts = $this->getAttemptCounts($quizIds, $course, $session);
+        $learningPathUsage = $this->getLearningPathUsage($quizIds);
+        $latestAttempts = $canManage ? [] : $this->getLatestAttempts($quizIds, $course, $session);
+        $forceEditLearningPathExercises = $this->isSettingEnabled('lp.force_edit_exercise_in_lp');
         $items = [];
 
         foreach ($quizzes as $quizId => $quiz) {
+            $isLinkedToLearningPath = 0 < ($learningPathUsage[$quizId]['count'] ?? 0);
+            if (!$canManage && $isLinkedToLearningPath) {
+                continue;
+            }
+
             $visible = self::VISIBILITY_PUBLISHED === ($linkVisibilityByQuiz[$quizId] ?? self::VISIBILITY_PUBLISHED);
             $items[] = $this->normalizeQuiz(
                 $quiz,
@@ -221,10 +235,57 @@ final readonly class ExerciseListProvider implements ProviderInterface
                 $questionCounts[$quizId] ?? 0,
                 $attemptCounts[$quizId] ?? 0,
                 $canManage,
+                $course,
+                $latestAttempts[$quizId] ?? null,
+                $isLinkedToLearningPath,
+                $forceEditLearningPathExercises,
+                (int) ($learningPathUsage[$quizId]['count'] ?? 0),
             );
         }
 
         return $items;
+    }
+
+    /**
+     * @param array<int, int> $quizIds
+     *
+     * @return array<int, array{count: int}>
+     */
+    private function getLearningPathUsage(array $quizIds): array
+    {
+        if ([] === $quizIds) {
+            return [];
+        }
+
+        $exerciseIds = array_map(static fn (int $quizId): string => (string) $quizId, $quizIds);
+        $rows = $this->entityManager->createQueryBuilder()
+            ->select('lpItem.path AS exercisePath')
+            ->addSelect('lpItem.ref AS exerciseRef')
+            ->addSelect('COUNT(lpItem.iid) AS itemCount')
+            ->from(CLpItem::class, 'lpItem')
+            ->andWhere('lpItem.itemType = :itemType')
+            ->andWhere('lpItem.path IN (:exerciseIds) OR lpItem.ref IN (:exerciseIds)')
+            ->setParameter('itemType', self::LP_ITEM_TYPE_QUIZ, Types::STRING)
+            ->setParameter('exerciseIds', $exerciseIds, ArrayParameterType::STRING)
+            ->groupBy('lpItem.path')
+            ->addGroupBy('lpItem.ref')
+            ->getQuery()
+            ->getArrayResult()
+        ;
+
+        $usage = [];
+        foreach ($rows as $row) {
+            $exerciseId = (int) ($row['exercisePath'] ?: $row['exerciseRef']);
+            if (0 >= $exerciseId) {
+                continue;
+            }
+
+            $usage[$exerciseId] = [
+                'count' => ($usage[$exerciseId]['count'] ?? 0) + (int) $row['itemCount'],
+            ];
+        }
+
+        return $usage;
     }
 
     /**
@@ -298,6 +359,65 @@ final readonly class ExerciseListProvider implements ProviderInterface
     }
 
     /**
+     * @param array<int, int> $quizIds
+     *
+     * @return array<int, TrackEExercise>
+     */
+    private function getLatestAttempts(array $quizIds, Course $course, ?Session $session): array
+    {
+        if ([] === $quizIds) {
+            return [];
+        }
+
+        $user = $this->security->getUser();
+        if (!$user instanceof User || null === $user->getId()) {
+            return [];
+        }
+
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('attempt')
+            ->from(TrackEExercise::class, 'attempt')
+            ->andWhere('IDENTITY(attempt.quiz) IN (:quizIds)')
+            ->andWhere('IDENTITY(attempt.course) = :courseId')
+            ->andWhere('IDENTITY(attempt.user) = :userId')
+            ->setParameter('quizIds', $quizIds, ArrayParameterType::INTEGER)
+            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
+            ->setParameter('userId', (int) $user->getId(), Types::INTEGER)
+            ->orderBy('attempt.exeDate', 'DESC')
+        ;
+
+        if (null !== $session) {
+            $queryBuilder
+                ->andWhere('IDENTITY(attempt.session) = :sessionId')
+                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
+            ;
+        } else {
+            $queryBuilder->andWhere('attempt.session IS NULL');
+        }
+
+        $attempts = $queryBuilder->getQuery()->getResult();
+        $latestAttempts = [];
+
+        foreach ($attempts as $attempt) {
+            if (!$attempt instanceof TrackEExercise) {
+                continue;
+            }
+
+            $quiz = $attempt->getQuiz();
+            if (!$quiz instanceof CQuiz || null === $quiz->getIid()) {
+                continue;
+            }
+
+            $quizId = (int) $quiz->getIid();
+            if (!isset($latestAttempts[$quizId])) {
+                $latestAttempts[$quizId] = $attempt;
+            }
+        }
+
+        return $latestAttempts;
+    }
+
+    /**
      * @return array<int, array<string, mixed>>
      */
     private function getCategories(Course $course): array
@@ -335,7 +455,7 @@ final readonly class ExerciseListProvider implements ProviderInterface
     /**
      * @return array<string, mixed>
      */
-    private function getSettings(): array
+    private function getSettings(Course $course): array
     {
         return [
             'allowExerciseCategories' => $this->isSettingEnabled('exercise.allow_exercise_categories'),
@@ -343,8 +463,8 @@ final readonly class ExerciseListProvider implements ProviderInterface
             'disableNewAttempts' => $this->isSettingEnabled('exercise.exercises_disable_new_attempts'),
             'hideAttemptsTableOnStartPage' => $this->isSettingEnabled('exercise.quiz_hide_attempts_table_on_start_page'),
             'limitTeacherAccess' => $this->isSettingEnabled('exercise.limit_exercise_teacher_access'),
-            'exerciseGeneratorEnabled' => $this->isSettingEnabled('ai_helpers.enable_ai_helpers')
-                && $this->isSettingEnabled('ai_helpers.exercise_generator'),
+            'exerciseGeneratorEnabled' => $this->isCourseSettingEnabled($course, 'exercise_generator'),
+            'canCleanAllResults' => $this->canCleanResults(),
         ];
     }
 
@@ -357,12 +477,21 @@ final readonly class ExerciseListProvider implements ProviderInterface
         int $questionCount,
         int $attemptCount,
         bool $canManage,
+        Course $course,
+        ?TrackEExercise $latestAttempt = null,
+        bool $isLinkedToLearningPath = false,
+        bool $forceEditLearningPathExercises = false,
+        int $learningPathUsageCount = 0,
     ): array {
         $category = $quiz->getQuizCategory();
         $startTime = $quiz->getStartTime();
         $endTime = $quiz->getEndTime();
         $availabilityStatus = $this->getAvailabilityStatus($startTime, $endTime);
         $canRunRestrictedActions = $this->canRunRestrictedActions();
+        $canCleanResults = $this->canCleanResults();
+        $isGradebookLocked = $this->isGradebookLocked((int) $quiz->getIid(), $course);
+        $isLimitTeacherAccess = $this->isSettingEnabled('exercise.limit_exercise_teacher_access');
+        $isReadOnlyFromLearningPath = $isLinkedToLearningPath && !$forceEditLearningPathExercises;
 
         return [
             'iid' => (int) $quiz->getIid(),
@@ -379,15 +508,54 @@ final readonly class ExerciseListProvider implements ProviderInterface
             'passPercentage' => $quiz->getPassPercentage(),
             'questionCount' => $questionCount,
             'attemptCount' => $attemptCount,
+            'latestAttempt' => $this->normalizeLatestAttempt($latestAttempt),
+            'isLinkedToLearningPath' => $isLinkedToLearningPath,
+            'isReadOnlyFromLearningPath' => $isReadOnlyFromLearningPath,
+            'learningPathUsageCount' => $learningPathUsageCount,
+            'learningPathReadOnlyMessage' => $isLinkedToLearningPath ? self::LP_READ_ONLY_MESSAGE : '',
             'canOpen' => $visible || $canManage,
             'canOverview' => $visible || $canManage,
             'canEdit' => $canManage,
-            'canConfigure' => $canManage,
-            'canReport' => $canManage,
-            'canExport' => $canManage,
+            'autoLaunch' => $quiz->isAutoLaunch(),
+            'isGradebookLocked' => $isGradebookLocked,
+            'canConfigure' => $canManage && (!$isLimitTeacherAccess || $this->security->isGranted('ROLE_ADMIN')),
+            'canReport' => $canManage && (!$isLimitTeacherAccess || $this->security->isGranted('ROLE_ADMIN')),
+            'canExport' => $canManage && $canRunRestrictedActions,
             'canCopy' => $canManage,
-            'canDelete' => $canManage && $canRunRestrictedActions,
-            'canToggleVisibility' => $canManage && $canRunRestrictedActions,
+            'canDelete' => $canManage && $canRunRestrictedActions && !$isGradebookLocked,
+            'canDeleteDisabled' => $canManage && $canRunRestrictedActions && $isGradebookLocked,
+            'canCleanResults' => $canManage && $canCleanResults && !$isGradebookLocked,
+            'canCleanResultsDisabled' => $canManage && $canCleanResults && $isGradebookLocked,
+            'canToggleAutoLaunch' => $canManage,
+            'canToggleVisibility' => $canManage && $canRunRestrictedActions && !$isLinkedToLearningPath,
+            'canToggleVisibilityDisabled' => $canManage && $canRunRestrictedActions && $isLinkedToLearningPath,
+        ];
+    }
+
+    /**
+     * @return array<string, mixed>|null
+     */
+    private function normalizeLatestAttempt(?TrackEExercise $attempt): ?array
+    {
+        if (null === $attempt) {
+            return null;
+        }
+
+        $maxScore = $attempt->getMaxScore();
+        $score = $attempt->getScore();
+        $percentage = 0.0;
+
+        if (0.0 < $maxScore) {
+            $percentage = ($score * 100) / $maxScore;
+        }
+
+        return [
+            'id' => $attempt->getExeId(),
+            'score' => $score,
+            'maxScore' => $maxScore,
+            'percentage' => $percentage,
+            'date' => $this->formatDate($attempt->getExeDate()),
+            'status' => $attempt->getStatus(),
         ];
     }
 
@@ -406,7 +574,6 @@ final readonly class ExerciseListProvider implements ProviderInterface
         return 'open';
     }
 
-
     private function canRunRestrictedActions(): bool
     {
         if (!$this->isSettingEnabled('exercise.limit_exercise_teacher_access')) {
@@ -416,6 +583,45 @@ final readonly class ExerciseListProvider implements ProviderInterface
         return $this->security->isGranted('ROLE_ADMIN');
     }
 
+    private function canCleanResults(): bool
+    {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return true;
+        }
+
+        return !$this->isSettingEnabled('exercise.limit_exercise_teacher_access')
+            && !$this->isSettingEnabled('exercise.disable_clean_exercise_results_for_teachers');
+    }
+
+    private function isGradebookLocked(int $exerciseId, Course $course): bool
+    {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return false;
+        }
+
+        if (!$this->isSettingEnabled('gradebook.gradebook_locking_enabled')) {
+            return false;
+        }
+
+        $lockedLink = $this->entityManager->createQueryBuilder()
+            ->select('link.id')
+            ->from(GradebookLink::class, 'link')
+            ->andWhere('link.locked = :locked')
+            ->andWhere('link.refId = :exerciseId')
+            ->andWhere('link.type = :linkType')
+            ->andWhere('IDENTITY(link.course) = :courseId')
+            ->setParameter('locked', 1, Types::INTEGER)
+            ->setParameter('exerciseId', $exerciseId, Types::INTEGER)
+            ->setParameter('linkType', self::LINK_TYPE_EXERCISE, Types::INTEGER)
+            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+
+        return null !== $lockedLink;
+    }
+
     private function formatDate(?DateTimeInterface $date): ?string
     {
         if (null === $date) {
@@ -423,6 +629,17 @@ final readonly class ExerciseListProvider implements ProviderInterface
         }
 
         return $date->format(DateTimeInterface::ATOM);
+    }
+
+    private function isCourseSettingEnabled(Course $course, string $name): bool
+    {
+        if (!\function_exists('api_get_course_setting')) {
+            return false;
+        }
+
+        $value = api_get_course_setting($name, $course);
+
+        return \in_array(strtolower((string) $value), ['1', 'true', 'yes', 'on'], true);
     }
 
     private function isSettingEnabled(string $name): bool

@@ -20,14 +20,14 @@
         @click="startCreate"
       />
       <BaseButton
-        v-if="isQuestionCategoryPage && legacyUrls.export"
+        v-if="isQuestionCategoryPage && categories.length > 0"
         class="exercise-category-toolbar__button"
         :label="t('CSV export')"
-        :to-url="legacyUrls.export"
         icon="export"
         only-icon
         size="small"
         type="primary-text"
+        @click="exportQuestionCategoriesCsv"
       />
       <BaseButton
         v-if="isQuestionCategoryPage"
@@ -230,7 +230,6 @@ const route = useRoute()
 const { requireConfirmation } = useConfirmation()
 
 const categories = ref([])
-const legacyUrls = ref({})
 const csrfToken = ref("")
 const isLoading = ref(false)
 const isSaving = ref(false)
@@ -275,7 +274,6 @@ async function loadCategories() {
   try {
     const response = await exerciseService.getExerciseCategories(props.categoryType, getContextParams())
     categories.value = Array.isArray(response.items) ? response.items : []
-    legacyUrls.value = response.legacyUrls || {}
     csrfToken.value = response.csrfToken || ""
   } catch (error) {
     console.error("Error loading exercise categories", error)
@@ -321,6 +319,33 @@ function startImport() {
 function cancelImport() {
   importFile.value = null
   isImportVisible.value = false
+}
+
+function exportQuestionCategoriesCsv() {
+  const rows = [["title", "description"]]
+
+  for (const category of categories.value) {
+    rows.push([
+      displayText(category.title),
+      displayText(category.description),
+    ])
+  }
+
+  const csvContent = rows.map((row) => row.map(escapeCsvValue).join(",")).join("\n")
+  const blob = new Blob([`${csvContent}\n`], { type: "text/csv;charset=utf-8" })
+  const link = document.createElement("a")
+  link.href = URL.createObjectURL(blob)
+  link.download = "question_categories.csv"
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  URL.revokeObjectURL(link.href)
+}
+
+function escapeCsvValue(value) {
+  const stringValue = String(value || "")
+
+  return `"${stringValue.replace(/"/g, '""')}"`
 }
 
 function selectImportFile(event) {

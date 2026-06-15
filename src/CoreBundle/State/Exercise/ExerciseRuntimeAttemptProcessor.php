@@ -33,7 +33,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * Starts or resumes a Vue runtime attempt without submitting answers yet.
+ * Starts or resumes an exercise runtime attempt without submitting answers yet.
  *
  * The goal of this batch is to create the same legacy-compatible attempt shell
  * used by exercise_submit.php: one incomplete row in track_e_exercises with
@@ -51,8 +51,23 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
     private const QUESTION_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED = 4;
     private const QUESTION_SELECTION_CATEGORIES_ORDERED_QUESTIONS_RANDOM = 5;
     private const QUESTION_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM = 6;
+    private const UNIQUE_TYPES = [1, 10, 17, 21];
+    private const MULTIPLE_TYPES = [2, 9, 14];
+    private const TRUE_FALSE_TYPES = [11, 12, 22];
+    private const FILL_BLANK_TYPES = [3, 27];
+    private const MATCHING_TYPES = [4, 19, 24, 25];
+    private const DRAGGABLE_TYPES = [18];
+    private const DROPDOWN_TYPES = [28, 29];
+    private const CALCULATED_TYPES = [16];
+    private const FREE_ANSWER_TYPES = [5];
+    private const ORAL_EXPRESSION_TYPES = [13];
+    private const UPLOAD_ANSWER_TYPES = [23];
+    private const ANNOTATION_TYPES = [20];
+    private const HOTSPOT_TYPES = [6, 26];
     private const PAGE_BREAK = 31;
     private const MEDIA_QUESTION = 15;
+    private const STRUCTURAL_CONTENT_TYPES = [self::MEDIA_QUESTION, self::PAGE_BREAK];
+    private const LEGACY_RUNTIME_REASON_UNSUPPORTED_QUESTION = 'This exercise contains a question type that requires a different test player.';
 
     public function __construct(
         private RequestStack $requestStack,
@@ -79,9 +94,10 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
 
         $course = $this->getCourse($request);
         $session = $this->getSession($request);
-        $canManage = $this->canManageExercises();
+        $canManagePermission = $this->canManageExercises();
+        $runsAsLearner = !$canManagePermission || $this->isLearnerRuntimeRequest($request);
 
-        if (!$canManage && !$this->canViewExercises()) {
+        if (!$canManagePermission && !$this->canViewExercises()) {
             throw new AccessDeniedHttpException('You are not allowed to start this exercise.');
         }
 
@@ -90,9 +106,9 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
             throw new BadRequestHttpException('A valid exercise id is required.');
         }
 
-        $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session, $canManage);
+        $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session, $canManagePermission);
 
-        if ($canManage) {
+        if ($canManagePermission && !$runsAsLearner) {
             return $this->createTeacherPreviewResponse($quiz, $course, $session, $request);
         }
 
@@ -107,7 +123,17 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
                 $course,
                 $session,
                 $request,
-                'This exercise uses a question selection mode that is not supported by the Vue runtime yet.'
+                'This exercise uses a question selection mode that requires a different test player.'
+            );
+        }
+
+        if ($this->hasUnsupportedRuntimeQuestionType($quiz)) {
+            return $this->createLegacyRequiredResponse(
+                $quiz,
+                $course,
+                $session,
+                $request,
+                self::LEGACY_RUNTIME_REASON_UNSUPPORTED_QUESTION
             );
         }
 
@@ -137,6 +163,20 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
         }
 
         $questionIds = $this->buildQuestionList($quiz);
+        if ($this->isQuestionLimitPerDayReached($questionIds, $course, $session, $user)) {
+            return $this->createBlockedResponse(
+                $quiz,
+                $course,
+                $session,
+                $request,
+                sprintf(
+                    'Sorry, you have reached the maximum number of questions (%d) for the day. Please try again tomorrow.',
+                    $this->getCourseSettingInt($course, 'quiz_question_limit_per_day')
+                ),
+                $questionIds
+            );
+        }
+
         $expiredAt = $this->buildExpiredAt($quiz);
         $attempt = (new TrackEExercise())
             ->setSession($session)
@@ -201,6 +241,21 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
             || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
     }
 
+    private function isLearnerRuntimeRequest(Request $request): bool
+    {
+        $origin = (string) $request->query->get('origin', '');
+        $isStudentView = strtolower(trim((string) $request->query->get('isStudentView', '')));
+        $preview = strtolower(trim((string) $request->query->get('preview', '')));
+
+        return 'learnpath' === $origin
+            || $request->query->has('lp_init')
+            || $request->query->has('learnpath_id')
+            || in_array($isStudentView, ['1', 'true', 'yes'], true)
+            || str_starts_with($isStudentView, 'true')
+            || in_array($preview, ['1', 'true', 'yes'], true)
+            || str_starts_with($preview, 'true');
+    }
+
     private function getExerciseFromCurrentContext(int $exerciseId, Course $course, ?Session $session, bool $canManage): CQuiz
     {
         $quiz = $this->quizRepository->find($exerciseId);
@@ -225,7 +280,7 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
 
         if (null !== $session) {
             $queryBuilder
-                ->andWhere('IDENTITY(links.session) = :sessionId')
+                ->andWhere('(IDENTITY(links.session) = :sessionId OR links.session IS NULL)')
                 ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
             ;
         } else {
@@ -260,6 +315,67 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
     private function requiresLegacyQuestionSelection(CQuiz $quiz): bool
     {
         return (int) ($quiz->getQuestionSelectionType() ?? 0) > self::QUESTION_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM;
+    }
+
+    private function hasUnsupportedRuntimeQuestionType(CQuiz $quiz): bool
+    {
+        foreach ($this->getOrderedQuestionRelations($quiz) as $relation) {
+            if (!$relation instanceof CQuizRelQuestion) {
+                continue;
+            }
+
+            $question = $relation->getQuestion();
+            if (!$question instanceof CQuizQuestion) {
+                continue;
+            }
+
+            $type = (int) $question->getType();
+            if (\in_array($type, self::STRUCTURAL_CONTENT_TYPES, true)) {
+                continue;
+            }
+
+            if (!$this->isFinishSupportedQuestionType($type)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function isFinishSupportedQuestionType(int $type): bool
+    {
+        return \in_array($type, self::UNIQUE_TYPES, true)
+            || \in_array($type, self::MULTIPLE_TYPES, true)
+            || \in_array($type, self::TRUE_FALSE_TYPES, true)
+            || \in_array($type, self::FILL_BLANK_TYPES, true)
+            || \in_array($type, self::MATCHING_TYPES, true)
+            || \in_array($type, self::DRAGGABLE_TYPES, true)
+            || \in_array($type, self::DROPDOWN_TYPES, true)
+            || \in_array($type, self::CALCULATED_TYPES, true)
+            || \in_array($type, self::FREE_ANSWER_TYPES, true)
+            || \in_array($type, self::ORAL_EXPRESSION_TYPES, true)
+            || \in_array($type, self::UPLOAD_ANSWER_TYPES, true)
+            || \in_array($type, self::ANNOTATION_TYPES, true)
+            || \in_array($type, self::HOTSPOT_TYPES, true);
+    }
+
+    /**
+     * @return array<int, CQuizRelQuestion>
+     */
+    private function getOrderedQuestionRelations(CQuiz $quiz): array
+    {
+        $relations = $this->entityManager->createQueryBuilder()
+            ->select('relQuestion', 'question')
+            ->from(CQuizRelQuestion::class, 'relQuestion')
+            ->innerJoin('relQuestion.question', 'question')
+            ->andWhere('IDENTITY(relQuestion.quiz) = :exerciseId')
+            ->setParameter('exerciseId', (int) $quiz->getIid(), Types::INTEGER)
+            ->orderBy('relQuestion.questionOrder', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        return array_values(array_filter($relations, static fn (mixed $relation): bool => $relation instanceof CQuizRelQuestion));
     }
 
     private function findIncompleteAttempt(CQuiz $quiz, Course $course, ?Session $session, User $user, Request $request): ?TrackEExercise
@@ -736,6 +852,61 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
         return (float) ($rows[0]['totalScore'] ?? 0.0);
     }
 
+    /**
+     * @param array<int, int> $questionIds
+     */
+    private function isQuestionLimitPerDayReached(array $questionIds, Course $course, ?Session $session, User $user): bool
+    {
+        $limit = $this->getCourseSettingInt($course, 'quiz_question_limit_per_day');
+        if (0 >= $limit || [] === $questionIds) {
+            return false;
+        }
+
+        if (null !== $session) {
+            $answeredQuestionsCount = (int) $this->entityManager->createQueryBuilder()
+                ->select('COUNT(attempt.id)')
+                ->from(TrackEAttempt::class, 'attempt')
+                ->innerJoin('attempt.trackExercise', 'track')
+                ->andWhere('IDENTITY(attempt.user) = :userId')
+                ->andWhere('IDENTITY(track.course) = :courseId')
+                ->andWhere('IDENTITY(track.session) = :sessionId')
+                ->andWhere('attempt.tms > :midnight')
+                ->setParameter('userId', (int) $user->getId(), Types::INTEGER)
+                ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
+                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
+                ->setParameter('midnight', new DateTime('today'), Types::DATETIME_MUTABLE)
+                ->getQuery()
+                ->getSingleScalarResult()
+            ;
+        } else {
+            $answeredQuestionsCount = (int) $this->entityManager->createQueryBuilder()
+                ->select('COUNT(attempt.id)')
+                ->from(TrackEAttempt::class, 'attempt')
+                ->innerJoin('attempt.trackExercise', 'track')
+                ->andWhere('IDENTITY(attempt.user) = :userId')
+                ->andWhere('IDENTITY(track.course) = :courseId')
+                ->andWhere('track.session IS NULL')
+                ->andWhere('attempt.tms > :midnight')
+                ->setParameter('userId', (int) $user->getId(), Types::INTEGER)
+                ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
+                ->setParameter('midnight', new DateTime('today'), Types::DATETIME_MUTABLE)
+                ->getQuery()
+                ->getSingleScalarResult()
+            ;
+        }
+
+        return ($answeredQuestionsCount + \count($questionIds)) > $limit;
+    }
+
+    private function getCourseSettingInt(Course $course, string $settingName): int
+    {
+        if (!\function_exists('api_get_course_setting')) {
+            return 0;
+        }
+
+        return (int) api_get_course_setting($settingName, $course);
+    }
+
     private function buildExpiredAt(CQuiz $quiz): ?DateTime
     {
         $expiredMinutes = (int) $quiz->getExpiredTime();
@@ -769,6 +940,21 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
         return $response;
     }
 
+    /**
+     * @param array<int, int> $questionIds
+     */
+    private function createBlockedResponse(CQuiz $quiz, Course $course, ?Session $session, Request $request, string $message, array $questionIds): ExerciseRuntimeAttempt
+    {
+        $response = $this->createBaseResponse($quiz, $course, $session, $request, $questionIds);
+        $response->success = false;
+        $response->usesLegacyRuntime = false;
+        $response->message = $message;
+        $response->status = 'blocked';
+        $response->canFinish = false;
+
+        return $response;
+    }
+
     private function normalizeAttemptResponse(CQuiz $quiz, Course $course, ?Session $session, Request $request, TrackEExercise $attempt, string $message): ExerciseRuntimeAttempt
     {
         $questionIds = $this->parseQuestionIds((string) $attempt->getDataTracking());
@@ -779,6 +965,7 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
         $response = $this->createBaseResponse($quiz, $course, $session, $request, $questionIds);
         $response->success = true;
         $response->attemptId = (int) $attempt->getExeId();
+        $response->attemptNumber = $this->getAttemptNumber($attempt);
         $response->status = method_exists($attempt, 'getStatus') ? (string) $attempt->getStatus() : self::STATUS_INCOMPLETE;
         $response->message = $message;
         $response->savedAnswers = $this->getSavedAnswers((int) $attempt->getExeId());
@@ -797,6 +984,46 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
         }
 
         return $response;
+    }
+
+    private function getAttemptNumber(TrackEExercise $attempt): int
+    {
+        $quiz = $attempt->getQuiz();
+        $attemptId = (int) $attempt->getExeId();
+        if (null === $quiz || null === $quiz->getIid() || 0 >= $attemptId) {
+            return 0;
+        }
+
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('COUNT(previousAttempt.exeId)')
+            ->from(TrackEExercise::class, 'previousAttempt')
+            ->andWhere('IDENTITY(previousAttempt.quiz) = :exerciseId')
+            ->andWhere('IDENTITY(previousAttempt.course) = :courseId')
+            ->andWhere('IDENTITY(previousAttempt.user) = :userId')
+            ->andWhere('previousAttempt.exeId <= :attemptId')
+            ->andWhere('previousAttempt.origLpId = :lpId')
+            ->andWhere('previousAttempt.origLpItemId = :lpItemId')
+            ->andWhere('previousAttempt.origLpItemViewId = :lpItemViewId')
+            ->setParameter('exerciseId', (int) $quiz->getIid(), Types::INTEGER)
+            ->setParameter('courseId', (int) $attempt->getCourse()->getId(), Types::INTEGER)
+            ->setParameter('userId', (int) $attempt->getUser()->getId(), Types::INTEGER)
+            ->setParameter('attemptId', $attemptId, Types::INTEGER)
+            ->setParameter('lpId', (int) $attempt->getOrigLpId(), Types::INTEGER)
+            ->setParameter('lpItemId', (int) $attempt->getOrigLpItemId(), Types::INTEGER)
+            ->setParameter('lpItemViewId', (int) $attempt->getOrigLpItemViewId(), Types::INTEGER)
+        ;
+
+        $session = $attempt->getSession();
+        if (null !== $session) {
+            $queryBuilder
+                ->andWhere('IDENTITY(previousAttempt.session) = :sessionId')
+                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
+            ;
+        } else {
+            $queryBuilder->andWhere('previousAttempt.session IS NULL');
+        }
+
+        return (int) $queryBuilder->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -831,7 +1058,7 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
     }
 
     /**
-     * @return array<int|string, array<int, array{answer: string, position: int|null}>>
+     * @return array<int|string, array<int, array{answer: string, position: int|null, secondsSpent: int}>>
      */
     private function getSavedAnswers(int $attemptId): array
     {
@@ -839,6 +1066,7 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
             ->select('saved.questionId AS questionId')
             ->addSelect('saved.answer AS answer')
             ->addSelect('saved.position AS position')
+            ->addSelect('saved.secondsSpent AS secondsSpent')
             ->from(TrackEAttempt::class, 'saved')
             ->andWhere('IDENTITY(saved.trackExercise) = :attemptId')
             ->setParameter('attemptId', $attemptId, Types::INTEGER)
@@ -862,6 +1090,7 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
             $savedAnswers[$questionId][] = [
                 'answer' => (string) ($row['answer'] ?? ''),
                 'position' => null !== ($row['position'] ?? null) ? (int) $row['position'] : null,
+                'secondsSpent' => (int) ($row['secondsSpent'] ?? 0),
             ];
         }
 

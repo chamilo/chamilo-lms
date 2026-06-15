@@ -60,6 +60,9 @@ final class ExerciseRuntimeAnswer
     #[Groups(['exercise_runtime_answer:read', 'exercise_runtime_answer:write'])]
     public int $secondsSpent = 0;
 
+    #[Groups(['exercise_runtime_answer:write'])]
+    public string $navigationAction = '';
+
     #[Groups(['exercise_runtime_answer:read'])]
     public bool $success = false;
 

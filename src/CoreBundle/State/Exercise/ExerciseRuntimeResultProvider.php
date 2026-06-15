@@ -23,7 +23,9 @@ use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizQuestionOption;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
+use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Types\Types;
@@ -65,6 +67,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         private CQuizRepository $quizRepository,
         private ResourceNodeRepository $resourceNodeRepository,
         private Security $security,
+        private SettingsManager $settingsManager,
     ) {}
 
     /**
@@ -135,6 +138,8 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         $response->ranking = true === ($visibility['showRanking'] ?? false)
             ? $this->getRanking($quiz, $course, $session, $attempt)
             : [];
+        $response->finalActions = $this->getFinalActions($quiz, $attempt, $course, $session);
+        $response->aiCorrection = $this->getAiCorrectionConfiguration($canManage);
         $response->canManage = $canManage;
 
         return $response;
@@ -183,6 +188,34 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
     }
 
+    /**
+     * @return array<string, mixed>
+     */
+    private function getAiCorrectionConfiguration(bool $canManage): array
+    {
+        $helpersEnabled = $this->isSettingEnabled('ai_helpers.enable_ai_helpers');
+        $openAnswersGraderEnabled = $this->isSettingEnabled('ai_helpers.open_answers_grader');
+
+        return [
+            'enabled' => $canManage && $helpersEnabled && $openAnswersGraderEnabled,
+            'helpersEnabled' => $helpersEnabled,
+            'openAnswersGraderEnabled' => $openAnswersGraderEnabled,
+        ];
+    }
+
+    private function isSettingEnabled(string $settingName): bool
+    {
+        $value = $this->settingsManager->getSetting($settingName, true);
+
+        if (true === $value || 1 === $value) {
+            return true;
+        }
+
+        $normalized = strtolower(trim((string) $value));
+
+        return \in_array($normalized, ['1', 'true', 'yes', 'on'], true);
+    }
+
     private function getExerciseFromCurrentContext(int $exerciseId, Course $course, ?Session $session, bool $canManage): CQuiz
     {
         $quiz = $this->quizRepository->find($exerciseId);
@@ -207,7 +240,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
 
         if (null !== $session) {
             $queryBuilder
-                ->andWhere('IDENTITY(links.session) = :sessionId')
+                ->andWhere('(IDENTITY(links.session) = :sessionId OR links.session IS NULL)')
                 ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
             ;
         } else {
@@ -1810,6 +1843,87 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             31 => 'Page break',
             default => 'Question',
         };
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function getFinalActions(CQuiz $quiz, TrackEExercise $attempt, Course $course, ?Session $session): array
+    {
+        $currentUser = $this->security->getUser();
+        $currentUserId = $currentUser instanceof User ? (int) $currentUser->getId() : 0;
+        $attemptUserId = (int) $attempt->getUser()->getId();
+        $isLearningPathAttempt = 0 < (int) $attempt->getOrigLpId()
+            || 0 < (int) $attempt->getOrigLpItemId()
+            || 0 < (int) $attempt->getOrigLpItemViewId();
+        $isOwnAttempt = $currentUserId > 0 && $currentUserId === $attemptUserId;
+        $showFinalActions = !$isLearningPathAttempt && $isOwnAttempt;
+        $attemptCount = $this->getAttemptCountForResultContext($quiz, $attempt, $course, $session);
+        $maxAttempt = (int) $quiz->getMaxAttempt();
+        $attemptLimitReached = 0 < $maxAttempt && $attemptCount >= $maxAttempt;
+        $canTryAgain = $showFinalActions
+            && $this->isExerciseOpenForRetry($quiz)
+            && !$attemptLimitReached;
+
+        return [
+            'isLearningPathAttempt' => $isLearningPathAttempt,
+            'isOwnAttempt' => $isOwnAttempt,
+            'showFinalActions' => $showFinalActions,
+            'canTryAgain' => $canTryAgain,
+            'attemptCount' => $attemptCount,
+            'maxAttempt' => $maxAttempt,
+            'remainingAttempts' => 0 < $maxAttempt ? max(0, $maxAttempt - $attemptCount) : null,
+        ];
+    }
+
+    private function getAttemptCountForResultContext(CQuiz $quiz, TrackEExercise $attempt, Course $course, ?Session $session): int
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('COUNT(resultAttempt.exeId)')
+            ->from(TrackEExercise::class, 'resultAttempt')
+            ->andWhere('IDENTITY(resultAttempt.quiz) = :exerciseId')
+            ->andWhere('IDENTITY(resultAttempt.course) = :courseId')
+            ->andWhere('IDENTITY(resultAttempt.user) = :userId')
+            ->andWhere('(resultAttempt.status = :emptyStatus OR resultAttempt.status = :completedStatus)')
+            ->andWhere('resultAttempt.origLpId = :learnpathId')
+            ->andWhere('resultAttempt.origLpItemId = :learnpathItemId')
+            ->andWhere('resultAttempt.origLpItemViewId = :learnpathItemViewId')
+            ->setParameter('exerciseId', (int) $quiz->getIid(), Types::INTEGER)
+            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
+            ->setParameter('userId', (int) $attempt->getUser()->getId(), Types::INTEGER)
+            ->setParameter('emptyStatus', '')
+            ->setParameter('completedStatus', self::STATUS_COMPLETED)
+            ->setParameter('learnpathId', (int) $attempt->getOrigLpId(), Types::INTEGER)
+            ->setParameter('learnpathItemId', (int) $attempt->getOrigLpItemId(), Types::INTEGER)
+            ->setParameter('learnpathItemViewId', (int) $attempt->getOrigLpItemViewId(), Types::INTEGER)
+        ;
+
+        if (null !== $session) {
+            $queryBuilder
+                ->andWhere('IDENTITY(resultAttempt.session) = :sessionId')
+                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
+            ;
+        } else {
+            $queryBuilder->andWhere('resultAttempt.session IS NULL');
+        }
+
+        return (int) $queryBuilder->getQuery()->getSingleScalarResult();
+    }
+
+    private function isExerciseOpenForRetry(CQuiz $quiz): bool
+    {
+        $now = new DateTimeImmutable();
+        $startTime = $quiz->getStartTime();
+        if ($startTime instanceof DateTimeInterface && $startTime > $now) {
+            return false;
+        }
+
+        $endTime = $quiz->getEndTime();
+        if ($endTime instanceof DateTimeInterface && $endTime < $now) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

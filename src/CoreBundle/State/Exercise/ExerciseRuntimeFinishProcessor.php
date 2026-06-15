@@ -13,7 +13,12 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
+use Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CourseBundle\Entity\CLpItem;
+use Chamilo\CourseBundle\Entity\CLpItemView;
+use Chamilo\CourseBundle\Entity\CLpView;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
@@ -42,6 +47,10 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
     private const VISIBILITY_PUBLISHED = 2;
     private const STATUS_INCOMPLETE = 'incomplete';
     private const STATUS_COMPLETED = 'completed';
+    private const LP_ITEM_TYPE_QUIZ = 'quiz';
+    private const LP_STATUS_FAILED = 'failed';
+    private const LP_STATUS_PASSED = 'passed';
+    private const FEEDBACK_TYPE_DIRECT = 1;
     private const UNIQUE_ANSWER = 1;
     private const MULTIPLE_ANSWER = 2;
     private const FILL_IN_BLANKS = 3;
@@ -110,6 +119,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
         private EntityManagerInterface $entityManager,
         private CQuizRepository $quizRepository,
         private Security $security,
+        private SettingsManager $settingsManager,
     ) {}
 
     /**
@@ -145,7 +155,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
             throw new BadRequestHttpException('A valid exercise and attempt are required.');
         }
 
-        $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session);
+        $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session, $this->canManageExercises());
         $attempt = $this->getIncompleteAttempt($attemptId, $quiz, $course, $session, $user);
         $questionIds = $this->parseQuestionIds((string) $attempt->getDataTracking());
         if ([] === $questionIds) {
@@ -204,6 +214,9 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
             ->setQuestionsToCheck(implode(',', $questionsToCheck))
         ;
 
+        $this->recordSavedAnswersConfirmation($data, $attempt, $quiz, $course, $session, $user, \count($questionIds));
+        $learnpathTracking = $this->synchronizeLearnpathTracking($request, $attempt, $quiz, $course, $session, $user);
+
         $this->entityManager->flush();
 
         $response = new ExerciseRuntimeFinish();
@@ -216,14 +229,297 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
         $response->maxScore = $totalWeight;
         $response->completedAt = $finishedAt->format(DateTimeInterface::ATOM);
         $response->resultUrl = '';
+        $response->learnpathTracking = $learnpathTracking;
 
         return $response;
+    }
+
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function synchronizeLearnpathTracking(
+        Request $request,
+        TrackEExercise $attempt,
+        CQuiz $quiz,
+        Course $course,
+        ?Session $session,
+        User $user,
+    ): array {
+        if (!$this->isLearnpathRuntimeRequest($request, $attempt)) {
+            return [];
+        }
+
+        $lpId = $this->getPositiveQueryInt($request, 'learnpath_id', $attempt->getOrigLpId());
+        $lpItemId = $this->getPositiveQueryInt($request, 'learnpath_item_id', $attempt->getOrigLpItemId());
+        $lpItemViewId = $this->getPositiveQueryInt($request, 'learnpath_item_view_id', $attempt->getOrigLpItemViewId());
+
+        if (0 >= $lpId || 0 >= $lpItemId) {
+            return [];
+        }
+
+        $lpItem = $this->getValidExerciseLpItem($lpItemId, $lpId, $quiz);
+        if (!$lpItem instanceof CLpItem) {
+            return [];
+        }
+
+        $lpItemView = $this->getLpItemViewForCurrentUser($lpItem, $lpItemViewId, $lpId, $course, $session, $user);
+        if (!$lpItemView instanceof CLpItemView) {
+            return [];
+        }
+
+        $lpView = $lpItemView->getView();
+        $status = $this->getLearnpathExerciseStatus($quiz, $attempt->getScore(), $attempt->getMaxScore());
+
+        $lpItem->setMaxScore((float) $attempt->getMaxScore());
+        $lpItemView
+            ->setStatus($status)
+            ->setScore((float) $attempt->getScore())
+            ->setTotalTime((int) $attempt->getExeDuration())
+        ;
+
+        $attempt
+            ->setOrigLpId($lpId)
+            ->setOrigLpItemId($lpItemId)
+            ->setOrigLpItemViewId((int) $lpItemView->getIid())
+        ;
+
+        $lpView->setLastItem($lpItemId);
+        $progressData = $this->updateLearnpathProgress($lpView);
+
+        return [
+            'enabled' => true,
+            'lpId' => $lpId,
+            'lpItemId' => $lpItemId,
+            'lpItemViewId' => (int) $lpItemView->getIid(),
+            'lpViewId' => (int) $lpView->getIid(),
+            'status' => $status,
+            'completedItems' => $progressData['completedItems'],
+            'totalItems' => $progressData['totalItems'],
+            'progress' => $progressData['progress'],
+            'progressMode' => $progressData['progressMode'],
+        ];
+    }
+
+    private function isLearnpathRuntimeRequest(Request $request, TrackEExercise $attempt): bool
+    {
+        $origin = (string) $request->query->get('origin', '');
+
+        return 'learnpath' === $origin
+            || $request->query->has('lp_init')
+            || $request->query->has('learnpath_id')
+            || $request->query->has('learnpath_item_id')
+            || $request->query->has('learnpath_item_view_id')
+            || 0 < (int) $attempt->getOrigLpId()
+            || 0 < (int) $attempt->getOrigLpItemId()
+            || 0 < (int) $attempt->getOrigLpItemViewId();
+    }
+
+    private function getPositiveQueryInt(Request $request, string $name, int $fallback = 0): int
+    {
+        $value = $request->query->get($name);
+        if (null !== $value) {
+            $value = \is_array($value) ? reset($value) : $value;
+            if (is_numeric($value)) {
+                $intValue = (int) $value;
+                if (0 < $intValue) {
+                    return $intValue;
+                }
+            }
+        }
+
+        return 0 < $fallback ? $fallback : 0;
+    }
+
+    private function getValidExerciseLpItem(int $lpItemId, int $lpId, CQuiz $quiz): ?CLpItem
+    {
+        $lpItem = $this->entityManager->getRepository(CLpItem::class)->find($lpItemId);
+        if (!$lpItem instanceof CLpItem) {
+            return null;
+        }
+
+        if ((int) ($lpItem->getLp()->getIid() ?? 0) !== $lpId) {
+            return null;
+        }
+
+        if (self::LP_ITEM_TYPE_QUIZ !== (string) $lpItem->getItemType()) {
+            return null;
+        }
+
+        if ((int) $lpItem->getPath() !== (int) ($quiz->getIid() ?? 0)) {
+            return null;
+        }
+
+        return $lpItem;
+    }
+
+    private function getLpItemViewForCurrentUser(
+        CLpItem $lpItem,
+        int $lpItemViewId,
+        int $lpId,
+        Course $course,
+        ?Session $session,
+        User $user,
+    ): ?CLpItemView {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('itemView')
+            ->addSelect('lpView')
+            ->from(CLpItemView::class, 'itemView')
+            ->innerJoin('itemView.view', 'lpView')
+            ->andWhere('IDENTITY(itemView.item) = :lpItemId')
+            ->andWhere('IDENTITY(lpView.lp) = :lpId')
+            ->andWhere('IDENTITY(lpView.course) = :courseId')
+            ->andWhere('IDENTITY(lpView.user) = :userId')
+            ->setParameter('lpItemId', (int) $lpItem->getIid(), Types::INTEGER)
+            ->setParameter('lpId', $lpId, Types::INTEGER)
+            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
+            ->setParameter('userId', (int) $user->getId(), Types::INTEGER)
+            ->setMaxResults(1)
+        ;
+
+        if (0 < $lpItemViewId) {
+            $queryBuilder
+                ->andWhere('itemView.iid = :lpItemViewId')
+                ->setParameter('lpItemViewId', $lpItemViewId, Types::INTEGER)
+            ;
+        }
+
+        if (null !== $session) {
+            $queryBuilder
+                ->andWhere('IDENTITY(lpView.session) = :sessionId')
+                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
+            ;
+        } else {
+            $queryBuilder->andWhere('lpView.session IS NULL');
+        }
+
+        $queryBuilder->orderBy('itemView.iid', 'DESC');
+
+        $lpItemView = $queryBuilder->getQuery()->getOneOrNullResult();
+
+        return $lpItemView instanceof CLpItemView ? $lpItemView : null;
+    }
+
+    private function getLearnpathExerciseStatus(CQuiz $quiz, float $score, float $maxScore): string
+    {
+        $status = self::STATUS_COMPLETED;
+        $passPercentage = $quiz->getPassPercentage();
+
+        if (self::FEEDBACK_TYPE_DIRECT !== (int) $quiz->getFeedbackType() && null !== $passPercentage && 0 < $passPercentage) {
+            $status = self::LP_STATUS_FAILED;
+            $percentage = 0.0 < $maxScore ? ($score / $maxScore) * 100 : 0.0;
+            if ($percentage >= (float) $passPercentage) {
+                $status = self::LP_STATUS_PASSED;
+            }
+        }
+
+        return $status;
+    }
+
+    /**
+     * @return array{completedItems: int, totalItems: int, progress: int, progressMode: string}
+     */
+    private function updateLearnpathProgress(CLpView $lpView): array
+    {
+        $lpId = (int) ($lpView->getLp()->getIid() ?? 0);
+        if (0 >= $lpId) {
+            return ['completedItems' => 0, 'totalItems' => 0, 'progress' => 0, 'progressMode' => '%'];
+        }
+
+        $totalItems = (int) $this->entityManager->createQueryBuilder()
+            ->select('COUNT(item.iid)')
+            ->from(CLpItem::class, 'item')
+            ->andWhere('IDENTITY(item.lp) = :lpId')
+            ->andWhere('item.itemType != :directoryType')
+            ->setParameter('lpId', $lpId, Types::INTEGER)
+            ->setParameter('directoryType', 'dir')
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        if (0 >= $totalItems) {
+            $lpView->setProgress(0);
+
+            return ['completedItems' => 0, 'totalItems' => 0, 'progress' => 0, 'progressMode' => '%'];
+        }
+
+        $completedItems = (int) $this->entityManager->createQueryBuilder()
+            ->select('COUNT(DISTINCT item.iid)')
+            ->from(CLpItemView::class, 'itemView')
+            ->innerJoin('itemView.item', 'item')
+            ->andWhere('IDENTITY(itemView.view) = :lpViewId')
+            ->andWhere('item.itemType != :directoryType')
+            ->andWhere('itemView.status IN (:completedStatuses)')
+            ->setParameter('lpViewId', (int) $lpView->getIid(), Types::INTEGER)
+            ->setParameter('directoryType', 'dir')
+            ->setParameter('completedStatuses', [self::STATUS_COMPLETED, self::LP_STATUS_PASSED, 'succeeded', 'browsed', self::LP_STATUS_FAILED], ArrayParameterType::STRING)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        $progress = max(0, min(100, (int) round(($completedItems / $totalItems) * 100)));
+        $lpView->setProgress($progress);
+
+        return [
+            'completedItems' => $completedItems,
+            'totalItems' => $totalItems,
+            'progress' => $progress,
+            'progressMode' => '%',
+        ];
+    }
+
+    private function recordSavedAnswersConfirmation(
+        ExerciseRuntimeFinish $data,
+        TrackEExercise $attempt,
+        CQuiz $quiz,
+        Course $course,
+        ?Session $session,
+        User $user,
+        int $questionsCount,
+    ): void {
+        if ('true' !== $this->settingsManager->getSetting('exercise.quiz_confirm_saved_answers', true)) {
+            return;
+        }
+
+        $attemptId = (int) $attempt->getExeId();
+        if (0 >= $attemptId) {
+            return;
+        }
+
+        $savedAnswersCount = (int) $this->entityManager->createQueryBuilder()
+            ->select('COUNT(DISTINCT answer.questionId)')
+            ->from(TrackEAttempt::class, 'answer')
+            ->andWhere('IDENTITY(answer.trackExercise) = :attemptId')
+            ->setParameter('attemptId', $attemptId, Types::INTEGER)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        $confirmation = (new TrackEExerciseConfirmation())
+            ->setUser($user)
+            ->setQuizId((int) ($quiz->getIid() ?? 0))
+            ->setAttemptId($attemptId)
+            ->setQuestionsCount($questionsCount)
+            ->setSavedAnswersCount($savedAnswersCount)
+            ->setCourseId((int) $course->getId())
+            ->setSessionId((int) ($session?->getId() ?? 0))
+            ->setConfirmed(true === $data->confirmedSavedAnswers)
+        ;
+
+        $this->entityManager->persist($confirmation);
     }
 
     private function canFinishAttempt(): bool
     {
         return $this->security->isGranted('ROLE_CURRENT_COURSE_STUDENT')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_STUDENT');
+            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_STUDENT')
+            || $this->canManageExercises();
+    }
+
+    private function canManageExercises(): bool
+    {
+        return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
+            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
     }
 
     private function getCourse(Request $request): Course
@@ -256,7 +552,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
         return $session;
     }
 
-    private function getExerciseFromCurrentContext(int $exerciseId, Course $course, ?Session $session): CQuiz
+    private function getExerciseFromCurrentContext(int $exerciseId, Course $course, ?Session $session, bool $canManage): CQuiz
     {
         $quiz = $this->quizRepository->find($exerciseId);
         if (!$quiz instanceof CQuiz) {
@@ -280,7 +576,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
 
         if (null !== $session) {
             $queryBuilder
-                ->andWhere('IDENTITY(links.session) = :sessionId')
+                ->andWhere('(IDENTITY(links.session) = :sessionId OR links.session IS NULL)')
                 ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
             ;
         } else {
@@ -292,18 +588,20 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
             throw new AccessDeniedHttpException('The requested exercise does not belong to the current course context.');
         }
 
-        $visibility = \is_array($row) ? (int) ($row['linkVisibility'] ?? 0) : 0;
-        $now = new DateTime();
-        if (self::VISIBILITY_PUBLISHED !== $visibility) {
-            throw new AccessDeniedHttpException('The requested exercise is not visible.');
-        }
+        if (!$canManage) {
+            $visibility = \is_array($row) ? (int) ($row['linkVisibility'] ?? 0) : 0;
+            $now = new DateTime();
+            if (self::VISIBILITY_PUBLISHED !== $visibility) {
+                throw new AccessDeniedHttpException('The requested exercise is not visible.');
+            }
 
-        if (null !== $quiz->getStartTime() && $quiz->getStartTime() > $now) {
-            throw new AccessDeniedHttpException('The requested exercise is not available yet.');
-        }
+            if (null !== $quiz->getStartTime() && $quiz->getStartTime() > $now) {
+                throw new AccessDeniedHttpException('The requested exercise is not available yet.');
+            }
 
-        if (null !== $quiz->getEndTime() && $quiz->getEndTime() < $now) {
-            throw new AccessDeniedHttpException('The requested exercise is closed.');
+            if (null !== $quiz->getEndTime() && $quiz->getEndTime() < $now) {
+                throw new AccessDeniedHttpException('The requested exercise is closed.');
+            }
         }
 
         return $quiz;

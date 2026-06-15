@@ -11,15 +11,19 @@ use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseRuntime;
 use Chamilo\CoreBundle\Entity\AttemptFile;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
+use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
 use Chamilo\CourseBundle\Entity\CQuizQuestionOption;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use Chamilo\CourseBundle\Repository\CQuizQuestionRepository;
@@ -41,7 +45,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  *
  * This provider intentionally exposes only the data required to render the attempt UI.
  * Correct answers, scores per answer and feedback comments remain hidden for learners.
- * Submission, scoring and tracking are still handled by the legacy runtime in this batch.
+ * Submission, scoring and tracking are handled by the runtime processors.
  *
  * @implements ProviderInterface<ExerciseRuntime>
  */
@@ -68,6 +72,7 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
     private const QUESTION_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED = 3;
     private const QUESTION_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM = 6;
     private const STRUCTURAL_CONTENT_TYPES = [self::MEDIA_QUESTION, self::PAGE_BREAK];
+    private const LEGACY_RUNTIME_REASON_UNSUPPORTED_QUESTION = 'This exercise contains a question type that requires a different test player.';
 
     public function __construct(
         private RequestStack $requestStack,
@@ -75,6 +80,7 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
         private CQuizRepository $quizRepository,
         private CQuizQuestionRepository $questionRepository,
         private Security $security,
+        private SettingsManager $settingsManager,
     ) {}
 
     /**
@@ -90,9 +96,11 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
 
         $course = $this->getCourse($request);
         $session = $this->getSession($request);
-        $canManage = $this->canManageExercises();
+        $canManagePermission = $this->canManageExercises();
+        $runsAsLearner = !$canManagePermission || $this->isLearnerRuntimeRequest($request);
+        $canManage = $canManagePermission && !$runsAsLearner;
 
-        if (!$canManage && !$this->canViewExercises()) {
+        if (!$canManagePermission && !$this->canViewExercises()) {
             throw new AccessDeniedHttpException('You are not allowed to open this exercise.');
         }
 
@@ -101,16 +109,19 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
             throw new BadRequestHttpException('A valid exercise id is required.');
         }
 
-        $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session, $canManage);
-        $attempt = $this->getRuntimeAttempt($request, $quiz, $course, $session, $canManage);
+        $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session, $canManagePermission);
+        $attempt = $this->getRuntimeAttempt($request, $quiz, $course, $session, !$runsAsLearner);
         $attemptQuestionIds = $attempt instanceof TrackEExercise ? $this->parseQuestionIds((string) $attempt->getDataTracking()) : null;
         $questions = $this->getRuntimeQuestions($quiz, $course, $session, $canManage, $attemptQuestionIds, $attempt);
         $runtimePages = $this->buildRuntimePages($quiz, $questions);
         $settings = $this->getRuntimeSettings($quiz);
+        $legacyRuntimeReasons = $this->getLegacyRuntimeReasons($quiz);
         $settings['runtimePages'] = $runtimePages['pages'];
         $settings['usesStructuralPages'] = $runtimePages['usesStructuralPages'];
         $settings['forceGroupedByMedia'] = $runtimePages['forceGroupedByMedia'];
         $settings['effectiveOneQuestionPerPage'] = $runtimePages['effectiveOneQuestionPerPage'];
+        $settings['requiresLegacyRuntime'] = [] !== $legacyRuntimeReasons;
+        $settings['legacyRuntimeReasons'] = $legacyRuntimeReasons;
 
         $response = new ExerciseRuntime();
         $response->exerciseId = $exerciseId;
@@ -121,16 +132,18 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
         $response->legacyUrls = $this->getLegacyUrls($quiz, $course, $session);
         $response->questionCount = $this->countAnswerableQuestions($questions);
         $response->totalScore = $this->getTotalScore($questions);
-        $canSubmit = !$canManage
+        $requiresLegacyRuntime = true === ($settings['requiresLegacyRuntime'] ?? false);
+        $canSubmit = $runsAsLearner
+            && !$requiresLegacyRuntime
             && $attempt instanceof TrackEExercise
             && self::STATUS_INCOMPLETE === (string) $attempt->getStatus()
             && $this->canFinishWithVue($questions);
 
         $response->canManage = $canManage;
         $response->attempt = $attempt instanceof TrackEExercise ? $this->normalizeAttempt($attempt, $questions) : null;
-        $response->canStartAttempt = !$canManage;
+        $response->canStartAttempt = $runsAsLearner;
         $response->canSubmit = $canSubmit;
-        $response->usesLegacySubmit = !$canSubmit;
+        $response->usesLegacySubmit = $requiresLegacyRuntime || !$canSubmit;
 
         return $response;
     }
@@ -237,6 +250,7 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
 
         return [
             'attemptId' => (int) $attempt->getExeId(),
+            'attemptNumber' => $this->getAttemptNumber($attempt),
             'status' => method_exists($attempt, 'getStatus') ? (string) $attempt->getStatus() : 'incomplete',
             'questionIds' => $questionIds,
             'currentQuestionIndex' => 0,
@@ -246,6 +260,46 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
             'remainingSeconds' => $remainingSeconds,
             'savedAnswers' => $this->getSavedAnswers((int) $attempt->getExeId(), $attempt->getCourse(), $attempt->getSession()),
         ];
+    }
+
+    private function getAttemptNumber(TrackEExercise $attempt): int
+    {
+        $quiz = $attempt->getQuiz();
+        $attemptId = (int) $attempt->getExeId();
+        if (null === $quiz || null === $quiz->getIid() || 0 >= $attemptId) {
+            return 0;
+        }
+
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('COUNT(previousAttempt.exeId)')
+            ->from(TrackEExercise::class, 'previousAttempt')
+            ->andWhere('IDENTITY(previousAttempt.quiz) = :exerciseId')
+            ->andWhere('IDENTITY(previousAttempt.course) = :courseId')
+            ->andWhere('IDENTITY(previousAttempt.user) = :userId')
+            ->andWhere('previousAttempt.exeId <= :attemptId')
+            ->andWhere('previousAttempt.origLpId = :lpId')
+            ->andWhere('previousAttempt.origLpItemId = :lpItemId')
+            ->andWhere('previousAttempt.origLpItemViewId = :lpItemViewId')
+            ->setParameter('exerciseId', (int) $quiz->getIid(), Types::INTEGER)
+            ->setParameter('courseId', (int) $attempt->getCourse()->getId(), Types::INTEGER)
+            ->setParameter('userId', (int) $attempt->getUser()->getId(), Types::INTEGER)
+            ->setParameter('attemptId', $attemptId, Types::INTEGER)
+            ->setParameter('lpId', (int) $attempt->getOrigLpId(), Types::INTEGER)
+            ->setParameter('lpItemId', (int) $attempt->getOrigLpItemId(), Types::INTEGER)
+            ->setParameter('lpItemViewId', (int) $attempt->getOrigLpItemViewId(), Types::INTEGER)
+        ;
+
+        $session = $attempt->getSession();
+        if (null !== $session) {
+            $queryBuilder
+                ->andWhere('IDENTITY(previousAttempt.session) = :sessionId')
+                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
+            ;
+        } else {
+            $queryBuilder->andWhere('previousAttempt.session IS NULL');
+        }
+
+        return (int) $queryBuilder->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -282,6 +336,7 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
             $savedRow = [
                 'answer' => $row->getAnswer(),
                 'position' => null !== $row->getPosition() ? (int) $row->getPosition() : null,
+                'secondsSpent' => method_exists($row, 'getSecondsSpent') ? (int) $row->getSecondsSpent() : 0,
             ];
 
             $files = $this->normalizeSavedAttemptFiles($row, $course, $session);
@@ -433,6 +488,21 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
             || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
     }
 
+    private function isLearnerRuntimeRequest(Request $request): bool
+    {
+        $origin = (string) $request->query->get('origin', '');
+        $isStudentView = strtolower(trim((string) $request->query->get('isStudentView', '')));
+        $preview = strtolower(trim((string) $request->query->get('preview', '')));
+
+        return 'learnpath' === $origin
+            || $request->query->has('lp_init')
+            || $request->query->has('learnpath_id')
+            || in_array($isStudentView, ['1', 'true', 'yes'], true)
+            || str_starts_with($isStudentView, 'true')
+            || in_array($preview, ['1', 'true', 'yes'], true)
+            || str_starts_with($preview, 'true');
+    }
+
     private function getExerciseFromCurrentContext(int $exerciseId, Course $course, ?Session $session, bool $canManage): CQuiz
     {
         $quiz = $this->quizRepository->find($exerciseId);
@@ -457,7 +527,7 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
 
         if (null !== $session) {
             $queryBuilder
-                ->andWhere('IDENTITY(links.session) = :sessionId')
+                ->andWhere('(IDENTITY(links.session) = :sessionId OR links.session IS NULL)')
                 ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
             ;
         } else {
@@ -531,12 +601,115 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
             'endTime' => $this->formatDate($quiz->getEndTime()),
             'textWhenFinished' => (string) $quiz->getTextWhenFinished(),
             'textWhenFinishedFailure' => (string) $quiz->getTextWhenFinishedFailure(),
+            'preventCopyPaste' => $this->isSettingEnabled('exercise.quiz_prevent_copy_paste'),
+            'keepAlivePingInterval' => $this->getKeepAlivePingInterval(),
+            'confirmSavedAnswers' => $this->isSettingEnabled('exercise.quiz_confirm_saved_answers'),
+            'allowTimePerQuestion' => $this->isSettingEnabled('exercise.allow_time_per_question'),
+            'hasTimedQuestions' => $this->hasTimedQuestions($quiz),
+            'blockCategoryQuestions' => $this->isBlockCategoryRuntimeEnabled($quiz),
         ];
     }
 
     /**
-     * @return array<int, array<string, mixed>>
+     * @return array<int, string>
      */
+    private function getLegacyRuntimeReasons(CQuiz $quiz): array
+    {
+        $reasons = [];
+
+        foreach ($this->getOrderedQuestionRelations($quiz) as $relation) {
+            if (!$relation instanceof CQuizRelQuestion) {
+                continue;
+            }
+
+            $question = $relation->getQuestion();
+            if (!$question instanceof CQuizQuestion) {
+                continue;
+            }
+
+            $type = (int) $question->getType();
+            if (\in_array($type, self::STRUCTURAL_CONTENT_TYPES, true)) {
+                continue;
+            }
+
+            if (!$this->isFinishSupportedQuestionType($type)) {
+                $reasons[] = self::LEGACY_RUNTIME_REASON_UNSUPPORTED_QUESTION;
+
+                break;
+            }
+        }
+
+        return array_values(array_unique($reasons));
+    }
+
+    private function hasTimedQuestions(CQuiz $quiz): bool
+    {
+        foreach ($this->getOrderedQuestionRelations($quiz) as $relation) {
+            if (!$relation instanceof CQuizRelQuestion) {
+                continue;
+            }
+
+            $question = $relation->getQuestion();
+            if (!$question instanceof CQuizQuestion || \in_array((int) $question->getType(), self::STRUCTURAL_CONTENT_TYPES, true)) {
+                continue;
+            }
+
+            if (0 < (int) $question->getDuration()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function isBlockCategoryRuntimeEnabled(CQuiz $quiz): bool
+    {
+        if (!$this->isSettingEnabled('exercise.block_category_questions')) {
+            return false;
+        }
+
+        $exerciseId = (int) ($quiz->getIid() ?? 0);
+        if (0 >= $exerciseId) {
+            return false;
+        }
+
+        $row = $this->entityManager->createQueryBuilder()
+            ->select('value')
+            ->from(ExtraFieldValues::class, 'value')
+            ->innerJoin('value.field', 'field')
+            ->andWhere('value.itemId = :itemId')
+            ->andWhere('field.itemType = :itemType')
+            ->andWhere('field.variable = :variable')
+            ->setParameter('itemId', $exerciseId, Types::INTEGER)
+            ->setParameter('itemType', ExtraField::EXERCISE_FIELD_TYPE, Types::INTEGER)
+            ->setParameter('variable', 'block_category', Types::STRING)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+
+        if (!$row instanceof ExtraFieldValues) {
+            return false;
+        }
+
+        return \in_array(strtolower((string) ($row->getFieldValue() ?? '')), ['1', 'true', 'yes', 'on'], true);
+    }
+
+    private function getKeepAlivePingInterval(): int
+    {
+        $interval = (int) $this->settingsManager->getSetting('exercise.quiz_keep_alive_ping_interval', true);
+        if (0 >= $interval) {
+            return 0;
+        }
+
+        return max(60, $interval);
+    }
+
+    private function isSettingEnabled(string $name): bool
+    {
+        return 'true' === $this->settingsManager->getSetting($name, true);
+    }
+
     /**
      * @param array<int, int>|null $questionIds
      *
@@ -668,6 +841,8 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
     {
         $type = (int) $question->getType();
 
+        $categorySummary = $this->getQuestionCategorySummary($question);
+
         return [
             'id' => (int) $question->getIid(),
             'title' => $question->getQuestion(),
@@ -681,6 +856,9 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
             'mandatory' => 1 === (int) $question->getMandatory(),
             'duration' => $question->getDuration(),
             'difficulty' => max(1, (int) $question->getLevel()),
+            'categoryIds' => $categorySummary['ids'],
+            'primaryCategoryId' => $categorySummary['primaryId'],
+            'primaryCategoryTitle' => $categorySummary['primaryTitle'],
             'canRevealTeacherData' => $canManage,
             'choices' => $this->getChoiceItems($question, $shuffleAnswers, $answerShuffleSeed),
             'trueFalseOptions' => $this->getQuestionOptions($question),
@@ -1287,8 +1465,8 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
     }
 
     /**
-     * Legacy stores the random calculated-answer variation in session for the current attempt.
-     * The Vue runtime must keep the same variation stable for an attempt without relying on session state.
+     * The previous runtime stores the random calculated-answer variation in session for the current attempt.
+     * The current runtime must keep the same variation stable for an attempt without relying on session state.
      *
      * @param array<int, array{id: int, text: string, position: int}> $variations
      *
@@ -1352,6 +1530,35 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
         }
 
         return max(0, (int) $parts[0]);
+    }
+
+    /**
+     * @return array{ids: array<int, int>, primaryId: int, primaryTitle: string}
+     */
+    private function getQuestionCategorySummary(CQuizQuestion $question): array
+    {
+        $ids = [];
+        $primaryId = 0;
+        $primaryTitle = 'General';
+
+        foreach ($question->getCategories() as $category) {
+            if (!$category instanceof CQuizQuestionCategory || null === $category->getIid()) {
+                continue;
+            }
+
+            $categoryId = (int) $category->getIid();
+            $ids[] = $categoryId;
+            if (0 === $primaryId) {
+                $primaryId = $categoryId;
+                $primaryTitle = $category->getTitle();
+            }
+        }
+
+        return [
+            'ids' => array_values(array_unique($ids)),
+            'primaryId' => $primaryId,
+            'primaryTitle' => $primaryTitle,
+        ];
     }
 
     /**

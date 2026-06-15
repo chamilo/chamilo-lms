@@ -88,7 +88,7 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
             throw new BadRequestHttpException('A valid exercise, attempt and question are required.');
         }
 
-        $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session);
+        $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session, $this->canManageExercises());
         $attempt = $this->getIncompleteAttempt($attemptId, $quiz, $course, $session, $user);
         $question = $this->getQuestionFromExercise($questionId, $quiz);
         if (!$question instanceof CQuizQuestion) {
@@ -160,7 +160,14 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
     private function canUploadAnswer(): bool
     {
         return $this->security->isGranted('ROLE_CURRENT_COURSE_STUDENT')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_STUDENT');
+            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_STUDENT')
+            || $this->canManageExercises();
+    }
+
+    private function canManageExercises(): bool
+    {
+        return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
+            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
     }
 
     private function getCourse(Request $request): Course
@@ -193,7 +200,7 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
         return $session;
     }
 
-    private function getExerciseFromCurrentContext(int $exerciseId, Course $course, ?Session $session): CQuiz
+    private function getExerciseFromCurrentContext(int $exerciseId, Course $course, ?Session $session, bool $canManage): CQuiz
     {
         $quiz = $this->quizRepository->find($exerciseId);
         if (!$quiz instanceof CQuiz) {
@@ -217,7 +224,7 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
 
         if (null !== $session) {
             $queryBuilder
-                ->andWhere('IDENTITY(links.session) = :sessionId')
+                ->andWhere('(IDENTITY(links.session) = :sessionId OR links.session IS NULL)')
                 ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
             ;
         } else {
@@ -229,18 +236,20 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
             throw new AccessDeniedHttpException('The requested exercise does not belong to the current course context.');
         }
 
-        $visibility = \is_array($row) ? (int) ($row['linkVisibility'] ?? 0) : 0;
-        $now = new DateTimeImmutable();
-        if (self::VISIBILITY_PUBLISHED !== $visibility) {
-            throw new AccessDeniedHttpException('The requested exercise is not visible.');
-        }
+        if (!$canManage) {
+            $visibility = \is_array($row) ? (int) ($row['linkVisibility'] ?? 0) : 0;
+            $now = new DateTimeImmutable();
+            if (self::VISIBILITY_PUBLISHED !== $visibility) {
+                throw new AccessDeniedHttpException('The requested exercise is not visible.');
+            }
 
-        if (null !== $quiz->getStartTime() && $quiz->getStartTime() > $now) {
-            throw new AccessDeniedHttpException('The requested exercise is not available yet.');
-        }
+            if (null !== $quiz->getStartTime() && $quiz->getStartTime() > $now) {
+                throw new AccessDeniedHttpException('The requested exercise is not available yet.');
+            }
 
-        if (null !== $quiz->getEndTime() && $quiz->getEndTime() < $now) {
-            throw new AccessDeniedHttpException('The requested exercise is closed.');
+            if (null !== $quiz->getEndTime() && $quiz->getEndTime() < $now) {
+                throw new AccessDeniedHttpException('The requested exercise is closed.');
+            }
         }
 
         return $quiz;

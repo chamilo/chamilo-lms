@@ -211,6 +211,9 @@ $strings['YouNeedToBeRegisteredInAtLeastOneCourse'] = 'Necesitas estar registrad
 $strings['YouNeedToBeRegisteredInAtLeastOneSession'] = 'Necesitas estar registrado en al menos una sesión';
 $strings['IfYouWantToGetTheCertificateAndOrSkillsAsociatedToThisCourseYouNeedToBuyTheCertificateServiceYouCanGoToServiceCatalogClickingHere'] = "Si quieres obtener el certificado y/o las competencias asociadas a este curso, necesitas comprar el servicio de <b> Certificado </b>, puedes ir al catálogo de servicios para comprarlo haciendo click <a target='_blank' href='%s'>AQUÍ</a>";
 $strings['ServiceDeleted'] = 'Servicio eliminado';
+$strings['ServiceCopied'] = 'Servicio copiado correctamente.';
+$strings['ServiceCopyFailed'] = 'No se pudo copiar el servicio.';
+$strings['ServiceCopyInvalidSecurityToken'] = 'La solicitud de copia ya no es válida. Inténtalo nuevamente.';
 $strings['YourCoursesNeedAtLeastOneLearningPath'] = 'Los cursos en los que estás registrado necesitan tener al menos una lección que contenga un item de cerficado final';
 $strings['GlobalTaxPerc'] = 'Porcentaje del impuesto global';
 $strings['GlobalTaxPercDescription'] = 'Porcentaje por defecto que se usará, excepto si existe un impuesto específico en el curso, sesión o servicio.';

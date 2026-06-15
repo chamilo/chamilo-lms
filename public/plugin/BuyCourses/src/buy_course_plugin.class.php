@@ -3927,6 +3927,140 @@ class BuyCoursesPlugin extends Plugin
         }
     }
 
+    public function copyService(int $id)
+    {
+        if ($id <= 0) {
+            return false;
+        }
+
+        $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
+        $service = Database::select(
+            '*',
+            $servicesTable,
+            [
+                'where' => ['id = ?' => $id],
+            ],
+            'first'
+        );
+
+        if (empty($service) || !is_array($service)) {
+            return false;
+        }
+
+        $sourceName = trim((string) ($service['name'] ?? ''));
+        if ('' === $sourceName) {
+            $sourceName = $this->get_lang('Service');
+        }
+
+        $sourceImageName = (string) ($service['image'] ?? '');
+
+        $copiedServiceId = Database::insert(
+            $servicesTable,
+            [
+                'name' => $sourceName.' (copy)',
+                'description' => (string) ($service['description'] ?? ''),
+                'price' => isset($service['price']) ? (float) $service['price'] : 0.0,
+                'tax_perc' => '' !== (string) ($service['tax_perc'] ?? '') ? (int) $service['tax_perc'] : null,
+                'duration_days' => isset($service['duration_days']) ? (int) $service['duration_days'] : 0,
+                'renewable' => !empty($service['renewable']) ? 1 : 0,
+                'total_charges' => isset($service['total_charges']) ? (int) $service['total_charges'] : 0,
+                'allow_trial' => !empty($service['allow_trial']) ? 1 : 0,
+                'trial_period' => (string) ($service['trial_period'] ?? ''),
+                'trial_frequency' => isset($service['trial_frequency']) ? (int) $service['trial_frequency'] : 0,
+                'trial_total_charges' => isset($service['trial_total_charges']) ? (int) $service['trial_total_charges'] : 0,
+                'max_subscribers' => isset($service['max_subscribers']) ? (int) $service['max_subscribers'] : 0,
+                'subscription_behavior_json' => (string) ($service['subscription_behavior_json'] ?? ''),
+                'stripe_price_id' => (string) ($service['stripe_price_id'] ?? ''),
+                'display_on_course_creation_page' => !empty($service['display_on_course_creation_page']) ? 1 : 0,
+                'applies_to' => isset($service['applies_to']) ? (int) $service['applies_to'] : self::SERVICE_TYPE_NONE,
+                'owner_id' => isset($service['owner_id']) ? (int) $service['owner_id'] : api_get_user_id(),
+                'visibility' => !empty($service['visibility']) ? 1 : 0,
+                'image' => '',
+                'video_url' => (string) ($service['video_url'] ?? ''),
+                'service_information' => (string) ($service['service_information'] ?? ''),
+            ]
+        );
+
+        if (!$copiedServiceId) {
+            return false;
+        }
+
+        $copiedImageName = 'simg-'.(int) $copiedServiceId.'.png';
+        if ($this->copyServiceImage($sourceImageName, $copiedImageName)) {
+            Database::update(
+                $servicesTable,
+                ['image' => $copiedImageName],
+                ['id = ?' => (int) $copiedServiceId]
+            );
+        }
+
+        $this->copyServiceBenefitConfigurations($id, (int) $copiedServiceId);
+
+        return (int) $copiedServiceId;
+    }
+
+    private function copyServiceBenefitConfigurations(int $sourceServiceId, int $targetServiceId): void
+    {
+        if ($sourceServiceId <= 0 || $targetServiceId <= 0) {
+            return;
+        }
+
+        if (!$this->hasPluginTable(self::TABLE_SERVICE_REL_EXTRA_FIELD)) {
+            return;
+        }
+
+        $serviceRelTable = Database::get_main_table(self::TABLE_SERVICE_REL_EXTRA_FIELD);
+        $rows = Database::select(
+            '*',
+            $serviceRelTable,
+            [
+                'where' => ['service_id = ?' => $sourceServiceId],
+            ]
+        );
+
+        foreach ($rows as $row) {
+            $extraFieldId = isset($row['extra_field_id']) ? (int) $row['extra_field_id'] : 0;
+            $grantedValue = isset($row['granted_value']) ? (int) $row['granted_value'] : 0;
+
+            if ($extraFieldId <= 0 || $grantedValue <= 0) {
+                continue;
+            }
+
+            Database::insert($serviceRelTable, [
+                'service_id' => $targetServiceId,
+                'extra_field_id' => $extraFieldId,
+                'granted_value' => $grantedValue,
+            ]);
+        }
+    }
+
+    private function copyServiceImage(string $sourceImageName, string $targetImageName): bool
+    {
+        if ('' === $sourceImageName || '' === $targetImageName) {
+            return false;
+        }
+
+        if (!$this->serviceImageExists($sourceImageName)) {
+            return false;
+        }
+
+        try {
+            $pluginsFilesystem = Container::getPluginsFileSystem();
+            $directory = $this->getServiceImagesDirectory();
+
+            if (!$pluginsFilesystem->directoryExists($directory)) {
+                $pluginsFilesystem->createDirectory($directory);
+            }
+
+            $content = $pluginsFilesystem->read($this->getServiceImageStoragePath($sourceImageName));
+            $pluginsFilesystem->write($this->getServiceImageStoragePath($targetImageName), $content);
+        } catch (\Throwable) {
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * update a service.
      *

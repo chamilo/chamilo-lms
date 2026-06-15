@@ -242,7 +242,13 @@ const overview = reactive({
 })
 
 function getQueryValue(value) {
-  return Array.isArray(value) ? value[0] : value
+  const normalizedValue = Array.isArray(value) ? value[0] : value
+
+  if (typeof normalizedValue === "string" && normalizedValue.includes("¬_multiple_attempt=")) {
+    return normalizedValue.split("¬_multiple_attempt=")[0]
+  }
+
+  return normalizedValue
 }
 
 function addOptionalQueryParam(params, key) {

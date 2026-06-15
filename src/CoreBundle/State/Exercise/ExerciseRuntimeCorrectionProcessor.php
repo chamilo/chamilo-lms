@@ -16,12 +16,16 @@ use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEAttemptQualify;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CourseBundle\Entity\CLpItem;
+use Chamilo\CourseBundle\Entity\CLpItemView;
+use Chamilo\CourseBundle\Entity\CLpView;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
-use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -44,6 +48,11 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
     private const UPLOAD_ANSWER = 23;
     private const ANNOTATION = 20;
     private const LINK_TYPE_EXERCISE = 1;
+    private const LP_ITEM_TYPE_QUIZ = 'quiz';
+    private const LP_ITEM_TYPE_DIR = 'dir';
+    private const LP_STATUS_FAILED = 'failed';
+    private const LP_STATUS_PASSED = 'passed';
+    private const FEEDBACK_TYPE_DIRECT = 1;
 
     public function __construct(
         private RequestStack $requestStack,
@@ -123,6 +132,7 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
         $this->recordCorrectionHistory($attempt, $questionId, $marks, (string) $data->teacherComment, (int) ($session?->getId() ?? 0));
         $this->removeQuestionToCheck($attempt, $questionId);
         $this->recalculateAttemptScore($attempt, $quiz);
+        $this->synchronizeLearnpathTrackingAfterCorrection($attempt, $quiz, $course, $session);
         $this->entityManager->flush();
 
         $response = new ExerciseRuntimeCorrection();
@@ -413,6 +423,185 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
         }
 
         $attempt->setScore($score);
+    }
+
+    private function synchronizeLearnpathTrackingAfterCorrection(
+        TrackEExercise $attempt,
+        CQuiz $quiz,
+        Course $course,
+        ?Session $session,
+    ): void {
+        $lpId = (int) $attempt->getOrigLpId();
+        $lpItemId = (int) $attempt->getOrigLpItemId();
+        $lpItemViewId = (int) $attempt->getOrigLpItemViewId();
+
+        if (0 >= $lpId || 0 >= $lpItemId || 0 >= $lpItemViewId) {
+            return;
+        }
+
+        $lpItem = $this->getValidExerciseLpItem($lpItemId, $lpId, $quiz);
+        if (!$lpItem instanceof CLpItem) {
+            return;
+        }
+
+        $lpItemView = $this->getLpItemViewForAttempt(
+            $lpItem,
+            $lpItemViewId,
+            $lpId,
+            $course,
+            $session,
+            $attempt->getUser(),
+        );
+        if (!$lpItemView instanceof CLpItemView) {
+            return;
+        }
+
+        $lpView = $lpItemView->getView();
+        $status = $this->getLearnpathExerciseStatus($quiz, $attempt->getScore(), $attempt->getMaxScore());
+
+        $lpItem->setMaxScore((float) $attempt->getMaxScore());
+        $lpItemView
+            ->setStatus($status)
+            ->setScore((float) $attempt->getScore())
+            ->setTotalTime((int) $attempt->getExeDuration())
+        ;
+
+        $lpView->setLastItem($lpItemId);
+        $this->updateLearnpathProgress($lpView);
+    }
+
+    private function getValidExerciseLpItem(int $lpItemId, int $lpId, CQuiz $quiz): ?CLpItem
+    {
+        $lpItem = $this->entityManager->getRepository(CLpItem::class)->find($lpItemId);
+        if (!$lpItem instanceof CLpItem) {
+            return null;
+        }
+
+        if ((int) ($lpItem->getLp()->getIid() ?? 0) !== $lpId) {
+            return null;
+        }
+
+        if (self::LP_ITEM_TYPE_QUIZ !== (string) $lpItem->getItemType()) {
+            return null;
+        }
+
+        if ((int) $lpItem->getPath() !== (int) ($quiz->getIid() ?? 0)) {
+            return null;
+        }
+
+        return $lpItem;
+    }
+
+    private function getLpItemViewForAttempt(
+        CLpItem $lpItem,
+        int $lpItemViewId,
+        int $lpId,
+        Course $course,
+        ?Session $session,
+        User $attemptUser,
+    ): ?CLpItemView {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('itemView')
+            ->addSelect('lpView')
+            ->from(CLpItemView::class, 'itemView')
+            ->innerJoin('itemView.view', 'lpView')
+            ->andWhere('itemView.iid = :lpItemViewId')
+            ->andWhere('IDENTITY(itemView.item) = :lpItemId')
+            ->andWhere('IDENTITY(lpView.lp) = :lpId')
+            ->andWhere('IDENTITY(lpView.course) = :courseId')
+            ->andWhere('IDENTITY(lpView.user) = :userId')
+            ->setParameter('lpItemViewId', $lpItemViewId, Types::INTEGER)
+            ->setParameter('lpItemId', (int) $lpItem->getIid(), Types::INTEGER)
+            ->setParameter('lpId', $lpId, Types::INTEGER)
+            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
+            ->setParameter('userId', (int) $attemptUser->getId(), Types::INTEGER)
+            ->setMaxResults(1)
+        ;
+
+        if (null !== $session) {
+            $queryBuilder
+                ->andWhere('IDENTITY(lpView.session) = :sessionId')
+                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
+            ;
+        } else {
+            $queryBuilder->andWhere('lpView.session IS NULL');
+        }
+
+        $lpItemView = $queryBuilder->getQuery()->getOneOrNullResult();
+
+        return $lpItemView instanceof CLpItemView ? $lpItemView : null;
+    }
+
+    private function getLearnpathExerciseStatus(CQuiz $quiz, float $score, float $maxScore): string
+    {
+        $status = self::STATUS_COMPLETED;
+        $passPercentage = $quiz->getPassPercentage();
+
+        if (self::FEEDBACK_TYPE_DIRECT !== (int) $quiz->getFeedbackType() && null !== $passPercentage && 0 < $passPercentage) {
+            $status = self::LP_STATUS_FAILED;
+            $percentage = 0.0 < $maxScore ? ($score / $maxScore) * 100 : 0.0;
+            if ($percentage >= (float) $passPercentage) {
+                $status = self::LP_STATUS_PASSED;
+            }
+        }
+
+        return $status;
+    }
+
+    /**
+     * @return array{completedItems: int, totalItems: int, progress: int, progressMode: string}
+     */
+    private function updateLearnpathProgress(CLpView $lpView): array
+    {
+        $lpId = (int) ($lpView->getLp()->getIid() ?? 0);
+        if (0 >= $lpId) {
+            return ['completedItems' => 0, 'totalItems' => 0, 'progress' => 0, 'progressMode' => '%'];
+        }
+
+        $totalItems = (int) $this->entityManager->createQueryBuilder()
+            ->select('COUNT(item.iid)')
+            ->from(CLpItem::class, 'item')
+            ->andWhere('IDENTITY(item.lp) = :lpId')
+            ->andWhere('item.itemType != :directoryType')
+            ->setParameter('lpId', $lpId, Types::INTEGER)
+            ->setParameter('directoryType', self::LP_ITEM_TYPE_DIR)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        if (0 >= $totalItems) {
+            $lpView->setProgress(0);
+
+            return ['completedItems' => 0, 'totalItems' => 0, 'progress' => 0, 'progressMode' => '%'];
+        }
+
+        $completedItems = (int) $this->entityManager->createQueryBuilder()
+            ->select('COUNT(DISTINCT item.iid)')
+            ->from(CLpItemView::class, 'itemView')
+            ->innerJoin('itemView.item', 'item')
+            ->andWhere('IDENTITY(itemView.view) = :lpViewId')
+            ->andWhere('item.itemType != :directoryType')
+            ->andWhere('itemView.status IN (:completedStatuses)')
+            ->setParameter('lpViewId', (int) $lpView->getIid(), Types::INTEGER)
+            ->setParameter('directoryType', self::LP_ITEM_TYPE_DIR)
+            ->setParameter(
+                'completedStatuses',
+                [self::STATUS_COMPLETED, self::LP_STATUS_PASSED, 'succeeded', 'browsed', self::LP_STATUS_FAILED],
+                ArrayParameterType::STRING,
+            )
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        $progress = max(0, min(100, (int) round(($completedItems / $totalItems) * 100)));
+        $lpView->setProgress($progress);
+
+        return [
+            'completedItems' => $completedItems,
+            'totalItems' => $totalItems,
+            'progress' => $progress,
+            'progressMode' => '%',
+        ];
     }
 
     /**

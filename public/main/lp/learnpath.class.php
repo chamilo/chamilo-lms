@@ -3186,7 +3186,7 @@ class learnpath
                                 if (1 === $prevent_reinit && $count_item_view > 0) {
                                     $not_multiple_attempt = 1;
                                 }
-                                $file .= '&not_multiple_attempt='.$not_multiple_attempt;
+                                $file .= '&amp;not_multiple_attempt='.$not_multiple_attempt;
                             }
                             break;
                     }

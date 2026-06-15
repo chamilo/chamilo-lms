@@ -68,10 +68,11 @@ if ($form->validate()) {
         $link->set_points_one($pointsOne);
         $link->set_points_many($pointsMany);
         // The item's max points (pointsMany) is also its weight in POINTS_SUM.
-        $link->set_weight((float) $pointsMany);
+        $final_weight = (float) $pointsMany;
     } else {
-        $link->set_weight($values['weight_mask']);
+        $final_weight = $values['weight_mask'];
     }
+    $link->set_weight($final_weight);
     $link->save();
 
     //Update weight for attendance

@@ -399,7 +399,7 @@ class ResourceNode implements Stringable
 
     public function setSlug(string $slug): self
     {
-        if (str_contains(self::PATH_SEPARATOR, $slug)) {
+        if (str_contains($slug, self::PATH_SEPARATOR)) {
             $message = 'Invalid character "'.self::PATH_SEPARATOR.'" in resource name';
 
             throw new InvalidArgumentException($message);

@@ -300,6 +300,10 @@ class AiController extends AbstractController
             return new JsonResponse(['prompt' => ''], 404);
         }
 
+        if (!$this->isAiFeatureEnabledForCourse('glossary_terms_generator', $cid)) {
+            return new JsonResponse(['prompt' => ''], 403);
+        }
+
         $existingTerms = $this->getExistingGlossaryTermTitles($course, $sid);
 
         if ($resourceFileId > 0) {
@@ -409,6 +413,10 @@ class AiController extends AbstractController
                 'success' => false,
                 'text' => 'Course not found.',
             ], 404);
+        }
+
+        if (!$this->isAiFeatureEnabledForCourse('glossary_terms_generator', $cid)) {
+            return $this->buildAiFeatureDisabledResponse();
         }
 
         $existingTerms = $this->getExistingGlossaryTermTitles($course, $sid);
@@ -699,7 +707,8 @@ class AiController extends AbstractController
         $this->denyAccessUnlessGranted(CourseVoter::EDIT, $course);
 
         $enabled = $this->isAiCourseAnalyzerSettingEnabled($settingsManager->getSetting('ai_helpers.enable_ai_helpers', true))
-            && $this->isAiCourseAnalyzerSettingEnabled($settingsManager->getSetting('ai_helpers.course_analyser', true));
+            && $this->isAiCourseAnalyzerSettingEnabled($settingsManager->getSetting('ai_helpers.course_analyser', true))
+            && $this->isAiFeatureEnabledForCourse('course_analyser', (int) $course->getId());
 
         $session = $this->getAiCourseAnalyzerSessionFromRequest($request);
         $providers = $this->aiProviderFactory->getProvidersForType('text');
@@ -832,6 +841,10 @@ class AiController extends AbstractController
                 'success' => false,
                 'text' => 'Invalid request parameters.',
             ], 400);
+        }
+
+        if (!$this->isAiFeatureEnabledForCourse('content_analyser', $cid)) {
+            return $this->buildAiFeatureDisabledResponse();
         }
 
         if (!\in_array($method, self::LP_LEARNING_HELPER_METHODS, true)) {
@@ -994,6 +1007,10 @@ class AiController extends AbstractController
             $cid = $this->resolveCourseIdFromRequest($request, $data);
             $sid = $this->resolveSessionIdFromRequest($request, $data);
 
+            if (!$this->isAiFeatureEnabledForCourse('learning_path_generator', $cid)) {
+                return $this->buildAiFeatureDisabledResponse();
+            }
+
             if ('' === $topic || $chaptersCount <= 0 || $wordsCount <= 0) {
                 return new JsonResponse([
                     'success' => false,
@@ -1105,6 +1122,10 @@ class AiController extends AbstractController
             $aiProvider = $this->normalizeProviderNameFromPayload($data['ai_provider'] ?? null);
             $cid = (int) ($data['cid'] ?? 0);
             $sid = (int) ($data['sid'] ?? 0);
+
+            if (!$this->isAiFeatureEnabledForCourse('exercise_generator', $cid)) {
+                return $this->buildAiFeatureDisabledResponse();
+            }
 
             if ($nQ <= 0 || '' === $topic) {
                 return new JsonResponse([
@@ -1218,6 +1239,10 @@ class AiController extends AbstractController
         $cid = (int) ($data['cid'] ?? 0);
         $sid = (int) ($data['sid'] ?? 0);
         $gid = (int) ($data['gid'] ?? 0);
+
+        if (!$this->isAiFeatureEnabledForCourse('exercise_generator', $cid)) {
+            return $this->buildAiFeatureDisabledResponse();
+        }
 
         $resourceFileId = (int) ($data['resource_file_id'] ?? 0);
         $documentTitle = trim((string) ($data['document_title'] ?? ''));
@@ -1504,6 +1529,10 @@ class AiController extends AbstractController
 
         $this->denyAccessUnlessGranted(CourseVoter::EDIT, $course);
 
+        if (!$this->isAiFeatureEnabledForCourse('open_answers_grader', $courseId)) {
+            return $this->buildAiFeatureDisabledResponse();
+        }
+
         // Optional provider selection (form-encoded)
         $aiProvider = $request->request->get('ai_provider');
 
@@ -1702,6 +1731,10 @@ class AiController extends AbstractController
             $aiProvider = $data['ai_provider'] ?? null;
             $cid = (int) ($data['cid'] ?? 0);
             $sid = (int) ($data['sid'] ?? 0);
+
+            if (!$this->isAiFeatureEnabledForCourse('image_generator', $cid)) {
+                return $this->buildAiFeatureDisabledResponse();
+            }
 
             if ($n <= 0 || '' === $prompt || '' === $toolName) {
                 return new JsonResponse([
@@ -1903,6 +1936,10 @@ class AiController extends AbstractController
 
             $cid = (int) ($data['cid'] ?? 0);
             $sid = (int) ($data['sid'] ?? 0);
+
+            if (!$this->isAiFeatureEnabledForCourse('video_generator', $cid)) {
+                return $this->buildAiFeatureDisabledResponse();
+            }
 
             // Gemini requires durationSeconds to be a NUMBER (int).
             $seconds = null;
@@ -2144,6 +2181,10 @@ class AiController extends AbstractController
 
             $cid = (int) $request->query->get('cid', 0);
 
+            if ($cid > 0 && !$this->isAiFeatureEnabledForCourse('video_generator', $cid)) {
+                return $this->buildAiFeatureDisabledResponse();
+            }
+
             $aiProvider = $request->query->get('ai_provider');
             $aiProvider = null !== $aiProvider ? trim((string) $aiProvider) : '';
 
@@ -2285,6 +2326,10 @@ class AiController extends AbstractController
 
         $resourceFileId = (int) ($data['resource_file_id'] ?? 0);
         $documentTitle = trim((string) ($data['document_title'] ?? ''));
+
+        if (!$this->isAiFeatureEnabledForCourse('content_analyser', $cid)) {
+            return $this->buildAiFeatureDisabledResponse();
+        }
 
         if (0 === $cid || 0 === $resourceFileId || '' === $prompt) {
             return new JsonResponse(['success' => false, 'text' => 'Invalid request parameters.'], 400);
@@ -2548,6 +2593,10 @@ class AiController extends AbstractController
         $cid = (int) ($data['cid'] ?? 0);
         $documentTitle = trim((string) ($data['document_title'] ?? ''));
         $answer = trim((string) ($data['answer'] ?? ''));
+
+        if (!$this->isAiFeatureEnabledForCourse('content_analyser', $cid)) {
+            return $this->buildAiFeatureDisabledResponse();
+        }
 
         if (0 === $cid || '' === $documentTitle || '' === $answer) {
             return new JsonResponse(['success' => false, 'text' => 'Invalid request parameters.'], 400);
@@ -2954,6 +3003,27 @@ class AiController extends AbstractController
         }
 
         return '' !== $decoded;
+    }
+
+    private function isAiFeatureEnabledForCourse(string $feature, int $courseId): bool
+    {
+        if ($courseId <= 0) {
+            return false;
+        }
+
+        if ('true' !== (string) api_get_setting('ai_helpers.enable_ai_helpers')) {
+            return false;
+        }
+
+        return 'true' === (string) api_get_course_setting($feature, ['real_id' => $courseId], true);
+    }
+
+    private function buildAiFeatureDisabledResponse(): JsonResponse
+    {
+        return new JsonResponse([
+            'success' => false,
+            'text' => 'This AI feature is not enabled for this course.',
+        ], 403);
     }
 
     private function denyIfNotTeacher(): void

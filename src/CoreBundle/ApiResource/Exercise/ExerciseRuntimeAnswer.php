@@ -58,6 +58,12 @@ final class ExerciseRuntimeAnswer
     public mixed $answer = null;
 
     #[Groups(['exercise_runtime_answer:read', 'exercise_runtime_answer:write'])]
+    public ?bool $reviewLater = null;
+
+    #[Groups(['exercise_runtime_answer:write'])]
+    public bool $reviewLaterOnly = false;
+
+    #[Groups(['exercise_runtime_answer:read', 'exercise_runtime_answer:write'])]
     public int $secondsSpent = 0;
 
     #[Groups(['exercise_runtime_answer:write'])]
@@ -80,6 +86,12 @@ final class ExerciseRuntimeAnswer
      */
     #[Groups(['exercise_runtime_answer:read'])]
     public array $answeredQuestionIds = [];
+
+    /**
+     * @var array<int, int>
+     */
+    #[Groups(['exercise_runtime_answer:read'])]
+    public array $reviewQuestionIds = [];
 
     #[Groups(['exercise_runtime_answer:read'])]
     public int $answeredCount = 0;

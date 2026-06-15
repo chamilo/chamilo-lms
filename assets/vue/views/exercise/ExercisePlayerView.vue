@@ -207,7 +207,87 @@
         </div>
       </div>
 
-      <form v-if="canManage || activeAttempt" class="space-y-4" @submit.prevent="submitDisabled">
+      <div
+        v-if="showReviewReminderScreen"
+        class="space-y-4 rounded-xl border border-gray-20 bg-white p-5 shadow-sm"
+      >
+        <div class="space-y-2">
+          <h2 class="text-xl font-semibold text-gray-90">
+            {{ t("Questions to be reviewed") }}
+          </h2>
+          <p class="text-sm text-gray-700">
+            {{ t("Review selected questions") }}
+          </p>
+          <div
+            v-if="reviewFlagError"
+            class="text-sm text-danger"
+          >
+            {{ reviewFlagError }}
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label
+            v-for="question in reviewQuestionList"
+            :key="`review-question-${question.id}`"
+            class="flex items-start gap-3 rounded-lg border border-gray-20 p-3 text-sm text-gray-700"
+            :class="question.isAnswered ? 'bg-white' : 'border-danger/30 bg-danger/10 text-danger'"
+          >
+            <input
+              :checked="question.isMarked"
+              class="mt-1"
+              :disabled="isReviewFlagSaving"
+              :name="`remind_list_${question.id}`"
+              type="checkbox"
+              @change="toggleReviewQuestion(question.id, $event.target.checked)"
+            />
+            <span class="min-w-0 flex-1">
+              <span class="block font-semibold text-gray-90">
+                {{ question.position }}. {{ displayText(question.title, t("Untitled")) }}
+              </span>
+              <span
+                v-if="!question.isAnswered"
+                class="mt-1 inline-block rounded bg-danger/10 px-2 py-0.5 text-xs text-danger"
+              >
+                {{ t("Questions without answer") }}
+              </span>
+            </span>
+          </label>
+        </div>
+
+        <div class="flex flex-wrap gap-2">
+          <BaseButton
+            :disabled="isReviewFlagSaving || selectedReviewQuestionIds.length === 0"
+            :label="t('Review selected questions')"
+            icon="eye"
+            type="primary"
+            @click="reviewSelectedQuestions"
+          />
+          <BaseButton
+            :disabled="isReviewFlagSaving"
+            :label="t('Select all')"
+            icon="checkbox-marked-outline"
+            type="plain"
+            @click="setAllReviewQuestions(true)"
+          />
+          <BaseButton
+            :disabled="isReviewFlagSaving"
+            :label="t('Unselect all')"
+            icon="checkbox-blank-outline"
+            type="plain"
+            @click="setAllReviewQuestions(false)"
+          />
+          <BaseButton
+            :disabled="isReviewFlagSaving || isFinishingAttempt || isAutoFinishingExpiredAttempt"
+            :label="isFinishingAttempt ? t('Finishing') : t('End test')"
+            icon="check"
+            type="primary"
+            @click="finishAttempt({ skipDraftSave: true, skipReviewAnswers: true })"
+          />
+        </div>
+      </div>
+
+      <form v-if="!showReviewReminderScreen && (canManage || activeAttempt)" class="space-y-4" @submit.prevent="submitDisabled">
         <div
           v-if="currentRuntimePage?.pageBreak || currentRuntimePage?.media"
           class="space-y-4 rounded-xl border border-gray-20 bg-white p-5 shadow-sm"
@@ -1018,6 +1098,22 @@
           </div>
 
           <div
+            v-if="showReviewLaterOption(question)"
+            class="mt-4 rounded-lg border border-info/30 bg-support-1 p-3 text-sm text-support-4"
+          >
+            <label class="flex items-center gap-2">
+              <input
+                v-model="answers[question.id].reviewLater"
+                :disabled="isReviewFlagSaving"
+                :name="`remind_list_${question.id}`"
+                type="checkbox"
+                @change="onReviewLaterChange(question)"
+              />
+              <span>{{ t("Revise question later") }}</span>
+            </label>
+          </div>
+
+          <div
             v-if="directFeedbackForQuestion(question)"
             class="mt-4 space-y-3 rounded-lg border p-4 text-sm"
             :class="feedbackStatusClass(directFeedbackForQuestion(question))"
@@ -1114,9 +1210,17 @@
               @click="goToNextQuestion"
             />
             <BaseButton
-              v-if="!canManage && activeAttempt && canFinishCurrentPage"
+              v-if="isReviewingMarkedQuestions && canFinishCurrentPage"
+              :disabled="isSavingAnswer || isQuestionTimeExpired || isAutoAdvancingTimedQuestion"
+              :label="t('Questions to be reviewed')"
+              icon="back"
+              type="primary"
+              @click="returnToReviewReminder"
+            />
+            <BaseButton
+              v-if="!isReviewingMarkedQuestions && !canManage && activeAttempt && canFinishCurrentPage"
               :disabled="!canSubmit || !canFinishWithConfirmation || isSavingAnswer || isFinishingAttempt || isAutoFinishingExpiredAttempt || isQuestionTimeExpired || isAutoAdvancingTimedQuestion"
-              :label="isFinishingAttempt ? t('Finishing') : t('Finish test')"
+              :label="finishButtonLabel"
               icon="check"
               type="primary"
               @click="finishAttempt"
@@ -1223,6 +1327,12 @@ const isFinishingAttempt = ref(false)
 const finishError = ref("")
 const finishMessage = ref("")
 const savedQuestionIds = ref(new Set())
+const reviewQuestionIds = ref(new Set())
+const isReviewReminderVisible = ref(false)
+const reviewQueue = ref([])
+const reviewQueueIndex = ref(0)
+const isReviewFlagSaving = ref(false)
+const reviewFlagError = ref("")
 const draggedMatchingOptionId = ref(null)
 const selectedMatchingOptions = ref({})
 const draggedDraggableItemId = ref(null)
@@ -1270,6 +1380,10 @@ const showLegacyRuntimeFallback = computed(() => {
 })
 
 const currentRuntimePage = computed(() => {
+  if (isReviewingMarkedQuestions.value) {
+    return null
+  }
+
   if (runtimePages.value.length === 0) {
     return null
   }
@@ -1278,6 +1392,13 @@ const currentRuntimePage = computed(() => {
 })
 
 const visibleQuestions = computed(() => {
+  if (isReviewingMarkedQuestions.value) {
+    const questionId = Number(reviewQueue.value[reviewQueueIndex.value] || 0)
+    const question = questionMap.value.get(questionId)
+
+    return question ? [question] : []
+  }
+
   if (currentRuntimePage.value && usesPagedNavigation.value) {
     return (currentRuntimePage.value.questionIds || [])
       .map((questionId) => questionMap.value.get(Number(questionId)))
@@ -1294,11 +1415,26 @@ const visibleQuestions = computed(() => {
 })
 
 const visibleQuestionTotal = computed(() => answerableQuestions.value.length)
-const navigationTotal = computed(() => usesPagedNavigation.value ? Math.max(1, runtimePages.value.length || visibleQuestionTotal.value) : visibleQuestionTotal.value)
+const isReviewAnswersEnabled = computed(() => Number(settings.value.reviewAnswers || 0) > 0)
+const isReviewingMarkedQuestions = computed(() => reviewQueue.value.length > 0)
+const showReviewReminderScreen = computed(() => {
+  return !canManage.value
+    && Boolean(activeAttempt.value?.attemptId)
+    && isReviewAnswersEnabled.value
+    && isReviewReminderVisible.value
+    && !isReviewingMarkedQuestions.value
+})
+const navigationTotal = computed(() => {
+  if (isReviewingMarkedQuestions.value) {
+    return Math.max(1, reviewQueue.value.length)
+  }
+
+  return usesPagedNavigation.value ? Math.max(1, runtimePages.value.length || visibleQuestionTotal.value) : visibleQuestionTotal.value
+})
 const previousNavigationAllowed = computed(() => !settings.value.preventBackwards && true !== settings.value.blockCategoryQuestions && settings.value.showPreviousButton !== false)
-const showPreviousNavigationButton = computed(() => usesPagedNavigation.value && previousNavigationAllowed.value)
-const canMovePrevious = computed(() => showPreviousNavigationButton.value && currentQuestionIndex.value > 0)
-const canMoveNext = computed(() => usesPagedNavigation.value && currentQuestionIndex.value < navigationTotal.value - 1)
+const showPreviousNavigationButton = computed(() => isReviewingMarkedQuestions.value || (usesPagedNavigation.value && previousNavigationAllowed.value))
+const canMovePrevious = computed(() => isReviewingMarkedQuestions.value ? reviewQueueIndex.value > 0 : showPreviousNavigationButton.value && currentQuestionIndex.value > 0)
+const canMoveNext = computed(() => isReviewingMarkedQuestions.value ? reviewQueueIndex.value < reviewQueue.value.length - 1 : usesPagedNavigation.value && currentQuestionIndex.value < navigationTotal.value - 1)
 const canFinishCurrentPage = computed(() => !usesPagedNavigation.value || !canMoveNext.value)
 const currentTimedQuestion = computed(() => {
   if (!activeAttempt.value || canManage.value || true !== settings.value.allowTimePerQuestion) {
@@ -1322,7 +1458,11 @@ const displayedRemainingSeconds = computed(() => hasQuestionTimeControl.value ? 
 const isDisplayedTimeExpired = computed(() => isTimeExpired.value || isQuestionTimeExpired.value)
 const timeControlLabel = computed(() => hasQuestionTimeControl.value ? t("Question time left") : t("Time left"))
 const answerableQuestions = computed(() => questions.value.filter((question) => !isStructuralQuestion(question)))
-const currentNavigationIndex = computed(() => Math.min(Math.max(0, currentQuestionIndex.value), Math.max(0, navigationTotal.value - 1)))
+const currentNavigationIndex = computed(() => {
+  const index = isReviewingMarkedQuestions.value ? reviewQueueIndex.value : currentQuestionIndex.value
+
+  return Math.min(Math.max(0, index), Math.max(0, navigationTotal.value - 1))
+})
 const progressLabel = computed(() => {
   if (usesPagedNavigation.value && currentRuntimePage.value && (settings.value.usesStructuralPages || visibleQuestions.value.length > 1)) {
     return `${t("Page")} ${currentNavigationIndex.value + 1} / ${navigationTotal.value}`
@@ -1352,8 +1492,22 @@ const currentCategoryLabel = computed(() => {
   const question = visibleQuestions.value.find((item) => !isStructuralQuestion(item))
   return displayText(question?.primaryCategoryTitle || "")
 })
-const previousNavigationLabel = computed(() => usesPagedNavigation.value && (settings.value.usesStructuralPages || visibleQuestions.value.length > 1) ? t("Previous page") : t("Previous question"))
-const nextNavigationLabel = computed(() => usesPagedNavigation.value && (settings.value.usesStructuralPages || visibleQuestions.value.length > 1) ? t("Next page") : t("Next question"))
+const previousNavigationLabel = computed(() => isReviewingMarkedQuestions.value || !(settings.value.usesStructuralPages || visibleQuestions.value.length > 1) ? t("Previous question") : t("Previous page"))
+const nextNavigationLabel = computed(() => isReviewingMarkedQuestions.value || !(settings.value.usesStructuralPages || visibleQuestions.value.length > 1) ? t("Next question") : t("Next page"))
+const finishButtonLabel = computed(() => {
+  if (isFinishingAttempt.value) {
+    return t("Finishing")
+  }
+
+  return isReviewAnswersEnabled.value ? t("Review my answers") : t("Finish test")
+})
+const selectedReviewQuestionIds = computed(() => Array.from(reviewQuestionIds.value).map(Number).filter((questionId) => questionId > 0))
+const reviewQuestionList = computed(() => answerableQuestions.value.map((question, index) => ({
+  ...question,
+  position: Number(question.position || index + 1),
+  isAnswered: savedQuestionIds.value.has(Number(question.id || 0)),
+  isMarked: reviewQuestionIds.value.has(Number(question.id || 0)),
+})))
 const feedbackDialogTitle = computed(() => t(feedbackDialog.value?.title || "Feedback"))
 const requiresSavedAnswerConfirmation = computed(() => {
   return !canManage.value && Boolean(activeAttempt.value?.attemptId) && true === settings.value.confirmSavedAnswers
@@ -1376,6 +1530,220 @@ watch(navigationTotal, (total) => {
     currentQuestionIndex.value = safeTotal - 1
   }
 })
+
+function isQuestionMarkedForReview(questionId) {
+  return reviewQuestionIds.value.has(Number(questionId || 0))
+}
+
+function showReviewLaterOption(question) {
+  return !canManage.value
+    && Boolean(activeAttempt.value?.attemptId)
+    && isReviewAnswersEnabled.value
+    && !isStructuralQuestion(question)
+}
+
+function syncReviewQuestionIds(questionIds = []) {
+  if (!Array.isArray(questionIds)) {
+    reviewQuestionIds.value = new Set()
+    return
+  }
+
+  reviewQuestionIds.value = new Set(questionIds.map(Number).filter((questionId) => questionId > 0))
+  syncReviewLaterAnswerState()
+}
+
+function syncReviewQuestionIdsFromAttempt(attempt) {
+  syncReviewQuestionIds(attempt?.reviewQuestionIds || [])
+}
+
+function syncReviewQuestionIdsFromResponse(response) {
+  if (Array.isArray(response?.reviewQuestionIds)) {
+    syncReviewQuestionIds(response.reviewQuestionIds)
+  }
+}
+
+function syncReviewLaterAnswerState() {
+  for (const [questionId, questionAnswer] of Object.entries(answers.value || {})) {
+    if (questionAnswer && typeof questionAnswer === "object") {
+      questionAnswer.reviewLater = reviewQuestionIds.value.has(Number(questionId))
+    }
+  }
+}
+
+function setQuestionReviewState(questionId, checked) {
+  const safeQuestionId = Number(questionId || 0)
+  if (safeQuestionId <= 0) {
+    return
+  }
+
+  const nextReviewQuestionIds = new Set(reviewQuestionIds.value)
+  if (checked) {
+    nextReviewQuestionIds.add(safeQuestionId)
+  } else {
+    nextReviewQuestionIds.delete(safeQuestionId)
+  }
+
+  reviewQuestionIds.value = nextReviewQuestionIds
+  if (answers.value[safeQuestionId]) {
+    answers.value[safeQuestionId].reviewLater = checked
+  }
+}
+
+async function toggleReviewQuestion(questionId, checked) {
+  setQuestionReviewState(questionId, checked)
+  await saveQuestionReviewLater(questionId, checked)
+}
+
+async function onReviewLaterChange(question) {
+  const questionId = Number(question?.id || 0)
+  const checked = true === answers.value[questionId]?.reviewLater
+  setQuestionReviewState(questionId, checked)
+  await saveQuestionReviewLater(questionId, checked)
+}
+
+async function saveQuestionReviewLater(questionId, checked) {
+  const exerciseId = getExerciseId()
+  const attemptId = Number(activeAttempt.value?.attemptId || 0)
+  const safeQuestionId = Number(questionId || 0)
+
+  if (!exerciseId || !attemptId || safeQuestionId <= 0 || !isReviewAnswersEnabled.value) {
+    return
+  }
+
+  isReviewFlagSaving.value = true
+  reviewFlagError.value = ""
+
+  try {
+    const response = await exerciseService.saveExerciseRuntimeAnswer(
+      {
+        exerciseId,
+        attemptId,
+        questionId: safeQuestionId,
+        reviewLater: checked,
+        reviewLaterOnly: true,
+      },
+      getContextParams(),
+      exerciseId,
+      attemptId,
+    )
+
+    if (!response?.success) {
+      throw new Error(response?.message || "Could not save draft answer")
+    }
+
+    syncReviewQuestionIdsFromResponse(response)
+  } catch (error) {
+    console.error("Error saving exercise review flag", error)
+    setQuestionReviewState(safeQuestionId, !checked)
+    reviewFlagError.value = t("Could not save draft answer")
+  } finally {
+    isReviewFlagSaving.value = false
+  }
+}
+
+async function setAllReviewQuestions(checked) {
+  if (!activeAttempt.value?.attemptId || isReviewFlagSaving.value) {
+    return
+  }
+
+  isReviewFlagSaving.value = true
+  reviewFlagError.value = ""
+
+  const previousQuestionIds = new Set(reviewQuestionIds.value)
+
+  try {
+    for (const question of answerableQuestions.value) {
+      const questionId = Number(question.id || 0)
+      if (questionId <= 0) {
+        continue
+      }
+
+      setQuestionReviewState(questionId, checked)
+      const exerciseId = getExerciseId()
+      const attemptId = Number(activeAttempt.value?.attemptId || 0)
+      const response = await exerciseService.saveExerciseRuntimeAnswer(
+        {
+          exerciseId,
+          attemptId,
+          questionId,
+          reviewLater: checked,
+          reviewLaterOnly: true,
+        },
+        getContextParams(),
+        exerciseId,
+        attemptId,
+      )
+
+      if (!response?.success) {
+        throw new Error(response?.message || "Could not save draft answer")
+      }
+
+      syncReviewQuestionIdsFromResponse(response)
+    }
+  } catch (error) {
+    console.error("Error saving exercise review list", error)
+    reviewQuestionIds.value = previousQuestionIds
+    syncReviewLaterAnswerState()
+    reviewFlagError.value = t("Could not save draft answer")
+  } finally {
+    isReviewFlagSaving.value = false
+  }
+}
+
+function showReviewReminder() {
+  if (!isReviewAnswersEnabled.value || canManage.value || !activeAttempt.value?.attemptId) {
+    return false
+  }
+
+  isReviewReminderVisible.value = true
+  reviewQueue.value = []
+  reviewQueueIndex.value = 0
+
+  return true
+}
+
+function reviewSelectedQuestions() {
+  const orderedSelectedIds = answerableQuestions.value
+    .map((question) => Number(question.id || 0))
+    .filter((questionId) => reviewQuestionIds.value.has(questionId))
+
+  if (orderedSelectedIds.length === 0) {
+    return
+  }
+
+  reviewQueue.value = orderedSelectedIds
+  reviewQueueIndex.value = 0
+  isReviewReminderVisible.value = false
+  setCurrentQuestionById(orderedSelectedIds[0])
+  syncQuestionCountdown()
+}
+
+function returnToReviewReminder() {
+  reviewQueue.value = []
+  reviewQueueIndex.value = 0
+  isReviewReminderVisible.value = true
+  syncQuestionCountdown()
+}
+
+function setCurrentQuestionById(questionId) {
+  const navigationIndex = findNavigationIndexForQuestion(questionId)
+  if (navigationIndex >= 0) {
+    currentQuestionIndex.value = navigationIndex
+  }
+}
+
+function findNavigationIndexForQuestion(questionId) {
+  const safeQuestionId = Number(questionId || 0)
+  if (safeQuestionId <= 0) {
+    return -1
+  }
+
+  if (runtimePages.value.length > 0) {
+    return runtimePages.value.findIndex((page) => (page.questionIds || []).map(Number).includes(safeQuestionId))
+  }
+
+  return answerableQuestions.value.findIndex((question) => Number(question.id || 0) === safeQuestionId)
+}
 
 function normalizeRuntimePages(pages = []) {
   const normalizedPages = []
@@ -1728,6 +2096,10 @@ async function loadRuntime() {
     applyAttemptState(activeAttempt.value)
     initializeAnswerState()
     applySavedAnswers(activeAttempt.value?.savedAnswers || {})
+    syncReviewQuestionIdsFromAttempt(activeAttempt.value)
+    isReviewReminderVisible.value = false
+    reviewQueue.value = []
+    reviewQueueIndex.value = 0
     directFeedbackByQuestion.value = {}
     feedbackDialog.value = null
     isFeedbackDialogVisible.value = false
@@ -1766,6 +2138,10 @@ async function startAttempt() {
       reorderQuestionsFromAttempt(response.questionIds || [])
       initializeAnswerState()
       applySavedAnswers(response.savedAnswers || {})
+      syncReviewQuestionIdsFromAttempt(response)
+      isReviewReminderVisible.value = false
+      reviewQueue.value = []
+      reviewQueueIndex.value = 0
       syncCountdownFromAttempt(response)
       syncRuntimeSettingsEffects()
       syncQuestionCountdown()
@@ -1790,6 +2166,10 @@ async function startAttempt() {
 function applyAttemptState(attempt) {
   if (!attempt) {
     currentQuestionIndex.value = 0
+    syncReviewQuestionIds([])
+    isReviewReminderVisible.value = false
+    reviewQueue.value = []
+    reviewQueueIndex.value = 0
     syncCountdownFromAttempt(null)
     syncQuestionCountdown()
     return
@@ -1851,10 +2231,19 @@ async function goToPreviousQuestion() {
   }
 
   if (await saveVisibleAnswers({ afterFeedback: "previous" })) {
-    if (!feedbackShownOnLastSave.value) {
-      currentQuestionIndex.value -= 1
-      syncQuestionCountdown()
+    if (feedbackShownOnLastSave.value) {
+      return
     }
+
+    if (isReviewingMarkedQuestions.value) {
+      reviewQueueIndex.value = Math.max(0, reviewQueueIndex.value - 1)
+      setCurrentQuestionById(reviewQueue.value[reviewQueueIndex.value])
+      syncQuestionCountdown()
+      return
+    }
+
+    currentQuestionIndex.value -= 1
+    syncQuestionCountdown()
   }
 }
 
@@ -1864,10 +2253,19 @@ async function goToNextQuestion() {
   }
 
   if (await saveVisibleAnswers({ afterFeedback: "next" })) {
-    if (!feedbackShownOnLastSave.value) {
-      currentQuestionIndex.value += 1
-      syncQuestionCountdown()
+    if (feedbackShownOnLastSave.value) {
+      return
     }
+
+    if (isReviewingMarkedQuestions.value) {
+      reviewQueueIndex.value = Math.min(reviewQueue.value.length - 1, reviewQueueIndex.value + 1)
+      setCurrentQuestionById(reviewQueue.value[reviewQueueIndex.value])
+      syncQuestionCountdown()
+      return
+    }
+
+    currentQuestionIndex.value += 1
+    syncQuestionCountdown()
   }
 }
 
@@ -1918,6 +2316,10 @@ async function finishAttempt(options = {}) {
   }
 
   if (!ignoreFeedback && feedbackShownOnLastSave.value) {
+    return
+  }
+
+  if (true !== options.skipReviewAnswers && !options.expiredByTimer && showReviewReminder()) {
     return
   }
 
@@ -1983,6 +2385,7 @@ async function saveQuestionDraftAnswer(question, afterFeedback = "none") {
         attemptId,
         questionId: Number(question.id),
         answer: buildAnswerPayload(question),
+        reviewLater: isQuestionMarkedForReview(question.id),
         secondsSpent: getQuestionSecondsSpent(question),
         navigationAction: afterFeedback,
       },
@@ -1998,6 +2401,8 @@ async function saveQuestionDraftAnswer(question, afterFeedback = "none") {
   if (!response?.success) {
     throw new Error(response?.message || "Could not save draft answer")
   }
+
+  syncReviewQuestionIdsFromResponse(response)
 
   if (Array.isArray(response.answeredQuestionIds)) {
     savedQuestionIds.value = new Set(response.answeredQuestionIds.map(Number))
@@ -2028,6 +2433,7 @@ async function saveUploadQuestionAnswer(question, exerciseId, attemptId) {
   const formData = new FormData()
   formData.append("questionId", String(Number(question.id)))
   formData.append("secondsSpent", String(getQuestionSecondsSpent(question)))
+  formData.append("reviewLater", isQuestionMarkedForReview(question.id) ? "1" : "0")
   formData.append("file", questionAnswer.uploadFile || questionAnswer.oralFile)
 
   const response = await exerciseService.uploadExerciseRuntimeAnswer(
@@ -2038,6 +2444,7 @@ async function saveUploadQuestionAnswer(question, exerciseId, attemptId) {
   )
 
   if (response?.success) {
+    syncReviewQuestionIdsFromResponse(response)
     questionAnswer.uploadFile = null
     questionAnswer.uploadFileName = ""
     questionAnswer.oralFile = null
@@ -2586,6 +2993,7 @@ function initializeAnswerState() {
       hotspotPoints: [],
       hotspotImageSize: null,
       selectedHotspotAnswerId: hotspotZones(question)[0]?.id || null,
+      reviewLater: reviewQuestionIds.value.has(Number(question.id || 0)),
     }
 
     if (isMatchingDraggableQuestion(question)) {

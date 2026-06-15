@@ -116,6 +116,19 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
             throw new AccessDeniedHttpException('The requested question does not belong to this attempt.');
         }
 
+        if (true === $data->reviewLaterOnly) {
+            if (null !== $data->reviewLater) {
+                $this->syncReviewQuestion($attempt, $questionId, true === $data->reviewLater);
+            }
+
+            $this->entityManager->flush();
+
+            $response = $this->createResponse($exerciseId, $attemptId, $questionId);
+            $response->message = 'Review list updated';
+
+            return $response;
+        }
+
         $rows = $this->buildDraftRows($question, $data->answer, max(0, (int) $data->secondsSpent));
         $feedback = $this->buildFeedback($quiz, $question, $rows);
         $marks = [] !== $feedback ? (float) ($feedback['score'] ?? 0.0) : 0.0;
@@ -136,23 +149,62 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
             $this->entityManager->persist($attemptRow);
         }
 
+        if (null !== $data->reviewLater) {
+            $this->syncReviewQuestion($attempt, $questionId, true === $data->reviewLater);
+        }
+
         $this->blockCategoryIfNeeded($attempt, $quiz, $question, (string) $data->navigationAction);
 
         $this->entityManager->flush();
 
+        $response = $this->createResponse($exerciseId, $attemptId, $questionId);
+        $response->message = [] === $rows ? 'Draft answer cleared' : 'Draft answer saved';
+        $response->feedback = $feedback;
+
+        return $response;
+    }
+
+
+    private function createResponse(int $exerciseId, int $attemptId, int $questionId): ExerciseRuntimeAnswer
+    {
         $response = new ExerciseRuntimeAnswer();
         $response->exerciseId = $exerciseId;
         $response->attemptId = $attemptId;
         $response->questionId = $questionId;
         $response->success = true;
-        $response->message = [] === $rows ? 'Draft answer cleared' : 'Draft answer saved';
         $response->savedAnswer = $this->getSavedAnswerRows($attemptId, $questionId);
         $response->answeredQuestionIds = $this->getAnsweredQuestionIds($attemptId);
+        $response->reviewQuestionIds = $this->getReviewQuestionIds($attemptId);
         $response->answeredCount = \count($response->answeredQuestionIds);
         $response->canFinish = false;
-        $response->feedback = $feedback;
 
         return $response;
+    }
+
+    private function syncReviewQuestion(TrackEExercise $attempt, int $questionId, bool $reviewLater): void
+    {
+        $questionIds = $this->parseQuestionIds((string) $attempt->getDataTracking());
+        if (!\in_array($questionId, $questionIds, true)) {
+            return;
+        }
+
+        $reviewQuestionIds = $this->parseQuestionIds((string) $attempt->getQuestionsToCheck());
+        $reviewQuestionMap = array_fill_keys($reviewQuestionIds, true);
+
+        if ($reviewLater) {
+            $reviewQuestionMap[$questionId] = true;
+        } else {
+            unset($reviewQuestionMap[$questionId]);
+        }
+
+        $orderedReviewQuestionIds = [];
+        foreach ($questionIds as $orderedQuestionId) {
+            if (isset($reviewQuestionMap[$orderedQuestionId])) {
+                $orderedReviewQuestionIds[] = $orderedQuestionId;
+            }
+        }
+
+        $attempt->setQuestionsToCheck(implode(',', $orderedReviewQuestionIds));
     }
 
     private function blockCategoryIfNeeded(TrackEExercise $attempt, CQuiz $quiz, CQuizQuestion $question, string $navigationAction): void
@@ -1658,6 +1710,27 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
         }
 
         return $result;
+    }
+
+    /**
+     * @return array<int, int>
+     */
+    private function getReviewQuestionIds(int $attemptId): array
+    {
+        $attempt = $this->entityManager->createQueryBuilder()
+            ->select('attempt.questionsToCheck')
+            ->from(TrackEExercise::class, 'attempt')
+            ->andWhere('attempt.exeId = :attemptId')
+            ->setParameter('attemptId', $attemptId, Types::INTEGER)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+
+        if (!\is_array($attempt)) {
+            return [];
+        }
+
+        return $this->parseQuestionIds((string) ($attempt['questionsToCheck'] ?? ''));
     }
 
     /**

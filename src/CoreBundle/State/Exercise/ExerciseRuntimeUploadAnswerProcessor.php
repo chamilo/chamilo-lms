@@ -84,6 +84,7 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
         $attemptId = isset($uriVariables['attemptId']) ? (int) $uriVariables['attemptId'] : $request->request->getInt('attemptId');
         $questionId = $request->request->getInt('questionId');
         $secondsSpent = max(0, $request->request->getInt('secondsSpent'));
+        $reviewLater = $request->request->has('reviewLater') ? $request->request->getBoolean('reviewLater') : null;
 
         if (0 >= $exerciseId || 0 >= $attemptId || 0 >= $questionId) {
             throw new BadRequestHttpException('A valid exercise, attempt and question are required.');
@@ -141,6 +142,10 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
             $this->entityManager->persist($attemptFile);
         }
 
+        if (null !== $reviewLater) {
+            $this->syncReviewQuestion($attempt, $questionId, true === $reviewLater);
+        }
+
         $this->entityManager->flush();
 
         $response = new ExerciseRuntimeUploadAnswer();
@@ -152,10 +157,37 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
         $response->files = $this->normalizeAttemptFiles($attemptRow);
         $response->savedAnswer = $this->getSavedAnswerRows($attemptId, $questionId);
         $response->answeredQuestionIds = $this->getAnsweredQuestionIds($attemptId);
+        $response->reviewQuestionIds = $this->getReviewQuestionIds($attemptId);
         $response->answeredCount = \count($response->answeredQuestionIds);
         $response->canFinish = false;
 
         return $response;
+    }
+
+    private function syncReviewQuestion(TrackEExercise $attempt, int $questionId, bool $reviewLater): void
+    {
+        $questionIds = $this->parseQuestionIds((string) $attempt->getDataTracking());
+        if (!\in_array($questionId, $questionIds, true)) {
+            return;
+        }
+
+        $reviewQuestionIds = $this->parseQuestionIds((string) $attempt->getQuestionsToCheck());
+        $reviewQuestionMap = array_fill_keys($reviewQuestionIds, true);
+
+        if ($reviewLater) {
+            $reviewQuestionMap[$questionId] = true;
+        } else {
+            unset($reviewQuestionMap[$questionId]);
+        }
+
+        $orderedReviewQuestionIds = [];
+        foreach ($questionIds as $orderedQuestionId) {
+            if (isset($reviewQuestionMap[$orderedQuestionId])) {
+                $orderedReviewQuestionIds[] = $orderedQuestionId;
+            }
+        }
+
+        $attempt->setQuestionsToCheck(implode(',', $orderedReviewQuestionIds));
     }
 
     private function canUploadAnswer(): bool
@@ -542,6 +574,27 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
         }
 
         return $result;
+    }
+
+    /**
+     * @return array<int, int>
+     */
+    private function getReviewQuestionIds(int $attemptId): array
+    {
+        $attempt = $this->entityManager->createQueryBuilder()
+            ->select('attempt.questionsToCheck')
+            ->from(TrackEExercise::class, 'attempt')
+            ->andWhere('attempt.exeId = :attemptId')
+            ->setParameter('attemptId', $attemptId, Types::INTEGER)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+
+        if (!\is_array($attempt)) {
+            return [];
+        }
+
+        return $this->parseQuestionIds((string) ($attempt['questionsToCheck'] ?? ''));
     }
 
     /**

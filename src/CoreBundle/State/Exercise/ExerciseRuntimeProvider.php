@@ -259,6 +259,7 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
             'expiredAt' => $expiredAt,
             'remainingSeconds' => $remainingSeconds,
             'savedAnswers' => $this->getSavedAnswers((int) $attempt->getExeId(), $attempt->getCourse(), $attempt->getSession()),
+            'reviewQuestionIds' => $this->parseQuestionIds((string) $attempt->getQuestionsToCheck()),
         ];
     }
 

@@ -42,6 +42,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
                                 'properties' => [
                                     'questionId' => ['type' => 'integer'],
                                     'secondsSpent' => ['type' => 'integer'],
+                                    'reviewLater' => ['type' => 'boolean'],
                                     'file' => [
                                         'type' => 'string',
                                         'format' => 'binary',
@@ -97,6 +98,12 @@ final class ExerciseRuntimeUploadAnswer
      */
     #[Groups(['exercise_runtime_upload_answer:read'])]
     public array $answeredQuestionIds = [];
+
+    /**
+     * @var array<int, int>
+     */
+    #[Groups(['exercise_runtime_upload_answer:read'])]
+    public array $reviewQuestionIds = [];
 
     #[Groups(['exercise_runtime_upload_answer:read'])]
     public int $answeredCount = 0;

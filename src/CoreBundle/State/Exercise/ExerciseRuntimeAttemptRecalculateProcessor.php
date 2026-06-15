@@ -84,7 +84,7 @@ final readonly class ExerciseRuntimeAttemptRecalculateProcessor implements Proce
         $response->exerciseId = $exerciseId;
         $response->attemptId = $attemptId;
         $response->success = true;
-        $response->message = 'Attempt recalculated';
+        $response->message = 'Results recalculated';
         $response->score = (float) $result['score'];
         $response->maxScore = (float) $result['maxScore'];
 

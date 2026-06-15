@@ -232,7 +232,7 @@ final readonly class ExerciseRuntimeReportBulkActionProcessor implements Process
 
         $this->entityManager->flush();
 
-        return $this->buildResponse($data, true, 'Attempts recalculated', $processedCount, $failedCount);
+        return $this->buildResponse($data, true, 'Results recalculated', $processedCount, $failedCount);
     }
 
     /**

@@ -81,7 +81,7 @@
       <BaseButton
         v-if="canBulkRecalculate"
         class="exercise-report-toolbar__button"
-        :label="t('Recalculate all results')"
+        :label="t('Recalculate results')"
         :icon="safeIcon('refresh', 'information')"
         only-icon
         size="small"
@@ -341,7 +341,7 @@
             <BaseButton
               v-if="data.canRecalculate"
               class="exercise-report-row-action"
-              :label="t('Recalculate')"
+              :label="t('Recalculate results')"
               only-icon
               :icon="safeIcon('refresh', 'information')"
               size="small"
@@ -620,7 +620,7 @@ function confirmCleanBeforeDate() {
 
 function confirmRecalculateAll() {
   requireConfirmation({
-    message: t("Recalculate all results?"),
+    message: t("Please confirm your choice"),
     accept: () => runBulkAction("recalculate_all"),
   })
 }
@@ -694,7 +694,7 @@ async function runBulkAction(action, extraPayload = {}) {
       exerciseId,
     )
     if (!response?.success) {
-      throw new Error(response?.message || "Could not run bulk action")
+      throw new Error(response?.message || "Could not load data")
     }
 
     successMessage.value = getBulkActionMessage(response)
@@ -704,7 +704,7 @@ async function runBulkAction(action, extraPayload = {}) {
     await loadReport()
   } catch (error) {
     console.error("Error running exercise report bulk action", error)
-    errorMessage.value = t("Could not run bulk action")
+    errorMessage.value = t("Could not load data")
   } finally {
     isBulkActionLoading.value = false
   }
@@ -752,7 +752,7 @@ async function closeAttempt(attempt) {
 
 function confirmRecalculateAttempt(attempt) {
   requireConfirmation({
-    message: t("Recalculate attempt?"),
+    message: t("Please confirm your choice"),
     accept: () => recalculateAttempt(attempt),
   })
 }
@@ -769,14 +769,14 @@ async function recalculateAttempt(attempt) {
   try {
     const response = await exerciseService.recalculateExerciseRuntimeAttempt({}, getContextParams(), exerciseId, attemptId)
     if (!response?.success) {
-      throw new Error(response?.message || "Could not recalculate attempt")
+      throw new Error(response?.message || "Could not load data")
     }
 
-    successMessage.value = t("Attempt recalculated")
+    successMessage.value = t("Results recalculated")
     await loadReport()
   } catch (error) {
     console.error("Error recalculating exercise attempt", error)
-    errorMessage.value = t("Could not recalculate attempt")
+    errorMessage.value = t("Could not load data")
   }
 }
 

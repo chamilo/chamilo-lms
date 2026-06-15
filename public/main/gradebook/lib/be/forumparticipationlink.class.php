@@ -125,7 +125,16 @@ class ForumParticipationLink extends AbstractLink
 
     public function get_description()
     {
-        return '';
+        $one = $this->get_points_one();
+        $many = $this->get_points_many();
+
+        if (null === $one && null === $many) {
+            return '';
+        }
+
+        // Surfaces both scoring values to the teacher, since the weight column only shows pointsMany.
+        return get_lang('Points for one message').': '.api_float_val($one)
+            .' · '.get_lang('Points for two or more messages').': '.api_float_val($many);
     }
 
     public function is_valid_link(): bool

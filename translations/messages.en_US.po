@@ -36517,3 +36517,6 @@ msgstr "Points awarded when the student posted exactly one message in the thread
 
 msgid "Points awarded when the student posted two or more messages in the thread."
 msgstr "Points awarded when the student posted two or more messages in the thread."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "Optional. If left empty, one or more messages award the points for one message."

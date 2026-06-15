@@ -76,12 +76,8 @@ class ForumParticipationLink extends AbstractLink
     public function calc_score($studentId = null, $type = null)
     {
         $pointsOne = (float) ($this->get_points_one() ?? 0);
-        $pointsMany = (float) ($this->get_points_many() ?? 0);
-
-        // The maximum a student can earn here is pointsMany; it is used as the item max so the
-        // per-item display stays within 0-100% and, with weight = pointsMany in POINTS_SUM,
-        // the contribution equals the earned points (score/max × weight = score).
-        $max = $pointsMany > 0 ? $pointsMany : 1.0;
+        $max = $this->getMaxPoints();
+        $max = $max > 0 ? $max : 1.0;
 
         // Aggregate (all students) is not meaningful for a fixed-points item.
         if (!isset($studentId)) {
@@ -95,10 +91,41 @@ class ForumParticipationLink extends AbstractLink
         } elseif (1 === $count) {
             $score = $pointsOne;
         } else {
-            $score = $pointsMany;
+            $score = $this->getEffectiveMany();
         }
 
         return [$score, $max];
+    }
+
+    /**
+     * The weight is derived from the points so it always matches them, instead of relying on
+     * the separately stored weight column (which could drift out of sync). Used by the gradebook
+     * display (Weight column) and by the category calculation in POINTS_SUM.
+     *
+     * @return float
+     */
+    public function get_weight()
+    {
+        return $this->getMaxPoints();
+    }
+
+    /**
+     * Highest award the item can give: pointsMany when set, otherwise pointsOne.
+     */
+    private function getMaxPoints(): float
+    {
+        return max((float) ($this->get_points_one() ?? 0), $this->getEffectiveMany());
+    }
+
+    /**
+     * Points for two or more messages, falling back to pointsOne when no 2+ bonus is configured.
+     */
+    private function getEffectiveMany(): float
+    {
+        $pointsOne = (float) ($this->get_points_one() ?? 0);
+        $pointsMany = (float) ($this->get_points_many() ?? 0);
+
+        return $pointsMany > 0 ? $pointsMany : $pointsOne;
     }
 
     public function needs_name_and_description(): bool
@@ -132,9 +159,13 @@ class ForumParticipationLink extends AbstractLink
             return '';
         }
 
-        // Surfaces both scoring values to the teacher, since the weight column only shows pointsMany.
-        return get_lang('Points for one message').': '.api_float_val($one)
-            .' · '.get_lang('Points for two or more messages').': '.api_float_val($many);
+        // Surfaces the scoring values to the teacher, since the weight column only shows the max.
+        $description = get_lang('Points for one message').': '.api_float_val($one);
+        if (null !== $many && (float) $many > 0) {
+            $description .= ' · '.get_lang('Points for two or more messages').': '.api_float_val($many);
+        }
+
+        return $description;
     }
 
     public function is_valid_link(): bool

@@ -256,8 +256,12 @@ class ImportCustomGradingRubricsCommand extends Command
         array &$skipped,
         bool $dryRun
     ): int {
-        $pointsOne = (string) round((float) ($component['one'] ?? 0), 4);
-        $pointsMany = (string) round((float) ($component['many'] ?? 0), 4);
+        $pointsOneValue = round((float) ($component['one'] ?? 0), 4);
+        $pointsManyValue = round((float) ($component['many'] ?? 0), 4);
+        $pointsOne = (string) $pointsOneValue;
+        $pointsMany = $pointsManyValue > 0 ? (string) $pointsManyValue : null;
+        // Weight is the highest award (pointsMany, or pointsOne when no 2+ bonus is set).
+        $weight = max($pointsOneValue, $pointsManyValue);
         $created = 0;
 
         foreach (($component['threads'] ?? []) as $threadId) {
@@ -273,9 +277,9 @@ class ImportCustomGradingRubricsCommand extends Command
             $link->setRefId($threadId);
             $link->setCourse($course);
             $link->setCategory($category);
-            // The item's max points (pointsMany) is also its weight, so in POINTS_SUM the
-            // contribution equals the earned points (score/max × weight = score).
-            $link->setWeight((float) $pointsMany);
+            // The highest award is the item's weight, so in POINTS_SUM the contribution
+            // equals the earned points (score/max × weight = score).
+            $link->setWeight($weight);
             $link->setVisible(1);
             $link->setLocked(0);
             $link->setPointsOne($pointsOne);

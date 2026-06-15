@@ -164,9 +164,9 @@ class LinkAddEditForm extends FormValidator
                 'points_many',
                 [
                     get_lang('Points for two or more messages'),
-                    get_lang('Points awarded when the student posted two or more messages in the thread.'),
+                    get_lang('Optional. If left empty, one or more messages award the points for one message.'),
                 ],
-                true,
+                false,
                 ['size' => '4', 'maxlength' => '8']
             );
             $this->addRule('points_many', get_lang('Only numbers'), 'numeric');

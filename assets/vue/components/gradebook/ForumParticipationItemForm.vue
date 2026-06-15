@@ -85,12 +85,15 @@ const isEdit = computed(() => null !== props.link)
 const form = reactive({
   threadId: props.link?.refId ?? null,
   pointsOne: Number(props.link?.pointsOne ?? 0),
-  pointsMany: Number(props.link?.pointsMany ?? 0),
+  // pointsMany is optional (the 2+ messages bonus); null means "one or more = pointsOne".
+  pointsMany: props.link?.pointsMany != null ? Number(props.link.pointsMany) : null,
 })
 
 const threadOptions = computed(() => props.threads)
 
-const isValid = computed(() => null !== form.threadId && form.pointsOne >= 0 && form.pointsMany >= 0)
+const hasMany = computed(() => form.pointsMany !== null && form.pointsMany !== "" && form.pointsMany >= 0)
+
+const isValid = computed(() => null !== form.threadId && form.pointsOne >= 0)
 
 /**
  * Creates or updates the forum participation gradebook item via the API.
@@ -100,12 +103,14 @@ async function submit() {
     return
   }
 
+  // Weight is the highest award: pointsMany when set, otherwise pointsOne.
+  const weight = Math.max(Number(form.pointsOne) || 0, hasMany.value ? Number(form.pointsMany) : 0)
+
   if (isEdit.value) {
     await gradebookService.updateForumParticipationLink(props.link.id, {
       pointsOne: String(form.pointsOne),
-      pointsMany: String(form.pointsMany),
-      // Keep weight in sync with pointsMany (the item's max points).
-      weight: Number(form.pointsMany),
+      pointsMany: hasMany.value ? String(form.pointsMany) : null,
+      weight,
     })
   } else {
     await gradebookService.createForumParticipationLink({

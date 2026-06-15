@@ -67,21 +67,22 @@ export default {
    * @param {number} payload.threadId The forum thread id used as ref_id.
    * @param {number} payload.courseId The course id.
    * @param {number|string} payload.categoryId The gradebook category id.
-   * @param {number} payload.pointsOne Points awarded for exactly one message.
-   * @param {number} payload.pointsMany Points awarded for two or more messages.
+   * @param {number} payload.pointsOne Points awarded for one or more messages.
+   * @param {number|null} payload.pointsMany Optional bonus points for two or more messages.
    * @returns {Promise<Object>} The created gradebook link resource.
    */
   async createForumParticipationLink({ threadId, courseId, categoryId, pointsOne, pointsMany }) {
-    // 11 = LINK_FORUM_PARTICIPATION. Weight equals pointsMany (the item's max points) so in
-    // points_sum the contribution equals the earned points.
+    const hasMany = pointsMany !== null && pointsMany !== undefined && pointsMany !== ""
+    // 11 = LINK_FORUM_PARTICIPATION. Weight is the highest award so in points_sum the
+    // contribution equals the earned points.
     return await baseService.post("/api/gradebook_links", {
       type: 11,
       refId: threadId,
       course: `/api/courses/${courseId}`,
       category: `/api/gradebook_categories/${categoryId}`,
-      weight: Number(pointsMany),
+      weight: Math.max(Number(pointsOne) || 0, hasMany ? Number(pointsMany) : 0),
       pointsOne: String(pointsOne),
-      pointsMany: String(pointsMany),
+      pointsMany: hasMany ? String(pointsMany) : null,
     })
   },
 

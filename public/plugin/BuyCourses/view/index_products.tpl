@@ -203,6 +203,17 @@
                 <div class="mt-1 text-base font-semibold text-gray-90">
                     {{ service.display_price|default(service.total_price|default('')) }}
                 </div>
+                <div class="mt-2 flex flex-wrap items-center gap-2 text-xs font-semibold text-gray-50">
+                    <span class="inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1">
+                        <em class="fa fa-calendar fa-fw text-primary"></em>
+                        {{ service.billing_cycle_label|default('') }}
+                    </span>
+                    {% if service.duration_label|default('') %}
+                        <span class="inline-flex items-center rounded-full bg-white px-2.5 py-1">
+                            {{ service.duration_label }}
+                        </span>
+                    {% endif %}
+                </div>
             </div>
 
             <div class="flex flex-col gap-3">
@@ -266,6 +277,21 @@
                 {% endif %}
             </div>
 
+            {% if section.card == 'service' and section.billing_cycle_tabs is defined and section.billing_cycle_tabs %}
+                <nav class="mb-5 overflow-x-auto" aria-label="{{ 'BillingPeriod'|get_plugin_lang('BuyCoursesPlugin') }}">
+                    <div class="inline-flex rounded-2xl border border-gray-25 bg-white p-1 shadow-sm">
+                        {% for billingTab in section.billing_cycle_tabs %}
+                            <a
+                                href="{{ billingTab.url }}"
+                                class="inline-flex items-center justify-center rounded-xl px-4 py-2.5 text-sm font-semibold transition {{ billingTab.active ? 'bg-primary text-white shadow-sm' : 'text-gray-90 hover:bg-support-2 hover:text-primary' }}"
+                            >
+                                {{ billingTab.label }}
+                            </a>
+                        {% endfor %}
+                    </div>
+                </nav>
+            {% endif %}
+
             {% if section.card == 'service' and buyer_role_notice %}
                 <div class="mb-4 rounded-2xl border border-warning bg-support-6 px-4 py-3 text-sm text-gray-90">
                     <em class="fa fa-info-circle fa-fw"></em>
@@ -273,17 +299,31 @@
                 </div>
             {% endif %}
 
-            <div class="grid gap-6 sm:grid-cols-2 2xl:grid-cols-3">
-                {% for item in section.items %}
-                    {% if section.card == 'course' %}
-                        {{ cards.course_card(item, section.buy_script, section.buy_type) }}
-                    {% elseif section.card == 'session' %}
-                        {{ cards.session_card(item, section.buy_script, section.buy_type) }}
-                    {% elseif section.card == 'service' %}
-                        {{ cards.service_card(item, can_buy_services) }}
-                    {% endif %}
-                {% endfor %}
-            </div>
+            {% if section.card == 'service' and section.items is empty %}
+                <div class="rounded-3xl border border-gray-25 bg-white p-10 text-center shadow-sm">
+                    <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-support-2 text-primary">
+                        <em class="fa fa-search text-xl"></em>
+                    </div>
+                    <h3 class="mt-4 text-lg font-semibold text-gray-90">
+                        {{ 'NoServicesFound'|get_plugin_lang('BuyCoursesPlugin') }}
+                    </h3>
+                    <p class="mt-2 text-sm text-gray-50">
+                        {{ 'TryChangingSearchFilter'|get_plugin_lang('BuyCoursesPlugin') }}
+                    </p>
+                </div>
+            {% else %}
+                <div class="grid gap-6 sm:grid-cols-2 2xl:grid-cols-3">
+                    {% for item in section.items %}
+                        {% if section.card == 'course' %}
+                            {{ cards.course_card(item, section.buy_script, section.buy_type) }}
+                        {% elseif section.card == 'session' %}
+                            {{ cards.session_card(item, section.buy_script, section.buy_type) }}
+                        {% elseif section.card == 'service' %}
+                            {{ cards.service_card(item, can_buy_services) }}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
         </section>
     {% endfor %}
 </div>

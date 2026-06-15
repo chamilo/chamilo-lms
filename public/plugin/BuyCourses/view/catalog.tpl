@@ -185,6 +185,14 @@
                     >
                 </div>
 
+                {% if showing_services %}
+                    <input
+                        type="hidden"
+                        name="billing_cycle"
+                        value="{{ billing_cycle_filter_value|default('monthly') }}"
+                    >
+                {% endif %}
+
                 <div class="flex flex-col gap-3 pt-2">
                     <button
                         type="submit"
@@ -195,7 +203,7 @@
                     </button>
 
                     <a
-                        href="{{ pagination_base_path|default('course_catalog.php') }}"
+                        href="{{ service_catalog_reset_url|default(pagination_base_path|default('course_catalog.php')) }}"
                         class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
                     >
                         <em class="fa fa-eraser fa-fw"></em>
@@ -407,6 +415,21 @@
             {% endif %}
 
             {% if showing_services %}
+                {% if billing_cycle_tabs is defined and billing_cycle_tabs %}
+                    <nav class="overflow-x-auto" aria-label="{{ 'BillingPeriod'|get_plugin_lang('BuyCoursesPlugin') }}">
+                        <div class="inline-flex rounded-2xl border border-gray-25 bg-white p-1 shadow-sm">
+                            {% for billingTab in billing_cycle_tabs %}
+                                <a
+                                    href="{{ billingTab.url }}"
+                                    class="inline-flex items-center justify-center rounded-xl px-4 py-2.5 text-sm font-semibold transition {{ billingTab.active ? 'bg-primary text-white shadow-sm' : 'text-gray-90 hover:bg-support-2 hover:text-primary' }}"
+                                >
+                                    {{ billingTab.label }}
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </nav>
+                {% endif %}
+
                 {% if buyer_role_notice is defined and buyer_role_notice %}
                     <div class="rounded-2xl border border-warning bg-support-6 px-4 py-3 text-sm text-gray-90">
                         <em class="fa fa-info-circle fa-fw"></em>
@@ -443,6 +466,17 @@
                                         </div>
                                         <div class="mt-1 text-base font-semibold text-gray-90">
                                             {{ service.display_price|default(service.total_price|default('')) }}
+                                        </div>
+                                        <div class="mt-2 flex flex-wrap items-center gap-2 text-xs font-semibold text-gray-50">
+                                            <span class="inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1">
+                                                <em class="fa fa-calendar fa-fw text-primary"></em>
+                                                {{ service.billing_cycle_label|default('') }}
+                                            </span>
+                                            {% if service.duration_label|default('') %}
+                                                <span class="inline-flex items-center rounded-full bg-white px-2.5 py-1">
+                                                    {{ service.duration_label }}
+                                                </span>
+                                            {% endif %}
                                         </div>
                                     </div>
 

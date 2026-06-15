@@ -50,12 +50,21 @@
       <BaseButton
         v-if="actionUrls.exportXlsx"
         class="exercise-report-toolbar__button"
-        :label="t('Export XLSX')"
+        :label="t('Excel export')"
         :to-url="actionUrls.exportXlsx"
         :icon="safeIcon('file-excel', 'information')"
         only-icon
         size="small"
         type="primary-text"
+      />
+      <BaseButton
+        class="exercise-report-toolbar__button"
+        :label="t('Download')"
+        :icon="safeIcon('download', 'file-excel')"
+        only-icon
+        size="small"
+        type="primary-text"
+        @click="toggleExportForm"
       />
       <BaseButton
         v-if="canBulkDelete"
@@ -155,6 +164,66 @@
         type="plain"
         @click.prevent="toggleCleanForm"
       />
+    </form>
+
+    <form
+      v-if="isExportFormVisible"
+      class="rounded-xl border border-gray-20 bg-white p-4 shadow-sm"
+      @submit.prevent="downloadReport"
+    >
+      <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+          <div class="w-full sm:max-w-56">
+            <BaseSelect
+              id="exercise-report-export-format"
+              v-model="exportForm.format"
+              :label="t('Format')"
+              name="exportFormat"
+              :options="exportFormatOptions"
+              option-label="label"
+              option-value="value"
+            />
+          </div>
+
+          <BaseButton
+            class="w-full sm:w-auto"
+            :label="t('Download')"
+            :icon="safeIcon('download', 'file-excel')"
+            :is-submit="true"
+            type="primary"
+          />
+        </div>
+
+        <div class="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-gray-700">
+          <label class="inline-flex items-center gap-2">
+            <input
+              v-model="exportForm.extraData"
+              class="h-4 w-4 rounded border-gray-30"
+              name="extraData"
+              type="checkbox"
+            />
+            <span>{{ t('Extra fields') }}</span>
+          </label>
+          <label class="inline-flex items-center gap-2">
+            <input
+              v-model="exportForm.includeAllUsers"
+              class="h-4 w-4 rounded border-gray-30"
+              name="includeAllUsers"
+              type="checkbox"
+            />
+            <span>{{ t('Include all users') }}</span>
+          </label>
+          <label class="inline-flex items-center gap-2">
+            <input
+              v-model="exportForm.onlyBestAttempts"
+              class="h-4 w-4 rounded border-gray-30"
+              name="onlyBestAttempts"
+              type="checkbox"
+            />
+            <span>{{ t('Only best attempts') }}</span>
+          </label>
+        </div>
+      </div>
     </form>
 
     <div class="border-b border-gray-20" />
@@ -267,6 +336,16 @@
         selection-mode="multiple"
         header-style="width: 3rem"
       />
+      <Column
+        v-if="showOfficialCode"
+        :header="t('Official code')"
+        field="officialCode"
+        sortable
+      >
+        <template #body="{ data }">
+          {{ displayText(data.officialCode, '-') }}
+        </template>
+      </Column>
       <Column :header="t('First name')" field="firstName" sortable>
         <template #body="{ data }">
           <div class="font-semibold text-gray-90">{{ displayText(data.firstName, '-') }}</div>
@@ -422,6 +501,7 @@ const description = ref("")
 const attempts = ref([])
 const selectedAttempts = ref([])
 const actionUrls = ref({})
+const showOfficialCode = ref(false)
 const lockedByGradebook = ref(false)
 const canBulkDelete = ref(false)
 const canCleanResults = ref(false)
@@ -429,7 +509,14 @@ const canBulkRecalculate = ref(false)
 const bulkActionToken = ref("")
 const emailActionToken = ref("")
 const isCleanFormVisible = ref(false)
+const isExportFormVisible = ref(false)
 const cleanBeforeDateValue = ref("")
+const exportForm = reactive({
+  format: "csv",
+  extraData: false,
+  includeAllUsers: false,
+  onlyBestAttempts: false,
+})
 const filterForm = reactive({
   firstName: getQueryValue(route.query.firstName) || "",
   lastName: getQueryValue(route.query.lastName) || "",
@@ -442,6 +529,10 @@ const statusOptions = computed(() => [
   { label: t("Completed"), value: "completed" },
   { label: t("Pending correction"), value: "pending_correction" },
   { label: t("Ongoing"), value: "incomplete" },
+])
+const exportFormatOptions = computed(() => [
+  { label: t("CSV export"), value: "csv" },
+  { label: t("Excel export"), value: "xlsx" },
 ])
 const pendingCorrectionCount = computed(() => attempts.value.filter((attempt) => attempt.pendingCorrection).length)
 const selectedAttemptIds = computed(() =>
@@ -537,6 +628,7 @@ async function loadReport() {
     attempts.value = Array.isArray(response.attempts) ? response.attempts : []
     selectedAttempts.value = []
     actionUrls.value = response.actionUrls || {}
+    showOfficialCode.value = true === response.showOfficialCode
     lockedByGradebook.value = true === response.lockedByGradebook
     canBulkDelete.value = true === response.canBulkDelete
     canCleanResults.value = true === response.canCleanResults
@@ -592,6 +684,36 @@ function clearFilters() {
 
 function toggleCleanForm() {
   isCleanFormVisible.value = !isCleanFormVisible.value
+}
+
+function toggleExportForm() {
+  isExportFormVisible.value = !isExportFormVisible.value
+}
+
+function downloadReport() {
+  window.location.href = getReportExportUrl()
+}
+
+function getReportExportUrl() {
+  const exerciseId = getExerciseId()
+  const format = exportForm.format === "xlsx" ? "xlsx" : "csv"
+  const query = new URLSearchParams()
+  const params = {
+    ...getReportParams(),
+    extraData: exportForm.extraData ? 1 : 0,
+    includeAllUsers: exportForm.includeAllUsers ? 1 : 0,
+    onlyBestAttempts: exportForm.onlyBestAttempts ? 1 : 0,
+  }
+
+  for (const [key, value] of Object.entries(params)) {
+    if (value !== undefined && value !== null && String(value) !== "") {
+      query.set(key, String(value))
+    }
+  }
+
+  const queryString = query.toString()
+
+  return `/api/exercise/runtime/${exerciseId}/attempts/export.${format}${queryString ? `?${queryString}` : ""}`
 }
 
 function confirmDeleteSelected() {

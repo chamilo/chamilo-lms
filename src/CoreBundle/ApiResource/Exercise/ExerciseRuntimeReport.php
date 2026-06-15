@@ -88,6 +88,15 @@ final class ExerciseRuntimeReport
     public bool $canBulkRecalculate = false;
 
     #[Groups(['exercise_runtime_report:read'])]
+    public bool $showOfficialCode = false;
+
+    /**
+     * @var array<int, array<string, mixed>>
+     */
+    #[Groups(['exercise_runtime_report:read'])]
+    public array $extraFields = [];
+
+    #[Groups(['exercise_runtime_report:read'])]
     public string $bulkActionToken = '';
 
     #[Groups(['exercise_runtime_report:read'])]

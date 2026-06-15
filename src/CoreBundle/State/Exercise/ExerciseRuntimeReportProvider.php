@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseRuntimeReport;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
@@ -78,6 +79,7 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
         $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session);
         $lockedByGradebook = $this->isGradebookLocked((int) $quiz->getIid(), $course);
         $attempts = $this->getAttempts($request, $quiz, $course, $session, $lockedByGradebook);
+        $showOfficialCode = $this->shouldShowOfficialCode();
 
         $response = new ExerciseRuntimeReport();
         $response->exerciseId = $exerciseId;
@@ -96,6 +98,8 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
         $response->canBulkDelete = !$lockedByGradebook && $this->canDeleteResults();
         $response->canCleanResults = !$lockedByGradebook && $this->canCleanResults();
         $response->canBulkRecalculate = !$lockedByGradebook;
+        $response->showOfficialCode = $showOfficialCode;
+        $response->extraFields = $this->getFilterableUserExtraFields();
         $response->bulkActionToken = $this->csrfTokenManager->getToken(self::BULK_ACTION_CSRF_TOKEN_ID)->getValue();
         $response->emailActionToken = $this->csrfTokenManager->getToken(self::EMAIL_ACTION_CSRF_TOKEN_ID)->getValue();
 
@@ -278,6 +282,7 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
             'exerciseId' => (int) $quiz->getIid(),
             'userId' => $userId,
             'username' => $user->getUsername(),
+            'officialCode' => (string) ($user->getOfficialCode() ?? ''),
             'firstName' => (string) $user->getFirstname(),
             'lastName' => (string) $user->getLastname(),
             'fullName' => $user->getFullName(),
@@ -395,6 +400,51 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
     private function isSettingEnabled(string $name): bool
     {
         return 'true' === $this->settingsManager->getSetting($name, true);
+    }
+
+
+    private function shouldShowOfficialCode(): bool
+    {
+        return $this->isSettingEnabled('exercise.show_official_code_exercise_result_list');
+    }
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    private function getFilterableUserExtraFields(): array
+    {
+        $rows = $this->entityManager->createQueryBuilder()
+            ->select('field')
+            ->from(ExtraField::class, 'field')
+            ->andWhere('field.itemType = :itemType')
+            ->andWhere('field.filter = :filter')
+            ->setParameter('itemType', ExtraField::USER_FIELD_TYPE, Types::INTEGER)
+            ->setParameter('filter', true, Types::BOOLEAN)
+            ->orderBy('field.fieldOrder', 'ASC')
+            ->addOrderBy('field.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        $fields = [];
+        foreach ($rows as $row) {
+            if (!$row instanceof ExtraField) {
+                continue;
+            }
+
+            $fieldId = (int) $row->getId();
+            if (0 >= $fieldId) {
+                continue;
+            }
+
+            $fields[] = [
+                'id' => $fieldId,
+                'variable' => $row->getVariable(),
+                'label' => (string) ($row->getDisplayText() ?: $row->getVariable()),
+            ];
+        }
+
+        return $fields;
     }
 
     /**

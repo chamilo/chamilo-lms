@@ -193,7 +193,7 @@
             </div>
 
             <div class="text-sm text-gray-50">
-                {{ service.description }}
+                {{ service.description|raw }}
             </div>
 
             <div class="rounded-2xl border border-primary/10 bg-support-1 px-4 py-3">

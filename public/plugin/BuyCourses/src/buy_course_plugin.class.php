@@ -7903,7 +7903,7 @@ class BuyCoursesPlugin extends Plugin
     private function filterSubscriptionCourseList(
         int $start,
         int $end,
-        string $name = '',
+        ?string $name = null,
         string $typeResult = 'all'
     ): array|int {
         $subscriptionTable = Database::get_main_table(self::TABLE_SUBSCRIPTION);

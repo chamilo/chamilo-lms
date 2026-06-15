@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Mpdf\SafeMpdfHttpClient;
 use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
@@ -5403,7 +5404,7 @@ final class WikiManager
                     'margin_right'  => 12,
                     'margin_top'    => 12,
                     'margin_bottom' => 12,
-                ]);
+                ], SafeMpdfHttpClient::container());
                 $mpdf->SetTitle($safeTitle);
                 $mpdf->WriteHTML($html);
                 // Force download
@@ -5419,7 +5420,7 @@ final class WikiManager
             try {
                 $dompdf = new \Dompdf\Dompdf([
                     'chroot' => realpath(__DIR__.'/../../..'),
-                    'isRemoteEnabled' => true,
+                    'isRemoteEnabled' => false,
                 ]);
                 $dompdf->loadHtml($html, 'UTF-8');
                 $dompdf->setPaper('A4', 'portrait');

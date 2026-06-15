@@ -1105,6 +1105,8 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
         $response->status = method_exists($attempt, 'getStatus') ? (string) $attempt->getStatus() : self::STATUS_INCOMPLETE;
         $response->message = $message;
         $response->savedAnswers = $this->getSavedAnswers((int) $attempt->getExeId());
+        $response->currentQuestionIndex = $this->getResumeQuestionIndex($attempt, $quiz, $questionIds);
+        $response->currentQuestionId = $questionIds[$response->currentQuestionIndex] ?? ($questionIds[0] ?? null);
 
         if (method_exists($attempt, 'getStartDate')) {
             $startDate = $attempt->getStartDate();
@@ -1120,6 +1122,27 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
         }
 
         return $response;
+    }
+
+    /**
+     * @param array<int, int> $questionIds
+     */
+    private function getResumeQuestionIndex(TrackEExercise $attempt, CQuiz $quiz, array $questionIds): int
+    {
+        if (1 !== (int) $quiz->getPreventBackwards()) {
+            return 0;
+        }
+
+        if ([] === $questionIds) {
+            return 0;
+        }
+
+        $stepsCounter = max(0, (int) $attempt->getStepsCounter());
+        if (0 >= $stepsCounter) {
+            return 0;
+        }
+
+        return min($stepsCounter, \count($questionIds) - 1);
     }
 
     private function getAttemptNumber(TrackEExercise $attempt): int

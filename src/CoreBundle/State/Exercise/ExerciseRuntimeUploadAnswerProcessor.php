@@ -108,6 +108,8 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
             throw new AccessDeniedHttpException('The requested question does not belong to this attempt.');
         }
 
+        $this->assertAttemptAcceptsAnswer($attempt, $quiz, $questionId);
+
         $uploadedFiles = $this->getUploadedFiles($request);
         if ([] === $uploadedFiles) {
             throw new BadRequestHttpException('A file is required for this answer.');
@@ -149,6 +151,8 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
             $this->syncReviewQuestion($attempt, $questionId, true === $reviewLater);
         }
 
+        $this->lockPreventBackwardsStepIfNeeded($attempt, $quiz, $questionId, strtolower(trim((string) $request->request->get('navigationAction', ''))));
+
         $this->entityManager->flush();
 
         $response = new ExerciseRuntimeUploadAnswer();
@@ -165,6 +169,64 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
         $response->canFinish = false;
 
         return $response;
+    }
+
+    private function assertAttemptAcceptsAnswer(TrackEExercise $attempt, CQuiz $quiz, int $questionId): void
+    {
+        if ($this->isAttemptExpired($attempt)) {
+            throw new AccessDeniedHttpException('The time for this exercise has expired.');
+        }
+
+        if (!$this->isPreventBackwardsEnabled($quiz)) {
+            return;
+        }
+
+        $questionIndex = $this->getAttemptQuestionIndex($attempt, $questionId);
+        if (0 > $questionIndex) {
+            return;
+        }
+
+        if ($questionIndex < $attempt->getStepsCounter()) {
+            throw new AccessDeniedHttpException('You cannot update a previous question in this exercise.');
+        }
+    }
+
+    private function isAttemptExpired(TrackEExercise $attempt): bool
+    {
+        $expiredAt = $attempt->getExpiredTimeControl();
+
+        return $expiredAt instanceof DateTime && $expiredAt <= new DateTime();
+    }
+
+    private function isPreventBackwardsEnabled(CQuiz $quiz): bool
+    {
+        return 1 === (int) $quiz->getPreventBackwards();
+    }
+
+    private function lockPreventBackwardsStepIfNeeded(TrackEExercise $attempt, CQuiz $quiz, int $questionId, string $navigationAction): void
+    {
+        if (!$this->isPreventBackwardsEnabled($quiz) || !\in_array($navigationAction, ['next', 'finish'], true)) {
+            return;
+        }
+
+        $questionIndex = $this->getAttemptQuestionIndex($attempt, $questionId);
+        if (0 > $questionIndex) {
+            return;
+        }
+
+        $attempt->setStepsCounter(max($attempt->getStepsCounter(), $questionIndex + 1));
+    }
+
+    private function getAttemptQuestionIndex(TrackEExercise $attempt, int $questionId): int
+    {
+        $questionIds = $this->parseQuestionIds((string) $attempt->getDataTracking());
+        foreach ($questionIds as $index => $attemptQuestionId) {
+            if ($questionId === $attemptQuestionId) {
+                return (int) $index;
+            }
+        }
+
+        return -1;
     }
 
     private function syncReviewQuestion(TrackEExercise $attempt, int $questionId, bool $reviewLater): void

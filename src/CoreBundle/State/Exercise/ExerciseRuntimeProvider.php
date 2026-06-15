@@ -143,7 +143,7 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
             && $this->canFinishWithVue($questions);
 
         $response->canManage = $canManage;
-        $response->attempt = $attempt instanceof TrackEExercise ? $this->normalizeAttempt($attempt, $questions) : null;
+        $response->attempt = $attempt instanceof TrackEExercise ? $this->normalizeAttempt($attempt, $questions, $quiz) : null;
         $response->canStartAttempt = $runsAsLearner;
         $response->canSubmit = $canSubmit;
         $response->usesLegacySubmit = $requiresLegacyRuntime || !$canSubmit;
@@ -238,7 +238,7 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
      *
      * @return array<string, mixed>
      */
-    private function normalizeAttempt(TrackEExercise $attempt, array $questions): array
+    private function normalizeAttempt(TrackEExercise $attempt, array $questions, CQuiz $quiz): array
     {
         $questionIds = $this->parseQuestionIds((string) $attempt->getDataTracking());
         $expiredAt = null;
@@ -251,19 +251,45 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
             }
         }
 
+        $currentQuestionIndex = $this->getResumeQuestionIndex($attempt, $quiz, $questionIds);
+
         return [
             'attemptId' => (int) $attempt->getExeId(),
             'attemptNumber' => $this->getAttemptNumber($attempt),
             'status' => method_exists($attempt, 'getStatus') ? (string) $attempt->getStatus() : 'incomplete',
             'questionIds' => $questionIds,
-            'currentQuestionIndex' => 0,
-            'currentQuestionId' => (int) ($questionIds[0] ?? ($questions[0]['id'] ?? 0)),
+            'currentQuestionIndex' => $currentQuestionIndex,
+            'currentQuestionId' => (int) (
+                $questionIds[$currentQuestionIndex]
+                ?? ($questions[$currentQuestionIndex]['id'] ?? ($questionIds[0] ?? ($questions[0]['id'] ?? 0)))
+            ),
             'totalQuestions' => \count($questions),
             'expiredAt' => $expiredAt,
             'remainingSeconds' => $remainingSeconds,
             'savedAnswers' => $this->getSavedAnswers((int) $attempt->getExeId(), $attempt->getCourse(), $attempt->getSession()),
             'reviewQuestionIds' => $this->parseQuestionIds((string) $attempt->getQuestionsToCheck()),
         ];
+    }
+
+    /**
+     * @param array<int, int> $questionIds
+     */
+    private function getResumeQuestionIndex(TrackEExercise $attempt, ?CQuiz $quiz, array $questionIds): int
+    {
+        if (!$quiz instanceof CQuiz || 1 !== (int) $quiz->getPreventBackwards()) {
+            return 0;
+        }
+
+        if ([] === $questionIds) {
+            return 0;
+        }
+
+        $stepsCounter = max(0, (int) $attempt->getStepsCounter());
+        if (0 >= $stepsCounter) {
+            return 0;
+        }
+
+        return min($stepsCounter, \count($questionIds) - 1);
     }
 
     private function getAttemptNumber(TrackEExercise $attempt): int

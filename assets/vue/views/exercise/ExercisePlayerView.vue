@@ -1178,7 +1178,7 @@
             <span>
               {{ t("I confirm that my answers were saved.") }}
               <span class="block text-xs">
-                {{ t("Saved answers: {0} / {1}", [savedQuestionIds.size, visibleQuestionTotal]) }}
+                {{ t("Saved") }} {{ t("answers") }}: {{ savedQuestionIds.size }} / {{ visibleQuestionTotal }}
               </span>
             </span>
           </label>
@@ -1834,7 +1834,7 @@ async function handleExpiredTimeLimit() {
   isAutoFinishingExpiredAttempt.value = true
   attemptMessage.value = t("Time limit reached. Finishing the attempt.")
 
-  await finishAttempt({ skipDraftSave: false, expiredByTimer: true })
+  await finishAttempt({ skipDraftSave: true, expiredByTimer: true })
 }
 
 function syncQuestionCountdown() {
@@ -2384,7 +2384,7 @@ async function saveQuestionDraftAnswer(question, afterFeedback = "none") {
   }
 
   const response = isUploadQuestion(question) || isOralQuestion(question)
-    ? await saveUploadQuestionAnswer(question, exerciseId, attemptId)
+    ? await saveUploadQuestionAnswer(question, exerciseId, attemptId, afterFeedback)
     : await exerciseService.saveExerciseRuntimeAnswer(
       {
         exerciseId,
@@ -2430,7 +2430,7 @@ async function saveQuestionDraftAnswer(question, afterFeedback = "none") {
 }
 
 
-async function saveUploadQuestionAnswer(question, exerciseId, attemptId) {
+async function saveUploadQuestionAnswer(question, exerciseId, attemptId, afterFeedback = "none") {
   const questionAnswer = answers.value[question.id] || {}
   if (!questionAnswer.uploadFile && !questionAnswer.oralFile) {
     return null
@@ -2440,6 +2440,7 @@ async function saveUploadQuestionAnswer(question, exerciseId, attemptId) {
   formData.append("questionId", String(Number(question.id)))
   formData.append("secondsSpent", String(getQuestionSecondsSpent(question)))
   formData.append("reviewLater", isQuestionMarkedForReview(question.id) ? "1" : "0")
+  formData.append("navigationAction", afterFeedback)
   formData.append("file", questionAnswer.uploadFile || questionAnswer.oralFile)
 
   const response = await exerciseService.uploadExerciseRuntimeAnswer(

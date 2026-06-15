@@ -16,7 +16,7 @@
 
                     <div>
                         <h1 class="text-2xl font-semibold tracking-tight text-gray-90 sm:text-3xl">
-                            {{ page_title|default('AvailableCourses'|get_lang) }}
+                            {{ page_title|default('AvailableCourses'|get_plugin_lang('BuyCoursesPlugin')) }}
                         </h1>
                         <p class="mt-2 text-sm leading-6 text-gray-50">
                             {{ 'ConfigurationOfCoursesAndPrices'|get_plugin_lang('BuyCoursesPlugin') }}
@@ -60,7 +60,7 @@
             <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                     <h2 class="text-lg font-semibold text-gray-90">
-                        {{ 'AvailableCourses'|get_lang }}
+                        {{ 'AvailableCourses'|get_plugin_lang('BuyCoursesPlugin') }}
                     </h2>
                     <p class="mt-1 text-sm text-gray-50">
                         {{ 'ConfigurationOfCoursesAndPrices'|get_plugin_lang('BuyCoursesPlugin') }}

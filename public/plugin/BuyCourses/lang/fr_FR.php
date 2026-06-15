@@ -367,7 +367,7 @@ $strings['ExportReportUsageHelp'] = 'Export all sales found inside the selected 
 $strings['FrequenciesNotSetError'] = 'You must configure at least one subscription frequency.';
 $strings['FrequencyUsageHelp'] = 'Reused by subscription forms for courses and sessions.';
 $strings['GatewayAvailability'] = 'Gateway availability';
-$strings['LandingBrowseIntro'] = 'Browse the available courses and subscriptions and continue to checkout.';
+$strings['LandingBrowseIntro'] = 'Parcourez les produits disponibles et continuez vers le paiement.';
 $strings['LandingChooseWhatToBuy'] = 'Choose what you want to buy';
 $strings['NoBankAccountsConfiguredYet'] = 'No bank accounts configured yet.';
 $strings['NoCouponsFoundForStatus'] = 'No coupons were found for the selected status.';
@@ -634,3 +634,5 @@ $strings['MaxMindAccountId'] = 'ID de compte MaxMind';
 $strings['MaxMindAccountIdHelp'] = 'Requis uniquement lorsque le service web MaxMind est sélectionné.';
 $strings['MaxMindLicenseKey'] = 'Clé de licence MaxMind';
 $strings['MaxMindLicenseKeyHelp'] = 'Requis uniquement lorsque le service web MaxMind est sélectionné. Gardez cette valeur confidentielle.';
+
+$strings['NoProductsAvailable'] = 'Aucun produit n’est disponible à l’achat pour le moment.';

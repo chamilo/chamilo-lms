@@ -571,6 +571,8 @@ $strings['RecurringPaymentAlreadyEnabled'] = 'Automatic renewal is already enabl
 $strings['RecurringPaymentEnabledSuccessfully'] = 'Automatic renewal was enabled successfully.';
 $strings['RecurringPaymentCancelledSuccessfully'] = 'Automatic renewal was cancelled successfully.';
 
+$strings['DisplayServiceOnCourseCreationPage'] = 'Show this service on the course creation page';
+$strings['DisplayServiceOnCourseCreationPageHelp'] = 'If enabled, teachers who have purchased this service can select it when creating a course so the course receives the service benefits.';
 $strings['StandardCourseOption'] = 'Standard course';
 $strings['StandardCourseOptionDescription'] = 'Create a course using the standard platform limits.';
 $strings['ServiceNotPurchasedForCourseCreation'] = 'You need to buy this service before creating a course with these benefits.';

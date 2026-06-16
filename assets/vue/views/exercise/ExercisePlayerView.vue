@@ -1,5 +1,5 @@
 <template>
-  <section class="space-y-5">
+  <section class="space-y-5" @click="handleRuntimeContentClick">
     <div
       v-if="!isLearnpathContext"
       class="flex flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm w-fit"
@@ -1297,11 +1297,35 @@
         />
       </template>
     </BaseDialog>
+
+    <BaseDialog
+      v-model:is-visible="isZoomDialogVisible"
+      :show-close-button="false"
+      :title="zoomImageAlt || t('Image')"
+      header-icon="file-image"
+    >
+      <div class="flex justify-center rounded-lg bg-gray-10 p-3">
+        <img
+          v-if="zoomImageSrc"
+          class="max-h-[80vh] max-w-full object-contain"
+          :alt="zoomImageAlt || t('Image')"
+          :src="zoomImageSrc"
+        />
+      </div>
+
+      <template #footer>
+        <BaseButton
+          :label="t('Close')"
+          type="plain"
+          @click="isZoomDialogVisible = false"
+        />
+      </template>
+    </BaseDialog>
   </section>
 </template>
 
 <script setup>
-import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue"
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
@@ -1363,6 +1387,9 @@ const feedbackDialog = ref(null)
 const isFeedbackDialogVisible = ref(false)
 const feedbackShownOnLastSave = ref(false)
 const confirmedSavedAnswers = ref(false)
+const isZoomDialogVisible = ref(false)
+const zoomImageSrc = ref("")
+const zoomImageAlt = ref("")
 let copyPasteCleanup = null
 let keepAliveTimer = null
 
@@ -1472,6 +1499,17 @@ const displayedRemainingSeconds = computed(() => hasQuestionTimeControl.value ? 
 const isDisplayedTimeExpired = computed(() => isTimeExpired.value || isQuestionTimeExpired.value)
 const timeControlLabel = computed(() => hasQuestionTimeControl.value ? t("Question time left") : t("Time left"))
 const answerableQuestions = computed(() => questions.value.filter((question) => !isStructuralQuestion(question)))
+const imageZoomEnabled = computed(() => {
+  const origin = String(getQueryValue(route.query.origin) || "").toLowerCase()
+
+  return true === settings.value.imageZoomEnabled && !["embeddable", "mobileapp"].includes(origin)
+})
+const glossaryTerms = computed(() => {
+  const terms = settings.value?.glossary?.terms
+
+  return Array.isArray(terms) ? terms : []
+})
+const glossaryEnabled = computed(() => true === settings.value?.glossary?.enabled && glossaryTerms.value.length > 0)
 const currentNavigationIndex = computed(() => {
   const index = isReviewingMarkedQuestions.value ? reviewQueueIndex.value : currentQuestionIndex.value
 
@@ -2148,6 +2186,7 @@ async function loadRuntime() {
     syncCountdownFromAttempt(activeAttempt.value)
     syncRuntimeSettingsEffects()
     syncQuestionCountdown()
+    scheduleRuntimeHtmlEnhancement()
   } catch (error) {
     console.error("Error loading exercise runtime", error)
     errorMessage.value = t("Could not load exercise")
@@ -3799,6 +3838,172 @@ function stopKeepAlivePing() {
   }
 }
 
+function handleRuntimeContentClick(event) {
+  const target = event.target
+  if (
+    !(target instanceof HTMLImageElement)
+    || !imageZoomEnabled.value
+    || !target.closest(".exercise-runtime-html")
+  ) {
+    return
+  }
+
+  const source = target.getAttribute("data-zoom-image") || target.currentSrc || target.getAttribute("src") || ""
+  if (!source) {
+    return
+  }
+
+  event.preventDefault()
+  zoomImageSrc.value = source
+  zoomImageAlt.value = target.getAttribute("alt") || target.getAttribute("title") || t("Image")
+  isZoomDialogVisible.value = true
+}
+
+function scheduleRuntimeHtmlEnhancement() {
+  if (typeof document === "undefined") {
+    return
+  }
+
+  nextTick(() => {
+    markZoomableRuntimeImages()
+    applyGlossaryTermsToRuntimeHtml()
+  })
+}
+
+function markZoomableRuntimeImages() {
+  document.querySelectorAll(".exercise-runtime-html img").forEach((image) => {
+    if (!(image instanceof HTMLImageElement)) {
+      return
+    }
+
+    if (!imageZoomEnabled.value) {
+      image.removeAttribute("data-exercise-runtime-zoom")
+      return
+    }
+
+    const source = image.getAttribute("data-zoom-image") || image.currentSrc || image.getAttribute("src") || ""
+    if (!source) {
+      return
+    }
+
+    image.setAttribute("data-exercise-runtime-zoom", "1")
+    if (!image.getAttribute("title")) {
+      image.setAttribute("title", t("Image"))
+    }
+  })
+}
+
+function applyGlossaryTermsToRuntimeHtml() {
+  if (!glossaryEnabled.value) {
+    return
+  }
+
+  const terms = normalizedGlossaryTerms()
+  if (!terms.length) {
+    return
+  }
+
+  const termPattern = terms.map((term) => escapeRegExp(term.title)).join("|")
+  const expression = new RegExp(`(^|[^\\p{L}\\p{N}_])(${termPattern})(?=$|[^\\p{L}\\p{N}_])`, "giu")
+  const descriptions = new Map(terms.map((term) => [term.title.toLowerCase(), term.description]))
+
+  document.querySelectorAll(".exercise-runtime-html").forEach((container) => {
+    if (!(container instanceof HTMLElement)) {
+      return
+    }
+
+    wrapGlossaryTermsInContainer(container, expression, descriptions)
+  })
+}
+
+function normalizedGlossaryTerms() {
+  const seen = new Set()
+
+  return glossaryTerms.value
+    .map((term) => ({
+      title: displayText(term?.title || ""),
+      description: displayText(term?.description || ""),
+    }))
+    .filter((term) => term.title.length > 1)
+    .filter((term) => {
+      const key = term.title.toLowerCase()
+      if (seen.has(key)) {
+        return false
+      }
+      seen.add(key)
+
+      return true
+    })
+    .sort((left, right) => right.title.length - left.title.length)
+}
+
+function wrapGlossaryTermsInContainer(container, expression, descriptions) {
+  const walker = document.createTreeWalker(
+    container,
+    NodeFilter.SHOW_TEXT,
+    {
+      acceptNode(node) {
+        const parent = node.parentElement
+        if (
+          !parent
+          || parent.closest(".glossary-term, a, button, input, select, textarea, script, style, svg")
+        ) {
+          return NodeFilter.FILTER_REJECT
+        }
+
+        expression.lastIndex = 0
+        const hasMatch = expression.test(node.nodeValue || "")
+        expression.lastIndex = 0
+
+        return hasMatch ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT
+      },
+    },
+  )
+
+  const textNodes = []
+  while (walker.nextNode()) {
+    textNodes.push(walker.currentNode)
+  }
+
+  textNodes.forEach((node) => wrapGlossaryTermsInTextNode(node, expression, descriptions))
+}
+
+function wrapGlossaryTermsInTextNode(node, expression, descriptions) {
+  const text = node.nodeValue || ""
+  const fragment = document.createDocumentFragment()
+  let lastIndex = 0
+  let matched = false
+
+  expression.lastIndex = 0
+  let match = expression.exec(text)
+  while (match) {
+    const leadingText = match[1] || ""
+    const matchedText = match[2] || ""
+    const leadingEnd = match.index + leadingText.length
+    const matchedEnd = leadingEnd + matchedText.length
+
+    fragment.append(document.createTextNode(text.slice(lastIndex, leadingEnd)))
+
+    const term = document.createElement("span")
+    term.className = "glossary-term"
+    term.textContent = matchedText
+    term.title = descriptions.get(matchedText.toLowerCase()) || matchedText
+    fragment.append(term)
+
+    lastIndex = matchedEnd
+    matched = true
+    match = expression.exec(text)
+  }
+
+  if (!matched) {
+    return
+  }
+
+  fragment.append(document.createTextNode(text.slice(lastIndex)))
+  node.parentNode?.replaceChild(fragment, node)
+}
+
+
 function submitDisabled() {
   return false
 }
@@ -3852,12 +4057,41 @@ watch(
   () => [currentTimedQuestionId.value, activeAttempt.value?.attemptId, activeAttempt.value?.status],
   () => syncQuestionCountdown(),
 )
+
+watch(
+  () => [
+    currentQuestionIndex.value,
+    reviewQueueIndex.value,
+    isFeedbackDialogVisible.value,
+    imageZoomEnabled.value,
+    glossaryEnabled.value,
+    glossaryTerms.value.length,
+    visibleQuestions.value.map((question) => question.id).join(","),
+  ],
+  () => scheduleRuntimeHtmlEnhancement(),
+)
 </script>
 
 <style scoped>
 .exercise-runtime-html :deep(img) {
   max-width: 100%;
   height: auto;
+}
+
+.exercise-runtime-html :deep(img[data-exercise-runtime-zoom="1"]) {
+  cursor: zoom-in;
+}
+
+.exercise-runtime-html :deep(.glossary-term) {
+  cursor: help;
+  font-weight: 500;
+  color: #2563eb;
+  border-bottom: 1px dotted currentColor;
+}
+
+.exercise-runtime-html :deep(.glossary-term:hover) {
+  color: #1d4ed8;
+  border-bottom-style: solid;
 }
 
 .exercise-runtime-html :deep(p) {

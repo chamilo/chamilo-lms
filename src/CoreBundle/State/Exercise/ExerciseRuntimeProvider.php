@@ -20,6 +20,7 @@ use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CourseBundle\Entity\CGlossary;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -28,6 +29,7 @@ use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
 use Chamilo\CourseBundle\Entity\CQuizQuestionOption;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
+use Chamilo\CourseBundle\Repository\CGlossaryRepository;
 use Chamilo\CourseBundle\Repository\CQuizQuestionRepository;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
 use DateTimeImmutable;
@@ -82,6 +84,7 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
         private EntityManagerInterface $entityManager,
         private CQuizRepository $quizRepository,
         private CQuizQuestionRepository $questionRepository,
+        private CGlossaryRepository $glossaryRepository,
         private Security $security,
         private SettingsManager $settingsManager,
     ) {}
@@ -117,7 +120,7 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
         $attemptQuestionIds = $attempt instanceof TrackEExercise ? $this->parseQuestionIds((string) $attempt->getDataTracking()) : null;
         $questions = $this->getRuntimeQuestions($quiz, $course, $session, $canManage, $attemptQuestionIds, $attempt);
         $runtimePages = $this->buildRuntimePages($quiz, $questions);
-        $settings = $this->getRuntimeSettings($quiz);
+        $settings = $this->getRuntimeSettings($quiz, $course, $session);
         $legacyRuntimeReasons = $this->getLegacyRuntimeReasons($quiz);
         $settings['runtimePages'] = $runtimePages['pages'];
         $settings['usesStructuralPages'] = $runtimePages['usesStructuralPages'];
@@ -725,8 +728,10 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
     /**
      * @return array<string, mixed>
      */
-    private function getRuntimeSettings(CQuiz $quiz): array
+    private function getRuntimeSettings(CQuiz $quiz, Course $course, ?Session $session): array
     {
+        $showGlossary = $this->shouldShowGlossaryInRuntime();
+
         return [
             'type' => (int) $quiz->getType(),
             'oneQuestionPerPage' => CQuiz::ONE_PER_PAGE === (int) $quiz->getType(),
@@ -772,6 +777,11 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
             'allowTimePerQuestion' => $this->isSettingEnabled('exercise.allow_time_per_question'),
             'hasTimedQuestions' => $this->hasTimedQuestions($quiz),
             'blockCategoryQuestions' => $this->isBlockCategoryRuntimeEnabled($quiz),
+            'imageZoomEnabled' => $this->isImageZoomEnabled(),
+            'glossary' => [
+                'enabled' => $showGlossary,
+                'terms' => $showGlossary ? $this->getRuntimeGlossaryTerms($course, $session) : [],
+            ],
         ];
     }
 
@@ -858,6 +868,82 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
         }
 
         return \in_array(strtolower((string) ($row->getFieldValue() ?? '')), ['1', 'true', 'yes', 'on'], true);
+    }
+
+    private function isImageZoomEnabled(): bool
+    {
+        $value = $this->settingsManager->getSetting('exercise.quiz_image_zoom', true);
+        if (\is_array($value)) {
+            return isset($value['options'])
+                || true === ($value['value'] ?? false)
+                || 'true' === strtolower((string) ($value['value'] ?? ''))
+                || '1' === (string) ($value['value'] ?? '');
+        }
+
+        return true === $value || 'true' === strtolower((string) $value) || '1' === (string) $value;
+    }
+
+    private function shouldShowGlossaryInRuntime(): bool
+    {
+        $value = strtolower(
+            trim((string) $this->settingsManager->getSetting('glossary.show_glossary_in_extra_tools', true))
+        );
+        $isLearnpathContext = $this->isLearnpathRuntimeContext();
+
+        return match ($value) {
+            'exercise' => !$isLearnpathContext,
+            'lp' => $isLearnpathContext,
+            'exercise_and_lp', 'true', '1', 'yes' => true,
+            default => false,
+        };
+    }
+
+    private function isLearnpathRuntimeContext(): bool
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        if (null === $request) {
+            return false;
+        }
+
+        return 'learnpath' === strtolower(trim((string) $request->query->get('origin', '')))
+            || $request->query->has('lp_init')
+            || 0 < $request->query->getInt('learnpath_id')
+            || 0 < $request->query->getInt('lp_id')
+            || 0 < $request->query->getInt('learnpath_item_id')
+            || 0 < $request->query->getInt('learnpath_item_view_id');
+    }
+
+    /**
+     * @return array<int, array{id: int, title: string, description: string}>
+     */
+    private function getRuntimeGlossaryTerms(Course $course, ?Session $session): array
+    {
+        $items = $this->glossaryRepository
+            ->getResourcesByCourse($course, $session, null, null, true, true)
+            ->setMaxResults(200)
+            ->getQuery()
+            ->getResult()
+        ;
+
+        $terms = [];
+        foreach ($items as $item) {
+            if (!$item instanceof CGlossary || null === $item->getIid()) {
+                continue;
+            }
+
+            $title = trim(strip_tags($item->getTitle()));
+            if ('' === $title) {
+                continue;
+            }
+
+            $terms[] = [
+                'id' => (int) $item->getIid(),
+                'title' => $title,
+                'description' => trim(strip_tags((string) $item->getDescription())),
+            ];
+        }
+
+        return $terms;
     }
 
     private function getKeepAlivePingInterval(): int

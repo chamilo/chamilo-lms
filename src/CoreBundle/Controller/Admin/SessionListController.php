@@ -73,6 +73,26 @@ class SessionListController extends AbstractController
         private readonly SettingsManager $settingsManager,
     ) {}
 
+    private function resolvePlatformTimezone(): DateTimeZone
+    {
+        $tz = (string) ($this->settingsManager->getSetting('platform.timezone', false, 'timezones') ?? '');
+
+        try {
+            return new DateTimeZone('' !== $tz ? $tz : 'UTC');
+        } catch (\Throwable) {
+            return new DateTimeZone('UTC');
+        }
+    }
+
+    private function formatSessionDate(?DateTime $date, DateTimeZone $tz): ?string
+    {
+        if (null === $date) {
+            return null;
+        }
+
+        return (clone $date)->setTimezone($tz)->format('Y-m-d H:i');
+    }
+
     #[Route('', name: 'admin_session_list_data', methods: ['GET'])]
     public function list(Request $request): JsonResponse
     {
@@ -180,14 +200,16 @@ class SessionListController extends AbstractController
             $tutorsMap = $this->getTutorsBySessionIds($sessionIds);
         }
 
+        $tz = $this->resolvePlatformTimezone();
+
         $items = [];
         foreach ($rows as $row) {
             $item = [
                 'id' => $row['id'],
                 'title' => $row['title'],
                 'categoryName' => $row['categoryName'] ?? '',
-                'displayStartDate' => $row['displayStartDate'] ? $row['displayStartDate']->format('Y-m-d H:i') : null,
-                'displayEndDate' => $row['displayEndDate'] ? $row['displayEndDate']->format('Y-m-d H:i') : null,
+                'displayStartDate' => $this->formatSessionDate($row['displayStartDate'], $tz),
+                'displayEndDate' => $this->formatSessionDate($row['displayEndDate'], $tz),
                 'visibility' => $row['visibility'],
                 'visibilityLabel' => self::VISIBILITY_LABELS[$row['visibility']] ?? 'Unknown',
                 'status' => $row['status'],
@@ -492,14 +514,16 @@ class SessionListController extends AbstractController
             $childTutorsMap = $this->getTutorsBySessionIds($childIds);
         }
 
+        $tz = $this->resolvePlatformTimezone();
+
         $childMap = [];
         foreach ($children as $child) {
             $childItem = [
                 'id' => $child['id'],
                 'title' => '-- '.$child['title'],
                 'categoryName' => $child['categoryName'] ?? '',
-                'displayStartDate' => $child['displayStartDate'] ? $child['displayStartDate']->format('Y-m-d H:i') : null,
-                'displayEndDate' => $child['displayEndDate'] ? $child['displayEndDate']->format('Y-m-d H:i') : null,
+                'displayStartDate' => $this->formatSessionDate($child['displayStartDate'], $tz),
+                'displayEndDate' => $this->formatSessionDate($child['displayEndDate'], $tz),
                 'visibility' => $child['visibility'],
                 'visibilityLabel' => self::VISIBILITY_LABELS[$child['visibility']] ?? 'Unknown',
                 'status' => $child['status'],

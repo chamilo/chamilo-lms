@@ -15,7 +15,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
-use Chamilo\CoreBundle\State\ForumAttachmentProcessor;
+use Chamilo\CoreBundle\State\Forum\ForumAttachmentProcessor;
 use Chamilo\CourseBundle\Repository\CForumAttachmentRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;

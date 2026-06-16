@@ -9,7 +9,7 @@ namespace Chamilo\CoreBundle\ApiResource\Forum;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
-use Chamilo\CoreBundle\State\ForumActionTokenProvider;
+use Chamilo\CoreBundle\State\Forum\ForumActionTokenProvider;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(

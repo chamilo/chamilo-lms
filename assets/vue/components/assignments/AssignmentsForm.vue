@@ -157,7 +157,7 @@ import BaseTinyEditor from "../basecomponents/BaseTinyEditor.vue"
 import ResourceLanguageSelector from "../resources/ResourceLanguageSelector.vue"
 import useVuelidate from "@vuelidate/core"
 import { computed, reactive, ref, watchEffect } from "vue"
-import { maxValue, minValue, required } from "@vuelidate/validators"
+import { helpers, required } from "@vuelidate/validators"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
@@ -301,6 +301,26 @@ watchEffect(() => {
   }
 })
 
+function truncateToMinute(date) {
+  const d = new Date(date)
+  d.setSeconds(0, 0)
+  return d
+}
+
+function maxDateByMinute(max) {
+  return helpers.withMessage(
+    t("Expiration date must be before or equal to end date"),
+    (value) => !value || !max || +truncateToMinute(value) <= +truncateToMinute(max),
+  )
+}
+
+function minDateByMinute(min) {
+  return helpers.withMessage(
+    t("End date must be after or equal to expiration date"),
+    (value) => !value || !min || +truncateToMinute(value) >= +truncateToMinute(min),
+  )
+}
+
 const rules = computed(() => {
   const r = { title: { required, $autoDirty: true } }
   if (showAdvancedSettings.value) {
@@ -310,11 +330,11 @@ const rules = computed(() => {
     }
     if (chkExpiresOn.value) {
       r.expiresOn = { required, $autoDirty: true }
-      if (chkEndsOn.value) r.expiresOn.maxValue = maxValue(assignment.endsOn)
+      if (chkEndsOn.value) r.expiresOn.maxValue = maxDateByMinute(assignment.endsOn)
     }
     if (chkEndsOn.value) {
       r.endsOn = { required, $autoDirty: true }
-      if (chkExpiresOn.value) r.endsOn.minValue = minValue(assignment.expiresOn)
+      if (chkExpiresOn.value) r.endsOn.minValue = minDateByMinute(assignment.expiresOn)
     }
     r.allowTextAssignment = { required }
   }

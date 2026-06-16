@@ -40,6 +40,7 @@ $strings['CautionThisProcessCantBeCanceled'] = '<b>Precaución</b>: este proceso
 $strings['ProcessingPayoutsDontCloseThisWindow'] = '<b>Procesando los pagos, no cierre esta ventana hasta que haya finalizado</b>';
 $strings['PayoutSuccess'] = 'Los pagos se han realizado con éxito';
 $strings['Buyer'] = 'Comprador';
+$strings['PurchaseDate'] = 'Fecha de compra';
 $strings['BankTransfer'] = 'Transferencia Bancaria';
 $strings['SaleInfo'] = 'Información de la venta';
 $strings['SaleStatusPending'] = 'Venta pendiente';

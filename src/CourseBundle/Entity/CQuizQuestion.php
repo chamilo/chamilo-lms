@@ -389,7 +389,12 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface, Strin
 
     public function getResourceName(): string
     {
-        return $this->getQuestion();
+        $question = $this->getQuestion();
+        if ('' !== $question) {
+            return $question;
+        }
+
+        return 'question-'.($this->iid ?? 'unknown');
     }
 
     public function setResourceName(string $name): self

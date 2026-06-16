@@ -84,9 +84,10 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch, computed } from "vue"
+import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue"
 import ToggleButton from "primevue/togglebutton"
 import { useI18n } from "vue-i18n"
+import { useRoute } from "vue-router"
 import { useSecurityStore } from "../../store/securityStore"
 import { useSidebarMenu } from "../../composables/sidebarMenu"
 import { usePlatformConfig } from "../../store/platformConfig"
@@ -97,6 +98,7 @@ import BaseSidebarPanelMenu from "../basecomponents/BaseSidebarPanelMenu.vue"
 import CategoryLinks from "../page/CategoryLinks.vue"
 
 const { t } = useI18n()
+const route = useRoute()
 const securityStore = useSecurityStore()
 const enrolledStore = useEnrolledStore()
 const platformConfigStore = usePlatformConfig()
@@ -104,11 +106,14 @@ const platformConfigStore = usePlatformConfig()
 const { menuItemsBeforeMyCourse, menuItemMyCourse, menuItemsAfterMyCourse, hasOnlyOneItem, initialize } =
   useSidebarMenu()
 
-const isMobile = () => window.innerWidth < 640
+const MOBILE_BREAKPOINT = 640
+
+const isMobile = () => window.innerWidth < MOBILE_BREAKPOINT
 
 const storedSidebarState = window.localStorage.getItem("sidebarIsOpen")
 
 const sidebarIsOpen = ref(isMobile() ? false : storedSidebarState === null ? true : storedSidebarState === "true")
+const wasMobileViewport = ref(isMobile())
 
 if (!isMobile() && storedSidebarState === null) {
   window.localStorage.setItem("sidebarIsOpen", "true")
@@ -150,7 +155,10 @@ watch(
     if (!isMobile()) {
       window.localStorage.setItem("sidebarIsOpen", newValue.toString())
     }
-    appEl.classList.toggle("app--sidebar-inactive", !newValue)
+
+    if (appEl) {
+      appEl.classList.toggle("app--sidebar-inactive", !newValue)
+    }
 
     if (!newValue) {
       if (!expandingDueToPanelClick.value) {
@@ -222,6 +230,38 @@ function handleLogoutClick(event) {
   }
 }
 
+function closeSidebarOnMobile() {
+  if (isMobile()) {
+    sidebarIsOpen.value = false
+  }
+}
+
+function getStoredDesktopSidebarState() {
+  const storedState = window.localStorage.getItem("sidebarIsOpen")
+
+  if (storedState === null) {
+    window.localStorage.setItem("sidebarIsOpen", "true")
+
+    return true
+  }
+
+  return storedState === "true"
+}
+
+function handleViewportResize() {
+  const mobile = isMobile()
+
+  if (mobile && !wasMobileViewport.value) {
+    sidebarIsOpen.value = false
+  }
+
+  if (!mobile && wasMobileViewport.value) {
+    sidebarIsOpen.value = getStoredDesktopSidebarState()
+  }
+
+  wasMobileViewport.value = mobile
+}
+
 const handlePanelHeaderClick = (event) => {
   const header = event.target.closest(".p-panelmenu-header")
 
@@ -239,15 +279,28 @@ const handlePanelHeaderClick = (event) => {
     }
   }
 
-  if (isMobile() && event.target.closest("a[href]")) {
-    sidebarIsOpen.value = false
+  if (event.target.closest("a[href]")) {
+    closeSidebarOnMobile()
   }
 }
 
+watch(
+  () => route.fullPath,
+  () => {
+    closeSidebarOnMobile()
+  },
+)
+
 onMounted(async () => {
+  window.addEventListener("resize", handleViewportResize)
+
   if (securityStore.isAuthenticated && !isAnonymous.value) {
     await initialize()
     externalLogoutBehaviour.value = await fetchExternalLogoutBehaviour()
   }
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", handleViewportResize)
 })
 </script>

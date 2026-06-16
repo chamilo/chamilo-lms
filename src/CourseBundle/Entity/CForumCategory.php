@@ -52,6 +52,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                                     'title' => ['type' => 'string'],
                                     'comment' => ['type' => 'string'],
                                     'locked' => ['type' => 'boolean'],
+                                    'language' => ['type' => 'string'],
                                     'parentResourceNodeId' => ['type' => 'integer'],
                                     'csrfToken' => ['type' => 'string'],
                                 ],

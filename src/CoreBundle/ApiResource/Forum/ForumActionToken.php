@@ -34,7 +34,7 @@ final class ForumActionToken
     public string $token = '';
 
     /**
-     * @var array<string, string|bool>
+     * @var array<string, mixed>
      */
     #[Groups(['forum_action_token:read'])]
     public array $settings = [];

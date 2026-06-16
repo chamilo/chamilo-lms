@@ -8,6 +8,11 @@ namespace Chamilo\CoreBundle\State\Forum;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
+use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\ExtraFieldValues;
+use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
+use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
+use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CourseBundle\Entity\CForumCategory;
 use Chamilo\CourseBundle\Repository\CForumCategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -32,6 +37,9 @@ final class ForumCategoryProcessor implements ProcessorInterface
         private readonly RequestStack $requestStack,
         private readonly Security $security,
         private readonly CsrfTokenManagerInterface $csrfTokenManager,
+        private readonly ExtraFieldRepository $extraFieldRepository,
+        private readonly ExtraFieldValuesRepository $extraFieldValuesRepository,
+        private readonly LanguageRepository $languageRepository,
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): CForumCategory|JsonResponse
@@ -60,6 +68,7 @@ final class ForumCategoryProcessor implements ProcessorInterface
             ;
 
             $this->categoryRepository->create($category);
+            $this->saveCategoryLanguage($category, $payload);
             $this->registerForumEventLog('new-forumcategory', 'forumcategory', (string) $category->getIid());
 
             return $category;
@@ -90,6 +99,7 @@ final class ForumCategoryProcessor implements ProcessorInterface
 
         $this->entityManager->persist($category);
         $this->entityManager->flush();
+        $this->saveCategoryLanguage($category, $payload);
 
         $this->registerForumEventLog('update-forumcategory', 'forumcategory', (string) $category->getIid());
 
@@ -164,5 +174,109 @@ final class ForumCategoryProcessor implements ProcessorInterface
             'position' => $position,
             'message' => 'Forum category moved.',
         ]);
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     */
+    private function saveCategoryLanguage(CForumCategory $category, array $payload): void
+    {
+        if (!array_key_exists('language', $payload)) {
+            return;
+        }
+
+        $categoryId = $category->getIid();
+        if (null === $categoryId) {
+            return;
+        }
+
+        $language = $this->getValidCategoryLanguage($payload['language'] ?? null);
+        if (null === $language) {
+            $this->clearCategoryLanguage($categoryId);
+
+            return;
+        }
+
+        $languageField = $this->getOrCreateCategoryLanguageField();
+        $extraFieldValue = $this->extraFieldValuesRepository->getValueByVariableAndItem(
+            'language',
+            $categoryId,
+            ExtraField::FORUM_CATEGORY_TYPE,
+        );
+
+        if (!$extraFieldValue instanceof ExtraFieldValues) {
+            $extraFieldValue = (new ExtraFieldValues())
+                ->setField($languageField)
+                ->setItemId($categoryId)
+            ;
+        }
+
+        $extraFieldValue->setFieldValue($language);
+        $this->entityManager->persist($extraFieldValue);
+        $this->entityManager->flush();
+    }
+
+    private function clearCategoryLanguage(int $categoryId): void
+    {
+        $extraFieldValue = $this->extraFieldValuesRepository->getValueByVariableAndItem(
+            'language',
+            $categoryId,
+            ExtraField::FORUM_CATEGORY_TYPE,
+        );
+
+        if (!$extraFieldValue instanceof ExtraFieldValues) {
+            return;
+        }
+
+        $extraFieldValue->setFieldValue(null);
+        $this->entityManager->persist($extraFieldValue);
+        $this->entityManager->flush();
+    }
+
+    private function getOrCreateCategoryLanguageField(): ExtraField
+    {
+        $languageField = $this->extraFieldRepository->findByVariable(ExtraField::FORUM_CATEGORY_TYPE, 'language');
+        if ($languageField instanceof ExtraField) {
+            return $languageField;
+        }
+
+        $languageField = (new ExtraField())
+            ->setItemType(ExtraField::FORUM_CATEGORY_TYPE)
+            ->setValueType(ExtraField::FIELD_TYPE_SELECT)
+            ->setVariable('language')
+            ->setDescription('')
+            ->setDisplayText('Language')
+            ->setHelperText(null)
+            ->setDefaultValue('')
+            ->setFieldOrder(0)
+            ->setVisibleToSelf(true)
+            ->setVisibleToOthers(true)
+            ->setChangeable(true)
+            ->setFilter(true)
+            ->setAutoRemove(false)
+        ;
+
+        $this->entityManager->persist($languageField);
+        $this->entityManager->flush();
+
+        return $languageField;
+    }
+
+    private function getValidCategoryLanguage(mixed $language): ?string
+    {
+        $language = trim((string) $language);
+        if ('' === $language) {
+            return null;
+        }
+
+        foreach ($this->languageRepository->getAllAvailableToArray(true, true) as $isoCode => $_languageName) {
+            $isoCode = trim((string) $isoCode);
+
+            if (strtolower($isoCode) === strtolower(str_replace('-', '_', $language))) {
+                return $isoCode;
+            }
+        }
+
+        return null;
     }
 }

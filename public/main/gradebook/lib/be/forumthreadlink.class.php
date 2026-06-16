@@ -260,10 +260,24 @@ class ForumThreadLink extends AbstractLink
         $row = Database::fetch_assoc($result);
 
         if ($row) {
-            $forum_id = $row['forum_id'];
+            $forum_id = (int) $row['forum_id'];
+            $courseId = (int) $this->getCourseId();
+            $course = Container::getCourseRepository()->find($courseId);
+            $nodeId = $course?->getResourceNode()?->getId();
+
+            if (!empty($nodeId)) {
+                $query = http_build_query([
+                    'cid' => $courseId,
+                    'sid' => (int) $sessionId,
+                    'gid' => 0,
+                    'gradebook' => 'view',
+                ]);
+
+                return api_get_path(WEB_PATH).'resources/forum/'.$nodeId.'/forum/'.$forum_id.'/thread/'.$this->get_ref_id().'?'.$query;
+            }
 
             return api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.
-                api_get_cidreq_params($this->getCourseId(), $sessionId).
+                api_get_cidreq_params($courseId, $sessionId).
                 '&thread='.$this->get_ref_id().'&gradebook=view&forum='.$forum_id;
         }
 

@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumNotification;
@@ -22,7 +23,6 @@ use Chamilo\CourseBundle\Repository\CForumAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CForumThreadRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
-use ExtraFieldValue;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -37,6 +37,7 @@ use Throwable;
 final class ForumThreadPostsStateProvider implements ProviderInterface
 {
     use ForumCourseSettingHelperTrait;
+    use ForumExtraFieldHelperTrait;
     use ForumGradebookGuardTrait;
     use ForumStateHelperTrait;
 
@@ -50,6 +51,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         private readonly CForumAttachmentRepository $attachmentRepository,
         private readonly Security $security,
         private readonly SettingsManager $settingsManager,
+        private readonly ExtraFieldValuesRepository $extraFieldValuesRepository,
     ) {}
 
     /**
@@ -352,11 +354,9 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
 
     private function areForumPostRevisionsEnabled(): bool
     {
-        if (!\function_exists('api_get_setting')) {
-            return false;
-        }
-
-        return $this->isTruthySetting(api_get_setting('forum.allow_forum_post_revisions'));
+        return $this->isTruthySetting(
+            $this->settingsManager->getSetting('forum.allow_forum_post_revisions', true),
+        );
     }
 
     private function isTruthySetting(mixed $value): bool
@@ -376,7 +376,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
 
     private function getPosterAvatarUrl(?User $user): string
     {
-        if (!$user instanceof User || !\function_exists('api_get_user_info')) {
+        if (!$user instanceof User) {
             return '';
         }
 
@@ -385,16 +385,16 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
             return $this->posterAvatarUrlByUserId[$userId];
         }
 
-        $userInfo = api_get_user_info($userId, false, false, false, false, true);
-        if (!\is_array($userInfo)) {
-            $this->posterAvatarUrlByUserId[$userId] = '';
+        $illustrationUrl = trim((string) ($user->illustrationUrl ?? ''));
+        if ('' !== $illustrationUrl) {
+            $this->posterAvatarUrlByUserId[$userId] = $illustrationUrl;
 
-            return '';
+            return $illustrationUrl;
         }
 
-        $this->posterAvatarUrlByUserId[$userId] = (string) ($userInfo['avatar_small'] ?? $userInfo['avatar'] ?? '');
+        $this->posterAvatarUrlByUserId[$userId] = '';
 
-        return $this->posterAvatarUrlByUserId[$userId];
+        return '';
     }
 
     private function isReportAvailableForCurrentRequest(): bool
@@ -415,72 +415,12 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
 
     private function getExtraFieldValue(string $itemType, int $itemId, string $variable): mixed
     {
-        $databaseValue = $this->getExtraFieldValueFromDatabase($itemType, $itemId, $variable);
-        if (null !== $databaseValue) {
-            return $databaseValue;
-        }
-
-        if (!class_exists('ExtraFieldValue')) {
-            return null;
-        }
-
-        $extraFieldValue = new ExtraFieldValue($itemType);
-        $value = $extraFieldValue->get_values_by_handler_and_field_variable($itemId, $variable);
-
-        return \is_array($value) ? ($value['value'] ?? null) : null;
-    }
-
-    private function getExtraFieldValueFromDatabase(string $itemType, int $itemId, string $variable): mixed
-    {
-        $fieldId = $this->getExtraFieldId($itemType, $variable);
-        if (null === $fieldId) {
-            return null;
-        }
-
-        $value = $this->entityManager->getConnection()->fetchOne(
-            'SELECT field_value FROM extra_field_values WHERE field_id = :fieldId AND item_id = :itemId ORDER BY id DESC LIMIT 1',
-            [
-                'fieldId' => $fieldId,
-                'itemId' => $itemId,
-            ],
-            [
-                'fieldId' => Types::INTEGER,
-                'itemId' => Types::INTEGER,
-            ],
+        return $this->getForumExtraFieldValue(
+            $this->extraFieldValuesRepository,
+            $itemType,
+            $itemId,
+            $variable,
         );
-
-        return false === $value ? null : $value;
-    }
-
-    private function getExtraFieldId(string $itemType, string $variable): ?int
-    {
-        $itemTypeId = $this->getExtraFieldItemTypeId($itemType);
-        if (null === $itemTypeId) {
-            return null;
-        }
-
-        $fieldId = $this->entityManager->getConnection()->fetchOne(
-            'SELECT id FROM extra_field WHERE item_type = :itemType AND variable = :variable ORDER BY id DESC LIMIT 1',
-            [
-                'itemType' => $itemTypeId,
-                'variable' => $variable,
-            ],
-            [
-                'itemType' => Types::INTEGER,
-                'variable' => Types::STRING,
-            ],
-        );
-
-        return false === $fieldId ? null : (int) $fieldId;
-    }
-
-    private function getExtraFieldItemTypeId(string $itemType): ?int
-    {
-        return match ($itemType) {
-            'course' => 2,
-            'forum_post' => 16,
-            default => null,
-        };
     }
 
     private function getPostStatusLabel(int $status): string

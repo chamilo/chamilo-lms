@@ -31,6 +31,10 @@ $form = new EvalForm(
 );
 
 if ($form->validate()) {
+    if (!Security::check_token('post')) {
+        api_not_allowed(true);
+    }
+    Security::clear_token();
     $values = $form->exportValues();
     $entityManager = Database::getManager();
     $course = $entityManager->getRepository(Course::class)->find(api_get_course_int_id());
@@ -165,6 +169,10 @@ echo Display::url(
 echo '</div>';
 
 echo '</div>';
+
+$token = Security::get_token();
+$form->addElement('hidden', 'sec_token');
+$form->setConstants(['sec_token' => $token]);
 
 $form->display();
 Display::display_footer();

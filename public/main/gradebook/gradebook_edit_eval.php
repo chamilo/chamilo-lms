@@ -36,6 +36,10 @@ $form = new EvalForm(
     api_get_self().'?editeval='.intval($_GET['editeval']).'&'.api_get_cidreq()
 );
 if ($form->validate()) {
+    if (!Security::check_token('post')) {
+        api_not_allowed(true);
+    }
+    Security::clear_token();
     $values = $form->exportValues();
 
     $entityManager = Database::getManager();
@@ -106,5 +110,10 @@ $(function() {
 </script>';
 
 Display::display_header(get_lang('Edit evaluation'));
+
+$token = Security::get_token();
+$form->addElement('hidden', 'sec_token');
+$form->setConstants(['sec_token' => $token]);
+
 $form->display();
 Display::display_footer();

@@ -6,7 +6,7 @@
         class="exercise-overview-toolbar flex flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm"
       >
         <BaseButton
-          :label="t('Back to exercises')"
+          :label="t('Return to exercises list')"
           :route="{ name: 'ExerciseList', params: route.params, query: getContextParams() }"
           icon="back"
           only-icon

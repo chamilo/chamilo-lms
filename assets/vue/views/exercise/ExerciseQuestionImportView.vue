@@ -292,7 +292,7 @@ async function loadImportData() {
     actionUrls.value = response.actionUrls || {}
   } catch (error) {
     console.error("Error loading exercise question import data", error)
-    errorMessage.value = t("Could not load import data")
+    errorMessage.value = t("Could not load data")
   } finally {
     isLoading.value = false
   }
@@ -300,7 +300,7 @@ async function loadImportData() {
 
 async function submitImport() {
   if (!selectedFile.value) {
-    errorMessage.value = t("A file is required")
+    errorMessage.value = t("This field is required")
     return
   }
 

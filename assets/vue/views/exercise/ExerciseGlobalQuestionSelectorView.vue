@@ -3,7 +3,7 @@
     <div class="exercise-question-toolbar flex w-fit flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm">
       <BaseButton
         class="exercise-question-toolbar__button"
-        :label="t('Back to exercises')"
+        :label="t('Return to exercises list')"
         :route="{ name: 'ExerciseList', params: route.params, query: getContextParams() }"
         icon="back"
         only-icon
@@ -51,7 +51,7 @@
         <BaseSelect
           id="exercise-global-question-exercise"
           v-model="selectedExerciseId"
-          :label="t('* Test')"
+          :label="t('Test') + ' *'"
           name="exercise"
           :options="exerciseOptions"
         />

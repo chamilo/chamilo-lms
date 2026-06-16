@@ -59,7 +59,7 @@
         id="exercise-title"
         v-model="form.title"
         :is-invalid="formSubmitted && !form.title.trim()"
-        :label="t('* Test name')"
+        :label="t('Test name') + ' *'"
         name="title"
         required
       />
@@ -319,7 +319,7 @@
             <BaseCheckbox
               id="exercise-auto-launch"
               v-model="form.autoLaunch"
-              :label="t('Auto launch')"
+              :label="t('Auto-launch')"
               name="autoLaunch"
             />
           </div>
@@ -853,7 +853,7 @@ const questionsRoute = computed(() => ({
 }))
 const learningPathContext = computed(() => isLearningPathContext())
 const learningPathBackUrl = computed(() => buildLearningPathBackUrl())
-const backButtonLabel = computed(() => (learningPathContext.value ? t("Back to learning path") : t("Back to exercises")))
+const backButtonLabel = computed(() => (learningPathContext.value ? t("Back to learning path") : t("Return to exercises list")))
 const typeOptions = computed(() => {
   const items = (options.value.typeOptions || []).map((option) => ({
     value: Number(option.value),
@@ -1275,7 +1275,7 @@ async function saveConfiguration() {
   errorMessage.value = ""
 
   if (!form.title.trim()) {
-    errorMessage.value = t("The exercise title is required.")
+    errorMessage.value = t("The title is required.")
     return
   }
 

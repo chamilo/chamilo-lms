@@ -22,7 +22,7 @@
       <BaseButton
         v-if="actionUrls.reportByQuestionPdf"
         class="exercise-report-by-question-toolbar__button"
-        :label="t('Export PDF')"
+        :label="t('Export to PDF')"
         :to-url="actionUrls.reportByQuestionPdf"
         :icon="safeIcon('file-pdf', 'file-excel')"
         only-icon
@@ -66,7 +66,7 @@
               {{ t('Configured answers') }}: {{ summary.totalAnswers || 0 }}
             </span>
             <span class="rounded-full bg-warning/10 px-3 py-1 text-sm font-semibold text-warning">
-              {{ t('Selections') }}: {{ summary.totalSelections || 0 }}
+              {{ t('Selection') }}: {{ summary.totalSelections || 0 }}
             </span>
           </div>
         </div>
@@ -118,7 +118,7 @@
             </p>
           </div>
           <span class="w-fit rounded-full bg-gray-15 px-3 py-1 text-sm font-semibold text-gray-700">
-            {{ t('Selections') }}: {{ question.totalSelections || 0 }}
+            {{ t('Selection') }}: {{ question.totalSelections || 0 }}
           </span>
         </div>
       </div>
@@ -165,7 +165,7 @@
             </span>
           </template>
         </Column>
-        <Column :header="t('Selection %')" field="selectedPercentage" sortable>
+        <Column :header="t('Selection')" field="selectedPercentage" sortable>
           <template #body="{ data }">
             {{ data.selectedCount === null ? '—' : `${formatNumber(data.selectedPercentage)} %` }}
           </template>

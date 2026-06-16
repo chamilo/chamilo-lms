@@ -473,7 +473,7 @@
                               <tr>
                                 <th class="w-16 border border-gray-20 px-2 py-2 text-left">{{ t("N°") }}</th>
                                 <th class="border border-gray-20 px-2 py-2 text-left">{{ t("Question") }}</th>
-                                <th class="border border-gray-20 px-2 py-2 text-left">{{ t("Matches to") }}</th>
+                                <th class="border border-gray-20 px-2 py-2 text-left">{{ t("Matches To") }}</th>
                                 <th class="border border-gray-20 px-2 py-2 text-left">{{ t("Feedback") }}</th>
                                 <th
                                   v-if="!isMatchingCombinationQuestionType(question.type)"
@@ -539,7 +539,7 @@
                               <tr>
                                 <th class="w-16 border border-gray-20 px-2 py-2 text-left">{{ t("N°") }}</th>
                                 <th class="border border-gray-20 px-2 py-2 text-left">{{ t("Answer") }}</th>
-                                <th class="w-32 border border-gray-20 px-2 py-2 text-center">{{ t("Matches to") }}</th>
+                                <th class="w-32 border border-gray-20 px-2 py-2 text-center">{{ t("Matches To") }}</th>
                                 <th class="w-24 border border-gray-20 px-2 py-2 text-right">{{ t("Score") }}</th>
                               </tr>
                             </thead>
@@ -669,7 +669,7 @@ const summaryText = computed(() =>
 )
 const learningPathContext = computed(() => isLearningPathContext())
 const learningPathBackUrl = computed(() => buildLearningPathBackUrl())
-const backButtonLabel = computed(() => (learningPathContext.value ? t("Back to learning path") : t("Back to exercises")))
+const backButtonLabel = computed(() => (learningPathContext.value ? t("Back to learning path") : t("Return to exercises list")))
 
 function getQueryValue(value) {
   return Array.isArray(value) ? value[0] : value
@@ -1039,7 +1039,7 @@ function confirmDeleteQuestion(question) {
 
   requireConfirmation({
     title: t("Delete question"),
-    message: t("Are you sure you want to delete this question?"),
+    message: t("Are you sure you want to delete the question?"),
     accept: () => deleteQuestion(question),
   })
 }

@@ -2,7 +2,7 @@
   <section class="space-y-5">
     <div class="flex flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm w-fit">
       <BaseButton
-        :label="isGlobalMode ? t('Back to exercises') : t('Back to questions')"
+        :label="isGlobalMode ? t('Return to exercises list') : t('Back to the questions')"
         :route="backRoute"
         icon="back"
         only-icon
@@ -469,7 +469,7 @@ function toggleAllQuestions(event) {
 
 function confirmDeleteQuestion(question) {
   requireConfirmation({
-    message: t("Are you sure you want to delete this question?"),
+    message: t("Are you sure you want to delete the question?"),
     accept: () => deleteQuestion(question),
   })
 }

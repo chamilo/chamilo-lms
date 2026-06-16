@@ -131,7 +131,7 @@
 
     <BaseTable
       :is-loading="isLoading"
-      :text-for-empty="t('No live results found')"
+      :text-for-empty="t('No results found')"
       :total-items="attempts.length"
       :values="attempts"
       data-key="id"

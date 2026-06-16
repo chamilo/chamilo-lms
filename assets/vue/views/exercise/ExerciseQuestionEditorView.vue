@@ -2,7 +2,7 @@
   <section class="space-y-5">
     <div class="flex w-fit flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm">
       <BaseButton
-        :label="t('Back to questions')"
+        :label="t('Back to the questions')"
         :route="questionsRoute"
         icon="back"
         only-icon
@@ -55,7 +55,7 @@
         <BaseInputText
           id="exercise-question-title"
           v-model="form.title"
-          :label="t('* Question')"
+          :label="t('Question') + ' *'"
           name="question"
         />
       </div>
@@ -423,7 +423,7 @@
 
         <div class="space-y-3">
           <div class="flex flex-wrap items-center justify-between gap-2">
-            <h3 class="text-lg font-semibold text-gray-90">{{ t("Hotspots") }}</h3>
+            <h3 class="text-lg font-semibold text-gray-90">{{ t("Hotspot") }}</h3>
             <div class="flex flex-wrap gap-2">
               <BaseButton
                 v-if="isPolygonHotspotType(currentHotspotItem?.hotspotType)"
@@ -443,7 +443,7 @@
               />
               <BaseButton
                 v-if="isHotspotDelineationQuestion"
-                :label="t('Add area to avoid')"
+                :label="t('Area to avoid')"
                 icon="plus"
                 size="small"
                 type="secondary"
@@ -629,7 +629,7 @@
         />
 
         <div class="rounded-lg border border-info/30 bg-support-1 px-4 py-3 text-sm text-support-4">
-          {{ t("If you want only integer values write both limits without decimals.") }}
+          {{ t("If you want only integer values write both limits without decimals") }}
         </div>
 
         <div
@@ -1002,7 +1002,7 @@
               <tr>
                 <th class="w-16 border-r border-gray-25 px-3 py-2 font-semibold">{{ t("N°") }}</th>
                 <th class="min-w-[380px] border-r border-gray-25 px-3 py-2 font-semibold">{{ t("Answer") }}</th>
-                <th class="w-72 border-r border-gray-25 px-3 py-2 font-semibold">{{ t("Matches to") }}</th>
+                <th class="w-72 border-r border-gray-25 px-3 py-2 font-semibold">{{ t("Matches To") }}</th>
                 <th
                   v-if="!isMatchingCombinationQuestion"
                   class="w-36 border-r border-gray-25 px-3 py-2 font-semibold"
@@ -1034,7 +1034,7 @@
                   <BaseSelect
                     :id="`exercise-matching-pair-option-${pair.localId}`"
                     v-model="pair.optionLocalId"
-                    :label="t('Matches to')"
+                    :label="t('Matches To')"
                     :name="`matching_pair_option_${index}`"
                     :options="matchingOptionSelectOptions"
                   />
@@ -1167,7 +1167,7 @@
               <tr>
                 <th class="w-16 border-r border-gray-25 px-3 py-2 font-semibold">{{ t("N°") }}</th>
                 <th class="min-w-[520px] border-r border-gray-25 px-3 py-2 font-semibold">{{ t("Answer") }}</th>
-                <th class="w-52 border-r border-gray-25 px-3 py-2 font-semibold">{{ t("Matches to") }}</th>
+                <th class="w-52 border-r border-gray-25 px-3 py-2 font-semibold">{{ t("Matches To") }}</th>
                 <th class="w-36 px-3 py-2 font-semibold">{{ t("Score") }}</th>
               </tr>
             </thead>
@@ -1193,7 +1193,7 @@
                   <BaseSelect
                     :id="`exercise-draggable-target-${item.localId}`"
                     v-model="item.targetPosition"
-                    :label="t('Matches to')"
+                    :label="t('Matches To')"
                     :name="`draggable_target_${index}`"
                     :options="draggablePositionSelectOptions"
                   />
@@ -1647,11 +1647,11 @@ const difficultyOptions = [
 ]
 
 const readingSpeedOptions = computed(() => [
-  { label: t("{0} words per minute", [50]), value: 1 },
-  { label: t("{0} words per minute", [100]), value: 2 },
-  { label: t("{0} words per minute", [175]), value: 3 },
-  { label: t("{0} words per minute", [300]), value: 4 },
-  { label: t("{0} words per minute", [600]), value: 5 },
+  { label: t("%s words per minute", [50]), value: 1 },
+  { label: t("%s words per minute", [100]), value: 2 },
+  { label: t("%s words per minute", [175]), value: 3 },
+  { label: t("%s words per minute", [300]), value: 4 },
+  { label: t("%s words per minute", [600]), value: 5 },
 ])
 
 const fillBlanksSeparatorOptions = [
@@ -3168,7 +3168,7 @@ function buildPayload() {
 
 function validateForm() {
   if (!stripHtml(form.title)) {
-    errorMessage.value = t("The question title is required.")
+    errorMessage.value = t("The title is required.")
     return false
   }
 
@@ -3351,7 +3351,7 @@ function validateForm() {
 
     const score = filledItems.reduce((total, item) => total + Math.max(0, Number(item.score || 0)), 0)
     if (score <= 0) {
-      errorMessage.value = t("Required field.")
+      errorMessage.value = t("Required field")
       return false
     }
 

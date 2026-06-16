@@ -22,7 +22,7 @@
       <BaseButton
         v-if="actionUrls.questionStatsPdf"
         class="exercise-question-stats-toolbar__button"
-        :label="t('Export PDF')"
+        :label="t('Export to PDF')"
         :to-url="actionUrls.questionStatsPdf"
         :icon="safeIcon('file-pdf', 'file-excel')"
         only-icon
@@ -66,7 +66,7 @@
               {{ t('Answered') }}: {{ summary.totalAnswered || 0 }}
             </span>
             <span class="rounded-full bg-warning/10 px-3 py-1 text-sm font-semibold text-warning">
-              {{ t('Wrong answers') }}: {{ summary.totalWrong || 0 }}
+              {{ t('Wrong answer') }}: {{ summary.totalWrong || 0 }}
             </span>
           </div>
         </div>

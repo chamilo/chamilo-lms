@@ -5,7 +5,7 @@
       class="flex flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm w-fit"
     >
       <BaseButton
-        :label="t('Back to exercises')"
+        :label="t('Return to exercises list')"
         :route="{ name: 'ExerciseList', params: route.params, query: getContextParams() }"
         icon="back"
         only-icon
@@ -775,13 +775,13 @@
                 v-if="answers[question.id]?.uploadFileName"
                 class="rounded-lg border border-info/30 bg-support-1 p-3 text-sm text-support-4"
               >
-                {{ t("Selected file") }}: {{ answers[question.id].uploadFileName }}
+                {{ t("Selected files") }}: {{ answers[question.id].uploadFileName }}
               </div>
               <div
                 v-if="answers[question.id]?.uploadedFiles?.length"
                 class="space-y-2 rounded-lg border border-success/30 bg-success/10 p-3 text-sm text-success"
               >
-                <div class="font-semibold">{{ t("Uploaded file") }}</div>
+                <div class="font-semibold">{{ t("Upload file") }}</div>
                 <div
                   v-for="file in answers[question.id].uploadedFiles"
                   :key="file.id || file.name"
@@ -793,9 +793,9 @@
                     target="_blank"
                     rel="noopener"
                   >
-                    {{ file.name || t("Uploaded file") }}
+                    {{ file.name || t("Upload file") }}
                   </a>
-                  <span v-else>{{ file.name || t("Uploaded file") }}</span>
+                  <span v-else>{{ file.name || t("Upload file") }}</span>
                 </div>
               </div>
             </div>
@@ -803,7 +803,7 @@
             <div v-else-if="isOralQuestion(question)" class="space-y-3">
               <div class="rounded-lg border border-gray-20 bg-gray-10 p-3">
                 <div class="mb-2 text-sm font-semibold text-gray-800">
-                  {{ t("Record oral answer") }}
+                  {{ t("Record answer") }}
                 </div>
                 <AudioRecorder
                   :multiple="false"
@@ -983,8 +983,8 @@
                     <div class="font-semibold text-gray-90">
                       {{ t("Current annotations") }}
                     </div>
-                    <div>{{ t("Paths") }}: {{ annotationPaths(question).length }}</div>
-                    <div>{{ t("Texts") }}: {{ annotationTexts(question).length }}</div>
+                    <div>{{ t("Path") }}: {{ annotationPaths(question).length }}</div>
+                    <div>{{ t("Text") }}: {{ annotationTexts(question).length }}</div>
                   </div>
                 </aside>
               </div>
@@ -1079,7 +1079,7 @@
 
             <div v-else-if="isReadingQuestion(question)" class="space-y-3">
               <div class="rounded-lg border border-gray-20 p-3 text-sm text-gray-700">
-                {{ t("Reading speed") }}: {{ question.reading.speed }} {{ t("words per minute") }}
+                {{ t("Reading speed") }}: {{ t("%s words per minute", [question.reading.speed]) }}
               </div>
               <div
                 class="exercise-runtime-html rounded-lg border border-gray-20 p-4 text-gray-800"
@@ -2974,7 +2974,7 @@ function applySavedAnswer(question, rows) {
 
   if (isUploadQuestion(question)) {
     const files = extractSavedAttemptFiles(rows)
-    questionAnswer.uploadedFiles = files.length > 0 ? files : (rows.length > 0 ? [{ name: t("Uploaded file") }] : [])
+    questionAnswer.uploadedFiles = files.length > 0 ? files : (rows.length > 0 ? [{ name: t("Upload file") }] : [])
     return
   }
 

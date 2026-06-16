@@ -58,7 +58,7 @@
         <BaseButton
           v-if="canManage"
           class="exercise-list-toolbar__button"
-          :label="t('Import exercises QTI2')"
+          :label="t('Import exercises Qti2')"
           :route="{ name: 'ExerciseImportQti2', params: route.params, query: getContextParams() }"
           icon="import"
           only-icon
@@ -127,7 +127,7 @@
       v-if="canManage && activeSearch && !isSearchVisible"
       class="flex flex-wrap items-center gap-2 rounded-xl border border-gray-20 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm"
     >
-      <span>{{ t("Showing results for: {0}", [activeSearch]) }}</span>
+      <span>{{ t("Showing results for: %s", [activeSearch]) }}</span>
       <BaseButton
         :label="t('Clear search')"
         icon="close"
@@ -862,7 +862,7 @@ function toggleAutoLaunch(exercise) {
 function confirmCopyExercise(exercise) {
   requireConfirmation({
     title: t("Copy exercise"),
-    message: t("Are you sure to copy {0}?", [displayText(exercise.title, t("Untitled"))]),
+    message: `${t("Are you sure to copy")} ${displayText(exercise.title, t("Untitled"))}?`,
     accept: () => runExerciseAction(exercise, "copy"),
   })
 }
@@ -870,7 +870,7 @@ function confirmCopyExercise(exercise) {
 function confirmDeleteExercise(exercise) {
   requireConfirmation({
     title: t("Delete exercise"),
-    message: t("Are you sure you want to delete {0}?", [displayText(exercise.title, t("Untitled"))]),
+    message: t("Are you sure you want to delete %s?", [displayText(exercise.title, t("Untitled"))]),
     accept: () => runExerciseAction(exercise, "delete"),
   })
 }

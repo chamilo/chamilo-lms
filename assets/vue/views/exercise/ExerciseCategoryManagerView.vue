@@ -3,7 +3,7 @@
     <div class="flex flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm w-fit">
       <BaseButton
         class="exercise-category-toolbar__button"
-        :label="t('Back to exercises')"
+        :label="t('Return to exercises list')"
         :route="{ name: 'ExerciseList', params: route.params, query: getContextParams() }"
         icon="back"
         only-icon
@@ -252,7 +252,7 @@ const pageDescription = computed(() =>
     ? t("Manage categories used to classify questions.")
     : t("Manage categories used to classify exercises."),
 )
-const usageHeader = computed(() => (isQuestionCategoryPage.value ? t("Questions") : t("Exercises")))
+const usageHeader = computed(() => (isQuestionCategoryPage.value ? t("Questions") : t("Tests")))
 
 function getQueryValue(value) {
   return Array.isArray(value) ? value[0] : value
@@ -364,7 +364,7 @@ function readFileAsText(file) {
 
 async function importCategories() {
   if (!importFile.value) {
-    errorMessage.value = t("CSV file is required")
+    errorMessage.value = t("This field is required")
     return
   }
 
@@ -403,7 +403,7 @@ async function importCategories() {
 async function saveCategory() {
   const title = form.title.trim()
   if (!title) {
-    errorMessage.value = t("Category name is required")
+    errorMessage.value = t("This field is required")
     return
   }
 

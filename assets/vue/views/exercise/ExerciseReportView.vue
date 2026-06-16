@@ -3,7 +3,7 @@
     <div class="exercise-report-toolbar flex w-fit flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm">
       <BaseButton
         class="exercise-report-toolbar__button"
-        :label="t('Back to exercises')"
+        :label="t('Return to exercises list')"
         :route="{ name: 'ExerciseList', params: getBaseRouteParams(), query: getContextParams() }"
         :icon="safeIcon('back')"
         only-icon

@@ -8,7 +8,7 @@
       class="exercise-result-toolbar flex w-fit flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm"
     >
       <BaseButton
-        :label="t('Back to exercises')"
+        :label="t('Return to exercises list')"
         :route="{ name: 'ExerciseList', params: getBaseRouteParams(), query: getContextParams() }"
         icon="back"
         only-icon
@@ -24,7 +24,7 @@
         type="primary-text"
       />
       <BaseButton
-        :label="t('Export PDF')"
+        :label="t('Export to PDF')"
         icon="file-pdf"
         only-icon
         size="small"
@@ -69,7 +69,7 @@
           <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div class="space-y-2">
               <h1 class="text-2xl font-semibold text-gray-90">
-                {{ displayText(title, t("Exercise result")) }}
+                {{ displayText(title, t("Exercise results")) }}
               </h1>
               <div
                 v-if="description"
@@ -228,7 +228,7 @@
                   class="px-3 py-3 text-center text-gray-500"
                   colspan="4"
                 >
-                  {{ t("No ranking data available") }}
+                  {{ t("No data available") }}
                 </td>
               </tr>
             </tbody>
@@ -832,7 +832,7 @@
                       v-model="correctionForms[question.id].marks"
                       :disabled="correctionSavingQuestionId === question.id"
                       :id="correctionScoreInputId(question)"
-                      :label="t('Correction score')"
+                      :label="t('Correct score')"
                       :max="Number(question.maxScore || 0)"
                       :min="0"
                       :step="0.5"
@@ -1036,7 +1036,7 @@
                       v-model="correctionForms[question.id].marks"
                       :disabled="correctionSavingQuestionId === question.id"
                       :id="correctionScoreInputId(question)"
-                      :label="t('Correction score')"
+                      :label="t('Correct score')"
                       :max="Number(question.maxScore || 0)"
                       :min="0"
                       :step="0.5"
@@ -1231,7 +1231,7 @@
                       v-model="correctionForms[question.id].marks"
                       :disabled="correctionSavingQuestionId === question.id"
                       :id="correctionScoreInputId(question)"
-                      :label="t('Correction score')"
+                      :label="t('Correct score')"
                       :max="Number(question.maxScore || 0)"
                       :min="0"
                       :step="0.5"
@@ -1302,7 +1302,7 @@
                   class="rounded-lg border border-gray-20 bg-gray-10 p-3"
                 >
                   <div class="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500">
-                    {{ t("Learner answer") }}
+                    {{ t("Learner answers") }}
                   </div>
                   <div class="whitespace-pre-wrap text-sm text-gray-800">
                     {{ question.answer.studentAnswer || t("No answer") }}
@@ -1421,7 +1421,7 @@
                       v-model="correctionForms[question.id].marks"
                       :disabled="correctionSavingQuestionId === question.id"
                       :id="correctionScoreInputId(question)"
-                      :label="t('Correction score')"
+                      :label="t('Correct score')"
                       :max="Number(question.maxScore || 0)"
                       :min="0"
                       :step="0.5"

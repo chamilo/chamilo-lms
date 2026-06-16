@@ -637,3 +637,6 @@ $strings['MaxMindLicenseKey'] = 'Clé de licence MaxMind';
 $strings['MaxMindLicenseKeyHelp'] = 'Requis uniquement lorsque le service web MaxMind est sélectionné. Gardez cette valeur confidentielle.';
 
 $strings['NoProductsAvailable'] = 'Aucun produit n’est disponible à l’achat pour le moment.';
+$strings['EnableCourse'] = 'Activer un cours';
+$strings['EnableSession'] = 'Activer une session';
+$strings['EnableSubscription'] = 'Activer un abonnement';

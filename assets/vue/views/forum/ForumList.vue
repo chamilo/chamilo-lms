@@ -93,7 +93,7 @@
         <div class="flex flex-col gap-3 border-b border-gray-20 bg-gray-15 p-4 md:flex-row md:items-center md:justify-between">
           <div class="flex items-center gap-2">
             <BaseIcon
-              icon="folder-generic"
+              icon="folder-open"
               size="normal"
             />
             <h2 class="text-lg font-semibold text-gray-90">{{ t("General") }}</h2>
@@ -147,6 +147,15 @@
               >
                 {{ t("Hidden") }}
               </span>
+              <BaseButton
+                v-if="canFoldCategories"
+                :label="isCategoryFolded(category) ? t('Show') : t('Hide')"
+                :icon="isCategoryFolded(category) ? 'unfold' : 'fold'"
+                only-icon
+                size="small"
+                type="plain"
+                @click="toggleCategoryFold(category)"
+              />
             </div>
             <p
               v-if="category.catComment"
@@ -221,7 +230,10 @@
           </div>
         </div>
 
-        <div class="p-4">
+        <div
+          v-show="!isCategoryFolded(category)"
+          class="p-4"
+        >
           <ForumCardList
             v-if="category.forums.length"
             :can-manage="isAllowedToEdit"
@@ -442,13 +454,11 @@ import ForumCardList from "./ForumCardList.vue"
 import { useIsAllowedToEdit } from "../../composables/userPermissions"
 import { useNotification } from "../../composables/notification"
 import { useConfirmation } from "../../composables/useConfirmation"
-import { usePlatformConfig } from "../../store/platformConfig"
 
 const { t } = useI18n()
 const route = useRoute()
 const notifications = useNotification()
 const { requireConfirmation } = useConfirmation()
-const platformConfigStore = usePlatformConfig()
 const { isAllowedToEdit } = useIsAllowedToEdit({ coach: true, sessionCoach: true })
 
 const isLoading = ref(false)
@@ -459,8 +469,15 @@ const forumFormSubmitted = ref(false)
 const isCategoryDialogVisible = ref(false)
 const isForumDialogVisible = ref(false)
 const csrfToken = ref("")
+const forumSettings = ref({
+  defaultForumView: "flat",
+  forumFoldCategories: false,
+  allowForumPostRevisions: false,
+  hideForumPostRevisionLanguage: false,
+})
 const categories = ref([])
 const forums = ref([])
+const foldedCategoryIds = ref(new Set())
 
 const categoryForm = reactive({
   id: null,
@@ -500,10 +517,11 @@ const baseQuery = computed(() => ({
   gid: gid.value || null,
 }))
 const defaultForumView = computed(() => {
-  const value = String(platformConfigStore.getSetting("forum.default_forum_view") || "flat")
+  const value = String(forumSettings.value.defaultForumView || "flat")
 
   return ["flat", "threaded", "nested"].includes(value) ? value : "flat"
 })
+const canFoldCategories = computed(() => Boolean(forumSettings.value.forumFoldCategories))
 
 const defaultViewOptions = computed(() => [
   { label: t("Flat"), value: "flat" },
@@ -574,6 +592,27 @@ function isForumVisible(forum) {
   }
 
   return true === forum.forumVisible || 1 === forum.forumVisible || "1" === String(forum.forumVisible)
+}
+
+
+function isCategoryFolded(category) {
+  return canFoldCategories.value && foldedCategoryIds.value.has(Number(category?.iid || 0))
+}
+
+function toggleCategoryFold(category) {
+  const categoryId = Number(category?.iid || 0)
+  if (!categoryId) {
+    return
+  }
+
+  const nextValue = new Set(foldedCategoryIds.value)
+  if (nextValue.has(categoryId)) {
+    nextValue.delete(categoryId)
+  } else {
+    nextValue.add(categoryId)
+  }
+
+  foldedCategoryIds.value = nextValue
 }
 
 function getCategoryIdFromForum(forum) {
@@ -692,6 +731,10 @@ function openEditForumDialog(forum) {
 async function loadToken() {
   const response = await forumService.getActionToken()
   csrfToken.value = response.token || ""
+  forumSettings.value = {
+    ...forumSettings.value,
+    ...(response.settings || {}),
+  }
 }
 
 async function loadForums() {

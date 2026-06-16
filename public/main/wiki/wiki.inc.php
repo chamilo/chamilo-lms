@@ -5381,7 +5381,38 @@ final class WikiManager
         $safeTitle = trim($title) !== '' ? $title : 'wiki_page';
         $fileName = preg_replace('/\s+/', '_', (string) api_replace_dangerous_char($safeTitle));
 
-        // Wrap content (keep structure simple for HTML→PDF engines)
+        $body = '<div class="wiki-title"><h1>'.htmlspecialchars($safeTitle).'</h1></div>'
+            .'<div class="wiki-content">'.$content.'</div>';
+
+        // Render through the shared PDF class: its mPDF instance routes remote
+        // asset fetches through the SSRF-guarded HTTP client, replacing the
+        // former direct mPDF/Dompdf instantiation (Dompdf's isRemoteEnabled was
+        // the second SSRF sink). complete_style=false keeps the course
+        // header/footer/watermark out of the wiki export, as before.
+        try {
+            $pdf = new PDF('A4', 'P', [
+                'left'   => 12,
+                'right'  => 12,
+                'top'    => 12,
+                'bottom' => 12,
+            ]);
+            // Write the CSS as header CSS: html_to_pdf renders the page content
+            // in body mode (HTML_BODY), which ignores inline <style> blocks.
+            $pdf->pdf->WriteHTML($css, \Mpdf\HTMLParserMode::HEADER_CSS);
+            $pdf->html_to_pdf(
+                [['title' => $safeTitle, 'content' => $body]],
+                $fileName,
+                $courseCode,
+                false,
+                false,
+                false
+            );
+        } catch (\Throwable $e) {
+            // Continue to final fallback
+        }
+
+        // --- Final fallback: deliver HTML as download (not PDF) ---
+        $downloadName = $fileName.'.pdf';
         $html = '<!DOCTYPE html><html lang="'.htmlspecialchars(api_get_language_isocode()).'"><head>'
             .'<meta charset="'.htmlspecialchars(api_get_system_encoding()).'">'
             .'<title>'.htmlspecialchars($safeTitle).'</title>'
@@ -5390,19 +5421,6 @@ final class WikiManager
             .'<div class="wiki-title"><h1>'.htmlspecialchars($safeTitle).'</h1></div>'
             .'<div class="wiki-content">'.$content.'</div>'
             .'</body></html>';
-
-        // Render through the shared PDF class, whose mPDF instance routes remote
-        // asset fetches through the SSRF-guarded HTTP client. This replaces the
-        // former direct mPDF/Dompdf instantiation (Dompdf's isRemoteEnabled was
-        // the second SSRF sink).
-        try {
-            PDF::htmlToPdfDownload($html, $fileName, $safeTitle, 12);
-        } catch (\Throwable $e) {
-            // Continue to final fallback
-        }
-
-        // --- Final fallback: deliver HTML as download (not PDF) ---
-        $downloadName = $fileName.'.pdf';
         // Clean buffers to avoid header issues
         if (function_exists('ob_get_level')) {
             while (ob_get_level() > 0) { @ob_end_clean(); }

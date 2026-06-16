@@ -578,44 +578,6 @@ class PDF
     }
 
     /**
-     * Renders a self-contained HTML document to a downloadable PDF.
-     *
-     * Reuses the SSRF-guarded mPDF instance built by the constructor and writes
-     * the given, already-styled HTML as-is, without format_pdf()'s course
-     * header/footer/watermark decoration. Intended for callers that build their
-     * own complete HTML document (e.g. the wiki page export).
-     *
-     * @param string $html     Complete HTML document to render
-     * @param string $fileName Output file name (without extension)
-     * @param string $title    Optional PDF metadata title
-     * @param int    $margin   Page margin in mm applied to the four sides
-     *
-     * @throws MpdfException
-     */
-    public static function htmlToPdfDownload(
-        string $html,
-        string $fileName,
-        string $title = '',
-        int $margin = 15
-    ): void {
-        $pdf = new self('A4', 'P', [
-            'left'   => $margin,
-            'right'  => $margin,
-            'top'    => $margin,
-            'bottom' => $margin,
-        ]);
-
-        if ('' !== $title) {
-            $pdf->pdf->SetTitle($title);
-        }
-
-        @$pdf->pdf->WriteHTML($html);
-
-        $pdf->pdf->Output(api_replace_dangerous_char($fileName).'.pdf', Destination::DOWNLOAD);
-        exit;
-    }
-
-    /**
      * Gets the watermark from the platform or a course.
      *
      * @param   string  course code (optional)

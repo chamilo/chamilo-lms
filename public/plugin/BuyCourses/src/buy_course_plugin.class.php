@@ -6246,19 +6246,45 @@ class BuyCoursesPlugin extends Plugin
         $checkResult = Database::query($checkSql);
 
         if ($checkResult && Database::num_rows($checkResult) > 0) {
-            Database::query("UPDATE $table
-                SET $valueColumn = '$escapedValue'
-                WHERE field_id = $extraFieldId
-                  AND item_id = $userId");
+            $updateData = [
+                $valueColumn => $value,
+            ];
+
+            if (in_array('updated_at', $this->getExtraFieldValueTimestampColumns(), true)) {
+                $updateData['updated_at'] = api_get_utc_datetime();
+            }
+
+            Database::update(
+                $table,
+                $updateData,
+                [
+                    'field_id = ? AND item_id = ?' => [$extraFieldId, $userId],
+                ]
+            );
 
             return;
         }
 
-        Database::insert($table, [
+        $insertData = [
             'field_id' => $extraFieldId,
             'item_id' => $userId,
             $valueColumn => $value,
-        ]);
+        ];
+
+        $timestampColumns = $this->getExtraFieldValueTimestampColumns();
+        if (!empty($timestampColumns)) {
+            $now = api_get_utc_datetime();
+
+            if (in_array('created_at', $timestampColumns, true)) {
+                $insertData['created_at'] = $now;
+            }
+
+            if (in_array('updated_at', $timestampColumns, true)) {
+                $insertData['updated_at'] = $now;
+            }
+        }
+
+        Database::insert($table, $insertData);
     }
 
     /**
@@ -9195,6 +9221,35 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
+     * Return timestamp columns available on extra_field_values.
+     * Some Chamilo 2 installations enforce NOT NULL created_at/updated_at.
+     *
+     * @return string[]
+     */
+    private function getExtraFieldValueTimestampColumns(): array
+    {
+        static $columns = null;
+
+        if (null !== $columns) {
+            return $columns;
+        }
+
+        $columns = [];
+        $table = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        $result = Database::query("SHOW COLUMNS FROM $table");
+
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $fieldName = (string) ($row['Field'] ?? '');
+
+            if (in_array($fieldName, ['created_at', 'updated_at'], true)) {
+                $columns[] = $fieldName;
+            }
+        }
+
+        return $columns;
+    }
+
+    /**
      * Return all benefit relations configured for a service.
      */
     public function getServiceBenefitRelations(int $serviceId): array
@@ -9237,9 +9292,7 @@ class BuyCoursesPlugin extends Plugin
 
         $table = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
         $valueColumn = $this->getExtraFieldValueColumn();
-        $jsonValue = Database::escape_string(
-            json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
-        );
+        $jsonValue = json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
         $checkSql = "SELECT id
                  FROM $table
@@ -9249,11 +9302,21 @@ class BuyCoursesPlugin extends Plugin
         $checkResult = Database::query($checkSql);
 
         if ($checkResult && Database::num_rows($checkResult) > 0) {
-            $sql = "UPDATE $table
-                SET $valueColumn = '$jsonValue'
-                WHERE field_id = $extraFieldId
-                  AND item_id = $userId";
-            Database::query($sql);
+            $updateData = [
+                $valueColumn => $jsonValue,
+            ];
+
+            if (in_array('updated_at', $this->getExtraFieldValueTimestampColumns(), true)) {
+                $updateData['updated_at'] = api_get_utc_datetime();
+            }
+
+            Database::update(
+                $table,
+                $updateData,
+                [
+                    'field_id = ? AND item_id = ?' => [$extraFieldId, $userId],
+                ]
+            );
 
             return;
         }
@@ -9263,6 +9326,19 @@ class BuyCoursesPlugin extends Plugin
             'item_id' => $userId,
             $valueColumn => $jsonValue,
         ];
+
+        $timestampColumns = $this->getExtraFieldValueTimestampColumns();
+        if (!empty($timestampColumns)) {
+            $now = api_get_utc_datetime();
+
+            if (in_array('created_at', $timestampColumns, true)) {
+                $insertData['created_at'] = $now;
+            }
+
+            if (in_array('updated_at', $timestampColumns, true)) {
+                $insertData['updated_at'] = $now;
+            }
+        }
 
         Database::insert($table, $insertData);
     }

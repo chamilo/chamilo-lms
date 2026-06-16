@@ -481,19 +481,26 @@ if (api_is_allowed_to_edit(null, true)) {
     }
 }
 
-// Global hosting limit: precompute a simple snapshot for UI purposes only.
-$globalLimitUsersPerCourse = 0;
-$currentUsersForGlobalLimit = 0;
-$courseIsFullForGlobalLimit = false;
+// Users-per-course limit: precompute a simple snapshot for UI purposes only.
+$usersPerCourseLimit = 0;
+$currentUsersForCourseLimit = 0;
+$courseIsFullForUsersPerCourseLimit = false;
 
 if ($canEdit && 0 === (int) $sessionId) {
-    // Read the global limit through CourseManager helper to keep logic centralized.
-    $globalLimitUsersPerCourse = (int) CourseManager::getGlobalUsersPerCourseLimit();
+    if (method_exists('CourseManager', 'getEffectiveUsersPerCourseLimit')) {
+        $usersPerCourseLimit = (int) CourseManager::getEffectiveUsersPerCourseLimit($courseId);
+    } else {
+        $usersPerCourseLimit = (int) CourseManager::getGlobalUsersPerCourseLimit();
+    }
 
-    if ($globalLimitUsersPerCourse > 0) {
-        // Count current users for the limit, excluding HR relation type.
-        $currentUsersForGlobalLimit = (int) CourseManager::countUsersForGlobalLimit($courseId);
-        $courseIsFullForGlobalLimit = $currentUsersForGlobalLimit >= $globalLimitUsersPerCourse;
+    if ($usersPerCourseLimit > 0) {
+        if (method_exists('CourseManager', 'countStudentsForUsersPerCourseLimit')) {
+            $currentUsersForCourseLimit = (int) CourseManager::countStudentsForUsersPerCourseLimit($courseId);
+        } else {
+            $currentUsersForCourseLimit = (int) CourseManager::countUsersForGlobalLimit($courseId);
+        }
+
+        $courseIsFullForUsersPerCourseLimit = $currentUsersForCourseLimit >= $usersPerCourseLimit;
     }
 }
 
@@ -628,10 +635,10 @@ if ($canRead) {
 
     $actionsLeft = '';
     if ($canEdit) {
-        // When the global hosting limit is enabled and already reached (no session),
+        // When the users-per-course limit is enabled and already reached (no session),
         // we hide the "Add" icon to avoid actions that would add more users.
         $canShowAddIcon = true;
-        if (0 === (int) $sessionId && $globalLimitUsersPerCourse > 0 && $courseIsFullForGlobalLimit) {
+        if (0 === (int) $sessionId && $usersPerCourseLimit > 0 && $courseIsFullForUsersPerCourseLimit) {
             $canShowAddIcon = false;
         }
 
@@ -683,15 +690,20 @@ if ($canRead) {
     echo UserManager::getUserSubscriptionTab($selectedTab);
     echo Display::toolbarAction('toolbar', [$actionsLeft, $actionsRight]);
 
-    // When the course is full according to the global limit (no session),
+    // When the course is full according to the effective limit (global or BuyCourses),
     // show an explicit warning so teachers understand why the Add icon is hidden.
-    if ($canEdit && 0 === (int) $sessionId && $globalLimitUsersPerCourse > 0 && $courseIsFullForGlobalLimit) {
-        $msg = sprintf(
-            get_lang(
-                'This course already reached the global limit of %d users set by the administrators. To add more users, please ask an administrator to raise this limit or use sessions.'
-            ),
-            $globalLimitUsersPerCourse
-        );
+    if ($canEdit && 0 === (int) $sessionId && $usersPerCourseLimit > 0 && $courseIsFullForUsersPerCourseLimit) {
+        if (method_exists('CourseManager', 'getUsersPerCourseLimitCancelMessage')) {
+            $msg = CourseManager::getUsersPerCourseLimitCancelMessage($courseId);
+        } else {
+            $msg = sprintf(
+                get_lang(
+                    'This operation would exceed the limit of %d users allowed for this course.'
+                ),
+                $usersPerCourseLimit
+            );
+        }
+
         echo Display::return_message($msg, 'warning');
     }
 }

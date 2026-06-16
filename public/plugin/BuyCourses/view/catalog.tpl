@@ -498,7 +498,7 @@
 
                                         {% if service.has_blocking_sale|default(false) %}
                                             <span
-                                                class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gray-20 px-4 py-2.5 text-sm font-semibold text-gray-50"
+                                                class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary/15 px-4 py-2.5 text-sm font-semibold text-primary"
                                             >
                                                 <em class="fa fa-check-circle fa-fw"></em>
                                                 {{ 'Already purchased'|get_lang }}

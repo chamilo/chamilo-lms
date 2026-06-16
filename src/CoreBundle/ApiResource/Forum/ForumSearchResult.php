@@ -11,7 +11,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
-use Chamilo\CoreBundle\State\ForumSearchStateProvider;
+use Chamilo\CoreBundle\State\Forum\ForumSearchStateProvider;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(

@@ -117,7 +117,7 @@ if ($typeUser) {
         '<div class="rounded-2xl border border-gray-20 bg-support-2 p-4">'.
         '<div class="text-body-2 font-semibold text-primary">'.get_lang('User').'</div>'.
         '<div class="mt-2 text-body-2 font-medium text-gray-90">'.$currentUserLabel.'</div>'.
-        '<div class="mt-1 text-caption text-gray-50">This service will be applied to your account.</div>'.
+        '<div class="mt-1 text-caption text-gray-50">'.$plugin->get_lang('ServiceAppliedToUserAccountHelp').'</div>'.
         '</div>'
     );
 } elseif ($typeCourse) {

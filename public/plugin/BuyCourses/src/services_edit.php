@@ -185,7 +185,7 @@ $form->addHtml(
     '<div class="rounded-2xl border border-gray-20 bg-support-2 p-4">'.
     '<div class="text-body-2 font-semibold text-primary">'.$plugin->get_lang('AppliesTo').'</div>'.
     '<div class="mt-2 text-body-2 font-medium text-gray-90">'.$currentAppliesToLabel.'</div>'.
-    '<div class="mt-1 text-caption text-gray-50">This value is read-only in the current implementation to preserve legacy services.</div>'.
+    '<div class="mt-1 text-caption text-gray-50">'.$plugin->get_lang('ServiceAppliesToReadOnlyHelp').'</div>'.
     '</div>'
 );
 
@@ -287,7 +287,7 @@ if ('POST' === $_SERVER['REQUEST_METHOD']) {
 
         if (false === $updated) {
             Display::addFlash(
-                Display::return_message('Service update failed.', 'error')
+                Display::return_message($plugin->get_lang('ServiceUpdateFailed'), 'error')
             );
         } else {
             Display::addFlash(

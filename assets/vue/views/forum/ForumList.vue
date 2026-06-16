@@ -86,6 +86,28 @@
       v-else
       class="flex flex-col gap-4"
     >
+      <div
+        v-if="canFilterCategoryLanguage"
+        class="rounded-xl border border-gray-20 bg-white p-4 shadow-sm"
+      >
+        <div class="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+          <BaseSelect
+            id="forum-category-language-filter"
+            v-model="categoryLanguageFilter"
+            :label="t('Language')"
+            :options="categoryLanguageFilterOptions"
+            class="min-w-64"
+            name="extra_language"
+          />
+          <BaseButton
+            v-if="categoryLanguageFilter"
+            :label="t('Reset')"
+            size="small"
+            type="plain"
+            @click="resetCategoryLanguageFilter"
+          />
+        </div>
+      </div>
       <section
         v-if="forumsWithoutCategory.length"
         class="overflow-hidden rounded-xl border border-gray-20 bg-white shadow-sm"
@@ -281,6 +303,14 @@
           name="forum_category_comment"
           rows="5"
         />
+        <BaseSelect
+          v-if="canEditCategoryLanguage"
+          id="forum-category-language"
+          v-model="categoryForm.language"
+          :label="t('Language')"
+          :options="categoryLanguageFilterOptions"
+          name="extra_language"
+        />
         <BaseCheckbox
           id="forum-category-locked"
           v-model="categoryForm.locked"
@@ -437,7 +467,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, reactive, ref } from "vue"
+import { computed, onMounted, reactive, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
@@ -474,16 +504,22 @@ const forumSettings = ref({
   forumFoldCategories: false,
   allowForumPostRevisions: false,
   hideForumPostRevisionLanguage: false,
+  categoryLanguageFilter: {
+    enabled: false,
+    options: [],
+  },
 })
 const categories = ref([])
 const forums = ref([])
 const foldedCategoryIds = ref(new Set())
+const categoryLanguageFilter = ref("")
 
 const categoryForm = reactive({
   id: null,
   title: "",
   comment: "",
   locked: false,
+  language: "",
 })
 
 const forumForm = reactive({
@@ -516,12 +552,30 @@ const baseQuery = computed(() => ({
   sid: sid.value || null,
   gid: gid.value || null,
 }))
+const categoryQuery = computed(() => ({
+  ...baseQuery.value,
+  extra_language: categoryLanguageFilter.value || null,
+  language_filter_applied: categoryLanguageFilter.value ? 1 : null,
+}))
 const defaultForumView = computed(() => {
   const value = String(forumSettings.value.defaultForumView || "flat")
 
   return ["flat", "threaded", "nested"].includes(value) ? value : "flat"
 })
 const canFoldCategories = computed(() => Boolean(forumSettings.value.forumFoldCategories))
+const categoryLanguageOptions = computed(() => {
+  const options = forumSettings.value.categoryLanguageFilter?.options
+
+  return Array.isArray(options) ? options : []
+})
+const canFilterCategoryLanguage = computed(
+  () => Boolean(forumSettings.value.categoryLanguageFilter?.enabled) && categoryLanguageOptions.value.length > 0,
+)
+const canEditCategoryLanguage = computed(() => canFilterCategoryLanguage.value)
+const categoryLanguageFilterOptions = computed(() => [
+  { label: t("Please select a language"), value: "" },
+  ...categoryLanguageOptions.value,
+])
 
 const defaultViewOptions = computed(() => [
   { label: t("Flat"), value: "flat" },
@@ -634,6 +688,7 @@ function resetCategoryForm() {
   categoryForm.title = ""
   categoryForm.comment = ""
   categoryForm.locked = false
+  categoryForm.language = ""
   categoryFormSubmitted.value = false
 }
 
@@ -699,6 +754,7 @@ function openEditCategoryDialog(category) {
   categoryForm.title = category.title || ""
   categoryForm.comment = category.catComment || ""
   categoryForm.locked = Boolean(Number(category.locked || 0))
+  categoryForm.language = category.language || ""
   categoryFormSubmitted.value = false
   isCategoryDialogVisible.value = true
 }
@@ -742,7 +798,7 @@ async function loadForums() {
 
   try {
     const [categoryItems, forumItems] = await Promise.all([
-      forumService.getCategories(baseQuery.value),
+      forumService.getCategories(categoryQuery.value),
       forumService.getForums(baseQuery.value),
     ])
 
@@ -769,6 +825,7 @@ async function saveCategory() {
     title: categoryForm.title.trim(),
     comment: categoryForm.comment.trim(),
     locked: categoryForm.locked,
+    language: canEditCategoryLanguage.value ? categoryForm.language : "",
     parentResourceNodeId: parentId.value,
     csrfToken: csrfToken.value,
   }
@@ -986,6 +1043,18 @@ async function moveForum(forum, direction) {
     await loadToken()
   }
 }
+
+function resetCategoryLanguageFilter() {
+  categoryLanguageFilter.value = ""
+}
+
+watch(categoryLanguageFilter, async () => {
+  if (!canFilterCategoryLanguage.value) {
+    return
+  }
+
+  await loadForums()
+})
 
 onMounted(async () => {
   await Promise.all([loadToken(), loadForums()])

@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\State\Forum;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Forum\ForumActionToken;
+use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
@@ -22,6 +23,7 @@ final readonly class ForumActionTokenProvider implements ProviderInterface
     public function __construct(
         private CsrfTokenManagerInterface $csrfTokenManager,
         private SettingsManager $settingsManager,
+        private LanguageRepository $languageRepository,
     ) {}
 
     /**
@@ -43,6 +45,7 @@ final readonly class ForumActionTokenProvider implements ProviderInterface
             'hideForumPostRevisionLanguage' => $this->isTruthySetting(
                 $this->settingsManager->getSetting('forum.hide_forum_post_revision_language', true),
             ),
+            'categoryLanguageFilter' => $this->getCategoryLanguageFilterSettings(),
         ];
 
         return $actionToken;
@@ -53,6 +56,46 @@ final readonly class ForumActionTokenProvider implements ProviderInterface
         $defaultView = (string) ($this->settingsManager->getSetting('forum.default_forum_view', true) ?? 'flat');
 
         return \in_array($defaultView, ['flat', 'threaded', 'nested'], true) ? $defaultView : 'flat';
+    }
+
+    /**
+     * @return array{enabled: bool, options: array<int, array{label: string, value: string}>}
+     */
+    private function getCategoryLanguageFilterSettings(): array
+    {
+        $enabled = $this->isTruthySetting(
+            $this->settingsManager->getSetting('forum.allow_forum_category_language_filter', true),
+        );
+        $options = $enabled ? $this->getPlatformLanguageOptions() : [];
+
+        return [
+            'enabled' => $enabled && [] !== $options,
+            'options' => $options,
+        ];
+    }
+
+    /**
+     * @return array<int, array{label: string, value: string}>
+     */
+    private function getPlatformLanguageOptions(): array
+    {
+        $options = [];
+
+        foreach ($this->languageRepository->getAllAvailableToArray(true, true) as $isoCode => $languageName) {
+            $isoCode = trim((string) $isoCode);
+            $languageName = trim((string) $languageName);
+
+            if ('' === $isoCode) {
+                continue;
+            }
+
+            $options[] = [
+                'label' => '' !== $languageName ? $languageName : $isoCode,
+                'value' => $isoCode,
+            ];
+        }
+
+        return $options;
     }
 
     private function isTruthySetting(mixed $value): bool

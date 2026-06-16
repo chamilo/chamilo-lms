@@ -137,30 +137,38 @@
         :class="['rounded-xl border border-gray-20 bg-white p-4 shadow-sm', getPostLevelClass(post)]"
       >
         <div class="mb-3 flex flex-col gap-3 border-b border-gray-20 pb-3 md:flex-row md:items-start md:justify-between">
-          <div class="min-w-0">
-            <h2 class="truncate text-base font-semibold text-gray-90">{{ post.title }}</h2>
-            <div class="mt-1 flex flex-wrap gap-2 text-xs text-gray-500">
-              <span>{{ post.posterFullName || t("Unknown user") }}</span>
-              <span v-if="post.postDate">{{ formatDate(post.postDate) }}</span>
-              <span v-if="!isPostVisible(post)">{{ t("Hidden") }}</span>
-              <span
-                v-if="showModerationStatus(post)"
-                :class="getModerationBadgeClass(post)"
-              >
-                {{ t(post.statusLabel || getModerationStatusLabel(post)) }}
-              </span>
-              <span
-                v-if="post.revisionRequested"
-                class="rounded-full bg-blue-100 px-2 py-0.5 text-blue-700"
-              >
-                {{ t('Revision requested') }}
-              </span>
-              <span
-                v-if="post.revisionLanguage"
-                class="rounded-full bg-gray-100 px-2 py-0.5 text-gray-700"
-              >
-                {{ t('Revision') }}
-              </span>
+          <div class="flex min-w-0 gap-3">
+            <img
+              v-if="post.showPosterAvatar && post.posterAvatarUrl"
+              :alt="post.posterFullName || t('Unknown user')"
+              :src="post.posterAvatarUrl"
+              class="h-10 w-10 shrink-0 rounded-full object-cover"
+            />
+            <div class="min-w-0">
+              <h2 class="truncate text-base font-semibold text-gray-90">{{ post.title }}</h2>
+              <div class="mt-1 flex flex-wrap gap-2 text-xs text-gray-500">
+                <span>{{ post.posterFullName || t("Unknown user") }}</span>
+                <span v-if="post.postDate">{{ formatDate(post.postDate) }}</span>
+                <span v-if="!isPostVisible(post)">{{ t("Hidden") }}</span>
+                <span
+                  v-if="showModerationStatus(post)"
+                  :class="getModerationBadgeClass(post)"
+                >
+                  {{ t(post.statusLabel || getModerationStatusLabel(post)) }}
+                </span>
+                <span
+                  v-if="post.revisionRequested"
+                  class="rounded-full bg-blue-100 px-2 py-0.5 text-blue-700"
+                >
+                  {{ t('Revision requested') }}
+                </span>
+                <span
+                  v-if="post.revisionLanguage"
+                  class="rounded-full bg-gray-100 px-2 py-0.5 text-gray-700"
+                >
+                  {{ t('Revision') }}
+                </span>
+              </div>
             </div>
           </div>
 

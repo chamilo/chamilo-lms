@@ -33,6 +33,12 @@ final class ForumActionToken
     #[Groups(['forum_action_token:read'])]
     public string $token = '';
 
+    /**
+     * @var array<string, string|bool>
+     */
+    #[Groups(['forum_action_token:read'])]
+    public array $settings = [];
+
     public function getId(): string
     {
         return $this->id;

@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\State\Forum;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Forum\ForumActionToken;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
@@ -20,6 +21,7 @@ final readonly class ForumActionTokenProvider implements ProviderInterface
 
     public function __construct(
         private CsrfTokenManagerInterface $csrfTokenManager,
+        private SettingsManager $settingsManager,
     ) {}
 
     /**
@@ -30,7 +32,31 @@ final readonly class ForumActionTokenProvider implements ProviderInterface
     {
         $actionToken = new ForumActionToken();
         $actionToken->token = $this->csrfTokenManager->getToken(self::FORUM_ACTION_TOKEN_INTENTION)->getValue();
+        $actionToken->settings = [
+            'defaultForumView' => $this->getDefaultForumView(),
+            'forumFoldCategories' => $this->isTruthySetting(
+                $this->settingsManager->getSetting('forum.forum_fold_categories', true),
+            ),
+            'allowForumPostRevisions' => $this->isTruthySetting(
+                $this->settingsManager->getSetting('forum.allow_forum_post_revisions', true),
+            ),
+            'hideForumPostRevisionLanguage' => $this->isTruthySetting(
+                $this->settingsManager->getSetting('forum.hide_forum_post_revision_language', true),
+            ),
+        ];
 
         return $actionToken;
+    }
+
+    private function getDefaultForumView(): string
+    {
+        $defaultView = (string) ($this->settingsManager->getSetting('forum.default_forum_view', true) ?? 'flat');
+
+        return \in_array($defaultView, ['flat', 'threaded', 'nested'], true) ? $defaultView : 'flat';
+    }
+
+    private function isTruthySetting(mixed $value): bool
+    {
+        return \in_array(strtolower(trim((string) $value)), ['1', 'true', 'yes', 'on'], true);
     }
 }

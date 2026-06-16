@@ -30,6 +30,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 final class ForumThreadCollectionStateProvider implements ProviderInterface
 {
+    use ForumCourseSettingHelperTrait;
     use ForumStateHelperTrait;
 
     public function __construct(
@@ -144,11 +145,7 @@ final class ForumThreadCollectionStateProvider implements ProviderInterface
 
     private function areForumPostNotificationsHidden(Course $course): bool
     {
-        if (!\function_exists('api_get_course_setting')) {
-            return false;
-        }
-
-        return 1 === (int) api_get_course_setting('hide_forum_notifications', $course);
+        return $this->isCourseSettingEnabled($this->entityManager, $course, 'hide_forum_notifications');
     }
 
     private function isSubscribedToThread(Course $course, User $user, int $threadId): bool

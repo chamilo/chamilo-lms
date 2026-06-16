@@ -141,7 +141,7 @@ final class ForumPostProcessor implements ProcessorInterface
             ->setForum($forum)
             ->setUser($user)
             ->setPostDate($now)
-            ->setPostNotification($this->shouldStorePostNotification($course, $this->getBoolean($data, 'postNotification')))
+            ->setPostNotification($this->shouldStorePostNotification($this->entityManager, $course, $this->getBoolean($data, 'postNotification')))
             ->setVisible($visible)
             ->setStatus($status)
             ->setPostParent($parentPost)

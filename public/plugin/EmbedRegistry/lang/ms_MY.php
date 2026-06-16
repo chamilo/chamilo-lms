@@ -20,3 +20,7 @@ $strings['EmbedDateRangeHelp'] = 'Dalam tarikh-tarikh ini, kandungan tersemat in
 $strings['HtmlCode'] = 'Kod HTML';
 $strings['HtmlCodeHelp'] = 'Kod HTML yang dikongsi, seperti yang disediakan oleh perkhidmatan luaran, apabila meminta untuk dikongsi dalam format Tersemat.';
 $strings['LaunchContent'] = 'Lancarkan kandungan';
+
+$strings['InvalidDateRange'] = 'Tarikh mula mesti lebih awal daripada atau sama dengan tarikh tamat.';
+
+$strings['InvalidSecurityToken'] = 'Token keselamatan tidak sah. Sila muat semula halaman dan cuba lagi.';

@@ -1,0 +1,39 @@
+<?php
+
+$strings['plugin_title'] = 'Google 地图';
+$strings['plugin_comment'] = '显示基于用户附加字段存储位置的 Google 地图。';
+$strings['enable_api'] = '加载 Google Maps API';
+$strings['api_key'] = 'API 密钥';
+$strings['extra_field_name'] = '附加字段名称';
+$strings['extra_field_name_help'] = '输入一个或多个用户附加字段变量，以逗号分隔。地图最多可显示 5 个字段。示例：address, office_address, city';
+$strings['UsersCoordinatesMap'] = '用户位置地图';
+$strings['UsersCoordinatesMapHelp'] = '此地图根据已配置的用户附加字段显示用户位置。';
+$strings['GoogleMapsAdminIntro'] = '配置 Google Maps API 密钥和包含地址或位置的用户附加字段。';
+$strings['GoogleMapsApi'] = 'Google Maps API';
+$strings['ExtraFields'] = '附加字段';
+$strings['Access'] = '访问权限';
+$strings['AdministratorsOnly'] = '仅管理员';
+$strings['OpenMap'] = '打开地图';
+$strings['ConfigurePlugin'] = '配置插件';
+$strings['Configured'] = '已配置';
+$strings['NotConfigured'] = '未配置';
+$strings['GoogleMapsApiDisabledWarning'] = '插件配置中已禁用 Google Maps API 加载。';
+$strings['GoogleMapsApiKeyMissingWarning'] = '缺少 Google Maps API 密钥。';
+$strings['ExtraFieldNameMissingWarning'] = '未配置任何用户附加字段。';
+$strings['ExtraFieldsNotFoundWarning'] = '以下用户附加字段未找到：%s。';
+$strings['NoUserCoordinatesFound'] = '未找到配置的附加字段对应的用户位置。';
+$strings['ConfigureGoogleMapsFirst'] = '打开地图前请先配置并启用 Google Maps API。';
+
+$strings['map_provider'] = '地图提供商';
+$strings['map_provider_help'] = '选择插件和社交地图使用的地图提供商。';
+$strings['GoogleMapsProvider'] = 'Google 地图';
+$strings['OpenStreetMapProvider'] = 'OpenStreetMap';
+$strings['MapProvider'] = '地图提供商';
+$strings['MapProviderConfiguration'] = '提供商配置';
+$strings['default_latitude'] = '默认纬度';
+$strings['default_latitude_help'] = '默认地图中心纬度。无标记可用时使用。';
+$strings['default_longitude'] = '默认经度';
+$strings['default_longitude_help'] = '默认地图中心经度。无标记可用时使用。';
+$strings['default_zoom'] = '默认缩放级别';
+$strings['default_zoom_help'] = '默认地图缩放级别（1-20）。';
+$strings['OpenStreetMapInfo'] = 'OpenStreetMap 无需 API 密钥。仅地址的标记将显示为搜索链接，除非有可用坐标。';

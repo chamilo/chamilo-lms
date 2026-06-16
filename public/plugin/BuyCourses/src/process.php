@@ -143,7 +143,20 @@ if ($form->validate()) {
         exit;
     }
 
-    $saleId = $plugin->registerSale($item['id'], $paymentType, $submittedCouponId ?? 0);
+    $vatErrors = $plugin->validateVatBuyerData($formValues);
+
+    if (!empty($vatErrors)) {
+        foreach ($vatErrors as $vatError) {
+            Display::addFlash(
+                Display::return_message($vatError, 'error', false)
+            );
+        }
+
+        header('Location: '.api_get_self().'?'.$queryString);
+        exit;
+    }
+
+    $saleId = $plugin->registerSale($item['id'], $paymentType, $submittedCouponId ?? 0, $formValues);
 
     if ($saleId) {
         $_SESSION['bc_sale_id'] = $saleId;
@@ -187,6 +200,35 @@ if (0 === $count) {
     );
     $form->addRadio('payment_type', null, $paymentTypesOptions);
 }
+
+$form->addHtml(
+    '<div class="mt-6 rounded-2xl border border-gray-20 bg-white p-4 shadow-sm">'.
+    '<h3 class="mb-2 text-body-1 font-semibold text-gray-90">'.$plugin->get_lang('VATBuyerInformation').'</h3>'.
+    '<p class="mb-4 text-body-2 text-gray-60">'.$plugin->get_lang('VATBuyerInformationHelp').'</p>'.
+    '</div>'
+);
+
+$form->addSelect(
+    'buyer_country',
+    $plugin->get_lang('BuyerCountry'),
+    $plugin->getVatCountryOptions()
+);
+$form->addText('buyer_postcode', $plugin->get_lang('BuyerPostcode'));
+$form->addSelect(
+    'buyer_type',
+    $plugin->get_lang('BuyerType'),
+    [
+        'individual' => $plugin->get_lang('BuyerTypeIndividual'),
+        'business' => $plugin->get_lang('BuyerTypeBusiness'),
+    ]
+);
+$form->addText('buyer_vat_number', $plugin->get_lang('BuyerVatNumber'));
+$form->addText('buyer_business_name', $plugin->get_lang('BuyerBusinessName'));
+$form->addTextarea('buyer_business_address', $plugin->get_lang('BuyerBusinessAddress'));
+
+$form->setDefaults([
+    'buyer_type' => 'individual',
+]);
 
 $form->addHidden('t', $productType);
 $form->addHidden('i', $productId);

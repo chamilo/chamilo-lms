@@ -8,3 +8,6 @@ $strings['PluginDisabled'] = 'Elektroninis vertinimas išjungtas';
 $strings['StudentId'] = 'Studento ID';
 $strings['ProviderId'] = 'Tiekėjo ID';
 $strings['CourseHours'] = 'Kursų valandos';
+
+$strings['GenerateFile'] = 'Generuoti failą';
+$strings['CourseId'] = 'Kurso ID';

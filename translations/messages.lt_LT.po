@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:autoriaus teisės,, no:be autoriaus teisių"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory: aplankas,, application/msword:MsWord,, application/octet-stream:Oktobaitų srautas,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Aplankas,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":testas:testas,,      simuliacija:simuliacija,,      klausimynas:klausimynas,,      diagrama:diagrama,,      paveikslėlis:paveikslėlis,,      grafikas:grafikas,,      indeksas:indeksas,,      skaidrė:skaidrė,,      lentelė:lentelė,,      naratyvinis tekstas:naratyvinis tekstas,,      egzaminas:egzaminas,,      eksperimentas:eksperimentas,,      problemos teiginys:problemos teiginys,,      savęs vertinimas:savęs vertinimas,,      paskaita:paskaita"
@@ -9731,6 +9731,9 @@ msgstr "Paieškos rezultatai:"
 msgid "Select a file"
 msgstr "Pasirinkite failą"
 
+msgid "Select a file to insert into the editor."
+msgstr "Pasirinkite failą, kurį norite įterpti į redaktorių."
+
 msgid "Warning - The FAQ file, located in the /home/ directory of your portal, is not writable. Your text will not be saved until the file permissions are changed."
 msgstr "Įspėjimas – DUK failas, esantis jūsų portalo /home/ kataloge, nėra rašomas. Jūsų tekstas nebus išsaugotas, kol nebus pakeistos failo teisės."
 
@@ -15911,6 +15914,9 @@ msgstr "Data ir laikas"
 msgid "Item"
 msgstr "Elementas"
 
+msgid "Items"
+msgstr "Elementai"
+
 msgid "Configure Dashboard Plugin"
 msgstr "Konfigūruoti prietaisų skydelio įskiepį"
 
@@ -17164,6 +17170,18 @@ msgstr "Sesijos grupėje"
 
 msgid "Courses in group"
 msgstr "Kursai grupėje"
+
+msgid "Courses on the platform"
+msgstr "Kursai platformoje"
+
+msgid "%s courses"
+msgstr "%s kursai"
+
+msgid "%s sessions"
+msgstr "%s sesijos"
+
+msgid "Search by title or code"
+msgstr "Ieškoti pagal pavadinimą arba kodą"
 
 msgid "Users in group"
 msgstr "Vartotojai grupėje"
@@ -32168,6 +32186,9 @@ msgstr "Užduotis"
 msgid "Allowed file formats: %s"
 msgstr "Leidžiami failų formatai: %s"
 
+msgid "File manager"
+msgstr "Failų tvarkyklė"
+
 msgid "File type not allowed. Allowed extensions: %s"
 msgstr "Failo tipas neleistinas. Leidžiami plėtiniai: %s"
 
@@ -33881,6 +33902,2583 @@ msgstr "Sveiki"
 msgid "Welcome to Chamilo"
 msgstr "Sveiki atvykę į Chamilo"
 
+msgid "Check all unanswered questions below"
+msgstr "Patikrinti visus neatsakytus klausimus žemiau"
+
 msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
 msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Jei tai pirmas kartas naudojant Chamilo, įsitikinkite, kad patikrinote šoninį meniu, kad rastumėte kelią per daugybę jo funkcijų. Jei reikia pagalbos, rasite <a href=\"https://docs.chamilo.org\">mūsų oficialią dokumentaciją</a> standartinei dokumentacijai, o mūsų <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">internetinį forumą</a> idėjoms dalintis ir atsakymams iš kitų Chamilo naudotojų rasti."
+
+msgid "Change password"
+msgstr "Keisti slaptažodį"
+
+msgid "Newest first"
+msgstr "Naujausi pirmiausia"
+
+msgid "Oldest first"
+msgstr "Seniausi pirmiausia"
+
+msgid "Title A–Z"
+msgstr "Pavadinimas A–Z"
+
+msgid "Title Z–A"
+msgstr "Pavadinimas Z–A"
+
+msgid "Send test email"
+msgstr "Siųsti bandomąjį el. laišką"
+
+msgid "Show teachers"
+msgstr "Rodyti dėstytojus"
+
+msgid "Hide teachers"
+msgstr "Slėpti dėstytojus"
+
+msgid "Delete exercise attempts"
+msgstr "Ištrinti pratimų bandymus"
+
+msgid "Message sent successfully."
+msgstr "Pranešimas sėkmingai išsiųstas."
+
+msgid "You cannot create a new course right now."
+msgstr "Šiuo metu negalite sukurti naujo kurso."
+
+msgid "Unable to verify whether you can create a new course right now."
+msgstr "Nepavyko patikrinti, ar šiuo metu galite sukurti naują kursą."
+
+msgid "Please try again later or contact the administrator."
+msgstr "Bandykite vėliau arba susisiekite su administratoriumi."
+
+msgid "You cannot create more courses at this time."
+msgstr "Šiuo metu negalite sukurti daugiau kursų."
+
+msgid "You already manage %d courses and your active service allows up to %d. To create another course, you need a higher service limit or reduce your current active courses."
+msgstr "Jūs jau valdote %d kursus, o jūsų aktyvi paslauga leidžia iki %d. Norėdami sukurti dar vieną kursą, jums reikia didesnės paslaugos ribos arba sumažinti dabartinių aktyvių kursų skaičių."
+
+msgid "You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now."
+msgstr "Jūs jau valdote %d kursus, o platforma šiuo metu leidžia iki %d jūsų paskyrai. Šiuo metu negalite sukurti daugiau kursų."
+
+msgid "Add a class"
+msgstr "Pridėti klasę"
+
+msgid "Search classes"
+msgstr "Ieškoti klasių"
+
+msgid "No classes found"
+msgstr "Klasės nerastos"
+
+msgid "Import classes"
+msgstr "Importuoti klases"
+
+msgid "Class users"
+msgstr "Klasės naudotojai"
+
+msgid "%s classes imported"
+msgstr "Importuota %s klasių"
+
+msgid "%s user-class links imported"
+msgstr "Importuota %s naudotojų-klasių ryšių"
+
+msgid "Hide comments"
+msgstr "Slėpti komentarus"
+
+msgid "Loading comments..."
+msgstr "Įkeliami komentarai..."
+
+msgid "No comments yet."
+msgstr "Komentarų dar nėra."
+
+msgid "A user with this username already exists"
+msgstr "Naudotojas su tokiu prisijungimo vardu jau egzistuoja"
+
+msgid "Manage meetings, review recordings and update course-wide BBB settings from one place."
+msgstr "Tvarkykite susitikimus, peržiūrėkite įrašus ir atnaujinkite viso kurso BBB nustatymus vienoje vietoje."
+
+msgid "Review the current defaults and propagate them to every course when needed."
+msgstr "Peržiūrėkite esamas numatytąsias reikšmes ir prireikus pritaikykite jas kiekvienam kursui."
+
+msgid "Filter the list by meeting date range."
+msgstr "Filtruoti sąrašą pagal susitikimų datų intervalą."
+
+msgid "Review meeting history, participants and recording actions."
+msgstr "Peržiūrėkite susitikimų istoriją, dalyvius ir įrašų veiksmus."
+
+msgid "Participants"
+msgstr "Dalyviai"
+
+msgid "CountUsers"
+msgstr "CountUsers"
+
+msgid "No data found"
+msgstr "Duomenų nerasta"
+
+msgid "My justifications"
+msgstr "Mano pateisinimai"
+
+msgid "My services"
+msgstr "Mano paslaugos"
+
+msgid "Extra menu"
+msgstr "Papildomas meniu"
+
+msgid "Pending tests"
+msgstr "Laukiantys testai"
+
+msgid "No specific language"
+msgstr "Nėra konkrečios kalbos"
+
+msgid "Source Chamilo version"
+msgstr "Šaltinio Chamilo versija"
+
+msgid "Exporting..."
+msgstr "Eksportuojama..."
+
+msgid "Autosaved drafts available"
+msgstr "Yra automatiškai išsaugotų juodraščių"
+
+msgid "Hide drafts"
+msgstr "Slėpti juodraščius"
+
+msgid "Show drafts"
+msgstr "Rodyti juodraščius"
+
+msgid "Drafts are stored only in this browser and are removed after saving the document."
+msgstr "Juodraščiai saugomi tik šioje naršyklėje ir pašalinami po dokumento išsaugojimo."
+
+msgid "Last saved"
+msgstr "Paskutinį kartą išsaugota"
+
+msgid "Restore draft"
+msgstr "Atkurti juodraštį"
+
+msgid "Delete draft"
+msgstr "Ištrinti juodraštį"
+
+msgid "Information about indexing document content"
+msgstr "Informacija apie dokumento turinio indeksavimą"
+
+msgid "When enabled, the document text is indexed by the search engine so users can find it from platform search."
+msgstr "Įgalinus šią parinktį, dokumento tekstas indeksuojamas paieškos sistemos, kad naudotojai galėtų jį rasti per platformos paiešką."
+
+msgid "The editor is not available."
+msgstr "Redaktorius nepasiekiamas."
+
+msgid "Please place the cursor inside a paragraph first."
+msgstr "Pirmiausia įdėkite žymeklį į pastraipą."
+
+msgid "The selected paragraph is empty."
+msgstr "Pasirinkta pastraipa tuščia."
+
+msgid "Loading failed."
+msgstr "Įkėlimas nepavyko."
+
+msgid "Add introduction"
+msgstr "Pridėti įžangą"
+
+msgid "Course type"
+msgstr "Kurso tipas"
+
+msgid "Choose whether this course uses the standard platform limits or benefits from a purchased service."
+msgstr "Pasirinkite, ar šis kursas naudos standartines platformos ribas, ar pasinaudos įsigyta paslauga."
+
+msgid "Standard course"
+msgstr "Standartinis kursas"
+
+msgid "Use the standard platform limits."
+msgstr "Naudoti standartines platformos ribas."
+
+msgid "Selected"
+msgstr "Pasirinkta"
+
+msgid "Hosting limit"
+msgstr "Prieglobos riba"
+
+msgid "Document quota"
+msgstr "Dokumentų kvota"
+
+msgid "The standard course limit has been reached."
+msgstr "Pasiektas standartinio kurso limitas."
+
+msgid "Use the benefits granted by this service."
+msgstr "Naudoti šios paslaugos suteikiamas naudas."
+
+msgid "Courses with these benefits"
+msgstr "Kursai su šiomis naudomis"
+
+msgid "Active service"
+msgstr "Aktyvi paslauga"
+
+msgid "Buy service"
+msgstr "Pirkti paslaugą"
+
+msgid "Select an available course type before creating the course."
+msgstr "Prieš kuriant kursą pasirinkite galimą kurso tipą."
+
+msgid "users"
+msgstr "naudotojai"
+
+msgid "You need to buy this service before using these benefits."
+msgstr "Prieš naudodamiesi šiomis naudomis turite įsigyti šią paslaugą."
+
+msgid "You already used all courses available with this service."
+msgstr "Jūs jau panaudojote visus šiai paslaugai prieinamus kursus."
+
+msgid "This option is not available."
+msgstr "Ši parinktis nepasiekiama."
+
+msgid "This field is required"
+msgstr "Šis laukas privalomas"
+
+msgid "Show less"
+msgstr "Rodyti mažiau"
+
+msgid "Show full description"
+msgstr "Rodyti visą aprašymą"
+
+msgid "Virtual keyboard"
+msgstr "Virtuali klaviatūra"
+
+msgid "Backspace"
+msgstr "Grįžti"
+
+msgid "Space"
+msgstr "Tarpas"
+
+msgid "Learning path only visible to selected learners"
+msgstr "Mokymosi kelias matomas tik pasirinktiems besimokantiesiems"
+
+msgid "Create course"
+msgstr "Sukurti kursą"
+
+msgid "Tour"
+msgstr "Turas"
+
+msgid "Are you sure you want to delete this comment?"
+msgstr "Ar tikrai norite ištrinti šį komentarą?"
+
+msgid "No posts found"
+msgstr "Įrašų nerasta"
+
+msgid "No communities"
+msgstr "Bendruomenių nėra"
+
+msgid "No friends found"
+msgstr "Draugų nerasta"
+
+msgid "Visual overview of your skills"
+msgstr "Vizualinė jūsų įgūdžių apžvalga"
+
+msgid "Compare your progress"
+msgstr "Palyginti savo pažangą"
+
+msgid "Please enter a search term."
+msgstr "Įveskite paieškos terminą."
+
+msgid "Enter captcha code"
+msgstr "Įveskite „captcha“ kodą"
+
+msgid "Refresh captcha"
+msgstr "Atnaujinti „captcha“"
+
+msgid "Captcha is temporarily blocked. Please try again later."
+msgstr "„Captcha“ laikinai užblokuota. Bandykite vėliau."
+
+msgid "Item Details"
+msgstr "Elemento detalės"
+
+msgid "Open File"
+msgstr "Atidaryti failą"
+
+msgid "Selection"
+msgstr "Pasirinkimas"
+
+msgid "Remove selection context"
+msgstr "Pašalinti pasirinkimo kontekstą"
+
+msgid "Source document"
+msgstr "Šaltinio dokumentas"
+
+msgid "Use the current course context"
+msgstr "Naudoti dabartinį kurso kontekstą"
+
+msgid "Loading documents..."
+msgstr "Įkeliami dokumentai..."
+
+msgid "No compatible PDF or TXT document was found in this course."
+msgstr "Šiame kurse nerasta suderinamo PDF ar TXT dokumento."
+
+msgid "Select a PDF or TXT document to generate terms only from that document."
+msgstr "Pasirinkite PDF ar TXT dokumentą, kad terminai būtų generuojami tik iš jo."
+
+msgid "Confidentiality warning"
+msgstr "Konfidencialumo įspėjimas"
+
+msgid "When a document is selected, the prompt is fixed so the generation uses only that document content."
+msgstr "Kai pasirenkamas dokumentas, užklausa fiksuojama, kad generavimas naudotų tik to dokumento turinį."
+
+msgid "No document-processing AI providers available."
+msgstr "Nėra prieinamų dokumentų apdorojimo DI teikėjų."
+
+msgid "Failed to save signature. Please try again."
+msgstr "Nepavyko išsaugoti parašo. Bandykite dar kartą."
+
+msgid "Select and move"
+msgstr "Pasirinkti ir perkelti"
+
+msgid "Freehand"
+msgstr "Laisva ranka"
+
+msgid "Stroke"
+msgstr "Brūkšnys"
+
+msgid "Fill"
+msgstr "Užpildymas"
+
+msgid "Import SVG"
+msgstr "Importuoti SVG"
+
+msgid "Import image"
+msgstr "Importuoti paveikslėlį"
+
+msgid "Click the drawing area to place this text"
+msgstr "Spustelėkite piešimo sritį, kad įdėtumėte šį tekstą"
+
+msgid "Draw a new SVG, import an existing SVG or embed an image, then save it as a reusable document."
+msgstr "Nubraižykite naują SVG, importuokite esamą SVG arba įterpkite paveikslėlį, tada išsaugokite kaip pakartotinai naudojamą dokumentą."
+
+msgid "Use Select and move to reposition or resize elements added in this editor."
+msgstr "Naudokite „Pasirinkti ir perkelti“, kad perstumtumėte ar pakeistumėte šiame rengyklėje pridėtų elementų dydį."
+
+msgid "Stroke width"
+msgstr "Brūkšnio plotis"
+
+msgid "Transparent fill"
+msgstr "Permatomas užpildymas"
+
+msgid "Invalid id"
+msgstr "Neteisingas ID"
+
+msgid "Unable to load the drawing"
+msgstr "Nepavyko įkelti piešinio"
+
+msgid "Only PNG, JPG, WEBP or GIF images are supported."
+msgstr "Palaikomi tik PNG, JPG, WEBP arba GIF paveikslėliai."
+
+msgid "Unable to read the image file."
+msgstr "Nepavyko nuskaityti paveikslėlio failo."
+
+msgid "Only SVG files are supported."
+msgstr "Palaikomi tik SVG failai."
+
+msgid "The SVG file is empty or invalid."
+msgstr "SVG failas yra tuščias arba neteisingas."
+
+msgid "Unable to read the SVG file."
+msgstr "Nepavyko perskaityti SVG failo."
+
+msgid "The drawing is empty or invalid."
+msgstr "Brėžinys yra tuščias arba neteisingas."
+
+msgid "Unable to save the drawing"
+msgstr "Nepavyko išsaugoti brėžinio"
+
+msgid "Information about AI-assisted documents"
+msgstr "Informacija apie dirbtinio intelekto padedamus dokumentus"
+
+msgid "Location"
+msgstr "Vieta"
+
+msgid "Cloud link"
+msgstr "Debesies nuoroda"
+
+msgid "Add a link to a cloud document, such as Google Drive or Google Docs."
+msgstr "Pridėti nuorodą į debesies dokumentą, pvz., „Google Drive“ arba „Google Docs“."
+
+msgid "Add cloud link"
+msgstr "Pridėti debesies nuorodą"
+
+msgid "Document title"
+msgstr "Dokumento pavadinimas"
+
+msgid "Document options change how uploaded files are processed after saving."
+msgstr "Dokumento parinktys keičia, kaip įkelti failai apdorojami po išsaugojimo."
+
+msgid "Information about uncompressing zip files"
+msgstr "Informacija apie ZIP failų išskleidimą"
+
+msgid "When enabled, ZIP files are extracted into the current document folder after upload."
+msgstr "Įjungus, ZIP failai po įkėlimo išskleidžiami į dabartinį dokumentų aplanką."
+
+msgid "The title is required."
+msgstr "Pavadinimas yra privalomas."
+
+msgid "The URL is required."
+msgstr "URL yra privalomas."
+
+msgid "The destination folder is missing."
+msgstr "Trūksta paskirties aplanko."
+
+msgid "Unable to create cloud link."
+msgstr "Nepavyko sukurti debesies nuorodos."
+
+msgid "Copy to My Files"
+msgstr "Kopijuoti į Mano failus"
+
+msgid "Used space"
+msgstr "Naudojama vieta"
+
+msgid "Available space"
+msgstr "Laisva vieta"
+
+msgid "Available percentage"
+msgstr "Laisvos vietos procentas"
+
+msgid "Cloud links cannot be downloaded."
+msgstr "Debesies nuorodų atsisiųsti negalima."
+
+msgid "Could not copy the file to My Files"
+msgstr "Nepavyko nukopijuoti failo į Mano failus"
+
+msgid "File copied to My Files"
+msgstr "Failas nukopijuotas į Mano failus"
+
+msgid "Checking course creation options..."
+msgstr "Tikrinamos kurso kūrimo parinktys..."
+
+msgid "You cannot create more courses right now."
+msgstr "Šiuo metu daugiau kursų sukurti negalite."
+
+msgid "AI analyzer"
+msgstr "DI analizatorius"
+
+msgid "Expand all"
+msgstr "Išskleisti viską"
+
+msgid "Collapse all"
+msgstr "Suskleisti viską"
+
+msgid "Review your active service benefits, purchase history and available receipts."
+msgstr "Peržiūrėkite aktyvias paslaugų naudas, pirkimų istoriją ir turimus kvitus."
+
+msgid "Active services"
+msgstr "Aktyvios paslaugos"
+
+msgid "No active services"
+msgstr "Nėra aktyvių paslaugų"
+
+msgid "Valid until"
+msgstr "Galioja iki"
+
+msgid "Recurring payment"
+msgstr "Pasikartojantis mokėjimas"
+
+msgid "Next charge"
+msgstr "Kitas mokestis"
+
+msgid "Enable auto billing"
+msgstr "Įjungti automatinį atsiskaitymą"
+
+msgid "Cancel auto billing"
+msgstr "Atšaukti automatinį atsiskaitymą"
+
+msgid "Granted benefits"
+msgstr "Suteiktos naudos"
+
+msgid "Purchase history"
+msgstr "Pirkimų istorija"
+
+msgid "No purchases yet"
+msgstr "Dar nėra pirkimų"
+
+msgid "Product"
+msgstr "Produktas"
+
+msgid "Reference"
+msgstr "Nuoroda"
+
+msgid "Amount"
+msgstr "Suma"
+
+msgid "Receipt"
+msgstr "Kvitas"
+
+msgid "Unable to load your services right now."
+msgstr "Šiuo metu nepavyko įkelti jūsų paslaugų."
+
+msgid "Auto billing enabled"
+msgstr "Automatinis atsiskaitymas įjungtas"
+
+msgid "Auto billing suspended"
+msgstr "Automatinis atsiskaitymas sustabdytas"
+
+msgid "Auto billing cancelled"
+msgstr "Automatinis atsiskaitymas atšauktas"
+
+msgid "Auto billing disabled"
+msgstr "Automatinis atsiskaitymas išjungtas"
+
+msgid "Cancel auto billing for this service?"
+msgstr "Atšaukti automatinį atsiskaitymą šiai paslaugai?"
+
+msgid "Preview class members and courses"
+msgstr "Peržiūrėti klasės narius ir kursus"
+
+msgid "Please select a CSV file to import."
+msgstr "Pasirinkite CSV failą importavimui."
+
+msgid "%d user-class links imported"
+msgstr "%d naudotojo-klasės ryšių importuota"
+
+msgid "The following errors occurred during import:"
+msgstr "Importuojant įvyko šios klaidos:"
+
+msgid "CSV file"
+msgstr "CSV failas"
+
+msgid "Remove user from all group-related entities if not in the list"
+msgstr "Pašalinti naudotoją iš visų su grupe susijusių objektų, jei jo nėra sąraše"
+
+msgid "UserName"
+msgstr "Naudotojo vardas"
+
+msgid "ClassName"
+msgstr "Klasės pavadinimas"
+
+msgid "are required for each row."
+msgstr "yra privalomi kiekvienai eilutei."
+
+msgid "title"
+msgstr "pavadinimas"
+
+msgid "is required."
+msgstr "yra privalomas."
+
+msgid "description"
+msgstr "aprašymas"
+
+msgid "are optional."
+msgstr "yra neprivalomi."
+
+msgid "Are you sure you want to remove this user from the class?"
+msgstr "Ar tikrai norite pašalinti šį naudotoją iš klasės?"
+
+msgid "Users in class"
+msgstr "Klasės naudotojai"
+
+msgid "Remove user"
+msgstr "Pašalinti naudotoją"
+
+msgid "Class not found"
+msgstr "Klasė nerasta"
+
+msgid "Class overview"
+msgstr "Klasės apžvalga"
+
+msgid "Back to classes"
+msgstr "Atgal į klases"
+
+msgid "Search members or courses"
+msgstr "Ieškoti narių ar kursų"
+
+msgid "Search by name, email, username or course title"
+msgstr "Ieškoti pagal vardą, el. paštą, naudotojo vardą ar kurso pavadinimą"
+
+msgid "Class members"
+msgstr "Klasės nariai"
+
+msgid "No email"
+msgstr "Nėra el. pašto"
+
+msgid "No members found"
+msgstr "Narių nerasta"
+
+msgid "No courses found"
+msgstr "Kursų nerasta"
+
+msgid "The end date must be after the start date."
+msgstr "Pabaigos data turi būti po pradžios datos."
+
+msgid "Always visible"
+msgstr "Visada matomas"
+
+msgid "No end date"
+msgstr "Nėra pabaigos datos"
+
+msgid "No restriction"
+msgstr "Nėra apribojimų"
+
+msgid "Missing learning path or course identifier"
+msgstr "Trūksta mokymosi kelio arba kurso identifikatoriaus"
+
+msgid "Select a user or a group first"
+msgstr "Pirmiausia pasirinkite naudotoją arba grupę"
+
+msgid "Remove all date restrictions for this learning path?"
+msgstr "Pašalinti visus datos apribojimus šiam mokymosi keliui?"
+
+msgid "Advanced learning path access"
+msgstr "Išplėstinė mokymosi kelio prieiga"
+
+msgid "Remove date restrictions"
+msgstr "Pašalinti datos apribojimus"
+
+msgid "Search by name, email, username or group"
+msgstr "Ieškoti pagal vardą, el. paštą, naudotojo vardą ar grupę"
+
+msgid "Edit user restriction"
+msgstr "Redaguoti naudotojo apribojimą"
+
+msgid "Edit group restriction"
+msgstr "Redaguoti grupės apribojimą"
+
+msgid "Select a user or group"
+msgstr "Pasirinkite naudotoją arba grupę"
+
+msgid "Save restriction"
+msgstr "Išsaugoti apribojimą"
+
+msgid "members"
+msgstr "nariai"
+
+msgid "Create Assignment"
+msgstr "Kurti užduotį"
+
+msgid "The submission deadline has passed. You can no longer submit."
+msgstr "Pateikimo terminas praėjo. Daugiau negalite pateikti."
+
+msgid "Mailing cannot be combined with other recipients."
+msgstr "Paštas negali būti derinamas su kitais gavėjais."
+
+msgid "Social map"
+msgstr "Socialinis žemėlapis"
+
+msgid "The map plugin is not enabled or configured."
+msgstr "Žemėlapio įskiepis neįjungtas arba nesukonfigūruotas."
+
+msgid "Some configured extra fields were not found"
+msgstr "Kai kurie sukonfigūruoti papildomi laukai nerasti"
+
+msgid "No user locations were found."
+msgstr "Naudotojų vietovių nerasta."
+
+msgid "OpenStreetMap needs coordinates to display an embedded marker. Address-only locations are listed below."
+msgstr "OpenStreetMap reikia koordinačių, kad būtų rodomas įterptas žymeklis. Vietovės, nurodytos tik adresu, pateiktos žemiau."
+
+msgid "Locations"
+msgstr "Vietovės"
+
+msgid "Open map"
+msgstr "Atidaryti žemėlapį"
+
+msgid "Provider: OpenStreetMap"
+msgstr "Teikėjas: OpenStreetMap"
+
+msgid "Provider: Google Maps"
+msgstr "Teikėjas: Google Maps"
+
+msgid "Personal files"
+msgstr "Asmeniniai failai"
+
+msgid "Upload image"
+msgstr "Įkelti paveikslėlį"
+
+msgid "Upload media"
+msgstr "Įkelti mediją"
+
+msgid "Only image files are allowed in this upload screen."
+msgstr "Šiame įkėlimo ekrane leidžiami tik paveikslėlių failai."
+
+msgid "Only audio and video files are allowed in this upload screen."
+msgstr "Šiame įkėlimo ekrane leidžiami tik garso ir vaizdo failai."
+
+msgid "Upload files to your personal storage."
+msgstr "Įkelti failus į asmeninę saugyklą."
+
+msgid "Linked"
+msgstr "Susietas"
+
+msgid "No audio or video files were found in this folder."
+msgstr "Šiame aplanke nerasta garso ar vaizdo failų."
+
+msgid "No image files were found in this folder."
+msgstr "Šiame aplanke nerasta paveikslėlių failų."
+
+msgid "No matching files were found in this folder."
+msgstr "Šiame aplanke nerasta atitinkančių failų."
+
+msgid "This file type is not allowed in this upload screen."
+msgstr "Šiame įkėlimo ekrane šis failo tipas neleidžiamas."
+
+msgid "Manage your personal files and course documents."
+msgstr "Tvarkyti asmeninius failus ir kurso dokumentus."
+
+msgid "DateValidity"
+msgstr "DateValidity"
+
+msgid "JustificationSaved"
+msgstr "JustificationSaved"
+
+msgid "ValidityDate"
+msgstr "ValidityDate"
+
+msgid "MyJustifications"
+msgstr "MyJustifications"
+
+msgid "Submission"
+msgstr "Pateikimas"
+
+msgid "Use the filters above to narrow the list."
+msgstr "Naudokite aukščiau esančius filtrus, kad susiaurintumėte sąrašą."
+
+msgid "You are not allowed to see this page."
+msgstr "Jums neleidžiama matyti šio puslapio."
+
+msgid "plugin_title"
+msgstr "plugin_title"
+
+msgid "plugin_comment"
+msgstr "plugin_comment"
+
+msgid "Course tracking details"
+msgstr "Kurso stebėjimo detalės"
+
+msgid "Course activity statistics"
+msgstr "Kurso veiklos statistika"
+
+msgid "mobile_phone_number"
+msgstr "mobile_phone_number"
+
+msgid "Allowed template syntax"
+msgstr "Leidžiama šablono sintaksė"
+
+msgid "Functions"
+msgstr "Funkcijos"
+
+msgid "Available variables depend on the template type, for example {{ user.getUsername() }} or {{ user.getEmail() }}."
+msgstr "Galimi kintamieji priklauso nuo šablono tipo, pavyzdžiui {{ user.getUsername() }} arba {{ user.getEmail() }}."
+
+msgid "For security reasons, any other Twig function, filter (such as filter, map, reduce or sort) or PHP call is blocked."
+msgstr "Saugumo sumetimais bet kokia kita Twig funkcija, filtras (pvz., filter, map, reduce ar sort) arba PHP kreipinys yra blokuojamas."
+
+msgid "Global administrator"
+msgstr "Pagrindinis administratorius"
+
+msgid "Session manager"
+msgstr "Sesijos valdytojas"
+
+msgid "Human resources manager"
+msgstr "Žmogiškųjų išteklių valdytojas"
+
+msgid "Course teacher"
+msgstr "Kurso dėstytojas"
+
+msgid "Course student"
+msgstr "Kurso studentas"
+
+msgid "Platform reports"
+msgstr "Platformos ataskaitos"
+
+msgid "Security reports"
+msgstr "Saugumo ataskaitos"
+
+msgid "Course reports"
+msgstr "Kurso ataskaitos"
+
+msgid "Gradebook reports"
+msgstr "Vertinimų knygelės ataskaitos"
+
+msgid "Social reports"
+msgstr "Socialinės ataskaitos"
+
+msgid "Exports"
+msgstr "Eksportai"
+
+msgid "Reports about platform-wide usage, users, courses and sessions."
+msgstr "Ataskaitos apie platformos naudojimą, vartotojus, kursus ir sesijas."
+
+msgid "Audit and security-sensitive reports."
+msgstr "Audito ir saugumui jautrios ataskaitos."
+
+msgid "Reports scoped to courses managed by the user."
+msgstr "Ataskaitos, apimančios vartotojo valdomus kursus."
+
+msgid "Reports related to learner activity and follow-up."
+msgstr "Ataskaitos, susijusios su besimokančiųjų veikla ir stebėsena."
+
+msgid "Reports related to scores, certificates and gradebook data."
+msgstr "Ataskaitos, susijusios su balais, sertifikatais ir vertinimų knygelės duomenimis."
+
+msgid "Reports and exports that generate downloadable files."
+msgstr "Ataskaitos ir eksportai, generuojantys atsisiunčiamus failus."
+
+msgid "Main platform statistics dashboard."
+msgstr "Pagrindinis platformos statistikos skydelis."
+
+msgid "Number of courses and course distribution report."
+msgstr "Kursų skaičiaus ir kursų pasiskirstymo ataskaita."
+
+msgid "Platform-wide access to course tools."
+msgstr "Platformos mastu pasiekiami kurso įrankiai."
+
+msgid "Number of resources per tool."
+msgstr "Išteklių skaičius pagal įrankį."
+
+msgid "Latest access to courses."
+msgstr "Paskutiniai prisijungimai prie kursų."
+
+msgid "Course distribution by language."
+msgstr "Kursų pasiskirstymas pagal kalbą."
+
+msgid "Course usage report."
+msgstr "Kursų naudojimo ataskaita."
+
+msgid "Platform user count report."
+msgstr "Platformos naudotojų skaičiaus ataskaita."
+
+msgid "Recent logins chart."
+msgstr "Naujausių prisijungimų diagrama."
+
+msgid "Login distribution by month."
+msgstr "Prisijungimų pasiskirstymas pagal mėnesį."
+
+msgid "Login distribution by day."
+msgstr "Prisijungimų pasiskirstymas pagal dieną."
+
+msgid "Login distribution by hour."
+msgstr "Prisijungimų pasiskirstymas pagal valandą."
+
+msgid "Users with profile picture."
+msgstr "Naudotojai su profilio nuotrauka."
+
+msgid "Login report filtered by date."
+msgstr "Prisijungimų ataskaita pagal datą."
+
+msgid "Users who have not logged in recently."
+msgstr "Naudotojai, kurie neseniai neprisijungė."
+
+msgid "Inactive or suspicious user accounts report."
+msgstr "Neaktyvių ar įtartinų naudotojų paskyrų ataskaita."
+
+msgid "Users activity statistics."
+msgstr "Naudotojų veiklos statistika."
+
+msgid "Currently online users report."
+msgstr "Šiuo metu prisijungusių naudotojų ataskaita."
+
+msgid "New user registrations over time."
+msgstr "Naujų naudotojų registracijų tendencija."
+
+msgid "Course and session subscriptions over time."
+msgstr "Kursų ir sesijų prenumeratų tendencija."
+
+msgid "Duplicate user detection and maintenance report."
+msgstr "Dubliuotų naudotojų aptikimo ir priežiūros ataskaita."
+
+msgid "Platform user/session statistics."
+msgstr "Platformos naudotojų / sesijų statistika."
+
+msgid "Quarterly platform report."
+msgstr "Ketvirčio platformos ataskaita."
+
+msgid "Activities audit"
+msgstr "Veiklos auditas"
+
+msgid "Audit report for important administrative and platform activities."
+msgstr "Svarbių administracinių ir platformos veiklų audito ataskaita."
+
+msgid "Social messages received report."
+msgstr "Gautų socialinių pranešimų ataskaita."
+
+msgid "Social messages sent report."
+msgstr "Išsiųstų socialinių pranešimų ataskaita."
+
+msgid "Social contacts count report."
+msgstr "Socialinių kontaktų skaičiaus ataskaita."
+
+msgid "Sessions created over time."
+msgstr "Sukurtų sesijų tendencija."
+
+msgid "Learning analytics dashboard."
+msgstr "Mokymosi analitikos skydelis."
+
+msgid "Teacher time report."
+msgstr "Dėstytojo laiko ataskaita."
+
+msgid "Teachers time by session report"
+msgstr "Dėstytojų laiko pagal sesiją ataskaita"
+
+msgid "Teacher time report grouped by session."
+msgstr "Dėstytojo laiko ataskaita sugrupuota pagal sesiją."
+
+msgid "Corporate learning analytics report."
+msgstr "Įmonės mokymosi analitikos ataskaita."
+
+msgid "Course learners tracking report."
+msgstr "Kurso besimokančiųjų stebėjimo ataskaita."
+
+msgid "Course activity statistics with connected and inactive users."
+msgstr "Kurso veiklos statistika su prisijungusiais ir neaktyviais naudotojais."
+
+msgid "Detailed tracking report for a learner inside a course."
+msgstr "Išsami besimokančiojo stebėjimo ataskaita kurse."
+
+msgid "Course gradebook overview."
+msgstr "Kurso vertinimų knygelės apžvalga."
+
+msgid "Gradebook statistics"
+msgstr "Vertinimų knygelės statistika"
+
+msgid "Gradebook statistics report."
+msgstr "Vertinimų knygelės statistikos ataskaita."
+
+msgid "Certificate report"
+msgstr "Pažymėjimo ataskaita"
+
+msgid "Certificate report for course gradebook."
+msgstr "Pažymėjimo ataskaita kurso vertinimų knygelei."
+
+msgid "User statistics"
+msgstr "Naudotojo statistika"
+
+msgid "Course gradebook statistics for a user."
+msgstr "Kurso vertinimų knygelės statistika naudotojui."
+
+msgid "Personal statistics"
+msgstr "Asmeninė statistika"
+
+msgid "Personal gradebook statistics."
+msgstr "Asmeninė vertinimų knygelės statistika."
+
+msgid "Reports catalog"
+msgstr "Ataskaitų katalogas"
+
+msgid "Central catalog of available reports, roles and permission categories."
+msgstr "Centrinis prieinamų ataskaitų, vaidmenų ir leidimų kategorijų katalogas."
+
+msgid "Course log events"
+msgstr "Kurso žurnalo įvykiai"
+
+msgid "Detailed course tracking events."
+msgstr "Išsamūs kurso stebėjimo įvykiai."
+
+msgid "Course tool usage"
+msgstr "Kurso įrankių naudojimas"
+
+msgid "Course tracking report grouped by tools."
+msgstr "Kurso stebėjimo ataskaita sugrupuota pagal įrankius."
+
+msgid "Course resource usage"
+msgstr "Kurso išteklių naudojimas"
+
+msgid "Course tracking report grouped by resources."
+msgstr "Kurso stebėjimo ataskaita sugrupuota pagal išteklius."
+
+msgid "Course group tracking"
+msgstr "Kurso grupių stebėjimas"
+
+msgid "Tracking report for course groups."
+msgstr "Kurso grupių stebėjimo ataskaita."
+
+msgid "Course session report"
+msgstr "Kurso sesijos ataskaita"
+
+msgid "Tracking report for a course inside sessions."
+msgstr "Kurso sesijų stebėjimo ataskaita."
+
+msgid "Learning path report"
+msgstr "Mokymosi kelio ataskaita"
+
+msgid "Learning path tracking report."
+msgstr "Mokymosi kelio stebėjimo ataskaita."
+
+msgid "Learning path results by user"
+msgstr "Mokymosi kelio rezultatai pagal naudotoją"
+
+msgid "Learning path results grouped by user."
+msgstr "Mokymosi kelio rezultatai sugrupuoti pagal naudotoją."
+
+msgid "Exercises report"
+msgstr "Pratimų ataskaita"
+
+msgid "Course exercises and exams tracking report."
+msgstr "Kurso pratimų ir egzaminų stebėjimo ataskaita."
+
+msgid "Question report"
+msgstr "Klausimų ataskaita"
+
+msgid "Course question tracking report."
+msgstr "Kurso klausimų stebėjimo ataskaita."
+
+msgid "Messages report"
+msgstr "Pranešimų ataskaita"
+
+msgid "Course messages tracking report."
+msgstr "Kurso pranešimų stebėjimo ataskaita."
+
+msgid "Total time tracking report for course learners."
+msgstr "Bendro laiko stebėjimo ataskaita kurso dalyviams."
+
+msgid "Gradebook summary"
+msgstr "Įvertinimų knygelės santrauka"
+
+msgid "Summary view of gradebook results."
+msgstr "Įvertinimų knygelės rezultatų santrauka."
+
+msgid "Flat view"
+msgstr "Plokščias vaizdas"
+
+msgid "Flat gradebook results view."
+msgstr "Plokščias įvertinimų knygelės rezultatų vaizdas."
+
+msgid "Evaluation log"
+msgstr "Vertinimo žurnalas"
+
+msgid "Change log for gradebook evaluations."
+msgstr "Įvertinimų knygelės vertinimų keitimo žurnalas."
+
+msgid "Link log"
+msgstr "Nuorodų žurnalas"
+
+msgid "Change log for gradebook links."
+msgstr "Įvertinimų knygelės nuorodų keitimo žurnalas."
+
+msgid "Result details"
+msgstr "Rezultatų detalės"
+
+msgid "Detailed view of a gradebook result."
+msgstr "Išsamus įvertinimų knygelės rezultato vaizdas."
+
+msgid "Personal certificates report."
+msgstr "Asmeninių pažymėjimų ataskaita."
+
+msgid "User move statistics"
+msgstr "Naudotojų perkėlimo statistika"
+
+msgid "Report for user move and transfer statistics."
+msgstr "Naudotojų perkėlimo ir perdavimo statistikos ataskaita."
+
+msgid "User consent list"
+msgstr "Naudotojų sutikimų sąrašas"
+
+msgid "Report of users and consent status."
+msgstr "Naudotojų ir sutikimų būsenos ataskaita."
+
+msgid "Special platform exports."
+msgstr "Specialūs platformos eksportai."
+
+msgid "Export certificates"
+msgstr "Eksportuoti pažymėjimus"
+
+msgid "Export platform certificates."
+msgstr "Eksportuoti platformos pažymėjimus."
+
+msgid "Export exercise results"
+msgstr "Eksportuoti pratimų rezultatus"
+
+msgid "Export exercise results from the platform."
+msgstr "Eksportuoti pratimų rezultatus iš platformos."
+
+msgid "Course survey results and reporting."
+msgstr "Kurso apklausų rezultatai ir ataskaitos."
+
+msgid "Attendance report"
+msgstr "Lankomumo ataskaita"
+
+msgid "Course attendance tracking and reports."
+msgstr "Kurso lankomumo stebėjimas ir ataskaitos."
+
+msgid "Exercises global report"
+msgstr "Bendroji pratimų ataskaita"
+
+msgid "Global exercise results report for the course."
+msgstr "Bendroji kurso pratimų rezultatų ataskaita."
+
+msgid "Exercise report"
+msgstr "Pratimo ataskaita"
+
+msgid "Detailed exercise report."
+msgstr "Išsami pratimo ataskaita."
+
+msgid "Exercise history"
+msgstr "Pratimo istorija"
+
+msgid "Exercise attempt history."
+msgstr "Pratimo bandymų istorija."
+
+msgid "Exercise results"
+msgstr "Pratimo rezultatai"
+
+msgid "Exercise results and corrections."
+msgstr "Pratimo rezultatai ir pataisymai."
+
+msgid "Question-level exercise statistics."
+msgstr "Klausimų lygmens pratimo statistika."
+
+msgid "Exercise statistics"
+msgstr "Pratimo statistika"
+
+msgid "Exercise statistics page."
+msgstr "Pratimo statistikos puslapis."
+
+msgid "Live exercise statistics"
+msgstr "Pratybų statistika realiuoju laiku"
+
+msgid "Live exercise statistics for teachers."
+msgstr "Pratybų statistika realiuoju laiku dėstytojams."
+
+msgid "Learning path statistics"
+msgstr "Mokymosi kelio statistika"
+
+msgid "Learning path item statistics."
+msgstr "Mokymosi kelio elemento statistika."
+
+msgid "Learning path report inside a course."
+msgstr "Mokymosi kelio ataskaita kurse."
+
+msgid "User skills report."
+msgstr "Vartotojo įgūdžių ataskaita."
+
+msgid "Scheduled or periodic export configuration."
+msgstr "Planuojamo arba periodinio eksporto konfigūracija."
+
+msgid "User export"
+msgstr "Vartotojų eksportas"
+
+msgid "Export users from the platform."
+msgstr "Eksportuoti vartotojus iš platformos."
+
+msgid "Not classified"
+msgstr "Neklasifikuota"
+
+msgid "You have acquired the skill %s"
+msgstr "Jūs įgijote įgūdį %s"
+
+msgid "You have acquired the skill %s."
+msgstr "Jūs įgijote įgūdį %s."
+
+msgid "Recover your password"
+msgstr "Atkurti slaptažodį"
+
+msgid "Disclaimer"
+msgstr "Atsakomybės apribojimas"
+
+msgid "This operation would exceed the limit of %d users allowed for this course."
+msgstr "Ši operacija viršytų leistiną %d vartotojų limitą šiame kurse."
+
+msgid "DefaultGroupCategory"
+msgstr "DefaultGroupCategory"
+
+msgid "LearningCalendar"
+msgstr "LearningCalendar"
+
+msgid "Choose how this user can authenticate on the platform."
+msgstr "Pasirinkite, kaip šis vartotojas gali autentifikuotis platformoje."
+
+msgid "Authentication methods"
+msgstr "Autentifikavimo metodai"
+
+msgid "Set password manually"
+msgstr "Nustatyti slaptažodį rankiniu būdu"
+
+msgid "Report role matrix"
+msgstr "Vaidmenų matricos ataskaita"
+
+msgid "Report permission categories"
+msgstr "Leidimų kategorijų ataskaita"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs enforce the documented report role matrix."
+msgstr "Šis registras pateikia žinomas ataskaitų puslapius, jų kategoriją, kanoninį URL, senąjį URL ir numatomą vaidmenų auditoriją. Kanoniniai URL užtikrina dokumentuotą ataskaitų vaidmenų matricą."
+
+msgid "reports"
+msgstr "ataskaitos"
+
+msgid "Canonical URL"
+msgstr "Kanoninis URL"
+
+msgid "Legacy URL"
+msgstr "Senas URL"
+
+msgid "Permission category"
+msgstr "Leidimų kategorija"
+
+msgid "This matrix documents the expected audience for each report and is enforced by the canonical report entry point."
+msgstr "Ši matrica dokumentuoja numatomą kiekvienos ataskaitos auditoriją ir yra užtikrinama kanoninio ataskaitų įėjimo taško."
+
+msgid "These keys group reports by access scope and are used by the report registry. They can later be mapped to finer-grained platform permissions."
+msgstr "Šie raktai grupuoja ataskaitas pagal prieigos apimtį ir yra naudojami ataskaitų registre. Vėliau jie gali būti susieti su smulkesnėmis platformos teisėmis."
+
+msgid "Permission"
+msgstr "Leidimas"
+
+msgid "Clear active session"
+msgstr "Išvalyti aktyvią sesiją"
+
+msgid "Are you sure you want to clear this user active session?"
+msgstr "Ar tikrai norite išvalyti šio vartotojo aktyvią sesiją?"
+
+msgid "Preview shown without course context. Some course-specific data may be unavailable."
+msgstr "Peržiūra rodoma be kurso konteksto. Kai kurie kurso duomenys gali būti nepasiekiami."
+
+msgid "Preview is not available for this question."
+msgstr "Peržiūra šiam klausimui nepasiekiama."
+
+msgid "Edition is not allowed without a course context."
+msgstr "Redagavimas neleidžiamas be kurso konteksto."
+
+msgid "This plugin does not use regions."
+msgstr "Šis papildinys nenaudoja regionų."
+
+msgid "No plugins with regions were found."
+msgstr "Nerasta papildinių su regionais."
+
+msgid "Freemium"
+msgstr "Freemium"
+
+msgid "Commercial service"
+msgstr "Komercinė paslauga"
+
+msgid "Commercial"
+msgstr "Komercinis"
+
+msgid "100% free"
+msgstr "100 % nemokamas"
+
+msgid "Displayed above the public login form."
+msgstr "Rodoma virš viešos prisijungimo formos."
+
+msgid "Displayed below the public login form."
+msgstr "Rodoma po viešos prisijungimo formos."
+
+msgid "Displayed before the footer area."
+msgstr "Rodoma prieš poraštės sritį."
+
+msgid "Displayed in the left footer column."
+msgstr "Rodoma kairiajame poraštės stulpelyje."
+
+msgid "Displayed in the center footer column."
+msgstr "Rodoma viduriniame poraštės stulpelyje."
+
+msgid "Displayed in the right footer column."
+msgstr "Rodoma dešiniajame poraštės stulpelyje."
+
+msgid "Showing all plugins."
+msgstr "Rodomi visi papildiniai."
+
+msgid "Some plugins are still pending functional verification."
+msgstr "Kai kurie papildiniai dar laukia funkcinio patikrinimo."
+
+msgid "Show verified plugins only"
+msgstr "Rodyti tik patikrintus papildinius"
+
+msgid "Showing verified plugins only."
+msgstr "Rodomi tik patvirtinti papildiniai."
+
+msgid "Pending plugins are temporarily hidden until they are adapted and tested."
+msgstr "Laukiantys papildiniai laikinai paslėpti, kol jie bus pritaikyti ir išbandyti."
+
+msgid "Show all plugins"
+msgstr "Rodyti visus papildinius"
+
+msgid "Official and free plugins are listed separately from plugins that may depend on commercial services or paid offers."
+msgstr "Oficialūs ir nemokami papildiniai pateikiami atskirai nuo papildinių, kurie gali priklausyti nuo komercinių paslaugų ar mokamų pasiūlymų."
+
+msgid "Included free plugins"
+msgstr "Įtraukti nemokami papildiniai"
+
+msgid "Commercial and freemium plugins"
+msgstr "Komerciniai ir freemium papildiniai"
+
+msgid "All plugins"
+msgstr "Visi papildiniai"
+
+msgid "No plugins were found for this category."
+msgstr "Šiai kategorijai papildinių nerasta."
+
+msgid "Search plugins"
+msgstr "Ieškoti papildinių"
+
+msgid "Search by name or description"
+msgstr "Ieškoti pagal pavadinimą ar aprašymą"
+
+msgid "Advanced filters"
+msgstr "Išplėstiniai filtrai"
+
+msgid "All statuses"
+msgstr "Visos būsenos"
+
+msgid "All sources"
+msgstr "Visi šaltiniai"
+
+msgid "All types"
+msgstr "Visi tipai"
+
+msgid "Installed plugins are shown first"
+msgstr "Įdiegti papildiniai rodomi pirmiausia"
+
+msgid "No plugins match the current filters."
+msgstr "Nė vienas papildinys neatitinka esamų filtrų."
+
+msgid "Try clearing the search or changing the filters."
+msgstr "Pabandykite išvalyti paiešką arba pakeisti filtrus."
+
+msgid "README"
+msgstr "README"
+
+msgid "Invalid security token"
+msgstr "Neteisingas saugumo raktas"
+
+msgid "Please select a destination session"
+msgstr "Pasirinkite paskirties sesiją"
+
+msgid "Cannot move this to the same session"
+msgstr "Negalima perkelti į tą pačią sesiją"
+
+msgid "The destination session must include the selected course"
+msgstr "Paskirties sesijoje turi būti pasirinktas kursas"
+
+msgid "The source session must include the selected course"
+msgstr "Šaltinio sesijoje turi būti pasirinktas kursas"
+
+msgid "No learners found"
+msgstr "Besimokančiųjų nerasta"
+
+msgid "Will be subscribed"
+msgstr "Bus užregistruota"
+
+msgid "Subscribed"
+msgstr "Užregistruota"
+
+msgid "The move process has finished"
+msgstr "Perkėlimo procesas baigtas"
+
+msgid "Comparison finished. No data has been moved."
+msgstr "Palyginimas baigtas. Duomenys neperkelti."
+
+msgid "Move tracking data from the base course or a source session to another session. Use comparison first to review the affected learner data."
+msgstr "Perkelti stebėjimo duomenis iš pagrindinio kurso ar šaltinio sesijos į kitą sesiją. Pirmiausia naudokite palyginimą, kad peržiūrėtumėte paveiktus besimokančiųjų duomenis."
+
+msgid "Search for a course or use the manual course ID field below."
+msgstr "Ieškokite kurso arba naudokite rankinio kurso ID lauką žemiau."
+
+msgid "Fallback when the course search is not available."
+msgstr "Atsarginis variantas, kai kurso paieška nepasiekiama."
+
+msgid "Load sessions"
+msgstr "Įkelti sesijas"
+
+msgid "Selected course"
+msgstr "Pasirinktas kursas"
+
+msgid "Choose the base course or the session where the tracking data currently exists."
+msgstr "Pasirinkite pagrindinį kursą arba sesiją, kurioje šiuo metu yra stebėjimo duomenys."
+
+msgid "Choose the session that will receive the tracking data."
+msgstr "Pasirinkite sesiją, kuri gaus stebėjimo duomenis."
+
+msgid "Important"
+msgstr "Svarbu"
+
+msgid "The move action updates existing tracking data. Run compare first and test this tool with a non-production course before moving real learner data."
+msgstr "Perkėlimo veiksmas atnaujina esamus stebėjimo duomenis. Pirmiausia paleiskite palyginimą ir išbandykite šį įrankį su ne gamybiniu kursu prieš perkeldami tikrus besimokančiųjų duomenis."
+
+msgid "No sessions found for this course"
+msgstr "Šiam kursui sesijų nerasta"
+
+msgid "Some users were ignored because they are not subscribed to this session."
+msgstr "Kai kurie vartotojai buvo ignoruoti, nes jie nėra užregistruoti šioje sesijoje."
+
+msgid "Remove selected user"
+msgstr "Pašalinti pasirinktą vartotoją"
+
+msgid "Add selected user"
+msgstr "Pridėti pasirinktą vartotoją"
+
+msgid "No users from the selected list are subscribed to this session."
+msgstr "Nė vienas pasirinkto sąrašo vartotojas nėra užregistruotas šioje sesijoje."
+
+msgid "No image"
+msgstr "Nėra paveikslėlio"
+
+msgid "Invalid URL."
+msgstr "Neteisingas URL."
+
+msgid "This cloud document cannot be embedded."
+msgstr "Šio debesies dokumento negalima įterpti."
+
+msgid "Document not found"
+msgstr "Dokumentas nerastas"
+
+msgid "File not found"
+msgstr "Failas nerastas"
+
+msgid "This learning path is not available for your user at this time."
+msgstr "Šis mokymosi kelias šiuo metu jūsų vartotojui nepasiekiamas."
+
+msgid "StartDateMustBeBeforeTheEndDate"
+msgstr "StartDateMustBeBeforeTheEndDate"
+
+msgid "Next learning path"
+msgstr "Kitas mokymosi kelias"
+
+msgid "Select the learning path that will be available after this one."
+msgstr "Pasirinkite mokymosi kelią, kuris bus pasiekiamas po šio."
+
+msgid "Create another learning path in this course to enable learning path flow."
+msgstr "Sukurkite dar vieną mokymosi kelią šiame kurse, kad įgalintumėte mokymosi kelių seką."
+
+msgid "Available from %s"
+msgstr "Pasiekiama nuo %s"
+
+msgid "Available until %s"
+msgstr "Pasiekiama iki %s"
+
+msgid "Statistics reset date"
+msgstr "Statistikos atstatymo data"
+
+msgid "Last 24 hours"
+msgstr "Paskutinės 24 valandos"
+
+msgid "This reset date is used as the reference date for the report. It does not delete historical tracking data."
+msgstr "Ši atstatymo data naudojama kaip atskaitos data ataskaitai. Ji neištrina istorinių stebėjimo duomenų."
+
+msgid "Since reset date"
+msgstr "Nuo atstatymo datos"
+
+msgid "Users connected in the last 24 hours"
+msgstr "Vartotojai prisijungę per pastarąsias 24 valandas"
+
+msgid "Learners with at least one course access during the last 24 hours."
+msgstr "Besimokantieji, turėję bent vieną kurso prieigą per pastarąsias 24 valandas."
+
+msgid "Users connected in the last week"
+msgstr "Vartotojai prisijungę per pastarąją savaitę"
+
+msgid "Learners with at least one course access during the last 7 days."
+msgstr "Besimokantieji, turėję bent vieną kurso prieigą per pastarąsias 7 dienas."
+
+msgid "Users connected in the last month"
+msgstr "Vartotojai prisijungę per pastarąjį mėnesį"
+
+msgid "Learners with at least one course access during the last 30 days."
+msgstr "Besimokantieji, turėję bent vieną kurso prieigą per pastarąsias 30 dienų."
+
+msgid "Not recently connected users"
+msgstr "Neseniai neprisijungę vartotojai"
+
+msgid "Learners without course access since %s."
+msgstr "Besimokantieji be kurso prieigos nuo %s."
+
+msgid "Recently used resources"
+msgstr "Neseniai naudoti ištekliai"
+
+msgid "Course tools/resources used since %s."
+msgstr "Kurso įrankiai/ištekliai, naudoti nuo %s."
+
+msgid "%s %% of learners"
+msgstr "%s %% besimokančiųjų"
+
+msgid "Connections"
+msgstr "Prisijungimai"
+
+msgid "Total connections"
+msgstr "Iš viso prisijungimų"
+
+msgid "Downloaded documents"
+msgstr "Atsisiųsti dokumentai"
+
+msgid "List of documents downloaded by this learner in this course."
+msgstr "Šio besimokančiojo šiame kurse atsisiųstų dokumentų sąrašas."
+
+msgid "Forum topics"
+msgstr "Forumo temos"
+
+msgid "Forum topics opened by this learner in this course."
+msgstr "Šio besimokančiojo šiame kurse atidarytos forumo temos."
+
+msgid "Forum posts"
+msgstr "Forumo pranešimai"
+
+msgid "Forum posts written by this learner in this course."
+msgstr "Šio besimokančiojo šiame kurse parašyti forumo pranešimai."
+
+msgid "Course connections"
+msgstr "Kurso prisijungimai"
+
+msgid "Connection history for this learner in this course."
+msgstr "Šio besimokančiojo prisijungimų istorija šiame kurse."
+
+msgid "Resources used"
+msgstr "Naudoti ištekliai"
+
+msgid "Latest tools or resources used by this learner in this course."
+msgstr "Naujausi šio besimokančiojo šiame kurse naudoti įrankiai ar ištekliai."
+
+msgid "Logout date"
+msgstr "Atsijungimo data"
+
+msgid "Imported Aiken quiz"
+msgstr "Importuotas Aiken testas"
+
+msgid "Only supported documents will be listed here."
+msgstr "Čia bus rodomi tik palaikomi dokumentai."
+
+msgid "Generated Aiken content"
+msgstr "Sugeneruotas Aiken turinys"
+
+msgid "Review the generated content before importing it as a new exercise."
+msgstr "Peržiūrėkite sugeneruotą turinį prieš importuodami jį kaip naują pratimą."
+
+msgid "No documents available."
+msgstr "Nėra prieinamų dokumentų."
+
+msgid "yperbolic arctangent:\\t\\tarctanh(x)"
+msgstr "Hiperbolinis arktangentas:\\t\\tarctanh(x)"
+
+msgid "Exercise"
+msgstr "Pratimas"
+
+msgid "OfficialCode"
+msgstr "OficialusKodas"
+
+msgid "FirstName"
+msgstr "Vardas"
+
+msgid "LastName"
+msgstr "Pavardė"
+
+msgid "LoginName"
+msgstr "PrisijungimoVardas"
+
+msgid "MinMinute"
+msgstr "MinMinutė"
+
+msgid "StartDate"
+msgstr "PradžiosData"
+
+msgid "EndDate"
+msgstr "PabaigosData"
+
+msgid "CorrectionDate"
+msgstr "TaisymoData"
+
+msgid "NotValidated"
+msgstr "NePatvirtinta"
+
+msgid "PendingAttempts"
+msgstr "LaukiantysBandymai"
+
+msgid "List of pending test attempts across your courses."
+msgstr "Laukiančių testų bandymų sąrašas visuose jūsų kursuose."
+
+msgid "User ID"
+msgstr "Vartotojo ID"
+
+msgid "QuestionType"
+msgstr "Klausimo tipas"
+
+msgid "QuestionsWithNoAutomaticCorrection"
+msgstr "Klausimai be automatinio vertinimo"
+
+msgid "There are no pending tests."
+msgstr "Nėra laukiančių testų."
+
+msgid "%s results"
+msgstr "%s rezultatai"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Pavyzdinė užpildymo forma: kūno masės indekso skaičiavimas</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Amžius</strong></td>            <td width=\"75%\" style=\"\">[25] metų</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Lytis</strong></td>            <td style=\"\" text-align:=\"\">[V] (V arba M)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Svoris</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ūgis</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Kūno masės indeksas</strong></td>            <td style=\"vertical-align: top;\">[29] KMI = Svoris / Ūgis<sup>2</sup> (žr. <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\">Vikipedijos straipsnį</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Removed"
+msgstr "Pašalinta"
+
+msgid "NoUsersInTheList"
+msgstr "Sąraše nėra vartotojų"
+
+msgid "Are you sure?"
+msgstr "Ar tikrai?"
+
+msgid "NoResultsAvailable"
+msgstr "Nėra rezultatų"
+
+msgid "Import groups from a CSV file and optionally remove items that are not present in the file."
+msgstr "Importuoti grupes iš CSV failo ir pasirinktinai pašalinti elementus, kurių nėra faile."
+
+msgid "Use this option carefully because items missing from the CSV can be removed during the import process."
+msgstr "Naudokite šią parinktį atsargiai, nes CSV faile trūkstantys elementai gali būti pašalinti importavimo metu."
+
+msgid "Upload a CSV file with the group data you want to import."
+msgstr "Įkelkite CSV failą su grupių duomenimis, kuriuos norite importuoti."
+
+msgid "You can download the example file to use the expected format."
+msgstr "Galite atsisiųsti pavyzdinį failą, kad naudotumėte tinkamą formatą."
+
+msgid "If you enable deletion, items not present in the file may be removed."
+msgstr "Jei įgalinsite trynimą, faile nesantys elementai gali būti pašalinti."
+
+msgid "The CSV file is mandatory to start the import."
+msgstr "Norint pradėti importavimą, CSV failas yra privalomas."
+
+msgid "Please select at least one class."
+msgstr "Pasirinkite bent vieną klasę."
+
+msgid "Define the properties for each group before creating them."
+msgstr "Prieš kurdami grupes, apibrėžkite kiekvienos grupės savybes."
+
+msgid "Apply the first row values"
+msgstr "Taikyti pirmosios eilutės reikšmes"
+
+msgid "Create groups manually or generate them from the classes subscribed to this course."
+msgstr "Kurti grupes rankiniu būdu arba generuoti jas iš klasių, užsiregistravusių šiame kurse."
+
+msgid "Create manual groups"
+msgstr "Kurti grupes rankiniu būdu"
+
+msgid "Use this form when you want to create empty course groups manually."
+msgstr "Naudokite šią formą, kai norite rankiniu būdu sukurti tuščias kurso grupes."
+
+msgid "Configure manual groups"
+msgstr "Konfigūruoti grupes rankiniu būdu"
+
+msgid "Create groups from subscribed classes"
+msgstr "Kurti grupes iš užsiregistravusių klasių"
+
+msgid "Use this form when you want to create one course group for each selected class."
+msgstr "Naudokite šią formą, kai norite sukurti po vieną kurso grupę kiekvienai pasirinktai klasei."
+
+msgid "Keep created groups linked to their source classes"
+msgstr "Išlaikyti sukurtas grupes susietas su jų šaltinio klasėmis"
+
+msgid "Create groups from selected classes"
+msgstr "Kurti grupes iš pasirinktų klasių"
+
+msgid "You must be logged in to access this page."
+msgstr "Norėdami pasiekti šį puslapį, turite prisijungti."
+
+msgid "Invalid user"
+msgstr "Neteisingas vartotojas"
+
+msgid "UseCourseCustomCertificate"
+msgstr "Naudoti kurso pasirinktinį pažymėjimą"
+
+msgid "UseDefaultCustomCertificate"
+msgstr "Naudoti numatytąjį pasirinktinį pažymėjimą"
+
+msgid "CertificateSetting"
+msgstr "Pažymėjimo nustatymas"
+
+msgid "SelectOneOptionBeforeOpeningEditor"
+msgstr "Prieš atidarant redaktorių, pasirinkite vieną parinktį"
+
+msgid "ChooseCustomCertificateModeHelp"
+msgstr "Pasirinktinio pažymėjimo režimo pagalba"
+
+msgid "CertificateMode"
+msgstr "Pažymėjimo režimas"
+
+msgid "Enable student to validate own attendance"
+msgstr "Leisti studentui patvirtinti savo lankomumą"
+
+msgid "Course block"
+msgstr "Kurso blokas"
+
+msgid "Add custom content blocks to course footer regions."
+msgstr "Pridėti pasirinktinius turinio blokus kurso poraštės srityse."
+
+msgid "course_block_pre_footer"
+msgstr "course_block_pre_footer"
+
+msgid "Before footer"
+msgstr "Prieš poraštę"
+
+msgid "course_block_footer_left"
+msgstr "course_block_footer_left"
+
+msgid "Footer left"
+msgstr "Kairioji poraštė"
+
+msgid "course_block_footer_center"
+msgstr "course_block_footer_center"
+
+msgid "Footer center"
+msgstr "Centrinė poraštė"
+
+msgid "course_block_footer_right"
+msgstr "course_block_footer_right"
+
+msgid "Footer right"
+msgstr "Dešinioji poraštė"
+
+msgid "SetNotification"
+msgstr "Nustatyti pranešimą"
+
+msgid "CourseLegal"
+msgstr "Kurso teisės"
+
+msgid "Certificates search is not available"
+msgstr "Pažymėjimų paieška negalima"
+
+msgid "It allows the acquisition of skills by subcategories"
+msgstr "Tai leidžia įgyti įgūdžius pagal subkategorijas"
+
+msgid "Allow skills by subcategories"
+msgstr "Leisti įgūdžius pagal subkategorijas"
+
+msgid "Minimum score for skills"
+msgstr "Minimalus įgūdžių balas"
+
+msgid "The gradebook table is hidden."
+msgstr "Įvertinimų lentelė yra paslėpta."
+
+msgid "Invalid token"
+msgstr "Neteisingas žetonas"
+
+msgid "Unable to save the item"
+msgstr "Nepavyko išsaugoti elemento"
+
+msgid "Only HTTP and HTTPS URLs are allowed."
+msgstr "Leidžiami tik HTTP ir HTTPS URL."
+
+msgid "Invalid URL host."
+msgstr "Neteisingas URL pagrindinis kompiuteris."
+
+msgid "This cloud provider is not allowed."
+msgstr "Šis debesies tiekėjas neleidžiamas."
+
+msgid "Documents used"
+msgstr "Naudoti dokumentai"
+
+msgid "No document usage"
+msgstr "Nėra dokumentų naudojimo"
+
+msgid "Invalid action."
+msgstr "Neteisingas veiksmas."
+
+msgid "No users selected."
+msgstr "Nepasirinkta jokių vartotojų."
+
+msgid "%s user(s) processed."
+msgstr "%s vartotojas(-ai) apdorotas(-i)."
+
+msgid "Invalid CSRF token."
+msgstr "Neteisingas CSRF žetonas."
+
+msgid "[%s] Please change your password"
+msgstr "[%s] Prašome pakeisti slaptažodį"
+
+msgid "Dear %s,\n\nOur security enforcing process shows you use a password that is commonly used on the internet, which means your account could easily be stolen. It is probably a simple sequence or a very common word, we don't really know (we cannot see your password), but we ask you to please connect to the platform and request a password change. You can follow the link here: %s to do that now.\n\nPlease note we will never ask for your password in this process. You just enter your username or e-mail and we send you a link. If you are asked to introduce your existing password to do that, someone is probably trying to do Phishing on your account. Be safe, change your password now!\n\n%s\n%s"
+msgstr "Gerb. %s,\n\nMūsų saugumo užtikrinimo procesas rodo, kad naudojate slaptažodį, kuris dažnai naudojamas internete, todėl jūsų paskyra gali būti lengvai pavogta. Tai tikriausiai paprasta seka arba labai dažnas žodis, mes tiksliai nežinome (mes nematome jūsų slaptažodžio), bet prašome prisijungti prie platformos ir paprašyti pakeisti slaptažodį. Tai galite padaryti dabar spustelėję šią nuorodą: %s.\n\nAtkreipkite dėmesį, kad šio proceso metu mes niekada neprašysime jūsų slaptažodžio. Jūs tiesiog įvedate savo vartotojo vardą arba el. paštą ir mes atsiunčiame jums nuorodą. Jei jūsų prašoma įvesti esamą slaptažodį, kad tai padarytumėte, greičiausiai kažkas bando vykdyti „Phishing“ ataką prieš jūsų paskyrą. Būkite saugūs, pakeiskite savo slaptažodį dabar!\n\n%s\n%s"
+
+msgid "[%s] Your password has been reset"
+msgstr "[%s] Jūsų slaptažodis buvo atstatytas"
+
+msgid "Dear %s,\n\nOur security enforcing process flagged you as using a password that is commonly used on the internet, which means your account could easily be stolen. As a prevention measure, we have decided to initiate a password reset process. Your new, automatically generated password is now:\n\n%s\n\nPlease login to the platform soon (using this new password) to set your own, personal and secure, password.\n\nBe safe.\n\n%s\n%s"
+msgstr "Gerb. %s,\n\nMūsų saugumo užtikrinimo procesas pažymėjo jus kaip naudojantį slaptažodį, kuris dažnai naudojamas internete, todėl jūsų paskyra gali būti lengvai pavogta. Kaip prevencinę priemonę, mes nusprendėme pradėti slaptažodžio atstatymo procesą. Jūsų naujas, automatiškai sugeneruotas slaptažodis dabar yra:\n\n%s\n\nPrašome greitai prisijungti prie platformos (naudojant šį naują slaptažodį), kad nustatytumėte savo asmeninį ir saugų slaptažodį.\n\nBūkite saugūs.\n\n%s\n%s"
+
+msgid "Signature saved successfully"
+msgstr "Parašas sėkmingai išsaugotas"
+
+msgid "Invalid request payload."
+msgstr "Neteisingas užklausos turinys."
+
+msgid "Authentication required."
+msgstr "Reikalinga autentifikacija."
+
+msgid "The course title is required."
+msgstr "Kurso pavadinimas yra privalomas."
+
+msgid "Only trainers and administrators can create courses."
+msgstr "Kursus gali kurti tik dėstytojai ir administratoriai."
+
+msgid "Course creation by trainers is disabled on this platform."
+msgstr "Kursų kūrimas dėstytojams šioje platformoje išjungtas."
+
+msgid "The selected BuyCourses service cannot be used to create this course."
+msgstr "Pasirinkta „BuyCourses“ paslauga negali būti naudojama šiam kursui sukurti."
+
+msgid "You have reached the maximum number of courses allowed (%d)."
+msgstr "Jūs pasiekėte maksimalų leistiną kursų skaičių (%d)."
+
+msgid "The selected BuyCourses service is invalid."
+msgstr "Pasirinkta „BuyCourses“ paslauga yra neteisinga."
+
+msgid "BuyCourses is not available right now."
+msgstr "„BuyCourses“ šiuo metu nepasiekiama."
+
+msgid "BuyCourses cannot validate the selected service right now."
+msgstr "„BuyCourses“ šiuo metu negali patvirtinti pasirinktos paslaugos."
+
+msgid "Unable to validate the selected BuyCourses service right now."
+msgstr "Šiuo metu nepavyko patvirtinti pasirinktos „BuyCourses“ paslaugos."
+
+msgid "External tool removed from course"
+msgstr "Išorinis įrankis pašalintas iš kurso"
+
+msgid "External tool was removed from the course, but kept internally because it is linked to the gradebook"
+msgstr "Išorinis įrankis pašalintas iš kurso, bet paliktas viduje, nes jis susietas su įvertinimų knyga"
+
+msgid "There are no external tools available to add to the gradebook"
+msgstr "Nėra išorinių įrankių, kuriuos būtų galima pridėti prie įvertinimų knygos"
+
+msgid "The evaluation could not be created"
+msgstr "Vertinimo sukurti nepavyko"
+
+msgid "The gradebook evaluation could not be linked"
+msgstr "Įvertinimų knygos vertinimo susieti nepavyko"
+
+msgid "Survey questions"
+msgstr "Apklausos klausimai"
+
+msgid "Back to survey list"
+msgstr "Grįžti į apklausų sąrašą"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "Ši apklausa jau turi atsakymus. Klausimų redagavimas išjungtas pagal konfigūraciją."
+
+msgid "Choose the type of question you want to add."
+msgstr "Pasirinkite norimo pridėti klausimo tipą."
+
+msgid "The free text option is added automatically."
+msgstr "Laisvo teksto parinktis pridedama automatiškai."
+
+msgid "No questions found"
+msgstr "Klausimų nerasta"
+
+msgid "Mandatory"
+msgstr "Privalomas"
+
+msgid "Unsupported question type"
+msgstr "Nepalaikomas klausimo tipas"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "Klausime galite naudoti žymas {%s} ir {%s}."
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "Šis klausimas rodomas sąlygiškai atsakant į apklausą."
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "Procentų parinktys nuo 1 iki 100 generuojamos automatiškai."
+
+msgid "Could not load survey questions"
+msgstr "Nepavyko įkelti apklausos klausimų"
+
+msgid "The question text is required."
+msgstr "Klausimo tekstas yra privalomas."
+
+msgid "The maximum score is required."
+msgstr "Maksimalus balas yra privalomas."
+
+msgid "Please select a parent option."
+msgstr "Pasirinkite pirminę parinktį."
+
+msgid "Please fill all answer options."
+msgstr "Užpildykite visas atsakymų parinktis."
+
+msgid "QuestionUpdated"
+msgstr "QuestionUpdated"
+
+msgid "Could not save survey question"
+msgstr "Nepavyko išsaugoti apklausos klausimo"
+
+msgid "Could not delete survey question"
+msgstr "Nepavyko ištrinti apklausos klausimo"
+
+msgid "Could not move survey question"
+msgstr "Nepavyko perkelti apklausos klausimo"
+
+msgid "Could not copy survey question"
+msgstr "Nepavyko nukopijuoti apklausos klausimo"
+
+msgid "Hide search"
+msgstr "Slėpti paiešką"
+
+msgid "Showing results for: %s"
+msgstr "Rodomi rezultatai: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "Ieškoti pagal apklausos pavadinimą, kodą ar aprašymą."
+
+msgid "Search surveys"
+msgstr "Ieškoti apklausų"
+
+msgid "%s surveys selected"
+msgstr "Pasirinkta apklausų: %s"
+
+msgid "Clear selection"
+msgstr "Išvalyti pasirinkimą"
+
+msgid "No surveys found"
+msgstr "Apklausų nerasta"
+
+msgid "Unsupported"
+msgstr "Nepalaikoma"
+
+msgid "Could not load surveys"
+msgstr "Nepavyko įkelti apklausų"
+
+msgid "Delete selected surveys"
+msgstr "Ištrinti pasirinktas apklausas"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "Pasirinktos apklausos ir jų klausimai bus ištrinti. Šio veiksmo negalima atšaukti."
+
+msgid "Could not delete selected surveys"
+msgstr "Nepavyko ištrinti pasirinktų apklausų"
+
+msgid "Survey action"
+msgstr "Apklausos veiksmas"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "Bus sukurta šios apklausos kopija: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "Visi atsakymai ir pakvietimai bus ištrinti šiai apklausai: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "Sugeneruoti padauginti klausimai bus pašalinti iš šios apklausos: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "Ši apklausa bus paskelbta susietos grupės kuratoriams: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "Ši apklausa ir jos klausimai bus ištrinti: %s"
+
+msgid "Could not complete survey action"
+msgstr "Nepavyko atlikti apklausos veiksmo"
+
+msgid "Not started"
+msgstr "Nepradėta"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "Susitikimų apklausos leidžia pakviestiems naudotojams pasirinkti datas, kada jie yra prieinami."
+
+msgid "Back to surveys"
+msgstr "Grįžti į apklausas"
+
+msgid "Edit meeting poll"
+msgstr "Redaguoti susitikimų apklausą"
+
+msgid "View meeting poll"
+msgstr "Peržiūrėti susitikimų apklausą"
+
+msgid "Basic information"
+msgstr "Pagrindinė informacija"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "Bus sukurta apklausa susitikimų apklausos tipu. Atsakymai ir pakvietimai tvarkomi atskirai."
+
+msgid "Availability"
+msgstr "Prieinamumas"
+
+msgid "Meeting dates"
+msgstr "Susitikimų datos"
+
+msgid "Meeting poll"
+msgstr "Susitikimų apklausa"
+
+msgid "My availability"
+msgstr "Mano prieinamumas"
+
+msgid "Meeting poll results"
+msgstr "Susitikimų apklausos rezultatai"
+
+msgid "No invitations found"
+msgstr "Pakvietimų nerasta"
+
+msgid "available"
+msgstr "prieinama"
+
+msgid "Could not load meeting poll"
+msgstr "Nepavyko įkelti susitikimų apklausos"
+
+msgid "Please complete the required fields"
+msgstr "Užpildykite privalomus laukus"
+
+msgid "Could not save meeting poll"
+msgstr "Nepavyko išsaugoti susitikimų apklausos"
+
+msgid "Could not save meeting availability"
+msgstr "Nepavyko išsaugoti susitikimų prieinamumo"
+
+msgid "Copy this survey to another course or session"
+msgstr "Kopijuoti šią apklausą į kitą kursą arba sesiją"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "Apklausa bus nukopijuota be atsakymų ar pakvietimų."
+
+msgid "No target courses found"
+msgstr "Tikslinių kursų nerasta"
+
+msgid "Search by course title, course code or session name."
+msgstr "Ieškoti pagal kurso pavadinimą, kurso kodą arba sesijos pavadinimą."
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "Naudokite „Dubliuoti apklausą“, jei norite kopijos tame pačiame kurse."
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "Klausimai ir parinktys bus nukopijuoti. Atsakymai, pakvietimai ir ataskaitos liks tik originalioje apklausoje."
+
+msgid "Selected target"
+msgstr "Pasirinktas tikslas"
+
+msgid "Could not load copy form"
+msgstr "Nepavyko įkelti kopijavimo formos"
+
+msgid "The survey will be copied to: %s"
+msgstr "Apklausa bus nukopijuota į: %s"
+
+msgid "Survey copied."
+msgstr "Apklausa nukopijuota."
+
+msgid "Could not copy survey"
+msgstr "Nepavyko nukopijuoti apklausos"
+
+msgid "Answer survey"
+msgstr "Atsakyti į apklausą"
+
+msgid "Preview mode does not save answers."
+msgstr "Peržiūros režimas neišsaugo atsakymų."
+
+msgid "Survey completed"
+msgstr "Apklausa užpildyta"
+
+msgid "Thank you for answering the survey."
+msgstr "Dėkojame, kad atsakėte į apklausą."
+
+msgid "Profile information"
+msgstr "Profilio informacija"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "Prieš atsakydami į apklausą peržiūrėkite prašomus profilio laukus."
+
+msgid "This profile field is read-only."
+msgstr "Šis profilio laukas yra tik skaitymui."
+
+msgid "You already filled this survey."
+msgstr "Jūs jau užpildėte šią apklausą."
+
+msgid "Please specify"
+msgstr "Nurodykite"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "Šis klausimo tipas nepalaikomas šiuolaikiniame apklausos rodinyje."
+
+msgid "Preview only"
+msgstr "Tik peržiūra"
+
+msgid "Submit answers"
+msgstr "Pateikti atsakymus"
+
+msgid "Could not load survey"
+msgstr "Nepavyko įkelti apklausos"
+
+msgid "Please complete the required profile fields."
+msgstr "Užpildykite privalomus profilio laukus."
+
+msgid "Please answer all mandatory questions."
+msgstr "Atsakykite į visus privalomus klausimus."
+
+msgid "Could not save survey answers"
+msgstr "Nepavyko išsaugoti apklausos atsakymų"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "Prieš tvarkydami klausimus ir pakvietimus, sukonfigūruokite pagrindinę apklausos informaciją."
+
+msgid "The survey code cannot be changed after creation."
+msgstr "Apklausos kodo po sukūrimo keisti negalima."
+
+msgid "Survey behavior"
+msgstr "Apklausos elgsena"
+
+msgid "Use 0 for no time limit."
+msgstr "Naudokite 0, jei laiko apribojimo nėra."
+
+msgid "Survey messages"
+msgstr "Apklausos pranešimai"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "Čia pasirinkti profilio laukai bus rodomi prieš apklausos klausimus."
+
+msgid "No profile fields are currently available."
+msgstr "Šiuo metu nėra prieinamų profilio laukų."
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "Profilio laukų pasirinkimas galimas tik neanoniminėms apklausoms."
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "Įgūdžių susiejimas bus perkeltas atskira partija."
+
+msgid "Could not load survey configuration"
+msgstr "Nepavyko įkelti apklausos konfigūracijos"
+
+msgid "The survey code is required."
+msgstr "Apklausos kodas yra privalomas."
+
+msgid "The survey title is required."
+msgstr "Apklausos pavadinimas yra privalomas."
+
+msgid "The survey has been saved successfully"
+msgstr "Apklausa sėkmingai išsaugota"
+
+msgid "Could not save survey configuration"
+msgstr "Nepavyko išsaugoti apklausos konfigūracijos"
+
+msgid "Course users"
+msgstr "Kurso naudotojai"
+
+msgid "Already invited"
+msgstr "Jau pakviesti"
+
+msgid "No users found"
+msgstr "Naudotojų nerasta"
+
+msgid "No groups found"
+msgstr "Grupių nerasta"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "Naudokite **nuorodą**, kur turi būti rodoma apklausos nuoroda."
+
+msgid "Remind all selected users"
+msgstr "Priminti visiems pasirinktiems naudotojams"
+
+msgid "Anonymous access link"
+msgstr "Anoniminės prieigos nuoroda"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "Naudotojai, kurie nėra pakviesti, gali naudoti šią nuorodą apklausai atlikti."
+
+msgid "Answered anonymously"
+msgstr "Atsakyta anonimiškai"
+
+msgid "Could not load survey invitations"
+msgstr "Nepavyko įkelti apklausos pakvietimų"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "Siunčiant laišką būtina nurodyti laiško temą ir pranešimą."
+
+msgid "Could not publish survey"
+msgstr "Nepavyko paskelbti apklausos"
+
+msgid "Could not copy the link"
+msgstr "Nepavyko nukopijuoti nuorodos"
+
+msgid "Please answer this survey using the following link"
+msgstr "Atsakykite į šią apklausą naudodami šią nuorodą"
+
+msgid "Export CSV"
+msgstr "Eksportuoti CSV"
+
+msgid "Export compact CSV"
+msgstr "Eksportuoti sutrumpintą CSV"
+
+msgid "Export Excel"
+msgstr "Eksportuoti Excel"
+
+msgid "Export package"
+msgstr "Eksportuoti paketą"
+
+msgid "Results summary"
+msgstr "Rezultatų santrauka"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "Šiame rodinyje rodomi šios apklausos perkeltieji ataskaitų duomenys."
+
+msgid "Select user"
+msgstr "Pasirinkti naudotoją"
+
+msgid "No answers found"
+msgstr "Atsakymų nerasta"
+
+msgid "answers"
+msgstr "atsakymai"
+
+msgid "Could not load survey reporting"
+msgstr "Nepavyko įkelti apklausos ataskaitų"
+
+msgid "Back to threads"
+msgstr "Grįžti prie temų"
+
+msgid "Back to learning path"
+msgstr "Grįžti prie mokymosi kelio"
+
+msgid "Remove sticky"
+msgstr "Pašalinti priklijuotą"
+
+msgid "Make sticky"
+msgstr "Padaryti priklijuotą"
+
+msgid "Open thread"
+msgstr "Atidaryti temą"
+
+msgid "Close thread"
+msgstr "Uždaryti temą"
+
+msgid "Delete thread"
+msgstr "Ištrinti temą"
+
+msgid "This thread is hidden from learners."
+msgstr "Ši tema yra paslėpta nuo besimokančiųjų."
+
+msgid "Revision requested"
+msgstr "Prašoma peržiūros"
+
+msgid "Revision"
+msgstr "Peržiūra"
+
+msgid "Approve post"
+msgstr "Patvirtinti įrašą"
+
+msgid "Reject post"
+msgstr "Atmesti įrašą"
+
+msgid "Cancel revision request"
+msgstr "Atšaukti peržiūros prašymą"
+
+msgid "Delete post"
+msgstr "Ištrinti įrašą"
+
+msgid "Message is required"
+msgstr "Pranešimas yra privalomas"
+
+msgid "Target thread is required"
+msgstr "Tikslinė tema yra privaloma"
+
+msgid "Could not retrieve posts"
+msgstr "Nepavyko gauti įrašų"
+
+msgid "Thread shown"
+msgstr "Tema rodoma"
+
+msgid "Thread hidden"
+msgstr "Tema paslėpta"
+
+msgid "Could not update thread"
+msgstr "Nepavyko atnaujinti temos"
+
+msgid "Thread closed"
+msgstr "Tema uždaryta"
+
+msgid "Thread opened"
+msgstr "Tema atidaryta"
+
+msgid "Thread marked as sticky"
+msgstr "Tema pažymėta kaip svarbi"
+
+msgid "Thread unmarked as sticky"
+msgstr "Temos svarbumo žymė pašalinta"
+
+msgid "Thread notifications enabled"
+msgstr "Temos pranešimai įjungti"
+
+msgid "Thread notifications disabled"
+msgstr "Temos pranešimai išjungti"
+
+msgid "Could not update thread notification"
+msgstr "Nepavyko atnaujinti temos pranešimų"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "Ar tikrai norite ištrinti šią temą?"
+
+msgid "Could not delete thread"
+msgstr "Nepavyko ištrinti temos"
+
+msgid "Post approved"
+msgstr "Įrašas patvirtintas"
+
+msgid "Could not approve post"
+msgstr "Nepavyko patvirtinti įrašo"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "Ar tikrai norite atmesti šį įrašą?"
+
+msgid "Post rejected"
+msgstr "Įrašas atmestas"
+
+msgid "Could not reject post"
+msgstr "Nepavyko atmesti įrašo"
+
+msgid "Post shown"
+msgstr "Įrašas rodomas"
+
+msgid "Post hidden"
+msgstr "Įrašas paslėptas"
+
+msgid "Could not update post"
+msgstr "Nepavyko atnaujinti įrašo"
+
+msgid "Post updated"
+msgstr "Įrašas atnaujintas"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "Ar tikrai norite ištrinti šį įrašą?"
+
+msgid "Post deleted"
+msgstr "Įrašas ištrintas"
+
+msgid "Could not delete post"
+msgstr "Nepavyko ištrinti įrašo"
+
+msgid "Untitled thread"
+msgstr "Be pavadinimo tema"
+
+msgid "Could not retrieve threads"
+msgstr "Nepavyko gauti temų"
+
+msgid "Post moved"
+msgstr "Įrašas perkeltas"
+
+msgid "Could not move post"
+msgstr "Nepavyko perkelti įrašo"
+
+msgid "Revision request removed"
+msgstr "Peržiūros prašymas pašalintas"
+
+msgid "Could not update revision request"
+msgstr "Nepavyko atnaujinti peržiūros prašymo"
+
+msgid "Are you sure you want to report this post?"
+msgstr "Ar tikrai norite pranešti apie šį įrašą?"
+
+msgid "Could not report post"
+msgstr "Nepavyko pranešti apie įrašą"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "Ar tikrai norite ištrinti šį priedą?"
+
+msgid "Attachment deleted"
+msgstr "Priedas ištrintas"
+
+msgid "Could not delete attachment"
+msgstr "Nepavyko ištrinti priedo"
+
+msgid "Thread title"
+msgstr "Temos pavadinimas"
+
+msgid "Sticky thread"
+msgstr "Svarbi tema"
+
+msgid "Attach files"
+msgstr "Pridėti failus"
+
+msgid "Attachments are disabled for this forum"
+msgstr "Šiame forume priedai išjungti"
+
+msgid "The forum is not open yet."
+msgstr "Forumas dar neatidarytas."
+
+msgid "The forum is closed."
+msgstr "Forumas uždarytas."
+
+msgid "The forum is locked."
+msgstr "Forumas užrakintas."
+
+msgid "New threads are not allowed in this forum."
+msgstr "Naujos temos šiame forume neleidžiamos."
+
+msgid "Thread created"
+msgstr "Tema sukurta"
+
+msgid "Could not create thread"
+msgstr "Nepavyko sukurti temos"
+
+msgid "Back to posts"
+msgstr "Atgal į pranešimus"
+
+msgid "This reply will be stored as a revision."
+msgstr "Šis atsakymas bus išsaugotas kaip peržiūra."
+
+msgid "Post reply"
+msgstr "Atsakyti į pranešimą"
+
+msgid "The thread is locked."
+msgstr "Tema užrakinta."
+
+msgid "Reply added"
+msgstr "Atsakymas pridėtas"
+
+msgid "Could not add reply"
+msgstr "Nepavyko pridėti atsakymo"
+
+msgid "Add forum"
+msgstr "Pridėti forumą"
+
+msgid "No forums found"
+msgstr "Forumų nerasta"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "Norėdami pradėti diskusijas, sukurkite pirmąją forumo kategoriją arba forumą."
+
+msgid "Locked"
+msgstr "Užrakintas"
+
+msgid "No forums in this category"
+msgstr "Šioje kategorijoje forumų nėra"
+
+msgid "Posts require approval"
+msgstr "Pranešimai reikalauja patvirtinimo"
+
+msgid "Forum for current group"
+msgstr "Dabartinės grupės forumas"
+
+msgid "Group forum visibility"
+msgstr "Grupės forumo matomumas"
+
+msgid "No category"
+msgstr "Be kategorijos"
+
+msgid "Could not retrieve forums"
+msgstr "Nepavyko gauti forumų"
+
+msgid "Forum category updated"
+msgstr "Forumo kategorija atnaujinta"
+
+msgid "Forum category created"
+msgstr "Forumo kategorija sukurta"
+
+msgid "Could not save forum category"
+msgstr "Nepavyko išsaugoti forumo kategorijos"
+
+msgid "Forum updated"
+msgstr "Forumas atnaujintas"
+
+msgid "Forum created"
+msgstr "Forumas sukurtas"
+
+msgid "Could not save forum"
+msgstr "Nepavyko išsaugoti forumo"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "Ar tikrai norite ištrinti šią forumo kategoriją?"
+
+msgid "Could not delete forum category"
+msgstr "Nepavyko ištrinti forumo kategorijos"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "Ar tikrai norite ištrinti šį forumą?"
+
+msgid "Could not delete forum"
+msgstr "Nepavyko ištrinti forumo"
+
+msgid "Forum category unlocked"
+msgstr "Forumo kategorija atrakinta"
+
+msgid "Forum category locked"
+msgstr "Forumo kategorija užrakinta"
+
+msgid "Could not update forum category"
+msgstr "Nepavyko atnaujinti forumo kategorijos"
+
+msgid "Forum category shown"
+msgstr "Forumo kategorija rodoma"
+
+msgid "Forum category hidden"
+msgstr "Forumo kategorija paslėpta"
+
+msgid "Forum unlocked"
+msgstr "Forumas atrakintas"
+
+msgid "Forum locked"
+msgstr "Forumas užrakintas"
+
+msgid "Could not update forum"
+msgstr "Nepavyko atnaujinti forumo"
+
+msgid "Forum shown"
+msgstr "Forumas rodomas"
+
+msgid "Forum hidden"
+msgstr "Forumas paslėptas"
+
+msgid "Forum notifications enabled"
+msgstr "Forumo pranešimai įjungti"
+
+msgid "Forum notifications disabled"
+msgstr "Forumo pranešimai išjungti"
+
+msgid "Could not update forum notification"
+msgstr "Nepavyko atnaujinti forumo pranešimo"
+
+msgid "Forum category moved"
+msgstr "Forumo kategorija perkelta"
+
+msgid "Could not move forum category"
+msgstr "Nepavyko perkelti forumo kategorijos"
+
+msgid "Forum moved"
+msgstr "Forumas perkeltas"
+
+msgid "Could not move forum"
+msgstr "Nepavyko perkelti forumo"
+
+msgid "Back to forums"
+msgstr "Atgal į forumus"
+
+msgid "New thread"
+msgstr "Nauja tema"
+
+msgid "No threads found"
+msgstr "Temų nerasta"
+
+msgid "Sticky"
+msgstr "Lipni"
+
+msgid "Graded"
+msgstr "Vertinama"
+
+msgid "Grade peers"
+msgstr "Vertinti bendraamžius"
+
+msgid "Move thread"
+msgstr "Perkelti temą"
+
+msgid "Target forum"
+msgstr "Tikslinis forumas"
+
+msgid "Target forum is required"
+msgstr "Būtina nurodyti tikslinį forumą"
+
+msgid "Students"
+msgstr "Studentai"
+
+msgid "No students found"
+msgstr "Studentų nerasta"
+
+msgid "No peers available to grade."
+msgstr "Nėra bendraamžių, kuriuos būtų galima vertinti."
+
+msgid "Qualified"
+msgstr "Kvalifikuotas"
+
+msgid "Not qualified"
+msgstr "Nekvalifikuotas"
+
+msgid "Could not retrieve thread grading"
+msgstr "Nepavyko gauti temos vertinimo"
+
+msgid "Thread grading updated"
+msgstr "Temos vertinimas atnaujintas"
+
+msgid "Could not update thread grading"
+msgstr "Nepavyko atnaujinti temos vertinimo"
+
+msgid "Thread score saved"
+msgstr "Temos balas išsaugotas"
+
+msgid "Could not save thread score"
+msgstr "Nepavyko išsaugoti temos balo"
+
+msgid "Could not move thread"
+msgstr "Nepavyko perkelti temos"
+
+msgid "Thread updated"
+msgstr "Tema atnaujinta"
+
+msgid "Search term is too short"
+msgstr "Paieškos frazė per trumpa"
+
+msgid "Could not search forums"
+msgstr "Nepavyko ieškoti forumuose"
+
+msgid "Moderated"
+msgstr "Moderuojama"
+
+msgid "View threads"
+msgstr "Peržiūrėti temas"
 

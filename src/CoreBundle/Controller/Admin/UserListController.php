@@ -7,8 +7,10 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use DateTime;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Expression;
@@ -50,6 +52,7 @@ class UserListController extends AbstractController
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly UserRepository $userRepository,
+        private readonly AccessUrlHelper $accessUrlHelper,
         private readonly CsrfTokenManagerInterface $csrfTokenManager,
         private readonly TranslatorInterface $translator,
     ) {}
@@ -81,6 +84,16 @@ class UserListController extends AbstractController
             ->andWhere('u.status != :fallback')
             ->setParameter('fallback', User::ROLE_FALLBACK)
         ;
+
+        if ($this->accessUrlHelper->isMultiple()) {
+            $currentUrl = $this->accessUrlHelper->getCurrent();
+            if (null !== $currentUrl) {
+                $qb->innerJoin('u.portals', 'p')
+                    ->andWhere('p.url = :currentUrlId')
+                    ->setParameter('currentUrlId', $currentUrl->getId(), Types::INTEGER)
+                ;
+            }
+        }
 
         if ($showDeleted) {
             $qb->andWhere('u.active = :softDeleted')

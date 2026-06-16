@@ -12,7 +12,7 @@ $strings['plugin_comment'] = 'Este plugin demonstra aos usuários como usar o am
 /* Strings for settings */
 $strings['show_tour'] = 'Mostrar o tour';
 
-$showTourHelpLine01 = 'As configurações necessárias para mostrar o bloco de ajuda, no formato JSON, está localizada no arquivo %plugin/tour/config/tour.json%s.';
+$showTourHelpLine01 = 'As configurações necessárias para mostrar o bloco de ajuda, no formato JSON, está localizada no arquivo %splugin/tour/config/tour.json%s.';
 $showTourHelpLine02 = 'Veja o arquivo README para mais informações.';
 
 $strings['show_tour_help'] = sprintf("$showTourHelpLine01 %s $showTourHelpLine02", '<strong>', '</strong>', '<br>');

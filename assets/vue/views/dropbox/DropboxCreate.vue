@@ -191,8 +191,10 @@ import BaseAdvancedSettingsButton from "../../components/basecomponents/BaseAdva
 import ResourceLanguageSelector from "../../components/resources/ResourceLanguageSelector.vue"
 
 import service from "../../services/dropbox"
+import { useUppyLocale } from "../../composables/uppyLocale"
 
 const { t } = useI18n()
+const { uppyLocale } = useUppyLocale()
 const route = useRoute()
 const router = useRouter()
 const returnRouteName = computed(() => (route.query?.from === "received" ? "DropboxListReceived" : "DropboxListSent"))
@@ -217,6 +219,7 @@ onMounted(() => {
     new Uppy({
       autoProceed: false,
       allowMultipleUploads: true,
+      locale: uppyLocale.value,
       restrictions: { maxNumberOfFiles: null },
     }),
   )

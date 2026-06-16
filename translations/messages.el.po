@@ -2030,7 +2030,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ναι:πνευματικά δικαιώματα,, όχι:χωρίς πνευματικά δικαιώματα"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Φάκελος,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Φάκελος,, application/msword:MsWord,, application/octet-stream:Δυαδική ροή,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":άσκηση:άσκηση,, προσομοίωση:προσομοίωση,, ερωτηματολόγιο:ερωτηματολόγιο,, διάγραμμα:διάγραμμα,, σχήμα:σχήμα,, γράφημα:γράφημα,, ευρετήριο:ευρετήριο,, διαφάνεια:διαφάνεια,, πίνακας:πίνακας,, αφηγηματικό κείμενο:αφηγηματικό κείμενο,, εξέταση:εξέταση,, πείραμα:πείραμα,, διατύπωση προβλήματος:διατύπωση προβλήματος,, αυτοαξιολόγηση:αυτοαξιολόγηση,, διάλεξη:διάλεξη"
@@ -9739,6 +9739,9 @@ msgstr "Αποτελέσματα για:"
 msgid "Select a file"
 msgstr "Επιλογή αρχείου"
 
+msgid "Select a file to insert into the editor."
+msgstr "Επιλέξτε αρχείο για εισαγωγή στον επεξεργαστή."
+
 msgid "Warning - The FAQ file, located in the /home/ directory of your portal, is not writable. Your text will not be saved until the file permissions are changed."
 msgstr "Προειδοποίηση - Το αρχείο FAQ, που βρίσκεται στον κατάλογο /home/ του portal σας, δεν είναι εγγράψιμο. Το κείμενό σας δεν θα αποθηκευτεί μέχρι να αλλάξουν τα δικαιώματα του αρχείου."
 
@@ -15919,6 +15922,9 @@ msgstr "Ημερομηνία & ώρα"
 msgid "Item"
 msgstr "Στοιχείο"
 
+msgid "Items"
+msgstr "Στοιχεία"
+
 msgid "Configure Dashboard Plugin"
 msgstr "Διαμόρφωση Plugin Πίνακα Ελέγχου"
 
@@ -17172,6 +17178,18 @@ msgstr "Περίοδοι στην ομάδα"
 
 msgid "Courses in group"
 msgstr "Μαθήματα στην ομάδα"
+
+msgid "Courses on the platform"
+msgstr "Μαθήματα στην πλατφόρμα"
+
+msgid "%s courses"
+msgstr "%s μαθήματα"
+
+msgid "%s sessions"
+msgstr "%s συνεδρίες"
+
+msgid "Search by title or code"
+msgstr "Αναζήτηση κατά τίτλο ή κωδικό"
 
 msgid "Users in group"
 msgstr "Χρήστες στην ομάδα"
@@ -32182,6 +32200,9 @@ msgstr "Εργασία"
 msgid "Allowed file formats: %s"
 msgstr "Επιτρεπόμενες μορφές αρχείων: %s"
 
+msgid "File manager"
+msgstr "Διαχείριση αρχείων"
+
 msgid "File type not allowed. Allowed extensions: %s"
 msgstr "Μη επιτρεπόμενος τύπος αρχείου. Επιτρεπόμενες επεκτάσεις: %s"
 
@@ -33895,6 +33916,2583 @@ msgstr "Καλώς ήρθατε"
 msgid "Welcome to Chamilo"
 msgstr "Καλώς ήρθατε στο Chamilo"
 
+msgid "Check all unanswered questions below"
+msgstr "Έλεγχος όλων των αναπάντητων ερωτήσεων παρακάτω"
+
 msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
 msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Αν χρησιμοποιείτε το Chamilo για πρώτη φορά, βεβαιωθείτε ότι ελέγξετε το πλευρικό μενού για να βρείτε τον δρόμο σας μέσα από τα πολλά χαρακτηριστικά του. Αν χρειάζεστε βοήθεια, θα βρείτε ότι <a href=\"https://docs.chamilo.org\">η επίσημη τεκμηρίωσή μας</a> μπορεί να βοηθήσει για τυπική τεκμηρίωση, ενώ το <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">διαδικτυακό φόρουμ μας</a> μπορεί να βοηθήσει να μοιραστείτε ιδέες και να βρείτε απαντήσεις από άλλους χρήστες του Chamilo."
+
+msgid "Change password"
+msgstr "Αλλαγή κωδικού πρόσβασης"
+
+msgid "Newest first"
+msgstr "Νεότερα πρώτα"
+
+msgid "Oldest first"
+msgstr "Παλαιότερα πρώτα"
+
+msgid "Title A–Z"
+msgstr "Τίτλος Α–Ω"
+
+msgid "Title Z–A"
+msgstr "Τίτλος Ω–Α"
+
+msgid "Send test email"
+msgstr "Αποστολή δοκιμαστικού email"
+
+msgid "Show teachers"
+msgstr "Εμφάνιση εκπαιδευτών"
+
+msgid "Hide teachers"
+msgstr "Απόκρυψη εκπαιδευτών"
+
+msgid "Delete exercise attempts"
+msgstr "Διαγραφή προσπαθειών άσκησης"
+
+msgid "Message sent successfully."
+msgstr "Το μήνυμα στάλθηκε με επιτυχία."
+
+msgid "You cannot create a new course right now."
+msgstr "Δεν μπορείτε να δημιουργήσετε νέο μάθημα αυτή τη στιγμή."
+
+msgid "Unable to verify whether you can create a new course right now."
+msgstr "Αδυναμία ελέγχου αν μπορείτε να δημιουργήσετε νέο μάθημα αυτή τη στιγμή."
+
+msgid "Please try again later or contact the administrator."
+msgstr "Προσπαθήστε ξανά αργότερα ή επικοινωνήστε με τον διαχειριστή."
+
+msgid "You cannot create more courses at this time."
+msgstr "Δεν μπορείτε να δημιουργήσετε περισσότερα μαθήματα αυτή τη στιγμή."
+
+msgid "You already manage %d courses and your active service allows up to %d. To create another course, you need a higher service limit or reduce your current active courses."
+msgstr "Διαχειρίζεστε ήδη %d μαθήματα και η ενεργή υπηρεσία σας επιτρέπει έως %d. Για να δημιουργήσετε άλλο μάθημα, χρειάζεστε υψηλότερο όριο υπηρεσίας ή μείωση των τρεχόντων ενεργών μαθημάτων σας."
+
+msgid "You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now."
+msgstr "Διαχειρίζεστε ήδη %d μαθήματα και η πλατφόρμα επιτρέπει έως %d για τον λογαριασμό σας. Δεν μπορείτε να δημιουργήσετε περισσότερα μαθήματα αυτή τη στιγμή."
+
+msgid "Add a class"
+msgstr "Προσθήκη τάξης"
+
+msgid "Search classes"
+msgstr "Αναζήτηση τάξεων"
+
+msgid "No classes found"
+msgstr "Δεν βρέθηκαν τάξεις"
+
+msgid "Import classes"
+msgstr "Εισαγωγή τάξεων"
+
+msgid "Class users"
+msgstr "Χρήστες τάξης"
+
+msgid "%s classes imported"
+msgstr "%s τάξεις εισήχθησαν"
+
+msgid "%s user-class links imported"
+msgstr "%s συνδέσεις χρήστη-τάξης εισήχθησαν"
+
+msgid "Hide comments"
+msgstr "Απόκρυψη σχολίων"
+
+msgid "Loading comments..."
+msgstr "Φόρτωση σχολίων..."
+
+msgid "No comments yet."
+msgstr "Δεν υπάρχουν σχόλια ακόμη."
+
+msgid "A user with this username already exists"
+msgstr "Υπάρχει ήδη χρήστης με αυτό το όνομα χρήστη"
+
+msgid "Manage meetings, review recordings and update course-wide BBB settings from one place."
+msgstr "Διαχειριστείτε συναντήσεις, ελέγξτε ηχογραφήσεις και ενημερώστε τις ρυθμίσεις BBB για όλο το μάθημα από ένα σημείο."
+
+msgid "Review the current defaults and propagate them to every course when needed."
+msgstr "Ελέγξτε τις τρέχουσες προεπιλογές και εφαρμόστε τις σε κάθε μάθημα όταν χρειάζεται."
+
+msgid "Filter the list by meeting date range."
+msgstr "Φιλτράρετε τη λίστα κατά εύρος ημερομηνίας συνάντησης."
+
+msgid "Review meeting history, participants and recording actions."
+msgstr "Ελέγξτε το ιστορικό συναντήσεων, τους συμμετέχοντες και τις ενέργειες ηχογράφησης."
+
+msgid "Participants"
+msgstr "Συμμετέχοντες"
+
+msgid "CountUsers"
+msgstr "CountUsers"
+
+msgid "No data found"
+msgstr "Δεν βρέθηκαν δεδομένα"
+
+msgid "My justifications"
+msgstr "Οι δικαιολογίες μου"
+
+msgid "My services"
+msgstr "Οι υπηρεσίες μου"
+
+msgid "Extra menu"
+msgstr "Επιπλέον μενού"
+
+msgid "Pending tests"
+msgstr "Εκκρεμείς δοκιμές"
+
+msgid "No specific language"
+msgstr "Καμία συγκεκριμένη γλώσσα"
+
+msgid "Source Chamilo version"
+msgstr "Έκδοση Chamilo προέλευσης"
+
+msgid "Exporting..."
+msgstr "Εξαγωγή..."
+
+msgid "Autosaved drafts available"
+msgstr "Διαθέσιμα αυτόματα αποθηκευμένα πρόχειρα"
+
+msgid "Hide drafts"
+msgstr "Απόκρυψη προχείρων"
+
+msgid "Show drafts"
+msgstr "Εμφάνιση προχείρων"
+
+msgid "Drafts are stored only in this browser and are removed after saving the document."
+msgstr "Τα πρόχειρα αποθηκεύονται μόνο σε αυτόν τον περιηγητή και αφαιρούνται μετά την αποθήκευση του εγγράφου."
+
+msgid "Last saved"
+msgstr "Τελευταία αποθήκευση"
+
+msgid "Restore draft"
+msgstr "Επαναφορά προχείρου"
+
+msgid "Delete draft"
+msgstr "Διαγραφή προχείρου"
+
+msgid "Information about indexing document content"
+msgstr "Πληροφορίες σχετικά με την ευρετηρίαση περιεχομένου εγγράφου"
+
+msgid "When enabled, the document text is indexed by the search engine so users can find it from platform search."
+msgstr "Όταν είναι ενεργοποιημένο, το κείμενο του εγγράφου ευρετηριάζεται από τη μηχανή αναζήτησης ώστε οι χρήστες να μπορούν να το βρουν από την αναζήτηση της πλατφόρμας."
+
+msgid "The editor is not available."
+msgstr "Ο επεξεργαστής δεν είναι διαθέσιμος."
+
+msgid "Please place the cursor inside a paragraph first."
+msgstr "Τοποθετήστε πρώτα τον κέρσορα μέσα σε μια παράγραφο."
+
+msgid "The selected paragraph is empty."
+msgstr "Η επιλεγμένη παράγραφος είναι κενή."
+
+msgid "Loading failed."
+msgstr "Η φόρτωση απέτυχε."
+
+msgid "Add introduction"
+msgstr "Προσθήκη εισαγωγής"
+
+msgid "Course type"
+msgstr "Τύπος μαθήματος"
+
+msgid "Choose whether this course uses the standard platform limits or benefits from a purchased service."
+msgstr "Επιλέξτε αν αυτό το μάθημα χρησιμοποιεί τα τυπικά όρια της πλατφόρμας ή επωφελείται από μια αγορασμένη υπηρεσία."
+
+msgid "Standard course"
+msgstr "Τυπικό μάθημα"
+
+msgid "Use the standard platform limits."
+msgstr "Χρησιμοποιήστε τα τυπικά όρια της πλατφόρμας."
+
+msgid "Selected"
+msgstr "Επιλεγμένο"
+
+msgid "Hosting limit"
+msgstr "Όριο φιλοξενίας"
+
+msgid "Document quota"
+msgstr "Ποσόστωση εγγράφων"
+
+msgid "The standard course limit has been reached."
+msgstr "Το τυπικό όριο μαθήματος έχει εξαντληθεί."
+
+msgid "Use the benefits granted by this service."
+msgstr "Χρησιμοποιήστε τα οφέλη που παρέχει αυτή η υπηρεσία."
+
+msgid "Courses with these benefits"
+msgstr "Μαθήματα με αυτά τα οφέλη"
+
+msgid "Active service"
+msgstr "Ενεργή υπηρεσία"
+
+msgid "Buy service"
+msgstr "Αγορά υπηρεσίας"
+
+msgid "Select an available course type before creating the course."
+msgstr "Επιλέξτε έναν διαθέσιμο τύπο μαθήματος πριν δημιουργήσετε το μάθημα."
+
+msgid "users"
+msgstr "χρήστες"
+
+msgid "You need to buy this service before using these benefits."
+msgstr "Πρέπει να αγοράσετε αυτή την υπηρεσία πριν χρησιμοποιήσετε αυτά τα οφέλη."
+
+msgid "You already used all courses available with this service."
+msgstr "Έχετε χρησιμοποιήσει ήδη όλα τα διαθέσιμα μαθήματα με αυτή την υπηρεσία."
+
+msgid "This option is not available."
+msgstr "Αυτή η επιλογή δεν είναι διαθέσιμη."
+
+msgid "This field is required"
+msgstr "Αυτό το πεδίο είναι υποχρεωτικό"
+
+msgid "Show less"
+msgstr "Εμφάνιση λιγότερων"
+
+msgid "Show full description"
+msgstr "Εμφάνιση πλήρους περιγραφής"
+
+msgid "Virtual keyboard"
+msgstr "Εικονικό πληκτρολόγιο"
+
+msgid "Backspace"
+msgstr "Οπισθοδρόμηση"
+
+msgid "Space"
+msgstr "Κενό"
+
+msgid "Learning path only visible to selected learners"
+msgstr "Διαδρομή μάθησης ορατή μόνο σε επιλεγμένους εκπαιδευόμενους"
+
+msgid "Create course"
+msgstr "Δημιουργία μαθήματος"
+
+msgid "Tour"
+msgstr "Περιήγηση"
+
+msgid "Are you sure you want to delete this comment?"
+msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτό το σχόλιο;"
+
+msgid "No posts found"
+msgstr "Δεν βρέθηκαν αναρτήσεις"
+
+msgid "No communities"
+msgstr "Δεν υπάρχουν κοινότητες"
+
+msgid "No friends found"
+msgstr "Δεν βρέθηκαν φίλοι"
+
+msgid "Visual overview of your skills"
+msgstr "Οπτική επισκόπηση των δεξιοτήτων σας"
+
+msgid "Compare your progress"
+msgstr "Σύγκριση της προόδου σας"
+
+msgid "Please enter a search term."
+msgstr "Παρακαλώ εισαγάγετε έναν όρο αναζήτησης."
+
+msgid "Enter captcha code"
+msgstr "Εισαγάγετε τον κωδικό captcha"
+
+msgid "Refresh captcha"
+msgstr "Ανανέωση captcha"
+
+msgid "Captcha is temporarily blocked. Please try again later."
+msgstr "Το captcha είναι προσωρινά αποκλεισμένο. Παρακαλώ δοκιμάστε αργότερα."
+
+msgid "Item Details"
+msgstr "Λεπτομέρειες στοιχείου"
+
+msgid "Open File"
+msgstr "Άνοιγμα αρχείου"
+
+msgid "Selection"
+msgstr "Επιλογή"
+
+msgid "Remove selection context"
+msgstr "Αφαίρεση περιβάλλοντος επιλογής"
+
+msgid "Source document"
+msgstr "Έγγραφο προέλευσης"
+
+msgid "Use the current course context"
+msgstr "Χρήση του τρέχοντος περιβάλλοντος μαθήματος"
+
+msgid "Loading documents..."
+msgstr "Φόρτωση εγγράφων..."
+
+msgid "No compatible PDF or TXT document was found in this course."
+msgstr "Δεν βρέθηκε συμβατό έγγραφο PDF ή TXT σε αυτό το μάθημα."
+
+msgid "Select a PDF or TXT document to generate terms only from that document."
+msgstr "Επιλέξτε ένα έγγραφο PDF ή TXT για να δημιουργήσετε όρους μόνο από αυτό το έγγραφο."
+
+msgid "Confidentiality warning"
+msgstr "Προειδοποίηση εμπιστευτικότητας"
+
+msgid "When a document is selected, the prompt is fixed so the generation uses only that document content."
+msgstr "Όταν επιλέγεται ένα έγγραφο, η προτροπή είναι σταθερή ώστε η δημιουργία να χρησιμοποιεί μόνο το περιεχόμενο αυτού του εγγράφου."
+
+msgid "No document-processing AI providers available."
+msgstr "Δεν υπάρχουν διαθέσιμοι πάροχοι AI επεξεργασίας εγγράφων."
+
+msgid "Failed to save signature. Please try again."
+msgstr "Αποτυχία αποθήκευσης υπογραφής. Παρακαλώ δοκιμάστε ξανά."
+
+msgid "Select and move"
+msgstr "Επιλογή και μετακίνηση"
+
+msgid "Freehand"
+msgstr "Ελεύθερο χέρι"
+
+msgid "Stroke"
+msgstr "Πινελιά"
+
+msgid "Fill"
+msgstr "Γέμισμα"
+
+msgid "Import SVG"
+msgstr "Εισαγωγή SVG"
+
+msgid "Import image"
+msgstr "Εισαγωγή εικόνας"
+
+msgid "Click the drawing area to place this text"
+msgstr "Κάντε κλικ στην περιοχή σχεδίασης για να τοποθετήσετε αυτό το κείμενο"
+
+msgid "Draw a new SVG, import an existing SVG or embed an image, then save it as a reusable document."
+msgstr "Σχεδιάστε ένα νέο SVG, εισαγάγετε υπάρχον SVG ή ενσωματώστε μια εικόνα και αποθηκεύστε το ως επαναχρησιμοποιήσιμο έγγραφο."
+
+msgid "Use Select and move to reposition or resize elements added in this editor."
+msgstr "Χρησιμοποιήστε την Επιλογή και μετακίνηση για να επανατοποθετήσετε ή να αλλάξετε το μέγεθος στοιχείων που προστέθηκαν σε αυτόν τον επεξεργαστή."
+
+msgid "Stroke width"
+msgstr "Πλάτος πινελιάς"
+
+msgid "Transparent fill"
+msgstr "Διαφανές γέμισμα"
+
+msgid "Invalid id"
+msgstr "Μη έγκυρο αναγνωριστικό"
+
+msgid "Unable to load the drawing"
+msgstr "Αδυναμία φόρτωσης του σχεδίου"
+
+msgid "Only PNG, JPG, WEBP or GIF images are supported."
+msgstr "Υποστηρίζονται μόνο εικόνες PNG, JPG, WEBP ή GIF."
+
+msgid "Unable to read the image file."
+msgstr "Αδυναμία ανάγνωσης του αρχείου εικόνας."
+
+msgid "Only SVG files are supported."
+msgstr "Υποστηρίζονται μόνο αρχεία SVG."
+
+msgid "The SVG file is empty or invalid."
+msgstr "Το αρχείο SVG είναι κενό ή μη έγκυρο."
+
+msgid "Unable to read the SVG file."
+msgstr "Αδυναμία ανάγνωσης του αρχείου SVG."
+
+msgid "The drawing is empty or invalid."
+msgstr "Το σχέδιο είναι κενό ή μη έγκυρο."
+
+msgid "Unable to save the drawing"
+msgstr "Αδυναμία αποθήκευσης του σχεδίου"
+
+msgid "Information about AI-assisted documents"
+msgstr "Πληροφορίες για έγγραφα με υποστήριξη AI"
+
+msgid "Location"
+msgstr "Τοποθεσία"
+
+msgid "Cloud link"
+msgstr "Σύνδεσμος cloud"
+
+msgid "Add a link to a cloud document, such as Google Drive or Google Docs."
+msgstr "Προσθήκη συνδέσμου σε έγγραφο cloud, όπως Google Drive ή Google Docs."
+
+msgid "Add cloud link"
+msgstr "Προσθήκη συνδέσμου cloud"
+
+msgid "Document title"
+msgstr "Τίτλος εγγράφου"
+
+msgid "Document options change how uploaded files are processed after saving."
+msgstr "Οι επιλογές εγγράφου αλλάζουν τον τρόπο επεξεργασίας των μεταφορτωμένων αρχείων μετά την αποθήκευση."
+
+msgid "Information about uncompressing zip files"
+msgstr "Πληροφορίες για την αποσυμπίεση αρχείων zip"
+
+msgid "When enabled, ZIP files are extracted into the current document folder after upload."
+msgstr "Όταν είναι ενεργοποιημένο, τα αρχεία ZIP εξάγονται στον τρέχοντα φάκελο εγγράφων μετά τη μεταφόρτωση."
+
+msgid "The title is required."
+msgstr "Ο τίτλος είναι υποχρεωτικός."
+
+msgid "The URL is required."
+msgstr "Το URL είναι υποχρεωτικό."
+
+msgid "The destination folder is missing."
+msgstr "Λείπει ο φάκελος προορισμού."
+
+msgid "Unable to create cloud link."
+msgstr "Αδυναμία δημιουργίας συνδέσμου cloud."
+
+msgid "Copy to My Files"
+msgstr "Αντιγραφή στα Αρχεία μου"
+
+msgid "Used space"
+msgstr "Χρησιμοποιούμενος χώρος"
+
+msgid "Available space"
+msgstr "Διαθέσιμος χώρος"
+
+msgid "Available percentage"
+msgstr "Διαθέσιμο ποσοστό"
+
+msgid "Cloud links cannot be downloaded."
+msgstr "Οι σύνδεσμοι cloud δεν μπορούν να ληφθούν."
+
+msgid "Could not copy the file to My Files"
+msgstr "Αδυναμία αντιγραφής του αρχείου στα Αρχεία μου"
+
+msgid "File copied to My Files"
+msgstr "Το αρχείο αντιγράφηκε στα Αρχεία μου"
+
+msgid "Checking course creation options..."
+msgstr "Έλεγχος επιλογών δημιουργίας μαθήματος..."
+
+msgid "You cannot create more courses right now."
+msgstr "Δεν μπορείτε να δημιουργήσετε περισσότερα μαθήματα αυτήν τη στιγμή."
+
+msgid "AI analyzer"
+msgstr "Αναλυτής AI"
+
+msgid "Expand all"
+msgstr "Ανάπτυξη όλων"
+
+msgid "Collapse all"
+msgstr "Σύμπτυξη όλων"
+
+msgid "Review your active service benefits, purchase history and available receipts."
+msgstr "Ελέγξτε τα ενεργά οφέλη της υπηρεσίας σας, το ιστορικό αγορών και τις διαθέσιμες αποδείξεις."
+
+msgid "Active services"
+msgstr "Ενεργές υπηρεσίες"
+
+msgid "No active services"
+msgstr "Δεν υπάρχουν ενεργές υπηρεσίες"
+
+msgid "Valid until"
+msgstr "Ισχύει έως"
+
+msgid "Recurring payment"
+msgstr "Επαναλαμβανόμενη πληρωμή"
+
+msgid "Next charge"
+msgstr "Επόμενη χρέωση"
+
+msgid "Enable auto billing"
+msgstr "Ενεργοποίηση αυτόματης χρέωσης"
+
+msgid "Cancel auto billing"
+msgstr "Ακύρωση αυτόματης χρέωσης"
+
+msgid "Granted benefits"
+msgstr "Παρεχόμενα οφέλη"
+
+msgid "Purchase history"
+msgstr "Ιστορικό αγορών"
+
+msgid "No purchases yet"
+msgstr "Δεν υπάρχουν αγορές ακόμη"
+
+msgid "Product"
+msgstr "Προϊόν"
+
+msgid "Reference"
+msgstr "Αναφορά"
+
+msgid "Amount"
+msgstr "Ποσό"
+
+msgid "Receipt"
+msgstr "Απόδειξη"
+
+msgid "Unable to load your services right now."
+msgstr "Αδυναμία φόρτωσης των υπηρεσιών σας αυτήν τη στιγμή."
+
+msgid "Auto billing enabled"
+msgstr "Αυτόματη χρέωση ενεργοποιημένη"
+
+msgid "Auto billing suspended"
+msgstr "Αυτόματη χρέωση σε αναστολή"
+
+msgid "Auto billing cancelled"
+msgstr "Αυτόματη χρέωση ακυρώθηκε"
+
+msgid "Auto billing disabled"
+msgstr "Αυτόματη χρέωση απενεργοποιημένη"
+
+msgid "Cancel auto billing for this service?"
+msgstr "Ακύρωση αυτόματης χρέωσης για αυτήν την υπηρεσία;"
+
+msgid "Preview class members and courses"
+msgstr "Προεπισκόπηση μελών τάξης και μαθημάτων"
+
+msgid "Please select a CSV file to import."
+msgstr "Παρακαλούμε επιλέξτε ένα αρχείο CSV για εισαγωγή."
+
+msgid "%d user-class links imported"
+msgstr "%d συνδέσεις χρήστη-τάξης εισήχθησαν"
+
+msgid "The following errors occurred during import:"
+msgstr "Παρουσιάστηκαν τα ακόλουθα σφάλματα κατά την εισαγωγή:"
+
+msgid "CSV file"
+msgstr "Αρχείο CSV"
+
+msgid "Remove user from all group-related entities if not in the list"
+msgstr "Αφαίρεση χρήστη από όλες τις οντότητες που σχετίζονται με ομάδες αν δεν περιλαμβάνεται στη λίστα"
+
+msgid "UserName"
+msgstr "ΌνομαΧρήστη"
+
+msgid "ClassName"
+msgstr "ΌνομαΤάξης"
+
+msgid "are required for each row."
+msgstr "απαιτούνται για κάθε γραμμή."
+
+msgid "title"
+msgstr "τίτλος"
+
+msgid "is required."
+msgstr "είναι υποχρεωτικό."
+
+msgid "description"
+msgstr "περιγραφή"
+
+msgid "are optional."
+msgstr "είναι προαιρετικά."
+
+msgid "Are you sure you want to remove this user from the class?"
+msgstr "Είστε βέβαιοι ότι θέλετε να αφαιρέσετε αυτόν τον χρήστη από την τάξη;"
+
+msgid "Users in class"
+msgstr "Χρήστες στην τάξη"
+
+msgid "Remove user"
+msgstr "Αφαίρεση χρήστη"
+
+msgid "Class not found"
+msgstr "Η τάξη δεν βρέθηκε"
+
+msgid "Class overview"
+msgstr "Επισκόπηση τάξης"
+
+msgid "Back to classes"
+msgstr "Επιστροφή στις τάξεις"
+
+msgid "Search members or courses"
+msgstr "Αναζήτηση μελών ή μαθημάτων"
+
+msgid "Search by name, email, username or course title"
+msgstr "Αναζήτηση με όνομα, email, όνομα χρήστη ή τίτλο μαθήματος"
+
+msgid "Class members"
+msgstr "Μέλη της τάξης"
+
+msgid "No email"
+msgstr "Χωρίς email"
+
+msgid "No members found"
+msgstr "Δεν βρέθηκαν μέλη"
+
+msgid "No courses found"
+msgstr "Δεν βρέθηκαν μαθήματα"
+
+msgid "The end date must be after the start date."
+msgstr "Η ημερομηνία λήξης πρέπει να είναι μετά την ημερομηνία έναρξης."
+
+msgid "Always visible"
+msgstr "Πάντα ορατό"
+
+msgid "No end date"
+msgstr "Χωρίς ημερομηνία λήξης"
+
+msgid "No restriction"
+msgstr "Χωρίς περιορισμό"
+
+msgid "Missing learning path or course identifier"
+msgstr "Λείπει η διαδρομή μάθησης ή το αναγνωριστικό μαθήματος"
+
+msgid "Select a user or a group first"
+msgstr "Επιλέξτε πρώτα έναν χρήστη ή μια ομάδα"
+
+msgid "Remove all date restrictions for this learning path?"
+msgstr "Αφαίρεση όλων των περιορισμών ημερομηνίας για αυτή τη διαδρομή μάθησης;"
+
+msgid "Advanced learning path access"
+msgstr "Προηγμένη πρόσβαση διαδρομής μάθησης"
+
+msgid "Remove date restrictions"
+msgstr "Αφαίρεση περιορισμών ημερομηνίας"
+
+msgid "Search by name, email, username or group"
+msgstr "Αναζήτηση με όνομα, email, όνομα χρήστη ή ομάδα"
+
+msgid "Edit user restriction"
+msgstr "Επεξεργασία περιορισμού χρήστη"
+
+msgid "Edit group restriction"
+msgstr "Επεξεργασία περιορισμού ομάδας"
+
+msgid "Select a user or group"
+msgstr "Επιλέξτε έναν χρήστη ή ομάδα"
+
+msgid "Save restriction"
+msgstr "Αποθήκευση περιορισμού"
+
+msgid "members"
+msgstr "μέλη"
+
+msgid "Create Assignment"
+msgstr "Δημιουργία Εργασίας"
+
+msgid "The submission deadline has passed. You can no longer submit."
+msgstr "Η προθεσμία υποβολής έχει παρέλθει. Δεν μπορείτε πλέον να υποβάλετε."
+
+msgid "Mailing cannot be combined with other recipients."
+msgstr "Η αποστολή δεν μπορεί να συνδυαστεί με άλλους παραλήπτες."
+
+msgid "Social map"
+msgstr "Κοινωνικός χάρτης"
+
+msgid "The map plugin is not enabled or configured."
+msgstr "Το πρόσθετο χάρτη δεν είναι ενεργοποιημένο ή ρυθμισμένο."
+
+msgid "Some configured extra fields were not found"
+msgstr "Ορισμένα ρυθμισμένα επιπλέον πεδία δεν βρέθηκαν"
+
+msgid "No user locations were found."
+msgstr "Δεν βρέθηκαν τοποθεσίες χρηστών."
+
+msgid "OpenStreetMap needs coordinates to display an embedded marker. Address-only locations are listed below."
+msgstr "Το OpenStreetMap χρειάζεται συντεταγμένες για να εμφανίσει ενσωματωμένο δείκτη. Οι τοποθεσίες μόνο με διεύθυνση παρατίθενται παρακάτω."
+
+msgid "Locations"
+msgstr "Τοποθεσίες"
+
+msgid "Open map"
+msgstr "Άνοιγμα χάρτη"
+
+msgid "Provider: OpenStreetMap"
+msgstr "Πάροχος: OpenStreetMap"
+
+msgid "Provider: Google Maps"
+msgstr "Πάροχος: Google Maps"
+
+msgid "Personal files"
+msgstr "Προσωπικά αρχεία"
+
+msgid "Upload image"
+msgstr "Μεταφόρτωση εικόνας"
+
+msgid "Upload media"
+msgstr "Μεταφόρτωση πολυμέσων"
+
+msgid "Only image files are allowed in this upload screen."
+msgstr "Μόνο αρχεία εικόνας επιτρέπονται σε αυτήν την οθόνη μεταφόρτωσης."
+
+msgid "Only audio and video files are allowed in this upload screen."
+msgstr "Μόνο αρχεία ήχου και βίντεο επιτρέπονται σε αυτήν την οθόνη μεταφόρτωσης."
+
+msgid "Upload files to your personal storage."
+msgstr "Μεταφορτώστε αρχεία στον προσωπικό σας αποθηκευτικό χώρο."
+
+msgid "Linked"
+msgstr "Συνδεδεμένο"
+
+msgid "No audio or video files were found in this folder."
+msgstr "Δεν βρέθηκαν αρχεία ήχου ή βίντεο σε αυτόν τον φάκελο."
+
+msgid "No image files were found in this folder."
+msgstr "Δεν βρέθηκαν αρχεία εικόνας σε αυτόν τον φάκελο."
+
+msgid "No matching files were found in this folder."
+msgstr "Δεν βρέθηκαν αντίστοιχα αρχεία σε αυτόν τον φάκελο."
+
+msgid "This file type is not allowed in this upload screen."
+msgstr "Αυτός ο τύπος αρχείου δεν επιτρέπεται σε αυτήν την οθόνη μεταφόρτωσης."
+
+msgid "Manage your personal files and course documents."
+msgstr "Διαχειριστείτε τα προσωπικά σας αρχεία και τα έγγραφα του μαθήματος."
+
+msgid "DateValidity"
+msgstr "DateValidity"
+
+msgid "JustificationSaved"
+msgstr "JustificationSaved"
+
+msgid "ValidityDate"
+msgstr "ValidityDate"
+
+msgid "MyJustifications"
+msgstr "MyJustifications"
+
+msgid "Submission"
+msgstr "Υποβολή"
+
+msgid "Use the filters above to narrow the list."
+msgstr "Χρησιμοποιήστε τα παραπάνω φίλτρα για να περιορίσετε τη λίστα."
+
+msgid "You are not allowed to see this page."
+msgstr "Δεν επιτρέπεται να δείτε αυτήν τη σελίδα."
+
+msgid "plugin_title"
+msgstr "plugin_title"
+
+msgid "plugin_comment"
+msgstr "plugin_comment"
+
+msgid "Course tracking details"
+msgstr "Λεπτομέρειες παρακολούθησης μαθήματος"
+
+msgid "Course activity statistics"
+msgstr "Στατιστικά δραστηριότητας μαθήματος"
+
+msgid "mobile_phone_number"
+msgstr "mobile_phone_number"
+
+msgid "Allowed template syntax"
+msgstr "Επιτρεπτή σύνταξη προτύπου"
+
+msgid "Functions"
+msgstr "Συναρτήσεις"
+
+msgid "Available variables depend on the template type, for example {{ user.getUsername() }} or {{ user.getEmail() }}."
+msgstr "Οι διαθέσιμες μεταβλητές εξαρτώνται από τον τύπο του προτύπου, για παράδειγμα {{ user.getUsername() }} ή {{ user.getEmail() }}."
+
+msgid "For security reasons, any other Twig function, filter (such as filter, map, reduce or sort) or PHP call is blocked."
+msgstr "Για λόγους ασφαλείας, κάθε άλλη συνάρτηση Twig, φίλτρο (όπως filter, map, reduce ή sort) ή κλήση PHP είναι αποκλεισμένη."
+
+msgid "Global administrator"
+msgstr "Καθολικός διαχειριστής"
+
+msgid "Session manager"
+msgstr "Διαχειριστής συνεδρίας"
+
+msgid "Human resources manager"
+msgstr "Διαχειριστής ανθρώπινου δυναμικού"
+
+msgid "Course teacher"
+msgstr "Διδάσκων μαθήματος"
+
+msgid "Course student"
+msgstr "Φοιτητής μαθήματος"
+
+msgid "Platform reports"
+msgstr "Αναφορές πλατφόρμας"
+
+msgid "Security reports"
+msgstr "Αναφορές ασφαλείας"
+
+msgid "Course reports"
+msgstr "Αναφορές μαθήματος"
+
+msgid "Gradebook reports"
+msgstr "Αναφορές βαθμολογίου"
+
+msgid "Social reports"
+msgstr "Κοινωνικές αναφορές"
+
+msgid "Exports"
+msgstr "Εξαγωγές"
+
+msgid "Reports about platform-wide usage, users, courses and sessions."
+msgstr "Αναφορές σχετικά με τη χρήση της πλατφόρμας, τους χρήστες, τα μαθήματα και τις συνεδρίες."
+
+msgid "Audit and security-sensitive reports."
+msgstr "Αναφορές ελέγχου και ευαίσθητες σε θέματα ασφαλείας."
+
+msgid "Reports scoped to courses managed by the user."
+msgstr "Αναφορές περιορισμένες στα μαθήματα που διαχειρίζεται ο χρήστης."
+
+msgid "Reports related to learner activity and follow-up."
+msgstr "Αναφορές σχετικές με τη δραστηριότητα και την παρακολούθηση των εκπαιδευομένων."
+
+msgid "Reports related to scores, certificates and gradebook data."
+msgstr "Αναφορές σχετικές με βαθμολογίες, πιστοποιητικά και δεδομένα βαθμολογίου."
+
+msgid "Reports and exports that generate downloadable files."
+msgstr "Αναφορές και εξαγωγές που παράγουν αρχεία προς λήψη."
+
+msgid "Main platform statistics dashboard."
+msgstr "Κύριος πίνακας στατιστικών της πλατφόρμας."
+
+msgid "Number of courses and course distribution report."
+msgstr "Αναφορά αριθμού μαθημάτων και κατανομής μαθημάτων."
+
+msgid "Platform-wide access to course tools."
+msgstr "Πρόσβαση σε εργαλεία μαθημάτων σε όλη την πλατφόρμα."
+
+msgid "Number of resources per tool."
+msgstr "Αριθμός πόρων ανά εργαλείο."
+
+msgid "Latest access to courses."
+msgstr "Τελευταία πρόσβαση στα μαθήματα."
+
+msgid "Course distribution by language."
+msgstr "Κατανομή μαθημάτων ανά γλώσσα."
+
+msgid "Course usage report."
+msgstr "Αναφορά χρήσης μαθήματος."
+
+msgid "Platform user count report."
+msgstr "Αναφορά αριθμού χρηστών πλατφόρμας."
+
+msgid "Recent logins chart."
+msgstr "Γράφημα πρόσφατων συνδέσεων."
+
+msgid "Login distribution by month."
+msgstr "Κατανομή συνδέσεων ανά μήνα."
+
+msgid "Login distribution by day."
+msgstr "Κατανομή συνδέσεων ανά ημέρα."
+
+msgid "Login distribution by hour."
+msgstr "Κατανομή συνδέσεων ανά ώρα."
+
+msgid "Users with profile picture."
+msgstr "Χρήστες με εικόνα προφίλ."
+
+msgid "Login report filtered by date."
+msgstr "Αναφορά συνδέσεων φιλτραρισμένη κατά ημερομηνία."
+
+msgid "Users who have not logged in recently."
+msgstr "Χρήστες που δεν έχουν συνδεθεί πρόσφατα."
+
+msgid "Inactive or suspicious user accounts report."
+msgstr "Αναφορά ανενεργών ή ύποπτων λογαριασμών χρηστών."
+
+msgid "Users activity statistics."
+msgstr "Στατιστικά δραστηριότητας χρηστών."
+
+msgid "Currently online users report."
+msgstr "Αναφορά χρηστών που είναι συνδεδεμένοι τώρα."
+
+msgid "New user registrations over time."
+msgstr "Νέες εγγραφές χρηστών με την πάροδο του χρόνου."
+
+msgid "Course and session subscriptions over time."
+msgstr "Εγγραφές μαθημάτων και συνεδριών με την πάροδο του χρόνου."
+
+msgid "Duplicate user detection and maintenance report."
+msgstr "Αναφορά εντοπισμού και συντήρησης διπλών χρηστών."
+
+msgid "Platform user/session statistics."
+msgstr "Στατιστικά χρηστών/συνεδριών πλατφόρμας."
+
+msgid "Quarterly platform report."
+msgstr "Τριμηνιαία αναφορά πλατφόρμας."
+
+msgid "Activities audit"
+msgstr "Έλεγχος δραστηριοτήτων"
+
+msgid "Audit report for important administrative and platform activities."
+msgstr "Αναφορά ελέγχου για σημαντικές διοικητικές και πλατφόρμας δραστηριότητες."
+
+msgid "Social messages received report."
+msgstr "Αναφορά ληφθέντων κοινωνικών μηνυμάτων."
+
+msgid "Social messages sent report."
+msgstr "Αναφορά απεσταλμένων κοινωνικών μηνυμάτων."
+
+msgid "Social contacts count report."
+msgstr "Αναφορά αριθμού κοινωνικών επαφών."
+
+msgid "Sessions created over time."
+msgstr "Συνεδρίες που δημιουργήθηκαν με την πάροδο του χρόνου."
+
+msgid "Learning analytics dashboard."
+msgstr "Πίνακας αναλυτικών στοιχείων μάθησης."
+
+msgid "Teacher time report."
+msgstr "Αναφορά χρόνου εκπαιδευτή."
+
+msgid "Teachers time by session report"
+msgstr "Αναφορά χρόνου εκπαιδευτών ανά συνεδρία"
+
+msgid "Teacher time report grouped by session."
+msgstr "Αναφορά χρόνου εκπαιδευτή ομαδοποιημένη ανά συνεδρία."
+
+msgid "Corporate learning analytics report."
+msgstr "Αναφορά αναλυτικών στοιχείων εταιρικής μάθησης."
+
+msgid "Course learners tracking report."
+msgstr "Αναφορά παρακολούθησης εκπαιδευομένων μαθήματος."
+
+msgid "Course activity statistics with connected and inactive users."
+msgstr "Στατιστικά δραστηριότητας μαθήματος με συνδεδεμένους και ανενεργούς χρήστες."
+
+msgid "Detailed tracking report for a learner inside a course."
+msgstr "Αναλυτική αναφορά παρακολούθησης για εκπαιδευόμενο μέσα σε μάθημα."
+
+msgid "Course gradebook overview."
+msgstr "Επισκόπηση βαθμολογίου μαθήματος."
+
+msgid "Gradebook statistics"
+msgstr "Στατιστικά βαθμολογίου"
+
+msgid "Gradebook statistics report."
+msgstr "Αναφορά στατιστικών βαθμολογίου."
+
+msgid "Certificate report"
+msgstr "Αναφορά πιστοποιητικού"
+
+msgid "Certificate report for course gradebook."
+msgstr "Αναφορά πιστοποιητικού για βαθμολογίο μαθήματος."
+
+msgid "User statistics"
+msgstr "Στατιστικά χρήστη"
+
+msgid "Course gradebook statistics for a user."
+msgstr "Στατιστικά βαθμολογίου μαθήματος για χρήστη."
+
+msgid "Personal statistics"
+msgstr "Προσωπικά στατιστικά"
+
+msgid "Personal gradebook statistics."
+msgstr "Προσωπικά στατιστικά βαθμολογίου."
+
+msgid "Reports catalog"
+msgstr "Κατάλογος αναφορών"
+
+msgid "Central catalog of available reports, roles and permission categories."
+msgstr "Κεντρικός κατάλογος διαθέσιμων αναφορών, ρόλων και κατηγοριών δικαιωμάτων."
+
+msgid "Course log events"
+msgstr "Συμβάντα καταγραφής μαθήματος"
+
+msgid "Detailed course tracking events."
+msgstr "Λεπτομερή συμβάντα παρακολούθησης μαθήματος."
+
+msgid "Course tool usage"
+msgstr "Χρήση εργαλείων μαθήματος"
+
+msgid "Course tracking report grouped by tools."
+msgstr "Αναφορά παρακολούθησης μαθήματος ομαδοποιημένη ανά εργαλεία."
+
+msgid "Course resource usage"
+msgstr "Χρήση πόρων μαθήματος"
+
+msgid "Course tracking report grouped by resources."
+msgstr "Αναφορά παρακολούθησης μαθήματος ομαδοποιημένη ανά πόρους."
+
+msgid "Course group tracking"
+msgstr "Παρακολούθηση ομάδων μαθήματος"
+
+msgid "Tracking report for course groups."
+msgstr "Αναφορά παρακολούθησης για ομάδες μαθήματος."
+
+msgid "Course session report"
+msgstr "Αναφορά συνεδρίας μαθήματος"
+
+msgid "Tracking report for a course inside sessions."
+msgstr "Αναφορά παρακολούθησης για ένα μάθημα εντός συνεδριών."
+
+msgid "Learning path report"
+msgstr "Αναφορά διαδρομής μάθησης"
+
+msgid "Learning path tracking report."
+msgstr "Αναφορά παρακολούθησης διαδρομής μάθησης."
+
+msgid "Learning path results by user"
+msgstr "Αποτελέσματα διαδρομής μάθησης ανά χρήστη"
+
+msgid "Learning path results grouped by user."
+msgstr "Αποτελέσματα διαδρομής μάθησης ομαδοποιημένα ανά χρήστη."
+
+msgid "Exercises report"
+msgstr "Αναφορά ασκήσεων"
+
+msgid "Course exercises and exams tracking report."
+msgstr "Αναφορά παρακολούθησης ασκήσεων και εξετάσεων μαθήματος."
+
+msgid "Question report"
+msgstr "Αναφορά ερωτήσεων"
+
+msgid "Course question tracking report."
+msgstr "Αναφορά παρακολούθησης ερωτήσεων μαθήματος."
+
+msgid "Messages report"
+msgstr "Αναφορά μηνυμάτων"
+
+msgid "Course messages tracking report."
+msgstr "Αναφορά παρακολούθησης μηνυμάτων μαθήματος."
+
+msgid "Total time tracking report for course learners."
+msgstr "Συνολική αναφορά παρακολούθησης χρόνου για εκπαιδευόμενους μαθήματος."
+
+msgid "Gradebook summary"
+msgstr "Σύνοψη βαθμολογίου"
+
+msgid "Summary view of gradebook results."
+msgstr "Συνοπτική προβολή αποτελεσμάτων βαθμολογίου."
+
+msgid "Flat view"
+msgstr "Επίπεδη προβολή"
+
+msgid "Flat gradebook results view."
+msgstr "Επίπεδη προβολή αποτελεσμάτων βαθμολογίου."
+
+msgid "Evaluation log"
+msgstr "Αρχείο καταγραφής αξιολογήσεων"
+
+msgid "Change log for gradebook evaluations."
+msgstr "Αρχείο καταγραφής αλλαγών για αξιολογήσεις βαθμολογίου."
+
+msgid "Link log"
+msgstr "Αρχείο καταγραφής συνδέσμων"
+
+msgid "Change log for gradebook links."
+msgstr "Αρχείο καταγραφής αλλαγών για συνδέσμους βαθμολογίου."
+
+msgid "Result details"
+msgstr "Λεπτομέρειες αποτελέσματος"
+
+msgid "Detailed view of a gradebook result."
+msgstr "Λεπτομερής προβολή αποτελέσματος βαθμολογίου."
+
+msgid "Personal certificates report."
+msgstr "Αναφορά προσωπικών πιστοποιητικών."
+
+msgid "User move statistics"
+msgstr "Στατιστικά μετακίνησης χρηστών"
+
+msgid "Report for user move and transfer statistics."
+msgstr "Αναφορά για στατιστικά μετακίνησης και μεταφοράς χρηστών."
+
+msgid "User consent list"
+msgstr "Λίστα συναίνεσης χρηστών"
+
+msgid "Report of users and consent status."
+msgstr "Αναφορά χρηστών και κατάστασης συναίνεσης."
+
+msgid "Special platform exports."
+msgstr "Ειδικές εξαγωγές πλατφόρμας."
+
+msgid "Export certificates"
+msgstr "Εξαγωγή πιστοποιητικών"
+
+msgid "Export platform certificates."
+msgstr "Εξαγωγή πιστοποιητικών πλατφόρμας."
+
+msgid "Export exercise results"
+msgstr "Εξαγωγή αποτελεσμάτων ασκήσεων"
+
+msgid "Export exercise results from the platform."
+msgstr "Εξαγωγή αποτελεσμάτων ασκήσεων από την πλατφόρμα."
+
+msgid "Course survey results and reporting."
+msgstr "Αποτελέσματα και αναφορές ερευνών μαθήματος."
+
+msgid "Attendance report"
+msgstr "Αναφορά παρουσιών"
+
+msgid "Course attendance tracking and reports."
+msgstr "Παρακολούθηση και αναφορές παρουσιών μαθήματος."
+
+msgid "Exercises global report"
+msgstr "Συνολική αναφορά ασκήσεων"
+
+msgid "Global exercise results report for the course."
+msgstr "Συνολική αναφορά αποτελεσμάτων ασκήσεων για το μάθημα."
+
+msgid "Exercise report"
+msgstr "Αναφορά άσκησης"
+
+msgid "Detailed exercise report."
+msgstr "Λεπτομερής αναφορά άσκησης."
+
+msgid "Exercise history"
+msgstr "Ιστορικό άσκησης"
+
+msgid "Exercise attempt history."
+msgstr "Ιστορικό προσπαθειών άσκησης."
+
+msgid "Exercise results"
+msgstr "Αποτελέσματα άσκησης"
+
+msgid "Exercise results and corrections."
+msgstr "Αποτελέσματα και διορθώσεις άσκησης."
+
+msgid "Question-level exercise statistics."
+msgstr "Στατιστικά άσκησης σε επίπεδο ερωτήσεων."
+
+msgid "Exercise statistics"
+msgstr "Στατιστικά άσκησης"
+
+msgid "Exercise statistics page."
+msgstr "Σελίδα στατιστικών άσκησης."
+
+msgid "Live exercise statistics"
+msgstr "Ζωντανά στατιστικά άσκησης"
+
+msgid "Live exercise statistics for teachers."
+msgstr "Ζωντανά στατιστικά άσκησης για εκπαιδευτές."
+
+msgid "Learning path statistics"
+msgstr "Στατιστικά διαδρομής μάθησης"
+
+msgid "Learning path item statistics."
+msgstr "Στατιστικά στοιχείων διαδρομής μάθησης."
+
+msgid "Learning path report inside a course."
+msgstr "Αναφορά διαδρομής μάθησης εντός μαθήματος."
+
+msgid "User skills report."
+msgstr "Αναφορά δεξιοτήτων χρήστη."
+
+msgid "Scheduled or periodic export configuration."
+msgstr "Προγραμματισμένη ή περιοδική διαμόρφωση εξαγωγής."
+
+msgid "User export"
+msgstr "Εξαγωγή χρηστών"
+
+msgid "Export users from the platform."
+msgstr "Εξαγωγή χρηστών από την πλατφόρμα."
+
+msgid "Not classified"
+msgstr "Μη ταξινομημένο"
+
+msgid "You have acquired the skill %s"
+msgstr "Αποκτήσατε τη δεξιότητα %s"
+
+msgid "You have acquired the skill %s."
+msgstr "Αποκτήσατε τη δεξιότητα %s."
+
+msgid "Recover your password"
+msgstr "Ανάκτηση κωδικού πρόσβασης"
+
+msgid "Disclaimer"
+msgstr "Αποποίηση ευθύνης"
+
+msgid "This operation would exceed the limit of %d users allowed for this course."
+msgstr "Αυτή η ενέργεια θα υπερβεί το όριο των %d χρηστών που επιτρέπονται για αυτό το μάθημα."
+
+msgid "DefaultGroupCategory"
+msgstr "DefaultGroupCategory"
+
+msgid "LearningCalendar"
+msgstr "LearningCalendar"
+
+msgid "Choose how this user can authenticate on the platform."
+msgstr "Επιλέξτε τον τρόπο με τον οποίο αυτός ο χρήστης μπορεί να πιστοποιηθεί στην πλατφόρμα."
+
+msgid "Authentication methods"
+msgstr "Μέθοδοι πιστοποίησης"
+
+msgid "Set password manually"
+msgstr "Ορισμός κωδικού πρόσβασης χειροκίνητα"
+
+msgid "Report role matrix"
+msgstr "Αναφορά πίνακα ρόλων"
+
+msgid "Report permission categories"
+msgstr "Αναφορά κατηγοριών δικαιωμάτων"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs enforce the documented report role matrix."
+msgstr "Αυτό το μητρώο παραθέτει γνωστές σελίδες αναφορών, την κατηγορία τους, το κανονικό URL, το παλαιό URL και το αναμενόμενο κοινό ρόλων. Τα κανονικά URL επιβάλλουν τον τεκμηριωμένο πίνακα ρόλων αναφορών."
+
+msgid "reports"
+msgstr "αναφορές"
+
+msgid "Canonical URL"
+msgstr "Κανονικό URL"
+
+msgid "Legacy URL"
+msgstr "Παλαιό URL"
+
+msgid "Permission category"
+msgstr "Κατηγορία δικαιωμάτων"
+
+msgid "This matrix documents the expected audience for each report and is enforced by the canonical report entry point."
+msgstr "Αυτός ο πίνακας τεκμηριώνει το αναμενόμενο κοινό για κάθε αναφορά και επιβάλλεται από το σημείο εισόδου κανονικής αναφοράς."
+
+msgid "These keys group reports by access scope and are used by the report registry. They can later be mapped to finer-grained platform permissions."
+msgstr "Αυτά τα κλειδιά ομαδοποιούν τις αναφορές κατά εύρος πρόσβασης και χρησιμοποιούνται από το μητρώο αναφορών. Μπορούν αργότερα να αντιστοιχιστούν σε πιο λεπτομερή δικαιώματα της πλατφόρμας."
+
+msgid "Permission"
+msgstr "Δικαίωμα"
+
+msgid "Clear active session"
+msgstr "Εκκαθάριση ενεργής συνεδρίας"
+
+msgid "Are you sure you want to clear this user active session?"
+msgstr "Είστε βέβαιοι ότι θέλετε να εκκαθαρίσετε αυτήν την ενεργή συνεδρία χρήστη;"
+
+msgid "Preview shown without course context. Some course-specific data may be unavailable."
+msgstr "Η προεπισκόπηση εμφανίζεται χωρίς πλαίσιο μαθήματος. Ορισμένα δεδομένα ειδικά για το μάθημα ενδέχεται να μην είναι διαθέσιμα."
+
+msgid "Preview is not available for this question."
+msgstr "Η προεπισκόπηση δεν είναι διαθέσιμη για αυτήν την ερώτηση."
+
+msgid "Edition is not allowed without a course context."
+msgstr "Η επεξεργασία δεν επιτρέπεται χωρίς πλαίσιο μαθήματος."
+
+msgid "This plugin does not use regions."
+msgstr "Αυτό το πρόσθετο δεν χρησιμοποιεί περιοχές."
+
+msgid "No plugins with regions were found."
+msgstr "Δεν βρέθηκαν πρόσθετα με περιοχές."
+
+msgid "Freemium"
+msgstr "Freemium"
+
+msgid "Commercial service"
+msgstr "Εμπορική υπηρεσία"
+
+msgid "Commercial"
+msgstr "Εμπορικό"
+
+msgid "100% free"
+msgstr "100% δωρεάν"
+
+msgid "Displayed above the public login form."
+msgstr "Εμφανίζεται πάνω από τη δημόσια φόρμα σύνδεσης."
+
+msgid "Displayed below the public login form."
+msgstr "Εμφανίζεται κάτω από τη δημόσια φόρμα σύνδεσης."
+
+msgid "Displayed before the footer area."
+msgstr "Εμφανίζεται πριν από την περιοχή υποσέλιδου."
+
+msgid "Displayed in the left footer column."
+msgstr "Εμφανίζεται στην αριστερή στήλη υποσέλιδου."
+
+msgid "Displayed in the center footer column."
+msgstr "Εμφανίζεται στην κεντρική στήλη υποσέλιδου."
+
+msgid "Displayed in the right footer column."
+msgstr "Εμφανίζεται στη δεξιά στήλη υποσέλιδου."
+
+msgid "Showing all plugins."
+msgstr "Εμφάνιση όλων των προσθέτων."
+
+msgid "Some plugins are still pending functional verification."
+msgstr "Ορισμένα πρόσθετα εκκρεμούν ακόμη λειτουργικής επαλήθευσης."
+
+msgid "Show verified plugins only"
+msgstr "Εμφάνιση μόνο επαληθευμένων προσθέτων"
+
+msgid "Showing verified plugins only."
+msgstr "Εμφάνιση μόνο επαληθευμένων προσθέτων."
+
+msgid "Pending plugins are temporarily hidden until they are adapted and tested."
+msgstr "Τα εκκρεμή πρόσθετα αποκρύπτονται προσωρινά μέχρι να προσαρμοστούν και να ελεγχθούν."
+
+msgid "Show all plugins"
+msgstr "Εμφάνιση όλων των προσθέτων"
+
+msgid "Official and free plugins are listed separately from plugins that may depend on commercial services or paid offers."
+msgstr "Τα επίσημα και δωρεάν πρόσθετα παρατίθενται ξεχωριστά από πρόσθετα που ενδέχεται να εξαρτώνται από εμπορικές υπηρεσίες ή επί πληρωμή προσφορές."
+
+msgid "Included free plugins"
+msgstr "Συμπεριλαμβανόμενα δωρεάν πρόσθετα"
+
+msgid "Commercial and freemium plugins"
+msgstr "Εμπορικά και freemium πρόσθετα"
+
+msgid "All plugins"
+msgstr "Όλα τα πρόσθετα"
+
+msgid "No plugins were found for this category."
+msgstr "Δεν βρέθηκαν πρόσθετα για αυτήν την κατηγορία."
+
+msgid "Search plugins"
+msgstr "Αναζήτηση προσθέτων"
+
+msgid "Search by name or description"
+msgstr "Αναζήτηση κατά όνομα ή περιγραφή"
+
+msgid "Advanced filters"
+msgstr "Προηγμένα φίλτρα"
+
+msgid "All statuses"
+msgstr "Όλες οι καταστάσεις"
+
+msgid "All sources"
+msgstr "Όλες οι πηγές"
+
+msgid "All types"
+msgstr "Όλοι οι τύποι"
+
+msgid "Installed plugins are shown first"
+msgstr "Τα εγκατεστημένα πρόσθετα εμφανίζονται πρώτα"
+
+msgid "No plugins match the current filters."
+msgstr "Κανένα πρόσθετο δεν ταιριάζει με τα τρέχοντα φίλτρα."
+
+msgid "Try clearing the search or changing the filters."
+msgstr "Δοκιμάστε να διαγράψετε την αναζήτηση ή να αλλάξετε τα φίλτρα."
+
+msgid "README"
+msgstr "README"
+
+msgid "Invalid security token"
+msgstr "Μη έγκυρο διακριτικό ασφαλείας"
+
+msgid "Please select a destination session"
+msgstr "Παρακαλούμε επιλέξτε συνεδρία προορισμού"
+
+msgid "Cannot move this to the same session"
+msgstr "Δεν είναι δυνατή η μετακίνηση σε αυτήν την ίδια συνεδρία"
+
+msgid "The destination session must include the selected course"
+msgstr "Η συνεδρία προορισμού πρέπει να περιλαμβάνει το επιλεγμένο μάθημα"
+
+msgid "The source session must include the selected course"
+msgstr "Η συνεδρία προέλευσης πρέπει να περιλαμβάνει το επιλεγμένο μάθημα"
+
+msgid "No learners found"
+msgstr "Δεν βρέθηκαν εκπαιδευόμενοι"
+
+msgid "Will be subscribed"
+msgstr "Θα εγγραφεί"
+
+msgid "Subscribed"
+msgstr "Εγγεγραμμένος"
+
+msgid "The move process has finished"
+msgstr "Η διαδικασία μετακίνησης ολοκληρώθηκε"
+
+msgid "Comparison finished. No data has been moved."
+msgstr "Η σύγκριση ολοκληρώθηκε. Δεν μετακινήθηκαν δεδομένα."
+
+msgid "Move tracking data from the base course or a source session to another session. Use comparison first to review the affected learner data."
+msgstr "Μετακίνηση δεδομένων παρακολούθησης από το βασικό μάθημα ή μια συνεδρία προέλευσης σε άλλη συνεδρία. Χρησιμοποιήστε πρώτα τη σύγκριση για να ελέγξετε τα δεδομένα των εκπαιδευομένων που επηρεάζονται."
+
+msgid "Search for a course or use the manual course ID field below."
+msgstr "Αναζητήστε ένα μάθημα ή χρησιμοποιήστε το παρακάτω πεδίο χειροκίνητου αναγνωριστικού μαθήματος."
+
+msgid "Fallback when the course search is not available."
+msgstr "Εναλλακτική λύση όταν η αναζήτηση μαθήματος δεν είναι διαθέσιμη."
+
+msgid "Load sessions"
+msgstr "Φόρτωση συνεδριών"
+
+msgid "Selected course"
+msgstr "Επιλεγμένο μάθημα"
+
+msgid "Choose the base course or the session where the tracking data currently exists."
+msgstr "Επιλέξτε το βασικό μάθημα ή τη συνεδρία όπου υπάρχουν αυτήν τη στιγμή τα δεδομένα παρακολούθησης."
+
+msgid "Choose the session that will receive the tracking data."
+msgstr "Επιλέξτε τη συνεδρία που θα λάβει τα δεδομένα παρακολούθησης."
+
+msgid "Important"
+msgstr "Σημαντικό"
+
+msgid "The move action updates existing tracking data. Run compare first and test this tool with a non-production course before moving real learner data."
+msgstr "Η ενέργεια μετακίνησης ενημερώνει τα υπάρχοντα δεδομένα παρακολούθησης. Εκτελέστε πρώτα τη σύγκριση και δοκιμάστε αυτό το εργαλείο με ένα μη παραγωγικό μάθημα πριν μετακινήσετε πραγματικά δεδομένα εκπαιδευομένων."
+
+msgid "No sessions found for this course"
+msgstr "Δεν βρέθηκαν συνεδρίες για αυτό το μάθημα"
+
+msgid "Some users were ignored because they are not subscribed to this session."
+msgstr "Ορισμένοι χρήστες αγνοήθηκαν επειδή δεν είναι εγγεγραμμένοι σε αυτήν τη συνεδρία."
+
+msgid "Remove selected user"
+msgstr "Αφαίρεση επιλεγμένου χρήστη"
+
+msgid "Add selected user"
+msgstr "Προσθήκη επιλεγμένου χρήστη"
+
+msgid "No users from the selected list are subscribed to this session."
+msgstr "Κανένας χρήστης από την επιλεγμένη λίστα δεν είναι εγγεγραμμένος σε αυτήν τη συνεδρία."
+
+msgid "No image"
+msgstr "Καμία εικόνα"
+
+msgid "Invalid URL."
+msgstr "Μη έγκυρο URL."
+
+msgid "This cloud document cannot be embedded."
+msgstr "Αυτό το έγγραφο cloud δεν μπορεί να ενσωματωθεί."
+
+msgid "Document not found"
+msgstr "Το έγγραφο δεν βρέθηκε"
+
+msgid "File not found"
+msgstr "Το αρχείο δεν βρέθηκε"
+
+msgid "This learning path is not available for your user at this time."
+msgstr "Αυτή η διαδρομή μάθησης δεν είναι διαθέσιμη για τον χρήστη σας αυτήν τη στιγμή."
+
+msgid "StartDateMustBeBeforeTheEndDate"
+msgstr "StartDateMustBeBeforeTheEndDate"
+
+msgid "Next learning path"
+msgstr "Επόμενη διαδρομή μάθησης"
+
+msgid "Select the learning path that will be available after this one."
+msgstr "Επιλέξτε τη διαδρομή μάθησης που θα είναι διαθέσιμη μετά από αυτήν."
+
+msgid "Create another learning path in this course to enable learning path flow."
+msgstr "Δημιουργήστε μια άλλη διαδρομή μάθησης σε αυτό το μάθημα για να ενεργοποιήσετε τη ροή διαδρομών μάθησης."
+
+msgid "Available from %s"
+msgstr "Διαθέσιμο από %s"
+
+msgid "Available until %s"
+msgstr "Διαθέσιμο έως %s"
+
+msgid "Statistics reset date"
+msgstr "Ημερομηνία επαναφοράς στατιστικών"
+
+msgid "Last 24 hours"
+msgstr "Τελευταίες 24 ώρες"
+
+msgid "This reset date is used as the reference date for the report. It does not delete historical tracking data."
+msgstr "Αυτή η ημερομηνία επαναφοράς χρησιμοποιείται ως ημερομηνία αναφοράς για την αναφορά. Δεν διαγράφει ιστορικά δεδομένα παρακολούθησης."
+
+msgid "Since reset date"
+msgstr "Από την ημερομηνία επαναφοράς"
+
+msgid "Users connected in the last 24 hours"
+msgstr "Χρήστες που συνδέθηκαν τις τελευταίες 24 ώρες"
+
+msgid "Learners with at least one course access during the last 24 hours."
+msgstr "Εκπαιδευόμενοι με τουλάχιστον μία πρόσβαση σε μάθημα κατά τις τελευταίες 24 ώρες."
+
+msgid "Users connected in the last week"
+msgstr "Χρήστες που συνδέθηκαν την τελευταία εβδομάδα"
+
+msgid "Learners with at least one course access during the last 7 days."
+msgstr "Εκπαιδευόμενοι με τουλάχιστον μία πρόσβαση σε μάθημα κατά τις τελευταίες 7 ημέρες."
+
+msgid "Users connected in the last month"
+msgstr "Χρήστες που συνδέθηκαν τον τελευταίο μήνα"
+
+msgid "Learners with at least one course access during the last 30 days."
+msgstr "Εκπαιδευόμενοι με τουλάχιστον μία πρόσβαση σε μάθημα κατά τις τελευταίες 30 ημέρες."
+
+msgid "Not recently connected users"
+msgstr "Χρήστες χωρίς πρόσφατη σύνδεση"
+
+msgid "Learners without course access since %s."
+msgstr "Εκπαιδευόμενοι χωρίς πρόσβαση σε μάθημα από %s."
+
+msgid "Recently used resources"
+msgstr "Πρόσφατα χρησιμοποιημένοι πόροι"
+
+msgid "Course tools/resources used since %s."
+msgstr "Εργαλεία/πόροι μαθήματος που χρησιμοποιήθηκαν από %s."
+
+msgid "%s %% of learners"
+msgstr "%s %% των εκπαιδευομένων"
+
+msgid "Connections"
+msgstr "Συνδέσεις"
+
+msgid "Total connections"
+msgstr "Συνολικές συνδέσεις"
+
+msgid "Downloaded documents"
+msgstr "Ληφθέντα έγγραφα"
+
+msgid "List of documents downloaded by this learner in this course."
+msgstr "Λίστα εγγράφων που λήφθηκαν από αυτόν τον εκπαιδευόμενο σε αυτό το μάθημα."
+
+msgid "Forum topics"
+msgstr "Θέματα φόρουμ"
+
+msgid "Forum topics opened by this learner in this course."
+msgstr "Θέματα φόρουμ που άνοιξε αυτός ο εκπαιδευόμενος σε αυτό το μάθημα."
+
+msgid "Forum posts"
+msgstr "Δημοσιεύσεις φόρουμ"
+
+msgid "Forum posts written by this learner in this course."
+msgstr "Δημοσιεύσεις φόρουμ που έγραψε αυτός ο εκπαιδευόμενος σε αυτό το μάθημα."
+
+msgid "Course connections"
+msgstr "Συνδέσεις μαθήματος"
+
+msgid "Connection history for this learner in this course."
+msgstr "Ιστορικό συνδέσεων αυτού του εκπαιδευόμενου σε αυτό το μάθημα."
+
+msgid "Resources used"
+msgstr "Πόροι που χρησιμοποιήθηκαν"
+
+msgid "Latest tools or resources used by this learner in this course."
+msgstr "Τελευταία εργαλεία ή πόροι που χρησιμοποίησε αυτός ο εκπαιδευόμενος σε αυτό το μάθημα."
+
+msgid "Logout date"
+msgstr "Ημερομηνία αποσύνδεσης"
+
+msgid "Imported Aiken quiz"
+msgstr "Εισαγόμενο κουίζ Aiken"
+
+msgid "Only supported documents will be listed here."
+msgstr "Μόνο τα υποστηριζόμενα έγγραφα θα εμφανίζονται εδώ."
+
+msgid "Generated Aiken content"
+msgstr "Δημιουργημένο περιεχόμενο Aiken"
+
+msgid "Review the generated content before importing it as a new exercise."
+msgstr "Ελέγξτε το δημιουργημένο περιεχόμενο πριν το εισαγάγετε ως νέα άσκηση."
+
+msgid "No documents available."
+msgstr "Δεν υπάρχουν διαθέσιμα έγγραφα."
+
+msgid "yperbolic arctangent:\\t\\tarctanh(x)"
+msgstr "υπερβολική εφαπτομένη:\\t\\tarctanh(x)"
+
+msgid "Exercise"
+msgstr "Άσκηση"
+
+msgid "OfficialCode"
+msgstr "ΕπίσημοςΚωδικός"
+
+msgid "FirstName"
+msgstr "Όνομα"
+
+msgid "LastName"
+msgstr "Επώνυμο"
+
+msgid "LoginName"
+msgstr "ΌνομαΣύνδεσης"
+
+msgid "MinMinute"
+msgstr "ΕλάχιστοΛεπτό"
+
+msgid "StartDate"
+msgstr "ΗμερομηνίαΈναρξης"
+
+msgid "EndDate"
+msgstr "ΗμερομηνίαΛήξης"
+
+msgid "CorrectionDate"
+msgstr "ΗμερομηνίαΔιόρθωσης"
+
+msgid "NotValidated"
+msgstr "ΜηΕπικυρωμένο"
+
+msgid "PendingAttempts"
+msgstr "ΕκκρεμείςΠροσπάθειες"
+
+msgid "List of pending test attempts across your courses."
+msgstr "Λίστα εκκρεμών προσπαθειών δοκιμής σε όλα τα μαθήματά σας."
+
+msgid "User ID"
+msgstr "Αναγνωριστικό Χρήστη"
+
+msgid "QuestionType"
+msgstr "ΤύποςΕρώτησης"
+
+msgid "QuestionsWithNoAutomaticCorrection"
+msgstr "ΕρωτήσειςΧωρίςΑυτόματηΔιόρθωση"
+
+msgid "There are no pending tests."
+msgstr "Δεν υπάρχουν εκκρεμείς δοκιμές."
+
+msgid "%s results"
+msgstr "%s αποτελέσματα"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Παράδειγμα δραστηριότητας συμπλήρωσης φόρμας: υπολογισμός του Δείκτη Μάζας Σώματος</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ηλικία</strong></td>            <td width=\"75%\" style=\"\">[25] ετών</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Φύλο</strong></td>            <td style=\"\" text-align:=\"\">[Α] (Α ή Θ)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Βάρος</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ύψος</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Δείκτης Μάζας Σώματος</strong></td>            <td style=\"vertical-align: top;\">[29] ΔΜΣ =Βάρος/Ύψος<sup>2</sup> (Βλ.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> άρθρο Wikipedia</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Removed"
+msgstr "Αφαιρέθηκε"
+
+msgid "NoUsersInTheList"
+msgstr "NoUsersInTheList"
+
+msgid "Are you sure?"
+msgstr "Είστε σίγουροι;"
+
+msgid "NoResultsAvailable"
+msgstr "NoResultsAvailable"
+
+msgid "Import groups from a CSV file and optionally remove items that are not present in the file."
+msgstr "Εισαγωγή ομάδων από αρχείο CSV και προαιρετική αφαίρεση στοιχείων που δεν υπάρχουν στο αρχείο."
+
+msgid "Use this option carefully because items missing from the CSV can be removed during the import process."
+msgstr "Χρησιμοποιήστε αυτήν την επιλογή με προσοχή, διότι στοιχεία που λείπουν από το CSV ενδέχεται να αφαιρεθούν κατά τη διαδικασία εισαγωγής."
+
+msgid "Upload a CSV file with the group data you want to import."
+msgstr "Ανεβάστε ένα αρχείο CSV με τα δεδομένα των ομάδων που θέλετε να εισαγάγετε."
+
+msgid "You can download the example file to use the expected format."
+msgstr "Μπορείτε να κατεβάσετε το παράδειγμα αρχείου για να χρησιμοποιήσετε την αναμενόμενη μορφή."
+
+msgid "If you enable deletion, items not present in the file may be removed."
+msgstr "Εάν ενεργοποιήσετε τη διαγραφή, στοιχεία που δεν υπάρχουν στο αρχείο ενδέχεται να αφαιρεθούν."
+
+msgid "The CSV file is mandatory to start the import."
+msgstr "Το αρχείο CSV είναι υποχρεωτικό για την έναρξη της εισαγωγής."
+
+msgid "Please select at least one class."
+msgstr "Επιλέξτε τουλάχιστον μία τάξη."
+
+msgid "Define the properties for each group before creating them."
+msgstr "Ορίστε τις ιδιότητες για κάθε ομάδα πριν τη δημιουργήσετε."
+
+msgid "Apply the first row values"
+msgstr "Εφαρμογή τιμών πρώτης γραμμής"
+
+msgid "Create groups manually or generate them from the classes subscribed to this course."
+msgstr "Δημιουργήστε ομάδες χειροκίνητα ή δημιουργήστε τις από τις τάξεις που είναι εγγεγραμμένες σε αυτό το μάθημα."
+
+msgid "Create manual groups"
+msgstr "Δημιουργία χειροκίνητων ομάδων"
+
+msgid "Use this form when you want to create empty course groups manually."
+msgstr "Χρησιμοποιήστε αυτήν τη φόρμα όταν θέλετε να δημιουργήσετε κενές ομάδες μαθήματος χειροκίνητα."
+
+msgid "Configure manual groups"
+msgstr "Ρύθμιση χειροκίνητων ομάδων"
+
+msgid "Create groups from subscribed classes"
+msgstr "Δημιουργία ομάδων από εγγεγραμμένες τάξεις"
+
+msgid "Use this form when you want to create one course group for each selected class."
+msgstr "Χρησιμοποιήστε αυτήν τη φόρμα όταν θέλετε να δημιουργήσετε μία ομάδα μαθήματος για κάθε επιλεγμένη τάξη."
+
+msgid "Keep created groups linked to their source classes"
+msgstr "Διατήρηση των δημιουργημένων ομάδων συνδεδεμένων με τις αρχικές τους τάξεις"
+
+msgid "Create groups from selected classes"
+msgstr "Δημιουργία ομάδων από επιλεγμένες τάξεις"
+
+msgid "You must be logged in to access this page."
+msgstr "Πρέπει να συνδεθείτε για να αποκτήσετε πρόσβαση σε αυτήν τη σελίδα."
+
+msgid "Invalid user"
+msgstr "Μη έγκυρος χρήστης"
+
+msgid "UseCourseCustomCertificate"
+msgstr "UseCourseCustomCertificate"
+
+msgid "UseDefaultCustomCertificate"
+msgstr "UseDefaultCustomCertificate"
+
+msgid "CertificateSetting"
+msgstr "CertificateSetting"
+
+msgid "SelectOneOptionBeforeOpeningEditor"
+msgstr "SelectOneOptionBeforeOpeningEditor"
+
+msgid "ChooseCustomCertificateModeHelp"
+msgstr "ChooseCustomCertificateModeHelp"
+
+msgid "CertificateMode"
+msgstr "CertificateMode"
+
+msgid "Enable student to validate own attendance"
+msgstr "Ενεργοποίηση επικύρωσης παρουσίας από τον ίδιο τον μαθητή"
+
+msgid "Course block"
+msgstr "Μπλοκ μαθήματος"
+
+msgid "Add custom content blocks to course footer regions."
+msgstr "Προσθήκη προσαρμοσμένων μπλοκ περιεχομένου στις περιοχές υποσέλιδου του μαθήματος."
+
+msgid "course_block_pre_footer"
+msgstr "course_block_pre_footer"
+
+msgid "Before footer"
+msgstr "Πριν από το υποσέλιδο"
+
+msgid "course_block_footer_left"
+msgstr "course_block_footer_left"
+
+msgid "Footer left"
+msgstr "Αριστερό υποσέλιδο"
+
+msgid "course_block_footer_center"
+msgstr "course_block_footer_center"
+
+msgid "Footer center"
+msgstr "Κεντρικό υποσέλιδο"
+
+msgid "course_block_footer_right"
+msgstr "course_block_footer_right"
+
+msgid "Footer right"
+msgstr "Δεξιό υποσέλιδο"
+
+msgid "SetNotification"
+msgstr "SetNotification"
+
+msgid "CourseLegal"
+msgstr "CourseLegal"
+
+msgid "Certificates search is not available"
+msgstr "Η αναζήτηση πιστοποιητικών δεν είναι διαθέσιμη"
+
+msgid "It allows the acquisition of skills by subcategories"
+msgstr "Επιτρέπει την απόκτηση δεξιοτήτων ανά υποκατηγορίες"
+
+msgid "Allow skills by subcategories"
+msgstr "Να επιτρέπονται δεξιότητες ανά υποκατηγορίες"
+
+msgid "Minimum score for skills"
+msgstr "Ελάχιστη βαθμολογία για δεξιότητες"
+
+msgid "The gradebook table is hidden."
+msgstr "Ο πίνακας βαθμολογίου είναι κρυφός."
+
+msgid "Invalid token"
+msgstr "Μη έγκυρο διακριτικό"
+
+msgid "Unable to save the item"
+msgstr "Αδυναμία αποθήκευσης του στοιχείου"
+
+msgid "Only HTTP and HTTPS URLs are allowed."
+msgstr "Επιτρέπονται μόνο διευθύνσεις URL HTTP και HTTPS."
+
+msgid "Invalid URL host."
+msgstr "Μη έγκυρος κεντρικός υπολογιστής URL."
+
+msgid "This cloud provider is not allowed."
+msgstr "Αυτός ο πάροχος cloud δεν επιτρέπεται."
+
+msgid "Documents used"
+msgstr "Χρησιμοποιούμενα έγγραφα"
+
+msgid "No document usage"
+msgstr "Καμία χρήση εγγράφου"
+
+msgid "Invalid action."
+msgstr "Μη έγκυρη ενέργεια."
+
+msgid "No users selected."
+msgstr "Δεν επιλέχθηκαν χρήστες."
+
+msgid "%s user(s) processed."
+msgstr "%s χρήστης(-ες) επεξεργάστηκαν."
+
+msgid "Invalid CSRF token."
+msgstr "Μη έγκυρο διακριτικό CSRF."
+
+msgid "[%s] Please change your password"
+msgstr "[%s] Αλλάξτε τον κωδικό πρόσβασής σας"
+
+msgid "Dear %s,\n\nOur security enforcing process shows you use a password that is commonly used on the internet, which means your account could easily be stolen. It is probably a simple sequence or a very common word, we don't really know (we cannot see your password), but we ask you to please connect to the platform and request a password change. You can follow the link here: %s to do that now.\n\nPlease note we will never ask for your password in this process. You just enter your username or e-mail and we send you a link. If you are asked to introduce your existing password to do that, someone is probably trying to do Phishing on your account. Be safe, change your password now!\n\n%s\n%s"
+msgstr "Αγαπητέ/ή %s,\n\nΗ διαδικασία επιβολής ασφάλειας δείχνει ότι χρησιμοποιείτε έναν κωδικό πρόσβασης που χρησιμοποιείται συνήθως στο διαδίκτυο, γεγονός που σημαίνει ότι ο λογαριασμός σας μπορεί εύκολα να κλαπεί. Πιθανότατα πρόκειται για μια απλή ακολουθία ή μια πολύ συνηθισμένη λέξη, δεν γνωρίζουμε πραγματικά (δεν μπορούμε να δούμε τον κωδικό πρόσβασής σας), αλλά σας ζητάμε να συνδεθείτε στην πλατφόρμα και να ζητήσετε αλλαγή κωδικού πρόσβασης. Μπορείτε να ακολουθήσετε τον σύνδεσμο εδώ: %s για να το κάνετε τώρα.\n\nΣημειώστε ότι δεν θα ζητήσουμε ποτέ τον κωδικό πρόσβασής σας σε αυτή τη διαδικασία. Απλώς εισάγετε το όνομα χρήστη ή το e-mail σας και σας στέλνουμε έναν σύνδεσμο. Αν σας ζητηθεί να εισαγάγετε τον υπάρχοντα κωδικό πρόσβασής σας για να το κάνετε αυτό, κάποιος πιθανώς προσπαθεί να κάνει phishing στον λογαριασμό σας. Για την ασφάλειά σας, αλλάξτε τον κωδικό πρόσβασής σας τώρα!\n\n%s\n%s"
+
+msgid "[%s] Your password has been reset"
+msgstr "[%s] Ο κωδικός πρόσβασής σας έχει επαναφερθεί"
+
+msgid "Dear %s,\n\nOur security enforcing process flagged you as using a password that is commonly used on the internet, which means your account could easily be stolen. As a prevention measure, we have decided to initiate a password reset process. Your new, automatically generated password is now:\n\n%s\n\nPlease login to the platform soon (using this new password) to set your own, personal and secure, password.\n\nBe safe.\n\n%s\n%s"
+msgstr "Αγαπητέ/ή %s,\n\nΗ διαδικασία επιβολής ασφάλειας σας επεσήμανε ότι χρησιμοποιείτε έναν κωδικό πρόσβασης που χρησιμοποιείται συνήθως στο διαδίκτυο, γεγονός που σημαίνει ότι ο λογαριασμός σας μπορεί εύκολα να κλαπεί. Ως μέτρο πρόληψης, αποφασίσαμε να ξεκινήσουμε μια διαδικασία επαναφοράς κωδικού πρόσβασης. Ο νέος σας, αυτόματα δημιουργημένος κωδικός πρόσβασης είναι τώρα:\n\n%s\n\nΣυνδεθείτε στην πλατφόρμα σύντομα (χρησιμοποιώντας αυτόν τον νέο κωδικό) για να ορίσετε τον δικό σας, προσωπικό και ασφαλή κωδικό πρόσβασης.\n\nΓια την ασφάλειά σας.\n\n%s\n%s"
+
+msgid "Signature saved successfully"
+msgstr "Η υπογραφή αποθηκεύτηκε με επιτυχία"
+
+msgid "Invalid request payload."
+msgstr "Μη έγκυρο φορτίο αιτήματος."
+
+msgid "Authentication required."
+msgstr "Απαιτείται έλεγχος ταυτότητας."
+
+msgid "The course title is required."
+msgstr "Ο τίτλος του μαθήματος είναι υποχρεωτικός."
+
+msgid "Only trainers and administrators can create courses."
+msgstr "Μόνο εκπαιδευτές και διαχειριστές μπορούν να δημιουργούν μαθήματα."
+
+msgid "Course creation by trainers is disabled on this platform."
+msgstr "Η δημιουργία μαθημάτων από εκπαιδευτές είναι απενεργοποιημένη σε αυτή την πλατφόρμα."
+
+msgid "The selected BuyCourses service cannot be used to create this course."
+msgstr "Η επιλεγμένη υπηρεσία BuyCourses δεν μπορεί να χρησιμοποιηθεί για τη δημιουργία αυτού του μαθήματος."
+
+msgid "You have reached the maximum number of courses allowed (%d)."
+msgstr "Έχετε φτάσει στον μέγιστο αριθμό μαθημάτων που επιτρέπεται (%d)."
+
+msgid "The selected BuyCourses service is invalid."
+msgstr "Η επιλεγμένη υπηρεσία BuyCourses δεν είναι έγκυρη."
+
+msgid "BuyCourses is not available right now."
+msgstr "Το BuyCourses δεν είναι διαθέσιμο αυτή τη στιγμή."
+
+msgid "BuyCourses cannot validate the selected service right now."
+msgstr "Το BuyCourses δεν μπορεί να επικυρώσει την επιλεγμένη υπηρεσία αυτή τη στιγμή."
+
+msgid "Unable to validate the selected BuyCourses service right now."
+msgstr "Αδυναμία επικύρωσης της επιλεγμένης υπηρεσίας BuyCourses αυτή τη στιγμή."
+
+msgid "External tool removed from course"
+msgstr "Το εξωτερικό εργαλείο αφαιρέθηκε από το μάθημα"
+
+msgid "External tool was removed from the course, but kept internally because it is linked to the gradebook"
+msgstr "Το εξωτερικό εργαλείο αφαιρέθηκε από το μάθημα, αλλά διατηρήθηκε εσωτερικά επειδή συνδέεται με το βαθμολόγιο"
+
+msgid "There are no external tools available to add to the gradebook"
+msgstr "Δεν υπάρχουν διαθέσιμα εξωτερικά εργαλεία για προσθήκη στο βαθμολόγιο"
+
+msgid "The evaluation could not be created"
+msgstr "Η αξιολόγηση δεν μπόρεσε να δημιουργηθεί"
+
+msgid "The gradebook evaluation could not be linked"
+msgstr "Η αξιολόγηση του βαθμολογίου δεν ήταν δυνατό να συνδεθεί"
+
+msgid "Survey questions"
+msgstr "Ερωτήσεις ερωτηματολογίου"
+
+msgid "Back to survey list"
+msgstr "Επιστροφή στη λίστα ερωτηματολογίων"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "Αυτό το ερωτηματολόγιο έχει ήδη απαντήσεις. Η επεξεργασία ερωτήσεων είναι απενεργοποιημένη από τις ρυθμίσεις."
+
+msgid "Choose the type of question you want to add."
+msgstr "Επιλέξτε τον τύπο ερώτησης που θέλετε να προσθέσετε."
+
+msgid "The free text option is added automatically."
+msgstr "Η επιλογή ελεύθερου κειμένου προστίθεται αυτόματα."
+
+msgid "No questions found"
+msgstr "Δεν βρέθηκαν ερωτήσεις"
+
+msgid "Mandatory"
+msgstr "Υποχρεωτικό"
+
+msgid "Unsupported question type"
+msgstr "Μη υποστηριζόμενος τύπος ερώτησης"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "Μπορείτε να χρησιμοποιήσετε τις ετικέτες {%s} και {%s} στην ερώτηση."
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "Αυτή η ερώτηση εμφανίζεται υπό όρους κατά την απάντηση του ερωτηματολογίου."
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "Οι επιλογές ποσοστού από 1 έως 100 δημιουργούνται αυτόματα."
+
+msgid "Could not load survey questions"
+msgstr "Αδυναμία φόρτωσης ερωτήσεων ερωτηματολογίου"
+
+msgid "The question text is required."
+msgstr "Το κείμενο της ερώτησης είναι υποχρεωτικό."
+
+msgid "The maximum score is required."
+msgstr "Η μέγιστη βαθμολογία είναι υποχρεωτική."
+
+msgid "Please select a parent option."
+msgstr "Παρακαλώ επιλέξτε μια γονική επιλογή."
+
+msgid "Please fill all answer options."
+msgstr "Παρακαλώ συμπληρώστε όλες τις επιλογές απάντησης."
+
+msgid "QuestionUpdated"
+msgstr "QuestionUpdated"
+
+msgid "Could not save survey question"
+msgstr "Αδυναμία αποθήκευσης ερώτησης ερωτηματολογίου"
+
+msgid "Could not delete survey question"
+msgstr "Αδυναμία διαγραφής ερώτησης ερωτηματολογίου"
+
+msgid "Could not move survey question"
+msgstr "Αδυναμία μετακίνησης ερώτησης ερωτηματολογίου"
+
+msgid "Could not copy survey question"
+msgstr "Αδυναμία αντιγραφής ερώτησης ερωτηματολογίου"
+
+msgid "Hide search"
+msgstr "Απόκρυψη αναζήτησης"
+
+msgid "Showing results for: %s"
+msgstr "Εμφάνιση αποτελεσμάτων για: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "Αναζήτηση κατά τίτλο ερωτηματολογίου, κωδικό ή περιγραφή."
+
+msgid "Search surveys"
+msgstr "Αναζήτηση ερωτηματολογίων"
+
+msgid "%s surveys selected"
+msgstr "%s ερωτηματολόγια επιλέχθηκαν"
+
+msgid "Clear selection"
+msgstr "Καθαρισμός επιλογής"
+
+msgid "No surveys found"
+msgstr "Δεν βρέθηκαν ερωτηματολόγια"
+
+msgid "Unsupported"
+msgstr "Μη υποστηριζόμενο"
+
+msgid "Could not load surveys"
+msgstr "Αδυναμία φόρτωσης ερωτηματολογίων"
+
+msgid "Delete selected surveys"
+msgstr "Διαγραφή επιλεγμένων ερωτηματολογίων"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "Τα επιλεγμένα ερωτηματολόγια και οι ερωτήσεις τους θα διαγραφούν. Αυτή η ενέργεια δεν μπορεί να αναιρεθεί."
+
+msgid "Could not delete selected surveys"
+msgstr "Αδυναμία διαγραφής επιλεγμένων ερωτηματολογίων"
+
+msgid "Survey action"
+msgstr "Ενέργεια ερωτηματολογίου"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "Θα δημιουργηθεί ένα αντίγραφο αυτού του ερωτηματολογίου: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "Όλες οι απαντήσεις και οι προσκλήσεις θα διαγραφούν για αυτό το ερωτηματολόγιο: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "Οι δημιουργημένες πολλαπλές ερωτήσεις θα αφαιρεθούν από αυτό το ερωτηματολόγιο: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "Αυτό το ερωτηματολόγιο θα δημοσιευθεί για τους συνδεδεμένους εκπαιδευτές της ομάδας: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "Αυτό το ερωτηματολόγιο και οι ερωτήσεις του θα διαγραφούν: %s"
+
+msgid "Could not complete survey action"
+msgstr "Αδυναμία ολοκλήρωσης ενέργειας ερωτηματολογίου"
+
+msgid "Not started"
+msgstr "Δεν ξεκίνησε"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "Οι δημοσκοπήσεις συνάντησης επιτρέπουν στους προσκεκλημένους χρήστες να επιλέγουν τις ημερομηνίες που είναι διαθέσιμοι."
+
+msgid "Back to surveys"
+msgstr "Επιστροφή στα ερωτηματολόγια"
+
+msgid "Edit meeting poll"
+msgstr "Επεξεργασία δημοσκόπησης συνάντησης"
+
+msgid "View meeting poll"
+msgstr "Προβολή δημοσκόπησης συνάντησης"
+
+msgid "Basic information"
+msgstr "Βασικές πληροφορίες"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "Αυτό θα δημιουργήσει ένα ερωτηματολόγιο τύπου δημοσκόπησης συνάντησης. Οι απαντήσεις και οι προσκλήσεις διαχειρίζονται ξεχωριστά."
+
+msgid "Availability"
+msgstr "Διαθεσιμότητα"
+
+msgid "Meeting dates"
+msgstr "Ημερομηνίες συνάντησης"
+
+msgid "Meeting poll"
+msgstr "Δημοσκόπηση συνάντησης"
+
+msgid "My availability"
+msgstr "Διαθεσιμότητά μου"
+
+msgid "Meeting poll results"
+msgstr "Αποτελέσματα δημοσκόπησης συνάντησης"
+
+msgid "No invitations found"
+msgstr "Δεν βρέθηκαν προσκλήσεις"
+
+msgid "available"
+msgstr "διαθέσιμος"
+
+msgid "Could not load meeting poll"
+msgstr "Αδυναμία φόρτωσης της δημοσκόπησης συνάντησης"
+
+msgid "Please complete the required fields"
+msgstr "Παρακαλώ συμπληρώστε τα απαιτούμενα πεδία"
+
+msgid "Could not save meeting poll"
+msgstr "Αδυναμία αποθήκευσης της δημοσκόπησης συνάντησης"
+
+msgid "Could not save meeting availability"
+msgstr "Αδυναμία αποθήκευσης της διαθεσιμότητας συνάντησης"
+
+msgid "Copy this survey to another course or session"
+msgstr "Αντιγραφή αυτής της έρευνας σε άλλο μάθημα ή περίοδο"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "Η έρευνα θα αντιγραφεί χωρίς απαντήσεις ή προσκλήσεις."
+
+msgid "No target courses found"
+msgstr "Δεν βρέθηκαν μαθήματα προορισμού"
+
+msgid "Search by course title, course code or session name."
+msgstr "Αναζήτηση κατά τίτλο μαθήματος, κωδικό μαθήματος ή όνομα περιόδου."
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "Χρησιμοποιήστε την Αντιγραφή έρευνας όταν θέλετε ένα αντίγραφο στο ίδιο μάθημα."
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "Οι ερωτήσεις και οι επιλογές θα αντιγραφούν. Οι απαντήσεις, οι προσκλήσεις και οι αναφορές θα παραμείνουν μόνο στην αρχική έρευνα."
+
+msgid "Selected target"
+msgstr "Επιλεγμένος προορισμός"
+
+msgid "Could not load copy form"
+msgstr "Αδυναμία φόρτωσης της φόρμας αντιγραφής"
+
+msgid "The survey will be copied to: %s"
+msgstr "Η έρευνα θα αντιγραφεί στο: %s"
+
+msgid "Survey copied."
+msgstr "Η έρευνα αντιγράφηκε."
+
+msgid "Could not copy survey"
+msgstr "Αδυναμία αντιγραφής της έρευνας"
+
+msgid "Answer survey"
+msgstr "Απάντηση έρευνας"
+
+msgid "Preview mode does not save answers."
+msgstr "Η λειτουργία προεπισκόπησης δεν αποθηκεύει απαντήσεις."
+
+msgid "Survey completed"
+msgstr "Η έρευνα ολοκληρώθηκε"
+
+msgid "Thank you for answering the survey."
+msgstr "Σας ευχαριστούμε που απαντήσατε στην έρευνα."
+
+msgid "Profile information"
+msgstr "Πληροφορίες προφίλ"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "Παρακαλώ ελέγξτε τα ζητούμενα πεδία προφίλ πριν απαντήσετε στην έρευνα."
+
+msgid "This profile field is read-only."
+msgstr "Αυτό το πεδίο προφίλ είναι μόνο για ανάγνωση."
+
+msgid "You already filled this survey."
+msgstr "Έχετε ήδη συμπληρώσει αυτήν την έρευνα."
+
+msgid "Please specify"
+msgstr "Παρακαλώ διευκρινίστε"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "Αυτός ο τύπος ερώτησης δεν υποστηρίζεται στην προβολή σύγχρονης έρευνας."
+
+msgid "Preview only"
+msgstr "Μόνο προεπισκόπηση"
+
+msgid "Submit answers"
+msgstr "Υποβολή απαντήσεων"
+
+msgid "Could not load survey"
+msgstr "Αδυναμία φόρτωσης της έρευνας"
+
+msgid "Please complete the required profile fields."
+msgstr "Παρακαλώ συμπληρώστε τα απαιτούμενα πεδία προφίλ."
+
+msgid "Please answer all mandatory questions."
+msgstr "Παρακαλώ απαντήστε σε όλες τις υποχρεωτικές ερωτήσεις."
+
+msgid "Could not save survey answers"
+msgstr "Αδυναμία αποθήκευσης των απαντήσεων της έρευνας"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "Ρυθμίστε τις κύριες πληροφορίες της έρευνας πριν διαχειριστείτε ερωτήσεις και προσκλήσεις."
+
+msgid "The survey code cannot be changed after creation."
+msgstr "Ο κωδικός της έρευνας δεν μπορεί να αλλάξει μετά τη δημιουργία."
+
+msgid "Survey behavior"
+msgstr "Συμπεριφορά έρευνας"
+
+msgid "Use 0 for no time limit."
+msgstr "Χρησιμοποιήστε το 0 για απεριόριστο χρόνο."
+
+msgid "Survey messages"
+msgstr "Μηνύματα έρευνας"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "Τα πεδία προφίλ που επιλέγονται εδώ θα εμφανίζονται πριν από τις ερωτήσεις της έρευνας."
+
+msgid "No profile fields are currently available."
+msgstr "Δεν υπάρχουν διαθέσιμα πεδία προφίλ αυτήν τη στιγμή."
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "Η επιλογή πεδίων προφίλ είναι διαθέσιμη μόνο για μη ανώνυμες έρευνες."
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "Η σύνδεση δεξιοτήτων θα μεταφερθεί σε ξεχωριστή δέσμη."
+
+msgid "Could not load survey configuration"
+msgstr "Αδυναμία φόρτωσης της διαμόρφωσης της έρευνας"
+
+msgid "The survey code is required."
+msgstr "Ο κωδικός της έρευνας είναι υποχρεωτικός."
+
+msgid "The survey title is required."
+msgstr "Ο τίτλος της έρευνας είναι υποχρεωτικός."
+
+msgid "The survey has been saved successfully"
+msgstr "Η έρευνα αποθηκεύτηκε με επιτυχία"
+
+msgid "Could not save survey configuration"
+msgstr "Αδυναμία αποθήκευσης της διαμόρφωσης της έρευνας"
+
+msgid "Course users"
+msgstr "Χρήστες μαθήματος"
+
+msgid "Already invited"
+msgstr "Ήδη προσκεκλημένοι"
+
+msgid "No users found"
+msgstr "Δεν βρέθηκαν χρήστες"
+
+msgid "No groups found"
+msgstr "Δεν βρέθηκαν ομάδες"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "Χρησιμοποιήστε **link** όπου πρέπει να εμφανίζεται ο σύνδεσμος της έρευνας."
+
+msgid "Remind all selected users"
+msgstr "Υπενθύμιση σε όλους τους επιλεγμένους χρήστες"
+
+msgid "Anonymous access link"
+msgstr "Σύνδεσμος ανώνυμης πρόσβασης"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "Οι χρήστες που δεν έχουν προσκληθεί μπορούν να χρησιμοποιήσουν αυτόν τον σύνδεσμο για να συμμετάσχουν στην έρευνα."
+
+msgid "Answered anonymously"
+msgstr "Απαντήθηκε ανώνυμα"
+
+msgid "Could not load survey invitations"
+msgstr "Αδυναμία φόρτωσης προσκλήσεων έρευνας"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "Απαιτούνται θέμα και μήνυμα email κατά την αποστολή email."
+
+msgid "Could not publish survey"
+msgstr "Αδυναμία δημοσίευσης έρευνας"
+
+msgid "Could not copy the link"
+msgstr "Αδυναμία αντιγραφής του συνδέσμου"
+
+msgid "Please answer this survey using the following link"
+msgstr "Παρακαλούμε απαντήστε σε αυτήν την έρευνα χρησιμοποιώντας τον παρακάτω σύνδεσμο"
+
+msgid "Export CSV"
+msgstr "Εξαγωγή CSV"
+
+msgid "Export compact CSV"
+msgstr "Εξαγωγή συμπαγούς CSV"
+
+msgid "Export Excel"
+msgstr "Εξαγωγή Excel"
+
+msgid "Export package"
+msgstr "Εξαγωγή πακέτου"
+
+msgid "Results summary"
+msgstr "Σύνοψη αποτελεσμάτων"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "Αυτή η προβολή εμφανίζει τα μεταφερθέντα δεδομένα αναφοράς για αυτήν την έρευνα."
+
+msgid "Select user"
+msgstr "Επιλογή χρήστη"
+
+msgid "No answers found"
+msgstr "Δεν βρέθηκαν απαντήσεις"
+
+msgid "answers"
+msgstr "απαντήσεις"
+
+msgid "Could not load survey reporting"
+msgstr "Αδυναμία φόρτωσης αναφοράς έρευνας"
+
+msgid "Back to threads"
+msgstr "Επιστροφή στα θέματα"
+
+msgid "Back to learning path"
+msgstr "Επιστροφή στη διαδρομή μάθησης"
+
+msgid "Remove sticky"
+msgstr "Αφαίρεση καρφιτσώματος"
+
+msgid "Make sticky"
+msgstr "Καρφίτσωμα"
+
+msgid "Open thread"
+msgstr "Άνοιγμα θέματος"
+
+msgid "Close thread"
+msgstr "Κλείσιμο θέματος"
+
+msgid "Delete thread"
+msgstr "Διαγραφή θέματος"
+
+msgid "This thread is hidden from learners."
+msgstr "Αυτό το θέμα είναι κρυφό από τους εκπαιδευόμενους."
+
+msgid "Revision requested"
+msgstr "Ζητήθηκε αναθεώρηση"
+
+msgid "Revision"
+msgstr "Αναθεώρηση"
+
+msgid "Approve post"
+msgstr "Έγκριση ανάρτησης"
+
+msgid "Reject post"
+msgstr "Απόρριψη ανάρτησης"
+
+msgid "Cancel revision request"
+msgstr "Ακύρωση αιτήματος αναθεώρησης"
+
+msgid "Delete post"
+msgstr "Διαγραφή ανάρτησης"
+
+msgid "Message is required"
+msgstr "Απαιτείται μήνυμα"
+
+msgid "Target thread is required"
+msgstr "Απαιτείται το θέμα προορισμού"
+
+msgid "Could not retrieve posts"
+msgstr "Αδυναμία ανάκτησης αναρτήσεων"
+
+msgid "Thread shown"
+msgstr "Το θέμα εμφανίζεται"
+
+msgid "Thread hidden"
+msgstr "Το θέμα είναι κρυφό"
+
+msgid "Could not update thread"
+msgstr "Αδυναμία ενημέρωσης θέματος"
+
+msgid "Thread closed"
+msgstr "Το θέμα έκλεισε"
+
+msgid "Thread opened"
+msgstr "Το θέμα άνοιξε"
+
+msgid "Thread marked as sticky"
+msgstr "Το θέμα επισημάνθηκε ως καρφιτσωμένο"
+
+msgid "Thread unmarked as sticky"
+msgstr "Το θέμα καταργήθηκε από καρφιτσωμένο"
+
+msgid "Thread notifications enabled"
+msgstr "Ειδοποιήσεις θέματος ενεργοποιημένες"
+
+msgid "Thread notifications disabled"
+msgstr "Ειδοποιήσεις θέματος απενεργοποιημένες"
+
+msgid "Could not update thread notification"
+msgstr "Δεν ήταν δυνατή η ενημέρωση της ειδοποίησης του νήματος"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτό το νήμα;"
+
+msgid "Could not delete thread"
+msgstr "Δεν ήταν δυνατή η διαγραφή του νήματος"
+
+msgid "Post approved"
+msgstr "Η δημοσίευση εγκρίθηκε"
+
+msgid "Could not approve post"
+msgstr "Δεν ήταν δυνατή η έγκριση της δημοσίευσης"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "Είστε βέβαιοι ότι θέλετε να απορρίψετε αυτή τη δημοσίευση;"
+
+msgid "Post rejected"
+msgstr "Η δημοσίευση απορρίφθηκε"
+
+msgid "Could not reject post"
+msgstr "Δεν ήταν δυνατή η απόρριψη της δημοσίευσης"
+
+msgid "Post shown"
+msgstr "Η δημοσίευση εμφανίζεται"
+
+msgid "Post hidden"
+msgstr "Η δημοσίευση είναι κρυφή"
+
+msgid "Could not update post"
+msgstr "Δεν ήταν δυνατή η ενημέρωση της δημοσίευσης"
+
+msgid "Post updated"
+msgstr "Η δημοσίευση ενημερώθηκε"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτή τη δημοσίευση;"
+
+msgid "Post deleted"
+msgstr "Η δημοσίευση διαγράφηκε"
+
+msgid "Could not delete post"
+msgstr "Δεν ήταν δυνατή η διαγραφή της δημοσίευσης"
+
+msgid "Untitled thread"
+msgstr "Νήμα χωρίς τίτλο"
+
+msgid "Could not retrieve threads"
+msgstr "Δεν ήταν δυνατή η ανάκτηση των νημάτων"
+
+msgid "Post moved"
+msgstr "Η δημοσίευση μετακινήθηκε"
+
+msgid "Could not move post"
+msgstr "Δεν ήταν δυνατή η μετακίνηση της δημοσίευσης"
+
+msgid "Revision request removed"
+msgstr "Η αίτηση αναθεώρησης αφαιρέθηκε"
+
+msgid "Could not update revision request"
+msgstr "Δεν ήταν δυνατή η ενημέρωση της αίτησης αναθεώρησης"
+
+msgid "Are you sure you want to report this post?"
+msgstr "Είστε βέβαιοι ότι θέλετε να αναφέρετε αυτή τη δημοσίευση;"
+
+msgid "Could not report post"
+msgstr "Δεν ήταν δυνατή η αναφορά της δημοσίευσης"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτό το συνημμένο;"
+
+msgid "Attachment deleted"
+msgstr "Το συνημμένο διαγράφηκε"
+
+msgid "Could not delete attachment"
+msgstr "Δεν ήταν δυνατή η διαγραφή του συνημμένου"
+
+msgid "Thread title"
+msgstr "Τίτλος νήματος"
+
+msgid "Sticky thread"
+msgstr "Καρφιτσωμένο νήμα"
+
+msgid "Attach files"
+msgstr "Επισύναψη αρχείων"
+
+msgid "Attachments are disabled for this forum"
+msgstr "Τα συνημμένα είναι απενεργοποιημένα για αυτό το φόρουμ"
+
+msgid "The forum is not open yet."
+msgstr "Το φόρουμ δεν έχει ανοίξει ακόμη."
+
+msgid "The forum is closed."
+msgstr "Το φόρουμ είναι κλειστό."
+
+msgid "The forum is locked."
+msgstr "Το φόρουμ είναι κλειδωμένο."
+
+msgid "New threads are not allowed in this forum."
+msgstr "Δεν επιτρέπονται νέα νήματα σε αυτό το φόρουμ."
+
+msgid "Thread created"
+msgstr "Το νήμα δημιουργήθηκε"
+
+msgid "Could not create thread"
+msgstr "Δεν ήταν δυνατή η δημιουργία του νήματος"
+
+msgid "Back to posts"
+msgstr "Επιστροφή στις δημοσιεύσεις"
+
+msgid "This reply will be stored as a revision."
+msgstr "Αυτή η απάντηση θα αποθηκευτεί ως αναθεώρηση."
+
+msgid "Post reply"
+msgstr "Απάντηση δημοσίευσης"
+
+msgid "The thread is locked."
+msgstr "Το νήμα είναι κλειδωμένο."
+
+msgid "Reply added"
+msgstr "Η απάντηση προστέθηκε"
+
+msgid "Could not add reply"
+msgstr "Δεν ήταν δυνατή η προσθήκη απάντησης"
+
+msgid "Add forum"
+msgstr "Προσθήκη φόρουμ"
+
+msgid "No forums found"
+msgstr "Δεν βρέθηκαν φόρουμ"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "Δημιουργήστε την πρώτη σας κατηγορία φόρουμ ή φόρουμ για να ξεκινήσετε συζητήσεις."
+
+msgid "Locked"
+msgstr "Κλειδωμένο"
+
+msgid "No forums in this category"
+msgstr "Δεν υπάρχουν φόρουμ σε αυτή την κατηγορία"
+
+msgid "Posts require approval"
+msgstr "Οι δημοσιεύσεις απαιτούν έγκριση"
+
+msgid "Forum for current group"
+msgstr "Φόρουμ για την τρέχουσα ομάδα"
+
+msgid "Group forum visibility"
+msgstr "Ορατότητα φόρουμ ομάδας"
+
+msgid "No category"
+msgstr "Χωρίς κατηγορία"
+
+msgid "Could not retrieve forums"
+msgstr "Αδυναμία ανάκτησης φόρουμ"
+
+msgid "Forum category updated"
+msgstr "Η κατηγορία φόρουμ ενημερώθηκε"
+
+msgid "Forum category created"
+msgstr "Η κατηγορία φόρουμ δημιουργήθηκε"
+
+msgid "Could not save forum category"
+msgstr "Αδυναμία αποθήκευσης κατηγορίας φόρουμ"
+
+msgid "Forum updated"
+msgstr "Το φόρουμ ενημερώθηκε"
+
+msgid "Forum created"
+msgstr "Το φόρουμ δημιουργήθηκε"
+
+msgid "Could not save forum"
+msgstr "Αδυναμία αποθήκευσης φόρουμ"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτήν την κατηγορία φόρουμ;"
+
+msgid "Could not delete forum category"
+msgstr "Αδυναμία διαγραφής κατηγορίας φόρουμ"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτό το φόρουμ;"
+
+msgid "Could not delete forum"
+msgstr "Αδυναμία διαγραφής φόρουμ"
+
+msgid "Forum category unlocked"
+msgstr "Η κατηγορία φόρουμ ξεκλειδώθηκε"
+
+msgid "Forum category locked"
+msgstr "Η κατηγορία φόρουμ κλειδώθηκε"
+
+msgid "Could not update forum category"
+msgstr "Αδυναμία ενημέρωσης κατηγορίας φόρουμ"
+
+msgid "Forum category shown"
+msgstr "Η κατηγορία φόρουμ εμφανίστηκε"
+
+msgid "Forum category hidden"
+msgstr "Η κατηγορία φόρουμ αποκρύφθηκε"
+
+msgid "Forum unlocked"
+msgstr "Το φόρουμ ξεκλείδωσε"
+
+msgid "Forum locked"
+msgstr "Το φόρουμ κλειδώθηκε"
+
+msgid "Could not update forum"
+msgstr "Αδυναμία ενημέρωσης φόρουμ"
+
+msgid "Forum shown"
+msgstr "Το φόρουμ εμφανίστηκε"
+
+msgid "Forum hidden"
+msgstr "Το φόρουμ αποκρύφθηκε"
+
+msgid "Forum notifications enabled"
+msgstr "Οι ειδοποιήσεις φόρουμ ενεργοποιήθηκαν"
+
+msgid "Forum notifications disabled"
+msgstr "Οι ειδοποιήσεις φόρουμ απενεργοποιήθηκαν"
+
+msgid "Could not update forum notification"
+msgstr "Αδυναμία ενημέρωσης ειδοποίησης φόρουμ"
+
+msgid "Forum category moved"
+msgstr "Η κατηγορία φόρουμ μετακινήθηκε"
+
+msgid "Could not move forum category"
+msgstr "Αδυναμία μετακίνησης κατηγορίας φόρουμ"
+
+msgid "Forum moved"
+msgstr "Το φόρουμ μετακινήθηκε"
+
+msgid "Could not move forum"
+msgstr "Αδυναμία μετακίνησης φόρουμ"
+
+msgid "Back to forums"
+msgstr "Επιστροφή στα φόρουμ"
+
+msgid "New thread"
+msgstr "Νέο θέμα"
+
+msgid "No threads found"
+msgstr "Δεν βρέθηκαν θέματα"
+
+msgid "Sticky"
+msgstr "Καρφιτσωμένο"
+
+msgid "Graded"
+msgstr "Βαθμολογημένο"
+
+msgid "Grade peers"
+msgstr "Βαθμολόγηση συμφοιτητών"
+
+msgid "Move thread"
+msgstr "Μετακίνηση θέματος"
+
+msgid "Target forum"
+msgstr "Στοχευμένο φόρουμ"
+
+msgid "Target forum is required"
+msgstr "Το στοχευμένο φόρουμ είναι υποχρεωτικό"
+
+msgid "Students"
+msgstr "Φοιτητές"
+
+msgid "No students found"
+msgstr "Δεν βρέθηκαν φοιτητές"
+
+msgid "No peers available to grade."
+msgstr "Δεν υπάρχουν διαθέσιμοι συμφοιτητές για βαθμολόγηση."
+
+msgid "Qualified"
+msgstr "Πιστοποιημένος"
+
+msgid "Not qualified"
+msgstr "Μη πιστοποιημένος"
+
+msgid "Could not retrieve thread grading"
+msgstr "Αδυναμία ανάκτησης βαθμολόγησης θέματος"
+
+msgid "Thread grading updated"
+msgstr "Η βαθμολόγηση θέματος ενημερώθηκε"
+
+msgid "Could not update thread grading"
+msgstr "Αδυναμία ενημέρωσης βαθμολόγησης θέματος"
+
+msgid "Thread score saved"
+msgstr "Η βαθμολογία θέματος αποθηκεύτηκε"
+
+msgid "Could not save thread score"
+msgstr "Αδυναμία αποθήκευσης βαθμολογίας θέματος"
+
+msgid "Could not move thread"
+msgstr "Αδυναμία μετακίνησης θέματος"
+
+msgid "Thread updated"
+msgstr "Το θέμα ενημερώθηκε"
+
+msgid "Search term is too short"
+msgstr "Ο όρος αναζήτησης είναι πολύ σύντομος"
+
+msgid "Could not search forums"
+msgstr "Αδυναμία αναζήτησης φόρουμ"
+
+msgid "Moderated"
+msgstr "Συντονισμένο"
+
+msgid "View threads"
+msgstr "Προβολή νημάτων"
 

@@ -5,6 +5,17 @@
 $strings['plugin_title'] = 'Zoom videokonference';
 $strings['plugin_comment'] = 'Zoom videokonferenču integrācija kursās un sesijās';
 
+$strings['accountId'] = 'Konta ID';
+$strings['clientId'] = 'Klienta ID';
+$strings['clientSecret'] = 'Klienta noslēpums';
+$strings['webhookSecretToken'] = 'Tīmekļa āķa noslēpuma marķieris';
+$strings['apiKey_help'] = 'Novecojis JWT API atslēga. Ieteicams izmantot Konta ID, Klienta ID un Klienta noslēpumu Zoom Server-to-Server OAuth.';
+$strings['apiSecret_help'] = 'Novecojis JWT API noslēpums. Ieteicams izmantot Konta ID, Klienta ID un Klienta noslēpumu Zoom Server-to-Server OAuth.';
+$strings['verificationToken_help'] = 'Novecojis tīmekļa āķa verifikācijas marķieris. Ieteicams izmantot Tīmekļa āķa noslēpuma marķieri.';
+$strings['accountId_help'] = 'Zoom Server-to-Server OAuth konta ID.';
+$strings['clientId_help'] = 'Zoom Server-to-Server OAuth klienta ID.';
+$strings['clientSecret_help'] = 'Zoom Server-to-Server OAuth klienta noslēpums.';
+$strings['webhookSecretToken_help'] = 'Noslēpuma marķieris, ko izmanto Zoom tīmekļa āķu pieprasījumu validēšanai.';
 $strings['apiKey'] = 'API atslēga';
 $strings['apiSecret'] = 'API noslēpums';
 $strings['verificationToken'] = 'Verifikācijas žetons';

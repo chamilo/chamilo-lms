@@ -11,10 +11,13 @@ if (PHP_SAPI != 'cli') {
  */
 
 $showAll = false;
+$apply = false;
 foreach ($argv as $arg) {
     if ($arg === '--all') {
         $showAll = true;
-        break;
+    }
+    if ($arg === '--apply') {
+        $apply = true;
     }
 }
 
@@ -25,6 +28,8 @@ if (!file_exists($root . '/.git')) {
 }
 
 $potPath = $root . '/translations/messages.pot';
+$poPath = $root . '/translations/messages.en_US.po';
+$jsonPath = $root . '/assets/locales/en_US.json';
 
 // Regex fragment for matching quoted string content, handling escaped characters.
 // Use with a captured opening quote in group N: (["']) then QUOTED_CONTENT then \N
@@ -37,6 +42,10 @@ define('QUOTED_CONTENT', '((?:\\\\.|(?!\\1)[^\\\\])*)');
 $msgids = parsePotFile($potPath);
 
 $missing = [];
+// For terms found in assets/vue, keep the original term (with {0}/{1} or %s/%d
+// placeholders exactly as written in the source) keyed by its normalized lookup
+// term, so it can be added to assets/locales/en_US.json with --apply.
+$vueTerms = [];
 
 //$dirsToScan = ['assets', 'public', 'src', 'tests'];
 $dirsToScan = ['assets', 'public', 'src'];
@@ -87,6 +96,9 @@ foreach ($dirsToScan as $dir) {
                 if ($isMissing) {
                     echo "\033[31m Missing in messages.pot\033[0m\n";
                     $missing[$lookupTerm] = true;
+                    if ($isVue && !isset($vueTerms[$lookupTerm])) {
+                        $vueTerms[$lookupTerm] = $term;
+                    }
                 }
             }
             foreach ($hiddenTerms as $term) {
@@ -94,6 +106,9 @@ foreach ($dirsToScan as $dir) {
                 $isMissing = !isset($msgids[$lookupTerm]);
                 if ($isMissing) {
                     $missing[$lookupTerm] = true;
+                    if ($isVue && !isset($vueTerms[$lookupTerm])) {
+                        $vueTerms[$lookupTerm] = $term;
+                    }
                 }
             }
         }
@@ -108,6 +123,120 @@ if (!empty($missing)) {
         $output .= "msgid \"{$escaped}\"\nmsgstr \"\"\n\n";
     }
     file_put_contents('/tmp/missing_terms.txt', $output);
+}
+
+if ($apply) {
+    applyMissingTerms(array_keys($missing), $vueTerms, $potPath, $poPath, $jsonPath, $msgids);
+}
+
+/**
+ * Append the missing terms to messages.pot and messages.en_US.po, and add the
+ * Vue-sourced terms to assets/locales/en_US.json (converting placeholders).
+ *
+ * @param string[] $missingTerms Normalized lookup terms missing from messages.pot
+ * @param array<string, string> $vueTerms lookupTerm => original Vue source term
+ * @param array<string, bool> $potMsgids Already-parsed messages.pot msgids
+ */
+function applyMissingTerms(
+    array $missingTerms,
+    array $vueTerms,
+    string $potPath,
+    string $poPath,
+    string $jsonPath,
+    array $potMsgids
+): void {
+    if (empty($missingTerms)) {
+        echo "\nNothing to apply: no missing terms found.\n";
+
+        return;
+    }
+
+    // --- messages.pot ---
+    // All $missingTerms are by definition absent from the .pot, so append them all.
+    $potAppend = '';
+    foreach ($missingTerms as $term) {
+        $escaped = escape_pot($term);
+        $potAppend .= "\nmsgid \"{$escaped}\"\nmsgstr \"\"\n";
+    }
+    file_put_contents($potPath, $potAppend, FILE_APPEND);
+    echo "\nAppended ".count($missingTerms)." term(s) to ".basename($potPath).".\n";
+
+    // --- messages.en_US.po ---
+    // Skip any term already present in the .po (msgstr mirrors the English source).
+    $poMsgids = parsePotFile($poPath);
+    $poAppend = '';
+    $poCount = 0;
+    foreach ($missingTerms as $term) {
+        if (isset($poMsgids[$term])) {
+            continue;
+        }
+        $escaped = escape_pot($term);
+        $poAppend .= "\nmsgid \"{$escaped}\"\nmsgstr \"{$escaped}\"\n";
+        $poCount++;
+    }
+    if ('' !== $poAppend) {
+        file_put_contents($poPath, $poAppend, FILE_APPEND);
+    }
+    echo "Appended {$poCount} term(s) to ".basename($poPath).".\n";
+
+    // --- assets/locales/en_US.json ---
+    if (empty($vueTerms)) {
+        echo "No Vue-sourced terms to add to ".basename($jsonPath).".\n";
+
+        return;
+    }
+
+    $json = file_get_contents($jsonPath);
+    $existing = json_decode($json, true);
+    if (!is_array($existing)) {
+        echo "Could not parse ".basename($jsonPath)."; skipping JSON update.\n";
+
+        return;
+    }
+
+    $newLines = [];
+    foreach ($vueTerms as $term) {
+        if (isset($existing[$term])) {
+            continue;
+        }
+        $existing[$term] = true; // guard against duplicate additions within this run
+        $key = json_encode($term);
+        $value = json_encode(toJsonValue($term));
+        $newLines[] = '    '.$key.': '.$value;
+    }
+
+    if (empty($newLines)) {
+        echo "No new Vue-sourced terms to add to ".basename($jsonPath).".\n";
+
+        return;
+    }
+
+    // Insert the new entries before the closing brace, keeping the existing
+    // formatting (4-space indent, trailing newline) untouched.
+    $body = rtrim($json);
+    $closePos = strrpos($body, '}');
+    $head = rtrim(substr($body, 0, $closePos));
+    $result = $head.",\n".implode(",\n", $newLines)."\n}\n";
+    file_put_contents($jsonPath, $result);
+    echo 'Added '.count($newLines).' term(s) to '.basename($jsonPath).".\n";
+}
+
+/**
+ * Convert a Vue source term into the JSON value form: sequential printf-style
+ * placeholders (%s, %d, %1$s) become positional vue-i18n placeholders {0}, {1}.
+ * Terms that already use {n} placeholders are left unchanged.
+ */
+function toJsonValue(string $term): string
+{
+    $index = 0;
+
+    return preg_replace_callback(
+        '/%(?:\d+\$)?[sd]/',
+        static function () use (&$index): string {
+            return '{'.$index++.'}';
+        },
+        $term
+    );
 }
 
 function parsePotFile(string $filePath): array

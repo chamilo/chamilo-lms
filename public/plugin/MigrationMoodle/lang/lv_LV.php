@@ -1,0 +1,95 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+$strings['plugin_title'] = 'Importēt no Moodle';
+$strings['plugin_comment'] = 'Izpildīt importēšanas procesu no Moodle datubāzes un failiem uz Chamilo.';
+
+$strings['MoodlePassword'] = 'Moodle parole';
+$strings['UninstallError'] = 'Radās kļūda atinstalējot spraudni.';
+
+$strings['db_host'] = 'Moodle DB serveris';
+$strings['db_user'] = 'Moodle DB lietotājs';
+$strings['db_password'] = 'Moodle DB parole';
+$strings['db_name'] = 'Moodle DB nosaukums';
+$strings['user_filter'] = 'Filtrs lietotājiem';
+$strings['user_filter_help'] = 'Importēt tikai tos lietotājus, kuru lietotājvārds sākas ar šo virkni.<br>Arī kursu importēšana ir atkarīga no šī iestatījuma, jo tiek importēti tikai tie kursi, kuros ir reģistrēti lietotāji ar šo prefiksu.';
+$strings['url_id'] = 'URL ID';
+$strings['url_id_help'] = 'Piekļuves URL ID, kurā saglabāt kursus, lietotājus un sesijas (ja tiek izmantots multi-url).';
+$strings['moodle_path'] = 'Moodledata ceļš';
+$strings['moodle_path_help'] = 'Moodledata mapes ceļš. Parasti kaut kas līdzīgs <pre>/var/www/moodledata</pre>';
+
+// Tasks
+$strings['UsersTask'] = 'Lietotāji';
+$strings['CourseCategoriesTask'] = 'Kursu kategorijas';
+$strings['CoursesTask'] = 'Kursi';
+$strings['CourseSectionsTask'] = 'Kursu sadaļas';
+$strings['CourseModulesLessonTask'] = 'Kursu moduļi: Nodarbības';
+$strings['LessonPagesTask'] = 'Nodarbību lapas';
+$strings['LessonPagesDocumentTask'] = 'Nodarbību lapas: Dokumenti';
+$strings['FilesForLessonPagesTask'] = 'Faili nodarbību lapām';
+$strings['LessonPagesQuizTask'] = 'Nodarbību lapas: Jautājumi';
+$strings['LessonPagesQuizQuestionTask'] = 'Jautājumi jautājumu lapām';
+$strings['LessonAnswersTrueFalseTask'] = 'Atbildes uz Patiesi/Nepatiesi jautājumiem';
+$strings['LessonAnswersMultipleChoiceTask'] = 'Atbildes uz Vairāku izvēļu jautājumiem';
+$strings['LessonAnswersMultipleAnswerTask'] = 'Atbildes uz Vairāku atbilžu jautājumiem';
+$strings['LessonAnswersMatchingTask'] = 'Atbildes uz Atbilžu savienošanas jautājumiem';
+$strings['LessonAnswersEssayTask'] = 'Atbildes uz Esejas jautājumiem';
+$strings['LessonAnswersShortAnswerTask'] = 'Atbildes uz Īsās atbildes jautājumiem';
+$strings['FilesForLessonAnswersTask'] = 'Faili nodarbību atbildēm';
+$strings['CourseModulesQuizTask'] = 'Kursu moduļi: Testi';
+$strings['CQuizTask'] = 'C tests';
+$strings['RoleAssignmentsTask'] = 'Lomu piešķiršana';
+$strings['QuizzesTask'] = 'Testi';
+$strings['FilesForQuizzesTask'] = 'Faili testiem';
+$strings['QuestionCategoriesTask'] = 'Jautājumu kategorijas';
+$strings['QuestionsTask'] = 'Jautājumi';
+$strings['QuestionMultiChoiceSingleTask'] = 'Atbildes uz vairāku izvēļu jautājumiem (viens)';
+$strings['QuestionMultiChoiceMultipleTask'] = 'Atbildes uz vairāku izvēļu jautājumiem (vairāki)';
+$strings['QuestionsTrueFalseTask'] = 'Atbildes uz patiesi/nepatiesi jautājumiem';
+$strings['QuestionShortAnswerTask'] = 'Atbildes uz īsās atbildes jautājumiem';
+$strings['CourseModulesScormTask'] = 'SCORM kursi';
+$strings['ScormScoesTask'] = 'SCORM vienības';
+$strings['FilesForScormScoesTask'] = 'Faili SCORM vienībām';
+$strings['UserSessionsTask'] = 'Kursu sesijas lietotājiem';
+$strings['CourseIntroductionsTask'] = 'Kursu ievadi';
+$strings['FilesForCourseIntroductionsTask'] = 'Faili kursu ievadiem';
+$strings['FilesForCourseSectionsTask'] = 'Faili kursu sadaļām';
+$strings['CourseModulesUrlTask'] = 'Kursu moduļi: URL';
+$strings['UrlsTask'] = 'URL';
+$strings['SortSectionModulesTask'] = 'Kārtot moduļus sadaļā';
+$strings['UsersScormsViewTask'] = 'SCORM skati lietotājiem';
+$strings['UsersScormsProgressTask'] = 'SCORM progress';
+$strings['UsersLearnPathsTask'] = 'Mācību ceļu skati lietotājiem';
+$strings['UsersLearnPathsLessonTimerTask'] = 'Nodarbības taimeris mācību ceļu sadaļas sākuma laikam';
+$strings['QuizzesScoresTask'] = 'Atjaunināt testu rezultātus mācību ceļā';
+$strings['QuestionGapselectTask'] = 'Atbildes gapselect jautājumiem';
+$strings['UsersLearnPathsLessonBranchTask'] = 'Nodarbības zarojums uz kopējo laiku mācību ceļu dokumentos';
+$strings['UsersLearnPathsLessonAttemptsTask'] = 'Nodarbības mēģinājumi uz kopējo laiku mācību ceļu testos';
+$strings['UsersLearnPathsQuizzesTask'] = 'Testu mēģinājumi uz mācību ceļu testu mēģinājumiem';
+$strings['UsersQuizzesAttemptsTask'] = 'Testu mēģinājumi lietotājiem';
+$strings['UserQuestionAttemptsShortanswerTask'] = 'Jautājumu mēģinājumi lietotājiem īsajām atbildēm';
+$strings['UserQuestionAttemptsGapselectTask'] = 'Jautājumu mēģinājumi lietotājiem gapselect';
+$strings['UserQuestionAttemptsTruefalseTask'] = 'Jautājumu mēģinājumi lietotājiem truefalse';
+$strings['UsersLastLoginTask'] = 'Pēdējās pieteikšanās lietotājiem';
+$strings['TrackLoginTask'] = 'Pirmā pieteikšanās un pēdējā izrakstīšanās';
+$strings['TrackCourseAccessTask'] = 'Lietotāja piekļuve kursam';
+$strings['UserLearnPathsProgressScript'] = 'Atjaunināt progresu mācību ceļos lietotājiem.';
+$strings['UserScormsProgressScript'] = 'Atjaunināt progresu SCORM lietotājiem.';
+
+$strings['InstallError'] = 'Radās kļūda instalējot spraudni: %s';
+$strings['AdminIntro'] = 'Palaist Moodle migrācijas uzdevumus secībā. Katrs solis ir iespējots tikai pēc tam, kad tā vecāks solis ir pabeigts.';
+$strings['MoodleDatabase'] = 'Moodle datubāze';
+$strings['MoodledataPath'] = 'Moodledata ceļš';
+$strings['AccessUrlId'] = 'Piekļuves URL ID';
+$strings['Configured'] = 'Konfigurēts';
+$strings['NotConfigured'] = 'Nav konfigurēts';
+$strings['ConfigurePlugin'] = 'Konfigurēt spraudni';
+$strings['MissingRequiredDatabaseConfiguration'] = 'Konfigurējiet Moodle datubāzes serveri, lietotāju un datubāzes nosaukumu pirms migrācijas uzdevumu palaišanas.';
+$strings['MissingMoodledataPathWarning'] = 'Moodledata ceļš ir tukšs. Failu saistītie uzdevumi var neizdoties, līdz šis iestatījums ir konfigurēts.';
+$strings['InvalidMigrationAction'] = 'Nederīga migrācijas darbība.';
+$strings['InvalidSecurityToken'] = 'Nederīgs drošības marķieris. Lūdzu, atkārtoti ielādējiet lapu un mēģiniet vēlreiz.';
+$strings['MigrationTasks'] = 'Migrācijas uzdevumi';
+$strings['MaintenanceScripts'] = 'Uzturēšanas skripti';
+$strings['ExecutionOutput'] = 'Izpildes izvade';
+$strings['TaskAlreadyExecuted'] = 'Šis uzdevums vai skripts jau ir izpildīts.';
+$strings['SelectTaskToRun'] = 'Izvēlieties migrācijas uzdevumu, kuru palaist. Izvade parādīsies šeit.';

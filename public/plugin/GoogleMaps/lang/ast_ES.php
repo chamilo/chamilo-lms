@@ -1,0 +1,39 @@
+<?php
+
+$strings['plugin_title'] = 'Google Maps';
+$strings['plugin_comment'] = 'Amuesa un mapa de Google coles llugares de los usuarios guardaos en campos adicionales.';
+$strings['enable_api'] = "Cargar l'API de Google Maps";
+$strings['api_key'] = "Clave de l'API";
+$strings['extra_field_name'] = 'Nome del campu adicional';
+$strings['extra_field_name_help'] = "Introduz una o más variables de campos adicionales d'usuariu separtaes por comes. El mapa pue amosar hasta 5 campos. Exemplu: address, office_address, city";
+$strings['UsersCoordinatesMap'] = 'Mapa de llugares de los usuarios';
+$strings['UsersCoordinatesMapHelp'] = 'Esti mapa amuesa les llugares de los usuarios en base a los campos adicionales configuraos.';
+$strings['GoogleMapsAdminIntro'] = "Configura la clave de l'API de Google Maps y los campos adicionales d'usuariu que contengan direiciones o llugares.";
+$strings['GoogleMapsApi'] = 'API de Google Maps';
+$strings['ExtraFields'] = 'Campos adicionales';
+$strings['Access'] = 'Accesu';
+$strings['AdministratorsOnly'] = 'Namái alministradores';
+$strings['OpenMap'] = 'Abrir mapa';
+$strings['ConfigurePlugin'] = 'Configurar plugin';
+$strings['Configured'] = 'Configuráu';
+$strings['NotConfigured'] = 'Non configuráu';
+$strings['GoogleMapsApiDisabledWarning'] = "La carga de l'API de Google Maps ta desactivada na configuración del plugin.";
+$strings['GoogleMapsApiKeyMissingWarning'] = "Falta la clave de l'API de Google Maps.";
+$strings['ExtraFieldNameMissingWarning'] = "Nun se configuró nengún campu adicional d'usuariu.";
+$strings['ExtraFieldsNotFoundWarning'] = "Los siguientes campos adicionales d'usuariu nun s'atoparon: %s.";
+$strings['NoUserCoordinatesFound'] = "Nun s'atoparon llugares d'usuariu pa los campos adicionales configuraos.";
+$strings['ConfigureGoogleMapsFirst'] = "Configura y activa l'API de Google Maps enantes d'abrir el mapa.";
+
+$strings['map_provider'] = 'Fornidor del mapa';
+$strings['map_provider_help'] = "Seleiciona'l fornidor del mapa qu'usa'l plugin y el mapa social.";
+$strings['GoogleMapsProvider'] = 'Google Maps';
+$strings['OpenStreetMapProvider'] = 'OpenStreetMap';
+$strings['MapProvider'] = 'Fornidor del mapa';
+$strings['MapProviderConfiguration'] = 'Configuración del fornidor';
+$strings['default_latitude'] = 'Llatitú predeterminada';
+$strings['default_latitude_help'] = 'Llatitú central del mapa por defeutu. Úsase cuando nun hai marcadores disponibles.';
+$strings['default_longitude'] = 'Llonditú predeterminada';
+$strings['default_longitude_help'] = 'Llonditú central del mapa por defeutu. Úsase cuando nun hai marcadores disponibles.';
+$strings['default_zoom'] = 'Zoom predetermináu';
+$strings['default_zoom_help'] = 'Zoom predetermináu del mapa ente 1 y 20.';
+$strings['OpenStreetMapInfo'] = "OpenStreetMap nun requier clave d'API. Los marcadores namái con direición amuésense como enllaces de busca a nun ser que haya coordenaes disponibles.";

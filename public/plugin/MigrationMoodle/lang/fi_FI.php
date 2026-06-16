@@ -1,0 +1,95 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+$strings['plugin_title'] = 'Tuo Moodlesta';
+$strings['plugin_comment'] = 'Suorita tuontiprosessi Moodlen tietokannasta ja tiedostoista Chamilo-järjestelmään.';
+
+$strings['MoodlePassword'] = 'Moodle-salasana';
+$strings['UninstallError'] = 'Virhe liitännäisen poistamisessa.';
+
+$strings['db_host'] = 'Moodle-tietokannan isäntä';
+$strings['db_user'] = 'Moodle-tietokannan käyttäjä';
+$strings['db_password'] = 'Moodle-tietokannan salasana';
+$strings['db_name'] = 'Moodle-tietokannan nimi';
+$strings['user_filter'] = 'Käyttäjäsuodatin';
+$strings['user_filter_help'] = 'Tuo vain käyttäjät, joiden käyttäjätunnus alkaa tällä merkkijonolla.<br>Kurssien tuontiin vaikuttaa myös tämä asetus, sillä se tuo vain kurssit, joihin on ilmoittautunut käyttäjiä tällä käyttäjätunnuksen etuliitteellä.';
+$strings['url_id'] = 'URL-tunniste';
+$strings['url_id_help'] = 'Käyttöoikeus-URL-tunniste, johon kurssit, käyttäjät ja istunnot tallennetaan (jos käytetään multi-url-ominaisuutta).';
+$strings['moodle_path'] = 'Moodledata-polku';
+$strings['moodle_path_help'] = 'Moodledata-kansion polku. Yleensä muotoa <pre>/var/www/moodledata</pre>';
+
+// Tasks
+$strings['UsersTask'] = 'Käyttäjät';
+$strings['CourseCategoriesTask'] = 'Kurssikategoriat';
+$strings['CoursesTask'] = 'Kurssit';
+$strings['CourseSectionsTask'] = 'Kurssiosiot';
+$strings['CourseModulesLessonTask'] = 'Kurssimoduulit: Oppitunnit';
+$strings['LessonPagesTask'] = 'Oppituntisivut';
+$strings['LessonPagesDocumentTask'] = 'Oppituntisivut: Asiakirjat';
+$strings['FilesForLessonPagesTask'] = 'Tiedostot oppituntisivuille';
+$strings['LessonPagesQuizTask'] = 'Oppituntisivut: Kysymykset';
+$strings['LessonPagesQuizQuestionTask'] = 'Kysymykset kysymyssivuille';
+$strings['LessonAnswersTrueFalseTask'] = 'Vastaukset tosi/epätosi-kysymyksiin';
+$strings['LessonAnswersMultipleChoiceTask'] = 'Vastaukset monivalintakysymyksiin';
+$strings['LessonAnswersMultipleAnswerTask'] = 'Vastaukset monivastauskysymyksiin';
+$strings['LessonAnswersMatchingTask'] = 'Vastaukset vastinparikysymyksiin';
+$strings['LessonAnswersEssayTask'] = 'Vastaukset essee-kysymyksiin';
+$strings['LessonAnswersShortAnswerTask'] = 'Vastaukset lyhytvastauskysymyksiin';
+$strings['FilesForLessonAnswersTask'] = 'Tiedostot oppituntivastauksiin';
+$strings['CourseModulesQuizTask'] = 'Kurssimoduulit: Kokeet';
+$strings['CQuizTask'] = 'C-kokeet';
+$strings['RoleAssignmentsTask'] = 'Roolimääritykset';
+$strings['QuizzesTask'] = 'Kokeet';
+$strings['FilesForQuizzesTask'] = 'Tiedostot kokeisiin';
+$strings['QuestionCategoriesTask'] = 'Kysymyskategoriat';
+$strings['QuestionsTask'] = 'Kysymykset';
+$strings['QuestionMultiChoiceSingleTask'] = 'Vastaukset monivalintakysymyksiin (yksi)';
+$strings['QuestionMultiChoiceMultipleTask'] = 'Vastaukset monivalintakysymyksiin (useita)';
+$strings['QuestionsTrueFalseTask'] = 'Vastaukset tosi/epätosi-kysymyksiin';
+$strings['QuestionShortAnswerTask'] = 'Vastaukset lyhytvastauskysymyksiin';
+$strings['CourseModulesScormTask'] = 'SCORM-kurssit';
+$strings['ScormScoesTask'] = 'SCORM-kohdat';
+$strings['FilesForScormScoesTask'] = 'Tiedostot SCORM-kohdille';
+$strings['UserSessionsTask'] = 'Kurssi-istunnot käyttäjille';
+$strings['CourseIntroductionsTask'] = 'Kurssien esittelytekstit';
+$strings['FilesForCourseIntroductionsTask'] = 'Tiedostot kurssien esittelyteksteille';
+$strings['FilesForCourseSectionsTask'] = 'Tiedostot kurssiosioille';
+$strings['CourseModulesUrlTask'] = 'Kurssimoduulit: URL-osoitteet';
+$strings['UrlsTask'] = 'URL-osoitteet';
+$strings['SortSectionModulesTask'] = 'Lajittele moduulit osiossa';
+$strings['UsersScormsViewTask'] = 'SCORM-katselukerrat käyttäjille';
+$strings['UsersScormsProgressTask'] = 'SCORM-edistyminen';
+$strings['UsersLearnPathsTask'] = 'Oppimispolkujen katselukerrat käyttäjille';
+$strings['UsersLearnPathsLessonTimerTask'] = 'Oppitunnin ajastin oppimispolkujen osion aloitusaikaan';
+$strings['QuizzesScoresTask'] = 'Päivitä tehtävien pisteet oppimispolussa';
+$strings['QuestionGapselectTask'] = 'Vastaukset aukon valinta -kysymyksiin';
+$strings['UsersLearnPathsLessonBranchTask'] = 'Oppitunnin haara kokonaisaikaan oppimispolkujen dokumenteissa';
+$strings['UsersLearnPathsLessonAttemptsTask'] = 'Oppitunnin yritykset kokonaisaikaan oppimispolkujen tehtävissä';
+$strings['UsersLearnPathsQuizzesTask'] = 'Tehtävien yritykset oppimispolkujen tehtävien yrityksiksi';
+$strings['UsersQuizzesAttemptsTask'] = 'Käyttäjien tehtävien yritykset';
+$strings['UserQuestionAttemptsShortanswerTask'] = 'Käyttäjien kysymysyritykset lyhytvastaus-tyypille';
+$strings['UserQuestionAttemptsGapselectTask'] = 'Käyttäjien kysymysyritykset aukon valinta -tyypille';
+$strings['UserQuestionAttemptsTruefalseTask'] = 'Käyttäjien kysymysyritykset tosi/epätosi-tyypille';
+$strings['UsersLastLoginTask'] = 'Viimeisimmät kirjautumiset käyttäjille';
+$strings['TrackLoginTask'] = 'Ensimmäinen kirjautuminen ja viimeinen uloskirjautuminen';
+$strings['TrackCourseAccessTask'] = 'Käyttäjän pääsy kurssille';
+$strings['UserLearnPathsProgressScript'] = 'Päivitä edistyminen oppimispoluissa käyttäjille.';
+$strings['UserScormsProgressScript'] = 'Päivitä edistyminen SCORMeissa käyttäjille.';
+
+$strings['InstallError'] = 'Virhe liitännäisen asennuksessa: %s';
+$strings['AdminIntro'] = 'Suorita Moodlen migraatiotehtävät järjestyksessä. Jokainen vaihe on käytettävissä vasta kun edellinen vaihe on suoritettu.';
+$strings['MoodleDatabase'] = 'Moodle-tietokanta';
+$strings['MoodledataPath'] = 'Moodledata-polku';
+$strings['AccessUrlId'] = 'Pääsylinkin tunnus';
+$strings['Configured'] = 'Määritetty';
+$strings['NotConfigured'] = 'Ei määritetty';
+$strings['ConfigurePlugin'] = 'Määritä liitännäinen';
+$strings['MissingRequiredDatabaseConfiguration'] = 'Määritä Moodlen tietokannan isäntä, käyttäjä ja tietokannan nimi ennen migraatiotehtävien suorittamista.';
+$strings['MissingMoodledataPathWarning'] = 'Moodledata-polku on tyhjä. Tiedostoihin liittyvät tehtävät voivat epäonnistua, kunnes tämä asetus on määritetty.';
+$strings['InvalidMigrationAction'] = 'Virheellinen migraatiotoiminto.';
+$strings['InvalidSecurityToken'] = 'Virheellinen suojaustoken. Lataa sivu uudelleen ja yritä uudelleen.';
+$strings['MigrationTasks'] = 'Migraatiotehtävät';
+$strings['MaintenanceScripts'] = 'Ylläpitokomentosarjat';
+$strings['ExecutionOutput'] = 'Suorituksen tuloste';
+$strings['TaskAlreadyExecuted'] = 'Tämä tehtävä tai komentosarja on jo suoritettu.';
+$strings['SelectTaskToRun'] = 'Valitse suoritettava migraatiotehtävä. Tuloste näkyy tässä.';

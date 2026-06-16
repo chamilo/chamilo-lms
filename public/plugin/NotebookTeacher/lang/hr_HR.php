@@ -13,3 +13,7 @@ $strings['NoNotebookFilter'] = 'Nema bilješki stvorenih s trenutnim filtrom';
 $strings['NoNotebook'] = 'Nema bilješki stvorenih u sustavu';
 $strings['NoNotebookUser'] = 'Nema bilješki za ovog studenta';
 $strings['NotebookNoStudentAssigned'] = 'Bilješke bez dodijeljenih studenata';
+
+$strings['TeacherNotesHelp'] = 'Stvaranje privatnih bilješki nastavnika povezanih s polaznicima na ovom tečaju.';
+$strings['CurrentFilter'] = 'Trenutni filtar';
+$strings['EmptyStateHelp'] = 'Stvorite novu bilješku ili promijenite filtar polaznika.';

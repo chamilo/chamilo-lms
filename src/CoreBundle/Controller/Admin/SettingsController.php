@@ -403,6 +403,13 @@ class SettingsController extends BaseController
 
         if ($isPartial) {
             $payload = $request->request->all($form->getName());
+            $payload = $this->completeMissingExpandedMultipleChoicesForPartialSubmit(
+                $form,
+                $manager,
+                $namespace,
+                $keyword,
+                $payload
+            );
             $form->submit($payload, false);
         } else {
             $form->handleRequest($request);
@@ -601,6 +608,50 @@ class SettingsController extends BaseController
                 $settings->remove($name);
             }
         }
+    }
+
+    private function completeMissingExpandedMultipleChoicesForPartialSubmit(
+        FormInterface $form,
+        SettingsManager $manager,
+        string $namespace,
+        string $keyword,
+        array $payload
+    ): array {
+        $keyword = trim($keyword);
+        if ('' === $keyword) {
+            return $payload;
+        }
+
+        $settingsFromKeyword = $manager->getParametersFromKeywordOrderedByCategory($keyword);
+        $parameterList = $settingsFromKeyword[$namespace] ?? [];
+
+        if (!\is_array($parameterList)) {
+            return $payload;
+        }
+
+        foreach ($parameterList as $parameter) {
+            if (!$parameter instanceof SettingsCurrent) {
+                continue;
+            }
+
+            $variable = $parameter->getVariable();
+
+            if (\array_key_exists($variable, $payload) || !$form->has($variable)) {
+                continue;
+            }
+
+            $fieldConfig = $form->get($variable)->getConfig();
+            $isExpanded = true === $fieldConfig->getOption('expanded', false);
+            $isMultiple = true === $fieldConfig->getOption('multiple', false);
+
+            if (!$isExpanded || !$isMultiple) {
+                continue;
+            }
+
+            $payload[$variable] = [];
+        }
+
+        return $payload;
     }
 
     /**

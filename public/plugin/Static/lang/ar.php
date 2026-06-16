@@ -9,3 +9,4 @@ $strings['plugin_comment'] = 'عرض محتوى HTML ثابت.';
 $strings['block_title'] = 'عنوان الكتلة';
 
 //$strings['title'] = "Title";
+$strings['content'] = 'المحتوى';

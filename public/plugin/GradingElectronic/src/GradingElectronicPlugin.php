@@ -45,6 +45,7 @@ class GradingElectronicPlugin extends Plugin
     public function install()
     {
         $this->setUpExtraFields();
+        $this->setUpDatabaseTables();
     }
 
     /**
@@ -798,6 +799,79 @@ class GradingElectronicPlugin extends Plugin
         if ($courseHoursField) {
             $cExtraField->delete($courseHoursField['id']);
         }
+    }
+
+
+    /**
+     * Create plugin-specific migration support tables.
+     *
+     * These tables keep custom grading/tracking structures outside the core schema.
+     * They intentionally use generic plugin table names instead of the legacy table names.
+     */
+    private function setUpDatabaseTables(): void
+    {
+        Database::query(<<<'SQL'
+CREATE TABLE IF NOT EXISTS plugin_grading_electronic_lp_completion (
+    id BIGINT AUTO_INCREMENT NOT NULL,
+    course_id INT NOT NULL,
+    user_id BIGINT NOT NULL,
+    lp_id INT NOT NULL,
+    completion_status VARCHAR(250) NOT NULL,
+    INDEX idx_pge_lp_completion_course_user_lp (course_id, user_id, lp_id),
+    INDEX idx_pge_lp_completion_lp (lp_id),
+    PRIMARY KEY(id)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC
+SQL);
+
+        Database::query(<<<'SQL'
+CREATE TABLE IF NOT EXISTS plugin_grading_electronic_lp_schedule (
+    id INT AUTO_INCREMENT NOT NULL,
+    course_id BIGINT NOT NULL,
+    lp_id BIGINT NOT NULL,
+    title VARCHAR(100) DEFAULT NULL,
+    week_day VARCHAR(100) DEFAULT NULL,
+    INDEX idx_pge_lp_schedule_course_lp (course_id, lp_id),
+    PRIMARY KEY(id)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC
+SQL);
+
+        Database::query(<<<'SQL'
+CREATE TABLE IF NOT EXISTS plugin_grading_electronic_forum_thread_comment (
+    id BIGINT AUTO_INCREMENT NOT NULL,
+    sender_user_id BIGINT NOT NULL,
+    receiver_user_id BIGINT NOT NULL,
+    forum_id BIGINT NOT NULL,
+    thread_id BIGINT NOT NULL,
+    comment BLOB NOT NULL,
+    INDEX idx_pge_forum_thread_comment_forum_thread (forum_id, thread_id),
+    INDEX idx_pge_forum_thread_comment_receiver (receiver_user_id),
+    INDEX idx_pge_forum_thread_comment_sender (sender_user_id),
+    PRIMARY KEY(id)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC
+SQL);
+
+        Database::query(<<<'SQL'
+CREATE TABLE IF NOT EXISTS plugin_grading_electronic_user_session_tracking (
+    id BIGINT AUTO_INCREMENT NOT NULL,
+    user_id BIGINT NOT NULL,
+    session_time VARCHAR(200) NOT NULL,
+    is_active INT NOT NULL DEFAULT 1,
+    INDEX idx_pge_user_session_tracking_user_active (user_id, is_active),
+    PRIMARY KEY(id)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC
+SQL);
+
+        Database::query(<<<'SQL'
+CREATE TABLE IF NOT EXISTS plugin_grading_electronic_unregistration_log (
+    id BIGINT AUTO_INCREMENT NOT NULL,
+    user_id INT NOT NULL,
+    course_id INT NOT NULL,
+    deleted_at_legacy VARCHAR(500) NOT NULL,
+    last_access_legacy VARCHAR(500) NOT NULL,
+    INDEX idx_pge_unregistration_user_course (user_id, course_id),
+    PRIMARY KEY(id)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC
+SQL);
     }
 
 

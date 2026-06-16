@@ -9731,6 +9731,9 @@ msgstr "Bilaketaren emaitzak honakoetarako:"
 msgid "Select a file"
 msgstr "Hautatu fitxategi bat"
 
+msgid "Select a file to insert into the editor."
+msgstr "Hautatu fitxategi bat editorean txertatzeko."
+
 msgid "Warning - The FAQ file, located in the /home/ directory of your portal, is not writable. Your text will not be saved until the file permissions are changed."
 msgstr "Abisua - Zure plataformako /home/ direktorioan dagoen FAQ fitxategian ezin da idatzi. Fitxategiaren baimenak aldatu arte ez da zuk idatzitako testua gordeko."
 
@@ -15911,6 +15914,9 @@ msgstr "Data eta ordua"
 msgid "Item"
 msgstr "Elementua"
 
+msgid "Items"
+msgstr "Elementuak"
+
 msgid "Configure Dashboard Plugin"
 msgstr "Konfiguratu kontrol paneleko plugina"
 
@@ -17164,6 +17170,18 @@ msgstr "Saioak taldean"
 
 msgid "Courses in group"
 msgstr "Ikastaroak taldean"
+
+msgid "Courses on the platform"
+msgstr "Plataformako ikastaroak"
+
+msgid "%s courses"
+msgstr "%s ikastaro"
+
+msgid "%s sessions"
+msgstr "%s saio"
+
+msgid "Search by title or code"
+msgstr "Bilatu izenburuaren edo kodearen arabera"
 
 msgid "Users in group"
 msgstr "Erabiltzaileak taldean"
@@ -32174,6 +32192,9 @@ msgstr "Lanarekin"
 msgid "Allowed file formats: %s"
 msgstr "Onartutako fitxategi-formatuak: %s"
 
+msgid "File manager"
+msgstr "Fitxategi-kudeatzailea"
+
 msgid "File type not allowed. Allowed extensions: %s"
 msgstr "Fitxategi-mota ez dago onartua. Hedapen onartuak: %s"
 
@@ -32415,7 +32436,7 @@ msgid "If enabled, the gradebook will give a learner 100% when present at least 
 msgstr "Gaituta badago, kalifikazio-liburuak ikasleari %100 emango dio behinik behin presente badago."
 
 msgid "AI feedback"
-msgstr "AI feedback"
+msgstr "AI iruzkina"
 
 msgid "Prompt"
 msgstr "Prompt"
@@ -33887,6 +33908,2583 @@ msgstr "Ongi etorri"
 msgid "Welcome to Chamilo"
 msgstr "Ongi etorri Chamilorat"
 
+msgid "Check all unanswered questions below"
+msgstr "Egiaztatu beheko erantzun gabeko galdera guztiak"
+
 msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
 msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Baldin Chamilo lehen aldiz erabiltzen baduzu, ziurtatu alboko menua egiaztatzen duzula haren ezaugarri askoak aurkitzeko. Laguntza behar baduzu, <a href=\"https://docs.chamilo.org\">gure dokumentazio ofiziala</a> lagunduko dizu dokumentazio estandarrentzat, eta gure <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">foroa linean</a> ideiaak partekatzen eta beste Chamilo erabiltzaile batzuen erantzunak aurkitzen lagunduko dizu."
+
+msgid "Change password"
+msgstr "Aldatu pasahitza"
+
+msgid "Newest first"
+msgstr "Berrienak lehenengo"
+
+msgid "Oldest first"
+msgstr "Zaharrenak lehenengo"
+
+msgid "Title A–Z"
+msgstr "Izenburua A–Z"
+
+msgid "Title Z–A"
+msgstr "Izenburua Z–A"
+
+msgid "Send test email"
+msgstr "Bidali proba-mezua"
+
+msgid "Show teachers"
+msgstr "Erakutsi irakasleak"
+
+msgid "Hide teachers"
+msgstr "Ezkutatu irakasleak"
+
+msgid "Delete exercise attempts"
+msgstr "Ezabatu ariketen saiakerak"
+
+msgid "Message sent successfully."
+msgstr "Mezua ongi bidali da."
+
+msgid "You cannot create a new course right now."
+msgstr "Ezin duzu ikastaro berria sortu une honetan."
+
+msgid "Unable to verify whether you can create a new course right now."
+msgstr "Ezin izan da egiaztatu ikastaro berria sortu dezakezun une honetan."
+
+msgid "Please try again later or contact the administrator."
+msgstr "Saiatu berriro geroago edo jarri harremanetan administratzailearekin."
+
+msgid "You cannot create more courses at this time."
+msgstr "Ezin duzu ikastaro gehiago sortu une honetan."
+
+msgid "You already manage %d courses and your active service allows up to %d. To create another course, you need a higher service limit or reduce your current active courses."
+msgstr "Dagoeneko %d ikastaro kudeatzen dituzu eta zure zerbitzu aktiboak gehienez %d onartzen ditu. Beste ikastaro bat sortzeko, zerbitzu-muga handiagoa behar duzu edo zure uneko ikastaro aktiboak murriztu behar dituzu."
+
+msgid "You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now."
+msgstr "Dagoeneko %d ikastaro kudeatzen dituzu eta plataformak une honetan gehienez %d onartzen ditu zure konturako. Ezin duzu ikastaro gehiago sortu une honetan."
+
+msgid "Add a class"
+msgstr "Gehitu klase bat"
+
+msgid "Search classes"
+msgstr "Bilatu klaseak"
+
+msgid "No classes found"
+msgstr "Ez da klaserik aurkitu"
+
+msgid "Import classes"
+msgstr "Inportatu klaseak"
+
+msgid "Class users"
+msgstr "Klaseko erabiltzaileak"
+
+msgid "%s classes imported"
+msgstr "%s klase inportatu dira"
+
+msgid "%s user-class links imported"
+msgstr "%s erabiltzaile-klase lotura inportatu dira"
+
+msgid "Hide comments"
+msgstr "Ezkutatu iruzkinak"
+
+msgid "Loading comments..."
+msgstr "Iruzkinak kargatzen..."
+
+msgid "No comments yet."
+msgstr "Ez dago iruzkinik oraindik."
+
+msgid "A user with this username already exists"
+msgstr "Erabiltzaile-izen hau duen erabiltzaile bat dagoeneko existitzen da"
+
+msgid "Manage meetings, review recordings and update course-wide BBB settings from one place."
+msgstr "Kudeatu bilerak, berrikusi grabazioak eta eguneratu ikastaro osoko BBB ezarpenak leku bakar batetik."
+
+msgid "Review the current defaults and propagate them to every course when needed."
+msgstr "Berrikusi uneko lehenetsiak eta hedatu ikastaro guztietara behar denean."
+
+msgid "Filter the list by meeting date range."
+msgstr "Iragazi zerrenda bilera-data tartearen arabera."
+
+msgid "Review meeting history, participants and recording actions."
+msgstr "Berrikusi bilera-historia, parte-hartzaileak eta grabazio-ekintzak."
+
+msgid "Participants"
+msgstr "Parte-hartzaileak"
+
+msgid "CountUsers"
+msgstr "CountUsers"
+
+msgid "No data found"
+msgstr "Ez da daturik aurkitu"
+
+msgid "My justifications"
+msgstr "Nire justifikazioak"
+
+msgid "My services"
+msgstr "Nire zerbitzuak"
+
+msgid "Extra menu"
+msgstr "Menu gehigarria"
+
+msgid "Pending tests"
+msgstr "Zain dauden probak"
+
+msgid "No specific language"
+msgstr "Ez dago hizkuntza zehatzik"
+
+msgid "Source Chamilo version"
+msgstr "Iturburu Chamilo bertsioa"
+
+msgid "Exporting..."
+msgstr "Esportatzen..."
+
+msgid "Autosaved drafts available"
+msgstr "Autogordetako zirriborroak eskuragarri"
+
+msgid "Hide drafts"
+msgstr "Ezkutatu zirriborroak"
+
+msgid "Show drafts"
+msgstr "Erakutsi zirriborroak"
+
+msgid "Drafts are stored only in this browser and are removed after saving the document."
+msgstr "Zirriborroak nabigatzaile honetan bakarrik gordetzen dira eta dokumentua gordetzean ezabatzen dira."
+
+msgid "Last saved"
+msgstr "Azken gordetzea"
+
+msgid "Restore draft"
+msgstr "Berrezarri zirriborroa"
+
+msgid "Delete draft"
+msgstr "Ezabatu zirriborroa"
+
+msgid "Information about indexing document content"
+msgstr "Dokumentu-edukiaren indexazioari buruzko informazioa"
+
+msgid "When enabled, the document text is indexed by the search engine so users can find it from platform search."
+msgstr "Gaituta dagoenean, dokumentu-testua bilaketa-motorrak indexatzen du erabiltzaileek plataformaren bilaketatik aurki dezaten."
+
+msgid "The editor is not available."
+msgstr "Editorea ez dago erabilgarri."
+
+msgid "Please place the cursor inside a paragraph first."
+msgstr "Jarri kurtsorea lehenik paragrafo baten barruan."
+
+msgid "The selected paragraph is empty."
+msgstr "Hautatutako paragrafoa hutsik dago."
+
+msgid "Loading failed."
+msgstr "Kargatzeak huts egin du."
+
+msgid "Add introduction"
+msgstr "Gehitu sarrera"
+
+msgid "Course type"
+msgstr "Ikastaro mota"
+
+msgid "Choose whether this course uses the standard platform limits or benefits from a purchased service."
+msgstr "Aukeratu ikastaro honek plataformaren muga estandarrak erabiliko dituen edo erositako zerbitzu baten onura jasoko duen."
+
+msgid "Standard course"
+msgstr "Ikastaro estandarra"
+
+msgid "Use the standard platform limits."
+msgstr "Erabili plataformaren muga estandarrak."
+
+msgid "Selected"
+msgstr "Hautatuta"
+
+msgid "Hosting limit"
+msgstr "Ostatu-muga"
+
+msgid "Document quota"
+msgstr "Dokumentu-kuota"
+
+msgid "The standard course limit has been reached."
+msgstr "Ikastaro estandarraren muga lortu da."
+
+msgid "Use the benefits granted by this service."
+msgstr "Erabili zerbitzu honek ematen dituen onurak."
+
+msgid "Courses with these benefits"
+msgstr "Onura hauek dituzten ikastaroak"
+
+msgid "Active service"
+msgstr "Zerbitzu aktiboa"
+
+msgid "Buy service"
+msgstr "Erosi zerbitzua"
+
+msgid "Select an available course type before creating the course."
+msgstr "Hautatu ikastaro mota erabilgarri bat ikastaroa sortu aurretik."
+
+msgid "users"
+msgstr "erabiltzaile"
+
+msgid "You need to buy this service before using these benefits."
+msgstr "Erosi zerbitzu hau onura hauek erabili aurretik."
+
+msgid "You already used all courses available with this service."
+msgstr "Zerbitzu honekin erabilgarri dauden ikastaro guztiak erabili dituzu."
+
+msgid "This option is not available."
+msgstr "Aukera hau ez dago erabilgarri."
+
+msgid "This field is required"
+msgstr "Eremu hau derrigorrezkoa da"
+
+msgid "Show less"
+msgstr "Erakutsi gutxiago"
+
+msgid "Show full description"
+msgstr "Erakutsi deskribapen osoa"
+
+msgid "Virtual keyboard"
+msgstr "Teklatu birtuala"
+
+msgid "Backspace"
+msgstr "Atzera-tekla"
+
+msgid "Space"
+msgstr "Zuriunea"
+
+msgid "Learning path only visible to selected learners"
+msgstr "Ikaskuntza-bidea ikasle hautatuentzat soilik ikusgai"
+
+msgid "Create course"
+msgstr "Sortu ikastaroa"
+
+msgid "Tour"
+msgstr "Ibilbidea"
+
+msgid "Are you sure you want to delete this comment?"
+msgstr "Ziur zaude iruzkin hau ezabatu nahi duzula?"
+
+msgid "No posts found"
+msgstr "Ez da argitalpenik aurkitu"
+
+msgid "No communities"
+msgstr "Ez dago komunitaterik"
+
+msgid "No friends found"
+msgstr "Ez da lagunik aurkitu"
+
+msgid "Visual overview of your skills"
+msgstr "Zure trebetasunen ikuspegi orokorra"
+
+msgid "Compare your progress"
+msgstr "Konparatu zure aurrerapena"
+
+msgid "Please enter a search term."
+msgstr "Sartu bilaketa-termino bat."
+
+msgid "Enter captcha code"
+msgstr "Sartu captcha kodea"
+
+msgid "Refresh captcha"
+msgstr "Freskatu captcha"
+
+msgid "Captcha is temporarily blocked. Please try again later."
+msgstr "Captcha aldi baterako blokeatuta dago. Saiatu berriro geroago."
+
+msgid "Item Details"
+msgstr "Elementuaren xehetasunak"
+
+msgid "Open File"
+msgstr "Ireki fitxategia"
+
+msgid "Selection"
+msgstr "Hautapena"
+
+msgid "Remove selection context"
+msgstr "Kendu hautapen-testuingurua"
+
+msgid "Source document"
+msgstr "Jatorrizko dokumentua"
+
+msgid "Use the current course context"
+msgstr "Erabili uneko ikastaroaren testuingurua"
+
+msgid "Loading documents..."
+msgstr "Dokumentuak kargatzen..."
+
+msgid "No compatible PDF or TXT document was found in this course."
+msgstr "Ez da PDF edo TXT dokumentu bateragarririk aurkitu ikastaro honetan."
+
+msgid "Select a PDF or TXT document to generate terms only from that document."
+msgstr "Hautatu PDF edo TXT dokumentu bat terminoak dokumentu horretatik soilik sortzeko."
+
+msgid "Confidentiality warning"
+msgstr "Konfidentzialtasun-abisua"
+
+msgid "When a document is selected, the prompt is fixed so the generation uses only that document content."
+msgstr "Dokumentu bat hautatzen denean, gonbita finkatzen da, beraz, sorrera dokumentuaren edukia soilik erabiliz egiten da."
+
+msgid "No document-processing AI providers available."
+msgstr "Ez dago dokumentuak prozesatzeko AI hornitzailerik erabilgarri."
+
+msgid "Failed to save signature. Please try again."
+msgstr "Sinadura gordetzeak huts egin du. Saiatu berriro."
+
+msgid "Select and move"
+msgstr "Hautatu eta mugitu"
+
+msgid "Freehand"
+msgstr "Esku hutsez"
+
+msgid "Stroke"
+msgstr "Trazua"
+
+msgid "Fill"
+msgstr "Bete"
+
+msgid "Import SVG"
+msgstr "Inportatu SVG"
+
+msgid "Import image"
+msgstr "Inportatu irudia"
+
+msgid "Click the drawing area to place this text"
+msgstr "Egin klik marrazketa-eremuan testu hau kokatzeko"
+
+msgid "Draw a new SVG, import an existing SVG or embed an image, then save it as a reusable document."
+msgstr "Marraztu SVG berri bat, inportatu lehendik dagoen SVG bat edo txertatu irudi bat, eta gorde berrerabilgarria den dokumentu gisa."
+
+msgid "Use Select and move to reposition or resize elements added in this editor."
+msgstr "Erabili Hautatu eta mugitu aukera editore honetan gehitutako elementuak birkokatzeko edo tamaina aldatzeko."
+
+msgid "Stroke width"
+msgstr "Trazu-zabalera"
+
+msgid "Transparent fill"
+msgstr "Betegarri gardena"
+
+msgid "Invalid id"
+msgstr "ID baliogabea"
+
+msgid "Unable to load the drawing"
+msgstr "Ezin da marrazkia kargatu"
+
+msgid "Only PNG, JPG, WEBP or GIF images are supported."
+msgstr "PNG, JPG, WEBP edo GIF irudiak soilik onartzen dira."
+
+msgid "Unable to read the image file."
+msgstr "Ezin da irudi-fitxategia irakurri."
+
+msgid "Only SVG files are supported."
+msgstr "SVG fitxategiak soilik onartzen dira."
+
+msgid "The SVG file is empty or invalid."
+msgstr "SVG fitxategia hutsik dago edo baliogabea da."
+
+msgid "Unable to read the SVG file."
+msgstr "Ezin da SVG fitxategia irakurri."
+
+msgid "The drawing is empty or invalid."
+msgstr "Marrazkia hutsik dago edo baliogabea da."
+
+msgid "Unable to save the drawing"
+msgstr "Ezin da marrazkia gorde"
+
+msgid "Information about AI-assisted documents"
+msgstr "AI lagundutako dokumentuei buruzko informazioa"
+
+msgid "Location"
+msgstr "Kokapena"
+
+msgid "Cloud link"
+msgstr "Hodei-esteka"
+
+msgid "Add a link to a cloud document, such as Google Drive or Google Docs."
+msgstr "Gehitu esteka hodeiko dokumentu batera, Google Drive edo Google Docs bezalakoetara."
+
+msgid "Add cloud link"
+msgstr "Gehitu hodei-esteka"
+
+msgid "Document title"
+msgstr "Dokumentuaren izenburua"
+
+msgid "Document options change how uploaded files are processed after saving."
+msgstr "Dokumentu-aukerek kargatutako fitxategiak gordetzean nola prozesatzen diren zehazten dute."
+
+msgid "Information about uncompressing zip files"
+msgstr "ZIP fitxategiak deskonprimatzeari buruzko informazioa"
+
+msgid "When enabled, ZIP files are extracted into the current document folder after upload."
+msgstr "Gaituta dagoenean, ZIP fitxategiak kargatu ondoren uneko dokumentu-karpetan ateratzen dira."
+
+msgid "The title is required."
+msgstr "Izenburua beharrezkoa da."
+
+msgid "The URL is required."
+msgstr "URLa beharrezkoa da."
+
+msgid "The destination folder is missing."
+msgstr "Helburuko karpeta falta da."
+
+msgid "Unable to create cloud link."
+msgstr "Ezin da hodei-esteka sortu."
+
+msgid "Copy to My Files"
+msgstr "Kopiatu Nire fitxategietara"
+
+msgid "Used space"
+msgstr "Erabilitako espazioa"
+
+msgid "Available space"
+msgstr "Espazio erabilgarria"
+
+msgid "Available percentage"
+msgstr "Ehuneko erabilgarria"
+
+msgid "Cloud links cannot be downloaded."
+msgstr "Hodei-estekak ezin dira deskargatu."
+
+msgid "Could not copy the file to My Files"
+msgstr "Ezin izan da fitxategia Nire fitxategietara kopiatu"
+
+msgid "File copied to My Files"
+msgstr "Fitxategia Nire fitxategietara kopiatu da"
+
+msgid "Checking course creation options..."
+msgstr "Ikastaroa sortzeko aukerak egiaztatzen..."
+
+msgid "You cannot create more courses right now."
+msgstr "Ezin duzu ikastaro gehiago sortu une honetan."
+
+msgid "AI analyzer"
+msgstr "AI analizatzailea"
+
+msgid "Expand all"
+msgstr "Zabaldu denak"
+
+msgid "Collapse all"
+msgstr "Tolestu denak"
+
+msgid "Review your active service benefits, purchase history and available receipts."
+msgstr "Berrikusi zure zerbitzu aktiboen onurak, erosketa-historia eta eskuragarri dauden ordainagiriak."
+
+msgid "Active services"
+msgstr "Zerbitzu aktiboak"
+
+msgid "No active services"
+msgstr "Ez dago zerbitzu aktiborik"
+
+msgid "Valid until"
+msgstr "Baliozkoa arte"
+
+msgid "Recurring payment"
+msgstr "Ordainketa errepikakorra"
+
+msgid "Next charge"
+msgstr "Hurrengo kargua"
+
+msgid "Enable auto billing"
+msgstr "Gaitu fakturazio automatikoa"
+
+msgid "Cancel auto billing"
+msgstr "Utzi fakturazio automatikoa"
+
+msgid "Granted benefits"
+msgstr "Emandako onurak"
+
+msgid "Purchase history"
+msgstr "Erosketa-historia"
+
+msgid "No purchases yet"
+msgstr "Oraindik ez dago erosketarik"
+
+msgid "Product"
+msgstr "Produktua"
+
+msgid "Reference"
+msgstr "Erreferentzia"
+
+msgid "Amount"
+msgstr "Zenbatekoa"
+
+msgid "Receipt"
+msgstr "Ordainagiria"
+
+msgid "Unable to load your services right now."
+msgstr "Ezin dira zure zerbitzuak une honetan kargatu."
+
+msgid "Auto billing enabled"
+msgstr "Ordainketa automatikoa gaituta"
+
+msgid "Auto billing suspended"
+msgstr "Ordainketa automatikoa etenda"
+
+msgid "Auto billing cancelled"
+msgstr "Ordainketa automatikoa bertan behera utzita"
+
+msgid "Auto billing disabled"
+msgstr "Ordainketa automatikoa desgaituta"
+
+msgid "Cancel auto billing for this service?"
+msgstr "Ordainketa automatikoa bertan behera utzi zerbitzu honetarako?"
+
+msgid "Preview class members and courses"
+msgstr "Aurreikusi klaseko kideak eta ikastaroak"
+
+msgid "Please select a CSV file to import."
+msgstr "Hautatu CSV fitxategi bat inportatzeko."
+
+msgid "%d user-class links imported"
+msgstr "%d erabiltzaile-klase lotura inportatu dira"
+
+msgid "The following errors occurred during import:"
+msgstr "Errore hauek gertatu dira inportazioan:"
+
+msgid "CSV file"
+msgstr "CSV fitxategia"
+
+msgid "Remove user from all group-related entities if not in the list"
+msgstr "Kendu erabiltzailea taldearekin lotutako entitate guztietatik zerrendan ez badago"
+
+msgid "UserName"
+msgstr "Erabiltzaile-izena"
+
+msgid "ClassName"
+msgstr "Klase-izena"
+
+msgid "are required for each row."
+msgstr "beharrezkoak dira errenkada bakoitzerako."
+
+msgid "title"
+msgstr "izenburua"
+
+msgid "is required."
+msgstr "beharrezkoa da."
+
+msgid "description"
+msgstr "deskribapena"
+
+msgid "are optional."
+msgstr "aukerakoak dira."
+
+msgid "Are you sure you want to remove this user from the class?"
+msgstr "Ziur zaude erabiltzaile hau klasetik kendu nahi duzula?"
+
+msgid "Users in class"
+msgstr "Klaseko erabiltzaileak"
+
+msgid "Remove user"
+msgstr "Kendu erabiltzailea"
+
+msgid "Class not found"
+msgstr "Klasea ez da aurkitu"
+
+msgid "Class overview"
+msgstr "Klasearen ikuspegi orokorra"
+
+msgid "Back to classes"
+msgstr "Itzuli klasetara"
+
+msgid "Search members or courses"
+msgstr "Bilatu kideak edo ikastaroak"
+
+msgid "Search by name, email, username or course title"
+msgstr "Bilatu izenaren, helbide elektronikoaren, erabiltzaile-izenaren edo ikastaro-izenburuaren arabera"
+
+msgid "Class members"
+msgstr "Klaseko kideak"
+
+msgid "No email"
+msgstr "Ez dago helbide elektronikorik"
+
+msgid "No members found"
+msgstr "Ez da kiderik aurkitu"
+
+msgid "No courses found"
+msgstr "Ez da ikastarorik aurkitu"
+
+msgid "The end date must be after the start date."
+msgstr "Amaiera-datak hasiera-data baino geroago izan behar du."
+
+msgid "Always visible"
+msgstr "Beti ikusgai"
+
+msgid "No end date"
+msgstr "Ez dago amaiera-datarik"
+
+msgid "No restriction"
+msgstr "Ez dago murrizketarik"
+
+msgid "Missing learning path or course identifier"
+msgstr "Ikaskuntza-bidea edo ikastaroaren identifikatzailea falta da"
+
+msgid "Select a user or a group first"
+msgstr "Hautatu erabiltzaile edo talde bat lehenik"
+
+msgid "Remove all date restrictions for this learning path?"
+msgstr "Kendu data-murrizketa guztiak ikaskuntza-bide honetarako?"
+
+msgid "Advanced learning path access"
+msgstr "Ikaskuntza-bidearen sarbide aurreratua"
+
+msgid "Remove date restrictions"
+msgstr "Kendu data-murrizketak"
+
+msgid "Search by name, email, username or group"
+msgstr "Bilatu izenaren, helbide elektronikoaren, erabiltzaile-izenaren edo taldearen arabera"
+
+msgid "Edit user restriction"
+msgstr "Editatu erabiltzaile-murrizketa"
+
+msgid "Edit group restriction"
+msgstr "Editatu talde-murrizketa"
+
+msgid "Select a user or group"
+msgstr "Hautatu erabiltzaile edo talde bat"
+
+msgid "Save restriction"
+msgstr "Gorde murrizketa"
+
+msgid "members"
+msgstr "kideak"
+
+msgid "Create Assignment"
+msgstr "Sortu zeregina"
+
+msgid "The submission deadline has passed. You can no longer submit."
+msgstr "Bidalketa-epea igaro da. Ezin duzu gehiago bidali."
+
+msgid "Mailing cannot be combined with other recipients."
+msgstr "Posta ezin da beste hartzaile batzuekin konbinatu."
+
+msgid "Social map"
+msgstr "Gizarte-mapa"
+
+msgid "The map plugin is not enabled or configured."
+msgstr "Mapa-plugina ez dago gaituta edo konfiguratuta."
+
+msgid "Some configured extra fields were not found"
+msgstr "Konfiguratutako eremu gehigarri batzuk ez dira aurkitu"
+
+msgid "No user locations were found."
+msgstr "Ez da erabiltzaile-kokapenik aurkitu."
+
+msgid "OpenStreetMap needs coordinates to display an embedded marker. Address-only locations are listed below."
+msgstr "OpenStreetMap-ek koordenatuak behar ditu markatzaile txertatua erakusteko. Helbide-soileko kokapenak behean zerrendatzen dira."
+
+msgid "Locations"
+msgstr "Kokapenak"
+
+msgid "Open map"
+msgstr "Ireki mapa"
+
+msgid "Provider: OpenStreetMap"
+msgstr "Hornitzailea: OpenStreetMap"
+
+msgid "Provider: Google Maps"
+msgstr "Hornitzailea: Google Maps"
+
+msgid "Personal files"
+msgstr "Fitxategi pertsonalak"
+
+msgid "Upload image"
+msgstr "Kargatu irudia"
+
+msgid "Upload media"
+msgstr "Kargatu multimedia"
+
+msgid "Only image files are allowed in this upload screen."
+msgstr "Irudi-fitxategiak soilik onartzen dira karga-pantaila honetan."
+
+msgid "Only audio and video files are allowed in this upload screen."
+msgstr "Audio- eta bideo-fitxategiak soilik onartzen dira karga-pantaila honetan."
+
+msgid "Upload files to your personal storage."
+msgstr "Kargatu fitxategiak zure biltegi pertsonalera."
+
+msgid "Linked"
+msgstr "Estekatuta"
+
+msgid "No audio or video files were found in this folder."
+msgstr "Ez da audio- edo bideo-fitxategirik aurkitu karpeta honetan."
+
+msgid "No image files were found in this folder."
+msgstr "Ez da irudi-fitxategirik aurkitu karpeta honetan."
+
+msgid "No matching files were found in this folder."
+msgstr "Ez da bat datorren fitxategirik aurkitu karpeta honetan."
+
+msgid "This file type is not allowed in this upload screen."
+msgstr "Fitxategi-mota hau ez da onartzen karga-pantaila honetan."
+
+msgid "Manage your personal files and course documents."
+msgstr "Kudeatu zure fitxategi pertsonalak eta ikastaro-dokumentuak."
+
+msgid "DateValidity"
+msgstr "DateValidity"
+
+msgid "JustificationSaved"
+msgstr "JustificationSaved"
+
+msgid "ValidityDate"
+msgstr "ValidityDate"
+
+msgid "MyJustifications"
+msgstr "MyJustifications"
+
+msgid "Submission"
+msgstr "Bidalketa"
+
+msgid "Use the filters above to narrow the list."
+msgstr "Erabili goiko iragazkiak zerrenda murrizteko."
+
+msgid "You are not allowed to see this page."
+msgstr "Ez duzu baimenik orri hau ikusteko."
+
+msgid "plugin_title"
+msgstr "plugin_title"
+
+msgid "plugin_comment"
+msgstr "plugin_comment"
+
+msgid "Course tracking details"
+msgstr "Ikastaro-jarraipenaren xehetasunak"
+
+msgid "Course activity statistics"
+msgstr "Ikastaro-jardueren estatistikak"
+
+msgid "mobile_phone_number"
+msgstr "mobile_phone_number"
+
+msgid "Allowed template syntax"
+msgstr "Baimendutako txantiloi-sintaxia"
+
+msgid "Functions"
+msgstr "Funtzioak"
+
+msgid "Available variables depend on the template type, for example {{ user.getUsername() }} or {{ user.getEmail() }}."
+msgstr "Eskuragarri dauden aldagaiak txantiloi-motaren araberakoak dira, adibidez {{ user.getUsername() }} edo {{ user.getEmail() }}."
+
+msgid "For security reasons, any other Twig function, filter (such as filter, map, reduce or sort) or PHP call is blocked."
+msgstr "Segurtasun-arrazoiengatik, beste edozein Twig funtzio, iragazki (adibidez, filter, map, reduce edo sort) edo PHP dei blokeatuta dago."
+
+msgid "Global administrator"
+msgstr "Administratzaile globala"
+
+msgid "Session manager"
+msgstr "Saio-kudeatzailea"
+
+msgid "Human resources manager"
+msgstr "Giza baliabideen kudeatzailea"
+
+msgid "Course teacher"
+msgstr "Ikastaro-irakaslea"
+
+msgid "Course student"
+msgstr "Ikastaro-ikaslea"
+
+msgid "Platform reports"
+msgstr "Plataformaren txostenak"
+
+msgid "Security reports"
+msgstr "Segurtasun-txostenak"
+
+msgid "Course reports"
+msgstr "Ikastaro-txostenak"
+
+msgid "Gradebook reports"
+msgstr "Kalifikazio-liburuaren txostenak"
+
+msgid "Social reports"
+msgstr "Gizarte-txostenak"
+
+msgid "Exports"
+msgstr "Esportazioak"
+
+msgid "Reports about platform-wide usage, users, courses and sessions."
+msgstr "Plataforma osoaren erabilerari, erabiltzaileei, ikastaro eta saioei buruzko txostenak."
+
+msgid "Audit and security-sensitive reports."
+msgstr "Ikuskaritza- eta segurtasunari lotutako txostenak."
+
+msgid "Reports scoped to courses managed by the user."
+msgstr "Txostenak erabiltzaileak kudeatutako ikastaroetara mugatuta."
+
+msgid "Reports related to learner activity and follow-up."
+msgstr "Ikasleen jarduerari eta jarraipenari lotutako txostenak."
+
+msgid "Reports related to scores, certificates and gradebook data."
+msgstr "Puntuazio, ziurtagiri eta kalifikazio-liburuaren datuei lotutako txostenak."
+
+msgid "Reports and exports that generate downloadable files."
+msgstr "Deskargatzeko fitxategiak sortzen dituzten txostenak eta esportazioak."
+
+msgid "Main platform statistics dashboard."
+msgstr "Plataformaren estatistika-panel nagusia."
+
+msgid "Number of courses and course distribution report."
+msgstr "Ikastaro kopurua eta ikastaroen banaketa-txostena."
+
+msgid "Platform-wide access to course tools."
+msgstr "Ikastaro-tresnetarako plataforma-mailako sarbidea."
+
+msgid "Number of resources per tool."
+msgstr "Tresna bakoitzeko baliabide kopurua."
+
+msgid "Latest access to courses."
+msgstr "Ikastaroetara azken sarbidea."
+
+msgid "Course distribution by language."
+msgstr "Ikastaroen banaketa hizkuntzaren arabera."
+
+msgid "Course usage report."
+msgstr "Ikastaroen erabilera-txostena."
+
+msgid "Platform user count report."
+msgstr "Plataformako erabiltzaile kopuruaren txostena."
+
+msgid "Recent logins chart."
+msgstr "Azken saio-hasieren grafikoa."
+
+msgid "Login distribution by month."
+msgstr "Saio-hasieren banaketa hilabeteen arabera."
+
+msgid "Login distribution by day."
+msgstr "Saio-hasieren banaketa egunen arabera."
+
+msgid "Login distribution by hour."
+msgstr "Saio-hasieren banaketa orduen arabera."
+
+msgid "Users with profile picture."
+msgstr "Profil-argazkia duten erabiltzaileak."
+
+msgid "Login report filtered by date."
+msgstr "Dataren arabera iragazitako saio-hasieren txostena."
+
+msgid "Users who have not logged in recently."
+msgstr "Duela gutxi saioa hasi ez duten erabiltzaileak."
+
+msgid "Inactive or suspicious user accounts report."
+msgstr "Inaktibo edo susmagarri diren erabiltzaile-kontuen txostena."
+
+msgid "Users activity statistics."
+msgstr "Erabiltzaileen jarduera-estatistikak."
+
+msgid "Currently online users report."
+msgstr "Uneko online erabiltzaileen txostena."
+
+msgid "New user registrations over time."
+msgstr "Erabiltzaile berrien erregistroak denboran zehar."
+
+msgid "Course and session subscriptions over time."
+msgstr "Ikastaro eta saioetako harpidetzak denboran zehar."
+
+msgid "Duplicate user detection and maintenance report."
+msgstr "Erabiltzaile bikoiztuak detektatzeko eta mantentzeko txostena."
+
+msgid "Platform user/session statistics."
+msgstr "Plataformako erabiltzaile/saio estatistikak."
+
+msgid "Quarterly platform report."
+msgstr "Hiruhileko plataformaren txostena."
+
+msgid "Activities audit"
+msgstr "Jardueren auditoretza"
+
+msgid "Audit report for important administrative and platform activities."
+msgstr "Jarduera administratibo eta plataformako garrantzitsuen auditoretza-txostena."
+
+msgid "Social messages received report."
+msgstr "Jasotako mezu sozialen txostena."
+
+msgid "Social messages sent report."
+msgstr "Bidalitako mezu sozialen txostena."
+
+msgid "Social contacts count report."
+msgstr "Harreman sozialen kopuruaren txostena."
+
+msgid "Sessions created over time."
+msgstr "Sortutako saioak denboran zehar."
+
+msgid "Learning analytics dashboard."
+msgstr "Ikaskuntzaren analitika-panela."
+
+msgid "Teacher time report."
+msgstr "Irakaslearen denbora-txostena."
+
+msgid "Teachers time by session report"
+msgstr "Irakasleen denbora saioaren arabera txostena"
+
+msgid "Teacher time report grouped by session."
+msgstr "Irakaslearen denbora-txostena saioaren arabera taldekatuta."
+
+msgid "Corporate learning analytics report."
+msgstr "Enpresa-ikaskuntzaren analitika-txostena."
+
+msgid "Course learners tracking report."
+msgstr "Ikastaroetako ikasleen jarraipen-txostena."
+
+msgid "Course activity statistics with connected and inactive users."
+msgstr "Konektatutako eta inaktibo dauden erabiltzaileekin ikastaro-jardueraren estatistikak."
+
+msgid "Detailed tracking report for a learner inside a course."
+msgstr "Ikasle baten jarraipen-txosten xehatua ikastaro baten barruan."
+
+msgid "Course gradebook overview."
+msgstr "Kalifikazio-liburuaren ikuspegi orokorra."
+
+msgid "Gradebook statistics"
+msgstr "Kalifikazio-liburuaren estatistikak"
+
+msgid "Gradebook statistics report."
+msgstr "Kalifikazio-liburuaren estatistiken txostena."
+
+msgid "Certificate report"
+msgstr "Ziurtagirien txostena"
+
+msgid "Certificate report for course gradebook."
+msgstr "Ikastaroaren kalifikazio-liburuaren ziurtagirien txostena."
+
+msgid "User statistics"
+msgstr "Erabiltzaile-estatistikak"
+
+msgid "Course gradebook statistics for a user."
+msgstr "Erabiltzaile baten ikastaroaren kalifikazio-liburuaren estatistikak."
+
+msgid "Personal statistics"
+msgstr "Estatistika pertsonalak"
+
+msgid "Personal gradebook statistics."
+msgstr "Kalifikazio-liburuaren estatistika pertsonalak."
+
+msgid "Reports catalog"
+msgstr "Txosten-katalogoa"
+
+msgid "Central catalog of available reports, roles and permission categories."
+msgstr "Txosten, rol eta baimen-kategoria erabilgarrien katalogo zentrala."
+
+msgid "Course log events"
+msgstr "Ikastaroaren gertaera-erregistroa"
+
+msgid "Detailed course tracking events."
+msgstr "Ikastaroaren jarraipen-gertaera zehatzak."
+
+msgid "Course tool usage"
+msgstr "Ikastaro-tresnen erabilera"
+
+msgid "Course tracking report grouped by tools."
+msgstr "Tresnen arabera taldekatutako ikastaroaren jarraipen-txostena."
+
+msgid "Course resource usage"
+msgstr "Ikastaro-baliabideen erabilera"
+
+msgid "Course tracking report grouped by resources."
+msgstr "Baliabideen arabera taldekatutako ikastaroaren jarraipen-txostena."
+
+msgid "Course group tracking"
+msgstr "Ikastaro-taldeen jarraipena"
+
+msgid "Tracking report for course groups."
+msgstr "Ikastaro-taldeen jarraipen-txostena."
+
+msgid "Course session report"
+msgstr "Ikastaro-saioaren txostena"
+
+msgid "Tracking report for a course inside sessions."
+msgstr "Saio barruko ikastaro baten jarraipen-txostena."
+
+msgid "Learning path report"
+msgstr "Ikaskuntza-bidearen txostena"
+
+msgid "Learning path tracking report."
+msgstr "Ikaskuntza-bidearen jarraipen-txostena."
+
+msgid "Learning path results by user"
+msgstr "Ikaskuntza-bidearen emaitzak erabiltzailearen arabera"
+
+msgid "Learning path results grouped by user."
+msgstr "Erabiltzailearen arabera taldekatutako ikaskuntza-bidearen emaitzak."
+
+msgid "Exercises report"
+msgstr "Ariketen txostena"
+
+msgid "Course exercises and exams tracking report."
+msgstr "Ikastaroaren ariketen eta azterketen jarraipen-txostena."
+
+msgid "Question report"
+msgstr "Galderen txostena"
+
+msgid "Course question tracking report."
+msgstr "Ikastaroaren galderen jarraipen-txostena."
+
+msgid "Messages report"
+msgstr "Mezuen txostena"
+
+msgid "Course messages tracking report."
+msgstr "Ikastaroaren mezuen jarraipen-txostena."
+
+msgid "Total time tracking report for course learners."
+msgstr "Ikastaro-ikasleen denbora osoaren jarraipen-txostena."
+
+msgid "Gradebook summary"
+msgstr "Kalifikazio-liburuaren laburpena"
+
+msgid "Summary view of gradebook results."
+msgstr "Kalifikazio-liburuaren emaitzen ikuspegi laburra."
+
+msgid "Flat view"
+msgstr "Ikuspegi laua"
+
+msgid "Flat gradebook results view."
+msgstr "Kalifikazio-liburuaren emaitzen ikuspegi laua."
+
+msgid "Evaluation log"
+msgstr "Ebaluazio-erregistroa"
+
+msgid "Change log for gradebook evaluations."
+msgstr "Kalifikazio-liburuaren ebaluazioen aldaketa-erregistroa."
+
+msgid "Link log"
+msgstr "Esteka-erregistroa"
+
+msgid "Change log for gradebook links."
+msgstr "Kalifikazio-liburuaren esteken aldaketa-erregistroa."
+
+msgid "Result details"
+msgstr "Emaitzen xehetasunak"
+
+msgid "Detailed view of a gradebook result."
+msgstr "Kalifikazio-liburuaren emaitza baten ikuspegi xehatua."
+
+msgid "Personal certificates report."
+msgstr "Ziurtagiri pertsonalen txostena."
+
+msgid "User move statistics"
+msgstr "Erabiltzaile-mugimenduen estatistikak"
+
+msgid "Report for user move and transfer statistics."
+msgstr "Erabiltzaile-mugimenduen eta transferentzien estatistiken txostena."
+
+msgid "User consent list"
+msgstr "Erabiltzaileen baimen-zerrenda"
+
+msgid "Report of users and consent status."
+msgstr "Erabiltzaileen eta baimen-egoeraren txostena."
+
+msgid "Special platform exports."
+msgstr "Plataformaren esportazio bereziak."
+
+msgid "Export certificates"
+msgstr "Ziurtagiriak esportatu"
+
+msgid "Export platform certificates."
+msgstr "Plataformaren ziurtagiriak esportatu."
+
+msgid "Export exercise results"
+msgstr "Ariketen emaitzak esportatu"
+
+msgid "Export exercise results from the platform."
+msgstr "Plataformako ariketen emaitzak esportatu."
+
+msgid "Course survey results and reporting."
+msgstr "Ikastaro-inkesten emaitzak eta txostenak."
+
+msgid "Attendance report"
+msgstr "Asistentzia-txostena"
+
+msgid "Course attendance tracking and reports."
+msgstr "Ikastaroaren asistentziaren jarraipena eta txostenak."
+
+msgid "Exercises global report"
+msgstr "Ariketen txosten globala"
+
+msgid "Global exercise results report for the course."
+msgstr "Ikastaroaren ariketen emaitzen txosten globala."
+
+msgid "Exercise report"
+msgstr "Ariketen txostena"
+
+msgid "Detailed exercise report."
+msgstr "Ariketen txosten xehatua."
+
+msgid "Exercise history"
+msgstr "Ariketa-historia"
+
+msgid "Exercise attempt history."
+msgstr "Ariketa-saiakera historia."
+
+msgid "Exercise results"
+msgstr "Ariketa-emaitzak"
+
+msgid "Exercise results and corrections."
+msgstr "Ariketa-emaitzak eta zuzenketak."
+
+msgid "Question-level exercise statistics."
+msgstr "Galdera-mailako ariketa-estatistikak."
+
+msgid "Exercise statistics"
+msgstr "Ariketa-estatistikak"
+
+msgid "Exercise statistics page."
+msgstr "Ariketa-estatistiken orria."
+
+msgid "Live exercise statistics"
+msgstr "Ariketa-estatistika zuzenak"
+
+msgid "Live exercise statistics for teachers."
+msgstr "Irakasleentzako ariketa-estatistika zuzenak."
+
+msgid "Learning path statistics"
+msgstr "Ikaskuntza-bide estatistikak"
+
+msgid "Learning path item statistics."
+msgstr "Ikaskuntza-bide elementuen estatistikak."
+
+msgid "Learning path report inside a course."
+msgstr "Ikastaro bateko ikaskuntza-bide txostena."
+
+msgid "User skills report."
+msgstr "Erabiltzaile-trebetasunen txostena."
+
+msgid "Scheduled or periodic export configuration."
+msgstr "Programatutako edo aldizkako esportazioaren konfigurazioa."
+
+msgid "User export"
+msgstr "Erabiltzaile esportazioa"
+
+msgid "Export users from the platform."
+msgstr "Plataformatik erabiltzaileak esportatu."
+
+msgid "Not classified"
+msgstr "Sailkatu gabe"
+
+msgid "You have acquired the skill %s"
+msgstr "%s trebetasuna eskuratu duzu"
+
+msgid "You have acquired the skill %s."
+msgstr "%s trebetasuna eskuratu duzu."
+
+msgid "Recover your password"
+msgstr "Berreskuratu zure pasahitza"
+
+msgid "Disclaimer"
+msgstr "Lege-oharra"
+
+msgid "This operation would exceed the limit of %d users allowed for this course."
+msgstr "Eragiketa honek ikastaro honetarako baimendutako %d erabiltzaile-muga gaindituko luke."
+
+msgid "DefaultGroupCategory"
+msgstr "TaldeKategoriaLehenetsia"
+
+msgid "LearningCalendar"
+msgstr "IkaskuntzaEgutegia"
+
+msgid "Choose how this user can authenticate on the platform."
+msgstr "Aukeratu erabiltzaile honek plataforman nola autentifikatu daitekeen."
+
+msgid "Authentication methods"
+msgstr "Autentifikazio-metodoak"
+
+msgid "Set password manually"
+msgstr "Ezarri pasahitza eskuz"
+
+msgid "Report role matrix"
+msgstr "Txosten rol-matrizea"
+
+msgid "Report permission categories"
+msgstr "Txosten baimen-kategoriak"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs enforce the documented report role matrix."
+msgstr "Erregistro honek ezagutzen diren txosten-orriak, haien kategoria, URL kanonikoa, URL zaharra eta espero den rol-publikoa zerrendatzen ditu. URL kanonikoek txosten rol-matrize dokumentatua betearazten dute."
+
+msgid "reports"
+msgstr "txostenak"
+
+msgid "Canonical URL"
+msgstr "URL kanonikoa"
+
+msgid "Legacy URL"
+msgstr "URL zaharra"
+
+msgid "Permission category"
+msgstr "Baimen-kategoria"
+
+msgid "This matrix documents the expected audience for each report and is enforced by the canonical report entry point."
+msgstr "Matrize honek txosten bakoitzaren espero den publikoa dokumentatzen du eta txosten-sarrera puntua kanonikoak betearazten du."
+
+msgid "These keys group reports by access scope and are used by the report registry. They can later be mapped to finer-grained platform permissions."
+msgstr "Gako hauek txostenak sarbide-esparruaren arabera taldekatzen dituzte eta txosten-erregistroak erabiltzen ditu. Geroago plataformaren baimen zehatzagoei lotu ahal izango zaizkie."
+
+msgid "Permission"
+msgstr "Baimena"
+
+msgid "Clear active session"
+msgstr "Garbitu saio aktiboa"
+
+msgid "Are you sure you want to clear this user active session?"
+msgstr "Ziur zaude erabiltzaile honen saio aktiboa garbitu nahi duzula?"
+
+msgid "Preview shown without course context. Some course-specific data may be unavailable."
+msgstr "Aurrebista ikastaro-testuingururik gabe erakusten da. Ikastaroari lotutako datu batzuk ez daude eskuragarri."
+
+msgid "Preview is not available for this question."
+msgstr "Aurrebista ez dago eskuragarri galdera honetarako."
+
+msgid "Edition is not allowed without a course context."
+msgstr "Edizioa ez da onartzen ikastaro-testuingururik gabe."
+
+msgid "This plugin does not use regions."
+msgstr "Plugin honek ez ditu eskualderik erabiltzen."
+
+msgid "No plugins with regions were found."
+msgstr "Ez da eskualderik duten pluginik aurkitu."
+
+msgid "Freemium"
+msgstr "Freemium"
+
+msgid "Commercial service"
+msgstr "Zerbitzu komertziala"
+
+msgid "Commercial"
+msgstr "Komertziala"
+
+msgid "100% free"
+msgstr "100% doan"
+
+msgid "Displayed above the public login form."
+msgstr "Publikoaren saioa hasteko inprimakiaren gainean erakusten da."
+
+msgid "Displayed below the public login form."
+msgstr "Publikoaren saioa hasteko inprimakiaren azpian erakusten da."
+
+msgid "Displayed before the footer area."
+msgstr "Oinaren eremuaren aurretik bistaratzen da."
+
+msgid "Displayed in the left footer column."
+msgstr "Ezkerreko oin-zutabean bistaratzen da."
+
+msgid "Displayed in the center footer column."
+msgstr "Erdiko oin-zutabean bistaratzen da."
+
+msgid "Displayed in the right footer column."
+msgstr "Eskuineko oin-zutabean bistaratzen da."
+
+msgid "Showing all plugins."
+msgstr "Plugin guztiak erakusten."
+
+msgid "Some plugins are still pending functional verification."
+msgstr "Plugin batzuk oraindik egiaztapen funtzionalaren zain daude."
+
+msgid "Show verified plugins only"
+msgstr "Egiaztatutako pluginak bakarrik erakutsi"
+
+msgid "Showing verified plugins only."
+msgstr "Egiaztatutako pluginak bakarrik erakusten."
+
+msgid "Pending plugins are temporarily hidden until they are adapted and tested."
+msgstr "Zain dauden pluginak aldi baterako ezkutatzen dira egokitu eta probatu arte."
+
+msgid "Show all plugins"
+msgstr "Plugin guztiak erakutsi"
+
+msgid "Official and free plugins are listed separately from plugins that may depend on commercial services or paid offers."
+msgstr "Plugin ofizial eta doakoak zerbitzu komertzialen edo eskaintza ordainduen mende egon daitezkeen pluginetatik bereizita zerrendatzen dira."
+
+msgid "Included free plugins"
+msgstr "Sartutako plugin doakoak"
+
+msgid "Commercial and freemium plugins"
+msgstr "Plugin komertzialak eta freemium"
+
+msgid "All plugins"
+msgstr "Plugin guztiak"
+
+msgid "No plugins were found for this category."
+msgstr "Ez da pluginik aurkitu kategoria honetarako."
+
+msgid "Search plugins"
+msgstr "Bilatu pluginak"
+
+msgid "Search by name or description"
+msgstr "Bilatu izenaren edo deskribapenaren arabera"
+
+msgid "Advanced filters"
+msgstr "Iragazki aurreratuak"
+
+msgid "All statuses"
+msgstr "Egoera guztiak"
+
+msgid "All sources"
+msgstr "Iturri guztiak"
+
+msgid "All types"
+msgstr "Mota guztiak"
+
+msgid "Installed plugins are shown first"
+msgstr "Instalatutako pluginak lehenengo erakusten dira"
+
+msgid "No plugins match the current filters."
+msgstr "Ez dago uneko iragazkiekin bat datorren pluginik."
+
+msgid "Try clearing the search or changing the filters."
+msgstr "Saiatu bilaketa garbitzen edo iragazkiak aldatzen."
+
+msgid "README"
+msgstr "IRAKURRI"
+
+msgid "Invalid security token"
+msgstr "Segurtasun-token baliogabea"
+
+msgid "Please select a destination session"
+msgstr "Hautatu helburuko saio bat"
+
+msgid "Cannot move this to the same session"
+msgstr "Ezin da hau saio berean mugitu"
+
+msgid "The destination session must include the selected course"
+msgstr "Helburuko saioak hautatutako ikastaroa barne hartu behar du"
+
+msgid "The source session must include the selected course"
+msgstr "Iturburuko saioak hautatutako ikastaroa barne hartu behar du"
+
+msgid "No learners found"
+msgstr "Ez da ikaslerik aurkitu"
+
+msgid "Will be subscribed"
+msgstr "Harpidetuko da"
+
+msgid "Subscribed"
+msgstr "Harpidetuta"
+
+msgid "The move process has finished"
+msgstr "Mugitzeko prozesua amaitu da"
+
+msgid "Comparison finished. No data has been moved."
+msgstr "Konparazioa amaitu da. Ez da daturik mugitu."
+
+msgid "Move tracking data from the base course or a source session to another session. Use comparison first to review the affected learner data."
+msgstr "Mugitu jarraipen-datuak oinarrizko ikastarotik edo iturburuko saio batetik beste saio batera. Erabili konparazioa lehenik eragindako ikasleen datuak berrikusteko."
+
+msgid "Search for a course or use the manual course ID field below."
+msgstr "Bilatu ikastaro bat edo erabili beheko ikastaroaren ID eskuzko eremua."
+
+msgid "Fallback when the course search is not available."
+msgstr "Atzera-egitea ikastaro-bilaketa ez dagoenean."
+
+msgid "Load sessions"
+msgstr "Kargatu saioak"
+
+msgid "Selected course"
+msgstr "Hautatutako ikastaroa"
+
+msgid "Choose the base course or the session where the tracking data currently exists."
+msgstr "Aukeratu oinarrizko ikastaroa edo jarraipen-datuak une honetan dauden saioa."
+
+msgid "Choose the session that will receive the tracking data."
+msgstr "Jarraipen-datuak jasoko dituen saioa aukeratu."
+
+msgid "Important"
+msgstr "Garrantzitsua"
+
+msgid "The move action updates existing tracking data. Run compare first and test this tool with a non-production course before moving real learner data."
+msgstr "Mugitzeko ekintzak lehendik dauden jarraipen-datuak eguneratzen ditu. Exekutatu konparazioa lehenik eta probatu tresna hau ekoizpenik gabeko ikastaro batekin benetako ikasleen datuak mugitu aurretik."
+
+msgid "No sessions found for this course"
+msgstr "Ez da saiorik aurkitu ikastaro honetarako"
+
+msgid "Some users were ignored because they are not subscribed to this session."
+msgstr "Erabiltzaile batzuk ez dira kontuan hartu saio honetan harpidetuta ez daudelako."
+
+msgid "Remove selected user"
+msgstr "Kendu hautatutako erabiltzailea"
+
+msgid "Add selected user"
+msgstr "Gehitu hautatutako erabiltzailea"
+
+msgid "No users from the selected list are subscribed to this session."
+msgstr "Hautatutako zerrendako erabiltzaile bakar bat ere ez dago saio honetan harpidetuta."
+
+msgid "No image"
+msgstr "Irudirik ez"
+
+msgid "Invalid URL."
+msgstr "URL baliogabea."
+
+msgid "This cloud document cannot be embedded."
+msgstr "Hodeiko dokumentu hau ezin da txertatu."
+
+msgid "Document not found"
+msgstr "Ez da dokumenturik aurkitu"
+
+msgid "File not found"
+msgstr "Ez da fitxategirik aurkitu"
+
+msgid "This learning path is not available for your user at this time."
+msgstr "Ikaskuntza-bide hau ez dago erabilgarri zure erabiltzailearentzat une honetan."
+
+msgid "StartDateMustBeBeforeTheEndDate"
+msgstr "StartDateMustBeBeforeTheEndDate"
+
+msgid "Next learning path"
+msgstr "Hurrengo ikaskuntza-bidea"
+
+msgid "Select the learning path that will be available after this one."
+msgstr "Honen ondoren erabilgarri egongo den ikaskuntza-bidea hautatu."
+
+msgid "Create another learning path in this course to enable learning path flow."
+msgstr "Sortu beste ikaskuntza-bide bat ikastaro honetan ikaskuntza-bideen fluxua gaitzeko."
+
+msgid "Available from %s"
+msgstr "%s-(e)tik aurrera erabilgarri"
+
+msgid "Available until %s"
+msgstr "%s arte erabilgarri"
+
+msgid "Statistics reset date"
+msgstr "Estatistiken berrezarpen-data"
+
+msgid "Last 24 hours"
+msgstr "Azken 24 orduak"
+
+msgid "This reset date is used as the reference date for the report. It does not delete historical tracking data."
+msgstr "Berrezarpen-data hau txostenaren erreferentzia-data gisa erabiltzen da. Ez ditu datu historikoak ezabatzen."
+
+msgid "Since reset date"
+msgstr "Berrezarpen-datatik aurrera"
+
+msgid "Users connected in the last 24 hours"
+msgstr "Azken 24 ordutan konektatutako erabiltzaileak"
+
+msgid "Learners with at least one course access during the last 24 hours."
+msgstr "Azken 24 ordutan gutxienez ikastaro batera sartu diren ikasleak."
+
+msgid "Users connected in the last week"
+msgstr "Azken astean konektatutako erabiltzaileak"
+
+msgid "Learners with at least one course access during the last 7 days."
+msgstr "Azken 7 egunetan gutxienez ikastaro batera sartu diren ikasleak."
+
+msgid "Users connected in the last month"
+msgstr "Azken hilabetean konektatutako erabiltzaileak"
+
+msgid "Learners with at least one course access during the last 30 days."
+msgstr "Azken 30 egunetan gutxienez ikastaro batera sartu diren ikasleak."
+
+msgid "Not recently connected users"
+msgstr "Azkenaldian konektatu ez diren erabiltzaileak"
+
+msgid "Learners without course access since %s."
+msgstr "%s-(e)tik aurrera ikastaroetara sartu ez diren ikasleak."
+
+msgid "Recently used resources"
+msgstr "Azkenaldian erabilitako baliabideak"
+
+msgid "Course tools/resources used since %s."
+msgstr "%s-(e)tik aurrera erabilitako ikastaro-tresnak/baliabideak."
+
+msgid "%s %% of learners"
+msgstr "Ikasleen %s %%"
+
+msgid "Connections"
+msgstr "Konexioak"
+
+msgid "Total connections"
+msgstr "Konexioak guztira"
+
+msgid "Downloaded documents"
+msgstr "Deskargatutako dokumentuak"
+
+msgid "List of documents downloaded by this learner in this course."
+msgstr "Ikasle honek ikastaro honetan deskargatutako dokumentuen zerrenda."
+
+msgid "Forum topics"
+msgstr "Foro-gaiak"
+
+msgid "Forum topics opened by this learner in this course."
+msgstr "Ikasle honek ikastaro honetan irekitako foro-gaiak."
+
+msgid "Forum posts"
+msgstr "Foro-mezuak"
+
+msgid "Forum posts written by this learner in this course."
+msgstr "Ikasle honek ikastaro honetan idatzitako foro-mezuak."
+
+msgid "Course connections"
+msgstr "Ikastaro-konexioak"
+
+msgid "Connection history for this learner in this course."
+msgstr "Ikasle honen ikastaro honetako konexio-historia."
+
+msgid "Resources used"
+msgstr "Erabilitako baliabideak"
+
+msgid "Latest tools or resources used by this learner in this course."
+msgstr "Ikasle honek ikastaro honetan erabilitako azken tresnak edo baliabideak."
+
+msgid "Logout date"
+msgstr "Saio-amaiera data"
+
+msgid "Imported Aiken quiz"
+msgstr "Inportatutako Aiken proba"
+
+msgid "Only supported documents will be listed here."
+msgstr "Onartutako dokumentuak soilik zerrendatuko dira hemen."
+
+msgid "Generated Aiken content"
+msgstr "Sortutako Aiken edukia"
+
+msgid "Review the generated content before importing it as a new exercise."
+msgstr "Berrikusi sortutako edukia proba berri gisa inportatu aurretik."
+
+msgid "No documents available."
+msgstr "Ez dago dokumenturik erabilgarri."
+
+msgid "yperbolic arctangent:\\t\\tarctanh(x)"
+msgstr "arku tangente hiperbolikoa:\\t\\tarctanh(x)"
+
+msgid "Exercise"
+msgstr "Ariketa"
+
+msgid "OfficialCode"
+msgstr "OfficialCode"
+
+msgid "FirstName"
+msgstr "FirstName"
+
+msgid "LastName"
+msgstr "LastName"
+
+msgid "LoginName"
+msgstr "LoginName"
+
+msgid "MinMinute"
+msgstr "MinMinutu"
+
+msgid "StartDate"
+msgstr "HasieraData"
+
+msgid "EndDate"
+msgstr "AmaieraData"
+
+msgid "CorrectionDate"
+msgstr "ZuzenketaData"
+
+msgid "NotValidated"
+msgstr "BalioztatuGabe"
+
+msgid "PendingAttempts"
+msgstr "ZainDaudeSaiakerak"
+
+msgid "List of pending test attempts across your courses."
+msgstr "Zain dauden azterketa-saiakeren zerrenda zure ikastaroetan."
+
+msgid "User ID"
+msgstr "Erabiltzaile ID"
+
+msgid "QuestionType"
+msgstr "GalderaMota"
+
+msgid "QuestionsWithNoAutomaticCorrection"
+msgstr "ZuzenketaAutomatikorikGabekoGalderak"
+
+msgid "There are no pending tests."
+msgstr "Ez dago zain dauden azterketarik."
+
+msgid "%s results"
+msgstr "%s emaitza"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Adibidezko jarduera inprimakia betetzeko: kalkulatu Gorputz-Masaren Indizea</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Adina</strong></td>            <td width=\"75%\" style=\"\">[25] urte</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sexua</strong></td>            <td style=\"\" text-align:=\"\">[G] (G edo E)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Pisua</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Altuera</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Gorputz-Masaren Indizea</strong></td>            <td style=\"vertical-align: top;\">[29] GMI =Pisua/Altuera<sup>2</sup> (Ikus.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia artikulua</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Removed"
+msgstr "KenduDa"
+
+msgid "NoUsersInTheList"
+msgstr "EzDagoErabiltzailerikZerrendan"
+
+msgid "Are you sure?"
+msgstr "Ziur al zaude?"
+
+msgid "NoResultsAvailable"
+msgstr "EzDagoEmaitzarikEskuragarri"
+
+msgid "Import groups from a CSV file and optionally remove items that are not present in the file."
+msgstr "Inportatu taldeak CSV fitxategitik eta aukeran kendu fitxategian ez dauden elementuak."
+
+msgid "Use this option carefully because items missing from the CSV can be removed during the import process."
+msgstr "Erabili aukera hau kontu handiz, CSV fitxategian ez dauden elementuak kendu daitezkeelako inportazio-prozesuan."
+
+msgid "Upload a CSV file with the group data you want to import."
+msgstr "Kargatu talde-datuak dituen CSV fitxategia inportatu nahi duzuna."
+
+msgid "You can download the example file to use the expected format."
+msgstr "Deskargatu adibide-fitxategia formatu egokia erabiltzeko."
+
+msgid "If you enable deletion, items not present in the file may be removed."
+msgstr "Ezabaketa gaitzen baduzu, fitxategian ez dauden elementuak kendu daitezke."
+
+msgid "The CSV file is mandatory to start the import."
+msgstr "CSV fitxategia derrigorrezkoa da inportazioa hasteko."
+
+msgid "Please select at least one class."
+msgstr "Hautatu gutxienez klase bat."
+
+msgid "Define the properties for each group before creating them."
+msgstr "Definitu talde bakoitzaren propietateak sortu aurretik."
+
+msgid "Apply the first row values"
+msgstr "Aplikatu lehen errenkadaren balioak"
+
+msgid "Create groups manually or generate them from the classes subscribed to this course."
+msgstr "Sortu taldeak eskuz edo sortu ikastaro honetan matrikulatutako klaseetatik."
+
+msgid "Create manual groups"
+msgstr "Sortu taldeak eskuz"
+
+msgid "Use this form when you want to create empty course groups manually."
+msgstr "Erabili inprimaki hau ikastaro-talde hutsak eskuz sortu nahi dituzunean."
+
+msgid "Configure manual groups"
+msgstr "Konfiguratu taldeak eskuz"
+
+msgid "Create groups from subscribed classes"
+msgstr "Sortu taldeak matrikulatutako klaseetatik"
+
+msgid "Use this form when you want to create one course group for each selected class."
+msgstr "Erabili inprimaki hau hautatutako klase bakoitzeko ikastaro-talde bat sortu nahi duzunean."
+
+msgid "Keep created groups linked to their source classes"
+msgstr "Mantendu sortutako taldeak jatorrizko klaseekin lotuta"
+
+msgid "Create groups from selected classes"
+msgstr "Sortu taldeak hautatutako klaseetatik"
+
+msgid "You must be logged in to access this page."
+msgstr "Saioa hasi behar duzu orri honetara sartzeko."
+
+msgid "Invalid user"
+msgstr "Erabiltzaile baliogabea"
+
+msgid "UseCourseCustomCertificate"
+msgstr "ErabiliIkastaroarenZiurtagiriPertsonalizatua"
+
+msgid "UseDefaultCustomCertificate"
+msgstr "ErabiliLehenetsitakoZiurtagiriPertsonalizatua"
+
+msgid "CertificateSetting"
+msgstr "ZiurtagiriEzarpena"
+
+msgid "SelectOneOptionBeforeOpeningEditor"
+msgstr "HautatuAukeraBatEditoreaIrekiAurretik"
+
+msgid "ChooseCustomCertificateModeHelp"
+msgstr "AukeratuZiurtagiriPertsonalizatuModuaLaguntza"
+
+msgid "CertificateMode"
+msgstr "ZiurtagiriModua"
+
+msgid "Enable student to validate own attendance"
+msgstr "Baimendu ikasleei beren asistentzia balioztatzea"
+
+msgid "Course block"
+msgstr "Ikastaro-blokea"
+
+msgid "Add custom content blocks to course footer regions."
+msgstr "Gehitu eduki-bloke pertsonalizatuak ikastaroaren oinaren eremuetan."
+
+msgid "course_block_pre_footer"
+msgstr "course_block_pre_footer"
+
+msgid "Before footer"
+msgstr "Oinaren aurretik"
+
+msgid "course_block_footer_left"
+msgstr "course_block_footer_left"
+
+msgid "Footer left"
+msgstr "Oinaren ezkerra"
+
+msgid "course_block_footer_center"
+msgstr "course_block_footer_center"
+
+msgid "Footer center"
+msgstr "Oinaren erdikoa"
+
+msgid "course_block_footer_right"
+msgstr "course_block_footer_right"
+
+msgid "Footer right"
+msgstr "Oinaren eskuinekoa"
+
+msgid "SetNotification"
+msgstr "SetNotification"
+
+msgid "CourseLegal"
+msgstr "CourseLegal"
+
+msgid "Certificates search is not available"
+msgstr "Ziurtagirien bilaketa ez dago erabilgarri"
+
+msgid "It allows the acquisition of skills by subcategories"
+msgstr "Azpikategorien bidez trebetasunak eskuratzea ahalbidetzen du"
+
+msgid "Allow skills by subcategories"
+msgstr "Baimendu trebetasunak azpikategorien arabera"
+
+msgid "Minimum score for skills"
+msgstr "Trebetasunetarako gutxieneko puntuazioa"
+
+msgid "The gradebook table is hidden."
+msgstr "Kalifikazio-liburuaren taula ezkutuan dago."
+
+msgid "Invalid token"
+msgstr "Token baliogabea"
+
+msgid "Unable to save the item"
+msgstr "Ezin da elementua gorde"
+
+msgid "Only HTTP and HTTPS URLs are allowed."
+msgstr "HTTP eta HTTPS URLak soilik onartzen dira."
+
+msgid "Invalid URL host."
+msgstr "URL ostalari baliogabea."
+
+msgid "This cloud provider is not allowed."
+msgstr "Hodei-hornitzaile hau ez da onartzen."
+
+msgid "Documents used"
+msgstr "Erabilitako dokumentuak"
+
+msgid "No document usage"
+msgstr "Ez dago dokumentu-erabilerarik"
+
+msgid "Invalid action."
+msgstr "Ekintza baliogabea."
+
+msgid "No users selected."
+msgstr "Ez da erabiltzailerik hautatu."
+
+msgid "%s user(s) processed."
+msgstr "%s erabiltzaile prozesatu dira."
+
+msgid "Invalid CSRF token."
+msgstr "CSRF token baliogabea."
+
+msgid "[%s] Please change your password"
+msgstr "[%s] Mesedez, aldatu zure pasahitza"
+
+msgid "Dear %s,\n\nOur security enforcing process shows you use a password that is commonly used on the internet, which means your account could easily be stolen. It is probably a simple sequence or a very common word, we don't really know (we cannot see your password), but we ask you to please connect to the platform and request a password change. You can follow the link here: %s to do that now.\n\nPlease note we will never ask for your password in this process. You just enter your username or e-mail and we send you a link. If you are asked to introduce your existing password to do that, someone is probably trying to do Phishing on your account. Be safe, change your password now!\n\n%s\n%s"
+msgstr "Maite %s,\n\nGure segurtasun-prozesuak erakusten du Interneten erabili ohi den pasahitz bat erabiltzen ari zarela, eta horrek esan nahi du zure kontua erraz lapurtu daitekeela. Seguruenik sekuentzia sinple bat edo hitz oso arrunta da, ez dakigu zehazki (ezin dugu zure pasahitza ikusi), baina eskatzen dizugu plataforma konektatzeko eta pasahitz-aldaketa eskatzeko. Hona hemen esteka: %s hori egiteko orain.\n\nKontuan izan ez dugula inoiz eskatuko zure pasahitza prozesu honetan. Zure erabiltzaile-izena edo posta elektronikoa sartu besterik ez duzu egin behar eta esteka bidaliko dizugu. Zure pasahitz zaharra sartzeko eskatzen bazaizu, norbait zure kontua Phishing bidez lapurtzen saiatzen ari da seguruenik. Segurtatu, aldatu zure pasahitza orain!\n\n%s\n%s"
+
+msgid "[%s] Your password has been reset"
+msgstr "[%s] Zure pasahitza berrezarri da"
+
+msgid "Dear %s,\n\nOur security enforcing process flagged you as using a password that is commonly used on the internet, which means your account could easily be stolen. As a prevention measure, we have decided to initiate a password reset process. Your new, automatically generated password is now:\n\n%s\n\nPlease login to the platform soon (using this new password) to set your own, personal and secure, password.\n\nBe safe.\n\n%s\n%s"
+msgstr "Maite %s,\n\nGure segurtasun-prozesuak Interneten erabili ohi den pasahitz bat erabiltzen ari zarela markatu du, eta horrek esan nahi du zure kontua erraz lapurtu daitekeela. Prebentzio-neurri gisa, pasahitz-berrezarpen prozesu bat hastea erabaki dugu. Zure pasahitz berri, automatikoki sortutakoa, hau da orain:\n\n%s\n\nMesedez, konektatu plataformara laster (pasahitz berri hau erabiliz) zure pasahitz pertsonal eta segurua ezartzeko.\n\nSegurtatu.\n\n%s\n%s"
+
+msgid "Signature saved successfully"
+msgstr "Sinadura ongi gorde da"
+
+msgid "Invalid request payload."
+msgstr "Eskaera-karga baliogabea."
+
+msgid "Authentication required."
+msgstr "Autentifikazioa beharrezkoa da."
+
+msgid "The course title is required."
+msgstr "Ikastaroaren izenburua beharrezkoa da."
+
+msgid "Only trainers and administrators can create courses."
+msgstr "Irakasleek eta administratzaileek soilik sor ditzakete ikastaroak."
+
+msgid "Course creation by trainers is disabled on this platform."
+msgstr "Irakasleek ikastaroak sortzea desgaituta dago plataforma honetan."
+
+msgid "The selected BuyCourses service cannot be used to create this course."
+msgstr "Hautatutako BuyCourses zerbitzua ezin da erabili ikastaro hau sortzeko."
+
+msgid "You have reached the maximum number of courses allowed (%d)."
+msgstr "Baimendutako gehieneko ikastaro kopurura iritsi zara (%d)."
+
+msgid "The selected BuyCourses service is invalid."
+msgstr "Hautatutako BuyCourses zerbitzua baliogabea da."
+
+msgid "BuyCourses is not available right now."
+msgstr "BuyCourses ez dago erabilgarri une honetan."
+
+msgid "BuyCourses cannot validate the selected service right now."
+msgstr "BuyCourses-ek ezin du hautatutako zerbitzua balioztatu une honetan."
+
+msgid "Unable to validate the selected BuyCourses service right now."
+msgstr "Ezin da hautatutako BuyCourses zerbitzua balioztatu une honetan."
+
+msgid "External tool removed from course"
+msgstr "Kanpoko tresna kendu da ikastarotik"
+
+msgid "External tool was removed from the course, but kept internally because it is linked to the gradebook"
+msgstr "Kanpoko tresna kendu da ikastarotik, baina barruan gorde da kalifikazio-liburura lotuta dagoelako"
+
+msgid "There are no external tools available to add to the gradebook"
+msgstr "Ez dago kanpoko tresnarik erabilgarri kalifikazio-liburura gehitzeko"
+
+msgid "The evaluation could not be created"
+msgstr "Ezin izan da ebaluazioa sortu"
+
+msgid "The gradebook evaluation could not be linked"
+msgstr "Ezin izan da kalifikazio-liburuko ebaluazioa lotu"
+
+msgid "Survey questions"
+msgstr "Inkestaren galderak"
+
+msgid "Back to survey list"
+msgstr "Itzuli inkesta zerrendara"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "Inkesta honek dagoeneko erantzunak ditu. Galdera editatzea desgaituta dago konfigurazioaren arabera."
+
+msgid "Choose the type of question you want to add."
+msgstr "Aukeratu gehitu nahi duzun galdera mota."
+
+msgid "The free text option is added automatically."
+msgstr "Testu askea aukera automatikoki gehitzen da."
+
+msgid "No questions found"
+msgstr "Ez da galderarik aurkitu"
+
+msgid "Mandatory"
+msgstr "Nahitaezkoa"
+
+msgid "Unsupported question type"
+msgstr "Onartzen ez den galdera mota"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "Galderan {%s} eta {%s} etiketak erabili ditzakezu."
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "Galdera hau inkestari erantzuten ari zaren bitartean baldintzapean erakusten da."
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "1etik 100era bitarteko ehuneko aukerak automatikoki sortzen dira."
+
+msgid "Could not load survey questions"
+msgstr "Ezin izan dira inkestaren galderak kargatu"
+
+msgid "The question text is required."
+msgstr "Galderaren testua beharrezkoa da."
+
+msgid "The maximum score is required."
+msgstr "Gehieneko puntuazioa beharrezkoa da."
+
+msgid "Please select a parent option."
+msgstr "Mesedez, hautatu aukera nagusi bat."
+
+msgid "Please fill all answer options."
+msgstr "Mesedez, bete erantzun aukera guztiak."
+
+msgid "QuestionUpdated"
+msgstr "QuestionUpdated"
+
+msgid "Could not save survey question"
+msgstr "Ezin izan da inkestaren galdera gorde"
+
+msgid "Could not delete survey question"
+msgstr "Ezin izan da inkestaren galdera ezabatu"
+
+msgid "Could not move survey question"
+msgstr "Ezin izan da inkestaren galdera mugitu"
+
+msgid "Could not copy survey question"
+msgstr "Ezin izan da inkestaren galdera kopiatu"
+
+msgid "Hide search"
+msgstr "Ezkutatu bilaketa"
+
+msgid "Showing results for: %s"
+msgstr "Emaitzak erakusten: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "Bilatu inkestaren izenburu, kode edo deskribapenaren arabera."
+
+msgid "Search surveys"
+msgstr "Bilatu inkestak"
+
+msgid "%s surveys selected"
+msgstr "%s inkesta hautatuta"
+
+msgid "Clear selection"
+msgstr "Garbitu hautaketa"
+
+msgid "No surveys found"
+msgstr "Ez da inkestarik aurkitu"
+
+msgid "Unsupported"
+msgstr "Ez da onartzen"
+
+msgid "Could not load surveys"
+msgstr "Ezin izan dira inkestak kargatu"
+
+msgid "Delete selected surveys"
+msgstr "Ezabatu hautatutako inkestak"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "Hautatutako inkestak eta haien galderak ezabatuko dira. Ekintza hau ezin da desegin."
+
+msgid "Could not delete selected surveys"
+msgstr "Ezin izan dira hautatutako inkestak ezabatu"
+
+msgid "Survey action"
+msgstr "Inkestaren ekintza"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "Inkesta honen kopia bat sortuko da: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "Inkesta honen erantzun eta gonbidapen guztiak ezabatuko dira: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "Sortutako biderkatutako galderak kenduko dira inkesta honetatik: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "Inkesta hau argitaratuko da lotutako taldeko tutoreentzat: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "Inkesta hau eta bere galderak ezabatuko dira: %s"
+
+msgid "Could not complete survey action"
+msgstr "Ezin izan da inkestaren ekintza burutu"
+
+msgid "Not started"
+msgstr "Ez da hasi"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "Bileren inkestek gonbidatutako erabiltzaileei eskuragarri dauden datak hautatzen uzten diete."
+
+msgid "Back to surveys"
+msgstr "Itzuli inkestetara"
+
+msgid "Edit meeting poll"
+msgstr "Editatu bileren inkesta"
+
+msgid "View meeting poll"
+msgstr "Ikusi bileren inkesta"
+
+msgid "Basic information"
+msgstr "Oinarrizko informazioa"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "Honek bileren inkesta motako inkesta bat sortuko du. Erantzunak eta gonbidapenak bereizita kudeatzen dira."
+
+msgid "Availability"
+msgstr "Eskuragarritasuna"
+
+msgid "Meeting dates"
+msgstr "Bileren datak"
+
+msgid "Meeting poll"
+msgstr "Bileren inkesta"
+
+msgid "My availability"
+msgstr "Nire eskuragarritasuna"
+
+msgid "Meeting poll results"
+msgstr "Bileren inkestaren emaitzak"
+
+msgid "No invitations found"
+msgstr "Ez da gonbidapenik aurkitu"
+
+msgid "available"
+msgstr "eskuragarri"
+
+msgid "Could not load meeting poll"
+msgstr "Ezin izan da bileren inkesta kargatu"
+
+msgid "Please complete the required fields"
+msgstr "Osatu beharrezko eremuak"
+
+msgid "Could not save meeting poll"
+msgstr "Ezin izan da bileren inkesta gorde"
+
+msgid "Could not save meeting availability"
+msgstr "Ezin izan da bileren eskuragarritasuna gorde"
+
+msgid "Copy this survey to another course or session"
+msgstr "Kopiatu inkesta hau beste ikastaro edo saio batera"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "Inkesta erantzun edo gonbidapenik gabe kopiatuko da."
+
+msgid "No target courses found"
+msgstr "Ez da helburuko ikastarorik aurkitu"
+
+msgid "Search by course title, course code or session name."
+msgstr "Bilatu ikastaroaren izenburu, ikastaroaren kode edo saioaren izenaren arabera."
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "Erabili Bikoiztu inkesta ikastaro berean kopia bat nahi duzunean."
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "Galderak eta aukerak kopiatuko dira. Erantzunak, gonbidapenak eta txostenak jatorrizko inkestan bakarrik geratuko dira."
+
+msgid "Selected target"
+msgstr "Hautatutako helburua"
+
+msgid "Could not load copy form"
+msgstr "Ezin izan da kopia inprimakia kargatu"
+
+msgid "The survey will be copied to: %s"
+msgstr "Inkesta hona kopiatuko da: %s"
+
+msgid "Survey copied."
+msgstr "Inkesta kopiatu da."
+
+msgid "Could not copy survey"
+msgstr "Ezin izan da inkesta kopiatu"
+
+msgid "Answer survey"
+msgstr "Erantzun inkesta"
+
+msgid "Preview mode does not save answers."
+msgstr "Aurrebista moduan ez dira erantzunak gordetzen."
+
+msgid "Survey completed"
+msgstr "Inkesta osatu da"
+
+msgid "Thank you for answering the survey."
+msgstr "Eskerrik asko inkesta erantzuteagatik."
+
+msgid "Profile information"
+msgstr "Profilaren informazioa"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "Berrikusi eskatutako profilaren eremuak inkesta erantzun aurretik."
+
+msgid "This profile field is read-only."
+msgstr "Profil-eremu hau irakurtzeko soilik da."
+
+msgid "You already filled this survey."
+msgstr "Dagoeneko bete duzu inkesta hau."
+
+msgid "Please specify"
+msgstr "Zehaztu ezazu"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "Galdera mota hau ez da onartzen inkestaren ikuspegi modernoan."
+
+msgid "Preview only"
+msgstr "Aurrebista soilik"
+
+msgid "Submit answers"
+msgstr "Bidali erantzunak"
+
+msgid "Could not load survey"
+msgstr "Ezin izan da inkesta kargatu"
+
+msgid "Please complete the required profile fields."
+msgstr "Osatu beharrezko profilaren eremuak."
+
+msgid "Please answer all mandatory questions."
+msgstr "Erantzun derrigorrezko galdera guztiak."
+
+msgid "Could not save survey answers"
+msgstr "Ezin izan dira inkestaren erantzunak gorde"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "Konfiguratu inkestaren oinarrizko informazioa galderak eta gonbidapenak kudeatu aurretik."
+
+msgid "The survey code cannot be changed after creation."
+msgstr "Inkestaren kodea ezin da aldatu sortu ondoren."
+
+msgid "Survey behavior"
+msgstr "Inkestaren portaera"
+
+msgid "Use 0 for no time limit."
+msgstr "Erabili 0 denbora-mugarik ez izateko."
+
+msgid "Survey messages"
+msgstr "Inkestaren mezuak"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "Hemen hautatutako profilaren eremuak inkestaren galderen aurretik erakutsiko dira."
+
+msgid "No profile fields are currently available."
+msgstr "Ez dago profilaren eremurik eskuragarri une honetan."
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "Profil-eremuen hautaketa anonimoak ez diren inkestetarako soilik dago eskuragarri."
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "Gaitasunen esteka lote dedikatu batean migratuko da."
+
+msgid "Could not load survey configuration"
+msgstr "Ezin izan da inkestaren konfigurazioa kargatu"
+
+msgid "The survey code is required."
+msgstr "Inkestaren kodea beharrezkoa da."
+
+msgid "The survey title is required."
+msgstr "Inkestaren izenburua beharrezkoa da."
+
+msgid "The survey has been saved successfully"
+msgstr "Inkesta ongi gorde da"
+
+msgid "Could not save survey configuration"
+msgstr "Ezin izan da inkestaren konfigurazioa gorde"
+
+msgid "Course users"
+msgstr "Ikastaroaren erabiltzaileak"
+
+msgid "Already invited"
+msgstr "Dagoeneko gonbidatuta"
+
+msgid "No users found"
+msgstr "Ez da erabiltzailerik aurkitu"
+
+msgid "No groups found"
+msgstr "Ez da talderik aurkitu"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "Erabili **link** inkestaren esteka agertu behar den lekuan."
+
+msgid "Remind all selected users"
+msgstr "Gogorarazi hautatutako erabiltzaile guztiei"
+
+msgid "Anonymous access link"
+msgstr "Sarbide-esteka anonimoa"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "Gonbidatu ez diren erabiltzaileek esteka hau erabili dezakete inkesta egiteko."
+
+msgid "Answered anonymously"
+msgstr "Anonimoan erantzunda"
+
+msgid "Could not load survey invitations"
+msgstr "Ezin izan dira inkestaren gonbidapenak kargatu"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "Posta bidaltzean, postaren gaia eta mezua beharrezkoak dira."
+
+msgid "Could not publish survey"
+msgstr "Ezin izan da inkesta argitaratu"
+
+msgid "Could not copy the link"
+msgstr "Ezin izan da esteka kopiatu"
+
+msgid "Please answer this survey using the following link"
+msgstr "Erantzun inkesta hau esteka hau erabiliz"
+
+msgid "Export CSV"
+msgstr "Esportatu CSV"
+
+msgid "Export compact CSV"
+msgstr "Esportatu CSV trinkoa"
+
+msgid "Export Excel"
+msgstr "Esportatu Excel"
+
+msgid "Export package"
+msgstr "Esportatu paketea"
+
+msgid "Results summary"
+msgstr "Emaitzen laburpena"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "Ikuspegi honek inkesta honen migrazio-datuen txostena erakusten du."
+
+msgid "Select user"
+msgstr "Hautatu erabiltzailea"
+
+msgid "No answers found"
+msgstr "Ez da erantzunik aurkitu"
+
+msgid "answers"
+msgstr "erantzunak"
+
+msgid "Could not load survey reporting"
+msgstr "Ezin izan da inkestaren txostena kargatu"
+
+msgid "Back to threads"
+msgstr "Itzuli harietara"
+
+msgid "Back to learning path"
+msgstr "Itzuli ikaskuntza-bidera"
+
+msgid "Remove sticky"
+msgstr "Kendu finkatua"
+
+msgid "Make sticky"
+msgstr "Egin finkatua"
+
+msgid "Open thread"
+msgstr "Ireki haria"
+
+msgid "Close thread"
+msgstr "Itxi haria"
+
+msgid "Delete thread"
+msgstr "Ezabatu haria"
+
+msgid "This thread is hidden from learners."
+msgstr "Haria ezkutatuta dago ikasleentzat."
+
+msgid "Revision requested"
+msgstr "Berrikuspena eskatu da"
+
+msgid "Revision"
+msgstr "Berrikuspena"
+
+msgid "Approve post"
+msgstr "Onartu mezua"
+
+msgid "Reject post"
+msgstr "Baztertu mezua"
+
+msgid "Cancel revision request"
+msgstr "Utzi berrikuspen-eskaera"
+
+msgid "Delete post"
+msgstr "Ezabatu mezua"
+
+msgid "Message is required"
+msgstr "Mezua beharrezkoa da"
+
+msgid "Target thread is required"
+msgstr "Helburuko haria beharrezkoa da"
+
+msgid "Could not retrieve posts"
+msgstr "Ezin izan dira mezuak eskuratu"
+
+msgid "Thread shown"
+msgstr "Haria erakutsita"
+
+msgid "Thread hidden"
+msgstr "Haria ezkutatuta"
+
+msgid "Could not update thread"
+msgstr "Ezin izan da haria eguneratu"
+
+msgid "Thread closed"
+msgstr "Haria itxita"
+
+msgid "Thread opened"
+msgstr "Haria irekita"
+
+msgid "Thread marked as sticky"
+msgstr "Haria finkatu gisa markatuta"
+
+msgid "Thread unmarked as sticky"
+msgstr "Haria finkatu gisa markatu gabe"
+
+msgid "Thread notifications enabled"
+msgstr "Hariaren jakinarazpenak gaituta"
+
+msgid "Thread notifications disabled"
+msgstr "Hariaren jakinarazpenak desgaituta"
+
+msgid "Could not update thread notification"
+msgstr "Ezin izan da hariaren jakinarazpena eguneratu"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "Ziur al zaude hari hau ezabatu nahi duzula?"
+
+msgid "Could not delete thread"
+msgstr "Ezin izan da haria ezabatu"
+
+msgid "Post approved"
+msgstr "Mezua onartu da"
+
+msgid "Could not approve post"
+msgstr "Ezin izan da mezua onartu"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "Ziur al zaude mezu hau baztertu nahi duzula?"
+
+msgid "Post rejected"
+msgstr "Mezua baztertu da"
+
+msgid "Could not reject post"
+msgstr "Ezin izan da mezua baztertu"
+
+msgid "Post shown"
+msgstr "Mezua erakutsita"
+
+msgid "Post hidden"
+msgstr "Mezua ezkutatuta"
+
+msgid "Could not update post"
+msgstr "Ezin izan da mezua eguneratu"
+
+msgid "Post updated"
+msgstr "Mezua eguneratu da"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "Ziur al zaude mezu hau ezabatu nahi duzula?"
+
+msgid "Post deleted"
+msgstr "Mezua ezabatu da"
+
+msgid "Could not delete post"
+msgstr "Ezin izan da mezua ezabatu"
+
+msgid "Untitled thread"
+msgstr "Izenik gabeko haria"
+
+msgid "Could not retrieve threads"
+msgstr "Ezin izan dira hariak eskuratu"
+
+msgid "Post moved"
+msgstr "Mezua mugitu da"
+
+msgid "Could not move post"
+msgstr "Ezin izan da mezua mugitu"
+
+msgid "Revision request removed"
+msgstr "Berrikuspen-eskaera kendu da"
+
+msgid "Could not update revision request"
+msgstr "Ezin izan da berrikuspen-eskaera eguneratu"
+
+msgid "Are you sure you want to report this post?"
+msgstr "Ziur al zaude mezu hau salatu nahi duzula?"
+
+msgid "Could not report post"
+msgstr "Ezin izan da mezua salatu"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "Ziur eranskin hau ezabatu nahi duzula?"
+
+msgid "Attachment deleted"
+msgstr "Eranskina ezabatu da"
+
+msgid "Could not delete attachment"
+msgstr "Ezin izan da eranskina ezabatu"
+
+msgid "Thread title"
+msgstr "Hariaren izenburua"
+
+msgid "Sticky thread"
+msgstr "Itsatsitako haria"
+
+msgid "Attach files"
+msgstr "Fitxategiak erantsi"
+
+msgid "Attachments are disabled for this forum"
+msgstr "Eranskinak desgaituta daude foro honetan"
+
+msgid "The forum is not open yet."
+msgstr "Foroa ez dago irekita oraindik."
+
+msgid "The forum is closed."
+msgstr "Foroa itxita dago."
+
+msgid "The forum is locked."
+msgstr "Foroa blokeatuta dago."
+
+msgid "New threads are not allowed in this forum."
+msgstr "Ez da onartzen hari berririk foro honetan."
+
+msgid "Thread created"
+msgstr "Haria sortu da"
+
+msgid "Could not create thread"
+msgstr "Ezin izan da haria sortu"
+
+msgid "Back to posts"
+msgstr "Itzuli mezuetara"
+
+msgid "This reply will be stored as a revision."
+msgstr "Erantzun hau berrikuspen gisa gordeko da."
+
+msgid "Post reply"
+msgstr "Erantzuna bidali"
+
+msgid "The thread is locked."
+msgstr "Haria blokeatuta dago."
+
+msgid "Reply added"
+msgstr "Erantzuna gehitu da"
+
+msgid "Could not add reply"
+msgstr "Ezin izan da erantzuna gehitu"
+
+msgid "Add forum"
+msgstr "Foroa gehitu"
+
+msgid "No forums found"
+msgstr "Ez da fororik aurkitu"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "Sortu zure lehenengo foro-kategoria edo foroa eztabaidak hasteko."
+
+msgid "Locked"
+msgstr "Blokeatuta"
+
+msgid "No forums in this category"
+msgstr "Ez dago fororik kategoria honetan"
+
+msgid "Posts require approval"
+msgstr "Mezuek onarpena behar dute"
+
+msgid "Forum for current group"
+msgstr "Uneko taldearen foroa"
+
+msgid "Group forum visibility"
+msgstr "Talde-foroaren ikusgaitasuna"
+
+msgid "No category"
+msgstr "Kategoriarik ez"
+
+msgid "Could not retrieve forums"
+msgstr "Ezin izan dira foroak eskuratu"
+
+msgid "Forum category updated"
+msgstr "Foro-kategoria eguneratu da"
+
+msgid "Forum category created"
+msgstr "Foro-kategoria sortu da"
+
+msgid "Could not save forum category"
+msgstr "Ezin izan da foro-kategoria gorde"
+
+msgid "Forum updated"
+msgstr "Foroa eguneratu da"
+
+msgid "Forum created"
+msgstr "Foroa sortu da"
+
+msgid "Could not save forum"
+msgstr "Ezin izan da foroa gorde"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "Ziur foro-kategoria hau ezabatu nahi duzula?"
+
+msgid "Could not delete forum category"
+msgstr "Ezin izan da foro-kategoria ezabatu"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "Ziur foro hau ezabatu nahi duzula?"
+
+msgid "Could not delete forum"
+msgstr "Ezin izan da foroa ezabatu"
+
+msgid "Forum category unlocked"
+msgstr "Foro-kategoria desblokeatu da"
+
+msgid "Forum category locked"
+msgstr "Foro-kategoria blokeatu da"
+
+msgid "Could not update forum category"
+msgstr "Ezin izan da foro-kategoria eguneratu"
+
+msgid "Forum category shown"
+msgstr "Foro-kategoria erakutsi da"
+
+msgid "Forum category hidden"
+msgstr "Foro-kategoria ezkutatu da"
+
+msgid "Forum unlocked"
+msgstr "Foroa desblokeatu da"
+
+msgid "Forum locked"
+msgstr "Foroa blokeatu da"
+
+msgid "Could not update forum"
+msgstr "Ezin izan da foroa eguneratu"
+
+msgid "Forum shown"
+msgstr "Foroa erakutsi da"
+
+msgid "Forum hidden"
+msgstr "Foroa ezkutatu da"
+
+msgid "Forum notifications enabled"
+msgstr "Foro-jakinarazpenak gaitu dira"
+
+msgid "Forum notifications disabled"
+msgstr "Foroaren jakinarazpenak desgaituta"
+
+msgid "Could not update forum notification"
+msgstr "Ezin izan da foroaren jakinarazpena eguneratu"
+
+msgid "Forum category moved"
+msgstr "Foro-kategoria mugitu da"
+
+msgid "Could not move forum category"
+msgstr "Ezin izan da foro-kategoria mugitu"
+
+msgid "Forum moved"
+msgstr "Foroa mugitu da"
+
+msgid "Could not move forum"
+msgstr "Ezin izan da foroa mugitu"
+
+msgid "Back to forums"
+msgstr "Itzuli foroetara"
+
+msgid "New thread"
+msgstr "Hari berria"
+
+msgid "No threads found"
+msgstr "Ez da haririk aurkitu"
+
+msgid "Sticky"
+msgstr "Itsaskorra"
+
+msgid "Graded"
+msgstr "Kalifikatua"
+
+msgid "Grade peers"
+msgstr "Kalifikatu ikaskideak"
+
+msgid "Move thread"
+msgstr "Mugitu haria"
+
+msgid "Target forum"
+msgstr "Helburuko foroa"
+
+msgid "Target forum is required"
+msgstr "Helburuko foroa beharrezkoa da"
+
+msgid "Students"
+msgstr "Ikasleak"
+
+msgid "No students found"
+msgstr "Ez da ikaslerik aurkitu"
+
+msgid "No peers available to grade."
+msgstr "Ez dago kalifikatzeko ikaskiderik eskuragarri."
+
+msgid "Qualified"
+msgstr "Kalifikatua"
+
+msgid "Not qualified"
+msgstr "Ez kalifikatua"
+
+msgid "Could not retrieve thread grading"
+msgstr "Ezin izan da hariaren kalifikazioa eskuratu"
+
+msgid "Thread grading updated"
+msgstr "Hariaren kalifikazioa eguneratu da"
+
+msgid "Could not update thread grading"
+msgstr "Ezin izan da hariaren kalifikazioa eguneratu"
+
+msgid "Thread score saved"
+msgstr "Hariaren puntuazioa gorde da"
+
+msgid "Could not save thread score"
+msgstr "Ezin izan da hariaren puntuazioa gorde"
+
+msgid "Could not move thread"
+msgstr "Ezin izan da haria mugitu"
+
+msgid "Thread updated"
+msgstr "Haria eguneratu da"
+
+msgid "Search term is too short"
+msgstr "Bilaketa-terminoa laburregia da"
+
+msgid "Could not search forums"
+msgstr "Ezin izan da fororik bilatu"
+
+msgid "Moderated"
+msgstr "Moderatua"
+
+msgid "View threads"
+msgstr "Ikusi hariak"
 

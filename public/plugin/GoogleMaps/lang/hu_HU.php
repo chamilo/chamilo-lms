@@ -1,0 +1,39 @@
+<?php
+
+$strings['plugin_title'] = 'Google Térkép';
+$strings['plugin_comment'] = 'Google térkép megjelenítése a felhasználók extra mezőkben tárolt helyadatai alapján.';
+$strings['enable_api'] = 'Google Maps API betöltése';
+$strings['api_key'] = 'API kulcs';
+$strings['extra_field_name'] = 'Extra mező neve';
+$strings['extra_field_name_help'] = 'Adjon meg egy vagy több felhasználói extra mező változót vesszővel elválasztva. A térkép legfeljebb 5 mezőt jeleníthet meg. Példa: address, office_address, city';
+$strings['UsersCoordinatesMap'] = 'Felhasználók helytérképe';
+$strings['UsersCoordinatesMapHelp'] = 'Ez a térkép a konfigurált felhasználói extra mezők alapján jeleníti meg a felhasználók helyadatait.';
+$strings['GoogleMapsAdminIntro'] = 'Konfigurálja a Google Maps API kulcsot és azokat a felhasználói extra mezőket, amelyek címeket vagy helyadatokat tartalmaznak.';
+$strings['GoogleMapsApi'] = 'Google Maps API';
+$strings['ExtraFields'] = 'Extra mezők';
+$strings['Access'] = 'Hozzáférés';
+$strings['AdministratorsOnly'] = 'Csak adminisztrátorok';
+$strings['OpenMap'] = 'Térkép megnyitása';
+$strings['ConfigurePlugin'] = 'Bővítmény konfigurálása';
+$strings['Configured'] = 'Konfigurálva';
+$strings['NotConfigured'] = 'Nincs konfigurálva';
+$strings['GoogleMapsApiDisabledWarning'] = 'A Google Maps API betöltése le van tiltva a bővítmény konfigurációjában.';
+$strings['GoogleMapsApiKeyMissingWarning'] = 'Hiányzik a Google Maps API kulcs.';
+$strings['ExtraFieldNameMissingWarning'] = 'Nincs konfigurálva felhasználói extra mező.';
+$strings['ExtraFieldsNotFoundWarning'] = 'A következő felhasználói extra mezők nem találhatók: %s.';
+$strings['NoUserCoordinatesFound'] = 'Nem található felhasználói helyadat a konfigurált extra mezők alapján.';
+$strings['ConfigureGoogleMapsFirst'] = 'Konfigurálja és engedélyezze a Google Maps API-t a térkép megnyitása előtt.';
+
+$strings['map_provider'] = 'Térkép szolgáltató';
+$strings['map_provider_help'] = 'Válassza ki a bővítmény és a Közösségi térkép által használt térkép-szolgáltatót.';
+$strings['GoogleMapsProvider'] = 'Google Térkép';
+$strings['OpenStreetMapProvider'] = 'OpenStreetMap';
+$strings['MapProvider'] = 'Térkép szolgáltató';
+$strings['MapProviderConfiguration'] = 'Szolgáltató konfiguráció';
+$strings['default_latitude'] = 'Alapértelmezett szélesség';
+$strings['default_latitude_help'] = 'Alapértelmezett térkép középpont szélességi koordinátája. Akkor használatos, ha nincs jelölő.';
+$strings['default_longitude'] = 'Alapértelmezett hosszúság';
+$strings['default_longitude_help'] = 'Alapértelmezett térkép középpont hosszúsági koordinátája. Akkor használatos, ha nincs jelölő.';
+$strings['default_zoom'] = 'Alapértelmezett nagyítás';
+$strings['default_zoom_help'] = 'Alapértelmezett térkép nagyítás 1 és 20 között.';
+$strings['OpenStreetMapInfo'] = 'Az OpenStreetMap nem igényel API kulcsot. A csak címmel rendelkező jelölők keresési hivatkozásként jelennek meg, kivéve, ha koordináták is rendelkezésre állnak.';

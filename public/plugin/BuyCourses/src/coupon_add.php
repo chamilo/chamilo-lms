@@ -232,7 +232,7 @@ if ('POST' === $_SERVER['REQUEST_METHOD']) {
     $submittedToken = (string) ($_POST['csrf_token'] ?? '');
     if ('' === $submittedToken || !hash_equals($csrfToken, $submittedToken)) {
         $messages[] = Display::return_message(
-            'Invalid form token. Please refresh the page and try again.',
+            $plugin->get_lang('InvalidFormTokenRefreshPage'),
             'error',
             false
         );
@@ -241,7 +241,7 @@ if ('POST' === $_SERVER['REQUEST_METHOD']) {
 
     if ('' === $formData['code']) {
         $messages[] = Display::return_message(
-            'Coupon code is required.',
+            $plugin->get_lang('CouponCodeRequired'),
             'error',
             false
         );
@@ -251,7 +251,7 @@ if ('POST' === $_SERVER['REQUEST_METHOD']) {
     $discountType = (int) $formData['discount_type'];
     if (!array_key_exists($discountType, $discountTypes)) {
         $messages[] = Display::return_message(
-            'Discount type is required.',
+            $plugin->get_lang('CouponDiscountTypeRequired'),
             'error',
             false
         );
@@ -261,7 +261,7 @@ if ('POST' === $_SERVER['REQUEST_METHOD']) {
     $discountAmount = (float) str_replace(',', '.', $formData['discount_amount']);
     if ($discountAmount < 0) {
         $messages[] = Display::return_message(
-            'Discount must be zero or greater.',
+            $plugin->get_lang('CouponDiscountMustBeZeroOrGreater'),
             'error',
             false
         );
@@ -273,14 +273,14 @@ if ('POST' === $_SERVER['REQUEST_METHOD']) {
 
     if (null === $validStart || null === $validEnd) {
         $messages[] = Display::return_message(
-            'Both start and end dates are required.',
+            $plugin->get_lang('CouponStartAndEndDatesRequired'),
             'error',
             false
         );
         $hasError = true;
     } elseif ($validStart > $validEnd) {
         $messages[] = Display::return_message(
-            'The start date cannot be later than the end date.',
+            $plugin->get_lang('CouponStartDateCannotBeLaterThanEndDate'),
             'error',
             false
         );
@@ -324,7 +324,7 @@ if ('POST' === $_SERVER['REQUEST_METHOD']) {
         }
 
         $messages[] = Display::return_message(
-            'The coupon could not be saved.',
+            $plugin->get_lang('CouponCouldNotBeSaved'),
             'error',
             false
         );

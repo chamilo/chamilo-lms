@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "此致敬礼"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "公式示例：sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "公式示例：sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "变量范围"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":是:有版权,, 否:无版权"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:文件夹,, application/msword:MsWord,, application/octet-stream:八位字节流,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:文件夹,, application\/msword:MsWord,, application\/octet-stream:八位字节流,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":练习:练习,, 模拟:模拟,, 问卷:问卷,, 图表:图表,, 图:图,, 图:图,, 索引:索引,, 幻灯:幻灯,, 表:表,, 描述文本:描述文本,, 考试:考试,, 实验:实验,, 问题声明:问题声明,, 自我评价:自我评价,, 演讲:演讲"
@@ -9731,6 +9731,9 @@ msgstr "搜索结果："
 msgid "Select a file"
 msgstr "选择文件"
 
+msgid "Select a file to insert into the editor."
+msgstr "选择要插入到编辑器中的文件。"
+
 msgid "Warning - The FAQ file, located in the /home/ directory of your portal, is not writable. Your text will not be saved until the file permissions are changed."
 msgstr "警告 - 门户 /home/ 目录中的 FAQ 文件不可写。在更改文件权限之前，您的文本将无法保存。"
 
@@ -15911,6 +15914,9 @@ msgstr "日期与时间"
 msgid "Item"
 msgstr "项目"
 
+msgid "Items"
+msgstr "项目"
+
 msgid "Configure Dashboard Plugin"
 msgstr "配置资料卡插件"
 
@@ -17164,6 +17170,18 @@ msgstr "组中的会话"
 
 msgid "Courses in group"
 msgstr "组中的课程"
+
+msgid "Courses on the platform"
+msgstr "平台上的课程"
+
+msgid "%s courses"
+msgstr "%s 门课程"
+
+msgid "%s sessions"
+msgstr "%s 个会话"
+
+msgid "Search by title or code"
+msgstr "按标题或代码搜索"
 
 msgid "Users in group"
 msgstr "组中的用户"
@@ -32169,6 +32187,9 @@ msgstr "作业"
 msgid "Allowed file formats: %s"
 msgstr "允许的文件格式：%s"
 
+msgid "File manager"
+msgstr "文件管理器"
+
 msgid "File type not allowed. Allowed extensions: %s"
 msgstr "文件类型不允许。允许的扩展名：%s"
 
@@ -33882,6 +33903,2583 @@ msgstr "欢迎"
 msgid "Welcome to Chamilo"
 msgstr "欢迎使用 Chamilo"
 
+msgid "Check all unanswered questions below"
+msgstr "检查下面所有未回答的问题"
+
 msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
 msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> 如果这是您第一次使用 Chamilo，请确保查看侧边菜单以了解其众多功能。如果您需要帮助，您会发现<a href=\"https://docs.chamilo.org\">我们的官方文档</a>可用于标准文档，而我们的<a href=\"https://github.com/chamilo/chamilo-lms/discussions\">在线论坛</a>可帮助分享想法并从其他 Chamilo 用户那里找到答案。"
+
+msgid "Change password"
+msgstr "更改密码"
+
+msgid "Newest first"
+msgstr "最新在前"
+
+msgid "Oldest first"
+msgstr "最早在前"
+
+msgid "Title A–Z"
+msgstr "标题 A–Z"
+
+msgid "Title Z–A"
+msgstr "标题 Z–A"
+
+msgid "Send test email"
+msgstr "发送测试邮件"
+
+msgid "Show teachers"
+msgstr "显示教师"
+
+msgid "Hide teachers"
+msgstr "隐藏教师"
+
+msgid "Delete exercise attempts"
+msgstr "删除练习尝试"
+
+msgid "Message sent successfully."
+msgstr "消息发送成功。"
+
+msgid "You cannot create a new course right now."
+msgstr "您目前无法创建新课程。"
+
+msgid "Unable to verify whether you can create a new course right now."
+msgstr "无法验证您目前是否可以创建新课程。"
+
+msgid "Please try again later or contact the administrator."
+msgstr "请稍后重试或联系管理员。"
+
+msgid "You cannot create more courses at this time."
+msgstr "您目前无法创建更多课程。"
+
+msgid "You already manage %d courses and your active service allows up to %d. To create another course, you need a higher service limit or reduce your current active courses."
+msgstr "您已管理 %d 门课程，您的有效服务允许最多 %d 门。要创建另一门课程，您需要更高的服务限制或减少当前有效课程。"
+
+msgid "You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now."
+msgstr "您已管理 %d 门课程，平台目前允许您的账户最多 %d 门。您目前无法创建更多课程。"
+
+msgid "Add a class"
+msgstr "添加班级"
+
+msgid "Search classes"
+msgstr "搜索班级"
+
+msgid "No classes found"
+msgstr "未找到班级"
+
+msgid "Import classes"
+msgstr "导入班级"
+
+msgid "Class users"
+msgstr "班级用户"
+
+msgid "%s classes imported"
+msgstr "已导入 %s 个班级"
+
+msgid "%s user-class links imported"
+msgstr "已导入 %s 个用户-班级关联"
+
+msgid "Hide comments"
+msgstr "隐藏评论"
+
+msgid "Loading comments..."
+msgstr "正在加载评论..."
+
+msgid "No comments yet."
+msgstr "暂无评论。"
+
+msgid "A user with this username already exists"
+msgstr "该用户名已存在"
+
+msgid "Manage meetings, review recordings and update course-wide BBB settings from one place."
+msgstr "在此处管理会议、查看录制内容并更新全课程 BBB 设置。"
+
+msgid "Review the current defaults and propagate them to every course when needed."
+msgstr "查看当前默认设置，并在需要时将其应用到所有课程。"
+
+msgid "Filter the list by meeting date range."
+msgstr "按会议日期范围筛选列表。"
+
+msgid "Review meeting history, participants and recording actions."
+msgstr "查看会议历史、参与者及录制操作。"
+
+msgid "Participants"
+msgstr "参与者"
+
+msgid "CountUsers"
+msgstr "用户数量"
+
+msgid "No data found"
+msgstr "未找到数据"
+
+msgid "My justifications"
+msgstr "我的请假"
+
+msgid "My services"
+msgstr "我的服务"
+
+msgid "Extra menu"
+msgstr "扩展菜单"
+
+msgid "Pending tests"
+msgstr "待完成测验"
+
+msgid "No specific language"
+msgstr "无特定语言"
+
+msgid "Source Chamilo version"
+msgstr "源 Chamilo 版本"
+
+msgid "Exporting..."
+msgstr "正在导出..."
+
+msgid "Autosaved drafts available"
+msgstr "有可用的自动保存草稿"
+
+msgid "Hide drafts"
+msgstr "隐藏草稿"
+
+msgid "Show drafts"
+msgstr "显示草稿"
+
+msgid "Drafts are stored only in this browser and are removed after saving the document."
+msgstr "草稿仅保存在此浏览器中，保存文档后将被删除。"
+
+msgid "Last saved"
+msgstr "最后保存"
+
+msgid "Restore draft"
+msgstr "恢复草稿"
+
+msgid "Delete draft"
+msgstr "删除草稿"
+
+msgid "Information about indexing document content"
+msgstr "关于文档内容索引的信息"
+
+msgid "When enabled, the document text is indexed by the search engine so users can find it from platform search."
+msgstr "启用后，文档文本将被搜索引擎索引，用户可通过平台搜索找到该文档。"
+
+msgid "The editor is not available."
+msgstr "编辑器不可用。"
+
+msgid "Please place the cursor inside a paragraph first."
+msgstr "请先将光标置于段落内。"
+
+msgid "The selected paragraph is empty."
+msgstr "所选段落为空。"
+
+msgid "Loading failed."
+msgstr "加载失败。"
+
+msgid "Add introduction"
+msgstr "添加简介"
+
+msgid "Course type"
+msgstr "课程类型"
+
+msgid "Choose whether this course uses the standard platform limits or benefits from a purchased service."
+msgstr "选择此课程使用标准平台限制还是享受已购服务权益。"
+
+msgid "Standard course"
+msgstr "标准课程"
+
+msgid "Use the standard platform limits."
+msgstr "使用标准平台限制。"
+
+msgid "Selected"
+msgstr "已选"
+
+msgid "Hosting limit"
+msgstr "托管限制"
+
+msgid "Document quota"
+msgstr "文档配额"
+
+msgid "The standard course limit has been reached."
+msgstr "已达到标准课程限制。"
+
+msgid "Use the benefits granted by this service."
+msgstr "使用此服务授予的权益。"
+
+msgid "Courses with these benefits"
+msgstr "使用这些权益的课程"
+
+msgid "Active service"
+msgstr "活动服务"
+
+msgid "Buy service"
+msgstr "购买服务"
+
+msgid "Select an available course type before creating the course."
+msgstr "创建课程前请先选择可用的课程类型。"
+
+msgid "users"
+msgstr "用户"
+
+msgid "You need to buy this service before using these benefits."
+msgstr "您需要先购买此服务才能使用这些权益。"
+
+msgid "You already used all courses available with this service."
+msgstr "您已用完此服务提供的所有课程。"
+
+msgid "This option is not available."
+msgstr "此选项不可用。"
+
+msgid "This field is required"
+msgstr "此字段为必填项"
+
+msgid "Show less"
+msgstr "显示更少"
+
+msgid "Show full description"
+msgstr "显示完整描述"
+
+msgid "Virtual keyboard"
+msgstr "虚拟键盘"
+
+msgid "Backspace"
+msgstr "退格"
+
+msgid "Space"
+msgstr "空格"
+
+msgid "Learning path only visible to selected learners"
+msgstr "学习路径仅对选定的学员可见"
+
+msgid "Create course"
+msgstr "创建课程"
+
+msgid "Tour"
+msgstr "导览"
+
+msgid "Are you sure you want to delete this comment?"
+msgstr "确定要删除此评论吗？"
+
+msgid "No posts found"
+msgstr "未找到帖子"
+
+msgid "No communities"
+msgstr "无社区"
+
+msgid "No friends found"
+msgstr "未找到好友"
+
+msgid "Visual overview of your skills"
+msgstr "技能可视化概览"
+
+msgid "Compare your progress"
+msgstr "比较您的进度"
+
+msgid "Please enter a search term."
+msgstr "请输入搜索词。"
+
+msgid "Enter captcha code"
+msgstr "请输入验证码"
+
+msgid "Refresh captcha"
+msgstr "刷新验证码"
+
+msgid "Captcha is temporarily blocked. Please try again later."
+msgstr "验证码暂时被锁定，请稍后再试。"
+
+msgid "Item Details"
+msgstr "项目详情"
+
+msgid "Open File"
+msgstr "打开文件"
+
+msgid "Selection"
+msgstr "选择"
+
+msgid "Remove selection context"
+msgstr "移除选择上下文"
+
+msgid "Source document"
+msgstr "源文档"
+
+msgid "Use the current course context"
+msgstr "使用当前课程上下文"
+
+msgid "Loading documents..."
+msgstr "正在加载文档..."
+
+msgid "No compatible PDF or TXT document was found in this course."
+msgstr "在此课程中未找到兼容的 PDF 或 TXT 文档。"
+
+msgid "Select a PDF or TXT document to generate terms only from that document."
+msgstr "请选择一个 PDF 或 TXT 文档，仅从该文档生成术语。"
+
+msgid "Confidentiality warning"
+msgstr "保密警告"
+
+msgid "When a document is selected, the prompt is fixed so the generation uses only that document content."
+msgstr "选择文档后，提示将被固定，生成内容仅使用该文档内容。"
+
+msgid "No document-processing AI providers available."
+msgstr "无可用的文档处理 AI 提供商。"
+
+msgid "Failed to save signature. Please try again."
+msgstr "保存签名失败，请重试。"
+
+msgid "Select and move"
+msgstr "选择并移动"
+
+msgid "Freehand"
+msgstr "手绘"
+
+msgid "Stroke"
+msgstr "描边"
+
+msgid "Fill"
+msgstr "填充"
+
+msgid "Import SVG"
+msgstr "导入 SVG"
+
+msgid "Import image"
+msgstr "导入图像"
+
+msgid "Click the drawing area to place this text"
+msgstr "点击绘图区域放置此文本"
+
+msgid "Draw a new SVG, import an existing SVG or embed an image, then save it as a reusable document."
+msgstr "绘制新的 SVG、导入现有 SVG 或嵌入图像，然后将其保存为可重复使用的文档。"
+
+msgid "Use Select and move to reposition or resize elements added in this editor."
+msgstr "使用“选择并移动”来重新定位或调整在此编辑器中添加的元素大小。"
+
+msgid "Stroke width"
+msgstr "描边宽度"
+
+msgid "Transparent fill"
+msgstr "透明填充"
+
+msgid "Invalid id"
+msgstr "无效的 ID"
+
+msgid "Unable to load the drawing"
+msgstr "无法加载绘图"
+
+msgid "Only PNG, JPG, WEBP or GIF images are supported."
+msgstr "仅支持 PNG、JPG、WEBP 或 GIF 图像。"
+
+msgid "Unable to read the image file."
+msgstr "无法读取图像文件。"
+
+msgid "Only SVG files are supported."
+msgstr "仅支持 SVG 文件。"
+
+msgid "The SVG file is empty or invalid."
+msgstr "SVG 文件为空或无效。"
+
+msgid "Unable to read the SVG file."
+msgstr "无法读取 SVG 文件。"
+
+msgid "The drawing is empty or invalid."
+msgstr "绘图为空或无效。"
+
+msgid "Unable to save the drawing"
+msgstr "无法保存绘图"
+
+msgid "Information about AI-assisted documents"
+msgstr "关于 AI 辅助文档的信息"
+
+msgid "Location"
+msgstr "位置"
+
+msgid "Cloud link"
+msgstr "云链接"
+
+msgid "Add a link to a cloud document, such as Google Drive or Google Docs."
+msgstr "添加指向云文档的链接，例如 Google Drive 或 Google Docs。"
+
+msgid "Add cloud link"
+msgstr "添加云链接"
+
+msgid "Document title"
+msgstr "文档标题"
+
+msgid "Document options change how uploaded files are processed after saving."
+msgstr "文档选项决定上传文件保存后的处理方式。"
+
+msgid "Information about uncompressing zip files"
+msgstr "关于解压 ZIP 文件的信息"
+
+msgid "When enabled, ZIP files are extracted into the current document folder after upload."
+msgstr "启用后，ZIP 文件上传后将解压到当前文档文件夹。"
+
+msgid "The title is required."
+msgstr "标题为必填项。"
+
+msgid "The URL is required."
+msgstr "URL 为必填项。"
+
+msgid "The destination folder is missing."
+msgstr "目标文件夹不存在。"
+
+msgid "Unable to create cloud link."
+msgstr "无法创建云链接。"
+
+msgid "Copy to My Files"
+msgstr "复制到我的文件"
+
+msgid "Used space"
+msgstr "已用空间"
+
+msgid "Available space"
+msgstr "可用空间"
+
+msgid "Available percentage"
+msgstr "可用百分比"
+
+msgid "Cloud links cannot be downloaded."
+msgstr "无法下载云链接。"
+
+msgid "Could not copy the file to My Files"
+msgstr "无法将文件复制到我的文件"
+
+msgid "File copied to My Files"
+msgstr "文件已复制到我的文件"
+
+msgid "Checking course creation options..."
+msgstr "正在检查课程创建选项..."
+
+msgid "You cannot create more courses right now."
+msgstr "您目前无法创建更多课程。"
+
+msgid "AI analyzer"
+msgstr "AI 分析器"
+
+msgid "Expand all"
+msgstr "全部展开"
+
+msgid "Collapse all"
+msgstr "全部折叠"
+
+msgid "Review your active service benefits, purchase history and available receipts."
+msgstr "查看您的活跃服务权益、购买历史和可用收据。"
+
+msgid "Active services"
+msgstr "活跃服务"
+
+msgid "No active services"
+msgstr "无活跃服务"
+
+msgid "Valid until"
+msgstr "有效期至"
+
+msgid "Recurring payment"
+msgstr "循环支付"
+
+msgid "Next charge"
+msgstr "下次扣费"
+
+msgid "Enable auto billing"
+msgstr "启用自动扣费"
+
+msgid "Cancel auto billing"
+msgstr "取消自动扣费"
+
+msgid "Granted benefits"
+msgstr "已获权益"
+
+msgid "Purchase history"
+msgstr "购买历史"
+
+msgid "No purchases yet"
+msgstr "暂无购买记录"
+
+msgid "Product"
+msgstr "产品"
+
+msgid "Reference"
+msgstr "参考编号"
+
+msgid "Amount"
+msgstr "金额"
+
+msgid "Receipt"
+msgstr "收据"
+
+msgid "Unable to load your services right now."
+msgstr "目前无法加载您的服务。"
+
+msgid "Auto billing enabled"
+msgstr "已启用自动扣费"
+
+msgid "Auto billing suspended"
+msgstr "已暂停自动扣费"
+
+msgid "Auto billing cancelled"
+msgstr "已取消自动扣费"
+
+msgid "Auto billing disabled"
+msgstr "已禁用自动扣费"
+
+msgid "Cancel auto billing for this service?"
+msgstr "取消此服务的自动扣费？"
+
+msgid "Preview class members and courses"
+msgstr "预览班级成员和课程"
+
+msgid "Please select a CSV file to import."
+msgstr "请选择要导入的 CSV 文件。"
+
+msgid "%d user-class links imported"
+msgstr "已导入 %d 条用户-班级关联"
+
+msgid "The following errors occurred during import:"
+msgstr "导入过程中出现以下错误："
+
+msgid "CSV file"
+msgstr "CSV 文件"
+
+msgid "Remove user from all group-related entities if not in the list"
+msgstr "若列表中不存在，则从所有与群组相关的实体中移除用户"
+
+msgid "UserName"
+msgstr "用户名"
+
+msgid "ClassName"
+msgstr "班级名称"
+
+msgid "are required for each row."
+msgstr "每行均必填。"
+
+msgid "title"
+msgstr "标题"
+
+msgid "is required."
+msgstr "必填。"
+
+msgid "description"
+msgstr "描述"
+
+msgid "are optional."
+msgstr "可选。"
+
+msgid "Are you sure you want to remove this user from the class?"
+msgstr "确定要将此用户从班级中移除吗？"
+
+msgid "Users in class"
+msgstr "班级用户"
+
+msgid "Remove user"
+msgstr "移除用户"
+
+msgid "Class not found"
+msgstr "未找到班级"
+
+msgid "Class overview"
+msgstr "班级概览"
+
+msgid "Back to classes"
+msgstr "返回班级列表"
+
+msgid "Search members or courses"
+msgstr "搜索成员或课程"
+
+msgid "Search by name, email, username or course title"
+msgstr "按姓名、邮箱、用户名或课程标题搜索"
+
+msgid "Class members"
+msgstr "班级成员"
+
+msgid "No email"
+msgstr "无邮箱"
+
+msgid "No members found"
+msgstr "未找到成员"
+
+msgid "No courses found"
+msgstr "未找到课程"
+
+msgid "The end date must be after the start date."
+msgstr "结束日期必须晚于开始日期。"
+
+msgid "Always visible"
+msgstr "始终可见"
+
+msgid "No end date"
+msgstr "无结束日期"
+
+msgid "No restriction"
+msgstr "无限制"
+
+msgid "Missing learning path or course identifier"
+msgstr "缺少学习路径或课程标识符"
+
+msgid "Select a user or a group first"
+msgstr "请先选择用户或群组"
+
+msgid "Remove all date restrictions for this learning path?"
+msgstr "移除此学习路径的所有日期限制？"
+
+msgid "Advanced learning path access"
+msgstr "高级学习路径访问"
+
+msgid "Remove date restrictions"
+msgstr "移除日期限制"
+
+msgid "Search by name, email, username or group"
+msgstr "按姓名、邮箱、用户名或群组搜索"
+
+msgid "Edit user restriction"
+msgstr "编辑用户限制"
+
+msgid "Edit group restriction"
+msgstr "编辑群组限制"
+
+msgid "Select a user or group"
+msgstr "选择用户或群组"
+
+msgid "Save restriction"
+msgstr "保存限制"
+
+msgid "members"
+msgstr "成员"
+
+msgid "Create Assignment"
+msgstr "创建作业"
+
+msgid "The submission deadline has passed. You can no longer submit."
+msgstr "提交截止日期已过。您无法再提交。"
+
+msgid "Mailing cannot be combined with other recipients."
+msgstr "邮件无法与其他收件人组合。"
+
+msgid "Social map"
+msgstr "社交地图"
+
+msgid "The map plugin is not enabled or configured."
+msgstr "地图插件未启用或未配置。"
+
+msgid "Some configured extra fields were not found"
+msgstr "部分配置的额外字段未找到"
+
+msgid "No user locations were found."
+msgstr "未找到用户位置。"
+
+msgid "OpenStreetMap needs coordinates to display an embedded marker. Address-only locations are listed below."
+msgstr "OpenStreetMap 需要坐标才能显示嵌入标记。仅含地址的位置列示如下。"
+
+msgid "Locations"
+msgstr "位置"
+
+msgid "Open map"
+msgstr "打开地图"
+
+msgid "Provider: OpenStreetMap"
+msgstr "提供商：OpenStreetMap"
+
+msgid "Provider: Google Maps"
+msgstr "提供商：Google 地图"
+
+msgid "Personal files"
+msgstr "个人文件"
+
+msgid "Upload image"
+msgstr "上传图片"
+
+msgid "Upload media"
+msgstr "上传媒体"
+
+msgid "Only image files are allowed in this upload screen."
+msgstr "此上传界面仅允许图片文件。"
+
+msgid "Only audio and video files are allowed in this upload screen."
+msgstr "此上传界面仅允许音频和视频文件。"
+
+msgid "Upload files to your personal storage."
+msgstr "将文件上传到您的个人存储空间。"
+
+msgid "Linked"
+msgstr "已链接"
+
+msgid "No audio or video files were found in this folder."
+msgstr "此文件夹中未找到音频或视频文件。"
+
+msgid "No image files were found in this folder."
+msgstr "此文件夹中未找到图片文件。"
+
+msgid "No matching files were found in this folder."
+msgstr "此文件夹中未找到匹配的文件。"
+
+msgid "This file type is not allowed in this upload screen."
+msgstr "此上传界面不允许此文件类型。"
+
+msgid "Manage your personal files and course documents."
+msgstr "管理您的个人文件和课程文档。"
+
+msgid "DateValidity"
+msgstr "DateValidity"
+
+msgid "JustificationSaved"
+msgstr "JustificationSaved"
+
+msgid "ValidityDate"
+msgstr "ValidityDate"
+
+msgid "MyJustifications"
+msgstr "MyJustifications"
+
+msgid "Submission"
+msgstr "提交"
+
+msgid "Use the filters above to narrow the list."
+msgstr "使用上方筛选器缩小列表范围。"
+
+msgid "You are not allowed to see this page."
+msgstr "您无权查看此页面。"
+
+msgid "plugin_title"
+msgstr "plugin_title"
+
+msgid "plugin_comment"
+msgstr "plugin_comment"
+
+msgid "Course tracking details"
+msgstr "课程跟踪详情"
+
+msgid "Course activity statistics"
+msgstr "课程活动统计"
+
+msgid "mobile_phone_number"
+msgstr "mobile_phone_number"
+
+msgid "Allowed template syntax"
+msgstr "允许的模板语法"
+
+msgid "Functions"
+msgstr "函数"
+
+msgid "Available variables depend on the template type, for example {{ user.getUsername() }} or {{ user.getEmail() }}."
+msgstr "可用变量取决于模板类型，例如 {{ user.getUsername() }} 或 {{ user.getEmail() }}。"
+
+msgid "For security reasons, any other Twig function, filter (such as filter, map, reduce or sort) or PHP call is blocked."
+msgstr "出于安全原因，任何其他 Twig 函数、过滤器（如 filter、map、reduce 或 sort）或 PHP 调用均被阻止。"
+
+msgid "Global administrator"
+msgstr "全局管理员"
+
+msgid "Session manager"
+msgstr "会话管理员"
+
+msgid "Human resources manager"
+msgstr "人力资源管理员"
+
+msgid "Course teacher"
+msgstr "课程教师"
+
+msgid "Course student"
+msgstr "课程学生"
+
+msgid "Platform reports"
+msgstr "平台报告"
+
+msgid "Security reports"
+msgstr "安全报告"
+
+msgid "Course reports"
+msgstr "课程报告"
+
+msgid "Gradebook reports"
+msgstr "成绩册报告"
+
+msgid "Social reports"
+msgstr "社交报告"
+
+msgid "Exports"
+msgstr "导出"
+
+msgid "Reports about platform-wide usage, users, courses and sessions."
+msgstr "关于平台使用情况、用户、课程和会话的报告。"
+
+msgid "Audit and security-sensitive reports."
+msgstr "审计和安全敏感报告。"
+
+msgid "Reports scoped to courses managed by the user."
+msgstr "用户管理的课程范围内的报告。"
+
+msgid "Reports related to learner activity and follow-up."
+msgstr "与学习者活动和跟进相关的报告。"
+
+msgid "Reports related to scores, certificates and gradebook data."
+msgstr "与分数、证书和成绩册数据相关的报告。"
+
+msgid "Reports and exports that generate downloadable files."
+msgstr "生成可下载文件的报告和导出。"
+
+msgid "Main platform statistics dashboard."
+msgstr "主平台统计仪表板。"
+
+msgid "Number of courses and course distribution report."
+msgstr "课程数量和课程分布报告。"
+
+msgid "Platform-wide access to course tools."
+msgstr "平台范围内对课程工具的访问。"
+
+msgid "Number of resources per tool."
+msgstr "每个工具的资源数量。"
+
+msgid "Latest access to courses."
+msgstr "最近访问课程。"
+
+msgid "Course distribution by language."
+msgstr "按语言划分的课程分布。"
+
+msgid "Course usage report."
+msgstr "课程使用报告。"
+
+msgid "Platform user count report."
+msgstr "平台用户数量报告。"
+
+msgid "Recent logins chart."
+msgstr "最近登录图表。"
+
+msgid "Login distribution by month."
+msgstr "按月划分的登录分布。"
+
+msgid "Login distribution by day."
+msgstr "按天划分的登录分布。"
+
+msgid "Login distribution by hour."
+msgstr "按小时划分的登录分布。"
+
+msgid "Users with profile picture."
+msgstr "拥有个人资料图片的用户。"
+
+msgid "Login report filtered by date."
+msgstr "按日期筛选的登录报告。"
+
+msgid "Users who have not logged in recently."
+msgstr "最近未登录的用户。"
+
+msgid "Inactive or suspicious user accounts report."
+msgstr "不活跃或可疑用户账户报告。"
+
+msgid "Users activity statistics."
+msgstr "用户活动统计。"
+
+msgid "Currently online users report."
+msgstr "当前在线用户报告。"
+
+msgid "New user registrations over time."
+msgstr "新用户注册趋势。"
+
+msgid "Course and session subscriptions over time."
+msgstr "课程和会话订阅趋势。"
+
+msgid "Duplicate user detection and maintenance report."
+msgstr "重复用户检测与维护报告。"
+
+msgid "Platform user/session statistics."
+msgstr "平台用户/会话统计。"
+
+msgid "Quarterly platform report."
+msgstr "季度平台报告。"
+
+msgid "Activities audit"
+msgstr "活动审计"
+
+msgid "Audit report for important administrative and platform activities."
+msgstr "重要管理和平台活动的审计报告。"
+
+msgid "Social messages received report."
+msgstr "社交消息接收报告。"
+
+msgid "Social messages sent report."
+msgstr "社交消息发送报告。"
+
+msgid "Social contacts count report."
+msgstr "社交联系人数量报告。"
+
+msgid "Sessions created over time."
+msgstr "会话创建趋势。"
+
+msgid "Learning analytics dashboard."
+msgstr "学习分析仪表板。"
+
+msgid "Teacher time report."
+msgstr "教师时间报告。"
+
+msgid "Teachers time by session report"
+msgstr "按会话分组的教师时间报告"
+
+msgid "Teacher time report grouped by session."
+msgstr "按会话分组的教师时间报告。"
+
+msgid "Corporate learning analytics report."
+msgstr "企业学习分析报告。"
+
+msgid "Course learners tracking report."
+msgstr "课程学习者跟踪报告。"
+
+msgid "Course activity statistics with connected and inactive users."
+msgstr "包含已连接和不活跃用户的课程活动统计。"
+
+msgid "Detailed tracking report for a learner inside a course."
+msgstr "课程内学习者的详细跟踪报告。"
+
+msgid "Course gradebook overview."
+msgstr "课程成绩册概览。"
+
+msgid "Gradebook statistics"
+msgstr "成绩册统计"
+
+msgid "Gradebook statistics report."
+msgstr "成绩册统计报告。"
+
+msgid "Certificate report"
+msgstr "证书报告"
+
+msgid "Certificate report for course gradebook."
+msgstr "课程成绩册的证书报告。"
+
+msgid "User statistics"
+msgstr "用户统计"
+
+msgid "Course gradebook statistics for a user."
+msgstr "用户的课程成绩册统计。"
+
+msgid "Personal statistics"
+msgstr "个人统计"
+
+msgid "Personal gradebook statistics."
+msgstr "个人成绩册统计。"
+
+msgid "Reports catalog"
+msgstr "报告目录"
+
+msgid "Central catalog of available reports, roles and permission categories."
+msgstr "可用报告、角色和权限类别的中央目录。"
+
+msgid "Course log events"
+msgstr "课程日志事件"
+
+msgid "Detailed course tracking events."
+msgstr "详细课程跟踪事件。"
+
+msgid "Course tool usage"
+msgstr "课程工具使用情况"
+
+msgid "Course tracking report grouped by tools."
+msgstr "按工具分组的课程跟踪报告。"
+
+msgid "Course resource usage"
+msgstr "课程资源使用情况"
+
+msgid "Course tracking report grouped by resources."
+msgstr "按资源分组的课程跟踪报告。"
+
+msgid "Course group tracking"
+msgstr "课程小组跟踪"
+
+msgid "Tracking report for course groups."
+msgstr "课程小组的跟踪报告。"
+
+msgid "Course session report"
+msgstr "课程课次报告"
+
+msgid "Tracking report for a course inside sessions."
+msgstr "课程在课次中的跟踪报告。"
+
+msgid "Learning path report"
+msgstr "学习路径报告"
+
+msgid "Learning path tracking report."
+msgstr "学习路径跟踪报告。"
+
+msgid "Learning path results by user"
+msgstr "按用户分组的学习路径结果"
+
+msgid "Learning path results grouped by user."
+msgstr "按用户分组的学习路径结果。"
+
+msgid "Exercises report"
+msgstr "练习报告"
+
+msgid "Course exercises and exams tracking report."
+msgstr "课程练习与考试跟踪报告。"
+
+msgid "Question report"
+msgstr "题目报告"
+
+msgid "Course question tracking report."
+msgstr "课程题目跟踪报告。"
+
+msgid "Messages report"
+msgstr "消息报告"
+
+msgid "Course messages tracking report."
+msgstr "课程消息跟踪报告。"
+
+msgid "Total time tracking report for course learners."
+msgstr "课程学习者总时长跟踪报告。"
+
+msgid "Gradebook summary"
+msgstr "成绩单摘要"
+
+msgid "Summary view of gradebook results."
+msgstr "成绩单结果的摘要视图。"
+
+msgid "Flat view"
+msgstr "平铺视图"
+
+msgid "Flat gradebook results view."
+msgstr "成绩单结果的平铺视图。"
+
+msgid "Evaluation log"
+msgstr "评测日志"
+
+msgid "Change log for gradebook evaluations."
+msgstr "成绩单评测的变更日志。"
+
+msgid "Link log"
+msgstr "链接日志"
+
+msgid "Change log for gradebook links."
+msgstr "成绩单链接的变更日志。"
+
+msgid "Result details"
+msgstr "结果详情"
+
+msgid "Detailed view of a gradebook result."
+msgstr "成绩单结果的详细视图。"
+
+msgid "Personal certificates report."
+msgstr "个人证书报告。"
+
+msgid "User move statistics"
+msgstr "用户迁移统计"
+
+msgid "Report for user move and transfer statistics."
+msgstr "用户迁移与转移统计报告。"
+
+msgid "User consent list"
+msgstr "用户同意列表"
+
+msgid "Report of users and consent status."
+msgstr "用户及其同意状态报告。"
+
+msgid "Special platform exports."
+msgstr "平台特殊导出。"
+
+msgid "Export certificates"
+msgstr "导出证书"
+
+msgid "Export platform certificates."
+msgstr "导出平台证书。"
+
+msgid "Export exercise results"
+msgstr "导出练习结果"
+
+msgid "Export exercise results from the platform."
+msgstr "从平台导出练习结果。"
+
+msgid "Course survey results and reporting."
+msgstr "课程调查结果与报告。"
+
+msgid "Attendance report"
+msgstr "考勤报告"
+
+msgid "Course attendance tracking and reports."
+msgstr "课程考勤跟踪与报告。"
+
+msgid "Exercises global report"
+msgstr "练习全局报告"
+
+msgid "Global exercise results report for the course."
+msgstr "课程练习结果全局报告。"
+
+msgid "Exercise report"
+msgstr "练习报告"
+
+msgid "Detailed exercise report."
+msgstr "详细练习报告。"
+
+msgid "Exercise history"
+msgstr "练习历史"
+
+msgid "Exercise attempt history."
+msgstr "练习尝试历史。"
+
+msgid "Exercise results"
+msgstr "练习结果"
+
+msgid "Exercise results and corrections."
+msgstr "练习结果与批改。"
+
+msgid "Question-level exercise statistics."
+msgstr "题目级练习统计。"
+
+msgid "Exercise statistics"
+msgstr "练习统计"
+
+msgid "Exercise statistics page."
+msgstr "练习统计页面。"
+
+msgid "Live exercise statistics"
+msgstr "实时练习统计"
+
+msgid "Live exercise statistics for teachers."
+msgstr "教师实时练习统计"
+
+msgid "Learning path statistics"
+msgstr "学习路径统计"
+
+msgid "Learning path item statistics."
+msgstr "学习路径项目统计。"
+
+msgid "Learning path report inside a course."
+msgstr "课程内学习路径报告。"
+
+msgid "User skills report."
+msgstr "用户技能报告。"
+
+msgid "Scheduled or periodic export configuration."
+msgstr "计划或定期导出配置。"
+
+msgid "User export"
+msgstr "用户导出"
+
+msgid "Export users from the platform."
+msgstr "从平台导出用户。"
+
+msgid "Not classified"
+msgstr "未分类"
+
+msgid "You have acquired the skill %s"
+msgstr "您已获得技能 %s"
+
+msgid "You have acquired the skill %s."
+msgstr "您已获得技能 %s。"
+
+msgid "Recover your password"
+msgstr "找回密码"
+
+msgid "Disclaimer"
+msgstr "免责声明"
+
+msgid "This operation would exceed the limit of %d users allowed for this course."
+msgstr "此操作将超出本课程允许的 %d 名用户上限。"
+
+msgid "DefaultGroupCategory"
+msgstr "DefaultGroupCategory"
+
+msgid "LearningCalendar"
+msgstr "LearningCalendar"
+
+msgid "Choose how this user can authenticate on the platform."
+msgstr "选择该用户在平台上的身份验证方式。"
+
+msgid "Authentication methods"
+msgstr "身份验证方法"
+
+msgid "Set password manually"
+msgstr "手动设置密码"
+
+msgid "Report role matrix"
+msgstr "报告角色矩阵"
+
+msgid "Report permission categories"
+msgstr "报告权限类别"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs enforce the documented report role matrix."
+msgstr "此注册表列出已知的报告页面、其类别、规范 URL、旧版 URL 及预期角色受众。规范 URL 强制执行文档化的报告角色矩阵。"
+
+msgid "reports"
+msgstr "reports"
+
+msgid "Canonical URL"
+msgstr "规范 URL"
+
+msgid "Legacy URL"
+msgstr "旧版 URL"
+
+msgid "Permission category"
+msgstr "权限类别"
+
+msgid "This matrix documents the expected audience for each report and is enforced by the canonical report entry point."
+msgstr "此矩阵记录每个报告的预期受众，并由规范报告入口强制执行。"
+
+msgid "These keys group reports by access scope and are used by the report registry. They can later be mapped to finer-grained platform permissions."
+msgstr "这些键按访问范围对报告进行分组，由报告注册表使用。稍后可将其映射到更细粒度的平台权限。"
+
+msgid "Permission"
+msgstr "权限"
+
+msgid "Clear active session"
+msgstr "清除活动会话"
+
+msgid "Are you sure you want to clear this user active session?"
+msgstr "确定要清除此用户的活动会话吗？"
+
+msgid "Preview shown without course context. Some course-specific data may be unavailable."
+msgstr "预览显示时未包含课程上下文。部分课程特定数据可能不可用。"
+
+msgid "Preview is not available for this question."
+msgstr "此问题无法预览。"
+
+msgid "Edition is not allowed without a course context."
+msgstr "无课程上下文时不允许编辑。"
+
+msgid "This plugin does not use regions."
+msgstr "此插件未使用区域。"
+
+msgid "No plugins with regions were found."
+msgstr "未找到使用区域的插件。"
+
+msgid "Freemium"
+msgstr "免费增值"
+
+msgid "Commercial service"
+msgstr "商业服务"
+
+msgid "Commercial"
+msgstr "商业版"
+
+msgid "100% free"
+msgstr "100% 免费"
+
+msgid "Displayed above the public login form."
+msgstr "显示在公开登录表单上方。"
+
+msgid "Displayed below the public login form."
+msgstr "显示在公开登录表单下方。"
+
+msgid "Displayed before the footer area."
+msgstr "显示在页脚区域之前。"
+
+msgid "Displayed in the left footer column."
+msgstr "显示在左侧页脚列。"
+
+msgid "Displayed in the center footer column."
+msgstr "显示在中间页脚列。"
+
+msgid "Displayed in the right footer column."
+msgstr "显示在右侧页脚列。"
+
+msgid "Showing all plugins."
+msgstr "显示所有插件。"
+
+msgid "Some plugins are still pending functional verification."
+msgstr "部分插件仍在等待功能验证。"
+
+msgid "Show verified plugins only"
+msgstr "仅显示已验证的插件"
+
+msgid "Showing verified plugins only."
+msgstr "仅显示已验证的插件。"
+
+msgid "Pending plugins are temporarily hidden until they are adapted and tested."
+msgstr "待处理的插件在适配和测试完成前暂时隐藏。"
+
+msgid "Show all plugins"
+msgstr "显示所有插件"
+
+msgid "Official and free plugins are listed separately from plugins that may depend on commercial services or paid offers."
+msgstr "官方免费插件与可能依赖商业服务或付费方案的插件分开列出。"
+
+msgid "Included free plugins"
+msgstr "包含的免费插件"
+
+msgid "Commercial and freemium plugins"
+msgstr "商业及免费增值插件"
+
+msgid "All plugins"
+msgstr "所有插件"
+
+msgid "No plugins were found for this category."
+msgstr "未找到此分类的插件。"
+
+msgid "Search plugins"
+msgstr "搜索插件"
+
+msgid "Search by name or description"
+msgstr "按名称或描述搜索"
+
+msgid "Advanced filters"
+msgstr "高级筛选"
+
+msgid "All statuses"
+msgstr "所有状态"
+
+msgid "All sources"
+msgstr "所有来源"
+
+msgid "All types"
+msgstr "所有类型"
+
+msgid "Installed plugins are shown first"
+msgstr "已安装的插件优先显示"
+
+msgid "No plugins match the current filters."
+msgstr "没有符合当前筛选条件的插件。"
+
+msgid "Try clearing the search or changing the filters."
+msgstr "请尝试清除搜索条件或更改筛选条件。"
+
+msgid "README"
+msgstr "自述文件"
+
+msgid "Invalid security token"
+msgstr "安全令牌无效"
+
+msgid "Please select a destination session"
+msgstr "请选择目标会话"
+
+msgid "Cannot move this to the same session"
+msgstr "无法移至同一会话"
+
+msgid "The destination session must include the selected course"
+msgstr "目标会话必须包含所选课程"
+
+msgid "The source session must include the selected course"
+msgstr "源会话必须包含所选课程"
+
+msgid "No learners found"
+msgstr "未找到学员"
+
+msgid "Will be subscribed"
+msgstr "将被订阅"
+
+msgid "Subscribed"
+msgstr "已订阅"
+
+msgid "The move process has finished"
+msgstr "移动过程已完成"
+
+msgid "Comparison finished. No data has been moved."
+msgstr "比较完成。未移动任何数据。"
+
+msgid "Move tracking data from the base course or a source session to another session. Use comparison first to review the affected learner data."
+msgstr "将跟踪数据从基础课程或源会话移动到另一个会话。请先执行比较以查看受影响的学员数据。"
+
+msgid "Search for a course or use the manual course ID field below."
+msgstr "搜索课程或使用下方的手动课程 ID 字段。"
+
+msgid "Fallback when the course search is not available."
+msgstr "课程搜索不可用时的备用方案。"
+
+msgid "Load sessions"
+msgstr "加载会话"
+
+msgid "Selected course"
+msgstr "已选课程"
+
+msgid "Choose the base course or the session where the tracking data currently exists."
+msgstr "选择跟踪数据当前所在的基础课程或会话。"
+
+msgid "Choose the session that will receive the tracking data."
+msgstr "选择将接收跟踪数据的会话。"
+
+msgid "Important"
+msgstr "重要"
+
+msgid "The move action updates existing tracking data. Run compare first and test this tool with a non-production course before moving real learner data."
+msgstr "移动操作会更新现有跟踪数据。请先运行比较，并在移动真实学员数据前使用非生产课程测试此工具。"
+
+msgid "No sessions found for this course"
+msgstr "未找到此课程的会话"
+
+msgid "Some users were ignored because they are not subscribed to this session."
+msgstr "部分用户因未订阅此会话而被忽略。"
+
+msgid "Remove selected user"
+msgstr "移除所选用户"
+
+msgid "Add selected user"
+msgstr "添加所选用户"
+
+msgid "No users from the selected list are subscribed to this session."
+msgstr "所选列表中的用户均未订阅此会话。"
+
+msgid "No image"
+msgstr "无图片"
+
+msgid "Invalid URL."
+msgstr "无效的 URL。"
+
+msgid "This cloud document cannot be embedded."
+msgstr "此云端文档无法嵌入。"
+
+msgid "Document not found"
+msgstr "未找到文档"
+
+msgid "File not found"
+msgstr "未找到文件"
+
+msgid "This learning path is not available for your user at this time."
+msgstr "此学习路径目前对您的用户不可用。"
+
+msgid "StartDateMustBeBeforeTheEndDate"
+msgstr "StartDateMustBeBeforeTheEndDate"
+
+msgid "Next learning path"
+msgstr "下一个学习路径"
+
+msgid "Select the learning path that will be available after this one."
+msgstr "选择在此学习路径之后可用的学习路径。"
+
+msgid "Create another learning path in this course to enable learning path flow."
+msgstr "在此课程中创建另一个学习路径以启用学习路径流程。"
+
+msgid "Available from %s"
+msgstr "自 %s 起可用"
+
+msgid "Available until %s"
+msgstr "可用至 %s"
+
+msgid "Statistics reset date"
+msgstr "统计重置日期"
+
+msgid "Last 24 hours"
+msgstr "最近 24 小时"
+
+msgid "This reset date is used as the reference date for the report. It does not delete historical tracking data."
+msgstr "此重置日期用作报告的参考日期。它不会删除历史跟踪数据。"
+
+msgid "Since reset date"
+msgstr "自重置日期起"
+
+msgid "Users connected in the last 24 hours"
+msgstr "最近 24 小时内连接的用户"
+
+msgid "Learners with at least one course access during the last 24 hours."
+msgstr "最近 24 小时内至少访问过一次课程的学习者。"
+
+msgid "Users connected in the last week"
+msgstr "最近一周内连接的用户"
+
+msgid "Learners with at least one course access during the last 7 days."
+msgstr "最近 7 天内至少访问过一次课程的学习者。"
+
+msgid "Users connected in the last month"
+msgstr "最近一个月内连接的用户"
+
+msgid "Learners with at least one course access during the last 30 days."
+msgstr "最近 30 天内至少访问过一次课程的学习者。"
+
+msgid "Not recently connected users"
+msgstr "近期未连接的用户"
+
+msgid "Learners without course access since %s."
+msgstr "自 %s 起未访问过课程的学习者。"
+
+msgid "Recently used resources"
+msgstr "最近使用的资源"
+
+msgid "Course tools/resources used since %s."
+msgstr "自 %s 起使用的课程工具/资源。"
+
+msgid "%s %% of learners"
+msgstr "%s %% 的学习者"
+
+msgid "Connections"
+msgstr "连接"
+
+msgid "Total connections"
+msgstr "总连接数"
+
+msgid "Downloaded documents"
+msgstr "下载的文档"
+
+msgid "List of documents downloaded by this learner in this course."
+msgstr "此学习者在此课程中下载的文档列表。"
+
+msgid "Forum topics"
+msgstr "论坛主题"
+
+msgid "Forum topics opened by this learner in this course."
+msgstr "此学习者在此课程中打开的论坛主题。"
+
+msgid "Forum posts"
+msgstr "论坛帖子"
+
+msgid "Forum posts written by this learner in this course."
+msgstr "此学习者在此课程中撰写的论坛帖子。"
+
+msgid "Course connections"
+msgstr "课程连接"
+
+msgid "Connection history for this learner in this course."
+msgstr "此学习者在此课程中的连接历史。"
+
+msgid "Resources used"
+msgstr "已使用的资源"
+
+msgid "Latest tools or resources used by this learner in this course."
+msgstr "此学习者在此课程中最近使用的工具或资源。"
+
+msgid "Logout date"
+msgstr "登出日期"
+
+msgid "Imported Aiken quiz"
+msgstr "已导入的 Aiken 测验"
+
+msgid "Only supported documents will be listed here."
+msgstr "仅支持的文档会列在此处。"
+
+msgid "Generated Aiken content"
+msgstr "生成的 Aiken 内容"
+
+msgid "Review the generated content before importing it as a new exercise."
+msgstr "在将其作为新练习导入之前，请查看生成的内容。"
+
+msgid "No documents available."
+msgstr "没有可用的文档。"
+
+msgid "yperbolic arctangent:\\t\\tarctanh(x)"
+msgstr "反双曲正切：\t\tarctanh(x)"
+
+msgid "Exercise"
+msgstr "练习"
+
+msgid "OfficialCode"
+msgstr "OfficialCode"
+
+msgid "FirstName"
+msgstr "FirstName"
+
+msgid "LastName"
+msgstr "LastName"
+
+msgid "LoginName"
+msgstr "LoginName"
+
+msgid "MinMinute"
+msgstr "MinMinute"
+
+msgid "StartDate"
+msgstr "StartDate"
+
+msgid "EndDate"
+msgstr "EndDate"
+
+msgid "CorrectionDate"
+msgstr "CorrectionDate"
+
+msgid "NotValidated"
+msgstr "NotValidated"
+
+msgid "PendingAttempts"
+msgstr "PendingAttempts"
+
+msgid "List of pending test attempts across your courses."
+msgstr "您所有课程中待批测试尝试的列表。"
+
+msgid "User ID"
+msgstr "用户 ID"
+
+msgid "QuestionType"
+msgstr "QuestionType"
+
+msgid "QuestionsWithNoAutomaticCorrection"
+msgstr "QuestionsWithNoAutomaticCorrection"
+
+msgid "There are no pending tests."
+msgstr "没有待批的测试。"
+
+msgid "%s results"
+msgstr "%s 条结果"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>填写表单活动示例：计算身体质量指数</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>年龄</strong></td>            <td width=\"75%\" style=\"\">[25] 岁</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>性别</strong></td>            <td style=\"\" text-align:=\"\">[M]（M 或 F）</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>体重</strong></td>            <td style=\"\" text-align:=\"\">95 公斤</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>身高</strong></td>            <td style=\"vertical-align: top;\">1.81 米</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>身体质量指数</strong></td>            <td style=\"vertical-align: top;\">[29] BMI = 体重/身高<sup>2</sup>（参见 <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\">维基百科文章</a>）</td>        </tr>    </tbody></table>"
+
+msgid "Removed"
+msgstr "已移除"
+
+msgid "NoUsersInTheList"
+msgstr "NoUsersInTheList"
+
+msgid "Are you sure?"
+msgstr "您确定吗？"
+
+msgid "NoResultsAvailable"
+msgstr "NoResultsAvailable"
+
+msgid "Import groups from a CSV file and optionally remove items that are not present in the file."
+msgstr "从 CSV 文件导入群组，并可选择移除文件中不存在的项目。"
+
+msgid "Use this option carefully because items missing from the CSV can be removed during the import process."
+msgstr "请谨慎使用此选项，因为 CSV 中缺失的项目在导入过程中可能会被移除。"
+
+msgid "Upload a CSV file with the group data you want to import."
+msgstr "上传包含要导入群组数据的 CSV 文件。"
+
+msgid "You can download the example file to use the expected format."
+msgstr "您可以下载示例文件以使用预期格式。"
+
+msgid "If you enable deletion, items not present in the file may be removed."
+msgstr "如果启用删除，文件中不存在的项目可能会被移除。"
+
+msgid "The CSV file is mandatory to start the import."
+msgstr "必须提供 CSV 文件才能开始导入。"
+
+msgid "Please select at least one class."
+msgstr "请至少选择一个班级。"
+
+msgid "Define the properties for each group before creating them."
+msgstr "在创建群组前，请先定义每个群组的属性。"
+
+msgid "Apply the first row values"
+msgstr "应用第一行的值"
+
+msgid "Create groups manually or generate them from the classes subscribed to this course."
+msgstr "手动创建群组，或根据已选修本课程的班级生成群组。"
+
+msgid "Create manual groups"
+msgstr "创建手动群组"
+
+msgid "Use this form when you want to create empty course groups manually."
+msgstr "当您希望手动创建空的课程群组时，请使用此表单。"
+
+msgid "Configure manual groups"
+msgstr "配置手动群组"
+
+msgid "Create groups from subscribed classes"
+msgstr "从已选修班级创建群组"
+
+msgid "Use this form when you want to create one course group for each selected class."
+msgstr "当您希望为每个选定的班级创建一个课程群组时，请使用此表单。"
+
+msgid "Keep created groups linked to their source classes"
+msgstr "保持创建的群组与其源班级关联"
+
+msgid "Create groups from selected classes"
+msgstr "从选定班级创建群组"
+
+msgid "You must be logged in to access this page."
+msgstr "您必须登录后才能访问此页面。"
+
+msgid "Invalid user"
+msgstr "无效用户"
+
+msgid "UseCourseCustomCertificate"
+msgstr "UseCourseCustomCertificate"
+
+msgid "UseDefaultCustomCertificate"
+msgstr "UseDefaultCustomCertificate"
+
+msgid "CertificateSetting"
+msgstr "CertificateSetting"
+
+msgid "SelectOneOptionBeforeOpeningEditor"
+msgstr "SelectOneOptionBeforeOpeningEditor"
+
+msgid "ChooseCustomCertificateModeHelp"
+msgstr "ChooseCustomCertificateModeHelp"
+
+msgid "CertificateMode"
+msgstr "CertificateMode"
+
+msgid "Enable student to validate own attendance"
+msgstr "允许学生自行验证出勤"
+
+msgid "Course block"
+msgstr "课程区块"
+
+msgid "Add custom content blocks to course footer regions."
+msgstr "向课程页脚区域添加自定义内容区块。"
+
+msgid "course_block_pre_footer"
+msgstr "course_block_pre_footer"
+
+msgid "Before footer"
+msgstr "页脚前"
+
+msgid "course_block_footer_left"
+msgstr "course_block_footer_left"
+
+msgid "Footer left"
+msgstr "页脚左侧"
+
+msgid "course_block_footer_center"
+msgstr "course_block_footer_center"
+
+msgid "Footer center"
+msgstr "页脚居中"
+
+msgid "course_block_footer_right"
+msgstr "course_block_footer_right"
+
+msgid "Footer right"
+msgstr "页脚右侧"
+
+msgid "SetNotification"
+msgstr "SetNotification"
+
+msgid "CourseLegal"
+msgstr "CourseLegal"
+
+msgid "Certificates search is not available"
+msgstr "证书搜索不可用"
+
+msgid "It allows the acquisition of skills by subcategories"
+msgstr "允许按子类别获取技能"
+
+msgid "Allow skills by subcategories"
+msgstr "允许按子类别设置技能"
+
+msgid "Minimum score for skills"
+msgstr "技能最低分数"
+
+msgid "The gradebook table is hidden."
+msgstr "成绩簿表格已隐藏。"
+
+msgid "Invalid token"
+msgstr "令牌无效"
+
+msgid "Unable to save the item"
+msgstr "无法保存该项目"
+
+msgid "Only HTTP and HTTPS URLs are allowed."
+msgstr "仅允许 HTTP 和 HTTPS 网址。"
+
+msgid "Invalid URL host."
+msgstr "网址主机无效。"
+
+msgid "This cloud provider is not allowed."
+msgstr "不允许使用此云服务提供商。"
+
+msgid "Documents used"
+msgstr "已使用的文档"
+
+msgid "No document usage"
+msgstr "无文档使用记录"
+
+msgid "Invalid action."
+msgstr "操作无效。"
+
+msgid "No users selected."
+msgstr "未选择用户。"
+
+msgid "%s user(s) processed."
+msgstr "已处理 %s 个用户。"
+
+msgid "Invalid CSRF token."
+msgstr "CSRF 令牌无效。"
+
+msgid "[%s] Please change your password"
+msgstr "[%s] 请修改您的密码"
+
+msgid "Dear %s,\n\nOur security enforcing process shows you use a password that is commonly used on the internet, which means your account could easily be stolen. It is probably a simple sequence or a very common word, we don't really know (we cannot see your password), but we ask you to please connect to the platform and request a password change. You can follow the link here: %s to do that now.\n\nPlease note we will never ask for your password in this process. You just enter your username or e-mail and we send you a link. If you are asked to introduce your existing password to do that, someone is probably trying to do Phishing on your account. Be safe, change your password now!\n\n%s\n%s"
+msgstr "尊敬的 %s，\n\n我们的安全执行流程显示您使用的密码在互联网上被广泛使用，这意味着您的账户可能很容易被盗用。这可能是一个简单的序列或非常常见的词，我们并不清楚（我们无法看到您的密码），但我们请求您连接到平台并申请修改密码。您可以点击此链接进行操作：%s。\n\n请注意，我们在此过程中绝不会索要您的密码。您只需输入用户名或电子邮件，我们将向您发送链接。如果要求您输入现有密码，可能是有人试图对您的账户进行网络钓鱼。请确保安全，立即修改您的密码！\n\n%s\n%s"
+
+msgid "[%s] Your password has been reset"
+msgstr "[%s] 您的密码已重置"
+
+msgid "Dear %s,\n\nOur security enforcing process flagged you as using a password that is commonly used on the internet, which means your account could easily be stolen. As a prevention measure, we have decided to initiate a password reset process. Your new, automatically generated password is now:\n\n%s\n\nPlease login to the platform soon (using this new password) to set your own, personal and secure, password.\n\nBe safe.\n\n%s\n%s"
+msgstr "尊敬的 %s，\n\n我们的安全执行流程标记您使用的密码在互联网上被广泛使用，这意味着您的账户可能很容易被盗用。作为预防措施，我们已决定启动密码重置流程。您的新自动生成密码为：\n\n%s\n\n请尽快使用此新密码登录平台，以设置您自己的个人安全密码。\n\n请确保安全。\n\n%s\n%s"
+
+msgid "Signature saved successfully"
+msgstr "签名保存成功"
+
+msgid "Invalid request payload."
+msgstr "请求负载无效。"
+
+msgid "Authentication required."
+msgstr "需要身份验证。"
+
+msgid "The course title is required."
+msgstr "课程标题为必填项。"
+
+msgid "Only trainers and administrators can create courses."
+msgstr "只有培训师和管理员可以创建课程。"
+
+msgid "Course creation by trainers is disabled on this platform."
+msgstr "本平台已禁用培训师创建课程的功能。"
+
+msgid "The selected BuyCourses service cannot be used to create this course."
+msgstr "所选的 BuyCourses 服务无法用于创建此课程。"
+
+msgid "You have reached the maximum number of courses allowed (%d)."
+msgstr "您已达到允许的最大课程数量（%d）。"
+
+msgid "The selected BuyCourses service is invalid."
+msgstr "所选的 BuyCourses 服务无效。"
+
+msgid "BuyCourses is not available right now."
+msgstr "BuyCourses 目前不可用。"
+
+msgid "BuyCourses cannot validate the selected service right now."
+msgstr "BuyCourses 目前无法验证所选服务。"
+
+msgid "Unable to validate the selected BuyCourses service right now."
+msgstr "目前无法验证所选的 BuyCourses 服务。"
+
+msgid "External tool removed from course"
+msgstr "外部工具已从课程中移除"
+
+msgid "External tool was removed from the course, but kept internally because it is linked to the gradebook"
+msgstr "外部工具已从课程中移除，但因与成绩簿关联而保留在内部"
+
+msgid "There are no external tools available to add to the gradebook"
+msgstr "没有可添加到成绩簿的外部工具"
+
+msgid "The evaluation could not be created"
+msgstr "无法创建评估"
+
+msgid "The gradebook evaluation could not be linked"
+msgstr "无法关联成绩簿评估"
+
+msgid "Survey questions"
+msgstr "调查问题"
+
+msgid "Back to survey list"
+msgstr "返回调查列表"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "此调查已有答案。根据配置，问题编辑已禁用。"
+
+msgid "Choose the type of question you want to add."
+msgstr "选择要添加的问题类型。"
+
+msgid "The free text option is added automatically."
+msgstr "自由文本选项会自动添加。"
+
+msgid "No questions found"
+msgstr "未找到问题"
+
+msgid "Mandatory"
+msgstr "必填"
+
+msgid "Unsupported question type"
+msgstr "不支持的问题类型"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "您可以在问题中使用标签 {%s} 和 {%s}。"
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "此问题在回答调查时有条件显示。"
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "1 到 100 的百分比选项会自动生成。"
+
+msgid "Could not load survey questions"
+msgstr "无法加载调查问题"
+
+msgid "The question text is required."
+msgstr "问题文本为必填项。"
+
+msgid "The maximum score is required."
+msgstr "最高分是必填项。"
+
+msgid "Please select a parent option."
+msgstr "请选择一个父选项。"
+
+msgid "Please fill all answer options."
+msgstr "请填写所有答案选项。"
+
+msgid "QuestionUpdated"
+msgstr "QuestionUpdated"
+
+msgid "Could not save survey question"
+msgstr "无法保存调查问题"
+
+msgid "Could not delete survey question"
+msgstr "无法删除调查问题"
+
+msgid "Could not move survey question"
+msgstr "无法移动调查问题"
+
+msgid "Could not copy survey question"
+msgstr "无法复制调查问题"
+
+msgid "Hide search"
+msgstr "隐藏搜索"
+
+msgid "Showing results for: %s"
+msgstr "显示搜索结果：%s"
+
+msgid "Search by survey title, code or description."
+msgstr "按调查标题、代码或描述搜索。"
+
+msgid "Search surveys"
+msgstr "搜索调查"
+
+msgid "%s surveys selected"
+msgstr "已选择 %s 项调查"
+
+msgid "Clear selection"
+msgstr "清除选择"
+
+msgid "No surveys found"
+msgstr "未找到调查"
+
+msgid "Unsupported"
+msgstr "不支持"
+
+msgid "Could not load surveys"
+msgstr "无法加载调查"
+
+msgid "Delete selected surveys"
+msgstr "删除选中的调查"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "选中的调查及其问题将被删除。此操作无法撤销。"
+
+msgid "Could not delete selected surveys"
+msgstr "无法删除选中的调查"
+
+msgid "Survey action"
+msgstr "调查操作"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "将创建此调查的副本：%s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "此调查的所有答案和邀请将被删除：%s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "此调查中生成的重复问题将被移除：%s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "此调查将发布给关联群组的导师：%s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "此调查及其问题将被删除：%s"
+
+msgid "Could not complete survey action"
+msgstr "无法完成调查操作"
+
+msgid "Not started"
+msgstr "未开始"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "会议投票允许受邀用户选择他们可用的日期。"
+
+msgid "Back to surveys"
+msgstr "返回调查"
+
+msgid "Edit meeting poll"
+msgstr "编辑会议投票"
+
+msgid "View meeting poll"
+msgstr "查看会议投票"
+
+msgid "Basic information"
+msgstr "基本信息"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "这将创建一个会议投票类型的调查。答案和邀请将单独处理。"
+
+msgid "Availability"
+msgstr "可用性"
+
+msgid "Meeting dates"
+msgstr "会议日期"
+
+msgid "Meeting poll"
+msgstr "会议投票"
+
+msgid "My availability"
+msgstr "我的可用性"
+
+msgid "Meeting poll results"
+msgstr "会议投票结果"
+
+msgid "No invitations found"
+msgstr "未找到邀请"
+
+msgid "available"
+msgstr "可用"
+
+msgid "Could not load meeting poll"
+msgstr "无法加载会议投票"
+
+msgid "Please complete the required fields"
+msgstr "请填写必填字段"
+
+msgid "Could not save meeting poll"
+msgstr "无法保存会议投票"
+
+msgid "Could not save meeting availability"
+msgstr "无法保存会议可用性"
+
+msgid "Copy this survey to another course or session"
+msgstr "将此调查复制到其他课程或会话"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "调查将被复制，但不包含答案或邀请。"
+
+msgid "No target courses found"
+msgstr "未找到目标课程"
+
+msgid "Search by course title, course code or session name."
+msgstr "按课程标题、课程代码或会话名称搜索。"
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "若要在同一课程中创建副本，请使用“复制调查”。"
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "问题和选项将被复制。答案、邀请和报告将仅保留在原始调查中。"
+
+msgid "Selected target"
+msgstr "已选目标"
+
+msgid "Could not load copy form"
+msgstr "无法加载复制表单"
+
+msgid "The survey will be copied to: %s"
+msgstr "调查将被复制到：%s"
+
+msgid "Survey copied."
+msgstr "调查已复制。"
+
+msgid "Could not copy survey"
+msgstr "无法复制调查"
+
+msgid "Answer survey"
+msgstr "回答调查"
+
+msgid "Preview mode does not save answers."
+msgstr "预览模式不会保存答案。"
+
+msgid "Survey completed"
+msgstr "调查已完成"
+
+msgid "Thank you for answering the survey."
+msgstr "感谢您回答调查。"
+
+msgid "Profile information"
+msgstr "个人资料信息"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "请在回答调查前查看请求的个人资料字段。"
+
+msgid "This profile field is read-only."
+msgstr "此个人资料字段为只读。"
+
+msgid "You already filled this survey."
+msgstr "您已填写此调查。"
+
+msgid "Please specify"
+msgstr "请指定"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "此问题类型在现代调查视图中不受支持。"
+
+msgid "Preview only"
+msgstr "仅预览"
+
+msgid "Submit answers"
+msgstr "提交答案"
+
+msgid "Could not load survey"
+msgstr "无法加载调查"
+
+msgid "Please complete the required profile fields."
+msgstr "请填写必填的个人资料字段。"
+
+msgid "Please answer all mandatory questions."
+msgstr "请回答所有必答问题。"
+
+msgid "Could not save survey answers"
+msgstr "无法保存调查答案"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "请先配置主要调查信息，再管理问题和邀请。"
+
+msgid "The survey code cannot be changed after creation."
+msgstr "调查代码创建后无法更改。"
+
+msgid "Survey behavior"
+msgstr "调查行为"
+
+msgid "Use 0 for no time limit."
+msgstr "使用 0 表示无时间限制。"
+
+msgid "Survey messages"
+msgstr "调查消息"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "在此选择的个人资料字段将在调查问题之前显示。"
+
+msgid "No profile fields are currently available."
+msgstr "目前没有可用的个人资料字段。"
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "个人资料字段选择仅适用于非匿名调查。"
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "技能关联将在专用批次中迁移。"
+
+msgid "Could not load survey configuration"
+msgstr "无法加载调查配置"
+
+msgid "The survey code is required."
+msgstr "调查代码为必填项。"
+
+msgid "The survey title is required."
+msgstr "调查标题为必填项。"
+
+msgid "The survey has been saved successfully"
+msgstr "调查已成功保存"
+
+msgid "Could not save survey configuration"
+msgstr "无法保存调查配置"
+
+msgid "Course users"
+msgstr "课程用户"
+
+msgid "Already invited"
+msgstr "已邀请"
+
+msgid "No users found"
+msgstr "未找到用户"
+
+msgid "No groups found"
+msgstr "未找到群组"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "请在 **link** 处放置调查链接。"
+
+msgid "Remind all selected users"
+msgstr "提醒所有选定用户"
+
+msgid "Anonymous access link"
+msgstr "匿名访问链接"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "未受邀请的用户可使用此链接参与调查。"
+
+msgid "Answered anonymously"
+msgstr "已匿名作答"
+
+msgid "Could not load survey invitations"
+msgstr "无法加载调查邀请"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "发送邮件时，邮件主题和内容为必填项。"
+
+msgid "Could not publish survey"
+msgstr "无法发布调查"
+
+msgid "Could not copy the link"
+msgstr "无法复制链接"
+
+msgid "Please answer this survey using the following link"
+msgstr "请使用以下链接回答此调查"
+
+msgid "Export CSV"
+msgstr "导出 CSV"
+
+msgid "Export compact CSV"
+msgstr "导出精简 CSV"
+
+msgid "Export Excel"
+msgstr "导出 Excel"
+
+msgid "Export package"
+msgstr "导出包"
+
+msgid "Results summary"
+msgstr "结果摘要"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "此视图显示该调查的迁移报告数据。"
+
+msgid "Select user"
+msgstr "选择用户"
+
+msgid "No answers found"
+msgstr "未找到答案"
+
+msgid "answers"
+msgstr "答案"
+
+msgid "Could not load survey reporting"
+msgstr "无法加载调查报告"
+
+msgid "Back to threads"
+msgstr "返回主题"
+
+msgid "Back to learning path"
+msgstr "返回学习路径"
+
+msgid "Remove sticky"
+msgstr "取消置顶"
+
+msgid "Make sticky"
+msgstr "置顶"
+
+msgid "Open thread"
+msgstr "打开主题"
+
+msgid "Close thread"
+msgstr "关闭主题"
+
+msgid "Delete thread"
+msgstr "删除主题"
+
+msgid "This thread is hidden from learners."
+msgstr "此主题对学员隐藏。"
+
+msgid "Revision requested"
+msgstr "已请求修订"
+
+msgid "Revision"
+msgstr "修订"
+
+msgid "Approve post"
+msgstr "批准帖子"
+
+msgid "Reject post"
+msgstr "拒绝帖子"
+
+msgid "Cancel revision request"
+msgstr "取消修订请求"
+
+msgid "Delete post"
+msgstr "删除帖子"
+
+msgid "Message is required"
+msgstr "消息为必填项"
+
+msgid "Target thread is required"
+msgstr "目标主题为必填项"
+
+msgid "Could not retrieve posts"
+msgstr "无法检索帖子"
+
+msgid "Thread shown"
+msgstr "主题已显示"
+
+msgid "Thread hidden"
+msgstr "主题已隐藏"
+
+msgid "Could not update thread"
+msgstr "无法更新主题"
+
+msgid "Thread closed"
+msgstr "主题已关闭"
+
+msgid "Thread opened"
+msgstr "主题已打开"
+
+msgid "Thread marked as sticky"
+msgstr "主题已标记为置顶"
+
+msgid "Thread unmarked as sticky"
+msgstr "主题已取消置顶标记"
+
+msgid "Thread notifications enabled"
+msgstr "主题通知已启用"
+
+msgid "Thread notifications disabled"
+msgstr "主题通知已禁用"
+
+msgid "Could not update thread notification"
+msgstr "无法更新主题通知"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "确定要删除此主题吗？"
+
+msgid "Could not delete thread"
+msgstr "无法删除主题"
+
+msgid "Post approved"
+msgstr "帖子已批准"
+
+msgid "Could not approve post"
+msgstr "无法批准帖子"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "确定要拒绝此帖子吗？"
+
+msgid "Post rejected"
+msgstr "帖子已拒绝"
+
+msgid "Could not reject post"
+msgstr "无法拒绝帖子"
+
+msgid "Post shown"
+msgstr "帖子已显示"
+
+msgid "Post hidden"
+msgstr "帖子已隐藏"
+
+msgid "Could not update post"
+msgstr "无法更新帖子"
+
+msgid "Post updated"
+msgstr "帖子已更新"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "确定要删除此帖子吗？"
+
+msgid "Post deleted"
+msgstr "帖子已删除"
+
+msgid "Could not delete post"
+msgstr "无法删除帖子"
+
+msgid "Untitled thread"
+msgstr "无标题主题"
+
+msgid "Could not retrieve threads"
+msgstr "无法检索主题"
+
+msgid "Post moved"
+msgstr "帖子已移动"
+
+msgid "Could not move post"
+msgstr "无法移动帖子"
+
+msgid "Revision request removed"
+msgstr "修订请求已移除"
+
+msgid "Could not update revision request"
+msgstr "无法更新修订请求"
+
+msgid "Are you sure you want to report this post?"
+msgstr "确定要举报此帖子吗？"
+
+msgid "Could not report post"
+msgstr "无法举报帖子"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "确定要删除此附件吗？"
+
+msgid "Attachment deleted"
+msgstr "附件已删除"
+
+msgid "Could not delete attachment"
+msgstr "无法删除附件"
+
+msgid "Thread title"
+msgstr "主题标题"
+
+msgid "Sticky thread"
+msgstr "置顶主题"
+
+msgid "Attach files"
+msgstr "附加文件"
+
+msgid "Attachments are disabled for this forum"
+msgstr "此论坛已禁用附件"
+
+msgid "The forum is not open yet."
+msgstr "论坛尚未开放。"
+
+msgid "The forum is closed."
+msgstr "论坛已关闭。"
+
+msgid "The forum is locked."
+msgstr "论坛已锁定。"
+
+msgid "New threads are not allowed in this forum."
+msgstr "此论坛不允许创建新主题。"
+
+msgid "Thread created"
+msgstr "主题已创建"
+
+msgid "Could not create thread"
+msgstr "无法创建主题"
+
+msgid "Back to posts"
+msgstr "返回帖子"
+
+msgid "This reply will be stored as a revision."
+msgstr "此回复将作为修订版保存。"
+
+msgid "Post reply"
+msgstr "回复帖子"
+
+msgid "The thread is locked."
+msgstr "主题已锁定。"
+
+msgid "Reply added"
+msgstr "回复已添加"
+
+msgid "Could not add reply"
+msgstr "无法添加回复"
+
+msgid "Add forum"
+msgstr "添加论坛"
+
+msgid "No forums found"
+msgstr "未找到论坛"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "创建您的第一个论坛分类或论坛以开始讨论。"
+
+msgid "Locked"
+msgstr "已锁定"
+
+msgid "No forums in this category"
+msgstr "此分类中没有论坛"
+
+msgid "Posts require approval"
+msgstr "帖子需要审核"
+
+msgid "Forum for current group"
+msgstr "当前小组的论坛"
+
+msgid "Group forum visibility"
+msgstr "小组论坛可见性"
+
+msgid "No category"
+msgstr "无分类"
+
+msgid "Could not retrieve forums"
+msgstr "无法检索论坛"
+
+msgid "Forum category updated"
+msgstr "论坛分类已更新"
+
+msgid "Forum category created"
+msgstr "论坛分类已创建"
+
+msgid "Could not save forum category"
+msgstr "无法保存论坛分类"
+
+msgid "Forum updated"
+msgstr "论坛已更新"
+
+msgid "Forum created"
+msgstr "论坛已创建"
+
+msgid "Could not save forum"
+msgstr "无法保存论坛"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "确定要删除此论坛分类吗？"
+
+msgid "Could not delete forum category"
+msgstr "无法删除论坛分类"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "确定要删除此论坛吗？"
+
+msgid "Could not delete forum"
+msgstr "无法删除论坛"
+
+msgid "Forum category unlocked"
+msgstr "论坛分类已解锁"
+
+msgid "Forum category locked"
+msgstr "论坛分类已锁定"
+
+msgid "Could not update forum category"
+msgstr "无法更新论坛分类"
+
+msgid "Forum category shown"
+msgstr "论坛分类已显示"
+
+msgid "Forum category hidden"
+msgstr "论坛分类已隐藏"
+
+msgid "Forum unlocked"
+msgstr "论坛已解锁"
+
+msgid "Forum locked"
+msgstr "论坛已锁定"
+
+msgid "Could not update forum"
+msgstr "无法更新论坛"
+
+msgid "Forum shown"
+msgstr "论坛已显示"
+
+msgid "Forum hidden"
+msgstr "论坛已隐藏"
+
+msgid "Forum notifications enabled"
+msgstr "论坛通知已启用"
+
+msgid "Forum notifications disabled"
+msgstr "论坛通知已禁用"
+
+msgid "Could not update forum notification"
+msgstr "无法更新论坛通知"
+
+msgid "Forum category moved"
+msgstr "论坛分类已移动"
+
+msgid "Could not move forum category"
+msgstr "无法移动论坛分类"
+
+msgid "Forum moved"
+msgstr "论坛已移动"
+
+msgid "Could not move forum"
+msgstr "无法移动论坛"
+
+msgid "Back to forums"
+msgstr "返回论坛"
+
+msgid "New thread"
+msgstr "新建主题"
+
+msgid "No threads found"
+msgstr "未找到主题"
+
+msgid "Sticky"
+msgstr "置顶"
+
+msgid "Graded"
+msgstr "已评分"
+
+msgid "Grade peers"
+msgstr "同学互评"
+
+msgid "Move thread"
+msgstr "移动主题"
+
+msgid "Target forum"
+msgstr "目标论坛"
+
+msgid "Target forum is required"
+msgstr "目标论坛为必填项"
+
+msgid "Students"
+msgstr "学生"
+
+msgid "No students found"
+msgstr "未找到学生"
+
+msgid "No peers available to grade."
+msgstr "无可供评分的同学。"
+
+msgid "Qualified"
+msgstr "已合格"
+
+msgid "Not qualified"
+msgstr "未合格"
+
+msgid "Could not retrieve thread grading"
+msgstr "无法获取主题评分"
+
+msgid "Thread grading updated"
+msgstr "主题评分已更新"
+
+msgid "Could not update thread grading"
+msgstr "无法更新主题评分"
+
+msgid "Thread score saved"
+msgstr "主题分数已保存"
+
+msgid "Could not save thread score"
+msgstr "无法保存主题分数"
+
+msgid "Could not move thread"
+msgstr "无法移动主题"
+
+msgid "Thread updated"
+msgstr "主题已更新"
+
+msgid "Search term is too short"
+msgstr "搜索词过短"
+
+msgid "Could not search forums"
+msgstr "无法搜索论坛"
+
+msgid "Moderated"
+msgstr "已审核"
+
+msgid "View threads"
+msgstr "查看主题"
 

@@ -1,0 +1,95 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+$strings['plugin_title'] = 'Импорт из Moodle';
+$strings['plugin_comment'] = 'Выполнить процесс импорта из базы данных и файлов Moodle в Chamilo.';
+
+$strings['MoodlePassword'] = 'Пароль Moodle';
+$strings['UninstallError'] = 'Произошла ошибка при удалении плагина.';
+
+$strings['db_host'] = 'Хост БД Moodle';
+$strings['db_user'] = 'Пользователь БД Moodle';
+$strings['db_password'] = 'Пароль БД Moodle';
+$strings['db_name'] = 'Имя БД Moodle';
+$strings['user_filter'] = 'Фильтр для пользователей';
+$strings['user_filter_help'] = 'Импортировать только пользователей, имена которых начинаются с этой строки.<br>Импорт курсов также зависит от этой настройки, так как импортируются только курсы, в которых записаны пользователи с таким префиксом имени.';
+$strings['url_id'] = 'ID URL';
+$strings['url_id_help'] = 'ID URL доступа для сохранения курсов, пользователей и сессий (при использовании multi-url).';
+$strings['moodle_path'] = 'Путь к moodledata';
+$strings['moodle_path_help'] = 'Путь к папке moodledata. Обычно выглядит как <pre>/var/www/moodledata</pre>';
+
+// Tasks
+$strings['UsersTask'] = 'Пользователи';
+$strings['CourseCategoriesTask'] = 'Категории курсов';
+$strings['CoursesTask'] = 'Курсы';
+$strings['CourseSectionsTask'] = 'Разделы курса';
+$strings['CourseModulesLessonTask'] = 'Модули курса: Уроки';
+$strings['LessonPagesTask'] = 'Страницы уроков';
+$strings['LessonPagesDocumentTask'] = 'Страницы уроков: Документы';
+$strings['FilesForLessonPagesTask'] = 'Файлы для страниц уроков';
+$strings['LessonPagesQuizTask'] = 'Страницы уроков: Вопросы';
+$strings['LessonPagesQuizQuestionTask'] = 'Вопросы для страниц вопросов';
+$strings['LessonAnswersTrueFalseTask'] = 'Ответы для вопросов Верно/Неверно';
+$strings['LessonAnswersMultipleChoiceTask'] = 'Ответы для вопросов с множественным выбором';
+$strings['LessonAnswersMultipleAnswerTask'] = 'Ответы для вопросов с несколькими ответами';
+$strings['LessonAnswersMatchingTask'] = 'Ответы для вопросов на соответствие';
+$strings['LessonAnswersEssayTask'] = 'Ответы для вопросов с эссе';
+$strings['LessonAnswersShortAnswerTask'] = 'Ответы для вопросов с кратким ответом';
+$strings['FilesForLessonAnswersTask'] = 'Файлы для ответов уроков';
+$strings['CourseModulesQuizTask'] = 'Модули курса: Тесты';
+$strings['CQuizTask'] = 'Тест C';
+$strings['RoleAssignmentsTask'] = 'Назначения ролей';
+$strings['QuizzesTask'] = 'Тесты';
+$strings['FilesForQuizzesTask'] = 'Файлы для тестов';
+$strings['QuestionCategoriesTask'] = 'Категории вопросов';
+$strings['QuestionsTask'] = 'Вопросы';
+$strings['QuestionMultiChoiceSingleTask'] = 'Ответы для вопросов с выбором одного варианта';
+$strings['QuestionMultiChoiceMultipleTask'] = 'Ответы для вопросов с выбором нескольких вариантов';
+$strings['QuestionsTrueFalseTask'] = 'Ответы для вопросов верно/неверно';
+$strings['QuestionShortAnswerTask'] = 'Ответы для вопросов с кратким ответом';
+$strings['CourseModulesScormTask'] = 'Курсы SCORM';
+$strings['ScormScoesTask'] = 'Элементы SCORM';
+$strings['FilesForScormScoesTask'] = 'Файлы для элементов SCORM';
+$strings['UserSessionsTask'] = 'Сессии курсов для пользователей';
+$strings['CourseIntroductionsTask'] = 'Введения к курсам';
+$strings['FilesForCourseIntroductionsTask'] = 'Файлы для введений к курсам';
+$strings['FilesForCourseSectionsTask'] = 'Файлы для разделов курса';
+$strings['CourseModulesUrlTask'] = 'Модули курса: URL';
+$strings['UrlsTask'] = 'URL-адреса';
+$strings['SortSectionModulesTask'] = 'Сортировать модули в разделе';
+$strings['UsersScormsViewTask'] = 'Просмотры SCORM для пользователей';
+$strings['UsersScormsProgressTask'] = 'Прогресс SCORM';
+$strings['UsersLearnPathsTask'] = 'Просмотры учебных путей пользователями';
+$strings['UsersLearnPathsLessonTimerTask'] = 'Таймер занятия для времени начала раздела учебных путей';
+$strings['QuizzesScoresTask'] = 'Обновление результатов тестов в учебном пути';
+$strings['QuestionGapselectTask'] = 'Ответы для вопросов с пропусками';
+$strings['UsersLearnPathsLessonBranchTask'] = 'Ветвление занятия в общее время в документах учебных путей';
+$strings['UsersLearnPathsLessonAttemptsTask'] = 'Попытки занятия в общее время в тестах учебных путей';
+$strings['UsersLearnPathsQuizzesTask'] = 'Попытки тестов в попытки тестов учебных путей';
+$strings['UsersQuizzesAttemptsTask'] = 'Попытки тестов пользователей';
+$strings['UserQuestionAttemptsShortanswerTask'] = 'Попытки вопросов пользователей для краткого ответа';
+$strings['UserQuestionAttemptsGapselectTask'] = 'Попытки вопросов пользователей для вопросов с пропусками';
+$strings['UserQuestionAttemptsTruefalseTask'] = 'Попытки вопросов пользователей для верно/неверно';
+$strings['UsersLastLoginTask'] = 'Последние входы пользователей';
+$strings['TrackLoginTask'] = 'Первый вход и последний выход';
+$strings['TrackCourseAccessTask'] = 'Доступ пользователей к курсу';
+$strings['UserLearnPathsProgressScript'] = 'Обновление прогресса в учебных путях для пользователей.';
+$strings['UserScormsProgressScript'] = 'Обновление прогресса в SCORM для пользователей.';
+
+$strings['InstallError'] = 'Произошла ошибка при установке плагина: %s';
+$strings['AdminIntro'] = 'Выполняйте задачи миграции Moodle по порядку. Каждый шаг доступен только после завершения родительского шага.';
+$strings['MoodleDatabase'] = 'База данных Moodle';
+$strings['MoodledataPath'] = 'Путь к moodledata';
+$strings['AccessUrlId'] = 'ID URL доступа';
+$strings['Configured'] = 'Настроено';
+$strings['NotConfigured'] = 'Не настроено';
+$strings['ConfigurePlugin'] = 'Настроить плагин';
+$strings['MissingRequiredDatabaseConfiguration'] = 'Настройте хост базы данных Moodle, пользователя и имя базы данных перед запуском задач миграции.';
+$strings['MissingMoodledataPathWarning'] = 'Путь к moodledata пуст. Задачи, связанные с файлами, могут завершиться ошибкой, пока эта настройка не будет сконфигурирована.';
+$strings['InvalidMigrationAction'] = 'Неверное действие миграции.';
+$strings['InvalidSecurityToken'] = 'Неверный токен безопасности. Пожалуйста, перезагрузите страницу и попробуйте снова.';
+$strings['MigrationTasks'] = 'Задачи миграции';
+$strings['MaintenanceScripts'] = 'Скрипты обслуживания';
+$strings['ExecutionOutput'] = 'Вывод выполнения';
+$strings['TaskAlreadyExecuted'] = 'Эта задача или скрипт уже был выполнен.';
+$strings['SelectTaskToRun'] = 'Выберите задачу миграции для запуска. Результат появится здесь.';

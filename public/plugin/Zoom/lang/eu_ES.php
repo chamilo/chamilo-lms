@@ -5,6 +5,17 @@
 $strings['plugin_title'] = 'Zoom Bideokonferentzia';
 $strings['plugin_comment'] = 'Ikastaro eta saioetan Zoom bideokonferentzia integratzea';
 
+$strings['accountId'] = 'Kontu IDa';
+$strings['clientId'] = 'Bezero IDa';
+$strings['clientSecret'] = 'Bezero sekretua';
+$strings['webhookSecretToken'] = 'Webhook sekretu tokena';
+$strings['apiKey_help'] = 'Legacy JWT API gakoa. Hobetsi Account ID, Client ID eta Client Secret Zoom Server-to-Server OAuth-erako.';
+$strings['apiSecret_help'] = 'Legacy JWT API sekretua. Hobetsi Account ID, Client ID eta Client Secret Zoom Server-to-Server OAuth-erako.';
+$strings['verificationToken_help'] = 'Legacy webhook egiaztapen tokena. Hobetsi Webhook Secret Token.';
+$strings['accountId_help'] = 'Zoom Server-to-Server OAuth kontu IDa.';
+$strings['clientId_help'] = 'Zoom Server-to-Server OAuth bezero IDa.';
+$strings['clientSecret_help'] = 'Zoom Server-to-Server OAuth bezero sekretua.';
+$strings['webhookSecretToken_help'] = 'Zoom webhook eskaerak balioztatzeko erabiltzen den sekretu tokena.';
 $strings['apiKey'] = 'API Gako';
 $strings['apiSecret'] = 'API Sekretua';
 $strings['verificationToken'] = 'Egiaztapen Tokena';

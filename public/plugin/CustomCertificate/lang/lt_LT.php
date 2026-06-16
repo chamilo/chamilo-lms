@@ -75,3 +75,18 @@ $strings['QuestionDelete'] = 'Ar norite ištrinti konkretų diplomą ir naudoti 
 $strings['SuccessDelete'] = 'Sėkmingai ištrinta';
 $strings['ProblemDelete'] = 'Problema ištrinant pažymėjimą';
 $strings['OnlyCustomCertificates'] = 'Eksportuojami tik kursai su pritaikytu pažymėjimu';
+$strings['CertificateMode'] = 'Sertifikato režimas';
+$strings['UseCourseCustomCertificate'] = 'Naudoti kurso specifinį pasirinktinį sertifikatą';
+$strings['UseDefaultCustomCertificate'] = 'Naudoti platformos numatytąjį pasirinktinį sertifikatą';
+
+$strings['CreateCertificateWithTags'] = 'Kurti sertifikatą naudojant šias žymas';
+
+$strings['DeleteCertificate'] = 'Ištrinti sertifikatą';
+
+$strings['SaveCertificate'] = 'Išsaugoti sertifikatą';
+
+$strings['SelectOneOptionBeforeOpeningEditor'] = 'Pasirinkite vieną parinktį ir išsaugokite nustatymus prieš atidarydami sertifikatų redaktorių.';
+
+$strings['ChooseCustomCertificateModeHelp'] = 'Pasirinkite, kaip šis kursas turėtų naudoti pasirinktinius sertifikatus.';
+
+$strings['CouldNotSaveCertificate'] = 'Nepavyko išsaugoti sertifikato konfigūracijos.';

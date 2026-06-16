@@ -8,3 +8,6 @@ $strings['PluginDisabled'] = '電子採点が無効です';
 $strings['StudentId'] = '学生ID';
 $strings['ProviderId'] = 'プロバイダID';
 $strings['CourseHours'] = 'コース時間';
+
+$strings['GenerateFile'] = 'ファイル生成';
+$strings['CourseId'] = 'コースID';

@@ -9,3 +9,4 @@ $strings['plugin_comment'] = 'Toon statische HTML-inhoud.';
 $strings['block_title'] = 'Bloktitel';
 
 //$strings['title'] = "Title";
+$strings['content'] = 'Inhoud';

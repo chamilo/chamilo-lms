@@ -20,3 +20,7 @@ $strings['EmbedDateRangeHelp'] = 'خلال هذه التواريخ، سيتم ع
 $strings['HtmlCode'] = 'كود HTML';
 $strings['HtmlCodeHelp'] = 'كود HTML المشترك، كما قدمه الخدمة الخارجية عند طلب المشاركة بصيغة مضمنة.';
 $strings['LaunchContent'] = 'تشغيل المحتوى';
+
+$strings['InvalidDateRange'] = 'يجب أن يكون تاريخ البداية أقدم من أو يساوي تاريخ النهاية.';
+
+$strings['InvalidSecurityToken'] = 'رمز الأمان غير صالح. يرجى إعادة تحميل الصفحة والمحاولة مرة أخرى.';

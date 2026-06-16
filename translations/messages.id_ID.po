@@ -9729,6 +9729,9 @@ msgstr "Hasil pencarian untuk:"
 msgid "Select a file"
 msgstr "Pilih file"
 
+msgid "Select a file to insert into the editor."
+msgstr "Pilih berkas untuk disisipkan ke dalam editor."
+
 msgid "Warning - The FAQ file, located in the /home/ directory of your portal, is not writable. Your text will not be saved until the file permissions are changed."
 msgstr "Peringatan - File FAQ, yang terletak di direktori /home/ portal Anda, tidak dapat ditulis. Teks Anda tidak akan disimpan sampai izin file diubah."
 
@@ -15909,6 +15912,9 @@ msgstr "Tanggal & waktu"
 msgid "Item"
 msgstr "Item"
 
+msgid "Items"
+msgstr "Item"
+
 msgid "Configure Dashboard Plugin"
 msgstr "Konfigurasi Plugin Dashboard"
 
@@ -17162,6 +17168,18 @@ msgstr "Sesi dalam grup"
 
 msgid "Courses in group"
 msgstr "Kursus dalam grup"
+
+msgid "Courses on the platform"
+msgstr "Kursus di platform"
+
+msgid "%s courses"
+msgstr "%s kursus"
+
+msgid "%s sessions"
+msgstr "%s sesi"
+
+msgid "Search by title or code"
+msgstr "Cari berdasarkan judul atau kode"
 
 msgid "Users in group"
 msgstr "Pengguna dalam grup"
@@ -26590,7 +26608,7 @@ msgid "LDAP connection configuration"
 msgstr "Konfigurasi koneksi LDAP"
 
 msgid "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
-msgstr "Array yang mendefinisikan host dan port untuk server LDAP.<br><pre> ['host' => '', 'port' => ''] </pre>"
+msgstr "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
 
 msgid "Set expiration date on first login"
 msgstr "Atur tanggal kedaluwarsa pada login pertama"
@@ -26602,7 +26620,7 @@ msgid "Selective display of roles"
 msgstr "Tampilan selektif peran"
 
 msgid "An array of role => true/false that defines whether that role should be shown or hidden.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
-msgstr "Array dari role => true/false yang mendefinisikan apakah role tersebut harus ditampilkan atau disembunyikan.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
+msgstr "An array of role => true/false that defines whether that role should be shown or hidden.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
 
 msgid "Roles display options"
 msgstr "Opsi tampilan peran"
@@ -32167,6 +32185,9 @@ msgstr "Tugas"
 msgid "Allowed file formats: %s"
 msgstr "Format file yang diizinkan: %s"
 
+msgid "File manager"
+msgstr "File manager"
+
 msgid "File type not allowed. Allowed extensions: %s"
 msgstr "Jenis file tidak diizinkan. Ekstensi yang diizinkan: %s"
 
@@ -33880,6 +33901,2583 @@ msgstr "Selamat datang"
 msgid "Welcome to Chamilo"
 msgstr "Selamat datang di Chamilo"
 
+msgid "Check all unanswered questions below"
+msgstr "Check all unanswered questions below"
+
 msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
 msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Jika ini pertama kali Anda menggunakan Chamilo, pastikan Anda memeriksa menu samping untuk menemukan jalan melalui banyak fiturnya. Jika Anda membutuhkan bantuan, Anda akan menemukan <a href=\"https://docs.chamilo.org\">dokumentasi resmi kami</a> dapat membantu untuk dokumentasi standar, sementara <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">forum online kami</a> dapat membantu berbagi ide dan menemukan jawaban dari pengguna Chamilo lainnya."
+
+msgid "Change password"
+msgstr "Change password"
+
+msgid "Newest first"
+msgstr "Terbaru dulu"
+
+msgid "Oldest first"
+msgstr "Terlama dulu"
+
+msgid "Title A–Z"
+msgstr "Judul A–Z"
+
+msgid "Title Z–A"
+msgstr "Judul Z–A"
+
+msgid "Send test email"
+msgstr "Kirim email uji"
+
+msgid "Show teachers"
+msgstr "Tampilkan pengajar"
+
+msgid "Hide teachers"
+msgstr "Sembunyikan pengajar"
+
+msgid "Delete exercise attempts"
+msgstr "Hapus percobaan latihan"
+
+msgid "Message sent successfully."
+msgstr "Pesan berhasil dikirim."
+
+msgid "You cannot create a new course right now."
+msgstr "Anda tidak dapat membuat kursus baru saat ini."
+
+msgid "Unable to verify whether you can create a new course right now."
+msgstr "Tidak dapat memverifikasi apakah Anda dapat membuat kursus baru saat ini."
+
+msgid "Please try again later or contact the administrator."
+msgstr "Silakan coba lagi nanti atau hubungi administrator."
+
+msgid "You cannot create more courses at this time."
+msgstr "Anda tidak dapat membuat lebih banyak kursus saat ini."
+
+msgid "You already manage %d courses and your active service allows up to %d. To create another course, you need a higher service limit or reduce your current active courses."
+msgstr "Anda sudah mengelola %d kursus dan layanan aktif Anda mengizinkan hingga %d. Untuk membuat kursus lain, Anda memerlukan batas layanan yang lebih tinggi atau mengurangi kursus aktif saat ini."
+
+msgid "You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now."
+msgstr "Anda sudah mengelola %d kursus dan platform saat ini mengizinkan hingga %d untuk akun Anda. Anda tidak dapat membuat lebih banyak kursus saat ini."
+
+msgid "Add a class"
+msgstr "Tambah kelas"
+
+msgid "Search classes"
+msgstr "Cari kelas"
+
+msgid "No classes found"
+msgstr "Tidak ada kelas ditemukan"
+
+msgid "Import classes"
+msgstr "Impor kelas"
+
+msgid "Class users"
+msgstr "Pengguna kelas"
+
+msgid "%s classes imported"
+msgstr "%s kelas diimpor"
+
+msgid "%s user-class links imported"
+msgstr "%s tautan pengguna-kelas diimpor"
+
+msgid "Hide comments"
+msgstr "Sembunyikan komentar"
+
+msgid "Loading comments..."
+msgstr "Memuat komentar..."
+
+msgid "No comments yet."
+msgstr "Belum ada komentar."
+
+msgid "A user with this username already exists"
+msgstr "Pengguna dengan nama pengguna ini sudah ada"
+
+msgid "Manage meetings, review recordings and update course-wide BBB settings from one place."
+msgstr "Kelola pertemuan, tinjau rekaman, dan perbarui pengaturan BBB seluruh kursus dari satu tempat."
+
+msgid "Review the current defaults and propagate them to every course when needed."
+msgstr "Tinjau pengaturan default saat ini dan terapkan ke setiap kursus bila diperlukan."
+
+msgid "Filter the list by meeting date range."
+msgstr "Saring daftar berdasarkan rentang tanggal pertemuan."
+
+msgid "Review meeting history, participants and recording actions."
+msgstr "Tinjau riwayat pertemuan, peserta, dan tindakan rekaman."
+
+msgid "Participants"
+msgstr "Peserta"
+
+msgid "CountUsers"
+msgstr "JumlahPengguna"
+
+msgid "No data found"
+msgstr "Tidak ada data ditemukan"
+
+msgid "My justifications"
+msgstr "Justifikasi saya"
+
+msgid "My services"
+msgstr "Layanan saya"
+
+msgid "Extra menu"
+msgstr "Menu tambahan"
+
+msgid "Pending tests"
+msgstr "Tes tertunda"
+
+msgid "No specific language"
+msgstr "Tidak ada bahasa khusus"
+
+msgid "Source Chamilo version"
+msgstr "Versi Chamilo sumber"
+
+msgid "Exporting..."
+msgstr "Mengekspor..."
+
+msgid "Autosaved drafts available"
+msgstr "Draf tersimpan otomatis tersedia"
+
+msgid "Hide drafts"
+msgstr "Sembunyikan draf"
+
+msgid "Show drafts"
+msgstr "Tampilkan draf"
+
+msgid "Drafts are stored only in this browser and are removed after saving the document."
+msgstr "Draf hanya disimpan di browser ini dan akan dihapus setelah menyimpan dokumen."
+
+msgid "Last saved"
+msgstr "Terakhir disimpan"
+
+msgid "Restore draft"
+msgstr "Pulihkan draf"
+
+msgid "Delete draft"
+msgstr "Hapus draf"
+
+msgid "Information about indexing document content"
+msgstr "Informasi tentang pengindeksan konten dokumen"
+
+msgid "When enabled, the document text is indexed by the search engine so users can find it from platform search."
+msgstr "Jika diaktifkan, teks dokumen diindeks oleh mesin pencari sehingga pengguna dapat menemukannya dari pencarian platform."
+
+msgid "The editor is not available."
+msgstr "Editor tidak tersedia."
+
+msgid "Please place the cursor inside a paragraph first."
+msgstr "Silakan letakkan kursor di dalam paragraf terlebih dahulu."
+
+msgid "The selected paragraph is empty."
+msgstr "Paragraf yang dipilih kosong."
+
+msgid "Loading failed."
+msgstr "Pemuatan gagal."
+
+msgid "Add introduction"
+msgstr "Tambahkan pengantar"
+
+msgid "Course type"
+msgstr "Jenis kursus"
+
+msgid "Choose whether this course uses the standard platform limits or benefits from a purchased service."
+msgstr "Pilih apakah kursus ini menggunakan batas standar platform atau memanfaatkan layanan berbayar."
+
+msgid "Standard course"
+msgstr "Kursus standar"
+
+msgid "Use the standard platform limits."
+msgstr "Gunakan batas standar platform."
+
+msgid "Selected"
+msgstr "Dipilih"
+
+msgid "Hosting limit"
+msgstr "Batas hosting"
+
+msgid "Document quota"
+msgstr "Kuota dokumen"
+
+msgid "The standard course limit has been reached."
+msgstr "Batas kursus standar telah tercapai."
+
+msgid "Use the benefits granted by this service."
+msgstr "Gunakan manfaat yang diberikan oleh layanan ini."
+
+msgid "Courses with these benefits"
+msgstr "Kursus dengan manfaat ini"
+
+msgid "Active service"
+msgstr "Layanan aktif"
+
+msgid "Buy service"
+msgstr "Beli layanan"
+
+msgid "Select an available course type before creating the course."
+msgstr "Pilih jenis kursus yang tersedia sebelum membuat kursus."
+
+msgid "users"
+msgstr "pengguna"
+
+msgid "You need to buy this service before using these benefits."
+msgstr "Anda perlu membeli layanan ini sebelum menggunakan manfaatnya."
+
+msgid "You already used all courses available with this service."
+msgstr "Anda telah menggunakan semua kursus yang tersedia dengan layanan ini."
+
+msgid "This option is not available."
+msgstr "Opsi ini tidak tersedia."
+
+msgid "This field is required"
+msgstr "Bidang ini wajib diisi"
+
+msgid "Show less"
+msgstr "Tampilkan lebih sedikit"
+
+msgid "Show full description"
+msgstr "Tampilkan deskripsi lengkap"
+
+msgid "Virtual keyboard"
+msgstr "Papan ketik virtual"
+
+msgid "Backspace"
+msgstr "Backspace"
+
+msgid "Space"
+msgstr "Spasi"
+
+msgid "Learning path only visible to selected learners"
+msgstr "Jalur pembelajaran hanya terlihat oleh peserta yang dipilih"
+
+msgid "Create course"
+msgstr "Buat kursus"
+
+msgid "Tour"
+msgstr "Tur"
+
+msgid "Are you sure you want to delete this comment?"
+msgstr "Apakah Anda yakin ingin menghapus komentar ini?"
+
+msgid "No posts found"
+msgstr "Tidak ada postingan ditemukan"
+
+msgid "No communities"
+msgstr "Tidak ada komunitas"
+
+msgid "No friends found"
+msgstr "Tidak ada teman ditemukan"
+
+msgid "Visual overview of your skills"
+msgstr "Tinjauan visual keterampilan Anda"
+
+msgid "Compare your progress"
+msgstr "Bandingkan kemajuan Anda"
+
+msgid "Please enter a search term."
+msgstr "Silakan masukkan istilah pencarian."
+
+msgid "Enter captcha code"
+msgstr "Masukkan kode captcha"
+
+msgid "Refresh captcha"
+msgstr "Muat ulang captcha"
+
+msgid "Captcha is temporarily blocked. Please try again later."
+msgstr "Captcha sementara diblokir. Silakan coba lagi nanti."
+
+msgid "Item Details"
+msgstr "Detail Item"
+
+msgid "Open File"
+msgstr "Buka Berkas"
+
+msgid "Selection"
+msgstr "Pilihan"
+
+msgid "Remove selection context"
+msgstr "Hapus konteks pilihan"
+
+msgid "Source document"
+msgstr "Dokumen sumber"
+
+msgid "Use the current course context"
+msgstr "Gunakan konteks kursus saat ini"
+
+msgid "Loading documents..."
+msgstr "Memuat dokumen..."
+
+msgid "No compatible PDF or TXT document was found in this course."
+msgstr "Tidak ada dokumen PDF atau TXT yang kompatibel ditemukan dalam kursus ini."
+
+msgid "Select a PDF or TXT document to generate terms only from that document."
+msgstr "Pilih dokumen PDF atau TXT untuk menghasilkan istilah hanya dari dokumen tersebut."
+
+msgid "Confidentiality warning"
+msgstr "Peringatan kerahasiaan"
+
+msgid "When a document is selected, the prompt is fixed so the generation uses only that document content."
+msgstr "Saat dokumen dipilih, prompt akan tetap sehingga pembuatan hanya menggunakan konten dokumen tersebut."
+
+msgid "No document-processing AI providers available."
+msgstr "Tidak ada penyedia AI pemroses dokumen yang tersedia."
+
+msgid "Failed to save signature. Please try again."
+msgstr "Gagal menyimpan tanda tangan. Silakan coba lagi."
+
+msgid "Select and move"
+msgstr "Pilih dan pindahkan"
+
+msgid "Freehand"
+msgstr "Gambar bebas"
+
+msgid "Stroke"
+msgstr "Garis"
+
+msgid "Fill"
+msgstr "Isi"
+
+msgid "Import SVG"
+msgstr "Impor SVG"
+
+msgid "Import image"
+msgstr "Impor gambar"
+
+msgid "Click the drawing area to place this text"
+msgstr "Klik area gambar untuk menempatkan teks ini"
+
+msgid "Draw a new SVG, import an existing SVG or embed an image, then save it as a reusable document."
+msgstr "Buat SVG baru, impor SVG yang ada, atau sematkan gambar, lalu simpan sebagai dokumen yang dapat digunakan kembali."
+
+msgid "Use Select and move to reposition or resize elements added in this editor."
+msgstr "Gunakan Pilih dan pindahkan untuk memposisikan ulang atau mengubah ukuran elemen yang ditambahkan di editor ini."
+
+msgid "Stroke width"
+msgstr "Lebar garis"
+
+msgid "Transparent fill"
+msgstr "Isi transparan"
+
+msgid "Invalid id"
+msgstr "ID tidak valid"
+
+msgid "Unable to load the drawing"
+msgstr "Tidak dapat memuat gambar"
+
+msgid "Only PNG, JPG, WEBP or GIF images are supported."
+msgstr "Hanya gambar PNG, JPG, WEBP, atau GIF yang didukung."
+
+msgid "Unable to read the image file."
+msgstr "Tidak dapat membaca berkas gambar."
+
+msgid "Only SVG files are supported."
+msgstr "Hanya berkas SVG yang didukung."
+
+msgid "The SVG file is empty or invalid."
+msgstr "Berkas SVG kosong atau tidak valid."
+
+msgid "Unable to read the SVG file."
+msgstr "Tidak dapat membaca berkas SVG."
+
+msgid "The drawing is empty or invalid."
+msgstr "Gambar kosong atau tidak valid."
+
+msgid "Unable to save the drawing"
+msgstr "Tidak dapat menyimpan gambar"
+
+msgid "Information about AI-assisted documents"
+msgstr "Informasi tentang dokumen berbantuan AI"
+
+msgid "Location"
+msgstr "Lokasi"
+
+msgid "Cloud link"
+msgstr "Tautan cloud"
+
+msgid "Add a link to a cloud document, such as Google Drive or Google Docs."
+msgstr "Tambahkan tautan ke dokumen cloud, seperti Google Drive atau Google Docs."
+
+msgid "Add cloud link"
+msgstr "Tambahkan tautan cloud"
+
+msgid "Document title"
+msgstr "Judul dokumen"
+
+msgid "Document options change how uploaded files are processed after saving."
+msgstr "Opsi dokumen mengubah cara pemrosesan berkas yang diunggah setelah disimpan."
+
+msgid "Information about uncompressing zip files"
+msgstr "Informasi tentang mengekstrak berkas zip"
+
+msgid "When enabled, ZIP files are extracted into the current document folder after upload."
+msgstr "Jika diaktifkan, berkas ZIP akan diekstrak ke folder dokumen saat ini setelah diunggah."
+
+msgid "The title is required."
+msgstr "Judul wajib diisi."
+
+msgid "The URL is required."
+msgstr "URL wajib diisi."
+
+msgid "The destination folder is missing."
+msgstr "Folder tujuan tidak ditemukan."
+
+msgid "Unable to create cloud link."
+msgstr "Tidak dapat membuat tautan cloud."
+
+msgid "Copy to My Files"
+msgstr "Salin ke Berkas Saya"
+
+msgid "Used space"
+msgstr "Ruang terpakai"
+
+msgid "Available space"
+msgstr "Ruang tersedia"
+
+msgid "Available percentage"
+msgstr "Persentase tersedia"
+
+msgid "Cloud links cannot be downloaded."
+msgstr "Tautan cloud tidak dapat diunduh."
+
+msgid "Could not copy the file to My Files"
+msgstr "Tidak dapat menyalin berkas ke Berkas Saya"
+
+msgid "File copied to My Files"
+msgstr "Berkas disalin ke Berkas Saya"
+
+msgid "Checking course creation options..."
+msgstr "Memeriksa opsi pembuatan kursus..."
+
+msgid "You cannot create more courses right now."
+msgstr "Anda tidak dapat membuat lebih banyak kursus saat ini."
+
+msgid "AI analyzer"
+msgstr "Penganalisis AI"
+
+msgid "Expand all"
+msgstr "Perluas semua"
+
+msgid "Collapse all"
+msgstr "Ciutkan semua"
+
+msgid "Review your active service benefits, purchase history and available receipts."
+msgstr "Tinjau manfaat layanan aktif, riwayat pembelian, dan kuitansi yang tersedia."
+
+msgid "Active services"
+msgstr "Layanan aktif"
+
+msgid "No active services"
+msgstr "Tidak ada layanan aktif"
+
+msgid "Valid until"
+msgstr "Berlaku hingga"
+
+msgid "Recurring payment"
+msgstr "Pembayaran berulang"
+
+msgid "Next charge"
+msgstr "Tagihan berikutnya"
+
+msgid "Enable auto billing"
+msgstr "Aktifkan penagihan otomatis"
+
+msgid "Cancel auto billing"
+msgstr "Batalkan penagihan otomatis"
+
+msgid "Granted benefits"
+msgstr "Manfaat yang diberikan"
+
+msgid "Purchase history"
+msgstr "Riwayat pembelian"
+
+msgid "No purchases yet"
+msgstr "Belum ada pembelian"
+
+msgid "Product"
+msgstr "Produk"
+
+msgid "Reference"
+msgstr "Referensi"
+
+msgid "Amount"
+msgstr "Jumlah"
+
+msgid "Receipt"
+msgstr "Kwitansi"
+
+msgid "Unable to load your services right now."
+msgstr "Tidak dapat memuat layanan Anda saat ini."
+
+msgid "Auto billing enabled"
+msgstr "Penagihan otomatis diaktifkan"
+
+msgid "Auto billing suspended"
+msgstr "Penagihan otomatis ditangguhkan"
+
+msgid "Auto billing cancelled"
+msgstr "Penagihan otomatis dibatalkan"
+
+msgid "Auto billing disabled"
+msgstr "Penagihan otomatis dinonaktifkan"
+
+msgid "Cancel auto billing for this service?"
+msgstr "Batalkan penagihan otomatis untuk layanan ini?"
+
+msgid "Preview class members and courses"
+msgstr "Pratinjau anggota kelas dan kursus"
+
+msgid "Please select a CSV file to import."
+msgstr "Silakan pilih file CSV untuk diimpor."
+
+msgid "%d user-class links imported"
+msgstr "%d tautan pengguna-kelas diimpor"
+
+msgid "The following errors occurred during import:"
+msgstr "Kesalahan berikut terjadi selama impor:"
+
+msgid "CSV file"
+msgstr "File CSV"
+
+msgid "Remove user from all group-related entities if not in the list"
+msgstr "Hapus pengguna dari semua entitas terkait grup jika tidak ada dalam daftar"
+
+msgid "UserName"
+msgstr "NamaPengguna"
+
+msgid "ClassName"
+msgstr "NamaKelas"
+
+msgid "are required for each row."
+msgstr "diperlukan untuk setiap baris."
+
+msgid "title"
+msgstr "judul"
+
+msgid "is required."
+msgstr "diperlukan."
+
+msgid "description"
+msgstr "deskripsi"
+
+msgid "are optional."
+msgstr "opsional."
+
+msgid "Are you sure you want to remove this user from the class?"
+msgstr "Apakah Anda yakin ingin menghapus pengguna ini dari kelas?"
+
+msgid "Users in class"
+msgstr "Pengguna dalam kelas"
+
+msgid "Remove user"
+msgstr "Hapus pengguna"
+
+msgid "Class not found"
+msgstr "Kelas tidak ditemukan"
+
+msgid "Class overview"
+msgstr "Ringkasan kelas"
+
+msgid "Back to classes"
+msgstr "Kembali ke kelas"
+
+msgid "Search members or courses"
+msgstr "Cari anggota atau kursus"
+
+msgid "Search by name, email, username or course title"
+msgstr "Cari berdasarkan nama, email, nama pengguna, atau judul kursus"
+
+msgid "Class members"
+msgstr "Anggota kelas"
+
+msgid "No email"
+msgstr "Tidak ada email"
+
+msgid "No members found"
+msgstr "Tidak ada anggota ditemukan"
+
+msgid "No courses found"
+msgstr "Tidak ada kursus ditemukan"
+
+msgid "The end date must be after the start date."
+msgstr "Tanggal akhir harus setelah tanggal mulai."
+
+msgid "Always visible"
+msgstr "Selalu terlihat"
+
+msgid "No end date"
+msgstr "Tidak ada tanggal akhir"
+
+msgid "No restriction"
+msgstr "Tidak ada batasan"
+
+msgid "Missing learning path or course identifier"
+msgstr "Tidak ada jalur pembelajaran atau pengidentifikasi kursus"
+
+msgid "Select a user or a group first"
+msgstr "Pilih pengguna atau grup terlebih dahulu"
+
+msgid "Remove all date restrictions for this learning path?"
+msgstr "Hapus semua batasan tanggal untuk jalur pembelajaran ini?"
+
+msgid "Advanced learning path access"
+msgstr "Akses jalur pembelajaran lanjutan"
+
+msgid "Remove date restrictions"
+msgstr "Hapus batasan tanggal"
+
+msgid "Search by name, email, username or group"
+msgstr "Cari berdasarkan nama, email, nama pengguna, atau grup"
+
+msgid "Edit user restriction"
+msgstr "Edit batasan pengguna"
+
+msgid "Edit group restriction"
+msgstr "Edit batasan grup"
+
+msgid "Select a user or group"
+msgstr "Pilih pengguna atau grup"
+
+msgid "Save restriction"
+msgstr "Simpan batasan"
+
+msgid "members"
+msgstr "anggota"
+
+msgid "Create Assignment"
+msgstr "Buat Tugas"
+
+msgid "The submission deadline has passed. You can no longer submit."
+msgstr "Batas waktu pengumpulan telah lewat. Anda tidak dapat mengirim lagi."
+
+msgid "Mailing cannot be combined with other recipients."
+msgstr "Mailing tidak dapat digabungkan dengan penerima lain."
+
+msgid "Social map"
+msgstr "Peta sosial"
+
+msgid "The map plugin is not enabled or configured."
+msgstr "Plugin peta tidak diaktifkan atau dikonfigurasi."
+
+msgid "Some configured extra fields were not found"
+msgstr "Beberapa bidang tambahan yang dikonfigurasi tidak ditemukan"
+
+msgid "No user locations were found."
+msgstr "Tidak ada lokasi pengguna yang ditemukan."
+
+msgid "OpenStreetMap needs coordinates to display an embedded marker. Address-only locations are listed below."
+msgstr "OpenStreetMap memerlukan koordinat untuk menampilkan penanda tertanam. Lokasi hanya alamat tercantum di bawah."
+
+msgid "Locations"
+msgstr "Lokasi"
+
+msgid "Open map"
+msgstr "Buka peta"
+
+msgid "Provider: OpenStreetMap"
+msgstr "Penyedia: OpenStreetMap"
+
+msgid "Provider: Google Maps"
+msgstr "Penyedia: Google Maps"
+
+msgid "Personal files"
+msgstr "Berkas pribadi"
+
+msgid "Upload image"
+msgstr "Unggah gambar"
+
+msgid "Upload media"
+msgstr "Unggah media"
+
+msgid "Only image files are allowed in this upload screen."
+msgstr "Hanya berkas gambar yang diizinkan di layar unggah ini."
+
+msgid "Only audio and video files are allowed in this upload screen."
+msgstr "Hanya berkas audio dan video yang diizinkan di layar unggah ini."
+
+msgid "Upload files to your personal storage."
+msgstr "Unggah berkas ke penyimpanan pribadi Anda."
+
+msgid "Linked"
+msgstr "Tertaut"
+
+msgid "No audio or video files were found in this folder."
+msgstr "Tidak ada berkas audio atau video yang ditemukan di folder ini."
+
+msgid "No image files were found in this folder."
+msgstr "Tidak ada berkas gambar yang ditemukan di folder ini."
+
+msgid "No matching files were found in this folder."
+msgstr "Tidak ada berkas yang cocok ditemukan di folder ini."
+
+msgid "This file type is not allowed in this upload screen."
+msgstr "Jenis berkas ini tidak diizinkan di layar unggah ini."
+
+msgid "Manage your personal files and course documents."
+msgstr "Kelola berkas pribadi dan dokumen kursus Anda."
+
+msgid "DateValidity"
+msgstr "DateValidity"
+
+msgid "JustificationSaved"
+msgstr "JustificationSaved"
+
+msgid "ValidityDate"
+msgstr "ValidityDate"
+
+msgid "MyJustifications"
+msgstr "MyJustifications"
+
+msgid "Submission"
+msgstr "Pengiriman"
+
+msgid "Use the filters above to narrow the list."
+msgstr "Gunakan filter di atas untuk mempersempit daftar."
+
+msgid "You are not allowed to see this page."
+msgstr "Anda tidak diizinkan melihat halaman ini."
+
+msgid "plugin_title"
+msgstr "plugin_title"
+
+msgid "plugin_comment"
+msgstr "plugin_comment"
+
+msgid "Course tracking details"
+msgstr "Detail pelacakan kursus"
+
+msgid "Course activity statistics"
+msgstr "Statistik aktivitas kursus"
+
+msgid "mobile_phone_number"
+msgstr "mobile_phone_number"
+
+msgid "Allowed template syntax"
+msgstr "Sintaks templat yang diizinkan"
+
+msgid "Functions"
+msgstr "Fungsi"
+
+msgid "Available variables depend on the template type, for example {{ user.getUsername() }} or {{ user.getEmail() }}."
+msgstr "Variabel yang tersedia bergantung pada jenis templat, misalnya {{ user.getUsername() }} atau {{ user.getEmail() }}."
+
+msgid "For security reasons, any other Twig function, filter (such as filter, map, reduce or sort) or PHP call is blocked."
+msgstr "Untuk alasan keamanan, fungsi Twig lain, filter (seperti filter, map, reduce atau sort) atau panggilan PHP apa pun diblokir."
+
+msgid "Global administrator"
+msgstr "Administrator global"
+
+msgid "Session manager"
+msgstr "Manajer sesi"
+
+msgid "Human resources manager"
+msgstr "Manajer sumber daya manusia"
+
+msgid "Course teacher"
+msgstr "Pengajar kursus"
+
+msgid "Course student"
+msgstr "Peserta kursus"
+
+msgid "Platform reports"
+msgstr "Laporan platform"
+
+msgid "Security reports"
+msgstr "Laporan keamanan"
+
+msgid "Course reports"
+msgstr "Laporan kursus"
+
+msgid "Gradebook reports"
+msgstr "Laporan buku nilai"
+
+msgid "Social reports"
+msgstr "Laporan sosial"
+
+msgid "Exports"
+msgstr "Ekspor"
+
+msgid "Reports about platform-wide usage, users, courses and sessions."
+msgstr "Laporan penggunaan platform secara keseluruhan, pengguna, kursus, dan sesi."
+
+msgid "Audit and security-sensitive reports."
+msgstr "Laporan audit dan keamanan sensitif."
+
+msgid "Reports scoped to courses managed by the user."
+msgstr "Laporan yang terbatas pada kursus yang dikelola pengguna."
+
+msgid "Reports related to learner activity and follow-up."
+msgstr "Laporan terkait aktivitas dan tindak lanjut peserta."
+
+msgid "Reports related to scores, certificates and gradebook data."
+msgstr "Laporan terkait nilai, sertifikat, dan data buku nilai."
+
+msgid "Reports and exports that generate downloadable files."
+msgstr "Laporan dan ekspor yang menghasilkan berkas yang dapat diunduh."
+
+msgid "Main platform statistics dashboard."
+msgstr "Dasbor statistik platform utama."
+
+msgid "Number of courses and course distribution report."
+msgstr "Laporan jumlah dan distribusi kursus."
+
+msgid "Platform-wide access to course tools."
+msgstr "Akses platform ke alat kursus."
+
+msgid "Number of resources per tool."
+msgstr "Jumlah sumber daya per alat."
+
+msgid "Latest access to courses."
+msgstr "Akses terbaru ke kursus."
+
+msgid "Course distribution by language."
+msgstr "Distribusi kursus berdasarkan bahasa."
+
+msgid "Course usage report."
+msgstr "Laporan penggunaan kursus."
+
+msgid "Platform user count report."
+msgstr "Laporan jumlah pengguna platform."
+
+msgid "Recent logins chart."
+msgstr "Grafik login terkini."
+
+msgid "Login distribution by month."
+msgstr "Distribusi login berdasarkan bulan."
+
+msgid "Login distribution by day."
+msgstr "Distribusi login berdasarkan hari."
+
+msgid "Login distribution by hour."
+msgstr "Distribusi login berdasarkan jam."
+
+msgid "Users with profile picture."
+msgstr "Pengguna dengan foto profil."
+
+msgid "Login report filtered by date."
+msgstr "Laporan login yang difilter berdasarkan tanggal."
+
+msgid "Users who have not logged in recently."
+msgstr "Pengguna yang belum login baru-baru ini."
+
+msgid "Inactive or suspicious user accounts report."
+msgstr "Laporan akun pengguna yang tidak aktif atau mencurigakan."
+
+msgid "Users activity statistics."
+msgstr "Statistik aktivitas pengguna."
+
+msgid "Currently online users report."
+msgstr "Laporan pengguna yang sedang online."
+
+msgid "New user registrations over time."
+msgstr "Pendaftaran pengguna baru dari waktu ke waktu."
+
+msgid "Course and session subscriptions over time."
+msgstr "Langganan kursus dan sesi dari waktu ke waktu."
+
+msgid "Duplicate user detection and maintenance report."
+msgstr "Laporan deteksi dan pemeliharaan pengguna duplikat."
+
+msgid "Platform user/session statistics."
+msgstr "Statistik pengguna/sesi platform."
+
+msgid "Quarterly platform report."
+msgstr "Laporan platform triwulanan."
+
+msgid "Activities audit"
+msgstr "Audit aktivitas"
+
+msgid "Audit report for important administrative and platform activities."
+msgstr "Laporan audit untuk aktivitas administratif dan platform penting."
+
+msgid "Social messages received report."
+msgstr "Laporan pesan sosial yang diterima."
+
+msgid "Social messages sent report."
+msgstr "Laporan pesan sosial yang dikirim."
+
+msgid "Social contacts count report."
+msgstr "Laporan jumlah kontak sosial."
+
+msgid "Sessions created over time."
+msgstr "Sesi yang dibuat dari waktu ke waktu."
+
+msgid "Learning analytics dashboard."
+msgstr "Dasbor analitik pembelajaran."
+
+msgid "Teacher time report."
+msgstr "Laporan waktu pengajar."
+
+msgid "Teachers time by session report"
+msgstr "Laporan waktu pengajar berdasarkan sesi"
+
+msgid "Teacher time report grouped by session."
+msgstr "Laporan waktu pengajar yang dikelompokkan berdasarkan sesi."
+
+msgid "Corporate learning analytics report."
+msgstr "Laporan analitik pembelajaran korporat."
+
+msgid "Course learners tracking report."
+msgstr "Laporan pelacakan peserta kursus."
+
+msgid "Course activity statistics with connected and inactive users."
+msgstr "Statistik aktivitas kursus dengan pengguna yang terhubung dan tidak aktif."
+
+msgid "Detailed tracking report for a learner inside a course."
+msgstr "Laporan pelacakan terperinci untuk peserta di dalam kursus."
+
+msgid "Course gradebook overview."
+msgstr "Ikhtisar buku nilai kursus."
+
+msgid "Gradebook statistics"
+msgstr "Statistik buku nilai"
+
+msgid "Gradebook statistics report."
+msgstr "Laporan statistik buku nilai."
+
+msgid "Certificate report"
+msgstr "Laporan sertifikat"
+
+msgid "Certificate report for course gradebook."
+msgstr "Laporan sertifikat untuk buku nilai kursus."
+
+msgid "User statistics"
+msgstr "Statistik pengguna"
+
+msgid "Course gradebook statistics for a user."
+msgstr "Statistik buku nilai kursus untuk seorang pengguna."
+
+msgid "Personal statistics"
+msgstr "Statistik pribadi"
+
+msgid "Personal gradebook statistics."
+msgstr "Statistik buku nilai pribadi."
+
+msgid "Reports catalog"
+msgstr "Katalog laporan"
+
+msgid "Central catalog of available reports, roles and permission categories."
+msgstr "Katalog pusat laporan yang tersedia, peran, dan kategori izin."
+
+msgid "Course log events"
+msgstr "Peristiwa log kursus"
+
+msgid "Detailed course tracking events."
+msgstr "Peristiwa pelacakan kursus terperinci."
+
+msgid "Course tool usage"
+msgstr "Penggunaan alat kursus"
+
+msgid "Course tracking report grouped by tools."
+msgstr "Laporan pelacakan kursus dikelompokkan berdasarkan alat."
+
+msgid "Course resource usage"
+msgstr "Penggunaan sumber daya kursus"
+
+msgid "Course tracking report grouped by resources."
+msgstr "Laporan pelacakan kursus dikelompokkan berdasarkan sumber daya."
+
+msgid "Course group tracking"
+msgstr "Pelacakan grup kursus"
+
+msgid "Tracking report for course groups."
+msgstr "Laporan pelacakan untuk grup kursus."
+
+msgid "Course session report"
+msgstr "Laporan sesi kursus"
+
+msgid "Tracking report for a course inside sessions."
+msgstr "Laporan pelacakan untuk kursus di dalam sesi."
+
+msgid "Learning path report"
+msgstr "Laporan jalur pembelajaran"
+
+msgid "Learning path tracking report."
+msgstr "Laporan pelacakan jalur pembelajaran."
+
+msgid "Learning path results by user"
+msgstr "Hasil jalur pembelajaran berdasarkan pengguna"
+
+msgid "Learning path results grouped by user."
+msgstr "Hasil jalur pembelajaran dikelompokkan berdasarkan pengguna."
+
+msgid "Exercises report"
+msgstr "Laporan latihan"
+
+msgid "Course exercises and exams tracking report."
+msgstr "Laporan pelacakan latihan dan ujian kursus."
+
+msgid "Question report"
+msgstr "Laporan pertanyaan"
+
+msgid "Course question tracking report."
+msgstr "Laporan pelacakan pertanyaan kursus."
+
+msgid "Messages report"
+msgstr "Laporan pesan"
+
+msgid "Course messages tracking report."
+msgstr "Laporan pelacakan pesan kursus."
+
+msgid "Total time tracking report for course learners."
+msgstr "Laporan pelacakan total waktu untuk peserta kursus."
+
+msgid "Gradebook summary"
+msgstr "Ringkasan buku nilai"
+
+msgid "Summary view of gradebook results."
+msgstr "Tampilan ringkasan hasil buku nilai."
+
+msgid "Flat view"
+msgstr "Tampilan datar"
+
+msgid "Flat gradebook results view."
+msgstr "Tampilan datar hasil buku nilai."
+
+msgid "Evaluation log"
+msgstr "Log evaluasi"
+
+msgid "Change log for gradebook evaluations."
+msgstr "Log perubahan untuk evaluasi buku nilai."
+
+msgid "Link log"
+msgstr "Log tautan"
+
+msgid "Change log for gradebook links."
+msgstr "Log perubahan untuk tautan buku nilai."
+
+msgid "Result details"
+msgstr "Detail hasil"
+
+msgid "Detailed view of a gradebook result."
+msgstr "Tampilan terperinci dari suatu hasil buku nilai."
+
+msgid "Personal certificates report."
+msgstr "Laporan sertifikat pribadi."
+
+msgid "User move statistics"
+msgstr "Statistik perpindahan pengguna"
+
+msgid "Report for user move and transfer statistics."
+msgstr "Laporan untuk statistik perpindahan dan transfer pengguna."
+
+msgid "User consent list"
+msgstr "Daftar persetujuan pengguna"
+
+msgid "Report of users and consent status."
+msgstr "Laporan pengguna dan status persetujuan."
+
+msgid "Special platform exports."
+msgstr "Ekspor khusus platform."
+
+msgid "Export certificates"
+msgstr "Ekspor sertifikat"
+
+msgid "Export platform certificates."
+msgstr "Ekspor sertifikat platform."
+
+msgid "Export exercise results"
+msgstr "Ekspor hasil latihan"
+
+msgid "Export exercise results from the platform."
+msgstr "Ekspor hasil latihan dari platform."
+
+msgid "Course survey results and reporting."
+msgstr "Hasil survei dan laporan kursus."
+
+msgid "Attendance report"
+msgstr "Laporan kehadiran"
+
+msgid "Course attendance tracking and reports."
+msgstr "Pelacakan dan laporan kehadiran kursus."
+
+msgid "Exercises global report"
+msgstr "Laporan global latihan"
+
+msgid "Global exercise results report for the course."
+msgstr "Laporan hasil latihan global untuk kursus."
+
+msgid "Exercise report"
+msgstr "Laporan latihan"
+
+msgid "Detailed exercise report."
+msgstr "Laporan latihan terperinci."
+
+msgid "Exercise history"
+msgstr "Riwayat latihan"
+
+msgid "Exercise attempt history."
+msgstr "Riwayat percobaan latihan."
+
+msgid "Exercise results"
+msgstr "Hasil latihan"
+
+msgid "Exercise results and corrections."
+msgstr "Hasil dan koreksi latihan."
+
+msgid "Question-level exercise statistics."
+msgstr "Statistik latihan tingkat pertanyaan."
+
+msgid "Exercise statistics"
+msgstr "Statistik latihan"
+
+msgid "Exercise statistics page."
+msgstr "Halaman statistik latihan."
+
+msgid "Live exercise statistics"
+msgstr "Statistik latihan langsung"
+
+msgid "Live exercise statistics for teachers."
+msgstr "Statistik latihan langsung untuk pengajar."
+
+msgid "Learning path statistics"
+msgstr "Statistik jalur pembelajaran"
+
+msgid "Learning path item statistics."
+msgstr "Statistik item jalur pembelajaran."
+
+msgid "Learning path report inside a course."
+msgstr "Laporan jalur pembelajaran di dalam kursus."
+
+msgid "User skills report."
+msgstr "Laporan keterampilan pengguna."
+
+msgid "Scheduled or periodic export configuration."
+msgstr "Konfigurasi ekspor terjadwal atau berkala."
+
+msgid "User export"
+msgstr "Ekspor pengguna"
+
+msgid "Export users from the platform."
+msgstr "Ekspor pengguna dari platform."
+
+msgid "Not classified"
+msgstr "Tidak diklasifikasikan"
+
+msgid "You have acquired the skill %s"
+msgstr "Anda telah memperoleh keterampilan %s"
+
+msgid "You have acquired the skill %s."
+msgstr "Anda telah memperoleh keterampilan %s."
+
+msgid "Recover your password"
+msgstr "Pulihkan kata sandi Anda"
+
+msgid "Disclaimer"
+msgstr "Penafian"
+
+msgid "This operation would exceed the limit of %d users allowed for this course."
+msgstr "Operasi ini akan melebihi batas %d pengguna yang diizinkan untuk kursus ini."
+
+msgid "DefaultGroupCategory"
+msgstr "DefaultGroupCategory"
+
+msgid "LearningCalendar"
+msgstr "LearningCalendar"
+
+msgid "Choose how this user can authenticate on the platform."
+msgstr "Pilih cara pengguna ini dapat mengautentikasi di platform."
+
+msgid "Authentication methods"
+msgstr "Metode autentikasi"
+
+msgid "Set password manually"
+msgstr "Atur kata sandi secara manual"
+
+msgid "Report role matrix"
+msgstr "Laporan matriks peran"
+
+msgid "Report permission categories"
+msgstr "Laporan kategori izin"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs enforce the documented report role matrix."
+msgstr "Registri ini mencantumkan halaman pelaporan yang dikenal, kategorinya, URL kanonis, URL lama, dan audiens peran yang diharapkan. URL kanonis memberlakukan matriks peran laporan yang didokumentasikan."
+
+msgid "reports"
+msgstr "laporan"
+
+msgid "Canonical URL"
+msgstr "URL kanonis"
+
+msgid "Legacy URL"
+msgstr "URL lama"
+
+msgid "Permission category"
+msgstr "Kategori izin"
+
+msgid "This matrix documents the expected audience for each report and is enforced by the canonical report entry point."
+msgstr "Matriks ini mendokumentasikan audiens yang diharapkan untuk setiap laporan dan diberlakukan oleh titik masuk laporan kanonis."
+
+msgid "These keys group reports by access scope and are used by the report registry. They can later be mapped to finer-grained platform permissions."
+msgstr "Kunci ini mengelompokkan laporan berdasarkan cakupan akses dan digunakan oleh registri laporan. Kunci ini nantinya dapat dipetakan ke izin platform yang lebih terperinci."
+
+msgid "Permission"
+msgstr "Izin"
+
+msgid "Clear active session"
+msgstr "Hapus sesi aktif"
+
+msgid "Are you sure you want to clear this user active session?"
+msgstr "Apakah Anda yakin ingin menghapus sesi aktif pengguna ini?"
+
+msgid "Preview shown without course context. Some course-specific data may be unavailable."
+msgstr "Pratinjau ditampilkan tanpa konteks kursus. Beberapa data khusus kursus mungkin tidak tersedia."
+
+msgid "Preview is not available for this question."
+msgstr "Pratinjau tidak tersedia untuk pertanyaan ini."
+
+msgid "Edition is not allowed without a course context."
+msgstr "Pengeditan tidak diizinkan tanpa konteks kursus."
+
+msgid "This plugin does not use regions."
+msgstr "Plugin ini tidak menggunakan region."
+
+msgid "No plugins with regions were found."
+msgstr "Tidak ada plugin dengan region yang ditemukan."
+
+msgid "Freemium"
+msgstr "Freemium"
+
+msgid "Commercial service"
+msgstr "Layanan komersial"
+
+msgid "Commercial"
+msgstr "Komersial"
+
+msgid "100% free"
+msgstr "100% gratis"
+
+msgid "Displayed above the public login form."
+msgstr "Ditampilkan di atas formulir login publik."
+
+msgid "Displayed below the public login form."
+msgstr "Ditampilkan di bawah formulir login publik."
+
+msgid "Displayed before the footer area."
+msgstr "Ditampilkan sebelum area footer."
+
+msgid "Displayed in the left footer column."
+msgstr "Ditampilkan di kolom footer kiri."
+
+msgid "Displayed in the center footer column."
+msgstr "Ditampilkan di kolom footer tengah."
+
+msgid "Displayed in the right footer column."
+msgstr "Ditampilkan di kolom footer kanan."
+
+msgid "Showing all plugins."
+msgstr "Menampilkan semua plugin."
+
+msgid "Some plugins are still pending functional verification."
+msgstr "Beberapa plugin masih menunggu verifikasi fungsional."
+
+msgid "Show verified plugins only"
+msgstr "Tampilkan hanya plugin terverifikasi"
+
+msgid "Showing verified plugins only."
+msgstr "Menampilkan hanya plugin terverifikasi."
+
+msgid "Pending plugins are temporarily hidden until they are adapted and tested."
+msgstr "Plugin yang tertunda disembunyikan sementara hingga diadaptasi dan diuji."
+
+msgid "Show all plugins"
+msgstr "Tampilkan semua plugin"
+
+msgid "Official and free plugins are listed separately from plugins that may depend on commercial services or paid offers."
+msgstr "Plugin resmi dan gratis ditampilkan terpisah dari plugin yang mungkin bergantung pada layanan komersial atau penawaran berbayar."
+
+msgid "Included free plugins"
+msgstr "Plugin gratis yang disertakan"
+
+msgid "Commercial and freemium plugins"
+msgstr "Plugin komersial dan freemium"
+
+msgid "All plugins"
+msgstr "Semua plugin"
+
+msgid "No plugins were found for this category."
+msgstr "Tidak ada plugin yang ditemukan untuk kategori ini."
+
+msgid "Search plugins"
+msgstr "Cari plugin"
+
+msgid "Search by name or description"
+msgstr "Cari berdasarkan nama atau deskripsi"
+
+msgid "Advanced filters"
+msgstr "Filter lanjutan"
+
+msgid "All statuses"
+msgstr "Semua status"
+
+msgid "All sources"
+msgstr "Semua sumber"
+
+msgid "All types"
+msgstr "Semua jenis"
+
+msgid "Installed plugins are shown first"
+msgstr "Plugin yang terinstal ditampilkan terlebih dahulu"
+
+msgid "No plugins match the current filters."
+msgstr "Tidak ada plugin yang cocok dengan filter saat ini."
+
+msgid "Try clearing the search or changing the filters."
+msgstr "Coba hapus pencarian atau ubah filter."
+
+msgid "README"
+msgstr "README"
+
+msgid "Invalid security token"
+msgstr "Token keamanan tidak valid"
+
+msgid "Please select a destination session"
+msgstr "Silakan pilih sesi tujuan"
+
+msgid "Cannot move this to the same session"
+msgstr "Tidak dapat memindahkan ini ke sesi yang sama"
+
+msgid "The destination session must include the selected course"
+msgstr "Sesi tujuan harus menyertakan kursus yang dipilih"
+
+msgid "The source session must include the selected course"
+msgstr "Sesi sumber harus menyertakan kursus yang dipilih"
+
+msgid "No learners found"
+msgstr "Tidak ada peserta yang ditemukan"
+
+msgid "Will be subscribed"
+msgstr "Akan berlangganan"
+
+msgid "Subscribed"
+msgstr "Berlangganan"
+
+msgid "The move process has finished"
+msgstr "Proses pemindahan telah selesai"
+
+msgid "Comparison finished. No data has been moved."
+msgstr "Perbandingan selesai. Tidak ada data yang dipindahkan."
+
+msgid "Move tracking data from the base course or a source session to another session. Use comparison first to review the affected learner data."
+msgstr "Pindahkan data pelacakan dari kursus dasar atau sesi sumber ke sesi lain. Gunakan perbandingan terlebih dahulu untuk meninjau data peserta yang terpengaruh."
+
+msgid "Search for a course or use the manual course ID field below."
+msgstr "Cari kursus atau gunakan bidang ID kursus manual di bawah ini."
+
+msgid "Fallback when the course search is not available."
+msgstr "Pengganti saat pencarian kursus tidak tersedia."
+
+msgid "Load sessions"
+msgstr "Muat sesi"
+
+msgid "Selected course"
+msgstr "Kursus terpilih"
+
+msgid "Choose the base course or the session where the tracking data currently exists."
+msgstr "Pilih kursus dasar atau sesi tempat data pelacakan saat ini berada."
+
+msgid "Choose the session that will receive the tracking data."
+msgstr "Pilih sesi yang akan menerima data pelacakan."
+
+msgid "Important"
+msgstr "Penting"
+
+msgid "The move action updates existing tracking data. Run compare first and test this tool with a non-production course before moving real learner data."
+msgstr "Tindakan pemindahan memperbarui data pelacakan yang ada. Jalankan perbandingan terlebih dahulu dan uji alat ini dengan kursus non-produksi sebelum memindahkan data peserta didik yang sebenarnya."
+
+msgid "No sessions found for this course"
+msgstr "Tidak ada sesi ditemukan untuk kursus ini"
+
+msgid "Some users were ignored because they are not subscribed to this session."
+msgstr "Beberapa pengguna diabaikan karena mereka tidak terdaftar di sesi ini."
+
+msgid "Remove selected user"
+msgstr "Hapus pengguna terpilih"
+
+msgid "Add selected user"
+msgstr "Tambah pengguna terpilih"
+
+msgid "No users from the selected list are subscribed to this session."
+msgstr "Tidak ada pengguna dari daftar terpilih yang terdaftar di sesi ini."
+
+msgid "No image"
+msgstr "Tidak ada gambar"
+
+msgid "Invalid URL."
+msgstr "URL tidak valid."
+
+msgid "This cloud document cannot be embedded."
+msgstr "Dokumen cloud ini tidak dapat disematkan."
+
+msgid "Document not found"
+msgstr "Dokumen tidak ditemukan"
+
+msgid "File not found"
+msgstr "Berkas tidak ditemukan"
+
+msgid "This learning path is not available for your user at this time."
+msgstr "Jalur pembelajaran ini tidak tersedia untuk pengguna Anda saat ini."
+
+msgid "StartDateMustBeBeforeTheEndDate"
+msgstr "StartDateMustBeBeforeTheEndDate"
+
+msgid "Next learning path"
+msgstr "Jalur pembelajaran berikutnya"
+
+msgid "Select the learning path that will be available after this one."
+msgstr "Pilih jalur pembelajaran yang akan tersedia setelah jalur ini."
+
+msgid "Create another learning path in this course to enable learning path flow."
+msgstr "Buat jalur pembelajaran lain di kursus ini untuk mengaktifkan alur jalur pembelajaran."
+
+msgid "Available from %s"
+msgstr "Tersedia dari %s"
+
+msgid "Available until %s"
+msgstr "Tersedia hingga %s"
+
+msgid "Statistics reset date"
+msgstr "Tanggal reset statistik"
+
+msgid "Last 24 hours"
+msgstr "24 jam terakhir"
+
+msgid "This reset date is used as the reference date for the report. It does not delete historical tracking data."
+msgstr "Tanggal reset ini digunakan sebagai tanggal referensi untuk laporan. Ini tidak menghapus data pelacakan historis."
+
+msgid "Since reset date"
+msgstr "Sejak tanggal reset"
+
+msgid "Users connected in the last 24 hours"
+msgstr "Pengguna yang terhubung dalam 24 jam terakhir"
+
+msgid "Learners with at least one course access during the last 24 hours."
+msgstr "Peserta didik dengan setidaknya satu akses kursus selama 24 jam terakhir."
+
+msgid "Users connected in the last week"
+msgstr "Pengguna yang terhubung dalam minggu terakhir"
+
+msgid "Learners with at least one course access during the last 7 days."
+msgstr "Peserta didik dengan setidaknya satu akses kursus selama 7 hari terakhir."
+
+msgid "Users connected in the last month"
+msgstr "Pengguna yang terhubung dalam bulan terakhir"
+
+msgid "Learners with at least one course access during the last 30 days."
+msgstr "Peserta didik dengan setidaknya satu akses kursus selama 30 hari terakhir."
+
+msgid "Not recently connected users"
+msgstr "Pengguna yang tidak terhubung baru-baru ini"
+
+msgid "Learners without course access since %s."
+msgstr "Peserta didik tanpa akses kursus sejak %s."
+
+msgid "Recently used resources"
+msgstr "Sumber daya yang baru digunakan"
+
+msgid "Course tools/resources used since %s."
+msgstr "Alat/sumber daya kursus yang digunakan sejak %s."
+
+msgid "%s %% of learners"
+msgstr "%s %% peserta didik"
+
+msgid "Connections"
+msgstr "Koneksi"
+
+msgid "Total connections"
+msgstr "Total koneksi"
+
+msgid "Downloaded documents"
+msgstr "Dokumen yang diunduh"
+
+msgid "List of documents downloaded by this learner in this course."
+msgstr "Daftar dokumen yang diunduh oleh peserta didik ini dalam kursus ini."
+
+msgid "Forum topics"
+msgstr "Topik forum"
+
+msgid "Forum topics opened by this learner in this course."
+msgstr "Topik forum yang dibuka oleh peserta didik ini dalam kursus ini."
+
+msgid "Forum posts"
+msgstr "Postingan forum"
+
+msgid "Forum posts written by this learner in this course."
+msgstr "Postingan forum yang ditulis oleh peserta didik ini dalam kursus ini."
+
+msgid "Course connections"
+msgstr "Koneksi kursus"
+
+msgid "Connection history for this learner in this course."
+msgstr "Riwayat koneksi peserta didik ini dalam kursus ini."
+
+msgid "Resources used"
+msgstr "Sumber daya yang digunakan"
+
+msgid "Latest tools or resources used by this learner in this course."
+msgstr "Alat atau sumber daya terbaru yang digunakan oleh peserta didik ini dalam kursus ini."
+
+msgid "Logout date"
+msgstr "Tanggal logout"
+
+msgid "Imported Aiken quiz"
+msgstr "Kuis Aiken yang diimpor"
+
+msgid "Only supported documents will be listed here."
+msgstr "Hanya dokumen yang didukung yang akan ditampilkan di sini."
+
+msgid "Generated Aiken content"
+msgstr "Konten Aiken yang dihasilkan"
+
+msgid "Review the generated content before importing it as a new exercise."
+msgstr "Tinjau konten yang dihasilkan sebelum mengimpornya sebagai latihan baru."
+
+msgid "No documents available."
+msgstr "Tidak ada dokumen tersedia."
+
+msgid "yperbolic arctangent:\\t\\tarctanh(x)"
+msgstr "arctangent hiperbolik:\\t\\tarctanh(x)"
+
+msgid "Exercise"
+msgstr "Latihan"
+
+msgid "OfficialCode"
+msgstr "KodeResmi"
+
+msgid "FirstName"
+msgstr "NamaDepan"
+
+msgid "LastName"
+msgstr "NamaBelakang"
+
+msgid "LoginName"
+msgstr "NamaLogin"
+
+msgid "MinMinute"
+msgstr "MenitMin"
+
+msgid "StartDate"
+msgstr "TanggalMulai"
+
+msgid "EndDate"
+msgstr "TanggalAkhir"
+
+msgid "CorrectionDate"
+msgstr "TanggalKoreksi"
+
+msgid "NotValidated"
+msgstr "BelumDivalidasi"
+
+msgid "PendingAttempts"
+msgstr "UpayaTertunda"
+
+msgid "List of pending test attempts across your courses."
+msgstr "Daftar upaya tes tertunda di seluruh kursus Anda."
+
+msgid "User ID"
+msgstr "ID Pengguna"
+
+msgid "QuestionType"
+msgstr "JenisPertanyaan"
+
+msgid "QuestionsWithNoAutomaticCorrection"
+msgstr "PertanyaanTanpaKoreksiOtomatis"
+
+msgid "There are no pending tests."
+msgstr "Tidak ada tes tertunda."
+
+msgid "%s results"
+msgstr "%s hasil"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Contoh aktivitas mengisi formulir: hitung Indeks Massa Tubuh</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Usia</strong></td>            <td width=\"75%\" style=\"\">[25] tahun</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Jenis Kelamin</strong></td>            <td style=\"\" text-align:=\"\">[L] (L atau P)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Berat Badan</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Tinggi Badan</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Indeks Massa Tubuh</strong></td>            <td style=\"vertical-align: top;\">[29] IMT =Berat/Tinggi<sup>2</sup> (Lihat <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\">artikel Wikipedia</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Removed"
+msgstr "Dihapus"
+
+msgid "NoUsersInTheList"
+msgstr "TidakAdaPenggunaDalamDaftar"
+
+msgid "Are you sure?"
+msgstr "Apakah Anda yakin?"
+
+msgid "NoResultsAvailable"
+msgstr "TidakAdaHasilTersedia"
+
+msgid "Import groups from a CSV file and optionally remove items that are not present in the file."
+msgstr "Impor grup dari file CSV dan opsional hapus item yang tidak ada dalam file."
+
+msgid "Use this option carefully because items missing from the CSV can be removed during the import process."
+msgstr "Gunakan opsi ini dengan hati-hati karena item yang tidak ada dalam CSV dapat dihapus selama proses impor."
+
+msgid "Upload a CSV file with the group data you want to import."
+msgstr "Unggah file CSV dengan data grup yang ingin Anda impor."
+
+msgid "You can download the example file to use the expected format."
+msgstr "Anda dapat mengunduh file contoh untuk menggunakan format yang diharapkan."
+
+msgid "If you enable deletion, items not present in the file may be removed."
+msgstr "Jika Anda mengaktifkan penghapusan, item yang tidak ada dalam file mungkin akan dihapus."
+
+msgid "The CSV file is mandatory to start the import."
+msgstr "File CSV wajib untuk memulai impor."
+
+msgid "Please select at least one class."
+msgstr "Silakan pilih setidaknya satu kelas."
+
+msgid "Define the properties for each group before creating them."
+msgstr "Tentukan properti untuk setiap grup sebelum membuatnya."
+
+msgid "Apply the first row values"
+msgstr "Terapkan nilai baris pertama"
+
+msgid "Create groups manually or generate them from the classes subscribed to this course."
+msgstr "Buat grup secara manual atau hasilkan dari kelas yang terdaftar pada kursus ini."
+
+msgid "Create manual groups"
+msgstr "Buat grup manual"
+
+msgid "Use this form when you want to create empty course groups manually."
+msgstr "Gunakan formulir ini jika Anda ingin membuat grup kursus kosong secara manual."
+
+msgid "Configure manual groups"
+msgstr "Konfigurasikan grup manual"
+
+msgid "Create groups from subscribed classes"
+msgstr "Buat grup dari kelas yang terdaftar"
+
+msgid "Use this form when you want to create one course group for each selected class."
+msgstr "Gunakan formulir ini jika Anda ingin membuat satu grup kursus untuk setiap kelas yang dipilih."
+
+msgid "Keep created groups linked to their source classes"
+msgstr "Pertahankan grup yang dibuat tetap terhubung dengan kelas asalnya"
+
+msgid "Create groups from selected classes"
+msgstr "Buat grup dari kelas yang dipilih"
+
+msgid "You must be logged in to access this page."
+msgstr "Anda harus masuk untuk mengakses halaman ini."
+
+msgid "Invalid user"
+msgstr "Pengguna tidak valid"
+
+msgid "UseCourseCustomCertificate"
+msgstr "GunakanSertifikatKustomKursus"
+
+msgid "UseDefaultCustomCertificate"
+msgstr "GunakanSertifikatKustomDefault"
+
+msgid "CertificateSetting"
+msgstr "PengaturanSertifikat"
+
+msgid "SelectOneOptionBeforeOpeningEditor"
+msgstr "PilihSatuOpsiSebelumMembukaEditor"
+
+msgid "ChooseCustomCertificateModeHelp"
+msgstr "PilihModeSertifikatKustomBantuan"
+
+msgid "CertificateMode"
+msgstr "ModeSertifikat"
+
+msgid "Enable student to validate own attendance"
+msgstr "Izinkan siswa memvalidasi kehadiran sendiri"
+
+msgid "Course block"
+msgstr "Blok kursus"
+
+msgid "Add custom content blocks to course footer regions."
+msgstr "Tambahkan blok konten kustom ke area footer kursus."
+
+msgid "course_block_pre_footer"
+msgstr "course_block_pre_footer"
+
+msgid "Before footer"
+msgstr "Sebelum footer"
+
+msgid "course_block_footer_left"
+msgstr "course_block_footer_left"
+
+msgid "Footer left"
+msgstr "Footer kiri"
+
+msgid "course_block_footer_center"
+msgstr "course_block_footer_center"
+
+msgid "Footer center"
+msgstr "Footer tengah"
+
+msgid "course_block_footer_right"
+msgstr "course_block_footer_right"
+
+msgid "Footer right"
+msgstr "Footer kanan"
+
+msgid "SetNotification"
+msgstr "AturNotifikasi"
+
+msgid "CourseLegal"
+msgstr "LegalKursus"
+
+msgid "Certificates search is not available"
+msgstr "Pencarian sertifikat tidak tersedia"
+
+msgid "It allows the acquisition of skills by subcategories"
+msgstr "Memungkinkan perolehan keterampilan berdasarkan subkategori"
+
+msgid "Allow skills by subcategories"
+msgstr "Izinkan keterampilan berdasarkan subkategori"
+
+msgid "Minimum score for skills"
+msgstr "Nilai minimum untuk keterampilan"
+
+msgid "The gradebook table is hidden."
+msgstr "Tabel buku nilai disembunyikan."
+
+msgid "Invalid token"
+msgstr "Token tidak valid"
+
+msgid "Unable to save the item"
+msgstr "Tidak dapat menyimpan item"
+
+msgid "Only HTTP and HTTPS URLs are allowed."
+msgstr "Hanya URL HTTP dan HTTPS yang diizinkan."
+
+msgid "Invalid URL host."
+msgstr "Host URL tidak valid."
+
+msgid "This cloud provider is not allowed."
+msgstr "Penyedia cloud ini tidak diizinkan."
+
+msgid "Documents used"
+msgstr "Dokumen yang digunakan"
+
+msgid "No document usage"
+msgstr "Tidak ada penggunaan dokumen"
+
+msgid "Invalid action."
+msgstr "Tindakan tidak valid."
+
+msgid "No users selected."
+msgstr "Tidak ada pengguna yang dipilih."
+
+msgid "%s user(s) processed."
+msgstr "%s pengguna diproses."
+
+msgid "Invalid CSRF token."
+msgstr "Token CSRF tidak valid."
+
+msgid "[%s] Please change your password"
+msgstr "[%s] Silakan ubah kata sandi Anda"
+
+msgid "Dear %s,\n\nOur security enforcing process shows you use a password that is commonly used on the internet, which means your account could easily be stolen. It is probably a simple sequence or a very common word, we don't really know (we cannot see your password), but we ask you to please connect to the platform and request a password change. You can follow the link here: %s to do that now.\n\nPlease note we will never ask for your password in this process. You just enter your username or e-mail and we send you a link. If you are asked to introduce your existing password to do that, someone is probably trying to do Phishing on your account. Be safe, change your password now!\n\n%s\n%s"
+msgstr "Kepada %s,\n\nProses keamanan kami menunjukkan bahwa Anda menggunakan kata sandi yang umum digunakan di internet, yang berarti akun Anda dapat dengan mudah dicuri. Kata sandi tersebut mungkin merupakan urutan sederhana atau kata yang sangat umum, kami tidak benar-benar tahu (kami tidak dapat melihat kata sandi Anda), tetapi kami meminta Anda untuk menghubungkan ke platform dan meminta perubahan kata sandi. Anda dapat mengikuti tautan ini: %s untuk melakukannya sekarang.\n\nHarap dicatat bahwa kami tidak akan pernah meminta kata sandi Anda dalam proses ini. Anda hanya perlu memasukkan nama pengguna atau email dan kami akan mengirimkan tautan kepada Anda. Jika Anda diminta untuk memasukkan kata sandi yang ada untuk melakukannya, kemungkinan seseorang sedang mencoba melakukan Phishing pada akun Anda. Tetap aman, ubah kata sandi Anda sekarang!\n\n%s\n%s"
+
+msgid "[%s] Your password has been reset"
+msgstr "[%s] Kata sandi Anda telah diatur ulang"
+
+msgid "Dear %s,\n\nOur security enforcing process flagged you as using a password that is commonly used on the internet, which means your account could easily be stolen. As a prevention measure, we have decided to initiate a password reset process. Your new, automatically generated password is now:\n\n%s\n\nPlease login to the platform soon (using this new password) to set your own, personal and secure, password.\n\nBe safe.\n\n%s\n%s"
+msgstr "Kepada %s,\n\nProses keamanan kami menandai Anda sebagai menggunakan kata sandi yang umum digunakan di internet, yang berarti akun Anda dapat dengan mudah dicuri. Sebagai langkah pencegahan, kami telah memutuskan untuk memulai proses pengaturan ulang kata sandi. Kata sandi baru Anda yang dibuat secara otomatis sekarang adalah:\n\n%s\n\nSilakan masuk ke platform segera (menggunakan kata sandi baru ini) untuk menetapkan kata sandi pribadi dan aman Anda sendiri.\n\nTetap aman.\n\n%s\n%s"
+
+msgid "Signature saved successfully"
+msgstr "Tanda tangan berhasil disimpan"
+
+msgid "Invalid request payload."
+msgstr "Muatan permintaan tidak valid."
+
+msgid "Authentication required."
+msgstr "Autentikasi diperlukan."
+
+msgid "The course title is required."
+msgstr "Judul kursus diperlukan."
+
+msgid "Only trainers and administrators can create courses."
+msgstr "Hanya pelatih dan administrator yang dapat membuat kursus."
+
+msgid "Course creation by trainers is disabled on this platform."
+msgstr "Pembuatan kursus oleh pelatih dinonaktifkan di platform ini."
+
+msgid "The selected BuyCourses service cannot be used to create this course."
+msgstr "Layanan BuyCourses yang dipilih tidak dapat digunakan untuk membuat kursus ini."
+
+msgid "You have reached the maximum number of courses allowed (%d)."
+msgstr "Anda telah mencapai jumlah maksimum kursus yang diizinkan (%d)."
+
+msgid "The selected BuyCourses service is invalid."
+msgstr "Layanan BuyCourses yang dipilih tidak valid."
+
+msgid "BuyCourses is not available right now."
+msgstr "BuyCourses tidak tersedia saat ini."
+
+msgid "BuyCourses cannot validate the selected service right now."
+msgstr "BuyCourses tidak dapat memvalidasi layanan yang dipilih saat ini."
+
+msgid "Unable to validate the selected BuyCourses service right now."
+msgstr "Tidak dapat memvalidasi layanan BuyCourses yang dipilih saat ini."
+
+msgid "External tool removed from course"
+msgstr "Alat eksternal dihapus dari kursus"
+
+msgid "External tool was removed from the course, but kept internally because it is linked to the gradebook"
+msgstr "Alat eksternal telah dihapus dari kursus, tetapi tetap disimpan secara internal karena terhubung dengan buku nilai"
+
+msgid "There are no external tools available to add to the gradebook"
+msgstr "Tidak ada alat eksternal yang tersedia untuk ditambahkan ke buku nilai"
+
+msgid "The evaluation could not be created"
+msgstr "Evaluasi tidak dapat dibuat"
+
+msgid "The gradebook evaluation could not be linked"
+msgstr "Evaluasi buku nilai tidak dapat ditautkan"
+
+msgid "Survey questions"
+msgstr "Survey questions"
+
+msgid "Back to survey list"
+msgstr "Back to survey list"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "This survey already has answers. Question editing is disabled by configuration."
+
+msgid "Choose the type of question you want to add."
+msgstr "Choose the type of question you want to add."
+
+msgid "The free text option is added automatically."
+msgstr "The free text option is added automatically."
+
+msgid "No questions found"
+msgstr "No questions found"
+
+msgid "Mandatory"
+msgstr "Wajib"
+
+msgid "Unsupported question type"
+msgstr "Tipe pertanyaan tidak didukung"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "Anda dapat menggunakan tag {%s} dan {%s} dalam pertanyaan."
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "Pertanyaan ini ditampilkan secara kondisional saat menjawab survei."
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "Opsi persentase dari 1 hingga 100 dibuat secara otomatis."
+
+msgid "Could not load survey questions"
+msgstr "Tidak dapat memuat pertanyaan survei"
+
+msgid "The question text is required."
+msgstr "Teks pertanyaan wajib diisi."
+
+msgid "The maximum score is required."
+msgstr "Skor maksimum wajib diisi."
+
+msgid "Please select a parent option."
+msgstr "Silakan pilih opsi induk."
+
+msgid "Please fill all answer options."
+msgstr "Silakan isi semua opsi jawaban."
+
+msgid "QuestionUpdated"
+msgstr "QuestionUpdated"
+
+msgid "Could not save survey question"
+msgstr "Tidak dapat menyimpan pertanyaan survei"
+
+msgid "Could not delete survey question"
+msgstr "Tidak dapat menghapus pertanyaan survei"
+
+msgid "Could not move survey question"
+msgstr "Tidak dapat memindahkan pertanyaan survei"
+
+msgid "Could not copy survey question"
+msgstr "Tidak dapat menyalin pertanyaan survei"
+
+msgid "Hide search"
+msgstr "Sembunyikan pencarian"
+
+msgid "Showing results for: %s"
+msgstr "Menampilkan hasil untuk: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "Cari berdasarkan judul survei, kode, atau deskripsi."
+
+msgid "Search surveys"
+msgstr "Cari survei"
+
+msgid "%s surveys selected"
+msgstr "%s survei dipilih"
+
+msgid "Clear selection"
+msgstr "Hapus pilihan"
+
+msgid "No surveys found"
+msgstr "Tidak ada survei ditemukan"
+
+msgid "Unsupported"
+msgstr "Tidak didukung"
+
+msgid "Could not load surveys"
+msgstr "Tidak dapat memuat survei"
+
+msgid "Delete selected surveys"
+msgstr "Hapus survei yang dipilih"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "Survei yang dipilih beserta pertanyaannya akan dihapus. Tindakan ini tidak dapat dibatalkan."
+
+msgid "Could not delete selected surveys"
+msgstr "Tidak dapat menghapus survei yang dipilih"
+
+msgid "Survey action"
+msgstr "Tindakan survei"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "Salinan survei ini akan dibuat: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "Semua jawaban dan undangan akan dihapus untuk survei ini: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "Pertanyaan yang dihasilkan secara berlipat ganda akan dihapus dari survei ini: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "Survei ini akan dipublikasikan untuk tutor kelompok terkait: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "Survei ini beserta pertanyaannya akan dihapus: %s"
+
+msgid "Could not complete survey action"
+msgstr "Tidak dapat menyelesaikan tindakan survei"
+
+msgid "Not started"
+msgstr "Belum dimulai"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "Jajak pendapat pertemuan memungkinkan pengguna yang diundang memilih tanggal saat mereka tersedia."
+
+msgid "Back to surveys"
+msgstr "Kembali ke survei"
+
+msgid "Edit meeting poll"
+msgstr "Edit jajak pendapat pertemuan"
+
+msgid "View meeting poll"
+msgstr "Lihat jajak pendapat pertemuan"
+
+msgid "Basic information"
+msgstr "Informasi dasar"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "Tindakan ini akan membuat survei jenis jajak pendapat pertemuan. Jawaban dan undangan ditangani secara terpisah."
+
+msgid "Availability"
+msgstr "Ketersediaan"
+
+msgid "Meeting dates"
+msgstr "Tanggal pertemuan"
+
+msgid "Meeting poll"
+msgstr "Jajak pendapat pertemuan"
+
+msgid "My availability"
+msgstr "Ketersediaan saya"
+
+msgid "Meeting poll results"
+msgstr "Hasil jajak pendapat pertemuan"
+
+msgid "No invitations found"
+msgstr "Tidak ada undangan ditemukan"
+
+msgid "available"
+msgstr "tersedia"
+
+msgid "Could not load meeting poll"
+msgstr "Tidak dapat memuat jajak pendapat pertemuan"
+
+msgid "Please complete the required fields"
+msgstr "Silakan lengkapi bidang yang wajib diisi"
+
+msgid "Could not save meeting poll"
+msgstr "Tidak dapat menyimpan polling pertemuan"
+
+msgid "Could not save meeting availability"
+msgstr "Tidak dapat menyimpan ketersediaan pertemuan"
+
+msgid "Copy this survey to another course or session"
+msgstr "Salin survei ini ke kursus atau sesi lain"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "Survei akan disalin tanpa jawaban atau undangan."
+
+msgid "No target courses found"
+msgstr "Tidak ada kursus tujuan ditemukan"
+
+msgid "Search by course title, course code or session name."
+msgstr "Cari berdasarkan judul kursus, kode kursus, atau nama sesi."
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "Gunakan Duplikat survei jika Anda ingin salinan di kursus yang sama."
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "Pertanyaan dan opsi akan disalin. Jawaban, undangan, dan laporan hanya akan tetap di survei asli."
+
+msgid "Selected target"
+msgstr "Target terpilih"
+
+msgid "Could not load copy form"
+msgstr "Tidak dapat memuat formulir salin"
+
+msgid "The survey will be copied to: %s"
+msgstr "Survei akan disalin ke: %s"
+
+msgid "Survey copied."
+msgstr "Survei disalin."
+
+msgid "Could not copy survey"
+msgstr "Tidak dapat menyalin survei"
+
+msgid "Answer survey"
+msgstr "Jawab survei"
+
+msgid "Preview mode does not save answers."
+msgstr "Mode pratinjau tidak menyimpan jawaban."
+
+msgid "Survey completed"
+msgstr "Survei selesai"
+
+msgid "Thank you for answering the survey."
+msgstr "Terima kasih telah menjawab survei."
+
+msgid "Profile information"
+msgstr "Informasi profil"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "Harap tinjau bidang profil yang diminta sebelum menjawab survei."
+
+msgid "This profile field is read-only."
+msgstr "Bidang profil ini hanya-baca."
+
+msgid "You already filled this survey."
+msgstr "Anda sudah mengisi survei ini."
+
+msgid "Please specify"
+msgstr "Harap tentukan"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "Jenis pertanyaan ini tidak didukung di tampilan survei modern."
+
+msgid "Preview only"
+msgstr "Hanya pratinjau"
+
+msgid "Submit answers"
+msgstr "Kirim jawaban"
+
+msgid "Could not load survey"
+msgstr "Tidak dapat memuat survei"
+
+msgid "Please complete the required profile fields."
+msgstr "Harap lengkapi bidang profil yang wajib."
+
+msgid "Please answer all mandatory questions."
+msgstr "Harap jawab semua pertanyaan wajib."
+
+msgid "Could not save survey answers"
+msgstr "Tidak dapat menyimpan jawaban survei"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "Konfigurasikan informasi utama survei sebelum mengelola pertanyaan dan undangan."
+
+msgid "The survey code cannot be changed after creation."
+msgstr "Kode survei tidak dapat diubah setelah dibuat."
+
+msgid "Survey behavior"
+msgstr "Perilaku survei"
+
+msgid "Use 0 for no time limit."
+msgstr "Gunakan 0 untuk tanpa batas waktu."
+
+msgid "Survey messages"
+msgstr "Pesan survei"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "Bidang profil yang dipilih di sini akan ditampilkan sebelum pertanyaan survei."
+
+msgid "No profile fields are currently available."
+msgstr "Tidak ada bidang profil yang tersedia saat ini."
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "Pemilihan bidang profil hanya tersedia untuk survei non-anonim."
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "Penautan keterampilan akan dimigrasikan dalam batch khusus."
+
+msgid "Could not load survey configuration"
+msgstr "Tidak dapat memuat konfigurasi survei"
+
+msgid "The survey code is required."
+msgstr "Kode survei wajib diisi."
+
+msgid "The survey title is required."
+msgstr "Judul survei wajib diisi."
+
+msgid "The survey has been saved successfully"
+msgstr "Survei berhasil disimpan"
+
+msgid "Could not save survey configuration"
+msgstr "Tidak dapat menyimpan konfigurasi survei"
+
+msgid "Course users"
+msgstr "Pengguna kursus"
+
+msgid "Already invited"
+msgstr "Sudah diundang"
+
+msgid "No users found"
+msgstr "Tidak ada pengguna ditemukan"
+
+msgid "No groups found"
+msgstr "Tidak ada grup ditemukan"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "Gunakan **link** di tempat tautan survei harus muncul."
+
+msgid "Remind all selected users"
+msgstr "Ingatkan semua pengguna terpilih"
+
+msgid "Anonymous access link"
+msgstr "Tautan akses anonim"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "Pengguna yang tidak diundang dapat menggunakan tautan ini untuk mengikuti survei."
+
+msgid "Answered anonymously"
+msgstr "Dijawab secara anonim"
+
+msgid "Could not load survey invitations"
+msgstr "Tidak dapat memuat undangan survei"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "Subjek dan pesan email wajib diisi saat mengirim email."
+
+msgid "Could not publish survey"
+msgstr "Tidak dapat mempublikasikan survei"
+
+msgid "Could not copy the link"
+msgstr "Tidak dapat menyalin tautan"
+
+msgid "Please answer this survey using the following link"
+msgstr "Silakan jawab survei ini menggunakan tautan berikut"
+
+msgid "Export CSV"
+msgstr "Ekspor CSV"
+
+msgid "Export compact CSV"
+msgstr "Ekspor CSV ringkas"
+
+msgid "Export Excel"
+msgstr "Ekspor Excel"
+
+msgid "Export package"
+msgstr "Ekspor paket"
+
+msgid "Results summary"
+msgstr "Ringkasan hasil"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "Tampilan ini menunjukkan data pelaporan yang telah dimigrasikan untuk survei ini."
+
+msgid "Select user"
+msgstr "Pilih pengguna"
+
+msgid "No answers found"
+msgstr "Tidak ada jawaban ditemukan"
+
+msgid "answers"
+msgstr "jawaban"
+
+msgid "Could not load survey reporting"
+msgstr "Tidak dapat memuat pelaporan survei"
+
+msgid "Back to threads"
+msgstr "Kembali ke topik"
+
+msgid "Back to learning path"
+msgstr "Kembali ke jalur pembelajaran"
+
+msgid "Remove sticky"
+msgstr "Hapus sticky"
+
+msgid "Make sticky"
+msgstr "Jadikan sticky"
+
+msgid "Open thread"
+msgstr "Buka topik"
+
+msgid "Close thread"
+msgstr "Tutup topik"
+
+msgid "Delete thread"
+msgstr "Hapus topik"
+
+msgid "This thread is hidden from learners."
+msgstr "Topik ini disembunyikan dari peserta."
+
+msgid "Revision requested"
+msgstr "Revisi diminta"
+
+msgid "Revision"
+msgstr "Revisi"
+
+msgid "Approve post"
+msgstr "Setujui postingan"
+
+msgid "Reject post"
+msgstr "Tolak postingan"
+
+msgid "Cancel revision request"
+msgstr "Batalkan permintaan revisi"
+
+msgid "Delete post"
+msgstr "Hapus postingan"
+
+msgid "Message is required"
+msgstr "Pesan wajib diisi"
+
+msgid "Target thread is required"
+msgstr "Topik tujuan wajib diisi"
+
+msgid "Could not retrieve posts"
+msgstr "Tidak dapat mengambil postingan"
+
+msgid "Thread shown"
+msgstr "Topik ditampilkan"
+
+msgid "Thread hidden"
+msgstr "Topik disembunyikan"
+
+msgid "Could not update thread"
+msgstr "Tidak dapat memperbarui topik"
+
+msgid "Thread closed"
+msgstr "Topik ditutup"
+
+msgid "Thread opened"
+msgstr "Topik dibuka"
+
+msgid "Thread marked as sticky"
+msgstr "Topik ditandai sebagai sticky"
+
+msgid "Thread unmarked as sticky"
+msgstr "Tanda sticky pada topik dihapus"
+
+msgid "Thread notifications enabled"
+msgstr "Notifikasi topik diaktifkan"
+
+msgid "Thread notifications disabled"
+msgstr "Notifikasi topik dinonaktifkan"
+
+msgid "Could not update thread notification"
+msgstr "Tidak dapat memperbarui notifikasi topik"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "Apakah Anda yakin ingin menghapus topik ini?"
+
+msgid "Could not delete thread"
+msgstr "Tidak dapat menghapus topik"
+
+msgid "Post approved"
+msgstr "Postingan disetujui"
+
+msgid "Could not approve post"
+msgstr "Tidak dapat menyetujui postingan"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "Apakah Anda yakin ingin menolak postingan ini?"
+
+msgid "Post rejected"
+msgstr "Postingan ditolak"
+
+msgid "Could not reject post"
+msgstr "Tidak dapat menolak postingan"
+
+msgid "Post shown"
+msgstr "Postingan ditampilkan"
+
+msgid "Post hidden"
+msgstr "Postingan disembunyikan"
+
+msgid "Could not update post"
+msgstr "Tidak dapat memperbarui postingan"
+
+msgid "Post updated"
+msgstr "Postingan diperbarui"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "Apakah Anda yakin ingin menghapus postingan ini?"
+
+msgid "Post deleted"
+msgstr "Postingan dihapus"
+
+msgid "Could not delete post"
+msgstr "Tidak dapat menghapus postingan"
+
+msgid "Untitled thread"
+msgstr "Utas tanpa judul"
+
+msgid "Could not retrieve threads"
+msgstr "Tidak dapat mengambil utas"
+
+msgid "Post moved"
+msgstr "Postingan dipindahkan"
+
+msgid "Could not move post"
+msgstr "Tidak dapat memindahkan postingan"
+
+msgid "Revision request removed"
+msgstr "Permintaan revisi dihapus"
+
+msgid "Could not update revision request"
+msgstr "Tidak dapat memperbarui permintaan revisi"
+
+msgid "Are you sure you want to report this post?"
+msgstr "Apakah Anda yakin ingin melaporkan postingan ini?"
+
+msgid "Could not report post"
+msgstr "Tidak dapat melaporkan postingan"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "Apakah Anda yakin ingin menghapus lampiran ini?"
+
+msgid "Attachment deleted"
+msgstr "Lampiran dihapus"
+
+msgid "Could not delete attachment"
+msgstr "Tidak dapat menghapus lampiran"
+
+msgid "Thread title"
+msgstr "Judul utas"
+
+msgid "Sticky thread"
+msgstr "Utas yang disematkan"
+
+msgid "Attach files"
+msgstr "Lampirkan berkas"
+
+msgid "Attachments are disabled for this forum"
+msgstr "Lampiran dinonaktifkan untuk forum ini"
+
+msgid "The forum is not open yet."
+msgstr "Forum belum dibuka."
+
+msgid "The forum is closed."
+msgstr "Forum ditutup."
+
+msgid "The forum is locked."
+msgstr "Forum dikunci."
+
+msgid "New threads are not allowed in this forum."
+msgstr "Utas baru tidak diizinkan di forum ini."
+
+msgid "Thread created"
+msgstr "Utas dibuat"
+
+msgid "Could not create thread"
+msgstr "Tidak dapat membuat utas"
+
+msgid "Back to posts"
+msgstr "Kembali ke postingan"
+
+msgid "This reply will be stored as a revision."
+msgstr "Balasan ini akan disimpan sebagai revisi."
+
+msgid "Post reply"
+msgstr "Balas postingan"
+
+msgid "The thread is locked."
+msgstr "Utas dikunci."
+
+msgid "Reply added"
+msgstr "Balasan ditambahkan"
+
+msgid "Could not add reply"
+msgstr "Tidak dapat menambahkan balasan"
+
+msgid "Add forum"
+msgstr "Tambah forum"
+
+msgid "No forums found"
+msgstr "Tidak ada forum ditemukan"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "Buat kategori forum atau forum pertama Anda untuk memulai diskusi."
+
+msgid "Locked"
+msgstr "Dikunci"
+
+msgid "No forums in this category"
+msgstr "Tidak ada forum dalam kategori ini"
+
+msgid "Posts require approval"
+msgstr "Postingan memerlukan persetujuan"
+
+msgid "Forum for current group"
+msgstr "Forum untuk grup saat ini"
+
+msgid "Group forum visibility"
+msgstr "Visibilitas forum grup"
+
+msgid "No category"
+msgstr "Tidak ada kategori"
+
+msgid "Could not retrieve forums"
+msgstr "Tidak dapat mengambil forum"
+
+msgid "Forum category updated"
+msgstr "Kategori forum diperbarui"
+
+msgid "Forum category created"
+msgstr "Kategori forum dibuat"
+
+msgid "Could not save forum category"
+msgstr "Tidak dapat menyimpan kategori forum"
+
+msgid "Forum updated"
+msgstr "Forum diperbarui"
+
+msgid "Forum created"
+msgstr "Forum dibuat"
+
+msgid "Could not save forum"
+msgstr "Forum tidak dapat disimpan"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "Apakah Anda yakin ingin menghapus kategori forum ini?"
+
+msgid "Could not delete forum category"
+msgstr "Kategori forum tidak dapat dihapus"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "Apakah Anda yakin ingin menghapus forum ini?"
+
+msgid "Could not delete forum"
+msgstr "Forum tidak dapat dihapus"
+
+msgid "Forum category unlocked"
+msgstr "Kategori forum dibuka"
+
+msgid "Forum category locked"
+msgstr "Kategori forum dikunci"
+
+msgid "Could not update forum category"
+msgstr "Kategori forum tidak dapat diperbarui"
+
+msgid "Forum category shown"
+msgstr "Kategori forum ditampilkan"
+
+msgid "Forum category hidden"
+msgstr "Kategori forum disembunyikan"
+
+msgid "Forum unlocked"
+msgstr "Forum dibuka"
+
+msgid "Forum locked"
+msgstr "Forum dikunci"
+
+msgid "Could not update forum"
+msgstr "Forum tidak dapat diperbarui"
+
+msgid "Forum shown"
+msgstr "Forum ditampilkan"
+
+msgid "Forum hidden"
+msgstr "Forum disembunyikan"
+
+msgid "Forum notifications enabled"
+msgstr "Notifikasi forum diaktifkan"
+
+msgid "Forum notifications disabled"
+msgstr "Notifikasi forum dinonaktifkan"
+
+msgid "Could not update forum notification"
+msgstr "Notifikasi forum tidak dapat diperbarui"
+
+msgid "Forum category moved"
+msgstr "Kategori forum dipindahkan"
+
+msgid "Could not move forum category"
+msgstr "Kategori forum tidak dapat dipindahkan"
+
+msgid "Forum moved"
+msgstr "Forum dipindahkan"
+
+msgid "Could not move forum"
+msgstr "Forum tidak dapat dipindahkan"
+
+msgid "Back to forums"
+msgstr "Kembali ke forum"
+
+msgid "New thread"
+msgstr "Topik baru"
+
+msgid "No threads found"
+msgstr "Tidak ada topik ditemukan"
+
+msgid "Sticky"
+msgstr "Sticky"
+
+msgid "Graded"
+msgstr "Dinilai"
+
+msgid "Grade peers"
+msgstr "Nilai rekan"
+
+msgid "Move thread"
+msgstr "Pindahkan topik"
+
+msgid "Target forum"
+msgstr "Forum tujuan"
+
+msgid "Target forum is required"
+msgstr "Forum tujuan wajib diisi"
+
+msgid "Students"
+msgstr "Mahasiswa"
+
+msgid "No students found"
+msgstr "Tidak ada mahasiswa ditemukan"
+
+msgid "No peers available to grade."
+msgstr "Tidak ada rekan yang tersedia untuk dinilai."
+
+msgid "Qualified"
+msgstr "Memenuhi syarat"
+
+msgid "Not qualified"
+msgstr "Tidak memenuhi syarat"
+
+msgid "Could not retrieve thread grading"
+msgstr "Penilaian topik tidak dapat diambil"
+
+msgid "Thread grading updated"
+msgstr "Penilaian topik diperbarui"
+
+msgid "Could not update thread grading"
+msgstr "Penilaian topik tidak dapat diperbarui"
+
+msgid "Thread score saved"
+msgstr "Skor topik disimpan"
+
+msgid "Could not save thread score"
+msgstr "Skor topik tidak dapat disimpan"
+
+msgid "Could not move thread"
+msgstr "Topik tidak dapat dipindahkan"
+
+msgid "Thread updated"
+msgstr "Topik diperbarui"
+
+msgid "Search term is too short"
+msgstr "Kata kunci pencarian terlalu pendek"
+
+msgid "Could not search forums"
+msgstr "Forum tidak dapat dicari"
+
+msgid "Moderated"
+msgstr "Dimoderasi"
+
+msgid "View threads"
+msgstr "Lihat topik"
 

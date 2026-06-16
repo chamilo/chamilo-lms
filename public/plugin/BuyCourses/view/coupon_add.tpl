@@ -7,12 +7,12 @@
     {% set readOnlyDiscountType = read_only_discount_type|default(false) %}
     {% set readOnlyDiscountAmount = read_only_discount_amount|default(false) %}
     {% set submitLabel = submit_label|default('Save'|get_lang) %}
-    {% set pageDescription = page_description|default('Create a coupon, define the discount type and validity period, and assign it to courses, sessions or services.') %}
-    {% set formHelp = form_section_help|default('Complete the form below and save the coupon configuration.') %}
+    {% set pageDescription = page_description|default('CouponAddPageDescription'|get_plugin_lang('BuyCoursesPlugin')) %}
+    {% set formHelp = form_section_help|default('CouponFormHelp'|get_plugin_lang('BuyCoursesPlugin')) %}
     {% set formTitle = form_section_title|default(page_title) %}
-    {% set discountTypeHelp = discount_type_help|default('Percentage or fixed amount.') %}
-    {% set dateHelp = date_help|default('Define the validity period for the coupon.') %}
-    {% set scopeHelp = scope_help|default('Assign the coupon to one or more courses, sessions or services.') %}
+    {% set discountTypeHelp = discount_type_help|default('CouponDiscountTypeHelp'|get_plugin_lang('BuyCoursesPlugin')) %}
+    {% set dateHelp = date_help|default('CouponDateHelp'|get_plugin_lang('BuyCoursesPlugin')) %}
+    {% set scopeHelp = scope_help|default('CouponScopeHelp'|get_plugin_lang('BuyCoursesPlugin')) %}
 
     <section class="rounded-3xl border border-gray-25 bg-white p-6 shadow-sm lg:p-8">
         <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
@@ -170,7 +170,7 @@
                     <div class="grid gap-4 lg:grid-cols-2">
                         <div class="w-full max-w-lg space-y-2">
                             <label for="coupon-date-start" class="block text-sm font-semibold text-gray-90">
-                                * Start date
+                                * {{ 'StartDate'|get_lang }}
                             </label>
                             <input
                                 id="coupon-date-start"
@@ -183,7 +183,7 @@
 
                         <div class="w-full max-w-lg space-y-2">
                             <label for="coupon-date-end" class="block text-sm font-semibold text-gray-90">
-                                * End date
+                                * {{ 'EndDate'|get_lang }}
                             </label>
                             <input
                                 id="coupon-date-end"
@@ -218,7 +218,7 @@
                                     <input
                                         type="text"
                                         id="courses_available_search"
-                                        placeholder="Search"
+                                        placeholder="{{ 'Search'|get_lang|e('html_attr') }}"
                                         class="block w-full rounded-xl border-gray-25 bg-white text-sm text-gray-90 shadow-sm placeholder:text-gray-50 focus:border-primary focus:ring-primary"
                                     >
                                     <select
@@ -252,7 +252,7 @@
                                     <input
                                         type="text"
                                         id="courses_selected_search"
-                                        placeholder="Search"
+                                        placeholder="{{ 'Search'|get_lang|e('html_attr') }}"
                                         class="block w-full rounded-xl border-gray-25 bg-white text-sm text-gray-90 shadow-sm placeholder:text-gray-50 focus:border-primary focus:ring-primary"
                                     >
                                     <select
@@ -283,7 +283,7 @@
                                         <input
                                             type="text"
                                             id="sessions_available_search"
-                                            placeholder="Search"
+                                            placeholder="{{ 'Search'|get_lang|e('html_attr') }}"
                                             class="block w-full rounded-xl border-gray-25 bg-white text-sm text-gray-90 shadow-sm placeholder:text-gray-50 focus:border-primary focus:ring-primary"
                                         >
                                         <select
@@ -317,7 +317,7 @@
                                         <input
                                             type="text"
                                             id="sessions_selected_search"
-                                            placeholder="Search"
+                                            placeholder="{{ 'Search'|get_lang|e('html_attr') }}"
                                             class="block w-full rounded-xl border-gray-25 bg-white text-sm text-gray-90 shadow-sm placeholder:text-gray-50 focus:border-primary focus:ring-primary"
                                         >
                                         <select
@@ -349,7 +349,7 @@
                                         <input
                                             type="text"
                                             id="services_available_search"
-                                            placeholder="Search"
+                                            placeholder="{{ 'Search'|get_lang|e('html_attr') }}"
                                             class="block w-full rounded-xl border-gray-25 bg-white text-sm text-gray-90 shadow-sm placeholder:text-gray-50 focus:border-primary focus:ring-primary"
                                         >
                                         <select
@@ -383,7 +383,7 @@
                                         <input
                                             type="text"
                                             id="services_selected_search"
-                                            placeholder="Search"
+                                            placeholder="{{ 'Search'|get_lang|e('html_attr') }}"
                                             class="block w-full rounded-xl border-gray-25 bg-white text-sm text-gray-90 shadow-sm placeholder:text-gray-50 focus:border-primary focus:ring-primary"
                                         >
                                         <select

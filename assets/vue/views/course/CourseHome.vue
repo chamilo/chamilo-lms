@@ -326,6 +326,7 @@ import { useIsAllowedToEdit } from "../../composables/userPermissions"
 import { useCidReqStore } from "../../store/cidReq"
 import { storeToRefs } from "pinia"
 import courseService from "../../services/courseService"
+import baseService from "../../services/baseService"
 import CourseIntroduction from "../../components/course/CourseIntroduction.vue"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useSecurityStore } from "../../store/securityStore"
@@ -522,36 +523,33 @@ const setToolVisibility = (tool, visibility) => {
   tool.resourceNode.resourceLinks[0].visibility = visibility
 }
 
-function changeVisibility(tool) {
-  axios
-    .post(
-      "/r/course_tool/links/" +
-        tool.resourceNode.id +
-        "/change_visibility?cid=" +
-        course.value.id +
-        "&sid=" +
-        session.value?.id,
+async function changeVisibility(tool) {
+  try {
+    const data = await baseService.post(
+      `/r/course_tool/links/${tool.resourceNode.id}/change_visibility?cid=${course.value.id}&sid=${session.value?.id}`,
     )
-    .then((response) => setToolVisibility(tool, response.data.visibility))
-    .catch((error) => console.log(error))
+    setToolVisibility(tool, data.visibility)
+  } catch (error) {
+    console.log(error)
+  }
 }
 
-function onClickShowAll() {
-  axios
-    .post(`/r/course_tool/links/change_visibility/show?cid=${course.value.id}&sid=${session.value?.id}`)
-    .then(() => {
-      tools.value.forEach((tool) => setToolVisibility(tool, 2))
-    })
-    .catch((error) => console.log(error))
+async function onClickShowAll() {
+  try {
+    await baseService.post(`/r/course_tool/links/change_visibility/show?cid=${course.value.id}&sid=${session.value?.id}`)
+    tools.value.forEach((tool) => setToolVisibility(tool, 2))
+  } catch (error) {
+    console.log(error)
+  }
 }
 
-function onClickHideAll() {
-  axios
-    .post(`/r/course_tool/links/change_visibility/hide?cid=${course.value.id}&sid=${session.value?.id}`)
-    .then(() => {
-      tools.value.forEach((tool) => setToolVisibility(tool, 0))
-    })
-    .catch((error) => console.log(error))
+async function onClickHideAll() {
+  try {
+    await baseService.post(`/r/course_tool/links/change_visibility/hide?cid=${course.value.id}&sid=${session.value?.id}`)
+    tools.value.forEach((tool) => setToolVisibility(tool, 0))
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 // Sort behaviour

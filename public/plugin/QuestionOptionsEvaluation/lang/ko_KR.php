@@ -4,7 +4,6 @@
 $strings['plugin_title'] = '문제 옵션 평가';
 $strings['plugin_comment'] = '문제에서 옵션 점수 재계산 허용';
 
-$strings['enable'] = '활성화';
 $strings['exercise_max_score'] = '연습문제 최대 점수';
 $strings['exercise_max_score_help'] = '기본값은 10입니다.';
 
@@ -17,3 +16,5 @@ $strings['Formula3'] = '성공 - 실패 / 3';
 $strings['QuestionsEvaluated'] = '평가된 문제';
 $strings['RecalculateQuestionScores'] = '문제 점수 재계산';
 $strings['FormulaSavedForExerciseX'] = '연습문제 "%s"에 공식이 저장되었습니다.';
+$strings['NoFormulaHelp'] = '이 테스트에 대해 Chamilo 기본 채점 방식을 유지합니다.';
+$strings['enable'] = '활성화';

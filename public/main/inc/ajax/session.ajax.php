@@ -143,6 +143,8 @@ switch ($action) {
         }
         break;
     case 'session_info':
+        SessionManager::protectSession(null, false);
+        api_protect_limit_for_session_admin();
         $sessionId = $_GET['session_id'] ?? '';
         $sessionInfo = api_get_session_info($sessionId);
         // Close the session as we don't need it any further
@@ -173,6 +175,11 @@ switch ($action) {
         }
         break;
     case 'get_description':
+        // Session descriptions are only public when the catalog itself is published;
+        // otherwise the caller must be authenticated (same gate as the catalog page).
+        if ('true' !== api_get_setting('catalog.course_catalog_published')) {
+            api_block_anonymous_users();
+        }
         if (isset($_GET['session'])) {
             $sessionInfo = api_get_session_info($_GET['session']);
             echo '<h2>'.$sessionInfo['name'].'</h2>';
@@ -211,42 +218,39 @@ switch ($action) {
     case 'get_courses_inside_session':
         $userId = api_get_user_id();
         $isAdmin = api_is_platform_admin();
-        if ($isAdmin) {
-            $sessionList = SessionManager::get_sessions_list();
-            $sessionIdList = array_column($sessionList, 'id');
-        } else {
-            $sessionList = SessionManager::get_sessions_by_user($userId);
-            $sessionIdList = array_column($sessionList, 'session_id');
-        }
-
         $sessionId = isset($_GET['session_id']) ? (int) $_GET['session_id'] : 0;
-        $courseList = [];
-        if (empty($sessionId)) {
-            $preCourseList = CourseManager::get_courses_list_by_user_id(
-                $userId,
-                false,
-                true
-            );
-            $courseList = array_column($preCourseList, 'real_id');
-        } else {
-            if ($isAdmin) {
-                $courseList = SessionManager::getCoursesInSession($sessionId);
-            } else {
-                if (in_array($sessionId, $sessionIdList)) {
-                    $courseList = SessionManager::getCoursesInSession($sessionId);
-                }
-            }
-        }
-
         $courseListToSelect = [];
-        if (!empty($courseList)) {
-            // Course List
-            foreach ($courseList as $courseId) {
-                $courseInfo = api_get_course_info_by_id($courseId);
+
+        if (empty($sessionId)) {
+            // get_courses_list_by_user_id already returns real_id + title — no extra queries needed
+            $preCourseList = CourseManager::get_courses_list_by_user_id($userId, false, true);
+            foreach ($preCourseList as $course) {
                 $courseListToSelect[] = [
-                    'id' => $courseInfo['real_id'],
-                    'name' => $courseInfo['title'],
+                    'id' => (int) $course['real_id'],
+                    'name' => $course['title'],
                 ];
+            }
+        } else {
+            $canAccess = $isAdmin;
+            if (!$isAdmin) {
+                $sessionList = SessionManager::get_sessions_by_user($userId);
+                $canAccess = in_array($sessionId, array_column($sessionList, 'session_id'));
+            }
+
+            if ($canAccess) {
+                $courseIds = SessionManager::getCoursesInSession($sessionId);
+                if (!empty($courseIds)) {
+                    $tblCourse = Database::get_main_table(TABLE_MAIN_COURSE);
+                    $ids = implode(',', array_map('intval', $courseIds));
+                    $sql = "SELECT id, title FROM $tblCourse WHERE id IN ($ids) ORDER BY title";
+                    $res = Database::query($sql);
+                    while ($row = Database::fetch_assoc($res)) {
+                        $courseListToSelect[] = [
+                            'id' => (int) $row['id'],
+                            'name' => $row['title'],
+                        ];
+                    }
+                }
             }
         }
 

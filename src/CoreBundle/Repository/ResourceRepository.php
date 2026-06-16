@@ -828,6 +828,12 @@ abstract class ResourceRepository extends ServiceEntityRepository
             $slug = \sprintf('%s.%s', $this->slugify->slugify($originalBasename), $originalExtension);
         }
 
+        // A title composed entirely of special characters (e.g. "/") can produce an empty slug.
+        // Fall back to the resource identifier so the node can still be persisted.
+        if ('' === $slug) {
+            $slug = 'resource-'.$resource->getResourceIdentifier();
+        }
+
         $resourceNode = new ResourceNode();
         $resourceNode
             ->setTitle($resourceName)

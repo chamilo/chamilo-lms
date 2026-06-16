@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Üdvözlettel"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Képlet minta: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Képletminta: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Változók tartománya"
@@ -2020,7 +2020,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:jogvédett,, no:nem jogvédett"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mappa,, application/msword:MsWord,, application/octet-stream:Oktett stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:Mappa,, application\/msword:MsWord,, application\/octet-stream:Octet stream,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:feladat,, simulation:szimuláció,, questionnaire:kérdőív,, diagram:diagram,, figure:ábra,, graph:grafikon,, index:tárgymutató,, slide:dia,, table:tábla,, narrative text:narrátor szöveg,, exam:teszt,, experiment:kísérlet,, problem statement:probléma megállapítás,, self assessment:önértékelés,, lecture:előadó"
@@ -5596,7 +5596,7 @@ msgid "If you are using an LDAP server that does not support or accept anonymous
 msgstr "Ha olyan LDAP szervert használ, amely nem támogatja vagy nem fogadja el a névtelen hozzáférést, töltse ki a következő mezőt a használandó felhasználói jelszóval."
 
 msgid "LDAP Import"
-msgstr "LDAP import"
+msgstr "LDAP importálás"
 
 msgid "Notify subscribed users by e-mail"
 msgstr "Feliratkozott felhasználók értesítése e-mailben"
@@ -9728,6 +9728,9 @@ msgstr "A keresés eredménye erre a kurzusra:"
 
 msgid "Select a file"
 msgstr "Állomány kiválasztása"
+
+msgid "Select a file to insert into the editor."
+msgstr "Válasszon ki egy fájlt a szerkesztőbe való beszúráshoz."
 
 msgid "Warning - The FAQ file, located in the /home/ directory of your portal, is not writable. Your text will not be saved until the file permissions are changed."
 msgstr "Figyelem - A GYIK állomány, amely a chamilo /home/ mappájában található, nem írható. A beírt szöveget addíg nem lehet elmenteni, amíg nem lesz javítva az írási jog."
@@ -15909,6 +15912,9 @@ msgstr "Dátum és idő"
 msgid "Item"
 msgstr "Elem"
 
+msgid "Items"
+msgstr "Elemek"
+
 msgid "Configure Dashboard Plugin"
 msgstr "Vezérlőpult bővítmény konfigurálása"
 
@@ -17162,6 +17168,18 @@ msgstr "Csoportban lévő szessziók"
 
 msgid "Courses in group"
 msgstr "Csoportban lévő kurzusok"
+
+msgid "Courses on the platform"
+msgstr "Kurzusok a platformon"
+
+msgid "%s courses"
+msgstr "%s kurzus"
+
+msgid "%s sessions"
+msgstr "%s munkamenet"
+
+msgid "Search by title or code"
+msgstr "Keresés cím vagy kód alapján"
 
 msgid "Users in group"
 msgstr "Csoportban lévő felhasználók"
@@ -32105,7 +32123,7 @@ msgid "Moodle version"
 msgstr "Moodle verzió"
 
 msgid "Admin ID"
-msgstr "Admin ID"
+msgstr "Admin azonosító"
 
 msgid "Internal integer user id"
 msgstr "Belső egész számú felhasználói azonosító"
@@ -32166,6 +32184,9 @@ msgstr "Feladat"
 
 msgid "Allowed file formats: %s"
 msgstr "Engedélyezett fájlformátumok: %s"
+
+msgid "File manager"
+msgstr "Fájlkezelő"
 
 msgid "File type not allowed. Allowed extensions: %s"
 msgstr "Fájltípus nem megengedett. Engedélyezett kiterjesztések: %s"
@@ -32384,7 +32405,7 @@ msgid "Delete failed: missing course context or invalid question id."
 msgstr "Törlés sikertelen: hiányzó kurzuskörnyezet vagy érvénytelen kérdés azonosító."
 
 msgid "AI Tutor"
-msgstr "AI tutor"
+msgstr "AI oktató"
 
 msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
 msgstr "Az APCu kiterjesztés telepítve és engedélyezve kell legyen a platform használatához."
@@ -33880,6 +33901,2583 @@ msgstr "Üdvözöljük"
 msgid "Welcome to Chamilo"
 msgstr "Üdvözöljük a Chamilo-ban"
 
+msgid "Check all unanswered questions below"
+msgstr "Az összes megválaszolatlan kérdés ellenőrzése lent"
+
 msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
 msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Ha először használja a Chamilo-t, győződjön meg róla, hogy megnézi a oldalsó menüt, hogy eligazodjon számos funkciójában. Ha segítségre van szüksége, a <a href=\"https://docs.chamilo.org\">hivatalos dokumentációnk</a> segíthet a szabványos dokumentációhoz, míg az <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online fórumunk</a> segíthet ötletek megosztásában és más Chamilo-felhasználóktól származó válaszok megtalálásában."
+
+msgid "Change password"
+msgstr "Jelszó módosítása"
+
+msgid "Newest first"
+msgstr "Legújabb elöl"
+
+msgid "Oldest first"
+msgstr "Legrégebbi elöl"
+
+msgid "Title A–Z"
+msgstr "Cím A–Z"
+
+msgid "Title Z–A"
+msgstr "Cím Z–A"
+
+msgid "Send test email"
+msgstr "Teszt e-mail küldése"
+
+msgid "Show teachers"
+msgstr "Tanárok megjelenítése"
+
+msgid "Hide teachers"
+msgstr "Tanárok elrejtése"
+
+msgid "Delete exercise attempts"
+msgstr "Gyakorlatkísérletek törlése"
+
+msgid "Message sent successfully."
+msgstr "Üzenet sikeresen elküldve."
+
+msgid "You cannot create a new course right now."
+msgstr "Jelenleg nem hozhat létre új kurzust."
+
+msgid "Unable to verify whether you can create a new course right now."
+msgstr "Nem sikerült ellenőrizni, hogy jelenleg létrehozhat-e új kurzust."
+
+msgid "Please try again later or contact the administrator."
+msgstr "Kérjük, próbálja meg később, vagy vegye fel a kapcsolatot a rendszergazdával."
+
+msgid "You cannot create more courses at this time."
+msgstr "Jelenleg nem hozhat létre további kurzusokat."
+
+msgid "You already manage %d courses and your active service allows up to %d. To create another course, you need a higher service limit or reduce your current active courses."
+msgstr "Jelenleg %d kurzust kezel, és az aktív szolgáltatása legfeljebb %d-et engedélyez. Egy másik kurzus létrehozásához magasabb szolgáltatási korlát szükséges, vagy csökkentenie kell az aktuális aktív kurzusok számát."
+
+msgid "You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now."
+msgstr "Jelenleg %d kurzust kezel, és a platform jelenleg legfeljebb %d-et engedélyez a fiókja számára. Jelenleg nem hozhat létre további kurzusokat."
+
+msgid "Add a class"
+msgstr "Osztály hozzáadása"
+
+msgid "Search classes"
+msgstr "Osztályok keresése"
+
+msgid "No classes found"
+msgstr "Nem található osztály"
+
+msgid "Import classes"
+msgstr "Osztályok importálása"
+
+msgid "Class users"
+msgstr "Osztály felhasználói"
+
+msgid "%s classes imported"
+msgstr "%s osztály importálva"
+
+msgid "%s user-class links imported"
+msgstr "%s felhasználó-osztály kapcsolat importálva"
+
+msgid "Hide comments"
+msgstr "Megjegyzések elrejtése"
+
+msgid "Loading comments..."
+msgstr "Megjegyzések betöltése..."
+
+msgid "No comments yet."
+msgstr "Még nincsenek megjegyzések."
+
+msgid "A user with this username already exists"
+msgstr "Már létezik felhasználó ezzel a felhasználónévvel"
+
+msgid "Manage meetings, review recordings and update course-wide BBB settings from one place."
+msgstr "Találkozók kezelése, felvételek áttekintése és a kurzus szintű BBB-beállítások frissítése egy helyen."
+
+msgid "Review the current defaults and propagate them to every course when needed."
+msgstr "Tekintse át az aktuális alapértelmezéseket, és szükség esetén terjessze ki azokat minden kurzusra."
+
+msgid "Filter the list by meeting date range."
+msgstr "Szűrés a találkozó dátumtartománya szerint."
+
+msgid "Review meeting history, participants and recording actions."
+msgstr "Tekintse át a találkozók előzményeit, a résztvevőket és a felvételi műveleteket."
+
+msgid "Participants"
+msgstr "Résztvevők"
+
+msgid "CountUsers"
+msgstr "Felhasználók száma"
+
+msgid "No data found"
+msgstr "Nem található adat"
+
+msgid "My justifications"
+msgstr "Saját indoklásaim"
+
+msgid "My services"
+msgstr "Saját szolgáltatásaim"
+
+msgid "Extra menu"
+msgstr "Extra menü"
+
+msgid "Pending tests"
+msgstr "Függőben lévő tesztek"
+
+msgid "No specific language"
+msgstr "Nincs megadott nyelv"
+
+msgid "Source Chamilo version"
+msgstr "Forrás Chamilo verzió"
+
+msgid "Exporting..."
+msgstr "Exportálás..."
+
+msgid "Autosaved drafts available"
+msgstr "Elérhetők automatikusan mentett vázlatok"
+
+msgid "Hide drafts"
+msgstr "Vázlatok elrejtése"
+
+msgid "Show drafts"
+msgstr "Vázlatok megjelenítése"
+
+msgid "Drafts are stored only in this browser and are removed after saving the document."
+msgstr "A vázlatok csak ebben a böngészőben tárolódnak, és a dokumentum mentése után törlődnek."
+
+msgid "Last saved"
+msgstr "Utoljára mentve"
+
+msgid "Restore draft"
+msgstr "Vázlat visszaállítása"
+
+msgid "Delete draft"
+msgstr "Vázlat törlése"
+
+msgid "Information about indexing document content"
+msgstr "Információ a dokumentum tartalmának indexeléséről"
+
+msgid "When enabled, the document text is indexed by the search engine so users can find it from platform search."
+msgstr "Ha engedélyezve van, a dokumentum szövege indexelésre kerül a keresőmotor által, így a felhasználók megtalálhatják a platform keresőjéből."
+
+msgid "The editor is not available."
+msgstr "A szerkesztő nem elérhető."
+
+msgid "Please place the cursor inside a paragraph first."
+msgstr "Először helyezze a kurzort egy bekezdésbe."
+
+msgid "The selected paragraph is empty."
+msgstr "A kijelölt bekezdés üres."
+
+msgid "Loading failed."
+msgstr "A betöltés sikertelen."
+
+msgid "Add introduction"
+msgstr "Bevezető hozzáadása"
+
+msgid "Course type"
+msgstr "Kurzus típusa"
+
+msgid "Choose whether this course uses the standard platform limits or benefits from a purchased service."
+msgstr "Válassza ki, hogy ez a kurzus a szabványos platformkorlátokat használja-e, vagy egy megvásárolt szolgáltatás előnyeit élvezi."
+
+msgid "Standard course"
+msgstr "Szabványos kurzus"
+
+msgid "Use the standard platform limits."
+msgstr "A szabványos platformkorlátok használata."
+
+msgid "Selected"
+msgstr "Kijelölt"
+
+msgid "Hosting limit"
+msgstr "Tárhelykorlát"
+
+msgid "Document quota"
+msgstr "Dokumentumkvóta"
+
+msgid "The standard course limit has been reached."
+msgstr "Elérte a szabványos kurzuskorlátot."
+
+msgid "Use the benefits granted by this service."
+msgstr "A szolgáltatás által biztosított előnyök használata."
+
+msgid "Courses with these benefits"
+msgstr "Ezen előnyökkel rendelkező kurzusok"
+
+msgid "Active service"
+msgstr "Aktív szolgáltatás"
+
+msgid "Buy service"
+msgstr "Szolgáltatás vásárlása"
+
+msgid "Select an available course type before creating the course."
+msgstr "Válasszon egy elérhető kurzustípust a kurzus létrehozása előtt."
+
+msgid "users"
+msgstr "felhasználók"
+
+msgid "You need to buy this service before using these benefits."
+msgstr "A szolgáltatás használatához először meg kell vásárolnia azt."
+
+msgid "You already used all courses available with this service."
+msgstr "Már felhasználta az összes, ehhez a szolgáltatáshoz tartozó kurzust."
+
+msgid "This option is not available."
+msgstr "Ez a lehetőség nem elérhető."
+
+msgid "This field is required"
+msgstr "Ez a mező kötelező"
+
+msgid "Show less"
+msgstr "Kevesebb megjelenítése"
+
+msgid "Show full description"
+msgstr "Teljes leírás megjelenítése"
+
+msgid "Virtual keyboard"
+msgstr "Virtuális billentyűzet"
+
+msgid "Backspace"
+msgstr "Backspace"
+
+msgid "Space"
+msgstr "Szóköz"
+
+msgid "Learning path only visible to selected learners"
+msgstr "Tanulási útvonal csak a kiválasztott tanulók számára látható"
+
+msgid "Create course"
+msgstr "Kurzus létrehozása"
+
+msgid "Tour"
+msgstr "Túra"
+
+msgid "Are you sure you want to delete this comment?"
+msgstr "Biztosan törli ezt a megjegyzést?"
+
+msgid "No posts found"
+msgstr "Nem található bejegyzés"
+
+msgid "No communities"
+msgstr "Nincsenek közösségek"
+
+msgid "No friends found"
+msgstr "Nem található barát"
+
+msgid "Visual overview of your skills"
+msgstr "Képességeinek vizuális áttekintése"
+
+msgid "Compare your progress"
+msgstr "Haladás összehasonlítása"
+
+msgid "Please enter a search term."
+msgstr "Adjon meg egy keresési kifejezést."
+
+msgid "Enter captcha code"
+msgstr "Adja meg a captcha kódot"
+
+msgid "Refresh captcha"
+msgstr "Captcha frissítése"
+
+msgid "Captcha is temporarily blocked. Please try again later."
+msgstr "A captcha ideiglenesen blokkolva van. Kérjük, próbálja meg később."
+
+msgid "Item Details"
+msgstr "Elem részletei"
+
+msgid "Open File"
+msgstr "Fájl megnyitása"
+
+msgid "Selection"
+msgstr "Kijelölés"
+
+msgid "Remove selection context"
+msgstr "Kijelölési környezet eltávolítása"
+
+msgid "Source document"
+msgstr "Forrásdokumentum"
+
+msgid "Use the current course context"
+msgstr "Az aktuális kurzus környezet használata"
+
+msgid "Loading documents..."
+msgstr "Dokumentumok betöltése..."
+
+msgid "No compatible PDF or TXT document was found in this course."
+msgstr "Nem található kompatibilis PDF vagy TXT dokumentum ebben a kurzusban."
+
+msgid "Select a PDF or TXT document to generate terms only from that document."
+msgstr "Válasszon egy PDF vagy TXT dokumentumot, hogy csak annak tartalmából generáljon kifejezéseket."
+
+msgid "Confidentiality warning"
+msgstr "Adatvédelmi figyelmeztetés"
+
+msgid "When a document is selected, the prompt is fixed so the generation uses only that document content."
+msgstr "Dokumentum kiválasztásakor a prompt rögzített, így a generálás csak a dokumentum tartalmát használja."
+
+msgid "No document-processing AI providers available."
+msgstr "Nem érhetők el dokumentumfeldolgozó AI-szolgáltatók."
+
+msgid "Failed to save signature. Please try again."
+msgstr "Az aláírás mentése sikertelen. Kérjük, próbálja meg újra."
+
+msgid "Select and move"
+msgstr "Kijelölés és mozgatás"
+
+msgid "Freehand"
+msgstr "Szabadkézi"
+
+msgid "Stroke"
+msgstr "Vonal"
+
+msgid "Fill"
+msgstr "Kitöltés"
+
+msgid "Import SVG"
+msgstr "SVG importálása"
+
+msgid "Import image"
+msgstr "Kép importálása"
+
+msgid "Click the drawing area to place this text"
+msgstr "Kattintson a rajzterületre a szöveg elhelyezéséhez"
+
+msgid "Draw a new SVG, import an existing SVG or embed an image, then save it as a reusable document."
+msgstr "Rajzoljon új SVG-t, importáljon meglévő SVG-t vagy ágyazzon be képet, majd mentse újra felhasználható dokumentumként."
+
+msgid "Use Select and move to reposition or resize elements added in this editor."
+msgstr "Használja a Kijelölés és mozgatás funkciót az ebben a szerkesztőben hozzáadott elemek áthelyezéséhez vagy átméretezéséhez."
+
+msgid "Stroke width"
+msgstr "Vonalvastagság"
+
+msgid "Transparent fill"
+msgstr "Átlátszó kitöltés"
+
+msgid "Invalid id"
+msgstr "Érvénytelen azonosító"
+
+msgid "Unable to load the drawing"
+msgstr "Nem sikerült betölteni a rajzot"
+
+msgid "Only PNG, JPG, WEBP or GIF images are supported."
+msgstr "Csak PNG, JPG, WEBP vagy GIF képek támogatottak."
+
+msgid "Unable to read the image file."
+msgstr "Nem sikerült beolvasni a képfájlt."
+
+msgid "Only SVG files are supported."
+msgstr "Csak SVG fájlok támogatottak."
+
+msgid "The SVG file is empty or invalid."
+msgstr "Az SVG fájl üres vagy érvénytelen."
+
+msgid "Unable to read the SVG file."
+msgstr "Nem sikerült beolvasni az SVG fájlt."
+
+msgid "The drawing is empty or invalid."
+msgstr "A rajz üres vagy érvénytelen."
+
+msgid "Unable to save the drawing"
+msgstr "Nem sikerült menteni a rajzot"
+
+msgid "Information about AI-assisted documents"
+msgstr "Információ az AI által támogatott dokumentumokról"
+
+msgid "Location"
+msgstr "Hely"
+
+msgid "Cloud link"
+msgstr "Felhőhivatkozás"
+
+msgid "Add a link to a cloud document, such as Google Drive or Google Docs."
+msgstr "Hivatkozás hozzáadása egy felhőalapú dokumentumhoz, például Google Drive-hoz vagy Google Docs-hoz."
+
+msgid "Add cloud link"
+msgstr "Felhőhivatkozás hozzáadása"
+
+msgid "Document title"
+msgstr "Dokumentum címe"
+
+msgid "Document options change how uploaded files are processed after saving."
+msgstr "A dokumentumbeállítások határozzák meg, hogyan kerülnek feldolgozásra a feltöltött fájlok mentés után."
+
+msgid "Information about uncompressing zip files"
+msgstr "Információ a ZIP-fájlok kibontásáról"
+
+msgid "When enabled, ZIP files are extracted into the current document folder after upload."
+msgstr "Ha engedélyezve van, a ZIP-fájlok feltöltés után kibontásra kerülnek az aktuális dokumentummappába."
+
+msgid "The title is required."
+msgstr "A cím megadása kötelező."
+
+msgid "The URL is required."
+msgstr "Az URL megadása kötelező."
+
+msgid "The destination folder is missing."
+msgstr "A célmappa hiányzik."
+
+msgid "Unable to create cloud link."
+msgstr "Nem sikerült létrehozni a felhőhivatkozást."
+
+msgid "Copy to My Files"
+msgstr "Másolás a Saját fájlokba"
+
+msgid "Used space"
+msgstr "Felhasznált terület"
+
+msgid "Available space"
+msgstr "Elérhető terület"
+
+msgid "Available percentage"
+msgstr "Elérhető százalék"
+
+msgid "Cloud links cannot be downloaded."
+msgstr "A felhőhivatkozások nem tölthetők le."
+
+msgid "Could not copy the file to My Files"
+msgstr "Nem sikerült a fájlt a Saját fájlokba másolni"
+
+msgid "File copied to My Files"
+msgstr "A fájl a Saját fájlokba másolva"
+
+msgid "Checking course creation options..."
+msgstr "Kurzuskészítési beállítások ellenőrzése..."
+
+msgid "You cannot create more courses right now."
+msgstr "Jelenleg nem hozhat létre további kurzusokat."
+
+msgid "AI analyzer"
+msgstr "AI-elemző"
+
+msgid "Expand all"
+msgstr "Összes kibontása"
+
+msgid "Collapse all"
+msgstr "Összes összecsukása"
+
+msgid "Review your active service benefits, purchase history and available receipts."
+msgstr "Tekintse át az aktív szolgáltatási előnyöket, a vásárlási előzményeket és az elérhető bizonylatokat."
+
+msgid "Active services"
+msgstr "Aktív szolgáltatások"
+
+msgid "No active services"
+msgstr "Nincsenek aktív szolgáltatások"
+
+msgid "Valid until"
+msgstr "Érvényes eddig"
+
+msgid "Recurring payment"
+msgstr "Ismétlődő fizetés"
+
+msgid "Next charge"
+msgstr "Következő terhelés"
+
+msgid "Enable auto billing"
+msgstr "Automatikus számlázás engedélyezése"
+
+msgid "Cancel auto billing"
+msgstr "Automatikus számlázás lemondása"
+
+msgid "Granted benefits"
+msgstr "Megadott előnyök"
+
+msgid "Purchase history"
+msgstr "Vásárlási előzmények"
+
+msgid "No purchases yet"
+msgstr "Még nincsenek vásárlások"
+
+msgid "Product"
+msgstr "Termék"
+
+msgid "Reference"
+msgstr "Hivatkozás"
+
+msgid "Amount"
+msgstr "Összeg"
+
+msgid "Receipt"
+msgstr "Bizonylat"
+
+msgid "Unable to load your services right now."
+msgstr "Jelenleg nem sikerült betölteni a szolgáltatásait."
+
+msgid "Auto billing enabled"
+msgstr "Automatikus számlázás engedélyezve"
+
+msgid "Auto billing suspended"
+msgstr "Automatikus számlázás felfüggesztve"
+
+msgid "Auto billing cancelled"
+msgstr "Automatikus számlázás törölve"
+
+msgid "Auto billing disabled"
+msgstr "Automatikus számlázás letiltva"
+
+msgid "Cancel auto billing for this service?"
+msgstr "Törli az automatikus számlázást ehhez a szolgáltatáshoz?"
+
+msgid "Preview class members and courses"
+msgstr "Osztálytagok és kurzusok előnézete"
+
+msgid "Please select a CSV file to import."
+msgstr "Kérjük, válasszon egy CSV-fájlt az importáláshoz."
+
+msgid "%d user-class links imported"
+msgstr "%d felhasználó-osztály kapcsolat importálva"
+
+msgid "The following errors occurred during import:"
+msgstr "Az importálás során a következő hibák történtek:"
+
+msgid "CSV file"
+msgstr "CSV-fájl"
+
+msgid "Remove user from all group-related entities if not in the list"
+msgstr "Felhasználó eltávolítása minden csoportkapcsolattal rendelkező entitásból, ha nincs a listában"
+
+msgid "UserName"
+msgstr "Felhasználónév"
+
+msgid "ClassName"
+msgstr "Osztálynév"
+
+msgid "are required for each row."
+msgstr "minden sorhoz kötelező."
+
+msgid "title"
+msgstr "cím"
+
+msgid "is required."
+msgstr "kötelező."
+
+msgid "description"
+msgstr "leírás"
+
+msgid "are optional."
+msgstr "nem kötelező."
+
+msgid "Are you sure you want to remove this user from the class?"
+msgstr "Biztosan eltávolítja ezt a felhasználót az osztályból?"
+
+msgid "Users in class"
+msgstr "Felhasználók az osztályban"
+
+msgid "Remove user"
+msgstr "Felhasználó eltávolítása"
+
+msgid "Class not found"
+msgstr "Az osztály nem található"
+
+msgid "Class overview"
+msgstr "Osztály áttekintése"
+
+msgid "Back to classes"
+msgstr "Vissza az osztályokhoz"
+
+msgid "Search members or courses"
+msgstr "Tagok vagy kurzusok keresése"
+
+msgid "Search by name, email, username or course title"
+msgstr "Keresés név, e-mail, felhasználónév vagy kurzus címe alapján"
+
+msgid "Class members"
+msgstr "Osztálytagok"
+
+msgid "No email"
+msgstr "Nincs e-mail"
+
+msgid "No members found"
+msgstr "Nem található tag"
+
+msgid "No courses found"
+msgstr "Nem található kurzus"
+
+msgid "The end date must be after the start date."
+msgstr "A befejezési dátumnak a kezdési dátum után kell lennie."
+
+msgid "Always visible"
+msgstr "Mindig látható"
+
+msgid "No end date"
+msgstr "Nincs befejezési dátum"
+
+msgid "No restriction"
+msgstr "Nincs korlátozás"
+
+msgid "Missing learning path or course identifier"
+msgstr "Hiányzó tanulási útvonal vagy kurzusazonosító"
+
+msgid "Select a user or a group first"
+msgstr "Először válasszon ki egy felhasználót vagy csoportot"
+
+msgid "Remove all date restrictions for this learning path?"
+msgstr "Eltávolítja az összes dátumkorlátozást ehhez a tanulási útvonalhoz?"
+
+msgid "Advanced learning path access"
+msgstr "Speciális tanulási útvonal hozzáférés"
+
+msgid "Remove date restrictions"
+msgstr "Dátumkorlátozások eltávolítása"
+
+msgid "Search by name, email, username or group"
+msgstr "Keresés név, e-mail, felhasználónév vagy csoport alapján"
+
+msgid "Edit user restriction"
+msgstr "Felhasználói korlátozás szerkesztése"
+
+msgid "Edit group restriction"
+msgstr "Csoportkorlátozás szerkesztése"
+
+msgid "Select a user or group"
+msgstr "Válasszon ki egy felhasználót vagy csoportot"
+
+msgid "Save restriction"
+msgstr "Korlátozás mentése"
+
+msgid "members"
+msgstr "tagok"
+
+msgid "Create Assignment"
+msgstr "Feladat létrehozása"
+
+msgid "The submission deadline has passed. You can no longer submit."
+msgstr "A leadási határidő lejárt. Már nem küldhet be."
+
+msgid "Mailing cannot be combined with other recipients."
+msgstr "A levelezés nem kombinálható más címzettekkel."
+
+msgid "Social map"
+msgstr "Társasági térkép"
+
+msgid "The map plugin is not enabled or configured."
+msgstr "A térkép bővítmény nincs engedélyezve vagy konfigurálva."
+
+msgid "Some configured extra fields were not found"
+msgstr "Néhány konfigurált extra mező nem található"
+
+msgid "No user locations were found."
+msgstr "Nem található felhasználói hely."
+
+msgid "OpenStreetMap needs coordinates to display an embedded marker. Address-only locations are listed below."
+msgstr "Az OpenStreetMap koordinátákat igényel a beágyazott jelölő megjelenítéséhez. A csak cím alapján megadott helyek az alábbi listában találhatók."
+
+msgid "Locations"
+msgstr "Helyek"
+
+msgid "Open map"
+msgstr "Térkép megnyitása"
+
+msgid "Provider: OpenStreetMap"
+msgstr "Szolgáltató: OpenStreetMap"
+
+msgid "Provider: Google Maps"
+msgstr "Szolgáltató: Google Térkép"
+
+msgid "Personal files"
+msgstr "Személyes fájlok"
+
+msgid "Upload image"
+msgstr "Kép feltöltése"
+
+msgid "Upload media"
+msgstr "Média feltöltése"
+
+msgid "Only image files are allowed in this upload screen."
+msgstr "Ezen a feltöltési képernyőn csak képfájlok engedélyezettek."
+
+msgid "Only audio and video files are allowed in this upload screen."
+msgstr "Ezen a feltöltési képernyőn csak hang- és videófájlok engedélyezettek."
+
+msgid "Upload files to your personal storage."
+msgstr "Fájlok feltöltése a személyes tárhelyre."
+
+msgid "Linked"
+msgstr "Csatolt"
+
+msgid "No audio or video files were found in this folder."
+msgstr "Ebben a mappában nem található hang- vagy videófájl."
+
+msgid "No image files were found in this folder."
+msgstr "Ebben a mappában nem található képfájl."
+
+msgid "No matching files were found in this folder."
+msgstr "Ebben a mappában nem található egyező fájl."
+
+msgid "This file type is not allowed in this upload screen."
+msgstr "Ez a fájltípus nem engedélyezett ezen a feltöltési képernyőn."
+
+msgid "Manage your personal files and course documents."
+msgstr "Személyes fájlok és kurzusdokumentumok kezelése."
+
+msgid "DateValidity"
+msgstr "DateValidity"
+
+msgid "JustificationSaved"
+msgstr "JustificationSaved"
+
+msgid "ValidityDate"
+msgstr "ValidityDate"
+
+msgid "MyJustifications"
+msgstr "MyJustifications"
+
+msgid "Submission"
+msgstr "Beküldés"
+
+msgid "Use the filters above to narrow the list."
+msgstr "A fenti szűrők segítségével szűkítheti a listát."
+
+msgid "You are not allowed to see this page."
+msgstr "Nincs jogosultsága az oldal megtekintéséhez."
+
+msgid "plugin_title"
+msgstr "plugin_title"
+
+msgid "plugin_comment"
+msgstr "plugin_comment"
+
+msgid "Course tracking details"
+msgstr "Kurzuskövetés részletei"
+
+msgid "Course activity statistics"
+msgstr "Kurzustevékenység-statisztikák"
+
+msgid "mobile_phone_number"
+msgstr "mobile_phone_number"
+
+msgid "Allowed template syntax"
+msgstr "Engedélyezett sablonszintaxis"
+
+msgid "Functions"
+msgstr "Függvények"
+
+msgid "Available variables depend on the template type, for example {{ user.getUsername() }} or {{ user.getEmail() }}."
+msgstr "Az elérhető változók a sablon típusától függenek, például {{ user.getUsername() }} vagy {{ user.getEmail() }}."
+
+msgid "For security reasons, any other Twig function, filter (such as filter, map, reduce or sort) or PHP call is blocked."
+msgstr "Biztonsági okokból minden egyéb Twig-függvény, szűrő (például filter, map, reduce vagy sort) vagy PHP-hívás blokkolva van."
+
+msgid "Global administrator"
+msgstr "Globális rendszergazda"
+
+msgid "Session manager"
+msgstr "Munkamenet-kezelő"
+
+msgid "Human resources manager"
+msgstr "Emberi erőforrások vezetője"
+
+msgid "Course teacher"
+msgstr "Kurzus oktatója"
+
+msgid "Course student"
+msgstr "Kurzus hallgatója"
+
+msgid "Platform reports"
+msgstr "Platformjelentések"
+
+msgid "Security reports"
+msgstr "Biztonsági jelentések"
+
+msgid "Course reports"
+msgstr "Kurzusjelentések"
+
+msgid "Gradebook reports"
+msgstr "Értékelési jelentések"
+
+msgid "Social reports"
+msgstr "Közösségi jelentések"
+
+msgid "Exports"
+msgstr "Exportok"
+
+msgid "Reports about platform-wide usage, users, courses and sessions."
+msgstr "Jelentések a platform egészére vonatkozó használatról, felhasználókról, kurzusokról és munkamenetekről."
+
+msgid "Audit and security-sensitive reports."
+msgstr "Audit- és biztonsági szempontból érzékeny jelentések."
+
+msgid "Reports scoped to courses managed by the user."
+msgstr "A felhasználó által kezelt kurzusokra vonatkozó jelentések."
+
+msgid "Reports related to learner activity and follow-up."
+msgstr "A tanulói tevékenységgel és nyomon követéssel kapcsolatos jelentések."
+
+msgid "Reports related to scores, certificates and gradebook data."
+msgstr "Pontszámokkal, tanúsítványokkal és értékelési adatokkal kapcsolatos jelentések."
+
+msgid "Reports and exports that generate downloadable files."
+msgstr "Jelentések és exportok, amelyek letölthető fájlokat hoznak létre."
+
+msgid "Main platform statistics dashboard."
+msgstr "Fő platform statisztikai irányítópult."
+
+msgid "Number of courses and course distribution report."
+msgstr "Kurzusok száma és kurzuseloszlási jelentés."
+
+msgid "Platform-wide access to course tools."
+msgstr "Platformszintű hozzáférés a kurzus-eszközökhöz."
+
+msgid "Number of resources per tool."
+msgstr "Erőforrások száma eszközönként."
+
+msgid "Latest access to courses."
+msgstr "Legutóbbi kurzus-hozzáférések."
+
+msgid "Course distribution by language."
+msgstr "Kurzusok eloszlása nyelv szerint."
+
+msgid "Course usage report."
+msgstr "Kurzushasználati jelentés."
+
+msgid "Platform user count report."
+msgstr "Platform felhasználói szám jelentés."
+
+msgid "Recent logins chart."
+msgstr "Legutóbbi bejelentkezések diagramja."
+
+msgid "Login distribution by month."
+msgstr "Bejelentkezések eloszlása hónap szerint."
+
+msgid "Login distribution by day."
+msgstr "Bejelentkezések eloszlása nap szerint."
+
+msgid "Login distribution by hour."
+msgstr "Bejelentkezések eloszlása óra szerint."
+
+msgid "Users with profile picture."
+msgstr "Profilképpel rendelkező felhasználók."
+
+msgid "Login report filtered by date."
+msgstr "Dátum szerint szűrt bejelentkezési jelentés."
+
+msgid "Users who have not logged in recently."
+msgstr "Nemrég be nem jelentkezett felhasználók."
+
+msgid "Inactive or suspicious user accounts report."
+msgstr "Inaktív vagy gyanús felhasználói fiókok jelentése."
+
+msgid "Users activity statistics."
+msgstr "Felhasználói tevékenységi statisztikák."
+
+msgid "Currently online users report."
+msgstr "Jelenleg online felhasználók jelentése."
+
+msgid "New user registrations over time."
+msgstr "Új felhasználói regisztrációk időbeli alakulása."
+
+msgid "Course and session subscriptions over time."
+msgstr "Kurzus- és munkamenet-feliratkozások időbeli alakulása."
+
+msgid "Duplicate user detection and maintenance report."
+msgstr "Duplikált felhasználók felismerése és karbantartási jelentés."
+
+msgid "Platform user/session statistics."
+msgstr "Platform felhasználói/munkamenet statisztikái."
+
+msgid "Quarterly platform report."
+msgstr "Negyedéves platformjelentés."
+
+msgid "Activities audit"
+msgstr "Tevékenységek auditja"
+
+msgid "Audit report for important administrative and platform activities."
+msgstr "Fontos adminisztrációs és platformtevékenységek auditjelentése."
+
+msgid "Social messages received report."
+msgstr "Fogadott közösségi üzenetek jelentése."
+
+msgid "Social messages sent report."
+msgstr "Küldött közösségi üzenetek jelentése."
+
+msgid "Social contacts count report."
+msgstr "Közösségi kapcsolatok száma jelentés."
+
+msgid "Sessions created over time."
+msgstr "Munkamenetek létrehozása időbeli alakulásban."
+
+msgid "Learning analytics dashboard."
+msgstr "Tanulási analitikai irányítópult."
+
+msgid "Teacher time report."
+msgstr "Oktatói idő jelentés."
+
+msgid "Teachers time by session report"
+msgstr "Oktatók ideje munkamenet szerint jelentés"
+
+msgid "Teacher time report grouped by session."
+msgstr "Oktatói idő jelentés munkamenet szerint csoportosítva."
+
+msgid "Corporate learning analytics report."
+msgstr "Vállalati tanulási analitikai jelentés."
+
+msgid "Course learners tracking report."
+msgstr "Kurzus-tanulók követési jelentése."
+
+msgid "Course activity statistics with connected and inactive users."
+msgstr "Kurzustevékenység-statisztikák csatlakozott és inaktív felhasználókkal."
+
+msgid "Detailed tracking report for a learner inside a course."
+msgstr "Részletes követési jelentés egy tanulóról egy kurzuson belül."
+
+msgid "Course gradebook overview."
+msgstr "Kurzus értékelési áttekintés."
+
+msgid "Gradebook statistics"
+msgstr "Értékelési statisztikák"
+
+msgid "Gradebook statistics report."
+msgstr "Értékelési statisztikai jelentés."
+
+msgid "Certificate report"
+msgstr "Tanúsítványjelentés"
+
+msgid "Certificate report for course gradebook."
+msgstr "Tanúsítványjelentés a kurzus értékeléséhez."
+
+msgid "User statistics"
+msgstr "Felhasználói statisztikák"
+
+msgid "Course gradebook statistics for a user."
+msgstr "Kurzus értékelési statisztikák egy felhasználóhoz."
+
+msgid "Personal statistics"
+msgstr "Személyes statisztikák"
+
+msgid "Personal gradebook statistics."
+msgstr "Személyes értékelési statisztikák."
+
+msgid "Reports catalog"
+msgstr "Jelentéskatalógus"
+
+msgid "Central catalog of available reports, roles and permission categories."
+msgstr "Elérhető jelentések, szerepkörök és jogosultsági kategóriák központi katalógusa."
+
+msgid "Course log events"
+msgstr "Kurzusnapló-események"
+
+msgid "Detailed course tracking events."
+msgstr "Részletes kurzuskövetési események."
+
+msgid "Course tool usage"
+msgstr "Kurzuseszköz-használat"
+
+msgid "Course tracking report grouped by tools."
+msgstr "Kurzuseszközök szerinti csoportosított követési jelentés."
+
+msgid "Course resource usage"
+msgstr "Kurzuserőforrás-használat"
+
+msgid "Course tracking report grouped by resources."
+msgstr "Erőforrások szerinti csoportosított követési jelentés."
+
+msgid "Course group tracking"
+msgstr "Kurzuscoport-követés"
+
+msgid "Tracking report for course groups."
+msgstr "Kurzuscoportok követési jelentése."
+
+msgid "Course session report"
+msgstr "Kurzusszekció-jelentés"
+
+msgid "Tracking report for a course inside sessions."
+msgstr "Szekción belüli kurzus követési jelentése."
+
+msgid "Learning path report"
+msgstr "Tanulási útvonal jelentés"
+
+msgid "Learning path tracking report."
+msgstr "Tanulási útvonal követési jelentése."
+
+msgid "Learning path results by user"
+msgstr "Tanulási útvonal eredményei felhasználónként"
+
+msgid "Learning path results grouped by user."
+msgstr "Felhasználók szerinti csoportosított tanulási útvonal eredmények."
+
+msgid "Exercises report"
+msgstr "Feladatok jelentése"
+
+msgid "Course exercises and exams tracking report."
+msgstr "Kurzusfeladatok és vizsgák követési jelentése."
+
+msgid "Question report"
+msgstr "Kérdésjelentés"
+
+msgid "Course question tracking report."
+msgstr "Kurzuskérdések követési jelentése."
+
+msgid "Messages report"
+msgstr "Üzenetek jelentése"
+
+msgid "Course messages tracking report."
+msgstr "Kurzusüzenetek követési jelentése."
+
+msgid "Total time tracking report for course learners."
+msgstr "Teljes idő követési jelentés a kurzus résztvevői számára."
+
+msgid "Gradebook summary"
+msgstr "Értékelési napló összegzése"
+
+msgid "Summary view of gradebook results."
+msgstr "Értékelési napló eredményeinek összegző nézete."
+
+msgid "Flat view"
+msgstr "Lapos nézet"
+
+msgid "Flat gradebook results view."
+msgstr "Értékelési napló eredményeinek lapos nézete."
+
+msgid "Evaluation log"
+msgstr "Értékelési napló"
+
+msgid "Change log for gradebook evaluations."
+msgstr "Értékelési napló változásainak naplója."
+
+msgid "Link log"
+msgstr "Hivatkozásnapló"
+
+msgid "Change log for gradebook links."
+msgstr "Értékelési napló hivatkozásainak változásnaplója."
+
+msgid "Result details"
+msgstr "Eredmény részletei"
+
+msgid "Detailed view of a gradebook result."
+msgstr "Értékelési napló eredményének részletes nézete."
+
+msgid "Personal certificates report."
+msgstr "Személyes tanúsítványok jelentése."
+
+msgid "User move statistics"
+msgstr "Felhasználói áthelyezési statisztikák"
+
+msgid "Report for user move and transfer statistics."
+msgstr "Felhasználói áthelyezési és átadási statisztikák jelentése."
+
+msgid "User consent list"
+msgstr "Felhasználói hozzájárulási lista"
+
+msgid "Report of users and consent status."
+msgstr "Felhasználók és hozzájárulási állapot jelentése."
+
+msgid "Special platform exports."
+msgstr "Speciális platform-exportok."
+
+msgid "Export certificates"
+msgstr "Tanúsítványok exportálása"
+
+msgid "Export platform certificates."
+msgstr "Platform-tanúsítványok exportálása."
+
+msgid "Export exercise results"
+msgstr "Feladat-eredmények exportálása"
+
+msgid "Export exercise results from the platform."
+msgstr "Feladat-eredmények exportálása a platformról."
+
+msgid "Course survey results and reporting."
+msgstr "Kurzusfelmérések eredményei és jelentése."
+
+msgid "Attendance report"
+msgstr "Jelenléti jelentés"
+
+msgid "Course attendance tracking and reports."
+msgstr "Kurzusi jelenlét követése és jelentései."
+
+msgid "Exercises global report"
+msgstr "Globális feladatok jelentése"
+
+msgid "Global exercise results report for the course."
+msgstr "Globális feladat-eredmények jelentése a kurzushoz."
+
+msgid "Exercise report"
+msgstr "Feladatjelentés"
+
+msgid "Detailed exercise report."
+msgstr "Részletes feladatjelentés."
+
+msgid "Exercise history"
+msgstr "Feladattörténet"
+
+msgid "Exercise attempt history."
+msgstr "Feladat-kísérletek története."
+
+msgid "Exercise results"
+msgstr "Feladat-eredmények"
+
+msgid "Exercise results and corrections."
+msgstr "Feladat-eredmények és javítások."
+
+msgid "Question-level exercise statistics."
+msgstr "Kérdésszintű gyakorlatstatisztika."
+
+msgid "Exercise statistics"
+msgstr "Gyakorlatstatisztika"
+
+msgid "Exercise statistics page."
+msgstr "Gyakorlatstatisztika oldal."
+
+msgid "Live exercise statistics"
+msgstr "Élő gyakorlatstatisztika"
+
+msgid "Live exercise statistics for teachers."
+msgstr "Élő gyakorlatstatisztika oktatóknak."
+
+msgid "Learning path statistics"
+msgstr "Tanulási útvonal statisztikái"
+
+msgid "Learning path item statistics."
+msgstr "Tanulási útvonal elem statisztikái."
+
+msgid "Learning path report inside a course."
+msgstr "Tanulási útvonal jelentés a kurzuson belül."
+
+msgid "User skills report."
+msgstr "Felhasználói készségek jelentése."
+
+msgid "Scheduled or periodic export configuration."
+msgstr "Ütemezett vagy időszakos export konfigurációja."
+
+msgid "User export"
+msgstr "Felhasználó exportálása"
+
+msgid "Export users from the platform."
+msgstr "Felhasználók exportálása a platformról."
+
+msgid "Not classified"
+msgstr "Nem besorolt"
+
+msgid "You have acquired the skill %s"
+msgstr "Megszerezted a(z) %s készséget"
+
+msgid "You have acquired the skill %s."
+msgstr "Megszerezted a(z) %s készséget."
+
+msgid "Recover your password"
+msgstr "Jelszó visszaállítása"
+
+msgid "Disclaimer"
+msgstr "Jogi nyilatkozat"
+
+msgid "This operation would exceed the limit of %d users allowed for this course."
+msgstr "Ez a művelet meghaladná a kurzus számára engedélyezett %d felhasználó korlátját."
+
+msgid "DefaultGroupCategory"
+msgstr "AlapértelmezettCsoportKategória"
+
+msgid "LearningCalendar"
+msgstr "TanulásiNaptár"
+
+msgid "Choose how this user can authenticate on the platform."
+msgstr "Válassza ki, hogyan hitelesítheti magát a felhasználó a platformon."
+
+msgid "Authentication methods"
+msgstr "Hitelesítési módszerek"
+
+msgid "Set password manually"
+msgstr "Jelszó manuális beállítása"
+
+msgid "Report role matrix"
+msgstr "Szerepkör-mátrix jelentése"
+
+msgid "Report permission categories"
+msgstr "Jogosultsági kategóriák jelentése"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs enforce the documented report role matrix."
+msgstr "Ez a nyilvántartás felsorolja az ismert jelentési oldalakat, azok kategóriáját, kanonikus URL-jét, örökölt URL-jét és a várt szerepkör-közönséget. A kanonikus URL-ek érvényesítik a dokumentált jelentési szerepkör-mátrixot."
+
+msgid "reports"
+msgstr "jelentések"
+
+msgid "Canonical URL"
+msgstr "Kanonikus URL"
+
+msgid "Legacy URL"
+msgstr "Örökölt URL"
+
+msgid "Permission category"
+msgstr "Jogosultsági kategória"
+
+msgid "This matrix documents the expected audience for each report and is enforced by the canonical report entry point."
+msgstr "Ez a mátrix dokumentálja az egyes jelentések várt közönségét, és a kanonikus jelentési belépési pont érvényesíti."
+
+msgid "These keys group reports by access scope and are used by the report registry. They can later be mapped to finer-grained platform permissions."
+msgstr "Ezek a kulcsok a jelentéseket hozzáférési hatókör szerint csoportosítják, és a jelentési nyilvántartás használja őket. Később finomabb platform-jogosultságokhoz is hozzárendelhetők."
+
+msgid "Permission"
+msgstr "Jogosultság"
+
+msgid "Clear active session"
+msgstr "Aktív munkamenet törlése"
+
+msgid "Are you sure you want to clear this user active session?"
+msgstr "Biztosan törölni szeretné a felhasználó aktív munkamenetét?"
+
+msgid "Preview shown without course context. Some course-specific data may be unavailable."
+msgstr "Előnézet kurzuskontextus nélkül jelenik meg. Egyes kurzus-specifikus adatok nem érhetők el."
+
+msgid "Preview is not available for this question."
+msgstr "Az előnézet nem érhető el ehhez a kérdéshez."
+
+msgid "Edition is not allowed without a course context."
+msgstr "Szerkesztés kurzuskontextus nélkül nem engedélyezett."
+
+msgid "This plugin does not use regions."
+msgstr "Ez a bővítmény nem használ régiókat."
+
+msgid "No plugins with regions were found."
+msgstr "Nem található régiókat használó bővítmény."
+
+msgid "Freemium"
+msgstr "Freemium"
+
+msgid "Commercial service"
+msgstr "Kereskedelmi szolgáltatás"
+
+msgid "Commercial"
+msgstr "Kereskedelmi"
+
+msgid "100% free"
+msgstr "100%-ban ingyenes"
+
+msgid "Displayed above the public login form."
+msgstr "A nyilvános bejelentkezési űrlap felett jelenik meg."
+
+msgid "Displayed below the public login form."
+msgstr "A nyilvános bejelentkezési űrlap alatt jelenik meg."
+
+msgid "Displayed before the footer area."
+msgstr "A lábléc területe előtt jelenik meg."
+
+msgid "Displayed in the left footer column."
+msgstr "A bal láblécoszlopban jelenik meg."
+
+msgid "Displayed in the center footer column."
+msgstr "A középső láblécoszlopban jelenik meg."
+
+msgid "Displayed in the right footer column."
+msgstr "A jobb láblécoszlopban jelenik meg."
+
+msgid "Showing all plugins."
+msgstr "Az összes bővítmény megjelenítése."
+
+msgid "Some plugins are still pending functional verification."
+msgstr "Néhány bővítmény még funkcionális ellenőrzésre vár."
+
+msgid "Show verified plugins only"
+msgstr "Csak az ellenőrzött bővítmények megjelenítése"
+
+msgid "Showing verified plugins only."
+msgstr "Csak az ellenőrzött bővítmények megjelenítése."
+
+msgid "Pending plugins are temporarily hidden until they are adapted and tested."
+msgstr "A függőben lévő bővítmények ideiglenesen el vannak rejtve, amíg nem kerülnek adaptálásra és tesztelésre."
+
+msgid "Show all plugins"
+msgstr "Összes bővítmény megjelenítése"
+
+msgid "Official and free plugins are listed separately from plugins that may depend on commercial services or paid offers."
+msgstr "A hivatalos és ingyenes bővítmények külön vannak listázva azoktól, amelyek kereskedelmi szolgáltatásoktól vagy fizetős ajánlatoktól függhetnek."
+
+msgid "Included free plugins"
+msgstr "Ingyenesen tartalmazott bővítmények"
+
+msgid "Commercial and freemium plugins"
+msgstr "Kereskedelmi és freemium bővítmények"
+
+msgid "All plugins"
+msgstr "Összes bővítmény"
+
+msgid "No plugins were found for this category."
+msgstr "Nem található bővítmény ebben a kategóriában."
+
+msgid "Search plugins"
+msgstr "Bővítmények keresése"
+
+msgid "Search by name or description"
+msgstr "Keresés név vagy leírás alapján"
+
+msgid "Advanced filters"
+msgstr "Speciális szűrők"
+
+msgid "All statuses"
+msgstr "Összes állapot"
+
+msgid "All sources"
+msgstr "Összes forrás"
+
+msgid "All types"
+msgstr "Összes típus"
+
+msgid "Installed plugins are shown first"
+msgstr "A telepített bővítmények jelennek meg először"
+
+msgid "No plugins match the current filters."
+msgstr "Nincs bővítmény, amely megfelelne az aktuális szűrőknek."
+
+msgid "Try clearing the search or changing the filters."
+msgstr "Próbálja meg törölni a keresést vagy módosítani a szűrőket."
+
+msgid "README"
+msgstr "README"
+
+msgid "Invalid security token"
+msgstr "Érvénytelen biztonsági token"
+
+msgid "Please select a destination session"
+msgstr "Kérjük, válasszon célmunkamenetet"
+
+msgid "Cannot move this to the same session"
+msgstr "Nem lehet ugyanabba a munkamenetbe áthelyezni"
+
+msgid "The destination session must include the selected course"
+msgstr "A célmunkamenetnek tartalmaznia kell a kiválasztott kurzust"
+
+msgid "The source session must include the selected course"
+msgstr "A forrásmunkamenetnek tartalmaznia kell a kiválasztott kurzust"
+
+msgid "No learners found"
+msgstr "Nem található tanuló"
+
+msgid "Will be subscribed"
+msgstr "Feliratkozik"
+
+msgid "Subscribed"
+msgstr "Feliratkozott"
+
+msgid "The move process has finished"
+msgstr "Az áthelyezési folyamat befejeződött"
+
+msgid "Comparison finished. No data has been moved."
+msgstr "Összehasonlítás befejezve. Nem történt adatáthelyezés."
+
+msgid "Move tracking data from the base course or a source session to another session. Use comparison first to review the affected learner data."
+msgstr "Követési adatok áthelyezése az alaptanfolyamról vagy egy forrásmunkamenetről egy másik munkamenetbe. Először használja az összehasonlítást az érintett tanulói adatok áttekintéséhez."
+
+msgid "Search for a course or use the manual course ID field below."
+msgstr "Keresés kurzusra vagy használja az alábbi kézi kurzusazonosító mezőt."
+
+msgid "Fallback when the course search is not available."
+msgstr "Tartalék, ha a kurzuskeresés nem érhető el."
+
+msgid "Load sessions"
+msgstr "Munkamenetek betöltése"
+
+msgid "Selected course"
+msgstr "Kiválasztott kurzus"
+
+msgid "Choose the base course or the session where the tracking data currently exists."
+msgstr "Válassza ki az alaptanfolyamot vagy a munkamenetet, ahol a követési adatok jelenleg léteznek."
+
+msgid "Choose the session that will receive the tracking data."
+msgstr "Válassza ki azt a munkamenetet, amely megkapja a követési adatokat."
+
+msgid "Important"
+msgstr "Fontos"
+
+msgid "The move action updates existing tracking data. Run compare first and test this tool with a non-production course before moving real learner data."
+msgstr "Az áthelyezési művelet frissíti a meglévő követési adatokat. Először futtassa az összehasonlítást, és tesztelje ezt az eszközt nem éles kurzuson, mielőtt valós tanulói adatokat helyez át."
+
+msgid "No sessions found for this course"
+msgstr "Nem található munkamenet ehhez a kurzushoz"
+
+msgid "Some users were ignored because they are not subscribed to this session."
+msgstr "Néhány felhasználó figyelmen kívül lett hagyva, mert nincs feliratkozva erre a munkamenetre."
+
+msgid "Remove selected user"
+msgstr "Kiválasztott felhasználó eltávolítása"
+
+msgid "Add selected user"
+msgstr "Kiválasztott felhasználó hozzáadása"
+
+msgid "No users from the selected list are subscribed to this session."
+msgstr "A kiválasztott listáról egyetlen felhasználó sincs feliratkozva erre a munkamenetre."
+
+msgid "No image"
+msgstr "Nincs kép"
+
+msgid "Invalid URL."
+msgstr "Érvénytelen URL."
+
+msgid "This cloud document cannot be embedded."
+msgstr "Ez a felhőalapú dokumentum nem ágyazható be."
+
+msgid "Document not found"
+msgstr "Dokumentum nem található"
+
+msgid "File not found"
+msgstr "Fájl nem található"
+
+msgid "This learning path is not available for your user at this time."
+msgstr "Ez a tanulási útvonal jelenleg nem érhető el az Ön számára."
+
+msgid "StartDateMustBeBeforeTheEndDate"
+msgstr "StartDateMustBeBeforeTheEndDate"
+
+msgid "Next learning path"
+msgstr "Következő tanulási útvonal"
+
+msgid "Select the learning path that will be available after this one."
+msgstr "Válassza ki azt a tanulási útvonalat, amely ez után lesz elérhető."
+
+msgid "Create another learning path in this course to enable learning path flow."
+msgstr "Hozzon létre egy másik tanulási útvonalat ebben a kurzusban a tanulási útvonalak folytonosságának engedélyezéséhez."
+
+msgid "Available from %s"
+msgstr "Elérhető ettől: %s"
+
+msgid "Available until %s"
+msgstr "Elérhető eddig: %s"
+
+msgid "Statistics reset date"
+msgstr "Statisztikák visszaállításának dátuma"
+
+msgid "Last 24 hours"
+msgstr "Utolsó 24 óra"
+
+msgid "This reset date is used as the reference date for the report. It does not delete historical tracking data."
+msgstr "Ez a visszaállítási dátum a jelentés referencia dátuma. Nem törli a korábbi követési adatokat."
+
+msgid "Since reset date"
+msgstr "A visszaállítás dátuma óta"
+
+msgid "Users connected in the last 24 hours"
+msgstr "Felhasználók az utolsó 24 órában"
+
+msgid "Learners with at least one course access during the last 24 hours."
+msgstr "Tanulók, akik legalább egyszer hozzáfértek a kurzushoz az elmúlt 24 órában."
+
+msgid "Users connected in the last week"
+msgstr "Felhasználók az elmúlt héten"
+
+msgid "Learners with at least one course access during the last 7 days."
+msgstr "Tanulók, akik legalább egyszer hozzáfértek a kurzushoz az elmúlt 7 napban."
+
+msgid "Users connected in the last month"
+msgstr "Felhasználók az elmúlt hónapban"
+
+msgid "Learners with at least one course access during the last 30 days."
+msgstr "Tanulók, akik legalább egyszer hozzáfértek a kurzushoz az elmúlt 30 napban."
+
+msgid "Not recently connected users"
+msgstr "Nemrég nem csatlakozott felhasználók"
+
+msgid "Learners without course access since %s."
+msgstr "Tanulók, akik %s óta nem fértek hozzá a kurzushoz."
+
+msgid "Recently used resources"
+msgstr "Nemrég használt erőforrások"
+
+msgid "Course tools/resources used since %s."
+msgstr "Kurzuseszközök/erőforrások, amelyeket %s óta használtak."
+
+msgid "%s %% of learners"
+msgstr "A tanulók %s %%-a"
+
+msgid "Connections"
+msgstr "Kapcsolatok"
+
+msgid "Total connections"
+msgstr "Összes kapcsolat"
+
+msgid "Downloaded documents"
+msgstr "Letöltött dokumentumok"
+
+msgid "List of documents downloaded by this learner in this course."
+msgstr "A tanuló által ebben a kurzusban letöltött dokumentumok listája."
+
+msgid "Forum topics"
+msgstr "Fórumtémák"
+
+msgid "Forum topics opened by this learner in this course."
+msgstr "A tanuló által ebben a kurzusban megnyitott fórumtémák."
+
+msgid "Forum posts"
+msgstr "Fórumbejegyzések"
+
+msgid "Forum posts written by this learner in this course."
+msgstr "A tanuló által ebben a kurzusban írt fórumbejegyzések."
+
+msgid "Course connections"
+msgstr "Kurzushozzáférések"
+
+msgid "Connection history for this learner in this course."
+msgstr "A tanuló kurzuskapcsolatainak előzményei."
+
+msgid "Resources used"
+msgstr "Használt erőforrások"
+
+msgid "Latest tools or resources used by this learner in this course."
+msgstr "A tanuló által ebben a kurzusban legutóbb használt eszközök vagy erőforrások."
+
+msgid "Logout date"
+msgstr "Kijelentkezés dátuma"
+
+msgid "Imported Aiken quiz"
+msgstr "Importált Aiken-teszt"
+
+msgid "Only supported documents will be listed here."
+msgstr "Csak a támogatott dokumentumok jelennek meg itt."
+
+msgid "Generated Aiken content"
+msgstr "Generált Aiken-tartalom"
+
+msgid "Review the generated content before importing it as a new exercise."
+msgstr "Tekintse át a generált tartalmat, mielőtt új gyakorlatként importálná."
+
+msgid "No documents available."
+msgstr "Nincsenek elérhető dokumentumok."
+
+msgid "yperbolic arctangent:\\t\\tarctanh(x)"
+msgstr "hiperbolikus arkusz tangens:\\t\\tarctanh(x)"
+
+msgid "Exercise"
+msgstr "Gyakorlat"
+
+msgid "OfficialCode"
+msgstr "HivatalosKód"
+
+msgid "FirstName"
+msgstr "Keresztnév"
+
+msgid "LastName"
+msgstr "Vezetéknév"
+
+msgid "LoginName"
+msgstr "BejelentkezésiNév"
+
+msgid "MinMinute"
+msgstr "MinPerc"
+
+msgid "StartDate"
+msgstr "KezdésDátuma"
+
+msgid "EndDate"
+msgstr "BefejezésDátuma"
+
+msgid "CorrectionDate"
+msgstr "JavításDátuma"
+
+msgid "NotValidated"
+msgstr "Nem ellenőrzött"
+
+msgid "PendingAttempts"
+msgstr "Függőben lévő próbálkozások"
+
+msgid "List of pending test attempts across your courses."
+msgstr "Függőben lévő tesztkísérletek listája az Ön kurzusaiban."
+
+msgid "User ID"
+msgstr "Felhasználói azonosító"
+
+msgid "QuestionType"
+msgstr "Kérdéstípus"
+
+msgid "QuestionsWithNoAutomaticCorrection"
+msgstr "Automatikus javítás nélküli kérdések"
+
+msgid "There are no pending tests."
+msgstr "Nincsenek függőben lévő tesztek."
+
+msgid "%s results"
+msgstr "%s eredmény"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Példa űrlapkitöltő tevékenység: testtömegindex számítása</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Életkor</strong></td>            <td width=\"75%\" style=\"\">[25] éves</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Nem</strong></td>            <td style=\"\" text-align:=\"\">[F] (F vagy N)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Súly</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Magasság</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Testtömegindex</strong></td>            <td style=\"vertical-align: top;\">[29] BMI = Súly/Magasság<sup>2</sup> (Lásd:<a href=\"http://hu.wikipedia.org/wiki/Testtömegindex\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipédia szócikk</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Removed"
+msgstr "Eltávolítva"
+
+msgid "NoUsersInTheList"
+msgstr "Nincsenek felhasználók a listában"
+
+msgid "Are you sure?"
+msgstr "Biztos benne?"
+
+msgid "NoResultsAvailable"
+msgstr "Nincsenek elérhető eredmények"
+
+msgid "Import groups from a CSV file and optionally remove items that are not present in the file."
+msgstr "Csoportok importálása CSV-fájlból, és opcionálisan az abban nem szereplő elemek eltávolítása."
+
+msgid "Use this option carefully because items missing from the CSV can be removed during the import process."
+msgstr "Használja ezt a lehetőséget körültekintően, mert a CSV-ben nem szereplő elemek az importálás során eltávolításra kerülhetnek."
+
+msgid "Upload a CSV file with the group data you want to import."
+msgstr "Töltse fel a CSV-fájlt a csoportadatokkal, amelyeket importálni kíván."
+
+msgid "You can download the example file to use the expected format."
+msgstr "Letöltheti a minta fájlt a várt formátum használatához."
+
+msgid "If you enable deletion, items not present in the file may be removed."
+msgstr "Ha engedélyezi a törlést, a fájlban nem szereplő elemek eltávolításra kerülhetnek."
+
+msgid "The CSV file is mandatory to start the import."
+msgstr "A CSV-fájl megadása kötelező az importálás megkezdéséhez."
+
+msgid "Please select at least one class."
+msgstr "Kérjük, válasszon ki legalább egy osztályt."
+
+msgid "Define the properties for each group before creating them."
+msgstr "Minden csoport tulajdonságait határozza meg a létrehozásuk előtt."
+
+msgid "Apply the first row values"
+msgstr "Első sor értékeinek alkalmazása"
+
+msgid "Create groups manually or generate them from the classes subscribed to this course."
+msgstr "Hozzon létre csoportokat manuálisan, vagy generálja őket a kurzusra feliratkozott osztályokból."
+
+msgid "Create manual groups"
+msgstr "Kézi csoportok létrehozása"
+
+msgid "Use this form when you want to create empty course groups manually."
+msgstr "Ezt az űrlapot használja, ha üres kurzuscsoportokat szeretne manuálisan létrehozni."
+
+msgid "Configure manual groups"
+msgstr "Kézi csoportok konfigurálása"
+
+msgid "Create groups from subscribed classes"
+msgstr "Csoportok létrehozása a feliratkozott osztályokból"
+
+msgid "Use this form when you want to create one course group for each selected class."
+msgstr "Ezt az űrlapot használja, ha minden kiválasztott osztályhoz egy kurzuscsoportot szeretne létrehozni."
+
+msgid "Keep created groups linked to their source classes"
+msgstr "A létrehozott csoportok kapcsolódjanak a forrásosztályaikhoz"
+
+msgid "Create groups from selected classes"
+msgstr "Csoportok létrehozása a kiválasztott osztályokból"
+
+msgid "You must be logged in to access this page."
+msgstr "Be kell jelentkeznie az oldal eléréséhez."
+
+msgid "Invalid user"
+msgstr "Érvénytelen felhasználó"
+
+msgid "UseCourseCustomCertificate"
+msgstr "Egyéni tanúsítvány használata"
+
+msgid "UseDefaultCustomCertificate"
+msgstr "Alapértelmezett egyéni tanúsítvány használata"
+
+msgid "CertificateSetting"
+msgstr "Tanúsítványbeállítás"
+
+msgid "SelectOneOptionBeforeOpeningEditor"
+msgstr "Válasszon egy lehetőséget a szerkesztő megnyitása előtt"
+
+msgid "ChooseCustomCertificateModeHelp"
+msgstr "Egyéni tanúsítvány mód súgója"
+
+msgid "CertificateMode"
+msgstr "Tanúsítvány mód"
+
+msgid "Enable student to validate own attendance"
+msgstr "A hallgató saját jelenlétét is érvényesítheti"
+
+msgid "Course block"
+msgstr "Kurzusblokk"
+
+msgid "Add custom content blocks to course footer regions."
+msgstr "Egyéni tartalomblokkok hozzáadása a kurzus lábrész régióihoz."
+
+msgid "course_block_pre_footer"
+msgstr "course_block_pre_footer"
+
+msgid "Before footer"
+msgstr "Lábrész előtt"
+
+msgid "course_block_footer_left"
+msgstr "course_block_footer_left"
+
+msgid "Footer left"
+msgstr "Lábrész bal"
+
+msgid "course_block_footer_center"
+msgstr "course_block_footer_center"
+
+msgid "Footer center"
+msgstr "Lábrész középen"
+
+msgid "course_block_footer_right"
+msgstr "course_block_footer_right"
+
+msgid "Footer right"
+msgstr "Lábrész jobb"
+
+msgid "SetNotification"
+msgstr "Értesítés beállítása"
+
+msgid "CourseLegal"
+msgstr "Kurzusjogi"
+
+msgid "Certificates search is not available"
+msgstr "A tanúsítványok keresése nem elérhető"
+
+msgid "It allows the acquisition of skills by subcategories"
+msgstr "Lehetővé teszi a kompetenciák elsajátítását alkategóriák szerint"
+
+msgid "Allow skills by subcategories"
+msgstr "Kompetenciák engedélyezése alkategóriák szerint"
+
+msgid "Minimum score for skills"
+msgstr "Minimális pontszám a kompetenciákhoz"
+
+msgid "The gradebook table is hidden."
+msgstr "A jegyzetkönyv táblázata rejtett."
+
+msgid "Invalid token"
+msgstr "Érvénytelen token"
+
+msgid "Unable to save the item"
+msgstr "Az elem mentése sikertelen"
+
+msgid "Only HTTP and HTTPS URLs are allowed."
+msgstr "Csak HTTP és HTTPS URL-ek engedélyezettek."
+
+msgid "Invalid URL host."
+msgstr "Érvénytelen URL-gazdagép."
+
+msgid "This cloud provider is not allowed."
+msgstr "Ez a felhőszolgáltató nem engedélyezett."
+
+msgid "Documents used"
+msgstr "Felhasznált dokumentumok"
+
+msgid "No document usage"
+msgstr "Nincs dokumentumhasználat"
+
+msgid "Invalid action."
+msgstr "Érvénytelen művelet."
+
+msgid "No users selected."
+msgstr "Nincs kijelölt felhasználó."
+
+msgid "%s user(s) processed."
+msgstr "%s felhasználó feldolgozva."
+
+msgid "Invalid CSRF token."
+msgstr "Érvénytelen CSRF token."
+
+msgid "[%s] Please change your password"
+msgstr "[%s] Kérjük, változtassa meg jelszavát"
+
+msgid "Dear %s,\n\nOur security enforcing process shows you use a password that is commonly used on the internet, which means your account could easily be stolen. It is probably a simple sequence or a very common word, we don't really know (we cannot see your password), but we ask you to please connect to the platform and request a password change. You can follow the link here: %s to do that now.\n\nPlease note we will never ask for your password in this process. You just enter your username or e-mail and we send you a link. If you are asked to introduce your existing password to do that, someone is probably trying to do Phishing on your account. Be safe, change your password now!\n\n%s\n%s"
+msgstr "Kedves %s!\n\nBiztonsági ellenőrző folyamatunk azt mutatja, hogy olyan jelszót használ, amely gyakran előfordul az interneten, így fiókja könnyen ellopható. Valószínűleg egy egyszerű sorozat vagy egy nagyon gyakori szó, nem tudjuk pontosan (nem látjuk a jelszavát), de kérjük, lépjen be a platformra, és kérjen jelszóváltoztatást. Ehhez most a következő linket használhatja: %s.\n\nKérjük, vegye figyelembe, hogy ebben a folyamatban soha nem kérjük a jelszavát. Csak adja meg felhasználónevét vagy e-mail-címét, és küldünk egy linket. Ha arra kérik, hogy a meglévő jelszavát adja meg, valaki valószínűleg adathalászatot próbál végrehajtani a fiókján. Legyen biztonságban, változtassa meg jelszavát most!\n\n%s\n%s"
+
+msgid "[%s] Your password has been reset"
+msgstr "[%s] Jelszava vissza lett állítva"
+
+msgid "Dear %s,\n\nOur security enforcing process flagged you as using a password that is commonly used on the internet, which means your account could easily be stolen. As a prevention measure, we have decided to initiate a password reset process. Your new, automatically generated password is now:\n\n%s\n\nPlease login to the platform soon (using this new password) to set your own, personal and secure, password.\n\nBe safe.\n\n%s\n%s"
+msgstr "Kedves %s!\n\nBiztonsági ellenőrző folyamatunk azt jelzi, hogy olyan jelszót használ, amely gyakran előfordul az interneten, így fiókja könnyen ellopható. Megelőző intézkedésként úgy döntöttünk, hogy jelszó-visszaállítási folyamatot indítunk. Az új, automatikusan generált jelszava most:\n\n%s\n\nKérjük, hamarosan jelentkezzen be a platformra (ezzel az új jelszóval), hogy beállítsa saját, személyes és biztonságos jelszavát.\n\nLegyen biztonságban.\n\n%s\n%s"
+
+msgid "Signature saved successfully"
+msgstr "Aláírás sikeresen mentve"
+
+msgid "Invalid request payload."
+msgstr "Érvénytelen kérés tartalma."
+
+msgid "Authentication required."
+msgstr "Hitelesítés szükséges."
+
+msgid "The course title is required."
+msgstr "A kurzus címe kötelező."
+
+msgid "Only trainers and administrators can create courses."
+msgstr "Csak oktatók és adminisztrátorok hozhatnak létre kurzusokat."
+
+msgid "Course creation by trainers is disabled on this platform."
+msgstr "Az oktatók általi kurzuslétrehozás le van tiltva ezen a platformon."
+
+msgid "The selected BuyCourses service cannot be used to create this course."
+msgstr "A kiválasztott BuyCourses szolgáltatás nem használható ezen kurzus létrehozásához."
+
+msgid "You have reached the maximum number of courses allowed (%d)."
+msgstr "Elérte a megengedett kurzusok maximális számát (%d)."
+
+msgid "The selected BuyCourses service is invalid."
+msgstr "A kiválasztott BuyCourses szolgáltatás érvénytelen."
+
+msgid "BuyCourses is not available right now."
+msgstr "A BuyCourses jelenleg nem elérhető."
+
+msgid "BuyCourses cannot validate the selected service right now."
+msgstr "A BuyCourses jelenleg nem tudja érvényesíteni a kiválasztott szolgáltatást."
+
+msgid "Unable to validate the selected BuyCourses service right now."
+msgstr "A kiválasztott BuyCourses szolgáltatás jelenleg nem érvényesíthető."
+
+msgid "External tool removed from course"
+msgstr "Külső eszköz eltávolítva a kurzusból"
+
+msgid "External tool was removed from the course, but kept internally because it is linked to the gradebook"
+msgstr "A külső eszközt eltávolítottuk a kurzusból, de belsőleg megőriztük, mert kapcsolódik a jegyzetkönyvhöz"
+
+msgid "There are no external tools available to add to the gradebook"
+msgstr "Nincsenek elérhető külső eszközök a jegyzetkönyvhöz"
+
+msgid "The evaluation could not be created"
+msgstr "Az értékelés nem hozható létre"
+
+msgid "The gradebook evaluation could not be linked"
+msgstr "A jegyzetkönyv értékelése nem kapcsolható össze"
+
+msgid "Survey questions"
+msgstr "Kérdőív kérdései"
+
+msgid "Back to survey list"
+msgstr "Vissza a kérdőívek listájához"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "Ehhez a kérdőívhez már tartoznak válaszok. A kérdés szerkesztése konfiguráció szerint tiltva van."
+
+msgid "Choose the type of question you want to add."
+msgstr "Válassza ki a hozzáadni kívánt kérdés típusát."
+
+msgid "The free text option is added automatically."
+msgstr "A szabad szöveges opció automatikusan hozzáadódik."
+
+msgid "No questions found"
+msgstr "Nem található kérdés"
+
+msgid "Mandatory"
+msgstr "Kötelező"
+
+msgid "Unsupported question type"
+msgstr "Nem támogatott kérdés típus"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "A kérdésben használhatja a {%s} és {%s} címkéket."
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "Ez a kérdés feltételesen jelenik meg a kérdőív kitöltése során."
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "Az 1-től 100-ig terjedő százalékos opciók automatikusan generálódnak."
+
+msgid "Could not load survey questions"
+msgstr "Nem sikerült betölteni a kérdőív kérdéseit"
+
+msgid "The question text is required."
+msgstr "A kérdés szövege kötelező."
+
+msgid "The maximum score is required."
+msgstr "A maximális pontszám kötelező."
+
+msgid "Please select a parent option."
+msgstr "Kérjük, válasszon szülő opciót."
+
+msgid "Please fill all answer options."
+msgstr "Kérjük, töltse ki az összes válaszlehetőséget."
+
+msgid "QuestionUpdated"
+msgstr "QuestionUpdated"
+
+msgid "Could not save survey question"
+msgstr "Nem sikerült menteni a kérdőív kérdését"
+
+msgid "Could not delete survey question"
+msgstr "Nem sikerült törölni a kérdőív kérdését"
+
+msgid "Could not move survey question"
+msgstr "Nem sikerült áthelyezni a kérdőív kérdését"
+
+msgid "Could not copy survey question"
+msgstr "Nem sikerült másolni a kérdőív kérdését"
+
+msgid "Hide search"
+msgstr "Keresés elrejtése"
+
+msgid "Showing results for: %s"
+msgstr "Eredmények megjelenítése: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "Keresés kérdőív címe, kódja vagy leírása alapján."
+
+msgid "Search surveys"
+msgstr "Kérdőívek keresése"
+
+msgid "%s surveys selected"
+msgstr "%s kérdőív kiválasztva"
+
+msgid "Clear selection"
+msgstr "Kijelölés törlése"
+
+msgid "No surveys found"
+msgstr "Nem található kérdőív"
+
+msgid "Unsupported"
+msgstr "Nem támogatott"
+
+msgid "Could not load surveys"
+msgstr "Nem sikerült betölteni a felméréseket"
+
+msgid "Delete selected surveys"
+msgstr "Kijelölt felmérések törlése"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "A kijelölt felmérések és kérdéseik törlésre kerülnek. Ez a művelet nem vonható vissza."
+
+msgid "Could not delete selected surveys"
+msgstr "Nem sikerült törölni a kijelölt felméréseket"
+
+msgid "Survey action"
+msgstr "Felmérés művelet"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "A felmérés másolata létrejön: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "A felméréshez tartozó összes válasz és meghívó törlésre kerül: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "A generált többszörözött kérdések eltávolításra kerülnek ebből a felmérésből: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "Ez a felmérés közzétételre kerül a kapcsolódó csoport oktatói számára: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "Ez a felmérés és kérdései törlésre kerülnek: %s"
+
+msgid "Could not complete survey action"
+msgstr "Nem sikerült végrehajtani a felmérés műveletet"
+
+msgid "Not started"
+msgstr "Nem indult el"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "Az értekezlet-szavazások lehetővé teszik a meghívott felhasználók számára, hogy kiválasszák azokat a dátumokat, amikor elérhetőek."
+
+msgid "Back to surveys"
+msgstr "Vissza a felmérésekhez"
+
+msgid "Edit meeting poll"
+msgstr "Értekezlet-szavazás szerkesztése"
+
+msgid "View meeting poll"
+msgstr "Értekezlet-szavazás megtekintése"
+
+msgid "Basic information"
+msgstr "Alapvető információk"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "Ez egy értekezlet-szavazás típusú felmérést hoz létre. A válaszok és meghívók külön kezelendők."
+
+msgid "Availability"
+msgstr "Elérhetőség"
+
+msgid "Meeting dates"
+msgstr "Értekezlet dátumai"
+
+msgid "Meeting poll"
+msgstr "Értekezlet-szavazás"
+
+msgid "My availability"
+msgstr "Saját elérhetőség"
+
+msgid "Meeting poll results"
+msgstr "Értekezlet-szavazás eredményei"
+
+msgid "No invitations found"
+msgstr "Nem található meghívó"
+
+msgid "available"
+msgstr "elérhető"
+
+msgid "Could not load meeting poll"
+msgstr "Nem sikerült betölteni az értekezlet-szavazást"
+
+msgid "Please complete the required fields"
+msgstr "Kérjük, töltse ki a kötelező mezőket"
+
+msgid "Could not save meeting poll"
+msgstr "Nem sikerült menteni az értekezlet-szavazást"
+
+msgid "Could not save meeting availability"
+msgstr "Nem sikerült menteni az értekezlet elérhetőségét"
+
+msgid "Copy this survey to another course or session"
+msgstr "Felmérés másolása másik kurzusba vagy munkamenetbe"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "A felmérés válaszok és meghívók nélkül lesz másolva."
+
+msgid "No target courses found"
+msgstr "Nem található célkurzus"
+
+msgid "Search by course title, course code or session name."
+msgstr "Keresés kurzus címe, kurzus kódja vagy munkamenet neve alapján."
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "Használja a Felmérés duplikálása funkciót, ha ugyanabban a kurzusban szeretne másolatot."
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "A kérdések és opciók másolásra kerülnek. A válaszok, meghívók és jelentések csak az eredeti felmérésben maradnak."
+
+msgid "Selected target"
+msgstr "Kijelölt cél"
+
+msgid "Could not load copy form"
+msgstr "Nem sikerült betölteni a másolási űrlapot"
+
+msgid "The survey will be copied to: %s"
+msgstr "A felmérés ide lesz másolva: %s"
+
+msgid "Survey copied."
+msgstr "Felmérés másolva."
+
+msgid "Could not copy survey"
+msgstr "Nem sikerült másolni a felmérést"
+
+msgid "Answer survey"
+msgstr "Felmérés kitöltése"
+
+msgid "Preview mode does not save answers."
+msgstr "Az előnézeti mód nem menti a válaszokat."
+
+msgid "Survey completed"
+msgstr "Felmérés kitöltve"
+
+msgid "Thank you for answering the survey."
+msgstr "Köszönjük, hogy kitöltötte a felmérést."
+
+msgid "Profile information"
+msgstr "Profilinformáció"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "Kérjük, ellenőrizze a kért profilmezőket a felmérés kitöltése előtt."
+
+msgid "This profile field is read-only."
+msgstr "Ez a profilmező csak olvasható."
+
+msgid "You already filled this survey."
+msgstr "Már kitöltötte ezt a felmérést."
+
+msgid "Please specify"
+msgstr "Kérjük, adja meg"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "Ez a kérdéstípus nem támogatott a modern felmérés nézetben."
+
+msgid "Preview only"
+msgstr "Csak előnézet"
+
+msgid "Submit answers"
+msgstr "Válaszok beküldése"
+
+msgid "Could not load survey"
+msgstr "Nem sikerült betölteni a felmérést"
+
+msgid "Please complete the required profile fields."
+msgstr "Kérjük, töltse ki a kötelező profilmezőket."
+
+msgid "Please answer all mandatory questions."
+msgstr "Kérjük, válaszoljon minden kötelező kérdésre."
+
+msgid "Could not save survey answers"
+msgstr "Nem sikerült menteni a felmérés válaszait"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "A fő felmérés-információk beállítása előtt kezelje a kérdéseket és a meghívókat."
+
+msgid "The survey code cannot be changed after creation."
+msgstr "A felmérés kódja a létrehozás után nem módosítható."
+
+msgid "Survey behavior"
+msgstr "Felmérés viselkedése"
+
+msgid "Use 0 for no time limit."
+msgstr "Időkorlát nélküli működéshez használjon 0 értéket."
+
+msgid "Survey messages"
+msgstr "Felmérés üzenetei"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "Az itt kiválasztott profilmezők a felmérés kérdései előtt jelennek meg."
+
+msgid "No profile fields are currently available."
+msgstr "Jelenleg nincsenek elérhető profilmezők."
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "A profilmezők kiválasztása csak nem névtelen felmérések esetén érhető el."
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "A készségkapcsolatok dedikált kötegben lesznek migrálva."
+
+msgid "Could not load survey configuration"
+msgstr "Nem sikerült betölteni a felmérés konfigurációját"
+
+msgid "The survey code is required."
+msgstr "A felmérés kódja kötelező."
+
+msgid "The survey title is required."
+msgstr "A felmérés címe kötelező."
+
+msgid "The survey has been saved successfully"
+msgstr "A felmérést sikeresen mentettük"
+
+msgid "Could not save survey configuration"
+msgstr "Nem sikerült menteni a felmérés konfigurációját"
+
+msgid "Course users"
+msgstr "Kurzus résztvevői"
+
+msgid "Already invited"
+msgstr "Már meghívott"
+
+msgid "No users found"
+msgstr "Nem található felhasználó"
+
+msgid "No groups found"
+msgstr "Nem található csoport"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "Használja a **link** szöveget ott, ahol a felmérés hivatkozásának meg kell jelennie."
+
+msgid "Remind all selected users"
+msgstr "Kiválasztott felhasználók emlékeztetése"
+
+msgid "Anonymous access link"
+msgstr "Névtelen hozzáférési link"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "A nem meghívott felhasználók ezt a linket használhatják a felmérés kitöltéséhez."
+
+msgid "Answered anonymously"
+msgstr "Névtelenül megválaszolva"
+
+msgid "Could not load survey invitations"
+msgstr "Nem sikerült betölteni a felmérés meghívóit"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "E-mail küldésekor a tárgy és az üzenet megadása kötelező."
+
+msgid "Could not publish survey"
+msgstr "Nem sikerült közzétenni a felmérést"
+
+msgid "Could not copy the link"
+msgstr "Nem sikerült másolni a linket"
+
+msgid "Please answer this survey using the following link"
+msgstr "Kérjük, a következő link segítségével töltse ki ezt a felmérést"
+
+msgid "Export CSV"
+msgstr "CSV exportálása"
+
+msgid "Export compact CSV"
+msgstr "Kompakt CSV exportálása"
+
+msgid "Export Excel"
+msgstr "Excel exportálása"
+
+msgid "Export package"
+msgstr "Csomag exportálása"
+
+msgid "Results summary"
+msgstr "Eredmények összefoglalója"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "Ez a nézet a felmérés migrált jelentési adatait mutatja."
+
+msgid "Select user"
+msgstr "Felhasználó kiválasztása"
+
+msgid "No answers found"
+msgstr "Nem található válasz"
+
+msgid "answers"
+msgstr "válaszok"
+
+msgid "Could not load survey reporting"
+msgstr "Nem sikerült betölteni a felmérés jelentéseit"
+
+msgid "Back to threads"
+msgstr "Vissza a témákhoz"
+
+msgid "Back to learning path"
+msgstr "Vissza a tanulási útvonalhoz"
+
+msgid "Remove sticky"
+msgstr "Kiemelés eltávolítása"
+
+msgid "Make sticky"
+msgstr "Kiemelés"
+
+msgid "Open thread"
+msgstr "Téma megnyitása"
+
+msgid "Close thread"
+msgstr "Szál bezárása"
+
+msgid "Delete thread"
+msgstr "Szál törlése"
+
+msgid "This thread is hidden from learners."
+msgstr "Ez a szál rejtve van a tanulók elől."
+
+msgid "Revision requested"
+msgstr "Felülvizsgálat kérve"
+
+msgid "Revision"
+msgstr "Felülvizsgálat"
+
+msgid "Approve post"
+msgstr "Bejegyzés jóváhagyása"
+
+msgid "Reject post"
+msgstr "Bejegyzés elutasítása"
+
+msgid "Cancel revision request"
+msgstr "Felülvizsgálati kérés visszavonása"
+
+msgid "Delete post"
+msgstr "Bejegyzés törlése"
+
+msgid "Message is required"
+msgstr "Üzenet megadása kötelező"
+
+msgid "Target thread is required"
+msgstr "Célszál megadása kötelező"
+
+msgid "Could not retrieve posts"
+msgstr "Nem sikerült lekérni a bejegyzéseket"
+
+msgid "Thread shown"
+msgstr "Szál megjelenítve"
+
+msgid "Thread hidden"
+msgstr "Szál elrejtve"
+
+msgid "Could not update thread"
+msgstr "Nem sikerült frissíteni a szálat"
+
+msgid "Thread closed"
+msgstr "Szál lezárva"
+
+msgid "Thread opened"
+msgstr "Szál megnyitva"
+
+msgid "Thread marked as sticky"
+msgstr "Szál kitűzve"
+
+msgid "Thread unmarked as sticky"
+msgstr "Szál kitűzése megszüntetve"
+
+msgid "Thread notifications enabled"
+msgstr "Szál értesítések engedélyezve"
+
+msgid "Thread notifications disabled"
+msgstr "Szál értesítések letiltva"
+
+msgid "Could not update thread notification"
+msgstr "Nem sikerült frissíteni a szál értesítését"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "Biztosan törölni szeretné ezt a szálat?"
+
+msgid "Could not delete thread"
+msgstr "Nem sikerült törölni a szálat"
+
+msgid "Post approved"
+msgstr "Bejegyzés jóváhagyva"
+
+msgid "Could not approve post"
+msgstr "Nem sikerült jóváhagyni a bejegyzést"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "Biztosan elutasítja ezt a bejegyzést?"
+
+msgid "Post rejected"
+msgstr "Bejegyzés elutasítva"
+
+msgid "Could not reject post"
+msgstr "Nem sikerült elutasítani a bejegyzést"
+
+msgid "Post shown"
+msgstr "Bejegyzés megjelenítve"
+
+msgid "Post hidden"
+msgstr "Bejegyzés elrejtve"
+
+msgid "Could not update post"
+msgstr "Nem sikerült frissíteni a bejegyzést"
+
+msgid "Post updated"
+msgstr "Bejegyzés frissítve"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "Biztosan törölni szeretné ezt a bejegyzést?"
+
+msgid "Post deleted"
+msgstr "Bejegyzés törölve"
+
+msgid "Could not delete post"
+msgstr "Nem sikerült törölni a bejegyzést"
+
+msgid "Untitled thread"
+msgstr "Névtelen szál"
+
+msgid "Could not retrieve threads"
+msgstr "Nem sikerült lekérni a szálakat"
+
+msgid "Post moved"
+msgstr "Bejegyzés áthelyezve"
+
+msgid "Could not move post"
+msgstr "Nem sikerült áthelyezni a bejegyzést"
+
+msgid "Revision request removed"
+msgstr "Felülvizsgálati kérés eltávolítva"
+
+msgid "Could not update revision request"
+msgstr "Nem sikerült frissíteni a felülvizsgálati kérést"
+
+msgid "Are you sure you want to report this post?"
+msgstr "Biztosan jelenteni szeretné ezt a bejegyzést?"
+
+msgid "Could not report post"
+msgstr "Nem sikerült jelenteni a bejegyzést"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "Biztosan törölni szeretné ezt a mellékletet?"
+
+msgid "Attachment deleted"
+msgstr "Melléklet törölve"
+
+msgid "Could not delete attachment"
+msgstr "Nem sikerült törölni a mellékletet"
+
+msgid "Thread title"
+msgstr "Szál címe"
+
+msgid "Sticky thread"
+msgstr "Kitűzött szál"
+
+msgid "Attach files"
+msgstr "Fájlok csatolása"
+
+msgid "Attachments are disabled for this forum"
+msgstr "A csatolmányok le vannak tiltva ebben a fórumban"
+
+msgid "The forum is not open yet."
+msgstr "A fórum még nem nyitott."
+
+msgid "The forum is closed."
+msgstr "A fórum le van zárva."
+
+msgid "The forum is locked."
+msgstr "A fórum zárolva van."
+
+msgid "New threads are not allowed in this forum."
+msgstr "Ebben a fórumban nem hozhatók létre új témák."
+
+msgid "Thread created"
+msgstr "Téma létrehozva"
+
+msgid "Could not create thread"
+msgstr "Nem sikerült létrehozni a témát"
+
+msgid "Back to posts"
+msgstr "Vissza a hozzászólásokhoz"
+
+msgid "This reply will be stored as a revision."
+msgstr "Ez a válasz verzióként lesz elmentve."
+
+msgid "Post reply"
+msgstr "Válasz küldése"
+
+msgid "The thread is locked."
+msgstr "A téma zárolva van."
+
+msgid "Reply added"
+msgstr "Válasz hozzáadva"
+
+msgid "Could not add reply"
+msgstr "Nem sikerült hozzáadni a választ"
+
+msgid "Add forum"
+msgstr "Fórum hozzáadása"
+
+msgid "No forums found"
+msgstr "Nem található fórum"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "Hozzon létre egy fórumkategóriát vagy fórumot a beszélgetések megkezdéséhez."
+
+msgid "Locked"
+msgstr "Zárolva"
+
+msgid "No forums in this category"
+msgstr "Nincsenek fórumok ebben a kategóriában"
+
+msgid "Posts require approval"
+msgstr "A hozzászólások jóváhagyást igényelnek"
+
+msgid "Forum for current group"
+msgstr "Fórum az aktuális csoporthoz"
+
+msgid "Group forum visibility"
+msgstr "Csoportfórum láthatósága"
+
+msgid "No category"
+msgstr "Nincs kategória"
+
+msgid "Could not retrieve forums"
+msgstr "Nem sikerült lekérni a fórumokat"
+
+msgid "Forum category updated"
+msgstr "Fórumkategória frissítve"
+
+msgid "Forum category created"
+msgstr "Fórumkategória létrehozva"
+
+msgid "Could not save forum category"
+msgstr "Nem sikerült menteni a fórumkategóriát"
+
+msgid "Forum updated"
+msgstr "Fórum frissítve"
+
+msgid "Forum created"
+msgstr "Fórum létrehozva"
+
+msgid "Could not save forum"
+msgstr "Nem sikerült menteni a fórumot"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "Biztosan törölni szeretné ezt a fórumkategóriát?"
+
+msgid "Could not delete forum category"
+msgstr "Nem sikerült törölni a fórumkategóriát"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "Biztosan törölni szeretné ezt a fórumot?"
+
+msgid "Could not delete forum"
+msgstr "Nem sikerült törölni a fórumot"
+
+msgid "Forum category unlocked"
+msgstr "Fórumkategória feloldva"
+
+msgid "Forum category locked"
+msgstr "Fórumkategória zárolva"
+
+msgid "Could not update forum category"
+msgstr "Nem sikerült frissíteni a fórumkategóriát"
+
+msgid "Forum category shown"
+msgstr "Fórumkategória megjelenítve"
+
+msgid "Forum category hidden"
+msgstr "Fórumkategória elrejtve"
+
+msgid "Forum unlocked"
+msgstr "Fórum feloldva"
+
+msgid "Forum locked"
+msgstr "Fórum zárolva"
+
+msgid "Could not update forum"
+msgstr "Nem sikerült frissíteni a fórumot"
+
+msgid "Forum shown"
+msgstr "Fórum megjelenítve"
+
+msgid "Forum hidden"
+msgstr "Fórum elrejtve"
+
+msgid "Forum notifications enabled"
+msgstr "Fórum értesítések engedélyezve"
+
+msgid "Forum notifications disabled"
+msgstr "Fórum értesítések letiltva"
+
+msgid "Could not update forum notification"
+msgstr "Nem sikerült frissíteni a fórum értesítését"
+
+msgid "Forum category moved"
+msgstr "Fórumkategória áthelyezve"
+
+msgid "Could not move forum category"
+msgstr "Nem sikerült áthelyezni a fórumkategóriát"
+
+msgid "Forum moved"
+msgstr "Fórum áthelyezve"
+
+msgid "Could not move forum"
+msgstr "Nem sikerült áthelyezni a fórumot"
+
+msgid "Back to forums"
+msgstr "Vissza a fórumokhoz"
+
+msgid "New thread"
+msgstr "Új téma"
+
+msgid "No threads found"
+msgstr "Nem található téma"
+
+msgid "Sticky"
+msgstr "Kiemelt"
+
+msgid "Graded"
+msgstr "Értékelt"
+
+msgid "Grade peers"
+msgstr "Társak értékelése"
+
+msgid "Move thread"
+msgstr "Téma áthelyezése"
+
+msgid "Target forum"
+msgstr "Célfórum"
+
+msgid "Target forum is required"
+msgstr "A célfórum megadása kötelező"
+
+msgid "Students"
+msgstr "Hallgatók"
+
+msgid "No students found"
+msgstr "Nem található hallgató"
+
+msgid "No peers available to grade."
+msgstr "Nincs elérhető értékelendő társ."
+
+msgid "Qualified"
+msgstr "Minősített"
+
+msgid "Not qualified"
+msgstr "Nem minősített"
+
+msgid "Could not retrieve thread grading"
+msgstr "Nem sikerült lekérni a téma értékelését"
+
+msgid "Thread grading updated"
+msgstr "Téma értékelése frissítve"
+
+msgid "Could not update thread grading"
+msgstr "Nem sikerült frissíteni a téma értékelését"
+
+msgid "Thread score saved"
+msgstr "Téma pontszáma mentve"
+
+msgid "Could not save thread score"
+msgstr "Nem sikerült menteni a téma pontszámát"
+
+msgid "Could not move thread"
+msgstr "Nem sikerült áthelyezni a témát"
+
+msgid "Thread updated"
+msgstr "Téma frissítve"
+
+msgid "Search term is too short"
+msgstr "A keresési kifejezés túl rövid"
+
+msgid "Could not search forums"
+msgstr "Nem sikerült keresni a fórumokban"
+
+msgid "Moderated"
+msgstr "Moderált"
+
+msgid "View threads"
+msgstr "Témák megtekintése"
 

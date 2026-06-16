@@ -1,0 +1,95 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+$strings['plugin_title'] = '從 Moodle 匯入';
+$strings['plugin_comment'] = '從 Moodle 資料庫與檔案執行匯入程序至 Chamilo。';
+
+$strings['MoodlePassword'] = 'Moodle 密碼';
+$strings['UninstallError'] = '解除安裝外掛程式時發生錯誤。';
+
+$strings['db_host'] = 'Moodle 資料庫主機';
+$strings['db_user'] = 'Moodle 資料庫使用者';
+$strings['db_password'] = 'Moodle 資料庫密碼';
+$strings['db_name'] = 'Moodle 資料庫名稱';
+$strings['user_filter'] = '使用者篩選條件';
+$strings['user_filter_help'] = '僅匯入使用者名稱以此字串為前綴的使用者。<br>課程匯入也受此設定影響，因為只會匯入有此使用者名稱前綴的使用者所選修的課程。';
+$strings['url_id'] = 'URL ID';
+$strings['url_id_help'] = '要儲存課程、使用者與學習時段的存取 URL ID（若使用多網址功能）。';
+$strings['moodle_path'] = 'Moodledata 路徑';
+$strings['moodle_path_help'] = 'moodledata 資料夾路徑。通常類似 <pre>/var/www/moodledata</pre>';
+
+// Tasks
+$strings['UsersTask'] = '使用者';
+$strings['CourseCategoriesTask'] = '課程類別';
+$strings['CoursesTask'] = '課程';
+$strings['CourseSectionsTask'] = '課程章節';
+$strings['CourseModulesLessonTask'] = '課程模組：課程';
+$strings['LessonPagesTask'] = '課程頁面';
+$strings['LessonPagesDocumentTask'] = '課程頁面：文件';
+$strings['FilesForLessonPagesTask'] = '課程頁面檔案';
+$strings['LessonPagesQuizTask'] = '課程頁面：題目';
+$strings['LessonPagesQuizQuestionTask'] = '題目頁面的題目';
+$strings['LessonAnswersTrueFalseTask'] = '是非題的答案';
+$strings['LessonAnswersMultipleChoiceTask'] = '單選題的答案';
+$strings['LessonAnswersMultipleAnswerTask'] = '多選題的答案';
+$strings['LessonAnswersMatchingTask'] = '配對題的答案';
+$strings['LessonAnswersEssayTask'] = '申論題的答案';
+$strings['LessonAnswersShortAnswerTask'] = '簡答題的答案';
+$strings['FilesForLessonAnswersTask'] = '課程答案檔案';
+$strings['CourseModulesQuizTask'] = '課程模組：測驗';
+$strings['CQuizTask'] = 'C 語言測驗';
+$strings['RoleAssignmentsTask'] = '角色指派';
+$strings['QuizzesTask'] = '測驗';
+$strings['FilesForQuizzesTask'] = '測驗檔案';
+$strings['QuestionCategoriesTask'] = '題目類別';
+$strings['QuestionsTask'] = '題目';
+$strings['QuestionMultiChoiceSingleTask'] = '單選題答案（單一選擇）';
+$strings['QuestionMultiChoiceMultipleTask'] = '單選題答案（多重選擇）';
+$strings['QuestionsTrueFalseTask'] = '是非題答案';
+$strings['QuestionShortAnswerTask'] = '簡答題答案';
+$strings['CourseModulesScormTask'] = 'SCORM 課程';
+$strings['ScormScoesTask'] = 'SCORM 項目';
+$strings['FilesForScormScoesTask'] = 'SCORM 項目檔案';
+$strings['UserSessionsTask'] = '使用者的課程學習時段';
+$strings['CourseIntroductionsTask'] = '課程簡介';
+$strings['FilesForCourseIntroductionsTask'] = '課程簡介檔案';
+$strings['FilesForCourseSectionsTask'] = '課程章節檔案';
+$strings['CourseModulesUrlTask'] = '課程模組：網址';
+$strings['UrlsTask'] = '網址';
+$strings['SortSectionModulesTask'] = '排序區塊中的模組';
+$strings['UsersScormsViewTask'] = '使用者 SCORM 檢視';
+$strings['UsersScormsProgressTask'] = 'SCORM 進度';
+$strings['UsersLearnPathsTask'] = '使用者學習路徑檢視';
+$strings['UsersLearnPathsLessonTimerTask'] = '課程計時器開始時間（學習路徑區塊）';
+$strings['QuizzesScoresTask'] = '更新學習路徑中的測驗分數';
+$strings['QuestionGapselectTask'] = '填空題答案';
+$strings['UsersLearnPathsLessonBranchTask'] = '學習路徑文件總時間的分支';
+$strings['UsersLearnPathsLessonAttemptsTask'] = '學習路徑測驗總時間的嘗試次數';
+$strings['UsersLearnPathsQuizzesTask'] = '測驗嘗試次數對應學習路徑測驗嘗試次數';
+$strings['UsersQuizzesAttemptsTask'] = '使用者測驗嘗試次數';
+$strings['UserQuestionAttemptsShortanswerTask'] = '使用者簡答題嘗試次數';
+$strings['UserQuestionAttemptsGapselectTask'] = '使用者填空題嘗試次數';
+$strings['UserQuestionAttemptsTruefalseTask'] = '使用者是非題嘗試次數';
+$strings['UsersLastLoginTask'] = '使用者最後登入';
+$strings['TrackLoginTask'] = '首次登入與最後登出';
+$strings['TrackCourseAccessTask'] = '使用者課程存取';
+$strings['UserLearnPathsProgressScript'] = '更新使用者的學習路徑進度。';
+$strings['UserScormsProgressScript'] = '更新使用者的 SCORM 進度。';
+
+$strings['InstallError'] = '安裝外掛程式時發生錯誤：%s';
+$strings['AdminIntro'] = '依序執行 Moodle 遷移任務。每個步驟僅在其父步驟完成後才會啟用。';
+$strings['MoodleDatabase'] = 'Moodle 資料庫';
+$strings['MoodledataPath'] = 'Moodledata 路徑';
+$strings['AccessUrlId'] = '存取網址 ID';
+$strings['Configured'] = '已設定';
+$strings['NotConfigured'] = '未設定';
+$strings['ConfigurePlugin'] = '設定外掛程式';
+$strings['MissingRequiredDatabaseConfiguration'] = '請先設定 Moodle 資料庫的主機、使用者與資料庫名稱，再執行遷移任務。';
+$strings['MissingMoodledataPathWarning'] = 'Moodledata 路徑為空。與檔案相關的任務在設定完成前可能會失敗。';
+$strings['InvalidMigrationAction'] = '無效的遷移動作。';
+$strings['InvalidSecurityToken'] = '無效的安全權杖。請重新載入頁面後再試一次。';
+$strings['MigrationTasks'] = '遷移任務';
+$strings['MaintenanceScripts'] = '維護指令碼';
+$strings['ExecutionOutput'] = '執行輸出';
+$strings['TaskAlreadyExecuted'] = '此任務或指令碼已執行過。';
+$strings['SelectTaskToRun'] = '請選擇要執行的遷移任務。輸出將顯示於此。';

@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "আন্তরিকতার সাথে"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "সূত্র নমুনা: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "ফর্মুলার নমুনা: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ভেরিয়েবলের পরিসর"
@@ -9726,6 +9726,9 @@ msgstr "অনুসন্ধানের ফলাফল:"
 msgid "Select a file"
 msgstr "একটি ফাইল নির্বাচন করুন"
 
+msgid "Select a file to insert into the editor."
+msgstr "সম্পাদকে সন্নিবেশ করার জন্য একটি ফাইল নির্বাচন করুন।"
+
 msgid "Warning - The FAQ file, located in the /home/ directory of your portal, is not writable. Your text will not be saved until the file permissions are changed."
 msgstr "সতর্কতা - আপনার পোর্টালের /home/ ডিরেক্টরিতে অবস্থিত FAQ ফাইল লেখার জন্য উপযুক্ত নয়। ফাইলের অনুমতি পরিবর্তন না করা পর্যন্ত আপনার টেক্সট সংরক্ষিত হবে না।"
 
@@ -15906,6 +15909,9 @@ msgstr "তারিখ ও সময়"
 msgid "Item"
 msgstr "আইটেম"
 
+msgid "Items"
+msgstr "আইটেম"
+
 msgid "Configure Dashboard Plugin"
 msgstr "ড্যাশবোর্ড প্লাগইন কনফিগার করুন"
 
@@ -17159,6 +17165,18 @@ msgstr "গ্রুপের সেশন"
 
 msgid "Courses in group"
 msgstr "গ্রুপের কোর্স"
+
+msgid "Courses on the platform"
+msgstr "প্ল্যাটফর্মের কোর্সসমূহ"
+
+msgid "%s courses"
+msgstr "%s কোর্স"
+
+msgid "%s sessions"
+msgstr "%s সেশন"
+
+msgid "Search by title or code"
+msgstr "শিরোনাম বা কোড দিয়ে অনুসন্ধান করুন"
 
 msgid "Users in group"
 msgstr "গ্রুপের ইউজার"
@@ -32163,6 +32181,9 @@ msgstr "অ্যাসাইনমেন্ট"
 msgid "Allowed file formats: %s"
 msgstr "অনুমোদিত ফাইল ফরম্যাট: %s"
 
+msgid "File manager"
+msgstr "ফাইল ম্যানেজার"
+
 msgid "File type not allowed. Allowed extensions: %s"
 msgstr "ফাইলের ধরন অনুমোদিত নয়। অনুমোদিত এক্সটেনশন: %s"
 
@@ -33876,6 +33897,2583 @@ msgstr "স্বাগতম"
 msgid "Welcome to Chamilo"
 msgstr "Chamilo-এ স্বাগতম"
 
+msgid "Check all unanswered questions below"
+msgstr "নিচের সব উত্তরহীন প্রশ্ন চেক করুন"
+
 msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
 msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> যদি এটি আপনার প্রথমবার Chamilo ব্যবহার করা হয়, তাহলে সাইড মেনু চেক করুন যাতে এর অনেক ফিচারের মধ্যে পথ খুঁজে পান। সাহায্য প্রয়োজন হলে, আপনি <a href=\"https://docs.chamilo.org\">আমাদের অফিসিয়াল ডকুমেন্টেশন</a> স্ট্যান্ডার্ড ডকুমেন্টেশনের জন্য সাহায্য করতে পারে, যখন আমাদের <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">অনলাইন ফোরাম</a> অন্য Chamilo ব্যবহারকারীদের থেকে ধারণা শেয়ার করতে এবং উত্তর খুঁজে পেতে সাহায্য করতে পারে।"
+
+msgid "Change password"
+msgstr "পাসওয়ার্ড পরিবর্তন করুন"
+
+msgid "Newest first"
+msgstr "নতুন প্রথমে"
+
+msgid "Oldest first"
+msgstr "পুরোনো প্রথমে"
+
+msgid "Title A–Z"
+msgstr "শিরোনাম A–Z"
+
+msgid "Title Z–A"
+msgstr "শিরোনাম Z–A"
+
+msgid "Send test email"
+msgstr "টেস্ট ইমেইল পাঠান"
+
+msgid "Show teachers"
+msgstr "শিক্ষক দেখান"
+
+msgid "Hide teachers"
+msgstr "শিক্ষক লুকান"
+
+msgid "Delete exercise attempts"
+msgstr "অনুশীলনের চেষ্টা মুছুন"
+
+msgid "Message sent successfully."
+msgstr "বার্তা সফলভাবে পাঠানো হয়েছে।"
+
+msgid "You cannot create a new course right now."
+msgstr "আপনি এখন নতুন কোর্স তৈরি করতে পারবেন না।"
+
+msgid "Unable to verify whether you can create a new course right now."
+msgstr "আপনি এখন নতুন কোর্স তৈরি করতে পারবেন কিনা তা যাচাই করা সম্ভব হয়নি।"
+
+msgid "Please try again later or contact the administrator."
+msgstr "অনুগ্রহ করে পরে আবার চেষ্টা করুন অথবা প্রশাসকের সাথে যোগাযোগ করুন।"
+
+msgid "You cannot create more courses at this time."
+msgstr "আপনি এই মুহূর্তে আরও কোর্স তৈরি করতে পারবেন না।"
+
+msgid "You already manage %d courses and your active service allows up to %d. To create another course, you need a higher service limit or reduce your current active courses."
+msgstr "আপনি ইতিমধ্যে %dটি কোর্স পরিচালনা করছেন এবং আপনার সক্রিয় সার্ভিস সর্বোচ্চ %dটি অনুমোদন করে। আরেকটি কোর্স তৈরি করতে আপনার উচ্চতর সার্ভিস সীমা প্রয়োজন অথবা বর্তমান সক্রিয় কোর্স কমাতে হবে।"
+
+msgid "You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now."
+msgstr "আপনি ইতিমধ্যে %dটি কোর্স পরিচালনা করছেন এবং প্ল্যাটফর্ম বর্তমানে আপনার অ্যাকাউন্টের জন্য সর্বোচ্চ %dটি অনুমোদন করে। আপনি এখন আরও কোর্স তৈরি করতে পারবেন না।"
+
+msgid "Add a class"
+msgstr "একটি ক্লাস যোগ করুন"
+
+msgid "Search classes"
+msgstr "ক্লাস অনুসন্ধান করুন"
+
+msgid "No classes found"
+msgstr "কোনো ক্লাস পাওয়া যায়নি"
+
+msgid "Import classes"
+msgstr "ক্লাস আমদানি করুন"
+
+msgid "Class users"
+msgstr "ক্লাস ব্যবহারকারী"
+
+msgid "%s classes imported"
+msgstr "%sটি ক্লাস আমদানি করা হয়েছে"
+
+msgid "%s user-class links imported"
+msgstr "%sটি ব্যবহারকারী-ক্লাস লিংক আমদানি করা হয়েছে"
+
+msgid "Hide comments"
+msgstr "মন্তব্য লুকান"
+
+msgid "Loading comments..."
+msgstr "মন্তব্য লোড হচ্ছে..."
+
+msgid "No comments yet."
+msgstr "এখনো কোনো মন্তব্য নেই।"
+
+msgid "A user with this username already exists"
+msgstr "এই ব্যবহারকারীর নামের একজন ব্যবহারকারী ইতিমধ্যে বিদ্যমান"
+
+msgid "Manage meetings, review recordings and update course-wide BBB settings from one place."
+msgstr "এক জায়গা থেকে মিটিং পরিচালনা করুন, রেকর্ডিং পর্যালোচনা করুন এবং কোর্স-ব্যাপী BBB সেটিংস আপডেট করুন।"
+
+msgid "Review the current defaults and propagate them to every course when needed."
+msgstr "বর্তমান ডিফল্টগুলি পর্যালোচনা করুন এবং প্রয়োজনে সেগুলি প্রতিটি কোর্সে প্রয়োগ করুন।"
+
+msgid "Filter the list by meeting date range."
+msgstr "মিটিং তারিখের সীমা অনুসারে তালিকা ফিল্টার করুন।"
+
+msgid "Review meeting history, participants and recording actions."
+msgstr "মিটিং ইতিহাস, অংশগ্রহণকারী এবং রেকর্ডিং কার্যক্রম পর্যালোচনা করুন।"
+
+msgid "Participants"
+msgstr "অংশগ্রহণকারী"
+
+msgid "CountUsers"
+msgstr "CountUsers"
+
+msgid "No data found"
+msgstr "কোনো তথ্য পাওয়া যায়নি"
+
+msgid "My justifications"
+msgstr "আমার যৌক্তিকতা"
+
+msgid "My services"
+msgstr "আমার সেবাসমূহ"
+
+msgid "Extra menu"
+msgstr "অতিরিক্ত মেনু"
+
+msgid "Pending tests"
+msgstr "মুলতুবি পরীক্ষাসমূহ"
+
+msgid "No specific language"
+msgstr "কোনো নির্দিষ্ট ভাষা নেই"
+
+msgid "Source Chamilo version"
+msgstr "উৎস Chamilo সংস্করণ"
+
+msgid "Exporting..."
+msgstr "রপ্তানি করা হচ্ছে..."
+
+msgid "Autosaved drafts available"
+msgstr "স্বয়ংক্রিয়ভাবে সংরক্ষিত খসড়া উপলব্ধ"
+
+msgid "Hide drafts"
+msgstr "খসড়া লুকান"
+
+msgid "Show drafts"
+msgstr "খসড়া দেখান"
+
+msgid "Drafts are stored only in this browser and are removed after saving the document."
+msgstr "খসড়াগুলি শুধুমাত্র এই ব্রাউজারে সংরক্ষিত হয় এবং নথি সংরক্ষণের পর মুছে ফেলা হয়।"
+
+msgid "Last saved"
+msgstr "সর্বশেষ সংরক্ষিত"
+
+msgid "Restore draft"
+msgstr "খসড়া পুনরুদ্ধার করুন"
+
+msgid "Delete draft"
+msgstr "খসড়া মুছুন"
+
+msgid "Information about indexing document content"
+msgstr "নথির বিষয়বস্তু ইনডেক্স করার তথ্য"
+
+msgid "When enabled, the document text is indexed by the search engine so users can find it from platform search."
+msgstr "সক্রিয় থাকলে, নথির টেক্সট সার্চ ইঞ্জিন দ্বারা ইনডেক্স করা হয় যাতে ব্যবহারকারীরা প্ল্যাটফর্ম সার্চ থেকে এটি খুঁজে পান।"
+
+msgid "The editor is not available."
+msgstr "এডিটরটি উপলব্ধ নয়।"
+
+msgid "Please place the cursor inside a paragraph first."
+msgstr "প্রথমে কার্সারটি একটি অনুচ্ছেদের ভিতরে রাখুন।"
+
+msgid "The selected paragraph is empty."
+msgstr "নির্বাচিত অনুচ্ছেদটি খালি।"
+
+msgid "Loading failed."
+msgstr "লোড করতে ব্যর্থ হয়েছে।"
+
+msgid "Add introduction"
+msgstr "ভূমিকা যোগ করুন"
+
+msgid "Course type"
+msgstr "কোর্সের ধরন"
+
+msgid "Choose whether this course uses the standard platform limits or benefits from a purchased service."
+msgstr "এই কোর্সটি স্ট্যান্ডার্ড প্ল্যাটফর্ম সীমা ব্যবহার করবে নাকি ক্রয়কৃত সেবার সুবিধা নেবে তা নির্বাচন করুন।"
+
+msgid "Standard course"
+msgstr "স্ট্যান্ডার্ড কোর্স"
+
+msgid "Use the standard platform limits."
+msgstr "স্ট্যান্ডার্ড প্ল্যাটফর্ম সীমা ব্যবহার করুন।"
+
+msgid "Selected"
+msgstr "নির্বাচিত"
+
+msgid "Hosting limit"
+msgstr "হোস্টিং সীমা"
+
+msgid "Document quota"
+msgstr "নথির কোটা"
+
+msgid "The standard course limit has been reached."
+msgstr "স্ট্যান্ডার্ড কোর্স সীমা পৌঁছে গেছে।"
+
+msgid "Use the benefits granted by this service."
+msgstr "এই সেবা দ্বারা প্রদত্ত সুবিধাগুলি ব্যবহার করুন।"
+
+msgid "Courses with these benefits"
+msgstr "এই সুবিধাসমূহসহ কোর্সসমূহ"
+
+msgid "Active service"
+msgstr "সক্রিয় সেবা"
+
+msgid "Buy service"
+msgstr "সেবা কিনুন"
+
+msgid "Select an available course type before creating the course."
+msgstr "কোর্স তৈরি করার আগে একটি উপলব্ধ কোর্সের ধরন নির্বাচন করুন।"
+
+msgid "users"
+msgstr "ব্যবহারকারী"
+
+msgid "You need to buy this service before using these benefits."
+msgstr "এই সুবিধাগুলি ব্যবহার করার আগে আপনাকে এই সেবাটি কিনতে হবে।"
+
+msgid "You already used all courses available with this service."
+msgstr "আপনি ইতিমধ্যে এই সেবার সাথে উপলব্ধ সব কোর্স ব্যবহার করেছেন।"
+
+msgid "This option is not available."
+msgstr "এই অপশনটি উপলব্ধ নয়।"
+
+msgid "This field is required"
+msgstr "এই ক্ষেত্রটি আবশ্যক"
+
+msgid "Show less"
+msgstr "কম দেখান"
+
+msgid "Show full description"
+msgstr "পূর্ণ বিবরণ দেখান"
+
+msgid "Virtual keyboard"
+msgstr "ভার্চুয়াল কীবোর্ড"
+
+msgid "Backspace"
+msgstr "ব্যাকস্পেস"
+
+msgid "Space"
+msgstr "স্পেস"
+
+msgid "Learning path only visible to selected learners"
+msgstr "শুধুমাত্র নির্বাচিত শিক্ষার্থীদের জন্য দৃশ্যমান শেখার পথ"
+
+msgid "Create course"
+msgstr "কোর্স তৈরি করুন"
+
+msgid "Tour"
+msgstr "ট্যুর"
+
+msgid "Are you sure you want to delete this comment?"
+msgstr "আপনি কি নিশ্চিতভাবে এই মন্তব্যটি মুছে ফেলতে চান?"
+
+msgid "No posts found"
+msgstr "কোনো পোস্ট পাওয়া যায়নি"
+
+msgid "No communities"
+msgstr "কোনো কমিউনিটি নেই"
+
+msgid "No friends found"
+msgstr "কোনো বন্ধু পাওয়া যায়নি"
+
+msgid "Visual overview of your skills"
+msgstr "আপনার দক্ষতার ভিজ্যুয়াল ওভারভিউ"
+
+msgid "Compare your progress"
+msgstr "আপনার অগ্রগতি তুলনা করুন"
+
+msgid "Please enter a search term."
+msgstr "অনুগ্রহ করে একটি অনুসন্ধান শব্দ লিখুন।"
+
+msgid "Enter captcha code"
+msgstr "ক্যাপচা কোড লিখুন"
+
+msgid "Refresh captcha"
+msgstr "ক্যাপচা রিফ্রেশ করুন"
+
+msgid "Captcha is temporarily blocked. Please try again later."
+msgstr "ক্যাপচা সাময়িকভাবে ব্লক করা হয়েছে। অনুগ্রহ করে পরে আবার চেষ্টা করুন।"
+
+msgid "Item Details"
+msgstr "আইটেমের বিবরণ"
+
+msgid "Open File"
+msgstr "ফাইল খুলুন"
+
+msgid "Selection"
+msgstr "নির্বাচন"
+
+msgid "Remove selection context"
+msgstr "নির্বাচনের প্রসঙ্গ সরান"
+
+msgid "Source document"
+msgstr "উৎস নথি"
+
+msgid "Use the current course context"
+msgstr "বর্তমান কোর্স প্রসঙ্গ ব্যবহার করুন"
+
+msgid "Loading documents..."
+msgstr "নথি লোড হচ্ছে..."
+
+msgid "No compatible PDF or TXT document was found in this course."
+msgstr "এই কোর্সে কোনো সামঞ্জস্যপূর্ণ PDF বা TXT নথি পাওয়া যায়নি।"
+
+msgid "Select a PDF or TXT document to generate terms only from that document."
+msgstr "শুধুমাত্র সেই নথির বিষয়বস্তু থেকে টার্ম তৈরি করতে একটি PDF বা TXT নথি নির্বাচন করুন।"
+
+msgid "Confidentiality warning"
+msgstr "গোপনীয়তার সতর্কতা"
+
+msgid "When a document is selected, the prompt is fixed so the generation uses only that document content."
+msgstr "যখন একটি নথি নির্বাচন করা হয়, প্রম্পট স্থির করা হয় যাতে জেনারেশন শুধুমাত্র সেই নথির বিষয়বস্তু ব্যবহার করে।"
+
+msgid "No document-processing AI providers available."
+msgstr "কোনো ডকুমেন্ট-প্রসেসিং AI প্রদানকারী উপলব্ধ নেই।"
+
+msgid "Failed to save signature. Please try again."
+msgstr "স্বাক্ষর সংরক্ষণ করতে ব্যর্থ। অনুগ্রহ করে আবার চেষ্টা করুন।"
+
+msgid "Select and move"
+msgstr "নির্বাচন এবং সরান"
+
+msgid "Freehand"
+msgstr "ফ্রিহ্যান্ড"
+
+msgid "Stroke"
+msgstr "স্ট্রোক"
+
+msgid "Fill"
+msgstr "পূরণ"
+
+msgid "Import SVG"
+msgstr "SVG আমদানি করুন"
+
+msgid "Import image"
+msgstr "ছবি আমদানি করুন"
+
+msgid "Click the drawing area to place this text"
+msgstr "এই টেক্সট স্থাপন করতে ড্রয়িং এরিয়ায় ক্লিক করুন"
+
+msgid "Draw a new SVG, import an existing SVG or embed an image, then save it as a reusable document."
+msgstr "একটি নতুন SVG আঁকুন, একটি বিদ্যমান SVG আমদানি করুন অথবা একটি ছবি এম্বেড করুন, তারপর এটি পুনরায় ব্যবহারযোগ্য নথি হিসেবে সংরক্ষণ করুন।"
+
+msgid "Use Select and move to reposition or resize elements added in this editor."
+msgstr "এই এডিটরে যোগ করা উপাদানগুলো পুনঃস্থাপন বা আকার পরিবর্তন করতে নির্বাচন এবং সরান ব্যবহার করুন।"
+
+msgid "Stroke width"
+msgstr "স্ট্রোকের প্রস্থ"
+
+msgid "Transparent fill"
+msgstr "স্বচ্ছ পূরণ"
+
+msgid "Invalid id"
+msgstr "অবৈধ আইডি"
+
+msgid "Unable to load the drawing"
+msgstr "ড্রয়িং লোড করা সম্ভব হয়নি"
+
+msgid "Only PNG, JPG, WEBP or GIF images are supported."
+msgstr "শুধুমাত্র PNG, JPG, WEBP বা GIF ছবি সমর্থিত।"
+
+msgid "Unable to read the image file."
+msgstr "ছবির ফাইল পড়া সম্ভব হয়নি।"
+
+msgid "Only SVG files are supported."
+msgstr "শুধুমাত্র SVG ফাইল সমর্থিত।"
+
+msgid "The SVG file is empty or invalid."
+msgstr "SVG ফাইল খালি বা অবৈধ।"
+
+msgid "Unable to read the SVG file."
+msgstr "SVG ফাইল পড়া সম্ভব হয়নি।"
+
+msgid "The drawing is empty or invalid."
+msgstr "ড্রয়িং খালি বা অবৈধ।"
+
+msgid "Unable to save the drawing"
+msgstr "ড্রয়িং সংরক্ষণ করা সম্ভব হয়নি"
+
+msgid "Information about AI-assisted documents"
+msgstr "AI-সহায়তাকৃত নথি সম্পর্কে তথ্য"
+
+msgid "Location"
+msgstr "অবস্থান"
+
+msgid "Cloud link"
+msgstr "ক্লাউড লিংক"
+
+msgid "Add a link to a cloud document, such as Google Drive or Google Docs."
+msgstr "Google Drive বা Google Docs-এর মতো ক্লাউড ডকুমেন্টের লিংক যোগ করুন।"
+
+msgid "Add cloud link"
+msgstr "ক্লাউড লিংক যোগ করুন"
+
+msgid "Document title"
+msgstr "ডকুমেন্টের শিরোনাম"
+
+msgid "Document options change how uploaded files are processed after saving."
+msgstr "ডকুমেন্ট অপশনগুলো আপলোড করা ফাইলগুলো সংরক্ষণের পর কীভাবে প্রক্রিয়াজাত করা হবে তা নির্ধারণ করে।"
+
+msgid "Information about uncompressing zip files"
+msgstr "জিপ ফাইল আনকম্প্রেস করার তথ্য"
+
+msgid "When enabled, ZIP files are extracted into the current document folder after upload."
+msgstr "সক্রিয় থাকলে, আপলোডের পর জিপ ফাইলগুলো বর্তমান ডকুমেন্ট ফোল্ডারে এক্সট্র্যাক্ট করা হবে।"
+
+msgid "The title is required."
+msgstr "শিরোনাম আবশ্যক।"
+
+msgid "The URL is required."
+msgstr "URL আবশ্যক।"
+
+msgid "The destination folder is missing."
+msgstr "গন্তব্য ফোল্ডার পাওয়া যায়নি।"
+
+msgid "Unable to create cloud link."
+msgstr "ক্লাউড লিংক তৈরি করা সম্ভব হয়নি।"
+
+msgid "Copy to My Files"
+msgstr "আমার ফাইলে কপি করুন"
+
+msgid "Used space"
+msgstr "ব্যবহৃত স্থান"
+
+msgid "Available space"
+msgstr "উপলব্ধ স্থান"
+
+msgid "Available percentage"
+msgstr "উপলব্ধ শতাংশ"
+
+msgid "Cloud links cannot be downloaded."
+msgstr "ক্লাউড লিংক ডাউনলোড করা যাবে না।"
+
+msgid "Could not copy the file to My Files"
+msgstr "ফাইলটি আমার ফাইলে কপি করা সম্ভব হয়নি"
+
+msgid "File copied to My Files"
+msgstr "ফাইলটি আমার ফাইলে কপি করা হয়েছে"
+
+msgid "Checking course creation options..."
+msgstr "কোর্স তৈরির অপশনগুলো পরীক্ষা করা হচ্ছে..."
+
+msgid "You cannot create more courses right now."
+msgstr "আপনি এখন আরও কোর্স তৈরি করতে পারবেন না।"
+
+msgid "AI analyzer"
+msgstr "AI বিশ্লেষক"
+
+msgid "Expand all"
+msgstr "সব প্রসারিত করুন"
+
+msgid "Collapse all"
+msgstr "সব সংকুচিত করুন"
+
+msgid "Review your active service benefits, purchase history and available receipts."
+msgstr "আপনার সক্রিয় সেবার সুবিধা, ক্রয়ের ইতিহাস এবং উপলব্ধ রসিদ পর্যালোচনা করুন।"
+
+msgid "Active services"
+msgstr "সক্রিয় সেবাসমূহ"
+
+msgid "No active services"
+msgstr "কোনো সক্রিয় সেবা নেই"
+
+msgid "Valid until"
+msgstr "বৈধ থাকবে"
+
+msgid "Recurring payment"
+msgstr "পুনরাবৃত্ত পেমেন্ট"
+
+msgid "Next charge"
+msgstr "পরবর্তী চার্জ"
+
+msgid "Enable auto billing"
+msgstr "অটো বিলিং সক্রিয় করুন"
+
+msgid "Cancel auto billing"
+msgstr "অটো বিলিং বাতিল করুন"
+
+msgid "Granted benefits"
+msgstr "প্রদত্ত সুবিধাসমূহ"
+
+msgid "Purchase history"
+msgstr "ক্রয়ের ইতিহাস"
+
+msgid "No purchases yet"
+msgstr "এখনো কোনো ক্রয় নেই"
+
+msgid "Product"
+msgstr "পণ্য"
+
+msgid "Reference"
+msgstr "রেফারেন্স"
+
+msgid "Amount"
+msgstr "পরিমাণ"
+
+msgid "Receipt"
+msgstr "রসিদ"
+
+msgid "Unable to load your services right now."
+msgstr "এখন আপনার সেবা লোড করা সম্ভব হয়নি।"
+
+msgid "Auto billing enabled"
+msgstr "অটো বিলিং সক্রিয় করা হয়েছে"
+
+msgid "Auto billing suspended"
+msgstr "অটো বিলিং স্থগিত করা হয়েছে"
+
+msgid "Auto billing cancelled"
+msgstr "অটো বিলিং বাতিল করা হয়েছে"
+
+msgid "Auto billing disabled"
+msgstr "অটো বিলিং নিষ্ক্রিয় করা হয়েছে"
+
+msgid "Cancel auto billing for this service?"
+msgstr "এই সেবার জন্য অটো বিলিং বাতিল করবেন?"
+
+msgid "Preview class members and courses"
+msgstr "ক্লাস সদস্য ও কোর্সের পূর্বরূপ দেখুন"
+
+msgid "Please select a CSV file to import."
+msgstr "অনুগ্রহ করে ইম্পোর্ট করার জন্য একটি CSV ফাইল নির্বাচন করুন।"
+
+msgid "%d user-class links imported"
+msgstr "%d ব্যবহারকারী-ক্লাস লিংক ইম্পোর্ট করা হয়েছে"
+
+msgid "The following errors occurred during import:"
+msgstr "ইম্পোর্টের সময় নিম্নলিখিত ত্রুটিগুলো ঘটেছে:"
+
+msgid "CSV file"
+msgstr "CSV ফাইল"
+
+msgid "Remove user from all group-related entities if not in the list"
+msgstr "তালিকায় না থাকলে সব গ্রুপ-সম্পর্কিত সত্তা থেকে ব্যবহারকারীকে সরিয়ে দিন"
+
+msgid "UserName"
+msgstr "ব্যবহারকারীর নাম"
+
+msgid "ClassName"
+msgstr "ক্লাসের নাম"
+
+msgid "are required for each row."
+msgstr "প্রতিটি সারির জন্য আবশ্যক।"
+
+msgid "title"
+msgstr "শিরোনাম"
+
+msgid "is required."
+msgstr "আবশ্যক।"
+
+msgid "description"
+msgstr "বিবরণ"
+
+msgid "are optional."
+msgstr "ঐচ্ছিক।"
+
+msgid "Are you sure you want to remove this user from the class?"
+msgstr "আপনি কি নিশ্চিত যে আপনি এই ব্যবহারকারীকে ক্লাস থেকে সরাতে চান?"
+
+msgid "Users in class"
+msgstr "ক্লাসের ব্যবহারকারীগণ"
+
+msgid "Remove user"
+msgstr "ব্যবহারকারী সরান"
+
+msgid "Class not found"
+msgstr "ক্লাস পাওয়া যায়নি"
+
+msgid "Class overview"
+msgstr "ক্লাসের সারসংক্ষেপ"
+
+msgid "Back to classes"
+msgstr "ক্লাসে ফিরে যান"
+
+msgid "Search members or courses"
+msgstr "সদস্য বা কোর্স খুঁজুন"
+
+msgid "Search by name, email, username or course title"
+msgstr "নাম, ইমেইল, ব্যবহারকারীর নাম বা কোর্সের শিরোনাম দিয়ে খুঁজুন"
+
+msgid "Class members"
+msgstr "ক্লাসের সদস্যগণ"
+
+msgid "No email"
+msgstr "কোনো ইমেইল নেই"
+
+msgid "No members found"
+msgstr "কোনো সদস্য পাওয়া যায়নি"
+
+msgid "No courses found"
+msgstr "কোনো কোর্স পাওয়া যায়নি"
+
+msgid "The end date must be after the start date."
+msgstr "শেষের তারিখ শুরুর তারিখের পর হতে হবে।"
+
+msgid "Always visible"
+msgstr "সবসময় দৃশ্যমান"
+
+msgid "No end date"
+msgstr "কোনো শেষ তারিখ নেই"
+
+msgid "No restriction"
+msgstr "কোনো সীমাবদ্ধতা নেই"
+
+msgid "Missing learning path or course identifier"
+msgstr "লার্নিং পাথ বা কোর্স শনাক্তকারী অনুপস্থিত"
+
+msgid "Select a user or a group first"
+msgstr "প্রথমে একজন ব্যবহারকারী বা গ্রুপ নির্বাচন করুন"
+
+msgid "Remove all date restrictions for this learning path?"
+msgstr "এই লার্নিং পাথের সকল তারিখ সীমাবদ্ধতা সরান?"
+
+msgid "Advanced learning path access"
+msgstr "উন্নত লার্নিং পাথ অ্যাক্সেস"
+
+msgid "Remove date restrictions"
+msgstr "তারিখ সীমাবদ্ধতা সরান"
+
+msgid "Search by name, email, username or group"
+msgstr "নাম, ইমেইল, ব্যবহারকারীর নাম বা গ্রুপ দিয়ে খুঁজুন"
+
+msgid "Edit user restriction"
+msgstr "ব্যবহারকারীর সীমাবদ্ধতা সম্পাদনা করুন"
+
+msgid "Edit group restriction"
+msgstr "গ্রুপের সীমাবদ্ধতা সম্পাদনা করুন"
+
+msgid "Select a user or group"
+msgstr "একজন ব্যবহারকারী বা গ্রুপ নির্বাচন করুন"
+
+msgid "Save restriction"
+msgstr "সীমাবদ্ধতা সংরক্ষণ করুন"
+
+msgid "members"
+msgstr "সদস্যগণ"
+
+msgid "Create Assignment"
+msgstr "অ্যাসাইনমেন্ট তৈরি করুন"
+
+msgid "The submission deadline has passed. You can no longer submit."
+msgstr "জমা দেওয়ার সময়সীমা অতিক্রান্ত হয়েছে। আপনি আর জমা দিতে পারবেন না।"
+
+msgid "Mailing cannot be combined with other recipients."
+msgstr "মেইলিং অন্যান্য প্রাপকদের সাথে একত্রিত করা যাবে না।"
+
+msgid "Social map"
+msgstr "সামাজিক মানচিত্র"
+
+msgid "The map plugin is not enabled or configured."
+msgstr "মানচিত্র প্লাগইন সক্রিয় বা কনফিগার করা নেই।"
+
+msgid "Some configured extra fields were not found"
+msgstr "কিছু কনফিগার করা অতিরিক্ত ফিল্ড পাওয়া যায়নি"
+
+msgid "No user locations were found."
+msgstr "কোনো ব্যবহারকারীর অবস্থান পাওয়া যায়নি।"
+
+msgid "OpenStreetMap needs coordinates to display an embedded marker. Address-only locations are listed below."
+msgstr "এমবেডেড মার্কার প্রদর্শনের জন্য OpenStreetMap-এর স্থানাঙ্ক প্রয়োজন। শুধুমাত্র ঠিকানাভিত্তিক অবস্থান নিচে তালিকাভুক্ত করা হয়েছে।"
+
+msgid "Locations"
+msgstr "অবস্থানসমূহ"
+
+msgid "Open map"
+msgstr "মানচিত্র খুলুন"
+
+msgid "Provider: OpenStreetMap"
+msgstr "প্রদানকারী: OpenStreetMap"
+
+msgid "Provider: Google Maps"
+msgstr "প্রদানকারী: Google Maps"
+
+msgid "Personal files"
+msgstr "ব্যক্তিগত ফাইলসমূহ"
+
+msgid "Upload image"
+msgstr "ছবি আপলোড করুন"
+
+msgid "Upload media"
+msgstr "মিডিয়া আপলোড করুন"
+
+msgid "Only image files are allowed in this upload screen."
+msgstr "এই আপলোড স্ক্রিনে শুধুমাত্র ছবির ফাইল অনুমোদিত।"
+
+msgid "Only audio and video files are allowed in this upload screen."
+msgstr "এই আপলোড স্ক্রিনে শুধুমাত্র অডিও এবং ভিডিও ফাইল অনুমোদিত।"
+
+msgid "Upload files to your personal storage."
+msgstr "আপনার ব্যক্তিগত স্টোরেজে ফাইল আপলোড করুন।"
+
+msgid "Linked"
+msgstr "লিঙ্ক করা হয়েছে"
+
+msgid "No audio or video files were found in this folder."
+msgstr "এই ফোল্ডারে কোনো অডিও বা ভিডিও ফাইল পাওয়া যায়নি।"
+
+msgid "No image files were found in this folder."
+msgstr "এই ফোল্ডারে কোনো ছবির ফাইল পাওয়া যায়নি।"
+
+msgid "No matching files were found in this folder."
+msgstr "এই ফোল্ডারে কোনো মিলে যাওয়া ফাইল পাওয়া যায়নি।"
+
+msgid "This file type is not allowed in this upload screen."
+msgstr "এই আপলোড স্ক্রিনে এই ধরনের ফাইল অনুমোদিত নয়।"
+
+msgid "Manage your personal files and course documents."
+msgstr "আপনার ব্যক্তিগত ফাইল এবং কোর্স ডকুমেন্ট পরিচালনা করুন।"
+
+msgid "DateValidity"
+msgstr "DateValidity"
+
+msgid "JustificationSaved"
+msgstr "JustificationSaved"
+
+msgid "ValidityDate"
+msgstr "ValidityDate"
+
+msgid "MyJustifications"
+msgstr "MyJustifications"
+
+msgid "Submission"
+msgstr "জমা"
+
+msgid "Use the filters above to narrow the list."
+msgstr "তালিকা সংকুচিত করতে উপরের ফিল্টারগুলো ব্যবহার করুন।"
+
+msgid "You are not allowed to see this page."
+msgstr "আপনার এই পৃষ্ঠাটি দেখার অনুমতি নেই।"
+
+msgid "plugin_title"
+msgstr "plugin_title"
+
+msgid "plugin_comment"
+msgstr "plugin_comment"
+
+msgid "Course tracking details"
+msgstr "কোর্স ট্র্যাকিং বিস্তারিত"
+
+msgid "Course activity statistics"
+msgstr "কোর্স কার্যকলাপ পরিসংখ্যান"
+
+msgid "mobile_phone_number"
+msgstr "mobile_phone_number"
+
+msgid "Allowed template syntax"
+msgstr "অনুমোদিত টেমপ্লেট সিনট্যাক্স"
+
+msgid "Functions"
+msgstr "ফাংশন"
+
+msgid "Available variables depend on the template type, for example {{ user.getUsername() }} or {{ user.getEmail() }}."
+msgstr "উপলব্ধ ভেরিয়েবল টেমপ্লেটের ধরনের উপর নির্ভর করে, উদাহরণস্বরূপ {{ user.getUsername() }} অথবা {{ user.getEmail() }}।"
+
+msgid "For security reasons, any other Twig function, filter (such as filter, map, reduce or sort) or PHP call is blocked."
+msgstr "নিরাপত্তার কারণে অন্য কোনো Twig ফাংশন, ফিল্টার (যেমন filter, map, reduce বা sort) অথবা PHP কল ব্লক করা হয়েছে।"
+
+msgid "Global administrator"
+msgstr "গ্লোবাল অ্যাডমিনিস্ট্রেটর"
+
+msgid "Session manager"
+msgstr "সেশন ম্যানেজার"
+
+msgid "Human resources manager"
+msgstr "মানব সম্পদ ম্যানেজার"
+
+msgid "Course teacher"
+msgstr "কোর্স শিক্ষক"
+
+msgid "Course student"
+msgstr "কোর্স শিক্ষার্থী"
+
+msgid "Platform reports"
+msgstr "প্ল্যাটফর্ম রিপোর্ট"
+
+msgid "Security reports"
+msgstr "নিরাপত্তা রিপোর্ট"
+
+msgid "Course reports"
+msgstr "কোর্স রিপোর্ট"
+
+msgid "Gradebook reports"
+msgstr "গ্রেডবুক রিপোর্ট"
+
+msgid "Social reports"
+msgstr "সোশ্যাল রিপোর্ট"
+
+msgid "Exports"
+msgstr "এক্সপোর্ট"
+
+msgid "Reports about platform-wide usage, users, courses and sessions."
+msgstr "প্ল্যাটফর্ম-ব্যাপী ব্যবহার, ব্যবহারকারী, কোর্স এবং সেশন সম্পর্কিত রিপোর্ট।"
+
+msgid "Audit and security-sensitive reports."
+msgstr "অডিট এবং নিরাপত্তা-সংবেদনশীল রিপোর্ট।"
+
+msgid "Reports scoped to courses managed by the user."
+msgstr "ব্যবহারকারী দ্বারা পরিচালিত কোর্সের সীমিত রিপোর্ট।"
+
+msgid "Reports related to learner activity and follow-up."
+msgstr "শিক্ষার্থীর কার্যকলাপ এবং অনুসরণ সম্পর্কিত রিপোর্ট।"
+
+msgid "Reports related to scores, certificates and gradebook data."
+msgstr "স্কোর, সার্টিফিকেট এবং গ্রেডবুক ডেটা সম্পর্কিত রিপোর্ট।"
+
+msgid "Reports and exports that generate downloadable files."
+msgstr "রিপোর্ট এবং এক্সপোর্ট যা ডাউনলোডযোগ্য ফাইল তৈরি করে।"
+
+msgid "Main platform statistics dashboard."
+msgstr "মূল প্ল্যাটফর্ম পরিসংখ্যান ড্যাশবোর্ড।"
+
+msgid "Number of courses and course distribution report."
+msgstr "কোর্সের সংখ্যা এবং কোর্স বিতরণ রিপোর্ট।"
+
+msgid "Platform-wide access to course tools."
+msgstr "কোর্স টুলে প্ল্যাটফর্ম-ব্যাপী অ্যাক্সেস।"
+
+msgid "Number of resources per tool."
+msgstr "প্রতি টুলে রিসোর্সের সংখ্যা।"
+
+msgid "Latest access to courses."
+msgstr "কোর্সে সর্বশেষ অ্যাক্সেস।"
+
+msgid "Course distribution by language."
+msgstr "ভাষা অনুসারে কোর্স বিতরণ।"
+
+msgid "Course usage report."
+msgstr "কোর্স ব্যবহার রিপোর্ট।"
+
+msgid "Platform user count report."
+msgstr "প্ল্যাটফর্ম ব্যবহারকারী সংখ্যা রিপোর্ট।"
+
+msgid "Recent logins chart."
+msgstr "সাম্প্রতিক লগইন চার্ট।"
+
+msgid "Login distribution by month."
+msgstr "মাস অনুসারে লগইন বিতরণ।"
+
+msgid "Login distribution by day."
+msgstr "দিন অনুসারে লগইন বিতরণ।"
+
+msgid "Login distribution by hour."
+msgstr "ঘণ্টা অনুসারে লগইন বিতরণ।"
+
+msgid "Users with profile picture."
+msgstr "প্রোফাইল ছবিযুক্ত ব্যবহারকারী।"
+
+msgid "Login report filtered by date."
+msgstr "তারিখ অনুসারে ফিল্টার করা লগইন প্রতিবেদন।"
+
+msgid "Users who have not logged in recently."
+msgstr "সম্প্রতি লগইন করেননি এমন ব্যবহারকারী।"
+
+msgid "Inactive or suspicious user accounts report."
+msgstr "নিষ্ক্রিয় বা সন্দেহজনক ব্যবহারকারী অ্যাকাউন্ট প্রতিবেদন।"
+
+msgid "Users activity statistics."
+msgstr "ব্যবহারকারীদের কার্যকলাপ পরিসংখ্যান।"
+
+msgid "Currently online users report."
+msgstr "বর্তমানে অনলাইন ব্যবহারকারী প্রতিবেদন।"
+
+msgid "New user registrations over time."
+msgstr "সময়ের সাথে নতুন ব্যবহারকারী নিবন্ধন।"
+
+msgid "Course and session subscriptions over time."
+msgstr "সময়ের সাথে কোর্স ও সেশন সাবস্ক্রিপশন।"
+
+msgid "Duplicate user detection and maintenance report."
+msgstr "ডুপ্লিকেট ব্যবহারকারী সনাক্তকরণ ও রক্ষণাবেক্ষণ প্রতিবেদন।"
+
+msgid "Platform user/session statistics."
+msgstr "প্ল্যাটফর্ম ব্যবহারকারী/সেশন পরিসংখ্যান।"
+
+msgid "Quarterly platform report."
+msgstr "ত্রৈমাসিক প্ল্যাটফর্ম প্রতিবেদন।"
+
+msgid "Activities audit"
+msgstr "কার্যক্রম অডিট"
+
+msgid "Audit report for important administrative and platform activities."
+msgstr "গুরুত্বপূর্ণ প্রশাসনিক ও প্ল্যাটফর্ম কার্যক্রমের অডিট প্রতিবেদন।"
+
+msgid "Social messages received report."
+msgstr "প্রাপ্ত সামাজিক বার্তার প্রতিবেদন।"
+
+msgid "Social messages sent report."
+msgstr "প্রেরিত সামাজিক বার্তার প্রতিবেদন।"
+
+msgid "Social contacts count report."
+msgstr "সামাজিক যোগাযোগ সংখ্যার প্রতিবেদন।"
+
+msgid "Sessions created over time."
+msgstr "সময়ের সাথে তৈরি সেশন।"
+
+msgid "Learning analytics dashboard."
+msgstr "শিক্ষণ বিশ্লেষণ ড্যাশবোর্ড।"
+
+msgid "Teacher time report."
+msgstr "শিক্ষক সময় প্রতিবেদন।"
+
+msgid "Teachers time by session report"
+msgstr "সেশন অনুসারে শিক্ষক সময় প্রতিবেদন"
+
+msgid "Teacher time report grouped by session."
+msgstr "সেশন অনুসারে গ্রুপ করা শিক্ষক সময় প্রতিবেদন।"
+
+msgid "Corporate learning analytics report."
+msgstr "কর্পোরেট শিক্ষণ বিশ্লেষণ প্রতিবেদন।"
+
+msgid "Course learners tracking report."
+msgstr "কোর্স শিক্ষার্থী ট্র্যাকিং প্রতিবেদন।"
+
+msgid "Course activity statistics with connected and inactive users."
+msgstr "সংযুক্ত ও নিষ্ক্রিয় ব্যবহারকারীসহ কোর্স কার্যকলাপ পরিসংখ্যান।"
+
+msgid "Detailed tracking report for a learner inside a course."
+msgstr "কোর্সের ভিতরে একজন শিক্ষার্থীর বিস্তারিত ট্র্যাকিং প্রতিবেদন।"
+
+msgid "Course gradebook overview."
+msgstr "কোর্স গ্রেডবুক ওভারভিউ।"
+
+msgid "Gradebook statistics"
+msgstr "গ্রেডবুক পরিসংখ্যান"
+
+msgid "Gradebook statistics report."
+msgstr "গ্রেডবুক পরিসংখ্যান প্রতিবেদন।"
+
+msgid "Certificate report"
+msgstr "সনদ প্রতিবেদন"
+
+msgid "Certificate report for course gradebook."
+msgstr "কোর্স গ্রেডবুকের সনদ প্রতিবেদন।"
+
+msgid "User statistics"
+msgstr "ব্যবহারকারী পরিসংখ্যান"
+
+msgid "Course gradebook statistics for a user."
+msgstr "একজন ব্যবহারকারীর জন্য কোর্স গ্রেডবুক পরিসংখ্যান।"
+
+msgid "Personal statistics"
+msgstr "ব্যক্তিগত পরিসংখ্যান"
+
+msgid "Personal gradebook statistics."
+msgstr "ব্যক্তিগত গ্রেডবুক পরিসংখ্যান।"
+
+msgid "Reports catalog"
+msgstr "প্রতিবেদন ক্যাটালগ"
+
+msgid "Central catalog of available reports, roles and permission categories."
+msgstr "উপলব্ধ প্রতিবেদন, ভূমিকা ও অনুমতি বিভাগের কেন্দ্রীয় ক্যাটালগ।"
+
+msgid "Course log events"
+msgstr "কোর্স লগ ইভেন্ট"
+
+msgid "Detailed course tracking events."
+msgstr "বিস্তারিত কোর্স ট্র্যাকিং ইভেন্ট।"
+
+msgid "Course tool usage"
+msgstr "কোর্স টুল ব্যবহার"
+
+msgid "Course tracking report grouped by tools."
+msgstr "টুল অনুসারে গ্রুপ করা কোর্স ট্র্যাকিং প্রতিবেদন।"
+
+msgid "Course resource usage"
+msgstr "কোর্স রিসোর্স ব্যবহার"
+
+msgid "Course tracking report grouped by resources."
+msgstr "রিসোর্স অনুসারে গ্রুপ করা কোর্স ট্র্যাকিং প্রতিবেদন।"
+
+msgid "Course group tracking"
+msgstr "কোর্স গ্রুপ ট্র্যাকিং"
+
+msgid "Tracking report for course groups."
+msgstr "কোর্স গ্রুপের ট্র্যাকিং প্রতিবেদন।"
+
+msgid "Course session report"
+msgstr "কোর্স সেশন প্রতিবেদন"
+
+msgid "Tracking report for a course inside sessions."
+msgstr "সেশনের ভিতরে একটি কোর্সের ট্র্যাকিং প্রতিবেদন।"
+
+msgid "Learning path report"
+msgstr "শিক্ষণ পথ প্রতিবেদন"
+
+msgid "Learning path tracking report."
+msgstr "শিক্ষণ পথ ট্র্যাকিং রিপোর্ট।"
+
+msgid "Learning path results by user"
+msgstr "ব্যবহারকারী অনুসারে শিক্ষণ পথের ফলাফল"
+
+msgid "Learning path results grouped by user."
+msgstr "ব্যবহারকারী অনুসারে গ্রুপভিত্তিক শিক্ষণ পথের ফলাফল।"
+
+msgid "Exercises report"
+msgstr "অনুশীলন রিপোর্ট"
+
+msgid "Course exercises and exams tracking report."
+msgstr "কোর্স অনুশীলন ও পরীক্ষার ট্র্যাকিং রিপোর্ট।"
+
+msgid "Question report"
+msgstr "প্রশ্ন রিপোর্ট"
+
+msgid "Course question tracking report."
+msgstr "কোর্স প্রশ্ন ট্র্যাকিং রিপোর্ট।"
+
+msgid "Messages report"
+msgstr "বার্তা রিপোর্ট"
+
+msgid "Course messages tracking report."
+msgstr "কোর্স বার্তা ট্র্যাকিং রিপোর্ট।"
+
+msgid "Total time tracking report for course learners."
+msgstr "কোর্স শিক্ষার্থীদের জন্য মোট সময় ট্র্যাকিং রিপোর্ট।"
+
+msgid "Gradebook summary"
+msgstr "গ্রেডবুক সারাংশ"
+
+msgid "Summary view of gradebook results."
+msgstr "গ্রেডবুক ফলাফলের সারাংশ দৃশ্য।"
+
+msgid "Flat view"
+msgstr "ফ্ল্যাট দৃশ্য"
+
+msgid "Flat gradebook results view."
+msgstr "গ্রেডবুক ফলাফলের ফ্ল্যাট দৃশ্য।"
+
+msgid "Evaluation log"
+msgstr "মূল্যায়ন লগ"
+
+msgid "Change log for gradebook evaluations."
+msgstr "গ্রেডবুক মূল্যায়নের পরিবর্তন লগ।"
+
+msgid "Link log"
+msgstr "লিংক লগ"
+
+msgid "Change log for gradebook links."
+msgstr "গ্রেডবুক লিংকের পরিবর্তন লগ।"
+
+msgid "Result details"
+msgstr "ফলাফলের বিস্তারিত"
+
+msgid "Detailed view of a gradebook result."
+msgstr "গ্রেডবুক ফলাফলের বিস্তারিত দৃশ্য।"
+
+msgid "Personal certificates report."
+msgstr "ব্যক্তিগত সনদপত্র রিপোর্ট।"
+
+msgid "User move statistics"
+msgstr "ব্যবহারকারী স্থানান্তর পরিসংখ্যান"
+
+msgid "Report for user move and transfer statistics."
+msgstr "ব্যবহারকারী স্থানান্তর ও স্থানান্তর পরিসংখ্যানের রিপোর্ট।"
+
+msgid "User consent list"
+msgstr "ব্যবহারকারীর সম্মতি তালিকা"
+
+msgid "Report of users and consent status."
+msgstr "ব্যবহারকারী ও সম্মতি অবস্থার রিপোর্ট।"
+
+msgid "Special platform exports."
+msgstr "বিশেষ প্ল্যাটফর্ম রপ্তানি।"
+
+msgid "Export certificates"
+msgstr "সনদপত্র রপ্তানি"
+
+msgid "Export platform certificates."
+msgstr "প্ল্যাটফর্ম সনদপত্র রপ্তানি।"
+
+msgid "Export exercise results"
+msgstr "অনুশীলন ফলাফল রপ্তানি"
+
+msgid "Export exercise results from the platform."
+msgstr "প্ল্যাটফর্ম থেকে অনুশীলন ফলাফল রপ্তানি।"
+
+msgid "Course survey results and reporting."
+msgstr "কোর্স জরিপ ফলাফল ও রিপোর্টিং।"
+
+msgid "Attendance report"
+msgstr "উপস্থিতি রিপোর্ট"
+
+msgid "Course attendance tracking and reports."
+msgstr "কোর্স উপস্থিতি ট্র্যাকিং ও রিপোর্ট।"
+
+msgid "Exercises global report"
+msgstr "অনুশীলন গ্লোবাল রিপোর্ট"
+
+msgid "Global exercise results report for the course."
+msgstr "কোর্সের জন্য গ্লোবাল অনুশীলন ফলাফল রিপোর্ট।"
+
+msgid "Exercise report"
+msgstr "অনুশীলন রিপোর্ট"
+
+msgid "Detailed exercise report."
+msgstr "বিস্তারিত অনুশীলন রিপোর্ট।"
+
+msgid "Exercise history"
+msgstr "অনুশীলন ইতিহাস"
+
+msgid "Exercise attempt history."
+msgstr "অনুশীলন প্রচেষ্টার ইতিহাস।"
+
+msgid "Exercise results"
+msgstr "অনুশীলন ফলাফল"
+
+msgid "Exercise results and corrections."
+msgstr "অনুশীলন ফলাফল ও সংশোধন।"
+
+msgid "Question-level exercise statistics."
+msgstr "প্রশ্ন-স্তরের অনুশীলন পরিসংখ্যান।"
+
+msgid "Exercise statistics"
+msgstr "অনুশীলন পরিসংখ্যান"
+
+msgid "Exercise statistics page."
+msgstr "অনুশীলন পরিসংখ্যান পৃষ্ঠা।"
+
+msgid "Live exercise statistics"
+msgstr "লাইভ অনুশীলন পরিসংখ্যান"
+
+msgid "Live exercise statistics for teachers."
+msgstr "শিক্ষকদের জন্য লাইভ অনুশীলন পরিসংখ্যান।"
+
+msgid "Learning path statistics"
+msgstr "শিক্ষণ পথ পরিসংখ্যান"
+
+msgid "Learning path item statistics."
+msgstr "শিক্ষণ পথ আইটেম পরিসংখ্যান।"
+
+msgid "Learning path report inside a course."
+msgstr "কোর্সের ভিতরে শিক্ষণ পথ রিপোর্ট।"
+
+msgid "User skills report."
+msgstr "ব্যবহারকারীর দক্ষতা রিপোর্ট।"
+
+msgid "Scheduled or periodic export configuration."
+msgstr "নির্ধারিত বা পর্যায়ক্রমিক রপ্তানি কনফিগারেশন।"
+
+msgid "User export"
+msgstr "ব্যবহারকারী রপ্তানি"
+
+msgid "Export users from the platform."
+msgstr "প্ল্যাটফর্ম থেকে ব্যবহারকারী রপ্তানি করুন।"
+
+msgid "Not classified"
+msgstr "শ্রেণিবদ্ধ নয়"
+
+msgid "You have acquired the skill %s"
+msgstr "আপনি দক্ষতা %s অর্জন করেছেন"
+
+msgid "You have acquired the skill %s."
+msgstr "আপনি দক্ষতা %s অর্জন করেছেন।"
+
+msgid "Recover your password"
+msgstr "আপনার পাসওয়ার্ড পুনরুদ্ধার করুন"
+
+msgid "Disclaimer"
+msgstr "দাবিত্যাগ"
+
+msgid "This operation would exceed the limit of %d users allowed for this course."
+msgstr "এই অপারেশনটি এই কোর্সের জন্য অনুমোদিত %d ব্যবহারকারীর সীমা অতিক্রম করবে।"
+
+msgid "DefaultGroupCategory"
+msgstr "DefaultGroupCategory"
+
+msgid "LearningCalendar"
+msgstr "LearningCalendar"
+
+msgid "Choose how this user can authenticate on the platform."
+msgstr "ব্যবহারকারী প্ল্যাটফর্মে কীভাবে প্রমাণীকরণ করবেন তা নির্বাচন করুন।"
+
+msgid "Authentication methods"
+msgstr "প্রমাণীকরণ পদ্ধতি"
+
+msgid "Set password manually"
+msgstr "পাসওয়ার্ড ম্যানুয়ালি সেট করুন"
+
+msgid "Report role matrix"
+msgstr "রিপোর্ট রোল ম্যাট্রিক্স"
+
+msgid "Report permission categories"
+msgstr "রিপোর্ট অনুমতি বিভাগ"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs enforce the documented report role matrix."
+msgstr "এই রেজিস্ট্রি পরিচিত রিপোর্টিং পৃষ্ঠা, তাদের বিভাগ, ক্যানোনিক্যাল URL, লেগ্যাসি URL এবং প্রত্যাশিত রোল অডিয়েন্স তালিকাভুক্ত করে। ক্যানোনিক্যাল URL নথিভুক্ত রিপোর্ট রোল ম্যাট্রিক্স প্রয়োগ করে।"
+
+msgid "reports"
+msgstr "রিপোর্ট"
+
+msgid "Canonical URL"
+msgstr "ক্যানোনিক্যাল URL"
+
+msgid "Legacy URL"
+msgstr "লেগ্যাসি URL"
+
+msgid "Permission category"
+msgstr "অনুমতি বিভাগ"
+
+msgid "This matrix documents the expected audience for each report and is enforced by the canonical report entry point."
+msgstr "এই ম্যাট্রিক্স প্রতিটি রিপোর্টের জন্য প্রত্যাশিত অডিয়েন্স নথিভুক্ত করে এবং ক্যানোনিক্যাল রিপোর্ট এন্ট্রি পয়েন্ট দ্বারা প্রয়োগ করা হয়।"
+
+msgid "These keys group reports by access scope and are used by the report registry. They can later be mapped to finer-grained platform permissions."
+msgstr "এই কীগুলি অ্যাক্সেস স্কোপ অনুসারে রিপোর্ট গ্রুপ করে এবং রিপোর্ট রেজিস্ট্রি দ্বারা ব্যবহৃত হয়। পরে এগুলি আরও সূক্ষ্ম প্ল্যাটফর্ম অনুমতির সাথে ম্যাপ করা যেতে পারে।"
+
+msgid "Permission"
+msgstr "অনুমতি"
+
+msgid "Clear active session"
+msgstr "সক্রিয় সেশন পরিষ্কার করুন"
+
+msgid "Are you sure you want to clear this user active session?"
+msgstr "আপনি কি নিশ্চিত যে এই ব্যবহারকারীর সক্রিয় সেশন পরিষ্কার করতে চান?"
+
+msgid "Preview shown without course context. Some course-specific data may be unavailable."
+msgstr "কোর্স প্রসঙ্গ ছাড়াই প্রিভিউ দেখানো হয়েছে। কিছু কোর্স-নির্দিষ্ট ডেটা উপলব্ধ নাও হতে পারে।"
+
+msgid "Preview is not available for this question."
+msgstr "এই প্রশ্নের জন্য প্রিভিউ উপলব্ধ নয়।"
+
+msgid "Edition is not allowed without a course context."
+msgstr "কোর্স প্রসঙ্গ ছাড়া সংস্করণ অনুমোদিত নয়।"
+
+msgid "This plugin does not use regions."
+msgstr "এই প্লাগইন অঞ্চল ব্যবহার করে না।"
+
+msgid "No plugins with regions were found."
+msgstr "অঞ্চল সহ কোনো প্লাগইন পাওয়া যায়নি।"
+
+msgid "Freemium"
+msgstr "ফ্রিমিয়াম"
+
+msgid "Commercial service"
+msgstr "বাণিজ্যিক পরিষেবা"
+
+msgid "Commercial"
+msgstr "বাণিজ্যিক"
+
+msgid "100% free"
+msgstr "১০০% বিনামূল্যে"
+
+msgid "Displayed above the public login form."
+msgstr "পাবলিক লগইন ফর্মের উপরে প্রদর্শিত হয়।"
+
+msgid "Displayed below the public login form."
+msgstr "পাবলিক লগইন ফর্মের নিচে প্রদর্শিত হয়।"
+
+msgid "Displayed before the footer area."
+msgstr "ফুটার এলাকার আগে প্রদর্শিত হয়।"
+
+msgid "Displayed in the left footer column."
+msgstr "বাম ফুটার কলামে প্রদর্শিত হয়।"
+
+msgid "Displayed in the center footer column."
+msgstr "কেন্দ্রীয় ফুটার কলামে প্রদর্শিত হয়।"
+
+msgid "Displayed in the right footer column."
+msgstr "ডান ফুটার কলামে প্রদর্শিত হয়।"
+
+msgid "Showing all plugins."
+msgstr "সমস্ত প্লাগইন দেখানো হচ্ছে।"
+
+msgid "Some plugins are still pending functional verification."
+msgstr "কিছু প্লাগইন এখনো কার্যকরী যাচাইকরণের অপেক্ষায় আছে।"
+
+msgid "Show verified plugins only"
+msgstr "শুধুমাত্র যাচাইকৃত প্লাগইন দেখান"
+
+msgid "Showing verified plugins only."
+msgstr "শুধুমাত্র যাচাইকৃত প্লাগইন দেখানো হচ্ছে।"
+
+msgid "Pending plugins are temporarily hidden until they are adapted and tested."
+msgstr "অপেক্ষমাণ প্লাগইনগুলি অস্থায়ীভাবে লুকানো হয়েছে যতক্ষণ না সেগুলি অভিযোজিত এবং পরীক্ষিত হয়।"
+
+msgid "Show all plugins"
+msgstr "সমস্ত প্লাগইন দেখান"
+
+msgid "Official and free plugins are listed separately from plugins that may depend on commercial services or paid offers."
+msgstr "অফিসিয়াল এবং বিনামূল্যে প্লাগইনগুলি বাণিজ্যিক পরিষেবা বা অর্থপ্রদানের অফারের উপর নির্ভর করতে পারে এমন প্লাগইন থেকে আলাদাভাবে তালিকাভুক্ত করা হয়েছে।"
+
+msgid "Included free plugins"
+msgstr "অন্তর্ভুক্ত বিনামূল্যে প্লাগইন"
+
+msgid "Commercial and freemium plugins"
+msgstr "বাণিজ্যিক এবং ফ্রিমিয়াম প্লাগইন"
+
+msgid "All plugins"
+msgstr "সব প্লাগইন"
+
+msgid "No plugins were found for this category."
+msgstr "এই বিভাগের জন্য কোনো প্লাগইন পাওয়া যায়নি।"
+
+msgid "Search plugins"
+msgstr "প্লাগইন অনুসন্ধান করুন"
+
+msgid "Search by name or description"
+msgstr "নাম বা বিবরণ দিয়ে অনুসন্ধান করুন"
+
+msgid "Advanced filters"
+msgstr "উন্নত ফিল্টার"
+
+msgid "All statuses"
+msgstr "সব স্ট্যাটাস"
+
+msgid "All sources"
+msgstr "সব উৎস"
+
+msgid "All types"
+msgstr "সব ধরন"
+
+msgid "Installed plugins are shown first"
+msgstr "ইনস্টল করা প্লাগইনগুলো প্রথমে দেখানো হয়"
+
+msgid "No plugins match the current filters."
+msgstr "বর্তমান ফিল্টারের সাথে কোনো প্লাগইন মিলছে না।"
+
+msgid "Try clearing the search or changing the filters."
+msgstr "অনুসন্ধান মুছে ফেলুন অথবা ফিল্টার পরিবর্তন করুন।"
+
+msgid "README"
+msgstr "README"
+
+msgid "Invalid security token"
+msgstr "অবৈধ নিরাপত্তা টোকেন"
+
+msgid "Please select a destination session"
+msgstr "অনুগ্রহ করে একটি গন্তব্য সেশন নির্বাচন করুন"
+
+msgid "Cannot move this to the same session"
+msgstr "একই সেশনে স্থানান্তর করা যাবে না"
+
+msgid "The destination session must include the selected course"
+msgstr "গন্তব্য সেশনে নির্বাচিত কোর্স থাকতে হবে"
+
+msgid "The source session must include the selected course"
+msgstr "উৎস সেশনে নির্বাচিত কোর্স থাকতে হবে"
+
+msgid "No learners found"
+msgstr "কোনো শিক্ষার্থী পাওয়া যায়নি"
+
+msgid "Will be subscribed"
+msgstr "সাবস্ক্রাইব করা হবে"
+
+msgid "Subscribed"
+msgstr "সাবস্ক্রাইব করা হয়েছে"
+
+msgid "The move process has finished"
+msgstr "স্থানান্তর প্রক্রিয়া সম্পন্ন হয়েছে"
+
+msgid "Comparison finished. No data has been moved."
+msgstr "তুলনা সম্পন্ন হয়েছে। কোনো ডেটা স্থানান্তর করা হয়নি।"
+
+msgid "Move tracking data from the base course or a source session to another session. Use comparison first to review the affected learner data."
+msgstr "বেস কোর্স বা উৎস সেশন থেকে ট্র্যাকিং ডেটা অন্য সেশনে স্থানান্তর করুন। প্রভাবিত শিক্ষার্থীর ডেটা পর্যালোচনা করতে প্রথমে তুলনা চালান।"
+
+msgid "Search for a course or use the manual course ID field below."
+msgstr "একটি কোর্স অনুসন্ধান করুন অথবা নিচের ম্যানুয়াল কোর্স আইডি ফিল্ড ব্যবহার করুন।"
+
+msgid "Fallback when the course search is not available."
+msgstr "কোর্স অনুসন্ধান উপলব্ধ না থাকলে বিকল্প।"
+
+msgid "Load sessions"
+msgstr "সেশন লোড করুন"
+
+msgid "Selected course"
+msgstr "নির্বাচিত কোর্স"
+
+msgid "Choose the base course or the session where the tracking data currently exists."
+msgstr "বেস কোর্স বা সেশন নির্বাচন করুন যেখানে ট্র্যাকিং ডেটা বর্তমানে আছে।"
+
+msgid "Choose the session that will receive the tracking data."
+msgstr "সেশন নির্বাচন করুন যেখানে ট্র্যাকিং ডেটা গ্রহণ করা হবে।"
+
+msgid "Important"
+msgstr "গুরুত্বপূর্ণ"
+
+msgid "The move action updates existing tracking data. Run compare first and test this tool with a non-production course before moving real learner data."
+msgstr "স্থানান্তর কাজ বিদ্যমান ট্র্যাকিং ডেটা আপডেট করে। আসল শিক্ষার্থীর ডেটা স্থানান্তরের আগে প্রথমে তুলনা চালান এবং এই টুলটি নন-প্রোডাকশন কোর্স দিয়ে পরীক্ষা করুন।"
+
+msgid "No sessions found for this course"
+msgstr "এই কোর্সের জন্য কোনো সেশন পাওয়া যায়নি"
+
+msgid "Some users were ignored because they are not subscribed to this session."
+msgstr "কিছু ব্যবহারকারী উপেক্ষা করা হয়েছে কারণ তারা এই সেশনে সাবস্ক্রাইব করা নেই।"
+
+msgid "Remove selected user"
+msgstr "নির্বাচিত ব্যবহারকারী সরান"
+
+msgid "Add selected user"
+msgstr "নির্বাচিত ব্যবহারকারী যোগ করুন"
+
+msgid "No users from the selected list are subscribed to this session."
+msgstr "নির্বাচিত তালিকার কোনো ব্যবহারকারী এই সেশনে সাবস্ক্রাইব করা নেই।"
+
+msgid "No image"
+msgstr "কোনো ছবি নেই"
+
+msgid "Invalid URL."
+msgstr "অবৈধ URL।"
+
+msgid "This cloud document cannot be embedded."
+msgstr "এই ক্লাউড ডকুমেন্ট এম্বেড করা যাবে না।"
+
+msgid "Document not found"
+msgstr "ডকুমেন্ট পাওয়া যায়নি"
+
+msgid "File not found"
+msgstr "ফাইল পাওয়া যায়নি"
+
+msgid "This learning path is not available for your user at this time."
+msgstr "এই শিক্ষণ পথটি এই সময়ে আপনার ব্যবহারকারীর জন্য উপলব্ধ নয়।"
+
+msgid "StartDateMustBeBeforeTheEndDate"
+msgstr "StartDateMustBeBeforeTheEndDate"
+
+msgid "Next learning path"
+msgstr "পরবর্তী শিক্ষণ পথ"
+
+msgid "Select the learning path that will be available after this one."
+msgstr "শিক্ষণ পথ নির্বাচন করুন যেটি এর পরে উপলব্ধ হবে।"
+
+msgid "Create another learning path in this course to enable learning path flow."
+msgstr "শিক্ষণ পথ ফ্লো সক্রিয় করতে এই কোর্সে আরেকটি শিক্ষণ পথ তৈরি করুন।"
+
+msgid "Available from %s"
+msgstr "%s থেকে উপলব্ধ"
+
+msgid "Available until %s"
+msgstr "%s পর্যন্ত উপলব্ধ"
+
+msgid "Statistics reset date"
+msgstr "পরিসংখ্যান রিসেটের তারিখ"
+
+msgid "Last 24 hours"
+msgstr "গত ২৪ ঘণ্টা"
+
+msgid "This reset date is used as the reference date for the report. It does not delete historical tracking data."
+msgstr "এই রিসেট তারিখটি রিপোর্টের রেফারেন্স তারিখ হিসেবে ব্যবহৃত হয়। এটি ঐতিহাসিক ট্র্যাকিং ডেটা মুছে ফেলে না।"
+
+msgid "Since reset date"
+msgstr "রিসেট তারিখ থেকে"
+
+msgid "Users connected in the last 24 hours"
+msgstr "গত ২৪ ঘণ্টায় সংযুক্ত ব্যবহারকারী"
+
+msgid "Learners with at least one course access during the last 24 hours."
+msgstr "গত ২৪ ঘণ্টায় অন্তত একবার কোর্স অ্যাক্সেস করেছেন এমন শিক্ষার্থী।"
+
+msgid "Users connected in the last week"
+msgstr "গত সপ্তাহে সংযুক্ত ব্যবহারকারী"
+
+msgid "Learners with at least one course access during the last 7 days."
+msgstr "গত ৭ দিনে অন্তত একবার কোর্স অ্যাক্সেস করেছেন এমন শিক্ষার্থী।"
+
+msgid "Users connected in the last month"
+msgstr "গত মাসে সংযুক্ত ব্যবহারকারী"
+
+msgid "Learners with at least one course access during the last 30 days."
+msgstr "গত ৩০ দিনে অন্তত একবার কোর্স অ্যাক্সেস করেছেন এমন শিক্ষার্থী।"
+
+msgid "Not recently connected users"
+msgstr "সম্প্রতি সংযুক্ত নন এমন ব্যবহারকারী"
+
+msgid "Learners without course access since %s."
+msgstr "%s থেকে কোর্স অ্যাক্সেসবিহীন শিক্ষার্থী।"
+
+msgid "Recently used resources"
+msgstr "সম্প্রতি ব্যবহৃত রিসোর্স"
+
+msgid "Course tools/resources used since %s."
+msgstr "%s থেকে ব্যবহৃত কোর্স টুল/রিসোর্স।"
+
+msgid "%s %% of learners"
+msgstr "শিক্ষার্থীদের %s %%"
+
+msgid "Connections"
+msgstr "সংযোগ"
+
+msgid "Total connections"
+msgstr "মোট সংযোগ"
+
+msgid "Downloaded documents"
+msgstr "ডাউনলোড করা ডকুমেন্ট"
+
+msgid "List of documents downloaded by this learner in this course."
+msgstr "এই কোর্সে এই শিক্ষার্থীর ডাউনলোড করা ডকুমেন্টের তালিকা।"
+
+msgid "Forum topics"
+msgstr "ফোরাম টপিক"
+
+msgid "Forum topics opened by this learner in this course."
+msgstr "এই কোর্সে এই শিক্ষার্থীর খোলা ফোরাম টপিক।"
+
+msgid "Forum posts"
+msgstr "ফোরাম পোস্ট"
+
+msgid "Forum posts written by this learner in this course."
+msgstr "এই কোর্সে এই শিক্ষার্থীর লেখা ফোরাম পোস্ট।"
+
+msgid "Course connections"
+msgstr "কোর্স সংযোগ"
+
+msgid "Connection history for this learner in this course."
+msgstr "এই কোর্সে এই শিক্ষার্থীর সংযোগ ইতিহাস।"
+
+msgid "Resources used"
+msgstr "ব্যবহৃত রিসোর্স"
+
+msgid "Latest tools or resources used by this learner in this course."
+msgstr "এই কোর্সে এই শিক্ষার্থীর সর্বশেষ ব্যবহৃত টুল বা রিসোর্স।"
+
+msgid "Logout date"
+msgstr "লগআউট তারিখ"
+
+msgid "Imported Aiken quiz"
+msgstr "আমদানি করা আইকেন কুইজ"
+
+msgid "Only supported documents will be listed here."
+msgstr "শুধুমাত্র সমর্থিত ডকুমেন্ট এখানে তালিকাভুক্ত হবে।"
+
+msgid "Generated Aiken content"
+msgstr "উৎপন্ন আইকেন কনটেন্ট"
+
+msgid "Review the generated content before importing it as a new exercise."
+msgstr "নতুন অনুশীলন হিসেবে আমদানি করার আগে উৎপন্ন কনটেন্ট পর্যালোচনা করুন।"
+
+msgid "No documents available."
+msgstr "কোনো ডকুমেন্ট উপলব্ধ নেই।"
+
+msgid "yperbolic arctangent:\\t\\tarctanh(x)"
+msgstr "হাইপারবোলিক আর্কট্যানজেন্ট:\\t\\tarctanh(x)"
+
+msgid "Exercise"
+msgstr "অনুশীলন"
+
+msgid "OfficialCode"
+msgstr "অফিসিয়ালকোড"
+
+msgid "FirstName"
+msgstr "প্রথমনাম"
+
+msgid "LastName"
+msgstr "পদবি"
+
+msgid "LoginName"
+msgstr "লগইননাম"
+
+msgid "MinMinute"
+msgstr "মিনমিনিট"
+
+msgid "StartDate"
+msgstr "শুরুর তারিখ"
+
+msgid "EndDate"
+msgstr "শেষের তারিখ"
+
+msgid "CorrectionDate"
+msgstr "সংশোধনের তারিখ"
+
+msgid "NotValidated"
+msgstr "যাচাই করা হয়নি"
+
+msgid "PendingAttempts"
+msgstr "মুলতুবি প্রচেষ্টা"
+
+msgid "List of pending test attempts across your courses."
+msgstr "আপনার কোর্স জুড়ে মুলতুবি পরীক্ষার প্রচেষ্টার তালিকা।"
+
+msgid "User ID"
+msgstr "ব্যবহারকারী আইডি"
+
+msgid "QuestionType"
+msgstr "প্রশ্নের ধরন"
+
+msgid "QuestionsWithNoAutomaticCorrection"
+msgstr "স্বয়ংক্রিয় সংশোধনবিহীন প্রশ্ন"
+
+msgid "There are no pending tests."
+msgstr "কোনো মুলতুবি পরীক্ষা নেই।"
+
+msgid "%s results"
+msgstr "%s ফলাফল"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>ফর্ম পূরণ কার্যক্রমের উদাহরণ : শরীরের ভর সূচক গণনা করুন</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>বয়স</strong></td>            <td width=\"75%\" style=\"\">[২৫] বছর বয়সী</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>লিঙ্গ</strong></td>            <td style=\"\" text-align:=\"\">[পুরুষ] (পুরুষ বা মহিলা)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>ওজন</strong></td>            <td style=\"\" text-align:=\"\">৯৫ কেজি</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>উচ্চতা</strong></td>            <td style=\"vertical-align: top;\">১.৮১ মিটার</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>শরীরের ভর সূচক</strong></td>            <td style=\"vertical-align: top;\">[২৯] BMI =ওজন/আকার<sup>২</sup> (দেখুন.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> উইকিপিডিয়া নিবন্ধ</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Removed"
+msgstr "অপসারিত"
+
+msgid "NoUsersInTheList"
+msgstr "তালিকায় কোনো ব্যবহারকারী নেই"
+
+msgid "Are you sure?"
+msgstr "আপনি কি নিশ্চিত?"
+
+msgid "NoResultsAvailable"
+msgstr "কোনো ফলাফল উপলব্ধ নেই"
+
+msgid "Import groups from a CSV file and optionally remove items that are not present in the file."
+msgstr "একটি CSV ফাইল থেকে গ্রুপ আমদানি করুন এবং ঐচ্ছিকভাবে ফাইলে অনুপস্থিত আইটেমগুলি অপসারণ করুন।"
+
+msgid "Use this option carefully because items missing from the CSV can be removed during the import process."
+msgstr "এই বিকল্পটি সতর্কতার সাথে ব্যবহার করুন কারণ CSV-তে অনুপস্থিত আইটেমগুলি আমদানি প্রক্রিয়ার সময় অপসারিত হতে পারে।"
+
+msgid "Upload a CSV file with the group data you want to import."
+msgstr "আপনি যে গ্রুপ ডেটা আমদানি করতে চান সেটি সহ একটি CSV ফাইল আপলোড করুন।"
+
+msgid "You can download the example file to use the expected format."
+msgstr "প্রত্যাশিত ফরম্যাট ব্যবহার করতে আপনি উদাহরণ ফাইলটি ডাউনলোড করতে পারেন।"
+
+msgid "If you enable deletion, items not present in the file may be removed."
+msgstr "যদি আপনি অপসারণ সক্রিয় করেন, তাহলে ফাইলে অনুপস্থিত আইটেমগুলি অপসারিত হতে পারে।"
+
+msgid "The CSV file is mandatory to start the import."
+msgstr "আমদানি শুরু করতে CSV ফাইল বাধ্যতামূলক।"
+
+msgid "Please select at least one class."
+msgstr "অনুগ্রহ করে অন্তত একটি ক্লাস নির্বাচন করুন।"
+
+msgid "Define the properties for each group before creating them."
+msgstr "তৈরি করার আগে প্রতিটি গ্রুপের বৈশিষ্ট্য নির্ধারণ করুন।"
+
+msgid "Apply the first row values"
+msgstr "প্রথম সারির মান প্রয়োগ করুন"
+
+msgid "Create groups manually or generate them from the classes subscribed to this course."
+msgstr "ম্যানুয়ালি গ্রুপ তৈরি করুন অথবা এই কোর্সে নিবন্ধিত ক্লাস থেকে সেগুলি তৈরি করুন।"
+
+msgid "Create manual groups"
+msgstr "ম্যানুয়াল গ্রুপ তৈরি করুন"
+
+msgid "Use this form when you want to create empty course groups manually."
+msgstr "যখন আপনি ম্যানুয়ালি খালি কোর্স গ্রুপ তৈরি করতে চান তখন এই ফর্মটি ব্যবহার করুন।"
+
+msgid "Configure manual groups"
+msgstr "ম্যানুয়াল গ্রুপ কনফিগার করুন"
+
+msgid "Create groups from subscribed classes"
+msgstr "নিবন্ধিত ক্লাস থেকে গ্রুপ তৈরি করুন"
+
+msgid "Use this form when you want to create one course group for each selected class."
+msgstr "যখন আপনি প্রতিটি নির্বাচিত ক্লাসের জন্য একটি কোর্স গ্রুপ তৈরি করতে চান তখন এই ফর্মটি ব্যবহার করুন।"
+
+msgid "Keep created groups linked to their source classes"
+msgstr "তৈরি করা গ্রুপগুলি তাদের উৎস ক্লাসের সাথে সংযুক্ত রাখুন"
+
+msgid "Create groups from selected classes"
+msgstr "নির্বাচিত ক্লাস থেকে গ্রুপ তৈরি করুন"
+
+msgid "You must be logged in to access this page."
+msgstr "এই পৃষ্ঠায় প্রবেশ করতে আপনাকে লগইন করতে হবে।"
+
+msgid "Invalid user"
+msgstr "অবৈধ ব্যবহারকারী"
+
+msgid "UseCourseCustomCertificate"
+msgstr "কোর্সের কাস্টম সনদ ব্যবহার করুন"
+
+msgid "UseDefaultCustomCertificate"
+msgstr "ডিফল্ট কাস্টম সনদ ব্যবহার করুন"
+
+msgid "CertificateSetting"
+msgstr "সনদ সেটিং"
+
+msgid "SelectOneOptionBeforeOpeningEditor"
+msgstr "এডিটর খোলার আগে একটি বিকল্প নির্বাচন করুন"
+
+msgid "ChooseCustomCertificateModeHelp"
+msgstr "কাস্টম সনদ মোড সাহায্য নির্বাচন করুন"
+
+msgid "CertificateMode"
+msgstr "সনদ মোড"
+
+msgid "Enable student to validate own attendance"
+msgstr "শিক্ষার্থীকে নিজস্ব উপস্থিতি যাচাই করার অনুমতি দিন"
+
+msgid "Course block"
+msgstr "কোর্স ব্লক"
+
+msgid "Add custom content blocks to course footer regions."
+msgstr "কোর্স ফুটার অঞ্চলে কাস্টম কনটেন্ট ব্লক যোগ করুন।"
+
+msgid "course_block_pre_footer"
+msgstr "course_block_pre_footer"
+
+msgid "Before footer"
+msgstr "ফুটারের আগে"
+
+msgid "course_block_footer_left"
+msgstr "course_block_footer_left"
+
+msgid "Footer left"
+msgstr "ফুটার বাম"
+
+msgid "course_block_footer_center"
+msgstr "course_block_footer_center"
+
+msgid "Footer center"
+msgstr "ফুটার কেন্দ্র"
+
+msgid "course_block_footer_right"
+msgstr "course_block_footer_right"
+
+msgid "Footer right"
+msgstr "ফুটার ডান"
+
+msgid "SetNotification"
+msgstr "বিজ্ঞপ্তি সেট করুন"
+
+msgid "CourseLegal"
+msgstr "কোর্স আইনি"
+
+msgid "Certificates search is not available"
+msgstr "সনদ অনুসন্ধান উপলব্ধ নয়"
+
+msgid "It allows the acquisition of skills by subcategories"
+msgstr "এটি উপশ্রেণি দ্বারা দক্ষতা অর্জনের অনুমতি দেয়"
+
+msgid "Allow skills by subcategories"
+msgstr "উপশ্রেণি অনুসারে দক্ষতা অনুমোদন করুন"
+
+msgid "Minimum score for skills"
+msgstr "দক্ষতার জন্য সর্বনিম্ন স্কোর"
+
+msgid "The gradebook table is hidden."
+msgstr "গ্রেডবুক টেবিল লুকানো আছে।"
+
+msgid "Invalid token"
+msgstr "অবৈধ টোকেন"
+
+msgid "Unable to save the item"
+msgstr "আইটেম সংরক্ষণ করা সম্ভব হয়নি"
+
+msgid "Only HTTP and HTTPS URLs are allowed."
+msgstr "শুধুমাত্র HTTP এবং HTTPS URL অনুমোদিত।"
+
+msgid "Invalid URL host."
+msgstr "অবৈধ URL হোস্ট।"
+
+msgid "This cloud provider is not allowed."
+msgstr "এই ক্লাউড প্রদানকারী অনুমোদিত নয়।"
+
+msgid "Documents used"
+msgstr "ব্যবহৃত নথি"
+
+msgid "No document usage"
+msgstr "কোনো নথি ব্যবহার নেই"
+
+msgid "Invalid action."
+msgstr "অবৈধ কার্যক্রম।"
+
+msgid "No users selected."
+msgstr "কোনো ব্যবহারকারী নির্বাচন করা হয়নি।"
+
+msgid "%s user(s) processed."
+msgstr "%s জন ব্যবহারকারী প্রক্রিয়াকৃত।"
+
+msgid "Invalid CSRF token."
+msgstr "অবৈধ CSRF টোকেন।"
+
+msgid "[%s] Please change your password"
+msgstr "[%s] অনুগ্রহ করে আপনার পাসওয়ার্ড পরিবর্তন করুন"
+
+msgid "Dear %s,\n\nOur security enforcing process shows you use a password that is commonly used on the internet, which means your account could easily be stolen. It is probably a simple sequence or a very common word, we don't really know (we cannot see your password), but we ask you to please connect to the platform and request a password change. You can follow the link here: %s to do that now.\n\nPlease note we will never ask for your password in this process. You just enter your username or e-mail and we send you a link. If you are asked to introduce your existing password to do that, someone is probably trying to do Phishing on your account. Be safe, change your password now!\n\n%s\n%s"
+msgstr "প্রিয় %s,\n\nআমাদের নিরাপত্তা প্রয়োগ প্রক্রিয়া দেখায় যে আপনি ইন্টারনেটে সাধারণত ব্যবহৃত একটি পাসওয়ার্ড ব্যবহার করছেন, যার অর্থ আপনার অ্যাকাউন্ট সহজেই চুরি হতে পারে। এটি সম্ভবত একটি সরল ক্রম বা খুব সাধারণ শব্দ, আমরা সত্যিই জানি না (আমরা আপনার পাসওয়ার্ড দেখতে পারি না), তবে আমরা আপনাকে অনুরোধ করছি প্ল্যাটফর্মে সংযোগ করুন এবং পাসওয়ার্ড পরিবর্তনের অনুরোধ করুন। এটি এখন করতে আপনি এখানে লিঙ্ক অনুসরণ করতে পারেন: %s।\n\nদয়া করে মনে রাখবেন এই প্রক্রিয়ায় আমরা কখনো আপনার পাসওয়ার্ড চাই না। আপনি শুধু আপনার ব্যবহারকারী নাম বা ই-মেইল প্রবেশ করান এবং আমরা আপনাকে একটি লিঙ্ক পাঠাব। যদি আপনাকে এটি করার জন্য আপনার বিদ্যমান পাসওয়ার্ড প্রবেশ করতে বলা হয়, সম্ভবত কেউ আপনার অ্যাকাউন্টে ফিশিং করার চেষ্টা করছে। নিরাপদ থাকুন, এখনই আপনার পাসওয়ার্ড পরিবর্তন করুন!\n\n%s\n%s"
+
+msgid "[%s] Your password has been reset"
+msgstr "[%s] আপনার পাসওয়ার্ড পুনরায় সেট করা হয়েছে"
+
+msgid "Dear %s,\n\nOur security enforcing process flagged you as using a password that is commonly used on the internet, which means your account could easily be stolen. As a prevention measure, we have decided to initiate a password reset process. Your new, automatically generated password is now:\n\n%s\n\nPlease login to the platform soon (using this new password) to set your own, personal and secure, password.\n\nBe safe.\n\n%s\n%s"
+msgstr "প্রিয় %s,\n\nআমাদের নিরাপত্তা প্রয়োগ প্রক্রিয়া আপনাকে ইন্টারনেটে সাধারণত ব্যবহৃত একটি পাসওয়ার্ড ব্যবহারকারী হিসেবে চিহ্নিত করেছে, যার অর্থ আপনার অ্যাকাউন্ট সহজেই চুরি হতে পারে। প্রতিরোধমূলক ব্যবস্থা হিসেবে, আমরা একটি পাসওয়ার্ড রিসেট প্রক্রিয়া শুরু করার সিদ্ধান্ত নিয়েছি। আপনার নতুন, স্বয়ংক্রিয়ভাবে তৈরি পাসওয়ার্ড এখন:\n\n%s\n\nঅনুগ্রহ করে শীঘ্রই প্ল্যাটফর্মে লগইন করুন (এই নতুন পাসওয়ার্ড ব্যবহার করে) এবং আপনার নিজস্ব, ব্যক্তিগত ও নিরাপদ পাসওয়ার্ড সেট করুন।\n\nনিরাপদ থাকুন।\n\n%s\n%s"
+
+msgid "Signature saved successfully"
+msgstr "স্বাক্ষর সফলভাবে সংরক্ষিত হয়েছে"
+
+msgid "Invalid request payload."
+msgstr "অবৈধ অনুরোধ পেলোড।"
+
+msgid "Authentication required."
+msgstr "প্রমাণীকরণ প্রয়োজন।"
+
+msgid "The course title is required."
+msgstr "কোর্সের শিরোনাম আবশ্যক।"
+
+msgid "Only trainers and administrators can create courses."
+msgstr "শুধুমাত্র প্রশিক্ষক এবং প্রশাসকরা কোর্স তৈরি করতে পারেন।"
+
+msgid "Course creation by trainers is disabled on this platform."
+msgstr "এই প্ল্যাটফর্মে প্রশিক্ষকদের দ্বারা কোর্স তৈরি নিষ্ক্রিয় করা হয়েছে।"
+
+msgid "The selected BuyCourses service cannot be used to create this course."
+msgstr "নির্বাচিত BuyCourses পরিষেবা এই কোর্স তৈরি করতে ব্যবহার করা যাবে না।"
+
+msgid "You have reached the maximum number of courses allowed (%d)."
+msgstr "আপনি অনুমোদিত সর্বোচ্চ সংখ্যক কোর্সের সীমায় পৌঁছেছেন (%d)।"
+
+msgid "The selected BuyCourses service is invalid."
+msgstr "নির্বাচিত BuyCourses পরিষেবা অবৈধ।"
+
+msgid "BuyCourses is not available right now."
+msgstr "BuyCourses এখন উপলব্ধ নয়।"
+
+msgid "BuyCourses cannot validate the selected service right now."
+msgstr "BuyCourses এখন নির্বাচিত পরিষেবা যাচাই করতে পারছে না।"
+
+msgid "Unable to validate the selected BuyCourses service right now."
+msgstr "এখন নির্বাচিত BuyCourses পরিষেবা যাচাই করা সম্ভব নয়।"
+
+msgid "External tool removed from course"
+msgstr "কোর্স থেকে বহিঃস্থ টুল সরানো হয়েছে"
+
+msgid "External tool was removed from the course, but kept internally because it is linked to the gradebook"
+msgstr "কোর্স থেকে বহিঃস্থ টুল সরানো হয়েছে, কিন্তু অভ্যন্তরীণভাবে রাখা হয়েছে কারণ এটি গ্রেডবুকের সাথে যুক্ত"
+
+msgid "There are no external tools available to add to the gradebook"
+msgstr "গ্রেডবুক যোগ করার জন্য কোনো বহিঃস্থ টুল উপলব্ধ নেই"
+
+msgid "The evaluation could not be created"
+msgstr "মূল্যায়ন তৈরি করা যায়নি"
+
+msgid "The gradebook evaluation could not be linked"
+msgstr "গ্রেডবুক মূল্যায়ন যুক্ত করা যায়নি"
+
+msgid "Survey questions"
+msgstr "জরিপ প্রশ্ন"
+
+msgid "Back to survey list"
+msgstr "জরিপ তালিকায় ফিরে যান"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "এই জরিপে ইতিমধ্যে উত্তর দেওয়া হয়েছে। কনফিগারেশনের কারণে প্রশ্ন সম্পাদনা নিষ্ক্রিয় করা হয়েছে।"
+
+msgid "Choose the type of question you want to add."
+msgstr "আপনি যে ধরনের প্রশ্ন যোগ করতে চান তা নির্বাচন করুন।"
+
+msgid "The free text option is added automatically."
+msgstr "মুক্ত পাঠ্য বিকল্পটি স্বয়ংক্রিয়ভাবে যোগ হয়।"
+
+msgid "No questions found"
+msgstr "কোনো প্রশ্ন পাওয়া যায়নি"
+
+msgid "Mandatory"
+msgstr "বাধ্যতামূলক"
+
+msgid "Unsupported question type"
+msgstr "অসমর্থিত প্রশ্নের ধরন"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "আপনি প্রশ্নে {%s} এবং {%s} ট্যাগ ব্যবহার করতে পারেন।"
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "উত্তর দেওয়ার সময় এই প্রশ্নটি শর্তসাপেক্ষে দেখানো হয়।"
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "১ থেকে ১০০ পর্যন্ত শতাংশের বিকল্পগুলো স্বয়ংক্রিয়ভাবে তৈরি হয়।"
+
+msgid "Could not load survey questions"
+msgstr "জরিপ প্রশ্ন লোড করা যায়নি"
+
+msgid "The question text is required."
+msgstr "প্রশ্নের পাঠ্য আবশ্যক।"
+
+msgid "The maximum score is required."
+msgstr "সর্বোচ্চ স্কোর আবশ্যক।"
+
+msgid "Please select a parent option."
+msgstr "অনুগ্রহ করে একটি প্যারেন্ট বিকল্প নির্বাচন করুন।"
+
+msgid "Please fill all answer options."
+msgstr "সব উত্তরের বিকল্প পূরণ করুন।"
+
+msgid "QuestionUpdated"
+msgstr "QuestionUpdated"
+
+msgid "Could not save survey question"
+msgstr "জরিপ প্রশ্ন সংরক্ষণ করা যায়নি"
+
+msgid "Could not delete survey question"
+msgstr "জরিপ প্রশ্ন মুছে ফেলা যায়নি"
+
+msgid "Could not move survey question"
+msgstr "জরিপ প্রশ্ন সরানো যায়নি"
+
+msgid "Could not copy survey question"
+msgstr "জরিপ প্রশ্ন অনুলিপি করা যায়নি"
+
+msgid "Hide search"
+msgstr "অনুসন্ধান লুকান"
+
+msgid "Showing results for: %s"
+msgstr "ফলাফল দেখানো হচ্ছে: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "জরিপের শিরোনাম, কোড বা বিবরণ অনুসারে অনুসন্ধান করুন।"
+
+msgid "Search surveys"
+msgstr "জরিপ অনুসন্ধান করুন"
+
+msgid "%s surveys selected"
+msgstr "%sটি জরিপ নির্বাচিত"
+
+msgid "Clear selection"
+msgstr "নির্বাচন মুছুন"
+
+msgid "No surveys found"
+msgstr "কোনো জরিপ পাওয়া যায়নি"
+
+msgid "Unsupported"
+msgstr "অসমর্থিত"
+
+msgid "Could not load surveys"
+msgstr "জরিপ লোড করা যায়নি"
+
+msgid "Delete selected surveys"
+msgstr "নির্বাচিত জরিপ মুছুন"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "নির্বাচিত জরিপ এবং তাদের প্রশ্ন মুছে ফেলা হবে। এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।"
+
+msgid "Could not delete selected surveys"
+msgstr "নির্বাচিত জরিপ মুছে ফেলা যায়নি"
+
+msgid "Survey action"
+msgstr "জরিপ কার্যক্রম"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "এই জরিপের একটি অনুলিপি তৈরি করা হবে: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "এই জরিপের সব উত্তর ও আমন্ত্রণ মুছে ফেলা হবে: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "এই জরিপ থেকে উৎপন্ন গুণিত প্রশ্নগুলো সরানো হবে: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "এই জরিপটি সংযুক্ত গ্রুপ টিউটরদের জন্য প্রকাশ করা হবে: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "এই জরিপ ও এর প্রশ্নগুলো মুছে ফেলা হবে: %s"
+
+msgid "Could not complete survey action"
+msgstr "জরিপের কাজ সম্পন্ন করা যায়নি"
+
+msgid "Not started"
+msgstr "শুরু হয়নি"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "মিটিং পোল আমন্ত্রিত ব্যবহারকারীদের উপলব্ধ তারিখ নির্বাচন করতে দেয়।"
+
+msgid "Back to surveys"
+msgstr "জরিপে ফিরে যান"
+
+msgid "Edit meeting poll"
+msgstr "মিটিং পোল সম্পাদনা করুন"
+
+msgid "View meeting poll"
+msgstr "মিটিং পোল দেখুন"
+
+msgid "Basic information"
+msgstr "মৌলিক তথ্য"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "এটি মিটিং পোল ধরনের একটি জরিপ তৈরি করবে। উত্তর ও আমন্ত্রণ আলাদাভাবে পরিচালিত হবে।"
+
+msgid "Availability"
+msgstr "উপলব্ধতা"
+
+msgid "Meeting dates"
+msgstr "মিটিং তারিখ"
+
+msgid "Meeting poll"
+msgstr "মিটিং পোল"
+
+msgid "My availability"
+msgstr "আমার উপলব্ধতা"
+
+msgid "Meeting poll results"
+msgstr "মিটিং পোলের ফলাফল"
+
+msgid "No invitations found"
+msgstr "কোনো আমন্ত্রণ পাওয়া যায়নি"
+
+msgid "available"
+msgstr "উপলব্ধ"
+
+msgid "Could not load meeting poll"
+msgstr "মিটিং পোল লোড করা যায়নি"
+
+msgid "Please complete the required fields"
+msgstr "অনুগ্রহ করে প্রয়োজনীয় ক্ষেত্রগুলো পূরণ করুন"
+
+msgid "Could not save meeting poll"
+msgstr "মিটিং পোল সংরক্ষণ করা যায়নি"
+
+msgid "Could not save meeting availability"
+msgstr "মিটিং উপলব্ধতা সংরক্ষণ করা যায়নি"
+
+msgid "Copy this survey to another course or session"
+msgstr "এই জরিপটি অন্য কোর্স বা সেশনে অনুলিপি করুন"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "জরিপটি উত্তর বা আমন্ত্রণ ছাড়াই অনুলিপি করা হবে।"
+
+msgid "No target courses found"
+msgstr "কোনো লক্ষ্য কোর্স পাওয়া যায়নি"
+
+msgid "Search by course title, course code or session name."
+msgstr "কোর্সের শিরোনাম, কোর্স কোড বা সেশনের নাম দিয়ে অনুসন্ধান করুন।"
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "একই কোর্সে অনুলিপি চাইলে ডুপ্লিকেট জরিপ ব্যবহার করুন।"
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "প্রশ্ন ও অপশন অনুলিপি করা হবে। উত্তর, আমন্ত্রণ ও প্রতিবেদন শুধুমাত্র মূল জরিপে থাকবে।"
+
+msgid "Selected target"
+msgstr "নির্বাচিত লক্ষ্য"
+
+msgid "Could not load copy form"
+msgstr "অনুলিপি ফর্ম লোড করা যায়নি"
+
+msgid "The survey will be copied to: %s"
+msgstr "জরিপটি এখানে অনুলিপি করা হবে: %s"
+
+msgid "Survey copied."
+msgstr "জরিপ অনুলিপি করা হয়েছে।"
+
+msgid "Could not copy survey"
+msgstr "জরিপ অনুলিপি করা যায়নি"
+
+msgid "Answer survey"
+msgstr "জরিপের উত্তর দিন"
+
+msgid "Preview mode does not save answers."
+msgstr "প্রিভিউ মোড উত্তর সংরক্ষণ করে না।"
+
+msgid "Survey completed"
+msgstr "জরিপ সম্পন্ন হয়েছে"
+
+msgid "Thank you for answering the survey."
+msgstr "জরিপের উত্তর দেওয়ার জন্য ধন্যবাদ।"
+
+msgid "Profile information"
+msgstr "প্রোফাইল তথ্য"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "জরিপের উত্তর দেওয়ার আগে অনুগ্রহ করে অনুরোধকৃত প্রোফাইল ক্ষেত্রগুলো পর্যালোচনা করুন।"
+
+msgid "This profile field is read-only."
+msgstr "এই প্রোফাইল ক্ষেত্রটি শুধুমাত্র পাঠযোগ্য।"
+
+msgid "You already filled this survey."
+msgstr "আপনি ইতিমধ্যে এই জরিপ পূরণ করেছেন।"
+
+msgid "Please specify"
+msgstr "অনুগ্রহ করে নির্দিষ্ট করুন"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "এই প্রশ্নের ধরন আধুনিক জরিপ দৃশ্যে সমর্থিত নয়।"
+
+msgid "Preview only"
+msgstr "শুধুমাত্র প্রিভিউ"
+
+msgid "Submit answers"
+msgstr "উত্তর জমা দিন"
+
+msgid "Could not load survey"
+msgstr "জরিপ লোড করা যায়নি"
+
+msgid "Please complete the required profile fields."
+msgstr "অনুগ্রহ করে প্রয়োজনীয় প্রোফাইল ক্ষেত্রগুলো পূরণ করুন।"
+
+msgid "Please answer all mandatory questions."
+msgstr "অনুগ্রহ করে সব বাধ্যতামূলক প্রশ্নের উত্তর দিন।"
+
+msgid "Could not save survey answers"
+msgstr "সার্ভে উত্তর সংরক্ষণ করা যায়নি"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "প্রশ্ন এবং আমন্ত্রণ পরিচালনার আগে প্রধান সার্ভে তথ্য কনফিগার করুন।"
+
+msgid "The survey code cannot be changed after creation."
+msgstr "সার্ভে কোড তৈরির পর পরিবর্তন করা যাবে না।"
+
+msgid "Survey behavior"
+msgstr "সার্ভে আচরণ"
+
+msgid "Use 0 for no time limit."
+msgstr "কোনো সময়সীমা না থাকলে 0 ব্যবহার করুন।"
+
+msgid "Survey messages"
+msgstr "সার্ভে বার্তা"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "এখানে নির্বাচিত প্রোফাইল ক্ষেত্রগুলো সার্ভে প্রশ্নের আগে দেখানো হবে।"
+
+msgid "No profile fields are currently available."
+msgstr "বর্তমানে কোনো প্রোফাইল ক্ষেত্র উপলব্ধ নেই।"
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "প্রোফাইল ক্ষেত্র নির্বাচন শুধুমাত্র অ-নামহীন সার্ভের জন্য উপলব্ধ।"
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "দক্ষতা সংযোগ একটি নির্দিষ্ট ব্যাচে স্থানান্তরিত হবে।"
+
+msgid "Could not load survey configuration"
+msgstr "সার্ভে কনফিগারেশন লোড করা যায়নি"
+
+msgid "The survey code is required."
+msgstr "সার্ভে কোড আবশ্যক।"
+
+msgid "The survey title is required."
+msgstr "সার্ভে শিরোনাম আবশ্যক।"
+
+msgid "The survey has been saved successfully"
+msgstr "সার্ভে সফলভাবে সংরক্ষণ করা হয়েছে"
+
+msgid "Could not save survey configuration"
+msgstr "সার্ভে কনফিগারেশন সংরক্ষণ করা যায়নি"
+
+msgid "Course users"
+msgstr "কোর্স ব্যবহারকারী"
+
+msgid "Already invited"
+msgstr "ইতিমধ্যে আমন্ত্রিত"
+
+msgid "No users found"
+msgstr "কোনো ব্যবহারকারী পাওয়া যায়নি"
+
+msgid "No groups found"
+msgstr "কোনো গ্রুপ পাওয়া যায়নি"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "সার্ভে লিঙ্ক যেখানে দেখানো হবে সেখানে **link** ব্যবহার করুন।"
+
+msgid "Remind all selected users"
+msgstr "নির্বাচিত সকল ব্যবহারকারীকে স্মরণ করিয়ে দিন"
+
+msgid "Anonymous access link"
+msgstr "নামহীন অ্যাক্সেস লিঙ্ক"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "যে ব্যবহারকারীরা আমন্ত্রিত নন তারা এই লিঙ্ক ব্যবহার করে সার্ভে দিতে পারবেন।"
+
+msgid "Answered anonymously"
+msgstr "নামহীনভাবে উত্তর দেওয়া হয়েছে"
+
+msgid "Could not load survey invitations"
+msgstr "সার্ভে আমন্ত্রণ লোড করা যায়নি"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "মেইল পাঠানোর সময় মেইলের বিষয় এবং বার্তা আবশ্যক।"
+
+msgid "Could not publish survey"
+msgstr "সার্ভে প্রকাশ করা যায়নি"
+
+msgid "Could not copy the link"
+msgstr "লি� ink কপি করা যায়নি"
+
+msgid "Please answer this survey using the following link"
+msgstr "অনুগ্রহ করে নিম্নলিখিত লিঙ্ক ব্যবহার করে এই সার্ভেটি উত্তর দিন"
+
+msgid "Export CSV"
+msgstr "CSV রপ্তানি করুন"
+
+msgid "Export compact CSV"
+msgstr "সংক্ষিপ্ত CSV রপ্তানি করুন"
+
+msgid "Export Excel"
+msgstr "Excel রপ্তানি করুন"
+
+msgid "Export package"
+msgstr "প্যাকেজ রপ্তানি করুন"
+
+msgid "Results summary"
+msgstr "ফলাফল সারাংশ"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "এই দৃশ্যটি এই সার্ভের জন্য স্থানান্তরিত রিপোর্টিং ডেটা দেখায়।"
+
+msgid "Select user"
+msgstr "ব্যবহারকারী নির্বাচন করুন"
+
+msgid "No answers found"
+msgstr "কোনো উত্তর পাওয়া যায়নি"
+
+msgid "answers"
+msgstr "উত্তর"
+
+msgid "Could not load survey reporting"
+msgstr "সার্ভে রিপোর্টিং লোড করা যায়নি"
+
+msgid "Back to threads"
+msgstr "থ্রেডে ফিরে যান"
+
+msgid "Back to learning path"
+msgstr "শিক্ষণ পথে ফিরে যান"
+
+msgid "Remove sticky"
+msgstr "স্টিকি সরান"
+
+msgid "Make sticky"
+msgstr "স্টিকি করুন"
+
+msgid "Open thread"
+msgstr "থ্রেড খুলুন"
+
+msgid "Close thread"
+msgstr "থ্রেড বন্ধ করুন"
+
+msgid "Delete thread"
+msgstr "থ্রেড মুছুন"
+
+msgid "This thread is hidden from learners."
+msgstr "এই থ্রেড শিক্ষার্থীদের কাছ থেকে লুকানো আছে।"
+
+msgid "Revision requested"
+msgstr "সংশোধন অনুরোধ করা হয়েছে"
+
+msgid "Revision"
+msgstr "সংশোধন"
+
+msgid "Approve post"
+msgstr "পোস্ট অনুমোদন করুন"
+
+msgid "Reject post"
+msgstr "পোস্ট প্রত্যাখ্যান করুন"
+
+msgid "Cancel revision request"
+msgstr "সংশোধনের অনুরোধ বাতিল করুন"
+
+msgid "Delete post"
+msgstr "পোস্ট মুছুন"
+
+msgid "Message is required"
+msgstr "বার্তা আবশ্যক"
+
+msgid "Target thread is required"
+msgstr "টার্গেট থ্রেড আবশ্যক"
+
+msgid "Could not retrieve posts"
+msgstr "পোস্টগুলো আনা যায়নি"
+
+msgid "Thread shown"
+msgstr "থ্রেড দেখানো হয়েছে"
+
+msgid "Thread hidden"
+msgstr "থ্রেড লুকানো হয়েছে"
+
+msgid "Could not update thread"
+msgstr "থ্রেড আপডেট করা যায়নি"
+
+msgid "Thread closed"
+msgstr "থ্রেড বন্ধ করা হয়েছে"
+
+msgid "Thread opened"
+msgstr "থ্রেড খোলা হয়েছে"
+
+msgid "Thread marked as sticky"
+msgstr "থ্রেড স্টিকি হিসেবে চিহ্নিত করা হয়েছে"
+
+msgid "Thread unmarked as sticky"
+msgstr "থ্রেড স্টিকি থেকে সরানো হয়েছে"
+
+msgid "Thread notifications enabled"
+msgstr "থ্রেড বিজ্ঞপ্তি সক্রিয় করা হয়েছে"
+
+msgid "Thread notifications disabled"
+msgstr "থ্রেড বিজ্ঞপ্তি নিষ্ক্রিয় করা হয়েছে"
+
+msgid "Could not update thread notification"
+msgstr "থ্রেড বিজ্ঞপ্তি আপডেট করা যায়নি"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "আপনি কি নিশ্চিতভাবে এই থ্রেডটি মুছে ফেলতে চান?"
+
+msgid "Could not delete thread"
+msgstr "থ্রেড মুছে ফেলা যায়নি"
+
+msgid "Post approved"
+msgstr "পোস্ট অনুমোদিত হয়েছে"
+
+msgid "Could not approve post"
+msgstr "পোস্ট অনুমোদন করা যায়নি"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "আপনি কি নিশ্চিতভাবে এই পোস্টটি প্রত্যাখ্যান করতে চান?"
+
+msgid "Post rejected"
+msgstr "পোস্ট প্রত্যাখ্যান করা হয়েছে"
+
+msgid "Could not reject post"
+msgstr "পোস্ট প্রত্যাখ্যান করা যায়নি"
+
+msgid "Post shown"
+msgstr "পোস্ট দেখানো হয়েছে"
+
+msgid "Post hidden"
+msgstr "পোস্ট লুকানো হয়েছে"
+
+msgid "Could not update post"
+msgstr "পোস্ট আপডেট করা যায়নি"
+
+msgid "Post updated"
+msgstr "পোস্ট আপডেট করা হয়েছে"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "আপনি কি নিশ্চিতভাবে এই পোস্টটি মুছে ফেলতে চান?"
+
+msgid "Post deleted"
+msgstr "পোস্ট মুছে ফেলা হয়েছে"
+
+msgid "Could not delete post"
+msgstr "পোস্ট মুছে ফেলা যায়নি"
+
+msgid "Untitled thread"
+msgstr "শিরোনামহীন থ্রেড"
+
+msgid "Could not retrieve threads"
+msgstr "থ্রেডগুলো আনা যায়নি"
+
+msgid "Post moved"
+msgstr "পোস্ট সরানো হয়েছে"
+
+msgid "Could not move post"
+msgstr "পোস্ট সরানো যায়নি"
+
+msgid "Revision request removed"
+msgstr "সংশোধনের অনুরোধ সরানো হয়েছে"
+
+msgid "Could not update revision request"
+msgstr "সংশোধনের অনুরোধ আপডেট করা যায়নি"
+
+msgid "Are you sure you want to report this post?"
+msgstr "আপনি কি নিশ্চিতভাবে এই পোস্টটি রিপোর্ট করতে চান?"
+
+msgid "Could not report post"
+msgstr "পোস্ট রিপোর্ট করা যায়নি"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "আপনি কি নিশ্চিতভাবে এই সংযুক্তি মুছে ফেলতে চান?"
+
+msgid "Attachment deleted"
+msgstr "সংযুক্তি মুছে ফেলা হয়েছে"
+
+msgid "Could not delete attachment"
+msgstr "সংযুক্তি মুছে ফেলা যায়নি"
+
+msgid "Thread title"
+msgstr "থ্রেডের শিরোনাম"
+
+msgid "Sticky thread"
+msgstr "স্টিকি থ্রেড"
+
+msgid "Attach files"
+msgstr "ফাইল সংযুক্ত করুন"
+
+msgid "Attachments are disabled for this forum"
+msgstr "এই ফোরামের জন্য সংযুক্তি নিষ্ক্রিয় করা হয়েছে"
+
+msgid "The forum is not open yet."
+msgstr "ফোরামটি এখনও খোলা হয়নি।"
+
+msgid "The forum is closed."
+msgstr "ফোরামটি বন্ধ আছে।"
+
+msgid "The forum is locked."
+msgstr "ফোরামটি লক করা আছে।"
+
+msgid "New threads are not allowed in this forum."
+msgstr "এই ফোরামে নতুন থ্রেড অনুমোদিত নয়।"
+
+msgid "Thread created"
+msgstr "থ্রেড তৈরি করা হয়েছে"
+
+msgid "Could not create thread"
+msgstr "থ্রেড তৈরি করা যায়নি"
+
+msgid "Back to posts"
+msgstr "পোস্টে ফিরে যান"
+
+msgid "This reply will be stored as a revision."
+msgstr "এই উত্তরটি একটি সংশোধন হিসেবে সংরক্ষণ করা হবে।"
+
+msgid "Post reply"
+msgstr "উত্তর পোস্ট করুন"
+
+msgid "The thread is locked."
+msgstr "থ্রেডটি লক করা আছে।"
+
+msgid "Reply added"
+msgstr "উত্তর যোগ করা হয়েছে"
+
+msgid "Could not add reply"
+msgstr "উত্তর যোগ করা যায়নি"
+
+msgid "Add forum"
+msgstr "ফোরাম যোগ করুন"
+
+msgid "No forums found"
+msgstr "কোনো ফোরাম পাওয়া যায়নি"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "আলোচনা শুরু করতে আপনার প্রথম ফোরাম বিভাগ বা ফোরাম তৈরি করুন।"
+
+msgid "Locked"
+msgstr "লক করা"
+
+msgid "No forums in this category"
+msgstr "এই বিভাগে কোনো ফোরাম নেই"
+
+msgid "Posts require approval"
+msgstr "পোস্টের অনুমোদন প্রয়োজন"
+
+msgid "Forum for current group"
+msgstr "বর্তমান গ্রুপের জন্য ফোরাম"
+
+msgid "Group forum visibility"
+msgstr "গ্রুপ ফোরাম দৃশ্যমানতা"
+
+msgid "No category"
+msgstr "কোনো বিভাগ নেই"
+
+msgid "Could not retrieve forums"
+msgstr "ফোরাম পুনরুদ্ধার করা যায়নি"
+
+msgid "Forum category updated"
+msgstr "ফোরাম বিভাগ আপডেট করা হয়েছে"
+
+msgid "Forum category created"
+msgstr "ফোরাম বিভাগ তৈরি করা হয়েছে"
+
+msgid "Could not save forum category"
+msgstr "ফোরাম বিভাগ সংরক্ষণ করা যায়নি"
+
+msgid "Forum updated"
+msgstr "ফোরাম আপডেট করা হয়েছে"
+
+msgid "Forum created"
+msgstr "ফোরাম তৈরি করা হয়েছে"
+
+msgid "Could not save forum"
+msgstr "ফোরাম সংরক্ষণ করা যায়নি"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "আপনি কি নিশ্চিত যে আপনি এই ফোরাম বিভাগটি মুছে ফেলতে চান?"
+
+msgid "Could not delete forum category"
+msgstr "ফোরাম বিভাগ মুছে ফেলা যায়নি"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "আপনি কি নিশ্চিত যে আপনি এই ফোরামটি মুছে ফেলতে চান?"
+
+msgid "Could not delete forum"
+msgstr "ফোরাম মুছে ফেলা যায়নি"
+
+msgid "Forum category unlocked"
+msgstr "ফোরাম বিভাগ আনলক করা হয়েছে"
+
+msgid "Forum category locked"
+msgstr "ফোরাম বিভাগ লক করা হয়েছে"
+
+msgid "Could not update forum category"
+msgstr "ফোরাম বিভাগ আপডেট করা যায়নি"
+
+msgid "Forum category shown"
+msgstr "ফোরাম বিভাগ দেখানো হয়েছে"
+
+msgid "Forum category hidden"
+msgstr "ফোরাম বিভাগ লুকানো হয়েছে"
+
+msgid "Forum unlocked"
+msgstr "ফোরাম আনলক করা হয়েছে"
+
+msgid "Forum locked"
+msgstr "ফোরাম লক করা হয়েছে"
+
+msgid "Could not update forum"
+msgstr "ফোরাম আপডেট করা যায়নি"
+
+msgid "Forum shown"
+msgstr "ফোরাম দেখানো হয়েছে"
+
+msgid "Forum hidden"
+msgstr "ফোরাম লুকানো হয়েছে"
+
+msgid "Forum notifications enabled"
+msgstr "ফোরাম বিজ্ঞপ্তি সক্রিয় করা হয়েছে"
+
+msgid "Forum notifications disabled"
+msgstr "ফোরাম বিজ্ঞপ্তি নিষ্ক্রিয় করা হয়েছে"
+
+msgid "Could not update forum notification"
+msgstr "ফোরাম বিজ্ঞপ্তি আপডেট করা যায়নি"
+
+msgid "Forum category moved"
+msgstr "ফোরাম বিভাগ সরানো হয়েছে"
+
+msgid "Could not move forum category"
+msgstr "ফোরাম বিভাগ সরানো যায়নি"
+
+msgid "Forum moved"
+msgstr "ফোরাম সরানো হয়েছে"
+
+msgid "Could not move forum"
+msgstr "ফোরাম সরানো যায়নি"
+
+msgid "Back to forums"
+msgstr "ফোরামে ফিরে যান"
+
+msgid "New thread"
+msgstr "নতুন থ্রেড"
+
+msgid "No threads found"
+msgstr "কোনো থ্রেড পাওয়া যায়নি"
+
+msgid "Sticky"
+msgstr "স্টিকি"
+
+msgid "Graded"
+msgstr "গ্রেড করা হয়েছে"
+
+msgid "Grade peers"
+msgstr "সহপাঠীদের গ্রেড করুন"
+
+msgid "Move thread"
+msgstr "থ্রেড সরান"
+
+msgid "Target forum"
+msgstr "লক্ষ্য ফোরাম"
+
+msgid "Target forum is required"
+msgstr "লক্ষ্য ফোরাম আবশ্যক"
+
+msgid "Students"
+msgstr "শিক্ষার্থীরা"
+
+msgid "No students found"
+msgstr "কোনো শিক্ষার্থী পাওয়া যায়নি"
+
+msgid "No peers available to grade."
+msgstr "মূল্যায়নের জন্য কোনো সহপাঠী উপলব্ধ নেই।"
+
+msgid "Qualified"
+msgstr "যোগ্য"
+
+msgid "Not qualified"
+msgstr "যোগ্য নয়"
+
+msgid "Could not retrieve thread grading"
+msgstr "থ্রেড মূল্যায়ন পুনরুদ্ধার করা যায়নি"
+
+msgid "Thread grading updated"
+msgstr "থ্রেড মূল্যায়ন আপডেট করা হয়েছে"
+
+msgid "Could not update thread grading"
+msgstr "থ্রেড মূল্যায়ন আপডেট করা যায়নি"
+
+msgid "Thread score saved"
+msgstr "থ্রেড স্কোর সংরক্ষিত হয়েছে"
+
+msgid "Could not save thread score"
+msgstr "থ্রেড স্কোর সংরক্ষণ করা যায়নি"
+
+msgid "Could not move thread"
+msgstr "থ্রেড সরানো যায়নি"
+
+msgid "Thread updated"
+msgstr "থ্রেড আপডেট করা হয়েছে"
+
+msgid "Search term is too short"
+msgstr "অনুসন্ধানের শব্দটি খুব ছোট"
+
+msgid "Could not search forums"
+msgstr "ফোরাম অনুসন্ধান করা যায়নি"
+
+msgid "Moderated"
+msgstr "মডারেটেড"
+
+msgid "View threads"
+msgstr "থ্রেড দেখুন"
 

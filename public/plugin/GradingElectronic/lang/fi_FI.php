@@ -8,3 +8,6 @@ $strings['PluginDisabled'] = 'Sähköinen arviointi on poistettu käytöstä';
 $strings['StudentId'] = 'Opiskelijan tunnus';
 $strings['ProviderId'] = 'Tarjoajan tunnus';
 $strings['CourseHours'] = 'Kurssin tunnit';
+
+$strings['GenerateFile'] = 'Luo tiedosto';
+$strings['CourseId'] = 'Kurssin tunniste';

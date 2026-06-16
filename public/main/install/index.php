@@ -845,7 +845,7 @@ $installerData = [
             'updateFromConfigFile' => $updateFromConfigFile,
         ]),
 
-    'updatePath' => !$badUpdatePath ? $proposedUpdatePath : '',
+    'updatePath' => $proposedUpdatePath,
     'urlAppendPath' => $urlAppendPath,
     'pathForm' => $pathForm,
     'urlForm' => $urlForm,

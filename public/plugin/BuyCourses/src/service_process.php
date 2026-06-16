@@ -51,6 +51,25 @@ if (isset($_REQUEST['c']) && '' !== trim((string) $_REQUEST['c'])) {
 }
 
 $serviceInfo = $plugin->getService($serviceId, $coupon);
+
+if (empty($serviceInfo) || empty($serviceInfo['id'])) {
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_catalog.php');
+    exit;
+}
+
+if (!$plugin->canCurrentUserBuyService($serviceInfo)) {
+    Display::addFlash(
+        Display::return_message(
+            $plugin->get_lang('ServicesOnlyForTeachers'),
+            'warning',
+            false
+        )
+    );
+
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_information.php?service_id='.$serviceId);
+    exit;
+}
+
 $userInfo = api_get_user_info($currentUserId);
 
 $form = new FormValidator('confirm_sale');
@@ -98,7 +117,7 @@ if ($typeUser) {
         '<div class="rounded-2xl border border-gray-20 bg-support-2 p-4">'.
         '<div class="text-body-2 font-semibold text-primary">'.get_lang('User').'</div>'.
         '<div class="mt-2 text-body-2 font-medium text-gray-90">'.$currentUserLabel.'</div>'.
-        '<div class="mt-1 text-caption text-gray-50">This service will be applied to your account.</div>'.
+        '<div class="mt-1 text-caption text-gray-50">'.$plugin->get_lang('ServiceAppliedToUserAccountHelp').'</div>'.
         '</div>'
     );
 } elseif ($typeCourse) {

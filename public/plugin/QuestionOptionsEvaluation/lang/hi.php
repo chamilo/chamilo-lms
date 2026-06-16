@@ -4,7 +4,6 @@
 $strings['plugin_title'] = 'प्रश्न विकल्प मूल्यांकन';
 $strings['plugin_comment'] = 'प्रश्नों में विकल्पों के अंकों की पुनः गणना की अनुमति दें';
 
-$strings['enable'] = 'सक्षम करें';
 $strings['exercise_max_score'] = 'अभ्यासों में अधिकतम अंक';
 $strings['exercise_max_score_help'] = 'पूर्वनिर्धारित 10 है।';
 
@@ -17,3 +16,5 @@ $strings['Formula3'] = 'सफलताएँ - असफलताएँ / 3';
 $strings['QuestionsEvaluated'] = 'मूल्यांकित प्रश्न';
 $strings['RecalculateQuestionScores'] = 'प्रश्न अंकों की पुनः गणना करें';
 $strings['FormulaSavedForExerciseX'] = 'अभ्यास "%s" के लिए सूत्र सहेजा गया।';
+$strings['NoFormulaHelp'] = 'इस परीक्षण के लिए Chamilo के डिफ़ॉल्ट स्कोरिंग व्यवहार को बनाए रखें।';
+$strings['enable'] = 'सक्षम करें';

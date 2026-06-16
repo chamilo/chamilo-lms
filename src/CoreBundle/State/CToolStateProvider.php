@@ -29,6 +29,8 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Throwable;
 
+use const JSON_ERROR_NONE;
+
 /**
  * @template-implements ProviderInterface<CTool>
  */
@@ -81,6 +83,7 @@ final class CToolStateProvider implements ProviderInterface
         );
 
         $allowVisibilityInSession = $this->settingsManager->getSetting('session.allow_edit_tool_visibility_in_session');
+        $hiddenToolsFromTeachers = $this->getHiddenToolsFromTeachers();
 
         [$restrictToPositioning, $allowedToolName] = $this->shouldRestrictToPositioningOnly(
             $user,
@@ -110,6 +113,10 @@ final class CToolStateProvider implements ProviderInterface
             $resolvedName = $resolved['name'];
             $legacyPlugin = $resolved['plugin'] ?? null;
 
+            if ($this->shouldHideToolFromTeacher($cTool, $resolvedName, $hiddenToolsFromTeachers, $user)) {
+                continue;
+            }
+
             if ($this->shouldHideLegacyPluginCourseTool($legacyPlugin, (bool) $isAllowToEdit, $studentView)) {
                 continue;
             }
@@ -131,7 +138,7 @@ final class CToolStateProvider implements ProviderInterface
 
             if ($session && $allowVisibilityInSession) {
                 $sessionLink = $resourceLinks->findFirst(
-                    fn (int $key, ResourceLink $resourceLink): bool => $resourceLink->getSession()?->getId() === $session->getId()
+                    fn (int $key, ResourceLink $resourceLink): bool => $resourceLink->getSession()?->getId() === $session->getId(),
                 );
 
                 if ($sessionLink) {
@@ -340,8 +347,11 @@ final class CToolStateProvider implements ProviderInterface
         ], static fn ($value): bool => \is_string($value) && '' !== trim($value))));
     }
 
-    private function shouldHideTeacherOnlyLegacyCourseTool(CTool $cTool, bool $isAllowToEdit, ?string $studentView): bool
-    {
+    private function shouldHideTeacherOnlyLegacyCourseTool(
+        CTool $cTool,
+        bool $isAllowToEdit,
+        ?string $studentView
+    ): bool {
         if (!$this->isTeacherOnlyLegacyCourseTool($cTool)) {
             return false;
         }
@@ -396,7 +406,150 @@ final class CToolStateProvider implements ProviderInterface
         $candidates[] = str_replace('_', '', $camelSnake);
         $candidates[] = str_replace('_', '', $alnumSnake);
 
-        return array_values(array_unique(array_filter($candidates, static fn ($v) => \is_string($v) && '' !== trim($v))));
+        return array_values(array_unique(array_filter(
+            $candidates,
+            static fn ($v): bool => \is_string($v) && '' !== trim($v),
+        )));
+    }
+
+    /**
+     * @return array<string, bool>
+     */
+    private function getHiddenToolsFromTeachers(): array
+    {
+        return $this->normalizeHiddenToolsSetting(
+            $this->settingsManager->getSetting('course.course_hide_tools', true)
+        );
+    }
+
+    /**
+     * @return array<string, bool>
+     */
+    private function normalizeHiddenToolsSetting(mixed $settingValue): array
+    {
+        if (null === $settingValue || false === $settingValue) {
+            return [];
+        }
+
+        $items = [];
+
+        if (\is_array($settingValue)) {
+            $items = $settingValue;
+        } elseif (\is_scalar($settingValue)) {
+            $settingValue = trim((string) $settingValue);
+
+            if ('' === $settingValue) {
+                return [];
+            }
+
+            $decodedValue = json_decode($settingValue, true);
+
+            if (JSON_ERROR_NONE === json_last_error() && \is_array($decodedValue)) {
+                $items = $decodedValue;
+            } else {
+                $items = preg_split('/[,;|]+/', $settingValue) ?: [];
+            }
+        }
+
+        if ([] === $items) {
+            return [];
+        }
+
+        $normalized = [];
+
+        foreach ($items as $key => $item) {
+            $value = $item;
+
+            if ((true === $item || 'true' === $item || '1' === $item) && \is_string($key)) {
+                $value = $key;
+            }
+
+            if ((false === $item || null === $item || '' === $item) && \is_string($key)) {
+                $value = $key;
+            }
+
+            if (!\is_scalar($value) && null !== $value) {
+                continue;
+            }
+
+            $tool = $this->normalizeToolIdentifier((string) $value);
+
+            if ('' === $tool) {
+                continue;
+            }
+
+            $normalized[$tool] = true;
+        }
+
+        return $normalized;
+    }
+
+    private function shouldHideToolFromTeacher(
+        CTool $cTool,
+        string $resolvedName,
+        array $hiddenTools,
+        ?User $user
+    ): bool {
+        if ([] === $hiddenTools || !$this->isCurrentUserTeacherAffectedByHiddenTools($user)) {
+            return false;
+        }
+
+        foreach ($this->getCourseToolHideCandidates($cTool, $resolvedName) as $candidate) {
+            if (isset($hiddenTools[$candidate])) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function isCurrentUserTeacherAffectedByHiddenTools(?User $user): bool
+    {
+        if (null === $user || $user->isAdmin()) {
+            return false;
+        }
+
+        return $user->hasRole('ROLE_CURRENT_COURSE_TEACHER')
+            || $user->hasRole('ROLE_CURRENT_COURSE_SESSION_TEACHER');
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getCourseToolHideCandidates(CTool $cTool, string $resolvedName): array
+    {
+        $toolTitle = trim((string) $cTool->getTool()->getTitle());
+        $courseToolTitle = trim((string) $cTool->getTitle());
+
+        $candidates = [
+            $resolvedName,
+            $toolTitle,
+            $courseToolTitle,
+        ];
+
+        foreach ([$resolvedName, $toolTitle, $courseToolTitle] as $candidate) {
+            $candidates = array_merge($candidates, $this->buildToolNameCandidates($candidate));
+        }
+
+        return array_values(array_unique(array_filter(
+            array_map([$this, 'normalizeToolIdentifier'], $candidates),
+            static fn (string $value): bool => '' !== $value
+        )));
+    }
+
+    private function normalizeToolIdentifier(string $tool): string
+    {
+        $tool = trim($tool);
+
+        if ('' === $tool) {
+            return '';
+        }
+
+        $tool = strtolower($tool);
+        $tool = preg_replace('/[\s\-]+/', '_', $tool) ?? $tool;
+        $tool = preg_replace('/[^a-z0-9_]+/', '_', $tool) ?? $tool;
+
+        return trim($tool, '_');
     }
 
     private function shouldRestrictToPositioningOnly(?User $user, int $courseId, ?int $sessionId): array
@@ -431,7 +584,7 @@ final class CToolStateProvider implements ProviderInterface
             $user->getId(),
             (int) $initialData['exercise_id'],
             $courseId,
-            $sessionId
+            $sessionId,
         );
 
         if (empty($results)) {
@@ -449,7 +602,7 @@ final class CToolStateProvider implements ProviderInterface
 
         return 'true' === $this->settingsManager->getSetting(
             'lp.show_invisible_lp_in_course_home',
-            true
+            true,
         );
     }
 }

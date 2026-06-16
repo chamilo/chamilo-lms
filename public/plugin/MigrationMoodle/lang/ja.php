@@ -1,0 +1,95 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+$strings['plugin_title'] = 'Moodleからインポート';
+$strings['plugin_comment'] = 'MoodleのデータベースとファイルからChamiloへインポート処理を実行します。';
+
+$strings['MoodlePassword'] = 'Moodleパスワード';
+$strings['UninstallError'] = 'プラグインのアンインストール中にエラーが発生しました。';
+
+$strings['db_host'] = 'Moodle DBホスト';
+$strings['db_user'] = 'Moodle DBユーザー';
+$strings['db_password'] = 'Moodle DBパスワード';
+$strings['db_name'] = 'Moodle DB名';
+$strings['user_filter'] = 'ユーザーのフィルター';
+$strings['user_filter_help'] = 'この文字列をプレフィックスとするユーザー名を持つユーザーのみをインポートします。<br>この設定はコースのインポートにも影響し、このユーザー名プレフィックスを持つユーザーが登録されているコースのみをインポートします。';
+$strings['url_id'] = 'URL ID';
+$strings['url_id_help'] = 'コース、ユーザー、セッションを保存するアクセスURL ID（マルチURL使用時）';
+$strings['moodle_path'] = 'Moodledataパス';
+$strings['moodle_path_help'] = 'moodledataフォルダのパス。通常は <pre>/var/www/moodledata</pre> のような形式です。';
+
+// Tasks
+$strings['UsersTask'] = 'ユーザー';
+$strings['CourseCategoriesTask'] = 'コースカテゴリ';
+$strings['CoursesTask'] = 'コース';
+$strings['CourseSectionsTask'] = 'コースセクション';
+$strings['CourseModulesLessonTask'] = 'コースモジュール：レッスン';
+$strings['LessonPagesTask'] = 'レッスンページ';
+$strings['LessonPagesDocumentTask'] = 'レッスンページ：ドキュメント';
+$strings['FilesForLessonPagesTask'] = 'レッスンページ用ファイル';
+$strings['LessonPagesQuizTask'] = 'レッスンページ：質問';
+$strings['LessonPagesQuizQuestionTask'] = '質問ページ用質問';
+$strings['LessonAnswersTrueFalseTask'] = '正誤問題の回答';
+$strings['LessonAnswersMultipleChoiceTask'] = '多肢選択問題の回答';
+$strings['LessonAnswersMultipleAnswerTask'] = '複数回答問題の回答';
+$strings['LessonAnswersMatchingTask'] = 'マッチング問題の回答';
+$strings['LessonAnswersEssayTask'] = '記述問題の回答';
+$strings['LessonAnswersShortAnswerTask'] = '短答問題の回答';
+$strings['FilesForLessonAnswersTask'] = 'レッスン回答用ファイル';
+$strings['CourseModulesQuizTask'] = 'コースモジュール：小テスト';
+$strings['CQuizTask'] = 'C小テスト';
+$strings['RoleAssignmentsTask'] = 'ロール割り当て';
+$strings['QuizzesTask'] = '小テスト';
+$strings['FilesForQuizzesTask'] = '小テスト用ファイル';
+$strings['QuestionCategoriesTask'] = '質問カテゴリ';
+$strings['QuestionsTask'] = '質問';
+$strings['QuestionMultiChoiceSingleTask'] = '多肢選択問題（単一回答）の回答';
+$strings['QuestionMultiChoiceMultipleTask'] = '多肢選択問題（複数回答）の回答';
+$strings['QuestionsTrueFalseTask'] = '正誤問題の回答';
+$strings['QuestionShortAnswerTask'] = '短答問題の回答';
+$strings['CourseModulesScormTask'] = 'SCORMコース';
+$strings['ScormScoesTask'] = 'SCORMアイテム';
+$strings['FilesForScormScoesTask'] = 'SCORMアイテム用ファイル';
+$strings['UserSessionsTask'] = 'ユーザー向けコースセッション';
+$strings['CourseIntroductionsTask'] = 'コースの案内文';
+$strings['FilesForCourseIntroductionsTask'] = 'コース案内文用ファイル';
+$strings['FilesForCourseSectionsTask'] = 'コースセクション用ファイル';
+$strings['CourseModulesUrlTask'] = 'コースモジュール：URL';
+$strings['UrlsTask'] = 'URL';
+$strings['SortSectionModulesTask'] = 'セクション内のモジュールを並べ替え';
+$strings['UsersScormsViewTask'] = 'ユーザーのSCORM閲覧回数';
+$strings['UsersScormsProgressTask'] = 'SCORM進捗';
+$strings['UsersLearnPathsTask'] = 'ユーザーの学習パスの閲覧回数';
+$strings['UsersLearnPathsLessonTimerTask'] = '学習パスセクションの開始時刻のレッスンタイマー';
+$strings['QuizzesScoresTask'] = '学習パスの小テストのスコアを更新';
+$strings['QuestionGapselectTask'] = '穴埋め選択問題の回答';
+$strings['UsersLearnPathsLessonBranchTask'] = '学習パス文書の合計時間へのレッスン分岐';
+$strings['UsersLearnPathsLessonAttemptsTask'] = '学習パス小テストの合計時間へのレッスン試行回数';
+$strings['UsersLearnPathsQuizzesTask'] = '小テストの試行回数を学習パスの小テスト試行回数に';
+$strings['UsersQuizzesAttemptsTask'] = 'ユーザーの小テスト試行回数';
+$strings['UserQuestionAttemptsShortanswerTask'] = 'ユーザーの短答問題の質問試行回数';
+$strings['UserQuestionAttemptsGapselectTask'] = 'ユーザーの穴埋め選択問題の質問試行回数';
+$strings['UserQuestionAttemptsTruefalseTask'] = 'ユーザーの正誤問題の質問試行回数';
+$strings['UsersLastLoginTask'] = 'ユーザーの最終ログイン';
+$strings['TrackLoginTask'] = '初回ログインと最終ログアウト';
+$strings['TrackCourseAccessTask'] = 'コースへのユーザーアクセス';
+$strings['UserLearnPathsProgressScript'] = 'ユーザーの学習パスの進捗を更新';
+$strings['UserScormsProgressScript'] = 'ユーザーのSCORMの進捗を更新';
+
+$strings['InstallError'] = 'プラグインのインストール中にエラーが発生しました: %s';
+$strings['AdminIntro'] = 'Moodle移行タスクを順番に実行します。各ステップは、親ステップが完了した後にのみ有効になります。';
+$strings['MoodleDatabase'] = 'Moodleデータベース';
+$strings['MoodledataPath'] = 'Moodledataパス';
+$strings['AccessUrlId'] = 'アクセスURL ID';
+$strings['Configured'] = '設定済み';
+$strings['NotConfigured'] = '未設定';
+$strings['ConfigurePlugin'] = 'プラグインを設定';
+$strings['MissingRequiredDatabaseConfiguration'] = '移行タスクを実行する前に、Moodleデータベースのホスト、ユーザー、データベース名を設定してください。';
+$strings['MissingMoodledataPathWarning'] = 'Moodledataパスが空です。この設定を構成するまで、ファイル関連のタスクが失敗する可能性があります。';
+$strings['InvalidMigrationAction'] = '無効な移行アクションです。';
+$strings['InvalidSecurityToken'] = 'セキュリティトークンが無効です。ページを再読み込みして再度お試しください。';
+$strings['MigrationTasks'] = '移行タスク';
+$strings['MaintenanceScripts'] = 'メンテナンススクリプト';
+$strings['ExecutionOutput'] = '実行結果';
+$strings['TaskAlreadyExecuted'] = 'このタスクまたはスクリプトはすでに実行されています。';
+$strings['SelectTaskToRun'] = '実行する移行タスクを選択してください。出力はここに表示されます。';

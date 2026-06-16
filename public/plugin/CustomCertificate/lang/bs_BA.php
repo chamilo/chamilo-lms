@@ -75,3 +75,18 @@ $strings['QuestionDelete'] = 'Želite li obrisati specifičnu diplomu i koristit
 $strings['SuccessDelete'] = 'Uspješno obrisano';
 $strings['ProblemDelete'] = 'Problem pri brisanju certifikata';
 $strings['OnlyCustomCertificates'] = 'Izvoze se samo kursevi s personaliziranim certifikatom';
+$strings['CertificateMode'] = 'Način rada certifikata';
+$strings['UseCourseCustomCertificate'] = 'Koristi prilagođeni certifikat specifičan za kurs';
+$strings['UseDefaultCustomCertificate'] = 'Koristi zadani prilagođeni certifikat platforme';
+
+$strings['CreateCertificateWithTags'] = 'Kreiraj certifikat koristeći ove oznake';
+
+$strings['DeleteCertificate'] = 'Obriši certifikat';
+
+$strings['SaveCertificate'] = 'Sačuvaj certifikat';
+
+$strings['SelectOneOptionBeforeOpeningEditor'] = 'Odaberite jednu opciju i sačuvajte postavke prije otvaranja uređivača certifikata.';
+
+$strings['ChooseCustomCertificateModeHelp'] = 'Odaberite kako ovaj kurs treba koristiti prilagođene certifikate.';
+
+$strings['CouldNotSaveCertificate'] = 'Nije moguće sačuvati konfiguraciju certifikata.';

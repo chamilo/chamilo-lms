@@ -20,3 +20,7 @@ $strings['EmbedDateRangeHelp'] = 'Inden for disse datoer vises dette indlejrede 
 $strings['HtmlCode'] = 'HTML-kode';
 $strings['HtmlCodeHelp'] = 'Den delte HTML-kode, som leveres af den eksterne tjeneste, når du beder om at dele i indlejret format.';
 $strings['LaunchContent'] = 'Start indhold';
+
+$strings['InvalidDateRange'] = 'Startdatoen skal være tidligere end eller lig med slutdatoen.';
+
+$strings['InvalidSecurityToken'] = 'Ugyldig sikkerhedstoken. Genindlæs venligst siden og prøv igen.';

@@ -75,3 +75,18 @@ $strings['QuestionDelete'] = 'Želite izbrisati ta specifični diplomski list in
 $strings['SuccessDelete'] = 'Uspešno izbrisano';
 $strings['ProblemDelete'] = 'Težava pri brisanju certifikata';
 $strings['OnlyCustomCertificates'] = 'Izvožijo se samo tečaji s prilagojenim certifikatom';
+$strings['CertificateMode'] = 'Način potrdila';
+$strings['UseCourseCustomCertificate'] = 'Uporabi potrdilo po meri za ta tečaj';
+$strings['UseDefaultCustomCertificate'] = 'Uporabi privzeto potrdilo po meri platforme';
+
+$strings['CreateCertificateWithTags'] = 'Ustvari potrdilo z uporabo teh oznak';
+
+$strings['DeleteCertificate'] = 'Izbriši potrdilo';
+
+$strings['SaveCertificate'] = 'Shrani potrdilo';
+
+$strings['SelectOneOptionBeforeOpeningEditor'] = 'Izberite eno možnost in shranite nastavitve, preden odprete urejevalnik potrdil.';
+
+$strings['ChooseCustomCertificateModeHelp'] = 'Izberite, kako naj ta tečaj uporablja potrdila po meri.';
+
+$strings['CouldNotSaveCertificate'] = 'Konfiguracije potrdila ni bilo mogoče shraniti.';

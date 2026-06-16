@@ -8,3 +8,6 @@ $strings['PluginDisabled'] = 'Evaluarea electronică este dezactivată';
 $strings['StudentId'] = 'ID student';
 $strings['ProviderId'] = 'ID furnizor';
 $strings['CourseHours'] = 'Ore curs';
+
+$strings['GenerateFile'] = 'Generează fișier';
+$strings['CourseId'] = 'ID curs';

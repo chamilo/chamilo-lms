@@ -20,3 +20,7 @@ $strings['EmbedDateRangeHelp'] = 'Šiomis datomis šis įterptas turinys bus rod
 $strings['HtmlCode'] = 'HTML kodas';
 $strings['HtmlCodeHelp'] = 'Dalijamas HTML kodas, kurį pateikia išorinė paslauga, kai prašoma dalintis Įterpimo formatu.';
 $strings['LaunchContent'] = 'Paleisti turinį';
+
+$strings['InvalidDateRange'] = 'Pradžios data turi būti ankstesnė arba lygi pabaigos datai.';
+
+$strings['InvalidSecurityToken'] = 'Neteisingas saugos žetonas. Įkelkite puslapį iš naujo ir bandykite dar kartą.';

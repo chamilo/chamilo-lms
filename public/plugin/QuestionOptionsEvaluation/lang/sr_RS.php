@@ -4,7 +4,6 @@
 $strings['plugin_title'] = 'Procena opcija pitanja';
 $strings['plugin_comment'] = 'Dozvoli ponovno izračunavanje poena opcija u pitanjima';
 
-$strings['enable'] = 'Omogući';
 $strings['exercise_max_score'] = 'Maksimalan broj poena u vežbama';
 $strings['exercise_max_score_help'] = 'Podrazumevano je 10.';
 
@@ -17,3 +16,5 @@ $strings['Formula3'] = 'Uspehi - Neuspesi / 3';
 $strings['QuestionsEvaluated'] = 'Procenjena pitanja';
 $strings['RecalculateQuestionScores'] = 'Ponovno izračunaj poene pitanja';
 $strings['FormulaSavedForExerciseX'] = 'Formula sačuvana za vežbu "%s".';
+$strings['NoFormulaHelp'] = 'Zadrži podrazumevano ponašanje bodovanja Chamilo za ovaj test.';
+$strings['enable'] = 'Omogući';

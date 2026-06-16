@@ -16,7 +16,7 @@
 
                     <div>
                         <h1 class="text-2xl font-semibold tracking-tight text-gray-90 sm:text-3xl">
-                            {{ page_title|default('AvailableCourses'|get_lang) }}
+                            {{ page_title|default('AvailableCourses'|get_plugin_lang('BuyCoursesPlugin')) }}
                         </h1>
                         <p class="mt-2 text-sm leading-6 text-gray-50">
                             {{ 'ConfigurationOfCoursesAndPrices'|get_plugin_lang('BuyCoursesPlugin') }}
@@ -60,7 +60,7 @@
             <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                     <h2 class="text-lg font-semibold text-gray-90">
-                        {{ 'AvailableCourses'|get_lang }}
+                        {{ 'AvailableCourses'|get_plugin_lang('BuyCoursesPlugin') }}
                     </h2>
                     <p class="mt-1 text-sm text-gray-50">
                         {{ 'ConfigurationOfCoursesAndPrices'|get_plugin_lang('BuyCoursesPlugin') }}
@@ -603,13 +603,45 @@
                     {% endif %}
 
                     <td class="px-6 py-4 text-right">
-                        <a
-                                href="{{ url('index') ~ 'plugin/BuyCourses/src/services_edit.php?' ~ {'id': item.id}|url_encode }}"
-                                class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2"
-                        >
-                            <em class="fa fa-wrench fa-fw"></em>
-                            {{ 'Edit'|get_lang }}
-                        </a>
+                        <div class="inline-flex flex-wrap items-center justify-end gap-2">
+                            <a
+                                    href="{{ url('index') ~ 'plugin/BuyCourses/src/services_edit.php?' ~ {'id': item.id}|url_encode }}"
+                                    class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2"
+                            >
+                                <em class="fa fa-wrench fa-fw"></em>
+                                {{ 'Edit'|get_lang }}
+                            </a>
+
+                            <form
+                                    method="post"
+                                    action="{{ url('index') ~ 'plugin/BuyCourses/src/list_service.php' }}"
+                                    class="inline-flex"
+                            >
+                                <input type="hidden" name="action" value="copy_service">
+                                <input type="hidden" name="id" value="{{ item.id }}">
+                                <input type="hidden" name="copy_service_token" value="{{ copy_service_token }}">
+                                <button
+                                        type="submit"
+                                        class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 shadow-sm transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
+                                >
+                                    <em class="fa fa-copy fa-fw"></em>
+                                    {{ 'Copy'|get_lang }}
+                                </button>
+                            </form>
+
+                            {% set serviceShareUrl = url('index') ~ 'plugin/BuyCourses/src/service_information.php?' ~ {'service_id': item.id}|url_encode %}
+                            <button
+                                    type="button"
+                                    class="buycourses-copy-service-link inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 shadow-sm transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
+                                    data-service-link="{{ serviceShareUrl|e('html_attr') }}"
+                                    data-default-label="{{ 'CopyServiceLink'|get_plugin_lang('BuyCoursesPlugin')|e('html_attr') }}"
+                                    data-success-label="{{ 'ServiceLinkCopied'|get_plugin_lang('BuyCoursesPlugin')|e('html_attr') }}"
+                                    data-error-message="{{ 'ServiceLinkCopyFailed'|get_plugin_lang('BuyCoursesPlugin')|e('html_attr') }}"
+                            >
+                                <em class="fa fa-link fa-fw"></em>
+                                <span>{{ 'CopyServiceLink'|get_plugin_lang('BuyCoursesPlugin') }}</span>
+                            </button>
+                        </div>
                     </td>
                 </tr>
                 {% else %}
@@ -679,4 +711,70 @@
     </section>
     {% endif %}
 </div>
+<script>
+(function () {
+    var buttons = document.querySelectorAll('.buycourses-copy-service-link');
+
+    if (!buttons.length) {
+        return;
+    }
+
+    var fallbackCopy = function (text) {
+        var input = document.createElement('textarea');
+        input.value = text;
+        input.setAttribute('readonly', 'readonly');
+        input.style.position = 'fixed';
+        input.style.opacity = '0';
+        document.body.appendChild(input);
+        input.select();
+
+        try {
+            return document.execCommand('copy');
+        } finally {
+            document.body.removeChild(input);
+        }
+    };
+
+    var copyText = function (text) {
+        if (navigator.clipboard && window.isSecureContext) {
+            return navigator.clipboard.writeText(text);
+        }
+
+        return new Promise(function (resolve, reject) {
+            if (fallbackCopy(text)) {
+                resolve();
+                return;
+            }
+
+            reject(new Error('Copy command failed'));
+        });
+    };
+
+    buttons.forEach(function (button) {
+        button.addEventListener('click', function () {
+            var link = button.getAttribute('data-service-link') || '';
+            var defaultLabel = button.getAttribute('data-default-label') || '';
+            var successLabel = button.getAttribute('data-success-label') || '';
+            var errorMessage = button.getAttribute('data-error-message') || '';
+            var label = button.querySelector('span');
+
+            copyText(link)
+                .then(function () {
+                    if (label && successLabel) {
+                        label.textContent = successLabel;
+                    }
+
+                    window.setTimeout(function () {
+                        if (label && defaultLabel) {
+                            label.textContent = defaultLabel;
+                        }
+                    }, 2000);
+                })
+                .catch(function () {
+                    window.prompt(errorMessage, link);
+                });
+        });
+    });
+})();
+</script>
 {% endautoescape %}

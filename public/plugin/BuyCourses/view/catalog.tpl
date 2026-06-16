@@ -26,6 +26,13 @@
     {% set visibleTabsCount = visibleTabsCount + 1 %}
 {% endif %}
 
+<style>
+    .bc-translated-html p {margin: 0 0 0.5rem;}
+    .bc-translated-html ul {margin: 0.5rem 0 0.5rem 1.25rem; padding-left: 1.25rem; list-style: disc;}
+    .bc-translated-html ol {margin: 0.5rem 0 0.5rem 1.25rem; padding-left: 1.25rem; list-style: decimal;}
+    .bc-translated-html li {margin: 0.2rem 0;}
+</style>
+
 <div class="mx-auto w-full max-w-[1600px] space-y-6 px-4 py-6 sm:px-6 lg:px-8 2xl:px-10">
     <section class="rounded-3xl border border-gray-25 bg-white p-6 shadow-sm">
         <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
@@ -185,6 +192,14 @@
                     >
                 </div>
 
+                {% if showing_services %}
+                    <input
+                        type="hidden"
+                        name="billing_cycle"
+                        value="{{ billing_cycle_filter_value|default('monthly') }}"
+                    >
+                {% endif %}
+
                 <div class="flex flex-col gap-3 pt-2">
                     <button
                         type="submit"
@@ -195,7 +210,7 @@
                     </button>
 
                     <a
-                        href="{{ pagination_base_path|default('course_catalog.php') }}"
+                        href="{{ service_catalog_reset_url|default(pagination_base_path|default('course_catalog.php')) }}"
                         class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
                     >
                         <em class="fa fa-eraser fa-fw"></em>
@@ -305,6 +320,17 @@
                         <p class="mt-2 text-sm text-gray-50">
                             {{ 'TryChangingSearchFilter'|get_plugin_lang('BuyCoursesPlugin') }}
                         </p>
+                        {% if admin_empty_catalog_action_url is defined and admin_empty_catalog_action_url and admin_empty_catalog_action_label is defined and admin_empty_catalog_action_label %}
+                            <div class="mt-6">
+                                <a
+                                    href="{{ admin_empty_catalog_action_url }}"
+                                    class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2"
+                                >
+                                    <em class="fa fa-plus fa-fw"></em>
+                                    {{ admin_empty_catalog_action_label }}
+                                </a>
+                            </div>
+                        {% endif %}
                     </div>
                 {% endif %}
             {% endif %}
@@ -402,11 +428,37 @@
                         <p class="mt-2 text-sm text-gray-50">
                             {{ 'TryChangingSearchFilter'|get_plugin_lang('BuyCoursesPlugin') }}
                         </p>
+                        {% if admin_empty_catalog_action_url is defined and admin_empty_catalog_action_url and admin_empty_catalog_action_label is defined and admin_empty_catalog_action_label %}
+                            <div class="mt-6">
+                                <a
+                                    href="{{ admin_empty_catalog_action_url }}"
+                                    class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2"
+                                >
+                                    <em class="fa fa-plus fa-fw"></em>
+                                    {{ admin_empty_catalog_action_label }}
+                                </a>
+                            </div>
+                        {% endif %}
                     </div>
                 {% endif %}
             {% endif %}
 
             {% if showing_services %}
+                {% if billing_cycle_tabs is defined and billing_cycle_tabs %}
+                    <nav class="overflow-x-auto" aria-label="{{ 'BillingPeriod'|get_plugin_lang('BuyCoursesPlugin') }}">
+                        <div class="inline-flex rounded-2xl border border-gray-25 bg-white p-1 shadow-sm">
+                            {% for billingTab in billing_cycle_tabs %}
+                                <a
+                                    href="{{ billingTab.url }}"
+                                    class="inline-flex items-center justify-center rounded-xl px-4 py-2.5 text-sm font-semibold transition {{ billingTab.active ? 'bg-primary text-white shadow-sm' : 'text-gray-90 hover:bg-support-2 hover:text-primary' }}"
+                                >
+                                    {{ billingTab.label }}
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </nav>
+                {% endif %}
+
                 {% if buyer_role_notice is defined and buyer_role_notice %}
                     <div class="rounded-2xl border border-warning bg-support-6 px-4 py-3 text-sm text-gray-90">
                         <em class="fa fa-info-circle fa-fw"></em>
@@ -433,8 +485,8 @@
                                         </h3>
                                     </div>
 
-                                    <div class="text-sm text-gray-50">
-                                        {{ service.description }}
+                                    <div class="bc-translated-html text-sm text-gray-50">
+                                        {{ service.description|raw }}
                                     </div>
 
                                     <div class="rounded-2xl border border-primary/10 bg-support-1 px-4 py-3">
@@ -443,6 +495,17 @@
                                         </div>
                                         <div class="mt-1 text-base font-semibold text-gray-90">
                                             {{ service.display_price|default(service.total_price|default('')) }}
+                                        </div>
+                                        <div class="mt-2 flex flex-wrap items-center gap-2 text-xs font-semibold text-gray-50">
+                                            <span class="inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1">
+                                                <em class="fa fa-calendar fa-fw text-primary"></em>
+                                                {{ service.billing_cycle_label|default('') }}
+                                            </span>
+                                            {% if service.duration_label|default('') %}
+                                                <span class="inline-flex items-center rounded-full bg-white px-2.5 py-1">
+                                                    {{ service.duration_label }}
+                                                </span>
+                                            {% endif %}
                                         </div>
                                     </div>
 
@@ -457,7 +520,7 @@
 
                                         {% if service.has_blocking_sale|default(false) %}
                                             <span
-                                                class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gray-20 px-4 py-2.5 text-sm font-semibold text-gray-50"
+                                                class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary/15 px-4 py-2.5 text-sm font-semibold text-primary"
                                             >
                                                 <em class="fa fa-check-circle fa-fw"></em>
                                                 {{ 'Already purchased'|get_lang }}
@@ -472,7 +535,8 @@
                                                 </span>
                                             {% endif %}
 
-                                            {% if can_buy_services|default(false) %}
+                                            {% set canBuyThisService = service.can_buy is defined ? service.can_buy : can_buy_services|default(false) %}
+                                            {% if canBuyThisService %}
                                                 <a
                                                     class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-success px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-success/30 focus:ring-offset-2"
                                                     href="service_process.php?i={{ service.id }}&t={{ service.applies_to|default(0) }}"

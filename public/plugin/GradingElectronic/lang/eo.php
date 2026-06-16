@@ -8,3 +8,6 @@ $strings['PluginDisabled'] = 'Elektronika Notado estas malŝaltita';
 $strings['StudentId'] = 'Student ID';
 $strings['ProviderId'] = 'Provizanto ID';
 $strings['CourseHours'] = 'Horoj de la kurso';
+
+$strings['GenerateFile'] = 'Generi dosieron';
+$strings['CourseId'] = 'Kurs-ID';

@@ -98,14 +98,14 @@
                             {% if sale.is_renewable %}
                                 <div class="bc-recurring-box">
                                     <div>
-                                        <p class="bc-recurring-box__title">Recurring payments</p>
+                                        <p class="bc-recurring-box__title">{{ 'RecurringPayments'|get_plugin_lang('BuyCoursesPlugin') }}</p>
                                         <p class="bc-recurring-box__status">{{ sale.recurring_status_label|e }}</p>
-                                        {% if sale.next_charge_date %}<p class="bc-recurring-box__extra">Next charge: {{ sale.next_charge_date|e }}</p>{% endif %}
-                                        {% if sale.recurring_profile_id %}<p class="bc-recurring-box__status">Profile: {{ sale.recurring_profile_id|e }}</p>{% endif %}
+                                        {% if sale.next_charge_date %}<p class="bc-recurring-box__extra">{{ 'NextCharge'|get_plugin_lang('BuyCoursesPlugin') }}: {{ sale.next_charge_date|e }}</p>{% endif %}
+                                        {% if sale.recurring_profile_id %}<p class="bc-recurring-box__status">{{ 'RecurringProfile'|get_plugin_lang('BuyCoursesPlugin') }}: {{ sale.recurring_profile_id|e }}</p>{% endif %}
                                     </div>
                                     <div class="bc-actions" style="margin-top: 0;">
-                                        {% if sale.can_enable_recurring %}<a href="{{ sale.enable_recurring_url|e }}" class="bc-button bc-button--primary">Enable auto billing</a>{% endif %}
-                                        {% if sale.can_cancel_recurring %}<a href="{{ sale.cancel_recurring_url|e }}" class="bc-button bc-button--danger" onclick="return confirm('Cancel auto billing for this service?');">Cancel auto billing</a>{% endif %}
+                                        {% if sale.can_enable_recurring %}<a href="{{ sale.enable_recurring_url|e }}" class="bc-button bc-button--primary">{{ 'EnableAutoBilling'|get_plugin_lang('BuyCoursesPlugin') }}</a>{% endif %}
+                                        {% if sale.can_cancel_recurring %}<a href="{{ sale.cancel_recurring_url|e }}" class="bc-button bc-button--danger" onclick="return confirm('{{ 'CancelAutoBillingConfirm'|get_plugin_lang('BuyCoursesPlugin')|e('js') }}');">{{ 'CancelAutoBilling'|get_plugin_lang('BuyCoursesPlugin') }}</a>{% endif %}
                                     </div>
                                 </div>
                             {% endif %}

@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Pẹ̀lẹ́"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Àpẹẹrẹ fọọmu: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Àpẹẹrẹ ìṣirò: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Àwùjọ ìdípadì ìyàtọ̀"
@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Jọwọ kọ ọrọ rẹ si isalẹ"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Àpẹẹrẹ ìdí ìwà ìfúnwò fọọmu : ṣe ìṣirò Ìdí Ìpọ̀n Ara</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ọjọ́-ori</strong></td>            <td width=\"75%\" style=\"\">[25] ọdún</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ìbẹ̀rẹ̀</strong></td>            <td style=\"\" text-align:=\"\">[M] (M tabi F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ìdí</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong Ìdàgbàsókè</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ìdí Ìpọ̀n Ara</strong></td>            <td style=\"vertical-align: top;\">[29] BMI = Ìdí/Ìdàgbàsókè<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Àtẹ̀wò Wikipedia</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Kọ adirẹẹsi silẹ"
@@ -9725,6 +9725,9 @@ msgstr "Awọn abajade ìwádìí fun:"
 
 msgid "Select a file"
 msgstr "Yan faili kan"
+
+msgid "Select a file to insert into the editor."
+msgstr "Yan fáìlì kan láti fi sínú olootu."
 
 msgid "Warning - The FAQ file, located in the /home/ directory of your portal, is not writable. Your text will not be saved until the file permissions are changed."
 msgstr "Ìkìlọ̀ - Faili FAQ, tí ó wà nínú àwùjọ /home/ ti ọ̀tá rẹ, kò ṣe ìkọ̀wé. Ọrọ rẹ kò ni fipamọ títí di ìgbà tí ìyọ̀nda faili yí padà."
@@ -15906,6 +15909,9 @@ msgstr "Ọjọ́ & àkókò"
 msgid "Item"
 msgstr "Ohun kan"
 
+msgid "Items"
+msgstr "Àwọn ohun kan"
+
 msgid "Configure Dashboard Plugin"
 msgstr "Ṣàtúnṣe Ìdàdìrì Plugin Dashboard"
 
@@ -16069,13 +16075,13 @@ msgid "Create child skill"
 msgstr "Ṣẹ̀dá ìmọ̀ ìbáṣepọ̀ ọmọ"
 
 msgid "This skill can be obtained through:"
-msgstr ""
+msgstr "Ìmọ̀ yìí lè ṣe nípasẹ̀:"
 
 msgid "No course currently allows you to obtain this skill."
-msgstr ""
+msgstr "Kò sí ẹ̀kọ́ tí ó wà lọ́wọ́lọ́wọ́ tí ó jẹ́ kí o lè gba ìmọ̀ yìí."
 
 msgid "Add skill to search profile"
-msgstr ""
+msgstr "Fi ìmọ̀ kun sí profaìlì ìwádìí"
 
 msgid "Search profile matches"
 msgstr "Ṣàwádìí ìbámu profaili"
@@ -17159,6 +17165,18 @@ msgstr "Awọn akoko ni ẹgbẹ"
 
 msgid "Courses in group"
 msgstr "Awọn iṣẹ-ẹkọ ni ẹgbẹ"
+
+msgid "Courses on the platform"
+msgstr "Àwọn ẹ̀kọ́ lórí pèlẹ́fọ́ọ̀mù"
+
+msgid "%s courses"
+msgstr "%s àwọn ẹ̀kọ́"
+
+msgid "%s sessions"
+msgstr "%s àwọn ìgbà"
+
+msgid "Search by title or code"
+msgstr "Wá nípasẹ̀ àkọlé tabi koodu"
 
 msgid "Users in group"
 msgstr "Awọn olumulo ni ẹgbẹ"
@@ -24865,28 +24883,28 @@ msgid "Invitation to session ((session_name))"
 msgstr "Ifiwepe si akoko ((session_name))"
 
 msgid "Fill blanks or form with exact selection"
-msgstr ""
+msgstr "Fọ́ọ̀mù ìṣòro pẹ̀lú yíyàn pípé"
 
 msgid "Matching with exact selection"
-msgstr ""
+msgstr "Ìbámu pẹ̀lú yíyàn pípé"
 
 msgid "Image zones with exact selection"
-msgstr ""
+msgstr "Àwọn agbègbè àwòrán pẹ̀lú yíyàn pípé"
 
 msgid "Match by dragging with exact selection"
-msgstr ""
+msgstr "Ìbámu nípa fifa pẹ̀lú yíyàn pípé"
 
 msgid "Multiple answer dropdown with exact selection"
-msgstr ""
+msgstr "Ìdáhùn ọ̀pọ̀lọpọ̀ pẹ̀lú ìsọ̀tọ́ tó péye"
 
 msgid "AI learning path generator"
-msgstr ""
+msgstr "Olùṣèdá ọ̀nà ìkẹ́kọ̀ọ́ AI"
 
 msgid "Topic"
-msgstr ""
+msgstr "Àkọ́lé"
 
 msgid "Type the topic on which you want the AI Helper to develop a learning path. The more detailed the topic, the more precise the result will be."
-msgstr ""
+msgstr "Tẹ àkọ́lé tí o fẹ́ kí Olùrànlọ́wọ́ AI ṣe ọ̀nà ìkẹ́kọ̀ọ́. Bí àkọ́lé bá ti péye sí i, àbájáde yóò sì péye sí i."
 
 msgid "Number of learning path items"
 msgstr "Nọmba awọn ohun elo ọna ẹkọ"
@@ -25057,7 +25075,7 @@ msgid "The update failed for the following courses"
 msgstr "Imudojuiwọn ti kuna fun awọn iṣẹ-ẹkọ wọnyi"
 
 msgid "%02d h %02d m %02d s"
-msgstr "%02d h %02d m %02d s"
+msgstr "%02d w %02d ìṣẹ́jú %02d ìṣẹ́jú-aaya"
 
 msgid "User management"
 msgstr "Ṣakoso olumulo"
@@ -25786,7 +25804,7 @@ msgid "Show question pagination for teachers"
 msgstr "Fi pagination ibeere han fun awọn olukọ"
 
 msgid "For tests with many questions, use pagination if the number of questions is higher than this setting. Set to 0 to prevent using pagination."
-msgstr ""
+msgstr "Fún àwọn ìdánwò pẹ̀lú ọ̀pọ̀lọpọ̀ ìbéèrè, lo ìpín ojú-ìwé bí iye àwọn ìbéèrè bá pọ̀ ju ìṣètò yìí lọ. Ṣètò sí 0 láti yẹra fún lílo ìpín ojú-ìwé."
 
 msgid "Question pagination length for teachers"
 msgstr "Gigun pagination ibeere fun olukọ"
@@ -32163,6 +32181,9 @@ msgstr "Iṣẹ́ Ìdásílẹ̀"
 msgid "Allowed file formats: %s"
 msgstr "Àwùn ìlò ìdásílẹ̀ tí a yọ̀ǹda: %s"
 
+msgid "File manager"
+msgstr "Olùṣàkóso fáìlì"
+
 msgid "File type not allowed. Allowed extensions: %s"
 msgstr "Àwùn ìlò ìdásílẹ̀ kò yọ̀ǹda. Àwùn ìdásílẹ̀ tí a yọ̀ǹda: %s"
 
@@ -33876,6 +33897,2583 @@ msgstr "Kaabọ"
 msgid "Welcome to Chamilo"
 msgstr "Kaabọ si Chamilo"
 
+msgid "Check all unanswered questions below"
+msgstr "Ṣàyẹ̀wò gbogbo àwọn ìbéèrè tí a kò tíì dáhùn nísàlẹ̀"
+
 msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
 msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Ti o ba jẹ akoko akọkọ rẹ lati lo Chamilo, rii daju pe o ṣayẹwo akojọ ẹwa ẹgbẹ lati wa ọna rẹ nipasẹ awọn ẹya ọpọlọpọ rẹ. Ti o ba nilo iranlọwọ, iwọ yoo rii <a href=\"https://docs.chamilo.org\">awọn iwe itọnisọna osise wa</a> le ṣe iranlọwọ fun awọn iwe itọnisọna boṣewa, lakoko ti <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">apejọ ori ayelujara wa</a> le ṣe iranlọwọ lati pin awọn imọran ati ri awọn idahun lati ọdọ awọn olummo Chamilo miiran."
+
+msgid "Change password"
+msgstr "Yí ọ̀rọ̀ìpamọ́ padà"
+
+msgid "Newest first"
+msgstr "Tuntun jùlọ ní àkọ́kọ́"
+
+msgid "Oldest first"
+msgstr "Àtọ́jọ́ jùlọ ní àkọ́kọ́"
+
+msgid "Title A–Z"
+msgstr "Àkọ́lé A–Z"
+
+msgid "Title Z–A"
+msgstr "Àkọ́lé Z–A"
+
+msgid "Send test email"
+msgstr "Fi ímeèlì ìdánwò ránṣẹ́"
+
+msgid "Show teachers"
+msgstr "Fihàn àwọn olùkọ́"
+
+msgid "Hide teachers"
+msgstr "Tọ́ àwọn olùkọ́ pamọ́"
+
+msgid "Delete exercise attempts"
+msgstr "Parẹ́ àwọn ìgbìyànjú ìdàrayá"
+
+msgid "Message sent successfully."
+msgstr "Ìfiránṣẹ́ ti ṣẹ́ ní àṣeyọrí."
+
+msgid "You cannot create a new course right now."
+msgstr "O kò lè ṣẹ̀dá ẹ̀kọ́ tuntun báyìí."
+
+msgid "Unable to verify whether you can create a new course right now."
+msgstr "Kò ṣeé ṣe láti rí i dájú pé o lè ṣẹ̀dá ẹ̀kọ́ tuntun báyìí."
+
+msgid "Please try again later or contact the administrator."
+msgstr "Jọ̀wọ́ gbiyanju lẹ́ẹ̀kan sí i tàbí kàn sí olùṣàkóso."
+
+msgid "You cannot create more courses at this time."
+msgstr "O kò lè ṣẹ̀dá ẹ̀kọ́ púpọ̀ sí i ní àkókò yìí."
+
+msgid "You already manage %d courses and your active service allows up to %d. To create another course, you need a higher service limit or reduce your current active courses."
+msgstr "O ti ń ṣàkóso àwọn ẹ̀kọ́ %d tẹ́lẹ̀, iṣẹ́ rẹ tí ó wà ní ipò ṣiṣẹ́ sì gba títí dé %d. Láti ṣẹ̀dá ẹ̀kọ́ mìíràn, o nílò ìpín iṣẹ́ tí ó ga jù tàbí dín àwọn ẹ̀kọ́ tí ó wà ní ipò ṣiṣẹ́ rẹ kù."
+
+msgid "You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now."
+msgstr "O ti ń ṣàkóso àwọn ẹ̀kọ́ %d tẹ́lẹ̀, pẹpẹ sì gba títí dé %d fún àkọọ́lẹ̀ rẹ báyìí. O kò lè ṣẹ̀dá ẹ̀kọ́ púpọ̀ sí i ní àkókò yìí."
+
+msgid "Add a class"
+msgstr "Fi kíláàsì kan kún"
+
+msgid "Search classes"
+msgstr "Wá àwọn kíláàsì"
+
+msgid "No classes found"
+msgstr "Kò rí àwọn kíláàsì kankan"
+
+msgid "Import classes"
+msgstr "Gbé àwọn kíláàsì wọlé"
+
+msgid "Class users"
+msgstr "Àwọn olùlò kíláàsì"
+
+msgid "%s classes imported"
+msgstr "%s àwọn kíláàsì ti wọlé"
+
+msgid "%s user-class links imported"
+msgstr "%s ìsopọ̀ olùlò-kíláàsì ti wọlé"
+
+msgid "Hide comments"
+msgstr "Tọ́ àwọn àkọsílẹ̀ pamọ́"
+
+msgid "Loading comments..."
+msgstr "Ń gbé àwọn àkọsílẹ̀ wá..."
+
+msgid "No comments yet."
+msgstr "Kò sí àkọsílẹ̀ kankan síbẹ̀."
+
+msgid "A user with this username already exists"
+msgstr "Olùlò kan pẹ̀lú orúkọ olùlò yìí ti wà tẹ́lẹ̀"
+
+msgid "Manage meetings, review recordings and update course-wide BBB settings from one place."
+msgstr "Ṣàkóso àwọn ìpàdé, ṣàtúnyẹ̀wò àwọn ìgbasilẹ̀ àti ṣàtúnṣe àwọn ìṣètò BBB gbogbo ẹ̀kọ́ láti ibì kan."
+
+msgid "Review the current defaults and propagate them to every course when needed."
+msgstr "Ṣàtúnyẹ̀wò àwọn ààyè àkọ́kọ́ lọ́wọ́lọ́wọ́ kí o sì tan wọn sí gbogbo ẹ̀kọ́ nígbà tí ó bá pọn dandan."
+
+msgid "Filter the list by meeting date range."
+msgstr "Ṣàyàn àtòjọ nípa ààyè ọjọ́ ìpàdé."
+
+msgid "Review meeting history, participants and recording actions."
+msgstr "Ṣàtúnyẹ̀wò ìtàn ìpàdé, àwọn olùkópa àti àwọn ìgbésẹ̀ ìgbasilẹ̀."
+
+msgid "Participants"
+msgstr "Àwọn olùkópa"
+
+msgid "CountUsers"
+msgstr "CountUsers"
+
+msgid "No data found"
+msgstr "Kò rí dátà kankan"
+
+msgid "My justifications"
+msgstr "Àwọn ìdájọ́ mi"
+
+msgid "My services"
+msgstr "Àwọn iṣẹ́ mi"
+
+msgid "Extra menu"
+msgstr "Àkọ́lé àfikún"
+
+msgid "Pending tests"
+msgstr "Àwọn ìdánwò tí ó dúró"
+
+msgid "No specific language"
+msgstr "Kò sí èdè pàtàkì"
+
+msgid "Source Chamilo version"
+msgstr "Ẹ̀yà Chamilo orísun"
+
+msgid "Exporting..."
+msgstr "Ń ṣe ìmúṣẹ..."
+
+msgid "Autosaved drafts available"
+msgstr "Àwọn àkọsílẹ̀ tí a fi pamọ́ fúnra wọn wà"
+
+msgid "Hide drafts"
+msgstr "Fi àwọn àkọsílẹ̀ pamọ́"
+
+msgid "Show drafts"
+msgstr "Ṣe àfihàn àwọn àkọsílẹ̀"
+
+msgid "Drafts are stored only in this browser and are removed after saving the document."
+msgstr "Àwọn àkọsílẹ̀ wọ̀nyí wà ní àkàwé yìí nìkan a sì máa yọ wọn lẹ́yìn tí a bá ti fi iṣẹ́ pamọ́."
+
+msgid "Last saved"
+msgstr "Ìgbà tí a fi pamọ́ kẹ́yìn"
+
+msgid "Restore draft"
+msgstr "Padà bọ̀ sí àkọsílẹ̀"
+
+msgid "Delete draft"
+msgstr "Parẹ́ àkọsílẹ̀"
+
+msgid "Information about indexing document content"
+msgstr "Àlàyé nípa ìtọ́kasí àkóónú iṣẹ́"
+
+msgid "When enabled, the document text is indexed by the search engine so users can find it from platform search."
+msgstr "Tí a bá tan-an, ọ̀rọ̀ inú iṣẹ́ yóò jẹ́ títọ́kasí nípasẹ̀ ẹ̀rọ ìwádìí kí àwọn olùlò lè rí i nípasẹ̀ ìwádìí orí pẹpẹ."
+
+msgid "The editor is not available."
+msgstr "Olóòtú kò sí."
+
+msgid "Please place the cursor inside a paragraph first."
+msgstr "Jọ̀ọ́ gbé ìtọ́ka sí inú ìpínrọ̀ kan ní àkọ́kọ́."
+
+msgid "The selected paragraph is empty."
+msgstr "Ìpínrọ̀ tí a yàn kò ní ohunkóhun."
+
+msgid "Loading failed."
+msgstr "Ìtura kùnà."
+
+msgid "Add introduction"
+msgstr "Fi ìṣàfihàn kún"
+
+msgid "Course type"
+msgstr "Irú ẹ̀kọ́"
+
+msgid "Choose whether this course uses the standard platform limits or benefits from a purchased service."
+msgstr "Yan bóyá ẹ̀kọ́ yìí máa lo àwọn ìpàlà pẹpẹ tàbí yóò jàǹfààní láti iṣẹ́ tí a ti ra."
+
+msgid "Standard course"
+msgstr "Ẹ̀kọ́ déédé"
+
+msgid "Use the standard platform limits."
+msgstr "Lo àwọn ìpàlà pẹpẹ déédé."
+
+msgid "Selected"
+msgstr "Ti yàn"
+
+msgid "Hosting limit"
+msgstr "Ìpàlà aléjo"
+
+msgid "Document quota"
+msgstr "Ìpín ìwé"
+
+msgid "The standard course limit has been reached."
+msgstr "Ìpàlà ẹ̀kọ́ déédé ti dé òpin."
+
+msgid "Use the benefits granted by this service."
+msgstr "Lo àwọn àǹfààní tí iṣẹ́ yìí fún."
+
+msgid "Courses with these benefits"
+msgstr "Àwọn ẹ̀kọ́ pẹ̀lú àwọn àǹfààní wọ̀nyí"
+
+msgid "Active service"
+msgstr "Iṣẹ́ tí ó ń ṣiṣẹ́"
+
+msgid "Buy service"
+msgstr "Ra iṣẹ́"
+
+msgid "Select an available course type before creating the course."
+msgstr "Yan irú ẹ̀kọ́ kan tó wà kí o tó dá ẹ̀kọ́."
+
+msgid "users"
+msgstr "àwọn olùlò"
+
+msgid "You need to buy this service before using these benefits."
+msgstr "O ní láti ra iṣẹ́ yìí kí o tó lè lo àwọn àǹfààní wọ̀nyí."
+
+msgid "You already used all courses available with this service."
+msgstr "O ti lo gbogbo àwọn ẹ̀kọ́ tí iṣẹ́ yìí fún."
+
+msgid "This option is not available."
+msgstr "Àṣàyàn yìí kò sí."
+
+msgid "This field is required"
+msgstr "Ààyè yìí jẹ́ dandan"
+
+msgid "Show less"
+msgstr "Fi díẹ̀ hàn"
+
+msgid "Show full description"
+msgstr "Fi àpèjúwe kíkún hàn"
+
+msgid "Virtual keyboard"
+msgstr "Kííbọ̀dù àfojúrí"
+
+msgid "Backspace"
+msgstr "Padà sẹ́yìn"
+
+msgid "Space"
+msgstr "Ààyè"
+
+msgid "Learning path only visible to selected learners"
+msgstr "Ọ̀nà ìkẹ́kọ̀ọ́ tí ó hàn fún àwọn akẹ́kọ̀ọ́ tí a yàn nìkan"
+
+msgid "Create course"
+msgstr "Dá ẹ̀kọ́"
+
+msgid "Tour"
+msgstr "Ìrìn-àjò"
+
+msgid "Are you sure you want to delete this comment?"
+msgstr "Ṣe ó dá ọ lójú pé o fẹ́ pa àròyé yìí rẹ́?"
+
+msgid "No posts found"
+msgstr "Kò sí àwọn ìfiránṣẹ́"
+
+msgid "No communities"
+msgstr "Kò sí àwọn àwùjọ"
+
+msgid "No friends found"
+msgstr "Kò sí àwọn ọ̀rẹ́"
+
+msgid "Visual overview of your skills"
+msgstr "Àkópọ̀ àfojúrí ti àwọn òye rẹ"
+
+msgid "Compare your progress"
+msgstr "Fi ìtẹ̀síwájú rẹ wé"
+
+msgid "Please enter a search term."
+msgstr "Jọ̀ọ́ tẹ ọ̀rọ̀ ìwádìí kan."
+
+msgid "Enter captcha code"
+msgstr "Tẹ koodu captcha"
+
+msgid "Refresh captcha"
+msgstr "Tún captcha ṣe"
+
+msgid "Captcha is temporarily blocked. Please try again later."
+msgstr "Captcha ti dí fún ìgbà díẹ̀. Jọ̀ọ́ gbiyanju lẹ́ẹ̀kan si."
+
+msgid "Item Details"
+msgstr "Àwọn àlàyé ohun kan"
+
+msgid "Open File"
+msgstr "Ṣí fáìlì"
+
+msgid "Selection"
+msgstr "Ìyàn"
+
+msgid "Remove selection context"
+msgstr "Yọ àyè ìyàn kúrò"
+
+msgid "Source document"
+msgstr "Ìwé orísun"
+
+msgid "Use the current course context"
+msgstr "Lo àyè ẹ̀kọ́ lọ́wọ́lọ́wọ́"
+
+msgid "Loading documents..."
+msgstr "Ń gbé àwọn ìwé..."
+
+msgid "No compatible PDF or TXT document was found in this course."
+msgstr "Kò sí ìwé PDF tàbí TXT tó bá mu nínú ẹ̀kọ́ yìí."
+
+msgid "Select a PDF or TXT document to generate terms only from that document."
+msgstr "Yan ìwé PDF tàbí TXT kan láti ṣẹ̀dá àwọn ọ̀rọ̀ láti inú ìwé yẹn nìkan."
+
+msgid "Confidentiality warning"
+msgstr "Ìkìlọ̀ ìpamọ́"
+
+msgid "When a document is selected, the prompt is fixed so the generation uses only that document content."
+msgstr "Nígbà tí a bá yan ìwé kan, ìránṣẹ́ náà yoo di títọ́ kí ìṣẹ̀dá náà lo àkóónú ìwé yẹn nìkan."
+
+msgid "No document-processing AI providers available."
+msgstr "Kò sí àwọn olùpèsè AI tó ń ṣiṣẹ́ ìwé."
+
+msgid "Failed to save signature. Please try again."
+msgstr "Kò le fi ìbùwọ́ pamọ́. Jọ̀ọ́ gbiyanju lẹ́ẹ̀kan si."
+
+msgid "Select and move"
+msgstr "Yan àti gbé"
+
+msgid "Freehand"
+msgstr "Ọwọ́ òmìnira"
+
+msgid "Stroke"
+msgstr "Ìlà"
+
+msgid "Fill"
+msgstr "Kún"
+
+msgid "Import SVG"
+msgstr "Gbé SVG wọlé"
+
+msgid "Import image"
+msgstr "Gbé àwòrán wọlé"
+
+msgid "Click the drawing area to place this text"
+msgstr "Tẹ agbègbè ìyàwòrán láti gbé ọ̀rọ̀ yìí sí"
+
+msgid "Draw a new SVG, import an existing SVG or embed an image, then save it as a reusable document."
+msgstr "Yà SVG tuntun, gbé SVG tó wà tẹ́lẹ̀ wọlé tàbí fi àwòrán sínú, lẹ́yìn náà fi pamọ́ gẹ́gẹ́ bí ìwé tí a lè tún lò."
+
+msgid "Use Select and move to reposition or resize elements added in this editor."
+msgstr "Lo Yan àti gbé láti tún gbé tàbí yí ìwọ̀n àwọn ohun tí a fi kun nínú olootu yìí padà."
+
+msgid "Stroke width"
+msgstr "Ìbú ìlà"
+
+msgid "Transparent fill"
+msgstr "Ìkún aláìlẹ́gbẹ́"
+
+msgid "Invalid id"
+msgstr "ID tí kò tọ́"
+
+msgid "Unable to load the drawing"
+msgstr "Kò le gbé ìyàwòrán wọlé"
+
+msgid "Only PNG, JPG, WEBP or GIF images are supported."
+msgstr "Àwòrán PNG, JPG, WEBP tàbí GIF nìkan ni a ń gba."
+
+msgid "Unable to read the image file."
+msgstr "Kò le ka fáìlì àwòrán náà."
+
+msgid "Only SVG files are supported."
+msgstr "Àwọn fáìlì SVG nìkan ni a ń gba."
+
+msgid "The SVG file is empty or invalid."
+msgstr "Fáìlì SVG náà ṣófo tàbí kò tọ́."
+
+msgid "Unable to read the SVG file."
+msgstr "Kò le ka fáìlì SVG náà."
+
+msgid "The drawing is empty or invalid."
+msgstr "Ìyàwòrán náà ṣófo tàbí kò tọ́."
+
+msgid "Unable to save the drawing"
+msgstr "Kò le fi ìyàwòrán pamọ́"
+
+msgid "Information about AI-assisted documents"
+msgstr "Àlàyé nípa àwọn ìwé tí AI ń ran lọ́wọ́"
+
+msgid "Location"
+msgstr "Ibi"
+
+msgid "Cloud link"
+msgstr "Ìjápọ̀ àwọ̀fẹ́lẹ́"
+
+msgid "Add a link to a cloud document, such as Google Drive or Google Docs."
+msgstr "Fi ìjápọ̀ sí ìwé àwọ̀fẹ́lẹ́ kan, bí Google Drive tàbí Google Docs."
+
+msgid "Add cloud link"
+msgstr "Fi ìjápọ̀ àwọ̀fẹ́lẹ́ kun"
+
+msgid "Document title"
+msgstr "Àkọlé ìwé"
+
+msgid "Document options change how uploaded files are processed after saving."
+msgstr "Àwọn àṣàyàn ìwé yí bí a ṣe ń ṣiṣẹ́ àwọn fáìlì tí a gbé sọ́lẹ̀ lẹ́yìn ìfipamọ́."
+
+msgid "Information about uncompressing zip files"
+msgstr "Àlàyé nípa yíyan àwọn fáìlì zip"
+
+msgid "When enabled, ZIP files are extracted into the current document folder after upload."
+msgstr "Nígbà tí a bá tan-an, a yoo tú àwọn fáìlì ZIP sí inú folda ìwé lọ́wọ́lọ́wọ́ lẹ́yìn ìgbà tí a bá gbé wọn sọ́lẹ̀."
+
+msgid "The title is required."
+msgstr "Àkọlé náà jẹ́ dandan."
+
+msgid "The URL is required."
+msgstr "URL náà jẹ́ dandan."
+
+msgid "The destination folder is missing."
+msgstr "Folda ìbọ̀sí kò sí."
+
+msgid "Unable to create cloud link."
+msgstr "Kò le ṣẹ̀dá ìjápọ̀ àwọ̀fẹ́lẹ́."
+
+msgid "Copy to My Files"
+msgstr "Daakọ sí Àwọn Fáìlì Mi"
+
+msgid "Used space"
+msgstr "Ààyè tí a ti lò"
+
+msgid "Available space"
+msgstr "Ààyè tó wà"
+
+msgid "Available percentage"
+msgstr "Ìpín ààyè tó wà"
+
+msgid "Cloud links cannot be downloaded."
+msgstr "Àwọn ìsopọ̀ ìsorí kò ṣeé gba sọ́tọ̀."
+
+msgid "Could not copy the file to My Files"
+msgstr "Kò ṣeé da fáìlì náà sí Àwọn Fáìlì Mi"
+
+msgid "File copied to My Files"
+msgstr "Fáìlì ti di dídà sí Àwọn Fáìlì Mi"
+
+msgid "Checking course creation options..."
+msgstr "Ó ń yẹ àwọn àṣàyàn ìdá ẹ̀kọ́..."
+
+msgid "You cannot create more courses right now."
+msgstr "O kò lè dá ẹ̀kọ́ mọ́ lọ́wọ́ báyìí."
+
+msgid "AI analyzer"
+msgstr "Olùtúpalẹ̀ AI"
+
+msgid "Expand all"
+msgstr "Fẹ̀hìn fún gbogbo rẹ̀"
+
+msgid "Collapse all"
+msgstr "Pa gbogbo rẹ̀ mọ́lẹ̀"
+
+msgid "Review your active service benefits, purchase history and available receipts."
+msgstr "Ṣàtúnyẹ̀wò àwọn àǹfààní iṣẹ́ tó ń ṣiṣẹ́, ìtàn rira àti àwọn ìwé-ẹ̀rí tó wà."
+
+msgid "Active services"
+msgstr "Àwọn iṣẹ́ tó ń ṣiṣẹ́"
+
+msgid "No active services"
+msgstr "Kò sí iṣẹ́ tó ń ṣiṣẹ́"
+
+msgid "Valid until"
+msgstr "Ó wulo títí di"
+
+msgid "Recurring payment"
+msgstr "Ìsanwó onígbàgbà"
+
+msgid "Next charge"
+msgstr "Ìdíyelé tó ń bọ̀"
+
+msgid "Enable auto billing"
+msgstr "Mu ìdíyelé aládàáṣiṣẹ́ ṣiṣẹ́"
+
+msgid "Cancel auto billing"
+msgstr "Fagilé ìdíyelé aládàáṣiṣẹ́"
+
+msgid "Granted benefits"
+msgstr "Àwọn àǹfààní tí a fúnni"
+
+msgid "Purchase history"
+msgstr "Ìtàn rira"
+
+msgid "No purchases yet"
+msgstr "Kò tíì sí ohun tí a ti ra"
+
+msgid "Product"
+msgstr "Ọjà"
+
+msgid "Reference"
+msgstr "Ìtọ́kasí"
+
+msgid "Amount"
+msgstr "Iye owó"
+
+msgid "Receipt"
+msgstr "Ìwé-ẹ̀rí"
+
+msgid "Unable to load your services right now."
+msgstr "Kò ṣeé gbé àwọn iṣẹ́ rẹ̀ wọlé báyìí."
+
+msgid "Auto billing enabled"
+msgstr "Ìdíyelé aládàáṣiṣẹ́ ti di ṣíṣiṣẹ́"
+
+msgid "Auto billing suspended"
+msgstr "Ìdíyelé aládàáṣiṣẹ́ ti di dáwọ́ dúró"
+
+msgid "Auto billing cancelled"
+msgstr "Ìdíyelé aládàáṣiṣẹ́ ti di fagilé"
+
+msgid "Auto billing disabled"
+msgstr "Ìdíyelé aládàáṣiṣẹ́ ti di pa"
+
+msgid "Cancel auto billing for this service?"
+msgstr "Fagilé ìdíyelé aládàáṣiṣẹ́ fún iṣẹ́ yìí?"
+
+msgid "Preview class members and courses"
+msgstr "Ṣàwákiri àwọn ọmọ ẹgbẹ́ kíláàsì àti àwọn ẹ̀kọ́"
+
+msgid "Please select a CSV file to import."
+msgstr "Jọ̀ọ́ yan fáìlì CSV kan láti gbé wọlé."
+
+msgid "%d user-class links imported"
+msgstr "%d ìsopọ̀ olùkọ́-kíláàsì ti di gbígbé wọlé"
+
+msgid "The following errors occurred during import:"
+msgstr "Àwọn àṣìṣe wọ̀nyí ṣẹlẹ̀ nígbà ìgbé wọlé:"
+
+msgid "CSV file"
+msgstr "Fáìlì CSV"
+
+msgid "Remove user from all group-related entities if not in the list"
+msgstr "Yọ olùkọ́ kúrò nínú gbogbo àwọn ohun-ìní tó ní í ṣe pẹ̀lú ẹgbẹ́ tí kò bá sí nínú àtòjọ"
+
+msgid "UserName"
+msgstr "OrúkọOlùkọ́"
+
+msgid "ClassName"
+msgstr "OrúkọKíláàsì"
+
+msgid "are required for each row."
+msgstr "wà nílò fún ìsọ̀rí kọ̀ọ̀kan."
+
+msgid "title"
+msgstr "àkọ́lé"
+
+msgid "is required."
+msgstr "wà nílò."
+
+msgid "description"
+msgstr "àpèjúwe"
+
+msgid "are optional."
+msgstr "wọn kò pọndandan."
+
+msgid "Are you sure you want to remove this user from the class?"
+msgstr "Ṣe ó dá ọ lójú pé o fẹ́ yọ olùkọ́ yìí kúrò nínú kíláàsì náà?"
+
+msgid "Users in class"
+msgstr "Àwọn olùkọ́ nínú kíláàsì"
+
+msgid "Remove user"
+msgstr "Yọ olùkọ́ kúrò"
+
+msgid "Class not found"
+msgstr "Kíláàsì kò sí"
+
+msgid "Class overview"
+msgstr "Àkópọ̀ kíláàsì"
+
+msgid "Back to classes"
+msgstr "Padà sí àwọn kíláàsì"
+
+msgid "Search members or courses"
+msgstr "Wá àwọn ọmọ ẹgbẹ́ tàbí àwọn ẹ̀kọ́"
+
+msgid "Search by name, email, username or course title"
+msgstr "Wá nípa orúkọ, ímeèlì, orúkọ olùlò tàbí àkọ́lé ẹ̀kọ́"
+
+msgid "Class members"
+msgstr "Àwọn ọmọ ẹgbẹ́ kíláàsì"
+
+msgid "No email"
+msgstr "Kò sí ímeèlì"
+
+msgid "No members found"
+msgstr "Kò rí àwọn ọmọ ẹgbẹ́ kankan"
+
+msgid "No courses found"
+msgstr "Kò rí àwọn ẹ̀kọ́ kankan"
+
+msgid "The end date must be after the start date."
+msgstr "Ọjọ́ ìparí gbọdọ̀ wà lẹ́yìn ọjọ́ ìbẹ̀rẹ̀."
+
+msgid "Always visible"
+msgstr "Ó máa ń hàn nígbà gbogbo"
+
+msgid "No end date"
+msgstr "Kò sí ọjọ́ ìparí"
+
+msgid "No restriction"
+msgstr "Kò sí ìdíwọ́"
+
+msgid "Missing learning path or course identifier"
+msgstr "Kò sí ọ̀nà ìkẹ́kọ̀ọ́ tàbí ìdánimọ̀ ẹ̀kọ́"
+
+msgid "Select a user or a group first"
+msgstr "Yàn olùlò tàbí ẹgbẹ́ kan ní àkọ́kọ́"
+
+msgid "Remove all date restrictions for this learning path?"
+msgstr "Yọ gbogbo ìdíwọ́ ọjọ́ fún ọ̀nà ìkẹ́kọ̀ọ́ yìí?"
+
+msgid "Advanced learning path access"
+msgstr "Ìráàyè ọ̀nà ìkẹ́kọ̀ọ́ onítẹ̀síwájú"
+
+msgid "Remove date restrictions"
+msgstr "Yọ ìdíwọ́ ọjọ́"
+
+msgid "Search by name, email, username or group"
+msgstr "Wá nípa orúkọ, ímeèlì, orúkọ olùlò tàbí ẹgbẹ́"
+
+msgid "Edit user restriction"
+msgstr "Ṣàtúnṣe ìdíwọ́ olùlò"
+
+msgid "Edit group restriction"
+msgstr "Ṣàtúnṣe ìdíwọ́ ẹgbẹ́"
+
+msgid "Select a user or group"
+msgstr "Yàn olùlò tàbí ẹgbẹ́ kan"
+
+msgid "Save restriction"
+msgstr "Fi ìdíwọ́ pamọ́"
+
+msgid "members"
+msgstr "àwọn ọmọ ẹgbẹ́"
+
+msgid "Create Assignment"
+msgstr "Ṣẹ̀dá Iṣẹ́ àyànfúnni"
+
+msgid "The submission deadline has passed. You can no longer submit."
+msgstr "Ọjọ́ ìparí ìfàsẹ́hìntì ti kọjá. O kò lè fi ohunkóhun mọ́."
+
+msgid "Mailing cannot be combined with other recipients."
+msgstr "Ìfìwéránṣẹ́ kò lè darapọ̀ pẹ̀lú àwọn olùgbà míràn."
+
+msgid "Social map"
+msgstr "Máàpù àwùjọ"
+
+msgid "The map plugin is not enabled or configured."
+msgstr "Àfikún máàpù kò ṣiṣẹ́ tàbí kò tíì ṣètò."
+
+msgid "Some configured extra fields were not found"
+msgstr "Àwọn ààyè àfikún tí a ṣètò kò sí"
+
+msgid "No user locations were found."
+msgstr "Kò rí àwọn ipò olùlò kankan."
+
+msgid "OpenStreetMap needs coordinates to display an embedded marker. Address-only locations are listed below."
+msgstr "OpenStreetMap nílò àwọn ipò láti ṣàfihàn àmì tí a fi sínú. Àwọn ipò orúkọ nìkan ni a ṣàkójọ sí ìsàlẹ̀."
+
+msgid "Locations"
+msgstr "Àwọn ipò"
+
+msgid "Open map"
+msgstr "Ṣí máàpù"
+
+msgid "Provider: OpenStreetMap"
+msgstr "Olùpèsè: OpenStreetMap"
+
+msgid "Provider: Google Maps"
+msgstr "Olùpèsè: Google Maps"
+
+msgid "Personal files"
+msgstr "Àwọn fáìlì ara ẹni"
+
+msgid "Upload image"
+msgstr "Gbe àwòrán sókè"
+
+msgid "Upload media"
+msgstr "Gbe mídíà sókè"
+
+msgid "Only image files are allowed in this upload screen."
+msgstr "Àwọn fáìlì àwòrán nìkan ni a gbà láàyè nínú ojú-ìwò yìí."
+
+msgid "Only audio and video files are allowed in this upload screen."
+msgstr "Àwọn fáìlì ohùn àti fídíò nìkan ni a gbà láàyè nínú ojú-ìwò yìí."
+
+msgid "Upload files to your personal storage."
+msgstr "Gbe àwọn fáìlì sínú ibi ìpamọ́ ara rẹ."
+
+msgid "Linked"
+msgstr "Ìsopọ̀"
+
+msgid "No audio or video files were found in this folder."
+msgstr "Kò rí àwọn fáìlì ohùn tàbí fídíò kankan nínú foldà yìí."
+
+msgid "No image files were found in this folder."
+msgstr "Kò rí àwọn fáìlì àwòrán kankan nínú foldà yìí."
+
+msgid "No matching files were found in this folder."
+msgstr "Kò rí àwọn fáìlì tí ó bá mu kankan nínú foldà yìí."
+
+msgid "This file type is not allowed in this upload screen."
+msgstr "Irú fáìlì yìí kò gbà láàyè nínú ojú-ìwò yìí."
+
+msgid "Manage your personal files and course documents."
+msgstr "Ṣàkóso àwọn fáìlì ara rẹ àti àwọn ìwé ẹ̀kọ́."
+
+msgid "DateValidity"
+msgstr "Ọjọ́ Ìwàdà"
+
+msgid "JustificationSaved"
+msgstr "Ìdájọ́TiFipamọ́"
+
+msgid "ValidityDate"
+msgstr "Ọjọ́ Ìwàdà"
+
+msgid "MyJustifications"
+msgstr "Awọn Ìdájọ́ Mi"
+
+msgid "Submission"
+msgstr "Ìfilélẹ̀"
+
+msgid "Use the filters above to narrow the list."
+msgstr "Lo àwọn àyè ìfúnra lókè láti dín àkójọ náà kù."
+
+msgid "You are not allowed to see this page."
+msgstr "O kò ní ààyè láti wo ojú-ewé yìí."
+
+msgid "plugin_title"
+msgstr "plugin_title"
+
+msgid "plugin_comment"
+msgstr "plugin_comment"
+
+msgid "Course tracking details"
+msgstr "Àwọn àlàyé ìtọpa ẹ̀kọ́"
+
+msgid "Course activity statistics"
+msgstr "Àwọn ìṣirò ìṣiṣẹ́ ẹ̀kọ́"
+
+msgid "mobile_phone_number"
+msgstr "nọ́mbà fóònù alágbèéká"
+
+msgid "Allowed template syntax"
+msgstr "Ìṣàfilọ́lẹ̀ àwòṣe tí a gbà láàyè"
+
+msgid "Functions"
+msgstr "Àwọn iṣẹ́"
+
+msgid "Available variables depend on the template type, for example {{ user.getUsername() }} or {{ user.getEmail() }}."
+msgstr "Àwọn oníṣirò tí ó wà ní ìbámu pẹ̀lú irú àwòṣe, fún àpẹẹrẹ {{ user.getUsername() }} tàbí {{ user.getEmail() }}."
+
+msgid "For security reasons, any other Twig function, filter (such as filter, map, reduce or sort) or PHP call is blocked."
+msgstr "Nítorí àwọn ìdí ààbò, gbogbo iṣẹ́ Twig mìíràn, àyè ìfúnra (bíi filter, map, reduce tàbí sort) tàbí ìpè PHP ni a ti dènà."
+
+msgid "Global administrator"
+msgstr "Alákòóso gbogbogbò"
+
+msgid "Session manager"
+msgstr "Olùṣàkóso ìpàdé"
+
+msgid "Human resources manager"
+msgstr "Olùṣàkóso oríṣiríṣi ènìyàn"
+
+msgid "Course teacher"
+msgstr "Olùkọ́ ẹ̀kọ́"
+
+msgid "Course student"
+msgstr "Ọmọ-ẹ̀kọ́ ẹ̀kọ́"
+
+msgid "Platform reports"
+msgstr "Àwọn ìròyìn ìpèlé"
+
+msgid "Security reports"
+msgstr "Àwọn ìròyìn ààbò"
+
+msgid "Course reports"
+msgstr "Àwọn ìròyìn ẹ̀kọ́"
+
+msgid "Gradebook reports"
+msgstr "Àwọn ìròyìn ìwé-ìṣirò"
+
+msgid "Social reports"
+msgstr "Àwọn ìròyìn àwùjọ"
+
+msgid "Exports"
+msgstr "Àwọn ìfilélẹ̀"
+
+msgid "Reports about platform-wide usage, users, courses and sessions."
+msgstr "Àwọn ìròyìn nípa lílo gbogbo ìpèlé, àwọn olùlò, àwọn ẹ̀kọ́ àti àwọn ìpàdé."
+
+msgid "Audit and security-sensitive reports."
+msgstr "Àwọn ìròyìn àyẹ̀wò àti àwọn ìròyìn tó ṣe pàtàkì nípa ààbò."
+
+msgid "Reports scoped to courses managed by the user."
+msgstr "Àwọn ìròyìn tí a dá ní ìbámu pẹ̀lú àwọn ẹ̀kọ́ tí olùlò ń ṣàkóso."
+
+msgid "Reports related to learner activity and follow-up."
+msgstr "Àwọn ìròyìn tó ní í ṣe pẹ̀lú ìṣiṣẹ́ àti ìtẹ̀lé ọmọ-ẹ̀kọ́."
+
+msgid "Reports related to scores, certificates and gradebook data."
+msgstr "Àwọn ìròyìn tó ní í ṣe pẹ̀lú àwọn àmì-ìṣirò, ìwé-ẹ̀rí àti dátà ìwé-ìṣirò."
+
+msgid "Reports and exports that generate downloadable files."
+msgstr "Àwọn ìròyìn àti àwọn ìfilélẹ̀ tí ó máa ń ṣẹ̀dá àwọn fáìlì tí a lè gba sísílẹ̀."
+
+msgid "Main platform statistics dashboard."
+msgstr "Pátákó ìṣirò ìpèlé àkọ́kọ́."
+
+msgid "Number of courses and course distribution report."
+msgstr "Ìròyìn iye àwọn ẹ̀kọ́ àti ìpínkiri àwọn ẹ̀kọ́."
+
+msgid "Platform-wide access to course tools."
+msgstr "Ìráàyè gbogbo ìpèlé sí àwọn irinṣẹ́ ẹ̀kọ́."
+
+msgid "Number of resources per tool."
+msgstr "Iye àwọn ohun-ìní fún irinṣẹ́ kọ̀ọ̀kan."
+
+msgid "Latest access to courses."
+msgstr "Ìráàyè tuntun sí àwọn ẹ̀kọ́."
+
+msgid "Course distribution by language."
+msgstr "Ìpínkiri àwọn ẹ̀kọ́ nípasẹ̀ èdè."
+
+msgid "Course usage report."
+msgstr "Ìròyìn lílo ẹ̀kọ́."
+
+msgid "Platform user count report."
+msgstr "Ìròyìn iye olùlò ìpèlé."
+
+msgid "Recent logins chart."
+msgstr "Àwòrán ìwọlé tuntun."
+
+msgid "Login distribution by month."
+msgstr "Ìpínkiri ìwọlé nípasẹ̀ oṣù."
+
+msgid "Login distribution by day."
+msgstr "Ìpínkiri ìwọlé nípasẹ̀ ọjọ́."
+
+msgid "Login distribution by hour."
+msgstr "Ìpínkiri ìwọlé nípasẹ̀ wákàtí."
+
+msgid "Users with profile picture."
+msgstr "Àwọn olùlò tí wọ́n ní àwòrán profaìlì."
+
+msgid "Login report filtered by date."
+msgstr "Ìròyìn ìwọlé tí a ti yọ́ nípasẹ̀ ọjọ́."
+
+msgid "Users who have not logged in recently."
+msgstr "Àwọn olùlò tí kò tí ì wọlé láìpẹ́."
+
+msgid "Inactive or suspicious user accounts report."
+msgstr "Ìròyìn àwọn àkọọ́lẹ̀ olùlò tí kò ṣiṣẹ́ tàbí tí ó ṣe ètò burúkú."
+
+msgid "Users activity statistics."
+msgstr "Àwọn ìṣirò ìṣiṣẹ́ àwọn olùlò."
+
+msgid "Currently online users report."
+msgstr "Ìròyìn àwọn olùlò tí wọ́n wà lórí ayélujára báyìí."
+
+msgid "New user registrations over time."
+msgstr "Ìforúkọsílẹ̀ olùlò tuntun nígbà tí ó bá yẹ."
+
+msgid "Course and session subscriptions over time."
+msgstr "Ìforúkọsílẹ̀ ẹ̀kọ́ àti ìpàdé nígbà tí ó bá yẹ."
+
+msgid "Duplicate user detection and maintenance report."
+msgstr "Ìdájọ́ àti ìtọ́jú àwọn olùlò tí ó jẹ́ ẹẹ̀mejì."
+
+msgid "Platform user/session statistics."
+msgstr "Àwọn ìṣirò olùlò / ìpàdé ẹ̀rọ."
+
+msgid "Quarterly platform report."
+msgstr "Ìròyìn ẹ̀rọ ní ìdá mẹ́rin."
+
+msgid "Activities audit"
+msgstr "Ìṣàfihàn àwọn ìgbòòrò"
+
+msgid "Audit report for important administrative and platform activities."
+msgstr "Ìròyìn ìṣàfihàn fún àwọn ìgbòòrò ìṣàkóso àti ẹ̀rọ tó ṣe pàtàkì."
+
+msgid "Social messages received report."
+msgstr "Ìròyìn àwọn ìránṣẹ́ ìbàṣepọ̀ tí a gbà."
+
+msgid "Social messages sent report."
+msgstr "Ìròyìn àwọn ìránṣẹ́ ìbàṣepọ̀ tí a fi ránṣẹ́."
+
+msgid "Social contacts count report."
+msgstr "Ìròyìn iye àwọn ìbàṣepọ̀ ìbàṣepọ̀."
+
+msgid "Sessions created over time."
+msgstr "Àwọn ìpàdé tí a dá ní àkókò."
+
+msgid "Learning analytics dashboard."
+msgstr "Pátákó ìtúpalẹ̀ ẹ̀kọ́."
+
+msgid "Teacher time report."
+msgstr "Ìròyìn àkókò olùkọ́."
+
+msgid "Teachers time by session report"
+msgstr "Ìròyìn àkókò olùkọ́ nípa ìpàdé"
+
+msgid "Teacher time report grouped by session."
+msgstr "Ìròyìn àkókò olùkọ́ tí a pín nípa ìpàdé."
+
+msgid "Corporate learning analytics report."
+msgstr "Ìròyìn ìtúpalẹ̀ ẹ̀kọ́ iléeṣẹ́."
+
+msgid "Course learners tracking report."
+msgstr "Ìròyìn ìtẹ̀lé àwọn akẹ́kọ̀ọ́ ẹ̀kọ́."
+
+msgid "Course activity statistics with connected and inactive users."
+msgstr "Àwọn ìṣirò ìgbòòrò ẹ̀kọ́ pẹ̀lú àwọn olùlò tí ó sopọ̀ àti tí kò ṣiṣẹ́."
+
+msgid "Detailed tracking report for a learner inside a course."
+msgstr "Ìròyìn ìtẹ̀lé aláyé fún akẹ́kọ̀ọ́ kan nínú ẹ̀kọ́ kan."
+
+msgid "Course gradebook overview."
+msgstr "Àkópọ̀ ìwé-ìṣirò ẹ̀kọ́."
+
+msgid "Gradebook statistics"
+msgstr "Àwọn ìṣirò ìwé-ìṣirò"
+
+msgid "Gradebook statistics report."
+msgstr "Ìròyìn ìṣirò ìwé-ìṣirò."
+
+msgid "Certificate report"
+msgstr "Ìròyìn ìwé-ẹ̀rí"
+
+msgid "Certificate report for course gradebook."
+msgstr "Ìròyìn ìwé-ẹ̀rí fún ìwé-ìṣirò ẹ̀kọ́."
+
+msgid "User statistics"
+msgstr "Àwọn ìṣirò olùlò"
+
+msgid "Course gradebook statistics for a user."
+msgstr "Àwọn ìṣirò ìwé-ìṣirò ẹ̀kọ́ fún olùlò kan."
+
+msgid "Personal statistics"
+msgstr "Àwọn ìṣirò ara ẹni"
+
+msgid "Personal gradebook statistics."
+msgstr "Àwọn ìṣirò ìwé-ìṣirò ara ẹni."
+
+msgid "Reports catalog"
+msgstr "Àkójọpọ̀ ìròyìn"
+
+msgid "Central catalog of available reports, roles and permission categories."
+msgstr "Àkójọpọ̀ àárín àwọn ìròyìn tó wà, ipò àti àwọn ẹ̀ka ìyọ̀ǹda."
+
+msgid "Course log events"
+msgstr "Àwọn ìṣẹ̀lẹ̀ àkọsílẹ̀ ẹ̀kọ́"
+
+msgid "Detailed course tracking events."
+msgstr "Àwọn ìṣẹ̀lẹ̀ ìtẹ̀lé ẹ̀kọ́ aláyé."
+
+msgid "Course tool usage"
+msgstr "Ìlò irinṣẹ́ ẹ̀kọ́"
+
+msgid "Course tracking report grouped by tools."
+msgstr "Ìròyìn ìtẹ̀lé ẹ̀kọ́ tí a pín nípa àwọn irinṣẹ́."
+
+msgid "Course resource usage"
+msgstr "Ìlò ohun-ìní ẹ̀kọ́"
+
+msgid "Course tracking report grouped by resources."
+msgstr "Ìròyìn ìtẹ̀lé ẹ̀kọ́ tí a pín nípa àwọn ohun-ìní."
+
+msgid "Course group tracking"
+msgstr "Ìtẹ̀lé ẹgbẹ́ ẹ̀kọ́"
+
+msgid "Tracking report for course groups."
+msgstr "Ìròyìn ìtẹ̀lé fún àwọn ẹgbẹ́ ẹ̀kọ́."
+
+msgid "Course session report"
+msgstr "Ìròyìn ìpàdé ẹ̀kọ́"
+
+msgid "Tracking report for a course inside sessions."
+msgstr "Ìròyìn ìtẹ̀lé fún ẹ̀kọ́ kan nínú àwọn ìpàdé."
+
+msgid "Learning path report"
+msgstr "Ìròyìn ọ̀nà ẹ̀kọ́"
+
+msgid "Learning path tracking report."
+msgstr "Ìròyìn ìtẹ̀lé ọ̀nà ẹ̀kọ́."
+
+msgid "Learning path results by user"
+msgstr "Àbájáde ọ̀nà ẹ̀kọ́ nípa olùlò"
+
+msgid "Learning path results grouped by user."
+msgstr "Àbájáde ọ̀nà ẹ̀kọ́ tí a pín nípa olùlò."
+
+msgid "Exercises report"
+msgstr "Ìròyìn àdánwò"
+
+msgid "Course exercises and exams tracking report."
+msgstr "Ìròyìn ìtẹ̀lé àwọn àdánwò àti ìdánwò ẹ̀kọ́."
+
+msgid "Question report"
+msgstr "Ìròyìn ìbéèrè"
+
+msgid "Course question tracking report."
+msgstr "Ìròyìn ìtẹ̀lé ìbéèrè ẹ̀kọ́."
+
+msgid "Messages report"
+msgstr "Ìròyìn ìránṣẹ́"
+
+msgid "Course messages tracking report."
+msgstr "Ìròyìn ìtẹ̀lé ìránṣẹ́ ẹ̀kọ́."
+
+msgid "Total time tracking report for course learners."
+msgstr "Ìròyìn ìtẹ̀lé àpapọ̀ àkókò fún àwọn akẹ́kọ̀ọ́ ẹ̀kọ́."
+
+msgid "Gradebook summary"
+msgstr "Àkópọ̀ ìwé-ìṣirò"
+
+msgid "Summary view of gradebook results."
+msgstr "Ìṣàkóso àwọn àbájáde ìwé-ẹ̀kọ́."
+
+msgid "Flat view"
+msgstr "Ìwò pẹ̀tẹ́ẹ̀sì"
+
+msgid "Flat gradebook results view."
+msgstr "Ìwò pẹ̀tẹ́ẹ̀sì àwọn àbájáde ìwé-ẹ̀kọ́."
+
+msgid "Evaluation log"
+msgstr "Àkọsílẹ̀ ìgbẹ́wọ̀n"
+
+msgid "Change log for gradebook evaluations."
+msgstr "Àkọsílẹ̀ ìyípadà fún àwọn ìgbẹ́wọ̀n ìwé-ẹ̀kọ́."
+
+msgid "Link log"
+msgstr "Àkọsílẹ̀ ìsopọ̀"
+
+msgid "Change log for gradebook links."
+msgstr "Àkọsílẹ̀ ìyípadà fún àwọn ìsopọ̀ ìwé-ẹ̀kọ́."
+
+msgid "Result details"
+msgstr "Àwọn àlàyé àbájáde"
+
+msgid "Detailed view of a gradebook result."
+msgstr "Ìwò àlàyé fún àbájáde ìwé-ẹ̀kọ́ kan."
+
+msgid "Personal certificates report."
+msgstr "Ìròyìn ìwé-ẹ̀rí ara ẹni."
+
+msgid "User move statistics"
+msgstr "Àwọn ìṣirò ìṣíṣe olùkọ́"
+
+msgid "Report for user move and transfer statistics."
+msgstr "Ìròyìn fún àwọn ìṣirò ìṣíṣe àti ìyípadà olùkọ́."
+
+msgid "User consent list"
+msgstr "Àtòjọ ìfọ̀kanbalẹ̀ olùkọ́"
+
+msgid "Report of users and consent status."
+msgstr "Ìròyìn àwọn olùkọ́ àti ipò ìfọ̀kanbalẹ̀ wọn."
+
+msgid "Special platform exports."
+msgstr "Àwọn ìṣàfihàn pàtàkì orí ẹ̀rọ."
+
+msgid "Export certificates"
+msgstr "Ìṣàfihàn ìwé-ẹ̀rí"
+
+msgid "Export platform certificates."
+msgstr "Ìṣàfihàn àwọn ìwé-ẹ̀rí orí ẹ̀rọ."
+
+msgid "Export exercise results"
+msgstr "Ìṣàfihàn àbájáde ìdánwò"
+
+msgid "Export exercise results from the platform."
+msgstr "Ìṣàfihàn àbájáde ìdánwò láti orí ẹ̀rọ."
+
+msgid "Course survey results and reporting."
+msgstr "Àbájáde ìwádìí ẹ̀kọ́ àti ìròyìn."
+
+msgid "Attendance report"
+msgstr "Ìròyìn ìbẹ̀wẹ̀"
+
+msgid "Course attendance tracking and reports."
+msgstr "Ìtọpinpin ìbẹ̀wẹ̀ ẹ̀kọ́ àti àwọn ìròyìn."
+
+msgid "Exercises global report"
+msgstr "Ìròyìn ìdánwò gbogbogbò"
+
+msgid "Global exercise results report for the course."
+msgstr "Ìròyìn àbájáde ìdánwò gbogbogbò fún ẹ̀kọ́ náà."
+
+msgid "Exercise report"
+msgstr "Ìròyìn ìdánwò"
+
+msgid "Detailed exercise report."
+msgstr "Ìròyìn ìdánwò aláyé."
+
+msgid "Exercise history"
+msgstr "Ìtàn ìdánwò"
+
+msgid "Exercise attempt history."
+msgstr "Ìtàn ìgbìyànjú ìdánwò."
+
+msgid "Exercise results"
+msgstr "Àbájáde ìdánwò"
+
+msgid "Exercise results and corrections."
+msgstr "Àbájáde ìdánwò àti àtúnṣe."
+
+msgid "Question-level exercise statistics."
+msgstr "Àwọn ìṣirò ìdánwò ní ìpele ìbéèrè."
+
+msgid "Exercise statistics"
+msgstr "Àwọn ìṣirò ìdánwò"
+
+msgid "Exercise statistics page."
+msgstr "Ojú-ewé àwọn ìṣirò ìdánwò."
+
+msgid "Live exercise statistics"
+msgstr "Àwọn ìṣirò ìdánwò lọ́wọ́"
+
+msgid "Live exercise statistics for teachers."
+msgstr "Àwọn ìṣirò ìdánwò lọ́wọ́ fún àwọn olùkọ́."
+
+msgid "Learning path statistics"
+msgstr "Àwọn ìṣirò ọ̀nà ẹ̀kọ́"
+
+msgid "Learning path item statistics."
+msgstr "Àwọn ìṣirò ohun-èlò ọ̀nà ẹ̀kọ́."
+
+msgid "Learning path report inside a course."
+msgstr "Ìròyìn ọ̀nà ẹ̀kọ́ nínú ẹ̀kọ́ kan."
+
+msgid "User skills report."
+msgstr "Ìròyìn ìṣe-ọwọ́ olùkọ́."
+
+msgid "Scheduled or periodic export configuration."
+msgstr "Ìṣètò ìṣàfihàn tí a ṣètò tàbí ìgbà díẹ̀."
+
+msgid "User export"
+msgstr "Ìṣàfihàn olùkọ́"
+
+msgid "Export users from the platform."
+msgstr "Ìṣàfihàn àwọn olùkọ́ láti orí ẹ̀rọ."
+
+msgid "Not classified"
+msgstr "Kò ní ìsọ̀rí"
+
+msgid "You have acquired the skill %s"
+msgstr "O ti ní ìṣe-ọwọ́ %s"
+
+msgid "You have acquired the skill %s."
+msgstr "O ti ní ìṣe-ọwọ́ %s."
+
+msgid "Recover your password"
+msgstr "Padà gba ọ̀rọ̀ìpamọ́ rẹ"
+
+msgid "Disclaimer"
+msgstr "Ìkìlọ̀"
+
+msgid "This operation would exceed the limit of %d users allowed for this course."
+msgstr "Ìṣiṣẹ́ yìí yóò kọjá ìwọ̀n %d àwọn olùkọ́ tí a gbà láàyè fún ẹ̀kọ́ yìí."
+
+msgid "DefaultGroupCategory"
+msgstr "Ẹgbẹ́ Àkọ́kọ́"
+
+msgid "LearningCalendar"
+msgstr "Kàlẹ́ńdà Ẹ̀kọ́"
+
+msgid "Choose how this user can authenticate on the platform."
+msgstr "Yan bí olùmọ̀ yìí ṣe lè wọlé sí pèlẹ́fọ́ọ̀mù náà."
+
+msgid "Authentication methods"
+msgstr "Àwọn ọ̀nà ìdájọ́"
+
+msgid "Set password manually"
+msgstr "Ṣètò ọ̀rọ̀ìpamọ́ pẹ̀lú ọwọ́"
+
+msgid "Report role matrix"
+msgstr "Ijabọ ipò àkópọ̀"
+
+msgid "Report permission categories"
+msgstr "Ijabọ àwọn ẹ̀ka ìyọ̀ǹda"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs enforce the documented report role matrix."
+msgstr "Àkọsílẹ̀ yìí ṣe àkójọ àwọn ojú-ìwé ìjabọ̀ tí a mọ̀, ẹ̀ka wọn, URL kanoníkà, URL àtọwọ́dọ́wọ́ àti àwọn ipò olùgbọ́ tí a retí. Àwọn URL kanoníkà ń fipamọ́ ìtòlẹ́sẹẹsẹ ipò ìjabọ̀ tí a ti ṣàkọsílẹ̀."
+
+msgid "reports"
+msgstr "àwọn ìjabọ̀"
+
+msgid "Canonical URL"
+msgstr "URL kanoníkà"
+
+msgid "Legacy URL"
+msgstr "URL àtọwọ́dọ́wọ́"
+
+msgid "Permission category"
+msgstr "Ẹ̀ka ìyọ̀ǹda"
+
+msgid "This matrix documents the expected audience for each report and is enforced by the canonical report entry point."
+msgstr "Àkọsílẹ̀ yìí ṣe àkọsílẹ̀ àwọn olùgbọ́ tí a retí fún ìjabọ̀ kọ̀ọ̀kan tí a sì fipamọ́ nípasẹ̀ ojú-ìwọlé ìjabọ̀ kanoníkà."
+
+msgid "These keys group reports by access scope and are used by the report registry. They can later be mapped to finer-grained platform permissions."
+msgstr "Àwọn bọtínì wọ̀nyí ń ṣe àkójọ àwọn ìjabọ̀ nípasẹ̀ ààyè ìráàyè wọn tí àwọn ìforúkọsílẹ̀ ìjabọ̀ sì ń lò wọ́n. Wọ́n lè yí padà nígbà mííràn sí àwọn ìyọ̀ǹda pèlẹ́fọ́ọ̀mù tí ó ní ìtumọ̀ jù."
+
+msgid "Permission"
+msgstr "Ìyọ̀ǹda"
+
+msgid "Clear active session"
+msgstr "Pa ìsinsìyí tó ń ṣiṣẹ́ rẹ́"
+
+msgid "Are you sure you want to clear this user active session?"
+msgstr "Ṣe ó dá ọ lójú pé o fẹ́ pa ìsinsìyí olùmọ̀ yìí tó ń ṣiṣẹ́?"
+
+msgid "Preview shown without course context. Some course-specific data may be unavailable."
+msgstr "Àwòrán hàn láìsí àyíká ẹ̀kọ́. Àwọn dátà kan tí ó ní ìsopọ̀ pẹ̀lú ẹ̀kọ́ lè má sí."
+
+msgid "Preview is not available for this question."
+msgstr "Àwòrán kò sí fún ìbéèrè yìí."
+
+msgid "Edition is not allowed without a course context."
+msgstr "Àtúnṣe kò jẹ́ gbà láìsí àyíká ẹ̀kọ́."
+
+msgid "This plugin does not use regions."
+msgstr "Plugin yìí kò lo àwọn agbègbè."
+
+msgid "No plugins with regions were found."
+msgstr "Kò sí àwọn plugin tó ní àwọn agbègbè tí a rí."
+
+msgid "Freemium"
+msgstr "Freemium"
+
+msgid "Commercial service"
+msgstr "Iṣẹ́ òwò"
+
+msgid "Commercial"
+msgstr "Òwò"
+
+msgid "100% free"
+msgstr "100% lọ́fẹ̀"
+
+msgid "Displayed above the public login form."
+msgstr "A fihàn lókè fọ́ọ̀mù ìwọlé gbogbogbò."
+
+msgid "Displayed below the public login form."
+msgstr "A fihàn lábẹ́ fọ́ọ̀mù ìwọlé gbogbogbò."
+
+msgid "Displayed before the footer area."
+msgstr "A fihàn ṣáájú agbègbè ìsàlẹ̀ ojú-ìwé."
+
+msgid "Displayed in the left footer column."
+msgstr "A fihàn ní òwòwó ìsàlẹ̀ ojú-ìwé òsì."
+
+msgid "Displayed in the center footer column."
+msgstr "A fihàn ní òwòwó ìsàlẹ̀ ojú-ìwé àárín."
+
+msgid "Displayed in the right footer column."
+msgstr "A fihàn ní òwòwó ìsàlẹ̀ ojú-ìwé ọ̀tún."
+
+msgid "Showing all plugins."
+msgstr "Ń fi gbogbo àwọn plugin hàn."
+
+msgid "Some plugins are still pending functional verification."
+msgstr "Àwọn plugin kan ṣì ń dúró fún ìdájọ́ ìṣiṣẹ́."
+
+msgid "Show verified plugins only"
+msgstr "Fihàn àwọn plugin tí a ti fọwọ́sí nìkan"
+
+msgid "Showing verified plugins only."
+msgstr "Ń fi àwọn plugin tí a ti fọwọ́sí nìkan hàn."
+
+msgid "Pending plugins are temporarily hidden until they are adapted and tested."
+msgstr "A fi àwọn plugin tí ó dúró pamọ́ fún ìgbà díẹ̀ títí a ó fi mú wọn padà bọ̀ sí ìbamu àti dájọ́ wọn."
+
+msgid "Show all plugins"
+msgstr "Fihàn gbogbo àwọn plugin"
+
+msgid "Official and free plugins are listed separately from plugins that may depend on commercial services or paid offers."
+msgstr "A ṣe àkójọ àwọn plugin òṣìṣẹ́ àti lọ́fẹ̀ lọ́tọ̀ kúrò nínú àwọn plugin tí ó lè gbarale àwọn iṣẹ́ òwò tàbí àwọn ìfilọ́lẹ̀ tí a sanwó fún."
+
+msgid "Included free plugins"
+msgstr "Àwọn plugin lọ́fẹ̀ tí a fi kún"
+
+msgid "Commercial and freemium plugins"
+msgstr "Àwọn plugin òwò àti freemium"
+
+msgid "All plugins"
+msgstr "Gbogbo àwọn plugin"
+
+msgid "No plugins were found for this category."
+msgstr "Kò sí plugin tí a rí fún ẹ̀ka yìí."
+
+msgid "Search plugins"
+msgstr "Wá àwọn plugin"
+
+msgid "Search by name or description"
+msgstr "Wá nípasẹ̀ orúkọ tàbí àpèjúwe"
+
+msgid "Advanced filters"
+msgstr "Àwọn àyè ìfọ̀rọ̀wérọ̀"
+
+msgid "All statuses"
+msgstr "Gbogbo àwọn ipò"
+
+msgid "All sources"
+msgstr "Gbogbo àwọn orísun"
+
+msgid "All types"
+msgstr "Gbogbo àwọn irú"
+
+msgid "Installed plugins are shown first"
+msgstr "A fihàn àwọn plugin tí a fi sínú ní àkọ́kọ́"
+
+msgid "No plugins match the current filters."
+msgstr "Kò sí plugin tí ó bá àwọn àyè ìfọ̀rọ̀wérọ̀ lọ́wọ́lọ́wọ́ mu."
+
+msgid "Try clearing the search or changing the filters."
+msgstr "Gbiyanju láti pa ìwárí náà rẹ́ tàbí yí àwọn àyè ìfọ̀rọ̀wérọ̀ padà."
+
+msgid "README"
+msgstr "README"
+
+msgid "Invalid security token"
+msgstr "Àmì ààbò tí kò tọ́"
+
+msgid "Please select a destination session"
+msgstr "Jọ̀ọ́ yan ìpàdé ìdásílẹ̀ kan"
+
+msgid "Cannot move this to the same session"
+msgstr "Kò ṣeé ṣe láti gbé èyí lọ sí ìpàdé ìdásílẹ̀ kan náà"
+
+msgid "The destination session must include the selected course"
+msgstr "Ìpàdé ìdásílẹ̀ tí a yàn gbọdọ̀ ní ìkẹ́kọ̀ọ́ tí a yàn nínú rẹ̀"
+
+msgid "The source session must include the selected course"
+msgstr "Ìpàdé ìdásílẹ̀ orísun gbọdọ̀ ní ìkẹ́kọ̀ọ́ tí a yàn nínú rẹ̀"
+
+msgid "No learners found"
+msgstr "Kò rí akẹ́kọ̀ọ́ kankan"
+
+msgid "Will be subscribed"
+msgstr "Yóò forúkọsílẹ̀"
+
+msgid "Subscribed"
+msgstr "Forúkọsílẹ̀"
+
+msgid "The move process has finished"
+msgstr "Ìlànà gbigbe ti parí"
+
+msgid "Comparison finished. No data has been moved."
+msgstr "Ìfiwéra ti parí. Kò sí dátà tí a gbé lọ."
+
+msgid "Move tracking data from the base course or a source session to another session. Use comparison first to review the affected learner data."
+msgstr "Gbé dátà ìtọpa láti ìkẹ́kọ̀ọ́ ìpìlẹ̀ tàbí ìpàdé ìdásílẹ̀ orísun sí ìpàdé ìdásílẹ̀ mìíràn. Lo ìfiwéra ní àkọ́kọ́ láti ṣàyẹ̀wò dátà akẹ́kọ̀ọ́ tí yóò kan."
+
+msgid "Search for a course or use the manual course ID field below."
+msgstr "Wá ìkẹ́kọ̀ọ́ kan tàbí lo ààyè ìdámọ̀ ìkẹ́kọ̀ọ́ pẹ̀lú ọwọ́ nísàlẹ̀."
+
+msgid "Fallback when the course search is not available."
+msgstr "Ìpadàbọ̀ nígbà tí ìwárí ìkẹ́kọ̀ọ́ kò sí."
+
+msgid "Load sessions"
+msgstr "Gbé àwọn ìpàdé ìdásílẹ̀"
+
+msgid "Selected course"
+msgstr "Ìkẹ́kọ̀ọ́ tí a yàn"
+
+msgid "Choose the base course or the session where the tracking data currently exists."
+msgstr "Yan ìkẹ́kọ̀ọ́ ìpìlẹ̀ tàbí ìpàdé ìdásílẹ̀ tí dátà ìtọpa wà níbẹ̀ báyìí."
+
+msgid "Choose the session that will receive the tracking data."
+msgstr "Yan ìpàdé ìdásílẹ̀ tí yóò gba dátà ìtọpa."
+
+msgid "Important"
+msgstr "Pàtàkì"
+
+msgid "The move action updates existing tracking data. Run compare first and test this tool with a non-production course before moving real learner data."
+msgstr "Ìṣe gbigbe ṣe àtúnṣe dátà ìtọpa tó wà tẹ́lẹ̀. Ṣe ìfiwéra ní àkọ́kọ́ kí o sì dán an wò pẹ̀lú ìkẹ́kọ̀ọ́ tí kò sí ní ìṣelọpọ̀ ṣáájú kí o tó gbé dátà akẹ́kọ̀ọ́ gidi."
+
+msgid "No sessions found for this course"
+msgstr "Kò rí ìpàdé ìdásílẹ̀ kankan fún ìkẹ́kọ̀ọ́ yìí"
+
+msgid "Some users were ignored because they are not subscribed to this session."
+msgstr "A kọbiara àwọn ìṣàmúlò kan nítorí wọn kò forúkọsílẹ̀ sí ìpàdé ìdásílẹ̀ yìí."
+
+msgid "Remove selected user"
+msgstr "Yọ olùlò tí a yàn"
+
+msgid "Add selected user"
+msgstr "Fi olùlò tí a yàn"
+
+msgid "No users from the selected list are subscribed to this session."
+msgstr "Kò sí olùlò kankan láti àtòjọ tí a yàn tí wọ́n forúkọsílẹ̀ sí ìpàdé ìdásílẹ̀ yìí."
+
+msgid "No image"
+msgstr "Kò sí àwòrán"
+
+msgid "Invalid URL."
+msgstr "URL tí kò tọ́."
+
+msgid "This cloud document cannot be embedded."
+msgstr "Kò ṣeé ṣe láti fi iṣẹ́-inú-ìṣọ̀kan yìí sínú."
+
+msgid "Document not found"
+msgstr "Kò rí iṣẹ́-inú"
+
+msgid "File not found"
+msgstr "Kò rí fáìlì"
+
+msgid "This learning path is not available for your user at this time."
+msgstr "Ìtọ́sọ́nà ẹ̀kọ́ yìí kò sí fún olùlò rẹ ní àkókò yìí."
+
+msgid "StartDateMustBeBeforeTheEndDate"
+msgstr "StartDateMustBeBeforeTheEndDate"
+
+msgid "Next learning path"
+msgstr "Ìtọ́sọ́nà ẹ̀kọ́ tí ó tẹ̀lé"
+
+msgid "Select the learning path that will be available after this one."
+msgstr "Yan ìtọ́sọ́nà ẹ̀kọ́ tí yóò wà ní ìmúṣe lẹ́yìn èyí."
+
+msgid "Create another learning path in this course to enable learning path flow."
+msgstr "Ṣẹ̀dá ìtọ́sọ́nà ẹ̀kọ́ mìíràn nínú ìkẹ́kọ̀ọ́ yìí láti jẹ́ kí ìtàn ìtọ́sọ́nà ẹ̀kọ́ ṣiṣẹ́."
+
+msgid "Available from %s"
+msgstr "Wà nílẹ̀ láti %s"
+
+msgid "Available until %s"
+msgstr "Wà títí di %s"
+
+msgid "Statistics reset date"
+msgstr "Ọjọ́ ìtúnṣe ìṣirò"
+
+msgid "Last 24 hours"
+msgstr "Wákàtí 24 tó kọjá"
+
+msgid "This reset date is used as the reference date for the report. It does not delete historical tracking data."
+msgstr "A lo ọjọ́ ìtúnṣe yìí gẹ́gẹ́ bí ọjọ́ ìtọ́ka fún ìròyìn. Kò parun dátà ìtọpa ìtàn."
+
+msgid "Since reset date"
+msgstr "Láti ọjọ́ ìtúnṣe"
+
+msgid "Users connected in the last 24 hours"
+msgstr "Àwọn olùlò tí a darapọ̀ ní wákàtí 24 tó kọjá"
+
+msgid "Learners with at least one course access during the last 24 hours."
+msgstr "Àwọn akẹ́kọ̀ọ́ tí wọ́n ní ìráàyè sí ìkẹ́kọ̀ọ́ kan ó kéré tán ní wákàtí 24 tó kọjá."
+
+msgid "Users connected in the last week"
+msgstr "Àwọn olùlò tí a darapọ̀ ní ọ̀sẹ̀ tó kọjá"
+
+msgid "Learners with at least one course access during the last 7 days."
+msgstr "Àwọn akẹ́kọ̀ọ́ tí wọ́n ní ìráàyè sí ìkẹ́kọ̀ọ́ kan ó kéré tán ní ọjọ́ 7 tó kọjá."
+
+msgid "Users connected in the last month"
+msgstr "Àwọn olùlò tí a darapọ̀ ní oṣù tó kọjá"
+
+msgid "Learners with at least one course access during the last 30 days."
+msgstr "Àwọn akẹ́kọ̀ọ́ tí wọ́n ní ìráàyè sí ìkẹ́kọ̀ọ́ kan ó kéré tán ní ọjọ́ 30 tó kọjá."
+
+msgid "Not recently connected users"
+msgstr "Àwọn olùlò tí kò darapọ̀ láìpẹ́"
+
+msgid "Learners without course access since %s."
+msgstr "Àwọn akẹ́kọ̀ọ́ tí kò ní ìráàyè sí ìkẹ́kọ̀ọ́ láti %s."
+
+msgid "Recently used resources"
+msgstr "Àwọn ohun-èlò tí a lò láìpẹ́"
+
+msgid "Course tools/resources used since %s."
+msgstr "Àwọn irinṣẹ́/àwọn ohun-èlò ẹ̀kọ́ tí a ti lò láti %s."
+
+msgid "%s %% of learners"
+msgstr "%s %% àwọn akẹ́kọ̀ọ́"
+
+msgid "Connections"
+msgstr "Àwọn ìsopọ̀"
+
+msgid "Total connections"
+msgstr "Àpapọ̀ àwọn ìsopọ̀"
+
+msgid "Downloaded documents"
+msgstr "Àwọn ìwé tí a gba sọ́tọ̀"
+
+msgid "List of documents downloaded by this learner in this course."
+msgstr "Àtòjọ àwọn ìwé tí akẹ́kọ̀ọ́ yìí ti gba sọ́tọ̀ nínú ẹ̀kọ́ yìí."
+
+msgid "Forum topics"
+msgstr "Àwọn àkórí fọ́rọ̀mù"
+
+msgid "Forum topics opened by this learner in this course."
+msgstr "Àwọn àkórí fọ́rọ̀mù tí akẹ́kọ̀ọ́ yìí ti ṣí ní ẹ̀kọ́ yìí."
+
+msgid "Forum posts"
+msgstr "Àwọn ìfiránṣẹ́ fọ́rọ̀mù"
+
+msgid "Forum posts written by this learner in this course."
+msgstr "Àwọn ìfiránṣẹ́ fọ́rọ̀mù tí akẹ́kọ̀ọ́ yìí ti kọ ní ẹ̀kọ́ yìí."
+
+msgid "Course connections"
+msgstr "Àwọn ìsopọ̀ ẹ̀kọ́"
+
+msgid "Connection history for this learner in this course."
+msgstr "Ìtàn ìsopọ̀ fún akẹ́kọ̀ọ́ yìí nínú ẹ̀kọ́ yìí."
+
+msgid "Resources used"
+msgstr "Àwọn ohun-èlò tí a ti lò"
+
+msgid "Latest tools or resources used by this learner in this course."
+msgstr "Àwọn irinṣẹ́ tàbí ohun-èlò tuntun tí akẹ́kọ̀ọ́ yìí ti lò nínú ẹ̀kọ́ yìí."
+
+msgid "Logout date"
+msgstr "Ọjọ́ ìjáde"
+
+msgid "Imported Aiken quiz"
+msgstr "Àdánwò Aiken tí a gbé wọlé"
+
+msgid "Only supported documents will be listed here."
+msgstr "Àwọn ìwé tí a ṣe àtìlẹ́yìn nìkan ni a óò ṣe àtòjọ níbí."
+
+msgid "Generated Aiken content"
+msgstr "Àkóónú Aiken tí a ṣẹ̀dá"
+
+msgid "Review the generated content before importing it as a new exercise."
+msgstr "Ṣàtúnyẹ̀wò àkóónú tí a ṣẹ̀dá ṣáájú kí o tó gbé wọlé gẹ́gẹ́ bí ìdárayá tuntun."
+
+msgid "No documents available."
+msgstr "Kò sí ìwé tí ó wà."
+
+msgid "yperbolic arctangent:\\t\\tarctanh(x)"
+msgstr "Arctangent hyperbolic:\\t\\tarctanh(x)"
+
+msgid "Exercise"
+msgstr "Ìdárayá"
+
+msgid "OfficialCode"
+msgstr "OfficialCode"
+
+msgid "FirstName"
+msgstr "FirstName"
+
+msgid "LastName"
+msgstr "LastName"
+
+msgid "LoginName"
+msgstr "LoginName"
+
+msgid "MinMinute"
+msgstr "MinMinute"
+
+msgid "StartDate"
+msgstr "StartDate"
+
+msgid "EndDate"
+msgstr "EndDate"
+
+msgid "CorrectionDate"
+msgstr "CorrectionDate"
+
+msgid "NotValidated"
+msgstr "NotValidated"
+
+msgid "PendingAttempts"
+msgstr "PendingAttempts"
+
+msgid "List of pending test attempts across your courses."
+msgstr "Àtòjọ àwọn ìgbìyànjú ìdárayá tí ó wà ní ìdúró ní gbogbo àwọn ẹ̀kọ́ rẹ."
+
+msgid "User ID"
+msgstr "User ID"
+
+msgid "QuestionType"
+msgstr "QuestionType"
+
+msgid "QuestionsWithNoAutomaticCorrection"
+msgstr "QuestionsWithNoAutomaticCorrection"
+
+msgid "There are no pending tests."
+msgstr "Kò sí àwọn ìdárayá tí ó wà ní ìdúró."
+
+msgid "%s results"
+msgstr "%s àbájáde"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Removed"
+msgstr "Ti yọkuro"
+
+msgid "NoUsersInTheList"
+msgstr "NoUsersInTheList"
+
+msgid "Are you sure?"
+msgstr "Ṣe o dá ọ lójú?"
+
+msgid "NoResultsAvailable"
+msgstr "NoResultsAvailable"
+
+msgid "Import groups from a CSV file and optionally remove items that are not present in the file."
+msgstr "Gbé àwọn ẹgbẹ́ wọlé láti fáìlì CSV kan àti láìrọ̀rùn yọ àwọn ohun kan tí kò sí nínú fáìlì náà."
+
+msgid "Use this option carefully because items missing from the CSV can be removed during the import process."
+msgstr "Lo àṣàyàn yìí pẹ̀lú ìṣọ́ra nítorí àwọn ohun tí kò sí nínú fáìlì CSV lè yọkuro nígbà tí a bá ń gbé wọlé."
+
+msgid "Upload a CSV file with the group data you want to import."
+msgstr "Gbe fáìlì CSV kan sọ́tọ̀ pẹ̀lú àwọn dátà ẹgbẹ́ tí o fẹ́ gbé wọlé."
+
+msgid "You can download the example file to use the expected format."
+msgstr "O lè ṣe ìsọ̀tọ̀ fáìlì àpẹẹrẹ láti lo ìlànà tí a retí."
+
+msgid "If you enable deletion, items not present in the file may be removed."
+msgstr "Tí o bá mu ìparun ṣiṣẹ́, àwọn ohun tí kò sí nínú fáìlì náà lè yọkuro."
+
+msgid "The CSV file is mandatory to start the import."
+msgstr "Fáìlì CSV jẹ́ dandan láti bẹ̀rẹ̀ ìmúwọlé."
+
+msgid "Please select at least one class."
+msgstr "Jọ̀wọ́ yan kíkékerẹ kan ní kéréjù."
+
+msgid "Define the properties for each group before creating them."
+msgstr "Ṣètò àwọn ohun-ìní fún ẹgbẹ̀ọ̀ọ̀ kọ̀ọ̀kan ṣaaju kí o tó dá wọn."
+
+msgid "Apply the first row values"
+msgstr "Lo àwọn iye ìlà àkọ́kọ́"
+
+msgid "Create groups manually or generate them from the classes subscribed to this course."
+msgstr "Dá àwọn ẹgbẹ̀ọ̀ọ̀ ní ọwọ́ tàbí ṣẹ̀dá wọn láti àwọn kíláàsì tí a forúkọsílẹ̀ sí ètò-ẹ̀kọ́ yìí."
+
+msgid "Create manual groups"
+msgstr "Dá àwọn ẹgbẹ̀ọ̀ọ̀ ní ọwọ́"
+
+msgid "Use this form when you want to create empty course groups manually."
+msgstr "Lo fọ́ọ̀mù yìí nígbà tí o bá fẹ́ dá àwọn ẹgbẹ̀ọ̀ọ̀ ètò-ẹ̀kọ́ òfìfo ní ọwọ́."
+
+msgid "Configure manual groups"
+msgstr "Ṣètò àwọn ẹgbẹ̀ọ̀ọ̀ ní ọwọ́"
+
+msgid "Create groups from subscribed classes"
+msgstr "Dá àwọn ẹgbẹ̀ọ̀ọ̀ láti àwọn kíláàsì tí a forúkọsílẹ̀"
+
+msgid "Use this form when you want to create one course group for each selected class."
+msgstr "Lo fọ́ọ̀mù yìí nígbà tí o bá fẹ́ dá ẹgbẹ̀ọ̀ọ̀ ètò-ẹ̀kọ́ kan fún kíláàsì tí a yàn kọ̀ọ̀kan."
+
+msgid "Keep created groups linked to their source classes"
+msgstr "Jẹ́ kí àwọn ẹgbẹ̀ọ̀ọ̀ tí a dá wà ní ìsopọ̀ pẹ̀lú àwọn kíláàsì orísun wọn"
+
+msgid "Create groups from selected classes"
+msgstr "Dá àwọn ẹgbẹ̀ọ̀ọ̀ láti àwọn kíláàsì tí a yàn"
+
+msgid "You must be logged in to access this page."
+msgstr "O gbọ́dọ̀ wọlé láti lè wọlé sí ojú-ewé yìí."
+
+msgid "Invalid user"
+msgstr "Olùlò tí kò tọ́"
+
+msgid "UseCourseCustomCertificate"
+msgstr "LoIwe-ẹri-Àdáni-Ètò-ẹ̀kọ́"
+
+msgid "UseDefaultCustomCertificate"
+msgstr "LoIwe-ẹri-Àdáni-Aiyipada"
+
+msgid "CertificateSetting"
+msgstr "Ètò-Iwe-ẹri"
+
+msgid "SelectOneOptionBeforeOpeningEditor"
+msgstr "YanAṣayanKanṢaajuṢiṣiiOlootu"
+
+msgid "ChooseCustomCertificateModeHelp"
+msgstr "YanIpoIwe-ẹri-ÀdaniIranlọwọ"
+
+msgid "CertificateMode"
+msgstr "IpoIwe-ẹri"
+
+msgid "Enable student to validate own attendance"
+msgstr "Gba ọmọ-ẹ̀kọ́ láàyè láti fọwọ́sí wíwá ara rẹ̀"
+
+msgid "Course block"
+msgstr "Àkóónú ètò-ẹ̀kọ́"
+
+msgid "Add custom content blocks to course footer regions."
+msgstr "Fi àwọn àkóónú àdáni kun sí àwọn agbègbè ìsàlẹ̀ ètò-ẹ̀kọ́."
+
+msgid "course_block_pre_footer"
+msgstr "àkóónú_èkọ́_ṣáájú_ìsàlẹ̀"
+
+msgid "Before footer"
+msgstr "Ṣáájú ìsàlẹ̀"
+
+msgid "course_block_footer_left"
+msgstr "àkóónú_èkọ́_ìsàlẹ̀_osì"
+
+msgid "Footer left"
+msgstr "Ìsàlẹ̀ osì"
+
+msgid "course_block_footer_center"
+msgstr "àkóónú_èkọ́_ìsàlẹ̀_àárín"
+
+msgid "Footer center"
+msgstr "Ìsàlẹ̀ àárín"
+
+msgid "course_block_footer_right"
+msgstr "àkóónú_èkọ́_ìsàlẹ̀_ọ̀tún"
+
+msgid "Footer right"
+msgstr "Ìsàlẹ̀ ọ̀tún"
+
+msgid "SetNotification"
+msgstr "ṢètòÌkìlọ̀"
+
+msgid "CourseLegal"
+msgstr "ÒfinÈtò-ẹ̀kọ́"
+
+msgid "Certificates search is not available"
+msgstr "Ìwádìí iwe-ẹri kò sí"
+
+msgid "It allows the acquisition of skills by subcategories"
+msgstr "Ó gba gbígba àwọn òye nípasẹ̀ àwọn abẹ́-ẹ̀ka"
+
+msgid "Allow skills by subcategories"
+msgstr "Gba àwọn òye nípasẹ̀ àwọn abẹ́-ẹ̀ka"
+
+msgid "Minimum score for skills"
+msgstr "Díẹ̀ kéré jù fún àwọn òye"
+
+msgid "The gradebook table is hidden."
+msgstr "Tábìlì ìwé-ìtàn ni a fi pamọ́."
+
+msgid "Invalid token"
+msgstr "Àmì-ìdánimọ̀ tí kò tọ́"
+
+msgid "Unable to save the item"
+msgstr "Kò le fi ohun kan pamọ́"
+
+msgid "Only HTTP and HTTPS URLs are allowed."
+msgstr "HTTP àti HTTPS URLs nìkan ni a gbà láàyè."
+
+msgid "Invalid URL host."
+msgstr "Olùgbàlejò URL tí kò tọ́."
+
+msgid "This cloud provider is not allowed."
+msgstr "Olùpèsè ìsorí-ìkùukùu yìí kò gbà láàyè."
+
+msgid "Documents used"
+msgstr "Àwọn ìwé tí a lò"
+
+msgid "No document usage"
+msgstr "Kò sí ìlò ìwé"
+
+msgid "Invalid action."
+msgstr "Ìṣe tí kò tọ́."
+
+msgid "No users selected."
+msgstr "Kò sí àwọn olùlò tí a yàn."
+
+msgid "%s user(s) processed."
+msgstr "%s olùlò ni a ti ṣiṣẹ́."
+
+msgid "Invalid CSRF token."
+msgstr "Àmì-ìdánimọ̀ CSRF tí kò tọ́."
+
+msgid "[%s] Please change your password"
+msgstr "[%s] Jọ̀wọ́ yí ọ̀rọ̀-ìgbani-lọ́wọ́ rẹ̀ padà"
+
+msgid "Dear %s,\n\nOur security enforcing process shows you use a password that is commonly used on the internet, which means your account could easily be stolen. It is probably a simple sequence or a very common word, we don't really know (we cannot see your password), but we ask you to please connect to the platform and request a password change. You can follow the link here: %s to do that now.\n\nPlease note we will never ask for your password in this process. You just enter your username or e-mail and we send you a link. If you are asked to introduce your existing password to do that, someone is probably trying to do Phishing on your account. Be safe, change your password now!\n\n%s\n%s"
+msgstr "Ẹ̀yin %s,\n\nÌlànà ààbò wa fi hàn pé o ń lo ọ̀rọ̀-ìgbani-lọ́wọ́ tí a máa ń lò lórí ayélujára, èyí tí ó túmọ̀ sí pé àkọọ́lẹ̀ rẹ̀ lè jẹ́ jíjá ní ìrọ̀rùn. Ó ṣeé ṣe kí ó jẹ́ ìtòlẹ́sẹẹsẹ kan tàbí ọ̀rọ̀ tí ó wọ́pọ̀, a kò mọ̀ ní pàtó (a kò lè rí ọ̀rọ̀-ìgbani-lọ́wọ́ rẹ̀), ṣùgbọ́n a bẹ̀ ẹ́ láti jọ̀wọ́ darapọ̀ mọ́ pẹpẹ náà kí o sì béèrè ìyípadà ọ̀rọ̀-ìgbani-lọ́wọ́. O lè tẹle ìjápọ̀ yìí: %s láti ṣe bẹ́ẹ̀ báyìí.\n\nJọ̀wọ́ ṣàkíyèsí pé a kò ní béèrè ọ̀rọ̀-ìgbani-lọ́wọ́ rẹ̀ ní ìlànà yìí. O kan tẹ orúkọ olùlò tàbí í-meèlì rẹ̀, a sì rán ìjápọ̀ sí ọ. Tí wọ́n bá ní kí o fi ọ̀rọ̀-ìgbani-lọ́wọ́ rẹ̀ tí ó wà lọ́wọ́lọ́wọ́ sílẹ̀ láti ṣe bẹ́ẹ̀, ó ṣeé ṣe kí ẹnikan máa gbìyànjú láti ṣe Phishing lórí àkọọ́lẹ̀ rẹ̀. Dúró ní ààbò, yí ọ̀rọ̀-ìgbani-lọ́wọ́ rẹ̀ padà báyìí!\n\n%s\n%s"
+
+msgid "[%s] Your password has been reset"
+msgstr "[%s] A ti tún ọ̀rọ̀-ìgbani-lọ́wọ́ rẹ̀ ṣe"
+
+msgid "Dear %s,\n\nOur security enforcing process flagged you as using a password that is commonly used on the internet, which means your account could easily be stolen. As a prevention measure, we have decided to initiate a password reset process. Your new, automatically generated password is now:\n\n%s\n\nPlease login to the platform soon (using this new password) to set your own, personal and secure, password.\n\nBe safe.\n\n%s\n%s"
+msgstr "Ẹ̀yin %s,\n\nÌlànà ààbò wa ti fi ọ́ hàn pé o ń lo ọ̀rọ̀ìpamọ́ tí a máa ń lò lórí ayélujára, èyí tí ó lè jẹ́ kí àkọọ́lẹ̀ rẹ̀ jẹ́ jíjá lọ́nà rọrùn. Gẹ́gẹ́ bí ìgbésẹ̀ ààbò, a ti pinnu láti bẹ̀rẹ̀ ìtúntò ọ̀rọ̀ìpamọ́. Ọ̀rọ̀ìpamọ́ tuntun tí a ṣẹ̀dá fún ọ ní báyìí jẹ́:\n\n%s\n\nJọ̀ọ́ wọlé sórí pèlẹ́fọ́ọ̀mù láìpẹ́ (ní lílo ọ̀rọ̀ìpamọ́ tuntun yìí) láti ṣètò ọ̀rọ̀ìpamọ́ tirẹ̀, ti ara rẹ àti ààbò.\n\nṢe ààbò.\n\n%s\n%s"
+
+msgid "Signature saved successfully"
+msgstr "Ìtọwọ́bọ̀wé ti ṣàfipamọ́ ní àṣeyọrí"
+
+msgid "Invalid request payload."
+msgstr "Ìbéèrè tí kò tọ́."
+
+msgid "Authentication required."
+msgstr "Ìfidájọ́ ní ìlò."
+
+msgid "The course title is required."
+msgstr "Àkọ́lé ìkẹ́kọ̀ọ́ ni a nílò."
+
+msgid "Only trainers and administrators can create courses."
+msgstr "Awọn olùkọ́ àti àwọn olùṣàkóso nìkan ni wọ́n lè dá àwọn ìkẹ́kọ̀ọ́."
+
+msgid "Course creation by trainers is disabled on this platform."
+msgstr "Ìdá ìkẹ́kọ̀ọ́ nípasẹ̀ àwọn olùkọ́ ti di ìdáwọ́lé ní pèlẹ́fọ́ọ̀mù yìí."
+
+msgid "The selected BuyCourses service cannot be used to create this course."
+msgstr "Ìsẹ́ BuyCourses tí a yàn kò ṣeé lò láti dá ìkẹ́kọ̀ọ́ yìí."
+
+msgid "You have reached the maximum number of courses allowed (%d)."
+msgstr "O ti dé ìwọ̀n àwọn ìkẹ́kọ̀ọ́ tí a gbà láàyè (%d)."
+
+msgid "The selected BuyCourses service is invalid."
+msgstr "Ìsẹ́ BuyCourses tí a yàn kò tọ́."
+
+msgid "BuyCourses is not available right now."
+msgstr "BuyCourses kò sí ní àkókò yìí."
+
+msgid "BuyCourses cannot validate the selected service right now."
+msgstr "BuyCourses kò lè fọwọ́sí ìsẹ́ tí a yàn ní àkókò yìí."
+
+msgid "Unable to validate the selected BuyCourses service right now."
+msgstr "Kò ṣeé ṣe láti fọwọ́sí ìsẹ́ BuyCourses tí a yàn ní àkókò yìí."
+
+msgid "External tool removed from course"
+msgstr "Irinsẹ́ òde ti yọọ́ kúrò nínú ìkẹ́kọ̀ọ́"
+
+msgid "External tool was removed from the course, but kept internally because it is linked to the gradebook"
+msgstr "Irinsẹ́ òde ti yọọ́ kúrò nínú ìkẹ́kọ̀ọ́, ṣùgbọ́n a ti tọ́jú rẹ̀ nínú nítorí pé ó ní ìsopọ̀ pẹ̀lú ìwé ìdájọ́"
+
+msgid "There are no external tools available to add to the gradebook"
+msgstr "Kò sí irinsẹ́ òde tí ó wà láti fi kún ìwé ìdájọ́"
+
+msgid "The evaluation could not be created"
+msgstr "Ìdájọ́ náà kò ṣeé dá"
+
+msgid "The gradebook evaluation could not be linked"
+msgstr "Ìsopọ̀ ìdájọ́ ìwé ìdájọ́ kò ṣeé ṣe"
+
+msgid "Survey questions"
+msgstr "Àwọn ìbéèrè ìwádìí"
+
+msgid "Back to survey list"
+msgstr "Padà sí àtòjọ ìwádìí"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "Ìwádìí yìí ti ní àwọn ìdáhùn tẹ́lẹ̀. Ṣíṣe àtúnṣe ìbéèrè ti di ìdíwọ́ nípasẹ̀ ààtò."
+
+msgid "Choose the type of question you want to add."
+msgstr "Yan irú ìbéèrè tí o fẹ́ fi kun."
+
+msgid "The free text option is added automatically."
+msgstr "Aṣàyàn ọ̀rọ̀ òmìnira ni a ṣàfikún nípasẹ̀ ara rẹ̀."
+
+msgid "No questions found"
+msgstr "Kò sí ìbéèrè tí a rí"
+
+msgid "Mandatory"
+msgstr "Dandan"
+
+msgid "Unsupported question type"
+msgstr "Iru ibeere ti ko ni atilẹyin"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "O le lo awọn aami {%s} ati {%s} ninu ibeere naa."
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "Ibeere yii han ni ipo nigba ti o n dahun iwadi naa."
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "Awọn aṣayan ogorun lati 1 si 100 ni a ṣe ni adaṣe."
+
+msgid "Could not load survey questions"
+msgstr "Ko le ṣe ikojọpọ awọn ibeere iwadi"
+
+msgid "The question text is required."
+msgstr "Ọrọ ibeere naa jẹ dandan."
+
+msgid "The maximum score is required."
+msgstr "Dókó tó ga jùlọ ni a nílò."
+
+msgid "Please select a parent option."
+msgstr "Jọwọ yan aṣayan obi kan."
+
+msgid "Please fill all answer options."
+msgstr "Jọwọ fọwọsi gbogbo awọn aṣayan idahun."
+
+msgid "QuestionUpdated"
+msgstr "IbeereTi Ṣe Imudojuiwọn"
+
+msgid "Could not save survey question"
+msgstr "Ko le fi ibeere iwadi pamọ"
+
+msgid "Could not delete survey question"
+msgstr "Ko le pa ibeere iwadi rẹ"
+
+msgid "Could not move survey question"
+msgstr "Ko le gbe ibeere iwadi"
+
+msgid "Could not copy survey question"
+msgstr "Ko le daakọ ibeere iwadi"
+
+msgid "Hide search"
+msgstr "Tọju wiwa"
+
+msgid "Showing results for: %s"
+msgstr "Nfihan awọn abajade fun: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "Ṣawari nipasẹ akọle iwadi, koodu tabi apejuwe."
+
+msgid "Search surveys"
+msgstr "Ṣawari awọn iwadi"
+
+msgid "%s surveys selected"
+msgstr "%s awọn iwadi ti a yan"
+
+msgid "Clear selection"
+msgstr "Pa yiyan rẹ"
+
+msgid "No surveys found"
+msgstr "Ko ri awọn iwadi kankan"
+
+msgid "Unsupported"
+msgstr "Ti ko ni atilẹyin"
+
+msgid "Could not load surveys"
+msgstr "Ko le ṣe ikojọpọ awọn iwadi"
+
+msgid "Delete selected surveys"
+msgstr "Pa awọn iwadi ti a yan rẹ"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "Awọn iwadi ti a yan ati awọn ibeere wọn yoo paarẹ. Iṣe yii ko le ṣe pada."
+
+msgid "Could not delete selected surveys"
+msgstr "Ko le pa awọn iwadi ti a yan rẹ"
+
+msgid "Survey action"
+msgstr "Iṣe iwadi"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "Ẹda iwadi yii yoo ṣẹda: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "Gbogbo awọn idahun ati awọn ifiwepe yoo paarẹ fun iwadi yii: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "Awọn ibeere ti a ṣe ni ilọpo yoo yọkuro ninu iwadi yii: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "Iwadi yii yoo ṣe atẹjade fun awọn olukọ ẹgbẹ ti a sopọ mọ: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "Iwadi yii ati awọn ibeere rẹ yoo paarẹ: %s"
+
+msgid "Could not complete survey action"
+msgstr "Ko le pari iṣe iwadi"
+
+msgid "Not started"
+msgstr "Ko bẹrẹ"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "Awọn ibo ipade jẹ ki awọn olumulo ti a pe yan awọn ọjọ ti wọn wa."
+
+msgid "Back to surveys"
+msgstr "Pada si awọn iwadi"
+
+msgid "Edit meeting poll"
+msgstr "Ṣatunkọ ibo ipade"
+
+msgid "View meeting poll"
+msgstr "Wo ibo ipade"
+
+msgid "Basic information"
+msgstr "Alaye ipilẹ"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "Eyi yoo ṣẹda iwadi ti iru ibo ipade. Awọn idahun ati awọn ifiwepe ni a nṣakoso lọtọ."
+
+msgid "Availability"
+msgstr "Wiwa"
+
+msgid "Meeting dates"
+msgstr "Awọn ọjọ ipade"
+
+msgid "Meeting poll"
+msgstr "Ibo ipade"
+
+msgid "My availability"
+msgstr "Wiwa mi"
+
+msgid "Meeting poll results"
+msgstr "Awọn abajade ibo ipade"
+
+msgid "No invitations found"
+msgstr "Ko ri awọn ifiwepe kankan"
+
+msgid "available"
+msgstr "wa"
+
+msgid "Could not load meeting poll"
+msgstr "Ko le ṣe ikojọpọ ibo ipade"
+
+msgid "Please complete the required fields"
+msgstr "Jọwọ pari awọn aaye ti a beere"
+
+msgid "Could not save meeting poll"
+msgstr "Kò ṣeé ṣe láti fi ìbò ìpàdé pamọ́"
+
+msgid "Could not save meeting availability"
+msgstr "Kò ṣeé ṣe láti fi ààyè ìpàdé pamọ́"
+
+msgid "Copy this survey to another course or session"
+msgstr "Da ìwádìí yìí sí ìkẹ́kọ̀ọ́ mìíràn tàbí ìpàdé"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "A ó da ìwádìí náà láìsí àwọn ìdáhùn tàbí ìpè."
+
+msgid "No target courses found"
+msgstr "Kò rí àwọn ìkẹ́kọ̀ọ́ tí a fẹ́"
+
+msgid "Search by course title, course code or session name."
+msgstr "Wa nípa àkọlé ìkẹ́kọ̀ọ́, koodu ìkẹ́kọ̀ọ́ tàbí orúkọ ìpàdé."
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "Lo Ìdàsílẹ̀ ìwádìí nígbà tí o bá fẹ́ ẹ̀dà kan nínú ìkẹ́kọ̀ọ́ kan náà."
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "A ó da àwọn ìbéèrè àti àwọn àṣàyàn. Àwọn ìdáhùn, ìpè àti àwọn ìròyìn yóò dúró nínú ìwádìí ìpilẹ̀ṣẹ̀ nìkan."
+
+msgid "Selected target"
+msgstr "Àfojúsùn tí a yàn"
+
+msgid "Could not load copy form"
+msgstr "Kò ṣeé ṣe láti gbé fọ́ọ̀mù ìdàsílẹ̀"
+
+msgid "The survey will be copied to: %s"
+msgstr "A ó da ìwádìí náà sí: %s"
+
+msgid "Survey copied."
+msgstr "Ìwádìí ti di dídàsílẹ̀."
+
+msgid "Could not copy survey"
+msgstr "Kò ṣeé ṣe láti da ìwádìí"
+
+msgid "Answer survey"
+msgstr "Dáhùn ìwádìí"
+
+msgid "Preview mode does not save answers."
+msgstr "Ìṣàfihàn kò fi àwọn ìdáhùn pamọ́."
+
+msgid "Survey completed"
+msgstr "Ìwádìí ti parí"
+
+msgid "Thank you for answering the survey."
+msgstr "O ṣeun fún dídáhùn ìwádìí náà."
+
+msgid "Profile information"
+msgstr "Àlàyé profaili"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "Jọ̀wọ́ ṣàyẹ̀wò àwọn ààyè profaili tí a béèrè ṣáájú kí o tó dáhùn ìwádìí náà."
+
+msgid "This profile field is read-only."
+msgstr "Ààyè profaili yìí jẹ́ kíkà-nìkan."
+
+msgid "You already filled this survey."
+msgstr "O ti kọ ìwádìí yìí tẹ́lẹ̀."
+
+msgid "Please specify"
+msgstr "Jọ̀wọ́ sọ ní pàtó"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "Irú ìbéèrè yìí kò ṣeé gba ní ìwò ìwádìí òde-òní."
+
+msgid "Preview only"
+msgstr "Ìṣàfihàn nìkan"
+
+msgid "Submit answers"
+msgstr "Fi àwọn ìdáhùn ránṣẹ́"
+
+msgid "Could not load survey"
+msgstr "Kò ṣeé ṣe láti gbé ìwádìí"
+
+msgid "Please complete the required profile fields."
+msgstr "Jọ̀wọ́ parí àwọn ààyè profaili tí a béèrè."
+
+msgid "Please answer all mandatory questions."
+msgstr "Jọ̀wọ́ dáhùn gbogbo àwọn ìbéèrè tí a gba."
+
+msgid "Could not save survey answers"
+msgstr "Kò ṣeé ṣe láti fi àwọn ìdáhùn ìwádìí pamọ́"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "Ṣètò àwọn àlàyé ìwádìí àkọ́kọ́ ṣáájú kí o tó ṣàkóso àwọn ìbéèrè àti ìpè."
+
+msgid "The survey code cannot be changed after creation."
+msgstr "A kò lè yí koodu ìwádìí padà lẹ́yìn ìṣẹ̀dá."
+
+msgid "Survey behavior"
+msgstr "Ìhùwàsí ìwádìí"
+
+msgid "Use 0 for no time limit."
+msgstr "Lo 0 fún ààlà àkókò kankan."
+
+msgid "Survey messages"
+msgstr "Àwọn ìránṣẹ́ ìwádìí"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "Àwọn ààyè profaili tí a yàn níbí ni a ó fi hàn ṣáájú àwọn ìbéèrè ìwádìí."
+
+msgid "No profile fields are currently available."
+msgstr "Kò sí àwọn ààyè profaili tí ó wà lọ́wọ́lọ́wọ́."
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "Yíyan ààyè profaili wà fún àwọn ìwádìí tí kò ní ìdánimọ̀ nìkan."
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "Ìsopọ̀ ìmọ̀-ọgbọ́n yóò di gbigbe ní ìdìpọ̀ tó yàtọ̀."
+
+msgid "Could not load survey configuration"
+msgstr "Kò ṣeé ṣe láti gbé ìtò ìwádìí"
+
+msgid "The survey code is required."
+msgstr "Koodu ìwádìí ni a béèrè."
+
+msgid "The survey title is required."
+msgstr "Àkọlé ìwádìí ni a béèrè."
+
+msgid "The survey has been saved successfully"
+msgstr "Ìwádìí ti di fífipamọ́ láìṣe àṣìṣe"
+
+msgid "Could not save survey configuration"
+msgstr "Kò ṣeé ṣe láti fi ìtò ìwádìí pamọ́"
+
+msgid "Course users"
+msgstr "Àwọn olùkẹ́kọ̀ọ́ ìkẹ́kọ̀ọ́"
+
+msgid "Already invited"
+msgstr "Ti pè tẹ́lẹ̀"
+
+msgid "No users found"
+msgstr "Kò rí àwọn olùlò"
+
+msgid "No groups found"
+msgstr "Kò rí àwọn ẹgbẹ́"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "Lo **ìtọ́ka** níbi tí ìtọ́ka ìwádìí yóò hàn."
+
+msgid "Remind all selected users"
+msgstr "Rán ìránlétí sí gbogbo àwọn olùlò tí a yàn"
+
+msgid "Anonymous access link"
+msgstr "Ìtọ́ka ìráàyè aláìlẹ́tọ̀"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "Àwọn olùkó tí wọn kò ní ìpè lè lo ìsọ̀rí yìí láti dáhùn ìbéèrè náà."
+
+msgid "Answered anonymously"
+msgstr "Dáhùn ní ìkọ̀kọ̀"
+
+msgid "Could not load survey invitations"
+msgstr "Kò le ṣàkóso àwọn ìpè ìbéèrè"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "Kókó àti ìsọ̀rí ìránṣẹ́ jẹ́ dandan nígbà tí a bá ń fi ìránṣẹ́ ránṣẹ́."
+
+msgid "Could not publish survey"
+msgstr "Kò le tẹ̀jáde ìbéèrè"
+
+msgid "Could not copy the link"
+msgstr "Kò le daakọ ìsọ̀rí náà"
+
+msgid "Please answer this survey using the following link"
+msgstr "Jọ̀wọ́ dáhùn ìbéèrè yìí pẹ̀lú ìsọ̀rí tí ó wà nísàlẹ̀"
+
+msgid "Export CSV"
+msgstr "Gbéjáde CSV"
+
+msgid "Export compact CSV"
+msgstr "Gbéjáde CSV kíkuru"
+
+msgid "Export Excel"
+msgstr "Gbéjáde Excel"
+
+msgid "Export package"
+msgstr "Gbéjáde àkójọpọ̀"
+
+msgid "Results summary"
+msgstr "Àkópọ̀ àbájáde"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "Ìwò yìí ṣàfihàn dátà ìròyìn tí a kó lọ́wọ́ fún ìbéèrè yìí."
+
+msgid "Select user"
+msgstr "Yan olùkó"
+
+msgid "No answers found"
+msgstr "Kò rí àwọn ìdáhùn"
+
+msgid "answers"
+msgstr "àwọn ìdáhùn"
+
+msgid "Could not load survey reporting"
+msgstr "Kò le ṣàkóso ìròyìn ìbéèrè"
+
+msgid "Back to threads"
+msgstr "Padà sí àwọn ìsọ̀rí"
+
+msgid "Back to learning path"
+msgstr "Padà sí ọ̀nà ìkẹ́kọ̀ọ́"
+
+msgid "Remove sticky"
+msgstr "Yọ̀ọ́ kúrò ní àkọsílẹ̀"
+
+msgid "Make sticky"
+msgstr "Ṣe àkọsílẹ̀"
+
+msgid "Open thread"
+msgstr "Ṣí ìsọ̀rí"
+
+msgid "Close thread"
+msgstr "Tì ìsọ̀rí"
+
+msgid "Delete thread"
+msgstr "Parẹ́ ìsọ̀rí"
+
+msgid "This thread is hidden from learners."
+msgstr "Ìsọ̀rí yìí ti pamọ́ kúrò lọ́wọ́ àwọn akẹ́kọ̀ọ́."
+
+msgid "Revision requested"
+msgstr "Bẹ̀rẹ̀ àtúnyẹ̀wò"
+
+msgid "Revision"
+msgstr "Àtúnyẹ̀wò"
+
+msgid "Approve post"
+msgstr "Fọwọ́sí ìfiránṣẹ́"
+
+msgid "Reject post"
+msgstr "Kọ ìfiránṣẹ́"
+
+msgid "Cancel revision request"
+msgstr "Fagilé ìbéèrè àtúnyẹ̀wò"
+
+msgid "Delete post"
+msgstr "Parẹ́ ìfiránṣẹ́"
+
+msgid "Message is required"
+msgstr "Ìsọ̀rí jẹ́ dandan"
+
+msgid "Target thread is required"
+msgstr "Ìsọ̀rí àfojúsùn jẹ́ dandan"
+
+msgid "Could not retrieve posts"
+msgstr "Kò le gba àwọn ìfiránṣẹ́ padà"
+
+msgid "Thread shown"
+msgstr "Ìsọ̀rí ti hàn"
+
+msgid "Thread hidden"
+msgstr "Ìsọ̀rí ti pamọ́"
+
+msgid "Could not update thread"
+msgstr "Kò le ṣàtúnṣe ìsọ̀rí"
+
+msgid "Thread closed"
+msgstr "Ìsọ̀rí ti tì"
+
+msgid "Thread opened"
+msgstr "Ìsọ̀rí ti ṣí"
+
+msgid "Thread marked as sticky"
+msgstr "Ìsọ̀rí ti di àkọsílẹ̀"
+
+msgid "Thread unmarked as sticky"
+msgstr "Ìsọ̀rí ti yọ kúrò ní àkọsílẹ̀"
+
+msgid "Thread notifications enabled"
+msgstr "Ìfitónilétí ìsọ̀rí ti ṣiṣẹ́"
+
+msgid "Thread notifications disabled"
+msgstr "Ìfitónilétí ìsọ̀rí ti dáwọ́dúró"
+
+msgid "Could not update thread notification"
+msgstr "Kò le ṣàtúnṣe ìfitónilétí ìsọ̀rí"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "Ṣé o dá ọ lójú pé o fẹ́ parẹ́ ìsọ̀rí yìí?"
+
+msgid "Could not delete thread"
+msgstr "Kò le parẹ́ ìsọ̀rí"
+
+msgid "Post approved"
+msgstr "Ìfiránṣẹ́ ti fọwọ́sí"
+
+msgid "Could not approve post"
+msgstr "Kò le fọwọ́sí ìfiránṣẹ́"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "Ṣé o dá ọ lójú pé o fẹ́ kọ ìfiránṣẹ́ yìí?"
+
+msgid "Post rejected"
+msgstr "Ìfiránṣẹ́ ti kọ"
+
+msgid "Could not reject post"
+msgstr "Kò ṣeé ṣe láti kọ ìfiránṣẹ́"
+
+msgid "Post shown"
+msgstr "Ìfiránṣẹ́ hàn"
+
+msgid "Post hidden"
+msgstr "Ìfiránṣẹ́ pamọ́"
+
+msgid "Could not update post"
+msgstr "Kò ṣeé ṣe láti ṣàtúnṣe ìfiránṣẹ́"
+
+msgid "Post updated"
+msgstr "Ìfiránṣẹ́ ti di àtúnṣe"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "Ṣé o dá ọ lójú pé o fẹ́ pa ìfiránṣẹ́ yìí rẹ́?"
+
+msgid "Post deleted"
+msgstr "Ìfiránṣẹ́ ti parẹ́"
+
+msgid "Could not delete post"
+msgstr "Kò ṣeé ṣe láti pa ìfiránṣẹ́ rẹ́"
+
+msgid "Untitled thread"
+msgstr "Àkórí tí kò ní àkọlé"
+
+msgid "Could not retrieve threads"
+msgstr "Kò ṣeé ṣe láti gba àwọn àkórí"
+
+msgid "Post moved"
+msgstr "Ìfiránṣẹ́ ti yípò"
+
+msgid "Could not move post"
+msgstr "Kò ṣeé ṣe láti yí ìfiránṣẹ́ pò"
+
+msgid "Revision request removed"
+msgstr "Ìbéèrè àtúnyẹ̀wò ti yọkuro"
+
+msgid "Could not update revision request"
+msgstr "Kò ṣeé ṣe láti ṣàtúnṣe ìbéèrè àtúnyẹ̀wò"
+
+msgid "Are you sure you want to report this post?"
+msgstr "Ṣé o dá ọ lójú pé o fẹ́ ròyìn ìfiránṣẹ́ yìí?"
+
+msgid "Could not report post"
+msgstr "Kò ṣeé ṣe láti ròyìn ìfiránṣẹ́"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "Ṣé o dá ọ lójú pé o fẹ́ pa àfikún yìí rẹ́?"
+
+msgid "Attachment deleted"
+msgstr "Àfikún ti parẹ́"
+
+msgid "Could not delete attachment"
+msgstr "Kò ṣeé ṣe láti pa àfikún rẹ́"
+
+msgid "Thread title"
+msgstr "Àkọlé àkórí"
+
+msgid "Sticky thread"
+msgstr "Àkórí onígbàgbọ́"
+
+msgid "Attach files"
+msgstr "Fi fáìlì sóra"
+
+msgid "Attachments are disabled for this forum"
+msgstr "Àfikún ti di àìṣiṣẹ́mọ́ fún fóórọ̀ yìí"
+
+msgid "The forum is not open yet."
+msgstr "Fóórọ̀ kò tíì ṣí sílẹ̀."
+
+msgid "The forum is closed."
+msgstr "Fóórọ̀ ti padé."
+
+msgid "The forum is locked."
+msgstr "Fóórọ̀ ti di títì."
+
+msgid "New threads are not allowed in this forum."
+msgstr "Kò gba àwọn àkórí tuntun ní fóórọ̀ yìí."
+
+msgid "Thread created"
+msgstr "Àkórí ti dá"
+
+msgid "Could not create thread"
+msgstr "Kò ṣeé ṣe láti dá àkórí"
+
+msgid "Back to posts"
+msgstr "Padà sí àwọn ìfiránṣẹ́"
+
+msgid "This reply will be stored as a revision."
+msgstr "Èsì yìí yóò wa fipamọ́ gẹ́gẹ́ bí àtúnyẹ̀wò."
+
+msgid "Post reply"
+msgstr "Fèsì sí ìfiránṣẹ́"
+
+msgid "The thread is locked."
+msgstr "Àkórí ti di títì."
+
+msgid "Reply added"
+msgstr "Èsì ti fi kún"
+
+msgid "Could not add reply"
+msgstr "Kò ṣeé ṣe láti fi èsì kún"
+
+msgid "Add forum"
+msgstr "Ṣàfikún fóórọ̀"
+
+msgid "No forums found"
+msgstr "Kò rí fóórọ̀ kankan"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "Ṣẹ̀dá ẹ̀ka fóórọ̀ tàbí fóórọ̀ rẹ̀ ní àkọ́kọ́ láti bẹ̀rẹ̀ ìjíròrò."
+
+msgid "Locked"
+msgstr "Ti di títì"
+
+msgid "No forums in this category"
+msgstr "Kò sí fóórọ̀ kankan nínú ẹ̀ka yìí"
+
+msgid "Posts require approval"
+msgstr "Àwọn ìfiránṣẹ́ nílò ìfọ̀wọ́sí"
+
+msgid "Forum for current group"
+msgstr "Fóórọ̀ fún ẹgbẹ́ lọ́wọ́lówó"
+
+msgid "Group forum visibility"
+msgstr "Ìfarahàn fóórọ̀ ẹgbẹ́"
+
+msgid "No category"
+msgstr "Kò sí ẹ̀ka"
+
+msgid "Could not retrieve forums"
+msgstr "Kò ṣeé ṣe láti gba àwọn fóórọ̀"
+
+msgid "Forum category updated"
+msgstr "Ẹ̀ka fóórọ̀ ti di àtúnṣe"
+
+msgid "Forum category created"
+msgstr "Ẹ̀ka fóórọ̀ ti dá"
+
+msgid "Could not save forum category"
+msgstr "Kò ṣeé ṣe láti fi ẹ̀ka fóórọ̀ pamọ́"
+
+msgid "Forum updated"
+msgstr "Fóórọ̀ ti di àtúnṣe"
+
+msgid "Forum created"
+msgstr "Fóórọ̀ ti dá"
+
+msgid "Could not save forum"
+msgstr "Kò ṣeé fi fóórọ̀ pamọ́"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "Ṣé o dá ọ lójú pé o fẹ́ pa ẹ̀ka fóórọ̀ yìí rẹ́?"
+
+msgid "Could not delete forum category"
+msgstr "Kò ṣeé pa ẹ̀ka fóórọ̀ rẹ́"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "Ṣé o dá ọ lójú pé o fẹ́ pa fóórọ̀ yìí rẹ́?"
+
+msgid "Could not delete forum"
+msgstr "Kò ṣeé pa fóórọ̀ rẹ́"
+
+msgid "Forum category unlocked"
+msgstr "Ẹ̀ka fóórọ̀ ti ṣí"
+
+msgid "Forum category locked"
+msgstr "Ẹ̀ka fóórọ̀ ti tì"
+
+msgid "Could not update forum category"
+msgstr "Kò ṣeé ṣàtúnṣe ẹ̀ka fóórọ̀"
+
+msgid "Forum category shown"
+msgstr "Ẹ̀ka fóórọ̀ ti hàn"
+
+msgid "Forum category hidden"
+msgstr "Ẹ̀ka fóórọ̀ ti fi pamọ́"
+
+msgid "Forum unlocked"
+msgstr "Fóórọ̀ ti ṣí"
+
+msgid "Forum locked"
+msgstr "Fóórọ̀ ti tì"
+
+msgid "Could not update forum"
+msgstr "Kò ṣeé ṣàtúnṣe fóórọ̀"
+
+msgid "Forum shown"
+msgstr "Fóórọ̀ ti hàn"
+
+msgid "Forum hidden"
+msgstr "Fóórọ̀ ti fi pamọ́"
+
+msgid "Forum notifications enabled"
+msgstr "Ìfitónilétí fóórọ̀ ti tan"
+
+msgid "Forum notifications disabled"
+msgstr "Ìfitónilétí fóórọ̀ ti pa"
+
+msgid "Could not update forum notification"
+msgstr "Kò ṣeé ṣàtúnṣe ìfitónilétí fóórọ̀"
+
+msgid "Forum category moved"
+msgstr "Ẹ̀ka fóórọ̀ ti yípò"
+
+msgid "Could not move forum category"
+msgstr "Kò ṣeé yípò ẹ̀ka fóórọ̀"
+
+msgid "Forum moved"
+msgstr "Fóórọ̀ ti yípò"
+
+msgid "Could not move forum"
+msgstr "Kò ṣeé yípò fóórọ̀"
+
+msgid "Back to forums"
+msgstr "Padà sí àwọn fóórọ̀"
+
+msgid "New thread"
+msgstr "Ìsọ̀rọ̀ tuntun"
+
+msgid "No threads found"
+msgstr "Kò rí ìsọ̀rọ̀ kankan"
+
+msgid "Sticky"
+msgstr "Lẹ́mọ́lẹ́mọ́"
+
+msgid "Graded"
+msgstr "Ti ní ìdájọ́"
+
+msgid "Grade peers"
+msgstr "Ṣe ìdájọ́ ẹlẹgbẹ́"
+
+msgid "Move thread"
+msgstr "Yípò ìsọ̀rọ̀"
+
+msgid "Target forum"
+msgstr "Fóórọ̀ àfojúsùn"
+
+msgid "Target forum is required"
+msgstr "Fóórọ̀ àfojúsùn ni a nílò"
+
+msgid "Students"
+msgstr "Àwọn akẹ́kọ̀ọ́"
+
+msgid "No students found"
+msgstr "Kò rí akẹ́kọ̀ọ́ kankan"
+
+msgid "No peers available to grade."
+msgstr "Kò sí ẹlẹgbẹ́ tó wà láti ṣe ìdájọ́."
+
+msgid "Qualified"
+msgstr "Ti ní ìdájọ́"
+
+msgid "Not qualified"
+msgstr "Kò ní ìdájọ́"
+
+msgid "Could not retrieve thread grading"
+msgstr "Kò ṣeé gba ìdájọ́ ìsọ̀rọ̀"
+
+msgid "Thread grading updated"
+msgstr "Ìdájọ́ ìsọ̀rọ̀ ti ṣàtúnṣe"
+
+msgid "Could not update thread grading"
+msgstr "Kò ṣeé ṣàtúnṣe ìdájọ́ ìsọ̀rọ̀"
+
+msgid "Thread score saved"
+msgstr "Àmì ìsọ̀rọ̀ ti fi pamọ́"
+
+msgid "Could not save thread score"
+msgstr "Kò ṣeé fi àmì ìsọ̀rọ̀ pamọ́"
+
+msgid "Could not move thread"
+msgstr "Kò ṣeé yípò ìsọ̀rọ̀"
+
+msgid "Thread updated"
+msgstr "Ìsọ̀rọ̀ ti ṣàtúnṣe"
+
+msgid "Search term is too short"
+msgstr "Ọ̀rọ̀ ìwádìí ti kéré jù"
+
+msgid "Could not search forums"
+msgstr "Kò ṣeé wádìí àwọn fóórọ̀"
+
+msgid "Moderated"
+msgstr "Ti ṣàkóso"
+
+msgid "View threads"
+msgstr "Wo àwọn ìsọ̀rọ̀"
 

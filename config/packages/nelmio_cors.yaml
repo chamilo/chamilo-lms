@@ -3,11 +3,23 @@ nelmio_cors:
         origin_regex: true
         allow_origin: ['%env(CORS_ALLOW_ORIGIN)%']
         allow_methods: ['GET', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE']
-        allow_headers: ['Content-Type', 'Authorization', 'Preload', 'Fields']
+        allow_headers: ['Content-Type', 'Authorization', 'Preload', 'Fields', 'X-Prefer-HTML-Errors']
         expose_headers: ['Link']
         max_age: 3600
         allow_credentials: true
     paths:
         '^/login/token/check':
+            origin_regex: true
+            allow_origin: ['%env(CORS_ALLOW_ORIGIN)%']
             allow_credentials: true
-        '^/': null
+            allow_methods: ['POST', 'OPTIONS']
+            allow_headers: ['Content-Type', 'Authorization', 'X-Prefer-HTML-Errors']
+            max_age: 3600
+        '^/':
+            origin_regex: true
+            allow_origin: ['%env(CORS_ALLOW_ORIGIN)%']
+            allow_credentials: true
+            allow_methods: ['GET', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE']
+            allow_headers: ['Content-Type', 'Authorization', 'Preload', 'Fields', 'X-Prefer-HTML-Errors']
+            expose_headers: ['Link']
+            max_age: 3600

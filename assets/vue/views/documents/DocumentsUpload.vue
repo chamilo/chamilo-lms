@@ -245,12 +245,14 @@ import ResourceLanguageSelector from "../../components/resources/ResourceLanguag
 import { usePlatformConfig } from "../../store/platformConfig"
 import documentsService from "../../services/documents"
 import searchEngineFieldService from "../../services/searchEngineFieldService"
+import { useUppyLocale } from "../../composables/uppyLocale"
 
 const route = useRoute()
 const router = useRouter()
 const { gid, sid, cid } = getCourseContext()
 const { onCreated } = useUpload()
 const { t } = useI18n()
+const { uppyLocale } = useUppyLocale()
 const platformConfigStore = usePlatformConfig()
 
 const LOW_QUOTA_THRESHOLD_PERCENT = 2
@@ -576,7 +578,10 @@ async function enforceQuotaForFile(file) {
   return true
 }
 
-const uppy = new Uppy({ autoProceed: false })
+const uppy = new Uppy({
+  autoProceed: false,
+  locale: uppyLocale.value,
+})
   .use(Webcam)
   .use(ImageEditor, {
     cropperOptions: {

@@ -89,6 +89,8 @@ sudo a2ensite my.chamilo.net
 sudo systemctl restart apache2
 yarn set version stable
 yarn up && yarn install && yarn dev
+# If yarn dev fails with "FATAL ERROR: Ineffective mark-compacts near heap limit Allocation failed - JavaScript heap out of memory", use this instead of only "yarn dev"
+# NODE_OPTIONS="--max-old-space-size=4096" yarn dev
 sudo touch .env
 sudo chown -R www-data: var/ .env config/
 # load http://my.chamilo.net in your browser and follow the installation wizard

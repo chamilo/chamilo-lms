@@ -20,3 +20,7 @@ $strings['EmbedDateRangeHelp'] = 'Binnen die data wordt deze ingebedde inhoud di
 $strings['HtmlCode'] = 'HTML-code';
 $strings['HtmlCodeHelp'] = 'De gedeelde HTML-code, zoals verstrekt door de externe service bij delen in Ingebed formaat.';
 $strings['LaunchContent'] = 'Inhoud starten';
+
+$strings['InvalidDateRange'] = 'De startdatum moet eerder zijn dan of gelijk zijn aan de einddatum.';
+
+$strings['InvalidSecurityToken'] = 'Ongeldig beveiligingstoken. Herlaad de pagina en probeer het opnieuw.';

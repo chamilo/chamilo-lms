@@ -74,3 +74,18 @@ $strings['QuestionDelete'] = 'Ziurtagiri espezifikoa ezabatu eta ziurtagiri lehe
 $strings['SuccessDelete'] = 'Arrakastaz ezabatu da';
 $strings['ProblemDelete'] = 'Arazoa ziurtagiria ezabatzerakoan';
 $strings['OnlyCustomCertificates'] = 'Ziurtagiri pertsonalizatua duen ikastaroak soilik esportatzen dira';
+$strings['CertificateMode'] = 'Ziurtagiri modua';
+$strings['UseCourseCustomCertificate'] = 'Erabili ikastaroko ziurtagiri pertsonalizatua';
+$strings['UseDefaultCustomCertificate'] = 'Erabili plataformako lehenetsitako ziurtagiri pertsonalizatua';
+
+$strings['CreateCertificateWithTags'] = 'Sortu ziurtagiria etiketa hauek erabiliz';
+
+$strings['DeleteCertificate'] = 'Ezabatu ziurtagiria';
+
+$strings['SaveCertificate'] = 'Gorde ziurtagiria';
+
+$strings['SelectOneOptionBeforeOpeningEditor'] = 'Hautatu aukera bat eta gorde ezarpenak ziurtagiri-editorea ireki aurretik.';
+
+$strings['ChooseCustomCertificateModeHelp'] = 'Aukeratu nola erabili behar dituen ikastaro honek ziurtagiri pertsonalizatuak.';
+
+$strings['CouldNotSaveCertificate'] = 'Ezin izan da ziurtagiriaren konfigurazioa gorde.';

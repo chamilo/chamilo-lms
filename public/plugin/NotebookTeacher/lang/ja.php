@@ -13,3 +13,7 @@ $strings['NoNotebookFilter'] = '現在のフィルターで作成されたノー
 $strings['NoNotebook'] = 'システムに作成されたノートはありません';
 $strings['NoNotebookUser'] = 'この学生のノートはありません';
 $strings['NotebookNoStudentAssigned'] = '学生が割り当てられていないノート';
+
+$strings['TeacherNotesHelp'] = 'このコースの学習者に紐づく非公開の講師用メモを作成します。';
+$strings['CurrentFilter'] = '現在のフィルター';
+$strings['EmptyStateHelp'] = '新しいメモを作成するか、学習者フィルターを変更してください。';

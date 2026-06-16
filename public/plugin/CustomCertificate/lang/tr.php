@@ -72,3 +72,18 @@ $strings['QuestionDelete'] = 'Özel diplomayı silip varsayılan sertifikayı ku
 $strings['SuccessDelete'] = 'Başarıyla silindi';
 $strings['ProblemDelete'] = 'Sertifika silinirken sorun oluştu';
 $strings['OnlyCustomCertificates'] = 'Yalnızca kişiselleştirilmiş sertifikası olan kurslar dışa aktarılır';
+$strings['CertificateMode'] = 'Sertifika modu';
+$strings['UseCourseCustomCertificate'] = 'Derse özel özel sertifika kullan';
+$strings['UseDefaultCustomCertificate'] = 'Platform varsayılan özel sertifikasını kullan';
+
+$strings['CreateCertificateWithTags'] = 'Bu etiketleri kullanarak sertifika oluştur';
+
+$strings['DeleteCertificate'] = 'Sertifikayı sil';
+
+$strings['SaveCertificate'] = 'Sertifikayı kaydet';
+
+$strings['SelectOneOptionBeforeOpeningEditor'] = 'Sertifika düzenleyicisini açmadan önce bir seçenek belirleyin ve ayarları kaydedin.';
+
+$strings['ChooseCustomCertificateModeHelp'] = 'Bu dersin özel sertifikaları nasıl kullanacağını seçin.';
+
+$strings['CouldNotSaveCertificate'] = 'Sertifika yapılandırması kaydedilemedi.';

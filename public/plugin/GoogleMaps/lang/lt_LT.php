@@ -1,0 +1,39 @@
+<?php
+
+$strings['plugin_title'] = 'Google Maps';
+$strings['plugin_comment'] = 'Rodyti Google žemėlapį su vartotojų vietomis, saugomomis papildomuose laukuose.';
+$strings['enable_api'] = 'Įkelti Google Maps API';
+$strings['api_key'] = 'API raktas';
+$strings['extra_field_name'] = 'Papildomo lauko pavadinimas';
+$strings['extra_field_name_help'] = 'Įveskite vieną ar daugiau vartotojo papildomo lauko kintamųjų, atskirtus kableliais. Žemėlapyje galima rodyti iki 5 laukų. Pavyzdys: address, office_address, city';
+$strings['UsersCoordinatesMap'] = 'Vartotojų vietų žemėlapis';
+$strings['UsersCoordinatesMapHelp'] = 'Šis žemėlapis rodo vartotojų vietas pagal sukonfigūruotus vartotojo papildomus laukus.';
+$strings['GoogleMapsAdminIntro'] = 'Sukonfigūruokite Google Maps API raktą ir vartotojo papildomus laukus, kuriuose yra adresai ar vietos.';
+$strings['GoogleMapsApi'] = 'Google Maps API';
+$strings['ExtraFields'] = 'Papildomi laukai';
+$strings['Access'] = 'Prieiga';
+$strings['AdministratorsOnly'] = 'Tik administratoriams';
+$strings['OpenMap'] = 'Atidaryti žemėlapį';
+$strings['ConfigurePlugin'] = 'Konfigūruoti įskiepį';
+$strings['Configured'] = 'Sukonfigūruota';
+$strings['NotConfigured'] = 'Nesukonfigūruota';
+$strings['GoogleMapsApiDisabledWarning'] = 'Google Maps API įkėlimas išjungtas įskiepio konfigūracijoje.';
+$strings['GoogleMapsApiKeyMissingWarning'] = 'Trūksta Google Maps API rakto.';
+$strings['ExtraFieldNameMissingWarning'] = 'Nepasirinktas joks vartotojo papildomas laukas.';
+$strings['ExtraFieldsNotFoundWarning'] = 'Šie vartotojo papildomi laukai nerasti: %s.';
+$strings['NoUserCoordinatesFound'] = 'Nerasta vartotojų vietų pagal sukonfigūruotus papildomus laukus.';
+$strings['ConfigureGoogleMapsFirst'] = 'Prieš atidarant žemėlapį sukonfigūruokite ir įjunkite Google Maps API.';
+
+$strings['map_provider'] = 'Žemėlapio teikėjas';
+$strings['map_provider_help'] = 'Pasirinkite žemėlapio teikėją, kurį naudos įskiepis ir Socialinis žemėlapis.';
+$strings['GoogleMapsProvider'] = 'Google Maps';
+$strings['OpenStreetMapProvider'] = 'OpenStreetMap';
+$strings['MapProvider'] = 'Žemėlapio teikėjas';
+$strings['MapProviderConfiguration'] = 'Teikėjo konfigūracija';
+$strings['default_latitude'] = 'Numatytoji platuma';
+$strings['default_latitude_help'] = 'Numatytoji žemėlapio centro platuma. Naudojama, kai nėra žymeklio.';
+$strings['default_longitude'] = 'Numatytoji ilguma';
+$strings['default_longitude_help'] = 'Numatytoji žemėlapio centro ilguma. Naudojama, kai nėra žymeklio.';
+$strings['default_zoom'] = 'Numatytasis mastelis';
+$strings['default_zoom_help'] = 'Numatytasis žemėlapio mastelis nuo 1 iki 20.';
+$strings['OpenStreetMapInfo'] = 'OpenStreetMap nereikalauja API rakto. Adreso žymekliai rodomi kaip paieškos nuorodos, nebent yra koordinatės.';

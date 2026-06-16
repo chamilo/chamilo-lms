@@ -43,7 +43,7 @@ if (empty($serviceSale) || (int) ($serviceSale['buyer']['id'] ?? 0) !== $current
 
 if ((int) ($serviceSale['status'] ?? BuyCoursesPlugin::SERVICE_STATUS_PENDING) !== BuyCoursesPlugin::SERVICE_STATUS_COMPLETED) {
     Display::addFlash(
-        Display::return_message('Recurring payment requires a completed sale.', 'warning', false)
+        Display::return_message($plugin->get_lang('RecurringPaymentRequiresCompletedSale'), 'warning', false)
     );
 
     header('Location: '.$panelUrl);
@@ -52,7 +52,7 @@ if ((int) ($serviceSale['status'] ?? BuyCoursesPlugin::SERVICE_STATUS_PENDING) !
 
 if ((int) ($serviceSale['payment_type'] ?? 0) !== BuyCoursesPlugin::PAYMENT_TYPE_PAYPAL) {
     Display::addFlash(
-        Display::return_message('Recurring payment is only available for PayPal service sales.', 'warning', false)
+        Display::return_message($plugin->get_lang('RecurringPaymentRequiresPayPal'), 'warning', false)
     );
 
     header('Location: '.$panelUrl);
@@ -61,7 +61,7 @@ if ((int) ($serviceSale['payment_type'] ?? 0) !== BuyCoursesPlugin::PAYMENT_TYPE
 
 if (empty($serviceSale['service']['renewable'])) {
     Display::addFlash(
-        Display::return_message('This service is not renewable.', 'warning', false)
+        Display::return_message($plugin->get_lang('ServiceIsNotRenewable'), 'warning', false)
     );
 
     header('Location: '.$panelUrl);
@@ -85,7 +85,7 @@ error_log('[BuyCourses][Recurring] API signature configured='.('' !== $paypalSig
 
 if ('' === $paypalUsername || '' === $paypalPassword || '' === $paypalSignature) {
     Display::addFlash(
-        Display::return_message('PayPal API credentials are incomplete.', 'error', false)
+        Display::return_message($plugin->get_lang('PayPalApiCredentialsIncomplete'), 'error', false)
     );
 
     header('Location: '.$panelUrl);
@@ -120,7 +120,7 @@ switch ($action) {
 
     case 'enable_recurring_payment':
         if (BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_ENABLED === (int) ($serviceSale['recurring_payment'] ?? 0)) {
-            $redirectWithSuccess('Recurring payment is already enabled.');
+            $redirectWithSuccess($plugin->get_lang('RecurringPaymentAlreadyEnabled'));
         }
 
         if ('' === $token) {
@@ -150,7 +150,7 @@ switch ($action) {
 
             if (!in_array($ack, ['SUCCESS', 'SUCCESSWITHWARNING'], true)) {
                 $errorCode = (string) ($expressCheckout['L_ERRORCODE0'] ?? 'unknown');
-                $longMessage = (string) ($expressCheckout['L_LONGMESSAGE0'] ?? 'Unknown PayPal error.');
+                $longMessage = (string) ($expressCheckout['L_LONGMESSAGE0'] ?? $plugin->get_lang('UnknownPayPalError'));
 
                 error_log(
                     '[BuyCourses][Recurring] SetExpressCheckout failed for service sale '.$orderId.
@@ -158,7 +158,7 @@ switch ($action) {
                     ' MESSAGE='.$longMessage
                 );
 
-                $redirectWithError('PayPal error '.$errorCode.': '.$longMessage);
+                $redirectWithError(sprintf($plugin->get_lang('PayPalErrorCodeMessage'), $errorCode, $longMessage));
             }
 
             RedirectToPayPal((string) ($expressCheckout['TOKEN'] ?? ''));
@@ -170,7 +170,7 @@ switch ($action) {
 
         if (!in_array($shippingAck, ['SUCCESS', 'SUCCESSWITHWARNING'], true)) {
             $errorCode = (string) ($shippingDetails['L_ERRORCODE0'] ?? 'unknown');
-            $longMessage = (string) ($shippingDetails['L_LONGMESSAGE0'] ?? 'Unknown PayPal error.');
+            $longMessage = (string) ($shippingDetails['L_LONGMESSAGE0'] ?? $plugin->get_lang('UnknownPayPalError'));
 
             error_log(
                 '[BuyCourses][Recurring] GetExpressCheckoutDetails failed for service sale '.$orderId.
@@ -178,7 +178,7 @@ switch ($action) {
                 ' MESSAGE='.$longMessage
             );
 
-            $redirectWithError('PayPal error '.$errorCode.': '.$longMessage);
+            $redirectWithError(sprintf($plugin->get_lang('PayPalErrorCodeMessage'), $errorCode, $longMessage));
         }
 
         $durationDays = max(1, (int) ($serviceSale['service']['duration_days'] ?? 1));
@@ -216,7 +216,7 @@ switch ($action) {
 
         if (!in_array($profileAck, ['SUCCESS', 'SUCCESSWITHWARNING'], true)) {
             $errorCode = (string) ($recurringProfile['L_ERRORCODE0'] ?? 'unknown');
-            $longMessage = (string) ($recurringProfile['L_LONGMESSAGE0'] ?? 'Unknown PayPal error.');
+            $longMessage = (string) ($recurringProfile['L_LONGMESSAGE0'] ?? $plugin->get_lang('UnknownPayPalError'));
 
             error_log(
                 '[BuyCourses][Recurring] CreateRecurringPaymentsProfile failed for service sale '.$orderId.
@@ -224,7 +224,7 @@ switch ($action) {
                 ' MESSAGE='.$longMessage
             );
 
-            $redirectWithError('PayPal error '.$errorCode.': '.$longMessage);
+            $redirectWithError(sprintf($plugin->get_lang('PayPalErrorCodeMessage'), $errorCode, $longMessage));
         }
 
         $previousProfileId = trim((string) ($serviceSale['recurring_profile_id'] ?? ''));
@@ -234,7 +234,7 @@ switch ($action) {
             ManageRecurringPaymentsProfileStatus(
                 $previousProfileId,
                 BuyCoursesPlugin::PAYPAL_RECURRING_PAYMENT_CANCEL,
-                'Replaced by a new BuyCourses recurring profile.'
+                $plugin->get_lang('RecurringPaymentReplacedByNewProfile')
             );
         }
 
@@ -252,7 +252,7 @@ switch ($action) {
         Session::erase('bc_recurring_action');
         unset($_SESSION['TOKEN'], $_SESSION['payer_id']);
 
-        $redirectWithSuccess('Recurring payment enabled successfully.');
+        $redirectWithSuccess($plugin->get_lang('RecurringPaymentEnabledSuccessfully'));
         break;
 
     case 'cancel_recurring_payment':
@@ -267,7 +267,7 @@ switch ($action) {
                 api_get_utc_datetime()
             );
 
-            $redirectWithSuccess('Recurring payment cancelled successfully.');
+            $redirectWithSuccess($plugin->get_lang('RecurringPaymentCancelledSuccessfully'));
         }
 
         error_log('[BuyCourses][Recurring] Cancelling PayPal recurring profile '.$profileId.' for service sale '.$orderId);
@@ -275,14 +275,14 @@ switch ($action) {
         $update = ManageRecurringPaymentsProfileStatus(
             $profileId,
             BuyCoursesPlugin::PAYPAL_RECURRING_PAYMENT_CANCEL,
-            'Cancelled by customer from BuyCourses service panel.'
+            $plugin->get_lang('RecurringPaymentCancelledByCustomer')
         );
 
         $ack = strtoupper((string) ($update['ACK'] ?? ''));
 
         if (!in_array($ack, ['SUCCESS', 'SUCCESSWITHWARNING'], true)) {
             $errorCode = (string) ($update['L_ERRORCODE0'] ?? 'unknown');
-            $longMessage = (string) ($update['L_LONGMESSAGE0'] ?? 'Unknown PayPal error.');
+            $longMessage = (string) ($update['L_LONGMESSAGE0'] ?? $plugin->get_lang('UnknownPayPalError'));
 
             error_log(
                 '[BuyCourses][Recurring] ManageRecurringPaymentsProfileStatus failed for service sale '.$orderId.
@@ -290,7 +290,7 @@ switch ($action) {
                 ' MESSAGE='.$longMessage
             );
 
-            $redirectWithError('PayPal error '.$errorCode.': '.$longMessage);
+            $redirectWithError(sprintf($plugin->get_lang('PayPalErrorCodeMessage'), $errorCode, $longMessage));
         }
 
         $plugin->updateServiceSaleRecurringData(
@@ -301,7 +301,7 @@ switch ($action) {
             api_get_utc_datetime()
         );
 
-        $redirectWithSuccess('Recurring payment cancelled successfully.');
+        $redirectWithSuccess($plugin->get_lang('RecurringPaymentCancelledSuccessfully'));
         break;
 
     default:

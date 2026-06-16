@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ndiyo:nakala,, hapana:hakuna nakala"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folda,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Fodha,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":mazoezi:mazoezi,,      uigaji:uigaji,,      dodoso:dodoso,,      mchoro:mchoro,,      picha:picha,,      grafu:grafu,,      faharasa:faharasa,,      slaidi:slaidi,,      jedwali:jedwali,,      maandishi ya hadithi:maandishi ya hadithi,,      mtihani:mtihani,,      majaribio:majaribio,,      taarifa ya tatizo:taarifa ya tatizo,,      tathmini ya kibinafsi:tathmini ya kibinafsi,,      mhadhara:mhadhara"
@@ -9726,6 +9726,9 @@ msgstr "Matokeo ya utafutaji kwa:"
 msgid "Select a file"
 msgstr "Chagua faili"
 
+msgid "Select a file to insert into the editor."
+msgstr "Chagua faili ili kuingiza kwenye kihariri."
+
 msgid "Warning - The FAQ file, located in the /home/ directory of your portal, is not writable. Your text will not be saved until the file permissions are changed."
 msgstr "Onyo - Faili ya FAQ, iliyoko katika saraka ya /home/ ya lango lako, haiwezi kuandikwa. maandishi yako hayatakuokolewa hadi ruhusa za faili zibadilishwe."
 
@@ -15906,6 +15909,9 @@ msgstr "Tarehe & wakati"
 msgid "Item"
 msgstr "Kipengele"
 
+msgid "Items"
+msgstr "Vipengee"
+
 msgid "Configure Dashboard Plugin"
 msgstr "Sanidi Kiuguo cha Dashibodi"
 
@@ -17159,6 +17165,18 @@ msgstr "Vikao katika kikundi"
 
 msgid "Courses in group"
 msgstr "Kozi katika kikundi"
+
+msgid "Courses on the platform"
+msgstr "Kozi kwenye jukwaa"
+
+msgid "%s courses"
+msgstr "%s kozi"
+
+msgid "%s sessions"
+msgstr "%s vipindi"
+
+msgid "Search by title or code"
+msgstr "Tafuta kwa kichwa au msimbo"
 
 msgid "Users in group"
 msgstr "Watumiaji katika kikundi"
@@ -32163,6 +32181,9 @@ msgstr "Kazi"
 msgid "Allowed file formats: %s"
 msgstr "Muundo wa faili zilizoruhusiwa: %s"
 
+msgid "File manager"
+msgstr "Kidhibiti faili"
+
 msgid "File type not allowed. Allowed extensions: %s"
 msgstr "Aina ya faili hairuhusiwi. Viendelezi vilivyoruhusiwa: %s"
 
@@ -33876,6 +33897,2583 @@ msgstr "Karibu"
 msgid "Welcome to Chamilo"
 msgstr "Karibu Chamilo"
 
+msgid "Check all unanswered questions below"
+msgstr "Angalia maswali yote ambayo hayajajibiwa hapa chini"
+
 msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
 msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Kama ni mara yako ya kwanza kutumia Chamilo, hakikisha unatazama menyu ya upande ili kupata njia katika vipengele vyake vingi. Kama unahitaji msaada, utapata <a href=\"https://docs.chamilo.org\">hati rasmi zetu</a> zinaweza kusaidia kwa hati za kawaida, wakati <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">forum yetu ya mtandaoni</a> inaweza kusaidia kushiriki mawazo na kupata majibu kutoka kwa watumiaji wengine wa Chamilo."
+
+msgid "Change password"
+msgstr "Badilisha nenosiri"
+
+msgid "Newest first"
+msgstr "Mpya zaidi kwanza"
+
+msgid "Oldest first"
+msgstr "Kongwe zaidi kwanza"
+
+msgid "Title A–Z"
+msgstr "Kichwa A–Z"
+
+msgid "Title Z–A"
+msgstr "Kichwa Z–A"
+
+msgid "Send test email"
+msgstr "Tuma barua pepe ya majaribio"
+
+msgid "Show teachers"
+msgstr "Onyesha walimu"
+
+msgid "Hide teachers"
+msgstr "Ficha walimu"
+
+msgid "Delete exercise attempts"
+msgstr "Futa majaribio ya zoezi"
+
+msgid "Message sent successfully."
+msgstr "Ujumbe umetumwa kwa mafanikio."
+
+msgid "You cannot create a new course right now."
+msgstr "Huwezi kuunda kozi mpya sasa hivi."
+
+msgid "Unable to verify whether you can create a new course right now."
+msgstr "Haijawezekana kuthibitisha kama unaweza kuunda kozi mpya sasa hivi."
+
+msgid "Please try again later or contact the administrator."
+msgstr "Tafadhali jaribu tena baadaye au wasiliana na msimamizi."
+
+msgid "You cannot create more courses at this time."
+msgstr "Huwezi kuunda kozi zaidi kwa wakati huu."
+
+msgid "You already manage %d courses and your active service allows up to %d. To create another course, you need a higher service limit or reduce your current active courses."
+msgstr "Tayari unasimamia kozi %d na huduma yako inayotumika inaruhusu hadi %d. Ili kuunda kozi nyingine, unahitaji kiwango cha juu cha huduma au punguza kozi zako za sasa zinazotumika."
+
+msgid "You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now."
+msgstr "Tayari unasimamia kozi %d na jukwaa kwa sasa linaruhusu hadi %d kwa akaunti yako. Huwezi kuunda kozi zaidi sasa hivi."
+
+msgid "Add a class"
+msgstr "Ongeza darasa"
+
+msgid "Search classes"
+msgstr "Tafuta madarasa"
+
+msgid "No classes found"
+msgstr "Hakuna madarasa yaliyopatikana"
+
+msgid "Import classes"
+msgstr "Leta madarasa"
+
+msgid "Class users"
+msgstr "Watumiaji wa darasa"
+
+msgid "%s classes imported"
+msgstr "Madarasa %s yameletwa"
+
+msgid "%s user-class links imported"
+msgstr "Viungo vya watumiaji-darasa %s vimeletwa"
+
+msgid "Hide comments"
+msgstr "Ficha maoni"
+
+msgid "Loading comments..."
+msgstr "Inapakia maoni..."
+
+msgid "No comments yet."
+msgstr "Bado hakuna maoni."
+
+msgid "A user with this username already exists"
+msgstr "Mtumiaji mwenye jina hili la mtumiaji tayari yupo"
+
+msgid "Manage meetings, review recordings and update course-wide BBB settings from one place."
+msgstr "Simamia mikutano, kagua rekodi na usasishe mipangilio ya BBB ya kozi nzima kutoka sehemu moja."
+
+msgid "Review the current defaults and propagate them to every course when needed."
+msgstr "Kagua chaguomsingi za sasa na uzieneze kwa kila kozi inapohitajika."
+
+msgid "Filter the list by meeting date range."
+msgstr "Chuja orodha kwa kipindi cha tarehe ya mkutano."
+
+msgid "Review meeting history, participants and recording actions."
+msgstr "Kagua historia ya mikutano, washiriki na vitendo vya rekodi."
+
+msgid "Participants"
+msgstr "Washiriki"
+
+msgid "CountUsers"
+msgstr "IdadiYaWatumiaji"
+
+msgid "No data found"
+msgstr "Hakuna data iliyopatikana"
+
+msgid "My justifications"
+msgstr "Haki zangu"
+
+msgid "My services"
+msgstr "Huduma zangu"
+
+msgid "Extra menu"
+msgstr "Menyu ya ziada"
+
+msgid "Pending tests"
+msgstr "Majaribio yanayosubiri"
+
+msgid "No specific language"
+msgstr "Hakuna lugha maalum"
+
+msgid "Source Chamilo version"
+msgstr "Toleo la Chamilo chanzo"
+
+msgid "Exporting..."
+msgstr "Inasafirisha nje..."
+
+msgid "Autosaved drafts available"
+msgstr "Rasimu zilizohifadhiwa kiotomatiki zinapatikana"
+
+msgid "Hide drafts"
+msgstr "Ficha rasimu"
+
+msgid "Show drafts"
+msgstr "Onyesha rasimu"
+
+msgid "Drafts are stored only in this browser and are removed after saving the document."
+msgstr "Rasimu huhifadhiwa tu kwenye kivinjari hiki na huondolewa baada ya kuhifadhi hati."
+
+msgid "Last saved"
+msgstr "Mwisho kuhifadhiwa"
+
+msgid "Restore draft"
+msgstr "Rejesha rasimu"
+
+msgid "Delete draft"
+msgstr "Futa rasimu"
+
+msgid "Information about indexing document content"
+msgstr "Maelezo kuhusu kuorodhesha maudhui ya hati"
+
+msgid "When enabled, the document text is indexed by the search engine so users can find it from platform search."
+msgstr "Ikiwashwa, maandishi ya hati huorodheshwa na injini ya utafutaji ili watumiaji waweze kuipata kutoka kwa utafutaji wa jukwaa."
+
+msgid "The editor is not available."
+msgstr "Kihariri hakipatikani."
+
+msgid "Please place the cursor inside a paragraph first."
+msgstr "Tafadhali weka kishale ndani ya aya kwanza."
+
+msgid "The selected paragraph is empty."
+msgstr "Aya iliyochaguliwa ni tupu."
+
+msgid "Loading failed."
+msgstr "Upakiaji umeshindwa."
+
+msgid "Add introduction"
+msgstr "Ongeza utangulizi"
+
+msgid "Course type"
+msgstr "Aina ya kozi"
+
+msgid "Choose whether this course uses the standard platform limits or benefits from a purchased service."
+msgstr "Chagua ikiwa kozi hii itatumia viwango vya kawaida vya jukwaa au itafaidika na huduma iliyonunuliwa."
+
+msgid "Standard course"
+msgstr "Kozi ya kawaida"
+
+msgid "Use the standard platform limits."
+msgstr "Tumia viwango vya kawaida vya jukwaa."
+
+msgid "Selected"
+msgstr "Imechaguliwa"
+
+msgid "Hosting limit"
+msgstr "Kikomo cha upangishaji"
+
+msgid "Document quota"
+msgstr "Kiasi cha hati"
+
+msgid "The standard course limit has been reached."
+msgstr "Kikomo cha kozi ya kawaida kimefikia."
+
+msgid "Use the benefits granted by this service."
+msgstr "Tumia manufaa yanayotolewa na huduma hii."
+
+msgid "Courses with these benefits"
+msgstr "Kozi zenye manufaa haya"
+
+msgid "Active service"
+msgstr "Huduma inayotumika"
+
+msgid "Buy service"
+msgstr "Nunua huduma"
+
+msgid "Select an available course type before creating the course."
+msgstr "Chagua aina ya kozi inayopatikana kabla ya kuunda kozi."
+
+msgid "users"
+msgstr "watumiaji"
+
+msgid "You need to buy this service before using these benefits."
+msgstr "Unahitaji kununua huduma hii kabla ya kutumia manufaa haya."
+
+msgid "You already used all courses available with this service."
+msgstr "Tayari umetumia kozi zote zinazopatikana na huduma hii."
+
+msgid "This option is not available."
+msgstr "Chaguo hili halipatikani."
+
+msgid "This field is required"
+msgstr "Sehemu hii inahitajika"
+
+msgid "Show less"
+msgstr "Onyesha kidogo"
+
+msgid "Show full description"
+msgstr "Onyesha maelezo kamili"
+
+msgid "Virtual keyboard"
+msgstr "Kibodi ya kawaida"
+
+msgid "Backspace"
+msgstr "Futa nyuma"
+
+msgid "Space"
+msgstr "Nafasi"
+
+msgid "Learning path only visible to selected learners"
+msgstr "Njia ya kujifunza inayoonekana kwa wanafunzi waliochaguliwa pekee"
+
+msgid "Create course"
+msgstr "Unda kozi"
+
+msgid "Tour"
+msgstr "Ziara"
+
+msgid "Are you sure you want to delete this comment?"
+msgstr "Je, una uhakika unataka kufuta maoni haya?"
+
+msgid "No posts found"
+msgstr "Hakuna machapisho yaliyopatikana"
+
+msgid "No communities"
+msgstr "Hakuna jamii"
+
+msgid "No friends found"
+msgstr "Hakuna marafiki waliopatikana"
+
+msgid "Visual overview of your skills"
+msgstr "Muhtasari wa kuona wa ujuzi wako"
+
+msgid "Compare your progress"
+msgstr "Linganisha maendeleo yako"
+
+msgid "Please enter a search term."
+msgstr "Tafadhali weka neno la utafutaji."
+
+msgid "Enter captcha code"
+msgstr "Weka msimbo wa captcha"
+
+msgid "Refresh captcha"
+msgstr "Onyesha upya captcha"
+
+msgid "Captcha is temporarily blocked. Please try again later."
+msgstr "Captcha imezuiliwa kwa muda. Tafadhali jaribu tena baadaye."
+
+msgid "Item Details"
+msgstr "Maelezo ya Kipengee"
+
+msgid "Open File"
+msgstr "Fungua Faili"
+
+msgid "Selection"
+msgstr "Uteuzi"
+
+msgid "Remove selection context"
+msgstr "Ondoa muktadha wa uteuzi"
+
+msgid "Source document"
+msgstr "Hati chanzo"
+
+msgid "Use the current course context"
+msgstr "Tumia muktadha wa kozi ya sasa"
+
+msgid "Loading documents..."
+msgstr "Inapakia hati..."
+
+msgid "No compatible PDF or TXT document was found in this course."
+msgstr "Hakuna hati ya PDF au TXT inayooana iliyopatikana katika kozi hii."
+
+msgid "Select a PDF or TXT document to generate terms only from that document."
+msgstr "Chagua hati ya PDF au TXT ili kutengeneza maneno kutoka kwa hati hiyo pekee."
+
+msgid "Confidentiality warning"
+msgstr "Onyo la usiri"
+
+msgid "When a document is selected, the prompt is fixed so the generation uses only that document content."
+msgstr "Wakati hati inachaguliwa, kidokezo hurekebishwa ili kizazi kitumie maudhui ya hati hiyo pekee."
+
+msgid "No document-processing AI providers available."
+msgstr "Hakuna watoa huduma wa AI wa kuchakata hati wanaopatikana."
+
+msgid "Failed to save signature. Please try again."
+msgstr "Imeshindwa kuhifadhi saini. Tafadhali jaribu tena."
+
+msgid "Select and move"
+msgstr "Chagua na usogeze"
+
+msgid "Freehand"
+msgstr "Kwa mkono huru"
+
+msgid "Stroke"
+msgstr "Mstari"
+
+msgid "Fill"
+msgstr "Jaza"
+
+msgid "Import SVG"
+msgstr "Leta SVG"
+
+msgid "Import image"
+msgstr "Leta picha"
+
+msgid "Click the drawing area to place this text"
+msgstr "Bonyeza eneo la kuchora ili kuweka maandishi haya"
+
+msgid "Draw a new SVG, import an existing SVG or embed an image, then save it as a reusable document."
+msgstr "Chora SVG mpya, leta SVG iliyopo au weka picha, kisha ihifadhi kama hati inayoweza kutumika tena."
+
+msgid "Use Select and move to reposition or resize elements added in this editor."
+msgstr "Tumia Chagua na usogeze ili kuweka upya au kubadilisha ukubwa wa vipengele vilivyoongezwa katika kihariri hiki."
+
+msgid "Stroke width"
+msgstr "Upana wa mstari"
+
+msgid "Transparent fill"
+msgstr "Jaza bila rangi"
+
+msgid "Invalid id"
+msgstr "Kitambulisho batili"
+
+msgid "Unable to load the drawing"
+msgstr "Haijaweza kupakia mchoro"
+
+msgid "Only PNG, JPG, WEBP or GIF images are supported."
+msgstr "Picha za PNG, JPG, WEBP au GIF pekee zinazungwa mkono."
+
+msgid "Unable to read the image file."
+msgstr "Haijaweza kusoma faili ya picha."
+
+msgid "Only SVG files are supported."
+msgstr "Faili za SVG pekee zinazungwa mkono."
+
+msgid "The SVG file is empty or invalid."
+msgstr "Faili ya SVG ni tupu au batili."
+
+msgid "Unable to read the SVG file."
+msgstr "Haijaweza kusoma faili ya SVG."
+
+msgid "The drawing is empty or invalid."
+msgstr "Mchoro ni tupu au batili."
+
+msgid "Unable to save the drawing"
+msgstr "Haijaweza kuhifadhi mchoro"
+
+msgid "Information about AI-assisted documents"
+msgstr "Maelezo kuhusu hati zinazosaidiwa na AI"
+
+msgid "Location"
+msgstr "Mahali"
+
+msgid "Cloud link"
+msgstr "Kiungo cha wingu"
+
+msgid "Add a link to a cloud document, such as Google Drive or Google Docs."
+msgstr "Ongeza kiungo kwa hati ya wingu, kama vile Google Drive au Google Docs."
+
+msgid "Add cloud link"
+msgstr "Ongeza kiungo cha wingu"
+
+msgid "Document title"
+msgstr "Kichwa cha hati"
+
+msgid "Document options change how uploaded files are processed after saving."
+msgstr "Chaguzi za hati hubadilisha jinsi faili zinazopakiwa zinavyochakatwa baada ya kuhifadhi."
+
+msgid "Information about uncompressing zip files"
+msgstr "Maelezo kuhusu kufungua faili za zip"
+
+msgid "When enabled, ZIP files are extracted into the current document folder after upload."
+msgstr "Ikiwashwa, faili za ZIP hutolewa ndani ya folda ya sasa ya hati baada ya kupakiwa."
+
+msgid "The title is required."
+msgstr "Kichwa kinahitajika."
+
+msgid "The URL is required."
+msgstr "URL inahitajika."
+
+msgid "The destination folder is missing."
+msgstr "Folda ya lengo haipo."
+
+msgid "Unable to create cloud link."
+msgstr "Haijaweza kuunda kiungo cha wingu."
+
+msgid "Copy to My Files"
+msgstr "Nakili kwenye Faili Zangu"
+
+msgid "Used space"
+msgstr "Nafasi iliyotumika"
+
+msgid "Available space"
+msgstr "Nafasi inayopatikana"
+
+msgid "Available percentage"
+msgstr "Asilimia inayopatikana"
+
+msgid "Cloud links cannot be downloaded."
+msgstr "Viungo vya wingu haviwezi kupakuliwa."
+
+msgid "Could not copy the file to My Files"
+msgstr "Haikuweza kunakili faili kwenye Faili Zangu"
+
+msgid "File copied to My Files"
+msgstr "Faili imenakiliwa kwenye Faili Zangu"
+
+msgid "Checking course creation options..."
+msgstr "Inakagua chaguzi za kuunda kozi..."
+
+msgid "You cannot create more courses right now."
+msgstr "Huwezi kuunda kozi zaidi kwa sasa."
+
+msgid "AI analyzer"
+msgstr "Kichanganuzi cha AI"
+
+msgid "Expand all"
+msgstr "Panua zote"
+
+msgid "Collapse all"
+msgstr "Kunja zote"
+
+msgid "Review your active service benefits, purchase history and available receipts."
+msgstr "Kagua manufaa ya huduma zako zinazotumika, historia ya ununuzi na risiti zinazopatikana."
+
+msgid "Active services"
+msgstr "Huduma zinazotumika"
+
+msgid "No active services"
+msgstr "Hakuna huduma zinazotumika"
+
+msgid "Valid until"
+msgstr "Halali hadi"
+
+msgid "Recurring payment"
+msgstr "Malipo yanayojirudia"
+
+msgid "Next charge"
+msgstr "Malipo yanayofuata"
+
+msgid "Enable auto billing"
+msgstr "Washa malipo otomatiki"
+
+msgid "Cancel auto billing"
+msgstr "Ghairi malipo otomatiki"
+
+msgid "Granted benefits"
+msgstr "Manufaa yaliyotolewa"
+
+msgid "Purchase history"
+msgstr "Historia ya ununuzi"
+
+msgid "No purchases yet"
+msgstr "Bado hakuna ununuzi"
+
+msgid "Product"
+msgstr "Bidhaa"
+
+msgid "Reference"
+msgstr "Rejeleo"
+
+msgid "Amount"
+msgstr "Kiasi"
+
+msgid "Receipt"
+msgstr "Risiti"
+
+msgid "Unable to load your services right now."
+msgstr "Haijawezekana kupakia huduma zako sasa."
+
+msgid "Auto billing enabled"
+msgstr "Malipo otomatiki yamewashwa"
+
+msgid "Auto billing suspended"
+msgstr "Malipo otomatiki yamesimamishwa"
+
+msgid "Auto billing cancelled"
+msgstr "Malipo otomatiki yameghairiwa"
+
+msgid "Auto billing disabled"
+msgstr "Malipo otomatiki yamezimwa"
+
+msgid "Cancel auto billing for this service?"
+msgstr "Ghairi malipo otomatiki kwa huduma hii?"
+
+msgid "Preview class members and courses"
+msgstr "Onyesha wanachama wa darasa na kozi"
+
+msgid "Please select a CSV file to import."
+msgstr "Tafadhali chagua faili ya CSV ili kuingiza."
+
+msgid "%d user-class links imported"
+msgstr "Viungo vya watumiaji-darasa %d vimeingizwa"
+
+msgid "The following errors occurred during import:"
+msgstr "Hitilafu zifuatazo zilitokea wakati wa kuingiza:"
+
+msgid "CSV file"
+msgstr "Faili ya CSV"
+
+msgid "Remove user from all group-related entities if not in the list"
+msgstr "Ondoa mtumiaji kutoka kwa vyombo vyote vinavyohusiana na kikundi ikiwa hayako kwenye orodha"
+
+msgid "UserName"
+msgstr "Jina la Mtumiaji"
+
+msgid "ClassName"
+msgstr "Jina la Darasa"
+
+msgid "are required for each row."
+msgstr "zinahitajika kwa kila safu."
+
+msgid "title"
+msgstr "kichwa"
+
+msgid "is required."
+msgstr "inahitajika."
+
+msgid "description"
+msgstr "maelezo"
+
+msgid "are optional."
+msgstr "si lazima."
+
+msgid "Are you sure you want to remove this user from the class?"
+msgstr "Je, una uhakika unataka kumwondoa mtumiaji huyu kutoka darasani?"
+
+msgid "Users in class"
+msgstr "Watumiaji katika darasa"
+
+msgid "Remove user"
+msgstr "Ondoa mtumiaji"
+
+msgid "Class not found"
+msgstr "Darasa halijapatikana"
+
+msgid "Class overview"
+msgstr "Muhtasari wa darasa"
+
+msgid "Back to classes"
+msgstr "Rudi kwenye madarasa"
+
+msgid "Search members or courses"
+msgstr "Tafuta wanachama au kozi"
+
+msgid "Search by name, email, username or course title"
+msgstr "Tafuta kwa jina, barua pepe, jina la mtumiaji au kichwa cha kozi"
+
+msgid "Class members"
+msgstr "Wanachama wa darasa"
+
+msgid "No email"
+msgstr "Hakuna barua pepe"
+
+msgid "No members found"
+msgstr "Hakuna wanachama waliopatikana"
+
+msgid "No courses found"
+msgstr "Hakuna kozi zilizopatikana"
+
+msgid "The end date must be after the start date."
+msgstr "Tarehe ya mwisho lazima iwe baada ya tarehe ya kuanza."
+
+msgid "Always visible"
+msgstr "Inaonekana kila wakati"
+
+msgid "No end date"
+msgstr "Hakuna tarehe ya mwisho"
+
+msgid "No restriction"
+msgstr "Hakuna kizuizi"
+
+msgid "Missing learning path or course identifier"
+msgstr "Kitambulisho cha njia ya kujifunza au kozi hakipo"
+
+msgid "Select a user or a group first"
+msgstr "Chagua mtumiaji au kikundi kwanza"
+
+msgid "Remove all date restrictions for this learning path?"
+msgstr "Ondoa vikwazo vyote vya tarehe kwa njia hii ya kujifunza?"
+
+msgid "Advanced learning path access"
+msgstr "Ufikiaji wa hali ya juu wa njia ya kujifunza"
+
+msgid "Remove date restrictions"
+msgstr "Ondoa vikwazo vya tarehe"
+
+msgid "Search by name, email, username or group"
+msgstr "Tafuta kwa jina, barua pepe, jina la mtumiaji au kikundi"
+
+msgid "Edit user restriction"
+msgstr "Hariri kizuizi cha mtumiaji"
+
+msgid "Edit group restriction"
+msgstr "Hariri kizuizi cha kikundi"
+
+msgid "Select a user or group"
+msgstr "Chagua mtumiaji au kikundi"
+
+msgid "Save restriction"
+msgstr "Hifadhi kizuizi"
+
+msgid "members"
+msgstr "wanachama"
+
+msgid "Create Assignment"
+msgstr "Unda Kazi"
+
+msgid "The submission deadline has passed. You can no longer submit."
+msgstr "Muda wa mwisho wa kuwasilisha umepita. Huwezi kuwasilisha tena."
+
+msgid "Mailing cannot be combined with other recipients."
+msgstr "Barua pepe haiwezi kuchanganywa na wapokeaji wengine."
+
+msgid "Social map"
+msgstr "Ramani ya kijamii"
+
+msgid "The map plugin is not enabled or configured."
+msgstr "Programu-jalizi ya ramani haijawashwa au kusanidiwa."
+
+msgid "Some configured extra fields were not found"
+msgstr "Baadhi ya sehemu za ziada zilizosanidiwa hazijapatikana"
+
+msgid "No user locations were found."
+msgstr "Hakuna maeneo ya mtumiaji yaliyopatikana."
+
+msgid "OpenStreetMap needs coordinates to display an embedded marker. Address-only locations are listed below."
+msgstr "OpenStreetMap inahitaji viwianishi ili kuonyesha alama iliyopachikwa. Maeneo yenye anwani pekee yameorodheshwa hapa chini."
+
+msgid "Locations"
+msgstr "Maeneo"
+
+msgid "Open map"
+msgstr "Fungua ramani"
+
+msgid "Provider: OpenStreetMap"
+msgstr "Mtoa huduma: OpenStreetMap"
+
+msgid "Provider: Google Maps"
+msgstr "Mtoa huduma: Google Maps"
+
+msgid "Personal files"
+msgstr "Faili za kibinafsi"
+
+msgid "Upload image"
+msgstr "Pakia picha"
+
+msgid "Upload media"
+msgstr "Pakia midia"
+
+msgid "Only image files are allowed in this upload screen."
+msgstr "Faili za picha pekee zinazoruhusiwa katika skrini hii ya kupakia."
+
+msgid "Only audio and video files are allowed in this upload screen."
+msgstr "Faili za sauti na video pekee zinazoruhusiwa katika skrini hii ya kupakia."
+
+msgid "Upload files to your personal storage."
+msgstr "Pakia faili kwenye hifadhi yako ya kibinafsi."
+
+msgid "Linked"
+msgstr "Imeunganishwa"
+
+msgid "No audio or video files were found in this folder."
+msgstr "Hakuna faili za sauti au video zilizopatikana katika folda hii."
+
+msgid "No image files were found in this folder."
+msgstr "Hakuna faili za picha zilizopatikana katika folda hii."
+
+msgid "No matching files were found in this folder."
+msgstr "Hakuna faili zinazolingana zilizopatikana katika folda hii."
+
+msgid "This file type is not allowed in this upload screen."
+msgstr "Aina hii ya faili hairuhusiwi katika skrini hii ya kupakia."
+
+msgid "Manage your personal files and course documents."
+msgstr "Dhibiti faili zako za kibinafsi na nyaraka za kozi."
+
+msgid "DateValidity"
+msgstr "UhalaliWaTarehe"
+
+msgid "JustificationSaved"
+msgstr "UhalaliUmehifadhiwa"
+
+msgid "ValidityDate"
+msgstr "TareheYaUhalali"
+
+msgid "MyJustifications"
+msgstr "UhalaliWangu"
+
+msgid "Submission"
+msgstr "Uwasilishaji"
+
+msgid "Use the filters above to narrow the list."
+msgstr "Tumia vichujio hapo juu kupunguza orodha."
+
+msgid "You are not allowed to see this page."
+msgstr "Huruhusiwi kuona ukurasa huu."
+
+msgid "plugin_title"
+msgstr "kichwa_cha_programu-jalizi"
+
+msgid "plugin_comment"
+msgstr "maoni_ya_programu-jalizi"
+
+msgid "Course tracking details"
+msgstr "Maelezo ya ufuatiliaji wa kozi"
+
+msgid "Course activity statistics"
+msgstr "Takwimu za shughuli za kozi"
+
+msgid "mobile_phone_number"
+msgstr "nambari_ya_simu_ya_rununu"
+
+msgid "Allowed template syntax"
+msgstr "Sintaksia ya kiolezo inayoruhusiwa"
+
+msgid "Functions"
+msgstr "Kazi"
+
+msgid "Available variables depend on the template type, for example {{ user.getUsername() }} or {{ user.getEmail() }}."
+msgstr "Vigezo vinavyopatikana hutegemea aina ya kiolezo, kwa mfano {{ user.getUsername() }} au {{ user.getEmail() }}."
+
+msgid "For security reasons, any other Twig function, filter (such as filter, map, reduce or sort) or PHP call is blocked."
+msgstr "Kwa sababu za usalama, kazi nyingine yoyote ya Twig, kichujio (kama vile kichujio, ramani, punguza au panga) au mwito wa PHP umezuiliwa."
+
+msgid "Global administrator"
+msgstr "Msimamizi mkuu"
+
+msgid "Session manager"
+msgstr "Meneja wa kipindi"
+
+msgid "Human resources manager"
+msgstr "Meneja wa rasilimali watu"
+
+msgid "Course teacher"
+msgstr "Mwalimu wa kozi"
+
+msgid "Course student"
+msgstr "Mwanafunzi wa kozi"
+
+msgid "Platform reports"
+msgstr "Ripoti za jukwaa"
+
+msgid "Security reports"
+msgstr "Ripoti za usalama"
+
+msgid "Course reports"
+msgstr "Ripoti za kozi"
+
+msgid "Gradebook reports"
+msgstr "Ripoti za daftari la alama"
+
+msgid "Social reports"
+msgstr "Ripoti za kijamii"
+
+msgid "Exports"
+msgstr "Mauzo"
+
+msgid "Reports about platform-wide usage, users, courses and sessions."
+msgstr "Ripoti kuhusu matumizi ya jukwaa kwa ujumla, watumiaji, kozi na vipindi."
+
+msgid "Audit and security-sensitive reports."
+msgstr "Ukaguzi na ripoti zinazohusiana na usalama."
+
+msgid "Reports scoped to courses managed by the user."
+msgstr "Ripoti zinazohusu kozi zinazosimamiwa na mtumiaji."
+
+msgid "Reports related to learner activity and follow-up."
+msgstr "Ripoti zinazohusiana na shughuli za wanafunzi na ufuatiliaji."
+
+msgid "Reports related to scores, certificates and gradebook data."
+msgstr "Ripoti zinazohusiana na alama, vyeti na data ya daftari la alama."
+
+msgid "Reports and exports that generate downloadable files."
+msgstr "Ripoti na mauzo yanayozalisha faili zinazoweza kupakuliwa."
+
+msgid "Main platform statistics dashboard."
+msgstr "Dashibodi kuu ya takwimu za jukwaa."
+
+msgid "Number of courses and course distribution report."
+msgstr "Ripoti ya idadi ya kozi na usambazaji wa kozi."
+
+msgid "Platform-wide access to course tools."
+msgstr "Ufikiaji wa zana za kozi kwenye jukwaa."
+
+msgid "Number of resources per tool."
+msgstr "Idadi ya rasilimali kwa kila zana."
+
+msgid "Latest access to courses."
+msgstr "Ufikiaji wa hivi karibuni wa kozi."
+
+msgid "Course distribution by language."
+msgstr "Usambazaji wa kozi kwa lugha."
+
+msgid "Course usage report."
+msgstr "Ripoti ya matumizi ya kozi."
+
+msgid "Platform user count report."
+msgstr "Ripoti ya idadi ya watumiaji wa jukwaa."
+
+msgid "Recent logins chart."
+msgstr "Chati ya kuingia hivi karibuni."
+
+msgid "Login distribution by month."
+msgstr "Usambazaji wa kuingia kwa mwezi."
+
+msgid "Login distribution by day."
+msgstr "Usambazaji wa kuingia kwa siku."
+
+msgid "Login distribution by hour."
+msgstr "Usambazaji wa kuingia kwa saa."
+
+msgid "Users with profile picture."
+msgstr "Watumiaji wenye picha ya wasifu."
+
+msgid "Login report filtered by date."
+msgstr "Ripoti ya kuingia iliyochujwa kwa tarehe."
+
+msgid "Users who have not logged in recently."
+msgstr "Watumiaji ambao hawajaingia hivi karibuni."
+
+msgid "Inactive or suspicious user accounts report."
+msgstr "Ripoti ya akaunti za watumiaji zisizotumika au zinazoshukiwa."
+
+msgid "Users activity statistics."
+msgstr "Takwimu za shughuli za watumiaji."
+
+msgid "Currently online users report."
+msgstr "Ripoti ya watumiaji waliopo mtandaoni sasa."
+
+msgid "New user registrations over time."
+msgstr "Usajili wa watumiaji wapya kwa wakati."
+
+msgid "Course and session subscriptions over time."
+msgstr "Usajili wa kozi na vipindi kwa wakati."
+
+msgid "Duplicate user detection and maintenance report."
+msgstr "Ripoti ya kugundua na kudumisha watumiaji wanaorudiwa."
+
+msgid "Platform user/session statistics."
+msgstr "Takwimu za watumiaji/vipindi vya jukwaa."
+
+msgid "Quarterly platform report."
+msgstr "Ripoti ya kila robo ya jukwaa."
+
+msgid "Activities audit"
+msgstr "Ukaguzi wa shughuli"
+
+msgid "Audit report for important administrative and platform activities."
+msgstr "Ripoti ya ukaguzi kwa shughuli muhimu za usimamizi na jukwaa."
+
+msgid "Social messages received report."
+msgstr "Ripoti ya ujumbe wa kijamii uliopokelewa."
+
+msgid "Social messages sent report."
+msgstr "Ripoti ya ujumbe wa kijamii uliotumwa."
+
+msgid "Social contacts count report."
+msgstr "Ripoti ya idadi ya mawasiliano ya kijamii."
+
+msgid "Sessions created over time."
+msgstr "Vipindi vilivyoundwa kwa wakati."
+
+msgid "Learning analytics dashboard."
+msgstr "Dashibodi ya uchanganuzi wa kujifunza."
+
+msgid "Teacher time report."
+msgstr "Ripoti ya muda wa mwalimu."
+
+msgid "Teachers time by session report"
+msgstr "Ripoti ya muda wa walimu kwa kipindi"
+
+msgid "Teacher time report grouped by session."
+msgstr "Ripoti ya muda wa mwalimu iliyopangwa kwa kikao."
+
+msgid "Corporate learning analytics report."
+msgstr "Ripoti ya uchanganuzi wa mafunzo ya shirika."
+
+msgid "Course learners tracking report."
+msgstr "Ripoti ya ufuatiliaji wa wanafunzi wa kozi."
+
+msgid "Course activity statistics with connected and inactive users."
+msgstr "Takwimu za shughuli za kozi pamoja na watumiaji waliounganishwa na wasio hai."
+
+msgid "Detailed tracking report for a learner inside a course."
+msgstr "Ripoti ya kina ya ufuatiliaji wa mwanafunzi ndani ya kozi."
+
+msgid "Course gradebook overview."
+msgstr "Muhtasari wa daftari la alama za kozi."
+
+msgid "Gradebook statistics"
+msgstr "Takwimu za daftari la alama"
+
+msgid "Gradebook statistics report."
+msgstr "Ripoti ya takwimu za daftari la alama."
+
+msgid "Certificate report"
+msgstr "Ripoti ya cheti"
+
+msgid "Certificate report for course gradebook."
+msgstr "Ripoti ya cheti kwa daftari la alama za kozi."
+
+msgid "User statistics"
+msgstr "Takwimu za mtumiaji"
+
+msgid "Course gradebook statistics for a user."
+msgstr "Takwimu za daftari la alama za kozi kwa mtumiaji."
+
+msgid "Personal statistics"
+msgstr "Takwimu za kibinafsi"
+
+msgid "Personal gradebook statistics."
+msgstr "Takwimu za kibinafsi za daftari la alama."
+
+msgid "Reports catalog"
+msgstr "Katalogi ya ripoti"
+
+msgid "Central catalog of available reports, roles and permission categories."
+msgstr "Katalogi kuu ya ripoti zinazopatikana, majukumu na kategoria za ruhusa."
+
+msgid "Course log events"
+msgstr "Matukio ya kumbukumbu za kozi"
+
+msgid "Detailed course tracking events."
+msgstr "Matukio ya kina ya ufuatiliaji wa kozi."
+
+msgid "Course tool usage"
+msgstr "Matumizi ya zana za kozi"
+
+msgid "Course tracking report grouped by tools."
+msgstr "Ripoti ya ufuatiliaji wa kozi iliyopangwa kwa zana."
+
+msgid "Course resource usage"
+msgstr "Matumizi ya rasilimali za kozi"
+
+msgid "Course tracking report grouped by resources."
+msgstr "Ripoti ya ufuatiliaji wa kozi iliyopangwa kwa rasilimali."
+
+msgid "Course group tracking"
+msgstr "Ufuatiliaji wa vikundi vya kozi"
+
+msgid "Tracking report for course groups."
+msgstr "Ripoti ya ufuatiliaji kwa vikundi vya kozi."
+
+msgid "Course session report"
+msgstr "Ripoti ya kikao cha kozi"
+
+msgid "Tracking report for a course inside sessions."
+msgstr "Ripoti ya ufuatiliaji kwa kozi ndani ya vikao."
+
+msgid "Learning path report"
+msgstr "Ripoti ya njia ya kujifunza"
+
+msgid "Learning path tracking report."
+msgstr "Ripoti ya ufuatiliaji wa njia ya kujifunza."
+
+msgid "Learning path results by user"
+msgstr "Matokeo ya njia ya kujifunza kwa mtumiaji"
+
+msgid "Learning path results grouped by user."
+msgstr "Matokeo ya njia ya kujifunza yaliyopangwa kwa mtumiaji."
+
+msgid "Exercises report"
+msgstr "Ripoti ya mazoezi"
+
+msgid "Course exercises and exams tracking report."
+msgstr "Ripoti ya ufuatiliaji wa mazoezi na mitihani ya kozi."
+
+msgid "Question report"
+msgstr "Ripoti ya maswali"
+
+msgid "Course question tracking report."
+msgstr "Ripoti ya ufuatiliaji wa maswali ya kozi."
+
+msgid "Messages report"
+msgstr "Ripoti ya ujumbe"
+
+msgid "Course messages tracking report."
+msgstr "Ripoti ya ufuatiliaji wa ujumbe wa kozi."
+
+msgid "Total time tracking report for course learners."
+msgstr "Ripoti ya jumla ya muda wa ufuatiliaji kwa wanafunzi wa kozi."
+
+msgid "Gradebook summary"
+msgstr "Muhtasari wa daftari la alama"
+
+msgid "Summary view of gradebook results."
+msgstr "Mwonekano wa muhtasari wa matokeo ya daftari la alama."
+
+msgid "Flat view"
+msgstr "Mwonekano wa kawaida"
+
+msgid "Flat gradebook results view."
+msgstr "Mwonekano wa matokeo ya daftari la alama wa kawaida."
+
+msgid "Evaluation log"
+msgstr "Kumbukumbu ya tathmini"
+
+msgid "Change log for gradebook evaluations."
+msgstr "Kumbukumbu ya mabadiliko kwa tathmini za daftari la alama."
+
+msgid "Link log"
+msgstr "Kumbukumbu ya viungo"
+
+msgid "Change log for gradebook links."
+msgstr "Kumbukumbu ya mabadiliko kwa viungo vya daftari la alama."
+
+msgid "Result details"
+msgstr "Maelezo ya matokeo"
+
+msgid "Detailed view of a gradebook result."
+msgstr "Mwonekano wa kina wa matokeo ya daftari la alama."
+
+msgid "Personal certificates report."
+msgstr "Ripoti ya vyeti vya kibinafsi."
+
+msgid "User move statistics"
+msgstr "Takwimu za uhamishaji wa mtumiaji"
+
+msgid "Report for user move and transfer statistics."
+msgstr "Ripoti ya takwimu za uhamishaji na uhamisho wa mtumiaji."
+
+msgid "User consent list"
+msgstr "Orodha ya idhini za watumiaji"
+
+msgid "Report of users and consent status."
+msgstr "Ripoti ya watumiaji na hali ya idhini."
+
+msgid "Special platform exports."
+msgstr "Usafirishaji maalum wa jukwaa."
+
+msgid "Export certificates"
+msgstr "Usafirishaji wa vyeti"
+
+msgid "Export platform certificates."
+msgstr "Usafirisha vyeti vya jukwaa."
+
+msgid "Export exercise results"
+msgstr "Usafirishaji wa matokeo ya mazoezi"
+
+msgid "Export exercise results from the platform."
+msgstr "Usafirisha matokeo ya mazoezi kutoka jukwaani."
+
+msgid "Course survey results and reporting."
+msgstr "Matokeo na ripoti za utafiti wa kozi."
+
+msgid "Attendance report"
+msgstr "Ripoti ya mahudhurio"
+
+msgid "Course attendance tracking and reports."
+msgstr "Ufuatiliaji na ripoti za mahudhurio ya kozi."
+
+msgid "Exercises global report"
+msgstr "Ripoti ya mazoezi ya jumla"
+
+msgid "Global exercise results report for the course."
+msgstr "Ripoti ya matokeo ya mazoezi ya jumla kwa kozi."
+
+msgid "Exercise report"
+msgstr "Ripoti ya mazoezi"
+
+msgid "Detailed exercise report."
+msgstr "Ripoti ya kina ya mazoezi."
+
+msgid "Exercise history"
+msgstr "Historia ya mazoezi"
+
+msgid "Exercise attempt history."
+msgstr "Historia ya majaribio ya mazoezi."
+
+msgid "Exercise results"
+msgstr "Matokeo ya mazoezi"
+
+msgid "Exercise results and corrections."
+msgstr "Matokeo na marekebisho ya mazoezi."
+
+msgid "Question-level exercise statistics."
+msgstr "Takwimu za mazoezi katika kiwango cha maswali."
+
+msgid "Exercise statistics"
+msgstr "Takwimu za mazoezi"
+
+msgid "Exercise statistics page."
+msgstr "Ukurasa wa takwimu za mazoezi."
+
+msgid "Live exercise statistics"
+msgstr "Takwimu za mazoezi za moja kwa moja"
+
+msgid "Live exercise statistics for teachers."
+msgstr "Takwimu za mazoezi za moja kwa moja kwa walimu."
+
+msgid "Learning path statistics"
+msgstr "Takwimu za njia ya kujifunza"
+
+msgid "Learning path item statistics."
+msgstr "Takwimu za vipengee vya njia ya kujifunza."
+
+msgid "Learning path report inside a course."
+msgstr "Ripoti ya njia ya kujifunza ndani ya kozi."
+
+msgid "User skills report."
+msgstr "Ripoti ya ujuzi wa mtumiaji."
+
+msgid "Scheduled or periodic export configuration."
+msgstr "Usanidi wa usafirishaji ulioratibiwa au wa mara kwa mara."
+
+msgid "User export"
+msgstr "Usafirishaji wa mtumiaji"
+
+msgid "Export users from the platform."
+msgstr "Usafirisha watumiaji kutoka jukwaani."
+
+msgid "Not classified"
+msgstr "Haijaainishwa"
+
+msgid "You have acquired the skill %s"
+msgstr "Umepata ujuzi %s"
+
+msgid "You have acquired the skill %s."
+msgstr "Umepata ujuzi %s."
+
+msgid "Recover your password"
+msgstr "Rejesha nenosiri lako"
+
+msgid "Disclaimer"
+msgstr "Kanusho"
+
+msgid "This operation would exceed the limit of %d users allowed for this course."
+msgstr "Operesheni hii itazidi kikomo cha watumiaji %d wanaoruhusiwa kwa kozi hii."
+
+msgid "DefaultGroupCategory"
+msgstr "KundiMsingi"
+
+msgid "LearningCalendar"
+msgstr "KalendaYaKujifunza"
+
+msgid "Choose how this user can authenticate on the platform."
+msgstr "Chagua jinsi mtumiaji huyu anavyoweza kuthibitisha utambulisho wake kwenye jukwaa."
+
+msgid "Authentication methods"
+msgstr "Mbinu za uthibitishaji"
+
+msgid "Set password manually"
+msgstr "Weka nenosiri wewe mwenyewe"
+
+msgid "Report role matrix"
+msgstr "Ripoti ya tumbo la majukumu"
+
+msgid "Report permission categories"
+msgstr "Ripoti ya kategoria za ruhusa"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs enforce the documented report role matrix."
+msgstr "Sajili hii inaorodhesha kurasa za kuripoti zinazojulikana, kategoria yake, URL ya kisheria, URL ya urithi na hadhira inayotarajiwa ya jukumu. URL za kisheria hutekeleza tumbo la majukumu ya ripoti lililorekodiwa."
+
+msgid "reports"
+msgstr "ripoti"
+
+msgid "Canonical URL"
+msgstr "URL ya kisheria"
+
+msgid "Legacy URL"
+msgstr "URL ya urithi"
+
+msgid "Permission category"
+msgstr "Kategoria ya ruhusa"
+
+msgid "This matrix documents the expected audience for each report and is enforced by the canonical report entry point."
+msgstr "Tumbo hili linaandika hadhira inayotarajiwa kwa kila ripoti na linatimizwa na kiingilio cha ripoti cha kisheria."
+
+msgid "These keys group reports by access scope and are used by the report registry. They can later be mapped to finer-grained platform permissions."
+msgstr "Funguo hizi hupanga ripoti kwa wigo wa ufikiaji na hutumiwa na sajili ya ripoti. Baadaye zinaweza kuunganishwa na ruhusa za jukwaa zenye kiwango cha juu zaidi."
+
+msgid "Permission"
+msgstr "Ruhusa"
+
+msgid "Clear active session"
+msgstr "Futa kipindi kinachotumika"
+
+msgid "Are you sure you want to clear this user active session?"
+msgstr "Je, una uhakika unataka kufuta kipindi hiki cha mtumiaji kinachotumika?"
+
+msgid "Preview shown without course context. Some course-specific data may be unavailable."
+msgstr "Onyesho limeonyeshwa bila muktadha wa kozi. Baadhi ya data maalum za kozi huenda zisipatikane."
+
+msgid "Preview is not available for this question."
+msgstr "Onyesho halipatikani kwa swali hili."
+
+msgid "Edition is not allowed without a course context."
+msgstr "Kuhariri hairuhusiwi bila muktadha wa kozi."
+
+msgid "This plugin does not use regions."
+msgstr "Programu-jalizi hii haitumii maeneo."
+
+msgid "No plugins with regions were found."
+msgstr "Hakuna programu-jalizi zilizo na maeneo zilizopatikana."
+
+msgid "Freemium"
+msgstr "Freemium"
+
+msgid "Commercial service"
+msgstr "Huduma ya kibiashara"
+
+msgid "Commercial"
+msgstr "Kibiashara"
+
+msgid "100% free"
+msgstr "100% bila malipo"
+
+msgid "Displayed above the public login form."
+msgstr "Huonyeshwa juu ya fomu ya kuingia ya umma."
+
+msgid "Displayed below the public login form."
+msgstr "Huonyeshwa chini ya fomu ya kuingia ya umma."
+
+msgid "Displayed before the footer area."
+msgstr "Huonyeshwa kabla ya eneo la kijachini."
+
+msgid "Displayed in the left footer column."
+msgstr "Huonyeshwa kwenye safu ya kushoto ya kijachini."
+
+msgid "Displayed in the center footer column."
+msgstr "Huonyeshwa kwenye safu ya kati ya kijachini."
+
+msgid "Displayed in the right footer column."
+msgstr "Huonyeshwa kwenye safu ya kulia ya kijachini."
+
+msgid "Showing all plugins."
+msgstr "Inaonyesha programu-jalizi zote."
+
+msgid "Some plugins are still pending functional verification."
+msgstr "Baadhi ya programu-jalizi bado zinangoja uthibitishaji wa utendaji."
+
+msgid "Show verified plugins only"
+msgstr "Onyesha programu-jalizi zilizothibitishwa pekee"
+
+msgid "Showing verified plugins only."
+msgstr "Inaonyesha programu-jalizi zilizothibitishwa pekee."
+
+msgid "Pending plugins are temporarily hidden until they are adapted and tested."
+msgstr "Programu-jalizi zinazosubiriwa zimefichwa kwa muda hadi zitakapobadilishwa na kujaribiwa."
+
+msgid "Show all plugins"
+msgstr "Onyesha programu-jalizi zote"
+
+msgid "Official and free plugins are listed separately from plugins that may depend on commercial services or paid offers."
+msgstr "Programu-jalizi rasmi na zisizolipishwa zimeorodheshwa kando na programu-jalizi zinazoweza kutegemea huduma za kibiashara au ofa za kulipia."
+
+msgid "Included free plugins"
+msgstr "Programu-jalizi zisizolipishwa zilizojumuishwa"
+
+msgid "Commercial and freemium plugins"
+msgstr "Programu-jalizi za kibiashara na freemium"
+
+msgid "All plugins"
+msgstr "Programu-jalizi zote"
+
+msgid "No plugins were found for this category."
+msgstr "Hakuna programu-jalizi zilizopatikana kwa kategoria hii."
+
+msgid "Search plugins"
+msgstr "Tafuta programu-jalizi"
+
+msgid "Search by name or description"
+msgstr "Tafuta kwa jina au maelezo"
+
+msgid "Advanced filters"
+msgstr "Vichujio vya juu"
+
+msgid "All statuses"
+msgstr "Hali zote"
+
+msgid "All sources"
+msgstr "Vyanzo vyote"
+
+msgid "All types"
+msgstr "Aina zote"
+
+msgid "Installed plugins are shown first"
+msgstr "Programu-jalizi zilizosakinishwa huonyeshwa kwanza"
+
+msgid "No plugins match the current filters."
+msgstr "Hakuna programu-jalizi zinazolingana na vichujio vya sasa."
+
+msgid "Try clearing the search or changing the filters."
+msgstr "Jaribu kufuta utafutaji au kubadilisha vichujio."
+
+msgid "README"
+msgstr "README"
+
+msgid "Invalid security token"
+msgstr "Tokeni batili ya usalama"
+
+msgid "Please select a destination session"
+msgstr "Tafadhali chagua kipindi cha lengo"
+
+msgid "Cannot move this to the same session"
+msgstr "Haiwezi kuhamisha hii kwenye kipindi kile kile"
+
+msgid "The destination session must include the selected course"
+msgstr "Kipindi cha lengo lazima kijumuishe kozi iliyochaguliwa"
+
+msgid "The source session must include the selected course"
+msgstr "Kipindi cha chanzo lazima kijumuishe kozi iliyochaguliwa"
+
+msgid "No learners found"
+msgstr "Hakuna wanafunzi waliopatikana"
+
+msgid "Will be subscribed"
+msgstr "Atasajiliwa"
+
+msgid "Subscribed"
+msgstr "Amesajiliwa"
+
+msgid "The move process has finished"
+msgstr "Mchakato wa kuhamisha umekamilika"
+
+msgid "Comparison finished. No data has been moved."
+msgstr "Ulinganishaji umekamilika. Hakuna data iliyohamishwa."
+
+msgid "Move tracking data from the base course or a source session to another session. Use comparison first to review the affected learner data."
+msgstr "Hamisha data ya ufuatiliaji kutoka kozi ya msingi au kipindi cha chanzo hadi kipindi kingine. Tumia ulinganishaji kwanza ili kukagua data ya mwanafunzi iliyoathirika."
+
+msgid "Search for a course or use the manual course ID field below."
+msgstr "Tafuta kozi au tumia sehemu ya kitambulisho cha kozi iliyo chini."
+
+msgid "Fallback when the course search is not available."
+msgstr "Chaguo mbadala wakati utafutaji wa kozi haupatikani."
+
+msgid "Load sessions"
+msgstr "Pakia vipindi"
+
+msgid "Selected course"
+msgstr "Kozi iliyochaguliwa"
+
+msgid "Choose the base course or the session where the tracking data currently exists."
+msgstr "Chagua kozi ya msingi au kipindi ambapo data ya ufuatiliaji ipo sasa."
+
+msgid "Choose the session that will receive the tracking data."
+msgstr "Chagua kipindi kitakachopokea data ya ufuatiliaji."
+
+msgid "Important"
+msgstr "Muhimu"
+
+msgid "The move action updates existing tracking data. Run compare first and test this tool with a non-production course before moving real learner data."
+msgstr "Kitendo cha kuhamisha kinasasisha data ya ufuatiliaji iliyopo. Fanya ulinganisho kwanza na ujaribu zana hii kwa kozi isiyotumika kabla ya kuhamisha data halisi ya wanafunzi."
+
+msgid "No sessions found for this course"
+msgstr "Hakuna vipindi vilivyopatikana kwa kozi hii"
+
+msgid "Some users were ignored because they are not subscribed to this session."
+msgstr "Baadhi ya watumiaji walipuuzwa kwa sababu hawajasajiliwa kwenye kipindi hiki."
+
+msgid "Remove selected user"
+msgstr "Ondoa mtumiaji aliyechaguliwa"
+
+msgid "Add selected user"
+msgstr "Ongeza mtumiaji aliyechaguliwa"
+
+msgid "No users from the selected list are subscribed to this session."
+msgstr "Hakuna watumiaji kutoka orodha iliyochaguliwa waliosajiliwa kwenye kipindi hiki."
+
+msgid "No image"
+msgstr "Hakuna picha"
+
+msgid "Invalid URL."
+msgstr "URL batili."
+
+msgid "This cloud document cannot be embedded."
+msgstr "Hati hii ya wingu haiwezi kupachikwa."
+
+msgid "Document not found"
+msgstr "Hati haijapatikana"
+
+msgid "File not found"
+msgstr "Faili haijapatikana"
+
+msgid "This learning path is not available for your user at this time."
+msgstr "Njia hii ya kujifunza haipatikani kwa mtumiaji wako kwa sasa."
+
+msgid "StartDateMustBeBeforeTheEndDate"
+msgstr "StartDateMustBeBeforeTheEndDate"
+
+msgid "Next learning path"
+msgstr "Njia inayofuata ya kujifunza"
+
+msgid "Select the learning path that will be available after this one."
+msgstr "Chagua njia ya kujifunza itakayopatikana baada ya hii."
+
+msgid "Create another learning path in this course to enable learning path flow."
+msgstr "Unda njia nyingine ya kujifunza katika kozi hii ili kuwezesha mtiririko wa njia za kujifunza."
+
+msgid "Available from %s"
+msgstr "Inapatikana kutoka %s"
+
+msgid "Available until %s"
+msgstr "Inapatikana hadi %s"
+
+msgid "Statistics reset date"
+msgstr "Tarehe ya kuweka upya takwimu"
+
+msgid "Last 24 hours"
+msgstr "Saa 24 zilizopita"
+
+msgid "This reset date is used as the reference date for the report. It does not delete historical tracking data."
+msgstr "Tarehe hii ya kuweka upya inatumika kama tarehe ya kumbukumbu kwa ripoti. Haiufuti data ya ufuatiliaji wa kihistoria."
+
+msgid "Since reset date"
+msgstr "Tangu tarehe ya kuweka upya"
+
+msgid "Users connected in the last 24 hours"
+msgstr "Watumiaji waliounganishwa katika saa 24 zilizopita"
+
+msgid "Learners with at least one course access during the last 24 hours."
+msgstr "Wanafunzi walio na angalau ufikiaji mmoja wa kozi katika saa 24 zilizopita."
+
+msgid "Users connected in the last week"
+msgstr "Watumiaji waliounganishwa katika wiki iliyopita"
+
+msgid "Learners with at least one course access during the last 7 days."
+msgstr "Wanafunzi walio na angalau ufikiaji mmoja wa kozi katika siku 7 zilizopita."
+
+msgid "Users connected in the last month"
+msgstr "Watumiaji waliounganishwa katika mwezi uliopita"
+
+msgid "Learners with at least one course access during the last 30 days."
+msgstr "Wanafunzi walio na angalau ufikiaji mmoja wa kozi katika siku 30 zilizopita."
+
+msgid "Not recently connected users"
+msgstr "Watumiaji wasiounganishwa hivi karibuni"
+
+msgid "Learners without course access since %s."
+msgstr "Wanafunzi wasio na ufikiaji wa kozi tangu %s."
+
+msgid "Recently used resources"
+msgstr "Rasilimali zilizotumika hivi karibuni"
+
+msgid "Course tools/resources used since %s."
+msgstr "Zana/rasilimali za kozi zilizotumika tangu %s."
+
+msgid "%s %% of learners"
+msgstr "%s %% ya wanafunzi"
+
+msgid "Connections"
+msgstr "Miunganisho"
+
+msgid "Total connections"
+msgstr "Jumla ya miunganisho"
+
+msgid "Downloaded documents"
+msgstr "Nyaraka zilizopakuliwa"
+
+msgid "List of documents downloaded by this learner in this course."
+msgstr "Orodha ya nyaraka zilizopakuliwa na mwanafunzi huyu katika kozi hii."
+
+msgid "Forum topics"
+msgstr "Mada za jukwaa"
+
+msgid "Forum topics opened by this learner in this course."
+msgstr "Mada za jukwaa zilizofunguliwa na mwanafunzi huyu katika kozi hii."
+
+msgid "Forum posts"
+msgstr "Machapisho ya jukwaa"
+
+msgid "Forum posts written by this learner in this course."
+msgstr "Machapisho ya jukwaa yaliyoandikwa na mwanafunzi huyu katika kozi hii."
+
+msgid "Course connections"
+msgstr "Miunganisho ya kozi"
+
+msgid "Connection history for this learner in this course."
+msgstr "Historia ya miunganisho ya mwanafunzi huyu katika kozi hii."
+
+msgid "Resources used"
+msgstr "Rasilimali zilizotumika"
+
+msgid "Latest tools or resources used by this learner in this course."
+msgstr "Zana au rasilimali za hivi karibuni zilizotumiwa na mwanafunzi huyu katika kozi hii."
+
+msgid "Logout date"
+msgstr "Tarehe ya kuondoka"
+
+msgid "Imported Aiken quiz"
+msgstr "Jaribio la Aiken lililoingizwa"
+
+msgid "Only supported documents will be listed here."
+msgstr "Nyaraka zinazoungwa mkono pekee ndizo zitakazoonyeshwa hapa."
+
+msgid "Generated Aiken content"
+msgstr "Maudhui ya Aiken yaliyotengenezwa"
+
+msgid "Review the generated content before importing it as a new exercise."
+msgstr "Kagua maudhui yaliyotengenezwa kabla ya kuyaleta kama zoezi jipya."
+
+msgid "No documents available."
+msgstr "Hakuna nyaraka zinazopatikana."
+
+msgid "yperbolic arctangent:\\t\\tarctanh(x)"
+msgstr "tangent ya arc ya hyperbolic:\\t\\tarctanh(x)"
+
+msgid "Exercise"
+msgstr "Zoezi"
+
+msgid "OfficialCode"
+msgstr "NambariRasmi"
+
+msgid "FirstName"
+msgstr "JinaLaKwanza"
+
+msgid "LastName"
+msgstr "JinaLaMwisho"
+
+msgid "LoginName"
+msgstr "JinaLaKuingia"
+
+msgid "MinMinute"
+msgstr "DakikaNdogo"
+
+msgid "StartDate"
+msgstr "TareheYaKuanza"
+
+msgid "EndDate"
+msgstr "TareheYaKumaliza"
+
+msgid "CorrectionDate"
+msgstr "TareheYaKusahihisha"
+
+msgid "NotValidated"
+msgstr "Haijathibitishwa"
+
+msgid "PendingAttempts"
+msgstr "MajaribioYanayosubiri"
+
+msgid "List of pending test attempts across your courses."
+msgstr "Orodha ya majaribio ya mtihani yanayosubiri katika kozi zako."
+
+msgid "User ID"
+msgstr "Kitambulisho cha Mtumiaji"
+
+msgid "QuestionType"
+msgstr "AinaYaSwali"
+
+msgid "QuestionsWithNoAutomaticCorrection"
+msgstr "MaswaliYasiyoNaMasahihishoOtomatiki"
+
+msgid "There are no pending tests."
+msgstr "Hakuna majaribio yanayosubiri."
+
+msgid "%s results"
+msgstr "Matokeo ya %s"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Mfano wa shughuli ya kujaza fomu: hesabu Kielezo cha Uzito wa Mwili</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Umri</strong></td>            <td width=\"75%\" style=\"\">[25] miaka</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Jinsia</strong></td>            <td style=\"\" text-align:=\"\">[M] (M au F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Uzito</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Urefu</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Kielezo cha Uzito wa Mwili</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Uzito/Ukubwa<sup>2</sup> (Angalia <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> makala ya Wikipedia</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Removed"
+msgstr "Imeondolewa"
+
+msgid "NoUsersInTheList"
+msgstr "HakunaWatumiajiKatikaOrodha"
+
+msgid "Are you sure?"
+msgstr "Je, una uhakika?"
+
+msgid "NoResultsAvailable"
+msgstr "HakunaMatokeoYanayopatikana"
+
+msgid "Import groups from a CSV file and optionally remove items that are not present in the file."
+msgstr "Leta vikundi kutoka faili ya CSV na uondoe hiari vipengee visivyopo kwenye faili."
+
+msgid "Use this option carefully because items missing from the CSV can be removed during the import process."
+msgstr "Tumia chaguo hili kwa uangalifu kwa sababu vipengee visivyopo kwenye CSV vinaweza kuondolewa wakati wa mchakato wa kuleta."
+
+msgid "Upload a CSV file with the group data you want to import."
+msgstr "Pakia faili ya CSV yenye data ya kikundi unayotaka kuleta."
+
+msgid "You can download the example file to use the expected format."
+msgstr "Unaweza kupakua faili ya mfano ili kutumia muundo unaotarajiwa."
+
+msgid "If you enable deletion, items not present in the file may be removed."
+msgstr "Ukiwezesha ufutaji, vipengee visivyopo kwenye faili vinaweza kuondolewa."
+
+msgid "The CSV file is mandatory to start the import."
+msgstr "Faili ya CSV ni lazima ili kuanza mchakato wa kuleta."
+
+msgid "Please select at least one class."
+msgstr "Tafadhali chagua angalau darasa moja."
+
+msgid "Define the properties for each group before creating them."
+msgstr "Bainisha sifa za kila kikundi kabla ya kuviumba."
+
+msgid "Apply the first row values"
+msgstr "Tekeleza thamani za safu ya kwanza"
+
+msgid "Create groups manually or generate them from the classes subscribed to this course."
+msgstr "Unda vikundi mwenyewe au vizalishe kutoka kwa madarasa yaliyojisajili kwenye kozi hii."
+
+msgid "Create manual groups"
+msgstr "Unda vikundi mwenyewe"
+
+msgid "Use this form when you want to create empty course groups manually."
+msgstr "Tumia fomu hii unapotaka kuunda vikundi vya kozi tupu mwenyewe."
+
+msgid "Configure manual groups"
+msgstr "Sanidi vikundi vya mwenyewe"
+
+msgid "Create groups from subscribed classes"
+msgstr "Unda vikundi kutoka kwa madarasa yaliyojisajili"
+
+msgid "Use this form when you want to create one course group for each selected class."
+msgstr "Tumia fomu hii unapotaka kuunda kikundi kimoja cha kozi kwa kila darasa lililochaguliwa."
+
+msgid "Keep created groups linked to their source classes"
+msgstr "Weka vikundi vilivyoundwa viunganishwe na madarasa yao ya asili"
+
+msgid "Create groups from selected classes"
+msgstr "Unda vikundi kutoka kwa madarasa yaliyochaguliwa"
+
+msgid "You must be logged in to access this page."
+msgstr "Lazima uwe umeingia ili kufikia ukurasa huu."
+
+msgid "Invalid user"
+msgstr "Mtumiaji batili"
+
+msgid "UseCourseCustomCertificate"
+msgstr "TumiaChetiMaalumChaKozi"
+
+msgid "UseDefaultCustomCertificate"
+msgstr "TumiaChetiMaalumChaguomsingi"
+
+msgid "CertificateSetting"
+msgstr "MipangilioYaCheti"
+
+msgid "SelectOneOptionBeforeOpeningEditor"
+msgstr "ChaguaChaguoMojaKablaYaKufunguaKihariri"
+
+msgid "ChooseCustomCertificateModeHelp"
+msgstr "ChaguaHaliYaChetiMaalumMsaada"
+
+msgid "CertificateMode"
+msgstr "HaliYaCheti"
+
+msgid "Enable student to validate own attendance"
+msgstr "Ruhusu mwanafunzi kuthibitisha mahudhurio yake mwenyewe"
+
+msgid "Course block"
+msgstr "Kitalu cha kozi"
+
+msgid "Add custom content blocks to course footer regions."
+msgstr "Ongeza vizuizi vya maudhui maalum kwenye maeneo ya chini ya kozi."
+
+msgid "course_block_pre_footer"
+msgstr "course_block_pre_footer"
+
+msgid "Before footer"
+msgstr "Kabla ya kijachini"
+
+msgid "course_block_footer_left"
+msgstr "course_block_footer_left"
+
+msgid "Footer left"
+msgstr "Kijachini kushoto"
+
+msgid "course_block_footer_center"
+msgstr "course_block_footer_center"
+
+msgid "Footer center"
+msgstr "Kijachini kati"
+
+msgid "course_block_footer_right"
+msgstr "course_block_footer_right"
+
+msgid "Footer right"
+msgstr "Kijachini kulia"
+
+msgid "SetNotification"
+msgstr "WekaTaarifa"
+
+msgid "CourseLegal"
+msgstr "SheriaZaKozi"
+
+msgid "Certificates search is not available"
+msgstr "Utafutaji wa vyeti haupatikani"
+
+msgid "It allows the acquisition of skills by subcategories"
+msgstr "Inaruhusu kupata ujuzi kwa vikundi vidogo"
+
+msgid "Allow skills by subcategories"
+msgstr "Ruhusu ujuzi kwa vikundi vidogo"
+
+msgid "Minimum score for skills"
+msgstr "Alama ya chini kwa ujuzi"
+
+msgid "The gradebook table is hidden."
+msgstr "Jedwali la rekodi ya alama limefichwa."
+
+msgid "Invalid token"
+msgstr "Tokeni batili"
+
+msgid "Unable to save the item"
+msgstr "Haijawezekana kuhifadhi kipengee"
+
+msgid "Only HTTP and HTTPS URLs are allowed."
+msgstr "URL za HTTP na HTTPS pekee zinazoruhusiwa."
+
+msgid "Invalid URL host."
+msgstr "Mwenyeji wa URL batili."
+
+msgid "This cloud provider is not allowed."
+msgstr "Mtoa huduma huyu wa wingu haruhusiwi."
+
+msgid "Documents used"
+msgstr "Nyaraka zilizotumika"
+
+msgid "No document usage"
+msgstr "Hakuna matumizi ya nyaraka"
+
+msgid "Invalid action."
+msgstr "Kitendo batili."
+
+msgid "No users selected."
+msgstr "Hakuna watumiaji walioteuliwa."
+
+msgid "%s user(s) processed."
+msgstr "%s mtumiaji (watumiaji) wamesindikwa."
+
+msgid "Invalid CSRF token."
+msgstr "Tokeni batili ya CSRF."
+
+msgid "[%s] Please change your password"
+msgstr "[%s] Tafadhali badilisha nenosiri lako"
+
+msgid "Dear %s,\n\nOur security enforcing process shows you use a password that is commonly used on the internet, which means your account could easily be stolen. It is probably a simple sequence or a very common word, we don't really know (we cannot see your password), but we ask you to please connect to the platform and request a password change. You can follow the link here: %s to do that now.\n\nPlease note we will never ask for your password in this process. You just enter your username or e-mail and we send you a link. If you are asked to introduce your existing password to do that, someone is probably trying to do Phishing on your account. Be safe, change your password now!\n\n%s\n%s"
+msgstr "Mpendwa %s,\n\nMchakato wetu wa kutekeleza usalama unaonyesha kuwa unatumia nenosiri linalotumika sana kwenye intaneti, ambalo linaweza kusababisha akaunti yako kuibiwa kwa urahisi. Labda ni mlolongo rahisi au neno la kawaida sana, hatujui hasa (hatuwezi kuona nenosiri lako), lakini tunakuomba uunganishwe kwenye jukwaa na uombe kubadilishwa kwa nenosiri. Unaweza kufuata kiungo hapa: %s ili kufanya hivyo sasa.\n\nTafadhali kumbuka hatutawahi kukuuliza nenosiri lako katika mchakato huu. Unachohitaji kuingiza ni jina lako la mtumiaji au barua pepe na tutakutumia kiungo. Ikiwa utaulizwa kuingiza nenosiri lako la sasa ili kufanya hivyo, labda mtu anajaribu kufanya Phishing kwenye akaunti yako. Kuwa salama, badilisha nenosiri lako sasa!\n\n%s\n%s"
+
+msgid "[%s] Your password has been reset"
+msgstr "[%s] Nenosiri lako limewekwa upya"
+
+msgid "Dear %s,\n\nOur security enforcing process flagged you as using a password that is commonly used on the internet, which means your account could easily be stolen. As a prevention measure, we have decided to initiate a password reset process. Your new, automatically generated password is now:\n\n%s\n\nPlease login to the platform soon (using this new password) to set your own, personal and secure, password.\n\nBe safe.\n\n%s\n%s"
+msgstr "Mpendwa %s,\n\nMchakato wetu wa kutekeleza usalama umekutambulisha kama unayetumia nenosiri linalotumika sana kwenye intaneti, ambalo linaweza kusababisha akaunti yako kuibiwa kwa urahisi. Kama hatua ya kuzuia, tumeamua kuanzisha mchakato wa kuweka upya nenosiri. Nenosiri lako jipya, linalozalishwa kiotomatiki sasa ni:\n\n%s\n\nTafadhali ingia kwenye jukwaa hivi karibuni (ukitumia nenosiri hili jipya) ili kuweka nenosiri lako mwenyewe, la kibinafsi na salama.\n\nKuwa salama.\n\n%s\n%s"
+
+msgid "Signature saved successfully"
+msgstr "Saini imehifadhiwa kwa mafanikio"
+
+msgid "Invalid request payload."
+msgstr "Mzigo wa ombi batili."
+
+msgid "Authentication required."
+msgstr "Uthibitishaji unahitajika."
+
+msgid "The course title is required."
+msgstr "Kichwa cha kozi kinahitajika."
+
+msgid "Only trainers and administrators can create courses."
+msgstr "Ni wakufunzi na wasimamizi pekee wanaoweza kuunda kozi."
+
+msgid "Course creation by trainers is disabled on this platform."
+msgstr "Uundaji wa kozi na wakufunzi umezimwa kwenye jukwaa hili."
+
+msgid "The selected BuyCourses service cannot be used to create this course."
+msgstr "Huduma iliyochaguliwa ya BuyCourses haiwezi kutumika kuunda kozi hii."
+
+msgid "You have reached the maximum number of courses allowed (%d)."
+msgstr "Umefikia idadi ya juu zaidi ya kozi zinazoruhusiwa (%d)."
+
+msgid "The selected BuyCourses service is invalid."
+msgstr "Huduma iliyochaguliwa ya BuyCourses si halali."
+
+msgid "BuyCourses is not available right now."
+msgstr "BuyCourses haipatikani kwa sasa."
+
+msgid "BuyCourses cannot validate the selected service right now."
+msgstr "BuyCourses haiwezi kuthibitisha huduma iliyochaguliwa kwa sasa."
+
+msgid "Unable to validate the selected BuyCourses service right now."
+msgstr "Imeshindwa kuthibitisha huduma ya BuyCourses iliyochaguliwa kwa sasa."
+
+msgid "External tool removed from course"
+msgstr "Zana ya nje imeondolewa kwenye kozi"
+
+msgid "External tool was removed from the course, but kept internally because it is linked to the gradebook"
+msgstr "Zana ya nje imeondolewa kwenye kozi, lakini imehifadhiwa ndani kwa sababu imeunganishwa na daftari la alama"
+
+msgid "There are no external tools available to add to the gradebook"
+msgstr "Hakuna zana za nje zinazopatikana za kuongeza kwenye daftari la alama"
+
+msgid "The evaluation could not be created"
+msgstr "Tathmini haikuweza kuundwa"
+
+msgid "The gradebook evaluation could not be linked"
+msgstr "Tathmini ya daftari la alama haikuweza kuunganishwa"
+
+msgid "Survey questions"
+msgstr "Maswali ya utafiti"
+
+msgid "Back to survey list"
+msgstr "Rudi kwenye orodha ya tafiti"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "Utafiti huu tayari una majibu. Kuhariri maswali kumezimwa na usanidi."
+
+msgid "Choose the type of question you want to add."
+msgstr "Chagua aina ya swali unayotaka kuongeza."
+
+msgid "The free text option is added automatically."
+msgstr "Chaguo la maandishi huru huongezwa kiotomatiki."
+
+msgid "No questions found"
+msgstr "Hakuna maswali yaliyopatikana"
+
+msgid "Mandatory"
+msgstr "Lazima"
+
+msgid "Unsupported question type"
+msgstr "Aina ya swali haijatumika"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "Unaweza kutumia lebo {%s} na {%s} katika swali."
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "Swali hili linaonyeshwa kwa masharti wakati wa kujibu dodoso."
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "Chaguzi za asilimia kutoka 1 hadi 100 zinazalishwa kiotomatiki."
+
+msgid "Could not load survey questions"
+msgstr "Haikuweza kupakia maswali ya dodoso"
+
+msgid "The question text is required."
+msgstr "Maandishi ya swali yanahitajika."
+
+msgid "The maximum score is required."
+msgstr "Alama ya juu zaidi inahitajika."
+
+msgid "Please select a parent option."
+msgstr "Tafadhali chagua chaguo la mzazi."
+
+msgid "Please fill all answer options."
+msgstr "Tafadhali jaza chaguzi zote za majibu."
+
+msgid "QuestionUpdated"
+msgstr "SwaliLimesasishwa"
+
+msgid "Could not save survey question"
+msgstr "Haikuweza kuhifadhi swali la dodoso"
+
+msgid "Could not delete survey question"
+msgstr "Haikuweza kufuta swali la dodoso"
+
+msgid "Could not move survey question"
+msgstr "Haikuweza kuhamisha swali la dodoso"
+
+msgid "Could not copy survey question"
+msgstr "Haikuweza kunakili swali la dodoso"
+
+msgid "Hide search"
+msgstr "Ficha utafutaji"
+
+msgid "Showing results for: %s"
+msgstr "Inaonyesha matokeo ya: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "Tafuta kwa kichwa cha dodoso, msimbo au maelezo."
+
+msgid "Search surveys"
+msgstr "Tafuta dodoso"
+
+msgid "%s surveys selected"
+msgstr "Dodoso %s zimechaguliwa"
+
+msgid "Clear selection"
+msgstr "Futa uteuzi"
+
+msgid "No surveys found"
+msgstr "Hakuna dodoso zilizopatikana"
+
+msgid "Unsupported"
+msgstr "Haijatumika"
+
+msgid "Could not load surveys"
+msgstr "Haikuweza kupakia dodoso"
+
+msgid "Delete selected surveys"
+msgstr "Futa dodoso zilizochaguliwa"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "Dodoso zilizochaguliwa na maswali yake zitafutwa. Hatua hii haiwezi kutenduliwa."
+
+msgid "Could not delete selected surveys"
+msgstr "Haikuweza kufuta dodoso zilizochaguliwa"
+
+msgid "Survey action"
+msgstr "Kitendo cha dodoso"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "Nakala ya dodoso hili itaundwa: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "Majibu na mialiko yote yatafutwa kwa dodoso hili: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "Maswali yaliyozidishwa yaliyotengenezwa yataondolewa kutoka kwa dodoso hili: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "Dodoso hili litachapishwa kwa wakufunzi wa kikundi kilichounganishwa: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "Dodoso hili na maswali yake yatafutwa: %s"
+
+msgid "Could not complete survey action"
+msgstr "Haikuweza kukamilisha kitendo cha dodoso"
+
+msgid "Not started"
+msgstr "Haijaanza"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "Kura za mkutano huruhusu watumiaji walioalikwa kuchagua tarehe wanazopatikana."
+
+msgid "Back to surveys"
+msgstr "Rudi kwenye dodoso"
+
+msgid "Edit meeting poll"
+msgstr "Hariri kura ya mkutano"
+
+msgid "View meeting poll"
+msgstr "Tazama kura ya mkutano"
+
+msgid "Basic information"
+msgstr "Taarifa za msingi"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "Hii itaunda dodoso la aina ya kura ya mkutano. Majibu na mialiko hushughulikiwa kando."
+
+msgid "Availability"
+msgstr "Upatikanaji"
+
+msgid "Meeting dates"
+msgstr "Tarehe za mkutano"
+
+msgid "Meeting poll"
+msgstr "Kura ya mkutano"
+
+msgid "My availability"
+msgstr "Upatikanaji wangu"
+
+msgid "Meeting poll results"
+msgstr "Matokeo ya kura ya mkutano"
+
+msgid "No invitations found"
+msgstr "Hakuna mialiko iliyopatikana"
+
+msgid "available"
+msgstr "inapatikana"
+
+msgid "Could not load meeting poll"
+msgstr "Haikuweza kupakia kura ya mkutano"
+
+msgid "Please complete the required fields"
+msgstr "Tafadhali kamilisha sehemu zinazohitajika"
+
+msgid "Could not save meeting poll"
+msgstr "Haikuweza kuhifadhi kura ya mkutano"
+
+msgid "Could not save meeting availability"
+msgstr "Haikuweza kuhifadhi upatikanaji wa mkutano"
+
+msgid "Copy this survey to another course or session"
+msgstr "Nakili utafiti huu kwenye kozi nyingine au kipindi"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "Utafiti utanakiliwa bila majibu au mialiko."
+
+msgid "No target courses found"
+msgstr "Hakuna kozi lengwa zilizopatikana"
+
+msgid "Search by course title, course code or session name."
+msgstr "Tafuta kwa kichwa cha kozi, msimbo wa kozi au jina la kipindi."
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "Tumia Nakili utafiti unapotaka nakala katika kozi ile ile."
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "Maswali na chaguzi zitanakiliwa. Majibu, mialiko na ripoti zitabaki kwenye utafiti wa asili pekee."
+
+msgid "Selected target"
+msgstr "Lengwa lililochaguliwa"
+
+msgid "Could not load copy form"
+msgstr "Haikuweza kupakia fomu ya kunakili"
+
+msgid "The survey will be copied to: %s"
+msgstr "Utafiti utanakiliwa kwenda: %s"
+
+msgid "Survey copied."
+msgstr "Utafiti umenakiliwa."
+
+msgid "Could not copy survey"
+msgstr "Haikuweza kunakili utafiti"
+
+msgid "Answer survey"
+msgstr "Jibu utafiti"
+
+msgid "Preview mode does not save answers."
+msgstr "Hali ya kutazama haibaki majibu."
+
+msgid "Survey completed"
+msgstr "Utafiti umekamilika"
+
+msgid "Thank you for answering the survey."
+msgstr "Asante kwa kujibu utafiti."
+
+msgid "Profile information"
+msgstr "Taarifa za wasifu"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "Tafadhali kagua sehemu za wasifu zinazohitajika kabla ya kujibu utafiti."
+
+msgid "This profile field is read-only."
+msgstr "Sehemu hii ya wasifu ni ya kusoma pekee."
+
+msgid "You already filled this survey."
+msgstr "Tayari umejaza utafiti huu."
+
+msgid "Please specify"
+msgstr "Tafadhali bainisha"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "Aina hii ya swali haiauniwi katika mwonekano wa kisasa wa utafiti."
+
+msgid "Preview only"
+msgstr "Kutazama pekee"
+
+msgid "Submit answers"
+msgstr "Wasilisha majibu"
+
+msgid "Could not load survey"
+msgstr "Haikuweza kupakia utafiti"
+
+msgid "Please complete the required profile fields."
+msgstr "Tafadhali kamilisha sehemu za wasifu zinazohitajika."
+
+msgid "Please answer all mandatory questions."
+msgstr "Tafadhali jibu maswali yote ya lazima."
+
+msgid "Could not save survey answers"
+msgstr "Haikuweza kuhifadhi majibu ya utafiti"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "Sanidi taarifa kuu za utafiti kabla ya kusimamia maswali na mialiko."
+
+msgid "The survey code cannot be changed after creation."
+msgstr "Msimbo wa utafiti hauwezi kubadilishwa baada ya kuundwa."
+
+msgid "Survey behavior"
+msgstr "Tabia ya utafiti"
+
+msgid "Use 0 for no time limit."
+msgstr "Tumia 0 kwa muda usio na kikomo."
+
+msgid "Survey messages"
+msgstr "Ujumbe wa utafiti"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "Sehemu za wasifu zilizochaguliwa hapa zitaonyeshwa kabla ya maswali ya utafiti."
+
+msgid "No profile fields are currently available."
+msgstr "Hakuna sehemu za wasifu zinazopatikana kwa sasa."
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "Uteuzi wa sehemu za wasifu unapatikana kwa utafiti usio wa siri pekee."
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "Uunganishaji wa ujuzi utahamishwa katika kundi maalum."
+
+msgid "Could not load survey configuration"
+msgstr "Haikuweza kupakia usanidi wa utafiti"
+
+msgid "The survey code is required."
+msgstr "Msimbo wa utafiti unahitajika."
+
+msgid "The survey title is required."
+msgstr "Kichwa cha utafiti kinahitajika."
+
+msgid "The survey has been saved successfully"
+msgstr "Utafiti umehifadhiwa kwa mafanikio"
+
+msgid "Could not save survey configuration"
+msgstr "Haikuweza kuhifadhi usanidi wa utafiti"
+
+msgid "Course users"
+msgstr "Watumiaji wa kozi"
+
+msgid "Already invited"
+msgstr "Tayari wamealikwa"
+
+msgid "No users found"
+msgstr "Hakuna watumiaji waliopatikana"
+
+msgid "No groups found"
+msgstr "Hakuna makundi yaliyopatikana"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "Tumia **link** mahali ambapo kiungo cha utafiti kinapaswa kuonekana."
+
+msgid "Remind all selected users"
+msgstr "Kumbusha watumiaji wote waliochaguliwa"
+
+msgid "Anonymous access link"
+msgstr "Kiungo cha ufikiaji bila majina"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "Watumiaji ambao hawajaalikwa wanaweza kutumia kiungo hiki kujibu utafiti."
+
+msgid "Answered anonymously"
+msgstr "Imejibiwa bila kujulikana"
+
+msgid "Could not load survey invitations"
+msgstr "Haikuweza kupakia mialiko ya utafiti"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "Mada na ujumbe wa barua pepe zinahitajika wakati wa kutuma barua."
+
+msgid "Could not publish survey"
+msgstr "Haikuweza kuchapisha utafiti"
+
+msgid "Could not copy the link"
+msgstr "Haikuweza kunakili kiungo"
+
+msgid "Please answer this survey using the following link"
+msgstr "Tafadhali jibu utafiti huu kwa kutumia kiungo kifuatacho"
+
+msgid "Export CSV"
+msgstr "Hamisha CSV"
+
+msgid "Export compact CSV"
+msgstr "Hamisha CSV fupi"
+
+msgid "Export Excel"
+msgstr "Hamisha Excel"
+
+msgid "Export package"
+msgstr "Hamisha kifurushi"
+
+msgid "Results summary"
+msgstr "Muhtasari wa matokeo"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "Mwonekano huu unaonyesha data ya ripoti iliyohamishwa kwa utafiti huu."
+
+msgid "Select user"
+msgstr "Chagua mtumiaji"
+
+msgid "No answers found"
+msgstr "Hakuna majibu yaliyopatikana"
+
+msgid "answers"
+msgstr "majibu"
+
+msgid "Could not load survey reporting"
+msgstr "Haikuweza kupakia ripoti ya utafiti"
+
+msgid "Back to threads"
+msgstr "Rudi kwenye nyuzi"
+
+msgid "Back to learning path"
+msgstr "Rudi kwenye njia ya kujifunza"
+
+msgid "Remove sticky"
+msgstr "Ondoa kunata"
+
+msgid "Make sticky"
+msgstr "Fanya kunata"
+
+msgid "Open thread"
+msgstr "Fungua nyuzi"
+
+msgid "Close thread"
+msgstr "Funga nyuzi"
+
+msgid "Delete thread"
+msgstr "Futa nyuzi"
+
+msgid "This thread is hidden from learners."
+msgstr "Nyuzi hii imefichwa kutoka kwa wanafunzi."
+
+msgid "Revision requested"
+msgstr "Marekebisho yameombwa"
+
+msgid "Revision"
+msgstr "Marekebisho"
+
+msgid "Approve post"
+msgstr "Idhinisha chapisho"
+
+msgid "Reject post"
+msgstr "Kataa chapisho"
+
+msgid "Cancel revision request"
+msgstr "Ghairi ombi la marekebisho"
+
+msgid "Delete post"
+msgstr "Futa chapisho"
+
+msgid "Message is required"
+msgstr "Ujumbe unahitajika"
+
+msgid "Target thread is required"
+msgstr "Nyuzi lengwa inahitajika"
+
+msgid "Could not retrieve posts"
+msgstr "Haikuweza kupata machapisho"
+
+msgid "Thread shown"
+msgstr "Nyuzi imeonyeshwa"
+
+msgid "Thread hidden"
+msgstr "Nyuzi imefichwa"
+
+msgid "Could not update thread"
+msgstr "Haikuweza kusasisha nyuzi"
+
+msgid "Thread closed"
+msgstr "Nyuzi imefungwa"
+
+msgid "Thread opened"
+msgstr "Nyuzi imefunguliwa"
+
+msgid "Thread marked as sticky"
+msgstr "Nyuzi imewekwa alama kama inayonata"
+
+msgid "Thread unmarked as sticky"
+msgstr "Alama ya kunata ya nyuzi imeondolewa"
+
+msgid "Thread notifications enabled"
+msgstr "Taarifa za nyuzi zimewezeshwa"
+
+msgid "Thread notifications disabled"
+msgstr "Taarifa za nyuzi zimelemazwa"
+
+msgid "Could not update thread notification"
+msgstr "Haikuweza kusasisha taarifa za nyuzi"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "Je, una uhakika unataka kufuta nyuzi hii?"
+
+msgid "Could not delete thread"
+msgstr "Haikuweza kufuta nyuzi"
+
+msgid "Post approved"
+msgstr "Chapisho limeidhinishwa"
+
+msgid "Could not approve post"
+msgstr "Haikuweza kuidhinisha chapisho"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "Je, una uhakika unataka kukataa chapisho hili?"
+
+msgid "Post rejected"
+msgstr "Chapisho limekataliwa"
+
+msgid "Could not reject post"
+msgstr "Haikuweza kukataa chapisho"
+
+msgid "Post shown"
+msgstr "Chapisho limeonyeshwa"
+
+msgid "Post hidden"
+msgstr "Chapisho limefichwa"
+
+msgid "Could not update post"
+msgstr "Haikuweza kusasisha chapisho"
+
+msgid "Post updated"
+msgstr "Chapisho limesasishwa"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "Je, una uhakika unataka kufuta chapisho hili?"
+
+msgid "Post deleted"
+msgstr "Chapisho limefutwa"
+
+msgid "Could not delete post"
+msgstr "Haikuweza kufuta chapisho"
+
+msgid "Untitled thread"
+msgstr "Uzi usio na kichwa"
+
+msgid "Could not retrieve threads"
+msgstr "Haikuweza kupata nyuzi"
+
+msgid "Post moved"
+msgstr "Chapisho limehamishwa"
+
+msgid "Could not move post"
+msgstr "Haikuweza kuhamisha chapisho"
+
+msgid "Revision request removed"
+msgstr "Ombi la marekebisho limeondolewa"
+
+msgid "Could not update revision request"
+msgstr "Haikuweza kusasisha ombi la marekebisho"
+
+msgid "Are you sure you want to report this post?"
+msgstr "Je, una uhakika unataka kuripoti chapisho hili?"
+
+msgid "Could not report post"
+msgstr "Haikuweza kuripoti chapisho"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "Je, una uhakika unataka kufuta kiambatisho hiki?"
+
+msgid "Attachment deleted"
+msgstr "Kiambatisho kimefutwa"
+
+msgid "Could not delete attachment"
+msgstr "Haikuweza kufuta kiambatisho"
+
+msgid "Thread title"
+msgstr "Kichwa cha uzi"
+
+msgid "Sticky thread"
+msgstr "Uzi uliobandikwa"
+
+msgid "Attach files"
+msgstr "Ambatanisha faili"
+
+msgid "Attachments are disabled for this forum"
+msgstr "Viambatisho vimelemazwa kwa jukwaa hili"
+
+msgid "The forum is not open yet."
+msgstr "Jukwaa halijafunguliwa bado."
+
+msgid "The forum is closed."
+msgstr "Jukwaa limefungwa."
+
+msgid "The forum is locked."
+msgstr "Jukwaa limefungwa."
+
+msgid "New threads are not allowed in this forum."
+msgstr "Nyuzi mpya haziruhusiwi katika jukwaa hili."
+
+msgid "Thread created"
+msgstr "Uzi umeundwa"
+
+msgid "Could not create thread"
+msgstr "Haikuweza kuunda uzi"
+
+msgid "Back to posts"
+msgstr "Rudi kwenye machapisho"
+
+msgid "This reply will be stored as a revision."
+msgstr "Jibu hili litahifadhiwa kama marekebisho."
+
+msgid "Post reply"
+msgstr "Chapisha jibu"
+
+msgid "The thread is locked."
+msgstr "Uzi umefungwa."
+
+msgid "Reply added"
+msgstr "Jibu limeongezwa"
+
+msgid "Could not add reply"
+msgstr "Haikuweza kuongeza jibu"
+
+msgid "Add forum"
+msgstr "Ongeza jukwaa"
+
+msgid "No forums found"
+msgstr "Hakuna majukwaa yaliyopatikana"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "Unda kategoria yako ya kwanza ya jukwaa au jukwaa ili kuanza majadiliano."
+
+msgid "Locked"
+msgstr "Imefungwa"
+
+msgid "No forums in this category"
+msgstr "Hakuna majukwaa katika kategoria hii"
+
+msgid "Posts require approval"
+msgstr "Machapisho yanahitaji idhini"
+
+msgid "Forum for current group"
+msgstr "Jukwaa la kikundi cha sasa"
+
+msgid "Group forum visibility"
+msgstr "Mwonekano wa jukwaa la kikundi"
+
+msgid "No category"
+msgstr "Hakuna kategoria"
+
+msgid "Could not retrieve forums"
+msgstr "Haikuweza kupata majukwaa"
+
+msgid "Forum category updated"
+msgstr "Kategoria ya jukwaa imesasishwa"
+
+msgid "Forum category created"
+msgstr "Kategoria ya jukwaa imeundwa"
+
+msgid "Could not save forum category"
+msgstr "Haikuweza kuhifadhi kategoria ya jukwaa"
+
+msgid "Forum updated"
+msgstr "Jukwaa limesasishwa"
+
+msgid "Forum created"
+msgstr "Jukwaa limeundwa"
+
+msgid "Could not save forum"
+msgstr "Haikuweza kuhifadhi jukwaa"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "Je, una uhakika unataka kufuta kategoria hii ya jukwaa?"
+
+msgid "Could not delete forum category"
+msgstr "Haikuweza kufuta kategoria ya jukwaa"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "Je, una uhakika unataka kufuta jukwaa hili?"
+
+msgid "Could not delete forum"
+msgstr "Haikuweza kufuta jukwaa"
+
+msgid "Forum category unlocked"
+msgstr "Kategoria ya jukwaa imefunguliwa"
+
+msgid "Forum category locked"
+msgstr "Kategoria ya jukwaa imefungwa"
+
+msgid "Could not update forum category"
+msgstr "Haikuweza kusasisha kategoria ya jukwaa"
+
+msgid "Forum category shown"
+msgstr "Kategoria ya jukwaa imeonyeshwa"
+
+msgid "Forum category hidden"
+msgstr "Kategoria ya jukwaa imefichwa"
+
+msgid "Forum unlocked"
+msgstr "Jukwaa limefunguliwa"
+
+msgid "Forum locked"
+msgstr "Jukwaa limefungwa"
+
+msgid "Could not update forum"
+msgstr "Haikuweza kusasisha jukwaa"
+
+msgid "Forum shown"
+msgstr "Jukwaa limeonyeshwa"
+
+msgid "Forum hidden"
+msgstr "Jukwaa limefichwa"
+
+msgid "Forum notifications enabled"
+msgstr "Taarifa za jukwaa zimewezeshwa"
+
+msgid "Forum notifications disabled"
+msgstr "Taarifa za jukwaa zimelemazwa"
+
+msgid "Could not update forum notification"
+msgstr "Haikuweza kusasisha taarifa za jukwaa"
+
+msgid "Forum category moved"
+msgstr "Kategoria ya jukwaa imehamishwa"
+
+msgid "Could not move forum category"
+msgstr "Haikuweza kuhamisha kategoria ya jukwaa"
+
+msgid "Forum moved"
+msgstr "Jukwaa limehamishwa"
+
+msgid "Could not move forum"
+msgstr "Haikuweza kuhamisha jukwaa"
+
+msgid "Back to forums"
+msgstr "Rudi kwenye majukwaa"
+
+msgid "New thread"
+msgstr "Uzi mpya"
+
+msgid "No threads found"
+msgstr "Hakuna nyuzi zilizopatikana"
+
+msgid "Sticky"
+msgstr "Imeshikiliwa"
+
+msgid "Graded"
+msgstr "Imekadiriwa"
+
+msgid "Grade peers"
+msgstr "Kadiria wenzao"
+
+msgid "Move thread"
+msgstr "Hamisha uzi"
+
+msgid "Target forum"
+msgstr "Jukwaa lengwa"
+
+msgid "Target forum is required"
+msgstr "Jukwaa lengwa linahitajika"
+
+msgid "Students"
+msgstr "Wanafunzi"
+
+msgid "No students found"
+msgstr "Hakuna wanafunzi waliopatikana"
+
+msgid "No peers available to grade."
+msgstr "Hakuna wenzao wanaopatikana kukadiria."
+
+msgid "Qualified"
+msgstr "Imekidhi sifa"
+
+msgid "Not qualified"
+msgstr "Haijakidhi sifa"
+
+msgid "Could not retrieve thread grading"
+msgstr "Haikuweza kupata ukadiriaji wa uzi"
+
+msgid "Thread grading updated"
+msgstr "Ukadiriaji wa uzi umesasishwa"
+
+msgid "Could not update thread grading"
+msgstr "Haikuweza kusasisha ukadiriaji wa uzi"
+
+msgid "Thread score saved"
+msgstr "Alama ya uzi imehifadhiwa"
+
+msgid "Could not save thread score"
+msgstr "Haikuweza kuhifadhi alama ya uzi"
+
+msgid "Could not move thread"
+msgstr "Haikuweza kuhamisha uzi"
+
+msgid "Thread updated"
+msgstr "Uzi umesasishwa"
+
+msgid "Search term is too short"
+msgstr "Neno la utafutaji ni fupi mno"
+
+msgid "Could not search forums"
+msgstr "Haikuweza kutafuta majukwaa"
+
+msgid "Moderated"
+msgstr "Imedhibitiwa"
+
+msgid "View threads"
+msgstr "Tazama nyuzi"
 

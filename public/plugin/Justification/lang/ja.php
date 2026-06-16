@@ -23,3 +23,33 @@ $strings['notification_to_creator_only'] = '正当性証明を送信したユー
 $strings['notification_to_creator_only_help'] = '有効にすると、正当性証明を送信したユーザーの作成者のみに通知が送信され、全ての管理者には送信されません';
 $strings['access_for_session_admin'] = 'セッション管理者がプラグインでユーザーを管理できるようにする';
 $strings['access_for_session_admin_help'] = '有効にすると、セッション管理者がプラグインにアクセスし、ユーザーリストと正当性証明の管理ができるようになります。';
+
+$strings['RequiredDocuments'] = 'ユーザーの正当化に必要な書類を設定しました。';
+
+$strings['UserJustificationListHelp'] = '選択したユーザーがアップロードした書類。';
+
+$strings['UserJustifications'] = 'ユーザーの正当化';
+$strings['SearchUserJustificationsHelp'] = 'アップロードされた正当化書類を確認するユーザーを検索します。';
+$strings['NoUserJustificationHelp'] = 'このユーザーは書類をアップロードしていません。';
+$strings['SelectUserJustificationHelp'] = '正当化書類を確認するユーザーを検索して選択してください。';
+$strings['CreateFirstJustificationHelp'] = '最初の必須正当化書類を作成します。';
+$strings['AddJustificationDocument'] = '正当化書類を追加';
+$strings['AddJustificationDocumentHelp'] = 'ユーザーが提出する必要のある必須書類の種類を作成します。';
+$strings['EditJustificationDocument'] = '正当化書類を編集';
+$strings['EditJustificationDocumentHelp'] = '必須書類の種類情報を更新します。';
+$strings['SetNewCourseHelp'] = '正当化cronがユーザーの登録・登録解除に使用するコースを選択してください。';
+$strings['EditUserJustification'] = 'ユーザーの正当化を編集';
+$strings['EditUserJustificationHelp'] = 'このアップロード済み書類の有効期限を更新します。';
+$strings['SelectUser'] = 'ユーザーを選択';
+
+$strings['MyJustificationsHelp'] = 'アカウントに必要な正当化書類をアップロードしてください。';
+$strings['NoRequiredJustificationDocuments'] = '必須書類が設定されていません';
+$strings['NoRequiredJustificationDocumentsHelp'] = '管理者が必須書類を設定してから、ユーザーはファイルをアップロードできます。';
+$strings['Uploaded'] = 'アップロード済み';
+$strings['ValidUntil'] = '有効期限';
+$strings['PendingUpload'] = 'アップロード保留中';
+$strings['SelectFile'] = 'ファイルを選択';
+$strings['UploadJustification'] = '書類をアップロード';
+$strings['UploadFailed'] = '書類をアップロードできませんでした。ファイルの種類を確認して再度お試しください。';
+$strings['DownloadFile'] = 'ファイルをダウンロード';
+$strings['AdminList'] = '管理者一覧';

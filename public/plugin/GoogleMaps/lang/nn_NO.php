@@ -1,0 +1,39 @@
+<?php
+
+$strings['plugin_title'] = 'Google Maps';
+$strings['plugin_comment'] = 'Vis eit Google-kart med brukarplasseringar lagra i ekstrafelt.';
+$strings['enable_api'] = 'Last inn Google Maps API';
+$strings['api_key'] = 'API-nøkkel';
+$strings['extra_field_name'] = 'Namn på ekstrafelt';
+$strings['extra_field_name_help'] = 'Skriv inn ein eller fleire variablar for brukar-ekstrafelt skilde med komma. Kartet kan vise opptil 5 felt. Døme: address, office_address, city';
+$strings['UsersCoordinatesMap'] = 'Brukarplasseringskart';
+$strings['UsersCoordinatesMapHelp'] = 'Dette kartet viser brukarplasseringar basert på konfigurerte brukar-ekstrafelt.';
+$strings['GoogleMapsAdminIntro'] = 'Konfigurer Google Maps API-nøkkelen og brukar-ekstrafelta som inneheld adresser eller plasseringar.';
+$strings['GoogleMapsApi'] = 'Google Maps API';
+$strings['ExtraFields'] = 'Ekstrafelt';
+$strings['Access'] = 'Tilgang';
+$strings['AdministratorsOnly'] = 'Berre administratorar';
+$strings['OpenMap'] = 'Opne kart';
+$strings['ConfigurePlugin'] = 'Konfigurer tillegg';
+$strings['Configured'] = 'Konfigurert';
+$strings['NotConfigured'] = 'Ikkje konfigurert';
+$strings['GoogleMapsApiDisabledWarning'] = 'Innlasting av Google Maps API er deaktivert i tilleggskonfigurasjonen.';
+$strings['GoogleMapsApiKeyMissingWarning'] = 'Google Maps API-nøkkel manglar.';
+$strings['ExtraFieldNameMissingWarning'] = 'Ingen brukar-ekstrafelt er konfigurert.';
+$strings['ExtraFieldsNotFoundWarning'] = 'Følgjande brukar-ekstrafelt vart ikkje funne: %s.';
+$strings['NoUserCoordinatesFound'] = 'Ingen brukarplasseringar vart funne for dei konfigurerte ekstrafelta.';
+$strings['ConfigureGoogleMapsFirst'] = 'Konfigurer og aktiver Google Maps API før du opnar kartet.';
+
+$strings['map_provider'] = 'Kartleverandør';
+$strings['map_provider_help'] = 'Vel kartleverandøren som vert brukt av tillegget og det sosiale kartet.';
+$strings['GoogleMapsProvider'] = 'Google Maps';
+$strings['OpenStreetMapProvider'] = 'OpenStreetMap';
+$strings['MapProvider'] = 'Kartleverandør';
+$strings['MapProviderConfiguration'] = 'Leverandørkonfigurasjon';
+$strings['default_latitude'] = 'Standard breddegrad';
+$strings['default_latitude_help'] = 'Standard senter-breddegrad for kartet. Brukt når ingen markør er tilgjengeleg.';
+$strings['default_longitude'] = 'Standard lengdegrad';
+$strings['default_longitude_help'] = 'Standard senter-lengdegrad for kartet. Brukt når ingen markør er tilgjengeleg.';
+$strings['default_zoom'] = 'Standard zoom';
+$strings['default_zoom_help'] = 'Standard kartzoom mellom 1 og 20.';
+$strings['OpenStreetMapInfo'] = 'OpenStreetMap krev ikkje ein API-nøkkel. Markørar med berre adresse vert viste som søkjelenkjer med mindre koordinatar er tilgjengelege.';

@@ -1,0 +1,95 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+$strings['plugin_title'] = 'Inportatu Moodletik';
+$strings['plugin_comment'] = 'Exekutatu inportazio-prozesu bat Moodle datu-base eta fitxategietatik Chamilorenera.';
+
+$strings['MoodlePassword'] = 'Moodle pasahitza';
+$strings['UninstallError'] = 'Errore bat gertatu da plugina desinstalatzean.';
+
+$strings['db_host'] = 'Moodle DB ostalaria';
+$strings['db_user'] = 'Moodle DB erabiltzailea';
+$strings['db_password'] = 'Moodle DB pasahitza';
+$strings['db_name'] = 'Moodle DB izena';
+$strings['user_filter'] = 'Erabiltzaileen iragazkia';
+$strings['user_filter_help'] = 'Inportatu soilik aurrizki honekin hasita duten erabiltzaileak.<br>Ikastaroen inportazioa ere eragina da konfigurazio honek, aurrizki hori duten erabiltzaileak matrikulatuta dauden ikastaroak soilik inportatzen baititu.';
+$strings['url_id'] = 'URL ID';
+$strings['url_id_help'] = 'Sarbide-URLaren IDa ikastaroak, erabiltzaileak eta saioak gordetzeko (multi-url erabiltzen bada).';
+$strings['moodle_path'] = 'Moodledata bide-izena';
+$strings['moodle_path_help'] = 'Moodledata karpetaren bide-izena. Normalean zerbait honelakoa: <pre>/var/www/moodledata</pre>';
+
+// Tasks
+$strings['UsersTask'] = 'Erabiltzaileak';
+$strings['CourseCategoriesTask'] = 'Ikastaro-kategoriak';
+$strings['CoursesTask'] = 'Ikastaroak';
+$strings['CourseSectionsTask'] = 'Ikastaro atalak';
+$strings['CourseModulesLessonTask'] = 'Ikastaro-moduluak: Ikasgaiak';
+$strings['LessonPagesTask'] = 'Ikasgai-orriak';
+$strings['LessonPagesDocumentTask'] = 'Ikasgai-orriak: Dokumentuak';
+$strings['FilesForLessonPagesTask'] = 'Ikasgai-orrietako fitxategiak';
+$strings['LessonPagesQuizTask'] = 'Ikasgai-orriak: Galderak';
+$strings['LessonPagesQuizQuestionTask'] = 'Galdera-orrietako galderak';
+$strings['LessonAnswersTrueFalseTask'] = 'Egia/Gezurra galderen erantzunak';
+$strings['LessonAnswersMultipleChoiceTask'] = 'Aukera anitzeko galderen erantzunak';
+$strings['LessonAnswersMultipleAnswerTask'] = 'Aukera anitzeko galderen erantzunak';
+$strings['LessonAnswersMatchingTask'] = 'Parekaketa-galderen erantzunak';
+$strings['LessonAnswersEssayTask'] = 'Idazlan-galderen erantzunak';
+$strings['LessonAnswersShortAnswerTask'] = 'Erantzun labur galderen erantzunak';
+$strings['FilesForLessonAnswersTask'] = 'Ikasgai-erantzunetako fitxategiak';
+$strings['CourseModulesQuizTask'] = 'Ikastaro-moduluak: Azterketak';
+$strings['CQuizTask'] = 'C Azterketa';
+$strings['RoleAssignmentsTask'] = 'Rol-esleipenak';
+$strings['QuizzesTask'] = 'Azterketak';
+$strings['FilesForQuizzesTask'] = 'Azterketetako fitxategiak';
+$strings['QuestionCategoriesTask'] = 'Galdera-kategoriak';
+$strings['QuestionsTask'] = 'Galderak';
+$strings['QuestionMultiChoiceSingleTask'] = 'Aukera anitzeko galderen erantzunak (bakarra)';
+$strings['QuestionMultiChoiceMultipleTask'] = 'Aukera anitzeko galderen erantzunak (anitz)';
+$strings['QuestionsTrueFalseTask'] = 'Egia/Gezurra galderen erantzunak';
+$strings['QuestionShortAnswerTask'] = 'Erantzun labur galderen erantzunak';
+$strings['CourseModulesScormTask'] = 'SCORM ikastaroak';
+$strings['ScormScoesTask'] = 'SCORM elementuak';
+$strings['FilesForScormScoesTask'] = 'SCORM elementuetako fitxategiak';
+$strings['UserSessionsTask'] = 'Erabiltzaileen ikastaro-saioak';
+$strings['CourseIntroductionsTask'] = 'Ikastaroen sarrerak';
+$strings['FilesForCourseIntroductionsTask'] = 'Ikastaro-sarreretako fitxategiak';
+$strings['FilesForCourseSectionsTask'] = 'Ikastaro-ataletako fitxategiak';
+$strings['CourseModulesUrlTask'] = 'Ikastaro-moduluak: URLak';
+$strings['UrlsTask'] = 'URLak';
+$strings['SortSectionModulesTask'] = 'Moduluak atalean ordenatu';
+$strings['UsersScormsViewTask'] = 'Erabiltzaileen SCORM ikuspegiak';
+$strings['UsersScormsProgressTask'] = 'SCORM aurrerapena';
+$strings['UsersLearnPathsTask'] = 'Erabiltzaileen ikasketa-bideen ikuspegiak';
+$strings['UsersLearnPathsLessonTimerTask'] = 'Ikasketa-bideen ataleko ikasgaiaren tenporizadorea hasiera-ordura';
+$strings['QuizzesScoresTask'] = 'Eguneratu galdetegien puntuazioak ikasketa-bidean';
+$strings['QuestionGapselectTask'] = 'Hutsune-beteko galderen erantzunak';
+$strings['UsersLearnPathsLessonBranchTask'] = 'Ikasketa-bideetako dokumentuen ikasgaiaren adarra denbora totalera';
+$strings['UsersLearnPathsLessonAttemptsTask'] = 'Ikasketa-bideetako galdetegien ikasgaiaren saiakerak denbora totalera';
+$strings['UsersLearnPathsQuizzesTask'] = 'Galdetegien saiakerak ikasketa-bideetako galdetegien saiakeretara';
+$strings['UsersQuizzesAttemptsTask'] = 'Erabiltzaileen galdetegi-saiakerak';
+$strings['UserQuestionAttemptsShortanswerTask'] = 'Erabiltzaileen erantzun laburreko galdera-saiakerak';
+$strings['UserQuestionAttemptsGapselectTask'] = 'Erabiltzaileen hutsune-beteko galdera-saiakerak';
+$strings['UserQuestionAttemptsTruefalseTask'] = 'Erabiltzaileen egia/gezurra galdera-saiakerak';
+$strings['UsersLastLoginTask'] = 'Erabiltzaileen azken saio-hasierak';
+$strings['TrackLoginTask'] = 'Lehen saio-hasiera eta azken saio-amaiera';
+$strings['TrackCourseAccessTask'] = 'Erabiltzailearen sarbidea ikastarora';
+$strings['UserLearnPathsProgressScript'] = 'Eguneratu erabiltzaileen ikasketa-bideetako aurrerapena.';
+$strings['UserScormsProgressScript'] = 'Eguneratu erabiltzaileen SCORMetako aurrerapena.';
+
+$strings['InstallError'] = 'Errore bat gertatu da plugina instalatzean: %s';
+$strings['AdminIntro'] = 'Exekutatu Moodle migrazio-zereginak ordenan. Etapa bakoitza soilik gaitzen da bere aurreko etapa osatu ondoren.';
+$strings['MoodleDatabase'] = 'Moodle datu-basea';
+$strings['MoodledataPath'] = 'Moodledata bide-izena';
+$strings['AccessUrlId'] = 'Sarbide-URLaren IDa';
+$strings['Configured'] = 'Konfiguratuta';
+$strings['NotConfigured'] = 'Ez dago konfiguratuta';
+$strings['ConfigurePlugin'] = 'Konfiguratu plugina';
+$strings['MissingRequiredDatabaseConfiguration'] = 'Konfiguratu Moodle datu-basearen ostalaria, erabiltzailea eta datu-basearen izena migrazio-zereginak exekutatu aurretik.';
+$strings['MissingMoodledataPathWarning'] = 'Moodledata bide-izena hutsik dago. Fitxategiekin lotutako zereginak huts egin dezakete ezarpen hau konfiguratu arte.';
+$strings['InvalidMigrationAction'] = 'Migrazio-ekintza baliogabea.';
+$strings['InvalidSecurityToken'] = 'Segurtasun-token baliogabea. Mesedez, birkargatu orria eta saiatu berriro.';
+$strings['MigrationTasks'] = 'Migrazio-zereginak';
+$strings['MaintenanceScripts'] = 'Mantentze-scriptak';
+$strings['ExecutionOutput'] = 'Exekuzio-irteera';
+$strings['TaskAlreadyExecuted'] = 'Zeregin edo script hau dagoeneko exekutatu da.';
+$strings['SelectTaskToRun'] = 'Hautatu exekutatu nahi duzun migrazio-zeregina. Irteera hemen agertuko da.';

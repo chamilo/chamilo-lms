@@ -1,0 +1,95 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+$strings['plugin_title'] = 'Importálás Moodle-ból';
+$strings['plugin_comment'] = 'Importálási folyamat végrehajtása Moodle adatbázisból és fájlokból Chamilo rendszerbe.';
+
+$strings['MoodlePassword'] = 'Moodle jelszó';
+$strings['UninstallError'] = 'Hiba történt a bővítmény eltávolítása során.';
+
+$strings['db_host'] = 'Moodle adatbázis kiszolgáló';
+$strings['db_user'] = 'Moodle adatbázis felhasználó';
+$strings['db_password'] = 'Moodle adatbázis jelszó';
+$strings['db_name'] = 'Moodle adatbázis neve';
+$strings['user_filter'] = 'Felhasználói szűrő';
+$strings['user_filter_help'] = 'Csak azokat a felhasználókat importálja, akiknek a felhasználóneve ezzel a szöveggel kezdődik.<br>A kurzusok importálását is befolyásolja ez a beállítás, mivel csak azokat a kurzusokat importálja, amelyekbe ilyen előtagú felhasználónevek vannak beiratkozva.';
+$strings['url_id'] = 'URL azonosító';
+$strings['url_id_help'] = 'Hozzáférési URL azonosító, ahová a kurzusokat, felhasználókat és munkameneteket menteni kell (több URL használata esetén).';
+$strings['moodle_path'] = 'Moodledata útvonal';
+$strings['moodle_path_help'] = 'A moodledata mappa útvonala. Általában valami ilyesmi: <pre>/var/www/moodledata</pre>';
+
+// Tasks
+$strings['UsersTask'] = 'Felhasználók';
+$strings['CourseCategoriesTask'] = 'Kurzus kategóriák';
+$strings['CoursesTask'] = 'Kurzusok';
+$strings['CourseSectionsTask'] = 'Kurzus szakaszok';
+$strings['CourseModulesLessonTask'] = 'Kurzus modulok: Leckék';
+$strings['LessonPagesTask'] = 'Leckék oldalai';
+$strings['LessonPagesDocumentTask'] = 'Leckék oldalai: Dokumentumok';
+$strings['FilesForLessonPagesTask'] = 'Fájlok a leckék oldalaihoz';
+$strings['LessonPagesQuizTask'] = 'Leckék oldalai: Kérdések';
+$strings['LessonPagesQuizQuestionTask'] = 'Kérdések a kérdőíves oldalakhoz';
+$strings['LessonAnswersTrueFalseTask'] = 'Válaszok az Igaz/Hamis kérdésekre';
+$strings['LessonAnswersMultipleChoiceTask'] = 'Válaszok a többszörös választásos kérdésekre';
+$strings['LessonAnswersMultipleAnswerTask'] = 'Válaszok a többszörös válaszos kérdésekre';
+$strings['LessonAnswersMatchingTask'] = 'Válaszok az összepárosításos kérdésekre';
+$strings['LessonAnswersEssayTask'] = 'Válaszok az esszé kérdésekre';
+$strings['LessonAnswersShortAnswerTask'] = 'Válaszok a rövid válaszos kérdésekre';
+$strings['FilesForLessonAnswersTask'] = 'Fájlok a leckék válaszaihoz';
+$strings['CourseModulesQuizTask'] = 'Kurzus modulok: Tesztfeladatok';
+$strings['CQuizTask'] = 'C Teszt';
+$strings['RoleAssignmentsTask'] = 'Szerepkör hozzárendelések';
+$strings['QuizzesTask'] = 'Tesztek';
+$strings['FilesForQuizzesTask'] = 'Fájlok a tesztekhez';
+$strings['QuestionCategoriesTask'] = 'Kérdéskategóriák';
+$strings['QuestionsTask'] = 'Kérdések';
+$strings['QuestionMultiChoiceSingleTask'] = 'Válaszok a többszörös választásos kérdésekre (egyetlen)';
+$strings['QuestionMultiChoiceMultipleTask'] = 'Válaszok a többszörös választásos kérdésekre (több)';
+$strings['QuestionsTrueFalseTask'] = 'Válaszok az igaz/hamis kérdésekre';
+$strings['QuestionShortAnswerTask'] = 'Válaszok a rövid válaszos kérdésekre';
+$strings['CourseModulesScormTask'] = 'SCORM kurzusok';
+$strings['ScormScoesTask'] = 'SCORM elemek';
+$strings['FilesForScormScoesTask'] = 'Fájlok a SCORM elemekhez';
+$strings['UserSessionsTask'] = 'Kurzus munkamenetek felhasználóknak';
+$strings['CourseIntroductionsTask'] = 'Kurzus bevezetők';
+$strings['FilesForCourseIntroductionsTask'] = 'Fájlok a kurzus bevezetőkhöz';
+$strings['FilesForCourseSectionsTask'] = 'Fájlok a kurzus szakaszokhoz';
+$strings['CourseModulesUrlTask'] = 'Kurzus modulok: URL-ek';
+$strings['UrlsTask'] = 'URL-ek';
+$strings['SortSectionModulesTask'] = 'Modulok rendezése a szekcióban';
+$strings['UsersScormsViewTask'] = 'SCORM megtekintések felhasználónként';
+$strings['UsersScormsProgressTask'] = 'SCORM előrehaladás';
+$strings['UsersLearnPathsTask'] = 'Tanulási útvonalak megtekintései felhasználónként';
+$strings['UsersLearnPathsLessonTimerTask'] = 'Óra időzítő a tanulási útvonalak szekció kezdési idejéhez';
+$strings['QuizzesScoresTask'] = 'Teszt pontszámok frissítése a tanulási útvonalban';
+$strings['QuestionGapselectTask'] = 'Válaszok a hiányos szöveg kérdésekre';
+$strings['UsersLearnPathsLessonBranchTask'] = 'Óra elágazás a teljes időhöz a tanulási útvonalak dokumentumaiban';
+$strings['UsersLearnPathsLessonAttemptsTask'] = 'Óra kísérletek a teljes időhöz a tanulási útvonalak teszteiben';
+$strings['UsersLearnPathsQuizzesTask'] = 'Tesztek kísérletei a tanulási útvonalak tesztkísérleteihez';
+$strings['UsersQuizzesAttemptsTask'] = 'Felhasználók tesztkísérletei';
+$strings['UserQuestionAttemptsShortanswerTask'] = 'Felhasználók kérdéskísérletei rövid válaszos kérdésekre';
+$strings['UserQuestionAttemptsGapselectTask'] = 'Felhasználók kérdéskísérletei hiányos szöveg kérdésekre';
+$strings['UserQuestionAttemptsTruefalseTask'] = 'Felhasználók kérdéskísérletei igaz-hamis kérdésekre';
+$strings['UsersLastLoginTask'] = 'Utolsó bejelentkezések felhasználónként';
+$strings['TrackLoginTask'] = 'Első bejelentkezés és utolsó kijelentkezés';
+$strings['TrackCourseAccessTask'] = 'Felhasználó hozzáférése a kurzushoz';
+$strings['UserLearnPathsProgressScript'] = 'Előrehaladás frissítése a tanulási útvonalakban felhasználónként.';
+$strings['UserScormsProgressScript'] = 'Előrehaladás frissítése az SCORM-okban felhasználónként.';
+
+$strings['InstallError'] = 'Hiba történt a bővítmény telepítésekor: %s';
+$strings['AdminIntro'] = 'Futtassa a Moodle migrációs feladatokat sorrendben. Minden lépés csak akkor engedélyezett, ha a szülő lépés befejeződött.';
+$strings['MoodleDatabase'] = 'Moodle adatbázis';
+$strings['MoodledataPath'] = 'Moodledata útvonal';
+$strings['AccessUrlId'] = 'Hozzáférési URL azonosító';
+$strings['Configured'] = 'Beállítva';
+$strings['NotConfigured'] = 'Nincs beállítva';
+$strings['ConfigurePlugin'] = 'Bővítmény beállítása';
+$strings['MissingRequiredDatabaseConfiguration'] = 'Állítsa be a Moodle adatbázis kiszolgálóját, felhasználóját és adatbázis nevét a migrációs feladatok futtatása előtt.';
+$strings['MissingMoodledataPathWarning'] = 'A Moodledata útvonal üres. A fájlokkal kapcsolatos feladatok sikertelenek lehetnek, amíg ez a beállítás nincs konfigurálva.';
+$strings['InvalidMigrationAction'] = 'Érvénytelen migrációs művelet.';
+$strings['InvalidSecurityToken'] = 'Érvénytelen biztonsági token. Kérjük, töltse újra az oldalt és próbálja újra.';
+$strings['MigrationTasks'] = 'Migrációs feladatok';
+$strings['MaintenanceScripts'] = 'Karbantartó szkriptek';
+$strings['ExecutionOutput'] = 'Végrehajtás kimenete';
+$strings['TaskAlreadyExecuted'] = 'Ez a feladat vagy szkript már végrehajtásra került.';
+$strings['SelectTaskToRun'] = 'Válasszon egy futtatandó migrációs feladatot. A kimenet itt jelenik meg.';

@@ -98,6 +98,30 @@ class CForumThreadQualify
         return $this->cId;
     }
 
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getQualifyUser(): User
+    {
+        return $this->qualifyUser;
+    }
+
+    public function setQualifyUser(User $qualifyUser): self
+    {
+        $this->qualifyUser = $qualifyUser;
+
+        return $this;
+    }
+
     public function getThread(): CForumThread
     {
         return $this->thread;

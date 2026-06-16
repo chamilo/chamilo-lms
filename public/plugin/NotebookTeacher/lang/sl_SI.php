@@ -13,3 +13,7 @@ $strings['NoNotebookFilter'] = 'Ni opomb ustvarjenih s trenutnim filtrom';
 $strings['NoNotebook'] = 'Ni opomb ustvarjenih v sistemu';
 $strings['NoNotebookUser'] = 'Ni opomb za tega študenta';
 $strings['NotebookNoStudentAssigned'] = 'Opombe brez dodeljenih študentov';
+
+$strings['TeacherNotesHelp'] = 'Ustvari zasebne beležke učitelja, povezane z udeleženci v tem predmetu.';
+$strings['CurrentFilter'] = 'Trenutni filter';
+$strings['EmptyStateHelp'] = 'Ustvari novo beležko ali spremeni filter udeležencev.';

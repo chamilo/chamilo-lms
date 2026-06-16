@@ -9732,6 +9732,9 @@ msgstr "Rezultati pretrage za:"
 msgid "Select a file"
 msgstr "Izaberite datoteku"
 
+msgid "Select a file to insert into the editor."
+msgstr "Izaberite datoteku za umetanje u uređivač."
+
 msgid "Warning - The FAQ file, located in the /home/ directory of your portal, is not writable. Your text will not be saved until the file permissions are changed."
 msgstr "Upozorenje - FAQ datoteka, smeštena u /home/ direktorijumu vašeg portala, nije upisiva. Vaš tekst neće biti sačuvan dok se dozvole datoteke ne promene."
 
@@ -15912,6 +15915,9 @@ msgstr "Datum i vreme"
 msgid "Item"
 msgstr "Stavka"
 
+msgid "Items"
+msgstr "Stavke"
+
 msgid "Configure Dashboard Plugin"
 msgstr "Podesi Dashboard dodatak"
 
@@ -17165,6 +17171,18 @@ msgstr "Sesije u grupi"
 
 msgid "Courses in group"
 msgstr "Kursevi u grupi"
+
+msgid "Courses on the platform"
+msgstr "Kursevi na platformi"
+
+msgid "%s courses"
+msgstr "%s kurseva"
+
+msgid "%s sessions"
+msgstr "%s sesija"
+
+msgid "Search by title or code"
+msgstr "Pretraga po naslovu ili kodu"
 
 msgid "Users in group"
 msgstr "Korisnici u grupi"
@@ -26593,7 +26611,7 @@ msgid "LDAP connection configuration"
 msgstr "Konfiguracija LDAP konekcije"
 
 msgid "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
-msgstr "Niz koji definiše host i port za LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
+msgstr "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
 
 msgid "Set expiration date on first login"
 msgstr "Postavi datum isteka pri prvoj prijavi"
@@ -32170,6 +32188,9 @@ msgstr "Zadatak"
 msgid "Allowed file formats: %s"
 msgstr "Dozvoljeni formati datoteka: %s"
 
+msgid "File manager"
+msgstr "Upravljač datotekama"
+
 msgid "File type not allowed. Allowed extensions: %s"
 msgstr "Tip datoteke nije dozvoljen. Dozvoljene ekstenzije: %s"
 
@@ -33883,6 +33904,2583 @@ msgstr "Dobrodošli"
 msgid "Welcome to Chamilo"
 msgstr "Dobrodošli u Chamilo"
 
+msgid "Check all unanswered questions below"
+msgstr "Označi sva neodgovorena pitanja ispod"
+
 msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
 msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Ako je ovo vaš prvi put da koristite Chamilo, proverite bočni meni da biste pronašli put kroz njegove mnoge funkcije. Ako vam je potrebna pomoć, <a href=\"https://docs.chamilo.org\">naša zvanična dokumentacija</a> može pomoći za standardnu dokumentaciju, dok naš <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> može pomoći u razmeni ideja i pronalaženju odgovora od drugih korisnika Chamilo-a."
+
+msgid "Change password"
+msgstr "Promeni lozinku"
+
+msgid "Newest first"
+msgstr "Najnovije prvo"
+
+msgid "Oldest first"
+msgstr "Najstarije prvo"
+
+msgid "Title A–Z"
+msgstr "Naslov A–Š"
+
+msgid "Title Z–A"
+msgstr "Naslov Š–A"
+
+msgid "Send test email"
+msgstr "Pošalji test e-poštu"
+
+msgid "Show teachers"
+msgstr "Prikaži nastavnike"
+
+msgid "Hide teachers"
+msgstr "Sakrij nastavnike"
+
+msgid "Delete exercise attempts"
+msgstr "Obriši pokušaje vežbe"
+
+msgid "Message sent successfully."
+msgstr "Poruka uspešno poslata."
+
+msgid "You cannot create a new course right now."
+msgstr "Trenutno ne možete kreirati novi kurs."
+
+msgid "Unable to verify whether you can create a new course right now."
+msgstr "Nije moguće proveriti da li trenutno možete kreirati novi kurs."
+
+msgid "Please try again later or contact the administrator."
+msgstr "Pokušajte ponovo kasnije ili kontaktirajte administratora."
+
+msgid "You cannot create more courses at this time."
+msgstr "Trenutno ne možete kreirati više kurseva."
+
+msgid "You already manage %d courses and your active service allows up to %d. To create another course, you need a higher service limit or reduce your current active courses."
+msgstr "Već upravljate sa %d kurseva, a vaš aktivni servis dozvoljava do %d. Da biste kreirali još jedan kurs, potrebno je povećati limit servisa ili smanjiti broj aktivnih kurseva."
+
+msgid "You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now."
+msgstr "Već upravljate sa %d kurseva, a platforma trenutno dozvoljava do %d za vaš nalog. Trenutno ne možete kreirati više kurseva."
+
+msgid "Add a class"
+msgstr "Dodaj razred"
+
+msgid "Search classes"
+msgstr "Pretraži razrede"
+
+msgid "No classes found"
+msgstr "Nema pronađenih razreda"
+
+msgid "Import classes"
+msgstr "Uvezi razrede"
+
+msgid "Class users"
+msgstr "Korisnici razreda"
+
+msgid "%s classes imported"
+msgstr "%s razreda uvezeno"
+
+msgid "%s user-class links imported"
+msgstr "%s veza korisnik-razred uvezeno"
+
+msgid "Hide comments"
+msgstr "Sakrij komentare"
+
+msgid "Loading comments..."
+msgstr "Učitavanje komentara..."
+
+msgid "No comments yet."
+msgstr "Još nema komentara."
+
+msgid "A user with this username already exists"
+msgstr "Korisnik sa ovim korisničkim imenom već postoji"
+
+msgid "Manage meetings, review recordings and update course-wide BBB settings from one place."
+msgstr "Upravljajte sastancima, pregledajte snimke i ažurirajte podešavanja BBB za ceo kurs na jednom mestu."
+
+msgid "Review the current defaults and propagate them to every course when needed."
+msgstr "Pregledajte trenutne podrazumevane vrednosti i primenite ih na svaki kurs po potrebi."
+
+msgid "Filter the list by meeting date range."
+msgstr "Filtrirajte listu prema opsegu datuma sastanka."
+
+msgid "Review meeting history, participants and recording actions."
+msgstr "Pregledajte istoriju sastanaka, učesnike i radnje sa snimcima."
+
+msgid "Participants"
+msgstr "Učesnici"
+
+msgid "CountUsers"
+msgstr "BrojKorisnika"
+
+msgid "No data found"
+msgstr "Nema pronađenih podataka"
+
+msgid "My justifications"
+msgstr "Moja opravdanja"
+
+msgid "My services"
+msgstr "Moje usluge"
+
+msgid "Extra menu"
+msgstr "Dodatni meni"
+
+msgid "Pending tests"
+msgstr "Testovi na čekanju"
+
+msgid "No specific language"
+msgstr "Nema određenog jezika"
+
+msgid "Source Chamilo version"
+msgstr "Izvorna verzija Chamilo"
+
+msgid "Exporting..."
+msgstr "Izvoz u toku..."
+
+msgid "Autosaved drafts available"
+msgstr "Dostupni automatski sačuvani nacrti"
+
+msgid "Hide drafts"
+msgstr "Sakrij nacrte"
+
+msgid "Show drafts"
+msgstr "Prikaži nacrte"
+
+msgid "Drafts are stored only in this browser and are removed after saving the document."
+msgstr "Nacrti se čuvaju samo u ovom pregledaču i uklanjaju se nakon čuvanja dokumenta."
+
+msgid "Last saved"
+msgstr "Poslednje sačuvano"
+
+msgid "Restore draft"
+msgstr "Vrati nacrt"
+
+msgid "Delete draft"
+msgstr "Obriši nacrt"
+
+msgid "Information about indexing document content"
+msgstr "Informacije o indeksiranju sadržaja dokumenta"
+
+msgid "When enabled, the document text is indexed by the search engine so users can find it from platform search."
+msgstr "Kada je omogućeno, tekst dokumenta se indeksira od strane pretraživača kako bi korisnici mogli da ga pronađu putem pretrage na platformi."
+
+msgid "The editor is not available."
+msgstr "Uređivač nije dostupan."
+
+msgid "Please place the cursor inside a paragraph first."
+msgstr "Prvo postavite kursor unutar pasusa."
+
+msgid "The selected paragraph is empty."
+msgstr "Izabrani pasus je prazan."
+
+msgid "Loading failed."
+msgstr "Učitavanje nije uspelo."
+
+msgid "Add introduction"
+msgstr "Dodaj uvod"
+
+msgid "Course type"
+msgstr "Tip kursa"
+
+msgid "Choose whether this course uses the standard platform limits or benefits from a purchased service."
+msgstr "Izaberite da li ovaj kurs koristi standardna ograničenja platforme ili koristi kupljenu uslugu."
+
+msgid "Standard course"
+msgstr "Standardni kurs"
+
+msgid "Use the standard platform limits."
+msgstr "Koristi standardna ograničenja platforme."
+
+msgid "Selected"
+msgstr "Izabrano"
+
+msgid "Hosting limit"
+msgstr "Ograničenje hostinga"
+
+msgid "Document quota"
+msgstr "Kvota dokumenata"
+
+msgid "The standard course limit has been reached."
+msgstr "Dostignuto je standardno ograničenje kursa."
+
+msgid "Use the benefits granted by this service."
+msgstr "Koristi prednosti koje pruža ova usluga."
+
+msgid "Courses with these benefits"
+msgstr "Kursevi sa ovim prednostima"
+
+msgid "Active service"
+msgstr "Aktivna usluga"
+
+msgid "Buy service"
+msgstr "Kupi uslugu"
+
+msgid "Select an available course type before creating the course."
+msgstr "Izaberite dostupni tip kursa pre kreiranja kursa."
+
+msgid "users"
+msgstr "korisnici"
+
+msgid "You need to buy this service before using these benefits."
+msgstr "Morate kupiti ovu uslugu pre korišćenja ovih prednosti."
+
+msgid "You already used all courses available with this service."
+msgstr "Već ste iskoristili sve kurseve dostupne sa ovom uslugom."
+
+msgid "This option is not available."
+msgstr "Ova opcija nije dostupna."
+
+msgid "This field is required"
+msgstr "Ovo polje je obavezno"
+
+msgid "Show less"
+msgstr "Prikaži manje"
+
+msgid "Show full description"
+msgstr "Prikaži ceo opis"
+
+msgid "Virtual keyboard"
+msgstr "Virtuelna tastatura"
+
+msgid "Backspace"
+msgstr "Nazad"
+
+msgid "Space"
+msgstr "Razmak"
+
+msgid "Learning path only visible to selected learners"
+msgstr "Putanja učenja vidljiva samo izabranim polaznicima"
+
+msgid "Create course"
+msgstr "Kreiraj kurs"
+
+msgid "Tour"
+msgstr "Obilazak"
+
+msgid "Are you sure you want to delete this comment?"
+msgstr "Da li ste sigurni da želite da obrišete ovaj komentar?"
+
+msgid "No posts found"
+msgstr "Nema pronađenih objava"
+
+msgid "No communities"
+msgstr "Nema zajednica"
+
+msgid "No friends found"
+msgstr "Nema pronađenih prijatelja"
+
+msgid "Visual overview of your skills"
+msgstr "Vizuelni pregled vaših veština"
+
+msgid "Compare your progress"
+msgstr "Uporedite svoj napredak"
+
+msgid "Please enter a search term."
+msgstr "Unesite pojam za pretragu."
+
+msgid "Enter captcha code"
+msgstr "Unesite captcha kod"
+
+msgid "Refresh captcha"
+msgstr "Osveži captcha"
+
+msgid "Captcha is temporarily blocked. Please try again later."
+msgstr "Captcha je privremeno blokirana. Pokušajte kasnije."
+
+msgid "Item Details"
+msgstr "Detalji stavke"
+
+msgid "Open File"
+msgstr "Otvori datoteku"
+
+msgid "Selection"
+msgstr "Izbor"
+
+msgid "Remove selection context"
+msgstr "Ukloni kontekst izbora"
+
+msgid "Source document"
+msgstr "Izvorni dokument"
+
+msgid "Use the current course context"
+msgstr "Koristi trenutni kontekst kursa"
+
+msgid "Loading documents..."
+msgstr "Učitavanje dokumenata..."
+
+msgid "No compatible PDF or TXT document was found in this course."
+msgstr "Nije pronađen kompatibilan PDF ili TXT dokument u ovom kursu."
+
+msgid "Select a PDF or TXT document to generate terms only from that document."
+msgstr "Izaberite PDF ili TXT dokument da biste generisali termine samo iz tog dokumenta."
+
+msgid "Confidentiality warning"
+msgstr "Upozorenje o poverljivosti"
+
+msgid "When a document is selected, the prompt is fixed so the generation uses only that document content."
+msgstr "Kada je dokument izabran, upit je fiksiran tako da generisanje koristi samo sadržaj tog dokumenta."
+
+msgid "No document-processing AI providers available."
+msgstr "Nema dostupnih AI provajdera za obradu dokumenata."
+
+msgid "Failed to save signature. Please try again."
+msgstr "Čuvanje potpisa nije uspelo. Pokušajte ponovo."
+
+msgid "Select and move"
+msgstr "Izaberi i pomeri"
+
+msgid "Freehand"
+msgstr "Slobodnom rukom"
+
+msgid "Stroke"
+msgstr "Potez"
+
+msgid "Fill"
+msgstr "Ispuna"
+
+msgid "Import SVG"
+msgstr "Uvezi SVG"
+
+msgid "Import image"
+msgstr "Uvezi sliku"
+
+msgid "Click the drawing area to place this text"
+msgstr "Kliknite na površinu za crtanje da biste postavili ovaj tekst"
+
+msgid "Draw a new SVG, import an existing SVG or embed an image, then save it as a reusable document."
+msgstr "Nacrtajte novi SVG, uvezite postojeći SVG ili ugradite sliku, zatim ga sačuvajte kao dokument za višekratnu upotrebu."
+
+msgid "Use Select and move to reposition or resize elements added in this editor."
+msgstr "Koristite Izaberi i pomeri da biste premestili ili promenili veličinu elemenata dodatih u ovom uređivaču."
+
+msgid "Stroke width"
+msgstr "Širina poteza"
+
+msgid "Transparent fill"
+msgstr "Prozirna ispuna"
+
+msgid "Invalid id"
+msgstr "Nevažeći ID"
+
+msgid "Unable to load the drawing"
+msgstr "Učitavanje crteža nije moguće"
+
+msgid "Only PNG, JPG, WEBP or GIF images are supported."
+msgstr "Podržani su samo PNG, JPG, WEBP ili GIF formati slika."
+
+msgid "Unable to read the image file."
+msgstr "Učitavanje slike nije moguće."
+
+msgid "Only SVG files are supported."
+msgstr "Podržani su samo SVG fajlovi."
+
+msgid "The SVG file is empty or invalid."
+msgstr "SVG fajl je prazan ili nevažeći."
+
+msgid "Unable to read the SVG file."
+msgstr "Učitavanje SVG fajla nije moguće."
+
+msgid "The drawing is empty or invalid."
+msgstr "Crtež je prazan ili nevažeći."
+
+msgid "Unable to save the drawing"
+msgstr "Čuvanje crteža nije moguće"
+
+msgid "Information about AI-assisted documents"
+msgstr "Informacije o AI-asistiranim dokumentima"
+
+msgid "Location"
+msgstr "Lokacija"
+
+msgid "Cloud link"
+msgstr "Link u oblaku"
+
+msgid "Add a link to a cloud document, such as Google Drive or Google Docs."
+msgstr "Dodajte link ka dokumentu u oblaku, kao što su Google Drive ili Google Docs."
+
+msgid "Add cloud link"
+msgstr "Dodaj link u oblaku"
+
+msgid "Document title"
+msgstr "Naslov dokumenta"
+
+msgid "Document options change how uploaded files are processed after saving."
+msgstr "Opcije dokumenta menjaju način obrade otpremljenih fajlova nakon čuvanja."
+
+msgid "Information about uncompressing zip files"
+msgstr "Informacije o raspakivanju ZIP fajlova"
+
+msgid "When enabled, ZIP files are extracted into the current document folder after upload."
+msgstr "Kada je omogućeno, ZIP fajlovi se raspakuju u trenutni folder dokumenata nakon otpremljivanja."
+
+msgid "The title is required."
+msgstr "Naslov je obavezan."
+
+msgid "The URL is required."
+msgstr "URL je obavezan."
+
+msgid "The destination folder is missing."
+msgstr "Odredišni folder nedostaje."
+
+msgid "Unable to create cloud link."
+msgstr "Kreiranje linka u oblaku nije moguće."
+
+msgid "Copy to My Files"
+msgstr "Kopiraj u Moje fajlove"
+
+msgid "Used space"
+msgstr "Iskorišćen prostor"
+
+msgid "Available space"
+msgstr "Dostupan prostor"
+
+msgid "Available percentage"
+msgstr "Procenat dostupnog prostora"
+
+msgid "Cloud links cannot be downloaded."
+msgstr "Linkovi u oblaku ne mogu se preuzeti."
+
+msgid "Could not copy the file to My Files"
+msgstr "Kopiranje fajla u Moje fajlove nije moguće"
+
+msgid "File copied to My Files"
+msgstr "Fajl je kopiran u Moje fajlove"
+
+msgid "Checking course creation options..."
+msgstr "Proveravanje opcija kreiranja kursa..."
+
+msgid "You cannot create more courses right now."
+msgstr "Trenutno ne možete kreirati više kurseva."
+
+msgid "AI analyzer"
+msgstr "AI analitičar"
+
+msgid "Expand all"
+msgstr "Proširi sve"
+
+msgid "Collapse all"
+msgstr "Skupi sve"
+
+msgid "Review your active service benefits, purchase history and available receipts."
+msgstr "Pregledajte aktivne usluge, istoriju kupovina i dostupne račune."
+
+msgid "Active services"
+msgstr "Aktivne usluge"
+
+msgid "No active services"
+msgstr "Nema aktivnih usluga"
+
+msgid "Valid until"
+msgstr "Važi do"
+
+msgid "Recurring payment"
+msgstr "Periodično plaćanje"
+
+msgid "Next charge"
+msgstr "Sledeće naplaćivanje"
+
+msgid "Enable auto billing"
+msgstr "Omogući automatsko naplaćivanje"
+
+msgid "Cancel auto billing"
+msgstr "Otkaži automatsko naplaćivanje"
+
+msgid "Granted benefits"
+msgstr "Dodeljene pogodnosti"
+
+msgid "Purchase history"
+msgstr "Istorija kupovina"
+
+msgid "No purchases yet"
+msgstr "Još nema kupovina"
+
+msgid "Product"
+msgstr "Proizvod"
+
+msgid "Reference"
+msgstr "Referenca"
+
+msgid "Amount"
+msgstr "Iznos"
+
+msgid "Receipt"
+msgstr "Račun"
+
+msgid "Unable to load your services right now."
+msgstr "Trenutno nije moguće učitati vaše usluge."
+
+msgid "Auto billing enabled"
+msgstr "Automatsko naplaćivanje omogućeno"
+
+msgid "Auto billing suspended"
+msgstr "Automatsko naplaćivanje obustavljeno"
+
+msgid "Auto billing cancelled"
+msgstr "Automatsko naplaćivanje otkazano"
+
+msgid "Auto billing disabled"
+msgstr "Automatsko naplaćivanje onemogućeno"
+
+msgid "Cancel auto billing for this service?"
+msgstr "Otkaži automatsko naplaćivanje za ovu uslugu?"
+
+msgid "Preview class members and courses"
+msgstr "Pregledaj članove razreda i kurseve"
+
+msgid "Please select a CSV file to import."
+msgstr "Molimo odaberite CSV datoteku za uvoz."
+
+msgid "%d user-class links imported"
+msgstr "%d veza korisnik-razred uvezeno"
+
+msgid "The following errors occurred during import:"
+msgstr "Tokom uvoza došlo je do sledećih grešaka:"
+
+msgid "CSV file"
+msgstr "CSV datoteka"
+
+msgid "Remove user from all group-related entities if not in the list"
+msgstr "Ukloni korisnika iz svih entiteta povezanih sa grupom ako nije na listi"
+
+msgid "UserName"
+msgstr "Korisničko ime"
+
+msgid "ClassName"
+msgstr "Naziv razreda"
+
+msgid "are required for each row."
+msgstr "su obavezni za svaki red."
+
+msgid "title"
+msgstr "naslov"
+
+msgid "is required."
+msgstr "je obavezan."
+
+msgid "description"
+msgstr "opis"
+
+msgid "are optional."
+msgstr "su opciono."
+
+msgid "Are you sure you want to remove this user from the class?"
+msgstr "Da li ste sigurni da želite da uklonite ovog korisnika iz razreda?"
+
+msgid "Users in class"
+msgstr "Korisnici u razredu"
+
+msgid "Remove user"
+msgstr "Ukloni korisnika"
+
+msgid "Class not found"
+msgstr "Razred nije pronađen"
+
+msgid "Class overview"
+msgstr "Pregled razreda"
+
+msgid "Back to classes"
+msgstr "Nazad na razrede"
+
+msgid "Search members or courses"
+msgstr "Pretraži članove ili kurseve"
+
+msgid "Search by name, email, username or course title"
+msgstr "Pretraži po imenu, e-pošti, korisničkom imenu ili naslovu kursa"
+
+msgid "Class members"
+msgstr "Članovi razreda"
+
+msgid "No email"
+msgstr "Nema e-pošte"
+
+msgid "No members found"
+msgstr "Nema pronađenih članova"
+
+msgid "No courses found"
+msgstr "Nema pronađenih kurseva"
+
+msgid "The end date must be after the start date."
+msgstr "Datum završetka mora biti posle datuma početka."
+
+msgid "Always visible"
+msgstr "Uvek vidljivo"
+
+msgid "No end date"
+msgstr "Nema datuma završetka"
+
+msgid "No restriction"
+msgstr "Bez ograničenja"
+
+msgid "Missing learning path or course identifier"
+msgstr "Nedostaje identifikator putanje učenja ili kursa"
+
+msgid "Select a user or a group first"
+msgstr "Prvo odaberite korisnika ili grupu"
+
+msgid "Remove all date restrictions for this learning path?"
+msgstr "Ukloniti sva ograničenja datuma za ovu putanju učenja?"
+
+msgid "Advanced learning path access"
+msgstr "Napredni pristup putanji učenja"
+
+msgid "Remove date restrictions"
+msgstr "Ukloni ograničenja datuma"
+
+msgid "Search by name, email, username or group"
+msgstr "Pretraga po imenu, e-pošti, korisničkom imenu ili grupi"
+
+msgid "Edit user restriction"
+msgstr "Uredi ograničenje korisnika"
+
+msgid "Edit group restriction"
+msgstr "Uredi ograničenje grupe"
+
+msgid "Select a user or group"
+msgstr "Izaberite korisnika ili grupu"
+
+msgid "Save restriction"
+msgstr "Sačuvaj ograničenje"
+
+msgid "members"
+msgstr "članovi"
+
+msgid "Create Assignment"
+msgstr "Kreiraj zadatak"
+
+msgid "The submission deadline has passed. You can no longer submit."
+msgstr "Rok za predaju je istekao. Više ne možete predati."
+
+msgid "Mailing cannot be combined with other recipients."
+msgstr "Slanje poštom ne može se kombinovati sa drugim primaocima."
+
+msgid "Social map"
+msgstr "Društvena mapa"
+
+msgid "The map plugin is not enabled or configured."
+msgstr "Dodatak za mapu nije omogućen ili konfigurisan."
+
+msgid "Some configured extra fields were not found"
+msgstr "Neka konfigurisana dodatna polja nisu pronađena"
+
+msgid "No user locations were found."
+msgstr "Nisu pronađene lokacije korisnika."
+
+msgid "OpenStreetMap needs coordinates to display an embedded marker. Address-only locations are listed below."
+msgstr "OpenStreetMap zahteva koordinate za prikaz ugrađenog markera. Lokacije samo sa adresom su navedene ispod."
+
+msgid "Locations"
+msgstr "Lokacije"
+
+msgid "Open map"
+msgstr "Otvori mapu"
+
+msgid "Provider: OpenStreetMap"
+msgstr "Provajder: OpenStreetMap"
+
+msgid "Provider: Google Maps"
+msgstr "Provajder: Google Maps"
+
+msgid "Personal files"
+msgstr "Lične datoteke"
+
+msgid "Upload image"
+msgstr "Otpremi sliku"
+
+msgid "Upload media"
+msgstr "Otpremi medij"
+
+msgid "Only image files are allowed in this upload screen."
+msgstr "U ovom ekranu za otpremanje dozvoljene su samo slikovne datoteke."
+
+msgid "Only audio and video files are allowed in this upload screen."
+msgstr "U ovom ekranu za otpremanje dozvoljene su samo audio i video datoteke."
+
+msgid "Upload files to your personal storage."
+msgstr "Otpremite datoteke u lično skladište."
+
+msgid "Linked"
+msgstr "Povezano"
+
+msgid "No audio or video files were found in this folder."
+msgstr "U ovoj fascikli nisu pronađene audio ili video datoteke."
+
+msgid "No image files were found in this folder."
+msgstr "U ovoj fascikli nisu pronađene slikovne datoteke."
+
+msgid "No matching files were found in this folder."
+msgstr "U ovoj fascikli nisu pronađene odgovarajuće datoteke."
+
+msgid "This file type is not allowed in this upload screen."
+msgstr "Ovaj tip datoteke nije dozvoljen u ovom ekranu za otpremanje."
+
+msgid "Manage your personal files and course documents."
+msgstr "Upravljajte ličnim datotekama i dokumentima kursa."
+
+msgid "DateValidity"
+msgstr "DatumVaženja"
+
+msgid "JustificationSaved"
+msgstr "OpravdanjeSačuvano"
+
+msgid "ValidityDate"
+msgstr "DatumVaženja"
+
+msgid "MyJustifications"
+msgstr "MojaOpravdanja"
+
+msgid "Submission"
+msgstr "Predaja"
+
+msgid "Use the filters above to narrow the list."
+msgstr "Koristite filtere iznad da suzite listu."
+
+msgid "You are not allowed to see this page."
+msgstr "Nije vam dozvoljeno da vidite ovu stranicu."
+
+msgid "plugin_title"
+msgstr "naziv_dodatka"
+
+msgid "plugin_comment"
+msgstr "komentar_dodatka"
+
+msgid "Course tracking details"
+msgstr "Detalji praćenja kursa"
+
+msgid "Course activity statistics"
+msgstr "Statistika aktivnosti kursa"
+
+msgid "mobile_phone_number"
+msgstr "broj_mobilnog_telefona"
+
+msgid "Allowed template syntax"
+msgstr "Dozvoljena sintaksa šablona"
+
+msgid "Functions"
+msgstr "Funkcije"
+
+msgid "Available variables depend on the template type, for example {{ user.getUsername() }} or {{ user.getEmail() }}."
+msgstr "Dostupne promenljive zavise od tipa šablona, na primer {{ user.getUsername() }} ili {{ user.getEmail() }}."
+
+msgid "For security reasons, any other Twig function, filter (such as filter, map, reduce or sort) or PHP call is blocked."
+msgstr "Iz bezbednosnih razloga, sve druge Twig funkcije, filteri (kao što su filter, map, reduce ili sort) ili PHP pozivi su blokirani."
+
+msgid "Global administrator"
+msgstr "Globalni administrator"
+
+msgid "Session manager"
+msgstr "Upravnik sesija"
+
+msgid "Human resources manager"
+msgstr "Upravnik ljudskih resursa"
+
+msgid "Course teacher"
+msgstr "Nastavnik kursa"
+
+msgid "Course student"
+msgstr "Student kursa"
+
+msgid "Platform reports"
+msgstr "Izveštaji platforme"
+
+msgid "Security reports"
+msgstr "Izveštaji bezbednosti"
+
+msgid "Course reports"
+msgstr "Izveštaji kursa"
+
+msgid "Gradebook reports"
+msgstr "Izveštaji dnevnika ocena"
+
+msgid "Social reports"
+msgstr "Društveni izveštaji"
+
+msgid "Exports"
+msgstr "Izvozi"
+
+msgid "Reports about platform-wide usage, users, courses and sessions."
+msgstr "Izveštaji o upotrebi platforme, korisnicima, kursevima i sesijama."
+
+msgid "Audit and security-sensitive reports."
+msgstr "Revizija i izveštaji o bezbednosno osetljivim aktivnostima."
+
+msgid "Reports scoped to courses managed by the user."
+msgstr "Izveštaji ograničeni na kurseve kojima korisnik upravlja."
+
+msgid "Reports related to learner activity and follow-up."
+msgstr "Izveštaji vezani za aktivnost učenika i praćenje napretka."
+
+msgid "Reports related to scores, certificates and gradebook data."
+msgstr "Izveštaji vezani za rezultate, sertifikate i podatke dnevnika ocena."
+
+msgid "Reports and exports that generate downloadable files."
+msgstr "Izveštaji i izvozi koji generišu datoteke za preuzimanje."
+
+msgid "Main platform statistics dashboard."
+msgstr "Glavna nadzorna tabla statistike platforme."
+
+msgid "Number of courses and course distribution report."
+msgstr "Izveštaj o broju kurseva i njihovoj distribuciji."
+
+msgid "Platform-wide access to course tools."
+msgstr "Pristup alatkama kursa na nivou platforme."
+
+msgid "Number of resources per tool."
+msgstr "Broj resursa po alatki."
+
+msgid "Latest access to courses."
+msgstr "Poslednji pristup kursevima."
+
+msgid "Course distribution by language."
+msgstr "Distribucija kurseva po jeziku."
+
+msgid "Course usage report."
+msgstr "Izveštaj o upotrebi kursa."
+
+msgid "Platform user count report."
+msgstr "Izveštaj o broju korisnika platforme."
+
+msgid "Recent logins chart."
+msgstr "Grafikon nedavnih prijava."
+
+msgid "Login distribution by month."
+msgstr "Distribucija prijava po mesecima."
+
+msgid "Login distribution by day."
+msgstr "Distribucija prijava po danima."
+
+msgid "Login distribution by hour."
+msgstr "Distribucija prijava po satima."
+
+msgid "Users with profile picture."
+msgstr "Korisnici sa profilnom slikom."
+
+msgid "Login report filtered by date."
+msgstr "Izveštaj o prijavama filtriran po datumu."
+
+msgid "Users who have not logged in recently."
+msgstr "Korisnici koji se nisu nedavno prijavili."
+
+msgid "Inactive or suspicious user accounts report."
+msgstr "Izveštaj o neaktivnim ili sumnjivim korisničkim nalozima."
+
+msgid "Users activity statistics."
+msgstr "Statistika aktivnosti korisnika."
+
+msgid "Currently online users report."
+msgstr "Izveštaj o trenutno prisutnim korisnicima."
+
+msgid "New user registrations over time."
+msgstr "Nove registracije korisnika tokom vremena."
+
+msgid "Course and session subscriptions over time."
+msgstr "Pretplate na kurseve i sesije tokom vremena."
+
+msgid "Duplicate user detection and maintenance report."
+msgstr "Izveštaj o otkrivanju duplikata korisnika i održavanju."
+
+msgid "Platform user/session statistics."
+msgstr "Statistika korisnika/sesija platforme."
+
+msgid "Quarterly platform report."
+msgstr "Kvartalni izveštaj platforme."
+
+msgid "Activities audit"
+msgstr "Revizija aktivnosti"
+
+msgid "Audit report for important administrative and platform activities."
+msgstr "Revizijski izveštaj za važne administrativne i platforme aktivnosti."
+
+msgid "Social messages received report."
+msgstr "Izveštaj o primljenim društvenim porukama."
+
+msgid "Social messages sent report."
+msgstr "Izveštaj o poslatim društvenim porukama."
+
+msgid "Social contacts count report."
+msgstr "Izveštaj o broju društvenih kontakata."
+
+msgid "Sessions created over time."
+msgstr "Sesije kreirane tokom vremena."
+
+msgid "Learning analytics dashboard."
+msgstr "Nadzorna tabla analitike učenja."
+
+msgid "Teacher time report."
+msgstr "Izveštaj o vremenu nastavnika."
+
+msgid "Teachers time by session report"
+msgstr "Izveštaj o vremenu nastavnika po sesiji"
+
+msgid "Teacher time report grouped by session."
+msgstr "Izveštaj o vremenu nastavnika grupisan po sesiji."
+
+msgid "Corporate learning analytics report."
+msgstr "Izveštaj o analitici korporativnog učenja."
+
+msgid "Course learners tracking report."
+msgstr "Izveštaj praćenja polaznika kursa."
+
+msgid "Course activity statistics with connected and inactive users."
+msgstr "Statistika aktivnosti kursa sa povezanim i neaktivnim korisnicima."
+
+msgid "Detailed tracking report for a learner inside a course."
+msgstr "Detaljan izveštaj praćenja polaznika unutar kursa."
+
+msgid "Course gradebook overview."
+msgstr "Pregled dnevnika ocena kursa."
+
+msgid "Gradebook statistics"
+msgstr "Statistika dnevnika ocena"
+
+msgid "Gradebook statistics report."
+msgstr "Izveštaj statistike dnevnika ocena."
+
+msgid "Certificate report"
+msgstr "Izveštaj o sertifikatima"
+
+msgid "Certificate report for course gradebook."
+msgstr "Izveštaj o sertifikatima za dnevnik ocena kursa."
+
+msgid "User statistics"
+msgstr "Statistika korisnika"
+
+msgid "Course gradebook statistics for a user."
+msgstr "Statistika dnevnika ocena kursa za korisnika."
+
+msgid "Personal statistics"
+msgstr "Lična statistika"
+
+msgid "Personal gradebook statistics."
+msgstr "Lična statistika dnevnika ocena."
+
+msgid "Reports catalog"
+msgstr "Katalog izveštaja"
+
+msgid "Central catalog of available reports, roles and permission categories."
+msgstr "Centralni katalog dostupnih izveštaja, uloga i kategorija dozvola."
+
+msgid "Course log events"
+msgstr "Događaji dnevnika kursa"
+
+msgid "Detailed course tracking events."
+msgstr "Detaljni događaji praćenja kursa."
+
+msgid "Course tool usage"
+msgstr "Korišćenje alata kursa"
+
+msgid "Course tracking report grouped by tools."
+msgstr "Izveštaj praćenja kursa grupisan po alatima."
+
+msgid "Course resource usage"
+msgstr "Korišćenje resursa kursa"
+
+msgid "Course tracking report grouped by resources."
+msgstr "Izveštaj praćenja kursa grupisan po resursima."
+
+msgid "Course group tracking"
+msgstr "Praćenje grupa kursa"
+
+msgid "Tracking report for course groups."
+msgstr "Izveštaj praćenja za grupe kursa."
+
+msgid "Course session report"
+msgstr "Izveštaj sesija kursa"
+
+msgid "Tracking report for a course inside sessions."
+msgstr "Izveštaj praćenja kursa unutar sesija."
+
+msgid "Learning path report"
+msgstr "Izveštaj putanje učenja"
+
+msgid "Learning path tracking report."
+msgstr "Izveštaj praćenja putanje učenja."
+
+msgid "Learning path results by user"
+msgstr "Rezultati putanje učenja po korisniku"
+
+msgid "Learning path results grouped by user."
+msgstr "Rezultati putanje učenja grupisani po korisniku."
+
+msgid "Exercises report"
+msgstr "Izveštaj vežbi"
+
+msgid "Course exercises and exams tracking report."
+msgstr "Izveštaj praćenja vežbi i ispita kursa."
+
+msgid "Question report"
+msgstr "Izveštaj pitanja"
+
+msgid "Course question tracking report."
+msgstr "Izveštaj praćenja pitanja kursa."
+
+msgid "Messages report"
+msgstr "Izveštaj poruka"
+
+msgid "Course messages tracking report."
+msgstr "Izveštaj praćenja poruka kursa."
+
+msgid "Total time tracking report for course learners."
+msgstr "Izveštaj ukupnog vremena praćenja za polaznike kursa."
+
+msgid "Gradebook summary"
+msgstr "Pregled dnevnika ocena"
+
+msgid "Summary view of gradebook results."
+msgstr "Pregled rezultata dnevnika ocena."
+
+msgid "Flat view"
+msgstr "Prikaz u ravni"
+
+msgid "Flat gradebook results view."
+msgstr "Prikaz rezultata dnevnika ocena u ravni."
+
+msgid "Evaluation log"
+msgstr "Dnevnik evaluacije"
+
+msgid "Change log for gradebook evaluations."
+msgstr "Dnevnik promena za evaluacije dnevnika ocena."
+
+msgid "Link log"
+msgstr "Dnevnik veza"
+
+msgid "Change log for gradebook links."
+msgstr "Dnevnik promena za veze dnevnika ocena."
+
+msgid "Result details"
+msgstr "Detalji rezultata"
+
+msgid "Detailed view of a gradebook result."
+msgstr "Detaljan prikaz rezultata dnevnika ocena."
+
+msgid "Personal certificates report."
+msgstr "Lični izveštaj o sertifikatima."
+
+msgid "User move statistics"
+msgstr "Statistika pomeranja korisnika"
+
+msgid "Report for user move and transfer statistics."
+msgstr "Izveštaj statistike pomeranja i prenosa korisnika."
+
+msgid "User consent list"
+msgstr "Lista saglasnosti korisnika"
+
+msgid "Report of users and consent status."
+msgstr "Izveštaj korisnika i statusa saglasnosti."
+
+msgid "Special platform exports."
+msgstr "Specijalni izvozi platforme."
+
+msgid "Export certificates"
+msgstr "Izvezi sertifikate"
+
+msgid "Export platform certificates."
+msgstr "Izvezi sertifikate platforme."
+
+msgid "Export exercise results"
+msgstr "Izvezi rezultate vežbi"
+
+msgid "Export exercise results from the platform."
+msgstr "Izvezi rezultate vežbi sa platforme."
+
+msgid "Course survey results and reporting."
+msgstr "Rezultati anketa kursa i izveštavanje."
+
+msgid "Attendance report"
+msgstr "Izveštaj o prisustvu"
+
+msgid "Course attendance tracking and reports."
+msgstr "Praćenje prisustva na kursu i izveštaji."
+
+msgid "Exercises global report"
+msgstr "Globalni izveštaj o vežbama"
+
+msgid "Global exercise results report for the course."
+msgstr "Globalni izveštaj rezultata vežbi za kurs."
+
+msgid "Exercise report"
+msgstr "Izveštaj o vežbi"
+
+msgid "Detailed exercise report."
+msgstr "Detaljan izveštaj o vežbi."
+
+msgid "Exercise history"
+msgstr "Istorija vežbi"
+
+msgid "Exercise attempt history."
+msgstr "Istorija pokušaja vežbi."
+
+msgid "Exercise results"
+msgstr "Rezultati vežbi"
+
+msgid "Exercise results and corrections."
+msgstr "Rezultati vežbi i ispravke."
+
+msgid "Question-level exercise statistics."
+msgstr "Statistika vežbi na nivou pitanja."
+
+msgid "Exercise statistics"
+msgstr "Statistika vežbi"
+
+msgid "Exercise statistics page."
+msgstr "Stranica statistike vežbi."
+
+msgid "Live exercise statistics"
+msgstr "Statistika vežbi uživo"
+
+msgid "Live exercise statistics for teachers."
+msgstr "Statistika vežbi uživo za nastavnike."
+
+msgid "Learning path statistics"
+msgstr "Statistika putanje učenja"
+
+msgid "Learning path item statistics."
+msgstr "Statistika stavki putanje učenja."
+
+msgid "Learning path report inside a course."
+msgstr "Izveštaj putanje učenja unutar kursa."
+
+msgid "User skills report."
+msgstr "Izveštaj o veštinama korisnika."
+
+msgid "Scheduled or periodic export configuration."
+msgstr "Konfiguracija zakazanog ili periodičnog izvoza."
+
+msgid "User export"
+msgstr "Izvoz korisnika"
+
+msgid "Export users from the platform."
+msgstr "Izvezi korisnike sa platforme."
+
+msgid "Not classified"
+msgstr "Nije klasifikovano"
+
+msgid "You have acquired the skill %s"
+msgstr "Stekli ste veštinu %s"
+
+msgid "You have acquired the skill %s."
+msgstr "Stekli ste veštinu %s."
+
+msgid "Recover your password"
+msgstr "Oporavite lozinku"
+
+msgid "Disclaimer"
+msgstr "Odricanje od odgovornosti"
+
+msgid "This operation would exceed the limit of %d users allowed for this course."
+msgstr "Ova operacija bi premašila ograničenje od %d korisnika dozvoljenih za ovaj kurs."
+
+msgid "DefaultGroupCategory"
+msgstr "DefaultGroupCategory"
+
+msgid "LearningCalendar"
+msgstr "LearningCalendar"
+
+msgid "Choose how this user can authenticate on the platform."
+msgstr "Izaberite kako se ovaj korisnik može autentifikovati na platformi."
+
+msgid "Authentication methods"
+msgstr "Metode autentifikacije"
+
+msgid "Set password manually"
+msgstr "Postavi lozinku ručno"
+
+msgid "Report role matrix"
+msgstr "Matrica uloga izveštaja"
+
+msgid "Report permission categories"
+msgstr "Kategorije dozvola izveštaja"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs enforce the documented report role matrix."
+msgstr "Ovaj registar navodi poznate stranice izveštaja, njihovu kategoriju, kanonski URL, nasleđeni URL i očekivanu publiku uloga. Kanonski URL-ovi primenjuju dokumentovanu matricu uloga izveštaja."
+
+msgid "reports"
+msgstr "izveštaji"
+
+msgid "Canonical URL"
+msgstr "Kanonski URL"
+
+msgid "Legacy URL"
+msgstr "Nasleđeni URL"
+
+msgid "Permission category"
+msgstr "Kategorija dozvola"
+
+msgid "This matrix documents the expected audience for each report and is enforced by the canonical report entry point."
+msgstr "Ova matrica dokumentuje očekivanu publiku za svaki izveštaj i primenjuje je kanonska tačka ulaska izveštaja."
+
+msgid "These keys group reports by access scope and are used by the report registry. They can later be mapped to finer-grained platform permissions."
+msgstr "Ovi ključevi grupišu izveštaje prema opsegu pristupa i koriste se u registru izveštaja. Kasnije se mogu mapirati na detaljnije dozvole platforme."
+
+msgid "Permission"
+msgstr "Dozvola"
+
+msgid "Clear active session"
+msgstr "Očisti aktivnu sesiju"
+
+msgid "Are you sure you want to clear this user active session?"
+msgstr "Da li ste sigurni da želite da obrišete aktivnu sesiju ovog korisnika?"
+
+msgid "Preview shown without course context. Some course-specific data may be unavailable."
+msgstr "Pregled je prikazan bez konteksta kursa. Neki podaci specifični za kurs mogu biti nedostupni."
+
+msgid "Preview is not available for this question."
+msgstr "Pregled nije dostupan za ovo pitanje."
+
+msgid "Edition is not allowed without a course context."
+msgstr "Izmena nije dozvoljena bez konteksta kursa."
+
+msgid "This plugin does not use regions."
+msgstr "Ovaj dodatak ne koristi regione."
+
+msgid "No plugins with regions were found."
+msgstr "Nisu pronađeni dodaci sa regionima."
+
+msgid "Freemium"
+msgstr "Freemium"
+
+msgid "Commercial service"
+msgstr "Komercijalna usluga"
+
+msgid "Commercial"
+msgstr "Komercijalno"
+
+msgid "100% free"
+msgstr "100% besplatno"
+
+msgid "Displayed above the public login form."
+msgstr "Prikazano iznad javne forme za prijavu."
+
+msgid "Displayed below the public login form."
+msgstr "Prikazano ispod javne forme za prijavu."
+
+msgid "Displayed before the footer area."
+msgstr "Prikazano pre podnožja."
+
+msgid "Displayed in the left footer column."
+msgstr "Prikazano u levoj koloni podnožja."
+
+msgid "Displayed in the center footer column."
+msgstr "Prikazano u centralnoj koloni podnožja."
+
+msgid "Displayed in the right footer column."
+msgstr "Prikazano u desnoj koloni podnožja."
+
+msgid "Showing all plugins."
+msgstr "Prikazuju se svi dodaci."
+
+msgid "Some plugins are still pending functional verification."
+msgstr "Neki dodaci još uvek čekaju funkcionalnu proveru."
+
+msgid "Show verified plugins only"
+msgstr "Prikaži samo verifikovane dodatke"
+
+msgid "Showing verified plugins only."
+msgstr "Prikazuju se samo verifikovani dodaci."
+
+msgid "Pending plugins are temporarily hidden until they are adapted and tested."
+msgstr "Dodaci na čekanju su privremeno sakriveni dok se ne prilagode i testiraju."
+
+msgid "Show all plugins"
+msgstr "Prikaži sve dodatke"
+
+msgid "Official and free plugins are listed separately from plugins that may depend on commercial services or paid offers."
+msgstr "Zvanični i besplatni dodaci su navedeni odvojeno od dodataka koji mogu zavisiti od komercijalnih usluga ili plaćenih ponuda."
+
+msgid "Included free plugins"
+msgstr "Uključeni besplatni dodaci"
+
+msgid "Commercial and freemium plugins"
+msgstr "Komercijalni i freemium dodaci"
+
+msgid "All plugins"
+msgstr "Svi dodaci"
+
+msgid "No plugins were found for this category."
+msgstr "Nisu pronađeni dodaci za ovu kategoriju."
+
+msgid "Search plugins"
+msgstr "Pretraži dodatke"
+
+msgid "Search by name or description"
+msgstr "Pretraži po nazivu ili opisu"
+
+msgid "Advanced filters"
+msgstr "Napredni filteri"
+
+msgid "All statuses"
+msgstr "Svi statusi"
+
+msgid "All sources"
+msgstr "Svi izvori"
+
+msgid "All types"
+msgstr "Svi tipovi"
+
+msgid "Installed plugins are shown first"
+msgstr "Instalirani dodaci se prikazuju prvi"
+
+msgid "No plugins match the current filters."
+msgstr "Nijedan dodatak ne odgovara trenutnim filterima."
+
+msgid "Try clearing the search or changing the filters."
+msgstr "Pokušajte da očistite pretragu ili promenite filtere."
+
+msgid "README"
+msgstr "README"
+
+msgid "Invalid security token"
+msgstr "Nevažeći bezbednosni token"
+
+msgid "Please select a destination session"
+msgstr "Molimo izaberite odredišnu sesiju"
+
+msgid "Cannot move this to the same session"
+msgstr "Nije moguće premestiti ovo u istu sesiju"
+
+msgid "The destination session must include the selected course"
+msgstr "Odredišna sesija mora da sadrži izabrani kurs"
+
+msgid "The source session must include the selected course"
+msgstr "Izvorna sesija mora da sadrži izabrani kurs"
+
+msgid "No learners found"
+msgstr "Nisu pronađeni polaznici"
+
+msgid "Will be subscribed"
+msgstr "Biće prijavljeno"
+
+msgid "Subscribed"
+msgstr "Prijavljeno"
+
+msgid "The move process has finished"
+msgstr "Proces premeštanja je završen"
+
+msgid "Comparison finished. No data has been moved."
+msgstr "Poređenje završeno. Nema prenetih podataka."
+
+msgid "Move tracking data from the base course or a source session to another session. Use comparison first to review the affected learner data."
+msgstr "Premesti podatke praćenja iz osnovnog kursa ili izvorne sesije u drugu sesiju. Prvo koristite poređenje da pregledate podatke polaznika na koje se to odnosi."
+
+msgid "Search for a course or use the manual course ID field below."
+msgstr "Potražite kurs ili koristite ručno polje za ID kursa ispod."
+
+msgid "Fallback when the course search is not available."
+msgstr "Rezervna opcija kada pretraga kursa nije dostupna."
+
+msgid "Load sessions"
+msgstr "Učitaj sesije"
+
+msgid "Selected course"
+msgstr "Izabrani kurs"
+
+msgid "Choose the base course or the session where the tracking data currently exists."
+msgstr "Izaberite osnovni kurs ili sesiju gde se trenutno nalaze podaci praćenja."
+
+msgid "Choose the session that will receive the tracking data."
+msgstr "Izaberite sesiju koja će primiti podatke praćenja."
+
+msgid "Important"
+msgstr "Važno"
+
+msgid "The move action updates existing tracking data. Run compare first and test this tool with a non-production course before moving real learner data."
+msgstr "Radnja premeštanja ažurira postojeće podatke praćenja. Prvo pokrenite poređenje i testirajte ovaj alat na neprodukcionom kursu pre premeštanja stvarnih podataka polaznika."
+
+msgid "No sessions found for this course"
+msgstr "Nema pronađenih sesija za ovaj kurs"
+
+msgid "Some users were ignored because they are not subscribed to this session."
+msgstr "Neki korisnici su ignorisani jer nisu upisani u ovu sesiju."
+
+msgid "Remove selected user"
+msgstr "Ukloni izabranog korisnika"
+
+msgid "Add selected user"
+msgstr "Dodaj izabranog korisnika"
+
+msgid "No users from the selected list are subscribed to this session."
+msgstr "Nijedan korisnik sa izabrane liste nije upisan u ovu sesiju."
+
+msgid "No image"
+msgstr "Nema slike"
+
+msgid "Invalid URL."
+msgstr "Nevažeći URL."
+
+msgid "This cloud document cannot be embedded."
+msgstr "Ovaj dokument iz oblaka ne može se ugraditi."
+
+msgid "Document not found"
+msgstr "Dokument nije pronađen"
+
+msgid "File not found"
+msgstr "Datoteka nije pronađena"
+
+msgid "This learning path is not available for your user at this time."
+msgstr "Ova putanja učenja trenutno nije dostupna za vašeg korisnika."
+
+msgid "StartDateMustBeBeforeTheEndDate"
+msgstr "StartDateMustBeBeforeTheEndDate"
+
+msgid "Next learning path"
+msgstr "Sledeća putanja učenja"
+
+msgid "Select the learning path that will be available after this one."
+msgstr "Izaberite putanju učenja koja će biti dostupna nakon ove."
+
+msgid "Create another learning path in this course to enable learning path flow."
+msgstr "Kreirajte još jednu putanju učenja u ovom kursu da biste omogućili tok putanja učenja."
+
+msgid "Available from %s"
+msgstr "Dostupno od %s"
+
+msgid "Available until %s"
+msgstr "Dostupno do %s"
+
+msgid "Statistics reset date"
+msgstr "Datum resetovanja statistike"
+
+msgid "Last 24 hours"
+msgstr "Poslednjih 24 sata"
+
+msgid "This reset date is used as the reference date for the report. It does not delete historical tracking data."
+msgstr "Ovaj datum resetovanja koristi se kao referentni datum za izveštaj. Ne briše istorijske podatke praćenja."
+
+msgid "Since reset date"
+msgstr "Od datuma resetovanja"
+
+msgid "Users connected in the last 24 hours"
+msgstr "Korisnici povezani u poslednjih 24 sata"
+
+msgid "Learners with at least one course access during the last 24 hours."
+msgstr "Polaznici sa barem jednim pristupom kursu u poslednjih 24 sata."
+
+msgid "Users connected in the last week"
+msgstr "Korisnici povezani u poslednjoj nedelji"
+
+msgid "Learners with at least one course access during the last 7 days."
+msgstr "Polaznici sa barem jednim pristupom kursu u poslednjih 7 dana."
+
+msgid "Users connected in the last month"
+msgstr "Korisnici povezani u poslednjem mesecu"
+
+msgid "Learners with at least one course access during the last 30 days."
+msgstr "Polaznici sa barem jednim pristupom kursu u poslednjih 30 dana."
+
+msgid "Not recently connected users"
+msgstr "Nedavno nepovezani korisnici"
+
+msgid "Learners without course access since %s."
+msgstr "Polaznici bez pristupa kursu od %s."
+
+msgid "Recently used resources"
+msgstr "Nedavno korišćeni resursi"
+
+msgid "Course tools/resources used since %s."
+msgstr "Alati/resursi kursa korišćeni od %s."
+
+msgid "%s %% of learners"
+msgstr "%s %% polaznika"
+
+msgid "Connections"
+msgstr "Povezivanja"
+
+msgid "Total connections"
+msgstr "Ukupno povezivanja"
+
+msgid "Downloaded documents"
+msgstr "Preuzeti dokumenti"
+
+msgid "List of documents downloaded by this learner in this course."
+msgstr "Lista dokumenata koje je ovaj polaznik preuzeo u ovom kursu."
+
+msgid "Forum topics"
+msgstr "Teme foruma"
+
+msgid "Forum topics opened by this learner in this course."
+msgstr "Teme foruma koje je ovaj polaznik otvorio u ovom kursu."
+
+msgid "Forum posts"
+msgstr "Postovi na forumu"
+
+msgid "Forum posts written by this learner in this course."
+msgstr "Postovi na forumu koje je ovaj polaznik napisao u ovom kursu."
+
+msgid "Course connections"
+msgstr "Povezivanja na kurs"
+
+msgid "Connection history for this learner in this course."
+msgstr "Istorija povezivanja ovog polaznika u ovom kursu."
+
+msgid "Resources used"
+msgstr "Korišćeni resursi"
+
+msgid "Latest tools or resources used by this learner in this course."
+msgstr "Najnoviji alati ili resursi koje je ovaj polaznik koristio u ovom kursu."
+
+msgid "Logout date"
+msgstr "Datum odjave"
+
+msgid "Imported Aiken quiz"
+msgstr "Uvezeni Aiken kviz"
+
+msgid "Only supported documents will be listed here."
+msgstr "Ovde će biti prikazani samo podržani dokumenti."
+
+msgid "Generated Aiken content"
+msgstr "Generisani Aiken sadržaj"
+
+msgid "Review the generated content before importing it as a new exercise."
+msgstr "Pregledajte generisani sadržaj pre nego što ga uvezete kao novu vežbu."
+
+msgid "No documents available."
+msgstr "Nema dostupnih dokumenata."
+
+msgid "yperbolic arctangent:\\t\\tarctanh(x)"
+msgstr "Hiperbolični arktangens:\\t\\tarctanh(x)"
+
+msgid "Exercise"
+msgstr "Vežba"
+
+msgid "OfficialCode"
+msgstr "ZvaničniKod"
+
+msgid "FirstName"
+msgstr "Ime"
+
+msgid "LastName"
+msgstr "Prezime"
+
+msgid "LoginName"
+msgstr "KorisničkoIme"
+
+msgid "MinMinute"
+msgstr "MinMinuta"
+
+msgid "StartDate"
+msgstr "DatumPočetka"
+
+msgid "EndDate"
+msgstr "DatumZavršetka"
+
+msgid "CorrectionDate"
+msgstr "DatumIspravke"
+
+msgid "NotValidated"
+msgstr "NijeValidirano"
+
+msgid "PendingAttempts"
+msgstr "PokusiNaČekanju"
+
+msgid "List of pending test attempts across your courses."
+msgstr "Lista pokušaja testova na čekanju u vašim kursevima."
+
+msgid "User ID"
+msgstr "Korisnički ID"
+
+msgid "QuestionType"
+msgstr "TipPitanja"
+
+msgid "QuestionsWithNoAutomaticCorrection"
+msgstr "PitanjaBezAutomatskeIspravke"
+
+msgid "There are no pending tests."
+msgstr "Nema pokušaja testova na čekanju."
+
+msgid "%s results"
+msgstr "%s rezultata"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Primer aktivnosti popunjavanja obrasca: izračunavanje indeksa telesne mase</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Godine</strong></td>            <td width=\"75%\" style=\"\">[25] godina</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Pol</strong></td>            <td style=\"\" text-align:=\"\">[M] (M ili Ž)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Težina</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Visina</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Indeks telesne mase</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Težina/Visina<sup>2</sup> (Pogledajte <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> članak na Vikipediji</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Removed"
+msgstr "Uklonjeno"
+
+msgid "NoUsersInTheList"
+msgstr "NemaKorisnikaUListi"
+
+msgid "Are you sure?"
+msgstr "Da li ste sigurni?"
+
+msgid "NoResultsAvailable"
+msgstr "NemaDostupnihRezultata"
+
+msgid "Import groups from a CSV file and optionally remove items that are not present in the file."
+msgstr "Uvezite grupe iz CSV datoteke i opciono uklonite stavke koje nisu prisutne u datoteci."
+
+msgid "Use this option carefully because items missing from the CSV can be removed during the import process."
+msgstr "Koristite ovu opciju pažljivo jer stavke koje nedostaju u CSV datoteci mogu biti uklonjene tokom procesa uvoza."
+
+msgid "Upload a CSV file with the group data you want to import."
+msgstr "Otpremite CSV datoteku sa podacima o grupama koje želite da uvezete."
+
+msgid "You can download the example file to use the expected format."
+msgstr "Možete preuzeti primer datoteke da biste koristili očekivani format."
+
+msgid "If you enable deletion, items not present in the file may be removed."
+msgstr "Ako omogućite brisanje, stavke koje nisu prisutne u datoteci mogu biti uklonjene."
+
+msgid "The CSV file is mandatory to start the import."
+msgstr "CSV datoteka je obavezna za pokretanje uvoza."
+
+msgid "Please select at least one class."
+msgstr "Molimo vas da izaberete barem jednu klasu."
+
+msgid "Define the properties for each group before creating them."
+msgstr "Definišite svojstva za svaku grupu pre nego što ih kreirate."
+
+msgid "Apply the first row values"
+msgstr "Primeni vrednosti prvog reda"
+
+msgid "Create groups manually or generate them from the classes subscribed to this course."
+msgstr "Kreirajte grupe ručno ili ih generišite iz klasa prijavljenih na ovaj kurs."
+
+msgid "Create manual groups"
+msgstr "Kreiraj grupe ručno"
+
+msgid "Use this form when you want to create empty course groups manually."
+msgstr "Koristite ovaj obrazac kada želite ručno da kreirate prazne grupe kursa."
+
+msgid "Configure manual groups"
+msgstr "Konfiguriši ručne grupe"
+
+msgid "Create groups from subscribed classes"
+msgstr "Kreiraj grupe iz prijavljenih klasa"
+
+msgid "Use this form when you want to create one course group for each selected class."
+msgstr "Koristite ovaj obrazac kada želite da kreirate jednu grupu kursa za svaku izabranu klasu."
+
+msgid "Keep created groups linked to their source classes"
+msgstr "Zadrži kreirane grupe povezane sa njihovim izvornim klasama"
+
+msgid "Create groups from selected classes"
+msgstr "Kreiraj grupe iz izabranih klasa"
+
+msgid "You must be logged in to access this page."
+msgstr "Morate biti prijavljeni da biste pristupili ovoj stranici."
+
+msgid "Invalid user"
+msgstr "Nevažeći korisnik"
+
+msgid "UseCourseCustomCertificate"
+msgstr "KoristiPrilagođeniSertifikatKursa"
+
+msgid "UseDefaultCustomCertificate"
+msgstr "KoristiPodrazumevaniPrilagođeniSertifikat"
+
+msgid "CertificateSetting"
+msgstr "Podešavanje sertifikata"
+
+msgid "SelectOneOptionBeforeOpeningEditor"
+msgstr "Izaberite jednu opciju pre otvaranja uređivača"
+
+msgid "ChooseCustomCertificateModeHelp"
+msgstr "ChooseCustomCertificateModeHelp"
+
+msgid "CertificateMode"
+msgstr "Režim sertifikata"
+
+msgid "Enable student to validate own attendance"
+msgstr "Omogući studentima da sami potvrde prisustvo"
+
+msgid "Course block"
+msgstr "Blok kursa"
+
+msgid "Add custom content blocks to course footer regions."
+msgstr "Dodajte prilagođene blokove sadržaja u podnožje kursa."
+
+msgid "course_block_pre_footer"
+msgstr "course_block_pre_footer"
+
+msgid "Before footer"
+msgstr "Pre podnožja"
+
+msgid "course_block_footer_left"
+msgstr "course_block_footer_left"
+
+msgid "Footer left"
+msgstr "Levo podnožje"
+
+msgid "course_block_footer_center"
+msgstr "course_block_footer_center"
+
+msgid "Footer center"
+msgstr "Srednje podnožje"
+
+msgid "course_block_footer_right"
+msgstr "course_block_footer_right"
+
+msgid "Footer right"
+msgstr "Desno podnožje"
+
+msgid "SetNotification"
+msgstr "Podesi obaveštenje"
+
+msgid "CourseLegal"
+msgstr "CourseLegal"
+
+msgid "Certificates search is not available"
+msgstr "Pretraga sertifikata nije dostupna"
+
+msgid "It allows the acquisition of skills by subcategories"
+msgstr "Omogućava sticanje veština po potkategorijama"
+
+msgid "Allow skills by subcategories"
+msgstr "Dozvoli veštine po potkategorijama"
+
+msgid "Minimum score for skills"
+msgstr "Minimalni rezultat za veštine"
+
+msgid "The gradebook table is hidden."
+msgstr "Tabela dnevnika ocena je skrivena."
+
+msgid "Invalid token"
+msgstr "Nevažeći token"
+
+msgid "Unable to save the item"
+msgstr "Nije moguće sačuvati stavku"
+
+msgid "Only HTTP and HTTPS URLs are allowed."
+msgstr "Dozvoljene su samo HTTP i HTTPS adrese."
+
+msgid "Invalid URL host."
+msgstr "Nevažeći host URL-a."
+
+msgid "This cloud provider is not allowed."
+msgstr "Ovaj dobavljač u oblaku nije dozvoljen."
+
+msgid "Documents used"
+msgstr "Korišćeni dokumenti"
+
+msgid "No document usage"
+msgstr "Nema korišćenja dokumenata"
+
+msgid "Invalid action."
+msgstr "Nevažeća radnja."
+
+msgid "No users selected."
+msgstr "Nije izabran nijedan korisnik."
+
+msgid "%s user(s) processed."
+msgstr "%s korisnik(a) obrađeno."
+
+msgid "Invalid CSRF token."
+msgstr "Nevažeći CSRF token."
+
+msgid "[%s] Please change your password"
+msgstr "[%s] Molimo promenite lozinku"
+
+msgid "Dear %s,\n\nOur security enforcing process shows you use a password that is commonly used on the internet, which means your account could easily be stolen. It is probably a simple sequence or a very common word, we don't really know (we cannot see your password), but we ask you to please connect to the platform and request a password change. You can follow the link here: %s to do that now.\n\nPlease note we will never ask for your password in this process. You just enter your username or e-mail and we send you a link. If you are asked to introduce your existing password to do that, someone is probably trying to do Phishing on your account. Be safe, change your password now!\n\n%s\n%s"
+msgstr "Poštovani %s,\n\nNaš proces primene bezbednosti pokazuje da koristite lozinku koja se često koristi na internetu, što znači da vaš nalog može lako biti ukraden. Verovatno je u pitanju jednostavna sekvenca ili veoma uobičajena reč, ne znamo tačno (ne možemo videti vašu lozinku), ali vas molimo da se povežete na platformu i zatražite promenu lozinke. Možete pratiti ovaj link: %s da biste to uradili sada.\n\nImajte u vidu da vas nikada nećemo tražiti lozinku u ovom procesu. Samo unesite korisničko ime ili e-poštu i poslaćemo vam link. Ako vas traže da unesete postojeću lozinku, neko verovatno pokušava da izvrši phishing na vašem nalogu. Budite bezbedni, promenite lozinku odmah!\n\n%s\n%s"
+
+msgid "[%s] Your password has been reset"
+msgstr "[%s] Vaša lozinka je resetovana"
+
+msgid "Dear %s,\n\nOur security enforcing process flagged you as using a password that is commonly used on the internet, which means your account could easily be stolen. As a prevention measure, we have decided to initiate a password reset process. Your new, automatically generated password is now:\n\n%s\n\nPlease login to the platform soon (using this new password) to set your own, personal and secure, password.\n\nBe safe.\n\n%s\n%s"
+msgstr "Poštovani %s,\n\nNaš proces primene bezbednosti označio vas je kao korisnika koji koristi lozinku koja se često koristi na internetu, što znači da vaš nalog može lako biti ukraden. Kao preventivnu meru, odlučili smo da pokrenemo proces resetovanja lozinke. Vaša nova, automatski generisana lozinka je sada:\n\n%s\n\nMolimo vas da se uskoro prijavite na platformu (koristeći ovu novu lozinku) kako biste postavili svoju ličnu i bezbednu lozinku.\n\nBudite bezbedni.\n\n%s\n%s"
+
+msgid "Signature saved successfully"
+msgstr "Potpis je uspešno sačuvan"
+
+msgid "Invalid request payload."
+msgstr "Nevažeći sadržaj zahteva."
+
+msgid "Authentication required."
+msgstr "Potrebna je autentifikacija."
+
+msgid "The course title is required."
+msgstr "Naslov kursa je obavezan."
+
+msgid "Only trainers and administrators can create courses."
+msgstr "Samo treneri i administratori mogu kreirati kurseve."
+
+msgid "Course creation by trainers is disabled on this platform."
+msgstr "Kreiranje kurseva od strane trenera je onemogućeno na ovoj platformi."
+
+msgid "The selected BuyCourses service cannot be used to create this course."
+msgstr "Izabrani BuyCourses servis ne može se koristiti za kreiranje ovog kursa."
+
+msgid "You have reached the maximum number of courses allowed (%d)."
+msgstr "Dostigli ste maksimalan broj dozvoljenih kurseva (%d)."
+
+msgid "The selected BuyCourses service is invalid."
+msgstr "Izabrani BuyCourses servis je nevažeći."
+
+msgid "BuyCourses is not available right now."
+msgstr "BuyCourses trenutno nije dostupan."
+
+msgid "BuyCourses cannot validate the selected service right now."
+msgstr "BuyCourses trenutno ne može da validira izabrani servis."
+
+msgid "Unable to validate the selected BuyCourses service right now."
+msgstr "Trenutno nije moguće validirati izabrani BuyCourses servis."
+
+msgid "External tool removed from course"
+msgstr "Eksterni alat uklonjen iz kursa"
+
+msgid "External tool was removed from the course, but kept internally because it is linked to the gradebook"
+msgstr "Spoljni alat je uklonjen iz kursa, ali je zadržan interno jer je povezan sa dnevnikom ocena"
+
+msgid "There are no external tools available to add to the gradebook"
+msgstr "Nema dostupnih spoljnih alata za dodavanje u dnevnik ocena"
+
+msgid "The evaluation could not be created"
+msgstr "Evaluacija nije mogla biti kreirana"
+
+msgid "The gradebook evaluation could not be linked"
+msgstr "Evaluacija dnevnika ocena nije mogla biti povezana"
+
+msgid "Survey questions"
+msgstr "Survey questions"
+
+msgid "Back to survey list"
+msgstr "Back to survey list"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "This survey already has answers. Question editing is disabled by configuration."
+
+msgid "Choose the type of question you want to add."
+msgstr "Choose the type of question you want to add."
+
+msgid "The free text option is added automatically."
+msgstr "The free text option is added automatically."
+
+msgid "No questions found"
+msgstr "No questions found"
+
+msgid "Mandatory"
+msgstr "Mandatory"
+
+msgid "Unsupported question type"
+msgstr "Unsupported question type"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "You can use the tags {%s} and {%s} in the question."
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "Ovo pitanje se prikazuje uslovno prilikom popunjavanja ankete."
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "Opcije procenta od 1 do 100 se generišu automatski."
+
+msgid "Could not load survey questions"
+msgstr "Nije moguće učitati pitanja ankete"
+
+msgid "The question text is required."
+msgstr "Tekst pitanja je obavezan."
+
+msgid "The maximum score is required."
+msgstr "Maksimalan broj poena je obavezan."
+
+msgid "Please select a parent option."
+msgstr "Molimo izaberite nadređenu opciju."
+
+msgid "Please fill all answer options."
+msgstr "Molimo popunite sve opcije odgovora."
+
+msgid "QuestionUpdated"
+msgstr "QuestionUpdated"
+
+msgid "Could not save survey question"
+msgstr "Nije moguće sačuvati pitanje ankete"
+
+msgid "Could not delete survey question"
+msgstr "Nije moguće obrisati pitanje ankete"
+
+msgid "Could not move survey question"
+msgstr "Nije moguće pomeriti pitanje ankete"
+
+msgid "Could not copy survey question"
+msgstr "Nije moguće kopirati pitanje ankete"
+
+msgid "Hide search"
+msgstr "Sakrij pretragu"
+
+msgid "Showing results for: %s"
+msgstr "Prikazuju se rezultati za: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "Pretražite po naslovu ankete, kodu ili opisu."
+
+msgid "Search surveys"
+msgstr "Pretraži ankete"
+
+msgid "%s surveys selected"
+msgstr "%s izabranih anketa"
+
+msgid "Clear selection"
+msgstr "Očisti izbor"
+
+msgid "No surveys found"
+msgstr "Nema pronađenih anketa"
+
+msgid "Unsupported"
+msgstr "Nepodržano"
+
+msgid "Could not load surveys"
+msgstr "Nije moguće učitati ankete"
+
+msgid "Delete selected surveys"
+msgstr "Obriši izabrane ankete"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "Izabrane ankete i njihova pitanja biće obrisani. Ova radnja se ne može poništiti."
+
+msgid "Could not delete selected surveys"
+msgstr "Nije moguće obrisati izabrane ankete"
+
+msgid "Survey action"
+msgstr "Radnja ankete"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "Biće kreirana kopija ove ankete: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "Svi odgovori i pozivi biće obrisani za ovu anketu: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "Generisana umnožena pitanja biće uklonjena iz ove ankete: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "Ova anketa biće objavljena za tutore povezane grupe: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "Ova anketa i njena pitanja biće obrisana: %s"
+
+msgid "Could not complete survey action"
+msgstr "Nije moguće izvršiti radnju ankete"
+
+msgid "Not started"
+msgstr "Nije započeto"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "Ankete o sastancima omogućavaju pozvanim korisnicima da izaberu datume kada su dostupni."
+
+msgid "Back to surveys"
+msgstr "Nazad na ankete"
+
+msgid "Edit meeting poll"
+msgstr "Izmeni anketu o sastanku"
+
+msgid "View meeting poll"
+msgstr "Prikaži anketu o sastanku"
+
+msgid "Basic information"
+msgstr "Osnovne informacije"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "Ovo će kreirati anketu tipa anketa o sastanku. Odgovori i pozivi se obrađuju zasebno."
+
+msgid "Availability"
+msgstr "Dostupnost"
+
+msgid "Meeting dates"
+msgstr "Datumi sastanka"
+
+msgid "Meeting poll"
+msgstr "Anketa o sastanku"
+
+msgid "My availability"
+msgstr "Moja dostupnost"
+
+msgid "Meeting poll results"
+msgstr "Rezultati ankete o sastanku"
+
+msgid "No invitations found"
+msgstr "Nema pronađenih poziva"
+
+msgid "available"
+msgstr "dostupan"
+
+msgid "Could not load meeting poll"
+msgstr "Nije moguće učitati anketu o sastanku"
+
+msgid "Please complete the required fields"
+msgstr "Molimo popunite obavezna polja"
+
+msgid "Could not save meeting poll"
+msgstr "Nije moguće sačuvati anketu o sastanku"
+
+msgid "Could not save meeting availability"
+msgstr "Nije moguće sačuvati dostupnost za sastanak"
+
+msgid "Copy this survey to another course or session"
+msgstr "Kopiraj ovu anketu u drugi kurs ili sesiju"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "Anketa će biti kopirana bez odgovora ili pozivnica."
+
+msgid "No target courses found"
+msgstr "Nisu pronađeni ciljni kursevi"
+
+msgid "Search by course title, course code or session name."
+msgstr "Pretražite po nazivu kursa, kodu kursa ili nazivu sesije."
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "Koristite Duplikat ankete kada želite kopiju u istom kursu."
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "Pitanja i opcije će biti kopirani. Odgovori, pozivnice i izveštaji ostaju samo u originalnoj anketi."
+
+msgid "Selected target"
+msgstr "Izabrani cilj"
+
+msgid "Could not load copy form"
+msgstr "Nije moguće učitati obrazac za kopiranje"
+
+msgid "The survey will be copied to: %s"
+msgstr "Anketa će biti kopirana u: %s"
+
+msgid "Survey copied."
+msgstr "Anketa je kopirana."
+
+msgid "Could not copy survey"
+msgstr "Nije moguće kopirati anketu"
+
+msgid "Answer survey"
+msgstr "Odgovori na anketu"
+
+msgid "Preview mode does not save answers."
+msgstr "Pregled ne čuva odgovore."
+
+msgid "Survey completed"
+msgstr "Anketa je završena"
+
+msgid "Thank you for answering the survey."
+msgstr "Hvala što ste odgovorili na anketu."
+
+msgid "Profile information"
+msgstr "Informacije o profilu"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "Pregledajte tražena polja profila pre nego što odgovorite na anketu."
+
+msgid "This profile field is read-only."
+msgstr "Ovo polje profila je samo za čitanje."
+
+msgid "You already filled this survey."
+msgstr "Već ste popunili ovu anketu."
+
+msgid "Please specify"
+msgstr "Molimo navedite"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "Ovaj tip pitanja nije podržan u modernom prikazu ankete."
+
+msgid "Preview only"
+msgstr "Samo pregled"
+
+msgid "Submit answers"
+msgstr "Pošalji odgovore"
+
+msgid "Could not load survey"
+msgstr "Nije moguće učitati anketu"
+
+msgid "Please complete the required profile fields."
+msgstr "Molimo popunite obavezna polja profila."
+
+msgid "Please answer all mandatory questions."
+msgstr "Molimo odgovorite na sva obavezna pitanja."
+
+msgid "Could not save survey answers"
+msgstr "Nije moguće sačuvati odgovore na anketu"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "Konfigurišite osnovne informacije o anketi pre upravljanja pitanjima i pozivnicama."
+
+msgid "The survey code cannot be changed after creation."
+msgstr "Kod ankete ne može se promeniti nakon kreiranja."
+
+msgid "Survey behavior"
+msgstr "Ponašanje ankete"
+
+msgid "Use 0 for no time limit."
+msgstr "Koristite 0 za neograničeno vreme."
+
+msgid "Survey messages"
+msgstr "Poruke ankete"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "Polja profila izabrana ovde biće prikazana pre pitanja ankete."
+
+msgid "No profile fields are currently available."
+msgstr "Trenutno nema dostupnih polja profila."
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "Izbor polja profila dostupan je samo za neanonimne ankete."
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "Povezivanje veština biće migrirano u posebnoj grupi."
+
+msgid "Could not load survey configuration"
+msgstr "Nije moguće učitati konfiguraciju ankete"
+
+msgid "The survey code is required."
+msgstr "Kod ankete je obavezan."
+
+msgid "The survey title is required."
+msgstr "Naslov ankete je obavezan."
+
+msgid "The survey has been saved successfully"
+msgstr "Anketa je uspešno sačuvana"
+
+msgid "Could not save survey configuration"
+msgstr "Nije moguće sačuvati konfiguraciju ankete"
+
+msgid "Course users"
+msgstr "Korisnici kursa"
+
+msgid "Already invited"
+msgstr "Već pozvani"
+
+msgid "No users found"
+msgstr "Nisu pronađeni korisnici"
+
+msgid "No groups found"
+msgstr "Nisu pronađene grupe"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "Koristite **link** gde treba da se pojavi veza ka anketi."
+
+msgid "Remind all selected users"
+msgstr "Podseti sve izabrane korisnike"
+
+msgid "Anonymous access link"
+msgstr "Anonimni pristupni link"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "Korisnici koji nisu pozvani mogu koristiti ovaj link za popunjavanje ankete."
+
+msgid "Answered anonymously"
+msgstr "Odgovoreno anonimno"
+
+msgid "Could not load survey invitations"
+msgstr "Nije moguće učitati pozivnice za anketu"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "Naslov i sadržaj poruke su obavezni prilikom slanja e-pošte."
+
+msgid "Could not publish survey"
+msgstr "Anketa se ne može objaviti"
+
+msgid "Could not copy the link"
+msgstr "Link se ne može kopirati"
+
+msgid "Please answer this survey using the following link"
+msgstr "Molimo Vas da odgovorite na ovu anketu koristeći sledeći link"
+
+msgid "Export CSV"
+msgstr "Izvezi CSV"
+
+msgid "Export compact CSV"
+msgstr "Izvezi kompaktni CSV"
+
+msgid "Export Excel"
+msgstr "Izvezi Excel"
+
+msgid "Export package"
+msgstr "Izvezi paket"
+
+msgid "Results summary"
+msgstr "Pregled rezultata"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "Ovaj prikaz prikazuje migrirane podatke izveštavanja za ovu anketu."
+
+msgid "Select user"
+msgstr "Izaberi korisnika"
+
+msgid "No answers found"
+msgstr "Nema pronađenih odgovora"
+
+msgid "answers"
+msgstr "odgovori"
+
+msgid "Could not load survey reporting"
+msgstr "Izveštavanje ankete se ne može učitati"
+
+msgid "Back to threads"
+msgstr "Nazad na teme"
+
+msgid "Back to learning path"
+msgstr "Nazad na putanju učenja"
+
+msgid "Remove sticky"
+msgstr "Ukloni istaknuto"
+
+msgid "Make sticky"
+msgstr "Označi kao istaknuto"
+
+msgid "Open thread"
+msgstr "Otvori temu"
+
+msgid "Close thread"
+msgstr "Zatvori temu"
+
+msgid "Delete thread"
+msgstr "Obriši temu"
+
+msgid "This thread is hidden from learners."
+msgstr "Ova tema je sakrivena od polaznika."
+
+msgid "Revision requested"
+msgstr "Zahtevana revizija"
+
+msgid "Revision"
+msgstr "Revizija"
+
+msgid "Approve post"
+msgstr "Odobri objavu"
+
+msgid "Reject post"
+msgstr "Odbij objavu"
+
+msgid "Cancel revision request"
+msgstr "Otkaži zahtev za reviziju"
+
+msgid "Delete post"
+msgstr "Obriši objavu"
+
+msgid "Message is required"
+msgstr "Poruka je obavezna"
+
+msgid "Target thread is required"
+msgstr "Ciljna tema je obavezna"
+
+msgid "Could not retrieve posts"
+msgstr "Objave se ne mogu učitati"
+
+msgid "Thread shown"
+msgstr "Tema prikazana"
+
+msgid "Thread hidden"
+msgstr "Tema sakrivena"
+
+msgid "Could not update thread"
+msgstr "Tema se ne može ažurirati"
+
+msgid "Thread closed"
+msgstr "Tema zatvorena"
+
+msgid "Thread opened"
+msgstr "Tema otvorena"
+
+msgid "Thread marked as sticky"
+msgstr "Tema označena kao istaknuta"
+
+msgid "Thread unmarked as sticky"
+msgstr "Tema uklonjena sa istaknutih"
+
+msgid "Thread notifications enabled"
+msgstr "Obaveštenja o temi omogućena"
+
+msgid "Thread notifications disabled"
+msgstr "Obaveštenja o temi onemogućena"
+
+msgid "Could not update thread notification"
+msgstr "Obaveštenja o temi se ne mogu ažurirati"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "Da li ste sigurni da želite da obrišete ovu temu?"
+
+msgid "Could not delete thread"
+msgstr "Tema se ne može obrisati"
+
+msgid "Post approved"
+msgstr "Objava odobrena"
+
+msgid "Could not approve post"
+msgstr "Objava se ne može odobriti"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "Da li ste sigurni da želite da odbijete ovu objavu?"
+
+msgid "Post rejected"
+msgstr "Objava odbijena"
+
+msgid "Could not reject post"
+msgstr "Objava se ne može odbiti"
+
+msgid "Post shown"
+msgstr "Objava prikazana"
+
+msgid "Post hidden"
+msgstr "Objava sakrivena"
+
+msgid "Could not update post"
+msgstr "Nije moguće ažurirati objavu"
+
+msgid "Post updated"
+msgstr "Objava ažurirana"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "Da li ste sigurni da želite da obrišete ovu objavu?"
+
+msgid "Post deleted"
+msgstr "Objava obrisana"
+
+msgid "Could not delete post"
+msgstr "Nije moguće obrisati objavu"
+
+msgid "Untitled thread"
+msgstr "Neimenovana tema"
+
+msgid "Could not retrieve threads"
+msgstr "Nije moguće preuzeti teme"
+
+msgid "Post moved"
+msgstr "Objava premeštena"
+
+msgid "Could not move post"
+msgstr "Nije moguće premestiti objavu"
+
+msgid "Revision request removed"
+msgstr "Zahtev za reviziju uklonjen"
+
+msgid "Could not update revision request"
+msgstr "Nije moguće ažurirati zahtev za reviziju"
+
+msgid "Are you sure you want to report this post?"
+msgstr "Da li ste sigurni da želite da prijavite ovu objavu?"
+
+msgid "Could not report post"
+msgstr "Nije moguće prijaviti objavu"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "Da li ste sigurni da želite da obrišete ovaj prilog?"
+
+msgid "Attachment deleted"
+msgstr "Prilog obrisan"
+
+msgid "Could not delete attachment"
+msgstr "Nije moguće obrisati prilog"
+
+msgid "Thread title"
+msgstr "Naslov teme"
+
+msgid "Sticky thread"
+msgstr "Fiksirana tema"
+
+msgid "Attach files"
+msgstr "Priloži datoteke"
+
+msgid "Attachments are disabled for this forum"
+msgstr "Prilozi su onemogućeni za ovaj forum"
+
+msgid "The forum is not open yet."
+msgstr "Forum još nije otvoren."
+
+msgid "The forum is closed."
+msgstr "Forum je zatvoren."
+
+msgid "The forum is locked."
+msgstr "Forum je zaključan."
+
+msgid "New threads are not allowed in this forum."
+msgstr "Nove teme nisu dozvoljene u ovom forumu."
+
+msgid "Thread created"
+msgstr "Tema kreirana"
+
+msgid "Could not create thread"
+msgstr "Nije moguće kreirati temu"
+
+msgid "Back to posts"
+msgstr "Nazad na objave"
+
+msgid "This reply will be stored as a revision."
+msgstr "Ovaj odgovor će biti sačuvan kao revizija."
+
+msgid "Post reply"
+msgstr "Odgovori na objavu"
+
+msgid "The thread is locked."
+msgstr "Tema je zaključana."
+
+msgid "Reply added"
+msgstr "Odgovor dodat"
+
+msgid "Could not add reply"
+msgstr "Nije moguće dodati odgovor"
+
+msgid "Add forum"
+msgstr "Dodaj forum"
+
+msgid "No forums found"
+msgstr "Nema pronađenih foruma"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "Kreirajte prvu kategoriju foruma ili forum da biste započeli diskusije."
+
+msgid "Locked"
+msgstr "Zaključano"
+
+msgid "No forums in this category"
+msgstr "Nema foruma u ovoj kategoriji"
+
+msgid "Posts require approval"
+msgstr "Objave zahtevaju odobrenje"
+
+msgid "Forum for current group"
+msgstr "Forum za trenutnu grupu"
+
+msgid "Group forum visibility"
+msgstr "Vidljivost grupnog foruma"
+
+msgid "No category"
+msgstr "Bez kategorije"
+
+msgid "Could not retrieve forums"
+msgstr "Nije moguće preuzeti forume"
+
+msgid "Forum category updated"
+msgstr "Kategorija foruma ažurirana"
+
+msgid "Forum category created"
+msgstr "Kategorija foruma kreirana"
+
+msgid "Could not save forum category"
+msgstr "Nije moguće sačuvati kategoriju foruma"
+
+msgid "Forum updated"
+msgstr "Forum ažuriran"
+
+msgid "Forum created"
+msgstr "Forum kreiran"
+
+msgid "Could not save forum"
+msgstr "Nije moguće sačuvati forum"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "Da li ste sigurni da želite da obrišete ovu kategoriju foruma?"
+
+msgid "Could not delete forum category"
+msgstr "Nije moguće obrisati kategoriju foruma"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "Da li ste sigurni da želite da obrišete ovaj forum?"
+
+msgid "Could not delete forum"
+msgstr "Nije moguće obrisati forum"
+
+msgid "Forum category unlocked"
+msgstr "Kategorija foruma otključana"
+
+msgid "Forum category locked"
+msgstr "Kategorija foruma zaključana"
+
+msgid "Could not update forum category"
+msgstr "Nije moguće ažurirati kategoriju foruma"
+
+msgid "Forum category shown"
+msgstr "Kategorija foruma prikazana"
+
+msgid "Forum category hidden"
+msgstr "Kategorija foruma sakrivena"
+
+msgid "Forum unlocked"
+msgstr "Forum otključan"
+
+msgid "Forum locked"
+msgstr "Forum zaključan"
+
+msgid "Could not update forum"
+msgstr "Nije moguće ažurirati forum"
+
+msgid "Forum shown"
+msgstr "Forum prikazan"
+
+msgid "Forum hidden"
+msgstr "Forum sakriven"
+
+msgid "Forum notifications enabled"
+msgstr "Obaveštenja o forumu omogućena"
+
+msgid "Forum notifications disabled"
+msgstr "Obaveštenja o forumu onemogućena"
+
+msgid "Could not update forum notification"
+msgstr "Nije moguće ažurirati obaveštenja o forumu"
+
+msgid "Forum category moved"
+msgstr "Kategorija foruma premeštena"
+
+msgid "Could not move forum category"
+msgstr "Nije moguće premestiti kategoriju foruma"
+
+msgid "Forum moved"
+msgstr "Forum premešten"
+
+msgid "Could not move forum"
+msgstr "Nije moguće premestiti forum"
+
+msgid "Back to forums"
+msgstr "Nazad na forume"
+
+msgid "New thread"
+msgstr "Nova tema"
+
+msgid "No threads found"
+msgstr "Nema pronađenih tema"
+
+msgid "Sticky"
+msgstr "Zakačeno"
+
+msgid "Graded"
+msgstr "Ocenjeno"
+
+msgid "Grade peers"
+msgstr "Ocenjivanje kolega"
+
+msgid "Move thread"
+msgstr "Premesti temu"
+
+msgid "Target forum"
+msgstr "Ciljni forum"
+
+msgid "Target forum is required"
+msgstr "Ciljni forum je obavezan"
+
+msgid "Students"
+msgstr "Studenti"
+
+msgid "No students found"
+msgstr "Nema pronađenih studenata"
+
+msgid "No peers available to grade."
+msgstr "Nema dostupnih kolega za ocenjivanje."
+
+msgid "Qualified"
+msgstr "Kvalifikovan"
+
+msgid "Not qualified"
+msgstr "Nije kvalifikovan"
+
+msgid "Could not retrieve thread grading"
+msgstr "Nije moguće preuzeti ocenjivanje teme"
+
+msgid "Thread grading updated"
+msgstr "Ocenjivanje teme ažurirano"
+
+msgid "Could not update thread grading"
+msgstr "Nije moguće ažurirati ocenjivanje teme"
+
+msgid "Thread score saved"
+msgstr "Ocena teme sačuvana"
+
+msgid "Could not save thread score"
+msgstr "Nije moguće sačuvati ocenu teme"
+
+msgid "Could not move thread"
+msgstr "Nije moguće premestiti temu"
+
+msgid "Thread updated"
+msgstr "Tema ažurirana"
+
+msgid "Search term is too short"
+msgstr "Pretraga je prekratka"
+
+msgid "Could not search forums"
+msgstr "Nije moguće pretražiti forume"
+
+msgid "Moderated"
+msgstr "Moderirano"
+
+msgid "View threads"
+msgstr "Prikaži teme"
 

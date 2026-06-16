@@ -5,6 +5,17 @@
 $strings['plugin_title'] = 'Zoom 視訊會議';
 $strings['plugin_comment'] = '課程與工作坊中的 Zoom 視訊會議整合';
 
+$strings['accountId'] = '帳戶 ID';
+$strings['clientId'] = '客戶端 ID';
+$strings['clientSecret'] = '客戶端金鑰';
+$strings['webhookSecretToken'] = 'Webhook 密鑰權杖';
+$strings['apiKey_help'] = '舊版 JWT API 金鑰。建議使用帳戶 ID、客戶端 ID 與客戶端金鑰進行 Zoom Server-to-Server OAuth。';
+$strings['apiSecret_help'] = '舊版 JWT API 密鑰。建議使用帳戶 ID、客戶端 ID 與客戶端金鑰進行 Zoom Server-to-Server OAuth。';
+$strings['verificationToken_help'] = '舊版 webhook 驗證權杖。建議使用 Webhook 密鑰權杖。';
+$strings['accountId_help'] = 'Zoom Server-to-Server OAuth 帳戶 ID。';
+$strings['clientId_help'] = 'Zoom Server-to-Server OAuth 客戶端 ID。';
+$strings['clientSecret_help'] = 'Zoom Server-to-Server OAuth 客戶端金鑰。';
+$strings['webhookSecretToken_help'] = '用於驗證 Zoom webhook 請求的密鑰權杖。';
 $strings['apiKey'] = 'API 金鑰';
 $strings['apiSecret'] = 'API 密鑰';
 $strings['verificationToken'] = '驗證權杖';

@@ -1,0 +1,39 @@
+<?php
+
+$strings['plugin_title'] = 'Google Maps';
+$strings['plugin_comment'] = 'แสดงแผนที่ Google Maps พร้อมตำแหน่งผู้ใช้ที่เก็บไว้ในช่องข้อมูลเพิ่มเติม';
+$strings['enable_api'] = 'โหลด Google Maps API';
+$strings['api_key'] = 'คีย์ API';
+$strings['extra_field_name'] = 'ชื่อช่องข้อมูลเพิ่มเติม';
+$strings['extra_field_name_help'] = 'ป้อนตัวแปรช่องข้อมูลเพิ่มเติมของผู้ใช้ตั้งแต่หนึ่งรายการขึ้นไป โดยคั่นด้วยเครื่องหมายจุลภาค แผนที่สามารถแสดงได้สูงสุด 5 ช่องข้อมูล ตัวอย่าง: address, office_address, city';
+$strings['UsersCoordinatesMap'] = 'แผนที่ตำแหน่งผู้ใช้';
+$strings['UsersCoordinatesMapHelp'] = 'แผนที่นี้แสดงตำแหน่งผู้ใช้ตามช่องข้อมูลเพิ่มเติมของผู้ใช้ที่กำหนดค่าไว้';
+$strings['GoogleMapsAdminIntro'] = 'กำหนดค่าคีย์ Google Maps API และช่องข้อมูลเพิ่มเติมของผู้ใช้ที่บรรจุที่อยู่หรือตำแหน่ง';
+$strings['GoogleMapsApi'] = 'Google Maps API';
+$strings['ExtraFields'] = 'ช่องข้อมูลเพิ่มเติม';
+$strings['Access'] = 'การเข้าถึง';
+$strings['AdministratorsOnly'] = 'ผู้ดูแลระบบเท่านั้น';
+$strings['OpenMap'] = 'เปิดแผนที่';
+$strings['ConfigurePlugin'] = 'กำหนดค่าปลั๊กอิน';
+$strings['Configured'] = 'กำหนดค่าแล้ว';
+$strings['NotConfigured'] = 'ยังไม่ได้กำหนดค่า';
+$strings['GoogleMapsApiDisabledWarning'] = 'การโหลด Google Maps API ถูกปิดใช้งานในการกำหนดค่าปลั๊กอิน';
+$strings['GoogleMapsApiKeyMissingWarning'] = 'ไม่มีคีย์ Google Maps API';
+$strings['ExtraFieldNameMissingWarning'] = 'ยังไม่ได้กำหนดค่าช่องข้อมูลเพิ่มเติมของผู้ใช้';
+$strings['ExtraFieldsNotFoundWarning'] = 'ไม่พบช่องข้อมูลเพิ่มเติมของผู้ใช้ต่อไปนี้: %s';
+$strings['NoUserCoordinatesFound'] = 'ไม่พบตำแหน่งผู้ใช้สำหรับช่องข้อมูลเพิ่มเติมที่กำหนดค่าไว้';
+$strings['ConfigureGoogleMapsFirst'] = 'กรุณากำหนดค่าและเปิดใช้งาน Google Maps API ก่อนเปิดแผนที่';
+
+$strings['map_provider'] = 'ผู้ให้บริการแผนที่';
+$strings['map_provider_help'] = 'เลือกผู้ให้บริการแผนที่ที่ใช้โดยปลั๊กอินและแผนที่โซเชียล';
+$strings['GoogleMapsProvider'] = 'Google Maps';
+$strings['OpenStreetMapProvider'] = 'OpenStreetMap';
+$strings['MapProvider'] = 'ผู้ให้บริการแผนที่';
+$strings['MapProviderConfiguration'] = 'การกำหนดค่าผู้ให้บริการ';
+$strings['default_latitude'] = 'ละติจูดเริ่มต้น';
+$strings['default_latitude_help'] = 'ละติจูดศูนย์กลางแผนที่เริ่มต้น ใช้เมื่อไม่มีมาร์กเกอร์';
+$strings['default_longitude'] = 'ลองจิจูดเริ่มต้น';
+$strings['default_longitude_help'] = 'ลองจิจูดศูนย์กลางแผนที่เริ่มต้น ใช้เมื่อไม่มีมาร์กเกอร์';
+$strings['default_zoom'] = 'การซูมเริ่มต้น';
+$strings['default_zoom_help'] = 'การซูมแผนที่เริ่มต้นระหว่าง 1 ถึง 20';
+$strings['OpenStreetMapInfo'] = 'OpenStreetMap ไม่จำเป็นต้องใช้คีย์ API มาร์กเกอร์ที่เป็นที่อยู่อย่างเดียวจะแสดงเป็นลิงก์ค้นหา เว้นแต่จะมีพิกัด';

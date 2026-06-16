@@ -1,0 +1,39 @@
+<?php
+
+$strings['plugin_title'] = 'Google Maps';
+$strings['plugin_comment'] = 'הצגת מפת Google עם מיקומי משתמשים השמורים בשדות נוספים.';
+$strings['enable_api'] = 'טעינת Google Maps API';
+$strings['api_key'] = 'מפתח API';
+$strings['extra_field_name'] = 'שם שדה נוסף';
+$strings['extra_field_name_help'] = 'הזן משתנה אחד או יותר של שדות נוספים של משתמשים, מופרדים בפסיקים. המפה יכולה להציג עד 5 שדות. דוגמה: address, office_address, city';
+$strings['UsersCoordinatesMap'] = 'מפת מיקומי משתמשים';
+$strings['UsersCoordinatesMapHelp'] = 'מפה זו מציגה את מיקומי המשתמשים על סמך שדות נוספים מוגדרים.';
+$strings['GoogleMapsAdminIntro'] = 'הגדר את מפתח Google Maps API ואת שדות הנוספים של המשתמשים המכילים כתובות או מיקומים.';
+$strings['GoogleMapsApi'] = 'Google Maps API';
+$strings['ExtraFields'] = 'שדות נוספים';
+$strings['Access'] = 'גישה';
+$strings['AdministratorsOnly'] = 'מנהלים בלבד';
+$strings['OpenMap'] = 'פתח מפה';
+$strings['ConfigurePlugin'] = 'הגדר תוסף';
+$strings['Configured'] = 'מוגדר';
+$strings['NotConfigured'] = 'לא מוגדר';
+$strings['GoogleMapsApiDisabledWarning'] = 'טעינת Google Maps API מושבתת בהגדרות התוסף.';
+$strings['GoogleMapsApiKeyMissingWarning'] = 'חסר מפתח Google Maps API.';
+$strings['ExtraFieldNameMissingWarning'] = 'לא הוגדר שדה נוסף של משתמש.';
+$strings['ExtraFieldsNotFoundWarning'] = 'שדות הנוספים הבאים של משתמשים לא נמצאו: %s.';
+$strings['NoUserCoordinatesFound'] = 'לא נמצאו מיקומי משתמשים עבור השדות הנוספים שהוגדרו.';
+$strings['ConfigureGoogleMapsFirst'] = 'הגדר ואפשר את Google Maps API לפני פתיחת המפה.';
+
+$strings['map_provider'] = 'ספק המפה';
+$strings['map_provider_help'] = 'בחר את ספק המפה שבו משתמש התוסף ומפת הרשת החברתית.';
+$strings['GoogleMapsProvider'] = 'Google Maps';
+$strings['OpenStreetMapProvider'] = 'OpenStreetMap';
+$strings['MapProvider'] = 'ספק המפה';
+$strings['MapProviderConfiguration'] = 'הגדרת ספק';
+$strings['default_latitude'] = 'קו רוחב ברירת מחדל';
+$strings['default_latitude_help'] = 'קו הרוחב המרכזי של המפה כברירת מחדל. משמש כאשר אין סמן זמין.';
+$strings['default_longitude'] = 'קו אורך ברירת מחדל';
+$strings['default_longitude_help'] = 'קו האורך המרכזי של המפה כברירת מחדל. משמש כאשר אין סמן זמין.';
+$strings['default_zoom'] = 'זום ברירת מחדל';
+$strings['default_zoom_help'] = 'זום ברירת מחדל של המפה בין 1 ל-20.';
+$strings['OpenStreetMapInfo'] = 'OpenStreetMap אינו דורש מפתח API. סמנים המבוססים על כתובת בלבד מוצגים כקישורי חיפוש, אלא אם כן זמינים קואורדינטות.';

@@ -7,12 +7,14 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Command;
 
 use Chamilo\CoreBundle\Entity\AgendaReminder;
+use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\MessageHelper;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
+use Symfony\Component\Translation\TranslatorBagInterface;
 use DateTime;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
@@ -237,9 +239,35 @@ class SendEventRemindersCommand extends Command
         return $dt->format('Y-m-d H:i:s');
     }
 
+    /**
+     * Resolve the best available translation locale for a user.
+     * Handles Chamilo sub-languages (e.g. fr_69) by falling back to the parent
+     * language's isocode (e.g. fr_FR), mirroring the pattern used in UpdateVueTranslations.
+     */
+    private function resolveTranslationLocale(string $userLocale): string
+    {
+        if (!$this->translator instanceof TranslatorBagInterface) {
+            return $userLocale;
+        }
+
+        if ($this->translator->getCatalogue($userLocale)->defines('Reminder for event : %s', 'messages')) {
+            return $userLocale;
+        }
+
+        $language = $this->entityManager->getRepository(Language::class)->findOneBy(['isocode' => $userLocale]);
+        if (null !== $language && null !== $language->getParent()) {
+            $parentIso = $language->getParent()->getIsocode();
+            if ($this->translator->getCatalogue($parentIso)->defines('Reminder for event : %s', 'messages')) {
+                return $parentIso;
+            }
+        }
+
+        return 'en_US';
+    }
+
     private function sendReminderMessage(User $user, CCalendarEvent $event, int $senderId, bool $debug, SymfonyStyle $io, int &$sentRemindersCount): void
     {
-        $locale = $user->getLocale() ?: 'en';
+        $locale = $this->resolveTranslationLocale($user->getLocale() ?: 'en_US');
         $this->translator->setLocale($locale);
 
         $messageSubject = \sprintf(

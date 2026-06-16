@@ -1,0 +1,39 @@
+<?php
+
+$strings['plugin_title'] = 'Google Maps';
+$strings['plugin_comment'] = 'Toon een Google-kaart met gebruikerslocaties die zijn opgeslagen in extra velden.';
+$strings['enable_api'] = 'Laad Google Maps API';
+$strings['api_key'] = 'API-sleutel';
+$strings['extra_field_name'] = 'Naam extra veld';
+$strings['extra_field_name_help'] = "Voer een of meer variabelen van gebruikers extra velden in, gescheiden door komma's. De kaart kan maximaal 5 velden weergeven. Voorbeeld: address, office_address, city";
+$strings['UsersCoordinatesMap'] = 'Gebruikerslocatiekaart';
+$strings['UsersCoordinatesMapHelp'] = 'Deze kaart toont gebruikerslocaties op basis van geconfigureerde gebruikers extra velden.';
+$strings['GoogleMapsAdminIntro'] = 'Configureer de Google Maps API-sleutel en de gebruikers extra velden die adressen of locaties bevatten.';
+$strings['GoogleMapsApi'] = 'Google Maps API';
+$strings['ExtraFields'] = 'Extra velden';
+$strings['Access'] = 'Toegang';
+$strings['AdministratorsOnly'] = 'Alleen beheerders';
+$strings['OpenMap'] = 'Kaart openen';
+$strings['ConfigurePlugin'] = 'Plugin configureren';
+$strings['Configured'] = 'Geconfigureerd';
+$strings['NotConfigured'] = 'Niet geconfigureerd';
+$strings['GoogleMapsApiDisabledWarning'] = 'Het laden van de Google Maps API is uitgeschakeld in de pluginconfiguratie.';
+$strings['GoogleMapsApiKeyMissingWarning'] = 'Google Maps API-sleutel ontbreekt.';
+$strings['ExtraFieldNameMissingWarning'] = 'Er is geen gebruikers extra veld geconfigureerd.';
+$strings['ExtraFieldsNotFoundWarning'] = 'De volgende gebruikers extra velden zijn niet gevonden: %s.';
+$strings['NoUserCoordinatesFound'] = 'Er zijn geen gebruikerslocaties gevonden voor de geconfigureerde extra velden.';
+$strings['ConfigureGoogleMapsFirst'] = 'Configureer en schakel de Google Maps API in voordat u de kaart opent.';
+
+$strings['map_provider'] = 'Kaartprovider';
+$strings['map_provider_help'] = 'Selecteer de kaartprovider die door de plugin en door de Sociale kaart wordt gebruikt.';
+$strings['GoogleMapsProvider'] = 'Google Maps';
+$strings['OpenStreetMapProvider'] = 'OpenStreetMap';
+$strings['MapProvider'] = 'Kaartprovider';
+$strings['MapProviderConfiguration'] = 'Providerconfiguratie';
+$strings['default_latitude'] = 'Standaard breedtegraad';
+$strings['default_latitude_help'] = 'Standaard breedtegraad van het kaartcentrum. Wordt gebruikt wanneer er geen markering beschikbaar is.';
+$strings['default_longitude'] = 'Standaard lengtegraad';
+$strings['default_longitude_help'] = 'Standaard lengtegraad van het kaartcentrum. Wordt gebruikt wanneer er geen markering beschikbaar is.';
+$strings['default_zoom'] = 'Standaard zoom';
+$strings['default_zoom_help'] = 'Standaard kaartzoom tussen 1 en 20.';
+$strings['OpenStreetMapInfo'] = 'OpenStreetMap vereist geen API-sleutel. Markeringen met alleen een adres worden weergegeven als zoeklinks, tenzij coördinaten beschikbaar zijn.';

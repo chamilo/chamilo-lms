@@ -109,7 +109,7 @@
                                         <em class="fa fa-user"></em>
                                     </span>
                                     <div>
-                                        <div class="font-semibold text-gray-90">{{ 'Buyer'|get_lang }}</div>
+                                        <div class="font-semibold text-gray-90">{{ 'Buyer'|get_plugin_lang('BuyCoursesPlugin') }}</div>
                                         <div>{{ service_sale.buyer.name }}</div>
                                     </div>
                                 </div>
@@ -119,7 +119,7 @@
                                         <em class="fa fa-calendar"></em>
                                     </span>
                                     <div>
-                                        <div class="font-semibold text-gray-90">{{ 'PurchaseDate'|get_lang }}</div>
+                                        <div class="font-semibold text-gray-90">{{ 'PurchaseDate'|get_plugin_lang('BuyCoursesPlugin') }}</div>
                                         <div>{{ service_sale.buy_date }}</div>
                                     </div>
                                 </div>
@@ -221,7 +221,7 @@
             <div class="rounded-3xl border border-gray-25 bg-white p-6 shadow-sm">
                 <div class="space-y-5">
                     <div class="space-y-2">
-                        <h2 class="text-lg font-semibold text-gray-90">Summary</h2>
+                        <h2 class="text-lg font-semibold text-gray-90">{{ 'ServiceProcessSummaryTitle'|get_plugin_lang('BuyCoursesPlugin') }}</h2>
                         <p class="text-sm leading-6 text-gray-50">
                             {{ 'ConfirmFinalDetails'|get_plugin_lang('BuyCoursesPlugin') }}
                         </p>

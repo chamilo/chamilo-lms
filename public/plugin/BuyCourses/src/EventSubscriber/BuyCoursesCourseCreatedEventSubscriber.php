@@ -158,9 +158,15 @@ final class BuyCoursesCourseCreatedEventSubscriber implements EventSubscriberInt
             'max_courses_with_benefits' => max(0, (int) ($benefits['maxCourses'] ?? 0)),
             'hosting_limit' => max(0, (int) ($benefits['hostingLimit'] ?? 0)),
             'document_quota_mb' => max(0, (int) ($benefits['documentQuotaMb'] ?? 0)),
+            'ai_features' => $this->plugin->normalizeAiCourseFeatures($benefits['aiFeatures'] ?? []),
             'status' => 'active',
             'created_at' => $now,
         ];
+
+        $this->plugin->applyAiCourseFeatureSettingsToCourse(
+            $courseId,
+            $this->plugin->normalizeAiCourseFeatures($benefits['aiFeatures'] ?? [])
+        );
 
         $this->connection->insert(
             BuyCoursesPlugin::TABLE_SUBSCRIPTION_COURSE,

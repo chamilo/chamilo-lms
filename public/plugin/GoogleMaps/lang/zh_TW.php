@@ -1,0 +1,39 @@
+<?php
+
+$strings['plugin_title'] = 'Google 地圖';
+$strings['plugin_comment'] = '顯示包含使用者額外欄位儲存位置的 Google 地圖。';
+$strings['enable_api'] = '載入 Google Maps API';
+$strings['api_key'] = 'API 金鑰';
+$strings['extra_field_name'] = '額外欄位名稱';
+$strings['extra_field_name_help'] = '輸入一個或多個使用者額外欄位變數，以逗號分隔。地圖最多可顯示 5 個欄位。範例：address, office_address, city';
+$strings['UsersCoordinatesMap'] = '使用者位置地圖';
+$strings['UsersCoordinatesMapHelp'] = '此地圖根據已設定的使用者額外欄位顯示使用者位置。';
+$strings['GoogleMapsAdminIntro'] = '設定 Google Maps API 金鑰以及包含地址或位置的使用者額外欄位。';
+$strings['GoogleMapsApi'] = 'Google Maps API';
+$strings['ExtraFields'] = '額外欄位';
+$strings['Access'] = '存取';
+$strings['AdministratorsOnly'] = '僅限管理員';
+$strings['OpenMap'] = '開啟地圖';
+$strings['ConfigurePlugin'] = '設定外掛';
+$strings['Configured'] = '已設定';
+$strings['NotConfigured'] = '未設定';
+$strings['GoogleMapsApiDisabledWarning'] = '外掛設定中已停用 Google Maps API 載入。';
+$strings['GoogleMapsApiKeyMissingWarning'] = '缺少 Google Maps API 金鑰。';
+$strings['ExtraFieldNameMissingWarning'] = '尚未設定任何使用者額外欄位。';
+$strings['ExtraFieldsNotFoundWarning'] = '找不到以下使用者額外欄位：%s。';
+$strings['NoUserCoordinatesFound'] = '在已設定的額外欄位中找不到任何使用者位置。';
+$strings['ConfigureGoogleMapsFirst'] = '開啟地圖前請先設定並啟用 Google Maps API。';
+
+$strings['map_provider'] = '地圖提供者';
+$strings['map_provider_help'] = '選擇此外掛與社群地圖使用的地圖提供者。';
+$strings['GoogleMapsProvider'] = 'Google 地圖';
+$strings['OpenStreetMapProvider'] = 'OpenStreetMap';
+$strings['MapProvider'] = '地圖提供者';
+$strings['MapProviderConfiguration'] = '提供者設定';
+$strings['default_latitude'] = '預設緯度';
+$strings['default_latitude_help'] = '預設地圖中心緯度。無標記可用時使用。';
+$strings['default_longitude'] = '預設經度';
+$strings['default_longitude_help'] = '預設地圖中心經度。無標記可用時使用。';
+$strings['default_zoom'] = '預設縮放等級';
+$strings['default_zoom_help'] = '預設地圖縮放等級（1 到 20 之間）。';
+$strings['OpenStreetMapInfo'] = 'OpenStreetMap 無需 API 金鑰。僅有地址的標記會顯示為搜尋連結，除非有可用座標。';

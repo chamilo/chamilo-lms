@@ -8,3 +8,6 @@ $strings['PluginDisabled'] = '電子評分已停用';
 $strings['StudentId'] = '學生編號';
 $strings['ProviderId'] = '提供者編號';
 $strings['CourseHours'] = '課程時數';
+
+$strings['GenerateFile'] = '產生檔案';
+$strings['CourseId'] = '課程 ID';

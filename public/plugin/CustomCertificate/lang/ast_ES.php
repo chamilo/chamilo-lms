@@ -72,3 +72,18 @@ $strings['QuestionDelete'] = '¿ quies desaniciar el títulu específicu y usar 
 $strings['SuccessDelete'] = 'Desaniciáu con èxitu';
 $strings['ProblemDelete'] = 'Problema al desaniciar el certificáu';
 $strings['OnlyCustomCertificates'] = "Sólo s'esporten los cursos con un certificáu personalizáu";
+$strings['CertificateMode'] = 'Mou de certificáu';
+$strings['UseCourseCustomCertificate'] = 'Usar certificáu personalizáu específicu del cursu';
+$strings['UseDefaultCustomCertificate'] = 'Usar certificáu personalizáu predetermináu de la plataforma';
+
+$strings['CreateCertificateWithTags'] = 'Crear el certificáu usando estes etiquetes';
+
+$strings['DeleteCertificate'] = 'Desaniciar certificáu';
+
+$strings['SaveCertificate'] = 'Guardar certificáu';
+
+$strings['SelectOneOptionBeforeOpeningEditor'] = "Seleiciona una opción y guarda la configuración enantes d'abrir l'editor de certificáu.";
+
+$strings['ChooseCustomCertificateModeHelp'] = 'Escueyi cómo ha usar esta cursu los certificáos personalizaos.';
+
+$strings['CouldNotSaveCertificate'] = 'Nun se pudo guardar la configuración del certificáu.';

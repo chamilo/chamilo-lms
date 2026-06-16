@@ -1,3 +1,36 @@
+v7.5 - 2026-06-12
+====
+Feature: per-country EU VAT now applies to course, session and subscription sales, not only
+services. At checkout the buyer fills in the same VAT declaration (country, postcode,
+individual/business, VAT number) already used for services; the sale then applies the correct
+destination-country VAT rate, B2B reverse charge, or export exemption, and stores the full VAT
+evidence. When no buyer country is declared, the previous flat global/product rate still
+applies. The catalog preview price stays on the flat rate for all product types (unchanged) —
+the per-country rate is computed at the point of sale.
+
+ACTION REQUIRED for installations updated from an earlier version: run the update procedure
+(see below) so the new VAT evidence columns are added to the `plugin_buycourses_sale` and
+`plugin_buycourses_subscription_rel_sale` tables.
+
+Fix: an empty tax rate on a service or a subscription can now be saved again, and is stored
+as NULL so the item falls back to the global tax rate (as intended). Older installations
+created the `tax_perc` column as NOT NULL on the services and subscription tables, which made
+saving an empty tax rate fail with "Column 'tax_perc' cannot be null".
+
+ACTION REQUIRED for installations updated from an earlier version: run the update procedure
+so these columns are made nullable. Either load [your-host]/plugin/BuyCourses/update.php in
+your browser as a platform administrator, or run this SQL manually:
+```sql
+ALTER TABLE plugin_buycourses_services MODIFY tax_perc int unsigned NULL;
+ALTER TABLE plugin_buycourses_subscription MODIFY tax_perc int unsigned NULL;
+```
+
+Fix: when tax is restricted to a single product type ("Only sessions" / "Only courses"), the
+catalog now applies tax to sessions consistently with what is actually charged at purchase.
+Previously the displayed price for sessions and session subscriptions always used the
+"courses" tax rule, so the shown tax could differ from the amount charged. No action required
+(code-only fix); the common "All" setting was never affected.
+
 v7.4 - 2022-04-28
 ====
 Add subscriptions support.

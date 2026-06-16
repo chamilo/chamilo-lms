@@ -75,3 +75,18 @@ $strings['QuestionDelete'] = 'Haluatko poistaa tämän diplomaattitodistuksen ja
 $strings['SuccessDelete'] = 'Poistettu onnistuneesti';
 $strings['ProblemDelete'] = 'Ongelma todistuksen poistamisessa';
 $strings['OnlyCustomCertificates'] = 'Vain kursseja, joilla on henkilökohtainen todistus, viedään';
+$strings['CertificateMode'] = 'Todistustila';
+$strings['UseCourseCustomCertificate'] = 'Käytä kurssikohtaista mukautettua todistusta';
+$strings['UseDefaultCustomCertificate'] = 'Käytä alustan oletusmukautettua todistusta';
+
+$strings['CreateCertificateWithTags'] = 'Luo todistus näillä tunnisteilla';
+
+$strings['DeleteCertificate'] = 'Poista todistus';
+
+$strings['SaveCertificate'] = 'Tallenna todistus';
+
+$strings['SelectOneOptionBeforeOpeningEditor'] = 'Valitse yksi vaihtoehto ja tallenna asetukset ennen todistuseditorin avaamista.';
+
+$strings['ChooseCustomCertificateModeHelp'] = 'Valitse, miten tämä kurssi käyttää mukautettuja todistuksia.';
+
+$strings['CouldNotSaveCertificate'] = 'Todistusasetusten tallentaminen epäonnistui.';

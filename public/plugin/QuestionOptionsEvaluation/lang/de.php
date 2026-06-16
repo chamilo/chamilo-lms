@@ -4,7 +4,6 @@
 $strings['plugin_title'] = 'Bewertung der Frageoptionen';
 $strings['plugin_comment'] = 'Neuberechnung der Punktzahlen der Optionen in Fragen erlauben';
 
-$strings['enable'] = 'Aktivieren';
 $strings['exercise_max_score'] = 'Max. Punktzahl in Übungen';
 $strings['exercise_max_score_help'] = 'Standard ist 10.';
 
@@ -17,3 +16,5 @@ $strings['Formula3'] = 'Erfolge - Fehlschläge / 3';
 $strings['QuestionsEvaluated'] = 'Bewertete Fragen';
 $strings['RecalculateQuestionScores'] = 'Fragenpunktzahlen neu berechnen';
 $strings['FormulaSavedForExerciseX'] = 'Formel für die Übung „%s“ gespeichert.';
+$strings['NoFormulaHelp'] = 'Das Standard-Bewertungsverhalten von Chamilo für diesen Test beibehalten.';
+$strings['enable'] = 'Aktivieren';

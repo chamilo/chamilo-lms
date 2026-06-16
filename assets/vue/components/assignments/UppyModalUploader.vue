@@ -28,6 +28,7 @@ import { useNotification } from "../../composables/notification"
 import cStudentPublicationService from "../../services/cstudentpublication"
 import "@uppy/core/dist/style.css"
 import "@uppy/dashboard/dist/style.css"
+import { useUppyLocale } from "../../composables/uppyLocale"
 
 const props = defineProps({
   parentResourceNodeId: {
@@ -52,6 +53,7 @@ const uppy = shallowRef(null)
 const uppyInstance = computed(() => uppy.value)
 
 const { showErrorNotification, showSuccessNotification } = useNotification()
+const { uppyLocale } = useUppyLocale()
 
 watch(
   () => props.visible,
@@ -73,6 +75,7 @@ function setupUppy() {
     new Uppy({
       restrictions: { maxNumberOfFiles: 1 },
       autoProceed: true,
+      locale: uppyLocale.value,
     }),
   )
 

@@ -4,7 +4,6 @@
 $strings['plugin_title'] = 'Vyhodnocení možností otázek';
 $strings['plugin_comment'] = 'Povolit přepočítání skóre možností v otázkách';
 
-$strings['enable'] = 'Povolit';
 $strings['exercise_max_score'] = 'Max skóre v cvičeních';
 $strings['exercise_max_score_help'] = 'Výchozí hodnota je 10.';
 
@@ -17,3 +16,5 @@ $strings['Formula3'] = 'Úspěchy - Neúspěchy / 3';
 $strings['QuestionsEvaluated'] = 'Vyhodnocené otázky';
 $strings['RecalculateQuestionScores'] = 'Přepočítat skóre otázek';
 $strings['FormulaSavedForExerciseX'] = 'Vzorec uložen pro cvičení „%s“.';
+$strings['NoFormulaHelp'] = 'Zachovat výchozí chování hodnocení Chamilo pro tento test.';
+$strings['enable'] = 'Povolit';

@@ -44,6 +44,8 @@ $interbreadcrumb[] = [
     'name' => $plugin->get_lang('Services'),
 ];
 
+$translatableHtmlEditorConfig = buycoursesBuildTranslatableHtmlEditorConfig();
+
 $formDefaultValues = array_merge($plugin->buildBenefitFormDefaults(), [
     'price' => 0,
     'tax_perc' => $defaultGlobalTax,
@@ -70,7 +72,7 @@ $form = new FormValidator(
 );
 $form->addText('name', $plugin->get_lang('ServiceName'));
 $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
-$form->addHtmlEditor('description', $plugin->get_lang('Description'));
+$form->addHtmlEditor('description', $plugin->get_lang('Description'), true, false, $translatableHtmlEditorConfig);
 $form->addElement(
     'number',
     'price',
@@ -167,7 +169,7 @@ $form->addFile(
     ['id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '16 / 9']
 );
 $form->addText('video_url', get_lang('VideoUrl'), false);
-$form->addHtmlEditor('service_information', $plugin->get_lang('ServiceInformation'), false);
+$form->addHtmlEditor('service_information', $plugin->get_lang('ServiceInformation'), false, false, $translatableHtmlEditorConfig);
 
 $form->addHtml('<div class="buycourses-benefits-section">');
 $form->addHeader($plugin->get_lang('GrantedBenefits'));
@@ -201,6 +203,26 @@ $form->addElement(
     ],
     ['step' => 1, 'min' => 0]
 );
+
+$form->addHtml(
+    '<div class="mt-4 rounded-2xl border border-gray-20 bg-support-2 p-4">'.
+    '<div class="text-body-2 font-semibold text-primary">'.$plugin->get_lang('AiCourseFeaturesGranted').'</div>'.
+    '<div class="mt-1 text-caption text-gray-50">'.$plugin->get_lang('AiCourseFeaturesGrantedHelp').'</div>'.
+    '</div>'
+);
+
+foreach ($plugin->getAiCourseFeatureDefinitions() as $feature => $definition) {
+    $description = (string) ($definition['description'] ?? '');
+    if (!empty($definition['expensive'])) {
+        $description .= ' '.$plugin->get_lang('AiCourseFeatureVideoWarning');
+    }
+
+    $form->addCheckBox(
+        $plugin->getAiCourseFeatureFormField((string) $feature),
+        (string) ($definition['title'] ?? $feature),
+        $description
+    );
+}
 $form->addHtml('</div>');
 
 $form->addButtonSave(get_lang('Add'));
@@ -215,6 +237,11 @@ if ('POST' === $_SERVER['REQUEST_METHOD']) {
 
 if ($form->validate()) {
     $values = $form->getSubmitValues();
+    foreach ($plugin->getAiCourseFeatureDefinitions() as $feature => $definition) {
+        $formField = $plugin->getAiCourseFeatureFormField((string) $feature);
+        $values[$formField] = isset($_POST[$formField]) ? 1 : 0;
+    }
+
     $errors = buycoursesValidateServicePayload($values, $plugin);
 
     if (empty($errors)) {
@@ -364,6 +391,21 @@ function buycoursesBuildServiceFormShell(
     HTML;
 }
 
+
+function buycoursesBuildTranslatableHtmlEditorConfig(): array
+{
+    $config = [
+        'ToolbarSet' => 'TestQuestionDescription',
+    ];
+
+    if ('true' === api_get_setting('editor.translate_html')) {
+        $config['extraPlugins'] = 'translatehtml';
+        $config['toolbar'] = 'undo redo | translatehtml | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | fontfamily fontsize | forecolor backcolor removeformat | link image media table | emoticons preview print code fullscreen | ltr rtl';
+    }
+
+    return $config;
+}
+
 function buycoursesValidateServicePayload(array $values, BuyCoursesPlugin $plugin): array
 {
     $errors = [];
@@ -379,8 +421,12 @@ function buycoursesValidateServicePayload(array $values, BuyCoursesPlugin $plugi
     $benefitMaxCourses = isset($values['benefit_max_courses']) ? (int) $values['benefit_max_courses'] : 0;
     $benefitHostingLimit = isset($values['benefit_hosting_limit']) ? (int) $values['benefit_hosting_limit'] : 0;
     $benefitDocumentQuota = isset($values['benefit_document_quota']) ? (int) $values['benefit_document_quota'] : 0;
+    $aiCourseFeatures = $plugin->getAiCourseFeaturesFromServiceData($values);
 
-    $hasAnyBenefit = $benefitMaxCourses > 0 || $benefitHostingLimit > 0 || $benefitDocumentQuota > 0;
+    $hasAnyBenefit = $benefitMaxCourses > 0
+        || $benefitHostingLimit > 0
+        || $benefitDocumentQuota > 0
+        || !empty($aiCourseFeatures);
 
     if ('' === $name) {
         $errors[] = get_lang('ThisFieldIsRequired').': '.$plugin->get_lang('ServiceName');

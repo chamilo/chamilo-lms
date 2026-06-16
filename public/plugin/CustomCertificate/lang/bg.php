@@ -75,3 +75,18 @@ $strings['QuestionDelete'] = 'Искате ли да изтриете конкр
 $strings['SuccessDelete'] = 'Успешно изтрито';
 $strings['ProblemDelete'] = 'Проблем при изтриването на сертификата';
 $strings['OnlyCustomCertificates'] = 'Експортират се само курсове с персонализиран сертификат';
+$strings['CertificateMode'] = 'Режим на сертификат';
+$strings['UseCourseCustomCertificate'] = 'Използване на персонализиран сертификат за курса';
+$strings['UseDefaultCustomCertificate'] = 'Използване на платформения стандартен персонализиран сертификат';
+
+$strings['CreateCertificateWithTags'] = 'Създаване на сертификата с тези тагове';
+
+$strings['DeleteCertificate'] = 'Изтриване на сертификат';
+
+$strings['SaveCertificate'] = 'Запазване на сертификат';
+
+$strings['SelectOneOptionBeforeOpeningEditor'] = 'Изберете една опция и запазете настройките, преди да отворите редактора на сертификати.';
+
+$strings['ChooseCustomCertificateModeHelp'] = 'Изберете как този курс да използва персонализирани сертификати.';
+
+$strings['CouldNotSaveCertificate'] = 'Не можа да се запази конфигурацията на сертификата.';

@@ -7,6 +7,8 @@
     .bc-info-button:hover {border-color: #2f80b7; color: #2f80b7; text-decoration: none;}
     .bc-info-button--success {border-color: transparent; background: #5ea80f; color: #fff;}
     .bc-info-button--success:hover {background: #5ea80f; color: #fff; opacity: 0.9;}
+    .bc-info-button--disabled {border-color: transparent; background: #e6edf3; color: #8a96a8; cursor: not-allowed;}
+    .bc-info-notice {display: flex; align-items: center; gap: 8px; margin-top: 12px; padding: 12px 14px; border: 1px solid #f5dca8; border-radius: 14px; background: #fff8e7; color: #6b4e16; font-size: 13px; font-weight: 700;}
     .bc-info-hero {display: grid; grid-template-columns: 300px minmax(0, 1fr); overflow: hidden; border: 1px solid #e6edf3; border-radius: 28px; background: #fff; box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);}
     .bc-info-hero__image-wrap {width: 300px; background: #f3f6f9; border-right: 1px solid #e6edf3;}
     .bc-info-hero__image {display: block; width: 100%; height: 100%; min-height: 260px; object-fit: cover;}
@@ -16,6 +18,10 @@
     .bc-info-badge--blue {background: #eef6ff; color: #1677ff;}
     .bc-info-title {margin: 0; color: #111827; font-size: 28px; font-weight: 800; line-height: 1.25;}
     .bc-info-description {max-width: 900px; margin: 10px 0 0; color: #8a96a8; font-size: 14px; line-height: 1.6;}
+    .bc-translated-html p {margin: 0 0 0.5rem;}
+    .bc-translated-html ul {margin: 0.5rem 0 0.5rem 1.25rem; padding-left: 1.25rem; list-style: disc;}
+    .bc-translated-html ol {margin: 0.5rem 0 0.5rem 1.25rem; padding-left: 1.25rem; list-style: decimal;}
+    .bc-translated-html li {margin: 0.2rem 0;}
     .bc-info-stats {display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 24px;}
     .bc-info-stat {min-width: 0; padding: 16px; border-radius: 18px; background: #f7fafc;}
     .bc-info-stat__label {color: #8a96a8; font-size: 11px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase;}
@@ -41,32 +47,37 @@
                 <a href="service_panel.php" class="bc-info-button">{{ 'MyServices'|get_plugin_lang('BuyCoursesPlugin') }}</a>
             {% else %}
                 <a href="service_catalog.php" class="bc-info-button">{{ 'ListOfServicesOnSale'|get_plugin_lang('BuyCoursesPlugin') }}</a>
-                <a href="service_process.php?i={{ service.id }}&t={{ service.applies_to|default(0) }}" class="bc-info-button bc-info-button--success">{{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}</a>
+                {% if can_buy_service|default(false) %}
+                    <a href="service_process.php?i={{ service.id }}&t={{ service.applies_to|default(0) }}" class="bc-info-button bc-info-button--success">{{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}</a>
+                {% else %}
+                    <span class="bc-info-button bc-info-button--disabled">{{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}</span>
+                {% endif %}
             {% endif %}
         </div>
     </div>
 
     <article class="bc-info-hero">
-        <div class="bc-info-hero__image-wrap"><img src="{{ service_image|e }}" alt="{{ service.name|e }}" class="bc-info-hero__image"></div>
+        <div class="bc-info-hero__image-wrap"><img src="{{ (service.image|default('') ?: _p.web_img ~ 'session_default.svg')|e }}" alt="{{ service.name|e }}" class="bc-info-hero__image"></div>
         <div class="bc-info-hero__body">
             <div class="bc-info-badges">
                 {% if applies_to_label %}<span class="bc-info-badge">{{ applies_to_label|e }}</span>{% endif %}
-                {% if service.renewable is defined and service.renewable %}<span class="bc-info-badge bc-info-badge--blue">Recurring payments</span>{% endif %}
-                {% if is_purchased_context %}<span class="bc-info-badge">Purchased</span>{% endif %}
+                {% if service.renewable is defined and service.renewable %}<span class="bc-info-badge bc-info-badge--blue">{{ 'RecurringPayments'|get_plugin_lang('BuyCoursesPlugin') }}</span>{% endif %}
+                {% if is_purchased_context %}<span class="bc-info-badge">{{ 'PurchasedService'|get_plugin_lang('BuyCoursesPlugin') }}</span>{% endif %}
             </div>
             <h1 class="bc-info-title">{{ service.name|e }}</h1>
-            {% if service_description %}<p class="bc-info-description">{{ service_description|e }}</p>{% endif %}
+            {% if service_description_html %}<div class="bc-info-description bc-translated-html">{{ service_description_html|raw }}</div>{% endif %}
+            {% if buyer_role_notice|default('') %}<div class="bc-info-notice"><em class="fa fa-info-circle"></em><span>{{ buyer_role_notice|e }}</span></div>{% endif %}
             <div class="bc-info-stats">
                 <div class="bc-info-stat"><div class="bc-info-stat__label">{{ 'Price'|get_lang }}</div><div class="bc-info-stat__value">{{ total_price_formatted|e ?: '—' }}</div></div>
                 <div class="bc-info-stat"><div class="bc-info-stat__label">{{ 'Duration'|get_lang }}</div><div class="bc-info-stat__value">{{ duration_label|e }}</div></div>
                 <div class="bc-info-stat"><div class="bc-info-stat__label">{{ 'Visible'|get_lang }}</div><div class="bc-info-stat__value">{% if service.visibility %}{{ 'Yes'|get_lang }}{% else %}{{ 'No'|get_lang }}{% endif %}</div></div>
-                <div class="bc-info-stat"><div class="bc-info-stat__label">Tax rate</div><div class="bc-info-stat__value">{{ service.tax_perc is defined ? service.tax_perc ~ '%' : '0%' }}</div></div>
+                <div class="bc-info-stat"><div class="bc-info-stat__label">{{ 'TaxPerc'|get_plugin_lang('BuyCoursesPlugin') }}</div><div class="bc-info-stat__value">{{ service.tax_perc is defined ? service.tax_perc ~ '%' : '0%' }}</div></div>
             </div>
         </div>
     </article>
 
     <section class="bc-info-grid">
-        <article class="bc-info-card"><h2 class="bc-info-card__title">{{ 'ServiceInformation'|get_plugin_lang('BuyCoursesPlugin') }}</h2><div class="bc-info-card__content">{% if service_details_html %}{{ service_details_html|raw }}{% else %}<p>{{ 'NoDescription'|get_lang }}</p>{% endif %}</div></article>
+        <article class="bc-info-card"><h2 class="bc-info-card__title">{{ 'ServiceInformation'|get_plugin_lang('BuyCoursesPlugin') }}</h2><div class="bc-info-card__content bc-translated-html">{% if service_details_html %}{{ service_details_html|raw }}{% else %}<p>{{ 'NoDescription'|get_lang }}</p>{% endif %}</div></article>
         <aside class="bc-info-card">
             <h2 class="bc-info-card__title">{{ 'Summary'|get_lang }}</h2>
             <div class="bc-summary-row"><span>{{ 'Total'|get_lang }}</span><span class="bc-summary-pill">{{ total_price_formatted|e ?: '—' }}</span></div>
@@ -75,7 +86,12 @@
             {% if is_purchased_context %}
                 <div class="bc-summary-box"><div class="bc-summary-box__label">{{ 'OrderReference'|get_plugin_lang('BuyCoursesPlugin') }}</div><div class="bc-summary-box__value">{{ service_sale.reference|default('')|e }}</div></div>
             {% else %}
-                <a href="service_process.php?i={{ service.id }}&t={{ service.applies_to|default(0) }}" class="bc-info-button bc-info-button--success" style="width: 100%; margin-top: 16px;">{{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}</a>
+                {% if can_buy_service|default(false) %}
+                    <a href="service_process.php?i={{ service.id }}&t={{ service.applies_to|default(0) }}" class="bc-info-button bc-info-button--success" style="width: 100%; margin-top: 16px;">{{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}</a>
+                {% else %}
+                    <span class="bc-info-button bc-info-button--disabled" style="width: 100%; margin-top: 16px;">{{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}</span>
+                    {% if buyer_role_notice|default('') %}<div class="bc-info-notice"><em class="fa fa-info-circle"></em><span>{{ buyer_role_notice|e }}</span></div>{% endif %}
+                {% endif %}
             {% endif %}
         </aside>
     </section>

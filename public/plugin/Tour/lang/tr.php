@@ -6,90 +6,90 @@
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
-$strings['plugin_title'] = '';
-$strings['plugin_comment'] = '';
+$strings['plugin_title'] = 'Tanıtım Turu';
+$strings['plugin_comment'] = "Bu eklenti, Chamilo LMS'in nasıl kullanılacağını kullanıcılara gösterir. Turu başlatan butonu göstermek için bir bölge (ör. \"header-right\") etkinleştirmeniz gerekir.";
 
 /* Strings for settings */
-$strings['show_tour'] = '';
+$strings['show_tour'] = 'Turu göster';
 
 $showTourHelpLine01 = 'The necessary configuration to show the help blocks, in JSON format, is located in the %splugin/tour/config/tour.json%s file.';
 $showTourHelpLine02 = 'See README file for more information.';
 
-$strings['show_tour_help'] = '';
+$strings['show_tour_help'] = 'Yardım bloklarını göstermek için gerekli JSON yapılandırması <strong>plugin/tour/config/tour.json</strong> dosyasında bulunur. <br> Daha fazla bilgi için README dosyasına bakın.';
 
-$strings['theme'] = '';
-$strings['theme_help'] = '';
+$strings['theme'] = 'Tema';
+$strings['theme_help'] = '<i>nassim</i>, <i>nazanin</i>, <i>royal</i> seçin. Varsayılan temayı kullanmak için boş bırakın.';
 
 /* Strings for plugin UI */
-$strings['Skip'] = '';
-$strings['Next'] = '';
-$strings['Prev'] = '';
-$strings['Done'] = '';
-$strings['StartButtonText'] = '';
+$strings['Skip'] = 'Atla';
+$strings['Next'] = 'Sonraki';
+$strings['Prev'] = 'Önceki';
+$strings['Done'] = 'Tamamlandı';
+$strings['StartButtonText'] = 'Turu başlat';
 
 /* String for the steps */
 // if body class = section-mycampus
-$strings['TheLogoStep'] = '';
-$strings['TheNavbarStep'] = '';
-$strings['TheRightPanelStep'] = '';
-$strings['TheUserImageBlock'] = '';
-$strings['TheProfileBlock'] = '';
-$strings['TheHomePageStep'] = '';
+$strings['TheLogoStep'] = '<b>Chamilo LMS 1.9.x</b> Hoş Geldiniz';
+$strings['TheNavbarStep'] = 'Portalın ana bölümlerine bağlantılar içeren menü çubuğu';
+$strings['TheRightPanelStep'] = 'Kenar çubuğu paneli';
+$strings['TheUserImageBlock'] = 'Profil fotoğrafınız';
+$strings['TheProfileBlock'] = 'Profil araçlarınız: <i>Gelen Kutusu</i>, <i>mesaj oluşturucu</i>, <i>bekleyen davetler</i>, <i>profil düzenleme</i>.';
+$strings['TheHomePageStep'] = 'Bu, portal duyurularını, bağlantıları ve yönetim ekibinin yapılandırdığı diğer bilgileri bulacağınız ana sayfadır.';
 
 // if body class = section-mycourses
-$strings['YourCoursesList'] = '';
+$strings['YourCoursesList'] = 'Bu alan, abone olduğunuz farklı kursları (veya oturumları) gösterir. Hiçbir kurs görünmüyorsa, kurs kataloğuna gidin (menüye bakın) veya portal yöneticinizle görüşün.';
 
 // if body class = section-myagenda
-$strings['AgendaAllowsYouToSeeWhatsHappening'] = '';
-$strings['AgendaTheActionBar'] = '';
-$strings['AgendaTodayButton'] = '';
-$strings['AgendaTheMonthIsAlwaysInEvidence'] = '';
-$strings['AgendaButtonsAllowYouToChangePeriod'] = '';
+$strings['AgendaAllowsYouToSeeWhatsHappening'] = 'Ajanda aracı, önümüzdeki günlerde, haftalarda veya aylarda planlanan etkinlikleri görmenizi sağlar.';
+$strings['AgendaTheActionBar'] = 'Sağlanan eylem simgelerini kullanarak etkinlikleri takvim görünümü yerine liste olarak gösterebilirsiniz.';
+$strings['AgendaTodayButton'] = 'Sadece bugünün programını görmek için "bugün" butonuna tıklayın';
+$strings['AgendaTheMonthIsAlwaysInEvidence'] = 'Mevcut ay, takvim görünümünde her zaman öne çıkarılır';
+$strings['AgendaButtonsAllowYouToChangePeriod'] = 'Bu butonlardan birine tıklayarak görünümü günlük, haftalık veya aylık olarak değiştirebilirsiniz';
 
 // if body class = section-session_my_space
-$strings['MySpaceAllowsYouToKeepTrackOfProgress'] = '';
-$strings['MySpaceSectionsGiveYouImportantInsight'] = '';
+$strings['MySpaceAllowsYouToKeepTrackOfProgress'] = 'Bu alan, öğrenciyseniz ilerlemenizi, öğretmen iseniz öğrencilerinizin ilerlemesini kontrol etmenizi sağlar';
+$strings['MySpaceSectionsGiveYouImportantInsight'] = 'Bu ekranda sunulan raporlar genişletilebilir ve öğrenme veya öğretme süreciniz hakkında çok değerli bilgiler sağlayabilir';
 
 // if body class = section-social-network
-$strings['SocialAllowsYouToGetInTouchWithOtherUsersOfThePlatform'] = '';
-$strings['SocialMenuGivesAccessToDifferentToolsToGetInTouchOrPublishStuff'] = '';
+$strings['SocialAllowsYouToGetInTouchWithOtherUsersOfThePlatform'] = 'Sosyal alan, platformdaki diğer kullanıcılarla iletişim kurmanızı sağlar';
+$strings['SocialMenuGivesAccessToDifferentToolsToGetInTouchOrPublishStuff'] = 'Menü, özel mesajlaşma, sohbet, ilgi grupları vb. alanlara katılmanızı sağlayan ekranlara erişim sağlar';
 
 // if body class = section-dashboard
-$strings['DashboardAllowsYouToGetVerySpecificInformationInAnIllustratedCondensedFormat'] = '';
-$strings['DashboardMustBeConfiguredFirstFromTheAdminSectionPluginsThenHereToEnableDesiredBlocks'] = '';
+$strings['DashboardAllowsYouToGetVerySpecificInformationInAnIllustratedCondensedFormat'] = 'Kontrol Paneli, size resimli ve özetlenmiş biçimde çok özel bilgiler sunar. Şu anda bu özelliğe yalnızca yöneticiler erişebilir';
+$strings['DashboardMustBeConfiguredFirstFromTheAdminSectionPluginsThenHereToEnableDesiredBlocks'] = 'Kontrol Paneli panellerini etkinleştirmek için önce yönetici bölümündeki eklentiler kısmından olası panelleri etkinleştirmeli, ardından buraya dönüp kontrol panelinizde görmek istediğiniz panelleri seçmelisiniz';
 
 // if body class = section-platform_admin
-$strings['AdministrationAllowsYouToManageYourPortal'] = '';
-$strings['AdminUsersBlockAllowsYouToManageUsers'] = '';
-$strings['AdminCoursesBlockAllowsYouToManageCourses'] = '';
+$strings['AdministrationAllowsYouToManageYourPortal'] = 'Yönetim paneli, Chamilo portalınızdaki tüm kaynakları yönetmenizi sağlar';
+$strings['AdminUsersBlockAllowsYouToManageUsers'] = 'Kullanıcılar bloğu, kullanıcılarla ilgili tüm işlemleri yönetmenizi sağlar.';
+$strings['AdminCoursesBlockAllowsYouToManageCourses'] = 'Kurslar bloğu, kurs oluşturma, düzenleme vb. işlemlere erişim sağlar. Diğer bloklar da belirli kullanımlar için ayrılmıştır.';
 
 
-$strings['tour_home_featured_courses_title'] = '';
-$strings['tour_home_featured_courses_content'] = '';
+$strings['tour_home_featured_courses_title'] = 'Öne çıkan kurslar';
+$strings['tour_home_featured_courses_content'] = 'Bu bölüm, ana sayfanızda bulunan öne çıkan kursları gösterir.';
 
-$strings['tour_home_course_card_title'] = '';
-$strings['tour_home_course_card_content'] = '';
+$strings['tour_home_course_card_title'] = 'Kurs kartı';
+$strings['tour_home_course_card_content'] = 'Her kart bir kursu özetler ve ana bilgilerine hızlı erişim sağlar.';
 
-$strings['tour_home_course_title_title'] = '';
-$strings['tour_home_course_title_content'] = '';
+$strings['tour_home_course_title_title'] = 'Kurs başlığı';
+$strings['tour_home_course_title_content'] = 'Kurs başlığı, kursu hızlıca tanımlamanıza yardımcı olur ve platform ayarlarına bağlı olarak daha fazla bilgi açabilir.';
 
-$strings['tour_home_teachers_title'] = '';
-$strings['tour_home_teachers_content'] = '';
+$strings['tour_home_teachers_title'] = 'Öğretmenler';
+$strings['tour_home_teachers_content'] = 'Bu alan, kursla ilişkili öğretmenleri veya kullanıcıları gösterir.';
 
-$strings['tour_home_rating_title'] = '';
-$strings['tour_home_rating_content'] = '';
+$strings['tour_home_rating_title'] = 'Değerlendirme ve geri bildirim';
+$strings['tour_home_rating_content'] = 'Burada kurs değerlendirmesini inceleyebilir ve izin veriliyorsa kendi oyunuzu gönderebilirsiniz.';
 
-$strings['tour_home_main_action_title'] = '';
-$strings['tour_home_main_action_content'] = '';
+$strings['tour_home_main_action_title'] = 'Ana kurs eylemi';
+$strings['tour_home_main_action_content'] = 'Bu butonu kullanarak kursa girebilir, abone olabilir veya kurs durumuna göre erişim kısıtlamalarını inceleyebilirsiniz.';
 
-$strings['tour_home_show_more_title'] = '';
-$strings['tour_home_show_more_content'] = '';
+$strings['tour_home_show_more_title'] = 'Daha fazla kurs göster';
+$strings['tour_home_show_more_content'] = 'Bu butonu kullanarak daha fazla kurs yükleyebilir ve ana sayfadan kataloğu keşfetmeye devam edebilirsiniz.';
 
-$strings['tour_my_courses_cards_title'] = '';
-$strings['tour_my_courses_cards_content'] = '';
+$strings['tour_my_courses_cards_title'] = 'Kurs kartlarınız';
+$strings['tour_my_courses_cards_content'] = 'Bu sayfa, abone olduğunuz kursları listeler. Her kart size kursa ve mevcut durumuna hızlı erişim sağlar.';
 
-$strings['tour_my_courses_image_title'] = '';
-$strings['tour_my_courses_image_content'] = '';
+$strings['tour_my_courses_image_title'] = 'Kurs görseli';
+$strings['tour_my_courses_image_content'] = 'Kurs görseli, kursu hızlıca tanımlamanıza yardımcı olur. Çoğu durumda üzerine tıklamak kursu açar.';
 
 $strings['tour_my_courses_title_title'] = 'Ders ve oturum başlığı';
 $strings['tour_my_courses_title_content'] = 'Burada ders başlığını ve varsa o dersle ilişkili oturum adını görebilirsiniz.';

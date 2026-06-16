@@ -75,3 +75,18 @@ $strings['QuestionDelete'] = 'Θέλετε να διαγράψετε το συγ
 $strings['SuccessDelete'] = 'Διαγράφηκε επιτυχώς';
 $strings['ProblemDelete'] = 'Πρόβλημα διαγραφής του πιστοποιητικού';
 $strings['OnlyCustomCertificates'] = 'Εξάγονται μόνο μαθήματα με εξατομικευμένο πιστοποιητικό';
+$strings['CertificateMode'] = 'Λειτουργία πιστοποιητικού';
+$strings['UseCourseCustomCertificate'] = 'Χρήση προσαρμοσμένου πιστοποιητικού μαθήματος';
+$strings['UseDefaultCustomCertificate'] = 'Χρήση προεπιλεγμένου προσαρμοσμένου πιστοποιητικού πλατφόρμας';
+
+$strings['CreateCertificateWithTags'] = 'Δημιουργία πιστοποιητικού με χρήση αυτών των ετικετών';
+
+$strings['DeleteCertificate'] = 'Διαγραφή πιστοποιητικού';
+
+$strings['SaveCertificate'] = 'Αποθήκευση πιστοποιητικού';
+
+$strings['SelectOneOptionBeforeOpeningEditor'] = 'Επιλέξτε μία επιλογή και αποθηκεύστε τις ρυθμίσεις πριν ανοίξετε τον επεξεργαστή πιστοποιητικών.';
+
+$strings['ChooseCustomCertificateModeHelp'] = 'Επιλέξτε τον τρόπο χρήσης προσαρμοσμένων πιστοποιητικών από αυτό το μάθημα.';
+
+$strings['CouldNotSaveCertificate'] = 'Δεν ήταν δυνατή η αποθήκευση της διαμόρφωσης πιστοποιητικού.';

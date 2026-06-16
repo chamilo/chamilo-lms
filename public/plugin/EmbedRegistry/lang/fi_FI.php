@@ -20,3 +20,7 @@ $strings['EmbedDateRangeHelp'] = 'Näinä päivinä upotettu sisältö näytetä
 $strings['HtmlCode'] = 'HTML-koodi';
 $strings['HtmlCodeHelp'] = 'Jaettu HTML-koodi, jonka ulkoinen palvelu tarjoaa pyydettäessä jakaa upotetussa muodossa.';
 $strings['LaunchContent'] = 'Käynnistä sisältö';
+
+$strings['InvalidDateRange'] = 'Alkamispäivän on oltava sama tai aikaisempi kuin päättymispäivä.';
+
+$strings['InvalidSecurityToken'] = 'Virheellinen suojaustoken. Lataa sivu uudelleen ja yritä uudelleen.';

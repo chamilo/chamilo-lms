@@ -5,6 +5,17 @@
 $strings['plugin_title'] = 'Διαδικτυακή Σύσκεψη Zoom';
 $strings['plugin_comment'] = 'Ενσωμάτωση Διαδικτυακής Σύσκεψης Zoom σε μαθήματα και περιόδους';
 
+$strings['accountId'] = 'Αναγνωριστικό λογαριασμού';
+$strings['clientId'] = 'Αναγνωριστικό πελάτη';
+$strings['clientSecret'] = 'Μυστικό πελάτη';
+$strings['webhookSecretToken'] = 'Μυστικό διακριτικό Webhook';
+$strings['apiKey_help'] = 'Παλαιό κλειδί API JWT. Προτιμήστε το Αναγνωριστικό λογαριασμού, το Αναγνωριστικό πελάτη και το Μυστικό πελάτη για το Zoom Server-to-Server OAuth.';
+$strings['apiSecret_help'] = 'Παλαιό μυστικό API JWT. Προτιμήστε το Αναγνωριστικό λογαριασμού, το Αναγνωριστικό πελάτη και το Μυστικό πελάτη για το Zoom Server-to-Server OAuth.';
+$strings['verificationToken_help'] = 'Παλαιό διακριτικό επαλήθευσης webhook. Προτιμήστε το Μυστικό διακριτικό Webhook.';
+$strings['accountId_help'] = 'Αναγνωριστικό λογαριασμού Zoom Server-to-Server OAuth.';
+$strings['clientId_help'] = 'Αναγνωριστικό πελάτη Zoom Server-to-Server OAuth.';
+$strings['clientSecret_help'] = 'Μυστικό πελάτη Zoom Server-to-Server OAuth.';
+$strings['webhookSecretToken_help'] = 'Μυστικό διακριτικό που χρησιμοποιείται για την επικύρωση αιτημάτων webhook του Zoom.';
 $strings['apiKey'] = 'Κλειδί API';
 $strings['apiSecret'] = 'Μυστικό API';
 $strings['verificationToken'] = 'Token Επαλήθευσης';

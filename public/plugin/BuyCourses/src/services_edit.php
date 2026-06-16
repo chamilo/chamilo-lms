@@ -75,6 +75,8 @@ $currentAppliesToLabel = $appliesToLabels[$currentAppliesTo] ?? get_lang('None')
 
 $customImageUrl = $plugin->getServiceImageUrl('simg-'.$serviceId.'.png');
 
+$translatableHtmlEditorConfig = buycoursesBuildTranslatableHtmlEditorConfig();
+
 $formDefaultValues = array_merge(
     $service,
     $plugin->buildBenefitFormDefaults($serviceId)
@@ -103,7 +105,7 @@ $form = new FormValidator(
 
 $form->addText('name', $plugin->get_lang('ServiceName'));
 $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
-$form->addHtmlEditor('description', $plugin->get_lang('Description'));
+$form->addHtmlEditor('description', $plugin->get_lang('Description'), true, false, $translatableHtmlEditorConfig);
 $form->addElement(
     'number',
     'price',
@@ -183,7 +185,7 @@ $form->addHtml(
     '<div class="rounded-2xl border border-gray-20 bg-support-2 p-4">'.
     '<div class="text-body-2 font-semibold text-primary">'.$plugin->get_lang('AppliesTo').'</div>'.
     '<div class="mt-2 text-body-2 font-medium text-gray-90">'.$currentAppliesToLabel.'</div>'.
-    '<div class="mt-1 text-caption text-gray-50">This value is read-only in the current implementation to preserve legacy services.</div>'.
+    '<div class="mt-1 text-caption text-gray-50">'.$plugin->get_lang('ServiceAppliesToReadOnlyHelp').'</div>'.
     '</div>'
 );
 
@@ -199,7 +201,7 @@ $form->addFile(
     ['id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '16 / 9']
 );
 $form->addText('video_url', get_lang('VideoUrl'), false);
-$form->addHtmlEditor('service_information', $plugin->get_lang('ServiceInformation'), false);
+$form->addHtmlEditor('service_information', $plugin->get_lang('ServiceInformation'), false, false, $translatableHtmlEditorConfig);
 
 $form->addHtml('<div class="buycourses-benefits-section">');
 $form->addHeader($plugin->get_lang('GrantedBenefits'));
@@ -237,6 +239,26 @@ $form->addElement(
     ['step' => 1, 'min' => 0]
 );
 
+$form->addHtml(
+    '<div class="mt-4 rounded-2xl border border-gray-20 bg-support-2 p-4">'.
+    '<div class="text-body-2 font-semibold text-primary">'.$plugin->get_lang('AiCourseFeaturesGranted').'</div>'.
+    '<div class="mt-1 text-caption text-gray-50">'.$plugin->get_lang('AiCourseFeaturesGrantedHelp').'</div>'.
+    '</div>'
+);
+
+foreach ($plugin->getAiCourseFeatureDefinitions() as $feature => $definition) {
+    $description = (string) ($definition['description'] ?? '');
+    if (!empty($definition['expensive'])) {
+        $description .= ' '.$plugin->get_lang('AiCourseFeatureVideoWarning');
+    }
+
+    $form->addCheckBox(
+        $plugin->getAiCourseFeatureFormField((string) $feature),
+        (string) ($definition['title'] ?? $feature),
+        $description
+    );
+}
+
 $form->addHtml('</div>');
 
 $form->addHidden('id', (string) $serviceId);
@@ -245,7 +267,7 @@ $form->addButtonDelete($plugin->get_lang('DeleteThisService'), 'delete_service')
 $form->setDefaults($formDefaultValues);
 
 if ('POST' === $_SERVER['REQUEST_METHOD']) {
-    $values = buycoursesBuildPostedServicePayload($serviceId);
+    $values = buycoursesBuildPostedServicePayload($serviceId, $plugin);
 
     if (isset($_POST['delete_service'])) {
         $plugin->deleteService($serviceId);
@@ -265,7 +287,7 @@ if ('POST' === $_SERVER['REQUEST_METHOD']) {
 
         if (false === $updated) {
             Display::addFlash(
-                Display::return_message('Service update failed.', 'error')
+                Display::return_message($plugin->get_lang('ServiceUpdateFailed'), 'error')
             );
         } else {
             Display::addFlash(
@@ -302,6 +324,21 @@ $pageContent = buycoursesBuildServiceFormShell(
 $tpl->assign('header', $templateName);
 $tpl->assign('content', $pageContent);
 $tpl->display_one_col_template();
+
+
+function buycoursesBuildTranslatableHtmlEditorConfig(): array
+{
+    $config = [
+        'ToolbarSet' => 'TestQuestionDescription',
+    ];
+
+    if ('true' === api_get_setting('editor.translate_html')) {
+        $config['extraPlugins'] = 'translatehtml';
+        $config['toolbar'] = 'undo redo | translatehtml | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | fontfamily fontsize | forecolor backcolor removeformat | link image media table | emoticons preview print code fullscreen | ltr rtl';
+    }
+
+    return $config;
+}
 
 /**
  * Build the service form page shell.
@@ -776,10 +813,12 @@ function buycoursesValidateServicePayload(array $values, BuyCoursesPlugin $plugi
     $benefitMaxCourses = isset($values['benefit_max_courses']) ? (int) ($values['benefit_max_courses'] ?? 0) : 0;
     $benefitHostingLimit = isset($values['benefit_hosting_limit']) ? (int) ($values['benefit_hosting_limit'] ?? 0) : 0;
     $benefitDocumentQuota = isset($values['benefit_document_quota']) ? (int) ($values['benefit_document_quota'] ?? 0) : 0;
+    $aiCourseFeatures = $plugin->getAiCourseFeaturesFromServiceData($values);
 
     $hasAnyBenefit = $benefitMaxCourses > 0
         || $benefitHostingLimit > 0
-        || $benefitDocumentQuota > 0;
+        || $benefitDocumentQuota > 0
+        || !empty($aiCourseFeatures);
 
     if ('' === $name) {
         $errors[] = get_lang('ThisFieldIsRequired').': '.$plugin->get_lang('ServiceName');
@@ -811,9 +850,9 @@ function buycoursesValidateServicePayload(array $values, BuyCoursesPlugin $plugi
     return $errors;
 }
 
-function buycoursesBuildPostedServicePayload(int $serviceId): array
+function buycoursesBuildPostedServicePayload(int $serviceId, BuyCoursesPlugin $plugin): array
 {
-    return [
+    $payload = [
         'id' => $serviceId,
         'name' => trim((string) ($_POST['name'] ?? '')),
         'description' => (string) ($_POST['description'] ?? ''),
@@ -841,4 +880,11 @@ function buycoursesBuildPostedServicePayload(int $serviceId): array
         'picture_crop_image_base_64' => (string) ($_POST['picture_crop_image_base_64'] ?? ''),
         'picture_crop_result' => (string) ($_POST['picture_crop_result'] ?? ''),
     ];
+
+    foreach ($plugin->getAiCourseFeatureDefinitions() as $feature => $definition) {
+        $formField = $plugin->getAiCourseFeatureFormField((string) $feature);
+        $payload[$formField] = isset($_POST[$formField]) ? 1 : 0;
+    }
+
+    return $payload;
 }

@@ -26,7 +26,7 @@
       v-if="!isLoading && !postList.length"
       class="py-6 text-center text-gray-50"
     >
-      {{ $t("No posts found") }}
+      {{ $t("No messages yet") }}
     </div>
   </div>
 </template>

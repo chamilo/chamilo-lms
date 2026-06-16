@@ -87,6 +87,9 @@ $tpl->assign('pagination_pages_count', $pagesCount);
 $tpl->assign('pagination_total_items', (int) $totalItems);
 $tpl->assign('pagination_base_path', 'subscription_course_catalog.php');
 
+$tpl->assign('admin_empty_catalog_action_url', api_is_platform_admin() ? api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/subscriptions_courses.php' : '');
+$tpl->assign('admin_empty_catalog_action_label', api_is_platform_admin() ? $plugin->get_lang('EnableSubscription') : '');
+
 $content = $tpl->fetch('BuyCourses/view/subscription_catalog.tpl');
 
 $tpl->assign('header', $templateName);

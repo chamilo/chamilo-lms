@@ -202,7 +202,7 @@ msgid "Delete comment"
 msgstr "Burahin ang komento"
 
 msgid "Social wall"
-msgstr "Social wall"
+msgstr "Pader panlipunan"
 
 msgid "Buy courses"
 msgstr "Mabili ang mga kurso"
@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Taos-puso"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Halimbawa ng pormula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Halimbawa ng formula: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Mga saklaw ng variable"
@@ -403,7 +403,7 @@ msgid "Additional access days for this user"
 msgstr "Karagdagang araw ng access para sa user na ito"
 
 msgid "User: %s - Session: %s"
-msgstr "User: %s - Session: %s"
+msgstr "Gumagamit: %s - Sesyon: %s"
 
 msgid "The given session duration is the same as the default for the session. Ignoring."
 msgstr "Ang ibinigay na tagal ng session ay pareho sa default para sa session. Binabalewala."
@@ -472,10 +472,10 @@ msgid "Sort by creation date"
 msgstr "Ayusin ayon sa petsa ng paglikha"
 
 msgid "Table view"
-msgstr "Table view"
+msgstr "Tanawin ng talahanayan"
 
 msgid "List view"
-msgstr "List view"
+msgstr "Tanawin ng listahan"
 
 msgid "Human Resources Manager"
 msgstr "Tagapamahala ng Human Resources"
@@ -493,7 +493,7 @@ msgid "ExerciseId"
 msgstr "ExerciseId"
 
 msgid "Excel export"
-msgstr "Excel export"
+msgstr "I-export sa Excel"
 
 msgid "Corporate report, short version"
 msgstr "Corporate report, maikling bersyon"
@@ -775,7 +775,7 @@ msgid "Here is your feedback"
 msgstr "Narito ang iyong feedback"
 
 msgid "Session Search"
-msgstr "Session Search"
+msgstr "Paghahanap ng Sesyon"
 
 msgid "Show system folders."
 msgstr "Ipakita ang mga system folder."
@@ -1219,7 +1219,7 @@ msgid "Show or hide the breadcrumb navigation, the one appearing just below the 
 msgstr "Ipakita o itago ang breadcrumb navigation, yung lumalabas lamang sa ibaba ng main navigation tabs. Lubos na inirerekomenda na ipakita ito sa mga gumagamit, dahil pinapayagan silang malaman ang kanilang kasalukuyang posisyon at madaling mag-navigate sa mga nakaraang pahina. Minsan, gayunpaman, maaaring kinakailangan itong itago (halimbawa sa mga exam platform) upang maiwasan ang mga gumagamit na mag-navigate sa mga pahinang hindi nila dapat makita."
 
 msgid "Breadcrumb navigation"
-msgstr "Breadcrumb navigation"
+msgstr "Nabigasyon ng breadcrumb"
 
 msgid "The PHP setting \"allow_url_fopen\" is set to off. This prevents the registration mechanism to work properly. This setting can be changed in you PHP configuration file (php.ini) or in the Apache Virtual Host configuration, using the php_admin_value directive"
 msgstr "Ang PHP setting \"allow_url_fopen\" ay nakatakda sa off. Ito ay pumipigil sa tamang pagtatrabaho ng registration mechanism. Maaaring baguhin ang setting na ito sa iyong PHP configuration file (php.ini) o sa Apache Virtual Host configuration, gamit ang php_admin_value directive"
@@ -1453,7 +1453,7 @@ msgid "All system users"
 msgstr "Lahat ng mga gumagamit ng system"
 
 msgid "Platform event"
-msgstr "Platform event"
+msgstr "Kaganapan sa plataporma"
 
 msgid "Edit event"
 msgstr "I-edit ang event"
@@ -1867,7 +1867,7 @@ msgid "The file \"users.csv\" has been put into Documents tool."
 msgstr "Inilagay na ang file \"users.csv\" sa Documents tool."
 
 msgid "Web services"
-msgstr "Web services"
+msgstr "Mga serbisyo sa web"
 
 msgid "Other category"
 msgstr "Ibang kategorya"
@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:copyright,, no:walang copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:Folder,, application\/msword:MsWord,, application\/octet-stream:Octet stream,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
@@ -2143,7 +2143,7 @@ msgid "The var/cache/ directory, used by this tool, is not writeable. Please con
 msgstr "Ang var/cache/ directory, na ginagamit ng tool na ito, ay hindi writeable. Pakikalmahan ang iyong platform administrator."
 
 msgid "Target course"
-msgstr "Target course"
+msgstr "Target na kurso"
 
 msgid "Convert to multiple answer"
 msgstr "I-convert sa multiple answer"
@@ -2257,7 +2257,7 @@ msgid "The Moderator of this Conference has left the room."
 msgstr "Umalis na ang Moderator ng Conference na ito sa silid."
 
 msgid "System message"
-msgstr "System message"
+msgstr "Mensahe ng sistema"
 
 msgid "Choose devices"
 msgstr "Piliin ang mga device"
@@ -4636,7 +4636,7 @@ msgid "Invalid end date was given."
 msgstr "Hindi valid na petsa ng pagtatapos ang ibinigay."
 
 msgid "(d/m/y h:m)"
-msgstr "(d/m/y h:m)"
+msgstr "(d\/m\/y h:m)"
 
 msgid "Homepage-files are not writable!"
 msgstr "Hindi masusulat ang mga file ng Homepage!"
@@ -5869,7 +5869,7 @@ msgid "Average progress in courses"
 msgstr "Ang average na progreso sa mga kurso"
 
 msgid "Multiple access URL / Branding"
-msgstr "Multiple access URL / Branding"
+msgstr "Multiple access URL \/ Branding"
 
 msgid "Full-text search: show unlinked results"
 msgstr "Buong-teksto na paghahanap: ipakita ang mga resulta na walang link"
@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Mangyaring i-type ang iyong text sa ibaba"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Halimbawa ng pagsasapunan ng form activity: kalkulahin ang Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Edad</strong></td>            <td width=\"75%\" style=\"\">[25] taong gulang</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sekso</strong></td>            <td style=\"\" text-align:=\"\">[L] (L o B)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Timbang</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Tangkad</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\"> [29] BMI = Timbang/Tangkad<sup>2</sup> (Tingnan <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false;\">Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight\/Size<sup>2</sup> (Cf.<a href=\"http:\/\/en.wikipedia.org\/wiki\/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Isulat ang address"
@@ -8908,7 +8908,7 @@ msgid "Document"
 msgstr "Pagsasanay"
 
 msgid "Portal Admin"
-msgstr "Portal Admin"
+msgstr "Tagapangasiwa ng Portal"
 
 msgid "none"
 msgstr "wala"
@@ -9725,6 +9725,9 @@ msgstr "Mga resulta ng paghahanap para sa:"
 
 msgid "Select a file"
 msgstr "Pumili ng file"
+
+msgid "Select a file to insert into the editor."
+msgstr "Pumili ng file na ilalagay sa editor."
 
 msgid "Warning - The FAQ file, located in the /home/ directory of your portal, is not writable. Your text will not be saved until the file permissions are changed."
 msgstr "Babala - Ang file ng FAQ, na matatagpuan sa /home/ directory ng iyong portal, ay hindi writable. Ang iyong text ay hindi mai-save hangga't hindi binago ang mga pahintulot ng file."
@@ -12529,7 +12532,7 @@ msgid "Table page"
 msgstr "Pahina ng talaan"
 
 msgid "Spreadsheet-like page"
-msgstr "Spreadsheet-like page"
+msgstr "Pahina na parang spreadsheet"
 
 msgid "Explain goals, roles, agenda"
 msgstr "Ipaliwanag ang mga layunin, tungkulin, agenda"
@@ -12598,7 +12601,7 @@ msgid "Describe the objectives of the course"
 msgstr "Ilarawan ang mga layunin ng kurso"
 
 msgid "Cycle chart"
-msgstr "Cycle chart"
+msgstr "Tsart ng ikot"
 
 msgid "2 list with cycle arrows"
 msgstr "2 lista na may mga cycle arrow"
@@ -12610,7 +12613,7 @@ msgid "Learner wonder description"
 msgstr "Deskripsyon ng pagkamangha ng mag-aaral"
 
 msgid "Phase timeline"
-msgstr "Phase timeline"
+msgstr "Timeline ng yugto"
 
 msgid "3 lists with an relational arrow"
 msgstr "3 lista na may relational arrow"
@@ -12736,7 +12739,7 @@ msgid "Add a date and time"
 msgstr "Magdagdag ng petsa at oras"
 
 msgid "Attendance sheet"
-msgstr "Attendance sheet"
+msgstr "Sheet ng pagdalo"
 
 msgid "Go to the attendance calendar"
 msgstr "Pumunta sa kalendaryo ng pagdalo"
@@ -14482,7 +14485,7 @@ msgid "dari"
 msgstr "dari"
 
 msgid "dutch corporate"
-msgstr "dutch corporate"
+msgstr "Dutch corporate"
 
 msgid "english for organisations"
 msgstr "english para sa mga organisasyon"
@@ -15906,6 +15909,9 @@ msgstr "Petsa at oras"
 msgid "Item"
 msgstr "Item"
 
+msgid "Items"
+msgstr "Items"
+
 msgid "Configure Dashboard Plugin"
 msgstr "I-configure ang Dashboard Plugin"
 
@@ -17159,6 +17165,18 @@ msgstr "Mga sesyon sa grupo"
 
 msgid "Courses in group"
 msgstr "Mga kurso sa grupo"
+
+msgid "Courses on the platform"
+msgstr "Mga kurso sa plataporma"
+
+msgid "%s courses"
+msgstr "%s kurso"
+
+msgid "%s sessions"
+msgstr "%s sesyon"
+
+msgid "Search by title or code"
+msgstr "Hanapin ayon sa pamagat o code"
 
 msgid "Users in group"
 msgstr "Mga gumagamit sa grupo"
@@ -24328,7 +24346,7 @@ msgid "IMS CC file created."
 msgstr "Nalikhang IMS CC file."
 
 msgid "IMS CC file"
-msgstr "IMS CC file"
+msgstr "File ng IMS CC"
 
 msgid "IMS CC file imported."
 msgstr "Na-import na ang IMS CC file."
@@ -24586,7 +24604,7 @@ msgid "Convert to multiple answer dropdown"
 msgstr "I-convert sa multiple answer dropdown"
 
 msgid "Multiple answer dropdown"
-msgstr "Multiple answer dropdown"
+msgstr "Dropdown ng maramihang sagot"
 
 msgid "Highlighted"
 msgstr "Nabanggit"
@@ -25642,7 +25660,7 @@ msgid "Video player renderers"
 msgstr "Mga renderer ng video player"
 
 msgid "Enable player renderers for YouTube, Vimeo, Facebook, DailyMotion, Twitch medias"
-msgstr "I-activate ang mga tagapag-render ng player para sa YouTube, Vimeo, Facebook, DailyMotion, Twitch na media"
+msgstr "Paganahin ang mga player renderer para sa YouTube, Vimeo, Facebook, DailyMotion, Twitch media"
 
 msgid "Allow teachers to edit tests in learning paths"
 msgstr "Payagan ang mga guro na mag-edit ng mga pagsusulit sa learning paths"
@@ -26599,7 +26617,7 @@ msgid "Selective display of roles"
 msgstr "Piliin ang pagpapakita ng mga role"
 
 msgid "An array of role => true/false that defines whether that role should be shown or hidden.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
-msgstr "Isang array ng role => true/false na tumutukoy kung ang role na iyon ay dapat ipakita o itago.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
+msgstr "Isang array ng role => true/false na tumutukoy kung ipapakita o itatago ang role.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
 
 msgid "Roles display options"
 msgstr "Mga opsyon sa pagpapakita ng mga role"
@@ -27733,7 +27751,7 @@ msgid "Update introduction links"
 msgstr "I-update ang mga link ng introduction"
 
 msgid "Conference Room"
-msgstr "Conference Room"
+msgstr "Silid ng Kumperensya"
 
 msgid "Choose item"
 msgstr "Pumili ng item"
@@ -27943,7 +27961,7 @@ msgid "When this feature is enabled on a multi-URL configuration, you can go to 
 msgstr "Kapag pinagana ang feature na ito sa multi-URL configuration, maaari kang pumunta sa main URL at magbigay ng URL-specific na bersyon ng anumang file (sa documents tool). Ang orihinal na file ay papalitan ng alternatibo kapag tinitingnan ito mula sa ibang URL. Ito ay nagbibigay-daan sa iyo na i-customize ang bawat URL pa lalo, habang tinatamasa ang pakinabang ng pag-reuse ng parehong mga kurso nang maraming beses."
 
 msgid "Project manager"
-msgstr "Project manager"
+msgstr "Tagapamahala ng proyekto"
 
 msgid "Select classes for which this course will be visible for subscription in the catalogue. Subscription rules still apply apart from it being visible in the catalogue."
 msgstr "Piliin ang mga klase kung saan makikita ang kurso na ito para sa subscription sa catalogue. Ang mga rule ng subscription ay nananatiling naaangkop bukod sa pagiging makikita sa catalogue."
@@ -28111,19 +28129,19 @@ msgid "Provides students with an AI-powered tutoring assistant."
 msgstr "Nagbibigay ng AI-powered tutoring assistant sa mga estudyante."
 
 msgid "Assignments grader"
-msgstr "Assignments grader"
+msgstr "Tagapagrado ng Takdang-Aralin"
 
 msgid "Uses AI to evaluate and grade uploaded assignments."
 msgstr "Gumagamit ng AI upang i-e-evaluate at i-grade ang na-upload na assignments."
 
 msgid "Content analyser"
-msgstr "Content analyser"
+msgstr "Tagasuri ng Nilalaman"
 
 msgid "Analyses learning materials to extract insights or improve quality."
 msgstr "Nag-a-analyze ng learning materials upang mag-extract ng insights o mapabuti ang quality."
 
 msgid "Image generator"
-msgstr "Image generator"
+msgstr "Tagalikha ng Larawan"
 
 msgid "Generates images based on prompts or content using AI."
 msgstr "Gumagawa ng images batay sa prompts o content gamit ang AI."
@@ -28171,13 +28189,13 @@ msgid "Session expired. Redirecting to login…"
 msgstr "Nag-expire ang session. Ire-redirect sa login…"
 
 msgid "Super admin"
-msgstr "Super admin"
+msgstr "Super Admin"
 
 msgid "Global admin"
-msgstr "Global admin"
+msgstr "Global na Admin"
 
 msgid "Question manager"
-msgstr "Question manager"
+msgstr "Tagapamahala ng tanong"
 
 msgid "Then enter the 6-digit code shown in your app at the bottom of the form."
 msgstr "Pagkatapos, ilagay ang 6-digit code na ipinapakita sa iyong app sa ibaba ng form."
@@ -28249,7 +28267,7 @@ msgid "No push subscriptions found for this user."
 msgstr "Walang natagpuang push subscriptions para sa user na ito."
 
 msgid "Push notification test"
-msgstr "Push notification test"
+msgstr "Pagsubok ng Push Notification"
 
 msgid "This is a test push notification from this platform to the user's browser or app."
 msgstr "Ito ay test push notification mula sa platform na ito sa browser o app ng user."
@@ -28339,7 +28357,7 @@ msgid "Sessions that depend on this session"
 msgstr "Sessions na umaasa sa session na ito"
 
 msgid "My Sessions display mode"
-msgstr "My Sessions display mode"
+msgstr "Mode ng Pagpapakita ng Aking mga Sesyon"
 
 msgid "Choose how the \"My Sessions\" page is displayed: as a modern visual block (card) view or the classic list style."
 msgstr "Pumili kung paano ipapakita ang pahina ng \"My Sessions\": bilang modernong visual block (card) view o classic list style."
@@ -28420,7 +28438,7 @@ msgid "In person"
 msgstr "Sa personal"
 
 msgid "Blended learning"
-msgstr "Blended learning"
+msgstr "Pinaghalong Pag-aaral"
 
 msgid "Centralised"
 msgstr "Sentralisado"
@@ -31189,7 +31207,7 @@ msgid "Admin Restart Courses"
 msgstr "Mga Mulang Kurso ng Admin"
 
 msgid "Admin Dashboard"
-msgstr "Admin Dashboard"
+msgstr "Dashboard ng Admin"
 
 msgid "Threads"
 msgstr "Mga Thread"
@@ -31504,7 +31522,7 @@ msgid "Get the latest news from Chamilo, including security vulnerabilities and 
 msgstr "Kumuha ng pinakabagong balita mula sa Chamilo, kabilang ang mga kahinaan sa seguridad at mga kaganapan, direktang sa loob ng iyong panel ng administrasyon. Susuriin ang mga balitang ito sa serber ng balita ng Chamilo tuwing ikakarga mo ang pahina ng administrasyon at makikita lamang ng mga administrador."
 
 msgid "Chamilo support block"
-msgstr "Chamilo support block"
+msgstr "Blokeng Suporta ng Chamilo"
 
 msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
 msgstr "Kumuha ng pro tips at madaling paraan upang makipag-ugnayan sa opisyal na mga tagapagbigay ng serbisyo para sa propesyonal na suporta, direktang mula sa mga gumawa ng Chamilo. Lumilitaw ang blok na ito sa iyong pahina ng administrasyon, makikita lamang ng mga administrador, at naa-refresh tuwing ikakarga mo ang pahina ng administrasyon."
@@ -32163,6 +32181,9 @@ msgstr "Gawain"
 msgid "Allowed file formats: %s"
 msgstr "Pinapayagang mga format ng file: %s"
 
+msgid "File manager"
+msgstr "File manager"
+
 msgid "File type not allowed. Allowed extensions: %s"
 msgstr "Hindi pinapayagang uri ng file. Pinapayagang mga extension: %s"
 
@@ -32404,7 +32425,7 @@ msgid "If enabled, the gradebook will give a learner 100% when present at least 
 msgstr "Kung pinagana, ang gradebook ay magbibigay ng 100% sa mag-aaral kapag present na hindi bababa sa isang beses."
 
 msgid "AI feedback"
-msgstr "AI feedback"
+msgstr "Feedback ng AI"
 
 msgid "Prompt"
 msgstr "Prompt"
@@ -32425,7 +32446,7 @@ msgid "Apply score"
 msgstr "I-lapat ang score"
 
 msgid "AI grade"
-msgstr "AI grade"
+msgstr "Marka ng AI"
 
 msgid "AI tutor is disabled during tests"
 msgstr "Ang AI tutor ay hindi pinagana sa panahon ng mga pagsusulit"
@@ -32473,7 +32494,7 @@ msgid "Save to Documents"
 msgstr "I-save sa Mga Dokumento"
 
 msgid "Document IRI"
-msgstr "Document IRI"
+msgstr "IRI ng Dokumento"
 
 msgid "Go to folder"
 msgstr "Punta sa folder"
@@ -32713,7 +32734,7 @@ msgid "Room"
 msgstr "Silid"
 
 msgid "Simple IDS"
-msgstr "Simple IDS"
+msgstr "Simpleng IDS"
 
 msgid "IDS is currently disabled. Set IDS_ENABLED=true in your .env to activate scanning."
 msgstr "Ang IDS ay hindi kasalukuyang pinagana. Itakda ang IDS_ENABLED=true sa iyong .env upang i-activate ang scanning."
@@ -33055,13 +33076,13 @@ msgid "MDI icon name"
 msgstr "Pangalan ng MDI icon"
 
 msgid "Assign authentication sources"
-msgstr ""
+msgstr "Magtalaga ng mga pinagmulan ng pagpapatunay"
 
 msgid "Assignment details"
-msgstr ""
+msgstr "Mga detalye ng takdang-aralin"
 
 msgid "Terms and conditions"
-msgstr ""
+msgstr "Mga tuntunin at kondisyon"
 
 msgid "Icons"
 msgstr "Mga Icon"
@@ -33082,7 +33103,7 @@ msgid "Shared files"
 msgstr "Mga nakabahagiang file"
 
 msgid "Skill wheel"
-msgstr "Skill wheel"
+msgstr "Gulong ng kasanayan"
 
 msgid "Favourite courses"
 msgstr "Mga paboritong kurso"
@@ -33876,6 +33897,2583 @@ msgstr "Maligayang pagdating"
 msgid "Welcome to Chamilo"
 msgstr "Maligayang pagdating sa Chamilo"
 
+msgid "Check all unanswered questions below"
+msgstr "Suriin ang lahat ng hindi nasagot na tanong sa ibaba"
+
 msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
 msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Kung ito ang unang pagkakataon mong gumamit ng Chamilo, tiyaking suriin ang side menu upang matagpuan ang iyong daan sa maraming tampok nito. Kung kailangan mo ng tulong, makikita mo na <a href=\"https://docs.chamilo.org\">ang aming opisyal na dokumentasyon</a> ay makakatulong para sa karaniwang dokumentasyon, habang ang aming <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> ay makakatulong na magbahagi ng mga ideya at makahanap ng mga sagot mula sa iba pang mga gumagamit ng Chamilo."
+
+msgid "Change password"
+msgstr "Baguhin ang password"
+
+msgid "Newest first"
+msgstr "Pinakabago muna"
+
+msgid "Oldest first"
+msgstr "Pinakaluma muna"
+
+msgid "Title A–Z"
+msgstr "Pamagat A–Z"
+
+msgid "Title Z–A"
+msgstr "Pamagat Z–A"
+
+msgid "Send test email"
+msgstr "Ipadala ang test na email"
+
+msgid "Show teachers"
+msgstr "Ipakita ang mga guro"
+
+msgid "Hide teachers"
+msgstr "Itago ang mga guro"
+
+msgid "Delete exercise attempts"
+msgstr "Tanggalin ang mga pagtatangka sa ehersisyo"
+
+msgid "Message sent successfully."
+msgstr "Matagumpay na naipadala ang mensahe."
+
+msgid "You cannot create a new course right now."
+msgstr "Hindi ka makakagawa ng bagong kurso sa ngayon."
+
+msgid "Unable to verify whether you can create a new course right now."
+msgstr "Hindi ma-verify kung makakagawa ka ng bagong kurso sa ngayon."
+
+msgid "Please try again later or contact the administrator."
+msgstr "Subukan muli mamaya o makipag-ugnayan sa administrator."
+
+msgid "You cannot create more courses at this time."
+msgstr "Hindi ka na makakagawa ng higit pang kurso sa oras na ito."
+
+msgid "You already manage %d courses and your active service allows up to %d. To create another course, you need a higher service limit or reduce your current active courses."
+msgstr "Pinamamahalaan mo na ang %d kurso at ang iyong aktibong serbisyo ay nagpapahintulot ng hanggang %d. Upang makagawa ng isa pang kurso, kailangan mo ng mas mataas na limitasyon ng serbisyo o bawasan ang iyong kasalukuyang aktibong kurso."
+
+msgid "You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now."
+msgstr "Pinamamahalaan mo na ang %d kurso at ang platform ay kasalukuyang nagpapahintulot ng hanggang %d para sa iyong account. Hindi ka makakagawa ng higit pang kurso sa ngayon."
+
+msgid "Add a class"
+msgstr "Magdagdag ng klase"
+
+msgid "Search classes"
+msgstr "Maghanap ng mga klase"
+
+msgid "No classes found"
+msgstr "Walang nakitang klase"
+
+msgid "Import classes"
+msgstr "Mag-import ng mga klase"
+
+msgid "Class users"
+msgstr "Mga gumagamit ng klase"
+
+msgid "%s classes imported"
+msgstr "%s klase ang na-import"
+
+msgid "%s user-class links imported"
+msgstr "%s link ng gumagamit-klase ang na-import"
+
+msgid "Hide comments"
+msgstr "Itago ang mga komento"
+
+msgid "Loading comments..."
+msgstr "Naglo-load ng mga komento..."
+
+msgid "No comments yet."
+msgstr "Wala pang komento."
+
+msgid "A user with this username already exists"
+msgstr "May gumagamit na may ganitong username"
+
+msgid "Manage meetings, review recordings and update course-wide BBB settings from one place."
+msgstr "Pamahalaan ang mga pulong, suriin ang mga recording at i-update ang mga setting ng BBB sa buong kurso mula sa isang lugar."
+
+msgid "Review the current defaults and propagate them to every course when needed."
+msgstr "Suriin ang kasalukuyang mga default at ipalaganap ang mga ito sa bawat kurso kapag kinakailangan."
+
+msgid "Filter the list by meeting date range."
+msgstr "I-filter ang listahan ayon sa saklaw ng petsa ng pulong."
+
+msgid "Review meeting history, participants and recording actions."
+msgstr "Suriin ang kasaysayan ng pulong, mga kalahok at mga aksyon sa recording."
+
+msgid "Participants"
+msgstr "Mga kalahok"
+
+msgid "CountUsers"
+msgstr "CountUsers"
+
+msgid "No data found"
+msgstr "Walang nakitang data"
+
+msgid "My justifications"
+msgstr "Aking mga katwiran"
+
+msgid "My services"
+msgstr "Aking mga serbisyo"
+
+msgid "Extra menu"
+msgstr "Karagdagang menu"
+
+msgid "Pending tests"
+msgstr "Mga pagsusulit na nakabinbin"
+
+msgid "No specific language"
+msgstr "Walang tiyak na wika"
+
+msgid "Source Chamilo version"
+msgstr "Bersyon ng Chamilo na pinagmulan"
+
+msgid "Exporting..."
+msgstr "Ine-export..."
+
+msgid "Autosaved drafts available"
+msgstr "May mga draft na nai-save nang awtomatiko"
+
+msgid "Hide drafts"
+msgstr "Itago ang mga draft"
+
+msgid "Show drafts"
+msgstr "Ipakita ang mga draft"
+
+msgid "Drafts are stored only in this browser and are removed after saving the document."
+msgstr "Ang mga draft ay naka-imbak lamang sa browser na ito at tinatanggal pagkatapos i-save ang dokumento."
+
+msgid "Last saved"
+msgstr "Huling na-save"
+
+msgid "Restore draft"
+msgstr "Ibalik ang draft"
+
+msgid "Delete draft"
+msgstr "Tanggalin ang draft"
+
+msgid "Information about indexing document content"
+msgstr "Impormasyon tungkol sa pag-index ng nilalaman ng dokumento"
+
+msgid "When enabled, the document text is indexed by the search engine so users can find it from platform search."
+msgstr "Kapag pinagana, ang teksto ng dokumento ay ini-index ng search engine upang makita ito ng mga gumagamit sa paghahanap sa platform."
+
+msgid "The editor is not available."
+msgstr "Hindi available ang editor."
+
+msgid "Please place the cursor inside a paragraph first."
+msgstr "Ilagay muna ang cursor sa loob ng talata."
+
+msgid "The selected paragraph is empty."
+msgstr "Walang laman ang napiling talata."
+
+msgid "Loading failed."
+msgstr "Nabigo ang paglo-load."
+
+msgid "Add introduction"
+msgstr "Magdagdag ng introduksiyon"
+
+msgid "Course type"
+msgstr "Uri ng kurso"
+
+msgid "Choose whether this course uses the standard platform limits or benefits from a purchased service."
+msgstr "Piliin kung gagamitin ng kursong ito ang karaniwang limitasyon ng platform o makikinabang mula sa biniling serbisyo."
+
+msgid "Standard course"
+msgstr "Karaniwang kurso"
+
+msgid "Use the standard platform limits."
+msgstr "Gamitin ang karaniwang limitasyon ng platform."
+
+msgid "Selected"
+msgstr "Napili"
+
+msgid "Hosting limit"
+msgstr "Limitasyon ng hosting"
+
+msgid "Document quota"
+msgstr "Quota ng dokumento"
+
+msgid "The standard course limit has been reached."
+msgstr "Naabot na ang limitasyon ng karaniwang kurso."
+
+msgid "Use the benefits granted by this service."
+msgstr "Gamitin ang mga benepisyong ibinibigay ng serbisyong ito."
+
+msgid "Courses with these benefits"
+msgstr "Mga kursong may ganitong mga benepisyo"
+
+msgid "Active service"
+msgstr "Aktibong serbisyo"
+
+msgid "Buy service"
+msgstr "Bumili ng serbisyo"
+
+msgid "Select an available course type before creating the course."
+msgstr "Pumili muna ng uri ng kurso bago gumawa ng kurso."
+
+msgid "users"
+msgstr "mga gumagamit"
+
+msgid "You need to buy this service before using these benefits."
+msgstr "Kailangan mong bilhin ang serbisyong ito bago gamitin ang mga benepisyong ito."
+
+msgid "You already used all courses available with this service."
+msgstr "Naubos mo na ang lahat ng kursong available sa serbisyong ito."
+
+msgid "This option is not available."
+msgstr "Hindi available ang opsyong ito."
+
+msgid "This field is required"
+msgstr "Kinakailangan ang field na ito"
+
+msgid "Show less"
+msgstr "Magpakita ng mas kaunti"
+
+msgid "Show full description"
+msgstr "Ipakita ang buong paglalarawan"
+
+msgid "Virtual keyboard"
+msgstr "Virtual na keyboard"
+
+msgid "Backspace"
+msgstr "Backspace"
+
+msgid "Space"
+msgstr "Space"
+
+msgid "Learning path only visible to selected learners"
+msgstr "Learning path na nakikita lamang ng mga napiling mag-aaral"
+
+msgid "Create course"
+msgstr "Gumawa ng kurso"
+
+msgid "Tour"
+msgstr "Tour"
+
+msgid "Are you sure you want to delete this comment?"
+msgstr "Sigurado ka bang tanggalin ang komentong ito?"
+
+msgid "No posts found"
+msgstr "Walang nahanap na post"
+
+msgid "No communities"
+msgstr "Walang komunidad"
+
+msgid "No friends found"
+msgstr "Walang nahanap na kaibigan"
+
+msgid "Visual overview of your skills"
+msgstr "Visual na overview ng iyong mga kasanayan"
+
+msgid "Compare your progress"
+msgstr "Ihambing ang iyong progreso"
+
+msgid "Please enter a search term."
+msgstr "Maglagay ng termino sa paghahanap."
+
+msgid "Enter captcha code"
+msgstr "Ilagay ang code ng captcha"
+
+msgid "Refresh captcha"
+msgstr "I-refresh ang captcha"
+
+msgid "Captcha is temporarily blocked. Please try again later."
+msgstr "Pansamantalang naka-block ang captcha. Subukan muli mamaya."
+
+msgid "Item Details"
+msgstr "Mga Detalye ng Item"
+
+msgid "Open File"
+msgstr "Buksan ang File"
+
+msgid "Selection"
+msgstr "Pagpili"
+
+msgid "Remove selection context"
+msgstr "Alisin ang konteksto ng pagpili"
+
+msgid "Source document"
+msgstr "Pinagmulang dokumento"
+
+msgid "Use the current course context"
+msgstr "Gamitin ang kasalukuyang konteksto ng kurso"
+
+msgid "Loading documents..."
+msgstr "Nilo-load ang mga dokumento..."
+
+msgid "No compatible PDF or TXT document was found in this course."
+msgstr "Walang katugmang PDF o TXT na dokumento ang natagpuan sa kursong ito."
+
+msgid "Select a PDF or TXT document to generate terms only from that document."
+msgstr "Pumili ng PDF o TXT na dokumento upang makabuo ng mga termino mula sa dokumentong iyon lamang."
+
+msgid "Confidentiality warning"
+msgstr "Babala sa pagiging kompidensyal"
+
+msgid "When a document is selected, the prompt is fixed so the generation uses only that document content."
+msgstr "Kapag napili ang isang dokumento, nakatakda ang prompt upang ang pagbuo ay gamitin lamang ang nilalaman ng dokumentong iyon."
+
+msgid "No document-processing AI providers available."
+msgstr "Walang available na AI provider para sa pagproseso ng dokumento."
+
+msgid "Failed to save signature. Please try again."
+msgstr "Nabigo ang pag-save ng lagda. Subukan muli."
+
+msgid "Select and move"
+msgstr "Pumili at ilipat"
+
+msgid "Freehand"
+msgstr "Malayang kamay"
+
+msgid "Stroke"
+msgstr "Hugis"
+
+msgid "Fill"
+msgstr "Punan"
+
+msgid "Import SVG"
+msgstr "I-import ang SVG"
+
+msgid "Import image"
+msgstr "I-import ang larawan"
+
+msgid "Click the drawing area to place this text"
+msgstr "I-click ang lugar ng pagguhit upang ilagay ang tekstong ito"
+
+msgid "Draw a new SVG, import an existing SVG or embed an image, then save it as a reusable document."
+msgstr "Gumuhit ng bagong SVG, mag-import ng umiiral na SVG o mag-embed ng larawan, pagkatapos ay i-save ito bilang muling magagamit na dokumento."
+
+msgid "Use Select and move to reposition or resize elements added in this editor."
+msgstr "Gamitin ang Pumili at Ilipat upang muling iposisyon o baguhin ang laki ng mga elementong idinagdag sa editor na ito."
+
+msgid "Stroke width"
+msgstr "Lapad ng guhit"
+
+msgid "Transparent fill"
+msgstr "Transparent na punan"
+
+msgid "Invalid id"
+msgstr "Di-wastong id"
+
+msgid "Unable to load the drawing"
+msgstr "Hindi ma-load ang pagguhit"
+
+msgid "Only PNG, JPG, WEBP or GIF images are supported."
+msgstr "Tanging PNG, JPG, WEBP o GIF na larawan ang sinusuportahan."
+
+msgid "Unable to read the image file."
+msgstr "Hindi mabasa ang file ng larawan."
+
+msgid "Only SVG files are supported."
+msgstr "Tanging SVG na file ang sinusuportahan."
+
+msgid "The SVG file is empty or invalid."
+msgstr "Walang laman o di-wasto ang SVG file."
+
+msgid "Unable to read the SVG file."
+msgstr "Hindi mabasa ang SVG file."
+
+msgid "The drawing is empty or invalid."
+msgstr "Walang laman o di-wasto ang pagguhit."
+
+msgid "Unable to save the drawing"
+msgstr "Hindi ma-save ang pagguhit"
+
+msgid "Information about AI-assisted documents"
+msgstr "Impormasyon tungkol sa mga dokumentong tinulungan ng AI"
+
+msgid "Location"
+msgstr "Lokasyon"
+
+msgid "Cloud link"
+msgstr "Link sa cloud"
+
+msgid "Add a link to a cloud document, such as Google Drive or Google Docs."
+msgstr "Magdagdag ng link sa isang dokumento sa cloud, tulad ng Google Drive o Google Docs."
+
+msgid "Add cloud link"
+msgstr "Magdagdag ng link sa cloud"
+
+msgid "Document title"
+msgstr "Pamagat ng dokumento"
+
+msgid "Document options change how uploaded files are processed after saving."
+msgstr "Binabago ng mga opsyon ng dokumento kung paano pinoproseso ang mga na-upload na file pagkatapos i-save."
+
+msgid "Information about uncompressing zip files"
+msgstr "Impormasyon tungkol sa pag-unzip ng mga zip file"
+
+msgid "When enabled, ZIP files are extracted into the current document folder after upload."
+msgstr "Kapag pinagana, ang mga ZIP file ay inilalabas sa kasalukuyang folder ng dokumento pagkatapos i-upload."
+
+msgid "The title is required."
+msgstr "Kinakailangan ang pamagat."
+
+msgid "The URL is required."
+msgstr "Kinakailangan ang URL."
+
+msgid "The destination folder is missing."
+msgstr "Nawawala ang patutunguhang folder."
+
+msgid "Unable to create cloud link."
+msgstr "Hindi makagawa ng link sa cloud."
+
+msgid "Copy to My Files"
+msgstr "Kopyahin sa Aking mga File"
+
+msgid "Used space"
+msgstr "Ginagamit na espasyo"
+
+msgid "Available space"
+msgstr "Magagamit na espasyo"
+
+msgid "Available percentage"
+msgstr "Porsyento ng magagamit"
+
+msgid "Cloud links cannot be downloaded."
+msgstr "Hindi ma-download ang mga cloud link."
+
+msgid "Could not copy the file to My Files"
+msgstr "Hindi makopya ang file sa Aking mga File"
+
+msgid "File copied to My Files"
+msgstr "Nakopya ang file sa Aking mga File"
+
+msgid "Checking course creation options..."
+msgstr "Sinusuri ang mga opsyon sa paggawa ng kurso..."
+
+msgid "You cannot create more courses right now."
+msgstr "Hindi ka na makakagawa pa ng mga kurso sa ngayon."
+
+msgid "AI analyzer"
+msgstr "AI analyzer"
+
+msgid "Expand all"
+msgstr "I-expand lahat"
+
+msgid "Collapse all"
+msgstr "I-collapse lahat"
+
+msgid "Review your active service benefits, purchase history and available receipts."
+msgstr "Suriin ang iyong mga aktibong benepisyo sa serbisyo, kasaysayan ng pagbili at mga resibo."
+
+msgid "Active services"
+msgstr "Mga aktibong serbisyo"
+
+msgid "No active services"
+msgstr "Walang aktibong serbisyo"
+
+msgid "Valid until"
+msgstr "May bisa hanggang"
+
+msgid "Recurring payment"
+msgstr "Paulit-ulit na bayad"
+
+msgid "Next charge"
+msgstr "Susunod na singil"
+
+msgid "Enable auto billing"
+msgstr "Paganahin ang auto billing"
+
+msgid "Cancel auto billing"
+msgstr "Kanselahin ang auto billing"
+
+msgid "Granted benefits"
+msgstr "Mga benepisyong ipinagkaloob"
+
+msgid "Purchase history"
+msgstr "Kasaysayan ng pagbili"
+
+msgid "No purchases yet"
+msgstr "Wala pang pagbili"
+
+msgid "Product"
+msgstr "Produkto"
+
+msgid "Reference"
+msgstr "Sanggunian"
+
+msgid "Amount"
+msgstr "Halaga"
+
+msgid "Receipt"
+msgstr "Resibo"
+
+msgid "Unable to load your services right now."
+msgstr "Hindi ma-load ang iyong mga serbisyo sa ngayon."
+
+msgid "Auto billing enabled"
+msgstr "Naka-enable ang auto billing"
+
+msgid "Auto billing suspended"
+msgstr "Nasuspinde ang auto billing"
+
+msgid "Auto billing cancelled"
+msgstr "Nakansela ang auto billing"
+
+msgid "Auto billing disabled"
+msgstr "Naka-disable ang auto billing"
+
+msgid "Cancel auto billing for this service?"
+msgstr "Kanselahin ang auto billing para sa serbisyong ito?"
+
+msgid "Preview class members and courses"
+msgstr "I-preview ang mga miyembro ng klase at mga kurso"
+
+msgid "Please select a CSV file to import."
+msgstr "Mangyaring pumili ng CSV file na ii-import."
+
+msgid "%d user-class links imported"
+msgstr "%d user-class links na na-import"
+
+msgid "The following errors occurred during import:"
+msgstr "Ang mga sumusunod na error ang naganap habang nag-i-import:"
+
+msgid "CSV file"
+msgstr "CSV file"
+
+msgid "Remove user from all group-related entities if not in the list"
+msgstr "Alisin ang user sa lahat ng entity na may kaugnayan sa grupo kung wala sa listahan"
+
+msgid "UserName"
+msgstr "UserName"
+
+msgid "ClassName"
+msgstr "ClassName"
+
+msgid "are required for each row."
+msgstr "ay kinakailangan para sa bawat row."
+
+msgid "title"
+msgstr "pamagat"
+
+msgid "is required."
+msgstr "ay kinakailangan."
+
+msgid "description"
+msgstr "paglalarawan"
+
+msgid "are optional."
+msgstr "ay opsyonal."
+
+msgid "Are you sure you want to remove this user from the class?"
+msgstr "Sigurado ka bang nais mong alisin ang user na ito sa klase?"
+
+msgid "Users in class"
+msgstr "Mga user sa klase"
+
+msgid "Remove user"
+msgstr "Alisin ang user"
+
+msgid "Class not found"
+msgstr "Hindi natagpuan ang klase"
+
+msgid "Class overview"
+msgstr "Pangkalahatang-ideya ng klase"
+
+msgid "Back to classes"
+msgstr "Bumalik sa mga klase"
+
+msgid "Search members or courses"
+msgstr "Maghanap ng mga miyembro o kurso"
+
+msgid "Search by name, email, username or course title"
+msgstr "Maghanap ayon sa pangalan, email, username o pamagat ng kurso"
+
+msgid "Class members"
+msgstr "Mga miyembro ng klase"
+
+msgid "No email"
+msgstr "Walang email"
+
+msgid "No members found"
+msgstr "Walang nakitang miyembro"
+
+msgid "No courses found"
+msgstr "Walang nakitang kurso"
+
+msgid "The end date must be after the start date."
+msgstr "Ang petsa ng pagtatapos ay dapat pagkatapos ng petsa ng pagsisimula."
+
+msgid "Always visible"
+msgstr "Palaging nakikita"
+
+msgid "No end date"
+msgstr "Walang petsa ng pagtatapos"
+
+msgid "No restriction"
+msgstr "Walang restriksyon"
+
+msgid "Missing learning path or course identifier"
+msgstr "Nawawala ang learning path o course identifier"
+
+msgid "Select a user or a group first"
+msgstr "Pumili muna ng user o group"
+
+msgid "Remove all date restrictions for this learning path?"
+msgstr "Alisin ang lahat ng date restriction para sa learning path na ito?"
+
+msgid "Advanced learning path access"
+msgstr "Advanced learning path access"
+
+msgid "Remove date restrictions"
+msgstr "Alisin ang date restrictions"
+
+msgid "Search by name, email, username or group"
+msgstr "Maghanap ayon sa pangalan, email, username o group"
+
+msgid "Edit user restriction"
+msgstr "I-edit ang user restriction"
+
+msgid "Edit group restriction"
+msgstr "I-edit ang group restriction"
+
+msgid "Select a user or group"
+msgstr "Pumili ng user o group"
+
+msgid "Save restriction"
+msgstr "I-save ang restriction"
+
+msgid "members"
+msgstr "mga miyembro"
+
+msgid "Create Assignment"
+msgstr "Gumawa ng Assignment"
+
+msgid "The submission deadline has passed. You can no longer submit."
+msgstr "Lumipas na ang submission deadline. Hindi ka na makakapagsumite."
+
+msgid "Mailing cannot be combined with other recipients."
+msgstr "Hindi maaaring pagsamahin ang Mailing sa iba pang mga tatanggap."
+
+msgid "Social map"
+msgstr "Social map"
+
+msgid "The map plugin is not enabled or configured."
+msgstr "Hindi naka-enable o naka-configure ang map plugin."
+
+msgid "Some configured extra fields were not found"
+msgstr "Ilang configured extra fields ang hindi natagpuan"
+
+msgid "No user locations were found."
+msgstr "Walang nakitang user locations."
+
+msgid "OpenStreetMap needs coordinates to display an embedded marker. Address-only locations are listed below."
+msgstr "Kailangan ng OpenStreetMap ng mga coordinate para ipakita ang embedded marker. Nakalista sa ibaba ang mga address-only locations."
+
+msgid "Locations"
+msgstr "Mga Lokasyon"
+
+msgid "Open map"
+msgstr "Buksan ang map"
+
+msgid "Provider: OpenStreetMap"
+msgstr "Provider: OpenStreetMap"
+
+msgid "Provider: Google Maps"
+msgstr "Provider: Google Maps"
+
+msgid "Personal files"
+msgstr "Personal files"
+
+msgid "Upload image"
+msgstr "Mag-upload ng larawan"
+
+msgid "Upload media"
+msgstr "Mag-upload ng media"
+
+msgid "Only image files are allowed in this upload screen."
+msgstr "Tanging image files lamang ang pinapayagan sa upload screen na ito."
+
+msgid "Only audio and video files are allowed in this upload screen."
+msgstr "Tanging audio at video files lamang ang pinapayagan sa upload screen na ito."
+
+msgid "Upload files to your personal storage."
+msgstr "Mag-upload ng mga file sa iyong personal storage."
+
+msgid "Linked"
+msgstr "Naka-link"
+
+msgid "No audio or video files were found in this folder."
+msgstr "Walang nakitang audio o video files sa folder na ito."
+
+msgid "No image files were found in this folder."
+msgstr "Walang nakitang image files sa folder na ito."
+
+msgid "No matching files were found in this folder."
+msgstr "Walang nakitang matching files sa folder na ito."
+
+msgid "This file type is not allowed in this upload screen."
+msgstr "Hindi pinapayagan ang file type na ito sa upload screen na ito."
+
+msgid "Manage your personal files and course documents."
+msgstr "Pamahalaan ang iyong personal files at course documents."
+
+msgid "DateValidity"
+msgstr "DateValidity"
+
+msgid "JustificationSaved"
+msgstr "JustificationSaved"
+
+msgid "ValidityDate"
+msgstr "ValidityDate"
+
+msgid "MyJustifications"
+msgstr "MyJustifications"
+
+msgid "Submission"
+msgstr "Pagsusumite"
+
+msgid "Use the filters above to narrow the list."
+msgstr "Gamitin ang mga filter sa itaas upang paliitin ang listahan."
+
+msgid "You are not allowed to see this page."
+msgstr "Hindi ka pinapayagang tingnan ang pahinang ito."
+
+msgid "plugin_title"
+msgstr "plugin_title"
+
+msgid "plugin_comment"
+msgstr "plugin_comment"
+
+msgid "Course tracking details"
+msgstr "Mga detalye ng pagsubaybay sa kurso"
+
+msgid "Course activity statistics"
+msgstr "Mga istatistika ng aktibidad sa kurso"
+
+msgid "mobile_phone_number"
+msgstr "mobile_phone_number"
+
+msgid "Allowed template syntax"
+msgstr "Pinahihintulutang syntax ng template"
+
+msgid "Functions"
+msgstr "Mga function"
+
+msgid "Available variables depend on the template type, for example {{ user.getUsername() }} or {{ user.getEmail() }}."
+msgstr "Ang mga available na variable ay nakadepende sa uri ng template, halimbawa {{ user.getUsername() }} o {{ user.getEmail() }}."
+
+msgid "For security reasons, any other Twig function, filter (such as filter, map, reduce or sort) or PHP call is blocked."
+msgstr "Para sa mga kadahilanang pangseguridad, anumang iba pang Twig function, filter (tulad ng filter, map, reduce o sort) o tawag sa PHP ay hinaharangan."
+
+msgid "Global administrator"
+msgstr "Global na tagapangasiwa"
+
+msgid "Session manager"
+msgstr "Tagapamahala ng sesyon"
+
+msgid "Human resources manager"
+msgstr "Tagapamahala ng human resources"
+
+msgid "Course teacher"
+msgstr "Guro sa kurso"
+
+msgid "Course student"
+msgstr "Estudyante sa kurso"
+
+msgid "Platform reports"
+msgstr "Mga ulat ng platform"
+
+msgid "Security reports"
+msgstr "Mga ulat sa seguridad"
+
+msgid "Course reports"
+msgstr "Mga ulat sa kurso"
+
+msgid "Gradebook reports"
+msgstr "Mga ulat sa gradebook"
+
+msgid "Social reports"
+msgstr "Mga ulat sa social"
+
+msgid "Exports"
+msgstr "Mga export"
+
+msgid "Reports about platform-wide usage, users, courses and sessions."
+msgstr "Mga ulat tungkol sa paggamit ng buong platform, mga gumagamit, mga kurso at mga sesyon."
+
+msgid "Audit and security-sensitive reports."
+msgstr "Mga ulat sa pag-audit at sensitibo sa seguridad."
+
+msgid "Reports scoped to courses managed by the user."
+msgstr "Mga ulat na sakop lamang sa mga kursong pinamamahalaan ng gumagamit."
+
+msgid "Reports related to learner activity and follow-up."
+msgstr "Mga ulat na may kaugnayan sa aktibidad at follow-up ng mga nag-aaral."
+
+msgid "Reports related to scores, certificates and gradebook data."
+msgstr "Mga ulat na may kaugnayan sa mga iskor, sertipiko at data ng gradebook."
+
+msgid "Reports and exports that generate downloadable files."
+msgstr "Mga ulat at export na gumagawa ng mga file na maaaring i-download."
+
+msgid "Main platform statistics dashboard."
+msgstr "Pangunahing dashboard ng istatistika ng platform."
+
+msgid "Number of courses and course distribution report."
+msgstr "Ulat sa bilang at distribusyon ng mga kurso."
+
+msgid "Platform-wide access to course tools."
+msgstr "Access sa buong platform sa mga tool ng kurso."
+
+msgid "Number of resources per tool."
+msgstr "Bilang ng mga resource bawat tool."
+
+msgid "Latest access to courses."
+msgstr "Pinakabagong access sa mga kurso."
+
+msgid "Course distribution by language."
+msgstr "Distribusyon ng kurso ayon sa wika."
+
+msgid "Course usage report."
+msgstr "Ulat sa paggamit ng kurso."
+
+msgid "Platform user count report."
+msgstr "Ulat sa bilang ng gumagamit ng platform."
+
+msgid "Recent logins chart."
+msgstr "Chart ng mga kamakailang pag-login."
+
+msgid "Login distribution by month."
+msgstr "Distribusyon ng pag-login ayon sa buwan."
+
+msgid "Login distribution by day."
+msgstr "Distribusyon ng pag-login ayon sa araw."
+
+msgid "Login distribution by hour."
+msgstr "Distribusyon ng pag-login ayon sa oras."
+
+msgid "Users with profile picture."
+msgstr "Mga gumagamit na may larawan sa profile."
+
+msgid "Login report filtered by date."
+msgstr "Ulat sa pag-login na na-filter ayon sa petsa."
+
+msgid "Users who have not logged in recently."
+msgstr "Mga gumagamit na hindi pa nakakapag-login kamakailan."
+
+msgid "Inactive or suspicious user accounts report."
+msgstr "Ulat sa mga account ng gumagamit na hindi aktibo o kahina-hinala."
+
+msgid "Users activity statistics."
+msgstr "Mga istatistika ng aktibidad ng mga gumagamit."
+
+msgid "Currently online users report."
+msgstr "Ulat sa mga gumagamit na kasalukuyang online."
+
+msgid "New user registrations over time."
+msgstr "Mga bagong rehistrasyon ng gumagamit sa paglipas ng panahon."
+
+msgid "Course and session subscriptions over time."
+msgstr "Mga subscription sa kurso at sesyon sa paglipas ng panahon."
+
+msgid "Duplicate user detection and maintenance report."
+msgstr "Ulat sa pagtuklas at pagpapanatili ng mga duplicate na gumagamit."
+
+msgid "Platform user/session statistics."
+msgstr "Mga istatistika ng gumagamit/sesyon ng plataporma."
+
+msgid "Quarterly platform report."
+msgstr "Ulat ng plataporma kada quarter."
+
+msgid "Activities audit"
+msgstr "Pagsusuri ng mga aktibidad"
+
+msgid "Audit report for important administrative and platform activities."
+msgstr "Ulat ng pagsusuri para sa mahahalagang aktibidad na pang-administratibo at plataporma."
+
+msgid "Social messages received report."
+msgstr "Ulat ng mga mensaheng panlipunan na natanggap."
+
+msgid "Social messages sent report."
+msgstr "Ulat ng mga mensaheng panlipunan na ipinadala."
+
+msgid "Social contacts count report."
+msgstr "Ulat ng bilang ng mga kontak na panlipunan."
+
+msgid "Sessions created over time."
+msgstr "Mga sesyon na nalikha sa paglipas ng panahon."
+
+msgid "Learning analytics dashboard."
+msgstr "Dashboard ng learning analytics."
+
+msgid "Teacher time report."
+msgstr "Ulat ng oras ng guro."
+
+msgid "Teachers time by session report"
+msgstr "Ulat ng oras ng mga guro ayon sa sesyon"
+
+msgid "Teacher time report grouped by session."
+msgstr "Ulat ng oras ng guro na pinagsama-sama ayon sa sesyon."
+
+msgid "Corporate learning analytics report."
+msgstr "Ulat ng corporate learning analytics."
+
+msgid "Course learners tracking report."
+msgstr "Ulat ng pagsubaybay sa mga nag-aaral sa kurso."
+
+msgid "Course activity statistics with connected and inactive users."
+msgstr "Mga istatistika ng aktibidad sa kurso kasama ang mga gumagamit na konektado at hindi aktibo."
+
+msgid "Detailed tracking report for a learner inside a course."
+msgstr "Detalyadong ulat ng pagsubaybay para sa isang nag-aaral sa loob ng kurso."
+
+msgid "Course gradebook overview."
+msgstr "Pangkalahatang-ideya ng gradebook ng kurso."
+
+msgid "Gradebook statistics"
+msgstr "Mga istatistika ng gradebook"
+
+msgid "Gradebook statistics report."
+msgstr "Ulat ng mga istatistika ng gradebook."
+
+msgid "Certificate report"
+msgstr "Ulat ng sertipiko"
+
+msgid "Certificate report for course gradebook."
+msgstr "Ulat ng sertipiko para sa gradebook ng kurso."
+
+msgid "User statistics"
+msgstr "Mga istatistika ng gumagamit"
+
+msgid "Course gradebook statistics for a user."
+msgstr "Mga istatistika ng gradebook ng kurso para sa isang gumagamit."
+
+msgid "Personal statistics"
+msgstr "Mga personal na istatistika"
+
+msgid "Personal gradebook statistics."
+msgstr "Mga personal na istatistika ng gradebook."
+
+msgid "Reports catalog"
+msgstr "Katalogo ng mga ulat"
+
+msgid "Central catalog of available reports, roles and permission categories."
+msgstr "Sentral na katalogo ng mga available na ulat, tungkulin at kategorya ng pahintulot."
+
+msgid "Course log events"
+msgstr "Mga kaganapan sa log ng kurso"
+
+msgid "Detailed course tracking events."
+msgstr "Mga detalyadong kaganapan sa pagsubaybay ng kurso."
+
+msgid "Course tool usage"
+msgstr "Paggamit ng tool sa kurso"
+
+msgid "Course tracking report grouped by tools."
+msgstr "Ulat ng pagsubaybay ng kurso na pinagsama-sama ayon sa mga tool."
+
+msgid "Course resource usage"
+msgstr "Paggamit ng resource sa kurso"
+
+msgid "Course tracking report grouped by resources."
+msgstr "Ulat ng pagsubaybay ng kurso na pinagsama-sama ayon sa mga resource."
+
+msgid "Course group tracking"
+msgstr "Pagsubaybay sa grupo ng kurso"
+
+msgid "Tracking report for course groups."
+msgstr "Ulat ng pagsubaybay para sa mga grupo ng kurso."
+
+msgid "Course session report"
+msgstr "Ulat ng sesyon ng kurso"
+
+msgid "Tracking report for a course inside sessions."
+msgstr "Ulat ng pagsubaybay para sa isang kurso sa loob ng mga sesyon."
+
+msgid "Learning path report"
+msgstr "Ulat ng learning path"
+
+msgid "Learning path tracking report."
+msgstr "Ulat ng pagsubaybay sa learning path."
+
+msgid "Learning path results by user"
+msgstr "Mga resulta ng learning path ayon sa gumagamit"
+
+msgid "Learning path results grouped by user."
+msgstr "Mga resulta ng learning path na pinagsama-sama ayon sa gumagamit."
+
+msgid "Exercises report"
+msgstr "Ulat ng mga ehersisyo"
+
+msgid "Course exercises and exams tracking report."
+msgstr "Ulat ng pagsubaybay sa mga ehersisyo at pagsusulit sa kurso."
+
+msgid "Question report"
+msgstr "Ulat ng tanong"
+
+msgid "Course question tracking report."
+msgstr "Ulat ng pagsubaybay sa tanong ng kurso."
+
+msgid "Messages report"
+msgstr "Ulat ng mga mensahe"
+
+msgid "Course messages tracking report."
+msgstr "Ulat ng pagsubaybay sa mga mensahe ng kurso."
+
+msgid "Total time tracking report for course learners."
+msgstr "Kabuuang ulat ng pagsubaybay sa oras para sa mga nag-aaral sa kurso."
+
+msgid "Gradebook summary"
+msgstr "Buod ng gradebook"
+
+msgid "Summary view of gradebook results."
+msgstr "Buod na view ng mga resulta ng gradebook."
+
+msgid "Flat view"
+msgstr "Flat view"
+
+msgid "Flat gradebook results view."
+msgstr "Flat gradebook results view."
+
+msgid "Evaluation log"
+msgstr "Evaluation log"
+
+msgid "Change log for gradebook evaluations."
+msgstr "Change log for gradebook evaluations."
+
+msgid "Link log"
+msgstr "Link log"
+
+msgid "Change log for gradebook links."
+msgstr "Change log for gradebook links."
+
+msgid "Result details"
+msgstr "Result details"
+
+msgid "Detailed view of a gradebook result."
+msgstr "Detailed view of a gradebook result."
+
+msgid "Personal certificates report."
+msgstr "Personal certificates report."
+
+msgid "User move statistics"
+msgstr "Mga istatistika ng galaw ng gumagamit"
+
+msgid "Report for user move and transfer statistics."
+msgstr "Ulat para sa mga istatistika ng galaw at paglipat ng gumagamit."
+
+msgid "User consent list"
+msgstr "Listahan ng pahintulot ng gumagamit"
+
+msgid "Report of users and consent status."
+msgstr "Ulat ng mga gumagamit at katayuan ng pahintulot."
+
+msgid "Special platform exports."
+msgstr "Mga espesyal na pag-export ng plataporma."
+
+msgid "Export certificates"
+msgstr "I-export ang mga sertipiko"
+
+msgid "Export platform certificates."
+msgstr "I-export ang mga sertipiko ng plataporma."
+
+msgid "Export exercise results"
+msgstr "I-export ang mga resulta ng pagsasanay"
+
+msgid "Export exercise results from the platform."
+msgstr "I-export ang mga resulta ng pagsasanay mula sa plataporma."
+
+msgid "Course survey results and reporting."
+msgstr "Mga resulta at ulat ng survey ng kurso."
+
+msgid "Attendance report"
+msgstr "Ulat ng pagdalo"
+
+msgid "Course attendance tracking and reports."
+msgstr "Pagsubaybay at mga ulat ng pagdalo sa kurso."
+
+msgid "Exercises global report"
+msgstr "Pandaigdigang ulat ng pagsasanay"
+
+msgid "Global exercise results report for the course."
+msgstr "Pandaigdigang ulat ng mga resulta ng pagsasanay para sa kurso."
+
+msgid "Exercise report"
+msgstr "Ulat ng pagsasanay"
+
+msgid "Detailed exercise report."
+msgstr "Detalyadong ulat ng pagsasanay."
+
+msgid "Exercise history"
+msgstr "Kasaysayan ng pagsasanay"
+
+msgid "Exercise attempt history."
+msgstr "Kasaysayan ng mga pagsubok sa pagsasanay."
+
+msgid "Exercise results"
+msgstr "Mga resulta ng pagsasanay"
+
+msgid "Exercise results and corrections."
+msgstr "Mga resulta at pagwawasto ng pagsasanay."
+
+msgid "Question-level exercise statistics."
+msgstr "Mga istatistika ng pagsasanay sa antas ng tanong."
+
+msgid "Exercise statistics"
+msgstr "Mga istatistika ng pagsasanay"
+
+msgid "Exercise statistics page."
+msgstr "Pahina ng mga istatistika ng pagsasanay."
+
+msgid "Live exercise statistics"
+msgstr "Mga istatistika ng pagsasanay na live"
+
+msgid "Live exercise statistics for teachers."
+msgstr "Mga istatistika ng pagsasanay na live para sa mga guro."
+
+msgid "Learning path statistics"
+msgstr "Mga istatistika ng landas ng pag-aaral"
+
+msgid "Learning path item statistics."
+msgstr "Mga istatistika ng item ng landas ng pag-aaral."
+
+msgid "Learning path report inside a course."
+msgstr "Ulat ng landas ng pag-aaral sa loob ng kurso."
+
+msgid "User skills report."
+msgstr "Ulat ng kasanayan ng gumagamit."
+
+msgid "Scheduled or periodic export configuration."
+msgstr "Naka-iskedyul o pana-panahong pagsasaayos ng pag-export."
+
+msgid "User export"
+msgstr "Pag-export ng gumagamit"
+
+msgid "Export users from the platform."
+msgstr "I-export ang mga gumagamit mula sa plataporma."
+
+msgid "Not classified"
+msgstr "Hindi nakategorya"
+
+msgid "You have acquired the skill %s"
+msgstr "Nakuha mo ang kasanayan %s"
+
+msgid "You have acquired the skill %s."
+msgstr "Nakuha mo ang kasanayan %s."
+
+msgid "Recover your password"
+msgstr "I-recover ang iyong password"
+
+msgid "Disclaimer"
+msgstr "Disclaimer"
+
+msgid "This operation would exceed the limit of %d users allowed for this course."
+msgstr "Lalampas ang operasyong ito sa limitasyon na %d gumagamit na pinahihintulutan para sa kursong ito."
+
+msgid "DefaultGroupCategory"
+msgstr "DefaultGroupCategory"
+
+msgid "LearningCalendar"
+msgstr "LearningCalendar"
+
+msgid "Choose how this user can authenticate on the platform."
+msgstr "Piliin kung paano maaaring mag-authenticate ang gumagamit na ito sa plataporma."
+
+msgid "Authentication methods"
+msgstr "Mga pamamaraan ng pagpapatunay"
+
+msgid "Set password manually"
+msgstr "Itakda ang password nang manu-mano"
+
+msgid "Report role matrix"
+msgstr "Ulat ng matrix ng tungkulin"
+
+msgid "Report permission categories"
+msgstr "Ulat ng mga kategorya ng pahintulot"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs enforce the documented report role matrix."
+msgstr "Naglilista ang talaang ito ng mga kilalang pahina ng pag-uulat, ang kanilang kategorya, canonical URL, legacy URL at inaasahang tungkulin ng madla. Pinapatupad ng mga Canonical URL ang dokumentadong matrix ng tungkulin sa ulat."
+
+msgid "reports"
+msgstr "mga ulat"
+
+msgid "Canonical URL"
+msgstr "Canonical URL"
+
+msgid "Legacy URL"
+msgstr "Legacy URL"
+
+msgid "Permission category"
+msgstr "Kategorya ng pahintulot"
+
+msgid "This matrix documents the expected audience for each report and is enforced by the canonical report entry point."
+msgstr "Dokumentado ng matrix na ito ang inaasahang madla para sa bawat ulat at ipinapatupad ng canonical entry point ng ulat."
+
+msgid "These keys group reports by access scope and are used by the report registry. They can later be mapped to finer-grained platform permissions."
+msgstr "Pinapangkat ng mga susi na ito ang mga ulat ayon sa saklaw ng pag-access at ginagamit ng talaan ng ulat. Maaari itong i-map sa mas detalyadong mga pahintulot ng platform sa hinaharap."
+
+msgid "Permission"
+msgstr "Pahintulot"
+
+msgid "Clear active session"
+msgstr "I-clear ang aktibong sesyon"
+
+msgid "Are you sure you want to clear this user active session?"
+msgstr "Sigurado ka bang gusto mong i-clear ang aktibong sesyon ng user na ito?"
+
+msgid "Preview shown without course context. Some course-specific data may be unavailable."
+msgstr "Ipapakita ang preview nang walang konteksto ng kurso. Maaaring hindi magagamit ang ilang data na partikular sa kurso."
+
+msgid "Preview is not available for this question."
+msgstr "Hindi magagamit ang preview para sa tanong na ito."
+
+msgid "Edition is not allowed without a course context."
+msgstr "Hindi pinapayagan ang pag-edit nang walang konteksto ng kurso."
+
+msgid "This plugin does not use regions."
+msgstr "Hindi gumagamit ng mga rehiyon ang plugin na ito."
+
+msgid "No plugins with regions were found."
+msgstr "Walang mga plugin na may mga rehiyon ang natagpuan."
+
+msgid "Freemium"
+msgstr "Freemium"
+
+msgid "Commercial service"
+msgstr "Serbisyong komersyal"
+
+msgid "Commercial"
+msgstr "Komersyal"
+
+msgid "100% free"
+msgstr "100% libre"
+
+msgid "Displayed above the public login form."
+msgstr "Ipapakita sa itaas ng pampublikong form ng pag-login."
+
+msgid "Displayed below the public login form."
+msgstr "Ipapakita sa ibaba ng pampublikong form ng pag-login."
+
+msgid "Displayed before the footer area."
+msgstr "Ipapakita bago ang lugar ng footer."
+
+msgid "Displayed in the left footer column."
+msgstr "Ipapakita sa kaliwang kolum ng footer."
+
+msgid "Displayed in the center footer column."
+msgstr "Ipapakita sa gitnang kolum ng footer."
+
+msgid "Displayed in the right footer column."
+msgstr "Ipapakita sa kanang kolum ng footer."
+
+msgid "Showing all plugins."
+msgstr "Ipinapakita ang lahat ng plugin."
+
+msgid "Some plugins are still pending functional verification."
+msgstr "May ilang plugin na naghihintay pa rin ng functional na pagpapatunay."
+
+msgid "Show verified plugins only"
+msgstr "Ipakita lamang ang mga napatunayang plugin"
+
+msgid "Showing verified plugins only."
+msgstr "Ipinapakita lamang ang mga napatunayang plugin."
+
+msgid "Pending plugins are temporarily hidden until they are adapted and tested."
+msgstr "Pansamantalang itinago ang mga plugin na naghihintay hanggang sa ito ay iangkop at masuri."
+
+msgid "Show all plugins"
+msgstr "Ipakita ang lahat ng plugin"
+
+msgid "Official and free plugins are listed separately from plugins that may depend on commercial services or paid offers."
+msgstr "Nakalista nang hiwalay ang mga opisyal at libreng plugin mula sa mga plugin na maaaring nakadepende sa mga serbisyong komersyal o bayad na alok."
+
+msgid "Included free plugins"
+msgstr "Kasamang libreng plugin"
+
+msgid "Commercial and freemium plugins"
+msgstr "Mga plugin na komersyal at freemium"
+
+msgid "All plugins"
+msgstr "Lahat ng plugin"
+
+msgid "No plugins were found for this category."
+msgstr "Walang plugin na natagpuan para sa kategoryang ito."
+
+msgid "Search plugins"
+msgstr "Maghanap ng plugin"
+
+msgid "Search by name or description"
+msgstr "Maghanap ayon sa pangalan o paglalarawan"
+
+msgid "Advanced filters"
+msgstr "Mga advanced na filter"
+
+msgid "All statuses"
+msgstr "Lahat ng status"
+
+msgid "All sources"
+msgstr "Lahat ng pinagmulan"
+
+msgid "All types"
+msgstr "Lahat ng uri"
+
+msgid "Installed plugins are shown first"
+msgstr "Unang ipinapakita ang mga naka-install na plugin"
+
+msgid "No plugins match the current filters."
+msgstr "Walang plugin na tumutugma sa kasalukuyang mga filter."
+
+msgid "Try clearing the search or changing the filters."
+msgstr "Subukang i-clear ang paghahanap o baguhin ang mga filter."
+
+msgid "README"
+msgstr "README"
+
+msgid "Invalid security token"
+msgstr "Di-wastong security token"
+
+msgid "Please select a destination session"
+msgstr "Pumili ng patutunguhang sesyon"
+
+msgid "Cannot move this to the same session"
+msgstr "Hindi mailipat ito sa parehong sesyon"
+
+msgid "The destination session must include the selected course"
+msgstr "Dapat isama ng patutunguhang sesyon ang napiling kurso"
+
+msgid "The source session must include the selected course"
+msgstr "Dapat isama ng pinagmulang sesyon ang napiling kurso"
+
+msgid "No learners found"
+msgstr "Walang natagpuang mga mag-aaral"
+
+msgid "Will be subscribed"
+msgstr "Ito ay isasali"
+
+msgid "Subscribed"
+msgstr "Nakasali na"
+
+msgid "The move process has finished"
+msgstr "Natapos na ang proseso ng paglipat"
+
+msgid "Comparison finished. No data has been moved."
+msgstr "Natapos na ang paghahambing. Walang data ang nailipat."
+
+msgid "Move tracking data from the base course or a source session to another session. Use comparison first to review the affected learner data."
+msgstr "Ilipat ang tracking data mula sa base course o pinagmulang sesyon patungo sa ibang sesyon. Gamitin muna ang paghahambing upang suriin ang apektadong data ng mag-aaral."
+
+msgid "Search for a course or use the manual course ID field below."
+msgstr "Maghanap ng kurso o gamitin ang patlang ng manual course ID sa ibaba."
+
+msgid "Fallback when the course search is not available."
+msgstr "Fallback kapag hindi available ang paghahanap ng kurso."
+
+msgid "Load sessions"
+msgstr "I-load ang mga sesyon"
+
+msgid "Selected course"
+msgstr "Napiling kurso"
+
+msgid "Choose the base course or the session where the tracking data currently exists."
+msgstr "Piliin ang base course o ang sesyon kung saan kasalukuyang umiiral ang tracking data."
+
+msgid "Choose the session that will receive the tracking data."
+msgstr "Piliin ang sesyon na tatanggap ng tracking data."
+
+msgid "Important"
+msgstr "Mahalaga"
+
+msgid "The move action updates existing tracking data. Run compare first and test this tool with a non-production course before moving real learner data."
+msgstr "Ina-update ng aksyon ng paglipat ang umiiral na tracking data. Patakbuhin muna ang paghahambing at subukan ang tool na ito gamit ang hindi-production na kurso bago ilipat ang totoong data ng mag-aaral."
+
+msgid "No sessions found for this course"
+msgstr "Walang natagpuang sesyon para sa kursong ito"
+
+msgid "Some users were ignored because they are not subscribed to this session."
+msgstr "May mga user na hindi isinama dahil hindi sila naka-subscribe sa sesyong ito."
+
+msgid "Remove selected user"
+msgstr "Alisin ang napiling user"
+
+msgid "Add selected user"
+msgstr "Idagdag ang napiling user"
+
+msgid "No users from the selected list are subscribed to this session."
+msgstr "Walang user mula sa napiling listahan ang naka-subscribe sa sesyong ito."
+
+msgid "No image"
+msgstr "Walang larawan"
+
+msgid "Invalid URL."
+msgstr "Di-wastong URL."
+
+msgid "This cloud document cannot be embedded."
+msgstr "Hindi ma-embed ang cloud document na ito."
+
+msgid "Document not found"
+msgstr "Hindi natagpuan ang dokumento"
+
+msgid "File not found"
+msgstr "Hindi natagpuan ang file"
+
+msgid "This learning path is not available for your user at this time."
+msgstr "Hindi available ang learning path na ito para sa iyong user sa ngayon."
+
+msgid "StartDateMustBeBeforeTheEndDate"
+msgstr "StartDateMustBeBeforeTheEndDate"
+
+msgid "Next learning path"
+msgstr "Susunod na learning path"
+
+msgid "Select the learning path that will be available after this one."
+msgstr "Piliin ang learning path na magiging available pagkatapos nito."
+
+msgid "Create another learning path in this course to enable learning path flow."
+msgstr "Lumikha ng isa pang learning path sa kursong ito upang paganahin ang learning path flow."
+
+msgid "Available from %s"
+msgstr "Available mula %s"
+
+msgid "Available until %s"
+msgstr "Available hanggang %s"
+
+msgid "Statistics reset date"
+msgstr "Petsa ng pag-reset ng istatistika"
+
+msgid "Last 24 hours"
+msgstr "Huling 24 oras"
+
+msgid "This reset date is used as the reference date for the report. It does not delete historical tracking data."
+msgstr "Ginagamit ang petsa ng pag-reset bilang sangguniang petsa para sa ulat. Hindi nito tinatanggal ang makasaysayang tracking data."
+
+msgid "Since reset date"
+msgstr "Mula sa petsa ng pag-reset"
+
+msgid "Users connected in the last 24 hours"
+msgstr "Mga user na nakakonekta sa huling 24 oras"
+
+msgid "Learners with at least one course access during the last 24 hours."
+msgstr "Mga mag-aaral na may hindi bababa sa isang pag-access sa kurso sa huling 24 oras."
+
+msgid "Users connected in the last week"
+msgstr "Mga user na nakakonekta sa huling linggo"
+
+msgid "Learners with at least one course access during the last 7 days."
+msgstr "Mga mag-aaral na may hindi bababa sa isang pag-access sa kurso sa huling 7 araw."
+
+msgid "Users connected in the last month"
+msgstr "Mga user na nakakonekta sa huling buwan"
+
+msgid "Learners with at least one course access during the last 30 days."
+msgstr "Mga mag-aaral na may hindi bababa sa isang pag-access sa kurso sa huling 30 araw."
+
+msgid "Not recently connected users"
+msgstr "Mga user na hindi pa kamakailan nakakonekta"
+
+msgid "Learners without course access since %s."
+msgstr "Mga mag-aaral na walang pag-access sa kurso mula noong %s."
+
+msgid "Recently used resources"
+msgstr "Kamakailang ginamit na mga mapagkukunan"
+
+msgid "Course tools/resources used since %s."
+msgstr "Mga course tools/resources na ginamit mula noong %s."
+
+msgid "%s %% of learners"
+msgstr "%s %% ng mga mag-aaral"
+
+msgid "Connections"
+msgstr "Mga Koneksyon"
+
+msgid "Total connections"
+msgstr "Kabuuang koneksyon"
+
+msgid "Downloaded documents"
+msgstr "Mga dokumentong na-download"
+
+msgid "List of documents downloaded by this learner in this course."
+msgstr "Listahan ng mga dokumentong na-download ng mag-aaral na ito sa kursong ito."
+
+msgid "Forum topics"
+msgstr "Mga paksa sa forum"
+
+msgid "Forum topics opened by this learner in this course."
+msgstr "Mga paksa sa forum na binuksan ng mag-aaral na ito sa kursong ito."
+
+msgid "Forum posts"
+msgstr "Mga post sa forum"
+
+msgid "Forum posts written by this learner in this course."
+msgstr "Mga post sa forum na isinulat ng mag-aaral na ito sa kursong ito."
+
+msgid "Course connections"
+msgstr "Mga koneksyon sa kurso"
+
+msgid "Connection history for this learner in this course."
+msgstr "Kasaysayan ng koneksyon ng mag-aaral na ito sa kursong ito."
+
+msgid "Resources used"
+msgstr "Mga ginamit na mapagkukunan"
+
+msgid "Latest tools or resources used by this learner in this course."
+msgstr "Pinakabagong mga tool o mapagkukunan na ginamit ng mag-aaral na ito sa kursong ito."
+
+msgid "Logout date"
+msgstr "Petsa ng pag-logout"
+
+msgid "Imported Aiken quiz"
+msgstr "Na-import na Aiken quiz"
+
+msgid "Only supported documents will be listed here."
+msgstr "Tanging mga suportadong dokumento ang ililista dito."
+
+msgid "Generated Aiken content"
+msgstr "Nalikhang nilalaman ng Aiken"
+
+msgid "Review the generated content before importing it as a new exercise."
+msgstr "Suriin ang nalikhang nilalaman bago ito i-import bilang bagong ehersisyo."
+
+msgid "No documents available."
+msgstr "Walang mga dokumentong magagamit."
+
+msgid "yperbolic arctangent:\\t\\tarctanh(x)"
+msgstr "hyperbolic arctangent:\\t\\tarctanh(x)"
+
+msgid "Exercise"
+msgstr "Ehersisyo"
+
+msgid "OfficialCode"
+msgstr "OfficialCode"
+
+msgid "FirstName"
+msgstr "FirstName"
+
+msgid "LastName"
+msgstr "LastName"
+
+msgid "LoginName"
+msgstr "LoginName"
+
+msgid "MinMinute"
+msgstr "MinMinute"
+
+msgid "StartDate"
+msgstr "StartDate"
+
+msgid "EndDate"
+msgstr "EndDate"
+
+msgid "CorrectionDate"
+msgstr "CorrectionDate"
+
+msgid "NotValidated"
+msgstr "NotValidated"
+
+msgid "PendingAttempts"
+msgstr "PendingAttempts"
+
+msgid "List of pending test attempts across your courses."
+msgstr "Listahan ng mga nakabinbing pagsubok sa lahat ng iyong kurso."
+
+msgid "User ID"
+msgstr "User ID"
+
+msgid "QuestionType"
+msgstr "QuestionType"
+
+msgid "QuestionsWithNoAutomaticCorrection"
+msgstr "QuestionsWithNoAutomaticCorrection"
+
+msgid "There are no pending tests."
+msgstr "Walang nakabinbing pagsubok."
+
+msgid "%s results"
+msgstr "%s resulta"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Halimbawa ng pagpuno sa form na aktibidad: kalkulahin ang Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Edad</strong></td>            <td width=\"75%\" style=\"\">[25] taong gulang</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kasarian</strong></td>            <td style=\"\" text-align:=\"\">[M] (M o F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Timbang</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Taas</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Timbang/Sukat<sup>2</sup> (Tingnan ang <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\">artikulo sa Wikipedia</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Removed"
+msgstr "Natanggal"
+
+msgid "NoUsersInTheList"
+msgstr "NoUsersInTheList"
+
+msgid "Are you sure?"
+msgstr "Sigurado ka ba?"
+
+msgid "NoResultsAvailable"
+msgstr "NoResultsAvailable"
+
+msgid "Import groups from a CSV file and optionally remove items that are not present in the file."
+msgstr "Mag-import ng mga grupo mula sa CSV file at opsyonal na tanggalin ang mga item na wala sa file."
+
+msgid "Use this option carefully because items missing from the CSV can be removed during the import process."
+msgstr "Gamitin nang maingat ang opsyong ito dahil maaaring matanggal ang mga item na wala sa CSV sa panahon ng proseso ng pag-import."
+
+msgid "Upload a CSV file with the group data you want to import."
+msgstr "Mag-upload ng CSV file na may data ng grupo na nais mong i-import."
+
+msgid "You can download the example file to use the expected format."
+msgstr "Maaari mong i-download ang halimbawang file upang gamitin ang inaasahang format."
+
+msgid "If you enable deletion, items not present in the file may be removed."
+msgstr "Kung paganahin mo ang pagtanggal, maaaring matanggal ang mga item na wala sa file."
+
+msgid "The CSV file is mandatory to start the import."
+msgstr "Kinakailangan ang CSV file upang simulan ang pag-import."
+
+msgid "Please select at least one class."
+msgstr "Mangyaring pumili ng hindi bababa sa isang klase."
+
+msgid "Define the properties for each group before creating them."
+msgstr "Tukuyin ang mga katangian para sa bawat grupo bago likhain ang mga ito."
+
+msgid "Apply the first row values"
+msgstr "Ilapat ang mga halaga ng unang hilera"
+
+msgid "Create groups manually or generate them from the classes subscribed to this course."
+msgstr "Lumikha ng mga pangkat nang manu-mano o buuin ang mga ito mula sa mga klase na naka-enroll sa kursong ito."
+
+msgid "Create manual groups"
+msgstr "Lumikha ng mga pangkat nang manu-mano"
+
+msgid "Use this form when you want to create empty course groups manually."
+msgstr "Gamitin ang form na ito kapag nais mong lumikha ng mga walang laman na pangkat ng kurso nang manu-mano."
+
+msgid "Configure manual groups"
+msgstr "I-configure ang mga pangkat nang manu-mano"
+
+msgid "Create groups from subscribed classes"
+msgstr "Lumikha ng mga pangkat mula sa mga klase na naka-enroll"
+
+msgid "Use this form when you want to create one course group for each selected class."
+msgstr "Gamitin ang form na ito kapag nais mong lumikha ng isang pangkat ng kurso para sa bawat napiling klase."
+
+msgid "Keep created groups linked to their source classes"
+msgstr "Panatilihing naka-link ang mga nalikhang pangkat sa kanilang mga pinagmulang klase"
+
+msgid "Create groups from selected classes"
+msgstr "Lumikha ng mga pangkat mula sa mga napiling klase"
+
+msgid "You must be logged in to access this page."
+msgstr "Kailangan mong mag-log in upang ma-access ang pahinang ito."
+
+msgid "Invalid user"
+msgstr "Di-wastong gumagamit"
+
+msgid "UseCourseCustomCertificate"
+msgstr "UseCourseCustomCertificate"
+
+msgid "UseDefaultCustomCertificate"
+msgstr "UseDefaultCustomCertificate"
+
+msgid "CertificateSetting"
+msgstr "CertificateSetting"
+
+msgid "SelectOneOptionBeforeOpeningEditor"
+msgstr "SelectOneOptionBeforeOpeningEditor"
+
+msgid "ChooseCustomCertificateModeHelp"
+msgstr "ChooseCustomCertificateModeHelp"
+
+msgid "CertificateMode"
+msgstr "CertificateMode"
+
+msgid "Enable student to validate own attendance"
+msgstr "Pahintulutan ang estudyante na patunayan ang sariling pagdalo"
+
+msgid "Course block"
+msgstr "Blok ng kurso"
+
+msgid "Add custom content blocks to course footer regions."
+msgstr "Magdagdag ng mga pasadyang bloke ng nilalaman sa mga rehiyon ng footer ng kurso."
+
+msgid "course_block_pre_footer"
+msgstr "course_block_pre_footer"
+
+msgid "Before footer"
+msgstr "Bago ang footer"
+
+msgid "course_block_footer_left"
+msgstr "course_block_footer_left"
+
+msgid "Footer left"
+msgstr "Kaliwang footer"
+
+msgid "course_block_footer_center"
+msgstr "course_block_footer_center"
+
+msgid "Footer center"
+msgstr "Gitnang footer"
+
+msgid "course_block_footer_right"
+msgstr "course_block_footer_right"
+
+msgid "Footer right"
+msgstr "Kanang footer"
+
+msgid "SetNotification"
+msgstr "SetNotification"
+
+msgid "CourseLegal"
+msgstr "CourseLegal"
+
+msgid "Certificates search is not available"
+msgstr "Hindi available ang paghahanap ng mga sertipiko"
+
+msgid "It allows the acquisition of skills by subcategories"
+msgstr "Pinapahintulutan nito ang pagkuha ng mga kasanayan sa pamamagitan ng mga subkategorya"
+
+msgid "Allow skills by subcategories"
+msgstr "Pahintulutan ang mga kasanayan sa pamamagitan ng mga subkategorya"
+
+msgid "Minimum score for skills"
+msgstr "Pinakamababang iskor para sa mga kasanayan"
+
+msgid "The gradebook table is hidden."
+msgstr "Nakatago ang talahanayan ng gradebook."
+
+msgid "Invalid token"
+msgstr "Di-wastong token"
+
+msgid "Unable to save the item"
+msgstr "Hindi ma-save ang item"
+
+msgid "Only HTTP and HTTPS URLs are allowed."
+msgstr "Tanging mga URL na HTTP at HTTPS lamang ang pinapayagan."
+
+msgid "Invalid URL host."
+msgstr "Di-wastong host ng URL."
+
+msgid "This cloud provider is not allowed."
+msgstr "Hindi pinapayagan ang cloud provider na ito."
+
+msgid "Documents used"
+msgstr "Mga dokumentong ginamit"
+
+msgid "No document usage"
+msgstr "Walang paggamit ng dokumento"
+
+msgid "Invalid action."
+msgstr "Di-wastong aksyon."
+
+msgid "No users selected."
+msgstr "Walang napiling gumagamit."
+
+msgid "%s user(s) processed."
+msgstr "%s (na) gumagamit ang naproseso."
+
+msgid "Invalid CSRF token."
+msgstr "Di-wastong CSRF token."
+
+msgid "[%s] Please change your password"
+msgstr "[%s] Pakibaguhin ang iyong password"
+
+msgid "Dear %s,\n\nOur security enforcing process shows you use a password that is commonly used on the internet, which means your account could easily be stolen. It is probably a simple sequence or a very common word, we don't really know (we cannot see your password), but we ask you to please connect to the platform and request a password change. You can follow the link here: %s to do that now.\n\nPlease note we will never ask for your password in this process. You just enter your username or e-mail and we send you a link. If you are asked to introduce your existing password to do that, someone is probably trying to do Phishing on your account. Be safe, change your password now!\n\n%s\n%s"
+msgstr "Mahal na %s,\n\nIpinapakita ng aming proseso ng pagpapatupad ng seguridad na gumagamit ka ng password na karaniwang ginagamit sa internet, na nangangahulugang madaling maagaw ang iyong account. Malamang ito ay simpleng pagkakasunod-sunod o isang napakakaraniwang salita, hindi namin talaga alam (hindi namin makita ang iyong password), ngunit hinihiling namin sa iyo na mangyaring kumonekta sa platform at humiling ng pagbabago ng password. Maaari mong sundin ang link dito: %s upang gawin iyon ngayon.\n\nPakitandaan na hindi namin hihilingin ang iyong password sa prosesong ito. Ilalagay mo lamang ang iyong username o e-mail at padadalhan ka namin ng link. Kung hihilingin sa iyo na ipasok ang iyong kasalukuyang password upang gawin iyon, malamang sinusubukan ng isang tao na mag-Phishing sa iyong account. Maging ligtas, baguhin ang iyong password ngayon!\n\n%s\n%s"
+
+msgid "[%s] Your password has been reset"
+msgstr "[%s] Na-reset ang iyong password"
+
+msgid "Dear %s,\n\nOur security enforcing process flagged you as using a password that is commonly used on the internet, which means your account could easily be stolen. As a prevention measure, we have decided to initiate a password reset process. Your new, automatically generated password is now:\n\n%s\n\nPlease login to the platform soon (using this new password) to set your own, personal and secure, password.\n\nBe safe.\n\n%s\n%s"
+msgstr "Mahal na %s,\n\nMinarkahan ka ng aming proseso ng pagpapatupad ng seguridad bilang gumagamit ng password na karaniwang ginagamit sa internet, na nangangahulugang madaling maagaw ang iyong account. Bilang hakbang sa pag-iwas, nagpasya kaming simulan ang proseso ng pag-reset ng password. Ang iyong bagong, awtomatikong nabuong password ay ngayon:\n\n%s\n\nMangyaring mag-log in sa platform sa lalong madaling panahon (gamit ang bagong password na ito) upang itakda ang iyong sariling, personal at ligtas na password.\n\nMaging ligtas.\n\n%s\n%s"
+
+msgid "Signature saved successfully"
+msgstr "Matagumpay na na-save ang lagda"
+
+msgid "Invalid request payload."
+msgstr "Di-wastong payload ng kahilingan."
+
+msgid "Authentication required."
+msgstr "Kinakailangan ang pagpapatunay."
+
+msgid "The course title is required."
+msgstr "Kinakailangan ang pamagat ng kurso."
+
+msgid "Only trainers and administrators can create courses."
+msgstr "Tanging mga tagapagsanay at tagapangasiwa lamang ang makakagawa ng mga kurso."
+
+msgid "Course creation by trainers is disabled on this platform."
+msgstr "Hindi pinapayagan ang paggawa ng kurso ng mga tagapagsanay sa platform na ito."
+
+msgid "The selected BuyCourses service cannot be used to create this course."
+msgstr "Hindi maaaring gamitin ang napiling serbisyo ng BuyCourses para gumawa ng kursong ito."
+
+msgid "You have reached the maximum number of courses allowed (%d)."
+msgstr "Naabot mo na ang pinakamataas na bilang ng mga kursong pinapayagan (%d)."
+
+msgid "The selected BuyCourses service is invalid."
+msgstr "Di-wasto ang napiling serbisyo ng BuyCourses."
+
+msgid "BuyCourses is not available right now."
+msgstr "Hindi available ang BuyCourses sa ngayon."
+
+msgid "BuyCourses cannot validate the selected service right now."
+msgstr "Hindi mapatunayan ng BuyCourses ang napiling serbisyo sa ngayon."
+
+msgid "Unable to validate the selected BuyCourses service right now."
+msgstr "Hindi mapatunayan ang napiling serbisyo ng BuyCourses sa ngayon."
+
+msgid "External tool removed from course"
+msgstr "Natanggal ang panlabas na kasangkapan mula sa kurso"
+
+msgid "External tool was removed from the course, but kept internally because it is linked to the gradebook"
+msgstr "Natanggal ang panlabas na kasangkapan mula sa kurso, ngunit itinago pa rin dahil ito ay naka-link sa gradebook"
+
+msgid "There are no external tools available to add to the gradebook"
+msgstr "Walang mga panlabas na kasangkapan na available para idagdag sa gradebook"
+
+msgid "The evaluation could not be created"
+msgstr "Hindi nagawa ang pagsusuri"
+
+msgid "The gradebook evaluation could not be linked"
+msgstr "Hindi nai-link ang pagsusuri sa gradebook"
+
+msgid "Survey questions"
+msgstr "Mga tanong sa survey"
+
+msgid "Back to survey list"
+msgstr "Bumalik sa listahan ng survey"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "May mga sagot na ang survey na ito. Hindi pinapayagan ang pag-edit ng tanong ayon sa pagsasaayos."
+
+msgid "Choose the type of question you want to add."
+msgstr "Piliin ang uri ng tanong na nais mong idagdag."
+
+msgid "The free text option is added automatically."
+msgstr "Awtomatikong idinagdag ang opsyon ng malayang teksto."
+
+msgid "No questions found"
+msgstr "Walang natagpuang tanong"
+
+msgid "Mandatory"
+msgstr "Kinakailangan"
+
+msgid "Unsupported question type"
+msgstr "Hindi sinusuportahang uri ng tanong"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "Maaari mong gamitin ang mga tag na {%s} at {%s} sa tanong."
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "Ang tanong na ito ay ipinapakita nang may kondisyon habang sinasagot ang survey."
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "Ang mga opsyon sa porsyento mula 1 hanggang 100 ay awtomatikong nabubuo."
+
+msgid "Could not load survey questions"
+msgstr "Hindi ma-load ang mga tanong sa survey"
+
+msgid "The question text is required."
+msgstr "Kinakailangan ang teksto ng tanong."
+
+msgid "The maximum score is required."
+msgstr "Kinakailangan ang pinakamataas na iskor."
+
+msgid "Please select a parent option."
+msgstr "Mangyaring pumili ng parent na opsyon."
+
+msgid "Please fill all answer options."
+msgstr "Mangyaring punan ang lahat ng opsyon sa sagot."
+
+msgid "QuestionUpdated"
+msgstr "QuestionUpdated"
+
+msgid "Could not save survey question"
+msgstr "Hindi ma-save ang tanong sa survey"
+
+msgid "Could not delete survey question"
+msgstr "Hindi matanggal ang tanong sa survey"
+
+msgid "Could not move survey question"
+msgstr "Hindi mailipat ang tanong sa survey"
+
+msgid "Could not copy survey question"
+msgstr "Hindi makopya ang tanong sa survey"
+
+msgid "Hide search"
+msgstr "Itago ang paghahanap"
+
+msgid "Showing results for: %s"
+msgstr "Ipinapakita ang mga resulta para sa: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "Maghanap ayon sa pamagat, code o paglalarawan ng survey."
+
+msgid "Search surveys"
+msgstr "Maghanap ng mga survey"
+
+msgid "%s surveys selected"
+msgstr "%s mga survey ang napili"
+
+msgid "Clear selection"
+msgstr "I-clear ang pagpili"
+
+msgid "No surveys found"
+msgstr "Walang nakitang survey"
+
+msgid "Unsupported"
+msgstr "Hindi sinusuportahan"
+
+msgid "Could not load surveys"
+msgstr "Hindi ma-load ang mga survey"
+
+msgid "Delete selected surveys"
+msgstr "Tanggalin ang mga napiling survey"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "Tatanggalin ang mga napiling survey at ang kanilang mga tanong. Hindi na maibabalik ang aksyong ito."
+
+msgid "Could not delete selected surveys"
+msgstr "Hindi matanggal ang mga napiling survey"
+
+msgid "Survey action"
+msgstr "Aksyon sa survey"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "Gagawa ng kopya ng survey na ito: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "Tatanggalin ang lahat ng sagot at imbitasyon para sa survey na ito: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "Tatanggalin ang mga nabuong multiplied na tanong mula sa survey na ito: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "Ipapaskil ang survey na ito para sa mga linked group tutor: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "Tatanggalin ang survey na ito at ang mga tanong nito: %s"
+
+msgid "Could not complete survey action"
+msgstr "Hindi makumpleto ang aksyon sa survey"
+
+msgid "Not started"
+msgstr "Hindi pa nasisimulan"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "Ang meeting poll ay nagbibigay-daan sa mga inimbita na user na pumili ng mga petsa kung kailan sila available."
+
+msgid "Back to surveys"
+msgstr "Bumalik sa mga survey"
+
+msgid "Edit meeting poll"
+msgstr "I-edit ang meeting poll"
+
+msgid "View meeting poll"
+msgstr "Tingnan ang meeting poll"
+
+msgid "Basic information"
+msgstr "Pangunahing impormasyon"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "Gagawa ito ng survey na may uri ng meeting poll. Ang mga sagot at imbitasyon ay hinahawakan nang hiwalay."
+
+msgid "Availability"
+msgstr "Availability"
+
+msgid "Meeting dates"
+msgstr "Mga petsa ng meeting"
+
+msgid "Meeting poll"
+msgstr "Meeting poll"
+
+msgid "My availability"
+msgstr "Aking availability"
+
+msgid "Meeting poll results"
+msgstr "Mga resulta ng meeting poll"
+
+msgid "No invitations found"
+msgstr "Walang nakitang imbitasyon"
+
+msgid "available"
+msgstr "available"
+
+msgid "Could not load meeting poll"
+msgstr "Hindi ma-load ang meeting poll"
+
+msgid "Please complete the required fields"
+msgstr "Mangyaring kumpletuhin ang mga kinakailangang field"
+
+msgid "Could not save meeting poll"
+msgstr "Hindi ma-save ang meeting poll"
+
+msgid "Could not save meeting availability"
+msgstr "Hindi ma-save ang meeting availability"
+
+msgid "Copy this survey to another course or session"
+msgstr "Kopyahin ang survey na ito sa ibang kurso o sesyon"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "Ang survey ay kokopyahin nang walang mga sagot o imbitasyon."
+
+msgid "No target courses found"
+msgstr "Walang target na kurso na natagpuan"
+
+msgid "Search by course title, course code or session name."
+msgstr "Maghanap ayon sa pamagat ng kurso, kodigo ng kurso o pangalan ng sesyon."
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "Gamitin ang Duplicate survey kapag nais mo ng kopya sa parehong kurso."
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "Ang mga tanong at pagpipilian ay kokopyahin. Ang mga sagot, imbitasyon at ulat ay mananatili lamang sa orihinal na survey."
+
+msgid "Selected target"
+msgstr "Napiling target"
+
+msgid "Could not load copy form"
+msgstr "Hindi ma-load ang form ng pagkopya"
+
+msgid "The survey will be copied to: %s"
+msgstr "Ang survey ay kokopyahin sa: %s"
+
+msgid "Survey copied."
+msgstr "Na-kopya ang survey."
+
+msgid "Could not copy survey"
+msgstr "Hindi makopya ang survey"
+
+msgid "Answer survey"
+msgstr "Sagutan ang survey"
+
+msgid "Preview mode does not save answers."
+msgstr "Ang preview mode ay hindi nagse-save ng mga sagot."
+
+msgid "Survey completed"
+msgstr "Nakumpleto ang survey"
+
+msgid "Thank you for answering the survey."
+msgstr "Salamat sa pagsagot sa survey."
+
+msgid "Profile information"
+msgstr "Impormasyon ng profile"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "Paki-review ang mga hiniling na field ng profile bago sagutan ang survey."
+
+msgid "This profile field is read-only."
+msgstr "Ang field ng profile na ito ay read-only."
+
+msgid "You already filled this survey."
+msgstr "Nasagutan mo na ang survey na ito."
+
+msgid "Please specify"
+msgstr "Pakitukoy"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "Ang uri ng tanong na ito ay hindi sinusuportahan sa modernong view ng survey."
+
+msgid "Preview only"
+msgstr "Preview lamang"
+
+msgid "Submit answers"
+msgstr "Isumite ang mga sagot"
+
+msgid "Could not load survey"
+msgstr "Hindi ma-load ang survey"
+
+msgid "Please complete the required profile fields."
+msgstr "Pakikumpleto ang mga kinakailangang field ng profile."
+
+msgid "Please answer all mandatory questions."
+msgstr "Pak sagutan ang lahat ng mandatoryong tanong."
+
+msgid "Could not save survey answers"
+msgstr "Hindi ma-save ang mga sagot sa survey"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "I-configure ang pangunahing impormasyon ng survey bago pamahalaan ang mga tanong at imbitasyon."
+
+msgid "The survey code cannot be changed after creation."
+msgstr "Hindi na mababago ang kodigo ng survey pagkatapos ng paglikha."
+
+msgid "Survey behavior"
+msgstr "Pag-uugali ng survey"
+
+msgid "Use 0 for no time limit."
+msgstr "Gamitin ang 0 para sa walang limitasyon sa oras."
+
+msgid "Survey messages"
+msgstr "Mga mensahe ng survey"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "Ang mga field ng profile na napili dito ay ipapakita bago ang mga tanong sa survey."
+
+msgid "No profile fields are currently available."
+msgstr "Walang mga field ng profile na kasalukuyang magagamit."
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "Ang pagpili ng field ng profile ay magagamit lamang para sa mga hindi-anonymous na survey."
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "Ang linkage ng kasanayan ay ililipat sa isang dedikadong batch."
+
+msgid "Could not load survey configuration"
+msgstr "Hindi ma-load ang configuration ng survey"
+
+msgid "The survey code is required."
+msgstr "Kinakailangan ang kodigo ng survey."
+
+msgid "The survey title is required."
+msgstr "Kinakailangan ang pamagat ng survey."
+
+msgid "The survey has been saved successfully"
+msgstr "Matagumpay na na-save ang survey"
+
+msgid "Could not save survey configuration"
+msgstr "Hindi ma-save ang configuration ng survey"
+
+msgid "Course users"
+msgstr "Mga gumagamit ng kurso"
+
+msgid "Already invited"
+msgstr "Na-inbitahan na"
+
+msgid "No users found"
+msgstr "Walang gumagamit na natagpuan"
+
+msgid "No groups found"
+msgstr "Walang grupo na natagpuan"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "Gamitin ang **link** kung saan dapat lumabas ang link ng survey."
+
+msgid "Remind all selected users"
+msgstr "Paalalahanan ang lahat ng napiling gumagamit"
+
+msgid "Anonymous access link"
+msgstr "Anonymous na link ng access"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "Ang mga gumagamit na hindi inimbita ay maaaring gamitin ang link na ito upang sagutan ang survey."
+
+msgid "Answered anonymously"
+msgstr "Sinagutan nang anonymous"
+
+msgid "Could not load survey invitations"
+msgstr "Hindi ma-load ang mga imbitasyon sa survey"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "Kinakailangan ang paksa at mensahe ng email kapag nagpapadala ng email."
+
+msgid "Could not publish survey"
+msgstr "Hindi ma-publish ang survey"
+
+msgid "Could not copy the link"
+msgstr "Hindi makopya ang link"
+
+msgid "Please answer this survey using the following link"
+msgstr "Pakitapos ang survey gamit ang sumusunod na link"
+
+msgid "Export CSV"
+msgstr "I-export ang CSV"
+
+msgid "Export compact CSV"
+msgstr "I-export ang compact na CSV"
+
+msgid "Export Excel"
+msgstr "I-export ang Excel"
+
+msgid "Export package"
+msgstr "I-export ang package"
+
+msgid "Results summary"
+msgstr "Buod ng mga resulta"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "Ipinapakita ng view na ito ang na-migrate na data ng pag-uulat para sa survey na ito."
+
+msgid "Select user"
+msgstr "Pumili ng user"
+
+msgid "No answers found"
+msgstr "Walang nakitang sagot"
+
+msgid "answers"
+msgstr "mga sagot"
+
+msgid "Could not load survey reporting"
+msgstr "Hindi ma-load ang pag-uulat ng survey"
+
+msgid "Back to threads"
+msgstr "Bumalik sa mga thread"
+
+msgid "Back to learning path"
+msgstr "Bumalik sa learning path"
+
+msgid "Remove sticky"
+msgstr "Alisin ang sticky"
+
+msgid "Make sticky"
+msgstr "Gawing sticky"
+
+msgid "Open thread"
+msgstr "Buksan ang thread"
+
+msgid "Close thread"
+msgstr "Isara ang thread"
+
+msgid "Delete thread"
+msgstr "Tanggalin ang thread"
+
+msgid "This thread is hidden from learners."
+msgstr "Nakatago ang thread na ito sa mga mag-aaral."
+
+msgid "Revision requested"
+msgstr "Hiniling ang rebisyon"
+
+msgid "Revision"
+msgstr "Rebisyon"
+
+msgid "Approve post"
+msgstr "Aprubahan ang post"
+
+msgid "Reject post"
+msgstr "Tanggihan ang post"
+
+msgid "Cancel revision request"
+msgstr "Kanselahin ang kahilingan sa rebisyon"
+
+msgid "Delete post"
+msgstr "Tanggalin ang post"
+
+msgid "Message is required"
+msgstr "Kinakailangan ang mensahe"
+
+msgid "Target thread is required"
+msgstr "Kinakailangan ang target na thread"
+
+msgid "Could not retrieve posts"
+msgstr "Hindi ma-retrieve ang mga post"
+
+msgid "Thread shown"
+msgstr "Ipinakita ang thread"
+
+msgid "Thread hidden"
+msgstr "Nakatago ang thread"
+
+msgid "Could not update thread"
+msgstr "Hindi ma-update ang thread"
+
+msgid "Thread closed"
+msgstr "Isinara ang thread"
+
+msgid "Thread opened"
+msgstr "Binuksan ang thread"
+
+msgid "Thread marked as sticky"
+msgstr "Minarkahan ang thread bilang sticky"
+
+msgid "Thread unmarked as sticky"
+msgstr "Inalis ang pagkaka-sticky ng thread"
+
+msgid "Thread notifications enabled"
+msgstr "Pinagana ang mga notification ng thread"
+
+msgid "Thread notifications disabled"
+msgstr "Na-disable ang mga notification ng thread"
+
+msgid "Could not update thread notification"
+msgstr "Hindi ma-update ang notification ng thread"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "Sigurado ka bang gusto mong tanggalin ang thread na ito?"
+
+msgid "Could not delete thread"
+msgstr "Hindi matanggal ang thread"
+
+msgid "Post approved"
+msgstr "Naaprubahan ang post"
+
+msgid "Could not approve post"
+msgstr "Hindi maaprubahan ang post"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "Sigurado ka bang gusto mong tanggihan ang post na ito?"
+
+msgid "Post rejected"
+msgstr "Natanggihan ang post"
+
+msgid "Could not reject post"
+msgstr "Hindi matanggihan ang post"
+
+msgid "Post shown"
+msgstr "Ipinakita ang post"
+
+msgid "Post hidden"
+msgstr "Nakatagong post"
+
+msgid "Could not update post"
+msgstr "Hindi na-update ang post"
+
+msgid "Post updated"
+msgstr "Na-update ang post"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "Sigurado ka bang gusto mong tanggalin ang post na ito?"
+
+msgid "Post deleted"
+msgstr "Natanggal ang post"
+
+msgid "Could not delete post"
+msgstr "Hindi matanggal ang post"
+
+msgid "Untitled thread"
+msgstr "Walang pamagat na thread"
+
+msgid "Could not retrieve threads"
+msgstr "Hindi makuha ang mga thread"
+
+msgid "Post moved"
+msgstr "Nailipat ang post"
+
+msgid "Could not move post"
+msgstr "Hindi mailipat ang post"
+
+msgid "Revision request removed"
+msgstr "Natanggal ang kahilingan sa rebisyon"
+
+msgid "Could not update revision request"
+msgstr "Hindi na-update ang kahilingan sa rebisyon"
+
+msgid "Are you sure you want to report this post?"
+msgstr "Sigurado ka bang gusto mong iulat ang post na ito?"
+
+msgid "Could not report post"
+msgstr "Hindi maiulat ang post"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "Sigurado ka bang gusto mong tanggalin ang attachment na ito?"
+
+msgid "Attachment deleted"
+msgstr "Natanggal ang attachment"
+
+msgid "Could not delete attachment"
+msgstr "Hindi matanggal ang attachment"
+
+msgid "Thread title"
+msgstr "Pamagat ng thread"
+
+msgid "Sticky thread"
+msgstr "Sticky thread"
+
+msgid "Attach files"
+msgstr "Mag-attach ng mga file"
+
+msgid "Attachments are disabled for this forum"
+msgstr "Hindi pinapayagan ang mga attachment sa forum na ito"
+
+msgid "The forum is not open yet."
+msgstr "Hindi pa bukas ang forum."
+
+msgid "The forum is closed."
+msgstr "Sarado ang forum."
+
+msgid "The forum is locked."
+msgstr "Naka-lock ang forum."
+
+msgid "New threads are not allowed in this forum."
+msgstr "Hindi pinapayagan ang mga bagong thread sa forum na ito."
+
+msgid "Thread created"
+msgstr "Nalikha ang thread"
+
+msgid "Could not create thread"
+msgstr "Hindi malikha ang thread"
+
+msgid "Back to posts"
+msgstr "Bumalik sa mga post"
+
+msgid "This reply will be stored as a revision."
+msgstr "Itatago ang sagot na ito bilang rebisyon."
+
+msgid "Post reply"
+msgstr "Mag-post ng sagot"
+
+msgid "The thread is locked."
+msgstr "Naka-lock ang thread."
+
+msgid "Reply added"
+msgstr "Naidagdag ang sagot"
+
+msgid "Could not add reply"
+msgstr "Hindi maidagdag ang sagot"
+
+msgid "Add forum"
+msgstr "Magdagdag ng forum"
+
+msgid "No forums found"
+msgstr "Walang nakitang forum"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "Lumikha ng iyong unang kategorya ng forum o forum upang simulan ang mga talakayan."
+
+msgid "Locked"
+msgstr "Naka-lock"
+
+msgid "No forums in this category"
+msgstr "Walang forum sa kategoryang ito"
+
+msgid "Posts require approval"
+msgstr "Kailangan ng pag-apruba ang mga post"
+
+msgid "Forum for current group"
+msgstr "Forum para sa kasalukuyang grupo"
+
+msgid "Group forum visibility"
+msgstr "Visibility ng group forum"
+
+msgid "No category"
+msgstr "Walang kategorya"
+
+msgid "Could not retrieve forums"
+msgstr "Hindi makuha ang mga forum"
+
+msgid "Forum category updated"
+msgstr "Na-update ang kategorya ng forum"
+
+msgid "Forum category created"
+msgstr "Nalikha ang kategorya ng forum"
+
+msgid "Could not save forum category"
+msgstr "Hindi mai-save ang kategorya ng forum"
+
+msgid "Forum updated"
+msgstr "Na-update ang forum"
+
+msgid "Forum created"
+msgstr "Nalikha ang forum"
+
+msgid "Could not save forum"
+msgstr "Hindi mai-save ang forum"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "Sigurado ka bang gusto mong tanggalin ang kategorya ng forum na ito?"
+
+msgid "Could not delete forum category"
+msgstr "Hindi matanggal ang kategorya ng forum"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "Sigurado ka bang gusto mong tanggalin ang forum na ito?"
+
+msgid "Could not delete forum"
+msgstr "Hindi matanggal ang forum"
+
+msgid "Forum category unlocked"
+msgstr "Naka-unlock ang kategorya ng forum"
+
+msgid "Forum category locked"
+msgstr "Naka-lock ang kategorya ng forum"
+
+msgid "Could not update forum category"
+msgstr "Hindi ma-update ang kategorya ng forum"
+
+msgid "Forum category shown"
+msgstr "Ipinakita ang kategorya ng forum"
+
+msgid "Forum category hidden"
+msgstr "Nakatago ang kategorya ng forum"
+
+msgid "Forum unlocked"
+msgstr "Naka-unlock ang forum"
+
+msgid "Forum locked"
+msgstr "Naka-lock ang forum"
+
+msgid "Could not update forum"
+msgstr "Hindi ma-update ang forum"
+
+msgid "Forum shown"
+msgstr "Ipinakita ang forum"
+
+msgid "Forum hidden"
+msgstr "Nakatago ang forum"
+
+msgid "Forum notifications enabled"
+msgstr "Naka-enable ang mga abiso ng forum"
+
+msgid "Forum notifications disabled"
+msgstr "Naka-disable ang mga abiso ng forum"
+
+msgid "Could not update forum notification"
+msgstr "Hindi ma-update ang abiso ng forum"
+
+msgid "Forum category moved"
+msgstr "Nailipat ang kategorya ng forum"
+
+msgid "Could not move forum category"
+msgstr "Hindi mailipat ang kategorya ng forum"
+
+msgid "Forum moved"
+msgstr "Nailipat ang forum"
+
+msgid "Could not move forum"
+msgstr "Hindi mailipat ang forum"
+
+msgid "Back to forums"
+msgstr "Bumalik sa mga forum"
+
+msgid "New thread"
+msgstr "Bagong thread"
+
+msgid "No threads found"
+msgstr "Walang thread na natagpuan"
+
+msgid "Sticky"
+msgstr "Naka-sticky"
+
+msgid "Graded"
+msgstr "Na-grade"
+
+msgid "Grade peers"
+msgstr "I-grade ang mga kapwa"
+
+msgid "Move thread"
+msgstr "Ilipat ang thread"
+
+msgid "Target forum"
+msgstr "Target na forum"
+
+msgid "Target forum is required"
+msgstr "Kinakailangan ang target na forum"
+
+msgid "Students"
+msgstr "Mga mag-aaral"
+
+msgid "No students found"
+msgstr "Walang mag-aaral na natagpuan"
+
+msgid "No peers available to grade."
+msgstr "Walang kapwa na magagamit para i-grade."
+
+msgid "Qualified"
+msgstr "Kwalipikado"
+
+msgid "Not qualified"
+msgstr "Hindi kwalipikado"
+
+msgid "Could not retrieve thread grading"
+msgstr "Hindi makuha ang pag-grade ng thread"
+
+msgid "Thread grading updated"
+msgstr "Na-update ang pag-grade ng thread"
+
+msgid "Could not update thread grading"
+msgstr "Hindi ma-update ang pag-grade ng thread"
+
+msgid "Thread score saved"
+msgstr "Na-save ang iskor ng thread"
+
+msgid "Could not save thread score"
+msgstr "Hindi ma-save ang iskor ng thread"
+
+msgid "Could not move thread"
+msgstr "Hindi mailipat ang thread"
+
+msgid "Thread updated"
+msgstr "Na-update ang thread"
+
+msgid "Search term is too short"
+msgstr "Masyadong maikli ang termino ng paghahanap"
+
+msgid "Could not search forums"
+msgstr "Hindi mahanap ang mga forum"
+
+msgid "Moderated"
+msgstr "Naka-moderate"
+
+msgid "View threads"
+msgstr "Tingnan ang mga thread"
 

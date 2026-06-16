@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Si sax ah"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Foomilada tusaale: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Tusaale qaacido: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Kala duwanaanshaha doorsoomaha"
@@ -9726,6 +9726,9 @@ msgstr "Natiijooyinka raadinta ee:"
 msgid "Select a file"
 msgstr "Dooro fayl"
 
+msgid "Select a file to insert into the editor."
+msgstr "Xulo fayl si aad ugu geliso tifatiraha."
+
 msgid "Warning - The FAQ file, located in the /home/ directory of your portal, is not writable. Your text will not be saved until the file permissions are changed."
 msgstr "Digtoow - Faylka FAQ, oo ku yaal /home/ directory-ga portal-kaaga, lama qori karo. Qoraalkaagu lama keydin doono ilaa inta ogolaanshaha faylka la beddelo."
 
@@ -15906,6 +15909,9 @@ msgstr "Taariikhda & waqtiga"
 msgid "Item"
 msgstr "Qodobka"
 
+msgid "Items"
+msgstr "Walxaha"
+
 msgid "Configure Dashboard Plugin"
 msgstr "Habeynta Boostada Dashboard"
 
@@ -17159,6 +17165,18 @@ msgstr "Jirrooyinka kooxda"
 
 msgid "Courses in group"
 msgstr "Koorsaska kooxda"
+
+msgid "Courses on the platform"
+msgstr "Koorsooyinka madasha"
+
+msgid "%s courses"
+msgstr "%s koorso"
+
+msgid "%s sessions"
+msgstr "%s kalfadhiyo"
+
+msgid "Search by title or code"
+msgstr "Raadi cinwaan ama kood"
 
 msgid "Users in group"
 msgstr "Isticmaale kooxda"
@@ -32163,6 +32181,9 @@ msgstr "Shaqo"
 msgid "Allowed file formats: %s"
 msgstr "Noocyada faylalka la oggol yahay: %s"
 
+msgid "File manager"
+msgstr "Maamulaha faylka"
+
 msgid "File type not allowed. Allowed extensions: %s"
 msgstr "Nooca faylka lama oggol. Kordhinta la oggol yahay: %s"
 
@@ -33876,6 +33897,2583 @@ msgstr "Ku soo dhawow"
 msgid "Welcome to Chamilo"
 msgstr "Ku soo dhawow Chamilo"
 
+msgid "Check all unanswered questions below"
+msgstr "Hubi dhammaan su'aalaha aan jawaabta lahayn ee hoose"
+
 msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
 msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Haddii kani yahay markii ugu horeysay ee aad isticmaasho Chamilo, hubi inaad ka hubiso menu-ka dhinaca bidix si aad u hesho jidka loo maro astaamihiisa badan. Haddii aad u baahan tahay caawinaad, waxaad ka heli doontaa <a href=\"https://docs.chamilo.org\">dukumentiyada rasmiga ah</a> waxay kaa caawin karaan dukumentiga caadiga ah, halka <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">guddiga online-ka</a> uu kaa caawin karo wadaagista fikradaha iyo helista jawaabaha ka yimaada isticmaale kale ee Chamilo."
+
+msgid "Change password"
+msgstr "Beddel erayga sirta ah"
+
+msgid "Newest first"
+msgstr "Kii ugu cuslaa marka hore"
+
+msgid "Oldest first"
+msgstr "Kii ugu da'da weyn marka hore"
+
+msgid "Title A–Z"
+msgstr "Cinwaan A–Z"
+
+msgid "Title Z–A"
+msgstr "Cinwaan Z–A"
+
+msgid "Send test email"
+msgstr "U dir iimayl tijaabo"
+
+msgid "Show teachers"
+msgstr "Muuji macallimiinta"
+
+msgid "Hide teachers"
+msgstr "Qari macallimiinta"
+
+msgid "Delete exercise attempts"
+msgstr "Tirtir isku dayada jimicsiga"
+
+msgid "Message sent successfully."
+msgstr "Fariinta si guul leh ayaa loo diray."
+
+msgid "You cannot create a new course right now."
+msgstr "Hadda ma abuuri kartid koorso cusub."
+
+msgid "Unable to verify whether you can create a new course right now."
+msgstr "Ma xaqiijin karno inaad hadda abuuri karto koorso cusub."
+
+msgid "Please try again later or contact the administrator."
+msgstr "Fadlan mar kale isku day ama la xiriir maamulaha."
+
+msgid "You cannot create more courses at this time."
+msgstr "Hadda ma abuuri kartid koorsooyin dheeraad ah."
+
+msgid "You already manage %d courses and your active service allows up to %d. To create another course, you need a higher service limit or reduce your current active courses."
+msgstr "Waxaad hore u maamushaa %d koorso oo adeeggaaga firfircoon wuxuu oggolaanayaa ilaa %d. Si aad u abuurto koorso kale, waxaad u baahan tahay xad sare oo adeeg ah ama yaree koorsooyinkaada firfircoon ee hadda."
+
+msgid "You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now."
+msgstr "Waxaad hore u maamushaa %d koorso oo aaladda hadda waxay oggolaanaysaa ilaa %d xisaabtaada. Hadda ma abuuri kartid koorsooyin dheeraad ah."
+
+msgid "Add a class"
+msgstr "Ku dar fasal"
+
+msgid "Search classes"
+msgstr "Raadi fasallo"
+
+msgid "No classes found"
+msgstr "Fasallo lama helin"
+
+msgid "Import classes"
+msgstr "Soo deji fasallo"
+
+msgid "Class users"
+msgstr "Isticmaalayaasha fasalka"
+
+msgid "%s classes imported"
+msgstr "%s fasal ayaa la soo dejiyay"
+
+msgid "%s user-class links imported"
+msgstr "%s isku xirka isticmaale-fasal ayaa la soo dejiyay"
+
+msgid "Hide comments"
+msgstr "Qari faallooyinka"
+
+msgid "Loading comments..."
+msgstr "Faallooyinka ayaa la soo dejinayaa..."
+
+msgid "No comments yet."
+msgstr "Wali faallo ma jiraan."
+
+msgid "A user with this username already exists"
+msgstr "Isticmaale leh magacan isticmaale ayaa hore u jira"
+
+msgid "Manage meetings, review recordings and update course-wide BBB settings from one place."
+msgstr "Maamul shirarka, dib u eeg duubista oo cusbooneysii dejinta BBB ee koorso dhammaan meel keliya."
+
+msgid "Review the current defaults and propagate them to every course when needed."
+msgstr "Dib u eeg dejinta caadiga ah oo u faafi koorso kasta markii loo baahdo."
+
+msgid "Filter the list by meeting date range."
+msgstr "Shaandhee liiska iyadoo la eegayo baaxadda taariikhda shirka."
+
+msgid "Review meeting history, participants and recording actions."
+msgstr "Dib u eeg taariikhda shirka, ka qaybgalayaasha iyo ficillada duubista."
+
+msgid "Participants"
+msgstr "Ka qaybgalayaasha"
+
+msgid "CountUsers"
+msgstr "TiradaIsticmaalayaasha"
+
+msgid "No data found"
+msgstr "Xog lama helin"
+
+msgid "My justifications"
+msgstr "Cudur-dhaafka"
+
+msgid "My services"
+msgstr "Adeegyadayda"
+
+msgid "Extra menu"
+msgstr "Menu dheeraad ah"
+
+msgid "Pending tests"
+msgstr "Imtixaannada sugaya"
+
+msgid "No specific language"
+msgstr "Luqad gaar ah ma jirto"
+
+msgid "Source Chamilo version"
+msgstr "Nooca Chamilo ee asalka ah"
+
+msgid "Exporting..."
+msgstr "Waxaa la dhoofinayaa..."
+
+msgid "Autosaved drafts available"
+msgstr "Qoraallo qabyo ah oo kaydsan ayaa la heli karaa"
+
+msgid "Hide drafts"
+msgstr "Qari qoraallada qabyada ah"
+
+msgid "Show drafts"
+msgstr "Muuji qoraallada qabyada ah"
+
+msgid "Drafts are stored only in this browser and are removed after saving the document."
+msgstr "Qoraallada qabyada ah waxaa lagu kaydiyaa oo keliya biraawsarkan oo waa la saaraa ka dib markii dukumeentiga la kaydiyo."
+
+msgid "Last saved"
+msgstr "Ugu dambeyntii la kaydiyay"
+
+msgid "Restore draft"
+msgstr "Soo celi qoraalka qabyada ah"
+
+msgid "Delete draft"
+msgstr "Tirtir qoraalka qabyada ah"
+
+msgid "Information about indexing document content"
+msgstr "Macluumaadka ku saabsan tusmada nuxurka dukumeentiga"
+
+msgid "When enabled, the document text is indexed by the search engine so users can find it from platform search."
+msgstr "Marka la oggolaado, qoraalka dukumeentiga waxaa tusayaa mashiinka raadinta si isticmaalayaashu uga heli karaan raadinta aaladda."
+
+msgid "The editor is not available."
+msgstr "Tifatiraha lama heli karo."
+
+msgid "Please place the cursor inside a paragraph first."
+msgstr "Fadlan marka hore cursorka ku dheji cutubka."
+
+msgid "The selected paragraph is empty."
+msgstr "Cutubka la doortay waa mid madhan."
+
+msgid "Loading failed."
+msgstr "Soo dejintu waa ay fashilantay."
+
+msgid "Add introduction"
+msgstr "Ku dar hordhac"
+
+msgid "Course type"
+msgstr "Nooca koorsada"
+
+msgid "Choose whether this course uses the standard platform limits or benefits from a purchased service."
+msgstr "Dooro in koorsadan ay isticmaasho xadadka caadiga ah ee barnaamijka ama ay ka faa'iidaysato adeeg la iibsaday."
+
+msgid "Standard course"
+msgstr "Koorsada caadiga ah"
+
+msgid "Use the standard platform limits."
+msgstr "Isticmaal xadadka caadiga ah ee barnaamijka."
+
+msgid "Selected"
+msgstr "La doortay"
+
+msgid "Hosting limit"
+msgstr "Xadka martigelinta"
+
+msgid "Document quota"
+msgstr "Kootada dukumentiga"
+
+msgid "The standard course limit has been reached."
+msgstr "Xadka koorsada caadiga ah waa la gaaray."
+
+msgid "Use the benefits granted by this service."
+msgstr "Isticmaal faa'iidooyinka adeeggan bixiyay."
+
+msgid "Courses with these benefits"
+msgstr "Koorsooyinka faa'iidooyinkan leh"
+
+msgid "Active service"
+msgstr "Adeeg firfircoon"
+
+msgid "Buy service"
+msgstr "Iibso adeeg"
+
+msgid "Select an available course type before creating the course."
+msgstr "Dooro nooca koorsada la heli karo ka hor inta aanad abuurin koorsada."
+
+msgid "users"
+msgstr "isticmaalayaasha"
+
+msgid "You need to buy this service before using these benefits."
+msgstr "Waa inaad iibsatid adeeggan ka hor inta aanad isticmaalin faa'iidooyinkan."
+
+msgid "You already used all courses available with this service."
+msgstr "Waxaad horay u isticmaashay dhammaan koorsooyinka adeeggan la heli karo."
+
+msgid "This option is not available."
+msgstr "Doorashadan lama heli karo."
+
+msgid "This field is required"
+msgstr "Goobtan waa lagama maarmaan"
+
+msgid "Show less"
+msgstr "Tus wax yar"
+
+msgid "Show full description"
+msgstr "Tus sharraxaadda oo dhan"
+
+msgid "Virtual keyboard"
+msgstr "Kiboodhka muuqaalka"
+
+msgid "Backspace"
+msgstr "Backspace"
+
+msgid "Space"
+msgstr "Boos"
+
+msgid "Learning path only visible to selected learners"
+msgstr "Waddada barashada oo keliya ardayda la doortay ayaa arki kara"
+
+msgid "Create course"
+msgstr "Abuur koorsada"
+
+msgid "Tour"
+msgstr "Socdaal"
+
+msgid "Are you sure you want to delete this comment?"
+msgstr "Ma hubtaa inaad tirtirto faalladan?"
+
+msgid "No posts found"
+msgstr "Qoraallo lama helin"
+
+msgid "No communities"
+msgstr "Bulshooyin lama helin"
+
+msgid "No friends found"
+msgstr "Saaxiibo lama helin"
+
+msgid "Visual overview of your skills"
+msgstr "Muuqaal guud oo xirfadahaaga ah"
+
+msgid "Compare your progress"
+msgstr "Isbarbardhig horumarkaaga"
+
+msgid "Please enter a search term."
+msgstr "Fadlan geli erey raadinta."
+
+msgid "Enter captcha code"
+msgstr "Geli koodhka captcha"
+
+msgid "Refresh captcha"
+msgstr "Cusbooneysii captcha"
+
+msgid "Captcha is temporarily blocked. Please try again later."
+msgstr "Captcha waa ku meel gaar u xanniban yahay. Fadlan mar dambe isku day."
+
+msgid "Item Details"
+msgstr "Faahfaahinta shayga"
+
+msgid "Open File"
+msgstr "Fur Faylka"
+
+msgid "Selection"
+msgstr "Xulasho"
+
+msgid "Remove selection context"
+msgstr "Ka saar xaaladda xulashada"
+
+msgid "Source document"
+msgstr "Dukumentiga asalka ah"
+
+msgid "Use the current course context"
+msgstr "Isticmaal xaaladda koorsada hadda"
+
+msgid "Loading documents..."
+msgstr "Dukumentiyada ayaa la rarayo..."
+
+msgid "No compatible PDF or TXT document was found in this course."
+msgstr "Dukumenti PDF ama TXT oo ku habboon kama helin koorsadan."
+
+msgid "Select a PDF or TXT document to generate terms only from that document."
+msgstr "Dooro dukumenti PDF ama TXT si aad uga soo saarto ereyada oo keliya dukumentigaas."
+
+msgid "Confidentiality warning"
+msgstr "Digniin qarsoodi"
+
+msgid "When a document is selected, the prompt is fixed so the generation uses only that document content."
+msgstr "Marka dukumenti la doorto, tilmaanta waa la hagaajiyaa si jiilku u isticmaalo oo keliya nuxurka dukumentigaas."
+
+msgid "No document-processing AI providers available."
+msgstr "Bixiyeyaal AI oo dukumentiyada ka shaqeeya lama heli karo."
+
+msgid "Failed to save signature. Please try again."
+msgstr "Saxeexa kaydinta waa lagu guul-darraystay. Fadlan mar kale isku day."
+
+msgid "Select and move"
+msgstr "Dooro oo dhaqaaji"
+
+msgid "Freehand"
+msgstr "Gacanta xorta ah"
+
+msgid "Stroke"
+msgstr "Khad"
+
+msgid "Fill"
+msgstr "Buuxin"
+
+msgid "Import SVG"
+msgstr "Soo dejinta SVG"
+
+msgid "Import image"
+msgstr "Soo dejinta sawir"
+
+msgid "Click the drawing area to place this text"
+msgstr "Riix meesha sawirka si aad u dhigto qoraalkan"
+
+msgid "Draw a new SVG, import an existing SVG or embed an image, then save it as a reusable document."
+msgstr "Sawir SVG cusub, soo deji SVG jira ama geli sawir, ka dibna kaydi sidii dukumeenti dib loo isticmaali karo."
+
+msgid "Use Select and move to reposition or resize elements added in this editor."
+msgstr "Isticmaal Xulo oo dhaqaaji si aad u beddesho ama u beddesho cabbirka walxaha lagu daray tifatirahan."
+
+msgid "Stroke width"
+msgstr "Ballaca khadka"
+
+msgid "Transparent fill"
+msgstr "Buuxin hufan"
+
+msgid "Invalid id"
+msgstr "Aqoonsi aan sax ahayn"
+
+msgid "Unable to load the drawing"
+msgstr "Ma awoodin in la soo dejiyo sawirka"
+
+msgid "Only PNG, JPG, WEBP or GIF images are supported."
+msgstr "Kaliya sawirada PNG, JPG, WEBP ama GIF ayaa la taageeraa."
+
+msgid "Unable to read the image file."
+msgstr "Ma awoodin in la akhriyo faylka sawirka."
+
+msgid "Only SVG files are supported."
+msgstr "Kaliya faylasha SVG ayaa la taageeraa."
+
+msgid "The SVG file is empty or invalid."
+msgstr "Faylka SVG waa madhan ama aan sax ahayn."
+
+msgid "Unable to read the SVG file."
+msgstr "Ma awoodin in la akhriyo faylka SVG."
+
+msgid "The drawing is empty or invalid."
+msgstr "Sawirku waa madhan ama aan sax ahayn."
+
+msgid "Unable to save the drawing"
+msgstr "Ma awoodin in la kaydiyo sawirka"
+
+msgid "Information about AI-assisted documents"
+msgstr "Macluumaadka dukumeentiyada AI-caawiyay"
+
+msgid "Location"
+msgstr "Goobta"
+
+msgid "Cloud link"
+msgstr "Xiriirka daruurta"
+
+msgid "Add a link to a cloud document, such as Google Drive or Google Docs."
+msgstr "Ku dar xiriirka dukumeenti daruur ah, sida Google Drive ama Google Docs."
+
+msgid "Add cloud link"
+msgstr "Ku dar xiriirka daruurta"
+
+msgid "Document title"
+msgstr "Cinwaanka dukumeentiga"
+
+msgid "Document options change how uploaded files are processed after saving."
+msgstr "Xulashooyinka dukumeentigu waxay beddelaan sida faylasha la soo geliyay loo habeeyo ka dib kaydinta."
+
+msgid "Information about uncompressing zip files"
+msgstr "Macluumaadka furitaanka faylasha zip"
+
+msgid "When enabled, ZIP files are extracted into the current document folder after upload."
+msgstr "Marka la oggolaado, faylasha ZIP waa la soo saaraa galay galka dukumeentiga hadda ka dib gelinta."
+
+msgid "The title is required."
+msgstr "Cinwaanka ayaa loo baahan yahay."
+
+msgid "The URL is required."
+msgstr "URL-ka ayaa loo baahan yahay."
+
+msgid "The destination folder is missing."
+msgstr "Galka loo socdo waa maqan yahay."
+
+msgid "Unable to create cloud link."
+msgstr "Ma awoodin in la abuuro xiriirka daruurta."
+
+msgid "Copy to My Files"
+msgstr "Nuqul u samee Faylkeyga"
+
+msgid "Used space"
+msgstr "Meesha la isticmaalay"
+
+msgid "Available space"
+msgstr "Meesha la heli karo"
+
+msgid "Available percentage"
+msgstr "Boqolkiiba la heli karo"
+
+msgid "Cloud links cannot be downloaded."
+msgstr "Xiriirada daruurta lama soo dejin karo."
+
+msgid "Could not copy the file to My Files"
+msgstr "Ma awoodin in faylka loo nuqulo Faylkeyga"
+
+msgid "File copied to My Files"
+msgstr "Faylka waxaa loo nuqulay Faylkeyga"
+
+msgid "Checking course creation options..."
+msgstr "Hubinta xulashooyinka abuurista koorso..."
+
+msgid "You cannot create more courses right now."
+msgstr "Hadda ma abuuri kartid koorsooyin dheeraad ah."
+
+msgid "AI analyzer"
+msgstr "Falanqeeyaha AI"
+
+msgid "Expand all"
+msgstr "Ballaari dhammaan"
+
+msgid "Collapse all"
+msgstr "Ururi dhammaan"
+
+msgid "Review your active service benefits, purchase history and available receipts."
+msgstr "Dib u eeg faa'iidooyinka adeegyadaada firfircoon, taariikhda iibka iyo rasiidhada la heli karo."
+
+msgid "Active services"
+msgstr "Adeegyada firfircoon"
+
+msgid "No active services"
+msgstr "Adeegyo firfircoon ma jiraan"
+
+msgid "Valid until"
+msgstr "Waxay ansax tahay ilaa"
+
+msgid "Recurring payment"
+msgstr "Bixinta soo noqnoqota"
+
+msgid "Next charge"
+msgstr "Lacagta xigta"
+
+msgid "Enable auto billing"
+msgstr "Daar bixinta otomaatiga ah"
+
+msgid "Cancel auto billing"
+msgstr "Jooji bixinta otomaatiga ah"
+
+msgid "Granted benefits"
+msgstr "Faa'iidooyinka la siiyay"
+
+msgid "Purchase history"
+msgstr "Taariikhda iibsashada"
+
+msgid "No purchases yet"
+msgstr "Wali lama iibsan"
+
+msgid "Product"
+msgstr "Alaab"
+
+msgid "Reference"
+msgstr "Tixraac"
+
+msgid "Amount"
+msgstr "Qaddar"
+
+msgid "Receipt"
+msgstr "Rasiidh"
+
+msgid "Unable to load your services right now."
+msgstr "Hadda ma suurtogeli karo in adeegyadaada la soo dejiyo."
+
+msgid "Auto billing enabled"
+msgstr "Bixinta otomaatiga ah waa la daaray"
+
+msgid "Auto billing suspended"
+msgstr "Bixinta otomaatiga ah waa la hakiyay"
+
+msgid "Auto billing cancelled"
+msgstr "Bixinta otomaatiga ah waa la joojiyay"
+
+msgid "Auto billing disabled"
+msgstr "Bixinta otomaatiga ah waa la damiyay"
+
+msgid "Cancel auto billing for this service?"
+msgstr "Jooji bixinta otomaatiga ah ee adeeggan?"
+
+msgid "Preview class members and courses"
+msgstr "Horudhac xubnaha fasalka iyo koorsooyinka"
+
+msgid "Please select a CSV file to import."
+msgstr "Fadlan dooro fayl CSV ah oo la soo gelinayo."
+
+msgid "%d user-class links imported"
+msgstr "%d xiriirka isticmaale-fasalka waa la soo geliyay"
+
+msgid "The following errors occurred during import:"
+msgstr "Khaladaadka soo socda ayaa dhacay intii lagu jiray soo gelinta:"
+
+msgid "CSV file"
+msgstr "Faylka CSV"
+
+msgid "Remove user from all group-related entities if not in the list"
+msgstr "Ka saar isticmaalaha dhammaan hay'adaha kooxda la xiriira haddii uusan liiska ku jirin"
+
+msgid "UserName"
+msgstr "Magaca isticmaalaha"
+
+msgid "ClassName"
+msgstr "Magaca fasalka"
+
+msgid "are required for each row."
+msgstr "waa loo baahan yahay saf kasta."
+
+msgid "title"
+msgstr "cinwaanka"
+
+msgid "is required."
+msgstr "waa loo baahan yahay."
+
+msgid "description"
+msgstr "sharaxaadda"
+
+msgid "are optional."
+msgstr "waa ikhtiyaari."
+
+msgid "Are you sure you want to remove this user from the class?"
+msgstr "Ma hubtaa inaad isticmaalahan ka saarto fasalka?"
+
+msgid "Users in class"
+msgstr "Isticmaalayaasha fasalka"
+
+msgid "Remove user"
+msgstr "Ka saar isticmaalaha"
+
+msgid "Class not found"
+msgstr "Fasalka lama helin"
+
+msgid "Class overview"
+msgstr "Dulmarka fasalka"
+
+msgid "Back to classes"
+msgstr "Ku noqo fasallada"
+
+msgid "Search members or courses"
+msgstr "Raadi xubnaha ama koorsooyinka"
+
+msgid "Search by name, email, username or course title"
+msgstr "Raadi magac, iimayl, magaca isticmaalaha ama cinwaanka koorsada"
+
+msgid "Class members"
+msgstr "Xubnaha fasalka"
+
+msgid "No email"
+msgstr "Iimayl ma jiro"
+
+msgid "No members found"
+msgstr "Xubno lama helin"
+
+msgid "No courses found"
+msgstr "Koorsooyin lama helin"
+
+msgid "The end date must be after the start date."
+msgstr "Taariikhda dhammaadka waa inay ka dambaysaa taariikhda bilowga."
+
+msgid "Always visible"
+msgstr "Had iyo jeer waa la arki karaa"
+
+msgid "No end date"
+msgstr "Taariikh dhammaad ma jirto"
+
+msgid "No restriction"
+msgstr "Xayiraad ma jirto"
+
+msgid "Missing learning path or course identifier"
+msgstr "Waddada barashada ama aqoonsiga koorsada ayaa maqan"
+
+msgid "Select a user or a group first"
+msgstr "Marka hore dooro isticmaale ama koox"
+
+msgid "Remove all date restrictions for this learning path?"
+msgstr "Ka saar dhammaan xayiraadaha taariikhda ee waddadan barashada?"
+
+msgid "Advanced learning path access"
+msgstr "Helitaanka horumarsan ee waddada barashada"
+
+msgid "Remove date restrictions"
+msgstr "Ka saar xayiraadaha taariikhda"
+
+msgid "Search by name, email, username or group"
+msgstr "Raadi magac, iimayl, magaca isticmaalaha ama koox"
+
+msgid "Edit user restriction"
+msgstr "Wax ka beddel xaddidaadda isticmaalaha"
+
+msgid "Edit group restriction"
+msgstr "Wax ka beddel xaddidaadda kooxda"
+
+msgid "Select a user or group"
+msgstr "Dooro isticmaale ama koox"
+
+msgid "Save restriction"
+msgstr "Kaydi xaddidaadda"
+
+msgid "members"
+msgstr "xubnaha"
+
+msgid "Create Assignment"
+msgstr "Abuur Hawsha"
+
+msgid "The submission deadline has passed. You can no longer submit."
+msgstr "Waqtiga gudbinta wuu dhammaaday. Mar dambe ma soo gudbin kartid."
+
+msgid "Mailing cannot be combined with other recipients."
+msgstr "Boostada lama isku dari karo qaataayaal kale."
+
+msgid "Social map"
+msgstr "Khariidadda bulshada"
+
+msgid "The map plugin is not enabled or configured."
+msgstr "Qalabka khariidadda ma shaqaynayo ama lama habeynin."
+
+msgid "Some configured extra fields were not found"
+msgstr "Qaar ka mid ah meelaha dheeraadka ah ee la habeyay lama helin"
+
+msgid "No user locations were found."
+msgstr "Lama helin meelo isticmaalayaal ah."
+
+msgid "OpenStreetMap needs coordinates to display an embedded marker. Address-only locations are listed below."
+msgstr "OpenStreetMap wuxuu u baahan yahay isku-duwayaal si uu u muujiyo calaamad gudaha ah. Meelaha cinwaanka-keliya ah hoos ayaa lagu taxay."
+
+msgid "Locations"
+msgstr "Meelaha"
+
+msgid "Open map"
+msgstr "Fur khariidadda"
+
+msgid "Provider: OpenStreetMap"
+msgstr "Bixiye: OpenStreetMap"
+
+msgid "Provider: Google Maps"
+msgstr "Bixiye: Google Maps"
+
+msgid "Personal files"
+msgstr "Faylasha shakhsi ahaaneed"
+
+msgid "Upload image"
+msgstr "Soo gel sawir"
+
+msgid "Upload media"
+msgstr "Soo gel warbaahin"
+
+msgid "Only image files are allowed in this upload screen."
+msgstr "Kaliya faylasha sawirka ayaa loo oggol yahay shaashaddan soo gelinta."
+
+msgid "Only audio and video files are allowed in this upload screen."
+msgstr "Kaliya faylasha maqalka iyo muuqaalka ayaa loo oggol yahay shaashaddan soo gelinta."
+
+msgid "Upload files to your personal storage."
+msgstr "Soo geli faylasha kaydkaaga shakhsi ahaaneed."
+
+msgid "Linked"
+msgstr "La xiriiray"
+
+msgid "No audio or video files were found in this folder."
+msgstr "Lama helin faylasha maqalka ama muuqaalka galkaas."
+
+msgid "No image files were found in this folder."
+msgstr "Lama helin faylasha sawirka galkaas."
+
+msgid "No matching files were found in this folder."
+msgstr "Lama helin faylasha u dhigma galkaas."
+
+msgid "This file type is not allowed in this upload screen."
+msgstr "Noocan faylka looma oggola shaashaddan soo gelinta."
+
+msgid "Manage your personal files and course documents."
+msgstr "Maamul faylashaada shakhsi ahaaneed iyo dukumentiyada koorsada."
+
+msgid "DateValidity"
+msgstr "TaariikhdaSaxnaanta"
+
+msgid "JustificationSaved"
+msgstr "Cudur-sababaLaKaydiyay"
+
+msgid "ValidityDate"
+msgstr "TaariikhdaSaxnaanta"
+
+msgid "MyJustifications"
+msgstr "Cudur-sababadayda"
+
+msgid "Submission"
+msgstr "Gudbinta"
+
+msgid "Use the filters above to narrow the list."
+msgstr "Isticmaal filtarrada kore si aad u yareysid liiska."
+
+msgid "You are not allowed to see this page."
+msgstr "Lama oggola inaad aragtid boggan."
+
+msgid "plugin_title"
+msgstr "cinwaanka_qalabka"
+
+msgid "plugin_comment"
+msgstr "faallo_qalabka"
+
+msgid "Course tracking details"
+msgstr "Faahfaahinta dabagalka koorsada"
+
+msgid "Course activity statistics"
+msgstr "Tirakoobka dhaqdhaqaaqa koorsada"
+
+msgid "mobile_phone_number"
+msgstr "lambarka_telefoonka_gacanta"
+
+msgid "Allowed template syntax"
+msgstr "Habka qoraalka shablonka ee la oggol yahay"
+
+msgid "Functions"
+msgstr "Hawlo"
+
+msgid "Available variables depend on the template type, for example {{ user.getUsername() }} or {{ user.getEmail() }}."
+msgstr "Doorshayaasha la heli karo waxay ku xiran yihiin nooca shablonka, tusaale ahaan {{ user.getUsername() }} ama {{ user.getEmail() }}."
+
+msgid "For security reasons, any other Twig function, filter (such as filter, map, reduce or sort) or PHP call is blocked."
+msgstr "Sababo amniga dartood, hawlo kale oo Twig ah, filtarrada (sida filter, map, reduce ama sort) ama wicitaan PHP waa la xannibay."
+
+msgid "Global administrator"
+msgstr "Maamulaha guud"
+
+msgid "Session manager"
+msgstr "Maamulaha kalfadhiga"
+
+msgid "Human resources manager"
+msgstr "Maamulaha kheyraadka aadanaha"
+
+msgid "Course teacher"
+msgstr "Macallinka koorsada"
+
+msgid "Course student"
+msgstr "Ardayga koorsada"
+
+msgid "Platform reports"
+msgstr "Warbixinnada Platform-ka"
+
+msgid "Security reports"
+msgstr "Warbixinnada Amniga"
+
+msgid "Course reports"
+msgstr "Warbixinnada Koorsooyinka"
+
+msgid "Gradebook reports"
+msgstr "Warbixinnada Buugga Darajooyinka"
+
+msgid "Social reports"
+msgstr "Warbixinnada Bulshada"
+
+msgid "Exports"
+msgstr "Dhoofinta"
+
+msgid "Reports about platform-wide usage, users, courses and sessions."
+msgstr "Warbixinnada ku saabsan isticmaalka guud ee platform-ka, isticmaalayaasha, koorsooyinka iyo kalfadhiyada."
+
+msgid "Audit and security-sensitive reports."
+msgstr "Warbixinnada xisaabinta iyo amniga."
+
+msgid "Reports scoped to courses managed by the user."
+msgstr "Warbixinnada ku xaddidan koorsooyinka uu maamulo isticmaaluhu."
+
+msgid "Reports related to learner activity and follow-up."
+msgstr "Warbixinnada la xiriira dhaqdhaqaaqa ardayga iyo dabagalka."
+
+msgid "Reports related to scores, certificates and gradebook data."
+msgstr "Warbixinnada la xiriira dhibcaha, shahaadooyinka iyo xogta buugga darajooyinka."
+
+msgid "Reports and exports that generate downloadable files."
+msgstr "Warbixinnada iyo dhoofinta soo saarta faylal la soo dejin karo."
+
+msgid "Main platform statistics dashboard."
+msgstr "Dheeshooyinka tirakoobka ugu muhiimsan ee platform-ka."
+
+msgid "Number of courses and course distribution report."
+msgstr "Tirada koorsooyinka iyo warbixinta qaybinta koorsooyinka."
+
+msgid "Platform-wide access to course tools."
+msgstr "Helitaanka guud ee platform-ka ee qalabka koorsooyinka."
+
+msgid "Number of resources per tool."
+msgstr "Tirada agabka qalab kasta."
+
+msgid "Latest access to courses."
+msgstr "Helitaanka ugu dambeeya ee koorsooyinka."
+
+msgid "Course distribution by language."
+msgstr "Qaybinta koorsooyinka luqad ahaan."
+
+msgid "Course usage report."
+msgstr "Warbixinta isticmaalka koorsooyinka."
+
+msgid "Platform user count report."
+msgstr "Warbixinta tirada isticmaalayaasha platform-ka."
+
+msgid "Recent logins chart."
+msgstr "Shaxanka galitaanka dhowaan."
+
+msgid "Login distribution by month."
+msgstr "Qaybinta galitaanka bisha."
+
+msgid "Login distribution by day."
+msgstr "Qaybinta galitaanka maalinta."
+
+msgid "Login distribution by hour."
+msgstr "Qaybinta galitaanka saacadda."
+
+msgid "Users with profile picture."
+msgstr "Isticmaalayaasha leh sawirka astaanta."
+
+msgid "Login report filtered by date."
+msgstr "Warbixinta galitaanka oo lagu sifeeyay taariikhda."
+
+msgid "Users who have not logged in recently."
+msgstr "Isticmaalayaasha aan dhowaan galin."
+
+msgid "Inactive or suspicious user accounts report."
+msgstr "Warbixinta akoonnada isticmaalayaasha aan firfircooneyn ama laga shakisan yahay."
+
+msgid "Users activity statistics."
+msgstr "Tirakoobka dhaqdhaqaaqa isticmaalayaasha."
+
+msgid "Currently online users report."
+msgstr "Warbixinta isticmaalayaasha hadda online-ka ah."
+
+msgid "New user registrations over time."
+msgstr "Diiwaangelinta isticmaalayaasha cusub waqti ka dib."
+
+msgid "Course and session subscriptions over time."
+msgstr "Diiwaangelinta koorsooyinka iyo kalfadhiyada waqti ka dib."
+
+msgid "Duplicate user detection and maintenance report."
+msgstr "Baadhitaanka isticmaalayaasha isku mid ah iyo warbixinta dayactirka."
+
+msgid "Platform user/session statistics."
+msgstr "Tirakoobka isticmaalayaasha/kalfadhiyada platform-ka."
+
+msgid "Quarterly platform report."
+msgstr "Warbixinta saddexdii bilood ee platform-ka."
+
+msgid "Activities audit"
+msgstr "Xisaabinta dhaqdhaqaaqyada"
+
+msgid "Audit report for important administrative and platform activities."
+msgstr "Warbixinta xisaabinta ee hawlaha muhiimka ah ee maamulka iyo platform-ka."
+
+msgid "Social messages received report."
+msgstr "Warbixinta farriimaha bulshada ee la helay."
+
+msgid "Social messages sent report."
+msgstr "Warbixinta farriimaha bulshada ee la diray."
+
+msgid "Social contacts count report."
+msgstr "Warbixinta tirada xiriirada bulshada."
+
+msgid "Sessions created over time."
+msgstr "Kalfadhiyada la abuuray waqti ka dib."
+
+msgid "Learning analytics dashboard."
+msgstr "Dheeshooyinka falanqaynta barashada."
+
+msgid "Teacher time report."
+msgstr "Warbixinta waqtiga macallinka."
+
+msgid "Teachers time by session report"
+msgstr "Warbixinta waqtiga macallimiinta kalfadhi ahaan"
+
+msgid "Teacher time report grouped by session."
+msgstr "Warbixinta waqtiga macallinka oo kooxaysan kalfadhi ahaan."
+
+msgid "Corporate learning analytics report."
+msgstr "Warbixinta falanqaynta barashada shirkadaha."
+
+msgid "Course learners tracking report."
+msgstr "Warbixinta dabagalka ardayda koorsooyinka."
+
+msgid "Course activity statistics with connected and inactive users."
+msgstr "Tirakoobka dhaqdhaqaaqa koorsooyinka oo leh isticmaalayaasha ku xiran iyo kuwa aan firfircooneyn."
+
+msgid "Detailed tracking report for a learner inside a course."
+msgstr "Warbixinta dabagalka faahfaahsan ee arday gudaha koorso."
+
+msgid "Course gradebook overview."
+msgstr "Dulmarka buugga darajooyinka koorsooyinka."
+
+msgid "Gradebook statistics"
+msgstr "Tirakoobka buugga darajooyinka"
+
+msgid "Gradebook statistics report."
+msgstr "Warbixinta tirakoobka buugga darajooyinka."
+
+msgid "Certificate report"
+msgstr "Warbixinta shahaadada"
+
+msgid "Certificate report for course gradebook."
+msgstr "Warbixinta shahaadada ee buugga darajooyinka koorsada."
+
+msgid "User statistics"
+msgstr "Tirakoobka isticmaalaha"
+
+msgid "Course gradebook statistics for a user."
+msgstr "Tirakoobka buugga darajooyinka koorsada ee isticmaalaha."
+
+msgid "Personal statistics"
+msgstr "Tirakoobka shakhsi ahaaneed"
+
+msgid "Personal gradebook statistics."
+msgstr "Tirakoobka buugga darajooyinka shakhsi ahaaneed."
+
+msgid "Reports catalog"
+msgstr "Kataloogga warbixinnada"
+
+msgid "Central catalog of available reports, roles and permission categories."
+msgstr "Kataloogga dhexe ee warbixinnada la heli karo, doorarka iyo qaybaha oggolaanshaha."
+
+msgid "Course log events"
+msgstr "Dhacdooyinka diiwaanka koorsada"
+
+msgid "Detailed course tracking events."
+msgstr "Dhacdooyinka raadraaca faahfaahsan ee koorsada."
+
+msgid "Course tool usage"
+msgstr "Isticmaalka qalabka koorsada"
+
+msgid "Course tracking report grouped by tools."
+msgstr "Warbixinta raadraaca koorsada oo kooxaysan qalabyada."
+
+msgid "Course resource usage"
+msgstr "Isticmaalka agabka koorsada"
+
+msgid "Course tracking report grouped by resources."
+msgstr "Warbixinta raadraaca koorsada oo kooxaysan agabka."
+
+msgid "Course group tracking"
+msgstr "Raad-raaca kooxda koorsada"
+
+msgid "Tracking report for course groups."
+msgstr "Warbixinta raadraaca kooxaha koorsada."
+
+msgid "Course session report"
+msgstr "Warbixinta kalfadhiga koorsada"
+
+msgid "Tracking report for a course inside sessions."
+msgstr "Warbixinta raadraaca koorsada gudaha kalfadhiyada."
+
+msgid "Learning path report"
+msgstr "Warbixinta dariiqa barashada"
+
+msgid "Learning path tracking report."
+msgstr "Warbixinta raadraaca dariiqa barashada."
+
+msgid "Learning path results by user"
+msgstr "Natiijooyinka dariiqa barashada ee isticmaalaha"
+
+msgid "Learning path results grouped by user."
+msgstr "Natiijooyinka dariiqa barashada oo kooxaysan isticmaalaha."
+
+msgid "Exercises report"
+msgstr "Warbixinta jimicsiyada"
+
+msgid "Course exercises and exams tracking report."
+msgstr "Warbixinta raadraaca jimicsiyada iyo imtixaannada koorsada."
+
+msgid "Question report"
+msgstr "Warbixinta su'aasha"
+
+msgid "Course question tracking report."
+msgstr "Warbixinta raadraaca su'aalaha koorsada."
+
+msgid "Messages report"
+msgstr "Warbixinta farriimaha"
+
+msgid "Course messages tracking report."
+msgstr "Warbixinta raadraaca farriimaha koorsada."
+
+msgid "Total time tracking report for course learners."
+msgstr "Warbixinta wadarta waqtiga raadraaca ardayda koorsada."
+
+msgid "Gradebook summary"
+msgstr "Soo koobidda buugga darajooyinka"
+
+msgid "Summary view of gradebook results."
+msgstr "Muuqaalka soo koobidda natiijooyinka buugga darajooyinka."
+
+msgid "Flat view"
+msgstr "Muuqaalka siman"
+
+msgid "Flat gradebook results view."
+msgstr "Muuqaalka natiijooyinka buugga darajooyinka ee siman."
+
+msgid "Evaluation log"
+msgstr "Diiwaanka qiimaynta"
+
+msgid "Change log for gradebook evaluations."
+msgstr "Diiwaanka isbeddelka qiimaynta buugga darajooyinka."
+
+msgid "Link log"
+msgstr "Diiwaanka xiriirka"
+
+msgid "Change log for gradebook links."
+msgstr "Diiwaanka isbeddelka xiriirada buugga darajooyinka."
+
+msgid "Result details"
+msgstr "Faahfaahinta natiijada"
+
+msgid "Detailed view of a gradebook result."
+msgstr "Muuqaalka faahfaahsan ee natiijada buugga darajooyinka."
+
+msgid "Personal certificates report."
+msgstr "Warbixinta shahaadooyinka shakhsi ahaaneed."
+
+msgid "User move statistics"
+msgstr "Tirakoobka dhaqdhaqaaqa isticmaalaha"
+
+msgid "Report for user move and transfer statistics."
+msgstr "Warbixinta tirakoobka dhaqdhaqaaqa iyo wareejinta isticmaalaha."
+
+msgid "User consent list"
+msgstr "Liiska oggolaanshaha isticmaalaha"
+
+msgid "Report of users and consent status."
+msgstr "Warbixinta isticmaalayaasha iyo xaaladda oggolaanshaha."
+
+msgid "Special platform exports."
+msgstr "Dhoofinta gaarka ah ee aaladda."
+
+msgid "Export certificates"
+msgstr "Dhoofinta shahaadooyinka"
+
+msgid "Export platform certificates."
+msgstr "Dhoofinta shahaadooyinka aaladda."
+
+msgid "Export exercise results"
+msgstr "Dhoofinta natiijooyinka jimicsiyada"
+
+msgid "Export exercise results from the platform."
+msgstr "Dhoofinta natiijooyinka jimicsiga ee madasha."
+
+msgid "Course survey results and reporting."
+msgstr "Natiijooyinka sahan ee koorsada iyo warbixinta."
+
+msgid "Attendance report"
+msgstr "Warbixinta imaanshaha"
+
+msgid "Course attendance tracking and reports."
+msgstr "Dabagalka imaanshaha koorsada iyo warbixinnada."
+
+msgid "Exercises global report"
+msgstr "Warbixinta guud ee jimicsiyada"
+
+msgid "Global exercise results report for the course."
+msgstr "Warbixinta natiijooyinka guud ee jimicsiyada ee koorsada."
+
+msgid "Exercise report"
+msgstr "Warbixinta jimicsiga"
+
+msgid "Detailed exercise report."
+msgstr "Warbixinta jimicsiga oo faahfaahsan."
+
+msgid "Exercise history"
+msgstr "Taariikhda jimicsiga"
+
+msgid "Exercise attempt history."
+msgstr "Taariikhda isku dayga jimicsiga."
+
+msgid "Exercise results"
+msgstr "Natiijooyinka jimicsiga"
+
+msgid "Exercise results and corrections."
+msgstr "Natiijooyinka jimicsiga iyo sixitaanka."
+
+msgid "Question-level exercise statistics."
+msgstr "Istaatistikada heerka su'aasha ee jimicsiga."
+
+msgid "Exercise statistics"
+msgstr "Istaatistikada jimicsiga"
+
+msgid "Exercise statistics page."
+msgstr "Bogga istaatistikada jimicsiga."
+
+msgid "Live exercise statistics"
+msgstr "Istaatistikada jimicsiga tooska ah"
+
+msgid "Live exercise statistics for teachers."
+msgstr "Istaatistikada jimicsiga tooska ah ee macallimiinta."
+
+msgid "Learning path statistics"
+msgstr "Istaatistikada dariiqa barashada"
+
+msgid "Learning path item statistics."
+msgstr "Istaatistikada shayga dariiqa barashada."
+
+msgid "Learning path report inside a course."
+msgstr "Warbixinta dariiqa barashada ee koorsada dhexdeeda."
+
+msgid "User skills report."
+msgstr "Warbixinta xirfadaha isticmaalaha."
+
+msgid "Scheduled or periodic export configuration."
+msgstr "Qaabeynta dhoofinta jadwalka ama xilliyeedka."
+
+msgid "User export"
+msgstr "Dhoofinta isticmaalaha"
+
+msgid "Export users from the platform."
+msgstr "Dhoofinta isticmaalayaasha madasha."
+
+msgid "Not classified"
+msgstr "Aan la kala saarin"
+
+msgid "You have acquired the skill %s"
+msgstr "Waxaad heshay xirfadda %s"
+
+msgid "You have acquired the skill %s."
+msgstr "Waxaad heshay xirfadda %s."
+
+msgid "Recover your password"
+msgstr "Soo celi eraygaaga sirta ah"
+
+msgid "Disclaimer"
+msgstr "Ogeysiis"
+
+msgid "This operation would exceed the limit of %d users allowed for this course."
+msgstr "Hawlgalkan wuxuu dhaafi doonaa xadka %d isticmaalayaal ee loo oggol yahay koorsadan."
+
+msgid "DefaultGroupCategory"
+msgstr "QaybtaKooxdaCaadiga"
+
+msgid "LearningCalendar"
+msgstr "JadwalkaBarashada"
+
+msgid "Choose how this user can authenticate on the platform."
+msgstr "Dooro sida isticmaalahani ugu xaqiijin karo madasha."
+
+msgid "Authentication methods"
+msgstr "Hababka xaqiijinta"
+
+msgid "Set password manually"
+msgstr "Deji erayga sirta ah gacanta"
+
+msgid "Report role matrix"
+msgstr "Warbixinta shaxanka doorka"
+
+msgid "Report permission categories"
+msgstr "Warbixinta qaybaha oggolaanshaha"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs enforce the documented report role matrix."
+msgstr "Diiwaankan wuxuu taxayaa boggaga warbixinta ee la yaqaan, qaybtooda, URL-kanonikalka, URL-legacy iyo dhagaystayaasha doorka la filayo. URL-yada kanonikalka waxay fuliyaan shaxanka doorka warbixinta ee la diiwaangeliyay."
+
+msgid "reports"
+msgstr "warbixinnada"
+
+msgid "Canonical URL"
+msgstr "URL-kanonikalka"
+
+msgid "Legacy URL"
+msgstr "URL-legacy"
+
+msgid "Permission category"
+msgstr "Qaybta oggolaanshaha"
+
+msgid "This matrix documents the expected audience for each report and is enforced by the canonical report entry point."
+msgstr "Shaxankan wuxuu diiwaangeliyaa dhagaystayaasha la filayo ee warbixin kasta oo ay fuliso barta gelitaanka warbixinta kanonikalka."
+
+msgid "These keys group reports by access scope and are used by the report registry. They can later be mapped to finer-grained platform permissions."
+msgstr "Furayaashan waxay kooxeeyaan warbixinnada baaxadda gelitaanka waxayna u adeegaan diiwaanka warbixinta. Mar dambe waa la khariidadin karaa oggolaanshaha madasha oo faahfaahsan."
+
+msgid "Permission"
+msgstr "Oggolaanshaha"
+
+msgid "Clear active session"
+msgstr "Nadiifi kalfadhiga firfircoon"
+
+msgid "Are you sure you want to clear this user active session?"
+msgstr "Ma hubtaa inaad doonayso inaad nadiifiso kalfadhigan isticmaalaha ee firfircoon?"
+
+msgid "Preview shown without course context. Some course-specific data may be unavailable."
+msgstr "Muuqaalka waa la tusay iyada oo aan lahayn macnaha koorsada. Qaar ka mid ah xogta gaarka ah ee koorsada ayaa laga yaabaa inaan la heli karin."
+
+msgid "Preview is not available for this question."
+msgstr "Muuqaalka looma heli karo su'aashan."
+
+msgid "Edition is not allowed without a course context."
+msgstr "Wax ka beddelka looma oggola iyada oo aan lahayn macnaha koorsada."
+
+msgid "This plugin does not use regions."
+msgstr "Qalabkani ma isticmaalo gobollo."
+
+msgid "No plugins with regions were found."
+msgstr "Qalab leh gobollo lama helin."
+
+msgid "Freemium"
+msgstr "Bilaash iyo lacag leh"
+
+msgid "Commercial service"
+msgstr "Adeeg ganacsi"
+
+msgid "Commercial"
+msgstr "Ganacsi"
+
+msgid "100% free"
+msgstr "100% bilaash"
+
+msgid "Displayed above the public login form."
+msgstr "Waxaa lagu muujiyaa ka sarreeya foomka gelitaanka dadweynaha."
+
+msgid "Displayed below the public login form."
+msgstr "Waxaa lagu muujiyaa ka hooseeya foomka gelitaanka dadweynaha."
+
+msgid "Displayed before the footer area."
+msgstr "Waxaa lagu muujiyaa ka hor aagga cagta."
+
+msgid "Displayed in the left footer column."
+msgstr "Waxaa lagu muujiyaa tiirka bidix ee cagta."
+
+msgid "Displayed in the center footer column."
+msgstr "Waxaa lagu muujiyaa tiirka dhexe ee cagta."
+
+msgid "Displayed in the right footer column."
+msgstr "Waxaa lagu muujiyaa tiirka midig ee cagta."
+
+msgid "Showing all plugins."
+msgstr "Waxaa la muujinayaa dhammaan qalabka."
+
+msgid "Some plugins are still pending functional verification."
+msgstr "Qalabka qaarkood weli waa sugaya xaqiijinta shaqada."
+
+msgid "Show verified plugins only"
+msgstr "Muuji qalabka la xaqiijiyay oo keliya"
+
+msgid "Showing verified plugins only."
+msgstr "Waxaa la muujinayaa qalabka la xaqiijiyay oo keliya."
+
+msgid "Pending plugins are temporarily hidden until they are adapted and tested."
+msgstr "Qalabka sugaya waa la qariyaa si ku meel gaar ah ilaa la habeeyo oo la tijaabiyo."
+
+msgid "Show all plugins"
+msgstr "Muuji dhammaan qalabka"
+
+msgid "Official and free plugins are listed separately from plugins that may depend on commercial services or paid offers."
+msgstr "Qalabka rasmiga ah iyo kuwa bilaashka ah waxaa si gaar ah loogu taxayaa qalabka laga yaabo inay ku xiran yihiin adeegyo ganacsi ama dalabyo lacag leh."
+
+msgid "Included free plugins"
+msgstr "Qalabka bilaashka ah ee lagu daray"
+
+msgid "Commercial and freemium plugins"
+msgstr "Qalabka ganacsiga iyo kuwa bilaashka iyo lacagta leh"
+
+msgid "All plugins"
+msgstr "Dhammaan qalabka"
+
+msgid "No plugins were found for this category."
+msgstr "Qalab loogu talagalay qaybtan lama helin."
+
+msgid "Search plugins"
+msgstr "Raadi qalab"
+
+msgid "Search by name or description"
+msgstr "Raadi magac ama sharraxaad"
+
+msgid "Advanced filters"
+msgstr "Shaandhooyin horumarsan"
+
+msgid "All statuses"
+msgstr "Dhammaan xaaladaha"
+
+msgid "All sources"
+msgstr "Dhammaan ilaha"
+
+msgid "All types"
+msgstr "Dhammaan noocyada"
+
+msgid "Installed plugins are shown first"
+msgstr "Qalabka la rakibay ayaa marka hore la muujiyaa"
+
+msgid "No plugins match the current filters."
+msgstr "Qalab kuma waafaqsana shaandhooyinka hadda."
+
+msgid "Try clearing the search or changing the filters."
+msgstr "Isku day inaad nadiifiso raadinta ama beddesho shaandhooyinka."
+
+msgid "README"
+msgstr "AKHRI"
+
+msgid "Invalid security token"
+msgstr "Calaamad ammaan darro ah"
+
+msgid "Please select a destination session"
+msgstr "Fadlan dooro kalfadhi meel loo socdo"
+
+msgid "Cannot move this to the same session"
+msgstr "Tan looma wareejin karo kalfadhigii hore"
+
+msgid "The destination session must include the selected course"
+msgstr "Kalfadhiga meel loo socdaa waa inuu ka mid yahay koorsada la doortay"
+
+msgid "The source session must include the selected course"
+msgstr "Kalfadhiga asalka ahi waa inuu ka mid yahay koorsada la doortay"
+
+msgid "No learners found"
+msgstr "Arday lama helin"
+
+msgid "Will be subscribed"
+msgstr "Waa la diiwaangelin doonaa"
+
+msgid "Subscribed"
+msgstr "Waa la diiwaangeliyay"
+
+msgid "The move process has finished"
+msgstr "Hawsha wareejinta way dhammaatay"
+
+msgid "Comparison finished. No data has been moved."
+msgstr "Isbarbardhigga wuu dhammaaday. Xog lama wareejin."
+
+msgid "Move tracking data from the base course or a source session to another session. Use comparison first to review the affected learner data."
+msgstr "U wareeji xogta dabagalka koorsada aasaasiga ah ama kalfadhi asal ah una geeya kalfadhi kale. Isticmaal marka hore isbarbardhig si aad u eegto xogta arday ee saameysan."
+
+msgid "Search for a course or use the manual course ID field below."
+msgstr "Raadi koorsada ama isticmaal goobta gacanta ee ID-ga koorsada hoose."
+
+msgid "Fallback when the course search is not available."
+msgstr "Beddelka marka raadinta koorsada aan la heli karin."
+
+msgid "Load sessions"
+msgstr "Raadi kalfadhiyo"
+
+msgid "Selected course"
+msgstr "Koorsada la doortay"
+
+msgid "Choose the base course or the session where the tracking data currently exists."
+msgstr "Dooro koorsada aasaasiga ah ama kalfadhiga ay xogta dabagalka hadda ku jirto."
+
+msgid "Choose the session that will receive the tracking data."
+msgstr "Dooro kalfadhiga xogta dabagalka heli doona."
+
+msgid "Important"
+msgstr "Muhiim"
+
+msgid "The move action updates existing tracking data. Run compare first and test this tool with a non-production course before moving real learner data."
+msgstr "Ficilka guuritaanka wuxuu cusbooneysiiyaa xogta dabagalka jirta. Marka hore isbarbardhig oo tijaabi qalabkan koorsada aan soo saarin ka hor inta aanad u guurin xogta ardayda dhabta ah."
+
+msgid "No sessions found for this course"
+msgstr "Kulamada looma helin koorsadan"
+
+msgid "Some users were ignored because they are not subscribed to this session."
+msgstr "Qaar ka mid ah isticmaalayaasha waa la iska indho tiray sababtoo ah kama diiwaangashana kulankan."
+
+msgid "Remove selected user"
+msgstr "Ka saar isticmaalaha la doortay"
+
+msgid "Add selected user"
+msgstr "Ku dar isticmaalaha la doortay"
+
+msgid "No users from the selected list are subscribed to this session."
+msgstr "Ma jiraan isticmaalayaal ka mid ah liiska la doortay oo ku diiwaangashan kulankan."
+
+msgid "No image"
+msgstr "Sawir ma jiro"
+
+msgid "Invalid URL."
+msgstr "URL aan sax ahayn."
+
+msgid "This cloud document cannot be embedded."
+msgstr "Dukumeentigan daruurta ah lama dhex gelin karo."
+
+msgid "Document not found"
+msgstr "Dukumeenti lama helin"
+
+msgid "File not found"
+msgstr "Fayl lama helin"
+
+msgid "This learning path is not available for your user at this time."
+msgstr "Jidkan barashada hadda looma heli karo isticmaalahaaga."
+
+msgid "StartDateMustBeBeforeTheEndDate"
+msgstr "StartDateMustBeBeforeTheEndDate"
+
+msgid "Next learning path"
+msgstr "Jidka barashada xiga"
+
+msgid "Select the learning path that will be available after this one."
+msgstr "Dooro jidka barashada ee la heli doono ka dib kan."
+
+msgid "Create another learning path in this course to enable learning path flow."
+msgstr "Abuur jid kale oo barasho oo koorsadan ah si aad u oggolaato socodka jidka barashada."
+
+msgid "Available from %s"
+msgstr "La heli karo laga bilaabo %s"
+
+msgid "Available until %s"
+msgstr "La heli karo ilaa %s"
+
+msgid "Statistics reset date"
+msgstr "Taariikhda dib u dejinta tirakoobka"
+
+msgid "Last 24 hours"
+msgstr "24 saac ee ugu dambeeyay"
+
+msgid "This reset date is used as the reference date for the report. It does not delete historical tracking data."
+msgstr "Taariikhdan dib u dejinta waxaa loo isticmaalaa taariikh tixraac ah warbixinta. Ma tirtirto xogta dabagalka taariikhiga ah."
+
+msgid "Since reset date"
+msgstr "Laga bilaabo taariikhda dib u dejinta"
+
+msgid "Users connected in the last 24 hours"
+msgstr "Isticmaalayaasha ku xidhan 24 saac ee ugu dambeeyay"
+
+msgid "Learners with at least one course access during the last 24 hours."
+msgstr "Ardayda leh ugu yaraan hal marin koorsada 24 saac ee ugu dambeeyay."
+
+msgid "Users connected in the last week"
+msgstr "Isticmaalayaasha ku xidhan toddobaadkii hore"
+
+msgid "Learners with at least one course access during the last 7 days."
+msgstr "Ardayda leh ugu yaraan hal marin koorsada 7 maalmood ee ugu dambeeyay."
+
+msgid "Users connected in the last month"
+msgstr "Isticmaalayaasha ku xidhan bishii hore"
+
+msgid "Learners with at least one course access during the last 30 days."
+msgstr "Ardayda leh ugu yaraan hal marin koorsada 30 maalmood ee ugu dambeeyay."
+
+msgid "Not recently connected users"
+msgstr "Isticmaalayaasha aan dhowaan xidhnayn"
+
+msgid "Learners without course access since %s."
+msgstr "Ardayda aan marin koorsada tan iyo %s."
+
+msgid "Recently used resources"
+msgstr "Agabyada dhowaan la isticmaalay"
+
+msgid "Course tools/resources used since %s."
+msgstr "Qalabka/ agabyada koorsada la isticmaalay tan iyo %s."
+
+msgid "%s %% of learners"
+msgstr "%s %% oo arday ah"
+
+msgid "Connections"
+msgstr "Xidhiidhada"
+
+msgid "Total connections"
+msgstr "Wadarta xidhiidhada"
+
+msgid "Downloaded documents"
+msgstr "Dukumeentiyada la soo dejiyay"
+
+msgid "List of documents downloaded by this learner in this course."
+msgstr "Liiska dukumeentiyada uu ardaygan ka soo dejiyay koorsadan."
+
+msgid "Forum topics"
+msgstr "Mawduucyada golaha"
+
+msgid "Forum topics opened by this learner in this course."
+msgstr "Mawduucyada golaha ee ardaygan ka furay koorsadan."
+
+msgid "Forum posts"
+msgstr "Qoraallada golaha"
+
+msgid "Forum posts written by this learner in this course."
+msgstr "Qoraallada golaha ee ardaygan ku qoray koorsadan."
+
+msgid "Course connections"
+msgstr "Xidhiidhada koorsada"
+
+msgid "Connection history for this learner in this course."
+msgstr "Taariikhda xidhiidhka ee ardaygan koorsadan."
+
+msgid "Resources used"
+msgstr "Agabyada la isticmaalay"
+
+msgid "Latest tools or resources used by this learner in this course."
+msgstr "Qalabka ama agabyada ugu dambeeyay ee ardaygan ku isticmaalay koorsadan."
+
+msgid "Logout date"
+msgstr "Taariikhda ka bixitaanka"
+
+msgid "Imported Aiken quiz"
+msgstr "Imtixaanka Aiken ee la soo geliyay"
+
+msgid "Only supported documents will be listed here."
+msgstr "Halkan waxaa lagu taxayaa oo keliya dukumeentiyada la taageeray."
+
+msgid "Generated Aiken content"
+msgstr "Waxyaabaha Aiken ee la soo saaray"
+
+msgid "Review the generated content before importing it as a new exercise."
+msgstr "Dib u eeg nuxurka la soo saaray ka hor inta aan loo soo dejin sidii jimicsi cusub."
+
+msgid "No documents available."
+msgstr "Dukumeenti lama heli karo."
+
+msgid "yperbolic arctangent:\\t\\tarctanh(x)"
+msgstr "tangent-ka arctangent ee xad-dhaafka ah:\\t\\tarctanh(x)"
+
+msgid "Exercise"
+msgstr "Jimicsi"
+
+msgid "OfficialCode"
+msgstr "Koodhka Rasmiga ah"
+
+msgid "FirstName"
+msgstr "Magaca Koowaad"
+
+msgid "LastName"
+msgstr "Magaca Dambe"
+
+msgid "LoginName"
+msgstr "Magaca Gelitaanka"
+
+msgid "MinMinute"
+msgstr "Daqiiqad Ugu Yar"
+
+msgid "StartDate"
+msgstr "Taariikhda Bilowga"
+
+msgid "EndDate"
+msgstr "Taariikhda Dhammaadka"
+
+msgid "CorrectionDate"
+msgstr "Taariikhda Sixidda"
+
+msgid "NotValidated"
+msgstr "Lama Xaqiijin"
+
+msgid "PendingAttempts"
+msgstr "Isku dayada sugaya"
+
+msgid "List of pending test attempts across your courses."
+msgstr "Liiska isku dayada imtixaanka ee sugaya dhammaan koorsooyinkaaga."
+
+msgid "User ID"
+msgstr "Aqoonsiga Isticmaalaha"
+
+msgid "QuestionType"
+msgstr "Nooca Su'aasha"
+
+msgid "QuestionsWithNoAutomaticCorrection"
+msgstr "Su'aalaha aan lahayn sixid otomaatig ah"
+
+msgid "There are no pending tests."
+msgstr "Ma jiraan imtixaanno sugaya."
+
+msgid "%s results"
+msgstr "%s natiijo"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Removed"
+msgstr "Laga saaray"
+
+msgid "NoUsersInTheList"
+msgstr "Isticmaalayaal kuma jiraan liiska"
+
+msgid "Are you sure?"
+msgstr "Ma hubtaa?"
+
+msgid "NoResultsAvailable"
+msgstr "Natiijooyin lama heli karo"
+
+msgid "Import groups from a CSV file and optionally remove items that are not present in the file."
+msgstr "Soo deji kooxo fayl CSV ah oo ikhtiyaari ahaan ka saar walxaha aan ku jirin faylka."
+
+msgid "Use this option carefully because items missing from the CSV can be removed during the import process."
+msgstr "U isticmaal xaaladdan si taxadar leh maxaa yeelay walxaha ka maqan CSV-ga waa la saari karaa inta lagu guda jiro hawsha soo dejinta."
+
+msgid "Upload a CSV file with the group data you want to import."
+msgstr "Soo rar fayl CSV ah oo leh xogta kooxda aad rabto inaad soo dejiso."
+
+msgid "You can download the example file to use the expected format."
+msgstr "Waxaad soo dejin kartaa faylka tusaalaha si aad u isticmaasho qaabka la filayo."
+
+msgid "If you enable deletion, items not present in the file may be removed."
+msgstr "Haddii aad kartaa tirtiridda, walxaha aan ku jirin faylka waa la saari karaa."
+
+msgid "The CSV file is mandatory to start the import."
+msgstr "Faylka CSV waa qasab si loo bilaabo soo dejinta."
+
+msgid "Please select at least one class."
+msgstr "Fadlan dooro ugu yaraan hal fasal."
+
+msgid "Define the properties for each group before creating them."
+msgstr "Qeex sifooyinka koox kasta ka hor inta aan la abuurin."
+
+msgid "Apply the first row values"
+msgstr "Codso qiimaha safka koowaad"
+
+msgid "Create groups manually or generate them from the classes subscribed to this course."
+msgstr "Abuur kooxo gacanta ama ka samee fasallada laga diiwaangeliyay koorsadan."
+
+msgid "Create manual groups"
+msgstr "Abuur kooxo gacanta"
+
+msgid "Use this form when you want to create empty course groups manually."
+msgstr "Isticmaal foomkan markaad rabto inaad gacanta ku abuurto kooxo koorso oo madhan."
+
+msgid "Configure manual groups"
+msgstr "Habbee kooxo gacanta"
+
+msgid "Create groups from subscribed classes"
+msgstr "Abuur kooxo fasallada laga diiwaangeliyay"
+
+msgid "Use this form when you want to create one course group for each selected class."
+msgstr "Isticmaal foomkan markaad rabto inaad abuurto hal koox koorso fasal kasta oo la doortay."
+
+msgid "Keep created groups linked to their source classes"
+msgstr "Hayso kooxaha la abuuray oo ku xidhan fasalladooda asalka ah"
+
+msgid "Create groups from selected classes"
+msgstr "Abuur kooxo fasallada la doortay"
+
+msgid "You must be logged in to access this page."
+msgstr "Waa inaad soo gelisaa si aad u gasho boggan."
+
+msgid "Invalid user"
+msgstr "Isticmaalaha aan sax ahayn"
+
+msgid "UseCourseCustomCertificate"
+msgstr "Isticmaal Shahaadada Koorso ee Gaarka ah"
+
+msgid "UseDefaultCustomCertificate"
+msgstr "Isticmaal Shahaadada Caadiga ah ee Gaarka ah"
+
+msgid "CertificateSetting"
+msgstr "Dejinta Shahaadada"
+
+msgid "SelectOneOptionBeforeOpeningEditor"
+msgstr "Dooro Hal Ikhtiyaar ka hor inta aan la furin Tifatiraha"
+
+msgid "ChooseCustomCertificateModeHelp"
+msgstr "Doorashada Habka Shahaadada ee Gaarka ah Caawimaad"
+
+msgid "CertificateMode"
+msgstr "Habka Shahaadada"
+
+msgid "Enable student to validate own attendance"
+msgstr "U oggolow ardayga inuu xaqiijiyo imaanshihiisa"
+
+msgid "Course block"
+msgstr "Qaybta koorsada"
+
+msgid "Add custom content blocks to course footer regions."
+msgstr "Ku dar qaybo macluumaad oo gaar ah meelaha hoose ee koorsada."
+
+msgid "course_block_pre_footer"
+msgstr "course_block_pre_footer"
+
+msgid "Before footer"
+msgstr "Kahor lugta hoose"
+
+msgid "course_block_footer_left"
+msgstr "course_block_footer_left"
+
+msgid "Footer left"
+msgstr "Lugta bidix"
+
+msgid "course_block_footer_center"
+msgstr "course_block_footer_center"
+
+msgid "Footer center"
+msgstr "Lugta dhexe"
+
+msgid "course_block_footer_right"
+msgstr "course_block_footer_right"
+
+msgid "Footer right"
+msgstr "Lugta midig"
+
+msgid "SetNotification"
+msgstr "SetNotification"
+
+msgid "CourseLegal"
+msgstr "CourseLegal"
+
+msgid "Certificates search is not available"
+msgstr "Raadinta shahaadooyinka lama heli karo"
+
+msgid "It allows the acquisition of skills by subcategories"
+msgstr "Waxay ogolaataa helitaanka xirfadaha qaybaha hoose"
+
+msgid "Allow skills by subcategories"
+msgstr "Oggolow xirfadaha qaybaha hoose"
+
+msgid "Minimum score for skills"
+msgstr "Dhibcaha ugu yar ee xirfadaha"
+
+msgid "The gradebook table is hidden."
+msgstr "Shaxda buugga darajooyinka waa la qariyey."
+
+msgid "Invalid token"
+msgstr "Calaamad aan sax ahayn"
+
+msgid "Unable to save the item"
+msgstr "Lama kaydin karo shayga"
+
+msgid "Only HTTP and HTTPS URLs are allowed."
+msgstr "Kaliya URL-yada HTTP iyo HTTPS ayaa la oggol yahay."
+
+msgid "Invalid URL host."
+msgstr "Martigeliyaha URL-ka waa mid aan sax ahayn."
+
+msgid "This cloud provider is not allowed."
+msgstr "Bixiyahan daruurta ah lama oggola."
+
+msgid "Documents used"
+msgstr "Dukumentiyada la isticmaalay"
+
+msgid "No document usage"
+msgstr "Ma jiro isticmaal dukumenti"
+
+msgid "Invalid action."
+msgstr "Ficil aan sax ahayn."
+
+msgid "No users selected."
+msgstr "Lama dooran isticmaalayaal."
+
+msgid "%s user(s) processed."
+msgstr "%s isticmaalayaal la shaqeeyey."
+
+msgid "Invalid CSRF token."
+msgstr "Calaamad CSRF aan sax ahayn."
+
+msgid "[%s] Please change your password"
+msgstr "[%s] Fadlan beddel eraygaaga sirta ah"
+
+msgid "Dear %s,\n\nOur security enforcing process shows you use a password that is commonly used on the internet, which means your account could easily be stolen. It is probably a simple sequence or a very common word, we don't really know (we cannot see your password), but we ask you to please connect to the platform and request a password change. You can follow the link here: %s to do that now.\n\nPlease note we will never ask for your password in this process. You just enter your username or e-mail and we send you a link. If you are asked to introduce your existing password to do that, someone is probably trying to do Phishing on your account. Be safe, change your password now!\n\n%s\n%s"
+msgstr "Gacaliye %s,\n\nNidaamkayaga sugidda amniga wuxuu muujinayaa inaad isticmaasho eray sir ah oo inta badan laga isticmaalo internetka, taas oo macnaheedu yahay in xisaabtaada si fudud loo xadi karo. Waxay u badan tahay inay tahay taxane fudud ama erey aad u caadi ah, runtii ma naqaano (ma arki karno eraygaaga sirta ah), laakiin waxaan kaa codsanaynaa inaad ku xirto barxadda oo aad codsato beddelka erayga sirta ah. Waxaad raaci kartaa xiriiriyaha halkan: %s si aad taas hadda u sameysato.\n\nFadlan ogow inaynaan waligeen kaa codsan doonin eraygaaga sirta ah hawshan. Kaliya geli magacaaga isticmaale ama iimaylka oo aan kuu soo dirno xiriiriye. Haddii lagaa codsado inaad geliso eraygaaga sirta ah ee jira si aad taas u sameysato, qof ayaa laga yaabaa inuu isku dayayo inuu Phishing ku sameeyo xisaabtaada. Ammaan noqdo, hadda beddel eraygaaga sirta ah!\n\n%s\n%s"
+
+msgid "[%s] Your password has been reset"
+msgstr "[%s] Eraygaaga sirta ah waa la dib u dajiyey"
+
+msgid "Dear %s,\n\nOur security enforcing process flagged you as using a password that is commonly used on the internet, which means your account could easily be stolen. As a prevention measure, we have decided to initiate a password reset process. Your new, automatically generated password is now:\n\n%s\n\nPlease login to the platform soon (using this new password) to set your own, personal and secure, password.\n\nBe safe.\n\n%s\n%s"
+msgstr "Gacaliye %s,\n\nNidaamkayaga sugidda amniga wuxuu calaamadeeyey inaad isticmaasho eray sir ah oo inta badan laga isticmaalo internetka, taas oo macnaheedu yahay in xisaabtaada si fudud loo xadi karo. Sida tallaabo ka hortag ah, waxaan go'aansanay inaan bilowno habka dib u dejinta erayga sirta ah. Eraygaaga sirta ah ee cusub, oo si otomaatig ah loo soo saaray, hadda waa:\n\n%s\n\nFadlan dhawaan gal barxadda (adigoo isticmaalaya eraygan sirta ah ee cusub) si aad u dejiso eray sir ah oo gaar ah oo ammaan ah.\n\nAmmaan noqdo.\n\n%s\n%s"
+
+msgid "Signature saved successfully"
+msgstr "Saxeexa si guul leh ayaa loo keydiyey"
+
+msgid "Invalid request payload."
+msgstr "Xamuul codsi aan sax ahayn."
+
+msgid "Authentication required."
+msgstr "Xaqiijin ayaa loo baahan yahay."
+
+msgid "The course title is required."
+msgstr "Cinwaanka koorsada ayaa loo baahan yahay."
+
+msgid "Only trainers and administrators can create courses."
+msgstr "Kaliya tababarayaasha iyo maamulayaasha ayaa abuuri kara koorsooyin."
+
+msgid "Course creation by trainers is disabled on this platform."
+msgstr "Abuurista koorsada tababarayaasha waa la damiyey barxaddan."
+
+msgid "The selected BuyCourses service cannot be used to create this course."
+msgstr "Adeegga BuyCourses ee la doortay lama isticmaali karo si loo abuuro koorsadan."
+
+msgid "You have reached the maximum number of courses allowed (%d)."
+msgstr "Waxaad gaadhay tirada ugu badan ee koorsooyinka la oggol yahay (%d)."
+
+msgid "The selected BuyCourses service is invalid."
+msgstr "Adeegga BuyCourses ee la doortay waa mid aan sax ahayn."
+
+msgid "BuyCourses is not available right now."
+msgstr "BuyCourses hadda lama heli karo."
+
+msgid "BuyCourses cannot validate the selected service right now."
+msgstr "BuyCourses hadda ma xaqiijin karo adeegga la doortay."
+
+msgid "Unable to validate the selected BuyCourses service right now."
+msgstr "Hadda lama xaqiijin karo adeegga BuyCourses ee la doortay."
+
+msgid "External tool removed from course"
+msgstr "Qalabka dibadda waa laga saaray koorsada"
+
+msgid "External tool was removed from the course, but kept internally because it is linked to the gradebook"
+msgstr "Qalabka dibadda waa laga saaray koorsada, laakiin gudaha ayaa loo hayey sababtoo ah wuxuu ku xidhan yahay buugga darajooyinka"
+
+msgid "There are no external tools available to add to the gradebook"
+msgstr "Ma jiraan qalab dibadda ah oo la heli karo si loogu daro buugga darajooyinka"
+
+msgid "The evaluation could not be created"
+msgstr "Qiimaynta lama abuuri karo"
+
+msgid "The gradebook evaluation could not be linked"
+msgstr "Qiimaynta buugga darajooyinka lama xidhi karo"
+
+msgid "Survey questions"
+msgstr "Su'aalaha sahan"
+
+msgid "Back to survey list"
+msgstr "Ku noqo liiska sahanka"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "Sahankan horey ayuu jawaabo u leeyahay. Wax ka beddelka su'aalaha waa la xannibay habka."
+
+msgid "Choose the type of question you want to add."
+msgstr "Dooro nooca su'aasha aad rabto inaad ku darto."
+
+msgid "The free text option is added automatically."
+msgstr "Xulashada qoraalka bilaashka ah si toos ah ayaa loogu daraa."
+
+msgid "No questions found"
+msgstr "Wax su'aalo ah lama helin"
+
+msgid "Mandatory"
+msgstr "Qasab ah"
+
+msgid "Unsupported question type"
+msgstr "Nooca su'aasha aan la taageerin"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "Waxaad isticmaali kartaa calaamadaha {%s} iyo {%s} su'aasha dhexdeeda."
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "Su'aashan waxaa lagu muujiyaa shuruud ahaan inta jawaabta sahanka la bixinayo."
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "Xulashooyinka boqolkiiba 1 ilaa 100 si toos ah ayaa loo soo saaraa."
+
+msgid "Could not load survey questions"
+msgstr "Su'aalaha sahanka lama soo dejin karin"
+
+msgid "The question text is required."
+msgstr "Qoraalka su'aasha waa lama huraan."
+
+msgid "The maximum score is required."
+msgstr "Dhibcaha ugu badan waa lama huraan."
+
+msgid "Please select a parent option."
+msgstr "Fadlan dooro xulasho waalid."
+
+msgid "Please fill all answer options."
+msgstr "Fadlan buuxi dhammaan xulashooyinka jawaabta."
+
+msgid "QuestionUpdated"
+msgstr "QuestionUpdated"
+
+msgid "Could not save survey question"
+msgstr "Su'aasha sahan lama kaydin karin"
+
+msgid "Could not delete survey question"
+msgstr "Su'aasha sahan lama tirtiri karin"
+
+msgid "Could not move survey question"
+msgstr "Su'aasha sahan lama dhaqaajin karin"
+
+msgid "Could not copy survey question"
+msgstr "Su'aasha sahan lama koobi karin"
+
+msgid "Hide search"
+msgstr "Qari raadinta"
+
+msgid "Showing results for: %s"
+msgstr "Muujinaya natiijooyinka: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "Raadi magaca sahan, koodh ama sharraxaad."
+
+msgid "Search surveys"
+msgstr "Raadi sahanno"
+
+msgid "%s surveys selected"
+msgstr "%s sahanno la doortay"
+
+msgid "Clear selection"
+msgstr "Nadiifi xulashada"
+
+msgid "No surveys found"
+msgstr "Sahanno lama helin"
+
+msgid "Unsupported"
+msgstr "Aan la taageerin"
+
+msgid "Could not load surveys"
+msgstr "Sahanno lama soo dejin karin"
+
+msgid "Delete selected surveys"
+msgstr "Tirtir sahannada la doortay"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "Sahannada la doortay iyo su'aalahooda waa la tirtiri doonaa. Ficilkan lama celin karo."
+
+msgid "Could not delete selected surveys"
+msgstr "Sahannada la doortay lama tirtiri karin"
+
+msgid "Survey action"
+msgstr "Ficil sahan"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "Nuqul ka mid ah sahankan waa la abuuri doonaa: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "Dhammaan jawaabaha iyo martiqaadyada waa la tirtiri doonaa sahankan: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "Su'aalaha la kordhiyey ee la soo saaray waa laga saari doonaa sahankan: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "Sahankan waxaa loo daabici doonaa macallimiinta kooxda la xiriirta: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "Sahankan iyo su'aalahooda waa la tirtiri doonaa: %s"
+
+msgid "Could not complete survey action"
+msgstr "Ficilka sahanka lama dhammaystiri karin"
+
+msgid "Not started"
+msgstr "Aan bilaabmin"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "Codbixinta kulanka waxay u oggolaanaysaa isticmaalayaasha la martiqaaday inay doortaan taariikhaha ay heli karaan."
+
+msgid "Back to surveys"
+msgstr "Ku noqo sahannada"
+
+msgid "Edit meeting poll"
+msgstr "Wax ka beddel codbixinta kulanka"
+
+msgid "View meeting poll"
+msgstr "Eeg codbixinta kulanka"
+
+msgid "Basic information"
+msgstr "Macluumaadka aasaasiga ah"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "Tani waxay abuuri doontaa sahan noociisu yahay codbixinta kulanka. Jawaabaha iyo martiqaadyada si gaar ah ayaa loo maamulaa."
+
+msgid "Availability"
+msgstr "Helitaan"
+
+msgid "Meeting dates"
+msgstr "Taariikhaha kulanka"
+
+msgid "Meeting poll"
+msgstr "Codbixinta kulanka"
+
+msgid "My availability"
+msgstr "Helitaankayga"
+
+msgid "Meeting poll results"
+msgstr "Natiijooyinka codbixinta kulanka"
+
+msgid "No invitations found"
+msgstr "Martiqaadyo lama helin"
+
+msgid "available"
+msgstr "la heli karo"
+
+msgid "Could not load meeting poll"
+msgstr "Codbixinta kulanka lama soo dejin karin"
+
+msgid "Please complete the required fields"
+msgstr "Fadlan buuxi meelaha loo baahan yahay"
+
+msgid "Could not save meeting poll"
+msgstr "Codbixinta kulanka lama kaydin karin"
+
+msgid "Could not save meeting availability"
+msgstr "Helitaanka kulanka lama kaydin karin"
+
+msgid "Copy this survey to another course or session"
+msgstr "Nuqul ka mid ah sahankan u guuri koorsada ama kalfadhiga kale"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "Sahanka waa la koobi doonaa iyada oo aan jawaabo ama martiqaadyo lahayn."
+
+msgid "No target courses found"
+msgstr "Koorsooyin la beegsan karo lama helin"
+
+msgid "Search by course title, course code or session name."
+msgstr "Raadi magaca koorsada, koodhka koorsada ama magaca kalfadhiga."
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "Isticmaal nuqulka sahan markaad doonayso inaad nuqul ka sameysato isla koorsada."
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "Su'aalaha iyo xulashooyinka waa la nuqulayaa. Jawaabaha, martiqaadyada iyo warbixinnada waxay sii joogi doonaan sahan asalka ah oo keliya."
+
+msgid "Selected target"
+msgstr "Bartilmaameedka la doortay"
+
+msgid "Could not load copy form"
+msgstr "Foomka nuqulka lama soo dejin karo"
+
+msgid "The survey will be copied to: %s"
+msgstr "Sahanka waxaa loo nuqulayaa: %s"
+
+msgid "Survey copied."
+msgstr "Sahanka waa la nuqulay."
+
+msgid "Could not copy survey"
+msgstr "Sahanka lama nuquli karo"
+
+msgid "Answer survey"
+msgstr "Jawaab sahanka"
+
+msgid "Preview mode does not save answers."
+msgstr "Habka horudhaca ma kaydiyo jawaabaha."
+
+msgid "Survey completed"
+msgstr "Sahanka waa la dhammaystiray"
+
+msgid "Thank you for answering the survey."
+msgstr "Waad ku mahadsan tahay jawaabta sahanka."
+
+msgid "Profile information"
+msgstr "Macluumaadka astaanta"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "Fadlan dib u eeg meelaha astaanta ee la codsaday ka hor intaadan jawaabin sahanka."
+
+msgid "This profile field is read-only."
+msgstr "Meeshan astaanta waa mid akhris-keliya ah."
+
+msgid "You already filled this survey."
+msgstr "Waxaad hore u buuxisay sahankan."
+
+msgid "Please specify"
+msgstr "Fadlan sheeg"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "Noocan su'aasha laguma taageero aragtida casriga ah ee sahanka."
+
+msgid "Preview only"
+msgstr "Horudhac oo keliya"
+
+msgid "Submit answers"
+msgstr "Gudbi jawaabaha"
+
+msgid "Could not load survey"
+msgstr "Sahanka lama soo dejin karo"
+
+msgid "Please complete the required profile fields."
+msgstr "Fadlan buuxi meelaha astaanta ee loo baahan yahay."
+
+msgid "Please answer all mandatory questions."
+msgstr "Fadlan ka jawaab dhammaan su'aalaha waajibka ah."
+
+msgid "Could not save survey answers"
+msgstr "Jawaabaha sahanka lama kaydin karo"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "Habbee macluumaadka ugu muhiimsan ee sahanka ka hor intaadan maamulin su'aalaha iyo martiqaadyada."
+
+msgid "The survey code cannot be changed after creation."
+msgstr "Koodhka sahanka lama beddeli karo ka dib markii la abuuro."
+
+msgid "Survey behavior"
+msgstr "Dhaqanka sahanka"
+
+msgid "Use 0 for no time limit."
+msgstr "Isticmaal 0 haddii aanay jirin xad waqti."
+
+msgid "Survey messages"
+msgstr "Farriimaha sahanka"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "Meelaha astaanta ee halkan laga doortay waxaa la tusi doonaa ka hor su'aalaha sahanka."
+
+msgid "No profile fields are currently available."
+msgstr "Hadda ma jiraan meelo astaanta ah oo la heli karo."
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "Xulashada meelaha astaanta waxay la heli kartaa oo keliya sahannada aan qarsoodi ahayn."
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "Xiriirinta xirfadaha waxaa loo soo haadin doonaa qayb gaar ah."
+
+msgid "Could not load survey configuration"
+msgstr "Qaabeynta sahanka lama soo dejin karo"
+
+msgid "The survey code is required."
+msgstr "Koodhka sahanka waa loo baahan yahay."
+
+msgid "The survey title is required."
+msgstr "Cinwaanka sahanka waa loo baahan yahay."
+
+msgid "The survey has been saved successfully"
+msgstr "Sahanka si guul leh ayaa loo kaydiyay"
+
+msgid "Could not save survey configuration"
+msgstr "Qaabeynta sahanka lama kaydin karo"
+
+msgid "Course users"
+msgstr "Isticmaalayaasha koorsada"
+
+msgid "Already invited"
+msgstr "Hore loo martiqaaday"
+
+msgid "No users found"
+msgstr "Lama helin isticmaalayaal"
+
+msgid "No groups found"
+msgstr "Lama helin kooxo"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "Isticmaal **link** halka xiriirka sahanka uu ka muuqanayo."
+
+msgid "Remind all selected users"
+msgstr "Xusuusi dhammaan isticmaalayaasha la doortay"
+
+msgid "Anonymous access link"
+msgstr "Xiriirka gelitaanka qarsoodiga ah"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "Isticmaalayaasha aan la martiqaadin waxay isticmaali karaan xiriirkan si ay u qaataan sahanka."
+
+msgid "Answered anonymously"
+msgstr "Jawaab qarsoodi ah"
+
+msgid "Could not load survey invitations"
+msgstr "Martiqaadyada sahanka lama soo dejin karo"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "Mawduuca iyo farriinta iimaylka waa loo baahan yahay marka iimayl la dirayo."
+
+msgid "Could not publish survey"
+msgstr "Sahanka lama daabici karo"
+
+msgid "Could not copy the link"
+msgstr "Xiriirka lama nuquli karo"
+
+msgid "Please answer this survey using the following link"
+msgstr "Fadlan ka jawaab xog-ururintan adigoo isticmaalaya xiriiriyaha soo socda"
+
+msgid "Export CSV"
+msgstr "Dhoofinta CSV"
+
+msgid "Export compact CSV"
+msgstr "Dhoofinta CSV kooban"
+
+msgid "Export Excel"
+msgstr "Dhoofinta Excel"
+
+msgid "Export package"
+msgstr "Dhoofinta xirmo"
+
+msgid "Results summary"
+msgstr "Dulmarka natiijooyinka"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "Muuqalkan wuxuu muujinayaa xogta warbixinta ee loo soo haajiray xog-ururintan."
+
+msgid "Select user"
+msgstr "Dooro isticmaale"
+
+msgid "No answers found"
+msgstr "Jawaabaha lama helin"
+
+msgid "answers"
+msgstr "jawaabo"
+
+msgid "Could not load survey reporting"
+msgstr "Waxaa dhacay in aan la soo dejin karin warbixinta xog-ururinta"
+
+msgid "Back to threads"
+msgstr "Ku noqo mawduucyada"
+
+msgid "Back to learning path"
+msgstr "Ku noqo dariiqa barashada"
+
+msgid "Remove sticky"
+msgstr "Ka saar ku dhejinta"
+
+msgid "Make sticky"
+msgstr "Samee ku dhejinta"
+
+msgid "Open thread"
+msgstr "Fur mawduuca"
+
+msgid "Close thread"
+msgstr "Xir mawduuca"
+
+msgid "Delete thread"
+msgstr "Tirtir mawduuca"
+
+msgid "This thread is hidden from learners."
+msgstr "Mawduucan waa laga qariyey ardayda."
+
+msgid "Revision requested"
+msgstr "Dib-u-eegis la codsaday"
+
+msgid "Revision"
+msgstr "Dib-u-eegis"
+
+msgid "Approve post"
+msgstr "Ansixi qoraalka"
+
+msgid "Reject post"
+msgstr "Diid qoraalka"
+
+msgid "Cancel revision request"
+msgstr "Jooji codsiga dib-u-eegista"
+
+msgid "Delete post"
+msgstr "Tirtir qoraalka"
+
+msgid "Message is required"
+msgstr "Farriinta waa loo baahan yahay"
+
+msgid "Target thread is required"
+msgstr "Mawduuca la beegsanayo waa loo baahan yahay"
+
+msgid "Could not retrieve posts"
+msgstr "Waxaa dhacay in aan la soo saari karin qoraallada"
+
+msgid "Thread shown"
+msgstr "Mawduuca waa la muujiyey"
+
+msgid "Thread hidden"
+msgstr "Mawduuca waa la qariyey"
+
+msgid "Could not update thread"
+msgstr "Waxaa dhacay in aan la cusboonaysiin karin mawduuca"
+
+msgid "Thread closed"
+msgstr "Mawduuca waa la xiray"
+
+msgid "Thread opened"
+msgstr "Mawduuca waa la furay"
+
+msgid "Thread marked as sticky"
+msgstr "Mawduuca waxaa loo calaamadeeyey inuu yahay mid dhejisan"
+
+msgid "Thread unmarked as sticky"
+msgstr "Calaamad dhejinta mawduuca waa laga qaaday"
+
+msgid "Thread notifications enabled"
+msgstr "Ogeysiisyada mawduuca waa la furay"
+
+msgid "Thread notifications disabled"
+msgstr "Ogeysiisyada mawduuca waa la xiray"
+
+msgid "Could not update thread notification"
+msgstr "Waxaa dhacay in aan la cusboonaysiin karin ogeysiiska mawduuca"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "Ma hubtaa inaad doonayso inaad tirtirto mawduucan?"
+
+msgid "Could not delete thread"
+msgstr "Waxaa dhacay in aan la tirtiri karin mawduuca"
+
+msgid "Post approved"
+msgstr "Qoraalka waa la oggolaaday"
+
+msgid "Could not approve post"
+msgstr "Waxaa dhacay in aan la oggolaan karin qoraalka"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "Ma hubtaa inaad doonayso inaad diiddo qoraalkan?"
+
+msgid "Post rejected"
+msgstr "Qoraalka waa la diiday"
+
+msgid "Could not reject post"
+msgstr "Waxaa dhacay in aan la diidi karin qoraalka"
+
+msgid "Post shown"
+msgstr "Qoraalka waa la muujiyey"
+
+msgid "Post hidden"
+msgstr "Qoraalka waa la qariyey"
+
+msgid "Could not update post"
+msgstr "Waxaa dhacay in aan la cusboonaysiin karin qoraalka"
+
+msgid "Post updated"
+msgstr "Qoraalka waa la cusboonaysiiyey"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "Ma hubtaa inaad doonayso inaad tirtirto qoraalkan?"
+
+msgid "Post deleted"
+msgstr "Boostii waa la tirtiray"
+
+msgid "Could not delete post"
+msgstr "Boostii lama tirtiri karo"
+
+msgid "Untitled thread"
+msgstr "Mawduuc aan cinwaan lahayn"
+
+msgid "Could not retrieve threads"
+msgstr "Mawduucyada lama soo saari karo"
+
+msgid "Post moved"
+msgstr "Boostii waa la raray"
+
+msgid "Could not move post"
+msgstr "Boostii lama rari karo"
+
+msgid "Revision request removed"
+msgstr "Codsi dib-u-eegis waa la saaray"
+
+msgid "Could not update revision request"
+msgstr "Codsi dib-u-eegis lama cusboonaysiin karo"
+
+msgid "Are you sure you want to report this post?"
+msgstr "Ma hubtaa inaad rabto inaad warbixiso boostan?"
+
+msgid "Could not report post"
+msgstr "Boostii lama soo sheegi karo"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "Ma hubtaa inaad rabto inaad tirtirto lifaaqan?"
+
+msgid "Attachment deleted"
+msgstr "Lifaaqa waa la tirtiray"
+
+msgid "Could not delete attachment"
+msgstr "Lifaaqa lama tirtiri karo"
+
+msgid "Thread title"
+msgstr "Cinwaanka mawduuca"
+
+msgid "Sticky thread"
+msgstr "Mawduuc dheg dheg ah"
+
+msgid "Attach files"
+msgstr "Lifaaq faylal"
+
+msgid "Attachments are disabled for this forum"
+msgstr "Lifaaqyada waa la damiyay golahan"
+
+msgid "The forum is not open yet."
+msgstr "Golaha wali lama furin."
+
+msgid "The forum is closed."
+msgstr "Golaha waa la xidhay."
+
+msgid "The forum is locked."
+msgstr "Golaha waa la xidhay."
+
+msgid "New threads are not allowed in this forum."
+msgstr "Mawduucyo cusub looma oggola golahan."
+
+msgid "Thread created"
+msgstr "Mawduuc waa la abuuray"
+
+msgid "Could not create thread"
+msgstr "Mawduuc lama abuuri karo"
+
+msgid "Back to posts"
+msgstr "Ku noqo boostada"
+
+msgid "This reply will be stored as a revision."
+msgstr "Jawaabtan waxa lagu kaydin doonaa sidii dib-u-eegis."
+
+msgid "Post reply"
+msgstr "Jawaab boost"
+
+msgid "The thread is locked."
+msgstr "Mawduuca waa la xidhay."
+
+msgid "Reply added"
+msgstr "Jawaab waa la kordhiyay"
+
+msgid "Could not add reply"
+msgstr "Jawaab lama kordhin karo"
+
+msgid "Add forum"
+msgstr "Ku dar gole"
+
+msgid "No forums found"
+msgstr "Gole lama helin"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "Abuur qaybtaada ugu horreysa ama gole si aad u bilowdo doodaha."
+
+msgid "Locked"
+msgstr "La xidhay"
+
+msgid "No forums in this category"
+msgstr "Gole kuma jiro qaybtan"
+
+msgid "Posts require approval"
+msgstr "Boostada waxay u baahan tahay oggolaansho"
+
+msgid "Forum for current group"
+msgstr "Gole kooxda hadda"
+
+msgid "Group forum visibility"
+msgstr "Muuqashada gole kooxeed"
+
+msgid "No category"
+msgstr "Qayb ma jirto"
+
+msgid "Could not retrieve forums"
+msgstr "Goleyada lama soo saari karo"
+
+msgid "Forum category updated"
+msgstr "Qaybta gole waa la cusboonaysiiyay"
+
+msgid "Forum category created"
+msgstr "Qaybta gole waa la abuuray"
+
+msgid "Could not save forum category"
+msgstr "Qaybta gole lama kaydin karo"
+
+msgid "Forum updated"
+msgstr "Gole waa la cusboonaysiiyay"
+
+msgid "Forum created"
+msgstr "Gole waa la abuuray"
+
+msgid "Could not save forum"
+msgstr "Gole lama kaydin karo"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "Ma hubtaa inaad rabto inaad tirtirto qaybtan gole?"
+
+msgid "Could not delete forum category"
+msgstr "Qaybta gole lama tirtiri karo"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "Ma hubtaa inaad rabto inaad tirtirto golahan?"
+
+msgid "Could not delete forum"
+msgstr "Gole lama tirtiri karo"
+
+msgid "Forum category unlocked"
+msgstr "Qaybta gole waa la furay"
+
+msgid "Forum category locked"
+msgstr "Qaybta golaha waa la xiray"
+
+msgid "Could not update forum category"
+msgstr "Qaybta golaha lama cusboonaysiin karin"
+
+msgid "Forum category shown"
+msgstr "Qaybta golaha waa la muujiyay"
+
+msgid "Forum category hidden"
+msgstr "Qaybta golaha waa la qariyay"
+
+msgid "Forum unlocked"
+msgstr "Golaha waa la furay"
+
+msgid "Forum locked"
+msgstr "Golaha waa la xiray"
+
+msgid "Could not update forum"
+msgstr "Golaha lama cusboonaysiin karin"
+
+msgid "Forum shown"
+msgstr "Golaha waa la muujiyay"
+
+msgid "Forum hidden"
+msgstr "Golaha waa la qariyay"
+
+msgid "Forum notifications enabled"
+msgstr "Ogeysiisyada golaha waa la furay"
+
+msgid "Forum notifications disabled"
+msgstr "Ogeysiisyada golaha waa la damiyay"
+
+msgid "Could not update forum notification"
+msgstr "Ogeysiiska golaha lama cusboonaysiin karin"
+
+msgid "Forum category moved"
+msgstr "Qaybta golaha waa la raray"
+
+msgid "Could not move forum category"
+msgstr "Qaybta golaha lama rarin karin"
+
+msgid "Forum moved"
+msgstr "Golaha waa la raray"
+
+msgid "Could not move forum"
+msgstr "Golaha lama rarin karin"
+
+msgid "Back to forums"
+msgstr "Ku noqo golayaasha"
+
+msgid "New thread"
+msgstr "Mawduuc cusub"
+
+msgid "No threads found"
+msgstr "Mawduucyo lama helin"
+
+msgid "Sticky"
+msgstr "Ku dheggan"
+
+msgid "Graded"
+msgstr "Qiimeeysan"
+
+msgid "Grade peers"
+msgstr "Qiimee asxaabta"
+
+msgid "Move thread"
+msgstr "Rar mawduuca"
+
+msgid "Target forum"
+msgstr "Golaha bartilmaameedka"
+
+msgid "Target forum is required"
+msgstr "Golaha bartilmaameedka waa loo baahan yahay"
+
+msgid "Students"
+msgstr "Ardayda"
+
+msgid "No students found"
+msgstr "Arday lama helin"
+
+msgid "No peers available to grade."
+msgstr "Asxaab qiimayn ah lama hayo."
+
+msgid "Qualified"
+msgstr "U qalma"
+
+msgid "Not qualified"
+msgstr "Ma u qalmo"
+
+msgid "Could not retrieve thread grading"
+msgstr "Qiimaynta mawduuca lama soo saari karin"
+
+msgid "Thread grading updated"
+msgstr "Qiimaynta mawduuca waa la cusboonaysiiyay"
+
+msgid "Could not update thread grading"
+msgstr "Qiimaynta mawduuca lama cusboonaysiin karin"
+
+msgid "Thread score saved"
+msgstr "Dhibcaha mawduuca waa la kaydiyay"
+
+msgid "Could not save thread score"
+msgstr "Dhibcaha mawduuca lama kaydin karin"
+
+msgid "Could not move thread"
+msgstr "Mawduuca lama rarin karin"
+
+msgid "Thread updated"
+msgstr "Mawduuca waa la cusboonaysiiyay"
+
+msgid "Search term is too short"
+msgstr "Erayga raadinta aad buu u gaaban yahay"
+
+msgid "Could not search forums"
+msgstr "Golayaasha lama baadhi karin"
+
+msgid "Moderated"
+msgstr "La dhex-dhexaajiyay"
+
+msgid "View threads"
+msgstr "Eeg mawduucyada"
 

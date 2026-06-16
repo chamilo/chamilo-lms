@@ -9,3 +9,4 @@ $strings['plugin_comment'] = 'Statikus HTML tartalom megjelenítése.';
 $strings['block_title'] = 'Blokk cím';
 
 //$strings['title'] = "Title";
+$strings['content'] = 'Tartalom';

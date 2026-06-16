@@ -75,3 +75,18 @@ $strings['QuestionDelete'] = 'Doriți să ștergeți diploma specifică și să 
 $strings['SuccessDelete'] = 'Șters cu succes';
 $strings['ProblemDelete'] = 'Problemă la ștergerea certificatului';
 $strings['OnlyCustomCertificates'] = 'Sunt exportate doar cursurile cu certificat personalizat';
+$strings['CertificateMode'] = 'Mod certificat';
+$strings['UseCourseCustomCertificate'] = 'Utilizează certificat personalizat specific cursului';
+$strings['UseDefaultCustomCertificate'] = 'Utilizează certificatul personalizat implicit al platformei';
+
+$strings['CreateCertificateWithTags'] = 'Creează certificatul folosind aceste etichete';
+
+$strings['DeleteCertificate'] = 'Șterge certificatul';
+
+$strings['SaveCertificate'] = 'Salvează certificatul';
+
+$strings['SelectOneOptionBeforeOpeningEditor'] = 'Selectați o opțiune și salvați setările înainte de a deschide editorul de certificate.';
+
+$strings['ChooseCustomCertificateModeHelp'] = 'Alegeți modul în care acest curs ar trebui să utilizeze certificate personalizate.';
+
+$strings['CouldNotSaveCertificate'] = 'Nu s-a putut salva configurația certificatului.';

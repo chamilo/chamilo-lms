@@ -13,3 +13,7 @@ $strings['NoNotebookFilter'] = 'Nema napomena kreiranih s trenutnim filterom';
 $strings['NoNotebook'] = 'Nema napomena kreiranih u sustavu';
 $strings['NoNotebookUser'] = 'Nema napomena za ovog studenta';
 $strings['NotebookNoStudentAssigned'] = 'Napomene bez dodijeljenih studenata';
+
+$strings['TeacherNotesHelp'] = 'Kreirajte privatne bilješke nastavnika povezane s polaznicima na ovom kursu.';
+$strings['CurrentFilter'] = 'Trenutni filter';
+$strings['EmptyStateHelp'] = 'Kreirajte novu bilješku ili promijenite filter polaznika.';

@@ -20,3 +20,7 @@ $strings['EmbedDateRangeHelp'] = 'W tych datach ta osadzona zawartość będzie 
 $strings['HtmlCode'] = 'Kod HTML';
 $strings['HtmlCodeHelp'] = 'Udostępniony kod HTML, dostarczony przez zewnętrzną usługę podczas żądania udostępnienia w formacie osadzonego.';
 $strings['LaunchContent'] = 'Uruchom zawartość';
+
+$strings['InvalidDateRange'] = 'Data rozpoczęcia musi być wcześniejsza lub równa dacie zakończenia.';
+
+$strings['InvalidSecurityToken'] = 'Nieprawidłowy token bezpieczeństwa. Odśwież stronę i spróbuj ponownie.';

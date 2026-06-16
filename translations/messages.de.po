@@ -24859,7 +24859,7 @@ msgid "Hours"
 msgstr "Stunden"
 
 msgid "Reminder for event : %s"
-msgstr "Erinnerung für Veranstaltung: %s"
+msgstr "Erinnerung zum Termin: %s"
 
 msgid "Add notification"
 msgstr "Benachrichtigung hinzufügen"

@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\MessageHelper;
 use Chamilo\CoreBundle\Security\Upload\UploadFilenamePolicy;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CForum;
@@ -68,6 +69,7 @@ final class ForumThreadProcessor implements ProcessorInterface
         private readonly CsrfTokenManagerInterface $csrfTokenManager,
         private readonly UploadFilenamePolicy $uploadFilenamePolicy,
         private readonly SettingsManager $settingsManager,
+        private readonly MessageHelper $messageHelper,
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): JsonResponse
@@ -180,7 +182,7 @@ final class ForumThreadProcessor implements ProcessorInterface
         }
 
         if ($visible) {
-            $this->sendForumSubscriptionNotifications($this->entityManager, $request, $course, $session, $forum, $thread, $post, $user);
+            $this->sendForumSubscriptionNotifications($this->entityManager, $request, $course, $session, $forum, $thread, $post, $user, $this->messageHelper);
         }
 
         $this->registerForumEventLog('new-thread', 'thread', (string) $thread->getIid());

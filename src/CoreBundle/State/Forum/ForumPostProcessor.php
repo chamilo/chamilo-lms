@@ -12,6 +12,9 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\MessageHelper;
+use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
+use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Security\Upload\UploadFilenamePolicy;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CForum;
@@ -23,14 +26,11 @@ use Chamilo\CourseBundle\Repository\CForumAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CForumPostRepository;
 use Chamilo\CourseBundle\Repository\CForumRepository;
 use Chamilo\CourseBundle\Repository\CForumThreadRepository;
-use CourseManager;
 use DateTime;
 use DateTimeZone;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
-use ExtraFieldValue;
 use JsonException;
-use MessageManager;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -41,7 +41,6 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
-use UserManager;
 
 use const FILTER_VALIDATE_BOOLEAN;
 use const JSON_THROW_ON_ERROR;
@@ -54,6 +53,7 @@ use const JSON_THROW_ON_ERROR;
 final class ForumPostProcessor implements ProcessorInterface
 {
     use ForumActionStateHelperTrait;
+    use ForumExtraFieldHelperTrait;
     use ForumGradebookGuardTrait;
     use ForumNotificationHelperTrait;
     use ForumStateHelperTrait;
@@ -70,6 +70,9 @@ final class ForumPostProcessor implements ProcessorInterface
         private readonly CsrfTokenManagerInterface $csrfTokenManager,
         private readonly UploadFilenamePolicy $uploadFilenamePolicy,
         private readonly SettingsManager $settingsManager,
+        private readonly MessageHelper $messageHelper,
+        private readonly ExtraFieldRepository $extraFieldRepository,
+        private readonly ExtraFieldValuesRepository $extraFieldValuesRepository,
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): JsonResponse
@@ -174,7 +177,7 @@ final class ForumPostProcessor implements ProcessorInterface
         }
 
         if ($visible) {
-            $this->sendForumSubscriptionNotifications($this->entityManager, $request, $course, $session, $forum, $thread, $post, $user);
+            $this->sendForumSubscriptionNotifications($this->entityManager, $request, $course, $session, $forum, $thread, $post, $user, $this->messageHelper);
         }
 
         $this->registerForumEventLog('reply-thread', 'post', (string) $post->getIid());
@@ -394,7 +397,7 @@ final class ForumPostProcessor implements ProcessorInterface
         $session = $this->getSession($this->entityManager, $request);
         $author = $data->getUser();
         if (!$wasVisible && $author instanceof User) {
-            $this->sendForumSubscriptionNotifications($this->entityManager, $request, $course, $session, $forum, $thread, $data, $author);
+            $this->sendForumSubscriptionNotifications($this->entityManager, $request, $course, $session, $forum, $thread, $data, $author, $this->messageHelper);
         }
 
         $this->registerForumEventLog('approve-post', 'post', (string) $data->getIid());
@@ -523,10 +526,9 @@ final class ForumPostProcessor implements ProcessorInterface
             $forum->getTitle(),
         );
 
+        $senderId = $currentUser instanceof User ? (int) $currentUser->getId() : 0;
         foreach ($recipientIds as $recipientId) {
-            if (class_exists('MessageManager')) {
-                MessageManager::send_message_simple($recipientId, $subject, $content);
-            }
+            $this->messageHelper->sendMessageSimple($recipientId, $subject, $content, $senderId, false, false);
         }
 
         $this->registerForumEventLog('report-post', 'post', (string) $data->getIid());
@@ -997,11 +999,9 @@ final class ForumPostProcessor implements ProcessorInterface
 
     private function areForumPostRevisionsEnabled(): bool
     {
-        if (!\function_exists('api_get_setting')) {
-            return false;
-        }
-
-        return $this->isTruthySetting(api_get_setting('forum.allow_forum_post_revisions'));
+        return $this->isTruthySetting(
+            $this->settingsManager->getSetting('forum.allow_forum_post_revisions', true),
+        );
     }
 
     private function isTruthySetting(mixed $value): bool
@@ -1021,175 +1021,25 @@ final class ForumPostProcessor implements ProcessorInterface
 
     private function getExtraFieldValue(string $itemType, int $itemId, string $variable): mixed
     {
-        $databaseValue = $this->getExtraFieldValueFromDatabase($itemType, $itemId, $variable);
-        if (null !== $databaseValue) {
-            return $databaseValue;
-        }
-
-        if (!class_exists('ExtraFieldValue')) {
-            return null;
-        }
-
-        $extraFieldValue = new ExtraFieldValue($itemType);
-        $value = $extraFieldValue->get_values_by_handler_and_field_variable($itemId, $variable);
-
-        return \is_array($value) ? ($value['value'] ?? null) : null;
+        return $this->getForumExtraFieldValue(
+            $this->extraFieldValuesRepository,
+            $itemType,
+            $itemId,
+            $variable,
+        );
     }
 
     private function saveExtraFieldValue(string $itemType, int $itemId, string $variable, mixed $value): void
     {
-        if ($this->saveExtraFieldValueInDatabase($itemType, $itemId, $variable, $value)) {
-            return;
-        }
-
-        if (!class_exists('ExtraFieldValue')) {
-            return;
-        }
-
-        $extraFieldValue = new ExtraFieldValue($itemType);
-        $params = ['item_id' => $itemId];
-        if (null !== $value && '' !== (string) $value) {
-            $params['extra_'.$variable] = ['extra_'.$variable => $value];
-        }
-
-        $extraFieldValue->saveFieldValues($params, true, false, [$variable]);
-    }
-
-    private function getExtraFieldValueFromDatabase(string $itemType, int $itemId, string $variable): mixed
-    {
-        $fieldId = $this->getExtraFieldId($itemType, $variable);
-        if (null === $fieldId) {
-            return null;
-        }
-
-        $value = $this->entityManager->getConnection()->fetchOne(
-            'SELECT field_value FROM extra_field_values WHERE field_id = :fieldId AND item_id = :itemId ORDER BY id DESC LIMIT 1',
-            [
-                'fieldId' => $fieldId,
-                'itemId' => $itemId,
-            ],
-            [
-                'fieldId' => Types::INTEGER,
-                'itemId' => Types::INTEGER,
-            ],
+        $this->saveForumExtraFieldValue(
+            $this->entityManager,
+            $this->extraFieldRepository,
+            $this->extraFieldValuesRepository,
+            $itemType,
+            $itemId,
+            $variable,
+            $value,
         );
-
-        return false === $value ? null : $value;
-    }
-
-    private function saveExtraFieldValueInDatabase(string $itemType, int $itemId, string $variable, mixed $value): bool
-    {
-        $fieldId = $this->getExtraFieldId($itemType, $variable);
-        if (null === $fieldId) {
-            return false;
-        }
-
-        $connection = $this->entityManager->getConnection();
-        if (null === $value || '' === (string) $value) {
-            $connection->delete(
-                'extra_field_values',
-                [
-                    'field_id' => $fieldId,
-                    'item_id' => $itemId,
-                ],
-                [
-                    Types::INTEGER,
-                    Types::INTEGER,
-                ],
-            );
-
-            return true;
-        }
-
-        $existingId = $connection->fetchOne(
-            'SELECT id FROM extra_field_values WHERE field_id = :fieldId AND item_id = :itemId ORDER BY id DESC LIMIT 1',
-            [
-                'fieldId' => $fieldId,
-                'itemId' => $itemId,
-            ],
-            [
-                'fieldId' => Types::INTEGER,
-                'itemId' => Types::INTEGER,
-            ],
-        );
-
-        $columns = $connection->createSchemaManager()->listTableColumns('extra_field_values');
-        $now = (new DateTime('now', new DateTimeZone('UTC')))->format('Y-m-d H:i:s');
-
-        if (false === $existingId) {
-            $insertData = [
-                'field_id' => $fieldId,
-                'item_id' => $itemId,
-                'field_value' => (string) $value,
-            ];
-            $insertTypes = [
-                Types::INTEGER,
-                Types::INTEGER,
-                Types::STRING,
-            ];
-
-            if (isset($columns['created_at'])) {
-                $insertData['created_at'] = $now;
-                $insertTypes[] = Types::STRING;
-            }
-
-            if (isset($columns['updated_at'])) {
-                $insertData['updated_at'] = $now;
-                $insertTypes[] = Types::STRING;
-            }
-
-            $connection->insert('extra_field_values', $insertData, $insertTypes);
-
-            return true;
-        }
-
-        $updateData = ['field_value' => (string) $value];
-        $updateTypes = [Types::STRING];
-
-        if (isset($columns['updated_at'])) {
-            $updateData['updated_at'] = $now;
-            $updateTypes[] = Types::STRING;
-        }
-
-        $connection->update(
-            'extra_field_values',
-            $updateData,
-            ['id' => (int) $existingId],
-            $updateTypes,
-        );
-
-        return true;
-    }
-
-    private function getExtraFieldId(string $itemType, string $variable): ?int
-    {
-        $itemTypeId = $this->getExtraFieldItemTypeId($itemType);
-        if (null === $itemTypeId) {
-            return null;
-        }
-
-        $fieldId = $this->entityManager->getConnection()->fetchOne(
-            'SELECT id FROM extra_field WHERE item_type = :itemType AND variable = :variable ORDER BY id DESC LIMIT 1',
-            [
-                'itemType' => $itemTypeId,
-                'variable' => $variable,
-            ],
-            [
-                'itemType' => Types::INTEGER,
-                'variable' => Types::STRING,
-            ],
-        );
-
-        return false === $fieldId ? null : (int) $fieldId;
-    }
-
-    private function getExtraFieldItemTypeId(string $itemType): ?int
-    {
-        return match ($itemType) {
-            'course' => 2,
-            'forum_post' => 16,
-            default => null,
-        };
     }
 
     /**
@@ -1202,38 +1052,111 @@ final class ForumPostProcessor implements ProcessorInterface
         $recipientIds = [];
 
         foreach ($recipientTypes as $recipientType) {
-            if ('teachers' === $recipientType && class_exists('CourseManager')) {
-                $teachers = CourseManager::get_teacher_list_from_course_code($course->getCode());
-                foreach ($teachers as $teacher) {
-                    $recipientIds[] = (int) ($teacher['user_id'] ?? 0);
-                }
+            if ('teachers' === $recipientType) {
+                $recipientIds = array_merge($recipientIds, $this->getCourseTeacherUserIds($course));
             }
 
-            if ('admins' === $recipientType && class_exists('UserManager')) {
-                $admins = UserManager::get_all_administrators();
-                foreach ($admins as $admin) {
-                    $recipientIds[] = (int) ($admin['user_id'] ?? $admin['id'] ?? 0);
-                }
+            if ('admins' === $recipientType) {
+                $recipientIds = array_merge($recipientIds, $this->getPlatformAdminUserIds());
             }
 
-            if ('community_managers' === $recipientType && \function_exists('api_get_setting')) {
-                $managers = api_get_setting('forum.community_managers_user_list', true);
-                if (\is_array($managers) && isset($managers['users']) && \is_array($managers['users'])) {
-                    foreach ($managers['users'] as $managerId) {
-                        $recipientIds[] = (int) $managerId;
-                    }
-                }
+            if ('community_managers' === $recipientType) {
+                $recipientIds = array_merge($recipientIds, $this->getCommunityManagerUserIds());
             }
         }
 
-        if ([] === $recipientIds && class_exists('CourseManager')) {
-            $teachers = CourseManager::get_teacher_list_from_course_code($course->getCode());
-            foreach ($teachers as $teacher) {
-                $recipientIds[] = (int) ($teacher['user_id'] ?? 0);
+        if ([] === $recipientIds) {
+            $recipientIds = $this->getCourseTeacherUserIds($course);
+        }
+
+        return $this->normalizeRecipientUserIds($recipientIds);
+    }
+
+    /**
+     * @return int[]
+     */
+    private function getCourseTeacherUserIds(Course $course): array
+    {
+        $userIds = [];
+        foreach ($course->getTeachersSubscriptions() as $subscription) {
+            if (!method_exists($subscription, 'getUser')) {
+                continue;
+            }
+
+            $user = $subscription->getUser();
+            if ($user instanceof User && $user->isActive()) {
+                $userIds[] = (int) $user->getId();
             }
         }
 
-        return array_values(array_unique(array_filter($recipientIds)));
+        return $this->normalizeRecipientUserIds($userIds);
+    }
+
+    /**
+     * @return int[]
+     */
+    private function getPlatformAdminUserIds(): array
+    {
+        $userIds = [];
+        foreach ($this->entityManager->getRepository(User::class)->findAll() as $user) {
+            if ($user instanceof User && $user->isActive() && $user->isAdmin()) {
+                $userIds[] = (int) $user->getId();
+            }
+        }
+
+        return $this->normalizeRecipientUserIds($userIds);
+    }
+
+    /**
+     * @return int[]
+     */
+    private function getCommunityManagerUserIds(): array
+    {
+        return $this->normalizeRecipientUserIds(
+            $this->flattenRecipientUserIds(
+                $this->settingsManager->getSetting('forum.community_managers_user_list', true),
+            ),
+        );
+    }
+
+    /**
+     * @return int[]
+     */
+    private function flattenRecipientUserIds(mixed $value): array
+    {
+        if (is_array($value)) {
+            $userIds = [];
+            foreach ($value as $item) {
+                $userIds = array_merge($userIds, $this->flattenRecipientUserIds($item));
+            }
+
+            return $userIds;
+        }
+
+        $rawValue = trim((string) $value);
+        if ('' === $rawValue) {
+            return [];
+        }
+
+        $userIds = [];
+        foreach (preg_split('/[;,]/', $rawValue) ?: [] as $part) {
+            $userIds[] = (int) trim((string) $part);
+        }
+
+        return $userIds;
+    }
+
+    /**
+     * @param array<int, mixed> $userIds
+     *
+     * @return int[]
+     */
+    private function normalizeRecipientUserIds(array $userIds): array
+    {
+        return array_values(array_unique(array_filter(
+            array_map('intval', $userIds),
+            static fn (int $userId): bool => $userId > 0,
+        )));
     }
 
     private function getCurrentRequest(): Request

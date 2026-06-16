@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\State\Forum;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\CoreBundle\Helpers\MessageHelper;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumCategory;
@@ -16,7 +17,6 @@ use Chamilo\CourseBundle\Entity\CForumNotification;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use Doctrine\ORM\EntityManagerInterface;
-use MessageManager;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -258,13 +258,14 @@ trait ForumNotificationHelperTrait
         CForumThread $thread,
         CForumPost $post,
         User $author,
+        MessageHelper $messageHelper,
     ): int {
         if (!$this->canSendForumNotification($course, $session, $forum, $thread, $post)) {
             return 0;
         }
 
         $recipientIds = $this->getForumNotificationRecipientIds($entityManager, $course, $forum, $thread, $author);
-        if ([] === $recipientIds || !class_exists(MessageManager::class)) {
+        if ([] === $recipientIds) {
             return 0;
         }
 
@@ -273,8 +274,9 @@ trait ForumNotificationHelperTrait
         $sentCount = 0;
 
         foreach ($recipientIds as $recipientId) {
-            MessageManager::send_message_simple($recipientId, $subject, $content);
-            ++$sentCount;
+            if (null !== $messageHelper->sendMessageSimple($recipientId, $subject, $content, (int) $author->getId(), false, false)) {
+                ++$sentCount;
+            }
         }
 
         return $sentCount;

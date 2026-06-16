@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Security\Upload\UploadFilenamePolicy;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumAttachment;
 use Chamilo\CourseBundle\Entity\CForumPost;
@@ -53,6 +54,7 @@ use const JSON_THROW_ON_ERROR;
 final class ForumPostProcessor implements ProcessorInterface
 {
     use ForumActionStateHelperTrait;
+    use ForumGradebookGuardTrait;
     use ForumNotificationHelperTrait;
     use ForumStateHelperTrait;
     use ForumWriteHelperTrait;
@@ -67,6 +69,7 @@ final class ForumPostProcessor implements ProcessorInterface
         private readonly Security $security,
         private readonly CsrfTokenManagerInterface $csrfTokenManager,
         private readonly UploadFilenamePolicy $uploadFilenamePolicy,
+        private readonly SettingsManager $settingsManager,
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): JsonResponse
@@ -203,6 +206,8 @@ final class ForumPostProcessor implements ProcessorInterface
         $this->assertVisibleResource($data->getResourceNode());
         $this->assertVisibleResource($thread->getResourceNode());
         $this->assertPostCanBeEdited($data, $forum, $thread);
+        $course = $this->getCourse($this->entityManager, $request);
+        $this->assertForumThreadNotLockedByGradebook($this->entityManager, $this->settingsManager, $this->security, $course, $thread);
 
         $title = $this->getRequiredText($payload, 'title', 250);
         $text = trim((string) ($payload['text'] ?? ''));
@@ -251,6 +256,8 @@ final class ForumPostProcessor implements ProcessorInterface
         $this->assertVisibleResource($data->getResourceNode());
         $this->assertVisibleResource($thread->getResourceNode());
         $this->assertPostCanBeDeleted($data, $forum, $thread);
+        $course = $this->getCourse($this->entityManager, $request);
+        $this->assertForumThreadNotLockedByGradebook($this->entityManager, $this->settingsManager, $this->security, $course, $thread);
 
         $postId = (int) $data->getIid();
         $postCount = $this->countThreadPosts($thread);
@@ -326,6 +333,8 @@ final class ForumPostProcessor implements ProcessorInterface
         $this->assertEditableForumResource($data->getResourceNode(), $this->security);
         $this->assertEditableForumResource($thread->getResourceNode(), $this->security);
         $this->assertEditableForumResource($forum->getResourceNode(), $this->security);
+        $course = $this->getCourse($this->entityManager, $request);
+        $this->assertForumThreadNotLockedByGradebook($this->entityManager, $this->settingsManager, $this->security, $course, $thread);
 
         $targetVisible = \array_key_exists('visible', $payload)
             ? filter_var($payload['visible'], FILTER_VALIDATE_BOOLEAN)
@@ -357,6 +366,8 @@ final class ForumPostProcessor implements ProcessorInterface
         $this->assertEditableForumResource($data->getResourceNode(), $this->security);
         $this->assertEditableForumResource($thread->getResourceNode(), $this->security);
         $this->assertEditableForumResource($forum->getResourceNode(), $this->security);
+        $course = $this->getCourse($this->entityManager, $request);
+        $this->assertForumThreadNotLockedByGradebook($this->entityManager, $this->settingsManager, $this->security, $course, $thread);
 
         $wasVisible = $data->getVisible();
         $data
@@ -380,7 +391,6 @@ final class ForumPostProcessor implements ProcessorInterface
         $this->entityManager->persist($forum);
         $this->entityManager->flush();
 
-        $course = $this->getCourse($this->entityManager, $request);
         $session = $this->getSession($this->entityManager, $request);
         $author = $data->getUser();
         if (!$wasVisible && $author instanceof User) {
@@ -412,6 +422,8 @@ final class ForumPostProcessor implements ProcessorInterface
         $this->assertEditableForumResource($data->getResourceNode(), $this->security);
         $this->assertEditableForumResource($thread->getResourceNode(), $this->security);
         $this->assertEditableForumResource($forum->getResourceNode(), $this->security);
+        $course = $this->getCourse($this->entityManager, $request);
+        $this->assertForumThreadNotLockedByGradebook($this->entityManager, $this->settingsManager, $this->security, $course, $thread);
 
         $wasVisible = $data->getVisible();
         $data
@@ -541,16 +553,17 @@ final class ForumPostProcessor implements ProcessorInterface
         $this->assertEditableForumResource($sourceThread->getResourceNode(), $this->security);
         $this->assertEditableForumResource($sourceForum->getResourceNode(), $this->security);
 
+        $course = $this->getCourse($this->entityManager, $request);
+        $session = $this->getSession($this->entityManager, $request);
+        $group = $this->getGroup($this->entityManager, $request);
+        $this->assertForumThreadNotLockedByGradebook($this->entityManager, $this->settingsManager, $this->security, $course, $sourceThread);
+
         if ($this->isFirstPost($data, $sourceThread)) {
             throw new BadRequestHttpException('The first post of a thread cannot be moved. Move the thread instead.');
         }
 
         $targetThreadId = $this->getOptionalInt($payload, 'targetThreadId');
         if (0 === $targetThreadId) {
-            $course = $this->getCourse($this->entityManager, $request);
-            $session = $this->getSession($this->entityManager, $request);
-            $group = $this->getGroup($this->entityManager, $request);
-
             $targetThread = (new CForumThread())
                 ->setTitle($data->getTitle())
                 ->setForum($sourceForum)
@@ -585,6 +598,8 @@ final class ForumPostProcessor implements ProcessorInterface
             if ($targetThread->getIid() === $sourceThread->getIid()) {
                 throw new BadRequestHttpException('The post is already in the selected thread.');
             }
+
+            $this->assertForumThreadNotLockedByGradebook($this->entityManager, $this->settingsManager, $this->security, $course, $targetThread);
         }
 
         foreach ($data->getChildren() as $child) {

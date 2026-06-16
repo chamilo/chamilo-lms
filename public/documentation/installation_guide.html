@@ -474,7 +474,8 @@ sudo chown -R www-data:www-data var/ config/ .env</pre>
 <a id="windows-install-iis-rewrite" class="anchor"></a>
         If you are working on a Windows server, you should have IIS installed already. If not, you can download it from the official website (https://www.iis.net/downloads).<br><br>
         With IIS, you will need the URL Rewrite module. You can download it from the official website (https://www.iis.net/downloads/microsoft/url-rewrite).<br><br>
-        Once installed, you will need to restart IIS, close the network manager window if open, and possibly reboot the whole Windows machine for it to appear in the Site management (not the server management section).<br>
+	Once installed, you will need to restart IIS, close the network manager window if open, and possibly reboot the whole Windows machine for it to appear in the Site management (not the server management section).<br><br>
+	Before you move on, Make sure you visit the Request Filter page on the site that will be used to host Chamilo, and change the default filter to allow for a larger <em>maximum authorized length of content (bytes)</em>. This value will otherwise limit the maximum upload you can send to Chamilo. 1GiB (i.e. 1,000,000,000 bytes) is a reasonable value if you start uploading big SCORM courses, for example.<br>
 
         <h4>6.4.3. IIS, CGI and PHP</h4>
 <a id="windows-install-iis-php" class="anchor"></a>

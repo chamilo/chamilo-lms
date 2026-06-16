@@ -26,19 +26,68 @@ $course_list = CourseManager::get_courses_list(
     '',
     api_get_current_access_url_id()
 );
-$formSent = null;
 $courses = $selected_courses = [];
 
-if (isset($_POST['formSent']) && $_POST['formSent']) {
-    $formSent = $_POST['formSent'];
-    $select_type = (int) ($_POST['select_type']);
-    $file_type = $_POST['file_type'];
-    $includeUsers = (empty($_POST['include_users']) ? false : true);
-    $includeExtraFields = (isset($_POST['include_extrafields']) && 1 === (int) $_POST['include_extrafields']);
+$form = new FormValidator('export', 'post', api_get_self());
+$form->addHeader($tool_name);
+$form->addElement(
+    'radio',
+    'select_type',
+    get_lang('Option'),
+    get_lang('ExportAllCoursesList'),
+    '1',
+    ['onclick' => "javascript: if(this.checked){document.getElementById('div-course-list').style.display='none';}"]
+);
+
+$form->addElement(
+    'radio',
+    'select_type',
+    '',
+    get_lang('ExportSelectedCoursesFromCoursesList'),
+    '2',
+    ['onclick' => "javascript: if(this.checked){document.getElementById('div-course-list').style.display='block';}"]
+);
+
+if (!empty($course_list)) {
+    $form->addHtml('<div id="div-course-list" style="display:none">');
+    $coursesInList = [];
+    foreach ($course_list as $course) {
+        $coursesInList[$course['code']] = $course['title'].' ('.$course['code'].')';
+    }
+
+    $form->addSelect(
+        'course_code',
+        get_lang('WhichCoursesToExport'),
+        $coursesInList,
+        ['multiple' => 'multiple']
+    );
+
+    $form->addHtml('</div>');
+}
+
+$form->addElement('radio', 'file_type', get_lang('OutputFileType'), 'CSV', 'csv', null);
+$form->addElement('radio', 'file_type', '', 'XLS', 'xls', null);
+$form->addElement('radio', 'file_type', null, 'XML', 'xml', null, ['id' => 'file_type_xml']);
+
+$form->addElement('checkbox', 'include_users', get_lang('ExportUsers'), '', '1');
+
+$form->addElement('checkbox', 'include_extrafields', get_lang('ExportExtraFields'), '', '1');
+
+$form->setDefaults(['select_type' => '1', 'file_type' => 'csv', 'include_users' => '1', 'include_extrafields' => 0]);
+
+$form->addButtonExport(get_lang('ExportCourses'));
+$form->protect();
+
+if ($form->validate()) {
+    $values = $form->exportValues();
+    $select_type = (int) $values['select_type'];
+    $file_type = $values['file_type'];
+    $includeUsers = !empty($values['include_users']);
+    $includeExtraFields = isset($values['include_extrafields']) && 1 === (int) $values['include_extrafields'];
 
     if (2 == $select_type) {
         // Get selected courses from courses list in form sent
-        $selected_courses = $_POST['course_code'];
+        $selected_courses = $values['course_code'] ?? [];
         if (is_array($selected_courses)) {
             foreach ($course_list as $course) {
                 if (!in_array($course['code'], $selected_courses)) {
@@ -156,55 +205,6 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 
 Display::display_header($tool_name);
 
-$form = new FormValidator('export', 'post', api_get_self());
-$form->addHeader($tool_name);
-$form->addHidden('formSent', 1);
-$form->addElement(
-    'radio',
-    'select_type',
-    get_lang('Option'),
-    get_lang('ExportAllCoursesList'),
-    '1',
-    ['onclick' => "javascript: if(this.checked){document.getElementById('div-course-list').style.display='none';}"]
-);
-
-$form->addElement(
-    'radio',
-    'select_type',
-    '',
-    get_lang('ExportSelectedCoursesFromCoursesList'),
-    '2',
-    ['onclick' => "javascript: if(this.checked){document.getElementById('div-course-list').style.display='block';}"]
-);
-
-if (!empty($course_list)) {
-    $form->addHtml('<div id="div-course-list" style="display:none">');
-    $coursesInList = [];
-    foreach ($course_list as $course) {
-        $coursesInList[$course['code']] = $course['title'].' ('.$course['code'].')';
-    }
-
-    $form->addSelect(
-        'course_code',
-        get_lang('WhichCoursesToExport'),
-        $coursesInList,
-        ['multiple' => 'multiple']
-    );
-
-    $form->addHtml('</div>');
-}
-
-$form->addElement('radio', 'file_type', get_lang('OutputFileType'), 'CSV', 'csv', null);
-$form->addElement('radio', 'file_type', '', 'XLS', 'xls', null);
-$form->addElement('radio', 'file_type', null, 'XML', 'xml', null, ['id' => 'file_type_xml']);
-
-$form->addElement('checkbox', 'include_users', get_lang('ExportUsers'), '', '1');
-
-$form->addElement('checkbox', 'include_extrafields', get_lang('ExportExtraFields'), '', '1');
-
-$form->setDefaults(['select_type' => '1', 'file_type' => 'csv', 'include_users' => '1', 'include_extrafields' => 0]);
-
-$form->addButtonExport(get_lang('ExportCourses'));
 $form->display();
 
 Display::display_footer();

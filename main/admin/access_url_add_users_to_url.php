@@ -40,7 +40,7 @@ echo '</div>';
 
 api_display_tool_title($tool_name);
 
-if ($_POST['form_sent']) {
+if (!empty($_POST['form_sent']) && Security::check_token('post')) {
     $form_sent = $_POST['form_sent'];
     $users = is_array($_POST['user_list']) ? $_POST['user_list'] : [];
     $url_list = is_array($_POST['url_list']) ? $_POST['url_list'] : [];
@@ -93,6 +93,7 @@ unset($result);
 
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>" style="margin:0px;">
  <input type="hidden" name="form_sent" value="1"/>
+ <?php echo Security::get_HTML_token(); ?>
   <table border="0" cellpadding="5" cellspacing="0" width="100%">
    <tr>
     <td width="40%" align="center">

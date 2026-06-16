@@ -215,9 +215,23 @@ $tool_name = get_lang('ImportCourses').' CSV';
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 
 set_time_limit(0);
+
+$form = new FormValidator(
+    'import',
+    'post',
+    api_get_self(),
+    null,
+    ['enctype' => 'multipart/form-data']
+);
+$form->addHeader($tool_name);
+$form->addElement('file', 'import_file', get_lang('ImportCSVFileLocation'));
+$form->addElement('checkbox', 'add_me_as_teacher', null, get_lang('AddMeAsTeacherInCourses'));
+$form->addButtonImport(get_lang('Import'), 'save');
+$form->protect();
+
 Display::display_header($tool_name);
 
-if (isset($_POST['formSent']) && $_POST['formSent']) {
+if ($form->validate()) {
     if (empty($_FILES['import_file']['tmp_name'])) {
         $error_message = get_lang('UplUploadFailed');
         echo Display::return_message($error_message, 'error', false);
@@ -250,18 +264,6 @@ if (isset($errors) && count($errors) != 0) {
     echo Display::return_message($error_message, 'error', false);
 }
 
-$form = new FormValidator(
-    'import',
-    'post',
-    api_get_self(),
-    null,
-    ['enctype' => 'multipart/form-data']
-);
-$form->addHeader($tool_name);
-$form->addElement('file', 'import_file', get_lang('ImportCSVFileLocation'));
-$form->addElement('checkbox', 'add_me_as_teacher', null, get_lang('AddMeAsTeacherInCourses'));
-$form->addButtonImport(get_lang('Import'), 'save');
-$form->addElement('hidden', 'formSent', 1);
 $form->display();
 
 ?>

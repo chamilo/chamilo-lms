@@ -345,3 +345,47 @@
     });
 </script>
 {% endautoescape %}
+
+<script>
+(function () {
+  function findFieldContainer(field) {
+    if (!field) {
+      return null;
+    }
+
+    return field.closest('.form-group, .form-row, .control-group, .row, .mb-3, .mb-4, tr, p, div') || field.parentElement;
+  }
+
+  function toggleBusinessBuyerFields() {
+    var buyerType = document.querySelector('[name="buyer_type"]');
+    var isBusiness = buyerType && buyerType.value === 'business';
+    var fieldNames = ['buyer_vat_number', 'buyer_business_name', 'buyer_business_address'];
+
+    fieldNames.forEach(function (fieldName) {
+      var field = document.querySelector('[name="' + fieldName + '"]');
+      var container = findFieldContainer(field);
+
+      if (!field || !container) {
+        return;
+      }
+
+      container.classList.add('buycourses-business-buyer-field');
+      container.style.display = isBusiness ? '' : 'none';
+      field.disabled = !isBusiness;
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    var buyerType = document.querySelector('[name="buyer_type"]');
+
+    if (!buyerType) {
+      return;
+    }
+
+    buyerType.classList.add('buycourses-toggle-business-buyer-fields');
+    buyerType.addEventListener('change', toggleBusinessBuyerFields);
+    toggleBusinessBuyerFields();
+  });
+})();
+</script>
+

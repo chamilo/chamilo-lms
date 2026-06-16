@@ -220,6 +220,17 @@
                 <p class="mt-2 text-sm text-gray-50">
                     {{ 'TryChangingSearchFilter'|get_plugin_lang('BuyCoursesPlugin') }}
                 </p>
+                {% if admin_empty_catalog_action_url is defined and admin_empty_catalog_action_url and admin_empty_catalog_action_label is defined and admin_empty_catalog_action_label %}
+                    <div class="mt-6">
+                        <a
+                            href="{{ admin_empty_catalog_action_url }}"
+                            class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2"
+                        >
+                            <em class="fa fa-plus fa-fw"></em>
+                            {{ admin_empty_catalog_action_label }}
+                        </a>
+                    </div>
+                {% endif %}
             </div>
             {% endif %}
             {% endif %}
@@ -307,6 +318,17 @@
                 <p class="mt-2 text-sm text-gray-50">
                     {{ 'TryChangingSearchFilter'|get_plugin_lang('BuyCoursesPlugin') }}
                 </p>
+                {% if admin_empty_catalog_action_url is defined and admin_empty_catalog_action_url and admin_empty_catalog_action_label is defined and admin_empty_catalog_action_label %}
+                    <div class="mt-6">
+                        <a
+                            href="{{ admin_empty_catalog_action_url }}"
+                            class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2"
+                        >
+                            <em class="fa fa-plus fa-fw"></em>
+                            {{ admin_empty_catalog_action_label }}
+                        </a>
+                    </div>
+                {% endif %}
             </div>
             {% endif %}
             {% endif %}

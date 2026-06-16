@@ -109,6 +109,17 @@ class BuyCoursesPlugin extends Plugin
     public const EXTRA_FIELD_HOSTING_LIMIT = 'buycourses_hosting_limit';
     public const EXTRA_FIELD_DOCUMENT_QUOTA = 'buycourses_document_quota';
 
+    public const AI_COURSE_FEATURE_LEARNING_PATH_GENERATOR = 'learning_path_generator';
+    public const AI_COURSE_FEATURE_EXERCISE_GENERATOR = 'exercise_generator';
+    public const AI_COURSE_FEATURE_OPEN_ANSWERS_GRADER = 'open_answers_grader';
+    public const AI_COURSE_FEATURE_TUTOR_CHATBOT = 'tutor_chatbot';
+    public const AI_COURSE_FEATURE_TASK_GRADER = 'task_grader';
+    public const AI_COURSE_FEATURE_CONTENT_ANALYSER = 'content_analyser';
+    public const AI_COURSE_FEATURE_IMAGE_GENERATOR = 'image_generator';
+    public const AI_COURSE_FEATURE_GLOSSARY_TERMS_GENERATOR = 'glossary_terms_generator';
+    public const AI_COURSE_FEATURE_COURSE_ANALYSER = 'course_analyser';
+    public const AI_COURSE_FEATURE_VIDEO_GENERATOR = 'video_generator';
+
     /**
      * @var bool
      */
@@ -154,6 +165,227 @@ class BuyCoursesPlugin extends Plugin
         static $result = null;
 
         return $result ? $result : $result = new self();
+    }
+
+
+    private function getCurrentLanguageTwoLetterIsoCode(): string
+    {
+        $language = '';
+        $userInfo = api_get_user_info();
+
+        if (!empty($userInfo['language'])) {
+            $language = (string) $userInfo['language'];
+        }
+
+        if ('' === $language && function_exists('api_get_language_isocode')) {
+            $language = (string) api_get_language_isocode();
+        }
+
+        if ('' === $language) {
+            $language = (string) api_get_setting('platformLanguage');
+        }
+
+        $languageId = api_get_language_id($language);
+        if (!empty($languageId)) {
+            $languageInfo = api_get_language_info($languageId);
+            if (!empty($languageInfo['isocode'])) {
+                $language = (string) $languageInfo['isocode'];
+            }
+        }
+
+        $language = strtolower(str_replace('_', '-', trim($language)));
+        if (preg_match('/^[a-z]{2}/', $language, $matches)) {
+            return $matches[0];
+        }
+
+        return 'en';
+    }
+
+    public function filterServiceMultilingualHtml(string $html): string
+    {
+        if ('' === trim($html) || 'true' !== api_get_setting('editor.translate_html')) {
+            return $html;
+        }
+
+        if (!str_contains($html, 'mce-translatehtml')) {
+            return Security::remove_XSS($html);
+        }
+
+        if (!class_exists(\DOMDocument::class) || !class_exists(\DOMXPath::class)) {
+            return $this->filterServiceMultilingualHtmlWithRegex($html);
+        }
+
+        $document = new \DOMDocument('1.0', 'UTF-8');
+        $previousUseInternalErrors = libxml_use_internal_errors(true);
+        $loaded = $document->loadHTML(
+            '<?xml encoding="UTF-8"><div id="buycourses-translation-root">'.$html.'</div>',
+            LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
+        );
+        libxml_clear_errors();
+        libxml_use_internal_errors($previousUseInternalErrors);
+
+        if (false === $loaded) {
+            return $this->filterServiceMultilingualHtmlWithRegex($html);
+        }
+
+        $xpath = new \DOMXPath($document);
+        $nodes = $xpath->query('//*[@lang and contains(concat(" ", normalize-space(@class), " "), " mce-translatehtml ")]');
+
+        if (false === $nodes || 0 === $nodes->length) {
+            return Security::remove_XSS($html);
+        }
+
+        $targetLanguage = $this->getCurrentLanguageTwoLetterIsoCode();
+        $availableLanguages = [];
+
+        foreach ($nodes as $node) {
+            if (!$node instanceof \DOMElement) {
+                continue;
+            }
+
+            $nodeLanguage = $this->normalizeServiceTranslationLanguageCode($node->getAttribute('lang'));
+            if ('' !== $nodeLanguage) {
+                $availableLanguages[] = $nodeLanguage;
+            }
+        }
+
+        $availableLanguages = array_values(array_unique($availableLanguages));
+
+        if (!in_array($targetLanguage, $availableLanguages, true)) {
+            $targetLanguage = in_array('en', $availableLanguages, true)
+                ? 'en'
+                : (string) ($availableLanguages[0] ?? 'en');
+        }
+
+        for ($i = $nodes->length - 1; $i >= 0; $i--) {
+            $node = $nodes->item($i);
+
+            if (!$node instanceof \DOMElement || null === $node->parentNode) {
+                continue;
+            }
+
+            $nodeLanguage = $this->normalizeServiceTranslationLanguageCode($node->getAttribute('lang'));
+
+            if ($nodeLanguage !== $targetLanguage) {
+                $node->parentNode->removeChild($node);
+                continue;
+            }
+
+            while ($node->firstChild) {
+                $node->parentNode->insertBefore($node->firstChild, $node);
+            }
+
+            $node->parentNode->removeChild($node);
+        }
+
+        $this->removeEmptyServiceTranslationNodes($xpath);
+
+        $root = $xpath->query('//*[@id="buycourses-translation-root"]')->item(0);
+        if (!$root instanceof \DOMElement) {
+            return $this->filterServiceMultilingualHtmlWithRegex($html);
+        }
+
+        $filteredHtml = '';
+        foreach ($root->childNodes as $childNode) {
+            $filteredHtml .= $document->saveHTML($childNode);
+        }
+
+        return Security::remove_XSS($filteredHtml);
+    }
+
+    private function normalizeServiceTranslationLanguageCode(string $language): string
+    {
+        $language = strtolower(str_replace('_', '-', trim($language)));
+
+        if (preg_match('/^[a-z]{2}/', $language, $matches)) {
+            return $matches[0];
+        }
+
+        return '';
+    }
+
+    private function removeEmptyServiceTranslationNodes(\DOMXPath $xpath): void
+    {
+        $emptyNodes = $xpath->query(
+            '//*[self::p or self::div][not(@id="buycourses-translation-root") and not(.//img) and not(.//video) and not(.//audio) and not(.//iframe) and not(.//table) and not(.//ul) and not(.//ol) and normalize-space(.) = ""]'
+        );
+
+        if (false === $emptyNodes) {
+            return;
+        }
+
+        for ($i = $emptyNodes->length - 1; $i >= 0; $i--) {
+            $node = $emptyNodes->item($i);
+            if (null !== $node?->parentNode) {
+                $node->parentNode->removeChild($node);
+            }
+        }
+    }
+
+    private function filterServiceMultilingualHtmlWithRegex(string $html): string
+    {
+        $pattern = '/<(?P<tag>div|section|article|p|span)\b(?=[^>]*\blang\s*=\s*(["\'])([a-z]{2})(?:[-_][a-z]{2})?\2)(?=[^>]*\bclass\s*=\s*(["\'])[^"\']*\bmce-translatehtml\b[^"\']*\4)[^>]*>(?P<content>.*?)<\/\k<tag>>/is';
+
+        if (!preg_match_all($pattern, $html, $matches, PREG_SET_ORDER)) {
+            return Security::remove_XSS($html);
+        }
+
+        $targetLanguage = $this->getCurrentLanguageTwoLetterIsoCode();
+        $availableLanguages = [];
+
+        foreach ($matches as $match) {
+            $availableLanguages[] = strtolower((string) $match[3]);
+        }
+
+        if (!in_array($targetLanguage, $availableLanguages, true)) {
+            $targetLanguage = in_array('en', $availableLanguages, true)
+                ? 'en'
+                : (string) ($availableLanguages[0] ?? 'en');
+        }
+
+        $filteredHtml = preg_replace_callback(
+            $pattern,
+            static function (array $match) use ($targetLanguage): string {
+                $nodeLanguage = strtolower((string) $match[3]);
+
+                if ($nodeLanguage !== $targetLanguage) {
+                    return '';
+                }
+
+                return (string) $match['content'];
+            },
+            $html
+        );
+
+        if (null === $filteredHtml) {
+            return Security::remove_XSS($html);
+        }
+
+        $filteredHtml = preg_replace(
+            '/<(p|div|li|h[1-6])\b[^>]*>\s*(?:&nbsp;|\xC2\xA0|\s)*<\/\1>/iu',
+            '',
+            $filteredHtml
+        );
+
+        if (null === $filteredHtml) {
+            return Security::remove_XSS($html);
+        }
+
+        return Security::remove_XSS($filteredHtml);
+    }
+
+    public function filterServiceMultilingualPlainText(string $html): string
+    {
+        $filteredHtml = $this->filterServiceMultilingualHtml($html);
+        $text = trim(strip_tags($filteredHtml));
+
+        if (function_exists('api_html_entity_decode')) {
+            $text = api_html_entity_decode($text);
+        } else {
+            $text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        }
+
+        return trim((string) preg_replace('/\s+/u', ' ', $text));
     }
 
     /**
@@ -446,6 +678,7 @@ class BuyCoursesPlugin extends Plugin
             'subscription_behavior_json' => 'LONGTEXT DEFAULT NULL',
             'stripe_price_id' => 'VARCHAR(255) DEFAULT NULL',
             'display_on_course_creation_page' => 'TINYINT(1) NOT NULL DEFAULT 0',
+            'ai_course_features_json' => 'LONGTEXT DEFAULT NULL',
         ];
 
         foreach ($recurringServiceColumns as $field => $definition) {
@@ -502,6 +735,25 @@ class BuyCoursesPlugin extends Plugin
                 $res = Database::query("ALTER TABLE $serviceSaleTable ADD $field $definition");
                 if (!$res) {
                     echo Display::return_message($this->get_lang('ErrorUpdateFieldDB'), 'warning');
+                }
+            }
+        }
+
+        // Course/session and subscription sales share the same per-country VAT evidence
+        // columns as service sales, so they can apply and record the destination VAT rate.
+        $vatEvidenceTables = [
+            Database::get_main_table(self::TABLE_SALE),
+            Database::get_main_table(self::TABLE_SUBSCRIPTION_SALE),
+        ];
+
+        foreach ($vatEvidenceTables as $vatEvidenceTable) {
+            foreach ($serviceSaleVatColumns as $field => $definition) {
+                $res = Database::query("SHOW COLUMNS FROM $vatEvidenceTable WHERE Field = '$field'");
+                if (0 === Database::num_rows($res)) {
+                    $res = Database::query("ALTER TABLE $vatEvidenceTable ADD $field $definition");
+                    if (!$res) {
+                        echo Display::return_message($this->get_lang('ErrorUpdateFieldDB'), 'warning');
+                    }
                 }
             }
         }
@@ -925,6 +1177,146 @@ class BuyCoursesPlugin extends Plugin
         ];
     }
 
+    public function getAiCourseFeatureDefinitions(): array
+    {
+        return [
+            self::AI_COURSE_FEATURE_LEARNING_PATH_GENERATOR => [
+                'variable' => self::AI_COURSE_FEATURE_LEARNING_PATH_GENERATOR,
+                'title' => $this->get_lang('AiCourseFeatureLearningPathGeneratorTitle'),
+                'description' => $this->get_lang('AiCourseFeatureLearningPathGeneratorDescription'),
+            ],
+            self::AI_COURSE_FEATURE_EXERCISE_GENERATOR => [
+                'variable' => self::AI_COURSE_FEATURE_EXERCISE_GENERATOR,
+                'title' => $this->get_lang('AiCourseFeatureExerciseGeneratorTitle'),
+                'description' => $this->get_lang('AiCourseFeatureExerciseGeneratorDescription'),
+            ],
+            self::AI_COURSE_FEATURE_OPEN_ANSWERS_GRADER => [
+                'variable' => self::AI_COURSE_FEATURE_OPEN_ANSWERS_GRADER,
+                'title' => $this->get_lang('AiCourseFeatureOpenAnswersGraderTitle'),
+                'description' => $this->get_lang('AiCourseFeatureOpenAnswersGraderDescription'),
+            ],
+            self::AI_COURSE_FEATURE_TUTOR_CHATBOT => [
+                'variable' => self::AI_COURSE_FEATURE_TUTOR_CHATBOT,
+                'title' => $this->get_lang('AiCourseFeatureTutorChatbotTitle'),
+                'description' => $this->get_lang('AiCourseFeatureTutorChatbotDescription'),
+            ],
+            self::AI_COURSE_FEATURE_TASK_GRADER => [
+                'variable' => self::AI_COURSE_FEATURE_TASK_GRADER,
+                'title' => $this->get_lang('AiCourseFeatureTaskGraderTitle'),
+                'description' => $this->get_lang('AiCourseFeatureTaskGraderDescription'),
+            ],
+            self::AI_COURSE_FEATURE_CONTENT_ANALYSER => [
+                'variable' => self::AI_COURSE_FEATURE_CONTENT_ANALYSER,
+                'title' => $this->get_lang('AiCourseFeatureContentAnalyserTitle'),
+                'description' => $this->get_lang('AiCourseFeatureContentAnalyserDescription'),
+            ],
+            self::AI_COURSE_FEATURE_IMAGE_GENERATOR => [
+                'variable' => self::AI_COURSE_FEATURE_IMAGE_GENERATOR,
+                'title' => $this->get_lang('AiCourseFeatureImageGeneratorTitle'),
+                'description' => $this->get_lang('AiCourseFeatureImageGeneratorDescription'),
+            ],
+            self::AI_COURSE_FEATURE_GLOSSARY_TERMS_GENERATOR => [
+                'variable' => self::AI_COURSE_FEATURE_GLOSSARY_TERMS_GENERATOR,
+                'title' => $this->get_lang('AiCourseFeatureGlossaryTermsGeneratorTitle'),
+                'description' => $this->get_lang('AiCourseFeatureGlossaryTermsGeneratorDescription'),
+            ],
+            self::AI_COURSE_FEATURE_COURSE_ANALYSER => [
+                'variable' => self::AI_COURSE_FEATURE_COURSE_ANALYSER,
+                'title' => $this->get_lang('AiCourseFeatureCourseAnalyserTitle'),
+                'description' => $this->get_lang('AiCourseFeatureCourseAnalyserDescription'),
+            ],
+            self::AI_COURSE_FEATURE_VIDEO_GENERATOR => [
+                'variable' => self::AI_COURSE_FEATURE_VIDEO_GENERATOR,
+                'title' => $this->get_lang('AiCourseFeatureVideoGeneratorTitle'),
+                'description' => $this->get_lang('AiCourseFeatureVideoGeneratorDescription'),
+                'expensive' => true,
+            ],
+        ];
+    }
+
+    public function getAiCourseFeatureFormField(string $feature): string
+    {
+        return 'ai_course_feature_'.$feature;
+    }
+
+    public function getAiCourseFeatureFormDefaults(array $service = []): array
+    {
+        $enabledFeatures = $this->normalizeAiCourseFeatures($service['ai_course_features_json'] ?? []);
+        $defaults = [];
+
+        foreach (array_keys($this->getAiCourseFeatureDefinitions()) as $feature) {
+            $defaults[$this->getAiCourseFeatureFormField($feature)] = in_array($feature, $enabledFeatures, true) ? 1 : 0;
+        }
+
+        return $defaults;
+    }
+
+    public function getAiCourseFeaturesFromServiceData(array $serviceData): array
+    {
+        $features = [];
+
+        foreach (array_keys($this->getAiCourseFeatureDefinitions()) as $feature) {
+            $formField = $this->getAiCourseFeatureFormField($feature);
+            if (!empty($serviceData[$formField])) {
+                $features[] = $feature;
+            }
+        }
+
+        return $this->normalizeAiCourseFeatures($features);
+    }
+
+    public function normalizeAiCourseFeatures(mixed $rawFeatures): array
+    {
+        if (is_string($rawFeatures)) {
+            $decoded = json_decode($rawFeatures, true);
+            $rawFeatures = is_array($decoded) ? $decoded : [];
+        }
+
+        if (!is_array($rawFeatures)) {
+            return [];
+        }
+
+        $allowed = array_keys($this->getAiCourseFeatureDefinitions());
+        $features = [];
+
+        foreach ($rawFeatures as $feature) {
+            $feature = (string) $feature;
+            if (in_array($feature, $allowed, true)) {
+                $features[] = $feature;
+            }
+        }
+
+        return array_values(array_unique($features));
+    }
+
+    public function buildAiCourseFeaturesJson(array $features): ?string
+    {
+        $features = $this->normalizeAiCourseFeatures($features);
+        if (empty($features)) {
+            return null;
+        }
+
+        return json_encode($features, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    }
+
+    public function getAiCourseFeatureSummary(array|string|null $rawFeatures): string
+    {
+        $features = $this->normalizeAiCourseFeatures($rawFeatures ?? []);
+        if (empty($features)) {
+            return '';
+        }
+
+        $definitions = $this->getAiCourseFeatureDefinitions();
+        $labels = [];
+        foreach ($features as $feature) {
+            if (isset($definitions[$feature])) {
+                $labels[] = $definitions[$feature]['title'];
+            }
+        }
+
+        return implode(', ', $labels);
+    }
+
     public function getAvailableBenefitExtraFields(): array
     {
         $fields = [];
@@ -992,12 +1384,19 @@ class BuyCoursesPlugin extends Plugin
             $defaults[$definition['form_field']] = 0;
         }
 
+        $defaults = array_merge($defaults, $this->getAiCourseFeatureFormDefaults());
+
         if ($serviceId <= 0) {
             return $defaults;
         }
 
         foreach ($this->getServiceBenefitConfigurations($serviceId) as $configuration) {
             $defaults[$configuration['form_field']] = (int) ($configuration['granted_value'] ?? 0);
+        }
+
+        $service = $this->getService($serviceId);
+        if (!empty($service) && is_array($service)) {
+            $defaults = array_replace($defaults, $this->getAiCourseFeatureFormDefaults($service));
         }
 
         return $defaults;
@@ -2493,7 +2892,7 @@ class BuyCoursesPlugin extends Plugin
      * @param int $paymentType The payment type
      * @param int $couponId    The coupon ID
      */
-    public function registerSale(int $itemId, int $paymentType, ?int $couponId = null): ?int
+    public function registerSale(int $itemId, int $paymentType, ?int $couponId = null, array $vatBuyerData = []): ?int
     {
         if (!in_array(
             $paymentType,
@@ -2553,30 +2952,18 @@ class BuyCoursesPlugin extends Plugin
             $priceWithoutDiscount = $item['price'];
         }
         $item['price'] -= $couponDiscount;
-        $price = $item['price'];
-        $priceWithoutTax = null;
-        $taxPerc = null;
-        $taxAmount = 0;
-        $taxEnable = 'true' === $this->get('tax_enable');
         $globalParameters = $this->getGlobalParameters();
-        $taxAppliesTo = $globalParameters['tax_applies_to'];
 
-        if ($taxEnable
-            && (
-                self::TAX_APPLIES_TO_ALL == $taxAppliesTo
-                || (self::TAX_APPLIES_TO_ONLY_COURSE == $taxAppliesTo && self::PRODUCT_TYPE_COURSE == $item['product_type'])
-                || (self::TAX_APPLIES_TO_ONLY_SESSION == $taxAppliesTo && self::PRODUCT_TYPE_SESSION == $item['product_type'])
-            )
-        ) {
-            $priceWithoutTax = $item['price'];
-            $globalTaxPerc = $globalParameters['global_tax_perc'];
-            $precision = 2;
-            $taxPerc = null === $item['tax_perc'] ? $globalTaxPerc : $item['tax_perc'];
-            $taxAmount = round($priceWithoutTax * $taxPerc / 100, $precision);
-            $price = $priceWithoutTax + $taxAmount;
-        }
+        $normalizedVatBuyerData = $this->normalizeVatBuyerData($vatBuyerData);
+        $vat = $this->resolveSaleVat(
+            (float) $item['price'],
+            null === $item['tax_perc'] ? null : (int) $item['tax_perc'],
+            $this->getTaxCategoryForProductType((int) $item['product_type']),
+            $normalizedVatBuyerData,
+            $globalParameters
+        );
 
-        $values = [
+        $values = array_merge([
             'reference' => $this->generateReference(
                 api_get_user_id(),
                 $item['product_type'],
@@ -2588,18 +2975,24 @@ class BuyCoursesPlugin extends Plugin
             'product_type' => $item['product_type'],
             'product_name' => $productName,
             'product_id' => $item['product_id'],
-            'price' => $price,
-            'price_without_tax' => $priceWithoutTax,
-            'tax_perc' => $taxPerc,
-            'tax_amount' => $taxAmount,
+            'price' => $vat['price'],
+            'price_without_tax' => $vat['price_without_tax'],
+            'tax_perc' => $vat['tax_perc'],
+            'tax_amount' => $vat['tax_amount'],
             'status' => self::SALE_STATUS_PENDING,
             'payment_type' => $paymentType,
             'price_without_discount' => $priceWithoutDiscount,
             'discount_amount' => $couponDiscount,
             'invoice' => 0,
-        ];
+        ], $this->buildSaleVatColumns($normalizedVatBuyerData, $vat));
 
-        return Database::insert(self::TABLE_SALE, $values);
+        $saleId = Database::insert(self::TABLE_SALE, $values);
+
+        if ($saleId) {
+            $this->saveVatBuyerDataInUserExtraFields(api_get_user_id(), $normalizedVatBuyerData);
+        }
+
+        return $saleId;
     }
 
     /**
@@ -3869,6 +4262,7 @@ class BuyCoursesPlugin extends Plugin
                 'subscription_behavior_json' => $service['subscription_behavior_json'],
                 'stripe_price_id' => $service['stripe_price_id'],
                 'display_on_course_creation_page' => $service['display_on_course_creation_page'],
+                'ai_course_features_json' => $service['ai_course_features_json'],
                 'applies_to' => $service['applies_to'],
                 'owner_id' => $service['owner_id'],
                 'visibility' => $service['visibility'],
@@ -3972,6 +4366,7 @@ class BuyCoursesPlugin extends Plugin
                 'subscription_behavior_json' => (string) ($service['subscription_behavior_json'] ?? ''),
                 'stripe_price_id' => (string) ($service['stripe_price_id'] ?? ''),
                 'display_on_course_creation_page' => !empty($service['display_on_course_creation_page']) ? 1 : 0,
+                'ai_course_features_json' => (string) ($service['ai_course_features_json'] ?? ''),
                 'applies_to' => isset($service['applies_to']) ? (int) $service['applies_to'] : self::SERVICE_TYPE_NONE,
                 'owner_id' => isset($service['owner_id']) ? (int) $service['owner_id'] : api_get_user_id(),
                 'visibility' => !empty($service['visibility']) ? 1 : 0,
@@ -4111,6 +4506,7 @@ class BuyCoursesPlugin extends Plugin
                 'subscription_behavior_json' => $service['subscription_behavior_json'],
                 'stripe_price_id' => $service['stripe_price_id'],
                 'display_on_course_creation_page' => $service['display_on_course_creation_page'],
+                'ai_course_features_json' => $service['ai_course_features_json'],
                 'applies_to' => $service['applies_to'],
                 'owner_id' => $service['owner_id'],
                 'visibility' => $service['visibility'],
@@ -4149,6 +4545,9 @@ class BuyCoursesPlugin extends Plugin
             'display_on_course_creation_page' => array_key_exists('display_on_course_creation_page', $service)
                 ? (!empty($service['display_on_course_creation_page']) ? 1 : 0)
                 : (int) ($existingService['display_on_course_creation_page'] ?? 0),
+            'ai_course_features_json' => $this->buildAiCourseFeaturesJson(
+                $this->getAiCourseFeaturesFromServiceData($service)
+            ),
             'applies_to' => $appliesTo,
             'owner_id' => isset($service['owner_id']) ? (int) $service['owner_id'] : api_get_user_id(),
             'visibility' => $visibility,
@@ -4168,6 +4567,8 @@ class BuyCoursesPlugin extends Plugin
             foreach ($this->getBenefitExtraFieldDefinitions() as $definition) {
                 $payload[$definition['form_field']] = 0;
             }
+
+            $payload['ai_course_features_json'] = null;
         }
 
         return $payload;
@@ -4896,7 +5297,8 @@ class BuyCoursesPlugin extends Plugin
         int $min = 0,
         int $max = 0,
         $appliesTo = '',
-        string $typeResult = 'all'
+        string $typeResult = 'all',
+        ?string $billingCycle = null
     ) {
         $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
@@ -4921,6 +5323,13 @@ class BuyCoursesPlugin extends Plugin
             $whereConditions['AND s.applies_to = ?'] = $appliesTo;
         }
 
+        if ('monthly' === $billingCycle) {
+            $whereConditions['AND s.duration_days > ?'] = 0;
+            $whereConditions['AND s.duration_days <= ?'] = 31;
+        } elseif ('yearly' === $billingCycle) {
+            $whereConditions['AND s.duration_days >= ?'] = 365;
+        }
+
         $innerJoins = "INNER JOIN $userTable u ON s.owner_id = u.id";
         $return = Database::select(
             's.*',
@@ -4939,6 +5348,22 @@ class BuyCoursesPlugin extends Plugin
         }
 
         return $services;
+    }
+
+    public function canCurrentUserBuyUserServices(): bool
+    {
+        return api_is_platform_admin() || api_is_teacher();
+    }
+
+    public function canCurrentUserBuyService(array $service): bool
+    {
+        $appliesTo = (int) ($service['applies_to'] ?? 0);
+
+        if (self::SERVICE_TYPE_USER === $appliesTo) {
+            return $this->canCurrentUserBuyUserServices();
+        }
+
+        return true;
     }
 
     public function hasBlockingUserServiceSaleForCurrentBuyer(int $serviceId): bool
@@ -5848,6 +6273,118 @@ class BuyCoursesPlugin extends Plugin
      *
      * @throws \Doctrine\DBAL\Exception
      */
+    /**
+     * Resolve the tax/VAT to apply to a sale.
+     *
+     * When the buyer declares a country and postcode, the per-country EU VAT rules
+     * (destination VAT, B2B reverse charge, exports, OSS) computed by determineVatTreatment()
+     * are applied. Otherwise it falls back to the flat global/product rate, gated by the
+     * plugin tax settings for the given tax category.
+     *
+     * $normalizedBuyer is passed by reference because the VIES lookup enriches it with the
+     * validation result and any business name/address returned by VIES.
+     *
+     * @param float      $netPrice        Price after discount, before tax
+     * @param int|null   $productTaxPerc  Product-level tax rate (null means "use global")
+     * @param int        $taxCategory     One of the TAX_APPLIES_TO_* constants for this product
+     * @param array      $normalizedBuyer Buyer data already passed through normalizeVatBuyerData()
+     * @param array      $globalParameters Plugin global parameters (seller/tax configuration)
+     *
+     * @return array{price: float, price_without_tax: float|null, tax_perc: float|null, tax_amount: float, vat_treatment: array, vat_evidence: array, buyer_ip: string, buyer_ip_country: string}
+     */
+    private function resolveSaleVat(
+        float $netPrice,
+        ?int $productTaxPerc,
+        int $taxCategory,
+        array &$normalizedBuyer,
+        array $globalParameters
+    ): array {
+        $precision = 2;
+        $taxEnable = 'true' === $this->get('tax_enable');
+        $taxAppliesTo = (int) $globalParameters['tax_applies_to'];
+
+        $price = $netPrice;
+        $priceWithoutTax = null;
+        $taxPerc = null;
+        $taxAmount = 0;
+
+        $hasVatBuyerDeclaration = '' !== $normalizedBuyer['buyer_country']
+            && '' !== $normalizedBuyer['buyer_postcode'];
+
+        $viesResult = $this->validateBuyerVatNumberWithVies($normalizedBuyer);
+        if (in_array($viesResult['status'], ['valid', 'invalid', 'unavailable'], true)) {
+            $normalizedBuyer['buyer_vat_valid'] = $viesResult['valid'];
+            $normalizedBuyer['vies_result'] = $viesResult;
+
+            if (true === $viesResult['valid']) {
+                if ('' !== trim((string) ($viesResult['business_name'] ?? ''))) {
+                    $normalizedBuyer['buyer_business_name'] = substr((string) $viesResult['business_name'], 0, 255);
+                }
+
+                if ('' !== trim((string) ($viesResult['business_address'] ?? ''))) {
+                    $normalizedBuyer['buyer_business_address'] = (string) $viesResult['business_address'];
+                }
+            }
+        }
+
+        $vatTreatment = $this->determineVatTreatment($normalizedBuyer, $globalParameters);
+
+        if ($hasVatBuyerDeclaration) {
+            $priceWithoutTax = $netPrice;
+            $taxPerc = !empty($vatTreatment['charge_vat']) && null !== $vatTreatment['vat_rate']
+                ? (float) $vatTreatment['vat_rate']
+                : 0.00;
+            $taxAmount = round($priceWithoutTax * $taxPerc / 100, $precision);
+            $price = $priceWithoutTax + $taxAmount;
+        } elseif ($taxEnable
+            && (self::TAX_APPLIES_TO_ALL == $taxAppliesTo || $taxCategory == $taxAppliesTo)
+        ) {
+            $priceWithoutTax = $netPrice;
+            $globalTaxPerc = $globalParameters['global_tax_perc'];
+            $taxPerc = null === $productTaxPerc ? $globalTaxPerc : $productTaxPerc;
+            $taxAmount = round($priceWithoutTax * $taxPerc / 100, $precision);
+            $price = $priceWithoutTax + $taxAmount;
+        }
+
+        $vatEvidence = $this->buildVatEvidenceSnapshot($normalizedBuyer, $vatTreatment);
+
+        return [
+            'price' => $price,
+            'price_without_tax' => $priceWithoutTax,
+            'tax_perc' => $taxPerc,
+            'tax_amount' => $taxAmount,
+            'vat_treatment' => $vatTreatment,
+            'vat_evidence' => $vatEvidence,
+            'buyer_ip' => (string) ($vatEvidence['buyer']['ip'] ?? ''),
+            'buyer_ip_country' => (string) ($vatEvidence['buyer']['ip_country'] ?? ''),
+        ];
+    }
+
+    /**
+     * Build the persisted VAT/buyer columns shared by all sale tables.
+     *
+     * @param array $normalizedBuyer Buyer data enriched by resolveSaleVat()
+     * @param array $vat             Result array returned by resolveSaleVat()
+     */
+    private function buildSaleVatColumns(array $normalizedBuyer, array $vat): array
+    {
+        return [
+            'buyer_country' => $normalizedBuyer['buyer_country'] ?: null,
+            'buyer_postcode' => $normalizedBuyer['buyer_postcode'] ?: null,
+            'buyer_ip' => '' !== $vat['buyer_ip'] ? $vat['buyer_ip'] : null,
+            'buyer_ip_country' => '' !== $vat['buyer_ip_country'] ? $vat['buyer_ip_country'] : null,
+            'buyer_vat_number' => $normalizedBuyer['buyer_vat_number'] ?: null,
+            'buyer_vat_valid' => null === $normalizedBuyer['buyer_vat_valid']
+                ? null
+                : (int) (bool) $normalizedBuyer['buyer_vat_valid'],
+            'buyer_business_name' => $normalizedBuyer['buyer_business_name'] ?: null,
+            'buyer_business_address' => $normalizedBuyer['buyer_business_address'] ?: null,
+            'vat_treatment' => $vat['vat_treatment']['treatment'] ?? 'pending_vat_calculation',
+            'vat_rate' => $vat['vat_treatment']['vat_rate'] ?? null,
+            'vat_evidence_json' => json_encode($vat['vat_evidence'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+        ];
+    }
+
     public function registerServiceSale(int $serviceId, int $paymentType, int $infoSelect, ?int $couponId = null, array $vatBuyerData = []): int|bool
     {
         if (!in_array(
@@ -5889,59 +6426,18 @@ class BuyCoursesPlugin extends Plugin
         }
         $service['price'] -= $couponDiscount;
         $currency = $this->getSelectedCurrency();
-        $price = $service['price'];
-        $priceWithoutTax = null;
-        $taxPerc = null;
-        $taxEnable = 'true' === $this->get('tax_enable');
         $globalParameters = $this->getGlobalParameters();
-        $taxAppliesTo = $globalParameters['tax_applies_to'];
-        $taxAmount = 0;
-        $precision = 2;
 
         $normalizedVatBuyerData = $this->normalizeVatBuyerData($vatBuyerData);
-        $hasVatBuyerDeclaration = '' !== $normalizedVatBuyerData['buyer_country']
-            && '' !== $normalizedVatBuyerData['buyer_postcode'];
+        $vat = $this->resolveSaleVat(
+            (float) $service['price'],
+            null === $service['tax_perc'] ? null : (int) $service['tax_perc'],
+            self::TAX_APPLIES_TO_ONLY_SERVICES,
+            $normalizedVatBuyerData,
+            $globalParameters
+        );
 
-        $viesResult = $this->validateBuyerVatNumberWithVies($normalizedVatBuyerData);
-        if (in_array($viesResult['status'], ['valid', 'invalid', 'unavailable'], true)) {
-            $normalizedVatBuyerData['buyer_vat_valid'] = $viesResult['valid'];
-            $normalizedVatBuyerData['vies_result'] = $viesResult;
-
-            if (true === $viesResult['valid']) {
-                if ('' !== trim((string) ($viesResult['business_name'] ?? ''))) {
-                    $normalizedVatBuyerData['buyer_business_name'] = substr((string) $viesResult['business_name'], 0, 255);
-                }
-
-                if ('' !== trim((string) ($viesResult['business_address'] ?? ''))) {
-                    $normalizedVatBuyerData['buyer_business_address'] = (string) $viesResult['business_address'];
-                }
-            }
-        }
-
-        $vatTreatment = $this->determineVatTreatment($normalizedVatBuyerData, $globalParameters);
-
-        if ($hasVatBuyerDeclaration) {
-            $priceWithoutTax = $service['price'];
-            $taxPerc = !empty($vatTreatment['charge_vat']) && null !== $vatTreatment['vat_rate']
-                ? (float) $vatTreatment['vat_rate']
-                : 0.00;
-            $taxAmount = round($priceWithoutTax * $taxPerc / 100, $precision);
-            $price = $priceWithoutTax + $taxAmount;
-        } elseif ($taxEnable
-            && (self::TAX_APPLIES_TO_ALL == $taxAppliesTo || self::TAX_APPLIES_TO_ONLY_SERVICES == $taxAppliesTo)
-        ) {
-            $priceWithoutTax = $service['price'];
-            $globalTaxPerc = $globalParameters['global_tax_perc'];
-            $taxPerc = null === $service['tax_perc'] ? $globalTaxPerc : $service['tax_perc'];
-            $taxAmount = round($priceWithoutTax * $taxPerc / 100, $precision);
-            $price = $priceWithoutTax + $taxAmount;
-        }
-
-        $vatEvidence = $this->buildVatEvidenceSnapshot($normalizedVatBuyerData, $vatTreatment);
-        $buyerIp = (string) ($vatEvidence['buyer']['ip'] ?? '');
-        $buyerIpCountry = (string) ($vatEvidence['buyer']['ip_country'] ?? '');
-
-        $values = [
+        $values = array_merge([
             'service_id' => $serviceId,
             'reference' => $this->generateReference(
                 $userId,
@@ -5949,10 +6445,10 @@ class BuyCoursesPlugin extends Plugin
                 $infoSelect
             ),
             'currency_id' => $currency['id'],
-            'price' => $price,
-            'price_without_tax' => $priceWithoutTax,
-            'tax_perc' => $taxPerc,
-            'tax_amount' => $taxAmount,
+            'price' => $vat['price'],
+            'price_without_tax' => $vat['price_without_tax'],
+            'tax_perc' => $vat['tax_perc'],
+            'tax_amount' => $vat['tax_amount'],
             'node_type' => $nodeType,
             'node_id' => $nodeId,
             'buyer_id' => $userId,
@@ -5969,21 +6465,8 @@ class BuyCoursesPlugin extends Plugin
             'payment_type' => $paymentType,
             'price_without_discount' => $priceWithoutDiscount,
             'discount_amount' => $couponDiscount,
-            'buyer_country' => $normalizedVatBuyerData['buyer_country'] ?: null,
-            'buyer_postcode' => $normalizedVatBuyerData['buyer_postcode'] ?: null,
-            'buyer_ip' => '' !== $buyerIp ? $buyerIp : null,
-            'buyer_ip_country' => '' !== $buyerIpCountry ? $buyerIpCountry : null,
-            'buyer_vat_number' => $normalizedVatBuyerData['buyer_vat_number'] ?: null,
-            'buyer_vat_valid' => null === $normalizedVatBuyerData['buyer_vat_valid']
-                ? null
-                : (int) (bool) $normalizedVatBuyerData['buyer_vat_valid'],
-            'buyer_business_name' => $normalizedVatBuyerData['buyer_business_name'] ?: null,
-            'buyer_business_address' => $normalizedVatBuyerData['buyer_business_address'] ?: null,
-            'vat_treatment' => $vatTreatment['treatment'] ?? 'pending_vat_calculation',
-            'vat_rate' => $vatTreatment['vat_rate'] ?? null,
-            'vat_evidence_json' => json_encode($vatEvidence, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
             'invoice' => 0,
-        ];
+        ], $this->buildSaleVatColumns($normalizedVatBuyerData, $vat));
 
         $serviceSaleId = Database::insert(self::TABLE_SERVICES_SALE, $values);
 
@@ -6620,7 +7103,8 @@ class BuyCoursesPlugin extends Plugin
         int $productType,
         int $paymentType,
         int $duration,
-        ?int $couponId = null
+        ?int $couponId = null,
+        array $vatBuyerData = []
     ) {
         if (!in_array(
             $paymentType,
@@ -6680,32 +7164,20 @@ class BuyCoursesPlugin extends Plugin
             $priceWithoutDiscount = $item['price'];
         }
         $item['price'] -= $couponDiscount;
-        $price = $item['price'];
-        $priceWithoutTax = null;
-        $taxPerc = null;
-        $taxAmount = 0;
-        $taxEnable = 'true' === $this->get('tax_enable');
         $globalParameters = $this->getGlobalParameters();
-        $taxAppliesTo = $globalParameters['tax_applies_to'];
 
-        if ($taxEnable
-            && (
-                self::TAX_APPLIES_TO_ALL == $taxAppliesTo
-                || (self::TAX_APPLIES_TO_ONLY_COURSE == $taxAppliesTo && self::PRODUCT_TYPE_COURSE == $item['product_type'])
-                || (self::TAX_APPLIES_TO_ONLY_SESSION == $taxAppliesTo && self::PRODUCT_TYPE_SESSION == $item['product_type'])
-            )
-        ) {
-            $priceWithoutTax = $item['price'];
-            $globalTaxPerc = $globalParameters['global_tax_perc'];
-            $precision = 2;
-            $taxPerc = null === $item['tax_perc'] ? $globalTaxPerc : $item['tax_perc'];
-            $taxAmount = round($priceWithoutTax * $taxPerc / 100, $precision);
-            $price = $priceWithoutTax + $taxAmount;
-        }
+        $normalizedVatBuyerData = $this->normalizeVatBuyerData($vatBuyerData);
+        $vat = $this->resolveSaleVat(
+            (float) $item['price'],
+            null === $item['tax_perc'] ? null : (int) $item['tax_perc'],
+            $this->getTaxCategoryForProductType((int) $item['product_type']),
+            $normalizedVatBuyerData,
+            $globalParameters
+        );
 
         $subscriptionEnd = date('Y-m-d H:i:s', strtotime('+'.$duration.' days'));
 
-        $values = [
+        $values = array_merge([
             'reference' => $this->generateReference(
                 api_get_user_id(),
                 $item['product_type'],
@@ -6717,10 +7189,10 @@ class BuyCoursesPlugin extends Plugin
             'product_type' => $item['product_type'],
             'product_name' => $productName,
             'product_id' => $item['product_id'],
-            'price' => $price,
-            'price_without_tax' => $priceWithoutTax,
-            'tax_perc' => $taxPerc,
-            'tax_amount' => $taxAmount,
+            'price' => $vat['price'],
+            'price_without_tax' => $vat['price_without_tax'],
+            'tax_perc' => $vat['tax_perc'],
+            'tax_amount' => $vat['tax_amount'],
             'status' => self::SALE_STATUS_PENDING,
             'payment_type' => $paymentType,
             'price_without_discount' => $priceWithoutDiscount,
@@ -6728,9 +7200,15 @@ class BuyCoursesPlugin extends Plugin
             'invoice' => 0,
             'subscription_end' => $subscriptionEnd,
             'expired' => 0,
-        ];
+        ], $this->buildSaleVatColumns($normalizedVatBuyerData, $vat));
 
-        return Database::insert(self::TABLE_SUBSCRIPTION_SALE, $values);
+        $subscriptionSaleId = Database::insert(self::TABLE_SUBSCRIPTION_SALE, $values);
+
+        if ($subscriptionSaleId) {
+            $this->saveVatBuyerDataInUserExtraFields(api_get_user_id(), $normalizedVatBuyerData);
+        }
+
+        return $subscriptionSaleId;
     }
 
     /**
@@ -7971,7 +8449,7 @@ class BuyCoursesPlugin extends Plugin
     private function filterSubscriptionCourseList(
         int $start,
         int $end,
-        string $name = '',
+        ?string $name = null,
         string $typeResult = 'all'
     ): array|int {
         $subscriptionTable = Database::get_main_table(self::TABLE_SUBSCRIPTION);
@@ -9240,6 +9718,8 @@ class BuyCoursesPlugin extends Plugin
                 'maxCourses' => $benefits['maxCourses'],
                 'hostingLimit' => $benefits['hostingLimit'],
                 'documentQuotaMb' => $benefits['documentQuotaMb'],
+                'aiFeatures' => $benefits['aiFeatures'],
+                'aiFeatureSummary' => $this->getAiCourseFeatureSummary($benefits['aiFeatures']),
                 'price' => $service['price_label'] ?? ($service['price_with_tax'] ?? ($service['price'] ?? null)),
                 'currency' => $service['iso_code'] ?? null,
                 'buyUrl' => api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_process.php?i='.$serviceId.'&t='.self::SERVICE_TYPE_USER,
@@ -9257,10 +9737,15 @@ class BuyCoursesPlugin extends Plugin
     {
         $configurations = $this->getServiceBenefitConfigurations($serviceId);
 
+        $service = $this->getService($serviceId);
+
         return [
             'maxCourses' => (int) ($configurations[self::EXTRA_FIELD_MAX_COURSES]['granted_value'] ?? 0),
             'hostingLimit' => (int) ($configurations[self::EXTRA_FIELD_HOSTING_LIMIT]['granted_value'] ?? 0),
             'documentQuotaMb' => (int) ($configurations[self::EXTRA_FIELD_DOCUMENT_QUOTA]['granted_value'] ?? 0),
+            'aiFeatures' => !empty($service) && is_array($service)
+                ? $this->normalizeAiCourseFeatures($service['ai_course_features_json'] ?? [])
+                : [],
         ];
     }
 
@@ -9349,6 +9834,7 @@ class BuyCoursesPlugin extends Plugin
         $sale['max_courses_with_benefits'] = max(0, (int) ($benefits['maxCourses'] ?? 0));
         $sale['hosting_limit'] = max(0, (int) ($benefits['hostingLimit'] ?? 0));
         $sale['document_quota_mb'] = max(0, (int) ($benefits['documentQuotaMb'] ?? 0));
+        $sale['ai_features'] = $this->normalizeAiCourseFeatures($benefits['aiFeatures'] ?? []);
 
         if ($maxCourses > 0 && $usedCourses >= $maxCourses) {
             return [
@@ -9432,6 +9918,48 @@ class BuyCoursesPlugin extends Plugin
         $row = Database::fetch_array($result, 'ASSOC');
 
         return (int) ($row['total'] ?? 0);
+    }
+
+    public function applyAiCourseFeatureSettingsToCourse(int $courseId, array $enabledFeatures): void
+    {
+        $courseId = (int) $courseId;
+        if ($courseId <= 0) {
+            return;
+        }
+
+        $enabledFeatures = $this->normalizeAiCourseFeatures($enabledFeatures);
+        $table = Database::get_course_table(TABLE_COURSE_SETTING);
+
+        foreach (array_keys($this->getAiCourseFeatureDefinitions()) as $feature) {
+            $value = in_array($feature, $enabledFeatures, true) ? 'true' : 'false';
+            $featureEsc = Database::escape_string($feature);
+            $valueEsc = Database::escape_string($value);
+            $categoryEsc = Database::escape_string('ai_helpers');
+
+            $result = Database::query(
+                "SELECT id FROM $table WHERE c_id = $courseId AND variable = '$featureEsc' LIMIT 1"
+            );
+
+            if (false !== $result && Database::num_rows($result) > 0) {
+                Database::update(
+                    $table,
+                    [
+                        'value' => $value,
+                        'category' => 'ai_helpers',
+                    ],
+                    [
+                        'c_id = ? AND variable = ?' => [$courseId, $feature],
+                    ]
+                );
+
+                continue;
+            }
+
+            Database::query(
+                "INSERT INTO $table (c_id, title, variable, value, category) " .
+                "VALUES ($courseId, '', '$featureEsc', '$valueEsc', '$categoryEsc')"
+            );
+        }
     }
 
     /**
@@ -9817,6 +10345,7 @@ class BuyCoursesPlugin extends Plugin
 
             $this->processExpiredCourseCreationForUser($userId);
             $this->processExpiredHostingLimitForUser($userId);
+            $this->processExpiredAiCourseFeaturesForUser($userId);
 
             $processedUsers++;
         }
@@ -9863,6 +10392,53 @@ class BuyCoursesPlugin extends Plugin
         foreach ($courseIds as $courseId) {
             $limit = $this->getEffectiveUsersPerCourseLimitForCourse($courseId);
             $this->freezeExcessEnrollmentsForCourse($courseId, $limit);
+        }
+    }
+
+    private function processExpiredAiCourseFeaturesForUser(int $userId): void
+    {
+        if ($userId <= 0 || !$this->hasSubscriptionCourseInfrastructure()) {
+            return;
+        }
+
+        $subscriptionCourseTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_COURSE);
+        $serviceSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
+        $now = Database::escape_string(api_get_utc_datetime());
+
+        $sql = "SELECT sc.id, sc.course_id
+            FROM $subscriptionCourseTable sc
+            INNER JOIN $serviceSaleTable ss ON ss.id = sc.service_sale_id
+            WHERE sc.user_id = $userId
+              AND sc.status = 'active'
+              AND ss.status = ".self::SERVICE_STATUS_COMPLETED."
+              AND ss.date_end IS NOT NULL
+              AND ss.date_end < '$now'";
+
+        $result = Database::query($sql);
+        if (false === $result) {
+            return;
+        }
+
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $subscriptionCourseId = (int) ($row['id'] ?? 0);
+            $courseId = (int) ($row['course_id'] ?? 0);
+
+            if ($courseId <= 0) {
+                continue;
+            }
+
+            $this->applyAiCourseFeatureSettingsToCourse($courseId, []);
+
+            if ($subscriptionCourseId > 0) {
+                Database::update(
+                    $subscriptionCourseTable,
+                    [
+                        'updated_at' => api_get_utc_datetime(),
+                        'last_action' => 'ai_expired',
+                    ],
+                    ['id = ?' => $subscriptionCourseId]
+                );
+            }
         }
     }
 

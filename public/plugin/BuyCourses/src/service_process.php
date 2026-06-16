@@ -51,6 +51,25 @@ if (isset($_REQUEST['c']) && '' !== trim((string) $_REQUEST['c'])) {
 }
 
 $serviceInfo = $plugin->getService($serviceId, $coupon);
+
+if (empty($serviceInfo) || empty($serviceInfo['id'])) {
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_catalog.php');
+    exit;
+}
+
+if (!$plugin->canCurrentUserBuyService($serviceInfo)) {
+    Display::addFlash(
+        Display::return_message(
+            $plugin->get_lang('ServicesOnlyForTeachers'),
+            'warning',
+            false
+        )
+    );
+
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_information.php?service_id='.$serviceId);
+    exit;
+}
+
 $userInfo = api_get_user_info($currentUserId);
 
 $form = new FormValidator('confirm_sale');

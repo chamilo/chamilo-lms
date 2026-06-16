@@ -12,6 +12,7 @@ $serviceId = isset($_GET['service_id']) ? (int) $_GET['service_id'] : 0;
 $saleId = isset($_GET['sale_id']) ? (int) $_GET['sale_id'] : 0;
 $plugin = BuyCoursesPlugin::create();
 $includeServices = 'true' === $plugin->get('include_services');
+
 $currentUserId = api_get_user_id();
 
 $renderPageMessage = static function (string $title, string $message, int $statusCode = 200): void {
@@ -72,9 +73,9 @@ if ($saleId > 0) {
 
 $serviceDetailsHtml = '';
 if (!empty($service['service_information'])) {
-    $serviceDetailsHtml = (string) $service['service_information'];
+    $serviceDetailsHtml = $plugin->filterServiceMultilingualHtml((string) $service['service_information']);
 } elseif (!empty($service['description'])) {
-    $serviceDetailsHtml = (string) $service['description'];
+    $serviceDetailsHtml = $plugin->filterServiceMultilingualHtml((string) $service['description']);
 }
 
 $durationDays = (int) ($service['duration_days'] ?? 0);
@@ -94,9 +95,18 @@ if (!empty($service['total_price_formatted'])) {
     $totalPriceFormatted = (string) $service['price'];
 }
 
+$serviceDescriptionHtml = '';
 $serviceDescription = '';
 if (!empty($service['description'])) {
-    $serviceDescription = strip_tags((string) $service['description']);
+    $serviceDescriptionHtml = $plugin->filterServiceMultilingualHtml((string) $service['description']);
+    $serviceDescription = $plugin->filterServiceMultilingualPlainText((string) $service['description']);
+}
+
+$canBuyService = $plugin->canCurrentUserBuyService($service);
+$buyerRoleNotice = null;
+
+if (!$canBuyService && !$isPurchasedContext) {
+    $buyerRoleNotice = $plugin->get_lang('ServicesOnlyForTeachers');
 }
 
 $pageUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_information.php?service_id='.$serviceId;
@@ -109,11 +119,14 @@ $template->assign('service', $service);
 $template->assign('service_sale', $serviceSale);
 $template->assign('service_details_html', $serviceDetailsHtml);
 $template->assign('service_description', $serviceDescription);
+$template->assign('service_description_html', $serviceDescriptionHtml);
 $template->assign('pageUrl', $pageUrl);
 $template->assign('duration_label', $durationLabel);
 $template->assign('applies_to_label', $appliesToLabel);
 $template->assign('total_price_formatted', $totalPriceFormatted);
 $template->assign('is_purchased_context', $isPurchasedContext);
+$template->assign('can_buy_service', $canBuyService);
+$template->assign('buyer_role_notice', $buyerRoleNotice);
 $template->assign('back_url', $backUrl);
 
 $content = $template->fetch('BuyCourses/view/service_information.tpl');

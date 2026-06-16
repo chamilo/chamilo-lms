@@ -300,6 +300,10 @@ class AiController extends AbstractController
             return new JsonResponse(['prompt' => ''], 404);
         }
 
+        if (!$this->isAiFeatureEnabledForCourse('glossary_terms_generator', $cid)) {
+            return new JsonResponse(['prompt' => ''], 403);
+        }
+
         $existingTerms = $this->getExistingGlossaryTermTitles($course, $sid);
 
         if ($resourceFileId > 0) {
@@ -409,6 +413,15 @@ class AiController extends AbstractController
                 'success' => false,
                 'text' => 'Course not found.',
             ], 404);
+        }
+
+        if (!$this->isAiFeatureEnabledForCourse('glossary_terms_generator', $cid)) {
+            return $this->buildAiFeatureDisabledResponse();
+        }
+
+        $quotaResponse = $this->buildAiTokenQuotaExceededResponse($providerName, 'text');
+        if (null !== $quotaResponse) {
+            return $quotaResponse;
         }
 
         $existingTerms = $this->getExistingGlossaryTermTitles($course, $sid);
@@ -699,7 +712,8 @@ class AiController extends AbstractController
         $this->denyAccessUnlessGranted(CourseVoter::EDIT, $course);
 
         $enabled = $this->isAiCourseAnalyzerSettingEnabled($settingsManager->getSetting('ai_helpers.enable_ai_helpers', true))
-            && $this->isAiCourseAnalyzerSettingEnabled($settingsManager->getSetting('ai_helpers.course_analyser', true));
+            && $this->isAiCourseAnalyzerSettingEnabled($settingsManager->getSetting('ai_helpers.course_analyser', true))
+            && $this->isAiFeatureEnabledForCourse('course_analyser', (int) $course->getId());
 
         $session = $this->getAiCourseAnalyzerSessionFromRequest($request);
         $providers = $this->aiProviderFactory->getProvidersForType('text');
@@ -731,17 +745,22 @@ class AiController extends AbstractController
                 if (!$csrfTokenManager->isTokenValid($token)) {
                     $error = 'Invalid security token. Please reload the page and try again.';
                 } else {
-                    try {
-                        $result = $courseAnalyzerService->analyze(
-                            $course,
-                            $session,
-                            $prompt,
-                            $selectedProvider,
-                            $includeStandaloneDocuments,
-                            $includeStandaloneExercises,
-                        );
-                    } catch (Throwable $exception) {
-                        $error = 'The AI analysis could not be completed: '.$exception->getMessage();
+                    $quotaMessage = $this->getAiTokenQuotaExceededMessage($selectedProvider, 'text');
+                    if (null !== $quotaMessage) {
+                        $error = $quotaMessage;
+                    } else {
+                        try {
+                            $result = $courseAnalyzerService->analyze(
+                                $course,
+                                $session,
+                                $prompt,
+                                $selectedProvider,
+                                $includeStandaloneDocuments,
+                                $includeStandaloneExercises,
+                            );
+                        } catch (Throwable $exception) {
+                            $error = 'The AI analysis could not be completed: '.$exception->getMessage();
+                        }
                     }
                 }
             }
@@ -832,6 +851,15 @@ class AiController extends AbstractController
                 'success' => false,
                 'text' => 'Invalid request parameters.',
             ], 400);
+        }
+
+        if (!$this->isAiFeatureEnabledForCourse('content_analyser', $cid)) {
+            return $this->buildAiFeatureDisabledResponse();
+        }
+
+        $quotaResponse = $this->buildAiTokenQuotaExceededResponse($aiProvider, 'text');
+        if (null !== $quotaResponse) {
+            return $quotaResponse;
         }
 
         if (!\in_array($method, self::LP_LEARNING_HELPER_METHODS, true)) {
@@ -994,6 +1022,15 @@ class AiController extends AbstractController
             $cid = $this->resolveCourseIdFromRequest($request, $data);
             $sid = $this->resolveSessionIdFromRequest($request, $data);
 
+            if (!$this->isAiFeatureEnabledForCourse('learning_path_generator', $cid)) {
+                return $this->buildAiFeatureDisabledResponse();
+            }
+
+            $quotaResponse = $this->buildAiTokenQuotaExceededResponse($this->normalizeProviderNameFromPayload($aiProvider), 'text');
+            if (null !== $quotaResponse) {
+                return $quotaResponse;
+            }
+
             if ('' === $topic || $chaptersCount <= 0 || $wordsCount <= 0) {
                 return new JsonResponse([
                     'success' => false,
@@ -1105,6 +1142,15 @@ class AiController extends AbstractController
             $aiProvider = $this->normalizeProviderNameFromPayload($data['ai_provider'] ?? null);
             $cid = (int) ($data['cid'] ?? 0);
             $sid = (int) ($data['sid'] ?? 0);
+
+            if (!$this->isAiFeatureEnabledForCourse('exercise_generator', $cid)) {
+                return $this->buildAiFeatureDisabledResponse();
+            }
+
+            $quotaResponse = $this->buildAiTokenQuotaExceededResponse($aiProvider, 'text');
+            if (null !== $quotaResponse) {
+                return $quotaResponse;
+            }
 
             if ($nQ <= 0 || '' === $topic) {
                 return new JsonResponse([
@@ -1218,6 +1264,15 @@ class AiController extends AbstractController
         $cid = (int) ($data['cid'] ?? 0);
         $sid = (int) ($data['sid'] ?? 0);
         $gid = (int) ($data['gid'] ?? 0);
+
+        if (!$this->isAiFeatureEnabledForCourse('exercise_generator', $cid)) {
+            return $this->buildAiFeatureDisabledResponse();
+        }
+
+        $quotaResponse = $this->buildAiTokenQuotaExceededResponse($aiProvider, 'document');
+        if (null !== $quotaResponse) {
+            return $quotaResponse;
+        }
 
         $resourceFileId = (int) ($data['resource_file_id'] ?? 0);
         $documentTitle = trim((string) ($data['document_title'] ?? ''));
@@ -1510,6 +1565,10 @@ class AiController extends AbstractController
 
         $this->denyAccessUnlessGranted(CourseVoter::EDIT, $course);
 
+        if (!$this->isAiFeatureEnabledForCourse('open_answers_grader', $courseId)) {
+            return $this->buildAiFeatureDisabledResponse();
+        }
+
         // Optional provider selection (form-encoded)
         $aiProvider = $request->request->get('ai_provider');
 
@@ -1527,6 +1586,11 @@ class AiController extends AbstractController
             if ('' === $aiProvider) {
                 $aiProvider = null;
             }
+        }
+
+        $quotaResponse = $this->buildAiTokenQuotaExceededResponse($aiProvider, 'text');
+        if (null !== $quotaResponse) {
+            return $quotaResponse;
         }
 
         /** @var TrackEExercise|null $trackExercise */
@@ -1709,6 +1773,10 @@ class AiController extends AbstractController
             $cid = (int) ($data['cid'] ?? 0);
             $sid = (int) ($data['sid'] ?? 0);
 
+            if (!$this->isAiFeatureEnabledForCourse('image_generator', $cid)) {
+                return $this->buildAiFeatureDisabledResponse();
+            }
+
             if ($n <= 0 || '' === $prompt || '' === $toolName) {
                 return new JsonResponse([
                     'success' => false,
@@ -1737,12 +1805,26 @@ class AiController extends AbstractController
             }
 
             $providersToTry = $explicitProvider ? [$explicitProvider] : $availableProviders;
+            if ($explicitProvider) {
+                $quotaResponse = $this->buildAiTokenQuotaExceededResponse($explicitProvider, 'image');
+                if (null !== $quotaResponse) {
+                    return $quotaResponse;
+                }
+            }
+
             $errors = [];
             $providerUsed = null;
             $result = null;
 
             foreach ($providersToTry as $providerName) {
                 try {
+                    $quotaMessage = $this->getAiTokenQuotaExceededMessage($providerName, 'image');
+                    if (null !== $quotaMessage) {
+                        $errors[$providerName] = $quotaMessage;
+
+                        continue;
+                    }
+
                     $aiService = $this->aiProviderFactory->getProvider($providerName, 'image');
 
                     if (!$aiService instanceof AiImageProviderInterface) {
@@ -1782,11 +1864,27 @@ class AiController extends AbstractController
             if (null === $providerUsed || empty($result)) {
                 error_log('[AI][image] Image generation failed for all providers: '.json_encode($errors));
 
+                $firstError = '';
+                foreach ($errors as $err) {
+                    if (\is_string($err) && '' !== trim($err)) {
+                        $firstError = trim($err);
+
+                        break;
+                    }
+                }
+
+                $message = $explicitProvider
+                    ? 'Image generation failed for the selected provider.'
+                    : 'All image providers failed.';
+                $statusCode = 500;
+                if ('' !== $firstError && $this->isAiTokenQuotaMessage($firstError)) {
+                    $message = $firstError;
+                    $statusCode = 429;
+                }
+
                 $payload = [
                     'success' => false,
-                    'text' => $explicitProvider
-                        ? 'Image generation failed for the selected provider.'
-                        : 'All image providers failed.',
+                    'text' => $message,
                 ];
 
                 if ($this->shouldExposeProviderDetails()) {
@@ -1794,7 +1892,7 @@ class AiController extends AbstractController
                     $payload['errors'] = $errors;
                 }
 
-                return new JsonResponse($payload, 500);
+                return new JsonResponse($payload, $statusCode);
             }
 
             // Audit (provider details in DB only).
@@ -1910,6 +2008,10 @@ class AiController extends AbstractController
             $cid = (int) ($data['cid'] ?? 0);
             $sid = (int) ($data['sid'] ?? 0);
 
+            if (!$this->isAiFeatureEnabledForCourse('video_generator', $cid)) {
+                return $this->buildAiFeatureDisabledResponse();
+            }
+
             // Gemini requires durationSeconds to be a NUMBER (int).
             $seconds = null;
             if (isset($data['seconds'])) {
@@ -1945,6 +2047,12 @@ class AiController extends AbstractController
             }
 
             $providersToTry = $explicitProvider ? [$explicitProvider] : $availableProviders;
+            if ($explicitProvider) {
+                $quotaResponse = $this->buildAiTokenQuotaExceededResponse($explicitProvider, 'video');
+                if (null !== $quotaResponse) {
+                    return $quotaResponse;
+                }
+            }
 
             if (!$explicitProvider) {
                 $active = $this->getActiveMediaProviderFromSession($request, 'video', $cid);
@@ -1959,6 +2067,13 @@ class AiController extends AbstractController
 
             foreach ($providersToTry as $providerName) {
                 try {
+                    $quotaMessage = $this->getAiTokenQuotaExceededMessage($providerName, 'video');
+                    if (null !== $quotaMessage) {
+                        $errors[$providerName] = $quotaMessage;
+
+                        continue;
+                    }
+
                     $aiService = $this->aiProviderFactory->getProvider($providerName, 'video');
 
                     if (!$aiService instanceof AiVideoProviderInterface) {
@@ -2050,6 +2165,8 @@ class AiController extends AbstractController
 
                 return new JsonResponse($payload, $statusCode);
             }
+
+            $this->logEstimatedAiTokenUsage($providerUsed, 'video_generator', $prompt, 'video');
 
             $this->aiDisclosureHelper->logAudit(
                 targetKey: 'video:'.sha1($prompt.'|'.$toolName.'|'.$language.'|'.$n.'|'.(string) $seconds.'|'.(string) $size),
@@ -2149,6 +2266,10 @@ class AiController extends AbstractController
             }
 
             $cid = (int) $request->query->get('cid', 0);
+
+            if ($cid > 0 && !$this->isAiFeatureEnabledForCourse('video_generator', $cid)) {
+                return $this->buildAiFeatureDisabledResponse();
+            }
 
             $aiProvider = $request->query->get('ai_provider');
             $aiProvider = null !== $aiProvider ? trim((string) $aiProvider) : '';
@@ -2291,6 +2412,15 @@ class AiController extends AbstractController
 
         $resourceFileId = (int) ($data['resource_file_id'] ?? 0);
         $documentTitle = trim((string) ($data['document_title'] ?? ''));
+
+        if (!$this->isAiFeatureEnabledForCourse('content_analyser', $cid)) {
+            return $this->buildAiFeatureDisabledResponse();
+        }
+
+        $quotaResponse = $this->buildAiTokenQuotaExceededResponse($aiProvider, 'document');
+        if (null !== $quotaResponse) {
+            return $quotaResponse;
+        }
 
         if (0 === $cid || 0 === $resourceFileId || '' === $prompt) {
             return new JsonResponse(['success' => false, 'text' => 'Invalid request parameters.'], 400);
@@ -2554,6 +2684,10 @@ class AiController extends AbstractController
         $cid = (int) ($data['cid'] ?? 0);
         $documentTitle = trim((string) ($data['document_title'] ?? ''));
         $answer = trim((string) ($data['answer'] ?? ''));
+
+        if (!$this->isAiFeatureEnabledForCourse('content_analyser', $cid)) {
+            return $this->buildAiFeatureDisabledResponse();
+        }
 
         if (0 === $cid || '' === $documentTitle || '' === $answer) {
             return new JsonResponse(['success' => false, 'text' => 'Invalid request parameters.'], 400);
@@ -2922,7 +3056,7 @@ class AiController extends AbstractController
             return 403;
         }
 
-        if (str_contains($m, 'rate limit') || str_contains($m, 'too many requests')) {
+        if (str_contains($m, 'rate limit') || str_contains($m, 'too many requests') || str_contains($m, 'token limit')) {
             return 429;
         }
 
@@ -2960,6 +3094,240 @@ class AiController extends AbstractController
         }
 
         return '' !== $decoded;
+    }
+
+    private function isAiTokenQuotaMessage(string $message): bool
+    {
+        $message = strtolower(trim($message));
+
+        return str_contains($message, 'daily ai token limit')
+            || str_contains($message, 'monthly ai token limit')
+            || str_contains($message, 'token limit has been reached');
+    }
+
+    private function buildAiTokenQuotaExceededResponse(?string $providerName, string $serviceType): ?JsonResponse
+    {
+        $message = $this->getAiTokenQuotaExceededMessage($providerName, $serviceType);
+        if (null === $message) {
+            return null;
+        }
+
+        return new JsonResponse([
+            'success' => false,
+            'text' => $message,
+        ], 429);
+    }
+
+    private function getAiTokenQuotaExceededMessage(?string $providerName, string $serviceType): ?string
+    {
+        $userId = $this->getCurrentUserId();
+        if ($userId <= 0) {
+            return null;
+        }
+
+        $limits = $this->getAiTokenLimitsForProvider($providerName, $serviceType);
+        if ($limits['daily'] <= 0 && $limits['monthly'] <= 0) {
+            return null;
+        }
+
+        $provider = $limits['provider'];
+        $reservedTokens = $this->getConfiguredAiRequestTokenCost($provider, $serviceType);
+
+        if ($limits['daily'] > 0) {
+            $dailyUsed = $this->getAiTokensUsedSince($userId, $provider, new \DateTimeImmutable('today'));
+            if ($dailyUsed + $reservedTokens > $limits['daily']) {
+                return $this->translator->trans('Your daily AI token limit has been reached. Please try again tomorrow.');
+            }
+        }
+
+        if ($limits['monthly'] > 0) {
+            $monthlyUsed = $this->getAiTokensUsedSince($userId, $provider, new \DateTimeImmutable('first day of this month 00:00:00'));
+            if ($monthlyUsed + $reservedTokens > $limits['monthly']) {
+                return $this->translator->trans('Your monthly AI token limit has been reached. Please try again next month.');
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @return array{provider:?string,daily:int,monthly:int}
+     */
+    private function getAiTokenLimitsForProvider(?string $providerName, string $serviceType): array
+    {
+        $config = $this->readAiProvidersConfig();
+        $provider = $this->resolveAiProviderNameForQuota($providerName, $serviceType, $config);
+        if (null === $provider || !isset($config[$provider]) || !\is_array($config[$provider])) {
+            return ['provider' => $provider, 'daily' => 0, 'monthly' => 0];
+        }
+
+        $providerConfig = $config[$provider];
+
+        return [
+            'provider' => $provider,
+            'daily' => max(0, (int) ($providerConfig['daily_token_limit'] ?? 0)),
+            'monthly' => max(0, (int) ($providerConfig['monthly_token_limit'] ?? 0)),
+        ];
+    }
+
+    /**
+     * @param array<string,mixed> $config
+     */
+    private function resolveAiProviderNameForQuota(?string $providerName, string $serviceType, array $config): ?string
+    {
+        $providerName = null !== $providerName ? trim($providerName) : '';
+        if ('' !== $providerName && isset($config[$providerName])) {
+            return $providerName;
+        }
+
+        $providers = $this->aiProviderFactory->getProvidersForType($serviceType);
+        foreach ($providers as $provider) {
+            if (isset($config[$provider])) {
+                return $provider;
+            }
+        }
+
+        $firstProvider = array_key_first($config);
+
+        return \is_string($firstProvider) ? $firstProvider : null;
+    }
+
+    private function getAiTokensUsedSince(int $userId, ?string $providerName, \DateTimeImmutable $start): int
+    {
+        try {
+            $connection = $this->em->getConnection();
+            $params = [
+                'user_id' => $userId,
+                'start_date' => $start->format('Y-m-d H:i:s'),
+            ];
+            $types = [
+                'user_id' => Types::INTEGER,
+                'start_date' => Types::STRING,
+            ];
+            $sql = 'SELECT COALESCE(SUM(total_tokens), 0) FROM ai_requests WHERE user_id = :user_id AND requested_at >= :start_date';
+
+            if (null !== $providerName && '' !== trim($providerName)) {
+                $sql .= ' AND ai_provider = :ai_provider';
+                $params['ai_provider'] = $providerName;
+                $types['ai_provider'] = Types::STRING;
+            }
+
+            return (int) $connection->executeQuery($sql, $params, $types)->fetchOne();
+        } catch (Throwable $e) {
+            error_log('[AI][quota] Could not read AI token usage: '.$e->getMessage());
+
+            return 0;
+        }
+    }
+
+    /**
+     * Reads optional per-provider estimated cost from ai_helpers.ai_providers.
+     * Supported keys: provider.<type>.token_cost, provider.<type>.estimated_token_cost,
+     * provider.token_cost, provider.estimated_token_cost.
+     */
+    private function getConfiguredAiRequestTokenCost(?string $providerName, string $serviceType): int
+    {
+        if (null === $providerName || '' === trim($providerName)) {
+            return 0;
+        }
+
+        $config = $this->readAiProvidersConfig();
+        if (!isset($config[$providerName]) || !\is_array($config[$providerName])) {
+            return 0;
+        }
+
+        $providerConfig = $config[$providerName];
+        $typeConfig = $providerConfig[$serviceType] ?? [];
+        if (!\is_array($typeConfig)) {
+            $typeConfig = [];
+        }
+
+        $configuredCost = $typeConfig['token_cost']
+            ?? $typeConfig['estimated_token_cost']
+            ?? $providerConfig['token_cost']
+            ?? $providerConfig['estimated_token_cost']
+            ?? null;
+
+        if (null !== $configuredCost) {
+            return max(0, (int) $configuredCost);
+        }
+
+        $maxTokens = $typeConfig['max_tokens'] ?? $typeConfig['max_output_tokens'] ?? null;
+
+        return max(0, (int) ($maxTokens ?? 0));
+    }
+
+    private function logEstimatedAiTokenUsage(?string $providerName, string $toolName, string $prompt, string $serviceType): void
+    {
+        $userId = $this->getCurrentUserId();
+        if ($userId <= 0 || null === $providerName || '' === trim($providerName)) {
+            return;
+        }
+
+        $tokenCost = $this->getConfiguredAiRequestTokenCost($providerName, $serviceType);
+        if ($tokenCost <= 0) {
+            return;
+        }
+
+        try {
+            $this->em->getConnection()->insert('ai_requests', [
+                'user_id' => $userId,
+                'tool_name' => $toolName.'_estimated_cost',
+                'requested_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s'),
+                'request_text' => mb_substr($prompt, 0, 900),
+                'prompt_tokens' => 0,
+                'completion_tokens' => 0,
+                'total_tokens' => $tokenCost,
+                'ai_provider' => $providerName,
+            ], [
+                'user_id' => Types::INTEGER,
+                'tool_name' => Types::STRING,
+                'requested_at' => Types::STRING,
+                'request_text' => Types::TEXT,
+                'prompt_tokens' => Types::INTEGER,
+                'completion_tokens' => Types::INTEGER,
+                'total_tokens' => Types::INTEGER,
+                'ai_provider' => Types::STRING,
+            ]);
+        } catch (Throwable $e) {
+            error_log('[AI][quota] Could not save estimated AI token usage: '.$e->getMessage());
+        }
+    }
+
+    /**
+     * @return array<string,mixed>
+     */
+    private function readAiProvidersConfig(): array
+    {
+        $configJson = api_get_setting('ai_helpers.ai_providers');
+        if (\is_string($configJson)) {
+            $decoded = json_decode($configJson, true);
+
+            return \is_array($decoded) ? $decoded : [];
+        }
+
+        return \is_array($configJson) ? $configJson : [];
+    }
+
+    private function isAiFeatureEnabledForCourse(string $feature, int $courseId): bool
+    {
+        if ($courseId <= 0) {
+            return false;
+        }
+
+        if ('true' !== (string) api_get_setting('ai_helpers.enable_ai_helpers')) {
+            return false;
+        }
+
+        return 'true' === (string) api_get_course_setting($feature, ['real_id' => $courseId], true);
+    }
+
+    private function buildAiFeatureDisabledResponse(): JsonResponse
+    {
+        return new JsonResponse([
+            'success' => false,
+            'text' => 'This AI feature is not enabled for this course.',
+        ], 403);
     }
 
     private function denyIfNotTeacher(): void
@@ -3094,7 +3462,7 @@ class AiController extends AbstractController
             return 401;
         }
 
-        if (str_contains($m, 'rate limit') || str_contains($m, 'too many requests')) {
+        if (str_contains($m, 'rate limit') || str_contains($m, 'too many requests') || str_contains($m, 'token limit')) {
             return 429;
         }
 

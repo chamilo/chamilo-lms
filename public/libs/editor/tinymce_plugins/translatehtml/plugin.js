@@ -1,83 +1,181 @@
-
 (function () {
-    'use strict';
+  'use strict';
 
-    var global = tinymce.util.Tools.resolve('tinymce.PluginManager');
+  var languages = [
+    { code: 'en', label: 'English' },
+    { code: 'fr', label: 'Français' },
+    { code: 'es', label: 'Español' },
+    { code: 'pt', label: 'Português' },
+    { code: 'de', label: 'Deutsch' },
+    { code: 'it', label: 'Italiano' },
+    { code: 'nl', label: 'Nederlands' }
+  ];
 
-    var cleanTranslated = function (newElement) {
-        var nodes = $(newElement).find(".mce-translatehtml");
-        if (nodes.length > 0) {
-            $(newElement).find(".mce-translatehtml").each(function () {
-                $(this).replaceWith($(this).html());
-            });
-        }
-    };
+  function normalizeLanguageCode(code) {
+    return String(code || '').trim().toLowerCase().substring(0, 2);
+  }
 
-    var tinyWrap = function (open_tag, close_tag) {
-      var ed = tinymce.activeEditor || opener.tinymce.activeEditor; /* get editor instance */
-      var selection = ed.selection.getContent(); /* get user selection, if any */
-      var temp_name  = new Date().getTime().toString(36).toLowerCase(); /* generate a unique string */
-      var span_open  = '<span id="' + temp_name + '">'; /* generate '<span id="unique">' */
-      var span_close = '</span>'; /* generate closing '</span>' */
-      selection = selection.replace(/<p>/g,'').replace(/<\/p>/g,'<br />'); /* convert <p></p> to <br /> */
-      if (selection.substr(selection.length-6) === '<br />') {
-        selection = selection.substr(0, selection.length-6); /* strip last <br /> if present */
+  function isValidLanguageCode(code) {
+    return /^[a-z]{2}$/.test(String(code || ''));
+  }
+
+  function encodeHtml(value) {
+    return String(value || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  function unwrapExistingTranslationBlocks(container) {
+    var blocks = Array.prototype.slice.call(container.querySelectorAll('.mce-translatehtml[lang]'));
+
+    blocks.forEach(function (block) {
+      var parent = block.parentNode;
+
+      if (!parent) {
+        return;
       }
-      /* create complete selection replacement: '<span id="unique">OPEN_TAGselectionCLOSE_TAG</span>' */
-      var content = open_tag + span_open + selection + span_close + close_tag;
-      ed.execCommand('mceReplaceContent', false, content); /* replace selection with new */
-      var span_elem = ed.dom.get(temp_name); /* get the element of the temp span */
-      ed.selection.select(span_elem); /* select (highlight) the selection span */
-      cleanTranslated(span_elem);
-      ed.dom.remove(temp_name, true); /* remove the span, leave it's highlighted text behind(true) */
-      ed.focus(); /* insure editor has focus */
-      return; /* taa-daa! all done! */
-    }
 
-    var register = function (editor) {
-        const languagesConfigStrings = window.languages;
-        editor.ui.registry.addSplitButton('translatehtml', {
-            tooltip: 'Translate html',
-            icon: 'translate',
-            onAction: function () {},
-            onItemAction: function (api, value) {
-                if (value[0] != 'remove') {
-                    tinyWrap('<span class="mce-translatehtml hidden" dir="' + value[0] + '" lang="' + value[1] + '">', '</span>');
-                } else {
-                    tinyWrap('', '');
-                }
-            },
-            fetch: function (callback) {
-                const rtlList = ['ps', 'ar', 'he', 'fa'];
-                var items = [], dir, i;
-                for (i = 0; i < languagesConfigStrings.length; i++) {
-                    let iso = languagesConfigStrings[i]['isocode'];
-                    dir = 'ltr';
-                    if (rtlList.includes(iso)) {
-                        dir = 'rtl';
-                    }
-                    items.push({
-                        type: 'choiceitem',
-                        text: languagesConfigStrings[i]['originalName'],
-                        value: [dir, iso]
-                    });
-                }
-                items.push({
-                    type: 'choiceitem',
-                    icon: 'remove',
-                    text: 'Remove translation',
-                    value: ['remove']
-                });
-                callback(items);
-            }                              
-        });
-    }
+      while (block.firstChild) {
+        parent.insertBefore(block.firstChild, block);
+      }
 
-    function Plugin () {
-      global.add('translatehtml', function (editor) {
-          register(editor);
+      parent.removeChild(block);
+    });
+  }
+
+  function removeEmptyBlocks(container) {
+    var blocks = Array.prototype.slice.call(container.querySelectorAll('p, div'));
+
+    blocks.forEach(function (block) {
+      if (block.querySelector('img, video, audio, iframe, table, ul, ol')) {
+        return;
+      }
+
+      var text = String(block.textContent || '').replace(/ /g, ' ').trim();
+      var html = String(block.innerHTML || '').replace(/&nbsp;/gi, '').replace(/<br\s*\/?\s*>/gi, '').trim();
+
+      if ('' === text && '' === html && block.parentNode) {
+        block.parentNode.removeChild(block);
+      }
+    });
+  }
+
+  function cleanSelectedContent(html) {
+    var container = document.createElement('div');
+    container.innerHTML = String(html || '');
+
+    unwrapExistingTranslationBlocks(container);
+    removeEmptyBlocks(container);
+
+    return String(container.innerHTML || '').trim();
+  }
+
+  tinymce.PluginManager.add('translatehtml', function (editor) {
+    function notifyInvalidLanguage() {
+      editor.notificationManager.open({
+        text: 'Please enter a two-letter language code, for example en, fr or es.',
+        type: 'warning',
+        timeout: 3000
       });
     }
 
-    Plugin();
+    function insertTranslatedBlock(languageCode) {
+      var code = normalizeLanguageCode(languageCode);
+
+      if (!isValidLanguageCode(code)) {
+        notifyInvalidLanguage();
+        return;
+      }
+
+      var selectedContent = cleanSelectedContent(editor.selection.getContent({ format: 'html' }));
+
+      if (!selectedContent) {
+        selectedContent = '<p>' + encodeHtml('Translated content') + '</p>';
+      }
+
+      editor.insertContent('<div class="mce-translatehtml" lang="' + code + '">' + selectedContent + '</div>');
+    }
+
+    function openCustomLanguageDialog() {
+      editor.windowManager.open({
+        title: 'Translated HTML block',
+        body: {
+          type: 'panel',
+          items: [
+            {
+              type: 'input',
+              name: 'languageCode',
+              label: 'Language code'
+            }
+          ]
+        },
+        buttons: [
+          {
+            type: 'cancel',
+            text: 'Cancel'
+          },
+          {
+            type: 'submit',
+            text: 'Insert',
+            primary: true
+          }
+        ],
+        initialData: {
+          languageCode: 'en'
+        },
+        onSubmit: function (api) {
+          var data = api.getData();
+          var code = normalizeLanguageCode(data.languageCode);
+
+          if (!isValidLanguageCode(code)) {
+            notifyInvalidLanguage();
+            return;
+          }
+
+          insertTranslatedBlock(code);
+          api.close();
+        }
+      });
+    }
+
+    editor.ui.registry.addMenuButton('translatehtml', {
+      text: 'Lang',
+      tooltip: 'Insert translated HTML block',
+      fetch: function (callback) {
+        var items = languages.map(function (language) {
+          return {
+            type: 'menuitem',
+            text: language.label + ' (' + language.code + ')',
+            onAction: function () {
+              insertTranslatedBlock(language.code);
+            }
+          };
+        });
+
+        items.push({
+          type: 'separator'
+        });
+
+        items.push({
+          type: 'menuitem',
+          text: 'Custom language code...',
+          onAction: openCustomLanguageDialog
+        });
+
+        callback(items);
+      }
+    });
+
+    return {
+      getMetadata: function () {
+        return {
+          name: 'Chamilo translated HTML blocks',
+          url: 'https://chamilo.org'
+        };
+      }
+    };
+  });
 }());

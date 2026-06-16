@@ -251,6 +251,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                             'organization_id' => '',
                             'project_id' => '',
                             'monthly_token_limit' => 10000,
+                            'daily_token_limit' => 2000,
                             'text' => [
                                 'url' => 'https://api.openai.com/v1/chat/completions',
                                 'model' => 'gpt-4o',
@@ -272,6 +273,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                                 'model' => 'sora-2',
                                 'seconds' => '4',
                                 'size' => '720x1280',
+                                'token_cost' => 3000,
                             ],
                             'document' => [
                                 'url' => 'https://api.openai.com/v1/chat/completions',
@@ -293,6 +295,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                             'api_key' => 'ANTHROPIC_KEY',
                             'anthropic_version' => '2023-06-01',
                             'monthly_token_limit' => 5000,
+                            'daily_token_limit' => 1000,
                             'text' => [
                                 'url' => 'https://api.anthropic.com/v1/messages',
                                 'model' => 'claude-sonnet-4-6',
@@ -309,6 +312,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                         'deepseek' => [
                             'api_key' => 'DEEPSEEK_KEY',
                             'monthly_token_limit' => 5000,
+                            'daily_token_limit' => 1000,
                             'text' => [
                                 'url' => 'https://api.deepseek.com/chat/completions',
                                 'model' => 'deepseek-chat',
@@ -325,6 +329,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                         'mistral' => [
                             'api_key' => 'MISTRAL_KEY',
                             'monthly_token_limit' => 5000,
+                            'daily_token_limit' => 1000,
                             'text' => [
                                 'url' => 'https://api.mistral.ai/v1/chat/completions',
                                 'model' => 'mistral-large-latest',
@@ -341,6 +346,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                         'grok' => [
                             'api_key' => 'GROK_KEY',
                             'monthly_token_limit' => 5000,
+                            'daily_token_limit' => 1000,
                             'text' => [
                                 'url' => 'https://api.x.ai/v1/chat/completions',
                                 'model' => 'grok-3-mini',
@@ -365,11 +371,13 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                                 'duration' => 8,
                                 'aspect_ratio' => '16:9',
                                 'resolution' => '480p',
+                                'token_cost' => 3000,
                             ],
                         ],
                         'gemini' => [
                             'api_key' => 'GEMINI_KEY',
                             'monthly_token_limit' => 5000,
+                            'daily_token_limit' => 1000,
                             'text' => [
                                 'url' => 'https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent',
                                 'model' => 'gemini-2.5-flash',
@@ -395,6 +403,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                                 'aspect_ratio' => '16:9',
                                 'resolution' => '720p',
                                 'status_base_url' => 'https://generativelanguage.googleapis.com/v1beta',
+                                'token_cost' => 3000,
                             ],
                         ],
                     ],

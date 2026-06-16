@@ -639,3 +639,6 @@ $strings['DiscountCoupons'] = 'Cupones descuento';
 $strings['Recibo'] = 'Recibo';
 
 $strings['NoProductsAvailable'] = 'No hay productos disponibles para comprar en este momento.';
+$strings['EnableCourse'] = 'Habilitar curso';
+$strings['EnableSession'] = 'Habilitar sesión';
+$strings['EnableSubscription'] = 'Habilitar suscripción';

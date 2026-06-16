@@ -5350,6 +5350,22 @@ class BuyCoursesPlugin extends Plugin
         return $services;
     }
 
+    public function canCurrentUserBuyUserServices(): bool
+    {
+        return api_is_platform_admin() || api_is_teacher();
+    }
+
+    public function canCurrentUserBuyService(array $service): bool
+    {
+        $appliesTo = (int) ($service['applies_to'] ?? 0);
+
+        if (self::SERVICE_TYPE_USER === $appliesTo) {
+            return $this->canCurrentUserBuyUserServices();
+        }
+
+        return true;
+    }
+
     public function hasBlockingUserServiceSaleForCurrentBuyer(int $serviceId): bool
     {
         $userId = api_get_user_id();

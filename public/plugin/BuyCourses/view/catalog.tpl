@@ -513,7 +513,8 @@
                                                 </span>
                                             {% endif %}
 
-                                            {% if can_buy_services|default(false) %}
+                                            {% set canBuyThisService = service.can_buy is defined ? service.can_buy : can_buy_services|default(false) %}
+                                            {% if canBuyThisService %}
                                                 <a
                                                     class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-success px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-success/30 focus:ring-offset-2"
                                                     href="service_process.php?i={{ service.id }}&t={{ service.applies_to|default(0) }}"

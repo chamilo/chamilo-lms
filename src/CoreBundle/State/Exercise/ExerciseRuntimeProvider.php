@@ -767,6 +767,8 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
             'preventCopyPaste' => $this->isSettingEnabled('exercise.quiz_prevent_copy_paste'),
             'keepAlivePingInterval' => $this->getKeepAlivePingInterval(),
             'confirmSavedAnswers' => $this->isSettingEnabled('exercise.quiz_confirm_saved_answers'),
+            'checkAllAnswersBeforeEndTest' => $this->isSettingEnabled('exercise.quiz_check_all_answers_before_end_test'),
+            'disableNewAttempts' => $this->isSettingEnabled('exercise.exercises_disable_new_attempts'),
             'allowTimePerQuestion' => $this->isSettingEnabled('exercise.allow_time_per_question'),
             'hasTimedQuestions' => $this->hasTimedQuestions($quiz),
             'blockCategoryQuestions' => $this->isBlockCategoryRuntimeEnabled($quiz),

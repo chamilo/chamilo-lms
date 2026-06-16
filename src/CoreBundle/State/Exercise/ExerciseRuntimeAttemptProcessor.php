@@ -155,6 +155,17 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
             return $this->normalizeAttemptResponse($quiz, $course, $session, $request, $incompleteAttempt, 'Attempt resumed');
         }
 
+        if ($this->isSettingEnabled('exercise.exercises_disable_new_attempts')) {
+            return $this->createBlockedResponse(
+                $quiz,
+                $course,
+                $session,
+                $request,
+                'Disable new test attempts',
+                $this->buildQuestionList($quiz)
+            );
+        }
+
         if (!$this->canCreateNewAttempt($quiz, $course, $session, $user, $request)) {
             return $this->createLegacyRequiredResponse(
                 $quiz,
@@ -1041,6 +1052,11 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
         }
 
         return (int) api_get_course_setting($settingName, $course);
+    }
+
+    private function isSettingEnabled(string $name): bool
+    {
+        return 'true' === $this->settingsManager->getSetting($name, true);
     }
 
     private function buildExpiredAt(CQuiz $quiz): ?DateTime

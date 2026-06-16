@@ -50,6 +50,7 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
     private const RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING = 8;
     private const RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK = 10;
     private const EXERCISE_FEEDBACK_TYPE_END = 0;
+    private const STATUS_INCOMPLETE = 'incomplete';
 
     public function __construct(
         private RequestStack $requestStack,
@@ -95,12 +96,16 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
         $learnpathItemId = max(0, $request->query->getInt('learnpath_item_id'));
         $currentUserAttempts = $this->getCurrentUserAttempts($quiz, $course, $session, $user, $learnpathId, $learnpathItemId);
         $currentUserAttemptCount = \count($currentUserAttempts);
+        $incompleteAttempt = $this->findIncompleteAttempt($quiz, $course, $session, $user, $request);
+        $hasIncompleteAttempt = $incompleteAttempt instanceof TrackEExercise;
+        $newAttemptsDisabled = $this->isSettingEnabled('exercise.exercises_disable_new_attempts');
         $maxAttempt = (int) $quiz->getMaxAttempt();
         $attemptLimitReached = 0 < $maxAttempt && $currentUserAttemptCount >= $maxAttempt;
         $hideAttemptsTable = $this->isSettingEnabled('exercise.quiz_hide_attempts_table_on_start_page');
 
         $availabilityStatus = $this->getAvailabilityStatus($quiz->getStartTime(), $quiz->getEndTime());
         $canOpen = $canManage || ($effectiveVisible && 'open' === $availabilityStatus);
+        $canStart = $canOpen && !$attemptLimitReached && (!$newAttemptsDisabled || $hasIncompleteAttempt || $canManage);
 
         $overview = new ExerciseOverview();
         $overview->exerciseId = (int) $quiz->getIid();
@@ -126,7 +131,7 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
         $overview->randomByCategory = (int) $quiz->getRandomByCategory();
         $overview->canManage = $canManage;
         $overview->canOpen = $canOpen;
-        $overview->canStart = $canOpen && !$attemptLimitReached;
+        $overview->canStart = $canStart;
         $overview->canReport = $canManage;
         $overview->availabilityStatus = $availabilityStatus;
         $overview->currentUserAttempts = $currentUserAttempts;
@@ -134,8 +139,8 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
         $overview->showScoreColumn = $this->shouldShowScoreColumn($quiz, $currentUserAttemptCount);
         $overview->showDetailsColumn = $this->shouldShowDetailsColumn($quiz, $currentUserAttemptCount);
         $overview->attemptLimitReached = $attemptLimitReached;
-        $overview->startButtonLabel = 0 < $currentUserAttemptCount ? 'Proceed with the test' : 'Start test';
-        $overview->notice = 0 < $currentUserAttemptCount ? 'You have tried to resolve this exercise earlier' : '';
+        $overview->startButtonLabel = 0 < $currentUserAttemptCount || $hasIncompleteAttempt ? 'Proceed with the test' : 'Start test';
+        $overview->notice = $this->getOverviewNotice($currentUserAttemptCount, $newAttemptsDisabled, $hasIncompleteAttempt, $canManage);
 
         return $overview;
     }
@@ -421,6 +426,49 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
     /**
      * @return array<int, array<string, mixed>>
      */
+
+    private function findIncompleteAttempt(
+        CQuiz $quiz,
+        Course $course,
+        ?Session $session,
+        User $user,
+        Request $request,
+    ): ?TrackEExercise {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('attempt')
+            ->from(TrackEExercise::class, 'attempt')
+            ->andWhere('IDENTITY(attempt.quiz) = :exerciseId')
+            ->andWhere('IDENTITY(attempt.course) = :courseId')
+            ->andWhere('IDENTITY(attempt.user) = :userId')
+            ->andWhere('attempt.status = :status')
+            ->andWhere('attempt.origLpId = :lpId')
+            ->andWhere('attempt.origLpItemId = :lpItemId')
+            ->andWhere('attempt.origLpItemViewId = :lpItemViewId')
+            ->setParameter('exerciseId', (int) $quiz->getIid(), Types::INTEGER)
+            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
+            ->setParameter('userId', (int) $user->getId(), Types::INTEGER)
+            ->setParameter('status', self::STATUS_INCOMPLETE)
+            ->setParameter('lpId', $request->query->getInt('learnpath_id'), Types::INTEGER)
+            ->setParameter('lpItemId', $request->query->getInt('learnpath_item_id'), Types::INTEGER)
+            ->setParameter('lpItemViewId', $request->query->getInt('learnpath_item_view_id'), Types::INTEGER)
+            ->orderBy('attempt.exeId', 'DESC')
+            ->setMaxResults(1)
+        ;
+
+        if (null !== $session) {
+            $queryBuilder
+                ->andWhere('IDENTITY(attempt.session) = :sessionId')
+                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
+            ;
+        } else {
+            $queryBuilder->andWhere('attempt.session IS NULL');
+        }
+
+        $attempt = $queryBuilder->getQuery()->getOneOrNullResult();
+
+        return $attempt instanceof TrackEExercise ? $attempt : null;
+    }
+
     private function getCurrentUserAttempts(
         CQuiz $quiz,
         Course $course,
@@ -501,6 +549,19 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
     private function hasPendingManualCorrection(TrackEExercise $attempt): bool
     {
         return '' !== trim($attempt->getQuestionsToCheck(), " \t\n\r\0\x0B,");
+    }
+
+    private function getOverviewNotice(
+        int $currentUserAttemptCount,
+        bool $newAttemptsDisabled,
+        bool $hasIncompleteAttempt,
+        bool $canManage,
+    ): string {
+        if ($newAttemptsDisabled && !$hasIncompleteAttempt && !$canManage) {
+            return 'Disable new test attempts';
+        }
+
+        return 0 < $currentUserAttemptCount ? 'You have tried to resolve this exercise earlier' : '';
     }
 
     private function shouldShowScoreColumn(CQuiz $quiz, int $attemptCount): bool

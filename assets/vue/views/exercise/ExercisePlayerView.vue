@@ -213,9 +213,9 @@
       >
         <div class="space-y-2">
           <h2 class="text-xl font-semibold text-gray-90">
-            {{ t("Questions to be reviewed") }}
+            {{ reviewReminderTitle }}
           </h2>
-          <p class="text-sm text-gray-700">
+          <p v-if="isReviewAnswersEnabled" class="text-sm text-gray-700">
             {{ t("Review selected questions") }}
           </p>
           <div
@@ -234,6 +234,7 @@
             :class="question.isAnswered ? 'bg-white' : 'border-danger/30 bg-danger/10 text-danger'"
           >
             <input
+              v-if="isReviewAnswersEnabled"
               :checked="question.isMarked"
               class="mt-1"
               :disabled="isReviewFlagSaving"
@@ -257,6 +258,15 @@
 
         <div class="flex flex-wrap gap-2">
           <BaseButton
+            v-if="!isReviewAnswersEnabled && firstUnansweredReviewQuestionId > 0"
+            :disabled="isReviewFlagSaving"
+            :label="t('Proceed with the test')"
+            icon="back"
+            type="secondary"
+            @click="returnToFirstUnansweredQuestion"
+          />
+          <BaseButton
+            v-if="isReviewAnswersEnabled"
             :disabled="isReviewFlagSaving || selectedReviewQuestionIds.length === 0"
             :label="t('Review selected questions')"
             icon="eye"
@@ -264,6 +274,7 @@
             @click="reviewSelectedQuestions"
           />
           <BaseButton
+            v-if="isReviewAnswersEnabled"
             :disabled="isReviewFlagSaving"
             :label="t('Select all')"
             icon="checkbox-marked-outline"
@@ -271,6 +282,7 @@
             @click="setAllReviewQuestions(true)"
           />
           <BaseButton
+            v-if="isReviewAnswersEnabled"
             :disabled="isReviewFlagSaving"
             :label="t('Unselect all')"
             icon="checkbox-blank-outline"
@@ -1416,11 +1428,13 @@ const visibleQuestions = computed(() => {
 
 const visibleQuestionTotal = computed(() => answerableQuestions.value.length)
 const isReviewAnswersEnabled = computed(() => Number(settings.value.reviewAnswers || 0) > 0)
+const isCheckAnswersBeforeFinishEnabled = computed(() => true === settings.value.checkAllAnswersBeforeEndTest)
+const isFinalAnswerChecklistEnabled = computed(() => isReviewAnswersEnabled.value || isCheckAnswersBeforeFinishEnabled.value)
 const isReviewingMarkedQuestions = computed(() => reviewQueue.value.length > 0)
 const showReviewReminderScreen = computed(() => {
   return !canManage.value
     && Boolean(activeAttempt.value?.attemptId)
-    && isReviewAnswersEnabled.value
+    && isFinalAnswerChecklistEnabled.value
     && isReviewReminderVisible.value
     && !isReviewingMarkedQuestions.value
 })
@@ -1508,6 +1522,14 @@ const reviewQuestionList = computed(() => answerableQuestions.value.map((questio
   isAnswered: savedQuestionIds.value.has(Number(question.id || 0)),
   isMarked: reviewQuestionIds.value.has(Number(question.id || 0)),
 })))
+const firstUnansweredReviewQuestionId = computed(() => {
+  const question = reviewQuestionList.value.find((item) => !item.isAnswered)
+
+  return Number(question?.id || 0)
+})
+const reviewReminderTitle = computed(() => {
+  return isReviewAnswersEnabled.value ? t("Questions to be reviewed") : t("Review my answers")
+})
 const feedbackDialogTitle = computed(() => t(feedbackDialog.value?.title || "Feedback"))
 const requiresSavedAnswerConfirmation = computed(() => {
   return !canManage.value && Boolean(activeAttempt.value?.attemptId) && true === settings.value.confirmSavedAnswers
@@ -1691,7 +1713,7 @@ async function setAllReviewQuestions(checked) {
 }
 
 function showReviewReminder() {
-  if (!isReviewAnswersEnabled.value || canManage.value || !activeAttempt.value?.attemptId) {
+  if (!isFinalAnswerChecklistEnabled.value || canManage.value || !activeAttempt.value?.attemptId) {
     return false
   }
 
@@ -1722,6 +1744,19 @@ function returnToReviewReminder() {
   reviewQueue.value = []
   reviewQueueIndex.value = 0
   isReviewReminderVisible.value = true
+  syncQuestionCountdown()
+}
+
+function returnToFirstUnansweredQuestion() {
+  const questionId = firstUnansweredReviewQuestionId.value
+  if (questionId <= 0) {
+    return
+  }
+
+  reviewQueue.value = []
+  reviewQueueIndex.value = 0
+  isReviewReminderVisible.value = false
+  setCurrentQuestionById(questionId)
   syncQuestionCountdown()
 }
 

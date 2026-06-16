@@ -75,6 +75,8 @@ $currentAppliesToLabel = $appliesToLabels[$currentAppliesTo] ?? get_lang('None')
 
 $customImageUrl = $plugin->getServiceImageUrl('simg-'.$serviceId.'.png');
 
+$translatableHtmlEditorConfig = buycoursesBuildTranslatableHtmlEditorConfig();
+
 $formDefaultValues = array_merge(
     $service,
     $plugin->buildBenefitFormDefaults($serviceId)
@@ -103,7 +105,7 @@ $form = new FormValidator(
 
 $form->addText('name', $plugin->get_lang('ServiceName'));
 $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
-$form->addHtmlEditor('description', $plugin->get_lang('Description'));
+$form->addHtmlEditor('description', $plugin->get_lang('Description'), true, false, $translatableHtmlEditorConfig);
 $form->addElement(
     'number',
     'price',
@@ -199,7 +201,7 @@ $form->addFile(
     ['id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '16 / 9']
 );
 $form->addText('video_url', get_lang('VideoUrl'), false);
-$form->addHtmlEditor('service_information', $plugin->get_lang('ServiceInformation'), false);
+$form->addHtmlEditor('service_information', $plugin->get_lang('ServiceInformation'), false, false, $translatableHtmlEditorConfig);
 
 $form->addHtml('<div class="buycourses-benefits-section">');
 $form->addHeader($plugin->get_lang('GrantedBenefits'));
@@ -322,6 +324,21 @@ $pageContent = buycoursesBuildServiceFormShell(
 $tpl->assign('header', $templateName);
 $tpl->assign('content', $pageContent);
 $tpl->display_one_col_template();
+
+
+function buycoursesBuildTranslatableHtmlEditorConfig(): array
+{
+    $config = [
+        'ToolbarSet' => 'TestQuestionDescription',
+    ];
+
+    if ('true' === api_get_setting('editor.translate_html')) {
+        $config['extraPlugins'] = 'translatehtml';
+        $config['toolbar'] = 'undo redo | translatehtml | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | fontfamily fontsize | forecolor backcolor removeformat | link image media table | emoticons preview print code fullscreen | ltr rtl';
+    }
+
+    return $config;
+}
 
 /**
  * Build the service form page shell.

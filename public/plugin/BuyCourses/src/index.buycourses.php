@@ -10,6 +10,7 @@ use ChamiloSession as Session;
  * Entry point of the Buy Courses plugin landing page.
  */
 $plugin = BuyCoursesPlugin::create();
+
 $allowAnonymousUsers = 'true' === $plugin->get('unregistered_users_enable');
 $includeServices = 'true' === $plugin->get('include_services');
 $includeSessions = 'true' === $plugin->get('include_sessions');
@@ -147,6 +148,8 @@ if (!api_is_platform_admin()) {
             foreach ($serviceItems as &$service) {
                 $serviceId = (int) $service['id'];
                 $durationDays = (int) ($service['duration_days'] ?? 0);
+                $service['description'] = $plugin->filterServiceMultilingualHtml((string) ($service['description'] ?? ''));
+                $service['service_information'] = $plugin->filterServiceMultilingualHtml((string) ($service['service_information'] ?? ''));
                 $service['has_blocking_sale'] = $plugin->hasBlockingUserServiceSaleForCurrentBuyer($serviceId);
                 $service['has_pending_sale'] = $plugin->hasPendingUserServiceSaleForCurrentBuyer($serviceId);
 

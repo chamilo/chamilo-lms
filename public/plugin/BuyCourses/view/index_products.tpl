@@ -1,6 +1,13 @@
 {% autoescape false %}
 {% import _self as cards %}
 
+<style>
+    .bc-translated-html p {margin: 0 0 0.5rem;}
+    .bc-translated-html ul {margin: 0.5rem 0 0.5rem 1.25rem; padding-left: 1.25rem; list-style: disc;}
+    .bc-translated-html ol {margin: 0.5rem 0 0.5rem 1.25rem; padding-left: 1.25rem; list-style: decimal;}
+    .bc-translated-html li {margin: 0.2rem 0;}
+</style>
+
 {#
     Direct product listing rendered on the BuyCourses landing page for non-admin
     users. Card markup mirrors view/catalog.tpl and view/subscription_catalog.tpl
@@ -196,7 +203,7 @@
                 </h3>
             </div>
 
-            <div class="text-sm text-gray-50">
+            <div class="bc-translated-html text-sm text-gray-50">
                 {{ service.description|raw }}
             </div>
 

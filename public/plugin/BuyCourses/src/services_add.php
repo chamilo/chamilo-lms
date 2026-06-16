@@ -44,6 +44,8 @@ $interbreadcrumb[] = [
     'name' => $plugin->get_lang('Services'),
 ];
 
+$translatableHtmlEditorConfig = buycoursesBuildTranslatableHtmlEditorConfig();
+
 $formDefaultValues = array_merge($plugin->buildBenefitFormDefaults(), [
     'price' => 0,
     'tax_perc' => $defaultGlobalTax,
@@ -70,7 +72,7 @@ $form = new FormValidator(
 );
 $form->addText('name', $plugin->get_lang('ServiceName'));
 $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
-$form->addHtmlEditor('description', $plugin->get_lang('Description'));
+$form->addHtmlEditor('description', $plugin->get_lang('Description'), true, false, $translatableHtmlEditorConfig);
 $form->addElement(
     'number',
     'price',
@@ -167,7 +169,7 @@ $form->addFile(
     ['id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '16 / 9']
 );
 $form->addText('video_url', get_lang('VideoUrl'), false);
-$form->addHtmlEditor('service_information', $plugin->get_lang('ServiceInformation'), false);
+$form->addHtmlEditor('service_information', $plugin->get_lang('ServiceInformation'), false, false, $translatableHtmlEditorConfig);
 
 $form->addHtml('<div class="buycourses-benefits-section">');
 $form->addHeader($plugin->get_lang('GrantedBenefits'));
@@ -387,6 +389,21 @@ function buycoursesBuildServiceFormShell(
         </div>
         {$enhancerScript}
     HTML;
+}
+
+
+function buycoursesBuildTranslatableHtmlEditorConfig(): array
+{
+    $config = [
+        'ToolbarSet' => 'TestQuestionDescription',
+    ];
+
+    if ('true' === api_get_setting('editor.translate_html')) {
+        $config['extraPlugins'] = 'translatehtml';
+        $config['toolbar'] = 'undo redo | translatehtml | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | fontfamily fontsize | forecolor backcolor removeformat | link image media table | emoticons preview print code fullscreen | ltr rtl';
+    }
+
+    return $config;
 }
 
 function buycoursesValidateServicePayload(array $values, BuyCoursesPlugin $plugin): array

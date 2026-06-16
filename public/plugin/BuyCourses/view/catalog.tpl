@@ -26,6 +26,13 @@
     {% set visibleTabsCount = visibleTabsCount + 1 %}
 {% endif %}
 
+<style>
+    .bc-translated-html p {margin: 0 0 0.5rem;}
+    .bc-translated-html ul {margin: 0.5rem 0 0.5rem 1.25rem; padding-left: 1.25rem; list-style: disc;}
+    .bc-translated-html ol {margin: 0.5rem 0 0.5rem 1.25rem; padding-left: 1.25rem; list-style: decimal;}
+    .bc-translated-html li {margin: 0.2rem 0;}
+</style>
+
 <div class="mx-auto w-full max-w-[1600px] space-y-6 px-4 py-6 sm:px-6 lg:px-8 2xl:px-10">
     <section class="rounded-3xl border border-gray-25 bg-white p-6 shadow-sm">
         <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
@@ -456,8 +463,8 @@
                                         </h3>
                                     </div>
 
-                                    <div class="text-sm text-gray-50">
-                                        {{ service.description }}
+                                    <div class="bc-translated-html text-sm text-gray-50">
+                                        {{ service.description|raw }}
                                     </div>
 
                                     <div class="rounded-2xl border border-primary/10 bg-support-1 px-4 py-3">

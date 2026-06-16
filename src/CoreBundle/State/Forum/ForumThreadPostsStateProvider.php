@@ -36,6 +36,7 @@ use Throwable;
  */
 final class ForumThreadPostsStateProvider implements ProviderInterface
 {
+    use ForumCourseSettingHelperTrait;
     use ForumStateHelperTrait;
 
     /** @var array<int, string> */
@@ -195,20 +196,12 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
 
     private function areForumPostNotificationsHidden(Course $course): bool
     {
-        if (!\function_exists('api_get_course_setting')) {
-            return false;
-        }
-
-        return 1 === (int) api_get_course_setting('hide_forum_notifications', $course);
+        return $this->isCourseSettingEnabled($this->entityManager, $course, 'hide_forum_notifications');
     }
 
     private function arePosterImagesAllowed(Course $course): bool
     {
-        if (!\function_exists('api_get_course_setting')) {
-            return false;
-        }
-
-        return 1 === (int) api_get_course_setting('allow_user_image_forum', $course);
+        return $this->isCourseSettingEnabled($this->entityManager, $course, 'allow_user_image_forum');
     }
 
     private function shouldHideForumPostRevisionLanguage(): bool

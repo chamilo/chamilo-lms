@@ -151,7 +151,7 @@ final class ForumThreadProcessor implements ProcessorInterface
             ->setForum($forum)
             ->setUser($user)
             ->setPostDate($now)
-            ->setPostNotification($this->shouldStorePostNotification($course, $this->getBoolean($data, 'postNotification')))
+            ->setPostNotification($this->shouldStorePostNotification($this->entityManager, $course, $this->getBoolean($data, 'postNotification')))
             ->setVisible($visible)
             ->setStatus($status)
             ->setParent($thread)
@@ -434,7 +434,7 @@ final class ForumThreadProcessor implements ProcessorInterface
         $this->validateCsrfToken($this->csrfTokenManager, $payload['csrfToken'] ?? null);
 
         $course = $this->getCourse($this->entityManager, $request);
-        if ($this->areForumPostNotificationsHidden($course)) {
+        if ($this->areForumPostNotificationsHidden($this->entityManager, $course)) {
             throw new AccessDeniedHttpException('Forum notifications are disabled for this course.');
         }
 

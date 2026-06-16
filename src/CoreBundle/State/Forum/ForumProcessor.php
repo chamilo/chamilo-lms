@@ -67,6 +67,10 @@ final class ForumProcessor implements ProcessorInterface
 
             $this->applyPayloadToForum($forum, $payload, true);
             $this->forumRepository->create($forum);
+            $subscribedUsers = $this->subscribeUsersToForumNotifications($this->entityManager, $course, $session, $forum);
+            if ($subscribedUsers > 0) {
+                $this->entityManager->flush();
+            }
             $this->registerForumEventLog('new-forum', 'forum', (string) $forum->getIid());
 
             return $forum;
@@ -180,7 +184,7 @@ final class ForumProcessor implements ProcessorInterface
         }
 
         $course = $this->getCourse($this->entityManager, $request);
-        if ($this->areForumPostNotificationsHidden($course)) {
+        if ($this->areForumPostNotificationsHidden($this->entityManager, $course)) {
             throw new AccessDeniedHttpException('Forum notifications are disabled for this course.');
         }
 

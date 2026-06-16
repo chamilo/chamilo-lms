@@ -2,7 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Component\Mpdf\SafeMpdfHttpClient;
 use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
@@ -5380,7 +5379,7 @@ final class WikiManager
 
         // Sanitize title for document/file names
         $safeTitle = trim($title) !== '' ? $title : 'wiki_page';
-        $downloadName = preg_replace('/\s+/', '_', (string) api_replace_dangerous_char($safeTitle)).'.pdf';
+        $fileName = preg_replace('/\s+/', '_', (string) api_replace_dangerous_char($safeTitle));
 
         // Wrap content (keep structure simple for HTML→PDF engines)
         $html = '<!DOCTYPE html><html lang="'.htmlspecialchars(api_get_language_isocode()).'"><head>'
@@ -5392,47 +5391,18 @@ final class WikiManager
             .'<div class="wiki-content">'.$content.'</div>'
             .'</body></html>';
 
-        // --- Try mPDF first ---
-        if (class_exists('\\Mpdf\\Mpdf')) {
-            // Use mPDF directly
-            try {
-                $mpdf = new \Mpdf\Mpdf([
-                    'tempDir' => sys_get_temp_dir(),
-                    'mode'    => 'utf-8',
-                    'format'  => 'A4',
-                    'margin_left'   => 12,
-                    'margin_right'  => 12,
-                    'margin_top'    => 12,
-                    'margin_bottom' => 12,
-                ], SafeMpdfHttpClient::container());
-                $mpdf->SetTitle($safeTitle);
-                $mpdf->WriteHTML($html);
-                // Force download
-                $mpdf->Output($downloadName, 'D');
-                exit;
-            } catch (\Throwable $e) {
-                // Continue to next engine
-            }
-        }
-
-        // --- Try Dompdf fallback ---
-        if (class_exists('\\Dompdf\\Dompdf')) {
-            try {
-                $dompdf = new \Dompdf\Dompdf([
-                    'chroot' => realpath(__DIR__.'/../../..'),
-                    'isRemoteEnabled' => false,
-                ]);
-                $dompdf->loadHtml($html, 'UTF-8');
-                $dompdf->setPaper('A4', 'portrait');
-                $dompdf->render();
-                $dompdf->stream($downloadName, ['Attachment' => true]);
-                exit;
-            } catch (\Throwable $e) {
-                // Continue to final fallback
-            }
+        // Render through the shared PDF class, whose mPDF instance routes remote
+        // asset fetches through the SSRF-guarded HTTP client. This replaces the
+        // former direct mPDF/Dompdf instantiation (Dompdf's isRemoteEnabled was
+        // the second SSRF sink).
+        try {
+            PDF::htmlToPdfDownload($html, $fileName, $safeTitle, 12);
+        } catch (\Throwable $e) {
+            // Continue to final fallback
         }
 
         // --- Final fallback: deliver HTML as download (not PDF) ---
+        $downloadName = $fileName.'.pdf';
         // Clean buffers to avoid header issues
         if (function_exists('ob_get_level')) {
             while (ob_get_level() > 0) { @ob_end_clean(); }

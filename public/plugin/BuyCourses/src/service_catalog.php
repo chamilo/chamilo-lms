@@ -202,6 +202,7 @@ foreach ($serviceList as &$service) {
     $service['service_information'] = $plugin->filterServiceMultilingualHtml((string) ($service['service_information'] ?? ''));
     $service['has_blocking_sale'] = $plugin->hasBlockingUserServiceSaleForCurrentBuyer($serviceId);
     $service['has_pending_sale'] = $plugin->hasPendingUserServiceSaleForCurrentBuyer($serviceId);
+    $service['can_buy'] = $plugin->canCurrentUserBuyService($service);
 }
 unset($service);
 
@@ -247,7 +248,7 @@ foreach ($serviceList as &$service) {
 }
 unset($service);
 
-$canBuyServices = api_is_platform_admin() || api_is_allowed_to_create_course();
+$canBuyServices = $plugin->canCurrentUserBuyUserServices();
 $buyerRoleNotice = null;
 
 if (!$canBuyServices) {

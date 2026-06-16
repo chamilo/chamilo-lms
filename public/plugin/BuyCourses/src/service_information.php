@@ -102,6 +102,13 @@ if (!empty($service['description'])) {
     $serviceDescription = $plugin->filterServiceMultilingualPlainText((string) $service['description']);
 }
 
+$canBuyService = $plugin->canCurrentUserBuyService($service);
+$buyerRoleNotice = null;
+
+if (!$canBuyService && !$isPurchasedContext) {
+    $buyerRoleNotice = $plugin->get_lang('ServicesOnlyForTeachers');
+}
+
 $pageUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_information.php?service_id='.$serviceId;
 $backUrl = $isPurchasedContext
     ? api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_panel.php'
@@ -118,6 +125,8 @@ $template->assign('duration_label', $durationLabel);
 $template->assign('applies_to_label', $appliesToLabel);
 $template->assign('total_price_formatted', $totalPriceFormatted);
 $template->assign('is_purchased_context', $isPurchasedContext);
+$template->assign('can_buy_service', $canBuyService);
+$template->assign('buyer_role_notice', $buyerRoleNotice);
 $template->assign('back_url', $backUrl);
 
 $content = $template->fetch('BuyCourses/view/service_information.tpl');

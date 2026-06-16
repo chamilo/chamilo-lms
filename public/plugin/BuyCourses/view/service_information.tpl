@@ -61,8 +61,8 @@
         <div class="bc-info-hero__body">
             <div class="bc-info-badges">
                 {% if applies_to_label %}<span class="bc-info-badge">{{ applies_to_label|e }}</span>{% endif %}
-                {% if service.renewable is defined and service.renewable %}<span class="bc-info-badge bc-info-badge--blue">Recurring payments</span>{% endif %}
-                {% if is_purchased_context %}<span class="bc-info-badge">Purchased</span>{% endif %}
+                {% if service.renewable is defined and service.renewable %}<span class="bc-info-badge bc-info-badge--blue">{{ 'RecurringPayments'|get_plugin_lang('BuyCoursesPlugin') }}</span>{% endif %}
+                {% if is_purchased_context %}<span class="bc-info-badge">{{ 'PurchasedService'|get_plugin_lang('BuyCoursesPlugin') }}</span>{% endif %}
             </div>
             <h1 class="bc-info-title">{{ service.name|e }}</h1>
             {% if service_description_html %}<div class="bc-info-description bc-translated-html">{{ service_description_html|raw }}</div>{% endif %}
@@ -71,7 +71,7 @@
                 <div class="bc-info-stat"><div class="bc-info-stat__label">{{ 'Price'|get_lang }}</div><div class="bc-info-stat__value">{{ total_price_formatted|e ?: '—' }}</div></div>
                 <div class="bc-info-stat"><div class="bc-info-stat__label">{{ 'Duration'|get_lang }}</div><div class="bc-info-stat__value">{{ duration_label|e }}</div></div>
                 <div class="bc-info-stat"><div class="bc-info-stat__label">{{ 'Visible'|get_lang }}</div><div class="bc-info-stat__value">{% if service.visibility %}{{ 'Yes'|get_lang }}{% else %}{{ 'No'|get_lang }}{% endif %}</div></div>
-                <div class="bc-info-stat"><div class="bc-info-stat__label">Tax rate</div><div class="bc-info-stat__value">{{ service.tax_perc is defined ? service.tax_perc ~ '%' : '0%' }}</div></div>
+                <div class="bc-info-stat"><div class="bc-info-stat__label">{{ 'TaxPerc'|get_plugin_lang('BuyCoursesPlugin') }}</div><div class="bc-info-stat__value">{{ service.tax_perc is defined ? service.tax_perc ~ '%' : '0%' }}</div></div>
             </div>
         </div>
     </article>

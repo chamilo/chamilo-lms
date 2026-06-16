@@ -9,7 +9,7 @@
         <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div class="space-y-3">
                 <span class="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary">
-                    {{ 'Buy courses'|get_plugin_lang('BuyCoursesPlugin') }}
+                    {{ 'BuyCourses'|get_plugin_lang('BuyCoursesPlugin') }}
                 </span>
                 <div>
                     <h1 class="text-3xl font-semibold tracking-tight text-gray-90">
@@ -123,7 +123,7 @@
                                         method="post"
                                         action="{{ delete_action_url }}"
                                         class="inline-flex"
-                                        onsubmit="return confirm('Are you sure you want to remove this subscription period?');"
+                                        onsubmit="return confirm('{{ 'ConfirmRemoveSubscriptionPeriod'|get_plugin_lang('BuyCoursesPlugin')|e('js') }}');"
                                     >
                                         <input type="hidden" name="action" value="delete_frequency">
                                         <input type="hidden" name="duration" value="{{ subscription.duration }}">

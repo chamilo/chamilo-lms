@@ -136,7 +136,7 @@
                                         type="button"
                                         disabled
                                         class="inline-flex cursor-not-allowed items-center justify-center gap-2 rounded-xl bg-gray-25 px-4 py-2.5 text-sm font-semibold text-gray-50"
-                                        title="This subscription period is currently in use and cannot be deleted."
+                                        title="{{ 'SubscriptionPeriodInUseCannotBeDeleted'|get_plugin_lang('BuyCoursesPlugin')|e('html_attr') }}"
                                     >
                                         <em class="fa fa-lock fa-fw"></em>
                                         {{ 'Delete'|get_lang }}

@@ -16,6 +16,10 @@
     .bc-info-badge--blue {background: #eef6ff; color: #1677ff;}
     .bc-info-title {margin: 0; color: #111827; font-size: 28px; font-weight: 800; line-height: 1.25;}
     .bc-info-description {max-width: 900px; margin: 10px 0 0; color: #8a96a8; font-size: 14px; line-height: 1.6;}
+    .bc-translated-html p {margin: 0 0 0.5rem;}
+    .bc-translated-html ul {margin: 0.5rem 0 0.5rem 1.25rem; padding-left: 1.25rem; list-style: disc;}
+    .bc-translated-html ol {margin: 0.5rem 0 0.5rem 1.25rem; padding-left: 1.25rem; list-style: decimal;}
+    .bc-translated-html li {margin: 0.2rem 0;}
     .bc-info-stats {display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 24px;}
     .bc-info-stat {min-width: 0; padding: 16px; border-radius: 18px; background: #f7fafc;}
     .bc-info-stat__label {color: #8a96a8; font-size: 11px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase;}
@@ -55,7 +59,7 @@
                 {% if is_purchased_context %}<span class="bc-info-badge">Purchased</span>{% endif %}
             </div>
             <h1 class="bc-info-title">{{ service.name|e }}</h1>
-            {% if service_description %}<p class="bc-info-description">{{ service_description|e }}</p>{% endif %}
+            {% if service_description_html %}<div class="bc-info-description bc-translated-html">{{ service_description_html|raw }}</div>{% endif %}
             <div class="bc-info-stats">
                 <div class="bc-info-stat"><div class="bc-info-stat__label">{{ 'Price'|get_lang }}</div><div class="bc-info-stat__value">{{ total_price_formatted|e ?: '—' }}</div></div>
                 <div class="bc-info-stat"><div class="bc-info-stat__label">{{ 'Duration'|get_lang }}</div><div class="bc-info-stat__value">{{ duration_label|e }}</div></div>
@@ -66,7 +70,7 @@
     </article>
 
     <section class="bc-info-grid">
-        <article class="bc-info-card"><h2 class="bc-info-card__title">{{ 'ServiceInformation'|get_plugin_lang('BuyCoursesPlugin') }}</h2><div class="bc-info-card__content">{% if service_details_html %}{{ service_details_html|raw }}{% else %}<p>{{ 'NoDescription'|get_lang }}</p>{% endif %}</div></article>
+        <article class="bc-info-card"><h2 class="bc-info-card__title">{{ 'ServiceInformation'|get_plugin_lang('BuyCoursesPlugin') }}</h2><div class="bc-info-card__content bc-translated-html">{% if service_details_html %}{{ service_details_html|raw }}{% else %}<p>{{ 'NoDescription'|get_lang }}</p>{% endif %}</div></article>
         <aside class="bc-info-card">
             <h2 class="bc-info-card__title">{{ 'Summary'|get_lang }}</h2>
             <div class="bc-summary-row"><span>{{ 'Total'|get_lang }}</span><span class="bc-summary-pill">{{ total_price_formatted|e ?: '—' }}</span></div>

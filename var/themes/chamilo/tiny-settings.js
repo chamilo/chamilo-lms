@@ -55,7 +55,7 @@
   function normalizePlugins(p) {
     if (!p) return []
     if (Array.isArray(p)) return p.flatMap((s) => String(s).split(/\s+/)).filter(Boolean)
-    return String(p).split(/\s+/).filter(Boolean)
+    return String(p).split(/[\s,]+/).filter(Boolean)
   }
 
   function dedupeToolbar(a, b) {
@@ -80,6 +80,29 @@
     return out.join(" | ")
   }
 
+  function appendToolbarCommand(toolbar, command) {
+    const current = String(toolbar || "")
+
+    if (!command || current.split(/\s+/).includes(command)) {
+      return current
+    }
+
+    const groups = current.split("|").map((group) => group.trim())
+
+    if (!groups.length || !groups[0]) {
+      return command
+    }
+
+    const firstGroupCommands = groups[0].split(/\s+/).filter(Boolean)
+    const insertAfter = firstGroupCommands.includes("redo")
+      ? firstGroupCommands.indexOf("redo") + 1
+      : firstGroupCommands.length
+
+    firstGroupCommands.splice(insertAfter, 0, command)
+    groups[0] = firstGroupCommands.join(" ")
+
+    return groups.join(" | ")
+  }
   function toBool(value) {
     if (typeof value === "boolean") {
       return value
@@ -596,19 +619,40 @@
     var merged = Object.assign({}, base, localConfig)
 
     var basePlugins = base.plugins || ""
-    var localPlugins = localConfig.plugins || ""
+    var localPlugins = [localConfig.plugins || "", localConfig.extraPlugins || "", localConfig.extra_plugins || ""]
+      .join(" ")
+
+    const pluginNames = new Set([
+      ...normalizePlugins(basePlugins),
+      ...normalizePlugins(localPlugins),
+    ])
 
     merged.plugins =
       PLUGINS_POLICY === "base"
         ? basePlugins
-        : Array.from(new Set((basePlugins + " " + localPlugins).trim().split(/\s+/))).join(" ")
+        : Array.from(pluginNames).join(" ")
 
-    merged.external_plugins = Object.assign({}, base.external_plugins || {}, localConfig.external_plugins || {})
+    const localExternalPlugins = Object.assign({}, localConfig.external_plugins || {})
+
+    if (pluginNames.has("translatehtml")) {
+      const editorBaseUrl = String(merged.base_url || base.base_url || BASE_URL_TINYMCE).replace(/\/$/, "")
+      localExternalPlugins.translatehtml = localExternalPlugins.translatehtml || editorBaseUrl + "/tinymce_plugins/translatehtml/plugin.js"
+    }
+
+    merged.external_plugins = Object.assign({}, base.external_plugins || {}, localExternalPlugins)
 
     if (TOOLBAR_POLICY === "base" && base.toolbar) {
       merged.toolbar = base.toolbar
     } else if (base.toolbar && localConfig.toolbar) {
       merged.toolbar = dedupeToolbar(base.toolbar, localConfig.toolbar)
+    }
+
+    if (pluginNames.has("translatehtml")) {
+      merged.toolbar = appendToolbarCommand(merged.toolbar || localConfig.toolbar || base.toolbar || "", "translatehtml")
+      merged.extended_valid_elements = appendExtendedValidElements(
+        merged.extended_valid_elements,
+        "span[lang|class|style]",
+      )
     }
 
     var csBase = base.content_style || ""

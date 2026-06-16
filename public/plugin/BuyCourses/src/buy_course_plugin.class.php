@@ -167,6 +167,227 @@ class BuyCoursesPlugin extends Plugin
         return $result ? $result : $result = new self();
     }
 
+
+    private function getCurrentLanguageTwoLetterIsoCode(): string
+    {
+        $language = '';
+        $userInfo = api_get_user_info();
+
+        if (!empty($userInfo['language'])) {
+            $language = (string) $userInfo['language'];
+        }
+
+        if ('' === $language && function_exists('api_get_language_isocode')) {
+            $language = (string) api_get_language_isocode();
+        }
+
+        if ('' === $language) {
+            $language = (string) api_get_setting('platformLanguage');
+        }
+
+        $languageId = api_get_language_id($language);
+        if (!empty($languageId)) {
+            $languageInfo = api_get_language_info($languageId);
+            if (!empty($languageInfo['isocode'])) {
+                $language = (string) $languageInfo['isocode'];
+            }
+        }
+
+        $language = strtolower(str_replace('_', '-', trim($language)));
+        if (preg_match('/^[a-z]{2}/', $language, $matches)) {
+            return $matches[0];
+        }
+
+        return 'en';
+    }
+
+    public function filterServiceMultilingualHtml(string $html): string
+    {
+        if ('' === trim($html) || 'true' !== api_get_setting('editor.translate_html')) {
+            return $html;
+        }
+
+        if (!str_contains($html, 'mce-translatehtml')) {
+            return Security::remove_XSS($html);
+        }
+
+        if (!class_exists(\DOMDocument::class) || !class_exists(\DOMXPath::class)) {
+            return $this->filterServiceMultilingualHtmlWithRegex($html);
+        }
+
+        $document = new \DOMDocument('1.0', 'UTF-8');
+        $previousUseInternalErrors = libxml_use_internal_errors(true);
+        $loaded = $document->loadHTML(
+            '<?xml encoding="UTF-8"><div id="buycourses-translation-root">'.$html.'</div>',
+            LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
+        );
+        libxml_clear_errors();
+        libxml_use_internal_errors($previousUseInternalErrors);
+
+        if (false === $loaded) {
+            return $this->filterServiceMultilingualHtmlWithRegex($html);
+        }
+
+        $xpath = new \DOMXPath($document);
+        $nodes = $xpath->query('//*[@lang and contains(concat(" ", normalize-space(@class), " "), " mce-translatehtml ")]');
+
+        if (false === $nodes || 0 === $nodes->length) {
+            return Security::remove_XSS($html);
+        }
+
+        $targetLanguage = $this->getCurrentLanguageTwoLetterIsoCode();
+        $availableLanguages = [];
+
+        foreach ($nodes as $node) {
+            if (!$node instanceof \DOMElement) {
+                continue;
+            }
+
+            $nodeLanguage = $this->normalizeServiceTranslationLanguageCode($node->getAttribute('lang'));
+            if ('' !== $nodeLanguage) {
+                $availableLanguages[] = $nodeLanguage;
+            }
+        }
+
+        $availableLanguages = array_values(array_unique($availableLanguages));
+
+        if (!in_array($targetLanguage, $availableLanguages, true)) {
+            $targetLanguage = in_array('en', $availableLanguages, true)
+                ? 'en'
+                : (string) ($availableLanguages[0] ?? 'en');
+        }
+
+        for ($i = $nodes->length - 1; $i >= 0; $i--) {
+            $node = $nodes->item($i);
+
+            if (!$node instanceof \DOMElement || null === $node->parentNode) {
+                continue;
+            }
+
+            $nodeLanguage = $this->normalizeServiceTranslationLanguageCode($node->getAttribute('lang'));
+
+            if ($nodeLanguage !== $targetLanguage) {
+                $node->parentNode->removeChild($node);
+                continue;
+            }
+
+            while ($node->firstChild) {
+                $node->parentNode->insertBefore($node->firstChild, $node);
+            }
+
+            $node->parentNode->removeChild($node);
+        }
+
+        $this->removeEmptyServiceTranslationNodes($xpath);
+
+        $root = $xpath->query('//*[@id="buycourses-translation-root"]')->item(0);
+        if (!$root instanceof \DOMElement) {
+            return $this->filterServiceMultilingualHtmlWithRegex($html);
+        }
+
+        $filteredHtml = '';
+        foreach ($root->childNodes as $childNode) {
+            $filteredHtml .= $document->saveHTML($childNode);
+        }
+
+        return Security::remove_XSS($filteredHtml);
+    }
+
+    private function normalizeServiceTranslationLanguageCode(string $language): string
+    {
+        $language = strtolower(str_replace('_', '-', trim($language)));
+
+        if (preg_match('/^[a-z]{2}/', $language, $matches)) {
+            return $matches[0];
+        }
+
+        return '';
+    }
+
+    private function removeEmptyServiceTranslationNodes(\DOMXPath $xpath): void
+    {
+        $emptyNodes = $xpath->query(
+            '//*[self::p or self::div][not(@id="buycourses-translation-root") and not(.//img) and not(.//video) and not(.//audio) and not(.//iframe) and not(.//table) and not(.//ul) and not(.//ol) and normalize-space(.) = ""]'
+        );
+
+        if (false === $emptyNodes) {
+            return;
+        }
+
+        for ($i = $emptyNodes->length - 1; $i >= 0; $i--) {
+            $node = $emptyNodes->item($i);
+            if (null !== $node?->parentNode) {
+                $node->parentNode->removeChild($node);
+            }
+        }
+    }
+
+    private function filterServiceMultilingualHtmlWithRegex(string $html): string
+    {
+        $pattern = '/<(?P<tag>div|section|article|p|span)\b(?=[^>]*\blang\s*=\s*(["\'])([a-z]{2})(?:[-_][a-z]{2})?\2)(?=[^>]*\bclass\s*=\s*(["\'])[^"\']*\bmce-translatehtml\b[^"\']*\4)[^>]*>(?P<content>.*?)<\/\k<tag>>/is';
+
+        if (!preg_match_all($pattern, $html, $matches, PREG_SET_ORDER)) {
+            return Security::remove_XSS($html);
+        }
+
+        $targetLanguage = $this->getCurrentLanguageTwoLetterIsoCode();
+        $availableLanguages = [];
+
+        foreach ($matches as $match) {
+            $availableLanguages[] = strtolower((string) $match[3]);
+        }
+
+        if (!in_array($targetLanguage, $availableLanguages, true)) {
+            $targetLanguage = in_array('en', $availableLanguages, true)
+                ? 'en'
+                : (string) ($availableLanguages[0] ?? 'en');
+        }
+
+        $filteredHtml = preg_replace_callback(
+            $pattern,
+            static function (array $match) use ($targetLanguage): string {
+                $nodeLanguage = strtolower((string) $match[3]);
+
+                if ($nodeLanguage !== $targetLanguage) {
+                    return '';
+                }
+
+                return (string) $match['content'];
+            },
+            $html
+        );
+
+        if (null === $filteredHtml) {
+            return Security::remove_XSS($html);
+        }
+
+        $filteredHtml = preg_replace(
+            '/<(p|div|li|h[1-6])\b[^>]*>\s*(?:&nbsp;|\xC2\xA0|\s)*<\/\1>/iu',
+            '',
+            $filteredHtml
+        );
+
+        if (null === $filteredHtml) {
+            return Security::remove_XSS($html);
+        }
+
+        return Security::remove_XSS($filteredHtml);
+    }
+
+    public function filterServiceMultilingualPlainText(string $html): string
+    {
+        $filteredHtml = $this->filterServiceMultilingualHtml($html);
+        $text = trim(strip_tags($filteredHtml));
+
+        if (function_exists('api_html_entity_decode')) {
+            $text = api_html_entity_decode($text);
+        } else {
+            $text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        }
+
+        return trim((string) preg_replace('/\s+/u', ' ', $text));
+    }
+
     /**
      * @return string[]
      */

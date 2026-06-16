@@ -198,6 +198,8 @@ $serviceList = $plugin->getCatalogServiceList(
 
 foreach ($serviceList as &$service) {
     $serviceId = (int) $service['id'];
+    $service['description'] = $plugin->filterServiceMultilingualHtml((string) ($service['description'] ?? ''));
+    $service['service_information'] = $plugin->filterServiceMultilingualHtml((string) ($service['service_information'] ?? ''));
     $service['has_blocking_sale'] = $plugin->hasBlockingUserServiceSaleForCurrentBuyer($serviceId);
     $service['has_pending_sale'] = $plugin->hasPendingUserServiceSaleForCurrentBuyer($serviceId);
 }

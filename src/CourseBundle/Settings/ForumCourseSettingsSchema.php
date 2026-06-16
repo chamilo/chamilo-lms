@@ -19,6 +19,7 @@ class ForumCourseSettingsSchema extends AbstractSettingsSchema
             ->setDefaults([
                 'enabled' => 1,
                 'allow_user_image_forum' => 1,
+                'hide_forum_notifications' => 0,
             ])
         ;
     }
@@ -28,6 +29,7 @@ class ForumCourseSettingsSchema extends AbstractSettingsSchema
         $builder
             ->add('enabled', YesNoNumericType::class)
             ->add('allow_user_image_forum', YesNoNumericType::class)
+            ->add('hide_forum_notifications', YesNoNumericType::class)
         ;
     }
 }

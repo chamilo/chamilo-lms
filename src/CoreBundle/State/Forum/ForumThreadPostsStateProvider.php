@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumNotification;
 use Chamilo\CourseBundle\Entity\CForumPost;
@@ -37,12 +38,16 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
 {
     use ForumStateHelperTrait;
 
+    /** @var array<int, string> */
+    private array $posterAvatarUrlByUserId = [];
+
     public function __construct(
         private readonly RequestStack $requestStack,
         private readonly EntityManagerInterface $entityManager,
         private readonly CForumThreadRepository $threadRepository,
         private readonly CForumAttachmentRepository $attachmentRepository,
         private readonly Security $security,
+        private readonly SettingsManager $settingsManager,
     ) {}
 
     /**
@@ -144,6 +149,8 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
 
         $posts = $postsQueryBuilder->getQuery()->getResult();
 
+        $showPosterAvatar = $this->arePosterImagesAllowed($course);
+
         return [
             'forum' => $this->serializeForum($forum),
             'thread' => $this->serializeThread(
@@ -157,7 +164,13 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
             'canReply' => $this->canReply($forum, $thread),
             'canManageThread' => $canManage,
             'posts' => array_map(
-                fn (CForumPost $post): array => $this->serializePost($post, $forum, $thread, $canManage),
+                fn (CForumPost $post): array => $this->serializePost(
+                    $post,
+                    $forum,
+                    $thread,
+                    $canManage,
+                    $showPosterAvatar,
+                ),
                 $posts,
             ),
         ];
@@ -187,6 +200,22 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         }
 
         return 1 === (int) api_get_course_setting('hide_forum_notifications', $course);
+    }
+
+    private function arePosterImagesAllowed(Course $course): bool
+    {
+        if (!\function_exists('api_get_course_setting')) {
+            return false;
+        }
+
+        return 1 === (int) api_get_course_setting('allow_user_image_forum', $course);
+    }
+
+    private function shouldHideForumPostRevisionLanguage(): bool
+    {
+        return $this->isTruthySetting(
+            $this->settingsManager->getSetting('forum.hide_forum_post_revision_language', true),
+        );
     }
 
     private function isSubscribedToThread(Course $course, User $user, int $threadId): bool
@@ -254,8 +283,13 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
     /**
      * @return array<string, mixed>
      */
-    private function serializePost(CForumPost $post, CForum $forum, CForumThread $thread, bool $canManage): array
-    {
+    private function serializePost(
+        CForumPost $post,
+        CForum $forum,
+        CForumThread $thread,
+        bool $canManage,
+        bool $showPosterAvatar,
+    ): array {
         $canEdit = $this->canEditPost($post, $forum, $thread, $canManage);
         $attachments = [];
 
@@ -275,7 +309,8 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         $currentUser = $this->security->getUser();
         $isAuthor = $currentUser instanceof User && $post->getUser()->getId() === $currentUser->getId();
         $revisionRequested = $this->postNeedsRevision($post);
-        $revisionLanguage = $this->getPostRevisionLanguage($post);
+        $revisionLanguage = $this->shouldHideForumPostRevisionLanguage() ? '' : $this->getPostRevisionLanguage($post);
+        $posterAvatarUrl = $showPosterAvatar ? $this->getPosterAvatarUrl($post->getUser()) : '';
 
         return [
             'iid' => $post->getIid(),
@@ -287,6 +322,8 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
             'status' => $status,
             'statusLabel' => $this->getPostStatusLabel($status),
             'posterFullName' => $post->getPosterFullName(),
+            'posterAvatarUrl' => $posterAvatarUrl,
+            'showPosterAvatar' => $showPosterAvatar && '' !== $posterAvatarUrl,
             'canEdit' => $canEdit,
             'canDelete' => $canEdit,
             'canApprove' => $canManage && CForumPost::STATUS_VALIDATED !== $status,
@@ -326,6 +363,29 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
     private function getPostRevisionLanguage(CForumPost $post): string
     {
         return (string) ($this->getExtraFieldValue('forum_post', (int) $post->getIid(), 'revision_language') ?? '');
+    }
+
+    private function getPosterAvatarUrl(?User $user): string
+    {
+        if (!$user instanceof User || !\function_exists('api_get_user_info')) {
+            return '';
+        }
+
+        $userId = (int) $user->getId();
+        if (isset($this->posterAvatarUrlByUserId[$userId])) {
+            return $this->posterAvatarUrlByUserId[$userId];
+        }
+
+        $userInfo = api_get_user_info($userId, false, false, false, false, true);
+        if (!\is_array($userInfo)) {
+            $this->posterAvatarUrlByUserId[$userId] = '';
+
+            return '';
+        }
+
+        $this->posterAvatarUrlByUserId[$userId] = (string) ($userInfo['avatar_small'] ?? $userInfo['avatar'] ?? '');
+
+        return $this->posterAvatarUrlByUserId[$userId];
     }
 
     private function isReportAvailableForCurrentRequest(): bool

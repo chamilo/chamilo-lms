@@ -88,6 +88,7 @@
               <span>{{ t("Views") }}: {{ thread.threadViews || 0 }}</span>
               <span v-if="thread.threadSticky">{{ t("Sticky") }}</span>
               <span v-if="Number(thread.threadQualifyMax || 0) > 0">{{ t("Graded") }}</span>
+              <span v-if="thread.lockedByGradebook && !thread.locked">{{ t("Locked") }}</span>
               <span v-if="thread.locked">{{ t("Locked") }}</span>
               <span v-if="!isThreadVisible(thread)">{{ t("Hidden") }}</span>
               <span
@@ -132,7 +133,7 @@
               @click="toggleThreadNotification(thread)"
             />
             <BaseButton
-              v-if="canManage"
+              v-if="thread.canToggleVisibility"
               :label="isThreadVisible(thread) ? t('Hide') : t('Show')"
               :icon="isThreadVisible(thread) ? 'eye-on' : 'eye-off'"
               only-icon
@@ -141,7 +142,7 @@
               @click="toggleThreadVisibility(thread)"
             />
             <BaseButton
-              v-if="canManage"
+              v-if="thread.canEdit"
               :label="t('Move thread')"
               icon="arrows-left-right"
               only-icon
@@ -150,7 +151,7 @@
               @click="openMoveThread(thread)"
             />
             <BaseButton
-              v-if="canManage"
+              v-if="thread.canEdit"
               :label="t('Edit thread')"
               icon="edit"
               only-icon
@@ -159,7 +160,7 @@
               @click="openEditThread(thread)"
             />
             <BaseButton
-              v-if="canManage"
+              v-if="thread.canToggleSticky"
               :label="thread.threadSticky ? t('Remove sticky') : t('Make sticky')"
               icon="tag-outline"
               only-icon
@@ -168,7 +169,7 @@
               @click="toggleThreadSticky(thread)"
             />
             <BaseButton
-              v-if="canManage"
+              v-if="thread.canToggleLock"
               :label="Number(thread.locked || 0) ? t('Open thread') : t('Close thread')"
               :icon="Number(thread.locked || 0) ? 'unlock' : 'lock'"
               only-icon
@@ -177,7 +178,7 @@
               @click="toggleThreadLock(thread)"
             />
             <BaseButton
-              v-if="canManage"
+              v-if="thread.canDelete"
               :label="t('Delete thread')"
               icon="delete"
               only-icon
@@ -655,6 +656,10 @@ function canPeerGradeThread(thread) {
 }
 
 function canOpenGrading(thread) {
+  if (thread?.lockedByGradebook) {
+    return false
+  }
+
   return canManage.value || canPeerGradeThread(thread)
 }
 

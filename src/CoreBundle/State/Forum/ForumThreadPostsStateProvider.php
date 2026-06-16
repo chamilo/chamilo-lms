@@ -37,6 +37,7 @@ use Throwable;
 final class ForumThreadPostsStateProvider implements ProviderInterface
 {
     use ForumCourseSettingHelperTrait;
+    use ForumGradebookGuardTrait;
     use ForumStateHelperTrait;
 
     /** @var array<int, string> */
@@ -151,6 +152,13 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         $posts = $postsQueryBuilder->getQuery()->getResult();
 
         $showPosterAvatar = $this->arePosterImagesAllowed($course);
+        $lockedByGradebook = $this->isForumThreadLockedByGradebook(
+            $this->entityManager,
+            $this->settingsManager,
+            $this->security,
+            $course,
+            $thread,
+        );
 
         return [
             'forum' => $this->serializeForum($forum),
@@ -161,6 +169,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
                 $canManage,
                 $canSubscribe && $this->isSubscribedToThread($course, $user, (int) $thread->getIid()),
                 $canSubscribe,
+                $lockedByGradebook,
             ),
             'canReply' => $this->canReply($forum, $thread),
             'canManageThread' => $canManage,
@@ -171,6 +180,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
                     $thread,
                     $canManage,
                     $showPosterAvatar,
+                    $lockedByGradebook,
                 ),
                 $posts,
             ),
@@ -251,8 +261,10 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         bool $canManage,
         bool $subscribed,
         bool $canSubscribe,
+        bool $lockedByGradebook,
     ): array {
         $visible = $this->isForumResourceVisible($thread, $course, $session);
+        $canMutate = $canManage && !$lockedByGradebook;
 
         return [
             'iid' => $thread->getIid(),
@@ -265,11 +277,13 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
             'posterFullName' => $thread->getPosterFullName(),
             'subscribed' => $subscribed,
             'canSubscribe' => $canSubscribe,
-            'canEdit' => $canManage,
-            'canDelete' => $canManage,
-            'canToggleLock' => $canManage,
-            'canToggleSticky' => $canManage,
-            'canToggleVisibility' => $canManage,
+            'lockedByGradebook' => $lockedByGradebook,
+            'gradebookLockedMessage' => $lockedByGradebook ? $this->getForumThreadGradebookLockedMessage() : '',
+            'canEdit' => $canMutate,
+            'canDelete' => $canMutate,
+            'canToggleLock' => $canMutate,
+            'canToggleSticky' => $canMutate,
+            'canToggleVisibility' => $canMutate,
         ];
     }
 
@@ -282,8 +296,10 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         CForumThread $thread,
         bool $canManage,
         bool $showPosterAvatar,
+        bool $lockedByGradebook,
     ): array {
-        $canEdit = $this->canEditPost($post, $forum, $thread, $canManage);
+        $canEdit = !$lockedByGradebook && $this->canEditPost($post, $forum, $thread, $canManage);
+        $canModerate = $canManage && !$lockedByGradebook;
         $attachments = [];
 
         foreach ($post->getAttachments() as $attachment) {
@@ -319,15 +335,15 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
             'showPosterAvatar' => $showPosterAvatar && '' !== $posterAvatarUrl,
             'canEdit' => $canEdit,
             'canDelete' => $canEdit,
-            'canApprove' => $canManage && CForumPost::STATUS_VALIDATED !== $status,
-            'canReject' => $canManage && CForumPost::STATUS_REJECTED !== $status,
-            'canToggleVisibility' => $canManage,
+            'canApprove' => $canModerate && CForumPost::STATUS_VALIDATED !== $status,
+            'canReject' => $canModerate && CForumPost::STATUS_REJECTED !== $status,
+            'canToggleVisibility' => $canModerate,
             'canReplyToPost' => $this->canReply($forum, $thread),
             'canQuote' => $this->canReply($forum, $thread),
-            'canMove' => $canManage && !$this->isFirstPost($post, $thread),
+            'canMove' => $canModerate && !$this->isFirstPost($post, $thread),
             'revisionRequested' => $revisionRequested,
             'revisionLanguage' => $revisionLanguage,
-            'canAskRevision' => $isAuthor && $this->areForumPostRevisionsEnabled(),
+            'canAskRevision' => !$lockedByGradebook && $isAuthor && $this->areForumPostRevisionsEnabled(),
             'canGiveRevision' => !$isAuthor && $revisionRequested && $this->canReply($forum, $thread),
             'canReport' => $this->isReportAvailableForCurrentRequest(),
             'attachments' => $attachments,

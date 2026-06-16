@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Security\Upload\UploadFilenamePolicy;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumAttachment;
 use Chamilo\CourseBundle\Entity\CForumPost;
@@ -50,6 +51,7 @@ use const JSON_THROW_ON_ERROR;
 final class ForumThreadProcessor implements ProcessorInterface
 {
     use ForumActionStateHelperTrait;
+    use ForumGradebookGuardTrait;
     use ForumNotificationHelperTrait;
     use ForumStateHelperTrait;
     use ForumWriteHelperTrait;
@@ -65,6 +67,7 @@ final class ForumThreadProcessor implements ProcessorInterface
         private readonly Security $security,
         private readonly CsrfTokenManagerInterface $csrfTokenManager,
         private readonly UploadFilenamePolicy $uploadFilenamePolicy,
+        private readonly SettingsManager $settingsManager,
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): JsonResponse
@@ -209,9 +212,11 @@ final class ForumThreadProcessor implements ProcessorInterface
         $this->assertEditableResource($data->getResourceNode(), 'edit');
         $this->assertEditableResource($forum->getResourceNode(), 'edit');
 
+        $course = $this->getCourse($this->entityManager, $request);
+        $this->assertForumThreadNotLockedByGradebook($this->entityManager, $this->settingsManager, $this->security, $course, $data);
+
         $data->setTitle($this->getRequiredText($payload, 'title', 250));
         if (\array_key_exists('gradebookEnabled', $payload)) {
-            $course = $this->getCourse($this->entityManager, $request);
             $this->applyThreadGradingSettings($data, $course, $payload);
             $this->syncThreadGradebookLink($data, $course, $payload);
         }
@@ -247,6 +252,8 @@ final class ForumThreadProcessor implements ProcessorInterface
         $this->assertEditableResource($forum->getResourceNode(), 'delete');
 
         $course = $this->getCourse($this->entityManager, $request);
+        $this->assertForumThreadNotLockedByGradebook($this->entityManager, $this->settingsManager, $this->security, $course, $data);
+
         $threadId = (int) $data->getIid();
         $postCount = $data->getPosts()->count();
         $forum->setForumThreads(max(0, (int) ($forum->getForumThreads() ?? 0) - 1));
@@ -294,6 +301,8 @@ final class ForumThreadProcessor implements ProcessorInterface
 
         $this->assertEditableForumResource($data->getResourceNode(), $this->security);
         $this->assertEditableForumResource($forum->getResourceNode(), $this->security);
+        $course = $this->getCourse($this->entityManager, $request);
+        $this->assertForumThreadNotLockedByGradebook($this->entityManager, $this->settingsManager, $this->security, $course, $data);
 
         $data->setLocked(0 === $data->getLocked() ? 1 : 0);
         $this->entityManager->persist($data);
@@ -325,6 +334,8 @@ final class ForumThreadProcessor implements ProcessorInterface
 
         $this->assertEditableForumResource($data->getResourceNode(), $this->security);
         $this->assertEditableForumResource($forum->getResourceNode(), $this->security);
+        $course = $this->getCourse($this->entityManager, $request);
+        $this->assertForumThreadNotLockedByGradebook($this->entityManager, $this->settingsManager, $this->security, $course, $data);
 
         $data->setThreadSticky(!$data->getThreadSticky());
         $this->entityManager->persist($data);
@@ -359,6 +370,7 @@ final class ForumThreadProcessor implements ProcessorInterface
 
         $course = $this->getCourse($this->entityManager, $request);
         $session = $this->getSession($this->entityManager, $request);
+        $this->assertForumThreadNotLockedByGradebook($this->entityManager, $this->settingsManager, $this->security, $course, $data);
         $targetVisible = $this->getTargetVisibility($payload, $data, $course, $session);
         $visible = $this->setForumResourceVisibility($data, $this->threadRepository, $course, $session, $targetVisible);
         $this->entityManager->flush();
@@ -404,6 +416,7 @@ final class ForumThreadProcessor implements ProcessorInterface
         $session = $this->getSession($this->entityManager, $request);
         $group = $this->getGroup($this->entityManager, $request);
         $this->assertForumBelongsToCurrentContext($targetForum, $course, $session, $group);
+        $this->assertForumThreadNotLockedByGradebook($this->entityManager, $this->settingsManager, $this->security, $course, $data);
 
         $postCount = $this->moveThreadPosts($data, $targetForum);
         $data->setForum($targetForum);

@@ -14,8 +14,8 @@ use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use ApiPlatform\OpenApi\Model\RequestBody;
 use ArrayObject;
-use Chamilo\CoreBundle\State\ForumThreadGradingProcessor;
-use Chamilo\CoreBundle\State\ForumThreadGradingProvider;
+use Chamilo\CoreBundle\State\Forum\ForumThreadGradingProcessor;
+use Chamilo\CoreBundle\State\Forum\ForumThreadGradingProvider;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(

@@ -7855,10 +7855,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
         $courseEntity = api_get_course_entity(api_get_course_int_id());
         $courseResourceNode = $courseEntity instanceof Course ? $courseEntity->getResourceNode() : null;
-        $createSurveyUrl = api_get_path(WEB_CODE_PATH).'survey/create_new_survey.php?'.api_get_cidreq().'&'.http_build_query([
-            'action' => 'add',
-            'lp_id' => $this->lp_id,
-        ]);
+        $createSurveyUrl = '#';
+        $createSurveyLinkAttributes = [
+            'title' => get_lang('Create survey'),
+            'aria-disabled' => 'true',
+            'class' => 'disabled',
+        ];
 
         if (null !== $courseResourceNode && $courseResourceNode->getId() > 0) {
             $createSurveyUrl = api_get_path(WEB_PATH).'resources/survey/'.$courseResourceNode->getId().'/create?'.http_build_query([
@@ -7871,6 +7873,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 'returnToLp' => 1,
                 'isStudentView' => 'false',
             ]);
+            $createSurveyLinkAttributes = ['title' => get_lang('Create survey')];
         }
 
         // First add link
@@ -7879,7 +7882,7 @@ document.addEventListener("DOMContentLoaded", function () {
         $return .= Display::url(
             get_lang('Create survey'),
             $createSurveyUrl,
-            ['title' => get_lang('Create survey')]
+            $createSurveyLinkAttributes
         );
         $return .= '</li>';
 
@@ -9476,19 +9479,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             return $surveyUrl;
                         }
 
-                        $autoSurveyLink = SurveyUtil::generateFillSurveyLink(
-                            $survey,
-                            'auto',
-                            api_get_course_entity($course_id),
-                            $session_id
-                        );
-                        $lpParams = [
-                            'lp_id' => $learningPathId,
-                            'lp_item_id' => $id_in_path,
-                            'origin' => 'learnpath',
-                        ];
-
-                        return $autoSurveyLink.'&'.http_build_query($lpParams).'&'.$extraParams;
+                        return '';
                     }
                 }
         }

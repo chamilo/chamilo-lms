@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CGroupRelUser;
 use Chamilo\CourseBundle\Entity\CSurvey;
@@ -44,6 +45,7 @@ final readonly class SurveyInvitationProcessor implements ProcessorInterface
         private CGroupRepository $groupRepository,
         private CsrfTokenManagerInterface $csrfTokenManager,
         private SurveyInvitationProvider $surveyInvitationProvider,
+        private SettingsManager $settingsManager,
     ) {}
 
     /**
@@ -87,7 +89,9 @@ final readonly class SurveyInvitationProcessor implements ProcessorInterface
         $selectedUserIds = $this->normalizeIntegerList($payload['selectedUserIds'] ?? []);
         $selectedGroupIds = $this->normalizeIntegerList($payload['selectedGroupIds'] ?? []);
         $resendToAll = true === ($payload['resendToAll'] ?? false);
-        $remindUnanswered = true === ($payload['remindUnanswered'] ?? false);
+        $canRemindUnanswered = '1' !== (string) $survey->getAnonymous()
+            || $this->isSettingEnabled('survey.survey_anonymous_show_answered');
+        $remindUnanswered = $canRemindUnanswered && true === ($payload['remindUnanswered'] ?? false);
         $hideLink = true === ($payload['hideLink'] ?? false);
 
         $survey->setMailSubject($mailSubject);
@@ -373,7 +377,7 @@ final readonly class SurveyInvitationProcessor implements ProcessorInterface
 
         foreach ($invitations as $invitation) {
             $user = $invitation->getUser();
-            if (null !== $user->getId()) {
+            if ($user instanceof User && null !== $user->getId()) {
                 $items[(int) $user->getId()] = $invitation;
             }
         }
@@ -434,10 +438,12 @@ final readonly class SurveyInvitationProcessor implements ProcessorInterface
             return false;
         }
 
-        $userId = $invitation->getUser()->getId();
-        if (null === $userId) {
+        $user = $invitation->getUser();
+        if (!$user instanceof User || null === $user->getId()) {
             return false;
         }
+
+        $userId = (int) $user->getId();
 
         $link = $this->buildModernAnswerLink($survey, $invitation->getInvitationCode(), $course, $session);
         $body = $this->buildMailBody($content, $link, $hideLink);
@@ -536,17 +542,48 @@ final readonly class SurveyInvitationProcessor implements ProcessorInterface
             ? (int) $survey->getResourceNode()->getId()
             : (int) $course->getId();
         $route = 3 === $survey->getSurveyType() ? 'meeting' : 'answer';
+        $query = [
+            'invitationCode' => $invitationCode,
+        ];
+
+        if ($this->isAnonymous($survey)) {
+            $query['publicCid'] = (int) $course->getId();
+            $query['publicSid'] = (int) ($session?->getId() ?? 0);
+            $query['publicGid'] = 0;
+        } else {
+            $query['cid'] = (int) $course->getId();
+            $query['sid'] = (int) ($session?->getId() ?? 0);
+        }
 
         return \sprintf(
             '/resources/survey/%d/%d/%s?%s',
             $nodeId,
             (int) $survey->getIid(),
             $route,
-            http_build_query([
-                'cid' => (int) $course->getId(),
-                'sid' => (int) ($session?->getId() ?? 0),
-                'invitationCode' => $invitationCode,
-            ]),
+            http_build_query($query),
         );
+    }
+
+    private function isSettingEnabled(string $name): bool
+    {
+        return $this->isEnabledValue($this->settingsManager->getSetting($name, true));
+    }
+
+    private function isAnonymous(CSurvey $survey): bool
+    {
+        return $this->isEnabledValue($survey->getAnonymous());
+    }
+
+    private function isEnabledValue(mixed $value): bool
+    {
+        if (\is_bool($value)) {
+            return $value;
+        }
+
+        if (\is_int($value)) {
+            return 1 === $value;
+        }
+
+        return \in_array(strtolower(trim((string) $value)), ['1', 'true', 'yes', 'on'], true);
     }
 }

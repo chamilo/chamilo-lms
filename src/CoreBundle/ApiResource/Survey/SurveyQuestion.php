@@ -14,8 +14,8 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
-use Chamilo\CoreBundle\State\SurveyQuestionProcessor;
-use Chamilo\CoreBundle\State\SurveyQuestionProvider;
+use Chamilo\CoreBundle\State\Survey\SurveyQuestionProcessor;
+use Chamilo\CoreBundle\State\Survey\SurveyQuestionProvider;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(

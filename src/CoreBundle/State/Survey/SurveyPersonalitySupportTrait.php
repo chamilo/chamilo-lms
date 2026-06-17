@@ -4,7 +4,7 @@
 
 declare(strict_types=1);
 
-namespace Chamilo\CoreBundle\State;
+namespace Chamilo\CoreBundle\State\Survey;
 
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;

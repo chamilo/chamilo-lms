@@ -127,29 +127,8 @@ const titleCustomClass = computed(() => {
   return ""
 })
 
-function extractIdFromIri(value) {
-  if (!value) {
-    return 0
-  }
-
-  const match = String(value).match(/\/(\d+)$/)
-
-  return match ? Number(match[1]) : 0
-}
-
 function getCourseResourceNodeId() {
-  const courseNode = course.value?.resourceNode
-  const toolNode = props.tool?.resourceNode
-
-  return (
-    Number(courseNode?.id) ||
-    extractIdFromIri(courseNode?.["@id"]) ||
-    Number(toolNode?.parent?.id) ||
-    extractIdFromIri(toolNode?.parent?.["@id"]) ||
-    Number(toolNode?.id) ||
-    extractIdFromIri(toolNode?.["@id"]) ||
-    0
-  )
+  return Number(cidReqStore.course?.resourceNode?.id) || Number(course.value?.resourceNode?.id) || 0
 }
 
 const isExerciseTool = computed(() => {

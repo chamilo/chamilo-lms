@@ -377,6 +377,7 @@
 import { computed, nextTick, onMounted, reactive, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
+import { getCourseContext } from "../../utils/courseContext"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
@@ -453,16 +454,8 @@ function safeIcon(icon, fallback = "information") {
   return availableIcons[0] || "information"
 }
 
-function getQueryValue(value) {
-  return Array.isArray(value) ? value[0] : value
-}
-
 function getContextParams() {
-  return {
-    cid: getQueryValue(route.query.cid),
-    sid: getQueryValue(route.query.sid),
-    gid: getQueryValue(route.query.gid),
-  }
+  return getCourseContext(route)
 }
 
 function normalizePositiveInt(value, fallback = 1, max = 100) {

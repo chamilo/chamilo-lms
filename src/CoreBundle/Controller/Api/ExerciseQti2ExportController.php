@@ -21,7 +21,7 @@ final class ExerciseQti2ExportController extends AbstractController
     ) {}
 
     #[Route(
-        '/api/exercise/{exerciseId}/qti2-export.zip',
+        '/api/exercise/{exerciseId}/qti2-export',
         name: 'chamilo_core_exercise_qti2_export_zip',
         requirements: ['exerciseId' => '\\d+'],
         methods: ['GET']

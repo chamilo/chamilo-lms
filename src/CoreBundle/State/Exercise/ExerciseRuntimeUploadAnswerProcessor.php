@@ -19,6 +19,7 @@ use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
@@ -59,6 +60,7 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
         private CQuizRepository $quizRepository,
         private ResourceNodeRepository $resourceNodeRepository,
         private Security $security,
+        private CidReqHelper $cidReqHelper,
     ) {}
 
     /**
@@ -81,8 +83,8 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
             throw new AccessDeniedHttpException('A valid authenticated user is required.');
         }
 
-        $course = $this->getCourse($request);
-        $session = $this->getSession($request);
+        $course = $this->getCourse();
+        $session = $this->getSession();
         $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : $request->request->getInt('exerciseId');
         $attemptId = isset($uriVariables['attemptId']) ? (int) $uriVariables['attemptId'] : $request->request->getInt('attemptId');
         $questionId = $request->request->getInt('questionId');
@@ -258,8 +260,7 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
     private function canUploadAnswer(): bool
     {
         return $this->security->isGranted('ROLE_CURRENT_COURSE_STUDENT')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_STUDENT')
-            || $this->canManageExercises();
+            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_STUDENT');
     }
 
     private function canManageExercises(): bool
@@ -268,34 +269,21 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
             || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
     }
 
-    private function getCourse(Request $request): Course
+    private function getCourse(): Course
     {
-        $courseId = $request->query->getInt('cid');
-        if (0 >= $courseId) {
-            throw new BadRequestHttpException('A valid course id is required.');
-        }
-
-        $course = $this->entityManager->getRepository(Course::class)->find($courseId);
+        $course = $this->cidReqHelper->getCourseEntity();
         if (!$course instanceof Course) {
-            throw new BadRequestHttpException('The requested course was not found.');
+            throw new BadRequestHttpException('A valid course context is required.');
         }
 
         return $course;
     }
 
-    private function getSession(Request $request): ?Session
+    private function getSession(): ?Session
     {
-        $sessionId = $request->query->getInt('sid');
-        if (0 >= $sessionId) {
-            return null;
-        }
+        $session = $this->cidReqHelper->getSessionEntity();
 
-        $session = $this->entityManager->getRepository(Session::class)->find($sessionId);
-        if (!$session instanceof Session) {
-            throw new BadRequestHttpException('The requested session was not found.');
-        }
-
-        return $session;
+        return $session instanceof Session ? $session : null;
     }
 
 
@@ -417,6 +405,10 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
     {
         foreach ($names as $name) {
             $value = $request->query->get($name);
+            if (null === $value || '' === (string) $value) {
+                $value = $request->request->get($name);
+            }
+
             if (\is_array($value)) {
                 $value = $value[0] ?? null;
             }

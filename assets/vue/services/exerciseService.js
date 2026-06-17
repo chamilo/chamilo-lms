@@ -26,7 +26,6 @@ function buildQueryString(params = {}) {
 
 function exerciseRequestConfig(config = {}) {
   return {
-    skipCourseContext: true,
     ...config,
   }
 }

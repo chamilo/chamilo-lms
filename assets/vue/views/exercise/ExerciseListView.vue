@@ -734,7 +734,7 @@ function buildQueryString(params = {}) {
 }
 
 function qti2ExportUrl(exerciseId) {
-  return `/api/exercise/${exerciseId}/qti2-export.zip${buildQueryString(getContextParams())}`
+  return `/api/exercise/${exerciseId}/qti2-export${buildQueryString(getContextParams())}`
 }
 
 function toggleSearchForm() {

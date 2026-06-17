@@ -293,6 +293,11 @@ async function courseHomeBeforeEnter(to) {
 
     const courseSettingsStore = useCourseSettings()
     const sid = sessionId ? `&sid=${sessionId}` : ""
+    const courseContextQuery = {
+      cid: courseId,
+      sid: sessionId || 0,
+      gid: 0,
+    }
 
     // Document auto-launch
     const documentAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_document_auto_launch"), 10) || 0
@@ -307,22 +312,25 @@ async function courseHomeBeforeEnter(to) {
     // Exercise auto-launch
     const exerciseAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_exercise_auto_launch"), 10) || 0
     const exerciseResourceNodeId = cidReqStore.course?.resourceNode?.id
-    const gid = "&gid=0"
-
     if (exerciseAutoLaunch === 2 && exerciseResourceNodeId) {
       sessionStorage.setItem(autoLaunchKey, "true")
-      window.location.href = `/resources/exercise/${exerciseResourceNodeId}/?cid=${courseId}` + sid + gid
 
-      return false
+      return {
+        name: "ExerciseList",
+        params: { node: exerciseResourceNodeId },
+        query: courseContextQuery,
+      }
     } else if (exerciseAutoLaunch === 1) {
       const exerciseId = await courseService.getAutoLaunchExerciseId(courseId, sessionId)
 
       if (exerciseId && exerciseResourceNodeId) {
         sessionStorage.setItem(autoLaunchKey, "true")
-        window.location.href =
-          `/resources/exercise/${exerciseResourceNodeId}/${exerciseId}/overview?cid=${courseId}` + sid + gid
 
-        return false
+        return {
+          name: "ExerciseOverview",
+          params: { node: exerciseResourceNodeId, exerciseId },
+          query: courseContextQuery,
+        }
       }
     }
 

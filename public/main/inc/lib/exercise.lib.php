@@ -7282,6 +7282,23 @@ EOT;
         $exerciseStatInfo['data_tracking'] = $newTracking;
     }
 
+
+    private static function getCourseResourceNodeId(int $courseId): int
+    {
+        if ($courseId <= 0) {
+            return 0;
+        }
+
+        $course = Container::getEntityManager()->getRepository(CourseEntity::class)->find($courseId);
+        if (!$course instanceof CourseEntity) {
+            return 0;
+        }
+
+        $resourceNode = $course->getResourceNode();
+
+        return null !== $resourceNode ? (int) $resourceNode->getId() : 0;
+    }
+
     /**
      * Build the modern Vue create URL for an exercise when a legacy integration
      * still needs to create a test without showing legacy exercise UI.
@@ -7297,11 +7314,7 @@ EOT;
             return null;
         }
 
-        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sql = "SELECT resource_node_id FROM $courseTable WHERE id = $courseId LIMIT 1";
-        $result = Database::query($sql);
-        $row = Database::fetch_assoc($result);
-        $nodeId = isset($row['resource_node_id']) ? (int) $row['resource_node_id'] : 0;
+        $nodeId = self::getCourseResourceNodeId($courseId);
         if ($nodeId <= 0) {
             return null;
         }
@@ -7344,11 +7357,7 @@ EOT;
             return null;
         }
 
-        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sql = "SELECT resource_node_id FROM $courseTable WHERE id = $courseId LIMIT 1";
-        $result = Database::query($sql);
-        $row = Database::fetch_assoc($result);
-        $nodeId = isset($row['resource_node_id']) ? (int) $row['resource_node_id'] : 0;
+        $nodeId = self::getCourseResourceNodeId($courseId);
         if ($nodeId <= 0) {
             return null;
         }
